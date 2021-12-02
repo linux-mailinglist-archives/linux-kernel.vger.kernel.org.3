@@ -2,89 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 932AC4661D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4644661DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357079AbhLBLCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 06:02:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
+        id S1357113AbhLBLCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 06:02:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356693AbhLBLB7 (ORCPT
+        with ESMTP id S1357088AbhLBLC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 06:01:59 -0500
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73CDC06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 02:58:37 -0800 (PST)
-Received: by mail-oo1-xc2e.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso8735890ood.13
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 02:58:37 -0800 (PST)
+        Thu, 2 Dec 2021 06:02:28 -0500
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7894EC06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 02:59:06 -0800 (PST)
+Received: by mail-ed1-x543.google.com with SMTP id w1so114525381edc.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 02:59:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IzqbKmhzTEjnI7ZTKD5CYs3ONkw0vgvO+4qQMNKWOhs=;
-        b=jBAsyWHHtQdvdVwofFUKLl/vEvVJTq5ZKgdda+6KDlneA10k5qh543jBb7XRJB7zwH
-         GDkgVoc1NgPTdGPxq5kGEPgjiyo6474g2dWFaiZvIv3RELjH+sl7cvBc0wNr2Io7gx4r
-         TL1CljXVKP4lkmYZVs6qSk++UV4W09Nd3kzkeP0edvpDSlaFudb7WjujxQ6EfyB8HtZt
-         LjVzXVyCIOOu2LUY1yoStp+YcWOPe8yFGWEQ1wI6U2fZGBRMlG5TwEBlzfDmwgDgOWs0
-         yvZuXZ2cZnUNX10CjQpmCoKO9hUQHdyyhexybMfdEozrJSX0fNByluuAk+/F+osgP7Fb
-         /3XA==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=mTe6rsF1WlocKfWRCIawejpNJl6lRYSIlYxDz8jltlQ=;
+        b=QyqNtRZGwJk/KQhTa/UZ/hY5y9StWPqq/UH4jkjKpGz9uYvvyCZuvaoudSofhbkcn5
+         pjuGuuDD+FZ28dbc43z7C8j1xBvvoHTG403tIDpU1fWVoyP3Xttpx3ODRZ35HlBnlDB6
+         bB9YVAuXUvT10Zuc/xNaG4eJlonzYOa2m5k9WFDvzjjY/eQK2Mexm70wUOaXwgLahX05
+         ZTcrbdmTWXPknUdyT+9edU+/cj5AIcmiWH5InoIv6GWY2Eoyvt4horGunr4ooJEAiG9+
+         jPgH4uYyGzUqTfjryVrxCfc56bY0ndtLtOiwA+q49woayWPFmlwpy2+q000av/IBtBCo
+         Z8Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IzqbKmhzTEjnI7ZTKD5CYs3ONkw0vgvO+4qQMNKWOhs=;
-        b=kn+TsF7wjZabG3WND6fXDiYMYJUostfDA7MiCPiIU8XGIjbEVTNP0h6kwnHhnscKdQ
-         PfiYvpUjpJzimf1g3XmMGptp9vSZETyM5FJyRR4y9D+BbZ/G9j+q6WYPDyfB6H0pditq
-         LuyTqKswKhlIj/vsw8rOxDtuxkHH8TG/UDa9mOYpWwF58nXCYa4qf2Dcrlt2PPXvwvNr
-         v3nGWcMVOi2U00e6CtNUFQkzgMENOXVKrXFIgHMOWIAQ5xxl8eBxNR903+2oHJtsWuC7
-         o0LlJHEhqqjMoUuM4YFT0lllBDJw25J66LkUhq3CUh4Utz3mytGkA0NCdt0Shlj/V8GI
-         G2mw==
-X-Gm-Message-State: AOAM532gHrlfWxHtcxnkziKpF6BOyFSNcXzFCIG5sRXmZ1bpXXoO1z4g
-        KN2+9U+4AGH5UfnNlz4Wjel+XT0NBMeEphPfSctE2w==
-X-Google-Smtp-Source: ABdhPJy0SYfwgINWHWi/WuELADe0lbasBO4rFHdE66HRkYYEYqLp965NMbMU98OEeGl+lXo3NMeRuBkV89kTsnLtDwk=
-X-Received: by 2002:a4a:cf12:: with SMTP id l18mr8131443oos.25.1638442716865;
- Thu, 02 Dec 2021 02:58:36 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=mTe6rsF1WlocKfWRCIawejpNJl6lRYSIlYxDz8jltlQ=;
+        b=Z06WJdKrCCOX2VrD+XarKCfcRuHk+SQ2GzepVXsKDtpua3rkPGzoF1SeNnJ3ZfebR3
+         /gzC450d6+SJ9SmJYab8JNutsBMK6aPpmlzc4EyDRESBa0E5K7MzA5zgKZC8FPh/pve0
+         iuegakruqMbzQAvkPGBUfLoBFD8ttVPsZcBWVYGGea2AnRSKZY2JlSo3WqoZGpx48ya+
+         UVMF3Gg3nFWathq4OYo9J4r9LPq+J4YScNGpheGI1cK4Gn+TCcv5k1PVeGvbFo6HYEVS
+         mCOFi1q8gawoOaTggazpnAFzfE2wW9q/kLVlSfWi2d4CsSWaHLUKpfYSeUb9mGso2y0L
+         JfoQ==
+X-Gm-Message-State: AOAM532i9MxtiiB8kytQooNAIS/pLew0YXwLvjomOOCHBz0R09dYzpDY
+        MPgI1KX22Mf5tHLBtr7eRexjITUUJZYVEl1sM3s=
+X-Google-Smtp-Source: ABdhPJzFtEgcjpci/1QZeG2HG6Dfhm0jOJSR1cohE3YebI44Ft1Ub+Iqmk5+GInwbG/JlgGPeShZUSlxi7JMki0wo5k=
+X-Received: by 2002:a05:6402:50c7:: with SMTP id h7mr17033233edb.277.1638442742899;
+ Thu, 02 Dec 2021 02:59:02 -0800 (PST)
 MIME-Version: 1.0
-References: <20211129145732.27000-1-wangkefeng.wang@huawei.com>
- <YadiUPpJ0gADbiHQ@FVFF77S0Q05N> <811af0bc-0c99-37f6-a39a-095418b10661@huawei.com>
- <Yaic31SbYFJ4zAl0@elver.google.com> <b641f1ea-6def-0fe4-d273-03c35c4aa7d6@huawei.com>
-In-Reply-To: <b641f1ea-6def-0fe4-d273-03c35c4aa7d6@huawei.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 2 Dec 2021 11:58:20 +0100
-Message-ID: <CANpmjNOOVQjoczanQndUoDRMCOfV4FB6bnezEjskKh3iDzaQVg@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: Enable KCSAN
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        joey.gouly@arm.com
+Reply-To: zahirikeen@gmail.com
+Sender: sabu7439@gmail.com
+Received: by 2002:a17:907:72d5:0:0:0:0 with HTTP; Thu, 2 Dec 2021 02:59:02
+ -0800 (PST)
+From:   Zahiri Keen <zahirikeen2@gmail.com>
+Date:   Thu, 2 Dec 2021 11:59:02 +0100
+X-Google-Sender-Auth: Vz0p_GGcrg8jrErW8rce7E2qYlM
+Message-ID: <CAOJFtj3RpT_EyKssxu-wLNweb4mRVGfcWa=woLZByorciDCCzQ@mail.gmail.com>
+Subject: Urgent Please.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Dec 2021 at 11:45, Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
-[...]
-> >> for now and more explanation into changlog.
-> > So what I gather arm64's final select line may look like:
-> >
-> >       select HAVE_ARCH_KCSAN if EXPERT && (CC_IS_GCC || CLANG_VERSION >= 120000)
-> Yes,  that's what we want now.
+Good Day,
 
-I think we have all the pieces sorted out, so hopefully you have
-everything you need to do v3.
+I know this email might come to you as a surprise because is coming
+from someone you haven=E2=80=99t met with before.
 
-[...]
-> > I actually have a "fix" for the data race in rwsem_spin_on_owner, that
-> > also shows where the other racing access comes from... which reminds me:
-> > https://lkml.kernel.org/r/20211202101238.33546-1-elver@google.com
->
-> There's a owner_on_cpu(),  we could reuse it,
+I am Mr. Zahiri Keen, the bank manager with BOA bank i contact you for
+a deal relating to the funds which are in my position I shall furnish
+you with more detail once your response.
 
-That looks like a reasonable thing to do, but can't say if it is
-actually the right thing to do. You could suggest it in reply to the
-patch I just sent and see what people say.
-
-Thanks,
--- Marco
+Regards,
+Mr.Zahiri

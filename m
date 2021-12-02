@@ -2,85 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A28466248
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 12:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7635346624E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 12:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357321AbhLBL2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 06:28:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        id S1357186AbhLBLa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 06:30:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357315AbhLBL21 (ORCPT
+        with ESMTP id S1357136AbhLBLaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 06:28:27 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F19AC061758;
-        Thu,  2 Dec 2021 03:25:05 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id a11so28242096ilj.6;
-        Thu, 02 Dec 2021 03:25:05 -0800 (PST)
+        Thu, 2 Dec 2021 06:30:25 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02EAC061757
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 03:27:03 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id j11so16801012pgs.2
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 03:27:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=U97NXkXMnWDrCjkhCrTSI8Q6yXefya2V7KMT5t4xUcM=;
-        b=I6PEU2aVaTVUTX1OnzKBPKyVa8L999yDFs1+GW/EcADQr0sr41aEQ1cpdrzez1f6yC
-         9qIX/a5ydbdfWLfFy/kf/4kxDqiUO9KtXTJBRS+JLxgQNCVpY0HAHDZJ6iAnlSjjg9rB
-         ztpB7rlPIu5m23/7ZL/HVl+MNqL3mnwvLmW21KXZV/Z8naEYWoJlKsNbvLMv3endgPqs
-         Mj/RANB9ZHYZtp3R486TIo8lysUdFlrb1jmReu9yJWLpdfTWUWzv63yHatzYZ8IRxo3u
-         yefGyPLzDY0DQwamTwvz/tNIk3qPMTQdsGBBtQVeRmKxERSMISd12Wn84G/rh3Hn/6j7
-         0SLw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zez1rxEqxUa6den/PlCBhFY8prK0HejZIbGceZPfSXw=;
+        b=DPqxH0FMX4rAnAr1pchtyHSlHhAZYliOErJIo0K0K7vLF3KTx/rVN+v7emdLAf9sf9
+         auuz3FeZsCPJCHzU0WDgMEIpbZ3dXphb7lTY6irmmiCwpgeEVv2ge7hAAL01VEbTZN8v
+         SFjTMg/Sm9I9pR8sUzh6kjBUi2Sm/QLBlhtZy3iFnFfioHuM5DX+n+SE4sIoeoPc7X8i
+         ob92gmZskSt6xlj8skPpk3CKl77HSXo/7RSy/yliK7Rpxv3WuF2a0UErbLk8HVrEXGR5
+         dJUvdXEug8seUadTO2EuJIiEB3TatynOA4rRsM7sEEOdpKZ8stuWzk/1eh5gLOroW7uh
+         qNuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U97NXkXMnWDrCjkhCrTSI8Q6yXefya2V7KMT5t4xUcM=;
-        b=GYAAxeAHif2q/YztyE3DwRAuNZKISpjt9TAgMMZEKm/sjdZiWQiZPgxVGOMtbsvZ4W
-         nEIz/LUB++hE593ED5U+hUI2UG0zn8FzCB4QvaMi6IFuX3b/e82mNFgnECrfdHvqVK39
-         b3IRfMMcRuQA57/AyUrrkstWoN1jINI8gaBMj99zd+TG3EvXVYfoXtxPqu7S1xb+vlRw
-         bQU6QxaMzjPI8Z236rgPTzECKcEtPqDtoPoYvV9YdCCOjJ2SF8dsQOjKhdqxmH64s6D2
-         dMuO4pLzLHODknOQTmfOxsGrtFO4dk0ZoQ6PZzKdguJaIKeogqXVoTEzJeINaeFAIoL4
-         OIQQ==
-X-Gm-Message-State: AOAM5314wcagbb0DJdrK6NIhxu+PFU2eGMpvtwmxt14q720x0tt74PtO
-        QxnkRW1wpqzUJ+MTYLPzdLaV9AflB+eAotWGTIk=
-X-Google-Smtp-Source: ABdhPJy6HxVb8T3Q0N5gt9YmS0coT/tzCF55ptsNSTasFB93m4XHrM6KdaPYgitrZSge6lCNwAj+o/Bf3Id4SxSHbrE=
-X-Received: by 2002:a92:c547:: with SMTP id a7mr16298203ilj.5.1638444304748;
- Thu, 02 Dec 2021 03:25:04 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zez1rxEqxUa6den/PlCBhFY8prK0HejZIbGceZPfSXw=;
+        b=hwnKijSBYtTkmXZgsAPEaG6OrlPfvWZNoywZAqy4H45huyM1jpXs4YrppgRbd0K0Fa
+         5OzLJ5YSZEWY5zuc5eji3R2PKLIw1DCtvPT3+uN+nyBajoko1MtkD44hDu/GU/IqMFQS
+         iswq0XbvWZH8ArOpqlK/II4wHsmxCeicSf5Yvllp7wDNaWk+RgWzTBCne6znmdzl/XUN
+         16AntZqeojAIHSR75a1pLGPM5X/jlS4+HkFe3fWIpqkMClsoav5jUpEtgWLbR/cq/48R
+         rImsHzSdAiQws3jZhGbMgssQXIPJBHU3HreOrn6JYNWcLBKl0e3NREzBlFkCVf+Jw4R0
+         iAwA==
+X-Gm-Message-State: AOAM530Ps1Z3y2xRVSoaw8y/eiEXmxC8q5pqve+CATWdIPaxsR2NToaA
+        l2KGv1Knxh5ltVVj+5XPzD9w7Q==
+X-Google-Smtp-Source: ABdhPJzH/PVd9bNk2o5EkrDPPp9WP0TgzT0mzFmsPY/nBb6sSAzis/xMBXa0YhWn2cdLzqOn0SWqVA==
+X-Received: by 2002:a63:5c05:: with SMTP id q5mr9153548pgb.599.1638444423086;
+        Thu, 02 Dec 2021 03:27:03 -0800 (PST)
+Received: from localhost ([106.201.42.111])
+        by smtp.gmail.com with ESMTPSA id q5sm3528213pfu.66.2021.12.02.03.27.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 03:27:02 -0800 (PST)
+Date:   Thu, 2 Dec 2021 16:57:00 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 0/6] spear: Fix SPEAr3XX plgpio support
+Message-ID: <20211202112700.mkjmwibabj2cpr6u@vireshk-i7>
+References: <20211202095255.165797-1-herve.codina@bootlin.com>
 MIME-Version: 1.0
-References: <cover.1638369365.git.mchehab+huawei@kernel.org> <eb4e49b9a701643b07a56f1863005ba8216ef694.1638369365.git.mchehab+huawei@kernel.org>
-In-Reply-To: <eb4e49b9a701643b07a56f1863005ba8216ef694.1638369365.git.mchehab+huawei@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 2 Dec 2021 12:24:53 +0100
-Message-ID: <CANiq72nu9TvLzxxj64b+EwFicwGexT7VTmVYVnVDzQgwkk+9ZA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] docs: allow selecting a Sphinx theme
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@protonmail.com>, Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Klychkov <andrew.a.klychkov@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211202095255.165797-1-herve.codina@bootlin.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 6:59 PM Mauro Carvalho Chehab
-<mchehab+huawei@kernel.org> wrote:
->
-> Instead of having RTD as an almost mandatory theme, allow the
-> user to select other themes via a THEMES environment var.
->
-> There's a catch, though: as the current theme override logic is
-> dependent of the RTD theme, we need to move the code which
-> adds the CSS overrides to be inside the RTD theme logic.
+On 02-12-21, 10:52, Herve Codina wrote:
+> Hi,
+> 
+> This patch series fixes the plgpio support on SPEAr3xx SOCs.
+> 
+> The first four patches of this series fixes a ressources
+> sharing issue between the plgpio driver and the pinmux
+> driver.
+> Indeed, these two drivers can use the same IO address range
+> on some SPEAr3xx SOCs.
+> To solve the issue, a regmap (syscon managed) is used in both
+> drivers and the plgpio driver can reference the pinmux regmap
+> to use it.
+> 
+> The second part of this series is related to IRQs.
+> The plgpio on SPEAr320s SOC uses an IRQ line in the reserve
+> range (from SPEAr320 point of view).
+> This issue is fixed enabling all the 'reserved' IRQs and
+> adding a dtsi file for the SPEAr320s with the correct interrupt
+> for the plgpio node.
 
-Does Sphinx support leaving the selection of the theme to "runtime",
-i.e. to let users pick a theme from a few from a combobox (e.g.
-light/dark)?
+Are these changes backwards compatible ? I mean new kernel will work
+with old DTBs ? It may be quite important to not break that here.
 
-I assume not, but asking just in case.
-
-Cheers,
-Miguel
+-- 
+viresh

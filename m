@@ -2,38 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E614465B3E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:45:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC82465B47
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344649AbhLBAsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 19:48:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354714AbhLBArF (ORCPT
+        id S1344725AbhLBAsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 19:48:38 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39260 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344523AbhLBArF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Dec 2021 19:47:05 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E237C061574;
-        Wed,  1 Dec 2021 16:43:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DE565CE2144;
+        by ams.source.kernel.org (Postfix) with ESMTPS id D477BB821A5;
         Thu,  2 Dec 2021 00:43:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF652C5831C;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7522C58326;
         Thu,  2 Dec 2021 00:43:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1638405818;
-        bh=eCkpJNKUZfbEDR24zCrJIaryfdNqV7jgxV8FdSPXU98=;
+        bh=Qzqztv8FrhL/cwpGA1IO0f3L9VhLXs9fpNRz0N3MM7o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vzsw6XcsvDqmIq6jwJiPcJ/vGzBjHp9GEfDhEGJTTgDL0++NSlEmLQ5mK6nwWb1fD
-         2Q7oNVVznESivHkHJFnWGi0dyqtUg41joPoKZcNxci/STDvsd3zDGOFkKjwDq5ix4e
-         VYfLGfYAykdhSore2rdLJ4kTGI1YkrqsHBwUjL6YNtOpVUH3Wp4Rc5vFhbGBcK1lRX
-         tUKRQ41KUKApDwonGqHMXveXKkWhyroRfFNvXCR0ywT08wFsApuM0hZpqa4OupiQaC
-         Az0f8sP9VILf3sd1Xh+r4gUvAAVlZkCtjhmg8Vw+MO8vnq/eSKv/RFiwmeEomSpuOq
-         E7CBehQoSmCww==
+        b=qp3S3P8ySom5S1ArxKmK9rq3X0EwtSGgPpIuCIISZPlqpewA5r4opxnvnLQ4J12cf
+         Xn9ODc4HffNve9O/3gJ6WPUkD/IFbKCp9RVMlHH3FfGddu5FMny3zbdu9YQz2Asu5I
+         xhbU1e3yM8J9mvYmRBodazlvqx1kofU2DANCVpjiH6Iuz358f7J3w2/Mr/wQigmiUI
+         6C7KsjryoYdKs1NIVzOy1QDtnX4hUwZaZ3FjSOm4JfF9AwdZzg4ovbY9rqx3prGKNj
+         uzyrE5l0Vno2TIR3P37f9+pZ00LZlJhbiai8mb9VaiY92A7xEIpJ7mcjED3j5vAGiT
+         F1I9NAKJxkF6A==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 5AFCB5C12B3; Wed,  1 Dec 2021 16:43:38 -0800 (PST)
+        id 5CBBC5C12E4; Wed,  1 Dec 2021 16:43:38 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
@@ -45,9 +42,9 @@ Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
         Li Zhijian <zhijianx.li@intel.com>,
         Davidlohr Bueso <dbueso@suse.de>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 11/17] scftorture: Always log error message
-Date:   Wed,  1 Dec 2021 16:43:30 -0800
-Message-Id: <20211202004337.3130175-11-paulmck@kernel.org>
+Subject: [PATCH rcu 12/17] locktorture,rcutorture,torture: Always log error message
+Date:   Wed,  1 Dec 2021 16:43:31 -0800
+Message-Id: <20211202004337.3130175-12-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20211202004245.GA3129966@paulmck-ThinkPad-P17-Gen-1>
 References: <20211202004245.GA3129966@paulmck-ThinkPad-P17-Gen-1>
@@ -65,49 +62,116 @@ Acked-by: Davidlohr Bueso <dbueso@suse.de>
 Signed-off-by: Li Zhijian <zhijianx.li@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/scftorture.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ include/linux/torture.h      | 9 ++-------
+ kernel/locking/locktorture.c | 4 ++--
+ kernel/rcu/rcutorture.c      | 8 ++++----
+ kernel/torture.c             | 4 ++--
+ 4 files changed, 10 insertions(+), 15 deletions(-)
 
-diff --git a/kernel/scftorture.c b/kernel/scftorture.c
-index a0df767897a1d..dcb0410950e45 100644
---- a/kernel/scftorture.c
-+++ b/kernel/scftorture.c
-@@ -41,8 +41,7 @@
- #define VERBOSE_SCFTORTOUT(s, x...) \
- 	do { if (verbose) pr_alert(SCFTORT_FLAG s "\n", ## x); } while (0)
+diff --git a/include/linux/torture.h b/include/linux/torture.h
+index 24f58e50a94b8..63fa4196e51cb 100644
+--- a/include/linux/torture.h
++++ b/include/linux/torture.h
+@@ -38,13 +38,8 @@ do {										\
+ 		pr_alert("%s" TORTURE_FLAG " %s\n", torture_type, s);		\
+ 	}									\
+ } while (0)
+-#define VERBOSE_TOROUT_ERRSTRING(s) \
+-do {										\
+-	if (verbose) {								\
+-		verbose_torout_sleep();						\
+-		pr_alert("%s" TORTURE_FLAG "!!! %s\n", torture_type, s);	\
+-	}									\
+-} while (0)
++#define TOROUT_ERRSTRING(s) \
++	pr_alert("%s" TORTURE_FLAG "!!! %s\n", torture_type, s)
+ void verbose_torout_sleep(void);
  
--#define VERBOSE_SCFTORTOUT_ERRSTRING(s, x...) \
--	do { if (verbose) pr_alert(SCFTORT_FLAG "!!! " s "\n", ## x); } while (0)
-+#define SCFTORTOUT_ERRSTRING(s, x...) pr_alert(SCFTORT_FLAG "!!! " s "\n", ## x)
- 
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Paul E. McKenney <paulmck@kernel.org>");
-@@ -584,14 +583,14 @@ static int __init scf_torture_init(void)
- 	if (weight_resched1 == 0 && weight_single1 == 0 && weight_single_rpc1 == 0 &&
- 	    weight_single_wait1 == 0 && weight_many1 == 0 && weight_many_wait1 == 0 &&
- 	    weight_all1 == 0 && weight_all_wait1 == 0) {
--		VERBOSE_SCFTORTOUT_ERRSTRING("all zero weights makes no sense");
-+		SCFTORTOUT_ERRSTRING("all zero weights makes no sense");
- 		firsterr = -EINVAL;
- 		goto unwind;
- 	}
- 	if (IS_BUILTIN(CONFIG_SCF_TORTURE_TEST))
- 		scf_sel_add(weight_resched1, SCF_PRIM_RESCHED, false);
- 	else if (weight_resched1)
--		VERBOSE_SCFTORTOUT_ERRSTRING("built as module, weight_resched ignored");
-+		SCFTORTOUT_ERRSTRING("built as module, weight_resched ignored");
- 	scf_sel_add(weight_single1, SCF_PRIM_SINGLE, false);
- 	scf_sel_add(weight_single_rpc1, SCF_PRIM_SINGLE_RPC, true);
- 	scf_sel_add(weight_single_wait1, SCF_PRIM_SINGLE, true);
-@@ -622,7 +621,7 @@ static int __init scf_torture_init(void)
- 		nthreads = num_online_cpus();
- 	scf_stats_p = kcalloc(nthreads, sizeof(scf_stats_p[0]), GFP_KERNEL);
- 	if (!scf_stats_p) {
--		VERBOSE_SCFTORTOUT_ERRSTRING("out of memory");
-+		SCFTORTOUT_ERRSTRING("out of memory");
+ #define torture_init_error(firsterr)						\
+diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
+index 397ac13d2ef75..9c2fb613a55d2 100644
+--- a/kernel/locking/locktorture.c
++++ b/kernel/locking/locktorture.c
+@@ -1047,7 +1047,7 @@ static int __init lock_torture_init(void)
+ 				       sizeof(writer_tasks[0]),
+ 				       GFP_KERNEL);
+ 		if (writer_tasks == NULL) {
+-			VERBOSE_TOROUT_ERRSTRING("writer_tasks: Out of memory");
++			TOROUT_ERRSTRING("writer_tasks: Out of memory");
+ 			firsterr = -ENOMEM;
+ 			goto unwind;
+ 		}
+@@ -1058,7 +1058,7 @@ static int __init lock_torture_init(void)
+ 				       sizeof(reader_tasks[0]),
+ 				       GFP_KERNEL);
+ 		if (reader_tasks == NULL) {
+-			VERBOSE_TOROUT_ERRSTRING("reader_tasks: Out of memory");
++			TOROUT_ERRSTRING("reader_tasks: Out of memory");
+ 			kfree(writer_tasks);
+ 			writer_tasks = NULL;
+ 			firsterr = -ENOMEM;
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index 503e14e62e8f2..36a273589a35c 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -2774,7 +2774,7 @@ static int rcu_torture_read_exit(void *unused)
+ 				     &trs, "%s",
+ 				     "rcu_torture_read_exit_child");
+ 		if (IS_ERR(tsp)) {
+-			VERBOSE_TOROUT_ERRSTRING("out of memory");
++			TOROUT_ERRSTRING("out of memory");
+ 			errexit = true;
+ 			tsp = NULL;
+ 			break;
+@@ -3101,7 +3101,7 @@ rcu_torture_init(void)
+ 					   sizeof(fakewriter_tasks[0]),
+ 					   GFP_KERNEL);
+ 		if (fakewriter_tasks == NULL) {
+-			VERBOSE_TOROUT_ERRSTRING("out of memory");
++			TOROUT_ERRSTRING("out of memory");
+ 			firsterr = -ENOMEM;
+ 			goto unwind;
+ 		}
+@@ -3117,7 +3117,7 @@ rcu_torture_init(void)
+ 	rcu_torture_reader_mbchk = kcalloc(nrealreaders, sizeof(*rcu_torture_reader_mbchk),
+ 					   GFP_KERNEL);
+ 	if (!reader_tasks || !rcu_torture_reader_mbchk) {
+-		VERBOSE_TOROUT_ERRSTRING("out of memory");
++		TOROUT_ERRSTRING("out of memory");
  		firsterr = -ENOMEM;
  		goto unwind;
  	}
+@@ -3136,7 +3136,7 @@ rcu_torture_init(void)
+ 	if (nrealnocbers > 0) {
+ 		nocb_tasks = kcalloc(nrealnocbers, sizeof(nocb_tasks[0]), GFP_KERNEL);
+ 		if (nocb_tasks == NULL) {
+-			VERBOSE_TOROUT_ERRSTRING("out of memory");
++			TOROUT_ERRSTRING("out of memory");
+ 			firsterr = -ENOMEM;
+ 			goto unwind;
+ 		}
+diff --git a/kernel/torture.c b/kernel/torture.c
+index bb8f411c974b8..ef27a6c824514 100644
+--- a/kernel/torture.c
++++ b/kernel/torture.c
+@@ -570,7 +570,7 @@ int torture_shuffle_init(long shuffint)
+ 	shuffle_idle_cpu = -1;
+ 
+ 	if (!alloc_cpumask_var(&shuffle_tmp_mask, GFP_KERNEL)) {
+-		VERBOSE_TOROUT_ERRSTRING("Failed to alloc mask");
++		TOROUT_ERRSTRING("Failed to alloc mask");
+ 		return -ENOMEM;
+ 	}
+ 
+@@ -934,7 +934,7 @@ int _torture_create_kthread(int (*fn)(void *arg), void *arg, char *s, char *m,
+ 	*tp = kthread_run(fn, arg, "%s", s);
+ 	if (IS_ERR(*tp)) {
+ 		ret = PTR_ERR(*tp);
+-		VERBOSE_TOROUT_ERRSTRING(f);
++		TOROUT_ERRSTRING(f);
+ 		*tp = NULL;
+ 	}
+ 	torture_shuffle_task_register(*tp);
 -- 
 2.31.1.189.g2e36527f23
 

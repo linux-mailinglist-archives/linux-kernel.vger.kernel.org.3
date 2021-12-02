@@ -2,96 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 133EC465E4C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 07:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5E5465E51
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 07:38:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345181AbhLBGiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 01:38:54 -0500
-Received: from tomli.me ([31.220.7.45]:12778 "EHLO tomli.me"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240839AbhLBGix (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 01:38:53 -0500
-Received: from tomli.me (localhost [127.0.0.1])
-        by tomli.me (OpenSMTPD) with ESMTP id ca9aa9be;
-        Thu, 2 Dec 2021 06:35:29 +0000 (UTC)
-Authentication-Results: tomli.me; auth=pass (login) smtp.auth=tomli
-Received: from Unknown (HELO work) (123.118.114.103)
- by tomli.me (qpsmtpd/0.96) with ESMTPSA (AEAD-AES256-GCM-SHA384 encrypted); Thu, 02 Dec 2021 06:35:28 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=tomli.me; h=date:from:to:cc:subject:message-id:mime-version:content-type:content-transfer-encoding; s=1490979754; bh=bOCrpZ2RjHxF2pFYdnVUvO3AaF9fNozXR7lvIsSGFCw=; b=XgzS5bE/Zsljd92Q5lqyRkv/djF3PV4pmEKe3ipRAkMbslgUUn1KKBJgQ1phCgntMGmV5IfOB4i+FUl3HezGQYA/28IOHpxlPFArSC7tx4lAgJm9gvIHpgwdG9Pr58JCqLqgjMq6Aw/r+zxT1lvTksAnZ7LzHrSeSZSPJLAO8prxniZAE4ppyqN65HgAGozwIsNhZJBNNDnFj7bzZBAYZOj7NpZ/rxtsmt1bIa077LZ0Olo6uQHFVKCZSnTz4KfascwRlR9a/ZC5VFdS5oQnO0B+1TbZ2h+Gn65OaP6vrDZnedkKwM+0ldZ4OvKJFpCC5ezCgs6m8z/9vVf1zka4Gw==
-Date:   Thu, 2 Dec 2021 06:35:21 +0000
-From:   Yifeng Li <tomli@tomli.me>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Sam Bingner <sam@bingner.com>, linux-pci@vger.kernel.org,
-        trivial@kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 RESEND] PCI: Add func1 DMA quirk for Marvell 88SE9125 SATA
- controller
-Message-ID: <YahpKVR+McJVDdkD@work>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+        id S1345295AbhLBGmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 01:42:14 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:55571 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345329AbhLBGl6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 01:41:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638427117; x=1669963117;
+  h=from:to:cc:subject:date:message-id;
+  bh=3g+eUVzpsgrN7jH+hXE6d4OUhX4I1HGrua57aZsyv40=;
+  b=AiinRTEwOGXL4q3gWfmI+K3LdpojXP1YjijcEI7WlsmgRnzSLWdsvO8u
+   HwfrB/N8KF9bbqeZK9p5JH6BP5WVPZ+rJtBLJR6tMHHmcVrqO4+xNWwhk
+   zChEpoMzQpQrU2fdhIqx4Vj1owi31nNNBvjG0gFm1BmHGtUgDpwaOZYK6
+   I=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 01 Dec 2021 22:38:35 -0800
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 01 Dec 2021 22:38:34 -0800
+X-QCInternal: smtphost
+Received: from c-sbhanu-linux.qualcomm.com ([10.242.50.201])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 02 Dec 2021 12:08:16 +0530
+Received: by c-sbhanu-linux.qualcomm.com (Postfix, from userid 2344807)
+        id 8FBEF48F7; Thu,  2 Dec 2021 12:08:15 +0530 (IST)
+From:   Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+To:     tudor.ambarus@microchip.com, michael@walle.cc, p.yadav@ti.com,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     stummala@codeaurora.org, vbadigan@codeaurora.org,
+        quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
+        sartgarg@codeaurora.org,
+        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+Subject: [PATCH V2] mtd: spi-nor: winbond: Add support for winbond chip
+Date:   Thu,  2 Dec 2021 12:08:12 +0530
+Message-Id: <1638427092-9139-1-git-send-email-quic_c_sbhanu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like other SATA controller chips in the Marvell 88SE91xx series, the
-Marvell 88SE9125 has the same DMA requester ID hardware bug that prevents
-it from working under IOMMU. This patch adds its device ID 0x9125 to the
-Function 1 DMA alias quirk list.
+Add support for winbond W25Q512NW-IM chip.
 
-This patch should not be confused with an earlier patch, commit 059983790a4c
-("PCI: Add function 1 DMA alias quirk for Marvell 9215 SATA controller"),
-which applies to a different chip with a similar model number, 88SE9215.
-
-Without this patch, device initialization fails with DMA errors.
-
-    ata8: softreset failed (1st FIS failed)
-    DMAR: DRHD: handling fault status reg 2
-    DMAR: [DMA Write NO_PASID] Request device [03:00.1] fault addr 0xfffc0000 [fault reason 0x02] Present bit in context entry is clear
-    DMAR: DRHD: handling fault status reg 2
-    DMAR: [DMA Read NO_PASID] Request device [03:00.1] fault addr 0xfffc0000 [fault reason 0x02] Present bit in context entry is clear
-
-After applying the patch, the controller can be successfully initialized.
-
-    ata8: SATA link up 1.5 Gbps (SStatus 113 SControl 330)
-    ata8.00: ATAPI: PIONEER BD-RW   BDR-207M, 1.21, max UDMA/100
-    ata8.00: configured for UDMA/100
-    scsi 7:0:0:0: CD-ROM            PIONEER  BD-RW   BDR-207M 1.21 PQ: 0 ANSI: 5
-
-Cc: stable@vger.kernel.org
-Reported-by: Sam Bingner <sam@bingner.com>
-Tested-by: Sam Bingner <sam@bingner.com>
-Tested-by: Yifeng Li <tomli@tomli.me>
-Signed-off-by: Yifeng Li <tomli@tomli.me>
-Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
+Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
 ---
-
-Notes:
-    v3: Use full names in Reported-by and Tested-by tags.
-    
-    v2: I accidentally sent an earlier version of the commit without
-    CCing stable@vger.kernel.org. The mail itself was also rejected by
-    many servers due to a DKIM issue. Thus [PATCH v2], sorry for the
-    noise.
-
- drivers/pci/quirks.c | 3 +++
+Changes since V1:
+	Added space before name of the flash part as suggested by Doug.
+---
+ drivers/mtd/spi-nor/winbond.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 003950c73..20a932690 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -4103,6 +4103,9 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9120,
- 			 quirk_dma_func1_alias);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9123,
- 			 quirk_dma_func1_alias);
-+/* https://bugzilla.kernel.org/show_bug.cgi?id=42679#c136 */
-+DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9125,
-+			 quirk_dma_func1_alias);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9128,
- 			 quirk_dma_func1_alias);
- /* https://bugzilla.kernel.org/show_bug.cgi?id=42679#c14 */
+diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
+index 96573f6..44f19f2 100644
+--- a/drivers/mtd/spi-nor/winbond.c
++++ b/drivers/mtd/spi-nor/winbond.c
+@@ -100,6 +100,9 @@ static const struct flash_info winbond_parts[] = {
+ 			     SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
+ 	{ "w25m512jv", INFO(0xef7119, 0, 64 * 1024, 1024,
+ 			    SECT_4K | SPI_NOR_QUAD_READ | SPI_NOR_DUAL_READ) },
++	{ "w25q512nw", INFO(0xef8020, 0, 64 * 1024, 1024,
++			   SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ |
++			   SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB) },
+ 	{ "w25q512jvq", INFO(0xef4020, 0, 64 * 1024, 1024,
+ 			     SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
+ };
 -- 
-2.31.1
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
+

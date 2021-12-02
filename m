@@ -2,106 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E992C4661A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7A84661A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:45:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357049AbhLBKr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 05:47:59 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:47204 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232856AbhLBKr6 (ORCPT
+        id S1357061AbhLBKsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232856AbhLBKso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 05:47:58 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B2AiSPV039153;
-        Thu, 2 Dec 2021 04:44:28 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638441868;
-        bh=tVa90xiSbSoY1tRcCyHb0YgsNeYRASbSTeyOl8WLfko=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=eaS2Y5f8QDsWdaPnQq/NThuZNTtykjReOP0QLt1WirleddDDovrlI4LZ5JGdn1EwC
-         0kSUzsVKgfUvMT/r72W0iwesTMojRxIMPEn5GPWrt+dMFNUXjDH6KLjSSczAhxfGaz
-         PROVACdFSjAtWsh22F69qsBWase9/XTJmhCShfwY=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B2AiSmA109954
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 2 Dec 2021 04:44:28 -0600
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 2
- Dec 2021 04:44:27 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 2 Dec 2021 04:44:28 -0600
-Received: from [10.250.235.8] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B2AiOOA115426;
-        Thu, 2 Dec 2021 04:44:25 -0600
-Message-ID: <22db4807-7772-abe6-50c6-5812d9692ccc@ti.com>
-Date:   Thu, 2 Dec 2021 16:14:23 +0530
+        Thu, 2 Dec 2021 05:48:44 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FA2C06174A;
+        Thu,  2 Dec 2021 02:45:21 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id a18so58773644wrn.6;
+        Thu, 02 Dec 2021 02:45:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1MGEQnBIQ3vbOTLy3XTiJ0Tx24PECqKkLHXiDfXBULI=;
+        b=HDWJGGkPx/ABcvM2OSRshHQ9Kyk2ejcXoUKfiA9pmPPhTJP/dUDhWff/STpZqhQrkE
+         Z9xvdiOKGHgTQoq7l42pKSUvUkZvy0vjr6QhusrKwIsI6zcg26kRPwCknA8MQgiQ6aml
+         WpvMalRn6N/FjBSW9eok+MPzzn+qb5LqAxzBt8rXPshy/uOSpw6PVStgZgNWwrjS7DEG
+         FdxZhyXRFX9CFHJ2VNKDRZJIlyeoezxRyDtyjzRTRlucji6iqc/ckxpk7xzw3o2cXtTA
+         6hys4j8hD0Txo63mP/AOP+rIpF6dvi2USVQmoik7EP0JIveqZ6T6/m68SyCDO25qCNXa
+         lD5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1MGEQnBIQ3vbOTLy3XTiJ0Tx24PECqKkLHXiDfXBULI=;
+        b=UcoROsOMofP2M0EZO9ATpzi+1FuEJ4eb7vu+s9diiqppSWzv6JHyaXdPiwF1Atvu25
+         KSxuRTn1NnSIa8XDzGBkPIVgcBR+29rUOt66kxJptkeMBZmObVMV09V59vTOYI+Z4TUz
+         f0dLYwe1ok5rmqBY1CZsc4+UBd7KbaTZQhJHwpXHDyJZiHNYHOVxx5YQkRXm3Jv3vIeJ
+         tRSDbn+82GFa3wwzxrTCk8q4v7PCcYuiY0/7TUyHmitBJzS+HEXoiUYv/PKcTa/DhUai
+         ePBvXpy7dyQEcuByJBlIw45ovESEjC+rd7IbfPibXlvahKwo/XjhAHQHhIFoGgoCL5kl
+         cqDw==
+X-Gm-Message-State: AOAM530Qcs2aTmgoEMot64/hE97l5QAVvOJ/IaXa6cpdZl9IDoZyxEZy
+        tLIyUUBn56TPeCjfcpB5uRM=
+X-Google-Smtp-Source: ABdhPJzWyEn2CUtbntLPrC+QRWXyUU/vsr3n9B8lFVwFkEpMv2ykzJgO3Bwz9deLoAWry1TP8gBNIQ==
+X-Received: by 2002:a05:6000:188b:: with SMTP id a11mr13249364wri.326.1638441920340;
+        Thu, 02 Dec 2021 02:45:20 -0800 (PST)
+Received: from ?IPV6:2003:ea:8f1a:f00:14e3:371c:4e7b:1f65? (p200300ea8f1a0f0014e3371c4e7b1f65.dip0.t-ipconnect.de. [2003:ea:8f1a:f00:14e3:371c:4e7b:1f65])
+        by smtp.googlemail.com with ESMTPSA id p8sm2224318wrx.25.2021.12.02.02.45.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 02:45:19 -0800 (PST)
+Message-ID: <cf4accd9-d613-5da4-cf2e-ccd9f06f3786@gmail.com>
+Date:   Thu, 2 Dec 2021 11:45:10 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.2
-Subject: Re: [PATCH] arm64: dts: ti: k3-am64-main: add timesync router node
+Subject: Re: [EXT] Re: [PATCH net-next 2/2] net: stmmac: make
+ stmmac-tx-timeout configurable in Kconfig
 Content-Language: en-US
-To:     Christian Gmeiner <christian.gmeiner@gmail.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     Grygorii Strashko <grygorii.strashko@ti.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>
-References: <20211109150158.164778-1-christian.gmeiner@gmail.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20211109150158.164778-1-christian.gmeiner@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "kuba@kernel.org" <kuba@kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "peppe.cavallaro@st.com" <peppe.cavallaro@st.com>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "joabreu@synopsys.com" <joabreu@synopsys.com>,
+        Yannick Vignon <yannick.vignon@nxp.com>,
+        "boon.leong.ong@intel.com" <boon.leong.ong@intel.com>,
+        "Jose.Abreu@synopsys.com" <Jose.Abreu@synopsys.com>,
+        "mst@redhat.com" <mst@redhat.com>,
+        "Joao.Pinto@synopsys.com" <Joao.Pinto@synopsys.com>,
+        Mingkai Hu <mingkai.hu@nxp.com>, Leo Li <leoyang.li@nxp.com>
+References: <20211201014705.6975-1-xiaoliang.yang_1@nxp.com>
+ <20211201014705.6975-3-xiaoliang.yang_1@nxp.com>
+ <9116dadb-c3a3-1e69-164a-2cffa341b91b@gmail.com>
+ <DB8PR04MB5785293BA211B0FD49EA40AFF0699@DB8PR04MB5785.eurprd04.prod.outlook.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+In-Reply-To: <DB8PR04MB5785293BA211B0FD49EA40AFF0699@DB8PR04MB5785.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 11/9/21 8:31 PM, Christian Gmeiner wrote:
-> The Time Sync Event Router (TIMESYNC_INTRTR0) implements a set of
-> multiplexers to provide selection of active CPTS time sync events for
-> routing to CPTS capable modules.
+On 02.12.2021 11:28, Xiaoliang Yang wrote:
+> Hi Heiner,
 > 
-> This patch adds DT node TIMESYNC_INTRTR0 using "pinctrl-single" bindings.
+> On Dec 02, 2021 at 16:13:20, Heiner Kallweit wrote:
+>>> stmmac_tx_timeout() function is called when a queue transmission
+>>> timeout. When Strict Priority is used as scheduling algorithms, the
+>>> lower priority queue may be blocked by a higher prority queue, which
+>>> will lead to tx timeout. We don't want to enable the tx watchdog
+>>> timeout in this case. Therefore, this patch make stmmac-tx-timeout
+>> configurable.
+>>>
+>> Your patch just disables the timeout handler, the WARN_ONCE() would still fire.
+>> And shouldn't this be a runtime setting rather than a compile-time setting?
+>>
+> I tried to disable it in stmmac_tx_timeout() at runtime, the WARN_ONCE() will still be called from dev_watchdog() in sch_generic.c. It seems only when the timeout handler is NULL can disable the netdev watchdog up. So I did this in compile-time setting.
 > 
-> Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
-> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-> Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-am64-main.dtsi | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-> index 42d1d219a3fd..c9321a80353a 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-> @@ -564,6 +564,14 @@ cpts@39000000 {
->  		ti,cpts-ext-ts-inputs = <8>;
->  	};
->  
-> +	timesync_router: timesync-router@a40000 {
+The issue you're trying to fix is not driver-specific. Therefore the solution
+should be added to net core.
 
-Node with "pinctrl-single" would need to be named pinctrl@reg.
-Else this would probably fail dtbs_check once pinctrl-single bindings is
-converted to YAML format.
-
-> +		compatible = "pinctrl-single";
-> +		reg = <0x0 0xa40000 0x0 0x800>;
-> +		#pinctrl-cells = <1>;
-> +		pinctrl-single,register-width = <32>;
-> +		pinctrl-single,function-mask = <0x000107ff>;
-> +	};
-> +
->  	usbss0: cdns-usb@f900000{
->  		compatible = "ti,am64-usb";
->  		reg = <0x00 0xf900000 0x00 0x100>;
+> Regards,
+> Xiaoliang
 > 
 
-Regards
-Vignesh

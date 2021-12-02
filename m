@@ -2,130 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED80466811
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0E846680D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359706AbhLBQ3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 11:29:48 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:34328 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1359490AbhLBQ25 (ORCPT
+        id S1359563AbhLBQ3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 11:29:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359487AbhLBQ2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 11:28:57 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B2GI24g027527;
-        Thu, 2 Dec 2021 16:25:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=muvMSeyIIQwZPclPGBI9yNBS6axKv+emRwU19A4CBPY=;
- b=QGO0ZOti/mvhfejbPZHMiKyP2A06GDGHUB5EB8IKf8UFBwf9bNl4iLUoNHjBNo2Dm0M3
- dl0RTWeWWk8FL+8B+8VB1K+FHrYCRV7NbJDkzcXHEp44wlbwgndnDbZp9hm7i2sBQqYR
- j1EXUmQop70wA9NDbZ4Vr3aFjFF+HklU44QBaIRLKDh6JJfwzMh1cHUN3k8dfDARw5OD
- cfJMVqlW5OpndW7ZjCPiPkXpwI2j9xVrl4uqmJBRly+dw4c9SQCy2wqaG4xgxX5DQKhF
- 3WLcU3mFohtWyOTwbVgQdvTDJs4S5xNoAkrWOndlYvhbhYOlmZDyZ8wFqOxQ0ozm5Y6K 0Q== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cq1hu84d4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 16:25:26 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B2GHw3J015148;
-        Thu, 2 Dec 2021 16:25:23 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma01fra.de.ibm.com with ESMTP id 3ckcaabtn5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 16:25:23 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B2GPLEJ18612616
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Dec 2021 16:25:21 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EBAD811C05C;
-        Thu,  2 Dec 2021 16:25:20 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 56C1811C058;
-        Thu,  2 Dec 2021 16:25:20 +0000 (GMT)
-Received: from sig-9-65-72-23.ibm.com (unknown [9.65.72.23])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  2 Dec 2021 16:25:20 +0000 (GMT)
-Message-ID: <a1b808d664603bfd4bd2f747b59c3e0c51646922.camel@linux.ibm.com>
-Subject: Re: [PATCH 2/4] ima: define a new signature type named
- IMA_VERITY_DIGSIG
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 02 Dec 2021 11:25:05 -0500
-In-Reply-To: <6931ed7b1c7d5906bb595447fc24cd8a9b3e3d62.camel@linux.ibm.com>
-References: <20211129170057.243127-1-zohar@linux.ibm.com>
-         <20211129170057.243127-3-zohar@linux.ibm.com>
-         <YaWNX3nwslG/Q2aH@sol.localdomain>
-         <6931ed7b1c7d5906bb595447fc24cd8a9b3e3d62.camel@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
+        Thu, 2 Dec 2021 11:28:48 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F5AC06174A;
+        Thu,  2 Dec 2021 08:25:25 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id q3so37927326wru.5;
+        Thu, 02 Dec 2021 08:25:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0JGsvnjiYkIl6j1i8qSpFvEIFGcGRddganu7CpOyXOk=;
+        b=X/0Vs8VNVs+6CMRA+kwG8jWZnxgMrYIY1EwQaL97BJweRb0ZY6vFKjx5CeZCmsapfX
+         KBgZ7E9zyr3Lc+QK9JFXV8xHH0hffaS/cer6YtrdTK0cgCJ46otgp+x0AS2obh9g9BYE
+         /WAg4XqUpnC3pywG+rx8VDprgBM1safugNRPF6eW1LNo23FU23WCBwei4gmdEde9uNdd
+         0t8/WIGTqWj1CeHrAl8UW/P+HsWgQMM3rQhK81g5Gp3WHG3mBHDwUBpZa0MbG0LLA5uf
+         xqO2+IsIaNd5i2a+rCcf2NMBRdceoyDB325XWR1M5XL2uOeV2jQjWFXnSmdSHossravG
+         7BEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0JGsvnjiYkIl6j1i8qSpFvEIFGcGRddganu7CpOyXOk=;
+        b=7cRCnCqa0sTn4zyKMmf1M5zRoG02SVdsxDPUN86am8BZatQazpFoSL8tuE++vrSF8f
+         Bpw7M4rsOPJSo/2nHEmKMNHxVxXWPs0LYT0DzC692YCuXH8z64Z6QVKruvgvXWmc9uX8
+         s6QNAkNCFyLtgZnh6is1mRKGiN5Ski6r8b8gk+QcT+JXPU37GbuEMPm9tVhJl+GoSrEb
+         nSdQRFApvsf4CEOXvS4gp3hxLE84g+g7oNuKOI6xU20LLKYQtooJ6zmvosHrtiU1781c
+         1zMpwxIAlaJ6r+ZJmuurvlLpUVK23lpAFPU/wCQRgRmLLlVRLN9hgKA1mnIfHx3qzCgN
+         wQiA==
+X-Gm-Message-State: AOAM530BPupTeiWIg7mRuMSZXMl5mczpy9cYQjRl+pRafQqjvfuQiwWB
+        qg6iE4+iGOHSj0d5Lwoa2x8=
+X-Google-Smtp-Source: ABdhPJzUsiFaBatwrqVRFWnbt+o+h6w2j9qYRd+3ZiiiY/fxafluV9DaJ2LV6+OCq8hY+8pp9BRyXg==
+X-Received: by 2002:adf:f7d2:: with SMTP id a18mr15223132wrq.354.1638462323689;
+        Thu, 02 Dec 2021 08:25:23 -0800 (PST)
+Received: from [192.168.8.198] ([185.69.144.137])
+        by smtp.gmail.com with ESMTPSA id p12sm349112wrr.10.2021.12.02.08.25.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 08:25:23 -0800 (PST)
+Message-ID: <9db0edcf-75c0-d014-6120-514cc37a1a9f@gmail.com>
+Date:   Thu, 2 Dec 2021 16:25:19 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [RFC 00/12] io_uring zerocopy send
+Content-Language: en-US
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     io-uring@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
+References: <cover.1638282789.git.asml.silence@gmail.com>
+ <CA+FuTSf-N08d6pcbie2=zFcQJf3_e2dBJRUZuop4pOhNfSANUA@mail.gmail.com>
+ <0d82f4e2-730f-4888-ec82-2354ffa9c2d8@gmail.com>
+ <d5a07e01-7fc3-2f73-a406-21246a252876@gmail.com>
+ <CA+FuTSeP-W-ePV1EkWMmD4Ycsfq9viYdtyfDbUW3LXTc2q+BHQ@mail.gmail.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CA+FuTSeP-W-ePV1EkWMmD4Ycsfq9viYdtyfDbUW3LXTc2q+BHQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: MO0yun4aboIqngP3f1t1pOt2QCGpAo07
-X-Proofpoint-ORIG-GUID: MO0yun4aboIqngP3f1t1pOt2QCGpAo07
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-02_10,2021-12-02_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- impostorscore=0 mlxscore=0 mlxlogscore=999 adultscore=0 phishscore=0
- suspectscore=0 malwarescore=0 lowpriorityscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112020106
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
-
-On Tue, 2021-11-30 at 13:14 -0500, Mimi Zohar wrote:
-> On Mon, 2021-11-29 at 18:33 -0800, Eric Biggers wrote:
-> > On Mon, Nov 29, 2021 at 12:00:55PM -0500, Mimi Zohar wrote:
-> > > To differentiate between a regular file hash and an fs-verity file digest
-> > > based signature stored as security.ima xattr, define a new signature type
-> > > named IMA_VERITY_DIGSIG.
-> > > 
-> > > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> > 
-> > For this new signature type, what bytes are actually signed?  It looks like it's
-> > just the raw digest, which isn't sufficient since it is ambiguous.  It needs to
-> > include information that makes it clear what the signer is actually signing,
-> > such as "this is an fs-verity SHA-256 file digest".  See
-> > 'struct fsverity_formatted_digest' for an example of this (but it isn't
-> > necessary to use that exact structure).
-> > 
-> > I think the existing IMA signatures have the same problem (but it is hard for me
-> > to understand the code).  However, a new signature type doesn't have
-> > backwards-compatibility concerns, so it could be done right.
+On 12/2/21 00:36, Willem de Bruijn wrote:
+>>>>> 1) we pass a bvec, so no page table walks.
+>>>>> 2) zerocopy_sg_from_iter() is just slow, adding a bvec optimised version
+>>>>>      still doing page get/put (see 4/12) slashed 4-5%.
+>>>>> 3) avoiding get_page/put_page in 5/12
+>>>>> 4) completion events are posted into io_uring's CQ, so no
+>>>>>      extra recvmsg for getting events
+>>>>> 5) no poll(2) in the code because of io_uring
+>>>>> 6) lot of time is spent in sock_omalloc()/free allocating ubuf_info.
+>>>>>      io_uring caches the structures reducing it to nearly zero-overhead.
+>>>>
+>>>> Nice set of complementary optimizations.
+>>>>
+>>>> We have looked at adding some of those as independent additions to
+>>>> msg_zerocopy before, such as long-term pinned regions. One issue with
+>>>> that is that the pages must remain until the request completes,
+>>>> regardless of whether the calling process is alive. So it cannot rely
+>>>> on a pinned range held by a process only.
+>>>>
+>>>> If feasible, it would be preferable if the optimizations can be added
+>>>> to msg_zerocopy directly, rather than adding a dependency on io_uring
+>>>> to make use of them. But not sure how feasible that is. For some, like
+>>>> 4 and 5, the answer is clearly it isn't.  6, it probably is?
+>>
+>> Forgot about 6), io_uring uses the fact that submissions are
+>> done under an per ring mutex, and completions are under a per
+>> ring spinlock, so there are two lists for them and no extra
+>> locking. Lists are spliced in a batched manner, so it's
+>> 1 spinlock per N (e.g. 32) cached ubuf_info's allocations.
+>>
+>> Any similar guarantees for sockets?
 > 
-> As this change should probably be applicable to all signature types,
-> the signature version in the  signature_v2_hdr should be bumped.  The
-> existing signature version could co-exist with the new signature
-> version.
+> For datagrams it might matter, not sure if it would show up in a
+> profile. The current notification mechanism is quite a bit more
+> heavyweight than any form of fixed ubuf pool.
 
-By signing the file hash, the sig field in the IMA measurement list can
-be directly verified against the digest field.  For appended
-signatures, we defined a new template named ima-modsig which contains
-two file hashes, with and without the appended signature.
+Just to give an idea what I'm seeing in profiles: while testing
 
-Similarly, by signing a digest containing other metadata and fs-
-verity's file digest, the measurement list should include both digests.
-Otherwise the consumer of the measurement list would first need to
-calculate the signed digest before verifying the signature.
+3 | io_uring (@flush=false, nr_reqs=1)   |  96534     | 2.03
 
-Options:
-- Include just fs-verity's file digest and the signature in the
-measurement list.  Leave it to the consumer of the measurement list to
-deal with.
-- Define a new template format to include both digests, add a new field
-in the iint for the signed digest.  (Much more work.)
-- As originally posted, directly sign fs-verity's file digest.
+I found that removing one extra smb_mb() per request in io_uring
+gave around +0.65% of t-put (quick testing). In profiles the
+function where it was dropped from 0.93% to 0.09%.
 
-thanks,
+ From what I see, alloc+free takes 6-10% for 64KB UDP, it may be
+great to have something for MSG_ZEROCOPY, but if that adds
+additional locking/atomics, honestly I'd prefer to keep it separate
+from io_uring's caching.
 
-Mimi
+I also hope we can optimise generic paths at some point, and the
+faster it gets the more such additional locking will hurt, pretty
+much how it was with the block layer.
 
+> For TCP this matters less, as multiple sends are not needed and
+> completions are coalesced, because in order.
+> 
+
+-- 
+Pavel Begunkov

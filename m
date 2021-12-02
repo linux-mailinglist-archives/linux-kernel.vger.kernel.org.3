@@ -2,101 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12142465DA8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 06:07:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DAD9465DAC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 06:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbhLBFKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 00:10:46 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:28143 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbhLBFKp (ORCPT
+        id S233170AbhLBFNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 00:13:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229469AbhLBFNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 00:10:45 -0500
-Received: from canpemm500008.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J4P5M4KXgz1DJcy;
-        Thu,  2 Dec 2021 13:04:39 +0800 (CST)
-Received: from [10.174.179.2] (10.174.179.2) by canpemm500008.china.huawei.com
- (7.192.105.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 2 Dec
- 2021 13:07:21 +0800
-Subject: Re: [PATCH] md: Fix unexpected behaviour in is_mddev_idle
-To:     Luis Chamberlain <mcgrof@kernel.org>
-CC:     <song@kernel.org>, <axboe@kernel.dk>, <hare@suse.de>,
-        <jack@suse.cz>, <ming.lei@redhat.com>, <tj@kernel.org>,
-        <linux-raid@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linfeilong@huawei.com>
-References: <20211201032712.3684503-1-lijinlin3@huawei.com>
- <Yad9phRUdKF/giGD@bombadil.infradead.org>
-From:   Li Jinlin <lijinlin3@huawei.com>
-Message-ID: <cc737240-a6d2-2c12-d9c8-877c8018b505@huawei.com>
-Date:   Thu, 2 Dec 2021 13:07:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Thu, 2 Dec 2021 00:13:45 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585F1C061574;
+        Wed,  1 Dec 2021 21:10:23 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id o4so26798849pfp.13;
+        Wed, 01 Dec 2021 21:10:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nYhvOFpnD+nATcij6pHFj/RlZs5yXdc5UYRL9Bv7hdA=;
+        b=igG5uKin/YSTcw0YoaxGhQ3fNMMy/FFFseT8g7XGwh6qtPPs+iMBMJHnn+l6dfDVsd
+         VYbFQUj/92Da0DLd3/XJgpv5F3P2a341NZDME8GFl4+J+9OhL5pou0Dhx3iYoIG5UKfA
+         XGpDYNdioRMGWm/RhuuyV+5SGoW9kFsDDlHirpZ6SjwveAK6nOX3lRKrKbWMhiSn0pBo
+         vo5QWmn5H53+u9YLVsCv0m5NP89cqTrHhnQ8aDo6xqqGFmyecP5Rkn6WbOMhrfRLFfSW
+         L1eDHRgQ8DzsHD7/uRS99ue+WtLW7KZgYUQjp5JOnBOgeVYLdBjRWc2+YBECiDfVqwQI
+         ZsTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nYhvOFpnD+nATcij6pHFj/RlZs5yXdc5UYRL9Bv7hdA=;
+        b=dlDQvaYouBpzlQw3dEdm9e6vKfLUf2vRdBTmA1PZHZacIWYglkwvMSNdqgXjZTOTQQ
+         CCTLmah91TW/5GZnuifdpIsKNW5J+ROCYtge76qpwKSmyM+DCh6QZCR3EHE7ncLj+yky
+         LALSShweFEzEHPIqkVLbI2pZLjU0efkTRbyFkdMg5ZYGnYakHBoZcQVJaWvVDFxbjj8s
+         z78iq3UYMySzZHbnuznxyByerxWYMlLObndZhIx9A2HdEGaYI71vdMBWnba0+BvMcUMq
+         MwlJ1uoOtRbnHOW2dqtbKElGsdldc810yH78vZB0h+eupxsOyVQUVM1fYMjk/yG6iVzs
+         m0mQ==
+X-Gm-Message-State: AOAM530OidGc1g6IOfcQwr/zCMtlWMrh2KP5fXREdu74dH98MKfxKvke
+        424GZfR0xL/bzLBn9MYqdJo+fD4vVqAfULs6uxloCUqdRWA=
+X-Google-Smtp-Source: ABdhPJy3xHjQer45zHTeWlFMZJmSYmh1eCEl5lkNepg7G+3DkiIDapz3rtXABRbc8iCwVyYY5YGKLntUwHu6Q5Lx4CA=
+X-Received: by 2002:a63:6881:: with SMTP id d123mr7798010pgc.497.1638421822722;
+ Wed, 01 Dec 2021 21:10:22 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Yad9phRUdKF/giGD@bombadil.infradead.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.2]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500008.china.huawei.com (7.192.105.151)
-X-CFilter-Loop: Reflected
+References: <20211124084119.260239-1-jolsa@kernel.org> <20211124084119.260239-2-jolsa@kernel.org>
+ <CAEf4Bzb5wyW=62fr-BzQsuFL+mt5s=+jGcdxKwZK0+AW18uD_Q@mail.gmail.com> <Yafp193RdskXofbH@krava>
+In-Reply-To: <Yafp193RdskXofbH@krava>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 1 Dec 2021 21:10:11 -0800
+Message-ID: <CAADnVQK2vEjnZVasTKASG6AmeWyyEF8Q3bpRfWvuJJ6_qHnEig@mail.gmail.com>
+Subject: Re: [PATCH 1/8] perf/kprobe: Add support to create multiple probes
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 1, 2021 at 1:32 PM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> On Tue, Nov 30, 2021 at 10:53:58PM -0800, Andrii Nakryiko wrote:
+> > On Wed, Nov 24, 2021 at 12:41 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > >
+> > > Adding support to create multiple probes within single perf event.
+> > > This way we can associate single bpf program with multiple kprobes,
+> > > because bpf program gets associated with the perf event.
+> > >
+> > > The perf_event_attr is not extended, current fields for kprobe
+> > > attachment are used for multi attachment.
+> >
+> > I'm a bit concerned with complicating perf_event_attr further to
+> > support this multi-attach. For BPF, at least, we now have
+> > bpf_perf_link and corresponding BPF_LINK_CREATE command in bpf()
+> > syscall which allows much simpler and cleaner API to do this. Libbpf
+> > will actually pick bpf_link-based attachment if kernel supports it. I
+> > think we should better do bpf_link-based approach from the get go.
+> >
+> > Another thing I'd like you to keep in mind and think about is BPF
+> > cookie. Currently kprobe/uprobe/tracepoint allow to associate
+> > arbitrary user-provided u64 value which will be accessible from BPF
+> > program with bpf_get_attach_cookie(). With multi-attach kprobes this
+> > because extremely crucial feature to support, otherwise it's both
+> > expensive, inconvenient and complicated to be able to distinguish
+> > between different instances of the same multi-attach kprobe
+> > invocation. So with that, what would be the interface to specify these
+> > BPF cookies for this multi-attach kprobe, if we are going through
+> > perf_event_attr. Probably picking yet another unused field and
+> > union-izing it with a pointer. It will work, but makes the interface
+> > even more overloaded. While for LINK_CREATE we can just add another
+> > pointer to a u64[] with the same size as number of kfunc names and
+> > offsets.
+>
+> I'm not sure we could bypass perf event easily.. perhaps introduce
+> BPF_PROG_TYPE_RAW_KPROBE as we did for tracepoints or just new
+> type for multi kprobe attachment like BPF_PROG_TYPE_MULTI_KPROBE
+> that might be that way we'd have full control over the API
 
+Indeed. The existing kprobe prog type has this api:
+ * Return: BPF programs always return an integer which is interpreted by
+ * kprobe handler as:
+ * 0 - return from kprobe (event is filtered out)
+ * 1 - store kprobe event into ring buffer
 
-On 12/1/2021 9:50 PM, Luis Chamberlain wrote:
-> On Wed, Dec 01, 2021 at 11:27:12AM +0800, Li Jinlin wrote:
->> diff --git a/drivers/md/md.c b/drivers/md/md.c
->> index 5111ed966947..f47035838c43 100644
->> --- a/drivers/md/md.c
->> +++ b/drivers/md/md.c
->> @@ -8429,14 +8429,14 @@ static int is_mddev_idle(struct mddev *mddev, int init)
->>  {
->>  	struct md_rdev *rdev;
->>  	int idle;
->> -	int curr_events;
->> +	long curr_events;
-> 
->>  
->>  	idle = 1;
->>  	rcu_read_lock();
->>  	rdev_for_each_rcu(rdev, mddev) {
->>  		struct gendisk *disk = rdev->bdev->bd_disk;
->> -		curr_events = (int)part_stat_read_accum(disk->part0, sectors) -
->> -			      atomic_read(&disk->sync_io);
->> +		curr_events = (long)part_stat_read_accum(disk->part0, sectors) -
->> +			      atomic64_read(&disk->sync_io);
-> 
-> And what makes you believe you might not have to go and change all other
-> drivers to address this as well? 
-The drdb driver also have same problem. I will resend this patch together with
-the fix patch of drdb driver.
-
-Thanks,
-JinLin
-
-
-> 
->>  static inline void md_sync_acct_bio(struct bio *bio, unsigned long nr_sectors)
->> diff --git a/include/linux/genhd.h b/include/linux/genhd.h
->> index 74c410263113..efa7884de11b 100644
->> --- a/include/linux/genhd.h
->> +++ b/include/linux/genhd.h
->> @@ -150,7 +150,7 @@ struct gendisk {
->>  	struct list_head slave_bdevs;
->>  #endif
->>  	struct timer_rand_state *random;
->> -	atomic_t sync_io;		/* RAID */
->> +	atomic64_t sync_io;		/* RAID */
->>  	struct disk_events *ev;
->>  #ifdef  CONFIG_BLK_DEV_INTEGRITY
->>  	struct kobject integrity_kobj;
->> -- 
->> 2.31.1
-> 
->   Luis
-> .
-> 
+that part we cannot change.
+No one was using that filtering feature. It often was in a way.
+New MULTI_KPROBE prog type should not have it.

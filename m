@@ -2,59 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BDB465F91
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 09:35:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0342465FAB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 09:41:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345310AbhLBIjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 03:39:16 -0500
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:52910 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230398AbhLBIjP (ORCPT
+        id S1345789AbhLBIoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 03:44:08 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:28147 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230054AbhLBIoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 03:39:15 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Uz9YS2j_1638434144;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0Uz9YS2j_1638434144)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 02 Dec 2021 16:35:51 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     bfields@fieldses.org
-Cc:     chuck.lever@oracle.com, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH] NFSD: Fix inconsistent indenting
-Date:   Thu,  2 Dec 2021 16:35:42 +0800
-Message-Id: <1638434142-44998-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        Thu, 2 Dec 2021 03:44:06 -0500
+Received: from kwepemi500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J4TqX2pwLz1DJcQ;
+        Thu,  2 Dec 2021 16:38:00 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ kwepemi500010.china.huawei.com (7.221.188.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 2 Dec 2021 16:40:42 +0800
+Received: from localhost.localdomain (10.67.165.24) by
+ kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 2 Dec 2021 16:40:42 +0800
+From:   Guangbin Huang <huangguangbin2@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <wangjie125@huawei.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
+        <chenhao288@hisilicon.com>
+Subject: [PATCH net-next 0/9] net: hns3: some cleanups for -next
+Date:   Thu, 2 Dec 2021 16:35:54 +0800
+Message-ID: <20211202083603.25176-1-huangguangbin2@huawei.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600016.china.huawei.com (7.193.23.20)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eliminate the follow smatch warning:
+To improve code readability and simplicity, this series add 9 cleanup
+patches for the HNS3 ethernet driver.
 
-fs/nfsd/nfs4xdr.c:4766 nfsd4_encode_read_plus_hole() warn: inconsistent
-indenting.
+Jian Shen (3):
+  net: hns3: split function hclge_init_vlan_config()
+  net: hns3: split function hclge_get_fd_rule_info()
+  net: hns3: split function hclge_update_port_base_vlan_cfg()
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- fs/nfsd/nfs4xdr.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Jie Wang (3):
+  net: hns3: refactor function hclge_configure()
+  net: hns3: refactor function hclge_set_channels()
+  net: hns3: refactor function hns3_get_vector_ring_chain()
 
-diff --git a/fs/nfsd/nfs4xdr.c b/fs/nfsd/nfs4xdr.c
-index c286690..3031126 100644
---- a/fs/nfsd/nfs4xdr.c
-+++ b/fs/nfsd/nfs4xdr.c
-@@ -4763,8 +4763,8 @@ static __be32 nfsd4_encode_readv(struct nfsd4_compoundres *resp,
- 		return nfserr_resource;
- 
- 	*p++ = htonl(NFS4_CONTENT_HOLE);
--	 p   = xdr_encode_hyper(p, read->rd_offset);
--	 p   = xdr_encode_hyper(p, count);
-+	p = xdr_encode_hyper(p, read->rd_offset);
-+	p = xdr_encode_hyper(p, count);
- 
- 	*eof = (read->rd_offset + count) >= f_size;
- 	*maxcount = min_t(unsigned long, count, *maxcount);
+Peng Li (2):
+  net: hns3: extract macro to simplify ring stats update code
+  net: hns3: refactor function hns3_fill_skb_desc to simplify code
+
+Yufeng Mo (1):
+  net: hns3: split function hns3_nic_net_xmit()
+
+ .../net/ethernet/hisilicon/hns3/hns3_enet.c   | 430 ++++++++----------
+ .../net/ethernet/hisilicon/hns3/hns3_enet.h   |   7 +
+ .../hisilicon/hns3/hns3pf/hclge_main.c        | 317 +++++++------
+ 3 files changed, 390 insertions(+), 364 deletions(-)
+
 -- 
-1.8.3.1
+2.33.0
 

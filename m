@@ -2,292 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E0D4664C1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 14:53:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B81E4664C4
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 14:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358364AbhLBN41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 08:56:27 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:5202 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346917AbhLBN4V (ORCPT
+        id S1358365AbhLBN4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 08:56:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358379AbhLBN4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 08:56:21 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B2DPJSZ017947;
-        Thu, 2 Dec 2021 13:52:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=odNM1SuCcKK6sCNzJJneZ0ovpnjIH9BAQkTZy7joDRY=;
- b=Rk3+Vm4+s5x/MNVGxwQE8KApdLXYxFCuHBZol2PWdD165qiVIj3WywpTpbyViQSOvpkN
- 5r3i05WIkRsAZ0X0jyqo29Kx53PEz0Xbryr/UcnSFTrWive7pkIoFHnhg3StGaaWMd2w
- 998lAT78sVJY6byxDbSEov1212C7Ug5ljXFCfx/9twJfeIi7zeW6qhjW0Kqls9Esm0/x
- Uj5tnAPrmxTjlvREPams+7juXb2bPERSllm1ZQSwGx6HE5iLI/AGfwcmtS5mDdS21OPS
- LbcDpN0hb1llEOkIDZ3kVyGcHv1VUWNsqVuARYiT0HojaakfP72Cti6HVsHKAfL7bZvy jg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cpxhy99c0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 13:52:46 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B2DQQiN020701;
-        Thu, 2 Dec 2021 13:52:45 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cpxhy99bg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 13:52:45 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B2Dj8Z4011454;
-        Thu, 2 Dec 2021 13:52:44 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma02wdc.us.ibm.com with ESMTP id 3ckcacp4wx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 13:52:43 +0000
-Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B2DqfE139780624
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Dec 2021 13:52:41 GMT
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 48E72136061;
-        Thu,  2 Dec 2021 13:52:41 +0000 (GMT)
-Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 10170136059;
-        Thu,  2 Dec 2021 13:52:37 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  2 Dec 2021 13:52:37 +0000 (GMT)
-Message-ID: <9b95d629-3d17-dbdc-05f1-205e50ec9e95@linux.ibm.com>
-Date:   Thu, 2 Dec 2021 08:52:37 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC 20/20] ima: Setup securityfs_ns for IMA namespace
-Content-Language: en-US
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20211130160654.1418231-1-stefanb@linux.ibm.com>
- <20211130160654.1418231-21-stefanb@linux.ibm.com>
- <20211202131818.ygzsywwfu4rfcbuy@wittgenstein>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20211202131818.ygzsywwfu4rfcbuy@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: yG9PQRou744qZr4gUqx54ql_n5sAv8Za
-X-Proofpoint-GUID: o2a_UNAkqbdnTh3bp-Q3BF3VlzQtdpct
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 2 Dec 2021 08:56:34 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF736C061759
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 05:53:11 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id r25so50086134edq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 05:53:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E1sTxIp0a41bkXoV8cHR5rlVl6XXZGn9tZNWmb4OGT8=;
+        b=O/w8IFDO8lBP7ZX/okkfDxwt6a0o5j/mp0wNN64tjiRVQDUVAXihonXsyYwAfzUx1Y
+         +s1aSfSfJyrhn+zri/+Wm091DSUpEUREWpZCESWe+PxEg0E4P++6qPFRTJY4KDtHytJd
+         e32ertQv+qww7UC5/aJjUxOglx7FMJaAYAWD6CxDRbtkcwtQ7/ZhVrKh1YHEcnf1aNTW
+         Lqi99upT615hXVDpzvrzYL8bpidWaKItWAR9K3/sCUHasB4XxQ7+urnDL++vRdvc2O2L
+         EaQrat63iIFHnaIr8rQfpla7JTCvIEtVQDTQZaSzm9aBXTiTZnHhzWuc4wHP9ZWpbgBE
+         isKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E1sTxIp0a41bkXoV8cHR5rlVl6XXZGn9tZNWmb4OGT8=;
+        b=RRngEb/JR441Oe3GttlACPCJidKLXvHPv5G+KY09PZ6McIZFXP7vJHq/lfv2m+BIhC
+         GY5fldGq00sb4bs/bE2Z2OQpSEo3lCDUGq+CzyOgrb1lRPRbM4TvoY91d1z0GCYufwEx
+         +vo5LDTNz1VY3sRnhVfEPwgu4H7CemJi7kpkU316a0aLRSEXBmHbPedUN3++06i8Eorz
+         E10ErRqka5yHUZOCrB23ZfH3qJHa0mDJm/I6e6QObEXTQsCZIyS4Fglxxsj/2bQTylFI
+         UgBK28LWlCZmm1vVeTKXcz4OCSvFgBpBaDnY7Umg8MtFmQk+ne/jjcfVFd0ZQL2T6SfM
+         w6gA==
+X-Gm-Message-State: AOAM532hQOAGvVrAqhKmDWh+ek91xrkqwUws6j+KgG8hnCxfCfFCaVyX
+        moLeEgReH4mvRP5EnrDC9zgKTFD9k1LYHjRCu/Z+0g==
+X-Google-Smtp-Source: ABdhPJy4sGiccW5Z5uUlfqdD2w/ANfk1HfjdWqg4WUNhAZwOB99TwjqmEpjnwErcYNUtPF2f3yGEIyX6tJ1JIaaT4KI=
+X-Received: by 2002:a17:906:7b53:: with SMTP id n19mr15634326ejo.538.1638453186230;
+ Thu, 02 Dec 2021 05:53:06 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-12-02_07,2021-12-02_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- mlxscore=0 bulkscore=0 impostorscore=0 adultscore=0 priorityscore=1501
- phishscore=0 clxscore=1015 lowpriorityscore=0 malwarescore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112020088
+References: <YaZNyMV5gX5cZpar@smile.fi.intel.com> <CAMRc=Mf5d1i34eBez+pOYjjdyfRL9N_ha_==Cn1rANr=2CB9aQ@mail.gmail.com>
+ <YaaQp2rq7N71dm1l@smile.fi.intel.com> <CAMRc=Me=Oq_V=+p-AFPcyDjBs-+4Ug3k0AWK9fdEEet2JD3eFw@mail.gmail.com>
+ <CAMRc=MdQ+a7UrE7csg3GsiLXYGkzti-wPUwPh5J=7WBj74OVZg@mail.gmail.com>
+ <YaimotqSgHzS2wdA@smile.fi.intel.com> <CAMRc=Mew8xfPb9kgH-bf=t+yb1xGpRwv3Vn0+b-9pPbp3M3g5Q@mail.gmail.com>
+ <YaivZe6Qo9LMoywi@smile.fi.intel.com> <Yaiv470uDhTbPD1A@smile.fi.intel.com>
+ <CAMRc=Mdz=pihuTamENmTiWRGeUU=tb_PuxvsarS+oXFpyq4p=g@mail.gmail.com> <YajNsrKmEEBr5zWs@smile.fi.intel.com>
+In-Reply-To: <YajNsrKmEEBr5zWs@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 2 Dec 2021 14:52:55 +0100
+Message-ID: <CAMRc=MeMhyV1kZ7zvkqrk0okh6shxvB_LapusCFzg6UBh-bU-A@mail.gmail.com>
+Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
+ struct gpio_chip
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 12/2/21 08:18, Christian Brauner wrote:
-> On Tue, Nov 30, 2021 at 11:06:54AM -0500, Stefan Berger wrote:
->> Setup securityfs_ns with symlinks, directories, and files for IMA
->> namespacing support. The same directory structure that IMA uses on the
->> host is also created for the namespacing case.
->>
->> Increment the user namespace's refcount_teardown value by '1' once
->> securityfs_ns has been successfully setup since the initialization of the
->> filesystem causes an additional reference to the user namespace to be
->> taken. The early teardown function will delete the file system and release
->> the additional reference.
->>
->> The securityfs_ns file and directory ownerships cannot be set when the
->> filesystem is setup since at this point the user namespace has not been
->> configured yet by the user and therefore the ownership mappings are not
->> available, yet. Therefore, adjust the file and directory ownerships when
->> an inode's function for determining the permissions of a file or directory
->> is accessed.
->>
->> This filesystem can now be mounted as follows:
->>
->> mount -t securityfs_ns /sys/kernel/security/ /sys/kernel/security/
->>
->> The following directories, symlinks, and files are then available.
->>
->> $ ls -l sys/kernel/security/
->> total 0
->> lr--r--r--. 1 nobody nobody 0 Nov 27 06:44 ima -> integrity/ima
->> drwxr-xr-x. 3 nobody nobody 0 Nov 27 06:44 integrity
->>
->> $ ls -l sys/kernel/security/ima/
->> total 0
->> -r--r-----. 1 root root 0 Nov 27 06:44 ascii_runtime_measurements
->> -r--r-----. 1 root root 0 Nov 27 06:44 binary_runtime_measurements
->> -rw-------. 1 root root 0 Nov 27 06:44 policy
->> -r--r-----. 1 root root 0 Nov 27 06:44 runtime_measurements_count
->> -r--r-----. 1 root root 0 Nov 27 06:44 violations
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> ---
->>   include/linux/ima.h                      |  17 +++
->>   security/integrity/ima/ima.h             |   2 +
->>   security/integrity/ima/ima_fs.c          | 178 ++++++++++++++++++++++-
->>   security/integrity/ima/ima_init_ima_ns.c |   6 +-
->>   security/integrity/ima/ima_ns.c          |   4 +-
->>   5 files changed, 203 insertions(+), 4 deletions(-)
->>
->> diff --git a/include/linux/ima.h b/include/linux/ima.h
->> index fe08919df326..a2c5e516f706 100644
->> --- a/include/linux/ima.h
->> +++ b/include/linux/ima.h
->> @@ -221,6 +221,18 @@ struct ima_h_table {
->>   	struct hlist_head queue[IMA_MEASURE_HTABLE_SIZE];
->>   };
->>   
->> +enum {
->> +	IMAFS_DENTRY_INTEGRITY_DIR = 0,
->> +	IMAFS_DENTRY_DIR,
->> +	IMAFS_DENTRY_SYMLINK,
->> +	IMAFS_DENTRY_BINARY_RUNTIME_MEASUREMENTS,
->> +	IMAFS_DENTRY_ASCII_RUNTIME_MEASUREMENTS,
->> +	IMAFS_DENTRY_RUNTIME_MEASUREMENTS_COUNT,
->> +	IMAFS_DENTRY_VIOLATIONS,
->> +	IMAFS_DENTRY_IMA_POLICY,
->> +	IMAFS_DENTRY_LAST
->> +};
->> +
->>   struct ima_namespace {
->>   	struct kref kref;
->>   	struct user_namespace *user_ns;
->> @@ -267,6 +279,11 @@ struct ima_namespace {
->>   	struct mutex ima_write_mutex;
->>   	unsigned long ima_fs_flags;
->>   	int valid_policy;
->> +
->> +	struct dentry *dentry[IMAFS_DENTRY_LAST];
->> +	struct vfsmount *mount;
->> +	int mount_count;
->> +	bool file_ownership_fixes_done;
->>   };
->>   
->>   extern struct ima_namespace init_ima_ns;
->> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
->> index bb9763cd5fb1..9bcd71bb716c 100644
->> --- a/security/integrity/ima/ima.h
->> +++ b/security/integrity/ima/ima.h
->> @@ -139,6 +139,8 @@ struct ns_status {
->>   /* Internal IMA function definitions */
->>   int ima_init(void);
->>   int ima_fs_init(void);
->> +int ima_fs_ns_init(struct ima_namespace *ns);
->> +void ima_fs_ns_free(struct ima_namespace *ns);
->>   int ima_add_template_entry(struct ima_namespace *ns,
->>   			   struct ima_template_entry *entry, int violation,
->>   			   const char *op, struct inode *inode,
->> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
->> index 6766bb8262f2..9a14be520268 100644
->> --- a/security/integrity/ima/ima_fs.c
->> +++ b/security/integrity/ima/ima_fs.c
->> @@ -22,6 +22,7 @@
->>   #include <linux/parser.h>
->>   #include <linux/vmalloc.h>
->>   #include <linux/ima.h>
->> +#include <linux/namei.h>
->>   
->>   #include "ima.h"
->>   
->> @@ -436,8 +437,13 @@ static int ima_release_policy(struct inode *inode, struct file *file)
->>   
->>   	ima_update_policy(ns);
->>   #if !defined(CONFIG_IMA_WRITE_POLICY) && !defined(CONFIG_IMA_READ_POLICY)
->> -	securityfs_remove(ima_policy);
->> -	ima_policy = NULL;
->> +	if (ns == &init_ima_ns) {
->> +		securityfs_remove(ima_policy);
->> +		ima_policy = NULL;
->> +	} else {
->> +		securityfs_ns_remove(ns->dentry[IMAFS_DENTRY_POLICY]);
->> +		ns->dentry[IMAFS_DENTRY_POLICY] = NULL;
->> +	}
->>   #elif defined(CONFIG_IMA_WRITE_POLICY)
->>   	clear_bit(IMA_FS_BUSY, &ns->ima_fs_flags);
->>   #elif defined(CONFIG_IMA_READ_POLICY)
->> @@ -509,3 +515,171 @@ int __init ima_fs_init(void)
->>   	securityfs_remove(ima_policy);
->>   	return -1;
->>   }
->> +
->> +/*
->> + * Fix the ownership (uid/gid) of the dentry's that couldn't be set at the
->> + * time of their creation because the user namespace wasn't configured, yet.
->> + */
->> +static void ima_fs_ns_fixup_uid_gid(struct ima_namespace *ns)
->> +{
->> +	struct inode *inode;
->> +	size_t i;
->> +
->> +	if (ns->file_ownership_fixes_done ||
->> +	    ns->user_ns->uid_map.nr_extents == 0)
->> +		return;
->> +
->> +	ns->file_ownership_fixes_done = true;
->> +	for (i = 0; i < IMAFS_DENTRY_LAST; i++) {
->> +		if (!ns->dentry[i])
->> +			continue;
->> +		inode = ns->dentry[i]->d_inode;
->> +		inode->i_uid = make_kuid(ns->user_ns, 0);
->> +		inode->i_gid = make_kgid(ns->user_ns, 0);
->> +	}
->> +}
->> +
->> +/* Fix the permissions when a file is opened */
->> +int ima_fs_ns_permission(struct user_namespace *mnt_userns, struct inode *inode,
->> +			 int mask)
->> +{
->> +	ima_fs_ns_fixup_uid_gid(get_current_ns());
-> As noted later in the thread if this is required it means something is
-> buggy in the current code. That shouldn't be needed.
-I fixed this yesterday with late initialization: 
-https://lkml.org/lkml/2021/12/1/1181
+On Thu, Dec 2, 2021 at 2:45 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> I think there's a more fundamental issue here. The correct way to do all
-> this would be to restructure securityfs at least how it works inside of
-> user namespaces. Currently, securityfs works like debugfs: a single
-> shared superblock that is pinned by each new inode that is created via:
+> On Thu, Dec 02, 2021 at 02:06:57PM +0100, Bartosz Golaszewski wrote:
+> > On Thu, Dec 2, 2021 at 12:38 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > >
+> > > On Thu, Dec 02, 2021 at 01:35:01PM +0200, Andy Shevchenko wrote:
+> > > > On Thu, Dec 02, 2021 at 12:24:06PM +0100, Bartosz Golaszewski wrote:
+> > > > > On Thu, Dec 2, 2021 at 11:58 AM Andy Shevchenko
+> > > > > <andriy.shevchenko@linux.intel.com> wrote:
+> > > > > >
+> > > > > > On Wed, Dec 01, 2021 at 02:11:28PM +0100, Bartosz Golaszewski wrote:
+> > > > > > > On Tue, Nov 30, 2021 at 10:04 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> > > > > >
+> > > > > > ...
+> > > > > >
+> > > > > > > Let me maybe rephrase the problem: currently, for GPIO devices
+> > > > > > > instantiating multiple banks created outside of the OF or ACPI
+> > > > > > > frameworks (e.g. instantiated manually and configured using a
+> > > > > > > hierarchy of software nodes with a single parent swnode and a number
+> > > > > > > of child swnodes representing the children), it is impossible to
+> > > > > > > assign firmware nodes other than the one representing the top GPIO
+> > > > > > > device to the gpiochip child devices.
+> > > > > > >
+> > > > > > > In fact if we want to drop the OF APIs entirely from gpiolib - this
+> > > > > > > would be the right first step as for gpio-sim it actually replaces the
+> > > > > > > gc->of_node = some_of_node; assignment that OF-based drivers do for
+> > > > > > > sub-nodes defining banks and it does work with device-tree (I verified
+> > > > > > > that too) thanks to the fwnode abstraction layer.
+> > > > > >
+> > > > > > In exchange of acknowledgements I confirm that I understood the issue
+> > > > > > you are describing. What I still don't like is this band-aid:ish approach.
+> > > > > > What we really need is to replace of_node by fwnode in GPIO library once
+> > > > > > for all. But it can be done later after your simulation series (or before,
+> > > > > > i.o.w. independently), hence I propose to update TODO and do it separately.
+> > > > > >
+> > > > >
+> > > > > But this is what we already do for OF. How would the core gpiolib know
+> > > > > how the firmware nodes represent the banks? It's the driver's job to
+> > > > > tell the framework which node corresponds with what. If anything, we
+> > > > > should start replacing of_nodes with fwnodes in drivers and eventually
+> > > > > we'd drop the of_node pointer from gpio_chip entirely, but we'd keep
+> > > > > the fwnode pointer I added as the driver still needs to assign it
+> > > > > itself.
+> > > > >
+> > > > > Again: I may be missing something here but I've been going through
+> > > > > this on and on and can't figure out any other way. Looking at
+> > > > > gpiolib-acpi.c I don't see it correctly assigning fwnodes to
+> > > > > sub-devices either but I don't have any HW to test it.
+> > > > >
+> > > > > As for this series: I can't really drop this patch as gpio-sim relies
+> > > > > on swnodes being correctly associated with gpio_chips to identify the
+> > > > > gpiodevs from configfs callbacks.
+> > > >
+> > > > Then we need to replace of_node by fwnode as a first step. I have looked
+> > > > briefly into the list of drivers that may have been cleaned up and it doesn't
+> > > > look too long.
+> > >
+> > > Let me kick this off by sending couple of patches.
+> >
+> > Are you fine with merging this in the meantime to get gpio-sim into mainline?
 >
-> 	simple_pin_fs(&fs_type, &mount, &mount_count);
-> 	simple_release_fs(&mount, &mount_count);
+> gpio-sim, yes, (though I may bikeshed about naming of the configfs attributes,
+> etc) but not this patch.
 >
-> and each mount surfaces the same superblock. Ideally making securityfs
-> mountable inside of user namespaces should get you a new superblock.
-> Functions that create files for the ima ns would then be called inside
-> ->fill_super etc.
 
-So this would be the wrong place to do it? I moved it there because this 
-is called late (upon mounting) when the configuration of the user 
-namespace has completed.
+There's no way around it though AFAIK. First - the 'gpio-line-names'
+property will not work for banks. 'ngpios' will only work because we
+read it manually in probe() to figure out the number of sysfs groups.
+And also configfs callbacks will not be able to associate bank devices
+with configfs groups. I would really like to hear an alternative -
+even if it's just an idea and not actual implementation.
 
-static int securityfs_ns_init_fs_context(struct fs_context *fc)
-{
-          int rc;
+I'm really curious to see how you'll remove the of_node pointer and
+not introduce the corresponding fwnode pointer actually.
 
-          if (fc->user_ns->ima_ns->late_fs_init) {
-                  rc = fc->user_ns->ima_ns->late_fs_init(fc->user_ns);
-                  if (rc)
-                          return rc;
-          }
-          fc->ops = &securityfs_ns_context_ops;
-          return 0;
-}
-
-
-Stefan
-
-
-
+Bart

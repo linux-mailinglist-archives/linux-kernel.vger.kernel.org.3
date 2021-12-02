@@ -2,175 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E7046649E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 14:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 892704664A4
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 14:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358319AbhLBNpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 08:45:02 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:52078 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1358297AbhLBNov (ORCPT
+        id S237001AbhLBNpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 08:45:53 -0500
+Received: from ewsoutbound.kpnmail.nl ([195.121.94.170]:54201 "EHLO
+        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358327AbhLBNps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 08:44:51 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B2DPJNn018379;
-        Thu, 2 Dec 2021 13:41:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=k0HT79Me9ovhdCsM3LaDTtpEBqBTasmenzwgpX70iZA=;
- b=fOd4mSoHfMg7IMNDZr7bQhREIQr6LXOA00fZjnoi1H9UOumV/QWpgoNZlmIfy9VFUMag
- bkB9fE7lChEE3qrvVQchZB7ZOIa5Tn6mXUDxwNueStzBM5oipIODDJGSDPjRf2haekfF
- aBFEXFUNLop/tqeFxUC3v/yw4UTaXWXvt2yFpikMt0CBHsQqpoC1dIM6+FNskbcfThmu
- 7RbRHelWuqG1e5lLQna3dM4UDLrIMKnYYz/o8qskghzqUA8zzTIdVcRXlWhQYE5T8BeO
- J+uOWr0Dq9h5/xMzMPA85r7AC/+eBguvgLkn0EIGZNmCerbGQk3Yx5wZbOQ24CaftSvF Zw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cpw57aveq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 13:41:16 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B2DcRbB007506;
-        Thu, 2 Dec 2021 13:41:16 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cpw57ave4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 13:41:16 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B2DbBSj026895;
-        Thu, 2 Dec 2021 13:41:14 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma02wdc.us.ibm.com with ESMTP id 3ckcacny97-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 13:41:14 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B2DfBlQ46596582
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Dec 2021 13:41:11 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4A680AC06B;
-        Thu,  2 Dec 2021 13:41:11 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1D5BEAC05B;
-        Thu,  2 Dec 2021 13:41:11 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu,  2 Dec 2021 13:41:11 +0000 (GMT)
-Message-ID: <c3b99439-1dd6-e204-ad41-5d8bacb54d48@linux.ibm.com>
-Date:   Thu, 2 Dec 2021 08:41:10 -0500
+        Thu, 2 Dec 2021 08:45:48 -0500
+X-Greylist: delayed 491 seconds by postgrey-1.27 at vger.kernel.org; Thu, 02 Dec 2021 08:45:47 EST
+X-KPN-MessageId: 9011b093-5375-11ec-8a6e-005056ab378f
+Received: from smtp.kpnmail.nl (unknown [10.31.155.39])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id 9011b093-5375-11ec-8a6e-005056ab378f;
+        Thu, 02 Dec 2021 14:41:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=xs4all.nl; s=xs4all01;
+        h=content-type:mime-version:date:message-id:from:to:subject;
+        bh=s/xVqNVOlwQge/G2W/Pt+qdPvzezn4iibA3pPzJ8pns=;
+        b=Wpj9W31xUSyCjSI/ALBRXxRks0yuXGnsi803+cC9/pM0rTioNUa6PTLbxYwBDMpH7xMnsMmAg3FLR
+         jyO4Pi5Gf9mvQx3Gsd/S+lbHKTFIXfPBQzWaCtfe69O58QtmI/Xaa2wP43JHQX8zsoGZkN0FPMSNCW
+         l1m/p2gBNqEnGCbaGTuT9sHLLtN7hImIPWHDlkzicTKFJkD/eFTWF6/A8GXtcmknCCUu6T2SMRDyhp
+         Bj5YsahnuDP3TXFZo3IDjQsljWF91YxFEMR005cb1QCuU6ZWLc2nfc6EQGWYWdLCNbFsrfNJKH9YwG
+         Kedlurco/nSsSeP1LOxoD8yotfrb56Q==
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|LFJL3ISlOVsPjOchdIcRHzGsAB/c7qkOye+aaa47FBeyZUvDXkjIVc2N0FQyWXR
+ njJy62WTQGDOdwahA6A9MRg==
+X-Originating-IP: 193.91.129.219
+Received: from [192.168.2.10] (cdb815bc1.dhcp.as2116.net [193.91.129.219])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id abae1dc3-5375-11ec-81f5-005056ab7447;
+        Thu, 02 Dec 2021 14:42:20 +0100 (CET)
+Subject: Re: [PATCH] media: vidtv: Fix a wild pointer dereference in
+ vidtv_channel_pmt_match_sections()
+To:     Zhou Qingyang <zhou1615@umn.edu>
+Cc:     kjlu@umn.edu, "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211130163946.189005-1-zhou1615@umn.edu>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <94dbfe62-43b3-a293-5f59-d8bd1f35bde1@xs4all.nl>
+Date:   Thu, 2 Dec 2021 14:42:19 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC 08/20] ima: Move measurement list related variables into
- ima_namespace
+In-Reply-To: <20211130163946.189005-1-zhou1615@umn.edu>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     jejb@linux.ibm.com, linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, serge@hallyn.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20211130160654.1418231-1-stefanb@linux.ibm.com>
- <20211130160654.1418231-9-stefanb@linux.ibm.com>
- <141ce433f026b47edb1d9a8f89e4581db253c579.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <141ce433f026b47edb1d9a8f89e4581db253c579.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 5vpw0dqQCrAgrxt1c0eWLevltCqb-px5
-X-Proofpoint-GUID: QygAvCJ4ldlvt3lmAk-Lz_6BEEQ9TFoZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-12-02_07,2021-12-02_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- mlxscore=0 phishscore=0 mlxlogscore=999 spamscore=0 bulkscore=0
- clxscore=1015 priorityscore=1501 lowpriorityscore=0 malwarescore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112020088
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 30/11/2021 17:39, Zhou Qingyang wrote:
+> In vidtv_channel_pmt_match_sections(), vidtv_psi_pmt_stream_init() is
+> assigned to tail and &tail->descriptor is used in
+> vidtv_psi_desc_assign(). There is a dereference of &tail->descriptor
+> in vidtv_psi_desc_assign(), which could lead to a wild pointer
+> dereference onfailure of vidtv_psi_pmt_stream_init().
 
-On 12/2/21 07:46, James Bottomley wrote:
-> On Tue, 2021-11-30 at 11:06 -0500, Stefan Berger wrote:
->> Move measurement list related variables into the ima_namespace. This
->> way a
->> front-end like SecurityFS can show the measurement list inside an IMA
->> namespace.
->>
->> Implement ima_free_measurements() to free a list of measurements
->> and call it when an IMA namespace is deleted.
-> This one worries me quite a lot.  What seems to be happening in this
-> code:
->
->> @@ -107,7 +100,7 @@ static int ima_add_digest_entry(struct
->> ima_namespace *ns,
->>          qe->entry = entry;
->>   
->>          INIT_LIST_HEAD(&qe->later);
->> -       list_add_tail_rcu(&qe->later, &ima_measurements);
->> +       list_add_tail_rcu(&qe->later, &ns->ima_measurements);
->>   
->>          atomic_long_inc(&ns->ima_htable.len);
->>          if (update_htable) {
->>
-> is that we now only add the measurements to the namespace list, but
-> that list is freed when the namespace dies.  However, the measurement
-> is still extended through the PCRs meaning we have incomplete
-> information for a replay after the namespace dies?
+onfailure -> on failure
 
-*Not at all.* The measurement list of the namespace is independent of 
-the host.
+> 
+> Fix this bug by adding a check of tail.
+> 
+> This bug was found by a static analyzer. The analysis employs
+> differential checking to identify inconsistent security operations
+> (e.g., checks or kfrees) between two code paths and confirms that the
+> inconsistent operations are not recovered in the current function or
+> the callers, so they constitute bugs.
+> 
+> Note that, as a bug found by static analysis, it can be a false
+> positive or hard to trigger. Multiple researchers have cross-reviewed
+> the bug.
+> 
+> Builds with CONFIG_DVB_VIDTV=m show no new warnings,
+> and our static analyzer no longer warns about this code.
+> 
+> Fixes: f90cf6079bf6 ("media: vidtv: add a bridge driver")
+> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+> ---
+>  drivers/media/test-drivers/vidtv/vidtv_channel.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/media/test-drivers/vidtv/vidtv_channel.c b/drivers/media/test-drivers/vidtv/vidtv_channel.c
+> index 7838e6272712..f2faa5504642 100644
+> --- a/drivers/media/test-drivers/vidtv/vidtv_channel.c
+> +++ b/drivers/media/test-drivers/vidtv/vidtv_channel.c
+> @@ -318,6 +318,10 @@ vidtv_channel_pmt_match_sections(struct vidtv_channel *channels,
+>  	struct vidtv_psi_table_pmt_stream *s = NULL;
+>  	struct vidtv_channel *cur_chnl = channels;
+>  	struct vidtv_psi_desc *desc = NULL;
+> +	struct vidtv_mux *m = container_of(&channels,
+> +					struct vidtv_mux,
+> +					channels);
+> +
+>  	u16 e_pid; /* elementary stream pid */
+>  	u16 curr_id;
+>  	u32 j;
+> @@ -341,6 +345,13 @@ vidtv_channel_pmt_match_sections(struct vidtv_channel *channels,
+>  					tail = vidtv_psi_pmt_stream_init(tail,
+>  									 s->type,
+>  									 e_pid);
+> +
+> +					if (!tail) {
+> +						vidtv_psi_pmt_stream_destroy(head);
 
-The cover letter states:
+I honestly can't tell if this is the right thing to do.
 
-"The following lines added to a suitable IMA policy on the host would
-cause the execution of the commands inside the container (by uid 1000)
-to be measured and audited as well on the host, thus leading to two
-auditing messages for the 'busybox cat' above and log entries in IMA's
-system log.
+Daniel, can you take a look at this?
 
-echo -e "measure func=BPRM_CHECK mask=MAY_EXEC uid=1000\n" \
-         "audit func=BPRM_CHECK mask=MAY_EXEC uid=1000\n" \
-     > /sys/kernel/security/ima/policy   "
+> +						dev_warn_ratelimited(m->dev,
+> +							"No enough memory for vidtv_psi_pmt_stream_init");
 
-So even now, with only auditing support in the namespace, you would get 
-measurements in the host log with an appropriately written IMA policy. 
-The measurements in the host log won't go away when the namespace dies.
+No -> Not
+Add newline at the end of the string.
 
-The intention is to provide flexibility that allows for writing the IMA 
-policy of the host in such a way
+> +						return;
+> +					}
+> 
+>  					if (!head)
+>  						head = tail;
+> 
 
-- that file accesses occurring in namespaces get measured on the host
+Regards,
 
-- that file accesses occurring in the namespace do NOT get measured on 
-the host and protect the host log from ever growing or actions in 
-namespaces intentionally growing the host log
-
-There would be a namespace policy that would allow for logging inside 
-the namespace. Combine this with the policy on the host and you can have 
-no measurements of the namespace file access, measurements in either the 
-host log or the namespace log or both. What I would be worried about is 
-if the flexibility wasn't there.
-
-
->
-> I tend to think the way this should work is that until we have a way of
-> attesting inside the namespace, all measurements should go into the
-> physical log, so that replay is always complete for the PCRs, so
-> effectively the visible log of the namespace would always have to be a
-> subset of the physical log.
-
-Per the cover letter description this is already possible today.
-
-    Stefan
-
-
->
-> James
->
->
+	Hans

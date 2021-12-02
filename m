@@ -2,99 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D03B466BFB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 23:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D90466BFE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 23:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232548AbhLBWSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 17:18:34 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56190 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbhLBWSc (ORCPT
+        id S236548AbhLBWTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 17:19:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229836AbhLBWTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 17:18:32 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A9D762849;
-        Thu,  2 Dec 2021 22:15:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F788C00446;
-        Thu,  2 Dec 2021 22:15:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638483308;
-        bh=KFPCchr4RdVJHXvFJ+rPkCdEx1z6KUKFMpCs0o/MV5c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XHEySldnLPW8S1ppgwOIN8JomdpbOTF203p+YQf5R4arPGIOeWFRnGJnClC86ADh5
-         aslEIOEQbjIjbEswH02SDJ1FjXe4RUAkprSmIQaWFvwCodZLIdwYe/vET1NIt+oLq8
-         zkEpFA6MfTx6foTpfdysFLAb6GF5D2dLBMlBVAhHKjYaksJdZBbYR3CixXOR47rhoJ
-         FJH0bjlSWhVgcrBNONiSAGBu2UfkV4xblhptzITAEep1wpTdtPOgS54sIrfg1eKEfx
-         HMPGuYhjIyr7CjzXDFT/9Bxmidpt1xt4NMrbR2j18Lc8S8gzAOAiFfuE0d63/B+i4C
-         3YgryBWsyT/1A==
-Date:   Thu, 2 Dec 2021 14:15:07 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/5] fs-verity: define a function to return the
- integrity protected file digest
-Message-ID: <YalFa3eBR/8tp0AP@sol.localdomain>
-References: <20211202215507.298415-1-zohar@linux.ibm.com>
- <20211202215507.298415-2-zohar@linux.ibm.com>
+        Thu, 2 Dec 2021 17:19:11 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948D7C06174A;
+        Thu,  2 Dec 2021 14:15:48 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id d9so1701512wrw.4;
+        Thu, 02 Dec 2021 14:15:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Yff+1FpOuMigZbAy73J63jy1kO8FukCv/6vnynIzzvw=;
+        b=m7vw3K0ooNVuluM9tx9YuP9gt3hvjazf/xJuqhZaUTEyFbMV27ooosY8kotGRMfbUJ
+         Ul/aC7auJnanWmh6B5rnVBGeZW0QMFEx2dlW6MIBRv538NC1B0T6peUzZcuI+oAo+9EZ
+         wPWOOqiL9oe8oPFNiS2gzfK4NOaA9HSOannG9uHvwC41sqDg8L9MnQzqIBLjsxFZilx7
+         mw/XLLN+QHq2kkt6I8xxjIkkS5USR4xSanBl+0L7uXh7hFt+ZKDWyWNjBAlCRMgNgKTD
+         cf3+814AUWKcCgxsw5gJmul1K3+3nFAQLVbb2Pm4vzwbFZXxZEoQd6GoJ+nRVzjLZqtn
+         Jx6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Yff+1FpOuMigZbAy73J63jy1kO8FukCv/6vnynIzzvw=;
+        b=COeMJHcLnfUqIL1ko2Qn71ARKu+0BiQCZQr7cb2sqNkbHT4L0RYYQXlXUQ9VbpbzhL
+         eq9yfZo/WMvFgcnp4ILeYmZBgrmrs9jUyBfnEjoh83RJIcQSMhVYqD+AiCaRKF9DYyOi
+         ORO6A0Efmy8/3zpj28azxFb4IMJcIPVHfKHL1dEJCcBnIu8yTJflw7ukgQrhgFaSfXhI
+         2sdV7zaBgFJ7dyrUZH4thlBi9w3BC1KTnRDOvdVaiitbO2+AXf7OVJPmgVddpNekUEyQ
+         P27pByp2ewNEeUwtnapBq6g1mAY0ghbYPWlqMz7I8dHq4yM1wpOCSPRXt91iH9QH6TYB
+         xEOg==
+X-Gm-Message-State: AOAM530vYkj7j4G2/eloqEe/hFJEgmntg55h91Nl5qX1fmDDCxRlha5A
+        v+lQKikfCt26wOJrMCbkE/+SHGOJdNS5VAG0
+X-Google-Smtp-Source: ABdhPJyw0fnVHwqCbx2j/3f+LhuiQhCMSFhQy7mZzArLrLknGa+6azR8ta8grSX8QHKGzuZfQd0QYg==
+X-Received: by 2002:adf:dc44:: with SMTP id m4mr17644222wrj.550.1638483347151;
+        Thu, 02 Dec 2021 14:15:47 -0800 (PST)
+Received: from localhost.localdomain ([39.48.206.151])
+        by smtp.gmail.com with ESMTPSA id h15sm3600820wmq.32.2021.12.02.14.15.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 14:15:46 -0800 (PST)
+From:   Ameer Hamza <amhamza.mgc@gmail.com>
+To:     saeedm@nvidia.com, leon@kernel.org, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, amhamza.mgc@gmail.com
+Subject: [PATCH] net/mlx5: Fix dangling pointer access
+Date:   Fri,  3 Dec 2021 03:15:39 +0500
+Message-Id: <20211202221539.113434-1-amhamza.mgc@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211202215507.298415-2-zohar@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 04:55:03PM -0500, Mimi Zohar wrote:
-> +
-> +/**
-> + * fsverity_collect_digest() - get a verity file's digest
-> + * @inode: inode to get digest of
-> + * @digest: (out) pointer to the digest
-> + * @alg: (out) pointer to the hash algorithm enumeration
-> + *
-> + * Return the file hash algorithm and digest of an fsverity protected file.
-> + *
-> + * Return: 0 on success, -errno on failure
-> + */
-> +int fsverity_collect_digest(struct inode *inode,
-> +			    u8 digest[FS_VERITY_MAX_DIGEST_SIZE],
-> +			    enum hash_algo *alg)
+Fix for dangling pointer access reported by Coverity.
 
-I'd still prefer that this be named fsverity_get_digest(), but this is fine too.
+Addresses-Coverity: 1494138 ("Use after free")
 
-> +{
-> +	const struct fsverity_info *vi;
-> +	const struct fsverity_hash_alg *hash_alg;
-> +	int i;
-> +
-> +	vi = fsverity_get_info(inode);
-> +	if (!vi)
-> +		return -ENODATA; /* not a verity file */
-> +
-> +	hash_alg = vi->tree_params.hash_alg;
-> +	memset(digest, 0, FS_VERITY_MAX_DIGEST_SIZE);
-> +	*alg = HASH_ALGO__LAST;
-> +
-> +	/* convert hash algorithm to hash_algo_name */
-> +	for (i = 0; i < HASH_ALGO__LAST; i++) {
-> +		pr_debug("name %s hash_algo_name[%d] %s\n",
-> +			  hash_alg->name, i, hash_algo_name[i]);
-> +
-> +		if (!strcmp(hash_alg->name, hash_algo_name[i])) {
-> +			*alg = i;
-> +			break;
-> +		}
-> +	}
+Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+---
+ drivers/net/ethernet/mellanox/mlx5/core/health.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-How about using match_string() here?
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/health.c b/drivers/net/ethernet/mellanox/mlx5/core/health.c
+index 3ca998874c50..856023321972 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/health.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/health.c
+@@ -335,7 +335,7 @@ static int mlx5_health_try_recover(struct mlx5_core_dev *dev)
+ {
+ 	mlx5_core_warn(dev, "handling bad device here\n");
+ 	mlx5_handle_bad_state(dev);
+-	if (mlx5_health_wait_pci_up(dev)) {
++	if (dev->timeouts && mlx5_health_wait_pci_up(dev)) {
+ 		mlx5_core_err(dev, "health recovery flow aborted, PCI reads still not working\n");
+ 		return -EIO;
+ 	}
+-- 
+2.25.1
 
-> +	pr_debug("file digest:%s %*phN\n", hash_algo_name[*alg],
-> +		  hash_digest_size[*alg], digest);
-
-Other log messages in fs/verity/ use the format alg:hash.  How about using
-"file_digest %s:%*phN\n" as the format string here?
-
-- Eric

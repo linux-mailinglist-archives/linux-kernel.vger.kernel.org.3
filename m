@@ -2,130 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC66466753
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:55:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E6F466756
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:57:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359284AbhLBP7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 10:59:00 -0500
-Received: from mga09.intel.com ([134.134.136.24]:8736 "EHLO mga09.intel.com"
+        id S1355540AbhLBQAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 11:00:34 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:45864 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1359218AbhLBP6j (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 10:58:39 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="236544909"
-X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="236544909"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 07:55:15 -0800
-X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="597209997"
-Received: from islamsam-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.121.22])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 07:55:14 -0800
-Date:   Thu, 2 Dec 2021 07:55:14 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, hpa@zytor.com,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH] x86/mm: Fix PAGE_KERNEL_IO removal breakage
-Message-ID: <20211202155452.jh4qnvpx52r3od67@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <20211202144646.23186-1-joro@8bytes.org>
+        id S1355283AbhLBQAM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 11:00:12 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 760191EC0136;
+        Thu,  2 Dec 2021 16:56:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1638460604;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=NbpZQfmvDZ+EDAo0C4jao84LNxSxMOr4OJNT2eDaPMA=;
+        b=GdtBBwPQ7cApqtWvTHKJ+3QMEjHjPuL7N4gZ0z6nbUTmP922o/Zwlo2fmUbQmbr638PIye
+        1j7GGfnxJIZLzZlkF5SAzvXB9OjzOnkEo88f+YOrnz/I+H5rmNYlopXd0ejrIz/Quk4evN
+        dRQEh+N7A8pdBMjW4FhZdC9sJhKQtH4=
+Date:   Thu, 2 Dec 2021 16:56:52 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     X86 ML <x86@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] notifier: Return an error when a callback has already
+ been registered
+Message-ID: <YajsxJpcM/f7cZjF@zn.tnic>
+References: <20211202133601.23527-1-bp@alien8.de>
+ <YajpQ/dA7h3QnkCR@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211202144646.23186-1-joro@8bytes.org>
+In-Reply-To: <YajpQ/dA7h3QnkCR@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 03:46:46PM +0100, Joerg Roedel wrote:
->From: Joerg Roedel <jroedel@suse.de>
->
->The removal of PAGE_KERNEL_IO broke SEV-ES because it changed the
->mapping of ioremap and some fixmap areas (like the local APIC page)
->from unencrypted to encrypted. Change those mappings back to
->be unencrypted.
->
->Cc: Lucas De Marchi <lucas.demarchi@intel.com>
->Fixes: 27dff0f58bde ("x86/mm: Nuke PAGE_KERNEL_IO")
->Signed-off-by: Joerg Roedel <jroedel@suse.de>
+On Thu, Dec 02, 2021 at 10:41:55AM -0500, Alan Stern wrote:
+> A patch that adds three new lines of code has got to be simpler than and 
+> preferable to a patch that adds about eleven lines (including a whole new 
+> function), right?
 
-oops, missed the fact PAGE_KERNEL had `| ENC` while PAGE_KERENL_IO
-didn't have it. Thanks for the fixup.
+Well, I like keeping things separate and prefer to keep the error
+handling and warning in another function. But Sebastian asked the same
+thing already so if people prefer that, I'll change it. I don't feel too
+strongly about it, tbh.
 
-Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
+Thx.
 
-Lucas De Marchi
+-- 
+Regards/Gruss,
+    Boris.
 
->---
-> arch/x86/include/asm/fixmap.h        |  2 +-
-> arch/x86/include/asm/pgtable_types.h | 21 +++++++++++----------
-> arch/x86/mm/ioremap.c                |  2 +-
-> 3 files changed, 13 insertions(+), 12 deletions(-)
->
->diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
->index 5e186a69db10..a2eaf265f784 100644
->--- a/arch/x86/include/asm/fixmap.h
->+++ b/arch/x86/include/asm/fixmap.h
->@@ -173,7 +173,7 @@ static inline void __set_fixmap(enum fixed_addresses idx,
->  * supported for MMIO addresses, so make sure that the memory encryption
->  * mask is not part of the page attributes.
->  */
->-#define FIXMAP_PAGE_NOCACHE PAGE_KERNEL_NOCACHE
->+#define FIXMAP_PAGE_NOCACHE PAGE_KERNEL_NOCACHE_NOENC
->
-> /*
->  * Early memremap routines used for in-place encryption. The mappings created
->diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
->index a87224767ff3..fc9b6995cb22 100644
->--- a/arch/x86/include/asm/pgtable_types.h
->+++ b/arch/x86/include/asm/pgtable_types.h
->@@ -208,16 +208,17 @@ enum page_cache_mode {
->
-> #define __pgprot_mask(x)	__pgprot((x) & __default_kernel_pte_mask)
->
->-#define PAGE_KERNEL		__pgprot_mask(__PAGE_KERNEL            | _ENC)
->-#define PAGE_KERNEL_NOENC	__pgprot_mask(__PAGE_KERNEL            |    0)
->-#define PAGE_KERNEL_RO		__pgprot_mask(__PAGE_KERNEL_RO         | _ENC)
->-#define PAGE_KERNEL_EXEC	__pgprot_mask(__PAGE_KERNEL_EXEC       | _ENC)
->-#define PAGE_KERNEL_EXEC_NOENC	__pgprot_mask(__PAGE_KERNEL_EXEC       |    0)
->-#define PAGE_KERNEL_ROX		__pgprot_mask(__PAGE_KERNEL_ROX        | _ENC)
->-#define PAGE_KERNEL_NOCACHE	__pgprot_mask(__PAGE_KERNEL_NOCACHE    | _ENC)
->-#define PAGE_KERNEL_LARGE	__pgprot_mask(__PAGE_KERNEL_LARGE      | _ENC)
->-#define PAGE_KERNEL_LARGE_EXEC	__pgprot_mask(__PAGE_KERNEL_LARGE_EXEC | _ENC)
->-#define PAGE_KERNEL_VVAR	__pgprot_mask(__PAGE_KERNEL_VVAR       | _ENC)
->+#define PAGE_KERNEL			__pgprot_mask(__PAGE_KERNEL            | _ENC)
->+#define PAGE_KERNEL_NOENC		__pgprot_mask(__PAGE_KERNEL            |    0)
->+#define PAGE_KERNEL_RO			__pgprot_mask(__PAGE_KERNEL_RO         | _ENC)
->+#define PAGE_KERNEL_EXEC		__pgprot_mask(__PAGE_KERNEL_EXEC       | _ENC)
->+#define PAGE_KERNEL_EXEC_NOENC		__pgprot_mask(__PAGE_KERNEL_EXEC       |    0)
->+#define PAGE_KERNEL_ROX			__pgprot_mask(__PAGE_KERNEL_ROX        | _ENC)
->+#define PAGE_KERNEL_NOCACHE		__pgprot_mask(__PAGE_KERNEL_NOCACHE    | _ENC)
->+#define PAGE_KERNEL_NOCACHE_NOENC	__pgprot_mask(__PAGE_KERNEL_NOCACHE    |    0)
->+#define PAGE_KERNEL_LARGE		__pgprot_mask(__PAGE_KERNEL_LARGE      | _ENC)
->+#define PAGE_KERNEL_LARGE_EXEC		__pgprot_mask(__PAGE_KERNEL_LARGE_EXEC | _ENC)
->+#define PAGE_KERNEL_VVAR		__pgprot_mask(__PAGE_KERNEL_VVAR       | _ENC)
->
-> #endif	/* __ASSEMBLY__ */
->
->diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
->index 3102dda4b152..4fe8d43d53bb 100644
->--- a/arch/x86/mm/ioremap.c
->+++ b/arch/x86/mm/ioremap.c
->@@ -243,7 +243,7 @@ __ioremap_caller(resource_size_t phys_addr, unsigned long size,
-> 	 * make sure the memory encryption attribute is enabled in the
-> 	 * resulting mapping.
-> 	 */
->-	prot = PAGE_KERNEL;
->+	prot = PAGE_KERNEL_NOENC;
-> 	if ((io_desc.flags & IORES_MAP_ENCRYPTED) || encrypted)
-> 		prot = pgprot_encrypted(prot);
->
->-- 
->2.34.0
->
+https://people.kernel.org/tglx/notes-about-netiquette

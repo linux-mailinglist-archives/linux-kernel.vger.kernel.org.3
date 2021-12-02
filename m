@@ -2,105 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE314669CE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 19:30:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 148874669D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 19:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376497AbhLBSd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 13:33:56 -0500
-Received: from mga18.intel.com ([134.134.136.126]:26915 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235498AbhLBSdy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 13:33:54 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="223640569"
-X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="223640569"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 10:30:31 -0800
-X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="513294960"
-Received: from msdenney-mobl.amr.corp.intel.com (HELO [10.209.114.233]) ([10.209.114.233])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 10:30:31 -0800
-Subject: Re: [PATCH 00/25] x86/sgx and selftests/sgx: Support SGX2
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, luto@kernel.org, mingo@redhat.com,
-        linux-sgx@vger.kernel.org, x86@kernel.org
-Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
-        cedric.xing@intel.com, haitao.huang@intel.com,
-        mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-References: <cover.1638381245.git.reinette.chatre@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <94d8d631-5345-66c4-52a3-941e52500f84@intel.com>
-Date:   Thu, 2 Dec 2021 10:30:28 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1376618AbhLBSi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 13:38:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235498AbhLBSi6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 13:38:58 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564F5C06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 10:35:35 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id w1so1697623edc.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 10:35:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s5n0op7WCKcxHWiREW25LxgHJF3lzy1KCTqw6Ak/eLE=;
+        b=fiO6PFUqhj645PeG1SvnU2IRU7MEzQmQ+x4DMqO/KYuk+cUNxKRRL3RV4FL8Is70yQ
+         GfLN1PnAzxJow2Y8F1nqooY2sv3XCr53M6Kaq4tBO+PyVVuAMIoM2Si7h971wzsBRU/l
+         0uEL8BCq3qlCXYwqLzZ4Xg6z7If+h6Sb8VqZw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s5n0op7WCKcxHWiREW25LxgHJF3lzy1KCTqw6Ak/eLE=;
+        b=F1Tbp1qMLRcx8e0WtrStPdfEKJ7Gpqp5wmq7Claf8D7y2sekKdWjpHLxU5sf5w4XVL
+         RKz8xchizg34o4JWPzL/p3+3FQltDVUXJg0aJWPNYbBCNGU11rotAZZNJ/0NUFSJylLr
+         IB+F04kHx19Bfra8LSM0PN07cM4HMBiqzUir2OipgaYW+C5qsK+Y1fa0n8Q21mfrMBw2
+         eXq1vv4j8g//BAQUUSSL9ldkjKh3VsIWdrSfkfBLVjE3pe1FLCtAAe5KwWy39ZACAsxw
+         s8k5/qDPGBjyNc0VWqILsjmfjRKDr1F+mjD5M856Z9h9h5FRfY/nxixfT0XHIvpwDYsr
+         qpOQ==
+X-Gm-Message-State: AOAM532rqMvpErRWonRcDQS2youM9iG/2A8lVO/SM8ztXeEDHaRT56aP
+        +iiFQSXhQZ5/rujsGrA72tzUI7HjcZ5AW3pE
+X-Google-Smtp-Source: ABdhPJwJFYVoOExRrv4pROeHb/PBI7XfjbZM8gEIPC+h/Q1abSvIlPNyc2Qm2MkFBEjO9ijsyoN2Ew==
+X-Received: by 2002:a05:6402:5107:: with SMTP id m7mr20161460edd.314.1638470133467;
+        Thu, 02 Dec 2021 10:35:33 -0800 (PST)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
+        by smtp.gmail.com with ESMTPSA id ht7sm387873ejc.27.2021.12.02.10.35.32
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 10:35:32 -0800 (PST)
+Received: by mail-wr1-f49.google.com with SMTP id q3so676445wru.5
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 10:35:32 -0800 (PST)
+X-Received: by 2002:adf:e5c7:: with SMTP id a7mr16399753wrn.318.1638470132223;
+ Thu, 02 Dec 2021 10:35:32 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <cover.1638381245.git.reinette.chatre@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20211116144937.19035-1-fmdefrancesco@gmail.com>
+ <1825634.Qa45DEmgBM@localhost.localdomain> <44d83e9c-d8c9-38bf-501c-019b8c2f7b5e@i-love.sakura.ne.jp>
+ <1701119.OD4kndUEs1@localhost.localdomain> <1d05e95c-556a-a34c-99fd-8c542311e2dd@i-love.sakura.ne.jp>
+ <3add7ade-9c9b-2839-5a0c-0a38c4be0e34@i-love.sakura.ne.jp>
+ <CAHk-=wjVL_CLm-+=7qf2obF6f8D+ujysmqp5dKdAb7UEyo1cZg@mail.gmail.com> <86452127-70e8-c0cf-de18-6f98e77849a6@i-love.sakura.ne.jp>
+In-Reply-To: <86452127-70e8-c0cf-de18-6f98e77849a6@i-love.sakura.ne.jp>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 2 Dec 2021 10:35:16 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiXNJ86W=gwAHH1qd+cE9dmfk_dEKFmNa89XH19NhPNkg@mail.gmail.com>
+Message-ID: <CAHk-=wiXNJ86W=gwAHH1qd+cE9dmfk_dEKFmNa89XH19NhPNkg@mail.gmail.com>
+Subject: Re: [PATCH] tty: vt: make do_con_write() no-op if IRQ is disabled
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Hurley <peter@hurleysoftware.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 11:22 AM, Reinette Chatre wrote:
-> * Support modifying permissions of regular enclave pages belonging to an
->   initialized enclave. New permissions are not allowed to exceed the
->   originally vetted permissions. Modifying permissions is accomplished
->   with a new ioctl SGX_IOC_PAGE_MODP.
+On Thu, Dec 2, 2021 at 7:41 AM Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
+>
+> > Looking at the backtrace, I see
+> >
+> >    n_hdlc_send_frames+0x24b/0x490 drivers/tty/n_hdlc.c:290
+> >    tty_wakeup+0xe1/0x120 drivers/tty/tty_io.c:534
+> >    __start_tty drivers/tty/tty_io.c:806 [inline]
+> >    __start_tty+0xfb/0x130 drivers/tty/tty_io.c:799
+> >
+> > and apparently it's that hdlc line discipline (and
+> > n_hdlc_send_frames() in particular) that is the problem here.
+> >
+> > I think that's where the fix should be.
+>
+> Do you mean that we should change the behavior of n_hdlc_send_frames()
+> rather than trying to make __start_tty() schedulable again?
 
-It's probably also worth noting that this effectively punts on the issue
-of how to allow enclaves to relax the permissions on pages, like taking
-a page from R=>RW, or R=>RX.  RX isn't allowed unless the page was
-*added* originally with RX or RWX.
+I wouldn't change n_hdlc_send_frames() itself. It does what it says it does.
 
-Since dynamically added pages start with initial RW permissions, they
-can *never* be RX or RWX since they did not start with execute
-permissions.  That's a limitation, of course, but it's one that can be
-dealt with separately from this set.
+But n_hdlc_tty_wakeup() probably shouldn't call it directly. Other tty
+line disciplines don't do that kind of thing - although I only looked
+at a couple. They all seem to just set bits and prepare things. Like a
+wakeup function should do.
 
-Does that sound sane to everyone?
+So I think n_hdlc_tty_wakeup() should perhaps only do a
+"schedule_work()" or similar to get that n_hdlc_send_frames() started,
+rather than doing it itself.
+
+Example: net/nfc/nci/uart.c. It does that
+
+        schedule_work(&nu->write_work);
+
+instead of actually trying to do a write from a wakeup routine
+(similar examples in ppp - "tasklet_schedule(&ap->tsk)" etc).
+
+I mean, it's called "wakeup", not "write". So I think the fundamental
+confusion here is in hdlc, not the tty layer.
+
+              Linus

@@ -2,93 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBEEB466ACE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 21:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B612466AD2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 21:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348737AbhLBUTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 15:19:40 -0500
-Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:62491 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348698AbhLBUTb (ORCPT
+        id S1348738AbhLBUWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 15:22:09 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:48461 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348661AbhLBUWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 15:19:31 -0500
-Received: from pop-os.home ([86.243.171.122])
-        by smtp.orange.fr with ESMTPA
-        id ssUvmqRgBozlissUvmqm80; Thu, 02 Dec 2021 21:16:07 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 02 Dec 2021 21:16:07 +0100
-X-ME-IP: 86.243.171.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     boris.ostrovsky@oracle.com, jgross@suse.com,
-        sstabellini@kernel.org, roger.pau@citrix.com, axboe@kernel.dk
-Cc:     xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH v2] xen-blkfront: Use the bitmap API when applicable
-Date:   Thu,  2 Dec 2021 21:16:04 +0100
-Message-Id: <d6f31db1d2542e1b4ba66d4cea80d3891678aa5a.1638476031.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.30.2
+        Thu, 2 Dec 2021 15:22:08 -0500
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id E892D806A8;
+        Fri,  3 Dec 2021 09:18:42 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1638476323;
+        bh=t9w9XFU2HzkdIXgBw1+w4e3pTYHFtUoYw7d6MqtA6QA=;
+        h=From:To:CC:Subject:Date;
+        b=dDweBuk8lYlS0b6185b23GjoURYmR6xMU+ARnZx2qsstzLQMzX6OMvt9CIgkM4Xx5
+         EA+/DrSo+bNGGppTBWH0dhJBcrfU8DNdPsiWut8HmCakP14F+73Y0llfWN1gxCsWr6
+         YXFRz3KzW4n62l/akYIbyZw0zVbfQbY2KeByNMJo1PFj/E29ShOZRJN72TDL1Z7Dgj
+         ASr9LZWmSkPAXas/fuWnyqWsNiuIbFguJPA2T+Ij5DeFrmF06LU4nbvaT1c8eStDra
+         NVAVSp0nY4hyXJaug+ynKHtBQIi3McGoeL+SUXPerfyMEV9xvq3Iji3Og5dgRDPkNd
+         Dch8lXocJVY+w==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B61a92a220000>; Fri, 03 Dec 2021 09:18:42 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.26; Fri, 3 Dec 2021 09:18:42 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.026; Fri, 3 Dec 2021 09:18:42 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: pca954x devices sharing reset-gpios
+Thread-Topic: pca954x devices sharing reset-gpios
+Thread-Index: AQHX57nMktjeGOiQoEWm9JTLScC8+g==
+Date:   Thu, 2 Dec 2021 20:18:42 +0000
+Message-ID: <ff1f75bb-75aa-e22e-9e68-721e8d80a755@alliedtelesis.co.nz>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E7631ECDE38DEF4193444A1B9F127204@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=XOZOtjpE c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=IOMw9HtfNCkA:10 a=gI1U_EXz3-_qf3ap8AEA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use 'bitmap_zalloc()' to simplify code, improve the semantic and avoid some
-open-coded arithmetic in allocator arguments.
-
-Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
-consistency.
-
-Use 'bitmap_copy()' to avoid an explicit 'memcpy()'
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-v1 --> v2: change another kfree into bitmap_free
----
- drivers/block/xen-blkfront.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/block/xen-blkfront.c b/drivers/block/xen-blkfront.c
-index 700c765a759a..69cf13608ce0 100644
---- a/drivers/block/xen-blkfront.c
-+++ b/drivers/block/xen-blkfront.c
-@@ -442,22 +442,20 @@ static int xlbd_reserve_minors(unsigned int minor, unsigned int nr)
- 	if (end > nr_minors) {
- 		unsigned long *bitmap, *old;
- 
--		bitmap = kcalloc(BITS_TO_LONGS(end), sizeof(*bitmap),
--				 GFP_KERNEL);
-+		bitmap = bitmap_zalloc(end, GFP_KERNEL);
- 		if (bitmap == NULL)
- 			return -ENOMEM;
- 
- 		spin_lock(&minor_lock);
- 		if (end > nr_minors) {
- 			old = minors;
--			memcpy(bitmap, minors,
--			       BITS_TO_LONGS(nr_minors) * sizeof(*bitmap));
-+			bitmap_copy(bitmap, minors, nr_minors);
- 			minors = bitmap;
- 			nr_minors = BITS_TO_LONGS(end) * BITS_PER_LONG;
- 		} else
- 			old = bitmap;
- 		spin_unlock(&minor_lock);
--		kfree(old);
-+		bitmap_free(old);
- 	}
- 
- 	spin_lock(&minor_lock);
-@@ -2610,7 +2608,7 @@ static void __exit xlblk_exit(void)
- 
- 	xenbus_unregister_driver(&blkfront_driver);
- 	unregister_blkdev(XENVBD_MAJOR, DEV_NAME);
--	kfree(minors);
-+	bitmap_free(minors);
- }
- module_exit(xlblk_exit);
- 
--- 
-2.30.2
-
+SGkgQWxsLA0KDQpJJ3ZlIHJ1biBpbnRvIGEgcHJvYmxlbSB0cnlpbmcgdG8gYWNjdXJhdGVseSBt
+b2RlbCBzb21lIGhhcmR3YXJlLg0KDQpJbiB0aGlzIHBhcnRpY3VsYXIgZGVzaWduIHRoZXJlIGFy
+ZSBhIGJ1bmNoIG9mIHBjYTk1NDggaTJjIG11eGVzIGFuZCANCnNvbWUgb2YgdGhlbSBzaGFyZSB0
+aGUgc2FtZSByZXNldCBwaW5zIGNvbWluZyBvdXQgb2YgYSBjdXN0b20gRlBHQSANCih3ZSd2ZSB3
+cml0dGVuIGEgZ3BpbyBkcml2ZXIgdG8gcmVwcmVzZW50IHRoYXQgcGFydCBvZiB0aGUgRlBHQSku
+IA0KSW5pdGlhbGx5IHdlIGhhZCB0aGlzIHdvcmtpbmcgYnkgdXNpbmcgYSBncGlvLWhvZyBmb3Ig
+dGhlIHJlc2V0IGxpbmVzIA0KYW5kIHByZXR0eSBtdWNoIGZvcmdldHRpbmcgdGhleSB3ZXJlIHRo
+ZXJlLg0KDQpJZiBJIHN0YXJ0IGJ1aWxkaW5nIHRoZSBmcGdhLWdwaW8gZHJpdmVyIGFzIGEgbW9k
+dWxlIEkgcnVuIGludG8gYSANCnNpdHVhdGlvbiB3aGVyZSB0aGVyZSBpcyBhbiBpbXBsaWNpdCBk
+ZXBlbmRlbmN5IGJldHdlZW4gdGhlIGZwZ2EtZ3BpbyANCmRyaXZlciBhbmQgdGhlIHBjYTk1NHgg
+aTJjIG11eGVzLiBCZWNhdXNlIGl0J3MgaW1wbGljaXQgdGhlIA0KcGNhOTU0eF9wcm9iZSBydW5z
+IGVhcmx5IGFuZCBmYWlscyBmb3IgdGhlc2UgZGV2aWNlcy4gSSBjYW4gbWFrZSB0aGF0IA0KZGVw
+ZW5kZW5jeSBleHBsaWNpdCBieSB1c2luZyB0aGUgcmVzZXQtZ3Bpb3MgcHJvcGVydHkgd2hpY2gg
+Y29ycmVjdGx5IA0KZGVmZXJzIHRoZSBwcm9iZSB1bnRpbCB0aGUgZnBnYS1ncGlvIGRyaXZlciBp
+cyBsb2FkZWQuIEJ1dCBhcyBzb21lIG9mIA0KdGhlc2UgcGNhOTU0OCBzaGFyZSByZXNldCBsaW5l
+cyB0aGV5IG9uZXMgdGhhdCBnZXQgcHJvYmVkIHNlY29uZCBnZXQgDQotRUJVU1kgd2hlbiB0aGV5
+IHJlcXVlc3QgdGhlIEdQSU8uDQoNCklzIHRoZXJlIGFueSB3YXkgSSBjYW4gcmVwcmVzZW50IHRo
+ZXNlIHBjYTk1NDggZGV2aWNlcyBhcyBhIGdyb3VwIHdpdGggYSANCnNpbmdsZSByZXNldC1ncGlv
+IHByb3BlcnR5IGZvciB0aGUgZ3JvdXA/DQoNClRoYW5rcywNCkNocmlzDQo=

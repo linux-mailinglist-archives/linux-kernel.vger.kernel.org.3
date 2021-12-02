@@ -2,61 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC29466C0E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 23:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0CE6466C12
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 23:24:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241998AbhLBWZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 17:25:31 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:39682 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236904AbhLBWZa (ORCPT
+        id S243366AbhLBW1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 17:27:54 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:52931 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236904AbhLBW1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 17:25:30 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60B70B823BF;
-        Thu,  2 Dec 2021 22:22:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F158BC00446;
-        Thu,  2 Dec 2021 22:22:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638483725;
-        bh=m/Fk5iHRT7P9GXzIEh0mLfgphaEZn28dmq/GemN57M4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D2gqUcO76vhYh/jtJRmM4gtDyYzAkGlvYxJ+ZXHW/Pp6fh4lIMRTc5ZywduEon67N
-         WWoxudSpr3WCOdakz9DWNled0AE/JUeoJKmlZLwGUfRPnHzCEDBF7Li6vAzlavenoY
-         nzXVQjWQO+TRix6Ntnx5S2FcGtOAySyq9oduAqb9/KQW9kRvHS7xn1D0E5Ri/j6qh9
-         lH0sTCLEsYL4rWcan7kmi0LuS7wFkC3S61eO/vKJLh7mflGyGNoqbXGUQqMbWvTLKh
-         GCOkt6czMqYUvepFLTXpmz3nxg/vDg12dCzNXZtL5FcbelmcUiy8YZydSVExHwZzEJ
-         Cy6Lvg1RR0ZIA==
-Date:   Thu, 2 Dec 2021 14:22:03 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 3/5] ima: limit including fs-verity's file digest in
- measurement list
-Message-ID: <YalHCz/FzQXKHx4u@sol.localdomain>
-References: <20211202215507.298415-1-zohar@linux.ibm.com>
- <20211202215507.298415-4-zohar@linux.ibm.com>
+        Thu, 2 Dec 2021 17:27:51 -0500
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id CDF321C000C;
+        Thu,  2 Dec 2021 22:24:25 +0000 (UTC)
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        David Abdurachmanov <david.abdurachmanov@sifive.com>
+Subject: Re: [PATCH v3] rtc: da9063: add as wakeup source
+Date:   Thu,  2 Dec 2021 23:24:25 +0100
+Message-Id: <163848385220.116247.9488906740285227230.b4-ty@bootlin.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211129072650.22686-1-nikita.shubin@maquefel.me>
+References: <20211129072650.22686-1-nikita.shubin@maquefel.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211202215507.298415-4-zohar@linux.ibm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 04:55:05PM -0500, Mimi Zohar wrote:
-> Without the file signature included in the IMA measurement list, the type
-> of file digest is unclear.  Set up the plumbing to limit including
-> fs-verity's file digest in the IMA measurement list based on whether the
-> template name is ima-sig.  In the future, this could be relaxed to include
-> any template format that includes the file signature.
+On Mon, 29 Nov 2021 10:26:49 +0300, Nikita Shubin wrote:
+> As da9063 RTC is not a real I2C client, but relies on da9063 MFD
+> driver, we need to explicitly mark da9063 RTC as a wakeup source
+> to be able to access class/rtc/rtcN/wakealarm sysfs entry
+> to set alarms, so we can wakeup from SHUTDOWN/RTC/DELIVERY mode.
 > 
+> As da9063 driver refuses to load without irq, we simply add it
+> as a wakeup source before registering rtc device.
+> 
+> [...]
 
-Does it make sense to tie IMA's fs-verity support to files having signatures?
-What about IMA audit mode?  I thought that is just about collecting hashes, and
-has nothing to do with signatures.
+Applied, thanks!
 
-- Eric
+[1/1] rtc: da9063: add as wakeup source
+      commit: 029d3a6f2f3c73ac29a7460d8007798e940488fd
+
+Best regards,
+-- 
+Alexandre Belloni <alexandre.belloni@bootlin.com>

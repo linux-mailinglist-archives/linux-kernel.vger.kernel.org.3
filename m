@@ -2,120 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D86B5466A2C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 20:10:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A050466A3D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 20:16:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376694AbhLBTNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 14:13:31 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34556 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376361AbhLBTNa (ORCPT
+        id S1376707AbhLBTUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 14:20:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46202 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348386AbhLBTT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 14:13:30 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D31AB627CD;
-        Thu,  2 Dec 2021 19:10:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43917C00446;
-        Thu,  2 Dec 2021 19:10:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638472207;
-        bh=EteNjkTKqOyKSgfA1TAsf+sxa9xkY4eJ2j/1WLoz584=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NRgz+2YKsw7JBre8+DtUxj2QEvWFPU7h1J81nWiHFanbkoLfyzK71P8ge/smwsNvv
-         AsjRCxXC6M3bCCHJFvjJI+bxONpDm+aPdG+RPB1n6D9TwRwUbHEZ9HYEFRM/Bb0Jzk
-         hoTrORi5bWGrO74PHKKRUVrXTF7Hyvjfw4JqwvZH4LTSEIEzpy7GVmGG8jn0WQB27u
-         tmZ3d0tW6AiSZA/klaOArnjjPyYYfFSMfRzNdeq1yPisVINrwS3v/pF8F2OrX4HFY+
-         PqhKMMVN65WfEoOrDceTAaFqzEf7oAfg/hVKHbOJfT0eRbSCs0LaTEr+naLqIPft0C
-         qlbvcz1pU63NQ==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1msrT2-009REe-Kt; Thu, 02 Dec 2021 19:10:04 +0000
-MIME-Version: 1.0
-Date:   Thu, 02 Dec 2021 19:10:04 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Shawn Guo <shawn.guo@linaro.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
+        Thu, 2 Dec 2021 14:19:59 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249A9C06174A;
+        Thu,  2 Dec 2021 11:16:36 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id j11so732336pgs.2;
+        Thu, 02 Dec 2021 11:16:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lIvVc9UzAzdCz9AdkWnea+gAbAiNOR5uDHyDKu3WgbY=;
+        b=Dd6ZI4tPy87vBsH9gdjNVI/4AKh8RYj2BBGqNyxi/IpzlJWUC8ZBgslwGGSnr74Xpa
+         tTugp2dHQUBdQO3JDOE8ggG2QjBhC1T/7folmDMnnQ1UcB5VJuYVURTSjFiZsw4AGDzW
+         LLjDDic6KjNe6TpfLUpCuzmI2vERRC5LKuqlCQbH0Zocu/kEdcNNlzb49AzLlkZ+JlCf
+         QOqA/XhgyXNTNYvOMUe+b4zryLaUuVjPh9ObaybleteEl8ESRWgXoXsk11sH0iNG+NQz
+         zvrOMZmPtf7xQ7FkdekLysPRlyk4c/FbVhXBfVlij8ccSkKAE7VZlLpGR7rw4YTPl1pj
+         z3XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lIvVc9UzAzdCz9AdkWnea+gAbAiNOR5uDHyDKu3WgbY=;
+        b=zT2720d2zbjMiyixfMkXi0zEjuZsCgGDKxYIj784Cd6ECrCyQYkY/E0cWPv1Fc3gXy
+         qw2aFzNtAqZ9zkTIj1H738Qax6DMsETyBjXn+hIcj7+mCgcxIP5wg7XA5aGbgLs7It0C
+         H3Zd17HrIB/LrTxGoM9H+RGgw66dqFcveOEEzMXgHBoVbOtGiusDuGAJjm9L8G3VIral
+         gzfwTDIYeO2dmtZ78oxxsNnlE07+uYr80Dv4gfsOzu4ym+E5o35hy5GfWJj+75rp4wVh
+         RksMF5Phi4puET7wpBrKbmhTaZAriXkFINzs0NPUMFowJkYdgHd+k39cu4Nq8zW7Sout
+         zlXA==
+X-Gm-Message-State: AOAM532vF5FLZWSPmfitcUngWz3QHRrQ/TZQoDwr5RW71xgWgilehLPV
+        tX0dyOC69C53VHs3lw0pwTU=
+X-Google-Smtp-Source: ABdhPJzSF9McZwh7hSAJ32DTE3jgq5yPSGbCRWaxmbEij3y927XaXHA+ul8uQkNPpmVoJTflN2IQqQ==
+X-Received: by 2002:a05:6a00:2283:b0:49f:dea0:b9ba with SMTP id f3-20020a056a00228300b0049fdea0b9bamr14444920pfe.56.1638472595586;
+        Thu, 02 Dec 2021 11:16:35 -0800 (PST)
+Received: from jaschultz-Thelio-Major.corp.microsoft.com ([2001:4898:80e8:37:517f:74c7:9fe9:b5e8])
+        by smtp.gmail.com with ESMTPSA id x14sm289897pjl.27.2021.12.02.11.16.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 11:16:35 -0800 (PST)
+From:   Jarrett Schultz <jaschultzms@gmail.com>
+X-Google-Original-From: Jarrett Schultz <jaschultz@microsoft.com>
+To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: Re: [PATCH v3 1/3] irqchip: Pass platform_device pointer to init_cb
-In-Reply-To: <b221fec0-43d0-537d-d78e-84da10a9c2d7@gmail.com>
-References: <20211202122122.23548-1-shawn.guo@linaro.org>
- <20211202122122.23548-2-shawn.guo@linaro.org>
- <b221fec0-43d0-537d-d78e-84da10a9c2d7@gmail.com>
-User-Agent: Roundcube Webmail/1.4.11
-Message-ID: <fa6ae407c1da16e571aaf04eb424fecd@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: f.fainelli@gmail.com, shawn.guo@linaro.org, tglx@linutronix.de, quic_mkshah@quicinc.com, bjorn.andersson@linaro.org, loic.poulain@linaro.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, claudiu.beznea@microchip.com, narmstrong@baylibre.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Jarrett Schultz <jaschultz@microsoft.com>
+Subject: [PATCH v2 0/5] platform: surface: Introduce Surface XBL Driver
+Date:   Thu,  2 Dec 2021 11:16:25 -0800
+Message-Id: <20211202191630.12450-1-jaschultz@microsoft.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-02 17:52, Florian Fainelli wrote:
-> On 12/2/21 4:21 AM, Shawn Guo wrote:
->> It makes sense to just pass device_node for callback in 
->> IRQCHIP_DECLARE
->> case, but not so much for IRQCHIP_PLATFORM_DRIVER one, because
->> platform_driver probe/init usually needs device pointer for various
->> purposes, e.g. resource allocation, service request, device prefixed
->> message output, etc.  Create a new callback type irqchip_init_cb_t 
->> which
->> takes platform_device pointer as parameter, and update the existing
->> IRQCHIP_PLATFORM_DRIVER users accordingly.
->> 
->> Cc: Florian Fainelli <f.fainelli@gmail.com>
->> Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
->> Cc: Neil Armstrong <narmstrong@baylibre.com>
->> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> 
-> Could you copy all recipients on all 3 patches plus your cover letter
-> next time so we have the full context? Thanks!
-> 
-> [snip]
-> 
->> 
->> -static int __init bcm7120_l2_intc_probe_7120(struct device_node *dn,
->> +static int __init bcm7120_l2_intc_probe_7120(struct platform_device 
->> *pdev,
->>  					     struct device_node *parent)
->>  {
->> -	return bcm7120_l2_intc_probe(dn, parent, bcm7120_l2_intc_iomap_7120,
->> +	return bcm7120_l2_intc_probe(pdev->dev.of_node, parent,
->> +				     bcm7120_l2_intc_iomap_7120,
->>  				     "BCM7120 L2");
-> 
-> If you look further into that driver, you will see that we do something
-> like this in bcm7120_l2_intc_probe:
-> 
->           pdev = of_find_device_by_node(dn);
->           if (!pdev) {
->                   ret = -ENODEV;
->                   goto out_free_data;
->           }
-> 
-> which would be completely superfluous now that we pass a 
-> platform_device
-> directly. Can you rework your patch so as to eliminate that
-> of_find_device_by_ndoe() (and the companion put_device call)?
+Introduce the Surface Extensible Boot Loader driver for the Surface Duo.
+Exposes information about the driver to user space via sysfs.
 
-Or just adopt the same construct in the MPM driver. At this stage, 
-drivers
-requiring a platform_device are the minority.
+Signed-off-by: Jarrett Schultz <jaschultz@microsoft.com>
 
-         M.
+---
+
+Changes in v3:
+ - For the yaml documentation:
+    * Updated description
+    * Fixed examples
+    * Updated 'required' field
+ - Further propogated ACPI dependency in Kconfigs
+ - Updated sysfs several binding descriptions
+ - Renamed files to conform to naming conventions
+
+---
+
+Changes in v2:
+ - Per Maximilian, added patch 2: propagated ACPI dependency from the
+   directory as a whole to each individual driver
+ - For the yaml documentation:
+    * Removed json-schema dependence
+    * Elaborated on description of driver
+    * Updated example
+ - Changed target KernelVersion in sysfs documentation
+ - Updated MAINTAINER changes to be properly applied across patches
+ - For the driver itself,
+    * Added types.h inclusion and removed unused inclusions
+    * Minor updates to code and acronym style
+    * Remove __packed attribute on driver struct
+    * Use .dev_groups for sysfs
+ - Added more in-depth description of driver in Kconfig
+ - Modified dts to reference a newly added section in sm8150.dtsi
+
+---
+Jarrett Schultz (5):
+  dt-bindings: platform: microsoft: Document surface xbl
+  platform: surface: Propagate ACPI Dependency
+  platform: surface: Add surface xbl
+  arm64: dts: qcom: sm8150: Add imem section
+  arm64: dts: qcom: surface-duo: Add surface xbl
+
+ .../ABI/testing/sysfs-platform-surface-xbl    |  79 ++++++++
+ .../platform/microsoft/surface-xbl.yaml       |  69 +++++++
+ MAINTAINERS                                   |   9 +
+ .../dts/qcom/sm8150-microsoft-surface-duo.dts |  10 +
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          |   8 +
+ drivers/platform/surface/Kconfig              |  19 +-
+ drivers/platform/surface/Makefile             |   1 +
+ drivers/platform/surface/aggregator/Kconfig   |   1 +
+ drivers/platform/surface/surface_xbl.c        | 186 ++++++++++++++++++
+ 9 files changed, 381 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-platform-surface-xbl
+ create mode 100644 Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml
+ create mode 100644 drivers/platform/surface/surface_xbl.c
+
 -- 
-Jazz is not dead. It just smells funny...
+2.25.1
+

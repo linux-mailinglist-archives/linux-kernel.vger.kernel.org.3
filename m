@@ -2,69 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F290946657A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 15:40:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 885F9466580
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 15:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241837AbhLBOnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 09:43:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39008 "EHLO
+        id S1358657AbhLBOoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 09:44:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358654AbhLBOnS (ORCPT
+        with ESMTP id S231202AbhLBOoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 09:43:18 -0500
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E83C061758
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 06:39:56 -0800 (PST)
-Received: by mail-vk1-xa30.google.com with SMTP id u68so18571399vke.11
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 06:39:56 -0800 (PST)
+        Thu, 2 Dec 2021 09:44:08 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629F1C06174A;
+        Thu,  2 Dec 2021 06:40:46 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id r26so55808045oiw.5;
+        Thu, 02 Dec 2021 06:40:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=qztlLTDQmmEb0Xq8BgFUWcdE0xJC0fnWX5znumDPlIQ=;
-        b=ftzfe/gtXmR8j8hyGvUL6MFARNKUoS9HbJalgEzP8idyMJnleh8+GI7RSpwhL/DJaO
-         FVVaI03AECZpBldwyu/2hchCxD4bo9mzIdtwgOM5PiZ80+WQ2/K4ik0oOOHCRI2BLQp6
-         C6m0RPCbvM2GrUjMNpbagdxUlYXbQfjjD11wD1/I9zEXSI5Ryu62i8fiL03ImYjBgkQ0
-         QFEkazUy5SgnN5wnUc3i7C6567OeT89ETJf7pdZpnmnbMiqbTBPVD1opXOZkx+WT2XiY
-         EuW6cS8H6JSidGKacWmoVQ0t8C9O5g0wmTpp1x3Y4/B8oIeKpGSoD9Qpd84N7u7OBzNv
-         pMCQ==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JzjMw6Bxg74ODBmRNh64G8wfqH9GoiId/mAlE/vVMDY=;
+        b=oZhW11CRVWpdVd7awXzzSqJKsouCjsdhVo+44hQ+g8stK0yY+85tMz4TQX7dls4TX+
+         02hVQ1UvbSxyJZ4pwUWQM2Z8CCRnDHhQN99qXCZ0bRgxJYTA7jsrvu7v1NDM74Pm1EKE
+         XBErasK5aQk493CGiOIObz1or6flLZQ9iSghKQ03fxYI0gdq/e1PTaAJw48bWVQ/s6jT
+         xKAkiSgWUYSAfjWL6x0VAZiEh1871BrXrAepLplNW2WZIy1axxlMgQi1Cd1tWJMfdown
+         Hd7Kr9ws2wrw+SzHtYuaZGa6XH1JX3/Y6oSZNzxrXUgSI8uXDceRorxluRF+ZkCRiI0I
+         lGVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=qztlLTDQmmEb0Xq8BgFUWcdE0xJC0fnWX5znumDPlIQ=;
-        b=Y4iYInnfSJbqux8Zfz1WxfKtSqkednUrmDm3lQvVEXMyGfZZ+U/a3mwyYTJiJ3btOQ
-         zPY9HBAjXS+4hNT6WqispQJNIclx/x+VytDKya3N8yQ2i/8YD4WZOgBkQDBGuKYzuuIB
-         sWInpfO85YqxvaXWy5BVMjBZ1Se3bW9SdDidWha2XDi+8gDHt2KsMr0grsQYMaLfnSNc
-         Pltn6+7+YtaQpHrsZcrpJk4CMAfIFdnrNNnviXzL3hdLq7xeVj3BKh/Z6KdpaT43Fq9k
-         6ebQVYg6376I7Bb/ixDa/KiL8y/Oh/21pZJ1mhdgIJTg+r7xSSEkUJT02OQEdVlSIpxi
-         cmvA==
-X-Gm-Message-State: AOAM530YzHg+0WiN4reOcT+nXelCY8MbdGqEtus6GMH2lmTU/RoylsLw
-        2owwC5m55934U97V+IZlE4MTd0YG3zzOh9JnkKo=
-X-Google-Smtp-Source: ABdhPJz7/3cq0NRUs4WWzi9ATdBjXx1Pg60+tiHJ7KWddKufoglDUVV6vC4HNRKlx0wgxcpCXkgUMk0JqlpU5/1bZR8=
-X-Received: by 2002:a05:6122:988:: with SMTP id g8mr16532476vkd.2.1638455994609;
- Thu, 02 Dec 2021 06:39:54 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=JzjMw6Bxg74ODBmRNh64G8wfqH9GoiId/mAlE/vVMDY=;
+        b=bnC72yK8wxPI2nN83uOf8H3XoTI8RUEH9dHtPWQoBE3SjE9baCsznW+kppL+y8e7uE
+         AcuzXMlvMeCoLNxZ2zMgtxoBzuCf+QfE+n8yXWMnFgUOtcKZ0ScmVc1Ps4rfJENRpmr8
+         V/fTqKkwRckMtIzVgvOsbAlu8knYomSdV8TCX1d6ZK50kCjOHnNeBmwf9knR1vXpFGOJ
+         Hj//0dF+kLbfpFEfvAz3DgARfNIWCMQxfGAdtmskm9OE7s4No4+2JzDRJbuofPZGEYgK
+         TznHz3L/HOCcCUibtfkOZt2vrUjYliycj5mThPnnwBelgW/o+5sCQUwsihxXCjfaVEwQ
+         Vv7w==
+X-Gm-Message-State: AOAM533Yxg+qzAfh99WQXe/gXqydiQ8JW3TZjpegg8IgDT8FepmiGQ58
+        wJqmLyJsgqQDsilZudqeAMI=
+X-Google-Smtp-Source: ABdhPJyLWBNRI1o+GL8ue6SURuIQkxXT2NUjFmtnAeYDba7Xcg/6gwo4HrkRVhIH5Gud+60Zq7m7AA==
+X-Received: by 2002:aca:3642:: with SMTP id d63mr4515126oia.95.1638456045810;
+        Thu, 02 Dec 2021 06:40:45 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w19sm10787oih.44.2021.12.02.06.40.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 06:40:45 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 2 Dec 2021 06:40:43 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Andrej Picej <andrej.picej@norik.com>
+Cc:     support.opensource@diasemi.com, linux-watchdog@vger.kernel.org,
+        wim@linux-watchdog.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 1/4] mfd: da9062: make register CONFIG_I writable
+Message-ID: <20211202144043.GA828760@roeck-us.net>
+References: <20211202093230.3951996-1-andrej.picej@norik.com>
 MIME-Version: 1.0
-Received: by 2002:ab0:2642:0:0:0:0:0 with HTTP; Thu, 2 Dec 2021 06:39:54 -0800 (PST)
-Reply-To: salemchantal@mail.ee
-From:   MRS Salem Chantal Lawrence <dericksunshine@gmail.com>
-Date:   Thu, 2 Dec 2021 06:39:54 -0800
-Message-ID: <CAN7dtm2Oq3sc0VTjMWAnf=rhj1kAsJ64EbARg3Kc-XEk1S=iYQ@mail.gmail.com>
-Subject: ATM VISA DAPARTCARD
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211202093230.3951996-1-andrej.picej@norik.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Attention
+On Thu, Dec 02, 2021 at 10:32:27AM +0100, Andrej Picej wrote:
+> From: Stefan Christ <s.christ@phytec.de>
+> 
+> Make the config register CONFIG_I writable to change the watchdog mode.
+> 
+> Signed-off-by: Stefan Christ <s.christ@phytec.de>
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
 
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-You have been compensated with the sum of 4.6 million dollars in this
-United Nation the payment will be issue into Atm Visa Card and send to you
-
-from the Santander bank of Spain we need your address, Passport and your
-whatsapp number.
-
-
-THANKS
-MRS Salem Chantal Lawrence
+> ---
+> Chnages in v4:
+>  - no changes
+> 
+> Changes in v3:
+>  - no chagnes
+> 
+> Changes in v2:
+>  - no changes
+> ---
+>  drivers/mfd/da9062-core.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/mfd/da9062-core.c b/drivers/mfd/da9062-core.c
+> index 01f8e10dfa55..7041ba53efb4 100644
+> --- a/drivers/mfd/da9062-core.c
+> +++ b/drivers/mfd/da9062-core.c
+> @@ -556,6 +556,7 @@ static const struct regmap_range da9062_aa_writeable_ranges[] = {
+>  	regmap_reg_range(DA9062AA_VBUCK3_B, DA9062AA_VBUCK3_B),
+>  	regmap_reg_range(DA9062AA_VLDO1_B, DA9062AA_VLDO4_B),
+>  	regmap_reg_range(DA9062AA_BBAT_CONT, DA9062AA_BBAT_CONT),
+> +	regmap_reg_range(DA9062AA_CONFIG_I, DA9062AA_CONFIG_I),
+>  	regmap_reg_range(DA9062AA_GP_ID_0, DA9062AA_GP_ID_19),
+>  };
+>  
+> -- 
+> 2.25.1
+> 

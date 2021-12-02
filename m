@@ -2,91 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E246C466B2A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 21:48:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09332466B27
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 21:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349023AbhLBUwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 15:52:14 -0500
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:48249 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238643AbhLBUwN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 15:52:13 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 844045C01E1;
-        Thu,  2 Dec 2021 15:48:49 -0500 (EST)
-Received: from imap45 ([10.202.2.95])
-  by compute5.internal (MEProxy); Thu, 02 Dec 2021 15:48:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=owlfolio.org; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm2; bh=V+oY0lvpRQ6EWyHSpKOwdyQZHvigeH/
-        DqFU+688VfMY=; b=nb/nkksHB3a3v4m7IZp4fqN9v2xH5hSYXlFYTlHB+UWrVyH
-        zTDvXiG5u/13oPUWZiI6qmf0PYrvqXZEvdl2SqEr4Y6QawYYzmnseHuysVT/lFIq
-        V8MNlx4x00WGzc5fNSo+1GgM1UOD3mwX1IZ4Vp/T5pQc7VzQb6gZ6u0KrdEmDK9N
-        xbsHXGFoSCie3plt1DgqtjMNV06JXlML19Zz0H/vf5Bq/klVz+0M1ohEHRNYDPeo
-        IL7Cg8Y5P3pHdGfvgdXBSkSfMVKquO9L+7h7bg4QA3Zrg76+DszVT13+n7r5KNlb
-        iriUINGYx8Ze31uCpxdzOO2Gv0t1NknSTRbPfHA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=V+oY0l
-        vpRQ6EWyHSpKOwdyQZHvigeH/DqFU+688VfMY=; b=NQm5/SdfzT+EZ/AqkRR47a
-        QX4yiM4sJjwLX4m6PvlVoMNjX+Uns4jeRpZTM7mMBWBlh3l8ufG/VWwDtu2brul0
-        bRGYNECR1HwGvbO5xZYs5c8IJ5eyUpagJdfeekv2EHQbHJ1uDSHRjFbaXx/dDfwt
-        TrV6iAZ8rAPqjZv3bVNtCx2Y9+EDrV11Ss/gUVNwcT5D6gla9+H9PwBjnLpL4vc6
-        aljzCB68dMyH3Hg1PxjcBiJ85Eu61QapWuAGoJRsT1MRbqrh6ogBoZt7d6C6bmPS
-        /VXkBMhkDj89rsmYNou+/aiC93ISbgkOKnA1tsiLHlqP3HuH8g2CZKkomwPlG1Qw
-        ==
-X-ME-Sender: <xms:MTGpYeEJPYWp_rHkqEacZFxYHsJd67PCuWde_SH5dYWqrSmdLSvCdg>
-    <xme:MTGpYfV2PxMAfwkf12Wcl41xCYCZ32GQT7M7kVl9ac2lG76oEqZspgMjV4iJ4GJGN
-    klk3u_Gtl_dcYLK3ss>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrieehgddugeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdgkrggt
-    khcuhggvihhnsggvrhhgfdcuoeiirggtkhesohiflhhfohhlihhordhorhhgqeenucggtf
-    frrghtthgvrhhnpefhuefhveeuffetfffgjeetgfekkeehfedtfeelgfehffffveehkeel
-    fefgheffudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpeiirggtkhesohiflhhfohhlihhordhorhhg
-X-ME-Proxy: <xmx:MTGpYYIcIk60IcYhPJipH82rcWZ_npxTlANWG_CTbh882idWQplhiQ>
-    <xmx:MTGpYYFb3jITNU2wroc500kVkUXgtwzYSAT-u9F-RsjShajDz8ZIKQ>
-    <xmx:MTGpYUWgEuT3sqp06vd3CA8jMwj1erEyitWGrie6-G1qgQ3qvVyqUQ>
-    <xmx:MTGpYSyEIzBfPUqfSA9f-BvYW2l9jShFn38Fz-o3hMBGYUTAl4VOIg>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 11E5C24A0077; Thu,  2 Dec 2021 15:48:48 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4458-g51a91c06b2-fm-20211130.004-g51a91c06
-Mime-Version: 1.0
-Message-Id: <1e3867cd-2c8b-4fe1-93a6-c6ae34120f6b@www.fastmail.com>
-In-Reply-To: <913509.1638457313@warthog.procyon.org.uk>
-References: <b8d6f890-e5aa-44bf-8a55-5998efa05967@www.fastmail.com>
- <YZvIlz7J6vOEY+Xu@yuki> <1618289.1637686052@warthog.procyon.org.uk>
- <ff8fc4470c8f45678e546cafe9980eff@AcuMS.aculab.com> <YaTAffbvzxGGsVIv@yuki>
- <CAK8P3a1Rvf_+qmQ5pyDeKweVOFM_GoOKnG4HA3Ffs6LeVuoDhA@mail.gmail.com>
- <913509.1638457313@warthog.procyon.org.uk>
-Date:   Thu, 02 Dec 2021 15:48:21 -0500
-From:   "Zack Weinberg" <zack@owlfolio.org>
-To:     "David Howells" <dhowells@redhat.com>
-Cc:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "Florian Weimer" <libc-alpha@sourceware.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "David Laight" <David.Laight@aculab.com>,
-        "ltp@lists.linux.it" <ltp@lists.linux.it>
-Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Content-Type: text/plain
+        id S1349003AbhLBUwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 15:52:03 -0500
+Received: from mga14.intel.com ([192.55.52.115]:46127 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238643AbhLBUwD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 15:52:03 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="237053520"
+X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
+   d="scan'208";a="237053520"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 12:48:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
+   d="scan'208";a="460609423"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 02 Dec 2021 12:48:36 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 105DF109; Thu,  2 Dec 2021 22:48:41 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] ASoC: zl38060: Setup parent device and get rid of unnecessary of_node assignment
+Date:   Thu,  2 Dec 2021 22:48:38 +0200
+Message-Id: <20211202204838.75287-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021, at 10:01 AM, David Howells via Libc-alpha wrote:
-> Zack Weinberg <zack@owlfolio.org> wrote:
->> I could be persuaded otherwise with an example of a program for which
->> changing __s64 from 'long long' to 'long' would break *binary* backward
->> compatibility, or similarly for __u64.
->
-> C++ could break.
+Some of the drivers do not set parent device. This may lead to obstacles
+during debugging or understanding the device relations from the Linux
+point of view. Assign parent device for GPIO chips created by these
+drivers.
 
-That's too hypothetical to be actionable.  I would like to see a _specific program_, and I would like it to be one that already exists in the world and was not written as a test case for this hypothetical ABI break.
+While at it, let GPIO library to assign of_node from the parent device.
 
-zw
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ sound/soc/codecs/zl38060.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/sound/soc/codecs/zl38060.c b/sound/soc/codecs/zl38060.c
+index d20ec1571010..6cae0fb08093 100644
+--- a/sound/soc/codecs/zl38060.c
++++ b/sound/soc/codecs/zl38060.c
+@@ -589,9 +589,7 @@ static int zl38_spi_probe(struct spi_device *spi)
+ 				       sizeof(template_chip), GFP_KERNEL);
+ 	if (!priv->gpio_chip)
+ 		return -ENOMEM;
+-#ifdef CONFIG_OF_GPIO
+-	priv->gpio_chip->of_node = dev->of_node;
+-#endif
++	priv->gpio_chip->parent = dev;
+ 	err = devm_gpiochip_add_data(dev, priv->gpio_chip, priv->regmap);
+ 	if (err)
+ 		return err;
+-- 
+2.33.0
+

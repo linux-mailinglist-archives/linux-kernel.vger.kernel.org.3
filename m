@@ -2,69 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C35AE465DB2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 06:14:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51425465DB8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 06:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344972AbhLBFRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 00:17:51 -0500
-Received: from marcansoft.com ([212.63.210.85]:48452 "EHLO mail.marcansoft.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229469AbhLBFRt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 00:17:49 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id BBE9241F5F;
-        Thu,  2 Dec 2021 05:14:23 +0000 (UTC)
-Subject: Re: [PATCH 2/2] watchdog: Add Apple SoC watchdog driver
-To:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Sven Peter <sven@svenpeter.dev>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20211113094732.73889-1-sven@svenpeter.dev>
- <20211113094732.73889-2-sven@svenpeter.dev> <YY/YnlCxLqdw/zAo@sunset>
- <95dea968-f452-4ba0-9b66-c9bc4269a52c@www.fastmail.com>
- <YZEMmH49D+GZEewi@sunset>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <ca52e4ee-b5f3-b892-1ba5-7c5656e45fdd@marcan.st>
-Date:   Thu, 2 Dec 2021 14:14:21 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S1349726AbhLBFVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 00:21:32 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:41967 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345211AbhLBFVa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 00:21:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638422289; x=1669958289;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=/XMyoFnUnbcqzYajmGFLcw3K582rP0wEAsXpwqdxpSQ=;
+  b=UvQvdzh0PpQTVL78ehh8FqBHlgR2ZkD0EtdBLVqlAG68hT+zITzjK3u8
+   5SQ2JtDQW0XWG62DNcJ+63BOlvdFtvzhnP38Pawx87GA2bjnxUoKrrVkj
+   Dp09OlCsswY8EwtigxD+LJKnpTWFUrGDIz5iuYiNfdAYTEniMR9qhVcKV
+   w=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Dec 2021 21:18:08 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 21:18:07 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 1 Dec 2021 21:18:08 -0800
+Received: from c-sanm-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 1 Dec 2021 21:18:04 -0800
+From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: [PATCH v2] arm64: qcom: sc7280: Move USB2 controller nodes from common dtsi to SKU1
+Date:   Thu, 2 Dec 2021 10:47:28 +0530
+Message-ID: <1638422248-24221-1-git-send-email-quic_c_sanm@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <YZEMmH49D+GZEewi@sunset>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/11/2021 22.18, Alyssa Rosenzweig wrote:
->>>> + * This HW block has three separate watchdogs. WD0 resets the machine
->>>> + * to recovery mode and is not very useful for us. WD1 and WD2 trigger a normal
->>>> + * machine reset. WD0 additionally supports a configurable interrupt.
->>>
->>> Do we have any idea what the difference between WD1 and WD2 is?
->>
->> I've never seen macOS write to WD2 when running in our hypervisor and only
->> found that one when I was looking at the rest of the MMIO region.
->> >From what I can tell it works exactly like WD1.
-> 
-> Makes sense, thanks.
-> 
+Move USB2 controller and phy nodes from common dtsi file as it is
+required only for SKU1 board and change the mode to host mode as
+it will be used in host mode for SKU1.
 
-Are any of these watchdogs active when we boot, and are we leaving them 
-like that? I'm pretty sure at least some of the coprocessors have their 
-own watchdog (SMC...), which might be one of these. We should make sure 
-we don't clobber that.
+Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+---
+v2:
+Squashed the two patches in v1 and changed the commit message.
 
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts  | 16 ++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 16 ----------------
+ 2 files changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+index 9b991ba..ffd483d 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+@@ -80,3 +80,19 @@
+ 		qcom,pre-scaling = <1 1>;
+ 	};
+ };
++
++&usb_2 {
++	status = "okay";
++};
++
++&usb_2_dwc3 {
++	dr_mode = "host";
++};
++
++&usb_2_hsphy {
++	status = "okay";
++
++	vdda-pll-supply = <&vreg_l10c_0p8>;
++	vdda33-supply = <&vreg_l2b_3p0>;
++	vdda18-supply = <&vreg_l1c_1p8>;
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+index d623d71..c54ad62 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+@@ -398,22 +398,6 @@
+ 	vdda-pll-supply = <&vreg_l1b_0p8>;
+ };
+ 
+-&usb_2 {
+-	status = "okay";
+-};
+-
+-&usb_2_dwc3 {
+-	dr_mode = "peripheral";
+-};
+-
+-&usb_2_hsphy {
+-	status = "okay";
+-
+-	vdda-pll-supply = <&vreg_l10c_0p8>;
+-	vdda33-supply = <&vreg_l2b_3p0>;
+-	vdda18-supply = <&vreg_l1c_1p8>;
+-};
+-
+ &uart7 {
+ 	status = "okay";
+ 
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+2.7.4
+

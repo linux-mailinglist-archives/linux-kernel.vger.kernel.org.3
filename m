@@ -2,86 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1C1465D7D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC43A465D84
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:43:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355553AbhLBEqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 23:46:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355539AbhLBEqB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 23:46:01 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF7CC061748
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 20:42:39 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id n8so19361667plf.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 20:42:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Q/XmdYzmWlBC/voF+84Cd3udQjdonRFCNCIqCUmDhDk=;
-        b=NNI4lbBLOzUh6enNA2zXDD6i/1bbGmC+FP6nollo+ZHi511xLiHCuXuklfoEatdbSW
-         c/K2UDB3imN6OpU5wZVX9y/cgHytjg748J8xZWdpWc5c2s/mjPDhWwgVMqKKaZGX/KR8
-         N5KEWOuSX6ObkcWzGMI0QUSJfrREjzwt0FlH38L7xhCnOUlCDKqwF76FdcUJMuPKFyyf
-         NcPOfpJLQ3fdoJX6usozrWel3ddfQu+4oIgNFru6sBQG3JAIVq+ToAIk0jcJUNombClm
-         98B1D6VwKpA9QpeCwgFuO6oyX8A9MSk+vYb9i38GLAnPQQTpxaDTVACDW5OSlJ7IfZLR
-         NVnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Q/XmdYzmWlBC/voF+84Cd3udQjdonRFCNCIqCUmDhDk=;
-        b=FCzCY0fy9WD4UoT3rPilH40w7N4Nb5dxxRixy2DNBrsJaVda4PCUOcXu1twLu1qzue
-         +hhIz70Mvnlf9McU4nyLLwAVbDV9NDu7CZ0YKp4MKNY4R+DkyZeBJQsGfj5AH/T+WNTg
-         0NZ4nEha7G7Kwg+aHAQMx09MwEJidUyTCtgHaDoRhZOIVAqow2q0xQ6giMkxhh3hq7Bu
-         j58zoniY0LDx9CbvKMvSFmxGlLvKWzgb91r378G/4vomOL2g5qOaigAIhL+3ob9CNtD8
-         be2zwnTb/+SVxu/NoJysaKJX439u3d6Lz0ycqH2BAv6p48ZAVpcJ7vf0hyBcCBlSk+7h
-         TSIQ==
-X-Gm-Message-State: AOAM5312Bf3bJajNFkDqDvHouD+x7MAtPCRdnpQgkvb6TiYSgfrH498K
-        h8yF5dL0MZe45v6pXS9RlG3NGg==
-X-Google-Smtp-Source: ABdhPJwd7LFTasLsCKCBBJSOBzXW1hcUhBvCVvh8QO8kQ/q9LWJdPJFWFfi3xByxw9fLIekXcskJdw==
-X-Received: by 2002:a17:903:1208:b0:143:e4e9:4ce3 with SMTP id l8-20020a170903120800b00143e4e94ce3mr12739440plh.21.1638420159291;
-        Wed, 01 Dec 2021 20:42:39 -0800 (PST)
-Received: from google.com ([2401:fa00:1:10:ce4d:ddd8:41f4:d987])
-        by smtp.gmail.com with ESMTPSA id p19sm1545646pfo.92.2021.12.01.20.42.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 20:42:39 -0800 (PST)
-Date:   Thu, 2 Dec 2021 12:42:34 +0800
-From:   Tzung-Bi Shih <tzungbi@google.com>
-To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        cujomalainey@google.com,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        sound-open-firmware@alsa-project.org
-Subject: Re: [PATCH v9 2/3] firmware: mediatek: add adsp ipc protocol
- interface
-Message-ID: <YahOuiIZ/wGR/TpD@google.com>
-References: <20211201075604.27864-1-allen-kh.cheng@mediatek.com>
- <20211201075604.27864-3-allen-kh.cheng@mediatek.com>
+        id S1355592AbhLBErE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 23:47:04 -0500
+Received: from mga14.intel.com ([192.55.52.115]:34201 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1355563AbhLBEqk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 23:46:40 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="236854428"
+X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
+   d="scan'208";a="236854428"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 20:43:13 -0800
+X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
+   d="scan'208";a="541081875"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 20:43:13 -0800
+From:   ira.weiny@intel.com
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V2 0/7] Improve Auxiliary Bus documentation
+Date:   Wed,  1 Dec 2021 20:42:58 -0800
+Message-Id: <20211202044305.4006853-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211201075604.27864-3-allen-kh.cheng@mediatek.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 03:56:03PM +0800, allen-kh.cheng wrote:
-> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+From: Ira Weiny <ira.weiny@intel.com>
 
-Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
+The auxiliary bus documentation was not wrong but it was a bit difficult to
+follow.  Furthermore the documentation was not tied to the code so it was
+potentially harder to maintain.
+
+Add clarifications to ensure that details are not missed.  Move the overview
+documentation into the code.  Finally, add some of the existing function
+kernel docs into the main Aux Bus section.
+
+
+Ira Weiny (7):
+Documentation/auxiliary_bus: Clarify auxiliary_device creation
+Documentation/auxiliary_bus: Clarify match_name
+Documentation/auxiliary_bus: Update Auxiliary device lifespan
+Documentation/auxiliary_bus: Clarify __auxiliary_driver_register
+Documentation/auxiliary_bus: Add example code for
+module_auxiliary_driver()
+Documentation/auxiliary_bus: Clarify the release of devices from find
+device
+Documentation/auxiliary_bus: Move the text into the code
+
+Documentation/driver-api/auxiliary_bus.rst | 236 +++------------------
+drivers/base/auxiliary.c | 152 ++++++++++++-
+include/linux/auxiliary_bus.h | 164 ++++++++++++++
+3 files changed, 339 insertions(+), 213 deletions(-)
+
+--
+2.31.1
+

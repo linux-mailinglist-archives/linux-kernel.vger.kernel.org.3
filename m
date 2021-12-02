@@ -2,162 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B5246615D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:21:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F36C446615F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:22:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356910AbhLBKYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 05:24:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43415 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1356915AbhLBKYl (ORCPT
+        id S1356937AbhLBKZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:25:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242697AbhLBKZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 05:24:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638440478;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=m4HlULEGQ+u/lfRbooSYsdnXMPgjmp3tTKFINSv7JFM=;
-        b=jR2Jxz3tP2VpsAq9tl8h1fuMHXT3d4aRFjfL2YL8Yp8+fL9yNCSBCk2M2XUVxcPZUeImuj
-        Kdztr1P5c1mfOqvLncQKKkERVbc4JwxdRYYZKRA8+2cy8p0EZ7gYyahQPUAijxFYxvXy/3
-        cWsYE8UIY7EEbOF2kmPSSiMoXuB1Aig=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-FTxu8o4JPGuzaC45aDiDWA-1; Thu, 02 Dec 2021 05:21:13 -0500
-X-MC-Unique: FTxu8o4JPGuzaC45aDiDWA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ABDFE81EE60;
-        Thu,  2 Dec 2021 10:21:09 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D73445D9CA;
-        Thu,  2 Dec 2021 10:20:56 +0000 (UTC)
-Message-ID: <f55056c55892dd42592e5c242fa7a1561c6cee90.camel@redhat.com>
-Subject: Re: [PATCH v2 11/43] KVM: Don't block+unblock when halt-polling is
- successful
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>
-Date:   Thu, 02 Dec 2021 12:20:55 +0200
-In-Reply-To: <YaUNBfJh35WXMV0M@google.com>
-References: <20211009021236.4122790-1-seanjc@google.com>
-         <20211009021236.4122790-12-seanjc@google.com>
-         <cceb33be9e2a6ac504bb95a7b2b8cf5fe0b1ff26.camel@redhat.com>
-         <4e883728e3e5201a94eb46b56315afca5e95ad9c.camel@redhat.com>
-         <YaUNBfJh35WXMV0M@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 2 Dec 2021 05:25:41 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6113C06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 02:22:18 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id d9so37729543wrw.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 02:22:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=e2CI3s+qc3l0KIfBWaOSCWRJ87QQ1SRqvUo2BVvjmHQ=;
+        b=upIXAYbG3/iaLyoXO2Im9gJtusVYVjH2ZpBvbS7wdC6co3rmb4A2CSOP5DK7CdbPSZ
+         l2oqIBBhwc0xLaPtw2qigD+KWar+7DPhgXEvB0t0yOL9hX9PHJFUAzCJuzMLQOwYn4Jj
+         /Ls4zzkAPFMX65LliElRVUjT54eAqKTYUxR1thvH+POS8SQGf7NxCpDTb+RD4X8WJsjY
+         j7miC3gIz0VDCp8Ph7FFMSWatDPY14HeIt+9NvO6B3+hEH/XWbFs3KxDBpsRnkOtTpEU
+         ywWubvvzXr+n0gpRQO+vZXnq6aaAlV+0erYoa2mKe5sVYqOH5AofQpInHSneey67n3cR
+         CXhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=e2CI3s+qc3l0KIfBWaOSCWRJ87QQ1SRqvUo2BVvjmHQ=;
+        b=kwyjdWwSST+L7LHCn9eN8sXtPeUVPnmZFoHbyxsM6OvYa9BqapzIVVOhZuRTTzy3q6
+         GuwSS8nof63FGadMtH45qJTMgV3tLSTrdUSY1/u48vEbLooo5JV2rkd8GXAxPyDerOdv
+         2qDK1ZKz1ej6VD1On4EHwlcC63wyY7DKk+bw/Pv7xb8Kq0L+it5nxSCzx9rEhqGuarN8
+         px43cFWFlLRSDAlbizP7TjRWZleWiUhWQeF8o/vDBVppjlvVJkDXRFIeCPM8252nUzDd
+         7J1u2K15fyYrp+EM9ST6fyZJFVRs3Rp0GxD1mVVffMv/ZTPnh/4l3K4WmoCWSoBBB49G
+         uEDA==
+X-Gm-Message-State: AOAM531OkSWmDrxpLt923u5tyMVXpZf++rOu0iqPFxrxzOu+SiOXgOmA
+        tyMldHcGhT2rVmjUWRgBqRvipA==
+X-Google-Smtp-Source: ABdhPJx1SKD6YvDp85QSxzRBRb+Q8ouDEm+WIW36C1XVsx6W7DTO4SNM0Z6q+zY/U815jKycPsrzIg==
+X-Received: by 2002:adf:eb05:: with SMTP id s5mr12763604wrn.448.1638440537248;
+        Thu, 02 Dec 2021 02:22:17 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:72d0:52a1:d4ea:f564? ([2a01:e34:ed2f:f020:72d0:52a1:d4ea:f564])
+        by smtp.googlemail.com with ESMTPSA id az4sm1741476wmb.20.2021.12.02.02.22.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 02:22:16 -0800 (PST)
+Subject: Re: [PATCH 2/2] clocksource: timer-imx-sysctr: set cpumask to
+ cpu_possible_mask
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, tglx@linutronix.de,
+        shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        van.freenix@gmail.com, Peng Fan <peng.fan@nxp.com>
+References: <20211201125030.2307746-1-peng.fan@oss.nxp.com>
+ <20211201125030.2307746-2-peng.fan@oss.nxp.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <80578aa9-35dd-02ca-fb07-5895991572e2@linaro.org>
+Date:   Thu, 2 Dec 2021 11:22:13 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+In-Reply-To: <20211201125030.2307746-2-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2021-11-29 at 17:25 +0000, Sean Christopherson wrote:
-> On Mon, Nov 29, 2021, Maxim Levitsky wrote:
-> > (This thing is that when you tell the IOMMU that a vCPU is not running,
-> > Another thing I discovered that this patch series totally breaks my VMs,
-> > without cpu_pm=on The whole series (I didn't yet bisect it) makes even my
-> > fedora32 VM be very laggy, almost unusable, and it only has one
-> > passed-through device, a nic).
+On 01/12/2021 13:50, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> Grrrr, the complete lack of comments in the KVM code and the separate paths for
-> VMX vs SVM when handling HLT with APICv make this all way for difficult to
-> understand than it should be.
-> 
-> The hangs are likely due to:
-> 
->   KVM: SVM: Unconditionally mark AVIC as running on vCPU load (with APICv)
-> 
-> If a posted interrupt arrives after KVM has done its final search through the vIRR,
-> but before avic_update_iommu_vcpu_affinity() is called, the posted interrupt will
-> be set in the vIRR without triggering a host IRQ to wake the vCPU via the GA log.
-> 
-> I.e. KVM is missing an equivalent to VMX's posted interrupt check for an outstanding
-> notification after switching to the wakeup vector.
-> 
-> For now, the least awful approach is sadly to keep the vcpu_(un)blocking() hooks.
-> Unlike VMX's PI support, there's no fast check for an interrupt being posted (KVM
-> would have to rewalk the vIRR), no easy to signal the current CPU to do wakeup (I
-> don't think KVM even has access to the IRQ used by the owning IOMMU), and there's
-> no simplification of load/put code.
+> Actually we have CLOCK_EVT_FEAT_DYNIRQ, the irq affinity will be runtime
+> changed and no issue. But the system counter timer is not tied to CPU0,
+> so use cpu_possible_mask here.
 
-I have an idea.
- 
-Why do we even use/need the GA log?
-Why not, just disable the 'guest mode' in the iommu and let it sent good old normal interrupt
-when a vCPU is not running, just like we do when we inhibit the AVIC?
- 
-GA log makes all devices that share an iommu (there are 4 iommus per package these days,
-some without useful devices) go through a single (!) msi like interrupt,
-which is even for some reason implemented by a threaded IRQ in the linux kernel.
+Did you mean:
 
- 
-Best regards,
-	Maxim Levitsky
+"There is no reason to tie the system counter timer to CPU0, change its
+affinity to cpu_possible_mask.
 
+Moreover, the timer has the flag CLOCK_EVT_FEAT_DYNIRQ set, changing to
+cpu_possibl_mask will reduce the number of wakeups related to the system
+timer"
+
+?
+
+Note you may want to explain why 'there is no reason'
+
+
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/clocksource/timer-imx-sysctr.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> If the scheduler were changed to support waking in the sched_out path, then I'd be
-> more inclined to handle this in avic_vcpu_put() by rewalking the vIRR one final
-> time, but for now it's not worth it.
-> 
-> > If I apply though only the patch series up to this patch, my fedora VM seems
-> > to work fine, but my windows VM still locks up hard when I run 'LatencyTop'
-> > in it, which doesn't happen without this patch.
-> 
-> Buy "run 'LatencyTop' in it", do you mean running something in the Windows guest?
-> The only search results I can find for LatencyTop are Linux specific.
-> 
-> > So far the symptoms I see is that on VCPU 0, ISR has quite high interrupt
-> > (0xe1 last time I seen it), TPR and PPR are 0xe0 (although I have seen TPR to
-> > have different values), and IRR has plenty of interrupts with lower priority.
-> > The VM seems to be stuck in this case. As if its EOI got lost or something is
-> > preventing the IRQ handler from issuing EOI.
-> >  
-> > LatencyTop does install some form of a kernel driver which likely does meddle
-> > with interrupts (maybe it sends lots of self IPIs?).
-> >  
-> > 100% reproducible as soon as I start monitoring with LatencyTop.
-> >  
-> > Without this patch it works (or if disabling halt polling),
-> 
-> Huh.  I assume everything works if you disable halt polling _without_ this patch
-> applied?
-> 
-> If so, that implies that successful halt polling without mucking with vCPU IOMMU
-> affinity is somehow problematic.  I can't think of any relevant side effects other
-> than timing.
+> diff --git a/drivers/clocksource/timer-imx-sysctr.c b/drivers/clocksource/timer-imx-sysctr.c
+> index 2b309af11266..55a8e198d2a1 100644
+> --- a/drivers/clocksource/timer-imx-sysctr.c
+> +++ b/drivers/clocksource/timer-imx-sysctr.c
+> @@ -119,7 +119,7 @@ static struct timer_of to_sysctr = {
+>  
+>  static void __init sysctr_clockevent_init(void)
+>  {
+> -	to_sysctr.clkevt.cpumask = cpumask_of(0);
+> +	to_sysctr.clkevt.cpumask = cpu_possible_mask;
+>  
+>  	clockevents_config_and_register(&to_sysctr.clkevt,
+>  					timer_of_rate(&to_sysctr),
 > 
 
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

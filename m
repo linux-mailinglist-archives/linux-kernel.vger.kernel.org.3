@@ -2,39 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00941465AF8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24185465AFD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354581AbhLBAgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 19:36:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234629AbhLBAgs (ORCPT
+        id S1354596AbhLBAhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 19:37:15 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:54320 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234629AbhLBAhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 19:36:48 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A2DC061574;
-        Wed,  1 Dec 2021 16:33:26 -0800 (PST)
+        Wed, 1 Dec 2021 19:37:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0A57ECE1DC7;
-        Thu,  2 Dec 2021 00:33:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B983C00446;
-        Thu,  2 Dec 2021 00:33:23 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 37D1ECE2073;
+        Thu,  2 Dec 2021 00:33:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 670ADC00446;
+        Thu,  2 Dec 2021 00:33:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638405203;
-        bh=Ds/eO3dfiMAcQ/6iKBSMK4xpLlZdjck5M+IsTr0LZSI=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=ItYZaJmdHOeyp3JiWqPdSjfXse+RS08UpC8Nm95vOcWlfJ5nKaTDvVy5cj7fSKTmK
-         0t2pXhJ5awCROoCVM53Sf5DPvr9Pp8iuKHoCATqcDJGZ05hjlNPtPPggbDMD+hooir
-         BEJF7vZhFWm//pofSWBNQZJYzom3F/3kEPqtuN2LQ6AGiqWsOAcBtSk8fNaIYSjSHO
-         gfYtzJ8Ar8FAgwv/JpsqRLxFZJcbo7/5+ZGsU/PsYajfj/fQC1acC+winoSnxkk7Py
-         /swDa+ro/oPfsQYSlzXKpBPy7Ohkbec7SHRbOA55Jdxj4ptJ3gKHqrSgmYonMkmiNN
-         F07UQIRKk/d4A==
+        s=k20201202; t=1638405228;
+        bh=fK50A5ZEtQ/gc+GzicoES0DTBRVS8nbuJtayBMo2NDs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Oz5wJU82tsToBBShZ/o6FQ+RGFuw6lRYxOl004naxmg+MWnSrpS37rfEUIeP2uzE0
+         514OpLEyoiDJl3MwWe6qElQFed6n8hb4OrzfnLGr1I82mPwfA3ndgwy7swl0NIl19Y
+         roWFkqyCe/07LKMmWu+LXIV/j3yMzLnnk/rvMDFy2yVciJNBnFkxIi6+uFXX4GAiC3
+         BfnFKPLRGYaVo5swRPScr2RU4L8m7IKg7UwFDaCfq3XKYUZn7io0JhoME3HMNbhXz4
+         jid2FIWrz26kgjaFuDTTzJTMozBHXyYalYgG+62DQWwYiy+VL6rJC+HxQxySbI7/s2
+         Z6zHBxsZHonHQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 01F7D5C0FCD; Wed,  1 Dec 2021 16:33:22 -0800 (PST)
-Date:   Wed, 1 Dec 2021 16:33:22 -0800
+        id 39A5A5C0FCD; Wed,  1 Dec 2021 16:33:48 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
@@ -42,40 +38,116 @@ Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
         mathieu.desnoyers@efficios.com, josh@joshtriplett.org,
         tglx@linutronix.de, peterz@infradead.org, rostedt@goodmis.org,
         dhowells@redhat.com, edumazet@google.com, fweisbec@gmail.com,
-        oleg@redhat.com, joel@joelfernandes.org
-Subject: [PATCH rcu 0/6] nolibc updates for v5.17
-Message-ID: <20211202003322.GA3128775@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+        oleg@redhat.com, joel@joelfernandes.org,
+        Ammar Faizi <ammar.faizi@students.amikom.ac.id>,
+        Bedirhan KURT <windowz414@gnuweeb.org>,
+        Louvian Lyndal <louvianlyndal@gmail.com>,
+        Peter Cordes <peter@cordes.ca>, stable@vger.kernel.org,
+        Willy Tarreau <w@1wt.eu>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 1/6] tools/nolibc: x86-64: Fix startup code bug
+Date:   Wed,  1 Dec 2021 16:33:41 -0800
+Message-Id: <20211202003346.3129110-1-paulmck@kernel.org>
+X-Mailer: git-send-email 2.31.1.189.g2e36527f23
+In-Reply-To: <20211202003322.GA3128775@paulmck-ThinkPad-P17-Gen-1>
+References: <20211202003322.GA3128775@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+From: Ammar Faizi <ammar.faizi@students.amikom.ac.id>
 
-This series provides nolibc updates, perhaps most notably the addition
-of the gettid() system call:
+Before this patch, the `_start` function looks like this:
+```
+0000000000001170 <_start>:
+    1170:	pop    %rdi
+    1171:	mov    %rsp,%rsi
+    1174:	lea    0x8(%rsi,%rdi,8),%rdx
+    1179:	and    $0xfffffffffffffff0,%rsp
+    117d:	sub    $0x8,%rsp
+    1181:	call   1000 <main>
+    1186:	movzbq %al,%rdi
+    118a:	mov    $0x3c,%rax
+    1191:	syscall
+    1193:	hlt
+    1194:	data16 cs nopw 0x0(%rax,%rax,1)
+    119f:	nop
+```
+Note the "and" to %rsp with $-16, it makes the %rsp be 16-byte aligned,
+but then there is a "sub" with $0x8 which makes the %rsp no longer
+16-byte aligned, then it calls main. That's the bug!
 
-1.	x86-64: Fix startup code bug, courtesy of Ammar Faizi.
+What actually the x86-64 System V ABI mandates is that right before the
+"call", the %rsp must be 16-byte aligned, not after the "call". So the
+"sub" with $0x8 here breaks the alignment. Remove it.
 
-2.	i386: fix initial stack alignment, courtesy of Willy Tarreau.
+An example where this rule matters is when the callee needs to align
+its stack at 16-byte for aligned move instruction, like `movdqa` and
+`movaps`. If the callee can't align its stack properly, it will result
+in segmentation fault.
 
-3.	fix incorrect truncation of exit code, courtesy of Willy Tarreau.
+x86-64 System V ABI also mandates the deepest stack frame should be
+zero. Just to be safe, let's zero the %rbp on startup as the content
+of %rbp may be unspecified when the program starts. Now it looks like
+this:
+```
+0000000000001170 <_start>:
+    1170:	pop    %rdi
+    1171:	mov    %rsp,%rsi
+    1174:	lea    0x8(%rsi,%rdi,8),%rdx
+    1179:	xor    %ebp,%ebp                # zero the %rbp
+    117b:	and    $0xfffffffffffffff0,%rsp # align the %rsp
+    117f:	call   1000 <main>
+    1184:	movzbq %al,%rdi
+    1188:	mov    $0x3c,%rax
+    118f:	syscall
+    1191:	hlt
+    1192:	data16 cs nopw 0x0(%rax,%rax,1)
+    119d:	nopl   (%rax)
+```
 
-4.	x86: Remove `r8`, `r9` and `r10` from the clobber list, courtesy
-	of Ammar Faizi.
+Cc: Bedirhan KURT <windowz414@gnuweeb.org>
+Cc: Louvian Lyndal <louvianlyndal@gmail.com>
+Reported-by: Peter Cordes <peter@cordes.ca>
+Signed-off-by: Ammar Faizi <ammar.faizi@students.amikom.ac.id>
+[wt: I did this on purpose due to a misunderstanding of the spec, other
+     archs will thus have to be rechecked, particularly i386]
+Cc: stable@vger.kernel.org
+Signed-off-by: Willy Tarreau <w@1wt.eu>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+---
+ tools/include/nolibc/nolibc.h | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-5.	x86-64: Use `mov $60,%eax` instead of `mov $60,%rax`, courtesy
-	of Ammar Faizi.
+diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
+index 3430667b0d241..96b6d56acb572 100644
+--- a/tools/include/nolibc/nolibc.h
++++ b/tools/include/nolibc/nolibc.h
+@@ -399,14 +399,20 @@ struct stat {
+ })
+ 
+ /* startup code */
++/*
++ * x86-64 System V ABI mandates:
++ * 1) %rsp must be 16-byte aligned right before the function call.
++ * 2) The deepest stack frame should be zero (the %rbp).
++ *
++ */
+ asm(".section .text\n"
+     ".global _start\n"
+     "_start:\n"
+     "pop %rdi\n"                // argc   (first arg, %rdi)
+     "mov %rsp, %rsi\n"          // argv[] (second arg, %rsi)
+     "lea 8(%rsi,%rdi,8),%rdx\n" // then a NULL then envp (third arg, %rdx)
+-    "and $-16, %rsp\n"          // x86 ABI : esp must be 16-byte aligned when
+-    "sub $8, %rsp\n"            // entering the callee
++    "xor %ebp, %ebp\n"          // zero the stack frame
++    "and $-16, %rsp\n"          // x86 ABI : esp must be 16-byte aligned before call
+     "call main\n"               // main() returns the status code, we'll exit with it.
+     "movzb %al, %rdi\n"         // retrieve exit code from 8 lower bits
+     "mov $60, %rax\n"           // NR_exit == 60
+-- 
+2.31.1.189.g2e36527f23
 
-6.	Implement gettid(), courtesy of Mark Brown.
-
-						Thanx, Paul
-
-------------------------------------------------------------------------
-
- b/tools/include/nolibc/nolibc.h |   10 ++++-
- tools/include/nolibc/nolibc.h   |   76 +++++++++++++++++++++++++++-------------
- 2 files changed, 60 insertions(+), 26 deletions(-)

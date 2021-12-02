@@ -2,79 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F824662C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 12:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 064004662C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 12:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346625AbhLBLyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 06:54:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
+        id S1346414AbhLBL44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 06:56:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243919AbhLBLyA (ORCPT
+        with ESMTP id S230110AbhLBL4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 06:54:00 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD20FC061757;
-        Thu,  2 Dec 2021 03:50:37 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id c3so34874023iob.6;
-        Thu, 02 Dec 2021 03:50:37 -0800 (PST)
+        Thu, 2 Dec 2021 06:56:51 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AE7C06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 03:53:27 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id u74so54963493oie.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 03:53:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=aZISskjc5oXX2lYsdOdBbcSsQiG48S/v64w/aU2Vkts=;
-        b=G35r2bFRGVPnMAAuMBKGadKvHYo8/Y6sbRXIdZ5LUKeuE4Ib01CKZdAFlXwWKwc1kH
-         DvNFQIXAGfSstyhlA9CgIFJM4DA46Ta9fCCVivRknnStzOiXjBiRnMBtHc4YDxlQ/VPG
-         OYlfvD4nnp5lq0yHOux6CwhLSrbXkXtmYUAh09EBufr9hEAfjfSS2txIaxApxJrprt8R
-         wSU0bqAHcYxASJCzlwbgou5u3WjlrlPxUZcTMx+JgsmmrdAy6tkthiLKic5CIQx+A6qS
-         zH6cGb68KDreW7bDDoh8V9xWVbWyYJTQ9NVlXRdY2K/9ZsYQ9VNLXwKeGs0uYS0zPd0J
-         Fviw==
+        bh=ERyjVDLbvXPFw+1ZHIpwSYVMUQxNY4scWpUY/y6O0Jc=;
+        b=blIsLDwR7DDDswyfTL9WVDwe+/nUiuVUR+UCadaBQSti541u6laTjJjf9ToEVYDU7H
+         Htyds7/EMoO9+ZUqBB2zuhy/565m4apZoQ74cN3uebq1UVMwJBRKG6tCeACR535RSnaB
+         OW1P3+KISAGYO9Y+t1uHBn4GY8z+wfDbQKHAd6iizancTxDx+UPu7MMKkwQLC5wrxy/z
+         8QcauXaXXtV/Zp12rcW7n+PSzXf135qnypLKsYt+p8OMLteCPWHMIR85LI7WZjIguDlR
+         owrgqn0o69VHdzI3I5JDvsArcU18NtixOEzB2wfq0SM1XYdSxNp6CJGxZoX8VmUmvDpn
+         xSGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aZISskjc5oXX2lYsdOdBbcSsQiG48S/v64w/aU2Vkts=;
-        b=H/EEmvVlvWTUpJ4IrFC3g+6Bvfm0+44qUV4CQy3idLZtIQyy38Y28jxXwK2uRhhOnw
-         N1B/cuEgDKxzh6kk2J3XhQZL6BkMgBQE73KxF3FNBZbXMWSJY7qzEDMNAn3xCZrezbV9
-         yeuN4arPDPFN/80ZmTd5Tzc1udSv01N/vjTJBQXIp0sLPEYtIj5txNyfLSNEnbSTEL26
-         nKVv7FAtRwzU2MgNyn/78/ldTBbUa03YNNXe2vHTodBAV5Hss/TIBn3THCcbCk1k6X7K
-         fRHi4r/fmtJNXL0zkUBLH23FlEJelFaM8kaH+J5xVTlssxRoK0Sv3cI/7Zlr4tKuyZAg
-         /bUQ==
-X-Gm-Message-State: AOAM5309FK0soEfjPiYH8USClVFZuNtVl9VEpO3srMDMakUDAFbtfqTm
-        SHCidOyH1LNpMlxT0CqSL/O82+RdjMa40gOlxeQ=
-X-Google-Smtp-Source: ABdhPJxcgyA+9Lafi669c+KxxrDP4+zJQpI89maaFyMYPCCP4+Nksn032jwjJA0X6w+d5G9wV7oCkzXf0ldZCDJv7B4=
-X-Received: by 2002:a05:6602:1581:: with SMTP id e1mr15176090iow.64.1638445837371;
- Thu, 02 Dec 2021 03:50:37 -0800 (PST)
+        bh=ERyjVDLbvXPFw+1ZHIpwSYVMUQxNY4scWpUY/y6O0Jc=;
+        b=jnL3EL7BUIvfE1eV230dHuQpE8Sn73+zYaUk8X5QHAJzmzL89jpqkA71ptV/voB05c
+         iAMVBg1o8CQsD0HpSjfqEa2+EAgkSOwpUFF0xzOi1JBbgZlrg+dB92k30OpRTO6m4TvE
+         QR9ja9kGdmmHXyoWAG+yarM3JUD6ze56Pnen7+nhaRiCtAmwJ49ns7oTRBfNraSChdeZ
+         qDIeI+zdK1HQFsRg8HjAtBYbI91kMp1hI8lpB7SRwGpU9FSq8ZL711pIUBsX3xRuffRo
+         oybuZA85I/JgILtZN5WfN2tC2IQatwd529oYA5mycfhDNNr6EUoW+gfkKrNu4cdez4a0
+         tPcw==
+X-Gm-Message-State: AOAM533J2Kgl3rw1HckceN0P0GEliueZZuyjOghuYfV3iph7I6tgU9b6
+        /YSO7OUV5jNNRh29sdVMKJgCSdtyob+PliqV7X3h/w==
+X-Google-Smtp-Source: ABdhPJwKGdAzCefTTCIIvY8lR1kW2egRR6DJg4LtoNnwU0WiLrD5llqmW6j5znFPLau6to4un5sDRRiBsMEo91LZxTk=
+X-Received: by 2002:aca:af50:: with SMTP id y77mr4149176oie.134.1638446006972;
+ Thu, 02 Dec 2021 03:53:26 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1638369365.git.mchehab+huawei@kernel.org>
- <eb4e49b9a701643b07a56f1863005ba8216ef694.1638369365.git.mchehab+huawei@kernel.org>
- <CANiq72nu9TvLzxxj64b+EwFicwGexT7VTmVYVnVDzQgwkk+9ZA@mail.gmail.com> <20211202124700.7e395897@coco.lan>
-In-Reply-To: <20211202124700.7e395897@coco.lan>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 2 Dec 2021 12:50:26 +0100
-Message-ID: <CANiq72=JVG3kVcsfQJx-owBfSpL=OY+O8jhJ7WXBLciiDfJWQQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] docs: allow selecting a Sphinx theme
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@protonmail.com>, Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Klychkov <andrew.a.klychkov@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20211202101238.33546-1-elver@google.com>
+In-Reply-To: <20211202101238.33546-1-elver@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 2 Dec 2021 12:53:14 +0100
+Message-ID: <CANpmjNMvPepakONMjTO=FzzeEtvq_CLjPN6=zF35j10rVrJ9Fg@mail.gmail.com>
+Subject: Re: [PATCH] locking/mutex: Mark racy reads of owner->on_cpu
+To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     kasan-dev@googlegroups.com, Thomas Gleixner <tglx@linutronix.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 12:47 PM Mauro Carvalho Chehab
-<mchehab+huawei@kernel.org> wrote:
+On Thu, 2 Dec 2021 at 11:13, Marco Elver <elver@google.com> wrote:
+> One of the more frequent data races reported by KCSAN is the racy read
+> in mutex_spin_on_owner(), which is usually reported as "race of unknown
+> origin" without showing the writer. This is due to the racing write
+> occurring in kernel/sched. Locally enabling KCSAN in kernel/sched shows:
 >
-> The RTD dark theme allows that. It basically places a <sun>/<moon>
-> icon. When such icon is clicked, it switches between light/dark.
+>  | write (marked) to 0xffff97f205079934 of 4 bytes by task 316 on cpu 6:
+>  |  finish_task                kernel/sched/core.c:4632 [inline]
+>  |  finish_task_switch         kernel/sched/core.c:4848
+>  |  context_switch             kernel/sched/core.c:4975 [inline]
+>  |  __schedule                 kernel/sched/core.c:6253
+>  |  schedule                   kernel/sched/core.c:6326
+>  |  schedule_preempt_disabled  kernel/sched/core.c:6385
+>  |  __mutex_lock_common        kernel/locking/mutex.c:680
+>  |  __mutex_lock               kernel/locking/mutex.c:740 [inline]
+>  |  __mutex_lock_slowpath      kernel/locking/mutex.c:1028
+>  |  mutex_lock                 kernel/locking/mutex.c:283
+>  |  tty_open_by_driver         drivers/tty/tty_io.c:2062 [inline]
+>  |  ...
+>  |
+>  | read to 0xffff97f205079934 of 4 bytes by task 322 on cpu 3:
+>  |  mutex_spin_on_owner        kernel/locking/mutex.c:370
+>  |  mutex_optimistic_spin      kernel/locking/mutex.c:480
+>  |  __mutex_lock_common        kernel/locking/mutex.c:610
+>  |  __mutex_lock               kernel/locking/mutex.c:740 [inline]
+>  |  __mutex_lock_slowpath      kernel/locking/mutex.c:1028
+>  |  mutex_lock                 kernel/locking/mutex.c:283
+>  |  tty_open_by_driver         drivers/tty/tty_io.c:2062 [inline]
+>  |  ...
+>  |
+>  | value changed: 0x00000001 -> 0x00000000
+>
+> This race is clearly intentional, and the potential for miscompilation
+> is slim due to surrounding barrier() and cpu_relax(), and the value
+> being used as a boolean.
+>
+> Nevertheless, marking this reader would more clearly denote intent and
+> make it obvious that concurrency is expected. Use READ_ONCE() to avoid
+> having to reason about compiler optimizations now and in future.
+>
+> Similarly, mark the read to owner->on_cpu in mutex_can_spin_on_owner(),
+> which immediately precedes the loop executing mutex_spin_on_owner().
+>
+> Signed-off-by: Marco Elver <elver@google.com>
+[...]
 
-Ah, that is great! Thanks!
+Kefeng kindly pointed out that there is an alternative, which would
+refactor owner_on_cpu() from rwsem that would address both mutex and
+rwsem:
+https://lore.kernel.org/all/b641f1ea-6def-0fe4-d273-03c35c4aa7d6@huawei.com/
 
-Cheers,
-Miguel
+Preferences?
+
+Thanks,
+-- Marco

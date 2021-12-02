@@ -2,179 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 879CA466732
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E1C466734
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359253AbhLBPya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 10:54:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
+        id S1359229AbhLBPyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 10:54:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359195AbhLBPxx (ORCPT
+        with ESMTP id S1347573AbhLBPyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 10:53:53 -0500
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2BEC06174A;
-        Thu,  2 Dec 2021 07:50:31 -0800 (PST)
-Received: by mail-ua1-x92e.google.com with SMTP id ay21so56677850uab.12;
-        Thu, 02 Dec 2021 07:50:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KPLWuZbDpzv1kp0LWjPj2YqGR9hJaA24u975f2wyCYk=;
-        b=qhqaps9Vt2YampZvLYdHoGtB7r+0dKFd1QcIRQQ7RtqIAQO+9AiE1xZ4ny5GV8HEpM
-         N65nEBqMVXm4Mj5fDdvjuAoIm3D38Eus24wSgspvKxIzu66qMBhiTW41y7lzYNdUWGRh
-         tZ6PO3v88lZ7kAVrkWrP1l8h2+HHpyvgIzPAP1fa9CLqv9hA8GMNIR8+pxTTGZCmblto
-         +uj1/0VoWVQxODdtgX/biboaczF5HhgVuXTL/uP4EPk0PFJBYwPT0e/cmhKS4qBLbl9B
-         HO/ckVEzVm/Uflv+fmj+1bl93fTZNBdvKH6uZDEDgeIORJhcty1Evchqa9Cu0yMildqV
-         wVSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KPLWuZbDpzv1kp0LWjPj2YqGR9hJaA24u975f2wyCYk=;
-        b=29/ZTTs6Q3q0wbeqRMUnOoNy0uM95NBZ1+1abgd9yel9AVxrZOJgnkl7r3e8FAJkdV
-         rqpj54qJpvA9zC3Oj2hWZvlWQ9BNG4pVo7XeXgUdIGSr0Nqf9T4Kkyo42sdwDM7CNIfB
-         GAzcJdI0lNQOQrFfulWP7yOomytc93M8UmOKcHViioCctn/GLQq8jHsF54QERX582buw
-         LoWvftvhmjGV6ApBhnkX082tBincB5AwFK2757noy/z3RwODKZnyAqOzqvwtwyqKW81r
-         4kkGMjkfOsYnBlUG4eu6vkAQw9eZfWpkiIep3Xs+ThtdDylUzRkSzhvJtmP3bYovGTHO
-         BAzw==
-X-Gm-Message-State: AOAM530xG+/YLgdyX0px5BoaFYvjzV/LrCSQv5c4BnibWbNoVAkMih4P
-        WuJiLhKmhQJ/8aegTdTG5XAIxAGZEu0BxScnVtc=
-X-Google-Smtp-Source: ABdhPJy1bmw0Xg/IQFqHcoCGPTFUqt/k5Ldc15mJ2WgIKzBSh9DjID3VoaehV9XAooEg7FJwjlbB3a7aLyHHE1QbNJc=
-X-Received: by 2002:ab0:6883:: with SMTP id t3mr15658152uar.66.1638460230314;
- Thu, 02 Dec 2021 07:50:30 -0800 (PST)
+        Thu, 2 Dec 2021 10:54:19 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D44EC06174A;
+        Thu,  2 Dec 2021 07:50:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Message-Id:Date:
+        Subject:Cc:To:From:Content-Type:Reply-To:Content-ID:Content-Description:
+        In-Reply-To:References; bh=OY2zTbK1ie6cFTyrDOMcePVtS2yQyfQeUBoaSJjVJcY=; b=o+
+        7M2AA4ymceZJiSU6SXW4kEaI2rwGKYlRf6gYKbZ5BpOOdVsMx53fkyJZZi5VhgllO7tfXLD1BHgpc
+        6hMDEGwMK9/ch9qS/6M2sNd1r8N5axFUlfuUuD1vz2DuSObNiU53Fi8qtDmtMHTvGrTGIxPbv4rdP
+        kw/CnRQ/KxJUBFJWRbY52ERZzIZlJ9OM2tWDKTWzOt5n/Jn0vheYWU6sdZtrmH8tq3ecJQffsqPec
+        G6ZIritKwllHEnTGmRF2WgM1yjRz4E4gAJ9qMCxZN627PHzQnIWsbaM94rm8coS3aRNqcNnwnhdu2
+        SmW6rdq6LJ7HW4YmgQ9+S+hrc1paCF4Q==;
+Received: from [81.174.171.191] (helo=donbot.metanate.com)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1msoMH-0001G2-Fy; Thu, 02 Dec 2021 15:50:53 +0000
+From:   John Keeping <john@metanate.com>
+To:     linux-gpio@vger.kernel.org
+Cc:     John Keeping <john@metanate.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] gpio/rockchip: lock GPIOs used as interrupts
+Date:   Thu,  2 Dec 2021 15:50:21 +0000
+Message-Id: <20211202155022.2972779-1-john@metanate.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20211201215127.23550-1-sergio.paracuellos@gmail.com>
- <20211201215127.23550-3-sergio.paracuellos@gmail.com> <d243a90d-25b2-a65f-b69d-af7497db8742@roeck-us.net>
- <CAMhs-H_i7aFeqf4EBtzdL0SKgKrseZGpVU-ytvangpeCMVTmFw@mail.gmail.com> <9401e88b-de5a-dd2a-7e82-f3657ea86e8f@roeck-us.net>
-In-Reply-To: <9401e88b-de5a-dd2a-7e82-f3657ea86e8f@roeck-us.net>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Thu, 2 Dec 2021 16:50:18 +0100
-Message-ID: <CAMhs-H8vw48RkpFz+rqvoPqDPpkaHdn60j6SdbDJHTNTTp7Fcg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] MIPS: ralink: implement 'pcibios_root_bridge_prepare()'
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-pci <linux-pci@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
+Use the standard gpiochip request/release resource functions so that any
+GPIOs used as interrupts are properly locked.  This allows libgpiod to
+correctly show these GPIOs as in-use.
 
-On Thu, Dec 2, 2021 at 4:06 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 12/2/21 12:29 AM, Sergio Paracuellos wrote:
-> > Hi Guenter,
-> >
-> > On Wed, Dec 1, 2021 at 11:17 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >>
-> >> On 12/1/21 1:51 PM, Sergio Paracuellos wrote:
-> >>> PCI core code call 'pcibios_root_bridge_prepare()' function inside function
-> >>> 'pci_register_host_bridge()'. This point is very good way to properly enter
-> >>> into this MIPS ralink specific code to properly setup I/O coherency units
-> >>> with PCI memory addresses.
-> >>>
-> >>> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> >>> ---
-> >>>    arch/mips/ralink/mt7621.c | 30 ++++++++++++++++++++++++++++++
-> >>>    1 file changed, 30 insertions(+)
-> >>>
-> >>> diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
-> >>> index bd71f5b14238..7649416c1cd7 100644
-> >>> --- a/arch/mips/ralink/mt7621.c
-> >>> +++ b/arch/mips/ralink/mt7621.c
-> >>> @@ -10,6 +10,7 @@
-> >>>    #include <linux/slab.h>
-> >>>    #include <linux/sys_soc.h>
-> >>>    #include <linux/memblock.h>
-> >>> +#include <linux/pci.h>
-> >>>
-> >>>    #include <asm/bootinfo.h>
-> >>>    #include <asm/mipsregs.h>
-> >>> @@ -22,6 +23,35 @@
-> >>>
-> >>>    static void *detect_magic __initdata = detect_memory_region;
-> >>>
-> >>> +int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
-> >>> +{
-> >>> +     struct resource_entry *entry;
-> >>> +     resource_size_t mask;
-> >>> +
-> >>> +     entry = resource_list_first_type(&bridge->windows, IORESOURCE_MEM);
-> >>> +     if (!entry) {
-> >>> +             pr_err("Cannot get memory resource\n");
-> >>> +             return -EINVAL;
-> >>> +     }
-> >>> +
-> >>> +     if (mips_cps_numiocu(0)) {
-> >>> +             /*
-> >>> +              * FIXME: hardware doesn't accept mask values with 1s after
-> >>> +              * 0s (e.g. 0xffef), so it would be great to warn if that's
-> >>> +              * about to happen
-> >>> +              */ > +         mask = ~(entry->res->end - entry->res->start);
-> >>> +
-> >>
-> >> Try something like this:
-> >>                  WARN_ON((mask != ~0UL && BIT(ffz(mask)) - 1 != mask);
-> >
-> > Thanks for the tip. The following works for me:
-> >
-> >                    WARN_ON(mask != ~0UL && ~(BIT(__ffs(mask)) - 1) != mask);
->
-> Are you sure ? __ffs() returns the first bit set, which isn't useful
-> for this test.
+Signed-off-by: John Keeping <john@metanate.com>
+---
+ drivers/gpio/gpio-rockchip.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-My mask is calculated as follows:
- mask = ~(entry->res->end - entry->res->start);
+diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
+index ce63cbd14d69a..c1b8e5dbbcc47 100644
+--- a/drivers/gpio/gpio-rockchip.c
++++ b/drivers/gpio/gpio-rockchip.c
+@@ -465,6 +465,22 @@ static int rockchip_irq_set_type(struct irq_data *d, unsigned int type)
+ 	return ret;
+ }
+ 
++static int rockchip_irq_reqres(struct irq_data *d)
++{
++	struct irq_chip_generic *gc = irq_data_get_irq_chip_data(d);
++	struct rockchip_pin_bank *bank = gc->private;
++
++	return gpiochip_reqres_irq(&bank->gpio_chip, d->hwirq);
++}
++
++static void rockchip_irq_relres(struct irq_data *d)
++{
++	struct irq_chip_generic *gc = irq_data_get_irq_chip_data(d);
++	struct rockchip_pin_bank *bank = gc->private;
++
++	gpiochip_relres_irq(&bank->gpio_chip, d->hwirq);
++}
++
+ static void rockchip_irq_suspend(struct irq_data *d)
+ {
+ 	struct irq_chip_generic *gc = irq_data_get_irq_chip_data(d);
+@@ -536,6 +552,8 @@ static int rockchip_interrupts_register(struct rockchip_pin_bank *bank)
+ 	gc->chip_types[0].chip.irq_suspend = rockchip_irq_suspend;
+ 	gc->chip_types[0].chip.irq_resume = rockchip_irq_resume;
+ 	gc->chip_types[0].chip.irq_set_type = rockchip_irq_set_type;
++	gc->chip_types[0].chip.irq_request_resources = rockchip_irq_reqres;
++	gc->chip_types[0].chip.irq_release_resources = rockchip_irq_relres;
+ 	gc->wake_enabled = IRQ_MSK(bank->nr_pins);
+ 
+ 	/*
+-- 
+2.34.1
 
-Where for normal memory resource:
- - entry->res->end = 0x6fffffff;
- - entry->res->start = 0x60000000;
-
-So I end up with a mask: 0xf0000000.
-
-So applying ~(BIT(__ffs(mask)) - 1) I get a good '0xf0000000' for this
-particular case which looks correct.
-
-Suppose an invalid case with the mask being 0xffef0000.
-
-Applying ~(BIT(__ffs(mask)) - 1) will be 0xffff0000 which will trigger
-the WARN_ON since 0xffff0000 != 0xffef0000
-
-So I think this is correct... Am I missing something?
-
-Thanks,
-    Sergio Paracuellos
->
-> Guenter
->
-> >
-> > I will send this as a different patch, though.
-> >
-> > Best regards,
-> >      Sergio Paracuellos
-> >
-> >>
-> >>> +             write_gcr_reg1_base(entry->res->start);
-> >>> +             write_gcr_reg1_mask(mask | CM_GCR_REGn_MASK_CMTGT_IOCU0);
-> >>> +             pr_info("PCI coherence region base: 0x%08llx, mask/settings: 0x%08llx\n",
-> >>> +                     (unsigned long long)read_gcr_reg1_base(),
-> >>> +                     (unsigned long long)read_gcr_reg1_mask());
-> >>> +     }
-> >>> +
-> >>> +     return 0;
-> >>> +}
-> >>> +
-> >>>    phys_addr_t mips_cpc_default_phys_base(void)
-> >>>    {
-> >>>        panic("Cannot detect cpc address");
-> >>>
-> >>
->

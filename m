@@ -2,133 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 506F3465F4A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 09:25:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E569465F50
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 09:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356072AbhLBI2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 03:28:35 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:46742
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241248AbhLBI2d (ORCPT
+        id S1356084AbhLBIa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 03:30:57 -0500
+Received: from conssluserg-06.nifty.com ([210.131.2.91]:32413 "EHLO
+        conssluserg-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238764AbhLBIa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 03:28:33 -0500
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EAA1E3F1B0
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 08:25:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638433510;
-        bh=rq4kQo+vXc9W5cZ125vb40WvISYosmc4HFLz8BRJoVE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=OdD0k+plIco9hLRQrUNiIqUJPlYosqtU89tOPbJPRy7gdZQcW9d2tN5JuAJvKAPXF
-         tbOZ1MOFZHGHJh8XllAjljr6eQ+XgVym/ka9lDfko+ZfvwMjNBudYNHZjUUOnhQMiO
-         LOvmviyFLHV4KIDgqtCUkI9ECgoMEFx56giwFXn3RtaYf0TRCYE2B4e5oi/NAKdCuh
-         /9LDJ28cgJzRKKrsyghpfDIKWW1ctR20ZVEQSO5vUUztHrsk2DZZ3hlvCGJPWZHyJf
-         B2rTy7LMLdm9T78Z2r+0D4jFoDk1dYSoK/0eBC0Y475HEU+gRWTbOdU58cCH+SBgjl
-         +n3Ul4jWIL3Vg==
-Received: by mail-lj1-f197.google.com with SMTP id y23-20020a2e3217000000b00218c6ede162so9307092ljy.23
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 00:25:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rq4kQo+vXc9W5cZ125vb40WvISYosmc4HFLz8BRJoVE=;
-        b=r4PHAZxqhEJf5dD3IIc5P+x8YGGIsi/If2FagiyHJalXmahYZnXc20scE+4MvnBATp
-         MNc42Igmq8FDA6CY8ulunoCqxMRLn7laxK7SZMis+EMmFDlqOy5Y5g7jW5zNIYW3hBPQ
-         gCCUydqCqUjZR/7h8XkvX0fQvBUPUrRJoYeqTIRUcbsaIHv172bB+ZeI4427H9q6GLq9
-         J2T9P4Bjl62/8nnYk/FtvCYeHInCuBPei17D/ffkxZoqij+w0wY61WsI3ZKasLGTeryN
-         8/ghU+9XJSv9eBY+FD1TgIpKUBpCVfHVwbCW2KKL/61bNfoscfBkwMW5vwEAS7wxFbnN
-         CeXA==
-X-Gm-Message-State: AOAM533+KGczx9ccp/0MaU06yB7j9In5xpekZPnlZBZe+GfFgPVIxVH+
-        vJxhXG51j4JfU8JGbLRaWJ1NfxLg/FYt4ylysEE7Ln+EoRn0GUupsxZx1bWish1q+CAElICUrf+
-        B5JtBg3isk2rJyfROOCaOHFK1gOI3iGVYrtKrYfnSQQ==
-X-Received: by 2002:ac2:442c:: with SMTP id w12mr10991026lfl.554.1638433510413;
-        Thu, 02 Dec 2021 00:25:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzeOf+QpxgrYFm1d6a5sk8CXUHe/Co/Txbe1+rCii5yOp8kswnRPQJ/L/ELgmX1saEmNDb38w==
-X-Received: by 2002:ac2:442c:: with SMTP id w12mr10991013lfl.554.1638433510232;
-        Thu, 02 Dec 2021 00:25:10 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id w8sm256217lfe.183.2021.12.02.00.25.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Dec 2021 00:25:09 -0800 (PST)
-Message-ID: <d12545a3-6fae-99aa-3851-97f3ea352bf1@canonical.com>
-Date:   Thu, 2 Dec 2021 09:25:09 +0100
+        Thu, 2 Dec 2021 03:30:56 -0500
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 1B28QxlN006678;
+        Thu, 2 Dec 2021 17:26:59 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 1B28QxlN006678
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1638433619;
+        bh=/yQg01BYOJFXppdxBduRNih3r4B6OrrFie8TdUvWsH4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JXmvbWDwG9IKGlbZi3rbZ3DTGFqHrgLL6Wyi619NwvTKYg8SHvNOybbAxsGCdO5xu
+         VbcVLiI7JlVuom+6954OzZVFHrAQQh7Q7TD8PIonFkZLHYzlRsyDyoW1Cq7Ii3YV3I
+         a/aAQNHf7HDmnAqcUIJ9Ls+C3LZrzPL6OHxVVPyTlBfR4xBKOiKx30wsOTi2Zujxgf
+         w6c/XhJ5i31O+1loPUWXpp85931taW/uJbfgZJKbCH/QqS8x3rD82cHMXE6Md/2ydt
+         JfekgAj+MXdPlj3EW2wlizT7qgZgy8THxlcxRKRmU42qTVO+ObvwY/g34km16pYT9p
+         b67OTJ/Qdxktg==
+X-Nifty-SrcIP: [209.85.210.180]
+Received: by mail-pf1-f180.google.com with SMTP id o4so27185407pfp.13;
+        Thu, 02 Dec 2021 00:26:59 -0800 (PST)
+X-Gm-Message-State: AOAM531WuF2zNyUTA5yII3D3aikMz6xZSxn0UtLyJHYZSgwkWdQkrM6B
+        4sue8ZQM/9ElJ9FwOyR24Ts/iVAd6ujzS5t2V3k=
+X-Google-Smtp-Source: ABdhPJxcPQ85vfjbSc2TTaMucoAVuXnzpKovoHhZYYdrtl4XmPNKKDlS6sEvhw15FBEyiNyupWGC01mqEQnCKEu0WzM=
+X-Received: by 2002:a65:50c6:: with SMTP id s6mr8754532pgp.352.1638433618425;
+ Thu, 02 Dec 2021 00:26:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 3/6] dt-bindings: i2c: exynos5: Add bus clock
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Wolfram Sang <wsa@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20211201190455.31646-1-semen.protsenko@linaro.org>
- <20211201190455.31646-4-semen.protsenko@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211201190455.31646-4-semen.protsenko@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20211129165803.470795-1-nathan@kernel.org> <202112011140.DA93B3E@keescook>
+In-Reply-To: <202112011140.DA93B3E@keescook>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 2 Dec 2021 17:26:21 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASW2F3SxgR6ydMaW7-ZumsxDv2QQTDqVxqJA1JWN3r4FA@mail.gmail.com>
+Message-ID: <CAK7LNASW2F3SxgR6ydMaW7-ZumsxDv2QQTDqVxqJA1JWN3r4FA@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/6] Bump minimum supported version of LLVM to 11.0.0
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Tom Stellard <tstellar@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>, cki-project@redhat.com,
+        kernelci@groups.io, llvm@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/2021 20:04, Sam Protsenko wrote:
-> In new Exynos SoCs (like Exynos850) where HSI2C is implemented as a
-> part of USIv2 block, there are two clocks provided to HSI2C controller:
->   - PCLK: bus clock (APB), provides access to register interface
->   - IPCLK: operating IP-core clock; SCL is derived from this one
-> 
-> Both clocks have to be asserted for HSI2C to be functional in that case.
-> 
-> Modify bindings doc to allow specifying bus clock in addition to
-> already described operating clock. Make it optional though, as older
-> Exynos SoC variants only have one HSI2C clock.
-
-I understand that it is required on newer SoCs, so you need "if:" adding
-it to required properties on Autov8 or 850.
-
-> 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
->  .../devicetree/bindings/i2c/i2c-exynos5.yaml          | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml b/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
-> index db20e703dea0..a212c1d5e7d9 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
-> @@ -49,11 +49,16 @@ properties:
->        clock-frequency is >= 1MHz.
->  
->    clocks:
-> -    maxItems: 1
-> -    description: I2C operating clock
-> +    minItems: 1
-> +    items:
-> +      - description: I2C operating clock
-> +      - description: Bus clock (APB)
->  
->    clock-names:
-> -    const: hsi2c
-> +    minItems: 1
-> +    items:
-> +      - const: hsi2c
-> +      - const: hsi2c_pclk
->  
->  required:
->    - compatible
-> 
+On Thu, Dec 2, 2021 at 4:41 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Mon, Nov 29, 2021 at 09:57:57AM -0700, Nathan Chancellor wrote:
+> > This patch series raises the minimum supported version of LLVM to
+> > 11.0.0.
+> >
+> > Patch #1 outlines the issue, goes over the potential impact of the
+> > change, and does the actual bump. Subsequent patches clean up the
+> > various checks that are always true after the bump.
+> >
+> > I have marked this revision as RFC to give various parties the option to
+> > comment on this bump before it is done, namely KernelCI and Linaro's
+> > LKFT, who are still testing clang-10. I have added some other folks to
+> > CC that I know are testing with clang to see if this impacts them in any
+> > way (as I would like to impact as few people as possible) but as far as
+> > I am aware, most other CIs and developers are testing closer to tip of
+> > tree. If that is not true, scream so that we can see what can be done
+> > about that. If I missed anyone who is actively testing with clang,
+> > please key them in and I will make sure to include them in future
+> > revisions (if any are needed).
+> >
+> > It probably makes sense for this series to live in -mm.
+>
+> Sounds good to me. Thanks!
+>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+>
+> --
+> Kees Cook
 
 
-Best regards,
-Krzysztof
+Only positive feedback so far.
+
+All applied to linux-kbuild.
+
+
+-- 
+Best Regards
+Masahiro Yamada

@@ -2,721 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CA8465D92
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED814465D8F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344819AbhLBEs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 23:48:59 -0500
-Received: from mga12.intel.com ([192.55.52.136]:24220 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355568AbhLBErD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 23:47:03 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="216640187"
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="216640187"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 20:43:19 -0800
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="477788590"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 20:43:18 -0800
-From:   ira.weiny@intel.com
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 7/7] Documentation/auxiliary_bus: Move the text into the code
-Date:   Wed,  1 Dec 2021 20:43:05 -0800
-Message-Id: <20211202044305.4006853-8-ira.weiny@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211202044305.4006853-1-ira.weiny@intel.com>
-References: <20211202044305.4006853-1-ira.weiny@intel.com>
+        id S1355699AbhLBErW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 23:47:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355612AbhLBErJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 23:47:09 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA28C061757
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 20:43:47 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id j9so23866668qvm.10
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 20:43:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XAKjMwA1aOUY1Tr9hpTK/UCH7nKBs/RRTFxbIpF5PZ8=;
+        b=FEHBJYie3CB2KZDjtYA3j/5uUAaVJOTvu7E0/04x8K/WbjXIz/FDvHxGH2P3Ii2WxZ
+         v9Bs2/O0UREiwt0E2/VbWWigcO4hc10pre016PBcn+QXodwd73bX9T4TsVRq40uktow7
+         4Aw1+K+7+zxeCfqkLc2jEVpy8PhnsM8iwNMMpZpxzJzxbml6XFbuSujWKggOjl2plgz8
+         gzwrQGj5Hrj0zVelxCsCf2ekA4Tl8kovCtkODGi64jRLEId4dpDvY2E4lP81S8hrgwn9
+         CFcQa+5KRv01eplGasqx3rnWeVFTliibqQWdHz2z21/8+H7YLIPgWfIKQJmaLQaano+f
+         myxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XAKjMwA1aOUY1Tr9hpTK/UCH7nKBs/RRTFxbIpF5PZ8=;
+        b=lPo25kkaFcmGc7an+s8zM3rKD3rUCecxzxogl2J5Ziw2PqvTmN1MaS17jrgV8khpr0
+         mRLILNp9yMFWh7ZSR263JUnyspW4USurFTMW989XrGtLyg0ODaZGkhU6ynuWGPnVXzYa
+         R590QmGRVfmergJfHZDHAYZQIbNGW9lebOLpyCJH3pa2LkYLT8vnbO6FrSHkK0AL99fh
+         RHjq+ely+IYLM/GnUIaPPsQ1BZBtGxEFkWEbNNZsFrh3Al3aOTdR1vwblf1RtO1dHaSV
+         AKHokYOSv+w6jcvro2y2uqgvA7/2bx2KtLdPMqyhDkEWL8LncEJX0RHLbbXZDDFs+oT+
+         TFbA==
+X-Gm-Message-State: AOAM530lkPzZagU5rshKGmpBPzYPH+uwhGe/9+GNp4/OE8FlSmOg9biR
+        nPluG9T9bN6FmoUkAMwYeRPEeWc0fimJPLxqpho=
+X-Google-Smtp-Source: ABdhPJwqzMntbplVSOVYF1L5aEN0hoBAP+fURw/kkntkN8VE+L+LNIWKJ0OpdMkuH2+qeUkygkY1uxmFJTLtRSCv9V4=
+X-Received: by 2002:ad4:5673:: with SMTP id bm19mr10480450qvb.105.1638420226317;
+ Wed, 01 Dec 2021 20:43:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211117023751.24190-1-feng.tang@intel.com> <20211117023751.24190-2-feng.tang@intel.com>
+In-Reply-To: <20211117023751.24190-2-feng.tang@intel.com>
+From:   Luming Yu <luming.yu@gmail.com>
+Date:   Wed, 1 Dec 2021 23:47:39 -0500
+Message-ID: <CAJRGBZznZOxqfOE471jUUTupPeZ-zW31sRo+0p5o0SeFKSqF9w@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] x86/tsc: skip tsc watchdog checking for qualified platforms
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, paulmck@kernel.org,
+        rui.zhang@intel.com, andi.kleen@intel.com,
+        Len Brown <len.brown@intel.com>, tim.c.chen@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ira Weiny <ira.weiny@intel.com>
+On Tue, Nov 16, 2021 at 11:18 PM Feng Tang <feng.tang@intel.com> wrote:
+>
+> There are cases that tsc clocksources are wrongly judged as unstable by
+> clocksource watchdogs like hpet, acpi_pm or 'refined-jiffies'. While
+> there is hardly a general reliable way to check the validity of a
+> watchdog, and to protect the innocent tsc, Thomas Gleixner proposed [1]:
+>
+> "I'm inclined to lift that requirement when the CPU has:
+>
+>     1) X86_FEATURE_CONSTANT_TSC
+>     2) X86_FEATURE_NONSTOP_TSC
+>     3) X86_FEATURE_NONSTOP_TSC_S3
+>     4) X86_FEATURE_TSC_ADJUST
+>     5) At max. 4 sockets
+>
+>  After two decades of horrors we're finally at a point where TSC seems
+>  to be halfway reliable and less abused by BIOS tinkerers. TSC_ADJUST
+>  was really key as we can now detect even small modifications reliably
+>  and the important point is that we can cure them as well (not pretty
+>  but better than all other options)."
+>
+> As feature #3 X86_FEATURE_NONSTOP_TSC_S3 only exists on several generations
+> of Atom processor, and is always coupled with X86_FEATURE_CONSTANT_TSC
+> and X86_FEATURE_NONSTOP_TSC, skip checking it, and also be more defensive
+> to use maxim of 2 sockets.
+>
+> The check is done inside tsc_init() before registering 'tsc-early' and
+> 'tsc' clocksources, as there were cases that both of them had been
+> wrongly judged as unreliable.
+>
+> For more background of tsc/watchdog, there is a good summary in [2]
+>
+> [1]. https://lore.kernel.org/lkml/87eekfk8bd.fsf@nanos.tec.linutronix.de/
+> [2]. https://lore.kernel.org/lkml/87a6pimt1f.ffs@nanos.tec.linutronix.de/
+> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Feng Tang <feng.tang@intel.com>
+> ---
+> Change log:
+>
+>   v3:
+>     * rebased against 5.16-rc1
+>     * refine commit log
+>
+>   v2:
+>     * Directly skip watchdog check without messing flag
+>       'tsc_clocksource_reliable' (Thomas)
+>
+>  arch/x86/kernel/tsc.c | 22 ++++++++++++++++++----
+>  1 file changed, 18 insertions(+), 4 deletions(-)
 
-The code and documentation are more difficult to maintain when kept
-separately.  This is further compounded when the standard structure
-documentation infrastructure is not used.
+retry:
 
-Move the documentation into the code, use the standard documentation
-infrastructure, add current documented functions, and reference the text
-in the rst file.
-
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
----
- Documentation/driver-api/auxiliary_bus.rst | 298 ++-------------------
- drivers/base/auxiliary.c                   | 141 ++++++++++
- include/linux/auxiliary_bus.h              | 160 +++++++++++
- 3 files changed, 318 insertions(+), 281 deletions(-)
-
-diff --git a/Documentation/driver-api/auxiliary_bus.rst b/Documentation/driver-api/auxiliary_bus.rst
-index 3786e4664a1e..cec84908fbc0 100644
---- a/Documentation/driver-api/auxiliary_bus.rst
-+++ b/Documentation/driver-api/auxiliary_bus.rst
-@@ -6,309 +6,45 @@
- Auxiliary Bus
- =============
- 
--In some subsystems, the functionality of the core device (PCI/ACPI/other) is
--too complex for a single device to be managed by a monolithic driver
--(e.g. Sound Open Firmware), multiple devices might implement a common
--intersection of functionality (e.g. NICs + RDMA), or a driver may want to
--export an interface for another subsystem to drive (e.g. SIOV Physical Function
--export Virtual Function management).  A split of the functionality into child-
--devices representing sub-domains of functionality makes it possible to
--compartmentalize, layer, and distribute domain-specific concerns via a Linux
--device-driver model.
--
--An example for this kind of requirement is the audio subsystem where a single
--IP is handling multiple entities such as HDMI, Soundwire, local devices such as
--mics/speakers etc. The split for the core's functionality can be arbitrary or
--be defined by the DSP firmware topology and include hooks for test/debug. This
--allows for the audio core device to be minimal and focused on hardware-specific
--control and communication.
--
--Each auxiliary_device represents a part of its parent functionality. The
--generic behavior can be extended and specialized as needed by encapsulating an
--auxiliary_device within other domain-specific structures and the use of .ops
--callbacks. Devices on the auxiliary bus do not share any structures and the use
--of a communication channel with the parent is domain-specific.
--
--Note that ops are intended as a way to augment instance behavior within a class
--of auxiliary devices, it is not the mechanism for exporting common
--infrastructure from the parent. Consider EXPORT_SYMBOL_NS() to convey
--infrastructure from the parent module to the auxiliary module(s).
--
-+.. kernel-doc:: drivers/base/auxiliary.c
-+   :doc: PURPOSE
- 
- When Should the Auxiliary Bus Be Used
- =====================================
- 
--The auxiliary bus is to be used when a driver and one or more kernel modules,
--who share a common header file with the driver, need a mechanism to connect and
--provide access to a shared object allocated by the auxiliary_device's
--registering driver.  The registering driver for the auxiliary_device(s) and the
--kernel module(s) registering auxiliary_drivers can be from the same subsystem,
--or from multiple subsystems.
--
--The emphasis here is on a common generic interface that keeps subsystem
--customization out of the bus infrastructure.
--
--One example is a PCI network device that is RDMA-capable and exports a child
--device to be driven by an auxiliary_driver in the RDMA subsystem.  The PCI
--driver allocates and registers an auxiliary_device for each physical
--function on the NIC.  The RDMA driver registers an auxiliary_driver that claims
--each of these auxiliary_devices.  This conveys data/ops published by the parent
--PCI device/driver to the RDMA auxiliary_driver.
--
--Another use case is for the PCI device to be split out into multiple sub
--functions.  For each sub function an auxiliary_device is created.  A PCI sub
--function driver binds to such devices that creates its own one or more class
--devices.  A PCI sub function auxiliary device is likely to be contained in a
--struct with additional attributes such as user defined sub function number and
--optional attributes such as resources and a link to the parent device.  These
--attributes could be used by systemd/udev; and hence should be initialized
--before a driver binds to an auxiliary_device.
-+.. kernel-doc:: drivers/base/auxiliary.c
-+   :doc: USAGE
- 
--A key requirement for utilizing the auxiliary bus is that there is no
--dependency on a physical bus, device, register accesses or regmap support.
--These individual devices split from the core cannot live on the platform bus as
--they are not physical devices that are controlled by DT/ACPI.  The same
--argument applies for not using MFD in this scenario as MFD relies on individual
--function devices being physical devices.
- 
- Auxiliary Device Creation
- =========================
- 
--An auxiliary_device represents a part of its parent device's functionality. It
--is given a name that, combined with the registering drivers KBUILD_MODNAME,
--creates a match_name that is used for driver binding, and an id that combined
--with the match_name provide a unique name to register with the bus subsystem.
--For example, a driver registering an auxiliary device is named 'foo_mod.ko' and
--the subdevice is named 'foo_dev'.  The match name is therefore
--'foo_mod.foo_dev'.
--
--.. code-block:: c
--
--	struct auxiliary_device {
--		struct device dev;
--                const char *name;
--		u32 id;
--	};
--
--Registering an auxiliary_device is a three-step process.
--
--First, a 'struct auxiliary_device' needs to be defined or allocated for each
--sub-device desired.  The name, id, dev.release, and dev.parent fields of this
--structure must be filled in as follows.
--
--The 'name' field is to be given a name that is recognized by the auxiliary
--driver.  If two auxiliary_devices with the same match_name, eg
--"foo_mod.foo_dev", are registered onto the bus, they must have unique id
--values (e.g. "x" and "y") so that the registered devices names are "foo_mod.foo_dev.x"
--and "foo_mod.foo_dev.y".  If match_name + id are not unique, then the device_add fails
--and generates an error message.
--
--The auxiliary_device.dev.type.release or auxiliary_device.dev.release must be
--populated with a non-NULL pointer to successfully register the
--auxiliary_device.  This release call is where resources associated with the
--auxiliary device must be free'ed.  Because once the device is placed on the bus
--the parent driver can not tell what other code may have a reference to this
--data.
--
--The auxiliary_device.dev.parent should be set.  Typically to the registering
--drivers device.
--
--Second, call auxiliary_device_init(), which checks several aspects of the
--auxiliary_device struct and performs a device_initialize().  After this step
--completes, any error state must have a call to auxiliary_device_uninit() in its
--resolution path.
--
--The third and final step in registering an auxiliary_device is to perform a
--call to auxiliary_device_add(), which sets the name of the device and adds the
--device to the bus.
--
--.. code-block:: c
--
--        #define MY_DEVICE_NAME "foo_dev"
--
--        ...
--
--	struct auxiliary_device *my_aux_dev = my_aux_dev_alloc(xxx);
--
--        /* Step 1: */
--	my_aux_dev->name = MY_DEVICE_NAME;
--	my_aux_dev->id = my_unique_id_alloc(xxx);
--	my_aux_dev->dev.release = my_aux_dev_release;
--	my_aux_dev->dev.parent = my_dev;
--
--        /* Step 2: */
--        if (auxiliary_device_init(my_aux_dev))
--                goto fail;
--
--        /* Step 3: */
--        if (auxiliary_device_add(my_aux_dev)) {
--                auxiliary_device_uninit(my_aux_dev);
--                goto fail;
--        }
--
--        ...
--
--
--Unregistering an auxiliary_device is a two-step process to mirror the register
--process.  First call auxiliary_device_delete(), then call
--auxiliary_device_uninit().
--
--
--.. code-block:: c
--
--        auxiliary_device_delete(my_dev->my_aux_dev);
--        auxiliary_device_uninit(my_dev->my_aux_dev);
-+.. kernel-doc:: include/linux/auxiliary_bus.h
-+   :identifiers: auxiliary_device
- 
-+.. kernel-doc:: drivers/base/auxiliary.c
-+   :identifiers: auxiliary_device_init __auxiliary_device_add
-+                 auxiliary_find_device
- 
- Auxiliary Device Memory Model and Lifespan
- ------------------------------------------
- 
--The registering driver is the entity that allocates memory for the
--auxiliary_device and registers it on the auxiliary bus.  It is important to note
--that, as opposed to the platform bus, the registering driver is wholly
--responsible for the management of the memory used for the device object.
--
--To be clear the memory for the auxiliary_device is freed in the release()
--callback defined by the registering driver.  The registering driver should only
--call auxiliary_device_delete() and then auxiliary_device_uninit() when it is
--done with the device.  The release() function is then automatically called if
--and when other code releases their reference to the devices.
--
--A parent object, defined in the shared header file, contains the
--auxiliary_device.  It also contains a pointer to the shared object(s), which
--also is defined in the shared header.  Both the parent object and the shared
--object(s) are allocated by the registering driver.  This layout allows the
--auxiliary_driver's registering module to perform a container_of() call to go
--from the pointer to the auxiliary_device, that is passed during the call to the
--auxiliary_driver's probe function, up to the parent object, and then have
--access to the shared object(s).
--
--The memory for the shared object(s) must have a lifespan equal to, or greater
--than, the lifespan of the memory for the auxiliary_device.  The
--auxiliary_driver should only consider that the shared object is valid as long
--as the auxiliary_device is still registered on the auxiliary bus.  It is up to
--the registering driver to manage (e.g. free or keep available) the memory for
--the shared object beyond the life of the auxiliary_device.
--
--The registering driver must unregister all auxiliary devices before its own
--driver.remove() is completed.  An easy way to ensure this is to use the
--devm_add_action_or_reset() call to register a function against the parent device
--which unregisters the auxiliary device object(s).
--
--Finally, any operations which operate on the auxiliary devices must continue to
--function (if only to return an error) after the registering driver unregisters
--the auxiliary device.
-+.. kernel-doc:: include/linux/auxiliary_bus.h
-+   :doc: DEVICE_LIFESPAN
- 
- 
- Auxiliary Drivers
- =================
- 
--Auxiliary drivers follow the standard driver model convention, where
--discovery/enumeration is handled by the core, and drivers
--provide probe() and remove() methods. They support power management
--and shutdown notifications using the standard conventions.
--
--.. code-block:: c
--
--	struct auxiliary_driver {
--		int (*probe)(struct auxiliary_device *,
--                             const struct auxiliary_device_id *id);
--		void (*remove)(struct auxiliary_device *);
--		void (*shutdown)(struct auxiliary_device *);
--		int (*suspend)(struct auxiliary_device *, pm_message_t);
--		int (*resume)(struct auxiliary_device *);
--		struct device_driver driver;
--		const struct auxiliary_device_id *id_table;
--	};
--
--Auxiliary drivers register themselves with the bus by calling
--auxiliary_driver_register(). The id_table contains the match_names of auxiliary
--devices that a driver can bind with.
--
--.. code-block:: c
--
--        static const struct auxiliary_device_id my_auxiliary_id_table[] = {
--		{ .name = "foo_mod.foo_dev" },
--                {},
--        };
--
--        MODULE_DEVICE_TABLE(auxiliary, my_auxiliary_id_table);
--
--        struct auxiliary_driver my_drv = {
--                .name = "myauxiliarydrv",
--                .id_table = my_auxiliary_id_table,
--                .probe = my_drv_probe,
--                .remove = my_drv_remove
--        };
-+.. kernel-doc:: include/linux/auxiliary_bus.h
-+   :identifiers: auxiliary_driver module_auxiliary_driver
- 
-+.. kernel-doc:: drivers/base/auxiliary.c
-+   :identifiers: __auxiliary_driver_register auxiliary_driver_unregister
- 
- Example Usage
- =============
- 
--Auxiliary devices are created and registered by a subsystem-level core device
--that needs to break up its functionality into smaller fragments. One way to
--extend the scope of an auxiliary_device is to encapsulate it within a domain-
--pecific structure defined by the parent device. This structure contains the
--auxiliary_device and any associated shared data/callbacks needed to establish
--the connection with the parent.
--
--An example is:
--
--.. code-block:: c
--
--        struct foo {
--		struct auxiliary_device auxdev;
--		void (*connect)(struct auxiliary_device *auxdev);
--		void (*disconnect)(struct auxiliary_device *auxdev);
--		void *data;
--        };
--
--The parent device then registers the auxiliary_device by calling
--auxiliary_device_init(), and then auxiliary_device_add(), with the pointer to
--the auxdev member of the above structure. The parent provides a name for the
--auxiliary_device that, combined with the parent's KBUILD_MODNAME, creates a
--match_name that is be used for matching and binding with a driver.
--
--Whenever an auxiliary_driver is registered, based on the match_name, the
--auxiliary_driver's probe() is invoked for the matching devices.  The
--auxiliary_driver can also be encapsulated inside custom drivers that make the
--core device's functionality extensible by adding additional domain-specific ops
--as follows:
--
--.. code-block:: c
--
--	struct my_ops {
--		void (*send)(struct auxiliary_device *auxdev);
--		void (*receive)(struct auxiliary_device *auxdev);
--	};
--
--
--	struct my_driver {
--		struct auxiliary_driver auxiliary_drv;
--		const struct my_ops ops;
--	};
--
--An example of this type of usage is:
--
--.. code-block:: c
--
--	const struct auxiliary_device_id my_auxiliary_id_table[] = {
--		{ .name = "foo_mod.foo_dev" },
--		{ },
--	};
--
--	const struct my_ops my_custom_ops = {
--		.send = my_tx,
--		.receive = my_rx,
--	};
-+.. kernel-doc:: drivers/base/auxiliary.c
-+   :doc: EXAMPLE
- 
--	const struct my_driver my_drv = {
--		.auxiliary_drv = {
--			.name = "myauxiliarydrv",
--			.id_table = my_auxiliary_id_table,
--			.probe = my_probe,
--			.remove = my_remove,
--			.shutdown = my_shutdown,
--		},
--		.ops = my_custom_ops,
--	};
-diff --git a/drivers/base/auxiliary.c b/drivers/base/auxiliary.c
-index ab5315681a42..8c5e65930617 100644
---- a/drivers/base/auxiliary.c
-+++ b/drivers/base/auxiliary.c
-@@ -17,6 +17,147 @@
- #include <linux/auxiliary_bus.h>
- #include "base.h"
- 
-+/**
-+ * DOC: PURPOSE
-+ *
-+ * In some subsystems, the functionality of the core device (PCI/ACPI/other) is
-+ * too complex for a single device to be managed by a monolithic driver (e.g.
-+ * Sound Open Firmware), multiple devices might implement a common intersection
-+ * of functionality (e.g. NICs + RDMA), or a driver may want to export an
-+ * interface for another subsystem to drive (e.g. SIOV Physical Function export
-+ * Virtual Function management).  A split of the functionality into child-
-+ * devices representing sub-domains of functionality makes it possible to
-+ * compartmentalize, layer, and distribute domain-specific concerns via a Linux
-+ * device-driver model.
-+ *
-+ * An example for this kind of requirement is the audio subsystem where a
-+ * single IP is handling multiple entities such as HDMI, Soundwire, local
-+ * devices such as mics/speakers etc. The split for the core's functionality
-+ * can be arbitrary or be defined by the DSP firmware topology and include
-+ * hooks for test/debug. This allows for the audio core device to be minimal
-+ * and focused on hardware-specific control and communication.
-+ *
-+ * Each auxiliary_device represents a part of its parent functionality. The
-+ * generic behavior can be extended and specialized as needed by encapsulating
-+ * an auxiliary_device within other domain-specific structures and the use of
-+ * .ops callbacks. Devices on the auxiliary bus do not share any structures and
-+ * the use of a communication channel with the parent is domain-specific.
-+ *
-+ * Note that ops are intended as a way to augment instance behavior within a
-+ * class of auxiliary devices, it is not the mechanism for exporting common
-+ * infrastructure from the parent. Consider EXPORT_SYMBOL_NS() to convey
-+ * infrastructure from the parent module to the auxiliary module(s).
-+ */
-+
-+/**
-+ * DOC: USAGE
-+ *
-+ * The auxiliary bus is to be used when a driver and one or more kernel
-+ * modules, who share a common header file with the driver, need a mechanism to
-+ * connect and provide access to a shared object allocated by the
-+ * auxiliary_device's registering driver.  The registering driver for the
-+ * auxiliary_device(s) and the kernel module(s) registering auxiliary_drivers
-+ * can be from the same subsystem, or from multiple subsystems.
-+ *
-+ * The emphasis here is on a common generic interface that keeps subsystem
-+ * customization out of the bus infrastructure.
-+ *
-+ * One example is a PCI network device that is RDMA-capable and exports a child
-+ * device to be driven by an auxiliary_driver in the RDMA subsystem.  The PCI
-+ * driver allocates and registers an auxiliary_device for each physical
-+ * function on the NIC.  The RDMA driver registers an auxiliary_driver that
-+ * claims each of these auxiliary_devices.  This conveys data/ops published by
-+ * the parent PCI device/driver to the RDMA auxiliary_driver.
-+ *
-+ * Another use case is for the PCI device to be split out into multiple sub
-+ * functions.  For each sub function an auxiliary_device is created.  A PCI sub
-+ * function driver binds to such devices that creates its own one or more class
-+ * devices.  A PCI sub function auxiliary device is likely to be contained in a
-+ * struct with additional attributes such as user defined sub function number
-+ * and optional attributes such as resources and a link to the parent device.
-+ * These attributes could be used by systemd/udev; and hence should be
-+ * initialized before a driver binds to an auxiliary_device.
-+ *
-+ * A key requirement for utilizing the auxiliary bus is that there is no
-+ * dependency on a physical bus, device, register accesses or regmap support.
-+ * These individual devices split from the core cannot live on the platform bus
-+ * as they are not physical devices that are controlled by DT/ACPI.  The same
-+ * argument applies for not using MFD in this scenario as MFD relies on
-+ * individual function devices being physical devices.
-+ */
-+
-+/**
-+ * DOC: EXAMPLE
-+ *
-+ * Auxiliary devices are created and registered by a subsystem-level core
-+ * device that needs to break up its functionality into smaller fragments. One
-+ * way to extend the scope of an auxiliary_device is to encapsulate it within a
-+ * domain- pecific structure defined by the parent device. This structure
-+ * contains the auxiliary_device and any associated shared data/callbacks
-+ * needed to establish the connection with the parent.
-+ *
-+ * An example is:
-+ *
-+ * .. code-block:: c
-+ *
-+ *         struct foo {
-+ *		struct auxiliary_device auxdev;
-+ *		void (*connect)(struct auxiliary_device *auxdev);
-+ *		void (*disconnect)(struct auxiliary_device *auxdev);
-+ *		void *data;
-+ *        };
-+ *
-+ * The parent device then registers the auxiliary_device by calling
-+ * auxiliary_device_init(), and then auxiliary_device_add(), with the pointer
-+ * to the auxdev member of the above structure. The parent provides a name for
-+ * the auxiliary_device that, combined with the parent's KBUILD_MODNAME,
-+ * creates a match_name that is be used for matching and binding with a driver.
-+ *
-+ * Whenever an auxiliary_driver is registered, based on the match_name, the
-+ * auxiliary_driver's probe() is invoked for the matching devices.  The
-+ * auxiliary_driver can also be encapsulated inside custom drivers that make
-+ * the core device's functionality extensible by adding additional
-+ * domain-specific ops as follows:
-+ *
-+ * .. code-block:: c
-+ *
-+ *	struct my_ops {
-+ *		void (*send)(struct auxiliary_device *auxdev);
-+ *		void (*receive)(struct auxiliary_device *auxdev);
-+ *	};
-+ *
-+ *
-+ *	struct my_driver {
-+ *		struct auxiliary_driver auxiliary_drv;
-+ *		const struct my_ops ops;
-+ *	};
-+ *
-+ * An example of this type of usage is:
-+ *
-+ * .. code-block:: c
-+ *
-+ *	const struct auxiliary_device_id my_auxiliary_id_table[] = {
-+ *		{ .name = "foo_mod.foo_dev" },
-+ *		{ },
-+ *	};
-+ *
-+ *	const struct my_ops my_custom_ops = {
-+ *		.send = my_tx,
-+ *		.receive = my_rx,
-+ *	};
-+ *
-+ *	const struct my_driver my_drv = {
-+ *		.auxiliary_drv = {
-+ *			.name = "myauxiliarydrv",
-+ *			.id_table = my_auxiliary_id_table,
-+ *			.probe = my_probe,
-+ *			.remove = my_remove,
-+ *			.shutdown = my_shutdown,
-+ *		},
-+ *		.ops = my_custom_ops,
-+ *	};
-+ */
-+
- static const struct auxiliary_device_id *auxiliary_match_id(const struct auxiliary_device_id *id,
- 							    const struct auxiliary_device *auxdev)
- {
-diff --git a/include/linux/auxiliary_bus.h b/include/linux/auxiliary_bus.h
-index 605b27aab693..e6d8b5c16226 100644
---- a/include/linux/auxiliary_bus.h
-+++ b/include/linux/auxiliary_bus.h
-@@ -11,12 +11,172 @@
- #include <linux/device.h>
- #include <linux/mod_devicetable.h>
- 
-+/**
-+ * DOC: DEVICE_LIFESPAN
-+ *
-+ * The registering driver is the entity that allocates memory for the
-+ * auxiliary_device and registers it on the auxiliary bus.  It is important to
-+ * note that, as opposed to the platform bus, the registering driver is wholly
-+ * responsible for the management of the memory used for the device object.
-+ *
-+ * To be clear the memory for the auxiliary_device is freed in the release()
-+ * callback defined by the registering driver.  The registering driver should
-+ * only call auxiliary_device_delete() and then auxiliary_device_uninit() when
-+ * it is done with the device.  The release() function is then automatically
-+ * called if and when other code releases their reference to the devices.
-+ *
-+ * A parent object, defined in the shared header file, contains the
-+ * auxiliary_device.  It also contains a pointer to the shared object(s), which
-+ * also is defined in the shared header.  Both the parent object and the shared
-+ * object(s) are allocated by the registering driver.  This layout allows the
-+ * auxiliary_driver's registering module to perform a container_of() call to go
-+ * from the pointer to the auxiliary_device, that is passed during the call to
-+ * the auxiliary_driver's probe function, up to the parent object, and then
-+ * have access to the shared object(s).
-+ *
-+ * The memory for the shared object(s) must have a lifespan equal to, or
-+ * greater than, the lifespan of the memory for the auxiliary_device.  The
-+ * auxiliary_driver should only consider that the shared object is valid as
-+ * long as the auxiliary_device is still registered on the auxiliary bus.  It
-+ * is up to the registering driver to manage (e.g. free or keep available) the
-+ * memory for the shared object beyond the life of the auxiliary_device.
-+ *
-+ * The registering driver must unregister all auxiliary devices before its own
-+ * driver.remove() is completed.  An easy way to ensure this is to use the
-+ * devm_add_action_or_reset() call to register a function against the parent
-+ * device which unregisters the auxiliary device object(s).
-+ *
-+ * Finally, any operations which operate on the auxiliary devices must continue
-+ * to function (if only to return an error) after the registering driver
-+ * unregisters the auxiliary device.
-+ */
-+
-+/**
-+ * struct auxiliary_device - auxiliary device object.
-+ * @dev: Device,
-+ *       The release and parent fields of the device structure must be filled
-+ *       in
-+ * @name: Match name found by the auxiliary device driver,
-+ * @id: unique identitier if multiple devices of the same name are exported,
-+ *
-+ * An auxiliary_device represents a part of its parent device's functionality.
-+ * It is given a name that, combined with the registering drivers
-+ * KBUILD_MODNAME, creates a match_name that is used for driver binding, and an
-+ * id that combined with the match_name provide a unique name to register with
-+ * the bus subsystem.  For example, a driver registering an auxiliary device is
-+ * named 'foo_mod.ko' and the subdevice is named 'foo_dev'.  The match name is
-+ * therefore 'foo_mod.foo_dev'.
-+ *
-+ * Registering an auxiliary_device is a three-step process.
-+ *
-+ * First, a 'struct auxiliary_device' needs to be defined or allocated for each
-+ * sub-device desired.  The name, id, dev.release, and dev.parent fields of
-+ * this structure must be filled in as follows.
-+ *
-+ * The 'name' field is to be given a name that is recognized by the auxiliary
-+ * driver.  If two auxiliary_devices with the same match_name, eg
-+ * "foo_mod.foo_dev", are registered onto the bus, they must have unique id
-+ * values (e.g. "x" and "y") so that the registered devices names are
-+ * "foo_mod.foo_dev.x" and "foo_mod.foo_dev.y".  If match_name + id are not
-+ * unique, then the device_add fails and generates an error message.
-+ *
-+ * The auxiliary_device.dev.type.release or auxiliary_device.dev.release must
-+ * be populated with a non-NULL pointer to successfully register the
-+ * auxiliary_device.  This release call is where resources associated with the
-+ * auxiliary device must be free'ed.  Because once the device is placed on the
-+ * bus the parent driver can not tell what other code may have a reference to
-+ * this data.
-+ *
-+ * The auxiliary_device.dev.parent should be set.  Typically to the registering
-+ * drivers device.
-+ *
-+ * Second, call auxiliary_device_init(), which checks several aspects of the
-+ * auxiliary_device struct and performs a device_initialize().  After this step
-+ * completes, any error state must have a call to auxiliary_device_uninit() in
-+ * its resolution path.
-+ *
-+ * The third and final step in registering an auxiliary_device is to perform a
-+ * call to auxiliary_device_add(), which sets the name of the device and adds
-+ * the device to the bus.
-+ *
-+ * .. code-block:: c
-+ *
-+ *      #define MY_DEVICE_NAME "foo_dev"
-+ *
-+ *      ...
-+ *
-+ *	struct auxiliary_device *my_aux_dev = my_aux_dev_alloc(xxx);
-+ *
-+ *	// Step 1:
-+ *	my_aux_dev->name = MY_DEVICE_NAME;
-+ *	my_aux_dev->id = my_unique_id_alloc(xxx);
-+ *	my_aux_dev->dev.release = my_aux_dev_release;
-+ *	my_aux_dev->dev.parent = my_dev;
-+ *
-+ *	// Step 2:
-+ *	if (auxiliary_device_init(my_aux_dev))
-+ *		goto fail;
-+ *
-+ *	// Step 3:
-+ *	if (auxiliary_device_add(my_aux_dev)) {
-+ *		auxiliary_device_uninit(my_aux_dev);
-+ *		goto fail;
-+ *	}
-+ *
-+ *	...
-+ *
-+ *
-+ * Unregistering an auxiliary_device is a two-step process to mirror the
-+ * register process.  First call auxiliary_device_delete(), then call
-+ * auxiliary_device_uninit().
-+ *
-+ * .. code-block:: c
-+ *
-+ *         auxiliary_device_delete(my_dev->my_aux_dev);
-+ *         auxiliary_device_uninit(my_dev->my_aux_dev);
-+ */
- struct auxiliary_device {
- 	struct device dev;
- 	const char *name;
- 	u32 id;
- };
- 
-+/**
-+ * struct auxiliary_driver - Definition of an auxiliary bus driver
-+ * @probe: Called when a matching device is added to the bus.
-+ * @remove: Called when device is removed from the bus.
-+ * @shutdown: Called at shut-down time to quiesce the device.
-+ * @suspend: Called to put the device to sleep mode. Usually to a power state.
-+ * @resume: Called to bring a device from sleep mode.
-+ * @name: Driver name.
-+ * @driver: Core driver structure.
-+ * @id_table: Table of devices this driver should match on the bus.
-+ *
-+ * Auxiliary drivers follow the standard driver model convention, where
-+ * discovery/enumeration is handled by the core, and drivers provide probe()
-+ * and remove() methods. They support power management and shutdown
-+ * notifications using the standard conventions.
-+ *
-+ * Auxiliary drivers register themselves with the bus by calling
-+ * auxiliary_driver_register(). The id_table contains the match_names of
-+ * auxiliary devices that a driver can bind with.
-+ *
-+ * .. code-block:: c
-+ *
-+ *         static const struct auxiliary_device_id my_auxiliary_id_table[] = {
-+ *		   { .name = "foo_mod.foo_dev" },
-+ *                 {},
-+ *         };
-+ *
-+ *         MODULE_DEVICE_TABLE(auxiliary, my_auxiliary_id_table);
-+ *
-+ *         struct auxiliary_driver my_drv = {
-+ *                 .name = "myauxiliarydrv",
-+ *                 .id_table = my_auxiliary_id_table,
-+ *                 .probe = my_drv_probe,
-+ *                 .remove = my_drv_remove
-+ *         };
-+ */
- struct auxiliary_driver {
- 	int (*probe)(struct auxiliary_device *auxdev, const struct auxiliary_device_id *id);
- 	void (*remove)(struct auxiliary_device *auxdev);
--- 
-2.31.1
-
+Reviewed-by: Luming Yu <luming.yu@intel.com>

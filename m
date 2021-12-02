@@ -2,128 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D304465AC6
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:26:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 832FC465AC7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344444AbhLBA3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 19:29:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232372AbhLBA3j (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 19:29:39 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3E0C061574;
-        Wed,  1 Dec 2021 16:26:17 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id 71so25295951pgb.4;
-        Wed, 01 Dec 2021 16:26:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=sv23TKvRzZPWht8CGSZ7AaQzPSxfhV6p2hx6hoQB8RA=;
-        b=B/7CH6WFlj8Q5RNgrAfZqS62Li1OnmWsNztgZSDN3/k6O6Y8OMbfSWSjWY1qrbbmpD
-         Y882GtTKA436La/dCX0MXxQSY7pEhdijgj0gPvIJC8aKNvK6hMC7ovkk8p0okDoIMX3t
-         ipLkOVP+tYMC2qXQKZO/44f64PsJIWBTC1ChXNPO+4m/1S7cIAyxro5f3Q/gFYruT6O8
-         PY0MCDY8Xe/ZPEv8IjVYmvc+wYo/U3yIdydIVuXx0pAzCTQDwYRxaKnW54P+RTL/EAIf
-         c8O23h+7AcQhZcPcyiHbpoQYFU/PZ2chqW7spKzyoQXSs1pun8Nka8hUDSnHxNhSvsDJ
-         Q01g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=sv23TKvRzZPWht8CGSZ7AaQzPSxfhV6p2hx6hoQB8RA=;
-        b=cN1s0FPGgpdossznRbZ95+Mz0O/MSGNX3QAkE5kKfv5/Mo9MCylr26ujqe3vWlKwJ4
-         toAHynxfM6Z1JisdLGY7Ontpa/RvsudgQ0be4XCGoEmiotQIihQncvLAhqXPFyfEFnxU
-         6UhPiRuMKbdpRlxZ0X1N91QRoxtmnhqzsnRfRWKT4TApOJ4HwnHDqiwQ0hd4nbc32plu
-         UAQlNjC9Vo24VGuLFaWRdeDEqdmiLEBOpCpPkdF3i+EBlaH+ndVbrf5AKLb8sx7+MGnM
-         F3XvFIrqmCXQft0dlAKHtK27pliUMafnB9C1DjxSRDfAQzpU0xoiUnda5W0P3QJ+8bCl
-         DfUA==
-X-Gm-Message-State: AOAM533gvQWb/dmRD6mGw1U+FvJMn+TNI7mLtoz6TgVNwgNeho07oDgJ
-        Mwv9Kj+lvnwdAVuILY6lpZh98jeU+D6avZtsIZ8=
-X-Google-Smtp-Source: ABdhPJxey/5t7weQ8d0mFE0yXPl7NJpEfgcpgxxuty7D+wcx4F3paTHNjatvKNNty79uRcDsauN4SfjZr8Nt4drMCy0=
-X-Received: by 2002:a05:6a00:1312:b0:4a4:e341:213a with SMTP id
- j18-20020a056a00131200b004a4e341213amr9397893pfu.57.1638404777476; Wed, 01
- Dec 2021 16:26:17 -0800 (PST)
+        id S1344693AbhLBA3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 19:29:52 -0500
+Received: from mga17.intel.com ([192.55.52.151]:4072 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234755AbhLBA3t (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 19:29:49 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="217281586"
+X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
+   d="scan'208";a="217281586"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:26:25 -0800
+X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
+   d="scan'208";a="512941021"
+Received: from rongch2-desk.sh.intel.com (HELO [10.239.159.175]) ([10.239.159.175])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:26:23 -0800
+Message-ID: <35c655d9-8a29-8141-69a7-1dab0f974a98@intel.com>
+Date:   Thu, 2 Dec 2021 08:26:21 +0800
 MIME-Version: 1.0
-References: <2036923.9o76ZdvQCi@positron.chronox.de> <22137816.pfsBpAd9cS@tauon.chronox.de>
- <YaEJtv4A6SoDFYjc@kroah.com> <9311513.S0ZZtNTvxh@tauon.chronox.de>
- <YaT+9MueQIa5p8xr@kroah.com> <CAH8yC8nokDTGs8H6nGDkvDxRHN_qoFROAfWnTv-q6UqzYvoSWA@mail.gmail.com>
- <YaYvYdnSaAvS8MAk@kroah.com> <ac123d96b31f4a51b167b4e85a205f31a6c97876.camel@redhat.com>
- <YaZHKHjomEivul6U@kroah.com> <YaZqVxI1C8RByq+w@gmail.com> <CAHmME9p60Ve5XJTVcmGvSpUkg_hRp_i0rGG0R9VhuwLs0o_nXQ@mail.gmail.com>
- <f4a4c9a6a06b6ab00dde24721715abaeca184a0d.camel@redhat.com>
- <CAHmME9qP9eYfPH+8eRvpx_tW8iAtDc-byVMvh4tFL_cABdsiOA@mail.gmail.com>
- <49d6091e571e24efff7bc4dc70c4c62628eb0782.camel@redhat.com> <CAHmME9q-WUGQ7NUO7oafUBkGBNtWePGXHGfEd2rTmZMUA49+DQ@mail.gmail.com>
-In-Reply-To: <CAHmME9q-WUGQ7NUO7oafUBkGBNtWePGXHGfEd2rTmZMUA49+DQ@mail.gmail.com>
-Reply-To: noloader@gmail.com
-From:   Jeffrey Walton <noloader@gmail.com>
-Date:   Wed, 1 Dec 2021 19:24:43 -0500
-Message-ID: <CAH8yC8k1WMwjoUXY_2nWjLMLVLPQsno3asyDEYVRJ4pg=OpLQA@mail.gmail.com>
-Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Simo Sorce <simo@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephan Mueller <smueller@chronox.de>, Tso Ted <tytso@mit.edu>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Alexander E. Patrakov" <patrakov@gmail.com>,
-        "Ahmed S. Darwish" <darwish.07@gmail.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Vito Caputo <vcaputo@pengaru.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
-        William Jon McCann <mccann@jhu.edu>,
-        zhangjs <zachary@baishancloud.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Peter Matthias <matthias.peter@bsi.bund.de>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
-        Neil Horman <nhorman@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Petr Tesarik <ptesarik@suse.cz>,
-        John Haxby <john.haxby@oracle.com>,
-        Alexander Lobakin <alobakin@mailbox.org>,
-        Jirka Hladky <jhladky@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: drivers/hid/i2c-hid/i2c-hid-core.c:867:4: warning: format
+ specifies type 'unsigned short' but the argument has type 'int'
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>,
+        kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+References: <202111261447.lxHTeAhi-lkp@intel.com>
+ <CAD=FV=XZv1LuGm59vJDQKuwqO0zdFZQQthfct7Z_bPcdkm4UUQ@mail.gmail.com>
+From:   Rong Chen <rong.a.chen@intel.com>
+In-Reply-To: <CAD=FV=XZv1LuGm59vJDQKuwqO0zdFZQQthfct7Z_bPcdkm4UUQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 1:25 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+
+On 11/30/21 08:19, Doug Anderson wrote:
+> <Beep> <Boop> <Bop> (translates as "Hello Mr. Robot"),
 >
-> On Wed, Dec 1, 2021 at 12:19 PM Simo Sorce <simo@redhat.com> wrote:
-> > that much it is, and it is a required one. However having worked a lot
-> > on this I can tell you there is actually real cryptographic value in
-> > the requirements FIPS introduced over the years
-> > Well I think most of the requirements are sane practices, hopefully
-> > controversial stuff will be minimal.
-> > I happen to think quite a few of the requirements are actually good
-> > ideas to implement to improve the guarantees of randomness
+> On Thu, Nov 25, 2021 at 10:44 PM kernel test robot <lkp@intel.com> wrote:
+>> Hi Douglas,
+>>
+>> First bad commit (maybe != root cause):
+>>
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>> head:   a4849f6000e29235a2707f22e39da6b897bb9543
+>> commit: c1ed18c11bdb80eced208a61d40b1988f36a014f HID: i2c-hid: Introduce goodix-i2c-hid using i2c-hid core
+>> date:   10 months ago
+>> config: arm64-randconfig-r034-20211116 (https://download.01.org/0day-ci/archive/20211126/202111261447.lxHTeAhi-lkp@intel.com/config)
+>> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
+>> reproduce (this is a W=1 build):
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # install arm64 cross compiling tool for clang build
+>>          # apt-get install binutils-aarch64-linux-gnu
+>>          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c1ed18c11bdb80eced208a61d40b1988f36a014f
+>>          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>          git fetch --no-tags linus master
+>>          git checkout c1ed18c11bdb80eced208a61d40b1988f36a014f
+>>          # save the config file to linux build tree
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64
+>>
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> All warnings (new ones prefixed by >>):
+>>
+>>>> drivers/hid/i2c-hid/i2c-hid-core.c:867:4: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+>>                             le16_to_cpu(hdesc->bcdVersion));
+>>                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>     include/linux/dev_printk.h:112:32: note: expanded from macro 'dev_err'
+>>             _dev_err(dev, dev_fmt(fmt), ##__VA_ARGS__)
+>>                                   ~~~     ^~~~~~~~~~~
+>>     include/linux/byteorder/generic.h:91:21: note: expanded from macro 'le16_to_cpu'
+>>     #define le16_to_cpu __le16_to_cpu
+>>                         ^
+>>     include/uapi/linux/byteorder/big_endian.h:36:26: note: expanded from macro '__le16_to_cpu'
+>>     #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+>>                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>     include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
+>>             (__builtin_constant_p((__u16)(x)) ?     \
+>>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> May I kindly point to the reply I gave to the same error last month
+> when you mailed it out?
 >
-> If you think there are good ways to improve the RNG, of course send
-> patches for this, justifying why, taking into account recent research
-> into the topic you wish to patch, etc. Don't write, "because FIPS";
-> instead argue rationale for each patch. And if you _do_ feel the need
-> to appeal to authority, perhaps links to the various eprint papers you
-> consulted would be worthwhile. Preferably you're able to do this in a
-> small, incremental way, with small standalone patchsets, instead of
-> gigantic series.
+> https://lore.kernel.org/r/CAD=FV=WkUEkkkfGa+6QJSBvj8EgVrnGYYbd6RrC_5HdTue=mDw@mail.gmail.com/
+>
 
-I may be parsing things incorrectly, but you seem to be rejecting the
-NIST requirements, and then positioning your personal opinion as
-superior. It sounds like one authority is being replaced by another.
-Perhaps I am missing something.
+Hi Doug,
 
-I am also guessing you've never read the relevant NIST documents. The
-documents state the security goals and provide the steps to achieve
-them in an implementation.
+Thanks for the feedback, we have added the warnings to our ignore list.
 
-Jeff
+Best Regards,
+
+Rong Chen
+

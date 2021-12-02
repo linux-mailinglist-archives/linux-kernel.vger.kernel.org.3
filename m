@@ -2,146 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 917A446638E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7CC466396
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:23:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358144AbhLBMZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 07:25:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
+        id S1346835AbhLBM0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 07:26:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357964AbhLBMYR (ORCPT
+        with ESMTP id S1358161AbhLBMZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 07:24:17 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86916C0613ED
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 04:20:54 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id y13so115167150edd.13
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 04:20:54 -0800 (PST)
+        Thu, 2 Dec 2021 07:25:09 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BA6C0613F6
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 04:21:47 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id p13so20099407pfw.2
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 04:21:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=stNCx27b8aE8hzCWV8Qt85YlOmpsOWC/PJmAmUYO/F8=;
-        b=LK4jOi2hHp5nxTRIaf8HOiESYeWC7dxC1CnXLqfje5Rv4NdXVJ2P/aDDekUbRtvak8
-         hFA063wfiFrgVQvBhCg4sAbHISkQyvrD+vyVzSDECYdwDZK7TEptBN6BpycaY3OYpqXC
-         wD/aufw3eg98Ul190ayHlbeVgcgW1yDqFw9gfCiAJiGY0pYWXJ6Fv+ed+eLjlQmE5vo/
-         rbpsmiLf8PODYg4BdK5tcIZ8mi5NQAM1cw8N9/JPIVy6LqlcYG5pl1pC6SlYTTGcTDKJ
-         n8ZhLyCY+jS8+UoKxyaPWtmu9cYDl/e+dmaCRAe5Y7Gngkw20p6ueYWx52nGqJNpvlkQ
-         9yiA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=LsxKFgbA+2a30DaeYBmMw8z7MNrrzz/s3NCf5D9i1bU=;
+        b=dLAnxQnv0982QXUGwuQ6KhTvaD0igCyDS0SutKUzJDwjM1ssi5Z44pARn1z2wkp8B7
+         MAnTs8ag8dj8PJx7E1WKW5z9LjEodx+/FKRvy1xqg9pHd9fHuCdAyUxb0mOpdv77xCwG
+         rIPoeA4gzL7RTB5xmM3GrFA+tAOcPNYJFdMjOfgL06iTxFDXCaWVp9mzE9YO5i1EUIqp
+         bF3paukWFJeb2c/yRyKdnB03R2FJgq7uafH/TtXuG+hIgi6Wj7xub8+YnzAfyi3eFNFr
+         262D6XLlL7YbzvxJy2PNS7oMt+qczQ8bu+EMYo+yDAiRJ76ESVC/407uJV500JSyMoNJ
+         fWZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=stNCx27b8aE8hzCWV8Qt85YlOmpsOWC/PJmAmUYO/F8=;
-        b=y+uvhou/3Gcw3JX22qCGjoXWYrLNRwI/KQNq0u8KBfRnWHBugErWOA7n5usAfeBBOr
-         7mGl+GQs3axq1u9wMOEfdSnfCOEYqYu2EwwN5FgYgSnInnlXmSABxioQbosyTnE04Sj3
-         S9vobN1nAv2Xsx7AC3JZkgjM2ug39Q2ehAHgFMqQjAyERkHRpXk9fnwDVoTh3mkhiC3E
-         6OmqQZJvYOj4vEG4pAWlXPW7lKqfTVSX5DKg1gOC93muaY4JAGU/nL7GblNV2F93w8kP
-         1G29VtHX5GRZw2lWFH3xO6l/R8gFpKRQLk5fjPhMMLS8jVramF11Egk5OvDBcX3TWrcc
-         jP9Q==
-X-Gm-Message-State: AOAM531uTTGj55UMzPfex1Wb85JKfQEkYxSUxyW3Q3NDjSvxWebLiX/A
-        5QUHhwZ+KC9J8kNnTZzIDyxiR7w5FxxhtRWK6ZE=
-X-Google-Smtp-Source: ABdhPJyWSiV13OHeGB7RDAZ10GEPDHxVRicuzrBgxsLRwsvQyQ0mAhkjedPyxDxR3ESjrTwWkllL2qSNj5hzFgk8tPY=
-X-Received: by 2002:aa7:d748:: with SMTP id a8mr17338154eds.21.1638447653088;
- Thu, 02 Dec 2021 04:20:53 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a17:906:6a25:0:0:0:0 with HTTP; Thu, 2 Dec 2021 04:20:52
- -0800 (PST)
-Reply-To: cristinacampeell@outlook.com
-From:   "Mrs. Cristina Campbell" <michellericharrd@gmail.com>
-Date:   Thu, 2 Dec 2021 12:20:52 +0000
-Message-ID: <CAJLj=HcWBz_vbiGF=0yz3SQCLdR4LYuCnfwNBx9YeRmJ7U2K8g@mail.gmail.com>
-Subject: =?UTF-8?B?0KLRiyDQvNC+0LbQtdGI0Ywg0LzQvdC1INC/0L7QvNC+0YfRjD8=?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=LsxKFgbA+2a30DaeYBmMw8z7MNrrzz/s3NCf5D9i1bU=;
+        b=QLoePZWs6DWb3uPkrSqFXVOfyM+ztdEu+qj96tBYBM4p7ONgH8K708BJbnvRhxByy/
+         lqXbGUWNi53FApHEBAoJd5oedO7IadzMWXyzYi3rTngf9wM1cVq3IReffYsfiAg0G2Ws
+         du+0Hz7jCa0PCpaGjn3hOze0lO0Pe5TWhCioGm7kZm59IGXSyon+LSoqMYdG8pHKLbKD
+         iXQSpnvzVc0lSnO/4033itG7FsllNpJIQCCmGJP/8GsGAgnN0XWrXbG13sDnkU7G86PY
+         dptFM0WBd1Q7dzWQou0xaR4yPEmLvRDggdTUz16MfW4FSCSRXfdizNWU3F3NofD/M+5m
+         q+ow==
+X-Gm-Message-State: AOAM531U14Ol8UKMOged7XirwVKJZXn75bl6gmJK2/LcEXZOWWOTwrGd
+        zfhL5KNwFaQYFtW6Wm4jimk5Eg==
+X-Google-Smtp-Source: ABdhPJzCrqzJXH96Z5MROayhEQfo213eXrRiFyMC/oAULHnau5lYrdt/lRIQ6By8zsupJT8o9z8VXg==
+X-Received: by 2002:a63:d651:: with SMTP id d17mr5702769pgj.529.1638447707070;
+        Thu, 02 Dec 2021 04:21:47 -0800 (PST)
+Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id m15sm3608894pfk.186.2021.12.02.04.21.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 04:21:46 -0800 (PST)
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
+Cc:     Maulik Shah <quic_mkshah@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shawn Guo <shawn.guo@linaro.org>
+Subject: [PATCH v3 0/3] Add Qualcomm MPM irqchip driver support
+Date:   Thu,  2 Dec 2021 20:21:19 +0800
+Message-Id: <20211202122122.23548-1-shawn.guo@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-0JTQvtGA0L7Qs9C+0Lkg0JLQvtC30LvRjtCx0LvQtdC90L3Ri9C5LA0KDQrQn9C+0LbQsNC70YPQ
-udGB0YLQsCwg0L/RgNC+0YfRgtC40YLQtSDRjdGC0L4g0LzQtdC00LvQtdC90L3QviDQuCDQstC9
-0LjQvNCw0YLQtdC70YzQvdC+LCDRgtCw0Log0LrQsNC6INGN0YLQviDQvNC+0LbQtdGCDQrQsdGL
-0YLRjCDQvtC00L3QviDQuNC3INGB0LDQvNGL0YUg0LLQsNC20L3Ri9GFINC/0LjRgdC10LwsINC6
-0L7RgtC+0YDRi9C1INCy0Ysg0LrQvtCz0LTQsC3Qu9C40LHQviDQv9C+0LvRg9GH0LDQu9C4LiDQ
-rw0K0LzQuNGB0YHQuNGBINCa0YDQuNGB0YLQuNC90LAg0JrRjdC80L/QsdC10LvQuywg0Y8g0LHR
-i9C70LAg0LfQsNC80YPQttC10Lwg0LfQsCDQv9C+0LrQvtC50L3Ri9C8INCt0LTQstCw0YDQtNC+
-0LwNCtCa0Y3QvNC/0LHQtdC70LvQvtC8LiDQntC9INGA0LDQsdC+0YLQsNC7INCyIFNoZWxsIFBl
-dHJvbGV1bSBEZXZlbG9wbWVudCBDb21wYW55INCyDQrQm9C+0L3QtNC+0L3QtSwg0LAg0YLQsNC6
-0LbQtSDQsdGL0Lsg0J7Qv9GL0YLQvdGL0Lkg0L/QvtC00YDRj9C00YfQuNC6INCyINGA0LXQs9C4
-0L7QvdC1INCS0L7RgdGC0L7Rh9C90L7QuSDQkNC30LjQuC4g0KPQvNC10YANCtCyINC/0L7QvdC1
-0LTQtdC70YzQvdC40LosIDMxINC40Y7Qu9GPIDIwMDMg0LMuLCDQsiDQn9Cw0YDQuNC20LUuINCc
-0Ysg0L/RgNC+0LbQuNC70Lgg0YHQtdC80Ywg0LvQtdGCINCyINCx0YDQsNC60LUNCtCx0LXQtyDQ
-tNC10YLQtdC5Lg0KDQrQmtC+0LPQtNCwINCy0Ysg0YfQuNGC0LDQtdGC0LUg0Y3RgtC+LCDRjyDQ
-vdC1INGF0L7Rh9GDLCDRh9GC0L7QsdGLINCy0Ysg0LzQtdC90Y8g0LbQsNC70LXQu9C4LCDQv9C+
-0YLQvtC80YMg0YfRgtC+INGPDQrQstC10YDRjiwg0YfRgtC+INCy0YHQtSDQvtC00L3QsNC20LTR
-iyDRg9C80YDRg9GCLiDQoyDQvNC10L3RjyDQtNC40LDQs9C90L7RgdGC0LjRgNC+0LLQsNC70Lgg
-0YDQsNC6INC/0LjRidC10LLQvtC00LAsINC4DQrQvNC+0Lkg0LLRgNCw0Ycg0YHQutCw0LfQsNC7
-INC80L3QtSwg0YfRgtC+INGPINC00L7Qu9Cz0L4g0L3QtSDQv9GA0L7RgtGP0L3RgyDQuNC3LdC3
-0LAg0YHQu9C+0LbQvdGL0YUg0L/RgNC+0LHQu9C10Lwg0YHQvg0K0LfQtNC+0YDQvtCy0YzQtdC8
-Lg0KDQrQryDRhdC+0YfRgywg0YfRgtC+0LHRiyDQkdC+0LMg0LHRi9C7INC80LjQu9C+0YHRgtC4
-0LIg0LrQviDQvNC90LUg0Lgg0L/RgNC40L3Rj9C7INC80L7RjiDQtNGD0YjRgywg0L/QvtGN0YLQ
-vtC80YMg0Y8NCtGA0LXRiNC40Lsg0L/QvtC00LDQstCw0YLRjCDQvNC40LvQvtGB0YLRi9C90Y4g
-0LHQu9Cw0LPQvtGC0LLQvtGA0LjRgtC10LvRjNC90YvQvCDQvtGA0LPQsNC90LjQt9Cw0YbQuNGP
-0LwgLyDRhtC10YDQutCy0Y/QvCAvDQrQsdGD0LTQtNC40LnRgdC60LjQvCDRhdGA0LDQvNCw0Lwg
-LyDQvNC10YfQtdGC0LggLyDQtNC10YLRj9C8INCx0LXQtyDQvNCw0YLQtdGA0LggLyDQvNC10L3Q
-tdC1DQrQv9GA0LjQstC40LvQtdCz0LjRgNC+0LLQsNC90L3Ri9C8INC4INCy0LTQvtCy0LDQvCwg
-0L/QvtGB0LrQvtC70YzQutGDINGPINGF0L7Rh9GDLCDRh9GC0L7QsdGLINGN0YLQviDQsdGL0LvQ
-viDQvtC00L3QuNC8INC40LcNCtC/0L7RgdC70LXQtNC90LjRhSDQtNC+0LHRgNGL0YUg0LTQtdC7
-INCvINC00LXQu9Cw0Y4g0Y3RgtC+INC90LAg0LfQtdC80LvQtSwg0L/RgNC10LbQtNC1INGH0LXQ
-vCDRg9C80YDRgy4g0J3QsCDQtNCw0L3QvdGL0LkNCtC80L7QvNC10L3RgiDRjyDRgNCw0YHQv9GA
-0LXQtNC10LvQuNC7INC00LXQvdGM0LPQuCDQvdC10LrQvtGC0L7RgNGL0Lwg0LHQu9Cw0LPQvtGC
-0LLQvtGA0LjRgtC10LvRjNC90YvQvCDQvtGA0LPQsNC90LjQt9Cw0YbQuNGP0Lwg0LINCtCo0L7R
-gtC70LDQvdC00LjQuCwg0KPRjdC70YzRgdC1LCDQm9GO0LrRgdC10LzQsdGD0YDQs9C1LCDQpNC4
-0L3Qu9GP0L3QtNC40Lgg0Lgg0JHRgNCw0LfQuNC70LjQuC4g0KLQtdC/0LXRgNGMLCDQutC+0LPQ
-tNCwDQrQvNC+0LUg0LfQtNC+0YDQvtCy0YzQtSDRgtCw0Log0YHQuNC70YzQvdC+INGD0YXRg9C0
-0YjQuNC70L7RgdGMLCDRjyDQsdC+0LvRjNGI0LUg0L3QtSDQvNC+0LPRgyDRjdGC0L7Qs9C+INC0
-0LXQu9Cw0YLRjCDRgdCw0LwuDQoNCtCe0LTQvdCw0LbQtNGLINGPINC/0L7Qv9GA0L7RgdC40Lsg
-0YfQu9C10L3QvtCyINC80L7QtdC5INGB0LXQvNGM0Lgg0LfQsNC60YDRi9GC0Ywg0L7QtNC40L0g
-0LjQtyDQvNC+0LjRhSDRgdGH0LXRgtC+0LIg0LgNCtC/0LXRgNC10LTQsNGC0Ywg0LTQtdC90YzQ
-s9C4LCDQutC+0YLQvtGA0YvQtSDRgyDQvNC10L3RjyDRgtCw0Lwg0LXRgdGC0YwsINCx0LvQsNCz
-0L7RgtCy0L7RgNC40YLQtdC70YzQvdGL0LwNCtC+0YDQs9Cw0L3QuNC30LDRhtC40Y/QvCDQsiDQ
-o9C60YDQsNC40L3QtSwg0JHQtdC70YzQs9C40LgsINCg0L7RgdGB0LjQuCwg0JPQtdGA0LzQsNC9
-0LjQuCwg0JjRgtCw0LvQuNC4INC4INCo0LLQtdC50YbQsNGA0LjQuCwNCtC+0L3QuCDQvtGC0LrQ
-sNC30LDQu9C40YHRjCDQuCDQvtGB0YLQsNCy0LjQu9C4INC00LXQvdGM0LPQuCDRgdC10LHQtS4g
-0L3QtSDQtNC+0LLQtdGA0Y/QudGC0LUg0LjQvCDQsdC+0LvRjNGI0LUsINGC0LDQuiDQutCw0LoN
-CtC+0L3QuCwg0LrQsNC20LXRgtGB0Y8sINC90LUg0YHQvtCz0LvQsNGB0L3RiyDRgSDRgtC10Lws
-INGH0YLQviDRjyDQuNC8INC+0YHRgtCw0LLQuNC7LiDQn9C+0YHQu9C10LTQvdC40LUg0LzQvtC4
-DQrQtNC10L3RjNCz0LgsINC+INC60L7RgtC+0YDRi9GFINC90LjQutGC0L4g0L3QtSDQt9C90LDQ
-tdGCLCAtINGN0YLQviDQvtCz0YDQvtC80L3Ri9C5INC00LXQvdC10LbQvdGL0Lkg0LTQtdC/0L7Q
-t9C40YIg0LINCtGA0LDQt9C80LXRgNC1IDYgMDAwIDAwMCDQtNC+0LvQu9Cw0YDQvtCyINCh0KjQ
-kCDQsiDRgNCw0LfQvNC10YDQtSA2INC80LjQu9C70LjQvtC90L7QsiDQtNC+0LvQu9Cw0YDQvtCy
-INCh0KjQkCwNCtC60L7RgtC+0YDRi9C5INGDINC80LXQvdGPINC10YHRgtGMINCyINCx0LDQvdC6
-0LUg0LIg0KLQsNC40LvQsNC90LTQtSwg0LrRg9C00LAg0Y8g0L/QvtC70L7QttC40Lsg0Y3RgtC+
-0YIg0YTQvtC90LQuINCvDQrRhdC+0YfRgywg0YfRgtC+0LHRiyDQstGLINC40YHQv9C+0LvRjNC3
-0L7QstCw0LvQuCDRjdGC0L7RgiDRhNC+0L3QtCDQtNC70Y8g0LHQu9Cw0LPQvtGC0LLQvtGA0LjR
-gtC10LvRjNC90YvRhSDQv9GA0L7Qs9GA0LDQvNC8INC4DQrQv9C+0LTQtNC10YDQttC60Lgg0YfQ
-tdC70L7QstC10YfQtdGB0YLQstCwINCyINCy0LDRiNC10Lkg0YHRgtGA0LDQvdC1LCDQtdGB0LvQ
-uCDRgtC+0LvRjNC60L4g0LLRiyDQsdGD0LTQtdGC0LUNCtC40YHQutGA0LXQvdC90LjQvNC4Lg0K
-DQrQryDQv9GA0LjQvdGP0Lsg0Y3RgtC+INGA0LXRiNC10L3QuNC1LCDQv9C+0YLQvtC80YMg0YfR
-gtC+INGDINC80LXQvdGPINC90LXRgiDRgNC10LHQtdC90LrQsCwg0LrQvtGC0L7RgNGL0LkNCtGD
-0L3QsNGB0LvQtdC00YPQtdGCINGN0YLQuCDQtNC10L3RjNCz0LgsINGPINC90LUg0LHQvtGO0YHR
-jCDRgdC80LXRgNGC0LgsINC/0L7RjdGC0L7QvNGDINGPINC30L3QsNGOLCDQutGD0LTQsCDRjyDQ
-uNC00YMuDQrQryDQt9C90LDRjiwg0YfRgtC+INCx0YPQtNGDINC90LAg0LvQvtC90LUg0JPQvtGB
-0L/QvtC00LAuINCa0LDQuiDRgtC+0LvRjNC60L4g0Y8g0L/QvtC70YPRh9GDINCy0LDRiCDQvtGC
-0LLQtdGCLCDRjw0K0L/QtdGA0LXQtNCw0Lwg0LLQsNC8INC60L7QvdGC0LDQutGC0L3Ri9C1INC0
-0LDQvdC90YvQtSDQkdCw0L3QutCwINC4INCy0YvRiNC70Y4g0LLQsNC8INC/0LjRgdGM0LzQvi3R
-gNCw0LfRgNC10YjQtdC90LjQtSwNCtC60L7RgtC+0YDQvtC1INC00LDRgdGCINCy0LDQvCDQv9GA
-0LDQstC+INC60LDQuiDQv9C10YDQstC+0L3QsNGH0LDQu9GM0L3QvtC80YMg0LHQtdC90LXRhNC4
-0YbQuNCw0YDRgyDRjdGC0L7Qs9C+INGE0L7QvdC00LANCtC90LXQvNC10LTQu9C10L3QvdC+INC9
-0LDRh9Cw0YLRjCDRjdGC0YMg0LHQu9Cw0LPQvtGC0LLQvtGA0LjRgtC10LvRjNC90YPRjiDQv9GA
-0L7Qs9GA0LDQvNC80YMg0LIg0LLQsNGI0LXQuSDRgdGC0YDQsNC90LUuDQoNCtCi0L7Qu9GM0LrQ
-viDQttC40LfQvdGMLCDQv9GA0L7QttC40YLQsNGPINC00LvRjyDQtNGA0YPQs9C40YUsINC00L7R
-gdGC0L7QudC90LAg0LbQuNC30L3QuC4g0K8g0YXQvtGH0YMsINGH0YLQvtCx0Ysg0LLRiw0K0LLR
-gdC10LPQtNCwINC80L7Qu9C40LvQuNGB0Ywg0LfQsCDQvNC10L3Rjy4g0JvRjtCx0LDRjyDQt9Cw
-0LTQtdGA0LbQutCwINGBINCy0LDRiNC40Lwg0L7RgtCy0LXRgtC+0Lwg0LTQsNGB0YIg0LzQvdC1
-DQrQstC+0LfQvNC+0LbQvdC+0YHRgtGMINC90LDQudGC0Lgg0LTRgNGD0LPQvtCz0L4g0YfQtdC7
-0L7QstC10LrQsCDQtNC70Y8g0Y3RgtC+0Lkg0LbQtSDRhtC10LvQuC4g0JXRgdC70Lgg0LLQsNC8
-INGN0YLQviDQvdC1DQrQuNC90YLQtdGA0LXRgdC90L4sINC/0YDQvtGI0YMg0L/RgNC+0YnQtdC9
-0LjRjyDQt9CwINGC0L4sINGH0YLQviDRjyDRgdCy0Y/Qt9Cw0LvRgdGPINGBINCy0LDQvNC4LiDQ
-ktGLINC80L7QttC10YLQtQ0K0YHQstGP0LfQsNGC0YzRgdGPINGB0L4g0LzQvdC+0Lkg0LjQu9C4
-INC+0YLQstC10YLQuNGC0Ywg0L3QsCDQvNC+0Lkg0LvQuNGH0L3Ri9C5INCw0LTRgNC10YEg0Y3Q
-u9C10LrRgtGA0L7QvdC90L7QuSDQv9C+0YfRgtGLOg0KKGNyaXN0aW5hY2FtcGVlbGxAb3V0bG9v
-ay5jb20pLg0KDQrQodC/0LDRgdC40LHQviwNCtCY0YHQutGA0LXQvdC90LUg0JLQsNGILA0K0JzQ
-uNGB0YHQuNGBINCa0YDQuNGB0YLQuNC90LAg0JrRjdC80L/QsdC10LvQuw0K0K3Quy4g0LDQtNGA
-0LXRgTsgY3Jpc3RpbmFjYW1wZWVsbEBvdXRsb29rLmNvbQ0K
+It updates IRQCHIP_PLATFORM_DRIVER infrastructural to pass
+platform_device pointer to init_cb.  On top of that, add DT binding
+and driver support for Qualcomm MPM (MSM Power Manager) interrupt
+controller.
+
+Changes for v3:
+- Support module build
+- Use relaxed accessors
+- Add barrier call to ensure MMIO write completes
+- Use d->chip_data to pass driver private data
+- Use raw spinlock
+- USe BIT() for bit shift
+- Create a single irq domain to cover both types of MPM pins
+- Call irq_resolve_mapping() to find out Linux irq number
+- Save the use of ternary conditional operator and use switch/case for
+  .irq_set_type call
+- Drop unnecessary .irq_disable hook
+- Align qcom_mpm_chip and qcom_mpm_ops members vertically
+- Use helper irq_domain_translate_twocell()
+- Move mailbox requesting forward in probe function
+- Improve the documentation on qcm2290_gic_pins[]
+- Use IRQCHIP_PLATFORM_DRIVER infrastructural
+- Use cpu_pm notifier instead of .suspend_late hook to write MPM for
+  sleep, so that MPM can be set up for both suspend and idle context.
+  The TIMER0/1 setup is currently omitted for idle use case though,
+  as I haven't been able to successfully test the idle context.
+
+
+Shawn Guo (3):
+  irqchip: Pass platform_device pointer to init_cb
+  dt-bindings: interrupt-controller: Add Qualcomm MPM support
+  irqchip: Add Qualcomm MPM controller driver
+
+ .../interrupt-controller/qcom,mpm.yaml        |  72 +++
+ drivers/irqchip/Kconfig                       |   8 +
+ drivers/irqchip/Makefile                      |   1 +
+ drivers/irqchip/irq-bcm7038-l1.c              |   3 +-
+ drivers/irqchip/irq-bcm7120-l2.c              |  10 +-
+ drivers/irqchip/irq-brcmstb-l2.c              |  10 +-
+ drivers/irqchip/irq-mchp-eic.c                |   4 +-
+ drivers/irqchip/irq-meson-gpio.c              |   7 +-
+ drivers/irqchip/irqchip.c                     |   4 +-
+ drivers/irqchip/qcom-mpm.c                    | 481 ++++++++++++++++++
+ drivers/irqchip/qcom-pdc.c                    |   4 +-
+ include/linux/irqchip.h                       |   8 +-
+ 12 files changed, 596 insertions(+), 16 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
+ create mode 100644 drivers/irqchip/qcom-mpm.c
+
+-- 
+2.17.1
+

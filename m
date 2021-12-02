@@ -2,14 +2,14 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B46A46607B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4FAF466077
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:32:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356527AbhLBJgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 04:36:19 -0500
-Received: from cpanel.siel.si ([46.19.9.99]:49402 "EHLO cpanel.siel.si"
+        id S1356486AbhLBJgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 04:36:12 -0500
+Received: from cpanel.siel.si ([46.19.9.99]:49420 "EHLO cpanel.siel.si"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356439AbhLBJgJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S1356461AbhLBJgJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 2 Dec 2021 04:36:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
         s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
@@ -17,17 +17,17 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=JoWVJsvCXYY1I9He6RtFyygHgrm4/b7pQYSgt5eRc5I=; b=NRIXNTkb1H3IH21rsQLN8s/SPB
-        R3weB2PYieJTrJQimij0T58d6xS5b1qj/Xi/RdUkCAgeH7+H81L/+I1btUJraTw1sUtP77+xpN2jB
-        pSxhHIne6ZDctDk6/kad5LvHFoyVVLPPuTyde2VsIkHNZNQeTleUspMnkUWTz52QLozwcy4pdFoTX
-        Wg2OIo1NMA9ZSLlz/FivNyELI2ApMKqa+1Bz1Yjpkr1X2UJiiwGdPDQTlPkfvdcOmEOPhjBh0o1Kx
-        kv+jAaPaxGnfdp1QkkCZDqT48KCqnPHMONN5uoSjEW3q72HqMnKwMuFc0FxvUb8aC0Bzc1uWmZBJY
-        bLZ79BNw==;
+        bh=IxY7gxKP97JK6nFkzdWBH41boYf5ZKhvB11lleRUyUo=; b=KnSynsd3fo7xlW4R04fvVoxAZI
+        WwrGTma1XzLuzUNrykz9P+6holt+o+uFqYsjTOSKod7np3MXbgpg10fQpWMwwlyrbJzuE8SFFk+Xi
+        pjGG+ABdrdAgWGg//sN/YtryKOInIbN+plCUe39sIDbYu8gVAQJBXsAchKg+R9oFPpj0v7R1Hpr2R
+        W5Aqy1cASzXF7opjtnW07KQozL4wxVciQglTKJ3NgQEGuYceE7JNTmEGdcp72Ff1KCHchmk8YlERI
+        c4tDvUisBbQzibRIVeLKN5kv50Bb+aNRo9LOgrShRvploRdrQTEAlLO1BjeoL0Sw+zK9bswfOeGpY
+        ZL7/R/hw==;
 Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:52018 helo=localhost.localdomain)
         by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.94.2)
         (envelope-from <andrej.picej@norik.com>)
-        id 1msiSB-00DPB6-81; Thu, 02 Dec 2021 10:32:42 +0100
+        id 1msiSB-00DPB6-Db; Thu, 02 Dec 2021 10:32:42 +0100
 From:   Andrej Picej <andrej.picej@norik.com>
 To:     support.opensource@diasemi.com, linux@roeck-us.net,
         linux-watchdog@vger.kernel.org
@@ -36,9 +36,9 @@ Cc:     andrej.picej@norik.com, wim@linux-watchdog.org,
         devicetree@vger.kernel.org, shawnguo@kernel.org,
         s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
         linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 3/4] dt-bindings: watchdog: da9062: add watchdog timeout mode
-Date:   Thu,  2 Dec 2021 10:32:29 +0100
-Message-Id: <20211202093230.3951996-3-andrej.picej@norik.com>
+Subject: [PATCH v4 4/4] ARM: dts: imx6: phycore-som: set watchdog timeout mode to shutdown
+Date:   Thu,  2 Dec 2021 10:32:30 +0100
+Message-Id: <20211202093230.3951996-4-andrej.picej@norik.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211202093230.3951996-1-andrej.picej@norik.com>
 References: <20211202093230.3951996-1-andrej.picej@norik.com>
@@ -58,46 +58,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the watchdog timeout mode property. If this property is used
-the user can select what happens on watchdog timeout. Set this property
-to 1 to enable SHUTDOWN (the device resets), set it to 0 and the device
-will go to POWERDOWN on watchdog timeout.
-
-If this property is not set, don't touch the WATCHDOG_SD bit and leave
-the configuration to OTP. This way backward compatibility is not broken.
+Enable system restart when the watchdog timeout occurs.
 
 Signed-off-by: Andrej Picej <andrej.picej@norik.com>
 ---
-Changes in v4:
+Chnages in v4:
  - no changes
 
 Changes in v3:
- - add note about using the default OTP setting if this DT binding is
-   not specified
+ - no changes
 
 Changes in v2:
- - new patch, document new DT binding
+ - new patch, enable shutdown mode for phytec-phycore (da9062 user)
 ---
- Documentation/devicetree/bindings/watchdog/da9062-wdt.txt | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt b/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
-index 950e4fba8dbc..354314d854ef 100644
---- a/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
-+++ b/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
-@@ -10,6 +10,12 @@ Optional properties:
- - dlg,use-sw-pm: Add this property to disable the watchdog during suspend.
- 	Only use this option if you can't use the watchdog automatic suspend
- 	function during a suspend (see register CONTROL_B).
-+- dlg,wdt-sd: Set what happens on watchdog timeout. If this bit is set the
-+	watchdog timeout triggers SHUTDOWN, if cleared the watchdog triggers
-+	POWERDOWN. Can be 0 or 1. Only use this option if you want to change the
-+	default chip's OTP setting for WATCHDOG_SD bit. If this property is NOT
-+	set the WATCHDOG_SD bit and on timeout watchdog behavior will match the
-+	chip's OTP settings.
+diff --git a/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
+index a80aa08a37cb..743343e525cf 100644
+--- a/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
+@@ -111,6 +111,7 @@ da9062_onkey: onkey {
+ 		watchdog {
+ 			compatible = "dlg,da9062-watchdog";
+ 			dlg,use-sw-pm;
++			dlg,wdt-sd = <1>;
+ 		};
  
- Example: DA9062
- 
+ 		regulators {
 -- 
 2.25.1
 

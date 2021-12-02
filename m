@@ -2,145 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51791465C07
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 03:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B755D465C0C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 03:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352074AbhLBCPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 21:15:52 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:60834 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238880AbhLBCPr (ORCPT
+        id S1353291AbhLBCQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 21:16:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238759AbhLBCQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 21:15:47 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E0653CE2152
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 02:12:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FE2FC00446;
-        Thu,  2 Dec 2021 02:12:20 +0000 (UTC)
-Date:   Wed, 1 Dec 2021 21:12:18 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Chen Jun <chenjun102@huawei.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Yafang Shao <laoar.shao@gmail.com>
-Subject: [GIT PULL] tracing: Minor fixes for 5.16-rc3
-Message-ID: <20211201211218.5f9e8ae8@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 1 Dec 2021 21:16:50 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E143CC06174A
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 18:13:28 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id m24so19132362pls.10
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 18:13:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xqdq69bklkVGPaiuC/hhcniUDsb69a5Tsomp+eMdT8Y=;
+        b=kLe2Jr2E6gqbImzVXFbWuWelxOvMTjUr3eE3r6UXGeXlSFHQJujz3lKGG1L8GrT/jA
+         tZc+qlJVZ58JjH0g5XNMGk6jNl01J+5YdmbMgSs4RYG+rZnunYfoVS5CVwrghZldDJyO
+         QsL/vfDrNDDfrswvVpKh4G3/Rp546pliFVtuK/l3YPREcTeI5wXswL8GsLhOo8t+L3zO
+         eEWvcu/xAKtGB5MCBINyHO9v189tvqdZBzA343XYcBSiMvbmvZ5h5HhvMN1neTO3sFuf
+         4KjN5JhpI1gvBnhZ1ekaA2hzk6QsMmK5uzhPhUAXOQETZO338FaIlVCWBJjU9Mdq9WON
+         fmYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xqdq69bklkVGPaiuC/hhcniUDsb69a5Tsomp+eMdT8Y=;
+        b=DM5zrVkcxz1fFzsALnXvt9n/cm3tFJbOGti/cb0jUVtwgprmG+/JdoLobGPKfy4XaH
+         yLATGpieVbniNj4O4BCVgAmK0uo4pGeqndD20WBSQIS4+d1VSyAqUOv2jij4YvGYo4fk
+         sjc642027jEY537oQKqiooCwN30J0qtGfugEkTxeAIBEyja1hp+1StSmP18eoT4tfvu7
+         8WJaOUNDpR4JxFWrv6pRAAhiHRRBYhnnaFc+vHY90OCAKLP42eA4RTE4ZK14H7p0bZlD
+         2kyBDd3Cd9b4VZQr/VTJYlpNDQ4OomMXw2UteUVtSgQXbKMv1/FYpnbc1hwuDACPWJST
+         f3Kw==
+X-Gm-Message-State: AOAM533dwWgq1hXB+IUYP7zpC4/5ki0ZPgjvLdn7xmcQ6avb28V2hBrw
+        CL5ATEJCD1P8I/KzHJ9Qd/Gvag==
+X-Google-Smtp-Source: ABdhPJwI9/kW+841BCq3bJVjpyet3MmhhrawiCLnHAmmZ9PuYqso3ZTZlCgmtcoT/lCxdVVnUZYA0g==
+X-Received: by 2002:a17:90b:92:: with SMTP id bb18mr2454366pjb.133.1638411208204;
+        Wed, 01 Dec 2021 18:13:28 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id j7sm1152501pfc.74.2021.12.01.18.13.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 18:13:27 -0800 (PST)
+Date:   Thu, 2 Dec 2021 02:13:24 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ajay Garg <ajaygargnsit@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v2 8/8] KVM: x86: Add checks for reserved-to-zero Hyper-V
+ hypercall fields
+Message-ID: <YagrxIknF9DX8l8L@google.com>
+References: <20211030000800.3065132-1-seanjc@google.com>
+ <20211030000800.3065132-9-seanjc@google.com>
+ <87v91cjhch.fsf@vitty.brq.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87v91cjhch.fsf@vitty.brq.redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 01, 2021, Vitaly Kuznetsov wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> 
+> > Add checks for the three fields in Hyper-V's hypercall params that must
+> > be zero.  Per the TLFS, HV_STATUS_INVALID_HYPERCALL_INPUT is returned if
+> > "A reserved bit in the specified hypercall input value is non-zero."
+> >
+> > Note, the TLFS has an off-by-one bug for the last reserved field, which
+> > it defines as being bits 64:60.  The same section states "The input field
+> > 64-bit value called a hypercall input value.", i.e. bit 64 doesn't
+> > exist.
+> 
+> This version are you looking at? I can't see this issue in 6.0b
 
-Linus,
+It's the web-based documentation, the 6.0b PDF indeed does not have the same bug.
 
-Three tracing fixes:
-
-- Allow compares of strings when using signed and unsigned characters
-
-- Fix kmemleak false positive for histogram entries.
-
-- Handle negative numbers for user defined kretprobe data sizes
-
-
-Please pull the latest trace-v5.16-rc3 tree, which can be found at:
-
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
-trace-v5.16-rc3
-
-Tag SHA1: a9213711ec6377e609967c5752305298b3c9ce60
-Head SHA1: 6bbfa44116689469267f1a6e3d233b52114139d2
-
-
-Chen Jun (1):
-      tracing: Fix a kmemleak false positive in tracing_map
-
-Masami Hiramatsu (1):
-      kprobes: Limit max data_size of the kretprobe instances
-
-Steven Rostedt (VMware) (1):
-      tracing/histograms: String compares should not care about signed values
-
-----
- include/linux/kprobes.h          | 2 ++
- kernel/kprobes.c                 | 3 +++
- kernel/trace/trace_events_hist.c | 2 +-
- kernel/trace/tracing_map.c       | 3 +++
- 4 files changed, 9 insertions(+), 1 deletion(-)
----------------------------
-diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index e974caf39d3e..8c8f7a4d93af 100644
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -153,6 +153,8 @@ struct kretprobe {
- 	struct kretprobe_holder *rph;
- };
- 
-+#define KRETPROBE_MAX_DATA_SIZE	4096
-+
- struct kretprobe_instance {
- 	union {
- 		struct freelist_node freelist;
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index e9db0c810554..21eccc961bba 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -2086,6 +2086,9 @@ int register_kretprobe(struct kretprobe *rp)
- 		}
- 	}
- 
-+	if (rp->data_size > KRETPROBE_MAX_DATA_SIZE)
-+		return -E2BIG;
-+
- 	rp->kp.pre_handler = pre_handler_kretprobe;
- 	rp->kp.post_handler = NULL;
- 
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index 9555b8e1d1e3..319f9c8ca7e7 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -3757,7 +3757,7 @@ static int check_synth_field(struct synth_event *event,
- 
- 	if (strcmp(field->type, hist_field->type) != 0) {
- 		if (field->size != hist_field->size ||
--		    field->is_signed != hist_field->is_signed)
-+		    (!field->is_string && field->is_signed != hist_field->is_signed))
- 			return -EINVAL;
- 	}
- 
-diff --git a/kernel/trace/tracing_map.c b/kernel/trace/tracing_map.c
-index 39bb56d2dcbe..9628b5571846 100644
---- a/kernel/trace/tracing_map.c
-+++ b/kernel/trace/tracing_map.c
-@@ -15,6 +15,7 @@
- #include <linux/jhash.h>
- #include <linux/slab.h>
- #include <linux/sort.h>
-+#include <linux/kmemleak.h>
- 
- #include "tracing_map.h"
- #include "trace.h"
-@@ -307,6 +308,7 @@ static void tracing_map_array_free(struct tracing_map_array *a)
- 	for (i = 0; i < a->n_pages; i++) {
- 		if (!a->pages[i])
- 			break;
-+		kmemleak_free(a->pages[i]);
- 		free_page((unsigned long)a->pages[i]);
- 	}
- 
-@@ -342,6 +344,7 @@ static struct tracing_map_array *tracing_map_array_alloc(unsigned int n_elts,
- 		a->pages[i] = (void *)get_zeroed_page(GFP_KERNEL);
- 		if (!a->pages[i])
- 			goto free;
-+		kmemleak_alloc(a->pages[i], PAGE_SIZE, 1, GFP_KERNEL);
- 	}
-  out:
- 	return a;
+https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/hypercall-interface#hypercall-inputs

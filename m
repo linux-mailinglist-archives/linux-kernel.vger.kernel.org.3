@@ -2,134 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E02F466553
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 15:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9BDA466556
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 15:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358583AbhLBOiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 09:38:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358563AbhLBOiH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 09:38:07 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A45C061758
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 06:34:45 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id o29so23161201wms.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 06:34:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RkskQLTh7iYk4V4TDl2rLiyYVggOpBc/lET+HjLMIZY=;
-        b=lOsaIOUC/wmPS6LA/B8Rg4xnpVAVAwOzB41PeHNg/1QUJgFg3M6e+aEDil58qr7xTg
-         UugI/nYZlyyO1S5Ehou7IVJM1pt8J401A7669aTQXxgrNHS3SoKkZrPdm7rjVDHGgRlC
-         00woP3PDgV3JxpYgYvHct6B/vj7rBGj/ASJtCt4Lya4htY4PeGjHBwRJpJmqW7A0H3LN
-         6uH8cIuTNrhuYvgfM4dHP4rwQCD1YKHMqiTH1rHip1sQ+EBHW6oOV9H8RNzUKneOwPKJ
-         oz8FH9SpMUTIdvfu8MCtLR9ZrJ6ace55qCGOA/T9aG2mYaNaeuiL3rJGJnasUlGw9Bus
-         q/+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RkskQLTh7iYk4V4TDl2rLiyYVggOpBc/lET+HjLMIZY=;
-        b=rEZihoElMxRM3Qd9uANIcz7Mpqypj3kx1rqtQvmEWZDYgDzO4HHoppePZTq1TjfXfb
-         fYfR68SYicPbMU7kCokK7h7W0vCHDOt330d0Q6LvQxWEyx4loHtfU1lSDwiSo0oxwucy
-         IjrrsCCve/3yHVGJgJb6pJIODHNXemfu7B52oYTzEE0abrxMip6zWQB3KY5FGUBLOTN+
-         2Lsb+nXFZw+1EjKbKfm2XvKatzlkQEfLN2ufUtb7YhTecBXlHt1V4BWw3AXdRabHgeIz
-         KU+EG/528uCH7GHvNs5xaRkBwewzcT8aF0lRz+/Ez1VnjG4qSuII5uXRxjLOm0WVYHLG
-         rAZQ==
-X-Gm-Message-State: AOAM533Ta+xKJjiRUEQIZkMRhdWd6SIyjlwHWDOGf9feCA1w730fA2PU
-        brKaatLJCvjKS7/zGuzcIMhDSg==
-X-Google-Smtp-Source: ABdhPJxuPkJBQ2U8Td07UFAjUCcbLfGh1y44Q8X1kQjszdBwllQNEU097MF5MxfFTOkIx1Wx8lWJ8g==
-X-Received: by 2002:a1c:540c:: with SMTP id i12mr6869018wmb.33.1638455683801;
-        Thu, 02 Dec 2021 06:34:43 -0800 (PST)
-Received: from localhost.localdomain ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id s63sm2575048wme.22.2021.12.02.06.34.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 06:34:43 -0800 (PST)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH 1/1] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset or zero
-Date:   Thu,  2 Dec 2021 14:34:37 +0000
-Message-Id: <20211202143437.1411410-1-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.34.0.384.gca35af8252-goog
+        id S1358592AbhLBOi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 09:38:27 -0500
+Received: from mga03.intel.com ([134.134.136.65]:6732 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1358563AbhLBOi0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 09:38:26 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="236657710"
+X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
+   d="scan'208";a="236657710"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 06:35:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
+   d="scan'208";a="459675001"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.76]) ([10.237.72.76])
+  by orsmga003.jf.intel.com with ESMTP; 02 Dec 2021 06:35:01 -0800
+Subject: Re: [PATCH v2] mmc: sdhci-tegra: Fix switch to HS400ES mode
+To:     Prathamesh Shete <pshete@nvidia.com>, ulf.hansson@linaro.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     anrao@nvidia.com, smangipudi@nvidia.com
+References: <0a8368f9-8ca2-f01b-2f9e-0c91e3b946f5@intel.com>
+ <20211202134948.18448-1-pshete@nvidia.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <bf629e1b-c61d-37e7-8802-b6d778f89c21@intel.com>
+Date:   Thu, 2 Dec 2021 16:35:00 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211202134948.18448-1-pshete@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, due to the sequential use of min_t() and clamp_t() macros,
-in cdc_ncm_check_tx_max(), if dwNtbOutMaxSize is not set, the logic
-sets tx_max to 0.  This is then used to allocate the data area of the
-SKB requested later in cdc_ncm_fill_tx_frame().
+On 02/12/2021 15:49, Prathamesh Shete wrote:
+> When CMD13 is sent after switching to HS400ES mode, the bus
+> is operating at either MMC_HIGH_26_MAX_DTR or MMC_HIGH_52_MAX_DTR.
+> To meet Tegra SDHCI requirement at HS400ES mode, force SDHCI
+> interface clock to MMC_HS200_MAX_DTR (200 MHz) so that host
+> controller CAR clock and the interface clock are rate matched.
+> 
+> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+> ---
+>  drivers/mmc/host/sdhci-tegra.c | 43 ++++++++++++++++++++--------------
+>  1 file changed, 26 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
+> index 387ce9cdbd7c..ca261cce9b37 100644
+> --- a/drivers/mmc/host/sdhci-tegra.c
+> +++ b/drivers/mmc/host/sdhci-tegra.c
+> @@ -354,23 +354,6 @@ static void tegra_sdhci_set_tap(struct sdhci_host *host, unsigned int tap)
+>  	}
+>  }
+>  
+> -static void tegra_sdhci_hs400_enhanced_strobe(struct mmc_host *mmc,
+> -					      struct mmc_ios *ios)
+> -{
+> -	struct sdhci_host *host = mmc_priv(mmc);
+> -	u32 val;
+> -
+> -	val = sdhci_readl(host, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
+> -
+> -	if (ios->enhanced_strobe)
+> -		val |= SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
+> -	else
+> -		val &= ~SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
+> -
+> -	sdhci_writel(host, val, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
+> -
+> -}
+> -
+>  static void tegra_sdhci_reset(struct sdhci_host *host, u8 mask)
+>  {
+>  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+> @@ -791,6 +774,32 @@ static void tegra_sdhci_set_clock(struct sdhci_host *host, unsigned int clock)
+>  	}
+>  }
+>  
+> +static void tegra_sdhci_hs400_enhanced_strobe(struct mmc_host *mmc,
+> +					      struct mmc_ios *ios)
+> +{
+> +	struct sdhci_host *host = mmc_priv(mmc);
+> +	u32 val;
+> +
+> +	val = sdhci_readl(host, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
+> +
+> +	if (ios->enhanced_strobe)
+> +		val |= SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
+> +	else
+> +		val &= ~SDHCI_TEGRA_SYS_SW_CTRL_ENHANCED_STROBE;
+> +
+> +	sdhci_writel(host, val, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
+> +
+> +	/*
+> +	 * When CMD13 is sent from mmc_select_hs400es() after
+> +	 * switching to HS400ES mode, the bus is operating at
+> +	 * either MMC_HIGH_26_MAX_DTR or MMC_HIGH_52_MAX_DTR.
+> +	 * To meet Tegra SDHCI requirement at HS400ES mode, force SDHCI
+> +	 * interface clock to MMC_HS200_MAX_DTR (200 MHz) so that host
+> +	 * controller CAR clock and the interface clock are rate matched.
 
-This does not cause an issue presently because when memory is
-allocated during initialisation phase of SKB creation, more memory
-(512b) is allocated than is required for the SKB headers alone (320b),
-leaving some space (512b - 320b = 192b) for CDC data (172b).
+Still doesn't explain why you want to set MMC_HS200_MAX_DTR when
+ios->enhanced_strobe is false e.g. mmc_set_initial_state()
 
-However, if more elements (for example 3 x u64 = [24b]) were added to
-one of the SKB header structs, say 'struct skb_shared_info',
-increasing its original size (320b [320b aligned]) to something larger
-(344b [384b aligned]), then suddenly the CDC data (172b) no longer
-fits in the spare SKB data area (512b - 384b = 128b).
-
-Consequently the SKB bounds checking semantics fails and panics:
-
-  skbuff: skb_over_panic: text:ffffffff830a5b5f len:184 put:172   \
-     head:ffff888119227c00 data:ffff888119227c00 tail:0xb8 end:0x80 dev:<NULL>
-
-  ------------[ cut here ]------------
-  kernel BUG at net/core/skbuff.c:110!
-  RIP: 0010:skb_panic+0x14f/0x160 net/core/skbuff.c:106
-  <snip>
-  Call Trace:
-   <IRQ>
-   skb_over_panic+0x2c/0x30 net/core/skbuff.c:115
-   skb_put+0x205/0x210 net/core/skbuff.c:1877
-   skb_put_zero include/linux/skbuff.h:2270 [inline]
-   cdc_ncm_ndp16 drivers/net/usb/cdc_ncm.c:1116 [inline]
-   cdc_ncm_fill_tx_frame+0x127f/0x3d50 drivers/net/usb/cdc_ncm.c:1293
-   cdc_ncm_tx_fixup+0x98/0xf0 drivers/net/usb/cdc_ncm.c:1514
-
-By overriding the max value with the default CDC_NCM_NTB_MAX_SIZE_TX
-when not offered through the system provided params, we ensure enough
-data space is allocated to handle the CDC data, meaning no crash will
-occur.
-
-Cc: stable@vger.kernel.org
-Cc: Oliver Neukum <oliver@neukum.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: linux-usb@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Fixes: 289507d3364f9 ("net: cdc_ncm: use sysfs for rx/tx aggregation tuning")
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/net/usb/cdc_ncm.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-index 24753a4da7e60..e303b522efb50 100644
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -181,6 +181,8 @@ static u32 cdc_ncm_check_tx_max(struct usbnet *dev, u32 new_tx)
- 		min = ctx->max_datagram_size + ctx->max_ndp_size + sizeof(struct usb_cdc_ncm_nth32);
- 
- 	max = min_t(u32, CDC_NCM_NTB_MAX_SIZE_TX, le32_to_cpu(ctx->ncm_parm.dwNtbOutMaxSize));
-+	if (max == 0)
-+		max = CDC_NCM_NTB_MAX_SIZE_TX; /* dwNtbOutMaxSize not set */
- 
- 	/* some devices set dwNtbOutMaxSize too low for the above default */
- 	min = min(min, max);
--- 
-2.34.0.384.gca35af8252-goog
+> +	 */
+> +	tegra_sdhci_set_clock(host, MMC_HS200_MAX_DTR);
+> +}
+> +
+>  static unsigned int tegra_sdhci_get_max_clock(struct sdhci_host *host)
+>  {
+>  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+> 
 

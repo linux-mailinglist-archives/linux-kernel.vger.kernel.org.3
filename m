@@ -2,76 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5E5465E51
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 07:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26291465E50
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 07:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345295AbhLBGmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 01:42:14 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:55571 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345329AbhLBGl6 (ORCPT
+        id S1345293AbhLBGlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 01:41:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238610AbhLBGln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 01:41:58 -0500
+        Thu, 2 Dec 2021 01:41:43 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B29C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 22:38:18 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id m12so14714230ljj.6
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 22:38:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1638427117; x=1669963117;
-  h=from:to:cc:subject:date:message-id;
-  bh=3g+eUVzpsgrN7jH+hXE6d4OUhX4I1HGrua57aZsyv40=;
-  b=AiinRTEwOGXL4q3gWfmI+K3LdpojXP1YjijcEI7WlsmgRnzSLWdsvO8u
-   HwfrB/N8KF9bbqeZK9p5JH6BP5WVPZ+rJtBLJR6tMHHmcVrqO4+xNWwhk
-   zChEpoMzQpQrU2fdhIqx4Vj1owi31nNNBvjG0gFm1BmHGtUgDpwaOZYK6
-   I=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 01 Dec 2021 22:38:35 -0800
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 01 Dec 2021 22:38:34 -0800
-X-QCInternal: smtphost
-Received: from c-sbhanu-linux.qualcomm.com ([10.242.50.201])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 02 Dec 2021 12:08:16 +0530
-Received: by c-sbhanu-linux.qualcomm.com (Postfix, from userid 2344807)
-        id 8FBEF48F7; Thu,  2 Dec 2021 12:08:15 +0530 (IST)
-From:   Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-To:     tudor.ambarus@microchip.com, michael@walle.cc, p.yadav@ti.com,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     stummala@codeaurora.org, vbadigan@codeaurora.org,
-        quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
-        sartgarg@codeaurora.org,
-        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-Subject: [PATCH V2] mtd: spi-nor: winbond: Add support for winbond chip
-Date:   Thu,  2 Dec 2021 12:08:12 +0530
-Message-Id: <1638427092-9139-1-git-send-email-quic_c_sbhanu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=7Z4bIWUJcNwasnOvZT//wASf4/xDxe1Cc4BxfIfuhGs=;
+        b=IIDpSl63efnOXKar6bWTArDp7JpH231HBcoGNC1Md2h4Kp7JTJm/W5WljjjLa1SzLX
+         3klXAQI0XQNYR8fRW4XZtd7IVP/tK9tFK3h8sCkQOKcYoTMKYgb7hxO6qwy6/Uqg3c+6
+         UnAHacyeno+zbLoft7WCCe8CJmhJAJ+RRPE2eoKhHJ617FsEyKLakGskcP2RRhGPoxHg
+         vhbHhX0dpXRGXBykSKi01THmOTMOOrTZwPUOn8zQQbcm0/F7NBw1Y1e+ErbtkI9fQfAF
+         6CXqXT79XPotElLRW86jwVLEyupngRKr1jW39uZLgb9X9uXS3NGEylrhYKuEYfn8DIBb
+         O6aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=7Z4bIWUJcNwasnOvZT//wASf4/xDxe1Cc4BxfIfuhGs=;
+        b=0EtJnOmQEk7GTZgO8GEA9si1cjE+xgFnRMwOJLASh+kHg6mn1VJTsLovQAwqtEnRSM
+         xRhHZ3GZILztd1st+QxAdCFIKllnX4YhyigqPz9mCdxHte+o/8M1LI9Wl/xfmIZ0BwyU
+         6GHsTgI4Sahsc0lKnqXMJnyUdeZD/v0F32F5oKwnpclay56L03//APCStOVncKByKMln
+         xVLeLiNjPrfx20cwYQG+yAhpSuHTaLipvOSbiJH3fZ2hB/IIVvC0W9vlKiY8qf5gwDeN
+         9O9mH+yWD2DSIiLm2EY+L0eHgkLn0MjXgxECXAnevrdlNRaXqoO14pR00U8tgJYyjo8g
+         xh2Q==
+X-Gm-Message-State: AOAM533jPu1+Ka5BNGXpKThlOQs4Zbpb9wU6HF7vr6t+HvB7MlZftpmN
+        GJtqXyzge7Cue1BX0eR5JX2FYyYHXGtoPsGIxYo=
+X-Google-Smtp-Source: ABdhPJzKgWEzVnelfIb9Alry9aRSGWLt8OiGzSdF7dgK4XqbjdZaPTVMo4QiiNkW7+PAqkMwj8lUIiSlcrYRInKRXZ4=
+X-Received: by 2002:a2e:bc21:: with SMTP id b33mr10493973ljf.497.1638427097074;
+ Wed, 01 Dec 2021 22:38:17 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:ab3:7f47:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 22:38:16 -0800 (PST)
+Reply-To: mohammedshamekh24@gmail.com
+From:   Mr mohammed shamekh <nasserkhalilaljaidah90@gmail.com>
+Date:   Wed, 1 Dec 2021 22:38:16 -0800
+Message-ID: <CAERPTfEDUGrG6a+rK0ghU-=2f0r5UEpHUamfFNqp=Zix+ZwhiQ@mail.gmail.com>
+Subject: THE AMOUNT IS 27.5 MILLIOMS USD
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for winbond W25Q512NW-IM chip.
-
-Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
----
-Changes since V1:
-	Added space before name of the flash part as suggested by Doug.
----
- drivers/mtd/spi-nor/winbond.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
-index 96573f6..44f19f2 100644
---- a/drivers/mtd/spi-nor/winbond.c
-+++ b/drivers/mtd/spi-nor/winbond.c
-@@ -100,6 +100,9 @@ static const struct flash_info winbond_parts[] = {
- 			     SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
- 	{ "w25m512jv", INFO(0xef7119, 0, 64 * 1024, 1024,
- 			    SECT_4K | SPI_NOR_QUAD_READ | SPI_NOR_DUAL_READ) },
-+	{ "w25q512nw", INFO(0xef8020, 0, 64 * 1024, 1024,
-+			   SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ |
-+			   SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB) },
- 	{ "w25q512jvq", INFO(0xef4020, 0, 64 * 1024, 1024,
- 			     SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
- };
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
-
+RGVhcsKgRnJpZW5kLA0KDQpHcmVldGluZ3MuDQoNCkhvd8KgYXJlwqB5b3XCoGRvaW5nwqB0b2Rh
+ecKgacKgaG9wZcKgZmluZT8NCg0KScKgY2FtZcKgYWNyb3NzwqB5b3VywqBlLW1haWzCoGNvbnRh
+Y3TCoHByaW9ywqBhwqBwcml2YXRlwqBzZWFyY2jCoHdoaWxlwqBpbsKgbmVlZA0Kb2bCoHlvdXLC
+oGFzc2lzdGFuY2UuwqBNecKgbmFtZcKgIE1yICBtb2hhbW1lZCAgIHNoYW1la2ggIOKAmcKgScKg
+d29ya8Kgd2l0aMKgdGhlDQpkZXBhcnRtZW50wqBvZsKgQXVkaXTCoGFuZMKgYWNjb3VudGluZ8Kg
+bWFuYWdlcsKgaGVyZcKgaW7CoFVCQcKgQmFua8Kgb2bCoEFmcmljYSwNClRoZXJlwqBpc8KgdGhp
+c8KgZnVuZMKgdGhhdMKgd2FzwqBrZWVwwqBpbsKgbXnCoGN1c3RvZHnCoHllYXJzwqBhZ2/CoGFu
+ZMKgScKgbmVlZA0KeW91csKgYXNzaXN0YW5jZcKgZm9ywqB0aGXCoHRyYW5zZmVycmluZ8Kgb2bC
+oHRoaXPCoGZ1bmTCoHRvwqB5b3VywqBiYW5rwqBhY2NvdW50DQpmb3LCoGJvdGjCoG9mwqB1c8Kg
+YmVuZWZpdMKgZm9ywqBsaWZlwqB0aW1lwqBpbnZlc3RtZW50wqBhbmTCoHRoZcKgYW1vdW50wqBp
+c8KgKFVTDQokMjcsNTAwLsKgTWlsbGlvbsKgRG9sbGFycykuDQoNCknCoGhhdmXCoGV2ZXJ5wqBp
+bnF1aXJ5wqBkZXRhaWxzwqB0b8KgbWFrZcKgdGhlwqBiYW5rwqBiZWxpZXZlwqB5b3XCoGFuZMKg
+cmVsZWFzZQ0KdGhlwqBmdW5kwqB0b8KgeW91csKgYmFua8KgYWNjb3VudMKgaW7CoHdpdGhpbsKg
+N8KgYmFua2luZ8Kgd29ya2luZ8KgZGF5c8Kgd2l0aA0KeW91csKgZnVsbMKgY28tb3BlcmF0aW9u
+wqB3aXRowqBtZcKgYWZ0ZXLCoHN1Y2Nlc3PCoE5vdGXCoDUwJcKgZm9ywqB5b3XCoHdoaWxlDQo1
+MCXCoGZvcsKgbWXCoGFmdGVywqBzdWNjZXNzwqBvZsKgdGhlwqB0cmFuc2ZlcsKgb2bCoHRoZcKg
+ZnVuZHPCoHRvwqB5b3VywqBiYW5rDQphY2NvdW50wqBva2F5Lg0KDQpXQUlUSU5HwqBUT8KgSEVB
+UsKgRlJPTcKgWU9VLg0KVEhBTktTLg0KDQogTXIgIG1vaGFtbWVkICAgc2hhbWVraCAsDQo=

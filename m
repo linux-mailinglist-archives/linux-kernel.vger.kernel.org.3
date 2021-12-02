@@ -2,94 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E34B7466B6F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 22:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D496B466B72
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 22:13:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359733AbhLBVPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 16:15:24 -0500
-Received: from mxout02.lancloud.ru ([45.84.86.82]:49130 "EHLO
-        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358668AbhLBVPX (ORCPT
+        id S1376911AbhLBVQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 16:16:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376289AbhLBVQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 16:15:23 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru AA6AA207D577
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH] platform: finally disallow IRQ0 in platform_get_irq() and
- its ilk
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru>
- <YaEJUiZRhkGRZqpt@kroah.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <f08072e8-df0a-95b4-0937-47e5763b40dc@omp.ru>
-Date:   Fri, 3 Dec 2021 00:11:57 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 2 Dec 2021 16:16:31 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3603C06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 13:13:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fqRoRE2K7Q81+lr5ELTYwEJc4onjPMD/PfhGxE8TtFI=; b=jTgV2q+Re04Omh/YVAepuvzBNT
+        m1KGHUkFHQezlGvw/oyBq8mie8eQ0ZC4mRjMXNviBGs568buxQ5uXg9um8HSUHwt/Ne1wKmO1W337
+        yoxZlcU1TMzrqXdRbsCTxgt09Tjt9hJpKpsJXW3eHV136AdsZd38f6f5Ds0R+22AD9XgM7S7Gf6XI
+        qVIRVG3pAJ30D58NByuUSDJDKNXI9+ky+F4WNePFLQjvw71lbrKTUiA4lOD3rzHYD8PQPJZuAGnru
+        S0o3qglT4Zjg4LpPqdeodZsjITBJog6wZAC+dCV7VyO/PScrCTdC8CPIa1NMsxgE3hL/k1ykOwIr9
+        KMsH0lxg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mstNt-005e3t-DA; Thu, 02 Dec 2021 21:12:54 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id ABC469810D4; Thu,  2 Dec 2021 22:12:53 +0100 (CET)
+Date:   Thu, 2 Dec 2021 22:12:53 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 00/11] lockdep: Unbreak lockdep's selftest work on
+ PREEMPT_RT.
+Message-ID: <20211202211253.GC16608@worktop.programming.kicks-ass.net>
+References: <20211129174654.668506-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <YaEJUiZRhkGRZqpt@kroah.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129174654.668506-1-bigeasy@linutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Mon, Nov 29, 2021 at 06:46:43PM +0100, Sebastian Andrzej Siewior wrote:
+> This mini-series unbreaks lockdep's selftest on PREEMPT_RT.
+> The last two are needed to compile the rtmutex based spinlock
+> implementation which is used on PREEMPT_RT.
 
-On 11/26/21 7:20 PM, Greg Kroah-Hartman wrote:
-
->> The commit a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is
->> invalid") only calls WARN() when IRQ0 is about to be returned, however
->> using IRQ0 is considered invalid (according to Linus) outside the arch/
->> code where it's used by the i8253 drivers. Many driver subsystems treat
->> 0 specially (e.g. as an indication of the polling mode by libata), so
->> the users of platform_get_irq[_byname]() in them would have to filter
->> out IRQ0 explicitly and this (quite obviously) doesn't scale...
->> Let's finally get this straight and return -EINVAL instead of IRQ0!
->>
->> Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is invalid")
->> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->>
->> ---
->> The patch is against the 'driver-core-linus' branch of Greg Kroah-Hartman's
->> 'driver-core.git' repo.
->>
->>  drivers/base/platform.c |    6 ++++--
->>  1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> Index: driver-core/drivers/base/platform.c
->> ===================================================================
->> --- driver-core.orig/drivers/base/platform.c
->> +++ driver-core/drivers/base/platform.c
->> @@ -231,7 +231,8 @@ int platform_get_irq_optional(struct pla
->>  out_not_found:
->>  	ret = -ENXIO;
->>  out:
->> -	WARN(ret == 0, "0 is an invalid IRQ number\n");
->> +	if (WARN(!ret, "0 is an invalid IRQ number\n"))
->> +		return -EINVAL;
-> 
-> You need to get approval from the interrrupt developers for this type of
-> change, as it is a change and might break existing platforms, right?
-
-   Well, that's always possible... :-)
-
-   I do remember we had issues with the serial driver on the Alchemy MIPS SoCs
-back in the 2.6.1x time frame: UART0 used IRQ0 there and the serial driver treated
-0 as an indication of the polling mode, IIRC... Now Alchemies have the SoC IRQ0
-mapped to the Linux IRQ8, so this is not a problem anymore (the 1st 8 IRQs are
-mapped to the MIPS CPU IRQs and IRQ0 isn't even used)...
-
-> thanks,
-> 
-> greg k-h
-
-MBR, Sergey
+Thanks! (fixed up that first thiny), lemme feed it to the robots.

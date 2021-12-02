@@ -2,139 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E5F46694E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CC4466953
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376439AbhLBRol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 12:44:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
+        id S1355619AbhLBRrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 12:47:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376415AbhLBRok (ORCPT
+        with ESMTP id S1347965AbhLBRrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 12:44:40 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389EAC061757
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 09:41:17 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id p8so1183727ljo.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 09:41:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Sel9QLaZVY4N+mTLlgeCKeQqHTygfT86F1uxh//ubJk=;
-        b=HBLmPCV+9oCwHZNYcNxG43IdBP8nmESwXT5WI7ZvozEylY0SxYxbx3yvK8hRsnW9oX
-         WCoHepnTCI6wZD6uClG5zlGVdL7PxfteS4avkFUtE47j4XEgz3TYQFKsSSBSVcW+sLe8
-         TmPjrny5x9F6q2IbjeZXHzOnzz9jkjPuJkxA82whsbyBV4KhQW8cqDzgXVHqwhzz9iCE
-         +/kGoTXMYMk/O/awyc60UzDdOMAeDrs6VEVaJyM7+JFUDco7xMUBt+7c7A51doDv2Irj
-         sJQdPmtP7ubIW3L4+bSqS39T+DSuoGJvo3b4ZV4ZdbdScOj+bycogtO4gFABWdDW9rky
-         xO/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Sel9QLaZVY4N+mTLlgeCKeQqHTygfT86F1uxh//ubJk=;
-        b=gmOGtNfb6lGJqOty9yACjbjuEqnYblgJeRMz5JiFC0QdCN7zBa9w7xThSG24H/pHDA
-         e8TZxoXdS8XVT5+Zy1TOR5wVzQhDncvlgdiFb8rd9QHhriQmm7Cj81fN1F3nKp9uZDfB
-         TRwrFnQNqq4jqNvWxC8FCYbVSryQODC7xVhEnfj6RkUyu4k6X6AnzvAV4Kc6WVnwUx5f
-         Jmh0jiJJuKcB3alNVvprRxCiVRcexkB4uxHBLOycsAAaAYkI6iDUfbqAPm4Br31WGFoZ
-         /dq8mcy887db0DiIIApeCtAJXBwXnfbvLbbf76l4IyB4ebVBJtD9n8piEnFRWFJxm7A2
-         fAVQ==
-X-Gm-Message-State: AOAM532ldu5CluWsOZETkqMp4X0oaldH2yQVRNMHow9Z3++DFR9kCGr5
-        M3GyNe1oFd6h7elTZtjGNKxYv4cEIy9Jmw1bZ8XRPQ==
-X-Google-Smtp-Source: ABdhPJxwsHniTL8HtWjxo0S47SHXwpQxqVedZCKIvQGSboEzg0cQOFPO30fWETeZK9KDiV3DDDoW9A9k9CWWDfdOAVQ=
-X-Received: by 2002:a05:651c:545:: with SMTP id q5mr12693560ljp.202.1638466875265;
- Thu, 02 Dec 2021 09:41:15 -0800 (PST)
+        Thu, 2 Dec 2021 12:47:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2648EC06174A;
+        Thu,  2 Dec 2021 09:43:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8B6BB823FB;
+        Thu,  2 Dec 2021 17:43:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 421BFC00446;
+        Thu,  2 Dec 2021 17:43:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638467030;
+        bh=Wvqr4QMgbo28VZ42PO+nadxc4Mne7hS7quuoqz8hLQ0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=TJ/suPL5zvfVulaERMDm+NFvtd0ok8UV2/0Tfli6lNEkk+SqJOCqzbs6WSce1U9r4
+         MWMtSUeLHsEmM3xyZKE9a58Rlb3r9YtEGXGMI4biKrOhmsscwh/tdOm4ZtOhpqoo1S
+         fp3LcFtur0YEh9MmVe5MioLXStoB0kGrf13lom4GIYfaXQclLva9xKTJw/Ib5jYjU3
+         +MfVND9jQcDxtefB7l+vdls/ikPzkq3YtcWRsdGttLlkAvpNpIS3QSmx2QbWs1dynB
+         qiy/jYhGI6fnU0R2K0MA5H3a9LJBn1C6+SqDxXGu3qNNR7V2+Bw/Hlg/gQY0ZTmUkv
+         qewE1tnAmWDBQ==
+Date:   Thu, 2 Dec 2021 11:43:48 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     David Airlie <airlied@linux.ie>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Vaibhav Gupta <vaibhav.varodek@gmail.com>,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2 1/3] amd64-agp: convert to generic power management
+Message-ID: <20211202174348.GA2899481@bhelgaas>
 MIME-Version: 1.0
-References: <20211202150614.22440-1-mgorman@techsingularity.net>
- <CALvZod6am_QrZCSf_de6eyzbOtKnWuL1CQZVn+srQVt20cnpFg@mail.gmail.com> <20211202165220.GZ3366@techsingularity.net>
-In-Reply-To: <20211202165220.GZ3366@techsingularity.net>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 2 Dec 2021 09:41:04 -0800
-Message-ID: <CALvZod5tiDgEz4JwxMHQvkzLxYeV0OtNGGsX5ZdT5mTQdUdUUA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/1] mm: vmscan: Reduce throttling due to a failure to
- make progress
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Alexey Avramov <hakavlad@inbox.lv>,
-        Rik van Riel <riel@surriel.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211201025419.2797624-2-helgaas@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 8:52 AM Mel Gorman <mgorman@techsingularity.net> wrote:
->
-> On Thu, Dec 02, 2021 at 08:30:51AM -0800, Shakeel Butt wrote:
-> > Hi Mel,
-> >
-> > On Thu, Dec 2, 2021 at 7:07 AM Mel Gorman <mgorman@techsingularity.net> wrote:
-> > >
-> > > Mike Galbraith, Alexey Avramov and Darrick Wong all reported similar
-> > > problems due to reclaim throttling for excessive lengths of time.
-> > > In Alexey's case, a memory hog that should go OOM quickly stalls for
-> > > several minutes before stalling. In Mike and Darrick's cases, a small
-> > > memcg environment stalled excessively even though the system had enough
-> > > memory overall.
-> > >
-> > > Commit 69392a403f49 ("mm/vmscan: throttle reclaim when no progress is being
-> > > made") introduced the problem although commit a19594ca4a8b ("mm/vmscan:
-> > > increase the timeout if page reclaim is not making progress") made it
-> > > worse. Systems at or near an OOM state that cannot be recovered must
-> > > reach OOM quickly and memcg should kill tasks if a memcg is near OOM.
-> > >
-> >
-> > Is there a reason we can't simply revert 69392a403f49 instead of adding
-> > more code/heuristics? Looking more into 69392a403f49, I don't think the
-> > code and commit message are in sync.
-> >
-> > For the memcg reclaim, instead of just removing congestion_wait or
-> > replacing it with schedule_timeout in mem_cgroup_force_empty(), why
-> > change the behavior of all memcg reclaim. Also this patch effectively
-> > reverts that behavior of 69392a403f49.
-> >
->
-> It doesn't fully revert it but I did consider reverting it. The reason
-> why I preserved it because the intent originally was to throttle somewhat
-> when progress is not being made to avoid a premature OOM and I wanted to
-> preserve that charactersistic. Right now, this is the least harmful way
-> of doing it.
+[cc->to: Rafael: help :)]
 
-If I understand correctly, the original intent of 69392a403f49 which
-you want to preserve is "avoid premature OOMs when reclaim is not
-making progress". Were there any complaints or bug reports on these
-premature OOMs?
+On Tue, Nov 30, 2021 at 08:54:17PM -0600, Bjorn Helgaas wrote:
+> From: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+> 
+> Convert amd64-agp from legacy PCI power management to the generic power
+> management framework.
+> 
+> Previously, amd64-agp used legacy PCI power management.
+> agp_amd64_suspend() looked like this:
+> 
+>   agp_amd64_suspend
+>     pci_save_state(pdev)
+>     pci_set_power_state(pdev, pci_choose_state(pdev, state))
+> 
+> With generic power management, these are both done by the PCI core in
+> pci_pm_runtime_suspend(), so drop agp_amd64_suspend() completely.
 
->
-> As more memcg, I removed the NOTHROTTLE because the primary reason why a
-> memcg might fail to make progress is excessive writeback and that should
-> still throttle. Completely failing to make progress in a memcg is most
-> likely due to a memcg-OOM.
->
-> > For direct reclaimers under global pressure, why is page allocator a bad
-> > place for stalling on no progress reclaim? IMHO the callers of the
-> > reclaim should decide what to do if reclaim is not making progress.
->
-> Because it's a layering violation and the caller has little direct control
-> over the reclaim retry logic. The page allocator has no visibility on
-> why reclaim failed only that it did fail.
->
+I think the *patch* is correct, but my explanation is wrong.  Would
+appreciate any corrections!
 
-Isn't it better that the reclaim returns why it is failing instead of
-littering the reclaim code with 'is this global reclaim', 'is this
-memcg reclaim', 'am I kswapd' which is also a layering violation. IMO
-this is the direction we should be going towards though not asking to
-do this now.
+Prior to this patch, agp_amd64_suspend() is a pci_driver.suspend()
+method and is called in this path:
 
-Regarding this patch and 69392a403f49, I am still confused on the main
-motivation behind 69392a403f49 to change the behavior of 'direct
-reclaimers from page allocator'.
+  pci_pm_suspend
+    pci_legacy_suspend
+      drv->suspend
 
-thanks,
-Shakeel
+After this patch, agp_amd64_suspend() is not implemented at all, and
+we do the pci_save_state() and pci_set_power_state() in PCI generic
+code.
+
+But I think those actually happen in pci_pm_suspend_noirq(), not in
+pci_pm_runtime_suspend(), i.e., in this path:
+
+  suspend_devices_and_enter
+    dpm_suspend_start(PMSG_SUSPEND)
+      dpm_suspend(PMSG_SUSPEND)
+        device_suspend
+          __device_suspend
+            callback = pm_op(dev->bus->pm, state)
+            dpm_run_callback(callback)
+              pci_pm_suspend                            # PCI bus method
+                dev->driver->pm->suspend
+                  agp_amd64_suspend                     # <-- no longer needed
+    suspend_enter
+      dpm_suspend_noirq(PMSG_SUSPEND)
+        dpm_noirq_suspend_devices(PMSG_SUSPEND)
+          device_suspend_noirq
+            __device_suspend_noirq
+              callback = pm_noirq_op(dev->bus->pm, state)
+              dpm_run_callback(callback)
+                pci_pm_suspend_noirq                    # PCI bus method
+                  pci_save_state                        # <-- now done here
+                  pci_prepare_to_sleep
+                    pci_set_power_state                 # <-- and here
+                  
+I got confused because I couldn't find the call chain leading to
+pci_pm_suspend_noirq().  pm_op() and dpm_run_callback() essentially
+break the call chain, which makes it a little hard to follow.
+
+> agp_amd64_resume() looked like this:
+> 
+>   agp_amd64_resume
+>     pci_set_power_state(pdev, PCI_D0)
+>     pci_restore_state(pdev)
+>     ...
+> 
+> With generic power management, the PCI parts are done by
+> pci_pm_runtime_resume(), so drop those from agp_amd64_resume().
+> 
+> [bhelgaas: commit log]
+> Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>  drivers/char/agp/amd64-agp.c | 24 ++++++------------------
+>  1 file changed, 6 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/char/agp/amd64-agp.c b/drivers/char/agp/amd64-agp.c
+> index b40edae32817..dc78a4fb879e 100644
+> --- a/drivers/char/agp/amd64-agp.c
+> +++ b/drivers/char/agp/amd64-agp.c
+> @@ -588,20 +588,11 @@ static void agp_amd64_remove(struct pci_dev *pdev)
+>  	agp_bridges_found--;
+>  }
+>  
+> -#ifdef CONFIG_PM
+> +#define agp_amd64_suspend NULL
+>  
+> -static int agp_amd64_suspend(struct pci_dev *pdev, pm_message_t state)
+> +static int __maybe_unused agp_amd64_resume(struct device *dev)
+>  {
+> -	pci_save_state(pdev);
+> -	pci_set_power_state(pdev, pci_choose_state(pdev, state));
+> -
+> -	return 0;
+> -}
+> -
+> -static int agp_amd64_resume(struct pci_dev *pdev)
+> -{
+> -	pci_set_power_state(pdev, PCI_D0);
+> -	pci_restore_state(pdev);
+> +	struct pci_dev *pdev = to_pci_dev(dev);
+>  
+>  	if (pdev->vendor == PCI_VENDOR_ID_NVIDIA)
+>  		nforce3_agp_init(pdev);
+> @@ -609,8 +600,6 @@ static int agp_amd64_resume(struct pci_dev *pdev)
+>  	return amd_8151_configure();
+>  }
+>  
+> -#endif /* CONFIG_PM */
+> -
+>  static const struct pci_device_id agp_amd64_pci_table[] = {
+>  	{
+>  	.class		= (PCI_CLASS_BRIDGE_HOST << 8),
+> @@ -738,15 +727,14 @@ static const struct pci_device_id agp_amd64_pci_promisc_table[] = {
+>  	{ }
+>  };
+>  
+> +static SIMPLE_DEV_PM_OPS(agp_amd64_pm_ops, agp_amd64_suspend, agp_amd64_resume);
+> +
+>  static struct pci_driver agp_amd64_pci_driver = {
+>  	.name		= "agpgart-amd64",
+>  	.id_table	= agp_amd64_pci_table,
+>  	.probe		= agp_amd64_probe,
+>  	.remove		= agp_amd64_remove,
+> -#ifdef CONFIG_PM
+> -	.suspend	= agp_amd64_suspend,
+> -	.resume		= agp_amd64_resume,
+> -#endif
+> +	.driver.pm  = &agp_amd64_pm_ops,
+>  };
+>  
+>  
+> -- 
+> 2.25.1
+> 

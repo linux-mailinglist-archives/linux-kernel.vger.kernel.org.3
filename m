@@ -2,77 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7772B465C4E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 03:48:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 532D6465C50
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 03:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355010AbhLBCwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 21:52:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbhLBCwF (ORCPT
+        id S1354832AbhLBC5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 21:57:30 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:28141 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241048AbhLBC52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 21:52:05 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE33C061574;
-        Wed,  1 Dec 2021 18:48:44 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638413322;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=g4d6LurEJQ3MhA4qJ7KFNVaMy6FBpSBp+mLvIbarqTw=;
-        b=fZjdc0DMllkN72PBeX8cSYDwKvyoN8JH1duMC3ZUgDDJQWJJELJwGt5fDxTS9d7twYumbq
-        XJMbc6MywWL2ReGIFakxrQRjURcEnD5iA29wWHE2fVsiRETaV3hDHnGU2yYjqclpm1Wbfk
-        FSZpzjuWugOHjGIaVP16q7vtA1kxOb3BXo+n2usmwxfHBHXLcG/K8dnH/iY/nSez8n/v3e
-        4F7yd9aMr+bRAb26BP4hoP+W59UPo8s70KTsoSUQlbPv1Nk9WmfsNDRaZZOoV8OIuApA8S
-        SSBrOy7mD2Fzqr0SJH/ic+zQxkjQNgXNhXLK6SaJuCcLCfbDeb/5Dzvk56yHwQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638413322;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=g4d6LurEJQ3MhA4qJ7KFNVaMy6FBpSBp+mLvIbarqTw=;
-        b=z+OqXDRjVcQlZCarqrTpINn6PAIHJbaXiDNWvfppsqape4f22NYcrwr/MuSY75Zg5/VM3N
-        AozKXxXxHuCwtkBg==
-To:     zhenwei pi <pizhenwei@bytedance.com>, pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
-        zhenwei pi <pizhenwei@bytedance.com>
-Subject: Re: [PATCH v2 2/2] KVM: x86: use x86_get_freq to get freq for kvmclock
-In-Reply-To: <20211201024650.88254-3-pizhenwei@bytedance.com>
-References: <20211201024650.88254-1-pizhenwei@bytedance.com>
- <20211201024650.88254-3-pizhenwei@bytedance.com>
-Date:   Thu, 02 Dec 2021 03:48:41 +0100
-Message-ID: <877dcn7md2.ffs@tglx>
+        Wed, 1 Dec 2021 21:57:28 -0500
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J4L7J5v4jz1DJlb;
+        Thu,  2 Dec 2021 10:51:08 +0800 (CST)
+Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 2 Dec 2021 10:53:51 +0800
+Received: from [10.174.177.232] (10.174.177.232) by
+ dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 2 Dec 2021 10:53:50 +0800
+Subject: Re: [PATCH -next] mm: delete oversized WARN_ON() in kvmalloc() calls
+To:     Bixuan Cui <cuibixuan@linux.alibaba.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <torvalds@linux-foundation.org>
+CC:     <leon@kernel.org>, <akpm@linux-foundation.org>, <w@1wt.eu>,
+        <keescook@chromium.org>
+References: <1638410784-48646-1-git-send-email-cuibixuan@linux.alibaba.com>
+From:   Tang Yizhou <tangyizhou@huawei.com>
+Message-ID: <74508663-8c2d-5c83-147f-adad7b71d93b@huawei.com>
+Date:   Thu, 2 Dec 2021 10:53:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.1.1
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <1638410784-48646-1-git-send-email-cuibixuan@linux.alibaba.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.232]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500006.china.huawei.com (7.185.36.76)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01 2021 at 10:46, zhenwei pi wrote:
-> If the host side supports APERF&MPERF feature, the guest side may get
-> mismatched frequency.
->
-> KVM uses x86_get_cpufreq_khz() to get the same frequency for guest side.
->
-> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
-> ---
->  arch/x86/kvm/x86.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 5a403d92833f..125ed3c8b21a 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -8305,10 +8305,8 @@ static void tsc_khz_changed(void *data)
->  
->  	if (data)
->  		khz = freq->new;
-> -	else if (!boot_cpu_has(X86_FEATURE_CONSTANT_TSC))
-> -		khz = cpufreq_quick_get(raw_smp_processor_id());
->  	if (!khz)
-> -		khz = tsc_khz;
-> +		khz = x86_get_cpufreq_khz(raw_smp_processor_id());
+On 2021/12/2 10:06, Bixuan Cui wrote:
+> Delete the WARN_ON() and return NULL directly for oversized parameter
+> in kvmalloc() calls.
+> Also add unlikely().
+> 
 
-my brain compiler tells me that this is broken.
+The commit message should explain why we need to do this. Thanks.
+
+> Fixes: 7661809d493b ("mm: don't allow oversized kvmalloc() calls")
+> Signed-off-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
+> ---
+> There are a lot of oversize warnings and patches about kvmalloc() calls
+> recently. Maybe these warnings are not very necessary.
+> 
+> https://lore.kernel.org/all/YadOjJXMTjP85MQx@unreal
+> 
+> The example of size check in __do_kmalloc_node():
+> __do_kmalloc_node(size_t size, gfp_t flags, int node, unsigned long caller)
+> {
+>         struct kmem_cache *cachep;
+>         void *ret;
+> 
+>         if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
+>                 return NULL;
+>         cachep = kmalloc_slab(size, flags);
+> 
+>  mm/util.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/util.c b/mm/util.c
+> index 7e433690..d26f19c 100644
+> --- a/mm/util.c
+> +++ b/mm/util.c
+> @@ -587,7 +587,7 @@ void *kvmalloc_node(size_t size, gfp_t flags, int node)
+>  		return ret;
+>  
+>  	/* Don't even allow crazy sizes */
+> -	if (WARN_ON_ONCE(size > INT_MAX))
+> +	if (unlikely(size > INT_MAX))
+>  		return NULL;
+>  
+>  	return __vmalloc_node(size, 1, flags, node,
+> 
+
+Tang

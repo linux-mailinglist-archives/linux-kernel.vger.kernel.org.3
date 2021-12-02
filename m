@@ -2,71 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C80466BB1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 22:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 212D9466BB5
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 22:36:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377112AbhLBVdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 16:33:52 -0500
-Received: from mga09.intel.com ([134.134.136.24]:41941 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1354021AbhLBVdr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 16:33:47 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="236656281"
-X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="236656281"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 13:30:24 -0800
-X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="513037641"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 13:30:21 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mstdm-001XeF-Dp;
-        Thu, 02 Dec 2021 23:29:18 +0200
-Date:   Thu, 2 Dec 2021 23:29:18 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH v1 1/1] net: dsa: vsc73xxx: Get rid of duplicate of_node
+        id S1377128AbhLBVjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 16:39:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348649AbhLBVjW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 16:39:22 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1A0C06174A;
+        Thu,  2 Dec 2021 13:35:59 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0658EB7E;
+        Thu,  2 Dec 2021 22:35:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1638480958;
+        bh=xM00oGjmavE1795OydjWevLFuRdGzmxd/C7idZ1aoRc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nUcfLsLTCZ7c7CJqbkMBnAviNMitAaguwgVicC6syOnC0D4mQD/caHdwDCjPbhPGW
+         TpXhorRT8PPiHte9GL1XWp7dJiP9F6W7xzZB7qbViYt0uyuWWO7si6LIjHLZFhW7k+
+         dqqzIqTPbFmWrTbSdvzxqao/uAl4Xi3jWCimTLn8=
+Date:   Thu, 2 Dec 2021 23:35:32 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v1 1/1] media: i2c: max9286: Get rid of duplicate of_node
  assignment
-Message-ID: <Yak6rnx9IOy6jLEm@smile.fi.intel.com>
-References: <20211202210029.77466-1-andriy.shevchenko@linux.intel.com>
- <20211202211259.qzdg3zs7lkjbykhn@skbuf>
+Message-ID: <Yak8JNAyUIwhh+nt@pendragon.ideasonboard.com>
+References: <20211202210335.78015-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211202211259.qzdg3zs7lkjbykhn@skbuf>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20211202210335.78015-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 11:12:59PM +0200, Vladimir Oltean wrote:
-> On Thu, Dec 02, 2021 at 11:00:29PM +0200, Andy Shevchenko wrote:
+Hi Andy,
 
-...
+Thank you for the patch.
 
-> I'm in To: and everyone else is in Cc? I don't even have the hardware.
-
-get_maintainer + Git heuristics. I see that you have 2 changes out of 9,
-maybe this what makes it triggered.
-
-> Adding Linus just in case, although the change seems correct.
+On Thu, Dec 02, 2021 at 11:03:35PM +0200, Andy Shevchenko wrote:
+> GPIO library does copy the of_node from the parent device of
+> the GPIO chip, there is no need to repeat this in the individual
+> drivers. Remove assignment here.
 > 
-> Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+> For the details one may look into the of_gpio_dev_init() implementation.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Thanks!
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+>  drivers/media/i2c/max9286.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
+> index 7c663fd587bb..a662d3aa0641 100644
+> --- a/drivers/media/i2c/max9286.c
+> +++ b/drivers/media/i2c/max9286.c
+> @@ -1055,7 +1055,6 @@ static int max9286_register_gpio(struct max9286_priv *priv)
+>  	gpio->label = dev_name(dev);
+>  	gpio->parent = dev;
+>  	gpio->owner = THIS_MODULE;
+> -	gpio->of_node = dev->of_node;
+>  	gpio->ngpio = 2;
+>  	gpio->base = -1;
+>  	gpio->set = max9286_gpio_set;
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards,
 
-
+Laurent Pinchart

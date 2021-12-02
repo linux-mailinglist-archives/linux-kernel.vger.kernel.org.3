@@ -2,85 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8C34660F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4D04660F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:55:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356875AbhLBJ5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 04:57:35 -0500
-Received: from relay10.mail.gandi.net ([217.70.178.230]:53967 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356713AbhLBJ4q (ORCPT
+        id S1356841AbhLBJ6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 04:58:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20112 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1356913AbhLBJ5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 04:56:46 -0500
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPA id DCB29240012;
-        Thu,  2 Dec 2021 09:53:21 +0000 (UTC)
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>
-Subject: [PATCH 6/6] ARM: dts: spear3xx: Add spear320s dtsi
-Date:   Thu,  2 Dec 2021 10:52:55 +0100
-Message-Id: <20211202095255.165797-7-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211202095255.165797-1-herve.codina@bootlin.com>
-References: <20211202095255.165797-1-herve.codina@bootlin.com>
+        Thu, 2 Dec 2021 04:57:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638438822;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Ihb1r64gOGbJUKMXKVMB9tzffqjZmKffkBLeYuYdb9A=;
+        b=N+OWXpa5t2FguG9hWTI5R1UbkO7v+PhfYwSAylm2bihgTyzIDrcQc2ktVF6e2/fYwV9Can
+        JeYLIa5B+0dw4S95io4RKru7B5mQahmBz4KIHf3jtjOWbYU4EsauIsj+W5BYlS40N3EQfc
+        MldzsWKRLnybpi5gR9ElD6nQC8t6yZs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-188-kKym0-7TMzqh25HoYg-reQ-1; Thu, 02 Dec 2021 04:53:38 -0500
+X-MC-Unique: kKym0-7TMzqh25HoYg-reQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A82EE10151E0;
+        Thu,  2 Dec 2021 09:53:37 +0000 (UTC)
+Received: from xps-13.redhat.com (unknown [10.39.195.108])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3804319C46;
+        Thu,  2 Dec 2021 09:53:36 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH 0/4] HID: followup of uhid crashes, and couple of core
+Date:   Thu,  2 Dec 2021 10:53:30 +0100
+Message-Id: <20211202095334.14399-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SPEAr320s SOC is a SPEAr320 SOC variant.
+Hi,
 
-Mostly identical to the SPEAr320 SOC variant, it has a
-new interrupt routing for PL_PGIOs.
+this is a followup of Greg's series[0].
+hid-sony is having a wrong error path leading to unreleased
+hidraw nodes, and bigbenff is having a crash when used with
+a wrong report descriptor in uhid.
 
-Add spear320s.dtsi to handle SPEAr320s SOC
+Those 2 first patches should IMO go into 5.16.
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
----
- arch/arm/boot/dts/spear320s.dtsi | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
- create mode 100644 arch/arm/boot/dts/spear320s.dtsi
+The 2 others are some core changes I had locally stacked and
+which should be ready to go now. They can be scheduled for 5.16
+or 5.17, there is no rush for them.
 
-diff --git a/arch/arm/boot/dts/spear320s.dtsi b/arch/arm/boot/dts/spear320s.dtsi
-new file mode 100644
-index 000000000000..133236dc190d
---- /dev/null
-+++ b/arch/arm/boot/dts/spear320s.dtsi
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * DTS file for SPEAr320s SoC
-+ *
-+ * Copyright 2021 Herve Codina <herve.codina@bootlin.com>
-+ */
-+
-+/include/ "spear320.dtsi"
-+
-+/ {
-+	ahb {
-+		apb {
-+			gpiopinctrl: gpio@b3000000 {
-+				/*
-+				 * The "RM0321 SPEAr320s address and map
-+				 * registers" document mentions interrupt 6
-+				 * (NPGIO_INTR) for the PL_GPIO interrupt.
-+				 */
-+				interrupts = <6>;
-+				interrupt-parent = <&shirq>;
-+			};
-+		};
-+	};
-+};
+Cheers,
+Benjamin
+
+
+[0] https://lore.kernel.org/linux-input/20211201183503.2373082-1-gregkh@linuxfoundation.org/
+
+
+Benjamin Tissoires (4):
+  HID: sony: fix error path in probe
+  HID: bigbenff: prevent null pointer dereference
+  HID: add suspend/resume helpers
+  HID: do not inline some hid_hw_ functions
+
+ drivers/hid/hid-bigbenff.c                 |  2 +-
+ drivers/hid/hid-core.c                     | 93 ++++++++++++++++++++++
+ drivers/hid/hid-sony.c                     | 22 +++--
+ drivers/hid/i2c-hid/i2c-hid-core.c         | 15 +---
+ drivers/hid/surface-hid/surface_hid_core.c | 25 ++----
+ drivers/hid/usbhid/hid-core.c              | 19 ++---
+ include/linux/hid.h                        | 78 ++++--------------
+ 7 files changed, 142 insertions(+), 112 deletions(-)
+
 -- 
-2.31.1
+2.33.1
 

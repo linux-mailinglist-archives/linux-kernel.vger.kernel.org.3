@@ -2,95 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 712AF4663CD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE1E4663D5
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357873AbhLBMlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 07:41:39 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:54626 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346987AbhLBMld (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 07:41:33 -0500
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 899A4E79;
-        Thu,  2 Dec 2021 13:38:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638448688;
-        bh=8laB6ZrK7mL8S9it7gK0pnuQ1r9qGWjJGPYXw7Sj4rA=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=cAhCaHoff0avaL228wDsPFu7O4+5ZfUhG+UrehEQnVUVC/AchTUQu8EilSaKCUeRz
-         qWWz8EhsAJZpPCZa5tS2P/g0hq1sFyopHT4J5UvLXWpDDZED2DeuY5dm5dlHbGokIs
-         +WKS52JJd5gjYvgKw6wDj438ZEhtjedCpPUgcTK8=
-Content-Type: text/plain; charset="utf-8"
+        id S1357528AbhLBMm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 07:42:58 -0500
+Received: from mga02.intel.com ([134.134.136.20]:5374 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241480AbhLBMm4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 07:42:56 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="223930799"
+X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
+   d="scan'208";a="223930799"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 04:39:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
+   d="scan'208";a="460443550"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 02 Dec 2021 04:39:31 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mslN4-000GKS-R2; Thu, 02 Dec 2021 12:39:30 +0000
+Date:   Thu, 02 Dec 2021 20:38:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ b50db7095fe002fa3e16605546cba66bf1b68a3e
+Message-ID: <61a8be45.jlRMEHnO5cLq5/tr%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <b11f646dda189f490c06bf671f64a2cc0af4d45c.1638397089.git.christophe.jaillet@wanadoo.fr>
-References: <b11f646dda189f490c06bf671f64a2cc0af4d45c.1638397089.git.christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] media: mc: mc-entity.c: Use bitmap_zalloc() when applicable
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com
-Date:   Thu, 02 Dec 2021 12:38:05 +0000
-Message-ID: <163844868581.3059017.16653620248778368715@Monstersaurus>
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Christophe JAILLET (2021-12-01 22:19:40)
-> 'ent_enum->bmap' is a bitmap. So use 'bitmap_zalloc()' to simplify
-> code, improve the semantic and avoid some open-coded arithmetic in
-> allocator arguments.
->=20
-> Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
-> consistency.
->=20
-> While at it, remove a useless 'bitmap_zero()'.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: b50db7095fe002fa3e16605546cba66bf1b68a3e  x86/tsc: Disable clocksource watchdog for TSC on qualified platorms
 
-Ah, yes kcalloc zeros memory, so it is doing a redundant clear as well.
-Changing to bitmap_zalloc looks a lot better though.
+elapsed time: 722m
 
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+configs tested: 165
+configs skipped: 67
 
->=20
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/media/mc/mc-entity.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-> index c02340698ad6..b411f9796191 100644
-> --- a/drivers/media/mc/mc-entity.c
-> +++ b/drivers/media/mc/mc-entity.c
-> @@ -48,12 +48,10 @@ __must_check int __media_entity_enum_init(struct medi=
-a_entity_enum *ent_enum,
->                                           int idx_max)
->  {
->         idx_max =3D ALIGN(idx_max, BITS_PER_LONG);
-> -       ent_enum->bmap =3D kcalloc(idx_max / BITS_PER_LONG, sizeof(long),
-> -                                GFP_KERNEL);
-> +       ent_enum->bmap =3D bitmap_zalloc(idx_max, GFP_KERNEL);
->         if (!ent_enum->bmap)
->                 return -ENOMEM;
-> =20
-> -       bitmap_zero(ent_enum->bmap, idx_max);
->         ent_enum->idx_max =3D idx_max;
-> =20
->         return 0;
-> @@ -62,7 +60,7 @@ EXPORT_SYMBOL_GPL(__media_entity_enum_init);
-> =20
->  void media_entity_enum_cleanup(struct media_entity_enum *ent_enum)
->  {
-> -       kfree(ent_enum->bmap);
-> +       bitmap_free(ent_enum->bmap);
->  }
->  EXPORT_SYMBOL_GPL(media_entity_enum_cleanup);
-> =20
-> --=20
-> 2.30.2
->
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                               defconfig
+arm                              allyesconfig
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211202
+i386                             allyesconfig
+arc                         haps_hs_defconfig
+arm                          pcm027_defconfig
+powerpc                   microwatt_defconfig
+arm                          ixp4xx_defconfig
+nios2                         3c120_defconfig
+openrisc                 simple_smp_defconfig
+arm                           corgi_defconfig
+sparc                       sparc64_defconfig
+powerpc                        warp_defconfig
+arm                          pxa910_defconfig
+powerpc                          g5_defconfig
+arc                        nsim_700_defconfig
+powerpc                 xes_mpc85xx_defconfig
+powerpc                 linkstation_defconfig
+sh                        apsh4ad0a_defconfig
+arm                       versatile_defconfig
+sh                     sh7710voipgw_defconfig
+riscv                    nommu_k210_defconfig
+arm                          moxart_defconfig
+sh                               allmodconfig
+arm                         lubbock_defconfig
+xtensa                          iss_defconfig
+powerpc                 mpc8540_ads_defconfig
+sh                          r7780mp_defconfig
+sh                         apsh4a3a_defconfig
+xtensa                    smp_lx200_defconfig
+arm                         hackkit_defconfig
+arm                         mv78xx0_defconfig
+s390                                defconfig
+h8300                            allyesconfig
+alpha                               defconfig
+sh                        edosk7705_defconfig
+nds32                            alldefconfig
+sh                          landisk_defconfig
+sh                        edosk7760_defconfig
+m68k                       m5275evb_defconfig
+arm                      tct_hammer_defconfig
+mips                        bcm63xx_defconfig
+s390                       zfcpdump_defconfig
+mips                         db1xxx_defconfig
+mips                        omega2p_defconfig
+xtensa                       common_defconfig
+arm                      jornada720_defconfig
+nds32                               defconfig
+arm                            pleb_defconfig
+arm                          pxa168_defconfig
+powerpc                     tqm5200_defconfig
+sh                             sh03_defconfig
+powerpc                     pseries_defconfig
+arm                   milbeaut_m10v_defconfig
+arm                          iop32x_defconfig
+sh                     magicpanelr2_defconfig
+m68k                          hp300_defconfig
+m68k                            q40_defconfig
+arm                           sama5_defconfig
+powerpc                   lite5200b_defconfig
+arm                        spear3xx_defconfig
+powerpc                      mgcoge_defconfig
+arm                       cns3420vb_defconfig
+arm                            hisi_defconfig
+um                                  defconfig
+powerpc                   motionpro_defconfig
+xtensa                    xip_kc705_defconfig
+m68k                       m5475evb_defconfig
+powerpc                           allnoconfig
+parisc                           alldefconfig
+mips                     cu1000-neo_defconfig
+powerpc                  iss476-smp_defconfig
+arm                           h5000_defconfig
+sh                          rsk7203_defconfig
+arm                         cm_x300_defconfig
+arm                         s3c2410_defconfig
+sh                           se7619_defconfig
+arm                  randconfig-c002-20211202
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+i386                 randconfig-a001-20211129
+i386                 randconfig-a002-20211129
+i386                 randconfig-a006-20211129
+i386                 randconfig-a005-20211129
+i386                 randconfig-a004-20211129
+i386                 randconfig-a003-20211129
+x86_64               randconfig-a016-20211202
+x86_64               randconfig-a011-20211202
+x86_64               randconfig-a013-20211202
+x86_64               randconfig-a014-20211202
+x86_64               randconfig-a012-20211202
+x86_64               randconfig-a015-20211202
+i386                 randconfig-a016-20211202
+i386                 randconfig-a013-20211202
+i386                 randconfig-a011-20211202
+i386                 randconfig-a014-20211202
+i386                 randconfig-a012-20211202
+i386                 randconfig-a015-20211202
+arc                  randconfig-r043-20211128
+s390                 randconfig-r044-20211128
+riscv                randconfig-r042-20211128
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+arm                  randconfig-c002-20211202
+x86_64               randconfig-c007-20211202
+riscv                randconfig-c006-20211202
+i386                 randconfig-c001-20211202
+powerpc              randconfig-c003-20211202
+s390                 randconfig-c005-20211202
+x86_64               randconfig-a006-20211202
+x86_64               randconfig-a005-20211202
+x86_64               randconfig-a001-20211202
+x86_64               randconfig-a002-20211202
+x86_64               randconfig-a004-20211202
+x86_64               randconfig-a003-20211202
+i386                 randconfig-a001-20211202
+i386                 randconfig-a005-20211202
+i386                 randconfig-a002-20211202
+i386                 randconfig-a003-20211202
+i386                 randconfig-a006-20211202
+i386                 randconfig-a004-20211202
+hexagon              randconfig-r045-20211202
+hexagon              randconfig-r041-20211202
+hexagon              randconfig-r045-20211129
+hexagon              randconfig-r041-20211129
+s390                 randconfig-r044-20211129
+riscv                randconfig-r042-20211129
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,82 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A94CF466345
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4905446634B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:12:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346591AbhLBMOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 07:14:40 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:56374 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357895AbhLBMNg (ORCPT
+        id S1357772AbhLBMPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 07:15:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232741AbhLBMP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 07:13:36 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E90F1CE221B;
-        Thu,  2 Dec 2021 12:10:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E56AEC53FCD;
-        Thu,  2 Dec 2021 12:10:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638447008;
-        bh=WGxZxxOxo/iEVtoBrbZrUbl8D0pmoPnzwWY3MpJZGhI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=tDGDir7z6ntq/n1zc0JTDMcWYlCYtClbgFbxRgI990AQfO9sV4PB8Nf8+aS2CcvBP
-         I5TXs/Fx0TiilyDqj+VDM+kdo19USTIzBYPLPIgIovasiHZNKL2hOAQBlMatgzoMyK
-         IDqTvjjAYHrJaBMvxBp50DUQ18xlIQQCTPJvxqjQGn9Iqdi/0sfw77wMMAj0af88Oa
-         0DzIUzrbNtEngwVhCcT0ltcTSoABR2Y5E602a6JWbC0egUAloKSSUtq8TFntYtzUYa
-         1WsOLaLKricQ8CxZsuBOysxfw0QJRx9rxqtLzuWmiq9myNzCHTEsAfjWzMjDrVwHTZ
-         xtLlvpCMltLsA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C705C60A7E;
-        Thu,  2 Dec 2021 12:10:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 2 Dec 2021 07:15:26 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F749C06174A;
+        Thu,  2 Dec 2021 04:12:03 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 729BC1F46337
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638447122; bh=s4dJNUBn4cysCTUjHiIKY6Kh55sL/ORU4j84VdhDGOE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=LBwRxDmHSgWVDEB6Xv6+ww9aiStnzyoZrKQ3j9L7d7JOH+66beF+YBBJhgA3NX7Ht
+         BE8q8V82Vpl/8jkgrEpEKBK529z0lmMV1CFoq80Fss33pPVEOyCIi5kP0ZLkJ+xL94
+         /f5GTnVbMLD/7WnhwGdz4e2ys4Vn7q6K0YggjeQNt1o+2Mpg1TPTHYObSsGFQXW8Ou
+         DH3UxLyLolsgVbki478JCu/7ZSk53fEnPq3zVcWIdGIaTOdJ/SMruE/3rFx0CiR/NE
+         NhnN29On/2j/jo7rpBL7q42XHqr9J6Aws+6BJaUnleA6+GJjyWHCN6PTuXXqXGHSME
+         Kwdlse/yKq7Tg==
+Subject: Re: [PATCH v10 4/4] soc: mediatek: mutex: add functions that operate
+ registers by CMDQ
+To:     Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
+        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        menghui.lin@mediatek.com, sj.huang@mediatek.com,
+        allen-kh.cheng@mediatek.com, randy.wu@mediatek.com,
+        jason-jh.lin@mediatek.com, roy-cw.yeh@mediatek.com,
+        river.cheng@mediatek.com, srv_heupstream@mediatek.com
+References: <20211202061322.19917-1-moudy.ho@mediatek.com>
+ <20211202061322.19917-5-moudy.ho@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <d1a291fb-fe57-fb75-04b5-72fc5e5462e7@collabora.com>
+Date:   Thu, 2 Dec 2021 13:11:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [net-next PATCH v2 1/2] dt-bindings: net: dsa: split generic port
- definition from dsa.yaml
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163844700881.4273.14536880840903138023.git-patchwork-notify@kernel.org>
-Date:   Thu, 02 Dec 2021 12:10:08 +0000
-References: <20211130211625.29724-1-ansuelsmth@gmail.com>
-In-Reply-To: <20211130211625.29724-1-ansuelsmth@gmail.com>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        robh+dt@kernel.org, john@phrozen.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh@kernel.org
+In-Reply-To: <20211202061322.19917-5-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Tue, 30 Nov 2021 22:16:24 +0100 you wrote:
-> Some switch may require to add additional binding to the node port.
-> Move DSA generic port definition to a dedicated yaml to permit this.
+Il 02/12/21 07:13, Moudy Ho ha scritto:
+> Considering that some functions have timing requirements
+> in specific situation, this patch adds several interface that
+> operate registers by CMDQ.
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/net/dsa/dsa-port.yaml | 77 +++++++++++++++++++
->  .../devicetree/bindings/net/dsa/dsa.yaml      | 60 +--------------
->  2 files changed, 79 insertions(+), 58 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 
-Here is the summary with links:
-  - [net-next,v2,1/2] dt-bindings: net: dsa: split generic port definition from dsa.yaml
-    https://git.kernel.org/netdev/net-next/c/75c990154479
-  - [net-next,v2,2/2] dt-bindings: net: dsa: qca8k: improve port definition documentation
-    https://git.kernel.org/netdev/net-next/c/dfb40cba6d45
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 

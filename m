@@ -2,109 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59674466578
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 15:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F290946657A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 15:40:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358639AbhLBOnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 09:43:13 -0500
-Received: from mail-wr1-f53.google.com ([209.85.221.53]:33539 "EHLO
-        mail-wr1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241837AbhLBOnM (ORCPT
+        id S241837AbhLBOnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 09:43:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39008 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358654AbhLBOnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 09:43:12 -0500
-Received: by mail-wr1-f53.google.com with SMTP id d24so60233514wra.0;
-        Thu, 02 Dec 2021 06:39:48 -0800 (PST)
+        Thu, 2 Dec 2021 09:43:18 -0500
+Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E83C061758
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 06:39:56 -0800 (PST)
+Received: by mail-vk1-xa30.google.com with SMTP id u68so18571399vke.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 06:39:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=qztlLTDQmmEb0Xq8BgFUWcdE0xJC0fnWX5znumDPlIQ=;
+        b=ftzfe/gtXmR8j8hyGvUL6MFARNKUoS9HbJalgEzP8idyMJnleh8+GI7RSpwhL/DJaO
+         FVVaI03AECZpBldwyu/2hchCxD4bo9mzIdtwgOM5PiZ80+WQ2/K4ik0oOOHCRI2BLQp6
+         C6m0RPCbvM2GrUjMNpbagdxUlYXbQfjjD11wD1/I9zEXSI5Ryu62i8fiL03ImYjBgkQ0
+         QFEkazUy5SgnN5wnUc3i7C6567OeT89ETJf7pdZpnmnbMiqbTBPVD1opXOZkx+WT2XiY
+         EuW6cS8H6JSidGKacWmoVQ0t8C9O5g0wmTpp1x3Y4/B8oIeKpGSoD9Qpd84N7u7OBzNv
+         pMCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=72a6A507OnldVCWrhDSc/GY7lKjxc4B5WRBxEFXAJ3U=;
-        b=OvOwn9o4CByWmhPJ6wX9eFJKNYc/jeBMoH23FBpyvULTTIUpsPm646poAlYTzMsijD
-         tl/Cn/vT6+tfc8IbpPA4WaXi6QTHju9OnhUgIoA4nPpenooFO+eX1NYQvVFIGE0f3eUp
-         Bl1wRUNsrLV//Aj0imQev2p1Xbk2GDf7Dwsbs1TkUWfbWMKMLHQs9XeFEi2cwoaNH/TP
-         RRutqs6PaqZcxqJplPHsyeUn8cQ4U5PjZfZdHku0VgX9r7dpkD38mKgAfmw/OoGLHo9Q
-         o2fvp8u0m5ugxWq1L3UoXXW+3vXdQIuQvgVcwKfNWt0SqQnce69oIcAm+CwsF2vwvgLS
-         OXvw==
-X-Gm-Message-State: AOAM531BgqktD2QcGGCTBXdPyWblVdklHCblii1t/aXZAsIYEeFwzZGH
-        o6113nZRJtpX2mP5hsE0Byk=
-X-Google-Smtp-Source: ABdhPJxPzdtd3RdqIbFdq4J+qJfyoes2s3XiUvAs4cyVDgX4hcthvPCvHGkt6Ry5P/1NlIy3ec+13w==
-X-Received: by 2002:adf:d4c2:: with SMTP id w2mr14815368wrk.225.1638455988303;
-        Thu, 02 Dec 2021 06:39:48 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id z5sm2876037wmp.26.2021.12.02.06.39.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 06:39:47 -0800 (PST)
-Date:   Thu, 2 Dec 2021 14:39:46 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, jgross@suse.com,
-        sstabellini@kernel.org, boris.ostrovsky@oracle.com,
-        joro@8bytes.org, will@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        arnd@arndb.de, hch@infradead.org, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, Tianyu.Lan@microsoft.com,
-        thomas.lendacky@amd.com, xen-devel@lists.xenproject.org,
-        michael.h.kelley@microsoft.com, iommu@lists.linux-foundation.org,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        netdev@vger.kernel.org, vkuznets@redhat.com, brijesh.singh@amd.com,
-        konrad.wilk@oracle.com, hch@lst.de, parri.andrea@gmail.com,
-        dave.hansen@intel.com
-Subject: Re: [PATCH V3 2/5] x86/hyper-v: Add hyperv Isolation VM check in the
- cc_platform_has()
-Message-ID: <20211202143946.7o7ncwcjq3t6xcrq@liuwe-devbox-debian-v2>
-References: <20211201160257.1003912-1-ltykernel@gmail.com>
- <20211201160257.1003912-3-ltykernel@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=qztlLTDQmmEb0Xq8BgFUWcdE0xJC0fnWX5znumDPlIQ=;
+        b=Y4iYInnfSJbqux8Zfz1WxfKtSqkednUrmDm3lQvVEXMyGfZZ+U/a3mwyYTJiJ3btOQ
+         zPY9HBAjXS+4hNT6WqispQJNIclx/x+VytDKya3N8yQ2i/8YD4WZOgBkQDBGuKYzuuIB
+         sWInpfO85YqxvaXWy5BVMjBZ1Se3bW9SdDidWha2XDi+8gDHt2KsMr0grsQYMaLfnSNc
+         Pltn6+7+YtaQpHrsZcrpJk4CMAfIFdnrNNnviXzL3hdLq7xeVj3BKh/Z6KdpaT43Fq9k
+         6ebQVYg6376I7Bb/ixDa/KiL8y/Oh/21pZJ1mhdgIJTg+r7xSSEkUJT02OQEdVlSIpxi
+         cmvA==
+X-Gm-Message-State: AOAM530YzHg+0WiN4reOcT+nXelCY8MbdGqEtus6GMH2lmTU/RoylsLw
+        2owwC5m55934U97V+IZlE4MTd0YG3zzOh9JnkKo=
+X-Google-Smtp-Source: ABdhPJz7/3cq0NRUs4WWzi9ATdBjXx1Pg60+tiHJ7KWddKufoglDUVV6vC4HNRKlx0wgxcpCXkgUMk0JqlpU5/1bZR8=
+X-Received: by 2002:a05:6122:988:: with SMTP id g8mr16532476vkd.2.1638455994609;
+ Thu, 02 Dec 2021 06:39:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211201160257.1003912-3-ltykernel@gmail.com>
+Received: by 2002:ab0:2642:0:0:0:0:0 with HTTP; Thu, 2 Dec 2021 06:39:54 -0800 (PST)
+Reply-To: salemchantal@mail.ee
+From:   MRS Salem Chantal Lawrence <dericksunshine@gmail.com>
+Date:   Thu, 2 Dec 2021 06:39:54 -0800
+Message-ID: <CAN7dtm2Oq3sc0VTjMWAnf=rhj1kAsJ64EbARg3Kc-XEk1S=iYQ@mail.gmail.com>
+Subject: ATM VISA DAPARTCARD
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 11:02:53AM -0500, Tianyu Lan wrote:
-> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> 
-> Hyper-V provides Isolation VM which has memory encrypt support. Add
-> hyperv_cc_platform_has() and return true for check of GUEST_MEM_ENCRYPT
-> attribute.
-> 
-> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> ---
->  arch/x86/kernel/cc_platform.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/cc_platform.c b/arch/x86/kernel/cc_platform.c
-> index 03bb2f343ddb..f3bb0431f5c5 100644
-> --- a/arch/x86/kernel/cc_platform.c
-> +++ b/arch/x86/kernel/cc_platform.c
-> @@ -11,6 +11,7 @@
->  #include <linux/cc_platform.h>
->  #include <linux/mem_encrypt.h>
->  
-> +#include <asm/mshyperv.h>
->  #include <asm/processor.h>
->  
->  static bool __maybe_unused intel_cc_platform_has(enum cc_attr attr)
-> @@ -58,9 +59,23 @@ static bool amd_cc_platform_has(enum cc_attr attr)
->  #endif
->  }
->  
-> +static bool hyperv_cc_platform_has(enum cc_attr attr)
-> +{
-> +#ifdef CONFIG_HYPERV
-> +	if (attr == CC_ATTR_GUEST_MEM_ENCRYPT)
-> +		return true;
-> +	else
-> +		return false;
-
-This can be simplified as
-
-	return attr == CC_ATTR_GUEST_MEM_ENCRYPT;
+Attention
 
 
-Wei.
+You have been compensated with the sum of 4.6 million dollars in this
+United Nation the payment will be issue into Atm Visa Card and send to you
+
+from the Santander bank of Spain we need your address, Passport and your
+whatsapp number.
+
+
+THANKS
+MRS Salem Chantal Lawrence

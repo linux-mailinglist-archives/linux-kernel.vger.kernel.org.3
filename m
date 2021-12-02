@@ -2,70 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF68466A81
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 20:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BA1466A89
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 20:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376857AbhLBTh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 14:37:29 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43134 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376768AbhLBThY (ORCPT
+        id S237668AbhLBTjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 14:39:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229793AbhLBTjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 14:37:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83673627EA
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 19:34:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E57EBC53FD0;
-        Thu,  2 Dec 2021 19:34:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638473640;
-        bh=Je0CkkJ6UI2XgeiQFROlQiru3bxnJZPutYKxSAHgfU0=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=kfZpKh39taF9KMidyan4Ac6iZd3NKiZ1jSiDhHPk0edaeYiPGYQDOBmKXRHf5qQR9
-         rjmGmc+JZRlwfhtpCQR2+ZemQduPQwWrBa7cB3AdZ5w+GoMDiiHTcIwVl+10JK/g2S
-         iJhPWREOoBZbPJlF/F8Ir/wV4WOKtMu0B2HHH+Z0GaKu2He2VAJ17fNf+Ij2WSaEQY
-         HGND0LtJ9+ojynsbbtX1GNLmJvWXaSNh+i54bsA4ru1yFIiHJVOmpXsmbzkgMxmzo8
-         QAxM0VAXAftpQ0hjNEhKfmmnmchTFVJ1tBwJlN0kr30TrC6f7miP627wOkjhOX1dA9
-         2e6ZoppltrrLw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id CF0C860A88;
-        Thu,  2 Dec 2021 19:34:00 +0000 (UTC)
-Subject: Re: [GIT PULL] tracing: Minor fixes for 5.16-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20211201211218.5f9e8ae8@gandalf.local.home>
-References: <20211201211218.5f9e8ae8@gandalf.local.home>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20211201211218.5f9e8ae8@gandalf.local.home>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git trace-v5.16-rc3
-X-PR-Tracked-Commit-Id: 6bbfa44116689469267f1a6e3d233b52114139d2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 2b2c0f24bac75bfdf2de9f4ea0912946ce5bf5c8
-Message-Id: <163847364084.31731.1673095413854301390.pr-tracker-bot@kernel.org>
-Date:   Thu, 02 Dec 2021 19:34:00 +0000
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Chen Jun <chenjun102@huawei.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Yafang Shao <laoar.shao@gmail.com>
+        Thu, 2 Dec 2021 14:39:24 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52050C061757
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 11:36:01 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id 200so787767pga.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 11:36:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0SCOI+o2Z/owL9Mbm+7ldS+Ld81vbYtWdoGHtJnRY5Y=;
+        b=jHbX+QSaWPnnpWzqq1tRWLqe5/ckDCq0fs1OiUAHUuBYHXNsRp4tNlKtFROZysh7Xm
+         5w6QTpy5Qznt44TW+gPAkDSU63d5O+gpQL9KTXA9nUXnBHzGX8gGzY2sUkX4KjBFQWKN
+         j5uzRf9R9g65wpU4/lec6bpGPCY9iEi/i3utQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0SCOI+o2Z/owL9Mbm+7ldS+Ld81vbYtWdoGHtJnRY5Y=;
+        b=KlIdPBtzIxnl+R9PQHstvFBjfWFB7HvoRS8wbkGOlAxEpdwNYWPyLDpHuC5HSsOznx
+         9SFuxsBq9rauDH+W2r9DhU9pASXuzU2mmQskI1Xrft3s2v9+RD9gaWQfRdCCO0RLUzBB
+         tzo78alWmCp6VwypiXxPJm1maRxQ1kozhj82roFgeJgCuNvhrDzVW25QYsyINO2NPY/0
+         9MVbFNoUgcN0ENs7Xy4gTOJxw+KH7YZ+6VBrmV3mDnO13gSGZxGK8SHqr32HmaaazaTI
+         ydfvIRA7uTOsm1PPzEuuLGba8gFCsv43cD7CYFuDWlSM2PRisM1ZSRQi0Ok3OQXtvvvA
+         ntoQ==
+X-Gm-Message-State: AOAM530W/+fjAW3K7xWFhy2i6Uqt/oQPmzzz/bsDqz0nlhfxIpz5CwKp
+        S6rL86TUwf1+0s04Dr9dqrClxQ==
+X-Google-Smtp-Source: ABdhPJwG+2Ng4ORjTZPJ/DNAPaqRQbpeTyovONbGKBGWpSTCR3gwh2Oq8LwoJrRPz9k5/eNQ1u98/g==
+X-Received: by 2002:a05:6a00:8cf:b0:4a8:3ae:1a78 with SMTP id s15-20020a056a0008cf00b004a803ae1a78mr14246553pfu.7.1638473760881;
+        Thu, 02 Dec 2021 11:36:00 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id na15sm3632525pjb.31.2021.12.02.11.36.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 11:36:00 -0800 (PST)
+Date:   Thu, 2 Dec 2021 11:35:59 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Yang Guang <cgel.zte@gmail.com>
+Cc:     Yang Guang <yang.guang5@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] gcc-plugins: use swap() to make code cleaner
+Message-ID: <202112021134.7ECC69C1@keescook>
+References: <20211028003526.7117-1-yang.guang5@zte.com.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211028003526.7117-1-yang.guang5@zte.com.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 1 Dec 2021 21:12:18 -0500:
+On Thu, Oct 28, 2021 at 12:35:26AM +0000, Yang Guang wrote:
+> Using swap() make it more readable.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+> ---
+>  scripts/gcc-plugins/randomize_layout_plugin.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/scripts/gcc-plugins/randomize_layout_plugin.c b/scripts/gcc-plugins/randomize_layout_plugin.c
+> index 334741a31d0a..feee5ba8fa2b 100644
+> --- a/scripts/gcc-plugins/randomize_layout_plugin.c
+> +++ b/scripts/gcc-plugins/randomize_layout_plugin.c
+> @@ -244,11 +244,8 @@ static void full_shuffle(tree *newtree, unsigned long length, ranctx *prng_state
+>  	unsigned long i, randnum;
+>  
+>  	for (i = length - 1; i > 0; i--) {
+> -		tree tmp;
+>  		randnum = ranval(prng_state) % (i + 1);
+> -		tmp = newtree[i];
+> -		newtree[i] = newtree[randnum];
+> -		newtree[randnum] = tmp;
+> +		swap(newtree[i], newtree[randnum]);
+>  	}
+>  }
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git trace-v5.16-rc3
+Hmm, I don't think you compile-tested this? The gcc plugins are build in
+userspace without the kernel headers (i.e. no "swap" macro). I'd be
+happy to avoid open-coding this, but that would require a new macro
+specific to the gcc plugins (to avoid std::swap). Also, there are two
+other open-coded swaps in here that could be changed too. :)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/2b2c0f24bac75bfdf2de9f4ea0912946ce5bf5c8
-
-Thank you!
+-Kees
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Kees Cook

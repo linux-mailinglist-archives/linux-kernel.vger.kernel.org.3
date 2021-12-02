@@ -2,133 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3354661B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD9E4661BB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356721AbhLBKwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 05:52:32 -0500
-Received: from mga17.intel.com ([192.55.52.151]:46901 "EHLO mga17.intel.com"
+        id S1356693AbhLBKx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:53:59 -0500
+Received: from foss.arm.com ([217.140.110.172]:33420 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356639AbhLBKwR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 05:52:17 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="217376393"
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="217376393"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 02:48:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="597102943"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 Dec 2021 02:48:28 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1msjdc-000GDI-9C; Thu, 02 Dec 2021 10:48:28 +0000
-Date:   Thu, 2 Dec 2021 18:47:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: fs/proc/vmcore.c:161:34: sparse: sparse: incorrect type in
- initializer (different address spaces)
-Message-ID: <202112021810.eF2TafOx-lkp@intel.com>
+        id S231208AbhLBKx5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 05:53:57 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 58759142F;
+        Thu,  2 Dec 2021 02:50:35 -0800 (PST)
+Received: from e123083-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1383B3F7D7;
+        Thu,  2 Dec 2021 02:50:33 -0800 (PST)
+Date:   Thu, 2 Dec 2021 11:50:27 +0100
+From:   Morten Rasmussen <morten.rasmussen@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Thara Gopinath <thara.gopinath@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH] base: arch_topology: Use policy->max to calculate
+ freq_factor
+Message-ID: <20211202105027.GA1180274@e123083-lin>
+References: <20211115201010.68567-1-thara.gopinath@linaro.org>
+ <CAJZ5v0gezoJZVH69Y7fDwa-uLhE0PaqFrzM=0bequxpE_749zg@mail.gmail.com>
+ <8f7397e3-4e92-c84d-9168-087967f4d683@arm.com>
+ <CAJZ5v0iRDtr5yae5UndwU2SmVL4cak=BN0irVGbgNzQiS8K3mA@mail.gmail.com>
+ <af59de78-49b0-d2e6-4bf0-7c897c2fccb1@linaro.org>
+ <CAJZ5v0h3O_rSR38X4fV1FC2O2DYQnxzeLbxcSqh1vpnE65Nd+A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAJZ5v0h3O_rSR38X4fV1FC2O2DYQnxzeLbxcSqh1vpnE65Nd+A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   58e1100fdc5990b0cc0d4beaf2562a92e621ac7d
-commit: c1e63117711977cc4295b2ce73de29dd17066c82 proc/vmcore: fix clearing user buffer by properly using clear_user()
-date:   12 days ago
-config: sh-randconfig-s032-20211202 (https://download.01.org/0day-ci/archive/20211202/202112021810.eF2TafOx-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c1e63117711977cc4295b2ce73de29dd17066c82
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c1e63117711977cc4295b2ce73de29dd17066c82
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sh SHELL=/bin/bash fs/proc/
+On Wed, Nov 17, 2021 at 06:59:05PM +0100, Rafael J. Wysocki wrote:
+> On Wed, Nov 17, 2021 at 6:01 PM Thara Gopinath
+> <thara.gopinath@linaro.org> wrote:
+> >
+> > Hi,
+> >
+> > On 11/17/21 7:49 AM, Rafael J. Wysocki wrote:
+> > > On Wed, Nov 17, 2021 at 11:46 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+> > >>
+> > >> Hi Rafael,
+> > >>
+> > >> On 11/16/21 7:05 PM, Rafael J. Wysocki wrote:
+> > >>> On Mon, Nov 15, 2021 at 9:10 PM Thara Gopinath
+> > >>> <thara.gopinath@linaro.org> wrote:
+> > >>>>
+> > >>>> cpuinfo.max_freq can reflect boost frequency if enabled during boot.  Since
+> > >>>> we don't consider boost frequencies while calculating cpu capacities, use
+> > >>>> policy->max to populate the freq_factor during boot up.
+> > >>>
+> > >>> I'm not sure about this.  schedutil uses cpuinfo.max_freq as the max frequency.
+> > >>
+> > >> Agree it's tricky how we treat the boost frequencies and also combine
+> > >> them with thermal pressure.
+> > >> We probably would have consider these design bits:
+> > >> 1. Should thermal pressure include boost frequency?
+> > >
+> > > Well, I guess so.
+> > >
+> > > Running at a boost frequency certainly increases thermal pressure.
+> > >
+> > >> 2. Should max capacity 1024 be a boost frequency so scheduler
+> > >>      would see it explicitly?
+> > >
+> > > That's what it is now if cpuinfo.max_freq is a boost frequency.
+> > >
+> > >> - if no, then schedutil could still request boost freq thanks to
+> > >>     map_util_perf() where we add 25% to the util and then
+> > >>     map_util_freq() would return a boost freq when util was > 1024
+> > >>
+> > >>
+> > >> I can see in schedutil only one place when cpuinfo.max_freq is used:
+> > >> get_next_freq(). If the value stored in there is a boost,
+> > >> then don't we get a higher freq value for the same util?
+> > >
+> > > Yes. we do, which basically is my point.
+> > >
+> > > The schedutil's response is proportional to cpuinfo.max_freq and that
+> > > needs to be taken into account for the results to be consistent.
+> >
+> > So IIUC, cpuinfo.max_freq is always supposed to be the highest supported
+> > frequency of a cpu, irrespective of whether boost is enabled or not.
+> > Where as policy->max is the currently available maximum cpu frequency
+> > which can be equal to cpuinfo.max_freq or lower (depending on whether
+> > boost is enabled, whether there is a constraint on policy->max placed by
+> > thermal etc).
+> 
+> It may also depend on the limit set by user space.
+> 
+> > So in this case isn't it better for schedutil to consider
+> > policy->max instead of cpuinfo.max ?
+> 
+> Not really.
+> 
+> In that case setting policy->max to 1/2 of cpuinfo.max_freq would
+> cause schedutil to choose 1/4 of cpuinfo.max_freq for 50% utilization
+> which would be rather unexpected.
+> 
+> policy->max is a cap, not the current maximum capacity.
+> 
+> > Like you mentioned above same
+> > utilization will relate to different frequencies depending on the
+> > maximum frequency.
+> 
+> Which is not how it is expected (and defined) to work, though.
+> 
+> If you really want to play with the current maximum capacity, you need
+> to change it whenever boost is disabled or enabled - and there is a
+> mechanism for updating cpufinfo.max_freq in such cases.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I don't see why we would want to change max capacity on the fly. It is
+not a cheap operation as we would need to normalize the capacity for all
+CPUs if the CPU(s) with capacity = 1024 changes its capacity. Worst case
+we even have to rebuild the sched_domain hierarchy to update flags. The
+update would also temporarily mess with load and utilization signals, so
+not a cheap operation.
 
-
-sparse warnings: (new ones prefixed by >>)
->> fs/proc/vmcore.c:161:34: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void [noderef] __user *__cl_addr @@     got char *buf @@
-   fs/proc/vmcore.c:161:34: sparse:     expected void [noderef] __user *__cl_addr
-   fs/proc/vmcore.c:161:34: sparse:     got char *buf
-
-vim +161 fs/proc/vmcore.c
-
-   133	
-   134	/* Reads a page from the oldmem device from given offset. */
-   135	ssize_t read_from_oldmem(char *buf, size_t count,
-   136				 u64 *ppos, int userbuf,
-   137				 bool encrypted)
-   138	{
-   139		unsigned long pfn, offset;
-   140		size_t nr_bytes;
-   141		ssize_t read = 0, tmp;
-   142	
-   143		if (!count)
-   144			return 0;
-   145	
-   146		offset = (unsigned long)(*ppos % PAGE_SIZE);
-   147		pfn = (unsigned long)(*ppos / PAGE_SIZE);
-   148	
-   149		down_read(&vmcore_cb_rwsem);
-   150		do {
-   151			if (count > (PAGE_SIZE - offset))
-   152				nr_bytes = PAGE_SIZE - offset;
-   153			else
-   154				nr_bytes = count;
-   155	
-   156			/* If pfn is not ram, return zeros for sparse dump files */
-   157			if (!pfn_is_ram(pfn)) {
-   158				tmp = 0;
-   159				if (!userbuf)
-   160					memset(buf, 0, nr_bytes);
- > 161				else if (clear_user(buf, nr_bytes))
-   162					tmp = -EFAULT;
-   163			} else {
-   164				if (encrypted)
-   165					tmp = copy_oldmem_page_encrypted(pfn, buf,
-   166									 nr_bytes,
-   167									 offset,
-   168									 userbuf);
-   169				else
-   170					tmp = copy_oldmem_page(pfn, buf, nr_bytes,
-   171							       offset, userbuf);
-   172			}
-   173			if (tmp < 0) {
-   174				up_read(&vmcore_cb_rwsem);
-   175				return tmp;
-   176			}
-   177	
-   178			*ppos += nr_bytes;
-   179			count -= nr_bytes;
-   180			buf += nr_bytes;
-   181			read += nr_bytes;
-   182			++pfn;
-   183			offset = 0;
-   184		} while (count);
-   185	
-   186		up_read(&vmcore_cb_rwsem);
-   187		return read;
-   188	}
-   189	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Morten

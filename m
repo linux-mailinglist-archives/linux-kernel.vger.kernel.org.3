@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E664660AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D414660B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356647AbhLBJyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 04:54:16 -0500
-Received: from mga01.intel.com ([192.55.52.88]:56004 "EHLO mga01.intel.com"
+        id S1356653AbhLBJy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 04:54:28 -0500
+Received: from mga01.intel.com ([192.55.52.88]:56019 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356628AbhLBJyH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 04:54:07 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="260668448"
+        id S1356657AbhLBJyS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 04:54:18 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="260668461"
 X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="260668448"
+   d="scan'208";a="260668461"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 01:50:44 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 01:50:49 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="677605170"
+   d="scan'208";a="677605200"
 Received: from ahunter-desktop.fi.intel.com ([10.237.72.76])
-  by orsmga005.jf.intel.com with ESMTP; 02 Dec 2021 01:50:41 -0800
+  by orsmga005.jf.intel.com with ESMTP; 02 Dec 2021 01:50:44 -0800
 From:   Adrian Hunter <adrian.hunter@intel.com>
 To:     Masami Hiramatsu <mhiramat@kernel.org>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -29,9 +29,9 @@ Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         H Peter Anvin <hpa@zytor.com>, chang.seok.bae@intel.com
-Subject: [PATCH 3/6] perf tests: Add misc instructions to x86 instruction decoder test
-Date:   Thu,  2 Dec 2021 11:50:26 +0200
-Message-Id: <20211202095029.2165714-4-adrian.hunter@intel.com>
+Subject: [PATCH 4/6] x86/insn: Add misc instructions to x86 instruction decoder
+Date:   Thu,  2 Dec 2021 11:50:27 +0200
+Message-Id: <20211202095029.2165714-5-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211202095029.2165714-1-adrian.hunter@intel.com>
 References: <20211202095029.2165714-1-adrian.hunter@intel.com>
@@ -46,7 +46,7 @@ x86 instruction decoder is used for both kernel instructions and user space
 instructions (e.g. uprobes, perf tools Intel PT), so it is good to update
 it with new instructions.
 
-Add instructions to x86 instruction decoder test:
+Add instructions to x86 instruction decoder:
 
 	User Interrupt
 
@@ -69,117 +69,86 @@ Add instructions to x86 instruction decoder test:
 		xresldtrk
 		xsusldtrk
 
-A subsequent patch adds the instructions to the instruction decoder.
-
 Reference:
 Intel Architecture Instruction Set Extensions and Future Features
 Programming Reference
 May 2021
 Document Number: 319433-044
 
-Example:
+Example using perf tools' x86 instruction decoder test:
 
   $ perf test -v "x86 instruction decoder" |& grep -i hreset
-  Failed to decode length (4 vs expected 6): f3 0f 3a f0 c0 00    	hreset $0x0
-  Failed to decode length (4 vs expected 6): f3 0f 3a f0 c0 00    	hreset $0x0
+  Decoded ok: f3 0f 3a f0 c0 00           hreset $0x0
+  Decoded ok: f3 0f 3a f0 c0 00           hreset $0x0
 
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 ---
- tools/perf/arch/x86/tests/insn-x86-dat-32.c  |  8 +++++++
- tools/perf/arch/x86/tests/insn-x86-dat-64.c  | 20 ++++++++++++++++++
- tools/perf/arch/x86/tests/insn-x86-dat-src.c | 22 ++++++++++++++++++++
- 3 files changed, 50 insertions(+)
+ arch/x86/lib/x86-opcode-map.txt       | 6 +++---
+ tools/arch/x86/lib/x86-opcode-map.txt | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/tools/perf/arch/x86/tests/insn-x86-dat-32.c b/tools/perf/arch/x86/tests/insn-x86-dat-32.c
-index 9708ae892061..79e2050cd1c2 100644
---- a/tools/perf/arch/x86/tests/insn-x86-dat-32.c
-+++ b/tools/perf/arch/x86/tests/insn-x86-dat-32.c
-@@ -2197,6 +2197,14 @@
- "3e f2 ff 25 78 56 34 12 \tnotrack bnd jmp *0x12345678",},
- {{0x3e, 0xf2, 0xff, 0xa4, 0xc8, 0x78, 0x56, 0x34, 0x12, }, 9, 0, "jmp", "indirect",
- "3e f2 ff a4 c8 78 56 34 12 \tnotrack bnd jmp *0x12345678(%eax,%ecx,8)",},
-+{{0xf3, 0x0f, 0x3a, 0xf0, 0xc0, 0x00, }, 6, 0, "", "",
-+"f3 0f 3a f0 c0 00    \threset $0x0",},
-+{{0x0f, 0x01, 0xe8, }, 3, 0, "", "",
-+"0f 01 e8             \tserialize ",},
-+{{0xf2, 0x0f, 0x01, 0xe9, }, 4, 0, "", "",
-+"f2 0f 01 e9          \txresldtrk ",},
-+{{0xf2, 0x0f, 0x01, 0xe8, }, 4, 0, "", "",
-+"f2 0f 01 e8          \txsusldtrk ",},
- {{0x0f, 0x01, 0xcf, }, 3, 0, "", "",
- "0f 01 cf             \tencls  ",},
- {{0x0f, 0x01, 0xd7, }, 3, 0, "", "",
-diff --git a/tools/perf/arch/x86/tests/insn-x86-dat-64.c b/tools/perf/arch/x86/tests/insn-x86-dat-64.c
-index 3548565a1cc5..b2d0ba45262b 100644
---- a/tools/perf/arch/x86/tests/insn-x86-dat-64.c
-+++ b/tools/perf/arch/x86/tests/insn-x86-dat-64.c
-@@ -2495,6 +2495,26 @@
- "c4 e2 7b 49 c0       \ttilezero %tmm0",},
- {{0xc4, 0xe2, 0x7b, 0x49, 0xf8, }, 5, 0, "", "",
- "c4 e2 7b 49 f8       \ttilezero %tmm7",},
-+{{0xf3, 0x0f, 0x01, 0xee, }, 4, 0, "", "",
-+"f3 0f 01 ee          \tclui   ",},
-+{{0xf3, 0x0f, 0xc7, 0xf0, }, 4, 0, "", "",
-+"f3 0f c7 f0          \tsenduipi %rax",},
-+{{0xf3, 0x41, 0x0f, 0xc7, 0xf0, }, 5, 0, "", "",
-+"f3 41 0f c7 f0       \tsenduipi %r8",},
-+{{0xf3, 0x0f, 0x01, 0xef, }, 4, 0, "", "",
-+"f3 0f 01 ef          \tstui   ",},
-+{{0xf3, 0x0f, 0x01, 0xed, }, 4, 0, "", "",
-+"f3 0f 01 ed          \ttestui ",},
-+{{0xf3, 0x0f, 0x01, 0xec, }, 4, 0, "", "",
-+"f3 0f 01 ec          \tuiret  ",},
-+{{0xf3, 0x0f, 0x3a, 0xf0, 0xc0, 0x00, }, 6, 0, "", "",
-+"f3 0f 3a f0 c0 00    \threset $0x0",},
-+{{0x0f, 0x01, 0xe8, }, 3, 0, "", "",
-+"0f 01 e8             \tserialize ",},
-+{{0xf2, 0x0f, 0x01, 0xe9, }, 4, 0, "", "",
-+"f2 0f 01 e9          \txresldtrk ",},
-+{{0xf2, 0x0f, 0x01, 0xe8, }, 4, 0, "", "",
-+"f2 0f 01 e8          \txsusldtrk ",},
- {{0x0f, 0x01, 0xcf, }, 3, 0, "", "",
- "0f 01 cf             \tencls  ",},
- {{0x0f, 0x01, 0xd7, }, 3, 0, "", "",
-diff --git a/tools/perf/arch/x86/tests/insn-x86-dat-src.c b/tools/perf/arch/x86/tests/insn-x86-dat-src.c
-index 7906f7b2ffeb..425db6a1b580 100644
---- a/tools/perf/arch/x86/tests/insn-x86-dat-src.c
-+++ b/tools/perf/arch/x86/tests/insn-x86-dat-src.c
-@@ -1931,6 +1931,15 @@ int main(void)
- 	asm volatile("tilezero %tmm0");
- 	asm volatile("tilezero %tmm7");
+diff --git a/arch/x86/lib/x86-opcode-map.txt b/arch/x86/lib/x86-opcode-map.txt
+index b2cc6c04cbfe..591797a931bf 100644
+--- a/arch/x86/lib/x86-opcode-map.txt
++++ b/arch/x86/lib/x86-opcode-map.txt
+@@ -893,7 +893,7 @@ cc: sha1rnds4 Vdq,Wdq,Ib
+ ce: vgf2p8affineqb Vx,Wx,Ib (66)
+ cf: vgf2p8affineinvqb Vx,Wx,Ib (66)
+ df: VAESKEYGEN Vdq,Wdq,Ib (66),(v1)
+-f0: RORX Gy,Ey,Ib (F2),(v)
++f0: RORX Gy,Ey,Ib (F2),(v) | HRESET Gv,Ib (F3),(000),(11B)
+ EndTable
  
-+	/* User Interrupt */
-+
-+	asm volatile("clui");
-+	asm volatile("senduipi %rax");
-+	asm volatile("senduipi %r8");
-+	asm volatile("stui");
-+	asm volatile("testui");
-+	asm volatile("uiret");
-+
- #else  /* #ifdef __x86_64__ */
+ GrpTable: Grp1
+@@ -976,7 +976,7 @@ GrpTable: Grp7
+ 2: LGDT Ms | XGETBV (000),(11B) | XSETBV (001),(11B) | VMFUNC (100),(11B) | XEND (101)(11B) | XTEST (110)(11B) | ENCLU (111),(11B)
+ 3: LIDT Ms
+ 4: SMSW Mw/Rv
+-5: rdpkru (110),(11B) | wrpkru (111),(11B) | SAVEPREVSSP (F3),(010),(11B) | RSTORSSP Mq (F3) | SETSSBSY (F3),(000),(11B)
++5: rdpkru (110),(11B) | wrpkru (111),(11B) | SAVEPREVSSP (F3),(010),(11B) | RSTORSSP Mq (F3) | SETSSBSY (F3),(000),(11B) | CLUI (F3),(110),(11B) | SERIALIZE (000),(11B) | STUI (F3),(111),(11B) | TESTUI (F3)(101)(11B) | UIRET (F3),(100),(11B) | XRESLDTRK (F2),(000),(11B) | XSUSLDTRK (F2),(001),(11B)
+ 6: LMSW Ew
+ 7: INVLPG Mb | SWAPGS (o64),(000),(11B) | RDTSCP (001),(11B)
+ EndTable
+@@ -993,7 +993,7 @@ GrpTable: Grp9
+ 3: xrstors
+ 4: xsavec
+ 5: xsaves
+-6: VMPTRLD Mq | VMCLEAR Mq (66) | VMXON Mq (F3) | RDRAND Rv (11B)
++6: VMPTRLD Mq | VMCLEAR Mq (66) | VMXON Mq (F3) | RDRAND Rv (11B) | SENDUIPI Gq (F3)
+ 7: VMPTRST Mq | VMPTRST Mq (F3) | RDSEED Rv (11B)
+ EndTable
  
- 	/* bound r32, mem (same op code as EVEX prefix) */
-@@ -3693,6 +3702,19 @@ int main(void)
+diff --git a/tools/arch/x86/lib/x86-opcode-map.txt b/tools/arch/x86/lib/x86-opcode-map.txt
+index b2cc6c04cbfe..591797a931bf 100644
+--- a/tools/arch/x86/lib/x86-opcode-map.txt
++++ b/tools/arch/x86/lib/x86-opcode-map.txt
+@@ -893,7 +893,7 @@ cc: sha1rnds4 Vdq,Wdq,Ib
+ ce: vgf2p8affineqb Vx,Wx,Ib (66)
+ cf: vgf2p8affineinvqb Vx,Wx,Ib (66)
+ df: VAESKEYGEN Vdq,Wdq,Ib (66),(v1)
+-f0: RORX Gy,Ey,Ib (F2),(v)
++f0: RORX Gy,Ey,Ib (F2),(v) | HRESET Gv,Ib (F3),(000),(11B)
+ EndTable
  
- #endif /* #ifndef __x86_64__ */
+ GrpTable: Grp1
+@@ -976,7 +976,7 @@ GrpTable: Grp7
+ 2: LGDT Ms | XGETBV (000),(11B) | XSETBV (001),(11B) | VMFUNC (100),(11B) | XEND (101)(11B) | XTEST (110)(11B) | ENCLU (111),(11B)
+ 3: LIDT Ms
+ 4: SMSW Mw/Rv
+-5: rdpkru (110),(11B) | wrpkru (111),(11B) | SAVEPREVSSP (F3),(010),(11B) | RSTORSSP Mq (F3) | SETSSBSY (F3),(000),(11B)
++5: rdpkru (110),(11B) | wrpkru (111),(11B) | SAVEPREVSSP (F3),(010),(11B) | RSTORSSP Mq (F3) | SETSSBSY (F3),(000),(11B) | CLUI (F3),(110),(11B) | SERIALIZE (000),(11B) | STUI (F3),(111),(11B) | TESTUI (F3)(101)(11B) | UIRET (F3),(100),(11B) | XRESLDTRK (F2),(000),(11B) | XSUSLDTRK (F2),(001),(11B)
+ 6: LMSW Ew
+ 7: INVLPG Mb | SWAPGS (o64),(000),(11B) | RDTSCP (001),(11B)
+ EndTable
+@@ -993,7 +993,7 @@ GrpTable: Grp9
+ 3: xrstors
+ 4: xsavec
+ 5: xsaves
+-6: VMPTRLD Mq | VMCLEAR Mq (66) | VMXON Mq (F3) | RDRAND Rv (11B)
++6: VMPTRLD Mq | VMCLEAR Mq (66) | VMXON Mq (F3) | RDRAND Rv (11B) | SENDUIPI Gq (F3)
+ 7: VMPTRST Mq | VMPTRST Mq (F3) | RDSEED Rv (11B)
+ EndTable
  
-+	/* Prediction history reset */
-+
-+	asm volatile("hreset $0");
-+
-+	/* Serialize instruction execution */
-+
-+	asm volatile("serialize");
-+
-+	/* TSX suspend load address tracking */
-+
-+	asm volatile("xresldtrk");
-+	asm volatile("xsusldtrk");
-+
- 	/* SGX */
- 
- 	asm volatile("encls");
 -- 
 2.25.1
 

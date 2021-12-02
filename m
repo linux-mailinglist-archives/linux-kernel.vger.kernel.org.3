@@ -2,139 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28838466618
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:02:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6383466616
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358427AbhLBPFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 10:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358364AbhLBPF1 (ORCPT
+        id S1358319AbhLBPF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 10:05:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46367 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1358172AbhLBPFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 10:05:27 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8175C06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 07:02:04 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id y12so116850583eda.12
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 07:02:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FYZ7pWgwTOlBPwdzrVeymAp5SE5b/mIikVc6NSRBjCw=;
-        b=HRnTKCfbWner7J+VmRmLdy1476/grLkVshDTtXe7fezto/zYKSM+ddX/zHJHcLPMb7
-         BIzAPfa9pDaQydC7Bz2V+xcQ5SJ27hzrnhvB9LJ34I1jkanZhb3DE678CX+nw5gw+F7g
-         Ags3PFyEFvujKFZQzZYsqYlHgW+pJQbwMqZO+PlJJJXTrpgFQgZY998hw1E87G0ChqEh
-         0mIirNv2W2xWNZZzl+fDcAY1R4pEebH+DegaDYcd4upmMvqCMvIatEMadjkbayqdJD9K
-         DwQ6e3PB6BYmseF1ND0D5R7Wa3d1xiJD7qOYHTP336A7rX7tIBU6oH2ahziEumyAkLwd
-         qqvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FYZ7pWgwTOlBPwdzrVeymAp5SE5b/mIikVc6NSRBjCw=;
-        b=VMV5TzbSgYCT3nED4fV9/XNXgvltjUPDYx33yU8yPS+LHfAsptKktc9kRTWmbsI7XD
-         4L0wKS1JRbr8olB1RPqB0znlF2HTPjQDBWx5FubjA1uNjssd9kVfhCN0pUQVSGXTzOcR
-         ksSL7JkjTAsGQ3coyOhcmI9W2lMVjUNdS0urXqmVzozQ0U7h9M5ya3lL6OOnPhNFLIf/
-         nQWs38VDXbjvcCfgjIrxOAuSjLh0iXj2kRG3Rx0kT1IfBMu4BivplGTbNOr0NaejaV0a
-         1kpT1+kfhAX/F3bomdWsIpKuCsPnEmeAKqdIHYg90bwuSljbmkkXbsxLHf3fdcanrlr/
-         FHIQ==
-X-Gm-Message-State: AOAM53289gSSWSHcL7sjId2vlBq+VNkBpS+NP/PsNSW+QNwNAvfLXVCf
-        ll9lvb0BMWtFhJsF57pcG6tdMbZ3Uqjp3nClKYBO2g==
-X-Google-Smtp-Source: ABdhPJzISUJXAYYlwt7qgLHvDKRCxJBIRO2E6l4Dwkxhcg2vX2iO31Xme1Hbgi7zcirqWaPFG5JzLfERq/4QuJTctqE=
-X-Received: by 2002:a17:906:58ce:: with SMTP id e14mr15259368ejs.525.1638457306497;
- Thu, 02 Dec 2021 07:01:46 -0800 (PST)
+        Thu, 2 Dec 2021 10:05:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638457321;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/3xlIYEWyvboPKd2VFHttveDDWJjCPblrUV213W3J78=;
+        b=Gw8cNDDmjCT76z87JQuORK/Bau79gGvTgDDc8JGIWHjt6c2oJ38TB2INkk92QnRwHvABU5
+        ZJU1/MIlbFTRELEeqvXnB/3bnBNmLpZcBBIf7iehBopoWKnY+aO7kfq+T0whpLq7uqypYX
+        53lMnqkj2gBewtW2pJLaCot7IvtMkyc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-538-Z6f8F3GTO3ux06V1OWFmmg-1; Thu, 02 Dec 2021 10:01:58 -0500
+X-MC-Unique: Z6f8F3GTO3ux06V1OWFmmg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6D97294EE3;
+        Thu,  2 Dec 2021 15:01:56 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 256E85F4ED;
+        Thu,  2 Dec 2021 15:01:53 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <b8d6f890-e5aa-44bf-8a55-5998efa05967@www.fastmail.com>
+References: <b8d6f890-e5aa-44bf-8a55-5998efa05967@www.fastmail.com> <YZvIlz7J6vOEY+Xu@yuki> <1618289.1637686052@warthog.procyon.org.uk> <ff8fc4470c8f45678e546cafe9980eff@AcuMS.aculab.com> <YaTAffbvzxGGsVIv@yuki> <CAK8P3a1Rvf_+qmQ5pyDeKweVOFM_GoOKnG4HA3Ffs6LeVuoDhA@mail.gmail.com>
+To:     "Zack Weinberg" <zack@owlfolio.org>
+Cc:     dhowells@redhat.com, "Arnd Bergmann" <arnd@arndb.de>,
+        "Cyril Hrubis" <chrubis@suse.cz>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        libc-alpha@sourceware.org,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "David Laight" <David.Laight@aculab.com>,
+        "ltp@lists.linux.it" <ltp@lists.linux.it>
+Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
 MIME-Version: 1.0
-References: <20211123214814.3756047-1-pasha.tatashin@soleen.com>
- <20211123214814.3756047-4-pasha.tatashin@soleen.com> <f81a6434-9f38-947e-02a8-9a9191285e52@kernel.org>
- <cadf2582-3004-92b9-ab5a-cb39259fa36c@kernel.org> <CA+CK2bBfcrxDyxnV+xc680AP+sJGHSpong6a+b_vvWcRsB2CcA@mail.gmail.com>
- <a0968570-a25a-a7e3-3ee5-b7275286c9d1@kernel.org> <172f894c-01ab-cd9f-3292-1ba811f7222a@kernel.org>
-In-Reply-To: <172f894c-01ab-cd9f-3292-1ba811f7222a@kernel.org>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Thu, 2 Dec 2021 10:01:10 -0500
-Message-ID: <CA+CK2bCGHBCO8+y_4E9LwV2C0bE_c0o3P4-9BXBASYFSYMpVrg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] x86: mm: add x86_64 support for page table check
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Paul Turner <pjt@google.com>, weixugc@google.com,
-        Greg Thelen <gthelen@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>, masahiroy@kernel.org,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        frederic@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <913508.1638457313.1@warthog.procyon.org.uk>
+Date:   Thu, 02 Dec 2021 15:01:53 +0000
+Message-ID: <913509.1638457313@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 5:05 AM Jiri Slaby <jirislaby@kernel.org> wrote:
->
-> On 02. 12. 21, 10:59, Jiri Slaby wrote:
-> > On 01. 12. 21, 14:55, Pasha Tatashin wrote:
-> >> On Wed, Dec 1, 2021 at 3:44 AM Jiri Slaby <jirislaby@kernel.org> wrote:
-> >>>
-> >>> On 01. 12. 21, 9:00, Jiri Slaby wrote:
-> >>>> On 23. 11. 21, 22:48, Pasha Tatashin wrote:
-> >>>>> Add page table check hooks into routines that modify user page tables.
-> >>>>
-> >>>> Hi,
-> >>>>
-> >>>> I bisected to this as this causes crashes during modules load:
-> >>>
-> >>> And it's not enough to unset CONFIG_PAGE_TABLE_CHECK_ENFORCED. I had to
-> >>> unset CONFIG_PAGE_TABLE_CHECK completely to get rid of this.
-> >>
-> >> Hi,
-> >>
-> >> Thanks for reporting this. Seems like module load for some reasons
-> >> does not like the static branches. However, I was not able to repro
-> >> this. Could you please share your config and the module that you were
-> >> loading?
-> >
-> > It's the openSUSE's -next config:
-> > https://raw.githubusercontent.com/openSUSE/kernel-source/linux-next/config/x86_64/vanilla
-> >
-> >
-> > But with CONFIG_IWLMEI=n (as that fails to link).
-> >
-> > One has to load i915, other modules (71 on my system) are apparently fine.
-> >
-> > i915 tries to patch your `page_table_check_disabled' which is defined as
-> > `DEFINE_STATIC_KEY_TRUE_RO':
-> >  > jump_label_add_module: key=__tracepoint_mmap_lock_released
-> > (ffffffff93f36d88) mod=0000000000000000
-> >  > jump_label_add_module: key=hugetlb_free_vmemmap_enabled_key
-> > (ffffffff94873560) mod=0000000000000000
-> >  > jump_label_add_module: key=devmap_managed_key (ffffffff94902700)
-> > mod=0000000000000000
-> >  > jump_label_add_module: key=page_table_check_disabled
-> > (ffffffff939da760) mod=0000000000000000
-> >  > BUG: unable to handle page fault for address: ffffffff939da768
->
-> Provided you EXPORT page_table_check_disabled and it can be used from
-> modules, it can be barely marked as RO. So the below indeed fixes the
-> problem for me:
->
-> --- a/mm/page_table_check.c
-> +++ b/mm/page_table_check.c
-> @@ -18,7 +18,7 @@ struct page_table_check {
->   static bool __page_table_check_enabled __initdata =
->
-> IS_ENABLED(CONFIG_PAGE_TABLE_CHECK_ENFORCED);
->
-> -DEFINE_STATIC_KEY_TRUE_RO(page_table_check_disabled);
-> +DEFINE_STATIC_KEY_TRUE(page_table_check_disabled);
+Zack Weinberg <zack@owlfolio.org> wrote:
 
-Makes sense, thanks! I will remove _RO in the next version.
+> I could be persuaded otherwise with an example of a program for which
+> changing __s64 from 'long long' to 'long' would break *binary* backward
+> compatibility, or similarly for __u64.
 
-Pasha
+C++ could break.
+
+David
+

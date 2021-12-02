@@ -2,63 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E80334660A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1046B4660A8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:48:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356575AbhLBJsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 04:48:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
+        id S1356581AbhLBJvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 04:51:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345962AbhLBJsg (ORCPT
+        with ESMTP id S1345962AbhLBJvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 04:48:36 -0500
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00517C06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 01:45:13 -0800 (PST)
-Received: by mail-lf1-x142.google.com with SMTP id z7so35741729lfi.11
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 01:45:13 -0800 (PST)
+        Thu, 2 Dec 2021 04:51:24 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343EAC06174A;
+        Thu,  2 Dec 2021 01:48:02 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id i5so58367833wrb.2;
+        Thu, 02 Dec 2021 01:48:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=QCG68ObPoGQ126FjMJ8YjZpzkjBTmbsGv489REpxv3o=;
-        b=cOc6b/+rHlxDUpRrOgxgj0KSZkMwzvRdEFLbPGZORZoMZJuK+pnPYC/uWJJEDFQSJz
-         RLHZ/Sqa7345AsjnPo+309ki0ZHXeUhGuGeRCPgcWWf5pF5VPoNljN0v8ItZeqRYYzyn
-         StwUjAbdyIZRbGxq3cRevmyGud7Hl4VC/QNOhGThZ2h4++dAFzxOkqKTSwtM2vmN5rEM
-         Dx7mjbmzidUPTSYfGU3ZzzcBEFInepsI/mg92voUwK3HyYAH/lVfD+6I3v0seJrMg0aQ
-         oo5LtQ9BxWCRCd1JEi3c+lKL3N/ToEX76dHlrXkC6Sqz3avY8tzFRKp4u2F3+sYCgAXS
-         iUdQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=758P/IaoZ9hWNIWUREsIatDsLPmQd5ti7yap9+rPwpU=;
+        b=W1AFEQ2lt6YOQr85juZ57+l9kCo54Y+j9yJB2ofNcyJnG5RTHxSDmxYju4mepX69wi
+         cj/xETlibdQw+nh4Rfk+R9M4LeaC0SAObPBhLTYyBZGlZo/24AWYhDdq1TP/9C8VJs9o
+         jPGj0izy5OA24X1iE+g0MHSXGmjvejq2IeZtlGTN6YxwvETaA+l/b5Wkq1zig8CGu47Z
+         eLn2WKF0yHGkuuceEbPMZbrxKQJYBmaYHVYRMVW1+KZ5ZCVn+WJunSszB/GXsi91nrq+
+         TcfsQSD0F+evyC5lrqF7vbDFV2UsnqKhMcue5GyIOvs5qXzhylT1vSe7RrnN0SU1XdFt
+         Dv3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=QCG68ObPoGQ126FjMJ8YjZpzkjBTmbsGv489REpxv3o=;
-        b=Hu70ja2YkmF01m1DJvhbHCb6kFd5bzQ3bCmde+z4xYWT7O3bh+ItRJgh2PbArUPufn
-         K/pvIqa6TDm3FIgyQ819Fl6D2lTXcCk/mqnM+S1pxLxODJ5bmQUF/9oDcR9ZrfrhLurx
-         oMUigN9tB3pONamcbmVVBLii7YNTUqQqSYpA45fm6v5ww4ERW6qJtKLMT7N5fF+y+MjL
-         Lj48ha7qrdm1fE/8hsmEDTR5yqHxkClIQdNab8MRrnjEY6DPWFeIo9p0CyKd8iCPDyB+
-         oZx7O1SSCv6KJqiMwtmrkaVcLKmS/byDFPlBaNv16eEBRwuqDVqSgj09NvnlyKGU8Obt
-         Dsag==
-X-Gm-Message-State: AOAM530eG2jKZPhYpvn8mB4L0jp2lBHGWiK+B4VTHvpR6vZ34Aj1X87K
-        IADARed6uQ513DCYT+QdmVswF8aVC4mt/dk2ebs=
-X-Google-Smtp-Source: ABdhPJx+oA67S0nHv0hRk09CIB41nfEYKdeMHCR7/4kSukS8RT3DTuRuB3n3kHN0qMqiFSX7eQknv93Y1vrPir93g/o=
-X-Received: by 2002:a19:c795:: with SMTP id x143mr11170951lff.249.1638438311959;
- Thu, 02 Dec 2021 01:45:11 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=758P/IaoZ9hWNIWUREsIatDsLPmQd5ti7yap9+rPwpU=;
+        b=34Z1a/tCEEYZ/bmgweLq5zckpBNxZg/w0E4g3yXcgRPZAZbSTNNGgayihaC7j/ZXTE
+         PkDZHcGDgTuIltcTE9ghf8DaWdqNzTCj3cAHAqzASy3sQ1i8EZ8TRXq3Ykqfwd+UEpDH
+         I7eE3xoigimPxvztoZO9NFITQtMch/61bfu2ZzcE3cSFdLSiRd5J11Z64ecZHEQmWwM2
+         9sTmhAm6q5zgCty2WVvHKSDeIZP8MhVlGhe/P/jOW28PAgjyIrPR0N9R9YALxtM0vW6t
+         mMl5xlNo8tMY+501E18vsF1mcFXv0vaGgXDmDBtDgTOcUrlM3G9yBnaehYelwEiedFBl
+         f/9w==
+X-Gm-Message-State: AOAM5338ruqmswyTSZ8X6bhXm0zWTRkWWGChX1xSmwPGeblx/46QtlW9
+        2QhNIsr6HfeKR2ZFqy65e1096wTHNq4=
+X-Google-Smtp-Source: ABdhPJwXWoIlJP098/ORKHgYZYKpH+TxKDyd+A2hwBKy3ZXPZ7K/njWuQU5gXOAUss4KHPSBKs9r2Q==
+X-Received: by 2002:a5d:648e:: with SMTP id o14mr13065220wri.141.1638438480717;
+        Thu, 02 Dec 2021 01:48:00 -0800 (PST)
+Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
+        by smtp.gmail.com with ESMTPSA id d1sm2015924wrz.92.2021.12.02.01.48.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 01:48:00 -0800 (PST)
+Subject: Re: [PATCH] media: i2c: Fix inconsistent indenting
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1638434358-47417-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+From:   Daniel Scally <djrscally@gmail.com>
+Message-ID: <4803fe17-fdce-dbcc-99e7-29e0715dfee9@gmail.com>
+Date:   Thu, 2 Dec 2021 09:47:59 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Received: by 2002:a19:c50f:0:0:0:0:0 with HTTP; Thu, 2 Dec 2021 01:45:11 -0800 (PST)
-Reply-To: deborahkouassi011@gmail.com
-From:   Deborah Kouassi <kouassideborah557@gmail.com>
-Date:   Thu, 2 Dec 2021 09:45:11 +0000
-Message-ID: <CAKxSgv2Xa8UC8+nE7HOzKj8DJWgcRdCRv0=5h6ohbZ_KSWBA-A@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1638434358-47417-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-.
-I will like to disclose something very important to you,
-get back to me for more details please.
+Hi Jiapeng
 
-Regards.
-Mrs Deborah Kouassi.
+
+Thanks for catching that
+
+On 02/12/2021 08:39, Jiapeng Chong wrote:
+> Eliminate the follow smatch warning:
+>
+> drivers/media/i2c/ov8865.c:2841 ov8865_get_selection() warn:
+> inconsistent indenting.
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+
+
+Reviewed-by: Daniel Scally <djrscally@gmail.com>
+
+> ---
+>  drivers/media/i2c/ov8865.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
+> index ebdb20d..09ba13f 100644
+> --- a/drivers/media/i2c/ov8865.c
+> +++ b/drivers/media/i2c/ov8865.c
+> @@ -2836,8 +2836,7 @@ static int ov8865_get_selection(struct v4l2_subdev *subdev,
+>  	switch (sel->target) {
+>  	case V4L2_SEL_TGT_CROP:
+>  		mutex_lock(&sensor->mutex);
+> -			__ov8865_get_pad_crop(sensor, state, sel->pad,
+> -					      sel->which, &sel->r);
+> +		__ov8865_get_pad_crop(sensor, state, sel->pad, sel->which, &sel->r);
+>  		mutex_unlock(&sensor->mutex);
+>  		break;
+>  	case V4L2_SEL_TGT_NATIVE_SIZE:

@@ -2,181 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0076D4667AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 734A04667B2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359135AbhLBQRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 11:17:06 -0500
-Received: from mail-vi1eur05on2050.outbound.protection.outlook.com ([40.107.21.50]:4768
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235056AbhLBQRF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 11:17:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xLa6su2hochrk60AJ4u6GuSkQGnYNVcpaukvQw/t9Yk=;
- b=IrAjK1905IttUsLhs6fSMsTkq0IBx2pYc6hHE+pVmh6Q0pSNCGESuRtfFeR5VZ/PX8NbeZKLByft1FE10NtkpG2epeTdLfLQUK1scAv7v6AO4UR9MWTol9ZxRTaZBUqPPHrPxpYCSaSHb/57lwzS4E8BNrWw2lfnaNb3jsgGgck=
-Received: from AM6P195CA0002.EURP195.PROD.OUTLOOK.COM (2603:10a6:209:81::15)
- by AM9PR08MB7242.eurprd08.prod.outlook.com (2603:10a6:20b:431::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Thu, 2 Dec
- 2021 16:13:35 +0000
-Received: from AM5EUR03FT028.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:209:81:cafe::de) by AM6P195CA0002.outlook.office365.com
- (2603:10a6:209:81::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16 via Frontend
- Transport; Thu, 2 Dec 2021 16:13:35 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- AM5EUR03FT028.mail.protection.outlook.com (10.152.16.118) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4755.13 via Frontend Transport; Thu, 2 Dec 2021 16:13:35 +0000
-Received: ("Tessian outbound dbb52aec1fa6:v110"); Thu, 02 Dec 2021 16:13:35 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: c858752362614e6e
-X-CR-MTA-TID: 64aa7808
-Received: from b51d937cc274.2
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id BC9AA1BB-22ED-44D3-B1F6-E2E472DE12E6.1;
-        Thu, 02 Dec 2021 16:13:24 +0000
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id b51d937cc274.2
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Thu, 02 Dec 2021 16:13:24 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ar7pYGChz4qdT0DEuiJCl3zvDuRJYSIuVphIbZX2XbK8XemxMJa04Gq7+nOVQcZzA4zo6dX/ezSoYYGCOARVd22YiaJLer6ZJ3PN97a1iiKYVBN38tcODJEDofi7tuqGzF5D8SPP1e8EXPdAIromUeRkCiw3XXgT4LVmrn3IS9SkSgNCEYpSZ+gGslz27sySGJKyOPsFAxtTc645MxwprIhJYUdicbgtYEDpm4uXwRTXKrFajspdb75IbBo9GQCi4IM9nVUmIhD3m43lSztQabCEmq70NuZcoasDoXpzVSbPLhDge0qjbQ1D5MooAdmrjHhu8JzRR9WuxLl3TWO+/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xLa6su2hochrk60AJ4u6GuSkQGnYNVcpaukvQw/t9Yk=;
- b=DbaqrXl2ddp6/dMDO3idbBrC480jiGvSyNnZ5ct6NykIsdDN1auAw99AvX/qFH++sCmpex8SEfkotKIJdK8oBfI0WDUbyZWRyv7K9YSgZ8XUUYPa419YtJhiBGTe7Vg+fnZ3wOzPBUBX6z0pZDqe+EWcPUBfr2eOmEMLVnsaMLbPzMVlwwgqsTUq4hEavf6RXWfQqrCJD81lWZzg5FI7z75YBBDoKPRnlDaRDoc2DhRRgD0vhL4Tk7I3ktzdx4CygCgG3+333fDmgzJgFcGePj6jFFNnyHvK7c2SM4cUrQRPsTuCWvcEdvKPM1B+qdxFI6/ke57JfTBvAKJofvjSMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xLa6su2hochrk60AJ4u6GuSkQGnYNVcpaukvQw/t9Yk=;
- b=IrAjK1905IttUsLhs6fSMsTkq0IBx2pYc6hHE+pVmh6Q0pSNCGESuRtfFeR5VZ/PX8NbeZKLByft1FE10NtkpG2epeTdLfLQUK1scAv7v6AO4UR9MWTol9ZxRTaZBUqPPHrPxpYCSaSHb/57lwzS4E8BNrWw2lfnaNb3jsgGgck=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB8PR08MB5433.eurprd08.prod.outlook.com (2603:10a6:10:118::13)
- by DB9PR08MB6361.eurprd08.prod.outlook.com (2603:10a6:10:261::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Thu, 2 Dec
- 2021 16:13:14 +0000
-Received: from DB8PR08MB5433.eurprd08.prod.outlook.com
- ([fe80::71de:ed79:2f31:c001]) by DB8PR08MB5433.eurprd08.prod.outlook.com
- ([fe80::71de:ed79:2f31:c001%3]) with mapi id 15.20.4734.024; Thu, 2 Dec 2021
- 16:13:13 +0000
-Date:   Thu, 2 Dec 2021 16:13:10 +0000
-From:   Joey Gouly <joey.gouly@arm.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Marco Elver <elver@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, nd@arm.com
-Subject: Re: [PATCH v3] arm64: Enable KCSAN
-Message-ID: <20211202161310.GA27207@e124191.cambridge.arm.com>
-References: <20211202143331.15259-1-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211202143331.15259-1-wangkefeng.wang@huawei.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: LO2P265CA0117.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:c::33) To DB8PR08MB5433.eurprd08.prod.outlook.com
- (2603:10a6:10:118::13)
+        id S1359383AbhLBQSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 11:18:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359368AbhLBQRe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 11:17:34 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9949DC06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 08:14:11 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id j9so25376320qvm.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 08:14:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ufkuMHJENZAKBVIrvseO49pb4ZFToj5htqXCloJEnks=;
+        b=Crx2IVA+3FT3DarQIHnHUeky6f0sOi0uyQVyUV5jrn7dSPq4qJ6fXu1TKwVoYru9Mv
+         lXERzjbX5xXWNbnnILttG3dn193EsWXLZU+iwq8aed71iJ4kfDnZAs/kHkymZ/1awlNM
+         fLX7BBPZfZvUg+4KyrempOVuGI3KkIG5e7MJFZBCTU0owbK3Q3G4LQ028mXapsNvnrwW
+         UZnA7ljZEzwMbHaKdFEWf8nFiRXq1SbVyAwDYZSJraplDwo9euYtP0sbGVvq68Gu1BQv
+         hiWyGOYqTb7XSz2rF15AgUM8rQwFWgrv3qwj7y6R9FGxplJsVtxKxzUqkjfCNfAvLd6V
+         KWAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ufkuMHJENZAKBVIrvseO49pb4ZFToj5htqXCloJEnks=;
+        b=lozg4XWx17P4r5NG1wfrgCpJw60NHySWYj77Im+hZR5qYXjtYmc3IlHwaPSQYjnSUi
+         KEojZzmNB+DyUC7z+F3QkyEgAIk+AAe4nEdv7/UbB4UnsBoZ5QEZW7XOAbb4ortAInX8
+         68jQrfJ2ml9NkZaI1LjTYlNVJXEmJK474Gd+pBssc2FeqKcUPjjVQfBTHNAaJ4R+dzK2
+         YLaLjXhmxbdY4+tOkf8jqJXTWo+X3Bwe4IMIdHz24Eb30z8SLlbN+75Qw0P/e/Ionv5/
+         eVyIjQHvZSVby3sWTas6oe75tbnK4/ibtqDdvJwVGTaU1GgX2PxM21QM9Mv9q+Xv7eOD
+         IHbQ==
+X-Gm-Message-State: AOAM533oDQpAsRmHj0DVXyaKfn4h41l9Qh66VDeYgJ6/7NDzmF5mD+9D
+        ujY3xuNcTZuvUsRwvzb+P17TLwIIr4rmCOYsyBfCwQ==
+X-Google-Smtp-Source: ABdhPJxjUOHGzUULmdGYRPeP5vFSn8K/NzY6SOtvNi1xDsFneFX5rAQN0TOn/uuP8WGVW+Aei30O7ewS4oTjFJjcah0=
+X-Received: by 2002:a0c:8031:: with SMTP id 46mr14089905qva.126.1638461650530;
+ Thu, 02 Dec 2021 08:14:10 -0800 (PST)
 MIME-Version: 1.0
-Received: from e124191.cambridge.arm.com (217.140.106.52) by LO2P265CA0117.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:c::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11 via Frontend Transport; Thu, 2 Dec 2021 16:13:12 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2cb5fddd-4631-4adb-b247-08d9b5aeb16f
-X-MS-TrafficTypeDiagnostic: DB9PR08MB6361:|AM9PR08MB7242:
-X-Microsoft-Antispam-PRVS: <AM9PR08MB72423F6DE02415CC7FD1CF3694699@AM9PR08MB7242.eurprd08.prod.outlook.com>
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: jirxJj5/pYnGPfXXAZlktTfRzCEkb4BdbtAl8219kTqZz97GXTsYeMQz+cepjzVdYbeloX7uH2rGgQnKclnSBi2LBvshXzH9cJsnxSHL50MdUFvwz6hAvLcok8B+VMzBcKLreTjeQoOSEWZeR4HDCqND6T9AQdfAEQDAyrpGzpTh6pphkWv0UxpYKxjrRgHfSxfHqgtwQaOxa2ImZ/opkEIfC4xNwVlFLIosnPihGqsbagFv6J8x8QPA8W/1SNvrQu3YflCCwi22fT1XTNJW8WPyZpLyMz4/VJOx7uKDhffHVYIKMpp3ioENHHgrUFne94/iUWgYiRU2Q0/f8AzyVtkVYkc3ihMxC4ojeVVTxctQizVsaP99mgVOnqoUXE4izx9ybmCgyOAtllTcW37TZtzXM1uxuyOCShAnq5T4aE796n3igRnFl8LhLWQovxiaHqLO/X/n3fK54UKs/rY8SatxEFIp1GLFsUt2JlXpALiz/vwHhC9Ra200vCsdi4Wpvt9yDL0q9SSdeKyVkI2PNGag+9YczeKbKMuHWkMvZhn+cuL/v0nO4OwjusKEw+E+TBil+8MxFcEfmTa1HQ1l14IHB1jOs2nV2UU/m1UpLw4M4Sld9qOqOD0NtIRcFgFT7Ggv6ip2IfT05wALgNYNbhdRYbsR5c1UnYuBHTjTokEWsHDlRVUfodj3VoDlFQlgLqM+wm7kMGYNhO2wDQjtM6guYsJQSrjVR23EKPTQ+sBty3ubzqeFqTaWyEt6H9cVI/nfD+F+MYWj26EFYnjA7ppMLwYrwQNoDC68M5WVQddUsHDKByprF08OIEjVl8D+c/GI89XXvuIjTMhz0ddHMQ==
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR08MB5433.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52116002)(956004)(66946007)(83380400001)(33656002)(316002)(2906002)(66476007)(5660300002)(7696005)(508600001)(6916009)(55016003)(66556008)(8676002)(54906003)(966005)(38100700002)(4326008)(38350700002)(26005)(1076003)(186003)(86362001)(8936002)(44832011);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB6361
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM5EUR03FT028.eop-EUR03.prod.protection.outlook.com
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 94a6a06a-3d1b-4139-caf0-08d9b5aea410
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2r8G33DJLktaud7sw8XBKyPNBjPigcWLua3iXp2ql0IElXvlLoFYUWN6ZkP4tV/2B6ZnJisSFnOEfRNhn9Svwk5Oxs3v2IRn7xAKbO105yrmh8p+TjrnhosheMLrrVSJdOjLknvgsiKC24W3cgLofGKNC+krfrzxj8ilwjgA0xD1i6Mpubu4Ka0qk+WAMmn+S5dpaBETc9jp/ZhSO8Kmt9NJRuf1LRqevzvo1B6n6HGsD2KM8v9SBfW2+4+ZP4yGgx4uvjYs3io5fdzXbaJi0N58AAiCmpXu054OESnXjyCZoiTAw225Wx8Syci6QcwDwQ57JlX1uOtnMLqcbgLauF1J8720GE49my2yjdltY/bvaS1wRGBsISUQCwx1rYiMRbWu57SPll/0u161jfVkMlRh3xTXqWcTVv90pPChKqTQivVIU5PGAv8d58zqN6nI5Z9wZ9yDzYWRL84R/G3QRUqchQRtIu8esallaO2Nrp3Xmp+rx2iixllpWA15bJZiuyPCIOtK1EK2i5wJrQg/oddZDZCGZGLei7Je7GQxV47szHa9u1sNOcB+/16xqKlRdUmvkqFPSDie3L4IJ0QGnFBCpR+5uP1smRpgHeWI4DumDIPYoI2l+aPHVYprSWCKo0wWhkC7TSyRoom5hx8PHACFFkurJZaRhcn76QO1pphSbEfuj2+VAv2aYWrLzxtRorB9XzWrBwKlkCvYP9EQjUP0B8GUAxIFLFx/A7JHPKoz6H0Kvh6T8nA7x1xJWGF+rm2TxMlsu0fD0bkCZcWttaeNw1/ASmdRmawoI/WHy2sr5ga/eFINOcuK7xt4GGClredAvqbiqiC+3jCjd+gKMpzfB8ldnydNSKq0hKUFANOOBgV9KON9aP12wScjjqBd
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(1076003)(33656002)(7696005)(966005)(2906002)(81166007)(508600001)(83380400001)(36860700001)(47076005)(8676002)(336012)(8936002)(5660300002)(6862004)(54906003)(4326008)(356005)(82310400004)(55016003)(70206006)(26005)(44832011)(70586007)(316002)(186003)(956004)(86362001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2021 16:13:35.4678
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2cb5fddd-4631-4adb-b247-08d9b5aeb16f
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: AM5EUR03FT028.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR08MB7242
+References: <cover.1638308023.git.andreyknvl@google.com> <984104c118a451fc4afa2eadb7206065f13b7af2.1638308023.git.andreyknvl@google.com>
+In-Reply-To: <984104c118a451fc4afa2eadb7206065f13b7af2.1638308023.git.andreyknvl@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 2 Dec 2021 17:13:34 +0100
+Message-ID: <CAG_fn=U71Yn-qCGMBR=_uOt0QCEu9skGzhgRBJjpkQCjZ=dKiA@mail.gmail.com>
+Subject: Re: [PATCH 08/31] kasan, page_alloc: refactor init checks in post_alloc_hook
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Evgenii Stepanov <eugenis@google.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Tue, Nov 30, 2021 at 10:41 PM <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> This patch separates code for zeroing memory from the code clearing tags
+> in post_alloc_hook().
+>
+> This patch is not useful by itself but makes the simplifications in
+> the following patches easier to follow.
+>
+> This patch does no functional changes.
+>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> ---
+>  mm/page_alloc.c | 18 ++++++++++--------
+>  1 file changed, 10 insertions(+), 8 deletions(-)
+>
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 2ada09a58e4b..0561cdafce36 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -2406,19 +2406,21 @@ inline void post_alloc_hook(struct page *page, un=
+signed int order,
+>                 kasan_alloc_pages(page, order, gfp_flags);
+>         } else {
+>                 bool init =3D !want_init_on_free() && want_init_on_alloc(=
+gfp_flags);
+> +               bool init_tags =3D init && (gfp_flags & __GFP_ZEROTAGS);
+>
+>                 kasan_unpoison_pages(page, order, init);
+>
+> -               if (init) {
+> -                       if (gfp_flags & __GFP_ZEROTAGS) {
+> -                               int i;
+> +               if (init_tags) {
+> +                       int i;
+>
+> -                               for (i =3D 0; i < 1 << order; i++)
+> -                                       tag_clear_highpage(page + i);
+> -                       } else {
+> -                               kernel_init_free_pages(page, 1 << order);
+> -                       }
+> +                       for (i =3D 0; i < 1 << order; i++)
+> +                               tag_clear_highpage(page + i);
+> +
+> +                       init =3D false;
 
-On Thu, Dec 02, 2021 at 10:33:31PM +0800, Kefeng Wang wrote:
-> This patch enables KCSAN for arm64, with updates to build rules
-> to not use KCSAN for several incompatible compilation units.
-> 
-> Resent GCC version(at least GCC10) made outline-atomics as the
-> default option(unlike Clang), which will cause linker errors
-> for kernel/kcsan/core.o. Disables the out-of-line atomics by
-> no-outline-atomics to fix the linker errors.
-> 
-> Meanwhile, as Mark said[1], there is a specific issue on arm64
-> about ARM64_BTI with Clang 11 if KCSAN enabled, which is fixed
-> by Clang 12, add CLANG_VERSION check. And also some latent issues
-> are need to be fixed which isn't just a KCSAN problem, we make
-> the KCSAN depends on EXPERT for now.
-> 
-> Tested selftest and kcsan_test(built with GCC11 and Clang 13),
-> and all passed.
-> 
-> [1] https://lkml.org/lkml/2021/12/1/354
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+I find this a bit twisted and prone to breakages.
+Maybe just check for (init && !init_tags) below?
+>                 }
+> +
+> +               if (init)
+> +                       kernel_init_free_pages(page, 1 << order);
+>         }
+>
+>         set_page_owner(page, order, gfp_flags);
+> --
+> 2.25.1
+>
 
-Confirming that I get KCSAN errors such as:
 
-[  285.188576] ==================================================================
-[  285.189514] BUG: KCSAN: data-race in el0_svc_common.constprop.0+0x84/0x14c
-[  285.190599]
-[  285.191092] race at unknown origin, with read to 0xffff0000e3ce3700 of 8 bytes by task 19946 on cpu 5:
-[  285.192576]  el0_svc_common.constprop.0+0x84/0x14c
-[  285.193601]  do_el0_svc+0x30/0x40
-[  285.194457]  el0_svc+0x3c/0x70
-[  285.194954]  el0t_64_sync_handler+0x9c/0x120
-[  285.195618]  el0t_64_sync+0x18c/0x190
-[  285.196371]
-[  285.196823] value changed: 0x0000000000000008 -> 0x000000000000000a
-[  285.197674]
-[  285.198172] Reported by Kernel Concurrency Sanitizer on:
-[  285.198941] CPU: 5 PID: 19946 Comm: stress-ng Not tainted 5.16.0-rc3+ #842 95517f70e70f029451088b9dec0b9074aa29ae52
-[  285.201191] ==================================================================
+--=20
+Alexander Potapenko
+Software Engineer
 
-This particular case is fixed by Mark's thread flag series [1], which is in linux-next now.
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
-Tested with gcc 11 and clang 14.0 (built from git) on qemu and FVP.
-
-Tested-by: Joey Gouly <joey.gouly@arm.com>
-
-Thanks,
-Joey
-
-[1] https://lore.kernel.org/lkml/20211129130653.2037928-1-mark.rutland@arm.com/
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

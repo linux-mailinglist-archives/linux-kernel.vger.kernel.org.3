@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C721F4660AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:50:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3B04660AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356595AbhLBJx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 04:53:58 -0500
+        id S1356607AbhLBJyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 04:54:01 -0500
 Received: from mga01.intel.com ([192.55.52.88]:56004 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356587AbhLBJx5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 04:53:57 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="260668422"
+        id S1356598AbhLBJx7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 04:53:59 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="260668431"
 X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="260668422"
+   d="scan'208";a="260668431"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 01:50:34 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 01:50:37 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="677605092"
+   d="scan'208";a="677605115"
 Received: from ahunter-desktop.fi.intel.com ([10.237.72.76])
-  by orsmga005.jf.intel.com with ESMTP; 02 Dec 2021 01:50:30 -0800
+  by orsmga005.jf.intel.com with ESMTP; 02 Dec 2021 01:50:34 -0800
 From:   Adrian Hunter <adrian.hunter@intel.com>
 To:     Masami Hiramatsu <mhiramat@kernel.org>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -29,10 +29,12 @@ Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         H Peter Anvin <hpa@zytor.com>, chang.seok.bae@intel.com
-Subject: [PATCH 0/6] x86/insn: Add instructions to instruction decoder
-Date:   Thu,  2 Dec 2021 11:50:23 +0200
-Message-Id: <20211202095029.2165714-1-adrian.hunter@intel.com>
+Subject: [PATCH 1/6] perf tests: Add AMX instructions to x86 instruction decoder test
+Date:   Thu,  2 Dec 2021 11:50:24 +0200
+Message-Id: <20211202095029.2165714-2-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211202095029.2165714-1-adrian.hunter@intel.com>
+References: <20211202095029.2165714-1-adrian.hunter@intel.com>
 MIME-Version: 1.0
 Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Content-Transfer-Encoding: 8bit
@@ -40,33 +42,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
-
-Here are patches to bring the kernel and tools x86 instruction decoder
-more up to date.
-
 x86 instruction decoder is used for both kernel instructions and user space
 instructions (e.g. uprobes, perf tools Intel PT), so it is good to update
 it with new instructions.
 
+Add AMX instructions to x86 instruction decoder test.
 
-Adrian Hunter (6):
-      perf tests: Add AMX instructions to x86 instruction decoder test
-      x86/insn: Add AMX instructions to x86 instruction decoder
-      perf tests: Add misc instructions to x86 instruction decoder test
-      x86/insn: Add misc instructions to x86 instruction decoder
-      perf tests: Add AVX512-FP16 instructions to x86 instruction decoder test
-      x86/insn: Add AVX512-FP16 instructions to x86 instruction decoder
+A subsequent patch adds the instructions to the instruction decoder.
 
- arch/x86/include/asm/insn.h                  |    2 +-
- arch/x86/lib/x86-opcode-map.txt              |  111 +-
- tools/arch/x86/include/asm/insn.h            |    2 +-
- tools/arch/x86/lib/x86-opcode-map.txt        |  111 +-
- tools/perf/arch/x86/tests/insn-x86-dat-32.c  |  918 +++++++++++++++++
- tools/perf/arch/x86/tests/insn-x86-dat-64.c  | 1426 ++++++++++++++++++++++++++
- tools/perf/arch/x86/tests/insn-x86-dat-src.c | 1189 +++++++++++++++++++++
- 7 files changed, 3731 insertions(+), 28 deletions(-)
+Reference:
+Intel Architecture Instruction Set Extensions and Future Features
+Programming Reference
+May 2021
+Document Number: 319433-044
 
+Example:
 
-Regards
-Adrian
+  $ INSN='ldtilecfg\|sttilecfg\|tdpbf16ps\|tdpbssd\|'
+  $ INSN+='tdpbsud\|tdpbusd\|'tdpbuud\|tileloadd\|'
+  $ INSN+='tileloaddt1\|tilerelease\|tilestored\|tilezero'
+  $ perf test -v "x86 instruction decoder" |& grep -i $INSN
+  Failed to decode: c4 e2 78 49 04 c8    	ldtilecfg (%rax,%rcx,8)
+  Failed to decode: c4 c2 78 49 04 c8    	ldtilecfg (%r8,%rcx,8)
+  Failed to decode: c4 e2 79 49 04 c8    	sttilecfg (%rax,%rcx,8)
+  Failed to decode: c4 c2 79 49 04 c8    	sttilecfg (%r8,%rcx,8)
+  Failed to decode: c4 e2 7a 5c d1       	tdpbf16ps %tmm0,%tmm1,%tmm2
+  Failed to decode: c4 e2 7b 5e d1       	tdpbssd %tmm0,%tmm1,%tmm2
+  Failed to decode: c4 e2 7a 5e d1       	tdpbsud %tmm0,%tmm1,%tmm2
+  Failed to decode: c4 e2 79 5e d1       	tdpbusd %tmm0,%tmm1,%tmm2
+  Failed to decode: c4 e2 78 5e d1       	tdpbuud %tmm0,%tmm1,%tmm2
+  Failed to decode: c4 e2 7b 4b 0c c8    	tileloadd (%rax,%rcx,8),%tmm1
+  Failed to decode: c4 c2 7b 4b 14 c8    	tileloadd (%r8,%rcx,8),%tmm2
+  Failed to decode: c4 e2 79 4b 0c c8    	tileloaddt1 (%rax,%rcx,8),%tmm1
+  Failed to decode: c4 c2 79 4b 14 c8    	tileloaddt1 (%r8,%rcx,8),%tmm2
+  Failed to decode: c4 e2 78 49 c0       	tilerelease
+  Failed to decode: c4 e2 7a 4b 0c c8    	tilestored %tmm1,(%rax,%rcx,8)
+  Failed to decode: c4 c2 7a 4b 14 c8    	tilestored %tmm2,(%r8,%rcx,8)
+  Failed to decode: c4 e2 7b 49 c0       	tilezero %tmm0
+  Failed to decode: c4 e2 7b 49 f8       	tilezero %tmm7
+
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+---
+ tools/perf/arch/x86/tests/insn-x86-dat-64.c  | 36 ++++++++++++++++++++
+ tools/perf/arch/x86/tests/insn-x86-dat-src.c | 21 ++++++++++++
+ 2 files changed, 57 insertions(+)
+
+diff --git a/tools/perf/arch/x86/tests/insn-x86-dat-64.c b/tools/perf/arch/x86/tests/insn-x86-dat-64.c
+index 5da17d41d302..3548565a1cc5 100644
+--- a/tools/perf/arch/x86/tests/insn-x86-dat-64.c
++++ b/tools/perf/arch/x86/tests/insn-x86-dat-64.c
+@@ -2459,6 +2459,42 @@
+ "3e f2 ff a4 c8 78 56 34 12 \tnotrack bnd jmpq *0x12345678(%rax,%rcx,8)",},
+ {{0x3e, 0xf2, 0x41, 0xff, 0xa4, 0xc8, 0x78, 0x56, 0x34, 0x12, }, 10, 0, "jmp", "indirect",
+ "3e f2 41 ff a4 c8 78 56 34 12 \tnotrack bnd jmpq *0x12345678(%r8,%rcx,8)",},
++{{0xc4, 0xe2, 0x78, 0x49, 0x04, 0xc8, }, 6, 0, "", "",
++"c4 e2 78 49 04 c8    \tldtilecfg (%rax,%rcx,8)",},
++{{0xc4, 0xc2, 0x78, 0x49, 0x04, 0xc8, }, 6, 0, "", "",
++"c4 c2 78 49 04 c8    \tldtilecfg (%r8,%rcx,8)",},
++{{0xc4, 0xe2, 0x79, 0x49, 0x04, 0xc8, }, 6, 0, "", "",
++"c4 e2 79 49 04 c8    \tsttilecfg (%rax,%rcx,8)",},
++{{0xc4, 0xc2, 0x79, 0x49, 0x04, 0xc8, }, 6, 0, "", "",
++"c4 c2 79 49 04 c8    \tsttilecfg (%r8,%rcx,8)",},
++{{0xc4, 0xe2, 0x7a, 0x5c, 0xd1, }, 5, 0, "", "",
++"c4 e2 7a 5c d1       \ttdpbf16ps %tmm0,%tmm1,%tmm2",},
++{{0xc4, 0xe2, 0x7b, 0x5e, 0xd1, }, 5, 0, "", "",
++"c4 e2 7b 5e d1       \ttdpbssd %tmm0,%tmm1,%tmm2",},
++{{0xc4, 0xe2, 0x7a, 0x5e, 0xd1, }, 5, 0, "", "",
++"c4 e2 7a 5e d1       \ttdpbsud %tmm0,%tmm1,%tmm2",},
++{{0xc4, 0xe2, 0x79, 0x5e, 0xd1, }, 5, 0, "", "",
++"c4 e2 79 5e d1       \ttdpbusd %tmm0,%tmm1,%tmm2",},
++{{0xc4, 0xe2, 0x78, 0x5e, 0xd1, }, 5, 0, "", "",
++"c4 e2 78 5e d1       \ttdpbuud %tmm0,%tmm1,%tmm2",},
++{{0xc4, 0xe2, 0x7b, 0x4b, 0x0c, 0xc8, }, 6, 0, "", "",
++"c4 e2 7b 4b 0c c8    \ttileloadd (%rax,%rcx,8),%tmm1",},
++{{0xc4, 0xc2, 0x7b, 0x4b, 0x14, 0xc8, }, 6, 0, "", "",
++"c4 c2 7b 4b 14 c8    \ttileloadd (%r8,%rcx,8),%tmm2",},
++{{0xc4, 0xe2, 0x79, 0x4b, 0x0c, 0xc8, }, 6, 0, "", "",
++"c4 e2 79 4b 0c c8    \ttileloaddt1 (%rax,%rcx,8),%tmm1",},
++{{0xc4, 0xc2, 0x79, 0x4b, 0x14, 0xc8, }, 6, 0, "", "",
++"c4 c2 79 4b 14 c8    \ttileloaddt1 (%r8,%rcx,8),%tmm2",},
++{{0xc4, 0xe2, 0x78, 0x49, 0xc0, }, 5, 0, "", "",
++"c4 e2 78 49 c0       \ttilerelease ",},
++{{0xc4, 0xe2, 0x7a, 0x4b, 0x0c, 0xc8, }, 6, 0, "", "",
++"c4 e2 7a 4b 0c c8    \ttilestored %tmm1,(%rax,%rcx,8)",},
++{{0xc4, 0xc2, 0x7a, 0x4b, 0x14, 0xc8, }, 6, 0, "", "",
++"c4 c2 7a 4b 14 c8    \ttilestored %tmm2,(%r8,%rcx,8)",},
++{{0xc4, 0xe2, 0x7b, 0x49, 0xc0, }, 5, 0, "", "",
++"c4 e2 7b 49 c0       \ttilezero %tmm0",},
++{{0xc4, 0xe2, 0x7b, 0x49, 0xf8, }, 5, 0, "", "",
++"c4 e2 7b 49 f8       \ttilezero %tmm7",},
+ {{0x0f, 0x01, 0xcf, }, 3, 0, "", "",
+ "0f 01 cf             \tencls  ",},
+ {{0x0f, 0x01, 0xd7, }, 3, 0, "", "",
+diff --git a/tools/perf/arch/x86/tests/insn-x86-dat-src.c b/tools/perf/arch/x86/tests/insn-x86-dat-src.c
+index c3808e94c46e..7906f7b2ffeb 100644
+--- a/tools/perf/arch/x86/tests/insn-x86-dat-src.c
++++ b/tools/perf/arch/x86/tests/insn-x86-dat-src.c
+@@ -1910,6 +1910,27 @@ int main(void)
+ 	asm volatile("notrack bnd jmpq *0x12345678(%rax,%rcx,8)");	/* Expecting: jmp indirect 0 */
+ 	asm volatile("notrack bnd jmpq *0x12345678(%r8,%rcx,8)");	/* Expecting: jmp indirect 0 */
+ 
++	/* AMX */
++
++	asm volatile("ldtilecfg (%rax,%rcx,8)");
++	asm volatile("ldtilecfg (%r8,%rcx,8)");
++	asm volatile("sttilecfg (%rax,%rcx,8)");
++	asm volatile("sttilecfg (%r8,%rcx,8)");
++	asm volatile("tdpbf16ps %tmm0, %tmm1, %tmm2");
++	asm volatile("tdpbssd %tmm0, %tmm1, %tmm2");
++	asm volatile("tdpbsud %tmm0, %tmm1, %tmm2");
++	asm volatile("tdpbusd %tmm0, %tmm1, %tmm2");
++	asm volatile("tdpbuud %tmm0, %tmm1, %tmm2");
++	asm volatile("tileloadd (%rax,%rcx,8), %tmm1");
++	asm volatile("tileloadd (%r8,%rcx,8), %tmm2");
++	asm volatile("tileloaddt1 (%rax,%rcx,8), %tmm1");
++	asm volatile("tileloaddt1 (%r8,%rcx,8), %tmm2");
++	asm volatile("tilerelease");
++	asm volatile("tilestored %tmm1, (%rax,%rcx,8)");
++	asm volatile("tilestored %tmm2, (%r8,%rcx,8)");
++	asm volatile("tilezero %tmm0");
++	asm volatile("tilezero %tmm7");
++
+ #else  /* #ifdef __x86_64__ */
+ 
+ 	/* bound r32, mem (same op code as EVEX prefix) */
+-- 
+2.25.1
+

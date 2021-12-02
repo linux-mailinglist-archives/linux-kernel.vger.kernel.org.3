@@ -2,95 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5F8465BCC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 02:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA5D465BCF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 02:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347426AbhLBBum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 20:50:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
+        id S1348256AbhLBBwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 20:52:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347291AbhLBBug (ORCPT
+        with ESMTP id S1347291AbhLBBvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 20:50:36 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356D8C061748
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 17:47:15 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso37934778otr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 17:47:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oAq/6yqP+Rs00XBfo1g1KbQwNm45N3/d0cp7dLPBOg4=;
-        b=ig+aiqr1KC3nRxcqO696YtpJY+3ph1C4OHtQX+Rw204KfgFTnZ7T9mJQPx9fjuMs4I
-         wCiy+KFi6WMFU66ZTJdEP+U2sch0WKL/QhJLuH9TVhLN2UMvkoU9oUtMXW8+RsctrgOg
-         z0lGMt/XwaIljHbhdYZ5xOgoHdt+CmiQxtYc1Ug2MLfuhOSfpKMN8Ot5EwV7iq9j82Ki
-         jiuigdesuFHxYRWpEE7KCIbD/Z0+0Jo9yeima6lE6tWnYhC6IOM736ihNW7/lnamwiaf
-         xiq+Wn9/kmVPZtQTwTHT7Y62gvRc9fd5g4TykiteffupHusT5LrCuoEh3Si0/3iyp7z+
-         0zLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oAq/6yqP+Rs00XBfo1g1KbQwNm45N3/d0cp7dLPBOg4=;
-        b=bnrwQOIeiPKe8PJrC1NJzY6scG0z75H8EI2N1opK4QjBAPrbCMEcdzsKdNoKewooRF
-         u/QMaMRSpNKHU9vckoK6JgcPfIemtMOs7ddPSATcSebhhaMze3J4CW6RSiRdwPqZRo0J
-         cDW4039ISf+Ur4Uv1/RlkBu6zS7TQ/5DfbytHYaGWpn7DMOlX8KAcNm0u0rEdpDNALKm
-         6uw5SzLbX+Tnui7E3AYnvSVpE4WWWk0FjkkodS7WpuXz52NTRvoPBSmx2xf7lr4EK/Qq
-         vbMQcNNe20Tm1sQunSaLgnLPRPipethPhJ4oPaQBUhHou+ZeOslG9RZkAPY5sjXJAOFk
-         Q68g==
-X-Gm-Message-State: AOAM531enijXxMKZ5oMmxrPgpSFLuW/G0J3GyNDiS+GoRCYqJJGFpFAE
-        REj08s1MkaSduDFt7PvXzNOBoCi0JZ2BI7p+eYgZbw==
-X-Google-Smtp-Source: ABdhPJxu/7Clco3SFiGJPXWgXj5k3rEQqe7phGhKHjJYymefXn8zHnSpG9SDKu6GGDk6D20yFG3in2eRs0XWKWhlMJg=
-X-Received: by 2002:a9d:a42:: with SMTP id 60mr9375658otg.179.1638409634547;
- Wed, 01 Dec 2021 17:47:14 -0800 (PST)
+        Wed, 1 Dec 2021 20:51:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F26AC061574;
+        Wed,  1 Dec 2021 17:48:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A141B821BB;
+        Thu,  2 Dec 2021 01:48:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A20E8C00446;
+        Thu,  2 Dec 2021 01:48:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638409703;
+        bh=rX6Hzb6QHB/vShLCZQuiRt4vZUktSxPTk8iSZdxIzrY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=U1LTYfKULVcS40C1rBGuW/+sUUKw4ue2cnd0j0PRe9ZIUPbeYYrekO6RGNj9xd2Nw
+         exNofflc5oLklBSM0h1S4icPNvdd3X0ORciFOigMbBTd6fzW50vm5hg8uL3Dq/82yl
+         P0FizyUopCZsghMKm2lXrcSmQuDKkZeIUsjRhPmhapj+nyeWuCY+jts7JzvQhLpIEF
+         L9wpxnjJpWKi92xAtH2YQzEljLSdi4wxGPU/lTnh11TtqUmV5idlkYqxfon6tYINEs
+         Tb8joZPIIle6ovI/D6qzjvWIOrggSbiRCW6rEFGH+1ltfSr2ZihHVg8XXdaDR9kbSd
+         odztmsbStbooA==
+Date:   Wed, 1 Dec 2021 17:48:21 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
+Cc:     "davem@davemloft.net" <davem@davemloft.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "dsahern@gmail.com" <dsahern@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/3] selftests: add option to list all avaliable tests
+Message-ID: <20211201174821.2d40a3eb@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <f4ebc027-5f5d-1a4a-8a33-964cd7214af8@fujitsu.com>
+References: <20211201111025.13834-1-lizhijian@cn.fujitsu.com>
+        <20211201111025.13834-2-lizhijian@cn.fujitsu.com>
+        <f4ebc027-5f5d-1a4a-8a33-964cd7214af8@fujitsu.com>
 MIME-Version: 1.0
-References: <20211129153330.37719-1-nbd@nbd.name> <20211129153330.37719-13-nbd@nbd.name>
-In-Reply-To: <20211129153330.37719-13-nbd@nbd.name>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 2 Dec 2021 02:47:02 +0100
-Message-ID: <CACRpkdacgoT-K4qZoBpMx8RiPcvOf=YmrTP36LKyizcQk+VyUQ@mail.gmail.com>
-Subject: Re: [PATCH v5 12/13] gpio: Add support for Airoha EN7523 GPIO controller
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>, john@phrozen.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Felix!
+On Wed, 1 Dec 2021 11:22:03 +0000 lizhijian@fujitsu.com wrote:
+> sent V2 to fix a typo
 
-Thanks for your patch!
+You need to resend the entire series, patchwork does not understand
+updating single patches:
 
-On Mon, Nov 29, 2021 at 4:54 PM Felix Fietkau <nbd@nbd.name> wrote:
-
-> From: John Crispin <john@phrozen.org>
->
-> Airoha's GPIO controller on their ARM EN7523 SoCs consists of two banks of 32
-> GPIOs. Each instance in DT is for an single bank.
->
-> Signed-off-by: John Crispin <john@phrozen.org>
-> Signed-off-by: Felix Fietkau <nbd@nbd.name>
-
-(...)
-> +config GPIO_EN7523
-> +       tristate "Airoha GPIO support"
-> +       depends on ARCH_AIROHA
-> +       default ARCH_AIROHA
-> +       select GPIO_GENERIC
-
-Yes that looks applicable, but why isn't it used?
-
-The few 32-bit registers look like an ideal candidate for
-using the generic GPIO. Check similar drivers such as
-drivers/gpio/gpio-ftgpio010.c and how it uses
-bgpio_init() and the nice doc for bgpio_init() in
-drivers/gpio/gpio-mmio.c.
-
-If it's not working already with generic GPIO I do not
-think it would be far fetched to fix it.
-
-Yours,
-Linus Walleij
+https://patchwork.kernel.org/project/netdevbpf/list/?series=588501
+https://patchwork.kernel.org/project/netdevbpf/list/?series=588507

@@ -2,111 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43391465C06
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 03:13:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51791465C07
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 03:13:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351887AbhLBCPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 21:15:42 -0500
-Received: from sender2-pp-o92.zoho.com.cn ([163.53.93.251]:25304 "EHLO
-        sender2-pp-o92.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238880AbhLBCPl (ORCPT
+        id S1352074AbhLBCPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 21:15:52 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:60834 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238880AbhLBCPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 21:15:41 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1638411101; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=Q4QQXAaMwNUEtSXUPPS/YOfNXlKMJk2z4qlbAR53dauC6PpZzt97NnVFlbHeUTR06reJpJtg/PJebo+bzxdosfxHex1wr/vhQ57DRJTvyjQmVwgWUIosqeVeH1QOAHsRaEE6JuEEXY3eXtMyXzySDaE6SSiqJiTiNhNRCvbVdrs=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1638411101; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
-        bh=+w5c16CfQO7ePlheYkXYE6GCq8jomkga+cYzxfhQ0os=; 
-        b=KvbCGbE+6xmZUulLWoQVsIMlg8tqCDIQSDWC2ZLVndG62DsUn+sCEyHlXPKTRxOP3u0JJF5FpEBgYx3kDkG7sEZzFVtOtpfr47gpR07J0Ok/m0BTq+A0L5LDKdrC1FHLPSa57tZTUo7HKeOEiHbjGefeFdB82x5/dYaY7iEI+EQ=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=mykernel.net;
-        spf=pass  smtp.mailfrom=cgxu519@mykernel.net;
-        dmarc=pass header.from=<cgxu519@mykernel.net>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1638411101;
-        s=zohomail; d=mykernel.net; i=cgxu519@mykernel.net;
-        h=Date:From:Reply-To:To:Cc:Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=+w5c16CfQO7ePlheYkXYE6GCq8jomkga+cYzxfhQ0os=;
-        b=LOm4wWadDIWLqEiRwyWkXQfsKn6meMuDEmjLsdn4uhA7mG9arUJ1I/w3AM4aKEuL
-        i90TvL06DmmjJ6jJQQKj527QcqXWvXF9awzLh3zpcjM10qwl9zGVGA2r/WC9ZWG8Zja
-        g/3IdM50E6baPrFzy3SBx6CgK1xgCpfQIihCN21k=
-Received: from mail.baihui.com by mx.zoho.com.cn
-        with SMTP id 1638411099213648.9100959012884; Thu, 2 Dec 2021 10:11:39 +0800 (CST)
-Date:   Thu, 02 Dec 2021 10:11:39 +0800
-From:   Chengguang Xu <cgxu519@mykernel.net>
-Reply-To: cgxu519@mykernel.net
-To:     "Amir Goldstein" <amir73il@gmail.com>
-Cc:     "Jan Kara" <jack@suse.cz>, "Miklos Szeredi" <miklos@szeredi.hu>,
-        "linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
-        "overlayfs" <linux-unionfs@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "ronyjin" <ronyjin@tencent.com>,
-        "charliecgxu" <charliecgxu@tencent.com>,
-        "Vivek Goyal" <vgoyal@redhat.com>
-Message-ID: <17d78e95c35.ceeffaaf22655.2727336036618811041@mykernel.net>
-In-Reply-To: <CAOQ4uxg6FATciQhzRifOft4gMZj15G=UA6MUiPX2n9-NR5+1Pg@mail.gmail.com>
-References: <20211118112315.GD13047@quack2.suse.cz> <17d32ecf46e.124314f8f672.8832559275193368959@mykernel.net>
- <20211118164349.GB8267@quack2.suse.cz> <17d36d37022.1227b6f102736.1047689367927335302@mykernel.net>
- <20211130112206.GE7174@quack2.suse.cz> <17d719b79f9.d89bf95117881.5882353172682156775@mykernel.net>
- <CAOQ4uxidK-yDMZoZtoRwTZLgSTr1o2Mu2L55vJRNJDLV0-Sb1w@mail.gmail.com>
- <17d73da701b.e571c37220081.6904057835107693340@mykernel.net>
- <17d74b08dcd.c0e94e6320632.9167792887632811518@mykernel.net>
- <CAOQ4uxiCYFeeH8oUUNG+rDCru_1XcwB6fR2keS1C6=d_yD9XzA@mail.gmail.com>
- <20211201134610.GA1815@quack2.suse.cz> <17d76cf59ee.12f4517f122167.2687299278423224602@mykernel.net>
- <CAOQ4uxiEjGms-sKhrVDtDHSEk97Wku5oPxnmy4vVB=6yRE_Hdg@mail.gmail.com> <CAOQ4uxg6FATciQhzRifOft4gMZj15G=UA6MUiPX2n9-NR5+1Pg@mail.gmail.com>
-Subject: Re: ovl_flush() behavior
+        Wed, 1 Dec 2021 21:15:47 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E0653CE2152
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 02:12:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FE2FC00446;
+        Thu,  2 Dec 2021 02:12:20 +0000 (UTC)
+Date:   Wed, 1 Dec 2021 21:12:18 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Chen Jun <chenjun102@huawei.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Yafang Shao <laoar.shao@gmail.com>
+Subject: [GIT PULL] tracing: Minor fixes for 5.16-rc3
+Message-ID: <20211201211218.5f9e8ae8@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Importance: Medium
-User-Agent: ZohoCN Mail
-X-Mailer: ZohoCN Mail
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
- ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E5=9B=9B, 2021-12-02 07:23:17 Amir Golds=
-tein <amir73il@gmail.com> =E6=92=B0=E5=86=99 ----
- > > >
- > > > To be honest I even don't fully understand what's the ->flush() logi=
-c in overlayfs.
- > > > Why should we open new underlying file when calling ->flush()?
- > > > Is it still correct in the case of opening lower layer first then co=
-py-uped case?
- > > >
- > >
- > > The semantics of flush() are far from being uniform across filesystems=
-.
- > > most local filesystems do nothing on close.
- > > most network fs only flush dirty data when a writer closes a file
- > > but not when a reader closes a file.
- > > It is hard to imagine that applications rely on flush-on-close of
- > > rdonly fd behavior and I agree that flushing only if original fd was u=
-pper
- > > makes more sense, so I am not sure if it is really essential for
- > > overlayfs to open an upper rdonly fd just to do whatever the upper fs
- > > would have done on close of rdonly fd, but maybe there is no good
- > > reason to change this behavior either.
- > >
- >=20
- > On second thought, I think there may be a good reason to change
- > ovl_flush() otherwise I wouldn't have submitted commit
- > a390ccb316be ("fuse: add FOPEN_NOFLUSH") - I did observe
- > applications that frequently open short lived rdonly fds and suffered
- > undesired latencies on close().
- >=20
- > As for "changing existing behavior", I think that most fs used as
- > upper do not implement flush at all.
- > Using fuse/virtiofs as overlayfs upper is quite new, so maybe that
- > is not a problem and maybe the new behavior would be preferred
- > for those users?
- >=20
+Linus,
 
-So is that mean simply redirect the ->flush request to original underlying =
-realfile?
+Three tracing fixes:
+
+- Allow compares of strings when using signed and unsigned characters
+
+- Fix kmemleak false positive for histogram entries.
+
+- Handle negative numbers for user defined kretprobe data sizes
 
 
-Thanks,
-Chengguang
+Please pull the latest trace-v5.16-rc3 tree, which can be found at:
 
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+trace-v5.16-rc3
+
+Tag SHA1: a9213711ec6377e609967c5752305298b3c9ce60
+Head SHA1: 6bbfa44116689469267f1a6e3d233b52114139d2
+
+
+Chen Jun (1):
+      tracing: Fix a kmemleak false positive in tracing_map
+
+Masami Hiramatsu (1):
+      kprobes: Limit max data_size of the kretprobe instances
+
+Steven Rostedt (VMware) (1):
+      tracing/histograms: String compares should not care about signed values
+
+----
+ include/linux/kprobes.h          | 2 ++
+ kernel/kprobes.c                 | 3 +++
+ kernel/trace/trace_events_hist.c | 2 +-
+ kernel/trace/tracing_map.c       | 3 +++
+ 4 files changed, 9 insertions(+), 1 deletion(-)
+---------------------------
+diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
+index e974caf39d3e..8c8f7a4d93af 100644
+--- a/include/linux/kprobes.h
++++ b/include/linux/kprobes.h
+@@ -153,6 +153,8 @@ struct kretprobe {
+ 	struct kretprobe_holder *rph;
+ };
+ 
++#define KRETPROBE_MAX_DATA_SIZE	4096
++
+ struct kretprobe_instance {
+ 	union {
+ 		struct freelist_node freelist;
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index e9db0c810554..21eccc961bba 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -2086,6 +2086,9 @@ int register_kretprobe(struct kretprobe *rp)
+ 		}
+ 	}
+ 
++	if (rp->data_size > KRETPROBE_MAX_DATA_SIZE)
++		return -E2BIG;
++
+ 	rp->kp.pre_handler = pre_handler_kretprobe;
+ 	rp->kp.post_handler = NULL;
+ 
+diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+index 9555b8e1d1e3..319f9c8ca7e7 100644
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -3757,7 +3757,7 @@ static int check_synth_field(struct synth_event *event,
+ 
+ 	if (strcmp(field->type, hist_field->type) != 0) {
+ 		if (field->size != hist_field->size ||
+-		    field->is_signed != hist_field->is_signed)
++		    (!field->is_string && field->is_signed != hist_field->is_signed))
+ 			return -EINVAL;
+ 	}
+ 
+diff --git a/kernel/trace/tracing_map.c b/kernel/trace/tracing_map.c
+index 39bb56d2dcbe..9628b5571846 100644
+--- a/kernel/trace/tracing_map.c
++++ b/kernel/trace/tracing_map.c
+@@ -15,6 +15,7 @@
+ #include <linux/jhash.h>
+ #include <linux/slab.h>
+ #include <linux/sort.h>
++#include <linux/kmemleak.h>
+ 
+ #include "tracing_map.h"
+ #include "trace.h"
+@@ -307,6 +308,7 @@ static void tracing_map_array_free(struct tracing_map_array *a)
+ 	for (i = 0; i < a->n_pages; i++) {
+ 		if (!a->pages[i])
+ 			break;
++		kmemleak_free(a->pages[i]);
+ 		free_page((unsigned long)a->pages[i]);
+ 	}
+ 
+@@ -342,6 +344,7 @@ static struct tracing_map_array *tracing_map_array_alloc(unsigned int n_elts,
+ 		a->pages[i] = (void *)get_zeroed_page(GFP_KERNEL);
+ 		if (!a->pages[i])
+ 			goto free;
++		kmemleak_alloc(a->pages[i], PAGE_SIZE, 1, GFP_KERNEL);
+ 	}
+  out:
+ 	return a;

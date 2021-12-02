@@ -2,117 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E56466AC7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 21:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56093466AC8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 21:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348637AbhLBUPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 15:15:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58672 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240256AbhLBUPU (ORCPT
+        id S1348661AbhLBUR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 15:17:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33126 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240256AbhLBURZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 15:15:20 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37078C06174A;
-        Thu,  2 Dec 2021 12:11:57 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id v203so2826730ybe.6;
-        Thu, 02 Dec 2021 12:11:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C5odNkgpOlK+IQa5X8eMyWufJ18QJE502yOHCZfZwcw=;
-        b=RuoQiwm9MWYiuyQIglIltB2ZhThs/K/EJsYDbhAQ7rYexEme3Trip1IbTsCTFrnswa
-         U3X1SRJUyJYw2w4K8UqkMj4WhRT1+9dVZ7kCSWK60zj8gfUuh//9UwwFk8CiGZhv14y4
-         vVPKVbWeIprbApC0O3Qa9up7DtqgmdhizabDfOWJ2XreRvKNZIvsBK/vzlkkpyq4dPAS
-         czyD60esNaXt+s+6Y7hTrU9UnCj0RpsODlhpgifbEDnGRt0V/Huw50X6GyD/y/PthnZt
-         Mpf7OSkz1ueTuDKxmt4tx7cdixizbK4HKQguhB5Fsd06oWff1Tm5yINzKYGZAfDwk5TM
-         99Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C5odNkgpOlK+IQa5X8eMyWufJ18QJE502yOHCZfZwcw=;
-        b=UcCIaLgFR55N/j/KOK0AH6O7K2jpvODawkHZ2e2BsmxYwVVTrZKInPtw33CoICMIae
-         ujuMWwKKFm0Q2miUj6bH2n7B+KmlNo7GQbnHqg5Nfbi+sE0mP9w0EYVvSyRtslSeumrn
-         Oy2XSWxic5nW62SS6n1n7ijNvL87xixxt9QbWdDnL2KIKCP5d/SfTZLU+0xA5i7ktT2V
-         W4pGjBXnZAn7usSa7u08D6Qi3vUvkakhmz0JQKcXVgipa+M+iyg70lfpKtoG3HMdZjLd
-         4Sz0BqA+b2OegwIUkYrFnnjdxt60C+9ErRsL0LrDtfVHo137vPu9NyhxHfbVLL3re/S7
-         pV1A==
-X-Gm-Message-State: AOAM533phqnvvqH+6B4WR47OfqJsXAJBeqIzkUycmAH6PeTqUwUG3/sP
-        gy2DQU+lmnWYZkRSLw2kwEBi0KQ9HjNlevgJItk=
-X-Google-Smtp-Source: ABdhPJyZMXPeV1RaU+pUJsdEw4wBM+kG9jQBJvOltUbWj6jrW0KqRKIFwiHO8VHLkLS2HQDse7tuJNINl72X/q7i+Uk=
-X-Received: by 2002:a25:abaa:: with SMTP id v39mr17865681ybi.367.1638475916510;
- Thu, 02 Dec 2021 12:11:56 -0800 (PST)
+        Thu, 2 Dec 2021 15:17:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638476041;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=i6jVtc242assNgeIcVXtyTsx6VAj/wb+VdFS00POL5Q=;
+        b=Vt540Y/2Pky09Huun81RSGdjleywTVxvOJWEixMjycZgp0wYVbrt/GOniOF+jcWBoKcWPh
+        qacmPIDSMumic3jU87xFhHo7dPmlbtkjShgJ8TzFa7YJYNORRdNdybaPJp/PiUE16Qjk1+
+        pXJQ/lZPbmNkfon9Ji5qknLFX9v+BCI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-422-eWbc5XiMNui_Sd9be511Eg-1; Thu, 02 Dec 2021 15:13:56 -0500
+X-MC-Unique: eWbc5XiMNui_Sd9be511Eg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E8C27100C660;
+        Thu,  2 Dec 2021 20:13:54 +0000 (UTC)
+Received: from x1.localdomain (unknown [10.39.194.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0E9465F4E7;
+        Thu,  2 Dec 2021 20:13:52 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Lee Jones <lee.jones@linaro.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dan Scally <djrscally@gmail.com>, Kate Hsuan <hpa@redhat.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>
+Subject: [PATCH] mfd: intel-lpss: Fix I2C4 not being available on the Microsoft Surface Go & Go 2
+Date:   Thu,  2 Dec 2021 21:13:51 +0100
+Message-Id: <20211202201351.74419-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-References: <20211201005030.GA3071525@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20211201005030.GA3071525@paulmck-ThinkPad-P17-Gen-1>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 2 Dec 2021 12:11:45 -0800
-Message-ID: <CAEf4BzYHycMkdkYdNWjd+XOaHUfJnmbAAKOh_Gu1WpN=MJZ-wA@mail.gmail.com>
-Subject: Re: [PATCH] testing/bpf: Update test names for xchg and cmpxchg
-To:     "Paul E . McKenney" <paulmck@kernel.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 4:50 PM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> The test_cmpxchg() and test_xchg() functions say "test_run add".
-> Therefore, make them say "test_run cmpxchg" and "test_run xchg",
-> respectively.
->
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Martin KaFai Lau <kafai@fb.com>
-> Cc: Song Liu <songliubraving@fb.com>
-> Cc: Yonghong Song <yhs@fb.com>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: <linux-kselftest@vger.kernel.org>
-> Cc: <netdev@vger.kernel.org>
-> Cc: <bpf@vger.kernel.org>
-> Cc: <linux-kernel@vger.kernel.org>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
->
+Many DSDTs for Kaby Lake and Kaby Lake Refresh models contain a
+_SB.PCI0.GEXP ACPI Device node describing an I2C attached GPIO expander.
 
-fixed up "testing/bpf" to more commonly used "selftests/bpf" and
-pushed to bpf-next, thanks.
+This seems to be something which is copy and pasted from the DSDT
+from some reference design since this ACPI Device is present even on
+models where no such GPIO expander is used at all, such as on the
+Microsoft Surface Go & Go 2.
 
+This ACPI Device is a problem because it contains a SystemMemory
+OperationRegion which covers the MMIO for the I2C4 I2C controller this
+causes the MFD cell for the I2C4 controller to not be instantiated due
+to a resource conflict, requiring the use of acpi_enforce_resources=lax
+to work around this.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/atomics.c b/tools/testing/selftests/bpf/prog_tests/atomics.c
-> index 0f9525293881b..86b7d5d84eec4 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/atomics.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/atomics.c
-> @@ -167,7 +167,7 @@ static void test_cmpxchg(struct atomics_lskel *skel)
->         prog_fd = skel->progs.cmpxchg.prog_fd;
->         err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
->                                 NULL, NULL, &retval, &duration);
-> -       if (CHECK(err || retval, "test_run add",
-> +       if (CHECK(err || retval, "test_run cmpxchg",
->                   "err %d errno %d retval %d duration %d\n", err, errno, retval, duration))
->                 goto cleanup;
->
-> @@ -196,7 +196,7 @@ static void test_xchg(struct atomics_lskel *skel)
->         prog_fd = skel->progs.xchg.prog_fd;
->         err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
->                                 NULL, NULL, &retval, &duration);
-> -       if (CHECK(err || retval, "test_run add",
-> +       if (CHECK(err || retval, "test_run xchg",
->                   "err %d errno %d retval %d duration %d\n", err, errno, retval, duration))
->                 goto cleanup;
->
+I have done an extensive analysis of all the ACPI tables on the
+Microsoft Surface Go and the _SB.PCI0.GEXP ACPI Device's methods are
+not used by any code in the ACPI tables, neither are any of them
+directly called by any Linux kernel code. This is unsurprising since
+running i2cdetect on the I2C4 bus shows that there is no GPIO
+expander chip present on these devices at all.
+
+This commit adds a PCI subsystem vendor:device table listing PCI devices
+where it is known to be safe to ignore a resource-conflicts with ACPI
+declared SystemMemory regions.
+
+This makes the I2C4 bus work out of the box on the Microsoft Surface
+Go & Go 2, which is necessary for the cameras on these devices to work.
+
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Dan Scally <djrscally@gmail.com>
+Cc: Kate Hsuan <hpa@redhat.com>
+Cc: Maximilian Luz <luzmaximilian@gmail.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/mfd/intel-lpss-pci.c | 12 ++++++++++++
+ drivers/mfd/intel-lpss.c     |  1 +
+ drivers/mfd/intel-lpss.h     |  1 +
+ 3 files changed, 14 insertions(+)
+
+diff --git a/drivers/mfd/intel-lpss-pci.c b/drivers/mfd/intel-lpss-pci.c
+index a872b4485eac..593290ff08a6 100644
+--- a/drivers/mfd/intel-lpss-pci.c
++++ b/drivers/mfd/intel-lpss-pci.c
+@@ -17,6 +17,15 @@
+ 
+ #include "intel-lpss.h"
+ 
++/* Some DSDTs have an unused GEXP ACPI device conflicting with I2C4 resources */
++static const struct pci_device_id ignore_resource_conflicts_ids[] = {
++	/* Microsoft Surface Go (version 1) I2C4 */
++	{ PCI_DEVICE_SUB(0x8086, 0x9d64, 0x152d, 0x1182), },
++	/* Microsoft Surface Go 2 I2C4 */
++	{ PCI_DEVICE_SUB(0x8086, 0x9d64, 0x152d, 0x1237), },
++	{ }
++};
++
+ static int intel_lpss_pci_probe(struct pci_dev *pdev,
+ 				const struct pci_device_id *id)
+ {
+@@ -35,6 +44,9 @@ static int intel_lpss_pci_probe(struct pci_dev *pdev,
+ 	info->mem = &pdev->resource[0];
+ 	info->irq = pdev->irq;
+ 
++	if (pci_match_id(ignore_resource_conflicts_ids, pdev))
++		info->ignore_resource_conflicts = true;
++
+ 	pdev->d3cold_delay = 0;
+ 
+ 	/* Probably it is enough to set this for iDMA capable devices only */
+diff --git a/drivers/mfd/intel-lpss.c b/drivers/mfd/intel-lpss.c
+index 0e15afc39f54..cfbee2cfba6b 100644
+--- a/drivers/mfd/intel-lpss.c
++++ b/drivers/mfd/intel-lpss.c
+@@ -401,6 +401,7 @@ int intel_lpss_probe(struct device *dev,
+ 		return ret;
+ 
+ 	lpss->cell->swnode = info->swnode;
++	lpss->cell->ignore_resource_conflicts = info->ignore_resource_conflicts;
+ 
+ 	intel_lpss_init_dev(lpss);
+ 
+diff --git a/drivers/mfd/intel-lpss.h b/drivers/mfd/intel-lpss.h
+index 22dbc4aed793..062ce95b68b9 100644
+--- a/drivers/mfd/intel-lpss.h
++++ b/drivers/mfd/intel-lpss.h
+@@ -19,6 +19,7 @@ struct software_node;
+ 
+ struct intel_lpss_platform_info {
+ 	struct resource *mem;
++	bool ignore_resource_conflicts;
+ 	int irq;
+ 	unsigned long clk_rate;
+ 	const char *clk_con_id;
+-- 
+2.33.1
+

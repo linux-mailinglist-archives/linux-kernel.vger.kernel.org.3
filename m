@@ -2,123 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC0146642B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F56466431
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 14:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240394AbhLBNCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 08:02:18 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:58826 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232890AbhLBNCQ (ORCPT
+        id S241991AbhLBNDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 08:03:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232890AbhLBNDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 08:02:16 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 2 Dec 2021 08:03:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E8BC06174A;
+        Thu,  2 Dec 2021 05:00:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7E9B1212BB;
-        Thu,  2 Dec 2021 12:58:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638449933; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zQvel9xfGDXi68b4SGSpn8cd2opNTyw0m7K2jF1A4lo=;
-        b=koC87icvTiya3wDVp64lBv3oDCuLiyUphvyaGVd7XOETfwfzbwMqrRkyFImZBbXk2fU9Rl
-        8nZdZAmPgdNG0dhXPdBWtenhyxy4pMAunH6XAJdR1XgjfvTS406exMUw+PqVFyxfVM3AJB
-        W//V4N4NmRcOUQUyFRWsufJPuGwhyqo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638449933;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zQvel9xfGDXi68b4SGSpn8cd2opNTyw0m7K2jF1A4lo=;
-        b=+ZuiqaWF9bEuctCMSrjM91NFV8jZ+mbBJn1axYq0oQsEkoO/QVgxrZfzb8us9C3CsWGEnY
-        phi7KyR10zI8/tDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1B48D1330B;
-        Thu,  2 Dec 2021 12:58:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jSIxBQ3DqGHkNAAAMHmgww
-        (envelope-from <jroedel@suse.de>); Thu, 02 Dec 2021 12:58:53 +0000
-Date:   Thu, 2 Dec 2021 13:58:51 +0100
-From:   Joerg Roedel <jroedel@suse.de>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, hpa@zytor.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] x86/mm: Flush global TLB when switching to
- trampoline page-table
-Message-ID: <YajDC/tgx7qR/UcW@suse.de>
-References: <20211001154817.29225-1-joro@8bytes.org>
- <20211001154817.29225-4-joro@8bytes.org>
- <YXki1Zx4jCmikBuf@zn.tnic>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C9F6B82341;
+        Thu,  2 Dec 2021 13:00:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DD1BC00446;
+        Thu,  2 Dec 2021 12:59:59 +0000 (UTC)
+Date:   Thu, 2 Dec 2021 13:59:55 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Denis Semakin <denis.semakin@huawei.com>
+Subject: Re: [RFC 17/20] ima: Use integrity_admin_ns_capable() to check
+ corresponding capability
+Message-ID: <20211202125955.qcmmnblit3nmatdo@wittgenstein>
+References: <20211130160654.1418231-1-stefanb@linux.ibm.com>
+ <20211130160654.1418231-18-stefanb@linux.ibm.com>
+ <7c751783b28766412f158e5ca074748ed18070bd.camel@linux.ibm.com>
+ <34085058-ff5f-c28e-c716-6f4fa71747a3@linux.ibm.com>
+ <4b12309289c6a51991c5062fed0fde03e0a6f703.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YXki1Zx4jCmikBuf@zn.tnic>
+In-Reply-To: <4b12309289c6a51991c5062fed0fde03e0a6f703.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 11:58:45AM +0200, Borislav Petkov wrote:
-> On Fri, Oct 01, 2021 at 05:48:16PM +0200, Joerg Roedel wrote:
-> > +void load_trampoline_pgtable(void)
-> > +{
-> > +#ifdef CONFIG_X86_32
-> > +	load_cr3(initial_page_table);
-> > +#else
-> > +	/* Exiting long mode will fail if CR4.PCIDE is set. */
+On Wed, Dec 01, 2021 at 02:29:09PM -0500, James Bottomley wrote:
+> On Wed, 2021-12-01 at 12:35 -0500, Stefan Berger wrote:
+> > On 12/1/21 11:58, James Bottomley wrote:
+> > > On Tue, 2021-11-30 at 11:06 -0500, Stefan Berger wrote:
+> > > > From: Denis Semakin <denis.semakin@huawei.com>
+> > > > 
+> > > > Use integrity_admin_ns_capable() to check corresponding
+> > > > capability to allow read/write IMA policy without CAP_SYS_ADMIN
+> > > > but with CAP_INTEGRITY_ADMIN.
+> > > > 
+> > > > Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
+> > > > ---
+> > > >   security/integrity/ima/ima_fs.c | 2 +-
+> > > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/security/integrity/ima/ima_fs.c
+> > > > b/security/integrity/ima/ima_fs.c
+> > > > index fd2798f2d224..6766bb8262f2 100644
+> > > > --- a/security/integrity/ima/ima_fs.c
+> > > > +++ b/security/integrity/ima/ima_fs.c
+> > > > @@ -393,7 +393,7 @@ static int ima_open_policy(struct inode
+> > > > *inode,
+> > > > struct file *filp)
+> > > >   #else
+> > > >   		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
+> > > >   			return -EACCES;
+> > > > -		if (!ns_capable(ns->user_ns, CAP_SYS_ADMIN))
+> > > > +		if (!integrity_admin_ns_capable(ns->user_ns))
+> > > so this one is basically replacing what you did in RFC 16/20, which
+> > > seems a little redundant.
+> > > 
+> > > The question I'd like to ask is: is there still a reason for
+> > > needing CAP_INTEGRITY_ADMIN?  My thinking is that now IMA is pretty
+> > > much tied to requiring a user (and a mount, because of
+> > > securityfs_ns) namespace, there might not be a pressing need for an
+> > > admin capability separated from CAP_SYS_ADMIN because the owner of
+> > > the user namespace passes the ns_capable(..., CAP_SYS_ADMIN)
+> > > check.  The rationale in
+> > 
+> > Casey suggested using CAP_MAC_ADMIN, which I think would also work.
+> > 
+> >      CAP_MAC_ADMIN (since Linux 2.6.25)
+> >                Allow MAC configuration or state changes. Implemented
+> > for
+> >                the Smack Linux Security Module (LSM).
+> > 
+> > 
+> > Down the road I think we should cover setting file extended
+> > attributes with the same capability as well for when a user signs
+> > files or installs packages with file signatures.  A container runtime
+> > could hold CAP_SYS_ADMIN while setting up a container and mounting
+> > filesystems and drop it for the first process started there. Since we
+> > are using the user namespace to spawn an IMA namespace, we would then
+> > require CAP_SYSTEM_ADMIN to be left available so that the user can do
+> > IMA related stuff in the container (set or append to the policy,
+> > write file signatures). I am not sure whether that should be the case
+> > or rather give the user something finer grained, such as
+> > CAP_MAC_ADMIN. So, it's about granularity...
 > 
-> So this comment is not valid anymore if this is a separate function - it
-> is valid only when that function is called in reboot.c so I guess you
-> should leave that comment there.
-
-Okay, but in the caller it is not visible the CR4.PCID is disabled in
-this function. I'd rather update the comment to tell that the function
-is called before transitioning to real mode?
-
+> It's possible ... any orchestration system that doesn't enter a user
+> namespace has to strictly regulate capabilities.   I'm probably biased
+> because I always use a user_ns so I never really had to mess with
+> capabilities.
 > 
-> > +	if (boot_cpu_has(X86_FEATURE_PCID))
-> > +		cr4_clear_bits(X86_CR4_PCIDE);
-> > +
-> > +	write_cr3(real_mode_header->trampoline_pgd);
+> > > https://kernsec.org/wiki/index.php/IMA_Namespacing_design_considerations
+> > > 
+> > > Is effectively "because CAP_SYS_ADMIN is too powerful" but that's
+> > > no longer true of the user namespace owner.  It only passes the
+> > > ns_capable() check not the capable() one, so while it does get
+> > > CAP_SYS_ADMIN, it can only use it in a few situations which
+> > > represent quite a power reduction already.
+> > 
+> > At least docker containers drop CAP_SYS_ADMIN.
 > 
-> Is there any significance to the reordering of those calls here? The
-> commit message doesn't say...
+> Well docker doesn't use the user_ns.  But even given that,
+> CAP_SYS_ADMIN is always dropped for most container systems.  What
+> happens when you enter a user namespace is the ns_capable( ...,
+> CAP_SYS_ADMIN) check returns true if you're the owner of the user_ns,
+> in the same way it would for root.  So effectively entering a user
+> namespace without CAP_SYS_ADMIN but mapping the owner id to 0 (what
+> unshare -r --user does) gives you back a form of CAP_SYS_ADMIN that
+> responds only in the places in the kernel that have a ns_capable()
+> check instead of a capable() one (most of the places you list below). 
+> This is the principle of how unprivileged containers actually work ...
+> and the source of some of our security problems if you get back an
+> ability to do something you shouldn't be allowed to do as an
+> unprivileged user.
+> 
+> >  I am not sure what the decision was based on but probably they don't
+> > want to give the user what is not absolutely necessary, but usage of
+> > user namespaces (with IMA namespaces) would kind of force it to be
+> > available then to do IMA-related stuff ...
+> > 
+> > Following this man page here 
+> > https://man7.org/linux/man-pages/man7/user_namespaces.7.html
+> > 
+> > CAP_SYS_ADMIN in a user namespace is about
+> > 
+> > - bind-mounting filesystems
+> > 
+> > - mounting /proc filesystems
+> > 
+> > - creating nested user namespaces
+> > 
+> > - configuring UTS namespace
+> > 
+> > - configuring whether setgroups() can be used
+> > 
+> > - usage of setns()
+> > 
+> > 
+> > Do we want to add '- only way of *setting up* IMA related stuff' to
+> > this list?
+> 
+> I don't see why not, but other container people should weigh in
+> because, as I said, I mostly use the user namespace and unprivileged
+> containers and don't bother with capabilities.
 
-Yes, the call to cr4_clear_bits() is not safe anymore on the trampoline
-page-table, because the per-cpu areas are not fully mapped anymore.
+There are very few scenarios where dropping capabilities in an
+unprivileged container makes sense. In a lot of other scenarios it is
+just a misunderstanding of the meaning of capabilities and their
+relationship to user namespaces. Usually, granting a full set of
+capabilities to the payload of an unprivigileged container is the right
+thing to do. All things that are properly namespaced will check
+capabilities in the relevant user namespace. Those that aren't will
+check them against the initial user namespaces.
 
-This changes with the next patch, but its nevertheless more robust to
-minimize the code running on the trampoline page-table.
+But I do think the question of whether or not ima should go into
+cap_sys_admin is more a question of capability semantics then it is in
+how exactly ima is namespaced. We do have agreed before that overloading
+cap_sys_admin further isn't ideal. Often we end up rectifying that
+mistake later. For example, how we moved stuff like criu, bpf, and perf
+to their own capability. Now we're left with stuff like:
 
-I will add that to the commit message.
+static inline bool perfmon_capable(void)
+{
+	return capable(CAP_PERFMON) || capable(CAP_SYS_ADMIN);
+}
 
-Regards,
+static inline bool bpf_capable(void)
+{
+	return capable(CAP_BPF) || capable(CAP_SYS_ADMIN);
+}
 
--- 
-Jörg Rödel
-jroedel@suse.de
+static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
+{
+	return ns_capable(ns, CAP_CHECKPOINT_RESTORE) ||
+		ns_capable(ns, CAP_SYS_ADMIN);
+}
 
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5
-90409 Nürnberg
-Germany
- 
-(HRB 36809, AG Nürnberg)
-Geschäftsführer: Ivo Totev
+for the sake of adhering to legacy behavior. I think we can skip over
+that mistake and introduce cap_sys_integrity.
 
+Christian

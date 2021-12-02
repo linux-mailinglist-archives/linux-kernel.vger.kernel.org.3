@@ -2,158 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC0F465E9B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 08:19:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1576465EA1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 08:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355826AbhLBHW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 02:22:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:45267 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1355821AbhLBHW6 (ORCPT
+        id S1355821AbhLBHYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 02:24:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345415AbhLBHYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 02:22:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638429575;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qlwfsaoVSceIM7+4wFeFG1DIh1QzBLUgfeE92ble2TE=;
-        b=hNPwq6/RiZ+dB4sOQPzbRNy01OooNLPxly0AJo+5rNFBz1+CsrAP/mowzntuGNoF5m2sDJ
-        IQty2qG0ZSLP9R3gSmRVkjl2PwRV5Ou4bd9IB+d4shvPaY8YjyK10Uasx8aphKeWbvNH+c
-        Lg5pYtG8OjrFd/+Xnynl6Izmzskr5KE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-463-0EEGdWedNfavC6Nnslo-Kg-1; Thu, 02 Dec 2021 02:19:30 -0500
-X-MC-Unique: 0EEGdWedNfavC6Nnslo-Kg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7C1221006AA6;
-        Thu,  2 Dec 2021 07:19:29 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 53F331836B;
-        Thu,  2 Dec 2021 07:19:26 +0000 (UTC)
-Message-ID: <ffbb8a16f267e73316084d1252696edaf81e35a9.camel@redhat.com>
-Subject: Re: Re: [PATCH v2 2/2] KVM: x86: use x86_get_freq to get freq for
- kvmclock
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     zhenwei pi <pizhenwei@bytedance.com>,
-        Thomas Gleixner <tglx@linutronix.de>, pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org
-Date:   Thu, 02 Dec 2021 09:19:25 +0200
-In-Reply-To: <b37ffc3d-4038-fc5e-d681-b89c04a37b04@bytedance.com>
-References: <20211201024650.88254-1-pizhenwei@bytedance.com>
-         <20211201024650.88254-3-pizhenwei@bytedance.com> <877dcn7md2.ffs@tglx>
-         <b37ffc3d-4038-fc5e-d681-b89c04a37b04@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 2 Dec 2021 02:24:42 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1409C061574;
+        Wed,  1 Dec 2021 23:21:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rqO5y6tHMaMK9eTexEF756VFsX+GgPuXTh5uGfxFaBk=; b=rCceHGLVni7wC5PsXHlpbGqfg3
+        Gae/8XyFn8y4oyg+Qw5og/bCu3s/+TNzPPqDQem4/nhBhWAtOC2vyqMKBN/6Xc+/rSVQEAiVWF7mz
+        koQPaa/bLFZbc5KJwRwGPUSoBqP6HfJhEZtzXVyt060HryAfkt/pKwqKSqfn6Oi8bitBmO7e62qSa
+        ojk+kcXmsi5Rjx17eX/f1OFOBe0cHtek9rXkUXs5jzEB3mTEfInnWXhtcR57vkB9AlNyb7SGsiYml
+        EoHpJHoWf6svwRQPdOZfr+ILiS8MktFI27w5MEqskeVR8MFTXyKf88CtE9kpLnax+ilGu1kTkLGlq
+        bFtKQQRw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1msgOj-00BArf-A8; Thu, 02 Dec 2021 07:20:53 +0000
+Date:   Wed, 1 Dec 2021 23:20:53 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     deven.desai@linux.microsoft.com, corbet@lwn.net, axboe@kernel.dk,
+        agk@redhat.com, snitzer@redhat.com, ebiggers@kernel.org,
+        tytso@mit.edu, paul@paul-moore.com, eparis@redhat.com,
+        jmorris@namei.org, serge@hallyn.com, jannh@google.com,
+        dm-devel@redhat.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-audit@redhat.com,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, tusharsu@linux.microsoft.com
+Subject: Re: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
+Message-ID: <Yahz1SYRG1CQIh0z@infradead.org>
+References: <81d5e825-1ee2-8f6b-cd9d-07b0f8bd36d3@linux.microsoft.com>
+ <20211201163708.3578176-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211201163708.3578176-1-roberto.sassu@huawei.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-02 at 13:26 +0800, zhenwei pi wrote:
-> On 12/2/21 10:48 AM, Thomas Gleixner wrote:
-> > On Wed, Dec 01 2021 at 10:46, zhenwei pi wrote:
-> > > If the host side supports APERF&MPERF feature, the guest side may get
-> > > mismatched frequency.
-> > > 
-> > > KVM uses x86_get_cpufreq_khz() to get the same frequency for guest side.
-> > > 
-> > > Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
-> > > ---
-> > >   arch/x86/kvm/x86.c | 4 +---
-> > >   1 file changed, 1 insertion(+), 3 deletions(-)
-> > > 
-> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > > index 5a403d92833f..125ed3c8b21a 100644
-> > > --- a/arch/x86/kvm/x86.c
-> > > +++ b/arch/x86/kvm/x86.c
-> > > @@ -8305,10 +8305,8 @@ static void tsc_khz_changed(void *data)
-> > >   
-> > >   	if (data)
-> > >   		khz = freq->new;
-> > > -	else if (!boot_cpu_has(X86_FEATURE_CONSTANT_TSC))
-> > > -		khz = cpufreq_quick_get(raw_smp_processor_id());
-> > >   	if (!khz)
-> > > -		khz = tsc_khz;
-> > > +		khz = x86_get_cpufreq_khz(raw_smp_processor_id());
-> > 
-> > my brain compiler tells me that this is broken.
-> > Without this patch:
-> 1, boot_cpu_has(X86_FEATURE_CONSTANT_TSC) is true:
-> no kvmclock_cpufreq_notifier, and khz = tsc_khz;
-> 
-> 2, boot_cpu_has(X86_FEATURE_CONSTANT_TSC) is false:
-> during installing kmod, try cpufreq_quick_get(), or use tsc_khz;
-> and get changed by kvmclock_cpufreq_notifier.
-> 
-> With this patch:
-> 1, boot_cpu_has(X86_FEATURE_CONSTANT_TSC) is true:
-> no kvmclock_cpufreq_notifier, try aperf/mperf, or try 
-> cpufreq_quick_get(), or use cpu_khz
-> 
-> 2, boot_cpu_has(X86_FEATURE_CONSTANT_TSC) is false:
-> during installing kmod, try aperf/mperf, or try cpufreq_quick_get(), or 
-> use cpu_khz;
-> and get changed by kvmclock_cpufreq_notifier.
-> 
-> I tested on Skylake&Icelake CPU, and got different CPU frequency from 
-> host & guest, the main purpose of this patch is to get the same frequency.
-> 
+On Wed, Dec 01, 2021 at 05:37:08PM +0100, Roberto Sassu wrote:
+> Users of the device mapper driver might want to obtain a device status,
+> with status types defined in the status_type_t enumerator.
 
-Note that on my Zen2 machine (3970X), aperf/mperf returns current cpu freqency,
-as now see in /proc/cpuinfo, while TSC is always running with base CPU clock frequency (3.7 GHZ)
-(that is max frequency that CPU is guranteed to run with, anything above is boost 'bonus')
-
-[mlevitsk@starship ~/Kernel/br-vm-64/src]$cat /proc/cpuinfo | grep "cpu MHz"
-cpu MHz		: 3685.333
-cpu MHz		: 2200.000
-cpu MHz		: 2200.000
-cpu MHz		: 2200.000
-cpu MHz		: 2200.000
-cpu MHz		: 2200.000
-cpu MHz		: 2200.000
-cpu MHz		: 2200.000
-cpu MHz		: 2200.000
-cpu MHz		: 2200.000
-cpu MHz		: 2200.000
-cpu MHz		: 2761.946
-cpu MHz		: 2200.000
-cpu MHz		: 2200.000
-cpu MHz		: 2200.000
-...
-
-[mlevitsk@starship ~/Kernel/master/src]$dmesg | grep tsc
-[    0.000000] tsc: Fast TSC calibration using PIT
-[    0.000000] tsc: Detected 3700.230 MHz processor
-...
-
-
-Before I forget about it I do want to point out few things
-that are not 100% related to this thread but do related to TSC:
-
-1. It sucks that on AMD, the TSC frequency is calibrated from other 
-clocksources like PIT/HPET, since the result is not exact and varies
-from boot to boot. I do wonder if they have something like that
-APERF/MPERF thing which sadly is not what I was looking for.
-
-2. In the guest on AMD, we mark the TSC as unsynchronized always due to the code
-in unsynchronized_tsc, unless invariant tsc is used in guest cpuid,
-which is IMHO not fair to AMD as we don't do this for  Intel cpus.
-(look at unsynchronized_tsc function)
-
-3. I wish the kernel would export the tsc frequency it found to userspace
-somewhere in /sys or /proc, as this would be very useful for userspace applications.
-Currently it can only be found in dmesg if I am not mistaken..
-I don't mind if such frequency would only be exported if the TSC is stable,
-always running, not affected by CPUfreq, etc.
-
-
-Best regards,
-	Maxim Levitsky
-
+The patch looks really odd.  And without the corresponding user of your
+new functionality it is entirely unreviewable anyway.

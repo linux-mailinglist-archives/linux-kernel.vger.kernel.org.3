@@ -2,164 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76073466763
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6B446676E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:01:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359309AbhLBQDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 11:03:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
+        id S1359329AbhLBQEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 11:04:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355540AbhLBQDa (ORCPT
+        with ESMTP id S229817AbhLBQER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 11:03:30 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC8FC06174A;
-        Thu,  2 Dec 2021 08:00:07 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id h16so28568535ila.4;
-        Thu, 02 Dec 2021 08:00:07 -0800 (PST)
+        Thu, 2 Dec 2021 11:04:17 -0500
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AB3C06174A;
+        Thu,  2 Dec 2021 08:00:54 -0800 (PST)
+Received: by mail-ua1-x92b.google.com with SMTP id n6so56819328uak.1;
+        Thu, 02 Dec 2021 08:00:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=efGeiJ/GSvNA8GpE74Rzl8Jk1u536irX6BsYP5Fxck0=;
-        b=fODnySamKnmbcP2mTNMULmfhC93FCdzwVnI3nafMu1ZvUa9ww2491GhDcLx9PHk4JF
-         hWIoCyVGriRFrXb1vGhacJ4xZ2M+X1dgNsRGdFfkXr99+PXZIZwEWg1noCyk76km4ffI
-         qrNlTe3oKXvcRRlFcDTjGxVubiqras7arbLZ+hbGv1Li7HHjJ2HamLfqcEzfs0HbZeEi
-         KBf6nk+P2LrdsHmakAxBiSr4oobEahC5CB7Byu323KWswhW3FAKQ/VTizCQNdfxFiY9u
-         MTXMXh7g4p4ibvuI+xAT2LsoitmtHQ5JUJ1abkS8VkDnKVUfCDZ/NKhSzHP3Xcug/Y5s
-         Y/7A==
+         :cc;
+        bh=U2sZPQd798weph9knxMPMeinCmRojfS8Pfapl2giXJM=;
+        b=jzpN2txMKcqDve7u5vuRi2+S6p2VzSDwNSmwgr2/5gAHntXTVsO8sG16S0sfqGyEUK
+         i5x27dvhK+nePQ8Yv1FdSGF/aNukodMSRBjErWtEoehmr5hBVhIJR+8fxfg19jP0VmLF
+         kDLyA3Rcf/hL1qOS1mxoSB8r7ot6uNKvV7zfnrN4auV/nXuMVm9ZJkxGibAMDmn/SoBe
+         ROrk7jYNBy4vRtneCuKrpYlAlXLqbg6VPDloVm3HCa7hmqiu7kasCokZzPej4vufQLcm
+         C103EOF/74+rSPWk4wyF6S+J+jQQ02uAbpL/QaSvdMcka5dyzJ3Tk3nenPYbgspH8T3x
+         7IvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=efGeiJ/GSvNA8GpE74Rzl8Jk1u536irX6BsYP5Fxck0=;
-        b=NX8yCWkY5JMDY+nBkusOMDy2kuUooaAoW8m4pD5Owispky3lVyxM7B06IUlEf3AreC
-         aT5hgAqr4Niy/mlEnCb+eHg1pFeFRUVicDwOUXsuWZqzR9NmfW/gJ3OXtluenCFbij6G
-         6WQTZqrGflzGgfrwW52KfVRN6nkeQvPQyy4/EXjPVJX1aL2L56g+hfrN8xQo7DeQXrz8
-         TDCcKp0IcFvQ34s7XEBsTCCtAetl47QnWb7sMUleK0c5D2l+J8pzPkGqXxqSAxQULOFP
-         UafxPedXTgEp51wCn4W/VgaF2mMEdUroGtJvxcv0xq3bozMhycBANNBvT2Elht67neiN
-         Gr/w==
-X-Gm-Message-State: AOAM531OUrc7U/WcpphrXXg061GM8C+u52fXhalzLHIZtSnA2wolysp+
-        +1CSuyF3eHttwP5EkJYzQV7mFUhk5Spzn9u/SaA=
-X-Google-Smtp-Source: ABdhPJzwR/WG1XQmZr+htmJ+/QbuNy7wKwSl1cRWMi60/L5kK88Z25LObxao9nMh9oD8ybeeRy4lPwF7oXiXzS1XGJ0=
-X-Received: by 2002:a92:c88e:: with SMTP id w14mr13976244ilo.24.1638460807330;
- Thu, 02 Dec 2021 08:00:07 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=U2sZPQd798weph9knxMPMeinCmRojfS8Pfapl2giXJM=;
+        b=HRZ3wB4So2gPSE9p3PGj91dZ32K3lvzrb4NYqR0D3dhitPorDeKlwtxAW7rQW0OMGn
+         aijsNxew002ftVOAutuVn3Z3FFYJAYFmUbZQinOWgZqHA7Ucwjb4DOl7WepV6FdPMsVd
+         2p+ZLCA+JoMVdY9jFkBwvrqCm/AG45qyX5PKTXmYqhzxTVJK8M/utfFs6iEpnIp1Jhoh
+         sjTrwkyU2bhK0o9slrhIt556uW4qUz1DgG36+tjrEwOb14Rd/ZEzvTVcwHKCzeJjotUU
+         yWw28KoWYqhGo4K+MN8+jH7A2MdSxIJL5c/Rf5OpcV0fpXNK0BSaQRZY2E7VIxo0ejTS
+         44RA==
+X-Gm-Message-State: AOAM530hese71zCkqrBBUAZbUNYt/GciqMDW2cJ22x9UMV2CGeebhavF
+        ktIsvDhUevpGeD0FvTfafVp21jofAmoM9laPd60=
+X-Google-Smtp-Source: ABdhPJybAreaEhSuo2y2Tbo1YdlgTaiMlhDNtXg5D8QWfVW6+flBljZULwo/BbqpU2HaLcu7I83aSoQSfdCygG1zQUs=
+X-Received: by 2002:ab0:45a8:: with SMTP id u37mr15834000uau.24.1638460853923;
+ Thu, 02 Dec 2021 08:00:53 -0800 (PST)
 MIME-Version: 1.0
-References: <17d719b79f9.d89bf95117881.5882353172682156775@mykernel.net>
- <CAOQ4uxidK-yDMZoZtoRwTZLgSTr1o2Mu2L55vJRNJDLV0-Sb1w@mail.gmail.com>
- <17d73da701b.e571c37220081.6904057835107693340@mykernel.net>
- <17d74b08dcd.c0e94e6320632.9167792887632811518@mykernel.net>
- <CAOQ4uxiCYFeeH8oUUNG+rDCru_1XcwB6fR2keS1C6=d_yD9XzA@mail.gmail.com>
- <20211201134610.GA1815@quack2.suse.cz> <17d76cf59ee.12f4517f122167.2687299278423224602@mykernel.net>
- <CAOQ4uxiEjGms-sKhrVDtDHSEk97Wku5oPxnmy4vVB=6yRE_Hdg@mail.gmail.com>
- <CAOQ4uxg6FATciQhzRifOft4gMZj15G=UA6MUiPX2n9-NR5+1Pg@mail.gmail.com>
- <17d78e95c35.ceeffaaf22655.2727336036618811041@mykernel.net> <YajkQUpxWQI1N64l@redhat.com>
-In-Reply-To: <YajkQUpxWQI1N64l@redhat.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Thu, 2 Dec 2021 17:59:56 +0200
-Message-ID: <CAOQ4uxj4Gh=hjoXgq-=c+JStKnK=iY4R+CZqEfb8eBd95218Mg@mail.gmail.com>
-Subject: Re: ovl_flush() behavior
-To:     Vivek Goyal <vgoyal@redhat.com>
-Cc:     Chengguang Xu <cgxu519@mykernel.net>, Jan Kara <jack@suse.cz>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        ronyjin <ronyjin@tencent.com>,
-        charliecgxu <charliecgxu@tencent.com>
+References: <20211201205110.41656-1-f.fainelli@gmail.com> <20211201205110.41656-6-f.fainelli@gmail.com>
+In-Reply-To: <20211201205110.41656-6-f.fainelli@gmail.com>
+From:   Gregory Fong <gregory.0xf0@gmail.com>
+Date:   Thu, 2 Dec 2021 08:00:00 -0800
+Message-ID: <CADtm3G7wiNdDq2fagWeSDd_RV_dyfrNy+5e-VL9OKjwGAWzNtg@mail.gmail.com>
+Subject: Re: [PATCH 05/14] dt-bindings: gpio: Convert Broadcom STB GPIO to YAML
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     devicetree@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
+        <linux-mmc@vger.kernel.org>,
+        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 5:20 PM Vivek Goyal <vgoyal@redhat.com> wrote:
+Hi Florian,
+
+I haven't kept up with the new yaml format, so not entirely sure I
+know what I'm talking about yet, but here are a few comments:
+
+On Wed, Dec 1, 2021 at 12:51 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
 >
-> On Thu, Dec 02, 2021 at 10:11:39AM +0800, Chengguang Xu wrote:
-> >
-> >  ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E5=9B=9B, 2021-12-02 07:23:17 Amir G=
-oldstein <amir73il@gmail.com> =E6=92=B0=E5=86=99 ----
-> >  > > >
-> >  > > > To be honest I even don't fully understand what's the ->flush() =
-logic in overlayfs.
-> >  > > > Why should we open new underlying file when calling ->flush()?
-> >  > > > Is it still correct in the case of opening lower layer first the=
-n copy-uped case?
-> >  > > >
-> >  > >
-> >  > > The semantics of flush() are far from being uniform across filesys=
-tems.
-> >  > > most local filesystems do nothing on close.
-> >  > > most network fs only flush dirty data when a writer closes a file
-> >  > > but not when a reader closes a file.
-> >  > > It is hard to imagine that applications rely on flush-on-close of
-> >  > > rdonly fd behavior and I agree that flushing only if original fd w=
-as upper
-> >  > > makes more sense, so I am not sure if it is really essential for
-> >  > > overlayfs to open an upper rdonly fd just to do whatever the upper=
- fs
-> >  > > would have done on close of rdonly fd, but maybe there is no good
-> >  > > reason to change this behavior either.
-> >  > >
-> >  >
-> >  > On second thought, I think there may be a good reason to change
-> >  > ovl_flush() otherwise I wouldn't have submitted commit
-> >  > a390ccb316be ("fuse: add FOPEN_NOFLUSH") - I did observe
-> >  > applications that frequently open short lived rdonly fds and suffere=
-d
-> >  > undesired latencies on close().
-> >  >
-> >  > As for "changing existing behavior", I think that most fs used as
-> >  > upper do not implement flush at all.
-> >  > Using fuse/virtiofs as overlayfs upper is quite new, so maybe that
-> >  > is not a problem and maybe the new behavior would be preferred
-> >  > for those users?
-> >  >
-> >
-> > So is that mean simply redirect the ->flush request to original underly=
-ing realfile?
+> Convert the Broadcom STB GPIO Device Tree binding to YAML to help with
+> validation.
 >
-> If the file has been copied up since open(), then flush should go on uppe=
-r
-> file, right?
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  .../bindings/gpio/brcm,brcmstb-gpio.txt       |  83 --------------
+>  .../bindings/gpio/brcm,brcmstb-gpio.yaml      | 104 ++++++++++++++++++
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 105 insertions(+), 84 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
+>  create mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
 >
-> I think Amir is talking about that can we optimize flush in overlay and
-> not call ->flush at all if file was opened read-only, IIUC.
+> diff --git a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
+> deleted file mode 100644
+> index 5d468ecd1809..000000000000
+> --- a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
+> +++ /dev/null
+> @@ -1,83 +0,0 @@
+> [snip]
+> -
+> -- interrupts-extended:
+> -    Alternate form of specifying interrupts and parents that allows for
+> -    multiple parents.  This takes precedence over 'interrupts' and
+> -    'interrupt-parent'.  Wakeup-capable GPIO controllers often route their
+> -    wakeup interrupt lines through a different interrupt controller than the
+> -    primary interrupt line, making this property necessary.
+
+It looks like interrupts-extended was removed from the new docs, I'm
+assuming that was intentional?
+
+> [snip]
+> diff --git a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
+> new file mode 100644
+> index 000000000000..4b7309dc74dc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
+> @@ -0,0 +1,104 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/brcm,brcmstb-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom STB "UPG GIO" GPIO controller
+> +
+> +description: >
+> +  The controller's registers are organized as sets of eight 32-bit
+> +  registers with each set controlling a bank of up to 32 pins.  A single
+> +  interrupt is shared for all of the banks handled by the controller.
+> +
+> +maintainers:
+> +  - Doug Berger <opendmb@gmail.com>
+> +  - Florian Fainelli <f.fainelli@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - brcm,bcm7445-gpio
+> +          - const: brcm,brcmstb-gpio
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description:
+
+Missing folded block scalar marker ('>') above
+
+> +      Define the base and range of the I/O address space containing
+> +      the brcmstb GPIO controller registers
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +    description: >
+> +      The first cell is the pin number (within the controller's
+> +      pin space), and the second is used for the following:
+> +      bit[0]: polarity (0 for active-high, 1 for active-low)
+> +
+> +  gpio-controller: true
+> +
+> +  "brcm,gpio-bank-widths":
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description:
+
+Same here
+
+> +      Number of GPIO lines for each bank.  Number of elements must
+> +      correspond to number of banks suggested by the 'reg' property.
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +    description:
+
+While it's not necessary while this is only one line, consider adding
+'>' here too.
+
+> +      The interrupt shared by all GPIO lines for this controller.
+> +
+> +  "#interrupt-cells":
+> +    const: 2
+> +    description: >
+
+This next block could get formatted strangely with '>'; recommend
+using '|' instead
+
+> +      The first cell is the GPIO number, the second should specify
+> +      flags.  The following subset of flags is supported:
+> +      - bits[3:0] trigger type and level flags
+> +        1 = low-to-high edge triggered
+> +        2 = high-to-low edge triggered
+> +        4 = active high level-sensitive
+> +        8 = active low level-sensitive
+> +      Valid combinations are 1, 2, 3, 4, 8.
+> +
+> +  interrupt-controller: true
+> +
+> +  wakeup-source:
+> +    type: boolean
+> +    description: >
+> +      GPIOs for this controller can be used as a wakeup source
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - gpio-controller
+> +  - "#gpio-cells"
+
+Need to add required property "brcm,gpio-bank-widths"
+
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    upg_gio: gpio@f040a700 {
+> +        #gpio-cells = <2>;
+> +        #interrupt-cells = <2>;
+> +        compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
+> +        gpio-controller;
+> +        interrupt-controller;
+> +        reg = <0xf040a700 0x80>;
+> +        interrupt-parent = <&irq0_intc>;
+> +        interrupts = <0x6>;
+> +        brcm,gpio-bank-widths = <32 32 32 24>;
+> +    };
+> +
+> +    upg_gio_aon: gpio@f04172c0 {
+> +        #gpio-cells = <2>;
+> +        #interrupt-cells = <2>;
+> +        compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
+> +        gpio-controller;
+> +        interrupt-controller;
+> +        reg = <0xf04172c0 0x40>;
+> +        interrupt-parent = <&irq0_aon_intc>;
+> +        interrupts = <0x6>;
+> +        wakeup-source;
+> +        brcm,gpio-bank-widths = <18 4>;
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 913856599623..78161abc384f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -3772,7 +3772,7 @@ BROADCOM BRCMSTB GPIO DRIVER
+>  M:     Gregory Fong <gregory.0xf0@gmail.com>
+
+Not really related to this patch, but I should probably update this
+entry to reflect current reality. Should that be you and/or Doug?
+
+>  L:     bcm-kernel-feedback-list@broadcom.com
+>  S:     Supported
+> -F:     Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
+> +F:     Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
+>  F:     drivers/gpio/gpio-brcmstb.c
+>
+>  BROADCOM BRCMSTB I2C DRIVER
+> --
+> 2.25.1
 >
 
-Maybe that's what I wrote, but what I meant was if file was open as
-lower read-only and later copied up, not sure we should bother with
-ovl_open_realfile() for flushing upper.
-
-> In case of fuse he left it to server. If that's the case, then in case
-> of overlayfs, it should be left to underlyng filesystem as well?
-> Otherwise, it might happen underlying filesystem (like virtiofs) might
-> be expecting ->flush() and overlayfs decided not to call it because
-> file was read only.
->
-
-Certainly, if upper wants flush on rdonly file we must call flush on
-close of rdonly file *that was opened on upper*.
-
-But if we opened rdonly file on lower, even if lower is virtiofs, does
-virtiosfd needs this flush? that same file on the server was not supposed
-to be written by anyone.
-If virtiofsd really needs this flush then it is a problem already today,
-because if lower file was copied up since open rdonly, virtiofsd
-is not going to get the flushes for the lower file (only the release).
-
-However, I now realize that if we opened file rdonly on lower,
-we may have later opened a short lived realfile on upper for read post
-copy up and we never issued a flush for this short live rdonly upper fd.
-So actually, unless we store a flag or something that says that
-we never opened upper realfile, we should keep current behavior.
-
-> So I will lean towards continue to call ->flush in overlay and try to
-> optimize virtiofsd to set FOPEN_NOFLUSH when not required.
->
-
-Makes sense.
-Calling flush() on fs that does nothing with it doesn't hurt.
-
-Thanks,
-Amir.
+Best regards,
+Gregory

@@ -2,57 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D11446612E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD4B466131
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:08:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345750AbhLBKLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 05:11:35 -0500
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:50105 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230406AbhLBKLd (ORCPT
+        id S1356713AbhLBKMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:12:15 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36172 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237551AbhLBKMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 05:11:33 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0UzAdH2e_1638439685;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0UzAdH2e_1638439685)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 02 Dec 2021 18:08:09 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     bmt@zurich.ibm.com
-Cc:     jgg@ziepe.ca, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH] RDMA/siw: Use max() instead of doing it manually
-Date:   Thu,  2 Dec 2021 18:07:59 +0800
-Message-Id: <1638439679-114250-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        Thu, 2 Dec 2021 05:12:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC4D5B82250;
+        Thu,  2 Dec 2021 10:08:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A519C00446;
+        Thu,  2 Dec 2021 10:08:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638439729;
+        bh=IuWGJaDCjFa8PsnRrVCp3/5cjpCR1EyGvz9DJWIbWqU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S0wH0S0l7ePBKqSRRXZYnzIU+QWkTR9Sc7v9ZOpc3jikhFQSh1v4hfyizQ8Sfpy+5
+         t+XrxeShiwuuLS36AlXDGygFjm8upLguYEqKXYB5+7wk1FeMCgJDj9eLiBW9TRy7N4
+         ac7yBVO0MrwliQw1bn6VmDaILGNfrZsx3E4N9IiOYmdBZb2BbkGBc6YXgmnq4tacdm
+         UXdKT5ojyNRSl/Z7/Lczsbq1bGqxo/2CwlKzDelFFHVWJfsF5Op4UwwPrIQPfn7r5g
+         aAzuXN6AKXuRnesVPhTBcTXWIeduGDHnaU+Ozh01KUrSAuntdPi+1lOowBl04IaV8D
+         p4tF7OsBQ5QHQ==
+Date:   Thu, 2 Dec 2021 10:08:44 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        chinwen.chang@mediatek.com, nicholas.tang@mediatek.com,
+        james.hsu@mediatek.com, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2] arm64: update PAC description for kernel
+Message-ID: <20211202100843.GB26450@willie-the-truck>
+References: <20211201034014.20048-1-Kuan-Ying.Lee@mediatek.com>
+ <Yaiat4ee0igTZDB5@FVFF77S0Q05N>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yaiat4ee0igTZDB5@FVFF77S0Q05N>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix following coccicheck warning:
+On Thu, Dec 02, 2021 at 10:06:47AM +0000, Mark Rutland wrote:
+> On Wed, Dec 01, 2021 at 11:40:10AM +0800, Kuan-Ying Lee wrote:
+> > Remove the paragraph which has nothing to do with the kernel and
+> > add PAC description related to kernel.
+> > 
+> > Suggested-by: Mark Rutland <mark.rutland@arm.com>
+> > Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+> 
+> This looks good to me.
+> 
+> Catalin/Will, did you want to pick this, or do you want Jonathan to do so?
 
-./drivers/infiniband/sw/siw/siw_verbs.c:665:28-29: WARNING opportunity
-for max().
+I can grab it.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/infiniband/sw/siw/siw_verbs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/infiniband/sw/siw/siw_verbs.c b/drivers/infiniband/sw/siw/siw_verbs.c
-index d15a1f9..a3dd2cb 100644
---- a/drivers/infiniband/sw/siw/siw_verbs.c
-+++ b/drivers/infiniband/sw/siw/siw_verbs.c
-@@ -662,7 +662,7 @@ static int siw_copy_inline_sgl(const struct ib_send_wr *core_wr,
- 		kbuf += core_sge->length;
- 		core_sge++;
- 	}
--	sqe->sge[0].length = bytes > 0 ? bytes : 0;
-+	sqe->sge[0].length = max(bytes, 0);
- 	sqe->num_sge = bytes > 0 ? 1 : 0;
- 
- 	return bytes;
--- 
-1.8.3.1
-
+Will

@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1369A4660E2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:53:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBBF14660EF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356870AbhLBJ46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 04:56:58 -0500
-Received: from relay10.mail.gandi.net ([217.70.178.230]:40761 "EHLO
+        id S231404AbhLBJ53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 04:57:29 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:49049 "EHLO
         relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356817AbhLBJ4i (ORCPT
+        with ESMTP id S1356825AbhLBJ4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 04:56:38 -0500
+        Thu, 2 Dec 2021 04:56:44 -0500
 Received: (Authenticated sender: herve.codina@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPA id D088E240016;
-        Thu,  2 Dec 2021 09:53:13 +0000 (UTC)
+        by relay10.mail.gandi.net (Postfix) with ESMTPA id 2AC5E240009;
+        Thu,  2 Dec 2021 09:53:16 +0000 (UTC)
 From:   Herve Codina <herve.codina@bootlin.com>
 To:     Viresh Kumar <vireshk@kernel.org>,
         Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
@@ -26,9 +26,9 @@ Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Herve Codina <herve.codina@bootlin.com>
-Subject: [PATCH 3/6] pinctrl: spear: plgpio: Introduce regmap phandle
-Date:   Thu,  2 Dec 2021 10:52:52 +0100
-Message-Id: <20211202095255.165797-4-herve.codina@bootlin.com>
+Subject: [PATCH 4/6] ARM: dts: spear3xx: Use plgpio regmap in SPEAr310 and SPEAr320
+Date:   Thu,  2 Dec 2021 10:52:53 +0100
+Message-Id: <20211202095255.165797-5-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211202095255.165797-1-herve.codina@bootlin.com>
 References: <20211202095255.165797-1-herve.codina@bootlin.com>
@@ -38,59 +38,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Resources need to be shared between pinmux and plgpio.
+Resources used by plgpio and pinmux are conflicting on SPEAr310
+and SPEAr320.
 
-Introduce regmap phandle in order to retrieve the regmap
-from the phandle if the property is present.
-This allows to retrieve an external regmap (ie the one
-used by pinmux if the phandle references the pinmux node)
-from plgpio.
+Use the newly introduced regmap property in plgpio node to use
+pinmux resources from plgpio and so avoid the conflict.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
- drivers/pinctrl/spear/pinctrl-plgpio.c | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+ arch/arm/boot/dts/spear310.dtsi | 1 +
+ arch/arm/boot/dts/spear320.dtsi | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/drivers/pinctrl/spear/pinctrl-plgpio.c b/drivers/pinctrl/spear/pinctrl-plgpio.c
-index 28538ac99eed..b36449724f3f 100644
---- a/drivers/pinctrl/spear/pinctrl-plgpio.c
-+++ b/drivers/pinctrl/spear/pinctrl-plgpio.c
-@@ -523,6 +523,7 @@ static int plgpio_probe_dt(struct platform_device *pdev, struct plgpio *plgpio)
- 
- static int plgpio_probe(struct platform_device *pdev)
- {
-+	struct device_node *regmap_np;
- 	struct plgpio *plgpio;
- 	int ret, irq;
- 
-@@ -530,11 +531,22 @@ static int plgpio_probe(struct platform_device *pdev)
- 	if (!plgpio)
- 		return -ENOMEM;
- 
--	plgpio->regmap = device_node_to_regmap(pdev->dev.of_node);
--	if (IS_ERR(plgpio->regmap)) {
--		dev_err(&pdev->dev, "Init regmap failed (%pe)\n",
--			plgpio->regmap);
--		return PTR_ERR(plgpio->regmap);
-+	regmap_np = of_parse_phandle(pdev->dev.of_node, "regmap", 0);
-+	if (regmap_np) {
-+		plgpio->regmap = device_node_to_regmap(regmap_np);
-+		of_node_put(regmap_np);
-+		if (IS_ERR(plgpio->regmap)) {
-+			dev_err(&pdev->dev, "Retrieve regmap failed (%pe)\n",
-+				plgpio->regmap);
-+			return PTR_ERR(plgpio->regmap);
-+		}
-+	} else {
-+		plgpio->regmap = device_node_to_regmap(pdev->dev.of_node);
-+		if (IS_ERR(plgpio->regmap)) {
-+			dev_err(&pdev->dev, "Init regmap failed (%pe)\n",
-+				plgpio->regmap);
-+			return PTR_ERR(plgpio->regmap);
-+		}
- 	}
- 
- 	ret = plgpio_probe_dt(pdev, plgpio);
+diff --git a/arch/arm/boot/dts/spear310.dtsi b/arch/arm/boot/dts/spear310.dtsi
+index 8ce751a1376d..77570833d46b 100644
+--- a/arch/arm/boot/dts/spear310.dtsi
++++ b/arch/arm/boot/dts/spear310.dtsi
+@@ -92,6 +92,7 @@ serial@b2200000 {
+ 			gpiopinctrl: gpio@b4000000 {
+ 				compatible = "st,spear-plgpio";
+ 				reg = <0xb4000000 0x1000>;
++				regmap = <&pinmux>;
+ 				#interrupt-cells = <1>;
+ 				interrupt-controller;
+ 				gpio-controller;
+diff --git a/arch/arm/boot/dts/spear320.dtsi b/arch/arm/boot/dts/spear320.dtsi
+index 3bc1e93a0a55..47ac4474ed96 100644
+--- a/arch/arm/boot/dts/spear320.dtsi
++++ b/arch/arm/boot/dts/spear320.dtsi
+@@ -120,6 +120,7 @@ serial@a4000000 {
+ 			gpiopinctrl: gpio@b3000000 {
+ 				compatible = "st,spear-plgpio";
+ 				reg = <0xb3000000 0x1000>;
++				regmap = <&pinmux>;
+ 				#interrupt-cells = <1>;
+ 				interrupt-controller;
+ 				gpio-controller;
 -- 
 2.31.1
 

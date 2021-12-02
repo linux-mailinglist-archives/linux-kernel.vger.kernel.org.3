@@ -2,105 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D5246613B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F7946613C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356786AbhLBKNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 05:13:38 -0500
-Received: from mail-ua1-f42.google.com ([209.85.222.42]:43823 "EHLO
-        mail-ua1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346435AbhLBKNg (ORCPT
+        id S1356795AbhLBKOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:14:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346163AbhLBKOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 05:13:36 -0500
-Received: by mail-ua1-f42.google.com with SMTP id j14so54616200uan.10;
-        Thu, 02 Dec 2021 02:10:14 -0800 (PST)
+        Thu, 2 Dec 2021 05:14:36 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B01C06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 02:11:14 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id b11so19857403pld.12
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 02:11:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c0DvcWJ6BwS4XZAHB+T7IVAgQuaYuZYZpCtQocd1jt8=;
+        b=OUNYwyFYjPAZMeMoxdblOxV2NxXq1sfGa2cNnE+bikkMPwgQ0QwelII6Iq9iMeSMZn
+         4FxAEAYzK379X96A17FBZXHASpSTr2xSRHwz4fcwhQxi18yx6wGl+PVJGsUSD24ODWc+
+         zzGw2AGpJLTiBtltNY0CQy1rBdrgeKG0nw9UAcjiKcQmMkqU6onpvclXWYgbpdpvmQUi
+         m23pCEDaxNC+0v1yUyinztlHVgTDABAvKYU8ymg23R0srhSQDeB2YUMIh8ZWEWRo2Eex
+         VsOjHIMoOAuGD7CZAARYo/F2zrxJb7FdCFdqoNz7XZRrpBnuAwW3MB8MTbLqSZBOmOQC
+         ZAIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Gtt0K2kxZfiDKpqCoFE7opDwj75/HaGJjpOiQDC84E8=;
-        b=Eg3XoukpsYvTDJMR5IAVA3IqsR+nO2o/N55taKBQWQlm5jPameR6krJjl5HlrKXPOm
-         Ou6znlDItowY5kz31rIZqfcm/YMkUxNXZAif1VZXU4+4QoBpKfli3mKnwbo3a9IUqiZ6
-         HqoEnkk2Mp3bqRRQLhLBnafE/TeFmnlaocWbjrIBFi/tK5rHzkuWRmslJHlcaRLntVoa
-         J+iept8hraG+44HGoONZqqv0lqFSFByMWjVkYLAMKC4AYEwUuWlLEd/F7iOMAfW6dKNI
-         h7FME+wo8mpgWdI+bUiS2YOe5bmK7nokIntdEDkISbbp8/7AV9JUDG0hNz1RcN0EqdI2
-         KD1Q==
-X-Gm-Message-State: AOAM532478ZbSgrbfvJvh+MPFf3PhdH8aY7aw+a/4+vxSXtQjPNBjk2D
-        5upWh6Nne6NMELT5X2OTGLo3SxEo5dVGgA==
-X-Google-Smtp-Source: ABdhPJwEbDYzatVtsi6D33Ax7LpckZF7DWK+xVdHNnB1u6jBh8f9nucDwq/UTeXNnqRyf/92GNpSZQ==
-X-Received: by 2002:ab0:14a:: with SMTP id 68mr13784308uak.0.1638439813384;
-        Thu, 02 Dec 2021 02:10:13 -0800 (PST)
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com. [209.85.221.173])
-        by smtp.gmail.com with ESMTPSA id t11sm695666vkt.34.2021.12.02.02.10.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Dec 2021 02:10:13 -0800 (PST)
-Received: by mail-vk1-f173.google.com with SMTP id 84so18050704vkc.6;
-        Thu, 02 Dec 2021 02:10:13 -0800 (PST)
-X-Received: by 2002:a05:6122:104f:: with SMTP id z15mr15150540vkn.39.1638439812926;
- Thu, 02 Dec 2021 02:10:12 -0800 (PST)
+        bh=c0DvcWJ6BwS4XZAHB+T7IVAgQuaYuZYZpCtQocd1jt8=;
+        b=C9XfRDgjZLm6QhOHiTV0mumdQLZcrOTvzUSLc5/sLA9mUzCHBUbOIWIo6vxOYVassN
+         kjOcV2ZtlZTS1e8PKAcux3V5SkhS4XvH5FfYzHKFPKlZ9+W55l+9ypKMmKnFeVHN3vJm
+         75SvmPkxsouVfuxXUi0Fm/zgCBRYYeZ45/zSLMNRtruqmknnQQ1evgq+pexP5JLGtUEX
+         D9gOK+ANAMmhV1nT5HgOCcxF+rrJCceK/tLY0xQQtTLavCKuHzXu3c2bVaJIusN3G5T2
+         Rdk0aRhsNgCfq1WwmrFyfRlXrLiPoZYOZruOLeEj9aIV3dRUSH4WDMHKhW0aMQhvYw4Q
+         ZNGg==
+X-Gm-Message-State: AOAM5337UZUcoAvwvqDiciZEJ/L7q/AGns/crKwtKB4dJHZ4Qy+Ah4iA
+        vItzhqcxBa9y/CU+fm7JpluuCnfYdJL5FuBHEuo=
+X-Google-Smtp-Source: ABdhPJyvDJ1NkE4fzQhTVbaMeaTJJ71H/QPrGgNzZ8y16kOvPjgAH+0OCEeAM2I31hS6Lvqf/0RCfOK0WAuB6QLG8Fg=
+X-Received: by 2002:a17:90a:6487:: with SMTP id h7mr4915163pjj.40.1638439873589;
+ Thu, 02 Dec 2021 02:11:13 -0800 (PST)
 MIME-Version: 1.0
-References: <104dcbfd22f95fc77de9fe15e8abd83869603ea5.1637927673.git.geert@linux-m68k.org>
- <YagEai+VPAnjAq4X@robh.at.kernel.org>
-In-Reply-To: <YagEai+VPAnjAq4X@robh.at.kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 2 Dec 2021 11:10:01 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW5Ng9225a6XK0VKd0kj=m8a1xr_oKeazQYxdpvn4Db=g@mail.gmail.com>
-Message-ID: <CAMuHMdW5Ng9225a6XK0VKd0kj=m8a1xr_oKeazQYxdpvn4Db=g@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: net: cdns,macb: Convert to json-schema
-To:     Rob Herring <robh@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
+References: <20211130132629.130713-1-zhou1615@umn.edu>
+In-Reply-To: <20211130132629.130713-1-zhou1615@umn.edu>
+From:   Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Date:   Thu, 2 Dec 2021 11:11:02 +0100
+Message-ID: <CAMeQTsazxeXgOJcuGZhEH5BX5ZzmOgM-NAjLjj9iypNgTqu-dg@mail.gmail.com>
+Subject: Re: [PATCH] drm/gma500/cdv_intel_lvds: Fix a wild pointer dereference
+ in cdv_intel_lvds_get_modes()
+To:     Zhou Qingyang <zhou1615@umn.edu>
+Cc:     kjlu@umn.edu, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>,
+        Alan Cox <alan@linux.intel.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-
-CC Michal
-
-On Thu, Dec 2, 2021 at 12:25 AM Rob Herring <robh@kernel.org> wrote:
-> On Fri, Nov 26, 2021 at 12:57:00PM +0100, Geert Uytterhoeven wrote:
-> > Convert the Cadence MACB/GEM Ethernet controller Device Tree binding
-> > documentation to json-schema.
-> >
-> > Re-add "cdns,gem" (removed in commit a217d8711da5c87f ("dt-bindings:
-> > Remove PicoXcell bindings")) as there are active users on non-PicoXcell
-> > platforms.
-> > Add missing "ether_clk" clock.
-> > Add missing properties.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/net/cdns,macb.yaml
-
-> > +  '#stream-id-cells':
-> > +    const: 1
+On Tue, Nov 30, 2021 at 2:26 PM Zhou Qingyang <zhou1615@umn.edu> wrote:
 >
-> I can't figure out why you have this here. I'll drop it while applying.
+> In cdv_intel_lvds_get_modes(), the return value of drm_mode_duplicate()
+> is assigned to mode and used in drm_mode_probed_add().
+> drm_mode_probed_add() passes mode->head to list_add_tail().
+> list_add_tail() will further call __list_add() and there is a
+> dereference of mode->head in __list_add(), which could lead to a wild
+> pointer dereference on failure of drm_mode_duplicate().
+>
+> Fix this bug by adding a checking of mode
+>
+> This bug was found by a static analyzer. The analysis employs
+> differential checking to identify inconsistent security operations
+> (e.g., checks or kfrees) between two code paths and confirms that the
+> inconsistent operations are not recovered in the current function or
+> the callers, so they constitute bugs.
+>
+> Note that, as a bug found by static analysis, it can be a false
+> positive or hard to trigger. Multiple researchers have cross-reviewed
+> the bug.
+>
+> Builds with CONFIG_DRM_GMA500=m show no new warnings,
+> and our static analyzer no longer warns about this code.
+>
+> Fixes: 6a227d5fd6c4 ("gma500: Add support for Cedarview")
+> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+> ---
+>  drivers/gpu/drm/gma500/cdv_intel_lvds.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/gma500/cdv_intel_lvds.c b/drivers/gpu/drm/gma500/cdv_intel_lvds.c
+> index 9e1cdb11023c..56aec41ebb1a 100644
+> --- a/drivers/gpu/drm/gma500/cdv_intel_lvds.c
+> +++ b/drivers/gpu/drm/gma500/cdv_intel_lvds.c
+> @@ -310,6 +310,9 @@ static int cdv_intel_lvds_get_modes(struct drm_connector *connector)
+>         if (mode_dev->panel_fixed_mode != NULL) {
+>                 struct drm_display_mode *mode =
+>                     drm_mode_duplicate(dev, mode_dev->panel_fixed_mode);
+> +               if (!mode)
+> +                       return -ENOMEM;
+> +
 
-See arch/arm64/boot/dts/xilinx/zynqmp.dtsi and
-drivers/iommu/arm/arm-smmu/arm-smmu.c.
+Same problem here as in the other patches.
 
-It wasn't clear to me if this is still needed, or legacy. Michal?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>                 drm_mode_probed_add(connector, mode);
+>                 return 1;
+>         }
+> --
+> 2.25.1
+>

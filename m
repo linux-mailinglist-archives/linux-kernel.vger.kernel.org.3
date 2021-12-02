@@ -2,147 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2268A465D73
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E73C465D74
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355485AbhLBEh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 23:37:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355360AbhLBEht (ORCPT
+        id S1355507AbhLBEja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 23:39:30 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:41114 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355360AbhLBEjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 23:37:49 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD29DC061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 20:34:25 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id u22so52419689lju.7
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 20:34:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KT4+ThzPToPwG8WHB54fTTopdp95Q9/t6ImLhzRoaVE=;
-        b=Q+n7hXy3FuOw/95x9CZ85UjLLYFb9+vIMsq49bqo0+kLhCv6zEKc3BX5Wr/g7Fq63I
-         Reaxon0EfvptNWPO+bqJMK2U+pKSAZklTP9uzJWF3JWyTRPaSSuX1d5F+vEvGnHUE9FZ
-         cqwqlOKmZtvoqt4JnCQVs7MhynwPyW8HWWDa+Ys0zxJ664At5joWfiwbX4uIizNzox4v
-         1LqtYUEUcL9ZvSWCXrGBQj8p/6I2Pg7jNBCXvdQCWjoT/7K0ucr4BVI68l8sOcqPO0R1
-         hWQZoUags1bTjaigc9QChIDzSLRUAxCM7qGlYJHp03/cM4iNtoIjlkNYMiBKqmU2gqua
-         2mag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KT4+ThzPToPwG8WHB54fTTopdp95Q9/t6ImLhzRoaVE=;
-        b=2NMA6iZINrB0kJUEsEo6HNehKwHKbLmg0TP5coLP3/S7zwDsB+aDqlg9VDWp+rY1AU
-         R7TinlnOeult3hVdkwkskl7a/OP6RCQXjyS9/lqUHw7jKDjrkt8lwX/dYoXIwZTMTHgS
-         2K8sFBbj/V4M9YrL+UlnidjjoCnevmaArfKsTxje4EdVHELHyp/BtdNp9uzeAXIAzhKy
-         TuxIMGfK8Gn3qVh9CtMqf9dPtzLfjwjT2Fbai9E9rFa86MSCEENNBJxyUzBiUwZE9ZpI
-         0/djK5AXmFHaFGH2oRG2AGzyllviZCmgFPI03/pLtX89DAbG8fMt09KRsE9mZRtzs/r2
-         kgvA==
-X-Gm-Message-State: AOAM5321dvDuh8b7kMemVmMuDFGtJO5TZ6c4GZGd1sLEaGrbfm++K3J3
-        nYQLF+GtSIuihUteSKoU+I+knYExip0y8dAv67tBoA==
-X-Google-Smtp-Source: ABdhPJxFsQTBROC0TdK8woZVFuKCiZHiiNEnW0O2qirGLrQJknz0//X0k9dM0v2xwX2cHpIWu2jT8nFBFBIQPkAeXqw=
-X-Received: by 2002:a2e:95d2:: with SMTP id y18mr9274159ljh.93.1638419662807;
- Wed, 01 Dec 2021 20:34:22 -0800 (PST)
+        Wed, 1 Dec 2021 23:39:15 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CF902CE2152
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 04:35:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16425C00446;
+        Thu,  2 Dec 2021 04:35:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638419751;
+        bh=pWND3NJkhj9XePIxXtamGmmjwZ+5EXgv2TnFzY3Z7vY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mVXZ9Oxq+6dVSMMrlkH7EFJalBARdvWp2A1RThLkRhvArLttCwwoIVxVbE64Z42Sv
+         9tn0A2vj6Ycy4BKut0pNQdjbH+j2+Frk1cVf6FfYG/xgITwBqlZzTqX9uMGCf824et
+         JpQH2sjmeWfKAgTxVYkamcxYDg0HXbkLNt7EdRZ3v+gKwRLDFCqhwbji7LvjOSX79h
+         d4Gdlv4/0qtcALrPmUCKayRog9lGKnsBhCfe9uZ1/4FbRjkyitPzvspemsGJXhG2IJ
+         mFU8pp7JADsuP6tn8p7X/Pd6ewMFT800eTAEjiFWgNFgsjjagX3W+Ayu+dgc/TD0Ay
+         8rrAGNPA6/TZQ==
+Date:   Thu, 2 Dec 2021 10:05:46 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Al Cooper <alcooperx@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-phy@lists.infradead.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH 1/3] phy: usb: Leave some clocks running during suspend
+Message-ID: <YahNIinbEwB569C1@matsya>
+References: <20211201180653.35097-1-alcooperx@gmail.com>
+ <20211201180653.35097-2-alcooperx@gmail.com>
 MIME-Version: 1.0
-References: <20211201231757.332199-1-willy@infradead.org> <CAG48ez3YNCNZB7AktmRoYLsBQjwBdwueRUXbkFgNVMsgjmCTGA@mail.gmail.com>
- <YahHZOnT1Uh41XnP@casper.infradead.org>
-In-Reply-To: <YahHZOnT1Uh41XnP@casper.infradead.org>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 2 Dec 2021 05:33:56 +0100
-Message-ID: <CAG48ez39USd-eKf_vQ78vqHEcM89pTwDE5-_DG5891Zt1VTWUA@mail.gmail.com>
-Subject: Re: [5.4 PATCH] mm/gup: Do not force a COW break on file-backed memory
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jan Kara <jack@suse.cz>,
-        Kirill Shutemov <kirill@shutemov.name>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Christoph Hellwig <hch@lst.de>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211201180653.35097-2-alcooperx@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 5:11 AM Matthew Wilcox <willy@infradead.org> wrote:
-> On Thu, Dec 02, 2021 at 04:51:47AM +0100, Jann Horn wrote:
-> > On Thu, Dec 2, 2021 at 12:18 AM Matthew Wilcox (Oracle)
-> > <willy@infradead.org> wrote:
-> > > Commit 17839856fd58 ("gup: document and work around "COW can break either
-> > > way" issue") forces a COW break, even for read-only GUP.  This interacts
-> > > badly with CONFIG_READ_ONLY_THP_FOR_FS as it tries to write to a read-only
-> > > PMD and follow_trans_huge_pmd() returns NULL which induces an endless
-> > > loop as __get_user_pages() interprets that as page-not-present, tries
-> > > to fault it in and retries the follow_page_mask().
-> > >
-> > > The issues fixed by 17839856fd58 don't apply to files.  We know which way
-> > > the COW breaks; the page cache keeps the original and any modifications
-> > > are private to that process.  There's no optimisation that allows a
-> > > process to reuse a file-backed MAP_PRIVATE page.  So we can skip the
-> > > breaking of the COW for file-backed mappings.
-> > >
-> > > This problem only exists in v5.4.y; other stable kernels either predate
-> > > CONFIG_READ_ONLY_THP_FOR_FS or they include commit a308c71bf1e6 ("mm/gup:
-> > > Remove enfornced COW mechanism").
-> > >
-> > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > > ---
-> > >  mm/gup.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/mm/gup.c b/mm/gup.c
-> > > index 3ef769529548..d55e02411010 100644
-> > > --- a/mm/gup.c
-> > > +++ b/mm/gup.c
-> > > @@ -176,7 +176,8 @@ static inline bool can_follow_write_pte(pte_t pte, unsigned int flags)
-> > >   */
-> > >  static inline bool should_force_cow_break(struct vm_area_struct *vma, unsigned int flags)
-> > >  {
-> > > -       return is_cow_mapping(vma->vm_flags) && (flags & FOLL_GET);
-> > > +       return is_cow_mapping(vma->vm_flags) && vma_is_anonymous(vma) &&
-> > > +               (flags & FOLL_GET);
-> > >  }
-> >
-> > To be fully correct, the check would have to check for PageAnon(), not
-> > whether the mapping is anonymous, right? Since a private file mapping
-> > can still contain anonymous pages from a prior CoW?
->
-> Oh, right.  So parent process maps a file with MAP_PRIVATE, writes to
-> it, gets an anon page, forks.  Child stuffs the page into a pipe,
-> unmaps page.  Parent writes to page again, now child can read() the
-> modification?
-
-Yeah - in theory that could happen e.g. with an ELF's .data section?
-Those end up as writable private file mappings.
-
-(I don't know whether that actually has real-world relevance though,
-I'm just saying it's semantically off in theory.)
-
-> The problem is that we don't even get to seeing the struct page with
-> the current code paths.  And we're looking for a fix for RO THP that's
-> less intrusive for v5.4 than backporting
->
-> 09854ba94c6a ("mm: do_wp_page() simplification")
-> 1a0cf26323c8 ("mm/ksm: Remove reuse_ksm_page()")
-> a308c71bf1e6 ("mm/gup: Remove enfornced COW mechanism")
->
-> The other patch we've been kicking around (and works) is:
->
->  static inline bool should_force_cow_break(struct vm_area_struct *vma, unsigned
-> int flags)
+On 01-12-21, 13:06, Al Cooper wrote:
+> The PHY client driver does a phy_exit() call on suspend or rmmod and
+> the PHY driver needs to know the difference because some clocks need
+> to be kept running for suspend but can be shutdown on unbind/rmmod
+> (or if there are no PHY clients at all).
+> 
+> The fix is to use a PM notifier so the driver can tell if a PHY
+> client is calling exit() because of a system suspend or a driver
+> unbind/rmmod.
+> 
+> Signed-off-by: Al Cooper <alcooperx@gmail.com>
+> ---
+>  drivers/phy/broadcom/phy-brcm-usb.c | 38 +++++++++++++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+> 
+> diff --git a/drivers/phy/broadcom/phy-brcm-usb.c b/drivers/phy/broadcom/phy-brcm-usb.c
+> index 116fb23aebd9..0f1deb6e0eab 100644
+> --- a/drivers/phy/broadcom/phy-brcm-usb.c
+> +++ b/drivers/phy/broadcom/phy-brcm-usb.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/soc/brcmstb/brcmstb.h>
+>  #include <dt-bindings/phy/phy.h>
+>  #include <linux/mfd/syscon.h>
+> +#include <linux/suspend.h>
+>  
+>  #include "phy-brcm-usb-init.h"
+>  
+> @@ -70,12 +71,35 @@ struct brcm_usb_phy_data {
+>  	int			init_count;
+>  	int			wake_irq;
+>  	struct brcm_usb_phy	phys[BRCM_USB_PHY_ID_MAX];
+> +	struct notifier_block	pm_notifier;
+> +	bool			pm_active;
+>  };
+>  
+>  static s8 *node_reg_names[BRCM_REGS_MAX] = {
+>  	"crtl", "xhci_ec", "xhci_gbl", "usb_phy", "usb_mdio", "bdc_ec"
+>  };
+>  
+> +static int brcm_pm_notifier(struct notifier_block *notifier,
+> +			    unsigned long pm_event,
+> +			    void *unused)
+> +{
+> +	struct brcm_usb_phy_data *priv =
+> +		container_of(notifier, struct brcm_usb_phy_data, pm_notifier);
+> +
+> +	switch (pm_event) {
+> +	case PM_HIBERNATION_PREPARE:
+> +	case PM_SUSPEND_PREPARE:
+> +		priv->pm_active = true;
+> +		break;
+> +	case PM_POST_RESTORE:
+> +	case PM_POST_HIBERNATION:
+> +	case PM_POST_SUSPEND:
+> +		priv->pm_active = false;
+> +		break;
+> +	}
+> +	return NOTIFY_DONE;
+> +}
+> +
+>  static irqreturn_t brcm_usb_phy_wake_isr(int irq, void *dev_id)
 >  {
-> -       return is_cow_mapping(vma->vm_flags) && (flags & FOLL_GET);
-> +       return is_cow_mapping(vma->vm_flags) &&
-> +               (!(vma->vm_flags & VM_DENYWRITE)) && (flags & FOLL_GET);
+>  	struct phy *gphy = dev_id;
+> @@ -91,6 +115,9 @@ static int brcm_usb_phy_init(struct phy *gphy)
+>  	struct brcm_usb_phy_data *priv =
+>  		container_of(phy, struct brcm_usb_phy_data, phys[phy->id]);
+>  
+> +	if (priv->pm_active)
+> +		return 0;
+> +
+>  	/*
+>  	 * Use a lock to make sure a second caller waits until
+>  	 * the base phy is inited before using it.
+> @@ -120,6 +147,9 @@ static int brcm_usb_phy_exit(struct phy *gphy)
+>  	struct brcm_usb_phy_data *priv =
+>  		container_of(phy, struct brcm_usb_phy_data, phys[phy->id]);
+>  
+> +	if (priv->pm_active)
+> +		return 0;
+> +
+>  	dev_dbg(&gphy->dev, "EXIT\n");
+>  	if (phy->id == BRCM_USB_PHY_2_0)
+>  		brcm_usb_uninit_eohci(&priv->ini);
+> @@ -488,6 +518,9 @@ static int brcm_usb_phy_probe(struct platform_device *pdev)
+>  	if (err)
+>  		return err;
+>  
+> +	priv->pm_notifier.notifier_call = brcm_pm_notifier;
+> +	register_pm_notifier(&priv->pm_notifier);
+> +
+>  	mutex_init(&priv->mutex);
+>  
+>  	/* make sure invert settings are correct */
+> @@ -528,7 +561,10 @@ static int brcm_usb_phy_probe(struct platform_device *pdev)
+>  
+>  static int brcm_usb_phy_remove(struct platform_device *pdev)
+>  {
+> +	struct brcm_usb_phy_data *priv = dev_get_drvdata(&pdev->dev);
+> +
+>  	sysfs_remove_group(&pdev->dev.kobj, &brcm_usb_phy_group);
+> +	unregister_pm_notifier(&priv->pm_notifier);
+>  
+>  	return 0;
 >  }
->
-> That limits the change to be only text pages.  Generally programs do
-> not write to their text pages, and they certainly don't write *secrets*
-> to their text pages; if somebody else can read it, that's probably not
-> a problem in the same way as writing to a page of heap.
+> @@ -539,6 +575,7 @@ static int brcm_usb_phy_suspend(struct device *dev)
+>  	struct brcm_usb_phy_data *priv = dev_get_drvdata(dev);
+>  
+>  	if (priv->init_count) {
+> +		dev_dbg(dev, "SUSPEND\n");
 
-Hm, yeah. It's not exactly beautiful, but I guess it should do the job
-for fixing stable...
+debug artifact?
 
-It's a good thing that VM_DENYWRITE still exists in the 5.4 branch. ^^
+>  		priv->ini.wake_enabled = device_may_wakeup(dev);
+>  		if (priv->phys[BRCM_USB_PHY_3_0].inited)
+>  			brcm_usb_uninit_xhci(&priv->ini);
+> @@ -578,6 +615,7 @@ static int brcm_usb_phy_resume(struct device *dev)
+>  	 * Uninitialize anything that wasn't previously initialized.
+>  	 */
+>  	if (priv->init_count) {
+> +		dev_dbg(dev, "RESUME\n");
+
+here too
+
+>  		if (priv->wake_irq >= 0)
+>  			disable_irq_wake(priv->wake_irq);
+>  		brcm_usb_init_common(&priv->ini);
+> -- 
+> 2.17.1
+
+-- 
+~Vinod

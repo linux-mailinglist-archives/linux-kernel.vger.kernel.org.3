@@ -2,143 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7018465C20
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 03:26:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B55465C27
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 03:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354806AbhLBC3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 21:29:10 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:32864 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354811AbhLBC22 (ORCPT
+        id S1344551AbhLBCcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 21:32:43 -0500
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:12354 "EHLO
+        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231411AbhLBCcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 21:28:28 -0500
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J4KY23sCPzcbcW;
-        Thu,  2 Dec 2021 10:24:54 +0800 (CST)
-Received: from dggpemm500023.china.huawei.com (7.185.36.83) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 2 Dec 2021 10:25:01 +0800
-Received: from dggpemm500023.china.huawei.com ([7.185.36.83]) by
- dggpemm500023.china.huawei.com ([7.185.36.83]) with mapi id 15.01.2308.020;
- Thu, 2 Dec 2021 10:25:01 +0800
-From:   "zhaozixuan (C)" <zhaozixuan2@huawei.com>
-To:     Paul Moore <paul@paul-moore.com>
-CC:     "eparis@redhat.com" <eparis@redhat.com>,
-        "linux-audit@redhat.com" <linux-audit@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] audit: accelerate audit rule filter
-Thread-Topic: [PATCH] audit: accelerate audit rule filter
-Thread-Index: AdfnI7zBpG+k05BPVEqO6SQrGWmNIA==
-Date:   Thu, 2 Dec 2021 02:25:01 +0000
-Message-ID: <10e0cc00a83d4214b7bcfda62c36bb20@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.176.92]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 1 Dec 2021 21:32:41 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3A0x9mYKyDt1AQiu22OEd6t+eSxCrEfRIJ4+MujC/?=
+ =?us-ascii?q?XYbTApGwqgTdUzmQaDzyEOKzbM2L0eN1xb43kox4C65bRnNM2HQtv/xmBbVoQ9?=
+ =?us-ascii?q?5OdWo7xwmQcns+qBpSaChohtq3yU/GYRCwPZiKa9kjF3oTJ9yEmjPjSHuOkU4Y?=
+ =?us-ascii?q?oBwgqLeNaYHZ44f5cs75h6mJYqYDR7zKl4bsekeWGULOW82Ic3lYv1k62gEgHU?=
+ =?us-ascii?q?MIeF98vlgdWifhj5DcynpSOZX4VDfnZw3DQGuG4EgMmLtsvwo1V/kuBl/ssIti?=
+ =?us-ascii?q?j1LjmcEwWWaOUNg+L4pZUc/H6xEEc+WppieBmXBYfQR4/ZzGhm9FjyNRPtJW2Y?=
+ =?us-ascii?q?Qk0PKzQg/lbWB5de817FfQfqOSfeiPn7aR/yGWDKRMA2c5GAEgoMIgw9u9pDGR?=
+ =?us-ascii?q?K8vIEbjYAcniri/m/wL+hTMFjg80iKI/gO4Z3knJ9xzjxDvs8R53HBaLQ6rdwx?=
+ =?us-ascii?q?zctj8BmHvvEYccdLz11Y3zoZxxJJ0dSC58kmuqsrmfwficeq1+Po6czpW/Jw2R?=
+ =?us-ascii?q?Z1LnrLcqQeceHQctJk12EjnzJ8n6/ARwAMtGbjz2f/RqEgOLTkS7lcJwdGaf+9?=
+ =?us-ascii?q?fNwhlCXgGsJB3UrufGTyRWiohfmHYsBdApPoWxzxZXePXeDFrHVNyBUalbd1vL?=
+ =?us-ascii?q?EZ+dtLg=3D=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Aa4jTOKM3yJKG9cBcTv2jsMiBIKoaSvp037BL?=
+ =?us-ascii?q?7TEUdfUxSKGlfq+V8sjzqiWftN98YhAdcLO7Scy9qBHnhP1ICOAqVN/MYOCMgh?=
+ =?us-ascii?q?rLEGgN1+vf6gylMyj/28oY7q14bpV5YeeaMXFKyer8/ym0euxN/OW6?=
+X-IronPort-AV: E=Sophos;i="5.87,280,1631548800"; 
+   d="scan'208";a="118303304"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 02 Dec 2021 10:29:16 +0800
+Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
+        by cn.fujitsu.com (Postfix) with ESMTP id 9DB8D4D13BC0;
+        Thu,  2 Dec 2021 10:29:14 +0800 (CST)
+Received: from G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) by
+ G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Thu, 2 Dec 2021 10:29:15 +0800
+Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
+ G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Thu, 2 Dec 2021 10:29:14 +0800
+Received: from FNSTPC.g08.fujitsu.local (10.167.226.45) by
+ G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Thu, 2 Dec 2021 10:29:14 +0800
+From:   Li Zhijian <lizhijian@cn.fujitsu.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <shuah@kernel.org>,
+        <dsahern@gmail.com>
+CC:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Li Zhijian <lizhijian@cn.fujitsu.com>
+Subject: [PATCH v2] selftests: net: Correct case name
+Date:   Thu, 2 Dec 2021 10:28:41 +0800
+Message-ID: <20211202022841.23248-1-lizhijian@cn.fujitsu.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: 9DB8D4D13BC0.AF1C1
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: lizhijian@fujitsu.com
+X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAgT24gTW9uLCBOb3YgMjksIDIwMjEgYXQgMjozNSBBTSB6aGFveml4dWFuIChDKSA8emhhb3pp
-eHVhbjJAaHVhd2VpLmNvbT4gd3JvdGU6DQo+ID4gPk9uIFR1ZSwgTm92IDIzLCAyMDIxIGF0IDI6
-NTAgQU0gWml4dWFuIFpoYW8gPHpoYW96aXh1YW4yQGh1YXdlaS5jb20+IHdyb3RlOg0KPiA+ID4+
-IFdlIHVzZWQgbGF0X3N5c2NhbGwgb2YgbG1iZW5jaDMgdG8gdGVzdCB0aGUgcGVyZm9ybWFuY2Ug
-aW1wYWN0IG9mIA0KPiA+ID4+IHRoaXMgcGF0Y2guIFdlIGNoYW5nZWQgdGhlIG51bWJlciBvZiBy
-dWxlcyBhbmQgcnVuIGxhdF9zeXNjYWxsIHdpdGggDQo+ID4gPj4gMTAwMCByZXBldGl0aW9ucyBh
-dCBlYWNoIHRlc3QuIFN5c2NhbGxzIG1lYXN1cmVkIGJ5IGxhdF9zeXNjYWxsIGFyZSANCj4gPiA+
-PiBub3QgbW9uaXRvcmVkIGJ5IHJ1bGVzLg0KPiA+ID4+DQo+ID4gPj4gQmVmb3JlIHRoaXMgb3B0
-aW1pemF0aW9uOg0KPiA+ID4+DQo+ID4gPj4gICAgICAgICAgICAgIG51bGwgICAgIHJlYWQgICAg
-d3JpdGUgICAgIHN0YXQgICAgZnN0YXQgICAgICBvcGVuDQo+ID4gPj4gICAwIHJ1bGVzICAxLjg3
-bXMgICAyLjc0bXMgICAyLjU2bXMgICAyNi4zMW1zICA0LjEzbXMgICA2OS42Nm1zDQo+ID4gPj4g
-IDEwIHJ1bGVzICAyLjE1bXMgICAzLjEzbXMgICAzLjMybXMgICAyNi45OW1zICA0LjE2bXMgICA3
-NC43MG1zDQo+ID4gPj4gIDIwIHJ1bGVzICAyLjQ1bXMgICAzLjk3bXMgICAzLjgybXMgICAyNy4w
-NW1zICA0LjYwbXMgICA3Ni4zNW1zDQo+ID4gPj4gIDMwIHJ1bGVzICAyLjY0bXMgICA0LjUybXMg
-ICAzLjk1bXMgICAzMC4zMG1zICA0Ljk0bXMgICA3OC45NG1zDQo+ID4gPj4gIDQwIHJ1bGVzICAy
-LjgzbXMgICA0Ljk3bXMgICA0LjIzbXMgICAzMi4xNm1zICA1LjQwbXMgICA4MS44OG1zDQo+ID4g
-Pj4gIDUwIHJ1bGVzICAzLjAwbXMgICA1LjMwbXMgICA0Ljg0bXMgICAzMy40OW1zICA1Ljc5bXMg
-ICA4My4yMG1zDQo+ID4gPj4gMTAwIHJ1bGVzICA0LjI0bXMgICA5Ljc1bXMgICA3LjQybXMgICAz
-Ny42OG1zICA2LjU1bXMgICA5My43MG1zDQo+ID4gPj4gMTYwIHJ1bGVzICA1LjUwbXMgICAxNi44
-OW1zICAxMi4xOG1zICA1MS41M21zICAxNy40NW1zICAxNTUuNDBtcw0KPiA+ID4+DQo+ID4gPj4g
-QWZ0ZXIgdGhpcyBvcHRpbWl6YXRpb246DQo+ID4gPj4NCj4gPiA+PiAgICAgICAgICAgICAgbnVs
-bCAgICAgcmVhZCAgICB3cml0ZSAgICAgc3RhdCAgICBmc3RhdCAgICAgIG9wZW4NCj4gPiA+PiAg
-IDAgcnVsZXMgIDEuODFtcyAgIDIuODRtcyAgIDIuNDJtcyAgMjcuNzBtcyAgIDQuMTVtcyAgIDY5
-LjEwbXMNCj4gPiA+PiAgMTAgcnVsZXMgIDEuOTdtcyAgIDIuODNtcyAgIDIuNjltcyAgMjcuNzBt
-cyAgIDQuMTVtcyAgIDY5LjMwbXMNCj4gPiA+PiAgMjAgcnVsZXMgIDEuNzJtcyAgIDIuOTFtcyAg
-IDIuNDFtcyAgMjYuNDltcyAgIDMuOTFtcyAgIDcxLjE5bXMNCj4gPiA+PiAgMzAgcnVsZXMgIDEu
-ODVtcyAgIDIuOTRtcyAgIDIuNDhtcyAgMjYuMjdtcyAgIDMuOTdtcyAgIDcxLjQzbXMNCj4gPiA+
-PiAgNDAgcnVsZXMgIDEuODhtcyAgIDIuOTRtcyAgIDIuNzhtcyAgMjYuODVtcyAgIDQuMDhtcyAg
-IDY5Ljc5bXMNCj4gPiA+PiAgNTAgcnVsZXMgIDEuODZtcyAgIDMuMTdtcyAgIDMuMDhtcyAgMjYu
-MjVtcyAgIDQuMDNtcyAgIDcyLjMybXMNCj4gPiA+PiAxMDAgcnVsZXMgIDEuODRtcyAgIDMuMDBt
-cyAgIDIuODFtcyAgMjYuMjVtcyAgIDMuOThtcyAgIDcwLjI1bXMNCj4gPiA+PiAxNjAgcnVsZXMg
-IDEuOTJtcyAgIDMuMzJtcyAgIDMuMDZtcyAgMjYuODFtcyAgIDQuNTdtcyAgIDcxLjQxbXMNCj4g
-PiA+Pg0KPiA+ID4+IEFzIHRoZSByZXN1bHQgc2hvd24gYWJvdmUsIHRoZSBzeXNjYWxsIGxhdGVu
-Y2llcyBpbmNyZWFzZSBhcyAgdGhlIA0KPiA+ID4+IG51bWJlciAgb2YgcnVsZXMgaW5jcmVhc2Vz
-LCB3aGlsZSB3aXRoIHRoZSBwYXRjaCB0aGUgbGF0ZW5jaWVzIHJlbWFpbiBzdGFibGUuDQo+ID4g
-Pj4gIFRoaXMgY291bGQgaGVscCB3aGVuIGEgdXNlciBhZGRzIG1hbnkgYXVkaXQgcnVsZXMgZm9y
-IHB1cnBvc2VzIA0KPiA+ID4+IChzdWNoIGFzICBhdHRhY2sgdHJhY2luZyBvciBwcm9jZXNzIGJl
-aGF2aW9yIHJlY29yZGluZykgYnV0IHN1ZmZlcnMgDQo+ID4gPj4gZnJvbSBsb3cgcGVyZm9ybWFu
-Y2UuDQo+ID4gPg0KPiA+ID5JIGhhdmUgZ2VuZXJhbCBjb25jZXJucyBhYm91dCB0cmFkaW5nIG1l
-bW9yeSBhbmQgY29tcGxleGl0eSBmb3IgcGVyZm9ybWFuY2UgZ2FpbnMsIGJ1dCBiZXlvbmQgdGhh
-dCB0aGUgbnVtYmVycyB5b3UgcG9zdGVkIGFib3ZlIGRvbid0IHlldCBtYWtlIHNlbnNlIHRvIG1l
-Lg0KPiA+DQo+ID4gVGhhbmtzIGZvciB5b3VyIHJlcGx5Lg0KPiA+DQo+ID4gVGhlIG1lbW9yeSBj
-b3N0IG9mIHRoaXMgcGF0Y2ggaXMgbGVzcyB0aGFuIDRLQiAoMTgyMCBieXRlcyBvbiB4NjQgYW5k
-DQo+ID4gIDM2NDAgYnl0ZXMgb24gY29tcGF0aWJsZSB4ODZfNjQpIHdoaWNoIGlzIHRyaXZpYWwg
-aW4gbWFueSBjYXNlcy4NCj4gPiAgQmVzaWRlcywgc3lzY2FsbHMgYXJlIGNhbGxlZCBmcmVxdWVu
-dGx5IG9uIGEgc3lzdGVtIHNvIGEgc21hbGwgIA0KPiA+IG9wdGltaXphdGlvbiBjb3VsZCBicmlu
-ZyBhIGdvb2QgaW5jb21lLg0KPiANCj4gVGhlIHRyYWRlb2ZmIHN0aWxsIGV4aXN0cywgZXZlbiB0
-aG91Z2ggeW91IGZlZWwgaXQgaXMgd29ydGh3aGlsZS4NCj4gDQo+ID4gPldoeSBhcmUgdGhlIGxh
-dGVuY3kgaW5jcmVhc2VzIGR1ZSB0byBydWxlIGNvdW50IG5vdCBzaW1pbGFyIGFjcm9zcyB0aGUg
-ZGlmZmVyZW50IHN5c2NhbGxzPyBGb3IgZXhhbXBsZSwgSSB3b3VsZCB0aGluayB0aGF0IGlmIHRo
-ZSBpbmNyZWFzZSBpbiBzeXNjYWxsIGxhdGVuY3kgd2FzID4gPmRpcmVjdGx5IGF0dHJpYnV0ZWQg
-dG8gdGhlIGF1ZGl0IHJ1bGUgcHJvY2Vzc2luZyB0aGVuIHRoZSBpbmNyZWFzZSBvbiB0aGUgIm9w
-ZW4iIHN5c2NhbGwgc2hvdWxkIGJlIHNpbWlsYXIgdG8gdGhhdCBvZiB0aGUgIm51bGwiIHN5c2Nh
-bGwuICBJbiBvdGhlciBwaHJhc2luZywgaWYgd2UgPiA+Y2FuIHByb2Nlc3MgMTYwIHJ1bGVzIGlu
-IH40bXMgaW4gdGhlICJudWxsIiBjYXNlLCB3aHkgZG9lcyBpdCB0YWtlIHVzIH44Nm1zIGluIHRo
-ZSAib3BlbiIgY2FzZT8NCj4gPg0KPiA+IEFzIHRvIHRoZSB0ZXN0IHJlc3VsdCwgd2UgZGlkIHNv
-bWUgaW52ZXN0aWdhdGlvbnMgYW5kIGNvbmNsdWRlZCB0d28NCj4gPiAgcmVhc29uczoNCj4gPiAx
-LiBUaGUgY2hvc2VuIHJ1bGUgc2V0cyB3ZXJlIG5vdCB2ZXJ5IHN1aXRhYmxlLiBUaG91Z2ggdGhl
-eSB3ZXJlIG5vdCANCj4gPiBoaXQgIGJ5IHN5c2NhbGxzIGJlaW5nIG1lYXN1cmVkLCBzb21lIG9m
-IHRoZW0gd2VyZSBoaXQgYnkgb3RoZXIgDQo+ID4gcHJvY2Vzc2VzLCAgd2hpY2ggcmVkdWNlZCB0
-aGUgc3lzdGVtIHBlcmZvcm1hbmNlIGFuZCBhZmZlY3RlZCB0aGUgdGVzdCANCj4gPiByZXN1bHQ7
-IDIuIFRoZSByb3V0aW5lIG9mIGxhdF9zeXNjYWxsIGlzIG11Y2ggbW9yZSBjb21wbGljYXRlZCB0
-aGFuIHdlIA0KPiA+IHRob3VnaHQuIEl0ICBjYWxsZWQgbWFueSBvdGhlciBzeXNjYWxscyBkdXJp
-bmcgdGhlIHRlc3QsIHdoaWNoIG1heSANCj4gPiBjYXVzZSB0aGUgcmVzdWx0ICBub3QgdG8gYmUg
-bGluZWFyLg0KPiA+DQo+ID4gRHVlIHRvIHRoZSByZWFzb25zIGFib3ZlLCB3ZSBkaWQgYW5vdGhl
-ciB0ZXN0LiBXZSBtb2RpZmllZCBhdWRpdCBydWxlIA0KPiA+IHNldHMgIGFuZCBtYWRlIHN1cmUg
-dGhleSB3b3VsZG4ndCBiZSBoaXQgYXQgcnVudGltZS4gVGhlbiwgd2UgYWRkZWQNCj4gPiAga3Rp
-bWVfZ2V0X3JlYWxfdHM2NCB0byBhdWRpdHNjLmMgdG8gcmVjb3JkIHRoZSB0aW1lIG9mIGV4ZWN1
-dGluZyAgDQo+ID4gX19hdWRpdF9zeXNjYWxsX2V4aXQuIFdlIHJhbiAic3RhdCIgc3lzY2FsbCAx
-MDAwMCB0aW1lcyBmb3IgZWFjaCBydWxlIA0KPiA+IHNldCAgYW5kIHJlY29yZGVkIHRoZSB0aW1l
-IGludGVydmFsLiBUaGUgcmVzdWx0IGlzIHNob3duIGJlbG93Og0KPiA+DQo+ID4gQmVmb3JlIHRo
-aXMgb3B0aW1pemF0aW9uOg0KPiA+DQo+ID4gcnVsZSBzZXQgICAgICAgICAgdGltZQ0KPiA+ICAg
-MCBydWxlcyAgICAgMzg0My45Nm5zDQo+ID4gICAxIHJ1bGVzICAgIDEzMTE5LjA4bnMNCj4gPiAg
-MTAgcnVsZXMgICAgMTQwMDMuMTNucw0KPiA+ICAyMCBydWxlcyAgICAxNTQyMC4xOG5zDQo+ID4g
-IDMwIHJ1bGVzICAgIDE3Mjg0Ljg0bnMNCj4gPiAgNDAgcnVsZXMgICAgMTkwMTAuNjducw0KPiA+
-ICA1MCBydWxlcyAgICAyMTExMi42M25zDQo+ID4gMTAwIHJ1bGVzICAgIDI1ODE1LjAybnMNCj4g
-PiAxMzAgcnVsZXMgICAgMjk0NDcuMDlucw0KPiA+DQo+ID4gQWZ0ZXIgdGhpcyBvcHRpbWl6YXRp
-b246DQo+ID4NCj4gPiAgcnVsZSBzZXQgICAgICAgICAgdGltZQ0KPiA+ICAgMCBydWxlcyAgICAg
-MzU5Ny43OG5zDQo+ID4gICAxIHJ1bGVzICAgIDEzNDk4LjczbnMNCj4gPiAgMTAgcnVsZXMgICAg
-MTMxMjIuNTducw0KPiA+ICAyMCBydWxlcyAgICAxMjg3NC44OG5zDQo+ID4gIDMwIHJ1bGVzICAg
-IDE0MzUxLjk5bnMNCj4gPiAgNDAgcnVsZXMgICAgMTQxODEuMDducw0KPiA+ICA1MCBydWxlcyAg
-ICAxMzgwNi40NW5zDQo+ID4gMTAwIHJ1bGVzICAgIDEzODkwLjg1bnMNCj4gPiAxMzAgcnVsZXMg
-ICAgMTQ0NDEuNDVucw0KPiA+DQo+ID4gQXMgdGhlIHJlc3VsdCBzaG93ZWQsIHRoZSBpbnRlcnZh
-bCBpcyBsaW5lYXJseSBpbmNyZWFzZWQgYmVmb3JlICANCj4gPiBvcHRpbWl6YXRpb24gd2hpbGUg
-dGhlIGludGVydmFsIHJlbWFpbnMgc3RhYmxlIGFmdGVyIG9wdGltaXphdGlvbi4gDQo+ID4gTm90
-ZSAgdGhhdCBhdWRpdCBza2lwcyBzb21lIG9wZXJhdGlvbnMgaWYgdGhlcmUgYXJlIG5vIHJ1bGVz
-LCBzbyB0aGVyZSANCj4gPiBpcyBhIGdhcCAgYmV0d2VlbiAwIHJ1bGUgYW5kIDEgcnVsZSBzZXQu
-DQo+IA0KPiBJdCBsb29rcyBsaWtlIGEgc2luZ2xlIHJ1bGUgbGlrZSB0aGUgb25lIGJlbG93IGNv
-dWxkIGVmZmVjdGl2ZWx5IGRpc2FibGUgdGhpcyBvcHRpbWl6YXRpb24sIGlzIHRoYXQgY29ycmVj
-dD8NCj4gDQo+ICAgJSBhdWRpdGN0bCAtYSBleGl0LGFsd2F5cyAtRiB1aWQ9MTAwMQ0KPiAgICUg
-YXVkaXRjdGwgLWwNCj4gICAtYSBhbHdheXMsZXhpdCAtUyBhbGwgLUYgdWlkPTEwMDENCg0KWWVz
-LCBydWxlcyBsaWtlIHRoaXMgb25lIHdoaWNoIG1vbml0b3JzIGFsbCBzeXNjYWxscyBjb3VsZCBk
-aXNhYmxlIHRoZQ0KIG9wdGltaXphdGlvbi4gVGhlIG51bWJlciBvZiB0aGUgZ2xvYmFsIGFycmF5
-IGNvdWxkIGV4cG9uZW50aWFsbHkgaW5jcmVhc2UNCiBpZiB3ZSB3YW50IHRvIGhhbmRsZSBtb3Jl
-IGF1ZGl0IGZpZWxkcy4gSG93ZXZlciwgd2UgZG9uJ3QgdGhhdCBraW5kIG9mDQogcnVsZSBpcyBw
-cmFjdGljYWwgYmVjYXVzZSB0aGV5IG1pZ2h0IGdlbmVyYXRlIGEgZ3JlYXQgbnVtYmVyIG9mIGxv
-Z3MgYW5kDQogZXZlbiBsZWFkIHRvIGxvZyBsb3NzLg0K
+ipv6_addr_bind/ipv4_addr_bind are function names. Previously, bind test
+would not be run by default due to the wrong case names
+
+Fixes: 34d0302ab861 ("selftests: Add ipv6 address bind tests to fcnal-test")
+Fixes: 75b2b2b3db4c ("selftests: Add ipv4 address bind tests to fcnal-test")
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+---
+ tools/testing/selftests/net/fcnal-test.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index 3313566ce906..7f5b265fcb90 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -4002,8 +4002,8 @@ EOF
+ ################################################################################
+ # main
+ 
+-TESTS_IPV4="ipv4_ping ipv4_tcp ipv4_udp ipv4_addr_bind ipv4_runtime ipv4_netfilter"
+-TESTS_IPV6="ipv6_ping ipv6_tcp ipv6_udp ipv6_addr_bind ipv6_runtime ipv6_netfilter"
++TESTS_IPV4="ipv4_ping ipv4_tcp ipv4_udp ipv4_bind ipv4_runtime ipv4_netfilter"
++TESTS_IPV6="ipv6_ping ipv6_tcp ipv6_udp ipv6_bind ipv6_runtime ipv6_netfilter"
+ TESTS_OTHER="use_cases"
+ 
+ PAUSE_ON_FAIL=no
+-- 
+2.33.0
+
+
+

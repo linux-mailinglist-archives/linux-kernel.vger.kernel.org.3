@@ -2,212 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 387EB4668EB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:13:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 932BF4668FA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:18:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359864AbhLBRRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 12:17:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
+        id S1376274AbhLBRVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 12:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235136AbhLBRRD (ORCPT
+        with ESMTP id S1376259AbhLBRVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 12:17:03 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36ABBC06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 09:13:41 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso613656otf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 09:13:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=AajSOfABZmizcM6W0Pmxe8k6X7Mucgg0abkivyflOos=;
-        b=bIlQhALzsSpyrYW9oR4N0/2vKAB+viUUzyc3WxBGoTrY1n1CuWkJAJWPyk//ixBkqO
-         Q8mizzVUZP6eHGSldLFeptQbPnchOCZS0L5bdMOYKq7vmpUhSpYTE4rLByZvBCpx3rsd
-         GBJDhjxb9oB7frIH62viMTVgoO2uX1p/kugcDiQKEArIHIE1qeF9onCNFc1zKr2IkZdN
-         ExoRWlOlUChn5wzXFJ9s4M5Csp76CTawiysoyf2iZE7dhn1MuaNPTXvQRGAcvbS4gbdn
-         4WyAfbS8Y5LS7K7HFcqsUuIPo59XZp0ov4xEUuHTribO/RQRrpvWFsMIY7+ZG+PqfTTA
-         27tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=AajSOfABZmizcM6W0Pmxe8k6X7Mucgg0abkivyflOos=;
-        b=ewug5WkMQlM8p5oh8o0jhMMcuGu7xgV7wu3BiMMbkyMLAY/gTObpwYrVHAd3U+kv1/
-         UQWeE5BtGsxesmAkIwiI+9FYsDlJDqYHySIGzApo9XMJotY/smjT399TrCITHmGwStvG
-         sJvFnMOoN6FBz6VJ1UXDQtU+SkjHDk38gjOv7eNBdFTJ9sGvb7HTJX6Ad37o3Ezg6XSf
-         hDt3v4hR7AZ1zwBIptmlLjPo7JDbdUhjbM4aldAPJzc4MeYGzLHHzE3Ssuw+RWJGWXaB
-         /ZpR4vS8ntyoeoJ+sHyYlCFcgyv4ukdQ6eZgNPqkVIcIm1UlVO46JLyFU90O0Xq7FUHX
-         GtkA==
-X-Gm-Message-State: AOAM530flzfQMMbnEWq5FqLdnYFI1Styi1R2UoVmVz6bOcEfDYAdP0Bj
-        QBr/lJ3Nnu+h/arvYACHexnlmibXl5r7T3m0m6g=
-X-Google-Smtp-Source: ABdhPJyY0ZZWWmrlcECjWfIA9f9tGUxAjcFzMuc9v82NaipBZRDDsrY/MKV5w4zTGRjqkwjOCU8VNEXDZDW/t9WcfR0=
-X-Received: by 2002:a9d:67c1:: with SMTP id c1mr12467723otn.299.1638465220553;
- Thu, 02 Dec 2021 09:13:40 -0800 (PST)
+        Thu, 2 Dec 2021 12:21:20 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4DEC06174A;
+        Thu,  2 Dec 2021 09:17:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Message-Id:Date:
+        Subject:Cc:To:From:Content-Type:Reply-To:Content-ID:Content-Description:
+        In-Reply-To:References; bh=4WCyM8f8j4d1i+Nq6Vhx0kWZ55WOQmTPNCMfAjx+7fY=; b=RU
+        RUEVHvZhyocL7Ix34Qe79xg1u+DbT2mJBqVppoFfIKhJhrk648SKJ6jjXOWjqrvcf1GrU6b+98/dN
+        9QD3RW6GoipDPDZKBabrdfHotfA1wQdlJGDD+/OzMkZDoF+jh5CMeAJ5oqWyKPCXgnWfhZ9DGi3Tq
+        xp5QjyX0LXxr49T/7jWACwViC/FriIF9Kf381SwTVxqtLU7WvzHXhwGNy9tT+Lgb2ePIuTKPH0Nsl
+        0GJYvo1FPdIFx5D8iOsTpKn6Fa5Hynq/bqBbr7WpNWTZA5vBkqCdtSBEw2AEkWuOxN4xt03r5bRSG
+        dp7bTIT00C50ujcL60YlLXW42HS4waiQ==;
+Received: from [81.174.171.191] (helo=donbot.metanate.com)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1mspiU-0002Tc-L6; Thu, 02 Dec 2021 17:17:54 +0000
+From:   John Keeping <john@metanate.com>
+To:     linux-usb@vger.kernel.org
+Cc:     John Keeping <john@metanate.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Argishti Aleksanyan <Argishti.Aleksanyan@synopsys.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc2: gadget: initialize max_speed from params
+Date:   Thu,  2 Dec 2021 17:17:48 +0000
+Message-Id: <20211202171748.3035874-1-john@metanate.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <e2685075-fbc5-6f36-907f-76b6f76a59ce@amd.com> <20211201151310.177671-1-zhou1615@umn.edu>
- <77fca7d2-b1d8-fe11-322a-3d32f40f6f65@amd.com>
-In-Reply-To: <77fca7d2-b1d8-fe11-322a-3d32f40f6f65@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 2 Dec 2021 12:13:29 -0500
-Message-ID: <CADnq5_M61Ob29ftgNB7L1eEAb_St1WL1wLEF3C4wXSEFP+3BMw@mail.gmail.com>
-Subject: Re: [PATCH v5] drm/radeon/radeon_kms: Fix a NULL pointer dereference
- in radeon_driver_open_kms()
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Zhou Qingyang <zhou1615@umn.edu>, David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, Kangjie Lu <kjlu@umn.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+DWC2 may be paired with a full-speed PHY which is not capable of
+high-speed operation.  Report this correctly to the gadget core by
+setting max_speed from the core parameters.
 
-Alex
+Prior to commit 5324bad66f09f ("usb: dwc2: gadget: implement
+udc_set_speed()") this didn't cause the hardware to be configured
+incorrectly, although the speed may have been reported incorrectly.  But
+after that commit params.speed is updated based on a value passed in by
+the gadget core which may set it to a faster speed than is supported by
+the hardware.  Initialising the max_speed parameter ensures the speed
+passed to dwc2_gadget_set_speed() will be one supported by the hardware.
 
-On Wed, Dec 1, 2021 at 10:16 AM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> Am 01.12.21 um 16:13 schrieb Zhou Qingyang:
-> > In radeon_driver_open_kms(), radeon_vm_bo_add() is assigned to
-> > vm->ib_bo_va and passes and used in radeon_vm_bo_set_addr(). In
-> > radeon_vm_bo_set_addr(), there is a dereference of vm->ib_bo_va,
-> > which could lead to a NULL pointer dereference on failure of
-> > radeon_vm_bo_add().
-> >
-> > Fix this bug by adding a check of vm->ib_bo_va.
-> >
-> > This bug was found by a static analyzer. The analysis employs
-> > differential checking to identify inconsistent security operations
-> > (e.g., checks or kfrees) between two code paths and confirms that the
-> > inconsistent operations are not recovered in the current function or
-> > the callers, so they constitute bugs.
-> >
-> > Note that, as a bug found by static analysis, it can be a false
-> > positive or hard to trigger. Multiple researchers have cross-reviewed
-> > the bug.
-> >
-> > Builds with CONFIG_DRM_RADEON=3Dm show no new warnings,
-> > and our static analyzer no longer warns about this code.
-> >
-> > Fixes: cc9e67e3d700 ("drm/radeon: fix VM IB handling")
-> > Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-> > ---
-> > Changes in v5:
-> >    -  Use conditions to avoid unnecessary initialization
-> >
-> > Changes in v4:
-> >    -  Initialize the variables to silence warning
-> >
-> > Changes in v3:
-> >    -  Fix the bug that good case will also be freed
-> >    -  Improve code style
-> >
-> > Changes in v2:
-> >    -  Improve the error handling into goto style
-> >
-> >   drivers/gpu/drm/radeon/radeon_kms.c | 36 ++++++++++++++++------------=
--
-> >   1 file changed, 20 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/radeon/radeon_kms.c b/drivers/gpu/drm/rade=
-on/radeon_kms.c
-> > index 482fb0ae6cb5..66aee48fd09d 100644
-> > --- a/drivers/gpu/drm/radeon/radeon_kms.c
-> > +++ b/drivers/gpu/drm/radeon/radeon_kms.c
-> > @@ -648,6 +648,8 @@ void radeon_driver_lastclose_kms(struct drm_device =
-*dev)
-> >   int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *f=
-ile_priv)
-> >   {
-> >       struct radeon_device *rdev =3D dev->dev_private;
-> > +     struct radeon_fpriv *fpriv;
-> > +     struct radeon_vm *vm;
-> >       int r;
-> >
-> >       file_priv->driver_priv =3D NULL;
-> > @@ -660,8 +662,6 @@ int radeon_driver_open_kms(struct drm_device *dev, =
-struct drm_file *file_priv)
-> >
-> >       /* new gpu have virtual address space support */
-> >       if (rdev->family >=3D CHIP_CAYMAN) {
-> > -             struct radeon_fpriv *fpriv;
-> > -             struct radeon_vm *vm;
-> >
-> >               fpriv =3D kzalloc(sizeof(*fpriv), GFP_KERNEL);
-> >               if (unlikely(!fpriv)) {
-> > @@ -672,35 +672,39 @@ int radeon_driver_open_kms(struct drm_device *dev=
-, struct drm_file *file_priv)
-> >               if (rdev->accel_working) {
-> >                       vm =3D &fpriv->vm;
-> >                       r =3D radeon_vm_init(rdev, vm);
-> > -                     if (r) {
-> > -                             kfree(fpriv);
-> > -                             goto out_suspend;
-> > -                     }
-> > +                     if (r)
-> > +                             goto out_fpriv;
-> >
-> >                       r =3D radeon_bo_reserve(rdev->ring_tmp_bo.bo, fal=
-se);
-> > -                     if (r) {
-> > -                             radeon_vm_fini(rdev, vm);
-> > -                             kfree(fpriv);
-> > -                             goto out_suspend;
-> > -                     }
-> > +                     if (r)
-> > +                             goto out_vm_fini;
-> >
-> >                       /* map the ib pool buffer read only into
-> >                        * virtual address space */
-> >                       vm->ib_bo_va =3D radeon_vm_bo_add(rdev, vm,
-> >                                                       rdev->ring_tmp_bo=
-.bo);
-> > +                     if (!vm->ib_bo_va) {
-> > +                             r =3D -ENOMEM;
-> > +                             goto out_vm_fini;
-> > +                     }
-> > +
-> >                       r =3D radeon_vm_bo_set_addr(rdev, vm->ib_bo_va,
-> >                                                 RADEON_VA_IB_OFFSET,
-> >                                                 RADEON_VM_PAGE_READABLE=
- |
-> >                                                 RADEON_VM_PAGE_SNOOPED)=
-;
-> > -                     if (r) {
-> > -                             radeon_vm_fini(rdev, vm);
-> > -                             kfree(fpriv);
-> > -                             goto out_suspend;
-> > -                     }
-> > +                     if (r)
-> > +                             goto out_vm_fini;
-> >               }
-> >               file_priv->driver_priv =3D fpriv;
-> >       }
-> >
-> > +     if (!r)
->
-> I think that test is unecessary now, maybe double check.
->
-> Either way patch Reviewed-by: Christian K=C3=B6nig
-> <christian.koenig@amd.com>. Alex will probably pick it up now.
->
-> Thanks for the help,
-> Christian.
->
-> > +             goto out_suspend;
-> > +
-> > +out_vm_fini:
-> > +     radeon_vm_fini(rdev, vm);
-> > +out_fpriv:
-> > +     kfree(fpriv);
-> >   out_suspend:
-> >       pm_runtime_mark_last_busy(dev->dev);
-> >       pm_runtime_put_autosuspend(dev->dev);
->
+Fixes: 5324bad66f09f ("usb: dwc2: gadget: implement udc_set_speed()")
+Signed-off-by: John Keeping <john@metanate.com>
+---
+ drivers/usb/dwc2/gadget.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index b884a83b26a6e..2bc03f41c70ad 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -4974,7 +4974,18 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+ 		hsotg->params.g_np_tx_fifo_size);
+ 	dev_dbg(dev, "RXFIFO size: %d\n", hsotg->params.g_rx_fifo_size);
+ 
+-	hsotg->gadget.max_speed = USB_SPEED_HIGH;
++	switch (hsotg->params.speed) {
++	case DWC2_SPEED_PARAM_LOW:
++		hsotg->gadget.max_speed = USB_SPEED_LOW;
++		break;
++	case DWC2_SPEED_PARAM_FULL:
++		hsotg->gadget.max_speed = USB_SPEED_FULL;
++		break;
++	default:
++		hsotg->gadget.max_speed = USB_SPEED_HIGH;
++		break;
++	}
++
+ 	hsotg->gadget.ops = &dwc2_hsotg_gadget_ops;
+ 	hsotg->gadget.name = dev_name(dev);
+ 	hsotg->gadget.otg_caps = &hsotg->params.otg_caps;
+-- 
+2.34.1
+

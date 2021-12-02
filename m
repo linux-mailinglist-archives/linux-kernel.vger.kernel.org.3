@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB864660D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C06224660DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356760AbhLBJ4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 04:56:44 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:58218 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1356778AbhLBJ43 (ORCPT
+        id S1356814AbhLBJ4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 04:56:50 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:44444 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356790AbhLBJ4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 04:56:29 -0500
+        Thu, 2 Dec 2021 04:56:31 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1638438787; x=1669974787;
+  t=1638438789; x=1669974789;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=goHvDbPAMT8y7VmBNDYv4n/5GH3eYTMy8N290BUBoig=;
-  b=UoKzmzYPqZaB3h6A518k+SAmjipQd5KgiqXk0h0leKnz8Qk0D74jlEhz
-   K2UkL6d19xm1WWHV0HE6CJhou1WlgyXzDUDFdu006562Y21G5oYM5U8/8
-   +INxMKMAJLmmAUXr7dH/8nr7iFWxHj4ii97LYibnd98WkfxFsHQvr/oP4
-   0=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 02 Dec 2021 01:53:06 -0800
+  bh=cF/GECuwp1S1UbdJMGwmQpraS1FiRU+LUbq4e6yb5EQ=;
+  b=VwZwWdr5L6nCm3eRipv/bSa3fU3SXzCpI8MJUGFuyQy+lOK35lXd3Rj5
+   8x8CyqntOVLNImvcbAyiMBbLE3QXl/cwGlmDdJEzDa+vuIGaxn+LKaGQ9
+   xXXW8o0DZcHCzMVC4qhCwdKL3mMEc2buL0N5xxQe4NdXMBB+YnydGUI1a
+   Q=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 02 Dec 2021 01:53:09 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 01:53:04 -0800
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 01:53:09 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 2 Dec 2021 01:53:03 -0800
+ 15.2.922.19; Thu, 2 Dec 2021 01:53:08 -0800
 Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 2 Dec 2021 01:52:58 -0800
+ 15.2.922.19; Thu, 2 Dec 2021 01:53:03 -0800
 From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
@@ -44,9 +44,9 @@ CC:     <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
         <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
         <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>,
         Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Subject: [PATCH V2 6/8] arm64: dts: qcom: sc7280: Add EUD dt node and dwc3 connector
-Date:   Thu, 2 Dec 2021 15:21:25 +0530
-Message-ID: <d035e37829c6f9ec8f01d1137020af635e34966f.1638430506.git.quic_schowdhu@quicinc.com>
+Subject: [PATCH V2 7/8] arm64: dts: qcom: sc7280: Set the default dr_mode for usb2
+Date:   Thu, 2 Dec 2021 15:21:26 +0530
+Message-ID: <0da9d07fc955a0cdeb2b702b3942f45ad0dfa232.1638430506.git.quic_schowdhu@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1638430506.git.quic_schowdhu@quicinc.com>
 References: <cover.1638430506.git.quic_schowdhu@quicinc.com>
@@ -59,61 +59,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Embedded USB Debugger(EUD) device tree node. The
-node contains EUD base register region and EUD mode
-manager register regions along with the interrupt entry.
-Also add the connector to EUD which is mapped as the child
-of dwc3. The connector is attached to EUD via port. Also add
-the role-switch property to dwc3 node.
+Set the default dr_mode for usb2 node to "otg" to enable.
+role-switch for EUD(Embedded USB Debugger) connector node.
 
 Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 53a21d0..2d14e5c 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -1315,6 +1315,18 @@
- 				phys = <&usb_2_hsphy>;
- 				phy-names = "usb2-phy";
- 				maximum-speed = "high-speed";
-+				usb-role-switch;
-+				usb_con: eud_usb_connector {
-+					compatible = "qcom,usb-connector-eud",
-+						     "usb-c-connector";
-+					ports {
-+						port@0 {
-+							usb2_role_switch: endpoint {
-+								remote-endpoint = <&eud_ep>;
-+							};
-+						};
-+					};
-+				};
- 			};
- 		};
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+index 64fc22a..7c69c78 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+@@ -61,6 +61,10 @@
+ 	modem-init;
+ };
  
-@@ -1339,6 +1351,19 @@
- 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		eud:  eud@88e0000 {
-+			compatible = "qcom,sc7280-eud","qcom,eud";
-+			reg = <0 0x88e0000 0 0x2000>,
-+			      <0 0x88e2000 0 0x1000>;
-+			interrupt-parent = <&pdc>;
-+			interrupts = <11 IRQ_TYPE_LEVEL_HIGH>;
-+			port {
-+				eud_ep: endpoint {
-+					remote-endpoint = <&usb2_role_switch>;
-+				};
-+			};
-+		};
++&usb_2_dwc3 {
++	dr_mode = "otg";
++};
 +
- 		nsp_noc: interconnect@a0c0000 {
- 			reg = <0 0x0a0c0000 0 0x10000>;
- 			compatible = "qcom,sc7280-nsp-noc";
+ &pmk8350_vadc {
+ 	pmr735a_die_temp {
+ 		reg = <PMR735A_ADC7_DIE_TEMP>;
 -- 
 2.7.4
 

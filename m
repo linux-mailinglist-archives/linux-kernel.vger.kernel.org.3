@@ -2,137 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95605465C43
+	by mail.lfdr.de (Postfix) with ESMTP id DE083465C44
 	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 03:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354832AbhLBCpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 21:45:25 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:16334 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350445AbhLBCoj (ORCPT
+        id S1354947AbhLBCp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 21:45:27 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:40334 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354817AbhLBCpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 21:44:39 -0500
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J4Kv82KfJz91Mh;
-        Thu,  2 Dec 2021 10:40:36 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 2 Dec 2021 10:41:09 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpeml500017.china.huawei.com (7.185.36.243) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 2 Dec 2021 10:41:08 +0800
-Subject: Re: [PATCH -next 2/3] staging: rtl8192e: rtllib_module: fix error
- handle case in alloc_rtllib()
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-staging@lists.linux.dev>,
-        <gregkh@linuxfoundation.org>, <paskripkin@gmail.com>
-References: <20211201095036.1763163-1-yangyingliang@huawei.com>
- <20211201095036.1763163-3-yangyingliang@huawei.com>
- <20211201095602.GB18178@kadam>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <31d8310f-edae-da8f-7ac4-e780db8a9973@huawei.com>
-Date:   Thu, 2 Dec 2021 10:41:07 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 1 Dec 2021 21:45:20 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BED39CE2152;
+        Thu,  2 Dec 2021 02:41:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E67E3C53FAD;
+        Thu,  2 Dec 2021 02:41:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638412887;
+        bh=3m7u+sZ/JfXv7vqQawelWiRYjzHEFtbgYJYUWG9r1b8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hjCrMloeAlo//c8uV0wTXGJY0VQVzX9ss7WawxL7wQRoAuBKXP0WojV1OZOv4aujV
+         KCtvKUcdYwiK8Q+W2ZiGz8xHCknfrXPF+AME8sulXPEwr4WchGXsDsfg9GFWTg/8jN
+         4hch1iY5Y7fLi1vXa8GySt12r/DDBlSevFTd2XJcgNbYePsSpep1f3wXVRuYQNweGQ
+         aYarJWYG3EexQmMMETCQoOvgQt73cuu+DL122qwK9gjVpuCynAe/DmHnoxF5AxGQ7z
+         kIIkLxmECwJbaIebeWVqGGGVPdiZwTYtNghm+NvS6bYRqQUe0KoNHgUii9KGHxfuwc
+         c34XVzxEryGyQ==
+Received: by mail-ed1-f44.google.com with SMTP id t5so110118732edd.0;
+        Wed, 01 Dec 2021 18:41:27 -0800 (PST)
+X-Gm-Message-State: AOAM53394BURSf8kjVpS1Ms0BpZTSnnu+v1ZaBg0tA3ekV4bWI3d9Lra
+        rZ1gc607Cd13VhXyTzhQd+1mE3gsOzAjHCFRBw==
+X-Google-Smtp-Source: ABdhPJx3F1WjNpDHru/DM96kME/hsAFfccUE3YKHA93VV80AISgDEazU3AyQVF7UBufYAD4s9o/PG7DqPjwpNjKq0MU=
+X-Received: by 2002:a17:906:9941:: with SMTP id zm1mr11679319ejb.466.1638412886275;
+ Wed, 01 Dec 2021 18:41:26 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211201095602.GB18178@kadam>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500017.china.huawei.com (7.185.36.243)
-X-CFilter-Loop: Reflected
+References: <20211101180243.23761-1-tharvey@gateworks.com> <CAJ+vNU2Pfwz5e0Jj6c5npceOwuNTB_dTVuL4NMD2qxr0CGyeGQ@mail.gmail.com>
+ <AS8PR04MB86769FC6021C2C137776D7A68C699@AS8PR04MB8676.eurprd04.prod.outlook.com>
+In-Reply-To: <AS8PR04MB86769FC6021C2C137776D7A68C699@AS8PR04MB8676.eurprd04.prod.outlook.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 1 Dec 2021 20:41:14 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKLqcRdHBQRnra20mkoPsEjy0Boni-mOVNQxNTwhbc7sQ@mail.gmail.com>
+Message-ID: <CAL_JsqKLqcRdHBQRnra20mkoPsEjy0Boni-mOVNQxNTwhbc7sQ@mail.gmail.com>
+Subject: Re: [PATCH] PCI: imx: do not remap invalid res
+To:     Hongxing Zhu <hongxing.zhu@nxp.com>
+Cc:     "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 1, 2021 at 6:48 PM Hongxing Zhu <hongxing.zhu@nxp.com> wrote:
+>
+>
+> > -----Original Message-----
+> > From: Tim Harvey <tharvey@gateworks.com>
+> > Sent: Thursday, December 2, 2021 6:07 AM
+> > To: Jingoo Han <jingoohan1@gmail.com>; Gustavo Pimentel
+> > <gustavo.pimentel@synopsys.com>; Rob Herring <robh@kernel.org>;
+> > Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>; Krzysztof Wilczy=C5=84sk=
+i
+> > <kw@linux.com>; Bjorn Helgaas <bhelgaas@google.com>;
+> > linux-pci@vger.kernel.org
+> > Cc: open list <linux-kernel@vger.kernel.org>; Hongxing Zhu
+> > <hongxing.zhu@nxp.com>
+> > Subject: Re: [PATCH] PCI: imx: do not remap invalid res
 
-On 2021/12/1 17:56, Dan Carpenter wrote:
-> Almost perfect, but it needs one minor change.
->
-> On Wed, Dec 01, 2021 at 05:50:35PM +0800, Yang Yingliang wrote:
->> Some variables are leaked in the error handling in alloc_rtllib(), free
->> the variables in the error path.
->>
->> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
->> ---
-> Please send this as a v4 patch with a little note here:
->
-> v4: Fix crypt_info leak
-> v3: Fix more leaks.  Break it up into multple patches.
-> v2: Make rtllib_softmac_init() return error codes.
->
-> You can probably put that in the 0/3 email.
->
->
->>   drivers/staging/rtl8192e/rtllib_module.c | 16 ++++++++++++----
->>   1 file changed, 12 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/staging/rtl8192e/rtllib_module.c b/drivers/staging/rtl8192e/rtllib_module.c
->> index 64d9feee1f39..a3c74fa25cfa 100644
->> --- a/drivers/staging/rtl8192e/rtllib_module.c
->> +++ b/drivers/staging/rtl8192e/rtllib_module.c
->> @@ -88,7 +88,7 @@ struct net_device *alloc_rtllib(int sizeof_priv)
->>   	err = rtllib_networks_allocate(ieee);
->>   	if (err) {
->>   		pr_err("Unable to allocate beacon storage: %d\n", err);
->> -		goto failed;
->> +		goto free_netdev;
->>   	}
->>   	rtllib_networks_initialize(ieee);
->>   
->> @@ -121,11 +121,13 @@ struct net_device *alloc_rtllib(int sizeof_priv)
->>   	ieee->hwsec_active = 0;
->>   
->>   	memset(ieee->swcamtable, 0, sizeof(struct sw_cam_table) * 32);
->> -	rtllib_softmac_init(ieee);
->> +	err = rtllib_softmac_init(ieee);
->> +	if (err)
->> +		goto free_networks;
-> This needs to free crypt_info;  This was my mistake in the email I sent
-> earlier.  Sorry!
->
->>   
->>   	ieee->pHTInfo = kzalloc(sizeof(struct rt_hi_throughput), GFP_KERNEL);
->>   	if (!ieee->pHTInfo)
->> -		return NULL;
->> +		goto free_softmac;
->>   
->>   	HTUpdateDefaultSetting(ieee);
->>   	HTInitializeHTInfo(ieee);
->> @@ -141,8 +143,14 @@ struct net_device *alloc_rtllib(int sizeof_priv)
->>   
->>   	return dev;
->>   
->> - failed:
->> +free_softmac:
->> +	rtllib_softmac_free(ieee);
->> +	lib80211_crypt_info_free(&ieee->crypt_info);
->> +free_networks:
->> +	rtllib_networks_free(ieee);
->> +free_netdev:
->>   	free_netdev(dev);
->> +
->>   	return NULL;
-> Something like:
->
-> free_softmac:
-> 	rtllib_softmac_free(ieee);
-> free_crypt_info:
-> 	lib80211_crypt_info_free(&ieee->crypt_info);
-> 	rtllib_networks_free(ieee);
-> free_netdev:
->   	free_netdev(dev);
-Yes, you are right, I should find this mistake before I send the patch.
-I will send a v4 patch set with this fix.
+Please fix your quoting style with all the headers (hint: don't use
+Outlook). It's base64 encoded too which isn't ideal for maillists, but
+somewhat tolerated nowadays.
 
-Thanks,
-Yang
->
-> regards,
-> dan carpenter
->
-> .
+> >
+> > On Mon, Nov 1, 2021 at 11:03 AM Tim Harvey <tharvey@gateworks.com>
+> > wrote:
+> > >
+> > > On imx6 and perhaps others when pcie probes you get a:
+> > > imx6q-pcie 33800000.pcie: invalid resource
+> > >
+> > > This occurs because the atu is not specified in the DT and as such it
+> > > should not be remapped.
+> > >
+> > > Cc: Richard Zhu <hongxing.zhu@nxp.com>
+> > > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> [Richard Zhu] Please merge Rob's commit log changes.
+
+The maintainer tools do that automatically.
+
+> Then, Acked-by: Richard Zhu <hongxing.zhu@nxp.com>
+
+But probably not when you prefix your tag with 'Then, '... :(
+
+Rob

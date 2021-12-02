@@ -2,443 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC424663D9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B65444663DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357903AbhLBMol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 07:44:41 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:55678 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241480AbhLBMoi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 07:44:38 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B2Cf5jB004546;
-        Thu, 2 Dec 2021 06:41:05 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638448865;
-        bh=sJlHYGHLohMDPJBTCgxX+Dpi5/1dn4ahE9byziVj/YQ=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Ta+YEZ+X78YLDZbT5pOz0uoY2QDf/F9iFZSzkeWxyqyvjGIlAS+oSxAmNZEgM0ZSi
-         I8NKrkeo/z/8F5wJuhqlE5uKrUo4tcbwyNsLWQAFxEPBe3qvkWNsMEqxEFP3SnKeMB
-         jLBXi2Vbtq6rP5N6sVcNrpSk6LrAw7o8mjiRSJco=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B2Cf5HK081655
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 2 Dec 2021 06:41:05 -0600
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 2
- Dec 2021 06:41:05 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 2 Dec 2021 06:41:05 -0600
-Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B2CesQE051666;
-        Thu, 2 Dec 2021 06:41:02 -0600
-From:   Aswath Govindraju <a-govindraju@ti.com>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Aswath Govindraju <a-govindraju@ti.com>
-Subject: [PATCH v2 2/2] mux: Add support for reading mux state from consumer DT node
-Date:   Thu, 2 Dec 2021 18:10:53 +0530
-Message-ID: <20211202124053.2835-3-a-govindraju@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211202124053.2835-1-a-govindraju@ti.com>
-References: <20211202124053.2835-1-a-govindraju@ti.com>
+        id S1357973AbhLBMpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 07:45:33 -0500
+Received: from mail-ma1ind01olkn0147.outbound.protection.outlook.com ([104.47.100.147]:54716
+        "EHLO IND01-MA1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1347366AbhLBMp3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 07:45:29 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DFbSPacadEenCU+dlh+4sd/eTugb4OLg9xL8JpjKxclcKoRcDeiMoPfabhiDdcpzIBmhX92GhvE526pKsXnaBe7FDQrWqt5rqq2oxcsglDjose05mG82OYppGQgS0eSaejFzbSLX+a0ljhO5XxfmI4VrrL/3jGM0L8lLbhLv+3HKWJ8FuzO7SQ3yXIA4dclyjjpexcai2zLMIpP8DapcDQsnTd51I+KcSGVmmVOH3Xc0ZY+loK8fCMEPt3luNpsRxSXtm4nKMxrac2Y7b4TP1d+j0dzg35i7tqKMsF9TUldRJ05y+2MpYFLxtZxgXM/kQQmQLmrxTyz5SJKEWUt9sA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k1TG+yfe3IHLJToEDvzfhdSHy2Kzh5fGW/OyBNHEkN8=;
+ b=Sd420j186KJLrVgp98Yd4a+DMAfOYhOMEHMfRaILyfB6Fhd0p/wb2MmAmXs6ZSboiNQvgrYLRgIsBmUzigPuD4y5VXkcT6Y7pztPIjLZ4j0xW0mRJmVcfSA7IUkLWkau6oWZTLLnlKnnqYmVWiqiHX30v3QZpqCkGA/T6eQvxCN/jc0p2E+lL6itBH5j0npoUA2UYBvTMIHc72/LkvB/EyYIjNZf14LWiqVlDeCoY8OQcNHwR1IheCUpDB/HP0+KsE4t60wVtWpAHZQzjopAp0Tt7goYkPQKyxTuPVLCjxvza7Xu1XLt9ix0ufv+ASW/Tqh2/gvxa3IlmhyFnqA36A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k1TG+yfe3IHLJToEDvzfhdSHy2Kzh5fGW/OyBNHEkN8=;
+ b=n1iFGCbJ7ph9ltGkrRfSQQ6fEsD/aibeubvwscZodLqJvUWi5aSo84vOTeaAXhFOL7RxmnGmQGu5vVdVoKYL2WVSO9o+JnkHMVgVSv693y9RGRqyL8MJnHzVh9pUEZYGls4i5vZfUgthdn7na8ITlZWDPzNGoI+SqZadbfER/U0uvic6thDpKxArUUiazazDSUKWZlaB+aKgBobZ2e/VZQm4XO/COD0HwGlwAsm4nBc1jbiwX4xtRIYlk1wOBchM6Is7gKA9OqtlToQry/AjFTu3h3KOiLOJzD6VrbPTrMaFk2CYcDsHejLL/leZGpXdLBA1Cq+lUFwGeZdrMkNIgg==
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
+ by PNZPR01MB4863.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:30::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.25; Thu, 2 Dec
+ 2021 12:41:59 +0000
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7%8]) with mapi id 15.20.4755.016; Thu, 2 Dec 2021
+ 12:41:59 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Marcel Holtmann <marcel@holtmann.org>
+CC:     Greg KH <gregkh@linuxfoundation.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Daniel Winkler <danielwinkler@google.com>,
+        Johan Hedberg <johan.hedberg@intel.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "sonnysasaka@chromium.org" <sonnysasaka@chromium.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: [PATCH v10 1/2] Bluetooth: add quirk disabling LE Read Transmit Power
+Thread-Topic: [PATCH v10 1/2] Bluetooth: add quirk disabling LE Read Transmit
+ Power
+Thread-Index: AQHX53n/zMAdaRsnZkmnOCQSSypCLw==
+Date:   Thu, 2 Dec 2021 12:41:59 +0000
+Message-ID: <DCEC0C45-D974-4DC7-9E86-8F2D3D8F7E1D@live.com>
+References: <3B8E16FA-97BF-40E5-9149-BBC3E2A245FE@live.com>
+ <YZSuWHB6YCtGclLs@kroah.com> <52DEDC31-EEB2-4F39-905F-D5E3F2BBD6C0@live.com>
+ <8919a36b-e485-500a-2722-529ffa0d2598@leemhuis.info>
+ <20211117124717.12352-1-redecorating@protonmail.com>
+ <F8D12EA8-4B37-4887-998E-DC0EBE60E730@holtmann.org>
+ <40550C00-4EE5-480F-AFD4-A2ACA01F9DBB@live.com>
+ <332a19f1-30f0-7058-ac18-c21cf78759bb@leemhuis.info>
+ <D9375D91-1062-4265-9DE9-C7CF2B705F3F@live.com>
+ <BC534C52-7FCF-4238-8933-C5706F494A11@live.com> <YaSCJg+Xkyx8w2M1@kroah.com>
+ <287DE71A-2BF2-402D-98C8-24A9AEEE55CB@live.com>
+ <42E2EC08-1D09-4DDE-B8B8-7855379C23C5@holtmann.org>
+ <6ABF3770-A9E8-4DAF-A22D-DA7113F444F3@live.com>
+ <92FBACD6-F4F2-4DE8-9000-2D30852770FC@live.com>
+ <3716D644-CD1B-4A5C-BC96-A51FF360E31D@live.com>
+ <9E6473A2-2ABE-4692-8DCF-D8F06BDEAE29@live.com>
+ <64E15BD0-665E-471F-94D9-991DFB87DEA0@live.com>
+ <A6DD9616-E669-4382-95A0-B9DBAF46712D@live.com>
+ <312202C7-C7BE-497D-8093-218C68176658@live.com>
+ <CDAA8BE2-F2B0-4020-AEB3-5C9DD4A6E08C@live.com>
+ <3F7CFEF0-10D6-4046-A3AE-33ECF81A2EB3@live.com>
+In-Reply-To: <3F7CFEF0-10D6-4046-A3AE-33ECF81A2EB3@live.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [x7/d91r1w/lJkwWtjMtxFMWIqjChLK8ei1SZP9ZcECg6B/iDo0wmg6v6/ltOJCU0]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2e1e369d-0e80-46f0-1a51-08d9b5912231
+x-ms-traffictypediagnostic: PNZPR01MB4863:
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Ef7Xo0EHqpaDMKbc3YeOjfhMwYT7ej5vvWjPkrClibDFZAodgR/EeDcpCscWHhIX2eSQd8xCJLdB3Ks056UtVRNb6VmdVOSkO7p7KXHIkviDSG5Y+jY5RzKt7PEuF+zNVv2S+YTF9IVZoQZbMACAIQuPAKtKmN9g9iyg6VXoz3qdgHIg504eWtH7TXCGsDqgZiH8OMOsN974dCfvtbQ/fqyNbaC/lM8Rn76QjLMeUOMi07+6AJOLjS2fN6mfnA11XICHan8zJvTRoR4rgFT42+jt7tzH11suFuv25NgfxVwAvCnNSlrlG+OfeZr/H8Aj4ig373nC1tNWRIN6HkQ3CYUCV5XShv0p41xFyQ4v7mRzSei1XKw+4ZcTlg3Y9lNSXcYIaF1dzcHi2bnN6uPGMmyPzQIP7S4yGajDozfWzPft2Z11e+VhIlolmGMRZjnlJ8gd8gy3UrlCFWS//qElsbM3+7INmpaEY3U5bIQNAFAfP1T2RIDPe1wdFA8Ehx42diZXD+B6pzjbhrlKwe6djIxbvSqdUJ70AFXAWTD81Jefal807S7JxciJMM9PPu4dhBzLPVyetxOpw3bk+LenHaLGbCXCL30RROfUzm2yTZo3Rjgz2eVhBOUcR5udE2KV
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XiQIf9zsIeWnItutRH8RVaEjkXYInBJce+aBYhyDXqDrRUc4YyzwUxJaxQ9g?=
+ =?us-ascii?Q?3qQBLXoxkuTbJ4MQmX+kwjNhV0nafNbCXNZ6S5HZJot0FkNPMzHDBEUkayOa?=
+ =?us-ascii?Q?KCPtHYj5MXhhAbRzoEzEZdHmVADv/ValP4xfyXTLRJf+FpXKSBQ8ZWOEuAe4?=
+ =?us-ascii?Q?WD7Pme6m+7Ldc1DM7vvzVas84xe1ruEJfPA1zS8oT/tYRjvPB1Dt0grQ5DHo?=
+ =?us-ascii?Q?0lTWWOpHxAahG4GzrGk4RPHUqmk/92l/U30lWFgWdvCMdtSOC8QKWKFGZsk5?=
+ =?us-ascii?Q?OwcEv2s4f483Byl3c4FVhaigkKr9Z0ASI2trY1EN+BZjH/wMSl64OGXCUrbf?=
+ =?us-ascii?Q?jESCbrHzPUB364wtV9FHX2rQn5D6gSAhvyTcdi1MdRH5nzR/TTQxcI7wYoyU?=
+ =?us-ascii?Q?Jlkok/yfo9tBGrxNqfBYBM8PdEwL0id2zh0mjFhF0Mh8d9H4ywotwKrPmO3s?=
+ =?us-ascii?Q?AcDGKqypnOVVjIHUi7vRsPz+A/pSLzC1TrP5ovLcU16v/sDzbvZLWFw19zOT?=
+ =?us-ascii?Q?7qXthmO0ngQybMi8hpx5v1mO3f19yHqhiUKTAG+DsUBMwoCk8hZyP55p3ug6?=
+ =?us-ascii?Q?yVyMQVjFz91zrhgh8BjyhayeCj9e2hx+Sc1GQAFOvFlRExACXRue5AXGmnwt?=
+ =?us-ascii?Q?+pzvw2sIeoNL+x+U9jVsLlfkygNuUSbqnQSWpXgvVS4TPHTOnZ8RExsJvFlK?=
+ =?us-ascii?Q?QgOfRxbE+wycCTLVCJihOniD/VdYkGZsl8X2/SWGIn00iQfFIQWutmjqN5NF?=
+ =?us-ascii?Q?WQFh6hqRTWNJs4WpVKFA6cB1PoDXKDt8JR/sbmEA+ftg0PWnWbDKxOGdJQxB?=
+ =?us-ascii?Q?w3w/19PKgZ4Xkd1ALfOJeg8tjDuRIF/vyqRpC4bxwGJjouYrbSL/nf0X5qD5?=
+ =?us-ascii?Q?a4Z4FKv6qdnEmFEUMZ4ejKgb9nxS5hOMIcTh2NGY7LWrN+gmEWNrjNNH85eM?=
+ =?us-ascii?Q?ONi5HLQMyT40aERZKoAZN+VwQNNtzxZLHyGQ9waLxHMzIok/V0Uki+wqarpH?=
+ =?us-ascii?Q?54hah/TKc9S+S5/iEthyy8ym6w=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <F958D55D17CA3A48B85505BF0B3B0A3F@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-To:     unlisted-recipients:; (no To-header on input)
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e1e369d-0e80-46f0-1a51-08d9b5912231
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2021 12:41:59.7447
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNZPR01MB4863
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some cases, we might need to provide the state of the mux to be set for
-the operation of a given peripheral. Therefore, pass this information using
-mux-states property.
+From: Aditya Garg <gargaditya08@live.com>
 
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+Some devices have a bug causing them to not work if they query
+LE tx power on startup. Thus we add a quirk in order to not query it
+and default min/max tx power values to HCI_TX_POWER_INVALID.
+
+Signed-off-by: Aditya Garg <gargaditya08@live.com>
+Reported-by: Orlando Chamberlain <redecorating@protonmail.com>
+Tested-by: Orlando Chamberlain <redecorating@protonmail.com>
+Link:
+https://lore.kernel.org/r/4970a940-211b-25d6-edab-21a815313954@protonmail.c=
+om
+Fixes: 7c395ea521e6 ("Bluetooth: Query LE tx power on startup")
+Cc: stable@vger.kernel.org
 ---
- drivers/mux/core.c           | 219 +++++++++++++++++++++++++++++++----
- include/linux/mux/consumer.h |  19 ++-
- 2 files changed, 216 insertions(+), 22 deletions(-)
+v7 :- Added Tested-by.
+v8 :- Fix checkpatch error.
+v9 :- Remake patch for Bluetooth-next tree and add Cc: stable@vger.kernel.o=
+rg
+v10 :- Fix gitlint
+ include/net/bluetooth/hci.h | 9 +++++++++
+ net/bluetooth/hci_sync.c    | 3 ++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mux/core.c b/drivers/mux/core.c
-index 22f4709768d1..7355c5ad41f7 100644
---- a/drivers/mux/core.c
-+++ b/drivers/mux/core.c
-@@ -29,6 +29,19 @@
-  */
- #define MUX_CACHE_UNKNOWN MUX_IDLE_AS_IS
- 
-+/**
-+ * struct mux_state -	Represents a mux controller specific to a given device
-+ * @mux:		Pointer to a mux controller
-+ * @state		State of the mux to be set
-+ *
-+ * This structure is specific to a device that acquires it and has information
-+ * specific to the device.
-+ */
-+struct mux_state {
-+	struct mux_control *mux;
-+	unsigned int state;
-+};
+diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
+index 0d2a92168..c4959cf9a 100644
+--- a/include/net/bluetooth/hci.h
++++ b/include/net/bluetooth/hci.h
+@@ -246,6 +246,15 @@ enum {
+ 	 * HCI after resume.
+ 	 */
+ 	HCI_QUIRK_NO_SUSPEND_NOTIFIER,
 +
- static struct class mux_class = {
- 	.name = "mux",
- 	.owner = THIS_MODULE,
-@@ -370,6 +383,31 @@ int mux_control_select_delay(struct mux_control *mux, unsigned int state,
- }
- EXPORT_SYMBOL_GPL(mux_control_select_delay);
- 
-+/**
-+ * mux_state_select_delay() - Select mux-state
-+ * @mstate: The mux-state to select
-+ * @delay_us: The time to delay (in microseconds) if the mux control
-+ *            changes state on select
-+ *
-+ * On successfully selecting the mux-state, it will be locked until
-+ * there is a call to mux_state_deselect() or mux_control_deselect().
-+ * If the mux-control is already selected when mux_state_select() is
-+ * called, the caller will be blocked until mux_state_deselect() or
-+ * mux_control_deselect() is called (by someone else).
-+ *
-+ * Therefore, make sure to call mux_state_deselect() when the operation is
-+ * complete and the mux-control is free for others to use, but do not call
-+ * mux_state_deselect() if mux_state_select() fails.
-+ *
-+ * Return: 0 when the mux-state has been selected or a negative
-+ * errno on error.
-+ */
-+int mux_state_select_delay(struct mux_state *mstate, unsigned int delay_us)
-+{
-+	return mux_control_select_delay(mstate->mux, mstate->state, delay_us);
-+}
-+EXPORT_SYMBOL_GPL(mux_state_select_delay);
-+
- /**
-  * mux_control_try_select_delay() - Try to select the given multiplexer state.
-  * @mux: The mux-control to request a change of state from.
-@@ -377,7 +415,7 @@ EXPORT_SYMBOL_GPL(mux_control_select_delay);
-  * @delay_us: The time to delay (in microseconds) if the mux state is changed.
-  *
-  * On successfully selecting the mux-control state, it will be locked until
-- * mux_control_deselect() called.
-+ * mux_control_deselect() or mux_state_deselect() called.
-  *
-  * Therefore, make sure to call mux_control_deselect() when the operation is
-  * complete and the mux-control is free for others to use, but do not call
-@@ -405,6 +443,27 @@ int mux_control_try_select_delay(struct mux_control *mux, unsigned int state,
- }
- EXPORT_SYMBOL_GPL(mux_control_try_select_delay);
- 
-+/**
-+ * mux_state_try_select_delay() - Try to select the mux-state.
-+ * @mstate: The mux-state to select
-+ * @delay_us: The time to delay (in microseconds) if the mux state is changed.
-+ *
-+ * On successfully selecting the mux-state, it will be locked until
-+ * mux_state_deselect() or mux_control_deselect() is called.
-+ *
-+ * Therefore, make sure to call mux_state_deselect() when the operation is
-+ * complete and the mux-control is free for others to use, but do not call
-+ * mux_state_deselect() if mux_state_try_select() fails.
-+ *
-+ * Return: 0 when the mux-state has been selected or a negative errno on
-+ * error. Specifically -EBUSY if the mux-control is contended.
-+ */
-+int mux_state_try_select_delay(struct mux_state *mstate, unsigned int delay_us)
-+{
-+	return mux_control_try_select_delay(mstate->mux, mstate->state, delay_us);
-+}
-+EXPORT_SYMBOL_GPL(mux_state_try_select_delay);
-+
- /**
-  * mux_control_deselect() - Deselect the previously selected multiplexer state.
-  * @mux: The mux-control to deselect.
-@@ -431,6 +490,24 @@ int mux_control_deselect(struct mux_control *mux)
- }
- EXPORT_SYMBOL_GPL(mux_control_deselect);
- 
-+/**
-+ * mux_state_deselect() - Deselect the previously selected multiplexer state.
-+ * @mstate: The mux-state to deselect.
-+ *
-+ * It is required that a single call is made to mux_state_deselect() for
-+ * each and every successful call made to either of mux_state_select() or
-+ * mux_state_try_select().
-+ *
-+ * Return: 0 on success and a negative errno on error. An error can only
-+ * occur if the mux has an idle state. Note that even if an error occurs, the
-+ * mux-control is unlocked and is thus free for the next access.
-+ */
-+int mux_state_deselect(struct mux_state *mstate)
-+{
-+	return mux_control_deselect(mstate->mux);
-+}
-+EXPORT_SYMBOL_GPL(mux_state_deselect);
-+
- /* Note this function returns a reference to the mux_chip dev. */
- static struct mux_chip *of_find_mux_chip_by_node(struct device_node *np)
++	/*
++	 * When this quirk is set, LE tx power is not queried on startup
++	 * and the min/max tx power values default to HCI_TX_POWER_INVALID.
++	 *
++	 * This quirk can be set before hci_register_dev is called or
++	 * during the hdev->setup vendor callback.
++	 */
++	HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER,
+ };
+=20
+ /* HCI device flags */
+diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+index ad86caf41..52e6b5dae 100644
+--- a/net/bluetooth/hci_sync.c
++++ b/net/bluetooth/hci_sync.c
+@@ -3283,7 +3283,8 @@ static int hci_le_read_adv_tx_power_sync(struct hci_d=
+ev *hdev)
+ /* Read LE Min/Max Tx Power*/
+ static int hci_le_read_tx_power_sync(struct hci_dev *hdev)
  {
-@@ -441,14 +518,17 @@ static struct mux_chip *of_find_mux_chip_by_node(struct device_node *np)
- 	return dev ? to_mux_chip(dev) : NULL;
- }
- 
--/**
-- * mux_control_get() - Get the mux-control for a device.
-+/*
-+ * mux_get() - Get the mux-control for a device.
-  * @dev: The device that needs a mux-control.
-  * @mux_name: The name identifying the mux-control.
-+ * @state: Pointer to where the requested state is returned, or NULL when
-+ *         the required multiplexer states are handled by other means.
-  *
-  * Return: A pointer to the mux-control, or an ERR_PTR with a negative errno.
-  */
--struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
-+static struct mux_control *mux_get(struct device *dev, const char *mux_name,
-+				   unsigned int *state)
- {
- 	struct device_node *np = dev->of_node;
- 	struct of_phandle_args args;
-@@ -458,8 +538,12 @@ struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
- 	int ret;
- 
- 	if (mux_name) {
--		index = of_property_match_string(np, "mux-control-names",
--						 mux_name);
-+		if (state)
-+			index = of_property_match_string(np, "mux-state-names",
-+							 mux_name);
-+		else
-+			index = of_property_match_string(np, "mux-control-names",
-+							 mux_name);
- 		if (index < 0) {
- 			dev_err(dev, "mux controller '%s' not found\n",
- 				mux_name);
-@@ -467,12 +551,17 @@ struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
- 		}
- 	}
- 
--	ret = of_parse_phandle_with_args(np,
--					 "mux-controls", "#mux-control-cells",
--					 index, &args);
-+	if (state)
-+		ret = of_parse_phandle_with_args(np,
-+						 "mux-states", "#mux-state-cells",
-+						 index, &args);
-+	else
-+		ret = of_parse_phandle_with_args(np,
-+						 "mux-controls", "#mux-control-cells",
-+						 index, &args);
- 	if (ret) {
--		dev_err(dev, "%pOF: failed to get mux-control %s(%i)\n",
--			np, mux_name ?: "", index);
-+		dev_err(dev, "%pOF: failed to get mux-%s %s(%i)\n",
-+			np, state ? "state" : "control", mux_name ?: "", index);
- 		return ERR_PTR(ret);
- 	}
- 
-@@ -481,17 +570,35 @@ struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
- 	if (!mux_chip)
- 		return ERR_PTR(-EPROBE_DEFER);
- 
--	if (args.args_count > 1 ||
--	    (!args.args_count && (mux_chip->controllers > 1))) {
--		dev_err(dev, "%pOF: wrong #mux-control-cells for %pOF\n",
--			np, args.np);
--		put_device(&mux_chip->dev);
--		return ERR_PTR(-EINVAL);
--	}
--
- 	controller = 0;
--	if (args.args_count)
--		controller = args.args[0];
-+	if (state) {
-+		if (args.args_count > 2 || args.args_count == 0 ||
-+		    (args.args_count < 2 && mux_chip->controllers > 1)) {
-+			dev_err(dev, "%pOF: wrong #mux-state-cells for %pOF\n",
-+				np, args.np);
-+			put_device(&mux_chip->dev);
-+			return ERR_PTR(-EINVAL);
-+		}
-+
-+		if (args.args_count == 2) {
-+			controller = args.args[0];
-+			*state = args.args[1];
-+		} else {
-+			*state = args.args[0];
-+		}
-+
-+	} else {
-+		if (args.args_count > 1 ||
-+		    (!args.args_count && mux_chip->controllers > 1)) {
-+			dev_err(dev, "%pOF: wrong #mux-control-cells for %pOF\n",
-+				np, args.np);
-+			put_device(&mux_chip->dev);
-+			return ERR_PTR(-EINVAL);
-+		}
-+
-+		if (args.args_count)
-+			controller = args.args[0];
-+	}
- 
- 	if (controller >= mux_chip->controllers) {
- 		dev_err(dev, "%pOF: bad mux controller %u specified in %pOF\n",
-@@ -502,6 +609,18 @@ struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
- 
- 	return &mux_chip->mux[controller];
- }
-+
-+/**
-+ * mux_control_get() - Get the mux-control for a device.
-+ * @dev: The device that needs a mux-control.
-+ * @mux_name: The name identifying the mux-control.
-+ *
-+ * Return: A pointer to the mux-control, or an ERR_PTR with a negative errno.
-+ */
-+struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
-+{
-+	return mux_get(dev, mux_name, NULL);
-+}
- EXPORT_SYMBOL_GPL(mux_control_get);
- 
- /**
-@@ -523,6 +642,26 @@ static void devm_mux_control_release(struct device *dev, void *res)
- 	mux_control_put(mux);
- }
- 
-+/**
-+ * mux_state_put() - Put away the mux-state for good.
-+ * @mstate: The mux-state to put away.
-+ *
-+ * mux_control_put() reverses the effects of mux_control_get().
-+ */
-+void mux_state_put(struct mux_state *mstate)
-+{
-+	mux_control_put(mstate->mux);
-+	kfree(mstate);
-+}
-+EXPORT_SYMBOL_GPL(mux_state_put);
-+
-+static void devm_mux_state_release(struct device *dev, void *res)
-+{
-+	struct mux_state *mstate = *(struct mux_state **)res;
-+
-+	mux_state_put(mstate);
-+}
-+
- /**
-  * devm_mux_control_get() - Get the mux-control for a device, with resource
-  *			    management.
-@@ -553,6 +692,44 @@ struct mux_control *devm_mux_control_get(struct device *dev,
- }
- EXPORT_SYMBOL_GPL(devm_mux_control_get);
- 
-+/**
-+ * devm_mux_state_get() - Get the mux-state for a device, with resource
-+ *			  management.
-+ * @dev: The device that needs a mux-control.
-+ * @mux_name: The name identifying the mux-control.
-+ *
-+ * Return: Pointer to the mux-state, or an ERR_PTR with a negative errno.
-+ */
-+struct mux_state *devm_mux_state_get(struct device *dev,
-+				     const char *mux_name)
-+{
-+	struct mux_state **ptr, *mstate;
-+	struct mux_control *mux_ctrl;
-+	int state;
-+
-+	mstate = devm_kzalloc(dev, sizeof(struct mux_state), GFP_KERNEL);
-+	if (!mstate)
-+		return ERR_PTR(-ENOMEM);
-+
-+	ptr = devres_alloc(devm_mux_state_release, sizeof(*ptr), GFP_KERNEL);
-+	if (!ptr)
-+		return ERR_PTR(-ENOMEM);
-+
-+	mux_ctrl = mux_get(dev, mux_name, &state);
-+	if (IS_ERR(mux_ctrl)) {
-+		devres_free(ptr);
-+		return (struct mux_state *)mux_ctrl;
-+	}
-+
-+	mstate->mux = mux_ctrl;
-+	mstate->state = state;
-+	*ptr = mstate;
-+	devres_add(dev, ptr);
-+
-+	return mstate;
-+}
-+EXPORT_SYMBOL_GPL(devm_mux_state_get);
-+
- /*
-  * Using subsys_initcall instead of module_init here to try to ensure - for
-  * the non-modular case - that the subsystem is initialized when mux consumers
-diff --git a/include/linux/mux/consumer.h b/include/linux/mux/consumer.h
-index 7a09b040ac39..bf5abf062c21 100644
---- a/include/linux/mux/consumer.h
-+++ b/include/linux/mux/consumer.h
-@@ -14,33 +14,50 @@
- 
- struct device;
- struct mux_control;
-+struct mux_state;
- 
- unsigned int mux_control_states(struct mux_control *mux);
- int __must_check mux_control_select_delay(struct mux_control *mux,
- 					  unsigned int state,
- 					  unsigned int delay_us);
-+int __must_check mux_state_select_delay(struct mux_state *mstate,
-+					unsigned int delay_us);
- int __must_check mux_control_try_select_delay(struct mux_control *mux,
- 					      unsigned int state,
- 					      unsigned int delay_us);
--
-+int __must_check mux_state_try_select_delay(struct mux_state *mstate,
-+					    unsigned int delay_us);
- static inline int __must_check mux_control_select(struct mux_control *mux,
- 						  unsigned int state)
- {
- 	return mux_control_select_delay(mux, state, 0);
- }
- 
-+static inline int __must_check mux_state_select(struct mux_state *mstate)
-+{
-+	return mux_state_select_delay(mstate, 0);
-+}
- static inline int __must_check mux_control_try_select(struct mux_control *mux,
- 						      unsigned int state)
- {
- 	return mux_control_try_select_delay(mux, state, 0);
- }
- 
-+static inline int __must_check mux_state_try_select(struct mux_state *mstate)
-+{
-+	return mux_state_try_select_delay(mstate, 0);
-+}
-+
- int mux_control_deselect(struct mux_control *mux);
-+int mux_state_deselect(struct mux_state *mstate);
- 
- struct mux_control *mux_control_get(struct device *dev, const char *mux_name);
- void mux_control_put(struct mux_control *mux);
-+void mux_state_put(struct mux_state *mstate);
- 
- struct mux_control *devm_mux_control_get(struct device *dev,
- 					 const char *mux_name);
-+struct mux_state *devm_mux_state_get(struct device *dev,
-+				     const char *mux_name);
- 
- #endif /* _LINUX_MUX_CONSUMER_H */
--- 
-2.17.1
+-	if (!(hdev->commands[38] & 0x80))
++	if (!(hdev->commands[38] & 0x80) ||
++	    test_bit(HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER, &hdev->quirks))
+ 		return 0;
+=20
+ 	return __hci_cmd_sync_status(hdev, HCI_OP_LE_READ_TRANSMIT_POWER,
+--=20
+2.25.1
+
 

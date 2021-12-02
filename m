@@ -2,88 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0506C4668A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5844668A6
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359737AbhLBQxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 11:53:47 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:57322 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359727AbhLBQxp (ORCPT
+        id S1359757AbhLBQx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 11:53:56 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:38921 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1359744AbhLBQxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 11:53:45 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 260BC2170C;
-        Thu,  2 Dec 2021 16:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638463822; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=B5c8jd312OU++3RBvwTLKAqm2dX4TEtVdTF/pGzwaMU=;
-        b=ERGiyyAjqJwCriXlkkBwKYNIVm5nfhXbZQtznCFpuRSgkuGGnHiW5+L7iun6EDRILZDXKl
-        S6w6GzOZ3iXyerJDBxg7VVTuB21DKsMPdfSLTc1lhoRKCVVI/yFR6l+H3sG7VPtUDQc22P
-        tR8LEGsLjs1s2jm2wC47VF3t+1D6UWU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0630A13E9E;
-        Thu,  2 Dec 2021 16:50:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id JObvAE75qGE3JQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 02 Dec 2021 16:50:22 +0000
-Date:   Thu, 2 Dec 2021 17:50:20 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     cgel.zte@gmail.com
-Cc:     tj@kernel.org, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zealci@zte.com.cn, deng.changcheng@zte.com.cn
-Subject: Re: [PATCH v2] block: Use div64_ul instead of do_div
-Message-ID: <20211202165020.GC16798@blackbody.suse.cz>
-References: <20211117010358.158313-1-deng.changcheng@zte.com.cn>
- <20211118034033.163550-1-deng.changcheng@zte.com.cn>
+        Thu, 2 Dec 2021 11:53:54 -0500
+Received: (qmail 393529 invoked by uid 1000); 2 Dec 2021 11:50:30 -0500
+Date:   Thu, 2 Dec 2021 11:50:30 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Maulik Shah <mkshah@codeaurora.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] PM: runtime: Allow rpm_resume() to succeed when runtime
+ PM is disabled
+Message-ID: <Yaj5Vur0fTFXvhwE@rowland.harvard.edu>
+References: <20211026222626.39222-1-ulf.hansson@linaro.org>
+ <CAPDyKFrFdt_U7By_bqk4DBHxCBLpDe00aRb6P6BmwR4MYM2OmQ@mail.gmail.com>
+ <CAJZ5v0i6WPVCf4pf9uTx5vjutw0cbD+omL_FNtw6DrxYDhyYEA@mail.gmail.com>
+ <5794197.lOV4Wx5bFT@kreacher>
+ <CAPDyKFrPC=8cAKGWQ4cDEcD934gi-012CWXu+uh-B_pqX+0RYQ@mail.gmail.com>
+ <CAJZ5v0ijRK0sYoJ6_WyqrhQfYKxEf4jCSjK4T5CbQsYPXaB=Nw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="kORqDWCi7qDJ0mEj"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211118034033.163550-1-deng.changcheng@zte.com.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAJZ5v0ijRK0sYoJ6_WyqrhQfYKxEf4jCSjK4T5CbQsYPXaB=Nw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 02, 2021 at 05:18:26PM +0100, Rafael J. Wysocki wrote:
+> On Thu, Dec 2, 2021 at 12:29 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > Alright, this sounds reasonable to me. I have also looked at the code
+> > below and it looks good to me.
+> >
+> > Do you intend to post a formal patch? In any case, feel free to add my
+> > reviewed-by tag.
+> 
+> I will, thank you!
 
---kORqDWCi7qDJ0mEj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Don't forget to check for spelling errors (I noticed one in the first version of 
+the patch you posted).  And please include a documentation update.
 
-Hello.
+On the whole, the idea seems like a good improvement.
 
-On Thu, Nov 18, 2021 at 03:40:33AM +0000, cgel.zte@gmail.com wrote:
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
-
-Just feedback to the bot or to you -- the same do_div() is in the same
-function for writes too. I think the processing shouldn't stop at the
-first occurence.
-
-Michal
-
-
---kORqDWCi7qDJ0mEj
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQTiq06H1IhXbF2mqzsiXqxkP0JkRwUCYaj5PgAKCRAiXqxkP0Jk
-RyzZAQCz0MBVSF0oVpol11+mBLRmq7R1xgXflAx9rH3/Ge9yJwD/eURdhzAfYNm4
-ZPElCRbhAn62Wi1zRHKFeFh8Ca4WBgI=
-=ydev
------END PGP SIGNATURE-----
-
---kORqDWCi7qDJ0mEj--
+Alan Stern

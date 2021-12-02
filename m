@@ -2,92 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D810466159
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B5246615D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356903AbhLBKXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 05:23:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240883AbhLBKX2 (ORCPT
+        id S1356910AbhLBKYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:24:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43415 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1356915AbhLBKYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 05:23:28 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59BAC06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 02:20:05 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id r26so54458686oiw.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 02:20:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tGFdOsPHZbg5ZrN3mTG563B5p/8mDhvFf9ZIRnX08E0=;
-        b=ZeYS9d2OygJnhsv2FYlogJyJkqhwA4k5l7mBOQWW8i1x3UeuO35zBAtNQbjkFFWONC
-         cPMbhy1GX08aSFaqVkxg3EBWgaNOzkdmct3LgB2zJexHPYNK1up1QNW5dyd9fnlUIp0L
-         b5gcZVG0Dof2IMvsP5RfwDCB0jeNGM1h9GBeydhmb4ytJNikt9Q546XKEUNrZ1qJzmFs
-         JoSbFtYRC3sgohVbSc8R7FFe87ePq8H11NybKRjSJYnRAcTyoadOffN8lS+QZQuMWLSr
-         s+EHRjJL9DVBByHVjTVMjKDVVN/hJzFUPNmzMnC/v/4eJz3hMNMEsAmx5t6PymKv1Wq9
-         h/hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tGFdOsPHZbg5ZrN3mTG563B5p/8mDhvFf9ZIRnX08E0=;
-        b=bc0KRTRulB2fRRfXhasTzOmNB9EkE1NeuK6+gbeL/Cw0DOOMAzT5eWAPeuhRE+Qm2u
-         0KDvoqd4AxX4MPixQk+Q+4gXZgBIyQB2e/nmh3ZrFHJE1p6TF6j39kvGfprWYCRsLehl
-         EMNmdbSvea27qcXdYjARViIjON/bmKW06593azGyh2gNe/KE5hqvHlG+eixFKc2MUxtU
-         TzQ4J31QDK815PDu9r9lI2Rtf4ZKwKQ6BBogW+jWbfz/Q1W1E5nCx01CCCCJL24aVTpB
-         vHFdYSPp9WcUjGxWwjNyMalf+U95nz5AMnigTnI++KHOg2GO5BTBhLdSFd23/dEaGsHZ
-         bFpA==
-X-Gm-Message-State: AOAM530uQFf024hi1LMqNzTscxP9LE41sYFuCPrG42hFQUdAnMpqokua
-        Czwjco6pcKeCC57HcIYE8bLqoJfzinhRf92g7fX4CA==
-X-Google-Smtp-Source: ABdhPJwa1yVCgKcC6MV/TyO3EMTg46+Swe5XhTdhQHJt+UoIGdOS6EqlW08isu7+R5XRSKEGsLWl1rk/kql7xJsZmKM=
-X-Received: by 2002:aca:af50:: with SMTP id y77mr3803774oie.134.1638440405007;
- Thu, 02 Dec 2021 02:20:05 -0800 (PST)
-MIME-Version: 1.0
-References: <20211129145732.27000-1-wangkefeng.wang@huawei.com>
- <YadiUPpJ0gADbiHQ@FVFF77S0Q05N> <811af0bc-0c99-37f6-a39a-095418b10661@huawei.com>
- <Yaic31SbYFJ4zAl0@elver.google.com>
-In-Reply-To: <Yaic31SbYFJ4zAl0@elver.google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 2 Dec 2021 11:19:52 +0100
-Message-ID: <CANpmjNNe3rnc6MvWi_GvngQYX2Qb-gEkDR081_L++Sz62XXmSg@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: Enable KCSAN
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        joey.gouly@arm.com
+        Thu, 2 Dec 2021 05:24:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638440478;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m4HlULEGQ+u/lfRbooSYsdnXMPgjmp3tTKFINSv7JFM=;
+        b=jR2Jxz3tP2VpsAq9tl8h1fuMHXT3d4aRFjfL2YL8Yp8+fL9yNCSBCk2M2XUVxcPZUeImuj
+        Kdztr1P5c1mfOqvLncQKKkERVbc4JwxdRYYZKRA8+2cy8p0EZ7gYyahQPUAijxFYxvXy/3
+        cWsYE8UIY7EEbOF2kmPSSiMoXuB1Aig=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-590-FTxu8o4JPGuzaC45aDiDWA-1; Thu, 02 Dec 2021 05:21:13 -0500
+X-MC-Unique: FTxu8o4JPGuzaC45aDiDWA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ABDFE81EE60;
+        Thu,  2 Dec 2021 10:21:09 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D73445D9CA;
+        Thu,  2 Dec 2021 10:20:56 +0000 (UTC)
+Message-ID: <f55056c55892dd42592e5c242fa7a1561c6cee90.camel@redhat.com>
+Subject: Re: [PATCH v2 11/43] KVM: Don't block+unblock when halt-polling is
+ successful
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Date:   Thu, 02 Dec 2021 12:20:55 +0200
+In-Reply-To: <YaUNBfJh35WXMV0M@google.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+         <20211009021236.4122790-12-seanjc@google.com>
+         <cceb33be9e2a6ac504bb95a7b2b8cf5fe0b1ff26.camel@redhat.com>
+         <4e883728e3e5201a94eb46b56315afca5e95ad9c.camel@redhat.com>
+         <YaUNBfJh35WXMV0M@google.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Dec 2021 at 11:16, Marco Elver <elver@google.com> wrote:
-[...]
-> > Reported by Kernel Concurrency Sanitizer on:
-> > CPU: 7 PID: 2530 Comm: syz-executor.11 Not tainted 5.10.0+ #113
-> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.104/01/2014
-> > ==================================================================
-> > BUG: KCSAN: data-race in rwsem_spin_on_owner+0xf4/0x180
-> >
-> > race at unknown origin, with read to 0xffff9767d3becfac of 4 bytes by task 18119 on cpu 0:
-> >  rwsem_spin_on_owner+0xf4/0x180
-> >  rwsem_optimistic_spin+0x48/0x480
-> >  rwsem_down_read_slowpath+0x4a0/0x670
-> >  down_read+0x69/0x190
-> >  process_vm_rw+0x41e/0x840
-> >  __x64_sys_process_vm_writev+0x76/0x90
-> >  do_syscall_64+0x37/0x50
-> >  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-[...]
-> I actually have a "fix" for the data race in rwsem_spin_on_owner, that
-> also shows where the other racing access comes from... which reminds me:
-> https://lkml.kernel.org/r/20211202101238.33546-1-elver@google.com
+On Mon, 2021-11-29 at 17:25 +0000, Sean Christopherson wrote:
+> On Mon, Nov 29, 2021, Maxim Levitsky wrote:
+> > (This thing is that when you tell the IOMMU that a vCPU is not running,
+> > Another thing I discovered that this patch series totally breaks my VMs,
+> > without cpu_pm=on The whole series (I didn't yet bisect it) makes even my
+> > fedora32 VM be very laggy, almost unusable, and it only has one
+> > passed-through device, a nic).
+> 
+> Grrrr, the complete lack of comments in the KVM code and the separate paths for
+> VMX vs SVM when handling HLT with APICv make this all way for difficult to
+> understand than it should be.
+> 
+> The hangs are likely due to:
+> 
+>   KVM: SVM: Unconditionally mark AVIC as running on vCPU load (with APICv)
+> 
+> If a posted interrupt arrives after KVM has done its final search through the vIRR,
+> but before avic_update_iommu_vcpu_affinity() is called, the posted interrupt will
+> be set in the vIRR without triggering a host IRQ to wake the vCPU via the GA log.
+> 
+> I.e. KVM is missing an equivalent to VMX's posted interrupt check for an outstanding
+> notification after switching to the wakeup vector.
+> 
+> For now, the least awful approach is sadly to keep the vcpu_(un)blocking() hooks.
+> Unlike VMX's PI support, there's no fast check for an interrupt being posted (KVM
+> would have to rewalk the vIRR), no easy to signal the current CPU to do wakeup (I
+> don't think KVM even has access to the IRQ used by the owning IOMMU), and there's
+> no simplification of load/put code.
 
-Reading be hard ... that patch is for mutex_spin_on_owner. But the
-other racing access is the same.
+I have an idea.
+ 
+Why do we even use/need the GA log?
+Why not, just disable the 'guest mode' in the iommu and let it sent good old normal interrupt
+when a vCPU is not running, just like we do when we inhibit the AVIC?
+ 
+GA log makes all devices that share an iommu (there are 4 iommus per package these days,
+some without useful devices) go through a single (!) msi like interrupt,
+which is even for some reason implemented by a threaded IRQ in the linux kernel.
 
-Thanks,
--- Marco
+ 
+Best regards,
+	Maxim Levitsky
+
+> 
+> If the scheduler were changed to support waking in the sched_out path, then I'd be
+> more inclined to handle this in avic_vcpu_put() by rewalking the vIRR one final
+> time, but for now it's not worth it.
+> 
+> > If I apply though only the patch series up to this patch, my fedora VM seems
+> > to work fine, but my windows VM still locks up hard when I run 'LatencyTop'
+> > in it, which doesn't happen without this patch.
+> 
+> Buy "run 'LatencyTop' in it", do you mean running something in the Windows guest?
+> The only search results I can find for LatencyTop are Linux specific.
+> 
+> > So far the symptoms I see is that on VCPU 0, ISR has quite high interrupt
+> > (0xe1 last time I seen it), TPR and PPR are 0xe0 (although I have seen TPR to
+> > have different values), and IRR has plenty of interrupts with lower priority.
+> > The VM seems to be stuck in this case. As if its EOI got lost or something is
+> > preventing the IRQ handler from issuing EOI.
+> >  
+> > LatencyTop does install some form of a kernel driver which likely does meddle
+> > with interrupts (maybe it sends lots of self IPIs?).
+> >  
+> > 100% reproducible as soon as I start monitoring with LatencyTop.
+> >  
+> > Without this patch it works (or if disabling halt polling),
+> 
+> Huh.  I assume everything works if you disable halt polling _without_ this patch
+> applied?
+> 
+> If so, that implies that successful halt polling without mucking with vCPU IOMMU
+> affinity is somehow problematic.  I can't think of any relevant side effects other
+> than timing.
+> 
+
+

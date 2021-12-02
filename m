@@ -2,132 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD9E4661BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:50:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF834661BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356693AbhLBKx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 05:53:59 -0500
-Received: from foss.arm.com ([217.140.110.172]:33420 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231208AbhLBKx5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 05:53:57 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 58759142F;
-        Thu,  2 Dec 2021 02:50:35 -0800 (PST)
-Received: from e123083-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1383B3F7D7;
-        Thu,  2 Dec 2021 02:50:33 -0800 (PST)
-Date:   Thu, 2 Dec 2021 11:50:27 +0100
-From:   Morten Rasmussen <morten.rasmussen@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Thara Gopinath <thara.gopinath@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH] base: arch_topology: Use policy->max to calculate
- freq_factor
-Message-ID: <20211202105027.GA1180274@e123083-lin>
-References: <20211115201010.68567-1-thara.gopinath@linaro.org>
- <CAJZ5v0gezoJZVH69Y7fDwa-uLhE0PaqFrzM=0bequxpE_749zg@mail.gmail.com>
- <8f7397e3-4e92-c84d-9168-087967f4d683@arm.com>
- <CAJZ5v0iRDtr5yae5UndwU2SmVL4cak=BN0irVGbgNzQiS8K3mA@mail.gmail.com>
- <af59de78-49b0-d2e6-4bf0-7c897c2fccb1@linaro.org>
- <CAJZ5v0h3O_rSR38X4fV1FC2O2DYQnxzeLbxcSqh1vpnE65Nd+A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0h3O_rSR38X4fV1FC2O2DYQnxzeLbxcSqh1vpnE65Nd+A@mail.gmail.com>
+        id S1356875AbhLBKyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:54:54 -0500
+Received: from so254-9.mailgun.net ([198.61.254.9]:17111 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231208AbhLBKyw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 05:54:52 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1638442290; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=HIGcD/jaqNClG+MM4DCw3sUIoBAVcod6MlDO/qs3diw=; b=m9K4o8LipaiMwzAqtKHnqauBclI51CSuMRGmBEfUzPEo3FSdPcgFzLQkrieyBiIsDUYynbCT
+ ZPlNFM3xUvf5Cy9pJbHKA+sWtA1MP9/yLIGbcCenTFvlNTqllX1zqDXYDYYWZSB0aj5VEMO9
+ jdAYA/nxjWfw9XCst0aTCQVmZ2E=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
+ 61a8a532135a8a9d0e2b8c56 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 02 Dec 2021 10:51:29
+ GMT
+Sender: quic_charante=quicinc.com@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 2E231C4360D; Thu,  2 Dec 2021 10:51:29 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from hu-charante-hyd.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: charante)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 21A62C4338F;
+        Thu,  2 Dec 2021 10:51:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 21A62C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=quicinc.com
+From:   Charan Teja Reddy <quic_charante@quicinc.com>
+To:     hughd@google.com, akpm@linux-foundation.org, vbabka@suse.cz,
+        rientjes@google.com, david@redhat.com, mhocko@suse.com,
+        surenb@google.com, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Charan Teja Reddy <charante@codeaurora.org>
+Subject: [PATCH v2] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for shmem
+Date:   Thu,  2 Dec 2021 16:20:53 +0530
+Message-Id: <1638442253-1591-1-git-send-email-quic_charante@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 17, 2021 at 06:59:05PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Nov 17, 2021 at 6:01 PM Thara Gopinath
-> <thara.gopinath@linaro.org> wrote:
-> >
-> > Hi,
-> >
-> > On 11/17/21 7:49 AM, Rafael J. Wysocki wrote:
-> > > On Wed, Nov 17, 2021 at 11:46 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
-> > >>
-> > >> Hi Rafael,
-> > >>
-> > >> On 11/16/21 7:05 PM, Rafael J. Wysocki wrote:
-> > >>> On Mon, Nov 15, 2021 at 9:10 PM Thara Gopinath
-> > >>> <thara.gopinath@linaro.org> wrote:
-> > >>>>
-> > >>>> cpuinfo.max_freq can reflect boost frequency if enabled during boot.  Since
-> > >>>> we don't consider boost frequencies while calculating cpu capacities, use
-> > >>>> policy->max to populate the freq_factor during boot up.
-> > >>>
-> > >>> I'm not sure about this.  schedutil uses cpuinfo.max_freq as the max frequency.
-> > >>
-> > >> Agree it's tricky how we treat the boost frequencies and also combine
-> > >> them with thermal pressure.
-> > >> We probably would have consider these design bits:
-> > >> 1. Should thermal pressure include boost frequency?
-> > >
-> > > Well, I guess so.
-> > >
-> > > Running at a boost frequency certainly increases thermal pressure.
-> > >
-> > >> 2. Should max capacity 1024 be a boost frequency so scheduler
-> > >>      would see it explicitly?
-> > >
-> > > That's what it is now if cpuinfo.max_freq is a boost frequency.
-> > >
-> > >> - if no, then schedutil could still request boost freq thanks to
-> > >>     map_util_perf() where we add 25% to the util and then
-> > >>     map_util_freq() would return a boost freq when util was > 1024
-> > >>
-> > >>
-> > >> I can see in schedutil only one place when cpuinfo.max_freq is used:
-> > >> get_next_freq(). If the value stored in there is a boost,
-> > >> then don't we get a higher freq value for the same util?
-> > >
-> > > Yes. we do, which basically is my point.
-> > >
-> > > The schedutil's response is proportional to cpuinfo.max_freq and that
-> > > needs to be taken into account for the results to be consistent.
-> >
-> > So IIUC, cpuinfo.max_freq is always supposed to be the highest supported
-> > frequency of a cpu, irrespective of whether boost is enabled or not.
-> > Where as policy->max is the currently available maximum cpu frequency
-> > which can be equal to cpuinfo.max_freq or lower (depending on whether
-> > boost is enabled, whether there is a constraint on policy->max placed by
-> > thermal etc).
-> 
-> It may also depend on the limit set by user space.
-> 
-> > So in this case isn't it better for schedutil to consider
-> > policy->max instead of cpuinfo.max ?
-> 
-> Not really.
-> 
-> In that case setting policy->max to 1/2 of cpuinfo.max_freq would
-> cause schedutil to choose 1/4 of cpuinfo.max_freq for 50% utilization
-> which would be rather unexpected.
-> 
-> policy->max is a cap, not the current maximum capacity.
-> 
-> > Like you mentioned above same
-> > utilization will relate to different frequencies depending on the
-> > maximum frequency.
-> 
-> Which is not how it is expected (and defined) to work, though.
-> 
-> If you really want to play with the current maximum capacity, you need
-> to change it whenever boost is disabled or enabled - and there is a
-> mechanism for updating cpufinfo.max_freq in such cases.
+From: Charan Teja Reddy <charante@codeaurora.org>
 
-I don't see why we would want to change max capacity on the fly. It is
-not a cheap operation as we would need to normalize the capacity for all
-CPUs if the CPU(s) with capacity = 1024 changes its capacity. Worst case
-we even have to rebuild the sched_domain hierarchy to update flags. The
-update would also temporarily mess with load and utilization signals, so
-not a cheap operation.
+Currently fadvise(2) is supported only for the files that doesn't
+associated with noop_backing_dev_info thus for the files, like shmem,
+fadvise results into NOP. But then there is file_operations->fadvise()
+that lets the file systems to implement their own fadvise
+implementation. Use this support to implement some of the POSIX_FADV_XXX
+functionality for shmem files.
 
-Morten
+This patch aims to implement POSIX_FADV_WILLNEED and POSIX_FADV_DONTNEED
+advices to shmem files which can be helpful for the drivers who may want
+to manage the shmem pages of the files that are created through
+shmem_file_setup[_with_mnt]().  An example usecase may be like, driver
+can create the shmem file of the size equal to its requirements and
+map the pages for DMA and then pass the fd to user. The user who knows
+well about the usage of these pages can now decide when these pages are
+not required push them to swap through DONTNEED thus free up memory well
+in advance rather than relying on the reclaim and use WILLNEED when it
+decide that they are useful in the near future. IOW, it lets the clients
+to free up/read the memory when it wants to. Another usecase is that GEM
+objets which are currenlty allocated and managed through shmem files can
+use vfs_fadvise(DONT|WILLNEED) on shmem fd when the driver comes to
+know(like through some hints from user space) that GEM objects are not
+going to use/will need in the near future.
+
+Signed-off-by: Charan Teja Reddy <charante@codeaurora.org>
+---
+
+Changes in V2:
+  -- Rearranged the code to not to sleep with rcu_lock while using xas_() functionality.
+  -- Addressed the comments from Suren.
+
+changes in V1:
+  -- Created the interface for fadvise(2) to work on shmem files.
+  -- https://patchwork.kernel.org/project/linux-mm/patch/1633701982-22302-1-git-send-email-charante@codeaurora.org/
+       
+
+ mm/shmem.c | 167 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 167 insertions(+)
+
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 70d9ce2..4c4685f 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -38,6 +38,8 @@
+ #include <linux/hugetlb.h>
+ #include <linux/frontswap.h>
+ #include <linux/fs_parser.h>
++#include <linux/mm_inline.h>
++#include <linux/fadvise.h>
+ 
+ #include <asm/tlbflush.h> /* for arch/microblaze update_mmu_cache() */
+ 
+@@ -2792,6 +2794,170 @@ static long shmem_fallocate(struct file *file, int mode, loff_t offset,
+ 	return error;
+ }
+ 
++static void shmem_isolate_pages_range(struct address_space *mapping, loff_t start,
++				loff_t end, struct list_head *list)
++{
++	XA_STATE(xas, &mapping->i_pages, start);
++	struct page *page;
++
++	rcu_read_lock();
++	xas_for_each(&xas, page, end) {
++		if (xas_retry(&xas, page))
++			continue;
++		if (xa_is_value(page))
++			continue;
++		if (!get_page_unless_zero(page))
++			continue;
++		if (isolate_lru_page(page))
++			continue;
++
++		list_add(&page->lru, list);
++		inc_node_page_state(page, NR_ISOLATED_ANON +
++						page_is_file_lru(page));
++		put_page(page);
++		if (need_resched()) {
++			xas_pause(&xas);
++			cond_resched_rcu();
++		}
++	}
++	rcu_read_unlock();
++}
++
++static int shmem_fadvise_dontneed(struct address_space *mapping, loff_t start,
++				loff_t end)
++{
++	int ret;
++	struct page *page;
++	LIST_HEAD(list);
++
++	if (!shmem_mapping(mapping))
++		return -EINVAL;
++
++	if (!total_swap_pages)
++		return 0;
++
++	lru_add_drain();
++	shmem_isolate_pages_range(mapping, start, end, &list);
++
++	while (!list_empty(&list)) {
++		page = lru_to_page(&list);
++		list_del(&page->lru);
++		lock_page(page);
++		if (clear_page_dirty_for_io(page)) {
++			struct writeback_control wbc = {
++				.sync_mode = WB_SYNC_NONE,
++				.nr_to_write = LONG_MAX,
++				.range_start = 0,
++				.range_end = LLONG_MAX,
++				.for_reclaim = 1,
++			};
++
++			SetPageReclaim(page);
++			ret = shmem_writepage(page, &wbc);
++			if (ret || PageWriteback(page)) {
++				if (ret)
++					unlock_page(page);
++				putback_lru_page(page);
++				dec_node_page_state(page, NR_ISOLATED_ANON +
++						page_is_file_lru(page));
++				continue;
++			}
++		}
++
++		if (!PageWriteback(page))
++			ClearPageReclaim(page);
++
++		/*
++		 * shmem_writepage() place the page in the swapcache.
++		 * Delete the page from the swapcache and release the
++		 * page.
++		 */
++		dec_node_page_state(page, NR_ISOLATED_ANON +
++						page_is_file_lru(page));
++		lock_page(page);
++		delete_from_swap_cache(page);
++		unlock_page(page);
++		put_page(page);
++
++	}
++
++	return 0;
++}
++
++static int shmem_fadvise_willneed(struct address_space *mapping,
++				 pgoff_t start, pgoff_t long end)
++{
++	XA_STATE(xas, &mapping->i_pages, start);
++	struct page *page;
++
++	rcu_read_lock();
++	page = xas_find(&xas, end);
++	rcu_read_unlock();
++
++	while (page) {
++		if (xa_is_value(page)) {
++			page = shmem_read_mapping_page(mapping, xas.xa_index);
++			if (!IS_ERR(page))
++				put_page(page);
++		}
++
++		if (need_resched()) {
++			xas_pause(&xas);
++			cond_resched();
++		}
++
++		rcu_read_lock();
++		page = xas_next_entry(&xas, end);
++		rcu_read_unlock();
++	}
++
++	return 0;
++}
++
++static int shmem_fadvise(struct file *file, loff_t offset, loff_t len, int advice)
++{
++	loff_t endbyte;
++	pgoff_t start_index;
++	pgoff_t end_index;
++	struct address_space *mapping;
++	int ret = 0;
++
++	mapping = file->f_mapping;
++	if (!mapping || len < 0)
++		return -EINVAL;
++
++	endbyte = (u64)offset + (u64)len;
++	if (!len || endbyte < len)
++		endbyte = -1;
++	else
++		endbyte--;
++
++
++	start_index = offset >> PAGE_SHIFT;
++	end_index   = endbyte >> PAGE_SHIFT;
++	switch (advice) {
++	case POSIX_FADV_DONTNEED:
++		ret = shmem_fadvise_dontneed(mapping, start_index, end_index);
++		break;
++	case POSIX_FADV_WILLNEED:
++		ret = shmem_fadvise_willneed(mapping, start_index, end_index);
++		break;
++	case POSIX_FADV_NORMAL:
++	case POSIX_FADV_RANDOM:
++	case POSIX_FADV_SEQUENTIAL:
++	case POSIX_FADV_NOREUSE:
++		/*
++		 * No bad return value, but ignore advice. May have to
++		 * implement in future.
++		 */
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return ret;
++}
++
+ static int shmem_statfs(struct dentry *dentry, struct kstatfs *buf)
+ {
+ 	struct shmem_sb_info *sbinfo = SHMEM_SB(dentry->d_sb);
+@@ -3799,6 +3965,7 @@ static const struct file_operations shmem_file_operations = {
+ 	.splice_write	= iter_file_splice_write,
+ 	.fallocate	= shmem_fallocate,
+ #endif
++	.fadvise	= shmem_fadvise,
+ };
+ 
+ static const struct inode_operations shmem_inode_operations = {
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a
+member of the Code Aurora Forum, hosted by The Linux Foundation
+

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40131466D0B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 23:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 592D6466D0D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 23:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377466AbhLBWll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 17:41:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
+        id S1377429AbhLBWlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 17:41:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356350AbhLBWl3 (ORCPT
+        with ESMTP id S1377290AbhLBWlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 17:41:29 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F9DC061758
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 14:38:06 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id p4so1543992qkm.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 14:38:06 -0800 (PST)
+        Thu, 2 Dec 2021 17:41:31 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4515BC06175D
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 14:38:07 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id z9so1386666qtj.9
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 14:38:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0diK6zWMgOO/TArP/zyW7Q3OH2Ix/QmAaJD5h2ncz4A=;
-        b=awoJJBi2hfUE1F4m4zBeadCl7t1J/j0kIXhSwFGX6yFqOZwkxe6P/bSW4g8ZTDdWuT
-         F2nmwEEsbgkQdWGpLAs5PkLgoumu6Zzs4vGtmpnuS/YToak13ectEyghRz5wwFldqNCo
-         PEewD/KBLHcg9CeSW9KEUva3ZVHe6At4qEQF3QcAibZgpFGTrtpUJVbdBfcC3zhuseJO
-         ZS7M7gYvXuYqWyQtlXdm5inJ9Ed60JPkTE1I82zDbVpZSHL8MMrWOmy69brB5m8feFL+
-         Aff8nwRH3QZQ9MjPX0R80Pj8BRPzmbSFJjUXrvtor12Fw4PaeWWSQAIipiG6PvwcmR+/
-         3d5w==
+        bh=/YgkxkUgYa3cGXFN75ZNVpxqudNeMPhQu2Vflsaslk8=;
+        b=kXDO6ZiBZCIi/mnCweRXGLA2xMwJarSMYy8jU8Z8J97OsNm9qT9phk279CqJLkXe6C
+         5DZfMIaCv0yJnDUQC1GhxA9g+q2wTyOiTURiMqwAqAmMLBMnlrXu8UOsTSKS14GWUisV
+         2w/D3o4NV3RxmAFx2gxN4xub2KfvmqX/rbRQRbewW+bHRa/aEvsgl56iTkPKQrIZyrNe
+         P5ZX4ntuJFRUFY5HC1ZTXzSVx+/jvgFWCC74+7oCctqssZ+zC3vV/VqF9amWg8tkWiFB
+         n0+ZJmcNgWxSoxD2JmOboNsMenMN+6zrbu4iD/TWCEcy+kXDlJY8zzPNYl2olhOZ6D/B
+         DEfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0diK6zWMgOO/TArP/zyW7Q3OH2Ix/QmAaJD5h2ncz4A=;
-        b=uo+eWG4PgjhK29L9N0f4l0DqSyWIjIpsVaMqBDOZZmPp6xrEvy2KHuNYRAEF/kbg4V
-         X1Ti7IOHrbICPstmj5r/qKc/hSQ7+o8R8EiO0xOme4hjQUar6G68u88yXGSHDFE+Ep4r
-         3fjBLwCejujUN9LbYvTR1OrO4v9fjSLtLmbpbVJ41xYp9c2MGK1MUqhUpUDKxazIW/dM
-         5Nh+fectjls/ePIgjD4fN4P5kdGLKnHs2EVrDloAR4B7r0foL5xWXy0dYQ4i9xUCdwiq
-         Ng20aV2KgkB2ebrzEYEdEeNNN7bgca84O/h4XmjoSKO3nktp4GRnQ/AvbiHrA6K3fDCD
-         dfqw==
-X-Gm-Message-State: AOAM532K5Wde7zDeK6BUSvO2JVI4QxT1WkrsotJwhdS4XelLgPMnOCnX
-        6XHfZvDJctSI0RhZhi14tmkPVw==
-X-Google-Smtp-Source: ABdhPJxQVbRfr9BSZgH8u3hmZetu4szGlJHsHguzhn20DLSXmmTT3Wj/07vQC6xH6L7cnqexO/15AA==
-X-Received: by 2002:a05:620a:bc8:: with SMTP id s8mr14613668qki.50.1638484685510;
-        Thu, 02 Dec 2021 14:38:05 -0800 (PST)
+        bh=/YgkxkUgYa3cGXFN75ZNVpxqudNeMPhQu2Vflsaslk8=;
+        b=HzR/ZHXbjj5fq4+VhmHFkU1ZQi3T6l3oFAX/AHfsugn3wfvQrY6snFauEBvm/KayFp
+         RNq4KsELljx6fww3/3IJOnEkc+9CsVps9reMOdclx4rcfc8BbRcz5IEJbx9M6hS7g82L
+         jiRUC03rhMGxBNWkQkq0s21BIrIiEty4Wdu5JJnTp/grD/XWYBN/Zkx1TU2MTzweejJQ
+         FdQxIR5YJkJETAH2+IrosVQ5ziXlSXsxowzG/UNyHiewrv564lWC8oNQ9btN3MPmbTri
+         S6ji22hAa5ZdQd+npdBf66TJlkXYvvIfStjjV+8EE4OsdY1Ogp9hoE3M2N7CgCl/pGTu
+         aKtg==
+X-Gm-Message-State: AOAM5333lDX9EhQLovkN7o6hNLHMoLePoJL+kzMwQ/f+UwVaWwXPtCxD
+        YRIae9FFzy1NAQrYsqkbyBvDcg==
+X-Google-Smtp-Source: ABdhPJw5thbB/dwtKRrrsemIkR0hgl49PqQvYWmXUWSSKHPwBpOe14Uc2RUufrjd5T2vkX1MAo4jAg==
+X-Received: by 2002:ac8:5c53:: with SMTP id j19mr16615598qtj.40.1638484686382;
+        Thu, 02 Dec 2021 14:38:06 -0800 (PST)
 Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.googlemail.com with ESMTPSA id h3sm961152qko.78.2021.12.02.14.38.04
+        by smtp.googlemail.com with ESMTPSA id h3sm961152qko.78.2021.12.02.14.38.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 14:38:05 -0800 (PST)
+        Thu, 02 Dec 2021 14:38:06 -0800 (PST)
 From:   Thara Gopinath <thara.gopinath@linaro.org>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
         robh+dt@kernel.org
 Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] arm64: dts: qcom: sm8150: Add support for LMh node
-Date:   Thu,  2 Dec 2021 17:38:01 -0500
-Message-Id: <20211202223802.382068-3-thara.gopinath@linaro.org>
+Subject: [PATCH 3/3] dt-bindings: thermal: Add sm8150 compatible string for LMh
+Date:   Thu,  2 Dec 2021 17:38:02 -0500
+Message-Id: <20211202223802.382068-4-thara.gopinath@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211202223802.382068-1-thara.gopinath@linaro.org>
 References: <20211202223802.382068-1-thara.gopinath@linaro.org>
@@ -66,48 +66,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add LMh nodes for cpu cluster0 and cpu cluster1 for sm8150 SoC.
+Extend the LMh dt binding document to include compatible string
+supporting sm8150 SoC.
 
 Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm8150.dtsi | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ Documentation/devicetree/bindings/thermal/qcom-lmh.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-index 81b4ff2cc4cd..e755d7ab78dd 100644
---- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-@@ -3650,6 +3650,30 @@ cpufreq_hw: cpufreq@18323000 {
- 			#freq-domain-cells = <1>;
- 		};
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml b/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
+index 289e9a845600..a9b7388ca9ac 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
+@@ -19,6 +19,7 @@ properties:
+   compatible:
+     enum:
+       - qcom,sdm845-lmh
++      - qcom,sm8150-lmh
  
-+		lmh_cluster1: lmh@18350800 {
-+			compatible = "qcom,sm8150-lmh";
-+			reg = <0 0x18350800 0 0x400>;
-+			interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
-+			cpus = <&CPU4>;
-+			qcom,lmh-temp-arm-millicelsius = <60000>;
-+			qcom,lmh-temp-low-millicelsius = <84500>;
-+			qcom,lmh-temp-high-millicelsius = <85000>;
-+			interrupt-controller;
-+			#interrupt-cells = <1>;
-+		};
-+
-+		lmh_cluster0: lmh@18358800 {
-+			compatible = "qcom,sm8150-lmh";
-+			reg = <0 0x18358800 0 0x400>;
-+			interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
-+			cpus = <&CPU0>;
-+			qcom,lmh-temp-arm-millicelsius = <60000>;
-+			qcom,lmh-temp-low-millicelsius = <84500>;
-+			qcom,lmh-temp-high-millicelsius = <85000>;
-+			interrupt-controller;
-+			#interrupt-cells = <1>;
-+		};
-+
- 		wifi: wifi@18800000 {
- 			compatible = "qcom,wcn3990-wifi";
- 			reg = <0 0x18800000 0 0x800000>;
+   reg:
+     items:
 -- 
 2.25.1
 

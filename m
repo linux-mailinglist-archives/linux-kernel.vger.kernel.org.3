@@ -2,131 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 892704664A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 14:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 779CE4664AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 14:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237001AbhLBNpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 08:45:53 -0500
-Received: from ewsoutbound.kpnmail.nl ([195.121.94.170]:54201 "EHLO
-        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358327AbhLBNps (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 08:45:48 -0500
-X-Greylist: delayed 491 seconds by postgrey-1.27 at vger.kernel.org; Thu, 02 Dec 2021 08:45:47 EST
-X-KPN-MessageId: 9011b093-5375-11ec-8a6e-005056ab378f
-Received: from smtp.kpnmail.nl (unknown [10.31.155.39])
-        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-        id 9011b093-5375-11ec-8a6e-005056ab378f;
-        Thu, 02 Dec 2021 14:41:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xs4all.nl; s=xs4all01;
-        h=content-type:mime-version:date:message-id:from:to:subject;
-        bh=s/xVqNVOlwQge/G2W/Pt+qdPvzezn4iibA3pPzJ8pns=;
-        b=Wpj9W31xUSyCjSI/ALBRXxRks0yuXGnsi803+cC9/pM0rTioNUa6PTLbxYwBDMpH7xMnsMmAg3FLR
-         jyO4Pi5Gf9mvQx3Gsd/S+lbHKTFIXfPBQzWaCtfe69O58QtmI/Xaa2wP43JHQX8zsoGZkN0FPMSNCW
-         l1m/p2gBNqEnGCbaGTuT9sHLLtN7hImIPWHDlkzicTKFJkD/eFTWF6/A8GXtcmknCCUu6T2SMRDyhp
-         Bj5YsahnuDP3TXFZo3IDjQsljWF91YxFEMR005cb1QCuU6ZWLc2nfc6EQGWYWdLCNbFsrfNJKH9YwG
-         Kedlurco/nSsSeP1LOxoD8yotfrb56Q==
-X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|LFJL3ISlOVsPjOchdIcRHzGsAB/c7qkOye+aaa47FBeyZUvDXkjIVc2N0FQyWXR
- njJy62WTQGDOdwahA6A9MRg==
-X-Originating-IP: 193.91.129.219
-Received: from [192.168.2.10] (cdb815bc1.dhcp.as2116.net [193.91.129.219])
-        by smtp.xs4all.nl (Halon) with ESMTPSA
-        id abae1dc3-5375-11ec-81f5-005056ab7447;
-        Thu, 02 Dec 2021 14:42:20 +0100 (CET)
-Subject: Re: [PATCH] media: vidtv: Fix a wild pointer dereference in
- vidtv_channel_pmt_match_sections()
-To:     Zhou Qingyang <zhou1615@umn.edu>
-Cc:     kjlu@umn.edu, "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211130163946.189005-1-zhou1615@umn.edu>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <94dbfe62-43b3-a293-5f59-d8bd1f35bde1@xs4all.nl>
-Date:   Thu, 2 Dec 2021 14:42:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S1347022AbhLBNsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 08:48:50 -0500
+Received: from mga09.intel.com ([134.134.136.24]:61448 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1358325AbhLBNsr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 08:48:47 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="236521709"
+X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
+   d="scan'208";a="236521709"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 05:45:24 -0800
+X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
+   d="scan'208";a="459659280"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 05:45:21 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1msmNm-001PJ2-Q4;
+        Thu, 02 Dec 2021 15:44:18 +0200
+Date:   Thu, 2 Dec 2021 15:44:18 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
+ struct gpio_chip
+Message-ID: <YajNsrKmEEBr5zWs@smile.fi.intel.com>
+References: <YaZNyMV5gX5cZpar@smile.fi.intel.com>
+ <CAMRc=Mf5d1i34eBez+pOYjjdyfRL9N_ha_==Cn1rANr=2CB9aQ@mail.gmail.com>
+ <YaaQp2rq7N71dm1l@smile.fi.intel.com>
+ <CAMRc=Me=Oq_V=+p-AFPcyDjBs-+4Ug3k0AWK9fdEEet2JD3eFw@mail.gmail.com>
+ <CAMRc=MdQ+a7UrE7csg3GsiLXYGkzti-wPUwPh5J=7WBj74OVZg@mail.gmail.com>
+ <YaimotqSgHzS2wdA@smile.fi.intel.com>
+ <CAMRc=Mew8xfPb9kgH-bf=t+yb1xGpRwv3Vn0+b-9pPbp3M3g5Q@mail.gmail.com>
+ <YaivZe6Qo9LMoywi@smile.fi.intel.com>
+ <Yaiv470uDhTbPD1A@smile.fi.intel.com>
+ <CAMRc=Mdz=pihuTamENmTiWRGeUU=tb_PuxvsarS+oXFpyq4p=g@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211130163946.189005-1-zhou1615@umn.edu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRc=Mdz=pihuTamENmTiWRGeUU=tb_PuxvsarS+oXFpyq4p=g@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/11/2021 17:39, Zhou Qingyang wrote:
-> In vidtv_channel_pmt_match_sections(), vidtv_psi_pmt_stream_init() is
-> assigned to tail and &tail->descriptor is used in
-> vidtv_psi_desc_assign(). There is a dereference of &tail->descriptor
-> in vidtv_psi_desc_assign(), which could lead to a wild pointer
-> dereference onfailure of vidtv_psi_pmt_stream_init().
-
-onfailure -> on failure
-
+On Thu, Dec 02, 2021 at 02:06:57PM +0100, Bartosz Golaszewski wrote:
+> On Thu, Dec 2, 2021 at 12:38 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > On Thu, Dec 02, 2021 at 01:35:01PM +0200, Andy Shevchenko wrote:
+> > > On Thu, Dec 02, 2021 at 12:24:06PM +0100, Bartosz Golaszewski wrote:
+> > > > On Thu, Dec 2, 2021 at 11:58 AM Andy Shevchenko
+> > > > <andriy.shevchenko@linux.intel.com> wrote:
+> > > > >
+> > > > > On Wed, Dec 01, 2021 at 02:11:28PM +0100, Bartosz Golaszewski wrote:
+> > > > > > On Tue, Nov 30, 2021 at 10:04 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> > > > >
+> > > > > ...
+> > > > >
+> > > > > > Let me maybe rephrase the problem: currently, for GPIO devices
+> > > > > > instantiating multiple banks created outside of the OF or ACPI
+> > > > > > frameworks (e.g. instantiated manually and configured using a
+> > > > > > hierarchy of software nodes with a single parent swnode and a number
+> > > > > > of child swnodes representing the children), it is impossible to
+> > > > > > assign firmware nodes other than the one representing the top GPIO
+> > > > > > device to the gpiochip child devices.
+> > > > > >
+> > > > > > In fact if we want to drop the OF APIs entirely from gpiolib - this
+> > > > > > would be the right first step as for gpio-sim it actually replaces the
+> > > > > > gc->of_node = some_of_node; assignment that OF-based drivers do for
+> > > > > > sub-nodes defining banks and it does work with device-tree (I verified
+> > > > > > that too) thanks to the fwnode abstraction layer.
+> > > > >
+> > > > > In exchange of acknowledgements I confirm that I understood the issue
+> > > > > you are describing. What I still don't like is this band-aid:ish approach.
+> > > > > What we really need is to replace of_node by fwnode in GPIO library once
+> > > > > for all. But it can be done later after your simulation series (or before,
+> > > > > i.o.w. independently), hence I propose to update TODO and do it separately.
+> > > > >
+> > > >
+> > > > But this is what we already do for OF. How would the core gpiolib know
+> > > > how the firmware nodes represent the banks? It's the driver's job to
+> > > > tell the framework which node corresponds with what. If anything, we
+> > > > should start replacing of_nodes with fwnodes in drivers and eventually
+> > > > we'd drop the of_node pointer from gpio_chip entirely, but we'd keep
+> > > > the fwnode pointer I added as the driver still needs to assign it
+> > > > itself.
+> > > >
+> > > > Again: I may be missing something here but I've been going through
+> > > > this on and on and can't figure out any other way. Looking at
+> > > > gpiolib-acpi.c I don't see it correctly assigning fwnodes to
+> > > > sub-devices either but I don't have any HW to test it.
+> > > >
+> > > > As for this series: I can't really drop this patch as gpio-sim relies
+> > > > on swnodes being correctly associated with gpio_chips to identify the
+> > > > gpiodevs from configfs callbacks.
+> > >
+> > > Then we need to replace of_node by fwnode as a first step. I have looked
+> > > briefly into the list of drivers that may have been cleaned up and it doesn't
+> > > look too long.
+> >
+> > Let me kick this off by sending couple of patches.
 > 
-> Fix this bug by adding a check of tail.
-> 
-> This bug was found by a static analyzer. The analysis employs
-> differential checking to identify inconsistent security operations
-> (e.g., checks or kfrees) between two code paths and confirms that the
-> inconsistent operations are not recovered in the current function or
-> the callers, so they constitute bugs.
-> 
-> Note that, as a bug found by static analysis, it can be a false
-> positive or hard to trigger. Multiple researchers have cross-reviewed
-> the bug.
-> 
-> Builds with CONFIG_DVB_VIDTV=m show no new warnings,
-> and our static analyzer no longer warns about this code.
-> 
-> Fixes: f90cf6079bf6 ("media: vidtv: add a bridge driver")
-> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-> ---
->  drivers/media/test-drivers/vidtv/vidtv_channel.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/media/test-drivers/vidtv/vidtv_channel.c b/drivers/media/test-drivers/vidtv/vidtv_channel.c
-> index 7838e6272712..f2faa5504642 100644
-> --- a/drivers/media/test-drivers/vidtv/vidtv_channel.c
-> +++ b/drivers/media/test-drivers/vidtv/vidtv_channel.c
-> @@ -318,6 +318,10 @@ vidtv_channel_pmt_match_sections(struct vidtv_channel *channels,
->  	struct vidtv_psi_table_pmt_stream *s = NULL;
->  	struct vidtv_channel *cur_chnl = channels;
->  	struct vidtv_psi_desc *desc = NULL;
-> +	struct vidtv_mux *m = container_of(&channels,
-> +					struct vidtv_mux,
-> +					channels);
-> +
->  	u16 e_pid; /* elementary stream pid */
->  	u16 curr_id;
->  	u32 j;
-> @@ -341,6 +345,13 @@ vidtv_channel_pmt_match_sections(struct vidtv_channel *channels,
->  					tail = vidtv_psi_pmt_stream_init(tail,
->  									 s->type,
->  									 e_pid);
-> +
-> +					if (!tail) {
-> +						vidtv_psi_pmt_stream_destroy(head);
+> Are you fine with merging this in the meantime to get gpio-sim into mainline?
 
-I honestly can't tell if this is the right thing to do.
+gpio-sim, yes, (though I may bikeshed about naming of the configfs attributes,
+etc) but not this patch.
 
-Daniel, can you take a look at this?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> +						dev_warn_ratelimited(m->dev,
-> +							"No enough memory for vidtv_psi_pmt_stream_init");
 
-No -> Not
-Add newline at the end of the string.
-
-> +						return;
-> +					}
-> 
->  					if (!head)
->  						head = tail;
-> 
-
-Regards,
-
-	Hans

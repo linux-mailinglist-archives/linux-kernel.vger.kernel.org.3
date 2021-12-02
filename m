@@ -2,148 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBCD4666E5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9794666E0
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:41:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347927AbhLBPop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 10:44:45 -0500
-Received: from mga11.intel.com ([192.55.52.93]:64622 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236822AbhLBPol (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 10:44:41 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="234238963"
-X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="234238963"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 07:41:19 -0800
-X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="677697629"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 07:41:15 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1msoBx-001R1B-2s;
-        Thu, 02 Dec 2021 17:40:13 +0200
-Date:   Thu, 2 Dec 2021 17:40:12 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
- struct gpio_chip
-Message-ID: <Yajo3IwiLnG5wreC@smile.fi.intel.com>
-References: <YaaQp2rq7N71dm1l@smile.fi.intel.com>
- <CAMRc=Me=Oq_V=+p-AFPcyDjBs-+4Ug3k0AWK9fdEEet2JD3eFw@mail.gmail.com>
- <CAMRc=MdQ+a7UrE7csg3GsiLXYGkzti-wPUwPh5J=7WBj74OVZg@mail.gmail.com>
- <YaimotqSgHzS2wdA@smile.fi.intel.com>
- <CAMRc=Mew8xfPb9kgH-bf=t+yb1xGpRwv3Vn0+b-9pPbp3M3g5Q@mail.gmail.com>
- <YaivZe6Qo9LMoywi@smile.fi.intel.com>
- <Yaiv470uDhTbPD1A@smile.fi.intel.com>
- <CAMRc=Mdz=pihuTamENmTiWRGeUU=tb_PuxvsarS+oXFpyq4p=g@mail.gmail.com>
- <YajNsrKmEEBr5zWs@smile.fi.intel.com>
- <CAMRc=MeMhyV1kZ7zvkqrk0okh6shxvB_LapusCFzg6UBh-bU-A@mail.gmail.com>
+        id S1347883AbhLBPoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 10:44:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232664AbhLBPoW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 10:44:22 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945EFC06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 07:40:58 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id t6so309307qkg.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 07:40:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Ze4OYA4kCMJmMvK5z2d/7YkRmJBRmguQKYCL2ja2UL4=;
+        b=pa2nCnfcRmkfZILR1cKeKiXikJJYJxwm6pPDIZkUI9fIsp0wzT4DJPsBWQ+c1tjVZi
+         HxIeTB5eh/Z0o+Nj7imU/f5ZFLK7xUn5IGWQoc/NRCLyXTC1ykJ8PyrN0+cmHM7wke3o
+         MWHZwLYvzVsPm7zCf5WUdNRPx7nancl1Hp2WLnXAT1fLs178a0VOTJtoXbN30ppfuKoN
+         mvE1qkW0UprQ50X7XWTbAafs5zJda+F/N9WKyIVOwo2VXVJfVnB2dV3MNAqE0seXEv1n
+         qTA1pnu5NsVDmW0T91pNKwdD35lBrI/Gix8wUJdWrpLC5uZoM3Y/ccF7piLjffSmNOPs
+         qeRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Ze4OYA4kCMJmMvK5z2d/7YkRmJBRmguQKYCL2ja2UL4=;
+        b=RuBo+s66Cxn4J4PjBcr7Pld2E2QGGvgDDJym1pomI2IEtd/vRqfLZ2QyF/N9YlDHW1
+         D1QbUd1ppcrKMKhe8uFEpdyDzt6/bMB9wECWdHbTKcHnyKcx4EcWvXeKkWx2CRhKxLGl
+         piv4s4MN2CmDHwd8exlqri1HYn9419SGlVjCRm+Q30yLcy/F5NjfcT1OECccc4vixJSM
+         z7QeOo3DAiiTN7c7BHKKhrY2/fS0ZkhJjEaXFfAFaN6lgqfc7dhxXssKdxpxRSIoxBaM
+         hhA1bXpZd6wn6Eg9kfmufg6SNTMOg3V7K1SlCOeyneoXQH/SQUKvCckuZvRMS6MihBc9
+         uPjg==
+X-Gm-Message-State: AOAM5335Q8Hj567WwZOv6LXpMQlxCor4CzxZa3qpLYY1RfT7da9TGzGA
+        gokwC7dYuAwEqs0rGp7wnkgaf7rz3YyBojQ1Pfrj2w==
+X-Google-Smtp-Source: ABdhPJwBy5Lmy0e4kFoPzEN++JCwpVABcIGXZw+uIkDEYR9B+YQxC7M1jL4oBMaNz8BbheiS7ZjNinJ1WJCaDQT6kYQ=
+X-Received: by 2002:a05:620a:d84:: with SMTP id q4mr13046469qkl.610.1638459657279;
+ Thu, 02 Dec 2021 07:40:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMRc=MeMhyV1kZ7zvkqrk0okh6shxvB_LapusCFzg6UBh-bU-A@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <cover.1638308023.git.andreyknvl@google.com> <938a827f9927ee2112d98e2053ad7764aae9d8f8.1638308023.git.andreyknvl@google.com>
+In-Reply-To: <938a827f9927ee2112d98e2053ad7764aae9d8f8.1638308023.git.andreyknvl@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 2 Dec 2021 16:40:21 +0100
+Message-ID: <CAG_fn=WRKRUskUrN1wb20gv2nLF-DOPBF5aDAg+q+sFKczDw1Q@mail.gmail.com>
+Subject: Re: [PATCH 07/31] kasan: only apply __GFP_ZEROTAGS when memory is zeroed
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Evgenii Stepanov <eugenis@google.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 02:52:55PM +0100, Bartosz Golaszewski wrote:
-> On Thu, Dec 2, 2021 at 2:45 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > On Thu, Dec 02, 2021 at 02:06:57PM +0100, Bartosz Golaszewski wrote:
-> > > On Thu, Dec 2, 2021 at 12:38 PM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > >
-> > > > On Thu, Dec 02, 2021 at 01:35:01PM +0200, Andy Shevchenko wrote:
-> > > > > On Thu, Dec 02, 2021 at 12:24:06PM +0100, Bartosz Golaszewski wrote:
-> > > > > > On Thu, Dec 2, 2021 at 11:58 AM Andy Shevchenko
-> > > > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > > >
-> > > > > > > On Wed, Dec 01, 2021 at 02:11:28PM +0100, Bartosz Golaszewski wrote:
-> > > > > > > > On Tue, Nov 30, 2021 at 10:04 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> > > > > > >
-> > > > > > > ...
-> > > > > > >
-> > > > > > > > Let me maybe rephrase the problem: currently, for GPIO devices
-> > > > > > > > instantiating multiple banks created outside of the OF or ACPI
-> > > > > > > > frameworks (e.g. instantiated manually and configured using a
-> > > > > > > > hierarchy of software nodes with a single parent swnode and a number
-> > > > > > > > of child swnodes representing the children), it is impossible to
-> > > > > > > > assign firmware nodes other than the one representing the top GPIO
-> > > > > > > > device to the gpiochip child devices.
-> > > > > > > >
-> > > > > > > > In fact if we want to drop the OF APIs entirely from gpiolib - this
-> > > > > > > > would be the right first step as for gpio-sim it actually replaces the
-> > > > > > > > gc->of_node = some_of_node; assignment that OF-based drivers do for
-> > > > > > > > sub-nodes defining banks and it does work with device-tree (I verified
-> > > > > > > > that too) thanks to the fwnode abstraction layer.
-> > > > > > >
-> > > > > > > In exchange of acknowledgements I confirm that I understood the issue
-> > > > > > > you are describing. What I still don't like is this band-aid:ish approach.
-> > > > > > > What we really need is to replace of_node by fwnode in GPIO library once
-> > > > > > > for all. But it can be done later after your simulation series (or before,
-> > > > > > > i.o.w. independently), hence I propose to update TODO and do it separately.
-> > > > > > >
-> > > > > >
-> > > > > > But this is what we already do for OF. How would the core gpiolib know
-> > > > > > how the firmware nodes represent the banks? It's the driver's job to
-> > > > > > tell the framework which node corresponds with what. If anything, we
-> > > > > > should start replacing of_nodes with fwnodes in drivers and eventually
-> > > > > > we'd drop the of_node pointer from gpio_chip entirely, but we'd keep
-> > > > > > the fwnode pointer I added as the driver still needs to assign it
-> > > > > > itself.
-> > > > > >
-> > > > > > Again: I may be missing something here but I've been going through
-> > > > > > this on and on and can't figure out any other way. Looking at
-> > > > > > gpiolib-acpi.c I don't see it correctly assigning fwnodes to
-> > > > > > sub-devices either but I don't have any HW to test it.
-> > > > > >
-> > > > > > As for this series: I can't really drop this patch as gpio-sim relies
-> > > > > > on swnodes being correctly associated with gpio_chips to identify the
-> > > > > > gpiodevs from configfs callbacks.
-> > > > >
-> > > > > Then we need to replace of_node by fwnode as a first step. I have looked
-> > > > > briefly into the list of drivers that may have been cleaned up and it doesn't
-> > > > > look too long.
-> > > >
-> > > > Let me kick this off by sending couple of patches.
-> > >
-> > > Are you fine with merging this in the meantime to get gpio-sim into mainline?
-> >
-> > gpio-sim, yes, (though I may bikeshed about naming of the configfs attributes,
-> > etc) but not this patch.
-> >
-> 
-> There's no way around it though AFAIK. First - the 'gpio-line-names'
-> property will not work for banks. 'ngpios' will only work because we
-> read it manually in probe() to figure out the number of sysfs groups.
-> And also configfs callbacks will not be able to associate bank devices
-> with configfs groups. I would really like to hear an alternative -
-> even if it's just an idea and not actual implementation.
-> 
-> I'm really curious to see how you'll remove the of_node pointer and
-> not introduce the corresponding fwnode pointer actually.
+On Tue, Nov 30, 2021 at 10:41 PM <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> __GFP_ZEROTAGS should only be effective if memory is being zeroed.
+> Currently, hardware tag-based KASAN violates this requirement.
+>
+> Fix by including an initialization check along with checking for
+> __GFP_ZEROTAGS.
+>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>
 
-Seems I was unclear, fwnode pointer will be needed, but what I'm against of is
-having of_node and fwnode at the same time in the struct gpio_chip.
-
-Yes, we may modify this patch to work without that ugly ifdeffery and with both
-in the structure, but I don't think it's a good solution.
-
-Now clearly we have to clean up of_node first.
-
--- 
-With Best Regards,
-Andy Shevchenko
+> ---
+>  mm/kasan/hw_tags.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
+> index 0b8225add2e4..c643740b8599 100644
+> --- a/mm/kasan/hw_tags.c
+> +++ b/mm/kasan/hw_tags.c
+> @@ -199,11 +199,12 @@ void kasan_alloc_pages(struct page *page, unsigned =
+int order, gfp_t flags)
+>          * page_alloc.c.
+>          */
+>         bool init =3D !want_init_on_free() && want_init_on_alloc(flags);
+> +       bool init_tags =3D init && (flags & __GFP_ZEROTAGS);
+>
+>         if (flags & __GFP_SKIP_KASAN_POISON)
+>                 SetPageSkipKASanPoison(page);
+>
+> -       if (flags & __GFP_ZEROTAGS) {
+> +       if (init_tags) {
+>                 int i;
+>
+>                 for (i =3D 0; i !=3D 1 << order; ++i)
+> --
+> 2.25.1
+>
 
 
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

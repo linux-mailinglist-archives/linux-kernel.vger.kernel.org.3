@@ -2,95 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5F74662F4
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7A64662FE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357554AbhLBMDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 07:03:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346568AbhLBMDg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 07:03:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35668C06174A;
-        Thu,  2 Dec 2021 04:00:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E43EB822AF;
-        Thu,  2 Dec 2021 12:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 22219C00446;
-        Thu,  2 Dec 2021 12:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638446411;
-        bh=iLoDEAtQmP8J0BXugJet7pBORB6PTD8CsPM3Mb+2OW0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=SQiKccmfya2TcmR0QL+J30CqEzyzU8Rycl9xqVHJy5M1ET62GX0Ge6xL8CTvNurHH
-         A1AOuqsAjl6EKj0veyhEdlgpxirR2tX/HqOGgg0Y+v2ZDj/syWOrBMEN2aNkMaw8cH
-         g/dUAZmXYi9IiqMfjbDYNBqNxp+Sx5ko9NqWBRYRAUNzt7fOHsCQzRPb029kqjMR9T
-         7om0YW2bXfa73YKQDYFhLIwMPYL0xymw7S5/LmyhJuaGZdBVVJasFAgDQ1s20zemtE
-         QPoxhhMoUg7EQ+9ExFbq2Wyyc0sWpaNv82V/57FzQNm6ZHHcIU5DG2iyPtofd+DyLz
-         zKjAyhUfW9UMg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 0B5B860A50;
-        Thu,  2 Dec 2021 12:00:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S1357635AbhLBMFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 07:05:18 -0500
+Received: from pegase2.c-s.fr ([93.17.235.10]:49557 "EHLO pegase2.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1357679AbhLBMEj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 07:04:39 -0500
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4J4ZKR5Clkz9sSm;
+        Thu,  2 Dec 2021 13:00:43 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id uE8160q18Aw8; Thu,  2 Dec 2021 13:00:43 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4J4ZKM104Wz9sSv;
+        Thu,  2 Dec 2021 13:00:39 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0C42C8B7C5;
+        Thu,  2 Dec 2021 13:00:39 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id XPLUeKtqLGeA; Thu,  2 Dec 2021 13:00:38 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.163])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 63DC68B7CD;
+        Thu,  2 Dec 2021 13:00:38 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 1B2C0VRB177241
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 2 Dec 2021 13:00:31 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 1B2C0SNZ177238;
+        Thu, 2 Dec 2021 13:00:28 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v1 01/11] powerpc/code-patching: Remove pr_debug()/pr_devel() messages and fix check()
+Date:   Thu,  2 Dec 2021 13:00:17 +0100
+Message-Id: <3ff9823c0a812a8a145d979a9600a6d4591b80ee.1638446239.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1638446424; l=2505; s=20211009; h=from:subject:message-id; bh=kXFQrhbGOBrRAY+/NIQwG4eDxVght7OdqoNFpOARWl0=; b=OxZZN2s4OQzhKIUEXk+U/JHsXLWjMqZkMndOePEOTlmiK7aRNm9TS6EXXiFB9WfoneO5p2RR+/B5 8YeFdVLKCPDJAVZcrBdWsyafZpW88ks/nGn4jfkCNyhIdzB+lfeQ
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/9] net: hns3: some cleanups for -next
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163844641104.32543.10004765077657533350.git-patchwork-notify@kernel.org>
-Date:   Thu, 02 Dec 2021 12:00:11 +0000
-References: <20211202083603.25176-1-huangguangbin2@huawei.com>
-In-Reply-To: <20211202083603.25176-1-huangguangbin2@huawei.com>
-To:     Guangbin Huang <huangguangbin2@huawei.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, wangjie125@huawei.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lipeng321@huawei.com, chenhao288@hisilicon.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+code-patching has been working for years now, time has come to
+remove debugging messages.
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+Change useful message to KERN_INFO and remove other ones.
 
-On Thu, 2 Dec 2021 16:35:54 +0800 you wrote:
-> To improve code readability and simplicity, this series add 9 cleanup
-> patches for the HNS3 ethernet driver.
-> 
-> Jian Shen (3):
->   net: hns3: split function hclge_init_vlan_config()
->   net: hns3: split function hclge_get_fd_rule_info()
->   net: hns3: split function hclge_update_port_base_vlan_cfg()
-> 
-> [...]
+Also add KERN_ERR to check() macro and change it into a do/while
+to make checkpatch happy.
 
-Here is the summary with links:
-  - [net-next,1/9] net: hns3: extract macro to simplify ring stats update code
-    https://git.kernel.org/netdev/net-next/c/e6d72f6ac2ad
-  - [net-next,2/9] net: hns3: refactor function hns3_fill_skb_desc to simplify code
-    https://git.kernel.org/netdev/net-next/c/a1cfb24d011a
-  - [net-next,3/9] net: hns3: split function hclge_init_vlan_config()
-    https://git.kernel.org/netdev/net-next/c/b60f9d2ec479
-  - [net-next,4/9] net: hns3: split function hclge_get_fd_rule_info()
-    https://git.kernel.org/netdev/net-next/c/a41fb3961d8d
-  - [net-next,5/9] net: hns3: split function hns3_nic_net_xmit()
-    https://git.kernel.org/netdev/net-next/c/8d4b409bac57
-  - [net-next,6/9] net: hns3: split function hclge_update_port_base_vlan_cfg()
-    https://git.kernel.org/netdev/net-next/c/d25f5eddbe1a
-  - [net-next,7/9] net: hns3: refactor function hclge_configure()
-    https://git.kernel.org/netdev/net-next/c/673b35b6a5bf
-  - [net-next,8/9] net: hns3: refactor function hclge_set_channels()
-    https://git.kernel.org/netdev/net-next/c/358e3edb31d5
-  - [net-next,9/9] net: hns3: refactor function hns3_get_vector_ring_chain()
-    https://git.kernel.org/netdev/net-next/c/1b33341e3dc0
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+This series applies on top of series "[v5,1/5] powerpc/inst: Refactor ___get_user_instr()" https://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=274258
 
-You are awesome, thank you!
+ arch/powerpc/lib/code-patching.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
+
+diff --git a/arch/powerpc/lib/code-patching.c b/arch/powerpc/lib/code-patching.c
+index 312324a26df3..4fe4464b7a84 100644
+--- a/arch/powerpc/lib/code-patching.c
++++ b/arch/powerpc/lib/code-patching.c
+@@ -95,7 +95,6 @@ static int map_patch_area(void *addr, unsigned long text_poke_addr)
+ 
+ 	err = map_kernel_page(text_poke_addr, (pfn << PAGE_SHIFT), PAGE_KERNEL);
+ 
+-	pr_devel("Mapped addr %lx with pfn %lx:%d\n", text_poke_addr, pfn, err);
+ 	if (err)
+ 		return -1;
+ 
+@@ -130,8 +129,6 @@ static inline int unmap_patch_area(unsigned long addr)
+ 	if (unlikely(!ptep))
+ 		return -EINVAL;
+ 
+-	pr_devel("clearing mm %p, pte %p, addr %lx\n", &init_mm, ptep, addr);
+-
+ 	/*
+ 	 * In hash, pte_clear flushes the tlb, in radix, we have to
+ 	 */
+@@ -190,10 +187,9 @@ static int do_patch_instruction(u32 *addr, ppc_inst_t instr)
+ int patch_instruction(u32 *addr, ppc_inst_t instr)
+ {
+ 	/* Make sure we aren't patching a freed init section */
+-	if (init_mem_is_free && init_section_contains(addr, 4)) {
+-		pr_debug("Skipping init section patching addr: 0x%px\n", addr);
++	if (init_mem_is_free && init_section_contains(addr, 4))
+ 		return 0;
+-	}
++
+ 	return do_patch_instruction(addr, instr);
+ }
+ NOKPROBE_SYMBOL(patch_instruction);
+@@ -411,8 +407,10 @@ static void __init test_trampoline(void)
+ 	asm ("nop;\n");
+ }
+ 
+-#define check(x)	\
+-	if (!(x)) printk("code-patching: test failed at line %d\n", __LINE__);
++#define check(x)	do {	\
++	if (!(x))		\
++		pr_err("code-patching: test failed at line %d\n", __LINE__); \
++} while (0)
+ 
+ static void __init test_branch_iform(void)
+ {
+@@ -737,7 +735,7 @@ static inline void test_prefixed_patching(void) {}
+ 
+ static int __init test_code_patching(void)
+ {
+-	printk(KERN_DEBUG "Running code patching self-tests ...\n");
++	pr_info("Running code patching self-tests ...\n");
+ 
+ 	test_branch_iform();
+ 	test_branch_bform();
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.33.1
 

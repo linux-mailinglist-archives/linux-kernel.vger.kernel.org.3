@@ -2,85 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99439466C02
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 23:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FE0466C21
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 23:27:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236904AbhLBWWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 17:22:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbhLBWWI (ORCPT
+        id S1349184AbhLBWad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 17:30:33 -0500
+Received: from smtpweb147.aruba.it ([62.149.158.147]:57349 "EHLO
+        smtpweb147.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239809AbhLBWac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 17:22:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C195C06174A;
-        Thu,  2 Dec 2021 14:18:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C53F6B823AA;
-        Thu,  2 Dec 2021 22:18:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59408C00446;
-        Thu,  2 Dec 2021 22:18:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638483522;
-        bh=YH4TOJRyH4rRdQrUQ5WZQ74ziTws+s2sSJiYYsJ8HPY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hthdPKE9Tw0YNz6Z1NkOAe11T+COAFIijQ2Ga941VrEPAvoaIf4dEVDDHftqLil+a
-         6yLOdh8VeT46wVfkj2aYOQU3STnMxAj1XdCgN/0+EGFz/y+Fv6tAOJkmNrUzR2t6fX
-         b6ZuFDn/0k1bbrdZJjaPAtB+DDKAOSOON5Z2p9jxQx5NCJlS/ZXhXrZVSb7da5d+Qi
-         QcGG4SF8kW0jGun8qFHpP7UWHSpWrp4G6XiZUQdoEnLrWGhgbKTvWCMfr3dURwAVwg
-         e0axtQR8U8iFmn9WGOzXkwX31MMI8JzXujmL2aNPzQVQx5FWGNvZL6crsN486eYCot
-         xQ6C4jmFYeK0w==
-Date:   Thu, 2 Dec 2021 14:18:40 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 4/5] ima: support fs-verity file digest based
- signatures
-Message-ID: <YalGQHTq51SHqC1a@sol.localdomain>
-References: <20211202215507.298415-1-zohar@linux.ibm.com>
- <20211202215507.298415-5-zohar@linux.ibm.com>
- <YalDvGjq0inMFKln@sol.localdomain>
- <4dc45d1ec7450b4d1d06b12baf73668525bd8157.camel@linux.ibm.com>
+        Thu, 2 Dec 2021 17:30:32 -0500
+X-Greylist: delayed 420 seconds by postgrey-1.27 at vger.kernel.org; Thu, 02 Dec 2021 17:30:32 EST
+Received: from localhost.localdomain ([146.241.138.59])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id suQtmgDlmrmmOsuQtmPeqn; Thu, 02 Dec 2021 23:20:07 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1638483607; bh=btz8KvWc462TUUvIHUh3hD+1jh6D/75biJI96lLyExE=;
+        h=From:To:Subject:Date:MIME-Version;
+        b=Fd6GnWmCh/coGPsuxcQb3W2yUx0Aqtz+v1G+Ih8T2yi5p+hh0N3e+Qh5QO3EL6EQ5
+         f3fW9cEK/sOsUiRuiTZHDwx5C3Z2phLMUK30YX6FCtNGI0NE0XyOiT+Kg8dXh7ccKv
+         SeTdTuQWWKzjDThvRE6hTv3gmq8F6SfYNbuI8wLWy/7TKXfAsFk8RDUqT29rEJNAq7
+         mwpryyyxTL6PcBZ7GMoyN4AO75VTsriz3IslqJ5ntFdUIA4tbfV5sO5ekQOxyE69xk
+         iPtuzAVnMgNgN2Hbs8mzBFTZLlJt/WQsk/oNO3yJa+ulhlQV/rl0jnvtq2yM7c3w9K
+         ra6vuYuAHFFfw==
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mike Rapoport <rppt@kernel.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Giulio Benetti <giulio.benetti@benettiengineering.com>
+Subject: [PATCH] ARM: Kconfig: improve ARM_SINGLE_ARMV7M description with Cortex M7
+Date:   Thu,  2 Dec 2021 23:20:02 +0100
+Message-Id: <20211202222002.33456-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4dc45d1ec7450b4d1d06b12baf73668525bd8157.camel@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfPvpKufhRjf4A4stLdDIsI6d31RNhGlHnJhYrO886IQFEoHokJzqSfGe3muwrQOm+DEmZ5B5aPP00Vzz1qLF58ghK9T5+tsCvGbcALDtqMcqoAI2HuE5
+ hi12wSFUHnACEj1PXOC7DSxXZd2tvm1QQ1ClYZSQ8oyTJ3Y6qJ77BIwdfTawAuFHTFZgBJNcXlGTW3Q4sh/C+PVzmupJYsaFyA5Ec5PztVkhPUD39plvgPe6
+ BnfV398sjjzT0rHTephIbIBJANhNVyxedSsAPAqCCW0OLkyUHpBWYgU2Qna/IBR0TRbbdX5tiSJlmRwTJ6/kwPims1cs39clNu//aGKqELKGrVk2thPMPT/y
+ x7nGjSgckSxJ/YjeURyDoSF4wCBtmGxiq/1XGaLFrPty53ynBVMCOlnKvZflguzOrWyLFh0UO05Q57s/8OEi8RQg5mI9mv2bw78gH40l0E7zluqracpenhPS
+ r5Z9PIPpHxa+4o5YLPvC3t5JLuEZYlb3LLjPFhnnuYK04ZP91GXnyYUdlxXizK+KT0c9CssXCISprBFwBVmjfiGvaJBze8y7nb3UR8EeYLOAWzgojYncP4gu
+ E6vqLcNo1Knj4CI2H9PUVMnMu4wEMaEnkNV39PZcisGS8MN6NhKCCAKvFNJZ3y6+KIJ2X7BCj8ufhJAGpfhyOsuuWNyYoPghHtkfZ1ENwhwoiJMQFJzw9lsl
+ xisAR/iesP/nQ1Qxcp4c7pOUVZqTZkiu
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 05:13:15PM -0500, Mimi Zohar wrote:
-> On Thu, 2021-12-02 at 14:07 -0800, Eric Biggers wrote:
-> > On Thu, Dec 02, 2021 at 04:55:06PM -0500, Mimi Zohar wrote:
-> > >  	case IMA_VERITY_DIGSIG:
-> > > -		fallthrough;
-> > > +		set_bit(IMA_DIGSIG, &iint->atomic_flags);
-> > > +
-> > > +		/*
-> > > +		 * The IMA signature is based on a hash of IMA_VERITY_DIGSIG
-> > > +		 * and the fs-verity file digest, not directly on the
-> > > +		 * fs-verity file digest.  Both digests should probably be
-> > > +		 * included in the IMA measurement list, but for now this
-> > > +		 * digest is only used for verifying the IMA signature.
-> > > +		 */
-> > > +		verity_digest[0] = IMA_VERITY_DIGSIG;
-> > > +		memcpy(verity_digest + 1, iint->ima_hash->digest,
-> > > +		       iint->ima_hash->length);
-> > > +
-> > > +		hash.hdr.algo = iint->ima_hash->algo;
-> > > +		hash.hdr.length = iint->ima_hash->length;
-> > 
-> > This is still wrong because the bytes being signed don't include the hash
-> > algorithm.  Unless you mean for it to be implicitly always SHA-256?  fs-verity
-> > supports SHA-512 too, and it may support other hash algorithms in the future.
-> 
-> The signature stored in security.ima is prefixed with a header
-> (signature_v2_hdr).
+ARM_SINGLE_ARMV7M implies Arm Cortex M7 too, so let's add it to
+description with M0/M3/M4.
 
-Yes, but the byte that identifies the hash algorithm is not included in the
-bytes that are actually signed, as far as I can tell.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ arch/arm/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-- Eric
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index c2724d986fa0..67efbde70e34 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -329,7 +329,7 @@ config ARCH_MULTIPLATFORM
+ 	select USE_OF
+ 
+ config ARM_SINGLE_ARMV7M
+-	bool "ARMv7-M based platforms (Cortex-M0/M3/M4)"
++	bool "ARMv7-M based platforms (Cortex-M0/M3/M4/M7)"
+ 	depends on !MMU
+ 	select ARM_NVIC
+ 	select AUTO_ZRELADDR
+-- 
+2.25.1
+

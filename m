@@ -2,113 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A65465B0A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0A1465B0B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:38:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354643AbhLBAk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 19:40:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45948 "EHLO
+        id S1354659AbhLBAlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 19:41:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233847AbhLBAkX (ORCPT
+        with ESMTP id S233847AbhLBAlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 19:40:23 -0500
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C141C061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 16:37:01 -0800 (PST)
-Received: by mail-ua1-x935.google.com with SMTP id az37so52682476uab.13
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 16:37:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=o514D1uhYEuhVflwqtCZuE/ZpMReL0NhA7xwmfYSlag=;
-        b=g+P9kPgV2HDyvGog5C8JdvOkx1/LJz+d7iJwKg7PWMfXLR9Z7bHpmRzY7OJMrXBenc
-         Vr2F24EkEgLGkEVm7aRxKWrJ8rPL1rIs/kFYEY5hYFJtUSMfVxXiqCUny+1WWQZI6ibt
-         +WgPNeEmWWelHagVXeI9196nciM57pA38C96o/6nWdzLrSFN2YmROMtzlYexPtto9wb9
-         1Ru9opswNpzj1Kxpl5/+qAew5CBARJzqdZpYVXuImRXTSa4Ds7gKUK7vBjS+K0z4L7H9
-         6QDCOKruK47OiMPvpyJ+HW/tLvPVRv5RNLFpOf/gXkSGIC+izuC69LKv2bkmaUG/AqIo
-         OgkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o514D1uhYEuhVflwqtCZuE/ZpMReL0NhA7xwmfYSlag=;
-        b=XkBxJSzGj48Pnu2YYucDAnCZnemohyVigKVdxGqpY6RYYlQrikRcQPc6ZM9gacDHiY
-         Vjr20FNvPTEflsZdLQ48MEM/6AccKxWtWYOE8sYY+LRPmV4fD2YMuHBl8zh9NUyACeCQ
-         SLoMsTw7D/J6RitZhvOXi2O8nnEN+XlrMPHVRtAoWGE0AygPUodKg8DvRp7azFxcinBo
-         dZopKfh8Xa2bJF/YQFIIOGBMYS/o57+kmQoSkKlr6Dsh9/PFSgwrI5mjoekSS1LC+ztF
-         9/Zu7/E9/lzrnYXTDTco8UhgtFcAbcDGYdp88L/PCR5as9vOwHI9UEsH3SVFn1ilPCW6
-         JMqA==
-X-Gm-Message-State: AOAM533+Uw0eR+Pjyek+NbBpTutXuBakueFVkoy/S6N+FGAHnW1oWOG/
-        y2mqqTy1oi3rpJPb8jS294ltdpPuAsXDmw==
-X-Google-Smtp-Source: ABdhPJxXNp2Rqr1zt0JzORqEO5eWQ8UUhSugn9nVoN+xjCaX3sJPWFVR0dxzga2DU21y1WzTmgVIFw==
-X-Received: by 2002:a05:6102:237a:: with SMTP id o26mr11417155vsa.79.1638405420778;
-        Wed, 01 Dec 2021 16:37:00 -0800 (PST)
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
-        by smtp.gmail.com with ESMTPSA id w17sm466661uar.18.2021.12.01.16.37.00
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 16:37:00 -0800 (PST)
-Received: by mail-ua1-f47.google.com with SMTP id i6so52608342uae.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 16:37:00 -0800 (PST)
-X-Received: by 2002:ab0:15a1:: with SMTP id i30mr12304408uae.122.1638405419938;
- Wed, 01 Dec 2021 16:36:59 -0800 (PST)
+        Wed, 1 Dec 2021 19:41:52 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5BFC061574;
+        Wed,  1 Dec 2021 16:38:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8BD6DCE2073;
+        Thu,  2 Dec 2021 00:38:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5775C00446;
+        Thu,  2 Dec 2021 00:38:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638405506;
+        bh=/ckJFm6qpXviL366xNE/ehHXGDPmw59rHuUlhCFqIME=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=C3lt1pgUedC0SnF0studGAAa2rwmJfJIOEXlQ2t+g/3h3kYhX9bVNpDvzejxfkvKY
+         V34h7kCk4S3vbWxdfPVrvYglAWRyXwgyr85Dz9tM8GT0TEkitHhC+RLTsVeuO47jT5
+         Tj0m5RKDujFu45urCnqILGyD0GaSsCeOFVJFNs/3pNS3tef8oNVXejiUFxS4wjK5Sq
+         jpEBUXdg29DR9WL23JDopmsUEBjmocEjIPV1Tu9PsNqZP7CIkOtik0rki3uKd6dTMZ
+         iSkJNgwosj32otwjEDUvcNlMdoRYHCSZVsL2Xlt+7ji/m6M8Kf5b9UdpbWmpLcHQP+
+         6juBSP/3MhcJQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 763195C0FCD; Wed,  1 Dec 2021 16:38:26 -0800 (PST)
+Date:   Wed, 1 Dec 2021 16:38:26 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
+        jiangshanlai@gmail.com, akpm@linux-foundation.org,
+        mathieu.desnoyers@efficios.com, josh@joshtriplett.org,
+        tglx@linutronix.de, peterz@infradead.org, rostedt@goodmis.org,
+        dhowells@redhat.com, edumazet@google.com, fweisbec@gmail.com,
+        oleg@redhat.com, joel@joelfernandes.org
+Subject: [PATCH rcu 0/18] RCU Tasks updates for v5.17
+Message-ID: <20211202003826.GA3129369@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-References: <cover.1638282789.git.asml.silence@gmail.com> <CA+FuTSf-N08d6pcbie2=zFcQJf3_e2dBJRUZuop4pOhNfSANUA@mail.gmail.com>
- <0d82f4e2-730f-4888-ec82-2354ffa9c2d8@gmail.com> <d5a07e01-7fc3-2f73-a406-21246a252876@gmail.com>
-In-Reply-To: <d5a07e01-7fc3-2f73-a406-21246a252876@gmail.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Wed, 1 Dec 2021 19:36:22 -0500
-X-Gmail-Original-Message-ID: <CA+FuTSeP-W-ePV1EkWMmD4Ycsfq9viYdtyfDbUW3LXTc2q+BHQ@mail.gmail.com>
-Message-ID: <CA+FuTSeP-W-ePV1EkWMmD4Ycsfq9viYdtyfDbUW3LXTc2q+BHQ@mail.gmail.com>
-Subject: Re: [RFC 00/12] io_uring zerocopy send
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     io-uring@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >>> 1) we pass a bvec, so no page table walks.
-> >>> 2) zerocopy_sg_from_iter() is just slow, adding a bvec optimised version
-> >>>     still doing page get/put (see 4/12) slashed 4-5%.
-> >>> 3) avoiding get_page/put_page in 5/12
-> >>> 4) completion events are posted into io_uring's CQ, so no
-> >>>     extra recvmsg for getting events
-> >>> 5) no poll(2) in the code because of io_uring
-> >>> 6) lot of time is spent in sock_omalloc()/free allocating ubuf_info.
-> >>>     io_uring caches the structures reducing it to nearly zero-overhead.
-> >>
-> >> Nice set of complementary optimizations.
-> >>
-> >> We have looked at adding some of those as independent additions to
-> >> msg_zerocopy before, such as long-term pinned regions. One issue with
-> >> that is that the pages must remain until the request completes,
-> >> regardless of whether the calling process is alive. So it cannot rely
-> >> on a pinned range held by a process only.
-> >>
-> >> If feasible, it would be preferable if the optimizations can be added
-> >> to msg_zerocopy directly, rather than adding a dependency on io_uring
-> >> to make use of them. But not sure how feasible that is. For some, like
-> >> 4 and 5, the answer is clearly it isn't.  6, it probably is?
->
-> Forgot about 6), io_uring uses the fact that submissions are
-> done under an per ring mutex, and completions are under a per
-> ring spinlock, so there are two lists for them and no extra
-> locking. Lists are spliced in a batched manner, so it's
-> 1 spinlock per N (e.g. 32) cached ubuf_info's allocations.
->
-> Any similar guarantees for sockets?
+Hello!
 
-For datagrams it might matter, not sure if it would show up in a
-profile. The current notification mechanism is quite a bit more
-heavyweight than any form of fixed ubuf pool.
+This series provides RCU Tasks updates, including making stall warnings
+use task_call_func() and providing better update-side scalability for
+call_rcu_tasks_trace() and friends:
 
-For TCP this matters less, as multiple sends are not needed and
-completions are coalesced, because in order.
+1.	rcu-tasks: Don't remove tasks with pending IPIs from holdout list.
+
+2.	rcu-tasks:  Create per-CPU callback lists.
+
+3.	rcu-tasks: Introduce ->percpu_enqueue_shift for dynamic queue
+	selection.
+
+4.	rcu-tasks: Convert grace-period counter to grace-period sequence
+	number.
+
+5.	rcu_tasks: Convert bespoke callback list to rcu_segcblist
+	structure.
+
+6.	rcu-tasks: Use spin_lock_rcu_node() and friends.
+
+7.	rcu-tasks: Inspect stalled task's trc state in locked state,
+	courtesy of Neeraj Upadhyay.
+
+8.	rcu-tasks: Add a ->percpu_enqueue_lim to the rcu_tasks structure.
+
+9.	rcu-tasks: Abstract checking of callback lists.
+
+10.	rcu-tasks: Abstract invocations of callbacks.
+
+11.	rcu-tasks: Use workqueues for multiple rcu_tasks_invoke_cbs()
+	invocations.
+
+12.	rcu-tasks: Make rcu_barrier_tasks*() handle multiple callback
+	queues.
+
+13.	rcu-tasks: Add rcupdate.rcu_task_enqueue_lim to set initial
+	queueing.
+
+14.	rcu-tasks: Count trylocks to estimate call_rcu_tasks() contention.
+
+15.	rcu-tasks: Avoid raw-spinlocked wakeups from
+	call_rcu_tasks_generic().
+
+16.	rcu-tasks: Use more callback queues if contention encountered.
+
+17.	rcu-tasks: Use separate ->percpu_dequeue_lim for callback
+	dequeueing.
+
+18.	rcu-tasks: Use fewer callbacks queues if callback flood ends.
+
+						Thanx, Paul
+
+------------------------------------------------------------------------
+
+ Documentation/admin-guide/kernel-parameters.txt   |   16 
+ b/Documentation/admin-guide/kernel-parameters.txt |    7 
+ b/kernel/rcu/Kconfig                              |    2 
+ b/kernel/rcu/tasks.h                              |    5 
+ kernel/rcu/tasks.h                                |  668 ++++++++++++++++------
+ 5 files changed, 518 insertions(+), 180 deletions(-)

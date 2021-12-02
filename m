@@ -2,104 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52CE4465C96
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 04:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7F3465C9A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 04:17:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355130AbhLBDT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 22:19:56 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:37283 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344982AbhLBDT4 (ORCPT
+        id S1355142AbhLBDUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 22:20:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347449AbhLBDUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 22:19:56 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J4Lhc5lMHz4xZ1;
-        Thu,  2 Dec 2021 14:16:32 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638414993;
-        bh=chQ8NEclw7413RXpQelT1+Yqbmzc3Z5o21+Ktq1ipxY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EMMpje0zzgfh2lhG3TdqRNWr96P6vpUIKOBG44+e+WmnzuqoAondgPXyP1JAp60jr
-         gqDU7LlKjoaL0wE0VePwX0vhUXZ/ImWd31tP7iW0CD5y2KPbayH/tPZ1B7K/L8jrPD
-         cigddmqzCk+rIcmnGH9qkbUvd0hOXZTGdh4bw/frInvVAFim/ZbDHxKuSz5/0ZvTA9
-         l05Wz5Xx3d8Yvnuw7oQ0qG/Dq0RoEmJL43M9glBCSuzwG1vhCNeFs2oKDv9BF2Z0P/
-         GRODPXwaAbpKf1ejdL1h+PaELPb2MTCT81Wb6dbtg6f5yR87jXmTRF5TLYcwOqzZpB
-         eteTnf70mFWaw==
-Date:   Thu, 2 Dec 2021 14:16:30 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Rob Herring <robh@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the gpio-brgl tree
-Message-ID: <20211202141630.34528f34@canb.auug.org.au>
-In-Reply-To: <20211123130418.17878c41@canb.auug.org.au>
-References: <20211116105112.4c99853d@canb.auug.org.au>
-        <20211118112951.2b788952@canb.auug.org.au>
-        <20211123130418.17878c41@canb.auug.org.au>
+        Wed, 1 Dec 2021 22:20:23 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA469C061748
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 19:17:01 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id u74so52817592oie.8
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 19:17:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=f8tSGjZsit51ZITlSBYML7OThbDeGlSnXcANZo2xXoU=;
+        b=OcAcusTmUQNb722Q+s0JJolLzmZh/A/oMIjkcGLj60eyHpAVWmMoW55wR33LD1BR+u
+         yZtIfif+P8rJ045jUniTURO4tFThxLGIl4VfWy9xzmFtFN8sSu/l6nxOFBUoatDjsiEJ
+         cj4Syc4/y63vqOFzjGlHSfLl4ubvZGlry23jU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=f8tSGjZsit51ZITlSBYML7OThbDeGlSnXcANZo2xXoU=;
+        b=PGDjZEhDj8LVZ3Ks/zloDE8mV4GEZnUB1RzBH14ywAN5JQrJR7LoK4O5HVUFUmyOf3
+         egrvFPfUYRecLT6IbFaElX+vTmp1+L1iSZWvjbIwgIaA+YQ+FL2UN2s5nqLoZHmwadDc
+         Wkg/66BCdV6jSio3EsMFDvt5XqQp+72bupBmPyVES40i6fyd9kzbgmxoUDbQZV2+AlK+
+         B7NmmSvhXHH2KNNMUNnLUADPmEXlStQ2/X80vcd4FQKGufdBVrkSAttt6iONzuQOAo+j
+         nbdwRzijoRkH9u+/n2c4QzfUL/4rV36XyplbdltmyMkkxHYIRrQDLLT52dOks6bzMBD9
+         +7og==
+X-Gm-Message-State: AOAM533UH/P74FdurMlLo9+gckVjNs0bZzdCjgjktt9xHCXsb72fjQOO
+        ceYGLHudvV3gVN6AEoYlSDzKLwclUm6J+SFEcwUScw==
+X-Google-Smtp-Source: ABdhPJxKKpqyYTRLZ/lnUGnoxlC6oopfHFJcy8Rj+02jlacnjWTqomFSu8Z35xm90T0/8VYMq8ziR8goHh2Z8my/XDA=
+X-Received: by 2002:aca:2319:: with SMTP id e25mr2366326oie.164.1638415021099;
+ Wed, 01 Dec 2021 19:17:01 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 1 Dec 2021 19:17:00 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OeT7pLIRbK251tuXYXQtWtz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <1638339338-6731-2-git-send-email-quic_c_sanm@quicinc.com>
+References: <1638339338-6731-1-git-send-email-quic_c_sanm@quicinc.com> <1638339338-6731-2-git-send-email-quic_c_sanm@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Wed, 1 Dec 2021 19:17:00 -0800
+Message-ID: <CAE-0n50YLsHhqoNQDNnGUYhHQSbMc7qnS5nGB-Nk2Z2J13xBVQ@mail.gmail.com>
+Subject: Re: [PATCH v3] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk for
+ DWC3 controller
+To:     Doug Anderson <dianders@chromium.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/OeT7pLIRbK251tuXYXQtWtz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Quoting Sandeep Maheswaram (2021-11-30 22:15:38)
+> Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
+> Runtime suspend of phy drivers was failing from DWC3 driver as
+> runtime usage value is 2 because the phy is initialized from
+> DWC3 core and HCD core.
+> DWC3 manages phy in their core drivers.
 
-Hi all,
+This looks wrapped weirdly.
 
-On Tue, 23 Nov 2021 13:04:18 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+> Set this quirk to avoid phy initialization in HCD core.
 >
-> On Thu, 18 Nov 2021 11:29:51 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > On Tue, 16 Nov 2021 10:51:12 +1100 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> > >
-> > > After merging the gpio-brgl tree, today's linux-next build (x86_64
-> > > allmodconfig) failed like this:
-> > >=20
-> > > drivers/gpio/gpio-xlp.c:300:16: error: 'GPIO_VARIANT_VULCAN' undeclar=
-ed here (not in a function)
-> > >   300 |  { "BRCM9006", GPIO_VARIANT_VULCAN },
-> > >       |                ^~~~~~~~~~~~~~~~~~~
-> > >=20
-> > > Caused by commit
-> > >=20
-> > >   ea708ac5bf41 ("gpio: xlp: Remove Netlogic XLP variants")
-> > >=20
-> > > I have used the gpio-bgrl tree from next-20211115 for today.   =20
-> >=20
-> > I am still getting this failure :-( =20
->=20
-> And still :-( :-(
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 
-Its still failing ...
+Any Fixes tag?
 
---=20
-Cheers,
-Stephen Rothwell
+> ---
+>  drivers/usb/host/xhci-plat.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> index c1edcc9..9bbd939 100644
+> --- a/drivers/usb/host/xhci-plat.c
+> +++ b/drivers/usb/host/xhci-plat.c
+> @@ -327,6 +327,9 @@ static int xhci_plat_probe(struct platform_device *pdev)
+>                                          &xhci->imod_interval);
+>         }
+>
+> +       if (of_device_is_compatible(pdev->dev.parent->of_node, "snps,dwc3"))
 
---Sig_/OeT7pLIRbK251tuXYXQtWtz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Are we sure that pdev->dev.parent isn't NULL here?
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGoOo4ACgkQAVBC80lX
-0GzDhAf/SnssGBtdJ+Je/t32yZMvi0NeowCL0bM45/75P5Hlmm57rOZ0TvaqPzVC
-LXr6O+pVUE0qu/m7G4XKxO/4c6rG2m0DoAX1uQWX0mQXwxnnOzZautk7Cpk5x55z
-YTbqI0qL+2mr9csbv3lTkUWnSEGhZVKsSPTiKiraqzuyCyha/4WRkWMEbR51CP6U
-fW5xYVx96XDO8reHiw7fqz8fNKSVxvkJk+GEgynVTzgWtCxejXFZQRkvoDitIyzH
-XE4TIH9z7lcdbt+Id8KIfDLiBo4E6XuuhgkWacGlS57NTaev/5LMXedrLEnrk02J
-3s2e2I1lbTAa07W10VBtTzs9A8YcrQ==
-=2t+a
------END PGP SIGNATURE-----
-
---Sig_/OeT7pLIRbK251tuXYXQtWtz--
+> +               xhci->quirks |= XHCI_SKIP_PHY_INIT;
+> +
+>         hcd->usb_phy = devm_usb_get_phy_by_phandle(sysdev, "usb-phy", 0);
+>         if (IS_ERR(hcd->usb_phy)) {

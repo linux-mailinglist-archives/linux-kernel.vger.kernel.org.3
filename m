@@ -2,105 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B3F466B71
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 22:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 502EA466B7A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 22:17:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359868AbhLBVQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 16:16:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
+        id S1377007AbhLBVU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 16:20:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243377AbhLBVQ0 (ORCPT
+        with ESMTP id S1377001AbhLBVUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 16:16:26 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F64C06174A;
-        Thu,  2 Dec 2021 13:13:03 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id z5so3306536edd.3;
-        Thu, 02 Dec 2021 13:13:02 -0800 (PST)
+        Thu, 2 Dec 2021 16:20:52 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123E0C06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 13:17:29 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id o20so3137794eds.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 13:17:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CosSd+cgUcNUiaY0hs7VW9skwmiaGD8L6mDXn30jLrE=;
-        b=JdXG6rsH5kxSnasrKVMg86W+ysQD/1JwF4sgOtgQREvDvaiw5rfW6E/IchkwkJeOFH
-         svKXqSr3i91JLZZzugdUqIPapjn13w7Ov/bo36TeHD8r1wYC6mwz3/np/TdjS1LFLp7L
-         AXBYuO34jZsl6JpNILpjmr7zQX3v0gyAVG5MdTGdZORF7Y049BAgyD/6mmtBdnc6fXsD
-         QaqA8YEJAdi89KP3Ib1u3Ss5umfkF9rY9w3mDk3yv/bLXbkFO2V92E0nPKoH/AGcM7WB
-         BKo/Dd4FAe0inxeZSVNtaMvKSdc6ly8E6VqabSp7ZtRyQ1EWQf/Z3vSO/T8JunoHZ5vR
-         QZuA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=P2iWvtbr9pqgIEuVK04x303diGFgnHSqLQi4xECoLUM=;
+        b=YK/b7sezd1nJYm7+fptD8CVREinlgEWmjTJK1hGDewOTOtPO1WaIDExiffTvFlna9f
+         lpfmqrub1G65ady/hjJ3Azk98dWyK59mNfEvvMQW1VDHsfI+8tMlH7Nl7PdsWJFS97yE
+         Ry47OXjI67QDMTPbOEC8WBu/j0J/XgMuX/HOvomkfFJAKkWITnANhh5xZe9oOdZavfSt
+         3Qx7pAU4WSDB3rViqSXNuZaS0IeZjIlu8jhYgFtALdYEsre235ivCxDC8uqx2sL5Wi5M
+         W4z8SReKQDPkzWHyTJdSSpysRQ6S5Uk9BJWPM5YAQP9HoM2S8UVFK55Bh0yOMyD1ft9V
+         hvFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CosSd+cgUcNUiaY0hs7VW9skwmiaGD8L6mDXn30jLrE=;
-        b=HCTTBqvRpUnoB98fz/WG/tLBggZeHgKtT1GQJBl9gHvVXtrtOHzQK5iJettVrDNXk8
-         Q2n/J8Z2Lw104AeRvy+nVGqpybjHWbnWkTcTUPi+O6Fykq44UrSJsmBgNkAwCJORlg8v
-         Z1LABZzWzwE6SVfmNFKSHVgzCm8bdpOOlq4u7LTOtAqGR+hTB1o2CQeH6pnXIRuCU8/C
-         t9z3erTnfDoF+/yHQcCFgkE7wdQMMAM8rcg63R6geSlVlxJ7r9xAtyI9FwLGGew0hCac
-         4h//mhm5Rda+g//+8D/W7PqPdfhJ6Torq6mHzT7u7eXFy9fn04vZC9xlBydmQBXWt/Tb
-         0VvA==
-X-Gm-Message-State: AOAM532weJV8cI2I1LNpcdw68WY7laLhQRZSnX9rqaHvVc/Y6AZd9sM0
-        mV8RTCuY0OaYhDRWGarwa9Q=
-X-Google-Smtp-Source: ABdhPJwx6u0YDT9Q5iFGmV1UgIGHGbcKO1BBHb/CW6Gku0y4F30OzcH6F/wEO+rS4b4N4yi9ocfkdA==
-X-Received: by 2002:a17:907:3f83:: with SMTP id hr3mr18410051ejc.555.1638479581662;
-        Thu, 02 Dec 2021 13:13:01 -0800 (PST)
-Received: from skbuf ([188.25.173.50])
-        by smtp.gmail.com with ESMTPSA id gs15sm625863ejc.42.2021.12.02.13.13.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 13:13:01 -0800 (PST)
-Date:   Thu, 2 Dec 2021 23:12:59 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH v1 1/1] net: dsa: vsc73xxx: Get rid of duplicate of_node
- assignment
-Message-ID: <20211202211259.qzdg3zs7lkjbykhn@skbuf>
-References: <20211202210029.77466-1-andriy.shevchenko@linux.intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=P2iWvtbr9pqgIEuVK04x303diGFgnHSqLQi4xECoLUM=;
+        b=iNuaFzKO+Tjhb1Pr4cMIQ4n7zYJUQsZOMPRXanDQCkAO/IGuKcdljS7td5oj+9Kueh
+         CbPtysLjC25JaZRrTSHqymHFst5dvqK+ZLNUFqmdLmtFPXgLsW06S3USv/9ooWUuTwML
+         BL0MoEp6Y1dc9QRikjAbt7tgFooHnqR7BoOdIFiXGmNTtpjjwX3fLPuqVT8EWHdoKBPP
+         0cfaeZddmMFd9D+T2Lx4AeuTuJckBFLXiyN0ptCG911K+niiNJTVp4gLfAZ5BtCi5Dlu
+         1tyTOMh7MJOpxP8WrcJ0tsDulyJWhisxS7l3OFOqMW9DAci3h9ftFaJr3P1nFFZd1JN5
+         fhiQ==
+X-Gm-Message-State: AOAM533yycxS0sbOgX7ejh7vX45V4H5CFqvS/txdp/04HgDyRg5SlfyB
+        oP0mShZlZDOyZ7jwVque2rCQzyPmBLR/TUKOfjg=
+X-Google-Smtp-Source: ABdhPJwIJSPzqW4JH6E7pTgPGFoT0qHEGTV3CUKkX4tI26av/c6mHsAZc19QiGMx2v5nMnKxWGT0aoy1OmW0tXzT4mo=
+X-Received: by 2002:aa7:d0d1:: with SMTP id u17mr20707091edo.135.1638479847487;
+ Thu, 02 Dec 2021 13:17:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211202210029.77466-1-andriy.shevchenko@linux.intel.com>
+References: <20211202201351.74419-1-hdegoede@redhat.com>
+In-Reply-To: <20211202201351.74419-1-hdegoede@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 2 Dec 2021 23:15:51 +0200
+Message-ID: <CAHp75VctFk8xO4ddWi1V49eNp5+h_AOcRVv_=iMnjmVt0TOM5w@mail.gmail.com>
+Subject: Re: [PATCH] mfd: intel-lpss: Fix I2C4 not being available on the
+ Microsoft Surface Go & Go 2
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dan Scally <djrscally@gmail.com>, Kate Hsuan <hpa@redhat.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 11:00:29PM +0200, Andy Shevchenko wrote:
-> GPIO library does copy the of_node from the parent device of
-> the GPIO chip, there is no need to repeat this in the individual
-> drivers. Remove assignment here.
-> 
-> For the details one may look into the of_gpio_dev_init() implementation.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Thu, Dec 2, 2021 at 10:14 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Many DSDTs for Kaby Lake and Kaby Lake Refresh models contain a
+> _SB.PCI0.GEXP ACPI Device node describing an I2C attached GPIO expander.
+
+For the record (and probably good to mention it's here) it's a PCA953x
+compatible one.
+
+> This seems to be something which is copy and pasted from the DSDT
+> from some reference design since this ACPI Device is present even on
+> models where no such GPIO expander is used at all, such as on the
+> Microsoft Surface Go & Go 2.
+
+Does this come from schematics? Or..? Ah, I see below.
+
+> This ACPI Device is a problem because it contains a SystemMemory
+> OperationRegion which covers the MMIO for the I2C4 I2C controller this
+> causes the MFD cell for the I2C4 controller to not be instantiated due
+> to a resource conflict, requiring the use of acpi_enforce_resources=lax
+> to work around this.
+
+Right.
+
+> I have done an extensive analysis of all the ACPI tables on the
+> Microsoft Surface Go and the _SB.PCI0.GEXP ACPI Device's methods are
+> not used by any code in the ACPI tables, neither are any of them
+> directly called by any Linux kernel code. This is unsurprising since
+> running i2cdetect on the I2C4 bus shows that there is no GPIO
+> expander chip present on these devices at all.
+
+I believe it's an optional component on our reference designs (I saw a
+lot of those expanders on our development boards).
+
+> This commit adds a PCI subsystem vendor:device table listing PCI devices
+> where it is known to be safe to ignore a resource-conflicts with ACPI
+
+ignore resource conflicts
+
+(no article, no dash) ?
+
+> declared SystemMemory regions.
+>
+> This makes the I2C4 bus work out of the box on the Microsoft Surface
+> Go & Go 2, which is necessary for the cameras on these devices to work.
+
+After addressing comments
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Thanks for the patch!
+
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Dan Scally <djrscally@gmail.com>
+> Cc: Kate Hsuan <hpa@redhat.com>
+> Cc: Maximilian Luz <luzmaximilian@gmail.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 > ---
->  drivers/net/dsa/vitesse-vsc73xx-core.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/vitesse-vsc73xx-core.c b/drivers/net/dsa/vitesse-vsc73xx-core.c
-> index 4c18f619ec02..ae55167ce0a6 100644
-> --- a/drivers/net/dsa/vitesse-vsc73xx-core.c
-> +++ b/drivers/net/dsa/vitesse-vsc73xx-core.c
-> @@ -1122,9 +1122,6 @@ static int vsc73xx_gpio_probe(struct vsc73xx *vsc)
->  	vsc->gc.ngpio = 4;
->  	vsc->gc.owner = THIS_MODULE;
->  	vsc->gc.parent = vsc->dev;
-> -#if IS_ENABLED(CONFIG_OF_GPIO)
-> -	vsc->gc.of_node = vsc->dev->of_node;
-> -#endif
->  	vsc->gc.base = -1;
->  	vsc->gc.get = vsc73xx_gpio_get;
->  	vsc->gc.set = vsc73xx_gpio_set;
-> -- 
-> 2.33.0
-> 
+>  drivers/mfd/intel-lpss-pci.c | 12 ++++++++++++
+>  drivers/mfd/intel-lpss.c     |  1 +
+>  drivers/mfd/intel-lpss.h     |  1 +
+>  3 files changed, 14 insertions(+)
+>
+> diff --git a/drivers/mfd/intel-lpss-pci.c b/drivers/mfd/intel-lpss-pci.c
+> index a872b4485eac..593290ff08a6 100644
+> --- a/drivers/mfd/intel-lpss-pci.c
+> +++ b/drivers/mfd/intel-lpss-pci.c
+> @@ -17,6 +17,15 @@
+>
+>  #include "intel-lpss.h"
+>
+> +/* Some DSDTs have an unused GEXP ACPI device conflicting with I2C4 resources */
+> +static const struct pci_device_id ignore_resource_conflicts_ids[] = {
+> +       /* Microsoft Surface Go (version 1) I2C4 */
+> +       { PCI_DEVICE_SUB(0x8086, 0x9d64, 0x152d, 0x1182), },
+> +       /* Microsoft Surface Go 2 I2C4 */
+> +       { PCI_DEVICE_SUB(0x8086, 0x9d64, 0x152d, 0x1237), },
 
-I'm in To: and everyone else is in Cc? I don't even have the hardware.
-Adding Linus just in case, although the change seems correct.
+Can we use PCI_VENDOR_ID_INTEL?
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+> +       { }
+> +};
+> +
+>  static int intel_lpss_pci_probe(struct pci_dev *pdev,
+>                                 const struct pci_device_id *id)
+>  {
+> @@ -35,6 +44,9 @@ static int intel_lpss_pci_probe(struct pci_dev *pdev,
+>         info->mem = &pdev->resource[0];
+>         info->irq = pdev->irq;
+>
+> +       if (pci_match_id(ignore_resource_conflicts_ids, pdev))
+> +               info->ignore_resource_conflicts = true;
+> +
+>         pdev->d3cold_delay = 0;
+>
+>         /* Probably it is enough to set this for iDMA capable devices only */
+> diff --git a/drivers/mfd/intel-lpss.c b/drivers/mfd/intel-lpss.c
+> index 0e15afc39f54..cfbee2cfba6b 100644
+> --- a/drivers/mfd/intel-lpss.c
+> +++ b/drivers/mfd/intel-lpss.c
+> @@ -401,6 +401,7 @@ int intel_lpss_probe(struct device *dev,
+>                 return ret;
+>
+>         lpss->cell->swnode = info->swnode;
+> +       lpss->cell->ignore_resource_conflicts = info->ignore_resource_conflicts;
+>
+>         intel_lpss_init_dev(lpss);
+>
+> diff --git a/drivers/mfd/intel-lpss.h b/drivers/mfd/intel-lpss.h
+> index 22dbc4aed793..062ce95b68b9 100644
+> --- a/drivers/mfd/intel-lpss.h
+> +++ b/drivers/mfd/intel-lpss.h
+> @@ -19,6 +19,7 @@ struct software_node;
+>
+>  struct intel_lpss_platform_info {
+>         struct resource *mem;
+> +       bool ignore_resource_conflicts;
+>         int irq;
+>         unsigned long clk_rate;
+>         const char *clk_con_id;
+> --
+> 2.33.1
+>
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

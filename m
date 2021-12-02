@@ -2,95 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86608466677
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 409EC466679
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348824AbhLBPcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 10:32:10 -0500
-Received: from srv6.fidu.org ([159.69.62.71]:50240 "EHLO srv6.fidu.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238168AbhLBPcI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 10:32:08 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by srv6.fidu.org (Postfix) with ESMTP id 77294C80089;
-        Thu,  2 Dec 2021 16:28:44 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
-Received: from srv6.fidu.org ([127.0.0.1])
-        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10026)
-        with LMTP id T43BbA8HVVIw; Thu,  2 Dec 2021 16:28:44 +0100 (CET)
-Received: from wsembach-tuxedo.fritz.box (host-212-18-30-247.customer.m-online.net [212.18.30.247])
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by srv6.fidu.org (Postfix) with ESMTPA id 26010C80086;
-        Thu,  2 Dec 2021 16:28:44 +0100 (CET)
-From:   Werner Sembach <wse@tuxedocomputers.com>
-To:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ALSA: hda/realtek: Fix quirk for TongFang PHxTxX1
-Date:   Thu,  2 Dec 2021 16:28:43 +0100
-Message-Id: <20211202152843.818617-1-wse@tuxedocomputers.com>
-X-Mailer: git-send-email 2.25.1
+        id S1358956AbhLBPdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 10:33:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238168AbhLBPdS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 10:33:18 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA990C06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 07:29:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AItHeJ0oln2JoDLNrVD++S/qW9cwrMAx59j/XHAQAoM=; b=rk10OiZeU0ko0E7iakmFGjmT8e
+        vVs8pF6SY3WYxgE8zXdFESHOyTaVeYqtccl3sJy3YRwtQE8adzZc3Oj+fYGkBfydqloGZfu6sdz7p
+        k728ejXrBNgUgX6FfIJtOAvJ9NvVMhKcI5yM5qnqZhjn/5y9Pf+ADBeVlxKXK+W0g25/B1Vz9zhv0
+        KriHA+LDC0ejP9vLW7DwydTEWr5Fs+M7HLG/4tMgFVTraWkU9B0/1LhFLTa0IMpe3sQOxWvYd21cd
+        eXJGeK5mWMpUfk2myeNjsMCfZa/Go1eBRP20L6mtc3rqNt0RsGcdrc443ONJ4omMBEXOd7TGe0DGR
+        nlaxG3JA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mso1r-004VWo-LJ; Thu, 02 Dec 2021 15:29:47 +0000
+Date:   Thu, 2 Dec 2021 15:29:47 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Bixuan Cui <cuibixuan@linux.alibaba.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        w@1wt.eu, keescook@chromium.org
+Subject: Re: [PATCH -next] mm: delete oversized WARN_ON() in kvmalloc() calls
+Message-ID: <YajmawzehKqR+j0v@casper.infradead.org>
+References: <1638410784-48646-1-git-send-email-cuibixuan@linux.alibaba.com>
+ <20211201192643.ecb0586e0d53bf8454c93669@linux-foundation.org>
+ <Yajk/oVypyUFTtgd@unreal>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yajk/oVypyUFTtgd@unreal>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes the SND_PCI_QUIRK(...) of the TongFang PHxTxX1 barebone. This
-fixes the issue of sound not working after s3 suspend.
+On Thu, Dec 02, 2021 at 05:23:42PM +0200, Leon Romanovsky wrote:
+> The problem is that this WARN_ON() is triggered by the users.
 
-When waking up from s3 suspend the Coef 0x10 is set to 0x0220 instead of
-0x0020. Setting the value manually makes the sound work again. This patch
-does this automatically.
+... or the problem is that you don't do a sanity check between the user
+and the MM system.  I mean, that's what this conversation is about --
+is it a bug to be asking for this much memory in the first place?
 
-While being on it, I also fixed the comment formatting of the quirk.
+> At least in the RDMA world, users can provide huge sizes and they expect
+> to get plain -ENOMEM and not dump stack, because it happens indirectly
+> to them.
+> 
+> In our case, these two kvcalloc() generates WARN_ON().
+> 
+> 		umem_odp->pfn_list = kvcalloc(
+> 			npfns, sizeof(*umem_odp->pfn_list), GFP_KERNEL);
 
-Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-Cc: <stable@vger.kernel.org>
----
- sound/pci/hda/patch_realtek.c | 25 ++++++++++++++-----------
- 1 file changed, 14 insertions(+), 11 deletions(-)
-
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 9ce7457533c96..d3a16843c7afd 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -6503,22 +6503,25 @@ static void alc287_fixup_legion_15imhg05_speakers(struct hda_codec *codec,
- /* for alc285_fixup_ideapad_s740_coef() */
- #include "ideapad_s740_helper.c"
- 
-+static const struct coef_fw alc256_fixup_tongfang_reset_persistent_settings_coefs[] = {
-+	WRITE_COEF(0x10, 0x0020), WRITE_COEF(0x24, 0x0000), WRITE_COEF(0x26, 0x0000),
-+	WRITE_COEF(0x29, 0x3000), WRITE_COEF(0x37, 0xfe05), WRITE_COEF(0x45, 0x5089),
-+	{}
-+};
-+
- static void alc256_fixup_tongfang_reset_persistent_settings(struct hda_codec *codec,
- 							    const struct hda_fixup *fix,
- 							    int action)
- {
- 	/*
--	* A certain other OS sets these coeffs to different values. On at least one TongFang
--	* barebone these settings might survive even a cold reboot. So to restore a clean slate the
--	* values are explicitly reset to default here. Without this, the external microphone is
--	* always in a plugged-in state, while the internal microphone is always in an unplugged
--	* state, breaking the ability to use the internal microphone.
--	*/
--	alc_write_coef_idx(codec, 0x24, 0x0000);
--	alc_write_coef_idx(codec, 0x26, 0x0000);
--	alc_write_coef_idx(codec, 0x29, 0x3000);
--	alc_write_coef_idx(codec, 0x37, 0xfe05);
--	alc_write_coef_idx(codec, 0x45, 0x5089);
-+	 * A certain other OS sets these coeffs to different values. On at least
-+	 * one TongFang barebone these settings might survive even a cold
-+	 * reboot. So to restore a clean slate the values are explicitly reset
-+	 * to default here. Without this, the external microphone is always in a
-+	 * plugged-in state, while the internal microphone is always in an
-+	 * unplugged state, breaking the ability to use the internal microphone.
-+	 */
-+	alc_process_coef_fw(codec, alc256_fixup_tongfang_reset_persistent_settings_coefs);
- }
- 
- static const struct coef_fw alc233_fixup_no_audio_jack_coefs[] = {
--- 
-2.25.1
+Does it really make sense for the user to specify 2^31 PFNs in a single
+call?  I mean, that's 8TB of memory.  Should RDMA put its own limit
+in here, or should it rely on kvmalloc returning -ENOMEM?
 

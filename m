@@ -2,126 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9782A466DFB
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 00:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5128D466DF8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 00:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377598AbhLBXrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 18:47:45 -0500
-Received: from mga18.intel.com ([134.134.136.126]:54125 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232981AbhLBXro (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 18:47:44 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="223745010"
-X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
-   d="scan'208";a="223745010"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 15:44:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
-   d="scan'208";a="561399309"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga008.fm.intel.com with ESMTP; 02 Dec 2021 15:44:13 -0800
-Date:   Thu, 2 Dec 2021 15:43:07 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/7] thermal: intel: hfi: Handle CPU hotplug events
-Message-ID: <20211202234307.GA334@ranerica-svr.sc.intel.com>
-References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
- <20211106013312.26698-5-ricardo.neri-calderon@linux.intel.com>
- <CAJZ5v0gemmV1Lz3+9iKz1eiXtkyDc3+4+po4Eidchzk+J2=ceA@mail.gmail.com>
- <20211130132137.GA25524@ranerica-svr.sc.intel.com>
- <CAJZ5v0iXBn1o9ZFzNaYU4ft=JcRfNv7AJ8Sq-9HbBJbp60LpWQ@mail.gmail.com>
+        id S1377566AbhLBXqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 18:46:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232981AbhLBXqr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 18:46:47 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D33C06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 15:43:23 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id bu11so1179972qvb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 15:43:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=NRHD8v+tRRUHCg4eVJNU2+6QjpHDHulBgn/4Ya8pJhM=;
+        b=aX7WenwnFgVumYBbGyaHgnNTJ7wSb7HEj0fPTxLMGTQJJkVOY/CxBp10dNxZR0DSp5
+         SobGbBdr4AWwVYcXbmxu8O9OU+r54RLY3I4Dpc/f3wm6xTLR1riK79dd070b0xnNQf0y
+         aM6KUPE3KKsNW/WIHbwkDIUV8Ym8Bac1c1dxTw10rzLxZbS3P8ibgNPsZJKNPuDHNKPa
+         XtckZr3Ht347w8SB1RwJbggxyoMvB/WxyZGGk+4e6N9ZIdf2JZni7OeKyg3j2Nc0XyBa
+         xQg+5aXscVEl2oxKA+2vVa00QHYfFmVqKnw8ChvuGVSj+WowY+B7TxwmahXla5MU2VHE
+         aOeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NRHD8v+tRRUHCg4eVJNU2+6QjpHDHulBgn/4Ya8pJhM=;
+        b=AlZPEcnr419o9XLM+56ksP5HFXXn3U4HRS4mBf71qNV/wxWk+mS1hhjLDYdV4uYMCq
+         Qz+K2kTeegKfK3Y0lb1/mrvO7Ohu8DZtTLb+UguAodK3COho5VrW4p4PpltGt3PZLZe6
+         dgTj/+azmJCQMHEV0+BmVnK1LNg47t4y1wPHSaKDGqo0+CANxDAoZHfKqY6y3tfiSjRq
+         XIq9KbbRtmo1a7Chbi7Cv3U0iX+73Urcjur9jY3PSCsHc1u+q/OxxWRBJdZFKurOeKnr
+         fJW6vlqpET+g6WD737RUaTJdgGjUk+ILdKDOi/eXlCaci+6Ie6kuefMK2UNo1JT4I8mz
+         Ulaw==
+X-Gm-Message-State: AOAM5327wtIqwaF/8+Fuwi+Ol+oVgX+MoThuXK6V8XCX8ly3NZjh4x5A
+        d+munpEcHmoF2mUT451bQvdSpYUA8AHYfQ==
+X-Google-Smtp-Source: ABdhPJx3c5+v5PHgltg8FiV34qsEJ3E0Bw5hri3ElAyjV5b9D6e7I/y3MxZ7ggfYBmxa7XokUXXLXg==
+X-Received: by 2002:ad4:4752:: with SMTP id c18mr16053040qvx.96.1638488602916;
+        Thu, 02 Dec 2021 15:43:22 -0800 (PST)
+Received: from ?IPV6:2804:431:c7cb:30f8:3030:59d3:d31c:ed39? ([2804:431:c7cb:30f8:3030:59d3:d31c:ed39])
+        by smtp.gmail.com with ESMTPSA id o1sm998201qtw.1.2021.12.02.15.43.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 15:43:22 -0800 (PST)
+Message-ID: <855a47d1-a89c-bbc8-7ddd-b89104c6138a@linaro.org>
+Date:   Thu, 2 Dec 2021 20:43:19 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0iXBn1o9ZFzNaYU4ft=JcRfNv7AJ8Sq-9HbBJbp60LpWQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
+Content-Language: en-US
+To:     Rich Felker <dalias@libc.org>, Zack Weinberg <zack@owlfolio.org>
+Cc:     linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        libc-alpha@sourceware.org, linux-kernel@vger.kernel.org,
+        ltp@lists.linux.it
+References: <YZvIlz7J6vOEY+Xu@yuki>
+ <c5993ee9-1b5d-4469-9c0e-8d4e0fbd575a@www.fastmail.com>
+ <20211202153422.GH7074@brightrain.aerifal.cx>
+ <20211202232954.GI7074@brightrain.aerifal.cx>
+From:   Adhemerval Zanella <adhemerval.zanella@linaro.org>
+In-Reply-To: <20211202232954.GI7074@brightrain.aerifal.cx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 02:32:42PM +0100, Rafael J. Wysocki wrote:
-> On Tue, Nov 30, 2021 at 2:22 PM Ricardo Neri
-> <ricardo.neri-calderon@linux.intel.com> wrote:
-> >
-> > On Wed, Nov 24, 2021 at 03:48:49PM +0100, Rafael J. Wysocki wrote:
-> > > On Sat, Nov 6, 2021 at 2:34 AM Ricardo Neri
-> > > <ricardo.neri-calderon@linux.intel.com> wrote:
-> 
-> [cut]
-> 
-> > > > +/**
-> > > > + * intel_hfi_offline() - Disable HFI on @cpu
-> > > > + * @cpu:       CPU in which the HFI will be disabled
-> > > > + *
-> > > > + * Remove @cpu from those covered by its HFI instance.
-> > > > + *
-> > > > + * On some processors, hardware remembers previous programming settings even
-> > > > + * after being reprogrammed. Thus, keep HFI enabled even if all CPUs in the
-> > > > + * die/package of @cpu are offline. See note in intel_hfi_online().
-> > > > + */
-> > > > +void intel_hfi_offline(unsigned int cpu)
-> > > > +{
-> > > > +       struct cpumask *die_cpumask = topology_core_cpumask(cpu);
-> > > > +       struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, cpu);
-> > > > +       struct hfi_instance *hfi_instance;
-> > > > +
-> > > > +       if (!boot_cpu_has(X86_FEATURE_INTEL_HFI))
-> > > > +               return;
-> > > > +
-> > > > +       hfi_instance = info->hfi_instance;
-> > > > +       if (!hfi_instance)
-> > > > +               return;
-> > > > +
-> > > > +       if (!hfi_instance->initialized)
-> > > > +               return;
-> > > > +
-> > > > +       mutex_lock(&hfi_lock);
-> > > > +
-> > > > +       /*
-> > > > +        * We were using the core cpumask of @cpu to track CPUs in the same
-> > > > +        * die/package. Now it is going offline and we need to find another
-> > > > +        * CPU we can use.
-> > > > +        */
-> > > > +       if (die_cpumask == hfi_instance->cpus) {
-> > > > +               int new_cpu;
-> > > > +
-> > > > +               new_cpu = cpumask_any_but(hfi_instance->cpus, cpu);
-> > > > +               if (new_cpu >= nr_cpu_ids)
-> > > > +                       /* All other CPUs in the package are offline. */
-> > > > +                       hfi_instance->cpus = NULL;
-> > > > +               else
-> > > > +                       hfi_instance->cpus = topology_core_cpumask(new_cpu);
-> > >
-> > > Hmmm.  Is topology_core_cpumask() updated when CPUs go offline and online?
-> >
-> > Yes. A CPU going offline is cleared from its siblings' cpumask [1] and its own [2]
-> > in remove_siblinginfo() via cpu_disable_common(). A CPU going online is set
-> > in its siblings' cpumask and its own in set_cpu_sibling_map() [3].
-> 
-> OK, so it is necessary to ensure that intel_hfi_offline() will always
-> run after remove_siblinginfo() so it sees the updated mask.  How do we
-> ensure that?
 
-I don't think that is possible. remove_siblinginfo() is called from
-CPUHP_TEARDOWN_CPU, which always happens after CPUHP_AP_OFFLINE, if I
-understand correctly.
 
-I guess that I will need to use a local cpumask as other drivers do.
+On 02/12/2021 20:29, Rich Felker wrote:
+> On Thu, Dec 02, 2021 at 10:34:23AM -0500, Rich Felker wrote:
+>> On Mon, Nov 22, 2021 at 10:19:59PM +0000, Zack Weinberg via Libc-alpha wrote:
+>>> On Mon, Nov 22, 2021, at 4:43 PM, Cyril Hrubis wrote:
+>>>> This changes the __u64 and __s64 in userspace on 64bit platforms from
+>>>> long long (unsigned) int to just long (unsigned) int in order to match
+>>>> the uint64_t and int64_t size in userspace.
+>>> ....
+>>>> +
+>>>> +#include <asm/bitsperlong.h>
+>>>> +
+>>>>  /*
+>>>> - * int-ll64 is used everywhere now.
+>>>> + * int-ll64 is used everywhere in kernel now.
+>>>>   */
+>>>> -#include <asm-generic/int-ll64.h>
+>>>> +#if __BITS_PER_LONG == 64 && !defined(__KERNEL__)
+>>>> +# include <asm-generic/int-l64.h>
+>>>> +#else
+>>>> +# include <asm-generic/int-ll64.h>
+>>>> +#endif
+>>>
+>>> I am all for matching __uN / __sN to uintN_t / intN_t in userspace, but may I suggest the technically simpler and guaranteed-to-be-accurate
+>>>
+>>>  /*
+>>> - * int-ll64 is used everywhere now.
+>>> + * int-ll64 is used everywhere in kernel now.
+>>> + * In user space match <stdint.h>.
+>>>   */
+>>> +#ifdef __KERNEL__
+>>>  # include <asm-generic/int-ll64.h>
+>>> +#elif __has_include (<bits/types.h>)
+>>> +# include <bits/types.h>
+>>> +typedef __int8_t __s8;
+>>> +typedef __uint8_t __u8;
+>>> +typedef __int16_t __s16;
+>>> +typedef __uint16_t __u16;
+>>> +typedef __int32_t __s32;
+>>> +typedef __uint32_t __u32;
+>>> +typedef __int64_t __s64;
+>>> +typedef __uint64_t __u64;
+>>> +#else
+>>> +# include <stdint.h>
+>>> +typedef int8_t __s8;
+>>> +typedef uint8_t __u8;
+>>> +typedef int16_t __s16;
+>>> +typedef uint16_t __u16;
+>>> +typedef int32_t __s32;
+>>> +typedef uint32_t __u32;
+>>> +typedef int64_t __s64;
+>>> +typedef uint64_t __u64;
+>>> +#endif
+>>>
+>>> The middle clause could be dropped if we are okay with all uapi
+>>> headers potentially exposing the non-implementation-namespace names
+>>> defined by <stdint.h>. I do not know what the musl libc equivalent
+>>> of <bits/types.h> is.
+>>
+>> We (musl) don't have an equivalent header or __-prefixed versions of
+>> these types.
+>>
+>> FWIW I don't think stdint.h exposes anything that would be problematic
+>> alongside arbitrary use of kernel headers.
+> 
+> Also, per glibc's bits/types.h:
+> 
+> /*
+>  * Never include this file directly; use <sys/types.h> instead.
+>  */
+> 
+> it's not permitted (not supported usage) to #include <bits/types.h>.
+> So I think the above patch is wrong for glibc too. As I understand it,
+> this is general policy for bits/* -- they're only intended to work as
+> included by the libc system headers, not directly by something else.
 
-Thanks and BR,
-Ricardo
+You are right, the idea is to allow glibc to create and remove internal headers.

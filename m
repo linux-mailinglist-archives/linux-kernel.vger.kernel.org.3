@@ -2,132 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC218466E03
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 00:49:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDA6466E06
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 00:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377629AbhLBXwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 18:52:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377625AbhLBXwK (ORCPT
+        id S1377631AbhLBXyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 18:54:46 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:28314 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235895AbhLBXyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 18:52:10 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46156C06174A;
-        Thu,  2 Dec 2021 15:48:47 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638488924;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5q90D0mcSKeapelm6wFaiR6ZRDLoVIIybSkt7RG4TXA=;
-        b=HVFKNgAmw8BpXnSaXm6dFdAPqCkbeylbedN2Db6encPLZZF1WTUOFc1hT7OTNqRFBqi2ja
-        HuNDUMebJkw5CbR9kQItS/7RPMxCEs38lmlsFaadF+nTukDGTmFmWiJ7UCYBWEpkSgKIPS
-        zj9Xj6SIGep3Nku7VpeyDZM4WXKM023cucgvW62ErLO9pBqg6OZELI5GuYAykzx9vspRD0
-        A78XvX6dPZV0CMK2uZCjuFfKnzvspHuSuRi4on/cAMWxr7pR3z4JIU/kFD+TtLtZIsWygY
-        08S+SGsDaP45NBmhfg4mrGIx0li34VB0ezuuONNVnRCADlIz2QfWJuBiNhch1g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638488924;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5q90D0mcSKeapelm6wFaiR6ZRDLoVIIybSkt7RG4TXA=;
-        b=BZTi2VWIYlscz72ONISvig/5FIrXyD1ipJCY35f2BaYWpU95nt3gG+RtzTboK/uGCDqJpa
-        lZJIY7ORK2FjuJDw==
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2] x86: Skip WBINVD instruction for VM guest
-In-Reply-To: <20211202222109.pcsgm2jska3obvmx@black.fi.intel.com>
-References: <YZPbQVwWOJCrAH78@zn.tnic>
- <20211119040330.4013045-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <87pmqpjcef.ffs@tglx> <20211202222109.pcsgm2jska3obvmx@black.fi.intel.com>
-Date:   Fri, 03 Dec 2021 00:48:43 +0100
-Message-ID: <87lf126010.ffs@tglx>
+        Thu, 2 Dec 2021 18:54:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638489082; x=1670025082;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=5n6q2/Rbj2ukEZYtRo5At8pfzMCBHu1MQ/yClJAd4kY=;
+  b=kSRNCG/AMNbno2FJeFDDjV2Nx0FMwAA7amiAo42j19Bi2YZLi0EM50Zm
+   1gdYq57up1mVeTxejUu1Wc6XlgbSOR4Rnw/+UL9bRp9TZWpEFJazGA0jK
+   1muKsahL0ha6hvanCWktoe5kgI4xXZTC6E+N0yXdgItY5FdVYGgA6SQwg
+   I=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 02 Dec 2021 15:51:22 -0800
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 15:51:22 -0800
+Received: from [10.46.160.247] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 2 Dec 2021
+ 15:51:20 -0800
+Subject: Re: [PATCH] spmi: pmic-arb: Add support for PMIC v7
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Dai <daidavid1@codeaurora.org>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        David Collins <quic_collinsd@quicinc.com>
+References: <20211201072718.3969011-1-vkoul@kernel.org>
+ <20211202230624.C05F3C00446@smtp.kernel.org>
+From:   David Collins <quic_collinsd@quicinc.com>
+Message-ID: <9161450a-40e0-c84f-f529-c903d6f1d722@quicinc.com>
+Date:   Thu, 2 Dec 2021 15:51:18 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20211202230624.C05F3C00446@smtp.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kirill,
+On 12/2/21 3:06 PM, Stephen Boyd wrote:
+> Quoting Vinod Koul (2021-11-30 23:27:18)
+>> @@ -1169,8 +1270,12 @@ static int spmi_pmic_arb_probe(struct platform_device *pdev)
+>>         pmic_arb = spmi_controller_get_drvdata(ctrl);
+>>         pmic_arb->spmic = ctrl;
+>>  
+>> +       /*
+>> +        * Don't use devm_ioremap_resource() as the resources are shared in
+>> +        * PMIC v7 onwards, so causing failure when mapping
+>> +        */
+>>         res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "core");
+>> -       core = devm_ioremap_resource(&ctrl->dev, res);
+>> +       core = devm_ioremap(&ctrl->dev, res->start, resource_size(res));
+> 
+> What does this mean? We have two nodes in DT that have the same reg
+> properties? How does that work?
 
-On Fri, Dec 03 2021 at 01:21, Kirill A. Shutemov wrote:
-> On Thu, Nov 25, 2021 at 01:40:24AM +0100, Thomas Gleixner wrote:
->> Kuppuswamy,
->> Either that or you provide patches with arguments which are based on
->> proper analysis and not on 'appears to' observations.
->
-> I think the right solution to the WBINVD would be to add a #VE handler
-> that does nothing. We don't have a reasonable way to handle it from within
-> the guest. We can call the VMM in hope that it would handle it, but VMM is
-> untrusted and it can ignore the request.
->
-> Dave suggested that we need to do code audit to make sure that there's no
-> user inside TDX guest environment that relies on WBINVD to work correctly.
->
-> Below is full call tree of WBINVD. It is substantially larger than I
-> anticipated from initial grep.
->
-> Conclusions:
->
->   - Most of callers are in ACPI code on changing S-states. Ignoring cache
->     flush for S-state change on virtual machine should be safe.
->
->   - The only WBINVD I was able to trigger is on poweroff from ACPI code.
->     Reboot also should trigger it, but for some reason I don't see it.
->
->   - Few caller in CPU offline code. TDX does not allowed to offline CPU as
->     we cannot bring it back -- we don't have SIPI. And even if offline
->     works for vCPU it should be safe to ignore WBINVD there.
->
->   - NVDIMMs are not supported inside TDX. If it will change we would need
->     to deal with cache flushing for this case. Hopefully, we would be able
->     to avoid WBINVD.
->
->   - Cache QoS and MTRR use WBINVD. They are disabled in TDX, but it is
->     controlled by VMM if the feature is advertised. We would need to
->     filter CPUID/MSRs to make sure VMM would not mess with them.
->
-> Is it good enough justification for do-nothing #VE WBINVD handler?
+PMIC Arbiter v7 has two SPMI bus master interfaces.  These are used to
+communicate with two sets of PMICs.  The SPMI interfaces operate
+independently; however, they share some register address ranges (e.g.
+one common one is used for APID->PPID mapping).  The most
+straightforward way to handle this is to treat them as two independent
+top-level DT devices.
 
-first of all thank you very much for this very profound analysis.
+In this case the "cnfg" address is used in the DT node name as that is
+unique between the two instances.
 
-This is really what I was asking for and you probably went even a step
-deeper than that. Very appreciated.
+Here are the DT nodes used downstream on a target with PMIC Arbiter v7:
 
-What we should do instead of doing a wholesale let's ignore WBINVD is to
-have a separate function/macro:
+spmi0_bus: qcom,spmi@c42d000 {
+	compatible = "qcom,spmi-pmic-arb";
+	reg = <0xc42d000 0x4000>,
+	      <0xc400000 0x3000>,
+	      <0xc500000 0x400000>,
+	      <0xc440000 0x80000>,
+	      <0xc4c0000 0x10000>;
+	reg-names = "cnfg", "core", "chnls", "obsrvr", "intr";
+	interrupts-extended = <&pdc 1 IRQ_TYPE_LEVEL_HIGH>;
+	interrupt-names = "periph_irq";
+	interrupt-controller;
+	#interrupt-cells = <4>;
+	#address-cells = <2>;
+	#size-cells = <0>;
+	cell-index = <0>;
+	qcom,channel = <0>;
+	qcom,ee = <0>;
+	qcom,bus-id = <0>;
+};
 
- ACPI_FLUSH_CPU_CACHE_PHYS()
+spmi1_bus: qcom,spmi@c432000 {
+	compatible = "qcom,spmi-pmic-arb";
+	reg = <0xc432000 0x4000>,
+	      <0xc400000 0x3000>,
+	      <0xc500000 0x400000>,
+	      <0xc440000 0x80000>,
+	      <0xc4d0000 0x10000>;
+	reg-names = "cnfg", "core", "chnls", "obsrvr", "intr";
+	interrupts-extended = <&pdc 3 IRQ_TYPE_LEVEL_HIGH>;
+	interrupt-names = "periph_irq";
+	interrupt-controller;
+	#interrupt-cells = <4>;
+	#address-cells = <2>;
+	#size-cells = <0>;
+	cell-index = <0>;
+	qcom,channel = <0>;
+	qcom,ee = <0>;
+	qcom,bus-id = <1>;
+};
 
-and invoke that from the functions which are considered to be safe.
+Note the inclusion of a new DT property: "qcom,bus-id".  This was
+defined in a DT binding patch that isn't present in Vinod's submission.
+Here is its definition:
 
-That would default to ACPI_FLUSH_CPU_CACHE() for other architecures
-obviously.
+- qcom,bus-id : Specifies which SPMI bus instance to use.  This property
+		is only applicable for PMIC arbiter version 7 and
+		beyond.
+		Support values: 0 = primary bus, 1 = secondary bus
+		Assumed to be 0 if unspecified.
 
-Then you can rightfully do:
-
-#define ACPI_FLUSH_CPU_CACHE_PHYS()     \
-        if (!cpu_feature_enabled(XXX))	\
-        	wbinvd();               \              
-                
-where $XXX might be FEATURE_TDX_GUEST for paranoia sake and then
-extended to X86_FEATURE_HYPERVISOR if everyone agrees.
-
-Then you have the #VE handler which just acts on any other wbinvd
-invocation via warn, panic, whatever, no?
-
-Thanks,
-
-        tglx
-
+Take care,
+David

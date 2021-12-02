@@ -2,35 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E43CC465AD0
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 646B5465ADA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:31:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354416AbhLBAdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 19:33:31 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60058 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345008AbhLBAcl (ORCPT
+        id S1344318AbhLBAeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 19:34:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354281AbhLBAcm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 19:32:41 -0500
+        Wed, 1 Dec 2021 19:32:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D78C06174A;
+        Wed,  1 Dec 2021 16:29:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C24A6B821A1;
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE616B82194;
         Thu,  2 Dec 2021 00:29:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35F89C84000;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C51FC634BA;
         Thu,  2 Dec 2021 00:29:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1638404955;
-        bh=1307fJQLUiGcVK9ulIi8SIucgepBGPIcipaEEWkmZNY=;
+        bh=81RWRinGuwUqHetp8mypFq7+tGh7b8+qWpURKMsoVvc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OLU3giOIvwMArLpALXQ/Sez22hcWEuHdEstc8E0W5nATC1iq+703Z/FZTwIo/Puj5
-         xXrLoNBG3WRmycPchERv/ChQehcsST3StUp/wuUAlOxiUv+IXBjvw/nu9vF3kF+fVO
-         1zxGLNqqMRoUoLFD0bOepCtCufxNTNT3kLdxGy9221E2s34dBgg3RH2jYyymFWIITT
-         rIyTtAbhJ5aiEva/Jv70Mm3bpKqcM97GjjHF0jiOitfG6hBeJVNKFPq2RwlSIfdqgz
-         blG8hqFFLTaeQWw9x8YfVWkZeJohFACotXNmeG7UZ0UJTMpjudPgIIkDNaoqlfawpa
-         o+qdmvE7fi5Mw==
+        b=fy4ELZmBp2sSu8AzLuMwL5/tBib4mgcCrlVhRnZixca8YTr18oCQG9Keaz8nowgE0
+         Pa2rGKQjNtqKfgZIxqXJxNZiuANG1G+xdDjwjxM2ob2WmTCVI/WulY7Vt+yGEYEYYK
+         9Kykw6pvF2LwYIjrtm181khF/cK5CH/dl8tyGz/WjCmRjopGboZ4QxxQfNgVDXQV2f
+         ZgUa5fw50xLIKUkteO2wEnTegwdIjdb3fuw4BM4E/apbVk4kxV2G3OP4paH3/gquJ8
+         upu/B9Fn5oplDtnFsGcyNLzuwmuz/OYIAViili1PQQY1uaJc5rl/bM4m7BjwG0/Kqc
+         x8NEw5kSgZGeQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7E6535C14E0; Wed,  1 Dec 2021 16:29:14 -0800 (PST)
+        id 803FF5C14E6; Wed,  1 Dec 2021 16:29:14 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
@@ -45,9 +48,9 @@ Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
         Uladzislau Rezki <urezki@gmail.com>,
         Juri Lelli <juri.lelli@redhat.com>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 17/18] rcu/nocb: Allow empty "rcu_nocbs" kernel parameter
-Date:   Wed,  1 Dec 2021 16:29:11 -0800
-Message-Id: <20211202002912.3127710-17-paulmck@kernel.org>
+Subject: [PATCH rcu 18/18] rcu/nocb: Merge rcu_spawn_cpu_nocb_kthread() and rcu_spawn_one_nocb_kthread()
+Date:   Wed,  1 Dec 2021 16:29:12 -0800
+Message-Id: <20211202002912.3127710-18-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20211202002848.GA3127439@paulmck-ThinkPad-P17-Gen-1>
 References: <20211202002848.GA3127439@paulmck-ThinkPad-P17-Gen-1>
@@ -59,17 +62,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Frederic Weisbecker <frederic@kernel.org>
 
-Allow the rcu_nocbs kernel parameter to be specified just by itself,
-without specifying any CPUs.  This allows systems administrators to use
-"rcu_nocbs" to specify that none of the CPUs are to be offloaded at boot
-time, but than any of them may be offloaded at runtime via cpusets.
-
-In contrast, if the "rcu_nocbs" or "nohz_full" kernel parameters are not
-specified at all, then not only are none of the CPUs offloaded at boot,
-none of them can be offloaded at runtime, either.
-
-While in the area, modernize the description of the "rcuo" kthreads'
-naming scheme.
+The rcu_spawn_one_nocb_kthread() function is called only from
+rcu_spawn_cpu_nocb_kthread().  Therefore, inline the former into
+the latter, saving a few lines of code.
 
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
@@ -80,83 +75,47 @@ Cc: Joel Fernandes <joel@joelfernandes.org>
 Tested-by: Juri Lelli <juri.lelli@redhat.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- .../admin-guide/kernel-parameters.txt         | 37 ++++++++++++-------
- kernel/rcu/tree_nocb.h                        | 10 +++--
- 2 files changed, 30 insertions(+), 17 deletions(-)
+ kernel/rcu/tree_nocb.h | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 9725c546a0d46..8b5da10f932e2 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -4343,19 +4343,30 @@
- 				Disable the Correctable Errors Collector,
- 				see CONFIG_RAS_CEC help text.
- 
--	rcu_nocbs=	[KNL]
--			The argument is a cpu list, as described above.
--
--			In kernels built with CONFIG_RCU_NOCB_CPU=y, set
--			the specified list of CPUs to be no-callback CPUs.
--			Invocation of these CPUs' RCU callbacks will be
--			offloaded to "rcuox/N" kthreads created for that
--			purpose, where "x" is "p" for RCU-preempt, and
--			"s" for RCU-sched, and "N" is the CPU number.
--			This reduces OS jitter on the offloaded CPUs,
--			which can be useful for HPC and real-time
--			workloads.  It can also improve energy efficiency
--			for asymmetric multiprocessors.
-+	rcu_nocbs[=cpu-list]
-+			[KNL] The optional argument is a cpu list,
-+			as described above.
-+
-+			In kernels built with CONFIG_RCU_NOCB_CPU=y,
-+			enable the no-callback CPU mode, which prevents
-+			such CPUs' callbacks from being invoked in
-+			softirq context.  Invocation of such CPUs' RCU
-+			callbacks will instead be offloaded to "rcuox/N"
-+			kthreads created for that purpose, where "x" is
-+			"p" for RCU-preempt, "s" for RCU-sched, and "g"
-+			for the kthreads that mediate grace periods; and
-+			"N" is the CPU number. This reduces OS jitter on
-+			the offloaded CPUs, which can be useful for HPC
-+			and real-time workloads.  It can also improve
-+			energy efficiency for asymmetric multiprocessors.
-+
-+			If a cpulist is passed as an argument, the specified
-+			list of	CPUs is set to no-callback mode from boot.
-+
-+			Otherwise, if the '=' sign and the cpulist
-+			arguments are omitted, no CPU will be set to
-+			no-callback mode from boot but the mode may be
-+			toggled at runtime via cpusets.
- 
- 	rcu_nocb_poll	[KNL]
- 			Rather than requiring that offloaded CPUs
 diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index f580a6b2e74e3..0c1802ce4764c 100644
+index 0c1802ce4764c..eeafb546a7a09 100644
 --- a/kernel/rcu/tree_nocb.h
 +++ b/kernel/rcu/tree_nocb.h
-@@ -66,14 +66,16 @@ static bool rcu_nocb_is_setup;
- static int __init rcu_nocb_setup(char *str)
+@@ -1233,12 +1233,15 @@ static void __init rcu_boot_init_nocb_percpu_data(struct rcu_data *rdp)
+  * rcuo CB kthread, spawn it.  Additionally, if the rcuo GP kthread
+  * for this CPU's group has not yet been created, spawn it as well.
+  */
+-static void rcu_spawn_one_nocb_kthread(int cpu)
++static void rcu_spawn_cpu_nocb_kthread(int cpu)
  {
- 	alloc_bootmem_cpumask_var(&rcu_nocb_mask);
--	if (cpulist_parse(str, rcu_nocb_mask)) {
--		pr_warn("rcu_nocbs= bad CPU range, all CPUs set\n");
--		cpumask_setall(rcu_nocb_mask);
-+	if (*str == '=') {
-+		if (cpulist_parse(++str, rcu_nocb_mask)) {
-+			pr_warn("rcu_nocbs= bad CPU range, all CPUs set\n");
-+			cpumask_setall(rcu_nocb_mask);
-+		}
- 	}
- 	rcu_nocb_is_setup = true;
- 	return 1;
- }
--__setup("rcu_nocbs=", rcu_nocb_setup);
-+__setup("rcu_nocbs", rcu_nocb_setup);
+ 	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
+ 	struct rcu_data *rdp_gp;
+ 	struct task_struct *t;
  
- static int __init parse_rcu_nocb_poll(char *arg)
- {
++	if (!rcu_scheduler_fully_active || !rcu_nocb_is_setup)
++		return;
++
+ 	/* If there already is an rcuo kthread, then nothing to do. */
+ 	if (rdp->nocb_cb_kthread)
+ 		return;
+@@ -1262,16 +1265,6 @@ static void rcu_spawn_one_nocb_kthread(int cpu)
+ 	WRITE_ONCE(rdp->nocb_gp_kthread, rdp_gp->nocb_gp_kthread);
+ }
+ 
+-/*
+- * If the specified CPU is a no-CBs CPU that does not already have its
+- * rcuo kthread, spawn it.
+- */
+-static void rcu_spawn_cpu_nocb_kthread(int cpu)
+-{
+-	if (rcu_scheduler_fully_active && rcu_nocb_is_setup)
+-		rcu_spawn_one_nocb_kthread(cpu);
+-}
+-
+ /*
+  * Once the scheduler is running, spawn rcuo kthreads for all online
+  * no-CBs CPUs.  This assumes that the early_initcall()s happen before
 -- 
 2.31.1.189.g2e36527f23
 

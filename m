@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97B42466250
+	by mail.lfdr.de (Postfix) with ESMTP id E1B66466251
 	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 12:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357323AbhLBLbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 06:31:02 -0500
-Received: from foss.arm.com ([217.140.110.172]:33842 "EHLO foss.arm.com"
+        id S1357343AbhLBLbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 06:31:04 -0500
+Received: from foss.arm.com ([217.140.110.172]:33858 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1357257AbhLBLbA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 06:31:00 -0500
+        id S1357329AbhLBLbD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 06:31:03 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 986851477;
-        Thu,  2 Dec 2021 03:27:38 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8BBA61435;
+        Thu,  2 Dec 2021 03:27:40 -0800 (PST)
 Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5DED23F7D7;
-        Thu,  2 Dec 2021 03:27:37 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 545ED3F7D7;
+        Thu,  2 Dec 2021 03:27:39 -0800 (PST)
 From:   Mark Rutland <mark.rutland@arm.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     andreyknvl@gmail.com, catalin.marinas@arm.com, dvyukov@google.com,
         glider@google.com, linux-kernel@vger.kernel.org,
         mark.rutland@arm.com, ryabinin.a.a@gmail.com, will@kernel.org
-Subject: [PATCH 1/3] kasan: move kasan_shadow_to_mem() to shared header
-Date:   Thu,  2 Dec 2021 11:27:29 +0000
-Message-Id: <20211202112731.3346975-2-mark.rutland@arm.com>
+Subject: [PATCH 2/3] arm64: mm: use die_kernel_fault() in do_mem_abort()
+Date:   Thu,  2 Dec 2021 11:27:30 +0000
+Message-Id: <20211202112731.3346975-3-mark.rutland@arm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211202112731.3346975-1-mark.rutland@arm.com>
 References: <20211202112731.3346975-1-mark.rutland@arm.com>
@@ -34,58 +34,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some arch code would like to convert a shadow address to a corresponding
-memory address, e.g. for better reporting when a fault is taken on a
-shadow access.
+If we take an unhandled fault from EL1, either:
 
-We already provide architectures with kasan_mem_to_shadow() and all the
-underlying constants, so we may as well allow them to use
-kasan_shadow_to_mem() rather than having to open-code this.
+a) The xFSC handler calls die_kernel_fault() directly. In this case,
+   die_kernel_fault() calls:
+
+   pr_alert(..., msg, addr);
+   mem_abort_decode(esr);
+   show_pte(addr);
+   die();
+   bust_spinlocks(0);
+   do_exit(SIGKILL);
+
+b) The xFSC handler returns to do_mem_abort(), indicating failure. In
+   this case, do_mem_abort() calls:
+
+   pr_alert(..., addr);
+   mem_abort_decode(esr);
+   show_pte(addr);
+   arm64_notify_die() {
+     die();
+   }
+
+This inconstency is unfortunatem, and in theory in case (b) registered
+notifiers can prevent us from terminating the faulting thread by
+returning NOTIFY_STOP, whereupon we'll end up returning from the fault,
+replaying, and almost certainly get stuck in a livelock spewing errors
+into dmesg. We don't expect notifers to fix things up, since we dump
+state to dmesg before invoking them, so it would be more sensible to
+consistently terminate the thread in this case.
+
+This patch has do_mem_abort() call die_kernel_fault() for unhandled
+faults taken from EL1. Where we would previously have logged a messafe
+of the form:
+
+| Unhandled fault at ${ADDR}
+
+... we will now log a message of the form:
+
+| Unable to handle kernel ${FAULT_NAME} at virtual address ${ADDR}
+
+... and we will consistently terminate the thread from which the fault
+was taken.
 
 Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Potapenko <glider@google.com>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
 ---
- include/linux/kasan.h | 6 ++++++
- mm/kasan/kasan.h      | 6 ------
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ arch/arm64/mm/fault.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-index d8783b682669..9059533e19c3 100644
---- a/include/linux/kasan.h
-+++ b/include/linux/kasan.h
-@@ -56,6 +56,12 @@ static inline void *kasan_mem_to_shadow(const void *addr)
- 		+ KASAN_SHADOW_OFFSET;
- }
+diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+index 9ae24e3b72be..b7b9caa41bc7 100644
+--- a/arch/arm64/mm/fault.c
++++ b/arch/arm64/mm/fault.c
+@@ -813,11 +813,8 @@ void do_mem_abort(unsigned long far, unsigned int esr, struct pt_regs *regs)
+ 	if (!inf->fn(far, esr, regs))
+ 		return;
  
-+static inline const void *kasan_shadow_to_mem(const void *shadow_addr)
-+{
-+	return (void *)(((unsigned long)shadow_addr - KASAN_SHADOW_OFFSET)
-+		<< KASAN_SHADOW_SCALE_SHIFT);
-+}
-+
- int kasan_add_zero_shadow(void *start, unsigned long size);
- void kasan_remove_zero_shadow(void *start, unsigned long size);
+-	if (!user_mode(regs)) {
+-		pr_alert("Unhandled fault at 0x%016lx\n", addr);
+-		mem_abort_decode(esr);
+-		show_pte(addr);
+-	}
++	if (!user_mode(regs))
++		die_kernel_fault(inf->name, addr, esr, regs);
  
-diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index aebd8df86a1f..9ec09154ceb1 100644
---- a/mm/kasan/kasan.h
-+++ b/mm/kasan/kasan.h
-@@ -213,12 +213,6 @@ struct kasan_free_meta *kasan_get_free_meta(struct kmem_cache *cache,
- 
- #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
- 
--static inline const void *kasan_shadow_to_mem(const void *shadow_addr)
--{
--	return (void *)(((unsigned long)shadow_addr - KASAN_SHADOW_OFFSET)
--		<< KASAN_SHADOW_SCALE_SHIFT);
--}
--
- static inline bool addr_has_metadata(const void *addr)
- {
- 	return (addr >= kasan_shadow_to_mem((void *)KASAN_SHADOW_START));
+ 	/*
+ 	 * At this point we have an unrecognized fault type whose tag bits may
 -- 
 2.30.2
 

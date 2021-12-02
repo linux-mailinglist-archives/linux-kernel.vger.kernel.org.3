@@ -2,102 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C59F8466A26
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 20:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C488466A28
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 20:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376661AbhLBTKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 14:10:45 -0500
-Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:58062 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348377AbhLBTKn (ORCPT
+        id S1376682AbhLBTME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 14:12:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376361AbhLBTMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 14:10:43 -0500
-Received: from [192.168.1.18] ([86.243.171.122])
-        by smtp.orange.fr with ESMTPA
-        id srQMm8a6iHQrlsrQMmWszZ; Thu, 02 Dec 2021 20:07:19 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 02 Dec 2021 20:07:19 +0100
-X-ME-IP: 86.243.171.122
-Subject: Re: [PATCH] xen-blkfront: Use the bitmap API when applicable
-To:     Joe Perches <joe@perches.com>, Juergen Gross <jgross@suse.com>,
-        boris.ostrovsky@oracle.com, sstabellini@kernel.org,
-        roger.pau@citrix.com, axboe@kernel.dk
-Cc:     xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <1c73cf8eaff02ea19439ec676c063e592d273cfe.1638392965.git.christophe.jaillet@wanadoo.fr>
- <c529a221-f444-ad26-11ff-f693401c9429@suse.com>
- <d8f87c17-75d1-2e6b-65e1-23adc75bb515@wanadoo.fr>
- <6fcddba84070c021eb92aa9a5ff15fb2a47e9acb.camel@perches.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Message-ID: <3d71577f-dabe-6e1a-4b03-2a44f304b702@wanadoo.fr>
-Date:   Thu, 2 Dec 2021 20:07:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 2 Dec 2021 14:12:00 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD27BC06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 11:08:36 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id m24so385971pls.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 11:08:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1hDOoMBGSN6kabG9MIsrdbw1zEiInbB097CJy1sxekA=;
+        b=fRdahR+cm2DQ61b0GVnE9C2akBv5/+imaMxGdjBCmOdwU1Je3To8WFoP3teXAsMszj
+         /24+VNRBMfuyVZ74nVKJgYJaBo/w7nWrdBElFwuH+HSXjBuCqlruUQjhH0bwHM60TGI3
+         9PrvHDdqrDhFfT0kv1EJq+1qblKeewWtDwwe4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1hDOoMBGSN6kabG9MIsrdbw1zEiInbB097CJy1sxekA=;
+        b=A1Sb9fmM13EwoetW+7qinu1wqVf45oa7/jDI4XBrtYGmr8eZcNLDP+pE0FfHbEAKb8
+         WcrdzHoDh70rfmJhW67t7Xn3MxDEYfsdxI2nS3Y6p2InJFj/r1/0lR7NWq1gWq33+IIF
+         q65wQ90ihbV6kXfXqi1FbMobZFxNKrFIUL6ulo+598/maq7rZdYXCfhc4IJwAew6rSxx
+         +J+iWA/d0Cj8reX88JhJWvfcynfSOqQrwyNQHmbdS83u5OLmSzNo8qgfl9B3AfuLrUND
+         C13VrG+HGKHyvnbTkPXDyn2Ar7aGvv7tuFTwDl+W3nn3eBvkW2haRnIC4mUozlrX6Bga
+         7w7g==
+X-Gm-Message-State: AOAM533A3EnqWNDUldFQcPPetFdkHwb6eFl8M32o2ZRGmIsZ4o5Ppyic
+        tFVIoa0Tb7LxOTF5rUe6lWiy7w==
+X-Google-Smtp-Source: ABdhPJzR7Cx57RXSCzSLhVy8YTHO2hrexUvipOpFPVgN8+TxWM0fTP8EXYPzrQJo7/Ae/wnpdM5ccA==
+X-Received: by 2002:a17:90b:4a43:: with SMTP id lb3mr8107258pjb.222.1638472116294;
+        Thu, 02 Dec 2021 11:08:36 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j34sm347058pgj.42.2021.12.02.11.08.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 11:08:35 -0800 (PST)
+Date:   Thu, 2 Dec 2021 11:08:34 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Bixuan Cui <cuibixuan@linux.alibaba.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        w@1wt.eu
+Subject: Re: [PATCH -next] mm: delete oversized WARN_ON() in kvmalloc() calls
+Message-ID: <202112021105.C9E64318F@keescook>
+References: <1638410784-48646-1-git-send-email-cuibixuan@linux.alibaba.com>
+ <20211201192643.ecb0586e0d53bf8454c93669@linux-foundation.org>
+ <Yajk/oVypyUFTtgd@unreal>
+ <YajmawzehKqR+j0v@casper.infradead.org>
+ <YajviIws7csNbTxU@unreal>
 MIME-Version: 1.0
-In-Reply-To: <6fcddba84070c021eb92aa9a5ff15fb2a47e9acb.camel@perches.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YajviIws7csNbTxU@unreal>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 02/12/2021 à 19:16, Joe Perches a écrit :
-> On Thu, 2021-12-02 at 19:12 +0100, Christophe JAILLET wrote:
->> Le 02/12/2021 à 07:12, Juergen Gross a écrit :
->>> On 01.12.21 22:10, Christophe JAILLET wrote:
->>>> Use 'bitmap_zalloc()' to simplify code, improve the semantic and avoid
->>>> some open-coded arithmetic in allocator arguments.
->>>>
->>>> Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
->>>> consistency.
->>>>
->>>> Use 'bitmap_copy()' to avoid an explicit 'memcpy()'
-> []
->>>> diff --git a/drivers/block/xen-blkfront.c b/drivers/block/xen-blkfront.c
-> []
->>>> @@ -442,16 +442,14 @@ static int xlbd_reserve_minors(unsigned int
->>>> minor, unsigned int nr)
->>>>        if (end > nr_minors) {
->>>>            unsigned long *bitmap, *old;
->>>> -        bitmap = kcalloc(BITS_TO_LONGS(end), sizeof(*bitmap),
->>>> -                 GFP_KERNEL);
->>>> +        bitmap = bitmap_zalloc(end, GFP_KERNEL);
->>>>            if (bitmap == NULL)
->>>>                return -ENOMEM;
->>>>            spin_lock(&minor_lock);
->>>>            if (end > nr_minors) {
->>>>                old = minors;
->>>> -            memcpy(bitmap, minors,
->>>> -                   BITS_TO_LONGS(nr_minors) * sizeof(*bitmap));
->>>> +            bitmap_copy(bitmap, minors, nr_minors);
->>>>                minors = bitmap;
->>>>                nr_minors = BITS_TO_LONGS(end) * BITS_PER_LONG;
+On Thu, Dec 02, 2021 at 06:08:40PM +0200, Leon Romanovsky wrote:
+> On Thu, Dec 02, 2021 at 03:29:47PM +0000, Matthew Wilcox wrote:
+> > On Thu, Dec 02, 2021 at 05:23:42PM +0200, Leon Romanovsky wrote:
+> > > The problem is that this WARN_ON() is triggered by the users.
+> > 
+> > ... or the problem is that you don't do a sanity check between the user
+> > and the MM system.  I mean, that's what this conversation is about --
+> > is it a bug to be asking for this much memory in the first place?
 > 
-> 		nr_minors = end;
-> ?
+> We do a lot of checks, and in this case, user provided valid input.
+> He asked size that doesn't cross his address space.
+> https://elixir.bootlin.com/linux/v5.16-rc3/source/drivers/infiniband/core/umem_odp.c#L67
 > 
+> 		start = ALIGN_DOWN(umem_odp->umem.address, page_size);
+> 		if (check_add_overflow(umem_odp->umem.address,
+> 				       (unsigned long)umem_odp->umem.length,
+> 				       &end))
+> 			return -EOVERFLOW;
+> 
+> There is a feature called ODP (on-demand-paging) which is supported
+> in some RDMA NICs. It allows to the user "export" their whole address
+> space to the other RDMA node without pinning the pages. And once the
+> other node sends data to not-pinned page, the RDMA NIC will prefetch
+> it.
 
-No,
-My understanding of the code is that if we lack space (end > nr_minors), 
-we need to allocate more. In such a case, we want to keep track of what 
-we have allocated, not what we needed.
-The "padding" bits in the "long align" allocation, can be used later.
+I think we have two cases:
 
-first call
-----------
-end = 65
-nr_minors = 63
+- limiting kvmalloc allocations to INT_MAX
+- issuing a WARN when that limit is exceeded
 
---> we need some space
---> we allocate 2 longs = 128 bits
---> we now use 65 bits of these 128 bits
+The argument for the having the WARN is "that amount should never be
+allocated so we want to find the pathological callers".
 
-new call
---------
-end = 68
-nr_minors = 128 (from previous call)
---> no need to reallocate
+But if the actual issue is that >INT_MAX is _acceptable_, then we have
+to do away with the entire check, not just the WARN.
 
-CJ
+-- 
+Kees Cook

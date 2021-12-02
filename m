@@ -2,93 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D42E8465EF7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 08:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB41465EFA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 08:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240918AbhLBHzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 02:55:40 -0500
-Received: from st43p00im-ztbu10073701.me.com ([17.58.63.183]:44659 "EHLO
-        st43p00im-ztbu10073701.me.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1355972AbhLBHza (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 02:55:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1638431522; bh=B5HbAQ3z6bOY/xQiBfcJ7b3vlYf2meSmO7XfFtNt6aY=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=XqvU8NwTRMc+tNh/y8wWSW3gaOEmutbBez8Cs7SzCPpmvuewcyzcGH7TodwpAGomg
-         xrg5uRbPEXw01AgRp9JTDh3+l6ZpyHbRadGZeeuyCQIg57dS7dZVv34ZSf+SI8oPkx
-         f3ycLJ/OGSvZCUksTv1BoEAx0iCQRM42kt+/CvxlrBSj9laZ58IgY5gGCuj+E2e6ji
-         cniQifhDN+tMN+NgFUtGWPQzONx5F/QyGseWLithcTxjfQnlQh1Q/HeyqDdYUfaG8q
-         VVvTxkh62VE7AesX/VQLc0aqkcn/sxImfiQf6eLQAZDnwuiz2F8ScWyKThk5naAnh2
-         DvBqXCvjT3BYA==
-Received: from localhost (101.220.150.77.rev.sfr.net [77.150.220.101])
-        by st43p00im-ztbu10073701.me.com (Postfix) with ESMTPSA id E4AD74C083D;
-        Thu,  2 Dec 2021 07:52:01 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     patrice.chotard@st.com, robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        id S1356032AbhLBH4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 02:56:21 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:39492 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1355952AbhLBHz7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 02:55:59 -0500
+Received: from localhost.localdomain (unknown [124.16.141.244])
+        by APP-03 (Coremail) with SMTP id rQCowABHYJIoe6hhZk7eAA--.65530S2;
+        Thu, 02 Dec 2021 15:52:10 +0800 (CST)
+From:   Xu Wang <vulab@iscas.ac.cn>
+To:     pshelar@ovn.org, davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, dev@openvswitch.org,
         linux-kernel@vger.kernel.org
-Cc:     avolmat@me.com
-Subject: [PATCH 12/12] ARM: dts: sti: move usb picophy nodes in stih410-b2260.dts
-Date:   Thu,  2 Dec 2021 08:51:05 +0100
-Message-Id: <20211202075105.195664-13-avolmat@me.com>
+Subject: [PATCH] net: openvswitch: Remove redundant if statements
+Date:   Thu,  2 Dec 2021 07:51:48 +0000
+Message-Id: <20211202075148.34136-1-vulab@iscas.ac.cn>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211202075105.195664-1-avolmat@me.com>
-References: <20211202075105.195664-1-avolmat@me.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.790
- definitions=2021-12-01_01:2021-11-30,2021-11-30 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 clxscore=1015 mlxscore=0
- mlxlogscore=878 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-2009150000 definitions=main-2112020046
+X-CM-TRANSID: rQCowABHYJIoe6hhZk7eAA--.65530S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruw43WF4fGF17Wr18Kr1Utrb_yoWxtrgE9a
+        n2yF4kXr45AF1jkr4UCF45Zrn2qr47Jr4Ivr17XF43Ja4UX39xXrW8Ww17uryUWF4Uury7
+        X3Z7XrW3KF47ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb28YjsxI4VWkCwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6r4xMxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jePfQUUUUU=
+X-Originating-IP: [124.16.141.244]
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiBgkDA10TfzmcDgAAsV
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update usb picophy nodes out of the soc section following the
-related update within the stih410.dtsi file.
+The 'if (dev)' statement already move into dev_{put , hold}, so remove
+redundant if statements.
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
+Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
 ---
- arch/arm/boot/dts/stih410-b2260.dts | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ net/openvswitch/vport-netdev.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/stih410-b2260.dts b/arch/arm/boot/dts/stih410-b2260.dts
-index c2d3b6de55d0..26d93f26f6d0 100644
---- a/arch/arm/boot/dts/stih410-b2260.dts
-+++ b/arch/arm/boot/dts/stih410-b2260.dts
-@@ -82,6 +82,14 @@ phy_port1: port@9b2a000 {
- 		};
- 	};
+diff --git a/net/openvswitch/vport-netdev.c b/net/openvswitch/vport-netdev.c
+index 8e1a88f13622..c1ad6699b1f8 100644
+--- a/net/openvswitch/vport-netdev.c
++++ b/net/openvswitch/vport-netdev.c
+@@ -137,8 +137,7 @@ static void vport_netdev_free(struct rcu_head *rcu)
+ {
+ 	struct vport *vport = container_of(rcu, struct vport, rcu);
  
-+	usb2_picophy1: phy2 {
-+		status = "okay";
-+	};
-+
-+	usb2_picophy2: phy3 {
-+		status = "okay";
-+	};
-+
- 	soc {
- 		/* Low speed expansion connector */
- 		uart0: serial@9830000 {
-@@ -152,14 +160,6 @@ pwm1: pwm@9510000 {
- 			status = "okay";
- 		};
+-	if (vport->dev)
+-		dev_put(vport->dev);
++	dev_put(vport->dev);
+ 	ovs_vport_free(vport);
+ }
  
--		usb2_picophy1: phy2@0 {
--			status = "okay";
--		};
--
--		usb2_picophy2: phy3@0 {
--			status = "okay";
--		};
--
- 		ohci0: usb@9a03c00 {
- 			status = "okay";
- 		};
 -- 
 2.25.1
 

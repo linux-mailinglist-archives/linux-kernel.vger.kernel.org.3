@@ -2,142 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 478D9466634
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 866BA466638
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358852AbhLBPMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 10:12:10 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:15746 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1358583AbhLBPMH (ORCPT
+        id S1358583AbhLBPPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 10:15:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236157AbhLBPPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 10:12:07 -0500
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B25xfvh021015;
-        Thu, 2 Dec 2021 10:08:43 -0500
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3cpe2tnav2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 10:08:43 -0500
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 1B2F8YGN058477
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 2 Dec 2021 10:08:34 -0500
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.858.5; Thu, 2 Dec 2021
- 10:08:33 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.858.5 via Frontend Transport;
- Thu, 2 Dec 2021 10:08:33 -0500
-Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.147])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 1B2F8TW4025502;
-        Thu, 2 Dec 2021 10:08:30 -0500
-From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
-To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Subject: [PATCH v6 2/2] dt-bindings:iio:dac: add ad7293 doc
-Date:   Thu, 2 Dec 2021 17:08:19 +0200
-Message-ID: <20211202150819.24832-2-antoniu.miclaus@analog.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211202150819.24832-1-antoniu.miclaus@analog.com>
-References: <20211202150819.24832-1-antoniu.miclaus@analog.com>
+        Thu, 2 Dec 2021 10:15:31 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D493C06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 07:12:09 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id b67so177672qkg.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 07:12:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5win83yfqpxb3G0uDT7ZMvmOCj3Tw1TRZr233dyvDuc=;
+        b=mo+uivjzmHsuRBaFi8uHymmczEF4b/SLFl7A/ASUdGfiz9FYm3VHvfLfmvHEwQrhiE
+         A9B+Q6R4HBswpJbv52KBTgTLuVgrceBao9La0Kj9ajy8Mb0jNAkXUoM93OvkRiYviWxf
+         0u9xWvjCiOnuxPkwQAY6zmKDmY4Kl61B7jd6M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5win83yfqpxb3G0uDT7ZMvmOCj3Tw1TRZr233dyvDuc=;
+        b=bY00hBZI4caI7zLlseZzIcsgLiIRtMOuYNVIhtv8HbBB1RzshhbR+IOyfgw4Va5ar5
+         xEActJr038Lrvaw566Jq13DVdIFmZShcFuJvjHDQ/KNY+4yMA6eDFN19EUcg7Wq1E2kM
+         IjoXSL7BRDdRnblFonk+Wr9SxpZfZincV2z+ByLol3tqU4xRzKlbdOcdnQks9KeAdN+i
+         R67yhPl0btsiboi9G8tT5kMQgnJ7FfXyAS48/Dn1PT3URsYxeBVfRfXi3No8blLmCwJZ
+         09BWJ1S30ZS5Z6764PRL4wzM4C7hNmux55TB9LZQTo/HGPnN4IyLHhayfw5rIMn1iAh2
+         L/2w==
+X-Gm-Message-State: AOAM533dXc8t+mkx8m739w1rBKhI7lSZ9RtFVrF3SYPQwc0M62bfF9Xs
+        9sPQPMrEH4IkXwJyzPw46aWztw==
+X-Google-Smtp-Source: ABdhPJyKW64deXqmMjT9ZCpai94tANaoaVT4bykBTn5Yw2GwqCoFkWdSZwlMgR1aQYIkqnzgC7294w==
+X-Received: by 2002:a37:6103:: with SMTP id v3mr12191774qkb.694.1638457928563;
+        Thu, 02 Dec 2021 07:12:08 -0800 (PST)
+Received: from markyacoub.nyc.corp.google.com ([2620:0:1003:314:f841:769c:df54:f26f])
+        by smtp.gmail.com with ESMTPSA id k16sm1726988qtx.92.2021.12.02.07.12.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 07:12:08 -0800 (PST)
+From:   Mark Yacoub <markyacoub@chromium.org>
+To:     dri-devel@lists.freedesktop.org
+Cc:     seanpaul@chromium.org, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, matthias.bgg@gmail.com,
+        jason-jh.lin@mediatek.com, tzungbi@google.com,
+        Mark Yacoub <markyacoub@google.com>,
+        Mark Yacoub <markyacoub@chromium.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm: send vblank event with the attached sequence rather than current
+Date:   Thu,  2 Dec 2021 10:11:55 -0500
+Message-Id: <20211202151200.3125685-1-markyacoub@chromium.org>
+X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: c2MHA2GBlz1U1N40wxns6gyMVIanLN-C
-X-Proofpoint-ORIG-GUID: c2MHA2GBlz1U1N40wxns6gyMVIanLN-C
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-02_08,2021-12-02_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 spamscore=0 phishscore=0 adultscore=0 clxscore=1015
- priorityscore=1501 mlxlogscore=979 bulkscore=0 lowpriorityscore=0
- suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112020100
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree bindings for the AD7293 Power Amplifier.
+From: Mark Yacoub <markyacoub@google.com>
 
-Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+[Why]
+drm_handle_vblank_events loops over vblank_event_list to send any event
+that is current or has passed.
+More than 1 event could be pending with past sequence time that need to
+be send. This can be a side effect of drivers without hardware vblank
+counter and they depend on the difference in the timestamps and the
+frame/field duration calculated in drm_update_vblank_count. This can
+lead to 1 vblirq being ignored due to very small diff, resulting in a
+subsequent vblank with 2 pending vblank events to be sent, each with a
+unique sequence expected by user space.
+
+[How]
+Send each pending vblank event with the sequence it's waiting on instead
+of assigning the current sequence to all of them.
+
+Fixes igt@kms_flip "Unexpected frame sequence"
+Tested on Jacuzzi (MT8183)
+
+Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
 ---
-no changes in v6.
- .../bindings/iio/dac/adi,ad7293.yaml          | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/dac/adi,ad7293.yaml
+ drivers/gpu/drm/drm_vblank.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/dac/adi,ad7293.yaml b/Documentation/devicetree/bindings/iio/dac/adi,ad7293.yaml
-new file mode 100644
-index 000000000000..5ee80bf6aa11
---- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/dac/adi,ad7293.yaml
-@@ -0,0 +1,61 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/iio/dac/adi,ad7293.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: AD7293 12-Bit Power Amplifier Current Controller with ADC,
-+       DACs, Temperature and Current Sensors
-+
-+maintainers:
-+  - Antoniu Miclaus <antoniu.miclaus@analog.com>
-+
-+description: |
-+   Power Amplifier drain current controller containing functionality
-+   for general-purpose monitoring and control of current, voltage,
-+   and temperature, integrated into a single chip solution with an
-+   SPI-compatible interface.
-+
-+   https://www.analog.com/en/products/ad7293.html
-+
-+properties:
-+  compatible:
-+    enum:
-+      - adi,ad7293
-+
-+  avdd-supply: true
-+
-+  vdrive-supply: true
-+
-+  reset-gpios:
-+    maxItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+  spi-max-frequency:
-+    maximum: 1000000
-+
-+required:
-+  - compatible
-+  - reg
-+  - avdd-supply
-+  - vdrive-supply
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    spi {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      ad7293@0 {
-+        compatible = "adi,ad7293";
-+        reg = <0>;
-+        spi-max-frequency = <1000000>;
-+        avdd-supply = <&avdd>;
-+        vdrive-supply = <&vdrive>;
-+        reset-gpios = <&gpio 10 0>;
-+      };
-+    };
-+...
+diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
+index 3417e1ac79185..47da8056abc14 100644
+--- a/drivers/gpu/drm/drm_vblank.c
++++ b/drivers/gpu/drm/drm_vblank.c
+@@ -1902,7 +1902,7 @@ static void drm_handle_vblank_events(struct drm_device *dev, unsigned int pipe)
+ 
+ 		list_del(&e->base.link);
+ 		drm_vblank_put(dev, pipe);
+-		send_vblank_event(dev, e, seq, now);
++		send_vblank_event(dev, e, e->sequence, now);
+ 	}
+ 
+ 	if (crtc && crtc->funcs->get_vblank_timestamp)
 -- 
-2.34.1
+2.34.0.rc2.393.gf8c9666880-goog
 

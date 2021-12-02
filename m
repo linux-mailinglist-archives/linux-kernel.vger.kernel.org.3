@@ -2,215 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E533746614C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B767646614F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354862AbhLBKTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 05:19:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241111AbhLBKTa (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 05:19:30 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75288C06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 02:16:08 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id n33-20020a05600c502100b0032fb900951eso1874083wmr.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 02:16:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=dvo4KVBG0Lx2iX6zR/VCV2kL5rEaU3wC7t8V2k80olI=;
-        b=nJiPFMW95wKn+lLyNIbdyV0kzUALgFXwHNktAjmi5lyAE4mWJaIvMCBE2GEaqNIW1t
-         QcNaptb0ibXK/CnaBjgx7/Ix9I93ouNXn/eYEOnWwzLrldYiI2NfHaNjAQTtwwBQ1oTs
-         43Br/8/GjYexyD/bD5G3lb7o9GL8NZ6s2ongOX3pPgmxzKosorTHlhuBXsWCBQ/29Jq3
-         99um6aUQser1CjL5t+mhY3yn5Ohz+mf7ILcxnYL/12bbVBJ2mcj4IEsngEeseSlSDirr
-         IeqHU4gPQbZb0bv3vYDx9PYqTDAsKqI5GyMd8xlVLHIFNSXePUoP/gOTlVtkLpjpGWto
-         XqQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=dvo4KVBG0Lx2iX6zR/VCV2kL5rEaU3wC7t8V2k80olI=;
-        b=rFhCVCOW4TB+XgY3NpEne5fBFHL9lO8f9sOPgr1MvHZXZOA3m+tgnwRDVqyL7sshiC
-         OVhiiLyG4ane5dwqdiaCuEyEkjOPt5oabq5K5MbcYkUgToUUsH0mfqv+TH07rjzN7Les
-         jVIohDzVgN0yyetbC89vgNfRFDfBmha+qoMhfiC5I9dfeyHkmnNz2Aidc0UaZ7kxcJcA
-         UrL+OjaIcSJoVHYK1au0OvtniYb1vuB2WHkM7wtrH6KozHlVGGjLbpakUUzz0jJOdsGL
-         Yh4tiosbEaZ3Udwn8jQQicaSgpOJef//6YknkLiFGtXTRRK6EFB1cDZMOAaFOp6Ol1GA
-         YTCA==
-X-Gm-Message-State: AOAM533Eo0gtg7sHUVMVCHAEo2WYeeF4NwI6Ix8v2AKSUM+3VFe0GoLt
-        s2iW8koNPON8rL9AnHzyI87xvQ==
-X-Google-Smtp-Source: ABdhPJz4n47DOmobBdHwetvrGEaEhLW0CXYatFsUwhbNPwmG2nRlsMqF8YKokqeHziiPkR4XjFTv/Q==
-X-Received: by 2002:a1c:770e:: with SMTP id t14mr5077846wmi.173.1638440166839;
-        Thu, 02 Dec 2021 02:16:06 -0800 (PST)
-Received: from elver.google.com ([2a00:79e0:15:13:ddd6:f3c9:b2f0:82f3])
-        by smtp.gmail.com with ESMTPSA id m20sm1850035wmq.11.2021.12.02.02.16.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 02:16:06 -0800 (PST)
-Date:   Thu, 2 Dec 2021 11:15:59 +0100
-From:   Marco Elver <elver@google.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        joey.gouly@arm.com
-Subject: Re: [PATCH v2] arm64: Enable KCSAN
-Message-ID: <Yaic31SbYFJ4zAl0@elver.google.com>
-References: <20211129145732.27000-1-wangkefeng.wang@huawei.com>
- <YadiUPpJ0gADbiHQ@FVFF77S0Q05N>
- <811af0bc-0c99-37f6-a39a-095418b10661@huawei.com>
+        id S1356861AbhLBKTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:19:49 -0500
+Received: from mail-bo1ind01olkn0154.outbound.protection.outlook.com ([104.47.101.154]:6277
+        "EHLO IND01-BO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S241111AbhLBKTr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 05:19:47 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iT7cotlheToow4bKM71KAbqPZ7rWCa8adadWHYG1V0ZGs/3q91tLLZlhf0CseJOUtFh8VRMcu+Gc4oZxx4ta5h10YxkkduraF5uE1wqXS23bkV7ZuLRYbQA4qvjLFv3c9V3dEfF3iVLwkKWC8n05qAAAMTPYIJQ56IPmtz2YKTf8ks2Ab1nN2xxARP/bdYXweaKEy5EAe47yk/Jva7wfzCjkC7S81+4Fe+3UXSMQb37Rqc0CZrgtlt5QbQHGtwus5kiCMHAXMr7opqebOrPy+rVt9yb/bTJrjwaV9xSHoWTVIUMdeDKLxFnhn/jOoYUjvhuIcZcO7OdxecRHnF+qAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WPBse4vbSTSZodgL0E3baNv70mXnK7Qm9BcUOJ6cFB0=;
+ b=LXs/93EL/pWpFtVh/0KORJmQCmaiHXhtUdUxmbPIQFQ0lwF4OalXUFVQHiN4dB8cA5/ye4netYbawERKg9sK6i7rF03QScEb31w2vIV+kPcsoHnqUodyEqvCYTB6akOK4cEaMr69+V0w7n64lLln0KPYRVKAeckeCxogKA4zFK2j6B/vAOYBWXGzJoOsSNtWARDwqooOqgh/xgDnCS1bRfdKRPqri3W3ikQ4ugqfdAp2ptlAvqXX6Un2ISs6uU7FPPG7icrY9vO08Tl6dOouyS2pJOkhh5xzJtB/5FjZHzYcLwPyc6BF3gEsF4EDflCrKkb57gHMTPQNLEdOkfeZug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WPBse4vbSTSZodgL0E3baNv70mXnK7Qm9BcUOJ6cFB0=;
+ b=aZaaitnquFS09p63K1NpoZV6pXjUeGJYrVFZZ8TTKkIBU9K1KjKY23472OSPEgOGZy4R3ktlsnNMQaB5BtY4n57KnevRSxZM+kU8Y2QeV2Pf2Jkl/4StUMgyHv3mPyYYN+hcehZtRTrjrz9wyC8qhOJ++FWS2a0lGIazmILbYLBqQkij+2+2YZksOgJ5SxvRKyraSdaj0xm2+iolPpvIdnd4rtOYfxvzDy+ZDHmDBCyLXJSOyaFrIHG2GsTutCBHBrT9NfEuE5J+KKTVf9nnBxY/HxLcS14niZqzeB8SG1HI/PQUMjK7yro+zsmUwZEiikNM9AdzqHJfudtM4ls0Lg==
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
+ by PN2PR01MB4649.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:d::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Thu, 2 Dec
+ 2021 10:16:19 +0000
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7%8]) with mapi id 15.20.4755.016; Thu, 2 Dec 2021
+ 10:16:19 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Marcel Holtmann <marcel@holtmann.org>
+CC:     Greg KH <gregkh@linuxfoundation.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Daniel Winkler <danielwinkler@google.com>,
+        Johan Hedberg <johan.hedberg@intel.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "sonnysasaka@chromium.org" <sonnysasaka@chromium.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: [PATCH v9 2/2] btbcm: disable read tx power for affected Macs with
+ the T2 Security chip
+Thread-Topic: [PATCH v9 2/2] btbcm: disable read tx power for affected Macs
+ with the T2 Security chip
+Thread-Index: AQHX52WmfMB59oaYaUK5Y3YtP+CNZQ==
+Date:   Thu, 2 Dec 2021 10:16:19 +0000
+Message-ID: <367A0877-455C-44CF-BA4B-AC07CD17F333@live.com>
+References: <3B8E16FA-97BF-40E5-9149-BBC3E2A245FE@live.com>
+ <YZSuWHB6YCtGclLs@kroah.com> <52DEDC31-EEB2-4F39-905F-D5E3F2BBD6C0@live.com>
+ <8919a36b-e485-500a-2722-529ffa0d2598@leemhuis.info>
+ <20211117124717.12352-1-redecorating@protonmail.com>
+ <F8D12EA8-4B37-4887-998E-DC0EBE60E730@holtmann.org>
+ <40550C00-4EE5-480F-AFD4-A2ACA01F9DBB@live.com>
+ <332a19f1-30f0-7058-ac18-c21cf78759bb@leemhuis.info>
+ <D9375D91-1062-4265-9DE9-C7CF2B705F3F@live.com>
+ <BC534C52-7FCF-4238-8933-C5706F494A11@live.com> <YaSCJg+Xkyx8w2M1@kroah.com>
+ <287DE71A-2BF2-402D-98C8-24A9AEEE55CB@live.com>
+ <42E2EC08-1D09-4DDE-B8B8-7855379C23C5@holtmann.org>
+ <6ABF3770-A9E8-4DAF-A22D-DA7113F444F3@live.com>
+ <92FBACD6-F4F2-4DE8-9000-2D30852770FC@live.com>
+ <3716D644-CD1B-4A5C-BC96-A51FF360E31D@live.com>
+ <9E6473A2-2ABE-4692-8DCF-D8F06BDEAE29@live.com>
+ <64E15BD0-665E-471F-94D9-991DFB87DEA0@live.com>
+ <A6DD9616-E669-4382-95A0-B9DBAF46712D@live.com>
+ <312202C7-C7BE-497D-8093-218C68176658@live.com>
+ <CDAA8BE2-F2B0-4020-AEB3-5C9DD4A6E08C@live.com>
+ <3F7CFEF0-10D6-4046-A3AE-33ECF81A2EB3@live.com>
+In-Reply-To: <3F7CFEF0-10D6-4046-A3AE-33ECF81A2EB3@live.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [EjmazMkJ4QH1Sg4p9yQBoUQ87nh4ZxYdCgAuHXrqvxrWg4EW2cA9Y3/nN/WWQJ8h]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 773fffb0-ddba-41e5-44dd-08d9b57cc8ad
+x-ms-traffictypediagnostic: PN2PR01MB4649:
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HdkW3+4Qh00sZbO3Q/xwYggtW9BKxv6CuAmOCast6s0JLZbsc+QCL7jFyq3h1x+lwo9qA0Ps8G92/MEtF92+FUGyyt15ReSlbm6pxKkeGUPPX6TP/+G3UNmwG9VPD9J2Dvhcko/tFYMi62CWqdS0utYVNCF+skeUV1FeqPMMnFWxtL0GFWRkWsLMSrHSH38jEa2xK1mjvE68ZG1fmIARw9T6vmZuCL376Hq7TK+Q8J26qzB/sZ5d9QoQzgzCYFLgEQSPZ9lc6GB8MyCXWNx/IZszktnzWuByQ/HVs7LlCpBCLIy1jvz+eJLGhoIUte7BfOVRe4LMiiRUw+YjQeV7w+92PxtVVFYfLLo3QJX8G4VhMstHX9O3bx30oO65hu0gxyAvOwbje4CdTucePRNv+NSwQgsRG7zqQdOiGyQv711mZ1ez8Da+swiVYOCHge5XAduDKsPjz/q8Oa2vQsD2GuKPF3EOT5/hn0iG3CPcEcOiSwQaKEvTvV7baLXuWLW2SCtRiKxbUtMrS/KmwYy7K7M2vUM++b5TgJxjHkf0UtF6XoPUn+DCAa7ALMAKkla5iBTZAMDvOR+V3MwvIDuGJtPebtpAHF20ezKcBEc6ChQ/Bn04qLXwc3ayW8u+UacE
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0+n9e/2oT6tTLNQQIq5dSpB5cgRZ0ZQLV4m27JOdFt3lVLXqMmjEFu/DnVTc?=
+ =?us-ascii?Q?qnPbtI339if+UaYaPQCMXXhO7y/cr5U1uTeB0lPA+7nSOk2vW5nESMuSLWe8?=
+ =?us-ascii?Q?+dKSb1Hju8uJS4KQQX2HtuL7QEhn+btqMo7wDKdDIyyt4bMmYiLhyqQLKDWT?=
+ =?us-ascii?Q?2BSE4F4puJ5UQzk0EnO/jvAwmxsSFOedJuBbnd/a7iDSqbeu3uf/R24c8L0i?=
+ =?us-ascii?Q?jKyqIPVXSjLoRnGKT/h5WwOse8+sjg/7G0iGTxqzvIKxJp19ljbe2Q/G7j1v?=
+ =?us-ascii?Q?3IgM0aDYTXLMAw7FGlBX6+bg8KejgjVWAZAXoHdCjgWLJy2fk/XdzRzmWUQv?=
+ =?us-ascii?Q?zezyq6qE1J9TbPSUpHqwL914CzQKVVxTrm1OVLeW/HxB6dXpfRjQU+iXYJ89?=
+ =?us-ascii?Q?gQASrU9ZZta9OH64Nc+m1D4bpjgCmIaoU2wo+CtFHx1EFMhmNMtUhXo7FxSX?=
+ =?us-ascii?Q?3GZzeFdO6Wd2UQuIJbIQDNd9RLgibHJq7otcAXsLoTmN+XmghFbWC43s0Tic?=
+ =?us-ascii?Q?HUbyySqINaoAc/oVjdqbZ9EIWtMq4V/P8Ra2kcMumuaesfIV66+UVV2zahAG?=
+ =?us-ascii?Q?FD9cpOZHVKbpNj46w0Z/BEHIGljELniI7YJ5g3ETUj4uMMPmHUHes9+KM39v?=
+ =?us-ascii?Q?W4OTP/Lswcmaj7UdTflC7S9iUs++dhRZN7Gj4jO+LJZApdYo3sRab4942Jn5?=
+ =?us-ascii?Q?oQSpHqhZpwujFQFFF3EGD2VB6Xt+3nneL5XUvRN7rDjYM8n8qcvFgpxLA0qS?=
+ =?us-ascii?Q?bU+1hBxSbPmj91FLaAO6RVrnfTmnj2sz/gesE1Tbjg11rLgXs0iLIYzmfSWO?=
+ =?us-ascii?Q?03PhBjZaIxSs23nDvmxFwRWCN0tlfOXb1TtAETx/o4ApDoEm0I+6eHI21Jy6?=
+ =?us-ascii?Q?5OKinmOgHfZ3H3cth5YKgVjeiPi3//GZ7Kt5glpBnXzWn5x+cdySykFWwJ0X?=
+ =?us-ascii?Q?H4bgjnDiNgDXBijf9vdLUZiUWm3N2OrJG+7gkR0Xp8vVhU8RC6nxi6X9iimQ?=
+ =?us-ascii?Q?Xb6SHbCpjhU/H7C1Tw7vMbg9AA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <C2F205B6AF46F64783237559274872B0@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <811af0bc-0c99-37f6-a39a-095418b10661@huawei.com>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 773fffb0-ddba-41e5-44dd-08d9b57cc8ad
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2021 10:16:19.6349
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN2PR01MB4649
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 09:35AM +0800, Kefeng Wang wrote:
-> 
-> On 2021/12/1 19:53, Mark Rutland wrote:
-> > Hi Kefeng,
-> > 
-> > On Mon, Nov 29, 2021 at 10:57:32PM +0800, Kefeng Wang wrote:
-> > > This patch enables KCSAN for arm64, with updates to build rules
-> > > to not use KCSAN for several incompatible compilation units.
-> > > 
-> > > Resent GCC version(at least GCC10) made outline-atomics as the
-> > > default option(unlike Clang), which will cause linker errors
-> > > for kernel/kcsan/core.o.
-> > > 
-> > > Disables the out-of-line atomics by no-outline-atomics to fix
-> > > the linker errors.
-> > > 
-> > > Tested selftest and kcsan_test(built with GCC11 and Clang 13),
-> > > and all passed.
-> > Nice!
-> > 
-> > I think there are a few additional bits and pieces we'll need:
-> > 
-> > * Prior to clang 12.0.0, KCSAN would produce warnings with BTI, as I found in:
-> > 
-> >    https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/kcsan&id=2d67c39ae4f619ca94d9790e09186e77922fa826
-> > 
-> >    Since BTI is in defconfig, I think arm64's Kconfig should require a minimum
-> >    of clang 12.0.0 to enable KCSAN.
-> 
-> I don't have different clang version to test,  when check KCSAN,
-> 
-> commit eb32f9f990d9 ("kcsan: Improve some Kconfig comments") saids,
-> 
-> 
->     The compiler instruments plain compound read-write operations
->     differently (++, --, +=, -=, |=, &=, etc.), which allows KCSAN to
->     distinguish them from other plain accesses. This is currently
->     supported by Clang 12 or later.
-> 
-> Should we add a  "depends on CLANG_VERSION >= 120000"
+From: Aditya Garg <gargaditya08@live.com>
 
-KCSAN works just fine with Clang 11. Clang 12 merely improves some
-instrumentation, which is what this comment is about.
+Some Macs with the T2 security chip had Bluetooth not working.
+To fix it we add DMI based quirks to disable querying of LE Tx power.
 
-What Mark meant is that there's a specific issue with arm64 and BTI that
-is fixed by Clang 12. Therefore, arm64's Kconfig will have to do
+Signed-off-by: Aditya Garg <gargaditya08@live.com>
+Reported-by: Orlando Chamberlain <redecorating@protonmail.com>
+Tested-by: Orlando Chamberlain <redecorating@protonmail.com>
+Link:
+https://lore.kernel.org/r/4970a940-211b-25d6-edab-21a815313954@protonmail.c=
+om
+Fixes: 7c395ea521e6 ("Bluetooth: Query LE tx power on startup")
+Cc: stable@vger.kernel.org
+---
+v7 :- Removed unused variable and added Tested-by.
+v8 :- No change.
+v9 :- Add Cc: stable@vger.kernel.org
+ drivers/bluetooth/btbcm.c | 39 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-	select HAVE_ARCH_KCSAN if CC_IS_GCC || CLANG_VERSION >= 120000
+diff --git a/drivers/bluetooth/btbcm.c b/drivers/bluetooth/btbcm.c
+index e4182acee488c5..07fabaa5aa2979 100644
+--- a/drivers/bluetooth/btbcm.c
++++ b/drivers/bluetooth/btbcm.c
+@@ -8,6 +8,7 @@
+=20
+ #include <linux/module.h>
+ #include <linux/firmware.h>
++#include <linux/dmi.h>
+ #include <asm/unaligned.h>
+=20
+ #include <net/bluetooth/bluetooth.h>
+@@ -343,6 +344,40 @@ static struct sk_buff *btbcm_read_usb_product(struct h=
+ci_dev *hdev)
+ 	return skb;
+ }
+=20
++static const struct dmi_system_id disable_broken_read_transmit_power[] =3D=
+ {
++	{
++		 .matches =3D {
++			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro16,1"),
++		},
++	},
++	{
++		 .matches =3D {
++			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro16,2"),
++		},
++	},
++	{
++		 .matches =3D {
++			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro16,4"),
++		},
++	},
++	{
++		 .matches =3D {
++			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "iMac20,1"),
++		},
++	},
++	{
++		 .matches =3D {
++			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "iMac20,2"),
++		},
++	},
++	{ }
++};
++
+ static int btbcm_read_info(struct hci_dev *hdev)
+ {
+ 	struct sk_buff *skb;
+@@ -363,6 +398,10 @@ static int btbcm_read_info(struct hci_dev *hdev)
+ 	bt_dev_info(hdev, "BCM: features 0x%2.2x", skb->data[1]);
+ 	kfree_skb(skb);
+=20
++	/* Read DMI and disable broken Read LE Min/Max Tx Power */
++	if (dmi_first_match(disable_broken_read_transmit_power))
++		set_bit(HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER, &hdev->quirks);
++
+ 	return 0;
+ }
+=20
 
-> > 
-> > * In the past clang did not have an attribute to suppress tsan instrumenation
-> >    and would instrument noinstr regions. I'm not sure when clang gained the
-> >    relevant attribute to supress this, but we will need to depend on this
-> >    existing, either based on the clang version or with a test for the attribute.
-> > 
-> >    (If we're lucky, clang 12.0.0 is sufficient, and we solve BTI and this in one
-> >    go).
-> > 
-> >    I *think* GCC always had an attribute, but I'm not certain.
-> > 
-> >    Marco, is there an existing dependency somewhere for this to work on x86? I
-> >    thought there was an objtool pass to NOP this out, but I couldn't find it in
-> >    mainline. If x86 is implicitly depending on a sufficiently recent version of
-> >    clang, we add something to the common KCSAN Kconfig for ARCH_WANTS_NO_INSTR?
-> > 
-> > * There are some latent issues with some code (e.g. alternatives, patching, insn)
-> >    code being instrumentable even though this is unsound, and depending on
-> >    compiler choices this can happen to be fine or can result in boot-time
-> >    failures (I saw lockups when I started trying to add KCSAN for arm64).
-> > 
-> >    While this isn't just a KCSAN problem, fixing that requires some fairly
-> >    significant rework to a bunch of code, and until that's done we're on very
-> >    shaky ground. So I'd like to make KCSAN depend on EXPERT for now.
-> > 
-> >    I had an initial stab at fixing some of that, e.g.
-> > 
-> >    https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/patching/rework
-> >    Joey has started looking into this too.
-> 
-> Thanks for your information,  I don't know about this. As your say, we could
-> add a depend on EXPERT
-> 
-> for now and more explanation into changlog.
-
-So what I gather arm64's final select line may look like:
-
-	select HAVE_ARCH_KCSAN if EXPERT && (CC_IS_GCC || CLANG_VERSION >= 120000)
-
-> > 
-> > * When I last tested, for simple boots I would get frequent KCSAN splats for a
-> >    few common issues, and those drowned out all other reports.
-> > 
-> >    One case was manipulation of thread_info::flags, which Thomas Gleixner has
-> >    queued some fixes at:
-> > 
-> >    https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/?h=core/entry
-> >    There were some other common failures, e.g. accesses to task_struct::on_cpu,
-> >    and I hadn't had the chance to investigate/fix those, beyond a (likely
-> >    unsound) hack:
-> > 
-> >    https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/kcsan&id=4fe9d6c2ef85257d80291086e4514eaaebd3504e
-> > 
-> >    It would be good if we could identify the most frequent problems (e.g. those
-> >    that will occur when just booting) before we enable this generally, to avoid
-> >    everyone racing to report/fix those as soon as we enable the feature.
-> > 
-> >    When you tested, did KCSAN flag anything beyond the selftests?
-> 
-> Yes, there are some KCSAN reports, but this is not only exist on arm64, I
-> saw  owner->on_cpu warning
-> 
-> on x86 too, eg, we also hack to disable it via data_race.
-> 
-> Reported by Kernel Concurrency Sanitizer on:
-> CPU: 7 PID: 2530 Comm: syz-executor.11 Not tainted 5.10.0+ #113
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.104/01/2014
-> ==================================================================
-> BUG: KCSAN: data-race in rwsem_spin_on_owner+0xf4/0x180
-> 
-> race at unknown origin, with read to 0xffff9767d3becfac of 4 bytes by task 18119 on cpu 0:
->  rwsem_spin_on_owner+0xf4/0x180
->  rwsem_optimistic_spin+0x48/0x480
->  rwsem_down_read_slowpath+0x4a0/0x670
->  down_read+0x69/0x190
->  process_vm_rw+0x41e/0x840
->  __x64_sys_process_vm_writev+0x76/0x90
->  do_syscall_64+0x37/0x50
->  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-I think fixing data races is not a pre-requisite for arch-enablement.
-Some are slowly being addressed (and others aren't -- syzbot has a list
-of >200 data races that I try to moderate and fix some or forward those
-that I think will get fixed). I expect the most frequent issues will be
-the same on arm64 as they are on x86.
-
-I actually have a "fix" for the data race in rwsem_spin_on_owner, that
-also shows where the other racing access comes from... which reminds me:
-https://lkml.kernel.org/r/20211202101238.33546-1-elver@google.com
-
-Thanks,
--- Marco

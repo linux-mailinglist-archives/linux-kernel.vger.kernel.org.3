@@ -2,86 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF338465A84
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75089465A87
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344185AbhLBASR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 19:18:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40218 "EHLO
+        id S1344232AbhLBATW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 19:19:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344287AbhLBASC (ORCPT
+        with ESMTP id S235723AbhLBATU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 19:18:02 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1A3C0613FD
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 16:13:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EA250CE212B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 00:13:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7B3AC53FAD;
-        Thu,  2 Dec 2021 00:13:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638404027;
-        bh=e2WW//HnsATfHJono364sgw3a4+9Xl+8LhE997wQAJc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FLOTI0K7m/oMwjOvQn5j0mlN6XuDbSM+fdqoM7YegNrQ+xyTN9J7h3Csx/TL1VDTk
-         9n/OY7KnGSZjNb4rmeleUPPchOL0lWA9CSiF0LsEOlp1rSfHDxP+yjmq+3bzwWnxsD
-         pjZJ4y68uWCibHA71D8WYGYtJPy/omaR8gFdW72BFDe8lDImvHVI46PQuqWJq781DV
-         wR9TOm6nzxXjlP0x+hakkp2NhuFAv1hwj/F+uplgBZ0nYKK6EmPE2Kf7LUtb8S8G+X
-         npFeCz5c8i8uQELYUpYQVNvClxQEGANM6oZw7gzzay96u714zzODGZo8HpWsjw4hwh
-         Sparo69R6HRNA==
-Date:   Thu, 2 Dec 2021 09:13:44 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        zhangyue <zhangyue1@kylinos.cn>, naveen.n.rao@linux.ibm.com,
-        anil.s.keshavamurthy@intel.com, davem@davemloft.net
-Subject: Re: [PATCH] kprobes: Limit max data_size of the kretprobe instances
-Message-Id: <20211202091344.f9725841b0cf704b9342b5f2@kernel.org>
-In-Reply-To: <20211201111922.2c52047d@gandalf.local.home>
-References: <163836995040.432120.10322772773821182925.stgit@devnote2>
-        <20211201111922.2c52047d@gandalf.local.home>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Wed, 1 Dec 2021 19:19:20 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72594C061748
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 16:15:58 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id n66so52059926oia.9
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 16:15:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5fIQ6AXcM0gNdq6MfBOpt1z0X7Fsc0u8cUt+/4xh4Do=;
+        b=sSiMH+E9z8brVBxLHOPGy5WD8p0Snw2niO7+cuV7qs7ojEKGxazj7fQcZpDz0V92Bs
+         G1PXKiAh/nFJ/W/3kb7PTTGq94E7cnCY2NvskLbm9fpBzONbCLIn7SKkBiR0DsnY3g1+
+         yodRXFe0IM3nL4sqmqq6cb+MfkcHVRoT39Lxz14JnQdXfoafMKf89rolpJUIyYLckSmQ
+         mTBxKuId4dd5zW5D9XLoEi/uSHo7E4yeyA5rPFX8QJ95yGP/Dgd1bROJMlLJkii7L+UY
+         mfZAdmFLJk1D+Yi17YMmUMDddWPWZ8LdzYJEOzaVXKZ/Wm+qpDM4dBcajEpOZkC8/OBQ
+         ueow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5fIQ6AXcM0gNdq6MfBOpt1z0X7Fsc0u8cUt+/4xh4Do=;
+        b=PJcETDJDx3EhzyNkP0UV701fJDkgsHfuYxb+2/Xd2hnownVhL7vdedLHYY12WgLvBp
+         kIerS3ui2dslzkGjomZTBQkjV47GYIZEcbzGRgYa79dWiwl2A8Fg6WflOUv6fL4qXXQH
+         75v8NFB/iOsgGgQK6/m+QsXgOWEwnV55luic6hC79nXQS6vTLobvY2CK6fqPYJtLJTfY
+         JMwx7kl4LthSGZDBE4WdVwIDWKuCk1WY4IqZcK3in8clDh+cqh7jytkFX5ZdXmKE+4v2
+         9mb7mPdVlRXE36sk4lBKFNeZ9UQXiNL/g/SxjBCYMZu+wPfwVuIEDHd9dDhmGR8Q8eYL
+         lcMQ==
+X-Gm-Message-State: AOAM533VRLFDb/Vd2LcPBAx9LNTj2Bh1CRTJa8nAykUlppp8MqL1LWAs
+        GOTx8ITgdbEq5EeN18E7w6tl/g==
+X-Google-Smtp-Source: ABdhPJxYuan9p3VRQ508Kk7Zuc6kskhGwIgXWbLNIhlATTfZRw0mtehJw8BtJQ+RbFJs2vJokHYEyA==
+X-Received: by 2002:aca:accd:: with SMTP id v196mr1716493oie.108.1638404157797;
+        Wed, 01 Dec 2021 16:15:57 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id g2sm553464oic.35.2021.12.01.16.15.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 16:15:57 -0800 (PST)
+Date:   Wed, 1 Dec 2021 16:17:29 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/16] arm64: dts: qcom: sm8350: Specify clock-frequency
+ for arch timer
+Message-ID: <YagQmQzk7GorCUVv@ripper>
+References: <20211114012755.112226-1-konrad.dybcio@somainline.org>
+ <20211114012755.112226-4-konrad.dybcio@somainline.org>
+ <20211130020536.52D0FC53FC7@smtp.kernel.org>
+ <dee30442-8a78-07f3-1fa1-e5922a510182@somainline.org>
+ <20211201204543.1286DC53FAD@smtp.kernel.org>
+ <0b171f2e-4bbc-a54a-7615-87fd4559fee9@somainline.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0b171f2e-4bbc-a54a-7615-87fd4559fee9@somainline.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Dec 2021 11:19:22 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Wed 01 Dec 16:00 PST 2021, Konrad Dybcio wrote:
 
-> On Wed,  1 Dec 2021 23:45:50 +0900
-> Masami Hiramatsu <mhiramat@kernel.org> wrote:
 > 
-> > The kretprobe::data_size is unsigned (size_t) but it is
-> > used as 'data_size + sizeof(struct kretprobe_instance)'.
-> > Thus, it can be smaller than sizeof(struct kretprobe_instance)
-> > while allocating memory for the kretprobe_instance.
+> On 01.12.2021 21:45, Stephen Boyd wrote:
+> > Quoting Konrad Dybcio (2021-11-30 11:59:03)
+> >> On 30/11/2021 03:05, Stephen Boyd wrote:
+> >>> Quoting Konrad Dybcio (2021-11-13 17:27:43)
+> >>>> Arch timer runs at 19.2 MHz. Specify the rate in the timer node.
+> >>>>
+> >>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> >>>> ---
+> >>>>   arch/arm64/boot/dts/qcom/sm8350.dtsi | 1 +
+> >>>>   1 file changed, 1 insertion(+)
+> >>>>
+> >>>> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> >>>> index a30ba3193d84..60866a20a55c 100644
+> >>>> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> >>>> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> >>>> @@ -2484,5 +2484,6 @@ timer {
+> >>>>                               <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+> >>>>                               <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+> >>>>                               <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
+> >>>> +               clock-frequency = <19200000>;
+> >>> Does the firmware not set the frequency properly?
+> >> It does on my device on the current firmware version (it wouldn't really 
+> >> boot if it didn't, no?),
+> >>
+> >> but who knows if it always will, or if it always has been..
+> >>
+> >>
+> >> It's present in downstream too, so I reckon it does not hurt to have it 
+> >> here too, even
+> >>
+> >> for completeness-of-describing-the-machine-properly sake.
+> >>
+> > No. We don't want dts files to have this. The property is only there to
+> > workaround bad firmware that doesn't set the frequency. Please drop this
+> > patch.
 > 
-> The above doesn't make sense.
+> After looking at it again, I see I was indeed wrong, and so was this patch.
 > 
-> data_size is unsigned but it is used as
->  'data_size + sizeof(struct kretprobe_instance)'. 
+> Sorry, and green light for dropping..
 > 
-> What does that mean?
-> 
-> What can be smaller than sizeof(struct kretprobe_instance) and why does it
-> matter?
 
-OK, what about this ?
+Can you please send me a patch that reverts the change as I merged it
+into my -next branch already? Both to simplify for me and to document
+why it shouldn't be here for others to refer to in the future.
 
-The 'kprobe::data_size' is unsigned, thus it can not be negative.
-But if user sets it enough big number (e.g. (size_t)-8), the result
-of 'data_size + sizeof(struct kretprobe_instance)' becomes smaller than
-sizeof(struct kretprobe_instance) or zero. In result, the kretprobe_instance
-are allocated without enough memory, and kretprobe accesses outside of
-allocated memory.
-
-Thank you,
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Thanks,
+Bjorn

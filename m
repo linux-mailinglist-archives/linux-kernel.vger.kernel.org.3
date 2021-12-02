@@ -2,112 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B8D465DA1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:55:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12142465DA8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 06:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345177AbhLBE6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 23:58:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236703AbhLBE6e (ORCPT
+        id S230194AbhLBFKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 00:10:46 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:28143 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229469AbhLBFKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 23:58:34 -0500
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFD5C061574;
-        Wed,  1 Dec 2021 20:55:12 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 58B8741F28;
-        Thu,  2 Dec 2021 04:55:08 +0000 (UTC)
-To:     Rob Herring <robh@kernel.org>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        PCI <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20211122111332.72264-1-marcan@marcan.st>
- <CAL_Jsq+vFbFN+WQhi3dRicW+kaP1Oi9JPSmnAFL7XAc0eCvgrA@mail.gmail.com>
- <8e881b80-614c-dccf-ddaf-895d1acf26c7@marcan.st>
- <CAL_JsqLMgkTdbKNP=kAvwKFQp+m330ztTX8v_UFmj2zvzsB-KA@mail.gmail.com>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH] PCI: apple: Configure link speeds properly
-Message-ID: <7f6928fc-97fd-cbe8-f7e9-954945b4574b@marcan.st>
-Date:   Thu, 2 Dec 2021 13:55:05 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Thu, 2 Dec 2021 00:10:45 -0500
+Received: from canpemm500008.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J4P5M4KXgz1DJcy;
+        Thu,  2 Dec 2021 13:04:39 +0800 (CST)
+Received: from [10.174.179.2] (10.174.179.2) by canpemm500008.china.huawei.com
+ (7.192.105.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 2 Dec
+ 2021 13:07:21 +0800
+Subject: Re: [PATCH] md: Fix unexpected behaviour in is_mddev_idle
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     <song@kernel.org>, <axboe@kernel.dk>, <hare@suse.de>,
+        <jack@suse.cz>, <ming.lei@redhat.com>, <tj@kernel.org>,
+        <linux-raid@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linfeilong@huawei.com>
+References: <20211201032712.3684503-1-lijinlin3@huawei.com>
+ <Yad9phRUdKF/giGD@bombadil.infradead.org>
+From:   Li Jinlin <lijinlin3@huawei.com>
+Message-ID: <cc737240-a6d2-2c12-d9c8-877c8018b505@huawei.com>
+Date:   Thu, 2 Dec 2021 13:07:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqLMgkTdbKNP=kAvwKFQp+m330ztTX8v_UFmj2zvzsB-KA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: es-ES
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yad9phRUdKF/giGD@bombadil.infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.2]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500008.china.huawei.com (7.192.105.151)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/11/2021 00.02, Rob Herring wrote:
->> Sure, it just means I have to reinvent the PCI capability lookup wheel
->> again. I'd love to use the regular accessors, but the infrastructure
->> isn't up to the point where we can do that yet yere. DWC also reinvents
->> this wheel, but we can't reuse that code because it pokes these
->> registers through a separate reg range, not config space (even though it
->> seems like they should be the same thing? I'm not sure what's going on
->> in the DWC devices... for the Apple controller it's just the ECAM).
+
+
+On 12/1/2021 9:50 PM, Luis Chamberlain wrote:
+> On Wed, Dec 01, 2021 at 11:27:12AM +0800, Li Jinlin wrote:
+>> diff --git a/drivers/md/md.c b/drivers/md/md.c
+>> index 5111ed966947..f47035838c43 100644
+>> --- a/drivers/md/md.c
+>> +++ b/drivers/md/md.c
+>> @@ -8429,14 +8429,14 @@ static int is_mddev_idle(struct mddev *mddev, int init)
+>>  {
+>>  	struct md_rdev *rdev;
+>>  	int idle;
+>> -	int curr_events;
+>> +	long curr_events;
 > 
-> Since it is just ECAM, can you use the regular config space accessors?
-
-The problem is this is before the PCI objects are created, so those 
-wouldn't work since they expect to be called on a pci_dev and such.
-
->>>> +       max_gen = of_pci_get_max_link_speed(port->np);
->>>> +       if (max_gen < 0) {
->>>> +               dev_err(port->pcie->dev, "max link speed not specified\n");
->>>
->>> Better to fail than limp along in gen1? Though you don't check the
->>> return value...
->>>
->>> Usually, the DT property is there to limit the speed when there's a
->>> board limitation.
->>
->> The default *setting* is actually Gen4, but without
->> PCIE_LINK_WIDTH_SPEED_CONTROL poked it always trains at Gen1. Might make
->> more sense to only set the LNKCTL field if max-link-speed is specified,
->> and unconditionally poke that bit. That'll get us Gen4 by default (or
->> even presumably Gen5 in future controllers, if everything else stays
->> compatible).
+>>  
+>>  	idle = 1;
+>>  	rcu_read_lock();
+>>  	rdev_for_each_rcu(rdev, mddev) {
+>>  		struct gendisk *disk = rdev->bdev->bd_disk;
+>> -		curr_events = (int)part_stat_read_accum(disk->part0, sectors) -
+>> -			      atomic_read(&disk->sync_io);
+>> +		curr_events = (long)part_stat_read_accum(disk->part0, sectors) -
+>> +			      atomic64_read(&disk->sync_io);
 > 
-> You already do some setup in firmware for ECAM, right? I think it
-> would be better if you can do any default setup there and then
-> max-link-speed is only an override for the kernel.
+> And what makes you believe you might not have to go and change all other
+> drivers to address this as well? 
+The drdb driver also have same problem. I will resend this patch together with
+the fix patch of drdb driver.
 
-I thought the PCIE_LINK_WIDTH_SPEED_CONTROL thing had to be set later, 
-but trying it now I realized we were missing a bit of initialization 
-that was causing it not to work. Indeed it can be done there and we can 
-drop it from the kernel.
+Thanks,
+JinLin
 
-We could even do the max-link-speed thing in m1n1 if we want. It has 
-access to the value from the ADT directly, which to be correct we'd have 
-to dynamically transplant to the DT, since there's at least one device 
-that has different PCIe devices on one port depending on hardware 
-variant, while sharing a devicetree. If we're okay with the kernel just 
-not implementing this feature for now, we can say it's the bootloader's job.
 
-Ultimately we ship the DTs along with m1n1, so there's an argument that 
-if some day we need to override the max-link-speed for whatever reason 
-over what the ADT says, well, we'd be shipping the updated DT along with 
-m1n1 anyway, so we might as well make m1n1 do it... if so, it might make 
-sense to drop those properties from the actual DTs we ship altogether, 
-at least for now.
-
-If we decide to make it m1n1's job entirely, we can drop this patch 
-altogether, at least for now (I can't say how this will interact with 
-suspend/resume and other power management, and hotplug... but we'll open 
-that can of worms when we get there).
-
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+> 
+>>  static inline void md_sync_acct_bio(struct bio *bio, unsigned long nr_sectors)
+>> diff --git a/include/linux/genhd.h b/include/linux/genhd.h
+>> index 74c410263113..efa7884de11b 100644
+>> --- a/include/linux/genhd.h
+>> +++ b/include/linux/genhd.h
+>> @@ -150,7 +150,7 @@ struct gendisk {
+>>  	struct list_head slave_bdevs;
+>>  #endif
+>>  	struct timer_rand_state *random;
+>> -	atomic_t sync_io;		/* RAID */
+>> +	atomic64_t sync_io;		/* RAID */
+>>  	struct disk_events *ev;
+>>  #ifdef  CONFIG_BLK_DEV_INTEGRITY
+>>  	struct kobject integrity_kobj;
+>> -- 
+>> 2.31.1
+> 
+>   Luis
+> .
+> 

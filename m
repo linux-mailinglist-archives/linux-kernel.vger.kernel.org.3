@@ -2,96 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2353465D9C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B8D465DA1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:55:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345211AbhLBEx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 23:53:56 -0500
-Received: from o1.ptr2625.egauge.net ([167.89.112.53]:39452 "EHLO
-        o1.ptr2625.egauge.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345155AbhLBExd (ORCPT
+        id S1345177AbhLBE6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 23:58:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236703AbhLBE6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 23:53:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=egauge.net;
-        h=from:subject:mime-version:to:cc:content-transfer-encoding:
-        content-type;
-        s=sgd; bh=V+rt97Ma1A4UbCvm3uO5ua9m0ulcAqxqdZw+J3rZCwI=;
-        b=Lx8UIrjFU4IGIZkzFgTI7JUosgizwYqwCIPY/nVYepOMj5dLL1LoPgnqbOiejr78zR6k
-        xhg9ICeX6CEWjSDYHIp2ms5Gc4hCTdCrbQJwsn+8GBoC4L7lfbUuz8OVvW2RpKeGjZl+dJ
-        YqkiHGSzzLLy8nIRwUGp/2zuFnNEVndy5iacyXJhM6Y/IZmJ/Yx5+3WZ+cvfSOkspQSHLL
-        spvX0BcvNfrzC0QEY12kHNSApG+JMVZuPjtXmZB50o1din512B9i8Ld2O2WhsaUM6QBzmi
-        u9AHxjivNs0okSgFWBcDRcIo2kJ8VFo7bIFj3Bb9VE3T4OB+obCqgMWLkQ8n2sKA==
-Received: by filterdrecv-64fcb979b9-ds7qn with SMTP id filterdrecv-64fcb979b9-ds7qn-1-61A85080-1A
-        2021-12-02 04:50:09.051111042 +0000 UTC m=+6843203.979711569
-Received: from pearl.egauge.net (unknown)
-        by geopod-ismtpd-6-0 (SG)
-        with ESMTP
-        id Zn13KC9PRh2A2BycfNBQfA
-        Thu, 02 Dec 2021 04:50:08.802 +0000 (UTC)
-Received: by pearl.egauge.net (Postfix, from userid 1000)
-        id 777B9700280; Wed,  1 Dec 2021 21:50:06 -0700 (MST)
-From:   David Mosberger-Tang <davidm@egauge.net>
-Subject: [PATCH] wilc1000: Add id_table to spi_driver
-Date:   Thu, 02 Dec 2021 04:50:09 +0000 (UTC)
-Message-Id: <20211202045001.2901903-1-davidm@egauge.net>
-X-Mailer: git-send-email 2.25.1
+        Wed, 1 Dec 2021 23:58:34 -0500
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFD5C061574;
+        Wed,  1 Dec 2021 20:55:12 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 58B8741F28;
+        Thu,  2 Dec 2021 04:55:08 +0000 (UTC)
+To:     Rob Herring <robh@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        PCI <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20211122111332.72264-1-marcan@marcan.st>
+ <CAL_Jsq+vFbFN+WQhi3dRicW+kaP1Oi9JPSmnAFL7XAc0eCvgrA@mail.gmail.com>
+ <8e881b80-614c-dccf-ddaf-895d1acf26c7@marcan.st>
+ <CAL_JsqLMgkTdbKNP=kAvwKFQp+m330ztTX8v_UFmj2zvzsB-KA@mail.gmail.com>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH] PCI: apple: Configure link speeds properly
+Message-ID: <7f6928fc-97fd-cbe8-f7e9-954945b4574b@marcan.st>
+Date:   Thu, 2 Dec 2021 13:55:05 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-X-SG-EID: =?us-ascii?Q?+kMxBqj35EdRUKoy8diX1j4AXmPtd302oan+iXZuF8m2Nw4HRW2irNspffT=2Fkh?=
- =?us-ascii?Q?ET6RJF6+Prbl0h=2FEtF1rRLvFUO26UYtrY3fq4tZ?=
- =?us-ascii?Q?RSGLd0N8Ue0pAwWsK8z9wfwxmsh=2FJiH7coen+AR?=
- =?us-ascii?Q?S72BgC5KehvSCik7mvkEZyg3FXMvooivqFOjdhw?=
- =?us-ascii?Q?4M0ar4C7BxnET0SjNv9zOm3QmmbZv0Eo3FqTlQx?=
- =?us-ascii?Q?t1ytwJRaDMMqhjYCBZi+Xe47MrPvzqwrBnBGY91?=
- =?us-ascii?Q?Rw9aC4UDv6UMssKGmYeyA=3D=3D?=
-To:     Ajay Singh <ajay.kathat@microchip.com>
-Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        David Mosberger-Tang <davidm@egauge.net>
-X-Entity-ID: Xg4JGAcGrJFIz2kDG9eoaQ==
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <CAL_JsqLMgkTdbKNP=kAvwKFQp+m330ztTX8v_UFmj2zvzsB-KA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This eliminates warning message:
+On 30/11/2021 00.02, Rob Herring wrote:
+>> Sure, it just means I have to reinvent the PCI capability lookup wheel
+>> again. I'd love to use the regular accessors, but the infrastructure
+>> isn't up to the point where we can do that yet yere. DWC also reinvents
+>> this wheel, but we can't reuse that code because it pokes these
+>> registers through a separate reg range, not config space (even though it
+>> seems like they should be the same thing? I'm not sure what's going on
+>> in the DWC devices... for the Apple controller it's just the ECAM).
+> 
+> Since it is just ECAM, can you use the regular config space accessors?
 
-	SPI driver WILC_SPI has no spi_device_id for microchip,wilc1000
+The problem is this is before the PCI objects are created, so those 
+wouldn't work since they expect to be called on a pci_dev and such.
 
-and makes device-tree autoloading work.
+>>>> +       max_gen = of_pci_get_max_link_speed(port->np);
+>>>> +       if (max_gen < 0) {
+>>>> +               dev_err(port->pcie->dev, "max link speed not specified\n");
+>>>
+>>> Better to fail than limp along in gen1? Though you don't check the
+>>> return value...
+>>>
+>>> Usually, the DT property is there to limit the speed when there's a
+>>> board limitation.
+>>
+>> The default *setting* is actually Gen4, but without
+>> PCIE_LINK_WIDTH_SPEED_CONTROL poked it always trains at Gen1. Might make
+>> more sense to only set the LNKCTL field if max-link-speed is specified,
+>> and unconditionally poke that bit. That'll get us Gen4 by default (or
+>> even presumably Gen5 in future controllers, if everything else stays
+>> compatible).
+> 
+> You already do some setup in firmware for ECAM, right? I think it
+> would be better if you can do any default setup there and then
+> max-link-speed is only an override for the kernel.
 
-Signed-off-by: David Mosberger-Tang <davidm@egauge.net>
----
- drivers/net/wireless/microchip/wilc1000/spi.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+I thought the PCIE_LINK_WIDTH_SPEED_CONTROL thing had to be set later, 
+but trying it now I realized we were missing a bit of initialization 
+that was causing it not to work. Indeed it can be done there and we can 
+drop it from the kernel.
 
-diff --git a/drivers/net/wireless/microchip/wilc1000/spi.c b/drivers/net/wireless/microchip/wilc1000/spi.c
-index 640850f989dd..6e7fd18c14e7 100644
---- a/drivers/net/wireless/microchip/wilc1000/spi.c
-+++ b/drivers/net/wireless/microchip/wilc1000/spi.c
-@@ -203,11 +203,18 @@ static const struct of_device_id wilc_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, wilc_of_match);
- 
-+static const struct spi_device_id wilc_spi_id[] = {
-+	{ "wilc1000", 0 },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(spi, wilc_spi_id);
-+
- static struct spi_driver wilc_spi_driver = {
- 	.driver = {
- 		.name = MODALIAS,
- 		.of_match_table = wilc_of_match,
- 	},
-+	.id_table = wilc_spi_id,
- 	.probe =  wilc_bus_probe,
- 	.remove = wilc_bus_remove,
- };
+We could even do the max-link-speed thing in m1n1 if we want. It has 
+access to the value from the ADT directly, which to be correct we'd have 
+to dynamically transplant to the DT, since there's at least one device 
+that has different PCIe devices on one port depending on hardware 
+variant, while sharing a devicetree. If we're okay with the kernel just 
+not implementing this feature for now, we can say it's the bootloader's job.
+
+Ultimately we ship the DTs along with m1n1, so there's an argument that 
+if some day we need to override the max-link-speed for whatever reason 
+over what the ADT says, well, we'd be shipping the updated DT along with 
+m1n1 anyway, so we might as well make m1n1 do it... if so, it might make 
+sense to drop those properties from the actual DTs we ship altogether, 
+at least for now.
+
+If we decide to make it m1n1's job entirely, we can drop this patch 
+altogether, at least for now (I can't say how this will interact with 
+suspend/resume and other power management, and hotplug... but we'll open 
+that can of worms when we get there).
+
 -- 
-2.25.1
-
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

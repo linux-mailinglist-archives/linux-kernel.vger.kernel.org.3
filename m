@@ -2,112 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1789846611F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A7246611E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:05:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346120AbhLBKJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 05:09:07 -0500
-Received: from mga18.intel.com ([134.134.136.126]:46389 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241366AbhLBKIk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 05:08:40 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="223549820"
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="223549820"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 02:05:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="477866074"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 02 Dec 2021 02:05:13 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1msixk-000G9p-N5; Thu, 02 Dec 2021 10:05:12 +0000
-Date:   Thu, 2 Dec 2021 18:04:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [rui:amd-pstate-dev-v5 6/22] include/acpi/processor.h:221:2: error:
- unknown type name 'phys_cpuid_t'
-Message-ID: <202112021843.Qk1Pq4hR-lkp@intel.com>
+        id S1346167AbhLBKI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:08:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240964AbhLBKIL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 05:08:11 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20DCC061758
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 02:04:48 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id v11so58468772wrw.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 02:04:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Q1txYpUSZr7D7uPbcrO25oyFLvtG0YcSl+xSgR678CU=;
+        b=s4DG6/X0sOK04u0D7nRFsOCfQL/+jtYSDxqFMxG40EDJ5GuWYXu9WaaowILfkgyn67
+         tpytbRin5PwhfPSzENpVbcJkoWuqv7o/sYNS3lSdUMXQTw/Ijycr6ocqgw+ER6iyT4Sv
+         fcY969eWHZiK6RecesJ3X6yWxEgPu7x3+gNNUUavMAJT0PaKlShhbiZi2/K3pgobbl6H
+         oyZEjOKnYLeazQ+I+4Kvv+ZFLLAgVukJUHoMlGYwb14Swyskhd8d2+E530pOcMiGgrmM
+         71TpNzl7Kv2zhq8K7YY9QIGXGifZS5moIgE035IDDdX60qhwJqJjwRRzgEk4klJykMrL
+         kt3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Q1txYpUSZr7D7uPbcrO25oyFLvtG0YcSl+xSgR678CU=;
+        b=JYIc8Yk3kd11HvKbyQpRP5/ITiy+GI6sjvgZxrnO2rMRkQHXkpgHCHqxEAuCnjpChf
+         SyW6jZOURt6vdJjuVTg+HbtMrAm/E6m5yun+jpvkv3yx/8ewPJNp0I5q2kDA+Xrsg/sE
+         Aj9U8PU03MFyUkEOdQNnt9XZ8FemC7BWXWNRZjvn2Etnfm7cdUJNaZpP4Gh/VI1v9nwP
+         358zU24VxThNVx3CNiruUDMXbsOpMbFo/qx2kuiZBMTgJsw40oMP/kea/5SGAT5qxqY7
+         Zea6rgaYXHNqAGiVqMcEt4RTkDiEw7mINk3Ze9C0qPnkS17ONGHdlD/aFw+mQFRl/N3o
+         aV3A==
+X-Gm-Message-State: AOAM531XOtp3v6ws67idG5Pyg+tl1YaEIDSFqsVaSa3I+GrPrasUJhAy
+        pPMOarunP1iWFwDt6Re78aG3/Q==
+X-Google-Smtp-Source: ABdhPJyCgBQhRwaqcmFlssyYNHQ8qnwc3j4ps6f61OlYNymOPCs3LjEfvAb7l2WH7H7klJ51hGksHQ==
+X-Received: by 2002:adf:dbcb:: with SMTP id e11mr12952895wrj.575.1638439487003;
+        Thu, 02 Dec 2021 02:04:47 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:72d0:52a1:d4ea:f564? ([2a01:e34:ed2f:f020:72d0:52a1:d4ea:f564])
+        by smtp.googlemail.com with ESMTPSA id n13sm2161632wrt.44.2021.12.02.02.04.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 02:04:46 -0800 (PST)
+Subject: Re: linux-next: build failure after merge of the pm tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20211202102814.793d2f67@canb.auug.org.au>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <f6e96a47-01a3-96f3-1ed7-e9a42c2b26bf@linaro.org>
+Date:   Thu, 2 Dec 2021 11:04:45 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211202102814.793d2f67@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git amd-pstate-dev-v5
-head:   33ee93463b3b2fe05043d5be31bfb12475d7b142
-commit: 912ee85e7c162de04823c6b061d5a9a482556d91 [6/22] cpufreq: amd: introduce a new amd pstate driver to support future processors
-config: x86_64-buildonly-randconfig-r001-20211202 (https://download.01.org/0day-ci/archive/20211202/202112021843.Qk1Pq4hR-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b553297ef3ee4dc2119d5429adf3072e90fac38)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git/commit/?id=912ee85e7c162de04823c6b061d5a9a482556d91
-        git remote add rui https://git.kernel.org/pub/scm/linux/kernel/git/rui/linux.git
-        git fetch --no-tags rui amd-pstate-dev-v5
-        git checkout 912ee85e7c162de04823c6b061d5a9a482556d91
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/cpufreq/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 02/12/2021 00:28, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the pm tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+> 
+> drivers/powercap/dtpm.c: In function 'init_dtpm':
+> drivers/powercap/dtpm.c:466:21: error: unused variable 'dtpm_descr' [-Werror=unused-variable]
+>   466 |  struct dtpm_descr *dtpm_descr;
+>       |                     ^~~~~~~~~~
+> cc1: all warnings being treated as errors
+> 
+> Caused by commit
+> 
+>   f751db8adaea ("powercap/drivers/dtpm: Disable DTPM at boot time")
 
-All errors (new ones prefixed by >>):
+Rafael, will you drop the patch from your tree and I send a new one with
+the local variable also, or shall I send a change on top of?
 
-   In file included from drivers/cpufreq/amd-pstate.c:27:
->> include/acpi/processor.h:221:2: error: unknown type name 'phys_cpuid_t'
-           phys_cpuid_t phys_id;   /* CPU hardware ID such as APIC ID for x86 */
-           ^
-   include/acpi/processor.h:350:1: error: unknown type name 'phys_cpuid_t'
-   phys_cpuid_t acpi_get_phys_id(acpi_handle, int type, u32 acpi_id);
-   ^
-   include/acpi/processor.h:351:1: error: unknown type name 'phys_cpuid_t'
-   phys_cpuid_t acpi_map_madt_entry(u32 acpi_id);
-   ^
-   include/acpi/processor.h:352:20: error: unknown type name 'phys_cpuid_t'
-   int acpi_map_cpuid(phys_cpuid_t phys_id, u32 acpi_id);
-                      ^
-   4 errors generated.
+> 
+> I have used the pm tree from next-20211201 for today.
+> 
 
 
-vim +/phys_cpuid_t +221 include/acpi/processor.h
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-^1da177e4c3f41 Linus Torvalds    2005-04-16  217  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  218  struct acpi_processor {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  219  	acpi_handle handle;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  220  	u32 acpi_id;
-828aef376d7a12 Catalin Marinas   2015-03-24 @221  	phys_cpuid_t phys_id;	/* CPU hardware ID such as APIC ID for x86 */
-af8f3f514d193e Hanjun Guo        2015-01-04  222  	u32 id;		/* CPU logical ID allocated by OS */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  223  	u32 pblk;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  224  	int performance_platform_limit;
-01854e697a77a4 Luming Yu         2007-05-26  225  	int throttling_platform_limit;
-ff55a9cebab024 Len Brown         2007-06-02  226  	/* 0 - states 0..n-th state available */
-01854e697a77a4 Luming Yu         2007-05-26  227  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  228  	struct acpi_processor_flags flags;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  229  	struct acpi_processor_power power;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  230  	struct acpi_processor_performance *performance;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  231  	struct acpi_processor_throttling throttling;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  232  	struct acpi_processor_limit limit;
-d9460fd227ed2c Zhang Rui         2008-01-17  233  	struct thermal_cooling_device *cdev;
-ac212b6980d8d5 Rafael J. Wysocki 2013-05-03  234  	struct device *dev; /* Processor device. */
-3000ce3c52f8b8 Rafael J. Wysocki 2019-10-16  235  	struct freq_qos_request perflib_req;
-3000ce3c52f8b8 Rafael J. Wysocki 2019-10-16  236  	struct freq_qos_request thermal_req;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  237  };
-^1da177e4c3f41 Linus Torvalds    2005-04-16  238  
-
-:::::: The code at line 221 was first introduced by commit
-:::::: 828aef376d7a129547bc4ebb949965040177e3da ACPI / processor: Introduce phys_cpuid_t for CPU hardware ID
-
-:::::: TO: Catalin Marinas <catalin.marinas@arm.com>
-:::::: CC: Will Deacon <will.deacon@arm.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

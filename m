@@ -2,128 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1FB466313
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:07:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F032466318
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357546AbhLBMKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 07:10:45 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:27808 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S241798AbhLBMKm (ORCPT
+        id S1357641AbhLBMLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 07:11:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60550 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346505AbhLBMLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 07:10:42 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B2BUMGo019468;
-        Thu, 2 Dec 2021 12:07:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=in-reply-to : subject :
- from : to : cc : date : message-id : content-transfer-encoding :
- content-type : mime-version : references; s=pp1;
- bh=/cBpo1bPMw63YrNeQlOUwy+lPR+yqdHCJnTgUl87cKU=;
- b=JayXMBriBQeYIqa3l0VC+nx/B7Nhlx8a658sRwL67A7zdXutgLqGadPZNXtB9AWuSF5p
- yIH7OWJzL8LTK/PCXhYHIwHcym97CwllbEXww10cinRDizCWt+t+0fegQzvh6FfdItA4
- r8YmUhznX9EU4ukYckG6B76P7GTxNCZYloJfEcK9dZEo0ul5KifHMJGDvqH8heQ559Gn
- I91lurcObTqxZlAB6X0UzKGGE/XbwqLW6Q74DyThMrSDKNyFxx83u4PpJ0ZM0HzL9L3W
- /LEeaz8MmmBPbW+BPhCn/jvc8sqIXU1LCBn3Ug1TBbu5Ww64mxoYzdVddGzp8kHRZ7zD GA== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cpuct39e5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 12:07:18 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B2BvPVG016705;
-        Thu, 2 Dec 2021 12:07:17 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma04dal.us.ibm.com with ESMTP id 3cnne3239r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 12:07:17 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B2C7GpZ29229398
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Dec 2021 12:07:16 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 891F3B205F;
-        Thu,  2 Dec 2021 12:07:16 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 633CBB2064;
-        Thu,  2 Dec 2021 12:07:16 +0000 (GMT)
-Received: from mww0301.wdc07m.mail.ibm.com (unknown [9.208.64.45])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTPS;
-        Thu,  2 Dec 2021 12:07:16 +0000 (GMT)
-In-Reply-To: <1638439679-114250-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-Subject: Re: [PATCH] RDMA/siw: Use max() instead of doing it manually
-From:   "Bernard Metzler" <BMT@zurich.ibm.com>
-To:     "Jiapeng Chong" <jiapeng.chong@linux.alibaba.com>
-Cc:     jgg@ziepe.ca, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 2 Dec 2021 12:07:14 +0000
-Message-ID: <OF03100A62.8FDD44EE-ON0025879F.00427DFD-0025879F.004294C9@ibm.com>
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
+        Thu, 2 Dec 2021 07:11:10 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE92C06174A;
+        Thu,  2 Dec 2021 04:07:48 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id F31B51F464A8
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638446866; bh=pPyD6PF5rFuQOiYOC4+IpwATefnYR78OfW8Ax9aUOMs=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=NcQEqFD9oH8mvt2zCAm3WVtnoZablrIDtMQfHyqK5qlr76zXDuOrHrs3ZaJpgHoKf
+         bTgbuO4n21Cs1J8ib6opRTX8oPiw0YqYvKctLyFS7rRATF3nUhS8u2QzIJFGwKgxWE
+         gBmWKHN45nPI0dUWK+pVP+7T3QkOOqD5RuI8piwc0OlIXql6Fn9Z3H+aCTbME0KAZg
+         UtNx5atp/WgxaobOaT7HGFdirD1ATK46yGjcJSLM0bEKu/N8SNGwY2RO52VWD0yzUP
+         rf8hZVfkAqg2A/MlzMAv6C91+aNnp0c5Jni90o1Hafn9qrYQkZ6pS6lh/eqfFLA7sy
+         U2i1aqXkmv/7A==
+Subject: Re: [PATCH v9 7/7] media: platform: mtk-mdp3: add Mediatek MDP3
+ driver
+To:     moudy ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
+        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        menghui.lin@mediatek.com, sj.huang@mediatek.com,
+        allen-kh.cheng@mediatek.com, randy.wu@mediatek.com,
+        jason-jh.lin@mediatek.com, roy-cw.yeh@mediatek.com,
+        river.cheng@mediatek.com, srv_heupstream@mediatek.com
+References: <20211201095031.31606-1-moudy.ho@mediatek.com>
+ <20211201095031.31606-8-moudy.ho@mediatek.com>
+ <103b1664-d04c-c1fc-ff4c-e2c92ce45ee8@collabora.com>
+ <0d3f33e26b67cabc82246c49c0e952194a9a88c1.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <038d4a24-7d61-ebb2-796f-63b59001ee54@collabora.com>
+Date:   Thu, 2 Dec 2021 13:07:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Sensitivity: 
-Importance: Normal
-X-Priority: 3 (Normal)
-References: <1638439679-114250-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-X-Mailer: Lotus Domino Web Server Release 11.0.1FP2HF117   October 6, 2021
-X-MIMETrack: Serialize by http on MWW0301/01/M/IBM at 12/02/2021 12:07:14,Serialize
- complete at 12/02/2021 12:07:14
-X-Disclaimed: 40247
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2LA_gj7mIzdW-mbDsZFU95nwPTRQWTSY
-X-Proofpoint-ORIG-GUID: 2LA_gj7mIzdW-mbDsZFU95nwPTRQWTSY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-12-02_07,2021-12-02_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
- suspectscore=0 spamscore=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 mlxlogscore=999 adultscore=0 phishscore=0
- malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2112020077
+In-Reply-To: <0d3f33e26b67cabc82246c49c0e952194a9a88c1.camel@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------"Jiapeng Chong" <jiapeng.chong@linux.alibaba.com> wrote: -----
+Il 02/12/21 04:35, moudy ho ha scritto:
+> On Wed, 2021-12-01 at 11:37 +0100, AngeloGioacchino Del Regno wrote:
+>> Il 01/12/21 10:50, Moudy Ho ha scritto:
+>>> This patch adds driver for Mediatek's Media Data Path ver.3 (MDP3).
+>>> It provides the following functions:
+>>>     color transform, format conversion, resize, crop, rotate, flip
+>>>     and additional image quality enhancement.
+>>>
+>>> The MDP3 driver is mainly used for Google Chromebook products to
+>>> import the new architecture to set the HW settings as shown below:
+>>>     User -> V4L2 framework
+>>>       -> MDP3 driver -> SCP (setting calculations)
+>>>         -> MDP3 driver -> CMDQ (GCE driver) -> HW
+>>>
+>>> Each modules' related operation control is sited in mtk-mdp3-comp.c
+>>> Each modules' register table is defined in file with "mdp_reg_"
+>>> prefix
+>>> GCE related API, operation control  sited in mtk-mdp3-cmdq.c
+>>> V4L2 m2m device functions are implemented in mtk-mdp3-m2m.c
+>>> Probe, power, suspend/resume, system level functions are defined in
+>>> mtk-mdp3-core.c
+>>>
+>>> Signed-off-by: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
+>>> Signed-off-by: daoyuan huang <daoyuan.huang@mediatek.com>
+>>> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> ---
+>>>    drivers/media/platform/Kconfig                |   19 +
+>>>    drivers/media/platform/Makefile               |    2 +
+>>>    drivers/media/platform/mtk-mdp3/Makefile      |    6 +
+>>>    .../media/platform/mtk-mdp3/mdp_reg_ccorr.h   |   19 +
+>>>    drivers/media/platform/mtk-mdp3/mdp_reg_isp.h |   27 +
+>>>    .../media/platform/mtk-mdp3/mdp_reg_rdma.h    |   65 +
+>>>    drivers/media/platform/mtk-mdp3/mdp_reg_rsz.h |   39 +
+>>>    .../media/platform/mtk-mdp3/mdp_reg_wdma.h    |   47 +
+>>>    .../media/platform/mtk-mdp3/mdp_reg_wrot.h    |   55 +
+>>>    drivers/media/platform/mtk-mdp3/mtk-img-ipi.h |  280 ++++
+>>>    .../media/platform/mtk-mdp3/mtk-mdp3-cmdq.c   |  514 +++++++
+>>>    .../media/platform/mtk-mdp3/mtk-mdp3-cmdq.h   |   46 +
+>>>    .../media/platform/mtk-mdp3/mtk-mdp3-comp.c   | 1264
+>>> +++++++++++++++++
+>>>    .../media/platform/mtk-mdp3/mtk-mdp3-comp.h   |  147 ++
+>>>    .../media/platform/mtk-mdp3/mtk-mdp3-core.c   |  338 +++++
+>>>    .../media/platform/mtk-mdp3/mtk-mdp3-core.h   |   76 +
+>>>    .../media/platform/mtk-mdp3/mtk-mdp3-m2m.c    |  789 ++++++++++
+>>>    .../media/platform/mtk-mdp3/mtk-mdp3-m2m.h    |   49 +
+>>>    .../media/platform/mtk-mdp3/mtk-mdp3-regs.c   |  737 ++++++++++
+>>>    .../media/platform/mtk-mdp3/mtk-mdp3-regs.h   |  372 +++++
+>>>    .../media/platform/mtk-mdp3/mtk-mdp3-vpu.c    |  312 ++++
+>>>    .../media/platform/mtk-mdp3/mtk-mdp3-vpu.h    |   78 +
+>>>    22 files changed, 5281 insertions(+)
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/Makefile
+>>>    create mode 100644 drivers/media/platform/mtk-
+>>> mdp3/mdp_reg_ccorr.h
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_isp.h
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_rdma.h
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_rsz.h
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_wdma.h
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_wrot.h
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mtk-img-ipi.h
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-
+>>> cmdq.c
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-
+>>> cmdq.h
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-
+>>> comp.c
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-
+>>> comp.h
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-
+>>> core.c
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-
+>>> core.h
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.c
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.h
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-
+>>> regs.c
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-
+>>> regs.h
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.c
+>>>    create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.h
+>>>
+>>
+>> snip...
+>>
+>>> diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c
+>>> b/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c
+>>> new file mode 100644
+>>> index 000000000000..a643f3ee928b
+>>> --- /dev/null
+>>> +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c
+>>> @@ -0,0 +1,514 @@
+>>
+>> Looks like you forgot to check my review comments to this entire
+>> file.
+>> Can you please send a new version after applying the changes to this
+>> file
+>> suggested in my review of series v8?
+> Hi Angelo,
+> 
+> Thanks for the reminder and sorry for my carelessness. Considering the
+> compatibility of subsequent chips and function independence, I plan to
+> move those mutex mod definition to the corresponding driver, and
+> release next version ASAP.
+> 
+> Thanks & Regards,
+> Moudy Ho
+>> Thanks.
+> 
 
->To: bmt@zurich.ibm.com
->From: "Jiapeng Chong" <jiapeng.chong@linux.alibaba.com>
->Date: 12/02/2021 11:08AM
->Cc: jgg@ziepe.ca, linux-rdma@vger.kernel.org,
->linux-kernel@vger.kernel.org, "Jiapeng Chong"
-><jiapeng.chong@linux.alibaba.com>
->Subject: [EXTERNAL] [PATCH] RDMA/siw: Use max() instead of doing it
->manually
->
->Fix following coccicheck warning:
->
->./drivers/infiniband/sw/siw/siw=5Fverbs.c:665:28-29: WARNING
->opportunity
->for max().
->
->Reported-by: Abaci Robot <abaci@linux.alibaba.com>
->Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
->---
-> drivers/infiniband/sw/siw/siw=5Fverbs.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/drivers/infiniband/sw/siw/siw=5Fverbs.c
->b/drivers/infiniband/sw/siw/siw=5Fverbs.c
->index d15a1f9..a3dd2cb 100644
->--- a/drivers/infiniband/sw/siw/siw=5Fverbs.c
->+++ b/drivers/infiniband/sw/siw/siw=5Fverbs.c
->@@ -662,7 +662,7 @@ static int siw=5Fcopy=5Finline=5Fsgl(const struct
->ib=5Fsend=5Fwr *core=5Fwr,
-> 		kbuf +=3D core=5Fsge->length;
-> 		core=5Fsge++;
-> 	}
->-	sqe->sge[0].length =3D bytes > 0 ? bytes : 0;
->+	sqe->sge[0].length =3D max(bytes, 0);
-> 	sqe->num=5Fsge =3D bytes > 0 ? 1 : 0;
->=20
-> 	return bytes;
->--=20
->1.8.3.1
->
->
-Looks good, thanks!
 
-Reviewed-by: Bernard Metzler <bmt@zurich.ibm.com>
+Hi Moudy,
+
+Don't worry, we're humans, it happens to the best. We're always here to improve!
+Thank you for sending the v10 by the way, I will review it as soon as I can.
+
+Regards,
+- Angelo

@@ -2,148 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 957E54669AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 19:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CC54669B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 19:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348306AbhLBSSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 13:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
+        id S1348353AbhLBSTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 13:19:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbhLBSSd (ORCPT
+        with ESMTP id S1348292AbhLBSTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 13:18:33 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA48C06174A;
-        Thu,  2 Dec 2021 10:15:10 -0800 (PST)
-Date:   Thu, 02 Dec 2021 18:15:07 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638468908;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BrF3Lpl38xw4GjI5AYCD/2kHblDIHWUggd56B1HbR9s=;
-        b=QncW17azzEh9KJD/h8ABsFEJmlUESrmWiWaD7GHLSM4+UuStWlYAMv/CfAVHWX9Jnudgel
-        2FTfCSozbg9TKoKpRQchS6upAlVu4le5HFPnq68AWlQqXnBsQXuHN0Sc6hIlfCpg1iv2Qk
-        r1kaNS5I+YH4MJDx1iVIHuyFYYe8ggbVwuLYOcVhqZerrx36lIOXeHu6HmoW9P7hS4AZj/
-        QScxBKa+KacSCoN7OnZsPKThCl5VfwAP51rp8Mvnk3xPVvplXJ/1Eo0T5IPzWAoUspURVs
-        EiGsNz7DhTDx6ImIhvelp3ZcgiumctS0hqlpuHA1HsVgoi3KPelpHLT7kYsx4w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638468908;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BrF3Lpl38xw4GjI5AYCD/2kHblDIHWUggd56B1HbR9s=;
-        b=Q/x7qj7bv2P2KvTx1mqMn7UGHWIam9uGt9SLYreQv4MgktpKDeF135rvJyelqiGpGNCY4a
-        41GST6JRNsJuXUDw==
-From:   "tip-bot2 for Joerg Roedel" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm: Fix PAGE_KERNEL_IO removal breakage
-Cc:     Joerg Roedel <jroedel@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211202144646.23186-1-joro@8bytes.org>
-References: <20211202144646.23186-1-joro@8bytes.org>
+        Thu, 2 Dec 2021 13:19:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35539C06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 10:15:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C25DF6279E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 18:15:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F52CC00446;
+        Thu,  2 Dec 2021 18:15:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638468939;
+        bh=rXdSCw7yvks4MsvqXc1cR/AMkdpo30qxXV6UWDcJXmo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ehAna/A8UKEtPBZc/0QjGYTY1r3P4MYWY8xUJLKFXwd4isHusPhGEoDG2Wzlc9ZYW
+         sVJFmuUCf//qaYRSjTTPZVQkuJh7XI3srsU7SxN2Fz50jZsX5CUi58heINBHbPsiZt
+         FzEnh/m2oXDhAkXccxHS9ElJ3LnLMlzeG2d/vQNanv2ndF4YcYRFbwRKz0F6J1THXU
+         UXe5YrmKtJ00UroMhVME4ACfKetqNJ7X743sfdCIhFIpUsfXNVhLG1+Kes/gKpa94b
+         ysR+9P/rq0Fer/ZKpCK6BZRmwo7Qu3+rrBBM0PNodxwVnO+96vm8VxxvMgVFJCgLbw
+         u7/L7sDdiuOyQ==
+Date:   Thu, 2 Dec 2021 10:15:37 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     niuzhiguo84@gmail.com, Jing.Xia@unisoc.com,
+        linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [f2fs-dev] [PATCH Vx 1/1] f2fs: Avoid deadlock between writeback
+ and checkpoint
+Message-ID: <YakNSfMyzGAe2y42@google.com>
+References: <1636438608-27597-1-git-send-email-niuzhiguo84@gmail.com>
+ <YZU0TFBH6k2Q6fJZ@google.com>
+ <e28d4963-d816-b568-dec8-60a79a9fe88d@kernel.org>
+ <e25053e9-f97e-6a2f-3bac-acfcd689fdcb@kernel.org>
+ <Yaf1J/GtTrJekmtn@google.com>
+ <f0fa20e0-7c03-c454-d5a7-62457663412b@kernel.org>
 MIME-Version: 1.0
-Message-ID: <163846890716.11128.7464150139974319110.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f0fa20e0-7c03-c454-d5a7-62457663412b@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/mm branch of tip:
+On 12/02, Chao Yu wrote:
+> On 2021/12/2 6:20, Jaegeuk Kim wrote:
+> > On 11/20, Chao Yu wrote:
+> > > On 2021/11/18 14:46, Chao Yu wrote:
+> > > > On 2021/11/18 0:56, Jaegeuk Kim wrote:
+> > > > > On 11/09, niuzhiguo84@gmail.com wrote:
+> > > > > > From: Zhiguo Niu <zhiguo.niu@unisoc.com>
+> > > > > > 
+> > > > > > There could be a scenario as following:
+> > > > > > The inodeA and inodeB are in b_io queue of writeback
+> > > > > > inodeA : f2fs's node inode
+> > > > > > inodeB : a dir inode with only one dirty pages, and the node page
+> > > > > > of inodeB cached into inodeA
+> > > > > > 
+> > > > > > writeback:
+> > > > > > 
+> > > > > > wb_workfn
+> > > > > > wb_writeback
+> > > > > > blk_start_plug
+> > > > > >            loop {
+> > > > > >            queue_io
+> > > > > >            progress=__writeback_inodes_wb
+> > > > > >                    __writeback_single_inode
+> > > > > >                            do_writepages
+> > > > > >                                    f2fs_write_data_pages
+> > > > > >                                    wbc->pages_skipped +=get_dirty_pages
+> > > > > >                            inode->i_state &= ~dirty
+> > > > > >                    wrote++
+> > > > > >                    requeue_inode
+> > > > > >            }
+> > > > > > blk_finish_plug
+> > > > > > 
+> > > > > > checkpoint:
+> > > > > > 
+> > > > > > f2fs_write_checkpoint
+> > > > > > f2fs_sync_dirty_inodes
+> > > > > > filemap_fdatawrite
+> > > > > > do_writepages
+> > > > > > f2fs_write_data_pages
+> > > > > >            f2fs_write_single_data_page
+> > > > > >                    f2fs_do_write_data_page
+> > > > > >                            set_page_writeback
+> > > > > >                            f2fs_outplace_write_data
+> > > > > >                                    f2fs_update_data_blkaddr
+> > > > > >                                            f2fs_wait_on_page_writeback
+> > > > > >                    inode_dec_dirty_pages
+> > > > > > 
+> > > > > > 1. Writeback thread flush inodeA, and push it's bio request in task's plug;
+> > > > > > 2. Checkpoint thread writes inodeB's dirty page, and then wait its node
+> > > > > >        page writeback cached into inodeA which is in writeback task's plug
+> > > > > > 3. Writeback thread flush inodeB and skip writing the dirty page as
+> > > > > >        wb_sync_req[DATA] > 0.
+> > > > > > 4. As none of the inodeB's page is marked as PAGECACHE_TAG_DIRTY, writeback
+> > > > > >        thread clear inodeB's dirty state.
+> > > > > > 5. Then inodeB is moved from b_io to b_dirty because of pages_skipped > 0
+> > > > > >        as checkpoint thread is stuck before dec dirty_pages.
+> > > > > > 
+> > > > > > This patch collect correct pages_skipped according to the tag state in
+> > > > > > page tree of inode
+> > > > > > 
+> > > > > > Signed-off-by: Zhiguo Niu <zhiguo.niu@unisoc.com>
+> > > > > > Signed-off-by: Jing Xia <jing.xia@unisoc.com>
+> > > > > > ---
+> > > > > >     fs/f2fs/data.c | 4 +++-
+> > > > > >     1 file changed, 3 insertions(+), 1 deletion(-)
+> > > > > > 
+> > > > > > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> > > > > > index f4fd6c246c9a..e98628e3868c 100644
+> > > > > > --- a/fs/f2fs/data.c
+> > > > > > +++ b/fs/f2fs/data.c
+> > > > > > @@ -3237,7 +3237,9 @@ static int __f2fs_write_data_pages(struct address_space *mapping,
+> > > > > >     	return ret;
+> > > > > >     skip_write:
+> > > > > > -	wbc->pages_skipped += get_dirty_pages(inode);
+> > > > > > +	wbc->pages_skipped +=
+> > > > > > +		mapping_tagged(inode->i_mapping, PAGECACHE_TAG_DIRTY) ?
+> > > > > 
+> > > > > Is there any race condition to get 0, if there's any dirty page? IOWs, it
+> > > > 
+> > > > Quoted from Jing Xia's explanation:
+> > > > 
+> > > > [T:writeback]				[T:checkpoint]
+> > > 
+> > > My bad, [1] should be here:
+> > > 
+> > > bio contains NodeA was plugged in writeback threads
+> > > 
+> > > Thanks,
+> > > 
+> > > > 					- do_writepages  -- sync write inodeB, inc wb_sync_req[DATA]
+> > > > 					 - f2fs_write_data_pages
+> > > > 					  - f2fs_write_single_data_page -- write last dirty page
+> > > > 					   - f2fs_do_write_data_page
+> > > > 					    - set_page_writeback  -- clear page dirty flag and
+> > > > 					    PAGECACHE_TAG_DIRTY tag in radix tree
+> > > > 					    - f2fs_outplace_write_data
+> > > > 					     - f2fs_update_data_blkaddr
+> > > > 					      - f2fs_wait_on_page_writeback -- wait NodeA to writeback here
+> > > > 					   - inode_dec_dirty_pages
+> > > 
+> > > > bio contains NodeA was plugged in writeback threads
+> > > 
+> > > [1]
+> > > 
+> > > Thanks,
+> > > 
+> > > > - writeback_sb_inodes
+> > > >     - writeback_single_inode
+> > > >      - do_writepages
+> > > >       - f2fs_write_data_pages -- skip writepages due to wb_sync_req[DATA]
+> > > >        - wbc->pages_skipped += get_dirty_pages() -- PAGECACHE_TAG_DIRTY is not set but get_dirty_pages() returns one
+> > > >     - requeue_inode -- requeue inode to wb->b_dirty queue due to non-zero.pages_skipped
+> > 
+> > So, my question was why this is the problem?
+> 
+> kworker will loop writebacking this requeued inode.
 
-Commit-ID:     9a951429b2e1670a76b68c90880b01430fe509e4
-Gitweb:        https://git.kernel.org/tip/9a951429b2e1670a76b68c90880b01430fe509e4
-Author:        Joerg Roedel <jroedel@suse.de>
-AuthorDate:    Thu, 02 Dec 2021 15:46:46 +01:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Thu, 02 Dec 2021 09:41:24 -08:00
+Does it make a problem?
 
-x86/mm: Fix PAGE_KERNEL_IO removal breakage
-
-The removal of PAGE_KERNEL_IO broke SEV-ES because it changed the
-mapping of ioremap and some fixmap areas (like the local APIC page)
-from unencrypted to encrypted. Change those mappings back to
-be unencrypted.
-
-Fixes: 27dff0f58bde ("x86/mm: Nuke PAGE_KERNEL_IO")
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
-Tested-by: Tom Lendacky <thomas.lendacky@amd.com>
-Link: https://lkml.kernel.org/r/20211202144646.23186-1-joro@8bytes.org
----
- arch/x86/include/asm/fixmap.h        |  2 +-
- arch/x86/include/asm/pgtable_types.h | 21 +++++++++++----------
- arch/x86/mm/ioremap.c                |  2 +-
- 3 files changed, 13 insertions(+), 12 deletions(-)
-
-diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
-index 5e186a6..a2eaf26 100644
---- a/arch/x86/include/asm/fixmap.h
-+++ b/arch/x86/include/asm/fixmap.h
-@@ -173,7 +173,7 @@ static inline void __set_fixmap(enum fixed_addresses idx,
-  * supported for MMIO addresses, so make sure that the memory encryption
-  * mask is not part of the page attributes.
-  */
--#define FIXMAP_PAGE_NOCACHE PAGE_KERNEL_NOCACHE
-+#define FIXMAP_PAGE_NOCACHE PAGE_KERNEL_NOCACHE_NOENC
- 
- /*
-  * Early memremap routines used for in-place encryption. The mappings created
-diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-index a872247..fc9b699 100644
---- a/arch/x86/include/asm/pgtable_types.h
-+++ b/arch/x86/include/asm/pgtable_types.h
-@@ -208,16 +208,17 @@ enum page_cache_mode {
- 
- #define __pgprot_mask(x)	__pgprot((x) & __default_kernel_pte_mask)
- 
--#define PAGE_KERNEL		__pgprot_mask(__PAGE_KERNEL            | _ENC)
--#define PAGE_KERNEL_NOENC	__pgprot_mask(__PAGE_KERNEL            |    0)
--#define PAGE_KERNEL_RO		__pgprot_mask(__PAGE_KERNEL_RO         | _ENC)
--#define PAGE_KERNEL_EXEC	__pgprot_mask(__PAGE_KERNEL_EXEC       | _ENC)
--#define PAGE_KERNEL_EXEC_NOENC	__pgprot_mask(__PAGE_KERNEL_EXEC       |    0)
--#define PAGE_KERNEL_ROX		__pgprot_mask(__PAGE_KERNEL_ROX        | _ENC)
--#define PAGE_KERNEL_NOCACHE	__pgprot_mask(__PAGE_KERNEL_NOCACHE    | _ENC)
--#define PAGE_KERNEL_LARGE	__pgprot_mask(__PAGE_KERNEL_LARGE      | _ENC)
--#define PAGE_KERNEL_LARGE_EXEC	__pgprot_mask(__PAGE_KERNEL_LARGE_EXEC | _ENC)
--#define PAGE_KERNEL_VVAR	__pgprot_mask(__PAGE_KERNEL_VVAR       | _ENC)
-+#define PAGE_KERNEL			__pgprot_mask(__PAGE_KERNEL            | _ENC)
-+#define PAGE_KERNEL_NOENC		__pgprot_mask(__PAGE_KERNEL            |    0)
-+#define PAGE_KERNEL_RO			__pgprot_mask(__PAGE_KERNEL_RO         | _ENC)
-+#define PAGE_KERNEL_EXEC		__pgprot_mask(__PAGE_KERNEL_EXEC       | _ENC)
-+#define PAGE_KERNEL_EXEC_NOENC		__pgprot_mask(__PAGE_KERNEL_EXEC       |    0)
-+#define PAGE_KERNEL_ROX			__pgprot_mask(__PAGE_KERNEL_ROX        | _ENC)
-+#define PAGE_KERNEL_NOCACHE		__pgprot_mask(__PAGE_KERNEL_NOCACHE    | _ENC)
-+#define PAGE_KERNEL_NOCACHE_NOENC	__pgprot_mask(__PAGE_KERNEL_NOCACHE    |    0)
-+#define PAGE_KERNEL_LARGE		__pgprot_mask(__PAGE_KERNEL_LARGE      | _ENC)
-+#define PAGE_KERNEL_LARGE_EXEC		__pgprot_mask(__PAGE_KERNEL_LARGE_EXEC | _ENC)
-+#define PAGE_KERNEL_VVAR		__pgprot_mask(__PAGE_KERNEL_VVAR       | _ENC)
- 
- #endif	/* __ASSEMBLY__ */
- 
-diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
-index 3102dda..4fe8d43 100644
---- a/arch/x86/mm/ioremap.c
-+++ b/arch/x86/mm/ioremap.c
-@@ -243,7 +243,7 @@ __ioremap_caller(resource_size_t phys_addr, unsigned long size,
- 	 * make sure the memory encryption attribute is enabled in the
- 	 * resulting mapping.
- 	 */
--	prot = PAGE_KERNEL;
-+	prot = PAGE_KERNEL_NOENC;
- 	if ((io_desc.flags & IORES_MAP_ENCRYPTED) || encrypted)
- 		prot = pgprot_encrypted(prot);
- 
+> 
+> Thanks,
+> 
+> > 
+> > > > 
+> > > > > seems the current condition is just requeuing the inode as dirty, but next
+> > > > > flushing time will remove it from dirty list. Is this giving too much overheads?
+> > > > 
+> > > > I prefer to let writeback thread call blk_flush_plug() after skipping
+> > > > writepages() due to wb_sync_req[DATA/NODE] check condition, thoughts?
+> > > > 
+> > > > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> > > > index 9f754aaef558..b6e1ed73f8f5 100644
+> > > > --- a/fs/f2fs/data.c
+> > > > +++ b/fs/f2fs/data.c
+> > > > @@ -3087,6 +3087,8 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+> > > >     			/* give a priority to WB_SYNC threads */
+> > > >     			if (atomic_read(&sbi->wb_sync_req[DATA]) &&
+> > > >     					wbc->sync_mode == WB_SYNC_NONE) {
+> > > > +				if (current->plug)
+> > > > +					blk_flush_plug(current->plug, false);
+> > > >     				done = 1;
+> > > >     				break;
+> > > >     			}
+> > > > diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+> > > > index 556fcd8457f3..dd9a817d8dab 100644
+> > > > --- a/fs/f2fs/node.c
+> > > > +++ b/fs/f2fs/node.c
+> > > > @@ -1946,6 +1946,8 @@ int f2fs_sync_node_pages(struct f2fs_sb_info *sbi,
+> > > >     			if (atomic_read(&sbi->wb_sync_req[NODE]) &&
+> > > >     					wbc->sync_mode == WB_SYNC_NONE) {
+> > > >     				done = 1;
+> > > > +				if (current->plug)
+> > > > +					blk_flush_plug(current->plug, false);
+> > > >     				break;
+> > > >     			}
+> > > > 
+> > > > 
+> > > > 
+> > > > Thanks,
+> > > > 
+> > > > > 
+> > > > > > +		get_dirty_pages(inode) : 0;
+> > > > > >     	trace_f2fs_writepages(mapping->host, wbc, DATA);
+> > > > > >     	return 0;
+> > > > > >     }
+> > > > > > -- 
+> > > > > > 2.28.0
+> > > > 
+> > > > 
+> > > > _______________________________________________
+> > > > Linux-f2fs-devel mailing list
+> > > > Linux-f2fs-devel@lists.sourceforge.net
+> > > > https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+> > > > 

@@ -2,77 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E15D3466472
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 14:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E4446647B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 14:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358280AbhLBNYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 08:24:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
+        id S1357992AbhLBNan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 08:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346690AbhLBNXf (ORCPT
+        with ESMTP id S1346690AbhLBNal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 08:23:35 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF86C06174A;
-        Thu,  2 Dec 2021 05:20:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CB8E6CE22F3;
-        Thu,  2 Dec 2021 13:20:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 089D6C53FD0;
-        Thu,  2 Dec 2021 13:20:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638451209;
-        bh=FumrJ/YM5Tmvh6PskMj7ULn7mzKvvTLOBYxmiIEYsfk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JcKzdo/En+3K3YyN611929yMqd+c3PBTyuaeZzOxpGy+WyFHShwp4YDmYTxzaZmti
-         GwOs+nnsx0pT5yhILeDLSGui3lRrkbc9K6Nq1lhlH24198OZsQokmk+VbnnT7H3Lyj
-         vM7s1peCmfaQCWzgUREBpdeMgxh1posGcthvwtXldBvHd70CF2qDs3cpatSrkafYRu
-         Qwtes9Aq2VwMloSKw/yyelmFHbFR9fzJwI31JBmOfh0awV0aFalC/rinUO5RzA6PnX
-         y6FtxlVJjFGgo1zt/EYgvdPO1QGQ+SNkv/vpbS7kxkZKHqdybTHsMCp5QdDNT7Exn8
-         qH+C5CsPcWF6A==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E508260A90;
-        Thu,  2 Dec 2021 13:20:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 2 Dec 2021 08:30:41 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B1EC06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 05:27:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=N8VxYpGE+2Elyrz/sMTX7Mk/aRqmYqSy1LMlq3q5uls=; b=R1PZBTV6rorn2BRra37YZ8vc+j
+        oR7AeNuq9scGaKUgNOxlHYZTbGzTYDWWv/RIRCYxJ5T8VUC83uIXH3yf3X4Mch79znEb2QEvPc3tZ
+        R3lNK3b/bwElqKsnOX5uC3U+vVPrTo7URf6AJwSnSyKu8fb4WGnI1lnzt2YE99rnz1jRQIhUNv3o8
+        fLDhOJ3GX0oJ4Zf7flF8nTUoRB7b4vMG441ZX1gQjZYowcvb6hUknerhR1t/TkLxzWyMfUDTZam3q
+        bdr0Sjcwu+mkqzL8a+L19h7d4i4HKIHgi0W47OvwjjXBojbXNuNg2q3vhJcNObac1KqWQ8HrbWsmn
+        Alq+vHjg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1msm77-0046py-K8; Thu, 02 Dec 2021 13:27:05 +0000
+Date:   Thu, 2 Dec 2021 13:27:05 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Charan Teja Reddy <quic_charante@quicinc.com>
+Cc:     hughd@google.com, akpm@linux-foundation.org, vbabka@suse.cz,
+        rientjes@google.com, david@redhat.com, mhocko@suse.com,
+        surenb@google.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Charan Teja Reddy <charante@codeaurora.org>
+Subject: Re: [PATCH v2] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for
+ shmem
+Message-ID: <YajJqY2ByC8uwa46@casper.infradead.org>
+References: <1638442253-1591-1-git-send-email-quic_charante@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] mctp: Remove redundant if statements
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163845120893.3424.12191746234187548358.git-patchwork-notify@kernel.org>
-Date:   Thu, 02 Dec 2021 13:20:08 +0000
-References: <20211202075535.34383-1-vulab@iscas.ac.cn>
-In-Reply-To: <20211202075535.34383-1-vulab@iscas.ac.cn>
-To:     Xu Wang <vulab@iscas.ac.cn>
-Cc:     jk@codeconstruct.com.au, matt@codeconstruct.com.au,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1638442253-1591-1-git-send-email-quic_charante@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, Dec 02, 2021 at 04:20:53PM +0530, Charan Teja Reddy wrote:
+> +static int shmem_fadvise_willneed(struct address_space *mapping,
+> +				 pgoff_t start, pgoff_t long end)
+> +{
+> +	XA_STATE(xas, &mapping->i_pages, start);
+> +	struct page *page;
+> +
+> +	rcu_read_lock();
+> +	page = xas_find(&xas, end);
+> +	rcu_read_unlock();
+> +
+> +	while (page) {
+> +		if (xa_is_value(page)) {
+> +			page = shmem_read_mapping_page(mapping, xas.xa_index);
+> +			if (!IS_ERR(page))
+> +				put_page(page);
+> +		}
+> +
+> +		if (need_resched()) {
+> +			xas_pause(&xas);
+> +			cond_resched();
+> +		}
+> +
+> +		rcu_read_lock();
+> +		page = xas_next_entry(&xas, end);
+> +		rcu_read_unlock();
+> +	}
+> +
+> +	return 0;
+> +}
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu,  2 Dec 2021 07:55:35 +0000 you wrote:
-> The 'if (dev)' statement already move into dev_{put , hold}, so remove
-> redundant if statements.
-> 
-> Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
-> ---
->  net/mctp/route.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-
-Here is the summary with links:
-  - mctp: Remove redundant if statements
-    https://git.kernel.org/netdev/net-next/c/d9e56d1839fa
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+What part of the XArray documentation led you to believe that this is a
+safe thing to do?  Because it needs to be rewritten immediately!

@@ -2,88 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB34B466AF9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 21:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B563E466AFB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 21:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348866AbhLBUma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 15:42:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
+        id S1348899AbhLBUmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 15:42:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348828AbhLBUm3 (ORCPT
+        with ESMTP id S1348828AbhLBUmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 15:42:29 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE83C061757
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 12:39:06 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id 193so1228443qkh.10
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 12:39:06 -0800 (PST)
+        Thu, 2 Dec 2021 15:42:53 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DD3C06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 12:39:30 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id g6-20020a63f406000000b0032f699e765cso577956pgi.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 12:39:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=profian-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hfpOB/YwxBkZmHMU1DG9r5qDFp0zinpAqA+jC5ucWk4=;
-        b=LzS1sKk/TTReAFEWlKUApPCYo+W6v9VRQwvJi0oULSe22j8TmhbOThj9BS9hdaQ+6M
-         gWnPk4ETvcOQT8RcTgyiseviofwFhJ4o/WgWI1prBz1JZtD7S35fRzyTAkoFT8VTciYu
-         v8DhFQXUEmkynzpEzwWfYSuALGBNZqtT7fAeHuw0Ziclrq6PIuntDNAocvAsJs6EehZd
-         HSQskYlmz26JvlX4QZdSE0d9KDr5BAHke8x/OPvIqK7yVbGmanxnPtdv2/J1s7VwA9qM
-         T33CPBfMJyIERRMecJnf1oDyq7xTuX55tc0Du/1JJqd4a/Z+HzoJG+zoNiMlCUyqvFkd
-         41ww==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=1bBCoVC9S/+TW6ndTgS5qlZLYuJcP1k4XxUAjFSU+s8=;
+        b=tAjj5diUhuSTD+4soSUzE+A+CPb64SeadEyY+LE141q4tuLlG+WutJ07plrrfhT9vn
+         /B5d0BAp1T24/kRj9sP5vx+YSN1NTbQ+gwusMr/msAGLjMdwjm6rvQ6iXSqM90bfhGuM
+         DDaG41Ye4GOoKVDFmUagMy9wdZLtGzKQl4tO2yrL7MJOxFWUC8xIl3vPS1FXahBAS31Z
+         Car8pkQh+YIC3b01ma14y8s/AD8IsVhdkAjeePESJOqU3nUds/sGYnNhXDuc/JE5z9S5
+         054j4JMyavbzEQ4qtU6nVJcZCEn/A6u6DRv7CanBmavN8TzOMa1Wnet5pXWUj0Bvy1Bw
+         pSbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hfpOB/YwxBkZmHMU1DG9r5qDFp0zinpAqA+jC5ucWk4=;
-        b=SR8kmzN6ZDSEsP2BaONK0LZaaom0h5hlfpI0AjDhYTEd1eLL8P4AeellhQsvpsrZJ2
-         DjHx9nhUlIAgfWfNebz0e3fR6gOLCYiNqAcQMjtl04pMjUXTfeZaAgtGSNpLru+k72dK
-         3Qtm8kiC45TPuxArRovy/x10UE9EUxV5WxoQclIhm3oCNgStxDtbn7rzq1htHYtfRr3B
-         LVV1Dn5VFQs4mBhXDxYqdhCiE3d1Mhg5P/jnzs3rKrCM0mYDLTYkUpH0EjN5/n7atjm+
-         oe+/WZYbmUPd8Ilji8vdaEmaPctIBHpFYuQBFg4dPc85pwknhNjGi2rOCRWb78oseq5Z
-         iwKA==
-X-Gm-Message-State: AOAM530Jo36H5THEr4gjdwRP4WLE4+eGcnvTO6uWy1IxKngD/quT82Oz
-        18uoqPse7OUhijPCCd3xyDjn2540SVR9aEJCCWIMig==
-X-Google-Smtp-Source: ABdhPJwjRjpZnsXo8YziSlyzXGi+3LwY0M2piBNCr8jHpLSss4W4bgiO5A16H4+If8K6pshum+1rZfhjBc5CGvoFV6o=
-X-Received: by 2002:a37:f619:: with SMTP id y25mr14291485qkj.201.1638477545592;
- Thu, 02 Dec 2021 12:39:05 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1638381245.git.reinette.chatre@intel.com> <94d8d631-5345-66c4-52a3-941e52500f84@intel.com>
-In-Reply-To: <94d8d631-5345-66c4-52a3-941e52500f84@intel.com>
-From:   Nathaniel McCallum <nathaniel@profian.com>
-Date:   Thu, 2 Dec 2021 15:38:55 -0500
-Message-ID: <CAHAy0tQr17mhpHskr4Mr+ooGyxjbSqy02Z2UA27U7=Ew6MW2Rg@mail.gmail.com>
-Subject: Re: [PATCH 00/25] x86/sgx and selftests/sgx: Support SGX2
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Reinette Chatre <reinette.chatre@intel.com>,
-        dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, luto@kernel.org, mingo@redhat.com,
-        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
-        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
-        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=1bBCoVC9S/+TW6ndTgS5qlZLYuJcP1k4XxUAjFSU+s8=;
+        b=4boeWbRwuyoL9l1ehdeyztxuA96plnRjE7gWIpZ9QRzaLIl4hLZREc9Mt+HBdrcVwf
+         lEoPq2M4EAUnFZ2vK4s37lRy8ABkAl9k19OujQyAltFlAZFgKfX3+smHviCujYT+xtIb
+         a8V2VOIY7bHmo1llbFI37HVcgE0l5I93V8ujzNqBd0tzOLC0M/oeCnL6kz1+rh0K4Dmt
+         0CKoJFN+ponfp9hmGKN3oNv/lPmjGVzKp+GQkfJLkBdfEuO1VxuV3vbvyluirkyNq1ND
+         xCcgnByTHFWsPzCzOIOkW/RBK847gKKegHfwj0WCRPyDgYpFSyKQmLPwwMDTuhQSgJAK
+         CYBA==
+X-Gm-Message-State: AOAM531k4V7LNPRL7cUD6YIVVj4yhaXAGpx5h68sIMEUmmx5RIRSKSfZ
+        NxvrRBqEpcYA0Oq8+Rci3ELuj0yI5CPk3g==
+X-Google-Smtp-Source: ABdhPJzL0BiPEBT2jAysbk5eYIZN8aFgygrLnN9kluCV/05L3Mvhp0uwtZ6mYCmzijLabi2Rmp1HB5kJq8lfPA==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:20b0:7fea:c512:7f65])
+ (user=dlatypov job=sendgmr) by 2002:a17:90b:38c1:: with SMTP id
+ nn1mr8603752pjb.91.1638477570307; Thu, 02 Dec 2021 12:39:30 -0800 (PST)
+Date:   Thu,  2 Dec 2021 12:39:27 -0800
+Message-Id: <20211202203927.2004527-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.0.384.gca35af8252-goog
+Subject: [PATCH] kunit: tool: make `build` subcommand also reconfigure if needed
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 1:30 PM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 12/1/21 11:22 AM, Reinette Chatre wrote:
-> > * Support modifying permissions of regular enclave pages belonging to an
-> >   initialized enclave. New permissions are not allowed to exceed the
-> >   originally vetted permissions. Modifying permissions is accomplished
-> >   with a new ioctl SGX_IOC_PAGE_MODP.
->
-> It's probably also worth noting that this effectively punts on the issue
-> of how to allow enclaves to relax the permissions on pages, like taking
-> a page from R=>RW, or R=>RX.  RX isn't allowed unless the page was
-> *added* originally with RX or RWX.
->
-> Since dynamically added pages start with initial RW permissions, they
-> can *never* be RX or RWX since they did not start with execute
-> permissions.  That's a limitation, of course, but it's one that can be
-> dealt with separately from this set.
->
-> Does that sound sane to everyone?
+If I created a kunitconfig file that was incomplete, then
+$ ./tools/testing/kunit/kunit.py build --kunitconfig=my_kunitconfig
+would silently drop all the options with unmet dependencies!
 
-We (Enarx) need arbitrary permission modifications. But for now we can
-just use this patch series and patch the original permissions to be
-RWX on all new pages. I think that should be sufficient.
+This is because it doesn't do the config check that `kunit.py config`
+does.
+
+So if I want to safely build a kernel for testing, I have to do
+$ ./tools/testing/kunit/kunit.py config <flags>
+$ ./tools/testing/kunit/kunit.py build <flags, again>
+
+It seems unlikely that any user of kunit.py would want the current
+`build` semantics.
+So make it effectively do `kunit.py config` + `kunit.py build`.
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+Note: this patch depends on https://lore.kernel.org/linux-kselftest/20211009015406.1311319-1-dlatypov@google.com/
+That patch simplifies all these functions by reducing the amount of
+boilerplate needed to convert between XXXRequest types.
+
+But we can rewrite this so it doesn't have that dep at the cost of
+the patch becoming more verbose.
+---
+ tools/testing/kunit/kunit.py           | 10 +++++++++-
+ tools/testing/kunit/kunit_tool_test.py |  2 +-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 367e29d6942b..99068532485d 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -110,6 +110,14 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
+ 			   'built kernel successfully',
+ 			   build_end - build_start)
+ 
++def config_and_build_tests(linux: kunit_kernel.LinuxSourceTree,
++			   request: KunitBuildRequest) -> KunitResult:
++	config_result = config_tests(linux, request)
++	if config_result.status != KunitStatus.SUCCESS:
++		return config_result
++
++	return build_tests(linux, request)
++
+ def _list_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -> List[str]:
+ 	args = ['kunit.action=list']
+ 	if request.kernel_args:
+@@ -451,7 +459,7 @@ def main(argv, linux=None):
+ 					    make_options=cli_args.make_options,
+ 					    jobs=cli_args.jobs,
+ 					    alltests=cli_args.alltests)
+-		result = build_tests(linux, request)
++		result = config_and_build_tests(linux, request)
+ 		kunit_parser.print_with_timestamp((
+ 			'Elapsed time: %.3fs\n') % (
+ 				result.elapsed_time))
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 178321d1f190..43ced874d5ad 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -418,7 +418,7 @@ class KUnitMainTest(unittest.TestCase):
+ 
+ 	def test_build_passes_args_pass(self):
+ 		kunit.main(['build'], self.linux_source_mock)
+-		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 0)
++		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+ 		self.linux_source_mock.build_kernel.assert_called_once_with(False, 8, '.kunit', None)
+ 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 0)
+ 
+-- 
+2.34.0.384.gca35af8252-goog
+

@@ -2,156 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1812846630D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:03:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1FB466313
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346575AbhLBMHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 07:07:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43104 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241915AbhLBMHL (ORCPT
+        id S1357546AbhLBMKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 07:10:45 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:27808 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S241798AbhLBMKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 07:07:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638446628;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1MmQTgpkeNH8NgIgmQ2Fco6xIavJapp91aJzsxvOixU=;
-        b=JaJ17aZSmLxVrbT8+tmvX9yyEv3hWTp+Huy2Tam6ELfoTTxgjINv6l9m6dVciBN0V5111D
-        SOgy6wiD8meR86vHdaLAQ7jPFG/TSh7ET8cYze8qVmpEMhW428mSrgopiL8ERVix7N9oyh
-        aO2Om+5WpqcSwhxQVbxfi5gjzw2goks=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-464-faQPh16CNsuypEtT6k4wfA-1; Thu, 02 Dec 2021 07:03:40 -0500
-X-MC-Unique: faQPh16CNsuypEtT6k4wfA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 93E5E81CCB6;
-        Thu,  2 Dec 2021 12:03:36 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 551DF60622;
-        Thu,  2 Dec 2021 12:02:58 +0000 (UTC)
-Message-ID: <3adb566de918fe2fcc7a8abe7dba5f2c9d292d66.camel@redhat.com>
-Subject: Re: [PATCH v2 11/43] KVM: Don't block+unblock when halt-polling is
- successful
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>
-Date:   Thu, 02 Dec 2021 14:02:56 +0200
-In-Reply-To: <YaUNBfJh35WXMV0M@google.com>
-References: <20211009021236.4122790-1-seanjc@google.com>
-         <20211009021236.4122790-12-seanjc@google.com>
-         <cceb33be9e2a6ac504bb95a7b2b8cf5fe0b1ff26.camel@redhat.com>
-         <4e883728e3e5201a94eb46b56315afca5e95ad9c.camel@redhat.com>
-         <YaUNBfJh35WXMV0M@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 2 Dec 2021 07:10:42 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B2BUMGo019468;
+        Thu, 2 Dec 2021 12:07:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=in-reply-to : subject :
+ from : to : cc : date : message-id : content-transfer-encoding :
+ content-type : mime-version : references; s=pp1;
+ bh=/cBpo1bPMw63YrNeQlOUwy+lPR+yqdHCJnTgUl87cKU=;
+ b=JayXMBriBQeYIqa3l0VC+nx/B7Nhlx8a658sRwL67A7zdXutgLqGadPZNXtB9AWuSF5p
+ yIH7OWJzL8LTK/PCXhYHIwHcym97CwllbEXww10cinRDizCWt+t+0fegQzvh6FfdItA4
+ r8YmUhznX9EU4ukYckG6B76P7GTxNCZYloJfEcK9dZEo0ul5KifHMJGDvqH8heQ559Gn
+ I91lurcObTqxZlAB6X0UzKGGE/XbwqLW6Q74DyThMrSDKNyFxx83u4PpJ0ZM0HzL9L3W
+ /LEeaz8MmmBPbW+BPhCn/jvc8sqIXU1LCBn3Ug1TBbu5Ww64mxoYzdVddGzp8kHRZ7zD GA== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cpuct39e5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Dec 2021 12:07:18 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B2BvPVG016705;
+        Thu, 2 Dec 2021 12:07:17 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma04dal.us.ibm.com with ESMTP id 3cnne3239r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Dec 2021 12:07:17 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B2C7GpZ29229398
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 Dec 2021 12:07:16 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 891F3B205F;
+        Thu,  2 Dec 2021 12:07:16 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 633CBB2064;
+        Thu,  2 Dec 2021 12:07:16 +0000 (GMT)
+Received: from mww0301.wdc07m.mail.ibm.com (unknown [9.208.64.45])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTPS;
+        Thu,  2 Dec 2021 12:07:16 +0000 (GMT)
+In-Reply-To: <1638439679-114250-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+Subject: Re: [PATCH] RDMA/siw: Use max() instead of doing it manually
+From:   "Bernard Metzler" <BMT@zurich.ibm.com>
+To:     "Jiapeng Chong" <jiapeng.chong@linux.alibaba.com>
+Cc:     jgg@ziepe.ca, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 2 Dec 2021 12:07:14 +0000
+Message-ID: <OF03100A62.8FDD44EE-ON0025879F.00427DFD-0025879F.004294C9@ibm.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Sensitivity: 
+Importance: Normal
+X-Priority: 3 (Normal)
+References: <1638439679-114250-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+X-Mailer: Lotus Domino Web Server Release 11.0.1FP2HF117   October 6, 2021
+X-MIMETrack: Serialize by http on MWW0301/01/M/IBM at 12/02/2021 12:07:14,Serialize
+ complete at 12/02/2021 12:07:14
+X-Disclaimed: 40247
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2LA_gj7mIzdW-mbDsZFU95nwPTRQWTSY
+X-Proofpoint-ORIG-GUID: 2LA_gj7mIzdW-mbDsZFU95nwPTRQWTSY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-12-02_07,2021-12-02_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
+ suspectscore=0 spamscore=0 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 mlxlogscore=999 adultscore=0 phishscore=0
+ malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2112020077
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2021-11-29 at 17:25 +0000, Sean Christopherson wrote:
-> On Mon, Nov 29, 2021, Maxim Levitsky wrote:
-> > (This thing is that when you tell the IOMMU that a vCPU is not running,
-> > Another thing I discovered that this patch series totally breaks my VMs,
-> > without cpu_pm=on The whole series (I didn't yet bisect it) makes even my
-> > fedora32 VM be very laggy, almost unusable, and it only has one
-> > passed-through device, a nic).
-> 
-> Grrrr, the complete lack of comments in the KVM code and the separate paths for
-> VMX vs SVM when handling HLT with APICv make this all way for difficult to
-> understand than it should be.
-> 
-> The hangs are likely due to:
-> 
->   KVM: SVM: Unconditionally mark AVIC as running on vCPU load (with APICv)
+-----"Jiapeng Chong" <jiapeng.chong@linux.alibaba.com> wrote: -----
 
-Yes, the other hang I told about which makes all my VMs very laggy, almost impossible
-to use is because of the above patch, but since I reproduced it now again without
-any passed-through device, I also blame the cpu errata on this.
+>To: bmt@zurich.ibm.com
+>From: "Jiapeng Chong" <jiapeng.chong@linux.alibaba.com>
+>Date: 12/02/2021 11:08AM
+>Cc: jgg@ziepe.ca, linux-rdma@vger.kernel.org,
+>linux-kernel@vger.kernel.org, "Jiapeng Chong"
+><jiapeng.chong@linux.alibaba.com>
+>Subject: [EXTERNAL] [PATCH] RDMA/siw: Use max() instead of doing it
+>manually
+>
+>Fix following coccicheck warning:
+>
+>./drivers/infiniband/sw/siw/siw=5Fverbs.c:665:28-29: WARNING
+>opportunity
+>for max().
+>
+>Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+>Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+>---
+> drivers/infiniband/sw/siw/siw=5Fverbs.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/drivers/infiniband/sw/siw/siw=5Fverbs.c
+>b/drivers/infiniband/sw/siw/siw=5Fverbs.c
+>index d15a1f9..a3dd2cb 100644
+>--- a/drivers/infiniband/sw/siw/siw=5Fverbs.c
+>+++ b/drivers/infiniband/sw/siw/siw=5Fverbs.c
+>@@ -662,7 +662,7 @@ static int siw=5Fcopy=5Finline=5Fsgl(const struct
+>ib=5Fsend=5Fwr *core=5Fwr,
+> 		kbuf +=3D core=5Fsge->length;
+> 		core=5Fsge++;
+> 	}
+>-	sqe->sge[0].length =3D bytes > 0 ? bytes : 0;
+>+	sqe->sge[0].length =3D max(bytes, 0);
+> 	sqe->num=5Fsge =3D bytes > 0 ? 1 : 0;
+>=20
+> 	return bytes;
+>--=20
+>1.8.3.1
+>
+>
+Looks good, thanks!
 
-Best regards,
-	Maxim Levitsky
-
-
-> 
-> If a posted interrupt arrives after KVM has done its final search through the vIRR,
-> but before avic_update_iommu_vcpu_affinity() is called, the posted interrupt will
-> be set in the vIRR without triggering a host IRQ to wake the vCPU via the GA log.
-> 
-> I.e. KVM is missing an equivalent to VMX's posted interrupt check for an outstanding
-> notification after switching to the wakeup vector.
-> 
-> For now, the least awful approach is sadly to keep the vcpu_(un)blocking() hooks.
-> Unlike VMX's PI support, there's no fast check for an interrupt being posted (KVM
-> would have to rewalk the vIRR), no easy to signal the current CPU to do wakeup (I
-> don't think KVM even has access to the IRQ used by the owning IOMMU), and there's
-> no simplification of load/put code.
-> 
-> If the scheduler were changed to support waking in the sched_out path, then I'd be
-> more inclined to handle this in avic_vcpu_put() by rewalking the vIRR one final
-> time, but for now it's not worth it.
-> 
-> > If I apply though only the patch series up to this patch, my fedora VM seems
-> > to work fine, but my windows VM still locks up hard when I run 'LatencyTop'
-> > in it, which doesn't happen without this patch.
-> 
-> Buy "run 'LatencyTop' in it", do you mean running something in the Windows guest?
-> The only search results I can find for LatencyTop are Linux specific.
-> 
-> > So far the symptoms I see is that on VCPU 0, ISR has quite high interrupt
-> > (0xe1 last time I seen it), TPR and PPR are 0xe0 (although I have seen TPR to
-> > have different values), and IRR has plenty of interrupts with lower priority.
-> > The VM seems to be stuck in this case. As if its EOI got lost or something is
-> > preventing the IRQ handler from issuing EOI.
-> >  
-> > LatencyTop does install some form of a kernel driver which likely does meddle
-> > with interrupts (maybe it sends lots of self IPIs?).
-> >  
-> > 100% reproducible as soon as I start monitoring with LatencyTop.
-> >  
-> > Without this patch it works (or if disabling halt polling),
-> 
-> Huh.  I assume everything works if you disable halt polling _without_ this patch
-> applied?
-> 
-> If so, that implies that successful halt polling without mucking with vCPU IOMMU
-> affinity is somehow problematic.  I can't think of any relevant side effects other
-> than timing.
-> 
-
-
+Reviewed-by: Bernard Metzler <bmt@zurich.ibm.com>

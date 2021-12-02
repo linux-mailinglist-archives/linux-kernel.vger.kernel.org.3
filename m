@@ -2,105 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 832FC465AC7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50103465AC8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344693AbhLBA3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 19:29:52 -0500
-Received: from mga17.intel.com ([192.55.52.151]:4072 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234755AbhLBA3t (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 19:29:49 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="217281586"
-X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
-   d="scan'208";a="217281586"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:26:25 -0800
-X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
-   d="scan'208";a="512941021"
-Received: from rongch2-desk.sh.intel.com (HELO [10.239.159.175]) ([10.239.159.175])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:26:23 -0800
-Message-ID: <35c655d9-8a29-8141-69a7-1dab0f974a98@intel.com>
-Date:   Thu, 2 Dec 2021 08:26:21 +0800
+        id S242765AbhLBAcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 19:32:14 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:51706 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230023AbhLBAcN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 19:32:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D8FD4CE1DC7;
+        Thu,  2 Dec 2021 00:28:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25F5EC53FAD;
+        Thu,  2 Dec 2021 00:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638404929;
+        bh=Tr1Np7F8feuJW1m5tGpQOJ4UH+iKcyGWm6eX94xFs7c=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=PLckjzUQVpeBuVyA/By58gAyhVzsUciDPyI+AEJAN7atcZ1wlpWM851hJcjASxhEk
+         jus2oTP70zK892Ml2aqCv51EfqiiUFNmAILnAxWScAR9ecow1+ftqnjxE8PDN0ALJr
+         oKgt/U0a4SJVIJp77Z47ztq8DKysEnoi7w18C55nTOO0FQB7pLcM8Y/MjMXZ7uDOmv
+         96qEbMPAs9IQuOA/UA9Sd2+4uHiRCWEk1yiLKoAJcLL2QtSzWcarEDdFge7Vltbtps
+         1ENPgVXrGz0jNjZXEL8m5QWAoIpjnHnIjDGNe4WlqnQSwMvABt/41Hqg1kpNJh/qXt
+         wQ0b9diDzxs/g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id D4B205C1107; Wed,  1 Dec 2021 16:28:48 -0800 (PST)
+Date:   Wed, 1 Dec 2021 16:28:48 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
+        jiangshanlai@gmail.com, akpm@linux-foundation.org,
+        mathieu.desnoyers@efficios.com, josh@joshtriplett.org,
+        tglx@linutronix.de, peterz@infradead.org, rostedt@goodmis.org,
+        dhowells@redhat.com, edumazet@google.com, fweisbec@gmail.com,
+        oleg@redhat.com, joel@joelfernandes.org, yury.norov@gmail.com
+Subject: [PATCH rcu 0/18] RCU no-CBs CPU updates for v5.17
+Message-ID: <20211202002848.GA3127439@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: drivers/hid/i2c-hid/i2c-hid-core.c:867:4: warning: format
- specifies type 'unsigned short' but the argument has type 'int'
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-References: <202111261447.lxHTeAhi-lkp@intel.com>
- <CAD=FV=XZv1LuGm59vJDQKuwqO0zdFZQQthfct7Z_bPcdkm4UUQ@mail.gmail.com>
-From:   Rong Chen <rong.a.chen@intel.com>
-In-Reply-To: <CAD=FV=XZv1LuGm59vJDQKuwqO0zdFZQQthfct7Z_bPcdkm4UUQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello!
 
-On 11/30/21 08:19, Doug Anderson wrote:
-> <Beep> <Boop> <Bop> (translates as "Hello Mr. Robot"),
->
-> On Thu, Nov 25, 2021 at 10:44 PM kernel test robot <lkp@intel.com> wrote:
->> Hi Douglas,
->>
->> First bad commit (maybe != root cause):
->>
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->> head:   a4849f6000e29235a2707f22e39da6b897bb9543
->> commit: c1ed18c11bdb80eced208a61d40b1988f36a014f HID: i2c-hid: Introduce goodix-i2c-hid using i2c-hid core
->> date:   10 months ago
->> config: arm64-randconfig-r034-20211116 (https://download.01.org/0day-ci/archive/20211126/202111261447.lxHTeAhi-lkp@intel.com/config)
->> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # install arm64 cross compiling tool for clang build
->>          # apt-get install binutils-aarch64-linux-gnu
->>          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c1ed18c11bdb80eced208a61d40b1988f36a014f
->>          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>          git fetch --no-tags linus master
->>          git checkout c1ed18c11bdb80eced208a61d40b1988f36a014f
->>          # save the config file to linux build tree
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All warnings (new ones prefixed by >>):
->>
->>>> drivers/hid/i2c-hid/i2c-hid-core.c:867:4: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
->>                             le16_to_cpu(hdesc->bcdVersion));
->>                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>     include/linux/dev_printk.h:112:32: note: expanded from macro 'dev_err'
->>             _dev_err(dev, dev_fmt(fmt), ##__VA_ARGS__)
->>                                   ~~~     ^~~~~~~~~~~
->>     include/linux/byteorder/generic.h:91:21: note: expanded from macro 'le16_to_cpu'
->>     #define le16_to_cpu __le16_to_cpu
->>                         ^
->>     include/uapi/linux/byteorder/big_endian.h:36:26: note: expanded from macro '__le16_to_cpu'
->>     #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
->>                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>     include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
->>             (__builtin_constant_p((__u16)(x)) ?     \
->>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> May I kindly point to the reply I gave to the same error last month
-> when you mailed it out?
->
-> https://lore.kernel.org/r/CAD=FV=WkUEkkkfGa+6QJSBvj8EgVrnGYYbd6RrC_5HdTue=mDw@mail.gmail.com/
->
+This series provides RCU no-CB CPUs updates, most notably the ability
+to offload CPUs that are in de-offloaded state at boot time.
 
-Hi Doug,
+1.	Tighten rcu_advance_cbs_nowake() checks.
 
-Thanks for the feedback, we have added the warnings to our ignore list.
+2.	Make local rcu_nocb_lock_irqsave() safe against concurrent
+	deoffloading, courtesy of Frederic Weisbecker.
 
-Best Regards,
+3.	Prepare state machine for a new step, courtesy of Frederic
+	Weisbecker.
 
-Rong Chen
+4.	Invoke rcu_core() at the start of deoffloading, courtesy of
+	Frederic Weisbecker.
 
+5.	Make rcu_core() callbacks acceleration preempt-safe, courtesy
+	of Thomas Gleixner.
+
+6.	Make rcu_core() callbacks acceleration (de-)offloading safe,
+	courtesy of Frederic Weisbecker.
+
+7.	Check a stable offloaded state to manipulate qlen_last_fqs_check,
+	courtesy of Frederic Weisbecker.
+
+8.	Use appropriate rcu_nocb_lock_irqsave(), courtesy of Frederic
+	Weisbecker.
+
+9.	Limit number of softirq callbacks only on softirq, courtesy of
+	Frederic Weisbecker.
+
+10.	Fix callbacks processing time limit retaining cond_resched(),
+	courtesy of Frederic Weisbecker.
+
+11.	Apply callbacks processing time limit only on softirq, courtesy
+	of Frederic Weisbecker.
+
+12.	Don't invoke local rcu core on callback overload from nocb
+	kthread, courtesy of Frederic Weisbecker.
+
+13.	Remove rcu_node structure from nocb list when de-offloaded,
+	courtesy of Frederic Weisbecker.
+
+14.	Prepare nocb_cb_wait() to start with a non-offloaded rdp,
+	courtesy of Frederic Weisbecker.
+
+15.	Optimize kthreads and rdp initialization, courtesy of Frederic
+	Weisbecker.
+
+16.	Create kthreads on all CPUs if "rcu_nocbs=" or "nohz_full="
+	are passed, courtesy of Frederic Weisbecker.
+
+17.	Allow empty "rcu_nocbs" kernel parameter, courtesy of Frederic
+	Weisbecker.
+
+18.	Merge rcu_spawn_cpu_nocb_kthread() and
+	rcu_spawn_one_nocb_kthread(), courtesy of Frederic Weisbecker.
+
+Note that #17 might be updated given some ongoing work by Yury Norov
+to support "none" for bitmaps, including the cpumask taken by the
+rcu_nocbs kernel-boot parameter.
+
+						Thanx, Paul
+
+------------------------------------------------------------------------
+
+ b/Documentation/admin-guide/kernel-parameters.txt |   37 +++--
+ b/include/linux/rcu_segcblist.h                   |   37 +++--
+ b/kernel/rcu/rcu_segcblist.c                      |    6 
+ b/kernel/rcu/rcu_segcblist.h                      |   12 +
+ b/kernel/rcu/tree.c                               |    7 -
+ b/kernel/rcu/tree.h                               |   16 +-
+ b/kernel/rcu/tree_nocb.h                          |   24 ++-
+ include/linux/rcu_segcblist.h                     |   14 ++
+ kernel/rcu/rcu_segcblist.c                        |    6 
+ kernel/rcu/tree.c                                 |  117 +++++++++++-------
+ kernel/rcu/tree.h                                 |    7 -
+ kernel/rcu/tree_nocb.h                            |  140 ++++++++++++++--------
+ 12 files changed, 275 insertions(+), 148 deletions(-)

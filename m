@@ -2,300 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47062465BED
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 02:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F02465BF2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 03:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348838AbhLBCDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 21:03:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
+        id S1350100AbhLBCDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 21:03:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242154AbhLBCDL (ORCPT
+        with ESMTP id S1349422AbhLBCDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 21:03:11 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023A2C061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 17:59:50 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id j2so68883348ybg.9
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 17:59:49 -0800 (PST)
+        Wed, 1 Dec 2021 21:03:30 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0146C061756
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 18:00:08 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id p18so19094630plf.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 18:00:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PQbQ01wzti4a86s0mzuGmyRjqSgKeOKXJvkaPDwlmQQ=;
-        b=l772S4I6Tkc3ncYGTm3hyJ6KUOQ+rw07AuwbzNu25E6Do8pPBFWhd/Miizq6QPvNXu
-         aB2NfCg3dtdaTtPJxvUwr6Ru9ZQbrKzNbFRAYkRWDRTnMKwebo9UgYTzExwuRT9QTMVn
-         8iWC3EsuWZoYomEElDfdw55q0ij2Jf1rQzYa8=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ieez22Xn2l5HWg/32xD5LElmnAc6m+5OIzBSW88ykGA=;
+        b=G0z4qsx02gTJpOX+id+WDt87iiCC68/pLc8/RHTHy93ZaRCC/cpz/VtsZ5QLq6NhsC
+         pztYoE3cxmb1ab05i+mKIC8ML+IoYX2JvCedMYG/dA5g4rEg3w2gyuXKxfic5SWkfGb+
+         LTzmn0ERm4vLCwinV2Q7f64T7CvStCYLOXGIoBC/JED1+H3JdUB9Rafl3aySZq2PFK+D
+         j8FA4sR8WNSfp7GYg67MnxS2CunppQgmHJnEXulsOfQJjagvmDJOLOMmlhUfNCfaq2x+
+         Msm/OAxbLxPfZ954U2c9p631E4TYd+VGgfnvhf+iALAZ45wlstnB6aDZPFFAYACiiRYn
+         9c3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PQbQ01wzti4a86s0mzuGmyRjqSgKeOKXJvkaPDwlmQQ=;
-        b=UO3mGQEp68t+Yw0sjSZorBcZUDsfNGjBmVplEJ5+wcdS2Aj6HWuH4rOTdAGSbIsQ+X
-         J4t+6SOBaUAa+DmNzfvTRtf4LdNXgO9qeWEVkrHlRWK3lgGCxGEcCP0TdzhyDC34OmDD
-         W5bUFHhWdp6XKPxLqP50VQ5WfZ8Tykj/yolqN7mltYXc0b4mHy7X13YBYnGlfWY1P5Kr
-         JxoF6WUo9kHT4SQYgL9BVDC+g6de985ItUfx3xix6boKm/mdkeaH1JxLqqjnxJv8B8BW
-         uFI9jFyZB9LCwFuKWsroEy8e6zRGiNw4A9iOrcv6y90VH7N0rXHlyfv/7rIRekbI3j/I
-         udtA==
-X-Gm-Message-State: AOAM530B4sO1uGNj+4/zpIw838/nzHR34bR5PWj50PENRxMKpHfKxSk8
-        4E7iJihvHu81Y7LP4KMrJBX3IM7qAew3PQr4VRXJ
-X-Google-Smtp-Source: ABdhPJzXw9ht1p5IdtspfcR3Rs31FHDZBP5k4GYV+tQ/lSwPnczsQhO+EW5S+Wbr18E9RrHAhOwm6ttYnXIiMVMAryM=
-X-Received: by 2002:a25:4d8:: with SMTP id 207mr11543751ybe.320.1638410389172;
- Wed, 01 Dec 2021 17:59:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20211129014007.286478-1-wefu@redhat.com> <03B8F784-4AF3-425D-99B6-F753F7970273@jrtc27.com>
- <CAOnJCUKmP6dsrV9xWC52uEaM0=fZh-FNDYyFg1VxQybpQZABMA@mail.gmail.com> <3495709.4EXlkQ93OV@diego>
-In-Reply-To: <3495709.4EXlkQ93OV@diego>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Wed, 1 Dec 2021 17:59:38 -0800
-Message-ID: <CAOnJCUL0mffufWZzWVBDo2akb+kd6rpnDG6aYOuXHWM274i6OA@mail.gmail.com>
-Subject: Re: [PATCH V4 1/2] dt-bindings: riscv: add MMU Standard Extensions
- support for Svpbmt
-To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Jessica Clarke <jrtc27@jrtc27.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Wei Fu <wefu@redhat.com>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        taiten.peng@canonical.com,
-        Aniket Ponkshe <aniket.ponkshe@canonical.com>,
-        Gordan Markus <gordan.markus@canonical.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Arnd Bergmann <arnd@arndb.de>, Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Dan Lustig <dlustig@nvidia.com>,
-        Greg Favor <gfavor@ventanamicro.com>,
-        Andrea Mondelli <andrea.mondelli@huawei.com>,
-        Jonathan Behrens <behrensj@mit.edu>,
-        Xinhaoqu <xinhaoqu@huawei.com>,
-        Bill Huffman <huffman@cadence.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Allen Baum <allen.baum@esperantotech.com>,
-        Josh Scheid <jscheid@ventanamicro.com>,
-        Richard Trauben <rtrauben@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Anup Patel <Anup.Patel@wdc.com>, atishp04@gmail.com,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ieez22Xn2l5HWg/32xD5LElmnAc6m+5OIzBSW88ykGA=;
+        b=4OaA2QLJSyRh7A2aJ4zeu41lTGVEL8zLvm1zLyfgao2U0H2EutbuQrhGFOwNGx6R20
+         kQ0x3Dz8U7DFLaxNqWQPTHIOOSvymzLTQ5QJ8RXN0H1o2apvM9F24UIgpAOaDn639o+F
+         PshacHNlvbMNvSXjU1qPvQ9AcPBS5Ti0iBjtAuPXdYJx48eksk716EEvIbUgP21i+sSM
+         MrgkiMVm1yr+OlKdM9K9Ehzuo4HkRFiraKVkvBpwfwJtO18TGmJrXdT33fGGLzXjzX3p
+         BPJygdLnTcEK8e7/aqWxiJjiDBFlteFxEmNwPRIfe5ixnFZ4LzGQ6PlyszFMxqDAuddc
+         67Eg==
+X-Gm-Message-State: AOAM533UwQSCeHeq55xtgG5gz80LBsfSy4KOLEbMOOqNWWwjfrHZ3eDg
+        ckOLkOfQ/054sIOMqal84SBsXQ==
+X-Google-Smtp-Source: ABdhPJxNBM72YGsKSZuE+5oJQdw89IebyEem9LDSzk1Pcg1GjafGCYFG2d6Z2Cymjn7sJ6Jwu52nlQ==
+X-Received: by 2002:a17:90b:3848:: with SMTP id nl8mr2408510pjb.221.1638410408016;
+        Wed, 01 Dec 2021 18:00:08 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id lr6sm550689pjb.0.2021.12.01.18.00.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 18:00:07 -0800 (PST)
+Date:   Thu, 2 Dec 2021 02:00:03 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Guo Ren <guoren@kernel.org>,
-        =?UTF-8?Q?Christoph_M=C3=BCllner?= <christoph.muellner@vrull.eu>,
-        Christoph Hellwig <hch@lst.de>,
-        liush <liush@allwinnertech.com>, Wei Wu <lazyparser@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Wei Huang <wei.huang2@amd.com>
+Subject: Re: [PATCH v2 11/43] KVM: Don't block+unblock when halt-polling is
+ successful
+Message-ID: <Yagoo7R8P5xVilsj@google.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+ <20211009021236.4122790-12-seanjc@google.com>
+ <cceb33be9e2a6ac504bb95a7b2b8cf5fe0b1ff26.camel@redhat.com>
+ <4e883728e3e5201a94eb46b56315afca5e95ad9c.camel@redhat.com>
+ <YaUNBfJh35WXMV0M@google.com>
+ <496c2fc6-26b0-9b5d-32f4-2f9e9dd6a064@redhat.com>
+ <YaUiEquKYi5eqWC0@google.com>
+ <880a5727-69d1-72a1-b129-b053781625ad@redhat.com>
+ <458c0819a578ba854f00089bc312c8faa177a81a.camel@redhat.com>
+ <32eabe7d270e5a466ba2d9345b4270b8fe27700c.camel@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <32eabe7d270e5a466ba2d9345b4270b8fe27700c.camel@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 5:28 AM Heiko St=C3=BCbner <heiko@sntech.de> wrote:
->
-> Hi Atish,
->
-> Am Mittwoch, 1. Dezember 2021, 02:21:46 CET schrieb Atish Patra:
-> > On Tue, Nov 30, 2021 at 8:13 AM Jessica Clarke <jrtc27@jrtc27.com> wrot=
-e:
-> > >
-> > > On 30 Nov 2021, at 15:01, Philipp Tomsich <philipp.tomsich@vrull.eu> =
-wrote:
-> > > >
-> > > > We did touch on this in our coordination call a few weeks ago: the
-> > > > grouping under mmu and the bool-entries were chosen because of thei=
-r
-> > > > similarity to other extensions (i.e. for Zb[abcs] there could/shoul=
-d
-> > > > be a bool-entry under each cpu-node =E2=80=94 for some Zv* entries =
-a subnode
-> > > > might be needed with further parameters).
-> > > >
-> > > > The string-based approach (as in the originally proposed "mmu-type=
-=3D")
-> > > > would like not scale with the proliferation of small & modular
-> > > > extensions.
-> > >
-> > > I don=E2=80=99t see why the Sv* extensions need to be under an mmu no=
-de then,
-> > > unless the intent is that every extension be grouped under a sub-node
-> > > (which doesn=E2=80=99t seem viable due to extensions like Zbk*, unles=
-s you
-> > > group by Ss, Sv and Z)?
-> > >
-> >
-> > It shouldn't be. All the ISA extensions (i.e. standard, supervisor & hy=
-pervisor)
-> > with prefix S,Z,H should be kept separate in a separate node for easy
-> > parsing.
-> >
-> > "riscv,isa" dt property will not scale at all. Just look at the few
-> > extensions that were ratified this year
-> > and Linux kernel needs to support them.
-> >
-> > "Sscofpmf", "Svpbmt", "Zicbom"
-> >
-> > > Also, what is going to happen to the current riscv,isa? Will that
-> > > continue to exist and duplicate the info, or will kernels be required
-> > > to reconstruct the string themselves if they want to display it to
-> > > users?
-> > >
-> >
-> > This is my personal preference:
-> > riscv,isa will continue to base Standard ISA extensions that have
-> > single letter extensions.
-> >
-> > This new DT node will encode all the non-single letter extensions.
-> > I am not sure if it should include some provisions for custom
-> > extensions starting with X because
-> > that will be platform specific.
-> >
-> > Again, this is just my personal preference. I will try to send a patch
-> > soon so that we can initiate a broader
-> > discussion of the scheme and agree/disagree on something.
->
-> that would be really helpful, as it currently looks like we have a number
-> of different points-of-view so discussing an actual implementation will
-> probably make things a lot easier compared to dancing around theoretic
-> cases :-) .
->
-> Out of curiosity, how soon is "soon" ? :-D
->
+On Thu, Dec 02, 2021, Maxim Levitsky wrote:
+> On Tue, 2021-11-30 at 00:53 +0200, Maxim Levitsky wrote:
+> > On Mon, 2021-11-29 at 20:18 +0100, Paolo Bonzini wrote:
+> > Basically what I see that
+> >  
+> > 1. vCPU2 disables is_running in avic physical id cache
+> > 2. vCPU2 checks that IRR is empty and it is
+> > 3. vCPU2 does schedule();
+> >  
+> > and it keeps on sleeping forever. If I kick it via signal 
+> > (like just doing 'info registers' qemu hmp command
+> > or just stop/cont on the same hmp interface, the
+> > vCPU wakes up and notices that IRR suddenly is not empty,
+> > and the VM comes back to life (and then hangs after a while again
+> > with the same problem....).
+> >  
+> > As far as I see in the traces, the bit in IRR came from
+> > another VCPU who didn't respect the ir_running bit and didn't get 
+> > AVIC_INCOMPLETE_IPI VMexit.
+> > I can't 100% prove it yet, but everything in the trace shows this.
 
-I will be on vacation for next week and I need to wrap up a few other
-things before that.
-Thus, soon may not be the "soon" you are expecting ;).
+...
 
-If you or Tsukasa have some free cycles, feel free to send the patch
-in the meantime.
+> I am now almost sure that this is errata #1235.
+> 
+> I had attached a kvm-unit-test I wrote (patch against master of
+> https://gitlab.com/kvm-unit-tests/kvm-unit-tests.git/) which is able to
+> reproduce the issue on stock 5.15.0 kernel (*no patches applied at all*)
+> after just few seconds.  If kvm is loaded without halt-polling (that is
+> halt_poll_ns=0 is used).
+> 
+> Halt polling and/or Sean's patch are not to blame, it just changes timeing.
+> With Sean's patch I don't need to disable half polling.
 
->
-> Heiko
->
->
-> > > As a FreeBSD developer I=E2=80=99m obviously not a part of many of th=
-ese
-> > > discussions, but what the Linux community imposes as the device tree
-> > > bindings has a real impact on us.
-> > >
-> > > Jess
-> > >
-> > > > On Tue, 30 Nov 2021 at 14:59, Jessica Clarke <jrtc27@jrtc27.com> wr=
-ote:
-> > > >>
-> > > >> On 30 Nov 2021, at 13:27, Heiko St=C3=BCbner <heiko@sntech.de> wro=
-te:
-> > > >>>
-> > > >>> Hi,
-> > > >>>
-> > > >>> Am Dienstag, 30. November 2021, 14:17:41 CET schrieb Jessica Clar=
-ke:
-> > > >>>> On 30 Nov 2021, at 12:07, Heiko St=C3=BCbner <heiko@sntech.de> w=
-rote:
-> > > >>>>>
-> > > >>>>> Am Montag, 29. November 2021, 13:06:23 CET schrieb Heiko St=C3=
-=BCbner:
-> > > >>>>>> Am Montag, 29. November 2021, 09:54:39 CET schrieb Heinrich Sc=
-huchardt:
-> > > >>>>>>> On 11/29/21 02:40, wefu@redhat.com wrote:
-> > > >>>>>>>> From: Wei Fu <wefu@redhat.com>
-> > > >>>>>>>>
-> > > >>>>>>>> Previous patch has added svpbmt in arch/riscv and add "riscv=
-,svpmbt"
-> > > >>>>>>>> in the DT mmu node. Update dt-bindings related property here=
-.
-> > > >>>>>>>>
-> > > >>>>>>>> Signed-off-by: Wei Fu <wefu@redhat.com>
-> > > >>>>>>>> Co-developed-by: Guo Ren <guoren@kernel.org>
-> > > >>>>>>>> Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > >>>>>>>> Cc: Anup Patel <anup@brainfault.org>
-> > > >>>>>>>> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> > > >>>>>>>> Cc: Rob Herring <robh+dt@kernel.org>
-> > > >>>>>>>> ---
-> > > >>>>>>>> Documentation/devicetree/bindings/riscv/cpus.yaml | 10 +++++=
-+++++
-> > > >>>>>>>> 1 file changed, 10 insertions(+)
-> > > >>>>>>>>
-> > > >>>>>>>> diff --git a/Documentation/devicetree/bindings/riscv/cpus.ya=
-ml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > > >>>>>>>> index aa5fb64d57eb..9ff9cbdd8a85 100644
-> > > >>>>>>>> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > > >>>>>>>> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > > >>>>>>>> @@ -63,6 +63,16 @@ properties:
-> > > >>>>>>>>      - riscv,sv48
-> > > >>>>>>>>      - riscv,none
-> > > >>>>>>>>
-> > > >>>>>>>> +  mmu:
-> > > >>>>>>>
-> > > >>>>>>> Shouldn't we keep the items be in alphabetic order, i.e. mmu =
-before
-> > > >>>>>>> mmu-type?
-> > > >>>>>>>
-> > > >>>>>>>> +    description:
-> > > >>>>>>>> +      Describes the CPU's MMU Standard Extensions support.
-> > > >>>>>>>> +      These values originate from the RISC-V Privileged
-> > > >>>>>>>> +      Specification document, available from
-> > > >>>>>>>> +      https://riscv.org/specifications/
-> > > >>>>>>>> +    $ref: '/schemas/types.yaml#/definitions/string'
-> > > >>>>>>>> +    enum:
-> > > >>>>>>>> +      - riscv,svpmbt
-> > > >>>>>>>
-> > > >>>>>>> The privileged specification has multiple MMU related extensi=
-ons:
-> > > >>>>>>> Svnapot, Svpbmt, Svinval. Shall they all be modeled in this e=
-num?
-> > > >>>>>>
-> > > >>>>>> I remember in some earlier version some way back there was the
-> > > >>>>>> suggestion of using a sub-node instead and then adding boolean
-> > > >>>>>> properties for the supported extensions.
-> > > >>>>>>
-> > > >>>>>> Aka something like
-> > > >>>>>>   mmu {
-> > > >>>>>>           riscv,svpbmt;
-> > > >>>>>>   };
-> > > >>>>>
-> > > >>>>> For the record, I'm talking about the mail from september
-> > > >>>>> https://lore.kernel.org/linux-riscv/CAAeLtUChjjzG+P8yg45GLZMJy5=
-UR2K5RRBoLFVZhtOaZ5pPtEA@mail.gmail.com/
-> > > >>>>>
-> > > >>>>> So having a sub-node would make adding future extensions
-> > > >>>>> way nicer.
-> > > >>>>
-> > > >>>> Svpbmt is just an ISA extension, and should be treated like any =
-other.
-> > > >>>> Let=E2=80=99s not invent two different ways of representing that=
- in the device
-> > > >>>> tree.
-> > > >>>
-> > > >>> Heinrich asked how the other extensions should be handled
-> > > >>> (Svnapot, Svpbmt, Svinval), so what do you suggest to do with the=
-se?
-> > > >>
-> > > >> Whatever is done for Zb[abcs], Zk*, Zv*, Zicbo*, etc. There may no=
-t be
-> > > >> a concrete plan for that yet, but that means you should speak with=
- the
-> > > >> people involved with such extensions and come up with something
-> > > >> appropriate together.
-> > > >>
-> > > >> Jess
-> > > >>
-> > >
-> > >
-> > > _______________________________________________
-> > > linux-riscv mailing list
-> > > linux-riscv@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-riscv
-> >
-> >
-> >
-> > --
-> > Regards,
-> > Atish
-> >
->
->
->
->
+Hmm, that suggests the bug/erratum is due to the CPU consuming stale data from #4
+for the IsRunning check in #5, or retiring uops for the IsRunning check before
+retiring the vIRR update.  It would be helpful if the erratum actually provided
+info on the "highly specific and detailed set of internal timing conditions". :-/
 
-
---=20
-Regards,
-Atish
+  4. Lookup the vAPIC backing page address in the Physical APIC table using the
+     guest physical APIC ID as an index into the table.
+  5. For every valid destination:
+     - Atomically set the appropriate IRR bit in each of the destinations’ vAPIC
+       backing page.
+     - Check the IsRunning status of each destination.

@@ -2,73 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C9BF465D93
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55EA8465D96
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:50:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344917AbhLBEwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 23:52:33 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:44692 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236424AbhLBEw3 (ORCPT
+        id S1345010AbhLBExS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 23:53:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236424AbhLBExN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 23:52:29 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E12D7CE215D
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 04:49:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58EA5C00446;
-        Thu,  2 Dec 2021 04:49:04 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="d0SXFN2M"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1638420542;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=I7h5wwoUrDU87eyrmLKOx7SiwJlXGwnFT4rulXd0vMg=;
-        b=d0SXFN2MfS9XeFThnM8l1ORz8AkhAuDBKv25YUv72rRKqqCc9DSXRbcTYiWKLUt/vXIy3t
-        ll2F/EIo4NmTa8vwgV8QoH1xCExBAu5rB2evFMEzopifKVEzGIe2geeJp09q4K5JvJLSpU
-        gvEkLKgI4x4LyqyMYlMgk3YXXaYrW1U=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fcb0a9f2 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 2 Dec 2021 04:49:02 +0000 (UTC)
-Date:   Wed, 1 Dec 2021 23:48:58 -0500
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     tytso@mit.edu, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH] random: Document add_hwgenerator_randomness() with other
- input functions
-Message-ID: <YahQOjroOQSbB9CR@zx2c4.com>
-References: <20211201174449.1359595-1-broonie@kernel.org>
+        Wed, 1 Dec 2021 23:53:13 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DADC061574;
+        Wed,  1 Dec 2021 20:49:50 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id y196so22006294wmc.3;
+        Wed, 01 Dec 2021 20:49:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:references:from:cc:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sKU5HJ0S+kS0uCi/hPOcXn/RvplQ4/OOHozBlPG8axU=;
+        b=Ky0ktax/aDFtiXZA0nFZv5Za76KIGG7Fs/oVhhiRQ+wJjJrYyLAfH79eQLYmh+qlGg
+         ud8mq0jWaMTMhKtWM1tz6RSe4dr1Igamb/uIVlqwzmvVMMwn92isyPG3TnyUKcsb9Iw1
+         g7cz5hCnBbkJziZBz6Q0OvZmoZg8n/TzAU37VvxaMuqFk3dqxxmTCNXnxORwbIrOnWOV
+         XUcpWBTX3x4W8E3Y0mXusISUxmdoG5lQUbFRjf3Y30UdrQDRW7320MmBrT1jO36GlFo2
+         mOUX/660zG4ZNl8RZ3AkXJJFz13/dmZYfgPhpFurNrcUX0NHGcrL+tusLLCTBWIzzTj9
+         YKcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:cc:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sKU5HJ0S+kS0uCi/hPOcXn/RvplQ4/OOHozBlPG8axU=;
+        b=A52k3lRLXCrUMEqHrZcNPVPmphGO0XnsUSLZWvWeBbpkUOZXzP0h0i4afNHWSC0skL
+         1nYVXzxPfn2RLLzjWKXnv+3efUwna9OFdV5g+RLKOL5GbWisRlke/O0B1zuHK33nNa+v
+         N3Ikzedbc0Xuoc6vihmKfqZkBBxIwTirHvjMQpMoWODNWwLmHQ8PaBYlNpCM6yEBE7aC
+         uG5o/xzCLlUzrjrHEQXn94mbHmfmCLvhiiSSPftcGCije+VHTdVF5SO+7d02WHiDg7PD
+         uPduUDRV30r5G0RoMKSSPiThaKaKaN2XM7et0tRSd9Kf42hZPV+8N3tSTIjhj1B/nx0w
+         pA6g==
+X-Gm-Message-State: AOAM532/faf/57EYZVFaxioAV+Zxs7q5rGF9zXgQksSeBRPuUGmEXE8R
+        3jVrEsFXUrr5jbtwd5s8fNOabifBUp/+cw==
+X-Google-Smtp-Source: ABdhPJx3POnji2GhsPdvyHebwXOOKlHM8TGMLEYC3jefB/37OvdBOAIcGv2WRE5orQCInO14VMtSUQ==
+X-Received: by 2002:a05:600c:1d06:: with SMTP id l6mr3267298wms.97.1638420588766;
+        Wed, 01 Dec 2021 20:49:48 -0800 (PST)
+Received: from ?IPv6:2003:c7:8f4e:658:f367:7a48:ecf:570a? (p200300c78f4e0658f3677a480ecf570a.dip0.t-ipconnect.de. [2003:c7:8f4e:658:f367:7a48:ecf:570a])
+        by smtp.gmail.com with ESMTPSA id a9sm1473364wrt.66.2021.12.01.20.49.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 20:49:48 -0800 (PST)
+Subject: Re: [PATCH 1/4] Docs: usb: update usb_bulk_msg receiving example
+To:     Alan Stern <stern@rowland.harvard.edu>
+References: <cover.1638152984.git.philipp.g.hortmann@gmail.com>
+ <28a76eedad7027277754cef84ca34810b0cfe6f4.1638152984.git.philipp.g.hortmann@gmail.com>
+ <YaaFNO1t3GIaGFPI@rowland.harvard.edu>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Message-ID: <ad2fcdfa-5688-4d09-2c82-c405adeae4ee@gmail.com>
+Date:   Thu, 2 Dec 2021 05:49:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211201174449.1359595-1-broonie@kernel.org>
+In-Reply-To: <YaaFNO1t3GIaGFPI@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
-
-On Wed, Dec 01, 2021 at 05:44:49PM +0000, Mark Brown wrote:
-> The section at the top of random.c which documents the input functions
-> available does not document add_hwgenerator_randomness() which might lead
-> a reader to overlook it. Add a brief note about it.
+On 11/30/21 9:10 PM, Alan Stern wrote:
+> On Mon, Nov 29, 2021 at 09:21:41PM +0100, Philipp Hortmann wrote:
+>> Clarification that this example is not in the driver template anymore.
+>> Update code example so that it fits best to usb-skeleton.c
+>>
+>> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+>> ---
+>>   .../driver-api/usb/writing_usb_driver.rst     | 30 +++++++++----------
+>>   1 file changed, 15 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
+>> index b43e1ce49f0e..a9608ad18d77 100644
+>> --- a/Documentation/driver-api/usb/writing_usb_driver.rst
+>> +++ b/Documentation/driver-api/usb/writing_usb_driver.rst
+>> @@ -218,36 +218,36 @@ do very much processing at that time. Our implementation of
+>>   ``skel_write_bulk_callback`` merely reports if the urb was completed
+>>   successfully or not and then returns.
+>>   
+>> -The read function works a bit differently from the write function in
+>> +This read function works a bit differently from the write function in
+>>   that we do not use an urb to transfer data from the device to the
+>> -driver. Instead we call the :c:func:`usb_bulk_msg` function, which can be used
+>> +driver. Instead we call `usb_bulk_msg` function, which can be used
+>>   to send or receive data from a device without having to create urbs and
+>> -handle urb completion callback functions. We call the :c:func:`usb_bulk_msg`
+>> +handle urb completion callback functions. We call `usb_bulk_msg`
+>>   function, giving it a buffer into which to place any data received from
 > 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
+> The reason for the last two changes above isn't clear.  You removed some of the
+> markup indicators and made the text ungrammatical.  This does not seem like an
+> improvement.
 > 
-> Ted, I've been sending this for almost two years at this point and
-> you've not commented on it - if there's some issue please let me know.
+> Alan Stern
+>
+This two changes were made because of an earlier comment to the same 
+document, but may be I understood this wrong:
+On 10/19/21 11:17 PM, Jonathan Corbet wrote:
+...
+We shouldn't be using :c:func: anymore; just say usb_register() and the
+right things will happen.  Definitely worth fixing while you are in the
+neighborhood.
+...
+If you're making this change, take out "the" (as well as :c:func:).
+...
+___
+Please find the full email under the link:
+https://lore.kernel.org/linux-usb/87h7dcsohs.fsf@meer.lwn.net/T/
 
-Sorry for the delay. I've queued this up in my random tree now after
-incorporating Randy's punctuation suggestion from two of the former
-posts:
-
-https://git.kernel.org/zx2c4/random-linux/c/91995de6b6dd91
-
-This will transition through the various trees next time I send a pull.
-
-Regards,
-Jason
+Please give me an example for the right wording. I am not a native 
+English speaker. Is the article in this case required?
+Thanks for your support.
+Philipp Hortmann

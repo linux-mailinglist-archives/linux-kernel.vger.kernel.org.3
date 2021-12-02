@@ -2,133 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C734D466083
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:33:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A29F466085
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356538AbhLBJgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 04:36:48 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:60837 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356560AbhLBJgk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 04:36:40 -0500
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20211202093315epoutp0309b25a4d68b073fa96f2a57e4c2babb9~85lAC2tZx0065500655epoutp03y
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 09:33:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20211202093315epoutp0309b25a4d68b073fa96f2a57e4c2babb9~85lAC2tZx0065500655epoutp03y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1638437595;
-        bh=gpRxoJZAoC8y5a9Heh3Hx8M2upBoA5wNGJpAqTMLmg8=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=UWebvgaY+UIJk7ssdYMeoWqGX3CN+Tkmnq7VdrwWzHJZvVvwAr/w13oo12XRXmkuf
-         Hg/JMzfQ/eZntN4j6NLbhL5t1skBRbTwVMdnvnPwXe1pXr1QRlip12oFKZWuJWavGj
-         RvZYu06JmsnpbcQiD8V/ecF3HSm9xeR1GqWTF7XA=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20211202093315epcas2p35a4223de970d9c0fe6dac20704952af4~85k-kdI3q0217802178epcas2p3e;
-        Thu,  2 Dec 2021 09:33:15 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.98]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4J4W3D65Sdz4x9QG; Thu,  2 Dec
-        2021 09:33:12 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2D.AC.10018.8D298A16; Thu,  2 Dec 2021 18:33:12 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-        20211202093312epcas2p337fa78734139e0a8193d8577c13ae054~85k8t5ZgP2206222062epcas2p3Y;
-        Thu,  2 Dec 2021 09:33:12 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20211202093312epsmtrp24e4af9a7b837b2a98d495f90735d9925~85k8sOZDu1784217842epsmtrp2L;
-        Thu,  2 Dec 2021 09:33:12 +0000 (GMT)
-X-AuditID: b6c32a46-a25ff70000002722-5b-61a892d8d6f5
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        23.86.29871.7D298A16; Thu,  2 Dec 2021 18:33:12 +0900 (KST)
-Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20211202093311epsmtip1bdf66a7835b2efb60d450866d622c5e4~85k8cuVuM2239822398epsmtip1M;
-        Thu,  2 Dec 2021 09:33:11 +0000 (GMT)
-From:   "Chanho Park" <chanho61.park@samsung.com>
-To:     "'Sam Protsenko'" <semen.protsenko@linaro.org>,
-        "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
-        "'Rob Herring'" <robh+dt@kernel.org>
-Cc:     "'Jaewon Kim'" <jaewon02.kim@samsung.com>,
-        "'David Virag'" <virag.david003@gmail.com>,
-        "'Youngmin Nam'" <youngmin.nam@samsung.com>,
-        "'Wolfram Sang'" <wsa@kernel.org>,
-        "'Arnd Bergmann'" <arnd@arndb.de>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
+        id S238461AbhLBJhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 04:37:43 -0500
+Received: from mga11.intel.com ([192.55.52.93]:36523 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229588AbhLBJhm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 04:37:42 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="234180304"
+X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
+   d="scan'208";a="234180304"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 01:34:20 -0800
+X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
+   d="scan'208";a="477858873"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 01:34:18 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1msiSp-001LGD-5E;
+        Thu, 02 Dec 2021 11:33:15 +0200
+Date:   Thu, 2 Dec 2021 11:33:14 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Li Yang <leoyang.li@nxp.com>
+Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>
-In-Reply-To: <20211201190455.31646-7-semen.protsenko@linaro.org>
-Subject: RE: [PATCH 6/6] i2c: exynos5: Mention Exynos850 and ExynosAutoV9 in
- Kconfig
-Date:   Thu, 2 Dec 2021 18:33:11 +0900
-Message-ID: <002201d7e75f$9fd62580$df827080$@samsung.com>
+        Qiang Zhao <qiang.zhao@nxp.com>
+Subject: Re: [PATCH v2 3/3] soc: fsl: Replace kernel.h with the necessary
+ inclusions
+Message-ID: <YaiS2iHCrGkXgTdX@smile.fi.intel.com>
+References: <20211110105952.62013-1-andriy.shevchenko@linux.intel.com>
+ <20211110105952.62013-3-andriy.shevchenko@linux.intel.com>
+ <YZJExzxJ4j8g6jEY@smile.fi.intel.com>
+ <AS8PR04MB8946B4800AE34258F7F2BA688F989@AS8PR04MB8946.eurprd04.prod.outlook.com>
+ <YZN7+UlXtJi8/i1L@smile.fi.intel.com>
+ <YZ0WlMyS36Gj565C@smile.fi.intel.com>
+ <CADRPPNT3yhr3jAPZm=hcON3nd97eLSrkWqFBV6kh6W5gf0w3Xg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJ+Fna5aS4J9DFonoTtOdjbcAGMmgLJ1qU6AcoLHguqrfLr8A==
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCJsWRmVeSWpSXmKPExsWy7bCmme6NSSsSDf7c0rL4O+kYu8X8I+dY
-        LXY0HGG12Pj2B5PFpsfXWC06/n5htLi8aw6bxYzz+5gsWvceYbd43gdkHX//mNHi7v65jBaL
-        D3xid+D1+P1rEqPHrIZeNo+ds+6ye2xa1cnmcefaHjaPzUvqPfq2rGL0+LxJLoAjKtsmIzUx
-        JbVIITUvOT8lMy/dVsk7ON453tTMwFDX0NLCXEkhLzE31VbJxSdA1y0zB+hkJYWyxJxSoFBA
-        YnGxkr6dTVF+aUmqQkZ+cYmtUmpBSk6BeYFecWJucWleul5eaomVoYGBkSlQYUJ2xo8zf5kK
-        TjJV7Olaw9zAOIGpi5GDQ0LAROLvSe4uRi4OIYEdjBKrf75jg3A+MUpM2nWLCcL5xiixe8t/
-        5i5GTrCOtU9PMEIk9jJKPFk6F6rlBaPEvSXbWEGq2AT0JV52gNhcHCIC0xkljneuYwdxmAX+
-        MUm0Nv5gB6niFHCQ6D/cCNYhLBAmcWbRehYQm0VARWLOtn9sIDavgKXE4d6lLBC2oMTJmU/A
-        bGYBeYntb+dA3aQg8fPpMrA5IgJOEpcndDNC1IhIzO5sg6q5wSEx5VEAhO0isfD4XUYIW1ji
-        1fEt7BC2lMTnd3vB3pEQ6GaUaH30HyqxmlGis9EHwraX+DV9Cyso+JgFNCXW79KHhKSyxJFb
-        UKfxSXQc/ssOEeaV6GgTgmhUlziwfToLhC0r0T3nM+sERqVZSB6bheSxWUgemIWwawEjyypG
-        sdSC4tz01GKjAiN4bCfn525iBCdnLbcdjFPeftA7xMjEwXiIUYKDWUmEV37mskQh3pTEyqrU
-        ovz4otKc1OJDjKbAoJ7ILCWanA/MD3kl8YYmlgYmZmaG5kamBuZK4rwf/KcnCgmkJ5akZqem
-        FqQWwfQxcXBKNTDZbX34/ULExfgvvkm79gZln4qpSRDnS/rQbxwb2dv7obr4YrP2sZywpF8B
-        934xXk3K/Zao9PODxtlPqd+XeAZ2XFla4aL+pqbDW4X92u9boeVaM0R3L9Vm6Em1vs59p2K/
-        KMNThRcv9v84dd/q79myzY7KthYn+Cw+vP7eNyUiTJLfOmzPrXn/F30rPnmufXHf6yYJ5Vnm
-        GcqXVRYu+RBuPOHu55tfPujum1ey62yIz6pPl0Kb2JdtPKNr+07BmT/goORk0fnqErUysW+q
-        fx8oXN70+JW+sdy9baa+X58E9x7/fW228n3L5Ovv1kgzbM/ZPLnghuOzG3WBpZLzZWYeOuMy
-        0ej74qxdgi75YWcClViKMxINtZiLihMBcSGJwlcEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAIsWRmVeSWpSXmKPExsWy7bCSnO6NSSsSDe6eZLL4O+kYu8X8I+dY
-        LXY0HGG12Pj2B5PFpsfXWC06/n5htLi8aw6bxYzz+5gsWvceYbd43gdkHX//mNHi7v65jBaL
-        D3xid+D1+P1rEqPHrIZeNo+ds+6ye2xa1cnmcefaHjaPzUvqPfq2rGL0+LxJLoAjissmJTUn
-        syy1SN8ugSvjx5m/TAUnmSr2dK1hbmCcwNTFyMkhIWAisfbpCcYuRi4OIYHdjBJzZjWyQCRk
-        JZ6928EOYQtL3G85wgpR9IxRou35CrAiNgF9iZcd28ASIgIzGSWOf53LBuIwC7QxS3x/9Zkd
-        ouUoo8T522fAFnIKOEj0H25kBbGFBUIk9my7BmazCKhIzNn2jw3E5hWwlDjcu5QFwhaUODnz
-        CZDNATRVT6JtIyNImFlAXmL72znMEOcpSPx8ugxsjIiAk8TlCd1QNSISszvbmCcwCs9CMmkW
-        wqRZSCbNQtKxgJFlFaNkakFxbnpusWGBYV5quV5xYm5xaV66XnJ+7iZGcKRqae5g3L7qg94h
-        RiYOxkOMEhzMSiK88jOXJQrxpiRWVqUW5ccXleakFh9ilOZgURLnvdB1Ml5IID2xJDU7NbUg
-        tQgmy8TBKdXAJHNl/u5mZlVbqQMMubsdgtdlLfiWcnrttb9zpugLx86XfphctGBpyKZ+03fi
-        AUzcLisuJrs+jj6rmpm1s2WXpur0OlOduYwuFxRnaxzj/1v2yMfn/9WjH6Njcl689pI7F5zY
-        O8n6dez69swTk/Vi9/Lcvf6xsf5YyIUN7XdPfcuYO0s2u+Bi/67/3f/8Lp09YXn8k4aSSY5i
-        frhP1cmZV1n0tM9YucSZsU+XaUuwCOy/6vvftdgs4RVfntf7w7tikoV9unqqyuf1aDJLib6+
-        r32zRf//69B8wUcTRTulO44u2Vqkczbq779/qwuPnF7FKRBzM/GhZfB5Rckprcn3y6RvJFs2
-        t/vWFS/ueftYiaU4I9FQi7moOBEAno5UlUMDAAA=
-X-CMS-MailID: 20211202093312epcas2p337fa78734139e0a8193d8577c13ae054
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20211201190510epcas2p491796defc810ab67435eee58c34e7bdf
-References: <20211201190455.31646-1-semen.protsenko@linaro.org>
-        <CGME20211201190510epcas2p491796defc810ab67435eee58c34e7bdf@epcas2p4.samsung.com>
-        <20211201190455.31646-7-semen.protsenko@linaro.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADRPPNT3yhr3jAPZm=hcON3nd97eLSrkWqFBV6kh6W5gf0w3Xg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I2C controller chosen by I2C_EXYNOS5 config option is also suitable for
-> Exynos850 and ExynosAutoV9 SoCs. State that specifically in I2C_EXYNOS5
-> symbol help section.
+On Wed, Dec 01, 2021 at 01:41:16PM -0600, Li Yang wrote:
+> On Tue, Nov 23, 2021 at 10:32 AM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > On Tue, Nov 16, 2021 at 11:38:01AM +0200, Andy Shevchenko wrote:
+> > > On Mon, Nov 15, 2021 at 10:24:36PM +0000, Leo Li wrote:
+> > > > > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > > Sent: Monday, November 15, 2021 5:30 AM
+> > > > > On Wed, Nov 10, 2021 at 12:59:52PM +0200, Andy Shevchenko wrote:
+> > >
+> > > ...
+> > >
+> > > > > > v2: updated Cc list based on previous changes to MAINTAINERS
+> > > > >
+> > > > > Any comments on this, please?
+> > > > >
+> > > > > I really want to decrease amount of kernel.h usage in the common headers.
+> > > > > So others won't copy'n'paste bad example.
+> > > >
+> > > > There seems to be no problem with the patch although I didn't get time to really compile with it applied.
+> > > >
+> > > > Will pick them up later after build test.
+> > >
+> > > Thank you!
+> > >
+> > > Note, it has two fixes against MAINTAINERS which may be sent, I believe,
+> > > sooner than later to Linus.
+> >
+> > Any new so far?
 > 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> The build test is good.  I have applied it for next.  Thanks.
 
-Reviewed-by: Chanho Park <chanho61.park@samsung.com>
+Thanks, what about MAINTAINERS updates? I don't see them neither in next nor in
+your tree.
 
-Best Regards,
-Chanho Park
+-- 
+With Best Regards,
+Andy Shevchenko
 
 

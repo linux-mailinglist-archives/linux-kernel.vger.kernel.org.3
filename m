@@ -2,176 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8C04668C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2CEA4668C1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359821AbhLBRDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 12:03:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
+        id S1359814AbhLBRDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 12:03:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359813AbhLBRDk (ORCPT
+        with ESMTP id S1348240AbhLBRDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 12:03:40 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A682CC06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 09:00:17 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id r25so644164edq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 09:00:17 -0800 (PST)
+        Thu, 2 Dec 2021 12:03:39 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F334DC061757
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 09:00:16 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id p13so162089pfw.2
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 09:00:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RleHhnHbPAOcRMuCS7kxWAWoueEz531KAPD2vJkfnyQ=;
-        b=zoO/K5tHvnsvI4bG5hfw5KHzS9iKC/PTv+BaruJVSSK0yyO+ZdWnVCVb26rc3Mr+ff
-         2toqDxHMUZ9wtBb6mXHwczDauzTdTBKxpfBJl0txusXuzGCH7ysbzQNwFJggVsky2Mnr
-         Y2QRkFlkCfrkqVYORVEXtQ9836xIdSbzBfQtV8y+AaFQp9WK9oWDqBKIBWoOAPfOmKD7
-         o6WlJcmB+botFV/DLlMPRa/VQ36LfP4BbmkE71tGUj9ffdJcD4iFslJyYO6FybtOrlBF
-         3pWsVhwmmltlQxwzOpyNjaBpyGpwDPCfMRRloMI05ik2tYdGdnvSE95uuycd8Qv0JwH4
-         Drqw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NJpF2n0u3f+V7LbnqKcCz27brPpeZJOecaGwU3axpi0=;
+        b=CiMe61IIzyOL1BdLkQAxHVUenkc57I8TLB0f1Bw9VwRKN3NPdIv/6r4TknCta3x1lI
+         i+9oJjkhEOYH9hjYG+ZnlIfdBUh5d+QSjZ9qBO6/lJg+Q3FcEFUwe5pu+R8L9w7HICuD
+         AqEQXCbmxpq191HswrrCvq3MvTLqtOv0adbZBd9L+Rr5cWynWnOyNe1hCx4skCUqNd/u
+         uhHFW17VS7Wix2xuQBWPV2WqpV3cWEdxbypaZXAqMOUWLAvlwsBarUABz9y3fq9maIZG
+         pAv0I308HwItzYIgzVsNCyL5piFKlE6P/tUGVAozP3zXXsu22OSkoNabHrqXG+/j3f2e
+         08Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RleHhnHbPAOcRMuCS7kxWAWoueEz531KAPD2vJkfnyQ=;
-        b=PcheXb3GcdyIKoVA7St5xXoxCQH+ktsYURnVhyX/2TC0DGQMdOLvxdXAAxVOGX20pd
-         15hMRpjmgFGsmuhkHpvpP8lHMKiiD0SpZoKamFI5t2AVoozO++wLh+l+jd9GNvE5Ru7y
-         1frHI+7q6nbbTKZThyzB5Y3Be30gvgZiiw71hPXNoTcEAbXBN1TbYuYbSfQFCJJdt5pe
-         d2h3SWJVAGE5vUZKuPR/X30H05dV+JITicuR1Kyd0gfdTzzr6/DLndoPAgd6nWl9gv5R
-         YdSjKog8PiONtIVOCPGwZ+DTRX6m+Wfwfw8cFGfmW/gviNTdUGQS8z+OF9pck2HlsXK2
-         DbHA==
-X-Gm-Message-State: AOAM5306b2rb6iobqVi5gWyu4ZgFvIEp8J9VU1VJenUHfItsVVIHEjy9
-        qSnz+hwjqgZI0H8KMFKuNnGSjFKI2d/bnwqm+5Tynw==
-X-Google-Smtp-Source: ABdhPJwDzxGuhVaCs0MCmWLrrRxyrDMbprDyGdZil/inTCBno9piac+590RuthSK0sasRCebEWhk1uPEH0r4Th59n4Y=
-X-Received: by 2002:a17:907:1deb:: with SMTP id og43mr16504714ejc.189.1638464416189;
- Thu, 02 Dec 2021 09:00:16 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NJpF2n0u3f+V7LbnqKcCz27brPpeZJOecaGwU3axpi0=;
+        b=OJfmSiQrJ9KkY/n46bh4sYC7KF57bMbTYR1X3uYLkPTD0xE0zB3ImSX/A5Jqyzb9Cm
+         kB0qLsBrxkztJ2fXLltQgEsgxOCunZO7dQnDrijGtsH/lv0CDoUCFuUQODfsteEB9qUY
+         zX9g9X7lb8LHcm/llpWBxv1tKEjfJF4ts3cwkQyb/5sAgD8VveEk3wkwPfzMOL6ev8st
+         XkfYYyIEOKAyuyYw3Kk6W0xAxv/KZI56vCVtC9ghe2KPZBq23+qIXUovT2xCWKrd4OqP
+         DRc7mXG5/xTTd2avX6rqWpLOSbBT6LJ8aGX4hOaNNBlCUk5hEzYEOzX49jwijUXSS4E3
+         z7tw==
+X-Gm-Message-State: AOAM5322ioCZyqVapz8JZXXPKrK74q+wnt7w9oUlQGoA10oWYHZgc+dE
+        eXt+u6wNL1CJitQsn50ka3M7bA==
+X-Google-Smtp-Source: ABdhPJykaF4uJUYc6GupHBk20usta49lUngRp9G2RsDCMbhgeVs6B+tYMdejk7ROtLxS7brmW4lP0w==
+X-Received: by 2002:a63:534d:: with SMTP id t13mr284539pgl.604.1638464416221;
+        Thu, 02 Dec 2021 09:00:16 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id 66sm180331pgg.63.2021.12.02.09.00.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 09:00:14 -0800 (PST)
+Date:   Thu, 2 Dec 2021 10:00:11 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        linux-remoteproc@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH v2] rpmsg: virtio: don't let virtio core to validate used
+ length
+Message-ID: <20211202170011.GA900071@p14s>
+References: <20211124162045.25983-1-arnaud.pouliquen@foss.st.com>
+ <20211124161055-mutt-send-email-mst@kernel.org>
+ <CACGkMEvQoUcPFgOTvEDGkZHMXhjhPrk0xq-Zq3+G20_Lp-hu8A@mail.gmail.com>
 MIME-Version: 1.0
-References: <YaaQp2rq7N71dm1l@smile.fi.intel.com> <CAMRc=Me=Oq_V=+p-AFPcyDjBs-+4Ug3k0AWK9fdEEet2JD3eFw@mail.gmail.com>
- <CAMRc=MdQ+a7UrE7csg3GsiLXYGkzti-wPUwPh5J=7WBj74OVZg@mail.gmail.com>
- <YaimotqSgHzS2wdA@smile.fi.intel.com> <CAMRc=Mew8xfPb9kgH-bf=t+yb1xGpRwv3Vn0+b-9pPbp3M3g5Q@mail.gmail.com>
- <YaivZe6Qo9LMoywi@smile.fi.intel.com> <Yaiv470uDhTbPD1A@smile.fi.intel.com>
- <CAMRc=Mdz=pihuTamENmTiWRGeUU=tb_PuxvsarS+oXFpyq4p=g@mail.gmail.com>
- <YajNsrKmEEBr5zWs@smile.fi.intel.com> <CAMRc=MeMhyV1kZ7zvkqrk0okh6shxvB_LapusCFzg6UBh-bU-A@mail.gmail.com>
- <Yajo3IwiLnG5wreC@smile.fi.intel.com>
-In-Reply-To: <Yajo3IwiLnG5wreC@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 2 Dec 2021 18:00:05 +0100
-Message-ID: <CAMRc=MdcpWpw9cq8Fm5A0RB7TkYkz0NBN5DaASxR2Xe46fBO7A@mail.gmail.com>
-Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
- struct gpio_chip
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEvQoUcPFgOTvEDGkZHMXhjhPrk0xq-Zq3+G20_Lp-hu8A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 4:41 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Dec 02, 2021 at 02:52:55PM +0100, Bartosz Golaszewski wrote:
-> > On Thu, Dec 2, 2021 at 2:45 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > On Thu, Dec 02, 2021 at 02:06:57PM +0100, Bartosz Golaszewski wrote:
-> > > > On Thu, Dec 2, 2021 at 12:38 PM Andy Shevchenko
-> > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > >
-> > > > > On Thu, Dec 02, 2021 at 01:35:01PM +0200, Andy Shevchenko wrote:
-> > > > > > On Thu, Dec 02, 2021 at 12:24:06PM +0100, Bartosz Golaszewski wrote:
-> > > > > > > On Thu, Dec 2, 2021 at 11:58 AM Andy Shevchenko
-> > > > > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > > > >
-> > > > > > > > On Wed, Dec 01, 2021 at 02:11:28PM +0100, Bartosz Golaszewski wrote:
-> > > > > > > > > On Tue, Nov 30, 2021 at 10:04 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> > > > > > > >
-> > > > > > > > ...
-> > > > > > > >
-> > > > > > > > > Let me maybe rephrase the problem: currently, for GPIO devices
-> > > > > > > > > instantiating multiple banks created outside of the OF or ACPI
-> > > > > > > > > frameworks (e.g. instantiated manually and configured using a
-> > > > > > > > > hierarchy of software nodes with a single parent swnode and a number
-> > > > > > > > > of child swnodes representing the children), it is impossible to
-> > > > > > > > > assign firmware nodes other than the one representing the top GPIO
-> > > > > > > > > device to the gpiochip child devices.
-> > > > > > > > >
-> > > > > > > > > In fact if we want to drop the OF APIs entirely from gpiolib - this
-> > > > > > > > > would be the right first step as for gpio-sim it actually replaces the
-> > > > > > > > > gc->of_node = some_of_node; assignment that OF-based drivers do for
-> > > > > > > > > sub-nodes defining banks and it does work with device-tree (I verified
-> > > > > > > > > that too) thanks to the fwnode abstraction layer.
-> > > > > > > >
-> > > > > > > > In exchange of acknowledgements I confirm that I understood the issue
-> > > > > > > > you are describing. What I still don't like is this band-aid:ish approach.
-> > > > > > > > What we really need is to replace of_node by fwnode in GPIO library once
-> > > > > > > > for all. But it can be done later after your simulation series (or before,
-> > > > > > > > i.o.w. independently), hence I propose to update TODO and do it separately.
-> > > > > > > >
-> > > > > > >
-> > > > > > > But this is what we already do for OF. How would the core gpiolib know
-> > > > > > > how the firmware nodes represent the banks? It's the driver's job to
-> > > > > > > tell the framework which node corresponds with what. If anything, we
-> > > > > > > should start replacing of_nodes with fwnodes in drivers and eventually
-> > > > > > > we'd drop the of_node pointer from gpio_chip entirely, but we'd keep
-> > > > > > > the fwnode pointer I added as the driver still needs to assign it
-> > > > > > > itself.
-> > > > > > >
-> > > > > > > Again: I may be missing something here but I've been going through
-> > > > > > > this on and on and can't figure out any other way. Looking at
-> > > > > > > gpiolib-acpi.c I don't see it correctly assigning fwnodes to
-> > > > > > > sub-devices either but I don't have any HW to test it.
-> > > > > > >
-> > > > > > > As for this series: I can't really drop this patch as gpio-sim relies
-> > > > > > > on swnodes being correctly associated with gpio_chips to identify the
-> > > > > > > gpiodevs from configfs callbacks.
-> > > > > >
-> > > > > > Then we need to replace of_node by fwnode as a first step. I have looked
-> > > > > > briefly into the list of drivers that may have been cleaned up and it doesn't
-> > > > > > look too long.
-> > > > >
-> > > > > Let me kick this off by sending couple of patches.
-> > > >
-> > > > Are you fine with merging this in the meantime to get gpio-sim into mainline?
-> > >
-> > > gpio-sim, yes, (though I may bikeshed about naming of the configfs attributes,
-> > > etc) but not this patch.
-> > >
+Hey guys,
+
+On Thu, Nov 25, 2021 at 10:15:44AM +0800, Jason Wang wrote:
+> On Thu, Nov 25, 2021 at 5:12 AM Michael S. Tsirkin <mst@redhat.com> wrote:
 > >
-> > There's no way around it though AFAIK. First - the 'gpio-line-names'
-> > property will not work for banks. 'ngpios' will only work because we
-> > read it manually in probe() to figure out the number of sysfs groups.
-> > And also configfs callbacks will not be able to associate bank devices
-> > with configfs groups. I would really like to hear an alternative -
-> > even if it's just an idea and not actual implementation.
+> > On Wed, Nov 24, 2021 at 05:20:45PM +0100, Arnaud Pouliquen wrote:
+> > > Using OpenAMP library on remote side, when the rpmsg framework tries to
+> > > reuse the buffer the following error message is displayed in
+> > > the virtqueue_get_buf_ctx_split function:
+> > > "virtio_rpmsg_bus virtio0: output:used len 28 is larger than in buflen 0"
+> > >
+> > > As described in virtio specification:
+> > > "many drivers ignored the len value, as a result, many devices set len
+> > > incorrectly. Thus, when using the legacy interface, it is generally
+> > > a good idea to ignore the len value in used ring entries if possible."
+> > >
+> > > To stay in compliance with the legacy libraries, this patch prevents the
+> > > virtio core from validating used length.
+> > >
+> > > Fixes: 939779f5152d ("virtio_ring: validate used buffer length")
+> > >
+> > > Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> > > Cc: Jason Wang <jasowang@redhat.com>
+> > > Cc: Michael S. Tsirkin <mst@redhat.com>
+> > > ---
 > >
-> > I'm really curious to see how you'll remove the of_node pointer and
-> > not introduce the corresponding fwnode pointer actually.
->
-> Seems I was unclear, fwnode pointer will be needed, but what I'm against of is
-> having of_node and fwnode at the same time in the struct gpio_chip.
->
-> Yes, we may modify this patch to work without that ugly ifdeffery and with both
-> in the structure, but I don't think it's a good solution.
->
+> > Arnaud, thanks a lot for the analysis.
+> >
+> > Jason, I think this is another good point. We really should not
+> > validate input for legacy devices at all.
+> 
+> I agree. Will do that in the next version.
 
-It may not be the best solution but we can't simply convert all the
-drivers to fwnode and pray they work. I would like every converted
-driver to be well tested because there can be some issues lurking in
-the fwnode <-> of_node conversion. That will take time.
+I'm a little unclear about the "next version" in the above comment - is this
+something I should wait for?  Should I move forward with Arnaud's patch?
 
-Meanwhile, this would block gpio-sim for months again. I don't believe
-this patch is wrong as it fixes a real issue and as you said: fwnode
-will most likely stay in gpio_chip.
+Thanks,
+Mathieu
 
-IMO we should introduce fwnode, convert gpiolib and drivers to using
-it gradually, remove of_node once there are no more users.
-
-Bart
-
-> Now clearly we have to clean up of_node first.
->
+> 
+> Thanks
+> 
+> >
+> >
+> > > Update vs v1[1]: update commit message to clarify the context.
+> > >
+> > > base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
+> > >
+> > > [1]https://lore.kernel.org/lkml/20211122160812.25125-1-arnaud.pouliquen@foss.st.com/T/
+> > > ---
+> > >  drivers/rpmsg/virtio_rpmsg_bus.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+> > > index 9c112aa65040..5f73f19c2c38 100644
+> > > --- a/drivers/rpmsg/virtio_rpmsg_bus.c
+> > > +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+> > > @@ -1054,6 +1054,7 @@ static struct virtio_driver virtio_ipc_driver = {
+> > >       .feature_table_size = ARRAY_SIZE(features),
+> > >       .driver.name    = KBUILD_MODNAME,
+> > >       .driver.owner   = THIS_MODULE,
+> > > +     .suppress_used_validation = true,
+> > >       .id_table       = id_table,
+> > >       .probe          = rpmsg_probe,
+> > >       .remove         = rpmsg_remove,
+> > > --
+> > > 2.17.1
+> >
+> 

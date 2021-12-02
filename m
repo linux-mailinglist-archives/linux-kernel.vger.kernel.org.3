@@ -2,125 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 397394665C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 15:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D94D4665C9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 15:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358776AbhLBOvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 09:51:46 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:37838 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358773AbhLBOvo (ORCPT
+        id S1358801AbhLBOwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 09:52:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358641AbhLBOwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 09:51:44 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8A2891FD39;
-        Thu,  2 Dec 2021 14:48:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638456499; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uwqW9ELU+jGK+NuQi1+7a6QT/l3WZTEzYW+bZJoKIeE=;
-        b=f9ZXzJf5LFpiT2X6TuRjVMvl6xAFciKyA0CiIMnb+s4fe5nZbXqN/KrOEQUzdnXC5p6jaN
-        prcl+l0b/5mXSDm+s9ldnuXK2ukzBA08x4tNnsAFX21tb0bpdVwoVBBZzg1HekS75f2Tkr
-        vIZVI5E9e57ZVzlPy9MutotpTmVQJ/k=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6A50613DFC;
-        Thu,  2 Dec 2021 14:48:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ssm1GLPcqGFnbQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 02 Dec 2021 14:48:19 +0000
-Date:   Thu, 2 Dec 2021 15:48:18 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     hch@infradead.org, tj@kernel.org, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-Subject: Re: [PATCH v4 2/2] block: cancel all throttled bios in del_gendisk()
-Message-ID: <20211202144818.GB16798@blackbody.suse.cz>
-References: <20211202130440.1943847-1-yukuai3@huawei.com>
- <20211202130440.1943847-3-yukuai3@huawei.com>
+        Thu, 2 Dec 2021 09:52:38 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE3CC06174A;
+        Thu,  2 Dec 2021 06:49:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=TENbFU3VPoZmYB532OJ5heIU8WiCFPnyDoknW+eBIAs=; b=u/RFN
+        igsiYs4KEY8kg4EOvk3QRD+ebpGHt0dj7glb360pL8HLJi8WIhp9GH8G58NU9z5m0uT3joBm/vWD3
+        FebZFiLGB4KoOXlMgL6wO7kHd/S//PefNmB7BpUkweDfy7p+uCV1aklvnVfr1zZbZ4hutZoISh5yg
+        stbSsqaVI3jlvzSepptn36teVgW9Zt5qMc8511JOhu7lJQpzwvaAiWtAusqtdz/pxBGy53VBGrLlL
+        PUO7mZ5gOvCXrH+RNFg/4gF5nvh1q29o6tziahe9ARcB6gHVBFFMQYA/4kgUzhS71B3pyvpLstQ3r
+        ciB7wqki9iwrbCQC4xn81UPOrXXKA==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1msnOY-0000PP-Dh; Thu, 02 Dec 2021 14:49:10 +0000
+Date:   Thu, 2 Dec 2021 14:49:09 +0000
+From:   John Keeping <john@metanate.com>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_jackp@quicinc.com
+Subject: Re: [PATCH] usb: gadget: f_fs: Wake up IO thread during disconnect
+Message-ID: <Yajc5f3LDm+dSji/@donbot>
+References: <20211201100205.25448-1-quic_wcheng@quicinc.com>
+ <YaelpmsJXmhTY4A0@donbot>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="PNTmBPCT7hxwcZjr"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211202130440.1943847-3-yukuai3@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YaelpmsJXmhTY4A0@donbot>
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 01, 2021 at 04:41:10PM +0000, John Keeping wrote:
+> On Wed, Dec 01, 2021 at 02:02:05AM -0800, Wesley Cheng wrote:
+> > During device disconnect or composition unbind, applications should be
+> > notified that the endpoints are no longer enabled, so that it can take
+> > the proper actions to handle its IO threads.  Otherwise, they can be
+> > left waiting for endpoints until EPs are re-enabled.
+> > 
+> > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> > ---
+> >  drivers/usb/gadget/function/f_fs.c | 7 +++++--
+> >  1 file changed, 5 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> > index 3c584da9118c..0b0747d96378 100644
+> > --- a/drivers/usb/gadget/function/f_fs.c
+> > +++ b/drivers/usb/gadget/function/f_fs.c
+> > @@ -957,10 +957,12 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+> >  		if (file->f_flags & O_NONBLOCK)
+> >  			return -EAGAIN;
+> >  
+> > -		ret = wait_event_interruptible(
+> > -				epfile->ffs->wait, (ep = epfile->ep));
+> > +		ret = wait_event_interruptible(epfile->ffs->wait,
+> > +				(ep = epfile->ep) || !epfile->ffs->func);
 
---PNTmBPCT7hxwcZjr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I looked at this again, and doesn't this totally break the wait
+condition?
 
-Hello Kuai.
+epfile->ep is set to non-null in ffs_func_eps_enable() which is called
+from ffs_func_set_alt() just after ffs->func is set to non-null, and
+then those are also set back to null at the same time.
 
-On Thu, Dec 02, 2021 at 09:04:40PM +0800, Yu Kuai <yukuai3@huawei.com> wrote:
-> For example, if user thread is throttled with low bps while it's
-> issuing large io, and the device is deleted. The user thread will
-> wait for a long time for io to return.
+So the condition boils down to a || !a and this never blocks.  Or am I
+missing something?
 
-Do I understand correctly the "long time" here is
-outstanding_IO_size/throttled_bandwidth? Or are you getting at some
-other cause/longer time?
-
-> +void blk_throtl_cancel_bios(struct request_queue *q)
-> +{
-> +	struct throtl_data *td = q->td;
-> +	struct bio_list bio_list_on_stack;
-> +	struct blkcg_gq *blkg;
-> +	struct cgroup_subsys_state *pos_css;
-> +	struct bio *bio;
-> +	int rw;
-> +
-> +	bio_list_init(&bio_list_on_stack);
-> +
-> +	/*
-> +	 * hold queue_lock to prevent concurrent with dispatching
-> +	 * throttled bios by timer.
-> +	 */
-> +	spin_lock_irq(&q->queue_lock);
-
-You've replaced the rcu_read_lock() with the queue lock but...
-
-> +
-> +	/*
-> +	 * Drain each tg while doing post-order walk on the blkg tree, so
-> +	 * that all bios are propagated to td->service_queue.  It'd be
-> +	 * better to walk service_queue tree directly but blkg walk is
-> +	 * easier.
-> +	 */
-> +	blkg_for_each_descendant_post(blkg, pos_css, td->queue->root_blkg)
-> +		tg_drain_bios(&blkg_to_tg(blkg)->service_queue);
-
-...you also need the rcu_read_lock() here since you may encounter a
-(descendant) blkcg that's removed concurrently.
-
-(I may miss some consequences of doing this under the queue_lock so if
-the concurrent removal is ruled out, please make a comment about it.)
-
-
-Regards,
-Michal
-
---PNTmBPCT7hxwcZjr
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQTiq06H1IhXbF2mqzsiXqxkP0JkRwUCYajcogAKCRAiXqxkP0Jk
-R7cGAQCsIq9mNSSTJzsqhyqoxiLByxVHzsfKjVpMEXCOTKOJoQD8CF2+/060Ii8J
-cTwQpo66d266frtmJFTvhKDWHeInGww=
-=H8f7
------END PGP SIGNATURE-----
-
---PNTmBPCT7hxwcZjr--
+> >  		if (ret)
+> >  			return -EINTR;
+> > +		if (!epfile->ffs->func)
+> > +			return -ENODEV;
+> 
+> This seems strange - we are inside the case where the endpoint is not
+> initially enabled, if we're returning ENODEV here shouldn't that happen
+> in all cases?
+> 
+> Beyond that, there is no locking for accessing ffs->func here;
+> modification happens in gadget callbacks so it's guarded by the gadget
+> core (the existing case in ffs_ep0_ioctl() looks suspicious as well).
+> 
+> But I can't see why this change is necessary - there are event
+> notifications through ep0 when this happens, as can be seen in the hunk
+> below from the ffs_event_add(ffs, FUNCTIONFS_DISABLE) line.  If
+> userspace cares about this, then it can read the events from ep0.
+> 
+> >  	}
+> >  
+> >  	/* Do we halt? */
+> > @@ -3292,6 +3294,7 @@ static int ffs_func_set_alt(struct usb_function *f,
+> >  	if (alt == (unsigned)-1) {
+> >  		ffs->func = NULL;
+> >  		ffs_event_add(ffs, FUNCTIONFS_DISABLE);
+> > +		wake_up_interruptible(&ffs->wait);
+> >  		return 0;
+> >  	}
+> >  

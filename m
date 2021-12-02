@@ -2,400 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFEA465B86
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 02:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B4E465B8A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 02:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354133AbhLBBKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 20:10:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53196 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232366AbhLBBKu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 20:10:50 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45BCC061574;
-        Wed,  1 Dec 2021 17:07:28 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id w1so109448788edc.6;
-        Wed, 01 Dec 2021 17:07:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jsN3EztMTO5gTaWYosbPAeoenG/0P1jSsaFfvkZDymQ=;
-        b=FKDx4aca1Ks+gQqHmBexOmYnS7hXVnZQ1EfkCUBv6+9Co5FkgAomCoUbrIziDPPXj5
-         cTpzGye+cmVBEQJ18b9QdkFaiW83XAWB/WBKV5IdXIF84Q7/rcl6UKzg9f898V0+kLO4
-         qF5ShfklLN1/cflc3fFPAdkSrBkdiM0jjuDdMGsftJXQ1hpJJJ42rwFyxFC6vLPw/V4H
-         WMPMq+aBFJP7R694WqW9pdOgPkpfGWLaZ5DYIh9UBGaT3AbJ5TcYEt1vk8XECgFc5YUj
-         2Zn+gSh6bAgj0oRsow5hgaAZWL35CfOP7c4Xzh9Wl1WCx7e/SAxsDPb7zV8r5V6WdHaR
-         YsiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jsN3EztMTO5gTaWYosbPAeoenG/0P1jSsaFfvkZDymQ=;
-        b=QAa/akmgJhFFIf43++H23YGwyNNGhBbtStosJnNT5I5RlCutKvi9dBYcEu0DEMCWXS
-         /HsUZpITddjfb5Yj0JJKPTkn+08+UZwy+5gC7n53X7prncBU8NfYm5wNKMBAKdl0m7Sd
-         RPWjVuNr2lt4o066V8Mt64hL3XmK3p4R2lF6U/nNWSqxI8RtQyyseZfweuL2Kdzmwk2+
-         dl3hyLKBSvrSbZsJ3iJOrquyjTEFqAlFHcl2dBS9pcfybiHF8+pcSy2LzksCgx2HJOPg
-         m/1ogbPuqzidx+Ak70jXMa5oQhl4+pOWqQd0mrpq//9z4SGOdQYTW+vHOb3C5wvV/jCP
-         ywUg==
-X-Gm-Message-State: AOAM533ber8KIHLCT84AP0BWZdnN9zfqsg3IooQ3RaigG2+sdXPOpM+T
-        cb1AHRj+7Q3zgmjtta6GswrUdRDVoel40s+4v+M=
-X-Google-Smtp-Source: ABdhPJy3ZlsT1GoaDKhBh0ZndQCmqDjvUQhQy8bxf+QPaYUbxDK9/cCM36DBehAoTaJ4CBHyMSBsIMV5Lm0LCTQWZwc=
-X-Received: by 2002:a50:e0cf:: with SMTP id j15mr13813003edl.23.1638407246761;
- Wed, 01 Dec 2021 17:07:26 -0800 (PST)
+        id S1354251AbhLBBLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 20:11:33 -0500
+Received: from mga04.intel.com ([192.55.52.120]:11688 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1354159AbhLBBLb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 20:11:31 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="235329196"
+X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
+   d="scan'208";a="235329196"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 17:08:10 -0800
+X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
+   d="scan'208";a="602514884"
+Received: from meghadey-mobl1.amr.corp.intel.com (HELO [10.213.191.214]) ([10.213.191.214])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 17:08:09 -0800
+Message-ID: <7ad200fa-dda3-4932-cd23-ad6e79288ea4@intel.com>
+Date:   Wed, 1 Dec 2021 17:08:01 -0800
 MIME-Version: 1.0
-References: <20211201013329.15875-1-aford173@gmail.com> <CAJ+vNU1jENmWAR_5E98Vgb53ctxjxSWJewPW0YC4Yp4DuYTn3g@mail.gmail.com>
- <7216bc863d89faa9fdc5cd8d44c319f7a6d88159.camel@pengutronix.de>
- <CAJ+vNU2PxgdN414Ufd4NAG5CJgnftNSAHDGpt9Nj+RfgkNmxaw@mail.gmail.com>
- <ccfc08bbb6ec0debd523bd106e7eff4a747aaa23.camel@pengutronix.de> <CAJ+vNU3GgwW02VCiqQJhpR_D_fFse42zyWHrB-ETj6V+c4KqtA@mail.gmail.com>
-In-Reply-To: <CAJ+vNU3GgwW02VCiqQJhpR_D_fFse42zyWHrB-ETj6V+c4KqtA@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Wed, 1 Dec 2021 19:07:15 -0600
-Message-ID: <CAHCN7xJN=Qg8JF0fhcS-xbzY7wmnqcNhGG7JyuzP_xAL31rjWw@mail.gmail.com>
-Subject: Re: [RFC V2 0/2] arm64: imx8mm: Enable Hantro VPUs
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        linux-media <linux-media@vger.kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HANTRO VPU CODEC DRIVER" 
-        <linux-rockchip@lists.infradead.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [patch 09/10] PCI/MSI: Provide pci_msix_expand_vectors[_at]()
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Andrew Cooper <amc96@cam.ac.uk>,
+        Juergen Gross <jgross@suse.com>, linux-pci@vger.kernel.org,
+        xen-devel@lists.xenproject.org
+References: <20211126233124.618283684@linutronix.de>
+ <20211127000919.004572849@linutronix.de>
+From:   "Dey, Megha" <megha.dey@intel.com>
+In-Reply-To: <20211127000919.004572849@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 2:04 PM Tim Harvey <tharvey@gateworks.com> wrote:
+Hi Thomas,
+On 11/26/2021 5:25 PM, Thomas Gleixner wrote:
+> Provide a new interface which allows to expand the MSI-X vector space if
+> the underlying irq domain implementation supports it.
 >
-> On Wed, Dec 1, 2021 at 10:37 AM Lucas Stach <l.stach@pengutronix.de> wrote:
-> >
-> > Am Mittwoch, dem 01.12.2021 um 10:16 -0800 schrieb Tim Harvey:
-> > > On Wed, Dec 1, 2021 at 9:32 AM Lucas Stach <l.stach@pengutronix.de> wrote:
-> > > >
-> > > > Hi Tim,
-> > > >
-> > > > Am Mittwoch, dem 01.12.2021 um 09:23 -0800 schrieb Tim Harvey:
-> > > > > On Tue, Nov 30, 2021 at 5:33 PM Adam Ford <aford173@gmail.com> wrote:
-> > > > > >
-> > > > > > The i.MX8M has two Hantro video decoders, called G1 and G2 which appear
-> > > > > > to be related to the video decoders used on the i.MX8MQ, but because of
-> > > > > > how the Mini handles the power domains, the VPU driver does not need to
-> > > > > > handle all the functions, nor does it support the post-processor,
-> > > > > > so a new compatible flag is required.
-> > > > > >
-> > > > > > With the suggestion from Hans Verkuil, I was able to get the G2 splat to go away
-> > > > > > with changes to FORCE_MAX_ZONEORDER, but I found I could also set cma=512M, however
-> > > > > > it's unclear to me if that's an acceptable alternative.
-> > > > > >
-> > > > > > At the suggestion of Ezequiel Garcia and Nicolas Dufresne I have some
-> > > > > > results from Fluster. However, the G2 VPU appears to fail most tests.
-> > > > > >
-> > > > > > ./fluster.py run -dGStreamer-H.264-V4L2SL-Gst1.0
-> > > > > > Ran 90/135 tests successfully               in 76.431 secs
-> > > > > >
-> > > > > >  ./fluster.py run -d GStreamer-VP8-V4L2SL-Gst1.0
-> > > > > > Ran 55/61 tests successfully               in 21.454 secs
-> > > > > >
-> > > > > > ./fluster.py run -d GStreamer-VP9-V4L2SL-Gst1.0
-> > > > > > Ran 0/303 tests successfully               in 20.016 secs
-> > > > > >
-> > > > > > Each day seems to show more and more G2 submissions, and gstreamer seems to be
-> > > > > > still working on the VP9, so I am not sure if I should drop G2 as well.
-> > > > > >
-> > > > > >
-> > > > > > Adam Ford (2):
-> > > > > >   media: hantro: Add support for i.MX8M Mini
-> > > > > >   arm64: dts: imx8mm: Enable VPU-G1 and VPU-G2
-> > > > > >
-> > > > > >  arch/arm64/boot/dts/freescale/imx8mm.dtsi   | 41 +++++++++++++++
-> > > > > >  drivers/staging/media/hantro/hantro_drv.c   |  2 +
-> > > > > >  drivers/staging/media/hantro/hantro_hw.h    |  2 +
-> > > > > >  drivers/staging/media/hantro/imx8m_vpu_hw.c | 57 +++++++++++++++++++++
-> > > > > >  4 files changed, 102 insertions(+)
-> > > > > >
-> > > > >
-> > > > > Adam,
-> > > > >
-> > > > > That's for the patches!
-> > > > >
-> > > > > I tested just this series on top of v5.16-rc3 on an
-> > > > > imx8mm-venice-gw73xx-0x and found that if I loop fluster I can end up
-> > > > > getting a hang within 10 to 15 mins or so when imx8m_blk_ctrl_power_on
-> > > > > is called for VPUMIX pd :
-> > > > > while [ 1 ]; do uptime; ./fluster.py run -d GStreamer-VP8-V4L2SL-Gst1.0; done
-> > > > > ...
-> > > > > [  618.838436] imx-pgc imx-pgc-domain.6: failed to command PGC
-> > > > > [  618.844407] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
-> > > > >
-> > > > > I added prints in imx_pgc_power_{up,down} and
-> > > > > imx8m_blk_ctrl_power_{on,off} to get some more context
-> > > > > ...
-> > > > > Ran 55/61 tests successfully               in 8.685 secs
-> > > > >  17:16:34 up 17 min,  0 users,  load average: 3.97, 2.11, 0.93
-> > > > > ********************************************************************************
-> > > > > ********************
-> > > > > Running test suite VP8-TEST-VECTORS with decoder GStreamer-VP8-V4L2SL-Gst1.0
-> > > > > Using 4 parallel job(s)
-> > > > > ********************************************************************************
-> > > > > ********************
-> > > > >
-> > > > > [TEST SUITE      ] (DECODER                    ) TEST VECTOR               ... R
-> > > > > ESULT
-> > > > > ----------------------------------------------------------------------
-> > > > > [ 1023.114806] imx8m_blk_ctrl_power_on vpublk-g1
-> > > > > [ 1023.119669] imx_pgc_power_up vpumix
-> > > > > [ 1023.124307] imx-pgc imx-pgc-domain.6: failed to command PGC
-> > > > > [ 1023.130006] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
-> > > > >
-> > > > > While this wouldn't be an issue with this series it does indicate we
-> > > > > still have something racy in blk-ctrl. Can you reproduce this (and if
-> > > > > not what kernel are you based on)? Perhaps you or Lucas have some
-> > > > > ideas?
-> > > > >
-> > > > Did you have "[PATCH] soc: imx: gpcv2: Synchronously suspend MIX
-> > > > domains" applied when running those tests? It has only recently been
-> > > > picked up by Shawn and may have an influence on the bus domain
-> > > > behavior.
-> > > >
-> > >
-> > > Lucas,
-> > >
-> > > Good point. I did have that originally before I started pruning down
-> > > to the bare minimum to reproduce the issue.
-> > >
-> > > I added it back and now I have the following:
-> > > arm64: dts: imx8mm: Enable VPU-G1 and VPU-G2
-> > > media: hantro: Add support for i.MX8M Mini
-> > > soc: imx: gpcv2: keep i.MX8MM VPU-H1 bus clock active
-> > > soc: imx: gpcv2: Synchronously suspend MIX domains
-> > > Linux 5.16-rc3
-> > >
-> > > Here's the latest with that patch:
-> > > ...
-> > > [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
-> > > vp80-00-comprehensive-007 ... Success
-> > > [  316.632373] imx8m_blk_ctrl_power_off vpublk-g1
-> > > [  316.636908] imx_pgc_power_down vpu-g1
-> > > [  316.640983] imx_pgc_power_down vpumix
-> > > [  316.756869] imx8m_blk_ctrl_power_on vpublk-g1
-> > > [  316.761360] imx_pgc_power_up vpumix
-> > > [  316.765985] imx-pgc imx-pgc-domain.6: failed to command PGC
-> > > [  316.772743] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
-> > > ^^^ hang
-> >
-> > Hm, I wonder if there's some broken error handling here somewhere, as a
-> > failure to power up a domain shouldn't lead to a hang.
-> >
-> > However, that doesn't explain why the PGC isn't completing the request.
-> > Can you try to extend the timeout some more. Even though I think that
-> > 1msec should already be generous. Can you dump the content of the
-> > GPC_PU_PGC_SW_PUP_REQ and GPC_A53_PU_PGC_PUP_STATUSn (all 3 of them)
-> > registers, when the failure condition is hit?
-> >
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>   drivers/pci/msi/msi.c |   41 +++++++++++++++++++++++++++++++++++++++++
+>   include/linux/pci.h   |   13 +++++++++++++
+>   2 files changed, 54 insertions(+)
+>
+> --- a/drivers/pci/msi/msi.c
+> +++ b/drivers/pci/msi/msi.c
+> @@ -1025,6 +1025,47 @@ int pci_alloc_irq_vectors_affinity(struc
+>   EXPORT_SYMBOL(pci_alloc_irq_vectors_affinity);
+>   
+>   /**
+> + * pci_msix_expand_vectors_at - Expand MSI-X interrupts for a device
+> + *
+> + * @dev:	PCI device to operate on
+> + * @at:		Allocate at MSI-X index. If @at == PCI_MSI_EXPAND_AUTO
+> + *		the function expands automatically after the last
+Not sure why some of these changes related to PCI_MSIX_EXPAND_AUTO and 
+num_descs did not make it to the 'msi' branch.
+Is this intentional?
+> + *		active index.
+> + * @nvec:	Number of vectors to allocate
+> + *
+> + * Expand the MSI-X vectors of a device after an initial enablement and
+> + * allocation.
+> + *
+> + * Return: 0 if the allocation was successful, an error code otherwise.
+> + */
+> +int pci_msix_expand_vectors_at(struct pci_dev *dev, unsigned int at, unsigned int nvec)
+> +{
+> +	struct msi_device_data *md = dev->dev.msi.data;
+> +	struct msi_range range = { .ndesc = nvec, };
+> +	unsigned int max_vecs;
+> +	int ret;
+> +
+> +	if (!pci_msi_enable || !dev || !dev->msix_enabled || !md)
+> +		return -ENOTSUPP;
+> +
+> +	if (!pci_msi_domain_supports_expand(dev))
+> +		return -ENOTSUPP;
+> +
+> +	max_vecs = pci_msix_vec_count(dev);
+> +	if (!nvec || nvec > max_vecs)
+> +		return -EINVAL;
+> +
+> +	range.first = at == PCI_MSIX_EXPAND_AUTO ? md->num_descs : at;
+> +
+> +	if (range.first >= max_vecs || nvec > max_vecs - range.first)
+> +		return -ENOSPC;
+> +
+> +	ret = msix_setup_interrupts(dev, dev->msix_base, &range, NULL, NULL, true);
+> +	return ret <= 0 ? ret : -ENOSPC;;
+> +}
+> +EXPORT_SYMBOL_GPL(pci_msix_expand_vectors_at);
+> +
+I am having trouble fully comprehending how this expansion scheme would 
+work..
 
-I haven't been able to repeat your findings on G1, but when testing
-VP9 on the G2 decoder, I get the following:
+For instance, say:
+1. Driver requests for 5 vectors:
+pci_enable_msix_range(dev, NULL, 5, 5)
+=>num_descs = 5
 
-[VP9-TEST-VECTORS] (GStreamer-VP9-V4L2SL-Gst1.0)
-vp90-2-07-frame_parallel.webm                   ... Success
-[VP9-TEST-VECTORS] (GStreamer-VP9-V4L2SL-Gst1.0)
-vp90-2-07-frame_parallel-1.webm                 ... Success
-[VP9-TEST-VECTORS] (GStreamer-VP9-V4L2SL-Gst1.0)
-vp90-2-08-tile_1x4_frame_parallel.webm          ... Timeout
-[VP9-TEST-VECTORS] (GStreamer-VP9-V4L2SL-Gst1.0)
-vp90-2-08-tile_1x2.webm                         ... Timeout
-[VP9-TEST-VECTORS] (GStreamer-VP9-V4L2SL-Gst1.0)
-vp90-2-02-size-lf-1920x1080.webm                ... Timeout
-[VP9-TEST-VECTORS] (GStreamer-VP9-V4L2SL-Gst1.0)
-vp90-2-08-tile_1x2_frame_parallel.webm          ... Timeout
-[  192.971101] cma: cma_alloc: reserved: alloc failed, req-size: 3548
-pages, ret: -12
-[  192.979748] hantro-vpu 38310000.video-codec: dma alloc of size
-14532608 failed
-[  192.988683] cma: cma_alloc: reserved: alloc failed, req-size: 938
-pages, ret: -12
-[VP9-TEST-VECTORS] (GStreamer-VP9-V4L2SL-Gst1.0)
-vp90-2-08-tile_1x8.webm                         ... Error
-[  195.296712] imx-pgc imx-pgc-domain.6: failed to command PGC
-[  195.302396] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
+2. Driver frees vectors at index 1,2:
+range = {1, 2, 2};
+pci_msi_teardown_msi_irqs(dev, range)
+=>num_descs = 3; Current active vectors are at index: 0, 3, 4
 
-At some point the G2 times out, starts to choke on memory, then the
-power domain fails, and then the system hangs.  I have a heartbeat
-GPIO running so I know if the kernel is alive or not.  The heartbeat
-stops, so I know it's locked up tightly.
-I guess the good news is that the G2 decoder is able to run 100-ish
-successful tests before it falls down.
+3. Driver requests for 3 more vectors using the new API:
+pci_msix_expand_vectors(dev, 3)
+=>range.first = 3 => It will try to allocate index 3-5, but we already 
+have 3,4 active?
+Ideally, we would want index 1,2 and 5 to be allocated for this request 
+right?
 
-Either way, I'll post a RFC V3 for the Hantro stuff, but I wonder if
-the order of operations on the power-domain powerdown is an issue.
+Could you please let me know what I am missing?
 
-adam
+With the 'range' approach, the issue is that we are trying to allocate 
+contiguous indexes. Perhaps, we also need to check if all the indexes in 
+the requested range are available,
+if not, find a contiguous range large enough to accommodate the request. 
+But there will be fragmentation issues if we choose to go with this way...
 
+I had a version of the dynamic MSI-X patch series (which never got sent 
+out). For the expansion, I had the following:
+pci_add_msix_irq_vector(pdev): On each invocation, add 1 MSI-X vector to 
+the device and return the msi-x index assigned by the kernel (using a 
+bitmap)
+Correspondingly, pci_free_msix_irq_vector(pdev, irq) frees all the 
+allocated resources associated with MSI-X interrupt with Linux IRQ 
+number 'irq'.
+I had issues when trying to dynamically allocate more than 1 interrupt 
+because I didn't have a clean way to communicate to the driver what 
+indexes were assigned in the current allocation.
+
+-Megha
 >
-> Adam,
->
-> Adding keep_clocks=true to VPUG1/VPUG2 domains did not help
->
-> Lucas,
->
-> I bumped the regmap_read_poll_timeout timeouts from 1m to 100ms and
-> still saw the same issue.
->
-> Here's some added debugging to show the regs:
-> [  648.037903] imx8m_blk_ctrl_power_on vpublk-g1
-> [  648.042346] imx_pgc_power_up vpumix
-> [  648.146178] imx-pgc imx-pgc-domain.6: imx_pgc_power_up: failed to command PGC
-> [  648.153355] imx-pgc imx-pgc-domain.6: GPC_PU_PGC_SW_PUP_REQ(0x0f8)=0x00000100
-> [  648.162339] imx-pgc imx-pgc-domain.6:
-> GPC_A53_PU_PGC_PUP_STATUS0(0x14c)=0x00000000
-> [  648.169988] imx-pgc imx-pgc-domain.6:
-> GPC_A53_PU_PGC_PUP_STATUS1(0x150)=0x00000000
-> [  648.177618] imx-pgc imx-pgc-domain.6:
-> GPC_A53_PU_PGC_PUP_STATUS2(0x154)=0x00000000
-> [  648.185281] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
->
-> diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
-> index 8176380b02e6..8124a3434655 100644
-> --- a/drivers/soc/imx/gpcv2.c
-> +++ b/drivers/soc/imx/gpcv2.c
-> @@ -67,6 +67,9 @@
->
->  #define GPC_PU_PGC_SW_PUP_REQ          0x0f8
->  #define GPC_PU_PGC_SW_PDN_REQ          0x104
-> +#define GPC_A53_PU_PGC_PUP_STATUS0     0x14c
-> +#define GPC_A53_PU_PGC_PUP_STATUS1     0x150
-> +#define GPC_A53_PU_PGC_PUP_STATUS2     0x154
->
->  #define IMX7_USB_HSIC_PHY_SW_Pxx_REQ           BIT(4)
->  #define IMX7_USB_OTG2_PHY_SW_Pxx_REQ           BIT(3)
-> @@ -224,6 +227,7 @@ static int imx_pgc_power_up(struct generic_pm_domain *genpd)
->         u32 reg_val, pgc;
->         int ret;
->
-> +printk("%s %s\n", __func__, genpd->name);
->         ret = pm_runtime_get_sync(domain->dev);
->         if (ret < 0) {
->                 pm_runtime_put_noidle(domain->dev);
-> @@ -258,9 +262,17 @@ static int imx_pgc_power_up(struct
-> generic_pm_domain *genpd)
->                 ret = regmap_read_poll_timeout(domain->regmap,
->                                                GPC_PU_PGC_SW_PUP_REQ, reg_val,
->                                                !(reg_val & domain->bits.pxx),
-> -                                              0, USEC_PER_MSEC);
-> +                                              0, 100 * USEC_PER_MSEC);
->                 if (ret) {
-> -                       dev_err(domain->dev, "failed to command PGC\n");
-> +                       dev_err(domain->dev, "%s: failed to command
-> PGC\n", __func__);
-> +                       if (!regmap_read(domain->regmap,
-> GPC_PU_PGC_SW_PUP_REQ, &reg_val))
-> +                               dev_err(domain->dev,
-> "GPC_PU_PGC_SW_PUP_REQ(0x%03x)=0x%08x\n", GPC_PU_PGC_SW_PUP_REQ,
-> reg_val);
-> +                       if (!regmap_read(domain->regmap,
-> GPC_A53_PU_PGC_PUP_STATUS0, &reg_val))
-> +                               dev_err(domain->dev,
-> "GPC_A53_PU_PGC_PUP_STATUS0(0x%03x)=0x%08x\n",
-> GPC_A53_PU_PGC_PUP_STATUS0, reg_val);
-> +                       if (!regmap_read(domain->regmap,
-> GPC_A53_PU_PGC_PUP_STATUS1, &reg_val))
-> +                               dev_err(domain->dev,
-> "GPC_A53_PU_PGC_PUP_STATUS1(0x%03x)=0x%08x\n",
-> GPC_A53_PU_PGC_PUP_STATUS1, reg_val);
-> +                       if (!regmap_read(domain->regmap,
-> GPC_A53_PU_PGC_PUP_STATUS2, &reg_val))
-> +                               dev_err(domain->dev,
-> "GPC_A53_PU_PGC_PUP_STATUS2(0x%03x)=0x%08x\n",
-> GPC_A53_PU_PGC_PUP_STATUS2, reg_val);
->                         goto out_clk_disable;
->                 }
->
-> @@ -318,6 +330,7 @@ static int imx_pgc_power_down(struct
-> generic_pm_domain *genpd)
->         u32 reg_val, pgc;
->         int ret;
->
-> +printk("%s %s\n", __func__, genpd->name);
->         /* Enable reset clocks for all devices in the domain */
->         if (!domain->keep_clocks) {
->                 ret = clk_bulk_prepare_enable(domain->num_clks, domain->clks);
-> @@ -335,7 +348,7 @@ static int imx_pgc_power_down(struct
-> generic_pm_domain *genpd)
->                 ret = regmap_read_poll_timeout(domain->regmap, GPC_PU_PWRHSK,
->                                                reg_val,
->                                                !(reg_val & domain->bits.hskack),
-> -                                              0, USEC_PER_MSEC);
-> +                                              0, 100 * USEC_PER_MSEC);
->                 if (ret) {
->                         dev_err(domain->dev, "failed to power down ADB400\n");
->                         goto out_clk_disable;
-> @@ -359,9 +372,9 @@ static int imx_pgc_power_down(struct
-> generic_pm_domain *genpd)
->                 ret = regmap_read_poll_timeout(domain->regmap,
->                                                GPC_PU_PGC_SW_PDN_REQ, reg_val,
->                                                !(reg_val & domain->bits.pxx),
-> -                                              0, USEC_PER_MSEC);
-> +                                              0, 100 * USEC_PER_MSEC);
->                 if (ret) {
-> -                       dev_err(domain->dev, "failed to command PGC\n");
-> +                       dev_err(domain->dev, "%s: failed to command
-> PGC\n", __func__);
->                         goto out_clk_disable;
->                 }
->         }
-> @@ -712,6 +725,7 @@ static const struct imx_pgc_domain imx8mm_pgc_domains[] = {
->                         .map = IMX8MM_VPUG1_A53_DOMAIN,
->                 },
->                 .pgc   = BIT(IMX8MM_PGC_VPUG1),
-> +               .keep_clocks = true,
->         },
->
->         [IMX8MM_POWER_DOMAIN_VPUG2] = {
-> @@ -723,6 +737,7 @@ static const struct imx_pgc_domain imx8mm_pgc_domains[] = {
->                         .map = IMX8MM_VPUG2_A53_DOMAIN,
->                 },
->                 .pgc   = BIT(IMX8MM_PGC_VPUG2),
-> +               .keep_clocks = true,
->         },
->
->         [IMX8MM_POWER_DOMAIN_VPUH1] = {
-> diff --git a/drivers/soc/imx/imx8m-blk-ctrl.c b/drivers/soc/imx/imx8m-blk-ctrl.c
-> index 519b3651d1d9..028f38d45892 100644
-> --- a/drivers/soc/imx/imx8m-blk-ctrl.c
-> +++ b/drivers/soc/imx/imx8m-blk-ctrl.c
-> @@ -68,6 +68,7 @@ static int imx8m_blk_ctrl_power_on(struct
-> generic_pm_domain *genpd)
->         struct imx8m_blk_ctrl *bc = domain->bc;
->         int ret;
->
-> +printk("%s %s\n", __func__, genpd->name);
->         /* make sure bus domain is awake */
->         ret = pm_runtime_get_sync(bc->bus_power_dev);
->         if (ret < 0) {
-> @@ -119,6 +120,7 @@ static int imx8m_blk_ctrl_power_off(struct
-> generic_pm_domain *genpd)
->         const struct imx8m_blk_ctrl_domain_data *data = domain->data;
->         struct imx8m_blk_ctrl *bc = domain->bc;
->
-> +printk("%s %s\n", __func__, genpd->name);
->         /* put devices into reset and disable clocks */
->         regmap_clear_bits(bc->regmap, BLK_SFT_RSTN, data->rst_mask);
->         regmap_clear_bits(bc->regmap, BLK_CLK_EN, data->clk_mask);
->
-> Tim

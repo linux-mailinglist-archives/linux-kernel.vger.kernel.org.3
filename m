@@ -2,259 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7155465FBF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 09:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 268AB465F9C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 09:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356307AbhLBIox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 03:44:53 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:29146 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345821AbhLBIoK (ORCPT
+        id S1345544AbhLBImD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 03:42:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230054AbhLBImC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 03:44:10 -0500
-Received: from kwepemi500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4J4TrR0W8NzXdQv;
-        Thu,  2 Dec 2021 16:38:47 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- kwepemi500001.china.huawei.com (7.221.188.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 2 Dec 2021 16:40:46 +0800
-Received: from localhost.localdomain (10.67.165.24) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 2 Dec 2021 16:40:45 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <wangjie125@huawei.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
-        <chenhao288@hisilicon.com>
-Subject: [PATCH net-next 9/9] net: hns3: refactor function hns3_get_vector_ring_chain()
-Date:   Thu, 2 Dec 2021 16:36:03 +0800
-Message-ID: <20211202083603.25176-10-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211202083603.25176-1-huangguangbin2@huawei.com>
-References: <20211202083603.25176-1-huangguangbin2@huawei.com>
+        Thu, 2 Dec 2021 03:42:02 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4532CC061574
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 00:38:40 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id c32so69767320lfv.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 00:38:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gzuYTHikBe26I+lZwL81eSuxVz26qz/YlIXM31Ln6EI=;
+        b=Lgus0m/stliOjA3sXKPX3rz6SfPPwsbK9f3zkWF7l2U001fYRg2xWti2N18mQOyk6u
+         R4nm0u6YyQlcxj8rotcePby74gjzAPhBXfnZTr3tOkg/RUJuWAJMOpFhu8rNL/i7M4jK
+         aSp+ETEdAYIk9LX6W5WeiryQPnPKBXMqIJww8PR8dANL6Vg3wEopLJwTAt4CUniDwuyq
+         ihfSBzj3dJkwzLV2r+8efgFkzbK1YKA/ei1vvL2NBDrMPPRgGCAAesdEnU6s9vhS+Y0A
+         ximJxMG1hfRIRoUpwQHiG1ZOZ0oYKjQWs94zVeSvvIwE7FequCP+m5M9oqCHAqGdE0Hb
+         GMbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gzuYTHikBe26I+lZwL81eSuxVz26qz/YlIXM31Ln6EI=;
+        b=C/azBcZfDBTJ1oVtalg3gFOMHbCCLS+eRYXeamU38riVU5h+V0Rm15B0bDn9SMuzFj
+         JBsVnb8IqBXL2sUqNcDvQFSZfPVeqSlUnJD/+VLd4pVQyQxBISiBVO11BpvNqf7uM+0M
+         ceBXcOt2TszohUDTeBPgzBhTMJoOEuRiMiT4M97VpB3D6mnQ7k4m8l4j7bCNaUvVWf4C
+         HXBWhTCa+JLo017+ZJqtnSGKZQtO/CAIEb7v9IwkdlZd99nk4nPnwOQrG49ubZRBJvWY
+         MTMDLVeTC18eMP4/0vyczwHMohSWjl9K8EjiSRJ/lopcMr+342bJm5BQEgbeBB50yh+c
+         7w7Q==
+X-Gm-Message-State: AOAM531kATvp7cxFOy1yma9rQdqvT3iJ3m5aGTtSrhqkqyAv+Zr783GB
+        jABRKex9vJ+YyN721LNr7DuBHFMkCv0VQA==
+X-Google-Smtp-Source: ABdhPJyr8Plxv0vgsC3vzC/FNnMnMOxWWH+gB39YilTAybkuEcGavqE69DGb/gQVFQesy1jnlfu2FQ==
+X-Received: by 2002:a05:6512:239d:: with SMTP id c29mr11229926lfv.454.1638434318432;
+        Thu, 02 Dec 2021 00:38:38 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.229.236])
+        by smtp.gmail.com with ESMTPSA id l16sm291157lfg.90.2021.12.02.00.38.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 00:38:37 -0800 (PST)
+Message-ID: <2f238cca-e609-f98c-41cd-6eb19adffbd8@gmail.com>
+Date:   Thu, 2 Dec 2021 11:38:35 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH -next v4 0/3] some fix and cleanup for rtl8192e
+Content-Language: en-US
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Cc:     gregkh@linuxfoundation.org, dan.carpenter@oracle.com
+References: <20211202030704.2425621-1-yangyingliang@huawei.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20211202030704.2425621-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jie Wang <wangjie125@huawei.com>
+On 12/2/21 06:07, Yang Yingliang wrote:
+> v4: Fix crypt_info leak. Add fix tags for patch #1 and #2.
+> v3: Fix more leaks.  Break it up into multple patches.
+> v2: Make rtllib_softmac_init() return error codes.
+> 
+> patch #1, #2:
+>    fix error handle case in alloc_rtllib()
+> 
+> patch #3:
+>    remove unnecessary assignment
+> 
+> Yang Yingliang (3):
+>    staging: rtl8192e: return error code from rtllib_softmac_init()
+>    staging: rtl8192e: rtllib_module: fix error handle case in
+>      alloc_rtllib()
+>    staging: rtl8192e: rtllib_module: remove unnecessary assignment
+> 
+>   drivers/staging/rtl8192e/rtllib.h         |  2 +-
+>   drivers/staging/rtl8192e/rtllib_module.c  | 17 ++++++++++++-----
+>   drivers/staging/rtl8192e/rtllib_softmac.c |  6 ++++--
+>   3 files changed, 17 insertions(+), 8 deletions(-)
+> 
 
-Currently  hns3_get_vector_ring_chain() is a bit long. Refactor it by
-extracting sub process to improve the readability.
+Thank you!
 
-Signed-off-by: Jie Wang <wangjie125@huawei.com>
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
----
- .../net/ethernet/hisilicon/hns3/hns3_enet.c   | 121 ++++++++----------
- 1 file changed, 53 insertions(+), 68 deletions(-)
+Reviewed-by: Pavel Skripkin <paskripkin@gmail.com>
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-index 8dcc2d80553b..babc5d7a3b52 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-@@ -4342,87 +4342,70 @@ static int hns3_nic_common_poll(struct napi_struct *napi, int budget)
- 	return rx_pkt_total;
- }
- 
--static int hns3_get_vector_ring_chain(struct hns3_enet_tqp_vector *tqp_vector,
--				      struct hnae3_ring_chain_node *head)
-+static int hns3_create_ring_chain(struct hns3_enet_tqp_vector *tqp_vector,
-+				  struct hnae3_ring_chain_node **head,
-+				  bool is_tx)
- {
-+	u32 bit_value = is_tx ? HNAE3_RING_TYPE_TX : HNAE3_RING_TYPE_RX;
-+	u32 field_value = is_tx ? HNAE3_RING_GL_TX : HNAE3_RING_GL_RX;
-+	struct hnae3_ring_chain_node *cur_chain = *head;
- 	struct pci_dev *pdev = tqp_vector->handle->pdev;
--	struct hnae3_ring_chain_node *cur_chain = head;
- 	struct hnae3_ring_chain_node *chain;
--	struct hns3_enet_ring *tx_ring;
--	struct hns3_enet_ring *rx_ring;
--
--	tx_ring = tqp_vector->tx_group.ring;
--	if (tx_ring) {
--		cur_chain->tqp_index = tx_ring->tqp->tqp_index;
--		hnae3_set_bit(cur_chain->flag, HNAE3_RING_TYPE_B,
--			      HNAE3_RING_TYPE_TX);
--		hnae3_set_field(cur_chain->int_gl_idx, HNAE3_RING_GL_IDX_M,
--				HNAE3_RING_GL_IDX_S, HNAE3_RING_GL_TX);
--
--		cur_chain->next = NULL;
--
--		while (tx_ring->next) {
--			tx_ring = tx_ring->next;
--
--			chain = devm_kzalloc(&pdev->dev, sizeof(*chain),
--					     GFP_KERNEL);
--			if (!chain)
--				goto err_free_chain;
--
--			cur_chain->next = chain;
--			chain->tqp_index = tx_ring->tqp->tqp_index;
--			hnae3_set_bit(chain->flag, HNAE3_RING_TYPE_B,
--				      HNAE3_RING_TYPE_TX);
--			hnae3_set_field(chain->int_gl_idx,
--					HNAE3_RING_GL_IDX_M,
--					HNAE3_RING_GL_IDX_S,
--					HNAE3_RING_GL_TX);
--
--			cur_chain = chain;
--		}
--	}
-+	struct hns3_enet_ring *ring;
- 
--	rx_ring = tqp_vector->rx_group.ring;
--	if (!tx_ring && rx_ring) {
--		cur_chain->next = NULL;
--		cur_chain->tqp_index = rx_ring->tqp->tqp_index;
--		hnae3_set_bit(cur_chain->flag, HNAE3_RING_TYPE_B,
--			      HNAE3_RING_TYPE_RX);
--		hnae3_set_field(cur_chain->int_gl_idx, HNAE3_RING_GL_IDX_M,
--				HNAE3_RING_GL_IDX_S, HNAE3_RING_GL_RX);
-+	ring = is_tx ? tqp_vector->tx_group.ring : tqp_vector->rx_group.ring;
- 
--		rx_ring = rx_ring->next;
-+	if (cur_chain) {
-+		while (cur_chain->next)
-+			cur_chain = cur_chain->next;
- 	}
- 
--	while (rx_ring) {
-+	while (ring) {
- 		chain = devm_kzalloc(&pdev->dev, sizeof(*chain), GFP_KERNEL);
- 		if (!chain)
--			goto err_free_chain;
--
--		cur_chain->next = chain;
--		chain->tqp_index = rx_ring->tqp->tqp_index;
-+			return -ENOMEM;
-+		if (cur_chain)
-+			cur_chain->next = chain;
-+		else
-+			*head = chain;
-+		chain->tqp_index = ring->tqp->tqp_index;
- 		hnae3_set_bit(chain->flag, HNAE3_RING_TYPE_B,
--			      HNAE3_RING_TYPE_RX);
--		hnae3_set_field(chain->int_gl_idx, HNAE3_RING_GL_IDX_M,
--				HNAE3_RING_GL_IDX_S, HNAE3_RING_GL_RX);
-+				bit_value);
-+		hnae3_set_field(chain->int_gl_idx,
-+				HNAE3_RING_GL_IDX_M,
-+				HNAE3_RING_GL_IDX_S, field_value);
- 
- 		cur_chain = chain;
- 
--		rx_ring = rx_ring->next;
-+		ring = ring->next;
- 	}
- 
- 	return 0;
-+}
-+
-+static struct hnae3_ring_chain_node *
-+hns3_get_vector_ring_chain(struct hns3_enet_tqp_vector *tqp_vector)
-+{
-+	struct pci_dev *pdev = tqp_vector->handle->pdev;
-+	struct hnae3_ring_chain_node *cur_chain = NULL;
-+	struct hnae3_ring_chain_node *chain;
-+
-+	if (hns3_create_ring_chain(tqp_vector, &cur_chain, true))
-+		goto err_free_chain;
-+
-+	if (hns3_create_ring_chain(tqp_vector, &cur_chain, false))
-+		goto err_free_chain;
-+
-+	return cur_chain;
- 
- err_free_chain:
--	cur_chain = head->next;
- 	while (cur_chain) {
- 		chain = cur_chain->next;
- 		devm_kfree(&pdev->dev, cur_chain);
- 		cur_chain = chain;
- 	}
--	head->next = NULL;
- 
--	return -ENOMEM;
-+	return NULL;
- }
- 
- static void hns3_free_vector_ring_chain(struct hns3_enet_tqp_vector *tqp_vector,
-@@ -4431,7 +4414,7 @@ static void hns3_free_vector_ring_chain(struct hns3_enet_tqp_vector *tqp_vector,
- 	struct pci_dev *pdev = tqp_vector->handle->pdev;
- 	struct hnae3_ring_chain_node *chain_tmp, *chain;
- 
--	chain = head->next;
-+	chain = head;
- 
- 	while (chain) {
- 		chain_tmp = chain->next;
-@@ -4546,7 +4529,7 @@ static int hns3_nic_init_vector_data(struct hns3_nic_priv *priv)
- 	}
- 
- 	for (i = 0; i < priv->vector_num; i++) {
--		struct hnae3_ring_chain_node vector_ring_chain;
-+		struct hnae3_ring_chain_node *vector_ring_chain;
- 
- 		tqp_vector = &priv->tqp_vector[i];
- 
-@@ -4556,15 +4539,16 @@ static int hns3_nic_init_vector_data(struct hns3_nic_priv *priv)
- 		tqp_vector->tx_group.total_packets = 0;
- 		tqp_vector->handle = h;
- 
--		ret = hns3_get_vector_ring_chain(tqp_vector,
--						 &vector_ring_chain);
--		if (ret)
-+		vector_ring_chain = hns3_get_vector_ring_chain(tqp_vector);
-+		if (!vector_ring_chain) {
-+			ret = -ENOMEM;
- 			goto map_ring_fail;
-+		}
- 
- 		ret = h->ae_algo->ops->map_ring_to_vector(h,
--			tqp_vector->vector_irq, &vector_ring_chain);
-+			tqp_vector->vector_irq, vector_ring_chain);
- 
--		hns3_free_vector_ring_chain(tqp_vector, &vector_ring_chain);
-+		hns3_free_vector_ring_chain(tqp_vector, vector_ring_chain);
- 
- 		if (ret)
- 			goto map_ring_fail;
-@@ -4663,7 +4647,7 @@ static void hns3_clear_ring_group(struct hns3_enet_ring_group *group)
- 
- static void hns3_nic_uninit_vector_data(struct hns3_nic_priv *priv)
- {
--	struct hnae3_ring_chain_node vector_ring_chain;
-+	struct hnae3_ring_chain_node *vector_ring_chain;
- 	struct hnae3_handle *h = priv->ae_handle;
- 	struct hns3_enet_tqp_vector *tqp_vector;
- 	int i;
-@@ -4678,13 +4662,14 @@ static void hns3_nic_uninit_vector_data(struct hns3_nic_priv *priv)
- 		 * chain between vector and ring, we should go on to deal with
- 		 * the remaining options.
- 		 */
--		if (hns3_get_vector_ring_chain(tqp_vector, &vector_ring_chain))
-+		vector_ring_chain = hns3_get_vector_ring_chain(tqp_vector);
-+		if (!vector_ring_chain)
- 			dev_warn(priv->dev, "failed to get ring chain\n");
- 
- 		h->ae_algo->ops->unmap_ring_from_vector(h,
--			tqp_vector->vector_irq, &vector_ring_chain);
-+			tqp_vector->vector_irq, vector_ring_chain);
- 
--		hns3_free_vector_ring_chain(tqp_vector, &vector_ring_chain);
-+		hns3_free_vector_ring_chain(tqp_vector, vector_ring_chain);
- 
- 		hns3_clear_ring_group(&tqp_vector->rx_group);
- 		hns3_clear_ring_group(&tqp_vector->tx_group);
--- 
-2.33.0
 
+
+With regards,
+Pavel Skripkin

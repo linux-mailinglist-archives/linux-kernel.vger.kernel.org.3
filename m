@@ -2,118 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B749C466106
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C583F46610C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354064AbhLBKCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 05:02:05 -0500
-Received: from mail-ed1-f46.google.com ([209.85.208.46]:39880 "EHLO
-        mail-ed1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357198AbhLBKA6 (ORCPT
+        id S241204AbhLBKDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:03:05 -0500
+Received: from mail-ed1-f41.google.com ([209.85.208.41]:35623 "EHLO
+        mail-ed1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231615AbhLBKC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 05:00:58 -0500
-Received: by mail-ed1-f46.google.com with SMTP id w1so113864843edc.6;
-        Thu, 02 Dec 2021 01:57:35 -0800 (PST)
+        Thu, 2 Dec 2021 05:02:59 -0500
+Received: by mail-ed1-f41.google.com with SMTP id v1so113487511edx.2;
+        Thu, 02 Dec 2021 01:59:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=en+Opy31MVytWWQD7G7uESibRnRhr5heljRq+Tgyh3k=;
-        b=oPgKGvqFeJeSvqCNO3WSNpJoYQ9qSLzPxDb4Z1/CV4g3TBvpxI1qg2oM7vruqV2soD
-         MlU2VKe+Tk6aQXySZ9nSdS0aqRcr2Jn1E6fM2hJ6KQ8UndG1gZR/eOejsOnoyX2EXloN
-         Nk2Mwjma0lV9je4CBc29TAM34yOfub5ibQUy1xrlzEUc+9P+5JwLDS0eEl09PALTkxor
-         fPIGO6SGGxKP+B8kpR4S6rQru61rmtGxpfBz3Jt+0o+X0C/jCRG3ORqrYzujqUAQdr6f
-         cvaQAKJGIPYalt4XZLhf6b7+P4UmooSjoInraQAQEts3wOkknhMBcHUHjuxJimawppIB
-         aqAA==
-X-Gm-Message-State: AOAM530AR4frB4GlBAkm3vn1xpfczxP545uHkZ561RdMB5mjyjPO/aOI
-        QVNy2TTgW0VLT5oJyAvnCSQ=
-X-Google-Smtp-Source: ABdhPJw6nmoGzRg2kEWm4EnXCY7RMccJAoIb40B+fUyn9zp8V8Br3ohmm71FaGOTtg+ckZXf623FnQ==
-X-Received: by 2002:a05:6402:5206:: with SMTP id s6mr16405018edd.113.1638439054291;
-        Thu, 02 Dec 2021 01:57:34 -0800 (PST)
-Received: from rocinante ([95.155.85.46])
-        by smtp.gmail.com with ESMTPSA id z22sm2035051edd.78.2021.12.02.01.57.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 01:57:33 -0800 (PST)
-Date:   Thu, 2 Dec 2021 10:57:32 +0100
-From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-To:     Qi Liu <liuqi115@huawei.com>
-Cc:     will@kernel.org, mark.rutland@arm.com, bhelgaas@google.com,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linuxarm@huawei.com,
-        zhangshaokun@hisilicon.com
-Subject: Re: [PATCH v13 0/2] drivers/perf: hisi: Add support for PCIe PMU
-Message-ID: <YaiYjHRrX+XfTic8@rocinante>
-References: <20211202080633.2919-1-liuqi115@huawei.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NypUDYvmH0MHXHQA77GvHsd6Iy6POgRp9+KytAO7ImY=;
+        b=wT9iMXbwPSMM7/w9BkrJp6dxS1AT7YIZhHz5z5lzO3iqVQYYUnCZgkZrGpxc2VCIXw
+         5OX18qBhJfkHXXUL4SoLeDgUkMiAMlh3YTA3KUlqTgXT7BPKJ45RW2xApl8FUjh4CVs5
+         fbnrjLrRiOP+9CNVj5+YelWmTGDntH8hjkOPKZr13Kifb/WLzKl+hAYBIA34zpfWTUvk
+         CAjLt1PRK43jCmllJc+ZoOhTj0x6D9x+8eUfzuew2kS4/+Hz7tbaSgvZW36Tgchip13t
+         EUAYhQAZjgLb1ZBLYjdf0SR5XASoaU/Gsu2h3Vq/xREE2uHNroAINPLhbJ0/YnXiYBEp
+         nxhg==
+X-Gm-Message-State: AOAM533ts4PMAxNtRghZ/tyXP/BbqaXNES4AsOZNa974J/lvmZ5LGn7C
+        JW5qbno4uSdZbY6gQFAXsM0=
+X-Google-Smtp-Source: ABdhPJxcgi1lcp2R/iZSMYZphyGfUkA/cNp9BVuOdBExhdM3ZQm/6jvATO7kYMvBfeBvAY0Cyketmg==
+X-Received: by 2002:a17:907:1b1f:: with SMTP id mp31mr14106111ejc.247.1638439176513;
+        Thu, 02 Dec 2021 01:59:36 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id gb18sm1577180ejc.95.2021.12.02.01.59.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 01:59:35 -0800 (PST)
+Message-ID: <a0968570-a25a-a7e3-3ee5-b7275286c9d1@kernel.org>
+Date:   Thu, 2 Dec 2021 10:59:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211202080633.2919-1-liuqi115@huawei.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 3/3] x86: mm: add x86_64 support for page table check
+Content-Language: en-US
+To:     Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Paul Turner <pjt@google.com>, weixugc@google.com,
+        Greg Thelen <gthelen@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>, masahiroy@kernel.org,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        frederic@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+References: <20211123214814.3756047-1-pasha.tatashin@soleen.com>
+ <20211123214814.3756047-4-pasha.tatashin@soleen.com>
+ <f81a6434-9f38-947e-02a8-9a9191285e52@kernel.org>
+ <cadf2582-3004-92b9-ab5a-cb39259fa36c@kernel.org>
+ <CA+CK2bBfcrxDyxnV+xc680AP+sJGHSpong6a+b_vvWcRsB2CcA@mail.gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <CA+CK2bBfcrxDyxnV+xc680AP+sJGHSpong6a+b_vvWcRsB2CcA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qi,
+On 01. 12. 21, 14:55, Pasha Tatashin wrote:
+> On Wed, Dec 1, 2021 at 3:44 AM Jiri Slaby <jirislaby@kernel.org> wrote:
+>>
+>> On 01. 12. 21, 9:00, Jiri Slaby wrote:
+>>> On 23. 11. 21, 22:48, Pasha Tatashin wrote:
+>>>> Add page table check hooks into routines that modify user page tables.
+>>>
+>>> Hi,
+>>>
+>>> I bisected to this as this causes crashes during modules load:
+>>
+>> And it's not enough to unset CONFIG_PAGE_TABLE_CHECK_ENFORCED. I had to
+>> unset CONFIG_PAGE_TABLE_CHECK completely to get rid of this.
+> 
+> Hi,
+> 
+> Thanks for reporting this. Seems like module load for some reasons
+> does not like the static branches. However, I was not able to repro
+> this. Could you please share your config and the module that you were
+> loading?
 
-[...]
-> Changes since v12:
-> - Modify the printout message of cpuhotplug to standard.
-> - Link: https://lore.kernel.org/linux-arm-kernel/20211130120450.2747-1-liuqi115@huawei.com/
-> 
-> Changes since v11:
-> - Address the comments from Krzysztof, drop all the final dot and change bdf in comment to BDF.
-> - Link: https://lore.kernel.org/linux-arm-kernel/20211029093632.4350-1-liuqi115@huawei.com/
-> 
-> Changes since v10:
-> - Drop the out of date comment according to Jonathan's review.
-> - Link: https://lore.kernel.org/linux-arm-kernel/20210915074524.18040-1-liuqi115@huawei.com/
-> 
-> Changes since v9:
-> - Add check in hisi_pcie_pmu_validate_event_group to count counters accurently .
-> - Link: https://lore.kernel.org/linux-arm-kernel/20210818051246.29545-1-liuqi115@huawei.com/
-> 
-> Changes since v8:
-> - Remove subevent parameter in attr->config.
-> - Check the counter scheduling constraints when accepting an event group.
-> - Link: https://lore.kernel.org/linux-arm-kernel/20210728080932.72515-1-liuqi115@huawei.com/
-> 
-> Changes since v7:
-> - Drop headerfile cpumask.h and cpuhotplug.h.
-> - Rename events in perf list: bw->flux, lat->delay, as driver doesn't
->   process bandwidth and average latency data.
-> - Link: https://lore.kernel.org/linux-arm-kernel/1624532384-43002-1-git-send-email-liuqi115@huawei.com/
-> 
-> Changes since v6:
-> - Move the driver to drivers/perf/hisilicon.
-> - Treat content in PMU counter and ext_counter as different PMU events, and
->   export them separately.
-> - Address the comments from Will and Krzysztof.
-> - Link: https://lore.kernel.org/linux-arm-kernel/1622467951-32114-1-git-send-email-liuqi115@huawei.com/
-> 
-> Changes since v5:
-> - Fix some errors when build under ARCH=xtensa.
-> - Link: https://lore.kernel.org/linux-arm-kernel/1621946795-14046-1-git-send-email-liuqi115@huawei.com/
-> 
-> Changes since v4:
-> - Replace irq_set_affinity_hint() with irq_set_affinity().
-> - Link: https://lore.kernel.org/linux-arm-kernel/1621417741-5229-1-git-send-email-liuqi115@huawei.com/
-> 
-> Changes since v3:
-> - Fix some warnings when build under 32bits architecture.
-> - Address the comments from John.
-> - Link: https://lore.kernel.org/linux-arm-kernel/1618490885-44612-1-git-send-email-liuqi115@huawei.com/
-> 
-> Changes since v2:
-> - Address the comments from John.
-> - Link: https://lore.kernel.org/linux-arm-kernel/1617959157-22956-1-git-send-email-liuqi115@huawei.com/
-> 
-> Changes since v1:
-> - Drop the internal Reviewed-by tag.
-> - Fix some build warnings when W=1.
-> - Link: https://lore.kernel.org/linux-arm-kernel/1617788943-52722-1-git-send-email-liuqi115@huawei.com/
-> Qi Liu (2):
->   docs: perf: Add description for HiSilicon PCIe PMU driver
->   drivers/perf: hisi: Add driver for HiSilicon PCIe PMU
+It's the openSUSE's -next config:
+https://raw.githubusercontent.com/openSUSE/kernel-source/linux-next/config/x86_64/vanilla
 
-Thank you!  Solid work here!  Much appreciated.
+But with CONFIG_IWLMEI=n (as that fails to link).
 
-	Krzysztof
+One has to load i915, other modules (71 on my system) are apparently fine.
+
+i915 tries to patch your `page_table_check_disabled' which is defined as 
+`DEFINE_STATIC_KEY_TRUE_RO':
+ > jump_label_add_module: key=__tracepoint_mmap_lock_released 
+(ffffffff93f36d88) mod=0000000000000000
+ > jump_label_add_module: key=hugetlb_free_vmemmap_enabled_key 
+(ffffffff94873560) mod=0000000000000000
+ > jump_label_add_module: key=devmap_managed_key (ffffffff94902700) 
+mod=0000000000000000
+ > jump_label_add_module: key=page_table_check_disabled 
+(ffffffff939da760) mod=0000000000000000
+ > BUG: unable to handle page fault for address: ffffffff939da768
+
+regards,
+-- 
+js
+suse labs

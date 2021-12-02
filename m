@@ -2,120 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 646B5465ADA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9851E465AE0
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344318AbhLBAeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 19:34:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354281AbhLBAcm (ORCPT
+        id S1354489AbhLBAfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 19:35:03 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:44915 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354594AbhLBAd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 19:32:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D78C06174A;
-        Wed,  1 Dec 2021 16:29:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 1 Dec 2021 19:33:58 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE616B82194;
-        Thu,  2 Dec 2021 00:29:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C51FC634BA;
-        Thu,  2 Dec 2021 00:29:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638404955;
-        bh=81RWRinGuwUqHetp8mypFq7+tGh7b8+qWpURKMsoVvc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fy4ELZmBp2sSu8AzLuMwL5/tBib4mgcCrlVhRnZixca8YTr18oCQG9Keaz8nowgE0
-         Pa2rGKQjNtqKfgZIxqXJxNZiuANG1G+xdDjwjxM2ob2WmTCVI/WulY7Vt+yGEYEYYK
-         9Kykw6pvF2LwYIjrtm181khF/cK5CH/dl8tyGz/WjCmRjopGboZ4QxxQfNgVDXQV2f
-         ZgUa5fw50xLIKUkteO2wEnTegwdIjdb3fuw4BM4E/apbVk4kxV2G3OP4paH3/gquJ8
-         upu/B9Fn5oplDtnFsGcyNLzuwmuz/OYIAViili1PQQY1uaJc5rl/bM4m7BjwG0/Kqc
-         x8NEw5kSgZGeQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 803FF5C14E6; Wed,  1 Dec 2021 16:29:14 -0800 (PST)
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
-        jiangshanlai@gmail.com, akpm@linux-foundation.org,
-        mathieu.desnoyers@efficios.com, josh@joshtriplett.org,
-        tglx@linutronix.de, peterz@infradead.org, rostedt@goodmis.org,
-        dhowells@redhat.com, edumazet@google.com, fweisbec@gmail.com,
-        oleg@redhat.com, joel@joelfernandes.org,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 18/18] rcu/nocb: Merge rcu_spawn_cpu_nocb_kthread() and rcu_spawn_one_nocb_kthread()
-Date:   Wed,  1 Dec 2021 16:29:12 -0800
-Message-Id: <20211202002912.3127710-18-paulmck@kernel.org>
-X-Mailer: git-send-email 2.31.1.189.g2e36527f23
-In-Reply-To: <20211202002848.GA3127439@paulmck-ThinkPad-P17-Gen-1>
-References: <20211202002848.GA3127439@paulmck-ThinkPad-P17-Gen-1>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J4H0z2yvqz4xbw;
+        Thu,  2 Dec 2021 11:30:26 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638405028;
+        bh=TjyNYyoyPBdzTBSQjZxt0J1gGbnbmg1ai8+DULrZFQE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=oKdOa53zFtGsIZmX9ID9GitRZlzZ1gwC24CacCWaW/qVXT1JIwdJRl2IcJu3o3gFM
+         liM+d9UoIhqcSn8clqgLt1nVDZIIPQlC2HT4Xj1rU6WhgEi7uWXH63zVbo9Hh9P5su
+         759pi3A/U9cPEloaw/ln79PVLfQgxW1elqEB8VZRU+k0pv/0whHUt/eNYTXVAkYWyY
+         2FiUW3a6EjHOenGhPcu3C+m1mKnT+kWptDGiJRJ4L5zS+MfHgxKAkjgsunt1mUkF5o
+         ThhzaDjizIjtfE51Q6BRwqojTqDIzF6kyCjEjf/A4julYTbClnax4fHoWkQE2IlvUN
+         pmQ4fnOqhLA3g==
+Date:   Thu, 2 Dec 2021 11:30:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Ville =?UTF-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
+Subject: linux-next: manual merge of the drm-intel-gt tree with the
+ drm-intel tree
+Message-ID: <20211202113025.71551241@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/U5W8j29yaPF/IG8K8AyEq1R";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frederic Weisbecker <frederic@kernel.org>
+--Sig_/U5W8j29yaPF/IG8K8AyEq1R
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The rcu_spawn_one_nocb_kthread() function is called only from
-rcu_spawn_cpu_nocb_kthread().  Therefore, inline the former into
-the latter, saving a few lines of code.
+Hi all,
 
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Uladzislau Rezki <urezki@gmail.com>
-Cc: Josh Triplett <josh@joshtriplett.org>
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Tested-by: Juri Lelli <juri.lelli@redhat.com>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
----
- kernel/rcu/tree_nocb.h | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
+Today's linux-next merge of the drm-intel-gt tree got a conflict in:
 
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index 0c1802ce4764c..eeafb546a7a09 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -1233,12 +1233,15 @@ static void __init rcu_boot_init_nocb_percpu_data(struct rcu_data *rdp)
-  * rcuo CB kthread, spawn it.  Additionally, if the rcuo GP kthread
-  * for this CPU's group has not yet been created, spawn it as well.
-  */
--static void rcu_spawn_one_nocb_kthread(int cpu)
-+static void rcu_spawn_cpu_nocb_kthread(int cpu)
- {
- 	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
- 	struct rcu_data *rdp_gp;
- 	struct task_struct *t;
- 
-+	if (!rcu_scheduler_fully_active || !rcu_nocb_is_setup)
-+		return;
-+
- 	/* If there already is an rcuo kthread, then nothing to do. */
- 	if (rdp->nocb_cb_kthread)
- 		return;
-@@ -1262,16 +1265,6 @@ static void rcu_spawn_one_nocb_kthread(int cpu)
- 	WRITE_ONCE(rdp->nocb_gp_kthread, rdp_gp->nocb_gp_kthread);
- }
- 
--/*
-- * If the specified CPU is a no-CBs CPU that does not already have its
-- * rcuo kthread, spawn it.
-- */
--static void rcu_spawn_cpu_nocb_kthread(int cpu)
--{
--	if (rcu_scheduler_fully_active && rcu_nocb_is_setup)
--		rcu_spawn_one_nocb_kthread(cpu);
--}
--
- /*
-  * Once the scheduler is running, spawn rcuo kthreads for all online
-  * no-CBs CPUs.  This assumes that the early_initcall()s happen before
--- 
-2.31.1.189.g2e36527f23
+  drivers/gpu/drm/i915/display/intel_fbc.c
 
+between commit:
+
+  d06188234427 ("drm/i915/fbc: s/dev_priv/i915/")
+
+from the drm-intel tree and commit:
+
+  cca084692394 ("drm/i915: Use per device iommu check")
+
+from the drm-intel-gt tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/i915/display/intel_fbc.c
+index d0c34bc3af6c,c40444206425..000000000000
+--- a/drivers/gpu/drm/i915/display/intel_fbc.c
++++ b/drivers/gpu/drm/i915/display/intel_fbc.c
+@@@ -1674,12 -1536,12 +1674,12 @@@ static int intel_sanitize_fbc_option(st
+  	return 0;
+  }
+ =20
+ -static bool need_fbc_vtd_wa(struct drm_i915_private *dev_priv)
+ +static bool need_fbc_vtd_wa(struct drm_i915_private *i915)
+  {
+  	/* WaFbcTurnOffFbcWhenHyperVisorIsUsed:skl,bxt */
+- 	if (intel_vtd_active() &&
+ -	if (intel_vtd_active(dev_priv) &&
+ -	    (IS_SKYLAKE(dev_priv) || IS_BROXTON(dev_priv))) {
+ -		drm_info(&dev_priv->drm,
+++	if (intel_vtd_active(i915) &&
+ +	    (IS_SKYLAKE(i915) || IS_BROXTON(i915))) {
+ +		drm_info(&i915->drm,
+  			 "Disabling framebuffer compression (FBC) to prevent screen flicker wi=
+th VT-d enabled\n");
+  		return true;
+  	}
+
+--Sig_/U5W8j29yaPF/IG8K8AyEq1R
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGoE6EACgkQAVBC80lX
+0GzXDAf+OlGafDDLWTuvxxMYe2NkmdpUhDLDa5gxcGmBfe3DzkoC6pompmP8DPBO
+/H+GR02MFdTl+y2rZkRLkHm2t0jQeiUXa9ccq99TiNaDf4FRGkx2xTRlDLqCfEcG
+TCWIT3oDyz/rilgDHpCLwp8zIMzw7CvCeDUSohdMhFId0zHobvKp2w9LluvLGndl
+s3EJk1DxJ4tPOxr80tRiqi4hypdHINwgQp+4YyagTqBD2yZMXfDdIDa81zDBPSrs
+A7yq3BHvDMuOYsvhvBvUmpCQq0AsCamdUwPTVZU7P7eT1xH2f+W9hcz639utU1ve
+07H3g7yUpEY68XvDOw46KxjUZXZohA==
+=gaRM
+-----END PGP SIGNATURE-----
+
+--Sig_/U5W8j29yaPF/IG8K8AyEq1R--

@@ -2,155 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 861E046617B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFA2466184
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357003AbhLBKer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 05:34:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356955AbhLBKeq (ORCPT
+        id S1357028AbhLBKfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:35:40 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11438 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345364AbhLBKfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 05:34:46 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10763C06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 02:31:24 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id y68so71988428ybe.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 02:31:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EeNOuxvv/783k+RAGH+/mPik/avVsKKHUy8sBnxFQag=;
-        b=Uf9Ac/koQG5lA8BIaiou4d4SebkzFUaX9j976OVRSNmEfk8l5FeLyI8CXevrszuhIE
-         /TmCYeGsChi38/yVM3wwl9Xlwgyr7RJd+A0/tQXGLQdSAxhC6L5uBHzKfJpT9Rw6HzHh
-         fju/CHQ6PH2cuGiLfYv/7OJgrdz1cR+psJ+2q4nYYvaaHjcluSNunwhd3SwuvFcICwXP
-         awO3Ikme8v3JqJCeGrXjKlQVe9CWNjNPK0jukJVZMNSik7rmHkdUTm7AZUKn7Znm4rXq
-         LPz1qHZ15wYtxmVJ3oglJ9TI8OrIxGhIiti/ocxUXLpnNLZRW13JUAwywCJW9F2HvHIF
-         rofA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EeNOuxvv/783k+RAGH+/mPik/avVsKKHUy8sBnxFQag=;
-        b=Cy4AWsqF5wjhS2rMqYx+vwE4cmVMcvh7ga6CyDxLINJh3hALBmA0ISqkvu+BLRpc2a
-         aYzRz27nDIHwvQ/mRaIfz5ZijUfAMoL8PegTVCl1E/MyD/douUss/afJvOsxfHnfD4Tw
-         lywRap1Kg69q+iHvhYW50O5fZ1bAc0PdmILELDo+JTZago4RhHwncDOBtQBEwVBFoA/T
-         VBOD3B91BR3bnIQzpD8JuJlf3KjsFvO49oxti/2dXmC61K/BtRgaMi4A88yspO3NklD/
-         KkgblCX+cEJpvyyp35ybFYRWBw9Ss5u5pyBY7YjRTHZpu9TJTxpycMNWyp3Ae9ZvTmhU
-         7bPQ==
-X-Gm-Message-State: AOAM531d3bJUMDds5azghX/+XjRz1BcMKx7EbvOoOpbskmpzsFaf60Ko
-        puknH9wD/jvpdv6x7w/PYPC8xkprLeWa+IVajsC6Mw==
-X-Google-Smtp-Source: ABdhPJz/wPDYkIWfKgdxJcGJiCqgU2TN0ErGGC3ufY3H4DRdSttYobpMoKTUb6WOd0kKlgwM5zG8VfbxG5457S6j/Kc=
-X-Received: by 2002:a25:d157:: with SMTP id i84mr13825183ybg.703.1638441083325;
- Thu, 02 Dec 2021 02:31:23 -0800 (PST)
+        Thu, 2 Dec 2021 05:35:39 -0500
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B29qWYK004013;
+        Thu, 2 Dec 2021 10:32:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=JHgA82d8aX/0qd2SxViMuY3g9qvqlI2nqIoM1UnKb3U=;
+ b=A7tV1uoEgz5qCvS2oDm0NGaJUJ7uX/YKtb7IxlQwK2g0rNcdvwiltnhj+n0HrlM3bNFp
+ cC5r+5NvKKmq6rlYxZgzz2FXnl3aFmg7f49Otrt6S39fhqAbRhNbq7l9a8ZJyZ4SaVza
+ 4OX46OJlRnZljIpsNonOPw1fQKy2oxp0yE4RXqkd0NeDaZ31BYU1zlTsPXfOEw/ETadz
+ X3bWCpdmcBayfi3sn7dJ14ZoxgWvCvqASQ+yje/dSWvat0afUWWl4jGb3Y6c7OjDgIgg
+ Urgq46BegCRpptdD7KWWPUudFEzEZLu9Ahv/YwnU1Wgk6KAOdwkT+91P2pNTAW8kQeHe ew== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cpuw70q4e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Dec 2021 10:32:16 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B2AAVZG024073;
+        Thu, 2 Dec 2021 10:32:15 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cpuw70q3n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Dec 2021 10:32:15 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B2ARQKa014086;
+        Thu, 2 Dec 2021 10:32:13 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3ckcaa8mec-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Dec 2021 10:32:12 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B2AV8Tf25624996
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 Dec 2021 10:31:08 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2EE774C072;
+        Thu,  2 Dec 2021 10:31:08 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DAB3E4C074;
+        Thu,  2 Dec 2021 10:31:07 +0000 (GMT)
+Received: from [9.155.196.57] (unknown [9.155.196.57])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  2 Dec 2021 10:31:07 +0000 (GMT)
+Message-ID: <fd0aa191-4b43-76a1-cb0c-7ed4298ffecb@linux.vnet.ibm.com>
+Date:   Thu, 2 Dec 2021 11:31:07 +0100
 MIME-Version: 1.0
-References: <20211123214814.3756047-1-pasha.tatashin@soleen.com>
- <20211123214814.3756047-4-pasha.tatashin@soleen.com> <f81a6434-9f38-947e-02a8-9a9191285e52@kernel.org>
- <cadf2582-3004-92b9-ab5a-cb39259fa36c@kernel.org> <CA+CK2bBfcrxDyxnV+xc680AP+sJGHSpong6a+b_vvWcRsB2CcA@mail.gmail.com>
- <a0968570-a25a-a7e3-3ee5-b7275286c9d1@kernel.org> <172f894c-01ab-cd9f-3292-1ba811f7222a@kernel.org>
-In-Reply-To: <172f894c-01ab-cd9f-3292-1ba811f7222a@kernel.org>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Thu, 2 Dec 2021 18:30:44 +0800
-Message-ID: <CAMZfGtVRUcKw_rjiype=sVYzthKYAwYavNAkyrJtkaDTxR+NHw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] x86: mm: add x86_64 support for page table check
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Pasha Tatashin <pasha.tatashin@soleen.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Paul Turner <pjt@google.com>, weixugc@google.com,
-        Greg Thelen <gthelen@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>, masahiroy@kernel.org,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        frederic@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] KVM: s390: Fix names of skey constants in api
+ documentation
+Content-Language: en-US
+To:     Janosch Frank <frankja@linux.ibm.com>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211118102522.569660-1-scgl@linux.ibm.com>
+ <6b781b76-28a9-c375-30cb-ee6764ecd7c8@linux.ibm.com>
+From:   Janis Schoetterl-Glausch <scgl@linux.vnet.ibm.com>
+In-Reply-To: <6b781b76-28a9-c375-30cb-ee6764ecd7c8@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: cZADdvT36I83K5svFRQ9dDjMMGWmqNE3
+X-Proofpoint-ORIG-GUID: Tc29EWqo4u4JKsSCFakOxb9jH6z-nN5p
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-12-02_05,2021-12-02_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 clxscore=1011 mlxlogscore=999 suspectscore=0
+ impostorscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0
+ phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112020065
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 6:06 PM Jiri Slaby <jirislaby@kernel.org> wrote:
->
-> On 02. 12. 21, 10:59, Jiri Slaby wrote:
-> > On 01. 12. 21, 14:55, Pasha Tatashin wrote:
-> >> On Wed, Dec 1, 2021 at 3:44 AM Jiri Slaby <jirislaby@kernel.org> wrote:
-> >>>
-> >>> On 01. 12. 21, 9:00, Jiri Slaby wrote:
-> >>>> On 23. 11. 21, 22:48, Pasha Tatashin wrote:
-> >>>>> Add page table check hooks into routines that modify user page tables.
-> >>>>
-> >>>> Hi,
-> >>>>
-> >>>> I bisected to this as this causes crashes during modules load:
-> >>>
-> >>> And it's not enough to unset CONFIG_PAGE_TABLE_CHECK_ENFORCED. I had to
-> >>> unset CONFIG_PAGE_TABLE_CHECK completely to get rid of this.
-> >>
-> >> Hi,
-> >>
-> >> Thanks for reporting this. Seems like module load for some reasons
-> >> does not like the static branches. However, I was not able to repro
-> >> this. Could you please share your config and the module that you were
-> >> loading?
-> >
-> > It's the openSUSE's -next config:
-> > https://raw.githubusercontent.com/openSUSE/kernel-source/linux-next/config/x86_64/vanilla
-> >
-> >
-> > But with CONFIG_IWLMEI=n (as that fails to link).
-> >
-> > One has to load i915, other modules (71 on my system) are apparently fine.
-> >
-> > i915 tries to patch your `page_table_check_disabled' which is defined as
-> > `DEFINE_STATIC_KEY_TRUE_RO':
-> >  > jump_label_add_module: key=__tracepoint_mmap_lock_released
-> > (ffffffff93f36d88) mod=0000000000000000
-> >  > jump_label_add_module: key=hugetlb_free_vmemmap_enabled_key
-> > (ffffffff94873560) mod=0000000000000000
-> >  > jump_label_add_module: key=devmap_managed_key (ffffffff94902700)
-> > mod=0000000000000000
-> >  > jump_label_add_module: key=page_table_check_disabled
-> > (ffffffff939da760) mod=0000000000000000
-> >  > BUG: unable to handle page fault for address: ffffffff939da768
->
-> Provided you EXPORT page_table_check_disabled and it can be used from
-> modules, it can be barely marked as RO. So the below indeed fixes the
-> problem for me:
+On 12/1/21 09:45, Janosch Frank wrote:
+> On 11/18/21 11:25, Janis Schoetterl-Glausch wrote:
+>> The are defined in include/uapi/linux/kvm.h as
+> 
+> s/The/They/
+> 
+> I can fix that up when picking if you want.
 
-Agree. I had encountered a similar problem some months ago. In one
-word, DEFINE_STATIC_KEY_TRUE_RO() and EXPORT_SYMBOL()
-are mutually exclusive.
+Thanks, please do.
+> 
+>> KVM_S390_GET_SKEYS_NONE and KVM_S390_SKEYS_MAX, but the
+>> api documetation talks of KVM_S390_GET_KEYS_NONE and
+>> KVM_S390_SKEYS_ALLOC_MAX respectively.
+>>
+>> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> 
+> Thanks for fixing this up.
+> 
+> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+> 
+>> ---
+>>   Documentation/virt/kvm/api.rst | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+>> index aeeb071c7688..b86c7edae888 100644
+>> --- a/Documentation/virt/kvm/api.rst
+>> +++ b/Documentation/virt/kvm/api.rst
+>> @@ -3701,7 +3701,7 @@ KVM with the currently defined set of flags.
+>>   :Architectures: s390
+>>   :Type: vm ioctl
+>>   :Parameters: struct kvm_s390_skeys
+>> -:Returns: 0 on success, KVM_S390_GET_KEYS_NONE if guest is not using storage
+>> +:Returns: 0 on success, KVM_S390_GET_SKEYS_NONE if guest is not using storage
+>>             keys, negative value on error
+>>     This ioctl is used to get guest storage key values on the s390
+>> @@ -3720,7 +3720,7 @@ you want to get.
+>>     The count field is the number of consecutive frames (starting from start_gfn)
+>>   whose storage keys to get. The count field must be at least 1 and the maximum
+>> -allowed value is defined as KVM_S390_SKEYS_ALLOC_MAX. Values outside this range
+>> +allowed value is defined as KVM_S390_SKEYS_MAX. Values outside this range
+>>   will cause the ioctl to return -EINVAL.
+>>     The skeydata_addr field is the address to a buffer large enough to hold count
+>> @@ -3744,7 +3744,7 @@ you want to set.
+>>     The count field is the number of consecutive frames (starting from start_gfn)
+>>   whose storage keys to get. The count field must be at least 1 and the maximum
+>> -allowed value is defined as KVM_S390_SKEYS_ALLOC_MAX. Values outside this range
+>> +allowed value is defined as KVM_S390_SKEYS_MAX. Values outside this range
+>>   will cause the ioctl to return -EINVAL.
+>>     The skeydata_addr field is the address to a buffer containing count bytes of
+>>
+> 
 
-Thanks.
-
->
-> --- a/mm/page_table_check.c
-> +++ b/mm/page_table_check.c
-> @@ -18,7 +18,7 @@ struct page_table_check {
->   static bool __page_table_check_enabled __initdata =
->
-> IS_ENABLED(CONFIG_PAGE_TABLE_CHECK_ENFORCED);
->
-> -DEFINE_STATIC_KEY_TRUE_RO(page_table_check_disabled);
-> +DEFINE_STATIC_KEY_TRUE(page_table_check_disabled);
->   EXPORT_SYMBOL(page_table_check_disabled);
->
->   static int __init early_page_table_check_param(char *buf)
->
-> >
-> > regards,
->
->
-> --
-> js
-> suse labs

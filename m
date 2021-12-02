@@ -2,128 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B612546671B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45600466723
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359197AbhLBPuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 10:50:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31178 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245536AbhLBPu3 (ORCPT
+        id S1359004AbhLBPv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 10:51:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242293AbhLBPvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 10:50:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638460026;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1QXpG/U1Vsg/4uKa21qXS5jgoVnEShvvUuealgGuJJw=;
-        b=g7nMqNmk5NwC55+LfY06dU281dleCQtD1KQmFyjct+1vt6juupKBXLY2iovwUTER5i+O5F
-        PbtvQZ6D6lNLedryOckV1GQyvYHVIzk5pgVJ1lhl2KBY2Lc2BnGr2j55UTkk82bFJs4OuZ
-        G//zb99vcdN92ZP6oqAmP/zTwXBiYCs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-122-hQDi2Ru_MfqdMskLlbh9bg-1; Thu, 02 Dec 2021 10:46:59 -0500
-X-MC-Unique: hQDi2Ru_MfqdMskLlbh9bg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9350780A1BF;
-        Thu,  2 Dec 2021 15:46:54 +0000 (UTC)
-Received: from [10.22.18.96] (unknown [10.22.18.96])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5C2E35D9D5;
-        Thu,  2 Dec 2021 15:46:53 +0000 (UTC)
-Message-ID: <2f67a2d9-98d6-eabd-fb5e-4c89574ce52c@redhat.com>
-Date:   Thu, 2 Dec 2021 10:46:52 -0500
+        Thu, 2 Dec 2021 10:51:53 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD485C06174A;
+        Thu,  2 Dec 2021 07:48:30 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id l16so60532769wrp.11;
+        Thu, 02 Dec 2021 07:48:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tGC3LpdEhf/azzucNhguXDxEcjakxGW5c1+cbDZrOzA=;
+        b=Cuw4refrkxRuzxjplWfBvXRstEa1sCgXRTrB9M6vZZZutwu5bGygklfwcZMz9fqdh6
+         brookoLg8n2YWE1FVC6QCBq7CNF2Ppwz9l/fbMpa2dz8XfJAgAUSbX+EuQ7epfRWIoQt
+         1FF8AxIwKVVMloGmPgKtv9p6eZp2BHl1sDLB8oKQFcLZHF3SWZVsuxjO90HnRxmyPhti
+         rAXK4AcQPan+6z066haa9Fbs2NutpEb+owuLl47tz8ZgzenuD65o/Kg7Wp1NcDTbwTs/
+         TGkAQDEEkuHEEpmH7y7xeTZkn8aEK+FeEgXbxflO5hmFeLeVR8Jmo7/slBpUPGePdS5Q
+         7dYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tGC3LpdEhf/azzucNhguXDxEcjakxGW5c1+cbDZrOzA=;
+        b=VXH3hUnwUBdCWhwjtz2jgHTt1nOzWw918XSbkr1wbz6ysXagX6uG4FUL42wKEy2PwT
+         zfgcVwHEYAwGCm13tvIeT5mX0lreqeKz82OP4byyz7OqWBTKAITkBPBHbqxsLsYZKhwC
+         3PGHhYt2c3n9UTGtrE+9F8Ln8WT5Kz5afJw8yhDqyqO96wyP4Vm2NDv4bZtNSA8JoDJo
+         blaY0OS3rFuNRzg9vgjQEXLdrQRu30/z5bwVAjbp6C+vb4sqDTQ4yteIxgz3Uj3LCACl
+         UCDvajcFJok6ubM+5tnbv1DG9sfAFnCyzCtwZWlzhYA+f+0ws/kj70gbLF2yIx0dfSc4
+         9gDA==
+X-Gm-Message-State: AOAM531G1buqMcsVmbwE0RRgt8JWXStOMvehCi2eGikH9y7S4D+HdAK4
+        fjuHB8T1N+AUq4BctIah59s=
+X-Google-Smtp-Source: ABdhPJwNz5AmAptN2Wtm7R8RgB0gpQZvAJdTETPL6m07GjnXiWJS7juoQ03JqVsWEd/3n9Gm9uhRog==
+X-Received: by 2002:a5d:588b:: with SMTP id n11mr15125945wrf.344.1638460109405;
+        Thu, 02 Dec 2021 07:48:29 -0800 (PST)
+Received: from [192.168.8.198] ([185.69.144.137])
+        by smtp.gmail.com with ESMTPSA id d2sm41111wmb.31.2021.12.02.07.48.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 07:48:28 -0800 (PST)
+Message-ID: <ffd25188-aa92-2d69-a749-3058d1d33bc1@gmail.com>
+Date:   Thu, 2 Dec 2021 15:48:14 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] locking/mutex: Mark racy reads of owner->on_cpu
+ Thunderbird/91.3.2
+Subject: Re: [RFC 00/12] io_uring zerocopy send
 Content-Language: en-US
-To:     Marco Elver <elver@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     kasan-dev@googlegroups.com, Thomas Gleixner <tglx@linutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-References: <20211202101238.33546-1-elver@google.com>
- <CANpmjNMvPepakONMjTO=FzzeEtvq_CLjPN6=zF35j10rVrJ9Fg@mail.gmail.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <CANpmjNMvPepakONMjTO=FzzeEtvq_CLjPN6=zF35j10rVrJ9Fg@mail.gmail.com>
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     David Ahern <dsahern@gmail.com>, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Willem de Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
+References: <cover.1638282789.git.asml.silence@gmail.com>
+ <ae2d2dab-6f42-403a-f167-1ba3db3fd07f@gmail.com>
+ <994e315b-fdb7-1467-553e-290d4434d853@gmail.com>
+ <c4424a7a-2ef1-6524-9b10-1e7d1f1e1fe4@gmail.com>
+ <889c0306-afed-62cd-d95b-a20b8e798979@gmail.com>
+ <0b92f046-5ac3-7138-2775-59fadee6e17a@gmail.com>
+ <974b266e-d224-97da-708f-c4a7e7050190@gmail.com>
+ <20211201215157.kgqd5attj3dytfgs@kafai-mbp.dhcp.thefacebook.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20211201215157.kgqd5attj3dytfgs@kafai-mbp.dhcp.thefacebook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/21 06:53, Marco Elver wrote:
-> On Thu, 2 Dec 2021 at 11:13, Marco Elver <elver@google.com> wrote:
->> One of the more frequent data races reported by KCSAN is the racy read
->> in mutex_spin_on_owner(), which is usually reported as "race of unknown
->> origin" without showing the writer. This is due to the racing write
->> occurring in kernel/sched. Locally enabling KCSAN in kernel/sched shows:
+On 12/1/21 21:51, Martin KaFai Lau wrote:
+> On Wed, Dec 01, 2021 at 08:15:28PM +0000, Pavel Begunkov wrote:
+>> On 12/1/21 19:20, David Ahern wrote:
+>>> On 12/1/21 12:11 PM, Pavel Begunkov wrote:
+>>>> btw, why a dummy device would ever go through loopback? It doesn't
+>>>> seem to make sense, though may be missing something.
+>>>
+>>> You are sending to a local ip address, so the fib_lookup returns
+>>> RTN_LOCAL. The code makes dev_out the loopback:
+>>>
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/net/ipv4/route.c#n2773
 >>
->>   | write (marked) to 0xffff97f205079934 of 4 bytes by task 316 on cpu 6:
->>   |  finish_task                kernel/sched/core.c:4632 [inline]
->>   |  finish_task_switch         kernel/sched/core.c:4848
->>   |  context_switch             kernel/sched/core.c:4975 [inline]
->>   |  __schedule                 kernel/sched/core.c:6253
->>   |  schedule                   kernel/sched/core.c:6326
->>   |  schedule_preempt_disabled  kernel/sched/core.c:6385
->>   |  __mutex_lock_common        kernel/locking/mutex.c:680
->>   |  __mutex_lock               kernel/locking/mutex.c:740 [inline]
->>   |  __mutex_lock_slowpath      kernel/locking/mutex.c:1028
->>   |  mutex_lock                 kernel/locking/mutex.c:283
->>   |  tty_open_by_driver         drivers/tty/tty_io.c:2062 [inline]
->>   |  ...
->>   |
->>   | read to 0xffff97f205079934 of 4 bytes by task 322 on cpu 3:
->>   |  mutex_spin_on_owner        kernel/locking/mutex.c:370
->>   |  mutex_optimistic_spin      kernel/locking/mutex.c:480
->>   |  __mutex_lock_common        kernel/locking/mutex.c:610
->>   |  __mutex_lock               kernel/locking/mutex.c:740 [inline]
->>   |  __mutex_lock_slowpath      kernel/locking/mutex.c:1028
->>   |  mutex_lock                 kernel/locking/mutex.c:283
->>   |  tty_open_by_driver         drivers/tty/tty_io.c:2062 [inline]
->>   |  ...
->>   |
->>   | value changed: 0x00000001 -> 0x00000000
+>> I see, thanks. I still don't use the skb_orphan_frags_rx() hack
+>> and it doesn't go through the loopback (for my dummy tests), just
+>> dummy_xmit() and no mention of loopback in perf data, see the
+>> flamegraph. Don't know what is the catch.
 >>
->> This race is clearly intentional, and the potential for miscompilation
->> is slim due to surrounding barrier() and cpu_relax(), and the value
->> being used as a boolean.
->>
->> Nevertheless, marking this reader would more clearly denote intent and
->> make it obvious that concurrency is expected. Use READ_ONCE() to avoid
->> having to reason about compiler optimizations now and in future.
->>
->> Similarly, mark the read to owner->on_cpu in mutex_can_spin_on_owner(),
->> which immediately precedes the loop executing mutex_spin_on_owner().
->>
->> Signed-off-by: Marco Elver <elver@google.com>
-> [...]
->
-> Kefeng kindly pointed out that there is an alternative, which would
-> refactor owner_on_cpu() from rwsem that would address both mutex and
-> rwsem:
-> https://lore.kernel.org/all/b641f1ea-6def-0fe4-d273-03c35c4aa7d6@huawei.com/
->
-> Preferences?
+>> I'm illiterate of the routing paths. Can it be related to
+>> the "ip route add"? How do you get an ipv4 address for the device?
+> I also bumped into the udp-connect() => ECONNREFUSED (111) error from send-zc.
+> because I assumed no server is needed by using dummy.  Then realized
+> the cover letter mentioned msg_zerocopy is used as the server.
+> Mentioning just in case someone hits it also.
+> 
+> To tx out dummy, I did:
+> #> ip a add 10.0.0.1/24 dev dummy0
 
-I would like to see owner_on_cpu() extracted out from 
-kernel/locking/rwsem.c into include/linux/sched.h right after 
-vcpu_is_preempted(), for instance, and with READ_ONCE() added. Then it 
-can be used in mutex.c as well. This problem is common to both mutex and 
-rwsem.
+Works well for me, IOW getting the same behaviour as with my
+ip route add <ip> dev dummy0
 
-Cheers,
-Longman
+I'm curious what is the difference bw them?
 
-Thanks,
--- Marco
 
+> #> ip -4 r
+> 10.0.0.0/24 dev dummy0 proto kernel scope link src 10.0.0.1
+> 
+> #> ./send-zc -4 -D 10.0.0.(2) -t 10 udp
+> ip -s link show dev dummy0
+> 2: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 65535 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+>     link/ether 82:0f:e0:dc:f7:e6 brd ff:ff:ff:ff:ff:ff
+>     RX:    bytes packets errors dropped  missed   mcast
+>                0       0      0       0       0       0
+>     TX:    bytes packets errors dropped carrier collsns
+>     140800890299 2150397      0       0       0       0
+> 
+
+-- 
+Pavel Begunkov

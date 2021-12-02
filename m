@@ -2,69 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2B346609C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4404F46609F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:44:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356546AbhLBJrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 04:47:05 -0500
-Received: from outbound-smtp49.blacknight.com ([46.22.136.233]:42961 "EHLO
-        outbound-smtp49.blacknight.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1356504AbhLBJq6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 04:46:58 -0500
-Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
-        by outbound-smtp49.blacknight.com (Postfix) with ESMTPS id 50964FAB01
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 09:43:35 +0000 (GMT)
-Received: (qmail 438 invoked from network); 2 Dec 2021 09:43:34 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.29])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 2 Dec 2021 09:43:34 -0000
-Date:   Thu, 2 Dec 2021 09:43:32 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Alexey Avramov <hakavlad@inbox.lv>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Rik van Riel <riel@surriel.com>,
-        Mike Galbraith <efault@gmx.de>, regressions@lists.linux.dev,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to
- make progress
-Message-ID: <20211202094332.GW3366@techsingularity.net>
-References: <20211125151853.8540-1-mgorman@techsingularity.net>
- <20211127011246.7a8ac7b8@mail.inbox.lv>
- <20211129150117.GO3366@techsingularity.net>
- <20211201010348.31e99637@mail.inbox.lv>
- <20211130172754.GS3366@techsingularity.net>
- <20211201033836.4382a474@mail.inbox.lv>
- <20211201140005.GU3366@techsingularity.net>
- <20211201172920.GA8492@magnolia>
+        id S1356557AbhLBJr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 04:47:58 -0500
+Received: from foss.arm.com ([217.140.110.172]:60386 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1356560AbhLBJr2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 04:47:28 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ED9121435;
+        Thu,  2 Dec 2021 01:44:05 -0800 (PST)
+Received: from e123427-lin.arm.com (unknown [10.57.32.195])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F1BC3F7D7;
+        Thu,  2 Dec 2021 01:44:04 -0800 (PST)
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Tim Harvey <tharvey@gateworks.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Jingoo Han <jingoohan1@gmail.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-kernel@vger.kernel.org, Richard Zhu <hongxing.zhu@nxp.com>
+Subject: Re: [PATCH] PCI: imx: do not remap invalid res
+Date:   Thu,  2 Dec 2021 09:43:57 +0000
+Message-Id: <163843822274.25378.13456341880706122163.b4-ty@arm.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20211101180243.23761-1-tharvey@gateworks.com>
+References: <20211101180243.23761-1-tharvey@gateworks.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20211201172920.GA8492@magnolia>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 09:29:20AM -0800, Darrick J. Wong wrote:
-> > Again 5.16-rc1 stuttered badly but the new patch was comparable to 5.15.
-> > 
-> > As my baseline figures are very different to yours due to differences in
-> > storage, can you test the following please?
+On Mon, 1 Nov 2021 11:02:43 -0700, Tim Harvey wrote:
+> On imx6 and perhaps others when pcie probes you get a:
+> imx6q-pcie 33800000.pcie: invalid resource
 > 
-> I don't know if this was directed at me, but I reran my swapfile
-> testcase on 5.16-rc3 and found that it had nearly the same runtime as it
-> did in 5.15.
+> This occurs because the atu is not specified in the DT and as such it
+> should not be remapped.
 > 
+> 
+> [...]
 
-Thanks Darrick. Can I add the following?
+Applied to pci/dwc, thanks!
 
-Tested-by: Darrick J. Wong <djwong@kernel.org>
+[1/1] PCI: imx: do not remap invalid res
+      https://git.kernel.org/lpieralisi/pci/c/6e5ebc96ec
 
--- 
-Mel Gorman
-SUSE Labs
+Thanks,
+Lorenzo

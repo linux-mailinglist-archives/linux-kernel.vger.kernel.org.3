@@ -2,125 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CE146622E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 12:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B73466230
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 12:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357289AbhLBLVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 06:21:36 -0500
-Received: from esa4.hgst.iphmx.com ([216.71.154.42]:38692 "EHLO
-        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357270AbhLBLVa (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 06:21:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1638443888; x=1669979888;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nl5CWwCo+HyJCS82sRYKOmxVIBP7Goz/nQOWZ6792B8=;
-  b=PugC9wAb4MZRY1dGXvhFqf+eUdvlD20KFaFgSw5pWlE4yV0eg0DGyBu/
-   xDTKjf8U5DpwFjQQmy9lKVXKrL9BPdZU+43gYadczDMiMisDrNZKpEFg2
-   1NGKJ7t7WGX542hz/wRgO8+EVfjDa5kAgNFofiSVHGOldUV13D1hdu+S8
-   U9TFSfsaWXHKYE1LPrzR8XlKCfZF4ysr3jkE9RSfmrp2nwEPeOJTgv2Sf
-   YBTDqmFuIoswdx+yKwynNluktOrjheTugW0+saaKHurTc0P9zf1/kdYKb
-   QIjY3ZHuMVCSYqY7JlBRe5PVPicvvb5JnTkOF3FLe4IKNTUode3fSVtpg
-   A==;
-X-IronPort-AV: E=Sophos;i="5.87,281,1631548800"; 
-   d="scan'208";a="186259548"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 02 Dec 2021 19:18:07 +0800
-IronPort-SDR: rFRG9VxI5dTI4mvL13f01gWZKW4pYuGoT8kvzHi5KvtMQlLH6OmRSeBGIx7uh14d8BpqfqGuAD
- FKo0+ZeKmWQ7z+l6YlJwL3m+jyf0CSBFfjoBK5Wnei3HUf6HcwpUuvGjYoXiaRK9oXbTodM62G
- 4xfm844yEnMdr0emdOJMNoGe9oXvy9+hG4cZMOdFCiwt5TfK1jJHuVWlh69BnvHfAunGWIxR3u
- 4OG+LwR+cz/4pYSSEQLIVhlDHugDPU6CRW/rfNsBpoJCPemlpiaVFBVnts2dA1q/sxK6RIgzRx
- CIxiSrGmrNTfOqAJq98yFBBJ
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 02:52:50 -0800
-IronPort-SDR: 7pIRTlCmBrmZ18SjUva2mq6zU3UAwDv4j09ieVCJRZ4BUiEv9mUeXUvt2MlQCPSP4mWRh6ORS9
- qEuBLpzMlTBkWGPaY8uRucKvVWeKlUhjIjuWdtk2E4HJbmDdIxWbl9FtmkLjlipUqmw/J6sqpb
- rrqhVparX2Sg3XR53ybjNKbAJW8XL6CbBLLJFUVSzJf2LnAZ/bQJ7eiZGVuuYxeWCgQN+8TrZT
- M7oDoQf8aBFdmb4xBVkHPkKoXcy0ytMduBk5HUDNuRHwRTtNPZzPhB5v6yu3cEUNXxm4Q64kG1
- eRs=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 03:18:07 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4J4YNH1jnGz1TFlr
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 03:18:07 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:mime-version
-        :references:in-reply-to:x-mailer:message-id:date:subject:to
-        :from; s=dkim; t=1638443886; x=1641035887; bh=nl5CWwCo+HyJCS82sR
-        YKOmxVIBP7Goz/nQOWZ6792B8=; b=ZBaBgjYBGtfY2X8siccP2z8zE8wIXrCR5W
-        meKK49dRKRY/dOVcZixP6TxnjRvI+ZBY9brrPuACeRI1AUCFKjLgIXRWahkoPX+T
-        +tUSQSUC/t2AbEoK75jo6LjsiyUEUi7LYvAtvL6RzMY/0oT2tLigwWwjRDbRj0jM
-        MogY7ddNcXl3v9y3JSnJ68qoh7ypTX3Y2K0SSpdDcruK2aEaHc1j60qOkxcylBkv
-        E3e1L6uzD/e5v0ZCsIFNHCwb1kpDegWADl/5nsISoRsld3A72GyEgZiZVU883pRy
-        ozB7KhYuhhUJ8qHCagtJuWd4aOQSaYfB7q6WqYuQhd6ASxyq5Tcw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id i22ORIt7hBN7 for <linux-kernel@vger.kernel.org>;
-        Thu,  2 Dec 2021 03:18:06 -0800 (PST)
-Received: from toolbox.alistair23.me (unknown [10.225.165.64])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4J4YN50X3fz1TFlx;
-        Thu,  2 Dec 2021 03:17:56 -0800 (PST)
-From:   Alistair Francis <alistair.francis@opensource.wdc.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     jolsa@redhat.com, mingo@redhat.com, dave@stgolabs.net,
-        linux-perf-users@vger.kernel.org, arnd@arndb.de,
-        namhyung@kernel.org, alistair23@gmail.com, mark.rutland@arm.com,
-        tglx@linutronix.de, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, peterz@infradead.org,
-        dvhart@infradead.org, Alistair Francis <alistair.francis@wdc.com>
-Subject: [PATCH v4 6/6] selftests: futex: Use futex_waitv helper function
-Date:   Thu,  2 Dec 2021 21:16:59 +1000
-Message-Id: <20211202111659.2077911-6-alistair.francis@opensource.wdc.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211202111659.2077911-1-alistair.francis@opensource.wdc.com>
-References: <20211202111659.2077911-1-alistair.francis@opensource.wdc.com>
+        id S1346326AbhLBLW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 06:22:26 -0500
+Received: from mga17.intel.com ([192.55.52.151]:49128 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1357291AbhLBLWE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 06:22:04 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="217379880"
+X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
+   d="scan'208";a="217379880"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 03:18:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
+   d="scan'208";a="460423673"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 02 Dec 2021 03:18:29 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1msk6e-000GFH-Ta; Thu, 02 Dec 2021 11:18:28 +0000
+Date:   Thu, 2 Dec 2021 19:18:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tero Kristo <tero.kristo@linux.intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [t-kristo-pm:usi-5.16-rfc-v3-bpf 17/24] drivers/hid/hid-bpf.c:376:6:
+ warning: variable 'parser' is used uninitialized whenever 'if' condition is
+ true
+Message-ID: <202112021938.1gSUOhoI-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alistair Francis <alistair.francis@wdc.com>
+tree:   https://github.com/t-kristo/linux-pm usi-5.16-rfc-v3-bpf
+head:   d0f251812c57f49830816624bec858500e4e14c2
+commit: e4c4cfe6fd7edf4bdd3bbd2e408759db9b02290e [17/24] HID: bpf: compile fix for bpf_hid_foreach_rdesc_item
+config: x86_64-randconfig-a001-20211202 (https://download.01.org/0day-ci/archive/20211202/202112021938.1gSUOhoI-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 4b553297ef3ee4dc2119d5429adf3072e90fac38)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/t-kristo/linux-pm/commit/e4c4cfe6fd7edf4bdd3bbd2e408759db9b02290e
+        git remote add t-kristo-pm https://github.com/t-kristo/linux-pm
+        git fetch --no-tags t-kristo-pm usi-5.16-rfc-v3-bpf
+        git checkout e4c4cfe6fd7edf4bdd3bbd2e408759db9b02290e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hid/
 
-Use the publically exposed __kernel_futex_syscall_waitv() helper
-function for the futex_waitv tests.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+All warnings (new ones prefixed by >>):
+
+   drivers/hid/hid-bpf.c:141:5: warning: no previous prototype for function 'hid_bpf_prog_detach' [-Wmissing-prototypes]
+   int hid_bpf_prog_detach(struct hid_device *hdev, struct bpf_prog *prog)
+       ^
+   drivers/hid/hid-bpf.c:141:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int hid_bpf_prog_detach(struct hid_device *hdev, struct bpf_prog *prog)
+   ^
+   static 
+   drivers/hid/hid-bpf.c:229:24: warning: no previous prototype for function 'hid_bpf_add_report' [-Wmissing-prototypes]
+   struct hid_bpf_report *hid_bpf_add_report(struct hid_bpf_parser_and_data *data,
+                          ^
+   drivers/hid/hid-bpf.c:229:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct hid_bpf_report *hid_bpf_add_report(struct hid_bpf_parser_and_data *data,
+   ^
+   static 
+   drivers/hid/hid-bpf.c:257:6: warning: no previous prototype for function 'hid_bpf_free_reports' [-Wmissing-prototypes]
+   void hid_bpf_free_reports(struct hid_bpf_parser_and_data *data)
+        ^
+   drivers/hid/hid-bpf.c:257:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void hid_bpf_free_reports(struct hid_bpf_parser_and_data *data)
+   ^
+   static 
+   drivers/hid/hid-bpf.c:321:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+           case HID_MAIN_ITEM_TAG_END_COLLECTION:
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/hid.h:96:42: note: expanded from macro 'HID_MAIN_ITEM_TAG_END_COLLECTION'
+   #define HID_MAIN_ITEM_TAG_END_COLLECTION        12
+                                                   ^~
+   drivers/hid/hid-bpf.c:338:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/hid/hid-bpf.c:318:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+           case HID_MAIN_ITEM_TAG_BEGIN_COLLECTION:
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/hid.h:95:44: note: expanded from macro 'HID_MAIN_ITEM_TAG_BEGIN_COLLECTION'
+   #define HID_MAIN_ITEM_TAG_BEGIN_COLLECTION      10
+                                                   ^~
+   drivers/hid/hid-bpf.c:338:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/hid/hid-bpf.c:311:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+>> drivers/hid/hid-bpf.c:376:6: warning: variable 'parser' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!parser_and_data) {
+               ^~~~~~~~~~~~~~~~
+   drivers/hid/hid-bpf.c:427:8: note: uninitialized use occurs here
+           kfree(parser->collection_stack);
+                 ^~~~~~
+   drivers/hid/hid-bpf.c:376:2: note: remove the 'if' if its condition is always false
+           if (!parser_and_data) {
+           ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-bpf.c:355:27: note: initialize the variable 'parser' to silence this warning
+           struct hid_parser *parser;
+                                    ^
+                                     = NULL
+   6 warnings generated.
+
+
+vim +376 drivers/hid/hid-bpf.c
+
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  350  
+e4c4cfe6fd7edf4 Tero Kristo        2021-11-25  351  BPF_CALL_4(bpf_hid_foreach_rdesc_item, void*, ctx, bpf_callback_t, callback_fn, void *, callback_ctx, u64, flags)
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  352  {
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  353  	struct hid_bpf_ctx *bpf_ctx = ctx;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  354  	struct hid_bpf_parser_and_data *parser_and_data;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  355  	struct hid_parser *parser;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  356  	struct hid_bpf_parser *callback_data;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  357  	struct hid_item item;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  358  	u8 *data_copy, *start, *end, *next;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  359  	u64 cur_index;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  360  	u64 ret = 0;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  361  	u32 num_elems = 0;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  362  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  363  	static int (*dispatch_type[])(struct hid_parser *parser,
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  364  				      struct hid_item *item) = {
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  365  		hid_bpf_parser_main,
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  366  		hid_parser_global,
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  367  		hid_parser_local,
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  368  		hid_parser_reserved
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  369  	};
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  370  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  371  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  372  	if (flags != 0)
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  373  		return -EINVAL;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  374  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  375  	parser_and_data = vzalloc(sizeof(*parser_and_data));
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13 @376  	if (!parser_and_data) {
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  377  		ret = -ENOMEM;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  378  		goto exit;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  379  	}
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  380  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  381  	parser = &parser_and_data->parser;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  382  	callback_data = &parser_and_data->callback_data;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  383  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  384  	parser->device = bpf_ctx->hdev;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  385  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  386  	data_copy = kmemdup(bpf_ctx->event.data, HID_BPF_MAX_BUFFER_SIZE, GFP_KERNEL);
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  387  	if (!data_copy) {
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  388  		ret = -ENOMEM;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  389  		goto exit;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  390  	}
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  391  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  392  	start = data_copy;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  393  	end = start + bpf_ctx->event.size;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  394  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  395  	while((next = hid_rdesc_fetch_item(start, end, &item)) != NULL) {
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  396  		cur_index = start - data_copy;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  397  		num_elems++;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  398  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  399  		dispatch_type[item.type](parser, &item);
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  400  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  401  		hid_bpf_store_bpf_parser(callback_data, &item, parser);
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  402  
+e4c4cfe6fd7edf4 Tero Kristo        2021-11-25  403  		ret = callback_fn((u64)(long)ctx, (u64)(long)callback_data,
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  404  				  (u64)(long)&cur_index,
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  405  				  (u64)(long)callback_ctx, 0);
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  406  		/* return value: 0 - continue, 1 - stop and return */
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  407  		if (ret)
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  408  			break;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  409  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  410  		/* Reset the local parser environment on main items */
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  411  		if (item.type == HID_ITEM_TYPE_MAIN)
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  412  			memset(&parser->local, 0, sizeof(parser->local));
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  413  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  414  		/* clear item content */
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  415  		memset(&item, 0, sizeof(item));
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  416  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  417  		start = next;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  418  	}
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  419  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  420  	hid_bpf_free_reports(parser_and_data);
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  421  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  422  	kfree(data_copy);
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  423  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  424  	ret = num_elems;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  425  
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  426   exit:
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  427  	kfree(parser->collection_stack);
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  428  	vfree(parser_and_data);
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  429  	return ret;
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  430  }
+db3fbbad76f8105 Benjamin Tissoires 2021-10-13  431  
+
+:::::: The code at line 376 was first introduced by commit
+:::::: db3fbbad76f810554bcb2c098f8c9beb02724702 HID: bpf: add a helper to parse a given report descriptor
+
+:::::: TO: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+:::::: CC: Tero Kristo <tero.kristo@linux.intel.com>
+
 ---
- tools/testing/selftests/futex/include/futex2test.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/futex/include/futex2test.h b/tools/t=
-esting/selftests/futex/include/futex2test.h
-index 9d305520e849..fdc0a0a270cd 100644
---- a/tools/testing/selftests/futex/include/futex2test.h
-+++ b/tools/testing/selftests/futex/include/futex2test.h
-@@ -5,6 +5,7 @@
-  * Copyright 2021 Collabora Ltd.
-  */
- #include <stdint.h>
-+#include <linux/futex_syscall.h>
-=20
- #define u64_to_ptr(x) ((void *)(uintptr_t)(x))
-=20
-@@ -18,5 +19,5 @@
- static inline int futex_waitv(volatile struct futex_waitv *waiters, unsi=
-gned long nr_waiters,
- 			      unsigned long flags, struct timespec *timo, clockid_t clockid)
- {
--	return syscall(__NR_futex_waitv, waiters, nr_waiters, flags, timo, cloc=
-kid);
-+	return __kernel_futex_syscall_waitv(waiters, nr_waiters, flags, timo, c=
-lockid);
- }
---=20
-2.31.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

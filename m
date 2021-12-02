@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4414663DB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC424663D9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357990AbhLBMov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 07:44:51 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:47188 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357546AbhLBMok (ORCPT
+        id S1357903AbhLBMol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 07:44:41 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:55678 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241480AbhLBMoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 07:44:40 -0500
+        Thu, 2 Dec 2021 07:44:38 -0500
 Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B2Cf268017880;
-        Thu, 2 Dec 2021 06:41:02 -0600
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B2Cf5jB004546;
+        Thu, 2 Dec 2021 06:41:05 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638448862;
-        bh=GDG2n+d5av4/wgQR3d2CdIyMKZrAGgh2Pzft8g/+j6U=;
+        s=ti-com-17Q1; t=1638448865;
+        bh=sJlHYGHLohMDPJBTCgxX+Dpi5/1dn4ahE9byziVj/YQ=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=hNV3Ed4QbNdVbOjbBQiimVpomQpQj89OAkRmQZc30HIrouGIkfCAfHQmlXzNTy7Rh
-         d0VM9A1Umel/Wd06yj+IZ/7EHhVwyxDkIDobQU6/7sC1MDB8hWvzigkX2RNlGR5NVi
-         lEgk0ToRyX0cSIUdqHc3WnKv9ib65/xOKtud75CU=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B2Cf2Rs081178
+        b=Ta+YEZ+X78YLDZbT5pOz0uoY2QDf/F9iFZSzkeWxyqyvjGIlAS+oSxAmNZEgM0ZSi
+         I8NKrkeo/z/8F5wJuhqlE5uKrUo4tcbwyNsLWQAFxEPBe3qvkWNsMEqxEFP3SnKeMB
+         jLBXi2Vbtq6rP5N6sVcNrpSk6LrAw7o8mjiRSJco=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B2Cf5HK081655
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 2 Dec 2021 06:41:02 -0600
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 2 Dec 2021 06:41:05 -0600
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 2
- Dec 2021 06:41:02 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ Dec 2021 06:41:05 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 2 Dec 2021 06:41:01 -0600
+ Frontend Transport; Thu, 2 Dec 2021 06:41:05 -0600
 Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B2CesQD051666;
-        Thu, 2 Dec 2021 06:40:58 -0600
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B2CesQE051666;
+        Thu, 2 Dec 2021 06:41:02 -0600
 From:   Aswath Govindraju <a-govindraju@ti.com>
 CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -45,9 +45,9 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         Aswath Govindraju <a-govindraju@ti.com>
-Subject: [PATCH v2 1/2] dt-bindings: mux: Document mux-states property
-Date:   Thu, 2 Dec 2021 18:10:52 +0530
-Message-ID: <20211202124053.2835-2-a-govindraju@ti.com>
+Subject: [PATCH v2 2/2] mux: Add support for reading mux state from consumer DT node
+Date:   Thu, 2 Dec 2021 18:10:53 +0530
+Message-ID: <20211202124053.2835-3-a-govindraju@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211202124053.2835-1-a-govindraju@ti.com>
 References: <20211202124053.2835-1-a-govindraju@ti.com>
@@ -59,167 +59,386 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some cases, it is required to provide the state to which the mux
-controller has to be set to, from the consumer device tree node. Document
-the property mux-states that can be used for adding this support.
+In some cases, we might need to provide the state of the mux to be set for
+the operation of a given peripheral. Therefore, pass this information using
+mux-states property.
 
 Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
 ---
+ drivers/mux/core.c           | 219 +++++++++++++++++++++++++++++++----
+ include/linux/mux/consumer.h |  19 ++-
+ 2 files changed, 216 insertions(+), 22 deletions(-)
 
-Note:
-- on running dt_binding_check with "DT_CHECKER_FLAGS=-m" the following
-  error was seen,
-
- LINT    Documentation/devicetree/bindings
-  CHKDT   Documentation/devicetree/bindings/processed-schema-examples.json
-  SCHEMA  Documentation/devicetree/bindings/processed-schema-examples.json
-  DTC     Documentation/devicetree/bindings/mux/mux-controller.example.dt.yaml
-  CHECK   Documentation/devicetree/bindings/mux/mux-controller.example.dt.yaml
-/home/gsaswath/presil/ks3-linux-integrated/linux/Documentation/devicetree/bindings/
-mux/mux-controller.example.dt.yaml: can-phy4: 'mux-states' does not match any of 
-the regexes: 'pinctrl-[0-9]+'
-	From schema: /home/gsaswath/presil/ks3-linux-integrated/linux/
-Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
-
-"mux-states" is a new property that is being added and the patch adding this
-property to TCAN104x can transceiver bindings will be sent as a follow up
-of this series.
-
- .../devicetree/bindings/mux/gpio-mux.yaml     | 11 ++++++--
- .../devicetree/bindings/mux/mux-consumer.yaml | 21 +++++++++++++++
- .../bindings/mux/mux-controller.yaml          | 26 ++++++++++++++++++-
- 3 files changed, 55 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/mux/gpio-mux.yaml b/Documentation/devicetree/bindings/mux/gpio-mux.yaml
-index 0a7c8d64981a..ee4de9fbaf4d 100644
---- a/Documentation/devicetree/bindings/mux/gpio-mux.yaml
-+++ b/Documentation/devicetree/bindings/mux/gpio-mux.yaml
-@@ -26,7 +26,10 @@ properties:
-       List of gpios used to control the multiplexer, least significant bit first.
+diff --git a/drivers/mux/core.c b/drivers/mux/core.c
+index 22f4709768d1..7355c5ad41f7 100644
+--- a/drivers/mux/core.c
++++ b/drivers/mux/core.c
+@@ -29,6 +29,19 @@
+  */
+ #define MUX_CACHE_UNKNOWN MUX_IDLE_AS_IS
  
-   '#mux-control-cells':
--    const: 0
-+    enum: [ 0, 1 ]
++/**
++ * struct mux_state -	Represents a mux controller specific to a given device
++ * @mux:		Pointer to a mux controller
++ * @state		State of the mux to be set
++ *
++ * This structure is specific to a device that acquires it and has information
++ * specific to the device.
++ */
++struct mux_state {
++	struct mux_control *mux;
++	unsigned int state;
++};
 +
-+  '#mux-state-cells':
-+    enum: [ 1, 2 ]
+ static struct class mux_class = {
+ 	.name = "mux",
+ 	.owner = THIS_MODULE,
+@@ -370,6 +383,31 @@ int mux_control_select_delay(struct mux_control *mux, unsigned int state,
+ }
+ EXPORT_SYMBOL_GPL(mux_control_select_delay);
  
-   idle-state:
-     default: -1
-@@ -34,7 +37,11 @@ properties:
- required:
-   - compatible
-   - mux-gpios
--  - "#mux-control-cells"
-+anyOf:
-+  - required:
-+      - "#mux-control-cells"
-+  - required:
-+      - "#mux-state-cells"
- 
- additionalProperties: false
- 
-diff --git a/Documentation/devicetree/bindings/mux/mux-consumer.yaml b/Documentation/devicetree/bindings/mux/mux-consumer.yaml
-index 7af93298ab5c..d3d854967359 100644
---- a/Documentation/devicetree/bindings/mux/mux-consumer.yaml
-+++ b/Documentation/devicetree/bindings/mux/mux-consumer.yaml
-@@ -25,6 +25,17 @@ description: |
-   strings to label each of the mux controllers listed in the "mux-controls"
-   property.
- 
-+  If it is required to provide the state that the mux controller needs to
-+  be set to, the property "mux-states" must be used. An optional property
-+  "mux-state-names" can be used to provide a list of strings, to label
-+  each of the multiplixer states listed in the "mux-states" property.
++/**
++ * mux_state_select_delay() - Select mux-state
++ * @mstate: The mux-state to select
++ * @delay_us: The time to delay (in microseconds) if the mux control
++ *            changes state on select
++ *
++ * On successfully selecting the mux-state, it will be locked until
++ * there is a call to mux_state_deselect() or mux_control_deselect().
++ * If the mux-control is already selected when mux_state_select() is
++ * called, the caller will be blocked until mux_state_deselect() or
++ * mux_control_deselect() is called (by someone else).
++ *
++ * Therefore, make sure to call mux_state_deselect() when the operation is
++ * complete and the mux-control is free for others to use, but do not call
++ * mux_state_deselect() if mux_state_select() fails.
++ *
++ * Return: 0 when the mux-state has been selected or a negative
++ * errno on error.
++ */
++int mux_state_select_delay(struct mux_state *mstate, unsigned int delay_us)
++{
++	return mux_control_select_delay(mstate->mux, mstate->state, delay_us);
++}
++EXPORT_SYMBOL_GPL(mux_state_select_delay);
 +
-+  Properties "mux-controls" and "mux-states" can be used depending on how
-+  the consumers want to control the mux controller. If the consumer needs
-+  needs to set multiple states in a mux controller, then property
-+  "mux-controls" can be used. If the consumer needs to set the mux
-+  controller to a given state then property "mux-states" can be used.
-+
-   mux-ctrl-specifier typically encodes the chip-relative mux controller number.
-   If the mux controller chip only provides a single mux controller, the
-   mux-ctrl-specifier can typically be left out.
-@@ -35,12 +46,22 @@ properties:
-   mux-controls:
-     $ref: /schemas/types.yaml#/definitions/phandle-array
+ /**
+  * mux_control_try_select_delay() - Try to select the given multiplexer state.
+  * @mux: The mux-control to request a change of state from.
+@@ -377,7 +415,7 @@ EXPORT_SYMBOL_GPL(mux_control_select_delay);
+  * @delay_us: The time to delay (in microseconds) if the mux state is changed.
+  *
+  * On successfully selecting the mux-control state, it will be locked until
+- * mux_control_deselect() called.
++ * mux_control_deselect() or mux_state_deselect() called.
+  *
+  * Therefore, make sure to call mux_control_deselect() when the operation is
+  * complete and the mux-control is free for others to use, but do not call
+@@ -405,6 +443,27 @@ int mux_control_try_select_delay(struct mux_control *mux, unsigned int state,
+ }
+ EXPORT_SYMBOL_GPL(mux_control_try_select_delay);
  
-+  mux-states:
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
++/**
++ * mux_state_try_select_delay() - Try to select the mux-state.
++ * @mstate: The mux-state to select
++ * @delay_us: The time to delay (in microseconds) if the mux state is changed.
++ *
++ * On successfully selecting the mux-state, it will be locked until
++ * mux_state_deselect() or mux_control_deselect() is called.
++ *
++ * Therefore, make sure to call mux_state_deselect() when the operation is
++ * complete and the mux-control is free for others to use, but do not call
++ * mux_state_deselect() if mux_state_try_select() fails.
++ *
++ * Return: 0 when the mux-state has been selected or a negative errno on
++ * error. Specifically -EBUSY if the mux-control is contended.
++ */
++int mux_state_try_select_delay(struct mux_state *mstate, unsigned int delay_us)
++{
++	return mux_control_try_select_delay(mstate->mux, mstate->state, delay_us);
++}
++EXPORT_SYMBOL_GPL(mux_state_try_select_delay);
 +
-   mux-control-names:
-     description:
-       Devices that use more than a single mux controller can use the
-       "mux-control-names" property to map the name of the requested mux
-       controller to an index into the list given by the "mux-controls" property.
+ /**
+  * mux_control_deselect() - Deselect the previously selected multiplexer state.
+  * @mux: The mux-control to deselect.
+@@ -431,6 +490,24 @@ int mux_control_deselect(struct mux_control *mux)
+ }
+ EXPORT_SYMBOL_GPL(mux_control_deselect);
  
-+  mux-state-names:
-+    description:
-+      Devices that use more than a single multiplexer state can use the
-+      "mux-state-names" property to map the name of the requested mux
-+      controller to an index into the list given by the "mux-states"
-+      property.
++/**
++ * mux_state_deselect() - Deselect the previously selected multiplexer state.
++ * @mstate: The mux-state to deselect.
++ *
++ * It is required that a single call is made to mux_state_deselect() for
++ * each and every successful call made to either of mux_state_select() or
++ * mux_state_try_select().
++ *
++ * Return: 0 on success and a negative errno on error. An error can only
++ * occur if the mux has an idle state. Note that even if an error occurs, the
++ * mux-control is unlocked and is thus free for the next access.
++ */
++int mux_state_deselect(struct mux_state *mstate)
++{
++	return mux_control_deselect(mstate->mux);
++}
++EXPORT_SYMBOL_GPL(mux_state_deselect);
 +
- additionalProperties: true
+ /* Note this function returns a reference to the mux_chip dev. */
+ static struct mux_chip *of_find_mux_chip_by_node(struct device_node *np)
+ {
+@@ -441,14 +518,17 @@ static struct mux_chip *of_find_mux_chip_by_node(struct device_node *np)
+ 	return dev ? to_mux_chip(dev) : NULL;
+ }
  
- ...
-diff --git a/Documentation/devicetree/bindings/mux/mux-controller.yaml b/Documentation/devicetree/bindings/mux/mux-controller.yaml
-index 736a84c3b6a5..c855fbad3884 100644
---- a/Documentation/devicetree/bindings/mux/mux-controller.yaml
-+++ b/Documentation/devicetree/bindings/mux/mux-controller.yaml
-@@ -25,7 +25,9 @@ description: |
-   --------------------
+-/**
+- * mux_control_get() - Get the mux-control for a device.
++/*
++ * mux_get() - Get the mux-control for a device.
+  * @dev: The device that needs a mux-control.
+  * @mux_name: The name identifying the mux-control.
++ * @state: Pointer to where the requested state is returned, or NULL when
++ *         the required multiplexer states are handled by other means.
+  *
+  * Return: A pointer to the mux-control, or an ERR_PTR with a negative errno.
+  */
+-struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
++static struct mux_control *mux_get(struct device *dev, const char *mux_name,
++				   unsigned int *state)
+ {
+ 	struct device_node *np = dev->of_node;
+ 	struct of_phandle_args args;
+@@ -458,8 +538,12 @@ struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
+ 	int ret;
  
-   Mux controller nodes must specify the number of cells used for the
--  specifier using the '#mux-control-cells' property.
-+  specifier using the '#mux-control-cells' or '#mux-state-cells' property.
-+  The value of '#mux-state-cells' will always be one greater than the value
-+  of '#mux-control-cells'.
+ 	if (mux_name) {
+-		index = of_property_match_string(np, "mux-control-names",
+-						 mux_name);
++		if (state)
++			index = of_property_match_string(np, "mux-state-names",
++							 mux_name);
++		else
++			index = of_property_match_string(np, "mux-control-names",
++							 mux_name);
+ 		if (index < 0) {
+ 			dev_err(dev, "mux controller '%s' not found\n",
+ 				mux_name);
+@@ -467,12 +551,17 @@ struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
+ 		}
+ 	}
  
-   Optionally, mux controller nodes can also specify the state the mux should
-   have when it is idle. The idle-state property is used for this. If the
-@@ -67,6 +69,8 @@ select:
-           pattern: '^mux-controller'
-     - required:
-         - '#mux-control-cells'
-+    - required:
-+        - '#mux-state-cells'
+-	ret = of_parse_phandle_with_args(np,
+-					 "mux-controls", "#mux-control-cells",
+-					 index, &args);
++	if (state)
++		ret = of_parse_phandle_with_args(np,
++						 "mux-states", "#mux-state-cells",
++						 index, &args);
++	else
++		ret = of_parse_phandle_with_args(np,
++						 "mux-controls", "#mux-control-cells",
++						 index, &args);
+ 	if (ret) {
+-		dev_err(dev, "%pOF: failed to get mux-control %s(%i)\n",
+-			np, mux_name ?: "", index);
++		dev_err(dev, "%pOF: failed to get mux-%s %s(%i)\n",
++			np, state ? "state" : "control", mux_name ?: "", index);
+ 		return ERR_PTR(ret);
+ 	}
  
- properties:
-   $nodename:
-@@ -75,6 +79,9 @@ properties:
-   '#mux-control-cells':
-     enum: [ 0, 1 ]
+@@ -481,17 +570,35 @@ struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
+ 	if (!mux_chip)
+ 		return ERR_PTR(-EPROBE_DEFER);
  
-+  '#mux-state-cells':
-+    enum: [ 1, 2 ]
+-	if (args.args_count > 1 ||
+-	    (!args.args_count && (mux_chip->controllers > 1))) {
+-		dev_err(dev, "%pOF: wrong #mux-control-cells for %pOF\n",
+-			np, args.np);
+-		put_device(&mux_chip->dev);
+-		return ERR_PTR(-EINVAL);
+-	}
+-
+ 	controller = 0;
+-	if (args.args_count)
+-		controller = args.args[0];
++	if (state) {
++		if (args.args_count > 2 || args.args_count == 0 ||
++		    (args.args_count < 2 && mux_chip->controllers > 1)) {
++			dev_err(dev, "%pOF: wrong #mux-state-cells for %pOF\n",
++				np, args.np);
++			put_device(&mux_chip->dev);
++			return ERR_PTR(-EINVAL);
++		}
 +
-   idle-state:
-     $ref: /schemas/types.yaml#/definitions/int32
-     minimum: -2
-@@ -179,4 +186,21 @@ examples:
-             };
-         };
-     };
++		if (args.args_count == 2) {
++			controller = args.args[0];
++			*state = args.args[1];
++		} else {
++			*state = args.args[0];
++		}
 +
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
++	} else {
++		if (args.args_count > 1 ||
++		    (!args.args_count && mux_chip->controllers > 1)) {
++			dev_err(dev, "%pOF: wrong #mux-control-cells for %pOF\n",
++				np, args.np);
++			put_device(&mux_chip->dev);
++			return ERR_PTR(-EINVAL);
++		}
 +
-+    mux1: mux-controller {
-+        compatible = "gpio-mux";
-+        #mux-state-cells = <1>;
-+        mux-gpios = <&exp_som 2 GPIO_ACTIVE_HIGH>;
-+    };
++		if (args.args_count)
++			controller = args.args[0];
++	}
+ 
+ 	if (controller >= mux_chip->controllers) {
+ 		dev_err(dev, "%pOF: bad mux controller %u specified in %pOF\n",
+@@ -502,6 +609,18 @@ struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
+ 
+ 	return &mux_chip->mux[controller];
+ }
 +
-+    transceiver4: can-phy4 {
-+        compatible = "ti,tcan1042";
-+        #phy-cells = <0>;
-+        max-bitrate = <5000000>;
-+        standby-gpios = <&exp_som 7 GPIO_ACTIVE_HIGH>;
-+        mux-states = <&mux1 1>;
-+    };
- ...
++/**
++ * mux_control_get() - Get the mux-control for a device.
++ * @dev: The device that needs a mux-control.
++ * @mux_name: The name identifying the mux-control.
++ *
++ * Return: A pointer to the mux-control, or an ERR_PTR with a negative errno.
++ */
++struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
++{
++	return mux_get(dev, mux_name, NULL);
++}
+ EXPORT_SYMBOL_GPL(mux_control_get);
+ 
+ /**
+@@ -523,6 +642,26 @@ static void devm_mux_control_release(struct device *dev, void *res)
+ 	mux_control_put(mux);
+ }
+ 
++/**
++ * mux_state_put() - Put away the mux-state for good.
++ * @mstate: The mux-state to put away.
++ *
++ * mux_control_put() reverses the effects of mux_control_get().
++ */
++void mux_state_put(struct mux_state *mstate)
++{
++	mux_control_put(mstate->mux);
++	kfree(mstate);
++}
++EXPORT_SYMBOL_GPL(mux_state_put);
++
++static void devm_mux_state_release(struct device *dev, void *res)
++{
++	struct mux_state *mstate = *(struct mux_state **)res;
++
++	mux_state_put(mstate);
++}
++
+ /**
+  * devm_mux_control_get() - Get the mux-control for a device, with resource
+  *			    management.
+@@ -553,6 +692,44 @@ struct mux_control *devm_mux_control_get(struct device *dev,
+ }
+ EXPORT_SYMBOL_GPL(devm_mux_control_get);
+ 
++/**
++ * devm_mux_state_get() - Get the mux-state for a device, with resource
++ *			  management.
++ * @dev: The device that needs a mux-control.
++ * @mux_name: The name identifying the mux-control.
++ *
++ * Return: Pointer to the mux-state, or an ERR_PTR with a negative errno.
++ */
++struct mux_state *devm_mux_state_get(struct device *dev,
++				     const char *mux_name)
++{
++	struct mux_state **ptr, *mstate;
++	struct mux_control *mux_ctrl;
++	int state;
++
++	mstate = devm_kzalloc(dev, sizeof(struct mux_state), GFP_KERNEL);
++	if (!mstate)
++		return ERR_PTR(-ENOMEM);
++
++	ptr = devres_alloc(devm_mux_state_release, sizeof(*ptr), GFP_KERNEL);
++	if (!ptr)
++		return ERR_PTR(-ENOMEM);
++
++	mux_ctrl = mux_get(dev, mux_name, &state);
++	if (IS_ERR(mux_ctrl)) {
++		devres_free(ptr);
++		return (struct mux_state *)mux_ctrl;
++	}
++
++	mstate->mux = mux_ctrl;
++	mstate->state = state;
++	*ptr = mstate;
++	devres_add(dev, ptr);
++
++	return mstate;
++}
++EXPORT_SYMBOL_GPL(devm_mux_state_get);
++
+ /*
+  * Using subsys_initcall instead of module_init here to try to ensure - for
+  * the non-modular case - that the subsystem is initialized when mux consumers
+diff --git a/include/linux/mux/consumer.h b/include/linux/mux/consumer.h
+index 7a09b040ac39..bf5abf062c21 100644
+--- a/include/linux/mux/consumer.h
++++ b/include/linux/mux/consumer.h
+@@ -14,33 +14,50 @@
+ 
+ struct device;
+ struct mux_control;
++struct mux_state;
+ 
+ unsigned int mux_control_states(struct mux_control *mux);
+ int __must_check mux_control_select_delay(struct mux_control *mux,
+ 					  unsigned int state,
+ 					  unsigned int delay_us);
++int __must_check mux_state_select_delay(struct mux_state *mstate,
++					unsigned int delay_us);
+ int __must_check mux_control_try_select_delay(struct mux_control *mux,
+ 					      unsigned int state,
+ 					      unsigned int delay_us);
+-
++int __must_check mux_state_try_select_delay(struct mux_state *mstate,
++					    unsigned int delay_us);
+ static inline int __must_check mux_control_select(struct mux_control *mux,
+ 						  unsigned int state)
+ {
+ 	return mux_control_select_delay(mux, state, 0);
+ }
+ 
++static inline int __must_check mux_state_select(struct mux_state *mstate)
++{
++	return mux_state_select_delay(mstate, 0);
++}
+ static inline int __must_check mux_control_try_select(struct mux_control *mux,
+ 						      unsigned int state)
+ {
+ 	return mux_control_try_select_delay(mux, state, 0);
+ }
+ 
++static inline int __must_check mux_state_try_select(struct mux_state *mstate)
++{
++	return mux_state_try_select_delay(mstate, 0);
++}
++
+ int mux_control_deselect(struct mux_control *mux);
++int mux_state_deselect(struct mux_state *mstate);
+ 
+ struct mux_control *mux_control_get(struct device *dev, const char *mux_name);
+ void mux_control_put(struct mux_control *mux);
++void mux_state_put(struct mux_state *mstate);
+ 
+ struct mux_control *devm_mux_control_get(struct device *dev,
+ 					 const char *mux_name);
++struct mux_state *devm_mux_state_get(struct device *dev,
++				     const char *mux_name);
+ 
+ #endif /* _LINUX_MUX_CONSUMER_H */
 -- 
 2.17.1
 

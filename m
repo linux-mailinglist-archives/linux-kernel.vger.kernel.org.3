@@ -2,235 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 505954678E4
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B20284678E6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244821AbhLCNz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 08:55:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243650AbhLCNz5 (ORCPT
+        id S1352491AbhLCN6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 08:58:21 -0500
+Received: from vmicros1.altlinux.org ([194.107.17.57]:49026 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243650AbhLCN6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 08:55:57 -0500
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E25C06174A
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 05:52:33 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:3191:9890:620a:6f4])
-        by michel.telenet-ops.be with bizsmtp
-        id RpsV2600Z3eLghq06psVj9; Fri, 03 Dec 2021 14:52:31 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mt8zF-002Le9-2u; Fri, 03 Dec 2021 14:52:29 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mt8zE-000lOe-JZ; Fri, 03 Dec 2021 14:52:28 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Rob Landley <rob@landley.net>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2 resend] sh: Use generic GCC library routines
-Date:   Fri,  3 Dec 2021 14:52:27 +0100
-Message-Id: <411814148d311d5a545672cdd2b0721195e53252.1638539376.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Fri, 3 Dec 2021 08:58:20 -0500
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id C412872C8DC;
+        Fri,  3 Dec 2021 16:54:54 +0300 (MSK)
+Received: from example.org (ip-78-45-37-102.net.upcbroadband.cz [78.45.37.102])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 045C74A46EA;
+        Fri,  3 Dec 2021 16:54:53 +0300 (MSK)
+Date:   Fri, 3 Dec 2021 14:54:53 +0100
+From:   Alexey Gladkov <legion@altlinux.ru>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     kbuild@lists.01.org, Alexey Gladkov <legion@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Containers <containers@lists.linux.dev>, lkp@intel.com,
+        kbuild-all@lists.01.org,
+        "Eric W . Biederman" <ebiederm@xmission.com>
+Subject: Re: [PATCH v1 2/2] ucounts: Move rlimit max values from ucounts max
+Message-ID: <20211203135453.ld2jblkd3xtlbgrv@example.org>
+References: <bcc85eae4f5e3799f9efdf2d73572bb88616ebac.1637934917.git.legion@kernel.org>
+ <202111280022.ugxpiKpA-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202111280022.ugxpiKpA-lkp@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The C implementations of __ashldi3(), __ashrdi3__(), and __lshrdi3() in
-arch/sh/lib/ are identical to the generic C implementations in lib/.
-Reduce duplication by switching SH to the generic versions.
+On Fri, Dec 03, 2021 at 04:33:25PM +0300, Dan Carpenter wrote:
+> Hi Alexey,
+> 
+> url:    https://github.com/0day-ci/linux/commits/Alexey-Gladkov/ucounts-Fix-rlimit-max-values-check/20211126-224059
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 136057256686de39cc3a07c2e39ef6bc43003ff6
+> config: i386-randconfig-m021-20211126 (https://download.01.org/0day-ci/archive/20211128/202111280022.ugxpiKpA-lkp@intel.com/config)
+> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> 
+> smatch warnings:
+> kernel/ucount.c:109 setup_userns_sysctls() error: buffer overflow 'ns->ucount_max' 10 <= 13
+> 
+> vim +109 kernel/ucount.c
+> 
+> dbec28460a89aa Eric W. Biederman 2016-07-30   98  bool setup_userns_sysctls(struct user_namespace *ns)
+> dbec28460a89aa Eric W. Biederman 2016-07-30   99  {
+> dbec28460a89aa Eric W. Biederman 2016-07-30  100  #ifdef CONFIG_SYSCTL
+> dbec28460a89aa Eric W. Biederman 2016-07-30  101  	struct ctl_table *tbl;
+> 0f538e3e712a51 Jan Kara          2020-04-07  102  
+> 0f538e3e712a51 Jan Kara          2020-04-07  103  	BUILD_BUG_ON(ARRAY_SIZE(user_table) != UCOUNT_COUNTS + 1);
+> dbec28460a89aa Eric W. Biederman 2016-07-30  104  	setup_sysctl_set(&ns->set, &set_root, set_is_seen);
+> f6b2db1a3e8d14 Eric W. Biederman 2016-08-08  105  	tbl = kmemdup(user_table, sizeof(user_table), GFP_KERNEL);
+> dbec28460a89aa Eric W. Biederman 2016-07-30  106  	if (tbl) {
+> 25f9c0817c535a Eric W. Biederman 2016-08-08  107  		int i;
+> 25f9c0817c535a Eric W. Biederman 2016-08-08  108  		for (i = 0; i < UCOUNT_COUNTS; i++) {
+> 25f9c0817c535a Eric W. Biederman 2016-08-08 @109  			tbl[i].data = &ns->ucount_max[i];
+> 
+> The patch changes the size of ->ucount_max[] to MAX_PER_NAMESPACE_UCOUNTS
+> but this loop still goes up to UCOUNT_COUNTS.
+> 
+> 25f9c0817c535a Eric W. Biederman 2016-08-08  110  		}
+> f6b2db1a3e8d14 Eric W. Biederman 2016-08-08  111  		ns->sysctls = __register_sysctl_table(&ns->set, "user", tbl);
+> dbec28460a89aa Eric W. Biederman 2016-07-30  112  	}
+> dbec28460a89aa Eric W. Biederman 2016-07-30  113  	if (!ns->sysctls) {
+> dbec28460a89aa Eric W. Biederman 2016-07-30  114  		kfree(tbl);
+> dbec28460a89aa Eric W. Biederman 2016-07-30  115  		retire_sysctl_set(&ns->set);
+> dbec28460a89aa Eric W. Biederman 2016-07-30  116  		return false;
+> dbec28460a89aa Eric W. Biederman 2016-07-30  117  	}
+> dbec28460a89aa Eric W. Biederman 2016-07-30  118  #endif
+> dbec28460a89aa Eric W. Biederman 2016-07-30  119  	return true;
+> dbec28460a89aa Eric W. Biederman 2016-07-30  120  }
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
 
-Update the include path in arch/sh/boot/compressed accordingly.
+Thanks! But a few days ago I already post a new version of this changeset
+with fix:
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-v2:
-  - Fix silly typo in subject.
+https://lore.kernel.org/containers/24c87e225c7950bf2ea1ff4b4a8f237348808241.1638218242.git.legion@kernel.org/
 
-Tested on landisk and qemu/rts7751r2d.
-
-Note that it also works without the change to arch/sh/boot/compressed/,
-as lib/ashldi3.c can be reached via both include/uapi/../../lib/ashldi3.c
-and arch/sh/boot/compressed/../../../../lib/ashldi3.c.
-
-Palmer tried a similar thing before:
-https://lore.kernel.org/linux-arch/20170523220546.16758-1-palmer@dabbelt.com/
-but initially it broke the SH build due to a missing change to
-arch/sh/boot/compressed/, and the later update never got picked up.
-In the mean time, arch/sh/boot/compressed/ was changed, so his patch no
-longer applies.
-
-Similar for the other architectures, I guess?
----
- arch/sh/Kconfig                   |  3 +++
- arch/sh/boot/compressed/ashldi3.c |  4 ++--
- arch/sh/lib/Makefile              |  4 +---
- arch/sh/lib/ashldi3.c             | 30 -----------------------------
- arch/sh/lib/ashrdi3.c             | 32 -------------------------------
- arch/sh/lib/lshrdi3.c             | 30 -----------------------------
- 6 files changed, 6 insertions(+), 97 deletions(-)
- delete mode 100644 arch/sh/lib/ashldi3.c
- delete mode 100644 arch/sh/lib/ashrdi3.c
- delete mode 100644 arch/sh/lib/lshrdi3.c
-
-diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-index 70afb30e0b321183..b10c4d852c22852a 100644
---- a/arch/sh/Kconfig
-+++ b/arch/sh/Kconfig
-@@ -20,6 +20,9 @@ config SUPERH
- 	select GENERIC_CMOS_UPDATE if SH_SH03 || SH_DREAMCAST
- 	select GENERIC_IDLE_POLL_SETUP
- 	select GENERIC_IRQ_SHOW
-+	select GENERIC_LIB_ASHLDI3
-+	select GENERIC_LIB_ASHRDI3
-+	select GENERIC_LIB_LSHRDI3
- 	select GENERIC_PCI_IOMAP if PCI
- 	select GENERIC_SCHED_CLOCK
- 	select GENERIC_SMP_IDLE_THREAD
-diff --git a/arch/sh/boot/compressed/ashldi3.c b/arch/sh/boot/compressed/ashldi3.c
-index 7cebd646df839b48..7c12121702309e8c 100644
---- a/arch/sh/boot/compressed/ashldi3.c
-+++ b/arch/sh/boot/compressed/ashldi3.c
-@@ -1,2 +1,2 @@
--// SPDX-License-Identifier: GPL-2.0-only
--#include "../../lib/ashldi3.c"
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+#include "../../../../lib/ashldi3.c"
-diff --git a/arch/sh/lib/Makefile b/arch/sh/lib/Makefile
-index eb473d373ca43a4b..d20a0768b31fa2b6 100644
---- a/arch/sh/lib/Makefile
-+++ b/arch/sh/lib/Makefile
-@@ -7,9 +7,7 @@ lib-y  = delay.o memmove.o memchr.o \
- 	 checksum.o strlen.o div64.o div64-generic.o
- 
- # Extracted from libgcc
--obj-y += movmem.o ashldi3.o ashrdi3.o lshrdi3.o \
--	 ashlsi3.o ashrsi3.o ashiftrt.o lshrsi3.o \
--	 udiv_qrnnd.o
-+obj-y += movmem.o ashlsi3.o ashrsi3.o ashiftrt.o lshrsi3.o udiv_qrnnd.o
- 
- udivsi3-y			:= udivsi3_i4i-Os.o
- 
-diff --git a/arch/sh/lib/ashldi3.c b/arch/sh/lib/ashldi3.c
-deleted file mode 100644
-index e5afe0935847427f..0000000000000000
---- a/arch/sh/lib/ashldi3.c
-+++ /dev/null
-@@ -1,30 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#include <linux/module.h>
--
--#include "libgcc.h"
--
--long long __ashldi3(long long u, word_type b)
--{
--	DWunion uu, w;
--	word_type bm;
--
--	if (b == 0)
--		return u;
--
--	uu.ll = u;
--	bm = 32 - b;
--
--	if (bm <= 0) {
--		w.s.low = 0;
--		w.s.high = (unsigned int) uu.s.low << -bm;
--	} else {
--		const unsigned int carries = (unsigned int) uu.s.low >> bm;
--
--		w.s.low = (unsigned int) uu.s.low << b;
--		w.s.high = ((unsigned int) uu.s.high << b) | carries;
--	}
--
--	return w.ll;
--}
--
--EXPORT_SYMBOL(__ashldi3);
-diff --git a/arch/sh/lib/ashrdi3.c b/arch/sh/lib/ashrdi3.c
-deleted file mode 100644
-index ae263fbf25383b70..0000000000000000
---- a/arch/sh/lib/ashrdi3.c
-+++ /dev/null
-@@ -1,32 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#include <linux/module.h>
--
--#include "libgcc.h"
--
--long long __ashrdi3(long long u, word_type b)
--{
--	DWunion uu, w;
--	word_type bm;
--
--	if (b == 0)
--		return u;
--
--	uu.ll = u;
--	bm = 32 - b;
--
--	if (bm <= 0) {
--		/* w.s.high = 1..1 or 0..0 */
--		w.s.high =
--		    uu.s.high >> 31;
--		w.s.low = uu.s.high >> -bm;
--	} else {
--		const unsigned int carries = (unsigned int) uu.s.high << bm;
--
--		w.s.high = uu.s.high >> b;
--		w.s.low = ((unsigned int) uu.s.low >> b) | carries;
--	}
--
--	return w.ll;
--}
--
--EXPORT_SYMBOL(__ashrdi3);
-diff --git a/arch/sh/lib/lshrdi3.c b/arch/sh/lib/lshrdi3.c
-deleted file mode 100644
-index 33eaa1edbc3c0656..0000000000000000
---- a/arch/sh/lib/lshrdi3.c
-+++ /dev/null
-@@ -1,30 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#include <linux/module.h>
--
--#include "libgcc.h"
--
--long long __lshrdi3(long long u, word_type b)
--{
--	DWunion uu, w;
--	word_type bm;
--
--	if (b == 0)
--		return u;
--
--	uu.ll = u;
--	bm = 32 - b;
--
--	if (bm <= 0) {
--		w.s.high = 0;
--		w.s.low = (unsigned int) uu.s.high >> -bm;
--	} else {
--		const unsigned int carries = (unsigned int) uu.s.high << bm;
--
--		w.s.high = (unsigned int) uu.s.high >> b;
--		w.s.low = ((unsigned int) uu.s.low >> b) | carries;
--	}
--
--	return w.ll;
--}
--
--EXPORT_SYMBOL(__lshrdi3);
 -- 
-2.25.1
+Rgrds, legion
 

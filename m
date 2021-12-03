@@ -2,102 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 278C3467B99
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 706DE467B8F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:37:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382099AbhLCQls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 11:41:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352818AbhLCQlq (ORCPT
+        id S1382108AbhLCQlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 11:41:00 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:53754 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1382087AbhLCQk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 11:41:46 -0500
-X-Greylist: delayed 89445 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Dec 2021 08:38:22 PST
-Received: from mx3.securetransport.de (mx3.securetransport.de [IPv6:2a01:4f8:c0c:92be::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5D98C061751;
-        Fri,  3 Dec 2021 08:38:21 -0800 (PST)
-Received: from mail.dh-electronics.com (business-24-134-97-169.pool2.vodafone-ip.de [24.134.97.169])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 3 Dec 2021 11:40:56 -0500
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.1)
+ id efa5b0d3f41f30b2; Fri, 3 Dec 2021 17:37:31 +0100
+Received: from kreacher.localnet (unknown [213.134.175.202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mx3.securetransport.de (Postfix) with ESMTPSA id E70125DD16;
-        Fri,  3 Dec 2021 17:37:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1638549453;
-        bh=EWGgfdTrxQHtOQ9XgCk8+mx7RHRdPzCWWWuYARSdwak=;
-        h=From:To:CC:Subject:Date:From;
-        b=F/NkNAunOITjnXwU4+kw1fWmci4k7a2LNgxv6ldsJvutLc4WUrlNFKa0FnAgGDFa6
-         id9mS7m4zjVzmnE2CI25Gaa18lY1xijub6R+uXC8CWpOVGosgz7wuL3SvQFYCfkwuw
-         lnIA2TxugRdyV01HUSOosewGY8plc8p/jl/fBUY3lEiuWkn+BldgGORNSkcKwaCeMq
-         XyfopXMcnQ9ZI8Kshnq0LfhcxefJ3sFQDrLslfVqFnKm/fpNr40cPCfkC41Zv0poXd
-         7NqSGNXj/FGeneKmjA3wa4lrRPtfhUnhxSH2Fza7QPyuVr4Xr7bj0Ix49thZEBK7YJ
-         0ZzGPHa0iRalA==
-Received: from DHPWEX01.DH-ELECTRONICS.ORG (2001:470:76a7:2::30) by
- DHPWEX01.DH-ELECTRONICS.ORG (2001:470:76a7:2::30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Fri, 3 Dec 2021 17:37:26 +0100
-Received: from localhost.localdomain (172.16.51.18) by
- DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14
- via Frontend Transport; Fri, 3 Dec 2021 17:37:25 +0100
-From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
-To:     <linux-arm-kernel@lists.infradead.org>
-CC:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        "Support Opensource" <support.opensource@diasemi.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrej Picej <andrej.picej@norik.com>,
-        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [RFC PATCH] watchdog: da9062: Correct the timeout values
-Date:   Fri, 3 Dec 2021 17:35:39 +0100
-Message-ID: <20211203163539.91870-1-cniedermaier@dh-electronics.com>
-X-Mailer: git-send-email 2.11.0
-X-klartext: yes
+        by v370.home.net.pl (Postfix) with ESMTPSA id 7551466AD69;
+        Fri,  3 Dec 2021 17:37:30 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [PATCH 1/2] ACPI: scan: Introduce acpi_fetch_acpi_dev()
+Date:   Fri, 03 Dec 2021 17:36:20 +0100
+Message-ID: <3173027.44csPzL39Z@kreacher>
+In-Reply-To: <2828957.e9J7NaK4W3@kreacher>
+References: <2828957.e9J7NaK4W3@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.175.202
+X-CLIENT-HOSTNAME: 213.134.175.202
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrieejgdelvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdejlefghfeiudektdelkeekvddugfeghffggeejgfeukeejleevgffgvdeluddtnecukfhppedvudefrddufeegrddujeehrddvtddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudejhedrvddtvddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohephhguvghgohgvuggvsehrvgguhhgrthdrtghomhdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohep
+ lhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshgrkhgrrhhirdgrihhluhhssehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I measured the timeout values of my DA9061 chip. According to the
-information in the data sheet the formula should be:
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-timeout = 2.048 * 2^(regval - 1)
+Introduce acpi_fetch_acpi_dev() as a more reasonable replacement for
+acpi_bus_get_device() and modify the code in scan.c to use it instead
+of the latter.
 
-But my measured values differ from that.
-Accoring to my measured values the formula must be:
+No expected functional impact.
 
-timeout = 3.2 * 2^(regval - 1)
-
-Is there something wrong with my chip, or has anyone else noticed this as well?
-
-Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Cc: Support Opensource <support.opensource@diasemi.com>
-Cc: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Andrej Picej <andrej.picej@norik.com>
-Cc: linux-watchdog@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/watchdog/da9062_wdt.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/acpi/scan.c     |   34 ++++++++++++++++++++++++----------
+ include/acpi/acpi_bus.h |    1 +
+ 2 files changed, 25 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
-index f02cbd530538..d2576aba9ca5 100644
---- a/drivers/watchdog/da9062_wdt.c
-+++ b/drivers/watchdog/da9062_wdt.c
-@@ -20,7 +20,8 @@
- #include <linux/regmap.h>
- #include <linux/of.h>
+Index: linux-pm/drivers/acpi/scan.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/scan.c
++++ linux-pm/drivers/acpi/scan.c
+@@ -135,12 +135,12 @@ bool acpi_scan_is_offline(struct acpi_de
+ static acpi_status acpi_bus_offline(acpi_handle handle, u32 lvl, void *data,
+ 				    void **ret_p)
+ {
+-	struct acpi_device *device = NULL;
++	struct acpi_device *device = acpi_fetch_acpi_dev(handle);
+ 	struct acpi_device_physical_node *pn;
+ 	bool second_pass = (bool)data;
+ 	acpi_status status = AE_OK;
  
--static const unsigned int wdt_timeout[] = { 0, 2, 4, 8, 16, 32, 65, 131 };
-+static const unsigned int wdt_timeout[] = { 0, 3, 6, 12, 25, 51, 102, 204 };
+-	if (acpi_bus_get_device(handle, &device))
++	if (!device)
+ 		return AE_OK;
+ 
+ 	if (device->handler && !device->handler->hotplug.enabled) {
+@@ -180,10 +180,10 @@ static acpi_status acpi_bus_offline(acpi
+ static acpi_status acpi_bus_online(acpi_handle handle, u32 lvl, void *data,
+ 				   void **ret_p)
+ {
+-	struct acpi_device *device = NULL;
++	struct acpi_device *device = acpi_fetch_acpi_dev(handle);
+ 	struct acpi_device_physical_node *pn;
+ 
+-	if (acpi_bus_get_device(handle, &device))
++	if (!device)
+ 		return AE_OK;
+ 
+ 	mutex_lock(&device->physical_node_lock);
+@@ -599,6 +599,19 @@ int acpi_bus_get_device(acpi_handle hand
+ }
+ EXPORT_SYMBOL(acpi_bus_get_device);
+ 
++/**
++ * acpi_fetch_acpi_dev - Retrieve ACPI device object.
++ * @handle: ACPI handle associated with the requested ACPI device object.
++ *
++ * Return a pointer to the ACPI device object associated with @handle, if
++ * present, or NULL otherwise.
++ */
++struct acpi_device *acpi_fetch_acpi_dev(acpi_handle handle)
++{
++	return handle_to_device(handle, NULL);
++}
++EXPORT_SYMBOL_GPL(acpi_fetch_acpi_dev);
 +
- #define DA9062_TWDSCALE_DISABLE		0
- #define DA9062_TWDSCALE_MIN		1
- #define DA9062_TWDSCALE_MAX		(ARRAY_SIZE(wdt_timeout) - 1)
--- 
-2.11.0
+ static void get_acpi_device(void *dev)
+ {
+ 	acpi_dev_get(dev);
+@@ -799,7 +812,7 @@ static const char * const acpi_ignore_de
+ 
+ static struct acpi_device *acpi_bus_get_parent(acpi_handle handle)
+ {
+-	struct acpi_device *device = NULL;
++	struct acpi_device *device;
+ 	acpi_status status;
+ 
+ 	/*
+@@ -814,7 +827,9 @@ static struct acpi_device *acpi_bus_get_
+ 		status = acpi_get_parent(handle, &handle);
+ 		if (ACPI_FAILURE(status))
+ 			return status == AE_NULL_ENTRY ? NULL : acpi_root;
+-	} while (acpi_bus_get_device(handle, &device));
++
++		device = acpi_fetch_acpi_dev(handle);
++	} while (!device);
+ 	return device;
+ }
+ 
+@@ -2003,11 +2018,10 @@ static bool acpi_bus_scan_second_pass;
+ static acpi_status acpi_bus_check_add(acpi_handle handle, bool check_dep,
+ 				      struct acpi_device **adev_p)
+ {
+-	struct acpi_device *device = NULL;
++	struct acpi_device *device = acpi_fetch_acpi_dev(handle);
+ 	acpi_object_type acpi_type;
+ 	int type;
+ 
+-	acpi_bus_get_device(handle, &device);
+ 	if (device)
+ 		goto out;
+ 
+@@ -2548,8 +2562,8 @@ int __init acpi_scan_init(void)
+ 	if (result)
+ 		goto out;
+ 
+-	result = acpi_bus_get_device(ACPI_ROOT_OBJECT, &acpi_root);
+-	if (result)
++	acpi_root = acpi_fetch_acpi_dev(ACPI_ROOT_OBJECT);
++	if (!acpi_root)
+ 		goto out;
+ 
+ 	/* Fixed feature devices do not exist on HW-reduced platform */
+Index: linux-pm/include/acpi/acpi_bus.h
+===================================================================
+--- linux-pm.orig/include/acpi/acpi_bus.h
++++ linux-pm/include/acpi/acpi_bus.h
+@@ -505,6 +505,7 @@ extern int unregister_acpi_notifier(stru
+  */
+ 
+ int acpi_bus_get_device(acpi_handle handle, struct acpi_device **device);
++struct acpi_device *acpi_fetch_acpi_dev(acpi_handle handle);
+ acpi_status acpi_bus_get_status_handle(acpi_handle handle,
+ 				       unsigned long long *sta);
+ int acpi_bus_get_status(struct acpi_device *device);
+
+
 

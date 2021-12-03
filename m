@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F286F467EBD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 21:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E35467EC6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 21:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383061AbhLCUYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 15:24:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49726 "EHLO
+        id S1383094AbhLCUaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 15:30:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352808AbhLCUYH (ORCPT
+        with ESMTP id S233528AbhLCUaC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 15:24:07 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F2CC061751
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 12:20:42 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id x15so16383532edv.1
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 12:20:42 -0800 (PST)
+        Fri, 3 Dec 2021 15:30:02 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF27C061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 12:26:38 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id l25so16125822eda.11
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 12:26:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=vYlniXxTR7J7OWes9rdka6OdCg5A0vL9FQbn1HK7hEc=;
-        b=RpRzLpUaSCf7o5/0Telq5zdr1BeQOMXy6zIgusGRAYPIGUiz+3a0LhIaH6BQOyOEqF
-         MpKXbWKWhFmZ9XPM2z+27fAjtVLgChwxh6Q9ez+vzLNXTW/f2H8PO+/HM8sn6fzeK7OJ
-         F4OpBF8Voxv6Aph3bmu852GVmE+mEIPCptkRs1OeSxHBqN7rWyYwxCeCQJ4SKWeBvfvE
-         J988HG6afKhWhKbQnLiY2KB9rX8YvHAj1L3nraFmygPWX/ZBV+iNaOieKjaLzPkWnHR8
-         EUQ0aTM6jUEEhdLlMq6CKmOxBxow4XTK+33T4mlkau0nOEAEuVrBc/nfDnukZxLYyr6D
-         cWsg==
+        bh=9zHipByrsNK0qk+HHU/d1JXlrjGn7rcQqoiAh21t8ds=;
+        b=l4GFWECq5qmLbXfAQOX7iJRHDEu8A/P7w2MnzLbhUBogNlo+L0tRrDzsmS0j5uyqmO
+         gVHVezGFR8CSnsNtrak01SKfgQeC0Ez3kpnW5QVeJpd5QVvloDPryeyiCA4aFXLoA2Tw
+         /mS4mw0/sMSeGlioDD6+qtkZKkaniX6ZrqQHlvci42OLT51SISgrhBQM5IcoqfXReJAD
+         L5iWDSMDJGmvmeXvtVOvxhZeTXihp1vl7g35jwuN7081aAhnYSicvpmr6sc9pK3cECbX
+         FYpR2rUeELm7oW2k7P/YmlQZSnRbyUhRgJKfGvsqfLwmginIVSeT7mKm8lZUpsS5vgqL
+         Wk2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=vYlniXxTR7J7OWes9rdka6OdCg5A0vL9FQbn1HK7hEc=;
-        b=o19IeWKhzKjQROx5TD/dQx8+c1vi2VsQuyD6ZK7oOH/K4bpRLa0G8YGz1dHHodSF+9
-         38oKuNNr1SS12FpAi5lKkfEAxczGu/n2AEubFyKeIo5z63ci+aqalsg/FFnA3vUZkxtu
-         KL/9+7q8DKVLz1vyB1szbZA/yDNESSzXgYDJnVbkPIgpi2EKe38yP3I+EbnqjzSKtmmx
-         DFKhV5Oqi4m45sxcpiO29ges5mGPtE6tGEjU5hGJa+BNIBwH1HBPV6M8z9tx9zK0aJJy
-         8Y9nCdz2EgfIXRU3cQePhvcgyIVRYGkwr8NXSjDQNym+/CbZa+BPfqLFVTJ4CELRpMwO
-         34dg==
-X-Gm-Message-State: AOAM530sr0H8CAyz1QY3byfZfhrwJaRgL7J+oAqLWZCHF5/cYe+UWQ63
-        lqSb2XmJaRa8epx3x3BcJOU=
-X-Google-Smtp-Source: ABdhPJyk/q71i8JmucdKj3hZLHe1pDU+GubdZr8P39xQUV3QL4rdKEKm+MoUYfF3WleOaZsG90nhqg==
-X-Received: by 2002:a17:906:eb8a:: with SMTP id mh10mr25171779ejb.198.1638562841273;
-        Fri, 03 Dec 2021 12:20:41 -0800 (PST)
+        bh=9zHipByrsNK0qk+HHU/d1JXlrjGn7rcQqoiAh21t8ds=;
+        b=Be8ur990EtCj1K3hmsm5u8JrjF18UeIrRudLuG6TXYSXy9tFiOym1atqjsnr5IjxUC
+         KO6SntoWu6AbNDsLyEnj1FGApyFuanAeYE5tHP1tGgIZiWjvds63GpXcV0yIGwFYDZVw
+         /2EcwsGd5pZv997JsPV4dgqJj28XiJgeUoyL+L1u4FwedvKwtE1XXdtjYov28SVs1f5V
+         W2IsZ5ySGXqmMOz/vPZykWQuYqB6bDwbyGY6gotojmWhKtd+C2Zfi26ZpLszl3oQ0LLI
+         lF24W8qrrF9YDmIK0sVseYCDuB8SD2y3ZRKMn1woNw4F4lWBz7fve5kczljaSiu5lLI3
+         J2Kw==
+X-Gm-Message-State: AOAM532bWl6vDdk/us53EVGQTgPk1zlnBliUh6LRJcF1B7Fe/jwZcgIy
+        EkDacXEA18MiBjcU4vZ//m0=
+X-Google-Smtp-Source: ABdhPJyp8uxqvwbPQ9viHB/F27DeLB2IJdAOVMZJ4dToWRGr/Qj8cDyyU6h0h2neBEwXNS6FncBy7A==
+X-Received: by 2002:a05:6402:3596:: with SMTP id y22mr29793203edc.297.1638563196598;
+        Fri, 03 Dec 2021 12:26:36 -0800 (PST)
 Received: from bulldog.fritz.box (host-79-17-112-183.retail.telecomitalia.it. [79.17.112.183])
-        by smtp.gmail.com with ESMTPSA id sh33sm2654655ejc.56.2021.12.03.12.20.40
+        by smtp.gmail.com with ESMTPSA id f17sm2596547edq.39.2021.12.03.12.26.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 12:20:40 -0800 (PST)
+        Fri, 03 Dec 2021 12:26:36 -0800 (PST)
 From:   Alberto Merciai <alb3rt0.m3rciai@gmail.com>
 To:     alb3rt0.m3rciai@gmail.com
 Cc:     Forest Bond <forest@alittletooquiet.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Tommaso Merciai <tomm.merciai@gmail.com>,
         =?UTF-8?q?Aldas=20Tara=C5=A1kevi=C4=8Dius?= <aldas60@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
         Karolina Drobnik <karolinadrobnik@gmail.com>,
         Lucas Henneman <lucas.henneman@linaro.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] staging: vt6655: refactor byRadioCtl to radio_ctl
-Date:   Fri,  3 Dec 2021 21:18:37 +0100
-Message-Id: <20211203201839.3806539-1-alb3rt0.m3rciai@gmail.com>
+Subject: [PATCH v3] staging: vt6655: refactor byRadioCtl to radio_ctl
+Date:   Fri,  3 Dec 2021 21:24:06 +0100
+Message-Id: <20211203202410.3807147-1-alb3rt0.m3rciai@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -68,11 +69,13 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Replace camelcase hungarian notated variable "byRadioCtl"
-into linux kernel coding style equivalent variable "hw_radio_off".
+into linux kernel coding style equivalent variable "radio_ctl".
 
 Signed-off-by: Alberto Merciai <alb3rt0.m3rciai@gmail.com>
 ---
 
+v2 -> v3
+- replace typo inside mail message body
 v1 -> v2
 - Correct mail subject
 

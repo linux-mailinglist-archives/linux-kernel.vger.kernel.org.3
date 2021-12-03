@@ -2,83 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DADA467D8C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8439467D8F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:54:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382749AbhLCS4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 13:56:35 -0500
-Received: from mga09.intel.com ([134.134.136.24]:60825 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1382737AbhLCS4c (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 13:56:32 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="236850018"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="236850018"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 10:53:01 -0800
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="460981919"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 10:52:58 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mtDf2-001sCL-Hp;
-        Fri, 03 Dec 2021 20:51:56 +0200
-Date:   Fri, 3 Dec 2021 20:51:56 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v12 3/7] gpiolib: of: make fwnode take precedence in
- struct gpio_chip
-Message-ID: <YapnTHQZyNCZXrgp@smile.fi.intel.com>
-References: <20211203133003.31786-1-brgl@bgdev.pl>
- <20211203133003.31786-4-brgl@bgdev.pl>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211203133003.31786-4-brgl@bgdev.pl>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S233088AbhLCS5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 13:57:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58078 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234981AbhLCS5W (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 13:57:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D9FC061751;
+        Fri,  3 Dec 2021 10:53:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 252DC62CAA;
+        Fri,  3 Dec 2021 18:53:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 867FBC53FCD;
+        Fri,  3 Dec 2021 18:53:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638557637;
+        bh=Dj3UgovYtc08Lx5pulZb/nz0mOCPJHhKAEON54LkdiM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=dhROiAHs0bUgJiD4TkAlqBa4vUZLHv1p/0paEnXcDVuiZqdjY2JskpnSfcl9F3nBb
+         ENDV4YsYJV5CbjifUvwZ+C4H7UHTSLz1j7PawQFqPLPpN8npDa1eELOl6vtUFjOw7P
+         gdTckAzPY8HFMrQR4hiFgk6pWu3UgUt9Lmz1yk/kPGDKF8rYpMou+Lb3kx/rmPJ/Nt
+         p9ikZJ7s+ddzC9sm2v1cwsX6mYvwZErPtK1afmrvP0hm3GcVVG4aNQcXIRYc8LOceg
+         kH1Zf/hI+hQErjOwbXdiRzTiiaNrJNPmq6SSpA8wSgRWxsYmv7j7HNnGsqt+4UoLBX
+         7bEX8V4v5xGuA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 54E0960A50;
+        Fri,  3 Dec 2021 18:53:57 +0000 (UTC)
+Subject: Re: [PULL REQUEST] i2c for v5.16
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YapJpi/BNwQ3VOR/@kunai>
+References: <YapJpi/BNwQ3VOR/@kunai>
+X-PR-Tracked-List-Id: <linux-i2c.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YapJpi/BNwQ3VOR/@kunai>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
+X-PR-Tracked-Commit-Id: 02fe0fbd8a21e183687925c3a266ae27dda9840f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f66062c7491b0f861ba1ee9c767c860fd615b2c3
+Message-Id: <163855763728.17226.4484747444946640069.pr-tracker-bot@kernel.org>
+Date:   Fri, 03 Dec 2021 18:53:57 +0000
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 02:29:59PM +0100, Bartosz Golaszewski wrote:
-> If the driver sets the fwnode in struct gpio_chip, let it take
-> precedence over the of_node.
+The pull request you sent on Fri, 3 Dec 2021 17:45:26 +0100:
 
-> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-> ---
->  drivers/gpio/gpiolib-of.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-> index 0ad288ab6262..91dcf2c6cdd8 100644
-> --- a/drivers/gpio/gpiolib-of.c
-> +++ b/drivers/gpio/gpiolib-of.c
-> @@ -1046,6 +1046,9 @@ void of_gpio_dev_init(struct gpio_chip *gc, struct gpio_device *gdev)
->  	if (gc->parent)
->  		gdev->dev.of_node = gc->parent->of_node;
->  
-> +	if (gc->fwnode)
-> +		gc->of_node = to_of_node(gc->fwnode);
-> +
->  	/* If the gpiochip has an assigned OF node this takes precedence */
->  	if (gc->of_node)
->  		gdev->dev.of_node = gc->of_node;
+> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-current
 
-Similar should be done in acpi_gpio_dev_init():
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f66062c7491b0f861ba1ee9c767c860fd615b2c3
 
-	if (gc->fwnode)
-		device_set_node(&gdev->dev, gc->fwnode);
+Thank you!
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,125 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E216246735B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE8546735D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:41:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379246AbhLCIoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 03:44:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239222AbhLCIob (ORCPT
+        id S1379248AbhLCIpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:45:16 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:35913 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244591AbhLCIpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 03:44:31 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4CBC06174A
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 00:41:07 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id x6so8501939edr.5
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 00:41:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uLBHn9jsbKV7jZYY7Dm+t8lPDQRTZnoOfAaLgWh49GU=;
-        b=LsIAHi4O7+rAKszJKyJ/QwZwolqgX7Xp85HCfWi/OAlf7oOjExVQVB3A1uF6oJMxXi
-         gPosTZ3PyRq9IbJKMX4ESqDGYZZYcom4XQ8JtyMRl5tOE7xlwAkd4FpJbONadp6pWo7I
-         oUoB99whrPg0HGUqiRetXBExiz97qDkf5NdxXb1GpetgxbWitUxWw81WWVuMwB7DeHg4
-         F4fsE0Im8ySC6EvPdTGuYxXIdnTwT10W+OMVEHRanF7YSviRe6CvO4rDs/Sfax7qLy0G
-         GQ8KIQPRWvs0w82uwlN5lRnk2skx92g4UPLasKF6asjvNdNubK/yYeFyTDsn7OcD+219
-         BK3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uLBHn9jsbKV7jZYY7Dm+t8lPDQRTZnoOfAaLgWh49GU=;
-        b=TCSCDO3nLY7tEK3N1GGr2CpxiU8CzT2ZD66L8rIUq96dRTEdRzl7Zzi3J8GP1SCPXB
-         J9BmoQM4iXFFIoTwAPnEX3wPXA2D7Tjx2cqYf2tQhYkdPaRmxCx9GmYg4dJ6ramE0bOw
-         M5mI89sOm/TC4V2Etb3T1O5g+9xUguvXnV91yeD982p60mfOAiZSPn+P+uV88d0nfepP
-         8hShY49OOV2+b/J4w5Id9MrLzNcXFJEYn+/G8gl/vNM6pSYEURNYAzO0Frq5X0s3fWet
-         FEmEMWrC9GoawnjPmPANRh2EPnlhZzijP9xysfAUvKStcsffLKCTMab8AaspL0n9+0OH
-         klmg==
-X-Gm-Message-State: AOAM532225YvRtM5LrI6BLfkqyZHZvfm4H0ElMho6Ae95md0tTYE/BVc
-        74TcTEuAwKaygexBEDs1ZdkyzDBrndsjwCoFuLmSGg==
-X-Google-Smtp-Source: ABdhPJzNHiauf+pMC5f/US+c9OIXcWbcKMNg90ABw6xCvQOgNu83JV2BIOiQy03TdGH6uVMTEr4y57dSuqO0jiYbpps=
-X-Received: by 2002:a17:907:75f0:: with SMTP id jz16mr22268827ejc.77.1638520866276;
- Fri, 03 Dec 2021 00:41:06 -0800 (PST)
+        Fri, 3 Dec 2021 03:45:15 -0500
+Received: (Authenticated sender: alex@ghiti.fr)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id CAFF66000E;
+        Fri,  3 Dec 2021 08:41:49 +0000 (UTC)
+Message-ID: <d7238da5-6a47-dcf6-9615-050856fc2dc9@ghiti.fr>
+Date:   Fri, 3 Dec 2021 09:41:49 +0100
 MIME-Version: 1.0
-References: <20211202210839.79140-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20211202210839.79140-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 3 Dec 2021 09:40:55 +0100
-Message-ID: <CAMRc=Md-TKUETLzf41D2KeQODac153_AumMTW4928XfJ70GRxQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] gpio: Get rid of duplicate of_node assignment in
- the drivers
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Tony Lindgren <tony@atomide.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jianqun Xu <jay.xu@rock-chips.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        Thierry Reding <treding@nvidia.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        patches@opensource.cirrus.com,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        linux-power <linux-power@fi.rohmeurope.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>, linux-pwm@vger.kernel.org,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-unisoc@lists.infradead.org,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-tegra@vger.kernel.org, Ray Jui <rjui@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Keerthy <j-keerthy@ti.com>, Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH 5/5] riscv: mm: init: try best to remove #ifdef
+ CONFIG_XIP_KERNEL usage
+Content-Language: en-US
+To:     Jisheng Zhang <jszhang@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20211203050317.2102-1-jszhang@kernel.org>
+ <20211203050317.2102-6-jszhang@kernel.org>
+From:   Alexandre ghiti <alex@ghiti.fr>
+In-Reply-To: <20211203050317.2102-6-jszhang@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 10:17 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On 12/3/21 06:03, Jisheng Zhang wrote:
+> Currently, the #ifdef CONFIG_XIP_KERNEL usage can be divided into the
+> following three types:
 >
-> GPIO library does copy the of_node from the parent device of
-> the GPIO chip, there is no need to repeat this in the individual
-> drivers. Remove these assignment all at once.
+> The first one is for functions/declarations only used in XIP case.
 >
-> For the details one may look into the of_gpio_dev_init() implementation.
+> The second one is for XIP_FIXUP case. Something as below:
+> |foo_type foo;
+> |#ifdef CONFIG_XIP_KERNEL
+> |#define foo    (*(foo_type *)XIP_FIXUP(&foo))
+> |#endif
 >
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Usually, it's better to let the foo macro sit with the foo var
+> together. But if various foos are defined adjacently, we can
+> save some #ifdef CONFIG_XIP_KERNEL usage by grouping them together.
+>
+> The third one is for different implementations for XIP, usually, this
+> is a #ifdef...#else...#endif case.
+>
+> This patch moves the pt_ops macro to adjacent #ifdef CONFIG_XIP_KERNEL
+> and group first usage case into one.
+>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 > ---
+>   arch/riscv/mm/init.c | 11 +++--------
+>   1 file changed, 3 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 4a9e3f429042..aeae7d6b2fee 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -40,10 +40,6 @@ EXPORT_SYMBOL(kernel_map);
+>   phys_addr_t phys_ram_base __ro_after_init;
+>   EXPORT_SYMBOL(phys_ram_base);
+>   
+> -#ifdef CONFIG_XIP_KERNEL
+> -extern char _xiprom[], _exiprom[], __data_loc;
+> -#endif
+> -
+>   unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)]
+>   							__page_aligned_bss;
+>   EXPORT_SYMBOL(empty_zero_page);
+> @@ -227,10 +223,6 @@ static void __init setup_bootmem(void)
+>   #ifdef CONFIG_MMU
+>   static struct pt_alloc_ops pt_ops __initdata;
+>   
+> -#ifdef CONFIG_XIP_KERNEL
+> -#define pt_ops (*(struct pt_alloc_ops *)XIP_FIXUP(&pt_ops))
+> -#endif
+> -
+>   unsigned long riscv_pfn_base __ro_after_init;
+>   EXPORT_SYMBOL(riscv_pfn_base);
+>   
+> @@ -242,6 +234,7 @@ pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
+>   static pmd_t __maybe_unused early_dtb_pmd[PTRS_PER_PMD] __initdata __aligned(PAGE_SIZE);
+>   
+>   #ifdef CONFIG_XIP_KERNEL
+> +#define pt_ops			(*(struct pt_alloc_ops *)XIP_FIXUP(&pt_ops))
+>   #define trampoline_pg_dir      ((pgd_t *)XIP_FIXUP(trampoline_pg_dir))
+>   #define fixmap_pte             ((pte_t *)XIP_FIXUP(fixmap_pte))
+>   #define early_pg_dir           ((pgd_t *)XIP_FIXUP(early_pg_dir))
+> @@ -445,6 +438,8 @@ static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
+>   }
+>   
+>   #ifdef CONFIG_XIP_KERNEL
+> +extern char _xiprom[], _exiprom[], __data_loc;
+> +
+>   /* called from head.S with MMU off */
+>   asmlinkage void __init __copy_data(void)
+>   {
 
-I have a bad feeling about this but I've gone through the drivers in
-this patch and it seems like you don't update any of the drivers that
-use multiple child OF nodes so I can't really point out any obvious
-bug.
 
-I have another change I'm working on that's related, let me send it shortly.
+Reviewed-by: Alexandre Ghiti <alex@ghiti.fr>
 
-Bart
+Thanks,
+
+Alex
+

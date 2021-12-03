@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38206466E9B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 01:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DFAF466E9E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 01:41:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377833AbhLCAoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 19:44:13 -0500
-Received: from smtpweb147.aruba.it ([62.149.158.147]:59037 "EHLO
+        id S1377882AbhLCAoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 19:44:19 -0500
+Received: from smtpweb147.aruba.it ([62.149.158.147]:36091 "EHLO
         smtpweb147.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234048AbhLCAoI (ORCPT
+        with ESMTP id S1377812AbhLCAoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 19:44:08 -0500
+        Thu, 2 Dec 2021 19:44:09 -0500
 Received: from localhost.localdomain ([146.241.138.59])
         by Aruba Outgoing Smtp  with ESMTPSA
-        id swcymiEudrmmOswd1mQfUd; Fri, 03 Dec 2021 01:40:44 +0100
+        id swcymiEudrmmOswd2mQfV0; Fri, 03 Dec 2021 01:40:44 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1638492044; bh=t4xdbfnNK9Zr1ZCEXL5v+5nT3HYIIIQG5TLHOwTwWmg=;
+        t=1638492044; bh=1GwZdZs71y1Y7zRJH7MP0kRXMRTEVCxiWPznzuV4wJA=;
         h=From:To:Subject:Date:MIME-Version;
-        b=dQTZeBbmotKlJ0u0FVoMC9PnQe4dr6GC/7gTSxawLyRWJv0g7GPNT2Fjjcod4DbLc
-         vX3tS2mlgB309nHdGBo2dUKMRFtIrF/9TgSMzvgpJN2f6tL3kQSjwoViSYY5Fl5PTs
-         EBDI+wRTUtalKvx0xRguzyZ2/qD4om0KKYDpL5ZTtfcxX+Z2QJck4xBoj20ju0QYnR
-         sVO3GXNTwvHepVy9eMTRxRPfXZ+uoJGocynL9I50DwcN3nClGw3NmyheXj4whkSjgE
-         f3ap4dUHj4YBma/lfOYHKV+MXZ/dRGVfPBMNb8Uf0i7anVjy5S7SrOX3najexDFzuR
-         CFKJnjVY5wMYw==
+        b=bi+ZNhQEchdc1w90aE2LeXP1xuRsFflIOgTFcQQcorCQfUlJt5j2dN4khYQqkMBp+
+         eRg4DMSL9qx0rWKWAF87hJbV43IdhTaqSroa1jLaDYcozCs2Pq28aR3M3aJVWETKoP
+         uyM8AZ7wTJH4TuOBoAGkO1k9o8qAWXKOSYHhta2IKbyOpT1VfkrcbHmaIXfs7P4uTi
+         M4E9CH95A7lBaNh7x+YCvs2tjRgDBBX4pue0hB9e97GdpLchV0tZp4OD0bVOW9VsNF
+         SfqguNKTUAFlq3goMHcfa+2ZRJtKrdsZDnCYm6toqT5R0VOhR0H2Vfp4mFYQL7f0ss
+         cn0lcBwg4Bvxw==
 From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
 To:     Rob Herring <robh+dt@kernel.org>
 Cc:     Shawn Guo <shawnguo@kernel.org>,
@@ -35,9 +35,9 @@ Cc:     Shawn Guo <shawnguo@kernel.org>,
         linux-kernel@vger.kernel.org,
         Jesse Taube <mr.bossman075@gmail.com>,
         Giulio Benetti <giulio.benetti@benettiengineering.com>
-Subject: [PATCH 07/17] ARM: dts: imx51: drop "fsl,imx-osc"
-Date:   Fri,  3 Dec 2021 01:40:29 +0100
-Message-Id: <20211203004039.48752-8-giulio.benetti@benettiengineering.com>
+Subject: [PATCH 08/17] ARM: dts: imx51: drop "fsl,imx-ckil"
+Date:   Fri,  3 Dec 2021 01:40:30 +0100
+Message-Id: <20211203004039.48752-9-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211203004039.48752-1-giulio.benetti@benettiengineering.com>
 References: <20211203004039.48752-1-giulio.benetti@benettiengineering.com>
@@ -53,7 +53,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"fsl,imx-osc" is useless since no driver deals with it, so let's drop it.
+"fsl,imx-ckil" is useless since no driver deals with it, so let's drop it.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
@@ -61,17 +61,17 @@ Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/imx51.dtsi b/arch/arm/boot/dts/imx51.dtsi
-index 01cfcbe5928e..ccabccf32786 100644
+index ccabccf32786..5ad15e889c40 100644
 --- a/arch/arm/boot/dts/imx51.dtsi
 +++ b/arch/arm/boot/dts/imx51.dtsi
-@@ -66,7 +66,7 @@ ckih2 {
- 		};
+@@ -48,7 +48,7 @@ tzic: tz-interrupt-controller@e0000000 {
  
- 		osc {
--			compatible = "fsl,imx-osc", "fixed-clock";
+ 	clocks {
+ 		ckil {
+-			compatible = "fsl,imx-ckil", "fixed-clock";
 +			compatible = "fixed-clock";
  			#clock-cells = <0>;
- 			clock-frequency = <24000000>;
+ 			clock-frequency = <32768>;
  		};
 -- 
 2.25.1

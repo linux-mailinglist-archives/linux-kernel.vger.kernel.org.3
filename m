@@ -2,287 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C53FD467771
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A703467774
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380829AbhLCMgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 07:36:02 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:59363 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232849AbhLCMgB (ORCPT
+        id S1380845AbhLCMgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 07:36:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380831AbhLCMgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 07:36:01 -0500
-Received: from fsav313.sakura.ne.jp (fsav313.sakura.ne.jp [153.120.85.144])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 1B3CWL5T024359;
-        Fri, 3 Dec 2021 21:32:21 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav313.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav313.sakura.ne.jp);
- Fri, 03 Dec 2021 21:32:21 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav313.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 1B3CWK8G024353
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 3 Dec 2021 21:32:21 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Message-ID: <5d055fbd-e94a-fe54-d3e0-982dc455ed1a@i-love.sakura.ne.jp>
-Date:   Fri, 3 Dec 2021 21:32:21 +0900
+        Fri, 3 Dec 2021 07:36:03 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46493C06174A
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 04:32:39 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id u16so2568457qvk.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 04:32:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tpGZcD4nIKwqnuNHKHO0TBkz7hc0UrH6GNojNQbNLKw=;
+        b=CEcz3jokK+2gamU86FUd732G6aGQSldWSgIYDAb1++eUEokprXH6vVcds+LEIFOvpw
+         CGcL58iMsLJPtV1sYdGQNrjx76UbdkL8wS6Nr8TKdrBLSU3WmoH4r7TEhESoXa3cjl8I
+         kl6yD/ihDzek+MCP6SP2DDP1Y2qbPZEIMFvEVe2a7KTHLELSuZr7ex+owANFJdyUNTj3
+         XUPwdZZNgBlEk/tE3YhZQQM8vyJMQPV7Cewrx4SQ89iL7flVKLssOKgLB0rEeGv+A17u
+         nsZueDRq8rbCD9tdeBuIThzS5LD3OWlinDAWsIjJIFkYFOB8NKl/Dh2MbBe41kfsYLrT
+         DOKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tpGZcD4nIKwqnuNHKHO0TBkz7hc0UrH6GNojNQbNLKw=;
+        b=h8ziCQ5f6rBR7FtCk3MHUgHKTpTT0q5kpLQkP5y6t960p+FUJlaxmlTRM2Y3xLNEZ3
+         gern1Yhyo9DEI887LpBl3BVUXuvKSOlznxTC1JX6ZHtdkKh41U8EyGHgHyRUoeg2mWpx
+         AfdVlPRYT7hLsrl/X48nTOwvjI93GmRGYs4UTWgGqWl/aYdcwDl7poG6rLM9E2tlzYoK
+         WGB1CBeL6dWTynDwST//B6HrYsXFp8VNAJ+roMNHQbtqWSdgarSJrgmuspio9H2alyq8
+         i+fCsbke+Y6HWs9AnhhXwNfxSMpFYUIoAC+/yJtaFz+OEWhKo8hSCfLktCX8jKbj67F3
+         tHjw==
+X-Gm-Message-State: AOAM533IfJGPMY9GH6YK+z6Up9nNPIbBcsOnyrLRPHGDXD3Nx6vG62G0
+        lksYIvjvddF8/uFosDevZJVMTA==
+X-Google-Smtp-Source: ABdhPJzaCgHrIbHSQbI0Sq3nOtRXTwg7hBaKyrlCC9ErC+zf+wgn72iYAl0CHvgkGMkfZn4Bi4B5jQ==
+X-Received: by 2002:a05:6214:4007:: with SMTP id kd7mr18672354qvb.52.1638534758304;
+        Fri, 03 Dec 2021 04:32:38 -0800 (PST)
+Received: from ?IPV6:2804:431:c7cb:30f8:f5d6:4b6d:fe6a:d565? ([2804:431:c7cb:30f8:f5d6:4b6d:fe6a:d565])
+        by smtp.gmail.com with ESMTPSA id h22sm2258645qtb.86.2021.12.03.04.32.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 04:32:37 -0800 (PST)
+Message-ID: <0864bd62-7a93-106d-8a36-23dd72a7ab58@linaro.org>
+Date:   Fri, 3 Dec 2021 09:32:34 -0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.2
-Subject: Re: [PATCH] tty: vt: make do_con_write() no-op if IRQ is disabled
+Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
 Content-Language: en-US
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Hurley <peter@hurleysoftware.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20211116144937.19035-1-fmdefrancesco@gmail.com>
- <86452127-70e8-c0cf-de18-6f98e77849a6@i-love.sakura.ne.jp>
- <CAHk-=wiXNJ86W=gwAHH1qd+cE9dmfk_dEKFmNa89XH19NhPNkg@mail.gmail.com>
- <3017492.JFOoIcAZ2s@localhost.localdomain>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-In-Reply-To: <3017492.JFOoIcAZ2s@localhost.localdomain>
+To:     Zack Weinberg <zack@owlfolio.org>, Rich Felker <dalias@libc.org>
+Cc:     linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        libc-alpha@sourceware.org, linux-kernel@vger.kernel.org,
+        ltp@lists.linux.it
+References: <YZvIlz7J6vOEY+Xu@yuki>
+ <c5993ee9-1b5d-4469-9c0e-8d4e0fbd575a@www.fastmail.com>
+ <20211202153422.GH7074@brightrain.aerifal.cx>
+ <20211202232954.GI7074@brightrain.aerifal.cx>
+ <855a47d1-a89c-bbc8-7ddd-b89104c6138a@linaro.org>
+ <9d24f699-386a-4881-b09a-ebd747310187@www.fastmail.com>
+From:   Adhemerval Zanella <adhemerval.zanella@linaro.org>
+In-Reply-To: <9d24f699-386a-4881-b09a-ebd747310187@www.fastmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/03 20:00, Fabio M. De Francesco wrote:
-> On Thursday, December 2, 2021 7:35:16 PM CET Linus Torvalds wrote:
->> On Thu, Dec 2, 2021 at 7:41 AM Tetsuo Handa
->> <penguin-kernel@i-love.sakura.ne.jp> wrote:
+
+
+On 02/12/2021 21:10, Zack Weinberg wrote:
+> On Thu, Dec 2, 2021, at 6:43 PM, Adhemerval Zanella via Libc-alpha wrote:
+>> On 02/12/2021 20:29, Rich Felker wrote:
+>>> On Thu, Dec 02, 2021 at 10:34:23AM -0500, Rich Felker wrote:
+>>>> On Mon, Nov 22, 2021 at 10:19:59PM +0000, Zack Weinberg via Libc-alpha wrote:
+>>>>> On Mon, Nov 22, 2021, at 4:43 PM, Cyril Hrubis wrote:
+>>>>>> This changes the __u64 and __s64 in userspace on 64bit platforms from
+>>>>>> long long (unsigned) int to just long (unsigned) int in order to match
+>>>>>> the uint64_t and int64_t size in userspace.
+>>>>> ....
+>>>>>> +
+>>>>>> +#include <asm/bitsperlong.h>
+>>>>>> +
+>>>>>>  /*
+>>>>>> - * int-ll64 is used everywhere now.
+>>>>>> + * int-ll64 is used everywhere in kernel now.
+>>>>>>   */
+>>>>>> -#include <asm-generic/int-ll64.h>
+>>>>>> +#if __BITS_PER_LONG == 64 && !defined(__KERNEL__)
+>>>>>> +# include <asm-generic/int-l64.h>
+>>>>>> +#else
+>>>>>> +# include <asm-generic/int-ll64.h>
+>>>>>> +#endif
+>>>>>
+>>>>> I am all for matching __uN / __sN to uintN_t / intN_t in userspace, but may I suggest the technically simpler and guaranteed-to-be-accurate
+>>>>>
+>>>>>  /*
+>>>>> - * int-ll64 is used everywhere now.
+>>>>> + * int-ll64 is used everywhere in kernel now.
+>>>>> + * In user space match <stdint.h>.
+>>>>>   */
+>>>>> +#ifdef __KERNEL__
+>>>>>  # include <asm-generic/int-ll64.h>
+>>>>> +#elif __has_include (<bits/types.h>)
+>>>>> +# include <bits/types.h>
+>>>>> +typedef __int8_t __s8;
+>>>>> +typedef __uint8_t __u8;
+>>>>> +typedef __int16_t __s16;
+>>>>> +typedef __uint16_t __u16;
+>>>>> +typedef __int32_t __s32;
+>>>>> +typedef __uint32_t __u32;
+>>>>> +typedef __int64_t __s64;
+>>>>> +typedef __uint64_t __u64;
+>>>>> +#else
+>>>>> +# include <stdint.h>
+>>>>> +typedef int8_t __s8;
+>>>>> +typedef uint8_t __u8;
+>>>>> +typedef int16_t __s16;
+>>>>> +typedef uint16_t __u16;
+>>>>> +typedef int32_t __s32;
+>>>>> +typedef uint32_t __u32;
+>>>>> +typedef int64_t __s64;
+>>>>> +typedef uint64_t __u64;
+>>>>> +#endif
+>>>>>
+>>>>> The middle clause could be dropped if we are okay with all uapi
+>>>>> headers potentially exposing the non-implementation-namespace names
+>>>>> defined by <stdint.h>. I do not know what the musl libc equivalent
+>>>>> of <bits/types.h> is.
+>>>>
+>>>> We (musl) don't have an equivalent header or __-prefixed versions of
+>>>> these types.
+>>>>
+>>>> FWIW I don't think stdint.h exposes anything that would be problematic
+>>>> alongside arbitrary use of kernel headers.
 >>>
->>>> Looking at the backtrace, I see
->>>>
->>>>    n_hdlc_send_frames+0x24b/0x490 drivers/tty/n_hdlc.c:290
->>>>    tty_wakeup+0xe1/0x120 drivers/tty/tty_io.c:534
->>>>    __start_tty drivers/tty/tty_io.c:806 [inline]
->>>>    __start_tty+0xfb/0x130 drivers/tty/tty_io.c:799
->>>>
->>>> and apparently it's that hdlc line discipline (and
->>>> n_hdlc_send_frames() in particular) that is the problem here.
->>>>
->>>> I think that's where the fix should be.
+>>> Also, per glibc's bits/types.h:
 >>>
->>> Do you mean that we should change the behavior of n_hdlc_send_frames()
->>> rather than trying to make __start_tty() schedulable again?
+>>> /*
+>>>  * Never include this file directly; use <sys/types.h> instead.
+>>>  */
+>>>
+>>> it's not permitted (not supported usage) to #include <bits/types.h>.
+>>> So I think the above patch is wrong for glibc too. As I understand it,
+>>> this is general policy for bits/* -- they're only intended to work as
+>>> included by the libc system headers, not directly by something else.
 >>
->> I wouldn't change n_hdlc_send_frames() itself. It does what it says it does.
->>
->> But n_hdlc_tty_wakeup() probably shouldn't call it directly. Other tty
->> line disciplines don't do that kind of thing - although I only looked
->> at a couple. They all seem to just set bits and prepare things. Like a
->> wakeup function should do.
->>
->> So I think n_hdlc_tty_wakeup() should perhaps only do a
->> "schedule_work()" or similar to get that n_hdlc_send_frames() started,
->> rather than doing it itself.
->>
->> Example: net/nfc/nci/uart.c. It does that
->>
->>         schedule_work(&nu->write_work);
->>
->> instead of actually trying to do a write from a wakeup routine
->> (similar examples in ppp - "tasklet_schedule(&ap->tsk)" etc).
->>
->> I mean, it's called "wakeup", not "write". So I think the fundamental
->> confusion here is in hdlc, not the tty layer.
->>
->>               Linus
->>
-
-OK.
-
-> This is what I understand from the above argument: do a schedule_work() to get 
-> that n_hdlc_send_frames() started; in this way, n_hdlc_tty_wakeup() can
-> return to the caller and n_hdlc_send_frames() is executed asynchronously 
-> (i.e., no longer in an atomic context). 
-
-Yes. If we copy how net/nfc/nci/uart.c does, the fix would look like:
-
---------------------
- drivers/tty/n_hdlc.c | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/tty/n_hdlc.c b/drivers/tty/n_hdlc.c
-index 7e0884ecc74f..a71fcac60925 100644
---- a/drivers/tty/n_hdlc.c
-+++ b/drivers/tty/n_hdlc.c
-@@ -140,6 +140,8 @@ struct n_hdlc {
- 	struct n_hdlc_buf_list	rx_buf_list;
- 	struct n_hdlc_buf_list	tx_free_buf_list;
- 	struct n_hdlc_buf_list	rx_free_buf_list;
-+	struct work_struct	write_work;
-+	struct tty_struct	*tty_for_write_work;
- };
- 
- /*
-@@ -210,6 +212,8 @@ static void n_hdlc_tty_close(struct tty_struct *tty)
- 	wake_up_interruptible(&tty->read_wait);
- 	wake_up_interruptible(&tty->write_wait);
- 
-+	cancel_work_sync(&n_hdlc->write_work);
-+
- 	n_hdlc_free_buf_list(&n_hdlc->rx_free_buf_list);
- 	n_hdlc_free_buf_list(&n_hdlc->tx_free_buf_list);
- 	n_hdlc_free_buf_list(&n_hdlc->rx_buf_list);
-@@ -334,6 +338,20 @@ static void n_hdlc_send_frames(struct n_hdlc *n_hdlc, struct tty_struct *tty)
- 		goto check_again;
- }	/* end of n_hdlc_send_frames() */
- 
-+/**
-+ * n_hdlc_tty_write_work - Asynchronous callback for transmit wakeup
-+ * @work: pointer to work_struct
-+ *
-+ * Called when low level device driver can accept more send data.
-+ */
-+static void n_hdlc_tty_write_work(struct work_struct *work)
-+{
-+	struct n_hdlc *n_hdlc = container_of(work, struct n_hdlc, write_work);
-+	struct tty_struct *tty = n_hdlc->tty_for_write_work;
-+
-+	n_hdlc_send_frames(n_hdlc, tty);
-+}	/* end of n_hdlc_tty_write_work() */
-+
- /**
-  * n_hdlc_tty_wakeup - Callback for transmit wakeup
-  * @tty: pointer to associated tty instance data
-@@ -344,7 +362,8 @@ static void n_hdlc_tty_wakeup(struct tty_struct *tty)
- {
- 	struct n_hdlc *n_hdlc = tty->disc_data;
- 
--	n_hdlc_send_frames(n_hdlc, tty);
-+	n_hdlc->tty_for_write_work = tty;
-+	schedule_work(&n_hdlc->write_work);
- }	/* end of n_hdlc_tty_wakeup() */
- 
- /**
-@@ -706,6 +725,7 @@ static struct n_hdlc *n_hdlc_alloc(void)
- 	if (!n_hdlc)
- 		return NULL;
- 
-+	INIT_WORK(&n_hdlc->write_work, n_hdlc_tty_write_work);
- 	spin_lock_init(&n_hdlc->rx_free_buf_list.spinlock);
- 	spin_lock_init(&n_hdlc->tx_free_buf_list.spinlock);
- 	spin_lock_init(&n_hdlc->rx_buf_list.spinlock);
---------------------
-
+>> You are right, the idea is to allow glibc to create and remove internal headers.
 > 
-> I hope that I'm not missing something. If the above summary is correct, 
-> please forgive a newbie for the following questions... 
-> 
-> Commit f9e053dcfc02 ("tty: Serialize tty flow control changes with flow_lock") 
-> has introduced spinlocks to serialize flow control changes and avoid the 
-> concurrent executions of __start_tty() and __stop_tty().
-> 
-> This is an excerpt from the above-mentioned commit:
-> 
-> ->
->     Introduce tty->flow_lock spinlock to serialize tty flow control changes.
->     Split out unlocked __start_tty()/__stop_tty() flavors for use by
->     ioctl(TCXONC) in follow-on patch.
-> <-
-> 
-> This is the reason why we are dealing with this bug. Currently we have __start_tty() 
-> called with an acquired spinlock and IRQs disabled and the calls chain leads to 
-> console_lock() while in atomic context.
+> As a general rule yes, but we could make a deal that some specific bits headers are permanent API for use by things like this. They probably should be less of a dumping ground than bits/types.h though.
 
-If we hit a race window described in that commit
-
-    CPU 0                          | CPU 1
-    stop_tty()                     |
-      lock ctrl_lock               |
-      tty->stopped = 1             |
-      unlock ctrl_lock             |
-                                   | start_tty()
-                                   |   lock ctrl_lock
-                                   |   tty->stopped = 0
-                                   |   unlock ctrl_lock
-                                   |   driver->start()
-      driver->stop()               |
-
-    In this case, the flow control state now indicates the tty has
-    been started, but the actual hardware state has actually been stopped.
-
-, the tty->stopped flag remains 0 despite driver->stop() is called after
-driver->start() finished. tty->stopped (the flow control state) says "not stopped"
-but the actual hardware state is "stopped".
-
-> 
-> In summation, my questions are... 
-> 
-> 1) Why do we still need to protect __start_tty() and __stop_tty() with spin_lock_irq() 
-> if the solution to the bug is to execute n_hdlc_send_frames() asynchronously?
-
-Without serialization, tty->stopped flag and the actual hardware state can mismatch.
-
-> 
-> 2) If it is true that we need to avoid concurrent executions of __start_tty() and 
-> __stop_tty(), can we just use a Mutex in the IOCTL's helper?
-
-Yes if all __start_tty() and __stop_tty() callers were schedulable context.
-But stop_tty() says that stop_tty() might be called from atomic context.
-Thus, we can't use a mutex for protecting tty->stopped flag.
-
-> 
-> Thanks,
-> 
-> Fabio M. De Francesco
-
-By the way, even with above patch, I think
-
-    CPU 0                  | CPU 1                  |  CPU 2
-    stop_tty()             |                        |
-      lock flow.lock       |                        |
-      tty->stopped = 1     |                        |
-      driver->stop()       |                        |
-      unlock flow.lock     |                        |
-                           | start_tty()            |
-                           |   lock flow.lock       |
-                           |   tty->stopped = 0     |
-                           |   driver->start() => Schedules n_hdlc_send_frames()
-                           |   unlock flow.lock     |
-    stop_tty()             |                        |
-      lock flow.lock       |                        |
-      tty->stopped = 1     |                        |
-      driver->stop()       |                        |
-      unlock flow.lock     |                        |
-                           |                        | Starts n_hdlc_send_frames()
-
-(that is, the n_hdlc is writing to consoles despite tty->stopped is 1) can happen
-until n_hdlc_send_frames() completes.
-
-Then, even scheduling next n_hdlc_send_frames() while previous n_hdlc_send_frames() is
-possible? In the worst case, multiple CPUs can run n_hdlc_send_frames() concurrently?
-
-    CPU 0                  | CPU 1                  |  CPU 2                 | CPU 3
-    stop_tty()             |                        |                        |
-      lock flow.lock       |                        |                        |
-      tty->stopped = 1     |                        |                        |
-      driver->stop()       |                        |                        |
-      unlock flow.lock     |                        |                        |
-                           | start_tty()            |                        |
-                           |   lock flow.lock       |                        |
-                           |   tty->stopped = 0     |                        |
-                           |   driver->start() => Schedules n_hdlc_send_frames()
-                           |   unlock flow.lock     |                        |
-                           |                        | Starts n_hdlc_send_frames()
-    stop_tty()             |                        |                        |
-      lock flow.lock       |                        |                        |
-      tty->stopped = 1     |                        |                        |
-      driver->stop()       |                        |                        |
-      unlock flow.lock     |                        |                        |
-                           | start_tty()            |                        |
-                           |   lock flow.lock       |                        |
-                           |   tty->stopped = 0     |                        |
-                           |   driver->start() => Schedules n_hdlc_send_frames()
-                           |   unlock flow.lock     |                        |
-                           |                        |                        | Starts n_hdlc_send_frames()
-
-Ah, OK. n_hdlc->tbusy is there for serialization.
+I really don't think adding such constraints really would improve the project
+in long term, we already have issues about the need to support some internal
+symbols that were exported by accident.
 

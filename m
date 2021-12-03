@@ -2,162 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A703467774
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C70467787
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:38:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380845AbhLCMgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 07:36:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
+        id S1380856AbhLCMlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 07:41:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380831AbhLCMgD (ORCPT
+        with ESMTP id S1380865AbhLCMlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 07:36:03 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46493C06174A
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 04:32:39 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id u16so2568457qvk.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 04:32:39 -0800 (PST)
+        Fri, 3 Dec 2021 07:41:12 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B474C06174A;
+        Fri,  3 Dec 2021 04:37:48 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id z7so6132191lfi.11;
+        Fri, 03 Dec 2021 04:37:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tpGZcD4nIKwqnuNHKHO0TBkz7hc0UrH6GNojNQbNLKw=;
-        b=CEcz3jokK+2gamU86FUd732G6aGQSldWSgIYDAb1++eUEokprXH6vVcds+LEIFOvpw
-         CGcL58iMsLJPtV1sYdGQNrjx76UbdkL8wS6Nr8TKdrBLSU3WmoH4r7TEhESoXa3cjl8I
-         kl6yD/ihDzek+MCP6SP2DDP1Y2qbPZEIMFvEVe2a7KTHLELSuZr7ex+owANFJdyUNTj3
-         XUPwdZZNgBlEk/tE3YhZQQM8vyJMQPV7Cewrx4SQ89iL7flVKLssOKgLB0rEeGv+A17u
-         nsZueDRq8rbCD9tdeBuIThzS5LD3OWlinDAWsIjJIFkYFOB8NKl/Dh2MbBe41kfsYLrT
-         DOKw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=fizL/hy9yXJ6JRH7+VgywLalW2LftVVfT2yuS4CxqNU=;
+        b=Y93nYHfixS2aqgzp9oqGpRkvTO+vKZ4sA0hcu5TPnaZI5RnNWEwu0TRtjRSiTp3N43
+         y3sybZOyU0c4RuLFBYOtIVujQ6q+g1AarOxI/e2E99DFUmFyYTruPj9ZO+/50q7As89+
+         /chQdxlA2myIMM5/fKQEoH9dwsiZGeI8lNSQmQ9d8dPA0EQW2qU+6mtZ29UpnT0NUId3
+         Qop+XVlzktCSRe7/V/vkIQrH2oGm7gK/EzdWJLr1vkd0630LfzxPDK+IIgFCCuFeHmGh
+         r75Qpk9fZkv9OSU5R5w83y/9JJ71ZLkp222biZtVlUaxHlWdIJBUX33pMA+A8wWFU68d
+         dVag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tpGZcD4nIKwqnuNHKHO0TBkz7hc0UrH6GNojNQbNLKw=;
-        b=h8ziCQ5f6rBR7FtCk3MHUgHKTpTT0q5kpLQkP5y6t960p+FUJlaxmlTRM2Y3xLNEZ3
-         gern1Yhyo9DEI887LpBl3BVUXuvKSOlznxTC1JX6ZHtdkKh41U8EyGHgHyRUoeg2mWpx
-         AfdVlPRYT7hLsrl/X48nTOwvjI93GmRGYs4UTWgGqWl/aYdcwDl7poG6rLM9E2tlzYoK
-         WGB1CBeL6dWTynDwST//B6HrYsXFp8VNAJ+roMNHQbtqWSdgarSJrgmuspio9H2alyq8
-         i+fCsbke+Y6HWs9AnhhXwNfxSMpFYUIoAC+/yJtaFz+OEWhKo8hSCfLktCX8jKbj67F3
-         tHjw==
-X-Gm-Message-State: AOAM533IfJGPMY9GH6YK+z6Up9nNPIbBcsOnyrLRPHGDXD3Nx6vG62G0
-        lksYIvjvddF8/uFosDevZJVMTA==
-X-Google-Smtp-Source: ABdhPJzaCgHrIbHSQbI0Sq3nOtRXTwg7hBaKyrlCC9ErC+zf+wgn72iYAl0CHvgkGMkfZn4Bi4B5jQ==
-X-Received: by 2002:a05:6214:4007:: with SMTP id kd7mr18672354qvb.52.1638534758304;
-        Fri, 03 Dec 2021 04:32:38 -0800 (PST)
-Received: from ?IPV6:2804:431:c7cb:30f8:f5d6:4b6d:fe6a:d565? ([2804:431:c7cb:30f8:f5d6:4b6d:fe6a:d565])
-        by smtp.gmail.com with ESMTPSA id h22sm2258645qtb.86.2021.12.03.04.32.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 04:32:37 -0800 (PST)
-Message-ID: <0864bd62-7a93-106d-8a36-23dd72a7ab58@linaro.org>
-Date:   Fri, 3 Dec 2021 09:32:34 -0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=fizL/hy9yXJ6JRH7+VgywLalW2LftVVfT2yuS4CxqNU=;
+        b=t+OpioMpH41QbfCgWD8u/HKanCdn/2MIA3p+xrdUvW5I7Q8oJyvCiFXjXb5AfesG05
+         pJAcFXqZg6mqYXzEExPq1UJ0TGIAfToAddlnvlBjDgqqTFL9lqFLF1lKqhPpg1p1+jPs
+         6Pd+yhZi0CQ/VYCO+tXDa3HOH+bANjyjBp9MrRN7OUNV1ewRrIMGio+g/Tf/DOLhwvZI
+         PB+GhIJDphjDaZuqpn22hXaBmGCS40LHmkeDf++fadbQKEB4Lm1ZThRAFZJ+fNZzwfdf
+         93vctzbJugGNMwieJwQLlTtopgl6ADzfUyuFqLQOLHMQLJ6VTD3Ic7AM4RVNV0G0Poph
+         VaaQ==
+X-Gm-Message-State: AOAM532FWI3m8L0zTJL68FR4P82iJShc4BvBSZPUsfGp4aakTo8ZZ/Xy
+        YlOGA7uionkxZvxLUPkxwMpi7ZUDbMOHbZGVIF8=
+X-Google-Smtp-Source: ABdhPJzUKtVqoTURMIvGt/wtjNsdrTX42pOkbo6NYV/K+6YXQkmbh3wUuinmxAvR0u4XkEaN1KbnoPgiV3eCzhKThp4=
+X-Received: by 2002:a05:6512:3a93:: with SMTP id q19mr17615388lfu.105.1638535066362;
+ Fri, 03 Dec 2021 04:37:46 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Content-Language: en-US
-To:     Zack Weinberg <zack@owlfolio.org>, Rich Felker <dalias@libc.org>
-Cc:     linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        libc-alpha@sourceware.org, linux-kernel@vger.kernel.org,
-        ltp@lists.linux.it
-References: <YZvIlz7J6vOEY+Xu@yuki>
- <c5993ee9-1b5d-4469-9c0e-8d4e0fbd575a@www.fastmail.com>
- <20211202153422.GH7074@brightrain.aerifal.cx>
- <20211202232954.GI7074@brightrain.aerifal.cx>
- <855a47d1-a89c-bbc8-7ddd-b89104c6138a@linaro.org>
- <9d24f699-386a-4881-b09a-ebd747310187@www.fastmail.com>
-From:   Adhemerval Zanella <adhemerval.zanella@linaro.org>
-In-Reply-To: <9d24f699-386a-4881-b09a-ebd747310187@www.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20211025093418.20545-1-kevin3.tang@gmail.com> <20211025093418.20545-7-kevin3.tang@gmail.com>
+ <20211203103841.vkl3sjsbaohsviou@houat>
+In-Reply-To: <20211203103841.vkl3sjsbaohsviou@houat>
+From:   Kevin Tang <kevin3.tang@gmail.com>
+Date:   Fri, 3 Dec 2021 20:34:50 +0800
+Message-ID: <CAFPSGXbWv94vShNAQ9xfkDZRKgZTdjRzH9i60ak1NYaPW-OKgA@mail.gmail.com>
+Subject: Re: [PATCH v7 6/6] drm/sprd: add Unisoc's drm mipi dsi&dphy driver
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     maarten.lankhorst@linux.intel.com, sean@poorly.run,
+        airlied@linux.ie, daniel@ffwll.ch, robh+dt@kernel.org,
+        mark.rutland@arm.com, pony1.wu@gmail.com, orsonzhai@gmail.com,
+        zhang.lyra@gmail.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Maxime Ripard <maxime@cerno.tech> =E4=BA=8E2021=E5=B9=B412=E6=9C=883=E6=97=
+=A5=E5=91=A8=E4=BA=94 18:38=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Mon, Oct 25, 2021 at 05:34:18PM +0800, Kevin Tang wrote:
+> > @@ -618,9 +619,25 @@ static void sprd_crtc_mode_set_nofb(struct drm_crt=
+c *crtc)
+> >  {
+> >       struct sprd_dpu *dpu =3D to_sprd_crtc(crtc);
+> >       struct drm_display_mode *mode =3D &crtc->state->adjusted_mode;
+> > +     struct drm_encoder *encoder;
+> > +     struct mipi_dsi_device *slave;
+> > +     struct sprd_dsi *dsi;
+> >
+> >       drm_display_mode_to_videomode(mode, &dpu->ctx.vm);
+> >
+> > +     drm_for_each_encoder(encoder, crtc->dev) {
+> > +             if (encoder->crtc !=3D crtc)
+> > +                     continue;
+>
+> encoder->crtc is deprecated. You should be using
+> encoder->drm_for_each_encoder_mask, using the encoder_mask in
+> encoder->drm_crtc_state.
 
+Use drm_for_each_encoder_mask to replace drm_for_each_encoder? like this:
+drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask) {
+    dsi =3D encoder_to_dsi(encoder);
+    slave =3D dsi->slave;
 
-On 02/12/2021 21:10, Zack Weinberg wrote:
-> On Thu, Dec 2, 2021, at 6:43 PM, Adhemerval Zanella via Libc-alpha wrote:
->> On 02/12/2021 20:29, Rich Felker wrote:
->>> On Thu, Dec 02, 2021 at 10:34:23AM -0500, Rich Felker wrote:
->>>> On Mon, Nov 22, 2021 at 10:19:59PM +0000, Zack Weinberg via Libc-alpha wrote:
->>>>> On Mon, Nov 22, 2021, at 4:43 PM, Cyril Hrubis wrote:
->>>>>> This changes the __u64 and __s64 in userspace on 64bit platforms from
->>>>>> long long (unsigned) int to just long (unsigned) int in order to match
->>>>>> the uint64_t and int64_t size in userspace.
->>>>> ....
->>>>>> +
->>>>>> +#include <asm/bitsperlong.h>
->>>>>> +
->>>>>>  /*
->>>>>> - * int-ll64 is used everywhere now.
->>>>>> + * int-ll64 is used everywhere in kernel now.
->>>>>>   */
->>>>>> -#include <asm-generic/int-ll64.h>
->>>>>> +#if __BITS_PER_LONG == 64 && !defined(__KERNEL__)
->>>>>> +# include <asm-generic/int-l64.h>
->>>>>> +#else
->>>>>> +# include <asm-generic/int-ll64.h>
->>>>>> +#endif
->>>>>
->>>>> I am all for matching __uN / __sN to uintN_t / intN_t in userspace, but may I suggest the technically simpler and guaranteed-to-be-accurate
->>>>>
->>>>>  /*
->>>>> - * int-ll64 is used everywhere now.
->>>>> + * int-ll64 is used everywhere in kernel now.
->>>>> + * In user space match <stdint.h>.
->>>>>   */
->>>>> +#ifdef __KERNEL__
->>>>>  # include <asm-generic/int-ll64.h>
->>>>> +#elif __has_include (<bits/types.h>)
->>>>> +# include <bits/types.h>
->>>>> +typedef __int8_t __s8;
->>>>> +typedef __uint8_t __u8;
->>>>> +typedef __int16_t __s16;
->>>>> +typedef __uint16_t __u16;
->>>>> +typedef __int32_t __s32;
->>>>> +typedef __uint32_t __u32;
->>>>> +typedef __int64_t __s64;
->>>>> +typedef __uint64_t __u64;
->>>>> +#else
->>>>> +# include <stdint.h>
->>>>> +typedef int8_t __s8;
->>>>> +typedef uint8_t __u8;
->>>>> +typedef int16_t __s16;
->>>>> +typedef uint16_t __u16;
->>>>> +typedef int32_t __s32;
->>>>> +typedef uint32_t __u32;
->>>>> +typedef int64_t __s64;
->>>>> +typedef uint64_t __u64;
->>>>> +#endif
->>>>>
->>>>> The middle clause could be dropped if we are okay with all uapi
->>>>> headers potentially exposing the non-implementation-namespace names
->>>>> defined by <stdint.h>. I do not know what the musl libc equivalent
->>>>> of <bits/types.h> is.
->>>>
->>>> We (musl) don't have an equivalent header or __-prefixed versions of
->>>> these types.
->>>>
->>>> FWIW I don't think stdint.h exposes anything that would be problematic
->>>> alongside arbitrary use of kernel headers.
->>>
->>> Also, per glibc's bits/types.h:
->>>
->>> /*
->>>  * Never include this file directly; use <sys/types.h> instead.
->>>  */
->>>
->>> it's not permitted (not supported usage) to #include <bits/types.h>.
->>> So I think the above patch is wrong for glibc too. As I understand it,
->>> this is general policy for bits/* -- they're only intended to work as
->>> included by the libc system headers, not directly by something else.
->>
->> You are right, the idea is to allow glibc to create and remove internal headers.
-> 
-> As a general rule yes, but we could make a deal that some specific bits headers are permanent API for use by things like this. They probably should be less of a dumping ground than bits/types.h though.
+    if (slave->mode_flags & MIPI_DSI_MODE_VIDEO)
+        dpu->ctx.if_type =3D SPRD_DPU_IF_DPI;
+    else
+         dpu->ctx.if_type =3D SPRD_DPU_IF_EDPI;
+}
 
-I really don't think adding such constraints really would improve the project
-in long term, we already have issues about the need to support some internal
-symbols that were exported by accident.
-
+>
+> > +static int sprd_dsi_probe(struct platform_device *pdev)
+> > +{
+> > +     struct device *dev =3D &pdev->dev;
+> > +     struct sprd_dsi *dsi;
+> > +
+> > +     dsi =3D devm_kzalloc(dev, sizeof(*dsi), GFP_KERNEL);
+> > +     if (!dsi)
+> > +             return -ENOMEM;
+> > +
+> > +     dev_set_drvdata(dev, dsi);
+> > +
+> > +     dsi->host.ops =3D &sprd_dsi_host_ops;
+> > +     dsi->host.dev =3D dev;
+> > +     mipi_dsi_host_register(&dsi->host);
+> > +
+> > +     return component_add(&pdev->dev, &dsi_component_ops);
+>
+> component_add must be run in the mipi_dsi_host.attach hook.
+Got it, will be fixed on patch v8.
+>
+> Maxime

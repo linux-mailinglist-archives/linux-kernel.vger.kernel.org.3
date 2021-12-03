@@ -2,113 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E3E46764D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE99467653
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:26:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242555AbhLCL3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 06:29:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242314AbhLCL32 (ORCPT
+        id S229639AbhLCLaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 06:30:17 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:55748 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243778AbhLCL3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 06:29:28 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA824C06173E;
-        Fri,  3 Dec 2021 03:26:04 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so4920700pja.1;
-        Fri, 03 Dec 2021 03:26:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Df2I2A2zVcIhvBHXD5z9iabD7nB5LthE/+eMaX0CJns=;
-        b=LrhVabQro3+RJTAF2UUwo++Q3tHVPc9KkdjTXgZj5009TrrrQoEZbScehBEamrCUSN
-         uAuPgOUZCbn39oord0X3XW7U/XIJ2WzNu0xdbBsMDjNH8DRAcaKxm/RnUdXTK7TPH9GB
-         /3QVEkipv/oDwHi2iskl2LfbgoDlNjPpNEnAH9c0t4ds6OIO4vgwzDl9tD4vqPr3Jj1i
-         soeN//lG51eXYc9/8Noh0CxgiHul5HzjoLY8pcB7lUlMXYr1yF0iF5iR8ZnAimEr0fEF
-         u9pUnIeyp3+uCAIcJI0WC45iQsDzZ7vfXZh4Mm9tVdhmXvGp7nCrb22wqTAz0TVn9HBO
-         JiOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Df2I2A2zVcIhvBHXD5z9iabD7nB5LthE/+eMaX0CJns=;
-        b=E8sotDUvNz5HdcrH5IfA/iK7LvYJgg4RelVWrRLHVizWFSn6hFgkgEsenDUzTKeLrA
-         Q+h+N1mYrB4xEWlmyrB0uaJzqjnis9D8EP9nBoLskUzEheAPiqgbPITWDF7x2vJdhcDf
-         NOo5uVxEB8EFXXg39S9SI1ncNlWE3jXW7nWxdUBApY93HkAH+pW+/208VhKRDBm6O6bt
-         g3x2wKYiOCWwog+1Vxa6Jndci62ccXZpdX+QRu9netfxemp4Y0bJI1IJ8Xv40BeafVnL
-         qg9q0pBH8BiLz+X6qKpNoc1NuQ31iZO8FW0piEUxmXpmOGJ/OO31krkMCF2YeZRXJLO1
-         5qFg==
-X-Gm-Message-State: AOAM530kmE34KKke+ux6Vu+DB64YRdpMEiEZfMFXjH+7nD2Th4oF16aC
-        8Bkj52vCbo0njkL9R0TL8XY=
-X-Google-Smtp-Source: ABdhPJzPvoKIz31xLOmSdpnjjIrMa2J9GjBdJxPwkC+KmRLj7Ds+PG6GrIFi6sWFBo0epAEx6rdfGQ==
-X-Received: by 2002:a17:90b:190f:: with SMTP id mp15mr13348018pjb.210.1638530764387;
-        Fri, 03 Dec 2021 03:26:04 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::50b? ([2404:f801:9000:1a:efea::50b])
-        by smtp.gmail.com with ESMTPSA id mp12sm5062949pjb.39.2021.12.03.03.25.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 03:26:04 -0800 (PST)
-Message-ID: <4006e942-b6bf-ac21-c56b-4719e514dbd2@gmail.com>
-Date:   Fri, 3 Dec 2021 19:25:52 +0800
+        Fri, 3 Dec 2021 06:29:44 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B3BQEjh116115;
+        Fri, 3 Dec 2021 05:26:14 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1638530774;
+        bh=MLDGzhyWOPSqm2Rn9xtPA1jXg00wCieQBnRv7tftYVk=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=wlG65fTBnLRj+CTKXhlFC0EWu1X9bIz8qr0XJigTQgnprtz76D3fQ0iPMVa4118Ue
+         atJKlq0/NjKphwlP3u60AilWBbsbWKE647De7QKLbg6AjTAF7E/h4L5gycBImZ/zfC
+         xeJa5BPwOb8976RCPoBGEwuxCOs2Bu8DfhVEa+V0=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B3BQEYf030960
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 3 Dec 2021 05:26:14 -0600
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 3
+ Dec 2021 05:26:14 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 3 Dec 2021 05:26:14 -0600
+Received: from [10.250.234.139] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B3BQA2E109248;
+        Fri, 3 Dec 2021 05:26:11 -0600
+Subject: Re: [PATCH] arm64: dts: k3-j7200: Correct the d-cache-sets info
+To:     Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-omap@vger.kernel.org>, Peng Fan <peng.fan@nxp.com>
+References: <20211113024348.29257-1-nm@ti.com>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <e7ce36b5-0b0e-e22c-3074-5a1ba49e1540@ti.com>
+Date:   Fri, 3 Dec 2021 16:56:09 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH V3 3/5] hyperv/IOMMU: Enable swiotlb bounce buffer for
- Isolation VM
+In-Reply-To: <20211113024348.29257-1-nm@ti.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, jgross@suse.com, sstabellini@kernel.org,
-        boris.ostrovsky@oracle.com, joro@8bytes.org, will@kernel.org,
-        davem@davemloft.net, kuba@kernel.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, arnd@arndb.de, hch@infradead.org,
-        m.szyprowski@samsung.com, robin.murphy@arm.com,
-        Tianyu.Lan@microsoft.com, thomas.lendacky@amd.com,
-        xen-devel@lists.xenproject.org, michael.h.kelley@microsoft.com,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
-        hch@lst.de, parri.andrea@gmail.com, dave.hansen@intel.com
-References: <20211201160257.1003912-1-ltykernel@gmail.com>
- <20211201160257.1003912-4-ltykernel@gmail.com>
- <20211202144336.z2sfs6kw5kdsfqgv@liuwe-devbox-debian-v2>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <20211202144336.z2sfs6kw5kdsfqgv@liuwe-devbox-debian-v2>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/2021 10:43 PM, Wei Liu wrote:
-> On Wed, Dec 01, 2021 at 11:02:54AM -0500, Tianyu Lan wrote:
-> [...]
->> diff --git a/arch/x86/xen/pci-swiotlb-xen.c b/arch/x86/xen/pci-swiotlb-xen.c
->> index 46df59aeaa06..30fd0600b008 100644
->> --- a/arch/x86/xen/pci-swiotlb-xen.c
->> +++ b/arch/x86/xen/pci-swiotlb-xen.c
->> @@ -4,6 +4,7 @@
->>   
->>   #include <linux/dma-map-ops.h>
->>   #include <linux/pci.h>
->> +#include <linux/hyperv.h>
->>   #include <xen/swiotlb-xen.h>
->>   
->>   #include <asm/xen/hypervisor.h>
->> @@ -91,6 +92,6 @@ int pci_xen_swiotlb_init_late(void)
->>   EXPORT_SYMBOL_GPL(pci_xen_swiotlb_init_late);
->>   
->>   IOMMU_INIT_FINISH(pci_xen_swiotlb_detect,
->> -		  NULL,
->> +		  hyperv_swiotlb_detect,
-> 
-> It is not immediately obvious why this is needed just by reading the
-> code. Please consider copying some of the text in the commit message to
-> a comment here.
-> 
 
-Thanks for suggestion. Will update.
+
+On 13/11/21 8:13 am, Nishanth Menon wrote:
+> A72 Cluster (chapter 1.3,1 [1]) has 48KB Icache, 32KB Dcache and 1MB L2 Cache
+>  - ICache is 3-way set-associative
+>  - Dcache is 2-way set-associative
+>  - Line size are 64bytes
+> 
+> 32KB (Dcache)/64 (fixed line length of 64 bytes) = 512 ways
+> 512 ways / 2 (Dcache is 2-way per set) = 256 sets.
+> 
+> So, correct the d-cache-sets info.
+> 
+> [1] https://www.ti.com/lit/pdf/spruiu1
+> 
+> Fixes: d361ed88455f ("arm64: dts: ti: Add support for J7200 SoC")
+> Reported-by: Peng Fan <peng.fan@nxp.com>
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+
+Reviewed-by: Kishon Vijay Abraham I <kishon@ti.com>
+> ---
+>  arch/arm64/boot/dts/ti/k3-j7200.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j7200.dtsi b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
+> index 47567cb260c2..958587d3a33d 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j7200.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
+> @@ -62,7 +62,7 @@ cpu0: cpu@0 {
+>  			i-cache-sets = <256>;
+>  			d-cache-size = <0x8000>;
+>  			d-cache-line-size = <64>;
+> -			d-cache-sets = <128>;
+> +			d-cache-sets = <256>;
+>  			next-level-cache = <&L2_0>;
+>  		};
+>  
+> @@ -76,7 +76,7 @@ cpu1: cpu@1 {
+>  			i-cache-sets = <256>;
+>  			d-cache-size = <0x8000>;
+>  			d-cache-line-size = <64>;
+> -			d-cache-sets = <128>;
+> +			d-cache-sets = <256>;
+>  			next-level-cache = <&L2_0>;
+>  		};
+>  	};
+> 

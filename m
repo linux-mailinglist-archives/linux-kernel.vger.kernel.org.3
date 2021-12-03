@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B20284678E6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D8A4678EA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:55:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352491AbhLCN6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 08:58:21 -0500
-Received: from vmicros1.altlinux.org ([194.107.17.57]:49026 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243650AbhLCN6U (ORCPT
+        id S1381192AbhLCN66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 08:58:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45628 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380508AbhLCN65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 08:58:20 -0500
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id C412872C8DC;
-        Fri,  3 Dec 2021 16:54:54 +0300 (MSK)
-Received: from example.org (ip-78-45-37-102.net.upcbroadband.cz [78.45.37.102])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 045C74A46EA;
-        Fri,  3 Dec 2021 16:54:53 +0300 (MSK)
-Date:   Fri, 3 Dec 2021 14:54:53 +0100
-From:   Alexey Gladkov <legion@altlinux.ru>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     kbuild@lists.01.org, Alexey Gladkov <legion@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Containers <containers@lists.linux.dev>, lkp@intel.com,
-        kbuild-all@lists.01.org,
-        "Eric W . Biederman" <ebiederm@xmission.com>
-Subject: Re: [PATCH v1 2/2] ucounts: Move rlimit max values from ucounts max
-Message-ID: <20211203135453.ld2jblkd3xtlbgrv@example.org>
-References: <bcc85eae4f5e3799f9efdf2d73572bb88616ebac.1637934917.git.legion@kernel.org>
- <202111280022.ugxpiKpA-lkp@intel.com>
+        Fri, 3 Dec 2021 08:58:57 -0500
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C13C061757
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 05:55:32 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:3191:9890:620a:6f4])
+        by michel.telenet-ops.be with bizsmtp
+        id RpvT2600E3eLghq06pvTJX; Fri, 03 Dec 2021 14:55:31 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1mt926-002Lev-S6; Fri, 03 Dec 2021 14:55:26 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1mt926-000lV8-AW; Fri, 03 Dec 2021 14:55:26 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        "H . Peter Anvin" <hpa@zytor.com>
+Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH v3 resend] x86: ce4100: Replace "ti,pcf8575" by "nxp,pcf8575"
+Date:   Fri,  3 Dec 2021 14:55:23 +0100
+Message-Id: <0c00cec971f5c405e47d04e493d854de0efc2e49.1638539629.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202111280022.ugxpiKpA-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 04:33:25PM +0300, Dan Carpenter wrote:
-> Hi Alexey,
-> 
-> url:    https://github.com/0day-ci/linux/commits/Alexey-Gladkov/ucounts-Fix-rlimit-max-values-check/20211126-224059
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 136057256686de39cc3a07c2e39ef6bc43003ff6
-> config: i386-randconfig-m021-20211126 (https://download.01.org/0day-ci/archive/20211128/202111280022.ugxpiKpA-lkp@intel.com/config)
-> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> 
-> smatch warnings:
-> kernel/ucount.c:109 setup_userns_sysctls() error: buffer overflow 'ns->ucount_max' 10 <= 13
-> 
-> vim +109 kernel/ucount.c
-> 
-> dbec28460a89aa Eric W. Biederman 2016-07-30   98  bool setup_userns_sysctls(struct user_namespace *ns)
-> dbec28460a89aa Eric W. Biederman 2016-07-30   99  {
-> dbec28460a89aa Eric W. Biederman 2016-07-30  100  #ifdef CONFIG_SYSCTL
-> dbec28460a89aa Eric W. Biederman 2016-07-30  101  	struct ctl_table *tbl;
-> 0f538e3e712a51 Jan Kara          2020-04-07  102  
-> 0f538e3e712a51 Jan Kara          2020-04-07  103  	BUILD_BUG_ON(ARRAY_SIZE(user_table) != UCOUNT_COUNTS + 1);
-> dbec28460a89aa Eric W. Biederman 2016-07-30  104  	setup_sysctl_set(&ns->set, &set_root, set_is_seen);
-> f6b2db1a3e8d14 Eric W. Biederman 2016-08-08  105  	tbl = kmemdup(user_table, sizeof(user_table), GFP_KERNEL);
-> dbec28460a89aa Eric W. Biederman 2016-07-30  106  	if (tbl) {
-> 25f9c0817c535a Eric W. Biederman 2016-08-08  107  		int i;
-> 25f9c0817c535a Eric W. Biederman 2016-08-08  108  		for (i = 0; i < UCOUNT_COUNTS; i++) {
-> 25f9c0817c535a Eric W. Biederman 2016-08-08 @109  			tbl[i].data = &ns->ucount_max[i];
-> 
-> The patch changes the size of ->ucount_max[] to MAX_PER_NAMESPACE_UCOUNTS
-> but this loop still goes up to UCOUNT_COUNTS.
-> 
-> 25f9c0817c535a Eric W. Biederman 2016-08-08  110  		}
-> f6b2db1a3e8d14 Eric W. Biederman 2016-08-08  111  		ns->sysctls = __register_sysctl_table(&ns->set, "user", tbl);
-> dbec28460a89aa Eric W. Biederman 2016-07-30  112  	}
-> dbec28460a89aa Eric W. Biederman 2016-07-30  113  	if (!ns->sysctls) {
-> dbec28460a89aa Eric W. Biederman 2016-07-30  114  		kfree(tbl);
-> dbec28460a89aa Eric W. Biederman 2016-07-30  115  		retire_sysctl_set(&ns->set);
-> dbec28460a89aa Eric W. Biederman 2016-07-30  116  		return false;
-> dbec28460a89aa Eric W. Biederman 2016-07-30  117  	}
-> dbec28460a89aa Eric W. Biederman 2016-07-30  118  #endif
-> dbec28460a89aa Eric W. Biederman 2016-07-30  119  	return true;
-> dbec28460a89aa Eric W. Biederman 2016-07-30  120  }
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 
+The TI part is equivalent to the NXP part, and its compatible value is
+not documented in the DT bindings.
 
-Thanks! But a few days ago I already post a new version of this changeset
-with fix:
+Note that while the Linux driver DT match table does not contain the
+compatible value of the TI part, it could still match to this part, as
+i2c_device_id-based matching ignores the vendor part of the compatible
+value.
 
-https://lore.kernel.org/containers/24c87e225c7950bf2ea1ff4b4a8f237348808241.1638218242.git.legion@kernel.org/
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+---
+v3:
+  - Add Reviewed-by,
 
+v2:
+  - New.
+---
+ arch/x86/platform/ce4100/falconfalls.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/platform/ce4100/falconfalls.dts b/arch/x86/platform/ce4100/falconfalls.dts
+index 0ac3d43571361112..65fa3d866226ce97 100644
+--- a/arch/x86/platform/ce4100/falconfalls.dts
++++ b/arch/x86/platform/ce4100/falconfalls.dts
+@@ -249,7 +249,7 @@ i2c@1 {
+ 
+ 						gpio@26 {
+ 							#gpio-cells = <2>;
+-							compatible = "ti,pcf8575";
++							compatible = "nxp,pcf8575";
+ 							reg = <0x26>;
+ 							gpio-controller;
+ 						};
+@@ -263,7 +263,7 @@ i2c@2 {
+ 
+ 						gpio@26 {
+ 							#gpio-cells = <2>;
+-							compatible = "ti,pcf8575";
++							compatible = "nxp,pcf8575";
+ 							reg = <0x26>;
+ 							gpio-controller;
+ 						};
 -- 
-Rgrds, legion
+2.25.1
 

@@ -2,86 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 566974674A1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8E04674AC
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351498AbhLCKV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 05:21:57 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:34268 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239694AbhLCKV4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 05:21:56 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B83B91EC04F2;
-        Fri,  3 Dec 2021 11:18:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1638526707;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=UpVtLakh6TxIEmDLQ5jw4zQYg2Y5AU8T2AtN4sR7uZ8=;
-        b=XZPYWGMXcw7ZW4q6+lzGWqixe6uz+19Wg5UOJKOfDDZ4cC9yptm1uUXBePj8T/Q+1rIdum
-        /QR0mcuraguA4L8ljffa6Nasf5VQ0bpacNtZD4qpKnKgU9B79ukUFfknuh59Q9us/1NG/8
-        KMQpPGmodu5yQdB/qSQi2QffhM5Fpbo=
-Date:   Fri, 3 Dec 2021 11:18:31 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Lai Jiangshan <laijs@linux.alibaba.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH V6 00/49] x86/entry/64: Convert a bunch of ASM entry code
- into C code
-Message-ID: <Yanu9wLar6Dp6UQ6@zn.tnic>
-References: <20211126101209.8613-1-jiangshanlai@gmail.com>
- <8dc8ec1c-3146-09fe-36ce-52999b06f6a0@linux.alibaba.com>
- <Yanl1HeO1m2TNbyv@zn.tnic>
- <3a4e3ba6-0ee1-b65f-f2b8-744d4dded6f8@linux.alibaba.com>
+        id S1379840AbhLCKYe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Dec 2021 05:24:34 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4193 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379862AbhLCKXz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 05:23:55 -0500
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J582D1KjQz67wM9;
+        Fri,  3 Dec 2021 18:19:32 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 3 Dec 2021 11:20:27 +0100
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.020;
+ Fri, 3 Dec 2021 11:20:27 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Christoph Hellwig <hch@infradead.org>
+CC:     "deven.desai@linux.microsoft.com" <deven.desai@linux.microsoft.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "agk@redhat.com" <agk@redhat.com>,
+        "snitzer@redhat.com" <snitzer@redhat.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "eparis@redhat.com" <eparis@redhat.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+        "linux-audit@redhat.com" <linux-audit@redhat.com>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "tusharsu@linux.microsoft.com" <tusharsu@linux.microsoft.com>
+Subject: RE: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
+Thread-Topic: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
+Thread-Index: AQHX5tHI6VSZDPA0J0GM0KIP7fuaeKweu+CAgAAaFvD///01gIAAEg9QgAFg9oCAAC4FMA==
+Date:   Fri, 3 Dec 2021 10:20:27 +0000
+Message-ID: <28208b7f142f4295ac5c857af5cffe07@huawei.com>
+References: <81d5e825-1ee2-8f6b-cd9d-07b0f8bd36d3@linux.microsoft.com>
+ <20211201163708.3578176-1-roberto.sassu@huawei.com>
+ <Yahz1SYRG1CQIh0z@infradead.org>
+ <e57d2d23ec7845febb79ca4476c73fcb@huawei.com>
+ <YaiHX+dWNUlmsNac@infradead.org>
+ <b4bf4a384b334cdab1522b3b082bd088@huawei.com>
+ <Yam+m9eiLxIamGXm@infradead.org>
+In-Reply-To: <Yam+m9eiLxIamGXm@infradead.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.204.63.33]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3a4e3ba6-0ee1-b65f-f2b8-744d4dded6f8@linux.alibaba.com>
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 06:10:47PM +0800, Lai Jiangshan wrote:
-> It is not urgent nor it is something should be put in cold cellar.
-> Please consider queuing the first three patches at least.
+> From: Christoph Hellwig [mailto:hch@infradead.org]
+> Sent: Friday, December 3, 2021 7:52 AM
+> On Thu, Dec 02, 2021 at 09:29:52AM +0000, Roberto Sassu wrote:
+> > The problem being solved is how to grant access to files
+> > which satisfy a property defined in the policy.
+> 
+> If you have want to enforce access to files in the block layer using
+> a specific stacking block driver you don't just have one layering
+> violation but a bunch of them.  Please go back to the drawing board.
 
-So there are fixes in there, which should go now. It's what I thought
-too when looking at those and was about to suggest to send them
-separately but that's fine - I can pick them out.
+Ok. I write my thoughts here, so that it is easier to align.
 
-> It is cold for a week, I think a ping is proper than a resending.
+dm-verity provides block-level integrity, which means that
+the block layer itself is responsible to not pass data to the
+upper layer, the filesystem, if a block is found corrupted.
 
-With such a huge patchset I don't think you need to ping or resend every
-week but only after people have looked at it at least somewhat. But I'm
-sure you can imagine people are busy as hell so looking at that takes
-time so you'd need to be patient.
+The dm-verity root digest represents the immutable state
+of the block device. dm-verity is still responsible to enforce
+accesses to the block device according to the root digest
+passed at device setup time. Nothing changes, the block
+layer still detects data corruption against the passed
+reference value.
 
-It might be even helpful if you could split it into more palatable
-portions of maybe 10-ish patches each, if possible, and then send the
-first portion, wait for review and only send the second portion after
-the first has been applied, etc.
+The task of the security layer is to decide whether or not
+the root digest passed at device setup time is acceptable,
+e.g. it represents a device containing genuine files coming
+from a software vendor.
 
-That would make life easier for everyone involved.
+The mandatory policy can be enforced at different layers,
+depending on whether the security controls are placed.
+A possibility would be to deny mounting block devices that
+don't satisfy the mandatory policy.
 
-> The asm entry code is always a pain and this patchset gives a start
-> in future with reduced asm code and pain because some future changes
-> might be redirected from asm to the C hopefully.
+However, if the mandatory policy wants only to restrict
+execution of approved files and allowing the rest, making
+the decision at the block layer is too coarse and restrictive.
+It would force the user to mount only approved block
+devices. The security layer must operate on files to enforce
+this policy.
 
-Yes, I think we all agree on that.
+Now probably there is the part where there is no agreement.
 
-Thx.
+The integrity property of a block device applies also to the
+files on the filesystem mounted from that device. User space
+programs cannot access files in that filesystem coming from a
+device with a different dm-verity root digest, or files stored
+in a corrupted block device.
 
--- 
-Regards/Gruss,
-    Boris.
+If what I wrote is correct, that the integrity property is preserved
+across the layers, this would give enough flexibility to enforce
+policies at a higher layer, although that property is guaranteed
+by a lower layer.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Zhong Ronghua

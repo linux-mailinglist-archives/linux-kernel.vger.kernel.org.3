@@ -2,72 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E014676D2
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 355BC4676DC
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238687AbhLCL4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 06:56:55 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:54819 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbhLCL4x (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 06:56:53 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1380624AbhLCL7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 06:59:16 -0500
+Received: from m43-7.mailgun.net ([69.72.43.7]:44889 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231466AbhLCL7L (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 06:59:11 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1638532547; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=bOt1H8z2j6YG1dWnvdF0egJwtTskF4YHLm3gfLlMM9o=; b=jvymMW5Y4hoZ0f12hL+477z5QKUTrgziIICdoim5kw/2wInp96oBqkxRilce+hSGC6HOJs1i
+ a9hq1upUDCvGHtSh9VwLgN9HjLGaELT0Tgnxi7frVt+79/QM/1m8phZgwcICwtiQNwkydQYM
+ C+Zr2RE7v/nWs9uZuqprWjx5bOk=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n10.prod.us-east-1.postgun.com with SMTP id
+ 61aa05c3642caac318d661f1 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 03 Dec 2021 11:55:47
+ GMT
+Sender: charante=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id AC36AC43618; Fri,  3 Dec 2021 11:55:46 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.8 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.29.110] (unknown [49.37.157.144])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J5B6Y3zCCz4xR9;
-        Fri,  3 Dec 2021 22:53:25 +1100 (AEDT)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     benh@kernel.crashing.org, chunkeey@gmail.com,
-        gregkh@linuxfoundation.org, hurricos@gmail.com,
-        chenhui.zhao@freescale.com, stable@vger.kernel.org,
-        Xiaoming Ni <nixiaoming@huawei.com>, wangle6@huawei.com,
-        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
-        oss@buserror.net, paulus@samba.org, chenjianguo3@huawei.com,
-        linux-kernel@vger.kernel.org, liuwenliang@huawei.com,
-        Yuantian.Tang@feescale.com, paul.gortmaker@windriver.com
-In-Reply-To: <20211126041153.16926-1-nixiaoming@huawei.com>
-References: <5f56f1af-9404-21fa-eda0-05a75d769427@huawei.com> <20211126041153.16926-1-nixiaoming@huawei.com>
-Subject: Re: [PATCH] powerpc/85xx: fix oops when CONFIG_FSL_PMC=n
-Message-Id: <163853238100.2903976.13035103513287667638.b4-ty@ellerman.id.au>
-Date:   Fri, 03 Dec 2021 22:53:01 +1100
+        (Authenticated sender: charante)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id CDF66C4360D;
+        Fri,  3 Dec 2021 11:55:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org CDF66C4360D
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH v2] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for
+ shmem
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Charan Teja Reddy <quic_charante@quicinc.com>, hughd@google.com,
+        akpm@linux-foundation.org, vbabka@suse.cz, rientjes@google.com,
+        david@redhat.com, mhocko@suse.com, surenb@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <1638442253-1591-1-git-send-email-quic_charante@quicinc.com>
+ <YajJqY2ByC8uwa46@casper.infradead.org>
+ <a88a3708-cdb6-589c-5828-0a4721c683d7@codeaurora.org>
+ <YajsJSejHlx8n11U@casper.infradead.org>
+From:   Charan Teja Kalla <charante@codeaurora.org>
+Message-ID: <04ca54ad-0e03-84b1-bf5c-131a582137d4@codeaurora.org>
+Date:   Fri, 3 Dec 2021 17:25:40 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YajsJSejHlx8n11U@casper.infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 Nov 2021 12:11:53 +0800, Xiaoming Ni wrote:
-> When CONFIG_FSL_PMC is set to n, no value is assigned to cpu_up_prepare
->  in the mpc85xx_pm_ops structure. As a result, oops is triggered in
->  smp_85xx_start_cpu().
+()
+
+On 12/2/2021 9:24 PM, Matthew Wilcox wrote:
+> Would this change to the documentation have prevented you from making
+> this mistake?
 > 
-> 	[    0.627233] smp: Bringing up secondary CPUs ...
-> 	[    0.681659] kernel tried to execute user page (0) - exploit attempt? (uid: 0)
-> 	[    0.766618] BUG: Unable to handle kernel instruction fetch (NULL pointer?)
-> 	[    0.848899] Faulting instruction address: 0x00000000
-> 	[    0.908273] Oops: Kernel access of bad area, sig: 11 [#1]
-> 	...
-> 	[    1.758220] NIP [00000000] 0x0
-> 	[    1.794688] LR [c0021d2c] smp_85xx_kick_cpu+0xe8/0x568
-> 	[    1.856126] Call Trace:
-> 	[    1.885295] [c1051da8] [c0021cb8] smp_85xx_kick_cpu+0x74/0x568 (unreliable)
-> 	[    1.968633] [c1051de8] [c0011460] __cpu_up+0xc0/0x228
-> 	[    2.029038] [c1051e18] [c0031bbc] bringup_cpu+0x30/0x224
-> 	[    2.092572] [c1051e48] [c0031f3c] cpu_up.constprop.0+0x180/0x33c
-> 	[    2.164443] [c1051e88] [c00322e8] bringup_nonboot_cpus+0x88/0xc8
-> 	[    2.236326] [c1051eb8] [c07e67bc] smp_init+0x30/0x78
-> 	[    2.295698] [c1051ed8] [c07d9e28] kernel_init_freeable+0x118/0x2a8
-> 	[    2.369641] [c1051f18] [c00032d8] kernel_init+0x14/0x124
-> 	[    2.433176] [c1051f38] [c0010278] ret_from_kernel_thread+0x14/0x1c
-> 
-> [...]
+>  The advanced API is based around the xa_state.  This is an opaque data
+>  structure which you declare on the stack using the XA_STATE()
+>  macro.  This macro initialises the xa_state ready to start walking
+>  around the XArray.  It is used as a cursor to maintain the position
+>  in the XArray and let you compose various operations together without
+> -having to restart from the top every time.
+> +having to restart from the top every time.  The contents of the xa_state
+> +are protected by the rcu_read_lock() or the xas_lock().  If you need to
+> +drop whichever of those locks is protecting your state and tree, you must
+> +call xas_pause() so that future calls do not rely on the parts of the
+> +state which were left unprotected.
 
-Applied to powerpc/fixes.
+Yes, this looks much clear to me.
 
-[1/1] powerpc/85xx: fix oops when CONFIG_FSL_PMC=n
-      https://git.kernel.org/powerpc/c/3dc709e518b47386e6af937eaec37bb36539edfd
-
-cheers
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora
+Forum, a Linux Foundation Collaborative Project

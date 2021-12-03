@@ -2,312 +2,450 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E3A467F7F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4D6467F7D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383293AbhLCVtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 16:49:53 -0500
-Received: from mga06.intel.com ([134.134.136.31]:33979 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1383283AbhLCVtv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 16:49:51 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="297861300"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="297861300"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 13:46:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="461037607"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 03 Dec 2021 13:46:23 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mtGNq-000I5m-SW; Fri, 03 Dec 2021 21:46:22 +0000
-Date:   Sat, 4 Dec 2021 05:46:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Matteo Croce <mcroce@linux.microsoft.com>, bpf@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [PATCH bpf-next 1/3] bpf: add signature to eBPF instructions
-Message-ID: <202112040507.siNkODlN-lkp@intel.com>
-References: <20211203191844.69709-2-mcroce@linux.microsoft.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211203191844.69709-2-mcroce@linux.microsoft.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1383281AbhLCVtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 16:49:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236204AbhLCVtj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 16:49:39 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99B8C061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 13:46:14 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id t1-20020a5b03c1000000b005f6ee3e97easo8538918ybp.16
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 13:46:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=o/EmJw4iJPFVcqm062lwjVkO8OcBQQd+5AmR5RtWHDw=;
+        b=Xa4Ek4cqojxaVZm9NU3wBBL4OHsEd2r5G5Rx6174wM3vCactd8Hfvtlqfr4c/JTD7y
+         f3NI4v2OMYS5dZMSPhiQk7n1bxF6G2MPx8nf7auSFkXcbR8cvjILlPTQV36eM4QmpXy8
+         +YrBNpENqQi7mq259PmG8lLAq3yBLMJqx6stQ099pe5clgkEQ6XUEYIyekUs2Q9M+Vk1
+         d4LZpxoukziU02iS2x8GTPM16kdPuq2V0hPPx6j0PbTaEc0begJdK6RhS+FNm6TW58Y0
+         0QaCi4Aqu4pRpLNYsmNIQy03bD8yMab5iXQhn+dtgRKXYVevBSF3eYgEYpiZaX4sNruW
+         OebQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=o/EmJw4iJPFVcqm062lwjVkO8OcBQQd+5AmR5RtWHDw=;
+        b=DowNFQs9C4e0XgQ/pRNGuKAW22kBIVwVnDqz4/TMZAVNw2hn9plYa9ydzS3PhruxRM
+         qcGP7p0Y5bsyJgRGkBUTmdK0kFjK6F8zDiI3V1YtcW3q3YZC76RCvvkgIH8bxmCIuZpv
+         8GhAKT0ANxPBDPwBQIzYf+KMHEdM2eXbgL40hYS9GlUobLneQmpW9aESLsd/g4frLOaP
+         A8F+bLcq5vS16Ylvzrh8OnWyBPZPH/knDM5sfsACYBiS9Fwz5A0ltJTDmDuy/gYFMu64
+         f77OvsECzhcDxRiUsd6HegrWTcZzKhOEIpMovAiY27poLZM9vrbWYd9LQGN8pEa5thTD
+         nmBw==
+X-Gm-Message-State: AOAM532lVY3hkO+QmkJIR3lhHYVR7PEIP/LkRXpkVBT7CN+onFr3ZUKP
+        UH52CoJohWiY/X3/IYWlEc5HRWypR14=
+X-Google-Smtp-Source: ABdhPJydMgFe3VZu9iybg9AbIQEexAViFWj4AOSqQGkbeDTL3kUqM+zzzjtaVkCzv9c9SIR+XBZ6tHsJY1g=
+X-Received: from pgonda2.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:ac9])
+ (user=pgonda job=sendgmr) by 2002:a25:d4c:: with SMTP id 73mr24776826ybn.74.1638567974026;
+ Fri, 03 Dec 2021 13:46:14 -0800 (PST)
+Date:   Fri,  3 Dec 2021 21:46:10 +0000
+Message-Id: <20211203214610.3546475-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
+Subject: [PATCH V5.1 5/5] crypto: ccp - Add SEV_INIT_EX support
+From:   Peter Gonda <pgonda@google.com>
+To:     thomas.lendacky@amd.com
+Cc:     David Rientjes <rientjes@google.com>,
+        Peter Gonda <pgonda@google.com>, Marc Orr <marcorr@google.com>,
+        kernel test robot <lkp@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        John Allen <john.allen@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matteo,
+From: David Rientjes <rientjes@google.com>
 
-Thank you for the patch! Perhaps something to improve:
+Add new module parameter to allow users to use SEV_INIT_EX instead of
+SEV_INIT. This helps users who lock their SPI bus to use the PSP for SEV
+functionality. The 'init_ex_path' parameter defaults to NULL which means
+the kernel will use SEV_INIT, if a path is specified SEV_INIT_EX will be
+used with the data found at the path. On certain PSP commands this
+file is written to as the PSP updates the NV memory region. Depending on
+file system initialization this file open may fail during module init
+but the CCP driver for SEV already has sufficient retries for platform
+initialization. During normal operation of PSP system and SEV commands
+if the PSP has not been initialized it is at run time. If the file at
+'init_ex_path' does not exist the PSP will not be initialized. The user
+must create the file prior to use with 32Kb of 0xFFs per spec.
 
-[auto build test WARNING on bpf-next/master]
-
-url:    https://github.com/0day-ci/linux/commits/Matteo-Croce/bpf-add-signature/20211204-032018
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: nds32-allyesconfig (https://download.01.org/0day-ci/archive/20211204/202112040507.siNkODlN-lkp@intel.com/config)
-compiler: nds32le-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/fdfe32b9e64c6a208965002215d467ec383b6f57
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Matteo-Croce/bpf-add-signature/20211204-032018
-        git checkout fdfe32b9e64c6a208965002215d467ec383b6f57
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash kernel/bpf/
-
-If you fix the issue, kindly add following tag as appropriate
+Signed-off-by: David Rientjes <rientjes@google.com>
+Co-developed-by: Peter Gonda <pgonda@google.com>
+Signed-off-by: Peter Gonda <pgonda@google.com>
+Reviewed-by: Marc Orr <marcorr@google.com>
 Reported-by: kernel test robot <lkp@intel.com>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Brijesh Singh <brijesh.singh@amd.com>
+Cc: Marc Orr <marcorr@google.com>
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: David Rientjes <rientjes@google.com>
+Cc: John Allen <john.allen@amd.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
 
-All warnings (new ones prefixed by >>):
-
-   kernel/bpf/syscall.c: In function 'bpf_prog_load':
->> kernel/bpf/syscall.c:2324:47: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-    2324 |                 if (copy_from_user(signature, (char *)attr->signature, attr->sig_len)) {
-         |                                               ^
-
-
-vim +2324 kernel/bpf/syscall.c
-
-  2192	
-  2193	static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
-  2194	{
-  2195		enum bpf_prog_type type = attr->prog_type;
-  2196		struct bpf_prog *prog, *dst_prog = NULL;
-  2197		struct btf *attach_btf = NULL;
-  2198		int err;
-  2199		char license[128];
-  2200		bool is_gpl;
-  2201	
-  2202		if (CHECK_ATTR(BPF_PROG_LOAD))
-  2203			return -EINVAL;
-  2204	
-  2205		if (attr->prog_flags & ~(BPF_F_STRICT_ALIGNMENT |
-  2206					 BPF_F_ANY_ALIGNMENT |
-  2207					 BPF_F_TEST_STATE_FREQ |
-  2208					 BPF_F_SLEEPABLE |
-  2209					 BPF_F_TEST_RND_HI32))
-  2210			return -EINVAL;
-  2211	
-  2212		if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
-  2213		    (attr->prog_flags & BPF_F_ANY_ALIGNMENT) &&
-  2214		    !bpf_capable())
-  2215			return -EPERM;
-  2216	
-  2217		/* copy eBPF program license from user space */
-  2218		if (strncpy_from_bpfptr(license,
-  2219					make_bpfptr(attr->license, uattr.is_kernel),
-  2220					sizeof(license) - 1) < 0)
-  2221			return -EFAULT;
-  2222		license[sizeof(license) - 1] = 0;
-  2223	
-  2224		/* eBPF programs must be GPL compatible to use GPL-ed functions */
-  2225		is_gpl = license_is_gpl_compatible(license);
-  2226	
-  2227		if (attr->insn_cnt == 0 ||
-  2228		    attr->insn_cnt > (bpf_capable() ? BPF_COMPLEXITY_LIMIT_INSNS : BPF_MAXINSNS))
-  2229			return -E2BIG;
-  2230		if (type != BPF_PROG_TYPE_SOCKET_FILTER &&
-  2231		    type != BPF_PROG_TYPE_CGROUP_SKB &&
-  2232		    !bpf_capable())
-  2233			return -EPERM;
-  2234	
-  2235		if (is_net_admin_prog_type(type) && !capable(CAP_NET_ADMIN) && !capable(CAP_SYS_ADMIN))
-  2236			return -EPERM;
-  2237		if (is_perfmon_prog_type(type) && !perfmon_capable())
-  2238			return -EPERM;
-  2239	
-  2240		/* attach_prog_fd/attach_btf_obj_fd can specify fd of either bpf_prog
-  2241		 * or btf, we need to check which one it is
-  2242		 */
-  2243		if (attr->attach_prog_fd) {
-  2244			dst_prog = bpf_prog_get(attr->attach_prog_fd);
-  2245			if (IS_ERR(dst_prog)) {
-  2246				dst_prog = NULL;
-  2247				attach_btf = btf_get_by_fd(attr->attach_btf_obj_fd);
-  2248				if (IS_ERR(attach_btf))
-  2249					return -EINVAL;
-  2250				if (!btf_is_kernel(attach_btf)) {
-  2251					/* attaching through specifying bpf_prog's BTF
-  2252					 * objects directly might be supported eventually
-  2253					 */
-  2254					btf_put(attach_btf);
-  2255					return -ENOTSUPP;
-  2256				}
-  2257			}
-  2258		} else if (attr->attach_btf_id) {
-  2259			/* fall back to vmlinux BTF, if BTF type ID is specified */
-  2260			attach_btf = bpf_get_btf_vmlinux();
-  2261			if (IS_ERR(attach_btf))
-  2262				return PTR_ERR(attach_btf);
-  2263			if (!attach_btf)
-  2264				return -EINVAL;
-  2265			btf_get(attach_btf);
-  2266		}
-  2267	
-  2268		bpf_prog_load_fixup_attach_type(attr);
-  2269		if (bpf_prog_load_check_attach(type, attr->expected_attach_type,
-  2270					       attach_btf, attr->attach_btf_id,
-  2271					       dst_prog)) {
-  2272			if (dst_prog)
-  2273				bpf_prog_put(dst_prog);
-  2274			if (attach_btf)
-  2275				btf_put(attach_btf);
-  2276			return -EINVAL;
-  2277		}
-  2278	
-  2279		/* plain bpf_prog allocation */
-  2280		prog = bpf_prog_alloc(bpf_prog_size(attr->insn_cnt), GFP_USER);
-  2281		if (!prog) {
-  2282			if (dst_prog)
-  2283				bpf_prog_put(dst_prog);
-  2284			if (attach_btf)
-  2285				btf_put(attach_btf);
-  2286			return -ENOMEM;
-  2287		}
-  2288	
-  2289		prog->expected_attach_type = attr->expected_attach_type;
-  2290		prog->aux->attach_btf = attach_btf;
-  2291		prog->aux->attach_btf_id = attr->attach_btf_id;
-  2292		prog->aux->dst_prog = dst_prog;
-  2293		prog->aux->offload_requested = !!attr->prog_ifindex;
-  2294		prog->aux->sleepable = attr->prog_flags & BPF_F_SLEEPABLE;
-  2295	
-  2296		err = security_bpf_prog_alloc(prog->aux);
-  2297		if (err)
-  2298			goto free_prog;
-  2299	
-  2300		prog->aux->user = get_current_user();
-  2301		prog->len = attr->insn_cnt;
-  2302	
-  2303		err = -EFAULT;
-  2304		if (copy_from_bpfptr(prog->insns,
-  2305				     make_bpfptr(attr->insns, uattr.is_kernel),
-  2306				     bpf_prog_insn_size(prog)) != 0)
-  2307			goto free_prog_sec;
-  2308	
-  2309		err = bpf_obj_name_cpy(prog->aux->name, attr->prog_name,
-  2310				       sizeof(attr->prog_name));
-  2311		if (err < 0)
-  2312			goto free_prog_sec;
-  2313	
-  2314	#ifdef CONFIG_BPF_SIG
-  2315		if (attr->sig_len) {
-  2316			char *signature;
-  2317	
-  2318			signature = kmalloc(attr->sig_len, GFP_USER);
-  2319			if (!signature) {
-  2320				err = -ENOMEM;
-  2321				goto free_prog_sec;
-  2322			}
-  2323	
-> 2324			if (copy_from_user(signature, (char *)attr->signature, attr->sig_len)) {
-  2325				err = -EFAULT;
-  2326				kfree(signature);
-  2327				goto free_prog_sec;
-  2328			}
-  2329	
-  2330			err = verify_pkcs7_signature(prog->insns,
-  2331						     prog->len * sizeof(struct bpf_insn),
-  2332						     signature, attr->sig_len,
-  2333						     VERIFY_USE_SECONDARY_KEYRING,
-  2334						     VERIFYING_BPF_SIGNATURE,
-  2335						     NULL, NULL);
-  2336			kfree(signature);
-  2337	
-  2338			if (err) {
-  2339				pr_warn("Invalid BPF signature for '%s': %pe\n",
-  2340					prog->aux->name, ERR_PTR(err));
-  2341				goto free_prog_sec;
-  2342			}
-  2343		}
-  2344	#endif
-  2345	
-  2346		prog->orig_prog = NULL;
-  2347		prog->jited = 0;
-  2348	
-  2349		atomic64_set(&prog->aux->refcnt, 1);
-  2350		prog->gpl_compatible = is_gpl ? 1 : 0;
-  2351	
-  2352		if (bpf_prog_is_dev_bound(prog->aux)) {
-  2353			err = bpf_prog_offload_init(prog, attr);
-  2354			if (err)
-  2355				goto free_prog_sec;
-  2356		}
-  2357	
-  2358		/* find program type: socket_filter vs tracing_filter */
-  2359		err = find_prog_type(type, prog);
-  2360		if (err < 0)
-  2361			goto free_prog_sec;
-  2362	
-  2363		prog->aux->load_time = ktime_get_boottime_ns();
-  2364	
-  2365		/* run eBPF verifier */
-  2366		err = bpf_check(&prog, attr, uattr);
-  2367		if (err < 0)
-  2368			goto free_used_maps;
-  2369	
-  2370		prog = bpf_prog_select_runtime(prog, &err);
-  2371		if (err < 0)
-  2372			goto free_used_maps;
-  2373	
-  2374		err = bpf_prog_alloc_id(prog);
-  2375		if (err)
-  2376			goto free_used_maps;
-  2377	
-  2378		/* Upon success of bpf_prog_alloc_id(), the BPF prog is
-  2379		 * effectively publicly exposed. However, retrieving via
-  2380		 * bpf_prog_get_fd_by_id() will take another reference,
-  2381		 * therefore it cannot be gone underneath us.
-  2382		 *
-  2383		 * Only for the time /after/ successful bpf_prog_new_fd()
-  2384		 * and before returning to userspace, we might just hold
-  2385		 * one reference and any parallel close on that fd could
-  2386		 * rip everything out. Hence, below notifications must
-  2387		 * happen before bpf_prog_new_fd().
-  2388		 *
-  2389		 * Also, any failure handling from this point onwards must
-  2390		 * be using bpf_prog_put() given the program is exposed.
-  2391		 */
-  2392		bpf_prog_kallsyms_add(prog);
-  2393		perf_event_bpf_event(prog, PERF_BPF_EVENT_PROG_LOAD, 0);
-  2394		bpf_audit_prog(prog, BPF_AUDIT_LOAD);
-  2395	
-  2396		err = bpf_prog_new_fd(prog);
-  2397		if (err < 0)
-  2398			bpf_prog_put(prog);
-  2399		return err;
-  2400	
-  2401	free_used_maps:
-  2402		/* In case we have subprogs, we need to wait for a grace
-  2403		 * period before we can tear down JIT memory since symbols
-  2404		 * are already exposed under kallsyms.
-  2405		 */
-  2406		__bpf_prog_put_noref(prog, prog->aux->func_cnt);
-  2407		return err;
-  2408	free_prog_sec:
-  2409		free_uid(prog->aux->user);
-  2410		security_bpf_prog_free(prog->aux);
-  2411	free_prog:
-  2412		if (prog->aux->attach_btf)
-  2413			btf_put(prog->aux->attach_btf);
-  2414		bpf_prog_free(prog);
-  2415		return err;
-  2416	}
-  2417	
+Mistakenly send old patch, this is the fixed version.
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ .../virt/kvm/amd-memory-encryption.rst        |   6 +
+ drivers/crypto/ccp/sev-dev.c                  | 193 ++++++++++++++++--
+ include/linux/psp-sev.h                       |  21 ++
+ 3 files changed, 205 insertions(+), 15 deletions(-)
+
+diff --git a/Documentation/virt/kvm/amd-memory-encryption.rst b/Documentation/virt/kvm/amd-memory-encryption.rst
+index 5c081c8c7164..1c6847fff304 100644
+--- a/Documentation/virt/kvm/amd-memory-encryption.rst
++++ b/Documentation/virt/kvm/amd-memory-encryption.rst
+@@ -85,6 +85,12 @@ guests, such as launching, running, snapshotting, migrating and decommissioning.
+ The KVM_SEV_INIT command is used by the hypervisor to initialize the SEV platform
+ context. In a typical workflow, this command should be the first command issued.
+ 
++The firmware can be initialized either by using its own non-volatile storage or
++the OS can manage the NV storage for the firmware using the module parameter
++``init_ex_path``. The file specified by ``init_ex_path`` must exist. To create
++a new NV storage file allocate the file with 32KB bytes of 0xFF as required by
++the SEV spec.
++
+ Returns: 0 on success, -negative on error
+ 
+ 2. KVM_SEV_LAUNCH_START
+diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+index 686b16e69de7..991cc5aaaa0f 100644
+--- a/drivers/crypto/ccp/sev-dev.c
++++ b/drivers/crypto/ccp/sev-dev.c
+@@ -22,6 +22,7 @@
+ #include <linux/firmware.h>
+ #include <linux/gfp.h>
+ #include <linux/cpufeature.h>
++#include <linux/fs.h>
+ 
+ #include <asm/smp.h>
+ 
+@@ -43,6 +44,10 @@ static int psp_probe_timeout = 5;
+ module_param(psp_probe_timeout, int, 0644);
+ MODULE_PARM_DESC(psp_probe_timeout, " default timeout value, in seconds, during PSP device probe");
+ 
++static char *init_ex_path;
++module_param(init_ex_path, charp, 0444);
++MODULE_PARM_DESC(init_ex_path, " Path for INIT_EX data; if set try INIT_EX");
++
+ static bool psp_init_on_probe = true;
+ module_param(psp_init_on_probe, bool, 0444);
+ MODULE_PARM_DESC(psp_init_on_probe, "  if true, the PSP will be initialized on module init. Else the PSP will be initialized on the first command requiring it");
+@@ -62,6 +67,14 @@ static int psp_timeout;
+ #define SEV_ES_TMR_SIZE		(1024 * 1024)
+ static void *sev_es_tmr;
+ 
++/* INIT_EX NV Storage:
++ *   The NV Storage is a 32Kb area and must be 4Kb page aligned.  Use the page
++ *   allocator to allocate the memory, which will return aligned memory for the
++ *   specified allocation order.
++ */
++#define NV_LENGTH (32 * 1024)
++static void *sev_init_ex_buffer;
++
+ static inline bool sev_version_greater_or_equal(u8 maj, u8 min)
+ {
+ 	struct sev_device *sev = psp_master->sev_data;
+@@ -111,6 +124,7 @@ static int sev_cmd_buffer_len(int cmd)
+ {
+ 	switch (cmd) {
+ 	case SEV_CMD_INIT:			return sizeof(struct sev_data_init);
++	case SEV_CMD_INIT_EX:                   return sizeof(struct sev_data_init_ex);
+ 	case SEV_CMD_PLATFORM_STATUS:		return sizeof(struct sev_user_data_status);
+ 	case SEV_CMD_PEK_CSR:			return sizeof(struct sev_data_pek_csr);
+ 	case SEV_CMD_PEK_CERT_IMPORT:		return sizeof(struct sev_data_pek_cert_import);
+@@ -156,6 +170,101 @@ static void *sev_fw_alloc(unsigned long len)
+ 	return page_address(page);
+ }
+ 
++static int sev_read_init_ex_file(void)
++{
++	struct sev_device *sev = psp_master->sev_data;
++	struct file *fp;
++	ssize_t nread;
++
++	lockdep_assert_held(&sev_cmd_mutex);
++
++	if (!sev_init_ex_buffer)
++		return -EOPNOTSUPP;
++
++	fp = filp_open(init_ex_path, O_RDONLY, 0);
++	if (IS_ERR(fp)) {
++		int ret = PTR_ERR(fp);
++
++		dev_err(sev->dev,
++			"SEV: could not open %s for read, error %d\n",
++			init_ex_path, ret);
++		return ret;
++	}
++
++	nread = kernel_read(fp, sev_init_ex_buffer, NV_LENGTH, NULL);
++	if (nread != NV_LENGTH) {
++		dev_err(sev->dev,
++			"SEV: failed to read %u bytes to non volatile memory area, ret %ld\n",
++			NV_LENGTH, nread);
++		return -EIO;
++	}
++
++	dev_dbg(sev->dev, "SEV: read %ld bytes from NV file\n", nread);
++	filp_close(fp, NULL);
++
++	return 0;
++}
++
++static void sev_write_init_ex_file(void)
++{
++	struct sev_device *sev = psp_master->sev_data;
++	struct file *fp;
++	loff_t offset = 0;
++	ssize_t nwrite;
++
++	lockdep_assert_held(&sev_cmd_mutex);
++
++	if (!sev_init_ex_buffer)
++		return;
++
++	fp = filp_open(init_ex_path, O_CREAT | O_WRONLY, 0600);
++	if (IS_ERR(fp)) {
++		dev_err(sev->dev,
++			"SEV: could not open file for write, error %ld\n",
++			PTR_ERR(fp));
++		return;
++	}
++
++	nwrite = kernel_write(fp, sev_init_ex_buffer, NV_LENGTH, &offset);
++	vfs_fsync(fp, 0);
++	filp_close(fp, NULL);
++
++	if (nwrite != NV_LENGTH) {
++		dev_err(sev->dev,
++			"SEV: failed to write %u bytes to non volatile memory area, ret %ld\n",
++			NV_LENGTH, nwrite);
++		return;
++	}
++
++	dev_dbg(sev->dev, "SEV: write successful to NV file\n");
++}
++
++static void sev_write_init_ex_file_if_required(int cmd_id)
++{
++	lockdep_assert_held(&sev_cmd_mutex);
++
++	if (!sev_init_ex_buffer)
++		return;
++
++	/*
++	 * Only a few platform commands modify the SPI/NV area, but none of the
++	 * non-platform commands do. Only INIT(_EX), PLATFORM_RESET, PEK_GEN,
++	 * PEK_CERT_IMPORT, and PDH_GEN do.
++	 */
++	switch (cmd_id) {
++	case SEV_CMD_FACTORY_RESET:
++	case SEV_CMD_INIT_EX:
++	case SEV_CMD_PDH_GEN:
++	case SEV_CMD_PEK_CERT_IMPORT:
++	case SEV_CMD_PEK_GEN:
++		break;
++	default:
++		return;
++	};
++
++	sev_write_init_ex_file();
++}
++
+ static int __sev_do_cmd_locked(int cmd, void *data, int *psp_ret)
+ {
+ 	struct psp_device *psp = psp_master;
+@@ -225,6 +334,8 @@ static int __sev_do_cmd_locked(int cmd, void *data, int *psp_ret)
+ 		dev_dbg(sev->dev, "sev command %#x failed (%#010x)\n",
+ 			cmd, reg & PSP_CMDRESP_ERR_MASK);
+ 		ret = -EIO;
++	} else {
++		sev_write_init_ex_file_if_required(cmd);
+ 	}
+ 
+ 	print_hex_dump_debug("(out): ", DUMP_PREFIX_OFFSET, 16, 2, data,
+@@ -251,37 +362,71 @@ static int sev_do_cmd(int cmd, void *data, int *psp_ret)
+ 	return rc;
+ }
+ 
+-static int __sev_platform_init_locked(int *error)
++static int __sev_init_locked(int *error)
+ {
+-	struct psp_device *psp = psp_master;
+ 	struct sev_data_init data;
+-	struct sev_device *sev;
+-	int psp_ret, rc = 0;
+ 
+-	if (!psp || !psp->sev_data)
+-		return -ENODEV;
++	memset(&data, 0, sizeof(data));
++	if (sev_es_tmr) {
++		/*
++		 * Do not include the encryption mask on the physical
++		 * address of the TMR (firmware should clear it anyway).
++		 */
++		data.tmr_address = __pa(sev_es_tmr);
+ 
+-	sev = psp->sev_data;
++		data.flags |= SEV_INIT_FLAGS_SEV_ES;
++		data.tmr_len = SEV_ES_TMR_SIZE;
++	}
+ 
+-	if (sev->state == SEV_STATE_INIT)
+-		return 0;
++	return __sev_do_cmd_locked(SEV_CMD_INIT, &data, error);
++}
++
++static int __sev_init_ex_locked(int *error)
++{
++	struct sev_data_init_ex data;
++	int ret;
+ 
+ 	memset(&data, 0, sizeof(data));
+-	if (sev_es_tmr) {
+-		u64 tmr_pa;
++	data.length = sizeof(data);
++	data.nv_address = __psp_pa(sev_init_ex_buffer);
++	data.nv_len = NV_LENGTH;
++
++	ret = sev_read_init_ex_file();
++	if (ret)
++		return ret;
+ 
++	if (sev_es_tmr) {
+ 		/*
+ 		 * Do not include the encryption mask on the physical
+ 		 * address of the TMR (firmware should clear it anyway).
+ 		 */
+-		tmr_pa = __pa(sev_es_tmr);
++		data.tmr_address = __pa(sev_es_tmr);
+ 
+ 		data.flags |= SEV_INIT_FLAGS_SEV_ES;
+-		data.tmr_address = tmr_pa;
+ 		data.tmr_len = SEV_ES_TMR_SIZE;
+ 	}
+ 
+-	rc = __sev_do_cmd_locked(SEV_CMD_INIT, &data, &psp_ret);
++	return __sev_do_cmd_locked(SEV_CMD_INIT_EX, &data, error);
++}
++
++static int __sev_platform_init_locked(int *error)
++{
++	struct psp_device *psp = psp_master;
++	struct sev_device *sev;
++	int rc, psp_ret;
++	int (*init_function)(int *error);
++
++	if (!psp || !psp->sev_data)
++		return -ENODEV;
++
++	sev = psp->sev_data;
++
++	if (sev->state == SEV_STATE_INIT)
++		return 0;
++
++	init_function = sev_init_ex_buffer ? __sev_init_ex_locked :
++			__sev_init_locked;
++	rc = init_function(&psp_ret);
+ 	if (rc && psp_ret == SEV_RET_SECURE_DATA_INVALID) {
+ 		/*
+ 		 * Initialization command returned an integrity check failure
+@@ -291,7 +436,7 @@ static int __sev_platform_init_locked(int *error)
+ 		 * with a reset state.
+ 		 */
+ 		dev_dbg(sev->dev, "SEV: retrying INIT command");
+-		rc = __sev_do_cmd_locked(SEV_CMD_INIT, &data, &psp_ret);
++		rc = init_function(&psp_ret);
+ 	}
+ 	if (error)
+ 		*error = psp_ret;
+@@ -1066,6 +1211,12 @@ static void sev_firmware_shutdown(struct sev_device *sev)
+ 			   get_order(SEV_ES_TMR_SIZE));
+ 		sev_es_tmr = NULL;
+ 	}
++
++	if (sev_init_ex_buffer) {
++		free_pages((unsigned long)sev_init_ex_buffer,
++			   get_order(NV_LENGTH));
++		sev_init_ex_buffer = NULL;
++	}
+ }
+ 
+ void sev_dev_destroy(struct psp_device *psp)
+@@ -1110,6 +1261,18 @@ void sev_pci_init(void)
+ 	    sev_update_firmware(sev->dev) == 0)
+ 		sev_get_api_version();
+ 
++	/* If an init_ex_path is provided rely on INIT_EX for PSP initialization
++	 * instead of INIT.
++	 */
++	if (init_ex_path) {
++		sev_init_ex_buffer = sev_fw_alloc(NV_LENGTH);
++		if (!sev_init_ex_buffer) {
++			dev_err(sev->dev,
++				"SEV: INIT_EX NV memory allocation failed\n");
++			goto err;
++		}
++	}
++
+ 	/* Obtain the TMR memory area for SEV-ES use */
+ 	sev_es_tmr = sev_fw_alloc(SEV_ES_TMR_SIZE);
+ 	if (!sev_es_tmr)
+diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
+index d48a7192e881..1595088c428b 100644
+--- a/include/linux/psp-sev.h
++++ b/include/linux/psp-sev.h
+@@ -52,6 +52,7 @@ enum sev_cmd {
+ 	SEV_CMD_DF_FLUSH		= 0x00A,
+ 	SEV_CMD_DOWNLOAD_FIRMWARE	= 0x00B,
+ 	SEV_CMD_GET_ID			= 0x00C,
++	SEV_CMD_INIT_EX                 = 0x00D,
+ 
+ 	/* Guest commands */
+ 	SEV_CMD_DECOMMISSION		= 0x020,
+@@ -102,6 +103,26 @@ struct sev_data_init {
+ 	u32 tmr_len;			/* In */
+ } __packed;
+ 
++/**
++ * struct sev_data_init_ex - INIT_EX command parameters
++ *
++ * @length: len of the command buffer read by the PSP
++ * @flags: processing flags
++ * @tmr_address: system physical address used for SEV-ES
++ * @tmr_len: len of tmr_address
++ * @nv_address: system physical address used for PSP NV storage
++ * @nv_len: len of nv_address
++ */
++struct sev_data_init_ex {
++	u32 length;                     /* In */
++	u32 flags;                      /* In */
++	u64 tmr_address;                /* In */
++	u32 tmr_len;                    /* In */
++	u32 reserved;                   /* In */
++	u64 nv_address;                 /* In/Out */
++	u32 nv_len;                     /* In */
++} __packed;
++
+ #define SEV_INIT_FLAGS_SEV_ES	0x01
+ 
+ /**
+-- 
+2.34.1.400.ga245620fadb-goog
+

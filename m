@@ -2,83 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F59246706F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 04:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BAF7467074
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 04:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378330AbhLCDGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 22:06:47 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:51826 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S239667AbhLCDGr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 22:06:47 -0500
-Received: from localhost.localdomain (unknown [124.16.138.128])
-        by APP-05 (Coremail) with SMTP id zQCowAAnCRbdiKlhM80FAQ--.32888S2;
-        Fri, 03 Dec 2021 11:02:53 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     rafal@milecki.pl, bcm-kernel-feedback-list@broadcom.com,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org, fw@strlen.de,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] net: broadcom: Catch the Exception
-Date:   Fri,  3 Dec 2021 11:02:50 +0800
-Message-Id: <20211203030250.1512671-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1378336AbhLCDHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 22:07:02 -0500
+Received: from smtprelay0154.hostedemail.com ([216.40.44.154]:42294 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1350790AbhLCDHA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 22:07:00 -0500
+Received: from omf06.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 140B9101369A0;
+        Fri,  3 Dec 2021 03:03:35 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id 6DDA420015;
+        Fri,  3 Dec 2021 03:03:32 +0000 (UTC)
+Message-ID: <863f2cddacac590d581cda09d548ee0a652df8a1.camel@perches.com>
+Subject: Re: [PATCH] xen-blkfront: Use the bitmap API when applicable
+From:   Joe Perches <joe@perches.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Juergen Gross <jgross@suse.com>, boris.ostrovsky@oracle.com,
+        sstabellini@kernel.org, roger.pau@citrix.com, axboe@kernel.dk
+Cc:     xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Date:   Thu, 02 Dec 2021 19:03:32 -0800
+In-Reply-To: <3d71577f-dabe-6e1a-4b03-2a44f304b702@wanadoo.fr>
+References: <1c73cf8eaff02ea19439ec676c063e592d273cfe.1638392965.git.christophe.jaillet@wanadoo.fr>
+         <c529a221-f444-ad26-11ff-f693401c9429@suse.com>
+         <d8f87c17-75d1-2e6b-65e1-23adc75bb515@wanadoo.fr>
+         <6fcddba84070c021eb92aa9a5ff15fb2a47e9acb.camel@perches.com>
+         <3d71577f-dabe-6e1a-4b03-2a44f304b702@wanadoo.fr>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAAnCRbdiKlhM80FAQ--.32888S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrur43JFWxuryUCr4rGr43GFg_yoWDKwbEgF
-        yUZ3sag3y8CryYkwsakw43Zry0k3yqvw18uFyvgrZaqr98ur1Dt3yktF1rtw1UWrWDJFyS
-        yrnxtFZxA340gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb4xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
-        Gr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU-miiUUU
-        UU=
-X-Originating-IP: [124.16.138.128]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Stat-Signature: dsgan1p8pchxr8wbecis6grq8tsez18d
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 6DDA420015
+X-Spam-Status: No, score=-4.90
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/U5Pxt1pAwSKl1eR87urKf9gGDN2xSyaw=
+X-HE-Tag: 1638500612-192617
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of dma_set_coherent_mask() is not always 0.
-To catch the exception in case that dma is not support the mask.
+On Thu, 2021-12-02 at 20:07 +0100, Christophe JAILLET wrote:
+> Le 02/12/2021 à 19:16, Joe Perches a écrit :
+> > On Thu, 2021-12-02 at 19:12 +0100, Christophe JAILLET wrote:
+> > > Le 02/12/2021 à 07:12, Juergen Gross a écrit :
+> > > > On 01.12.21 22:10, Christophe JAILLET wrote:
+> > > > > Use 'bitmap_zalloc()' to simplify code, improve the semantic and avoid
+> > > > > some open-coded arithmetic in allocator arguments.
+> > > > > 
+> > > > > Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
+> > > > > consistency.
+> > > > > 
+> > > > > Use 'bitmap_copy()' to avoid an explicit 'memcpy()'
+> > []
+> > > > > diff --git a/drivers/block/xen-blkfront.c b/drivers/block/xen-blkfront.c
+> > []
+> > > > > @@ -442,16 +442,14 @@ static int xlbd_reserve_minors(unsigned int
+> > > > > minor, unsigned int nr)
+> > > > >        if (end > nr_minors) {
+> > > > >            unsigned long *bitmap, *old;
+> > > > > -        bitmap = kcalloc(BITS_TO_LONGS(end), sizeof(*bitmap),
+> > > > > -                 GFP_KERNEL);
+> > > > > +        bitmap = bitmap_zalloc(end, GFP_KERNEL);
+> > > > >            if (bitmap == NULL)
+> > > > >                return -ENOMEM;
+> > > > >            spin_lock(&minor_lock);
+> > > > >            if (end > nr_minors) {
+> > > > >                old = minors;
+> > > > > -            memcpy(bitmap, minors,
+> > > > > -                   BITS_TO_LONGS(nr_minors) * sizeof(*bitmap));
+> > > > > +            bitmap_copy(bitmap, minors, nr_minors);
+> > > > >                minors = bitmap;
+> > > > >                nr_minors = BITS_TO_LONGS(end) * BITS_PER_LONG;
+> > 
+> > 		nr_minors = end;
+> > ?
+> > 
+> 
+> No,
+> My understanding of the code is that if we lack space (end > nr_minors), 
+> we need to allocate more. In such a case, we want to keep track of what 
+> we have allocated, not what we needed.
+> The "padding" bits in the "long align" allocation, can be used later.
 
-Fixes: 9d61d138ab30 ("net: broadcom: rename BCM4908 driver & update DT binding")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog
+> 
+> first call
+> ----------
+> end = 65
+> nr_minors = 63
+> 
+> --> we need some space
+> --> we allocate 2 longs = 128 bits
+> --> we now use 65 bits of these 128 bits
 
-v1 -> v2
+or 96, 32 or 64 bit longs remember.
 
-* Change 1. Correct the Fixes tags.
-* Change 2. CC Florian.
----
- drivers/net/ethernet/broadcom/bcm4908_enet.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> new call
+> --------
+> end = 68
+> nr_minors = 128 (from previous call)
 
-diff --git a/drivers/net/ethernet/broadcom/bcm4908_enet.c b/drivers/net/ethernet/broadcom/bcm4908_enet.c
-index 02a569500234..376f81796a29 100644
---- a/drivers/net/ethernet/broadcom/bcm4908_enet.c
-+++ b/drivers/net/ethernet/broadcom/bcm4908_enet.c
-@@ -708,7 +708,9 @@ static int bcm4908_enet_probe(struct platform_device *pdev)
- 
- 	enet->irq_tx = platform_get_irq_byname(pdev, "tx");
- 
--	dma_set_coherent_mask(dev, DMA_BIT_MASK(32));
-+	err = dma_set_coherent_mask(dev, DMA_BIT_MASK(32));
-+	if (err)
-+		return err;
- 
- 	err = bcm4908_enet_dma_alloc(enet);
- 	if (err)
--- 
-2.25.1
+The initial allocation is now bitmap_zalloc which
+specifies only bits and the nr_minors is then in
+BITS_TO_LONGS(bits) * BITS_PER_LONG
+
+Perhaps that assumes too much about the internal
+implementation of bitmap_alloc
+
+
 

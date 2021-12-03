@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C21AE466EA6
+	by mail.lfdr.de (Postfix) with ESMTP id 55F32466EA5
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 01:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377895AbhLCAoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 19:44:30 -0500
-Received: from smtpweb150.aruba.it ([62.149.158.150]:43625 "EHLO
+        id S1377915AbhLCAo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 19:44:28 -0500
+Received: from smtpweb150.aruba.it ([62.149.158.150]:36301 "EHLO
         smtpweb150.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377849AbhLCAoM (ORCPT
+        with ESMTP id S1377853AbhLCAoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 19:44:12 -0500
+        Thu, 2 Dec 2021 19:44:13 -0500
 Received: from localhost.localdomain ([146.241.138.59])
         by Aruba Outgoing Smtp  with ESMTPSA
-        id swcymiEudrmmOswd5mQfWy; Fri, 03 Dec 2021 01:40:48 +0100
+        id swcymiEudrmmOswd6mQfXG; Fri, 03 Dec 2021 01:40:48 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1638492048; bh=RJS2i0M8zKnI9Lsdi2zK0pDrPuDMLsiMLi2A/PbcU3s=;
+        t=1638492048; bh=Rx+SBMUqsTnKXcpfkgcnkciqI0OV1H64qQy6HsIaVjs=;
         h=From:To:Subject:Date:MIME-Version;
-        b=FDNlpxkjoTnqS0lmayCmM2hJE2bP2PIThARt2jk9iS7KfYXXu6v1y1elW+qY7W3Oa
-         uB3FzN4Up8fOtmDbap6IZ0zGAqnZky4N3qVp9plDFXeDyLPgcAkZkLf49Z7dba/HwR
-         6+sKPZ8Yg7/+Qzb1D/d1fbDkHjNwB3idYPcZQUTenS2mUzLeTuo69XHuv2X0dI/Q6o
-         7JmKMP3tVaSmvxiKBDd4C1KO0P3t9Ngr+eq9TeVMAO8WcxZ/1yh7p49SgJQCLthPgc
-         8qs0NUtlXZOwO3A4MLJ6n4FhKA4VMh68mI+xIQo3lE8vMk7p+RSAo5VzyZwlFdCxwU
-         fYnZ+3NztRckw==
+        b=Cae5GpEWsBQf2nzaOeTXKc6E/TBB6ubvfrMCzPGVFlfJYt8eK0SCKVgwRoFdROlrv
+         1ULJLImYqE/nmBdM6iZ4Jrb3Y7cnFvd4taoE2Q7AduRtr6bq0C5e38C1Upo8ld8kj8
+         R779UwCPO6SO92Td8l/1OmwLeO7Zjk9Z83AkbbQZ7Cng+QuuyWcBG43i5z/eUc7GIu
+         mzakKcGO/DWEOKotfjOA8gC3L3zwUP4Sdcc9sMl5sKfvmTceGFOXZ9kfUQditk1E+r
+         3wdNgtvJ+PlASd2b2C86ljE6WMXOjWk4PTVKQhEvhfhOprS8UcuL3KpBSXy97aKdOs
+         4roWzdy57QhCg==
 From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
 To:     Rob Herring <robh+dt@kernel.org>
 Cc:     Shawn Guo <shawnguo@kernel.org>,
@@ -35,9 +35,9 @@ Cc:     Shawn Guo <shawnguo@kernel.org>,
         linux-kernel@vger.kernel.org,
         Jesse Taube <mr.bossman075@gmail.com>,
         Giulio Benetti <giulio.benetti@benettiengineering.com>
-Subject: [PATCH 15/17] ARM: dts: imx6qdl: drop "fsl,imx-osc"
-Date:   Fri,  3 Dec 2021 01:40:37 +0100
-Message-Id: <20211203004039.48752-16-giulio.benetti@benettiengineering.com>
+Subject: [PATCH 16/17] ARM: dts: imx6qdl: drop "fsl,imx-ckil"
+Date:   Fri,  3 Dec 2021 01:40:38 +0100
+Message-Id: <20211203004039.48752-17-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211203004039.48752-1-giulio.benetti@benettiengineering.com>
 References: <20211203004039.48752-1-giulio.benetti@benettiengineering.com>
@@ -53,7 +53,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"fsl,imx-osc" is useless since no driver deals with it, so let's drop it.
+"fsl,imx-ckil" is useless since no driver deals with it, so let's drop it.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
@@ -61,17 +61,17 @@ Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/imx6qdl.dtsi b/arch/arm/boot/dts/imx6qdl.dtsi
-index f5de5def876d..7470a0f1fd2f 100644
+index 7470a0f1fd2f..215e835a9b93 100644
 --- a/arch/arm/boot/dts/imx6qdl.dtsi
 +++ b/arch/arm/boot/dts/imx6qdl.dtsi
-@@ -67,7 +67,7 @@ ckih1 {
- 		};
+@@ -55,7 +55,7 @@ aliases {
  
- 		osc {
--			compatible = "fsl,imx-osc", "fixed-clock";
+ 	clocks {
+ 		ckil {
+-			compatible = "fsl,imx-ckil", "fixed-clock";
 +			compatible = "fixed-clock";
  			#clock-cells = <0>;
- 			clock-frequency = <24000000>;
+ 			clock-frequency = <32768>;
  		};
 -- 
 2.25.1

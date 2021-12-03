@@ -2,103 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48093467B70
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:32:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F51467B75
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381894AbhLCQfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 11:35:38 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47306 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245728AbhLCQfh (ORCPT
+        id S1381990AbhLCQgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 11:36:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240590AbhLCQgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 11:35:37 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8895062C1F;
-        Fri,  3 Dec 2021 16:32:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5CFAC53FCD;
-        Fri,  3 Dec 2021 16:32:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638549132;
-        bh=GJjzs4CbpbnwXQCUCUM4r55kJfSeTbIx8bPqA88zfio=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cUIjF0jpDhTzM/R2sl3sUQj18NhOt/pioC+isxM6j8INylDBds1F/iPH1v4favTqT
-         MywEB3cgC9Q6fwnS1w2TBnoWH0SY8An9U25nzj5EGjOgr9cj7oUYcoSdmUL/DEBru9
-         L2RiloOfE8XlvYr/yiYdX5ALpNS8jVrQJjwx8TaHqUZw//UhKjWearLtX/Kx9mQVCK
-         z5e8Ss9m5jQD3HIRCmlBBeVNIC83xGXts/UGENorL5an0gzx5bCOEyzgFyAooJjh6C
-         3qZMhlCj7GcUxv8lNES8uAaoNlE7U1bwzd0KguxNn094uEoNezHAUMhpB21kKP+Gwn
-         zc0ZUjACqnCPQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1mtBTm-009e3e-Uk; Fri, 03 Dec 2021 16:32:11 +0000
-Date:   Fri, 03 Dec 2021 16:32:10 +0000
-Message-ID: <87zgphlkdx.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
+        Fri, 3 Dec 2021 11:36:38 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9D7C061751;
+        Fri,  3 Dec 2021 08:33:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=QjwBqRRkSrixSh/IDyfbmaebOro1hr1dDZ0gMoqAxDY=; b=filV5mfIAXvfm0uzdKd9gxn+Ac
+        /Z+Bd/HBfONMrS6Ywwq2Z1V9I2sh7rZnRhXrZb+mLZf65ChTQzrJUzraRuiPZrarIhntiH3mwAljC
+        BLpVdZnwOqd0WZVg9w1rzQnTT7SZJzrZ3SB4ic9vMTZx47mGfdxhg6qjQOmTQ1RurUee0ohGp6MrC
+        46nDrNFg0zbkY2BN0n0ou4kE11nRCvkPZiZsLAOE2bhH4e4V9FDaIUuJiNh54VF+CW2y5W8kS79v9
+        ZVzvesXBl8G8PJYmPI6bdsJ6+T/Gavx2XwBzBd0urakpY2UvJY15R/ay4wJJ1JSgCfCn4qqb8Z5wF
+        fhXW5HFQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mtBUA-009OIf-6T; Fri, 03 Dec 2021 16:32:35 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 37CEC9810D4; Fri,  3 Dec 2021 17:32:34 +0100 (CET)
+Date:   Fri, 3 Dec 2021 17:32:34 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Dougall <dougallj@gmail.com>, kernel-team@android.com
-Subject: Re: [PATCH v2 3/8] irqchip/apple-aic: Add cpumasks for E and P cores
-In-Reply-To: <Yaed7VAlwwCBcP13@FVFF77S0Q05N>
-References: <20211201134909.390490-1-maz@kernel.org>
-        <20211201134909.390490-4-maz@kernel.org>
-        <Yaed7VAlwwCBcP13@FVFF77S0Q05N>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, will@kernel.org, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, robh+dt@kernel.org, tglx@linutronix.de, dougallj@gmail.com, kernel-team@android.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v8 00/14] Function Granular KASLR
+Message-ID: <20211203163234.GJ16608@worktop.programming.kicks-ass.net>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+ <YanzpvmaX1JWYf9t@hirez.programming.kicks-ass.net>
+ <20211203144136.82915-1-alexandr.lobakin@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211203144136.82915-1-alexandr.lobakin@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 01 Dec 2021 16:08:13 +0000,
-Mark Rutland <mark.rutland@arm.com> wrote:
+On Fri, Dec 03, 2021 at 03:41:36PM +0100, Alexander Lobakin wrote:
+> From: Peter Zijlstra <peterz@infradead.org>
+> Date: Fri, 3 Dec 2021 11:38:30 +0100
 > 
-> On Wed, Dec 01, 2021 at 01:49:04PM +0000, Marc Zyngier wrote:
-> > In order to be able to tell the core IRQ code about the affinity
-> > of the PMU interrupt in later patches, compute the cpumasks of the
-> > P and E cores at boot time.
+> > On Thu, Dec 02, 2021 at 11:32:00PM +0100, Alexander Lobakin wrote:
 > > 
-> > This relies on the affinity scheme used by the vendor, which seems
-> > to work for the couple of SoCs that are out in the wild.
+> > > feat        make -j65 boot    vmlinux.o vmlinux  bzImage  bogoops/s
+> > > Relocatable 4m38.478s 24.440s 72014208  58579520  9396192 57640.39
+> > > KASLR       4m39.344s 24.204s 72020624  87805776  9740352 57393.80
+> > > FG-K 16 fps 6m16.493s 25.429s 83759856  87194160 10885632 57784.76
+> > > FG-K 8 fps  6m20.190s 25.094s 83759856  88741328 10985248 56625.84
+> > > FG-K 1 fps  7m09.611s 25.922s 83759856  95681128 11352192 56953.99
+> > 
+> > :sadface: so at best it makes my kernel compiles ~50% slower. Who would
+> > ever consider doing that? It's like retpolines weren't bad enough; lets
+> > heap on the fail?
 > 
-> ... but may change at any arbitrary point in future?
-
-Crystal balls are in short supply, sorry! ;-)
-
-> Can we please put the affinity in the DT, like we do for other SoCs and
-> devices?
+> I was waiting for that :D
 > 
-> I don't think we should treat this HW specially in this regard; we certaintly
-> don't want other folk hard-coding system topology in their irqchip driver, and
-> it should be possible to do something like the ppi-partitions binding, no?
+> I know it's horrible for now, but there are some points to consider:
+>  - folks who are placing hardening over everything don't mind
+>    compile times most likely;
+>  - linkers choking on huge LD scripts is actually a bug in their
+>    code. They process 40k sections as orphans (without a generated
+>    LD script) for a split second, so they're likely able to do the
+>    same with it. Our position here is that after FG-KASLR landing
+>    we'll report it and probably look into linkers' code to see if
+>    that can be addressed (Kees et al are on this AFAIU);
+>  - ClangLTO (at least "Fat", not sure about Thin as I didn't used
+>    it) thinks on vmlinux.o for ~5 minutes on 8-core Skylake. Still,
+>    it is here in mainline and is widely (relatively) used.
+>    I know FG-KASLR stuff is way more exotic, but anyways.
+>  - And the last one: I wouldn't consider FG-KASLR production ready
+>    as Kees would like to see it. Apart from compilation time, you
+>    get random performance {in,de}creases here-and-there all over
+>    the kernel and modules you can't predict at all.
+>    I guess it would become better later on when/if we introduce
+>    profiling-based function placement (there are some discussions
+>    around that and one related article is referred in the orig
+>    cover letter), but dunno for now.
+>    There's one issue in the current code as well -- PTI switching
+>    code is in .entry.text which doesn't currently get randomized.
+>    So it can probably be hunted using gadget collectors I guess?
 
-The PPI partition is totally overkill here. What it deals with is
-multiple devices sharing a single PPI across the system.
+Oooh, so those compile times are not, as one would expect the compile
+times for a set .config but with different kernel, but instead for a
+varying .config on the same kernel?
 
-Here, we can invent our own interrupt number, so the sharing is
-avoided by construction (the joy of not having an interrupt controller
-the first place!).
+IOW, they don't represent the run-time overhead of this thing, but
+merely the toolchain overhead of all this.
 
-I'm happy to stick the affinity in the DT (after all, it is likely
-that other devices on these systems have the same requirements) and
-have it consumed by the irqchip driver. I only need to find a way that
-doesn't completely invalidate the existing binding...
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+So what is the actual runtime overhead of all this?

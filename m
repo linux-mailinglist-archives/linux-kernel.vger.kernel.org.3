@@ -2,84 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 021B5467597
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CD44675A3
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352029AbhLCKyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 05:54:24 -0500
-Received: from outbound-smtp47.blacknight.com ([46.22.136.64]:48061 "EHLO
-        outbound-smtp47.blacknight.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229750AbhLCKyW (ORCPT
+        id S1352183AbhLCK4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 05:56:12 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:50412 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237048AbhLCK4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 05:54:22 -0500
-Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
-        by outbound-smtp47.blacknight.com (Postfix) with ESMTPS id F08C9FB038
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 10:50:57 +0000 (GMT)
-Received: (qmail 25378 invoked from network); 3 Dec 2021 10:50:57 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.29])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 3 Dec 2021 10:50:57 -0000
-Date:   Fri, 3 Dec 2021 10:50:55 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] sched/fair: Adjust the allowed NUMA imbalance when
- SD_NUMA spans multiple LLCs
-Message-ID: <20211203105055.GB3366@techsingularity.net>
-References: <20211201151844.20488-1-mgorman@techsingularity.net>
- <20211201151844.20488-3-mgorman@techsingularity.net>
- <CAGsJ_4xuYH8d18r9f5vUGYjNxtZ31FZrNZepEh8QCZbLW+3a6Q@mail.gmail.com>
+        Fri, 3 Dec 2021 05:56:11 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 57C0BA59;
+        Fri,  3 Dec 2021 11:52:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1638528766;
+        bh=gRR+IXbjrfOBB7AE2iBz2rWScEFKRnf1B2FF0CZ3jz8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lVpTe4zmfbQeDpw/iGDaz0nqxUXzeXqg0eUa7f8wLC7QICzSJ65HX2d8ydxArxgy0
+         1nrAae1QlZniNTLmC8SV641Jim5ntea1t4OiwhXkjoNkUpxqh9KGP5uIP7DV7ALEqy
+         AM7ad6b87KmRDprxBaTgWVGPyhzLTDnK3FFC5tRs=
+Date:   Fri, 3 Dec 2021 12:52:19 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] media: uvcvideo: fix division by zero at stream start
+Message-ID: <Yan241Kg7O+qgQXG@pendragon.ideasonboard.com>
+References: <20211026095511.26673-1-johan@kernel.org>
+ <163524570516.1184428.14632987312253060787@Monstersaurus>
+ <YXfjSJ+fm+LV/m+M@pendragon.ideasonboard.com>
+ <YXfvXzgnvPVqwqZs@hovoldconsulting.com>
+ <YXh4NqnpzOnPiA5/@pendragon.ideasonboard.com>
+ <Yanxc/229JFkuP/v@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAGsJ_4xuYH8d18r9f5vUGYjNxtZ31FZrNZepEh8QCZbLW+3a6Q@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <Yanxc/229JFkuP/v@hovoldconsulting.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 09:15:15PM +1300, Barry Song wrote:
-> > diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> > index d201a7052a29..fee2930745ab 100644
-> > --- a/kernel/sched/topology.c
-> > +++ b/kernel/sched/topology.c
-> > @@ -2242,6 +2242,26 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
-> >                 }
-> >         }
-> >
-> > +       /* Calculate allowed NUMA imbalance */
-> > +       for_each_cpu(i, cpu_map) {
-> > +               int imb_numa_nr = 0;
-> > +
-> > +               for (sd = *per_cpu_ptr(d.sd, i); sd; sd = sd->parent) {
-> > +                       struct sched_domain *child = sd->child;
-> > +
-> > +                       if (!(sd->flags & SD_SHARE_PKG_RESOURCES) && child &&
-> > +                           (child->flags & SD_SHARE_PKG_RESOURCES)) {
-> > +                               int nr_groups;
-> > +
-> > +                               nr_groups = sd->span_weight / child->span_weight;
-> > +                               imb_numa_nr = max(1U, ((child->span_weight) >> 1) /
-> > +                                               (nr_groups * num_online_nodes()));
-> 
-> Hi Mel, you used to have 25% * numa_weight if node has only one LLC.
-> for a system with 4 numa,  In case sd has 2 nodes, child is 1 numa node,
-> then  nr_groups=2, num_online_nodes()=4,  imb_numa_nr will be
-> child->span_weight/2/2/4?
-> 
-> Does this patch change the behaviour for machines whose numa equals LLC?
-> 
+Hi Johan,
 
-Yes, it changes behaviour. Instead of a flat 25%, it takes into account
-the number of LLCs per node and the number of nodes overall.
+On Fri, Dec 03, 2021 at 11:29:07AM +0100, Johan Hovold wrote:
+> On Wed, Oct 27, 2021 at 12:50:46AM +0300, Laurent Pinchart wrote:
+> > On Tue, Oct 26, 2021 at 02:06:55PM +0200, Johan Hovold wrote:
+> > > On Tue, Oct 26, 2021 at 02:15:20PM +0300, Laurent Pinchart wrote:
+> > > > On Tue, Oct 26, 2021 at 11:55:05AM +0100, Kieran Bingham wrote:
+> > > > > Quoting Johan Hovold (2021-10-26 10:55:11)
+> > > > > > Add the missing bulk-endpoint max-packet sanity check to probe() to
+> > > > > > avoid division by zero in uvc_alloc_urb_buffers() in case a malicious
+> > > > > > device has broken descriptors (or when doing descriptor fuzz testing).
+> > > > > > 
+> > > > > > Note that USB core will reject URBs submitted for endpoints with zero
+> > > > > > wMaxPacketSize but that drivers doing packet-size calculations still
+> > > > > > need to handle this (cf. commit 2548288b4fb0 ("USB: Fix: Don't skip
+> > > > > > endpoint descriptors with maxpacket=0")).
+> > > > > > 
+> > > > > > Fixes: c0efd232929c ("V4L/DVB (8145a): USB Video Class driver")
+> > > > > > Cc: stable@vger.kernel.org      # 2.6.26
+> > > > > > Signed-off-by: Johan Hovold <johan@kernel.org>
+> > >
+> > > Note however the copy-paste error in the commit message mentioning
+> > > probe(), which is indeed where this would typically be handled.
+> > > 
+> > > Do you want me to resend or can you change
+> > > 
+> > > 	s/probe()/uvc_video_start_transfer()/
+> > > 
+> > > in the commit message when applying if you think this is acceptable as
+> > > is?
+> > 
+> > I can fix this when applying.
+> > 
+> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> I noticed that this one hasn't showed up in linux-next yet. Do you still
+> have it in your queue or do you want me to resend?
+
+It should be in Mauro's queue now:
+
+https://lore.kernel.org/all/YacOun3Diggsi05V@pendragon.ideasonboard.com/
 
 -- 
-Mel Gorman
-SUSE Labs
+Regards,
+
+Laurent Pinchart

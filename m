@@ -2,126 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1E5467B19
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B8E467B27
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbhLCQSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 11:18:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
+        id S239714AbhLCQWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 11:22:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbhLCQSL (ORCPT
+        with ESMTP id S232415AbhLCQWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 11:18:11 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEF8C061353
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 08:14:47 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id x7so2726332pjn.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 08:14:47 -0800 (PST)
+        Fri, 3 Dec 2021 11:22:20 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6733EC061751;
+        Fri,  3 Dec 2021 08:18:56 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id 137so2768933wma.1;
+        Fri, 03 Dec 2021 08:18:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mDEuCH3n+yniaEStC/bTIvAFijRLrGRV0ZCyXMk9t/M=;
-        b=oqUYSbutqJteauH4QzJUU1tERxwyPAPDs3EM1sc0ukykTNiWq39o1dov0dglm/5QqV
-         XvTnRgBdPVRgoGKaQMRYn0HK7ai7kM+8aWEPTo8HUUtJdLm/9D3J1VVTChAGdn4AHd98
-         VEmIkkCkynqxDfng4apt3z7nBS65wq8VEEzI3bh+gcihDy7bYlq0nsQDqYn64U4lge4M
-         QMmchmZ50jnEjuZnsoeCW2OoPLJMXrUiSPcQT+/h8Nrn66ZzDGtonMlqo3AqPjre3K5/
-         JPYmUMKkRqHh31DXge2eRfYWyhhTqGB036sKzb5T6taryxdgDuDPqD/B0oUffI2cWSfe
-         k5+g==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/LPkN68tYspfEa2svzvg7iyj4T9p7CaSU3K6P782Fdw=;
+        b=g2S3EPebcJNAfwNc5v6rHce3p4JPeOX8jq2jgny1i7i6I0pQBv6ab0x055D8Qntl9g
+         sOCtaFKVUZIyDjf3TfGZQxEJW4utSuMpXeYfU9EtRwlCI3g7X7ByXchi/V00JiCuYxPW
+         ND1ZPpODaA1hifD8cwrXs+p5BP1Z3ojig+eShCqg3RouXry7hyfMYx9I0pIX6isk9TlE
+         rgRHNhmK0jL2uohPoDQ0mU2VsELYNz80QcQfGwIqkr1qGN0pijc41nBLieWYCkQ0VoYt
+         1kVyVu/GfknhgVr8yMsJfSgbAvnfFi+RpnqTJiGk7GDIFRsOTFdKaoLH17EgJua598li
+         JEaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mDEuCH3n+yniaEStC/bTIvAFijRLrGRV0ZCyXMk9t/M=;
-        b=0NGGBaVjrA1TKQJXmgajRlpXptBvijnxJ9/75zK3N0tnUWq93bZapDjY8iXBmXX1dP
-         pqHiEoc7L3KAX+jkUiOXa/XLM8nE6DmbJfEhX0sB0L8zKoCgqusa61lmyhr683TeugPP
-         KvQ4+B+qbh8j4AXeSSllSMBrEmdv900sGhEpmK1l+V/RQ1q73lWgA7tsKSifwnm+rCWi
-         ikbh9MqpEx8J47bf56vgnUW9MM2zZSwdW/3GHPNZZdhVg8o/HHHDjafxUp0tIOB0agc4
-         e4h70+U5lBHfiACrkaIX9hqdPJ5HJnrf2+UyTGQmE/JJ+JbHhgCd0IJsTXPuPeBCwhmu
-         Aztw==
-X-Gm-Message-State: AOAM533JXIfOY/Vt3lVF+REj4uGLM5fxKcwBH1zFm6U1wKhMeaCJqM5I
-        hSFN6CpZtt0qAWAjmMPmnK+oxg==
-X-Google-Smtp-Source: ABdhPJxvvSjINFqQcAHf2+Clt4J5Cn7W5SqPzyCyKfYyq/bvZNquHePCmEG8d2EWGpoFnpbBVV59ag==
-X-Received: by 2002:a17:90b:17c4:: with SMTP id me4mr15106820pjb.15.1638548086685;
-        Fri, 03 Dec 2021 08:14:46 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id v38sm2826654pgl.38.2021.12.03.08.14.45
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/LPkN68tYspfEa2svzvg7iyj4T9p7CaSU3K6P782Fdw=;
+        b=wWf9/gZjQ/efR151M6jHigl0tadC3LTKdVvVBPiFGO3KsjAP/38t0jR+0E/FAvQ0zj
+         db70Bow0ZBsyr1t6FfF1nPsSUixjYyWawcRSXJyNskaCL+4MSnpl2fnT2QVcZb0T1Xky
+         Ep6kf4HM/TsB3JIHdyDjQMY5hgjEeK6DtG6OCj36VFMHTBfunYgGXJBYHi+Kr+yq58qX
+         3iF3FODuXfi9O2VpGmv6f2X8ghnzsgVYKY+/97OZIoanvFCeQ9zG9iOrHMqTonj7fS6P
+         6TwCj/wG1Cvfm/5pCtjkef6gt9Yo9WnMlv+ZLC76Jc+SEXB1tCyKOIymECW4AKq7UYUM
+         fLvQ==
+X-Gm-Message-State: AOAM531sAIpBJGNVUWhehjltYEf45kycN8wiWkC/pQ5vH0DeXZ+hObJ6
+        z2FoB4+3GN97ragQL+tJXKU=
+X-Google-Smtp-Source: ABdhPJzmcfbTgyWLQSHJ5e/BGnE3Pqje/jXItvJqco9AXkaN5rIXhT48X2OYs6JMnimTMbYjs6If7A==
+X-Received: by 2002:a05:600c:3d06:: with SMTP id bh6mr16326257wmb.40.1638548334048;
+        Fri, 03 Dec 2021 08:18:54 -0800 (PST)
+Received: from localhost.localdomain ([39.48.132.131])
+        by smtp.gmail.com with ESMTPSA id t17sm5665970wmq.15.2021.12.03.08.18.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 08:14:45 -0800 (PST)
-Date:   Fri, 3 Dec 2021 16:14:42 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, isaku.yamahata@intel.com,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>
-Subject: Re: [RFC PATCH v3 14/59] KVM: x86: Add vm_type to differentiate
- legacy VMs from protected VMs
-Message-ID: <YapCclOiQXWGXVEr@google.com>
-References: <cover.1637799475.git.isaku.yamahata@intel.com>
- <60a163e818b9101dce94973a2b44662ba3d53f97.1637799475.git.isaku.yamahata@intel.com>
- <87tug0jbno.ffs@tglx>
- <YaUPZj4ja5FY7Fvh@google.com>
- <20211201193737.GB1166703@private.email.ne.jp>
+        Fri, 03 Dec 2021 08:18:53 -0800 (PST)
+From:   Ameer Hamza <amhamza.mgc@gmail.com>
+To:     robdclark@gmail.com, sean@poorly.run, quic_abhinavk@quicinc.com,
+        airlied@linux.ie, daniel@ffwll.ch
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        amhamza.mgc@gmail.com
+Subject: [PATCH] drm/msm/dpu: removed logically dead code
+Date:   Fri,  3 Dec 2021 21:18:46 +0500
+Message-Id: <20211203161846.37720-1-amhamza.mgc@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211201193737.GB1166703@private.email.ne.jp>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021, Isaku Yamahata wrote:
-> On Mon, Nov 29, 2021 at 05:35:34PM +0000,
-> Sean Christopherson <seanjc@google.com> wrote:
-> 
-> > On Thu, Nov 25, 2021, Thomas Gleixner wrote:
-> > > On Wed, Nov 24 2021 at 16:19, isaku yamahata wrote:
-> > > > From: Sean Christopherson <sean.j.christopherson@intel.com>
-> > > >
-> > > > Add a capability to effectively allow userspace to query what VM types
-> > > > are supported by KVM.
-> > > 
-> > > I really don't see why this has to be named legacy. There are enough
-> > > reasonable use cases which are perfectly fine using the non-encrypted
-> > > muck. Just because there is a new hyped feature does not make anything
-> > > else legacy.
-> > 
-> > Yeah, this was brought up in the past.  The current proposal is to use
-> > KVM_X86_DEFAULT_VM[1], though at one point the plan was to use a generic
-> > KVM_VM_TYPE_DEFAULT for all architectures[2], not sure what happened to that idea.
-> > 
-> > [1] https://lore.kernel.org/all/YY6aqVkHNEfEp990@google.com/
-> > [2] https://lore.kernel.org/all/YQsjQ5aJokV1HZ8N@google.com/
-> 
-> Currently <feature>_{unsupported, disallowed} are added and the check is
->  sprinkled and warn in the corresponding low level tdx code.  It helped to
->  detect dubious behavior of guest or qemu.
+Fixed coverity warning by removing the dead code
 
-KVM shouldn't log a message or WARN unless the issue is detected at a late sanity
-check, i.e. where failure indicates a KVM bug.  Other than that, I agree that KVM
-should reject ioctls() that directly violate the rules of a confidential VM with
-an appropriate error code.  I don't think KVM should reject everything though,
-e.g. if the guest attempts to send an SMI, dropping the request on the floor is
-the least awful option because we can't communicate an error to the guest without
-making up our own architecture, and exiting to userspace with -EINVAL from deep
-in KVM would be both painful to implement and an overreaction since doing so would
-likely kill the guest.
+Addresses-Coverity: 1494147 ("Logically dead code")
 
-> The other approach is to silently ignore them (SMI, INIT, IRQ etc) without
-> such check.  The pros is, the code would be simpler and it's what SEV does today.
-> the cons is, it would bes hard to track down such cases and the user would
-> be confused.  For example, when user requests reset/SMI, it's silently ignored.
-> The some check would still be needed.
-> Any thoughts?
-> 
-> -- 
-> Isaku Yamahata <isaku.yamahata@gmail.com>
+Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+index 185379b18572..75f0c0cee661 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+@@ -751,8 +751,6 @@ struct dpu_encoder_phys *dpu_encoder_phys_vid_init(
+ 
+ fail:
+ 	DPU_ERROR("failed to create encoder\n");
+-	if (phys_enc)
+-		dpu_encoder_phys_vid_destroy(phys_enc);
+ 
+ 	return ERR_PTR(ret);
+ }
+-- 
+2.25.1
+

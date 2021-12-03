@@ -2,158 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 384C74672A8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC2D4672AF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350759AbhLCHhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 02:37:08 -0500
-Received: from so254-9.mailgun.net ([198.61.254.9]:39269 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243710AbhLCHhH (ORCPT
+        id S1378911AbhLCHju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 02:39:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350852AbhLCHjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 02:37:07 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1638516824; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=N7DGyEQzTk8fyCInGXk90E25CG4IDDnUIzPL/8K1MqQ=; b=mJL8RimOzT5USwmHGa8V1/pCZSV9a9BlDn9VHQBN7g/uRHP4Jef2FfKYtRh6SobvDWDtyGJa
- BIfoF1TuDU6p/HZ3lXvyWJY8msdhxJ7XM6cGwbtMdfjGr41yJiQ6oZ6gavYLm0/Z1yovkSGY
- GLPsXzfRJ/j3YKooadzo4F5x7hA=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 61a9c857df12ba53c4a8ab01 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 03 Dec 2021 07:33:43
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 01F95C43616; Fri,  3 Dec 2021 07:33:42 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.0
-Received: from [10.110.103.27] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 525F1C4338F;
-        Fri,  3 Dec 2021 07:33:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 525F1C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [PATCH] usb: gadget: f_fs: Wake up IO thread during disconnect
-To:     John Keeping <john@metanate.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_jackp@quicinc.com
-References: <20211201100205.25448-1-quic_wcheng@quicinc.com>
- <YaelpmsJXmhTY4A0@donbot> <Yajc5f3LDm+dSji/@donbot>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <dcfb2b21-6ae8-6921-663d-85cb71f3f5ae@codeaurora.org>
-Date:   Thu, 2 Dec 2021 23:33:40 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Fri, 3 Dec 2021 02:39:45 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8105C061757
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 23:36:21 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso1785201pjb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 23:36:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=KjJvjXLE84A8Tp2zgE64yxeO3Z42dzfdF9inCICVOqg=;
+        b=sTnV/UJjFrntjoK+5RgyPvGchzO0T5aBO6CdvIJqHRpvd5ASEtD1RgsSImzoQSTNkQ
+         Ju140Zwz5b9L4wUHm5e6h2CIgCT8XqEf+PiYV7g0Y+3QL+uaO1EZdBlBqiQ4rlux0j8o
+         I8EfnHpYWUWwbNnpsPGcTyuMWWBuSq09DwIzWvHv7Kk0jjoBIvdcQSScS2VRe0ohPx+s
+         MfRT7qv0Upskt8WK+M4IbZJ7qtd/8wIIuBMZ9MdaUesQP06EOODQ35AV3OJOl3Ce2lAK
+         vBb0Hih+ONP24pmpnWAWZovNbcKu8XbRwmg9XPLy+fkpAknQaOp8YqRRysUDPdWxmyVT
+         mY+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=KjJvjXLE84A8Tp2zgE64yxeO3Z42dzfdF9inCICVOqg=;
+        b=DgoLLffH1qTr3tsZ4TYRr32WxRHsDrMUaxd48gQbZ7FOUBWXUwqMm4o4yIL9GqXlex
+         uPvd53+1yAzfAtJzcI3p7Dvgvv/uNcIJu9nO6yAHv8CLM6ael/DhMF/wxyYWn+h7pSt9
+         Ez7Lk0dVYv0fppC5N0271JLSJa44V5wQ3l62AgaetMqpb0N9+Qv7mDWk89XbUh0jDGCN
+         NzvpyNE2NgmYbKh0/E8K5kpbIPhw76fh7ECv2IvxWbENZ3vXjdtiubMhXDxUG8FoqVlK
+         HVNgKdkLR6lfeuAD0YI2yKe5IXCpi9l2bxlSzOMg8VSxuOXbSy8ZWFctdC9ZMsCiCUpw
+         /DhQ==
+X-Gm-Message-State: AOAM532ajN0woMIk28z1PtDMOA619jxE/ijEixAyVRdLDlsWSoMEmoZG
+        /l/u+6NKwjepkeH9h7Ll8Pnlpg==
+X-Google-Smtp-Source: ABdhPJy4egCE8rQOb7tJ2GeVtLdIc30+wYbZBi29M/Fe0sdl+orVxIjNxbhea/luBn7LIaynASA2Fg==
+X-Received: by 2002:a17:90b:8d6:: with SMTP id ds22mr12209936pjb.194.1638516981196;
+        Thu, 02 Dec 2021 23:36:21 -0800 (PST)
+Received: from [10.76.15.169] ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id p33sm1549107pgm.85.2021.12.02.23.36.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 23:36:20 -0800 (PST)
+Subject: Re: Re: [PATCH v2 1/2] x86/cpu: Introduce x86_get_cpufreq_khz()
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     tglx@linutronix.de, pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20211201024650.88254-1-pizhenwei@bytedance.com>
+ <20211201024650.88254-2-pizhenwei@bytedance.com>
+ <20211202222514.GD16608@worktop.programming.kicks-ass.net>
+From:   zhenwei pi <pizhenwei@bytedance.com>
+Message-ID: <947de021-df91-9219-7378-8addc6f66612@bytedance.com>
+Date:   Fri, 3 Dec 2021 15:34:04 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <Yajc5f3LDm+dSji/@donbot>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20211202222514.GD16608@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
-
-On 12/2/2021 6:49 AM, John Keeping wrote:
-> On Wed, Dec 01, 2021 at 04:41:10PM +0000, John Keeping wrote:
->> On Wed, Dec 01, 2021 at 02:02:05AM -0800, Wesley Cheng wrote:
->>> During device disconnect or composition unbind, applications should be
->>> notified that the endpoints are no longer enabled, so that it can take
->>> the proper actions to handle its IO threads.  Otherwise, they can be
->>> left waiting for endpoints until EPs are re-enabled.
->>>
->>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->>> ---
->>>  drivers/usb/gadget/function/f_fs.c | 7 +++++--
->>>  1 file changed, 5 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
->>> index 3c584da9118c..0b0747d96378 100644
->>> --- a/drivers/usb/gadget/function/f_fs.c
->>> +++ b/drivers/usb/gadget/function/f_fs.c
->>> @@ -957,10 +957,12 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
->>>  		if (file->f_flags & O_NONBLOCK)
->>>  			return -EAGAIN;
->>>  
->>> -		ret = wait_event_interruptible(
->>> -				epfile->ffs->wait, (ep = epfile->ep));
->>> +		ret = wait_event_interruptible(epfile->ffs->wait,
->>> +				(ep = epfile->ep) || !epfile->ffs->func);
-> 
-> I looked at this again, and doesn't this totally break the wait
-> condition?
-> 
-> epfile->ep is set to non-null in ffs_func_eps_enable() which is called
-> from ffs_func_set_alt() just after ffs->func is set to non-null, and
-> then those are also set back to null at the same time.
-> 
-> So the condition boils down to a || !a and this never blocks.  Or am I
-> missing something?
-
-Thanks for the feedback.  Hmm...yes, I get what you're saying.  The
-EPfiles and func is basically being set/cleared together, so the above
-change wouldn't be any different than checking for ep != epfile->ep.
-Let me see if there's another way we can address the issue this change
-is trying to resolve.
-
-> 
->>>  		if (ret)
->>>  			return -EINTR;
->>> +		if (!epfile->ffs->func)
->>> +			return -ENODEV;
+On 12/3/21 6:25 AM, Peter Zijlstra wrote:
+> On Wed, Dec 01, 2021 at 10:46:49AM +0800, zhenwei pi wrote:
+>> Wrapper function x86_get_cpufreq_khz() to get frequency on a x86
+>> platform, hide detailed implementation from proc routine.
 >>
->> This seems strange - we are inside the case where the endpoint is not
->> initially enabled, if we're returning ENODEV here shouldn't that happen
->> in all cases?
->>
->> Beyond that, there is no locking for accessing ffs->func here;
->> modification happens in gadget callbacks so it's guarded by the gadget
->> core (the existing case in ffs_ep0_ioctl() looks suspicious as well).
->>
->> But I can't see why this change is necessary - there are event
->> notifications through ep0 when this happens, as can be seen in the hunk
->> below from the ffs_event_add(ffs, FUNCTIONFS_DISABLE) line.  If
->> userspace cares about this, then it can read the events from ep0.
->>
-In short, the change is basically trying to resolve an issue in an
-application that has a separate thread handling the IO ops.  When the
-USB cable is disconnected, the application would expect for this IO
-thread to be completed and exit gracefully, and restarting it on the
-next connect.  However, since we are stuck in the read() it can not
-proceed further.
+>> Also export this function for the further use, a typical case is that
+>> kvm module gets the frequency of the host and tell the guest side by
+>> kvmclock.
+> 
+> This function was already complete crap, and now you want to export it,
+> *WHY* ?!
+> 
+> What possible use does KVM have for this random number generator?
+> 
+A KVM guest overwrites the '.calibrate_tsc' and '.calibrate_cpu' if 
+kvmclock is supported:
 
-I guess in these situations, we should utilize the O_NONBLOCK file
-parameter?
+in function kvmclock_init(void) (linux/arch/x86/kernel/kvmclock.c)
+	...
+         x86_platform.calibrate_tsc = kvm_get_tsc_khz;
+         x86_platform.calibrate_cpu = kvm_get_tsc_khz;
+	...
 
-Thanks
-Wesley Cheng
+And kvm_get_tsc_khz reads PV data from host side. Before guest reads 
+this, KVM should writes the frequency into the PV data structure.
 
->>>  	}
->>>  
->>>  	/* Do we halt? */
->>> @@ -3292,6 +3294,7 @@ static int ffs_func_set_alt(struct usb_function *f,
->>>  	if (alt == (unsigned)-1) {
->>>  		ffs->func = NULL;
->>>  		ffs_event_add(ffs, FUNCTIONFS_DISABLE);
->>> +		wake_up_interruptible(&ffs->wait);
->>>  		return 0;
->>>  	}
->>>  
+And the problem is that KVM gets tsc_khz directly without aperf/mperf 
+detection. So user may gets different frequency(cat /proc/cpuinfo) from 
+guest & host.
+
+Or is that possible to export function 'aperfmperf_get_khz'?
 
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+zhenwei pi

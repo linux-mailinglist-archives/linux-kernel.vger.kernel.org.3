@@ -2,115 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40ED24679A1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4629C4679AA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381566AbhLCOtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 09:49:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
+        id S244982AbhLCOuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 09:50:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381534AbhLCOtT (ORCPT
+        with ESMTP id S1381594AbhLCOuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 09:49:19 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A39C061751
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 06:45:55 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id 207so6588729ljf.10
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 06:45:55 -0800 (PST)
+        Fri, 3 Dec 2021 09:50:09 -0500
+Received: from mail-io1-xd4a.google.com (mail-io1-xd4a.google.com [IPv6:2607:f8b0:4864:20::d4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFD0C061D5E
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 06:46:45 -0800 (PST)
+Received: by mail-io1-xd4a.google.com with SMTP id j13-20020a0566022ccd00b005e9684c80c6so2442524iow.10
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 06:46:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=isVI3i0OnnF9HKk7LL+6nbdR6JnxGxIvGGvKoeFOlMs=;
-        b=Pl4pmwVCPUPIF2AYBaEOUFoTbHtAE2VsxM7VpuSv/RBCkSZGX34k/NBdso9Tv0jLLp
-         KEfLlxmt8wVHVSFloSOH3k4EUquj0I8STkq0WMMwVzKsMeju+DMyC5TA7JQnRrdqSl2N
-         9mW9VNLaXAvL/hM/n7WVI5UdfY0ud0ZMFDeiKFuEgJDC3kiKR88r6DwHc0dB+rj+cLeo
-         JQLU8JWgkQt7zRrFf8RKkLnTtanGE4fnIBJVJMKz4L42PwfhxNWGItUFBwNus9X0aw7s
-         a5CjbPL1yMkybeauqRsYBInMN8tharIrL9coPnjWKcjZe6uRg86edJannynkQwJ8a1+/
-         +fJw==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=QsxayFD0kSuupxPAlrDY1PLwKJKslxAp42nuzbNIjyc=;
+        b=S37/Z/1EV8P8Kr2/jN4oC0OACqVv3Rq2r/TMoUbyRT95hskGw5Ac/BA/osek4vqjBG
+         aPd1B8nkUo0WwdGAD/s5OBU0zquwpdRcvxkvXSYZR5KHCIl99GPFB9/xBsHpXgqdFAu+
+         V4rPu6u4+NBAunYs/yitmqd3ImOA7NS/myakKDTSs6xzHux9PPzlrryyMERfNhdqAWKV
+         RpguqkpdastYUc6rn75OmVnUu9F5j05N24VzHWi3fk+0opswkX46Ax7pJrD91eDnOMDS
+         hqkoPr4xANSvt7oMryhKVX9d7qTJmFisEfg8fiQka/BMOwqHNTyrvLFEe4TC62d8AZ+R
+         eCoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=isVI3i0OnnF9HKk7LL+6nbdR6JnxGxIvGGvKoeFOlMs=;
-        b=o6LtPvLy70DOht3947DlmgIUjLkHnts/J2xeHwZZvYBB84jNcyOtaBN9ZqSAeijZke
-         EkrqBY3xfyxeqBQ/z2yn8omcXqn7QFjg0sT6rYH1PuwwYzVCiuAtie20AVT+wzyPmGA8
-         zdRfIFJMe2iNdBgPacBCwW9+oiu3xGraydtMDDFzUv9+cg7uKvBoKW8f9BOOfILb6hsf
-         PZyAAxOw2pptMUljWJxOjIZf8M0hVpIylrE/DMCT0tekYx7mCmWiYgP5CnESUNQD6grW
-         6SHFAKZC8u3xdtwWqoSGPdQO/37+ggSICtN6KhktE3W0xmBcwTULTqhBQsCiUcRxDsAx
-         73+Q==
-X-Gm-Message-State: AOAM53189WkIRznooNR1V85z8A6fggO9RgDjdaB3DUFJ9A5jG07NHaqY
-        yChC5ElZAoepe36bHKSjMbc=
-X-Google-Smtp-Source: ABdhPJx3zBP2dIEW33Re8Np8HCSdfQ1NKxZT30mOLTPKIvqlbRVrKtuhDhGOeEjnvH9cBWodlZRg0w==
-X-Received: by 2002:a2e:a7c8:: with SMTP id x8mr18583832ljp.524.1638542753575;
-        Fri, 03 Dec 2021 06:45:53 -0800 (PST)
-Received: from [10.0.0.115] (91-153-170-164.elisa-laajakaista.fi. [91.153.170.164])
-        by smtp.gmail.com with ESMTPSA id t69sm434642lff.110.2021.12.03.06.45.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 06:45:53 -0800 (PST)
-Message-ID: <7dbddf9f-f8fc-f223-7f94-1e1f6382bc7e@gmail.com>
-Date:   Fri, 3 Dec 2021 16:46:20 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v1 2/2] ASoC: ti: davinci-mcasp: Remove unnecessary
- conditional
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-References: <20211202205612.76216-1-andriy.shevchenko@linux.intel.com>
- <20211202205612.76216-2-andriy.shevchenko@linux.intel.com>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-In-Reply-To: <20211202205612.76216-2-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=QsxayFD0kSuupxPAlrDY1PLwKJKslxAp42nuzbNIjyc=;
+        b=sAHBCCuvEL902qV0eIxkTO3vvIlpTpFipGM3pPT156P8+ybBxIkfpp02RYrdbNbNOt
+         G+zqUOIRqWqYafI7f8QIGshGW4Dk3Dh0eyfpNulf8Sg5ewr3DynqSvDowIQUQ5A4g7Pq
+         Ql3lrKGYcYS5HCfFGzBrSf34ekDqz0WbX09nhhxf7dGkRA/R3zKP6shLm9rIXub6/Rzx
+         exJ7wgaFtqh9pFCR5BXHZffnTd5V9eMezq3vcs3GpLZq1O6wAlxbqrR24fJtwzUCDQ/C
+         +EQtS64Uh2CxxsY8a0x9kcyCapKAcCHHwS1LS83mLBZWC8ry1h7TmKhcx31P7ZGaQOQf
+         NhwA==
+X-Gm-Message-State: AOAM530emYIKWmGHVExjracs3oZoF7ewh4poxQfq7t1U/55MzB7uadDW
+        VzgnsSZX/Wu+BXOlPcHRLBECsQgNBDg=
+X-Google-Smtp-Source: ABdhPJyOGt4g5EWzqW6UP63ydOdGYyK8gCrTK1Rv8b5hydUWnUdaHl+T7HfnSIcyYEnbmy+3lFBGAA0orjw=
+X-Received: from pgonda2.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:ac9])
+ (user=pgonda job=sendgmr) by 2002:a05:6638:1311:: with SMTP id
+ r17mr24842979jad.69.1638542804473; Fri, 03 Dec 2021 06:46:44 -0800 (PST)
+Date:   Fri,  3 Dec 2021 14:46:37 +0000
+Message-Id: <20211203144642.3460447-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.0.384.gca35af8252-goog
+Subject: [PATCH V5 0/5] Add SEV_INIT_EX support
+From:   Peter Gonda <pgonda@google.com>
+To:     thomas.lendacky@amd.com
+Cc:     Peter Gonda <pgonda@google.com>, Marc Orr <marcorr@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        John Allen <john.allen@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+SEV_INIT requires users to unlock their SPI bus for the PSP's non
+volatile (NV) storage. Users may wish to lock their SPI bus for numerous
+reasons, to support this the PSP firmware supports SEV_INIT_EX. INIT_EX
+allows the firmware to use a region of memory for its NV storage leaving
+the kernel responsible for actually storing the data in a persistent
+way. This series adds a new module parameter to ccp allowing users to
+specify a path to a file for use as the PSP's NV storage. The ccp driver
+then reads the file into memory for the PSP to use and is responsible
+for writing the file whenever the PSP modifies the memory region.
 
+V4
+* Fix make C=1 W=1 warnings.
 
-On 02/12/2021 22:56, Andy Shevchenko wrote:
-> Instead of double validating of_node, return value of
-> the boolean property directly.
+V3
+* Add another module parameter 'psp_init_on_probe' to allow for skipping
+  PSP init on module init.
+* Fixes review comments from Sean.
+* Fixes missing error checking with file reading.
+* Removed setting 'error' to a set value in patch 1.
 
-Nice cleanup, thanks,
-Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+Signed-off-by: Peter Gonda <pgonda@google.com>
+Reviewed-by: Marc Orr <marcorr@google.com>
+Acked-by: David Rientjes <rientjes@google.com>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Brijesh Singh <brijesh.singh@amd.com>
+Cc: Marc Orr <marcorr@google.com>
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: David Rientjes <rientjes@google.com>
+Cc: John Allen <john.allen@amd.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-> We can't remove ifdeffery, because in OF_GPIO=n cases
-> it might bring unwanted surprises.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  sound/soc/ti/davinci-mcasp.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/sound/soc/ti/davinci-mcasp.c b/sound/soc/ti/davinci-mcasp.c
-> index 81c1ccec5904..3e105caac95e 100644
-> --- a/sound/soc/ti/davinci-mcasp.c
-> +++ b/sound/soc/ti/davinci-mcasp.c
-> @@ -1870,12 +1870,10 @@ static int mcasp_reparent_fck(struct platform_device *pdev)
->  static bool davinci_mcasp_have_gpiochip(struct davinci_mcasp *mcasp)
->  {
->  #ifdef CONFIG_OF_GPIO
-> -	if (mcasp->dev->of_node &&
-> -	    of_property_read_bool(mcasp->dev->of_node, "gpio-controller"))
-> -		return true;
-> -#endif
-> -
-> +	return of_property_read_bool(mcasp->dev->of_node, "gpio-controller");
-> +#else
->  	return false;
-> +#endif
->  }
->  
->  static int davinci_mcasp_get_config(struct davinci_mcasp *mcasp,
-> 
+David Rientjes (1):
+  crypto: ccp - Add SEV_INIT_EX support
+
+Peter Gonda (4):
+  crypto: ccp - Add SEV_INIT rc error logging on init
+  crypto: ccp - Move SEV_INIT retry for corrupted data
+  crypto: ccp - Refactor out sev_fw_alloc()
+  crypto: ccp - Add psp_init_on_probe module parameter
+
+ .../virt/kvm/amd-memory-encryption.rst        |   6 +
+ drivers/crypto/ccp/sev-dev.c                  | 258 +++++++++++++++---
+ include/linux/psp-sev.h                       |  21 ++
+ 3 files changed, 245 insertions(+), 40 deletions(-)
 
 -- 
-Péter
+2.34.0.384.gca35af8252-goog
+

@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4891F467F07
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB1F467F0A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353782AbhLCVFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 16:05:41 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54246 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243206AbhLCVFj (ORCPT
+        id S1383143AbhLCVGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 16:06:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243206AbhLCVGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 16:05:39 -0500
-Received: from mail.kernel.org (unknown [198.145.29.99])
+        Fri, 3 Dec 2021 16:06:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B26C061751;
+        Fri,  3 Dec 2021 13:02:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91CF7B82956
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 21:02:14 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BC8E560E73;
-        Fri,  3 Dec 2021 21:02:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1638565333;
-        bh=Aae9TRQcpxW4Yd/zp6n3Lm0pw3x2oan07wBnj/exvvc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lMampx88aTxtbor/T9R7heUFlzc8mQaYeSKx12NonB7PAIBzqIin1zn6gBxNnAxM8
-         WnmiSiaB3PJ4807w9faKlQ+SlYhy+wgsGnZSXL5rqjfvk3y34AGG6t4HjLqHqo0cRW
-         SHRbyBQKSCbeDsif7YBNjHqXlvDkxr5hsedq2Huo=
-Date:   Fri, 3 Dec 2021 13:02:10 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     yongw.pur@gmail.com
-Cc:     bsingharora@gmail.com, peterz@infradead.org, mingo@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        yang.yang29@zte.com.cn, wang.yong12@zte.com.cn
-Subject: Re: [PATCH linux-next] delayacct: track delays from memory compact
-Message-Id: <20211203130210.f34079f175f28bd1c5c26541@linux-foundation.org>
-In-Reply-To: <1638542272-15187-1-git-send-email-wang.yong12@zte.com.cn>
-References: <1638542272-15187-1-git-send-email-wang.yong12@zte.com.cn>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C1F9B82958;
+        Fri,  3 Dec 2021 21:02:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 48482C53FCB;
+        Fri,  3 Dec 2021 21:02:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638565377;
+        bh=LLXZLQbHwT3AlxfaBOmz4VHwls9ttIGOTI57YT0CMmE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=VGJ8XOMsSQbCE7nbwbh8Sm/5NnI056/1l+HgjOalNQl3Pv+CDE7KXJcmuXDb2pUmE
+         bc5dV6mA75pui0ZBScHvOLxjzXDZm1T6Yutqm3Lz/1sNDidKp6Yt1aQUkGUtXcs1OG
+         dhzK0CNJwenmJqA0CGzyMr94NvIJiK9Q6xE1G9kh3kNgSfhB4Si2P2jmiENx09tJkR
+         yv/GNXcjDebPVdv6E/zhdym2iPlw2szRANSUhyVBGBeUC2neTdvVnK284cIuyPQNSy
+         RsuCuvq4rQ7y2PcQ+y+r8NRNC0KcqAeYGcojnkOA8ys44mf3iR7vCrkbCwpZfLlMLi
+         JTQcNTfjO306A==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 3252C60A5A;
+        Fri,  3 Dec 2021 21:02:57 +0000 (UTC)
+Subject: Re: [GIT PULL] VFIO updates for v5.16-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20211203131803.7fb40f46.alex.williamson@redhat.com>
+References: <20211203131803.7fb40f46.alex.williamson@redhat.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20211203131803.7fb40f46.alex.williamson@redhat.com>
+X-PR-Tracked-Remote: git://github.com/awilliam/linux-vfio.git tags/vfio-v5.16-rc4
+X-PR-Tracked-Commit-Id: 8704e89349080bd640d1755c46d8cdc359a89748
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 12119cfa1052d512a92524e90ebee85029a918f8
+Message-Id: <163856537719.7508.10680291123254494117.pr-tracker-bot@kernel.org>
+Date:   Fri, 03 Dec 2021 21:02:57 +0000
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  3 Dec 2021 06:37:52 -0800 yongw.pur@gmail.com wrote:
+The pull request you sent on Fri, 3 Dec 2021 13:18:03 -0700:
 
-> From: wangyong <wang.yong12@zte.com.cn>
-> 
-> Delay accounting does not track the delay of memory compact.
-> When there is not enough free memory, tasks can spend
-> a amount of their time waiting for memory compact.
-> 
-> To get the impact of tasks in direct memory compact, measure
-> the delay when allocating memory through memory compact.
-> 
-> ...
->
-> --- a/include/linux/delayacct.h
-> +++ b/include/linux/delayacct.h
-> @@ -42,8 +42,13 @@ struct task_delay_info {
->  	u64 thrashing_start;
->  	u64 thrashing_delay;	/* wait for thrashing page */
->  
-> +	u64 compact_start;
-> +	u64 compact_delay;	/* wait for memory compact */
-> +
-> +	u64 freepages_start;
+> git://github.com/awilliam/linux-vfio.git tags/vfio-v5.16-rc4
 
-task_delay_info already has a freepages_start, so it fails to compile.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/12119cfa1052d512a92524e90ebee85029a918f8
 
-Did you send the correct version?
+Thank you!
 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

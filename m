@@ -2,212 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49EDC4678F6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68CEC4678EB
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381294AbhLCODR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 09:03:17 -0500
-Received: from mga09.intel.com ([134.134.136.24]:35042 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1352843AbhLCODQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 09:03:16 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="236787135"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="236787135"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 05:59:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="478332089"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga002.jf.intel.com with ESMTP; 03 Dec 2021 05:59:43 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B3DxfX7005810;
-        Fri, 3 Dec 2021 13:59:41 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v8 03/14] x86: Add support for function granular KASLR
-Date:   Fri,  3 Dec 2021 14:57:25 +0100
-Message-Id: <20211203135725.82097-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <Yang97SFfwuqTNzK@hirez.programming.kicks-ass.net>
-References: <20211202223214.72888-1-alexandr.lobakin@intel.com> <20211202223214.72888-4-alexandr.lobakin@intel.com> <Yang97SFfwuqTNzK@hirez.programming.kicks-ass.net>
+        id S1352612AbhLCOBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 09:01:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236989AbhLCOBI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 09:01:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CE3C06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 05:57:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC6B662AEA
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 13:57:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97A57C53FAD;
+        Fri,  3 Dec 2021 13:57:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638539863;
+        bh=GkZK7CjGJ62tcATLLT9E8sNeTIf3fZA3Xl+jf6Wf6y4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WQcyp4Hmmn/oUjF10ZQdW/iRg9E+SCbUq63s7GI0c0tKXyPuWzcna3+0r8HcrNn4c
+         H/rg4Ca+tS6XaNSTrhyquSK3HJAPHVyb7sgkZLoU/DwLCsiC9HP2X5YXvMsMyCvgUB
+         c4bBsYkksDuQYdUzaphPUcsfTKcXjEkSKSGy5pVeE9mrQ5vDqMu9J9gVY5lKHzAAlt
+         DWne3eO4cWHd4AFgYBDqnY9lfH9u21lJ0jTjOpzUFHAbIgvrg1ABzEIpP/sH3vmAYA
+         6CdQPo1rjeLpTcumMCocOz5Qs+wEu5INrU4geZqMKp7Rf1xu9Bck2G+aZ5EJtphMpY
+         Ae8mFGalKmS+w==
+Date:   Fri, 3 Dec 2021 14:57:38 +0100
+From:   Alexey Gladkov <legion@kernel.org>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     kbuild@lists.01.org, LKML <linux-kernel@vger.kernel.org>,
+        Linux Containers <containers@lists.linux.dev>, lkp@intel.com,
+        kbuild-all@lists.01.org,
+        "Eric W . Biederman" <ebiederm@xmission.com>
+Subject: Re: [PATCH v1 2/2] ucounts: Move rlimit max values from ucounts max
+Message-ID: <20211203135738.ywxjw63ljskzfp2e@example.org>
+References: <bcc85eae4f5e3799f9efdf2d73572bb88616ebac.1637934917.git.legion@kernel.org>
+ <202111280022.ugxpiKpA-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202111280022.ugxpiKpA-lkp@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Fri, 3 Dec 2021 10:18:47 +0100
-
-> On Thu, Dec 02, 2021 at 11:32:03PM +0100, Alexander Lobakin wrote:
-> > From: Kristen Carlson Accardi <kristen@linux.intel.com>
-> > 
-> > This commit contains the changes required to re-layout the kernel text
-> > sections generated by -ffunction-sections shortly after decompression.
-> > Documentation of the feature is also added.
-> > 
-> > After decompression, the decompressed image's elf headers are parsed.
-> > In order to manually update certain data structures that are built with
-> > relative offsets during the kernel build process, certain symbols are
-> > not stripped by objdump and their location is retained in the elf symbol
-> > tables. These addresses are saved.
-> > 
-> > If the image was built with -ffunction-sections, there will be ELF section
-> > headers present which contain information about the address range of each
-> > section. Anything that is not broken out into function sections (i.e. is
-> > consolidated into .text) is left in it's original location, but any other
-> > executable section which begins with ".text." is located and shuffled
-> > randomly within the remaining text segment address range.
-> > 
-> > After the sections have been copied to their new locations, but before
-> > relocations have been applied, the kallsyms tables must be updated to
-> > reflect the new symbol locations. Because it is expected that these tables
-> > will be sorted by address, the kallsyms tables will need to be sorted
-> > after the update.
-> > 
-> > When applying relocations, the address of the relocation needs to be
-> > adjusted by the offset from the original location of the section that was
-> > randomized to it's new location. In addition, if a value at that relocation
-> > was a location in the text segment that was randomized, it's value will be
-> > adjusted to a new location.
-> > 
-> > After relocations have been applied, the exception table must be updated
-> > with new symbol locations, and then re-sorted by the new address. The
-> > orc table will have been updated as part of applying relocations, but since
-> > it is expected to be sorted by address, it will need to be resorted.
+On Fri, Dec 03, 2021 at 04:33:25PM +0300, Dan Carpenter wrote:
+> Hi Alexey,
 > 
+> url:    https://github.com/0day-ci/linux/commits/Alexey-Gladkov/ucounts-Fix-rlimit-max-values-check/20211126-224059
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 136057256686de39cc3a07c2e39ef6bc43003ff6
+> config: i386-randconfig-m021-20211126 (https://download.01.org/0day-ci/archive/20211128/202111280022.ugxpiKpA-lkp@intel.com/config)
+> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
 > 
-> > +static long addr_kallsyms_names;
-> > +static long addr_kallsyms_offsets;
-> > +static long addr_kallsyms_num_syms;
-> > +static long addr_kallsyms_relative_base;
-> > +static long addr_kallsyms_markers;
-> > +static long addr___start___ex_table;
-> > +static long addr___stop___ex_table;
-> > +static long addr___altinstr_replacement;
-> > +static long addr___altinstr_replacement_end;
-> > +static long addr__stext;
-> > +static long addr__etext;
-> > +static long addr__sinittext;
-> > +static long addr__einittext;
-> > +static long addr___start_orc_unwind_ip;
-> > +static long addr___stop_orc_unwind_ip;
-> > +static long addr___start_orc_unwind;
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 > 
-> > +void post_relocations_cleanup(unsigned long map)
-> > +{
-> > +	if (!nofgkaslr) {
-> > +		update_ex_table(map);
-> > +		sort_ex_table(map);
-> > +		update_orc_table(map);
-> > +		sort_orc_table(map);
-> > +	}
-> > +
-> > +	/*
-> > +	 * maybe one day free will do something. So, we "free" this memory
-> > +	 * in either case
-> > +	 */
-> > +	free(sections);
-> > +	free(sechdrs);
-> > +}
-> > +
-> > +void pre_relocations_cleanup(unsigned long map)
-> > +{
-> > +	if (nofgkaslr)
-> > +		return;
-> > +
-> > +	sort_kallsyms(map);
-> > +}
+> smatch warnings:
+> kernel/ucount.c:109 setup_userns_sysctls() error: buffer overflow 'ns->ucount_max' 10 <= 13
 > 
-> > diff --git a/arch/x86/boot/compressed/vmlinux.symbols b/arch/x86/boot/compressed/vmlinux.symbols
-> > new file mode 100644
-> > index 000000000000..da41f3ee153c
-> > --- /dev/null
-> > +++ b/arch/x86/boot/compressed/vmlinux.symbols
-> > @@ -0,0 +1,19 @@
-> > +kallsyms_offsets
-> > +kallsyms_addresses
-> > +kallsyms_num_syms
-> > +kallsyms_relative_base
-> > +kallsyms_names
-> > +kallsyms_token_table
-> > +kallsyms_token_index
-> > +kallsyms_markers
-> > +__start___ex_table
-> > +__stop___ex_table
-> > +__altinstr_replacement
-> > +__altinstr_replacement_end
-> > +_sinittext
-> > +_einittext
-> > +_stext
-> > +_etext
-> > +__start_orc_unwind_ip
-> > +__stop_orc_unwind_ip
-> > +__start_orc_unwind
+> vim +109 kernel/ucount.c
 > 
-> So please don't make it hard to add sections; the above has far too much
-> duplication. For example you can trivially generate the addr_ symbol and
-> the .symbol file from a common include file and a bit of macro wrappery,
-> ideally that macro wrappery would also specify the sort location and
-> function such that you can also generate those pre_ and post_ functions.
+> dbec28460a89aa Eric W. Biederman 2016-07-30   98  bool setup_userns_sysctls(struct user_namespace *ns)
+> dbec28460a89aa Eric W. Biederman 2016-07-30   99  {
+> dbec28460a89aa Eric W. Biederman 2016-07-30  100  #ifdef CONFIG_SYSCTL
+> dbec28460a89aa Eric W. Biederman 2016-07-30  101  	struct ctl_table *tbl;
+> 0f538e3e712a51 Jan Kara          2020-04-07  102  
+> 0f538e3e712a51 Jan Kara          2020-04-07  103  	BUILD_BUG_ON(ARRAY_SIZE(user_table) != UCOUNT_COUNTS + 1);
+> dbec28460a89aa Eric W. Biederman 2016-07-30  104  	setup_sysctl_set(&ns->set, &set_root, set_is_seen);
+> f6b2db1a3e8d14 Eric W. Biederman 2016-08-08  105  	tbl = kmemdup(user_table, sizeof(user_table), GFP_KERNEL);
+> dbec28460a89aa Eric W. Biederman 2016-07-30  106  	if (tbl) {
+> 25f9c0817c535a Eric W. Biederman 2016-08-08  107  		int i;
+> 25f9c0817c535a Eric W. Biederman 2016-08-08  108  		for (i = 0; i < UCOUNT_COUNTS; i++) {
+> 25f9c0817c535a Eric W. Biederman 2016-08-08 @109  			tbl[i].data = &ns->ucount_max[i];
+> 
+> The patch changes the size of ->ucount_max[] to MAX_PER_NAMESPACE_UCOUNTS
+> but this loop still goes up to UCOUNT_COUNTS.
+> 
+> 25f9c0817c535a Eric W. Biederman 2016-08-08  110  		}
+> f6b2db1a3e8d14 Eric W. Biederman 2016-08-08  111  		ns->sysctls = __register_sysctl_table(&ns->set, "user", tbl);
+> dbec28460a89aa Eric W. Biederman 2016-07-30  112  	}
+> dbec28460a89aa Eric W. Biederman 2016-07-30  113  	if (!ns->sysctls) {
+> dbec28460a89aa Eric W. Biederman 2016-07-30  114  		kfree(tbl);
+> dbec28460a89aa Eric W. Biederman 2016-07-30  115  		retire_sysctl_set(&ns->set);
+> dbec28460a89aa Eric W. Biederman 2016-07-30  116  		return false;
+> dbec28460a89aa Eric W. Biederman 2016-07-30  117  	}
+> dbec28460a89aa Eric W. Biederman 2016-07-30  118  #endif
+> dbec28460a89aa Eric W. Biederman 2016-07-30  119  	return true;
+> dbec28460a89aa Eric W. Biederman 2016-07-30  120  }
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
 
-Re automatical generation using some wrappery -- sounds nice.
-I mostly was only doing makeup for Kristen's commits so didn't pay
-attention to that duplication.
+Thanks! But a few days ago I already post a new version of this changeset
+with fix:
 
-> And this is only for sections that need to be sorted right? There's
-> currently a patch in flight to also pre-sort the ftrace table.
+https://lore.kernel.org/containers/24c87e225c7950bf2ea1ff4b4a8f237348808241.1638218242.git.legion@kernel.org/
 
-Kallsyms, ORC tables and extable are getting sorted. text, inittext
-and altinstr_replacement related symbols are needed to perform
-shuffling (text) and relocation fixups (altinsr, inittext).
+-- 
+Rgrds, legion
 
-> All unsorted or runtime sorted sections are fine since they're fixed up
-> by the relocations?
-
-Right.
-
-> Is it at all feasible to share the comparison functions between the
-> various sorters?
-
-They look very similar, I think it'd be fine to merge them (seems
-like not only cmp, but adjust functions as well).
-
-Thanks,
-Al

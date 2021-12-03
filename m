@@ -2,225 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C03794677BB
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:57:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B292C4677C5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357597AbhLCNAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 08:00:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239742AbhLCNAy (ORCPT
+        id S1380974AbhLCNC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 08:02:59 -0500
+Received: from mout.kundenserver.de ([212.227.126.135]:43527 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238868AbhLCNC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 08:00:54 -0500
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DCEC06173E;
-        Fri,  3 Dec 2021 04:57:30 -0800 (PST)
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9f:8608:6e64:956a:daea:cf2f])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 1B3CvIb2021165
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Fri, 3 Dec 2021 13:57:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1638536239; bh=gI7M7yPnJx/oBhAt4SBRGRDw8I96J5PZcHTVDS0LQsg=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=BAsTFALgaSBRgoSJ0MIH4yunIjYB5cZCqpotcxvGBP7TFsAAshQY7JHDrtKil90J8
-         5DoaPmZByVBxtEGfFDbp6RkrvbBM8hR6k0Mr5kIssXGR6RLXjwnh2+YSo7y+ZshL/4
-         lz8VAebIYeiVEJiPRdJkJF6HeWfuB7xY+9XgXjAE=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
-        (envelope-from <bjorn@mork.no>)
-        id 1mt87p-001jVy-N0; Fri, 03 Dec 2021 13:57:17 +0100
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/1] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset
- or zero
-Organization: m
-References: <20211202143437.1411410-1-lee.jones@linaro.org>
-        <20211202175134.5b463e18@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <87o85yj81l.fsf@miraculix.mork.no> <Yan+nvfyS21z7ZUw@google.com>
-Date:   Fri, 03 Dec 2021 13:57:17 +0100
-In-Reply-To: <Yan+nvfyS21z7ZUw@google.com> (Lee Jones's message of "Fri, 3 Dec
-        2021 11:25:18 +0000")
-Message-ID: <87ilw5kfrm.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 3 Dec 2021 08:02:58 -0500
+Received: from mail-wm1-f53.google.com ([209.85.128.53]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mdf3x-1mKLVU1TP7-00Zglw; Fri, 03 Dec 2021 13:59:33 +0100
+Received: by mail-wm1-f53.google.com with SMTP id o29so2291713wms.2;
+        Fri, 03 Dec 2021 04:59:33 -0800 (PST)
+X-Gm-Message-State: AOAM531gMx3wv85iQEZSTtKcdwWCyL/OU3refkuj+Hz7mgEu9yeHGr0D
+        ylAhIjkdAiz/lvAsxt0q0j/7RdrMEeg63tlwLoI=
+X-Google-Smtp-Source: ABdhPJyX6CJeai+XlcUbCUwAknx/CsVUVihzpPVX1b5BV3lc0keaqgZHkLPlFaoWVjc6mXCowzLPsQd2AP0COFBqS8Y=
+X-Received: by 2002:a05:600c:6d2:: with SMTP id b18mr15201503wmn.98.1638536372919;
+ Fri, 03 Dec 2021 04:59:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.3 at canardo
-X-Virus-Status: Clean
+References: <cover.1638515726.git.qinjian@cqplus1.com> <eabfe1b84b889e4aa95e24c30a114c68ef95fd07.1638515726.git.qinjian@cqplus1.com>
+In-Reply-To: <eabfe1b84b889e4aa95e24c30a114c68ef95fd07.1638515726.git.qinjian@cqplus1.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 3 Dec 2021 13:59:16 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1_coAnp8P3L2UA+smxuRL9widFQv9Y5ZZ0X_Sr9zsZtg@mail.gmail.com>
+Message-ID: <CAK8P3a1_coAnp8P3L2UA+smxuRL9widFQv9Y5ZZ0X_Sr9zsZtg@mail.gmail.com>
+Subject: Re: [PATCH v5 09/10] ARM: sunplus: Add initial support for Sunplus
+ SP7021 SoC
+To:     Qin Jian <qinjian@cqplus1.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>, wells.lu@sunplus.com
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:mIPXg2LMYtDEByuHDLalLd/K8sf9pr4S5TrX60AZ0iBJFffwV7t
+ uY+sD8kzZPszA57BmjN4u/0klp3dEA508k6ich7vodzSJoBA1SYECIOysvZXOtqsg+s9uA0
+ rlYGZHgCZ39kQjiCoglXSJqE2vbIUzcHMgak2fm8SiO5xsCCQ9MEAB8De9a6iSGXERmc1yN
+ Cugcrb9i/bkDygVIhpY5Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+VvMNvIVBvE=:4XRsltvYstP7/MgxHZ2zjh
+ hZXKodpj8eRgwlnpWvdr43vyTjt1dxCJ3jlDPYoJ7eP4bGbQVLbfqjJwv5BapKIGDC1dy3H8K
+ 8pLOftLuE1AG5SLRcvMPgpSXbzXZdP7LxUeFvW0rAgDwsz/jkjV+LXbpTO4k8PkYRKlwuBvLL
+ ZRtr9RYZaeWLVEeW7c50pTgjq53sfBqotzRAPQ5WwVfbMNcg45gi+U+U64jibVxS29bKuewGh
+ G4Sjz7yRqBE3L/A5w+wNw0R1VnqIWaAWwT48COX6BowgX66Xf0yJVdPcUhUoODM0CVzQrZoma
+ RVRpfbGPwjm6U9L4SDa7ieR0gQThSlIDPNiVDZM75X3W3pZXBCFenZ3ubqOvbbLzIo/QfU2nc
+ 5Idi2g5OWfgGCvn8LEisywuOvnodubuZHQq60MwTIIKn0fxRbHfS3rvUJZgyA+Q4p9vG8Kry8
+ YVd+pwUWk7ixfSwV8OtDJ6QK9fAqzSYzoY11LAVngWSY5IjrthCLVsIDSIfD8lW94EQS5Ai5x
+ LcQL3pAFlRKe2OL7yZJc/zGa/ISK1ierkm3INinDwrb0mzw384Uyw/Vw8V1xh7h06Q5+47LhW
+ eDzb/LyiaCYtFHSDnB2gPLetWGuZfWKwnBpf0h1EUkFtgmUD89YF3+sBELVQ3srZXR/2ygV/p
+ YULCXss2YEKVZBhaMUtNloycXq1vYxEnzj991A2EJn9YOHy05UxYbaz2n8r0KR8tP0f2qdg8O
+ ro5+nrIj3Yk6jtsXWTLrQIQAZJbHK3g4TVCaQ3VorthwJhpf2C93gP3xSObVEA7lQWePROzPk
+ P766VP+9s0hwO1ub4xUpuX4lb7b0X2+LPX+AM4BnNx8nWFOfEg=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lee Jones <lee.jones@linaro.org> writes:
-> On Fri, 03 Dec 2021, Bj=C3=B8rn Mork wrote:
+On Fri, Dec 3, 2021 at 8:34 AM Qin Jian <qinjian@cqplus1.com> wrote:
+
+> @@ -487,6 +487,22 @@ config ARCH_S3C24XX
+>           (<http://www.simtec.co.uk/products/EB110ITX/>), the IPAQ 1940 or the
+>           Samsung SMDK2410 development board (and derivatives).
 >
->> Just out of curiouslity: Is this a real device, or was this the result
->> of fuzzing around?
->
-> This is the result of "fuzzing around" on qemu. :)
->
-> https://syzkaller.appspot.com/bug?extid=3D2c9b6751e87ab8706cb3
+> +config ARCH_SUNPLUS
+> +       bool "Sunplus SoCs"
+> +       select CLKSRC_OF
+> +       select COMMON_CLK
+> +       select GENERIC_CLOCKEVENTS
+> +       select GENERIC_IRQ_CHIP
+> +       select GENERIC_IRQ_MULTI_HANDLER
+> +       select USE_OF
+> +       select RTC_CLASS
+> +       select RESET_SUNPLUS
 
-OK.  Makes sense.  I'd be surprised of such a device worked on that
-other OS.
+This is in the wrong place: move the Kconfig entry into
+arch/arm/mach-sunplus/Kconfig
+and make it 'depends on ARCH_MULTI_V7'.
 
->> Not that it matters - it's obviously a bug to fix in any case.  Good cat=
-ch!
->>=20
->> (We probably have many more of the same, assuming the device presents
->> semi-sane values in the NCM parameter struct)
->>=20
->> >> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
->> >> index 24753a4da7e60..e303b522efb50 100644
->> >> --- a/drivers/net/usb/cdc_ncm.c
->> >> +++ b/drivers/net/usb/cdc_ncm.c
->> >> @@ -181,6 +181,8 @@ static u32 cdc_ncm_check_tx_max(struct usbnet *de=
-v, u32 new_tx)
->> >>  		min =3D ctx->max_datagram_size + ctx->max_ndp_size + sizeof(struct=
- usb_cdc_ncm_nth32);
->> >>=20=20
->> >>  	max =3D min_t(u32, CDC_NCM_NTB_MAX_SIZE_TX, le32_to_cpu(ctx->ncm_pa=
-rm.dwNtbOutMaxSize));
->> >> +	if (max =3D=3D 0)
->> >> +		max =3D CDC_NCM_NTB_MAX_SIZE_TX; /* dwNtbOutMaxSize not set */
->> >>=20=20
->> >>  	/* some devices set dwNtbOutMaxSize too low for the above default */
->> >>  	min =3D min(min, max);
->>=20
->> It's been a while since I looked at this, so excuse me if I read it
->> wrongly.  But I think we need to catch more illegal/impossible values
->> than just zero here?  Any buffer size which cannot hold a single
->> datagram is pointless.
->>=20
->> Trying to figure out what I possible meant to do with that
->>=20
->>  	min =3D min(min, max);
->>=20
->> I don't think it makes any sense?  Does it?  The "min" value we've
->> carefully calculated allow one max sized datagram and headers. I don't
->> think we should ever continue with a smaller buffer than that
->
-> I was more confused with the comment you added to that code:
->
->    /* some devices set dwNtbOutMaxSize too low for the above default */
->    min =3D min(min, max);
->
-> ... which looks as though it should solve the issue of an inadequate
-> dwNtbOutMaxSize, but it almost does the opposite.
+I think you can remove all the 'select' lines as well because they are
+either implied by
+ARCH_MULTI_V7 or not actually necessary.
 
-That's what I read too.  I must admit that I cannot remember writing any
-of this stuff.  But I trust git...
+> @@ -152,6 +152,7 @@ textofs-$(CONFIG_ARCH_MSM8X60) := 0x00208000
+>  textofs-$(CONFIG_ARCH_MSM8960) := 0x00208000
+>  textofs-$(CONFIG_ARCH_MESON) := 0x00208000
+>  textofs-$(CONFIG_ARCH_AXXIA) := 0x00308000
+> +textofs-$(CONFIG_ARCH_SUNPLUS) := 0x00308000
 
-> I initially
-> changed this segment to use the max() macro instead, but the
-> subsequent clamp_t() macro simply chooses 'max' (0) value over the now
-> sane 'min' one.
+What is this needed for? If it boots without this line, better avoid
+adding it, because
+it will increase the kernel size for everyone else (unless they also enable
+AXXIA).
 
-Yes, but what if we adjust max here instead of min?
+> +config SOC_SP7021
+> +       bool "Sunplus SP7021 SoC support"
+> +       default y
 
-> Which is why I chose=20
->> Or are there cases where this is valid?
->
-> I'm not an expert on the SKB code, but in my simple view of the world,
-> if you wish to use a buffer for any amount of data, you should
-> allocate space for it.
->
->> So that really should haven been catching this bug with a
->>=20
->>   max =3D max(min, max)
->
-> I tried this.  It didn't work either.
->
-> See the subsequent clamp_t() call a few lines down.
+No 'default y' here. You can probably remove this option completely
+and fold it into
+ARCH_SUNPLUS.
 
-This I don't understand.  If we have for example
+> +       select CPU_V7
+> +       select ARM_GIC
+> +       select SUNPLUS_SP7021_INTC
+> +       select HAVE_SMP
+> +       select ARM_PSCI
+> +       select COMMON_CLK_SP7021
+> +       select PINCTRL
+> +       select PINCTRL_SPPCTL
+> +       select OF_OVERLAY
+> +       select GPIOLIB
+> +       help
 
- new_tx =3D 0
- max =3D 0
- min =3D 1514(=3Ddatagram) + 8(=3Dndp) + 2(=3D1+1) * 4(=3Ddpe) + 12(=3Dnth)=
- =3D 1542
+Again, most of these should be implied by ARCH_MULTI_V7, so remove those.
+For individual drivers, try to avoid the 'select' unless this is required by
+the respective driver subsystem.
 
-then
+> diff --git a/arch/arm/mach-sunplus/Makefile.boot b/arch/arm/mach-sunplus/Makefile.boot
+> new file mode 100644
+> index 000000000..401c30840
+> --- /dev/null
+> +++ b/arch/arm/mach-sunplus/Makefile.boot
+> @@ -0,0 +1,3 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +zreladdr-$(CONFIG_ARCH_SUNPLUS) := 0x00308000
 
- max =3D max(min, max) =3D 1542
- val =3D clamp_t(u32, new_tx, min, max) =3D 1542
+This should not be needed any more.
 
-so we return 1542 and everything is fine.
-
->> or maybe more readable
->>=20
->>   if (max < min)
->>      max =3D min
->>=20
->> What do you think?
->
-> So the data that is added to the SKB is ctx->max_ndp_size, which is
-> allocated in cdc_ncm_init().  The code that does it looks like:
->
->    if (ctx->is_ndp16)=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
->         ctx->max_ndp_size =3D sizeof(struct usb_cdc_ncm_ndp16) +
-> 	                    (ctx->tx_max_datagrams + 1) *
-> 			    sizeof(struct usb_cdc_ncm_dpe16);=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20
->     else=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20=20=20=20=20
->         ctx->max_ndp_size =3D sizeof(struct usb_cdc_ncm_ndp32) +
-> 	                    (ctx->tx_max_datagrams + 1) *
-> 			    sizeof(struct usb_cdc_ncm_dpe32);=20=20
->
-> So this should be the size of the allocation too, right?
-
-This driver doesn't add data to the skb.  It allocates a new buffer and
-copies one or more skbs into it.  I'm sure that could be improved too..
-
-Without a complete rewrite we need to allocate new skbs large enough to hold
-
-NTH          - frame header
-NDP x 1      - index table, with minimum two entries (1 datagram + terminat=
-or)
-datagram x 1 - ethernet frame
-
-This gives the minimum "tx_max" value.
-
-The device is supposed to tell us the maximum "tx_max" value in
-dwNtbOutMaxSize.  In theory.  In practice we cannot trust the device, as
-you point out.  We know aleady deal with too large values (which are
-commonly seen in real products), but we also need to deal with too low
-values.
-
-I believe the "too low" is defined by the calculated minimum value, and
-the comment indicates that this what I tried to express but failed.
-
-
-> Why would the platform ever need to over-ride this?  The platform
-> can't make the data area smaller since there won't be enough room.  It
-> could perhaps make it bigger, but the min_t() and clamp_t() macros
-> will end up choosing the above allocation anyway.
->
-> This leaves me feeling a little perplexed.
->
-> If there isn't a good reason for over-riding then I could simplify
-> cdc_ncm_check_tx_max() greatly.
->
-> What do *you* think? :)
-
-I also have the feeling that this could and should be simplified. This
-discussion shows that refactoring is required.  git blame makes this all
-too embarrassing ;-)
-
-
-
-Bj=C3=B8rn
+       Arnd

@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F00D467031
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 03:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66802467049
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 03:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378236AbhLCCum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 21:50:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378218AbhLCCuk (ORCPT
+        id S1378289AbhLCCxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 21:53:54 -0500
+Received: from smtprelay0138.hostedemail.com ([216.40.44.138]:41594 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S243536AbhLCCxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 21:50:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76ED7C06174A;
-        Thu,  2 Dec 2021 18:47:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 119CC62775;
-        Fri,  3 Dec 2021 02:47:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00388C00446;
-        Fri,  3 Dec 2021 02:47:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638499635;
-        bh=SzRDDa9c6PtEphb+1OK8jXRhKNO0W+uy+jB5FALjy6s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WmL8NC3Vg10qxWLWiF/ifRzdihaVcrnNTO7/vShEitsh/zSubrafXYRx/KsBCh2o3
-         y1YhLY//eDCk3FmjP1ly8bRU3FliuUtn/RueyXlAySU+v2NNcFXRenly5EXr6FHS1m
-         b9NBzsn9bNKI2gtXbLIB3Wz5sw9LtnynTmmoTfC5OkTzSq2YNT7bcF+OVASMR8BEaY
-         VaVVBCrpxggqIZnI90EtYIzbf5KN02fjAyhZLPYlQx5LsQZyNqR1tm6KJHgu8IHiHC
-         XosUjntUqUc4NIeHhDiL7mpqa22uGGAmUbc2Qwb6hEMH6HhMBldyvDowE6tGV2Ejad
-         AUuHGufpvCq9A==
-Date:   Thu, 2 Dec 2021 18:47:13 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Li Zhijian <zhijianx.li@intel.com>
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Davide Caratti <dcaratti@redhat.com>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, lizhijian@cn.fujitsu.com,
-        linux-kernel@vger.kernel.org, lkp@intel.com, philip.li@intel.com,
-        Networking <netdev@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] selftests/tc-testing: add exit code
-Message-ID: <20211202184713.4afbdf26@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <236a81d3-db14-902f-8833-377ec0a9b7da@intel.com>
-References: <20211117054517.31847-1-zhijianx.li@intel.com>
-        <YZTDcjv4ZPXv8Oaz@dcaratti.users.ipa.redhat.com>
-        <20211117060535.1d47295a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <4ed23cd5-f4a1-aa70-183f-fbea407c19ee@mojatatu.com>
-        <20211117084854.0d44d64b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <d0c32c34-b0a4-ce1e-35d6-1894222e825a@mojatatu.com>
-        <236a81d3-db14-902f-8833-377ec0a9b7da@intel.com>
+        Thu, 2 Dec 2021 21:53:54 -0500
+Received: from omf08.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay04.hostedemail.com (Postfix) with ESMTP id 45C6D1815C4CB;
+        Fri,  3 Dec 2021 02:50:30 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id A7C1C20038;
+        Fri,  3 Dec 2021 02:50:28 +0000 (UTC)
+Message-ID: <10e59e850894524d34cc7d89c126ab9133e6a1a7.camel@perches.com>
+Subject: Re: [RFC Patch v2 1/3] i2c debug counters as sysfs attributes
+From:   Joe Perches <joe@perches.com>
+To:     Sui Chen <suichen@google.com>, linux-kernel@vger.kernel.org
+Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        joel@jms.id.au, andrew@aj.id.au, tali.perry1@gmail.com,
+        benjaminfair@google.com, krellan@google.com
+Date:   Thu, 02 Dec 2021 18:50:27 -0800
+In-Reply-To: <20211203023728.3699610-2-suichen@google.com>
+References: <20211203023728.3699610-1-suichen@google.com>
+         <20211203023728.3699610-2-suichen@google.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: A7C1C20038
+X-Spam-Status: No, score=-3.21
+X-Stat-Signature: ywct6uirwhdagy39zibat4wycbdx5x6u
+X-Rspamd-Server: rspamout04
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19jdsD/Pinoi7TG5JJ2y9H0VAQekIuvdUA=
+X-HE-Tag: 1638499828-864565
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Dec 2021 10:21:31 +0800 Li Zhijian wrote:
-> CCed netdev
+On Thu, 2021-12-02 at 18:37 -0800, Sui Chen wrote:
+> This change adds a few example I2C debug counters as sysfs attributes:
+> - ber_cnt (bus error count)
+> - nack_cnt (NACK count)
+> - rec_fail_cnt, rec_succ_cnt (recovery failure/success count)
+> - timeout_cnt (timeout count)
+> - i2c_speed (bus frequency)
+> - tx_complete_cnt (transaction completed, including both as an initiator
+>   and as a target)
+> 
+> The function i2c_adapter_create_stats_folder creates a stats directory
+> in the device's sysfs directory to hold the debug counters. The platform
+> drivers are responsible for instantiating the counters in the stats
+> directory if applicable.
 
-Please repost the patches.
+Please try to use scripts/checkpatch.pl on your patches and see if
+you should be more 'typical kernel style' compliant.
+
+Ideally, use the --strict option too.
 

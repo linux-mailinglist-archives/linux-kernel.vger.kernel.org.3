@@ -2,91 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C222C4679C9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B59174679D0
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381544AbhLCO42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 09:56:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58934 "EHLO
+        id S1381590AbhLCO7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 09:59:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235792AbhLCO4X (ORCPT
+        with ESMTP id S1381558AbhLCO7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 09:56:23 -0500
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D309C061751;
-        Fri,  3 Dec 2021 06:52:58 -0800 (PST)
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9f:8608:6e64:956a:daea:cf2f])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 1B3Eqn8e033666
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Fri, 3 Dec 2021 15:52:49 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1638543169; bh=0cRGgZgMtLbTFNIr5ua2q8OeGBtFQrzP3yDen7RjQKs=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=VkVnDzMhPxTS8GcsWZjDDBHGV+SMKQtkE1k2EXR6JxOxcxuTDZ+kqpCdXdbe+EMIo
-         ahya8xHVq/YiXHlEBYowVmcojQW8TVgUSaoKiZuV8G5TAe6ymQ3vYgxOfVmhopdoU7
-         50lCk4OFOxpnTx2TXmxnX3ICSzsYLYA+5xzfyD2g=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
-        (envelope-from <bjorn@mork.no>)
-        id 1mt9vc-001jj7-T7; Fri, 03 Dec 2021 15:52:48 +0100
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/1] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset
- or zero
-Organization: m
-References: <20211202143437.1411410-1-lee.jones@linaro.org>
-Date:   Fri, 03 Dec 2021 15:52:48 +0100
-In-Reply-To: <20211202143437.1411410-1-lee.jones@linaro.org> (Lee Jones's
-        message of "Thu, 2 Dec 2021 14:34:37 +0000")
-Message-ID: <87wnklivun.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 3 Dec 2021 09:59:39 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F88C061354
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 06:56:15 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id l25so12478840eda.11
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 06:56:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RFJamPwMcB79YpPJdr9X5nWsgWFVHH2mX3QM9pNgfiI=;
+        b=pPeI0WldQzTug0+2ebOtE1TXML0bzl9wMsVc/B2ZxhkzPiMLZqjioQ/IeqFGeXLII9
+         rWNBci1Y6WHViXW3gbu2ev5HcSfxHMvyoPqUYB13TELK6fKXTgTEg5f9ah46p9Y55S12
+         dAYbq6gJV6ccGZU2n0NLD4ugHWkHU4YL/P1UlL19aYTRVmqm5cb/jDNqW0rJ6B0wvXQx
+         62n31VzoViGNTPesbRRIBSx8wUEypcZWbLzwBZSuXfsuLd04sjHu4gdKL+TzEhG58+iA
+         90h9XugTMEGYqMV4lits8Pd9RhPZeSXmtVr6nvMeEVH1mzOR0aOt3dU8FQchI3aEIlYv
+         NSTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RFJamPwMcB79YpPJdr9X5nWsgWFVHH2mX3QM9pNgfiI=;
+        b=iDg82WvP3dtwSdw9P3YG6t0Nuo3SAWxGg6noiiMqpASfisx8IYs0tGIdllNmy2aAwZ
+         QxPWKrMdCGo/a9c6pzgKgdovvSdLdIIjwUi7Fl++iajZWwbw624JrnTZ2Rcd67dFWI7q
+         kTc7nF4qsirBNeQ9OgLBcQFLQpUKd/H6hLxrvg+HPKAUHMqg0gIKQayuAZsKXKpbuscH
+         sCAJ8cunpAAdYKr0VaAg+h0mLK7XFeLN8m7rmMdxHSizQZ5Qxdxr/98WosLd1GTo1VQ0
+         A8PpW7s6CsWpb3EJL4JOOEpKFNVz8A9/0/p6xEnEny0YDKEyuJ17RuurtHW2xMwbTxbH
+         BLfA==
+X-Gm-Message-State: AOAM533/gQ7CxsMZxoRfdU1SZnv3s3J4fQeHacKRQ5Tw6lWVLg3EHOko
+        ip3VmrELrkwmrCgyKkhVoBKcxOma1zcznufmhPo1vNe6rct4lg==
+X-Google-Smtp-Source: ABdhPJzVqnP9oqtHp756WStFqP87RsySz8caMYyGs0eInE84HLBw62raTp9zYmpE32VQ9R2fttrRFSjK6z9tfkoBkls=
+X-Received: by 2002:a17:907:1deb:: with SMTP id og43mr23827654ejc.189.1638543372008;
+ Fri, 03 Dec 2021 06:56:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.3 at canardo
-X-Virus-Status: Clean
+References: <ba7f82f348d77b6a65498dd13a92550949e69cc3.1638540167.git.geert+renesas@glider.be>
+In-Reply-To: <ba7f82f348d77b6a65498dd13a92550949e69cc3.1638540167.git.geert+renesas@glider.be>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 3 Dec 2021 15:56:01 +0100
+Message-ID: <CAMRc=Me2528N_jT6AoSSTajznY4EFP+cFvEbqnw4rONB5nJsQw@mail.gmail.com>
+Subject: Re: [PATCH resend] gpio: aggregator: Add interrupt support
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Enrico Weigelt metux IT consult <info@metux.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        stratos-dev@op-lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lee Jones <lee.jones@linaro.org> writes:
+On Fri, Dec 3, 2021 at 3:06 PM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> Currently the GPIO Aggregator does not support interrupts.  This means
+> that kernel drivers going from a GPIO to an IRQ using gpiod_to_irq(),
+> and userspace applications using line events do not work.
+>
+> Add interrupt support by providing a gpio_chip.to_irq() callback, which
+> just calls into the parent GPIO controller.
+>
+> Note that this does not implement full interrupt controller (irq_chip)
+> support, so using e.g. gpio-keys with "interrupts" instead of "gpios"
+> still does not work.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> I would prefer to avoid implementing irq_chip support, until there is a
+> real use case for this.
+>
+> This has been tested with gpio-keys and gpiomon on the Koelsch
+> development board:
+>
+>   - gpio-keys, using a DT overlay[1]:
+>
+>         $ overlay add r8a7791-koelsch-keyboard-controlled-led
+>         $ echo gpio-aggregator > /sys/devices/platform/frobnicator/driver_override
+>         $ echo frobnicator > /sys/bus/platform/drivers/gpio-aggregator/bind
+>
+>         $ gpioinfo frobnicator
+>         gpiochip12 - 3 lines:
+>                 line   0:      "light"      "light"  output  active-high [used]
+>                 line   1:         "on"         "On"   input   active-low [used]
+>                 line   2:        "off"        "Off"   input   active-low [used]
+>
+>         $ echo 255 > /sys/class/leds/light/brightness
+>         $ echo 0 > /sys/class/leds/light/brightness
+>
+>         $ evtest /dev/input/event0
+>
+>   - gpiomon, using the GPIO sysfs API:
+>
+>         $ echo keyboard > /sys/bus/platform/drivers/gpio-keys/unbind
+>         $ echo e6055800.gpio 2,6 > /sys/bus/platform/drivers/gpio-aggregator/new_device
+>         $ gpiomon gpiochip12 0 1
+>
+> [1] "ARM: dts: koelsch: Add overlay for keyboard-controlled LED"
+>     https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/commit/?h=topic/renesas-overlays&id=c78d817869e63a3485bb4ab98aeea6ce368a396e
+> ---
+>  drivers/gpio/gpio-aggregator.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpio/gpio-aggregator.c b/drivers/gpio/gpio-aggregator.c
+> index e9671d1660ef4b40..869dc952cf45218b 100644
+> --- a/drivers/gpio/gpio-aggregator.c
+> +++ b/drivers/gpio/gpio-aggregator.c
+> @@ -371,6 +371,13 @@ static int gpio_fwd_set_config(struct gpio_chip *chip, unsigned int offset,
+>         return gpiod_set_config(fwd->descs[offset], config);
+>  }
+>
+> +static int gpio_fwd_to_irq(struct gpio_chip *chip, unsigned int offset)
+> +{
+> +       struct gpiochip_fwd *fwd = gpiochip_get_data(chip);
+> +
+> +       return gpiod_to_irq(fwd->descs[offset]);
+> +}
+> +
+>  /**
+>   * gpiochip_fwd_create() - Create a new GPIO forwarder
+>   * @dev: Parent device pointer
+> @@ -411,7 +418,8 @@ static struct gpiochip_fwd *gpiochip_fwd_create(struct device *dev,
+>         for (i = 0; i < ngpios; i++) {
+>                 struct gpio_chip *parent = gpiod_to_chip(descs[i]);
+>
+> -               dev_dbg(dev, "%u => gpio-%d\n", i, desc_to_gpio(descs[i]));
+> +               dev_dbg(dev, "%u => gpio %d irq %d\n", i,
+> +                       desc_to_gpio(descs[i]), gpiod_to_irq(descs[i]));
+>
+>                 if (gpiod_cansleep(descs[i]))
+>                         chip->can_sleep = true;
+> @@ -429,6 +437,7 @@ static struct gpiochip_fwd *gpiochip_fwd_create(struct device *dev,
+>         chip->get_multiple = gpio_fwd_get_multiple_locked;
+>         chip->set = gpio_fwd_set;
+>         chip->set_multiple = gpio_fwd_set_multiple_locked;
+> +       chip->to_irq = gpio_fwd_to_irq;
+>         chip->base = -1;
+>         chip->ngpio = ngpios;
+>         fwd->descs = descs;
+> --
+> 2.25.1
+>
 
-> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-> index 24753a4da7e60..e303b522efb50 100644
-> --- a/drivers/net/usb/cdc_ncm.c
-> +++ b/drivers/net/usb/cdc_ncm.c
-> @@ -181,6 +181,8 @@ static u32 cdc_ncm_check_tx_max(struct usbnet *dev, u=
-32 new_tx)
->  		min =3D ctx->max_datagram_size + ctx->max_ndp_size + sizeof(struct usb=
-_cdc_ncm_nth32);
->=20=20
->  	max =3D min_t(u32, CDC_NCM_NTB_MAX_SIZE_TX, le32_to_cpu(ctx->ncm_parm.d=
-wNtbOutMaxSize));
-> +	if (max =3D=3D 0)
-> +		max =3D CDC_NCM_NTB_MAX_SIZE_TX; /* dwNtbOutMaxSize not set */
->=20=20
->  	/* some devices set dwNtbOutMaxSize too low for the above default */
->  	min =3D min(min, max);
+Applied, thanks!
 
-I believe this is the best possible fix, considering the regressions
-anything stricter might cause.
-
-We know of at least one MBIM device where dwNtbOutMaxSize is as low as
-2048.
-
-According to the MBIM spec, the minimum and default value for
-wMaxSegmentSize is also 2048.  This implies that the calculated "min"
-value is at least 2076, which is why we need that odd looking
-
-  min =3D min(min, max);
-
-So let's just fix this specific zero case without breaking the
-non-conforming devices.
-
-
-Reviewed-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+Bart

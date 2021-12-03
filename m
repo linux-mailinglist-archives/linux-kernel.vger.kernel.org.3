@@ -2,197 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C32164674B3
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 107B74674B9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379857AbhLCKYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 05:24:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46942 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1379849AbhLCKYr (ORCPT
+        id S1379858AbhLCK1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 05:27:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243470AbhLCK1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 05:24:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638526880;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=16tCcBN6A3Kz/QH+fwsigWZzWp8j5LhPyBwzqPVfU+s=;
-        b=XDiVye4NHAeEYwtI08iauyqBMQ9igNTDxN05rx4eSiiUpaAUQg+SwnJoTRfAhTVKVNv91e
-        SVNvMM4cbiR/xLt+o+AOpjMs+RcmiPLWXhosP78niNajktNWuJzH3Trp6qRsXlLQDholD/
-        V3sgbasyXE2fLTsxHaH9KL4zOhnBDAo=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-191-9Vn-MG_wPP6ciT-nt1Y09A-1; Fri, 03 Dec 2021 05:21:19 -0500
-X-MC-Unique: 9Vn-MG_wPP6ciT-nt1Y09A-1
-Received: by mail-ed1-f70.google.com with SMTP id n11-20020aa7c68b000000b003e7d68e9874so2173417edq.8
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 02:21:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=16tCcBN6A3Kz/QH+fwsigWZzWp8j5LhPyBwzqPVfU+s=;
-        b=0cxXGHL+DsPULhHFXzApxfd2HL/X5t51EZCKC/fHVl/WYCPioqG0Iq/HDdA2ezKsmx
-         +rJoFRy+qYVnQy+0MnJu+PyyeJWKmw7GfSGXTCFaTZgQm/OZM0kDhFCS9LEUdZ4PrMpN
-         wsI5mRzUK9jLF90IfIxLWZ2bXs0GZ/PNqrM/vBEfV6qmlLkO7dtz7BriQAzgJ81V5OT5
-         8SzBO04T8pi5UWnd33EXWXbYyIyihAfxuwDpniaCi2hSbYhw8quqfk+roC4V+wunKkmd
-         ETwfFPZTbDMKFZGpl5KOnbFExdARIWlDcxYsFGWdgvoKBT46PAT0T1Blz9nyXjRlX92D
-         7f/g==
-X-Gm-Message-State: AOAM533H/ih72P8jJDkOIa4n87uXLQmslmJTrgk6HSoGuNrIX5pp4OL2
-        u5y7L7zY4EIcKDwnN6+BpSo7++dWkOQfqnYOCa5h9WxdzkB3M7F4uPBdqpn1mEeVMrioX9jCdRj
-        P20TH/fmBroLPydQWh1cvugw2
-X-Received: by 2002:a17:906:1290:: with SMTP id k16mr21809399ejb.566.1638526878103;
-        Fri, 03 Dec 2021 02:21:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzfDVxFlYIQsj184u1/mFOHQafz2Rc5BDIkEaP4xxF7HrxkWS23R3eWGG8P7RWdWV8e7yqKbg==
-X-Received: by 2002:a17:906:1290:: with SMTP id k16mr21809366ejb.566.1638526877844;
-        Fri, 03 Dec 2021 02:21:17 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id d18sm1634905edj.23.2021.12.03.02.21.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 02:21:17 -0800 (PST)
-Message-ID: <724ab9d5-7ba1-dae6-49b9-831bafca5b84@redhat.com>
-Date:   Fri, 3 Dec 2021 11:21:16 +0100
+        Fri, 3 Dec 2021 05:27:20 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AE3C06173E;
+        Fri,  3 Dec 2021 02:23:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=WDJ7DRgTIJi/G608Ewn/RZmWDD8diylwBXPBUlmJ67Q=; b=tAGWACfEhPD9yiB9avdDZw/3D+
+        u1zeKcjJBBX7BlGGG9yjkYMGpDrMSUAsGinn9VupILRwY3PCGRQ0mBbTY5hbbArnNK07glNj3Wjrz
+        2DcKNoe59YMJW3ScyhGWJLlYbLAMYnJVoEixt7SfGMjHg+e/mbuiTdlDtQf7ciC+lgg1FVTxgjF5A
+        IkSpa8q0dSesDMLHaXZjYUzpYF4fZuVzUP335nbXvDzpjGcbBebGeLo9Z8vxHTl1ppx3wEruwSLvC
+        84GoyS6A1M8FTLB4MJBtZgbRxyVjWXD3Ca8OrI7XEJ6zYB2p/YJi9DrRTEJGj0neUazl0QVpKocUD
+        EMpJjwCA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mt5iy-008BaQ-Jh; Fri, 03 Dec 2021 10:23:29 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5CF54300293;
+        Fri,  3 Dec 2021 11:23:27 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 424512B36B3B7; Fri,  3 Dec 2021 11:23:27 +0100 (CET)
+Date:   Fri, 3 Dec 2021 11:23:27 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v8 11/14] module: Reorder functions
+Message-ID: <YanwH4bgCgJnwsRW@hirez.programming.kicks-ass.net>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+ <20211202223214.72888-12-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v6 07/15] platform/x86: int3472: Enable I2c daisy chain
-Content-Language: en-US
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <20211125165412.535063-1-hdegoede@redhat.com>
- <20211125165412.535063-8-hdegoede@redhat.com>
- <YaAel9HuAvemRg2s@pendragon.ideasonboard.com>
- <03306e12-40ec-39ab-3b40-42b0395e1b65@redhat.com>
- <4ab5efa7-65b0-009c-293a-d7a49776e78d@gmail.com>
- <2fd5400e-e587-54d2-1071-ad8df49a8a68@redhat.com>
-In-Reply-To: <2fd5400e-e587-54d2-1071-ad8df49a8a68@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211202223214.72888-12-alexandr.lobakin@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Dec 02, 2021 at 11:32:11PM +0100, Alexander Lobakin wrote:
+> +/*
+> + * shuffle_text_list()
+> + * Use a Fisher Yates algorithm to shuffle a list of text sections.
+> + */
+> +static void shuffle_text_list(Elf_Shdr **list, int size)
+> +{
+> +	u32 i, j;
+> +
+> +	for (i = size - 1; i > 0; i--) {
+> +		/*
+> +		 * pick a random index from 0 to i
+> +		 */
+> +		j = get_random_u32() % (i + 1);
+> +
+> +		swap(list[i], list[j]);
+> +	}
+> +}
 
-On 11/26/21 12:45, Hans de Goede wrote:
-> Hi,
-> 
-> On 11/26/21 12:39, Daniel Scally wrote:
->> Hello
->>
->> On 26/11/2021 11:30, Hans de Goede wrote:
->>> Hi,
->>>
->>> On 11/26/21 00:39, Laurent Pinchart wrote:
->>>> Hi Hans,
->>>>
->>>> Thank you for the patch.
->>>>
->>>> On Thu, Nov 25, 2021 at 05:54:04PM +0100, Hans de Goede wrote:
->>>>> From: Daniel Scally <djrscally@gmail.com>
->>>>>
->>>>> The TPS68470 PMIC has an I2C passthrough mode through which I2C traffic
->>>>> can be forwarded to a device connected to the PMIC as though it were
->>>>> connected directly to the system bus. Enable this mode when the chip
->>>>> is initialised.
->>>> Is there any drawback doing this unconditionally, if nothing is
->>>> connected to the bus on the other side (including no pull-ups) ?
->>> I actually never took a really close look at this patch, I just
->>> sorta inherited it from Daniel.
->>>
->>> Now that I have taken a close look, I see that it is setting the
->>> exact same bits as which get set when enabling the VSIO regulator.
->>>
->>> The idea here is that the I2C-passthrough only gets enabled when
->>> the VSIO regulator is turned on, because some sensors end up
->>> shorting the I2C pins to ground when the sensor is not powered.
->>>
->>> Since we set these bits when powering up the VSIO regulator
->>> and since we do that before trying to talk to the sensor
->>> I don't think that we need this (hack) anymore.
->>>
->>> I will give things a try without this change and if things
->>> still work I will drop this patch from the set.
->>>
->>> Daniel, what do you think?
->>
->>
->> Humm, we're only using the VSIO regulator with the VCM though right?
-> 
-> Nope, there is a mapping from VSIO to dovdd for the ov8865 in the
-> board_data; and I'm pretty sure I copied that from your earlier
-> attempts at getting regulator lookups registered :)
-> 
-> And even if the VSIO regulator was only used by the VCM, then it would
-> get turned off after probing the VCM, clearing the 2 bits which this
-> commit sets. Which would break things if we did not re-enable it when
-> the ov8865 needs it.
-> 
->> Which might not be on when the ov8865 tries to probe. I haven't tried
->> without this patch to be honest; I set it because that was what Windows
->> does when powering on the PMIC.
-> 
-> See above, I'm pretty sure we can do without this patch which means
-> that the INT3472 code will no longer be poking at the PMIC directly
-> itself, which is good :)
-> 
-> Anyways I'll give this a try sometime next week and then drop the
-> patch.
+I'm sure I've seen pretty much that exact function earlier in this
+series; does we really need two of them?
 
-I can confirm that this patch indeed is no longer necessary with
-the current regulator code already taking care of this.
+#define shuffle_me_harder(_base, _size, _nr)				\
+do {									\
+	struct { unsigned char _[_size]; } _t, *_a = (void *)(_base);	\
+	int _i, _j;							\
+	for (_i = (_nr)-1; _i > 0; _i--) {				\
+		_j = get_random_u32() % (_i + 1);			\
+		_t = _a[_i];						\
+		_a[_i] = _a[_j];					\
+		_a[_j] = _t;						\
+	}								\
+} while (0)
 
-I will post version 7 of this patch-set soon, with this patch dropped.
+#define shuffle_array(_array)	shuffle_me_harder(_array, sizeof(_array[0]), sizeof(_array)/sizeof(_array[0]))
 
-Regards,
-
-Hans
-
-
-
->>>>> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
->>>>> Signed-off-by: Daniel Scally <djrscally@gmail.com>
->>>>> ---
->>>>>  .../x86/intel/int3472/intel_skl_int3472_tps68470.c         | 7 +++++++
->>>>>  1 file changed, 7 insertions(+)
->>>>>
->>>>> diff --git a/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c b/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
->>>>> index c05b4cf502fe..42e688f4cad4 100644
->>>>> --- a/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
->>>>> +++ b/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
->>>>> @@ -45,6 +45,13 @@ static int tps68470_chip_init(struct device *dev, struct regmap *regmap)
->>>>>  		return ret;
->>>>>  	}
->>>>>  
->>>>> +	/* Enable I2C daisy chain */
->>>>> +	ret = regmap_write(regmap, TPS68470_REG_S_I2C_CTL, 0x03);
->>>>> +	if (ret) {
->>>>> +		dev_err(dev, "Failed to enable i2c daisy chain\n");
->>>>> +		return ret;
->>>>> +	}
->>>>> +
->>>>>  	dev_info(dev, "TPS68470 REVID: 0x%02x\n", version);
->>>>>  
->>>>>  	return 0;
->>
-
+Or something like that...

@@ -2,103 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B665846733A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D42467345
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379190AbhLCI3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 03:29:31 -0500
-Received: from mail-ua1-f41.google.com ([209.85.222.41]:36789 "EHLO
-        mail-ua1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379143AbhLCI3a (ORCPT
+        id S1379196AbhLCIdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:33:33 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:43908 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244052AbhLCIdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 03:29:30 -0500
-Received: by mail-ua1-f41.google.com with SMTP id r15so4055170uao.3;
-        Fri, 03 Dec 2021 00:26:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nv8Jf49U8dHM6/sJsWSvwazrQnskBUzISoulkhKft80=;
-        b=L8t0rXDY8x2xXDbYuVWHPhDDMNxKk8NRu2hPgywrWYG3Kn3fSl/zEFZIenOJgCL6Hd
-         A3Fd5RMtWOTjVRLupH9fPusTqO4HXIVTWKjpfJBH0RzpeVkEGFnd1ebx9uip4NGOKjRn
-         eaNXT1kLbQMADNIcmf+iPL82y3Thf4OCHqxw/aqMZi1W+ixLPGczvPnn+pm/6+4Q1gfB
-         n0RV33ubNKQNnyoIs/ewKnR06b3ul75XRDqZvgYgn+wpu9uNE52BA1rumQM35DlUe3fY
-         DvCyaA2hkK+qwtXTs5xDAkvPoaVN2HatmfByB0kXZhUfBNMAfU9XbPosPiqLoWPxuFhJ
-         VyQg==
-X-Gm-Message-State: AOAM532X1mjDOKgcOB5Nqy6DTWosErW6TdnKDr+Y+SXIOfu9f39tn0GT
-        DlCphxBkKxo8ZYXQoIi8CQNwKfv0BE8Rncg9
-X-Google-Smtp-Source: ABdhPJyfSjm1n2ApUicTHkaVFy01cgH9A3aFLoRzPLPE++w/ueLdUaz2mW4rH0r5UQpmSrDQmryCPA==
-X-Received: by 2002:a67:e114:: with SMTP id d20mr20213817vsl.5.1638519966445;
-        Fri, 03 Dec 2021 00:26:06 -0800 (PST)
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com. [209.85.222.42])
-        by smtp.gmail.com with ESMTPSA id q20sm362299uae.17.2021.12.03.00.26.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 00:26:06 -0800 (PST)
-Received: by mail-ua1-f42.google.com with SMTP id t13so3985314uad.9;
-        Fri, 03 Dec 2021 00:26:06 -0800 (PST)
-X-Received: by 2002:a05:6102:c89:: with SMTP id f9mr19521165vst.68.1638519963327;
- Fri, 03 Dec 2021 00:26:03 -0800 (PST)
+        Fri, 3 Dec 2021 03:33:31 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CF2341FD3C;
+        Fri,  3 Dec 2021 08:30:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638520206; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Paxz2PbJ3ABf+QoTLmxZAgh9n+0xzk9SrTohSl7pwkk=;
+        b=kSucru1oKEfVRiHRu1oP/o1hAlmjYzR6N1aqQkXeKPmOgQxONBO1VjrJZQAHUHF5fE52yK
+        MlZRkecJY7d5lWC5Pj5O8+F2xOTZMG+lFeiTFyBp7s+ZshnszmlL2we/O/jv8uGCjB1+HY
+        YbDQFyl2bgCxEWZ+bbn9RmPUJ+qxu2w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638520206;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Paxz2PbJ3ABf+QoTLmxZAgh9n+0xzk9SrTohSl7pwkk=;
+        b=DVfinWFywF5kZKWZWEwp8ExveJDu/qnzWEOkQDaS4mxPYupKcKpenuxvsa0c/qmmgyaU66
+        2teZ3yw2Pff/IBAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6883B13CF5;
+        Fri,  3 Dec 2021 08:30:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Di5XF47VqWGRWQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Fri, 03 Dec 2021 08:30:06 +0000
+Date:   Fri, 3 Dec 2021 09:30:05 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        ck+kernelbugzilla@bl4ckb0x.de, stephane.poignant@protonmail.com,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.15 35/68] i2c: i801: Fix interrupt storm from
+ SMB_ALERT signal
+Message-ID: <20211203093005.4337dfde@endymion>
+In-Reply-To: <20211130144707.944580-35-sashal@kernel.org>
+References: <20211130144707.944580-1-sashal@kernel.org>
+        <20211130144707.944580-35-sashal@kernel.org>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <c26dfdf9ce56e92d23530a09db386b283e62845d.1638289204.git.geert+renesas@glider.be>
- <20211203065726.GA3072@lst.de>
-In-Reply-To: <20211203065726.GA3072@lst.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 3 Dec 2021 09:25:51 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWR3hwBho3wDBPjGm4q==qrQn3PLdZN9CfVwX-aOMUW0A@mail.gmail.com>
-Message-ID: <CAMuHMdWR3hwBho3wDBPjGm4q==qrQn3PLdZN9CfVwX-aOMUW0A@mail.gmail.com>
-Subject: Re: [PATCH/RFC -nxt] mtd_blkdevs: Set GENHD_FL_NO_PART
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Michael Walle <michael@walle.cc>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        linux-block@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph,
+Hi Sasha,
 
-On Fri, Dec 3, 2021 at 7:57 AM Christoph Hellwig <hch@lst.de> wrote:
-> I think we need the patch below to restore the old behavior where a
-> partitions scan happens only for those sub-drivers that do report a
-> partition shift.
+On Tue, 30 Nov 2021 09:46:31 -0500, Sasha Levin wrote:
+> From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> 
+> [ Upstream commit 03a976c9afb5e3c4f8260c6c08a27d723b279c92 ]
+> 
+> Currently interrupt storm will occur from i2c-i801 after first
+> transaction if SMB_ALERT signal is enabled and ever asserted. It is
+> enough if the signal is asserted once even before the driver is loaded
+> and does not recover because that interrupt is not acknowledged.
+> 
+> This fix aims to fix it by two ways:
+> - Add acknowledging for the SMB_ALERT interrupt status
+> - Disable the SMB_ALERT interrupt on platforms where possible since the
+>   driver currently does not make use for it
+> 
+> Acknowledging resets the SMB_ALERT interrupt status on all platforms and
+> also should help to avoid interrupt storm on older platforms where the
+> SMB_ALERT interrupt disabling is not available.
+> 
+> For simplicity this fix reuses the host notify feature for disabling and
+> restoring original register value.
+> (...)
 
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+If you are backporting this, then I think you should also include:
 
-> MTD maintainers: is this intentional that raw mtdblock does not support
-> partitions, but the various "FTL" modules do?
->
-> diff --git a/drivers/mtd/mtd_blkdevs.c b/drivers/mtd/mtd_blkdevs.c
-> index 113f86df76038..57a22d2ebaeca 100644
-> --- a/drivers/mtd/mtd_blkdevs.c
-> +++ b/drivers/mtd/mtd_blkdevs.c
-> @@ -345,6 +345,8 @@ int add_mtd_blktrans_dev(struct mtd_blktrans_dev *new)
->         gd->first_minor = (new->devnum) << tr->part_bits;
->         gd->minors = 1 << tr->part_bits;
->         gd->fops = &mtd_block_ops;
-> +       if (!tr->part_bits)
-> +               gd->flags |= GENHD_FL_NO_PART;
+commit 9b5bf5878138293fb5b14a48a7a17b6ede6bea25
+Author: Jean Delvare
+Date:   Tue Nov 9 16:02:57 2021 +0100
 
-Move this into the "else" branch of the test below?
+    i2c: i801: Restore INTREN on unload
 
->         if (tr->part_bits)
->                 if (new->devnum < 26)
+which is the first half of the fix for the same bug. Jarkko's patch
+fixes the interrupt storm while the driver is loaded, mine fixes it
+after the driver is unloaded (or when the device is handed over to the
+BIOS, at suspend or reboot).
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Jean Delvare
+SUSE L3 Support

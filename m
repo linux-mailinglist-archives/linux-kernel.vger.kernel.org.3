@@ -2,113 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18742467AFA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B92F8467B02
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:10:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382084AbhLCQNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 11:13:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382071AbhLCQMs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 11:12:48 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49127C061359
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 08:09:22 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so3854824otj.7
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 08:09:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BKBDLL0Pg+6Be9p1WaSktay52T0y6mFUaQvtWCJbSMY=;
-        b=OAIncqtMT/0scZLU2/Ve9TW4YlALP3eX2kqcFI2dVzOsrl+AZ6q8pHZ06mPBgho/Vr
-         qjJ/T0TIm3neKK/2Hk6fXlFiRYa4RAnR9VcKY7d5ZGdnvTGP7GckpkoTOszLJAul9Hv3
-         Xq6jUGzRhb30NNs5LxnIEniqTw2eTalhG7CV42MoyU1BEBPiE9UbZx5tt6baxR4HCbXn
-         Fr3ldoIOA3VOSSd9ubeR+Ae4Oyucm41LP2RmyXQgQTZZidlYWV158BXniH168Ouqn2W0
-         rfNX1X42gZx9mhnQDhHesGeYt6axyqYAR9CEdGRuGbL3JD7SbM3I4nAcTYG95hUm7wAZ
-         7Q2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BKBDLL0Pg+6Be9p1WaSktay52T0y6mFUaQvtWCJbSMY=;
-        b=aKmBv/aQl8Md9eMkyaHUxswQ75LS0kxcr7XJKafS8MB/dx0TAyzvGuavECTV/iuPtl
-         agOTQV778Ws0kO78VQxEKH1bfv2lwQzsoXJ3tQwjlvFXoUP32U5XyMLSA5Ayv3g3n1Gz
-         74emCR0lOlZSOnjpLgXkCxW9WNsRIWhbHs5KA7PE/8DTX70ZlFPJTrYPf98wJ/337YUk
-         7mgilkQFSz/awVG0Y5E2R9GVaGwpnP6t3PAS3m0TRosqdgkL6iS1tv5tYk60/z+UEcCG
-         +bKgssdBjIGl4XIaCpSMb/weOx6qia7BWA0252tL8SFefDStPeWsvvPV4UnZyWUPw3LP
-         sSWw==
-X-Gm-Message-State: AOAM531YFNEF5r3DCcGfac82PM63C15Qtl/pxHYkz/z7FU7BJVMM8rU5
-        gH9PbOuVGdEG8TWfD1skmm6jLg==
-X-Google-Smtp-Source: ABdhPJx4AjNs6LMs4LnJVhhw+WDzmH+OPWF5FL9a4YiirmlcQkf0Z8zzZLQsjZ6nLcobpwTP8PufAQ==
-X-Received: by 2002:a05:6830:1494:: with SMTP id s20mr17149352otq.172.1638547761473;
-        Fri, 03 Dec 2021 08:09:21 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id f20sm840505oiw.48.2021.12.03.08.09.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 08:09:20 -0800 (PST)
-Date:   Fri, 3 Dec 2021 10:09:16 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Martin Botka <martin.botka@somainline.org>
-Cc:     martin.botka1@gmail.com, ~postmarketos/upstreaming@lists.sr.ht,
-        konrad.dybcio@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        paul.bouchara@somainline.org, Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: qcom: sm6125-gcc: Swap ops of ice and apps on sdcc1
-Message-ID: <YapBLN4b01E9Iz9F@builder.lan>
-References: <20211130212015.25232-1-martin.botka@somainline.org>
+        id S237522AbhLCQN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 11:13:58 -0500
+Received: from foss.arm.com ([217.140.110.172]:50998 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230370AbhLCQN5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 11:13:57 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B02A81435;
+        Fri,  3 Dec 2021 08:10:33 -0800 (PST)
+Received: from [10.1.38.15] (e122027.cambridge.arm.com [10.1.38.15])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 783AC3F73B;
+        Fri,  3 Dec 2021 08:10:32 -0800 (PST)
+Subject: Re: [PATCH v3] MAINTAINERS: Update Atish's email address
+To:     Atish Patra <atishp@atishpatra.org>, linux-kernel@vger.kernel.org
+Cc:     anup.patel@wdc.com, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org
+References: <20211202235823.1926970-1-atishp@atishpatra.org>
+From:   Steven Price <steven.price@arm.com>
+Message-ID: <f63e9f1b-4b8e-6c3e-8e21-f9a5f97ca17d@arm.com>
+Date:   Fri, 3 Dec 2021 16:10:30 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211130212015.25232-1-martin.botka@somainline.org>
+In-Reply-To: <20211202235823.1926970-1-atishp@atishpatra.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 30 Nov 15:20 CST 2021, Martin Botka wrote:
-
-> Without this change eMMC runs at overclocked freq.
-> Swap the ops to not OC the eMMC.
+On 02/12/2021 23:58, Atish Patra wrote:
+> I am no longer employed by western digital. Update my email address to
+> personal one and add entries to .mailmap as well.
 > 
-> Signed-off-by: Martin Botka <martin.botka@somainline.org>
-
-Fixes: 4b8d6ae57cdf ("clk: qcom: Add SM6125 (TRINKET) GCC driver")
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Regards,
-Bjorn
-
+> Signed-off-by: Atish Patra <atishp@atishpatra.org>
 > ---
->  drivers/clk/qcom/gcc-sm6125.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  .mailmap    | 1 +
+>  MAINTAINERS | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/clk/qcom/gcc-sm6125.c b/drivers/clk/qcom/gcc-sm6125.c
-> index 543cfab7561f..431b55bb0d2f 100644
-> --- a/drivers/clk/qcom/gcc-sm6125.c
-> +++ b/drivers/clk/qcom/gcc-sm6125.c
-> @@ -1121,7 +1121,7 @@ static struct clk_rcg2 gcc_sdcc1_apps_clk_src = {
->  		.name = "gcc_sdcc1_apps_clk_src",
->  		.parent_data = gcc_parent_data_1,
->  		.num_parents = ARRAY_SIZE(gcc_parent_data_1),
-> -		.ops = &clk_rcg2_ops,
-> +		.ops = &clk_rcg2_floor_ops,
->  	},
->  };
+> diff --git a/.mailmap b/.mailmap
+> index 6277bb27b4bf..23f6b0a60adf 100644
+> --- a/.mailmap
+> +++ b/.mailmap
+> @@ -50,6 +50,7 @@ Archit Taneja <archit@ti.com>
+>  Ard Biesheuvel <ardb@kernel.org> <ard.biesheuvel@linaro.org>
+>  Arnaud Patard <arnaud.patard@rtp-net.org>
+>  Arnd Bergmann <arnd@arndb.de>
+> +Atish Patra <atishp@atishpatra.org> <atish.patra@wdc.com> <atishp@rivosinc.com>
+
+I don't think this does what you expect. You can't list more than one
+email address to replace on the same line. You can use the command "git
+check-mailmap" to test what happens, e.g. with this change applied:
+
+  $ git check-mailmap "<atishp@rivosinc.com>"
+  <atishp@rivosinc.com>
+  $ git check-mailmap "<atish.patra@wdc.com>"
+  Atish Patra <atishp@atishpatra.org>
+  $ git check-mailmap "<atishp@atishpatra.org>"
+  <atishp@atishpatra.org>
+
+So only your @wdc.com address is translated. If you want to translate
+the @rivosinc.com address as well you need a second line. As the file says:
+
+# For format details, see "MAPPING AUTHORS" in "man git-shortlog".
+
+Steve
+
+>  Axel Dyks <xl@xlsigned.net>
+>  Axel Lin <axel.lin@gmail.com>
+>  Bart Van Assche <bvanassche@acm.org> <bart.vanassche@sandisk.com>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 5250298d2817..6c2a34da0314 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10434,7 +10434,7 @@ F:	arch/powerpc/kvm/
 >  
-> @@ -1143,7 +1143,7 @@ static struct clk_rcg2 gcc_sdcc1_ice_core_clk_src = {
->  		.name = "gcc_sdcc1_ice_core_clk_src",
->  		.parent_data = gcc_parent_data_0,
->  		.num_parents = ARRAY_SIZE(gcc_parent_data_0),
-> -		.ops = &clk_rcg2_floor_ops,
-> +		.ops = &clk_rcg2_ops,
->  	},
->  };
->  
-> -- 
-> 2.34.0
+>  KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)
+>  M:	Anup Patel <anup.patel@wdc.com>
+> -R:	Atish Patra <atish.patra@wdc.com>
+> +R:	Atish Patra <atishp@atishpatra.org>
+>  L:	kvm@vger.kernel.org
+>  L:	kvm-riscv@lists.infradead.org
+>  L:	linux-riscv@lists.infradead.org
 > 
+

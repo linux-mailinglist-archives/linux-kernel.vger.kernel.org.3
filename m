@@ -2,319 +2,642 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E29C46738D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC5F6467392
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:56:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379382AbhLCI77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 03:59:59 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:50750 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1350768AbhLCI76 (ORCPT
+        id S1379395AbhLCJAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 04:00:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379389AbhLCJAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 03:59:58 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B320UDC016744;
-        Fri, 3 Dec 2021 09:56:26 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : subject
- : date : message-id : mime-version : content-type; s=selector1;
- bh=XrLbeIeUYiT9KcguK1deuZsNiWLu+GVdqLFPcsOABMY=;
- b=wXxcVCO0nNRlyU3ctgVduj6m1SgRgKEJEZwQsd9X/9KsVH+/qCCvlI17RsoOQ7go9GFy
- TlODWXQ8ZKNoNUdPJcX+l3tZZX0fnY+kk89FE2AfhuiVSfp+RAU9oqMku4W1WHpImbyD
- rBpLufYoIeAfOXvSvQ9iJ4THOF4BApU4+JGqM1g0aoEfc6sE7vdKcQPmvgSQrc6eUk4z
- hEaGlpq4ximxnD03fEll+5cL4b8t5p/o9C9YAF8ystgBboyRW5Hv1Q8ZCkHz6A6gLqnI
- 8NC1M2Y8N7Sw2BTTbscqMt8GzGpdBfvQaAOqsa27UmLeE1ZSCjj9X1lHir5o7RChCeUB Sg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cqa2x9sw2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 09:56:26 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 459EB10002A;
-        Fri,  3 Dec 2021 09:56:25 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3CDF1226FB7;
-        Fri,  3 Dec 2021 09:56:25 +0100 (CET)
-Received: from localhost (10.75.127.47) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 3 Dec 2021 09:56:24
- +0100
-From:   Yannick Fertre <yannick.fertre@foss.st.com>
-To:     Yannick Fertre <yannick.fertre@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/stm: ltdc: support of new hardware version
-Date:   Fri, 3 Dec 2021 09:56:18 +0100
-Message-ID: <20211203085618.11314-1-yannick.fertre@foss.st.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 3 Dec 2021 04:00:17 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3333C061758
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 00:56:53 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id c4so4177156wrd.9
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 00:56:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=qx5PvmkFVYZqETai/jK/rfHutzbtJKEAqXwvuGBVDPE=;
+        b=fFM0awD/G0twvuNnk+xyenuecQLDk12/Y1c49lDM84wCDXFqSu4Pe35DJljkPB1Wnk
+         uKVxwYDVQtipVII3BWUFujpB5XLBW6ljMWfxuPrZuixtA2oJmoCR8JQzn8XscRjB8tYA
+         gZBbtKu3Z/Y39CXNvrCPxB6rlqUhRIiM3oQMFmuQna7W3kXpS7AEs6DiqWs4toYL5otW
+         cdkRiVzjqhOJFD1AjNFowO6ixAyGBgog/44WRwm7jB/UbzFc7hPnt/WgfTU2Ddnq2p5K
+         txBg16OaBMvF2xL6K+nnk4YQNORluxvQR2pqDxrk3HpCQwWPKwCMrn7HHoWx6coOKFS4
+         bSwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=qx5PvmkFVYZqETai/jK/rfHutzbtJKEAqXwvuGBVDPE=;
+        b=04IEy8gJvv4+cYpf5OJdcMDsLwsbOh1bcQSMeWi3S1YKVoBVT0gyELN87crWo61K7q
+         +VoP4Ec/BsidYY/4MQdKfWbEo4CXZiNLWQCnO564/4py9WGsLdNFr2L77JjVZ4OuUpqh
+         46ZXEsz1nehiKxPtxOO04YW3qqfoEBKnB93SYVhXQLEkirf4/eOo4sJfGLC1tqskWyEP
+         xikZE3S/fEcGiCl+1l5Qsr2cwmZDJBsDu4eG/9206XfRQI1jx7aJ1vnUyxkq28OImGm6
+         7wbAjeQ3SsWNEy8RmRT8rFBVInWESxn953HOb7gwZtVf/QC2XByrqUBseF6I4KNJxLz9
+         2w7w==
+X-Gm-Message-State: AOAM532dY4zNw3pVl+zRBLL3hDOfC4LWhB5ro0ZixVB+nmqbAuojy9+o
+        AsqWgrwN9sWSUO4qDGUHcAO6qQ==
+X-Google-Smtp-Source: ABdhPJwgEQ+x1HVk5rgMo4Y8f18ccd80rvTZD8VVrB0/Nz8Qdd/IKIHocHTvb96+66k5BCmPq6AveA==
+X-Received: by 2002:a5d:6e82:: with SMTP id k2mr20186167wrz.147.1638521812022;
+        Fri, 03 Dec 2021 00:56:52 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:15:13:cb5f:d3e:205e:c7c4])
+        by smtp.gmail.com with ESMTPSA id z7sm4272542wmi.33.2021.12.03.00.56.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 00:56:50 -0800 (PST)
+Date:   Fri, 3 Dec 2021 09:56:45 +0100
+From:   Marco Elver <elver@google.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev, x86@kernel.org
+Subject: Re: [PATCH v3 04/25] kcsan: Add core support for a subset of weak
+ memory modeling
+Message-ID: <YanbzWyhR0LwdinE@elver.google.com>
+References: <20211130114433.2580590-1-elver@google.com>
+ <20211130114433.2580590-5-elver@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-03_05,2021-12-02_01,2021-12-02_01
+Content-Type: multipart/mixed; boundary="oIcY7JcqTshlMZ0y"
+Content-Disposition: inline
+In-Reply-To: <20211130114433.2580590-5-elver@google.com>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support of new hardware version 0x40100.
 
-Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+--oIcY7JcqTshlMZ0y
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Tue, Nov 30, 2021 at 12:44PM +0100, Marco Elver wrote:
+[...]
+> v3:
+> * Remove kcsan_noinstr hackery, since we now try to avoid adding any
+>   instrumentation to .noinstr.text in the first place.
+[...]
+
+I missed some cleanups after changes from v2 to v3 -- the below cleanup
+is missing.
+
+Full replacement patch attached.
+
+Thanks,
+-- Marco
+
+------ >8 ------
+
+diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
+index 2254cb75cbb0..916060913966 100644
+--- a/kernel/kcsan/core.c
++++ b/kernel/kcsan/core.c
+@@ -12,7 +12,6 @@
+ #include <linux/delay.h>
+ #include <linux/export.h>
+ #include <linux/init.h>
+-#include <linux/instrumentation.h>
+ #include <linux/kernel.h>
+ #include <linux/list.h>
+ #include <linux/moduleparam.h>
+@@ -21,8 +20,6 @@
+ #include <linux/sched.h>
+ #include <linux/uaccess.h>
+ 
+-#include <asm/sections.h>
+-
+ #include "encoding.h"
+ #include "kcsan.h"
+ #include "permissive.h"
+@@ -1086,9 +1083,7 @@ noinline void __tsan_func_entry(void *call_pc)
+ 	if (!IS_ENABLED(CONFIG_KCSAN_WEAK_MEMORY))
+ 		return;
+ 
+-	instrumentation_begin();
+ 	add_kcsan_stack_depth(1);
+-	instrumentation_end();
+ }
+ EXPORT_SYMBOL(__tsan_func_entry);
+ 
+@@ -1100,7 +1095,6 @@ noinline void __tsan_func_exit(void)
+ 	if (!IS_ENABLED(CONFIG_KCSAN_WEAK_MEMORY))
+ 		return;
+ 
+-	instrumentation_begin();
+ 	reorder_access = get_reorder_access(get_ctx());
+ 	if (!reorder_access)
+ 		goto out;
+@@ -1120,7 +1114,6 @@ noinline void __tsan_func_exit(void)
+ 	}
+ out:
+ 	add_kcsan_stack_depth(-1);
+-	instrumentation_end();
+ }
+ EXPORT_SYMBOL(__tsan_func_exit);
+ 
+
+--oIcY7JcqTshlMZ0y
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="v4-0004-kcsan-Add-core-support-for-a-subset-of-weak-memor.patch"
+
+From 7ac337afb7bec3cc5c5bd5e4155b08bdb554bc7d Mon Sep 17 00:00:00 2001
+From: Marco Elver <elver@google.com>
+Date: Thu, 5 Aug 2021 14:57:45 +0200
+Subject: [PATCH v4 04/25] kcsan: Add core support for a subset of weak memory
+ modeling
+
+Add support for modeling a subset of weak memory, which will enable
+detection of a subset of data races due to missing memory barriers.
+
+KCSAN's approach to detecting missing memory barriers is based on
+modeling access reordering, and enabled if `CONFIG_KCSAN_WEAK_MEMORY=y`,
+which depends on `CONFIG_KCSAN_STRICT=y`. The feature can be enabled or
+disabled at boot and runtime via the `kcsan.weak_memory` boot parameter.
+
+Each memory access for which a watchpoint is set up, is also selected
+for simulated reordering within the scope of its function (at most 1
+in-flight access).
+
+We are limited to modeling the effects of "buffering" (delaying the
+access), since the runtime cannot "prefetch" accesses (therefore no
+acquire modeling). Once an access has been selected for reordering, it
+is checked along every other access until the end of the function scope.
+If an appropriate memory barrier is encountered, the access will no
+longer be considered for reordering.
+
+When the result of a memory operation should be ordered by a barrier,
+KCSAN can then detect data races where the conflict only occurs as a
+result of a missing barrier due to reordering accesses.
+
+Suggested-by: Dmitry Vyukov <dvyukov@google.com>
+Signed-off-by: Marco Elver <elver@google.com>
 ---
- drivers/gpu/drm/stm/ltdc.c | 172 ++++++++++++++++++++++++++++++-------
- drivers/gpu/drm/stm/ltdc.h |   3 +-
- 2 files changed, 145 insertions(+), 30 deletions(-)
+v4:
+* Remove redundant instrumentation_begin/end() now that kcsan_noinstr no
+  longer exists.
 
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index dbdee954692a..c0619f372630 100644
---- a/drivers/gpu/drm/stm/ltdc.c
-+++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -46,15 +46,15 @@
- #define HWVER_10200 0x010200
- #define HWVER_10300 0x010300
- #define HWVER_20101 0x020101
-+#define HWVER_40100 0x040100
+v3:
+* Remove kcsan_noinstr hackery, since we now try to avoid adding any
+  instrumentation to .noinstr.text in the first place.
+* Restrict config WEAK_MEMORY to only be enabled with tooling where
+  we actually remove instrumentation from noinstr.
+* Don't define kcsan_weak_memory bool if !KCSAN_WEAK_MEMORY.
+
+v2:
+* Define kcsan_noinstr as noinline if we rely on objtool nop'ing out
+  calls, to avoid things like LTO inlining it.
+---
+ include/linux/kcsan-checks.h |  10 +-
+ include/linux/kcsan.h        |  10 +-
+ include/linux/sched.h        |   3 +
+ kernel/kcsan/core.c          | 202 ++++++++++++++++++++++++++++++++---
+ lib/Kconfig.kcsan            |  20 ++++
+ scripts/Makefile.kcsan       |   9 +-
+ 6 files changed, 235 insertions(+), 19 deletions(-)
+
+diff --git a/include/linux/kcsan-checks.h b/include/linux/kcsan-checks.h
+index 5f5965246877..a1c6a89fde71 100644
+--- a/include/linux/kcsan-checks.h
++++ b/include/linux/kcsan-checks.h
+@@ -99,7 +99,15 @@ void kcsan_set_access_mask(unsigned long mask);
+ 
+ /* Scoped access information. */
+ struct kcsan_scoped_access {
+-	struct list_head list;
++	union {
++		struct list_head list; /* scoped_accesses list */
++		/*
++		 * Not an entry in scoped_accesses list; stack depth from where
++		 * the access was initialized.
++		 */
++		int stack_depth;
++	};
++
+ 	/* Access information. */
+ 	const volatile void *ptr;
+ 	size_t size;
+diff --git a/include/linux/kcsan.h b/include/linux/kcsan.h
+index 13cef3458fed..c07c71f5ba4f 100644
+--- a/include/linux/kcsan.h
++++ b/include/linux/kcsan.h
+@@ -49,8 +49,16 @@ struct kcsan_ctx {
+ 	 */
+ 	unsigned long access_mask;
+ 
+-	/* List of scoped accesses. */
++	/* List of scoped accesses; likely to be empty. */
+ 	struct list_head scoped_accesses;
++
++#ifdef CONFIG_KCSAN_WEAK_MEMORY
++	/*
++	 * Scoped access for modeling access reordering to detect missing memory
++	 * barriers; only keep 1 to keep fast-path complexity manageable.
++	 */
++	struct kcsan_scoped_access reorder_access;
++#endif
+ };
+ 
+ /**
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 78c351e35fec..0cd40b010487 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1339,6 +1339,9 @@ struct task_struct {
+ #ifdef CONFIG_TRACE_IRQFLAGS
+ 	struct irqtrace_events		kcsan_save_irqtrace;
+ #endif
++#ifdef CONFIG_KCSAN_WEAK_MEMORY
++	int				kcsan_stack_depth;
++#endif
+ #endif
+ 
+ #if IS_ENABLED(CONFIG_KUNIT)
+diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
+index bd359f8ee63a..481f8a524089 100644
+--- a/kernel/kcsan/core.c
++++ b/kernel/kcsan/core.c
+@@ -40,6 +40,13 @@ module_param_named(udelay_interrupt, kcsan_udelay_interrupt, uint, 0644);
+ module_param_named(skip_watch, kcsan_skip_watch, long, 0644);
+ module_param_named(interrupt_watcher, kcsan_interrupt_watcher, bool, 0444);
+ 
++#ifdef CONFIG_KCSAN_WEAK_MEMORY
++static bool kcsan_weak_memory = true;
++module_param_named(weak_memory, kcsan_weak_memory, bool, 0644);
++#else
++#define kcsan_weak_memory false
++#endif
++
+ bool kcsan_enabled;
+ 
+ /* Per-CPU kcsan_ctx for interrupts */
+@@ -351,6 +358,67 @@ void kcsan_restore_irqtrace(struct task_struct *task)
+ #endif
+ }
+ 
++static __always_inline int get_kcsan_stack_depth(void)
++{
++#ifdef CONFIG_KCSAN_WEAK_MEMORY
++	return current->kcsan_stack_depth;
++#else
++	BUILD_BUG();
++	return 0;
++#endif
++}
++
++static __always_inline void add_kcsan_stack_depth(int val)
++{
++#ifdef CONFIG_KCSAN_WEAK_MEMORY
++	current->kcsan_stack_depth += val;
++#else
++	BUILD_BUG();
++#endif
++}
++
++static __always_inline struct kcsan_scoped_access *get_reorder_access(struct kcsan_ctx *ctx)
++{
++#ifdef CONFIG_KCSAN_WEAK_MEMORY
++	return ctx->disable_scoped ? NULL : &ctx->reorder_access;
++#else
++	return NULL;
++#endif
++}
++
++static __always_inline bool
++find_reorder_access(struct kcsan_ctx *ctx, const volatile void *ptr, size_t size,
++		    int type, unsigned long ip)
++{
++	struct kcsan_scoped_access *reorder_access = get_reorder_access(ctx);
++
++	if (!reorder_access)
++		return false;
++
++	/*
++	 * Note: If accesses are repeated while reorder_access is identical,
++	 * never matches the new access, because !(type & KCSAN_ACCESS_SCOPED).
++	 */
++	return reorder_access->ptr == ptr && reorder_access->size == size &&
++	       reorder_access->type == type && reorder_access->ip == ip;
++}
++
++static inline void
++set_reorder_access(struct kcsan_ctx *ctx, const volatile void *ptr, size_t size,
++		   int type, unsigned long ip)
++{
++	struct kcsan_scoped_access *reorder_access = get_reorder_access(ctx);
++
++	if (!reorder_access || !kcsan_weak_memory)
++		return;
++
++	reorder_access->ptr		= ptr;
++	reorder_access->size		= size;
++	reorder_access->type		= type | KCSAN_ACCESS_SCOPED;
++	reorder_access->ip		= ip;
++	reorder_access->stack_depth	= get_kcsan_stack_depth();
++}
++
+ /*
+  * Pull everything together: check_access() below contains the performance
+  * critical operations; the fast-path (including check_access) functions should
+@@ -389,8 +457,10 @@ static noinline void kcsan_found_watchpoint(const volatile void *ptr,
+ 	 * The access_mask check relies on value-change comparison. To avoid
+ 	 * reporting a race where e.g. the writer set up the watchpoint, but the
+ 	 * reader has access_mask!=0, we have to ignore the found watchpoint.
++	 *
++	 * reorder_access is never created from an access with access_mask set.
+ 	 */
+-	if (ctx->access_mask)
++	if (ctx->access_mask && !find_reorder_access(ctx, ptr, size, type, ip))
+ 		return;
+ 
+ 	/*
+@@ -440,11 +510,13 @@ kcsan_setup_watchpoint(const volatile void *ptr, size_t size, int type, unsigned
+ 	const bool is_assert = (type & KCSAN_ACCESS_ASSERT) != 0;
+ 	atomic_long_t *watchpoint;
+ 	u64 old, new, diff;
+-	unsigned long access_mask;
+ 	enum kcsan_value_change value_change = KCSAN_VALUE_CHANGE_MAYBE;
++	bool interrupt_watcher = kcsan_interrupt_watcher;
+ 	unsigned long ua_flags = user_access_save();
+ 	struct kcsan_ctx *ctx = get_ctx();
++	unsigned long access_mask = ctx->access_mask;
+ 	unsigned long irq_flags = 0;
++	bool is_reorder_access;
+ 
+ 	/*
+ 	 * Always reset kcsan_skip counter in slow-path to avoid underflow; see
+@@ -467,6 +539,17 @@ kcsan_setup_watchpoint(const volatile void *ptr, size_t size, int type, unsigned
+ 		goto out;
+ 	}
+ 
++	/*
++	 * The local CPU cannot observe reordering of its own accesses, and
++	 * therefore we need to take care of 2 cases to avoid false positives:
++	 *
++	 *	1. Races of the reordered access with interrupts. To avoid, if
++	 *	   the current access is reorder_access, disable interrupts.
++	 *	2. Avoid races of scoped accesses from nested interrupts (below).
++	 */
++	is_reorder_access = find_reorder_access(ctx, ptr, size, type, ip);
++	if (is_reorder_access)
++		interrupt_watcher = false;
+ 	/*
+ 	 * Avoid races of scoped accesses from nested interrupts (or scheduler).
+ 	 * Assume setting up a watchpoint for a non-scoped (normal) access that
+@@ -482,7 +565,7 @@ kcsan_setup_watchpoint(const volatile void *ptr, size_t size, int type, unsigned
+ 	 * information is lost if dirtied by KCSAN.
+ 	 */
+ 	kcsan_save_irqtrace(current);
+-	if (!kcsan_interrupt_watcher)
++	if (!interrupt_watcher)
+ 		local_irq_save(irq_flags);
+ 
+ 	watchpoint = insert_watchpoint((unsigned long)ptr, size, is_write);
+@@ -503,7 +586,7 @@ kcsan_setup_watchpoint(const volatile void *ptr, size_t size, int type, unsigned
+ 	 * Read the current value, to later check and infer a race if the data
+ 	 * was modified via a non-instrumented access, e.g. from a device.
+ 	 */
+-	old = read_instrumented_memory(ptr, size);
++	old = is_reorder_access ? 0 : read_instrumented_memory(ptr, size);
+ 
+ 	/*
+ 	 * Delay this thread, to increase probability of observing a racy
+@@ -515,8 +598,17 @@ kcsan_setup_watchpoint(const volatile void *ptr, size_t size, int type, unsigned
+ 	 * Re-read value, and check if it is as expected; if not, we infer a
+ 	 * racy access.
+ 	 */
+-	access_mask = ctx->access_mask;
+-	new = read_instrumented_memory(ptr, size);
++	if (!is_reorder_access) {
++		new = read_instrumented_memory(ptr, size);
++	} else {
++		/*
++		 * Reordered accesses cannot be used for value change detection,
++		 * because the memory location may no longer be accessible and
++		 * could result in a fault.
++		 */
++		new = 0;
++		access_mask = 0;
++	}
+ 
+ 	diff = old ^ new;
+ 	if (access_mask)
+@@ -585,11 +677,20 @@ kcsan_setup_watchpoint(const volatile void *ptr, size_t size, int type, unsigned
+ 	 */
+ 	remove_watchpoint(watchpoint);
+ 	atomic_long_dec(&kcsan_counters[KCSAN_COUNTER_USED_WATCHPOINTS]);
++
+ out_unlock:
+-	if (!kcsan_interrupt_watcher)
++	if (!interrupt_watcher)
+ 		local_irq_restore(irq_flags);
+ 	kcsan_restore_irqtrace(current);
+ 	ctx->disable_scoped--;
++
++	/*
++	 * Reordered accesses cannot be used for value change detection,
++	 * therefore never consider for reordering if access_mask is set.
++	 * ASSERT_EXCLUSIVE are not real accesses, ignore them as well.
++	 */
++	if (!access_mask && !is_assert)
++		set_reorder_access(ctx, ptr, size, type, ip);
+ out:
+ 	user_access_restore(ua_flags);
+ }
+@@ -597,7 +698,6 @@ kcsan_setup_watchpoint(const volatile void *ptr, size_t size, int type, unsigned
+ static __always_inline void
+ check_access(const volatile void *ptr, size_t size, int type, unsigned long ip)
+ {
+-	const bool is_write = (type & KCSAN_ACCESS_WRITE) != 0;
+ 	atomic_long_t *watchpoint;
+ 	long encoded_watchpoint;
+ 
+@@ -608,12 +708,14 @@ check_access(const volatile void *ptr, size_t size, int type, unsigned long ip)
+ 	if (unlikely(size == 0))
+ 		return;
+ 
++again:
+ 	/*
+ 	 * Avoid user_access_save in fast-path: find_watchpoint is safe without
+ 	 * user_access_save, as the address that ptr points to is only used to
+ 	 * check if a watchpoint exists; ptr is never dereferenced.
+ 	 */
+-	watchpoint = find_watchpoint((unsigned long)ptr, size, !is_write,
++	watchpoint = find_watchpoint((unsigned long)ptr, size,
++				     !(type & KCSAN_ACCESS_WRITE),
+ 				     &encoded_watchpoint);
+ 	/*
+ 	 * It is safe to check kcsan_is_enabled() after find_watchpoint in the
+@@ -627,9 +729,42 @@ check_access(const volatile void *ptr, size_t size, int type, unsigned long ip)
+ 	else {
+ 		struct kcsan_ctx *ctx = get_ctx(); /* Call only once in fast-path. */
+ 
+-		if (unlikely(should_watch(ctx, ptr, size, type)))
++		if (unlikely(should_watch(ctx, ptr, size, type))) {
+ 			kcsan_setup_watchpoint(ptr, size, type, ip);
+-		else if (unlikely(ctx->scoped_accesses.prev))
++			return;
++		}
++
++		if (!(type & KCSAN_ACCESS_SCOPED)) {
++			struct kcsan_scoped_access *reorder_access = get_reorder_access(ctx);
++
++			if (reorder_access) {
++				/*
++				 * reorder_access check: simulates reordering of
++				 * the access after subsequent operations.
++				 */
++				ptr = reorder_access->ptr;
++				type = reorder_access->type;
++				ip = reorder_access->ip;
++				/*
++				 * Upon a nested interrupt, this context's
++				 * reorder_access can be modified (shared ctx).
++				 * We know that upon return, reorder_access is
++				 * always invalidated by setting size to 0 via
++				 * __tsan_func_exit(). Therefore we must read
++				 * and check size after the other fields.
++				 */
++				barrier();
++				size = READ_ONCE(reorder_access->size);
++				if (size)
++					goto again;
++			}
++		}
++
++		/*
++		 * Always checked last, right before returning from runtime;
++		 * if reorder_access is valid, checked after it was checked.
++		 */
++		if (unlikely(ctx->scoped_accesses.prev))
+ 			kcsan_check_scoped_accesses();
+ 	}
+ }
+@@ -916,19 +1051,56 @@ DEFINE_TSAN_VOLATILE_READ_WRITE(8);
+ DEFINE_TSAN_VOLATILE_READ_WRITE(16);
  
  /*
-  * The address of some registers depends on the HW version: such registers have
-- * an extra offset specified with reg_ofs.
-+ * an extra offset specified with layer_ofs.
+- * The below are not required by KCSAN, but can still be emitted by the
+- * compiler.
++ * Function entry and exit are used to determine the validty of reorder_access.
++ * Reordering of the access ends at the end of the function scope where the
++ * access happened. This is done for two reasons:
++ *
++ *	1. Artificially limits the scope where missing barriers are detected.
++ *	   This minimizes false positives due to uninstrumented functions that
++ *	   contain the required barriers but were missed.
++ *
++ *	2. Simplifies generating the stack trace of the access.
   */
--#define REG_OFS_NONE	0
--#define REG_OFS_4	4		/* Insertion of "Layer Conf. 2" reg */
--#define REG_OFS		(ldev->caps.reg_ofs)
--#define LAY_OFS		0x80		/* Register Offset between 2 layers */
-+#define LAY_OFS_0	0x80
-+#define LAY_OFS_1	0x100
-+#define LAY_OFS	(ldev->caps.layer_ofs)
- 
- /* Global register offsets */
- #define LTDC_IDR	0x0000		/* IDentification */
-@@ -75,29 +75,34 @@
- #define LTDC_LIPCR	0x0040		/* Line Interrupt Position Conf. */
- #define LTDC_CPSR	0x0044		/* Current Position Status */
- #define LTDC_CDSR	0x0048		/* Current Display Status */
-+#define LTDC_FUT	0x0090		/* Fifo underrun Threshold */
- 
- /* Layer register offsets */
--#define LTDC_L1LC1R	(0x80)		/* L1 Layer Configuration 1 */
--#define LTDC_L1LC2R	(0x84)		/* L1 Layer Configuration 2 */
--#define LTDC_L1CR	(0x84 + REG_OFS)/* L1 Control */
--#define LTDC_L1WHPCR	(0x88 + REG_OFS)/* L1 Window Hor Position Config */
--#define LTDC_L1WVPCR	(0x8C + REG_OFS)/* L1 Window Vert Position Config */
--#define LTDC_L1CKCR	(0x90 + REG_OFS)/* L1 Color Keying Configuration */
--#define LTDC_L1PFCR	(0x94 + REG_OFS)/* L1 Pixel Format Configuration */
--#define LTDC_L1CACR	(0x98 + REG_OFS)/* L1 Constant Alpha Config */
--#define LTDC_L1DCCR	(0x9C + REG_OFS)/* L1 Default Color Configuration */
--#define LTDC_L1BFCR	(0xA0 + REG_OFS)/* L1 Blend Factors Configuration */
--#define LTDC_L1FBBCR	(0xA4 + REG_OFS)/* L1 FrameBuffer Bus Control */
--#define LTDC_L1AFBCR	(0xA8 + REG_OFS)/* L1 AuxFB Control */
--#define LTDC_L1CFBAR	(0xAC + REG_OFS)/* L1 Color FrameBuffer Address */
--#define LTDC_L1CFBLR	(0xB0 + REG_OFS)/* L1 Color FrameBuffer Length */
--#define LTDC_L1CFBLNR	(0xB4 + REG_OFS)/* L1 Color FrameBuffer Line Nb */
--#define LTDC_L1AFBAR	(0xB8 + REG_OFS)/* L1 AuxFB Address */
--#define LTDC_L1AFBLR	(0xBC + REG_OFS)/* L1 AuxFB Length */
--#define LTDC_L1AFBLNR	(0xC0 + REG_OFS)/* L1 AuxFB Line Number */
--#define LTDC_L1CLUTWR	(0xC4 + REG_OFS)/* L1 CLUT Write */
--#define LTDC_L1YS1R	(0xE0 + REG_OFS)/* L1 YCbCr Scale 1 */
--#define LTDC_L1YS2R	(0xE4 + REG_OFS)/* L1 YCbCr Scale 2 */
-+#define LTDC_L1C0R	(ldev->caps.layer_regs[0])	/* L1 configuration 0 */
-+#define LTDC_L1C1R	(ldev->caps.layer_regs[1])	/* L1 configuration 1 */
-+#define LTDC_L1RCR	(ldev->caps.layer_regs[2])	/* L1 reload control */
-+#define LTDC_L1CR	(ldev->caps.layer_regs[3])	/* L1 control register */
-+#define LTDC_L1WHPCR	(ldev->caps.layer_regs[4])	/* L1 window horizontal position configuration */
-+#define LTDC_L1WVPCR	(ldev->caps.layer_regs[5])	/* L1 window vertical position configuration */
-+#define LTDC_L1CKCR	(ldev->caps.layer_regs[6])	/* L1 color keying configuration */
-+#define LTDC_L1PFCR	(ldev->caps.layer_regs[7])	/* L1 pixel format configuration */
-+#define LTDC_L1CACR	(ldev->caps.layer_regs[8])	/* L1 constant alpha configuration */
-+#define LTDC_L1DCCR	(ldev->caps.layer_regs[9])	/* L1 default color configuration */
-+#define LTDC_L1BFCR	(ldev->caps.layer_regs[10])	/* L1 blending factors configuration */
-+#define LTDC_L1BLCR	(ldev->caps.layer_regs[11])	/* L1 burst length configuration */
-+#define LTDC_L1PCR	(ldev->caps.layer_regs[12])	/* L1 planar configuration */
-+#define LTDC_L1CFBAR	(ldev->caps.layer_regs[13])	/* L1 color frame buffer address */
-+#define LTDC_L1CFBLR	(ldev->caps.layer_regs[14])	/* L1 color frame buffer length */
-+#define LTDC_L1CFBLNR	(ldev->caps.layer_regs[15])	/* L1 color frame buffer line number */
-+#define LTDC_L1AFBA0R	(ldev->caps.layer_regs[16])	/* L1 auxiliary frame buffer address 0 */
-+#define LTDC_L1AFBA1R	(ldev->caps.layer_regs[17])	/* L1 auxiliary frame buffer address 1 */
-+#define LTDC_L1AFBLR	(ldev->caps.layer_regs[18])	/* L1 auxiliary frame buffer length */
-+#define LTDC_L1AFBLNR	(ldev->caps.layer_regs[19])	/* L1 auxiliary frame buffer line number */
-+#define LTDC_L1CLUTWR	(ldev->caps.layer_regs[20])	/* L1 CLUT write */
-+#define LTDC_L1CYR0R	(ldev->caps.layer_regs[21])	/* L1 Conversion YCbCr RGB 0 */
-+#define LTDC_L1CYR1R	(ldev->caps.layer_regs[22])	/* L1 Conversion YCbCr RGB 1 */
-+#define LTDC_L1FPF0R	(ldev->caps.layer_regs[23])	/* L1 Flexible Pixel Format 0 */
-+#define LTDC_L1FPF1R	(ldev->caps.layer_regs[24])	/* L1 Flexible Pixel Format 1 */
- 
- /* Bit definitions */
- #define SSCR_VSH	GENMASK(10, 0)	/* Vertical Synchronization Height */
-@@ -208,7 +213,10 @@ enum ltdc_pix_fmt {
- 	/* Indexed formats */
- 	PF_L8,			/* Indexed 8 bits [8 bits] */
- 	PF_AL44,		/* Alpha:4 bits + indexed 4 bits [8 bits] */
--	PF_AL88			/* Alpha:8 bits + indexed 8 bits [16 bits] */
-+	PF_AL88,		/* Alpha:8 bits + indexed 8 bits [16 bits] */
-+	PF_ABGR8888,		/* ABGR [32 bits] */
-+	PF_BGRA8888,		/* BGRA [32 bits] */
-+	PF_BGR565		/* RGB [16 bits] */
- };
- 
- /* The index gives the encoding of the pixel format for an HW version */
-@@ -234,6 +242,102 @@ static const enum ltdc_pix_fmt ltdc_pix_fmt_a1[NB_PF] = {
- 	PF_ARGB4444		/* 0x07 */
- };
- 
-+static const enum ltdc_pix_fmt ltdc_pix_fmt_a2[NB_PF] = {
-+	PF_ARGB8888,		/* 0x00 */
-+	PF_ABGR8888,		/* 0x01 */
-+	PF_RGBA8888,		/* 0x02 */
-+	PF_BGRA8888,		/* 0x03 */
-+	PF_RGB565,		/* 0x04 */
-+	PF_BGR565,		/* 0x05 */
-+	PF_RGB888,		/* 0x06 */
-+	PF_ARGB1555		/* 0x07 */
-+};
+ void __tsan_func_entry(void *call_pc);
+-void __tsan_func_entry(void *call_pc)
++noinline void __tsan_func_entry(void *call_pc)
+ {
++	if (!IS_ENABLED(CONFIG_KCSAN_WEAK_MEMORY))
++		return;
 +
-+/* Layer register offsets */
-+static const u32 ltdc_layer_regs_a0[] = {
-+	0x80,	/* L1 configuration 0 */
-+	0x00,	/* not available */
-+	0x00,	/* not available */
-+	0x84,	/* L1 control register */
-+	0x88,	/* L1 window horizontal position configuration */
-+	0x8c,	/* L1 window vertical position configuration */
-+	0x90,	/* L1 color keying configuration */
-+	0x94,	/* L1 pixel format configuration */
-+	0x98,	/* L1 constant alpha configuration */
-+	0x9c,	/* L1 default color configuration */
-+	0xa0,	/* L1 blending factors configuration */
-+	0x00,	/* not available */
-+	0x00,	/* not available */
-+	0xac,	/* L1 color frame buffer address */
-+	0xb0,	/* L1 color frame buffer length */
-+	0xb4,	/* L1 color frame buffer line number */
-+	0x00,	/* not available */
-+	0x00,	/* not available */
-+	0x00,	/* not available */
-+	0x00,	/* not available */
-+	0xc4,	/* L1 CLUT write */
-+	0x00,	/* not available */
-+	0x00,	/* not available */
-+	0x00,	/* not available */
-+	0x00	/* not available */
-+};
++	add_kcsan_stack_depth(1);
+ }
+ EXPORT_SYMBOL(__tsan_func_entry);
 +
-+static const u32 ltdc_layer_regs_a1[] = {
-+	0x80,	/* L1 configuration 0 */
-+	0x84,	/* L1 configuration 1 */
-+	0x00,	/* L1 reload control */
-+	0x88,	/* L1 control register */
-+	0x8c,	/* L1 window horizontal position configuration */
-+	0x90,	/* L1 window vertical position configuration */
-+	0x94,	/* L1 color keying configuration */
-+	0x98,	/* L1 pixel format configuration */
-+	0x9c,	/* L1 constant alpha configuration */
-+	0xa0,	/* L1 default color configuration */
-+	0xa4,	/* L1 blending factors configuration */
-+	0xa8,	/* L1 burst length configuration */
-+	0x00,	/* not available */
-+	0xac,	/* L1 color frame buffer address */
-+	0xb0,	/* L1 color frame buffer length */
-+	0xb4,	/* L1 color frame buffer line number */
-+	0xb8,	/* L1 auxiliary frame buffer address 0 */
-+	0xbc,	/* L1 auxiliary frame buffer address 1 */
-+	0xc0,	/* L1 auxiliary frame buffer length */
-+	0xc4,	/* L1 auxiliary frame buffer line number */
-+	0xc8,	/* L1 CLUT write */
-+	0x00,	/* not available */
-+	0x00,	/* not available */
-+	0x00,	/* not available */
-+	0x00	/* not available */
-+};
+ void __tsan_func_exit(void);
+-void __tsan_func_exit(void)
++noinline void __tsan_func_exit(void)
+ {
++	struct kcsan_scoped_access *reorder_access;
 +
-+static const u32 ltdc_layer_regs_a2[] = {
-+	0x100,	/* L1 configuration 0 */
-+	0x104,	/* L1 configuration 1 */
-+	0x108,	/* L1 reload control */
-+	0x10c,	/* L1 control register */
-+	0x110,	/* L1 window horizontal position configuration */
-+	0x114,	/* L1 window vertical position configuration */
-+	0x118,	/* L1 color keying configuration */
-+	0x11c,	/* L1 pixel format configuration */
-+	0x120,	/* L1 constant alpha configuration */
-+	0x124,	/* L1 default color configuration */
-+	0x128,	/* L1 blending factors configuration */
-+	0x12c,	/* L1 burst length configuration */
-+	0x130,	/* L1 planar configuration */
-+	0x134,	/* L1 color frame buffer address */
-+	0x138,	/* L1 color frame buffer length */
-+	0x13c,	/* L1 color frame buffer line number */
-+	0x140,	/* L1 auxiliary frame buffer address 0 */
-+	0x144,	/* L1 auxiliary frame buffer address 1 */
-+	0x148,	/* L1 auxiliary frame buffer length */
-+	0x14c,	/* L1 auxiliary frame buffer line number */
-+	0x150,	/* L1 CLUT write */
-+	0x16c,	/* L1 Conversion YCbCr RGB 0 */
-+	0x170,	/* L1 Conversion YCbCr RGB 1 */
-+	0x174,	/* L1 Flexible Pixel Format 0 */
-+	0x178	/* L1 Flexible Pixel Format 1 */
-+};
++	if (!IS_ENABLED(CONFIG_KCSAN_WEAK_MEMORY))
++		return;
 +
- static const u64 ltdc_format_modifiers[] = {
- 	DRM_FORMAT_MOD_LINEAR,
- 	DRM_FORMAT_MOD_INVALID
-@@ -1158,7 +1262,8 @@ static int ltdc_get_caps(struct drm_device *ddev)
- 	switch (ldev->caps.hw_version) {
- 	case HWVER_10200:
- 	case HWVER_10300:
--		ldev->caps.reg_ofs = REG_OFS_NONE;
-+		ldev->caps.layer_ofs = LAY_OFS_0;
-+		ldev->caps.layer_regs = ltdc_layer_regs_a0;
- 		ldev->caps.pix_fmt_hw = ltdc_pix_fmt_a0;
- 		/*
- 		 * Hw older versions support non-alpha color formats derived
-@@ -1174,12 +1279,21 @@ static int ltdc_get_caps(struct drm_device *ddev)
- 		ldev->caps.nb_irq = 2;
- 		break;
- 	case HWVER_20101:
--		ldev->caps.reg_ofs = REG_OFS_4;
-+		ldev->caps.layer_ofs = LAY_OFS_0;
-+		ldev->caps.layer_regs = ltdc_layer_regs_a1;
- 		ldev->caps.pix_fmt_hw = ltdc_pix_fmt_a1;
- 		ldev->caps.non_alpha_only_l1 = false;
- 		ldev->caps.pad_max_freq_hz = 150000000;
- 		ldev->caps.nb_irq = 4;
- 		break;
-+	case HWVER_40100:
-+		ldev->caps.layer_ofs = LAY_OFS_1;
-+		ldev->caps.layer_regs = ltdc_layer_regs_a2;
-+		ldev->caps.pix_fmt_hw = ltdc_pix_fmt_a2;
-+		ldev->caps.non_alpha_only_l1 = false;
-+		ldev->caps.pad_max_freq_hz = 90000000;
-+		ldev->caps.nb_irq = 2;
-+		break;
- 	default:
- 		return -ENODEV;
- 	}
-diff --git a/drivers/gpu/drm/stm/ltdc.h b/drivers/gpu/drm/stm/ltdc.h
-index f153b908c70e..55a125f89af6 100644
---- a/drivers/gpu/drm/stm/ltdc.h
-+++ b/drivers/gpu/drm/stm/ltdc.h
-@@ -14,7 +14,8 @@
- struct ltdc_caps {
- 	u32 hw_version;		/* hardware version */
- 	u32 nb_layers;		/* number of supported layers */
--	u32 reg_ofs;		/* register offset for applicable regs */
-+	u32 layer_ofs;		/* layer offset for applicable regs */
-+	const u32 *layer_regs;	/* layer register offset */
- 	u32 bus_width;		/* bus width (32 or 64 bits) */
- 	const u32 *pix_fmt_hw;	/* supported pixel formats */
- 	bool non_alpha_only_l1; /* non-native no-alpha formats on layer 1 */
++	reorder_access = get_reorder_access(get_ctx());
++	if (!reorder_access)
++		goto out;
++
++	if (get_kcsan_stack_depth() <= reorder_access->stack_depth) {
++		/*
++		 * Access check to catch cases where write without a barrier
++		 * (supposed release) was last access in function: because
++		 * instrumentation is inserted before the real access, a data
++		 * race due to the write giving up a c-s would only be caught if
++		 * we do the conflicting access after.
++		 */
++		check_access(reorder_access->ptr, reorder_access->size,
++			     reorder_access->type, reorder_access->ip);
++		reorder_access->size = 0;
++		reorder_access->stack_depth = INT_MIN;
++	}
++out:
++	add_kcsan_stack_depth(-1);
+ }
+ EXPORT_SYMBOL(__tsan_func_exit);
++
+ void __tsan_init(void);
+ void __tsan_init(void)
+ {
+diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
+index e0a93ffdef30..e4394ea8068b 100644
+--- a/lib/Kconfig.kcsan
++++ b/lib/Kconfig.kcsan
+@@ -191,6 +191,26 @@ config KCSAN_STRICT
+ 	  closely aligns with the rules defined by the Linux-kernel memory
+ 	  consistency model (LKMM).
+ 
++config KCSAN_WEAK_MEMORY
++	bool "Enable weak memory modeling to detect missing memory barriers"
++	default y
++	depends on KCSAN_STRICT
++	# We can either let objtool nop __tsan_func_{entry,exit}() and builtin
++	# atomics instrumentation in .noinstr.text, or use a compiler that can
++	# implement __no_kcsan to really remove all instrumentation.
++	depends on STACK_VALIDATION || CC_IS_GCC
++	help
++	  Enable support for modeling a subset of weak memory, which allows
++	  detecting a subset of data races due to missing memory barriers.
++
++	  Depends on KCSAN_STRICT, because the options strenghtening certain
++	  plain accesses by default (depending on !KCSAN_STRICT) reduce the
++	  ability to detect any data races invoving reordered accesses, in
++	  particular reordered writes.
++
++	  Weak memory modeling relies on additional instrumentation and may
++	  affect performance.
++
+ config KCSAN_REPORT_VALUE_CHANGE_ONLY
+ 	bool "Only report races where watcher observed a data value change"
+ 	default y
+diff --git a/scripts/Makefile.kcsan b/scripts/Makefile.kcsan
+index 37cb504c77e1..4c7f0d282e42 100644
+--- a/scripts/Makefile.kcsan
++++ b/scripts/Makefile.kcsan
+@@ -9,7 +9,12 @@ endif
+ 
+ # Keep most options here optional, to allow enabling more compilers if absence
+ # of some options does not break KCSAN nor causes false positive reports.
+-export CFLAGS_KCSAN := -fsanitize=thread \
+-	$(call cc-option,$(call cc-param,tsan-instrument-func-entry-exit=0) -fno-optimize-sibling-calls) \
++kcsan-cflags := -fsanitize=thread -fno-optimize-sibling-calls \
+ 	$(call cc-option,$(call cc-param,tsan-compound-read-before-write=1),$(call cc-option,$(call cc-param,tsan-instrument-read-before-write=1))) \
+ 	$(call cc-param,tsan-distinguish-volatile=1)
++
++ifndef CONFIG_KCSAN_WEAK_MEMORY
++kcsan-cflags += $(call cc-option,$(call cc-param,tsan-instrument-func-entry-exit=0))
++endif
++
++export CFLAGS_KCSAN := $(kcsan-cflags)
 -- 
-2.17.1
+2.34.0.384.gca35af8252-goog
 
+
+--oIcY7JcqTshlMZ0y--

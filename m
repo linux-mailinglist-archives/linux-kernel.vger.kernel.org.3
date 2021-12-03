@@ -2,100 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C88B0468073
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 00:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB3D46808D
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 00:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354057AbhLCXgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 18:36:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46229 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240573AbhLCXgn (ORCPT
+        id S1383471AbhLCXhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 18:37:48 -0500
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:34488 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1383441AbhLCXhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 18:36:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638574398;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=IzaeBgyHZORzIVTDqiO0f7UEpuHJc5xhZ5iFzR8LQew=;
-        b=UMbvqt3Po0KClIbV2mT2xwmx5q8I8B0o+J6SFHlVPAz6+ymAHRC2spYUuB9BGS9wOHWWUf
-        SUZergySs5zWPrQQlwOQGYOYt48+WwOmXQTasfK/q0r399TjF2uP9/GGZJUs788QMKsnc8
-        EFEWTFzudMdkCJvEU8NBbpSoMGhAgE0=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-267-dezgsiNgNOycb_9buWa9VQ-1; Fri, 03 Dec 2021 18:33:17 -0500
-X-MC-Unique: dezgsiNgNOycb_9buWa9VQ-1
-Received: by mail-il1-f200.google.com with SMTP id s10-20020a056e021a0a00b0029e76c20cc0so3102303ild.23
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 15:33:17 -0800 (PST)
+        Fri, 3 Dec 2021 18:37:45 -0500
+Received: by mail-oi1-f172.google.com with SMTP id t19so8862005oij.1;
+        Fri, 03 Dec 2021 15:34:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IzaeBgyHZORzIVTDqiO0f7UEpuHJc5xhZ5iFzR8LQew=;
-        b=R8wnjBauleGyVPlf8CwzaWrY0H8lWUZCSfuCCdkuoIWqKwZhfShBLfe+XxnY3bq29f
-         x+nyyNSmfSNlpp39Tq3sJZ4XcLz/hW6N+7Fn6Xx5hEabfS8LSvXwEPTV7IZIBjlU0/mq
-         yH7nc14an2pq1FqeQ2XffWhOYnB1J1o7F35LwvIV4T6iXK4sWSeLjxQWLmzw8RPNuKZv
-         L8jntQTud7/z4AoZ5Ans5BTeR1tHTOWjFXeyy3uhmRqhzhtD6x/cCX22uu8aj449Wjy/
-         TWbYVYZPEtYuCmUv0b61EsqtROTSjVX9FjTBxP6lgfi0UBA5x/UtqflN9nkys+UmEZld
-         XM4Q==
-X-Gm-Message-State: AOAM531AckJA1P7mPXRddKfWf5yvan6jLGNYxVTuB8sMTtiJ4jb3Ebg2
-        8/tvsJ3vqRhC2yjjV7IEHNQhlpEWIRwEbRBY3TBXOzzV56oiQYk42xeVtC0iFBurFfLMh8EQYqu
-        PeSi9mW/kKARPd0+42sZF3bah
-X-Received: by 2002:a92:c26c:: with SMTP id h12mr22149376ild.179.1638574396666;
-        Fri, 03 Dec 2021 15:33:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwLvDF5jRLvOhuEDIMo2DJ6HiCBQl5THbAQYaDEIOv5v4rKzGyiPiHLDf9VlCU5h5HQ3nWCGw==
-X-Received: by 2002:a92:c26c:: with SMTP id h12mr22149350ild.179.1638574396170;
-        Fri, 03 Dec 2021 15:33:16 -0800 (PST)
-Received: from halaneylaptop.redhat.com (068-184-200-203.res.spectrum.com. [68.184.200.203])
-        by smtp.gmail.com with ESMTPSA id h1sm2857172iow.31.2021.12.03.15.33.15
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=5xVzvDh1joQ0PvtSRXDyTia4qRtzHANFPSquK7O4Heg=;
+        b=6rJV6ImOG4Mak3mc+XfBCUxGpemC363s1jS1OKwVPxmXu0qkA462WvBaYIug5blUbf
+         uvoSJNaExjD+2ZH4wTS74oRQAiasSUq8NMMGeKUT3BUY3VhK2w1fhXUtKHD3Z+qT/463
+         ataBvqGzASaQGAAO6YJ8usqyTvXIXEXVdcQmgGY9844qDpfbaCL4ly3Gm/09gUMCSEWG
+         36CUEMZbnntywD88WnhkrTSCEbxby1TQshUEQR3slwoYeTm8/vLWtL/SCxHOpvAY5tSm
+         p3hmwk5jCinTNb8lrLK/sJ2UI/hpzGRLTHfUHtR0jrLF2E4wLeXNEz/MUvSdtFvl8rJu
+         swWQ==
+X-Gm-Message-State: AOAM5334DcNnCuZxzN2rAXuvrwl4kh7myUZ2+VRFDWgSdQTNc7HkKRAY
+        E01OzLxU4QpfJJIC3HWAIA==
+X-Google-Smtp-Source: ABdhPJy4EYzcmvaszVCZtdLXGyr9r/GuQ7QGHrA0QRrleCyp6BSEkJZmgzgvRtOFnfBaOn8BQ+NNVQ==
+X-Received: by 2002:a05:6808:ec9:: with SMTP id q9mr12176101oiv.160.1638574460276;
+        Fri, 03 Dec 2021 15:34:20 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id h26sm847262oor.17.2021.12.03.15.34.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 15:33:15 -0800 (PST)
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     peterz@infradead.org
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, frederic@kernel.org, mark.rutland@arm.com,
-        linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH] preempt/dynamic: Fix setup_preempt_mode() return value
-Date:   Fri,  3 Dec 2021 17:32:03 -0600
-Message-Id: <20211203233203.133581-1-ahalaney@redhat.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Fri, 03 Dec 2021 15:34:19 -0800 (PST)
+Received: (nullmailer pid 1043001 invoked by uid 1000);
+        Fri, 03 Dec 2021 23:34:15 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, Ray Jui <rjui@broadcom.com>,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+In-Reply-To: <20211202233248.1190797-6-f.fainelli@gmail.com>
+References: <20211202233248.1190797-1-f.fainelli@gmail.com> <20211202233248.1190797-6-f.fainelli@gmail.com>
+Subject: Re: [PATCH 5/5] dt-bindings: pci: Convert iProc PCIe to YAML
+Date:   Fri, 03 Dec 2021 17:34:15 -0600
+Message-Id: <1638574455.209193.1043000.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__setup() callbacks expect 1 for success and 0 for failure. Correct the
-usage here to reflect that.
+On Thu, 02 Dec 2021 15:32:48 -0800, Florian Fainelli wrote:
+> Conver the iProc PCIe controller Device Tree binding to YAML now that
+> all DTS in arch/arm and arch/arm64 have been fixed to be compliant.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  .../bindings/pci/brcm,iproc-pcie.txt          | 133 --------------
+>  .../bindings/pci/brcm,iproc-pcie.yaml         | 172 ++++++++++++++++++
+>  2 files changed, 172 insertions(+), 133 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.txt
+>  create mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.yaml
+> 
 
-Fixes: 826bfeb37bb4 ("preempt/dynamic: Support dynamic preempt with preempt= boot option")
-Reported-by: Mark Rutland <mark.rutland@arm.com>
-Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
----
- kernel/sched/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 3592942ea29c..d4f60583be6e 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6730,11 +6730,11 @@ static int __init setup_preempt_mode(char *str)
- 	int mode = sched_dynamic_mode(str);
- 	if (mode < 0) {
- 		pr_warn("Dynamic Preempt: unsupported mode: %s\n", str);
--		return 1;
-+		return 0;
- 	}
- 
- 	sched_dynamic_update(mode);
--	return 0;
-+	return 1;
- }
- __setup("preempt=", setup_preempt_mode);
- 
--- 
-2.31.1
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/pci/brcm,iproc-pcie.example.dt.yaml:0:0: /example-0/bus/pcie@18012000/msi: failed to match any schema with compatible: ['brcm,iproc-msi']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1563044
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

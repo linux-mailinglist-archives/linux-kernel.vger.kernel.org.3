@@ -2,157 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAEF4673DC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 351DD4673DD
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379542AbhLCJXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 04:23:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351316AbhLCJXX (ORCPT
+        id S1379550AbhLCJXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 04:23:30 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:29123 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351316AbhLCJX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 04:23:23 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E39EC06173E
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 01:20:00 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id g19so2311774pfb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 01:20:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id;
-        bh=jYAv0iWmWBE455h4D1IoUIYFZpKUBtbS2GMUOFjDnlE=;
-        b=kRYjEoBxRWU78OrMfvBtdKgvs6qE/KJjO3fy91csgbbJWqzmiiAdqT5p6zDn7yo0YL
-         bb9R4uXRxa2eOdhpGBbZOZHnduqW+4MjxSNmI9u0AJGrykeAyqGJSjPtWQ37188QV/s3
-         oEhBfj73LjJMFw06iSe8nL6pLjcZB4xsuMq856NXbpwVoOj1quy8KM0oarCMF8ogWuxU
-         8Mar2BNjwyEmHB+0eytQrCDl0TcUq4/Rgck3Zoi+FklpoWhP4xqSDjs4x8ZwN/jr5p3m
-         2IMsEgjAxZN5nDLAOLq9AY8ZvWYHh/2t6XlwrsdMeDx/9ZacZ1JBVjXjGYq+58pZJZtf
-         4nCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=jYAv0iWmWBE455h4D1IoUIYFZpKUBtbS2GMUOFjDnlE=;
-        b=2+WBNI+1w7xZcs6I017kHpguOPn8zCpg3fITVoFbhL2vwvR+iNZb1PFu7N8WVdXxe/
-         xs2e2IFMsnzfRhCsa4k6IPP1sGJQgojtYSl84jhc/WRLFaSwOgIrftON07uosGC34yH2
-         r7xWnbkIE0Ec5/yJIR4oVHFmoS75okjHgQH3jZctjX0A6grIZyt5/vpW+GDEwPN+Hysn
-         6aGwrG2MiiR9SxWoCoBLrzl7qoU7S9ELHMhWWiXLUulq4dgOck4iM0fQTHe0gE41pVxt
-         iExu7S1A0jniJIcmFe+uzLx31BfpKOd28aMbK22JfEK8UFc+9CRKGQ9VwAoZQ2kJaMa9
-         Ry8w==
-X-Gm-Message-State: AOAM533Ba5ko0JfcQk1sEQSWFbBe7ECDKi1uK//p8DyqjbALV9vZGkZT
-        bpUhAccBhyfKwJPgORctyoo=
-X-Google-Smtp-Source: ABdhPJyKFkn8+whNJapWOI58OhVFjpnY70TICL+9MQy4V3v/NORKVWagAb4THUVQq+VWQ2MOvZmbDw==
-X-Received: by 2002:a63:6c81:: with SMTP id h123mr3766011pgc.313.1638523199638;
-        Fri, 03 Dec 2021 01:19:59 -0800 (PST)
-Received: from bj03382pcu.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id d19sm2602423pfv.199.2021.12.03.01.19.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 03 Dec 2021 01:19:59 -0800 (PST)
-From:   Huangzhaoyang <huangzhaoyang@gmail.com>
-To:     Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        Ingo Molnar <mingo@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] mm: count swap_writepage into PSI_IO STALL
-Date:   Fri,  3 Dec 2021 17:19:40 +0800
-Message-Id: <1638523180-4884-1-git-send-email-huangzhaoyang@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        Fri, 3 Dec 2021 04:23:29 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-91--7c1WWoYN2uhy3DyISQqag-1; Fri, 03 Dec 2021 09:20:03 +0000
+X-MC-Unique: -7c1WWoYN2uhy3DyISQqag-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Fri, 3 Dec 2021 09:20:02 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Fri, 3 Dec 2021 09:20:02 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Dave Hansen' <dave.hansen@intel.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "x86@kernel.org" <x86@kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "chang.seok.bae@intel.com" <chang.seok.bae@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [RFC PATCH 00/10] x86: Allocate AVX512 xstate ondemand
+Thread-Topic: [RFC PATCH 00/10] x86: Allocate AVX512 xstate ondemand
+Thread-Index: AQHX5+Ds8R196ucx3kmBJZhfmN/yXawgfKWg
+Date:   Fri, 3 Dec 2021 09:20:01 +0000
+Message-ID: <e332573f03ec441d9b357c7cfb6852ba@AcuMS.aculab.com>
+References: <20211203003636.11417-1-jiaxun.yang@flygoat.com>
+ <822ced92-f165-3c5a-e0bf-dafa6f808b76@intel.com>
+ <27b6387f-fa93-484e-a56e-12452a82f069@www.fastmail.com>
+ <d7be6ef4-f73e-923e-93b7-ef254bf347c0@intel.com>
+In-Reply-To: <d7be6ef4-f73e-923e-93b7-ef254bf347c0@intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-
-We would like to count swap_writepage into PSI_IO STALL time. There are
-two reasons for doing so:
-1. Swap_writepage introduces non-productive times. especially under the
-   scenario of RAM based swap device.
-2. High swappiness value will lead to more anon pages to be swap out.
-3. IO pressure is inconsistent to PGSWPOUT.
-
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
- include/linux/psi.h |  6 ++++++
- kernel/sched/psi.c  | 15 +++++++++++++++
- mm/vmscan.c         | 10 ++++++++++
- 3 files changed, 31 insertions(+)
-
-diff --git a/include/linux/psi.h b/include/linux/psi.h
-index 65eb147..6eb3a6f 100644
---- a/include/linux/psi.h
-+++ b/include/linux/psi.h
-@@ -23,6 +23,9 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
- void psi_memstall_enter(unsigned long *flags);
- void psi_memstall_leave(unsigned long *flags);
- 
-+void psi_iostall_enter(void);
-+void psi_iostall_leave(void);
-+
- int psi_show(struct seq_file *s, struct psi_group *group, enum psi_res res);
- 
- #ifdef CONFIG_CGROUPS
-@@ -45,6 +48,9 @@ static inline void psi_init(void) {}
- static inline void psi_memstall_enter(unsigned long *flags) {}
- static inline void psi_memstall_leave(unsigned long *flags) {}
- 
-+static inline void psi_iostall_enter(void) {}
-+static inline void psi_iostall_leave(void) {}
-+
- #ifdef CONFIG_CGROUPS
- static inline int psi_cgroup_alloc(struct cgroup *cgrp)
- {
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index 923a0d6..643b48c 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -958,6 +958,21 @@ void psi_memstall_leave(unsigned long *flags)
- 	rq_unlock_irq(rq, &rf);
- }
- 
-+void psi_iostall_enter(void)
-+{
-+	if (static_branch_likely(&psi_disabled))
-+		return;
-+
-+	psi_task_change(current, 0, TSK_IOWAIT);
-+}
-+
-+void psi_iostall_leave(void)
-+{
-+	if (static_branch_likely(&psi_disabled))
-+		return;
-+
-+	psi_task_change(current, TSK_IOWAIT, 0);
-+}
- #ifdef CONFIG_CGROUPS
- int psi_cgroup_alloc(struct cgroup *cgroup)
- {
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 74296c2..798907b 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -1072,7 +1072,17 @@ static pageout_t pageout(struct page *page, struct address_space *mapping)
- 		};
- 
- 		SetPageReclaim(page);
-+
-+		/*
-+		 * For the ram based swap device, there is no chance for reclaim
-+		 * context sleeping on the congested IO while it really introduce
-+		 * non-productive time. So count the period into PSI_IO.
-+		 * Don't worry about the file page, just counting it in as it has
-+		 * less chance to be here.
-+		 */
-+		psi_iostall_enter();
- 		res = mapping->a_ops->writepage(page, &wbc);
-+		psi_iostall_leave();
- 		if (res < 0)
- 			handle_write_error(mapping, page, res);
- 		if (res == AOP_WRITEPAGE_ACTIVATE) {
--- 
-1.9.1
+RnJvbTogRGF2ZSBIYW5zZW4NCj4gU2VudDogMDMgRGVjZW1iZXIgMjAyMSAwMDo1OQ0KPiANCj4g
+T24gMTIvMi8yMSA0OjQ1IFBNLCBKaWF4dW4gWWFuZyB3cm90ZToNCj4gPiDlnKgyMDIx5bm0MTLm
+nIgz5pel5Y2B5LqM5pyIIOS4iuWNiDEyOjQw77yMRGF2ZSBIYW5zZW7lhpnpgZPvvJoNCj4gPj4g
+T24gMTIvMi8yMSA0OjM2IFBNLCBKaWF4dW4gWWFuZyB3cm90ZToNCj4gPj4+IEFsc28gd2UgYXJl
+IGdvaW5nIHRvIGhhdmUgaGV0ZXJvZ2VuZW91cyBwcm9jZXNzb3JzIHRoYXQNCj4gPj4+IG9ubHkg
+c29tZSBjb3JlcyBzdXBwb3J0IEFWWDUxMiwgaXQgY2FuIGJlIGhlbHBmdWwgd2hlbg0KPiA+Pj4g
+ZGVhbGluZyB3aXRoIHN1Y2ggcHJvY2Vzc29ycy4NCj4gPj4gUmVhbGx5PyAgV2hpY2ggeDg2IHZl
+bmRvciBpcyBkb2luZyB0aGF0Pw0KDQo+ID4gQ2xlYXIgbG93ZXIgdHdvIGJpdHMgb2YgTVNSIDB4
+QUYgb24gQWxkZXIgTGFrZSBnaXZlIG1lIHNvbWUgc3VwcmlzZSA6LSkNCj4gDQo+IEkgaG9uZXN0
+bHkgZG9uJ3Qga25vdyB3aGF0IHlvdSdyZSB0YWxraW5nIGFib3V0LiAgRG9lcyBwb2tpbmcgdGhh
+dCBNU1INCj4gYWxsb3dpbmcgQVZYNTEyIGluc3RydWN0aW9ucyB0byBiZSBleGVjdXRlZCBvbiBj
+b3JlcyB3aGVyZSBpdCB3YXMNCj4gb3RoZXJ3aXNlIGRpc2FibGVkPyAgVGhhdCdzIGVudGVydGFp
+bmluZywgYnV0IGl0J3MgZmFyIGZyb20gInN1cHBvcnRlZCINCj4gb3IgZXZlbiBzdXBwb3J0KmFi
+bGUqIGluIExpbnV4Lg0KDQpJIGNhbiBhbHNvIGltYWdpbmUgY2hpcHMgYmVpbmcgdGVzdGVkIGFu
+ZCB0ZXN0ZWQgYW5kIG1hcmtlZA0KZGlmZmVyZW50bHkgZGVwZW5kaW5nIG9uIHdoYXQgd29ya3Mu
+DQoNClNvIGEgcGFydCB3aXRoIGZhdWx0eSBBVlg1MTIgd2lsbCBiZSBtYXJrZWQgYXMgQklHK2xp
+dHRsZSB3aXRoIEFWWDUxMiBkaXNhYmxlZC4NCkEgcGFydCB3aXRoIHdvcmtpbmcgQVZYNTEyIHdp
+bGwgaGF2ZSB0aGUgJ2xpdHRsZScgY3B1IGRpc2FibGVkLg0KDQpBIGxvdCBvZiB0aGlzIGlzIGFj
+dHVhbGx5IHNldHVwIGJ5IHRoZSBCSU9TIGNvZGUuDQpDaGVhdGluZyB3aWxsIGNhdXNlIGdyaWVm
+Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJv
+YWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24g
+Tm86IDEzOTczODYgKFdhbGVzKQ0K
 

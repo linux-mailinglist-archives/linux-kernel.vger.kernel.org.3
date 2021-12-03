@@ -2,80 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEECF466F2B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 02:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BFD466F27
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 02:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377963AbhLCBli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 20:41:38 -0500
-Received: from mswedge1.sunplus.com ([60.248.182.113]:45288 "EHLO
-        mg.sunplus.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1377962AbhLCBlb (ORCPT
+        id S1377953AbhLCBlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 20:41:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377960AbhLCBl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 20:41:31 -0500
-X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
-        ,3)
-Received: from 172.17.9.112
-        by mg01.sunplus.com with MailGates ESMTP Server V5.0(5128:0:AUTH_RELAY)
-        (envelope-from <wells.lu@sunplus.com>); Fri, 03 Dec 2021 09:36:40 +0800 (CST)
-Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
- sphcmbx02.sunplus.com.tw (172.17.9.112) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Fri, 3 Dec 2021 09:36:41 +0800
-Received: from sphcmbx02.sunplus.com.tw ([::1]) by sphcmbx02.sunplus.com.tw
- ([fe80::f8bb:bd77:a854:5b9e%14]) with mapi id 15.00.1497.023; Fri, 3 Dec 2021
- 09:36:41 +0800
-From:   =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     Wells Lu <wellslutw@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        =?utf-8?B?VmluY2VudCBTaGloIOaWvemMlem0uw==?= 
-        <vincent.shih@sunplus.com>
-Subject: RE: [PATCH net-next v3 2/2] net: ethernet: Add driver for Sunplus
- SP7021
-Thread-Topic: [PATCH net-next v3 2/2] net: ethernet: Add driver for Sunplus
- SP7021
-Thread-Index: AQHX5dF9eGPWQxkNKU64ogPFWvAIaqwcdcyAgAE+n/CAAPQwgIAA4eHw//+CcACAAPOLMA==
-Date:   Fri, 3 Dec 2021 01:36:41 +0000
-Message-ID: <ad04e59777694bbcbcf52f518a2c16a0@sphcmbx02.sunplus.com.tw>
-References: <1638266572-5831-1-git-send-email-wellslutw@gmail.com>
- <1638266572-5831-3-git-send-email-wellslutw@gmail.com>
- <YabsT0/dASvYUH2p@lunn.ch>
- <cf60c230950747ec918acfc6dda595d6@sphcmbx02.sunplus.com.tw>
- <YajEbXtBwlDL4gOL@lunn.ch>
- <2fded2fc3a1344d0882ae2f186257911@sphcmbx02.sunplus.com.tw>
- <YakYlHzvlAI+1at+@lunn.ch>
-In-Reply-To: <YakYlHzvlAI+1at+@lunn.ch>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.25.108.39]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 2 Dec 2021 20:41:28 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E61C061758
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 17:37:31 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso2147156otj.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 17:37:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0IX7VBvn7NWi1LknLBHaVLXoYOBoRawJUhOn065lnpw=;
+        b=JRJH2qlyWjZbCGhQsj/8MZq6Lwn0fIuLp/Dc1Samp2uQze8qQJtkyMuelJkep6VxAf
+         07DonGQBLaXjhnXmP5HDrxEoj95Z2AchZFeLQvFnk22ChVo1NeijWnOr3iHKAddd8NNu
+         LiunLfhDqJOW04xaWEtTAM5dSiBHXfOzdZ7PsoSu54qdleqHQDB17OXSzR+RSOrtmoAX
+         uwl4McTrMieSNk25VmvwZsDwkDOAp6OpuHz45ZspbhyVmXd0z8iwd0AL0LMIPsmAXAgm
+         zH99zOpZnkJPsBTlEFEs1z6GR1m3Bwk0xyg3ViNzmybwqemjcfbtYlfeT+XJqJSpp5HN
+         qGUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0IX7VBvn7NWi1LknLBHaVLXoYOBoRawJUhOn065lnpw=;
+        b=KnAfqOQx6eR+wXbRC3s+BdVmXtxACGJJU4p+8YF0p6tZkJmGyWAG/qs+8QbYx64xP3
+         /5bvGMliwfKeIaNIMWu2V6eHYr+xwXLG1Gv4i0fDNNgbGgkxLTgOhdkDLHAfPwSoByK/
+         yk+gOZtqx3RajszBf1U8IN2yEGNjy1/ixCD62ZPDWNLAGkREgiBTJNHHsabOC7UXVatS
+         DDupAYvbD3NFRUt/xsQMBLA0hCnTOUNSmBD48Y8NodfTl/jOdn4REtolRL2t13QOcWWU
+         7k+ykeeIxpPcE5GdAYiEg+KGr10LtAFZkkVGm5uNnvBXCx4tliybORgplT7X7NYsSop+
+         dy1Q==
+X-Gm-Message-State: AOAM5329OpLd6V/YcvxuX8ZkYkY2Epqbi2EZ+WShrGomObGCibI961J3
+        Pu67t+YVoDrO4aZNTtBRRIVEvg==
+X-Google-Smtp-Source: ABdhPJzb/5EkCMdfjL4J+cmlmwPkC7eXYxem6MJ509mG20Wcev7hszG6NX8Sle8RxgzOOMQ8KUN7SA==
+X-Received: by 2002:a9d:5185:: with SMTP id y5mr13898744otg.110.1638495450204;
+        Thu, 02 Dec 2021 17:37:30 -0800 (PST)
+Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id e26sm321323oog.46.2021.12.02.17.37.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 17:37:29 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: Add entry for Qualcomm clock drivers
+Date:   Thu,  2 Dec 2021 17:39:01 -0800
+Message-Id: <20211203013901.3460496-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQW5kcmV3LA0KDQpUaGFuayB5b3UgZm9yIGV4cGxhbmF0aW9uLg0KDQoNCkJlc3QgcmVnYXJk
-cywNCldlbGxzIEx1DQoNCg0KPiA+IEhpIEFuZHJldywNCj4gPg0KPiA+IFRoYW5rIHlvdSBmb3Ig
-ZXhwbGFuYXRpb24uDQo+ID4NCj4gPiBJJ2xsIGFkZCBwaHlfc3VwcG9ydF9hc3ltX3BhdXNlKCkg
-YWZ0ZXIgUEhZIGNvbm5lY3RlZCBuZXh0IHBhdGNoLg0KPiA+DQo+ID4gSSBmb3VuZCBzb21lIGRy
-aXZlcnMgY2FsbCBwaHlfc2V0X21heF9zcGVlZCgpIHRvIHNldCBQSFkgc3BlZWQgdG8gMTAwTQ0K
-PiA+IGFmdGVyIFBIWSBjb25uZWN0ZWQuIElzIHRoYXQgbmVjZXNzYXJ5Pw0KPiANCj4gPiBGcm9t
-ICdzdXBwb3J0ZWQnLCBQSFkgc3VwcG9ydHMgMTBNLzEwME0gYWxyZWFkeS4NCj4gDQo+IFlvdSBu
-ZWVkIHBoeV9zZXRfbWF4X3NwZWVkKCkgd2hlbiBpdCBpcyBwb3NzaWJsZSB0byBjb25uZWN0IGEg
-MTAvMTAwIE1BQyB0byBhIDFHIFBIWS4gIFlvdQ0KPiBzb21ldGltZSBkbyB0aGlzIGJlY2F1c2Ug
-YSAxRyBQSFkgaXMgY2hlYXBlciB0aGFuIGEgMTAwTSBQSFkuIFVubGVzcyBsaW1pdGVkLCB0aGUg
-UEhZIHdpbGwNCj4gYWR2ZXJ0aXNlIGFuZCBjb3VsZCBuZWdvdGlhdGUgYSAxRyBsaW5rLCBidXQg
-dGhlIE1BQyBjb3VsZCB0aGVuIG5vdCBzdXBwb3J0IGl0LiBJZiBpdCBpcw0KPiBub3QgcGh5c2lj
-YWxseSBwb3NzaWJsZSB0byBjb25uZWN0IGEgMUcgUEhZIHRvIHlvdXIgTUFDLCB5b3UgZG9uJ3Qg
-bmVlZCB0byB3b3JyeS4NCj4gDQo+ID4gSSBhbHNvIGZvdW5kIHNvbWUgZHJpdmVycyBjYWxsIHBo
-eV9zdGFydF9hbmVnKCkgYWZ0ZXIgUEhZIHN0YXJ0ZWQuDQo+IA0KPiBJdCBpcyBub3QgbmVlZGVk
-Lg0KPiANCj4gICAgQW5kcmV3DQo=
+Most SoC specific clock drivers are picked by respective SoC maintainer
+and then sent to the clock maintainers on their way upstream.
+
+This has however not been the case for the Qualcomm clock drivers -
+which doesn't actually have a maintainer per MAINTAINERS and where the
+framework maintainers have just carried the Qualcomm effort as well,
+presumably as a result of Stephen's history.
+
+Move the maintainership of the Qualcomm clock drivers to use the same
+model as other SoC vendors and document the ownership by actually
+introducing an entry in MAINTAINERS.
+
+Cc: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ MAINTAINERS | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 88fcc4e7ff37..a644e2a5e79f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15671,6 +15671,15 @@ F:	Documentation/admin-guide/media/qcom_camss.rst
+ F:	Documentation/devicetree/bindings/media/*camss*
+ F:	drivers/media/platform/qcom/camss/
+ 
++QUALCOMM CLOCK DRIVERS
++M:	Bjorn Andersson <bjorn.andersson@linaro.org>
++L:	linux-arm-msm@vger.kernel.org
++S:	Supported
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git
++F:	Documentation/devicetree/bindings/clock/qcom,*
++F:	drivers/clk/qcom/
++F:	include/dt-bindings/clock/qcom,*
++
+ QUALCOMM CORE POWER REDUCTION (CPR) AVS DRIVER
+ M:	Niklas Cassel <nks@flawful.org>
+ L:	linux-pm@vger.kernel.org
+-- 
+2.33.1
+

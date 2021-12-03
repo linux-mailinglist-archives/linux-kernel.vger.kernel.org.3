@@ -2,194 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEE94679A6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40ED24679A1
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238027AbhLCOtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 09:49:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
+        id S1381566AbhLCOtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 09:49:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381543AbhLCOtp (ORCPT
+        with ESMTP id S1381534AbhLCOtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 09:49:45 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60AFC061354
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 06:46:20 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id 133so2596984wme.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 06:46:20 -0800 (PST)
+        Fri, 3 Dec 2021 09:49:19 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A39C061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 06:45:55 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id 207so6588729ljf.10
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 06:45:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=v4VOMillbCsUUfD1LU3KOFh8EAHKlb6MpbuMP36w6ao=;
-        b=inODXxOYsLADIcXKLE2foYW49r3909nrLMuTPkHQN16A2nQy6zeLBh/WhPypLO5avJ
-         RmeOJQ3z7jB0b1j9zzIhYBmMcFHvSppx0QIOIO/dVEh3h27BoESwCdouXZSdF4RnhUxv
-         guYkjIx33yIIaVcApfIG4isd0xhugX3UsyOQDIBhxGkt74eKopjU4BxEztqUjohymV6H
-         RvqxZu8kXgpawYu8OqG2Qe4rPXP39Xc32N5nRTKHZc7SDzIe1+ljOnEqKPHzum0G8uIP
-         11UqHSiCZb5w8eH+HcsnLkgBwvR0I0DQp6RKBHX2QIYd/kgapJ0D6XWIzjxtzVk6OcKX
-         +tDg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=isVI3i0OnnF9HKk7LL+6nbdR6JnxGxIvGGvKoeFOlMs=;
+        b=Pl4pmwVCPUPIF2AYBaEOUFoTbHtAE2VsxM7VpuSv/RBCkSZGX34k/NBdso9Tv0jLLp
+         KEfLlxmt8wVHVSFloSOH3k4EUquj0I8STkq0WMMwVzKsMeju+DMyC5TA7JQnRrdqSl2N
+         9mW9VNLaXAvL/hM/n7WVI5UdfY0ud0ZMFDeiKFuEgJDC3kiKR88r6DwHc0dB+rj+cLeo
+         JQLU8JWgkQt7zRrFf8RKkLnTtanGE4fnIBJVJMKz4L42PwfhxNWGItUFBwNus9X0aw7s
+         a5CjbPL1yMkybeauqRsYBInMN8tharIrL9coPnjWKcjZe6uRg86edJannynkQwJ8a1+/
+         +fJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=v4VOMillbCsUUfD1LU3KOFh8EAHKlb6MpbuMP36w6ao=;
-        b=NeQlD3ormbJZfXgF9OmuPxjoSwsE9B3UiplJ09IzNyhqqbRWrWsbLgrgCXimjoBkwJ
-         8AWG38H5VnUkRyNmsa6XRIo/OJ/iIZt6IwspNCb305mVrCz2QrdIWt2LouVlyusMP1XO
-         TzVXiTGxdwuG5sHzAkj8h3q+P08zWOmsTruuCNP5bT9YWb5by0O8P28gBVOvRa+xk0bI
-         JFddvDQzeLhxV4jdvd3O0Kr0EHcF2zzKvthAEvb/oGniV/pxakIH9qDsv/RaRYus2IoM
-         jKB8Sca4VCpAE5fM23Stgs3YOWjJdROvH/krxmnr9cQa76/5X/czQ6wMnKl7Lc5g8jX3
-         cChQ==
-X-Gm-Message-State: AOAM531lRiNFK/kiPElkIAWKMF9Z9Klj9gsJZOybhGJ2aWzHR2GHSHDT
-        Z9DpEFD9eXgjlIJ8LT28Py7Nb4aeb8hTAA==
-X-Google-Smtp-Source: ABdhPJzxHqETgoDEVRMGwS14ODKhQckKDbC14Nr5NTWkjBLZu5Oc7PUyGjbcnQSzmO06JsWn84ouUw==
-X-Received: by 2002:a1c:770e:: with SMTP id t14mr15217228wmi.173.1638542779194;
-        Fri, 03 Dec 2021 06:46:19 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id r8sm3667803wrz.43.2021.12.03.06.46.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 06:46:18 -0800 (PST)
-Date:   Fri, 3 Dec 2021 14:46:16 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Cc:     Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/1] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset
- or zero
-Message-ID: <YaotuB5CkQhWHvpQ@google.com>
-References: <20211202143437.1411410-1-lee.jones@linaro.org>
- <20211202175134.5b463e18@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <87o85yj81l.fsf@miraculix.mork.no>
- <Yan+nvfyS21z7ZUw@google.com>
- <87ilw5kfrm.fsf@miraculix.mork.no>
- <YaoeKfmJrDPhMXWp@google.com>
- <871r2tkb5k.fsf@miraculix.mork.no>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=isVI3i0OnnF9HKk7LL+6nbdR6JnxGxIvGGvKoeFOlMs=;
+        b=o6LtPvLy70DOht3947DlmgIUjLkHnts/J2xeHwZZvYBB84jNcyOtaBN9ZqSAeijZke
+         EkrqBY3xfyxeqBQ/z2yn8omcXqn7QFjg0sT6rYH1PuwwYzVCiuAtie20AVT+wzyPmGA8
+         zdRfIFJMe2iNdBgPacBCwW9+oiu3xGraydtMDDFzUv9+cg7uKvBoKW8f9BOOfILb6hsf
+         PZyAAxOw2pptMUljWJxOjIZf8M0hVpIylrE/DMCT0tekYx7mCmWiYgP5CnESUNQD6grW
+         6SHFAKZC8u3xdtwWqoSGPdQO/37+ggSICtN6KhktE3W0xmBcwTULTqhBQsCiUcRxDsAx
+         73+Q==
+X-Gm-Message-State: AOAM53189WkIRznooNR1V85z8A6fggO9RgDjdaB3DUFJ9A5jG07NHaqY
+        yChC5ElZAoepe36bHKSjMbc=
+X-Google-Smtp-Source: ABdhPJx3zBP2dIEW33Re8Np8HCSdfQ1NKxZT30mOLTPKIvqlbRVrKtuhDhGOeEjnvH9cBWodlZRg0w==
+X-Received: by 2002:a2e:a7c8:: with SMTP id x8mr18583832ljp.524.1638542753575;
+        Fri, 03 Dec 2021 06:45:53 -0800 (PST)
+Received: from [10.0.0.115] (91-153-170-164.elisa-laajakaista.fi. [91.153.170.164])
+        by smtp.gmail.com with ESMTPSA id t69sm434642lff.110.2021.12.03.06.45.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 06:45:53 -0800 (PST)
+Message-ID: <7dbddf9f-f8fc-f223-7f94-1e1f6382bc7e@gmail.com>
+Date:   Fri, 3 Dec 2021 16:46:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v1 2/2] ASoC: ti: davinci-mcasp: Remove unnecessary
+ conditional
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+References: <20211202205612.76216-1-andriy.shevchenko@linux.intel.com>
+ <20211202205612.76216-2-andriy.shevchenko@linux.intel.com>
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+In-Reply-To: <20211202205612.76216-2-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <871r2tkb5k.fsf@miraculix.mork.no>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 03 Dec 2021, Bjørn Mork wrote:
 
-> Lee Jones <lee.jones@linaro.org> writes:
-> > On Fri, 03 Dec 2021, Bjørn Mork wrote:
-> 
-> >> This I don't understand.  If we have for example
-> >> 
-> >>  new_tx = 0
-> >>  max = 0
-> >>  min = 1514(=datagram) + 8(=ndp) + 2(=1+1) * 4(=dpe) + 12(=nth) = 1542
-> >> 
-> >> then
-> >> 
-> >>  max = max(min, max) = 1542
-> >>  val = clamp_t(u32, new_tx, min, max) = 1542
-> >> 
-> >> so we return 1542 and everything is fine.
-> >
-> > I don't believe so.
-> >
-> > #define clamp_t(type, val, lo, hi) \
-> >               min_t(type, max_t(type, val, lo), hi)
-> >
-> > So:
-> >               min_t(u32, max_t(u32, 0, 1542), 0)
-> 
-> 
-> I don't think so.  If we have:
-> 
->  new_tx = 0
->  max = 0
->  min = 1514(=datagram) + 8(=ndp) + 2(=1+1) * 4(=dpe) + 12(=nth) = 1542
->  max = max(min, max) = 1542
-> 
-> Then we have
-> 
->   min_t(u32, max_t(u32, 0, 1542), 1542)
-> 
-> 
-> If it wasn't clear - My proposal was to change this:
-> 
->   - min = min(min, max);
->   + max = max(min, max);
-> 
-> in the original code.
 
-Oh, I see.  Yes, I missed the reallocation of 'max'.
+On 02/12/2021 22:56, Andy Shevchenko wrote:
+> Instead of double validating of_node, return value of
+> the boolean property directly.
 
-I thought we were using original values and just changing min() to max().
+Nice cleanup, thanks,
+Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
 
-> But looking further I don't think that's a good idea either.  I searched
-> through old email and found this commit:
+> We can't remove ifdeffery, because in OF_GPIO=n cases
+> it might bring unwanted surprises.
 > 
-> commit a6fe67087d7cb916e41b4ad1b3a57c91150edb88
-> Author: Bjørn Mork <bjorn@mork.no>
-> Date:   Fri Nov 1 11:17:01 2013 +0100
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  sound/soc/ti/davinci-mcasp.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
 > 
->     net: cdc_ncm: no not set tx_max higher than the device supports
->     
->     There are MBIM devices out there reporting
->     
->       dwNtbInMaxSize=2048 dwNtbOutMaxSize=2048
->     
->     and since the spec require a datagram max size of at least
->     2048, this means that a full sized datagram will never fit.
->     
->     Still, sending larger NTBs than the device supports is not
->     going to help.  We do not have any other options than either
->      a) refusing to bindi, or
->      b) respect the insanely low value.
->     
->     Alternative b will at least make these devices work, so go
->     for it.
->     
->     Cc: Alexey Orishko <alexey.orishko@gmail.com>
->     Signed-off-by: Bjørn Mork <bjorn@mork.no>
->     Signed-off-by: David S. Miller <davem@davemloft.net>
-> 
-> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-> index 4531f38fc0e5..11c703337577 100644
-> --- a/drivers/net/usb/cdc_ncm.c
-> +++ b/drivers/net/usb/cdc_ncm.c
-> @@ -159,8 +159,7 @@ static u8 cdc_ncm_setup(struct usbnet *dev)
->         }
+> diff --git a/sound/soc/ti/davinci-mcasp.c b/sound/soc/ti/davinci-mcasp.c
+> index 81c1ccec5904..3e105caac95e 100644
+> --- a/sound/soc/ti/davinci-mcasp.c
+> +++ b/sound/soc/ti/davinci-mcasp.c
+> @@ -1870,12 +1870,10 @@ static int mcasp_reparent_fck(struct platform_device *pdev)
+>  static bool davinci_mcasp_have_gpiochip(struct davinci_mcasp *mcasp)
+>  {
+>  #ifdef CONFIG_OF_GPIO
+> -	if (mcasp->dev->of_node &&
+> -	    of_property_read_bool(mcasp->dev->of_node, "gpio-controller"))
+> -		return true;
+> -#endif
+> -
+> +	return of_property_read_bool(mcasp->dev->of_node, "gpio-controller");
+> +#else
+>  	return false;
+> +#endif
+>  }
 >  
->         /* verify maximum size of transmitted NTB in bytes */
-> -       if ((ctx->tx_max < (CDC_NCM_MIN_HDR_SIZE + ctx->max_datagram_size)) ||
-> -           (ctx->tx_max > CDC_NCM_NTB_MAX_SIZE_TX)) {
-> +       if (ctx->tx_max > CDC_NCM_NTB_MAX_SIZE_TX) {
->                 dev_dbg(&dev->intf->dev, "Using default maximum transmit length=%d\n",
->                         CDC_NCM_NTB_MAX_SIZE_TX);
->                 ctx->tx_max = CDC_NCM_NTB_MAX_SIZE_TX;
+>  static int davinci_mcasp_get_config(struct davinci_mcasp *mcasp,
 > 
-> 
-> 
-> 
-> 
-> So there are real devices depending on a dwNtbOutMaxSize which is too
-> low.  Our calculated minimum for MBIM will not fit.
-> 
-> So let's go back your original test for zero.  It's better than
-> nothing.  I'll just ack that.
-
-Sure, no problem.
-
-Thanks for conversing with me.
-
-> > Perhaps we should use max_t() here instead of clamp?
-> 
-> No.  That would allow userspace to set an unlimited buffer size.
-
-Right, I see.
 
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Péter

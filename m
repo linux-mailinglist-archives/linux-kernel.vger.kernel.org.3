@@ -2,551 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3254673C0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B58EA4673C3
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379456AbhLCJRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 04:17:34 -0500
-Received: from out0.migadu.com ([94.23.1.103]:49807 "EHLO out0.migadu.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235878AbhLCJRV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 04:17:21 -0500
-Date:   Fri, 3 Dec 2021 17:13:45 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1638522834;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ICMG0LM6TFIIWQIAmCvfzGsYfsWrQwKywGFcd5J2Yoc=;
-        b=PRHNgjfipvE8tCskvL+0W732G6JccAiCmGDRX5VIdqhXXbzU79nD4enKfQOYqfHnRIAFJJ
-        yJL0ZGwp/jE2P0dhjaka7vQFY2pg4cT+1k3hsYKOz1C3Oa8hzNSM4iqVzWzgHF4OnvilqE
-        GTB4lGr1xBPdRn33mLovUGbH95O5SA0=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Tao Zhou <tao.zhou@linux.dev>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        John Kacur <jkacur@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Tao Zhou <tao.zhou@linux.dev>, linux-rt-users@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V8 06/14] rtla: Add timerlat tool and timelart top mode
-Message-ID: <YanfyfUgMW6KWpxS@geo.homenetwork>
-References: <cover.1638182284.git.bristot@kernel.org>
- <e65a6899bbde6ecb129cfaf55e402d785ad124eb.1638182284.git.bristot@kernel.org>
+        id S1379467AbhLCJRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 04:17:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351313AbhLCJRu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 04:17:50 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81FBC06174A
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 01:14:26 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id gf14-20020a17090ac7ce00b001a7a2a0b5c3so4646880pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 01:14:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=saVuQhzixBwsqDYRywfLCa1HkOX8bignwBCsRWI1qEU=;
+        b=SlTpIt8ZNCqW/9A4VUbaR83S1wMyfqdCewD6rXm+VJsVUfcmFju+i0rgDaRiL3X2FO
+         FvKdIsYob7oyCjWrkpN2Etf1mA576MDr/cDygoeRNe3vedQHKPRj//TxFYNAA/qvT+1P
+         2I2hQ0gXFqqEWsBI5TrldoZYGyyce4VvGqP6U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=saVuQhzixBwsqDYRywfLCa1HkOX8bignwBCsRWI1qEU=;
+        b=Ikww4mNdILgoPPGQMLvJ1C3b0CpWkxL2DiDuS2dNFCnozNeHybCNLNaSAwtm+nso9u
+         Werqb37ZaZ5oE8UwINBEK1HZl+0u1yvd6IZTiKdctalh5naJOdaNB+vaGwrTC496cPMF
+         ZRtcIcibD1Z2f3+5iqxKBBk3E2UNd7OQp7hG/+RXVRsoIepJRUfS1K3DFGkFIf1Dv0HY
+         ByQJ+sM5UOe2Kk+9btQRqulW+RU2jiOPnVIew0fwblOCiBDLeUY+hjp+a5JdojdMNx+M
+         xpfETBpQ9csE55P9eUz5iq0q/Kmq3zYESRiPC2+WTXvy9kIwlF70kB4TI+b9VRODVTKQ
+         tHGQ==
+X-Gm-Message-State: AOAM530qQNWMyq7/Y6aDPuomcHeYy+3cHqwqpaJK/ir7G3agRYR3lMWu
+        wpd/AR5JZqTmJ5oiEzUSt1fpXQ==
+X-Google-Smtp-Source: ABdhPJz8RnRahBC15FlwjjPsKlZ+CpQcH75sjsinaHiphr+fFlXgxA/jx9yn9VYUsmsMio1yEUacIw==
+X-Received: by 2002:a17:903:248c:b0:142:9bf:8b0 with SMTP id p12-20020a170903248c00b0014209bf08b0mr21371502plw.70.1638522866265;
+        Fri, 03 Dec 2021 01:14:26 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s15sm1814024pjs.51.2021.12.03.01.14.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 01:14:26 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Kashyap Desai <kashyap.desai@broadcom.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] scsi: megaraid: Avoid mismatched storage type sizes
+Date:   Fri,  3 Dec 2021 01:14:24 -0800
+Message-Id: <20211203091424.3355371-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e65a6899bbde6ecb129cfaf55e402d785ad124eb.1638182284.git.bristot@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7024; h=from:subject; bh=LkdLDRS96rJJ+hsAnyw+nSek/NN70rsR6NXpE1WqNL0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhqd/vtwMNKerswTCQUH/RzzThOHW470nn5B9vB56H GLxt2qSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYanf7wAKCRCJcvTf3G3AJjzbEA CJgny2oO/KaCl8l/C0HuShj6t+Kya+5RGbj776BKxjzVP8r12CulsTYnPWCFTLiXIM2CgzhHgZ/hhF uUIbLHncQ2M0UG/bOvuzqqBDLa8lc9XllLmTSxgXgRL3C2rnWHZ9mOjXpDvm+AzeZMBrOzkWhnMp53 k8IBu/HZcFuHDvLjTChZNmJxU0Owbrcrkns4KUqp7heH0gHLC5ZUCI7L4rmihEz0lQzr/RHKpjwy3i +phfAd+Eh853oaRCtg/TYI5bIzCnZQtUjwEmcF7kCv8uSqKuLLGAS+rUB5o60pxQIk7HrfuUGKNZV1 hahWnk48CPCLhDlLOb9cqeg2ObYrOitbaD2HNmxacySFe4t6EpfGTLd9vGYxxL37QDObmCYJI4ykzN OFYwNT/jpa4Z3zlGlu+hkmJ13Y+827pGXaoZ2ze9Z2knbOIn5jlSK4WO3ljhhduNIo1e/bttTwf3zE PTI4gNz7lylHPOb4lnJuEZKWyek4EPmEF3Yh0ToAyI8bkpbltSfqotzITyuWBXaerWh/UxpmdgQIVM 14vo61cj+l+Xw6JZIteOkCHIIeRKu7csJkNYaSDpMyErO5vFnbTWsUUwO7GVT4s8EueZyI0HR5andj V6cZu/c97mcCHEg0I4vTNF9087WaCDsgEnq4D9TJU4qii8BwRbsrvwKHGtiw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 12:07:44PM +0100,
-Daniel Bristot de Oliveira wrote:
+Remove needless use of mbox_t, replacing with just struct
+mbox_out. Silences compiler warnings under a -Warray-bounds build:
 
-> The rtla timerlat tool is an interface for the timerlat tracer.
-> The timerlat tracer dispatches a kernel thread per-cpu. These threads set a
-> periodic timer to wake themselves up and go back to sleep. After the
-> wakeup, they collect and generate useful information for the debugging of
-> operating system timer latency.
-> 
-> The timerlat tracer outputs information in two ways. It periodically
-> prints the timer latency at the timer IRQ handler and the Thread handler.
-> It also provides information for each noise via the osnoise tracepoints.
-> 
-> The rtla timerlat top mode displays a summary of the periodic output from
-> the timerlat tracer.
-> 
-> Here is one example of the rtla timerlat tool output:
->  ---------- %< ----------
-> [root@alien ~]# rtla timerlat top -c 0-3 -d 1m
->                                      Timer Latency
->   0 00:01:00   |          IRQ Timer Latency (us)        |         Thread Timer Latency (us)
-> CPU COUNT      |      cur       min       avg       max |      cur       min       avg       max
->   0 #60001     |        0         0         0         3 |        1         1         1         6
->   1 #60001     |        0         0         0         3 |        2         1         1         5
->   2 #60001     |        0         0         1         6 |        1         1         2         7
->   3 #60001     |        0         0         0         7 |        1         1         1        11
->  ---------- >% ----------
-> 
-> Running:
->   # rtla timerlat --help
->   # rtla timerlat top --help
-> provides information about the available options.
-> 
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Tom Zanussi <zanussi@kernel.org>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Juri Lelli <juri.lelli@redhat.com>
-> Cc: Clark Williams <williams@redhat.com>
-> Cc: John Kacur <jkacur@redhat.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
-> Cc: linux-rt-users@vger.kernel.org
-> Cc: linux-trace-devel@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-> ---
->  tools/tracing/rtla/Makefile           |   2 +
->  tools/tracing/rtla/src/rtla.c         |   5 +
->  tools/tracing/rtla/src/timerlat.c     |  68 +++
->  tools/tracing/rtla/src/timerlat.h     |   4 +
->  tools/tracing/rtla/src/timerlat_top.c | 615 ++++++++++++++++++++++++++
->  5 files changed, 694 insertions(+)
->  create mode 100644 tools/tracing/rtla/src/timerlat.c
->  create mode 100644 tools/tracing/rtla/src/timerlat.h
->  create mode 100644 tools/tracing/rtla/src/timerlat_top.c
-> 
-> diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-> index ba6f327e815a..f254cfbe4fa3 100644
-> --- a/tools/tracing/rtla/Makefile
-> +++ b/tools/tracing/rtla/Makefile
-> @@ -62,6 +62,8 @@ install:
->  	$(STRIP) $(DESTDIR)$(BINDIR)/rtla
->  	@test ! -f $(DESTDIR)$(BINDIR)/osnoise || rm $(DESTDIR)$(BINDIR)/osnoise
->  	ln -s $(DESTDIR)$(BINDIR)/rtla $(DESTDIR)$(BINDIR)/osnoise
-> +	@test ! -f $(DESTDIR)$(BINDIR)/timerlat || rm $(DESTDIR)$(BINDIR)/timerlat
-> +	ln -s $(DESTDIR)$(BINDIR)/rtla $(DESTDIR)$(BINDIR)/timerlat
->  
->  .PHONY: clean tarball
->  clean:
-> diff --git a/tools/tracing/rtla/src/rtla.c b/tools/tracing/rtla/src/rtla.c
-> index 669b9750b3b3..09bd21b8af81 100644
-> --- a/tools/tracing/rtla/src/rtla.c
-> +++ b/tools/tracing/rtla/src/rtla.c
-> @@ -9,6 +9,7 @@
->  #include <stdio.h>
->  
->  #include "osnoise.h"
-> +#include "timerlat.h"
->  
->  /*
->   * rtla_usage - print rtla usage
-> @@ -25,6 +26,7 @@ static void rtla_usage(void)
->  		"",
->  		"  commands:",
->  		"     osnoise  - gives information about the operating system noise (osnoise)",
-> +		"     timerlat - measures the timer irq and thread latency",
->  		"",
->  		NULL,
->  	};
-> @@ -45,6 +47,9 @@ int run_command(int argc, char **argv, int start_position)
->  	if (strcmp(argv[start_position], "osnoise") == 0) {
->  		osnoise_main(argc-start_position, &argv[start_position]);
->  		goto ran;
-> +	} else if (strcmp(argv[start_position], "timerlat") == 0) {
-> +		timerlat_main(argc-start_position, &argv[start_position]);
-> +		goto ran;
->  	}
->  
->  	return 0;
-> diff --git a/tools/tracing/rtla/src/timerlat.c b/tools/tracing/rtla/src/timerlat.c
-> new file mode 100644
-> index 000000000000..29a51c01b084
-> --- /dev/null
-> +++ b/tools/tracing/rtla/src/timerlat.c
-> @@ -0,0 +1,68 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2021 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
-> + */
-> +#include <sys/types.h>
-> +#include <sys/stat.h>
-> +#include <pthread.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <unistd.h>
-> +#include <errno.h>
-> +#include <fcntl.h>
-> +#include <stdio.h>
-> +
-> +#include "timerlat.h"
-> +
-> +static void timerlat_usage(void)
-> +{
-> +	int i;
-> +
-> +	static const char * const msg[] = {
-> +		"",
-> +		"timerlat version " VERSION,
-> +		"",
-> +		"  usage: [rtla] timerlat [MODE] ...",
-> +		"",
-> +		"  modes:",
-> +		"     top  - prints the summary from timerlat tracer",
-> +		"",
-> +		"if no MODE is given, the top mode is called, passing the arguments",
-> +		NULL,
-> +	};
-> +
-> +	for (i = 0; msg[i]; i++)
-> +		fprintf(stderr, "%s\n", msg[i]);
-> +	exit(1);
-> +}
-> +
-> +int timerlat_main(int argc, char *argv[])
-> +{
-> +	if (argc == 0)
-> +		goto usage;
-> +
-> +	/*
-> +	 * if timerlat was called without any argument, run the
-> +	 * default cmdline.
-> +	 */
-> +	if (argc == 1) {
-> +		timerlat_top_main(argc, argv);
-> +		exit(0);
-> +	}
-> +
-> +	if ((strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "--help") == 0)) {
-> +		timerlat_usage();
-> +		exit(0);
-> +	} else if (strncmp(argv[1], "-", 1) == 0) {
-> +		/* the user skipped the tool, call the default one */
-> +		timerlat_top_main(argc, argv);
-> +		exit(0);
-> +	} else if (strcmp(argv[1], "top") == 0) {
-> +		timerlat_top_main(argc-1, &argv[1]);
-> +		exit(0);
-> +	}
-> +
-> +usage:
-> +	timerlat_usage();
-> +	exit(1);
-> +}
-> diff --git a/tools/tracing/rtla/src/timerlat.h b/tools/tracing/rtla/src/timerlat.h
-> new file mode 100644
-> index 000000000000..6f9d3925acd0
-> --- /dev/null
-> +++ b/tools/tracing/rtla/src/timerlat.h
-> @@ -0,0 +1,4 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +int timerlat_top_main(int argc, char *argv[]);
-> +int timerlat_main(int argc, char *argv[]);
-> diff --git a/tools/tracing/rtla/src/timerlat_top.c b/tools/tracing/rtla/src/timerlat_top.c
-> new file mode 100644
-> index 000000000000..9764681ad8b1
-> --- /dev/null
-> +++ b/tools/tracing/rtla/src/timerlat_top.c
-> @@ -0,0 +1,615 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2021 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
-> + */
-> +
-> +#include <getopt.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <signal.h>
-> +#include <unistd.h>
-> +#include <stdio.h>
-> +#include <time.h>
-> +
-> +#include "utils.h"
-> +#include "osnoise.h"
-> +#include "timerlat.h"
-> +
-> +struct timerlat_top_params {
-> +	char			*cpus;
-> +	char			*monitored_cpus;
-> +	char			*trace_output;
-> +	unsigned long long	runtime;
-> +	long long		stop_us;
-> +	long long		stop_total_us;
-> +	long long		timerlat_period_us;
-> +	long long		print_stack;
-> +	int			sleep_time;
-> +	int			output_divisor;
-> +	int			duration;
-> +	int			quiet;
-> +	int			set_sched;
-> +	struct sched_attr	sched_param;
-> +};
-> +
-> +struct timerlat_top_cpu {
-> +	int			irq_count;
-> +	int			thread_count;
-> +
-> +	unsigned long long	cur_irq;
-> +	unsigned long long	min_irq;
-> +	unsigned long long	sum_irq;
-> +	unsigned long long	max_irq;
-> +
-> +	unsigned long long	cur_thread;
-> +	unsigned long long	min_thread;
-> +	unsigned long long	sum_thread;
-> +	unsigned long long	max_thread;
-> +};
-> +
-> +struct timerlat_top_data {
-> +	struct timerlat_top_cpu	*cpu_data;
-> +	int			nr_cpus;
-> +};
-> +
-> +/*
-> + * timerlat_free_top - free runtime data
-> + */
-> +static void
-> +timerlat_free_top(struct timerlat_top_data *data)
-> +{
-> +	free(data->cpu_data);
-> +	free(data);
-> +}
-> +
-> +/*
-> + * timerlat_alloc_histogram - alloc runtime data
-> + */
-> +static struct timerlat_top_data *timerlat_alloc_top(int nr_cpus)
-> +{
-> +	struct timerlat_top_data *data;
-> +	int cpu;
-> +
-> +	data = calloc(1, sizeof(*data));
-> +	if (!data)
-> +		return NULL;
-> +
-> +	data->nr_cpus = nr_cpus;
-> +
-> +	/* one set of histograms per CPU */
-> +	data->cpu_data = calloc(1, sizeof(*data->cpu_data) * nr_cpus);
-> +	if (!data->cpu_data)
-> +		goto cleanup;
-> +
-> +	/* set the min to max */
-> +	for (cpu = 0; cpu < nr_cpus; cpu++) {
-> +		data->cpu_data[cpu].min_irq = ~0;
-> +		data->cpu_data[cpu].min_thread = ~0;
-> +	}
-> +
-> +	return data;
-> +
-> +cleanup:
-> +	timerlat_free_top(data);
-> +	return NULL;
-> +}
-> +
-> +/*
-> + * timerlat_hist_update - record a new timerlat occurent on cpu, updating data
-> + */
-> +static void
-> +timerlat_top_update(struct osnoise_tool *tool, int cpu,
-> +		    unsigned long long thread,
-> +		    unsigned long long latency)
-> +{
-> +	struct timerlat_top_data *data = tool->data;
-> +	struct timerlat_top_cpu *cpu_data = &data->cpu_data[cpu];
-> +
-> +	if (!thread) {
-> +		cpu_data->irq_count++;
-> +		cpu_data->cur_irq = latency;
-> +		update_min(&cpu_data->min_irq, &latency);
-> +		update_sum(&cpu_data->sum_irq, &latency);
-> +		update_max(&cpu_data->max_irq, &latency);
-> +	} else {
-> +		cpu_data->thread_count++;
-> +		cpu_data->cur_thread = latency;
-> +		update_min(&cpu_data->min_thread, &latency);
-> +		update_sum(&cpu_data->sum_thread, &latency);
-> +		update_max(&cpu_data->max_thread, &latency);
-> +	}
-> +}
-> +
-> +/*
-> + * timerlat_top_handler - this is the handler for timerlat tracer events
-> + */
-> +static int
-> +timerlat_top_handler(struct trace_seq *s, struct tep_record *record,
-> +		     struct tep_event *event, void *context)
-> +{
-> +	struct trace_instance *trace = context;
-> +	unsigned long long latency, thread;
-> +	struct osnoise_tool *top;
-> +	int cpu = record->cpu;
-> +
-> +	top = container_of(trace, struct osnoise_tool, trace);
-> +
-> +	tep_get_field_val(s, event, "context", record, &thread, 1);
-> +	tep_get_field_val(s, event, "timer_latency", record, &latency, 1);
-> +
-> +	timerlat_top_update(top, cpu, thread, latency);
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * timerlat_top_header - print the header of the tool output
-> + */
-> +static void timerlat_top_header(struct osnoise_tool *top)
-> +{
-> +	struct timerlat_top_params *params = top->params;
-> +	struct trace_seq *s = top->trace.seq;
-> +	char duration[26];
-> +
-> +	get_duration(top->start_time, duration, sizeof(duration));
-> +
-> +	trace_seq_printf(s, "\033[2;37;40m");
-> +	trace_seq_printf(s, "                                     Timer Latency                                              ");
-> +	trace_seq_printf(s, "\033[0;0;0m");
-> +	trace_seq_printf(s, "\n");
-> +
-> +	trace_seq_printf(s, "%-6s   |          IRQ Timer Latency (%s)        |         Thread Timer Latency (%s)\n", duration,
-> +			params->output_divisor == 1 ? "ns" : "us",
-> +			params->output_divisor == 1 ? "ns" : "us");
-> +
-> +	trace_seq_printf(s, "\033[2;30;47m");
-> +	trace_seq_printf(s, "CPU COUNT      |      cur       min       avg       max |      cur       min       avg       max");
-> +	trace_seq_printf(s, "\033[0;0;0m");
-> +	trace_seq_printf(s, "\n");
-> +}
-> +
-> +/*
-> + * timerlat_top_print - prints the output of a given CPU
-> + */
-> +static void timerlat_top_print(struct osnoise_tool *top, int cpu)
-> +{
-> +
-> +	struct timerlat_top_params *params = top->params;
-> +	struct timerlat_top_data *data = top->data;
-> +	struct timerlat_top_cpu *cpu_data = &data->cpu_data[cpu];
-> +	int divisor = params->output_divisor;
-> +	struct trace_seq *s = top->trace.seq;
-> +
-> +	if (divisor == 0)
-> +		return;
-> +
-> +	/*
-> +	 * Skip if no data is available: is this cpu offline?
-> +	 */
-> +	if (!cpu_data->irq_count && !cpu_data->thread_count)
-> +		return;
-> +
-> +	/*
-> +	 * Unless trace is being lost, IRQ counter is always the max.
-> +	 */
-> +	trace_seq_printf(s, "%3d #%-9d |", cpu, cpu_data->irq_count);
-> +
-> +	if (!cpu_data->irq_count) {
-> +		trace_seq_printf(s, "        - ");
-> +		trace_seq_printf(s, "        - ");
-> +		trace_seq_printf(s, "        - ");
-> +		trace_seq_printf(s, "        - |");
-> +	} else {
-> +		trace_seq_printf(s, "%9llu ", cpu_data->cur_irq / params->output_divisor);
-> +		trace_seq_printf(s, "%9llu ", cpu_data->min_irq / params->output_divisor);
-> +		trace_seq_printf(s, "%9llu ", (cpu_data->sum_irq / cpu_data->irq_count) / divisor);
-> +		trace_seq_printf(s, "%9llu |", cpu_data->max_irq / divisor);
-> +	}
-> +
-> +	if (!cpu_data->thread_count) {
-> +		trace_seq_printf(s, "        - ");
-> +		trace_seq_printf(s, "        - ");
-> +		trace_seq_printf(s, "        - ");
-> +		trace_seq_printf(s, "        -\n");
-> +	} else {
-> +		trace_seq_printf(s, "%9llu ", cpu_data->cur_thread / divisor);
-> +		trace_seq_printf(s, "%9llu ", cpu_data->min_thread / divisor);
-> +		trace_seq_printf(s, "%9llu ",
-> +				(cpu_data->sum_thread / cpu_data->thread_count) / divisor);
-> +		trace_seq_printf(s, "%9llu\n", cpu_data->max_thread / divisor);
-> +	}
-> +}
-> +
-> +/*
-> + * clear_terminal - clears the output terminal
-> + */
-> +static void clear_terminal(struct trace_seq *seq)
-> +{
-> +	if (!config_debug)
-> +		trace_seq_printf(seq, "\033c");
-> +}
-> +
-> +/*
-> + * timerlat_print_stats - print data for all cpus
-> + */
-> +static void
-> +timerlat_print_stats(struct timerlat_top_params *params, struct osnoise_tool *top)
-> +{
-> +	struct trace_instance *trace = &top->trace;
-> +	static int nr_cpus = -1;
-> +	int i;
-> +
-> +	if (nr_cpus == -1)
-> +		nr_cpus = sysconf(_SC_NPROCESSORS_CONF);
-> +
-> +	if (!params->quiet)
-> +		clear_terminal(trace->seq);
-> +
-> +	timerlat_top_header(top);
-> +
-> +	for (i = 0; i < nr_cpus; i++) {
-> +		if (params->cpus && !params->monitored_cpus[i])
-> +			continue;
-> +		timerlat_top_print(top, i);
-> +	}
-> +
-> +	trace_seq_do_printf(trace->seq);
-> +	trace_seq_reset(trace->seq);
-> +}
-> +
-> +/*
-> + * timerlat_top_usage - prints timerlat top usage message
-> + */
-> +static void timerlat_top_usage(char *usage)
-> +{
-> +	int i;
-> +
-> +	static const char *const msg[] = {
-> +		"",
-> +		"  usage: rtla timerlat [top] [-h] [-q] [-p us] [-i us] [-t us] [-s us] [-T[=file]] \\",
-> +		"	  [-c cpu-list] [-P priority]",
-> +		"",
-> +		"	  -h/--help: print this menu",
-> +		"	  -p/--period us: timerlat period in us",
-> +		"	  -i/--irq us: stop trace if the irq latency is higher than the argument in us",
-> +		"	  -T/--thread us: stop trace if the thread latency is higher than the argument in us",
-> +		"	  -s/--stack us: save the stack trace at the IRQ if a thread latency is higher than the argument in us",
-> +		"	  -c/--cpus cpus: run the tracer only on the given cpus	  -d/--duration time[m|h|d]: duration of the session in seconds",
-> +		"	  -t/--trace[=file]: save the stopped trace to [file|timerlat_trace.txt]",
-> +		"	  -n/--nano: display data in nanoseconds",
-> +		"	  -q/--quiet print only a summary at the end",
-> +		"	  -P/--priority o:prio|r:prio|f:prio|d:runtime:period : set scheduling parameters",
-> +		"		o:prio - use SCHED_OTHER with prio",
-> +		"		r:prio - use SCHED_RR with prio",
-> +		"		f:prio - use SCHED_FIFO with prio",
-> +		"		d:runtime[us|ms|s]:period[us|ms|s] - use SCHED_DEADLINE with runtime and period",
-> +		"						       in nanoseconds",
-> +		NULL,
-> +	};
+drivers/scsi/megaraid.c: In function 'megaraid_probe_one':
+drivers/scsi/megaraid.c:3615:30: error: array subscript 'mbox_t[0]' is partly outside array bounds of 'unsigned char[15]' [-Werror=array-bounds]
+ 3615 |         mbox->m_out.xferaddr = (u32)adapter->buf_dma_handle;
+      |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/megaraid.c:3599:23: note: while referencing 'raw_mbox'
+ 3599 |         unsigned char raw_mbox[sizeof(struct mbox_out)];
+      |                       ^~~~~~~~
 
-About help usage msg.
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/scsi/megaraid.c | 84 +++++++++++++++++------------------------
+ 1 file changed, 34 insertions(+), 50 deletions(-)
 
-[-t us] --> [-T us]
-[-T=[file]] --> [-t[=file]]
+diff --git a/drivers/scsi/megaraid.c b/drivers/scsi/megaraid.c
+index 0d31d7a5e335..bf987f3a7f3f 100644
+--- a/drivers/scsi/megaraid.c
++++ b/drivers/scsi/megaraid.c
+@@ -192,23 +192,21 @@ mega_query_adapter(adapter_t *adapter)
+ {
+ 	dma_addr_t	prod_info_dma_handle;
+ 	mega_inquiry3	*inquiry3;
+-	u8	raw_mbox[sizeof(struct mbox_out)];
+-	mbox_t	*mbox;
++	struct mbox_out	mbox;
++	u8	*raw_mbox = (u8 *)&mbox;
+ 	int	retval;
+ 
+ 	/* Initialize adapter inquiry mailbox */
+ 
+-	mbox = (mbox_t *)raw_mbox;
+-
+ 	memset((void *)adapter->mega_buffer, 0, MEGA_BUFFER_SIZE);
+-	memset(&mbox->m_out, 0, sizeof(raw_mbox));
++	memset(&mbox, 0, sizeof(mbox));
+ 
+ 	/*
+ 	 * Try to issue Inquiry3 command
+ 	 * if not succeeded, then issue MEGA_MBOXCMD_ADAPTERINQ command and
+ 	 * update enquiry3 structure
+ 	 */
+-	mbox->m_out.xferaddr = (u32)adapter->buf_dma_handle;
++	mbox.xferaddr = (u32)adapter->buf_dma_handle;
+ 
+ 	inquiry3 = (mega_inquiry3 *)adapter->mega_buffer;
+ 
+@@ -232,10 +230,10 @@ mega_query_adapter(adapter_t *adapter)
+ 
+ 		inq = &ext_inq->raid_inq;
+ 
+-		mbox->m_out.xferaddr = (u32)dma_handle;
++		mbox.xferaddr = (u32)dma_handle;
+ 
+ 		/*issue old 0x04 command to adapter */
+-		mbox->m_out.cmd = MEGA_MBOXCMD_ADPEXTINQ;
++		mbox.cmd = MEGA_MBOXCMD_ADPEXTINQ;
+ 
+ 		issue_scb_block(adapter, raw_mbox);
+ 
+@@ -262,7 +260,7 @@ mega_query_adapter(adapter_t *adapter)
+ 						      sizeof(mega_product_info),
+ 						      DMA_FROM_DEVICE);
+ 
+-		mbox->m_out.xferaddr = prod_info_dma_handle;
++		mbox.xferaddr = prod_info_dma_handle;
+ 
+ 		raw_mbox[0] = FC_NEW_CONFIG;	/* i.e. mbox->cmd=0xA1 */
+ 		raw_mbox[2] = NC_SUBOP_PRODUCT_INFO;	/* i.e. 0x0E */
+@@ -3569,16 +3567,14 @@ mega_n_to_m(void __user *arg, megacmd_t *mc)
+ static int
+ mega_is_bios_enabled(adapter_t *adapter)
+ {
+-	unsigned char	raw_mbox[sizeof(struct mbox_out)];
+-	mbox_t	*mbox;
+-
+-	mbox = (mbox_t *)raw_mbox;
++	struct mbox_out mbox;
++	unsigned char	*raw_mbox = (u8 *)&mbox;
+ 
+-	memset(&mbox->m_out, 0, sizeof(raw_mbox));
++	memset(&mbox, 0, sizeof(mbox));
+ 
+ 	memset((void *)adapter->mega_buffer, 0, MEGA_BUFFER_SIZE);
+ 
+-	mbox->m_out.xferaddr = (u32)adapter->buf_dma_handle;
++	mbox.xferaddr = (u32)adapter->buf_dma_handle;
+ 
+ 	raw_mbox[0] = IS_BIOS_ENABLED;
+ 	raw_mbox[2] = GET_BIOS;
+@@ -3600,13 +3596,11 @@ mega_is_bios_enabled(adapter_t *adapter)
+ static void
+ mega_enum_raid_scsi(adapter_t *adapter)
+ {
+-	unsigned char raw_mbox[sizeof(struct mbox_out)];
+-	mbox_t *mbox;
++	struct mbox_out mbox;
++	unsigned char	*raw_mbox = (u8 *)&mbox;
+ 	int i;
+ 
+-	mbox = (mbox_t *)raw_mbox;
+-
+-	memset(&mbox->m_out, 0, sizeof(raw_mbox));
++	memset(&mbox, 0, sizeof(mbox));
+ 
+ 	/*
+ 	 * issue command to find out what channels are raid/scsi
+@@ -3616,7 +3610,7 @@ mega_enum_raid_scsi(adapter_t *adapter)
+ 
+ 	memset((void *)adapter->mega_buffer, 0, MEGA_BUFFER_SIZE);
+ 
+-	mbox->m_out.xferaddr = (u32)adapter->buf_dma_handle;
++	mbox.xferaddr = (u32)adapter->buf_dma_handle;
+ 
+ 	/*
+ 	 * Non-ROMB firmware fail this command, so all channels
+@@ -3655,23 +3649,21 @@ static void
+ mega_get_boot_drv(adapter_t *adapter)
+ {
+ 	struct private_bios_data	*prv_bios_data;
+-	unsigned char	raw_mbox[sizeof(struct mbox_out)];
+-	mbox_t	*mbox;
++	struct mbox_out mbox;
++	unsigned char	*raw_mbox = (u8 *)&mbox;
+ 	u16	cksum = 0;
+ 	u8	*cksum_p;
+ 	u8	boot_pdrv;
+ 	int	i;
+ 
+-	mbox = (mbox_t *)raw_mbox;
+-
+-	memset(&mbox->m_out, 0, sizeof(raw_mbox));
++	memset(&mbox, 0, sizeof(mbox));
+ 
+ 	raw_mbox[0] = BIOS_PVT_DATA;
+ 	raw_mbox[2] = GET_BIOS_PVT_DATA;
+ 
+ 	memset((void *)adapter->mega_buffer, 0, MEGA_BUFFER_SIZE);
+ 
+-	mbox->m_out.xferaddr = (u32)adapter->buf_dma_handle;
++	mbox.xferaddr = (u32)adapter->buf_dma_handle;
+ 
+ 	adapter->boot_ldrv_enabled = 0;
+ 	adapter->boot_ldrv = 0;
+@@ -3721,13 +3713,11 @@ mega_get_boot_drv(adapter_t *adapter)
+ static int
+ mega_support_random_del(adapter_t *adapter)
+ {
+-	unsigned char raw_mbox[sizeof(struct mbox_out)];
+-	mbox_t *mbox;
++	struct mbox_out mbox;
++	unsigned char	*raw_mbox = (u8 *)&mbox;
+ 	int rval;
+ 
+-	mbox = (mbox_t *)raw_mbox;
+-
+-	memset(&mbox->m_out, 0, sizeof(raw_mbox));
++	memset(&mbox, 0, sizeof(mbox));
+ 
+ 	/*
+ 	 * issue command
+@@ -3750,13 +3740,11 @@ mega_support_random_del(adapter_t *adapter)
+ static int
+ mega_support_ext_cdb(adapter_t *adapter)
+ {
+-	unsigned char raw_mbox[sizeof(struct mbox_out)];
+-	mbox_t *mbox;
++	struct mbox_out mbox;
++	unsigned char	*raw_mbox = (u8 *)&mbox;
+ 	int rval;
+ 
+-	mbox = (mbox_t *)raw_mbox;
+-
+-	memset(&mbox->m_out, 0, sizeof(raw_mbox));
++	memset(&mbox, 0, sizeof(mbox));
+ 	/*
+ 	 * issue command to find out if controller supports extended CDBs.
+ 	 */
+@@ -3865,16 +3853,14 @@ mega_do_del_logdrv(adapter_t *adapter, int logdrv)
+ static void
+ mega_get_max_sgl(adapter_t *adapter)
+ {
+-	unsigned char	raw_mbox[sizeof(struct mbox_out)];
+-	mbox_t	*mbox;
++	struct mbox_out	mbox;
++	unsigned char	*raw_mbox = (u8 *)&mbox;
+ 
+-	mbox = (mbox_t *)raw_mbox;
+-
+-	memset(mbox, 0, sizeof(raw_mbox));
++	memset(&mbox, 0, sizeof(mbox));
+ 
+ 	memset((void *)adapter->mega_buffer, 0, MEGA_BUFFER_SIZE);
+ 
+-	mbox->m_out.xferaddr = (u32)adapter->buf_dma_handle;
++	mbox.xferaddr = (u32)adapter->buf_dma_handle;
+ 
+ 	raw_mbox[0] = MAIN_MISC_OPCODE;
+ 	raw_mbox[2] = GET_MAX_SG_SUPPORT;
+@@ -3888,7 +3874,7 @@ mega_get_max_sgl(adapter_t *adapter)
+ 	}
+ 	else {
+ 		adapter->sglen = *((char *)adapter->mega_buffer);
+-		
++
+ 		/*
+ 		 * Make sure this is not more than the resources we are
+ 		 * planning to allocate
+@@ -3910,16 +3896,14 @@ mega_get_max_sgl(adapter_t *adapter)
+ static int
+ mega_support_cluster(adapter_t *adapter)
+ {
+-	unsigned char	raw_mbox[sizeof(struct mbox_out)];
+-	mbox_t	*mbox;
+-
+-	mbox = (mbox_t *)raw_mbox;
++	struct mbox_out	mbox;
++	unsigned char	*raw_mbox = (u8 *)&mbox;
+ 
+-	memset(mbox, 0, sizeof(raw_mbox));
++	memset(&mbox, 0, sizeof(mbox));
+ 
+ 	memset((void *)adapter->mega_buffer, 0, MEGA_BUFFER_SIZE);
+ 
+-	mbox->m_out.xferaddr = (u32)adapter->buf_dma_handle;
++	mbox.xferaddr = (u32)adapter->buf_dma_handle;
+ 
+ 	/*
+ 	 * Try to get the initiator id. This command will succeed iff the
+-- 
+2.30.2
 
-[-d] [-D] [-n] lack in the head usage info 'usage: ...'
-
-> +
-> +	if (usage)
-> +		fprintf(stderr, "%s\n", usage);
-> +
-> +	fprintf(stderr, "rtla timerlat top: a per-cpu summary of the timer latency (version %s)\n",
-> +			VERSION);
-> +
-> +	for (i = 0; msg[i]; i++)
-> +		fprintf(stderr, "%s\n", msg[i]);
-> +	exit(1);
-> +}
-> +

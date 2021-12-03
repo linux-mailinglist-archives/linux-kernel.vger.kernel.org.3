@@ -2,164 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74FDE467791
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C97467793
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380772AbhLCMo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 07:44:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
+        id S1380887AbhLCMov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 07:44:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352027AbhLCMoY (ORCPT
+        with ESMTP id S1352027AbhLCMou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 07:44:24 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13D7C06174A
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 04:41:00 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id j17so3077195qtx.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 04:41:00 -0800 (PST)
+        Fri, 3 Dec 2021 07:44:50 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E71C06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 04:41:25 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id i5so5500385wrb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 04:41:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YzETAAhL/NPrMqOB8Dhv3Q+lcOA75NqIJ8aqwt7MBQo=;
-        b=Gr9vZEUCKtBa0P4z+lEvbS31k8YUTbRH8BuO+TFYQy22R2zi+R39oJ9TsOCM65TPSY
-         cmJZXkb1M8m9fSQ0v6MtaTX5//U5q3jyMrF45c/K4/QfplpQjbhdHv0EGvgv6/CctqhV
-         tTw3yiMC0GXvfkjqippNsQiwFAXR4GRuKqTcou6/T/pXUxgUaS8S7LKFvY3JZaMtwZeT
-         tUT3EmM1+eQZ7xguS5xPmiiOrEgeN9yausc8RH8BOMN6Rwzr/c3HQ5dN37TtRfw2QhE5
-         REyCkAzWNPYKMBjCHIzIjQCsHcVYnyO5NYeMipEx92/U6JBnDzL7AWxKRKhLMBjrM0L8
-         Xgww==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=2DlaYyrMnNAfarN4p4bn7fLOENYHGsS+8GIcDJI44kI=;
+        b=EGQ3aws5Y4/XGWAH1A6EHl4jGKcodEVMaTu6soy7BD9gxMZgtueQRjNgyQltM7OkYu
+         82ffPIdz00JJ0MN2jQxpmbLVd2134QX2ghdaOLHgE37EfAQttbnZ95sybWO8DAoZTPGy
+         kLkF4dyf9bGIIpn/N6jAvpFyLfMXjRnF0MsVhVHNW87w/tiSpI5iEg18F68Z8K+zi66y
+         UdevS/ahqkO0WBH4R1+4JrhtbdgjTwiLW/ZeCsK83hlq24BIhOoY5TzdmnxqePwOieJ3
+         rd8BuoOAy+Eb+NycsuNWEHEZgqcSKXxGJiw6GuyTt5ax6o8/MUflJko+mGEGNvYHpAe0
+         vuEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YzETAAhL/NPrMqOB8Dhv3Q+lcOA75NqIJ8aqwt7MBQo=;
-        b=653AJvZnWmKvIOt3VnY6rFe6QuJF0+89UE+eg+A8La3keTZvCB72Ffrlvl+zNbpnSH
-         z4tH98o8dT1EMkVMBD8IrzfkT2kEBIsL6xPE+WcWHO6Nv8CUfBzNylVi2lUqfxrpeANa
-         NZynZ3hGYQvGN+0TPfj2AxCipM9wOGBvvGchRRG0UX35ickX8v8fPhq7SCGluBYg7jTR
-         Hs9CVIvlTVf6g0htJ5dJ3ZPqdmU18ogyOXy3jvj7kx+feO1OJU4+MCMgRfwZQU70yk++
-         qOQNXWNX4i2FTNlWOTsykr8upvIq2N4PBNfttkDUZQje2GQZ7OasFZ6Az1TCxhnd3CEA
-         ax4Q==
-X-Gm-Message-State: AOAM530415RlaDS3yQkP2GmEHQIXeGPHE1SaWuuOOXZg63QWdWEDLybu
-        RKBALeaA/TUTv+6QSgZSqNUXgw==
-X-Google-Smtp-Source: ABdhPJwvWAMl4t4Ouer40afEMNCjblBSRcn9wt9/hC0MeqFtyK8US1JNgs+NvMPYbm7aZp/3NdtxXA==
-X-Received: by 2002:a05:622a:1a83:: with SMTP id s3mr20385748qtc.497.1638535260098;
-        Fri, 03 Dec 2021 04:41:00 -0800 (PST)
-Received: from [192.168.1.173] (bras-base-kntaon1617w-grc-33-142-112-185-132.dsl.bell.ca. [142.112.185.132])
-        by smtp.googlemail.com with ESMTPSA id u18sm2071638qki.69.2021.12.03.04.40.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 04:40:59 -0800 (PST)
-Message-ID: <472b2dd9-3596-5d5b-2fc2-20a7bbf05dbf@mojatatu.com>
-Date:   Fri, 3 Dec 2021 07:40:58 -0500
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=2DlaYyrMnNAfarN4p4bn7fLOENYHGsS+8GIcDJI44kI=;
+        b=rqNei+4F1u87sNOUEitgpiPgKvYaRN46sLENX7L8Ag0eV8wo9jvI9iveB632v9keua
+         I6QpvSzRbQvQrjQMIYQAECtCtvvU87lk2hFd/yXlhJqLq+K5gqoj37cnJSl7nB3J/B6j
+         TsJIN9d7mpeAK7XUKrSr4qxWlbM9wS3Df6Q8MqwydaS3CtkI3w1sl+10BqQpDPPDIISh
+         P/UhN7atg5xv/V965GZ99x9nhHG0oWuryB1bFnraumU1D/ltR4aOVujb1LvaxTjlA7q4
+         DOE3OC5KPtpRHtBIdQehAYnxT3slO5BJlEJ8CYtdWXxRgiMbilMBQm0DzUYNA1mgK7s1
+         cZOQ==
+X-Gm-Message-State: AOAM5326IhVmFa/T+x0jZk0YfLfrmV8VlBamdfVvWXd9UWgn7RQ2GvaX
+        4anhlU6Hgd9MfNqrxODLGuo7cw==
+X-Google-Smtp-Source: ABdhPJy/MiBgF2zqfmjd+3J4u1vP4T6FanHvj7EcLrUpNxZ+mISsd53PcHVj/Julw+2v3rUBi0jE+g==
+X-Received: by 2002:a5d:4889:: with SMTP id g9mr21784593wrq.455.1638535284334;
+        Fri, 03 Dec 2021 04:41:24 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:15:13:cb5f:d3e:205e:c7c4])
+        by smtp.gmail.com with ESMTPSA id z6sm2427482wrm.93.2021.12.03.04.41.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 04:41:23 -0800 (PST)
+Date:   Fri, 3 Dec 2021 13:41:18 +0100
+From:   Marco Elver <elver@google.com>
+To:     andrey.konovalov@linux.dev
+Cc:     Alexander Potapenko <glider@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Evgenii Stepanov <eugenis@google.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: Re: [PATCH 27/31] kasan, vmalloc: add vmalloc support to HW_TAGS
+Message-ID: <YaoQbt/7FoEnBx4K@elver.google.com>
+References: <cover.1638308023.git.andreyknvl@google.com>
+ <aa90926d11b5977402af4ce6dccea89932006d36.1638308023.git.andreyknvl@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3 1/3] selftests/tc-testing: add exit code
-Content-Language: en-US
-To:     Li Zhijian <zhijianx.li@intel.com>, kuba@kernel.org,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, shuah@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lizhijian@cn.fujitsu.com,
-        Philip Li <philip.li@intel.com>,
-        kernel test robot <lkp@intel.com>,
-        Davide Caratti <dcaratti@redhat.com>
-References: <20211203025323.6052-1-zhijianx.li@intel.com>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-In-Reply-To: <20211203025323.6052-1-zhijianx.li@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aa90926d11b5977402af4ce6dccea89932006d36.1638308023.git.andreyknvl@google.com>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All LGTM - but shouldnt these patches be independent of each other?
-i.e submit 3 patches each with 1/1
+On Tue, Nov 30, 2021 at 11:08PM +0100, andrey.konovalov@linux.dev wrote:
+> From: Andrey Konovalov <andreyknvl@google.com>
+> 
+> This patch adds vmalloc tagging support to HW_TAGS KASAN.
+> 
+> The key difference between HW_TAGS and the other two KASAN modes
+> when it comes to vmalloc: HW_TAGS KASAN can only assign tags to
+> physical memory. The other two modes have shadow memory covering
+> every mapped virtual memory region.
+> 
+> This patch makes __kasan_unpoison_vmalloc() for HW_TAGS KASAN:
+> 
+> - Skip non-VM_ALLOC mappings as HW_TAGS KASAN can only tag a single
+>   mapping of normal physical memory; see the comment in the function.
+> - Generate a random tag, tag the returned pointer and the allocation.
+> - Propagate the tag into the page stucts to allow accesses through
+>   page_address(vmalloc_to_page()).
+> 
+> The rest of vmalloc-related KASAN hooks are not needed:
+> 
+> - The shadow-related ones are fully skipped.
+> - __kasan_poison_vmalloc() is kept as a no-op with a comment.
+> 
+> Poisoning of physical pages that are backing vmalloc() allocations
+> is skipped via __GFP_SKIP_KASAN_UNPOISON: __kasan_unpoison_vmalloc()
+> poisons them instead.
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> Co-developed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
-cheers,
-jamal
-
-On 2021-12-02 21:53, Li Zhijian wrote:
-> Mark the summary result as FAIL to prevent from confusing the selftest
-> framework if some of them are failed.
-> 
-> Previously, the selftest framework always treats it as *ok* even though
-> some of them are failed actually. That's because the script tdc.sh always
-> return 0.
-> 
->   # All test results:
->   #
->   # 1..97
->   # ok 1 83be - Create FQ-PIE with invalid number of flows
->   # ok 2 8b6e - Create RED with no flags
-> [...snip]
->   # ok 6 5f15 - Create RED with flags ECN, harddrop
->   # ok 7 53e8 - Create RED with flags ECN, nodrop
->   # ok 8 d091 - Fail to create RED with only nodrop flag
->   # ok 9 af8e - Create RED with flags ECN, nodrop, harddrop
->   # not ok 10 ce7d - Add mq Qdisc to multi-queue device (4 queues)
->   #       Could not match regex pattern. Verify command output:
->   # qdisc mq 1: root
->   # qdisc fq_codel 0: parent 1:4 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64
->   # qdisc fq_codel 0: parent 1:3 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64
-> [...snip]
->   # ok 96 6979 - Change quantum of a strict ETS band
->   # ok 97 9a7d - Change ETS strict band without quantum
->   #
->   #
->   #
->   #
->   ok 1 selftests: tc-testing: tdc.sh <<< summary result
-> 
-> CC: Philip Li <philip.li@intel.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Li Zhijian <zhijianx.li@intel.com>
-> Acked-by: Davide Caratti <dcaratti@redhat.com>
-> Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
-> ---
-> V3: repost to netdev
-> V2: Fix missing ':'
-> ---
->   tools/testing/selftests/tc-testing/tdc.py | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/tc-testing/tdc.py b/tools/testing/selftests/tc-testing/tdc.py
-> index a3e43189d940..ee22e3447ec7 100755
-> --- a/tools/testing/selftests/tc-testing/tdc.py
-> +++ b/tools/testing/selftests/tc-testing/tdc.py
-> @@ -716,6 +716,7 @@ def set_operation_mode(pm, parser, args, remaining):
->           list_test_cases(alltests)
->           exit(0)
->   
-> +    exit_code = 0 # KSFT_PASS
->       if len(alltests):
->           req_plugins = pm.get_required_plugins(alltests)
->           try:
-> @@ -724,6 +725,8 @@ def set_operation_mode(pm, parser, args, remaining):
->               print('The following plugins were not found:')
->               print('{}'.format(pde.missing_pg))
->           catresults = test_runner(pm, args, alltests)
-> +        if catresults.count_failures() != 0:
-> +            exit_code = 1 # KSFT_FAIL
->           if args.format == 'none':
->               print('Test results output suppression requested\n')
->           else:
-> @@ -748,6 +751,8 @@ def set_operation_mode(pm, parser, args, remaining):
->                           gid=int(os.getenv('SUDO_GID')))
->       else:
->           print('No tests found\n')
-> +        exit_code = 4 # KSFT_SKIP
-> +    exit(exit_code)
->   
->   def main():
->       """
-> @@ -767,8 +772,5 @@ def main():
->   
->       set_operation_mode(pm, parser, args, remaining)
->   
-> -    exit(0)
-> -
-> -
->   if __name__ == "__main__":
->       main()
-> 
-
+This is missing a Signed-off-by from Vincenzo.

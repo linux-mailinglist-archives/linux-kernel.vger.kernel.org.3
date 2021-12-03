@@ -2,96 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 077DD467069
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 04:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D4A46706B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 04:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350278AbhLCDEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 22:04:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
+        id S1350921AbhLCDFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 22:05:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233750AbhLCDEu (ORCPT
+        with ESMTP id S233750AbhLCDFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 22:04:50 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B21C06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 19:01:26 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id x7so1297845pjn.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 19:01:26 -0800 (PST)
+        Thu, 2 Dec 2021 22:05:38 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6372C061757
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 19:02:15 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id g17so5063338ybe.13
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 19:02:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=huaqin-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=flNl4+wOdPQZ7BpJ4HcBce/7klXuEOQ0vt7dFvL/gho=;
-        b=XC/Yz4sYM1Arbp2e3E2wVTt//UL4M7PuJO7JTzib1PPRdSPgHChxeRRPSEzI3PvlJg
-         NJpusJcEW+xLJUEeh+qL4A0YzLt4HJusHf4g6Oj5CbivdLsMxJUrYCNJnDmbN99oRcee
-         jj2goEz/txZZtcAFe41LlyFtnO18yNiJuKnho/Db+3KNLbG2GqQSYeFbo8Ppdhrw4M/a
-         bkCsXGcN+5w7jL++b5w7wbIE/xuNEqOpOdvFwitzZX/UPpgaHHsuNZ8AAJ71vyQbUla0
-         6BWRHg80BLEncUvFuXMyumxfhZiq2kyrkknfyHCAVEFYopBy2j7nRcYNNVza06aUfXSY
-         1dLg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K7PaP8tSfENa0iq44ql6ZAlEC/JeVO3TL0+8pVjJNAs=;
+        b=kWNAEBAC02bV50QGF/i0k6/BGpUVnovxXt7Bdh8Oi+xN+Cl3Uwf7n4tservsKdy+Ye
+         vu/gZaHuSQxlZk3MLBc7WtJXHNIzyb4FIlN2oN11jTmKj8bmQwTY2N3nCLMBd/UUQgwT
+         UfQyhrogfhvFyNwleewGOVMhbVdN8vqCoGXAy6iFf9hWuamq2HCcupXgIUi+z/6miFkI
+         bvOc7pXXlK/0ERZSxLOys2Ppkz8s+HBWfQ1WHXGKuu0Q72tHUPIEpwKqnwfjZc3g52uI
+         bjg0Kp3i+IASjSyTh/HdIL+5VuNOPEWUwdpzqOtWsDFvEHEdAmqmMX9IU74496f4opvP
+         OE+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=flNl4+wOdPQZ7BpJ4HcBce/7klXuEOQ0vt7dFvL/gho=;
-        b=ck/J+u/M8g1Z1DwfYBPFB+9IrEZLLbDUACjqIghXQqqg+ao+t8a7bqWRBz/D7eTmGh
-         VE3Pb/eSuLgnymQNZWMlSRwVvt4n0D060pL4nDeMDV373sAjiQfheeKXKP4e0DC9OgE5
-         g/Ga26t4JJs7LP5QSBU0+CupmIdW2lzFn96XFvvewp8h0XmU3l+pMjJ6RW08dfo1GQG+
-         umnEIhql+QjKkQNi3Z1v46bJ16ss0i59QU6Yj/LUjij5p5uomAdoCl0onXQnM6ABErhj
-         0Lssn6oeYjJ+OAemWNBRYTSR6DXM4zYDvDTkhin2+5Fy6VewXfrs+2Gklg/L+rGop6VI
-         KEiA==
-X-Gm-Message-State: AOAM530l3e/MIluNBhAcjocKWDSsasnhlDdX9xRfM6MBHk1AvFzYKmAq
-        fJRARJ4RX6WvSbDrwG7ONbWDbQ==
-X-Google-Smtp-Source: ABdhPJzt+6XC66+2G5EwGqBuBxlxbAKK0cPUS/l0GmnEfaLzUfQst1xZqtaaxooHw+a8jZ46Cz+iog==
-X-Received: by 2002:a17:90a:e00f:: with SMTP id u15mr10570528pjy.123.1638500486530;
-        Thu, 02 Dec 2021 19:01:26 -0800 (PST)
-Received: from ubuntu.huaqin.com ([101.78.151.213])
-        by smtp.gmail.com with ESMTPSA id n16sm737476pja.46.2021.12.02.19.01.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 19:01:26 -0800 (PST)
-From:   xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
-To:     jikos@kernel.org, benjamin.tissoires@redhat.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phoenixshen@google.com,
-        xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
-Subject: [PATCH] HID: google: add eel USB id
-Date:   Fri,  3 Dec 2021 11:01:19 +0800
-Message-Id: <20211203030119.28612-1-xiazhengqiao@huaqin.corp-partner.google.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K7PaP8tSfENa0iq44ql6ZAlEC/JeVO3TL0+8pVjJNAs=;
+        b=WZmcmScNkkg1yFWHThVOf/k8PMTZ7EfnxgErfglstw3Kk9oa1fuhycLugLLNaQb2FU
+         cpfvt7T3JD27EYfoHBNCJ9WIpe8EF5+QsDeNfDBRqSeIe40CEEZumMvG0YyZiYP+MeL5
+         1VHEX5poNLlYeA6RlyyJeNB21uPr0RXdCrfMZvj2kNCkU40onQj02IjXT6B9a9dHbvhn
+         HJm9tu26LwtypKNZN/rpphkx6xtwVcOsNC5LjF3J8rdi28+PvgU7F6eD+O79oIdobyAt
+         EW7KS1x29JvMfmZBpIIQ+/QHZ9n+idZz3DMR01oltfa/vczF2B9LS/sV1Z4xaL1x37dF
+         HJ4w==
+X-Gm-Message-State: AOAM533Uv5EE1MXAED4xj2+LWXRzwjAxXrxKHVSMvz7jSOm10uEiYuq1
+        AhV5iU1HWwC+f6F4Q9VFltxsDC+vGu5DeEeA/r7csA==
+X-Google-Smtp-Source: ABdhPJz99Yxf8WWAJww+VYX8V78U0MvyH5Oy353Ttz5ekTrjiy9CNWit3BY/k9oGR+/J9ggrpG6DX2xplKmKqkZ/V/U=
+X-Received: by 2002:a25:b285:: with SMTP id k5mr19708197ybj.132.1638500535048;
+ Thu, 02 Dec 2021 19:02:15 -0800 (PST)
+MIME-Version: 1.0
+References: <20211201150440.1088-1-sj@kernel.org> <20211201150440.1088-5-sj@kernel.org>
+In-Reply-To: <20211201150440.1088-5-sj@kernel.org>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Fri, 3 Dec 2021 11:01:36 +0800
+Message-ID: <CAMZfGtUPSmquyMd70HtqFVvxU68kbTdYN1fJU8g35zeXHMJHVA@mail.gmail.com>
+Subject: Re: [PATCH 04/11] mm/damon/vaddr: Remove an unnecessary warning message
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, brendanhiggins@google.com,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add one additional hammer-like device.
+On Wed, Dec 1, 2021 at 11:05 PM SeongJae Park <sj@kernel.org> wrote:
+>
+> The DAMON virtual address space monitoring primitive prints a warning
+> message for wrong DAMOS action.  However, it is not essential as the
+> code returns appropriate failure in the case.  This commit removes the
+> message to make the log clean.
+>
+> Fixes: 6dea8add4d28 ("mm/damon/vaddr: support DAMON-based Operation Schemes")
 
-Signed-off-by: xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
----
- drivers/hid/hid-google-hammer.c | 2 ++
- drivers/hid/hid-ids.h           | 1 +
- 2 files changed, 3 insertions(+)
+I don't think there should be a Fixes tag since it's not a serious bug.
 
-diff --git a/drivers/hid/hid-google-hammer.c b/drivers/hid/hid-google-hammer.c
-index 8123b871a3eb..0403beb3104b 100644
---- a/drivers/hid/hid-google-hammer.c
-+++ b/drivers/hid/hid-google-hammer.c
-@@ -585,6 +585,8 @@ static void hammer_remove(struct hid_device *hdev)
- static const struct hid_device_id hammer_devices[] = {
- 	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
- 		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_DON) },
-+	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
-+		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_EEL) },
- 	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
- 		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_HAMMER) },
- 	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 96a455921c67..b02d8b1d907a 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -501,6 +501,7 @@
- #define USB_DEVICE_ID_GOOGLE_MAGNEMITE	0x503d
- #define USB_DEVICE_ID_GOOGLE_MOONBALL	0x5044
- #define USB_DEVICE_ID_GOOGLE_DON	0x5050
-+#define USB_DEVICE_ID_GOOGLE_EEL	0x5057
- 
- #define USB_VENDOR_ID_GOTOP		0x08f2
- #define USB_DEVICE_ID_SUPER_Q2		0x007f
--- 
-2.17.1
+Without this:
 
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+
+Thanks.

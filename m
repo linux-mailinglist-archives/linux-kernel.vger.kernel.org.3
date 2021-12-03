@@ -2,132 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEB9467D09
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71CE7467D0B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382478AbhLCSRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 13:17:14 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36536 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235884AbhLCSRN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 13:17:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFB9262C80;
-        Fri,  3 Dec 2021 18:13:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1010DC53FAD;
-        Fri,  3 Dec 2021 18:13:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638555228;
-        bh=E90SW7IezprzON0XL09cv7YjYR918uAvsP1m3+lB75U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mUZBFxgDYgPpfatw21IfMbBLSAWSrGYfF4nrh3zsDvHkmLW8kIW0V44NIuaJ9ZHk4
-         PcCp570Minqx39sXU+ffHYl/rBlXmH9m0CigeeKsdTUqbnTWcGDP8SniUbxow5jfJH
-         Ra6wfVQQmaQvo1hWkKm9fsDOqNGaJHfzchiYj8VPuFVgDVJO0EWkF+XR+RRs0FNBmF
-         SnGnVrYqrgm5ktlPUZAbLUrDWFdxPXmKKWDsp3PqF341ayJ0aN7egKSOzGVp+s+Y7X
-         RwaxX+KXMvlnQhqdb9FAW699sV1t2iyQK2krFDitQNV4ZxD+AVPQQUCtXAquVAFVCq
-         ymkFmido93uNg==
-Received: by mail-oi1-f179.google.com with SMTP id u74so7311155oie.8;
-        Fri, 03 Dec 2021 10:13:48 -0800 (PST)
-X-Gm-Message-State: AOAM5335VRoyx7NRtTBGlR9ktA16RFXvXtHgCOkqDCUFGeWjJp4eDWep
-        x7pninEX7YYS5bEBtSc8efZmFtjRuNK+G0wllCw=
-X-Google-Smtp-Source: ABdhPJwqDfN3YlV4nM2a1pe/9ZpwcgcOtGI/Dw4iZR82jtHqY0rmw12khrU6X6Kt61PNKhsOnkINyfsWJ9tYXwSAG7Y=
-X-Received: by 2002:a05:6808:12:: with SMTP id u18mr11260456oic.174.1638555227284;
- Fri, 03 Dec 2021 10:13:47 -0800 (PST)
+        id S1382488AbhLCSS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 13:18:27 -0500
+Received: from mga17.intel.com ([192.55.52.151]:61370 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235884AbhLCSS1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 13:18:27 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="217718214"
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="217718214"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 10:15:02 -0800
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="478415393"
+Received: from lbriscoe-mobl.amr.corp.intel.com (HELO [10.209.18.147]) ([10.209.18.147])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 10:15:02 -0800
+Subject: Re: [PATCH 10/25] x86/sgx: Support enclave page permission changes
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
+        bp@alien8.de, luto@kernel.org, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org
+Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
+        cedric.xing@intel.com, haitao.huang@intel.com,
+        mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+References: <cover.1638381245.git.reinette.chatre@intel.com>
+ <44fe170cfd855760857660b9f56cae8c4747cc15.1638381245.git.reinette.chatre@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <8087c21c-195b-3ffa-a3ca-542752db6462@intel.com>
+Date:   Fri, 3 Dec 2021 10:14:59 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <8afff0c64feb6b96db36112cb865243f4ae280ca.1634922135.git.thomas.lendacky@amd.com>
- <c997e8a2-b364-2a8e-d247-438e9d937a1e@amd.com> <CAMj1kXGH7aGR==o1L2dnA9U9L==gM0__10UGznnyZwkHrT84sw@mail.gmail.com>
- <YXmEo8iMNIn1esYC@zn.tnic> <CAMj1kXEZkw99MPssHWFRL_k0okeGF47VYL+o8p72hBWkqW927g@mail.gmail.com>
- <f939e968-149f-1caf-c1fb-5939eafae31c@amd.com> <15ceb556-0b56-2833-206e-0cf9b9d2cb45@amd.com>
- <CAMj1kXHKxObuebZJMWQQwg014rYzvoBgWPZxfCYakuf+GSoqhg@mail.gmail.com> <6d6b4982-ce69-4fd4-1bb8-5c35b360a95f@amd.com>
-In-Reply-To: <6d6b4982-ce69-4fd4-1bb8-5c35b360a95f@amd.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 3 Dec 2021 19:13:36 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFkL8AkgE431CJWsD2T7uXh5PiR44iXLBKfTQQuDuNbyg@mail.gmail.com>
-Message-ID: <CAMj1kXFkL8AkgE431CJWsD2T7uXh5PiR44iXLBKfTQQuDuNbyg@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/sme: Explicitly map new EFI memmap table as encrypted
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Matt Fleming <matt@codeblueprint.co.uk>,
-        "# 3.4.x" <stable@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <44fe170cfd855760857660b9f56cae8c4747cc15.1638381245.git.reinette.chatre@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Dec 2021 at 17:22, Tom Lendacky <thomas.lendacky@amd.com> wrote:
->
-> On 12/3/21 4:30 AM, Ard Biesheuvel wrote:
-> > On Wed, 1 Dec 2021 at 15:06, Tom Lendacky <thomas.lendacky@amd.com> wrote:
-> >>
-> >> On 10/27/21 12:04 PM, Tom Lendacky wrote:
-> >>>
-> >>>
-> >>> On 10/27/21 11:59 AM, Ard Biesheuvel wrote:
-> >>>> On Wed, 27 Oct 2021 at 18:56, Borislav Petkov <bp@alien8.de> wrote:
-> >>>>>
-> >>>>> On Wed, Oct 27, 2021 at 05:14:35PM +0200, Ard Biesheuvel wrote:
-> >>>>>> I could take it, but since it will ultimately go through -tip anyway,
-> >>>>>> perhaps better if they just take it directly? (This will change after
-> >>>>>> the next -rc1 though)
-> >>>>>>
-> >>>>>> Boris?
-> >>>>>
-> >>>>> Yeah, I'm being told this is not urgent enough to rush in now so you
-> >>>>> could queue it into your fixes branch for 5.16 once -rc1 is out and send
-> >>>>> it to Linus then. The stable tag is just so it gets backported to the
-> >>>>> respective trees.
-> >>>>>
-> >>>>> But if you prefer I should take it, then I can queue it after -rc1.
-> >>>>> It'll boil down to the same thing though.
-> >>>>>
-> >>>>
-> >>>> No, in that case, I can take it myself.
-> >>>>
-> >>>> Tom, does that work for you?
-> >>>
-> >>> Yup, that works for me. Thanks guys!
-> >>
-> >> I don't see this in any tree yet, so just a gentle reminder in case it
-> >> dropped off the radar.
-> >>
-> >
-> > Apologies for the delay, I've pushed this out to -next now.
-> >
-> > Before I send it to Linus, can you please confirm (for my peace of
-> > mind) how this only affects systems that have memory encryption
-> > available and enabled in the first place?
->
-> Certainly.
->
-> An early_memremap() call uses the FIXMAP_PAGE_NORMAL protection value for
-> performing the mapping. Prior to performing the actual mapping though, a
-> call to early_memremap_pgprot_adjust() is made to possibly alter the
-> protection value, but only if memory encryption is active.
->
-> Changing the call to early_memremap_prot() and providing
-> pgprot_encrypted(FIXMAP_PAGE_NORMAL) as the protection value results in an
-> equivalent call to early_memremap() when memory encryption is not active.
-> This is because the pgprot_encrypted() is, in effect, a NOP when memory
-> encryption is not active.
->
-> So when memory encryption is not available or active, the result of an
-> early_memremap_prot() call with a protection value of
-> pgprot_encrypted(FIXMAP_PAGE_NORMAL) is equivalent to an early_memremap()
-> call.
->
-> Let me know if that answers your question.
->
+On 12/1/21 11:23 AM, Reinette Chatre wrote:
+> Enclave page permission changes need to be approached with care and
+> for this reason this initial support is to allow enclave page
+> permission changes _only_ if the new permissions are the same or
+> more restrictive that the permissions originally vetted at the time the
+> pages were added to the enclave. Support for extending enclave page
+> permissions beyond what was originally vetted is deferred.
 
-It does, thanks.
+It's probably worth adding a few examples here:
+
+ * RWX => RW => RX => RW => R => RWX
+ * RW => R => RW
+ * RX => R => RX
+

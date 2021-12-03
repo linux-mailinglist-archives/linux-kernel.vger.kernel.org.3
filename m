@@ -2,136 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 638F746798A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4453246798C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381521AbhLCOlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 09:41:03 -0500
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:38543 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1352361AbhLCOlC (ORCPT
+        id S1381525AbhLCOl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 09:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236570AbhLCOlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 09:41:02 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 9EDDE58017A;
-        Fri,  3 Dec 2021 09:37:37 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 03 Dec 2021 09:37:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=i+PDizJ4CygpKjnA6GeSt+T0s59
-        0lhPcJnx/bPZhFRM=; b=J4jfRbK2W0THIdVkbDLJx6o7KjK428mCbchaoQWCtED
-        aJxs3mjZxESxpigGG6Pu7/FCOOFiLnhHFMASA2E/2vzTE7dLWHaEocBSAecapGns
-        v/GgTN7mpVdj3daGcFe04TILklv7Z4AjA8CW1SLDpbI7UjVQU5GA4GqvZnc9WH8o
-        zOq4SlZUhjCvuDk8b1hpkG+ggIrS0d0XLAMUa0VLYtIW+PkSfqX7CrEFC28g2X3d
-        6c59U70mAaf2VrWYFu/6ITh3rO+80YLn6UwF14+pNFIxGE3TUjBMxM6jMKolmi3y
-        XcorOTdFCwras1vM56pEBO4AEt0sZ+BckmgLKxUANlg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=i+PDiz
-        J4CygpKjnA6GeSt+T0s590lhPcJnx/bPZhFRM=; b=C/rT67gmxFNiW49lJW8qsT
-        Npf3M89Enwg5Ozfh0uTs3oGF1OgGa57tBFQLtInIEwNBs4BaUHz7LABFVVT2dONm
-        sluQ4ozF3f7AzsIM/E1LvlbNrwmmlaiWptkdl+9ATfH0nN6Vl3PdnwCpSPMFj45L
-        bytURRM8YFZJluWMeHMYL6dUyN5TNvQTpgGhQ6o6rRRPhv9AhjDIOP6+TerVJQMh
-        QrFha3IThGdhgjTUUmkZNmu9ktGTecxRcEyI+YXyuhF8wuxjRGKQuonxE/oKDb0C
-        6Q7DQBW+NZtueWIlNd3RmqXyeRRmWVfHFD8A/sG4tsogjYTMOUyehAEsl/FL9zIg
-        ==
-X-ME-Sender: <xms:sSuqYVrnnQprUF-dMcQsEjVv3YCCYjwCmXWugrST_noZt3m88lZj-w>
-    <xme:sSuqYXp5BP4ch2g2n6hWV8-QgnPG0ZP2S-YvRYFSpOkxT258fQ0NrYiJ8CSbpFQ9U
-    qHgcAETSByssrH-nkM>
-X-ME-Received: <xmr:sSuqYSOt4-w-i0sZtMYI5s9F_XLPvEed10aD4L0Z3P4ws9dQgmXofFwLrJYcKZDD5YPEsElin3lt0s8ApQ64abQtcjH9UXt7Xtyx5TOP6b3lOQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrieejgdeilecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeeutdfgjeeuudehvefgvedvtedtudelfffgffekledtffekgedukeejueevieeg
-    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
-    igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:sSuqYQ6WpaWjTrKNkdI3nOEk_-O2I8vri1YOmeMMlfCHhLCaw4XfXw>
-    <xmx:sSuqYU48fQGsdTu-kJD-yfKCpqYRXvPyLQA9UlAi44QbLTsVFFzAVQ>
-    <xmx:sSuqYYhdT-NaidE9kDoeWEw5fYUmA2lYVBvXYwE4REazLm2F9FOcwA>
-    <xmx:sSuqYUjiF_bvGMgFoBtm4yUOOfB7mwQvv5-qkZQvMvsVIJ3m9on9tQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 3 Dec 2021 09:37:36 -0500 (EST)
-Date:   Fri, 3 Dec 2021 15:37:34 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Kevin Tang <kevin3.tang@gmail.com>
-Cc:     maarten.lankhorst@linux.intel.com, sean@poorly.run,
-        airlied@linux.ie, daniel@ffwll.ch, robh+dt@kernel.org,
-        mark.rutland@arm.com, pony1.wu@gmail.com, orsonzhai@gmail.com,
-        zhang.lyra@gmail.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 6/6] drm/sprd: add Unisoc's drm mipi dsi&dphy driver
-Message-ID: <20211203143734.pn4q6wft4s37ckut@houat>
-References: <20211025093418.20545-1-kevin3.tang@gmail.com>
- <20211025093418.20545-7-kevin3.tang@gmail.com>
- <20211203103841.vkl3sjsbaohsviou@houat>
- <CAFPSGXbWv94vShNAQ9xfkDZRKgZTdjRzH9i60ak1NYaPW-OKgA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xcgm6vftby67t4i2"
-Content-Disposition: inline
-In-Reply-To: <CAFPSGXbWv94vShNAQ9xfkDZRKgZTdjRzH9i60ak1NYaPW-OKgA@mail.gmail.com>
+        Fri, 3 Dec 2021 09:41:55 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509A2C061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 06:38:31 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id r11so12242178edd.9
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 06:38:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=chR4af+IfDfsqhZAZrVwI4X+Xf3XgUyZz2Vg1zAzeOg=;
+        b=dG/zr4OMWjdCv4D9eRkLA1feaHOnLbntdIJK2LNVEjjYrTPJGsWrM9kMz44OFt7DIp
+         dSbJAdP74PXYYA5/FGBcQKFUGIbThxKDnch4tF8w49YHI1nDUz0l8KRtcai2ZL4EnviT
+         4dI5B7CJxd7wCYmXMQAduDE7JVPT+ozEPijNGUNBF00Ajz6C0ulLd1FUknF/IeModOMl
+         ouJl4dhLiRU2+0grflX+k7n6wxF3GHvOwmqyivb4C3BTgdeTiAZF4Tjc92lEHUyyhkWw
+         dp4MrWdcfJ7OKzpXaBj5tnh8scP0+ME3aS6NMKeVY5Ah2fSSPL6slafaRUKoIhDu7hfE
+         sjvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=chR4af+IfDfsqhZAZrVwI4X+Xf3XgUyZz2Vg1zAzeOg=;
+        b=CeaF0M5mAsT4fN4Tk4Hk+Tz2DPhkLajbgPoB9F4MZrXzCEz3tkmfTeJitXFjTHXq6V
+         /+h54Uy10EEru3hA2iJhrFLUHsGa4UbGEFbNvSqME+JaDoEvDPDScRs6DBIjHxNekS+s
+         2VyNxHc2yFRaTkW8dsCHYWnSc+01oi+8RbxNAlEXW8JgYgkERf9W+T8M7UPc0Qh5le7j
+         Ef/cizk8qYLyFQtSN+6n1rbnTrD3/TBuvsPCHlB+SK1xAEa09kh+OP/7ENTXAX9HxHSj
+         qnreVWgnNgMe08/WNRYWPmzNlQnm1U6yFzrBQJEEvjbTvRa4LwgDtcYqRsPVktuilfV6
+         +KyQ==
+X-Gm-Message-State: AOAM532LzV1FIwgj5I8/4IjiuC/kuHYR7TRGr1JHSAPgN/1FJvRLEpbV
+        NQZ3dz69B5tH7kkUqub4Qeo=
+X-Google-Smtp-Source: ABdhPJzBzYWq2KE1lU6oGOG/JTf8ir2ecNJUBHmySZ5nPckx08Vtv+J3PYlzDMHkI8u+jInk2oKYCQ==
+X-Received: by 2002:a17:907:97d2:: with SMTP id js18mr18806079ejc.179.1638542309621;
+        Fri, 03 Dec 2021 06:38:29 -0800 (PST)
+Received: from localhost.localdomain ([146.70.33.61])
+        by smtp.gmail.com with ESMTPSA id hb36sm2132179ejc.73.2021.12.03.06.38.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 03 Dec 2021 06:38:28 -0800 (PST)
+From:   yongw.pur@gmail.com
+X-Google-Original-From: wang.yong12@zte.com.cn
+To:     bsingharora@gmail.com, akpm@linux-foundation.org,
+        peterz@infradead.org, mingo@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        yang.yang29@zte.com.cn, wang.yong12@zte.com.cn
+Subject: [PATCH linux-next] delayacct: track delays from memory compact
+Date:   Fri,  3 Dec 2021 06:37:52 -0800
+Message-Id: <1638542272-15187-1-git-send-email-wang.yong12@zte.com.cn>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: wangyong <wang.yong12@zte.com.cn>
 
---xcgm6vftby67t4i2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Delay accounting does not track the delay of memory compact.
+When there is not enough free memory, tasks can spend
+a amount of their time waiting for memory compact.
 
-On Fri, Dec 03, 2021 at 08:34:50PM +0800, Kevin Tang wrote:
-> Maxime Ripard <maxime@cerno.tech> =E4=BA=8E2021=E5=B9=B412=E6=9C=883=E6=
-=97=A5=E5=91=A8=E4=BA=94 18:38=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > On Mon, Oct 25, 2021 at 05:34:18PM +0800, Kevin Tang wrote:
-> > > @@ -618,9 +619,25 @@ static void sprd_crtc_mode_set_nofb(struct drm_c=
-rtc *crtc)
-> > >  {
-> > >       struct sprd_dpu *dpu =3D to_sprd_crtc(crtc);
-> > >       struct drm_display_mode *mode =3D &crtc->state->adjusted_mode;
-> > > +     struct drm_encoder *encoder;
-> > > +     struct mipi_dsi_device *slave;
-> > > +     struct sprd_dsi *dsi;
-> > >
-> > >       drm_display_mode_to_videomode(mode, &dpu->ctx.vm);
-> > >
-> > > +     drm_for_each_encoder(encoder, crtc->dev) {
-> > > +             if (encoder->crtc !=3D crtc)
-> > > +                     continue;
-> >
-> > encoder->crtc is deprecated. You should be using
-> > encoder->drm_for_each_encoder_mask, using the encoder_mask in
-> > encoder->drm_crtc_state.
->=20
-> Use drm_for_each_encoder_mask to replace drm_for_each_encoder? like this:
-> drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask) {
->     dsi =3D encoder_to_dsi(encoder);
->     slave =3D dsi->slave;
->=20
->     if (slave->mode_flags & MIPI_DSI_MODE_VIDEO)
->         dpu->ctx.if_type =3D SPRD_DPU_IF_DPI;
->     else
->          dpu->ctx.if_type =3D SPRD_DPU_IF_EDPI;
-> }
+To get the impact of tasks in direct memory compact, measure
+the delay when allocating memory through memory compact.
 
-Yes
+Update tools/accounting/getdelays.c:
+/ # ./getdelays_next  -di -p 304
+print delayacct stats ON
+printing IO accounting
+PID     304
 
-Maxime
+CPU             count     real total  virtual total    delay total  delay average
+                  277      780000000      849039485       18877296          0.068ms
+IO              count    delay total  delay average
+                    0              0              0ms
+SWAP            count    delay total  delay average
+                    0              0              0ms
+RECLAIM         count    delay total  delay average
+                    5    11088812685           2217ms
+THRASHING       count    delay total  delay average
+                    0              0              0ms
+COMPACT         count    delay total  delay average
+                    3          72758              0ms
+watch: read=0, write=0, cancelled_write=0
 
---xcgm6vftby67t4i2
-Content-Type: application/pgp-signature; name="signature.asc"
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: wangyong <wang.yong12@zte.com.cn>
+Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
+---
+ include/linux/delayacct.h      | 29 +++++++++++++++++++++++++++++
+ include/uapi/linux/taskstats.h |  6 +++++-
+ kernel/delayacct.c             | 15 +++++++++++++++
+ mm/page_alloc.c                |  3 +++
+ tools/accounting/getdelays.c   |  8 +++++++-
+ 5 files changed, 59 insertions(+), 2 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/include/linux/delayacct.h b/include/linux/delayacct.h
+index 435c365..547cba9 100644
+--- a/include/linux/delayacct.h
++++ b/include/linux/delayacct.h
+@@ -42,8 +42,13 @@ struct task_delay_info {
+ 	u64 thrashing_start;
+ 	u64 thrashing_delay;	/* wait for thrashing page */
+ 
++	u64 compact_start;
++	u64 compact_delay;	/* wait for memory compact */
++
++	u64 freepages_start;
+ 	u32 freepages_count;	/* total count of memory reclaim */
+ 	u32 thrashing_count;	/* total count of thrash waits */
++	u32 compact_count;	/* total count of memory compact */
+ };
+ #endif
+ 
+@@ -72,6 +77,8 @@ extern void __delayacct_thrashing_start(void);
+ extern void __delayacct_thrashing_end(void);
+ extern void __delayacct_swapin_start(void);
+ extern void __delayacct_swapin_end(void);
++extern void __delayacct_compact_start(void);
++extern void __delayacct_compact_end(void);
+ 
+ static inline void delayacct_tsk_init(struct task_struct *tsk)
+ {
+@@ -170,6 +177,24 @@ static inline void delayacct_swapin_end(void)
+ 		__delayacct_swapin_end();
+ }
+ 
++static inline void delayacct_compact_start(void)
++{
++	if (!static_branch_unlikely(&delayacct_key))
++		return;
++
++	if (current->delays)
++		__delayacct_compact_start();
++}
++
++static inline void delayacct_compact_end(void)
++{
++	if (!static_branch_unlikely(&delayacct_key))
++		return;
++
++	if (current->delays)
++		__delayacct_compact_end();
++}
++
+ #else
+ static inline void delayacct_init(void)
+ {}
+@@ -200,6 +225,10 @@ static inline void delayacct_swapin_start(void)
+ {}
+ static inline void delayacct_swapin_end(void)
+ {}
++static inline void delayacct_compact_start(void)
++{}
++static inline void delayacct_compact_end(void)
++{}
+ 
+ #endif /* CONFIG_TASK_DELAY_ACCT */
+ 
+diff --git a/include/uapi/linux/taskstats.h b/include/uapi/linux/taskstats.h
+index ccbd087..12327d3 100644
+--- a/include/uapi/linux/taskstats.h
++++ b/include/uapi/linux/taskstats.h
+@@ -34,7 +34,7 @@
+  */
+ 
+ 
+-#define TASKSTATS_VERSION	10
++#define TASKSTATS_VERSION	11
+ #define TS_COMM_LEN		32	/* should be >= TASK_COMM_LEN
+ 					 * in linux/sched.h */
+ 
+@@ -172,6 +172,10 @@ struct taskstats {
+ 
+ 	/* v10: 64-bit btime to avoid overflow */
+ 	__u64	ac_btime64;		/* 64-bit begin time */
++
++	/* Delay waiting for memory compact */
++	__u64	compact_count;
++	__u64	compact_delay_total;
+ };
+ 
+ 
+diff --git a/kernel/delayacct.c b/kernel/delayacct.c
+index 11f3cd8..c5e8cea 100644
+--- a/kernel/delayacct.c
++++ b/kernel/delayacct.c
+@@ -155,10 +155,13 @@ int delayacct_add_tsk(struct taskstats *d, struct task_struct *tsk)
+ 	d->freepages_delay_total = (tmp < d->freepages_delay_total) ? 0 : tmp;
+ 	tmp = d->thrashing_delay_total + tsk->delays->thrashing_delay;
+ 	d->thrashing_delay_total = (tmp < d->thrashing_delay_total) ? 0 : tmp;
++	tmp = d->compact_delay_total + tsk->delays->compact_delay;
++	d->compact_delay_total = (tmp < d->compact_delay_total) ? 0 : tmp;
+ 	d->blkio_count += tsk->delays->blkio_count;
+ 	d->swapin_count += tsk->delays->swapin_count;
+ 	d->freepages_count += tsk->delays->freepages_count;
+ 	d->thrashing_count += tsk->delays->thrashing_count;
++	d->compact_count += tsk->delays->compact_count;
+ 	raw_spin_unlock_irqrestore(&tsk->delays->lock, flags);
+ 
+ 	return 0;
+@@ -214,3 +217,15 @@ void __delayacct_swapin_end(void)
+ 		      &current->delays->swapin_count);
+ }
+ 
++void __delayacct_compact_start(void)
++{
++	current->delays->compact_start = local_clock();
++}
++
++void __delayacct_compact_end(void)
++{
++	delayacct_end(&current->delays->lock,
++		      &current->delays->compact_start,
++		      &current->delays->compact_delay,
++		      &current->delays->compact_count);
++}
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index edfd6c8..6430226 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -74,6 +74,7 @@
+ #include <linux/padata.h>
+ #include <linux/khugepaged.h>
+ #include <linux/buffer_head.h>
++#include <linux/delayacct.h>
+ #include <asm/sections.h>
+ #include <asm/tlbflush.h>
+ #include <asm/div64.h>
+@@ -4363,6 +4364,7 @@ __alloc_pages_direct_compact(gfp_t gfp_mask, unsigned int order,
+ 		return NULL;
+ 
+ 	psi_memstall_enter(&pflags);
++	delayacct_compact_start();
+ 	noreclaim_flag = memalloc_noreclaim_save();
+ 
+ 	*compact_result = try_to_compact_pages(gfp_mask, order, alloc_flags, ac,
+@@ -4370,6 +4372,7 @@ __alloc_pages_direct_compact(gfp_t gfp_mask, unsigned int order,
+ 
+ 	memalloc_noreclaim_restore(noreclaim_flag);
+ 	psi_memstall_leave(&pflags);
++	delayacct_compact_end();
+ 
+ 	if (*compact_result == COMPACT_SKIPPED)
+ 		return NULL;
+diff --git a/tools/accounting/getdelays.c b/tools/accounting/getdelays.c
+index 5ef1c15..11e8673 100644
+--- a/tools/accounting/getdelays.c
++++ b/tools/accounting/getdelays.c
+@@ -205,6 +205,8 @@ static void print_delayacct(struct taskstats *t)
+ 	       "RECLAIM  %12s%15s%15s\n"
+ 	       "      %15llu%15llu%15llums\n"
+ 	       "THRASHING%12s%15s%15s\n"
++	       "      %15llu%15llu%15llums\n"
++	       "COMPACT  %12s%15s%15s\n"
+ 	       "      %15llu%15llu%15llums\n",
+ 	       "count", "real total", "virtual total",
+ 	       "delay total", "delay average",
+@@ -228,7 +230,11 @@ static void print_delayacct(struct taskstats *t)
+ 	       "count", "delay total", "delay average",
+ 	       (unsigned long long)t->thrashing_count,
+ 	       (unsigned long long)t->thrashing_delay_total,
+-	       average_ms(t->thrashing_delay_total, t->thrashing_count));
++	       average_ms(t->thrashing_delay_total, t->thrashing_count),
++	       "count", "delay total", "delay average",
++	       (unsigned long long)t->compact_count,
++	       (unsigned long long)t->compact_delay_total,
++	       average_ms(t->compact_delay_total, t->compact_count));
+ }
+ 
+ static void task_context_switch_counts(struct taskstats *t)
+-- 
+2.7.4
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYaorrgAKCRDj7w1vZxhR
-xeExAP9ZFUc9viR8jVqxFYksuwT5OhewO0DsPjv856NwUpY+EQEAmIOyKr/k09XD
-mqk6Hu3g1notikrNRfGp2DSQV5MkYgg=
-=yyH3
------END PGP SIGNATURE-----
-
---xcgm6vftby67t4i2--

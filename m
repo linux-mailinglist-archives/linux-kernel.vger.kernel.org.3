@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 336E94670AC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 04:20:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FFBB4670AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 04:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244433AbhLCDYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 22:24:19 -0500
-Received: from mga01.intel.com ([192.55.52.88]:58822 "EHLO mga01.intel.com"
+        id S1344115AbhLCDZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 22:25:19 -0500
+Received: from mga17.intel.com ([192.55.52.151]:46730 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245593AbhLCDYS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 22:24:18 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="260904573"
+        id S232601AbhLCDZS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 22:25:18 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="217591399"
 X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
-   d="scan'208";a="260904573"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 19:20:54 -0800
+   d="scan'208";a="217591399"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 19:21:54 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
-   d="scan'208";a="460724828"
+   d="scan'208";a="541487873"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 02 Dec 2021 19:20:53 -0800
+  by orsmga001.jf.intel.com with ESMTP; 02 Dec 2021 19:21:53 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1msz80-000H29-AU; Fri, 03 Dec 2021 03:20:52 +0000
-Date:   Fri, 03 Dec 2021 11:20:46 +0800
+        id 1msz8y-000H2H-Bu; Fri, 03 Dec 2021 03:21:52 +0000
+Date:   Fri, 03 Dec 2021 11:20:49 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:sched/urgent] BUILD SUCCESS
- e7f2be115f0746b969c0df14c0d182f65f005ca5
-Message-ID: <61a98d0e.d7Txej/YXUyUDgpw%lkp@intel.com>
+Subject: [tip:timers/urgent] BUILD SUCCESS
+ 53e87e3cdc155f20c3417b689df8d2ac88d79576
+Message-ID: <61a98d11.kMl4mV+THrkfBTGG%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -39,29 +39,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/urgent
-branch HEAD: e7f2be115f0746b969c0df14c0d182f65f005ca5  sched/cputime: Fix getrusage(RUSAGE_THREAD) with nohz_full
-
-possible Warning in current branch (please contact us if interested):
-
-kernel/sched/rt.c:257:6: warning: no previous prototype for 'unregister_rt_sched_group' [-Wmissing-prototypes]
-kernel/sched/rt.c:257:6: warning: no previous prototype for function 'unregister_rt_sched_group' [-Wmissing-prototypes]
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- openrisc-randconfig-r012-20211202
-|   `-- kernel-sched-rt.c:warning:no-previous-prototype-for-unregister_rt_sched_group
-`-- parisc-randconfig-r013-20211202
-    `-- kernel-sched-rt.c:warning:no-previous-prototype-for-unregister_rt_sched_group
-
-clang_recent_errors
-`-- arm-randconfig-r014-20211202
-    `-- kernel-sched-rt.c:warning:no-previous-prototype-for-function-unregister_rt_sched_group
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/urgent
+branch HEAD: 53e87e3cdc155f20c3417b689df8d2ac88d79576  timers/nohz: Last resort update jiffies on nohz_full IRQ entry
 
 elapsed time: 731m
 
-configs tested: 161
+configs tested: 166
 configs skipped: 4
 
 The following configs have been built successfully.
@@ -167,8 +150,8 @@ sparc                               defconfig
 i386                                defconfig
 i386                   debian-10.3-kselftests
 i386                              debian-10.3
-mips                             allyesconfig
 mips                             allmodconfig
+mips                             allyesconfig
 powerpc                          allyesconfig
 powerpc                           allnoconfig
 i386                 randconfig-a001-20211203
@@ -192,6 +175,7 @@ i386                 randconfig-a015-20211202
 arc                  randconfig-r043-20211202
 s390                 randconfig-r044-20211202
 riscv                randconfig-r042-20211202
+arc                  randconfig-r043-20211203
 riscv                            allyesconfig
 riscv                    nommu_virt_defconfig
 riscv                             allnoconfig
@@ -231,6 +215,10 @@ i386                 randconfig-a013-20211203
 i386                 randconfig-a011-20211203
 i386                 randconfig-a014-20211203
 i386                 randconfig-a012-20211203
+hexagon              randconfig-r041-20211203
+hexagon              randconfig-r045-20211203
+s390                 randconfig-r044-20211203
+riscv                randconfig-r042-20211203
 hexagon              randconfig-r045-20211202
 hexagon              randconfig-r041-20211202
 

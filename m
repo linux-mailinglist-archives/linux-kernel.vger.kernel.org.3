@@ -2,124 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18678467C2D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D89467C32
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343634AbhLCRHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 12:07:01 -0500
-Received: from smtpcmd02102.aruba.it ([62.149.158.102]:50081 "EHLO
-        smtpcmd02102.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239612AbhLCRHA (ORCPT
+        id S1353029AbhLCRHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 12:07:46 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:40656 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234423AbhLCRHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 12:07:00 -0500
-Received: from [192.168.50.18] ([146.241.138.59])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id tByBmvhSXhA9ytByBmbeeo; Fri, 03 Dec 2021 18:03:35 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1638551015; bh=ZVqunKlhbpVtNIi/cymjPndW03M8+Br6+h6UyINC7RU=;
-        h=Subject:To:From:Date:MIME-Version:Content-Type;
-        b=DadQJ8sFyTynaRg6FKuyEY6mTUImdYyybP9VL9pz4KwqKRBul4bkHWITb8VSsnLKj
-         lQOBXhtA70RGIdpJURLar32WTB6fhwzNXDtP9+oCfl5H8ydSCNpPziyV9qvlZGDKHg
-         ydvEzte672DiMbSYHGstYzm9sAgMvHhGjlPGoiCAAEVYQM3AD7V9eaJ1y7KQMELSiM
-         TpzMujzpfeKiItPegOoYBey0d0pAVT3GdytTebFeftLgGiaGtq/BguuUN0OeYNbxjo
-         yLZYbD2CpneP+JBmGyTXo6HqzpHQ6YjSxP2GmeGACtqihQnieWq5wh7Q6psqWRtzWH
-         uaEcTEYkqNUhA==
-Subject: Re: [PATCH] ARM: Kconfig: improve ARM_SINGLE_ARMV7M description with
- Cortex M7
-To:     Vladimir Murzin <vladimir.murzin@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Mike Rapoport <rppt@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-References: <20211202222002.33456-1-giulio.benetti@benettiengineering.com>
- <db427a15-231b-957e-3690-73373fec55ea@arm.com>
- <170aea55-44f3-9cf0-fd88-adf8c66efeb4@benettiengineering.com>
- <ea2679ec-9bfd-6a78-a82d-7b160350ddfb@arm.com>
-From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <252614ac-04cc-8ac8-c226-4245088d8952@benettiengineering.com>
-Date:   Fri, 3 Dec 2021 18:03:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 3 Dec 2021 12:07:46 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B3GlfTt011359;
+        Fri, 3 Dec 2021 17:04:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=F+tCGDFIeRp8o33HpdAlZ6K6x/FktEhQuFVJ2RkTMso=;
+ b=Rd1BUgXVW74JHXK778SZslCkBpznsfBvGhA1g7JoUBfiAtisf6YO86HPXkCopYbmDZWT
+ gZxNWXkYSYfdqLGaDlJoR8ToyTEsEB4T19Mrl15fGEL1oCgM/e+QWvOQlBBCXdxv4VMs
+ 0ZSUFKAr4rZ/ZsgmY3uCiY8sPMabJxKF1jJ1M73nAsdWOISlNC+h3Ky7BK5Z/ZgRLnZl
+ isX6ATPR5K5sDQJdhUmAlKMsVb64B8GWhuyCSeBurSqX2LwHu4mnr7GqbggjCS94yRvJ
+ k7/uvrgLYv5sfCNusxrKEuymT/25UZucKouG89nIUIrJz7655pvtgeVhnjAMiv881b0Q hg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cqq2qraan-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Dec 2021 17:04:09 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B3GxFP7016586;
+        Fri, 3 Dec 2021 17:04:08 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cqq2qraa4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Dec 2021 17:04:08 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B3H3OnJ005348;
+        Fri, 3 Dec 2021 17:04:07 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma05wdc.us.ibm.com with ESMTP id 3ckcad8b07-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Dec 2021 17:04:07 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B3H45ZZ25559668
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Dec 2021 17:04:05 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 221C878067;
+        Fri,  3 Dec 2021 17:04:05 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0EB297806E;
+        Fri,  3 Dec 2021 17:03:42 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.211.96.125])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri,  3 Dec 2021 17:03:42 +0000 (GMT)
+Message-ID: <df433bc52ca1e0408d48bbace4c34a573991f5ba.camel@linux.ibm.com>
+Subject: Re: [RFC v2 19/19] ima: Setup securityfs for IMA namespace
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, serge@hallyn.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Date:   Fri, 03 Dec 2021 12:03:41 -0500
+In-Reply-To: <20211203023118.1447229-20-stefanb@linux.ibm.com>
+References: <20211203023118.1447229-1-stefanb@linux.ibm.com>
+         <20211203023118.1447229-20-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-In-Reply-To: <ea2679ec-9bfd-6a78-a82d-7b160350ddfb@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfAHbAiY5bBtBnJqukNGjER85FjLffIaFqMfT337Ad7odk2A8nEGRNxk5KCrvJfq9dTrpPgWONRN8BjAFvfVvPwiH+MsWaXIJJAXKu0I6AIprcjJqcEbN
- hmAPCxjMPOUZLgkl/uLUNkTPbZX/GyN8bNSYU8C49AvuoEf7ZfDwM4U5zKxSHBHDTSldo3NFA9kADwB2jtVuKBUewQl72LhKl9Q3cgxOypAoC2sPOw2cEGgl
- XFFA7Whh+wfzx3PaW7jYFmjPBWGS3ytQVUR4tJMkGlc/YCihcn5hgRnL2zqowbFWnB6q7OPuXKYliNZbAi06mv/SPsnbhCXF43vZJ+yNDvoClCq36liBaEIZ
- LYKgJMRQI/R7w+WfkUss6LvubxngMucRWmQG5kZMf9feKPKsJQ+NP3/HWB1yAB4d9R9xPPNTQpX2EeIfI0aQbXdWnr0yIkErPTieARQrZQh4gHFhL5+3lKng
- jP81d73dzYytGypwfDLsjpHHEQaBZCVmPUyFrZBvXajDH31bg50oyhg9xvFIj6aF9JkTH2oF15Z9vxkeIcU5bxlvZJeUbDloj+FVsMIQUED6oQcVOCFCsqM0
- ZKTfnsA7qd6Z1IixEotqaF4VqJqmV6PXJcE2dpST4cirbsuZfFiKDu5A6r8p90wDCeG8c2t6u85HC+TDtjx3C9ORPy5/0LAe0ziBvScGzPbap2WN0xERrp3n
- 1ZaCW3S3Yzk=
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: qp2uRPsDduXYHPMRvGASjPlDQXI6KZdu
+X-Proofpoint-ORIG-GUID: DuvLoI2KjCwewfDAyl49qjI7oKvoceDe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-03_07,2021-12-02_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=999
+ spamscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
+ phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112030109
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/12/21 18:01, Vladimir Murzin wrote:
-> On 12/3/21 4:41 PM, Giulio Benetti wrote:
->> Hi Vladimir,
->>
->> On 03/12/21 10:30, Vladimir Murzin wrote:
->>> On 12/2/21 10:20 PM, Giulio Benetti wrote:
->>>> ARM_SINGLE_ARMV7M implies Arm Cortex M7 too, so let's add it to
->>>> description with M0/M3/M4.
->>>
->>> Well it also implies M33 and M55. I'd suggest drop specific implementations
->>> from description - so we do not need to update it each time new compatible
->>> core is released. To account newest cores like M33 and M55 you can rephrase
->>> to:
->>> - ARMv7-M/v8-M
->>
->> This ^^^ is ok for me. Also, I don't see any M0 used at the moment so no ARMv6-M makes sense, if any in the future we can update. I see M3,M4,M7 for the moment, so ARMv7-M. But at the moment no ARMv8-M, or am I wrong?
-> 
-> We already support PMSAv8 which is ARMv8-M, M33/M55 is in flight [1].
+On Thu, 2021-12-02 at 21:31 -0500, Stefan Berger wrote:
+[...]
+>  static int securityfs_init_fs_context(struct fs_context *fc)
+>  {
+> +	int rc;
+> +
+> +	if (fc->user_ns->ima_ns->late_fs_init) {
+> +		rc = fc->user_ns->ima_ns->late_fs_init(fc->user_ns);
+> +		if (rc)
+> +			return rc;
+> +	}
+>  	fc->ops = &securityfs_context_ops;
+>  	return 0;
+>  }
 
-Ah, I've missed that. And great for M33!
+I know I suggested this, but to get this to work in general, it's going
+to have to not be specific to IMA, so it's going to have to become
+something generic like a notifier chain.  The other problem is it's
+only working still by accident:
 
->> Maybe it would be better to add ARMv8-M when there will really be the support, considering also that ARM_SINGLE_ARMV7M is a bit ambiguous to be used with ARMv8-M. So maybe that could be modified too when an ARMv8-M is added.
->>
->> What do you think about this?
-> 
-> Well, I prefer to touch this as rare as possible, and if we touch
-> it then ensure we do not need to touch it for a long time ;)
-> 
-> Look at A-class cores,
-> 
-> config ARCH_MULTI_V7
->          bool "ARMv7 based platforms (Cortex-A, PJ4, Scorpion, Krait)"
-> 
-> it doesn't mention ARMv8, yet it is pretty much possible to run it
-> on some cores either bare-metal or as a guest (just look under
-> arch/arm/include/asm/cputype.h)
+> +int ima_fs_ns_init(struct ima_namespace *ns)
+> +{
+> +	ns->mount = securityfs_ns_create_mount(ns->user_ns);
 
-Ah yeah, thanks for pointing, then I'm going with ARMv7-M/v8-M
+This actually triggers on the call to securityfs_init_fs_context, but
+nothing happens because the callback is null.  Every subsequent use of
+fscontext will trigger this.  The point of a keyed supeblock is that
+fill_super is only called once per key, that's the place we should be
+doing this.   It should also probably be a blocking notifier so any
+consumer of securityfs can be namespaced by registering for this
+notifier.
 
-> These are just config options, not a legal deeds...
+> +	if (IS_ERR(ns->mount)) {
+> +		ns->mount = NULL;
+> +		return -1;
+> +	}
+> +	ns->mount_count = 1;
 
-+1
+This is a bit nasty, too: we're spilling the guts of mount count
+tracking into IMA instead of encapsulating it inside securityfs.
 
-Thank you
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
+> +
+> +	/* Adjust the trigger for user namespace's early teardown of
+> dependent
+> +	 * namespaces. Due to the filesystem there's an additional
+> reference
+> +	 * to the user namespace.
+> +	 */
+> +	ns->user_ns->refcount_teardown += 1;
+> +
+> +	ns->late_fs_init = ima_fs_ns_late_init;
+> +
+> +	return 0;
+> +}
 
-> [1] https://lore.kernel.org/linux-arm-kernel/20211201132908.106711-1-vladimir.murzin@arm.com/T/
-> 
-> Cheers
-> Vladimir
-> 
->>
->> Best regards
-> 
+I think what should be happening is that we shouldn't so the
+simple_pin_fs, which creates the inodes, ahead of time; we should do it
+inside fill_super using a notifier, meaning it gets called once per
+key, creates the root dentry then triggers the notifier which
+instantiates all the namespaced entries.  We can still use
+simple_pin_fs for this because there's no locking across fill_super. 
+This would mean fill_super would be called the first time the
+securityfs is mounted inside the namespace.
+
+If we do it this way, we can now make securityfs have its own mount and
+mount_count inside the user namespace, which it uses internally to the
+securityfs code, thus avoiding exposing them to ima or any other
+namespaced consumer.
+
+I also think we now don't need the securityfs_ns_ duplicated functions
+because the callback via the notifier chain now ensures we can use the
+namespace they were created in to distinguish between non namespaced
+and namespaced entries.
+
+So non-namespaced consumers of securityfs would do what they do now
+(calling the securityfs_create on initialization) and namespaced
+consumers would register a callback on the notifier which would get
+called once for every namespace the securityfs gets mounted in.
+
+I also theorize if we do it with notifiers, we could have a notifier on
+kill_sb to tear down all the entires.  If we do this, I think we don't
+have to pin any more.
+
+James
+
 

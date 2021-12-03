@@ -2,226 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74FAB466E60
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 01:15:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF320466E63
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 01:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233657AbhLCAS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 19:18:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
+        id S235740AbhLCAU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 19:20:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbhLCASu (ORCPT
+        with ESMTP id S233413AbhLCAU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 19:18:50 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03275C06174A;
-        Thu,  2 Dec 2021 16:15:19 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J4td20mpMz4xZ4;
-        Fri,  3 Dec 2021 11:15:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638490518;
-        bh=MpVMBw9H1sDbcQJnxKdIN+V8pRD1fEVLC6dEr0fpgAA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TPm2o3ayYQVJASgIPbu63tca+bJK+dxorLNRNccIbOcXAJPKW64wEgv/5eIwImhm9
-         Vne3Ho61th5BJpbV1z+wM2ah4dNeMYay7Mt5YGr9Xsn+CDxBku0zmTL+QB/m6b2w8C
-         6hubdg25vvXIDzU+EJt2suAUeXVRpsANJ+vn00n4Bngx745HSRPTMGAci0/h+3jZ7P
-         IzrGBxIukoluaUiyomNXMKdgc7HHtotxLbQHt0G4qqEbaJTqSExvqwCQNNzuc25KbL
-         y412XMudpf4VgM0wY9gjr+iQH70qUmqSpn6PPEaV3/eVyj0oiLRhgNz6VH1niSyUmN
-         P5r1whRd1wBSg==
-Date:   Fri, 3 Dec 2021 11:15:16 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the bpf-next tree
-Message-ID: <20211203111516.3f22aa95@canb.auug.org.au>
+        Thu, 2 Dec 2021 19:20:26 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9996BC061757
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 16:17:02 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id 13so2803374ljj.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 16:17:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SkSTdG5o1/wprlHHr7CRgP6LJcFfuVQK8ztqVVXG3LA=;
+        b=RBe3Rc7J+8GNRdI9Ci1VMPy5bxbWc+MJRdWRpkm/hfUekPgDn3NkKrsXWFokbD8m0D
+         XOMH11CkawFmh+6FyaR6UPHhxL8hNRDLcnF2W3xF52efbD0Td+O55qfMVpVAmDjQcOxF
+         hdbDu40h2UdxKLhIXBRpSVS5pRmfbAYpw1QRd7ThXywHFUDJPeMZw+8YhE8NNPh2dQrU
+         3gZCVL/FGCAofIZAoLISpLuFHbxD680TL2p1gWMg0niRI+O0nGNSOf+LOyutQKdzoTNe
+         KgZJuE74dgh9ZEkjwMT9+c7m7du0C24kNm23XW2NryYyYnkluY4JoHUN81HneqnwdlP/
+         G08w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SkSTdG5o1/wprlHHr7CRgP6LJcFfuVQK8ztqVVXG3LA=;
+        b=rcgOXat8/I2hX8zGzPzS94Wqv2FEbR4L6HMcRiKZXtScl6VUfjQsPE0262K4Q3w5Wb
+         EIXe+0+ZRy53S/cxRtlso5MHzhtzC5vE5209+W9i+xS34RCvm5TE6r2rYTWi0J79HHLU
+         +EIxmhqbSH/psUDytI+4EFsKhytnk7Y3t3ZJpp++2fd1NzVbaY5vUk9KD36tMnjvHaGt
+         VksIFkFglsOgD6zqUpYuxQg6HkNkBco65GJXHmAFUQuA9gjHYKjRx0hHoXHvAURUj86l
+         QZgyMv6dufUhJ+bkaM+Ux0+NIQrlcXxQ8Dvf1W2wsIO8D7c9i/CnozyCBb8S4BeQb1Wz
+         lYQw==
+X-Gm-Message-State: AOAM530pqNhhzjvdp5K/TVz/zEwLz+TyBsUxAswWUWsIjp4Noq+2QaCa
+        CPkhRN18Kex5zmRUcIhVe5mxPHfhSbentzHXJVmFIw==
+X-Google-Smtp-Source: ABdhPJy38ilEf0lQUBhF6jRRl1vjdxL/TBmfWEGTBQT2XyasOKxdAARo/XxiTyPeAUK9M5P8p0bPx+6TPDINXL48v2o=
+X-Received: by 2002:a2e:8895:: with SMTP id k21mr15224930lji.331.1638490620707;
+ Thu, 02 Dec 2021 16:17:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KmNnKRBrIaMX/2EzgPiwUoA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20211120045046.3940942-1-seanjc@google.com> <CALzav=cRRW2ZdotseqV+eKcu2oxehkkzKjYYDc3PA=Lw16JrGQ@mail.gmail.com>
+ <YagpeekJ6I52f4U1@google.com>
+In-Reply-To: <YagpeekJ6I52f4U1@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Thu, 2 Dec 2021 16:16:34 -0800
+Message-ID: <CALzav=e7m0BS-iPd=_zW6V=uf4dCuDhmPLZ5AWpg5vRx9M7uuQ@mail.gmail.com>
+Subject: Re: [PATCH 00/28] KVM: x86/mmu: Overhaul TDP MMU zapping and flushing
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hou Wenlong <houwenlong93@linux.alibaba.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/KmNnKRBrIaMX/2EzgPiwUoA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Dec 1, 2021 at 6:03 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Wed, Dec 01, 2021, David Matlack wrote:
+> > On Fri, Nov 19, 2021 at 8:51 PM Sean Christopherson <seanjc@google.com> wrote:
+> > >
+> > > Overhaul TDP MMU's handling of zapping and TLB flushing to reduce the
+> > > number of TLB flushes, and to clean up the zapping code.  The final patch
+> > > realizes the biggest change, which is to use RCU to defer any TLB flush
+> > > due to zapping a SP to the caller.  The largest cleanup is to separate the
+> > > flows for zapping roots (zap _everything_), zapping leaf SPTEs (zap guest
+> > > mappings for whatever reason), and zapping a specific SP (NX recovery).
+> > > They're currently smushed into a single zap_gfn_range(), which was a good
+> > > idea at the time, but became a mess when trying to handle the different
+> > > rules, e.g. TLB flushes aren't needed when zapping a root because KVM can
+> > > safely zap a root if and only if it's unreachable.
+> > >
+> > > For booting an 8 vCPU, remote_tlb_flush (requests) goes from roughly
+> > > 180 (600) to 130 (215).
+> > >
+> > > Please don't apply patches 02 and 03, they've been posted elsehwere and by
+> > > other people.  I included them here because some of the patches have
+> > > pseudo-dependencies on their changes.  Patch 01 is also posted separately.
+> > > I had a brain fart and sent it out realizing that doing so would lead to
+> > > oddities.
+> >
+> > What's the base commit for this series?
+>
+> Pretty sure it's based on a stale kvm/queue, commit 81d7c6659da0 ("KVM: VMX: Remove
+> vCPU from PI wakeup list before updating PID.NV").  Time to add useAutoBase=true...
 
-Hi all,
-
-After merging the bpf-next tree, today's linux-next build (native perf)
-failed like this:
-
-tests/bpf.c: In function 'check_env':
-tests/bpf.c:299:2: error: 'bpf_load_program' is deprecated: libbpf v0.7+: u=
-se bpf_prog_load() instead [-Werror=3Ddeprecated-declarations]
-  299 |  err =3D bpf_load_program(BPF_PROG_TYPE_KPROBE, insns,
-      |  ^~~
-In file included from tests/bpf.c:28:
-tools/lib/bpf/bpf.h:204:16: note: declared here
-  204 | LIBBPF_API int bpf_load_program(enum bpf_prog_type type,
-      |                ^~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
-util/bpf-loader.c: In function 'bpf__clear':
-util/bpf-loader.c:115:2: error: 'bpf_object__next' is deprecated: libbpf v0=
-.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-de=
-clarations]
-  115 |  bpf_object__for_each_safe(obj, tmp) {
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from util/bpf-loader.c:10:
-tools/lib/bpf/libbpf.h:176:20: note: declared here
-  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
-      |                    ^~~~~~~~~~~~~~~~
-util/bpf-loader.c:115:2: error: 'bpf_object__next' is deprecated: libbpf v0=
-.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-de=
-clarations]
-  115 |  bpf_object__for_each_safe(obj, tmp) {
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from util/bpf-loader.c:10:
-tools/lib/bpf/libbpf.h:176:20: note: declared here
-  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
-      |                    ^~~~~~~~~~~~~~~~
-util/bpf-loader.c:115:2: error: 'bpf_object__next' is deprecated: libbpf v0=
-.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-de=
-clarations]
-  115 |  bpf_object__for_each_safe(obj, tmp) {
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from util/bpf-loader.c:10:
-tools/lib/bpf/libbpf.h:176:20: note: declared here
-  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
-      |                    ^~~~~~~~~~~~~~~~
-util/bpf-loader.c: In function 'hook_load_preprocessor':
-util/bpf-loader.c:621:2: error: 'bpf_program__set_prep' is deprecated: libb=
-pf v0.7+: use bpf_program__insns() for getting bpf_program instructions [-W=
-error=3Ddeprecated-declarations]
-  621 |  err =3D bpf_program__set_prep(prog, priv->nr_types,
-      |  ^~~
-In file included from util/bpf-loader.c:10:
-tools/lib/bpf/libbpf.h:467:16: note: declared here
-  467 | LIBBPF_API int bpf_program__set_prep(struct bpf_program *prog, int =
-nr_instance,
-      |                ^~~~~~~~~~~~~~~~~~~~~
-util/bpf-loader.c: In function 'bpf__foreach_event':
-util/bpf-loader.c:776:5: error: 'bpf_program__nth_fd' is deprecated: libbpf=
- v0.7+: multi-instance bpf_program support is deprecated [-Werror=3Ddepreca=
-ted-declarations]
-  776 |     fd =3D bpf_program__nth_fd(prog, type);
-      |     ^~
-In file included from util/bpf-loader.c:10:
-tools/lib/bpf/libbpf.h:471:16: note: declared here
-  471 | LIBBPF_API int bpf_program__nth_fd(const struct bpf_program *prog, =
-int n);
-      |                ^~~~~~~~~~~~~~~~~~~
-util/bpf-loader.c: In function 'bpf__apply_obj_config':
-util/bpf-loader.c:1501:2: error: 'bpf_object__next' is deprecated: libbpf v=
-0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
-eclarations]
- 1501 |  bpf_object__for_each_safe(obj, tmp) {
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from util/bpf-loader.c:10:
-tools/lib/bpf/libbpf.h:176:20: note: declared here
-  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
-      |                    ^~~~~~~~~~~~~~~~
-util/bpf-loader.c:1501:2: error: 'bpf_object__next' is deprecated: libbpf v=
-0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
-eclarations]
- 1501 |  bpf_object__for_each_safe(obj, tmp) {
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from util/bpf-loader.c:10:
-tools/lib/bpf/libbpf.h:176:20: note: declared here
-  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
-      |                    ^~~~~~~~~~~~~~~~
-util/bpf-loader.c:1501:2: error: 'bpf_object__next' is deprecated: libbpf v=
-0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
-eclarations]
- 1501 |  bpf_object__for_each_safe(obj, tmp) {
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from util/bpf-loader.c:10:
-tools/lib/bpf/libbpf.h:176:20: note: declared here
-  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
-      |                    ^~~~~~~~~~~~~~~~
-util/bpf-loader.c: In function 'bpf__setup_output_event':
-util/bpf-loader.c:1529:2: error: 'bpf_object__next' is deprecated: libbpf v=
-0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
-eclarations]
- 1529 |  bpf__for_each_map_named(map, obj, tmp, name) {
-      |  ^~~~~~~~~~~~~~~~~~~~~~~
-In file included from util/bpf-loader.c:10:
-tools/lib/bpf/libbpf.h:176:20: note: declared here
-  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
-      |                    ^~~~~~~~~~~~~~~~
-util/bpf-loader.c:1529:2: error: 'bpf_object__next' is deprecated: libbpf v=
-0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
-eclarations]
- 1529 |  bpf__for_each_map_named(map, obj, tmp, name) {
-      |  ^~~~~~~~~~~~~~~~~~~~~~~
-In file included from util/bpf-loader.c:10:
-tools/lib/bpf/libbpf.h:176:20: note: declared here
-  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
-      |                    ^~~~~~~~~~~~~~~~
-util/bpf-loader.c:1529:2: error: 'bpf_object__next' is deprecated: libbpf v=
-0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
-eclarations]
- 1529 |  bpf__for_each_map_named(map, obj, tmp, name) {
-      |  ^~~~~~~~~~~~~~~~~~~~~~~
-In file included from util/bpf-loader.c:10:
-tools/lib/bpf/libbpf.h:176:20: note: declared here
-  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
-      |                    ^~~~~~~~~~~~~~~~
-util/bpf-loader.c:1565:2: error: 'bpf_object__next' is deprecated: libbpf v=
-0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
-eclarations]
- 1565 |  bpf__for_each_map_named(map, obj, tmp, name) {
-      |  ^~~~~~~~~~~~~~~~~~~~~~~
-In file included from util/bpf-loader.c:10:
-tools/lib/bpf/libbpf.h:176:20: note: declared here
-  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
-      |                    ^~~~~~~~~~~~~~~~
-util/bpf-loader.c:1565:2: error: 'bpf_object__next' is deprecated: libbpf v=
-0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
-eclarations]
- 1565 |  bpf__for_each_map_named(map, obj, tmp, name) {
-      |  ^~~~~~~~~~~~~~~~~~~~~~~
-In file included from util/bpf-loader.c:10:
-tools/lib/bpf/libbpf.h:176:20: note: declared here
-  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
-      |                    ^~~~~~~~~~~~~~~~
-util/bpf-loader.c:1565:2: error: 'bpf_object__next' is deprecated: libbpf v=
-0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
-eclarations]
- 1565 |  bpf__for_each_map_named(map, obj, tmp, name) {
-      |  ^~~~~~~~~~~~~~~~~~~~~~~
-In file included from util/bpf-loader.c:10:
-tools/lib/bpf/libbpf.h:176:20: note: declared here
-  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
-      |                    ^~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
-
-I am not sure what caused this, but I have just used the bpf-next tree
-from next-20211202 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/KmNnKRBrIaMX/2EzgPiwUoA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGpYZQACgkQAVBC80lX
-0GxT1AgAn37c09ci5LxrwKVewgxdKFgU66BwND4c8dUpMZ7enT6IrmmK2wfSyOdL
-9DFZXM8NPGbfDxUN3b5JhRg3zvcTEDx7edHY3du7NDZ5Pion5cduvkenpmwcf5QK
-VTH+Y6KLI4Y/yInJ+biDjhBzEujo2ZK24vO1NguyDkKjEyhxjx855GABp8CkeRT9
-h4cAZ3qMwWcRMWRac3RFbgry1Ai8P3yqVGAlF0QBG33cWt0OgpjehrgTga33eR1+
-b99STtlHMDZj9C1OJHaTZplqyMjmvcrxNChf82sS/wlrHEuQHmVHH7iK/ZhryI68
-aZTx9YELDNlVmQBre5l4lzC8uNytWQ==
-=RZbd
------END PGP SIGNATURE-----
-
---Sig_/KmNnKRBrIaMX/2EzgPiwUoA--
+That applied cleanly. Thanks!

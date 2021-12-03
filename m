@@ -2,69 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 522A3467BCD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60EE2467BCE
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382191AbhLCQyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 11:54:04 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:41328 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382181AbhLCQyD (ORCPT
+        id S1382181AbhLCQyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 11:54:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1382155AbhLCQy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 11:54:03 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.1)
- id 541c385309b5ff86; Fri, 3 Dec 2021 17:50:38 +0100
-Received: from kreacher.localnet (unknown [213.134.175.202])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 494F866AD69;
-        Fri,  3 Dec 2021 17:50:37 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the pm tree
-Date:   Fri, 03 Dec 2021 17:50:36 +0100
-Message-ID: <1902790.PYKUYFuaPT@kreacher>
-In-Reply-To: <f6e96a47-01a3-96f3-1ed7-e9a42c2b26bf@linaro.org>
-References: <20211202102814.793d2f67@canb.auug.org.au> <f6e96a47-01a3-96f3-1ed7-e9a42c2b26bf@linaro.org>
+        Fri, 3 Dec 2021 11:54:27 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC624C061353
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 08:51:02 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id z7so7887667lfi.11
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 08:51:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=7RLzTDUv8VPQuKAQO1KOPoH9Ek4D8djGLZsWCJ50TtY=;
+        b=Ohb/WTE+9mg38iGsHSTOTqZQROPWbE8bhZLP4szo39azWsx5AYdjtKltOkM9FzZfvG
+         jORep8blrWOXxLKjrGWbzSrMhqmylGXdrCzAF1bPIFP9ROsB8RtN2HWEXsX57YRo+FJY
+         lfiwy5/FSZd+VTjbrouNjyhCni17EeEH1l85qPErCxXXCoLDDFJiG0xV4zG86Yn43ax7
+         vq1fbLt36ucMnIQe7gzercxLh0uCpuFI5Et5pyjGWLDWVHEDzC6UbhnooeJ1MFpz07AW
+         DN6c30yXL8nPxQFGnzvamm6R3v6LGbx5Q8SXBGX3JxCRaXQQ9pmnVQcgr9XHIbv9S0/K
+         qabQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=7RLzTDUv8VPQuKAQO1KOPoH9Ek4D8djGLZsWCJ50TtY=;
+        b=p8Rvib+/LPAjy2Gx6gR7vdud3T4LI9s5wbtvCFCXwIZjhIcNI8MKz2b1sQeWOOwS3Z
+         pjNRWXHZi0NEDlKdHElv+KeZ0BPEtK/c2g/twQRnKdK+roQjNTcuVW6IBp0JBKekbQYY
+         4qX2X60SG8wEg500nzPlBAOwYkpPundtdFx5X83mvRXAn/2pzYL0huYbINqTjGBgLOJf
+         T0SHXGHu5meXiBg1AlUyOq3hexTNhKxGC7wGuALy+eATTkXC3eiW0QPY/ZAvOJO4mT5C
+         0PGM235gUCH97T13MLHwfgrkyM0jJiKklkc5MHW6z6eDJ6YYpKm3AQ0RwO7dWjOvfMRk
+         meHQ==
+X-Gm-Message-State: AOAM530T2E9AQJ0jOQzU3QSwk6Vsl0pD75W1LixpiwpZh35DwOqRYdTS
+        jw8sTBUes9wnk73+Wv+MtEarLR/UP9vEHtGbHtjLjaPfzhE=
+X-Google-Smtp-Source: ABdhPJzG0dliDruLNZB8XZL0qzWtA1j0lMcS883TkAfSwf23n7ngGui8NYoA71pCTj/w0AAZXwb597hyEVXwq/543rM=
+X-Received: by 2002:a05:6512:2081:: with SMTP id t1mr18858989lfr.348.1638550261111;
+ Fri, 03 Dec 2021 08:51:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+From:   Muni Sekhar <munisekharrms@gmail.com>
+Date:   Fri, 3 Dec 2021 22:20:50 +0530
+Message-ID: <CAHhAz+jpmksehY4BSH9jJPYuY+jykSHtx9TNiG-gAkq10zaXSQ@mail.gmail.com>
+Subject: Time: new clocksource
+To:     daniel.lezcano@linaro.org, tglx@linutronix.de,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernelnewbies <kernelnewbies@kernelnewbies.org>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.175.202
-X-CLIENT-HOSTNAME: 213.134.175.202
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrieejgdeliecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdejlefghfeiudektdelkeekvddugfeghffggeejgfeukeejleevgffgvdeluddtnecukfhppedvudefrddufeegrddujeehrddvtddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudejhedrvddtvddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehsfhhrsegtrghnsgdrrghuuhhgrdhorhhgrdgruhdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday, December 2, 2021 11:04:45 AM CET Daniel Lezcano wrote:
-> 
-> On 02/12/2021 00:28, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > After merging the pm tree, today's linux-next build (x86_64 allmodconfig)
-> > failed like this:
-> > 
-> > drivers/powercap/dtpm.c: In function 'init_dtpm':
-> > drivers/powercap/dtpm.c:466:21: error: unused variable 'dtpm_descr' [-Werror=unused-variable]
-> >   466 |  struct dtpm_descr *dtpm_descr;
-> >       |                     ^~~~~~~~~~
-> > cc1: all warnings being treated as errors
-> > 
-> > Caused by commit
-> > 
-> >   f751db8adaea ("powercap/drivers/dtpm: Disable DTPM at boot time")
-> 
-> Rafael, will you drop the patch from your tree and I send a new one with
-> the local variable also, or shall I send a change on top of?
+Hi All,
 
-I'll fix this.
+We have a Digital PLL with 64 bit timer counter hardware and the
+counter is accessible from the CPU over the PCIe bus.
+
+Is it possible to add this timer counter hardware as new clocksource
+driver? To do this, can someone please point me to the existing
+reference source code(or patch) for this task.
+
+Suppose if it is possible to add a new clocksource driver for this
+hardware then does any userspace get_timestamp* API would get the time
+from this new hardware?
 
 
-
+-- 
+Thanks,
+Sekhar

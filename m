@@ -2,105 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA75467C6D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA137467C75
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245721AbhLCRZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 12:25:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
+        id S1353083AbhLCR2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 12:28:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239848AbhLCRZe (ORCPT
+        with ESMTP id S239848AbhLCR2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 12:25:34 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3BAC061353
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 09:22:10 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id n33-20020a05600c502100b0032fb900951eso5399262wmr.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 09:22:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=MhRYkwGP9y8J66uLTyGKdYV6Wy72Se8HK2WrMyhEeTQ=;
-        b=MXO1uUZFxb9pLVjd1EL0J360MIY6N0ro6yQT+NEhU5FcvQCSK/YaacRZKOgtoFIitv
-         2H8pokCbuK+Ja71M9IO74t8xT+w1St8ffldZQ2Pp5HxZnuR3cU/kd+GIyMuFhz/BjEfe
-         v59DUz5qzTJpJRvsH5weKauhWKHLJSAs+fPNB9xfyZ0Y9YhShVlNFu4KLDWbB3BXBPiB
-         AaSiXKR9VjUp9kFx6Rcznxgyf2nUR8gLWSdDSXFwVMNjITINLI2lGzPV2fqnB7yWQbua
-         1kAJGnVKpDgV2QZVntfvypake0L6+gBZKt22PlIFwj5+5kmlEdmR1tIN+9UUEHeqsgrl
-         fjPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=MhRYkwGP9y8J66uLTyGKdYV6Wy72Se8HK2WrMyhEeTQ=;
-        b=Q38J09/FwNcWPpP1dr3QnfT6T5gYVP71jRAHTCTPD4sg9tTNl3UhwN7U55uRMpxUCt
-         SJRwFmfu8XozNtiqgi4wdVgJ98rGk80ZoU4z56jTiZWKb6IKeh33kbIjcdcJm2HQk3P0
-         cCFVTyk9GBUuBr0R5m1nvZIFVzcjAaR+EBDVBuSD1kIskpeIvpc9/3hVTWnIHGuNdoda
-         KSqQ45a4Sx0cajOAuGf2h5DxKT0jnBV9xfj6JXHwT2TrZTH213sXkkbhVlHdtYj4ylCf
-         L4oYoUowMc6TZpN11IU4Vza0ldXZZujhHHrdn+OkNXzXT6O83m2HC6CgRRfeRspWO5sB
-         RAww==
-X-Gm-Message-State: AOAM531N4iu1SWOGXfMmZnI6C7wlyRlRS9/OBCbc3bahiVATsP7TzV2e
-        tvE37k8OdQDfMu7km9ZWbfl4vIfSYbZ1VA==
-X-Google-Smtp-Source: ABdhPJxz0PGaPizeU5ApKPdlDsYUw3paucZczO+7RaaARzQmI0OQHybqH4s5Ru/NOmvJoNWYuEc7iw==
-X-Received: by 2002:a1c:98ca:: with SMTP id a193mr16892696wme.162.1638552128748;
-        Fri, 03 Dec 2021 09:22:08 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:98bf:72f4:f216:41dc? ([2a01:e34:ed2f:f020:98bf:72f4:f216:41dc])
-        by smtp.googlemail.com with ESMTPSA id d6sm3202136wrx.60.2021.12.03.09.22.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 09:22:08 -0800 (PST)
-Subject: Re: linux-next: build failure after merge of the pm tree
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20211202102814.793d2f67@canb.auug.org.au>
- <f6e96a47-01a3-96f3-1ed7-e9a42c2b26bf@linaro.org>
- <1902790.PYKUYFuaPT@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <33d6d418-535d-8df4-b674-6b4f498a8dbd@linaro.org>
-Date:   Fri, 3 Dec 2021 18:22:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 3 Dec 2021 12:28:20 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7423C061751;
+        Fri,  3 Dec 2021 09:24:55 -0800 (PST)
+Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1mtCIn-0003QH-7t; Fri, 03 Dec 2021 18:24:53 +0100
+Message-ID: <e03ddc81-c60b-bd28-b959-0602142f0efc@leemhuis.info>
+Date:   Fri, 3 Dec 2021 18:24:52 +0100
 MIME-Version: 1.0
-In-Reply-To: <1902790.PYKUYFuaPT@kreacher>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: Regression: plugging in USB scanner breaks all USB functionality
+ #forregzbot
+Content-Language: en-BS
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <35f7428b39f996c793f5b4a6a314772681c73d7a.camel@apache.org>
+ <3eb9c3f8-6bca-da08-47ec-af2a02d6a485@leemhuis.info>
+To:     regressions@lists.linux.dev
+In-Reply-To: <3eb9c3f8-6bca-da08-47ec-af2a02d6a485@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1638552295;ea523916;
+X-HE-SMSGID: 1mtCIn-0003QH-7t
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/12/2021 17:50, Rafael J. Wysocki wrote:
-> On Thursday, December 2, 2021 11:04:45 AM CET Daniel Lezcano wrote:
->>
->> On 02/12/2021 00:28, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> After merging the pm tree, today's linux-next build (x86_64 allmodconfig)
->>> failed like this:
->>>
->>> drivers/powercap/dtpm.c: In function 'init_dtpm':
->>> drivers/powercap/dtpm.c:466:21: error: unused variable 'dtpm_descr' [-Werror=unused-variable]
->>>   466 |  struct dtpm_descr *dtpm_descr;
->>>       |                     ^~~~~~~~~~
->>> cc1: all warnings being treated as errors
->>>
->>> Caused by commit
->>>
->>>   f751db8adaea ("powercap/drivers/dtpm: Disable DTPM at boot time")
->>
->> Rafael, will you drop the patch from your tree and I send a new one with
->> the local variable also, or shall I send a change on top of?
+On 02.12.21 16:13, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker speaking.
 > 
-> I'll fix this.
+> Thanks for the report.
+> 
+> Top-posting for once, to make this easy accessible to everyone.
+> 
+> FWIW, 5.14 is EOL, so it might not be fixed there. As the problem is in
+> newer kernels as well, I suspect that it was a change applies to 5.15 or
+> 5.16 that got backported. Maybe one of the developers might have an idea
+> which commit causes it. If that's not the case you likely should try a
+> bisection to find the culprit. Performing one between v5.14.11..v5.14.14
+> is likely the easiest and quickest way to find it.
+> 
+> To be sure this issue doesn't fall through the cracks unnoticed, I'm
+> adding it to regzbot, my Linux kernel regression tracking bot:
+> 
+> #regzbot ^introduced v5.14.11..v5.14.14
+> #regzbot title usb: plugging in USB scanner breaks all USB functionality
+> [regression present in 5.15.2 und 5.16-rc3, too]
+> #regzbot ignore-activity
 
-Ok, thanks. Sorry for the inconvenience
+#regzbot introduced ff0e50d3564f
+#regzbot fixed-by 385b5b09c3546c87cfb730b76abe5f8d73c579a2
+
+Ciao, Thorsten, your Linux kernel regression tracker
+
+P.S.: this mail is primarily send for documentation purposes and for
+regzbot, my Linux kernel regression tracking bot. These mails usually
+contain '#forregzbot' in the subject, to make them easy to spot and filter.
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog

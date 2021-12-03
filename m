@@ -2,96 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0BB7467538
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6F7467533
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:38:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351457AbhLCKmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 05:42:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243912AbhLCKmQ (ORCPT
+        id S243752AbhLCKmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 05:42:08 -0500
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:34713 "EHLO
+        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230390AbhLCKmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 05:42:16 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4889BC06173E;
-        Fri,  3 Dec 2021 02:38:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vD4L77VHgLvDmRbeZaWlspxy3NbaUIb+bwMSWEqT/lw=; b=FtTFaIjd/WBYIJvTtPhJo44DrX
-        RcYmE57KZwuXeuzlu7Kdkx2xflj3o+rzM3kF4sQiGjDpUKtXbp7oudu7R/EH2Tab5GanjeJdbw6eO
-        GnMUQglTXZrpXUb6PqxBeqjkNPpoUjPaKxwwvHhh1HWok+iaQlCwNA2nh/Ji9od2jPr7IDgTI6h+s
-        6wTTjnPgmcndc9NEzp4lrwziWOrrhbEYll78jJR7rNpVmVFBYNExHxA7qa4w7SzUbdB53/tRQAKZg
-        lxNb/IKuJhLaZerPAOzxQBjzD64fZAp4KO4F2mRmatNFp0P5CS0fr1r14sr5agu+oxu7/6EI349BO
-        UH2M68Pg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mt5xX-001yqZ-HY; Fri, 03 Dec 2021 10:38:31 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A4DD530001C;
-        Fri,  3 Dec 2021 11:38:30 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8976D2B36B3C0; Fri,  3 Dec 2021 11:38:30 +0100 (CET)
-Date:   Fri, 3 Dec 2021 11:38:30 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v8 00/14] Function Granular KASLR
-Message-ID: <YanzpvmaX1JWYf9t@hirez.programming.kicks-ass.net>
-References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+        Fri, 3 Dec 2021 05:42:07 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 7EE045801D1;
+        Fri,  3 Dec 2021 05:38:43 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 03 Dec 2021 05:38:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=rRzHlzSBjqtyvYL/4h3PntMy3Xe
+        iCXlXwulLeCZvjIg=; b=gQYQYE8QFU+UUv9scGZxYeG4JesTX3bM6SNqyxpFTNK
+        1pOrY8rgUECiIv7P6qyDRvRbaIl3vs+aleNXq8FwzXCYQ8zXw7hYzlkJsaml8pcU
+        XptKF2KsXn0zrGk2FB/Ldj/AebVg2bjiscSm2MKF4ulG3lOMrbUp8AEezH1TzhDN
+        6CzrhR5IlatxOey6Ah54D+9FAN1WWG4yo8H710+qWQH47fKHhLPvZLzlkH6UKZe7
+        SUGClhBfWutx8ktQG4cuOeSrmqzsCx1p8m06EQA92YLYWbRldd1mwQTkaGszgeb9
+        j6D/c0jEu/psySBk/beATs+QXfXeKTyyns9qZl+4GDQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=rRzHlz
+        SBjqtyvYL/4h3PntMy3XeiCXlXwulLeCZvjIg=; b=bCyyyMx1zl9iVR/0IbA0U2
+        wFGAyON+0nEtRr2kWfvA7qSMPf5tHJF6ij8oWVbpYGHLw4NGJuycn6bqVg4exBHX
+        FpfCnwu3sz4iw948r9MRRG0oitQL/861MbixnDw9vTpSJiILRFH4ygh0KDJ516Bw
+        OBEuPfjyGG7SJRuQZ787pPdsk2arwR55p8VDZtcvZVSVS16w4AOvOohm10GHWyO8
+        FakMo4qvVXUNnLWssMZe8RndO9idK26BQyQ0lwfj0Ui5Y+HT8fq4cAbK2a+5Sh2h
+        Ez9gb/f/jHLcQof6xKLs/YDyyXssFfLGVLh4+jf1fUAglJNXdI73T1CHc0ltJebw
+        ==
+X-ME-Sender: <xms:s_OpYUOzW24KbMmFPqRquZ5-wjMmdht_zQQgTs08vVAhTqa1R5--vQ>
+    <xme:s_OpYa-h0wNjj7lafKFIo5WX7EDlLLtlkwRaEX_RTSRrImw_4I62fCPIMSH1aWmHi
+    XYuXPtBpGdKXPqVD4g>
+X-ME-Received: <xmr:s_OpYbRpE4upBA0lBXt7uXHtD0PSXXsGlsjIyHvwEr4wCW8DpKBNejk3ofN8eYI62j8w0dhJJBEBSPZGM1WT7He9LhnquLun9lib_AdOn4IXIw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrieejgddulecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
+    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    igihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:s_OpYcslD3fKKJ45jXuwb1ujP6zsML88V3oSwXzCLQJBfeMy33Dlgw>
+    <xmx:s_OpYcc9z2qiObBHhM9RYaUFkRLr013_9CAaKQ1wgYRToKlOiQKMUQ>
+    <xmx:s_OpYQ20GLJJznWF20ZXPQFmE0Nj64X-o7meYDXwwMLPQ9RDLGZM2Q>
+    <xmx:s_OpYQ3kJx4fvTmGwUQVoCharSkuOvBXNqebwDCWjRjIM44jpcOZEQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 3 Dec 2021 05:38:42 -0500 (EST)
+Date:   Fri, 3 Dec 2021 11:38:41 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Kevin Tang <kevin3.tang@gmail.com>
+Cc:     maarten.lankhorst@linux.intel.com, sean@poorly.run,
+        airlied@linux.ie, daniel@ffwll.ch, robh+dt@kernel.org,
+        mark.rutland@arm.com, pony1.wu@gmail.com, orsonzhai@gmail.com,
+        zhang.lyra@gmail.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 6/6] drm/sprd: add Unisoc's drm mipi dsi&dphy driver
+Message-ID: <20211203103841.vkl3sjsbaohsviou@houat>
+References: <20211025093418.20545-1-kevin3.tang@gmail.com>
+ <20211025093418.20545-7-kevin3.tang@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ynqok2avqp6f7jvf"
 Content-Disposition: inline
-In-Reply-To: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+In-Reply-To: <20211025093418.20545-7-kevin3.tang@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 11:32:00PM +0100, Alexander Lobakin wrote:
 
-> feat        make -j65 boot    vmlinux.o vmlinux  bzImage  bogoops/s
-> Relocatable 4m38.478s 24.440s 72014208  58579520  9396192 57640.39
-> KASLR       4m39.344s 24.204s 72020624  87805776  9740352 57393.80
-> FG-K 16 fps 6m16.493s 25.429s 83759856  87194160 10885632 57784.76
-> FG-K 8 fps  6m20.190s 25.094s 83759856  88741328 10985248 56625.84
-> FG-K 1 fps  7m09.611s 25.922s 83759856  95681128 11352192 56953.99
+--ynqok2avqp6f7jvf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-:sadface: so at best it makes my kernel compiles ~50% slower. Who would
-ever consider doing that? It's like retpolines weren't bad enough; lets
-heap on the fail?
+On Mon, Oct 25, 2021 at 05:34:18PM +0800, Kevin Tang wrote:
+> @@ -618,9 +619,25 @@ static void sprd_crtc_mode_set_nofb(struct drm_crtc =
+*crtc)
+>  {
+>  	struct sprd_dpu *dpu =3D to_sprd_crtc(crtc);
+>  	struct drm_display_mode *mode =3D &crtc->state->adjusted_mode;
+> +	struct drm_encoder *encoder;
+> +	struct mipi_dsi_device *slave;
+> +	struct sprd_dsi *dsi;
+> =20
+>  	drm_display_mode_to_videomode(mode, &dpu->ctx.vm);
+> =20
+> +	drm_for_each_encoder(encoder, crtc->dev) {
+> +		if (encoder->crtc !=3D crtc)
+> +			continue;
+
+encoder->crtc is deprecated. You should be using
+encoder->drm_for_each_encoder_mask, using the encoder_mask in
+encoder->drm_crtc_state.
+
+> +static int sprd_dsi_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev =3D &pdev->dev;
+> +	struct sprd_dsi *dsi;
+> +
+> +	dsi =3D devm_kzalloc(dev, sizeof(*dsi), GFP_KERNEL);
+> +	if (!dsi)
+> +		return -ENOMEM;
+> +
+> +	dev_set_drvdata(dev, dsi);
+> +
+> +	dsi->host.ops =3D &sprd_dsi_host_ops;
+> +	dsi->host.dev =3D dev;
+> +	mipi_dsi_host_register(&dsi->host);
+> +
+> +	return component_add(&pdev->dev, &dsi_component_ops);
+
+component_add must be run in the mipi_dsi_host.attach hook.
+
+Maxime
+
+--ynqok2avqp6f7jvf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYanzsQAKCRDj7w1vZxhR
+xRe2AP99Mp7SYAZGjucY4sRI7q9PWgtA8VNJMZbPDvgid6+oNAEA4WA/RrSZs55v
+1DqTNDjwtGIOSQy/IsSXdpZjjZq/ngY=
+=++lK
+-----END PGP SIGNATURE-----
+
+--ynqok2avqp6f7jvf--

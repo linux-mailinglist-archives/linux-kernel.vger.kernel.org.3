@@ -2,139 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A1C467377
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCBE8467379
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:46:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379328AbhLCItT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 03:49:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27469 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351242AbhLCItS (ORCPT
+        id S1379334AbhLCIuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:50:15 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:52582 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379348AbhLCIuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 03:49:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638521154;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Fri, 3 Dec 2021 03:50:09 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4B9B521709;
+        Fri,  3 Dec 2021 08:46:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638521204; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=wr5FuvjVcX7SC5c2qwRq/4np3gbYK+aB0OUFPg2us1g=;
-        b=eTVkikQeA1ui8qJOeFggtyMRsGhyuO+88aCi7kq1js52GJkRXV0S5LwkpV/Z+oXfjYi6mF
-        LE4N+OGlEN4z1Vt7JZ8RHVdUL091so5syN4Btxx/X7/O2EysEjh27tNxaOUdDpWSAnUfcf
-        eNAjdLwkLL/enrnmjDxItmTgMUZ+H2A=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-476-S1B6L-tQNVi46-l_SoNbzg-1; Fri, 03 Dec 2021 03:45:53 -0500
-X-MC-Unique: S1B6L-tQNVi46-l_SoNbzg-1
-Received: by mail-pg1-f197.google.com with SMTP id r15-20020a63ec4f000000b002e582189837so1483829pgj.20
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 00:45:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wr5FuvjVcX7SC5c2qwRq/4np3gbYK+aB0OUFPg2us1g=;
-        b=FxkUGIAMBsErXundLAMwv5JzbMVjblfu0hvwThNYRFX7MCACcZ47Y++Wbpv6C/+Awv
-         zaOqvU0YhvjTzXcBNyQuzYP0MWeuqqH07FSYhWZFD5Xc1BBlptu9cKWSUsTzgVe7Rp4d
-         y0KcTdGHu5Wg/AqiQQ1OHSpLg7Yyps4ZXdAx14LTly8h7Lc+g4HEoRwv3qzmH+UsAum6
-         tGOFvx3yMv3hlnk6yRBkDTmi0QvBzkBcCGZub64tzXnOy1fqE/M8alJPNEFN5NEQ3h8W
-         XdBNaZG5H/4uUi74aDtUW0yU4hs6P7MV/bVFqYKvid/GuHKToxy1craT3VfPTZiuUOcp
-         60nw==
-X-Gm-Message-State: AOAM530tiobHNE9A6k6yM+dJRjMgQ63SYowvhM38GyQ2sSxOrlPL4qO/
-        8e2xN/jhZHjVfajiwIR1DIrEnBYAqGQZyz8dRfR8xU0wtwj2CwtjfYwhKUqCVdKd9WY7C18LNOn
-        hz+o/thKEucsvuhivcZxNmgSrYxSRx0L/aFxqNPBd
-X-Received: by 2002:a17:903:1c7:b0:141:e630:130c with SMTP id e7-20020a17090301c700b00141e630130cmr21352724plh.80.1638521152214;
-        Fri, 03 Dec 2021 00:45:52 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwvs+4WyxBsI0PowrRG0Yz/rESddXVKNX1pGr8vIxAXqTpV2FXSAFuNa5ZcbscddqQPJag+OktCbi1zZBRw0CI=
-X-Received: by 2002:a17:903:1c7:b0:141:e630:130c with SMTP id
- e7-20020a17090301c700b00141e630130cmr21352701plh.80.1638521151949; Fri, 03
- Dec 2021 00:45:51 -0800 (PST)
+        bh=4IXIAddKf47NvmPSg6fr8omn4Ihjf4sLMtaCGrTab5U=;
+        b=nhR3oatLImACwfVNm4wtEvwMA+3x2lmSHcIEUrHaVU7+zij22Q5PHsew890IQSftKdRhj1
+        Zun3J6UhBmAay7hNHNJ3xl9WbTAaosm9RZG71qLwZvUavQlegc8zjrmiV24KAKOv2I4m/4
+        xwdG0wtN9j45h3YcidcM3Z7m5bQPqAo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638521204;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4IXIAddKf47NvmPSg6fr8omn4Ihjf4sLMtaCGrTab5U=;
+        b=ZVbW0zkUzPQtarqccn9wsplMMxzJqDjz2VGYOPxbk16HI+ixTOLyTmpwMLl1arVj87DAlS
+        y74qxucZTsiL2tDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1007A13CF5;
+        Fri,  3 Dec 2021 08:46:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /H/JAnTZqWGPYQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 03 Dec 2021 08:46:44 +0000
+Message-ID: <4a7ce84d-faef-4fb2-d36d-5cff2fba8ecf@suse.de>
+Date:   Fri, 3 Dec 2021 09:46:43 +0100
 MIME-Version: 1.0
-References: <20211130060117.3026-1-linux@weissschuh.net> <2a336482fb73d8093ed284942c6b63c53b9a8727.camel@linux.intel.com>
-In-Reply-To: <2a336482fb73d8093ed284942c6b63c53b9a8727.camel@linux.intel.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Fri, 3 Dec 2021 09:45:41 +0100
-Message-ID: <CAO-hwJKkCZg7JbAk=hj=X80tB744F5_F9_TgR0DibcRKk-fNPA@mail.gmail.com>
-Subject: Re: [PATCH] HID: intel-ish-hid: ipc: only enable IRQ wakeup when requested
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Jiri Kosina <jikos@kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Mark Pearson <markpearson@lenovo.com>,
-        Daniel Drubin <daniel.drubin@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] drm/ast: Atomic CR/SR reg R/W
+Content-Language: en-US
+To:     Kuo-Hsiang Chou <kuohsiang_chou@aspeedtech.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Ryan Chen <ryan_chen@aspeedtech.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        =?UTF-8?B?5riF5rC05L+uKG8tc2hpbWl6dSkt5Y+w54GjTkVD?= 
+        <o-shimizu@nec.com.tw>, Jenmin Yuan <jenmin_yuan@aspeedtech.com>,
+        "airlied@redhat.com" <airlied@redhat.com>,
+        Arc Sung <arc_sung@aspeedtech.com>,
+        Luke Chen <luke_chen@aspeedtech.com>
+References: <20210917072226.17357-1-kuohsiang_chou@aspeedtech.com>
+ <7c128e03-842a-57b3-0c11-24fed9d4d126@suse.de>
+ <HK2PR06MB3300C768B6A3C390A7D1BBC28CAA9@HK2PR06MB3300.apcprd06.prod.outlook.com>
+ <HK2PR06MB3300EB8A7BEB41907FB7FC5F8C6A9@HK2PR06MB3300.apcprd06.prod.outlook.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <HK2PR06MB3300EB8A7BEB41907FB7FC5F8C6A9@HK2PR06MB3300.apcprd06.prod.outlook.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------0D3tRR0iAjyAn7RMZkuVDNXk"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 2:35 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Tue, 2021-11-30 at 07:01 +0100, Thomas Wei=C3=9Fschuh wrote:
-> > Fixes spurious wakeups from s0ix on Lenovo ThinkPad X1 Cargon Gen 9
-> > on
-> > lid close.
-> >
-> > These wakeups are generated by interrupts from the ISH on changes to
-> > the
-> > lid status.
-> >
-> > By disabling the wake IRQ from the ISH we inhibit these spurious
-> > wakeups while keeping the resume from LID open through the ACPI
-> > interrupt.
-> >
-> > Reports on the Lenovo forums indicate that Lenovo ThinkPad X1 Yoga
-> > Gen6
-> > is also affected.
-> >
-> > Fixes: ae02e5d40d5f ("HID: intel-ish-hid: ipc layer")
-> > BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=3D214855
-> > Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-> Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------0D3tRR0iAjyAn7RMZkuVDNXk
+Content-Type: multipart/mixed; boundary="------------kX9E0menofnSmumUbLYr70Vv";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Kuo-Hsiang Chou <kuohsiang_chou@aspeedtech.com>,
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc: Ryan Chen <ryan_chen@aspeedtech.com>, "airlied@linux.ie"
+ <airlied@linux.ie>, =?UTF-8?B?5riF5rC05L+uKG8tc2hpbWl6dSkt5Y+w54GjTkVD?=
+ <o-shimizu@nec.com.tw>, Jenmin Yuan <jenmin_yuan@aspeedtech.com>,
+ "airlied@redhat.com" <airlied@redhat.com>, Arc Sung
+ <arc_sung@aspeedtech.com>, Luke Chen <luke_chen@aspeedtech.com>
+Message-ID: <4a7ce84d-faef-4fb2-d36d-5cff2fba8ecf@suse.de>
+Subject: Re: [PATCH] drm/ast: Atomic CR/SR reg R/W
+References: <20210917072226.17357-1-kuohsiang_chou@aspeedtech.com>
+ <7c128e03-842a-57b3-0c11-24fed9d4d126@suse.de>
+ <HK2PR06MB3300C768B6A3C390A7D1BBC28CAA9@HK2PR06MB3300.apcprd06.prod.outlook.com>
+ <HK2PR06MB3300EB8A7BEB41907FB7FC5F8C6A9@HK2PR06MB3300.apcprd06.prod.outlook.com>
+In-Reply-To: <HK2PR06MB3300EB8A7BEB41907FB7FC5F8C6A9@HK2PR06MB3300.apcprd06.prod.outlook.com>
 
-Applied to for-5.16/upstream-fixes in hid.git
+--------------kX9E0menofnSmumUbLYr70Vv
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-thanks
+SGkNCg0KQW0gMDMuMTIuMjEgdW0gMDI6MjMgc2NocmllYiBLdW8tSHNpYW5nIENob3U6DQo+
+IA0KPiANCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS3VvLUhzaWFu
+ZyBDaG91DQo+IFNlbnQ6IFRodXJzZGF5LCBTZXB0ZW1iZXIgMzAsIDIwMjEgMzoxOSBQTQ0K
+PiBUbzogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+OyBkcmktZGV2
+ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3Jn
+DQo+IFN1YmplY3Q6IFJFOiBbUEFUQ0hdIGRybS9hc3Q6IEF0b21pYyBDUi9TUiByZWcgUi9X
+DQo+IA0KPiBIaQ0KPiANCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTog
+VGhvbWFzIFppbW1lcm1hbm4gW21haWx0bzp0emltbWVybWFubkBzdXNlLmRlXQ0KPiBTZW50
+OiBNb25kYXksIFNlcHRlbWJlciAyMCwgMjAyMSA0OjE3IFBNDQo+IFRvOiBLdW8tSHNpYW5n
+IENob3UgPGt1b2hzaWFuZ19jaG91QGFzcGVlZHRlY2guY29tPjsgZHJpLWRldmVsQGxpc3Rz
+LmZyZWVkZXNrdG9wLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiBTdWJq
+ZWN0OiBSZTogW1BBVENIXSBkcm0vYXN0OiBBdG9taWMgQ1IvU1IgcmVnIFIvVw0KPiANCj4g
+SGkNCj4gDQo+IEFtIDE3LjA5LjIxIHVtIDA5OjIyIHNjaHJpZWIgS3VvSHNpYW5nIENob3U6
+DQo+PiAxLiBBdm9pZCBJTy1pbmRleCByYWNpbmcNCj4+IDIuIElPLWluZGV4IHJhY2luZyBo
+YXBwZW5lZCBvbiByZXNvbHVzdGlvbiBzd2l0Y2hpbmcNCj4+ICAgICAgYW5kIG1vdXNlIG1v
+dmluZyBhdCB0aGUgc2FtZSB0aW1lDQo+PiAzLiBTeXN0ZW0gaHVuZyB3aGlsZSBJTy1pbmRl
+eCByYWNpbmcgb2NjdXJyZWQuDQo+IA0KPiBJJ2Qgc2F5IHRoYXQgdGhlcmUncyBzb21ldGhp
+bmcgZWxzZSBnb2luZyBvbmUgaGVyZS4gTW9kZSBzZXR0aW5nIGFuZCBjdXJzb3IgbW92ZW1l
+bnQgc2hvdWxkIGJlIHByb3RlY3RlZCBhZ2FpbnN0IGVhY2ggb3RoZXIgYnkgRFJNIGxvY2tp
+bmcuDQo+IENoYW5naW5nIHRoZXNlIGxvdy1sZXZlbCBmdW5jdGlvbnMgd291bGQgbm90IHNv
+bHZlIHRoZSBpc3N1ZXMuIEknbGwgdHJ5IHRvIHJlcHJvZHVjZSB0aGUgcHJvYmxlbSBBU0FQ
+Lg0KPiANCj4gSGkgVGhvbWFzLA0KPiANCj4gU29ycnkgdG8gaW50ZXJydXB0IHlvdSBhZ2Fp
+biENCj4gTWF5IEkgdW5kZXJzdGFuZCB0aGUgcmV2aWV3J3Mgc2l0dWF0aW9uPyBUaGFua3Mh
+DQoNCkxvb2ssIHlvdSByZWFsbHkgaGF2ZSB0byB3b3JrIHdpdGggdXMgZHVyaW5nIHRoZSBy
+ZXZpZXcgcHJvY2Vzcy4gRG9uJ3QgDQpqdXN0IGV4cGVjdCB1cyB0byB0ZWxsIHlvdSB3aGF0
+IHRvIGRvLg0KDQpJJ20gbm90IGdvaW5nIHRvIG1lcmdlIHRoaXMgcGF0Y2guIEFzIEkgc2Fp
+ZCwgSSBkb24ndCB0aGluayBpdCBmaXhlcyB0aGUgDQpwcm9ibGVtLiBNb3VzZSBtb3ZlbWVu
+dCBhbmQgcmVzb2x1dGlvbiBzd2l0Y2hpbmcgc2hvdWxkIG5vdCBpbnRlcmZlcmUgDQp3aXRo
+IGVhY2ggb3RoZXIuIFRoZSBEUk0gZnJhbWV3b3JrIHNob3VsZCBndWFyYW50ZWUgdGhhdC4N
+Cg0KSSBjYW5ub3QgcmVwcm9kdWNlIHRoZSBpc3N1ZSwgYnV0IHRoZXJlJ3MgbW9zdCBsaWtl
+bHkgc29tZXRoaW5nIGVsc2UgDQpoYXBwZW5pbmcgaGVyZS4gSG93IGNhbiB0aGUgc3lzdGVt
+IHN3aXRjaCByZXNvbHV0aW9uIGFuZCBjaGFuZ2UgdGhlIA0KbW91c2UgYXQgdGhlIHNhbWUg
+dGltZT8NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gSGkgVG9tYXMsDQo+IEdv
+b2QgZGF5IQ0KPiBNYXkgSSB1bmRlcnN0YW5kIHRoZSByZXZpZXcgc3RhdHVzLCBvciBpcyB0
+aGVyZSBhbnl0aGluZyBJIGNhbiBkbyB0byBpbXByb3ZlIGl0PyBUaGFua3MhDQo+IA0KPiBC
+ZXN0IFJlZ2FyZHMsDQo+IAlLdW8tSHNpYW5nIENob3UNCj4gDQo+IEJlc3QgUmVnYXJkcywN
+Cj4gICAJS3VvLUhzaWFuZyBDaG91DQo+IA0KPiBCZXN0IHJlZ2FyZHMNCj4gVGhvbWFzDQo+
+IA0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IEt1b0hzaWFuZyBDaG91IDxrdW9oc2lhbmdfY2hv
+dUBhc3BlZWR0ZWNoLmNvbT4NCj4+IC0tLQ0KPj4gICAgZHJpdmVycy9ncHUvZHJtL2FzdC9h
+c3RfbWFpbi5jIHwgNDggKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLQ0KPj4g
+ICAgMSBmaWxlIGNoYW5nZWQsIDM2IGluc2VydGlvbnMoKyksIDEyIGRlbGV0aW9ucygtKQ0K
+Pj4NCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tYWluLmMNCj4+
+IGIvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbWFpbi5jIGluZGV4IDc5YTM2MTg2Ny4uMWQ4
+ZmE3MGM1IDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbWFpbi5j
+DQo+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tYWluLmMNCj4+IEBAIC00MSwy
+OCArNDEsNTIgQEAgdm9pZCBhc3Rfc2V0X2luZGV4X3JlZ19tYXNrKHN0cnVjdCBhc3RfcHJp
+dmF0ZSAqYXN0LA0KPj4gICAgCQkJICAgIHVpbnQzMl90IGJhc2UsIHVpbnQ4X3QgaW5kZXgs
+DQo+PiAgICAJCQkgICAgdWludDhfdCBtYXNrLCB1aW50OF90IHZhbCkNCj4+ICAgIHsNCj4+
+IC0JdTggdG1wOw0KPj4gLQlhc3RfaW9fd3JpdGU4KGFzdCwgYmFzZSwgaW5kZXgpOw0KPj4g
+LQl0bXAgPSAoYXN0X2lvX3JlYWQ4KGFzdCwgYmFzZSArIDEpICYgbWFzaykgfCB2YWw7DQo+
+PiAtCWFzdF9zZXRfaW5kZXhfcmVnKGFzdCwgYmFzZSwgaW5kZXgsIHRtcCk7DQo+PiArCXVp
+bnQxNl90IHZvbGF0aWxlIHVzRGF0YTsNCj4+ICsJdWludDhfdCAgdm9sYXRpbGUgakRhdGE7
+DQo+PiArDQo+PiArCWRvIHsNCj4+ICsJCWFzdF9pb193cml0ZTgoYXN0LCBiYXNlLCBpbmRl
+eCk7DQo+PiArCQl1c0RhdGEgPSBhc3RfaW9fcmVhZDE2KGFzdCwgYmFzZSk7DQo+PiArCX0g
+d2hpbGUgKCh1aW50OF90KSh1c0RhdGEpICE9IGluZGV4KTsNCj4+ICsNCj4+ICsJakRhdGEg
+ID0gKHVpbnQ4X3QpKHVzRGF0YSA+PiA4KTsNCj4+ICsJakRhdGEgJj0gbWFzazsNCj4+ICsJ
+akRhdGEgfD0gdmFsOw0KPj4gKwl1c0RhdGEgPSAoKHVpbnQxNl90KSBqRGF0YSA8PCA4KSB8
+ICh1aW50MTZfdCkgaW5kZXg7DQo+PiArCWFzdF9pb193cml0ZTE2KGFzdCwgYmFzZSwgdXNE
+YXRhKTsNCj4+ICAgIH0NCj4+DQo+PiAgICB1aW50OF90IGFzdF9nZXRfaW5kZXhfcmVnKHN0
+cnVjdCBhc3RfcHJpdmF0ZSAqYXN0LA0KPj4gICAgCQkJICB1aW50MzJfdCBiYXNlLCB1aW50
+OF90IGluZGV4KQ0KPj4gICAgew0KPj4gLQl1aW50OF90IHJldDsNCj4+IC0JYXN0X2lvX3dy
+aXRlOChhc3QsIGJhc2UsIGluZGV4KTsNCj4+IC0JcmV0ID0gYXN0X2lvX3JlYWQ4KGFzdCwg
+YmFzZSArIDEpOw0KPj4gLQlyZXR1cm4gcmV0Ow0KPj4gKwl1aW50MTZfdCB2b2xhdGlsZSB1
+c0RhdGE7DQo+PiArCXVpbnQ4X3QgIHZvbGF0aWxlIGpEYXRhOw0KPj4gKw0KPj4gKwlkbyB7
+DQo+PiArCQlhc3RfaW9fd3JpdGU4KGFzdCwgYmFzZSwgaW5kZXgpOw0KPj4gKwkJdXNEYXRh
+ID0gYXN0X2lvX3JlYWQxNihhc3QsIGJhc2UpOw0KPj4gKwl9IHdoaWxlICgodWludDhfdCko
+dXNEYXRhKSAhPSBpbmRleCk7DQo+PiArDQo+PiArCWpEYXRhICA9ICh1aW50OF90KSh1c0Rh
+dGEgPj4gOCk7DQo+PiArDQo+PiArCXJldHVybiBqRGF0YTsNCj4+ICAgIH0NCj4+DQo+PiAg
+ICB1aW50OF90IGFzdF9nZXRfaW5kZXhfcmVnX21hc2soc3RydWN0IGFzdF9wcml2YXRlICph
+c3QsDQo+PiAgICAJCQkgICAgICAgdWludDMyX3QgYmFzZSwgdWludDhfdCBpbmRleCwgdWlu
+dDhfdCBtYXNrKQ0KPj4gICAgew0KPj4gLQl1aW50OF90IHJldDsNCj4+IC0JYXN0X2lvX3dy
+aXRlOChhc3QsIGJhc2UsIGluZGV4KTsNCj4+IC0JcmV0ID0gYXN0X2lvX3JlYWQ4KGFzdCwg
+YmFzZSArIDEpICYgbWFzazsNCj4+IC0JcmV0dXJuIHJldDsNCj4+ICsJdWludDE2X3Qgdm9s
+YXRpbGUgdXNEYXRhOw0KPj4gKwl1aW50OF90ICB2b2xhdGlsZSBqRGF0YTsNCj4+ICsNCj4+
+ICsJZG8gew0KPj4gKwkJYXN0X2lvX3dyaXRlOChhc3QsIGJhc2UsIGluZGV4KTsNCj4+ICsJ
+CXVzRGF0YSA9IGFzdF9pb19yZWFkMTYoYXN0LCBiYXNlKTsNCj4+ICsJfSB3aGlsZSAoKHVp
+bnQ4X3QpKHVzRGF0YSkgIT0gaW5kZXgpOw0KPj4gKw0KPj4gKwlqRGF0YSAgPSAodWludDhf
+dCkodXNEYXRhID4+IDgpOw0KPj4gKwlqRGF0YSAmPSBtYXNrOw0KPj4gKw0KPj4gKwlyZXR1
+cm4gakRhdGE7DQo+PiAgICB9DQo+Pg0KPj4gICAgc3RhdGljIHZvaWQgYXN0X2RldGVjdF9j
+b25maWdfbW9kZShzdHJ1Y3QgZHJtX2RldmljZSAqZGV2LCB1MzINCj4+ICpzY3VfcmV2KQ0K
+Pj4gLS0NCj4+IDIuMTguNA0KPj4NCj4gDQo+IC0tDQo+IFRob21hcyBaaW1tZXJtYW5uDQo+
+IEdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINCj4gU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMg
+R2VybWFueSBHbWJIDQo+IE1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFu
+eQ0KPiAoSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQo+IEdlc2Now6RmdHNmw7xocmVyOiBG
+ZWxpeCBJbWVuZMO2cmZmZXINCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBo
+aWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkg
+R21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2
+ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-Cheers,
-Benjamin
+--------------kX9E0menofnSmumUbLYr70Vv--
 
->
-> > ---
-> >  drivers/hid/intel-ish-hid/ipc/pci-ish.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/hid/intel-ish-hid/ipc/pci-ish.c
-> > b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
-> > index 1c5039081db2..8e9d9450cb83 100644
-> > --- a/drivers/hid/intel-ish-hid/ipc/pci-ish.c
-> > +++ b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
-> > @@ -266,7 +266,8 @@ static void __maybe_unused
-> > ish_resume_handler(struct work_struct *work)
-> >
-> >         if (ish_should_leave_d0i3(pdev) && !dev->suspend_flag
-> >                         && IPC_IS_ISH_ILUP(fwsts)) {
-> > -               disable_irq_wake(pdev->irq);
-> > +               if (device_may_wakeup(&pdev->dev))
-> > +                       disable_irq_wake(pdev->irq);
-> >
-> >                 ish_set_host_ready(dev);
-> >
-> > @@ -337,7 +338,8 @@ static int __maybe_unused ish_suspend(struct device
-> > *device)
-> >                          */
-> >                         pci_save_state(pdev);
-> >
-> > -                       enable_irq_wake(pdev->irq);
-> > +                       if (device_may_wakeup(&pdev->dev))
-> > +                               enable_irq_wake(pdev->irq);
-> >                 }
-> >         } else {
-> >                 /*
-> >
-> > base-commit: d58071a8a76d779eedab38033ae4c821c30295a5
->
->
+--------------0D3tRR0iAjyAn7RMZkuVDNXk
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGp2XMFAwAAAAAACgkQlh/E3EQov+DU
+CRAAvAyBfc9yooroXfaNe0N8UYcYr72RRpmMrH3P51Q69MYT7ATPd9zC463oG6FULmjLJVeLm1wU
+qn9I0Ols6RamCAw3unsGMfgjF2VLn2gOqX5RxPiXdWRynYi6NubSVMSmP4d/eNPNBeH/S7o5sFdd
+ciwgIuKNy1Ga9j3YjEPBYrCL6NSxQfNZalUzAM1jrzcAyC26m49MJr0a6fixSw6neCbWetLEwk04
+fHqGonrapX3+dF5bAPxXBGTJAb6X7fnSbjfB1xcGhVctOIy+Q4CQmR6y+4QpZHbE+kvWp8x3GCbo
+MiHQeENK9Igk6w6etwpkUg/u7NWPsFlbqkSwO9+N3sHmR1gaJTrjkVpb7inZSZPxwsMZ9Yc9F1U0
+P//Z2E8bgoRpHrVBD73Uue5LvlnrhdjEllERPpRmfuAE0OmoGP7GaNOXnTJTqc8d0wrf5Ps9N9k2
+nowjW0EnRdqfb6AhN36GloboqVaVsvEdksXMip22FoUhjvwWvb5XRzwkdMpFKBK+EaJzDiBQulS8
+vr8UEbWRVcumyfF8TTnM+c5UgrChDGh0fgyvuv1RBy1F3OIwx4LzQjVG+d+qlc2C9gM+/eYF4hxV
+A9FgxH0TuezwSgHLn4Le9DVK/RerDkAzRFuEU86mbl6opHRQNHUk1Qdw6eEcsHC6ZvnI8o3RbEQ0
+r4c=
+=CSiN
+-----END PGP SIGNATURE-----
+
+--------------0D3tRR0iAjyAn7RMZkuVDNXk--

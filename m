@@ -2,165 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A90F8467F5B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4891F467F07
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383290AbhLCVe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 16:34:57 -0500
-Received: from mga03.intel.com ([134.134.136.65]:15695 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1354032AbhLCVep (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 16:34:45 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="237000635"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="237000635"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 13:31:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="598116284"
-Received: from skl-02.jf.intel.com ([10.54.74.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 03 Dec 2021 13:31:18 -0800
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Tim Chen <tim.c.chen@linux.intel.com>,
-        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-        Chen Yu <yu.c.chen@intel.com>,
-        Song Bao Hua <song.bao.hua@hisilicon.com>,
-        yangyicong <yangyicong@huawei.com>,
-        Michael Larabel <Michael@MichaelLarabel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] scheduler: Default cluster scheduling to off on x86 hybrid CPU
-Date:   Fri,  3 Dec 2021 12:32:42 -0800
-Message-Id: <0c69821b57261c10818fba146bd31ea88bb41093.1638563225.git.tim.c.chen@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <cover.1638563225.git.tim.c.chen@linux.intel.com>
-References: <cover.1638563225.git.tim.c.chen@linux.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1353782AbhLCVFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 16:05:41 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54246 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243206AbhLCVFj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 16:05:39 -0500
+Received: from mail.kernel.org (unknown [198.145.29.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91CF7B82956
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 21:02:14 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BC8E560E73;
+        Fri,  3 Dec 2021 21:02:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1638565333;
+        bh=Aae9TRQcpxW4Yd/zp6n3Lm0pw3x2oan07wBnj/exvvc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lMampx88aTxtbor/T9R7heUFlzc8mQaYeSKx12NonB7PAIBzqIin1zn6gBxNnAxM8
+         WnmiSiaB3PJ4807w9faKlQ+SlYhy+wgsGnZSXL5rqjfvk3y34AGG6t4HjLqHqo0cRW
+         SHRbyBQKSCbeDsif7YBNjHqXlvDkxr5hsedq2Huo=
+Date:   Fri, 3 Dec 2021 13:02:10 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     yongw.pur@gmail.com
+Cc:     bsingharora@gmail.com, peterz@infradead.org, mingo@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        yang.yang29@zte.com.cn, wang.yong12@zte.com.cn
+Subject: Re: [PATCH linux-next] delayacct: track delays from memory compact
+Message-Id: <20211203130210.f34079f175f28bd1c5c26541@linux-foundation.org>
+In-Reply-To: <1638542272-15187-1-git-send-email-wang.yong12@zte.com.cn>
+References: <1638542272-15187-1-git-send-email-wang.yong12@zte.com.cn>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For x86 hybrid CPUs like Alder Lake, the order of CPU selection should
-be based stricly on CPU priority.  Turn off cluster scheduling
-to avoid interference with such CPU selection order.
+On Fri,  3 Dec 2021 06:37:52 -0800 yongw.pur@gmail.com wrote:
 
-Signed-off-by: Tim Chen <tim.c.chen@linux.intel.com>
----
- arch/x86/kernel/smpboot.c    | 18 ++++++++++++++++++
- drivers/base/arch_topology.c | 10 ++++++++++
- include/linux/topology.h     |  6 ++++++
- kernel/sched/topology.c      |  4 +++-
- 4 files changed, 37 insertions(+), 1 deletion(-)
+> From: wangyong <wang.yong12@zte.com.cn>
+> 
+> Delay accounting does not track the delay of memory compact.
+> When there is not enough free memory, tasks can spend
+> a amount of their time waiting for memory compact.
+> 
+> To get the impact of tasks in direct memory compact, measure
+> the delay when allocating memory through memory compact.
+> 
+> ...
+>
+> --- a/include/linux/delayacct.h
+> +++ b/include/linux/delayacct.h
+> @@ -42,8 +42,13 @@ struct task_delay_info {
+>  	u64 thrashing_start;
+>  	u64 thrashing_delay;	/* wait for thrashing page */
+>  
+> +	u64 compact_start;
+> +	u64 compact_delay;	/* wait for memory compact */
+> +
+> +	u64 freepages_start;
 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index bab5251f8e03..4aa1c859dcea 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -46,6 +46,7 @@
- #include <linux/sched/topology.h>
- #include <linux/sched/hotplug.h>
- #include <linux/sched/task_stack.h>
-+#include <linux/sched/sysctl.h>
- #include <linux/percpu.h>
- #include <linux/memblock.h>
- #include <linux/err.h>
-@@ -135,6 +136,23 @@ void arch_rebuild_cpu_topology(void)
- 	x86_topology_update = false;
- }
- 
-+#ifdef CONFIG_SCHED_CLUSTER
-+void arch_set_def_cluster_topology(void)
-+{
-+	/*
-+	 * For hybrid CPUs, scheduling order between the CPUs should be
-+	 * based strictly on CPU priority. Turn off cluster scheduling
-+	 * for hybrid CPUs.
-+	 */
-+	if (sysctl_sched_cluster > 1) {
-+		if (cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
-+			sysctl_sched_cluster = 0;
-+		else
-+			sysctl_sched_cluster = 1;
-+	}
-+}
-+#endif
-+
- static inline void smpboot_setup_warm_reset_vector(unsigned long start_eip)
- {
- 	unsigned long flags;
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index bb129929410b..a3668cc4b727 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -18,6 +18,7 @@
- #include <linux/init.h>
- #include <linux/rcupdate.h>
- #include <linux/sched.h>
-+#include <linux/sched/sysctl.h>
- 
- static DEFINE_PER_CPU(struct scale_freq_data __rcu *, sft_data);
- static struct cpumask scale_freq_counters_mask;
-@@ -213,6 +214,15 @@ void __weak arch_rebuild_cpu_topology(void)
- 	update_topology = 0;
- }
- 
-+#ifdef CONFIG_SCHED_CLUSTER
-+void __weak arch_set_def_cluster_topology(void)
-+{
-+	/* Use cluster topology by default unless disabled in boot option */
-+	if (sysctl_sched_cluster > 1)
-+		sysctl_sched_cluster = 1;
-+}
-+#endif
-+
- /*
-  * Updating the sched_domains can't be done directly from cpufreq callbacks
-  * due to locking, so queue the work for later.
-diff --git a/include/linux/topology.h b/include/linux/topology.h
-index 42bcfd5d9fdb..87d893c05f0c 100644
---- a/include/linux/topology.h
-+++ b/include/linux/topology.h
-@@ -46,6 +46,12 @@
- int arch_update_cpu_topology(void);
- void arch_rebuild_cpu_topology(void);
- 
-+#ifdef CONFIG_SCHED_CLUSTER
-+void arch_set_def_cluster_topology(void);
-+#else
-+static inline void arch_set_def_sched_cluster(void) { };
-+#endif
-+
- /* Conform to ACPI 2.0 SLIT distance definitions */
- #define LOCAL_DISTANCE		10
- #define REMOTE_DISTANCE		20
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 087854d505f7..07dfc4666c09 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1660,6 +1660,8 @@ void set_sched_cluster(void)
- {
- 	struct sched_domain_topology_level *tl;
- 
-+	arch_set_def_cluster_topology();
-+
- 	for (tl = sched_domain_topology; tl->mask; tl++) {
- 		if (tl->sd_flags && (tl->sd_flags() & SD_CLUSTER)) {
- 			if (!sysctl_sched_cluster)
-@@ -1672,7 +1674,7 @@ void set_sched_cluster(void)
- }
- 
- /* set via /proc/sys/kernel/sched_cluster */
--unsigned int __read_mostly sysctl_sched_cluster = 1;
-+unsigned int __read_mostly sysctl_sched_cluster = 2;
- 
- static DEFINE_MUTEX(sched_cluster_mutex);
- int sched_cluster_handler(struct ctl_table *table, int write,
--- 
-2.20.1
+task_delay_info already has a freepages_start, so it fails to compile.
+
+Did you send the correct version?
 

@@ -2,120 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E5646715E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 06:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6687F46714A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 06:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349243AbhLCFOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 00:14:07 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48514 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349280AbhLCFOF (ORCPT
+        id S229864AbhLCFHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 00:07:16 -0500
+Received: from mail-ed1-f42.google.com ([209.85.208.42]:41792 "EHLO
+        mail-ed1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229741AbhLCFHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 00:14:05 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C7CDB825B7
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 05:10:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FF8FC53FD0;
-        Fri,  3 Dec 2021 05:10:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638508240;
-        bh=j6qwodVLZiWt9IpyiJJj3SUWjAMFCthwug2fOloP0/Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CqTIyc9z96ALtOxRoJnCEOlxP/ZL6Xw7Hd/QCgWp405EdVaBoz5JiQiQ6i/vxp+Xj
-         a3VtlCHlDgGwxs207HoKWG/Fc//q5xMzzCPzT2z0lKwKRPRyH4BHA+dGY6v389JdDr
-         utTefIz+iBFD6vIUOvfWMvmojVZGvNcKYLBxzRZEg8nBlP1/43/7VdOqZ23BAyAxGL
-         YP93jM4gn3zOfky/azAZ+8EClmQF7sSAdosN+8HIHIuxFP/NBAccQW+jojXMaf40Fa
-         mqb/7Wrq0CyDbxfC2qOTKzDOTV8gyKuKOvtEB+tAp8e55VJ9qayW+H+pw87bKds3xk
-         XfEUG0IFq3DNw==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Ghiti <alex@ghiti.fr>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] riscv: mm: init: try best to remove #ifdef CONFIG_XIP_KERNEL usage
-Date:   Fri,  3 Dec 2021 13:03:17 +0800
-Message-Id: <20211203050317.2102-6-jszhang@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211203050317.2102-1-jszhang@kernel.org>
-References: <20211203050317.2102-1-jszhang@kernel.org>
+        Fri, 3 Dec 2021 00:07:15 -0500
+Received: by mail-ed1-f42.google.com with SMTP id g14so6628720edb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 21:03:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rprGn8RFY/tiTMnkDGz553s/55a0pvo9AIhDH03fGOA=;
+        b=5G4kWT9xZsLFDx0eVw3RjiOD12U+iPUghK5EInqothOuVSDgSVuXGQQadA0n14/kDS
+         tQpcdyS6rjVfQyD7qs3JKKos7OKemJZ+4+aUoknhzJY6CvljUD9687dLZm0tQBA/AcjN
+         sW9QAgnQbHIx9szfWGLBzWyOxXVXcC9/dHe4v7ggIURdCLwtxgku6JAipezzw/E17OUc
+         zc39HSa2AWCG7/8XRr7jifaLO43KGx4tGgqkKEWqWA3ZvnL11OgEkJPTiornNLv/lsNr
+         +mtpW5otu4HcY7MxV3zoFbQzEI7nvO8kdFLO+D5OC1yE/osCYYz0OCSvpi5yH+shNrHi
+         hx6g==
+X-Gm-Message-State: AOAM531INUXK5FV+KOzr/GB3pFemnY3MD6229prVhJq2uOnv5hiRYlsP
+        7DLatJ7a4NdYmoQSxIRlyVI=
+X-Google-Smtp-Source: ABdhPJym8YGSl5nAchCGiGLIdvklp5kK+KReeVHZfG4+tyT47kY+Gw6Y6t6jsw4dvlHNkZxhTl890g==
+X-Received: by 2002:a17:906:24ca:: with SMTP id f10mr20688895ejb.144.1638507831144;
+        Thu, 02 Dec 2021 21:03:51 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id hc10sm1090382ejc.99.2021.12.02.21.03.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 21:03:50 -0800 (PST)
+Message-ID: <5ac5c18d-d99c-460c-bfff-6674b3651549@kernel.org>
+Date:   Fri, 3 Dec 2021 06:03:49 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] tty: vt: make do_con_write() no-op if IRQ is disabled
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Hurley <peter@hurleysoftware.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20211116144937.19035-1-fmdefrancesco@gmail.com>
+ <1825634.Qa45DEmgBM@localhost.localdomain>
+ <44d83e9c-d8c9-38bf-501c-019b8c2f7b5e@i-love.sakura.ne.jp>
+ <1701119.OD4kndUEs1@localhost.localdomain>
+ <1d05e95c-556a-a34c-99fd-8c542311e2dd@i-love.sakura.ne.jp>
+ <3add7ade-9c9b-2839-5a0c-0a38c4be0e34@i-love.sakura.ne.jp>
+ <CAHk-=wjVL_CLm-+=7qf2obF6f8D+ujysmqp5dKdAb7UEyo1cZg@mail.gmail.com>
+ <86452127-70e8-c0cf-de18-6f98e77849a6@i-love.sakura.ne.jp>
+ <CAHk-=wiXNJ86W=gwAHH1qd+cE9dmfk_dEKFmNa89XH19NhPNkg@mail.gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <CAHk-=wiXNJ86W=gwAHH1qd+cE9dmfk_dEKFmNa89XH19NhPNkg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the #ifdef CONFIG_XIP_KERNEL usage can be divided into the
-following three types:
+On 02. 12. 21, 19:35, Linus Torvalds wrote:
+> On Thu, Dec 2, 2021 at 7:41 AM Tetsuo Handa
+> <penguin-kernel@i-love.sakura.ne.jp> wrote:
+>>
+>>> Looking at the backtrace, I see
+>>>
+>>>     n_hdlc_send_frames+0x24b/0x490 drivers/tty/n_hdlc.c:290
+>>>     tty_wakeup+0xe1/0x120 drivers/tty/tty_io.c:534
+>>>     __start_tty drivers/tty/tty_io.c:806 [inline]
+>>>     __start_tty+0xfb/0x130 drivers/tty/tty_io.c:799
+>>>
+>>> and apparently it's that hdlc line discipline (and
+>>> n_hdlc_send_frames() in particular) that is the problem here.
+>>>
+>>> I think that's where the fix should be.
+>>
+>> Do you mean that we should change the behavior of n_hdlc_send_frames()
+>> rather than trying to make __start_tty() schedulable again?
+> 
+> I wouldn't change n_hdlc_send_frames() itself. It does what it says it does.
+> 
+> But n_hdlc_tty_wakeup() probably shouldn't call it directly. Other tty
+> line disciplines don't do that kind of thing - although I only looked
+> at a couple. They all seem to just set bits and prepare things. Like a
+> wakeup function should do.
+> 
+> So I think n_hdlc_tty_wakeup() should perhaps only do a
+> "schedule_work()" or similar to get that n_hdlc_send_frames() started,
+> rather than doing it itself.
 
-The first one is for functions/declarations only used in XIP case.
+Concurred, this is even documented:
+write_wakeup
+     [DRV] void ()(struct tty_struct *tty)
+This function is called by the low-level tty driver to signal that line 
+discpline should try to send more characters to the low-level driver for 
+transmission. If the line discpline does not have any more data to send, 
+it can just return. If the line discipline does have some data to send, 
+please arise a tasklet or workqueue to do the real data transfer. Do not 
+send data in this hook, it may lead to a deadlock.
 
-The second one is for XIP_FIXUP case. Something as below:
-|foo_type foo;
-|#ifdef CONFIG_XIP_KERNEL
-|#define foo    (*(foo_type *)XIP_FIXUP(&foo))
-|#endif
-
-Usually, it's better to let the foo macro sit with the foo var
-together. But if various foos are defined adjacently, we can
-save some #ifdef CONFIG_XIP_KERNEL usage by grouping them together.
-
-The third one is for different implementations for XIP, usually, this
-is a #ifdef...#else...#endif case.
-
-This patch moves the pt_ops macro to adjacent #ifdef CONFIG_XIP_KERNEL
-and group first usage case into one.
-
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
----
- arch/riscv/mm/init.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
-
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 4a9e3f429042..aeae7d6b2fee 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -40,10 +40,6 @@ EXPORT_SYMBOL(kernel_map);
- phys_addr_t phys_ram_base __ro_after_init;
- EXPORT_SYMBOL(phys_ram_base);
- 
--#ifdef CONFIG_XIP_KERNEL
--extern char _xiprom[], _exiprom[], __data_loc;
--#endif
--
- unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)]
- 							__page_aligned_bss;
- EXPORT_SYMBOL(empty_zero_page);
-@@ -227,10 +223,6 @@ static void __init setup_bootmem(void)
- #ifdef CONFIG_MMU
- static struct pt_alloc_ops pt_ops __initdata;
- 
--#ifdef CONFIG_XIP_KERNEL
--#define pt_ops (*(struct pt_alloc_ops *)XIP_FIXUP(&pt_ops))
--#endif
--
- unsigned long riscv_pfn_base __ro_after_init;
- EXPORT_SYMBOL(riscv_pfn_base);
- 
-@@ -242,6 +234,7 @@ pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
- static pmd_t __maybe_unused early_dtb_pmd[PTRS_PER_PMD] __initdata __aligned(PAGE_SIZE);
- 
- #ifdef CONFIG_XIP_KERNEL
-+#define pt_ops			(*(struct pt_alloc_ops *)XIP_FIXUP(&pt_ops))
- #define trampoline_pg_dir      ((pgd_t *)XIP_FIXUP(trampoline_pg_dir))
- #define fixmap_pte             ((pte_t *)XIP_FIXUP(fixmap_pte))
- #define early_pg_dir           ((pgd_t *)XIP_FIXUP(early_pg_dir))
-@@ -445,6 +438,8 @@ static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
- }
- 
- #ifdef CONFIG_XIP_KERNEL
-+extern char _xiprom[], _exiprom[], __data_loc;
-+
- /* called from head.S with MMU off */
- asmlinkage void __init __copy_data(void)
- {
+thanks,
 -- 
-2.34.1
-
+js
+suse labs

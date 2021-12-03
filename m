@@ -2,64 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F405467C24
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3545467C22
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:01:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245618AbhLCREh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 12:04:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240062AbhLCREe (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 12:04:34 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99283C061353;
-        Fri,  3 Dec 2021 09:01:10 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so4068998otl.8;
-        Fri, 03 Dec 2021 09:01:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=4pLxk7I16UyPlVEly608dE6yaANiOeOiDzOCIy8vIzw=;
-        b=LJqxQ5gmqDmXZRVWGXjXcv8c8wLJeavWLuQiDkpKvGdA2p5B4HWuMHN7FO7bhuxeuY
-         XyRw5fjcCGMDc/BZWLQSR2X6isokgZa0W2tN/Rihr50j3MEb6EIvOavkaYIyEJGoxjcU
-         NjpC8ptVkkp2anyf4+sPulwLVg2+Rb3gSMD/B0LdFiebvE/qO6hOTh5Skzluo+vlUKcY
-         G3SNo4rG5Dm4zbbznb7VrFB6YnX9tUnqqYGj0S3h+CfRyZf0FdkKQtuyzOwBSEwsWUME
-         zDmuu7Va5hZs1MyU0YoySVS/GR9lzSyUEIWdYgFNu+cY5Ea6mgJqyxsKLxfajTMEqxBg
-         CD+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=4pLxk7I16UyPlVEly608dE6yaANiOeOiDzOCIy8vIzw=;
-        b=UA98MM+eVxLhUEGFF291HFEaqMxRxYqppqEW7ZPPL3BDkaJpeHPkjSxVdBYybUqZUA
-         Wx12vrn9DIvP4BXjaS+PhIg0kcAGqeoAEJ7BYMAl7UNhK2gcBe8lrD4GiZXc2m1Q8Zdv
-         pEvv1SSNoImSBXf2mwzyfnApgoap/4+yxlZhWwO0FVi7BMT1SLDfWXQ693W8pZaYPXtT
-         c0/CM3n69YB/QalnTBGiuTCZtDJG+ktc7AKmiikR0BeYG+fDZTTRpGLYIZP4vTg317bx
-         o0KtT+qtCEJFqnKH9OdeVQnD/uEGY5XmkKrf47CW/UQYjGk4x9JTheW80Bai/B946P6c
-         X6ww==
-X-Gm-Message-State: AOAM530ClhMG5XwtEsakSuOKD8TI+QU5lS5QyTWCP49Ba8zNBgtkLY1P
-        LW66RYgSydiZYL7sE6HHoLQHQrqV80hK5qEG3wuYGZ01Hk8=
-X-Google-Smtp-Source: ABdhPJw6hrdacJ62/3uuSmIXkCjCzl0C1Zw3yi2uUMB/pAe+QA6JvioigWOi4C3G4DUZuUvfRsZDsjQM86VN8uF8dVg=
-X-Received: by 2002:a05:6830:30b7:: with SMTP id g23mr16995052ots.159.1638550869641;
- Fri, 03 Dec 2021 09:01:09 -0800 (PST)
+        id S235278AbhLCREc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 12:04:32 -0500
+Received: from foss.arm.com ([217.140.110.172]:51628 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230100AbhLCREb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 12:04:31 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71C801435;
+        Fri,  3 Dec 2021 09:01:06 -0800 (PST)
+Received: from [10.57.0.218] (unknown [10.57.0.218])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4B0203F73B;
+        Fri,  3 Dec 2021 09:01:04 -0800 (PST)
+Subject: Re: [PATCH] ARM: Kconfig: improve ARM_SINGLE_ARMV7M description with
+ Cortex M7
+To:     Giulio Benetti <giulio.benetti@benettiengineering.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mike Rapoport <rppt@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+References: <20211202222002.33456-1-giulio.benetti@benettiengineering.com>
+ <db427a15-231b-957e-3690-73373fec55ea@arm.com>
+ <170aea55-44f3-9cf0-fd88-adf8c66efeb4@benettiengineering.com>
+From:   Vladimir Murzin <vladimir.murzin@arm.com>
+Message-ID: <ea2679ec-9bfd-6a78-a82d-7b160350ddfb@arm.com>
+Date:   Fri, 3 Dec 2021 17:01:05 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-From:   Subhashini Rao Beerisetty <subhashbeerisetty@gmail.com>
-Date:   Fri, 3 Dec 2021 22:30:58 +0530
-Message-ID: <CAPY=qRQJ-YbRi0AStrytsE3ke4vFN9K4Cos2T+b1JKDPJGUVOg@mail.gmail.com>
-Subject: PCI: latency
-To:     linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        kernelnewbies <kernelnewbies@kernelnewbies.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <170aea55-44f3-9cf0-fd88-adf8c66efeb4@benettiengineering.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- [ Please keep me in CC as I'm not subscribed to the list]
+On 12/3/21 4:41 PM, Giulio Benetti wrote:
+> Hi Vladimir,
+> 
+> On 03/12/21 10:30, Vladimir Murzin wrote:
+>> On 12/2/21 10:20 PM, Giulio Benetti wrote:
+>>> ARM_SINGLE_ARMV7M implies Arm Cortex M7 too, so let's add it to
+>>> description with M0/M3/M4.
+>>
+>> Well it also implies M33 and M55. I'd suggest drop specific implementations
+>> from description - so we do not need to update it each time new compatible
+>> core is released. To account newest cores like M33 and M55 you can rephrase
+>> to:
+>> - ARMv7-M/v8-M
+> 
+> This ^^^ is ok for me. Also, I don't see any M0 used at the moment so no ARMv6-M makes sense, if any in the future we can update. I see M3,M4,M7 for the moment, so ARMv7-M. But at the moment no ARMv8-M, or am I wrong?
 
-Hi all,
+We already support PMSAv8 which is ARMv8-M, M33/M55 is in flight [1].
 
-We are using the Linux OS on an x86_64 machine. I need to measure the
-PCIe latency on my system, does kernel have any latency measurement
-module for the PCIe bus?
+> Maybe it would be better to add ARMv8-M when there will really be the support, considering also that ARM_SINGLE_ARMV7M is a bit ambiguous to be used with ARMv8-M. So maybe that could be modified too when an ARMv8-M is added.
+> 
+> What do you think about this?
 
-Thanks,
+Well, I prefer to touch this as rare as possible, and if we touch
+it then ensure we do not need to touch it for a long time ;)
+
+Look at A-class cores, 
+
+config ARCH_MULTI_V7
+        bool "ARMv7 based platforms (Cortex-A, PJ4, Scorpion, Krait)"
+
+it doesn't mention ARMv8, yet it is pretty much possible to run it
+on some cores either bare-metal or as a guest (just look under
+arch/arm/include/asm/cputype.h)
+
+These are just config options, not a legal deeds...
+
+[1] https://lore.kernel.org/linux-arm-kernel/20211201132908.106711-1-vladimir.murzin@arm.com/T/
+
+Cheers
+Vladimir
+
+> 
+> Best regards
+

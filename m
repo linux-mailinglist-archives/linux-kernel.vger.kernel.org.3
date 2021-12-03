@@ -2,84 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 985A946725A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E6B46724E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 07:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378748AbhLCHEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 02:04:52 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:56981 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345605AbhLCHEv (ORCPT
+        id S1378733AbhLCHBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 02:01:07 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:32874 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345605AbhLCHBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 02:04:51 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J53df06TJz4xRC;
-        Fri,  3 Dec 2021 18:01:25 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638514886;
-        bh=SUVbQnKpFA54I6+lh3rt6Aj++o7uT7IfrdkwC1qkkao=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CTFIL+ElB0+MhBAbUx2HFgXBQVZZGCvd1jUoOdkaOw9nDpxTKQbZnpkZyCdY0+atl
-         GLnE1bU8FVpxaXyhA8aJwoy7S0ry1XYyCXKjMjhaYC01Dkdek0/9MoxMhzXOfagI2o
-         aB7+UGpPiDcF5WHMP+hovwWUeSRrifcl+ljKwqe8+ZoB6JaYDlNTqAcLu+uT5H3YOX
-         F3ZAwJcDAlNEi4zzVAdi9o0cAXb+mLL/kxgezpL+L+k4gvoe3bt0mvLrxQKa2adDr2
-         Jyza/uEg0SZHGXyvxqFfeuVbMd+DTQ1lb9hiXZQYZzUZR/k/zi4RojzE8rtDEqjHqk
-         guw7PX0CrDXWg==
-Date:   Fri, 3 Dec 2021 18:01:24 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the hid tree
-Message-ID: <20211203180124.1721cbe4@canb.auug.org.au>
+        Fri, 3 Dec 2021 02:01:05 -0500
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J53Y74W81zcbgT;
+        Fri,  3 Dec 2021 14:57:31 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 3 Dec 2021 14:57:40 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 3 Dec
+ 2021 14:57:39 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <tchornyi@marvell.com>, <vmytnyk@marvell.com>,
+        <davem@davemloft.net>, <kuba@kernel.org>
+Subject: [PATCH -next] net: prestera: acl: fix return value check in prestera_acl_rule_entry_find()
+Date:   Fri, 3 Dec 2021 15:04:18 +0800
+Message-ID: <20211203070418.465144-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GVJp0TQPTsRXCGqVXCSwXdK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/GVJp0TQPTsRXCGqVXCSwXdK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+rhashtable_lookup_fast() returns NULL pointer not ERR_PTR().
+Return rhashtable_lookup_fast() directly to fix this.
 
-Hi all,
+Fixes: 47327e198d42 ("net: prestera: acl: migrate to new vTCAM api")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/net/ethernet/marvell/prestera/prestera_acl.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-After merging the hid tree, today's linux-next build (sparc defconfig)
-failed like this:
+diff --git a/drivers/net/ethernet/marvell/prestera/prestera_acl.c b/drivers/net/ethernet/marvell/prestera/prestera_acl.c
+index da0b6525ef9a..fc7f2fedafd7 100644
+--- a/drivers/net/ethernet/marvell/prestera/prestera_acl.c
++++ b/drivers/net/ethernet/marvell/prestera/prestera_acl.c
+@@ -419,11 +419,8 @@ struct prestera_acl_rule_entry *
+ prestera_acl_rule_entry_find(struct prestera_acl *acl,
+ 			     struct prestera_acl_rule_entry_key *key)
+ {
+-	struct prestera_acl_rule_entry *e;
+-
+-	e = rhashtable_lookup_fast(&acl->acl_rule_entry_ht, key,
+-				   __prestera_acl_rule_entry_ht_params);
+-	return IS_ERR(e) ? NULL : e;
++	return rhashtable_lookup_fast(&acl->acl_rule_entry_ht, key,
++				      __prestera_acl_rule_entry_ht_params);
+ }
+ 
+ static int __prestera_acl_rule_entry2hw_del(struct prestera_switch *sw,
+-- 
+2.25.1
 
-hid-chicony.c:(.text+0x4): undefined reference to `usb_hid_driver'
-hid-chicony.c:(.text+0xc): undefined reference to `usb_hid_driver'
-
-Caused by commit
-
-  93020953d0fa ("HID: check for valid USB device for many HID drivers")
-
-I have marked CONFIG_HID_CHICONY as BROKEN for now.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/GVJp0TQPTsRXCGqVXCSwXdK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGpwMQACgkQAVBC80lX
-0GyBtQf/THK2cZDDhBQjLpDGzqf8zMK+k4fPDx/S0thryzBAlnutvyX2cg5YbuWw
-jSf8TpJV10YMcvuNg5nlB7CAwvC+7rOXIAVWvYEAwOLSWbjH98JzW1mEkOh+42wM
-X8H78mh2fX7KseiVY624gPJCbsEd74Ve+2v63cajLUbDUk1k6LJJuWbPxOelUYnt
-Nq3sPOvpDpduOJOQUPJjtz/qGG6C8G6ko9xFmym8VsKQ5FyMOk73PU2r2QavSf1d
-kK32zDHzm1qFd9UxsFu93NuX3WOsvEz2YSvoURwpXQ2WafMIf4nqJoAU32yAKaVQ
-MPTJ/lL0cRmwuUZgvBfDlUTiQSgw2A==
-=XIwj
------END PGP SIGNATURE-----
-
---Sig_/GVJp0TQPTsRXCGqVXCSwXdK--

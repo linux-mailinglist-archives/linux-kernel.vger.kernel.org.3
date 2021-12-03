@@ -2,135 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04EE14676EB
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D29B4676F0
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380648AbhLCMDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 07:03:21 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:45948 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238939AbhLCMDT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 07:03:19 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4D1891FD3F;
-        Fri,  3 Dec 2021 11:59:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1638532794; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KdazV+5dpFcxcu5IXEP+kgN/NpeXmvpoVUL6S+BnkZ4=;
-        b=zeFPFPekdXm0eeHHD9fukFGRrduVhvLP09oVZXTR84us+XgctbD0Cr0CA8V9TvWmb9hO5C
-        jeZaKurvasjR+ZAMMAKEuSio4ikrCFqOVcy/7L/GdCC1JP/ZAkuSzCMmAHUKQTTXI3P+gq
-        7lsQ0eCfBk16Cq3yVNsYLupTenWnQ54=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1638532794;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KdazV+5dpFcxcu5IXEP+kgN/NpeXmvpoVUL6S+BnkZ4=;
-        b=97fRlWE3/DYli8de6+Duv/6JqJT8Bj06QCOf0ZrA2uZx1ntBxj+iw5JlIijTxVyZKt8tZw
-        g8Y8A3+ScReqkQDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0ADDD13DF5;
-        Fri,  3 Dec 2021 11:59:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 1i6gAboGqmHoOAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 03 Dec 2021 11:59:54 +0000
-Message-ID: <cca17e9f-0d4f-f23a-2bc4-b36e834f7ef8@suse.cz>
-Date:   Fri, 3 Dec 2021 12:59:53 +0100
+        id S1380666AbhLCMEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 07:04:07 -0500
+Received: from foss.arm.com ([217.140.110.172]:48280 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1380642AbhLCMD7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 07:03:59 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 68B981396;
+        Fri,  3 Dec 2021 04:00:35 -0800 (PST)
+Received: from [10.1.29.138] (e127744.cambridge.arm.com [10.1.29.138])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 213453F5A1;
+        Fri,  3 Dec 2021 04:00:31 -0800 (PST)
+Subject: Re: [PATCH v1 2/4] perf script: Add "struct machine" parameter to
+ process_event callback
+To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <20211201123334.679131-1-german.gomez@arm.com>
+ <20211201123334.679131-3-german.gomez@arm.com>
+ <D6A3A8F3-9946-44FE-A70F-42977C6F38A1@linux.vnet.ibm.com>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <38fd4992-63ae-4871-ddfd-27d40b5c48d2@arm.com>
+Date:   Fri, 3 Dec 2021 12:00:26 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] mm/vmscan: add sysctl knobs for protecting the working
- set
+In-Reply-To: <D6A3A8F3-9946-44FE-A70F-42977C6F38A1@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        ValdikSS <iam@valdikss.org.ru>
-Cc:     Alexey Avramov <hakavlad@inbox.lv>, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, corbet@lwn.net, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com,
-        oleksandr@natalenko.name, kernel@xanmod.org, aros@gmx.com,
-        hakavlad@gmail.com, Yu Zhao <yuzhao@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-References: <20211130201652.2218636d@mail.inbox.lv>
- <2dc51fc8-f14e-17ed-a8c6-0ec70423bf54@valdikss.org.ru>
- <20211202135824.33d2421bf5116801cfa2040d@linux-foundation.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20211202135824.33d2421bf5116801cfa2040d@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/21 22:58, Andrew Morton wrote:
-> On Thu, 2 Dec 2021 21:05:01 +0300 ValdikSS <iam@valdikss.org.ru> wrote:
-> 
->> This patchset is surprisingly effective and very useful for low-end PC 
->> with slow HDD, single-board ARM boards with slow storage, cheap Android 
->> smartphones with limited amount of memory. It almost completely prevents 
->> thrashing condition and aids in fast OOM killer invocation.
->> 
->> The similar file-locking patch is used in ChromeOS for nearly 10 years 
->> but not on stock Linux or Android. It would be very beneficial for 
->> lower-performance Android phones, SBCs, old PCs and other devices.
->> 
->> With this patch, combined with zram, I'm able to run the following 
->> software on an old office PC from 2007 with __only 2GB of RAM__ 
->> simultaneously:
->> 
->>   * Firefox with 37 active tabs (all data in RAM, no tab unloading)
->>   * Discord
->>   * Skype
->>   * LibreOffice with the document opened
->>   * Two PDF files (14 and 47 megabytes in size)
->> 
->> And the PC doesn't crawl like a snail, even with 2+ GB in zram!
->> Without the patch, this PC is barely usable.
->> Please watch the video:
->> https://notes.valdikss.org.ru/linux-for-old-pc-from-2007/en/
->> 
-> 
-> This is quite a condemnation of the current VM.  It shouldn't crawl
-> like a snail.
-> 
-> The patch simply sets hard limits on page reclaim's malfunctioning. 
-> I'd prefer that reclaim not malfunction :(
+Hi Athira,
 
-+CC Johannes
+On 02/12/2021 16:03, Athira Rajeev wrote:
+>
+>> On 01-Dec-2021, at 6:03 PM, German Gomez <german.gomez@arm.com> wrote:
+>>
+>> Include a "struct machine*" parameter to the process_event callback in
+>> the scripting layer. This will allow access to the perf_env from within
+>> this callback.
+>>
+>> Followup patches will build on top of this to report the correct name of
+>> the registers in a perf.data file, consistently with the architecture
+>> the file was recorded in.
+>>
+>> Signed-off-by: German Gomez <german.gomez@arm.com>
+>> ---
+>> tools/perf/builtin-script.c                   |  2 +-
+>> .../util/scripting-engines/trace-event-perl.c |  3 ++-
+>> .../scripting-engines/trace-event-python.c    | 23 +++++++++++--------
+>> tools/perf/util/trace-event-scripting.c       |  3 ++-
+>> tools/perf/util/trace-event.h                 |  3 ++-
+>> 5 files changed, 21 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+>> index 9434367af..711132f0b 100644
+>> --- a/tools/perf/builtin-script.c
+>> +++ b/tools/perf/builtin-script.c
+>> @@ -2256,7 +2256,7 @@ static int process_sample_event(struct perf_tool *tool,
+>> 				thread__resolve(al.thread, &addr_al, sample);
+>> 			addr_al_ptr = &addr_al;
+>> 		}
+>> -		scripting_ops->process_event(event, sample, evsel, &al, addr_al_ptr);
+>> +		scripting_ops->process_event(event, sample, evsel, &al, addr_al_ptr, machine);
+> Hi,
+>
+> Looks like the patch is using “machine” to allow access to perf_env__arch and there by to get the “arch” value.
+> But can we use from evsel, like  "perf_env__arch(evsel__env(evsel))” to get arch value instead of including new parameter for “struct machine” ?
+>
+> Thanks
+> Athira
 
-I'd also like to know where that malfunction happens in this case. The
-relatively well known scenario is that memory overloaded systems thrash
-instead of going OOM quickly - something PSI should be able to help with.
+Thanks for the suggestion. It looks like we can skip this patch if we
+can get the arch value that way.
 
-But in your case, if there is no OOM due to the added protections, it would
-mean that the system is in fact not overloaded, just that the normal reclaim
-decisions lead to reclaming something that should be left in memory, while
-there is other memory that can be reclaimed without causing thrashing?
-That's perhaps worse and worth investigating.
-
-> That being said, I can see that a blunt instrument like this would be
-> useful.
-> 
-> I don't think that the limits should be "N bytes on the current node". 
-> Nodes can have different amounts of memory so I expect it should scale
-> the hard limits on a per-node basis.  And of course, the various zones
-> have different size as well.
-> 
-> We do already have a lot of sysctls for controlling these sort of
-> things.  Was much work put into attempting to utilize the existing
-> sysctls to overcome these issues?
-> 
-> 
+Thanks!
+German
 

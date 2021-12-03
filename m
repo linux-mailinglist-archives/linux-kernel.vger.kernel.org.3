@@ -2,89 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 639A6467160
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 06:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A5C467168
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 06:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351764AbhLCFOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 00:14:16 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:59562 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349313AbhLCFOK (ORCPT
+        id S237705AbhLCFWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 00:22:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52024 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231481AbhLCFWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 00:14:10 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B35Ahh1013691;
-        Thu, 2 Dec 2021 23:10:43 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638508243;
-        bh=7YPusAw1dTZ1uA0ZnlzN0Mq+Wg14w8hatYGYAm9krPI=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=vaVxLkvQSAnxHFf+TaSOteUQA4rUuO5Cs48jREOrPjl42i2dkuE+HGfsjxx1k4/DT
-         kLsg7SLEib0xXENuBFwDGiJcRXy8CBkH2XTqCvQUuvGIA3WU3dQ2WaEowTE9dAa2wN
-         TsVwLAszfpfWtGdjnGGUapLaSDcGlp/JekG70SHQ=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B35AhMa084378
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 2 Dec 2021 23:10:43 -0600
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 2
- Dec 2021 23:10:42 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 2 Dec 2021 23:10:42 -0600
-Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B35AeIo002126;
-        Thu, 2 Dec 2021 23:10:40 -0600
-Subject: Re: [PATCH 1/2] arm64: dts: ti: j7200-main: Fix 'dtbs_check'
- serdes_ln_ctrl node
-To:     Kishon Vijay Abraham I <kishon@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-CC:     Tero Kristo <kristo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-References: <20211126084555.17797-1-kishon@ti.com>
- <20211126084555.17797-2-kishon@ti.com>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-Message-ID: <9a1124f3-89c9-5c5d-bd99-03fee830b977@ti.com>
-Date:   Fri, 3 Dec 2021 10:40:39 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 3 Dec 2021 00:22:36 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C462B825B7
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 05:19:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE51C53FC7;
+        Fri,  3 Dec 2021 05:19:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638508751;
+        bh=DIZ3iH9eTHW1kh3AtvEImcM5tdEzpteHHLSK3AhyocI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pwAgFJYrBa6ZaXpfWCune5BzG6L7h1HBmuLVVxnUVumJnJNly8D9n25nol++Q6NrE
+         omijuK2cbfxAN0weD9K0s5YOrmKpa+sXTxvw30B87IOuPW2ty0CSz1BmIrPFZ+ZC7Y
+         Gw90LwhSB7r3c2My/ifoHcj/cjfue3r8HPoRLqLFgGzx5+cBV2Nu/RcEUibuOIfuvJ
+         SHcugi2aJOTLuv3i5ibsKLT1MnzCnwtMk7uy3jIo8qwoIUN2bznKPITIj6XYr+LH43
+         3oKo7rN/NdUvshAWpldSxfqFHfTacl7nM8Es81p38wsHP7hhvDDDUcwsBG3iwXy670
+         JhW8DJiDTf9kQ==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        hpa@zytor.com, Eric Biederman <ebiederm@xmission.com>,
+        Alexandre Ghiti <alex@ghiti.fr>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, kexec@lists.infradead.org
+Subject: [RFC PATCH 0/5] kexec: use IS_ENABLED(CONFIG_KEXEC_CORE) instead of #ifdef
+Date:   Fri,  3 Dec 2021 13:11:52 +0800
+Message-Id: <20211203051157.2160-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20211126084555.17797-2-kishon@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/11/21 2:15 pm, Kishon Vijay Abraham I wrote:
-> Fix 'dtbs_check' in serdes_ln_ctrl (serdes-ln-ctrl@4080) node by
-> changing the node name to mux-controller@4080.
-> 
-> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
-> ---
+Replace the conditional compilation using "#ifdef CONFIG_KEXEC_CORE"
+by a check for "IS_ENABLED(CONFIG_BLK_DEV_INITRD)", to simplify the
+code and increase compile coverage.
 
-Reviewed-by: Aswath Govindraju <a-govindraju@ti.com>
+I only modifies x86, arm, arm64 and riscv, other arch are not touched.
+If the idea is accepted, I will modify all architectures code.
 
->  arch/arm64/boot/dts/ti/k3-j7200-main.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-> index d60ef4f7dd0b..05a627ad6cdc 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-> @@ -32,7 +32,7 @@
->  		#size-cells = <1>;
->  		ranges = <0x00 0x00 0x00100000 0x1c000>;
->  
-> -		serdes_ln_ctrl: serdes-ln-ctrl@4080 {
-> +		serdes_ln_ctrl: mux-controller@4080 {
->  			compatible = "mmio-mux";
->  			#mux-control-cells = <1>;
->  			mux-reg-masks = <0x4080 0x3>, <0x4084 0x3>, /* SERDES0 lane0/1 select */
-> 
+Jisheng Zhang (5):
+  kexec: make crashk_res, crashk_low_res and crash_notes symbols always
+    visible
+  riscv: mm: init: use IS_ENABLED(CONFIG_KEXEC_CORE) instead of #ifdef
+  x86/setup: use IS_ENABLED(CONFIG_KEXEC_CORE) instead of #ifdef
+  arm64: mm: use IS_ENABLED(CONFIG_KEXEC_CORE) instead of #ifdef
+  arm: use IS_ENABLED(CONFIG_KEXEC_CORE) instead of #ifdef
+
+ arch/arm/kernel/setup.c |  7 +++----
+ arch/arm64/mm/init.c    |  9 +++------
+ arch/riscv/mm/init.c    |  6 ++----
+ arch/x86/kernel/setup.c | 10 +++-------
+ include/linux/kexec.h   | 12 ++++++------
+ 5 files changed, 17 insertions(+), 27 deletions(-)
+
+-- 
+2.34.1
 

@@ -2,105 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64250467F12
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:06:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DCDC467F19
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350807AbhLCVJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 16:09:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236111AbhLCVJe (ORCPT
+        id S1383169AbhLCVLh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Dec 2021 16:11:37 -0500
+Received: from coyote.holtmann.net ([212.227.132.17]:34809 "EHLO
+        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236111AbhLCVLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 16:09:34 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC8AC061751;
-        Fri,  3 Dec 2021 13:06:09 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id f125so4335707pgc.0;
-        Fri, 03 Dec 2021 13:06:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XGO9VcIvVBE2m6N0pRqcs519qMf/SHuCfks/jYAJHuM=;
-        b=SQ4Htg19rxC8ajxfuw2S88U5TeUx9IlvmPx2/DGhqjjb8EicSnfva4T9JFFpkcrQ/2
-         oATPAMhk+oFWW3IDj0LyMmcqKN4UT7I8R4mBcQ/ATRehJfwgMfYrqTrYnoYTZOYsczIn
-         jUMuKPkpUta80wRnsxgo85C/jlOfPeFpmP09iW7NhjD+Gz3/c/gNR6lHXXMoVXBUS9xa
-         TpE++rumR8vKUAV4lDUTLUvqP5ptuZGaPXGlDUF/i+LHOPx7uBuQPVdjOg1OM0rt6O8d
-         xzyJTeRFRloafp/6tnS7ax0brRsmCgqdgPeVeNQmcK6NloUmnucWkFzEZ5z2ZGK8CsYR
-         BvfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XGO9VcIvVBE2m6N0pRqcs519qMf/SHuCfks/jYAJHuM=;
-        b=Ni8TEck4CIQ8CbkXe6CO/Z34yWQP/zRCZa/Gd60ztFWf8XCfTk/amlRt0REuDL/Vp8
-         MavNhki9cnKoN1OTHZ3ap30wt92joTIhOmOTx7SsmY3msk5bjqPdjQXGYosueY+j2Pyz
-         oNwSD2hpwuJ7j1TzD/koyUrmQdAlu2STA7oQZ2TFyaYMLHPVufMpp9WEFiJeftNAhxMf
-         lcnE3W/89eQWDXgJDFnKNOwW8zZk76hBRW62HqpTDFeqZeFdfYdethKYT/N9qIWCbckv
-         DM4aVVi0/b2HFh6qP88sz1PC2xTyJ1AzM2QHLU5AcS+1zZJiBS/pzqsS1JHYQ3WDC0H0
-         LjAw==
-X-Gm-Message-State: AOAM532aA5pvj9dKk++NQewgPOL1AuZRhW8VbU5ABu0kZ4iNnT2/FRCp
-        Ub+Cafcz4FnEulSml7DB7JE=
-X-Google-Smtp-Source: ABdhPJxdLnZMfBYdnf6LHNRIDxI05OrA2aWHDs4XVkS25qxNHeZvmuzf22pHqysTBWRBRtLRJFJl4g==
-X-Received: by 2002:a63:ec0a:: with SMTP id j10mr6225320pgh.396.1638565568948;
-        Fri, 03 Dec 2021 13:06:08 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:e637:aa31:c488:b6c0])
-        by smtp.gmail.com with ESMTPSA id on6sm7458874pjb.47.2021.12.03.13.06.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 13:06:07 -0800 (PST)
-Date:   Fri, 3 Dec 2021 13:06:05 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH] module: add in-kernel support for decompressing
-Message-ID: <YaqGvffumIw14TbG@google.com>
-References: <YaMYJv539OEBz5B/@google.com>
- <202112011112.83416FCA2C@keescook>
- <YafYvA5JWMgb6PVy@google.com>
- <202112020012.8B4C205@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202112020012.8B4C205@keescook>
+        Fri, 3 Dec 2021 16:11:34 -0500
+Received: from smtpclient.apple (p5b3d2e91.dip0.t-ipconnect.de [91.61.46.145])
+        by mail.holtmann.org (Postfix) with ESMTPSA id C16E0CED1F;
+        Fri,  3 Dec 2021 22:08:07 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.20.0.1.32\))
+Subject: Re: [PATCH v2 1/2] Bluetooth: Bluetooth: btmtksdio: handle runtime pm
+ only when sdio_func is available
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <73960845c299e2cd22c11b84014ff6ba4758e9bb.1638381385.git.objelf@gmail.com>
+Date:   Fri, 3 Dec 2021 22:08:06 +0100
+Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
+        =?utf-8?B?Ik1hcmstWVcgQ2hlbiAo6Zmz5o+a5paHKSI=?= 
+        <Mark-YW.Chen@mediatek.com>, Soul.Huang@mediatek.com,
+        YN.Chen@mediatek.com, Leon.Yen@mediatek.com,
+        Eric-SY.Chang@mediatek.com, Deren.Wu@mediatek.com,
+        km.lin@mediatek.com, robin.chiu@mediatek.com,
+        Eddie.Chen@mediatek.com, ch.yeh@mediatek.com,
+        posh.sun@mediatek.com, ted.huang@mediatek.com,
+        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
+        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
+        frankgor@google.com, jemele@google.com, abhishekpandit@google.com,
+        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
+        linux-bluetooth@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <D82A5F07-0E51-444C-9179-17AD75F7107D@holtmann.org>
+References: <73960845c299e2cd22c11b84014ff6ba4758e9bb.1638381385.git.objelf@gmail.com>
+To:     Sean Wang <sean.wang@mediatek.com>
+X-Mailer: Apple Mail (2.3693.20.0.1.32)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 12:14:18AM -0800, Kees Cook wrote:
-> On Wed, Dec 01, 2021 at 12:19:08PM -0800, Dmitry Torokhov wrote:
-> > On Wed, Dec 01, 2021 at 11:24:35AM -0800, Kees Cook wrote:
-> > > On Sat, Nov 27, 2021 at 09:48:22PM -0800, Dmitry Torokhov wrote:
-> > > >  /* Flags for sys_finit_module: */
-> > > >  #define MODULE_INIT_IGNORE_MODVERSIONS	1
-> > > >  #define MODULE_INIT_IGNORE_VERMAGIC	2
-> > > > +#define MODULE_INIT_COMPRESSED_DATA	4
-> > > 
-> > > bikeshedding: adding "_DATA" seems redundant/misleading? The entire
-> > > module is compressed, so maybe call it just MODULE_INIT_COMPRESSED ?
-> > 
-> > OK, or maybe MODULE_INIT_COMPRESSED_FILE since we are indeed dealing
-> > with a file?
+Hi Sean,
+
+> Runtime pm ops is not aware the sdio_func status that is probably
+> being disabled by btmtksdio_close. Thus, we are only able to access the
+> sdio_func for the runtime pm operations only when the sdio_func is
+> available.
 > 
-> Sounds good to me! :)
-> 
-> As far as my tangent on using the crypto subsystem, I think that looks
-> like a long path, so your existing routines are likely the right place
-> to start. I still wonder if it might be able to use of the "acomp" API
-> instead of calling directly into the specific decompressor.
+> Fixes: 7f3c563c575e7 ("Bluetooth: btmtksdio: Add runtime PM support to SDIO based Bluetooth")
+> Co-developed-by: Mark-yw Chen <mark-yw.chen@mediatek.com>
+> Signed-off-by: Mark-yw Chen <mark-yw.chen@mediatek.com>
+> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+> ---
+> v2: not check HCI_RUNNING from a driver, use an internal flag instead
+> ---
+> drivers/bluetooth/btmtksdio.c | 10 ++++++++++
+> 1 file changed, 10 insertions(+)
 
-I looked at the acomp and it still needs preallocation of the output
-buffer, so it has to wait for your "get worst size" API additions before
-it can be used. But ideally I'd have some streaming option where I could
-feed it chunks of data and consume output...
+patch has been applied to bluetooth-next tree.
 
-Also, regarding your comment about not changing free_copy() but move
-this logic to load_module(): free copy is called twice there, both in
-success and error paths, and can't really be reduced to one call site
-even with "jumping backwards goto", so I'd be forced to duplicate this
-logic in 2 places, which is not great. Or did I misunderstand your idea?
+Regards
 
-Thanks.
+Marcel
 
--- 
-Dmitry

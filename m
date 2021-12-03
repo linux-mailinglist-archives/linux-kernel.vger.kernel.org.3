@@ -2,154 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF8F467D3D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01CDA467D40
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:25:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382679AbhLCS23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 13:28:29 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:48796 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241688AbhLCS21 (ORCPT
+        id S1382688AbhLCS3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 13:29:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233740AbhLCS3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 13:28:27 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 259FA1FD3C;
-        Fri,  3 Dec 2021 18:25:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638555902; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eV3OmMVm/NWdly/P2YCXm8g5vG08JX/vYpooIV4zaHM=;
-        b=P7zR711xL2stvUGx6l6vVCieltuwJ7iV6UsAhFInFLaRmH8OJdSujjmdkyf4YrNrIT79E/
-        ZYuQCHGjcPMPXVGMFoAqnhbzDrq9e3ZueDbczIi9W0+stZnoOhH7yqYmjT3d7uzr/o4F3D
-        ArNTust0WbmyWA/ziUPunMb3o5HF4ds=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DEC8D13EC7;
-        Fri,  3 Dec 2021 18:25:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kezINP1gqmHYYQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Fri, 03 Dec 2021 18:25:01 +0000
-Date:   Fri, 3 Dec 2021 19:25:00 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Message-ID: <20211203182500.GD16798@blackbody.suse.cz>
-References: <20211018143619.205065-6-longman@redhat.com>
- <20211115193122.GA16798@blackbody.suse.cz>
- <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
- <20211116175411.GA50019@blackbody.suse.cz>
- <293d7abf-aff6-fcd8-c999-b1dbda1cffb8@redhat.com>
- <YaZbXArNIMNvwJD/@slm.duckdns.org>
- <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
- <Yaem+r/YZ9BNXv9R@slm.duckdns.org>
- <4a021678-1896-2d16-4075-f626c7ab8513@redhat.com>
- <8f56f7a3-1d4b-679b-7348-d8ecb4ef3d6c@redhat.com>
+        Fri, 3 Dec 2021 13:29:02 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE168C061353
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 10:25:37 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id w1so15031938edc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 10:25:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Or/JmgPTS79GqZIutDkpHnEjHVYD0LU+lzufkfg0YQw=;
+        b=WTkKNkRE6R418ysyxmvF8zDurfo/zAOdLc0UOp7eCzeFJefSW8HET1IAYuo+Taimiy
+         p4iweJpk9xplCCWJEpzAorhhQJWPSFavF78h6ld1rIUuOva5uei/OUOvEgUzYiVZm1wt
+         QpKnqVIUdp4omi7wXkYSNGbpjyco2jCVtE1Lw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Or/JmgPTS79GqZIutDkpHnEjHVYD0LU+lzufkfg0YQw=;
+        b=41KgwsTn+lNFUdOTEq64Tji6nOv8CtaNBX7cuIoY1zcJNnQFIOqlcYK4uky34YLmVH
+         Eh2u3uY0pQudjqwA4UhvR/ncz999hpkVf0EFFyICxTWWRcgekwmS195rlMxShXh6fNQV
+         Gb+e77HZFHeX0uo3J9NSlVnd7/TZM7WP9e5pS6yR756Vi5m8WzyaWTNJYZ2kZGNAL2vI
+         urgD0PCrvvkHZjaWeHQr0fOghPeCk1kA4pyeoGa+nDCUyE39P0Fsq4+rRPlRLOfz1wu0
+         aZJx4Mj9RBUpQ1VSdj/dWiAUjfoBWfTlcWJXsLb8gk1pCfnGj0dV4+mifiTB2I2Ol0t2
+         x+/w==
+X-Gm-Message-State: AOAM531fqZgyKgg03zoOYfCHrjW6/HwWotFgWZLJmCMRx6Xul9EZ3qHX
+        PpgZG2dCdzefqCxI1UebnsCa5t2Zghfqf8kB
+X-Google-Smtp-Source: ABdhPJxTF87C39kEyL4hVwIbR62oDNKdwCLqZe0CEDIyBiw3K3M5ffp4pUwpfCL+Om1/jNQrXaa4rQ==
+X-Received: by 2002:a05:6402:4389:: with SMTP id o9mr28916141edc.138.1638555936176;
+        Fri, 03 Dec 2021 10:25:36 -0800 (PST)
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
+        by smtp.gmail.com with ESMTPSA id x22sm2322609ejc.97.2021.12.03.10.25.33
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 10:25:34 -0800 (PST)
+Received: by mail-wr1-f53.google.com with SMTP id u1so7410171wru.13
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 10:25:33 -0800 (PST)
+X-Received: by 2002:adf:f8c3:: with SMTP id f3mr23456435wrq.495.1638555933321;
+ Fri, 03 Dec 2021 10:25:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ctP54qlpMx3WjD+/"
-Content-Disposition: inline
-In-Reply-To: <8f56f7a3-1d4b-679b-7348-d8ecb4ef3d6c@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211201193750.2097885-1-catalin.marinas@arm.com>
+ <CAHc6FU7gXfZk7=Xj+RjxCqkmsrcAhenfbeoqa4AmHd5+vgja7g@mail.gmail.com>
+ <CAHk-=wiQAQTGdMNLCKwgnt4EiAXf7Bm6p7NQx5-31S9-qPD8jg@mail.gmail.com> <CAHc6FU6r-CsMHkWzxEm237mV2vZ2O9g_D7BbCPeaA2qX0dpi0g@mail.gmail.com>
+In-Reply-To: <CAHc6FU6r-CsMHkWzxEm237mV2vZ2O9g_D7BbCPeaA2qX0dpi0g@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 3 Dec 2021 10:25:17 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi12AStfPrXLjki_SLc5qqDwYX21bJLp10mynNQj7u8FA@mail.gmail.com>
+Message-ID: <CAHk-=wi12AStfPrXLjki_SLc5qqDwYX21bJLp10mynNQj7u8FA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] Avoid live-lock in fault-in+uaccess loops with
+ sub-page faults
+To:     Andreas Gruenbacher <agruenba@redhat.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-btrfs <linux-btrfs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 3, 2021 at 10:12 AM Andreas Gruenbacher <agruenba@redhat.com> wrote:
+>
+> It happens when you mmap a file and write the mmapped region to
+> another file, for example.
 
---ctP54qlpMx3WjD+/
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Do you actually have such loads? Nobody should use mmap() for
+single-access file copy purposes. It's slower than just doing the copy
+exactly due to page fault overhead.
 
-Hello Longman.
+In other words, you seem to be worrying about the performance of a
+load that is _explicitly_ badly written. You should be fixing the
+application, not making the kernel do stupid things.
 
-On Wed, Dec 01, 2021 at 08:28:09PM -0500, Waiman Long <longman@redhat.com> =
-wrote:
-> 1) The limitation that "cpuset.cpus" has to be a superset of child's
-> "cpuset.cpus" has been removed as a new patch to remove that limitation w=
-ill
-> be added.
+Also, it's worth noting that that situation should be caught by the
+page-in code, which will map multiple pages in one go
+(do_fault_around() - for when the pages are cached), and do the
+readahead logic (filemap_fault() - for when the pages aren't in the
+page cache).
 
-Superb!
+Both of which are a lot more important than the "synchronously fault
+in pages one at a time".
 
-> 2) The initial transition from "member" to partition root now requires th=
-at
-> "cpuset.cpus" overlap with that of the parent's "cpuset.cpus" instead of
-> being a superset.
-
-That's sensible.
-
-> For the transition back to "member", I haven't changed the current wording
-> of forcing child partition roots to become "member" yet. If you think
-> keeping them as invalid partition root is better, I can made that change
-> too.
-
-I wrote I was indifferent about this in a previous mail but when I think
-about it now, switching to invalid root is perhaps better than switching
-to member since it'd effectively mean that modifications of the parent
-config propagate (permanently) also to a descendant config, which is
-an undesired v1-ism.
-
-
-> Please let me know what other changes you would like to see.
-
-I hope my remarks below are just clarifications and not substantial
-changes. Besides that I find your new draft good. Thanks!
-
-> [...]
-
-> =A0=A0 =A0An invalid partition root can be reverted back to a valid one
-> =A0=A0 =A0if none of the validity constraints of a valid partition root
-> =A0=A0 =A0are violated.
-
-s/can be/will be/=20
-
-(I understand the intention is to make it asynchronously and
-automatically, i.e. without writing into the affected descendant(s)
-cpuset.partition again.)
-
-> =A0=A0 =A0Poll and inotify events are triggered whenever the state of
-> =A0=A0 =A0"cpuset.cpus.partition" changes.=A0 That includes changes cause=
-d by
-> =A0=A0 =A0write to "cpuset.cpus.partition", cpu hotplug and other changes
-> =A0=A0 =A0that make the partition invalid.
-
--> that change validity status
-
-(In accordance with the comment above.)
-
-
-Michal
-
---ctP54qlpMx3WjD+/
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQTiq06H1IhXbF2mqzsiXqxkP0JkRwUCYapg+AAKCRAiXqxkP0Jk
-R60gAQCV8E8cIvOn/Hr5KboWD+7obSggVivpR3LxikBIuT9raQD+OptMUIwAN0Mk
-MnWqFSlaobxSAqN0VorYNkJ17mv9dAc=
-=q7Dx
------END PGP SIGNATURE-----
-
---ctP54qlpMx3WjD+/--
+                Linus

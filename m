@@ -2,114 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB3F4675F4
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4668C4675F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380291AbhLCLP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 06:15:58 -0500
-Received: from foss.arm.com ([217.140.110.172]:47518 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235997AbhLCLP5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 06:15:57 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 941BF1396;
-        Fri,  3 Dec 2021 03:12:33 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.66.214])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A8E103F5A1;
-        Fri,  3 Dec 2021 03:12:31 -0800 (PST)
-Date:   Fri, 3 Dec 2021 11:12:28 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Ben Dai <ben.dai9703@gmail.com>
-Cc:     samitolvanen@google.com, ndesaulniers@google.com,
-        rostedt@goodmis.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Ben Dai <ben.dai@unisoc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Peter Zijlstra <peter.zijlstra@arm.com>
-Subject: Re: [PATCH] arm64: fix the address of syscall in arch_syscall_addr
- if CFI is enabled
-Message-ID: <Yan7nD6U1I0m5uKY@FVFF77S0Q05N>
-References: <20211203052908.7467-1-ben.dai@unisoc.com>
+        id S1380300AbhLCLQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 06:16:44 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:54210 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235997AbhLCLQn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 06:16:43 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B3BDBdN112705;
+        Fri, 3 Dec 2021 05:13:11 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1638529991;
+        bh=GrKJIZ02eZdfcKmB7j5fDaxR+HIVNYkC4fwMiMR4Wcg=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=QQdZnqOolvTlErih4CD/hmoZgB90kqaHKWV8juSA+kWFsFf3ssQUcUITkcNF5ntFl
+         rb5Djz6TdiW7A/+qvMP9S0PUwQCPpJ9twuRe97x7aB/nOdFdo95mTn173T0sew31Hq
+         oa1BnsgFFo7RDAzL/7EBj+2N/dkLVdTnzRjcD4Ew=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B3BDBBE022837
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 3 Dec 2021 05:13:11 -0600
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 3
+ Dec 2021 05:13:11 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 3 Dec 2021 05:13:11 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B3BDAwd093223;
+        Fri, 3 Dec 2021 05:13:11 -0600
+Date:   Fri, 3 Dec 2021 16:43:10 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Nishanth Menon <nm@ti.com>
+CC:     Rob Herring <robh+dt@kernel.org>, Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-omap@vger.kernel.org>, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH] arm64: dts: ti: k3-am642: Fix the L2 cache sets
+Message-ID: <20211203111308.zfxczgywmjzplbha@ti.com>
+References: <20211113043635.4296-1-nm@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20211203052908.7467-1-ben.dai@unisoc.com>
+In-Reply-To: <20211113043635.4296-1-nm@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ben,
+On 12/11/21 10:36PM, Nishanth Menon wrote:
+> A53's L2 cache[1] on AM642[2] is 256KB. A53's L2 is fixed line length
+> of 64 bytes and 16-way set-associative cache structure.
 
-Please Cc the arm64 maintainers for arm64 patches, you can find the relevant
-folk in the MAINTAINERS file, and you can use the get_maintainer.pl script to
-find them automatically (e.g. with `./scripts/get_maintainer.pl ${PATCH}` or
-`./scripts/get_maintainer.pl -f ${FILE}`).
+This time the commit message is correct :-)
 
-For arm64 patches, you should also see LAKML
-(linux-arm-kernel@lists.infradead.org).
+Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
 
-I've added Will and Catalin now, and Ard and Peter too since they've btoh been
-fighting with things in this area.
-
-On Fri, Dec 03, 2021 at 01:29:08PM +0800, Ben Dai wrote:
-> With CONFIG_CFI_CLANG, the addresses in sys_call_table[] actually point to
-> jump instructions like "b __arm64_sys_*", and if CONFIG_LTO_CLANG_FULL is
-> enabled, the compiler will not generate a symbol for each jump. It causes
-> syscall tracer can't get symbol name in find_syscall_meta() and fail to
-> initialize.
 > 
-> To fix this problem, implement an strong definition of arch_syscall_addr()
-> to get the actual addresses of system calls.
+> 256KB of L2 / 64 (line length) = 4096 ways
+> 4096 ways / 16 = 256 sets
 > 
-> Signed-off-by: Ben Dai <ben.dai@unisoc.com>
+> Fix the l2 cache-sets.
+> 
+> [1] https://developer.arm.com/documentation/ddi0500/j/Level-2-Memory-System/About-the-L2-memory-system?lang=en
+> [2] https://www.ti.com/lit/pdf/spruim2
+> 
+> Fixes: 8abae9389bdb ("arm64: dts: ti: Add support for AM642 SoC")
+> Reported-by: Peng Fan <peng.fan@nxp.com>
+> Signed-off-by: Nishanth Menon <nm@ti.com>
 > ---
->  arch/arm64/kernel/syscall.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
+>  arch/arm64/boot/dts/ti/k3-am642.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
-> index 50a0f1a38e84..2b911603966b 100644
-> --- a/arch/arm64/kernel/syscall.c
-> +++ b/arch/arm64/kernel/syscall.c
-> @@ -12,6 +12,8 @@
->  #include <asm/debug-monitors.h>
->  #include <asm/exception.h>
->  #include <asm/fpsimd.h>
-> +#include <asm/insn.h>
-> +#include <asm/patching.h>
->  #include <asm/syscall.h>
->  #include <asm/thread_info.h>
->  #include <asm/unistd.h>
-> @@ -19,6 +21,25 @@
->  long compat_arm_syscall(struct pt_regs *regs, int scno);
->  long sys_ni_syscall(void);
->  
-> +#ifdef CONFIG_CFI_CLANG
-> +unsigned long __init arch_syscall_addr(int nr)
-> +{
-> +	u32 insn;
-> +	unsigned long addr = (unsigned long)sys_call_table[nr];
-> +
-> +	/*
-> +	 * Clang's CFI will replace the address of each system call function
-> +	 * with the address of a jump table entry. In this case, the jump
-> +	 * target address is the actual address of the system call.
-> +	 */
-> +	aarch64_insn_read((void *)addr, &insn);
-> +	if (likely(aarch64_insn_is_b(insn)))
-> +		addr += aarch64_get_branch_offset(insn);
+> diff --git a/arch/arm64/boot/dts/ti/k3-am642.dtsi b/arch/arm64/boot/dts/ti/k3-am642.dtsi
+> index e2b397c88401..8a76f4821b11 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am642.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am642.dtsi
+> @@ -60,6 +60,6 @@ L2_0: l2-cache0 {
+>  		cache-level = <2>;
+>  		cache-size = <0x40000>;
+>  		cache-line-size = <64>;
+> -		cache-sets = <512>;
+> +		cache-sets = <256>;
+>  	};
+>  };
 
-The problemn is not your fault, but I absolutely hate this, because we're
-bodging around the compiler having broken stuff for us in the first place.
-We've been encountering more of these cases over time, and had we been aware of
-them to begin with we'd have strongly pushed back on marging the CFI patches
-until the compiler offered a better solution.
-
-My view is that the current clang CFI scheme is broken by design here, and we
-should mark tracing as incompatible with it for now, and work with the compiler
-folk to get a scheme that actually works, rather than trying to bodge around
-it.
-
-Thanks,
-Mark.
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

@@ -2,510 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3FAC467860
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:30:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F58467864
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381139AbhLCNeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 08:34:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39526 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381060AbhLCNd4 (ORCPT
+        id S1381099AbhLCNeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 08:34:23 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:4064 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1381157AbhLCNeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 08:33:56 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D9CC061757
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 05:30:32 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so2226599wmc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 05:30:32 -0800 (PST)
+        Fri, 3 Dec 2021 08:34:15 -0500
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B3CW9Zj032625;
+        Fri, 3 Dec 2021 13:30:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=TvoPsv1mQ3e9VKuBkvVcISpJTgbdacWxUg7L6CWCzCc=;
+ b=bfB206ZRt/jK0O6lVGwgGKJbuSDaiS179fDgZOKE7lHNfo4pel6EERK8NR/va5k7bQhU
+ KWwxUjuEkCIvSj4mSRQCrtyoK2ArROFGwoXXJA55lJRPQdFn/EZa1od7901PeQOtMF71
+ MWjPXxKlvNjoW4O4/WSoMHv/HVTavy+O7vGzr2cdW02Usth5PpV9aRxRnLfL1VM0fPVS
+ jNX7UjXOKtagx0n+uLl3EkyyadiHHrcstTmxNYMuUwsTrFWYs88msc5Ij9yViLuNiuOh
+ VC01n1Ok62ukBdCcrz2OZv4G0Xl+QobSgVvgku/r6mkr6lWb6AQZd04qajJgmiOSJJUZ rQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cp9r5fdkq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 03 Dec 2021 13:30:41 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B3DKvPM171790;
+        Fri, 3 Dec 2021 13:30:40 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2106.outbound.protection.outlook.com [104.47.55.106])
+        by userp3030.oracle.com with ESMTP id 3ck9t66aqn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 03 Dec 2021 13:30:40 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cKXHLOE6EeLSmx1ABkkfQcR94eSqh3Wce5CvC0m9i4JlhlV4oELQRvGyzKL2AuARs9+kcpEltRT9vBASLVcRUX+ZCOpvdMKGFcZOTVIaSBr+fHNUYXrUwYM3sgPKCebbw7nFJ8nRatMcVqgNMhgRQpQ9KdG46p5xcMKl5jNaqB3IDOy02as2tZAeL2f6QufOKO66uDiFL6kR+GTuoQZGhoxhJJdaWAtFBdzcHkpMV8mHhROXyRkIHb0F4w9P0dXaWIQOvuFNSy/BHB++8oS3hab/ha0vLfBBPJ+rM9hVPSzlwG91y82Y54y/VdGmj4OhG2fs4ZEvIZi4Do8FRO3gyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TvoPsv1mQ3e9VKuBkvVcISpJTgbdacWxUg7L6CWCzCc=;
+ b=nVOrkvT8fQX1TJ8maQlV+Zf7TOQnbvhJBAku7IVvIZF1MAZi1NVcJc0m3c1m/odINRX5G9oD5i+yCrws8GCxLF6jHkeo9EnayJU8UaEtGzKS/hDUi3/GWCtnzfm+/Ye+UhriUXGsd22xSupsA7pa25mlUm7fFM7/WL/7FJ3CGbXtgzFKiWnFMqi0MykLbpCiqMiNPtNnu3OvSZzSSA1tSLl2N64aeSq1C0ubQuTSmnBg4JV9u5yeHKQ/Dbx6dTUlnrsUPDZKAHZKy6W83MjpQROVUaxhhDofG/T8AHkFx+I0d+VDyIefU0anWSF+19R2GvGLD1U/3s3IXmBTT+ulYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=E72nks27R+FTfv7Xo66RHLQTl4ZrJaRM3vx6caSIRwg=;
-        b=WfJex636x0X4ZYsbi3rPBG6l2q/sXpLc8YNw003RNi+leq68/spntkyuEmo9oIE+Vt
-         kS47R4AgSXsvpG8yemg4PKZLPYLiAHAgV0l2LbqMrDhXWtLbMzRhuUTKCYAzDsj0V7U6
-         Gyg4hXN6i8r84UhU1jTMO4v+8tGUKrlzMSTqfRP+ZM1oK+0Ze3Al03wUHWZ4bZ8GrnZL
-         M9rfsx5NS6HL7pG7RGHuyI3utwLmo18Ay9vR0hvuiL/OzV0wSRxzBBYVVopVUDbZzeWr
-         LQNUgkwrZNSyGICRZ5ZqAL8y7tgyPIc4doPJYvmFThMXi87bQBbCuMEtsz9wjJlOjDQ1
-         7JxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=E72nks27R+FTfv7Xo66RHLQTl4ZrJaRM3vx6caSIRwg=;
-        b=7+yBWMbdm9NihUx+IqIa9WSMIPpWgCi12/B3mJfD+VcycSh8BAuKyj2OhYlVXUyuet
-         ypTcRaHI64r1QWofRasb1W8lCLFrjbSKtrQlWQTZrMPth+pOXsY8rum/DkOVFbXlNI9H
-         LK/u/oylN1MByzpO2GKX0Ok2stoQby7gbhFzkn8cZqI7VsOD4JbZMAsjmYK5b6x4MTah
-         wxVaRzJfTGz/HyJTHbYBRwvHAl/Zh9vwQ8ZYjd0wxnXQ7X/WbJtG1/h0TN/fGhXhV7PX
-         TDyuoOosgIaWxbrzm8wKuJAJt/p89VbzP5bynfRgjBkAifbCtYqRWvPtEJsAc1IEY2t9
-         Fk0g==
-X-Gm-Message-State: AOAM532OoRdp/SWpoBNohvQ3CwRAef49gvCwL+TM1oCT7OvVqjUbDrdp
-        do6Ly5KWOJoZUJJ/fBM9H7UlVRd12gtO6Oon
-X-Google-Smtp-Source: ABdhPJyAkfH4QBWyJPt0wk8qllmUOQoJGCDA+UinVqR9iD8Qb+n3Ybaf5fhBTtOXmHjKSYCVmk8HHQ==
-X-Received: by 2002:a05:600c:a42:: with SMTP id c2mr15082127wmq.154.1638538230788;
-        Fri, 03 Dec 2021 05:30:30 -0800 (PST)
-Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
-        by smtp.gmail.com with ESMTPSA id j11sm2755910wrt.3.2021.12.03.05.30.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 05:30:30 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH v12 7/7] selftests: gpio: add test cases for gpio-sim
-Date:   Fri,  3 Dec 2021 14:30:03 +0100
-Message-Id: <20211203133003.31786-8-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20211203133003.31786-1-brgl@bgdev.pl>
-References: <20211203133003.31786-1-brgl@bgdev.pl>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TvoPsv1mQ3e9VKuBkvVcISpJTgbdacWxUg7L6CWCzCc=;
+ b=CELUAIx9VyxC/XFFHEkaEJTG8BYff2wRwLa/4pYpRxU3qboqR5ZWGPywr8tsulNIbnBXbp+mukZPZp1E/9BejrjQZTuaB6ztiNc750K46gBnsUnjne3zMlrDM05vM523Peq8ADmGVOR/Q4Cap6XAse6tvRwiASof16GKm/1+LrM=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by MWHPR10MB1568.namprd10.prod.outlook.com
+ (2603:10b6:300:26::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Fri, 3 Dec
+ 2021 13:30:38 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::7194:c377:36cc:d9f0]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::7194:c377:36cc:d9f0%6]) with mapi id 15.20.4734.027; Fri, 3 Dec 2021
+ 13:30:38 +0000
+Date:   Fri, 3 Dec 2021 16:30:13 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Zhou Qingyang <zhou1615@umn.edu>
+Cc:     kjlu@umn.edu, Neil Armstrong <narmstrong@baylibre.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Maxime Jourdan <mjourdan@baylibre.com>,
+        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] media: meson: vdec: Fix a NULL pointer dereference in
+ amvdec_add_ts()
+Message-ID: <20211203133013.GJ9522@kadam>
+References: <20211201084108.GE9522@kadam>
+ <20211202160357.75173-1-zhou1615@umn.edu>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211202160357.75173-1-zhou1615@umn.edu>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNAP275CA0013.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4c::18)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: from kadam (102.222.70.114) by JNAP275CA0013.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4c::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16 via Frontend Transport; Fri, 3 Dec 2021 13:30:27 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f4835418-c2e0-4ba1-eca7-08d9b66117ee
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1568:
+X-Microsoft-Antispam-PRVS: <MWHPR10MB1568E062676F51298C1652C48E6A9@MWHPR10MB1568.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hgUCkrAV1IGtvQmEiDSYcKSvcuE35CQzhMw4wamMILXHjefSrLPQ6KQU1VfiYj3GloOS81Seb2OEOP9gXe8U5ImoxHUIgNV29i84zEqs0AiNaz0/aPS/q/LVeuFJs4JXnDpkI55IM+ZnXM5auMiYTw++VtyJD4JlLAJyUV1q4ebSmO8zIUR6BbSrqU46wkFPerAgNR28fD8Mqe10RliDapZhiV2U6SdFuwY+yOYS0wYXdzOLAJNue7TOegKIQaWEgbETA4JvozoNs3TRhHSkbLJZQjIEInShSjZGa3NtPnsfqeTGf8SsBB5n0PLAwTMVWAXhh7yqV1+FWMao/DcpK7KOs0puzhhHtBBtiR7t4cgmLANFMSWttMgLiBiG58Tb+LM0eU9YLi00A3Vzwrc4XgqscDXbXRi/X5oN5IxJ41UekqgzNCx3ojs1dMVkcIjdCxeJeP4P010bT4psYlvhl36mmzDmXCo4QuwUsRYHdwjoLJOJUniuIimv+7k1KDTW9Kb0ISGZ51rHjBKLQKbo7FfhoAIRsiOTo2AXrDbDexrW9L6rt72WqPlbWfHqB6NRClmetVK+XKFMuRVB0RZ9jg78lzezeMCGH7JvsJ7Z5GtlDVyrJfE7W9wG9g3NS5UWR3hSecoytW4b/+UXoXZ0tJUxVbGbhnOan9PH9QWdLmWlnGzYSaxnnIag1j9szizY6/cH8ZWHi3Dq42E4/LxsWQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(2906002)(33716001)(5660300002)(55016003)(52116002)(8936002)(26005)(86362001)(38350700002)(38100700002)(6496006)(9686003)(186003)(33656002)(54906003)(83380400001)(44832011)(956004)(1076003)(316002)(7416002)(8676002)(508600001)(4326008)(6666004)(6916009)(9576002)(66476007)(66556008)(66946007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?un/7HqyOvoQ+qzDs8AKZlablcFBNtBQETwB5E/exXcZb4r+8rJl9URrR2fBY?=
+ =?us-ascii?Q?GpuL2RcuT/sdUd7yJNDBVk6Mxd4XQ+ICjbjjJ9LpGpmb2IqIvY0ssh4QsYc1?=
+ =?us-ascii?Q?mjD3Y26zQOviq4c1j3NRUo0NGYKkP4Uf9CQD5yJkJAvoYuAhKnyUURWTuJIG?=
+ =?us-ascii?Q?dOOJQQ36+diMkYuYNNFC2WtqMt3ld/iDXRQeGpCBC3SAs44QeZCJVr564qP2?=
+ =?us-ascii?Q?nWb5nYHwU5XFV+jMYnK1zzur1nKDRxl0hf5lMbLDitSZYId3OFz/cNOL8D8v?=
+ =?us-ascii?Q?JAiGe38T0O75h9YY6KCxiLVN393VK7Ku0LTUL3bL3gK/E/rctT9hLRrmzDRV?=
+ =?us-ascii?Q?pz4RDkZSd5b6wa1xqNquEhM/BnNMYnx8j/90BdPeoIe73hvasP+aTmCQSp8b?=
+ =?us-ascii?Q?/vmPD7qmRUVkuiGxA3OKwD/2wPALBveGh5y2wyczZxcICw9hPLRJjGHAizwi?=
+ =?us-ascii?Q?Q9WtyuhvVnIiKtriAG41H0gC5vulLIb7qsv9/1I2vmmHjA+rK6vaHAFKfxAb?=
+ =?us-ascii?Q?e4x1lS7FkHbINQNFbjJxQ+wZpYcypGnD+o2Z1jYzN93PquFNQsD2bsfb7fNj?=
+ =?us-ascii?Q?egy/KYH1LmHncZjaMJJU8MYGqWYbvQbQIXb0CaJ8Fq/mTMJurBPWvlbqyxdF?=
+ =?us-ascii?Q?q7iNDXd8D9RQCWYD8Y6H+/TYR53byAVDvBdkv6XNiDjcRZQVNLhgbdVMLbPm?=
+ =?us-ascii?Q?l7RkA/R2ZxlhLcFFvja6q5t6wXtnebA85xN/dVLFDSpYIuv0/k1aMlK+CONY?=
+ =?us-ascii?Q?4SmhUgrPluJXNEBs+TtlRBQzQ5M1jLpWFEVRpSAPHCN6WFkZe4tRPUeGwwUC?=
+ =?us-ascii?Q?MAtubQRI3hqFuFUlus+E8BV6p32RW2I6vIGIwFXXyafCBxpnecheLkOvhR78?=
+ =?us-ascii?Q?4AeoJG7Ooe4JFFLpW8OItFzwdmZ/UcytfrH+S+8xmDq3QY3xWSOIdfsVASp7?=
+ =?us-ascii?Q?TIadEtYiOP6vA01cllmRja9/b+X1FIXJSQEL0O+lz3sFrGPFMPEvdbWwNPlE?=
+ =?us-ascii?Q?uh8QoRtRotQ1lA8DzdvvRic5+pkMbb0yVJPgeoDlef/PukQg73bqQRdY2I7M?=
+ =?us-ascii?Q?VEVwUJXtBX98B1Azuw/Uh63fyeTSrj+487zuI/xEneDrt3o2Bqmv88mKvvVz?=
+ =?us-ascii?Q?Hbti7E4hDUQfA3lBEH/4N8zWIT+O84oEOyovRhxRrpKrlXp+zspxXw60jBHD?=
+ =?us-ascii?Q?kXpebMOAVh+KS8nOdMYDDVyjtGtjBcIOC+4ZJ8c0czczk9zOU+7E4Ra5inP+?=
+ =?us-ascii?Q?tzJtYFJF/9IiHV7g2qw6CpcU+yJ0fJEOU07qbsYBaFiVrJhBx8/GchNJg3UJ?=
+ =?us-ascii?Q?PdAHf0ft5IfJ1qoIJEYmA5fXuhTN4p/A8OhkUOGhlxSRfPa/UqYkYrMZcl3m?=
+ =?us-ascii?Q?kVsTvqp88ifZTQOz/gXUnulSMwKH3lQ3vfw21XYSV539FQIGKKOQL0LMzNWm?=
+ =?us-ascii?Q?GUIesLGB0aap88Iv1THWxizorJr0oqPVsE12wtQQ+0jIk8X0V3PyQPMvtEcD?=
+ =?us-ascii?Q?bCg2eFzluKViB4EwaTHTaGq39KYfF6hfR9Tci7OXMfWKx+amMdGh1oTdpACi?=
+ =?us-ascii?Q?FMMwy3YO5rvke3OyjnwmvwSMK1reLYMGxzrf9BSL7L26ht6+fktj40JOHCKP?=
+ =?us-ascii?Q?3jm4JvV16UFInKKryvoY4XwO9b/qhKOuTSjzFJLVwFajTL1PMv0q1+uprFbg?=
+ =?us-ascii?Q?sBG8alVIbpfqFlnEoxYyv8CwNwE=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f4835418-c2e0-4ba1-eca7-08d9b66117ee
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2021 13:30:38.1691
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4V2irXk6/t6/6NrNt8D5g4j6IhUka5TDTDjFPRyU9TlcVVmLUjAPC6RXU8O/1UWuhOv8oJzhbEfK9j2DH9pxKbm7mODl8N5Eic/n7Qcy9Mw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1568
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10186 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 malwarescore=0
+ spamscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112030084
+X-Proofpoint-ORIG-GUID: i2uN8798X2nZqurxkGIWG-UruV0kvl5M
+X-Proofpoint-GUID: i2uN8798X2nZqurxkGIWG-UruV0kvl5M
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a set of tests for the new gpio-sim module. This is a pure shell
-test-suite and uses the helper programs available in the gpio selftests
-directory. These test-cases only test the functionalities exposed by the
-gpio-sim driver, not those handled by core gpiolib code.
+On Fri, Dec 03, 2021 at 12:03:57AM +0800, Zhou Qingyang wrote:
+> In amvdec_add_ts(), there is a dereference of kzalloc(), which could lead
+> to a NULL pointer dereference on failure of kzalloc().
+> 
+> I fix this bug by adding a NULL check of new_ts.
+> 
+> This bug was found by a static analyzer. The analysis employs
+> differential checking to identify inconsistent security operations
+> (e.g., checks or kfrees) between two code paths and confirms that the
+> inconsistent operations are not recovered in the current function or
+> the callers, so they constitute bugs.
+> 
+> Note that, as a bug found by static analysis, it can be a false
+> positive or hard to trigger. Multiple researchers have cross-reviewed
+> the bug.
+> 
+> Builds with CONFIG_VIDEO_MESON_VDEC=m show no new warnings,
+> and our static analyzer no longer warns about this code.
+> 
+> Fixes: 876f123b8956 ("media: meson: vdec: bring up to compliance")
+> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+> ---
+  ^^^
+Thanks.  Next time put the meta commentary about how the bug was found
+and the QC process under the the --- cut off line.  We don't need to
+have that drama stored in the permanent git log.
 
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
----
- tools/testing/selftests/gpio/Makefile    |   2 +-
- tools/testing/selftests/gpio/config      |   1 +
- tools/testing/selftests/gpio/gpio-sim.sh | 396 +++++++++++++++++++++++
- 3 files changed, 398 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/gpio/gpio-sim.sh
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-index 293aa9749408..71b306602368 100644
---- a/tools/testing/selftests/gpio/Makefile
-+++ b/tools/testing/selftests/gpio/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--TEST_PROGS := gpio-mockup.sh
-+TEST_PROGS := gpio-mockup.sh gpio-sim.sh
- TEST_FILES := gpio-mockup-sysfs.sh
- TEST_GEN_PROGS_EXTENDED := gpio-mockup-cdev gpio-chip-info gpio-line-name
- CFLAGS += -O2 -g -Wall -I../../../../usr/include/
-diff --git a/tools/testing/selftests/gpio/config b/tools/testing/selftests/gpio/config
-index ce100342c20b..409a8532facc 100644
---- a/tools/testing/selftests/gpio/config
-+++ b/tools/testing/selftests/gpio/config
-@@ -1,3 +1,4 @@
- CONFIG_GPIOLIB=y
- CONFIG_GPIO_CDEV=y
- CONFIG_GPIO_MOCKUP=m
-+CONFIG_GPIO_SIM=m
-diff --git a/tools/testing/selftests/gpio/gpio-sim.sh b/tools/testing/selftests/gpio/gpio-sim.sh
-new file mode 100755
-index 000000000000..d335a975890c
---- /dev/null
-+++ b/tools/testing/selftests/gpio/gpio-sim.sh
-@@ -0,0 +1,396 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2021 Bartosz Golaszewski <brgl@bgdev.pl>
-+
-+BASE_DIR=`dirname $0`
-+CONFIGFS_DIR="/sys/kernel/config/gpio-sim"
-+MODULE="gpio-sim"
-+
-+fail() {
-+	echo "$*" >&2
-+	echo "GPIO $MODULE test FAIL"
-+	exit 1
-+}
-+
-+skip() {
-+	echo "$*" >&2
-+	echo "GPIO $MODULE test SKIP"
-+	exit 4
-+}
-+
-+remove_chip() {
-+	local CHIP=$1
-+
-+	for FILE in $CONFIGFS_DIR/$CHIP/*; do
-+		BANK=`basename $FILE`
-+		if [ "$BANK" == "live" ] || [ "$BANK" == "dev_name" ]; then
-+			continue
-+		fi
-+
-+		LINES=`ls $CONFIGFS_DIR/$CHIP/$BANK/ | egrep ^line`
-+		if [ "$?" == 0 ]; then
-+			for LINE in $LINES; do
-+				if [ -e $CONFIGFS_DIR/$CHIP/$BANK/$LINE/hog ]; then
-+					rmdir $CONFIGFS_DIR/$CHIP/$BANK/$LINE/hog || \
-+						fail "Unable to remove the hog"
-+				fi
-+
-+				rmdir $CONFIGFS_DIR/$CHIP/$BANK/$LINE || \
-+					fail "Unable to remove the line"
-+			done
-+		fi
-+
-+		rmdir $CONFIGFS_DIR/$CHIP/$BANK
-+	done
-+
-+	rmdir $CONFIGFS_DIR/$CHIP || fail "Unable to remove the chip"
-+}
-+
-+configfs_cleanup() {
-+	for CHIP in `ls $CONFIGFS_DIR/`; do
-+		remove_chip $CHIP
-+	done
-+}
-+
-+create_chip() {
-+	local CHIP=$1
-+
-+	mkdir $CONFIGFS_DIR/$CHIP
-+}
-+
-+create_bank() {
-+	local CHIP=$1
-+	local BANK=$2
-+
-+	mkdir $CONFIGFS_DIR/$CHIP/$BANK
-+}
-+
-+set_label() {
-+	local CHIP=$1
-+	local BANK=$2
-+	local LABEL=$3
-+
-+	echo $LABEL > $CONFIGFS_DIR/$CHIP/$BANK/label || fail "Unable to set the chip label"
-+}
-+
-+set_num_lines() {
-+	local CHIP=$1
-+	local BANK=$2
-+	local NUM_LINES=$3
-+
-+	echo $NUM_LINES > $CONFIGFS_DIR/$CHIP/$BANK/num_lines || \
-+		fail "Unable to set the number of lines"
-+}
-+
-+set_line_name() {
-+	local CHIP=$1
-+	local BANK=$2
-+	local OFFSET=$3
-+	local NAME=$4
-+	local LINE_DIR=$CONFIGFS_DIR/$CHIP/$BANK/line$OFFSET
-+
-+	test -d $LINE_DIR || mkdir $LINE_DIR
-+	echo $NAME > $LINE_DIR/name || fail "Unable to set the line name"
-+}
-+
-+enable_chip() {
-+	local CHIP=$1
-+
-+	echo 1 > $CONFIGFS_DIR/$CHIP/live || fail "Unable to enable the chip"
-+}
-+
-+disable_chip() {
-+	local CHIP=$1
-+
-+	echo 0 > $CONFIGFS_DIR/$CHIP/live || fail "Unable to disable the chip"
-+}
-+
-+configfs_chip_name() {
-+	local CHIP=$1
-+	local BANK=$2
-+
-+	cat $CONFIGFS_DIR/$CHIP/$BANK/chip_name 2> /dev/null || \
-+		fail "unable to read the chip name from configfs"
-+}
-+
-+configfs_dev_name() {
-+	local CHIP=$1
-+
-+	cat $CONFIGFS_DIR/$CHIP/dev_name 2> /dev/null || \
-+		fail "unable to read the device name from configfs"
-+}
-+
-+get_chip_num_lines() {
-+	local CHIP=$1
-+	local BANK=$2
-+
-+	$BASE_DIR/gpio-chip-info /dev/`configfs_chip_name $CHIP $BANK` num-lines || \
-+		fail "unable to read the number of lines from the character device"
-+}
-+
-+get_chip_label() {
-+	local CHIP=$1
-+	local BANK=$2
-+
-+	$BASE_DIR/gpio-chip-info /dev/`configfs_chip_name $CHIP $BANK` label || \
-+		fail "unable to read the chip label from the character device"
-+}
-+
-+get_line_name() {
-+	local CHIP=$1
-+	local BANK=$2
-+	local OFFSET=$3
-+
-+	$BASE_DIR/gpio-line-name /dev/`configfs_chip_name $CHIP $BANK` $OFFSET || \
-+		fail "unable to read the line name from the character device"
-+}
-+
-+sysfs_set_pull() {
-+	local DEV=$1
-+	local BANK=$2
-+	local OFFSET=$3
-+	local PULL=$4
-+	local DEVNAME=`configfs_dev_name $DEV`
-+	local CHIPNAME=`configfs_chip_name $DEV $BANK`
-+	local SYSFSPATH="/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio$OFFSET/pull"
-+
-+	echo $PULL > $SYSFSPATH || fail "Unable to set line pull in sysfs"
-+}
-+
-+# Load the gpio-sim module. This will pull in configfs if needed too.
-+modprobe gpio-sim || skip "unable to load the gpio-sim module"
-+# Make sure configfs is mounted at /sys/kernel/config. Wait a bit if needed.
-+for IDX in `seq 5`; do
-+	if [ "$IDX" -eq "5" ]; then
-+		skip "configfs not mounted at /sys/kernel/config"
-+	fi
-+
-+	mountpoint -q /sys/kernel/config && break
-+	sleep 0.1
-+done
-+# If the module was already loaded: remove all previous chips
-+configfs_cleanup
-+
-+trap "exit 1" SIGTERM SIGINT
-+trap configfs_cleanup EXIT
-+
-+echo "1. chip_name and dev_name attributes"
-+
-+echo "1.1. Chip name is communicated to user"
-+create_chip chip
-+create_bank chip bank
-+enable_chip chip
-+test -n `cat $CONFIGFS_DIR/chip/bank/chip_name` || fail "chip_name doesn't work"
-+remove_chip chip
-+
-+echo "1.2. chip_name returns 'none' if the chip is still pending"
-+create_chip chip
-+create_bank chip bank
-+test "`cat $CONFIGFS_DIR/chip/bank/chip_name`" = "none" || \
-+	fail "chip_name doesn't return 'none' for a pending chip"
-+remove_chip chip
-+
-+echo "1.3. Device name is communicated to user"
-+create_chip chip
-+create_bank chip bank
-+enable_chip chip
-+test -n `cat $CONFIGFS_DIR/chip/dev_name` || fail "dev_name doesn't work"
-+remove_chip chip
-+
-+echo "2. Creating and configuring simulated chips"
-+
-+echo "2.1. Default number of lines is 1"
-+create_chip chip
-+create_bank chip bank
-+enable_chip chip
-+test "`get_chip_num_lines chip bank`" = "1" || fail "default number of lines is not 1"
-+remove_chip chip
-+
-+echo "2.2. Number of lines can be specified"
-+create_chip chip
-+create_bank chip bank
-+set_num_lines chip bank 16
-+enable_chip chip
-+test "`get_chip_num_lines chip bank`" = "16" || fail "number of lines is not 16"
-+remove_chip chip
-+
-+echo "2.3. Label can be set"
-+create_chip chip
-+create_bank chip bank
-+set_label chip bank foobar
-+enable_chip chip
-+test "`get_chip_label chip bank`" = "foobar" || fail "label is incorrect"
-+remove_chip chip
-+
-+echo "2.4. Label can be left empty"
-+create_chip chip
-+create_bank chip bank
-+enable_chip chip
-+test -z "`cat $CONFIGFS_DIR/chip/bank/label`" || fail "label is not empty"
-+remove_chip chip
-+
-+echo "2.5. Line names can be configured"
-+create_chip chip
-+create_bank chip bank
-+set_num_lines chip bank 16
-+set_line_name chip bank 0 foo
-+set_line_name chip bank 2 bar
-+enable_chip chip
-+test "`get_line_name chip bank 0`" = "foo" || fail "line name is incorrect"
-+test "`get_line_name chip bank 2`" = "bar" || fail "line name is incorrect"
-+remove_chip chip
-+
-+echo "2.6. Line config can remain unused if offset is greater than number of lines"
-+create_chip chip
-+create_bank chip bank
-+set_num_lines chip bank 2
-+set_line_name chip bank 5 foobar
-+enable_chip chip
-+test "`get_line_name chip bank 0`" = "" || fail "line name is incorrect"
-+test "`get_line_name chip bank 1`" = "" || fail "line name is incorrect"
-+remove_chip chip
-+
-+echo "2.7. Line configfs directory names are sanitized"
-+create_chip chip
-+create_bank chip bank
-+mkdir $CONFIGFS_DIR/chip/bank/line12foobar 2> /dev/null && \
-+	fail "invalid configfs line name accepted"
-+mkdir $CONFIGFS_DIR/chip/bank/line_no_offset 2> /dev/null && \
-+	fail "invalid configfs line name accepted"
-+remove_chip chip
-+
-+echo "2.8. Multiple chips can be created"
-+CHIPS="chip0 chip1 chip2"
-+for CHIP in $CHIPS; do
-+	create_chip $CHIP
-+	create_bank $CHIP bank
-+	enable_chip $CHIP
-+done
-+for CHIP in $CHIPS; do
-+	remove_chip $CHIP
-+done
-+
-+echo "2.9. Can't modify settings when chip is live"
-+create_chip chip
-+create_bank chip bank
-+enable_chip chip
-+echo foobar > $CONFIGFS_DIR/chip/bank/label 2> /dev/null && \
-+	fail "Setting label of a live chip should fail"
-+echo 8 > $CONFIGFS_DIR/chip/bank/num_lines 2> /dev/null && \
-+	fail "Setting number of lines of a live chip should fail"
-+remove_chip chip
-+
-+echo "2.10. Can't create line items when chip is live"
-+create_chip chip
-+create_bank chip bank
-+enable_chip chip
-+mkdir $CONFIGFS_DIR/chip/bank/line0 2> /dev/null && fail "Creating line item should fail"
-+remove_chip chip
-+
-+echo "2.11. Probe errors are propagated to user-space"
-+create_chip chip
-+create_bank chip bank
-+set_num_lines chip bank 99999
-+echo 1 > $CONFIGFS_DIR/chip/live 2> /dev/null && fail "Probe error was not propagated"
-+remove_chip chip
-+
-+echo "2.12. Cannot enable a chip without any GPIO banks"
-+create_chip chip
-+echo 1 > $CONFIGFS_DIR/chip/live 2> /dev/null && fail "Chip enabled without any GPIO banks"
-+remove_chip chip
-+
-+echo "2.13. Duplicate chip labels are not allowed"
-+create_chip chip
-+create_bank chip bank0
-+set_label chip bank0 foobar
-+create_bank chip bank1
-+set_label chip bank1 foobar
-+echo 1 > $CONFIGFS_DIR/chip/live 2> /dev/null && fail "Duplicate chip labels were not rejected"
-+remove_chip chip
-+
-+echo "2.14. Lines can be hogged"
-+create_chip chip
-+create_bank chip bank
-+set_num_lines chip bank 8
-+mkdir -p $CONFIGFS_DIR/chip/bank/line4/hog
-+enable_chip chip
-+$BASE_DIR/gpio-mockup-cdev -s 1 /dev/`configfs_chip_name chip bank` 4 2> /dev/null && \
-+	fail "Setting the value of a hogged line shouldn't succeed"
-+remove_chip chip
-+
-+echo "3. Controlling simulated chips"
-+
-+echo "3.1. Pull can be set over sysfs"
-+create_chip chip
-+create_bank chip bank
-+set_num_lines chip bank 8
-+enable_chip chip
-+sysfs_set_pull chip bank 0 pull-up
-+$BASE_DIR/gpio-mockup-cdev /dev/`configfs_chip_name chip bank` 0
-+test "$?" = "1" || fail "pull set incorrectly"
-+sysfs_set_pull chip bank 0 pull-down
-+$BASE_DIR/gpio-mockup-cdev /dev/`configfs_chip_name chip bank` 1
-+test "$?" = "0" || fail "pull set incorrectly"
-+remove_chip chip
-+
-+echo "3.2. Pull can be read from sysfs"
-+create_chip chip
-+create_bank chip bank
-+set_num_lines chip bank 8
-+enable_chip chip
-+DEVNAME=`configfs_dev_name chip`
-+CHIPNAME=`configfs_chip_name chip bank`
-+SYSFS_PATH=/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio0/pull
-+test `cat $SYSFS_PATH` = "pull-down" || fail "reading the pull failed"
-+sysfs_set_pull chip bank 0 pull-up
-+test `cat $SYSFS_PATH` = "pull-up" || fail "reading the pull failed"
-+remove_chip chip
-+
-+echo "3.3. Incorrect input in sysfs is rejected"
-+create_chip chip
-+create_bank chip bank
-+set_num_lines chip bank 8
-+enable_chip chip
-+DEVNAME=`configfs_dev_name chip`
-+CHIPNAME=`configfs_chip_name chip bank`
-+SYSFS_PATH="/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio0/pull"
-+echo foobar > $SYSFS_PATH 2> /dev/null && fail "invalid input not detected"
-+remove_chip chip
-+
-+echo "3.4. Can't write to value"
-+create_chip chip
-+create_bank chip bank
-+enable_chip chip
-+DEVNAME=`configfs_dev_name chip`
-+CHIPNAME=`configfs_chip_name chip bank`
-+SYSFS_PATH="/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio0/value"
-+echo 1 > $SYSFS_PATH 2> /dev/null && fail "writing to 'value' succeeded unexpectedly"
-+remove_chip chip
-+
-+echo "4. Simulated GPIO chips are functional"
-+
-+echo "4.1. Values can be read from sysfs"
-+create_chip chip
-+create_bank chip bank
-+set_num_lines chip bank 8
-+enable_chip chip
-+DEVNAME=`configfs_dev_name chip`
-+CHIPNAME=`configfs_chip_name chip bank`
-+SYSFS_PATH="/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio0/value"
-+test `cat $SYSFS_PATH` = "0" || fail "incorrect value read from sysfs"
-+$BASE_DIR/gpio-mockup-cdev -s 1 /dev/`configfs_chip_name chip bank` 0 &
-+sleep 0.1 # FIXME Any better way?
-+test `cat $SYSFS_PATH` = "1" || fail "incorrect value read from sysfs"
-+kill $!
-+remove_chip chip
-+
-+echo "4.2. Bias settings work correctly"
-+create_chip chip
-+create_bank chip bank
-+set_num_lines chip bank 8
-+enable_chip chip
-+$BASE_DIR/gpio-mockup-cdev -b pull-up /dev/`configfs_chip_name chip bank` 0
-+test `cat $SYSFS_PATH` = "1" || fail "bias setting does not work"
-+remove_chip chip
-+
-+echo "GPIO $MODULE test PASS"
--- 
-2.25.1
+regards,
+dan carpenter
 

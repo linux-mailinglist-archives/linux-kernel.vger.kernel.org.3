@@ -2,77 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E123467CD8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C32467CD9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382488AbhLCRyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 12:54:16 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:59156 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343541AbhLCRyN (ORCPT
+        id S1382475AbhLCRyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 12:54:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1382464AbhLCRya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 12:54:13 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: adalessandro)
-        with ESMTPSA id 5BF591F4724E
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638553848; bh=sjUDlRzGKvbKVrH0gyQWnGzouzwqlG1XZ4Jt6m71DjQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NwkfaQSTsNOkewcP0B716mc78gWZExuruZKkT+w5vMZK3j5bz16Jz46lMdsSHN6d8
-         vbrQW+rczqrkZv7gADP/scWRDEpZELWkgK9yA3WbJZ7dzxsAcQM3cDW6Z1dSMAb2Ph
-         DNZF/IGm1DuStbG7DGLsA3ifLF43DOGqZelzCHtFwWuhY9wg8KVgqH+XQ0KWLpha4L
-         qG7g0WNvjEWJlWRgAmxQ49gBw/2k9U/fZgKgHc25hoh1vheF6Au/McyIVX/qPQcez6
-         qZRfpnnAGXXsjsVkukAqI/r4Gfni8Z3xi3pR/SlzRu6kHkDoRnRsKTWgE+AyRiCnpk
-         05KK4eUCt4h8g==
-From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
-To:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     Xiubo.Lee@gmail.com, ariel.dalessandro@collabora.com,
-        bcousson@baylibre.com, broonie@kernel.org, festevam@gmail.com,
-        kuninori.morimoto.gx@renesas.com, lgirdwood@gmail.com,
-        michael@amarulasolutions.com, nicoleotsuka@gmail.com,
-        perex@perex.cz, robh+dt@kernel.org, shengjiu.wang@gmail.com,
-        tiwai@suse.com, tony@atomide.com
-Subject: [PATCH 1/1] ASoC: fsl-asoc-card: Add missing Kconfig option for tlv320aic31xx
-Date:   Fri,  3 Dec 2021 14:50:18 -0300
-Message-Id: <20211203175018.252641-2-ariel.dalessandro@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211203175018.252641-1-ariel.dalessandro@collabora.com>
-References: <20211203175018.252641-1-ariel.dalessandro@collabora.com>
+        Fri, 3 Dec 2021 12:54:30 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB3AC061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 09:51:05 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id m27so8230401lfj.12
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 09:51:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xm0FOcKnB1VB3SyGY+sZgit/QboKHbPIM25nrSjiVeY=;
+        b=N0n18KpBckGWjsg5X9h/A83ty0o4Y2ajbVK+oq8W2DGblpELSt9Dhvxst6zT5umQca
+         l22wF2EXENaFxvBlgmOdgP9MwEyAzpw27Kext1rqCrvLVpBAfvt6zXCP1lqyoIF7zGoe
+         P+afmkfI0PbMaFi7yUICWBHgB7jiKFB1ZYccLqS1kg83qgtm00eMb3dXtX5nf8A8RqV0
+         lEvR4CQfkt7+jF9vNelvn1aufiBq4DbTy/UFIBtrH8tnqAZHskqzMXZd37eO4HSU2juD
+         s0Zgxp4s9rj+X0058T9NaXCB8niGEAjIdKnzglKON6QX0G+Z6kZ7R6kXSQU4Mxiu8c+J
+         Gh7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xm0FOcKnB1VB3SyGY+sZgit/QboKHbPIM25nrSjiVeY=;
+        b=hyW25DxAGO34zuJvdc97dscmTl8Vfhv8LbmemwJMySuGz5/m+ydh05A4+4xrCI6HS8
+         zCRSI1VGFvjG9pRbBJn55vKoR4ydPZesD4+fVrrqzTyJaenDVEuadxca4zWrng4oYrAV
+         OFlZF6XYd7RGNHOXlnyxrmUm40qsx7litwljRlAquNwxd9C/k8wUYVZHqQXIBRSQDzN/
+         SvFr8zYSXbY+vHKe3oKnzfKk3s4HSU3uVcEgSbLW4qWQI/oodE+UAXw25iuBKb0E1d4d
+         mU+gb3xA6iCUIzpe817xjNxjTslj5J2FSDE2VoSiJQxHHza/tJcZEpj+wCS0VbxwNtcx
+         Ex9w==
+X-Gm-Message-State: AOAM533h/XG0hGlea6CLwc8egnAJgb7L0Pi84iv9cS5V1Sw02g/jsV6R
+        bSE05aT0OeGUcCOVrZ6L3Z2pe7KfChN3jhYsmSyloA==
+X-Google-Smtp-Source: ABdhPJy+QmtD0vN6/vIdbzeiC2xsRqs0giW2uF6k3loJjaViYyrjKE72ZpAM7vEUEZc+Y+AUnuF0gnrkB9wwTa1wxWk=
+X-Received: by 2002:a05:6512:5c2:: with SMTP id o2mr18773168lfo.8.1638553863883;
+ Fri, 03 Dec 2021 09:51:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211202150614.22440-1-mgorman@techsingularity.net>
+ <CALvZod6am_QrZCSf_de6eyzbOtKnWuL1CQZVn+srQVt20cnpFg@mail.gmail.com>
+ <20211202165220.GZ3366@techsingularity.net> <CALvZod5tiDgEz4JwxMHQvkzLxYeV0OtNGGsX5ZdT5mTQdUdUUA@mail.gmail.com>
+ <20211203090137.GA3366@techsingularity.net>
+In-Reply-To: <20211203090137.GA3366@techsingularity.net>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Fri, 3 Dec 2021 09:50:51 -0800
+Message-ID: <CALvZod46SFiNvUSLCJWEVccsXKx=NwT4=gk9wS6Nt8cZd0WOgg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/1] mm: vmscan: Reduce throttling due to a failure to
+ make progress
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Alexey Avramov <hakavlad@inbox.lv>,
+        Rik van Riel <riel@surriel.com>,
+        Mike Galbraith <efault@gmx.de>,
+        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
+        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit added support for tlv320aic31xx codec to
-fsl-asoc-card, but missed the related Kconfig option. Fix this.
+On Fri, Dec 3, 2021 at 1:01 AM Mel Gorman <mgorman@techsingularity.net> wrote:
+>
+[...]
+>
+> Not recently that I'm aware of but historically reclaim has been plagued by
+> at least two classes of problems -- premature OOM and excessive CPU usage
+> churning through the LRU. Going back, the solution was basically to sleep
+> something like "disable kswapd if it fails to make progress for too long".
+> Commit 69392a403f49 addressed a case where calling congestion_wait might as
+> well have been schedule_timeout_uninterruptible(HZ/10) because congestion
+> is no longer tracked by the block layer.
+>
+> Hence 69392a403f49 allows reclaim to throttle on NOPROGRESS but if
+> another task makes progress, the throttled tasks can be woken before the
+> timeout. The flaw was throttling too easily or for too long delaying OOM
+> being properly detected.
+>
 
-  commit 8c9b9cfb7724685ce705f511b882f30597596536
-  Author: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
-  Date:   Fri Nov 19 12:32:48 2021 -0300
+To remove congestion_wait of mem_cgroup_force_empty_write(), the
+commit 69392a403f49 has changed the behavior of all memcg reclaim
+codepaths as well as direct global reclaimers. Were there other
+congestion_wait() instances which commit 69392a403f49 was targeting
+but those congestion_wait() were replaced/removed by different
+commits?
 
-      ASoC: fsl-asoc-card: Support fsl,imx-audio-tlv320aic31xx codec
+[...]
 
-Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
----
- sound/soc/fsl/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+> >
+> > Isn't it better that the reclaim returns why it is failing instead of
+> > littering the reclaim code with 'is this global reclaim', 'is this
+> > memcg reclaim', 'am I kswapd' which is also a layering violation. IMO
+> > this is the direction we should be going towards though not asking to
+> > do this now.
+> >
+>
+> It's not clear why you think the page allocator can make better decisions
+> about reclaim than reclaim can. It might make sense if callers were
+> returned enough information to make a decision but even if they could,
+> it would not be popular as the API would be difficult to use properly.
+>
 
-diff --git a/sound/soc/fsl/Kconfig b/sound/soc/fsl/Kconfig
-index 8e05d092790e..10fa38753453 100644
---- a/sound/soc/fsl/Kconfig
-+++ b/sound/soc/fsl/Kconfig
-@@ -311,6 +311,7 @@ config SND_SOC_FSL_ASOC_CARD
- 	select SND_SOC_FSL_ESAI
- 	select SND_SOC_FSL_SAI
- 	select SND_SOC_FSL_SSI
-+	select SND_SOC_TLV320AIC31XX
- 	select SND_SOC_WM8994
- 	select MFD_WM8994
- 	help
--- 
-2.30.2
+The above is a separate discussion for later.
 
+> Is your primary objection the cgroup_reclaim(sc) check?
+
+No, I am of the opinion that we should revert 69392a403f49 and we
+should have just replaced congestion_wait in
+mem_cgroup_force_empty_write with a simple
+schedule_timeout_interruptible. The memory.force_empty is a cgroup v1
+interface (to be deprecated) and it is very normal to expect that the
+user will trigger that interface multiple times. We should not change
+the behavior of all the memcg reclaimers and direct global reclaimers
+so that we can remove congestion_wait from
+mem_cgroup_force_empty_write.
+
+> If so, I can
+> remove it. While there is a mild risk that OOM would be delayed, it's very
+> unlikely because a memcg failing to make progress in the local case will
+> probably call cond_resched() if there are not lots of of pages pending
+> writes globally.
+>
+> > Regarding this patch and 69392a403f49, I am still confused on the main
+> > motivation behind 69392a403f49 to change the behavior of 'direct
+> > reclaimers from page allocator'.
+> >
+>
+> The main motivation of the series overall was to remove the reliance on
+> congestion_wait and wait_iff_congested because both are fundamentally
+> broken when congestion is not tracked by the block layer. Replacing with
+> schedule_timeout_uninterruptible() would be silly because where possible
+> decisions on whether to pause or throttle should be based on events,
+> not time. For example, if there are too many pages waiting on writeback
+> then throttle but if writeback completes, wake the throttled tasks
+> instead of "sleep some time and hope for the best".
+>
+
+I am in agreement with the motivation of the whole series. I am just
+making sure that the motivation of VMSCAN_THROTTLE_NOPROGRESS based
+throttle is more than just the congestion_wait of
+mem_cgroup_force_empty_write.
+
+thanks,
+Shakeel

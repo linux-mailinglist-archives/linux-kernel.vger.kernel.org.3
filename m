@@ -2,149 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB27B46726B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EAAF46726F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378782AbhLCHQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 02:16:58 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:39862 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345605AbhLCHQ5 (ORCPT
+        id S1378803AbhLCHTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 02:19:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378794AbhLCHTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 02:16:57 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B37DM4h062564;
-        Fri, 3 Dec 2021 01:13:22 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638515602;
-        bh=HDIYdGCGWgdJR70rVLR8bOWHs6lY2KxX1FKweNKLUH4=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=sD2UG0/tc3eZcvFTjz30svi5SoTPeYlYfTaIdv5xlqf9K4sNc3RE4NaLpap0NVXa+
-         h3+4GWIz3qj+W/QTw5ZfnXN+zVN2zl333aF+nK1eksHN2aIMyArUXRgg+bf5hQKoKB
-         MHe/GJTMD/xZ7+mBUNq5Td8JmRIL9y2ZzuvjwlBY=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B37DMfL082453
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 3 Dec 2021 01:13:22 -0600
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 3
- Dec 2021 01:13:22 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 3 Dec 2021 01:13:22 -0600
-Received: from [10.250.234.92] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B37DI1t024178;
-        Fri, 3 Dec 2021 01:13:19 -0600
-Subject: Re: [PATCH 3/5] arm64: dts: ti: Add initial support for J721S2 SoC
-To:     Aswath Govindraju <a-govindraju@ti.com>
-CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20211119133052.17793-1-a-govindraju@ti.com>
- <20211119133052.17793-4-a-govindraju@ti.com>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-Message-ID: <22180fe2-2b59-9558-4e5b-dc97bcf09c96@ti.com>
-Date:   Fri, 3 Dec 2021 12:43:17 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20211119133052.17793-4-a-govindraju@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        Fri, 3 Dec 2021 02:19:47 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9790C061758
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 23:16:23 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id h5-20020a255f45000000b005ffd939127bso4799022ybm.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 23:16:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=gdDFsMaRLluRJdvMlC+gWmkX7QB0BeSvd5wQfHYqfjI=;
+        b=IcEYnQS+oNlHWGeV/a8nOwS6RwGKZJiu9VMSeC+fP8jjmPto6jUhuzhBjxWBqb/gS2
+         G6VJHQ0kUU/jw31YyX9AA7GX4GB2ENx4nt5r7KpSIF1eD40MHTvl5eGIjMvEDdZlEBIg
+         /wM1oxKpuaHKtr7qNrkfrRzDaJ+vDP+gbtvoK8gVeZjpoz22VrNHsyT2yT0X2bYa4UeW
+         3lJOZQWwyeWenaqhT8yTSANC4vrx1ii2fS3bms3tHIcK56f/icqqS2S7FdJA/lOA3a6T
+         0kzdMaIPuweKQHthGlGtqejq46ucLWy97YOvaAdQdXQFK/R1Jvw82sTAtd6FoP9wPqwP
+         mnLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=gdDFsMaRLluRJdvMlC+gWmkX7QB0BeSvd5wQfHYqfjI=;
+        b=iySFlHBhKMIQuZecNmCLRo8FTYeIqCDrUwbQER1c91NVnUebFlb++awo3M86OFB21B
+         4D9/mmZF64n9Q1pTT0lRHn/zVPMMyj3lgeuZWc9WHOv4Vd73Gn44tUXT2Adm8g3mdRZs
+         p6ulHRQ8jmspZCa/fAziXWA05mtZQQyuOdTSEMSjZhZ0+DsWLBwVXyvC1kkrqjPr8xRO
+         rxsiyrDZNEz1MDIJHO2wL7rbsW0bsgOXvRwcSVIZqBBtNA70neJ8fBsIjac6jQ5+b93l
+         3N6CfT7N4ZfaJm47WJFZH45WniOcOOV1NhUQOz7WQK8HQQ2U/0HMpByiUktD3uB7rqPW
+         ZL7A==
+X-Gm-Message-State: AOAM532+KZwYD7OiEslByYk/RribGLaPE3cV4yxH9UAui/pWER6vNGP9
+        nc9UDuH0kPZNzyxPiWUCRcpI08/EBLxCpA==
+X-Google-Smtp-Source: ABdhPJw4Tzam/iXRr7TSaTLgJ6FlzkX4R2lFdGTQjGcjfLBpe8I58hWrCjquix7eM4jCo3RnLB1Ykn+3yXiK/Q==
+X-Received: from mmandlik.mtv.corp.google.com ([2620:15c:202:201:adf:ab3:651b:12a])
+ (user=mmandlik job=sendgmr) by 2002:a25:42cb:: with SMTP id
+ p194mr21070317yba.134.1638515783037; Thu, 02 Dec 2021 23:16:23 -0800 (PST)
+Date:   Thu,  2 Dec 2021 23:16:17 -0800
+Message-Id: <20211202231123.v7.1.Ic0a40b84dee3825302890aaea690e73165c71820@changeid>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.0.384.gca35af8252-goog
+Subject: [PATCH v7 1/2] bluetooth: Handle MSFT Monitor Device Event
+From:   Manish Mandlik <mmandlik@google.com>
+To:     marcel@holtmann.org, luiz.dentz@gmail.com
+Cc:     linux-bluetooth@vger.kernel.org,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        Manish Mandlik <mmandlik@google.com>,
+        Miao-chen Chou <mcchou@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aswath,
+Whenever the controller starts/stops monitoring a bt device, it sends
+MSFT Monitor Device event. Add handler to read this vendor event.
 
-On 19/11/21 7:00 pm, Aswath Govindraju wrote:
-> The J721S2 SoC belongs to the K3 Multicore SoC architecture platform,
-> providing advanced system integration in automotive ADAS applications and
-> industrial applications requiring AI at the network edge. This SoC extends
-> the Jacinto 7 family of SoCs with focus on lowering system costs and power
-> while providing interfaces, memory architecture and compute performance for
-> single and multi-sensor applications.
-> 
-> Some highlights of this SoC are:
-> 
-> * Dual Cortex-A72s in a single cluster, three clusters of lockstep capable
-> dual Cortex-R5F MCUs, Deep-learning Matrix Multiply Accelerator(MMA), C7x
-> floating point Vector DSP.
-> * 3D GPU: Automotive grade IMG BXS-4-64
-> * Vision Processing Accelerator (VPAC) with image signal processor and
-> Depth and Motion Processing Accelerator (DMPAC)
-> * Two CSI2.0 4L RX plus one eDP/DP, two DSI Tx, and one DPI interface.
-> * Two Ethernet ports with RGMII support.
-> * Single 4 lane PCIe-GEN3 controllers, USB3.0 Dual-role device subsystems,
-> * Up to 20 MCANs, 5 McASP, eMMC and SD, OSPI/HyperBus memory controller,
-> QSPI, I3C and I2C, eCAP/eQEP, eHRPWM, MLB among other peripherals.
-> * Hardware accelerator blocks containing AES/DES/SHA/MD5 called SA2UL
-> management.
-> * Chips and Media Wave521CL H.264/H.265 encode/decode engine
-> 
-> See J721S2 Technical Reference Manual (SPRUJ28 – NOVEMBER 2021)
-> for further details: http://www.ti.com/lit/pdf/spruj28
-> 
-> Introduce basic support for the J721S2 SoC.
-> 
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-> Signed-off-by: Nishanth Menon <nm@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi    | 941 ++++++++++++++++++
->  .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 302 ++++++
->  arch/arm64/boot/dts/ti/k3-j721s2.dtsi         | 189 ++++
->  3 files changed, 1432 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
->  create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
->  create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> new file mode 100644
-> index 000000000000..4fb629f1ec77
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> @@ -0,0 +1,941 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Device Tree Source for J721S2 SoC Family Main Domain peripherals
-> + *
-> + * Copyright (C) 2021 Texas Instruments Incorporated - https://www.ti.com/
-> + */
-> +
-> +#include <dt-bindings/mux/mux.h>
-> +#include <dt-bindings/phy/phy.h>
-> +#include <dt-bindings/mux/ti-serdes.h>
+Test performed:
+- Verified by logs that the MSFT Monitor Device event is received from
+  the controller whenever it starts/stops monitoring a device.
 
-I don't see this being used right now. Better to add it when it's actually used.
+Signed-off-by: Manish Mandlik <mmandlik@google.com>
+Reviewed-by: Miao-chen Chou <mcchou@google.com>
 
-Thanks
-Kishon
+---
 
-> +
-> +&cbass_main {
-> +	msmc_ram: sram@70000000 {
-> +		compatible = "mmio-sram";
-> +		reg = <0x0 0x70000000 0x0 0x400000>;
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges = <0x0 0x0 0x70000000 0x400000>;
-> +
-> +		atf-sram@0 {
-> +			reg = <0x0 0x20000>;
-> +		};
-> +
-> +		tifs-sram@1f0000 {
-> +			reg = <0x1f0000 0x10000>;
-> +		};
-> +
-> +		l3cache-sram@200000 {
-> +			reg = <0x200000 0x200000>;
-> +		};
-> +	};
+Hello Bt-Maintainers,
+
+As mentioned in the bluez patch series [1], we need to capture the 'MSFT
+Monitor Device' event from the controller and pass on the necessary
+information to the bluetoothd.
+
+This is required to further optimize the power consumption by avoiding
+handling of RSSI thresholds and timeouts in the user space and let the
+controller do the RSSI tracking.
+
+This patch series adds support to read the MSFT vendor event
+HCI_VS_MSFT_LE_Monitor_Device_Event and introduces new MGMT events
+MGMT_EV_ADV_MONITOR_DEVICE_FOUND and MGMT_EV_ADV_MONITOR_DEVICE_LOST to
+indicate that the controller has started/stopped tracking a particular
+device.
+
+Please let me know what you think about this or if you have any further
+questions.
+
+[1] https://patchwork.kernel.org/project/bluetooth/list/?series=583423
+
+Thanks,
+Manish.
+
+(no changes since v6)
+
+Changes in v6:
+- Fix compiler warning bt_dev_err() missing argument.
+
+Changes in v5:
+- Split v4 into two patches.
+- Buffer controller Device Found event and maintain the device tracking
+  state in the kernel.
+
+Changes in v4:
+- Add Advertisement Monitor Device Found event and update addr type.
+
+Changes in v3:
+- Discard changes to the Device Found event and notify bluetoothd only
+  when the controller stops monitoring the device via new Device Lost
+  event.
+
+Changes in v2:
+- Instead of creating a new 'Device Tracking' event, add a flag 'Device
+  Tracked' in the existing 'Device Found' event and add a new 'Device
+  Lost' event to indicate that the controller has stopped tracking that
+  device.
+
+ include/net/bluetooth/hci_core.h |  11 +++
+ net/bluetooth/hci_core.c         |   1 +
+ net/bluetooth/msft.c             | 127 ++++++++++++++++++++++++++++++-
+ 3 files changed, 138 insertions(+), 1 deletion(-)
+
+diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
+index 7bae8376fd6f..5ccd19dec77c 100644
+--- a/include/net/bluetooth/hci_core.h
++++ b/include/net/bluetooth/hci_core.h
+@@ -258,6 +258,15 @@ struct adv_info {
+ 
+ #define HCI_ADV_TX_POWER_NO_PREFERENCE 0x7F
+ 
++struct monitored_device {
++	struct list_head list;
++
++	bdaddr_t bdaddr;
++	__u8     addr_type;
++	__u16    handle;
++	bool     notified;
++};
++
+ struct adv_pattern {
+ 	struct list_head list;
+ 	__u8 ad_type;
+@@ -589,6 +598,8 @@ struct hci_dev {
+ 
+ 	struct delayed_work	interleave_scan;
+ 
++	struct list_head	monitored_devices;
++
+ #if IS_ENABLED(CONFIG_BT_LEDS)
+ 	struct led_trigger	*power_led;
+ #endif
+diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+index fdc0dcf8ee36..d4bcd511530a 100644
+--- a/net/bluetooth/hci_core.c
++++ b/net/bluetooth/hci_core.c
+@@ -2503,6 +2503,7 @@ struct hci_dev *hci_alloc_dev_priv(int sizeof_priv)
+ 	INIT_LIST_HEAD(&hdev->conn_hash.list);
+ 	INIT_LIST_HEAD(&hdev->adv_instances);
+ 	INIT_LIST_HEAD(&hdev->blocked_keys);
++	INIT_LIST_HEAD(&hdev->monitored_devices);
+ 
+ 	INIT_LIST_HEAD(&hdev->local_codecs);
+ 	INIT_WORK(&hdev->rx_work, hci_rx_work);
+diff --git a/net/bluetooth/msft.c b/net/bluetooth/msft.c
+index 1122097e1e49..aadabe78baf6 100644
+--- a/net/bluetooth/msft.c
++++ b/net/bluetooth/msft.c
+@@ -80,6 +80,14 @@ struct msft_rp_le_set_advertisement_filter_enable {
+ 	__u8 sub_opcode;
+ } __packed;
+ 
++#define MSFT_EV_LE_MONITOR_DEVICE	0x02
++struct msft_ev_le_monitor_device {
++	__u8     addr_type;
++	bdaddr_t bdaddr;
++	__u8     monitor_handle;
++	__u8     monitor_state;
++} __packed;
++
+ struct msft_monitor_advertisement_handle_data {
+ 	__u8  msft_handle;
+ 	__u16 mgmt_handle;
+@@ -266,6 +274,7 @@ static void msft_le_cancel_monitor_advertisement_cb(struct hci_dev *hdev,
+ 	struct msft_data *msft = hdev->msft_data;
+ 	int err;
+ 	bool pending;
++	struct monitored_device *dev, *tmp;
+ 
+ 	if (status)
+ 		goto done;
+@@ -296,6 +305,15 @@ static void msft_le_cancel_monitor_advertisement_cb(struct hci_dev *hdev,
+ 
+ 		list_del(&handle_data->list);
+ 		kfree(handle_data);
++
++		/* Clear any monitored devices by this Adv Monitor */
++		list_for_each_entry_safe(dev, tmp, &hdev->monitored_devices,
++					 list) {
++			if (dev->handle == handle_data->mgmt_handle) {
++				list_del(&dev->list);
++				kfree(dev);
++			}
++		}
+ 	}
+ 
+ 	/* If remove all monitors is required, we need to continue the process
+@@ -538,6 +556,7 @@ void msft_do_close(struct hci_dev *hdev)
+ 	struct msft_data *msft = hdev->msft_data;
+ 	struct msft_monitor_advertisement_handle_data *handle_data, *tmp;
+ 	struct adv_monitor *monitor;
++	struct monitored_device *dev, *tmp_dev;
+ 
+ 	if (!msft)
+ 		return;
+@@ -557,6 +576,16 @@ void msft_do_close(struct hci_dev *hdev)
+ 		list_del(&handle_data->list);
+ 		kfree(handle_data);
+ 	}
++
++	hci_dev_lock(hdev);
++
++	/* Clear any devices that are being monitored */
++	list_for_each_entry_safe(dev, tmp_dev, &hdev->monitored_devices, list) {
++		list_del(&dev->list);
++		kfree(dev);
++	}
++
++	hci_dev_unlock(hdev);
+ }
+ 
+ void msft_register(struct hci_dev *hdev)
+@@ -590,6 +619,90 @@ void msft_unregister(struct hci_dev *hdev)
+ 	kfree(msft);
+ }
+ 
++/* This function requires the caller holds hdev->lock */
++static void msft_device_found(struct hci_dev *hdev, bdaddr_t *bdaddr,
++			      __u8 addr_type, __u16 mgmt_handle)
++{
++	struct monitored_device *dev;
++
++	dev = kmalloc(sizeof(*dev), GFP_KERNEL);
++	if (!dev) {
++		bt_dev_err(hdev, "MSFT vendor event %u: no memory",
++			   MSFT_EV_LE_MONITOR_DEVICE);
++		return;
++	}
++
++	bacpy(&dev->bdaddr, bdaddr);
++	dev->addr_type = addr_type;
++	dev->handle = mgmt_handle;
++	dev->notified = false;
++
++	INIT_LIST_HEAD(&dev->list);
++	list_add(&dev->list, &hdev->monitored_devices);
++}
++
++/* This function requires the caller holds hdev->lock */
++static void msft_device_lost(struct hci_dev *hdev, bdaddr_t *bdaddr,
++			     __u8 addr_type, __u16 mgmt_handle)
++{
++	struct monitored_device *dev, *tmp;
++
++	list_for_each_entry_safe(dev, tmp, &hdev->monitored_devices, list) {
++		if (dev->handle == mgmt_handle) {
++			list_del(&dev->list);
++			kfree(dev);
++
++			break;
++		}
++	}
++}
++
++/* This function requires the caller holds hdev->lock */
++static void msft_monitor_device_evt(struct hci_dev *hdev, struct sk_buff *skb)
++{
++	struct msft_ev_le_monitor_device *ev = (void *)skb->data;
++	struct msft_monitor_advertisement_handle_data *handle_data;
++	u8 addr_type;
++
++	if (skb->len < sizeof(*ev)) {
++		bt_dev_err(hdev,
++			   "MSFT vendor event %u: insufficient data (len: %u)",
++			   MSFT_EV_LE_MONITOR_DEVICE, skb->len);
++		return;
++	}
++	skb_pull(skb, sizeof(*ev));
++
++	bt_dev_dbg(hdev,
++		   "MSFT vendor event %u: handle 0x%04x state %d addr %pMR",
++		   MSFT_EV_LE_MONITOR_DEVICE, ev->monitor_handle,
++		   ev->monitor_state, &ev->bdaddr);
++
++	handle_data = msft_find_handle_data(hdev, ev->monitor_handle, false);
++
++	switch (ev->addr_type) {
++	case ADDR_LE_DEV_PUBLIC:
++		addr_type = BDADDR_LE_PUBLIC;
++		break;
++
++	case ADDR_LE_DEV_RANDOM:
++		addr_type = BDADDR_LE_RANDOM;
++		break;
++
++	default:
++		bt_dev_err(hdev,
++			   "MSFT vendor event %u: unknown addr type 0x%02x",
++			   MSFT_EV_LE_MONITOR_DEVICE, ev->addr_type);
++		return;
++	}
++
++	if (ev->monitor_state)
++		msft_device_found(hdev, &ev->bdaddr, addr_type,
++				  handle_data->mgmt_handle);
++	else
++		msft_device_lost(hdev, &ev->bdaddr, addr_type,
++				 handle_data->mgmt_handle);
++}
++
+ void msft_vendor_evt(struct hci_dev *hdev, struct sk_buff *skb)
+ {
+ 	struct msft_data *msft = hdev->msft_data;
+@@ -617,10 +730,22 @@ void msft_vendor_evt(struct hci_dev *hdev, struct sk_buff *skb)
+ 	if (skb->len < 1)
+ 		return;
+ 
++	hci_dev_lock(hdev);
++
+ 	event = *skb->data;
+ 	skb_pull(skb, 1);
+ 
+-	bt_dev_dbg(hdev, "MSFT vendor event %u", event);
++	switch (event) {
++	case MSFT_EV_LE_MONITOR_DEVICE:
++		msft_monitor_device_evt(hdev, skb);
++		break;
++
++	default:
++		bt_dev_dbg(hdev, "MSFT vendor event %u", event);
++		break;
++	}
++
++	hci_dev_unlock(hdev);
+ }
+ 
+ __u64 msft_get_features(struct hci_dev *hdev)
+-- 
+2.34.0.384.gca35af8252-goog
+

@@ -2,81 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5304675B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:55:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5194675C1
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380154AbhLCK6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 05:58:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60294 "EHLO
+        id S1380208AbhLCK7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 05:59:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237048AbhLCK6l (ORCPT
+        with ESMTP id S237898AbhLCK7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 05:58:41 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07FBC06173E
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 02:55:17 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id r11so9726177edd.9
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 02:55:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dynamicshubs-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=R+HuRFVvKR4uO1oMLJ7kkKMTSqMfl3iwt8EGFZVkPM0=;
-        b=HRpeEyQGSlWjiMzDUrP2MsnKXzpnfRtO0LsnPkv16zYNB5Xv4AhqZKH8/LQX37QLwW
-         a0LVB0cjWupLbBv+ua6sRalBdDKCb1I/DfEdHrm0Vei9vb8G4VSfoSCC+M8l48OX/oim
-         k716PFeXU8qiwau17ZO8x/QO+VyI6oF8XC/zEbEJN4o1fa8tNn2Ma94N4PdxeZxaYn7j
-         qcE4KSJNoBsN50iq8zPcJSKE8b3rPwAERa9iTpmcrzJYUP2msDXhkU9HpO7FTm7+a3Ao
-         uUdvllSkenuO1fYO64IDg5x7Bn9wtBcyRvT2549dyZbmaX6Q+9SjqcXrxIkJVJWA2kKR
-         hSGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=R+HuRFVvKR4uO1oMLJ7kkKMTSqMfl3iwt8EGFZVkPM0=;
-        b=FXgJm9/JV2Kc+N8q53MsdIzvClb3vE9ujPb2RZfjX/5BbpNC6YnuwOcKGVmmNUTZNq
-         As5n65yuRQk+7koZzDyDL30Ot3TUa+NpcnLcwp/W4L8f+FJqBj4O9Z9Dm9qbN5J2Brj3
-         W1rLDdgDJfDRRPGS+BU0rCOd1icB+F61yFwiCBkBsAXEMmZe2GpJaY5iet90pn6Jn0fp
-         hLxtfMLWKXSzm6EKpF5cGTbl9tAcKJYAMEmz9HwMN13VJ0ji7yCpQQVj0Sj71566tCIl
-         KM8aaW68hXy20uak1pL+OjVUW2Qo8naETXtcV/39G7xK+vH6GheGSZjbK4ErrV7gQFof
-         /Z5A==
-X-Gm-Message-State: AOAM532ImZx68hUSFjlo0vSRVJJ56hW/iz4SlEx/+xcnxfDvtF+uQFi0
-        Gh4YoJbl+daM/WUJMlLkpjG7aN9vsmQBvl1YSe4NOg==
-X-Google-Smtp-Source: ABdhPJwrycN/FZipc+ySkrV3q1TvHeTTtwks/qtGeARbkrjDEdPEfaaGRESSgoKsgI+Tl8WDAmKgpiZpPbElkt3FSi4=
-X-Received: by 2002:a17:906:730f:: with SMTP id di15mr22364122ejc.22.1638528915898;
- Fri, 03 Dec 2021 02:55:15 -0800 (PST)
+        Fri, 3 Dec 2021 05:59:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80DEC06173E;
+        Fri,  3 Dec 2021 02:56:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 672A762A02;
+        Fri,  3 Dec 2021 10:56:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD0FBC53FAD;
+        Fri,  3 Dec 2021 10:56:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638528965;
+        bh=xcd6qCvNc9eCZVPRbxRPtVsEptcOqtGydxpUyb81wgE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CORB7spGLCd0A6HhQbRWzCNj6QPsI7hpilW9UKyRafB2hN0mVQGTRM3R34RsyLdFO
+         AJAFZfA16dAna85G8U+Mc+mj6aCTylm9hQ9mc8UKbJR1OsERWF2jiw5CLmIT4y+e1L
+         dA3v3AFkOYFYxsUYZscoRUseJauAQuV2X0r7IGrX8h1y/jWk4REj0mXoM/2ujRXZph
+         81Bd/deu40KudTR+SmhV+B08WwRksQokqxMW9bdorTyl+fDdMl5JIXAC2xe+src+GZ
+         rgNbB7wqAzzn+Nzw+tScnMgEzN4TxxA+AsJgojk52/f14Vys1q1r41calGg/P25CKO
+         fI1MZMQPyURBA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mt6EF-0002Dg-O8; Fri, 03 Dec 2021 11:55:47 +0100
+Date:   Fri, 3 Dec 2021 11:55:47 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] media: uvcvideo: fix division by zero at stream start
+Message-ID: <Yan3s35hsyK0DEGH@hovoldconsulting.com>
+References: <20211026095511.26673-1-johan@kernel.org>
+ <163524570516.1184428.14632987312253060787@Monstersaurus>
+ <YXfjSJ+fm+LV/m+M@pendragon.ideasonboard.com>
+ <YXfvXzgnvPVqwqZs@hovoldconsulting.com>
+ <YXh4NqnpzOnPiA5/@pendragon.ideasonboard.com>
+ <Yanxc/229JFkuP/v@hovoldconsulting.com>
+ <Yan241Kg7O+qgQXG@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-From:   Colette Bayuk <colette@dynamicshubs.com>
-Date:   Fri, 3 Dec 2021 04:55:01 -0600
-Message-ID: <CANuKC1VkE2k33ahmeV98ScORG6s2__uPUPkE7puyCnWOx2uekA@mail.gmail.com>
-Subject: Re: Register HIMSS Attendee Mailing Lists-2022
-To:     Colette Bayuk <colette@dynamicshubs.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yan241Kg7O+qgQXG@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Dec 03, 2021 at 12:52:19PM +0200, Laurent Pinchart wrote:
 
-Wishing you all the best for HIMSS Show 2022!
+> > I noticed that this one hasn't showed up in linux-next yet. Do you still
+> > have it in your queue or do you want me to resend?
+> 
+> It should be in Mauro's queue now:
+> 
+> https://lore.kernel.org/all/YacOun3Diggsi05V@pendragon.ideasonboard.com/
 
-Would you be interested to acquire HIMSS Global Health Conference
-Attendees Email Lists-2022?
+Perfect, thanks!
 
-List Includes:- Org-Name, First Name, Last Name, Contact Job Title,
-Verified Email Address, Website URL, Mailing Address, Phone Number,
-Fax Number, Industry and many more=E2=80=A6
-
-Number of Contacts:  46,465 Verified Contacts.
-Cost:                              : $1,899
-
-Any future attendee who will register to this HIMSS 2022 conference
-till the date, we will supply the updated list every 25 days once, and
-after the conference also at no additional cost
-
-Kind Regards,
-Colette Bayuk
-Marketing Coordinator
-
-If you do not wish to receive future emails from us, please reply as
-'leave out=E2=80=99.
+Johan

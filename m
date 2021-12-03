@@ -2,172 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FBB4679D5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:58:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBEB4679D7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381611AbhLCPBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 10:01:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        id S1381619AbhLCPCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 10:02:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245020AbhLCPBt (ORCPT
+        with ESMTP id S245020AbhLCPCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 10:01:49 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980B7C061751
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 06:58:25 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id x15so12835274edv.1
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 06:58:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8uwnbjWCW2NbetnVwJHOczwYzHXg75SzbYiTjP9xuJM=;
-        b=itSYy8FbZ19oFa7QhxilrMw5H6qoyCm0duHgSQZbQOZROxNHOCqcDctnEx5vqzflDU
-         N6jUlqj5k29AnB79/vUGpAtkUodSRJHcft3WPsTtnSPJQdk/lrOcrTU3/GaERqzQj4Mo
-         0W6BuGJKAU5xA/nHZNlszqrv62hYMYuMezz68j1sH2gkG7Xlpgc2UbDoCR6J6Kb9E/aW
-         b/biOiolzetfN7+uKT0HLdFhhzQQkUKsenYBfJl2gCEL1DeHfv6+U+tfVD5KY7RmJeZS
-         t6fTQaJpGQZP7y/yzK971Engixb3kVh4nRb0xmUGeyjbPJwpZ+M9v8Hp9FcmUc6az5PQ
-         FQOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8uwnbjWCW2NbetnVwJHOczwYzHXg75SzbYiTjP9xuJM=;
-        b=dwll033PUVoMxwRGj92UyH2K5EgTR0pUfgY0v1jlANhBCcFQciUXTPg21ySAqm0OKu
-         kifCtN56IO7U9BBzpQDZ+MqAicettKwY2Tky4TVmLpckFk2gPmhfLhdwvKEsly9T9Eq+
-         F3t36QyOOcvUW9cu66iH+ZQ2b363etnxEQtrELvwT0fRLT+7R1iUaQadhjvdvYk1by7/
-         Vwk2bh7yqJCEyxdjTtNtSaG8xtsDGS7yQeyxdV6kyrWXh3tyNwEV3apSV9PkA5ZBFuOi
-         j2nM1YcLomC9gk3Uz4YKOeE5S3ghlOHskAu1tGAiF5Yx3Gre/aXZ4/4fVKDLqw5u4QQL
-         Kauw==
-X-Gm-Message-State: AOAM532W+WMWsH7bGy0sF8/9qDO7ENtAPAsqK+y01G4N9l/A0dVWOODO
-        aKJfLNvSvrQwqBvySoWsfTWlYkxwbHwFXKf77rilfA==
-X-Google-Smtp-Source: ABdhPJzxwFL6qWvmN/+BTvbHoiwaKvQaI0NVlklxFRKIO8SNlltV6yKzNybdFxvRBsZ6lYhom3cwTNMblsarjuCpmsw=
-X-Received: by 2002:aa7:cb45:: with SMTP id w5mr27367673edt.405.1638543503580;
- Fri, 03 Dec 2021 06:58:23 -0800 (PST)
+        Fri, 3 Dec 2021 10:02:32 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64376C061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 06:59:07 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1mtA1Z-0001xQ-2Q; Fri, 03 Dec 2021 15:58:57 +0100
+Received: from pengutronix.de (2a03-f580-87bc-d400-4c70-bd43-38a4-642e.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:4c70:bd43:38a4:642e])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id E1C286BBB97;
+        Fri,  3 Dec 2021 14:58:51 +0000 (UTC)
+Date:   Fri, 3 Dec 2021 15:58:51 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     kbuild@lists.01.org,
+        Stephane Grosjean <s.grosjean@peak-system.com>, lkp@intel.com,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: drivers/net/can/usb/peak_usb/pcan_usb.c:523
+ pcan_usb_decode_error() error: we previously assumed 'cf' could be null (see
+ line 503)
+Message-ID: <20211203145851.nrgmnu7c56w4vecy@pengutronix.de>
+References: <202112021833.wABxM5UN-lkp@intel.com>
 MIME-Version: 1.0
-References: <ba7f82f348d77b6a65498dd13a92550949e69cc3.1638540167.git.geert+renesas@glider.be>
- <CAMRc=Me2528N_jT6AoSSTajznY4EFP+cFvEbqnw4rONB5nJsQw@mail.gmail.com>
-In-Reply-To: <CAMRc=Me2528N_jT6AoSSTajznY4EFP+cFvEbqnw4rONB5nJsQw@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 3 Dec 2021 15:58:13 +0100
-Message-ID: <CAMRc=Mdw1pEUntRkJRYcuQH9ZhWc9=psPDe7bXwkj=RCYQKO=g@mail.gmail.com>
-Subject: Re: [PATCH resend] gpio: aggregator: Add interrupt support
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Enrico Weigelt metux IT consult <info@metux.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        stratos-dev@op-lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qem4j3f2flcmpazt"
+Content-Disposition: inline
+In-Reply-To: <202112021833.wABxM5UN-lkp@intel.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 3:56 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> On Fri, Dec 3, 2021 at 3:06 PM Geert Uytterhoeven
-> <geert+renesas@glider.be> wrote:
-> >
-> > Currently the GPIO Aggregator does not support interrupts.  This means
-> > that kernel drivers going from a GPIO to an IRQ using gpiod_to_irq(),
-> > and userspace applications using line events do not work.
-> >
-> > Add interrupt support by providing a gpio_chip.to_irq() callback, which
-> > just calls into the parent GPIO controller.
-> >
-> > Note that this does not implement full interrupt controller (irq_chip)
-> > support, so using e.g. gpio-keys with "interrupts" instead of "gpios"
-> > still does not work.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
-> > I would prefer to avoid implementing irq_chip support, until there is a
-> > real use case for this.
-> >
-> > This has been tested with gpio-keys and gpiomon on the Koelsch
-> > development board:
-> >
-> >   - gpio-keys, using a DT overlay[1]:
-> >
-> >         $ overlay add r8a7791-koelsch-keyboard-controlled-led
-> >         $ echo gpio-aggregator > /sys/devices/platform/frobnicator/driver_override
-> >         $ echo frobnicator > /sys/bus/platform/drivers/gpio-aggregator/bind
-> >
-> >         $ gpioinfo frobnicator
-> >         gpiochip12 - 3 lines:
-> >                 line   0:      "light"      "light"  output  active-high [used]
-> >                 line   1:         "on"         "On"   input   active-low [used]
-> >                 line   2:        "off"        "Off"   input   active-low [used]
-> >
-> >         $ echo 255 > /sys/class/leds/light/brightness
-> >         $ echo 0 > /sys/class/leds/light/brightness
-> >
-> >         $ evtest /dev/input/event0
-> >
-> >   - gpiomon, using the GPIO sysfs API:
-> >
-> >         $ echo keyboard > /sys/bus/platform/drivers/gpio-keys/unbind
-> >         $ echo e6055800.gpio 2,6 > /sys/bus/platform/drivers/gpio-aggregator/new_device
-> >         $ gpiomon gpiochip12 0 1
-> >
-> > [1] "ARM: dts: koelsch: Add overlay for keyboard-controlled LED"
-> >     https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/commit/?h=topic/renesas-overlays&id=c78d817869e63a3485bb4ab98aeea6ce368a396e
-> > ---
-> >  drivers/gpio/gpio-aggregator.c | 11 ++++++++++-
-> >  1 file changed, 10 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpio/gpio-aggregator.c b/drivers/gpio/gpio-aggregator.c
-> > index e9671d1660ef4b40..869dc952cf45218b 100644
-> > --- a/drivers/gpio/gpio-aggregator.c
-> > +++ b/drivers/gpio/gpio-aggregator.c
-> > @@ -371,6 +371,13 @@ static int gpio_fwd_set_config(struct gpio_chip *chip, unsigned int offset,
-> >         return gpiod_set_config(fwd->descs[offset], config);
-> >  }
-> >
-> > +static int gpio_fwd_to_irq(struct gpio_chip *chip, unsigned int offset)
-> > +{
-> > +       struct gpiochip_fwd *fwd = gpiochip_get_data(chip);
-> > +
-> > +       return gpiod_to_irq(fwd->descs[offset]);
-> > +}
-> > +
-> >  /**
-> >   * gpiochip_fwd_create() - Create a new GPIO forwarder
-> >   * @dev: Parent device pointer
-> > @@ -411,7 +418,8 @@ static struct gpiochip_fwd *gpiochip_fwd_create(struct device *dev,
-> >         for (i = 0; i < ngpios; i++) {
-> >                 struct gpio_chip *parent = gpiod_to_chip(descs[i]);
-> >
-> > -               dev_dbg(dev, "%u => gpio-%d\n", i, desc_to_gpio(descs[i]));
-> > +               dev_dbg(dev, "%u => gpio %d irq %d\n", i,
-> > +                       desc_to_gpio(descs[i]), gpiod_to_irq(descs[i]));
-> >
-> >                 if (gpiod_cansleep(descs[i]))
-> >                         chip->can_sleep = true;
-> > @@ -429,6 +437,7 @@ static struct gpiochip_fwd *gpiochip_fwd_create(struct device *dev,
-> >         chip->get_multiple = gpio_fwd_get_multiple_locked;
-> >         chip->set = gpio_fwd_set;
-> >         chip->set_multiple = gpio_fwd_set_multiple_locked;
-> > +       chip->to_irq = gpio_fwd_to_irq;
-> >         chip->base = -1;
-> >         chip->ngpio = ngpios;
-> >         fwd->descs = descs;
-> > --
-> > 2.25.1
-> >
->
-> Applied, thanks!
->
-> Bart
 
-Eek, missed the explanation.
+--qem4j3f2flcmpazt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I think this is fine. For user-space eventual switch to a real
-irq_chip won't break anything so let's take it.
+On 03.12.2021 17:09:55, Dan Carpenter wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t master
+> head:   58e1100fdc5990b0cc0d4beaf2562a92e621ac7d
+> commit: c11dcee758302702a83c6e85e4c4c3d9af42d2b3 can: peak_usb: pcan_usb_=
+decode_error(): upgrade handling of bus state changes
+> config: x86_64-randconfig-m001-20211202 (https://download.01.org/0day-ci/=
+archive/20211202/202112021833.wABxM5UN-lkp@intel.com/config)
+> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+>=20
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+>=20
+> smatch warnings:
+> drivers/net/can/usb/peak_usb/pcan_usb.c:523 pcan_usb_decode_error() error=
+: we previously assumed 'cf' could be null (see line 503)
+>=20
+> vim +/cf +523 drivers/net/can/usb/peak_usb/pcan_usb.c
+>=20
+> 46be265d338833 Stephane Grosjean 2012-03-02  450  static int pcan_usb_dec=
+ode_error(struct pcan_usb_msg_context *mc, u8 n,
+> 46be265d338833 Stephane Grosjean 2012-03-02  451  				 u8 status_len)
+> 46be265d338833 Stephane Grosjean 2012-03-02  452  {
+> 46be265d338833 Stephane Grosjean 2012-03-02  453  	struct sk_buff *skb;
+> 46be265d338833 Stephane Grosjean 2012-03-02  454  	struct can_frame *cf;
+> c11dcee7583027 Stephane Grosjean 2021-07-15  455  	enum can_state new_sta=
+te =3D CAN_STATE_ERROR_ACTIVE;
+> 46be265d338833 Stephane Grosjean 2012-03-02  456 =20
+> 46be265d338833 Stephane Grosjean 2012-03-02  457  	/* ignore this error u=
+ntil 1st ts received */
+> 46be265d338833 Stephane Grosjean 2012-03-02  458  	if (n =3D=3D PCAN_USB_=
+ERROR_QOVR)
+> 46be265d338833 Stephane Grosjean 2012-03-02  459  		if (!mc->pdev->time_r=
+ef.tick_count)
+> 46be265d338833 Stephane Grosjean 2012-03-02  460  			return 0;
+> 46be265d338833 Stephane Grosjean 2012-03-02  461 =20
+> c11dcee7583027 Stephane Grosjean 2021-07-15  462  	/* allocate an skb to =
+store the error frame */
+> c11dcee7583027 Stephane Grosjean 2021-07-15  463  	skb =3D alloc_can_err_=
+skb(mc->netdev, &cf);
 
-Bart
+alloc_can_err_skb() ->
+alloc_canfd_skb()
+
+https://elixir.bootlin.com/linux/v5.15/source/drivers/net/can/dev/skb.c#L210
+
+If skb is NULL, cf is set to NULL, too.
+
+> 46be265d338833 Stephane Grosjean 2012-03-02  464 =20
+> c11dcee7583027 Stephane Grosjean 2021-07-15  465  	if (n & PCAN_USB_ERROR=
+_RXQOVR) {
+> c11dcee7583027 Stephane Grosjean 2021-07-15  466  		/* data overrun inter=
+rupt */
+> c11dcee7583027 Stephane Grosjean 2021-07-15  467  		netdev_dbg(mc->netdev=
+, "data overrun interrupt\n");
+> c11dcee7583027 Stephane Grosjean 2021-07-15  468  		mc->netdev->stats.rx_=
+over_errors++;
+> c11dcee7583027 Stephane Grosjean 2021-07-15  469  		mc->netdev->stats.rx_=
+errors++;
+> c11dcee7583027 Stephane Grosjean 2021-07-15  470  		if (cf) {
+>=20
+> Check for NULL
+>=20
+> c11dcee7583027 Stephane Grosjean 2021-07-15  471  			cf->can_id |=3D CAN_=
+ERR_CRTL;
+> c11dcee7583027 Stephane Grosjean 2021-07-15  472  			cf->data[1] |=3D CAN=
+_ERR_CRTL_RX_OVERFLOW;
+> 46be265d338833 Stephane Grosjean 2012-03-02  473  		}
+> 46be265d338833 Stephane Grosjean 2012-03-02  474  	}
+> 46be265d338833 Stephane Grosjean 2012-03-02  475 =20
+> c11dcee7583027 Stephane Grosjean 2021-07-15  476  	if (n & PCAN_USB_ERROR=
+_TXQFULL)
+> c11dcee7583027 Stephane Grosjean 2021-07-15  477  		netdev_dbg(mc->netdev=
+, "device Tx queue full)\n");
+> c11dcee7583027 Stephane Grosjean 2021-07-15  478 =20
+> 46be265d338833 Stephane Grosjean 2012-03-02  479  	if (n & PCAN_USB_ERROR=
+_BUS_OFF) {
+> 46be265d338833 Stephane Grosjean 2012-03-02  480  		new_state =3D CAN_STA=
+TE_BUS_OFF;
+> c11dcee7583027 Stephane Grosjean 2021-07-15  481  	} else if (n & PCAN_US=
+B_ERROR_BUS_HEAVY) {
+> c11dcee7583027 Stephane Grosjean 2021-07-15  482  		new_state =3D ((mc->p=
+dev->bec.txerr >=3D 128) ||
+> c11dcee7583027 Stephane Grosjean 2021-07-15  483  			     (mc->pdev->bec.=
+rxerr >=3D 128)) ?
+> c11dcee7583027 Stephane Grosjean 2021-07-15  484  				CAN_STATE_ERROR_PAS=
+SIVE :
+> c11dcee7583027 Stephane Grosjean 2021-07-15  485  				CAN_STATE_ERROR_WAR=
+NING;
+> c11dcee7583027 Stephane Grosjean 2021-07-15  486  	} else {
+> c11dcee7583027 Stephane Grosjean 2021-07-15  487  		new_state =3D CAN_STA=
+TE_ERROR_ACTIVE;
+> 46be265d338833 Stephane Grosjean 2012-03-02  488  	}
+> 46be265d338833 Stephane Grosjean 2012-03-02  489 =20
+> c11dcee7583027 Stephane Grosjean 2021-07-15  490  	/* handle change of st=
+ate */
+> c11dcee7583027 Stephane Grosjean 2021-07-15  491  	if (new_state !=3D mc-=
+>pdev->dev.can.state) {
+> c11dcee7583027 Stephane Grosjean 2021-07-15  492  		enum can_state tx_sta=
+te =3D
+> c11dcee7583027 Stephane Grosjean 2021-07-15  493  			(mc->pdev->bec.txerr=
+ >=3D mc->pdev->bec.rxerr) ?
+> c11dcee7583027 Stephane Grosjean 2021-07-15  494  				new_state : 0;
+> c11dcee7583027 Stephane Grosjean 2021-07-15  495  		enum can_state rx_sta=
+te =3D
+> c11dcee7583027 Stephane Grosjean 2021-07-15  496  			(mc->pdev->bec.txerr=
+ <=3D mc->pdev->bec.rxerr) ?
+> c11dcee7583027 Stephane Grosjean 2021-07-15  497  				new_state : 0;
+> 46be265d338833 Stephane Grosjean 2012-03-02  498 =20
+> c11dcee7583027 Stephane Grosjean 2021-07-15  499  		can_change_state(mc->=
+netdev, cf, tx_state, rx_state);
+> 46be265d338833 Stephane Grosjean 2012-03-02  500 =20
+> c11dcee7583027 Stephane Grosjean 2021-07-15  501  		if (new_state =3D=3D =
+CAN_STATE_BUS_OFF) {
+> 46be265d338833 Stephane Grosjean 2012-03-02  502  			can_bus_off(mc->netd=
+ev);
+> c11dcee7583027 Stephane Grosjean 2021-07-15 @503  		} else if (cf && (cf-=
+>can_id & CAN_ERR_CRTL)) {
+>=20
+> Check for NULL
+>=20
+> c11dcee7583027 Stephane Grosjean 2021-07-15  504  			/* Supply TX/RX erro=
+r counters in case of
+> c11dcee7583027 Stephane Grosjean 2021-07-15  505  			 * controller error.
+> c11dcee7583027 Stephane Grosjean 2021-07-15  506  			 */
+> ea8b33bde76c8f Stephane Grosjean 2019-12-06  507  			cf->data[6] =3D mc->=
+pdev->bec.txerr;
+> ea8b33bde76c8f Stephane Grosjean 2019-12-06  508  			cf->data[7] =3D mc->=
+pdev->bec.rxerr;
+> ea8b33bde76c8f Stephane Grosjean 2019-12-06  509  		}
+> 46be265d338833 Stephane Grosjean 2012-03-02  510  	}
+> 46be265d338833 Stephane Grosjean 2012-03-02  511 =20
+> c11dcee7583027 Stephane Grosjean 2021-07-15  512  	if (!skb)
+> c11dcee7583027 Stephane Grosjean 2021-07-15  513  		return -ENOMEM;
+
+If cf is NULL, so is skb....
+
+> 46be265d338833 Stephane Grosjean 2012-03-02  514 =20
+> 46be265d338833 Stephane Grosjean 2012-03-02  515  	if (status_len & PCAN_=
+USB_STATUSLEN_TIMESTAMP) {
+> c9faaa09e2a133 Oliver Hartkopp   2012-11-21  516  		struct skb_shared_hwt=
+stamps *hwts =3D skb_hwtstamps(skb);
+> c9faaa09e2a133 Oliver Hartkopp   2012-11-21  517 =20
+> d5888a1e75c799 Arnd Bergmann     2017-11-03  518  		peak_usb_get_ts_time(=
+&mc->pdev->time_ref, mc->ts16,
+> d5888a1e75c799 Arnd Bergmann     2017-11-03  519  				     &hwts->hwtstam=
+p);
+> 46be265d338833 Stephane Grosjean 2012-03-02  520  	}
+> 46be265d338833 Stephane Grosjean 2012-03-02  521 =20
+> 46be265d338833 Stephane Grosjean 2012-03-02  522  	mc->netdev->stats.rx_p=
+ackets++;
+> c7b74967799b1a Oliver Hartkopp   2020-11-20 @523  	mc->netdev->stats.rx_b=
+ytes +=3D cf->len;
+>                                                                          =
+             ^^^^^^^^
+> No check for NULL.
+
+=2E..then this code is not reached.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--qem4j3f2flcmpazt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmGqMKcACgkQqclaivrt
+76n0Iwf9HWjl3P35YRJKwX+091fA7NeknznWw1Zaa+9cKnh/7qI50UPvN02Sa87j
+GApkLy1LPP6a/BwLycEXaBB//4jf2qIsrOfGUSSJWX2FMugkk3aDEEcWvlSIggxY
+W3uymG9hv2rs2uljuZFb5peEYoa+yUL0HG5vI1kOOBayHI7FbNgoMzkcGGT4FGcD
+zmQgK18xnd2+EHswrc4nkmw8fs3qju+iZRJeVQqukq6+lkZMhH5RrtBBghWlReOR
+5ISuLipLBS9OuIRptaarcWtUQtVjLo2Hjoqw7l2fRdDvK++j/lB0GNVzW7s52BDs
+03ahdB1rqW/LMuIZcNxXGffNf6iKdw==
+=1km7
+-----END PGP SIGNATURE-----
+
+--qem4j3f2flcmpazt--

@@ -2,142 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DAA467A31
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 16:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0E0467A33
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 16:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381741AbhLCP10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 10:27:26 -0500
-Received: from mta-p6.oit.umn.edu ([134.84.196.206]:39104 "EHLO
-        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245140AbhLCP1Z (ORCPT
+        id S1381754AbhLCP1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 10:27:31 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4602 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245140AbhLCP12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 10:27:25 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4J5GnW1lqbz9vf8f
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 15:23:59 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p6.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ZpxcjcYvSlkh for <linux-kernel@vger.kernel.org>;
-        Fri,  3 Dec 2021 09:23:59 -0600 (CST)
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4J5GnV71kYz9vf8d
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 09:23:58 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4J5GnV71kYz9vf8d
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4J5GnV71kYz9vf8d
-Received: by mail-pj1-f70.google.com with SMTP id o4-20020a17090a3d4400b001a66f10df6cso1961367pjf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 07:23:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cLGGvUHQifyobmz3LmGMV247Dhq0W2shJ3e+qEVTIds=;
-        b=TNPaDNzF3K1VhbVDf4I1R5nZaBqAX6g77HbzJdKGnY8RO6IY/AyhqsDuO2Od0a5tu3
-         LEKGoEXrT5vTDVyMVrFBWynlxEK2wRyn/TLPqShENHAhrIjwNg4+dKtb9Io5Zsfg0NLA
-         V7DopEhSs1IF4LyxnB6EVfDotiDVjzndgeHRNxPemnaxHf/JWtcwFPelz6GdIfkQZHJ1
-         1GkeAl/xxISXAv7T+cAYvg27PuVHwZXGkKRyM1tL18KQlU2pgq9z/0zx14B5Dx48zDca
-         S0K1ywGE3yLPfsFmguVhVzkzuebFcbBPMzbqadlkVCiGsy7mlvlDaeLBIfN5DrDlJvLq
-         o2mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cLGGvUHQifyobmz3LmGMV247Dhq0W2shJ3e+qEVTIds=;
-        b=zc6GJARjK6xn2bjF9FDaq2Ng/YgzfwbGtlEz3DDI2/l5+uAn7gRiBMxKJzZTd8sLK7
-         rrq+INULjiwWxEUyxqTdvwoqRtkIZoqOvG7Ev+nuKQGe2lcPzmzw5J9IkYq76ljUX8M9
-         gYKyPJp/8uoPeZNbtU+R/aqxZCLJpLow1c6CxK/rHAfiTLMSvEkU+r7OXV1xGP/7loWk
-         95bjQMr4PlpIfGjGnsQF87r42odTarhcA+HkIAG5eovvrBqRqQ2suUTOYZcwt5VLJ7MF
-         G3O20drWa9EiEGXUe6zzZ20p5aMyAJGbKKHzMWSCrS+xDnh3dQqgWA5Io064MK1qpGLc
-         R9qw==
-X-Gm-Message-State: AOAM533XvuyE4GWj1a4rYgezO/DMlqunsf3+DrAEFZIjHzDgqLJA07it
-        ai/FAky0nEHVD0Egh9BcWjUWPhjBaF+zUs0n2u0HXSf4XC2n5at3rqzi7TXANGZEUj6+W45foPs
-        4H6WjEr3esx1svAFuijFRtU8Fqr6W
-X-Received: by 2002:a17:90b:1d03:: with SMTP id on3mr1285024pjb.68.1638545037867;
-        Fri, 03 Dec 2021 07:23:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwjkihQgC/+XOXAxkIe19mpdvtqNj0OFzj+orHDGdZiV+ukP/97LX7BCjS9Dn2qd5/hJVGyUw==
-X-Received: by 2002:a17:90b:1d03:: with SMTP id on3mr1284989pjb.68.1638545037601;
-        Fri, 03 Dec 2021 07:23:57 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.4.93.212])
-        by smtp.gmail.com with ESMTPSA id z4sm3550613pfg.101.2021.12.03.07.23.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 07:23:57 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Airlie <airlied@redhat.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drm/radeon/radeon_connectors: Fix a NULL pointer dereference in radeon_fp_native_mode()
-Date:   Fri,  3 Dec 2021 23:23:50 +0800
-Message-Id: <20211203152350.105099-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CADnq5_ONy+=6ufko6aBiTDwBsUuRGqqJxcDvNmAEoELUMJMxWw@mail.gmail.com>
-References: <CADnq5_ONy+=6ufko6aBiTDwBsUuRGqqJxcDvNmAEoELUMJMxWw@mail.gmail.com>
+        Fri, 3 Dec 2021 10:27:28 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B3DGefn028636;
+        Fri, 3 Dec 2021 15:24:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Efo9Jhs0LpQtMwBo3VZ/1mqeig4JdcHeFLgixmH13U8=;
+ b=YrATOJa6A+T1gMBGVjwmfbxBjLoIWyVUnoOdk4PYXLRJMoP+Npzd6m/AsAetyPB4GXV/
+ ZDmuzMi3EvPPcP3MmnFf3g/aYzTmqyxyjwFtIPIzrucC5udwA5d/PLkP86HmoA4wZdY7
+ jQiYX1/pzA2DAFHhzsCywzaZCk9xGivTlRORcq+QojyRXkSzXGW3WX8UEJ+AZOw/3cnv
+ 0dXJpQFXSGexRAy1I5KTvBnmV/YNPUB2ubEEuIkOHB6sebyz9p3a39QXsOGj6DlWghdL
+ fJfbtxVMxAOpNhZNikO0/zrRHZMMl7Sc8GH+LMaGkX4roTAfXZoWY8+TlLV9Q1y8RYZ8 hg== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cqkyvtwee-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Dec 2021 15:24:00 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B3FIH6X007556;
+        Fri, 3 Dec 2021 15:23:58 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3ckbxky45v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Dec 2021 15:23:58 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B3FNs2v29360618
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Dec 2021 15:23:54 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C514311C04A;
+        Fri,  3 Dec 2021 15:23:54 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9599D11C050;
+        Fri,  3 Dec 2021 15:23:54 +0000 (GMT)
+Received: from [9.145.11.85] (unknown [9.145.11.85])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  3 Dec 2021 15:23:54 +0000 (GMT)
+Message-ID: <a1fb26c0-14a4-0d8f-6f31-37cca112df14@linux.ibm.com>
+Date:   Fri, 3 Dec 2021 16:23:54 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [PATCH v2] powerpc/pseries: read the lpar name from the firmware
+Content-Language: en-US
+To:     Michael Ellerman <michaele@au1.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, Nathan Lynch <nathanl@linux.ibm.com>
+References: <20211201190642.49897-1-ldufour@linux.ibm.com>
+ <87y251ooth.fsf@mpe.ellerman.id.au>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <87y251ooth.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: gojMuHEmzQAgrqppuuxMlG_Im2AMFxTJ
+X-Proofpoint-ORIG-GUID: gojMuHEmzQAgrqppuuxMlG_Im2AMFxTJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-03_07,2021-12-02_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ mlxscore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
+ impostorscore=0 bulkscore=0 spamscore=0 suspectscore=0 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112030095
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In radeon_fp_native_mode(), the return value of drm_mode_duplicate() is
-assigned to mode and there is a dereference of it in
-radeon_fp_native_mode(), which could lead to a NULL pointer
-dereference on failure of drm_mode_duplicate().
+On 03/12/2021, 13:28:10, Michael Ellerman wrote:
+> Hi Laurent,
+> 
+> Just a few minor comments below ...
 
-Fix this bug by adding a check of mode.
+Thanks, Michael, for your _major_ comments.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+I'll send a version 3 soon.
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
+Laurent.
 
-Builds with CONFIG_DRM_RADEON=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: d2efdf6d6f42 ("drm/radeon/kms: add cvt mode if we only have lvds w/h and no edid (v4)")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
-Changes in v2:
-  -  Add a similar check in else clause
-
- drivers/gpu/drm/radeon/radeon_connectors.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/gpu/drm/radeon/radeon_connectors.c b/drivers/gpu/drm/radeon/radeon_connectors.c
-index 607ad5620bd9..7953830cc8b5 100644
---- a/drivers/gpu/drm/radeon/radeon_connectors.c
-+++ b/drivers/gpu/drm/radeon/radeon_connectors.c
-@@ -473,6 +473,9 @@ static struct drm_display_mode *radeon_fp_native_mode(struct drm_encoder *encode
- 	    native_mode->vdisplay != 0 &&
- 	    native_mode->clock != 0) {
- 		mode = drm_mode_duplicate(dev, native_mode);
-+		if (!mode)
-+			return NULL;
-+
- 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
- 		drm_mode_set_name(mode);
- 
-@@ -487,6 +490,9 @@ static struct drm_display_mode *radeon_fp_native_mode(struct drm_encoder *encode
- 		 * simpler.
- 		 */
- 		mode = drm_cvt_mode(dev, native_mode->hdisplay, native_mode->vdisplay, 60, true, false, false);
-+		if (!mode)
-+			return NULL;
-+
- 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
- 		DRM_DEBUG_KMS("Adding cvt approximation of native panel mode %s\n", mode->name);
- 	}
--- 
-2.25.1
+> 
+> Laurent Dufour <ldufour@linux.ibm.com> writes:
+>> The LPAR name may be changed after the LPAR has been started in the HMC.
+>> In that case lparstat command is not reporting the updated value because it
+>> reads it from the device tree which is read at boot time.
+>>
+>> However this value could be read from RTAS.
+>>
+>> Adding this value in the /proc/powerpc/lparcfg output allows to read the
+>> updated value.
+>>
+>> Cc: Nathan Lynch <nathanl@linux.ibm.com>
+>> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+>> ---
+>> v2:
+>>  address Nathan's comments.
+>>  change title to partition_name aligning with existing partition_id
+>> ---
+>>  arch/powerpc/platforms/pseries/lparcfg.c | 53 ++++++++++++++++++++++++
+>>  1 file changed, 53 insertions(+)
+>>
+>> diff --git a/arch/powerpc/platforms/pseries/lparcfg.c b/arch/powerpc/platforms/pseries/lparcfg.c
+>> index f71eac74ea92..0deca7b4cd81 100644
+>> --- a/arch/powerpc/platforms/pseries/lparcfg.c
+>> +++ b/arch/powerpc/platforms/pseries/lparcfg.c
+>> @@ -311,6 +311,58 @@ static void parse_mpp_x_data(struct seq_file *m)
+>>  		seq_printf(m, "coalesce_pool_spurr=%ld\n", mpp_x_data.pool_spurr_cycles);
+>>  }
+>>  
+>> +/*
+>> + * PAPR defines no maximum for the LPAR name, and defines that the maximum
+>> + * length of the get-system-parameter's output buffer is 4000 plus 2 bytes for
+>> + * the length. Limit LPAR's name size to 1024
+>> + */
+>> +#define SPLPAR_LPAR_NAME_MAXLEN	1026
+> 
+> Why not just allocate the full 4000? That's not much memory in the
+> scheme of things, and allocating less risks us needing to update this in
+> future. I realise that's a ridiculously long LPAR name, but still.
+> 
+>> +#define SPLPAR_LPAR_NAME_TOKEN	55
+> 
+> Can you add a comment saying where that value is defined, PAPR?
+> 
+>> +static void parse_lpar_name(struct seq_file *m)
+> 
+> Nitpick, but we're not really parsing it, we're just reading it from firmware.
+> 
+>> +{
+>> +	int rc, len, token;
+>> +	unsigned char *local_buffer;
+>> +
+>> +	token = rtas_token("ibm,get-system-parameter");
+>> +	if (token == RTAS_UNKNOWN_SERVICE)
+>> +		return;
+>> +
+>> +	local_buffer = kmalloc(SPLPAR_LPAR_NAME_MAXLEN, GFP_KERNEL);
+>> +	if (!local_buffer)
+>> +		return;
+>> +
+>> +	do {
+>> +		spin_lock(&rtas_data_buf_lock);
+>> +
+>> +		memset(rtas_data_buf, 0, RTAS_DATA_BUF_SIZE);
+>> +		rc = rtas_call(token, 3, 1, NULL, SPLPAR_LPAR_NAME_TOKEN,
+>> +			       __pa(rtas_data_buf), RTAS_DATA_BUF_SIZE);
+>> +		memcpy(local_buffer, rtas_data_buf, SPLPAR_LPAR_NAME_MAXLEN);
+> 
+> Would be nice to skip the memcpy() if rc is non-zero.
+> 
+>> +		spin_unlock(&rtas_data_buf_lock);
+>> +	} while (rtas_busy_delay(rc));
+>> +
+>> +	if (rc != 0) {
+>> +		pr_err_once(
+>> +			"%s %s Error calling get-system-parameter (0x%x)\n",
+>> +			__FILE__, __func__, rc);
+>> +	} else {
+>> +		local_buffer[SPLPAR_LPAR_NAME_MAXLEN - 1] = '\0';
+>> +		len = local_buffer[0] * 256 + local_buffer[1];
+> 
+> This is kind of a hand rolled be16_to_cpu().
+> 
+> And we also have the + 2 to skip the length in several places.
+> 
+> I feel like the code would be cleaner if we had a type for the result
+> buffer, eg something like:
+> 
+> union {
+> 	char raw_buffer[1026];
+>         struct {
+>         	__be16 len;
+>                 char data[1024];
+>         };
+> };
+> 
+>> +		/*
+>> +		 * Forces an empty string in the weird case fw reports no data.
+>> +		 */
+>> +		if (!len)
+>> +			local_buffer[2] = '\0';
+>> +
+>> +		seq_printf(m, "partition_name=%s\n", local_buffer + 2);
+> 
+> Then above you could use the data field rather than having to add the
+> "2" in both places.
+> 
+>> +	}
+>> +
+>> +	kfree(local_buffer);
+>> +}
+>> +
+>> +
+>>  #define SPLPAR_CHARACTERISTICS_TOKEN 20
+>>  #define SPLPAR_MAXLENGTH 1026*(sizeof(char))
+>>  
+>> @@ -496,6 +548,7 @@ static int pseries_lparcfg_data(struct seq_file *m, void *v)
+>>  
+>>  	if (firmware_has_feature(FW_FEATURE_SPLPAR)) {
+>>  		/* this call handles the ibm,get-system-parameter contents */
+>> +		parse_lpar_name(m);
+>>  		parse_system_parameter_string(m);
+>>  		parse_ppp_data(m);
+>>  		parse_mpp_data(m);
+>> -- 
+>> 2.34.1
+> 
+> 
+> cheers
+> 
 

@@ -2,102 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB86466F04
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 02:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47416466F07
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 02:13:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233521AbhLCBO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 20:14:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbhLCBO4 (ORCPT
+        id S236994AbhLCBRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 20:17:05 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35198 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229570AbhLCBRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 20:14:56 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6B0C061757;
-        Thu,  2 Dec 2021 17:11:32 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 2 Dec 2021 20:17:04 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J4vsv3CSNz4xbC;
-        Fri,  3 Dec 2021 12:11:31 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1638493891;
-        bh=+JylP2RVIbtJzYpK2ZtaZSsm+v7AMw7cQapVbRNSwI8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=j/t8FbUTVygIvVEoxzzZeVOIlusztuSn4HuxDqsS5CfLp5BE/rNBKoWcnGHmhPitv
-         PzUTw22HhaYWs+WvRmGOXGuScXvgCT3wxz6PIV4ZAjlb8kRYnDCZKhmuQW3vM3TeSi
-         nIz+9c9qz9/3zi1SF13P9qFNiJIWHQqMSGAQnj272Jkd/hMLVJQQTDguqSFB2aQmWj
-         QZp81bpe2lrteGS8N190rWVOJU3dCiIKDgqeB16b+oM2pmF17lblSKI/ydd7qxTCNM
-         kOsh7WJS7l225DTMkC6wTJh7ppHqwW1i1WX+A60L+imI6V/Xhbm2ecGQnWdX3d9ZDu
-         CnBhtLuPtJOLA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Mark Rutland <mark.rutland@arm.com>, Rob Herring <robh@kernel.org>
-Cc:     Calvin Zhang <calvinzhang.cool@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] of: unmap memory regions in /memreserve node
-In-Reply-To: <YaiRAD40xCK7u3Hl@FVFF77S0Q05N>
-References: <20211124133347.3861391-1-calvinzhang.cool@gmail.com>
- <YaapE8oys5zQEdD5@robh.at.kernel.org> <YaiRAD40xCK7u3Hl@FVFF77S0Q05N>
-Date:   Fri, 03 Dec 2021 12:11:26 +1100
-Message-ID: <874k7qpk5d.fsf@mpe.ellerman.id.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 933D2B8259E
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 01:13:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1478C00446;
+        Fri,  3 Dec 2021 01:13:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638494019;
+        bh=n57k6U7BW8VgLU48lSFDh1oK3CtoLW1LIqJES3Ic1Qg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=rWxP8RrXU1aUJtsDSV7yB6O9Nbxn0EzwuegKXWK1eBR8dQPcHgNSkF2SWozC+Ko77
+         HjdsAYV6epgBvjHwk2ij/W0yLTUvcsHXLfakmR27+D1zNMR0/H2ospYKkP/VdQI6X/
+         9jbfNank/a+UMNDie59tUgrrLXxYVqAFgqKXw4/9zkAMjMYeKNqEJucGk2NiLYeoT0
+         XuKpNF7QZy2sskjTf04gxbRDHpi3gFIgJ29H/aygFHH+KpDZzzmdi90vTyIa8+KjZi
+         GjZKz4stzfy0SP+u4AC+5ZYwJAWosoh3zZABovEjZP1rBbNWDcsbp+1MQLTWKROXlC
+         RGn02P4chgrGQ==
+Message-ID: <0a4a1ad5-5143-bd51-c8db-194f7fa443b7@kernel.org>
+Date:   Thu, 2 Dec 2021 17:13:37 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH V7 08/18] x86/entry: Preserve PKRS MSR across exceptions
+Content-Language: en-US
+To:     Ira Weiny <ira.weiny@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
+        linux-mm@kvack.org
+References: <20210804043231.2655537-1-ira.weiny@intel.com>
+ <20210804043231.2655537-9-ira.weiny@intel.com>
+ <20211113005051.GN3538886@iweiny-DESK2.sc.intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+In-Reply-To: <20211113005051.GN3538886@iweiny-DESK2.sc.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark Rutland <mark.rutland@arm.com> writes:
-> On Tue, Nov 30, 2021 at 04:43:31PM -0600, Rob Herring wrote:
->> +linuxppc-dev
- 
-Sorry missed this until now ...
+On 11/12/21 16:50, Ira Weiny wrote:
+> On Tue, Aug 03, 2021 at 09:32:21PM -0700, 'Ira Weiny' wrote:
+>> From: Ira Weiny <ira.weiny@intel.com>
+>>
+>> The PKRS MSR is not managed by XSAVE.  It is preserved through a context
+>> switch but this support leaves exception handling code open to memory
+>> accesses during exceptions.
+>>
+>> 2 possible places for preserving this state were considered,
+>> irqentry_state_t or pt_regs.[1]  pt_regs was much more complicated and
+>> was potentially fraught with unintended consequences.[2]  However, Andy
+>> came up with a way to hide additional values on the stack which could be
+>> accessed as "extended_pt_regs".[3]
+> 
+> Andy,
+> 
+> I'm preparing to send V8 of this PKS work.  But I have not seen any feed back
+> since I originally implemented this in V4[1].
+> 
+> Does this meets your expectations?  Are there any issues you can see with this
+> code?
 
->> On Wed, Nov 24, 2021 at 09:33:47PM +0800, Calvin Zhang wrote:
->> > Reserved memory regions in /memreserve node aren't and shouldn't
->> > be referenced elsewhere. So mark them no-map to skip direct mapping
->> > for them.
->> 
->> I suspect this has a high chance of breaking some platform. There's no 
->> rule a region can't be accessed.
->
-> The subtlety is that the region shouldn't be explicitly accessed (e.g.
-> modified),
-
-I think "modified" is the key there, reserved means Linux doesn't use
-the range for its own data, but may still read from whatever is in the
-range.
-
-On some platforms the initrd will be marked as reserved, which Linux
-obviously needs to read from.
-
-> but the OS is permitted to have the region mapped. In ePAPR this is
-> described as:
->
->    This requirement is necessary because the client program is permitted to map
->    memory with storage attributes specified as not Write Through Required, not
->    Caching Inhibited, and Memory Coherence Required (i.e., WIMG = 0b001x), and
->    VLE=0 where supported. The client program may use large virtual pages that
->    contain reserved memory. However, the client program may not modify reserved
->    memory, so the boot program may perform accesses to reserved memory as Write
->    Through Required where conflicting values for this storage attribute are
->    architecturally permissible.
->
-> Historically arm64 relied upon this for spin-table to work, and I *think* we
-> might not need that any more I agree that there's a high chance this will break
-> something (especially on 16K or 64K page size kernels), so I'd prefer to leave
-> it as-is.
-
-Yeah I agree. On powerpc we still use large pages for the linear mapping
-(direct map), so reserved regions will be incidentally mapped as
-described above.
-
-> If someone requires no-map behaviour, they should use a /reserved-memory entry
-> with a no-map property, which will work today and document their requirement
-> explicitly.
-
-+1.
-
-cheers
+I think I'm generally okay with the approach to allocating space.  All 
+of Thomas' comments still apply, though.  (Sorry, I'm horribly behind.)

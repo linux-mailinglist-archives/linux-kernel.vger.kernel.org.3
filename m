@@ -2,92 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15CD44675A3
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA1C4675A6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352183AbhLCK4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 05:56:12 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:50412 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237048AbhLCK4L (ORCPT
+        id S1380042AbhLCK4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 05:56:54 -0500
+Received: from outbound-smtp32.blacknight.com ([81.17.249.64]:55540 "EHLO
+        outbound-smtp32.blacknight.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237048AbhLCK4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 05:56:11 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 57C0BA59;
-        Fri,  3 Dec 2021 11:52:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638528766;
-        bh=gRR+IXbjrfOBB7AE2iBz2rWScEFKRnf1B2FF0CZ3jz8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lVpTe4zmfbQeDpw/iGDaz0nqxUXzeXqg0eUa7f8wLC7QICzSJ65HX2d8ydxArxgy0
-         1nrAae1QlZniNTLmC8SV641Jim5ntea1t4OiwhXkjoNkUpxqh9KGP5uIP7DV7ALEqy
-         AM7ad6b87KmRDprxBaTgWVGPyhzLTDnK3FFC5tRs=
-Date:   Fri, 3 Dec 2021 12:52:19 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] media: uvcvideo: fix division by zero at stream start
-Message-ID: <Yan241Kg7O+qgQXG@pendragon.ideasonboard.com>
-References: <20211026095511.26673-1-johan@kernel.org>
- <163524570516.1184428.14632987312253060787@Monstersaurus>
- <YXfjSJ+fm+LV/m+M@pendragon.ideasonboard.com>
- <YXfvXzgnvPVqwqZs@hovoldconsulting.com>
- <YXh4NqnpzOnPiA5/@pendragon.ideasonboard.com>
- <Yanxc/229JFkuP/v@hovoldconsulting.com>
+        Fri, 3 Dec 2021 05:56:53 -0500
+Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
+        by outbound-smtp32.blacknight.com (Postfix) with ESMTPS id D76B7BED69
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 10:53:28 +0000 (GMT)
+Received: (qmail 4886 invoked from network); 3 Dec 2021 10:53:28 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.29])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 3 Dec 2021 10:53:28 -0000
+Date:   Fri, 3 Dec 2021 10:53:27 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Mike Galbraith <efault@gmx.de>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] sched/fair: Use weight of SD_NUMA domain in
+ find_busiest_group
+Message-ID: <20211203105327.GC3366@techsingularity.net>
+References: <20211201151844.20488-1-mgorman@techsingularity.net>
+ <20211201151844.20488-2-mgorman@techsingularity.net>
+ <CAGsJ_4z30yfw=kyBNZuSLMaCcMBmstD=bK4VOsVW3vKO3kO+fA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <Yanxc/229JFkuP/v@hovoldconsulting.com>
+In-Reply-To: <CAGsJ_4z30yfw=kyBNZuSLMaCcMBmstD=bK4VOsVW3vKO3kO+fA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johan,
-
-On Fri, Dec 03, 2021 at 11:29:07AM +0100, Johan Hovold wrote:
-> On Wed, Oct 27, 2021 at 12:50:46AM +0300, Laurent Pinchart wrote:
-> > On Tue, Oct 26, 2021 at 02:06:55PM +0200, Johan Hovold wrote:
-> > > On Tue, Oct 26, 2021 at 02:15:20PM +0300, Laurent Pinchart wrote:
-> > > > On Tue, Oct 26, 2021 at 11:55:05AM +0100, Kieran Bingham wrote:
-> > > > > Quoting Johan Hovold (2021-10-26 10:55:11)
-> > > > > > Add the missing bulk-endpoint max-packet sanity check to probe() to
-> > > > > > avoid division by zero in uvc_alloc_urb_buffers() in case a malicious
-> > > > > > device has broken descriptors (or when doing descriptor fuzz testing).
-> > > > > > 
-> > > > > > Note that USB core will reject URBs submitted for endpoints with zero
-> > > > > > wMaxPacketSize but that drivers doing packet-size calculations still
-> > > > > > need to handle this (cf. commit 2548288b4fb0 ("USB: Fix: Don't skip
-> > > > > > endpoint descriptors with maxpacket=0")).
-> > > > > > 
-> > > > > > Fixes: c0efd232929c ("V4L/DVB (8145a): USB Video Class driver")
-> > > > > > Cc: stable@vger.kernel.org      # 2.6.26
-> > > > > > Signed-off-by: Johan Hovold <johan@kernel.org>
-> > >
-> > > Note however the copy-paste error in the commit message mentioning
-> > > probe(), which is indeed where this would typically be handled.
-> > > 
-> > > Do you want me to resend or can you change
-> > > 
-> > > 	s/probe()/uvc_video_start_transfer()/
-> > > 
-> > > in the commit message when applying if you think this is acceptable as
-> > > is?
-> > 
-> > I can fix this when applying.
-> > 
-> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+On Fri, Dec 03, 2021 at 09:38:33PM +1300, Barry Song wrote:
+> On Fri, Dec 3, 2021 at 8:27 PM Mel Gorman <mgorman@techsingularity.net> wrote:
+> >
+> > find_busiest_group uses the child domain's group weight instead of
+> > the sched_domain's weight that has SD_NUMA set when calculating the
+> > allowed imbalance between NUMA nodes. This is wrong and inconsistent
+> > with find_idlest_group.
+> >
+> > This patch uses the SD_NUMA weight in both.
+> >
+> > Fixes: c4e8f691d926 ("sched/fair: Adjust the allowed NUMA imbalance when SD_NUMA spans multiple LLCS")
 > 
-> I noticed that this one hasn't showed up in linux-next yet. Do you still
-> have it in your queue or do you want me to resend?
+> Hi Mel,
+> 
+> sorry I might be missing something. but I have failed to figure out
+> where this commit is.
+> 
 
-It should be in Mauro's queue now:
+Stupid cut&paste error and failing to check it properly
 
-https://lore.kernel.org/all/YacOun3Diggsi05V@pendragon.ideasonboard.com/
+7d2b5dd0bcc4 ("sched/numa: Allow a floating imbalance between NUMA nodes")
 
 -- 
-Regards,
-
-Laurent Pinchart
+Mel Gorman
+SUSE Labs

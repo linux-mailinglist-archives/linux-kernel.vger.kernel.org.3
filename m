@@ -2,153 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A1F467B05
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1E5467B19
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241840AbhLCQOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 11:14:06 -0500
-Received: from smtprelay0235.hostedemail.com ([216.40.44.235]:44414 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229943AbhLCQOF (ORCPT
+        id S232322AbhLCQSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 11:18:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229646AbhLCQSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 11:14:05 -0500
-Received: from omf12.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 0E2FB180AF868;
-        Fri,  3 Dec 2021 16:10:40 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf12.hostedemail.com (Postfix) with ESMTPA id 564242D;
-        Fri,  3 Dec 2021 16:10:38 +0000 (UTC)
-Message-ID: <737d7d96deec73039699d62cd42b26b8862ae373.camel@perches.com>
-Subject: Re: [PATCH] xen-blkfront: Use the bitmap API when applicable
-From:   Joe Perches <joe@perches.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Juergen Gross <jgross@suse.com>, boris.ostrovsky@oracle.com,
-        sstabellini@kernel.org, roger.pau@citrix.com, axboe@kernel.dk
-Cc:     xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Date:   Fri, 03 Dec 2021 08:10:37 -0800
-In-Reply-To: <1e9291c6-48bb-88e5-37dc-f604cfa4c4db@wanadoo.fr>
-References: <1c73cf8eaff02ea19439ec676c063e592d273cfe.1638392965.git.christophe.jaillet@wanadoo.fr>
-         <c529a221-f444-ad26-11ff-f693401c9429@suse.com>
-         <d8f87c17-75d1-2e6b-65e1-23adc75bb515@wanadoo.fr>
-         <6fcddba84070c021eb92aa9a5ff15fb2a47e9acb.camel@perches.com>
-         <3d71577f-dabe-6e1a-4b03-2a44f304b702@wanadoo.fr>
-         <863f2cddacac590d581cda09d548ee0a652df8a1.camel@perches.com>
-         <1e9291c6-48bb-88e5-37dc-f604cfa4c4db@wanadoo.fr>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Fri, 3 Dec 2021 11:18:11 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEF8C061353
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 08:14:47 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id x7so2726332pjn.0
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 08:14:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mDEuCH3n+yniaEStC/bTIvAFijRLrGRV0ZCyXMk9t/M=;
+        b=oqUYSbutqJteauH4QzJUU1tERxwyPAPDs3EM1sc0ukykTNiWq39o1dov0dglm/5QqV
+         XvTnRgBdPVRgoGKaQMRYn0HK7ai7kM+8aWEPTo8HUUtJdLm/9D3J1VVTChAGdn4AHd98
+         VEmIkkCkynqxDfng4apt3z7nBS65wq8VEEzI3bh+gcihDy7bYlq0nsQDqYn64U4lge4M
+         QMmchmZ50jnEjuZnsoeCW2OoPLJMXrUiSPcQT+/h8Nrn66ZzDGtonMlqo3AqPjre3K5/
+         JPYmUMKkRqHh31DXge2eRfYWyhhTqGB036sKzb5T6taryxdgDuDPqD/B0oUffI2cWSfe
+         k5+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mDEuCH3n+yniaEStC/bTIvAFijRLrGRV0ZCyXMk9t/M=;
+        b=0NGGBaVjrA1TKQJXmgajRlpXptBvijnxJ9/75zK3N0tnUWq93bZapDjY8iXBmXX1dP
+         pqHiEoc7L3KAX+jkUiOXa/XLM8nE6DmbJfEhX0sB0L8zKoCgqusa61lmyhr683TeugPP
+         KvQ4+B+qbh8j4AXeSSllSMBrEmdv900sGhEpmK1l+V/RQ1q73lWgA7tsKSifwnm+rCWi
+         ikbh9MqpEx8J47bf56vgnUW9MM2zZSwdW/3GHPNZZdhVg8o/HHHDjafxUp0tIOB0agc4
+         e4h70+U5lBHfiACrkaIX9hqdPJ5HJnrf2+UyTGQmE/JJ+JbHhgCd0IJsTXPuPeBCwhmu
+         Aztw==
+X-Gm-Message-State: AOAM533JXIfOY/Vt3lVF+REj4uGLM5fxKcwBH1zFm6U1wKhMeaCJqM5I
+        hSFN6CpZtt0qAWAjmMPmnK+oxg==
+X-Google-Smtp-Source: ABdhPJxvvSjINFqQcAHf2+Clt4J5Cn7W5SqPzyCyKfYyq/bvZNquHePCmEG8d2EWGpoFnpbBVV59ag==
+X-Received: by 2002:a17:90b:17c4:: with SMTP id me4mr15106820pjb.15.1638548086685;
+        Fri, 03 Dec 2021 08:14:46 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id v38sm2826654pgl.38.2021.12.03.08.14.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 08:14:45 -0800 (PST)
+Date:   Fri, 3 Dec 2021 16:14:42 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, isaku.yamahata@intel.com,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>
+Subject: Re: [RFC PATCH v3 14/59] KVM: x86: Add vm_type to differentiate
+ legacy VMs from protected VMs
+Message-ID: <YapCclOiQXWGXVEr@google.com>
+References: <cover.1637799475.git.isaku.yamahata@intel.com>
+ <60a163e818b9101dce94973a2b44662ba3d53f97.1637799475.git.isaku.yamahata@intel.com>
+ <87tug0jbno.ffs@tglx>
+ <YaUPZj4ja5FY7Fvh@google.com>
+ <20211201193737.GB1166703@private.email.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 564242D
-X-Spam-Status: No, score=-4.90
-X-Stat-Signature: skzu1e47gn4yh4br1u6yk3izt6hqdaja
-X-Rspamd-Server: rspamout03
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/Cp6pUluPgKVCI9lR+/9PfIk4J2JPI1hA=
-X-HE-Tag: 1638547838-500636
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211201193737.GB1166703@private.email.ne.jp>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2021-12-03 at 16:54 +0100, Christophe JAILLET wrote:
-> Le 03/12/2021 à 04:03, Joe Perches a écrit :
-> > On Thu, 2021-12-02 at 20:07 +0100, Christophe JAILLET wrote:
-> > > Le 02/12/2021 à 19:16, Joe Perches a écrit :
-> > > > On Thu, 2021-12-02 at 19:12 +0100, Christophe JAILLET wrote:
-> > > > > Le 02/12/2021 à 07:12, Juergen Gross a écrit :
-> > > > > > On 01.12.21 22:10, Christophe JAILLET wrote:
-> > > > > > > Use 'bitmap_zalloc()' to simplify code, improve the semantic and avoid
-> > > > > > > some open-coded arithmetic in allocator arguments.
-> > > > > > > 
-> > > > > > > Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
-> > > > > > > consistency.
-> > > > > > > 
-> > > > > > > Use 'bitmap_copy()' to avoid an explicit 'memcpy()'
-> > > > []
-> > > > > > > diff --git a/drivers/block/xen-blkfront.c b/drivers/block/xen-blkfront.c
-> > > > []
-> > > > > > > @@ -442,16 +442,14 @@ static int xlbd_reserve_minors(unsigned int
-> > > > > > > minor, unsigned int nr)
-> > > > > > >         if (end > nr_minors) {
-> > > > > > >             unsigned long *bitmap, *old;
-> > > > > > > -        bitmap = kcalloc(BITS_TO_LONGS(end), sizeof(*bitmap),
-> > > > > > > -                 GFP_KERNEL);
-> > > > > > > +        bitmap = bitmap_zalloc(end, GFP_KERNEL);
-> > > > > > >             if (bitmap == NULL)
-> > > > > > >                 return -ENOMEM;
-> > > > > > >             spin_lock(&minor_lock);
-> > > > > > >             if (end > nr_minors) {
-> > > > > > >                 old = minors;
-> > > > > > > -            memcpy(bitmap, minors,
-> > > > > > > -                   BITS_TO_LONGS(nr_minors) * sizeof(*bitmap));
-> > > > > > > +            bitmap_copy(bitmap, minors, nr_minors);
-> > > > > > >                 minors = bitmap;
-> > > > > > >                 nr_minors = BITS_TO_LONGS(end) * BITS_PER_LONG;
-> > > > 
-> > > > 		nr_minors = end;
-> > > > ?
-> > > > 
+On Wed, Dec 01, 2021, Isaku Yamahata wrote:
+> On Mon, Nov 29, 2021 at 05:35:34PM +0000,
+> Sean Christopherson <seanjc@google.com> wrote:
+> 
+> > On Thu, Nov 25, 2021, Thomas Gleixner wrote:
+> > > On Wed, Nov 24 2021 at 16:19, isaku yamahata wrote:
+> > > > From: Sean Christopherson <sean.j.christopherson@intel.com>
+> > > >
+> > > > Add a capability to effectively allow userspace to query what VM types
+> > > > are supported by KVM.
 > > > 
-> > > No,
-> > > My understanding of the code is that if we lack space (end > nr_minors),
-> > > we need to allocate more. In such a case, we want to keep track of what
-> > > we have allocated, not what we needed.
-> > > The "padding" bits in the "long align" allocation, can be used later.
+> > > I really don't see why this has to be named legacy. There are enough
+> > > reasonable use cases which are perfectly fine using the non-encrypted
+> > > muck. Just because there is a new hyped feature does not make anything
+> > > else legacy.
 > > 
-> > > 
-> > > first call
-> > > ----------
-> > > end = 65
-> > > nr_minors = 63
-> > > 
-> > > --> we need some space
-> > > --> we allocate 2 longs = 128 bits
-> > > --> we now use 65 bits of these 128 bits
+> > Yeah, this was brought up in the past.  The current proposal is to use
+> > KVM_X86_DEFAULT_VM[1], though at one point the plan was to use a generic
+> > KVM_VM_TYPE_DEFAULT for all architectures[2], not sure what happened to that idea.
 > > 
-> > or 96, 32 or 64 bit longs remember.
+> > [1] https://lore.kernel.org/all/YY6aqVkHNEfEp990@google.com/
+> > [2] https://lore.kernel.org/all/YQsjQ5aJokV1HZ8N@google.com/
 > 
-> 32 and 64 for sure, but I was not aware of 96. On which arch?
+> Currently <feature>_{unsupported, disallowed} are added and the check is
+>  sprinkled and warn in the corresponding low level tdx code.  It helped to
+>  detect dubious behavior of guest or qemu.
 
-For more clarity that should have been a period instead of comma after 96.
+KVM shouldn't log a message or WARN unless the issue is detected at a late sanity
+check, i.e. where failure indicates a KVM bug.  Other than that, I agree that KVM
+should reject ioctls() that directly violate the rules of a confidential VM with
+an appropriate error code.  I don't think KVM should reject everything though,
+e.g. if the guest attempts to send an SMI, dropping the request on the floor is
+the least awful option because we can't communicate an error to the guest without
+making up our own architecture, and exiting to userspace with -EINVAL from deep
+in KVM would be both painful to implement and an overreaction since doing so would
+likely kill the guest.
 
-
-> > The initial allocation is now bitmap_zalloc which
-> > specifies only bits and the nr_minors is then in
-> > BITS_TO_LONGS(bits) * BITS_PER_LONG
-> > 
-> > Perhaps that assumes too much about the internal
-> > implementation of bitmap_alloc
+> The other approach is to silently ignore them (SMI, INIT, IRQ etc) without
+> such check.  The pros is, the code would be simpler and it's what SEV does today.
+> the cons is, it would bes hard to track down such cases and the user would
+> be confused.  For example, when user requests reset/SMI, it's silently ignored.
+> The some check would still be needed.
+> Any thoughts?
 > 
-> I get your point now, and I agree with you.
-> 
-> Maybe something as what is done in mc-entity.c?
-> Explicitly require more bits (which will be allocated anyway), instead 
-> of taking advantage (read "hoping") that it will be done.
-
-Sure, that's sensible.
-
-> Could be:
-> 
-> @@ -440,26 +440,25 @@ static int xlbd_reserve_minors(unsigned int minor, 
-> unsigned int nr)
->   	int rc;
-> 
->   	if (end > nr_minors) {
->   		unsigned long *bitmap, *old;
-> 
-> -		bitmap = kcalloc(BITS_TO_LONGS(end), sizeof(*bitmap),
-> -				 GFP_KERNEL);
-> +		end = ALIGN(end, BITS_PER_LONG);
-
-Though it may be more sensible to use some other alignment
-like round_up and not use BITS_PER_LONG at all as the
-number of these may not be dependent on 32/64 bit arches
-at all.
-
-Maybe something like:
-
-#define GROW_MINORS	64
-
-		end = round_up(nr_minors, GROW_MINORS);
-
-etc...
-
+> -- 
+> Isaku Yamahata <isaku.yamahata@gmail.com>

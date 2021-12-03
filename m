@@ -2,98 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B434680E0
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 00:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D074680DA
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 00:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354443AbhLCXtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 18:49:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
+        id S1354313AbhLCXtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 18:49:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354388AbhLCXtH (ORCPT
+        with ESMTP id S230023AbhLCXtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 18:49:07 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48E7C061353
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 15:45:42 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so5357741oto.13
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 15:45:42 -0800 (PST)
+        Fri, 3 Dec 2021 18:49:01 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84C4C061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 15:45:36 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id z6so3153346plk.6
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 15:45:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=60reH7R0DIOnYiDzjJxXKxDAKSmQYMrrZWuqMItQwS0=;
-        b=lwLR59toSKg0d3DkxASJYGkZ8L16glxKUaDTTvF+88eWEDzjr4kjtxvRl33PVBnKDD
-         htg85jvk5miIto3O0oC10nexmnVRUMkm0LPTObzhAaHdC9pSe7CF2JCNF75x/WGIkOG3
-         PM1RuTN6Nhu5/g4qGlmgmqHRM2UZSR8UXi8+g/rcskGP7alvFuGEMFDeGahQ1pLEjsrX
-         Z6EFmUfQjhtG/4rRPSVC1kWoUh+nSdz2aRIUoHXdKW8VYEFiDZIrfgmJAN7aC4i78hhh
-         MVVhyQh/Hs2vmX+fTK9085aBpBW56vEUhxfheI0Ytpw8QrKAGkDBvIXT/x3LUmzXzWvU
-         D5eA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yD6g0uGUpXofVzj8NK/B5yfkrr/b2pwl08L+HXZNmGc=;
+        b=IDYdi2gcCU7orh4FCNZ/3qn99byxzKL2xcCN/fy7149//aVjPNvsiuErNGtJG6jiTk
+         +vcFYKfykKTbUQrJ682QgjNeEGcYx8tYLYSM4NDVmq/OJlpjLATES0QTffx7/p1ec8GW
+         Kt5/GAxt3xPVZ++X51blLwWo5Yizh8vAQTdkRk4oAVhECQFthHqToe5+J5LzMUyOFB4g
+         YtqAuga7Rin6skchpNJLGJ6JZNxHXNlrLHRkGhMeuIXWGJDRFiio15Vexh6+QYSG/x0s
+         SH7gh9Sifx2PMnXScCVsPV0bH/y0XTa4a/UEZjvXYNmmCQcOeFQ8H9xkjWhkz4qze/xo
+         O6Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=60reH7R0DIOnYiDzjJxXKxDAKSmQYMrrZWuqMItQwS0=;
-        b=PKjmmZqfmXpnlhNPvHfLMSxMhcRHLJ1DQ4xF6IlaPuIhNwWbWs20O5vP+X7OG93fI4
-         Y59iFSLVUx55oT7g/GUtV7ueZlRyF1XK8kMT71ik9FucQpkh+Vzjw0QVfckz2D1P1PLI
-         6qx5usv3QAiRXvT8OWhHoaHDE+LzOnsjpKvl+mx6z41HDy6iHyqN49ZdeZJIbxlfX1Kv
-         kyO8J1iKFOt5J7HTf7D0q+ym+DwZVudCJwOts4rmbk6aX6DMBn7xSSPnYgshZ4iqeVb2
-         b0qpP2fDauklWT64P1RqQaiWDJyR8+Ekr6kAmsuPN4F9KnKhjVa2INs5+uoPf/5UT7Uf
-         GWSg==
-X-Gm-Message-State: AOAM530K/ePfYbyc5wrB8nA4U5S3WqfhSZ0TaLDZxuwdHqQGgBmD/de4
-        UJiuzD9OatBUobHTTr/3ELKEDNF672u4EgJCK8JjrQ==
-X-Google-Smtp-Source: ABdhPJwprIsuAE81kQhNwY2u7JUyLZ0Gf1lKN54zx/jf0D8m6dhbAAqy4FkFq551WfGByrnkVKj8Umhm/PE2NQckFns=
-X-Received: by 2002:a9d:77d1:: with SMTP id w17mr18546120otl.329.1638575142007;
- Fri, 03 Dec 2021 15:45:42 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yD6g0uGUpXofVzj8NK/B5yfkrr/b2pwl08L+HXZNmGc=;
+        b=vv1ronL3SsgXlhiL1Y4EaRX2nAJDSecR5Q7VopxXWBxQ97H+w8naPJ++q99AcvgFY5
+         LXAc9BX2bMkPel8r4pop2IgO2W2b6SV9o7Ro8ZByLlDvZRgJ3BtxZjAUDyRtl34j5BR3
+         z/L2M11VXISR9SYroMM9eHg5pcHEnCKx5r4l0pzbCGQN/s5ZFQUTYWg50Pd5UmZKE1Sz
+         sXNU4R8nkBbAPqeRMFp5uzgGL5X4rDp3yemcgUwyiz4b13OZGNK7yKuh+0mf7kygTNtF
+         +A8ES9mGG+dPjguUFc4nau7Um6zVzVAoDk/JP2R961iKLDxojweT853iv3Ypt8P+1zhA
+         H5TA==
+X-Gm-Message-State: AOAM532ubTJbJB6EHgWKzpuBRz/j3sHg4r7Xn1X7EY26I3LejRw1F5EU
+        reO+aXZeFjw00IWdf7pYf3/EO66aUciTUw==
+X-Google-Smtp-Source: ABdhPJwhSBTsZDHrLEJdD1LTuDAAzOLhcJfgIx6HJ3Hrk2ouSqIr1bcL3Rr3j7eKMr5wwS0weuWQ/w==
+X-Received: by 2002:a17:902:f24a:b0:141:c6fc:2e18 with SMTP id j10-20020a170902f24a00b00141c6fc2e18mr26414542plc.55.1638575136288;
+        Fri, 03 Dec 2021 15:45:36 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id b6sm4352949pfm.170.2021.12.03.15.45.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 15:45:35 -0800 (PST)
+Date:   Fri, 3 Dec 2021 23:45:32 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ajay Garg <ajaygargnsit@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v2 3/8] KVM: x86: Refactor kvm_hv_flush_tlb() to reduce
+ indentation
+Message-ID: <YaqsHPZdXQB/q7aP@google.com>
+References: <20211030000800.3065132-1-seanjc@google.com>
+ <20211030000800.3065132-4-seanjc@google.com>
+ <877ddskxfq.fsf@vitty.brq.redhat.com>
 MIME-Version: 1.0
-References: <20211130114433.2580590-1-elver@google.com> <20211130114433.2580590-5-elver@google.com>
- <YanbzWyhR0LwdinE@elver.google.com> <20211203165020.GR641268@paulmck-ThinkPad-P17-Gen-1>
- <20211203210856.GA712591@paulmck-ThinkPad-P17-Gen-1> <20211203234218.GA3308268@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20211203234218.GA3308268@paulmck-ThinkPad-P17-Gen-1>
-From:   Marco Elver <elver@google.com>
-Date:   Sat, 4 Dec 2021 00:45:30 +0100
-Message-ID: <CANpmjNNUinNdBBOVbAgQQYCJVftgUfQQZyPSchWhyVRyjWpedA@mail.gmail.com>
-Subject: Re: [PATCH v3 04/25] kcsan: Add core support for a subset of weak
- memory modeling
-To:     paulmck@kernel.org
-Cc:     Alexander Potapenko <glider@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877ddskxfq.fsf@vitty.brq.redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 4 Dec 2021 at 00:42, Paul E. McKenney <paulmck@kernel.org> wrote:
-[...]
-> And to further extend this bug report, the following patch suppresses
-> the error.
->
->                                                         Thanx, Paul
->
-> ------------------------------------------------------------------------
->
-> commit d157b802f05bd12cf40bef7a73ca6914b85c865e
-> Author: Paul E. McKenney <paulmck@kernel.org>
-> Date:   Fri Dec 3 15:35:29 2021 -0800
->
->     kcsan: selftest: Move test spinlock to static global
+On Mon, Nov 01, 2021, Vitaly Kuznetsov wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> 
+> > Refactor the "extended" path of kvm_hv_flush_tlb() to reduce the nesting
+> > depth for the non-fast sparse path, and to make the code more similar to
+> > the extended path in kvm_hv_send_ipi().
+> >
+> > No functional change intended.
+> >
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  arch/x86/kvm/hyperv.c | 40 +++++++++++++++++++++-------------------
+> >  1 file changed, 21 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> > index cf18aa1712bf..e68931ed27f6 100644
+> > --- a/arch/x86/kvm/hyperv.c
+> > +++ b/arch/x86/kvm/hyperv.c
+> > @@ -1814,31 +1814,33 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+> >  		if (hc->var_cnt != bitmap_weight((unsigned long *)&valid_bank_mask, 64))
+> >  			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+> >  
+> > -		if (!hc->var_cnt && !all_cpus)
+> > +		if (all_cpus)
+> > +			goto do_flush;
+> 
+> You could've probably done:
+> 
+> 	if (all_cpus) {
+> 		kvm_make_all_cpus_request(kvm, KVM_REQ_TLB_FLUSH_GUEST);
+> 		goto ret_success;
+> 	}
+> 
+> to get rid on the second 'all_cpus' check (and maybe even 'do_flush'
+> label with some extra work) below.
 
-Indeed, that will fix the selftest. The kcsan_test has the same
-problem (+1 extra problem).
-
-We raced sending the fix. :-)
-I hope this patch works for you:
-https://lkml.kernel.org/r/20211203233817.2815340-1-elver@google.com
-
-Thanks,
--- Marco
+Yeah, but the !ex path also uses all_cpus, and in general I'd prefer to keep the
+two flush requests bundled together.

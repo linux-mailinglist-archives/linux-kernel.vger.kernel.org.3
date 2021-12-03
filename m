@@ -2,188 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B55C466FAA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 03:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8409F466FAC
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 03:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378050AbhLCCVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 21:21:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
+        id S1378059AbhLCCVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 21:21:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244477AbhLCCVK (ORCPT
+        with ESMTP id S244477AbhLCCVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 21:21:10 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979BEC061757
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 18:17:47 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id r26so2979016oiw.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 18:17:47 -0800 (PST)
+        Thu, 2 Dec 2021 21:21:34 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C6CC06174A;
+        Thu,  2 Dec 2021 18:18:10 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id n66so2929613oia.9;
+        Thu, 02 Dec 2021 18:18:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/xEnHpiNZIiBMq7VBpsg6nm2XEWpv3RfgGXRqVy/dX0=;
-        b=eJ1BxUe4FjEz+PM1veXkHjD2GeDsLhl/S/Ao8DVTTwWFV0zv5YP6gIR1tWDCNVVrfL
-         p3LMroMnIwU3vCIgySbWESxtfifSg0xB19iBaCrIw2hvdwVj9QKFnXtr6MqQBB4ukbOt
-         m4eWGLXMpkbRdiGFPA5HVkhElxP1/a474m5+sjJCPTt7gwiIl27T7QtNI2V+y9WWvXmI
-         rNEkpqS6EoVbOJ2Fh9jXovBmS+kZiWGQ1s7rvq2y2MiDJ1yMh+4GU2z0rF84E2rSH2Ho
-         Fz/RzpU35ty1T//CDyXQF622ngb/QUg2piSTU0ooUYqd5VgZif9Z1tQdT8bWdN8wKXL6
-         zKJw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ID68FmgYdJ08/2DpLeu3xV7W5csGpDe7raph8daXNiE=;
+        b=O+hkwaxiNwrVXImb3meYbf/Te3Ad3ClwDv8bCxeXzYNuyzlZ00bwQoXxZLg/AyKhFS
+         1+IUWTZm8jR1cyxShU8Nd3TYGxDbKoBkqK1zJaWib/JLhjBgVN+/P5YRMa2p9LSmQ87Y
+         43fAHmvaoIUOQP6ivE4g2Vu0V6jtP8DfYwxO6IKPLSNsqC9L4RsGKWVJU4mCnL1Ho5i3
+         73E1fwJI94xt9aVyEW07QNhFdyV144s2JVR/u4MDgCQ7ZSoflBIwUZMdE8eKktRGKk+R
+         vwi564IffPKHiQg7Y1A1YbCcl9I8+mWgp4VQ1hDIgkpZMut726hFhYQHj2yCeQO4U+d6
+         y5hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/xEnHpiNZIiBMq7VBpsg6nm2XEWpv3RfgGXRqVy/dX0=;
-        b=Jw8K/hNeVmrglwM4JKPL1ZUvG8VHFKeCeswL0CEJQrJlnOYHZ55dKlVZq6BNBs8xF4
-         lOeuf9su0LjTty3G7CShZPluD4xY0tBy6y774Vjf3/h4uCn/Swa/VwWlQ/JnOjcauZ4r
-         wjFjONDwaPBlx1j9Y9tqXx1lrFBLCg5F0EvC5G0ut1YTjG19gFVlImNOub/LzE8PzKiA
-         FfYJFNYi48T2+cxxMps0UzaN7jLiKPwbk4dzL3ew1ZKHKantjfbXw0JhB7gSijq5rqJO
-         PWMPzg226qOV4/cKENHurZQIYRCedi6VM58L8YvquBKAyEbviyBpA+sUIjNRRfDIdw+O
-         U6qg==
-X-Gm-Message-State: AOAM533SCHlBuIXWOOeQCQ2XXffGs+vRPioEqnsMvKyEMZG+Us9bMoe+
-        ffCU5kTN9nyCZIhS048cM/ZHKw==
-X-Google-Smtp-Source: ABdhPJzlnEGMLizbKrS+0DrTUk/CTUO+16IImKgwrRBAvDWOmTbdjreM/mOhfK3TclNVwBf5MCqklQ==
-X-Received: by 2002:a05:6808:23c3:: with SMTP id bq3mr7483254oib.124.1638497866914;
-        Thu, 02 Dec 2021 18:17:46 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id t14sm379403otr.23.2021.12.02.18.17.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 18:17:46 -0800 (PST)
-Date:   Thu, 2 Dec 2021 20:17:43 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, julien.massot@iot.bzh
-Subject: Re: [PATCH v7 02/12] rpmsg: Create the rpmsg class in core instead
- of in rpmsg char
-Message-ID: <Yal+R7nd1tuBHioi@builder.lan>
-References: <20211108141937.13016-1-arnaud.pouliquen@foss.st.com>
- <20211108141937.13016-3-arnaud.pouliquen@foss.st.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ID68FmgYdJ08/2DpLeu3xV7W5csGpDe7raph8daXNiE=;
+        b=H7VcNxuLKu6GL++vqczMJzOefbUDjN39lV5vVlEtUGaFocwOX8qTCx+/zQ+Uvf6pPf
+         hzN2qjeuwIOBCJVfzxUm8UeVz/J3wgCN2U1MDoR3U3Bxe5tXYQ03P8UwhPb54HXOtnql
+         vymTNxVGEkK36zL79QC9JvZJARSItxLdji04Np2RCHWbu4rtC5K62y+Uto2WpvYfqomf
+         zoGUcfPbFv6wJycYNd2YpnUBpahY8C7kjq0Gr3/Uws//aDAQV35AY5f/z1FzAHqcI0r9
+         WqZP/46oDe2Ioc9S3OAB6XQq3p1dj2szae5sHF+A3xdWDNDOvQA46Yg3PqAHH61TchCC
+         aMpA==
+X-Gm-Message-State: AOAM533YwO8cds5O2qahJvMK6ROAUmuX+9pbkGhk/R9sDNhzDvb7K63d
+        o9YBZ2H4HAKFedTDdxH07FoaM3OKTjWMus9seik=
+X-Google-Smtp-Source: ABdhPJzu9pqRgJ91mqDl0i7dnrkE9ql0LMNO0UQNBe+FHfN2MO85arM5tMuCpB4zY4i3O0UWT7ba3c+TUg+DDTCEYFs=
+X-Received: by 2002:a05:6808:1919:: with SMTP id bf25mr7691558oib.33.1638497890165;
+ Thu, 02 Dec 2021 18:18:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211108141937.13016-3-arnaud.pouliquen@foss.st.com>
+References: <20211130123746.293379-1-pbonzini@redhat.com>
+In-Reply-To: <20211130123746.293379-1-pbonzini@redhat.com>
+From:   Wanpeng Li <kernellwp@gmail.com>
+Date:   Fri, 3 Dec 2021 10:17:59 +0800
+Message-ID: <CANRm+Cz8aKsoLpiuiL0qkgQ7HW9Ao2zS=WAUoYpM=CX5yh_8OA@mail.gmail.com>
+Subject: Re: [PATCH] KVM: ensure APICv is considered inactive if there is no APIC
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Ignat Korchagin <ignat@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 08 Nov 08:19 CST 2021, Arnaud Pouliquen wrote:
+On Wed, 1 Dec 2021 at 12:14, Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> kvm_vcpu_apicv_active() returns false if a virtual machine has no in-kernel
+> local APIC, however kvm_apicv_activated might still be true if there are
+> no reasons to disable APICv; in fact it is quite likely that there is none
+> because APICv is inhibited by specific configurations of the local APIC
+> and those configurations cannot be programmed.  This triggers a WARN:
+>
+>    WARN_ON_ONCE(kvm_apicv_activated(vcpu->kvm) != kvm_vcpu_apicv_active(vcpu));
+>
+> To avoid this, introduce another cause for APICv inhibition, namely the
+> absence of an in-kernel local APIC.  This cause is enabled by default,
+> and is dropped by either KVM_CREATE_IRQCHIP or the enabling of
+> KVM_CAP_IRQCHIP_SPLIT.
+>
+> Reported-by: Ignat Korchagin <ignat@cloudflare.com>
+> Fixes: ee49a8932971 ("KVM: x86: Move SVM's APICv sanity check to common x86", 2021-10-22)
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 
-> Migrate the creation of the rpmsg class from the rpmsg_char
-> to the core that the class is usable by the rpmsg_char and
-> the futur rpmsg_ctrl module.
-> 
-> Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Regards,
-Bjorn
+Reviewed-by: Wanpeng Li <wanpengli@tencent.com>
 
 > ---
-> Update vs previous revision:
-> - remove rpmsg_get_class API and export the rpmsg_class in rpmsg_internal.h
-> ---
->  drivers/rpmsg/rpmsg_char.c     | 10 ----------
->  drivers/rpmsg/rpmsg_core.c     | 15 +++++++++++++--
->  drivers/rpmsg/rpmsg_internal.h |  2 ++
->  3 files changed, 15 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-> index 44934d7fa3c4..8ab5ac23850c 100644
-> --- a/drivers/rpmsg/rpmsg_char.c
-> +++ b/drivers/rpmsg/rpmsg_char.c
-> @@ -29,7 +29,6 @@
->  #define RPMSG_DEV_MAX	(MINORMASK + 1)
->  
->  static dev_t rpmsg_major;
-> -static struct class *rpmsg_class;
->  
->  static DEFINE_IDA(rpmsg_ctrl_ida);
->  static DEFINE_IDA(rpmsg_ept_ida);
-> @@ -559,17 +558,9 @@ static int rpmsg_chrdev_init(void)
->  		return ret;
->  	}
->  
-> -	rpmsg_class = class_create(THIS_MODULE, "rpmsg");
-> -	if (IS_ERR(rpmsg_class)) {
-> -		pr_err("failed to create rpmsg class\n");
-> -		unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
-> -		return PTR_ERR(rpmsg_class);
-> -	}
-> -
->  	ret = register_rpmsg_driver(&rpmsg_chrdev_driver);
->  	if (ret < 0) {
->  		pr_err("rpmsgchr: failed to register rpmsg driver\n");
-> -		class_destroy(rpmsg_class);
->  		unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
->  	}
->  
-> @@ -580,7 +571,6 @@ postcore_initcall(rpmsg_chrdev_init);
->  static void rpmsg_chrdev_exit(void)
+>  arch/x86/include/asm/kvm_host.h | 1 +
+>  arch/x86/kvm/svm/avic.c         | 1 +
+>  arch/x86/kvm/vmx/vmx.c          | 1 +
+>  arch/x86/kvm/x86.c              | 9 +++++----
+>  4 files changed, 8 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 6ac61f85e07b..860ed500580c 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1036,6 +1036,7 @@ struct kvm_x86_msr_filter {
+>  #define APICV_INHIBIT_REASON_PIT_REINJ  4
+>  #define APICV_INHIBIT_REASON_X2APIC    5
+>  #define APICV_INHIBIT_REASON_BLOCKIRQ  6
+> +#define APICV_INHIBIT_REASON_ABSENT    7
+>
+>  struct kvm_arch {
+>         unsigned long n_used_mmu_pages;
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index affc0ea98d30..5a55a78e2f50 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -900,6 +900,7 @@ int svm_update_pi_irte(struct kvm *kvm, unsigned int host_irq,
+>  bool svm_check_apicv_inhibit_reasons(ulong bit)
 >  {
->  	unregister_rpmsg_driver(&rpmsg_chrdev_driver);
-> -	class_destroy(rpmsg_class);
->  	unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
->  }
->  module_exit(rpmsg_chrdev_exit);
-> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-> index 9151836190ce..45227c864aa2 100644
-> --- a/drivers/rpmsg/rpmsg_core.c
-> +++ b/drivers/rpmsg/rpmsg_core.c
-> @@ -20,6 +20,9 @@
->  
->  #include "rpmsg_internal.h"
->  
-> +struct class *rpmsg_class;
-> +EXPORT_SYMBOL(rpmsg_class);
-> +
->  /**
->   * rpmsg_create_channel() - create a new rpmsg channel
->   * using its name and address info.
-> @@ -629,10 +632,17 @@ static int __init rpmsg_init(void)
+>         ulong supported = BIT(APICV_INHIBIT_REASON_DISABLE) |
+> +                         BIT(APICV_INHIBIT_REASON_ABSENT) |
+>                           BIT(APICV_INHIBIT_REASON_HYPERV) |
+>                           BIT(APICV_INHIBIT_REASON_NESTED) |
+>                           BIT(APICV_INHIBIT_REASON_IRQWIN) |
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 1fadec8cbf96..ca1fd93c1dc9 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -7525,6 +7525,7 @@ static void hardware_unsetup(void)
+>  static bool vmx_check_apicv_inhibit_reasons(ulong bit)
 >  {
->  	int ret;
->  
-> +	rpmsg_class = class_create(THIS_MODULE, "rpmsg");
-> +	if (IS_ERR(rpmsg_class)) {
-> +		pr_err("failed to create rpmsg class\n");
-> +		return PTR_ERR(rpmsg_class);
-> +	}
-> +
->  	ret = bus_register(&rpmsg_bus);
-> -	if (ret)
-> +	if (ret) {
->  		pr_err("failed to register rpmsg bus: %d\n", ret);
-> -
-> +		class_destroy(rpmsg_class);
-> +	}
->  	return ret;
->  }
->  postcore_initcall(rpmsg_init);
-> @@ -640,6 +650,7 @@ postcore_initcall(rpmsg_init);
->  static void __exit rpmsg_fini(void)
+>         ulong supported = BIT(APICV_INHIBIT_REASON_DISABLE) |
+> +                         BIT(APICV_INHIBIT_REASON_ABSENT) |
+>                           BIT(APICV_INHIBIT_REASON_HYPERV) |
+>                           BIT(APICV_INHIBIT_REASON_BLOCKIRQ);
+>
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 0ee1a039b490..e0aa4dd53c7f 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -5740,6 +5740,7 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+>                 smp_wmb();
+>                 kvm->arch.irqchip_mode = KVM_IRQCHIP_SPLIT;
+>                 kvm->arch.nr_reserved_ioapic_pins = cap->args[0];
+> +               kvm_request_apicv_update(kvm, true, APICV_INHIBIT_REASON_ABSENT);
+>                 r = 0;
+>  split_irqchip_unlock:
+>                 mutex_unlock(&kvm->lock);
+> @@ -6120,6 +6121,7 @@ long kvm_arch_vm_ioctl(struct file *filp,
+>                 /* Write kvm->irq_routing before enabling irqchip_in_kernel. */
+>                 smp_wmb();
+>                 kvm->arch.irqchip_mode = KVM_IRQCHIP_KERNEL;
+> +               kvm_request_apicv_update(kvm, true, APICV_INHIBIT_REASON_ABSENT);
+>         create_irqchip_unlock:
+>                 mutex_unlock(&kvm->lock);
+>                 break;
+> @@ -8818,10 +8820,9 @@ static void kvm_apicv_init(struct kvm *kvm)
 >  {
->  	bus_unregister(&rpmsg_bus);
-> +	class_destroy(rpmsg_class);
+>         init_rwsem(&kvm->arch.apicv_update_lock);
+>
+> -       if (enable_apicv)
+> -               clear_bit(APICV_INHIBIT_REASON_DISABLE,
+> -                         &kvm->arch.apicv_inhibit_reasons);
+> -       else
+> +       set_bit(APICV_INHIBIT_REASON_ABSENT,
+> +               &kvm->arch.apicv_inhibit_reasons);
+> +       if (!enable_apicv)
+>                 set_bit(APICV_INHIBIT_REASON_DISABLE,
+>                         &kvm->arch.apicv_inhibit_reasons);
 >  }
->  module_exit(rpmsg_fini);
->  
-> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-> index a76c344253bf..1b6f998e1a4a 100644
-> --- a/drivers/rpmsg/rpmsg_internal.h
-> +++ b/drivers/rpmsg/rpmsg_internal.h
-> @@ -18,6 +18,8 @@
->  #define to_rpmsg_device(d) container_of(d, struct rpmsg_device, dev)
->  #define to_rpmsg_driver(d) container_of(d, struct rpmsg_driver, drv)
->  
-> +extern struct class *rpmsg_class;
-> +
->  /**
->   * struct rpmsg_device_ops - indirection table for the rpmsg_device operations
->   * @create_channel:	create backend-specific channel, optional
-> -- 
-> 2.17.1
-> 
+> --
+> 2.31.1
+>

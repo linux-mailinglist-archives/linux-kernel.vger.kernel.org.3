@@ -2,92 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC78467316
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5484672F7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379122AbhLCIIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 03:08:32 -0500
-Received: from mleia.com ([178.79.152.223]:60400 "EHLO mail.mleia.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351105AbhLCIIb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 03:08:31 -0500
-X-Greylist: delayed 475 seconds by postgrey-1.27 at vger.kernel.org; Fri, 03 Dec 2021 03:08:31 EST
-Received: from mail.mleia.com (localhost [127.0.0.1])
-        by mail.mleia.com (Postfix) with ESMTP id 0E5EB3809A0;
-        Fri,  3 Dec 2021 07:56:42 +0000 (UTC)
-Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi [88.113.46.102])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.mleia.com (Postfix) with ESMTPSA id A95D23808DE;
-        Fri,  3 Dec 2021 07:56:41 +0000 (UTC)
-Subject: Re: [PATCH RESEND] gpio: lpc32xx: Handle devm_gpiochip_add_data error
- codes
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com
-Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20211203074934.1559805-1-jiasheng@iscas.ac.cn>
-From:   Vladimir Zapolskiy <vz@mleia.com>
-Message-ID: <0b6c05ec-638a-10d5-a3e7-e6bf69adb678@mleia.com>
-Date:   Fri, 3 Dec 2021 09:56:37 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S1379030AbhLCIAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:00:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350800AbhLCIAt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 03:00:49 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE329C06173E;
+        Thu,  2 Dec 2021 23:57:25 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id t9so3901647wrx.7;
+        Thu, 02 Dec 2021 23:57:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=TNV9fHEzEZVf5RgXSWpjSpluBeliapHUf8v5v/Opj/M=;
+        b=d479v+zTrj3yISM6DulHtlbK/6f1XE8uPSziNBqeHqTrIzyMVmqeBGsmMPJIwn59we
+         4KyKd66AiXBIAR9e9t5CxIz4+7gFIABd1OmkrB2rQ6Irs+6jJK1jxv/kv06v6f4WTIJm
+         XDzamESwdaeQIwZGurAqansl6jhiAR/TcznUVHy2q6MI9VFFo4yBL+VIE5bUTZqrTX+O
+         Nkhk3lcrdZug9n412p5lGTq5DOM9RgmPWPrYYzhIndIi07rKPHjUEBNxbDlYS2LIrH9r
+         EmZd+FUOMdJmi4j8T2366SL2KI0g405NTwFpCy+FyUX2FYcRqIIimB85wRHtEtGobMbI
+         1DkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TNV9fHEzEZVf5RgXSWpjSpluBeliapHUf8v5v/Opj/M=;
+        b=fETbjw4/hhQ50scII3XI0zuG03Ud6SVTFpUxLIyyI341171LvOVaMSWqnx1c4pAeYA
+         fe+EbGafrnZ2whk+2+UOx4axju+NopYh8IeYOrJKBk7t8jrY4HbtzDlroxzzj9YnsNjR
+         9eqlrwXYdFU5eVksyYzUgDBek989nW8hb3bWM0ZLtfWdRnNQNDh/a+7Jo0i8B9uGOUpi
+         4NRVKYYHJw9R9tBleVNQ9zNpCbi9010+KPb7jEVr6v3RoNV1dYBXZ3yloTeb7qwsZtY9
+         N9zXvI7HjyY2n/OWU0abHKkBCz+FKZfrjct3uPEkvagbl5dLhomEAFiO/5Fi69dWYdKj
+         oF7w==
+X-Gm-Message-State: AOAM530ZZZIRT117l8T2MMxQqMxc3PD+m9SJBVDs8ohLMjVQznBsJk/4
+        RFvjk1Xb6y5DgFUXskI5zg0=
+X-Google-Smtp-Source: ABdhPJxDUgqqn9c7zvg5vFxi97QijfcIxWHGUUCcGiAVUTbknSza8LEL7TbAB3i/SG3WAzWTUNJGtA==
+X-Received: by 2002:a05:6000:1681:: with SMTP id y1mr20072720wrd.52.1638518244267;
+        Thu, 02 Dec 2021 23:57:24 -0800 (PST)
+Received: from debian64.daheim (p5b0d7b73.dip0.t-ipconnect.de. [91.13.123.115])
+        by smtp.gmail.com with ESMTPSA id f19sm4928700wmq.34.2021.12.02.23.57.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 23:57:23 -0800 (PST)
+Received: from localhost.daheim ([127.0.0.1])
+        by debian64.daheim with esmtp (Exim 4.95)
+        (envelope-from <chunkeey@gmail.com>)
+        id 1mt2UB-0003lm-9X;
+        Fri, 03 Dec 2021 08:57:23 +0100
+Message-ID: <32587626-0dd5-f8d1-5573-1088fd6b375a@gmail.com>
+Date:   Fri, 3 Dec 2021 08:57:23 +0100
 MIME-Version: 1.0
-In-Reply-To: <20211203074934.1559805-1-jiasheng@iscas.ac.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] carl9170: Use the bitmap API when applicable
+Content-Language: de-DE
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        chunkeey@googlemail.com, kvalo@codeaurora.org, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <1fe18fb73f71d855043c40c83865ad539f326478.1638396221.git.christophe.jaillet@wanadoo.fr>
+From:   Christian Lamparter <chunkeey@gmail.com>
+In-Reply-To: <1fe18fb73f71d855043c40c83865ad539f326478.1638396221.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20211203_075642_081474_F9ADD3D4 
-X-CRM114-Status: GOOD (  18.07  )
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/21 9:49 AM, Jiasheng Jiang wrote:
-> The return value of devm_gpiochip_add_data() is not always 0.
-> To catch the exception in case of the failure.
+On 01/12/2021 23:05, Christophe JAILLET wrote:
+> Use 'bitmap_zalloc()' to simplify code, improve the semantic and avoid some
+> open-coded arithmetic in allocator arguments.
 > 
-> Fixes: 69c0a0a52cde ("gpio: lpc32xx: Use devm_gpiochip_add_data() for gpio registration")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->   drivers/gpio/gpio-lpc32xx.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
+> Note, that this 'bitmap_zalloc()' divides by BITS_PER_LONG the amount of
+> memory allocated.
+> The 'roundup()' used to computed the number of needed long should have
+> been a DIV_ROUND_UP.
 > 
-> diff --git a/drivers/gpio/gpio-lpc32xx.c b/drivers/gpio/gpio-lpc32xx.c
-> index 4e626c4235c2..e3b734302b76 100644
-> --- a/drivers/gpio/gpio-lpc32xx.c
-> +++ b/drivers/gpio/gpio-lpc32xx.c
-> @@ -505,6 +505,7 @@ static int lpc32xx_of_xlate(struct gpio_chip *gc,
->   static int lpc32xx_gpio_probe(struct platform_device *pdev)
->   {
->   	int i;
-> +	int err;
-
-This was missed in v1, so formally it is not a resend, but a v2 change.
-
->   	void __iomem *reg_base;
->   
->   	reg_base = devm_platform_ioremap_resource(pdev, 0);
-> @@ -518,8 +519,10 @@ static int lpc32xx_gpio_probe(struct platform_device *pdev)
->   			lpc32xx_gpiochip[i].chip.of_node = pdev->dev.of_node;
->   			lpc32xx_gpiochip[i].reg_base = reg_base;
->   		}
-> -		devm_gpiochip_add_data(&pdev->dev, &lpc32xx_gpiochip[i].chip,
-> +		err = devm_gpiochip_add_data(&pdev->dev, &lpc32xx_gpiochip[i].chip,
->   				  &lpc32xx_gpiochip[i]);
-> +		if (err)
-> +			return err;
->   	}
->   
->   	return 0;
 > 
-
-Thank you for the fix.
-
-Acked-by: Vladimir Zapolskiy <vz@mleia.com>
-
---
-Best wishes,
-Vladimir
+> Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
+> consistency.
+> 
+> Use 'bitmap_zero()' to avoid hand writing it.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Acked-by: Christian Lamparter <chunkeey@gmail.com>

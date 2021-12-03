@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4629C4679AA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:46:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A2284679AD
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:47:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244982AbhLCOuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 09:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
+        id S1381570AbhLCOuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 09:50:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381594AbhLCOuJ (ORCPT
+        with ESMTP id S1381599AbhLCOuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 09:50:09 -0500
-Received: from mail-io1-xd4a.google.com (mail-io1-xd4a.google.com [IPv6:2607:f8b0:4864:20::d4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFD0C061D5E
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 06:46:45 -0800 (PST)
-Received: by mail-io1-xd4a.google.com with SMTP id j13-20020a0566022ccd00b005e9684c80c6so2442524iow.10
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 06:46:45 -0800 (PST)
+        Fri, 3 Dec 2021 09:50:10 -0500
+Received: from mail-il1-x149.google.com (mail-il1-x149.google.com [IPv6:2607:f8b0:4864:20::149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A46C061D60
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 06:46:46 -0800 (PST)
+Received: by mail-il1-x149.google.com with SMTP id y3-20020a056e021be300b0029f6c440695so2186970ilv.19
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 06:46:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=QsxayFD0kSuupxPAlrDY1PLwKJKslxAp42nuzbNIjyc=;
-        b=S37/Z/1EV8P8Kr2/jN4oC0OACqVv3Rq2r/TMoUbyRT95hskGw5Ac/BA/osek4vqjBG
-         aPd1B8nkUo0WwdGAD/s5OBU0zquwpdRcvxkvXSYZR5KHCIl99GPFB9/xBsHpXgqdFAu+
-         V4rPu6u4+NBAunYs/yitmqd3ImOA7NS/myakKDTSs6xzHux9PPzlrryyMERfNhdqAWKV
-         RpguqkpdastYUc6rn75OmVnUu9F5j05N24VzHWi3fk+0opswkX46Ax7pJrD91eDnOMDS
-         hqkoPr4xANSvt7oMryhKVX9d7qTJmFisEfg8fiQka/BMOwqHNTyrvLFEe4TC62d8AZ+R
-         eCoQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=n9U31kqgJhRjTrQuE7/WsUbjvo3IuvChEsgfsakfCtM=;
+        b=rd8pvcG1vzx/DDDuvYSdtXAbva5Itbs/PnhB2WR1urv/bO8ZPp1DXeuDB3jbK7bmyf
+         75UG+udWEFJy8HARO2Hsjt7/V3HgxUa5q1tD2eb8FUez3UnZ16pl+I/xkf7mtyqUuOWt
+         StHChCjRJ3LEGPKWX2cyCvF60W7tn6tWuesxf6QVhunXkJ+oNLShrPBUJEpKRu7ZjJY8
+         oCWpUPIlDcJhu/dtw1NSeEGwFwHripXIlJChpleBS6lUg4pa7uYJjaJDZzyrOGgCZBjt
+         1mLvnBInioIoe2BKwg2LFcr+6Su5RMkhn5riAysWBEMbCplY2a2MUSLSZuLL3uTQqeEa
+         LEMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=QsxayFD0kSuupxPAlrDY1PLwKJKslxAp42nuzbNIjyc=;
-        b=sAHBCCuvEL902qV0eIxkTO3vvIlpTpFipGM3pPT156P8+ybBxIkfpp02RYrdbNbNOt
-         G+zqUOIRqWqYafI7f8QIGshGW4Dk3Dh0eyfpNulf8Sg5ewr3DynqSvDowIQUQ5A4g7Pq
-         Ql3lrKGYcYS5HCfFGzBrSf34ekDqz0WbX09nhhxf7dGkRA/R3zKP6shLm9rIXub6/Rzx
-         exJ7wgaFtqh9pFCR5BXHZffnTd5V9eMezq3vcs3GpLZq1O6wAlxbqrR24fJtwzUCDQ/C
-         +EQtS64Uh2CxxsY8a0x9kcyCapKAcCHHwS1LS83mLBZWC8ry1h7TmKhcx31P7ZGaQOQf
-         NhwA==
-X-Gm-Message-State: AOAM530emYIKWmGHVExjracs3oZoF7ewh4poxQfq7t1U/55MzB7uadDW
-        VzgnsSZX/Wu+BXOlPcHRLBECsQgNBDg=
-X-Google-Smtp-Source: ABdhPJyOGt4g5EWzqW6UP63ydOdGYyK8gCrTK1Rv8b5hydUWnUdaHl+T7HfnSIcyYEnbmy+3lFBGAA0orjw=
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=n9U31kqgJhRjTrQuE7/WsUbjvo3IuvChEsgfsakfCtM=;
+        b=P48RstNrkPXg8G5lquuGAHbr3j20VzeLfQhs3mdYe/6rI6UcQjgDVwBHuJEZBIRrro
+         xnHa9AlpWIU9Gal9NAegMDjtKfz2FwXIQQlCCY698nRpzzO03Amxo0kMZGha+KDs4A4w
+         fUnRUvtsmWyqsgoUGIPKPhLPc2HedyStEkT+LxaRRMbqAod1UM4w6g4gih9WEknkqK+t
+         sKu+OqAYgcAIC+HoVZiTJHWgBXhq/znEQPAgXVYfJ6PPwANvA9kf7x4eIjvlloQnTbum
+         eXdJEAy/+2R0iRiebTeX1RbgrypiocgskltVVup1VDET6vk4GV0MQ/9kLZpg4TZrpZAw
+         7nhg==
+X-Gm-Message-State: AOAM530ADhn2Jl3jwkKstZoBkEnI5x19l1MSMTzVKDMQUWP/OsU6YkWx
+        +cqNGIsADSWYRAIqu0NPgbEsv5sIsMI=
+X-Google-Smtp-Source: ABdhPJzrzQYwNY4O2vuTS5sr2ZpqPQQ+UCFOGbe72sin34/pwiPQ5VQ0RpEhgLuzb96y4borqsRF0Z6nWwI=
 X-Received: from pgonda2.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:ac9])
- (user=pgonda job=sendgmr) by 2002:a05:6638:1311:: with SMTP id
- r17mr24842979jad.69.1638542804473; Fri, 03 Dec 2021 06:46:44 -0800 (PST)
-Date:   Fri,  3 Dec 2021 14:46:37 +0000
-Message-Id: <20211203144642.3460447-1-pgonda@google.com>
+ (user=pgonda job=sendgmr) by 2002:a6b:700e:: with SMTP id l14mr20659616ioc.20.1638542805449;
+ Fri, 03 Dec 2021 06:46:45 -0800 (PST)
+Date:   Fri,  3 Dec 2021 14:46:38 +0000
+In-Reply-To: <20211203144642.3460447-1-pgonda@google.com>
+Message-Id: <20211203144642.3460447-2-pgonda@google.com>
 Mime-Version: 1.0
+References: <20211203144642.3460447-1-pgonda@google.com>
 X-Mailer: git-send-email 2.34.0.384.gca35af8252-goog
-Subject: [PATCH V5 0/5] Add SEV_INIT_EX support
+Subject: [PATCH V5 1/5] crypto: ccp - Add SEV_INIT rc error logging on init
 From:   Peter Gonda <pgonda@google.com>
 To:     thomas.lendacky@amd.com
 Cc:     Peter Gonda <pgonda@google.com>, Marc Orr <marcorr@google.com>,
@@ -64,29 +68,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SEV_INIT requires users to unlock their SPI bus for the PSP's non
-volatile (NV) storage. Users may wish to lock their SPI bus for numerous
-reasons, to support this the PSP firmware supports SEV_INIT_EX. INIT_EX
-allows the firmware to use a region of memory for its NV storage leaving
-the kernel responsible for actually storing the data in a persistent
-way. This series adds a new module parameter to ccp allowing users to
-specify a path to a file for use as the PSP's NV storage. The ccp driver
-then reads the file into memory for the PSP to use and is responsible
-for writing the file whenever the PSP modifies the memory region.
-
-V4
-* Fix make C=1 W=1 warnings.
-
-V3
-* Add another module parameter 'psp_init_on_probe' to allow for skipping
-  PSP init on module init.
-* Fixes review comments from Sean.
-* Fixes missing error checking with file reading.
-* Removed setting 'error' to a set value in patch 1.
+Currently only the firmware error code is printed. This is incomplete
+and also incorrect as error cases exists where the firmware is never
+called and therefore does not set an error code.
 
 Signed-off-by: Peter Gonda <pgonda@google.com>
 Reviewed-by: Marc Orr <marcorr@google.com>
 Acked-by: David Rientjes <rientjes@google.com>
+Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
 Cc: Tom Lendacky <thomas.lendacky@amd.com>
 Cc: Brijesh Singh <brijesh.singh@amd.com>
 Cc: Marc Orr <marcorr@google.com>
@@ -98,21 +87,24 @@ Cc: "David S. Miller" <davem@davemloft.net>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
 Cc: linux-crypto@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
+---
+ drivers/crypto/ccp/sev-dev.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-David Rientjes (1):
-  crypto: ccp - Add SEV_INIT_EX support
-
-Peter Gonda (4):
-  crypto: ccp - Add SEV_INIT rc error logging on init
-  crypto: ccp - Move SEV_INIT retry for corrupted data
-  crypto: ccp - Refactor out sev_fw_alloc()
-  crypto: ccp - Add psp_init_on_probe module parameter
-
- .../virt/kvm/amd-memory-encryption.rst        |   6 +
- drivers/crypto/ccp/sev-dev.c                  | 258 +++++++++++++++---
- include/linux/psp-sev.h                       |  21 ++
- 3 files changed, 245 insertions(+), 40 deletions(-)
-
+diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+index e09925d86bf3..f527e5f9ed1f 100644
+--- a/drivers/crypto/ccp/sev-dev.c
++++ b/drivers/crypto/ccp/sev-dev.c
+@@ -1104,7 +1104,8 @@ void sev_pci_init(void)
+ 	}
+ 
+ 	if (rc) {
+-		dev_err(sev->dev, "SEV: failed to INIT error %#x\n", error);
++		dev_err(sev->dev, "SEV: failed to INIT error %#x, rc %d\n",
++			error, rc);
+ 		return;
+ 	}
+ 
 -- 
 2.34.0.384.gca35af8252-goog
 

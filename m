@@ -2,190 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1404446791E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0983A46791A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:08:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381349AbhLCOMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 09:12:32 -0500
-Received: from mga11.intel.com ([192.55.52.93]:3853 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241626AbhLCOMa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 09:12:30 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="234486196"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="234486196"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 06:09:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="460882745"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga006.jf.intel.com with ESMTP; 03 Dec 2021 06:08:51 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B3E8nHa007780;
-        Fri, 3 Dec 2021 14:08:49 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        id S1381344AbhLCOLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 09:11:54 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45940 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352478AbhLCOLx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 09:11:53 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F93A62B10;
+        Fri,  3 Dec 2021 14:08:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F7F4C53FC7;
+        Fri,  3 Dec 2021 14:08:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638540508;
+        bh=eDoEsNNsQZ17vVQwvSAUdLea63vK4M1VwU4kJH81afU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ON2iTtZ47aa327omlPy9Dxj9VtrvSjufKZu/0XOqeeu6GIw1GTDJ3tWa8P0G3u0A5
+         VcioyuqtlHNPOkjJNoq00rTvwP8EFCz04GkxzhTVTF1MEl+j6DI8gvV2OiW1uAZBIq
+         aFCb7L7OxkXlzlx+HXSo+AbeqGT33iPWAOe0+Id7tt+bU9RVpduAz0PV1ne0LkDl42
+         NdD7tJ1ZqjjgocXZd1lVUkNekDirvPjQv3gsKWUG6PoJtVSjYZYQfll7IbFi/HAQTk
+         pTaWPSnHW1XRTulExZMYqj1klEb3xyYpS+NowLdWQJhLiCu6rt8t+dmubXDF1byx4L
+         Wf71u5K63W9zw==
+Date:   Fri, 3 Dec 2021 15:08:22 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v8 04/14] linkage: add macros for putting ASM functions into own sections
-Date:   Fri,  3 Dec 2021 15:08:20 +0100
-Message-Id: <20211203140820.82341-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <Yanj8qvo3Wj4ePyV@hirez.programming.kicks-ass.net>
-References: <20211202223214.72888-1-alexandr.lobakin@intel.com> <20211202223214.72888-5-alexandr.lobakin@intel.com> <Yanj8qvo3Wj4ePyV@hirez.programming.kicks-ass.net>
+        Akira Yokosawa <akiyks@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        "=?UTF-8?B?TsOtY29sYXM=?= F. R. A. Prado" <nfraprado@protonmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Klychkov <andrew.a.klychkov@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] docs: allow selecting a Sphinx theme
+Message-ID: <20211203150822.54a81cbb@coco.lan>
+In-Reply-To: <20211202124700.7e395897@coco.lan>
+References: <cover.1638369365.git.mchehab+huawei@kernel.org>
+        <eb4e49b9a701643b07a56f1863005ba8216ef694.1638369365.git.mchehab+huawei@kernel.org>
+        <CANiq72nu9TvLzxxj64b+EwFicwGexT7VTmVYVnVDzQgwkk+9ZA@mail.gmail.com>
+        <20211202124700.7e395897@coco.lan>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Fri, 3 Dec 2021 10:31:30 +0100
+Em Thu, 2 Dec 2021 12:47:00 +0100
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
 
-> On Thu, Dec 02, 2021 at 11:32:04PM +0100, Alexander Lobakin wrote:
+> Em Thu, 2 Dec 2021 12:24:53 +0100
+> Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> escreveu:
 > 
-> > diff --git a/include/linux/linkage.h b/include/linux/linkage.h
-> > index dbf8506decca..baaab7dece08 100644
-> > --- a/include/linux/linkage.h
-> > +++ b/include/linux/linkage.h
-> > @@ -355,4 +355,86 @@
-> >  
-> >  #endif /* __ASSEMBLY__ */
-> >  
-> > +/*
-> > + * Allow ASM symbols to have their own unique sections if they are being
-> > + * generated by the compiler for C functions (DCE, FG-KASLR, LTO).
-> > + */
-> > +#if (defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) && !defined(MODULE)) || \
-> > +    (defined(CONFIG_FG_KASLR) && !defined(MODULE)) || \
-> > +    (defined(CONFIG_MODULE_FG_KASLR) && defined(MODULE)) || \
-> > +    (defined(CONFIG_LTO_CLANG))
-> > +
-> > +#define SYM_TEXT_SECTION(name)				\
-> > +	.pushsection .text.##name, "ax"
-> > +
-> > +#define ASM_TEXT_SECTION(name)				\
-> > +	".text." #name
-> > +
-> > +#define ASM_PUSH_SECTION(name)				\
-> > +	".pushsection .text." #name ", \"ax\""
-> > +
-> > +#else /* just .text */
-> > +
-> > +#define SYM_TEXT_SECTION(name)				\
-> > +	.pushsection .text, "ax"
-> > +
-> > +#define ASM_TEXT_SECTION(name)				\
-> > +	".text"
-> > +
-> > +#define ASM_PUSH_SECTION(name)				\
-> > +	".pushsection .text, \"ax\""
-> > +
-> > +#endif /* just .text */
+> > On Wed, Dec 1, 2021 at 6:59 PM Mauro Carvalho Chehab
+> > <mchehab+huawei@kernel.org> wrote:  
+> > >
+> > > Instead of having RTD as an almost mandatory theme, allow the
+> > > user to select other themes via a THEMES environment var.
+> > >
+> > > There's a catch, though: as the current theme override logic is
+> > > dependent of the RTD theme, we need to move the code which
+> > > adds the CSS overrides to be inside the RTD theme logic.    
+> > 
+> > Does Sphinx support leaving the selection of the theme to "runtime",
+> > i.e. to let users pick a theme from a few from a combobox (e.g.
+> > light/dark)?
+> > 
+> > I assume not, but asking just in case.  
 > 
-> That's terribly inconsistent, SYM_TEXT_SECTION is in fact
-> PUSH_TEXT_SECTION, ASM_PUSH_SECTION is in fact ASM_PUSH_TEXT_SECTION and
-> should be stringify(PUSH_TEXT_SECTION()) or something, and they're all
-> repeating that ASM_TEXT_SECTION thing :/
+> The RTD dark theme allows that. It basically places a <sun>/<moon>
+> icon. When such icon is clicked, it switches between light/dark.
 
-Right. In fact I was waiting for someone to review them to pick more
-fitting names, so I'll change them for sure.
+Btw, I'm now using it at:
 
-> > +
-> > +#ifdef __ASSEMBLY__
-> > +
-> > +#define SYM_TEXT_END_SECTION				\
-> > +	.popsection
-> > +
-> > +#define SYM_FUNC_START_LOCAL_ALIAS_SECTION(name)	\
-> > +	SYM_TEXT_SECTION(name) ASM_NL			\
-> > +	SYM_FUNC_START_LOCAL_ALIAS(name)
-> > +
-> > +#define SYM_FUNC_START_LOCAL_SECTION(name)		\
-> > +	SYM_TEXT_SECTION(name) ASM_NL			\
-> > +	SYM_FUNC_START_LOCAL(name)
-> > +
-> > +#define SYM_FUNC_START_NOALIGN_SECTION(name)		\
-> > +	SYM_TEXT_SECTION(name) ASM_NL			\
-> > +	SYM_FUNC_START_NOALIGN(name)
-> > +
-> > +#define SYM_FUNC_START_WEAK_SECTION(name)		\
-> > +	SYM_TEXT_SECTION(name) ASM_NL			\
-> > +	SYM_FUNC_START_WEAK(name)
-> > +
-> > +#define SYM_FUNC_START_SECTION(name)			\
-> > +	SYM_TEXT_SECTION(name) ASM_NL			\
-> > +	SYM_FUNC_START(name)
-> > +
-> > +#define SYM_CODE_START_LOCAL_NOALIGN_SECTION(name)	\
-> > +	SYM_TEXT_SECTION(name) ASM_NL			\
-> > +	SYM_CODE_START_LOCAL_NOALIGN(name)
-> > +
-> > +#define SYM_CODE_START_NOALIGN_SECTION(name)		\
-> > +	SYM_TEXT_SECTION(name) ASM_NL			\
-> > +	SYM_CODE_START_NOALIGN(name)
-> > +
-> > +#define SYM_CODE_START_SECTION(name)			\
-> > +	SYM_TEXT_SECTION(name) ASM_NL			\
-> > +	SYM_CODE_START(name)
-> > +
-> > +#define SYM_FUNC_END_ALIAS_SECTION(name)		\
-> > +	SYM_FUNC_END_ALIAS(name) ASM_NL			\
-> > +	SYM_TEXT_END_SECTION
-> > +
-> > +#define SYM_FUNC_END_SECTION(name)			\
-> > +	SYM_FUNC_END(name) ASM_NL			\
-> > +	SYM_TEXT_END_SECTION
-> > +
-> > +#define SYM_CODE_END_SECTION(name)			\
-> > +	SYM_CODE_END(name) ASM_NL			\
-> > +	SYM_TEXT_END_SECTION
-> > +
-> > +#endif /* __ASSEMBLY__ */
-> 
-> *URGH* why do we have to have new macros for this? SYM_FUNC_START*()
-> already takes the name as argument.
+	https://linuxtv.org/downloads/v4l-dvb-apis-new/index.html
 
-I'm not sure whether we should have new macros for this.
-I introduced them since there's plenty of code which use
-SYM_FUNC_*(), but does .{push,pop}section outside of it, e.g. to
-place something to .noinstr or .init. If I'd replace them, those
-would be broken.
-So I'm fine with the replacement, but those cases need to be
-adressed somehow then. Are there any tricks to check if we're
-already outside of .text to not push it into a new section?
+As we use a dark theme at linuxtv.org since ever.
 
-Al
+It was built with the following script:
+
+	CSS=linuxtv.css
+	THEME=sphinx_rtd_dark_mode
+
+	cat << EOF > $CSS
+	  html body {
+	    font-family: arial,helvetica,sans-serif;
+	    margin: 0px;
+	    padding: 0px;
+	  }
+	  html[data-theme='dark'] body {
+	    color: white !important;
+	  }
+	  html[data-theme='dark'] .sig-name {
+	    color: green !important;
+	  }
+	  html[data-theme='dark'] .wy-menu-vertical a {
+	    color: #ffcc00 !important;
+	  }
+	  html[data-theme="dark"] h1, html[data-theme="dark"] h2, html[data-theme="dark"] h3 {
+	    color: #ffcc00 !important;
+	  }
+	  html[data-theme="dark"] h4, html[data-theme="dark"] h5, html[data-theme="dark"] h6 {
+	    color: #ffcc00 !important;
+	  }
+	  html[data-theme="dark"] h7, html[data-theme="dark"] h8, html[data-theme="dark"] h9 {
+	    color: #ffcc00 !important;
+	  }
+	  html[data-theme="dark"] .wy-nav-content a, html[data-theme="dark"] .wy-nav-content a:visited {
+	    color: #ffcc00 !important;
+	  }
+	EOF
+
+	make SPHINXDIRS='media' CSS='$CSS' THEME='$THEME' htmldocs
+
+Thanks,
+Mauro

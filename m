@@ -2,95 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F264674C2
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 353FA4674C5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356964AbhLCKbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 05:31:06 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:37546 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235349AbhLCKbF (ORCPT
+        id S1357015AbhLCKbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 05:31:12 -0500
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:44949 "EHLO
+        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235349AbhLCKbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 05:31:05 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D8E38212C6;
-        Fri,  3 Dec 2021 10:27:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638527260; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DvmP4cB/KNSRMgh4UcYVFP3x4fPHzjzEcFBhVdgCru0=;
-        b=MhFZ5ke24T5q0Sb3wHgjIeX2G1ZCb5g6d41PhS8Trge8RFGVLrwzMO/HycD4Jd2kNRV7bz
-        LrhPHTIzUonH7t8N+MMz6ch2dmM1oBJQagD7Ep3UpZ4/paqZtZNwk4JwzY92h8umG1HitZ
-        tMhsu1WaLNQpPDIgIacn1YgtL6q7hC8=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B86D713CF5;
-        Fri,  3 Dec 2021 10:27:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id vRFZLBzxqWFoDwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Fri, 03 Dec 2021 10:27:40 +0000
-Date:   Fri, 3 Dec 2021 11:27:39 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     "yukuai (C)" <yukuai3@huawei.com>
-Cc:     hch@infradead.org, tj@kernel.org, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-Subject: Re: [PATCH v4 2/2] block: cancel all throttled bios in del_gendisk()
-Message-ID: <20211203102739.GB64349@blackbody.suse.cz>
-References: <20211202130440.1943847-1-yukuai3@huawei.com>
- <20211202130440.1943847-3-yukuai3@huawei.com>
- <20211202144818.GB16798@blackbody.suse.cz>
- <95825098-a532-a0e4-9ed0-0b5f2a0e5f04@huawei.com>
+        Fri, 3 Dec 2021 05:31:09 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 60B0658016F;
+        Fri,  3 Dec 2021 05:27:44 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 03 Dec 2021 05:27:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=OnV8vEzoZxaVl0qHkwAThSYaRta
+        UEam94WrwlUucJLE=; b=Ne0RikK4OK4w9RY64dqWgdXxNykq8qhu0IP8+vK5/OD
+        Ns5t9xXVi2YLqj4mBhlFqwAAOtU74vFicEjgapkppAOO14AAlKr+1oso54XEmALJ
+        QZU68mj739ZIIub5PP6A+gGciJz9CogyV4raxo8ZDPxV1si0CBubjFWBkfvBkGcj
+        66z2xz/XbFH8rnSsDRAuy9Pegg6iH0IDalqG4+Z4IaB4P8hfFcuXQDWUO4HINc2K
+        MGQNJWrzMVeWEEM5qxEeyJ72I3rdUBXHqw0AexPYDGsEK5e6M6fhETvRsUGxDKyQ
+        RZv0ZnfAL1pQRtwAxJ45Pm2oJgXSFiz4NnPiFr39mZA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=OnV8vE
+        zoZxaVl0qHkwAThSYaRtaUEam94WrwlUucJLE=; b=dXzo9QTCZ9wWbiIaoImVwe
+        QgbZwwrII0q+GnG5jdNbJh7bIwVI0s1U0FQU7W5jof580he2MkhXEgZaZ3dZ9jti
+        XDvtpoELUvLYaxF77tVqLrGFPgu58cMwrJoXlxGqEkYSGSQ0fmpXO/HplZ9tydK0
+        rMbOgusu9rii4dHiJ/aEvhsmVCZVkbKRJMXkVX2irqWHd6nWxs7ahdUsYT6N8UpT
+        f0dMR5p3yrH0VjQRYaw95YHDzDTPVyR/c3NY8Iy/w1vxAZG++xzB8pBpp9nAOkzO
+        MFjMeo9AT6vGgOw63mhoMEEnFTXHtDvPZbgovPrsFUAkpFrSW/xTr+1V94RQnc9Q
+        ==
+X-ME-Sender: <xms:H_GpYXRYG8EQxSo3KjZ_Zpsg4ZDO_98YJYV4t2_IaBRL8_54ARO8Xg>
+    <xme:H_GpYYz9AjVtWHBslGt3qGgkV21cu7N1nlD8DRnV_Z5clkxobb4ZEGEtiazmpLa4Y
+    QF8uSZAp8QFVyzqc2I>
+X-ME-Received: <xmr:H_GpYc0Ugl6j-_374RODhNdkubqettEq1pI6_MzvFDNTSk8B1P9wD6L0i2lwqB41Y2T6CS5BDDh9ioRR0nuLXXcvzWiIH3QrRfsVYtsrAV1v-g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrieejgddujecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
+    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    igihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:H_GpYXB18lMe4cpBzAOMCI88ksL6pSr8s7wpohB661vc5rfAPeA-1w>
+    <xmx:H_GpYQhlQjP2yBlUIvvLJB0YwPO1pYysWIbgtQ2k96AoD7HzGAyFIg>
+    <xmx:H_GpYbrQUA78W_o570mrQ9q0UmnoeO5tuviXjSH-anRU4eTjMGpciA>
+    <xmx:IPGpYfqFBNdu7-cayPetXO7Q06w53rKpHvOnoUv4CEUDNxYi9PWzOw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 3 Dec 2021 05:27:43 -0500 (EST)
+Date:   Fri, 3 Dec 2021 11:27:41 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Kevin Tang <kevin3.tang@gmail.com>
+Cc:     maarten.lankhorst@linux.intel.com, sean@poorly.run,
+        airlied@linux.ie, daniel@ffwll.ch, robh+dt@kernel.org,
+        mark.rutland@arm.com, pony1.wu@gmail.com, orsonzhai@gmail.com,
+        zhang.lyra@gmail.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 4/6] drm/sprd: add Unisoc's drm display controller
+ driver
+Message-ID: <20211203102741.danmbjpkb5q3huk4@houat>
+References: <20211025093418.20545-1-kevin3.tang@gmail.com>
+ <20211025093418.20545-5-kevin3.tang@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="tjCHc7DPkfUGtrlw"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oqpur3x2efcto2bk"
 Content-Disposition: inline
-In-Reply-To: <95825098-a532-a0e4-9ed0-0b5f2a0e5f04@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211025093418.20545-5-kevin3.tang@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---tjCHc7DPkfUGtrlw
-Content-Type: text/plain; charset=utf-8
+--oqpur3x2efcto2bk
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 03, 2021 at 03:50:01PM +0800, "yukuai (C)" <yukuai3@huawei.com>=
- wrote:
-> blkg_destroy() is protected by the queue_lock=EF=BC=8Cso I think queue_lo=
-ck can
-> protect such concurrent scenario.
+On Mon, Oct 25, 2021 at 05:34:16PM +0800, Kevin Tang wrote:
+> Adds DPU(Display Processor Unit) support for the Unisoc's display
+> subsystem.
+> It's support multi planes, scaler, rotation, PQ(Picture Quality) and more.
+>=20
+> v2:
+>   - Use drm_xxx to replace all DRM_XXX.
+>   - Use kzalloc to replace devm_kzalloc for sprd_dpu structure init.
+>=20
+> v3:
+>   - Remove dpu_layer stuff layer and commit layers by aotmic_update
+>=20
+> v4:
+>   - Use drmm_helpers to allocate crtc and planes.
+>   - Move rotation enum definitions to crtc layer reg bitfields.
+>   - Move allocate crtc and planes to bind function.
+>=20
+> v5:
+>   - Fix the checkpatch warnings.
+>   - Use mode_set_nofb instead of mode_valid callback.
+>   - Follow the OF-Graph bindings, use of_graph_get_port_by_id
+>     instead of of_parse_phandle.
+>   - Use zpos to represent the layer position.
+>   - Rebase to last drm misc branch.
+>=20
+> v6:
+>   - Disable and clear interrupts before register dpu IRQ
+>   - Init dpi config used by crtc_state->adjusted_mode on mode_set_nofb
+>   - Remove enable_irq and disable_irq function call.
+>   - Remove drm_format_info function call.
+>=20
+> v7:
+>   - Remove iommu error interrupt handling function.
+>=20
+> Cc: Orson Zhai <orsonzhai@gmail.com>
+> Cc: Chunyan Zhang <zhang.lyra@gmail.com>
+> Signed-off-by: Kevin Tang <kevin.tang@unisoc.com>
 
-blkg_destroy() is not as destroying :-) as actual free, you should
-synchronize against (the queue_lock ensures this for
-pd_free_fn=3Dthrotl_pd_free but you may still trip on blkcg after
-blkcg_css_free()).
+Reviewed-by: Maxime Ripard <maxime@cerno.tech>
 
-[Actually, I think you should see a warning in your situation if you
-enable CONFIG_PROVE_RCU.]
+Maxime
 
-HTH,
-Michal
-
---tjCHc7DPkfUGtrlw
+--oqpur3x2efcto2bk
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEARYIAB0WIQTiq06H1IhXbF2mqzsiXqxkP0JkRwUCYanxCgAKCRAiXqxkP0Jk
-R3lBAP4oljvRynKApFVPUyqI5k6NuqpWC4Yv1Ll3PdCiKrZkiwEAtozR8aRyinFF
-NPyhhAKCpdU+IAXi7JXzqU982GQDEAs=
-=YebJ
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYanxHQAKCRDj7w1vZxhR
+xVOrAP9uqqQLkzJRnj6udGJqT0o56/g+74z/9ri4LMlPaPPeVQD9HRLEUu7ieC5f
+SKuHIPP1fIcYtZxho4aq8vn0I24Nvg0=
+=KMxW
 -----END PGP SIGNATURE-----
 
---tjCHc7DPkfUGtrlw--
+--oqpur3x2efcto2bk--

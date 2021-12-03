@@ -2,205 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2620F466E14
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 00:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45ED4466E42
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 01:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377695AbhLCACs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 19:02:48 -0500
-Received: from mail-bn7nam10on2085.outbound.protection.outlook.com ([40.107.92.85]:53569
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1377687AbhLCACo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 19:02:44 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dUAMkag9qMdDPDoAnwV8sZfxfLfCIkyxuXTXND2eiXdHlZdTj4fGltlO+diFnSJ4i8s/8cCHTrEkThH2fvXF7GsOfweNHtXqoEaZtDQm+Fi7P+Ea20X3ULR5Xlnj5Unpk0ABimlCX/DAPY0unsO0Ld19kA9skMWX7YbKntxeK7Y2MYohc3q8yNUKGgZBssVf5lp8W8tIZ7M1tH5P8kjreQx2eDqX8Qp2QOTTuKYN/zCq3/NKX/q34qce6nExyykUyXPvmltJRv2CGLCTqyLIvMQmjypuqppTkFP1dXut96KMTvRe4Su3UEesd9pPNeTIVwWECGkmR4pe+OqpGq/60Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=urH6GitdpxxIeiWTqkJA4MM7m/iuRDyJEtfkSrJk0dQ=;
- b=LdhtTDm91VSHFP5/1ZWaQWOLGDf1wQ5NwQppg23UO1/BJI3QFYu8Ztd0YIVlveS1MSn8Pp0CyoLXaOScDHHVWsq/zLUOtFvmKwASt/iwevkxybSxQ4yx2TJcIbb55PuTGU6QCPGBqpxSOtRjy+QEwduPCnJzLmbfGzt1q9Og3PJBqa1P51wUObNvLIlPYXKjPS8IUlpYOFECpnq7MU4BxThjYFTAcQqlDiQzm0oDMnuzBYAf7yvMK95svFMF3lBXYgecq1YnoxdqvbSojJuICCsnYpfJHoR5Bynf69kDjZDbRCR04+XudXh3ktRdvTqgyiT2Ln9F278ummH3bSKphg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=urH6GitdpxxIeiWTqkJA4MM7m/iuRDyJEtfkSrJk0dQ=;
- b=ByQArP0oYBNdv0Lkyo1/3PPBcrtG4XQ1aGC+zxamGf5kYv/sdiYL6jh6O5EjDVrGnCStte04z82c7heiBNGezl8Em7AgG3sWe8XQK6YBuPgh1z2hrqplyndwOUDiWaOAyIdgYP3Qm0OItEZo9G2zkauYDjLxlT5yAqrR131lN90=
-Received: from MWHPR17CA0079.namprd17.prod.outlook.com (2603:10b6:300:c2::17)
- by DM5PR12MB4662.namprd12.prod.outlook.com (2603:10b6:4:a6::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22; Thu, 2 Dec
- 2021 23:59:19 +0000
-Received: from CO1NAM11FT015.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:c2:cafe::38) by MWHPR17CA0079.outlook.office365.com
- (2603:10b6:300:c2::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.24 via Frontend
- Transport; Thu, 2 Dec 2021 23:59:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1NAM11FT015.mail.protection.outlook.com (10.13.175.130) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4755.13 via Frontend Transport; Thu, 2 Dec 2021 23:59:19 +0000
-Received: from sos-ubuntu2004-quartz01.amd.com (10.180.168.240) by
- SATLEXMB03.amd.com (10.181.40.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 2 Dec 2021 17:59:16 -0600
-From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <x86@kernel.org>
-CC:     <pbonzini@redhat.com>, <joro@8bytes.org>, <seanjc@google.com>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <peterz@infradead.org>, <hpa@zytor.com>, <thomas.lendacky@amd.com>,
-        <jon.grimm@amd.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Subject: [PATCH v2 3/3] KVM: SVM: Extend host physical APIC ID field to support more than 8-bit
-Date:   Thu, 2 Dec 2021 17:58:25 -0600
-Message-ID: <20211202235825.12562-4-suravee.suthikulpanit@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211202235825.12562-1-suravee.suthikulpanit@amd.com>
-References: <20211202235825.12562-1-suravee.suthikulpanit@amd.com>
+        id S1349679AbhLCAFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 19:05:15 -0500
+Received: from mga11.intel.com ([192.55.52.93]:47927 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242581AbhLCAFN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 19:05:13 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="234383792"
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="234383792"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 16:01:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="513443553"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 02 Dec 2021 16:01:47 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1msw1K-000GrP-At; Fri, 03 Dec 2021 00:01:46 +0000
+Date:   Fri, 3 Dec 2021 08:00:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Shawn Guo <shawn.guo@linaro.org>, Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     kbuild-all@lists.01.org, Maulik Shah <quic_mkshah@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shawn Guo <shawn.guo@linaro.org>
+Subject: Re: [PATCH v3 3/3] irqchip: Add Qualcomm MPM controller driver
+Message-ID: <202112030740.6LvRpZLQ-lkp@intel.com>
+References: <20211202122122.23548-4-shawn.guo@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB03.amd.com
- (10.181.40.144)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d84b3865-4865-4444-d366-08d9b5efc12e
-X-MS-TrafficTypeDiagnostic: DM5PR12MB4662:
-X-Microsoft-Antispam-PRVS: <DM5PR12MB4662A8C8B71038E2BDAE4D9BF3699@DM5PR12MB4662.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3968;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0lr/t3wSEl9bLxJwgdIws2/cK+FWw5ziegSSDHXCgv7bDwR0N8gibwxayhfuDCPTPNnUFNhs8LmcGx+X/ttGFVbltjf4scNako94Xx9qxc1D5+Irm5d2hKSG6/fPF4PbWnwZr6GQFYJC4zuRZQsdy3ZhAm/oZBPt+FU38GdYsIip6zPqFrkqeC2C3HFyQzn0wTuAUQeAbNlTem+U8tN49I9UbWsQCsuY4y0RPsz+yhoqxqj/IfzEdqBx9AuGJlf5wJhrDTS/eOw1YyXTGBydqKSdWDjyV1avtTuk2rt9Qj1z/Ky1gWu2qn+bsx88H/q4awgOPP2YCHPdfaoE0hHTTjGGdnfZ87JMynxfMOn4boRQv/29TtOPhd1JPNTa2lb73zAMUye41zJjm+JTYZTwEGYyJzX3njRU1A254NBGcepjyI3rLEp9SOe0DGuQJaQ3y4yhYUIBycZk3Ujc3G/aD2aQKshfYO0Kb4l4Q5prckiE0s+02mcHNk9P9iwAhQIJdFJO+XAAumXWX6DJTNztNYUHuHpYNGlNh/Cgc6HeEkBjPPbpkmYwNkj3OSvuIKXU84XkBt18kBoFkVaGUh7FM3IHKUxhEXoILKL7VbvUgtw0r5sHg36ZW/UDkqWV/22vNS33gjkUWjXL0Pxb+xjCM7TQ7R+F8GBvbwwyq/KkIGIPVMyZU1rIu7ucG5V+mh9ATBQBjS2zBtkI0FJCMHaFj4NM0xI9qsNV3ZGk5oeAdEBDw17N7BiR0W8oHoQn9qlKXYp5Qbsc3B58R2HdCYLA+KwFaZLlwssk5o/hqiIjaGM=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(70206006)(508600001)(70586007)(36860700001)(16526019)(7416002)(8936002)(356005)(5660300002)(8676002)(82310400004)(83380400001)(47076005)(186003)(110136005)(44832011)(7696005)(81166007)(6666004)(40460700001)(86362001)(54906003)(2906002)(26005)(1076003)(426003)(316002)(36756003)(2616005)(4326008)(336012)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2021 23:59:19.0881
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d84b3865-4865-4444-d366-08d9b5efc12e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT015.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB4662
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211202122122.23548-4-shawn.guo@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AVIC physical APIC ID table entry contains the host physical
-APIC ID field, which the hardware uses to keep track of where each
-vCPU is running. Originally, the field is an 8-bit value, which can
-only support physical APIC ID up to 255.
+Hi Shawn,
 
-To support system with larger APIC ID, the AVIC hardware extends
-this field to support up to the largest possible physical APIC ID
-available on the system.
+I love your patch! Yet something to improve:
 
-Therefore, replace the hard-coded mask value with the value
-calculated from the maximum possible physical APIC ID in the system.
+[auto build test ERROR on tip/irq/core]
+[also build test ERROR on linux/master linus/master v5.16-rc3 next-20211202]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+url:    https://github.com/0day-ci/linux/commits/Shawn-Guo/Add-Qualcomm-MPM-irqchip-driver-support/20211202-202327
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 4946f15e8c334840bf277a0bf924371eae120fcd
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20211203/202112030740.6LvRpZLQ-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/d575d38e462a2d09c7e36150fb9a638d591a9c91
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Shawn-Guo/Add-Qualcomm-MPM-irqchip-driver-support/20211202-202327
+        git checkout d575d38e462a2d09c7e36150fb9a638d591a9c91
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/irqchip/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/irqchip/qcom-mpm.c: In function 'qcom_mpm_handler':
+>> drivers/irqchip/qcom-mpm.c:284:33: error: implicit declaration of function 'irq_set_irqchip_state'; did you mean 'irq_set_chip_data'? [-Werror=implicit-function-declaration]
+     284 |                                 irq_set_irqchip_state(d->irq,
+         |                                 ^~~~~~~~~~~~~~~~~~~~~
+         |                                 irq_set_chip_data
+>> drivers/irqchip/qcom-mpm.c:285:49: error: 'IRQCHIP_STATE_PENDING' undeclared (first use in this function)
+     285 |                                                 IRQCHIP_STATE_PENDING, true);
+         |                                                 ^~~~~~~~~~~~~~~~~~~~~
+   drivers/irqchip/qcom-mpm.c:285:49: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/irqchip/qcom-mpm.c: In function 'qcom_mpm_init':
+>> drivers/irqchip/qcom-mpm.c:425:15: error: implicit declaration of function 'devm_request_irq'; did you mean 'can_request_irq'? [-Werror=implicit-function-declaration]
+     425 |         ret = devm_request_irq(dev, irq, qcom_mpm_handler,
+         |               ^~~~~~~~~~~~~~~~
+         |               can_request_irq
+>> drivers/irqchip/qcom-mpm.c:426:32: error: 'IRQF_TRIGGER_RISING' undeclared (first use in this function); did you mean 'IRQD_TRIGGER_MASK'?
+     426 |                                IRQF_TRIGGER_RISING | IRQF_NO_SUSPEND,
+         |                                ^~~~~~~~~~~~~~~~~~~
+         |                                IRQD_TRIGGER_MASK
+>> drivers/irqchip/qcom-mpm.c:426:54: error: 'IRQF_NO_SUSPEND' undeclared (first use in this function)
+     426 |                                IRQF_TRIGGER_RISING | IRQF_NO_SUSPEND,
+         |                                                      ^~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +284 drivers/irqchip/qcom-mpm.c
+
+   264	
+   265	/* Triggered by RPM when system resumes from deep sleep */
+   266	static irqreturn_t qcom_mpm_handler(int irq, void *dev_id)
+   267	{
+   268		struct qcom_mpm_priv *priv = dev_id;
+   269		unsigned long enable, pending;
+   270		int i, j;
+   271	
+   272		for (i = 0; i < priv->reg_stride; i++) {
+   273			enable = qcom_mpm_read(priv, MPM_REG_ENABLE, i);
+   274			pending = qcom_mpm_read(priv, MPM_REG_STATUS, i);
+   275			pending &= enable;
+   276	
+   277			for_each_set_bit(j, &pending, 32) {
+   278				unsigned int pin = 32 * i + j;
+   279				struct irq_desc *desc =
+   280						irq_resolve_mapping(priv->domain, pin);
+   281				struct irq_data *d = &desc->irq_data;
+   282	
+   283				if (!irqd_is_level_type(d))
+ > 284					irq_set_irqchip_state(d->irq,
+ > 285							IRQCHIP_STATE_PENDING, true);
+   286	
+   287			}
+   288		}
+   289	
+   290		return IRQ_HANDLED;
+   291	}
+   292	
+   293	static int qcom_mpm_enter_sleep(struct qcom_mpm_priv *priv)
+   294	{
+   295		int i, ret;
+   296	
+   297		for (i = 0; i < priv->reg_stride; i++)
+   298			qcom_mpm_write(priv, MPM_REG_STATUS, i, 0);
+   299	
+   300		/* Notify RPM to write vMPM into HW */
+   301		ret = mbox_send_message(priv->mbox_chan, NULL);
+   302		if (ret < 0)
+   303			return ret;
+   304	
+   305		return 0;
+   306	}
+   307	
+   308	static int qcom_mpm_cpu_pm_callback(struct notifier_block *nb,
+   309					    unsigned long action, void *data)
+   310	{
+   311		struct qcom_mpm_priv *priv = container_of(nb, struct qcom_mpm_priv,
+   312							  pm_nb);
+   313		int ret = NOTIFY_OK;
+   314		int cpus_in_pm;
+   315	
+   316		switch (action) {
+   317		case CPU_PM_ENTER:
+   318			cpus_in_pm = atomic_inc_return(&priv->cpus_in_pm);
+   319			/*
+   320			 * NOTE: comments for num_online_cpus() point out that it's
+   321			 * only a snapshot so we need to be careful. It should be OK
+   322			 * for us to use, though.  It's important for us not to miss
+   323			 * if we're the last CPU going down so it would only be a
+   324			 * problem if a CPU went offline right after we did the check
+   325			 * AND that CPU was not idle AND that CPU was the last non-idle
+   326			 * CPU. That can't happen. CPUs would have to come out of idle
+   327			 * before the CPU could go offline.
+   328			 */
+   329			if (cpus_in_pm < num_online_cpus())
+   330				return NOTIFY_OK;
+   331			break;
+   332		case CPU_PM_ENTER_FAILED:
+   333		case CPU_PM_EXIT:
+   334			atomic_dec(&priv->cpus_in_pm);
+   335			return NOTIFY_OK;
+   336		default:
+   337			return NOTIFY_DONE;
+   338		}
+   339	
+   340		/*
+   341		 * It's likely we're on the last CPU. Grab the lock and write MPM for
+   342		 * sleep. Grabbing the lock means that if we race with another CPU
+   343		 * coming up we are still guaranteed to be safe.
+   344		 */
+   345		if (raw_spin_trylock(&priv->lock)) {
+   346			if (qcom_mpm_enter_sleep(priv))
+   347				ret = NOTIFY_BAD;
+   348			raw_spin_unlock(&priv->lock);
+   349		} else {
+   350			/* Another CPU must be up */
+   351			return NOTIFY_OK;
+   352		}
+   353	
+   354		if (ret == NOTIFY_BAD) {
+   355			/* Double-check if we're here because someone else is up */
+   356			if (cpus_in_pm < num_online_cpus())
+   357				ret = NOTIFY_OK;
+   358			else
+   359				/* We won't be called w/ CPU_PM_ENTER_FAILED */
+   360				atomic_dec(&priv->cpus_in_pm);
+   361		}
+   362	
+   363		return ret;
+   364	}
+   365	
+   366	static int qcom_mpm_init(struct platform_device *pdev,
+   367				 struct device_node *parent,
+   368				 const struct mpm_data *data)
+   369	{
+   370		struct irq_domain *parent_domain;
+   371		struct device *dev = &pdev->dev;
+   372		struct device_node *np = dev->of_node;
+   373		struct qcom_mpm_priv *priv;
+   374		unsigned int pin_num;
+   375		int irq;
+   376		int ret;
+   377	
+   378		if (!data)
+   379			return -ENODEV;
+   380	
+   381		priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+   382		if (!priv)
+   383			return -ENOMEM;
+   384	
+   385		priv->data = data;
+   386		pin_num = priv->data->pin_num;
+   387		priv->reg_stride = DIV_ROUND_UP(pin_num, 32);
+   388	
+   389		raw_spin_lock_init(&priv->lock);
+   390	
+   391		priv->base = devm_platform_ioremap_resource(pdev, 0);
+   392		if (!priv->base)
+   393			return PTR_ERR(priv->base);
+   394	
+   395		irq = platform_get_irq(pdev, 0);
+   396		if (irq < 0)
+   397			return irq;
+   398	
+   399		priv->mbox_client.dev = dev;
+   400		priv->mbox_chan = mbox_request_channel(&priv->mbox_client, 0);
+   401		if (IS_ERR(priv->mbox_chan)) {
+   402			ret = PTR_ERR(priv->mbox_chan);
+   403			dev_err(dev, "failed to acquire IPC channel: %d\n", ret);
+   404			return ret;
+   405		}
+   406	
+   407		parent_domain = irq_find_host(parent);
+   408		if (!parent_domain) {
+   409			dev_err(dev, "failed to find MPM parent domain\n");
+   410			ret = -ENXIO;
+   411			goto free_mbox;
+   412		}
+   413	
+   414		priv->domain = irq_domain_create_hierarchy(parent_domain,
+   415					IRQ_DOMAIN_FLAG_QCOM_MPM_WAKEUP, pin_num,
+   416					of_node_to_fwnode(np), &qcom_mpm_ops, priv);
+   417		if (!priv->domain) {
+   418			dev_err(dev, "failed to create MPM domain\n");
+   419			ret = -ENOMEM;
+   420			goto free_mbox;
+   421		}
+   422	
+   423		irq_domain_update_bus_token(priv->domain, DOMAIN_BUS_WAKEUP);
+   424	
+ > 425		ret = devm_request_irq(dev, irq, qcom_mpm_handler,
+ > 426				       IRQF_TRIGGER_RISING | IRQF_NO_SUSPEND,
+   427				       "qcom_mpm", priv);
+   428		if (ret) {
+   429			dev_err(dev, "failed to request irq: %d\n", ret);
+   430			goto remove_domain;
+   431		}
+   432	
+   433		priv->pm_nb.notifier_call = qcom_mpm_cpu_pm_callback;
+   434		cpu_pm_register_notifier(&priv->pm_nb);
+   435	
+   436		dev_set_drvdata(dev, priv);
+   437	
+   438		return 0;
+   439	
+   440	remove_domain:
+   441		irq_domain_remove(priv->domain);
+   442	free_mbox:
+   443		mbox_free_channel(priv->mbox_chan);
+   444		return ret;
+   445	}
+   446	
+
 ---
- arch/x86/kvm/svm/avic.c | 28 ++++++++++++++++++++--------
- arch/x86/kvm/svm/svm.h  |  1 -
- 2 files changed, 20 insertions(+), 9 deletions(-)
-
-diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index 6aca1682f4b7..2a0f58e6edf5 100644
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -19,6 +19,7 @@
- #include <linux/amd-iommu.h>
- #include <linux/kvm_host.h>
- 
-+#include <asm/apic.h>
- #include <asm/irq_remapping.h>
- 
- #include "trace.h"
-@@ -63,6 +64,7 @@
- static DEFINE_HASHTABLE(svm_vm_data_hash, SVM_VM_DATA_HASH_BITS);
- static u32 next_vm_id = 0;
- static bool next_vm_id_wrapped = 0;
-+static u64 avic_host_physical_id_mask;
- static DEFINE_SPINLOCK(svm_vm_data_hash_lock);
- 
- /*
-@@ -133,6 +135,20 @@ void avic_vm_destroy(struct kvm *kvm)
- 	spin_unlock_irqrestore(&svm_vm_data_hash_lock, flags);
- }
- 
-+static void avic_init_host_physical_apicid_mask(void)
-+{
-+	if (!x2apic_mode) {
-+		/* If host is in xAPIC mode, default to only 8-bit mask. */
-+		avic_host_physical_id_mask = 0xffULL;
-+	} else {
-+		u32 count = get_count_order(apic_get_max_phys_apicid());
-+
-+		avic_host_physical_id_mask = BIT(count) - 1;
-+	}
-+	pr_debug("Using AVIC host physical APIC ID mask %#0llx\n",
-+		 avic_host_physical_id_mask);
-+}
-+
- int avic_vm_init(struct kvm *kvm)
- {
- 	unsigned long flags;
-@@ -943,22 +959,17 @@ avic_update_iommu_vcpu_affinity(struct kvm_vcpu *vcpu, int cpu, bool r)
- void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
- {
- 	u64 entry;
--	/* ID = 0xff (broadcast), ID > 0xff (reserved) */
- 	int h_physical_id = kvm_cpu_get_apicid(cpu);
- 	struct vcpu_svm *svm = to_svm(vcpu);
- 
--	/*
--	 * Since the host physical APIC id is 8 bits,
--	 * we can support host APIC ID upto 255.
--	 */
--	if (WARN_ON(h_physical_id > AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK))
-+	if (WARN_ON(h_physical_id > avic_host_physical_id_mask))
- 		return;
- 
- 	entry = READ_ONCE(*(svm->avic_physical_id_cache));
- 	WARN_ON(entry & AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK);
- 
--	entry &= ~AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK;
--	entry |= (h_physical_id & AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK);
-+	entry &= ~avic_host_physical_id_mask;
-+	entry |= h_physical_id;
- 
- 	entry &= ~AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK;
- 	if (svm->avic_is_running)
-@@ -1018,6 +1029,7 @@ bool avic_hardware_setup(bool avic, bool npt)
- 		return false;
- 
- 	pr_info("AVIC enabled\n");
-+	avic_init_host_physical_apicid_mask();
- 	amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
- 	return true;
- }
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index 1d2d72e56dd1..b4cb71c538b3 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -497,7 +497,6 @@ extern struct kvm_x86_nested_ops svm_nested_ops;
- #define AVIC_LOGICAL_ID_ENTRY_VALID_BIT			31
- #define AVIC_LOGICAL_ID_ENTRY_VALID_MASK		(1 << 31)
- 
--#define AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK	(0xFFULL)
- #define AVIC_PHYSICAL_ID_ENTRY_BACKING_PAGE_MASK	(0xFFFFFFFFFFULL << 12)
- #define AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK		(1ULL << 62)
- #define AVIC_PHYSICAL_ID_ENTRY_VALID_MASK		(1ULL << 63)
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

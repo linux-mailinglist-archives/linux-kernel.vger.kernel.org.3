@@ -2,164 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05811467226
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 07:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6FDC467228
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 07:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350754AbhLCGpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 01:45:17 -0500
-Received: from mail-bo1ind01olkn0186.outbound.protection.outlook.com ([104.47.101.186]:6314
-        "EHLO IND01-BO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S244502AbhLCGpP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 01:45:15 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hud1MMdW1muNBiGQgVAyrNh9/cFSTeb3hWcCmLmAvL7S5icICfXKOCOehz/6ZcO7u1SICjB2sNBqlXARczjt6HGUI1sq+YvJ03+e4ZYHXJF+XShWwrWKAzfKcjuINDoU+ZwM7DE4fJCeDLJ+9HqyQdHJL46K6Dguhvu4GXFET2P+LloEQk7njwGOTQ7Vg3+TaBb3MbFKTmVESHx1CFTwx0ur7pBho2wFo49Cyfgd132T1lKIzJRo9PyQIy8ZaQRqi6H881yKHwJf+8t8hUO1DCPMOOmSSG0bTPa8jUux83MD0TD8D/Fl6aVsZsNsqpP/EaHU1OiIuRPwSK8UJZQ6Rw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wFGuyMHXhQapYoaVRG82eACo//tIvOhHjTidR3wJd/M=;
- b=iYIg1S9z/ol+xYkG9cxWN49MfwTU1ukiaDyTto9nOrluc2RBNmD8Fj3nYs8eFpQvqh7H3XW3QOdp6R72i89fL2sTM5EGaDnt7XC2VvojnEYFXoTcnebmg01qX95N4fv9+vQgQGyJpHcvpVOTG+pD/ZOXd9oaprBAED3aeEHFvis+N50kZvNw1Z9t7acVy0JI2onTPCab3TxQUwQVRpbmdlQpMgJlFDDIqEmmmd/dl6lhtCim6RAuQAF0KYhRwGB3pzB3FErnz955KJAlVbGuTnV9WISe/NEMQbuQ8RRfxLgL6VC9QiH+wNrwDnejYyL7r9K0ix0RxbyYwyvbn8xaGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wFGuyMHXhQapYoaVRG82eACo//tIvOhHjTidR3wJd/M=;
- b=UNtjKJPg/f80kk9W+T4bU4J/ptsNgRDljtBmiOjPaLzojJ8z1V9CWUPf/UH8tR8VuSIOYvvjvDgBufZoLMuyoV/0A0L+kybnIM/5apurux+JQGrJW65ixnwsxGrXHhOYOoR/WxJ41ycuBK1eXxRCw0biJBywdD6hlcNe5pvlbcVjVda4wwS/7PpGKj8ovvvec+C4PQeWsp4Y2MZgFtkEXImAjauJpl0MSPpz00l86Xmfk99wWEF5RV2UH+K7Sev413C80ILCHxMS/U/WMZ/QSonjjnlTJoMHtXCKLH69yNWIAOaJ+QCmS/faOynOBTUVRqnCV8DK0ck9yxQQtHvjpw==
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
- by PNZPR01MB4414.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1a::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.28; Fri, 3 Dec
- 2021 06:41:44 +0000
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::7ca6:9165:19ec:4cd7]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::7ca6:9165:19ec:4cd7%8]) with mapi id 15.20.4755.016; Fri, 3 Dec 2021
- 06:41:44 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Hector Martin <marcan@marcan.st>
-CC:     "aspriel@gmail.com" <aspriel@gmail.com>,
-        "franky.lin@broadcom.com" <franky.lin@broadcom.com>,
-        "hante.meuleman@broadcom.com" <hante.meuleman@broadcom.com>,
-        "chi-hsien.lin@infineon.com" <chi-hsien.lin@infineon.com>,
-        "wright.feng@infineon.com" <wright.feng@infineon.com>,
-        "chung-hsien.hsu@infineon.com" <chung-hsien.hsu@infineon.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Stan Skowronek <stan@corellium.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Joey Gouly <joey.gouly@arm.com>
-Subject: Re: [PATCH v3 1/3] brcmfmac: Add support for BCM4378 on Apple
- hardware (with their special OTP).
-Thread-Topic: [PATCH v3 1/3] brcmfmac: Add support for BCM4378 on Apple
- hardware (with their special OTP).
-Thread-Index: AQHX0GuU60Mzr7gPW0qK2qCd4kZ7oKvxeKSAgC8IL4A=
-Date:   Fri, 3 Dec 2021 06:41:44 +0000
-Message-ID: <510D7CA0-8DED-488B-9F27-1F407F74861C@live.com>
-References: <PNZPR01MB4415874CD530F2C305872F88B88A9@PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM>
- <PNZPR01MB44155DC40EAA3A13FCE85193B88A9@PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM>
- <PNZPR01MB44156C94263746D4EC592E96B88B9@PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM>
- <391FADA9-4C9D-42F5-97FA-B87D36BE901B@live.com>
- <4928ea79-2794-05fb-d1a8-942b589a1c3a@marcan.st>
-In-Reply-To: <4928ea79-2794-05fb-d1a8-942b589a1c3a@marcan.st>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [CGeXRie244E5p95IStUVel203jRJZQsUeNBP+6XfMw9Vx8NuOXzVP4VzRKdwUbjm]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3c4ffadb-0fde-4376-3c7e-08d9b627f8f5
-x-ms-traffictypediagnostic: PNZPR01MB4414:
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ddOdaFaOiMbn8NXk43d2dI/e90aXPLQHUvvSjXmFCbDGugalkPbQ71TfikksZCDqljGu4PIOL3w2v8w7t25a19YSoSXsLNlNrDAQMw7ku6t2v+xt2jwHpOmMu+6jaHN50ZzdrJYY0ncCUHB8oh2MY4Abi54oExf0EUG1O5+1q5LOSpy2twG6I4tXh1J5qslmJ28CXTO1yAaEq66gmXXDy3JOupwVv+YVS4jkYzEc5BOkWonKgOTE4lNEEXoRiqJu5S1uFqKQDeoDyaaFXbH5FaGSisykD/zpa/0CFy/v1dekuW31CgpTpD1F6klbt1vp57GTDOmTL7WPtpv9VYFTcDfuzuYVTpzbHady7xngSKy8ary3wuDMVQMLgaRMb9/9DR7P3IPzg5tor4ax1kS/eKp3xxBZR8IekW3GwrN67fDUBu5bpYqAIx8uW4Ndn1n6R9SjcJxhHilxJ/3Lz1G6GEIwypjG42tG/EVn3Y+GfVx1Jxi8Zykftj5yGs2GnxFJ6qSxj22A9KSPu39+2Y6TLfGwCxuayhopwDMsKnUR69s2jT7UvW9ay6WiKep3TbNTIfRwh1raq0a98vRjV0Ev3lpvNE7FnI9DjqpAxBGuq7SU2m0A3aEITO8QIIFJ+P21
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?VFqgMf9NdiZHaDXQqCTxtHs7jjkBEBjBXxcP6ka9sMlkBf/MMN2cQHCS1NDi?=
- =?us-ascii?Q?2N3ZSvyiUrRusRJdFdsl58GmxpyBcvzXH+LSbxWFMIwbPDP5QotDET9FGTpI?=
- =?us-ascii?Q?C/RB9u/CBDN4YiJf+wXCKuO/Gla5u/FSS3a2fb63Tf7G+cQpGGAG1oo/P/aj?=
- =?us-ascii?Q?JCSUjA0815hvT0pxLXRVkq5aX97QFxpOKjTaewHscQO1bhYcBxGVBGjdgroz?=
- =?us-ascii?Q?e4CheCZ+S4h3GGVXuzUX8onELcv8fn9YZuOJRCP9AWcISPe+EJHw6s93hFjN?=
- =?us-ascii?Q?9sQE2Uu6dgzwgGnbbTRXtfdAvjXhO2ZFr4OjxSikPySurOIG2Df2HyyVQARM?=
- =?us-ascii?Q?kyIQK+zut1YekmQGyerQhve9lHonkB3wIre5FKDpRu4x6Ze0d1fDZM0ZibEk?=
- =?us-ascii?Q?jlFkQSKLhrR5MWtW4l/VR9KEdv/c88tSqJA8Od5FKuAFcI88smm7j8XLeWof?=
- =?us-ascii?Q?cPIQ0jv6qNrk2Tg2hHpvUNwMLgWmJsitp2QEg04f6NckxRMxpjgPLI5v7VCy?=
- =?us-ascii?Q?1zG/V1RNE5aFPmtQhpHbFMRItdWRcCZ5pVYfSK9vEvfLxE1y4BO/8pVuJJSJ?=
- =?us-ascii?Q?iUzi5kd8ChS4cwQvzBqVu622z1nBo4eHgTeAidFo3DCqd8dq95OGPfFlehCJ?=
- =?us-ascii?Q?qwGtUmtlr4RvN7c0WLtgaLr1FXl28orEC1p56RvuzKDKoaKVTUZnfDRy4FA5?=
- =?us-ascii?Q?gfCOezMOH3LzMaBiRD6IdOUMINtMmr8t2ruh+7mamJFlB4u6HKvNeeoY3pGk?=
- =?us-ascii?Q?V2ck3HRQYU5c7Db74n4rI99JYOQ37RcA8Fow22GeMDR+Anrd5t+0abc7dgri?=
- =?us-ascii?Q?me4mNowj6UYTgC5r0uZTy5ymzB698chUwj/QtEstfEkPxV1cdOBIj/fcsxCY?=
- =?us-ascii?Q?ymWV/43ftFMJia0djYQl1KHjBIqkQEURz9k+C41o9qkxdRcReyHccgMRc12Q?=
- =?us-ascii?Q?T0h4tYu5k6H/cReH5FSvncVgVjvWjZxEzbQaE9m1u47BL2QhO29ZBrchAQGY?=
- =?us-ascii?Q?kBBE8ruwyQ9F52JGexUUmbm4IQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C1DEC40790465747B3D1641688B20818@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        id S1350792AbhLCGqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 01:46:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234449AbhLCGqg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 01:46:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AAAC06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 22:43:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C0DBB82503
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 06:43:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60D45C53FC7;
+        Fri,  3 Dec 2021 06:43:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638513790;
+        bh=kQWKSO8pVmVc/VLBP9zNwAX6yT8k5Pr0J8RSVBiVfaI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WwC8BxpfO2TuNdW4uXsFfDxb+u6oAr8/34p0TlPWAkhqPoonzlTKeB8wXWjWoGWOm
+         t9q4avoQmUNpr8E3RixVNx/jgGAI9zqr3vF9InWRfRiCJxOYqZD0jB78eHG4oiN0hC
+         tQTo2EEsIwROfLlVJt+8NCwgygmZrEiZ3/sI5x59pNrzQlVm6i6AQY3cr0dw49tyGz
+         dGcJaiwWXKhLGMKe9bRNRVyjqvUF28f66YhByoDcWQwArQ3/s0739TRuMvbM7dSHFN
+         lfGPhi/YdLHBjTDHHM7xbE4NbzWK6ZieUE9DfTJFkSKM2ILWqYgsU6YoEL93+n3tsJ
+         bJduLTm+/Y5gg==
+Message-ID: <9b637c29-f9c7-5928-cf2e-346253bb00c7@kernel.org>
+Date:   Fri, 3 Dec 2021 14:43:07 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c4ffadb-0fde-4376-3c7e-08d9b627f8f5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Dec 2021 06:41:44.6078
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNZPR01MB4414
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [f2fs-dev] [PATCH 2/6] f2fs: do not expose unwritten blocks to
+ user by DIO
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20211116214510.2934905-1-jaegeuk@kernel.org>
+ <20211116214510.2934905-2-jaegeuk@kernel.org>
+ <6576ab84-7441-e594-a7c4-e5876a814df7@kernel.org>
+ <YakMtRif1f0cXT6R@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <YakMtRif1f0cXT6R@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2021/12/3 2:13, Jaegeuk Kim wrote:
+> On 12/02, Chao Yu wrote:
+>> On 2021/11/17 5:45, Jaegeuk Kim wrote:
+>>> DIO preallocates physical blocks before writing data, but if an error occurrs
+>>> or power-cut happens, we can see block contents from the disk. This patch tries
+>>> to fix it by 1) turning to buffered writes for DIO into holes, 2) truncating
+>>> unwritten blocks from error or power-cut.
+>>>
+>>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+>>> ---
+>>>    fs/f2fs/data.c |  5 ++++-
+>>>    fs/f2fs/f2fs.h |  5 +++++
+>>>    fs/f2fs/file.c | 24 +++++++++++++++++++++++-
+>>>    3 files changed, 32 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>>> index 3b27fb7daa8b..7ac1a39fcad2 100644
+>>> --- a/fs/f2fs/data.c
+>>> +++ b/fs/f2fs/data.c
+>>> @@ -1543,8 +1543,11 @@ int f2fs_map_blocks(struct inode *inode, struct f2fs_map_blocks *map,
+>>>    					flag != F2FS_GET_BLOCK_DIO);
+>>>    				err = __allocate_data_block(&dn,
+>>>    							map->m_seg_type);
+>>> -				if (!err)
+>>> +				if (!err) {
+>>> +					if (flag == F2FS_GET_BLOCK_PRE_DIO)
+>>> +						file_need_truncate(inode);
+>>>    					set_inode_flag(inode, FI_APPEND_WRITE);
+>>> +				}
+>>>    			}
+>>>    			if (err)
+>>>    				goto sync_out;
+>>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>>> index be871a79c634..14bea669f87e 100644
+>>> --- a/fs/f2fs/f2fs.h
+>>> +++ b/fs/f2fs/f2fs.h
+>>> @@ -654,6 +654,7 @@ enum {
+>>>    #define FADVISE_KEEP_SIZE_BIT	0x10
+>>>    #define FADVISE_HOT_BIT		0x20
+>>>    #define FADVISE_VERITY_BIT	0x40
+>>> +#define FADVISE_TRUNC_BIT	0x80
+>>>    #define FADVISE_MODIFIABLE_BITS	(FADVISE_COLD_BIT | FADVISE_HOT_BIT)
+>>> @@ -681,6 +682,10 @@ enum {
+>>>    #define file_is_verity(inode)	is_file(inode, FADVISE_VERITY_BIT)
+>>>    #define file_set_verity(inode)	set_file(inode, FADVISE_VERITY_BIT)
+>>> +#define file_should_truncate(inode)	is_file(inode, FADVISE_TRUNC_BIT)
+>>> +#define file_need_truncate(inode)	set_file(inode, FADVISE_TRUNC_BIT)
+>>> +#define file_dont_truncate(inode)	clear_file(inode, FADVISE_TRUNC_BIT)
+>>> +
+>>>    #define DEF_DIR_LEVEL		0
+>>>    enum {
+>>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+>>> index 4bf77a5bf998..ec8de0662437 100644
+>>> --- a/fs/f2fs/file.c
+>>> +++ b/fs/f2fs/file.c
+>>> @@ -960,10 +960,21 @@ int f2fs_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
+>>>    		down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+>>>    		filemap_invalidate_lock(inode->i_mapping);
+>>> +		/*
+>>> +		 * Truncate stale preallocated blocks used by the previous DIO.
+>>> +		 */
+>>> +		if (file_should_truncate(inode)) {
+>>> +			err = f2fs_truncate(inode);
+>>> +			if (err)
+>>> +				goto out_unlock;
+>>> +			file_dont_truncate(inode);
+>>> +		}
+>>> +
+>>>    		truncate_setsize(inode, attr->ia_size);
+>>>    		if (attr->ia_size <= old_size)
+>>>    			err = f2fs_truncate(inode);
+>>> +out_unlock:
+>>>    		/*
+>>>    		 * do not trim all blocks after i_size if target size is
+>>>    		 * larger than i_size.
+>>> @@ -4257,6 +4268,13 @@ static int f2fs_preallocate_blocks(struct kiocb *iocb, struct iov_iter *iter)
+>>>    	/* If it will be an out-of-place direct write, don't bother. */
+>>>    	if (dio && f2fs_lfs_mode(sbi))
+>>>    		return 0;
+>>> +	/*
+>>> +	 * Don't preallocate holes aligned to DIO_SKIP_HOLES which turns into
+>>> +	 * buffered IO, if DIO meets any holes.
+>>> +	 */
+>>> +	if (dio && i_size_read(inode) &&
+>>> +		(F2FS_BYTES_TO_BLK(pos) < F2FS_BLK_ALIGN(i_size_read(inode))))
+>>> +		return 0;
+>>>    	/* No-wait I/O can't allocate blocks. */
+>>>    	if (iocb->ki_flags & IOCB_NOWAIT)
+>>> @@ -4366,10 +4384,14 @@ static ssize_t f2fs_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
+>>>    		if (preallocated > 0 && i_size_read(inode) < target_size) {
+>>>    			down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+>>>    			filemap_invalidate_lock(inode->i_mapping);
+>>> -			f2fs_truncate(inode);
+>>> +			if (!f2fs_truncate(inode))
+>>> +				file_dont_truncate(inode);
+>>>    			filemap_invalidate_unlock(inode->i_mapping);
+>>>    			up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+>>> +		} else {
+>>> +			file_dont_truncate(inode);
+>>
+>> How about this case:
+>>
+>> - touch file
+>> - DIO write [0, 8kb] to file
+>>   - preallocate 2 physical blocks
+>>   - set FADVISE_TRUNC_BIT
+>>   - SPO
+>> - BUFIO write [0, 4kb] to file
+>>   - file_dont_truncate -- it leaks unwritten [4kb, 8kb] to user after
+>> truncating file to 8kb
+> 
+> i_size should be 4kb, no?
 
+- BUFIO write [0, 4kb] to file
+  - file_dont_truncate()
+i_size should be 4kb, w/ FADVISE_TRUNC_BIT
 
-> On 03-Nov-2021, at 1:58 PM, Hector Martin <marcan@marcan.st> wrote:
->=20
-> Hi,
->=20
-> I'd been meaning to rewrite this patch because it's such a mess, but sinc=
-e we're here... (CCing some relevant folks)
->=20
-> Overall: this patch combines a ton of unrelated random changes, many of w=
-hich without explanation, with some completely crazy approaches. Stan (CC'e=
-d) has so far refused to interact with the kernel community in any way what=
-soever, and I do not feel comfortable using his patches without thorough re=
-view, including reverse engineering the changes to figure out what they act=
-ually do and why. We've already gone through this with some of his other pa=
-tches, which ended up being largely rewritten or entirely dropped in the en=
-d.
->=20
-> The firmware situation with this patch is completely unacceptable. It see=
-ms the original intent here is to have users load the driver, have it print=
- the required firmware version, and then expect users to copy specifically =
-that firmware file set from macOS, and reload again. This is obviously not =
-the right way to do this. We need to statically copy all firmware from macO=
-S/recovery mode with a naming scheme that this driver can use, at initial i=
-nstall time, and it needs to dynamically select the right firmware for any =
-given platform it is booted on.
->=20
-> The main issue with these machines is that there is a large set of requir=
-ed firmware variants; a few core firmware files plus many nvram variants fo=
-r different hardware modules and device revisions. A lot of them are identi=
-cal and can be symlinked, but we need to work out a naming scheme for these=
- variations. There are several more dimensions of nvram selection than what=
- we're used to on Linux.
-Update on the firmware situation :-
-Thanks to this commit (https://git.kernel.org/pub/scm/linux/kernel/git/torv=
-alds/linux.git/commit/drivers/net/wireless/broadcom/brcm80211/brcmfmac?h=3D=
-v5.16-rc3&id=3D5ff013914c62c493c206d70554cfb1d311ea481a), we can have model=
- specific .bin files for Macs.
-Example :- brcmfmac4364-pcie.Apple Inc.-MacBookPro16,1.bin is the file spec=
-ific to MacBook Pro 16 inch, 2019
+- setattr 8kb
+i_size should be 8kb, last [4kb, 8kb] is unwritten
 
-We would need something like this for the .clm_blob files, that is we would=
- want additional support for per board suffix clm_blob files. This should s=
-olve the firmware problem for .bin and .clm_blob files. A patch to get the =
-same feature would be appreciated. I am Ccing the original author of the ab=
-ove commit too.
+Thanks,
 
-Next we have is the .txt NVRAM file. This seems tricky cause I haven't been=
- able to find a way to get the module version, on which the variants depend=
- on.
+> 
+>>
+>> Thanks,
+>>
+>>>    		}
+>>> +
+>>>    		clear_inode_flag(inode, FI_PREALLOCATED_ALL);
+>>>    		if (ret > 0)
+>>>

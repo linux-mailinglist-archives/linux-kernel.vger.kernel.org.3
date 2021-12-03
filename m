@@ -2,84 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 358574673B8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:12:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A511E4673A5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351259AbhLCJPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 04:15:30 -0500
-Received: from mslow1.mail.gandi.net ([217.70.178.240]:36013 "EHLO
-        mslow1.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243758AbhLCJP3 (ORCPT
+        id S1379404AbhLCJIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 04:08:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243758AbhLCJIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 04:15:29 -0500
-Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 55EE2C00A6
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 08:57:59 +0000 (UTC)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 2B4DDFF80F;
-        Fri,  3 Dec 2021 08:57:35 +0000 (UTC)
-Message-ID: <bdb6b231-2b1d-61c9-35a6-d5545bd667c6@ghiti.fr>
-Date:   Fri, 3 Dec 2021 09:57:35 +0100
+        Fri, 3 Dec 2021 04:08:44 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2C5C06173E;
+        Fri,  3 Dec 2021 01:05:20 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id y16so2824010ioc.8;
+        Fri, 03 Dec 2021 01:05:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hpHmb8fethI2k7K6CB6NbA3dcvUxz9E13FAFhSEgRqc=;
+        b=hYm4+5lL77QIxnm6FZtbulkdjUSQDQt9/Gz8kaSu+ipSnyNy2ooN1te+OFyWaDuQ1G
+         FR8N/eeaK1BxJkKGMCT/7uNLbA8tt3tKZCd1PpDYExomklFxl1R1zkpjXeEbfGFWGzay
+         0S8iAwh65ZLbM9BEyCzYcfXrBojA9RQfiQCiu0i/o4mDnCxIqZoc8Ay/7AZh1qwCRRv6
+         qVnkBFDsfwBTabUA1MawdW4hcfCdCjaDu1fWMVWQKO0AMq+s8COnqL9F9bMM8zemHbwM
+         h8Jtisk68RpALWwaaZhJOQl4MDE80Z2Drdk8feuwwBo4NEG+BAImCKcZ6iQPwha+BNDb
+         /oJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hpHmb8fethI2k7K6CB6NbA3dcvUxz9E13FAFhSEgRqc=;
+        b=IqpknACVEhi5altwSKENHjqzp8A0rCZu/WL4Cb3bcivoi8HAgjkKwtx3A4XBE3Aq0s
+         YYRwqb9bxeHAEdRfH2YOBj9N5l2RAlFIkPc/8RkZ/BjcaHmqp+5j5t7bavgF5sKKmOz6
+         aohg3otMecWQkRRXl0rwHqjfRGTAy/1pl75w3LlcwVXZr1h1uMPjcUp4XoC1ka308iLp
+         gPSkcRN3rlGGUteNDD/eXAd6q8iJ8A3FoL4bpwSJ2SxCY7sZrZAJ4JzL8KNdzufW5mSB
+         5QT/iAn+o4SH/bdJMgOuT6F9y8OB+05j2JGsd4IQB4HgDG36eBo7LgMI1vGx9q20fkwl
+         tEfg==
+X-Gm-Message-State: AOAM530c2vTrr/Cb3iNBXyPGEtej+FOw6eEwccefLI1Y166QWZ2ZSOxU
+        /uycRNcH1qcY00mgudU5QgaFRjpryeeaH60iTFS4dtsfpmw=
+X-Google-Smtp-Source: ABdhPJz8AsxwdtWTj8AhL6g86pHyPc+94skz6mL1GOshnr5YEYBW9wc9SOFrBzoZ5r30UqypeQVQkYwfpz1VRcOaYZ0=
+X-Received: by 2002:a6b:b7c8:: with SMTP id h191mr16428134iof.155.1638522320377;
+ Fri, 03 Dec 2021 01:05:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH 3/5] riscv: mm: init: remove _pt_ops and use pt_ops
- directly
-Content-Language: en-US
-To:     Jisheng Zhang <jszhang@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211203050317.2102-1-jszhang@kernel.org>
- <20211203050317.2102-4-jszhang@kernel.org>
-From:   Alexandre ghiti <alex@ghiti.fr>
-In-Reply-To: <20211203050317.2102-4-jszhang@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211203162035.406a055a@canb.auug.org.au>
+In-Reply-To: <20211203162035.406a055a@canb.auug.org.au>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 3 Dec 2021 10:05:09 +0100
+Message-ID: <CANiq72nu_2s=eGy9KbOZDU8LKUw6bczP1Sea1Pewuwvue7ovdQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the rust tree with the kbuild tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Finn Behrens <me@kloenk.de>, Gary Guo <gary@garyguo.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Wei Liu <wei.liu@kernel.org>, Wu XiangCheng <bobwxc@email.cn>,
+        Yuki Okushi <jtitor@2k36.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/21 06:03, Jisheng Zhang wrote:
-> Except "pt_ops", other global vars when CONFIG_XIP_KERNEL=y is defined
-> as below:
+On Fri, Dec 3, 2021 at 6:20 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> |foo_type foo;
-> |#ifdef CONFIG_XIP_KERNEL
-> |#define foo	(*(foo_type *)XIP_FIXUP(&foo))
-> |#endif
->
-> Follow the same way for pt_ops to unify the style and to simplify code.
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
+Looks good to me. Thanks!
 
-_dtb_early_pa and _dtb_early_va have the same 'issue' too. I thought 
-there was a reason for those variables to be declared this way but I 
-can't find it :)
-
-
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->   arch/riscv/mm/init.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index bd445ac778a8..4d4fcd7ef1a9 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -227,12 +227,10 @@ static void __init setup_bootmem(void)
->   }
->   
->   #ifdef CONFIG_MMU
-> -static struct pt_alloc_ops _pt_ops __initdata;
-> +static struct pt_alloc_ops pt_ops __initdata;
->   
->   #ifdef CONFIG_XIP_KERNEL
-> -#define pt_ops (*(struct pt_alloc_ops *)XIP_FIXUP(&_pt_ops))
-> -#else
-> -#define pt_ops _pt_ops
-> +#define pt_ops (*(struct pt_alloc_ops *)XIP_FIXUP(&pt_ops))
->   #endif
->   
->   unsigned long riscv_pfn_base __ro_after_init;
+Cheers,
+Miguel

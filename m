@@ -2,247 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E00E3467D87
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:51:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 241F2467D83
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353144AbhLCSyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 13:54:45 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:6952 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231605AbhLCSyn (ORCPT
+        id S1348562AbhLCSyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 13:54:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231605AbhLCSyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 13:54:43 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B3IkINr022600;
-        Fri, 3 Dec 2021 18:51:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=CeqDmYVcHZKTTCv8hx7p20HEo4XinK/+V4PT0rTIPQs=;
- b=mP1h5n+oXKrdger+9qxg6m/lwWgWGCUH1KnWZF9cDqJEG4qvDqIT5+uSCa8lPoR31iol
- llVKcv3X95FoQ/YseHGQ9ivsIrUwXh2w/EeWxVMbzaf1VQl4jYCcwtNO12zVaFlIt+fI
- att7NS8H50DHKZDL1QoX1TmdH/Tjdeh/7YqcEF52CQB8oPU7cGumBj8NFjq9aWvmdUwD
- 3n7WCZPLhV70Q3XGfd5UVFlxMJeqy4ZrMYkYrJ0x3UNpdEDjY4v15V2eQO0xsR8c7tTo
- ZevP8rS1QNwXQopJKFe2yFI4DOUhwD/eifgrdZPRk7WN7grtr7raLXyQR7mUYie5zoJ9 PQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cqrte02qr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 18:51:02 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B3InxVi002415;
-        Fri, 3 Dec 2021 18:51:01 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cqrte02qk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 18:51:01 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B3IkxLW010396;
-        Fri, 3 Dec 2021 18:51:01 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma02dal.us.ibm.com with ESMTP id 3cn5f1xdgu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 18:51:01 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B3Ioxe956426974
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 3 Dec 2021 18:50:59 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 369E578064;
-        Fri,  3 Dec 2021 18:50:59 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E3DB778060;
-        Fri,  3 Dec 2021 18:50:50 +0000 (GMT)
-Received: from jarvis.int.hansenpartnership.com (unknown [9.211.96.125])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri,  3 Dec 2021 18:50:50 +0000 (GMT)
-Message-ID: <11b557b58de74828b1c16334a5fb52c4d3f6ad0f.camel@linux.ibm.com>
-Subject: Re: [RFC v2 19/19] ima: Setup securityfs for IMA namespace
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, serge@hallyn.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Fri, 03 Dec 2021 13:50:49 -0500
-In-Reply-To: <6306b4e5-f26d-1704-6344-354eb5387abf@linux.ibm.com>
-References: <20211203023118.1447229-1-stefanb@linux.ibm.com>
-         <20211203023118.1447229-20-stefanb@linux.ibm.com>
-         <df433bc52ca1e0408d48bbace4c34a573991f5ba.camel@linux.ibm.com>
-         <6306b4e5-f26d-1704-6344-354eb5387abf@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Fri, 3 Dec 2021 13:54:39 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5E3C061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 10:51:15 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id u3so8733853lfl.2
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 10:51:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AoGWj/bWqwFWdFDfAGCiZt2+Rrs0vhzQ2O7jMvIrWTE=;
+        b=i7hnxehXR4Qq6dr9FYM+t6kwmA5qmPA39SksNpMT3nrmhOGSEp0jngHnpulMw5gXXb
+         c+vskdcXt2UBcrbrvhsUNkWEIHIPFuVeBkFZmzot8MboOly04tZW5IK9Ex30bQYbYIFG
+         hHp8w43Fhec4OCyS0j5tlitqI9VhnlZXT3VRk+LlTfHxItKgMqvHBFstf4FzVH3fmSz4
+         5eSJ0v8ygAj24QW8Gp8v8JAW8GnU4VCOLeiKPBZo7FJsWbsNzpFbdSeApsYFHBWbeHjc
+         lpGJEBgwU9yn9FvkYpUN9XfL7eLmwuNYYHWGaxAZ+JPdAZ2RYeGwtsAxVwKDxx4sBJmY
+         IAjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AoGWj/bWqwFWdFDfAGCiZt2+Rrs0vhzQ2O7jMvIrWTE=;
+        b=nP25A4J01JkcoeZhiE9xo7Cd0/CHYI9XW9roo0zqRMhJd2/aL7CRZ5+bflXCRZOIoi
+         r8J81p3rjHAAVbqVsewoQr7Jazj0IIubgRtbPkJhd7/umgVQ7fIZmJfVSwpZsnldoC4E
+         T+quztU9Kft/OFcYtERgvfAQduAt6k0YejeI4EEW4wzfMbj9jEo3mnUZtoDerZGDvm3A
+         sUhBuTwXlEuevurT8EXDnlcLt6mkp/PycDWflSOdg3l03UUCpnYcJy0UDCfStrUOKJUC
+         0tOkv2GJIDJi8p/+TtuRyEPMOyk/WsIOwQKOKCMYlWMRhOcfexguPhIF38aGz6dQLkLS
+         oYjg==
+X-Gm-Message-State: AOAM532Zu150De4fLL/85z47k9CQBemVgIft242dNatOU1vzafAslaGk
+        Tq1/CN0DwkuYd289+WbYyh2qiA==
+X-Google-Smtp-Source: ABdhPJx3oNQ/pRiEn2+/u0ktbVPcBmU8snjmPDRzgL+8t9ORKohqKzHYrihygwoe+ybgKC2OUge75Q==
+X-Received: by 2002:ac2:55a6:: with SMTP id y6mr18888149lfg.406.1638557473337;
+        Fri, 03 Dec 2021 10:51:13 -0800 (PST)
+Received: from [192.168.1.8] ([185.24.52.156])
+        by smtp.gmail.com with ESMTPSA id c15sm465158lfb.154.2021.12.03.10.51.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 10:51:12 -0800 (PST)
+Message-ID: <8ee2b4d4-44f3-6d03-b674-613b5b04a754@linaro.org>
+Date:   Fri, 3 Dec 2021 21:51:10 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] drm/msm/a5xx: Add support for Adreno 506 GPU
+Content-Language: en-GB
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>
+Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Kristian H. Kristensen" <hoegsberg@google.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Akhil P Oommen <akhilpo@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Iskren Chernev <iskren.chernev@gmail.com>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20211022114349.102552-1-vladimir.lypak@gmail.com>
+ <YXL16V17upehvUwt@ripper>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <YXL16V17upehvUwt@ripper>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vWCj3NGAJe7hWcTddG7p0UD3l0VofSYo
-X-Proofpoint-ORIG-GUID: j204tRZAMpl2_A2FaR9kURtBhTuIcMyN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-03_07,2021-12-02_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- malwarescore=0 mlxscore=0 clxscore=1015 priorityscore=1501 impostorscore=0
- mlxlogscore=999 adultscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112030118
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2021-12-03 at 13:06 -0500, Stefan Berger wrote:
-> On 12/3/21 12:03, James Bottomley wrote:
-> > On Thu, 2021-12-02 at 21:31 -0500, Stefan Berger wrote:
-> > [...]
-> > >   static int securityfs_init_fs_context(struct fs_context *fc)
-> > >   {
-> > > +	int rc;
-> > > +
-> > > +	if (fc->user_ns->ima_ns->late_fs_init) {
-> > > +		rc = fc->user_ns->ima_ns->late_fs_init(fc->user_ns);
-> > > +		if (rc)
-> > > +			return rc;
-> > > +	}
-> > >   	fc->ops = &securityfs_context_ops;
-> > >   	return 0;
-> > >   }
-> > I know I suggested this, but to get this to work in general, it's
-> > going to have to not be specific to IMA, so it's going to have to
-> > become something generic like a notifier chain.  The other problem
-> > is it's only working still by accident:
+On 22/10/2021 20:33, Bjorn Andersson wrote:
+> On Fri 22 Oct 04:43 PDT 2021, Vladimir Lypak wrote:
 > 
-> I had thought about this also but the rationale was:
+>> This GPU is found on SoCs such as MSM8953(650MHz), SDM450(600MHz),
+>> SDM632(725MHz).
+>>
+>> Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
+>> ---
+>>   drivers/gpu/drm/msm/adreno/a5xx_gpu.c      | 34 ++++++++++++++--------
+>>   drivers/gpu/drm/msm/adreno/adreno_device.c | 18 ++++++++++++
+>>   drivers/gpu/drm/msm/adreno/adreno_gpu.h    |  5 ++++
+>>   3 files changed, 45 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
+>> index 5e2750eb3810..249a0d8bc673 100644
+>> --- a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
+>> +++ b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
+>> @@ -441,7 +441,7 @@ void a5xx_set_hwcg(struct msm_gpu *gpu, bool state)
+>>   	const struct adreno_five_hwcg_regs *regs;
+>>   	unsigned int i, sz;
+>>   
+>> -	if (adreno_is_a508(adreno_gpu)) {
+>> +	if (adreno_is_a506(adreno_gpu) || adreno_is_a508(adreno_gpu)) {
+>>   		regs = a50x_hwcg;
+>>   		sz = ARRAY_SIZE(a50x_hwcg);
+>>   	} else if (adreno_is_a509(adreno_gpu) || adreno_is_a512(adreno_gpu)) {
+>> @@ -485,7 +485,7 @@ static int a5xx_me_init(struct msm_gpu *gpu)
+>>   	OUT_RING(ring, 0x00000000);
+>>   
+>>   	/* Specify workarounds for various microcode issues */
+>> -	if (adreno_is_a530(adreno_gpu)) {
+>> +	if (adreno_is_a506(adreno_gpu) || adreno_is_a530(adreno_gpu)) {
+>>   		/* Workaround for token end syncs
+>>   		 * Force a WFI after every direct-render 3D mode draw and every
+>>   		 * 2D mode 3 draw
+>> @@ -620,8 +620,17 @@ static int a5xx_ucode_init(struct msm_gpu *gpu)
+>>   
+>>   static int a5xx_zap_shader_resume(struct msm_gpu *gpu)
+>>   {
+>> +	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+>>   	int ret;
+>>   
+>> +	/*
+>> +	 * Adreno 506,508,512 have CPZ Retention feature and
+>> +	 * don't need to resume zap shader
+>> +	 */
+>> +	if (adreno_is_a506(adreno_gpu) || adreno_is_a508(adreno_gpu) ||
+>> +	    adreno_is_a512(adreno_gpu))
+>> +		return 0;
 > 
-> securityfs is compiled due to CONFIG_IMA_NS and the user namespace 
-> exists there and that has a pointer now to ima_namespace, which can
-> have that callback. I assumed that other namespaced subsystems could
-> also be  reached then via such a callback, but I don't know.
-
-Well securityfs is supposed to exist for LSMs.  At some point each of
-those is going to need to be namespaced, which may eventually be quite
-a pile of callbacks, which is why I thought of a notifier.
-
-> I suppose any late filesystem init callchain would have to be
-> connected to the user_namespace somehow?
-
-I don't think so; I think just moving some securityfs entries into the
-user_namespace and managing the notifier chain from within securityfs
-will do for now.  [although I'd have to spec this out in code before I
-knew for sure].
-
-> > > +int ima_fs_ns_init(struct ima_namespace *ns)
-> > > +{
-> > > +	ns->mount = securityfs_ns_create_mount(ns->user_ns);
-> > This actually triggers on the call to securityfs_init_fs_context,
-> > but nothing happens because the callback is null.  Every subsequent
-> > use of fscontext will trigger this.  The point of a keyed supeblock
-> > is that fill_super is only called once per key, that's the place we
-> > should be doing this.   It should also probably be a blocking
-> > notifier so anyconsumer of securityfs can be namespaced by
-> > registering for this notifier.
+> Afaict all other changes in the patch adds a506 support, but this hunk
+> changes a508 and a512 behavior.
 > 
-> What I don't like about the fill_super is that it gets called too
-> early:
-> 
-> [   67.058611] securityfs_ns_create_mount @ 102 target user_ns: 
-> ffff95c010698c80; nr_extents: 0
-> [   67.059836] securityfs_fill_super @ 47  user_ns:
-> ffff95c010698c80; 
-> nr_extents: 0
+> I'm not saying that the change is wrong, but this hunk deserves to be in
+> it's own patch - so that if there's any impact on those other versions
+> it can be tracked down to that specific patch.
 
-Right, it's being activated by securityfs_ns_create_mount which is
-called as soon as the user_ns is created.
-
-> We are switching to the target user namespace in 
-> securityfs_ns_create_mount. The expected nr_extents at this point is
-> 0, since user_ns hasn't been configured, yet. But then
-> security_fill_super is also called with nr_extents 0. We cannot use
-> that, it's too early!
-
-Exactly, so I was thinking of not having a securityfs_ns_create_mount
-at all.  All the securityfs_ns_create.. calls would be in the notifier
-call chain. This means there's nothing to fill the superblock until an
-actual mount on it is called.
-
-> > > +	if (IS_ERR(ns->mount)) {
-> > > +		ns->mount = NULL;
-> > > +		return -1;
-> > > +	}
-> > > +	ns->mount_count = 1;
-> > This is a bit nasty, too: we're spilling the guts of mount count
-> > tracking into IMA instead of encapsulating it inside securityfs.
-> 
-> Ok, I can make this disappear.
-> 
-> 
-> > > +
-> > > +	/* Adjust the trigger for user namespace's early teardown of
-> > > dependent
-> > > +	 * namespaces. Due to the filesystem there's an additional
-> > > reference
-> > > +	 * to the user namespace.
-> > > +	 */
-> > > +	ns->user_ns->refcount_teardown += 1;
-> > > +
-> > > +	ns->late_fs_init = ima_fs_ns_late_init;
-> > > +
-> > > +	return 0;
-> > > +}
-> > I think what should be happening is that we shouldn't so the
-> > simple_pin_fs, which creates the inodes, ahead of time; we should
-> > do it inside fill_super using a notifier, meaning it gets called
-> > once per
-> 
-> fill_super would only work for the init_user_ns from what I can see.
-> 
-> 
-> > key, creates the root dentry then triggers the notifier which
-> > instantiates all the namespaced entries.  We can still use
-> > simple_pin_fs for this because there's no locking across
-> > fill_super.
-> > This would mean fill_super would be called the first time the
-> > securityfs is mounted inside the namespace.
-> 
-> I guess I would need to know how fill_super would work or how it
-> could be called late/delayed as well.
-
-So it would be called early in the init_user_ns by non-namespaced
-consumers of securityfs, like it is now.
-
-Namespaced consumers wouldn't call any securityfs_ns_create callbacks
-to create dentries until they were notified from the fill_super
-notifier, which would now only be triggered on first mount of
-securityfs inside the namespace.
-
-> > If we do it this way, we can now make securityfs have its own mount
-> > and mount_count inside the user namespace, which it uses internally
-> > to the securityfs code, thus avoiding exposing them to ima or any
-> > other namespaced consumer.
-> > 
-> > I also think we now don't need the securityfs_ns_ duplicated
-> > functions because the callback via the notifier chain now ensures
-> > we can usethe namespace they were created in to distinguish between
-> > non namespaced and namespaced entries.
-> 
-> Is there then no need to pass a separate vfsmount * in anymore? 
-
-I don't think so no.  It could be entirely managed internally to
-securityfs.
-
-> Where would the vfsmount pointer reside? For now it's in
-> ima_namespace, but it sounds like it should be in a more centralized
-> place? Should it also be  connected to the user_namespace so we can
-> pick it up using get_user_ns()?
-
-exactly.  I think struct user_namespace should have two elements gated
-by a #ifdef CONFIG_SECURITYFS which are the vfsmount and the
-mount_count for passing into simple_pin_fs.
+Vladimir, any plans to submit v2? This comment requests splitting the 
+patch in two.
 
 
-James
-
-
+-- 
+With best wishes
+Dmitry

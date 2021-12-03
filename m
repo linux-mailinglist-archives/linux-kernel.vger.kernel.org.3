@@ -2,60 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 918D34673A7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6701D4673AD
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379427AbhLCJJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 04:09:32 -0500
-Received: from w4.tutanota.de ([81.3.6.165]:40838 "EHLO w4.tutanota.de"
+        id S1379437AbhLCJL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 04:11:26 -0500
+Received: from out1.migadu.com ([91.121.223.63]:40402 "EHLO out1.migadu.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243758AbhLCJJb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 04:09:31 -0500
-Received: from w3.tutanota.de (unknown [192.168.1.164])
-        by w4.tutanota.de (Postfix) with ESMTP id EDCD610602DE;
-        Fri,  3 Dec 2021 09:06:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1638522366;
-        s=s1; d=tuta.io;
-        h=From:From:To:To:Subject:Subject:Content-Description:Content-ID:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Cc:Cc:Date:Date:In-Reply-To:In-Reply-To:MIME-Version:MIME-Version:Message-ID:Message-ID:Reply-To:References:References:Sender;
-        bh=mkOXUyfGWMlP4LHyKMKNeglwKfa5K+5tB13b1KziAr4=;
-        b=LSMaZx0aRm7xtIWWCyFcC2JXe17W84ey/uBtXEwXsDE1CIjfcWycjxoUPemvctw3
-        TKz+Kv2ZdwwRrOU7+XCqgLq0X+J0DZBEFYOSUo4AjWsi0PLwFqMLvShUtKCgtX+oNEt
-        KhMdrDE1OmoarpwxCe65Ldjmk5ijfg6TKaubEYzQ2GTxFspN3HB6U/uC5F+/HVx9rL8
-        2dl/ICBESK+fcB7I96YyMpSf/EG4Vosbjw7c0RRg8RqFTZGp2hD7GK1Q1wwoAVPoWFy
-        GIoRV4NyvxyoNROiCo5+XPbBmsEQeE1Db577egKOQpCwsK894D4ecaXSvFI1R2gT9rs
-        +zKehBLtGA==
-Date:   Fri, 3 Dec 2021 10:06:06 +0100 (CET)
-From:   Adam Kandur <rndd@tuta.io>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Netdev <netdev@vger.kernel.org>,
-        Linux Staging <linux-staging@lists.linux.dev>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Message-ID: <MpzXmGP--N-2@tuta.io>
-In-Reply-To: <20211203081401.GF9522@kadam>
-References: <MpqQpIa--F-2@tuta.io> <20211203081401.GF9522@kadam>
-Subject: Re: [PATCH] QLGE: qlge_main: Fix style
+        id S243758AbhLCJLX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 04:11:23 -0500
+Date:   Fri, 3 Dec 2021 17:07:49 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1638522478;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=V77KM8Yhr74VAb29G5cK07G1IrqN80qbBuHofto+1HI=;
+        b=qZ6Q+T2a96Ovhnl7TPmkQcoYSzqHYwMK8c8BDd9XEXurQpTfNUZuH3APGF1ULJvZxLzB+R
+        DO2t7jN5rh/8Rnaw14u1kQ/NCixLGK0uszvvHDQlJux7FrKHd+rstdI8Uk+j5hPoH17u4F
+        hCg2PFNiILpTJKQdBfBGjZtBEeXPz90=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Tao Zhou <tao.zhou@linux.dev>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        John Kacur <jkacur@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Tao Zhou <tao.zhou@linux.dev>, linux-rt-users@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V8 02/14] rtla: Helper functions for rtla
+Message-ID: <YaneZTnR+leNRzNN@geo.homenetwork>
+References: <cover.1638182284.git.bristot@kernel.org>
+ <8fbb0e5ab5b39ba3c981fc97a3f93471d291cffc.1638182284.git.bristot@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8fbb0e5ab5b39ba3c981fc97a3f93471d291cffc.1638182284.git.bristot@kernel.org>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for the answer.
+On Mon, Nov 29, 2021 at 12:07:40PM +0100,
+Daniel Bristot de Oliveira wrote:
 
+> +/*
+> + * enable_tracer_by_name - enable a tracer on the given instance
+> + */
+> +int enable_tracer_by_name(struct tracefs_instance *inst, const char *tracer)
+> +{ 
+> +	enum tracefs_tracers t;
+> +	int retval;
+> +
+> +	t = TRACEFS_TRACER_CUSTOM;
+> +
+> +	debug_msg("enabling %s tracer\n", tracer);
+> +
+> +	retval = tracefs_tracer_set(inst, t, tracer);
 
+The comment of parameters used for tracefs_tracer_set() says:
 
-Dec 3, 2021, 11:14 by dan.carpenter@oracle.com:
+'
+ * tracefs_set_tracer - function to set the tracer
+ * @instance: ftrace instance, can be NULL for top tracing instance
+ * @tracer: The tracer enum that defines the tracer to be set
+ * @t: A tracer name if TRACEFS_TRACER_CUSTOM is passed in for @tracer
+'
 
-> On Wed, Dec 01, 2021 at 03:39:08PM +0100, Adam Kandur wrote:
->
->>
->>
->
-> The original style was better.  Multi-line indents get curly braces for
-> readability even though they're not required by the C standard.
->
-> regards,
-> dan carpenter
->
+tracefs_tracer_set(inst, tracer, t); @tracer is enum and @t is tracer
+name. this is not important.
 
+> +	if (retval < 0) {
+> +		if (errno == ENODEV)
+> +			err_msg("tracer %s not found!\n", tracer);
+> +
+> +		err_msg("failed to enable the tracer %s\n", tracer);
+> +		return -1;
+> +	}
+> +
+> +	return 0;
+> +}

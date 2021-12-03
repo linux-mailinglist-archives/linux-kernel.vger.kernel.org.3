@@ -2,125 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8EA4672B3
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 186A94672D8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378932AbhLCHnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 02:43:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50414 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1350803AbhLCHnQ (ORCPT
+        id S1350914AbhLCHrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 02:47:36 -0500
+Received: from mail-qv1-f52.google.com ([209.85.219.52]:43622 "EHLO
+        mail-qv1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378957AbhLCHr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 02:43:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638517192;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GGCgUfjn6OQpQU13zAQTWzs7Dy28ymhp2sUo8niZZ6o=;
-        b=X9MzZuPhX+3v8PLaYSmZFMR0sB6xdE4sa10dZlPqxbNNesp+80W+oJ97NYbJeHUrqXfaqC
-        VlJCM3IWr4PtP/Mtat/hk1PP7KUp58Cnr5LuHnwAb3F2Q3p09Eoo0qESFxQgX6TEsrhNn5
-        puCtGYi8p3TATHx1/ivNIZBdsZL/Nz8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-64-3uS5TebrOO6TTghhs9fQ8g-1; Fri, 03 Dec 2021 02:39:49 -0500
-X-MC-Unique: 3uS5TebrOO6TTghhs9fQ8g-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5F79A190D340;
-        Fri,  3 Dec 2021 07:39:47 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 234005D9D5;
-        Fri,  3 Dec 2021 07:39:41 +0000 (UTC)
-Message-ID: <6a97d0ab100e596c3f4c26c64aaf945018d82a5e.camel@redhat.com>
-Subject: Re: [PATCH v2 1/3] KVM: SVM: Refactor AVIC hardware setup logic
- into helper function
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org
-Cc:     pbonzini@redhat.com, joro@8bytes.org, seanjc@google.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        peterz@infradead.org, hpa@zytor.com, thomas.lendacky@amd.com,
-        jon.grimm@amd.com
-Date:   Fri, 03 Dec 2021 09:39:40 +0200
-In-Reply-To: <20211202235825.12562-2-suravee.suthikulpanit@amd.com>
-References: <20211202235825.12562-1-suravee.suthikulpanit@amd.com>
-         <20211202235825.12562-2-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Fri, 3 Dec 2021 02:47:26 -0500
+Received: by mail-qv1-f52.google.com with SMTP id j9so1969940qvm.10;
+        Thu, 02 Dec 2021 23:44:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=yoWs+PQyv74WJgIH/n8CVu6zibGf1hIQseWJziXNagc=;
+        b=qrpv8K7TedhNzbZAYC+fOzgtCjShxLDZS6iaNSrPBnDAJuI//YObaj4E6bNMFEBY3W
+         IYMgnRRWMwziLbvx0Ty23BkuGHzP/XvtZzURiyLprQhwmA/pmAPklss6fHwKxpgaNWPW
+         vSt7/LILVikPBPhLqEx3cF96Sr+KOkkTA7b5MQv83xR0MachJJQds4utU8mow1XNm4+f
+         39P+ydImxgB8y6/XTxvbYhIDFSMHcRA505PS4jbO9KWIeo6TdbinH/EUXBb8F3F4yH+j
+         5vN4aCDl6YGy3F869xnfkSDkeVksIbrFAvvbcHgDlB/qhhU0C/ktZ9DALY5/7MyVGE5Q
+         CRLQ==
+X-Gm-Message-State: AOAM531RsregNlWbQgU3JGE2cXFbmF+r3hAjp33CJyE8d90xKEgmtUkP
+        j+dhOEnlpxTv5pSwcldJQs+6j3i8f9Y=
+X-Google-Smtp-Source: ABdhPJxVeZ+d7hec3YqPGJNBqE1cxPXxGtNWyC+Ls1jy4iKipaeOmpFQLs/YC493tYyNKP907pfZag==
+X-Received: by 2002:ad4:4ee4:: with SMTP id dv4mr17712867qvb.59.1638517442789;
+        Thu, 02 Dec 2021 23:44:02 -0800 (PST)
+Received: from [192.168.1.110] ([213.87.144.207])
+        by smtp.gmail.com with ESMTPSA id m20sm1693351qkp.112.2021.12.02.23.44.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 23:44:02 -0800 (PST)
+Message-ID: <045df549-6805-0a02-a634-81aca7d98db5@linux.com>
+Date:   Fri, 3 Dec 2021 10:42:53 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org,
+        Linux-kernel <linux-kernel@vger.kernel.org>
+From:   Denis Efremov <efremov@linux.com>
+Subject: [GIT PULL] Floppy patches for 5.17
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-02 at 17:58 -0600, Suravee Suthikulpanit wrote:
-> To prepare for upcoming AVIC changes. There is no functional change.
-> 
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->  arch/x86/kvm/svm/avic.c | 10 ++++++++++
->  arch/x86/kvm/svm/svm.c  |  8 +-------
->  arch/x86/kvm/svm/svm.h  |  1 +
->  3 files changed, 12 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 8052d92069e0..6aca1682f4b7 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -1011,3 +1011,13 @@ void svm_vcpu_unblocking(struct kvm_vcpu *vcpu)
->  		kvm_vcpu_update_apicv(vcpu);
->  	avic_set_running(vcpu, true);
->  }
-> +
-> +bool avic_hardware_setup(bool avic, bool npt)
-> +{
-> +	if (!avic || !npt || !boot_cpu_has(X86_FEATURE_AVIC))
-> +		return false;
-Nitpick: Why to pass these as local variables? npt_enabled for example is
-used in many places directly.
+Hi Jens,
 
-> +
-> +	pr_info("AVIC enabled\n");
-> +	amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
-> +	return true;
-> +}
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 989685098b3e..d23bc7a7c48e 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -1031,13 +1031,7 @@ static __init int svm_hardware_setup(void)
->  			nrips = false;
->  	}
->  
-> -	enable_apicv = avic = avic && npt_enabled && boot_cpu_has(X86_FEATURE_AVIC);
-> -
-> -	if (enable_apicv) {
-> -		pr_info("AVIC enabled\n");
-> -
-> -		amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
-> -	}
-> +	enable_apicv = avic = avic_hardware_setup(avic, npt_enabled);
->  
->  	if (vls) {
->  		if (!npt_enabled ||
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 5d30db599e10..1d2d72e56dd1 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -515,6 +515,7 @@ static inline bool avic_vcpu_is_running(struct kvm_vcpu *vcpu)
->  	return (READ_ONCE(*entry) & AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK);
->  }
->  
-> +bool avic_hardware_setup(bool avic, bool npt);
->  int avic_ga_log_notifier(u32 ga_tag);
->  void avic_vm_destroy(struct kvm *kvm);
->  int avic_vm_init(struct kvm *kvm);
+The following changes since commit 2bfdbe8b7ebd17b5331071071a910fbabc64b436:
 
-Best regards,
-	Maxim Levitsky
+  null_blk: allow zero poll queues (2021-12-02 19:57:47 -0700)
 
+are available in the Git repository at:
+
+  https://github.com/evdenis/linux-floppy tags/floppy-for-5.17
+
+for you to fetch changes up to 9fae059d4cd88229661b3eccb0409f723129e5bd:
+
+  floppy: Add max size check for user space request (2021-12-03 09:54:34 +0300)
+
+Please, pull
+
+----------------------------------------------------------------
+Floppy patches for 5.17
+
+Two patches. The patch from Tasos Sahanidis fixes a hung when the module
+tries to read a broken floppy while ejecting it. The patch from Xiongwei
+Song suppresses a syzkaller warning about allocation size.
+
+Signed-off-by: Denis Efremov <efremov@linux.com>
+
+----------------------------------------------------------------
+Tasos Sahanidis (1):
+      floppy: Fix hang in watchdog when disk is ejected
+
+Xiongwei Song (1):
+      floppy: Add max size check for user space request
+
+ drivers/block/floppy.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)

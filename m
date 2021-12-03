@@ -2,93 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A36467798
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9894446779A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380900AbhLCMpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 07:45:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380896AbhLCMpm (ORCPT
+        id S1380903AbhLCMvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 07:51:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59006 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352128AbhLCMvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 07:45:42 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD78CC06173E
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 04:42:18 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id p27-20020a05600c1d9b00b0033bf8532855so2110016wms.3
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 04:42:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=K6qjVToyPcEHlycO2HNFxJnoTYZ6aOQ5rp3ZUXudbCA=;
-        b=rL72f8vzH8f7cYwRsqF4gj4Qxu8c2GlTrqrumu2a2F7PUM33o50UExXGXs8k4npXl1
-         qmIpXs9apzavATZ40TwvBFZN3xhBlcNN3ixv+KjMohiXbl8N55nrrb13O4KiFgOMgYuy
-         qyJbJk3Osg0oxy7RjoylqnGqUXe9xDcQd2BCvAMZgMBG9CeRds6I6IfCloQT57j+KzbQ
-         ehFzVV0HZoJzLHquoUPHyhX8F7TeSHdkkEt6sxdwgPzT00Zte259RQ3Uu3QbC85mqaoi
-         56Ru2X6P/lzkyDdXfPaXlBqlKdP07JpxYvSiT9RMBjYxLHwrE1pQPjNJ9vn5hv9W8v0H
-         n6TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=K6qjVToyPcEHlycO2HNFxJnoTYZ6aOQ5rp3ZUXudbCA=;
-        b=0HpPN5BXrawomwihtUBiAdtj67bqzRMf897fc/4V2ZIyGX+XFDyO3SLqKg8yqTwp4w
-         F5FktrPcKYZqaYBTQDywJzZT8ukiQD6kqqX5l3hKhn/pf+srEp9J1UDZIqqrFE5J2fap
-         RU6DpleoYK0pGTAG6vSCfqXvVLZ1TBEAgAoAv1xTDiwdILrQymBTMqA4G244dUtCAm2n
-         raBe+Ynj8GAR/dCCwkUSsrzXjGQxElJY1QeYkv2LfiBsUaOvxcoGNXFglhLHZygqu7V6
-         HPvFZf7uFqovrCssoA+gEmjX9SfxPOmC2wGzF4RU/3oul0k2R12A06571bb83Dxkw/jC
-         cI8g==
-X-Gm-Message-State: AOAM530UXfKH45eaiNhis667uYeJh5e50bDg5sU6usRUuwWGO/SOVeyR
-        R3/hmgP4NmdBOfY+nLIhe2UhgA==
-X-Google-Smtp-Source: ABdhPJyO7X8Vj9qWcvyIA1fCz7OcGIZG+FVgEN8mEee9QZg2PITmHDGzsm4Y9LQhPk9kGHgybp1UrA==
-X-Received: by 2002:a05:600c:299:: with SMTP id 25mr14594606wmk.77.1638535337117;
-        Fri, 03 Dec 2021 04:42:17 -0800 (PST)
-Received: from elver.google.com ([2a00:79e0:15:13:cb5f:d3e:205e:c7c4])
-        by smtp.gmail.com with ESMTPSA id a22sm2474329wme.19.2021.12.03.04.42.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 04:42:16 -0800 (PST)
-Date:   Fri, 3 Dec 2021 13:42:10 +0100
-From:   Marco Elver <elver@google.com>
-To:     andrey.konovalov@linux.dev
-Cc:     Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: Re: [PATCH 24/31] kasan, vmalloc, arm64: mark vmalloc mappings as
- pgprot_tagged
-Message-ID: <YaoQos9Fevz32h6+@elver.google.com>
-References: <cover.1638308023.git.andreyknvl@google.com>
- <8557e32739e38d3cdf409789c2b3e1b405c743f4.1638308023.git.andreyknvl@google.com>
+        Fri, 3 Dec 2021 07:51:17 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25707B826B1
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 12:47:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858C0C53FAD;
+        Fri,  3 Dec 2021 12:47:50 +0000 (UTC)
+Date:   Fri, 3 Dec 2021 12:47:47 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Cc:     mark.rutland@arm.com, will@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        moyufeng@huawei.com
+Subject: Re: [RFC PATCH v2] arm64: barrier: add macro dgh() to control memory
+ accesses merging
+Message-ID: <YaoR874T6/tVLesz@arm.com>
+References: <20211015090511.92421-1-wangxiongfeng2@huawei.com>
+ <YWnBngJeIvV2S5IB@arm.com>
+ <3303413f-a8de-bd41-4095-80ffa98cf75b@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8557e32739e38d3cdf409789c2b3e1b405c743f4.1638308023.git.andreyknvl@google.com>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+In-Reply-To: <3303413f-a8de-bd41-4095-80ffa98cf75b@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 11:07PM +0100, andrey.konovalov@linux.dev wrote:
-> From: Andrey Konovalov <andreyknvl@google.com>
-> 
-> HW_TAGS KASAN relies on ARM Memory Tagging Extension (MTE). With MTE,
-> a memory region must be mapped as MT_NORMAL_TAGGED to allow setting
-> memory tags via MTE-specific instructions.
-> 
-> This change adds proper protection bits to vmalloc() allocations.
-> These allocations are always backed by page_alloc pages, so the tags
-> will actually be getting set on the corresponding physical memory.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> Co-developed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Hi Xiongfeng,
 
-This is also missing Signed-off-by from Vincenzo.
+On Fri, Oct 22, 2021 at 09:51:40AM +0800, Xiongfeng Wang wrote:
+> On 2021/10/16 1:59, Catalin Marinas wrote:
+> > On Fri, Oct 15, 2021 at 05:05:11PM +0800, Xiongfeng Wang wrote:
+> >> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
+> >> index 451e11e5fd23..d71a7457d619 100644
+> >> --- a/arch/arm64/include/asm/barrier.h
+> >> +++ b/arch/arm64/include/asm/barrier.h
+> >> @@ -18,6 +18,14 @@
+> >>  #define wfe()		asm volatile("wfe" : : : "memory")
+> >>  #define wfi()		asm volatile("wfi" : : : "memory")
+> >>  
+> >> +/*
+> >> + * Data Gathering Hint:
+> >> + * This instruction prohibits merging memory accesses with Normal-NC or
+> >> + * Device-GRE attributes before the hint instruction with any memory accesses
+> >> + * appearing after the hint instruction.
+> >> + */
+> >> +#define dgh()		asm volatile("hint #6" : : : "memory")
+> > 
+> > On its own, this patch doesn't do anything. It's more interesting to see
+> > how it will be used and maybe come up with a common name that other
+> > architectures would share (or just implement as no-opp). I'm not sure
+> > there was any conclusion last time we discussed this.
+> 
+> In the last mail, I was suggested to investigate the code in other architecture
+> to find if there exists similar interface. I searched 'merg' in the code and
+> didn't find similar interface.
+
+Maybe no other architecture has such hint. They have write buffer
+draining but that's more expensive.
+
+> The only thing similar I found is in Intel Software Developer's Manual. It says
+> "Write Combining (WC) ... Writes may be delayed and combined in the write
+> combining buffer (WC buffer) to reduce memory accesses. If the WC buffer is
+> partially filled, the writes may be delayed until the next occurrence of a
+> serializing event; such as an SFENCE or MFENCE instruction, CPUID or other
+> serializing instruction, a read or write to uncached memory, an interrupt
+> occurrence, or an execution of a LOCK instruction (including one with an
+> XACQUIRE or XRELEASE prefix)."
+> Maybe this is more like the write combine buffer flushing, not prevent merging.
+> Sorry I still didn't understand the difference clearly.
+
+IIUC those drivers on x86 just rely on the microarchitecture aspects of
+the draining (e.g. fill 64 bytes). On Arm we don't have such guarantee
+as there's a wide variation in implementations, hence the DGH
+instruction.
+
+> How about a common name called 'merge_prohibit_hint()'? Could you give me some
+> suggestions ?
+
+I think "prohibit" looks more like not allowing any write-buffer merge.
+Maybe stop_merge_hint(), stop_write_buffer_merge(),
+stop_write_combining() (any other ideas?). It would be a NOP on all
+other architectures.
+
+-- 
+Catalin

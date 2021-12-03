@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CE7467D0B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C974467D0F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382488AbhLCSS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 13:18:27 -0500
-Received: from mga17.intel.com ([192.55.52.151]:61370 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235884AbhLCSS1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 13:18:27 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="217718214"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="217718214"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 10:15:02 -0800
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="478415393"
-Received: from lbriscoe-mobl.amr.corp.intel.com (HELO [10.209.18.147]) ([10.209.18.147])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 10:15:02 -0800
-Subject: Re: [PATCH 10/25] x86/sgx: Support enclave page permission changes
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, luto@kernel.org, mingo@redhat.com,
-        linux-sgx@vger.kernel.org, x86@kernel.org
-Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
-        cedric.xing@intel.com, haitao.huang@intel.com,
-        mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-References: <cover.1638381245.git.reinette.chatre@intel.com>
- <44fe170cfd855760857660b9f56cae8c4747cc15.1638381245.git.reinette.chatre@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <8087c21c-195b-3ffa-a3ca-542752db6462@intel.com>
-Date:   Fri, 3 Dec 2021 10:14:59 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1382495AbhLCSTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 13:19:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49202 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343996AbhLCSTU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 13:19:20 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE260C061353
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 10:15:55 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id 13so7712797ljj.11
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 10:15:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XETtVR3trVk3mJEQkxCtSey9MCpDGt0zZTF/ap46FO4=;
+        b=iE+jSRpvnSte9JQZsPdsAtZykCqnIKnwliWjcBkac6g9S8TiM0IYmlI6EKWy4QNEZw
+         Ym3r0jYJScGyrC9KBtisi3lUBkl/rYPfU04BF+xB3kNL69x9DH6Fl8dVFaQChzDdLdLK
+         GCu8Y5mmIDGC0OFY8sGn9SON0zMzwp0FulyeVBQFONB4YuX9OkFW176Nr9AWp4uRa1a8
+         EOeuK2q9zE7/HA0RzIC7Qig8z2XBsldCOqnR3mZVWIvUDwfJMc5DowTlXKHAoCBcCX1a
+         OWpFBAL4COxKVUBuciWVNH81t1oax2Y06D/jq5GGu4tD17gb9fKIr6UL514OBKFT94rg
+         Symg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XETtVR3trVk3mJEQkxCtSey9MCpDGt0zZTF/ap46FO4=;
+        b=eqSbcYVtXd5skrN6hKg5+hDCoQ53Z1f2mKbpq7UoFlSfz3dh14gWUHa2i7WTxm7gS1
+         Bs/JXgwr5kXH8fW4C7X9RcasBauIM6YKIvlR0Ghbe2xFU9gNauXCvISSyCIJaFpdWDLt
+         tY0rpEnQTmTCr19uBCoElZIk0W8Utq3eDTHusaGFeTPflJ3pgOaO8YYnPYb3RAYXgcXG
+         ojFer0YH3g/7vh/ORwxDdIPJOJo4g0zJrvbPZrqVGfE16SU2EcXkqk6fnCiSeXPUZqwV
+         qH3xDxWaI4IvClXD1AQ+SyauWUPvXIbo43COKIc+PwCceYSylYE8SynZrFpjnKD6T0l5
+         dtGQ==
+X-Gm-Message-State: AOAM530hdbf/vrZjv5nu4Nf1zl4nLQhj+HnHC3H5cZCy87HtKK75Qlxo
+        fYBI0wRts/2gOMadXh6MhKfaHx614lICAQ==
+X-Google-Smtp-Source: ABdhPJxILDGn/88i8VPm+vst3qYWiNJp3eau+aa1yVIcKUDIXOvNW/S0cGXGWtSkxE7P8RkvkOYe0Q==
+X-Received: by 2002:a05:651c:50c:: with SMTP id o12mr20110619ljp.438.1638555354010;
+        Fri, 03 Dec 2021 10:15:54 -0800 (PST)
+Received: from [192.168.1.8] ([185.24.52.156])
+        by smtp.gmail.com with ESMTPSA id l20sm453938lfj.36.2021.12.03.10.15.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 10:15:53 -0800 (PST)
+Message-ID: <ffdf9007-d2cc-2437-684c-66c00bb0ceda@linaro.org>
+Date:   Fri, 3 Dec 2021 21:15:51 +0300
 MIME-Version: 1.0
-In-Reply-To: <44fe170cfd855760857660b9f56cae8c4747cc15.1638381245.git.reinette.chatre@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] drm/msm/dpu: removed logically dead code
+Content-Language: en-GB
+To:     Ameer Hamza <amhamza.mgc@gmail.com>, robdclark@gmail.com,
+        sean@poorly.run, quic_abhinavk@quicinc.com, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20211203161846.37720-1-amhamza.mgc@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20211203161846.37720-1-amhamza.mgc@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 11:23 AM, Reinette Chatre wrote:
-> Enclave page permission changes need to be approached with care and
-> for this reason this initial support is to allow enclave page
-> permission changes _only_ if the new permissions are the same or
-> more restrictive that the permissions originally vetted at the time the
-> pages were added to the enclave. Support for extending enclave page
-> permissions beyond what was originally vetted is deferred.
+On 03/12/2021 19:18, Ameer Hamza wrote:
+> Fixed coverity warning by removing the dead code
+> 
+> Addresses-Coverity: 1494147 ("Logically dead code")
+> 
+> Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
 
-It's probably worth adding a few examples here:
+While the patch is correct, remove the 'fail' part completely by moving 
+DPU_ERROR and return statement in place of corresponding goto statements.
 
- * RWX => RW => RX => RW => R => RWX
- * RW => R => RW
- * RX => R => RX
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> index 185379b18572..75f0c0cee661 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> @@ -751,8 +751,6 @@ struct dpu_encoder_phys *dpu_encoder_phys_vid_init(
+>   
+>   fail:
+>   	DPU_ERROR("failed to create encoder\n");
+> -	if (phys_enc)
+> -		dpu_encoder_phys_vid_destroy(phys_enc);
+>   
+>   	return ERR_PTR(ret);
+>   }
+> 
 
+
+-- 
+With best wishes
+Dmitry

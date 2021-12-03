@@ -2,116 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5C84676D5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2FC467696
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351907AbhLCL6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 06:58:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbhLCL6M (ORCPT
+        id S243513AbhLCLin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 06:38:43 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:47656 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232903AbhLCLim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 06:58:12 -0500
-Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2056C06173E;
-        Fri,  3 Dec 2021 03:54:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-         s=20160729; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=JvONQWCJsHnDyCyBVeKU/6qlvcXXNWDR5qe13qM8lnM=; b=GxJdWteE8trZ48jQuYJg8f0LV9
-        r1pyzzR5lY2AEjwgxvqJEm9f7Bhme8bJ4bk8yytaUyHoaTANTUFtlUKJ/xaY204vgKEYYfkuDwk9m
-        T+A5hwKhpHPDyaa+n4A2eFplXt+haVFSPnCZQAbJ9L4iJYQXScHdceKCJJVUvtemlu2g=;
-Received: from p54ae943f.dip0.t-ipconnect.de ([84.174.148.63] helo=localhost.localdomain)
-        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <nbd@nbd.name>)
-        id 1mt6p2-0004Ez-Qj; Fri, 03 Dec 2021 12:33:48 +0100
-From:   Felix Fietkau <nbd@nbd.name>
-To:     linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     john@phrozen.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v6 14/14] ARM: dts: add GPIO support for Airoha EN7523
-Date:   Fri,  3 Dec 2021 12:33:31 +0100
-Message-Id: <20211203113331.20510-15-nbd@nbd.name>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20211203113331.20510-1-nbd@nbd.name>
-References: <20211203113331.20510-1-nbd@nbd.name>
+        Fri, 3 Dec 2021 06:38:42 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B3BZFt2001632;
+        Fri, 3 Dec 2021 05:35:15 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1638531315;
+        bh=iW3RyW/cm/sUg1ANaPVf9fkZFSDiEUqpMhaMEtCqznA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=FS56ZsnTTwk3siHEQxK5EiAYc6aY+Cg0nBmPIT4x44o+LgHhYLlXf/69vNMb2MKZ4
+         dx7ZBVwQo5DTg+RH7AI9qIPRKxpexplcrGs+ZiMFgzd0icAopbexRpfJusipSVVOt0
+         RjiTdvoulwVBFzNMgoWocIn5+aY8Vl6hBDY6uGZw=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B3BZFB8052817
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 3 Dec 2021 05:35:15 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 3
+ Dec 2021 05:35:15 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 3 Dec 2021 05:35:15 -0600
+Received: from [10.250.234.139] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B3BZCEu124513;
+        Fri, 3 Dec 2021 05:35:13 -0600
+Subject: Re: [PATCH] soc: ti: k3-socinfo: Add entry for J721S2 SoC family
+To:     Aswath Govindraju <a-govindraju@ti.com>
+CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20211119131510.14350-1-a-govindraju@ti.com>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <c15ef772-514f-4433-77da-79e498e22100@ti.com>
+Date:   Fri, 3 Dec 2021 17:05:11 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211119131510.14350-1-a-govindraju@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Crispin <john@phrozen.org>
+Hi Aswath,
 
-Airoha's GPIO controller on their ARM EN7523 SoCs consists of two banks of 32
-GPIOs
+On 19/11/21 6:45 pm, Aswath Govindraju wrote:
+> It's JTAG PARTNO is 0xBB75.
 
-Signed-off-by: John Crispin <john@phrozen.org>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
----
- arch/arm/boot/dts/en7523-evb.dts |  8 ++++++++
- arch/arm/boot/dts/en7523.dtsi    | 20 ++++++++++++++++++++
- 2 files changed, 28 insertions(+)
+%s/It's/J721S2 SoC/
+> 
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> ---
+>  drivers/soc/ti/k3-socinfo.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/soc/ti/k3-socinfo.c b/drivers/soc/ti/k3-socinfo.c
+> index fd91129de6e5..83e5a40824f1 100644
+> --- a/drivers/soc/ti/k3-socinfo.c
+> +++ b/drivers/soc/ti/k3-socinfo.c
+> @@ -40,7 +40,8 @@ static const struct k3_soc_id {
+>  	{ 0xBB5A, "AM65X" },
+>  	{ 0xBB64, "J721E" },
+>  	{ 0xBB6D, "J7200" },
+> -	{ 0xBB38, "AM64X" }
+> +	{ 0xBB38, "AM64X" },
+> +	{ 0xBB75, "J721S2"}
 
-diff --git a/arch/arm/boot/dts/en7523-evb.dts b/arch/arm/boot/dts/en7523-evb.dts
-index 0a79f5f6c311..cd9cded5b564 100644
---- a/arch/arm/boot/dts/en7523-evb.dts
-+++ b/arch/arm/boot/dts/en7523-evb.dts
-@@ -33,3 +33,11 @@ &pcie0 {
- &pcie1 {
- 	status = "okay";
- };
-+
-+&gpio0 {
-+	status = "okay";
-+};
-+
-+&gpio1 {
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/en7523.dtsi b/arch/arm/boot/dts/en7523.dtsi
-index 862da104d6f2..d9cc5a1b83b8 100644
---- a/arch/arm/boot/dts/en7523.dtsi
-+++ b/arch/arm/boot/dts/en7523.dtsi
-@@ -3,6 +3,7 @@
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/clock/en7523-clk.h>
-+#include <dt-bindings/gpio/gpio.h>
- 
- / {
- 	interrupt-parent = <&gic>;
-@@ -120,6 +121,25 @@ uart1: serial@1fbf0000 {
- 		status = "okay";
- 	};
- 
-+	gpio0: gpio@1fbf0200 {
-+		compatible = "airoha,en7523-gpio";
-+		reg = <0x1fbf0204 0x4>,
-+		      <0x1fbf0200 0x4>,
-+		      <0x1fbf0220 0x4>,
-+		      <0x1fbf0214 0x4>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+	};
-+
-+	gpio1: gpio@1fbf0270 {
-+		compatible = "airoha,en7523-gpio";
-+		reg = <0x1fbf0270 0x4>,
-+		      <0x1fbf0260 0x4>,
-+		      <0x1fbf0264 0x4>,
-+		      <0x1fbf0278 0x4>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+	};
- 
- 	pcie0: pcie@1fa91000 {
- 		compatible = "airoha,en7523-pcie", "mediatek,mt7622-pcie";
--- 
-2.30.1
+Prefer to add ',' in the end so the change is confined to one line for every new
+SoC family.
 
+Thanks,
+Kishon

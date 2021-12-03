@@ -2,272 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D79C467C94
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D7B9467C9E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382225AbhLCRgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 12:36:23 -0500
-Received: from mail-bn8nam11on2083.outbound.protection.outlook.com ([40.107.236.83]:34825
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        id S1382326AbhLCRhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 12:37:39 -0500
+Received: from mail-eus2azlp17011013.outbound.protection.outlook.com ([40.93.12.13]:10773
+        "EHLO na01-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S245721AbhLCRgW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 12:36:22 -0500
+        id S1343672AbhLCRhh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 12:37:37 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GSU/jTSaAmtJS0sjW/Di/cS0eZzs15DqfoQ4P3xOqT9LN7vK4SbCHq+di7QDRoSrWx4syGtkADHhQVgq6raztsL05L7ux/yVYfa03IVA1CR+Lg8PhvKkqBsULrIikxFgEA8JEx3JHxI+OWFTowJq1c2xdCVGhCMkShv1SosOfhiBte4gdR5jSZDJq4slJnw5QZSCfjm2/voOuHNOH/66EOIoXeyq87hl2Q9d+61f+Rb5TccMZiH8HpTpugfW5IvpnBtoRuaoD9g9FiJND/Gmc45nxNCTl0WujS2gxhJOnPRaxhzALYT43oKlCzl7zLsffk+1TkjbrceS7dNaQFvq+g==
+ b=MT8mQlC6TpoEaWX2//r+GEzoR6rdZ+XL/4HA4Qf4H/36Va/JXx7HNWXIiRd3I2i1Z22IHac0TGtD+0YTSoaG4zZzdCzSw0h4uv3RJgj11ADt4GQLfkvtKXQ/mwQY5r6k7USDKDUHnDZT7bcKCOQdX122baA5thU5M0PGiXSaVoWhbUdXKF4UirZhXpdt92idkepHT0c5rKk6ZVswovQQsmMfAXv4yO5QbL4mnHEI3QhHNdLQCDZUw8bMRkjkg3CFPr7uwfDeLElEndnALWp22sZNNFLxKlOd2sJXZztXAlbmfNPMWgfdoKEEEOCXiTQb8ApPRiU3rEUN1nMkQ/5eHA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uaK5NSo6dtVWk1uoyeFmunh7EHyLiTGRi0lsQYIkHAM=;
- b=RWwU3lnhWHtfAKcnTz5IaWXqUtF9Wk/J7khP7EcVGzn+7kKPOKMIvrWUrrPvuMEGvjTD2eKDUyV4guf61RmrNt9h4UjwyBWimih9awlQrYZzYK70s3JvZb95kXBqwmjtPOQ7KWtpPMgh8DAUxSk7Za/+XzuZo/vzBBFn0RQXQnQ+3UYbD5yVzsA5o7C2HAtGGiHo+0O08XX1JyLTB7qRSKHRDW5gzzpTrm271k0cVGpCsgRG3XoJ21QfjWI2UcXnNiAVch6WdrlrB7Do6pdyz2G64ImuDjUdlHaMbiGcihVCwBkrQsinrn6vgMkj5y7YnM85wa73x0jBKheatoAPxA==
+ bh=pFomgNCTVpc24kYvom+3t2OSOLXqbeuaEyWdswtDQjk=;
+ b=MIB7sQNdyrDrjWajmUjp8CuzFX/z2IMxHHbJbveBvrAIF7iDz8A81tA8bCuMO3VFzWvjMiMkPedj3CLrRc2bMa/w9uQofU/MSz80+YwOygfpGhvFfpGAJ1S9VLrgY0Tqd/C+5kytubhxVDdgIj2l1yhMyksrzgzGAavtc2EaaVwaBqV5nrRarH7oscIwbgwagxCyrwqzH6fj+HwS0SHQS4jHqEvBLhgI4LRc+OKeni65CIaFTIetttTFhd9LYX5zWmeUJBJ4uLpxYa4Ts1cvvifBQHPrfCMHLL9vBScA0A5eylJIUM8D2v+nB8V+BVuoEijzVHhUrZCQw00zkv93Lw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uaK5NSo6dtVWk1uoyeFmunh7EHyLiTGRi0lsQYIkHAM=;
- b=dk9u/ODhLfxWpajtaHZtD0CddlJwkep6pMNchDndwXgiCPerttwGKJ3/5i1KqApZ7dv+1wRobjyFxxz9+ScD5XQsg2UKmjq9CIDab0wBiuqGZdc3KhqWj7KXQQZT+lJf7YBkRGaA2o9ragr7SK3vMXxuGLVdfw8XwNQeQzgBV1o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by DM4PR12MB5133.namprd12.prod.outlook.com (2603:10b6:5:390::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Fri, 3 Dec
- 2021 17:32:48 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::1ddd:71e4:5803:e44a]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::1ddd:71e4:5803:e44a%3]) with mapi id 15.20.4734.028; Fri, 3 Dec 2021
- 17:32:48 +0000
-Subject: Re: [PATCH] x86/mm: Fix PAGE_KERNEL_IO removal breakage
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, hpa@zytor.com,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
-References: <20211202144646.23186-1-joro@8bytes.org>
- <20211202155452.jh4qnvpx52r3od67@ldmartin-desk2>
- <20211203002513.fa43j6uvsn2ho4mm@ldmartin-desk2>
- <35ba181f-c182-aa74-07e2-fcff94bf345a@amd.com>
-Message-ID: <45962757-d539-0caf-1031-9340ca4ce0e0@amd.com>
-Date:   Fri, 3 Dec 2021 11:32:45 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-In-Reply-To: <35ba181f-c182-aa74-07e2-fcff94bf345a@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+ bh=pFomgNCTVpc24kYvom+3t2OSOLXqbeuaEyWdswtDQjk=;
+ b=SJ+TKmntDJADchD742r+Sn6yjI07XfLXATePvhqidHS+vy5edwT+uqx4hqWJxMLmR3mRq2WhHaGPgIF8ncNdgnykgtWDF5vYIRgcFj49mFN0EZfWdT3+lRoxe7pTkLKptf0cMOqEmfwks5GykV7mC8stE9fuSu1YX0XRvtTtntU=
+Received: from BL0PR2101MB1316.namprd21.prod.outlook.com
+ (2603:10b6:208:92::10) by BL0PR2101MB1058.namprd21.prod.outlook.com
+ (2603:10b6:207:37::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.8; Fri, 3 Dec
+ 2021 17:34:11 +0000
+Received: from BL0PR2101MB1316.namprd21.prod.outlook.com
+ ([fe80::6116:3d9f:ef5:2c45]) by BL0PR2101MB1316.namprd21.prod.outlook.com
+ ([fe80::6116:3d9f:ef5:2c45%8]) with mapi id 15.20.4690.000; Fri, 3 Dec 2021
+ 17:34:11 +0000
+From:   Jarrett Schultz <jaschultz@microsoft.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Jarrett Schultz <jaschultzms@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Gross <markgross@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>
+CC:     "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: RE: [EXTERNAL] Re: [PATCH 2/5] platform: surface: Propagate ACPI
+ Dependency
+Thread-Topic: [EXTERNAL] Re: [PATCH 2/5] platform: surface: Propagate ACPI
+ Dependency
+Thread-Index: AQHX6CxyCPVI/q/kxkKAjnW/mFJf/qwhBu5Q
+Date:   Fri, 3 Dec 2021 17:34:10 +0000
+Message-ID: <BL0PR2101MB1316DFA13C3AB1A6620A6CA3A56A9@BL0PR2101MB1316.namprd21.prod.outlook.com>
+References: <20211202191630.12450-1-jaschultz@microsoft.com>
+ <20211202191630.12450-3-jaschultz@microsoft.com>
+ <639583df-a54a-eb9b-91ad-a60612a930b0@redhat.com>
+In-Reply-To: <639583df-a54a-eb9b-91ad-a60612a930b0@redhat.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SA0PR11CA0102.namprd11.prod.outlook.com
- (2603:10b6:806:d1::17) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=20746931-6de9-45ee-986a-6400c34298fa;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-12-03T17:31:43Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 952b086e-9ee5-4df9-8ede-08d9b6831e15
+x-ms-traffictypediagnostic: BL0PR2101MB1058:EE_
+x-microsoft-antispam-prvs: <BL0PR2101MB10584F4A1BEB2D0A289BC225A56A9@BL0PR2101MB1058.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ygz4hemT1ZhkHRenbUQVOKry42ieFG8BCbwPAh510o/xXqUv3g0x0M7j0+MUqRDxdGPrLdC1f4OfBDOKy7LPUmmug+cSqf8nuZbF/GWIYpOh4mLq6hgrLVwj2+N2KWNL3Dzz+tpu3qFUhVpe1KQU6TjmMFiKkXpj0M8AzmDZLwBrAfCMfreO7ldkaVd3+sp4tkDe+vpAyu9zZ6JSBJsA/vTlz6iPLfCwBy78WmFs+XKfMOCdJ4+fVBwksK8sGcU0DMD3EhXD5kLZzl6uWXHjybJfk0lWutYXys1k+cdfjuH+KYwk7jqCG8BvBheWgifKn16ldYBhsJuo9hvBdTZvNhZgsd9EVQh/3dOGPSOkezGE5HD5CSZVvMX//laZavHiQkSlxSTO+ejGcqdvPwjoBCW1hKMkDrajl5oUhs70lCd7SGo4V4v26q+cnI98/hdepIUZGyxY3fSKCIgyzrcPiscWzCfu7Xy7KNdaNOSm8F8Q9or+2jznOEzc46JsMx4+zX+x/O0s1zwjm4w5Gcxi4XJ6gJWsz5bc8M5Vtnr75MTbhuBiBpUVypH39cEksujM+NRdv2lvhxWmdGQH23JpQO/ZE41+mIbGmmgK1AIi73AvkAFseItx48/KpFx5/MfoVnN6/wJP0py9E0+vCShNdIKKaFSITr+s719biZQy7yhvAjnF+enr7YTW+dQT1haN5ZQtS4eLCB7eKl1lU0a5eM5rFKsjomTyZXxHAPM1FJoFGk1YUwrDS6xK/AL/ImuH
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR2101MB1316.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(33656002)(8990500004)(7416002)(2906002)(55016003)(8676002)(82950400001)(83380400001)(7696005)(86362001)(82960400001)(10290500003)(186003)(5660300002)(38100700002)(316002)(76116006)(71200400001)(66476007)(52536014)(9686003)(66946007)(122000001)(38070700005)(966005)(54906003)(110136005)(6506007)(508600001)(66556008)(4326008)(53546011)(8936002)(66446008)(64756008)(20210929001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?X4HsOH1KQ/2rXsotste6CbcvGaB56/Fxa1MTnPSX1HtyW5A1MFK/GLipiw2i?=
+ =?us-ascii?Q?l4K4ym1mKW5+m6gHIOz+yF5cdUksMRkWbZKZMV5cVubRcHDulYZQpjRKBnKQ?=
+ =?us-ascii?Q?Q5aLJXKCwe6OtnONj7QOP5jn4K2A32GOh0R8Y+PwTvvXfGBb8ne2RGhmHO1M?=
+ =?us-ascii?Q?40/1pM9Qfmz93iIe2gu+qiAOk7vHSMtJq/fg2iCOR2b8yIBPsbGNiQuvfGvu?=
+ =?us-ascii?Q?eP+N2dkIC56DlIwzKzhH1h/atPXEbHcWoi1QGFbbMr80N4at0otZJy3KEivW?=
+ =?us-ascii?Q?ACWllNhxSfnLwOwvGgKmhXvZ692511YJz3+0lLtD2vUUiVbcwmZisXLitMlM?=
+ =?us-ascii?Q?NgsCeoLuX/EsU58N2U7YniZWlG4fSk4CFhy9Vd4cgfDthulDK1kk9/QmotbB?=
+ =?us-ascii?Q?ZfkSA5Gg9EIv/jxb0FOM/pd/05jTZ4pBTocfLqEXoK9hzVR6tIKzfLAAeODS?=
+ =?us-ascii?Q?+w4dIYArbGGLNXK5MLng/Z2ZmOZ8iK4AUuSv6kz5L0Npg2SUFl30J1//KsTL?=
+ =?us-ascii?Q?G8a465bSXPOk4nvk0TPvpWfE5TPGIZl2MebEkyfqd1gYA6HfTEvJ6P1CvdlC?=
+ =?us-ascii?Q?krJLeE9914DNsSbn7HTwIyedhgLSQkXvm6bfK3v8+I2fqJXGyZvSfpNGpqBT?=
+ =?us-ascii?Q?rhhDY9xkU5lcIV5qDKdXXgwoxk8TU+A93ci1whaQtnW+CIEOn4rggCZ1v2n0?=
+ =?us-ascii?Q?zYCJkrctXX99gWuPP/ldxVqwtsUv1YGRghjCzpxAJUUGlMkM4avdFxraHvHe?=
+ =?us-ascii?Q?1f5hy0VhkVvu+XULSxe7yuNIC6T0X/SZfp5uroq8nxYhjqCvOb8plWZHlITo?=
+ =?us-ascii?Q?QftRlCQ7bcEcaiCra5zgFdxvOJ8yc51deBF2asE0UrngdfQ3CoSXy6/yUpJh?=
+ =?us-ascii?Q?kItLw4ERMSw7pTQVWuXr9aBp9XY97gEF49tdXIGpOu1i/cwkiUkpOafelQl7?=
+ =?us-ascii?Q?2ooq9S6zUJKw0pBCd+pIa1YCd0F5dB3BmsMWHMOcuOQrF462WZLmyT5FAt59?=
+ =?us-ascii?Q?lOsJuHC9FhhT5M0OWc99WOJ4ZIhe+G6h72kymz/rmiwYWM94wN3VDA3Zd1BK?=
+ =?us-ascii?Q?AJf5IyTMKL6lKZGOFdk4PSH/SPzT/BREPgoonMMDv0cIvC07q4t0MpGrfDFh?=
+ =?us-ascii?Q?SOOA6/t23xixcDUYY5YTpaAx3YO6lC9dTVlDzsd1CZVuEKhwAx5D/Y5wXYAK?=
+ =?us-ascii?Q?JZNFaJTq0bDcixb3dwlml/tJgg2y50Sq8uA3hpsa6wLJBSz3FCqsR164auZI?=
+ =?us-ascii?Q?m3rO/rh/c0ifqN5tvoCTPHI1TJDRh2mXHGB8oK6NjsdkcQKDy3BEKnKPnAB6?=
+ =?us-ascii?Q?kgWel1NcssMpXxnWUfTba3Tz/vWleRnV6aqiB3zX1Wk4ZOQKmtk2qCVrYMQB?=
+ =?us-ascii?Q?1QedrrND+JFMvgOAjh4S+HeY48Xnb2y1NkjaMwyVrVA3v6io/JQ0V/PWiuu0?=
+ =?us-ascii?Q?E6rUl3I+2VF4niV0e1Dp/jouVLQMSdMVhOGPVo6d7EfFstSIa1SRIAxdYQIm?=
+ =?us-ascii?Q?fK/4fsQsHYDN6oCxtaBazWOLAoeOcHxftfe1f1XIrJYK+m9N8vrR4O3Emw0U?=
+ =?us-ascii?Q?SG62HhXTmvFIVNsmg/jbw4Cqnw3xz4rhU/W/3SJh3bGttRjnfgeb118WXMsg?=
+ =?us-ascii?Q?zA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Received: from office-ryzen.texastahm.com (67.79.209.213) by SA0PR11CA0102.namprd11.prod.outlook.com (2603:10b6:806:d1::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16 via Frontend Transport; Fri, 3 Dec 2021 17:32:47 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 12015517-6dca-45a8-05e1-08d9b682ec82
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5133:
-X-Microsoft-Antispam-PRVS: <DM4PR12MB513329C151B0AC8515F7D833EC6A9@DM4PR12MB5133.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:208;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qKFx6DxRfcErTiwQgtL5Sz9nHDgS1N8FdgWZ4kPQiuy7art0zuUumML2SLp8y4EsJ11Y+yAiRvkQt5TgzCG5tf1Smwd2Pg0B40fvlZGyZJEMzi4iqG4JqUK+tMQ2gwx2gSr1i3m3afwXYjBAQV4N64BpO3CheFpPA0Jhjz2QSBUPt+hdkgmeQchM1yYqcEzQ9AdyMkbP/GmcKGgMFf265jI5aDmM7e3MsLrlv4Blcd62+49cTgJeCUTpBeDP+WRHLv+th5WNAIYGs8N2u77m/xP2XPIgZQmCc3haNNbLeRxmxEksDdIIuaiF16mPrXSHz9nq1ruRcb9N12p5NkwERv358JYW4u35TzQlHWoLXv37laUz5CuRPAnyGoiK5ySRhH9X6yHo20yPgG0E5QOY45a0uCvDWUih4gdYFXSVYhB3nKwR5L5IJiO4pOqovf9QYjGjmJIFomjuub1tEpB5cgd+RXyLaFVq9JjGG8CFwoJtEAMk6nHsNEz5vG0qEJm8oPg1+uaWfwCCSwwh/PB4SjM31Fvi9QxBtObcI8kax6EV+9qDWudBJQxsjEGZm2y8a48RnWe3aBJsRHqcbEnnZIwyCQ6HUv2B0ghuzH8zyMFDSSGQ/JxholEPufv+ngdQ6XmjA5g6f+noYUtHJSTTrKT649eY+cKLCAywpS9zAC/tY61A44YDA4Esx7kKf+dFz6Mr5W4c4yfvaAhzuz/8Uf5DW3NXVAlQjfaQx7+eCnndr/tCNdF3LiJMUBcICr3b
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(86362001)(8936002)(53546011)(6512007)(6486002)(186003)(26005)(31696002)(66946007)(508600001)(8676002)(2906002)(6506007)(83380400001)(2616005)(316002)(7416002)(110136005)(54906003)(66476007)(4326008)(5660300002)(66556008)(31686004)(36756003)(956004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aStHWWlNTzdaWXRjL3pYVnczYjdZS1p0RlBJSTZoUVdIbkJnYTZBVGNuVnoz?=
- =?utf-8?B?eWMzRjdzZGhxa0t3cXNqQ25mZjBmM25WVzIxa3IrVlhzc2VYeG90UkJmc3BU?=
- =?utf-8?B?YURMNVkweWVDbk12U0dYYUFjV3RxSDlTR1l1SmtQeTBtNmEwRVYyZWJqOHhL?=
- =?utf-8?B?WjBDb3NxeGJXdm1iK0E1ckhVY0I4TW4yNDlVeDJEYnc4OXZ0NGlUS0lBK2xX?=
- =?utf-8?B?RjJKTDVsbEdkS0hla1paNUY0RnZzcWlrVWxCODNlWE8yWFcxRTR6NzgxbVZC?=
- =?utf-8?B?N0x1M1ZhcVlMWE1YMnFTVWlzczNldnNTNEpuekJiY0gwbHZIMDZuek8wN01s?=
- =?utf-8?B?OGFDQUpSQzhOMWtWRTkxSldWaUdwcjlyYVJlNlQrSCtiWVEwd1JjbGxZMlNU?=
- =?utf-8?B?R2R4MmlUN0VXYlJGdm9pdDNzVFZTTlUyUTkxcGlFZUpURWwySzQ1RnVRNHNj?=
- =?utf-8?B?NEFiOXVDZ3VGWEtNdGorbkxyWEpJYUdpODNLN3Y5Z09vMjJNYWk0UnlkNHcx?=
- =?utf-8?B?Nm5Bckk5aGFzenJ2czIwK0ZIcUlmcW5ScWFEQXZERE55aElZL2l3NXV1QTND?=
- =?utf-8?B?WG5XcGpYWjVScmlYdkF3UTNRenc3eko1ZHU1d3ZrMjlRYnlYaTZwOVJCdmNs?=
- =?utf-8?B?YXFTMHdFZnpSendXaGJUby9SZnZpSThDM2pTYjJ0UzFCYWgzWUlrSnpWV0hk?=
- =?utf-8?B?SnFqRDlPbjdMK1RHbC83L0xyT1RNS2hDQUxkbjAxVmw2OEF2YkZuWjhDMXZP?=
- =?utf-8?B?V05GaUxMR3U1L0RwQnJTL2IwbXdVY2dyZTUyTjd3N0pIUXNHVWZWakFZblJF?=
- =?utf-8?B?VmhVNFJmeTdZWkUrdzNCaGpFNW5MRnh2L0dTbVBmN0NiS280SDZTNGp0QVdv?=
- =?utf-8?B?cjZBNkVSa08wZ2xVZmVlS3VOSVJwcng0djV3Z25DcXFnaWxjSXlGWis5S3lo?=
- =?utf-8?B?aTNwZ0Y4NDlVRU92ckl4QjIwVnFFUUNMdCtyMStiYXh2TW9jNlROdmVCbW4w?=
- =?utf-8?B?Z0dVYXgybFlQK0RxdjYyK1lZeU4rcTl5a2pzNGRjT000eEsyT3ZiT3hIeGEw?=
- =?utf-8?B?NThoeTZ4eTlRUmRnbHNxZFA3UlRaSHpXTUZuUGxEVThNcGF1VmYvd2M3SDJX?=
- =?utf-8?B?NkN5eHV6bGlCdkdGcWJieDdzeGE2T3ROMVZkOUhjckFVUFpSVUMrdzRscHU2?=
- =?utf-8?B?VGdCRkhmZVI3VlMxUWRpb0NRQUFUTDdtb3pTems0aVhBQ29Pbis5d1kvQlhj?=
- =?utf-8?B?ejdHRnVZWWhzL0tCUVR6NlV2cHBMclIvdFRPK3ArQzd2YzJqWkI3eW56dWtu?=
- =?utf-8?B?UjlEd1Y1ME5vQW43T1h3RUdtbTZ2ZWpXbjQ4QzV2dHpoSnBobXgvclMwN2Fx?=
- =?utf-8?B?RThVYmx4L0lCeHQ0NURsSm9OWCthVUpQTXpGcUowZFNEc2ZsYXI4S3IreThN?=
- =?utf-8?B?NWRiNDU3bjlHbDlJVU8xR08zUXU2UmZEWmlsNEJKVGJsZTVKV25jRXlHNWo1?=
- =?utf-8?B?WmVlMUFXTDRUMW4yeVJPQUxJaHVjQzN2azM4QWEyOTdvc0ZlODQzSXZDKzFN?=
- =?utf-8?B?aVMxY1I3Sk1udWJ0dzlBbFhZWkxvYjFodncwZ2NJS0h5QTV4ajRJR3BsUVIr?=
- =?utf-8?B?TEN5VlMzRnM2TG4wYmJnVzZMcHBYREYzVlMvSm0zd3hzUnNHalY2SlZTSEh6?=
- =?utf-8?B?SHdvbWtjQnR5eXB2aHZLNHJ1TUVqRWVTZXFBSWhFWEtZVDRxUVlwRlJUMUV1?=
- =?utf-8?B?N01lam01QVFFMVQzZ0R4UHllQUF6cmhKYVhseStqTzM5aXozb1N6bHZHbzNz?=
- =?utf-8?B?ZWx6cEIwSnFsR2txYU5EekdHVmVtOU1yV1dWcm1xWnJERmxsOENZTzZvWGk0?=
- =?utf-8?B?N3NHclNDR1hjRlhYbkhhODRaZHA1eWhjd291akhKUm5HU1BhODZlaGI0ZXla?=
- =?utf-8?B?NnZaZWtKbWNYcVE1ZlJuMnBwaC9MYlZSVlJPVnM2Vkk0SzZoTVRrSVJ4WnJW?=
- =?utf-8?B?R2N2TEswT3l1VzF5dU41RHVWekxCK3l4bmc4bHcwbk9IMERRUzRZeTVNMXhz?=
- =?utf-8?B?cFM2NXhsOGN0UWkrbnZRY0wvaDN1NW5oWThPWUw5TFJTb2I4b3J0TjZBSDcy?=
- =?utf-8?B?dGJvV1dYMjUyc3BQSThJWmdncUVzVmcvSWFlajErTmJ0NkZrWmlqVHI0N29r?=
- =?utf-8?Q?4wM672RqUSqxK4C4K5TvGg8=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12015517-6dca-45a8-05e1-08d9b682ec82
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2021 17:32:48.0957
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR2101MB1316.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 952b086e-9ee5-4df9-8ede-08d9b6831e15
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Dec 2021 17:34:11.0479
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JOVLsqRBwE2WAsfJyOQFPFAS0UQlu1FSZHr/aDEyZwB1LIfI53SNMQBB2ZAPRvoJiAEFGV8WMZniMimngQ87NA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5133
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Af8YMDkkajkfnKC+GK+8XhnaZkgimZrsuLW8LK/eJ3oejy/Abu8MtPts5qaswpPJclXlFX/zZbZPJZK3aQ1CPQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR2101MB1058
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/21 11:28 AM, Tom Lendacky wrote:
-> On 12/2/21 6:25 PM, Lucas De Marchi wrote:
->> On Thu, Dec 02, 2021 at 07:55:14AM -0800, Lucas De Marchi wrote:
->>> On Thu, Dec 02, 2021 at 03:46:46PM +0100, Joerg Roedel wrote:
->>>> From: Joerg Roedel <jroedel@suse.de>
->>>>
->>>> The removal of PAGE_KERNEL_IO broke SEV-ES because it changed the
->>>> mapping of ioremap and some fixmap areas (like the local APIC page)
->>>> from unencrypted to encrypted. Change those mappings back to
->>>> be unencrypted.
->>>>
->>>> Cc: Lucas De Marchi <lucas.demarchi@intel.com>
->>>> Fixes: 27dff0f58bde ("x86/mm: Nuke PAGE_KERNEL_IO")
->>>> Signed-off-by: Joerg Roedel <jroedel@suse.de>
->>>
->>> oops, missed the fact PAGE_KERNEL had `| ENC` while PAGE_KERENL_IO
->>> didn't have it. Thanks for the fixup.
->>
->> on a second thought, the fact that PAGE_KERNEL is _not_ the same as
->> PAGE_KERNEL_IO, completely invalidates those 2 patches I sent. It seems
->> I screwed it up big here.
->>
->> About the first patch,
->> 6b2a2138cf36 ("drm/i915/gem: Stop using PAGE_KERNEL_IO"),
->> I didn't notice any regression on the i915
->> side though. Is it safe to keep it? Otherwise we are probably better
->> off reverting everything.
 
-Is i915 for just integrated graphics? In which case SME/SEV-ES aren't 
-available on Intel.
 
-Thanks,
-Tom
+> -----Original Message-----
+> From: Hans de Goede <hdegoede@redhat.com>
+> Sent: Friday, December 3, 2021 1:59 AM
+> To: Jarrett Schultz <jaschultzms@gmail.com>; Rob Herring
+> <robh+dt@kernel.org>; Andy Gross <agross@kernel.org>; Bjorn Andersson
+> <bjorn.andersson@linaro.org>; Mark Gross <markgross@kernel.org>;
+> Maximilian Luz <luzmaximilian@gmail.com>
+> Cc: linux-arm-msm@vger.kernel.org; platform-driver-x86@vger.kernel.org;
+> linux-kernel@vger.kernel.org; devicetree@vger.kernel.org; Felipe Balbi
+> <balbi@kernel.org>; Jarrett Schultz <jaschultz@microsoft.com>
+> Subject: [EXTERNAL] Re: [PATCH 2/5] platform: surface: Propagate ACPI
+> Dependency
+>=20
+> Hi Jarett,
+>=20
+> On 12/2/21 20:16, Jarrett Schultz wrote:
+> > Since the Surface XBL Driver does not depend on ACPI, the
+> > platform/surface directory as a whole no longer depends on ACPI. With
+> > respect to this, the ACPI dependency is moved into each config that
+> > depends on ACPI individually.
+> >
+> > Signed-off-by: Jarrett Schultz <jaschultz@microsoft.com>
+>=20
+> I think I will already merge this patch into the pdx86 tree:
+>=20
+> https://nam06.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgit.k
+> ernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fpdx86%2Fplatform-
+> drivers-
+> x86.git%2F&amp;data=3D04%7C01%7Cjaschultz%40microsoft.com%7C0ab6fcc6
+> 4a5c4fd8657308d9b64391dd%7C72f988bf86f141af91ab2d7cd011db47%7C0
+> %7C0%7C637741223627024908%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC
+> 4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&
+> amp;sdata=3DfEszuAgBLL3g2Z9Lh3DPQ%2BlzrWZR3o6aUst6fDmLOrE%3D&amp
+> ;reserved=3D0
+>=20
+> While we are waiting for the rest of the series to get hashed out.
+>=20
+> But as already pointed out by Trilok Soni your From: and Signed-off-by em=
+ail
+> addresses don't match.
+>=20
+> I can fix up the From to match the Signed-off-by while I apply this, but =
+before
+> I do that I wanted to check with you that setting both to "Jarrett Schult=
+z
+> <jaschultz@microsoft.com>" is the right thing to do ?
+>=20
+> Regards,
+>=20
+> Hans
+>=20
+>=20
 
->>
->> I'm wondering why the addition of memory encryption
->> in 21729f81ce8a ("x86/mm: Provide general kernel support for memory 
->> encryption")
->> didn't break io_mapping_init_wc() though as it had already done a
->> s/PAGE_KERNEL_IO/PAGE_KERNEL/ in commit
->> ac96b5566926 ("io-mapping.h: s/PAGE_KERNEL_IO/PAGE_KERNEL/")
-> 
-> If I follow it correctly, since SME/SEV-ES are X86_64 only, 
-> io_mapping_init_wc() takes the ioremap_wc() path which uses 
-> PAGE_KERNEL_IO. iomap_create_wc() is only called when 
-> CONFIG_HAVE_ATOMIC_IOMAP is set, which isn't set for X86_64.
-> 
-> Thanks,
-> Tom
-> 
->>
->> thanks
->> Lucas De Marchi
->>
->>>
->>> Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
->>>
->>> Lucas De Marchi
->>>
->>>> ---
->>>> arch/x86/include/asm/fixmap.h        |  2 +-
->>>> arch/x86/include/asm/pgtable_types.h | 21 +++++++++++----------
->>>> arch/x86/mm/ioremap.c                |  2 +-
->>>> 3 files changed, 13 insertions(+), 12 deletions(-)
->>>>
->>>> diff --git a/arch/x86/include/asm/fixmap.h 
->>>> b/arch/x86/include/asm/fixmap.h
->>>> index 5e186a69db10..a2eaf265f784 100644
->>>> --- a/arch/x86/include/asm/fixmap.h
->>>> +++ b/arch/x86/include/asm/fixmap.h
->>>> @@ -173,7 +173,7 @@ static inline void __set_fixmap(enum 
->>>> fixed_addresses idx,
->>>> * supported for MMIO addresses, so make sure that the memory encryption
->>>> * mask is not part of the page attributes.
->>>> */
->>>> -#define FIXMAP_PAGE_NOCACHE PAGE_KERNEL_NOCACHE
->>>> +#define FIXMAP_PAGE_NOCACHE PAGE_KERNEL_NOCACHE_NOENC
->>>>
->>>> /*
->>>> * Early memremap routines used for in-place encryption. The mappings 
->>>> created
->>>> diff --git a/arch/x86/include/asm/pgtable_types.h 
->>>> b/arch/x86/include/asm/pgtable_types.h
->>>> index a87224767ff3..fc9b6995cb22 100644
->>>> --- a/arch/x86/include/asm/pgtable_types.h
->>>> +++ b/arch/x86/include/asm/pgtable_types.h
->>>> @@ -208,16 +208,17 @@ enum page_cache_mode {
->>>>
->>>> #define __pgprot_mask(x)    __pgprot((x) & __default_kernel_pte_mask)
->>>>
->>>> -#define PAGE_KERNEL        __pgprot_mask(__PAGE_KERNEL            | 
->>>> _ENC)
->>>> -#define PAGE_KERNEL_NOENC    __pgprot_mask(__PAGE_KERNEL |    0)
->>>> -#define PAGE_KERNEL_RO        __pgprot_mask(__PAGE_KERNEL_RO         
->>>> | _ENC)
->>>> -#define PAGE_KERNEL_EXEC    __pgprot_mask(__PAGE_KERNEL_EXEC       | 
->>>> _ENC)
->>>> -#define PAGE_KERNEL_EXEC_NOENC __pgprot_mask(__PAGE_KERNEL_EXEC       
->>>> |    0)
->>>> -#define PAGE_KERNEL_ROX        __pgprot_mask(__PAGE_KERNEL_ROX | _ENC)
->>>> -#define PAGE_KERNEL_NOCACHE    __pgprot_mask(__PAGE_KERNEL_NOCACHE | 
->>>> _ENC)
->>>> -#define PAGE_KERNEL_LARGE    __pgprot_mask(__PAGE_KERNEL_LARGE      | 
->>>> _ENC)
->>>> -#define PAGE_KERNEL_LARGE_EXEC __pgprot_mask(__PAGE_KERNEL_LARGE_EXEC 
->>>> | _ENC)
->>>> -#define PAGE_KERNEL_VVAR    __pgprot_mask(__PAGE_KERNEL_VVAR       | 
->>>> _ENC)
->>>> +#define PAGE_KERNEL            __pgprot_mask(__PAGE_KERNEL | _ENC)
->>>> +#define PAGE_KERNEL_NOENC __pgprot_mask(__PAGE_KERNEL            |    0)
->>>> +#define PAGE_KERNEL_RO __pgprot_mask(__PAGE_KERNEL_RO         | _ENC)
->>>> +#define PAGE_KERNEL_EXEC        __pgprot_mask(__PAGE_KERNEL_EXEC | _ENC)
->>>> +#define PAGE_KERNEL_EXEC_NOENC __pgprot_mask(__PAGE_KERNEL_EXEC       
->>>> |    0)
->>>> +#define PAGE_KERNEL_ROX __pgprot_mask(__PAGE_KERNEL_ROX        | _ENC)
->>>> +#define PAGE_KERNEL_NOCACHE __pgprot_mask(__PAGE_KERNEL_NOCACHE    | 
->>>> _ENC)
->>>> +#define PAGE_KERNEL_NOCACHE_NOENC 
->>>> __pgprot_mask(__PAGE_KERNEL_NOCACHE    |    0)
->>>> +#define PAGE_KERNEL_LARGE __pgprot_mask(__PAGE_KERNEL_LARGE      | _ENC)
->>>> +#define PAGE_KERNEL_LARGE_EXEC __pgprot_mask(__PAGE_KERNEL_LARGE_EXEC 
->>>> | _ENC)
->>>> +#define PAGE_KERNEL_VVAR        __pgprot_mask(__PAGE_KERNEL_VVAR | _ENC)
->>>>
->>>> #endif    /* __ASSEMBLY__ */
->>>>
->>>> diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
->>>> index 3102dda4b152..4fe8d43d53bb 100644
->>>> --- a/arch/x86/mm/ioremap.c
->>>> +++ b/arch/x86/mm/ioremap.c
->>>> @@ -243,7 +243,7 @@ __ioremap_caller(resource_size_t phys_addr, 
->>>> unsigned long size,
->>>>      * make sure the memory encryption attribute is enabled in the
->>>>      * resulting mapping.
->>>>      */
->>>> -    prot = PAGE_KERNEL;
->>>> +    prot = PAGE_KERNEL_NOENC;
->>>>     if ((io_desc.flags & IORES_MAP_ENCRYPTED) || encrypted)
->>>>         prot = pgprot_encrypted(prot);
->>>>
->>>> -- 
->>>> 2.34.0
->>>>
+Hans,
+
+Yes, that is the correct email. Still trying to get all the kinks worked ou=
+t, I appreciate your patience.
+
+Thank you,
+Jarrett
+
+>=20
+>=20
+>=20
+>=20
+> >
+> > ---
+> >
+> > Changes in v3:
+> >  - Further propagated ACPI dependecy to SURFACE_AGGREGATOR
+> >
+> > ---
+> >
+> > Changes in v2:
+> >  - Created to propagate ACPI dependency
+> > ---
+> >  drivers/platform/surface/Kconfig            | 7 ++++++-
+> >  drivers/platform/surface/aggregator/Kconfig | 1 +
+> >  2 files changed, 7 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/platform/surface/Kconfig
+> > b/drivers/platform/surface/Kconfig
+> > index 3105f651614f..5f0578e25f71 100644
+> > --- a/drivers/platform/surface/Kconfig
+> > +++ b/drivers/platform/surface/Kconfig
+> > @@ -5,7 +5,6 @@
+> >
+> >  menuconfig SURFACE_PLATFORMS
+> >  	bool "Microsoft Surface Platform-Specific Device Drivers"
+> > -	depends on ACPI
+> >  	default y
+> >  	help
+> >  	  Say Y here to get to see options for platform-specific device
+> > drivers @@ -30,12 +29,14 @@ config SURFACE3_WMI
+> >
+> >  config SURFACE_3_BUTTON
+> >  	tristate "Power/home/volume buttons driver for Microsoft Surface 3
+> tablet"
+> > +	depends on ACPI
+> >  	depends on KEYBOARD_GPIO && I2C
+> >  	help
+> >  	  This driver handles the power/home/volume buttons on the
+> Microsoft Surface 3 tablet.
+> >
+> >  config SURFACE_3_POWER_OPREGION
+> >  	tristate "Surface 3 battery platform operation region support"
+> > +	depends on ACPI
+> >  	depends on I2C
+> >  	help
+> >  	  This driver provides support for ACPI operation @@ -126,6 +127,7
+> > @@ config SURFACE_DTX
+> >
+> >  config SURFACE_GPE
+> >  	tristate "Surface GPE/Lid Support Driver"
+> > +	depends on ACPI
+> >  	depends on DMI
+> >  	help
+> >  	  This driver marks the GPEs related to the ACPI lid device found on
+> > @@ -135,6 +137,7 @@ config SURFACE_GPE
+> >
+> >  config SURFACE_HOTPLUG
+> >  	tristate "Surface Hot-Plug Driver"
+> > +	depends on ACPI
+> >  	depends on GPIOLIB
+> >  	help
+> >  	  Driver for out-of-band hot-plug event signaling on Microsoft
+> > Surface @@ -154,6 +157,7 @@ config SURFACE_HOTPLUG
+> >
+> >  config SURFACE_PLATFORM_PROFILE
+> >  	tristate "Surface Platform Profile Driver"
+> > +	depends on ACPI
+> >  	depends on SURFACE_AGGREGATOR_REGISTRY
+> >  	select ACPI_PLATFORM_PROFILE
+> >  	help
+> > @@ -176,6 +180,7 @@ config SURFACE_PLATFORM_PROFILE
+> >
+> >  config SURFACE_PRO3_BUTTON
+> >  	tristate "Power/home/volume buttons driver for Microsoft Surface
+> Pro 3/4 tablet"
+> > +	depends on ACPI
+> >  	depends on INPUT
+> >  	help
+> >  	  This driver handles the power/home/volume buttons on the
+> Microsoft Surface Pro 3/4 tablet.
+> > diff --git a/drivers/platform/surface/aggregator/Kconfig
+> > b/drivers/platform/surface/aggregator/Kconfig
+> > index fd6dc452f3e8..cab020324256 100644
+> > --- a/drivers/platform/surface/aggregator/Kconfig
+> > +++ b/drivers/platform/surface/aggregator/Kconfig
+> > @@ -4,6 +4,7 @@
+> >  menuconfig SURFACE_AGGREGATOR
+> >  	tristate "Microsoft Surface System Aggregator Module Subsystem
+> and Drivers"
+> >  	depends on SERIAL_DEV_BUS
+> > +	depends on ACPI
+> >  	select CRC_CCITT
+> >  	help
+> >  	  The Surface System Aggregator Module (Surface SAM or SSAM) is an
+> >
+

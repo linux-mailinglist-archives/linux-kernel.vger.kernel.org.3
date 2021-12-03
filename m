@@ -2,229 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C07946789B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5378F46789C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352356AbhLCNnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 08:43:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352266AbhLCNnV (ORCPT
+        id S1381192AbhLCNn1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Dec 2021 08:43:27 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:54619 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381196AbhLCNn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 08:43:21 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8EFC06174A
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 05:39:57 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id p18so2369619wmq.5
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 05:39:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ohIQaB84LArJ7RMWDRu6/DrUHfyigZQ0XOc04IPMQVk=;
-        b=UBjV1JNjo+S+Dqw5OKdqx8IJXaq/sEdsuodIgLgKBn/FMM/115dr8inkmNRMaFktRx
-         qV/2M+rRnzmZeNF55CRVS/DKFARRRD7rjPycyX6pVVv87nLHWrvjgiSGdBvauwBsxLwQ
-         5PdaphjcFbipsdGa8i8JkULKDRXUusLzAlatusPjyOdYy7Og+oIAg/M0ophB5qLgQSBp
-         SHnEZbJLdn8cgpzDU/tWt8ecxu5M9O/a8oleagBTWHWHpnSLmKg5DmghD+BFj7K0jsya
-         WsbN/TdPHASAKywU0BfQSn1K3qLymyN9QmUZUA7/GlPbGXvRk8Qp0Ic+RvrDlIAGQlUU
-         sshA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ohIQaB84LArJ7RMWDRu6/DrUHfyigZQ0XOc04IPMQVk=;
-        b=a4R/KATGoD1PWzPOSMdxnyD4y+Z3W9thJ/dM/IJ+yyIlni8VUY044yaciGaQjlmp2C
-         vpEfDd4Q4ID0PfL7MWpP4O97HLlRYcS9soFqJXC6UKm0RPubd09UIo+PYvvshoEiQQT5
-         jfzKIKcojWBw+cN0N5pdLU/6Qu7+IuyrB6UkIytBGl7wTsob12ftXkx/vH4YOck9m+UW
-         Z0KpVoL55PZOKR6lu0OGIid3VR8qyCYuGnJwN1sMMtWl2DJoxFwVnJ5ZPe186Xsx4ez9
-         8KXpZTK7zxEQjwR2lsVANWlO2BECzgC51bDpKPA44H3K1piwNzXmC6eEP5fegiyMOp37
-         dwqg==
-X-Gm-Message-State: AOAM530KvNXAjQGq/7xurkQA3hjp+ucJ/tIWKaMh0MxWZikw20noVdsU
-        MhE8RzMQOyUCwsjqWyuZ6Gnzjw==
-X-Google-Smtp-Source: ABdhPJxwZDbDcKhAQgTLmFrplkYEpzZy5KyrNtYNt3ZDhm67WxoFiqVIJTBcXGvHKyIILhAkeAZFww==
-X-Received: by 2002:a1c:a301:: with SMTP id m1mr15235234wme.118.1638538796060;
-        Fri, 03 Dec 2021 05:39:56 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id g13sm2601664wmk.37.2021.12.03.05.39.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 05:39:55 -0800 (PST)
-Date:   Fri, 3 Dec 2021 13:39:53 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Cc:     Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/1] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset
- or zero
-Message-ID: <YaoeKfmJrDPhMXWp@google.com>
-References: <20211202143437.1411410-1-lee.jones@linaro.org>
- <20211202175134.5b463e18@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <87o85yj81l.fsf@miraculix.mork.no>
- <Yan+nvfyS21z7ZUw@google.com>
- <87ilw5kfrm.fsf@miraculix.mork.no>
+        Fri, 3 Dec 2021 08:43:26 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id D6B7A200005;
+        Fri,  3 Dec 2021 13:39:59 +0000 (UTC)
+Date:   Fri, 3 Dec 2021 14:39:58 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     Sean Nyekjaer <sean@geanix.com>, linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v5 3/4] mtd: core: protect access to MTD devices while
+ in suspend
+Message-ID: <20211203143958.40645506@xps13>
+In-Reply-To: <20211130143705.5d0404aa@collabora.com>
+References: <20211102110204.3334609-4-sean@geanix.com>
+        <CGME20211123120353eucas1p2fb2561b7cfddd8d6e7decaef8b504f4c@eucas1p2.samsung.com>
+        <21092c0f-e11b-ac16-ab96-2a0556c0e30a@samsung.com>
+        <20211123125012.ibzqu44ixmykbhkt@skn-laptop>
+        <20211123140715.280b2f70@collabora.com>
+        <20211129101908.6f1aa715@xps13>
+        <20211129094129.xn364czofrgtvfb4@skn-laptop>
+        <63be9121-18c3-1ef2-c448-f99fb861490f@samsung.com>
+        <20211130124131.6pgu7enjgk6y536m@skn-laptop>
+        <20211130141551.400331c8@collabora.com>
+        <20211130132912.v6v45boce2zbnoy3@skn-laptop>
+        <20211130143705.5d0404aa@collabora.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87ilw5kfrm.fsf@miraculix.mork.no>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 03 Dec 2021, Bjørn Mork wrote:
-> >> It's been a while since I looked at this, so excuse me if I read it
-> >> wrongly.  But I think we need to catch more illegal/impossible values
-> >> than just zero here?  Any buffer size which cannot hold a single
-> >> datagram is pointless.
-> >> 
-> >> Trying to figure out what I possible meant to do with that
-> >> 
-> >>  	min = min(min, max);
-> >> 
-> >> I don't think it makes any sense?  Does it?  The "min" value we've
-> >> carefully calculated allow one max sized datagram and headers. I don't
-> >> think we should ever continue with a smaller buffer than that
-> >
-> > I was more confused with the comment you added to that code:
-> >
-> >    /* some devices set dwNtbOutMaxSize too low for the above default */
-> >    min = min(min, max);
-> >
-> > ... which looks as though it should solve the issue of an inadequate
-> > dwNtbOutMaxSize, but it almost does the opposite.
+Hello,
+
+> > Fine by me, lets drop this series.
+
+FYI I've dropped the entire series from mtd/next. I'm waiting for the
+fix discussed below (without abusing the chip mutex ;-) ).
+
+Cheers,
+Miquèl
+
+> > We have +10.000 devices that runs with this patch:
+> > 
+> > diff --git a/drivers/mtd/nand/raw/nand_base.c b/drivers/mtd/nand/raw/nand_base.c
+> > index 1f0d542d5923..58d48c3070fa 100644
+> > --- a/drivers/mtd/nand/raw/nand_base.c
+> > +++ b/drivers/mtd/nand/raw/nand_base.c
+> > @@ -4337,7 +4337,6 @@ static int nand_suspend(struct mtd_info *mtd)
+> >  		ret = chip->ops.suspend(chip);
+> >  	if (!ret)
+> >  		chip->suspended = 1;
+> > -	mutex_unlock(&chip->lock);
+> >  
+> >  	return ret;
+> >  }
+> > @@ -4350,7 +4349,6 @@ static void nand_resume(struct mtd_info *mtd)
+> >  {
+> >  	struct nand_chip *chip = mtd_to_nand(mtd);
+> >  
+> > -	mutex_lock(&chip->lock);
+> >  	if (chip->suspended) {
+> >  		if (chip->ops.resume)
+> >  			chip->ops.resume(chip);
+> >   
 > 
-> That's what I read too.  I must admit that I cannot remember writing any
-> of this stuff.  But I trust git...
-
-In Git we trust!
-
-> > I initially
-> > changed this segment to use the max() macro instead, but the
-> > subsequent clamp_t() macro simply chooses 'max' (0) value over the now
-> > sane 'min' one.
+> But it's abusing the chip lock... Use a wait queue as we did at the MTD
+> level, and make nand_get_device() wait on this wait queue when the
+> device is suspended.
 > 
-> Yes, but what if we adjust max here instead of min?
-
-That's what my patch does.
-
-> > Which is why I chose 
-> >> Or are there cases where this is valid?
-> >
-> > I'm not an expert on the SKB code, but in my simple view of the world,
-> > if you wish to use a buffer for any amount of data, you should
-> > allocate space for it.
-> >
-> >> So that really should haven been catching this bug with a
-> >> 
-> >>   max = max(min, max)
-> >
-> > I tried this.  It didn't work either.
-> >
-> > See the subsequent clamp_t() call a few lines down.
-> 
-> This I don't understand.  If we have for example
-> 
->  new_tx = 0
->  max = 0
->  min = 1514(=datagram) + 8(=ndp) + 2(=1+1) * 4(=dpe) + 12(=nth) = 1542
-> 
-> then
-> 
->  max = max(min, max) = 1542
->  val = clamp_t(u32, new_tx, min, max) = 1542
-> 
-> so we return 1542 and everything is fine.
-
-I don't believe so.
-
-#define clamp_t(type, val, lo, hi) \
-              min_t(type, max_t(type, val, lo), hi)
-
-So:
-              min_t(u32, max_t(u32, 0, 1542), 0)
-
-So:
-	      min_t(u32, 1542, 0) = 0
-
-So we return 0 and everything is not fine. :)
-
-Perhaps we should use max_t() here instead of clamp?
-
-> >> or maybe more readable
-> >> 
-> >>   if (max < min)
-> >>      max = min
-> >> 
-> >> What do you think?
-> >
-> > So the data that is added to the SKB is ctx->max_ndp_size, which is
-> > allocated in cdc_ncm_init().  The code that does it looks like:
-> >
-> >    if (ctx->is_ndp16)                                                                                         
-> >         ctx->max_ndp_size = sizeof(struct usb_cdc_ncm_ndp16) +
-> > 	                    (ctx->tx_max_datagrams + 1) *
-> > 			    sizeof(struct usb_cdc_ncm_dpe16);                                                                                               
-> >     else                                                                                                       
-> >         ctx->max_ndp_size = sizeof(struct usb_cdc_ncm_ndp32) +
-> > 	                    (ctx->tx_max_datagrams + 1) *
-> > 			    sizeof(struct usb_cdc_ncm_dpe32);  
-> >
-> > So this should be the size of the allocation too, right?
-> 
-> This driver doesn't add data to the skb.  It allocates a new buffer and
-> copies one or more skbs into it.  I'm sure that could be improved too..
-
-"one or more skbs" == data :)
-
-Either way, it's asking for more bits to be copied in than there is
-space for.  It's amazing that this worked at all.  We only noticed it
-when we increased the size of one of the SKB headers and some of the
-accidentally allocated memory was eaten up.
-
-> Without a complete rewrite we need to allocate new skbs large enough to hold
-> 
-> NTH          - frame header
-> NDP x 1      - index table, with minimum two entries (1 datagram + terminator)
-> datagram x 1 - ethernet frame
-> 
-> This gives the minimum "tx_max" value.
-> 
-> The device is supposed to tell us the maximum "tx_max" value in
-> dwNtbOutMaxSize.  In theory.  In practice we cannot trust the device, as
-> you point out.  We know aleady deal with too large values (which are
-> commonly seen in real products), but we also need to deal with too low
-> values.
-> 
-> I believe the "too low" is defined by the calculated minimum value, and
-> the comment indicates that this what I tried to express but failed.
-
-Right, that's how I read it too.
-
-> > Why would the platform ever need to over-ride this?  The platform
-> > can't make the data area smaller since there won't be enough room.  It
-> > could perhaps make it bigger, but the min_t() and clamp_t() macros
-> > will end up choosing the above allocation anyway.
-> >
-> > This leaves me feeling a little perplexed.
-> >
-> > If there isn't a good reason for over-riding then I could simplify
-> > cdc_ncm_check_tx_max() greatly.
-> >
-> > What do *you* think? :)
-> 
-> I also have the feeling that this could and should be simplified. This
-> discussion shows that refactoring is required.
-
-I'm happy to help with the coding, if we agree on a solution.
-
-> git blame makes this all too embarrassing ;-)
-
-:D
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> ______________________________________________________
+> Linux MTD discussion mailing list
+> http://lists.infradead.org/mailman/listinfo/linux-mtd/

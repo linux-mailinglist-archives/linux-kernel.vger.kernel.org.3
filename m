@@ -2,91 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF13467B95
+	by mail.lfdr.de (Postfix) with ESMTP id B54FA467B96
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382114AbhLCQlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 11:41:15 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49484 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382116AbhLCQlD (ORCPT
+        id S1382106AbhLCQl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 11:41:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1382141AbhLCQl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 11:41:03 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8237B62C22;
-        Fri,  3 Dec 2021 16:37:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44260C53FCD;
-        Fri,  3 Dec 2021 16:37:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638549457;
-        bh=RaQUeM5FjKYkPEE/kCPfxJNphXuR9R0Uk5864sf6S2M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ArLkupHjT5pr4EvSwZ2qdKt0GL4gc7v7rXuPWG6a5Fb9+jjIQpKKkCiOHcBLBBIcZ
-         oCnb76jPjqlqzYFsFgLQwGb54TrcL6UmNpnqtTqDok2ph0aDpzA+Jm3lhMeO8wIyF9
-         LVD0bfQhTY2eDl008epTwItD8C+F0qFbGS3gkXdQyWNqJY42ZkY/ED8pZ71nLwTM2K
-         uaJaEyGo3s7Y+9ERKN37+m2lEIUdNmQVNQKiwzTixlkUjx2vlV2j8QPnUeD4jamwfm
-         mhIfQdC9rDcf6CBr3iC8xcwjLHDFAyOV1fErsDd3M9yJFteAfAjfG/g2IrhC59pocr
-         oldKQ2sS13dZA==
-Date:   Fri, 3 Dec 2021 17:37:34 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Sui Chen <suichen@google.com>
-Cc:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
-        tali.perry1@gmail.com, benjaminfair@google.com, krellan@google.com,
-        joe@perches.com
-Subject: Re: [RFC Patch v2 0/3] I2C statistics as sysfs attributes
-Message-ID: <YapHznDoqJ+wjx8m@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Sui Chen <suichen@google.com>, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org, joel@jms.id.au,
-        andrew@aj.id.au, tali.perry1@gmail.com, benjaminfair@google.com,
-        krellan@google.com, joe@perches.com
-References: <20211203023728.3699610-1-suichen@google.com>
+        Fri, 3 Dec 2021 11:41:26 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFD4C061D5E
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 08:38:02 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id g19so3405907pfb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 08:38:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=1Os1YXl4la47axxJ9jJm6JnaqNSY09GwFIn2TEKSK34=;
+        b=NV71F2dXvhAuV9ngT//koygUCamIjyG074O/+3MMVdIx+Yrhh/OnKnrG+HjuqzGIz+
+         aeYkCReWJtBYO6vuOUAsjmD0fcNg8qtxl2sMMZeWUuIE/S9WJaj/2HM20Xy4WjfZeK/l
+         74fXHGLaHvuzhM8OW+vtoVP7MKYRZVcTs7djM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=1Os1YXl4la47axxJ9jJm6JnaqNSY09GwFIn2TEKSK34=;
+        b=zGl4925eHiWipE3We9FSRCYNDMufEnRby4AvS80eaQzC0Nhf+QLE70KUExKP9g3dVQ
+         QNMVzH5HklIrsVPJc+hh483xcm2LQXaFkBq+QCztnXZ9+qnBMeHE+ZoxljFqd2cqU1WD
+         5bK3utExKxOdj2r5WWqL4HiPY32vSCOAKNH89wRVke4BBoxglyA7mbPLZ7qqM5eopnvP
+         5mqbLmh+alKUg5oaNm/wFLvYkl4PQMMvldZY2rP4wTTkae9KKSOZEtDoai8fyK1I/NEb
+         6v2Jy+ga0SQe/fdl1z3M7RzKiRYqiEzS3ZDNwijBH/nj1B023ygkfMbnQg/b7WGVhMBo
+         PKXA==
+X-Gm-Message-State: AOAM530F8JEhmcxIAE4tpflr2xgiAHvHNl6pkKhOUnsNhyiNyZbZOpP/
+        wfegYCmfXoOAE+b5hPj+Ys5U/A==
+X-Google-Smtp-Source: ABdhPJwQAjEynTS1Zy+kiMxhN1859sy4nV6Hn4qhyUmIOr2nCUvQ1+gveQ8Sp1GCosQcJ/NzZwgNlQ==
+X-Received: by 2002:a62:5215:0:b0:49f:a996:b724 with SMTP id g21-20020a625215000000b0049fa996b724mr20111647pfb.3.1638549481618;
+        Fri, 03 Dec 2021 08:38:01 -0800 (PST)
+Received: from [127.0.0.1] (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id np1sm6453482pjb.22.2021.12.03.08.38.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 08:38:01 -0800 (PST)
+Date:   Fri, 03 Dec 2021 08:37:59 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Yury Norov <yury.norov@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_find=3A_Do_not_read_beyon?= =?US-ASCII?Q?d_variable_boundaries_on_small_sizes?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <YaoN6wnNezMvyyd5@smile.fi.intel.com>
+References: <20211203100846.3977195-1-keescook@chromium.org> <YaoN6wnNezMvyyd5@smile.fi.intel.com>
+Message-ID: <E1A4953A-8801-48FA-A744-63DA548C5924@chromium.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LHJ0t05wcta78tCq"
-Content-Disposition: inline
-In-Reply-To: <20211203023728.3699610-1-suichen@google.com>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---LHJ0t05wcta78tCq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 02, 2021 at 06:37:25PM -0800, Sui Chen wrote:
-> Add I2C statistics such as Bus Error counts and NACK counts as sysfs
-> attributes so they don't need to live in debugfs.
+On December 3, 2021 4:30:35 AM PST, Andy Shevchenko <andriy=2Eshevchenko@l=
+inux=2Eintel=2Ecom> wrote:
+>On Fri, Dec 03, 2021 at 02:08:46AM -0800, Kees Cook wrote:
+>> It's common practice to cast small variable arguments to the find_*_bit=
+()
+>
+>It's a bad practice and should be fixed accordingly, no?
 
-What has changed since v1?
+There's an argument to be made that the first arg should be void * but tha=
+t's a pretty invasive change at this point (and orthogonal to this fix)=2E
 
-=46rom a glimpse, none of my questions to v1 have been answered or
-addressed?
+I'd be happy to send a treewide change for that too, if folks wanted?
+
+>
+>> helpers to unsigned long and then use a size argument smaller than
+>> sizeof(unsigned long):
+>>=20
+>> 	unsigned int bits;
+>> 	=2E=2E=2E
+>> 	out =3D find_first_bit((unsigned long *)&bits, 32);
+>>=20
+>> This leads to the find helper dereferencing a full unsigned long,
+>> regardless of the size of the actual variable=2E The unwanted bits
+>> get masked away, but strictly speaking, a read beyond the end of
+>> the target variable happens=2E Builds under -Warray-bounds complain
+>> about this situation, for example:
+>>=20
+>> In file included from =2E/include/linux/bitmap=2Eh:9,
+>>                  from drivers/iommu/intel/iommu=2Ec:17:
+>> drivers/iommu/intel/iommu=2Ec: In function 'domain_context_mapping_one'=
+:
+>> =2E/include/linux/find=2Eh:119:37: error: array subscript 'long unsigne=
+d int[0]' is partly outside array bounds of 'int[1]' [-Werror=3Darray-bound=
+s]
+>>   119 |                 unsigned long val =3D *addr & GENMASK(size - 1,=
+ 0);
+>>       |                                     ^~~~~
+>> drivers/iommu/intel/iommu=2Ec:2115:18: note: while referencing 'max_pde=
+'
+>>  2115 |         int pds, max_pde;
+>>       |                  ^~~~~~~
+>>=20
+>> Instead, just carefully read the correct variable size, all of which
+>> happens at compile time since small_const_nbits(size) has already
+>> determined that arguments are constant expressions=2E
+>
+>What is the performance impact?
+
+There should be none=2E It's entirely using constant expressions, so all o=
+f it gets reduce at compile time to a single path without conditionals=2E T=
+he spot checks I did on the machine code showed no differences either (sinc=
+e I think optimization was doing the masking vis smaller width dereference)=
+=2E
 
 
---LHJ0t05wcta78tCq
-Content-Type: application/pgp-signature; name="signature.asc"
+>
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGqR8oACgkQFA3kzBSg
-KbbJUQ/9FR9iFKVBIJx91SD9MXVjmtU8xgFUs8hXfXmN6gNe9QnzRtcO4qas2tKI
-Flxo3yz9ocPpH/Gb3SG1Kwdv9Jze5gOL1nLrml8zVUiJa3JsrnQmqQVSZOpPLcpE
-H/yKLGu1FH4ALjSAsg6tJKyc1JJqdbhBqqhWCQXTjB1RNN7FpNzy1RlxwsKUNF47
-ZKMJ3A7ADX+wNpRAQg/k3UFkN5kNcGyuRhHg+4hQyySjrxaraaAZBOhjLiiAtTuj
-ahkNbwvUHnZeO694UMK/0/xQAEGzgan4ryrNo32I8nautczhk9DWPLTxVJIfOh4a
-3bhjhtBVo7EQ1wM64jH0cp2lvJ6588syqk7+rI207YBa9zIkZTjuH4w/9678pinX
-Rpbwpn1M/nQpdjds55QGYaSVMbzGoQRh25PN4xHkyynRAd37aOdUp2JCMgqcqLoC
-s9fTyXDEzwDiZEKKM5uG9+JmQQjiMZ4dhdk9D/DY+36mfQ10Rw3W9QeJ0JGqYTCW
-h7aswLDb1Q+PuwEKnlAC2pe1g6bIA5igjcPGdMBi6B7zpQXGyKJP12TlPpTex4s8
-GTGqHx2zIP0mGgrLzfRl0M2RZddiDPSAhGVMoa0lq/EXRN4Qqse59VdJZCB814tC
-TCG9sBXqMFbuFvwQOzOfiyjQoyN/6Fs850U4EJfTjMMAohnn9iY=
-=LdTx
------END PGP SIGNATURE-----
-
---LHJ0t05wcta78tCq--
+--=20
+Kees Cook

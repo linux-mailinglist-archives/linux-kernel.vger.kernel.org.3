@@ -2,149 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FF2467895
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C07946789B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381136AbhLCNmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 08:42:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
+        id S1352356AbhLCNnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 08:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238691AbhLCNmT (ORCPT
+        with ESMTP id S1352266AbhLCNnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 08:42:19 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF063C06174A
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 05:38:55 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id e3so11734157edu.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 05:38:55 -0800 (PST)
+        Fri, 3 Dec 2021 08:43:21 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8EFC06174A
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 05:39:57 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id p18so2369619wmq.5
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 05:39:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jZ0k65IEv+mkTjXj+Hsssr+TTC6PuB+uri2MNkshlgg=;
-        b=QdEZ/4DlPgf5qAJIhxS4IiSzj47x69iMSbtz+4keNZevkJKHBOQ6KaXs+ONRRpGca4
-         eLfvjCq4/SdlnzYvfJgbw8xWtg/stWatgwswPL+eJ+PjKhoD64Q9NPb+IiJCAujLdP86
-         BsS13GIC/MJa61NY5ljnuOssYsukUWJjZiYlk=
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ohIQaB84LArJ7RMWDRu6/DrUHfyigZQ0XOc04IPMQVk=;
+        b=UBjV1JNjo+S+Dqw5OKdqx8IJXaq/sEdsuodIgLgKBn/FMM/115dr8inkmNRMaFktRx
+         qV/2M+rRnzmZeNF55CRVS/DKFARRRD7rjPycyX6pVVv87nLHWrvjgiSGdBvauwBsxLwQ
+         5PdaphjcFbipsdGa8i8JkULKDRXUusLzAlatusPjyOdYy7Og+oIAg/M0ophB5qLgQSBp
+         SHnEZbJLdn8cgpzDU/tWt8ecxu5M9O/a8oleagBTWHWHpnSLmKg5DmghD+BFj7K0jsya
+         WsbN/TdPHASAKywU0BfQSn1K3qLymyN9QmUZUA7/GlPbGXvRk8Qp0Ic+RvrDlIAGQlUU
+         sshA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jZ0k65IEv+mkTjXj+Hsssr+TTC6PuB+uri2MNkshlgg=;
-        b=YcmCh51UupxxLArxzh84pHff126P/wgfO8Ib0V3WyvXdSc2a9njVNO/hqzl+xuBZ0g
-         VsHYkr49HVHR58InYby2EPrHpUEN8ROh16QaCTg47NViiJ6Nrd4wGKhw5/vyekATuhkP
-         6B1+svmfAEppxCYWBOz6pZxfqKpajKLrEHF1y48o4Fao37TPuVPsNH3KR/z5pFOhg6gu
-         bUFbln+sLNSO5da/n2qkRMHoW7C8chJM/kbZmlW/nHe7PhitlNghsdxnQTR3UwL63afO
-         migdAeEBgudKfPw3vb9LVwrG0qXtX7wExJUc1Qr66FzbSEZOnqUY30zgNZc6C8G+k/R+
-         ewNg==
-X-Gm-Message-State: AOAM532SSVlFRvD0h0Tg9wuWFT4EDu04O014eyBoM0F8ooihzglqhy0f
-        XEiadfGmtwniid2esnxJSYvOb0g8fzMBCw==
-X-Google-Smtp-Source: ABdhPJzuITPnpzlSsz+9aNcFmFcrY+OtVEN7ewcsLzPDRrY8OL090gK8pD8o0pIwVC2mE1Ynmj9yMg==
-X-Received: by 2002:a05:6402:2809:: with SMTP id h9mr26838816ede.351.1638538734105;
-        Fri, 03 Dec 2021 05:38:54 -0800 (PST)
-Received: from gmail.com ([100.104.168.197])
-        by smtp.gmail.com with ESMTPSA id s2sm2246751ejn.96.2021.12.03.05.38.52
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ohIQaB84LArJ7RMWDRu6/DrUHfyigZQ0XOc04IPMQVk=;
+        b=a4R/KATGoD1PWzPOSMdxnyD4y+Z3W9thJ/dM/IJ+yyIlni8VUY044yaciGaQjlmp2C
+         vpEfDd4Q4ID0PfL7MWpP4O97HLlRYcS9soFqJXC6UKm0RPubd09UIo+PYvvshoEiQQT5
+         jfzKIKcojWBw+cN0N5pdLU/6Qu7+IuyrB6UkIytBGl7wTsob12ftXkx/vH4YOck9m+UW
+         Z0KpVoL55PZOKR6lu0OGIid3VR8qyCYuGnJwN1sMMtWl2DJoxFwVnJ5ZPe186Xsx4ez9
+         8KXpZTK7zxEQjwR2lsVANWlO2BECzgC51bDpKPA44H3K1piwNzXmC6eEP5fegiyMOp37
+         dwqg==
+X-Gm-Message-State: AOAM530KvNXAjQGq/7xurkQA3hjp+ucJ/tIWKaMh0MxWZikw20noVdsU
+        MhE8RzMQOyUCwsjqWyuZ6Gnzjw==
+X-Google-Smtp-Source: ABdhPJxwZDbDcKhAQgTLmFrplkYEpzZy5KyrNtYNt3ZDhm67WxoFiqVIJTBcXGvHKyIILhAkeAZFww==
+X-Received: by 2002:a1c:a301:: with SMTP id m1mr15235234wme.118.1638538796060;
+        Fri, 03 Dec 2021 05:39:56 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id g13sm2601664wmk.37.2021.12.03.05.39.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 05:38:53 -0800 (PST)
-Date:   Fri, 3 Dec 2021 14:38:35 +0100
-From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     "kyrie.wu" <kyrie.wu@mediatek.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, xia.jiang@mediatek.com,
-        maoguang.meng@mediatek.com, srv_heupstream@mediatek.com,
-        irui.wang@mediatek.com
-Subject: Re: [PATCH V6, 0/5] Support multi-hardware jpeg encoding using
- of_platform_populate
-Message-ID: <Yaod22NaGQveuevu@gmail.com>
-References: <1638501230-13417-1-git-send-email-kyrie.wu@mediatek.com>
+        Fri, 03 Dec 2021 05:39:55 -0800 (PST)
+Date:   Fri, 3 Dec 2021 13:39:53 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Cc:     Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
+        "David S. Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 1/1] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset
+ or zero
+Message-ID: <YaoeKfmJrDPhMXWp@google.com>
+References: <20211202143437.1411410-1-lee.jones@linaro.org>
+ <20211202175134.5b463e18@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <87o85yj81l.fsf@miraculix.mork.no>
+ <Yan+nvfyS21z7ZUw@google.com>
+ <87ilw5kfrm.fsf@miraculix.mork.no>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1638501230-13417-1-git-send-email-kyrie.wu@mediatek.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87ilw5kfrm.fsf@miraculix.mork.no>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On Fri, 03 Dec 2021, Bjørn Mork wrote:
+> >> It's been a while since I looked at this, so excuse me if I read it
+> >> wrongly.  But I think we need to catch more illegal/impossible values
+> >> than just zero here?  Any buffer size which cannot hold a single
+> >> datagram is pointless.
+> >> 
+> >> Trying to figure out what I possible meant to do with that
+> >> 
+> >>  	min = min(min, max);
+> >> 
+> >> I don't think it makes any sense?  Does it?  The "min" value we've
+> >> carefully calculated allow one max sized datagram and headers. I don't
+> >> think we should ever continue with a smaller buffer than that
+> >
+> > I was more confused with the comment you added to that code:
+> >
+> >    /* some devices set dwNtbOutMaxSize too low for the above default */
+> >    min = min(min, max);
+> >
+> > ... which looks as though it should solve the issue of an inadequate
+> > dwNtbOutMaxSize, but it almost does the opposite.
+> 
+> That's what I read too.  I must admit that I cannot remember writing any
+> of this stuff.  But I trust git...
 
-Any idea why this series is not available at
-https://patchwork.linuxtv.org/ but it exists in 
-https://lore.kernel.org/all/1638501230-13417-1-git-send-email-kyrie.wu@mediatek.com/#r
+In Git we trust!
 
-thanks!
+> > I initially
+> > changed this segment to use the max() macro instead, but the
+> > subsequent clamp_t() macro simply chooses 'max' (0) value over the now
+> > sane 'min' one.
+> 
+> Yes, but what if we adjust max here instead of min?
 
-kyrie.wu wrote:
+That's what my patch does.
 
-> This series adds support for multi hardware jpeg encoding, by first
-> adding use of_platform_populate to manage each hardware information:
-> interrupt, clock, register bases and power. Secondly add encoding 
-> work queue to deal with the encoding requestsof multi-hardware
-> at the same time. Lastly, add output picture reorder function
-> interface to eliminate the out of order images.
+> > Which is why I chose 
+> >> Or are there cases where this is valid?
+> >
+> > I'm not an expert on the SKB code, but in my simple view of the world,
+> > if you wish to use a buffer for any amount of data, you should
+> > allocate space for it.
+> >
+> >> So that really should haven been catching this bug with a
+> >> 
+> >>   max = max(min, max)
+> >
+> > I tried this.  It didn't work either.
+> >
+> > See the subsequent clamp_t() call a few lines down.
 > 
-> This series has been tested with both MT8195.
-> Encoding worked for this chip.
+> This I don't understand.  If we have for example
 > 
-> Patches 1~2 use of_platform_populate to replace component framework
-> to manage multi-hardware.
+>  new_tx = 0
+>  max = 0
+>  min = 1514(=datagram) + 8(=ndp) + 2(=1+1) * 4(=dpe) + 12(=nth) = 1542
 > 
-> Patch 3 add jpeg encoding timeout function to judge hardware timeout.
+> then
 > 
-> Patch 4 add encoding work queue to deal with multi-hardware encoding
-> at the same time.
+>  max = max(min, max) = 1542
+>  val = clamp_t(u32, new_tx, min, max) = 1542
 > 
-> Patch 5 add output picture reorder function to order images.
-> ---
-> Changes compared with v5:
-> - use of_platform_populate to replace component framework to
-> manage multi-hardware in patch 2.
+> so we return 1542 and everything is fine.
+
+I don't believe so.
+
+#define clamp_t(type, val, lo, hi) \
+              min_t(type, max_t(type, val, lo), hi)
+
+So:
+              min_t(u32, max_t(u32, 0, 1542), 0)
+
+So:
+	      min_t(u32, 1542, 0) = 0
+
+So we return 0 and everything is not fine. :)
+
+Perhaps we should use max_t() here instead of clamp?
+
+> >> or maybe more readable
+> >> 
+> >>   if (max < min)
+> >>      max = min
+> >> 
+> >> What do you think?
+> >
+> > So the data that is added to the SKB is ctx->max_ndp_size, which is
+> > allocated in cdc_ncm_init().  The code that does it looks like:
+> >
+> >    if (ctx->is_ndp16)                                                                                         
+> >         ctx->max_ndp_size = sizeof(struct usb_cdc_ncm_ndp16) +
+> > 	                    (ctx->tx_max_datagrams + 1) *
+> > 			    sizeof(struct usb_cdc_ncm_dpe16);                                                                                               
+> >     else                                                                                                       
+> >         ctx->max_ndp_size = sizeof(struct usb_cdc_ncm_ndp32) +
+> > 	                    (ctx->tx_max_datagrams + 1) *
+> > 			    sizeof(struct usb_cdc_ncm_dpe32);  
+> >
+> > So this should be the size of the allocation too, right?
 > 
-> Changes compared with v4:
-> --No change compaered with v4
+> This driver doesn't add data to the skb.  It allocates a new buffer and
+> copies one or more skbs into it.  I'm sure that could be improved too..
+
+"one or more skbs" == data :)
+
+Either way, it's asking for more bits to be copied in than there is
+space for.  It's amazing that this worked at all.  We only noticed it
+when we increased the size of one of the SKB headers and some of the
+accidentally allocated memory was eaten up.
+
+> Without a complete rewrite we need to allocate new skbs large enough to hold
 > 
-> Changes compared with v3:
-> --Structure patches for consistency, non-backward
->   compatible and do not break any existing functionality
+> NTH          - frame header
+> NDP x 1      - index table, with minimum two entries (1 datagram + terminator)
+> datagram x 1 - ethernet frame
 > 
-> Changes compared with v2:
-> --Split the last two patches into several patches
->   to enhance readability
-> --Correct some syntax errors
-> --Explain why the component framework is used
+> This gives the minimum "tx_max" value.
 > 
-> Changes compared with v1:
-> --Add jpeg encoder dt-bindings for MT8195
-> --Use component framework to manage jpegenc HW
-> --Add jpegenc output pic reorder function interface
+> The device is supposed to tell us the maximum "tx_max" value in
+> dwNtbOutMaxSize.  In theory.  In practice we cannot trust the device, as
+> you point out.  We know aleady deal with too large values (which are
+> commonly seen in real products), but we also need to deal with too low
+> values.
 > 
-> kyrie.wu (5):
->   dt-bindings: mediatek: Add mediatek, mt8195-jpgenc compatible
->   media: mtk-jpegenc: manage jpegenc multi-hardware
->   media: mtk-jpegenc: add jpegenc timeout func interface
->   media: mtk-jpegenc: add jpeg encode worker interface
->   media: mtk-jpegenc: add output pic reorder interface
+> I believe the "too low" is defined by the calculated minimum value, and
+> the comment indicates that this what I tried to express but failed.
+
+Right, that's how I read it too.
+
+> > Why would the platform ever need to over-ride this?  The platform
+> > can't make the data area smaller since there won't be enough room.  It
+> > could perhaps make it bigger, but the min_t() and clamp_t() macros
+> > will end up choosing the above allocation anyway.
+> >
+> > This leaves me feeling a little perplexed.
+> >
+> > If there isn't a good reason for over-riding then I could simplify
+> > cdc_ncm_check_tx_max() greatly.
+> >
+> > What do *you* think? :)
 > 
->  .../bindings/media/mediatek-jpeg-encoder.yaml      |   3 +
->  drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c    | 287 +++++++++++++++----
->  drivers/media/platform/mtk-jpeg/mtk_jpeg_core.h    |  91 +++++-
->  drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.c  |   1 +
->  drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.h  |   3 +-
->  drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c  | 316 ++++++++++++++++++++-
->  6 files changed, 644 insertions(+), 57 deletions(-)
-> 
-> -- 
-> 2.6.4
-> 
-> 
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek
-> 
+> I also have the feeling that this could and should be simplified. This
+> discussion shows that refactoring is required.
+
+I'm happy to help with the coding, if we agree on a solution.
+
+> git blame makes this all too embarrassing ;-)
+
+:D
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

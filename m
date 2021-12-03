@@ -2,106 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8A4467075
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 04:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C82467077
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 04:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378359AbhLCDHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 22:07:03 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15690 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239667AbhLCDHB (ORCPT
+        id S1351342AbhLCDHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 22:07:44 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:3996 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350224AbhLCDHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 22:07:01 -0500
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J4yJ42NjvzZdNW;
-        Fri,  3 Dec 2021 11:00:52 +0800 (CST)
-Received: from dggpemm100005.china.huawei.com (7.185.36.231) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 3 Dec 2021 11:03:36 +0800
-Received: from dggpeml100016.china.huawei.com (7.185.36.216) by
- dggpemm100005.china.huawei.com (7.185.36.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 3 Dec 2021 11:03:35 +0800
-Received: from dggpeml100016.china.huawei.com ([7.185.36.216]) by
- dggpeml100016.china.huawei.com ([7.185.36.216]) with mapi id 15.01.2308.020;
- Fri, 3 Dec 2021 11:03:35 +0800
-From:   "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
-        <longpeng2@huawei.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>
-CC:     "cornelia.huck@de.ibm.com" <cornelia.huck@de.ibm.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Gonglei (Arei)" <arei.gonglei@huawei.com>
-Subject: RE: [PATCH] kvm/eventfd: fix the misleading comment in
- kvm_irqfd_assign
-Thread-Topic: [PATCH] kvm/eventfd: fix the misleading comment in
- kvm_irqfd_assign
-Thread-Index: AQHX5NNH1Leb7fxkY0SkUYfU1jQEjawaOSSAgAXTy/A=
-Date:   Fri, 3 Dec 2021 03:03:35 +0000
-Message-ID: <5c5f0f0982df4fc6a858f8e095c4eaa5@huawei.com>
-References: <20211129034328.1604-1-longpeng2@huawei.com>
- <c6b7c933-2d48-1504-7c45-110b0ab317ad@linux.ibm.com>
-In-Reply-To: <c6b7c933-2d48-1504-7c45-110b0ab317ad@linux.ibm.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.148.223]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 2 Dec 2021 22:07:43 -0500
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B31YGH1032323;
+        Fri, 3 Dec 2021 03:04:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=3GtMorerQQ94N/li8Ak8hBK5n/1RQu5Lb86Ot3mNBE0=;
+ b=0PMO9CzpU0dIitj9N5B13Sa2yUunvieGY87lBCHhL5aTN9X9idIArtZxxDC06iLVhYX7
+ HMi8oRLsEkxgTFfnQciooxWv5Wbs/ov5L54vTxJwFUqvccNDLrQvfUMUEGQRla0/+1SO
+ qNggSIso2juqpgicaAuiVQigBjw9ot3wxP74oDNFLnURoDFBl6dYjRWwxaCsmsa+DxaD
+ m4A7HgwwzCOqWRq3/fUqtziVaVidchdD7X6UXs5IJc9JHT6EDerSR1wsrJnFMlP/gs4z
+ JU7I4aXJC65s9wo/hUxmOSb9UwptVZ/vVw5I0USF90WP5/LexhbgLCek3u1lbS1HTcQi qA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cp7wewc6m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 03 Dec 2021 03:04:16 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B331qEP188371;
+        Fri, 3 Dec 2021 03:04:02 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by aserp3020.oracle.com with ESMTP id 3cnhvht9hp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 03 Dec 2021 03:04:02 +0000
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 1B3340ia003616;
+        Fri, 3 Dec 2021 03:04:02 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by aserp3020.oracle.com with ESMTP id 3cnhvht9f3-3;
+        Fri, 03 Dec 2021 03:04:02 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "supporter:QLOGIC QL41xxx ISCSI DRIVER" 
+        <GR-QLogic-Storage-Upstream@marvell.com>,
+        "open list:QLOGIC QL41xxx ISCSI DRIVER" <linux-scsi@vger.kernel.org>,
+        Manish Rangankar <mrangankar@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>
+Subject: Re: [PATCH v2 0/2] scsi: qedi: Couple of warning fixes
+Date:   Thu,  2 Dec 2021 22:03:59 -0500
+Message-Id: <163850060429.30297.3525452173890019336.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211126201708.27140-1-f.fainelli@gmail.com>
+References: <20211126201708.27140-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: xNK9rECQH4c1KUyWvU9InjSaJ4Gvmv2V
+X-Proofpoint-GUID: xNK9rECQH4c1KUyWvU9InjSaJ4Gvmv2V
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQ2hyaXN0aWFuIEJvcm50
-cmFlZ2VyIFttYWlsdG86Ym9ybnRyYWVnZXJAbGludXguaWJtLmNvbV0NCj4gU2VudDogVHVlc2Rh
-eSwgTm92ZW1iZXIgMzAsIDIwMjEgMToxNCBBTQ0KPiBUbzogTG9uZ3BlbmcgKE1pa2UsIENsb3Vk
-IEluZnJhc3RydWN0dXJlIFNlcnZpY2UgUHJvZHVjdCBEZXB0LikNCj4gPGxvbmdwZW5nMkBodWF3
-ZWkuY29tPjsgcGJvbnppbmlAcmVkaGF0LmNvbQ0KPiBDYzogY29ybmVsaWEuaHVja0BkZS5pYm0u
-Y29tOyBrdm1Admdlci5rZXJuZWwub3JnOw0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3Jn
-OyBHb25nbGVpIChBcmVpKSA8YXJlaS5nb25nbGVpQGh1YXdlaS5jb20+DQo+IFN1YmplY3Q6IFJl
-OiBbUEFUQ0hdIGt2bS9ldmVudGZkOiBmaXggdGhlIG1pc2xlYWRpbmcgY29tbWVudCBpbiBrdm1f
-aXJxZmRfYXNzaWduDQo+IA0KPiANCj4gDQo+IEFtIDI5LjExLjIxIHVtIDA0OjQzIHNjaHJpZWIg
-TG9uZ3BlbmcoTWlrZSk6DQo+ID4gRnJvbTogTG9uZ3BlbmcgPGxvbmdwZW5nMkBodWF3ZWkuY29t
-Pg0KPiA+DQo+ID4gVGhlIGNvbW1lbnQgYWJvdmUgdGhlIGludm9jYXRpb24gb2YgdmZzX3BvbGwo
-KSBpcyBtaXNsZWFkaW5nLCBtb3ZlDQo+ID4gaXQgdG8gdGhlIHJpZ2h0IHBsYWNlLg0KPiA+DQo+
-IEkgdGhpbmsgdGhhdCB0aGUgY3VycmVudCB2YXJpYW50IGlzIGJldHRlci4NCj4gZXZlbnRzIGlz
-IG9ubHkgdXNlZCBpbiB0aGF0IGZ1bmN0aW9uIHRvIGNoZWNrIGZvciBFUE9MTElOLCBzbyB0aGUN
-Cj4gYXNzaWdubWVudCBhbmQgdGhlIGlmIGJlbG9uZyB0b2dldGhlciBmcm9tIGEgIndoYXQgYW0g
-SSBkb2luZyBoZXJlIiBwZXJzcGVjdGl2ZS4NCj4gDQoNCkhpIENocmlzdGlhbiwNCg0KSSB0aGlu
-ayB0aGF0IGFkZCB0aGUgaXJxZmQtPndhaXQgdG8gdGhlIGZpbGUncyB3YWl0IHF1ZXVlIGlzIG11
-Y2ggbW9yZQ0KaW1wb3J0YW50LCB0aGUgY3VycmVudCB2YXJpYW50IG1heSBsZWFkIHRvIGlnbm9y
-aW5nIGl0Lg0KDQpCb3RoIG9mIHRoZXNlIHR3byB2YXJpYW50cyBhcmUgc3VwcG9ydGVkIGluIHRo
-ZSBjdXJyZW50IGtlcm5lbDoNCg0KWzFdIGh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4
-L2xhdGVzdC9zb3VyY2UvZHJpdmVycy92ZmlvL3ZpcnFmZC5jI0wxNjkNCmBgYA0KCWV2ZW50cyA9
-IHZmc19wb2xsKGlycWZkLmZpbGUsICZ2aXJxZmQtPnB0KTsNCg0KCS8qDQoJICogQ2hlY2sgaWYg
-dGhlcmUgd2FzIGFuIGV2ZW50IGFscmVhZHkgcGVuZGluZyBvbiB0aGUgZXZlbnRmZA0KCSAqIGJl
-Zm9yZSB3ZSByZWdpc3RlcmVkIGFuZCB0cmlnZ2VyIGl0IGFzIGlmIHdlIGRpZG4ndCBtaXNzIGl0
-Lg0KCSAqLw0KCWlmIChldmVudHMgJiBFUE9MTElOKSB7DQoJCWlmICgoIWhhbmRsZXIgfHwgaGFu
-ZGxlcihvcGFxdWUsIGRhdGEpKSAmJiB0aHJlYWQpDQoJCQlzY2hlZHVsZV93b3JrKCZ2aXJxZmQt
-PmluamVjdCk7DQoJfQ0KYGBgDQoNClsyXSBodHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51
-eC9sYXRlc3Qvc291cmNlL2RyaXZlcnMvdmlydC9hY3JuL2lycWZkLmMjTDE2MQ0KYGBgDQoJLyog
-Q2hlY2sgdGhlIHBlbmRpbmcgZXZlbnQgaW4gdGhpcyBzdGFnZSAqLw0KCWV2ZW50cyA9IHZmc19w
-b2xsKGYuZmlsZSwgJmlycWZkLT5wdCk7DQoNCglpZiAoZXZlbnRzICYgRVBPTExJTikNCgkJYWNy
-bl9pcnFmZF9pbmplY3QoaXJxZmQpOw0KYGBgDQoNClNpbmNlIHRoZXJlJ3Mgbm8gYW55IGNvZGUg
-Y2hhbmdlcywgSSBhZ3JlZSB0byBkcm9wIHRoaXMgdW5tZWFuaW5nIGNoYW5nZS4NCg0KVGhhbmtz
-Lg0KDQo+ID4gRml4ZXM6IDY4NGEwYjcxOWRkYiAoIktWTTogZXZlbnRmZDogRml4IGxvY2sgb3Jk
-ZXIgaW52ZXJzaW9uIikNCj4gPiBTaWduZWQtb2ZmLWJ5OiBMb25ncGVuZyA8bG9uZ3BlbmcyQGh1
-YXdlaS5jb20+DQo+ID4gLS0tDQo+ID4gICB2aXJ0L2t2bS9ldmVudGZkLmMgfCA0ICsrLS0NCj4g
-PiAgIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+ID4N
-Cj4gPiBkaWZmIC0tZ2l0IGEvdmlydC9rdm0vZXZlbnRmZC5jIGIvdmlydC9rdm0vZXZlbnRmZC5j
-DQo+ID4gaW5kZXggMmFkMDEzYi4uY2QwMTgxNCAxMDA2NDQNCj4gPiAtLS0gYS92aXJ0L2t2bS9l
-dmVudGZkLmMNCj4gPiArKysgYi92aXJ0L2t2bS9ldmVudGZkLmMNCj4gPiBAQCAtNDA2LDEyICs0
-MDYsMTIgQEAgYm9vbCBfX2F0dHJpYnV0ZV9fKCh3ZWFrKSkNCj4ga3ZtX2FyY2hfaXJxZmRfcm91
-dGVfY2hhbmdlZCgNCj4gPg0KPiA+ICAgCXNwaW5fdW5sb2NrX2lycSgma3ZtLT5pcnFmZHMubG9j
-ayk7DQo+ID4NCj4gPiArCWV2ZW50cyA9IHZmc19wb2xsKGYuZmlsZSwgJmlycWZkLT5wdCk7DQo+
-ID4gKw0KPiA+ICAgCS8qDQo+ID4gICAJICogQ2hlY2sgaWYgdGhlcmUgd2FzIGFuIGV2ZW50IGFs
-cmVhZHkgcGVuZGluZyBvbiB0aGUgZXZlbnRmZA0KPiA+ICAgCSAqIGJlZm9yZSB3ZSByZWdpc3Rl
-cmVkLCBhbmQgdHJpZ2dlciBpdCBhcyBpZiB3ZSBkaWRuJ3QgbWlzcyBpdC4NCj4gPiAgIAkgKi8N
-Cj4gPiAtCWV2ZW50cyA9IHZmc19wb2xsKGYuZmlsZSwgJmlycWZkLT5wdCk7DQo+ID4gLQ0KPiA+
-ICAgCWlmIChldmVudHMgJiBFUE9MTElOKQ0KPiA+ICAgCQlzY2hlZHVsZV93b3JrKCZpcnFmZC0+
-aW5qZWN0KTsNCj4gPg0K
+On Fri, 26 Nov 2021 12:17:06 -0800, Florian Fainelli wrote:
+
+> These warnings started to show up after enabling PCI on BMIPS (32-bit
+> MIPS architecture) and were reported by the kbuild robot.
+> 
+> I don't know whether they are technically correct, in particular the
+> unused 'page' variable might be unveiling a genuine bug whereby it
+> should have been used. Please review.
+> 
+> [...]
+
+Applied to 5.17/scsi-queue, thanks!
+
+[1/2] scsi: qedi: Remove set but unused 'page' variable
+      https://git.kernel.org/mkp/scsi/c/6d8619f034f0
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering

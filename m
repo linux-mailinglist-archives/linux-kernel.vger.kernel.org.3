@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14AA84678C4
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:50:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66AC14678C8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381251AbhLCNx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 08:53:27 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:57064 "EHLO
+        id S1381275AbhLCNxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 08:53:32 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:57088 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381238AbhLCNxZ (ORCPT
+        with ESMTP id S1381259AbhLCNxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 08:53:25 -0500
+        Fri, 3 Dec 2021 08:53:31 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: adalessandro)
-        with ESMTPSA id C20161F46E6D
+        with ESMTPSA id 480331F46E6E
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638539400; bh=EUOOj1w5o/+kj169E0ovMXoLxYesUiGRUYC6RdweQy8=;
+        t=1638539406; bh=hJG58SYAVGNpPYo2IcIUWsajkYlXBANCyhYcff6ZNmA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X7YFdJ4S5uPncfB66kSY/ujNMHRrPRuCMZ7xNTVBSyp+xHujyxIwl8TVi5RJM/OIF
-         qFACkQCk0Kmu+kwz9RNIRthQUfHR//fehHk7z2bPTCs7+aEN6zUKKuL9nXwZiYIC9u
-         j/yR9r0FCnDfIbILm/d6xoqhEYFUULV0LvIgU1m2i8ewP/H2Euqyv8yroEOX5NPXb9
-         SzLC/NCiWhHFLg9ndrpL+5nIWfksHSxdhPWilngCvqEXvCKlD089aKNkrum4QfXRRt
-         MnCOLIs8qYo5MJGuFz+rUS0X/bO6dJTFqSUP7g6rxLYfi8ZK8e+ClIIgHEUM2wa2ys
-         nge9Z6jKKi3Jw==
+        b=ezOB+UXh06vKoBdD+FQrYCJoW+clB2VJVJFPYn8itvWBcBR23nHjSXtLe7HEq6N5Q
+         lRPKyMKRqk5oa4iJu3ZbMGJ6npcdZpydysHrCh0TFKUM3+C2V+Jy/K2VMxbn2ugmFL
+         b2TdQ1wE10ZBOpehM/4htHj/Wb2NqpwcEZJ6CgSfRbLVEm6mPJ2iut11INo40TL957
+         aVN+V/cm74me8bw+F+TOwZBDLOG53k5aCjLKpBN+OAF2M+haJY7mz0HnR5YYHa1obV
+         r5/Cs6TmwMWliNKWESVQ3zDI4y0UhC7v1ztfkzIRZefp1GJTr0Dldq9HHVC/QWYL9o
+         SbpNOmKK7sKrA==
 From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
 To:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
@@ -34,9 +34,9 @@ Cc:     Xiubo.Lee@gmail.com, ariel.dalessandro@collabora.com,
         michael@amarulasolutions.com, nicoleotsuka@gmail.com,
         perex@perex.cz, robh+dt@kernel.org, shengjiu.wang@gmail.com,
         tiwai@suse.com, tony@atomide.com
-Subject: [PATCH 2/4] dt-bindings: tlv320aic31xx: Define PLL clock inputs
-Date:   Fri,  3 Dec 2021 10:49:28 -0300
-Message-Id: <20211203134930.128703-3-ariel.dalessandro@collabora.com>
+Subject: [PATCH 3/4] ASoC: fsl-asoc-card: Add optional dt property for setting mclk-id
+Date:   Fri,  3 Dec 2021 10:49:29 -0300
+Message-Id: <20211203134930.128703-4-ariel.dalessandro@collabora.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211203134930.128703-1-ariel.dalessandro@collabora.com>
 References: <20211203134930.128703-1-ariel.dalessandro@collabora.com>
@@ -46,27 +46,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add constants for the different PLL clock inputs in tlv320aic31xx.
+Sound cards may allow using different main clock inputs. In the generic
+fsl-asoc-card driver, these values are hardcoded for each specific card
+configuration.
+
+Let's make it more flexible, allowing setting mclk-id from the
+device-tree node. Otherwise, the default value for each card
+configuration is used.
 
 Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
 ---
- include/dt-bindings/sound/tlv320aic31xx.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ Documentation/devicetree/bindings/sound/fsl-asoc-card.txt | 1 +
+ sound/soc/fsl/fsl-asoc-card.c                             | 6 ++++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/include/dt-bindings/sound/tlv320aic31xx.h b/include/dt-bindings/sound/tlv320aic31xx.h
-index 3a845fbba992..4a80238ab250 100644
---- a/include/dt-bindings/sound/tlv320aic31xx.h
-+++ b/include/dt-bindings/sound/tlv320aic31xx.h
-@@ -6,4 +6,9 @@
- #define MICBIAS_2_5V		2
- #define MICBIAS_AVDDV		3
+diff --git a/Documentation/devicetree/bindings/sound/fsl-asoc-card.txt b/Documentation/devicetree/bindings/sound/fsl-asoc-card.txt
+index 23d83fa7609f..b219626a5403 100644
+--- a/Documentation/devicetree/bindings/sound/fsl-asoc-card.txt
++++ b/Documentation/devicetree/bindings/sound/fsl-asoc-card.txt
+@@ -82,6 +82,7 @@ Optional properties:
+   - dai-format		: audio format, for details see simple-card.yaml.
+   - frame-inversion	: dai-link uses frame clock inversion, for details see simple-card.yaml.
+   - bitclock-inversion	: dai-link uses bit clock inversion, for details see simple-card.yaml.
++  - mclk-id		: main clock id, specific for each card configuration.
  
-+#define PLL_CLKIN_MCLK		0x00
-+#define PLL_CLKIN_BCLK		0x01
-+#define PLL_CLKIN_GPIO1		0x02
-+#define PLL_CLKIN_DIN		0x03
+ Optional unless SSI is selected as a CPU DAI:
+ 
+diff --git a/sound/soc/fsl/fsl-asoc-card.c b/sound/soc/fsl/fsl-asoc-card.c
+index 90cbed496f98..bb962e04d40b 100644
+--- a/sound/soc/fsl/fsl-asoc-card.c
++++ b/sound/soc/fsl/fsl-asoc-card.c
+@@ -693,6 +693,12 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
+ 		goto asrc_fail;
+ 	}
+ 
++	/*
++	 * Allow setting mclk-id from the device-tree node. Otherwise, the
++	 * default value for each card configuration is used.
++	 */
++	of_property_read_u32(np, "mclk-id", &priv->codec_priv.mclk_id);
 +
- #endif /* __DT_TLV320AIC31XX_H */
+ 	/* Format info from DT is optional. */
+ 	snd_soc_daifmt_parse_clock_provider_as_phandle(np, NULL, &bitclkprovider, &frameprovider);
+ 	if (bitclkprovider || frameprovider) {
 -- 
 2.30.2
 

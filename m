@@ -2,104 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E2D467E38
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC41F467E3C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382861AbhLCTbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 14:31:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
+        id S1382876AbhLCTcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 14:32:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353754AbhLCTbd (ORCPT
+        with ESMTP id S1382867AbhLCTcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 14:31:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDE4C061751;
-        Fri,  3 Dec 2021 11:28:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9EEBFB828D3;
-        Fri,  3 Dec 2021 19:28:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF9F8C53FAD;
-        Fri,  3 Dec 2021 19:28:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638559686;
-        bh=sAJaLNzg+JVMUerDY4yeRe8FVaUg2LjpY6jSf5lZmcg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FxRyB3OnmGsrkVo7DOQ9T47jUs6CmY5H5Zzq/Fjf7mI1765jNRxrEHB/TbHLxoT/C
-         5xoVEVv3cPFY2wee470DfWaMJTVVYNXc9OPCG59JqBKvbSFsRnlHtaRrlpp3pRuWSg
-         uHbW9HFZchd1EsZ3epAuGQsG0ZBmURO3s83PnuSsvkzEE8njEU2RSA32/kXmmZEHJM
-         xa6UcuqV48Qf5OUPTychoRyiBkoqmXcYvEdQZou+yNsO/FNLyTReIcqzye5A7ddR2j
-         GPFmJ+C1eZ1W/3Mw1Ph+RRR8Y3y9JOMssUzzhj63NhzALYFzU+9dp8bI9AvRllPcU0
-         6sXvoKQxiVu3g==
-Message-ID: <db9b7bc9-fdca-4dd2-2c3f-3b7354c165bb@kernel.org>
-Date:   Fri, 3 Dec 2021 11:28:04 -0800
+        Fri, 3 Dec 2021 14:32:10 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178F3C061354
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 11:28:46 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id e3so15779010edu.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 11:28:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=n3mtz8VE+XSHmuF/1hsfZdAAcBHullfiaK+FTYXOaw0=;
+        b=QIq8O9E5NW9kqjHRg+AslYvtUmzsQzcyNAmATrdMlBVEbcPBmv9bkO/Sm9E6zkrJOh
+         diMXbc4RT6JCMzezCzmf/5E4HgC50k7amZB9hp2212Q1EZrl0nNm4TAnj/aodEzPYAWY
+         F7DDEkKlfLVQL7BZ0ejDRUWGIJt62pt9m3jugDXkutl92BTDJWmLIfavoH3GKPjHsTuR
+         C7C1YJr1kmL1+MoRW5l/h0A2v/bG0cl7ZyV6AfbuoTF4VPLAk8YPdLdtAUDtGUoqHEOg
+         5SRsCBFYIuAymbbBzzHD2FKVJmQMxlF7XHp6L1ptGCpwaKJzePwZM7l0janlE4aig5Wm
+         K5bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n3mtz8VE+XSHmuF/1hsfZdAAcBHullfiaK+FTYXOaw0=;
+        b=LPEJmjEHikXGphrqV5at7uzZNQkRBmRQdOu2CKhPaWqLROyOzD/lWbajVWxQ1+/cuO
+         xuL59kwbhILNm1uDMV/O6uLUgzj/Futvv/IBsfyDvEi1M1OmsgTQWqq2EgeDkhC49Kih
+         gsDe7EWjeYFvLEBcnTBlD4cBq9l+X2JjDmnHr1aRQotj7yxCmHYZJVoPbm5Px9B1VlWJ
+         PZObFxX2yudY1wr2l4heP2tXcfriXOIHQrTQJeTsqaTKpE6+6hnLb5OfdohxtXn2N0es
+         /BTctGmDyio6utPCFdDG4I1tqYAF4UI7JVKXlxmO9b1pRoqO2bJnzkvG/WdNIAbmn9W4
+         9stQ==
+X-Gm-Message-State: AOAM530McVQJOy4UpqJsnZ2yyRMgW6ys4hVckCwyfFXkjC4IF2XAVq4p
+        0cDM4pv2HBBgD9NiQY/XKSzyFQRBveJBhPsauuMHkQ==
+X-Google-Smtp-Source: ABdhPJw5CFp+py3IKpRGcPqNiGG4UgNpCg+pnkKmPhuMsAAZLi5nAdE7ZVqX7PQoax8QqIjtj5Hg0Mw+3NOuAu2BELU=
+X-Received: by 2002:a05:6402:27c7:: with SMTP id c7mr29557634ede.0.1638559724691;
+ Fri, 03 Dec 2021 11:28:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
-Content-Language: en-US
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org
-Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
-        cedric.xing@intel.com, haitao.huang@intel.com,
-        mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-References: <cover.1638381245.git.reinette.chatre@intel.com>
- <2f6b04dd8949591ee6139072c72eb93da3dd07b0.1638381245.git.reinette.chatre@intel.com>
-From:   Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <2f6b04dd8949591ee6139072c72eb93da3dd07b0.1638381245.git.reinette.chatre@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211203133003.31786-1-brgl@bgdev.pl> <20211203133003.31786-4-brgl@bgdev.pl>
+ <YapnTHQZyNCZXrgp@smile.fi.intel.com> <YapoW+DL4jPo69u8@smile.fi.intel.com> <Yapp4vakFxH7JV5B@smile.fi.intel.com>
+In-Reply-To: <Yapp4vakFxH7JV5B@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 3 Dec 2021 20:28:34 +0100
+Message-ID: <CAMRc=MeWfKHWFKwRjaqczrfwhAodpDLgrWKF-zqXCsjd=gMv3g@mail.gmail.com>
+Subject: Re: [PATCH v12 3/7] gpiolib: of: make fwnode take precedence in
+ struct gpio_chip
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 11:23, Reinette Chatre wrote:
-> Enclave creators declare their paging permission intent at the time
-> the pages are added to the enclave. These paging permissions are
-> vetted when pages are added to the enclave and stashed off
-> (in sgx_encl_page->vm_max_prot_bits) for later comparison with
-> enclave PTEs.
-> 
+On Fri, Dec 3, 2021 at 8:04 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Fri, Dec 03, 2021 at 08:56:27PM +0200, Andy Shevchenko wrote:
+> > On Fri, Dec 03, 2021 at 08:51:56PM +0200, Andy Shevchenko wrote:
+> > > On Fri, Dec 03, 2021 at 02:29:59PM +0100, Bartosz Golaszewski wrote:
+> >
+> > ...
+> >
+> > > >   if (gc->parent)
+> > > >           gdev->dev.of_node = gc->parent->of_node;
+> > > >
+> > > > + if (gc->fwnode)
+> > > > +         gc->of_node = to_of_node(gc->fwnode);
+> > > > +
+> > > >   /* If the gpiochip has an assigned OF node this takes precedence */
+> > > >   if (gc->of_node)
+> > > >           gdev->dev.of_node = gc->of_node;
+> > >
+> > > Similar should be done in acpi_gpio_dev_init():
+> > >
+> > >     if (gc->fwnode)
+> > >             device_set_node(&gdev->dev, gc->fwnode);
+> >
+> > Hmm... On the second though this should be rather
+> >
+> >       if (gc->fwnode)
+> >               set_secondary_fwnode(&gdev->dev, gc->fwnode);
+> >
+> > So the logic will be that:
+> >  - if we have parent, set primary fwnode to it
+> >  - if we have fwnode, set secondary one to it
+> >  - otherwise do nothing
+>
+> Heck, it's Friday...
+>
+> If we have parent device for several GPIO devices, this won't work right now
+> due to limitations of fwnode regarding to the sturct device.
+>
+> So, it means we may not have shared primary with different secondary fwnodes.
+>
+> So, come back to the initial suggestion (overwrite it for now):
+>
+>         /*
+>          * If custom fwnode provided, use it. Currently we may not
+>          * handle the case where shared primary node has different
+>          * secondary ones. Ideally we have to use
+>          * set_secondary_fwnode() here.
+>          */
+>         if (gc->fwnode)
+>                 device_set_node(&gdev->dev, gc->fwnode);
+>
 
-I'm a bit confused here. ENCLU[EMODPE] allows the enclave to change the 
-EPCM permission bits however it likes with no oversight from the kernel. 
-  So we end up with a whole bunch of permission masks:
+Other parts of gpiolib-of depend on the of_node being there.
+Converting it to fwnode is a whole other task so for now I suggest we
+just convert the fwnode to of_node in struct gpio_chip as per my
+patch.
 
-The PTE: controlled by complex kernel policy
-
-The VMA: with your series, this is entirely controlled by userspace.  I 
-think I'm fine with that.
-
-vm_max_prot_bits: populated from secinfo at setup time, unless I missed 
-something that changes it later.  Maybe I'm confused or missed something 
-in one of the patches,
-
-vm_run_prot_bits: populated from some combination of ioctls.  I'm 
-entirely lost as to what this is for.
-
-EPCM bits: controlled by the guest.  basically useless for any host 
-purpose on SGX2 hardware (with or without kernel support -- the enclave 
-can do ENCLU[EMODPE] whether we like it or not, even on old kernels)
-
-So I guess I don't understand the purpose of this patch	or of the rules 
-in the later patches, and I feel like this is getting more complicated 
-than makes sense.
-
-
-Could we perhaps make vm_max_prot_bits dynamic or at least controllable 
-in some useful way?  My initial proposal (years ago) was for 
-vm_max_prot_bits to be *separately* configured at initial load time 
-instead of being inferred from secinfo with the intent being that the 
-user untrusted runtime would set it appropriately.  I have no problem 
-with allowing runtime changes as long as the security policy makes sense 
-and it's kept consistent with PTEs.
-
-Also, I think we need a changelog message or, even better, actual docs 
-in kernel, explaining the actual final set of rules and invariants for 
-all these masks.
-
---Andy
+Bart

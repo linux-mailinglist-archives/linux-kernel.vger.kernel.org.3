@@ -2,198 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4311D467E6C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:44:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E0B467E6E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343798AbhLCTsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 14:48:14 -0500
-Received: from mail-eopbgr10083.outbound.protection.outlook.com ([40.107.1.83]:47927
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S240365AbhLCTsN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 14:48:13 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c7ScbS20REGnR4VuVbe6Lm3LADnQq3LX4aht+cyo6gilowWbbp0DA7bDoxAwDhhfaBKpqZuBtp+4pAyyyqbiDXAJ+JVz40VfofzQZkykdMN2pOM/GyYoPj+3IleqgZxeFjlS6AjyCbAPIiPzuJ98nqKqiSG92PTKK8tg5FeZ0mBZoJTuqm+5JAHCq/hyjq0yNgREtzSV/+YkBxpx/qANkregTloMjBRAEzGOPyeDkvzzapx7EMKftnmnrSAbb6uzHCDtyzvBtMWeqpYnqcQQXme4aBnhAJmvTeOA/KTAFvwC4R9zYfSiQgUXZ16VdQbQICcPOAt13wy0B0tDOPNvdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G/DtsEQo+tAVkXc90kPNq2NW9xCT/shdmhfjIK4k59o=;
- b=A44B2K6QIKyNaX4TXCaovr4ftV5SLjU/2u14F/oc6SxXlsMyGsdr7IwTvIeq9shlta2u8tZtcINzOlD8kfYW6pVidwUxAdCK84fRZNTrdyhLrpEg6tHrHSz6KLnwt0LHPS2HnQBC/BOw7yVBmtJYQ9H5WywnVWQ3uMu5PoxbdClFKPyspxe4Z6vU80Agzo83IUhw0EYgi6fdY9mEwSzuy89dodbflk124NIzcyiG9hL4kiWwcgyn9EuXtp0Nf9LL8fG52/hjHBLe0X54czo3VyAYIIo/6dMPAckVTk03HU8jps8a6wREFQO1GXCg5KleX+Df8ptvKASbgi5q9+oJRw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.70) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=siemens.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G/DtsEQo+tAVkXc90kPNq2NW9xCT/shdmhfjIK4k59o=;
- b=hssbCM1rpEAfe3RrNGw0egaAkguSdzLP766R8MjAvyIj2Wy6H8Wn7BAVlWbMsvKpotW/cjxNEv845YPBScUwq4uj7z6MKzZFvCJ3Mlyj9zGlDUl9+wWmCmyYMdOOVx+br2Xi0MhdR6jnm7zHFPvQITfq/CJS312bkIbVikTWxxv4YKEiXvPEI6AE2C22S7LQiVUjQbS7p3SS7B3lVgPl8G+RYSct23JO3F47MlYsm3VRI1xLk/6ejP25xx9kAo1tVd+eDkJaK0ZhB6T8JCnR5yzRDwekV84kKZVplTS/OGBsswl5B7qXn+LsuLVr96PpqtSZkjBzj0w6eJw5OPGSyQ==
-Received: from OL1P279CA0017.NORP279.PROD.OUTLOOK.COM (2603:10a6:e10:12::22)
- by PAXPR10MB4814.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:155::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16; Fri, 3 Dec
- 2021 19:44:46 +0000
-Received: from HE1EUR01FT041.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:e10:12::4) by OL1P279CA0017.outlook.office365.com
- (2603:10a6:e10:12::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11 via Frontend
- Transport; Fri, 3 Dec 2021 19:44:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.70)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=siemens.com;
-Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.70 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.70; helo=hybrid.siemens.com;
-Received: from hybrid.siemens.com (194.138.21.70) by
- HE1EUR01FT041.mail.protection.outlook.com (10.152.1.3) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4755.13 via Frontend Transport; Fri, 3 Dec 2021 19:44:46 +0000
-Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
- DEMCHDC9SJA.ad011.siemens.net (194.138.21.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 3 Dec 2021 20:44:45 +0100
-Received: from md1za8fc.ad001.siemens.net (139.22.45.74) by
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 3 Dec 2021 20:44:45 +0100
-Date:   Fri, 3 Dec 2021 20:44:43 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>
-CC:     Srikanth Krishnakar <skrishnakar@gmail.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Enrico Weigelt <lkml@metux.net>
-Subject: Re: [PATCH v4 0/4] add device drivers for Siemens Industrial PCs
-Message-ID: <20211203204443.01a92b3f@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20211126141027.16161-1-henning.schild@siemens.com>
-References: <20211126141027.16161-1-henning.schild@siemens.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S1353441AbhLCTtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 14:49:04 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49668 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232563AbhLCTtD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 14:49:03 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B3JM9Mq029940;
+        Fri, 3 Dec 2021 19:45:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : content-type : mime-version; s=pp1;
+ bh=AvmOL/7dy3eBq2s8abNKFtLLigRsr8Yw7hlNUXwG2pc=;
+ b=Cf/PDIHjQdyKX9QnIZUV/TKAmagaG6D1ZpiUsDFwo1hRicp04+hgaE3y8pdniG5vQy8R
+ wMUHim2aQX9MMjxHDbUMkcaWSzO7fDn6JuwshRiXsccsUL8VP2YEbM4EVifDVdXnUEQy
+ EX6VSw18gEypy73SoHmti/tzWleXxf1u13anInVHwUprq6QqBPRzCPPO3ilk+wvWtXq3
+ tLioOI0mwh9yUqBAO/qx41ebGRJF1y0NoyJrnyqIr8bTaNdh2vzZeKAJ2BJpYcJeXhBj
+ g17dgxDmzccJeKrp1SuisWj3ICoNqySHxzYppCYXCNefrlZK/HeQmCEIJWPSYGcKcz2U Vw== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cqsb30cc7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Dec 2021 19:45:37 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B3JgHdo031516;
+        Fri, 3 Dec 2021 19:45:35 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3ckbxm0u8c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Dec 2021 19:45:35 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B3JjWmT13042154
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Dec 2021 19:45:32 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E4DB6A405B;
+        Fri,  3 Dec 2021 19:45:31 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A1018A4040;
+        Fri,  3 Dec 2021 19:45:31 +0000 (GMT)
+Received: from osiris (unknown [9.145.9.173])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri,  3 Dec 2021 19:45:31 +0000 (GMT)
+Date:   Fri, 3 Dec 2021 20:45:30 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] s390 updates for 5.16-rc4
+Message-ID: <Yapz2thD1GK8yQ6J@osiris>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: G4ITLETFjZNAsh3wGqw2aW6JLhGNVrSb
+X-Proofpoint-ORIG-GUID: G4ITLETFjZNAsh3wGqw2aW6JLhGNVrSb
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [139.22.45.74]
-X-ClientProxiedBy: DEMCHDC89YA.ad011.siemens.net (139.25.226.104) To
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2505fd99-9aeb-4093-568d-08d9b6955c57
-X-MS-TrafficTypeDiagnostic: PAXPR10MB4814:
-X-Microsoft-Antispam-PRVS: <PAXPR10MB48143AD7A3BAA80479848EE8856A9@PAXPR10MB4814.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QWIN3pFQtuMMcvnExOvFrqLdFPzSPx/e8EPOvKNbC/KhAL5I5hRsk29S4mQwcjAvV4bDgDjtsJAoPADhmuhno9qkwo6jHPYO2FPZOCtu3yHNvZSFJ2iKFD8Lds+tKFScsPDRQ61JdilkoEr8xeLzXhXTYnyoR+XIss/FkrLboblaqA1jiUN/elkES5+yKkSo60igLeltdgqwtM7ti4jHuBCIL8dJNuCQVg3PpsdOVqwGUUW6fABfhCDfvyQ4XKDX6gPzzec4Lv8M0OfKLPjXCNSp8mvGT6542qEG6QoKDl/JHkIRgcHHzBlsU+epZ0w3TZPbnJS+woazwMPA5hbesUqtB6+xFP4WKSZ5wVGo8IsGl8LTFg9ENFvuAIszuoXZ9YCFWjv/8d7XZOeK6HRHnhOK1oWUxGE6MXzOTISy7665jvXF1CD3xkjtZp9Jn4QxI5rl95iu7n6iebX7Fz49f06DNzDBZU9AF7TW6sk5kIpg8zcaADua4pJAT9Bl+HsP8joG7+OPXlkrn6Hr4ZjOSR2XJY0X5Qkc4m7CniRhAghu7G/LdD173esyHRgGVAv6VgeNaRRL0ykyRhUsp8sOMwYadkYYas+A9vyXYdTyk1xvzHr4dH8cJ/wB45OVyvXHJ1VF92X3euHTR9r7DD1aJZjQK2EarHryRtHmLhefegOZhcUw05X/CGoBVx1OWzIorftaW7s0/OLyzsIZj9SrT/CoKTDEZPI5x98OfFG5KbvuncVK3im+7tTfq76WhLMp3CW8GnkUYXpyOpJcVOGkiiU7xxSNSmCKOUOs8/NmjCEUd3wkEO8yXtss+aJCkHng
-X-Forefront-Antispam-Report: CIP:194.138.21.70;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:hybrid.siemens.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(7696005)(956004)(508600001)(55016003)(36860700001)(70586007)(16526019)(316002)(44832011)(4326008)(5660300002)(40460700001)(1076003)(82310400004)(7416002)(9686003)(54906003)(110136005)(7636003)(7596003)(356005)(8936002)(8676002)(186003)(83380400001)(70206006)(47076005)(26005)(2906002)(86362001)(82960400001)(336012);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2021 19:44:46.4308
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2505fd99-9aeb-4093-568d-08d9b6955c57
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.70];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT041.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR10MB4814
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-03_07,2021-12-02_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 phishscore=0 spamscore=0
+ clxscore=1015 adultscore=0 impostorscore=0 malwarescore=0 mlxscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112030126
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Hi Linus,
 
-to me it currently looks like a v5 will only differ in terms of
-documentation and could be acceptable to all people who have raised
-concerns on v4.
+please pull some small s390 updates for 5.16-rc4.
 
-Will send that v5 soon. And invite anyone to please raise further
-concerns, or review again.
+Thanks,
+Heiko
 
-regards,
-Henning
+The following changes since commit 136057256686de39cc3a07c2e39ef6bc43003ff6:
 
-Am Fri, 26 Nov 2021 15:10:23 +0100
-schrieb Henning Schild <henning.schild@siemens.com>:
+  Linux 5.16-rc2 (2021-11-21 13:47:39 -0800)
 
-> changes since v3:
-> 
-> - fix io access width and region reservations
-> - fix style in p1
-> 
-> changes since v2:
-> 
-> - remove "simatic-ipc" prefix from LED names
-> - fix style issues found in v2, mainly LED driver
-> - fix OEM specific dmi code, and remove magic numbers
-> - more "simatic_ipc" name prefixing
-> - improved pmc quirk code using callbacks
-> 
-> changes since v1:
-> 
-> - fixed lots of style issues found in v1
->   - (debug) printing
->   - header ordering
-> - fixed license issues GPLv2 and SPDX in all files
-> - module_platform_driver instead of __init __exit
-> - wdt simplifications cleanup
-> - lots of fixes in wdt driver, all that was found in v1
-> - fixed dmi length in dmi helper
-> - changed LED names to allowed ones
-> - move led driver to simple/
-> - switched pmc_atom to dmi callback with global variable
-> 
-> 
-> This series adds support for watchdogs and leds of several x86 devices
-> from Siemens.
-> 
-> It is structured with a platform driver that mainly does
-> identification of the machines. It might trigger loading of the
-> actual device drivers by attaching devices to the platform bus.
-> 
-> The identification is vendor specific, parsing a special binary DMI
-> entry. The implementation of that platform identification is applied
-> on pmc_atom clock quirks in the final patch.
-> 
-> It is all structured in a way that we can easily add more devices and
-> more platform drivers later. Internally we have some more code for
-> hardware monitoring, more leds, watchdogs etc. This will follow some
-> day.
-> 
-> Henning Schild (4):
->   platform/x86: simatic-ipc: add main driver for Siemens devices
->   leds: simatic-ipc-leds: add new driver for Siemens Industial PCs
->   watchdog: simatic-ipc-wdt: add new driver for Siemens Industrial PCs
->   platform/x86: pmc_atom: improve critclk_systems matching for Siemens
->     PCs
-> 
->  drivers/leds/Kconfig                          |   3 +
->  drivers/leds/Makefile                         |   3 +
->  drivers/leds/simple/Kconfig                   |  11 +
->  drivers/leds/simple/Makefile                  |   2 +
->  drivers/leds/simple/simatic-ipc-leds.c        | 202 ++++++++++++++++
->  drivers/platform/x86/Kconfig                  |  12 +
->  drivers/platform/x86/Makefile                 |   3 +
->  drivers/platform/x86/pmc_atom.c               |  54 +++--
->  drivers/platform/x86/simatic-ipc.c            | 168 +++++++++++++
->  drivers/watchdog/Kconfig                      |  11 +
->  drivers/watchdog/Makefile                     |   1 +
->  drivers/watchdog/simatic-ipc-wdt.c            | 228
-> ++++++++++++++++++ .../platform_data/x86/simatic-ipc-base.h      |
-> 29 +++ include/linux/platform_data/x86/simatic-ipc.h |  72 ++++++
->  14 files changed, 778 insertions(+), 21 deletions(-)
->  create mode 100644 drivers/leds/simple/Kconfig
->  create mode 100644 drivers/leds/simple/Makefile
->  create mode 100644 drivers/leds/simple/simatic-ipc-leds.c
->  create mode 100644 drivers/platform/x86/simatic-ipc.c
->  create mode 100644 drivers/watchdog/simatic-ipc-wdt.c
->  create mode 100644 include/linux/platform_data/x86/simatic-ipc-base.h
->  create mode 100644 include/linux/platform_data/x86/simatic-ipc.h
-> 
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.16-4
+
+for you to fetch changes up to 3c088b1e82cfb7c889823d39846d32079f190f3f:
+
+  s390: update defconfigs (2021-12-02 19:29:44 +0100)
+
+----------------------------------------------------------------
+s390 updates for 5.16-rc4
+
+- Fix potential overlap of pseudo-MMIO addresses with MIO addresses.
+
+- Fix stack unwinder test case inline assembly compile error that
+  happens with LLVM's integrated assembler.
+
+- Update defconfigs.
+
+----------------------------------------------------------------
+Heiko Carstens (1):
+      s390: update defconfigs
+
+Ilie Halip (1):
+      s390/test_unwind: use raw opcode instead of invalid instruction
+
+Niklas Schnelle (1):
+      s390/pci: move pseudo-MMIO to prevent MIO overlap
+
+ arch/s390/configs/debug_defconfig    | 10 ++++++++--
+ arch/s390/configs/defconfig          |  7 ++++++-
+ arch/s390/configs/zfcpdump_defconfig |  2 ++
+ arch/s390/include/asm/pci_io.h       |  7 ++++---
+ arch/s390/lib/test_unwind.c          |  5 +++--
+ 5 files changed, 23 insertions(+), 8 deletions(-)
+
+diff --git a/arch/s390/configs/debug_defconfig b/arch/s390/configs/debug_defconfig
+index fd825097cf04..b626bc6e0eaf 100644
+--- a/arch/s390/configs/debug_defconfig
++++ b/arch/s390/configs/debug_defconfig
+@@ -403,7 +403,6 @@ CONFIG_DEVTMPFS=y
+ CONFIG_CONNECTOR=y
+ CONFIG_ZRAM=y
+ CONFIG_BLK_DEV_LOOP=m
+-CONFIG_BLK_DEV_CRYPTOLOOP=m
+ CONFIG_BLK_DEV_DRBD=m
+ CONFIG_BLK_DEV_NBD=m
+ CONFIG_BLK_DEV_RAM=y
+@@ -476,6 +475,7 @@ CONFIG_MACVLAN=m
+ CONFIG_MACVTAP=m
+ CONFIG_VXLAN=m
+ CONFIG_BAREUDP=m
++CONFIG_AMT=m
+ CONFIG_TUN=m
+ CONFIG_VETH=m
+ CONFIG_VIRTIO_NET=m
+@@ -489,6 +489,7 @@ CONFIG_NLMON=m
+ # CONFIG_NET_VENDOR_AMD is not set
+ # CONFIG_NET_VENDOR_AQUANTIA is not set
+ # CONFIG_NET_VENDOR_ARC is not set
++# CONFIG_NET_VENDOR_ASIX is not set
+ # CONFIG_NET_VENDOR_ATHEROS is not set
+ # CONFIG_NET_VENDOR_BROADCOM is not set
+ # CONFIG_NET_VENDOR_BROCADE is not set
+@@ -571,6 +572,7 @@ CONFIG_WATCHDOG=y
+ CONFIG_WATCHDOG_NOWAYOUT=y
+ CONFIG_SOFT_WATCHDOG=m
+ CONFIG_DIAG288_WATCHDOG=m
++# CONFIG_DRM_DEBUG_MODESET_LOCK is not set
+ CONFIG_FB=y
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+ CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
+@@ -775,12 +777,14 @@ CONFIG_CRC4=m
+ CONFIG_CRC7=m
+ CONFIG_CRC8=m
+ CONFIG_RANDOM32_SELFTEST=y
++CONFIG_XZ_DEC_MICROLZMA=y
+ CONFIG_DMA_CMA=y
+ CONFIG_CMA_SIZE_MBYTES=0
+ CONFIG_PRINTK_TIME=y
+ CONFIG_DYNAMIC_DEBUG=y
+ CONFIG_DEBUG_INFO=y
+ CONFIG_DEBUG_INFO_DWARF4=y
++CONFIG_DEBUG_INFO_BTF=y
+ CONFIG_GDB_SCRIPTS=y
+ CONFIG_HEADERS_INSTALL=y
+ CONFIG_DEBUG_SECTION_MISMATCH=y
+@@ -807,6 +811,7 @@ CONFIG_DEBUG_MEMORY_INIT=y
+ CONFIG_MEMORY_NOTIFIER_ERROR_INJECT=m
+ CONFIG_DEBUG_PER_CPU_MAPS=y
+ CONFIG_KFENCE=y
++CONFIG_KFENCE_STATIC_KEYS=y
+ CONFIG_DEBUG_SHIRQ=y
+ CONFIG_PANIC_ON_OOPS=y
+ CONFIG_DETECT_HUNG_TASK=y
+@@ -842,6 +847,7 @@ CONFIG_FTRACE_STARTUP_TEST=y
+ CONFIG_SAMPLES=y
+ CONFIG_SAMPLE_TRACE_PRINTK=m
+ CONFIG_SAMPLE_FTRACE_DIRECT=m
++CONFIG_SAMPLE_FTRACE_DIRECT_MULTI=m
+ CONFIG_DEBUG_ENTRY=y
+ CONFIG_CIO_INJECT=y
+ CONFIG_KUNIT=m
+@@ -860,7 +866,7 @@ CONFIG_FAIL_FUNCTION=y
+ CONFIG_FAULT_INJECTION_STACKTRACE_FILTER=y
+ CONFIG_LKDTM=m
+ CONFIG_TEST_MIN_HEAP=y
+-CONFIG_KPROBES_SANITY_TEST=y
++CONFIG_KPROBES_SANITY_TEST=m
+ CONFIG_RBTREE_TEST=y
+ CONFIG_INTERVAL_TREE_TEST=m
+ CONFIG_PERCPU_TEST=m
+diff --git a/arch/s390/configs/defconfig b/arch/s390/configs/defconfig
+index c9c3cedff2d8..0056cab27372 100644
+--- a/arch/s390/configs/defconfig
++++ b/arch/s390/configs/defconfig
+@@ -394,7 +394,6 @@ CONFIG_DEVTMPFS=y
+ CONFIG_CONNECTOR=y
+ CONFIG_ZRAM=y
+ CONFIG_BLK_DEV_LOOP=m
+-CONFIG_BLK_DEV_CRYPTOLOOP=m
+ CONFIG_BLK_DEV_DRBD=m
+ CONFIG_BLK_DEV_NBD=m
+ CONFIG_BLK_DEV_RAM=y
+@@ -467,6 +466,7 @@ CONFIG_MACVLAN=m
+ CONFIG_MACVTAP=m
+ CONFIG_VXLAN=m
+ CONFIG_BAREUDP=m
++CONFIG_AMT=m
+ CONFIG_TUN=m
+ CONFIG_VETH=m
+ CONFIG_VIRTIO_NET=m
+@@ -480,6 +480,7 @@ CONFIG_NLMON=m
+ # CONFIG_NET_VENDOR_AMD is not set
+ # CONFIG_NET_VENDOR_AQUANTIA is not set
+ # CONFIG_NET_VENDOR_ARC is not set
++# CONFIG_NET_VENDOR_ASIX is not set
+ # CONFIG_NET_VENDOR_ATHEROS is not set
+ # CONFIG_NET_VENDOR_BROADCOM is not set
+ # CONFIG_NET_VENDOR_BROCADE is not set
+@@ -762,12 +763,14 @@ CONFIG_PRIME_NUMBERS=m
+ CONFIG_CRC4=m
+ CONFIG_CRC7=m
+ CONFIG_CRC8=m
++CONFIG_XZ_DEC_MICROLZMA=y
+ CONFIG_DMA_CMA=y
+ CONFIG_CMA_SIZE_MBYTES=0
+ CONFIG_PRINTK_TIME=y
+ CONFIG_DYNAMIC_DEBUG=y
+ CONFIG_DEBUG_INFO=y
+ CONFIG_DEBUG_INFO_DWARF4=y
++CONFIG_DEBUG_INFO_BTF=y
+ CONFIG_GDB_SCRIPTS=y
+ CONFIG_DEBUG_SECTION_MISMATCH=y
+ CONFIG_MAGIC_SYSRQ=y
+@@ -792,9 +795,11 @@ CONFIG_HIST_TRIGGERS=y
+ CONFIG_SAMPLES=y
+ CONFIG_SAMPLE_TRACE_PRINTK=m
+ CONFIG_SAMPLE_FTRACE_DIRECT=m
++CONFIG_SAMPLE_FTRACE_DIRECT_MULTI=m
+ CONFIG_KUNIT=m
+ CONFIG_KUNIT_DEBUGFS=y
+ CONFIG_LKDTM=m
++CONFIG_KPROBES_SANITY_TEST=m
+ CONFIG_PERCPU_TEST=m
+ CONFIG_ATOMIC64_SELFTEST=y
+ CONFIG_TEST_BPF=m
+diff --git a/arch/s390/configs/zfcpdump_defconfig b/arch/s390/configs/zfcpdump_defconfig
+index aceccf3b9a88..eed3b9acfa71 100644
+--- a/arch/s390/configs/zfcpdump_defconfig
++++ b/arch/s390/configs/zfcpdump_defconfig
+@@ -65,9 +65,11 @@ CONFIG_ZFCP=y
+ # CONFIG_NETWORK_FILESYSTEMS is not set
+ CONFIG_LSM="yama,loadpin,safesetid,integrity"
+ # CONFIG_ZLIB_DFLTCC is not set
++CONFIG_XZ_DEC_MICROLZMA=y
+ CONFIG_PRINTK_TIME=y
+ # CONFIG_SYMBOLIC_ERRNAME is not set
+ CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_BTF=y
+ CONFIG_DEBUG_FS=y
+ CONFIG_DEBUG_KERNEL=y
+ CONFIG_PANIC_ON_OOPS=y
+diff --git a/arch/s390/include/asm/pci_io.h b/arch/s390/include/asm/pci_io.h
+index e4dc64cc9c55..287bb88f7698 100644
+--- a/arch/s390/include/asm/pci_io.h
++++ b/arch/s390/include/asm/pci_io.h
+@@ -14,12 +14,13 @@
+ 
+ /* I/O Map */
+ #define ZPCI_IOMAP_SHIFT		48
+-#define ZPCI_IOMAP_ADDR_BASE		0x8000000000000000UL
++#define ZPCI_IOMAP_ADDR_SHIFT		62
++#define ZPCI_IOMAP_ADDR_BASE		(1UL << ZPCI_IOMAP_ADDR_SHIFT)
+ #define ZPCI_IOMAP_ADDR_OFF_MASK	((1UL << ZPCI_IOMAP_SHIFT) - 1)
+ #define ZPCI_IOMAP_MAX_ENTRIES							\
+-	((ULONG_MAX - ZPCI_IOMAP_ADDR_BASE + 1) / (1UL << ZPCI_IOMAP_SHIFT))
++	(1UL << (ZPCI_IOMAP_ADDR_SHIFT - ZPCI_IOMAP_SHIFT))
+ #define ZPCI_IOMAP_ADDR_IDX_MASK						\
+-	(~ZPCI_IOMAP_ADDR_OFF_MASK - ZPCI_IOMAP_ADDR_BASE)
++	((ZPCI_IOMAP_ADDR_BASE - 1) & ~ZPCI_IOMAP_ADDR_OFF_MASK)
+ 
+ struct zpci_iomap_entry {
+ 	u32 fh;
+diff --git a/arch/s390/lib/test_unwind.c b/arch/s390/lib/test_unwind.c
+index cfc5f5557c06..bc7973359ae2 100644
+--- a/arch/s390/lib/test_unwind.c
++++ b/arch/s390/lib/test_unwind.c
+@@ -173,10 +173,11 @@ static noinline int unwindme_func4(struct unwindme *u)
+ 		}
+ 
+ 		/*
+-		 * trigger specification exception
++		 * Trigger operation exception; use insn notation to bypass
++		 * llvm's integrated assembler sanity checks.
+ 		 */
+ 		asm volatile(
+-			"	mvcl	%%r1,%%r1\n"
++			"	.insn	e,0x0000\n"	/* illegal opcode */
+ 			"0:	nopr	%%r7\n"
+ 			EX_TABLE(0b, 0b)
+ 			:);

@@ -2,99 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9894446779A
+	by mail.lfdr.de (Postfix) with ESMTP id E0F7946779B
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380903AbhLCMvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 07:51:19 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59006 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352128AbhLCMvR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 07:51:17 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25707B826B1
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 12:47:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858C0C53FAD;
-        Fri,  3 Dec 2021 12:47:50 +0000 (UTC)
-Date:   Fri, 3 Dec 2021 12:47:47 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Cc:     mark.rutland@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        moyufeng@huawei.com
-Subject: Re: [RFC PATCH v2] arm64: barrier: add macro dgh() to control memory
- accesses merging
-Message-ID: <YaoR874T6/tVLesz@arm.com>
-References: <20211015090511.92421-1-wangxiongfeng2@huawei.com>
- <YWnBngJeIvV2S5IB@arm.com>
- <3303413f-a8de-bd41-4095-80ffa98cf75b@huawei.com>
+        id S1380910AbhLCMvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 07:51:37 -0500
+Received: from mga09.intel.com ([134.134.136.24]:30636 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1352128AbhLCMvg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 07:51:36 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="236779116"
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="236779116"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 04:48:12 -0800
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="678087688"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 04:48:09 -0800
+Received: by lahna (sSMTP sendmail emulation); Fri, 03 Dec 2021 14:48:07 +0200
+Date:   Fri, 3 Dec 2021 14:48:07 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        linux-kernel@vger.kernel.org, Dan Scally <djrscally@gmail.com>,
+        Kate Hsuan <hpa@redhat.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v2] mfd: intel-lpss: Fix I2C4 not being available on the
+ Microsoft Surface Go & Go 2
+Message-ID: <YaoSB7wrqs1pw1Fy@lahna>
+References: <20211203115108.89661-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3303413f-a8de-bd41-4095-80ffa98cf75b@huawei.com>
+In-Reply-To: <20211203115108.89661-1-hdegoede@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiongfeng,
-
-On Fri, Oct 22, 2021 at 09:51:40AM +0800, Xiongfeng Wang wrote:
-> On 2021/10/16 1:59, Catalin Marinas wrote:
-> > On Fri, Oct 15, 2021 at 05:05:11PM +0800, Xiongfeng Wang wrote:
-> >> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
-> >> index 451e11e5fd23..d71a7457d619 100644
-> >> --- a/arch/arm64/include/asm/barrier.h
-> >> +++ b/arch/arm64/include/asm/barrier.h
-> >> @@ -18,6 +18,14 @@
-> >>  #define wfe()		asm volatile("wfe" : : : "memory")
-> >>  #define wfi()		asm volatile("wfi" : : : "memory")
-> >>  
-> >> +/*
-> >> + * Data Gathering Hint:
-> >> + * This instruction prohibits merging memory accesses with Normal-NC or
-> >> + * Device-GRE attributes before the hint instruction with any memory accesses
-> >> + * appearing after the hint instruction.
-> >> + */
-> >> +#define dgh()		asm volatile("hint #6" : : : "memory")
-> > 
-> > On its own, this patch doesn't do anything. It's more interesting to see
-> > how it will be used and maybe come up with a common name that other
-> > architectures would share (or just implement as no-opp). I'm not sure
-> > there was any conclusion last time we discussed this.
+On Fri, Dec 03, 2021 at 12:51:08PM +0100, Hans de Goede wrote:
+> Many DSDTs for Kaby Lake and Kaby Lake Refresh models contain a
+> _SB.PCI0.GEXP ACPI Device node describing an I2C attached PCA953x
+> GPIO expander.
 > 
-> In the last mail, I was suggested to investigate the code in other architecture
-> to find if there exists similar interface. I searched 'merg' in the code and
-> didn't find similar interface.
+> This seems to be something which is copy and pasted from the DSDT
+> from some reference design since this ACPI Device is present even on
+> models where no such GPIO expander is used at all, such as on the
+> Microsoft Surface Go & Go 2.
+> 
+> This ACPI Device is a problem because it contains a SystemMemory
+> OperationRegion which covers the MMIO for the I2C4 I2C controller. This
+> causes the MFD cell for the I2C4 controller to not be instantiated due
+> to a resource conflict, requiring the use of acpi_enforce_resources=lax
+> to work around this.
+> 
+> I have done an extensive analysis of all the ACPI tables on the
+> Microsoft Surface Go and the _SB.PCI0.GEXP ACPI Device's methods are
+> not used by any code in the ACPI tables, neither are any of them
+> directly called by any Linux kernel code. This is unsurprising since
+> running i2cdetect on the I2C4 bus shows that there is no GPIO
+> expander chip present on these devices at all.
+> 
+> This commit adds a PCI subsystem vendor:device table listing PCI devices
+> where it is known to be safe to ignore resource conflicts with ACPI
+> declared SystemMemory regions.
+> 
+> This makes the I2C4 bus work out of the box on the Microsoft Surface
+> Go & Go 2, which is necessary for the cameras on these devices to work.
+> 
+> Cc: Dan Scally <djrscally@gmail.com>
+> Cc: Kate Hsuan <hpa@redhat.com>
+> Cc: Maximilian Luz <luzmaximilian@gmail.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-Maybe no other architecture has such hint. They have write buffer
-draining but that's more expensive.
-
-> The only thing similar I found is in Intel Software Developer's Manual. It says
-> "Write Combining (WC) ... Writes may be delayed and combined in the write
-> combining buffer (WC buffer) to reduce memory accesses. If the WC buffer is
-> partially filled, the writes may be delayed until the next occurrence of a
-> serializing event; such as an SFENCE or MFENCE instruction, CPUID or other
-> serializing instruction, a read or write to uncached memory, an interrupt
-> occurrence, or an execution of a LOCK instruction (including one with an
-> XACQUIRE or XRELEASE prefix)."
-> Maybe this is more like the write combine buffer flushing, not prevent merging.
-> Sorry I still didn't understand the difference clearly.
-
-IIUC those drivers on x86 just rely on the microarchitecture aspects of
-the draining (e.g. fill 64 bytes). On Arm we don't have such guarantee
-as there's a wide variation in implementations, hence the DGH
-instruction.
-
-> How about a common name called 'merge_prohibit_hint()'? Could you give me some
-> suggestions ?
-
-I think "prohibit" looks more like not allowing any write-buffer merge.
-Maybe stop_merge_hint(), stop_write_buffer_merge(),
-stop_write_combining() (any other ideas?). It would be a NOP on all
-other architectures.
-
--- 
-Catalin
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>

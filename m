@@ -2,147 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A38D467426
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:35:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA1346742B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:38:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350279AbhLCJia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 04:38:30 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:57700 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238201AbhLCJi3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 04:38:29 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 39311212CA;
-        Fri,  3 Dec 2021 09:35:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638524105; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zSNfU4icadvzlJZjRyXS0VEcChBgb89lhRgthpyYGgY=;
-        b=dM5+f3wlSvrdMD+GpAxow3dRuc4Zl8WeliQrEIXA1KlDYipjZyS8ej+wjmgYiL1kGI3Ca3
-        tfnW0cdf/iYt8lTDgFxsRs3pY1k7ceHUhKRjvO+MaeKgWIt5ptBjM7Be4UlSSlrNSKDbza
-        +0DwPMbx9zYC3enOI+tpU82DG0PS+Ps=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638524105;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zSNfU4icadvzlJZjRyXS0VEcChBgb89lhRgthpyYGgY=;
-        b=hpukj8e0tA3G99BFC9+LNoGYrI5b9LMUE8dDeHm5v2hsDDBlhIkrSUNEaOv62AmnJ0Hprq
-        +evZ2nqCnQsin6Dw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F294713D9E;
-        Fri,  3 Dec 2021 09:35:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OvFPOsjkqWHtdwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 03 Dec 2021 09:35:04 +0000
-Message-ID: <7469e918-b2bf-00a9-1bbc-2f3514ec0816@suse.de>
-Date:   Fri, 3 Dec 2021 10:35:04 +0100
+        id S1351454AbhLCJmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 04:42:17 -0500
+Received: from foss.arm.com ([217.140.110.172]:46298 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351418AbhLCJmP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 04:42:15 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2DBD1435;
+        Fri,  3 Dec 2021 01:38:51 -0800 (PST)
+Received: from [10.57.82.187] (unknown [10.57.82.187])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 25C633F5A1;
+        Fri,  3 Dec 2021 01:38:49 -0800 (PST)
+Subject: Re: [PATCH v1 4/4] perf tools: Support register names from all
+ architectures
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <20211201123334.679131-1-german.gomez@arm.com>
+ <20211201123334.679131-5-german.gomez@arm.com>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <c78b2533-6960-99c9-543a-965d669d1ece@arm.com>
+Date:   Fri, 3 Dec 2021 09:38:43 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] drm/stm: remove conflicting framebuffers
+In-Reply-To: <20211201123334.679131-5-german.gomez@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-To:     Yannick Fertre <yannick.fertre@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211203085512.11127-1-yannick.fertre@foss.st.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20211203085512.11127-1-yannick.fertre@foss.st.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------DFU8K9UBXjQ1FZY83MRcWDwj"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------DFU8K9UBXjQ1FZY83MRcWDwj
-Content-Type: multipart/mixed; boundary="------------pJVY4Pdtym1G0TkQl2dh1mDd";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Yannick Fertre <yannick.fertre@foss.st.com>,
- Philippe Cornu <philippe.cornu@foss.st.com>,
- Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
- David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- dri-devel@lists.freedesktop.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Message-ID: <7469e918-b2bf-00a9-1bbc-2f3514ec0816@suse.de>
-Subject: Re: [PATCH] drm/stm: remove conflicting framebuffers
-References: <20211203085512.11127-1-yannick.fertre@foss.st.com>
-In-Reply-To: <20211203085512.11127-1-yannick.fertre@foss.st.com>
 
---------------pJVY4Pdtym1G0TkQl2dh1mDd
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On 01/12/2021 12:33, German Gomez wrote:
+> [...]
+>
+> diff --git a/tools/perf/util/perf_regs.h b/tools/perf/util/perf_regs.h
+> index eeac181eb..a201181fc 100644
+> --- a/tools/perf/util/perf_regs.h
+> +++ b/tools/perf/util/perf_regs.h
+> @@ -27,15 +27,42 @@ uint64_t arch__user_reg_mask(void);
+>  #ifdef HAVE_PERF_REGS_SUPPORT
+>  extern const struct sample_reg sample_reg_masks[];
+>  
+> +#include <string.h>
+>  #include <perf_regs.h>
+>  
+>  #define DWARF_MINIMAL_REGS ((1ULL << PERF_REG_IP) | (1ULL << PERF_REG_SP))
+>  
+>  int perf_reg_value(u64 *valp, struct regs_dump *regs, int id);
+>  
+> -static inline const char *perf_reg_name(int id)
+> +#include "perf_regs_csky.h"
+> +#include "perf_regs_mips.h"
+> +#include "perf_regs_powerpc.h"
+> +#include "perf_regs_riscv.h"
+> +#include "perf_regs_s390.h"
+> +#include "perf_regs_x86.h"
+> +#include "perf_regs_arm.h"
+> +#include "perf_regs_arm64.h"
 
-SGkNCg0KQW0gMDMuMTIuMjEgdW0gMDk6NTUgc2NocmllYiBZYW5uaWNrIEZlcnRyZToNCj4g
-SW4gY2FzZSBvZiB1c2luZyBzaW1wbGVmYiBvciBhbm90aGVyIGNvbmZsaWN0aW5nIGZyYW1l
-YnVmZmVyLA0KPiBjYWxsIGRybV9hcGVydHVyZV9yZW1vdmVfZnJhbWVidWZmZXJzKCkgdG8g
-cmVtb3ZlIG1lbW9yeSBhbGxvY2F0ZWQuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBZYW5uaWNr
-IEZlcnRyZSA8eWFubmljay5mZXJ0cmVAZm9zcy5zdC5jb20+DQo+IC0tLQ0KPiAgIGRyaXZl
-cnMvZ3B1L2RybS9zdG0vZHJ2LmMgfCA1ICsrKysrDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDUg
-aW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9zdG0v
-ZHJ2LmMgYi9kcml2ZXJzL2dwdS9kcm0vc3RtL2Rydi5jDQo+IGluZGV4IDIyMjg2OWIyMzJh
-ZS4uNWJhNDZmNzBmMDgxIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vc3RtL2Ry
-di5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9zdG0vZHJ2LmMNCj4gQEAgLTE0LDYgKzE0
-LDcgQEANCj4gICAjaW5jbHVkZSA8bGludXgvb2ZfcGxhdGZvcm0uaD4NCj4gICAjaW5jbHVk
-ZSA8bGludXgvcG1fcnVudGltZS5oPg0KPiAgIA0KPiArI2luY2x1ZGUgPGRybS9kcm1fYXBl
-cnR1cmUuaD4NCj4gICAjaW5jbHVkZSA8ZHJtL2RybV9hdG9taWMuaD4NCj4gICAjaW5jbHVk
-ZSA8ZHJtL2RybV9hdG9taWNfaGVscGVyLmg+DQo+ICAgI2luY2x1ZGUgPGRybS9kcm1fZHJ2
-Lmg+DQo+IEBAIC0xOTMsNiArMTk0LDEwIEBAIHN0YXRpYyBpbnQgc3RtX2RybV9wbGF0Zm9y
-bV9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgIAlpZiAocmV0KQ0K
-PiAgIAkJZ290byBlcnJfcHV0Ow0KPiAgIA0KPiArCXJldCA9IGRybV9hcGVydHVyZV9yZW1v
-dmVfZnJhbWVidWZmZXJzKGZhbHNlLCAmZHJ2X2RyaXZlcik7DQo+ICsJaWYgKHJldCkNCj4g
-KwkJZ290byBlcnJfcHV0Ow0KPiArDQoNClRoaXMgaGFzIHRvIGJlIGRvbmUgYXQgdGhlIHZl
-cnkgdG9wIG9mIHRoZSBwcm9iZSBmdW5jdGlvbiwgYmVmb3JlIA0KYW55dGhpbmcgdGhhdCB0
-b3VjaGVzIHRoZSBkZXZpY2UuIE90aGVyd2lzZSBib3RoIGRyaXZlcnMgaW50ZXJmZXJlIHdp
-dGggDQplYWNoIG90aGVyIHdoaWxlIHByb2JpbmcgYW5kIHNldHVwJ3MgZ29pbmcgb24uDQoN
-CkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gICAJcmV0ID0gZHJtX2Rldl9yZWdpc3Rlcihk
-ZGV2LCAwKTsNCj4gICAJaWYgKHJldCkNCj4gICAJCWdvdG8gZXJyX3B1dDsNCj4gDQoNCi0t
-IA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0Ug
-U29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkg
-TsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOk
-ZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+Something that slipped through: this is failing to compile perf on ARM32
+due to the order of the imports:
 
---------------pJVY4Pdtym1G0TkQl2dh1mDd--
+util/../../arch/arm64/include/uapi/asm/perf_regs.h:5:6: error: nested redefinition of ‘enum perf_event_arm_regs’
+    5 | enum perf_event_arm_regs {
+      |      ^~~~~~~~~~~~~~~~~~~
 
---------------DFU8K9UBXjQ1FZY83MRcWDwj
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Both #import <perf_regs.h> and "perf_regs_arm.h" are importing the same
+header (/tools/arch/arm/include/uapi/asm/perf_regs.h) so this part of
+the [PATCH 3/4] isn't doing anything:
 
------BEGIN PGP SIGNATURE-----
+diff --git a/tools/perf/util/perf_regs_arm.h b/tools/perf/util/perf_regs_arm.h
+new file mode 100644
+index 000000000..779b40d6c
+--- /dev/null
++++ b/tools/perf/util/perf_regs_arm.h
+@@ -0,0 +1,57 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++#ifndef __PERF_REGS_ARM_H
++#define __PERF_REGS_ARM_H
++
++/*
++ * ARM and ARM64 registers are grouped under enums of the same name.
++ * Temporarily rename the name of the enum to prevent the naming collision.
++ */
++#define perf_event_arm_regs perf_event_arm_regs_workaround
++
++#include "../../arch/arm/include/uapi/asm/perf_regs.h"
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGp5MgFAwAAAAAACgkQlh/E3EQov+CH
-hRAAkBBbTnUmmdwnR9pxdbyvR9gSBtupKiVfslYcPCmUGEexHF/W1mzBhWu9BrnlXr9fV0F4xgW3
-QKpNXnYyj5aXCOxS9XOduXKVgcjswwQ69/CbxzBfHYBmxUJuq4xgOvYksHRJgeXo/KP/vUB6htOx
-ogdsxOQSPMKn/z8VRPpAjCMPUIpD2QX/x/Q4DtaiKEUtb9F4pYsNg/gJrrNPnojauMByTPbl+avJ
-qR/Fov+BVBf785qEkaLWpqkcjD24x7uVMEsiQ8km9rTMObXiFG9rcZSMjiVhP3Y2tupxPIyrU6zZ
-VbVC3Pj5l9MlqifTiwm5E6RBLkzL/N2RTVxuZ/CA+p5Llt3mZReeMFosoZlBjcaJa+l8DILhlYyZ
-iPyyY4FC0Ta4rWWPaheQxIhwKogL0CqgKOyWmba0inH7dIpBXTvczi9TBhugp3G7bt3BpiI5q1qu
-QXqpFBJ1j0qdpi8re5u4jTmyjjUCUNcxTskCUkZykmioyIcfgaqyZ8L0tUd3mFg3MsQVHe4dmEwq
-GN7Q6IC59Xeqi4WZdlnPnEaoTXopZaTDOVusKxjca8AmLTY962fOPUZHSdgP3BvdGML39/0wbapd
-MOUCg4sZXlICLp2tjtLuD4ZncksM80aRP/UagdZtZz8jGn35X2sauQvUWy+zvDTukO7B+cGW9TQQ
-G2k=
-=rwiW
------END PGP SIGNATURE-----
+There is a similar workaround in the csky version. Although it should
+compile, I think some of the register names might be missing (the ones
+under #if defined(__CSKYABIV2__)).
 
---------------DFU8K9UBXjQ1FZY83MRcWDwj--
+I'm wondering if it would be wiser to update this changeset to only
+consider a small number of platforms (maybe x86 and arm64) and see how
+it goes.
+

@@ -2,1011 +2,574 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C76466FB8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 03:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E290F466FBC
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 03:25:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378065AbhLCCZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 21:25:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
+        id S235840AbhLCC2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 21:28:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240146AbhLCCZ5 (ORCPT
+        with ESMTP id S234029AbhLCC2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 21:25:57 -0500
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08BDC06174A;
-        Thu,  2 Dec 2021 18:22:33 -0800 (PST)
-Date:   Fri, 3 Dec 2021 10:22:04 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1638498151;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2iPnH39Ob2gt1UJQ+4skv1SvcUS30NyrX3RdPXZl8PI=;
-        b=t4ft4b+Gows/DuqB+wd14oxDfCWJtc1TQ9ZzO90df6wvJyMcGwPgVwiiuAYS6iJR3Dh70W
-        HC42fAIsUQNVBDpwNt8ATUEylEG/JNu7ZHev+sas8vkTFvpeiM06A021Aqou8dkMcR81Ww
-        ctlbRSWbYznKE1IvE8ouNtYPfKwI7cw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Cc:     jic23@kernel.org, robh+dt@kernel.org, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/2] iio:dac:ad7293: add support for AD7293
-Message-ID: <20211203022204.GA12289@chq-T47>
-References: <20211202150819.24832-1-antoniu.miclaus@analog.com>
+        Thu, 2 Dec 2021 21:28:48 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1480EC061757
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 18:25:25 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so2167644oto.13
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 18:25:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wk6sBqf4veTr0aCNaX77VD1RE59FNpZDowLejgif8qI=;
+        b=S7AJ3XcfPHZkkOr8+PeptoEGXWMWzq4tdCtytBHda9yrH8e5oTvAfcAY69k0KVs3C4
+         88i+mfHGkwgKhTNCMam2qB6YXTRpm6kbrhGPpZUdTcwOmjvUCo5c0r1r/RzL3Ec5PxKU
+         1aBopvpJXVb0BaLcHELs3w3MnY5YSRmmLqFII2iXzHpC2U2RPtwEEDbbzKPhRv4TIubP
+         126HGLLHhvouUnFT9R7K/1rOH1XglG9ZGQglz6wQSFiv5cn1XvqZWwcOQ6rqzXf1Vo5/
+         TC7zzVuT4g0P5XCdPmdaJ6zcrJYps5HqECfv+pKD+UL171cTKnsyeJhcmpyCeOni/D++
+         lqFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wk6sBqf4veTr0aCNaX77VD1RE59FNpZDowLejgif8qI=;
+        b=Qje1WRwEBrtQ0qUimq6l0aEsMbj18/10TF35R5+wFS/163/xFwQsXU1wF7cNMHYawY
+         bdjGT56UQNDtOLHGA6MCPsOAyHWV2wmTQAKDuS/hBygwZqbGorgLXqmlpkJrEsk1f+wx
+         XklcwpjUxtKoZ6Jki1HoXm7L7j2PWy6dnEbNTWyiHEBjjMxS7jpkNpb2TZR8kMIXJERK
+         M0WaBir8+7OLE/E9zO+G6H+Wl6hzNMvGB1Be5esnh5VrfKKyxHPxPXk9qc4/h/725YC5
+         a0uWdR2JJvD9auADzV2Jtoy6YLfUQLiGUklHDukMEpA0AjE0YKjjFYxf76VsSdlVM+Cu
+         /HyQ==
+X-Gm-Message-State: AOAM533iXyCKagDjLIrM2AcnIzW9OTP1rcQyqqQin33hAlY2UQGtJnmQ
+        zoWo0SffYfl3gE/6lVG22rZvDA==
+X-Google-Smtp-Source: ABdhPJxFGd1APJh95Fqq4Ks0VmjxljytjF4mqSrBVVfhyhbxJc2oh/Lv8kOmUNmuYYg5uDe6FL18HQ==
+X-Received: by 2002:a9d:68d5:: with SMTP id i21mr13808630oto.107.1638498324258;
+        Thu, 02 Dec 2021 18:25:24 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id x8sm356390otg.31.2021.12.02.18.25.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 18:25:23 -0800 (PST)
+Date:   Thu, 2 Dec 2021 20:25:18 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, julien.massot@iot.bzh
+Subject: Re: [PATCH v7 03/12] rpmsg: Move the rpmsg control device from
+ rpmsg_char to rpmsg_ctrl
+Message-ID: <YamADnLb9MZd6SUU@builder.lan>
+References: <20211108141937.13016-1-arnaud.pouliquen@foss.st.com>
+ <20211108141937.13016-4-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211202150819.24832-1-antoniu.miclaus@analog.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+In-Reply-To: <20211108141937.13016-4-arnaud.pouliquen@foss.st.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02 12月 21 17:08:18, Antoniu Miclaus wrote:
-> The AD7293 is a Power Amplifier drain current controller
-> containing functionality for general-purpose monitoring
-> and control of current, voltage, and temperature, integrated
-> into a single chip solution with an SPI-compatible interface.
+On Mon 08 Nov 08:19 CST 2021, Arnaud Pouliquen wrote:
+
+> Create the rpmsg_ctrl.c module and move the code related to the
+> rpmsg_ctrldev device in this new module.
 > 
-> Datasheet:
-> https://www.analog.com/media/en/technical-documentation/data-sheets/AD7293.pdf
-> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+> Add the dependency between rpmsg_char and rpmsg_ctrl in the
+> kconfig file:
+> 
+> 1) RPMSG_CTRL can set as module or built-in if
+>   RPMSG=y || RPMSG_CHAR=y || RPMSG_CHAR=n
+> 
+> 2) RPMSG_CTRL can not be set as built-in if
+>    RPMSG=m || RPMSG_CHAR=m
+> 
+> Note that RPMGH_CHAR and RPMSG_CTRL can be activated separately.
+> Therefore, the RPMSG_CTRL configuration must be set for backwards compatibility.
+> 
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
 > ---
-> changes in v6:
->  - remove register defines for pages that are not used
->  drivers/iio/dac/Kconfig  |  11 +
->  drivers/iio/dac/Makefile |   1 +
->  drivers/iio/dac/ad7293.c | 895 +++++++++++++++++++++++++++++++++++++++
->  3 files changed, 907 insertions(+)
->  create mode 100644 drivers/iio/dac/ad7293.c
+> update vs previous version
+>  - suppress the "select RPMSG_CTRL" for RPMSG_CHAR config
+>  - add dependency on RPMSG_CHAR in RPMSG_CTRL to handle the use case
+>    where RPMSG_CHAR is built as a module.
+> ---
+>  drivers/rpmsg/Kconfig      |   8 ++
+>  drivers/rpmsg/Makefile     |   1 +
+>  drivers/rpmsg/rpmsg_char.c | 167 +---------------------------
+>  drivers/rpmsg/rpmsg_ctrl.c | 219 +++++++++++++++++++++++++++++++++++++
+>  4 files changed, 230 insertions(+), 165 deletions(-)
+>  create mode 100644 drivers/rpmsg/rpmsg_ctrl.c
 > 
-> diff --git a/drivers/iio/dac/Kconfig b/drivers/iio/dac/Kconfig
-> index 75e1f2b48638..6206b90fc08f 100644
-> --- a/drivers/iio/dac/Kconfig
-> +++ b/drivers/iio/dac/Kconfig
-> @@ -221,6 +221,17 @@ config AD5791
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called ad5791.
+> diff --git a/drivers/rpmsg/Kconfig b/drivers/rpmsg/Kconfig
+> index 0b4407abdf13..d3795860f5c0 100644
+> --- a/drivers/rpmsg/Kconfig
+> +++ b/drivers/rpmsg/Kconfig
+> @@ -15,6 +15,14 @@ config RPMSG_CHAR
+>  	  in /dev. They make it possible for user-space programs to send and
+>  	  receive rpmsg packets.
 >  
-> +config AD7293
-> +	tristate "Analog Devices AD7293 Power Amplifier Current Controller"
-> +	depends on SPI
+> +config RPMSG_CTRL
+
+Just for the record, I still am of the opinion that yet another Kconfig
+option only adds unnecessary complexity.
+
+Regards,
+Bjorn
+
+> +	tristate "RPMSG control interface"
+> +	depends on RPMSG && ( RPMSG_CHAR || RPMSG_CHAR=n )
 > +	help
-> +	  Say yes here to build support for Analog Devices AD7293
-> +	  Power Amplifier Current Controller with
-> +	  ADC, DACs, and Temperature and Current Sensors
+> +	  Say Y here to enable the support of the /dev/rpmsg_ctrlX API. This API
+> +	  allows user-space programs to create endpoints with specific service name,
+> +	  source and destination addresses.
 > +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called ad7293.
-> +
->  config AD7303
->  	tristate "Analog Devices AD7303 DAC driver"
->  	depends on SPI
-> diff --git a/drivers/iio/dac/Makefile b/drivers/iio/dac/Makefile
-> index 33e16f14902a..3c17246ee89b 100644
-> --- a/drivers/iio/dac/Makefile
-> +++ b/drivers/iio/dac/Makefile
-> @@ -25,6 +25,7 @@ obj-$(CONFIG_AD5791) += ad5791.o
->  obj-$(CONFIG_AD5686) += ad5686.o
->  obj-$(CONFIG_AD5686_SPI) += ad5686-spi.o
->  obj-$(CONFIG_AD5696_I2C) += ad5696-i2c.o
-> +obj-$(CONFIG_AD7293) += ad7293.o
->  obj-$(CONFIG_AD7303) += ad7303.o
->  obj-$(CONFIG_AD8801) += ad8801.o
->  obj-$(CONFIG_CIO_DAC) += cio-dac.o
-> diff --git a/drivers/iio/dac/ad7293.c b/drivers/iio/dac/ad7293.c
+>  config RPMSG_NS
+>  	tristate "RPMSG name service announcement"
+>  	depends on RPMSG
+> diff --git a/drivers/rpmsg/Makefile b/drivers/rpmsg/Makefile
+> index 8d452656f0ee..58e3b382e316 100644
+> --- a/drivers/rpmsg/Makefile
+> +++ b/drivers/rpmsg/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-$(CONFIG_RPMSG)		+= rpmsg_core.o
+>  obj-$(CONFIG_RPMSG_CHAR)	+= rpmsg_char.o
+> +obj-$(CONFIG_RPMSG_CTRL)	+= rpmsg_ctrl.o
+>  obj-$(CONFIG_RPMSG_NS)		+= rpmsg_ns.o
+>  obj-$(CONFIG_RPMSG_MTK_SCP)	+= mtk_rpmsg.o
+>  qcom_glink-objs			:= qcom_glink_native.o qcom_glink_ssr.o
+> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+> index 8ab5ac23850c..29c4d2c3aea9 100644
+> --- a/drivers/rpmsg/rpmsg_char.c
+> +++ b/drivers/rpmsg/rpmsg_char.c
+> @@ -30,28 +30,12 @@
+>  
+>  static dev_t rpmsg_major;
+>  
+> -static DEFINE_IDA(rpmsg_ctrl_ida);
+>  static DEFINE_IDA(rpmsg_ept_ida);
+>  static DEFINE_IDA(rpmsg_minor_ida);
+>  
+>  #define dev_to_eptdev(dev) container_of(dev, struct rpmsg_eptdev, dev)
+>  #define cdev_to_eptdev(i_cdev) container_of(i_cdev, struct rpmsg_eptdev, cdev)
+>  
+> -#define dev_to_ctrldev(dev) container_of(dev, struct rpmsg_ctrldev, dev)
+> -#define cdev_to_ctrldev(i_cdev) container_of(i_cdev, struct rpmsg_ctrldev, cdev)
+> -
+> -/**
+> - * struct rpmsg_ctrldev - control device for instantiating endpoint devices
+> - * @rpdev:	underlaying rpmsg device
+> - * @cdev:	cdev for the ctrl device
+> - * @dev:	device for the ctrl device
+> - */
+> -struct rpmsg_ctrldev {
+> -	struct rpmsg_device *rpdev;
+> -	struct cdev cdev;
+> -	struct device dev;
+> -};
+> -
+>  /**
+>   * struct rpmsg_eptdev - endpoint device context
+>   * @dev:	endpoint device
+> @@ -408,169 +392,22 @@ int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent
+>  }
+>  EXPORT_SYMBOL(rpmsg_chrdev_eptdev_create);
+>  
+> -static int rpmsg_ctrldev_open(struct inode *inode, struct file *filp)
+> -{
+> -	struct rpmsg_ctrldev *ctrldev = cdev_to_ctrldev(inode->i_cdev);
+> -
+> -	get_device(&ctrldev->dev);
+> -	filp->private_data = ctrldev;
+> -
+> -	return 0;
+> -}
+> -
+> -static int rpmsg_ctrldev_release(struct inode *inode, struct file *filp)
+> -{
+> -	struct rpmsg_ctrldev *ctrldev = cdev_to_ctrldev(inode->i_cdev);
+> -
+> -	put_device(&ctrldev->dev);
+> -
+> -	return 0;
+> -}
+> -
+> -static long rpmsg_ctrldev_ioctl(struct file *fp, unsigned int cmd,
+> -				unsigned long arg)
+> -{
+> -	struct rpmsg_ctrldev *ctrldev = fp->private_data;
+> -	void __user *argp = (void __user *)arg;
+> -	struct rpmsg_endpoint_info eptinfo;
+> -	struct rpmsg_channel_info chinfo;
+> -
+> -	if (cmd != RPMSG_CREATE_EPT_IOCTL)
+> -		return -EINVAL;
+> -
+> -	if (copy_from_user(&eptinfo, argp, sizeof(eptinfo)))
+> -		return -EFAULT;
+> -
+> -	memcpy(chinfo.name, eptinfo.name, RPMSG_NAME_SIZE);
+> -	chinfo.name[RPMSG_NAME_SIZE-1] = '\0';
+> -	chinfo.src = eptinfo.src;
+> -	chinfo.dst = eptinfo.dst;
+> -
+> -	return rpmsg_chrdev_eptdev_create(ctrldev->rpdev, &ctrldev->dev, chinfo);
+> -};
+> -
+> -static const struct file_operations rpmsg_ctrldev_fops = {
+> -	.owner = THIS_MODULE,
+> -	.open = rpmsg_ctrldev_open,
+> -	.release = rpmsg_ctrldev_release,
+> -	.unlocked_ioctl = rpmsg_ctrldev_ioctl,
+> -	.compat_ioctl = compat_ptr_ioctl,
+> -};
+> -
+> -static void rpmsg_ctrldev_release_device(struct device *dev)
+> -{
+> -	struct rpmsg_ctrldev *ctrldev = dev_to_ctrldev(dev);
+> -
+> -	ida_simple_remove(&rpmsg_ctrl_ida, dev->id);
+> -	ida_simple_remove(&rpmsg_minor_ida, MINOR(dev->devt));
+> -	cdev_del(&ctrldev->cdev);
+> -	kfree(ctrldev);
+> -}
+> -
+> -static int rpmsg_chrdev_probe(struct rpmsg_device *rpdev)
+> -{
+> -	struct rpmsg_ctrldev *ctrldev;
+> -	struct device *dev;
+> -	int ret;
+> -
+> -	ctrldev = kzalloc(sizeof(*ctrldev), GFP_KERNEL);
+> -	if (!ctrldev)
+> -		return -ENOMEM;
+> -
+> -	ctrldev->rpdev = rpdev;
+> -
+> -	dev = &ctrldev->dev;
+> -	device_initialize(dev);
+> -	dev->parent = &rpdev->dev;
+> -	dev->class = rpmsg_class;
+> -
+> -	cdev_init(&ctrldev->cdev, &rpmsg_ctrldev_fops);
+> -	ctrldev->cdev.owner = THIS_MODULE;
+> -
+> -	ret = ida_simple_get(&rpmsg_minor_ida, 0, RPMSG_DEV_MAX, GFP_KERNEL);
+> -	if (ret < 0)
+> -		goto free_ctrldev;
+> -	dev->devt = MKDEV(MAJOR(rpmsg_major), ret);
+> -
+> -	ret = ida_simple_get(&rpmsg_ctrl_ida, 0, 0, GFP_KERNEL);
+> -	if (ret < 0)
+> -		goto free_minor_ida;
+> -	dev->id = ret;
+> -	dev_set_name(&ctrldev->dev, "rpmsg_ctrl%d", ret);
+> -
+> -	ret = cdev_add(&ctrldev->cdev, dev->devt, 1);
+> -	if (ret)
+> -		goto free_ctrl_ida;
+> -
+> -	/* We can now rely on the release function for cleanup */
+> -	dev->release = rpmsg_ctrldev_release_device;
+> -
+> -	ret = device_add(dev);
+> -	if (ret) {
+> -		dev_err(&rpdev->dev, "device_add failed: %d\n", ret);
+> -		put_device(dev);
+> -	}
+> -
+> -	dev_set_drvdata(&rpdev->dev, ctrldev);
+> -
+> -	return ret;
+> -
+> -free_ctrl_ida:
+> -	ida_simple_remove(&rpmsg_ctrl_ida, dev->id);
+> -free_minor_ida:
+> -	ida_simple_remove(&rpmsg_minor_ida, MINOR(dev->devt));
+> -free_ctrldev:
+> -	put_device(dev);
+> -	kfree(ctrldev);
+> -
+> -	return ret;
+> -}
+> -
+> -static void rpmsg_chrdev_remove(struct rpmsg_device *rpdev)
+> -{
+> -	struct rpmsg_ctrldev *ctrldev = dev_get_drvdata(&rpdev->dev);
+> -	int ret;
+> -
+> -	/* Destroy all endpoints */
+> -	ret = device_for_each_child(&ctrldev->dev, NULL, rpmsg_chrdev_eptdev_destroy);
+> -	if (ret)
+> -		dev_warn(&rpdev->dev, "failed to nuke endpoints: %d\n", ret);
+> -
+> -	device_del(&ctrldev->dev);
+> -	put_device(&ctrldev->dev);
+> -}
+> -
+> -static struct rpmsg_driver rpmsg_chrdev_driver = {
+> -	.probe = rpmsg_chrdev_probe,
+> -	.remove = rpmsg_chrdev_remove,
+> -	.drv = {
+> -		.name = "rpmsg_chrdev",
+> -	},
+> -};
+> -
+>  static int rpmsg_chrdev_init(void)
+>  {
+>  	int ret;
+>  
+> -	ret = alloc_chrdev_region(&rpmsg_major, 0, RPMSG_DEV_MAX, "rpmsg");
+> +	ret = alloc_chrdev_region(&rpmsg_major, 0, RPMSG_DEV_MAX, "rpmsg_char");
+>  	if (ret < 0) {
+>  		pr_err("rpmsg: failed to allocate char dev region\n");
+>  		return ret;
+>  	}
+>  
+> -	ret = register_rpmsg_driver(&rpmsg_chrdev_driver);
+> -	if (ret < 0) {
+> -		pr_err("rpmsgchr: failed to register rpmsg driver\n");
+> -		unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+> -	}
+> -
+> -	return ret;
+> +	return 0;
+>  }
+>  postcore_initcall(rpmsg_chrdev_init);
+>  
+>  static void rpmsg_chrdev_exit(void)
+>  {
+> -	unregister_rpmsg_driver(&rpmsg_chrdev_driver);
+>  	unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+>  }
+>  module_exit(rpmsg_chrdev_exit);
+> diff --git a/drivers/rpmsg/rpmsg_ctrl.c b/drivers/rpmsg/rpmsg_ctrl.c
 > new file mode 100644
-> index 000000000000..507ed60126c3
+> index 000000000000..33c38cbf2b83
 > --- /dev/null
-> +++ b/drivers/iio/dac/ad7293.c
-> @@ -0,0 +1,895 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
+> +++ b/drivers/rpmsg/rpmsg_ctrl.c
+> @@ -0,0 +1,219 @@
+> +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * AD7293 driver
+> + * Copyright (C) 2021, STMicroelectronics
+> + * Copyright (c) 2016, Linaro Ltd.
+> + * Copyright (c) 2012, Michal Simek <monstr@monstr.eu>
+> + * Copyright (c) 2012, PetaLogix
+> + * Copyright (c) 2011, Texas Instruments, Inc.
+> + * Copyright (c) 2011, Google, Inc.
 > + *
-> + * Copyright 2021 Analog Devices Inc.
+> + * Based on rpmsg performance statistics driver by Michal Simek, which in turn
+> + * was based on TI & Google OMX rpmsg driver.
 > + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/bits.h>
-> +#include <linux/delay.h>
+> +#include <linux/cdev.h>
 > +#include <linux/device.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/iio/iio.h>
-> +#include <linux/mod_devicetable.h>
+> +#include <linux/fs.h>
+> +#include <linux/idr.h>
+> +#include <linux/kernel.h>
 > +#include <linux/module.h>
-> +#include <linux/regulator/consumer.h>
-> +#include <linux/spi/spi.h>
+> +#include <linux/rpmsg.h>
+> +#include <linux/skbuff.h>
+> +#include <linux/slab.h>
+> +#include <linux/uaccess.h>
+> +#include <uapi/linux/rpmsg.h>
 > +
-> +#include <asm/unaligned.h>
+> +#include "rpmsg_char.h"
+> +#include "rpmsg_internal.h"
 > +
-> +#define AD7293_R1B				BIT(16)
-> +#define AD7293_R2B				BIT(17)
-> +#define AD7293_PAGE_ADDR_MSK			GENMASK(15, 8)
-> +#define AD7293_PAGE(x)				FIELD_PREP(AD7293_PAGE_ADDR_MSK, x)
+> +#define RPMSG_DEV_MAX	(MINORMASK + 1)
 > +
-> +/* AD7293 Register Map Common */
-> +#define AD7293_REG_NO_OP			(AD7293_R1B | AD7293_PAGE(0x0) | 0x0)
-> +#define AD7293_REG_PAGE_SELECT			(AD7293_R1B | AD7293_PAGE(0x0) | 0x1)
-> +#define AD7293_REG_CONV_CMD			(AD7293_R2B | AD7293_PAGE(0x0) | 0x2)
-> +#define AD7293_REG_RESULT			(AD7293_R1B | AD7293_PAGE(0x0) | 0x3)
-> +#define AD7293_REG_DAC_EN			(AD7293_R1B | AD7293_PAGE(0x0) | 0x4)
-> +#define AD7293_REG_DEVICE_ID			(AD7293_R2B | AD7293_PAGE(0x0) | 0xC)
-> +#define AD7293_REG_SOFT_RESET			(AD7293_R2B | AD7293_PAGE(0x0) | 0xF)
+> +static dev_t rpmsg_major;
 > +
-> +/* AD7293 Register Map Page 0x0 */
-> +#define AD7293_REG_VIN0				(AD7293_R2B | AD7293_PAGE(0x0) | 0x10)
-> +#define AD7293_REG_VIN1				(AD7293_R2B | AD7293_PAGE(0x0) | 0x11)
-> +#define AD7293_REG_VIN2				(AD7293_R2B | AD7293_PAGE(0x0) | 0x12)
-> +#define AD7293_REG_VIN3				(AD7293_R2B | AD7293_PAGE(0x0) | 0x13)
-> +#define AD7293_REG_TSENSE_INT			(AD7293_R2B | AD7293_PAGE(0x0) | 0x20)
-> +#define AD7293_REG_TSENSE_D0			(AD7293_R2B | AD7293_PAGE(0x0) | 0x21)
-> +#define AD7293_REG_TSENSE_D1			(AD7293_R2B | AD7293_PAGE(0x0) | 0x22)
-> +#define AD7293_REG_ISENSE_0			(AD7293_R2B | AD7293_PAGE(0x0) | 0x28)
-> +#define AD7293_REG_ISENSE_1			(AD7293_R2B | AD7293_PAGE(0x0) | 0x29)
-> +#define AD7293_REG_ISENSE_2			(AD7293_R2B | AD7293_PAGE(0x0) | 0x2A)
-> +#define AD7293_REG_ISENSE_3			(AD7293_R2B | AD7293_PAGE(0x0) | 0x2B)
-> +#define AD7293_REG_UNI_VOUT0			(AD7293_R2B | AD7293_PAGE(0x0) | 0x30)
-> +#define AD7293_REG_UNI_VOUT1			(AD7293_R2B | AD7293_PAGE(0x0) | 0x31)
-> +#define AD7293_REG_UNI_VOUT2			(AD7293_R2B | AD7293_PAGE(0x0) | 0x32)
-> +#define AD7293_REG_UNI_VOUT3			(AD7293_R2B | AD7293_PAGE(0x0) | 0x33)
-> +#define AD7293_REG_BI_VOUT0			(AD7293_R2B | AD7293_PAGE(0x0) | 0x34)
-> +#define AD7293_REG_BI_VOUT1			(AD7293_R2B | AD7293_PAGE(0x0) | 0x35)
-> +#define AD7293_REG_BI_VOUT2			(AD7293_R2B | AD7293_PAGE(0x0) | 0x36)
-> +#define AD7293_REG_BI_VOUT3			(AD7293_R2B | AD7293_PAGE(0x0) | 0x37)
+> +static DEFINE_IDA(rpmsg_ctrl_ida);
+> +static DEFINE_IDA(rpmsg_minor_ida);
 > +
-> +/* AD7293 Register Map Page 0x2 */
-> +#define AD7293_REG_DIGITAL_OUT_EN		(AD7293_R2B | AD7293_PAGE(0x2) | 0x11)
-> +#define AD7293_REG_DIGITAL_INOUT_FUNC		(AD7293_R2B | AD7293_PAGE(0x2) | 0x12)
-> +#define AD7293_REG_DIGITAL_FUNC_POL		(AD7293_R2B | AD7293_PAGE(0x2) | 0x13)
-> +#define AD7293_REG_GENERAL			(AD7293_R2B | AD7293_PAGE(0x2) | 0x14)
-> +#define AD7293_REG_VINX_RANGE0			(AD7293_R2B | AD7293_PAGE(0x2) | 0x15)
-> +#define AD7293_REG_VINX_RANGE1			(AD7293_R2B | AD7293_PAGE(0x2) | 0x16)
-> +#define AD7293_REG_VINX_DIFF_SE			(AD7293_R2B | AD7293_PAGE(0x2) | 0x17)
-> +#define AD7293_REG_VINX_FILTER			(AD7293_R2B | AD7293_PAGE(0x2) | 0x18)
-> +#define AD7293_REG_BG_EN			(AD7293_R2B | AD7293_PAGE(0x2) | 0x19)
-> +#define AD7293_REG_CONV_DELAY			(AD7293_R2B | AD7293_PAGE(0x2) | 0x1A)
-> +#define AD7293_REG_TSENSE_BG_EN			(AD7293_R2B | AD7293_PAGE(0x2) | 0x1B)
-> +#define AD7293_REG_ISENSE_BG_EN			(AD7293_R2B | AD7293_PAGE(0x2) | 0x1C)
-> +#define AD7293_REG_ISENSE_GAIN			(AD7293_R2B | AD7293_PAGE(0x2) | 0x1D)
-> +#define AD7293_REG_DAC_SNOOZE_O			(AD7293_R2B | AD7293_PAGE(0x2) | 0x1F)
-> +#define AD7293_REG_DAC_SNOOZE_1			(AD7293_R2B | AD7293_PAGE(0x2) | 0x20)
-> +#define AD7293_REG_RSX_MON_BG_EN		(AD7293_R2B | AD7293_PAGE(0x2) | 0x23)
-> +#define AD7293_REG_INTEGR_CL			(AD7293_R2B | AD7293_PAGE(0x2) | 0x28)
-> +#define AD7293_REG_PA_ON_CTRL			(AD7293_R2B | AD7293_PAGE(0x2) | 0x29)
-> +#define AD7293_REG_RAMP_TIME_0			(AD7293_R2B | AD7293_PAGE(0x2) | 0x2A)
-> +#define AD7293_REG_RAMP_TIME_1			(AD7293_R2B | AD7293_PAGE(0x2) | 0x2B)
-> +#define AD7293_REG_RAMP_TIME_2			(AD7293_R2B | AD7293_PAGE(0x2) | 0x2C)
-> +#define AD7293_REG_RAMP_TIME_3			(AD7293_R2B | AD7293_PAGE(0x2) | 0x2D)
-> +#define AD7293_REG_CL_FR_IT			(AD7293_R2B | AD7293_PAGE(0x2) | 0x2E)
-> +#define AD7293_REG_INTX_AVSS_AVDD		(AD7293_R2B | AD7293_PAGE(0x2) | 0x2F)
+> +#define dev_to_ctrldev(dev) container_of(dev, struct rpmsg_ctrldev, dev)
+> +#define cdev_to_ctrldev(i_cdev) container_of(i_cdev, struct rpmsg_ctrldev, cdev)
 > +
-> +/* AD7293 Register Map Page 0x3 */
-> +#define AD7293_REG_VINX_SEQ			(AD7293_R2B | AD7293_PAGE(0x3) | 0x10)
-> +#define AD7293_REG_ISENSEX_TSENSEX_SEQ		(AD7293_R2B | AD7293_PAGE(0x3) | 0x11)
-> +#define AD7293_REG_RSX_MON_BI_VOUTX_SEQ		(AD7293_R2B | AD7293_PAGE(0x3) | 0x12)
-> +
-> +/* AD7293 Register Map Page 0xE */
-> +#define AD7293_REG_VIN0_OFFSET			(AD7293_R1B | AD7293_PAGE(0xE) | 0x10)
-> +#define AD7293_REG_VIN1_OFFSET			(AD7293_R1B | AD7293_PAGE(0xE) | 0x11)
-> +#define AD7293_REG_VIN2_OFFSET			(AD7293_R1B | AD7293_PAGE(0xE) | 0x12)
-> +#define AD7293_REG_VIN3_OFFSET			(AD7293_R1B | AD7293_PAGE(0xE) | 0x13)
-> +#define AD7293_REG_TSENSE_INT_OFFSET		(AD7293_R1B | AD7293_PAGE(0xE) | 0x20)
-> +#define AD7293_REG_TSENSE_D0_OFFSET		(AD7293_R1B | AD7293_PAGE(0xE) | 0x21)
-> +#define AD7293_REG_TSENSE_D1_OFFSET		(AD7293_R1B | AD7293_PAGE(0xE) | 0x22)
-> +#define AD7293_REG_ISENSE0_OFFSET		(AD7293_R1B | AD7293_PAGE(0xE) | 0x28)
-> +#define AD7293_REG_ISENSE1_OFFSET		(AD7293_R1B | AD7293_PAGE(0xE) | 0x29)
-> +#define AD7293_REG_ISENSE2_OFFSET		(AD7293_R1B | AD7293_PAGE(0xE) | 0x2A)
-> +#define AD7293_REG_ISENSE3_OFFSET		(AD7293_R1B | AD7293_PAGE(0xE) | 0x2B)
-> +#define AD7293_REG_UNI_VOUT0_OFFSET		(AD7293_R1B | AD7293_PAGE(0xE) | 0x30)
-> +#define AD7293_REG_UNI_VOUT1_OFFSET		(AD7293_R1B | AD7293_PAGE(0xE) | 0x31)
-> +#define AD7293_REG_UNI_VOUT2_OFFSET		(AD7293_R1B | AD7293_PAGE(0xE) | 0x32)
-> +#define AD7293_REG_UNI_VOUT3_OFFSET		(AD7293_R1B | AD7293_PAGE(0xE) | 0x33)
-> +#define AD7293_REG_BI_VOUT0_OFFSET		(AD7293_R1B | AD7293_PAGE(0xE) | 0x34)
-> +#define AD7293_REG_BI_VOUT1_OFFSET		(AD7293_R1B | AD7293_PAGE(0xE) | 0x35)
-> +#define AD7293_REG_BI_VOUT2_OFFSET		(AD7293_R1B | AD7293_PAGE(0xE) | 0x36)
-> +#define AD7293_REG_BI_VOUT3_OFFSET		(AD7293_R1B | AD7293_PAGE(0xE) | 0x37)
-> +
-> +/* AD7293 Miscellaneous Definitions */
-> +#define AD7293_READ				BIT(7)
-> +#define AD7293_TRANSF_LEN_MSK			GENMASK(17, 16)
-> +
-> +#define AD7293_REG_ADDR_MSK			GENMASK(7, 0)
-> +#define AD7293_REG_VOUT_OFFSET_MSK		GENMASK(5, 4)
-> +#define AD7293_REG_DATA_RAW_MSK			GENMASK(15, 4)
-> +#define AD7293_REG_VINX_RANGE_GET_CH_MSK(x, ch)	(((x) >> (ch)) & 0x1)
-> +#define AD7293_REG_VINX_RANGE_SET_CH_MSK(x, ch)	(((x) & 0x1) << (ch))
-> +#define AD7293_CHIP_ID				0x18
-> +
-> +enum ad7293_ch_type {
-> +	AD7293_ADC_VINX,
-> +	AD7293_ADC_TSENSE,
-> +	AD7293_ADC_ISENSE,
-> +	AD7293_DAC,
+> +/**
+> + * struct rpmsg_ctrldev - control device for instantiating endpoint devices
+> + * @rpdev:	underlaying rpmsg device
+> + * @cdev:	cdev for the ctrl device
+> + * @dev:	device for the ctrl device
+> + */
+> +struct rpmsg_ctrldev {
+> +	struct rpmsg_device *rpdev;
+> +	struct cdev cdev;
+> +	struct device dev;
 > +};
 > +
-> +enum ad7293_max_offset {
-> +	AD7293_TSENSE_MIN_OFFSET_CH = 4,
-> +	AD7293_ISENSE_MIN_OFFSET_CH = 7,
-> +	AD7293_VOUT_MIN_OFFSET_CH = 11,
-> +	AD7293_VOUT_MAX_OFFSET_CH = 18,
-> +};
-> +
-> +static const int dac_offset_table[] = {0, 1, 2};
-> +
-> +static const int isense_gain_table[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-> +
-> +static const int adc_range_table[] = {0, 1, 2, 3};
-> +
-> +struct ad7293_state {
-> +	struct spi_device *spi;
-> +	/* Protect against concurrent accesses to the device, page selection and data content */
-> +	struct mutex lock;
-> +	struct gpio_desc *gpio_reset;
-> +	struct regulator *reg_avdd;
-> +	struct regulator *reg_vdrive;
-> +	u8 page_select;
-> +	u8 data[3] ____cacheline_aligned;
-> +};
-> +
-> +static int ad7293_page_select(struct ad7293_state *st, unsigned int reg)
+> +static int rpmsg_ctrldev_open(struct inode *inode, struct file *filp)
 > +{
-> +	int ret;
+> +	struct rpmsg_ctrldev *ctrldev = cdev_to_ctrldev(inode->i_cdev);
 > +
-> +	if (st->page_select != FIELD_GET(AD7293_PAGE_ADDR_MSK, reg)) {
-> +		st->data[0] = FIELD_GET(AD7293_REG_ADDR_MSK, AD7293_REG_PAGE_SELECT);
-> +		st->data[1] = FIELD_GET(AD7293_PAGE_ADDR_MSK, reg);
-> +
-> +		ret = spi_write(st->spi, &st->data[0], 2);
-> +		if (ret)
-> +			return ret;
-> +
-> +		st->page_select = FIELD_GET(AD7293_PAGE_ADDR_MSK, reg);
-> +	}
+> +	get_device(&ctrldev->dev);
+> +	filp->private_data = ctrldev;
 > +
 > +	return 0;
 > +}
 > +
-> +static int __ad7293_spi_read(struct ad7293_state *st, unsigned int reg,
-> +			     u16 *val)
+> +static int rpmsg_ctrldev_release(struct inode *inode, struct file *filp)
 > +{
-> +	int ret;
-> +	unsigned int length;
-> +	struct spi_transfer t = {0};
+> +	struct rpmsg_ctrldev *ctrldev = cdev_to_ctrldev(inode->i_cdev);
 > +
-> +	length = FIELD_GET(AD7293_TRANSF_LEN_MSK, reg);
-> +
-> +	ret = ad7293_page_select(st, reg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	st->data[0] = AD7293_READ | FIELD_GET(AD7293_REG_ADDR_MSK, reg);
-> +	st->data[1] = 0x0;
-> +	st->data[2] = 0x0;
-> +
-> +	t.tx_buf = &st->data[0];
-> +	t.rx_buf = &st->data[0];
-> +	t.len = length + 1;
-> +
-> +	ret = spi_sync_transfer(st->spi, &t, 1);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (length == 1)
-> +		*val = st->data[1];
-> +	else
-> +		*val = get_unaligned_be16(&st->data[1]);
+> +	put_device(&ctrldev->dev);
 > +
 > +	return 0;
 > +}
 > +
-> +static int ad7293_spi_read(struct ad7293_state *st, unsigned int reg,
-> +			   u16 *val)
+> +static long rpmsg_ctrldev_ioctl(struct file *fp, unsigned int cmd,
+> +				unsigned long arg)
 > +{
-> +	int ret;
+> +	struct rpmsg_ctrldev *ctrldev = fp->private_data;
+> +	void __user *argp = (void __user *)arg;
+> +	struct rpmsg_endpoint_info eptinfo;
+> +	struct rpmsg_channel_info chinfo;
 > +
-> +	mutex_lock(&st->lock);
-> +	ret = __ad7293_spi_read(st, reg, val);
-> +	mutex_unlock(&st->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int __ad7293_spi_write(struct ad7293_state *st, unsigned int reg,
-> +			      u16 val)
-> +{
-> +	int ret;
-> +	unsigned int length;
-> +
-> +	length = FIELD_GET(AD7293_TRANSF_LEN_MSK, reg);
-> +
-> +	ret = ad7293_page_select(st, reg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	st->data[0] = FIELD_GET(AD7293_REG_ADDR_MSK, reg);
-> +
-> +	if (length == 1)
-> +		st->data[1] = val;
-> +	else
-> +		put_unaligned_be16(val, &st->data[1]);
-> +
-> +	return spi_write(st->spi, &st->data[0], length + 1);
-> +}
-> +
-> +static int ad7293_spi_write(struct ad7293_state *st, unsigned int reg,
-> +			    u16 val)
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&st->lock);
-> +	ret = __ad7293_spi_write(st, reg, val);
-> +	mutex_unlock(&st->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int __ad7293_spi_update_bits(struct ad7293_state *st, unsigned int reg,
-> +				    u16 mask, u16 val)
-> +{
-> +	int ret;
-> +	u16 data, temp;
-> +
-> +	ret = __ad7293_spi_read(st, reg, &data);
-> +	if (ret)
-> +		return ret;
-> +
-> +	temp = (data & ~mask) | (val & mask);
-> +
-> +	return __ad7293_spi_write(st, reg, temp);
-> +}
-> +
-> +static int ad7293_spi_update_bits(struct ad7293_state *st, unsigned int reg,
-> +				  u16 mask, u16 val)
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&st->lock);
-> +	ret = __ad7293_spi_update_bits(st, reg, mask, val);
-> +	mutex_unlock(&st->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int ad7293_adc_get_scale(struct ad7293_state *st, unsigned int ch, u16 *range)
-> +{
-> +	int ret;
-> +	u16 data;
-> +
-> +	mutex_lock(&st->lock);
-> +
-> +	ret = __ad7293_spi_read(st, AD7293_REG_VINX_RANGE1, &data);
-> +	if (ret)
-> +		goto exit;
-> +
-> +	*range = AD7293_REG_VINX_RANGE_GET_CH_MSK(data, ch);
-> +
-> +	ret = __ad7293_spi_read(st, AD7293_REG_VINX_RANGE0, &data);
-> +	if (ret)
-> +		goto exit;
-> +
-> +	*range |= AD7293_REG_VINX_RANGE_GET_CH_MSK(data, ch) << 1;
-> +
-> +exit:
-> +	mutex_unlock(&st->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int ad7293_adc_set_scale(struct ad7293_state *st, unsigned int ch, u16 range)
-> +{
-> +	int ret;
-> +	unsigned int ch_msk = BIT(ch);
-> +
-> +	mutex_lock(&st->lock);
-> +	ret = __ad7293_spi_update_bits(st, AD7293_REG_VINX_RANGE1, ch_msk,
-> +				       AD7293_REG_VINX_RANGE_SET_CH_MSK(range, ch));
-> +	if (ret)
-> +		goto exit;
-> +
-> +	ret = __ad7293_spi_update_bits(st, AD7293_REG_VINX_RANGE0, ch_msk,
-> +				       AD7293_REG_VINX_RANGE_SET_CH_MSK((range >> 1), ch));
-> +
-> +exit:
-> +	mutex_unlock(&st->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int ad7293_get_offset(struct ad7293_state *st, unsigned int ch, u16 *offset)
-> +{
-> +	if (ch < AD7293_TSENSE_MIN_OFFSET_CH)
-> +		return ad7293_spi_read(st, AD7293_REG_VIN0_OFFSET + ch, offset);
-> +	else if (ch < AD7293_ISENSE_MIN_OFFSET_CH)
-> +		return ad7293_spi_read(st, AD7293_REG_TSENSE_INT_OFFSET + (ch - 4), offset);
-> +	else if (ch < AD7293_VOUT_MIN_OFFSET_CH)
-> +		return ad7293_spi_read(st, AD7293_REG_ISENSE0_OFFSET + (ch - 7), offset);
-> +	else if (ch <= AD7293_VOUT_MAX_OFFSET_CH)
-> +		return ad7293_spi_read(st, AD7293_REG_UNI_VOUT0_OFFSET + (ch - 11), offset);
-> +
-> +	return -EINVAL;
-> +}
-> +
-> +static int ad7293_set_offset(struct ad7293_state *st, unsigned int ch, u16 offset)
-> +{
-> +	if (ch < AD7293_TSENSE_MIN_OFFSET_CH)
-> +		return ad7293_spi_write(st, AD7293_REG_VIN0_OFFSET + ch, offset);
-> +	else if (ch < AD7293_ISENSE_MIN_OFFSET_CH)
-> +		return ad7293_spi_write(st, AD7293_REG_TSENSE_INT_OFFSET +
-> +					(ch - AD7293_TSENSE_MIN_OFFSET_CH), offset);
-> +	else if (ch < AD7293_VOUT_MIN_OFFSET_CH)
-> +		return ad7293_spi_write(st, AD7293_REG_ISENSE0_OFFSET +
-> +					(ch - AD7293_ISENSE_MIN_OFFSET_CH), offset);
-> +	else if (ch <= AD7293_VOUT_MAX_OFFSET_CH)
-> +		return ad7293_spi_update_bits(st, AD7293_REG_UNI_VOUT0_OFFSET +
-> +						(ch - AD7293_VOUT_MIN_OFFSET_CH),
-> +						AD7293_REG_VOUT_OFFSET_MSK,
-> +						FIELD_PREP(AD7293_REG_VOUT_OFFSET_MSK, offset));
-> +
-> +	return -EINVAL;
-> +}
-> +
-> +static int ad7293_isense_set_scale(struct ad7293_state *st, unsigned int ch, u16 gain)
-> +{
-> +	unsigned int ch_msk = (0xf << (4 * ch));
-> +
-> +	return ad7293_spi_update_bits(st, AD7293_REG_ISENSE_GAIN, ch_msk, gain << (4 * ch));
-> +}
-> +
-> +static int ad7293_isense_get_scale(struct ad7293_state *st, unsigned int ch, u16 *gain)
-> +{
-> +	int ret;
-> +
-> +	ret = ad7293_spi_read(st, AD7293_REG_ISENSE_GAIN, gain);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*gain = (*gain >> (4 * ch)) & 0xf;
-> +
-> +	return ret;
-> +}
-> +
-> +static int ad7293_dac_write_raw(struct ad7293_state *st, unsigned int ch, u16 raw)
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&st->lock);
-> +
-> +	ret = __ad7293_spi_update_bits(st, AD7293_REG_DAC_EN, BIT(ch), BIT(ch));
-> +	if (ret)
-> +		goto exit;
-> +
-> +	ret =  __ad7293_spi_write(st, AD7293_REG_UNI_VOUT0 + ch,
-> +				  FIELD_PREP(AD7293_REG_DATA_RAW_MSK, raw));
-> +
-> +exit:
-> +	mutex_unlock(&st->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int ad7293_ch_read_raw(struct ad7293_state *st, enum ad7293_ch_type type, unsigned int ch,
-> +			      u16 *raw)
-> +{
-> +	int ret;
-> +	unsigned int reg_wr, reg_rd, data_wr;
-> +
-> +	switch (type) {
-> +	case AD7293_ADC_VINX:
-> +		reg_wr = AD7293_REG_VINX_SEQ;
-> +		reg_rd = AD7293_REG_VIN0 + ch;
-> +		data_wr = BIT(ch);
-> +
-> +		break;
-> +	case AD7293_ADC_TSENSE:
-> +		reg_wr = AD7293_REG_ISENSEX_TSENSEX_SEQ;
-> +		reg_rd = AD7293_REG_TSENSE_INT + ch;
-> +		data_wr = BIT(ch);
-> +
-> +		break;
-> +	case AD7293_ADC_ISENSE:
-> +		reg_wr = AD7293_REG_ISENSEX_TSENSEX_SEQ;
-> +		reg_rd = AD7293_REG_ISENSE_0 + ch;
-> +		data_wr = BIT(ch) << 8;
-> +
-> +		break;
-> +	case AD7293_DAC:
-> +		reg_rd = AD7293_REG_UNI_VOUT0 + ch;
-> +
-> +		break;
-> +	default:
+> +	if (cmd != RPMSG_CREATE_EPT_IOCTL)
 > +		return -EINVAL;
-> +	}
 > +
-> +	mutex_lock(&st->lock);
+> +	if (copy_from_user(&eptinfo, argp, sizeof(eptinfo)))
+> +		return -EFAULT;
 > +
-> +	if (type != AD7293_DAC) {
-> +		if (type == AD7293_ADC_TSENSE) {
-> +			ret = __ad7293_spi_write(st, AD7293_REG_TSENSE_BG_EN, BIT(ch));
-> +			if (ret)
-> +				goto exit;
+> +	memcpy(chinfo.name, eptinfo.name, RPMSG_NAME_SIZE);
+> +	chinfo.name[RPMSG_NAME_SIZE - 1] = '\0';
+> +	chinfo.src = eptinfo.src;
+> +	chinfo.dst = eptinfo.dst;
 > +
-> +			usleep_range(9000, 9900);
-> +		} else if (type == AD7293_ADC_ISENSE) {
-> +			ret = __ad7293_spi_write(st, AD7293_REG_ISENSE_BG_EN, BIT(ch));
-> +			if (ret)
-> +				goto exit;
-> +
-> +			usleep_range(2000, 7000);
-> +		}
-> +
-> +		ret = __ad7293_spi_write(st, reg_wr, data_wr);
-> +		if (ret)
-> +			goto exit;
-> +
-> +		ret = __ad7293_spi_write(st, AD7293_REG_CONV_CMD, 0x82);
-> +		if (ret)
-> +			goto exit;
-> +	}
-> +
-> +	ret = __ad7293_spi_read(st, reg_rd, raw);
-> +
-> +	*raw = FIELD_GET(AD7293_REG_DATA_RAW_MSK, *raw);
-> +
-> +exit:
-> +	mutex_unlock(&st->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int ad7293_read_raw(struct iio_dev *indio_dev,
-> +			   struct iio_chan_spec const *chan,
-> +			   int *val, int *val2, long info)
-> +{
-> +	struct ad7293_state *st = iio_priv(indio_dev);
-> +	int ret;
-> +	u16 data;
-> +
-> +	switch (info) {
-> +	case IIO_CHAN_INFO_RAW:
-> +		switch (chan->type) {
-> +		case IIO_VOLTAGE:
-> +			if (chan->output)
-> +				ret =  ad7293_ch_read_raw(st, AD7293_DAC, chan->channel, &data);
-> +			else
-> +				ret =  ad7293_ch_read_raw(st, AD7293_ADC_VINX, chan->channel, &data);
-Line length of 101 exceeds 100 columns,
-if resend next version, please fix it.
-After that, other looks good to me, add
-
-Reviewed-by: Cai Huoqing <cai.huoqing@linux.dev>
-
-(You could keep this patch for serveral days for other review)
-Thanks,
-Cai
-> +
-> +			break;
-> +		case IIO_CURRENT:
-> +			ret =  ad7293_ch_read_raw(st, AD7293_ADC_ISENSE, chan->channel, &data);
-> +
-> +			break;
-> +		case IIO_TEMP:
-> +			ret =  ad7293_ch_read_raw(st, AD7293_ADC_TSENSE, chan->channel, &data);
-> +
-> +			break;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +
-> +		if (ret)
-> +			return ret;
-> +
-> +		*val = data;
-> +
-> +		return IIO_VAL_INT;
-> +	case IIO_CHAN_INFO_OFFSET:
-> +		switch (chan->type) {
-> +		case IIO_VOLTAGE:
-> +			if (chan->output) {
-> +				ret = ad7293_get_offset(st, chan->channel +
-> +							AD7293_VOUT_MIN_OFFSET_CH, &data);
-> +
-> +				data = FIELD_GET(AD7293_REG_VOUT_OFFSET_MSK, data);
-> +			} else {
-> +				ret = ad7293_get_offset(st, chan->channel, &data);
-> +			}
-> +
-> +			break;
-> +		case IIO_CURRENT:
-> +			ret = ad7293_get_offset(st, chan->channel +
-> +						AD7293_ISENSE_MIN_OFFSET_CH, &data);
-> +
-> +			break;
-> +		case IIO_TEMP:
-> +			ret = ad7293_get_offset(st, chan->channel +
-> +						AD7293_TSENSE_MIN_OFFSET_CH, &data);
-> +
-> +			break;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +		if (ret)
-> +			return ret;
-> +
-> +		*val = data;
-> +
-> +		return IIO_VAL_INT;
-> +	case IIO_CHAN_INFO_SCALE:
-> +		switch (chan->type) {
-> +		case IIO_VOLTAGE:
-> +			ret = ad7293_adc_get_scale(st, chan->channel, &data);
-> +			if (ret)
-> +				return ret;
-> +
-> +			*val = data;
-> +
-> +			return IIO_VAL_INT;
-> +		case IIO_CURRENT:
-> +			ret = ad7293_isense_get_scale(st, chan->channel, &data);
-> +			if (ret)
-> +				return ret;
-> +
-> +			*val = data;
-> +
-> +			return IIO_VAL_INT;
-> +		case IIO_TEMP:
-> +			*val = 1;
-> +			*val2 = 8;
-> +
-> +			return IIO_VAL_FRACTIONAL;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static int ad7293_write_raw(struct iio_dev *indio_dev,
-> +			    struct iio_chan_spec const *chan,
-> +			    int val, int val2, long info)
-> +{
-> +	struct ad7293_state *st = iio_priv(indio_dev);
-> +
-> +	switch (info) {
-> +	case IIO_CHAN_INFO_RAW:
-> +		switch (chan->type) {
-> +		case IIO_VOLTAGE:
-> +			if (!chan->output)
-> +				return -EINVAL;
-> +
-> +			return ad7293_dac_write_raw(st, chan->channel, val);
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +	case IIO_CHAN_INFO_OFFSET:
-> +		switch (chan->type) {
-> +		case IIO_VOLTAGE:
-> +			if (chan->output)
-> +				return ad7293_set_offset(st, chan->channel +
-> +							 AD7293_VOUT_MIN_OFFSET_CH, val);
-> +			else
-> +				return ad7293_set_offset(st, chan->channel, val);
-> +		case IIO_CURRENT:
-> +			return ad7293_set_offset(st, chan->channel +
-> +						 AD7293_ISENSE_MIN_OFFSET_CH, val);
-> +		case IIO_TEMP:
-> +			return ad7293_set_offset(st, chan->channel +
-> +						 AD7293_TSENSE_MIN_OFFSET_CH, val);
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +	case IIO_CHAN_INFO_SCALE:
-> +		switch (chan->type) {
-> +		case IIO_VOLTAGE:
-> +			return ad7293_adc_set_scale(st, chan->channel, val);
-> +		case IIO_CURRENT:
-> +			return ad7293_isense_set_scale(st, chan->channel, val);
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static int ad7293_reg_access(struct iio_dev *indio_dev,
-> +			     unsigned int reg,
-> +			     unsigned int write_val,
-> +			     unsigned int *read_val)
-> +{
-> +	struct ad7293_state *st = iio_priv(indio_dev);
-> +	int ret;
-> +
-> +	if (read_val)
-> +		ret = ad7293_spi_read(st, reg, (u16 *)read_val);
-> +	else
-> +		ret = ad7293_spi_write(st, reg, (u16)write_val);
-> +
-> +	return ret;
-> +}
-> +
-> +static int ad7293_read_avail(struct iio_dev *indio_dev,
-> +			     struct iio_chan_spec const *chan,
-> +			     const int **vals, int *type, int *length,
-> +			     long info)
-> +{
-> +	switch (info) {
-> +	case IIO_CHAN_INFO_OFFSET:
-> +		*vals = dac_offset_table;
-> +		*type = IIO_VAL_INT;
-> +		*length = ARRAY_SIZE(dac_offset_table);
-> +
-> +		return IIO_AVAIL_LIST;
-> +	case IIO_CHAN_INFO_SCALE:
-> +		*type = IIO_VAL_INT;
-> +
-> +		switch (chan->type) {
-> +		case IIO_VOLTAGE:
-> +			*vals = adc_range_table;
-> +			*length = ARRAY_SIZE(adc_range_table);
-> +			return IIO_AVAIL_LIST;
-> +		case IIO_CURRENT:
-> +			*vals = isense_gain_table;
-> +			*length = ARRAY_SIZE(isense_gain_table);
-> +			return IIO_AVAIL_LIST;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +#define AD7293_CHAN_ADC(_channel) {						\
-> +	.type = IIO_VOLTAGE,							\
-> +	.output = 0,								\
-> +	.indexed = 1,								\
-> +	.channel = _channel,							\
-> +	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE) | \
-> +			      BIT(IIO_CHAN_INFO_OFFSET),			\
-> +	.info_mask_shared_by_type_available = BIT(IIO_CHAN_INFO_SCALE)		\
-> +}
-> +
-> +#define AD7293_CHAN_DAC(_channel) {						\
-> +	.type = IIO_VOLTAGE,							\
-> +	.output = 1,								\
-> +	.indexed = 1,								\
-> +	.channel = _channel,							\
-> +	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_OFFSET), \
-> +	.info_mask_shared_by_type_available = BIT(IIO_CHAN_INFO_OFFSET)		\
-> +}
-> +
-> +#define AD7293_CHAN_ISENSE(_channel) {						\
-> +	.type = IIO_CURRENT,							\
-> +	.output = 0,								\
-> +	.indexed = 1,								\
-> +	.channel = _channel,							\
-> +	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_OFFSET) | \
-> +			      BIT(IIO_CHAN_INFO_SCALE),				\
-> +	.info_mask_shared_by_type_available = BIT(IIO_CHAN_INFO_SCALE)		\
-> +}
-> +
-> +#define AD7293_CHAN_TEMP(_channel) {						\
-> +	.type = IIO_TEMP,							\
-> +	.output = 0,								\
-> +	.indexed = 1,								\
-> +	.channel = _channel,							\
-> +	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_OFFSET), \
-> +	.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE)			\
-> +}
-> +
-> +static const struct iio_chan_spec ad7293_channels[] = {
-> +	AD7293_CHAN_ADC(0),
-> +	AD7293_CHAN_ADC(1),
-> +	AD7293_CHAN_ADC(2),
-> +	AD7293_CHAN_ADC(3),
-> +	AD7293_CHAN_ISENSE(0),
-> +	AD7293_CHAN_ISENSE(1),
-> +	AD7293_CHAN_ISENSE(2),
-> +	AD7293_CHAN_ISENSE(3),
-> +	AD7293_CHAN_TEMP(0),
-> +	AD7293_CHAN_TEMP(1),
-> +	AD7293_CHAN_TEMP(2),
-> +	AD7293_CHAN_DAC(0),
-> +	AD7293_CHAN_DAC(1),
-> +	AD7293_CHAN_DAC(2),
-> +	AD7293_CHAN_DAC(3),
-> +	AD7293_CHAN_DAC(4),
-> +	AD7293_CHAN_DAC(5),
-> +	AD7293_CHAN_DAC(6),
-> +	AD7293_CHAN_DAC(7)
+> +	return rpmsg_chrdev_eptdev_create(ctrldev->rpdev, &ctrldev->dev, chinfo);
 > +};
 > +
-> +static int ad7293_soft_reset(struct ad7293_state *st)
-> +{
-> +	int ret;
-> +
-> +	ret = __ad7293_spi_write(st, AD7293_REG_SOFT_RESET, 0x7293);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return __ad7293_spi_write(st, AD7293_REG_SOFT_RESET, 0x0000);
-> +}
-> +
-> +static int ad7293_reset(struct ad7293_state *st)
-> +{
-> +	if (st->gpio_reset) {
-> +		gpiod_set_value(st->gpio_reset, 0);
-> +		usleep_range(100, 1000);
-> +		gpiod_set_value(st->gpio_reset, 1);
-> +		usleep_range(100, 1000);
-> +
-> +		return 0;
-> +	}
-> +
-> +	/* Perform a software reset */
-> +	return ad7293_soft_reset(st);
-> +}
-> +
-> +static int ad7293_properties_parse(struct ad7293_state *st)
-> +{
-> +	struct spi_device *spi = st->spi;
-> +
-> +	st->gpio_reset = devm_gpiod_get_optional(&st->spi->dev, "reset",
-> +						 GPIOD_OUT_HIGH);
-> +	if (IS_ERR(st->gpio_reset))
-> +		return dev_err_probe(&spi->dev, PTR_ERR(st->gpio_reset),
-> +				     "failed to get the reset GPIO\n");
-> +
-> +	st->reg_avdd = devm_regulator_get(&spi->dev, "avdd");
-> +	if (IS_ERR(st->reg_avdd))
-> +		return dev_err_probe(&spi->dev, PTR_ERR(st->reg_avdd),
-> +				     "failed to get the AVDD voltage\n");
-> +
-> +	st->reg_vdrive = devm_regulator_get(&spi->dev, "vdrive");
-> +	if (IS_ERR(st->reg_vdrive))
-> +		return dev_err_probe(&spi->dev, PTR_ERR(st->reg_vdrive),
-> +				     "failed to get the VDRIVE voltage\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static void ad7293_reg_disable(void *data)
-> +{
-> +	regulator_disable(data);
-> +}
-> +
-> +static int ad7293_init(struct ad7293_state *st)
-> +{
-> +	int ret;
-> +	u16 chip_id;
-> +	struct spi_device *spi = st->spi;
-> +
-> +	ret = ad7293_properties_parse(st);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ad7293_reset(st);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regulator_enable(st->reg_avdd);
-> +	if (ret) {
-> +		dev_err(&spi->dev, "Failed to enable specified AVDD Voltage!\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = devm_add_action_or_reset(&spi->dev, ad7293_reg_disable,
-> +				       st->reg_avdd);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regulator_enable(st->reg_vdrive);
-> +	if (ret) {
-> +		dev_err(&spi->dev, "Failed to enable specified VDRIVE Voltage!\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = devm_add_action_or_reset(&spi->dev, ad7293_reg_disable,
-> +				       st->reg_vdrive);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regulator_get_voltage(st->reg_avdd);
-> +	if (ret < 0) {
-> +		dev_err(&spi->dev, "Failed to read avdd regulator: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	if (ret > 5500000 || ret < 4500000)
-> +		return -EINVAL;
-> +
-> +	ret = regulator_get_voltage(st->reg_vdrive);
-> +	if (ret < 0) {
-> +		dev_err(&spi->dev, "Failed to read vdrive regulator: %d\n", ret);
-> +		return ret;
-> +	}
-> +	if (ret > 5500000 || ret < 1700000)
-> +		return -EINVAL;
-> +
-> +	/* Check Chip ID */
-> +	ret = __ad7293_spi_read(st, AD7293_REG_DEVICE_ID, &chip_id);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (chip_id != AD7293_CHIP_ID) {
-> +		dev_err(&spi->dev, "Invalid Chip ID.\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct iio_info ad7293_info = {
-> +	.read_raw = ad7293_read_raw,
-> +	.write_raw = ad7293_write_raw,
-> +	.read_avail = &ad7293_read_avail,
-> +	.debugfs_reg_access = &ad7293_reg_access,
+> +static const struct file_operations rpmsg_ctrldev_fops = {
+> +	.owner = THIS_MODULE,
+> +	.open = rpmsg_ctrldev_open,
+> +	.release = rpmsg_ctrldev_release,
+> +	.unlocked_ioctl = rpmsg_ctrldev_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
 > +};
 > +
-> +static int ad7293_probe(struct spi_device *spi)
+> +static void rpmsg_ctrldev_release_device(struct device *dev)
 > +{
-> +	struct iio_dev *indio_dev;
-> +	struct ad7293_state *st;
+> +	struct rpmsg_ctrldev *ctrldev = dev_to_ctrldev(dev);
+> +
+> +	ida_simple_remove(&rpmsg_ctrl_ida, dev->id);
+> +	ida_simple_remove(&rpmsg_minor_ida, MINOR(dev->devt));
+> +	cdev_del(&ctrldev->cdev);
+> +	kfree(ctrldev);
+> +}
+> +
+> +static int rpmsg_ctrldev_probe(struct rpmsg_device *rpdev)
+> +{
+> +	struct rpmsg_ctrldev *ctrldev;
+> +	struct device *dev;
 > +	int ret;
 > +
-> +	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*st));
-> +	if (!indio_dev)
+> +	ctrldev = kzalloc(sizeof(*ctrldev), GFP_KERNEL);
+> +	if (!ctrldev)
 > +		return -ENOMEM;
 > +
-> +	st = iio_priv(indio_dev);
+> +	ctrldev->rpdev = rpdev;
 > +
-> +	indio_dev->info = &ad7293_info;
-> +	indio_dev->name = "ad7293";
-> +	indio_dev->channels = ad7293_channels;
-> +	indio_dev->num_channels = ARRAY_SIZE(ad7293_channels);
+> +	dev = &ctrldev->dev;
+> +	device_initialize(dev);
+> +	dev->parent = &rpdev->dev;
+> +	dev->class = rpmsg_class;
 > +
-> +	st->spi = spi;
-> +	st->page_select = 0;
+> +	cdev_init(&ctrldev->cdev, &rpmsg_ctrldev_fops);
+> +	ctrldev->cdev.owner = THIS_MODULE;
 > +
-> +	mutex_init(&st->lock);
+> +	ret = ida_simple_get(&rpmsg_minor_ida, 0, RPMSG_DEV_MAX, GFP_KERNEL);
+> +	if (ret < 0)
+> +		goto free_ctrldev;
+> +	dev->devt = MKDEV(MAJOR(rpmsg_major), ret);
 > +
-> +	ret = ad7293_init(st);
+> +	ret = ida_simple_get(&rpmsg_ctrl_ida, 0, 0, GFP_KERNEL);
+> +	if (ret < 0)
+> +		goto free_minor_ida;
+> +	dev->id = ret;
+> +	dev_set_name(&ctrldev->dev, "rpmsg_ctrl%d", ret);
+> +
+> +	ret = cdev_add(&ctrldev->cdev, dev->devt, 1);
 > +	if (ret)
-> +		return ret;
+> +		goto free_ctrl_ida;
 > +
-> +	return devm_iio_device_register(&spi->dev, indio_dev);
+> +	/* We can now rely on the release function for cleanup */
+> +	dev->release = rpmsg_ctrldev_release_device;
+> +
+> +	ret = device_add(dev);
+> +	if (ret) {
+> +		dev_err(&rpdev->dev, "device_add failed: %d\n", ret);
+> +		put_device(dev);
+> +	}
+> +
+> +	dev_set_drvdata(&rpdev->dev, ctrldev);
+> +
+> +	return ret;
+> +
+> +free_ctrl_ida:
+> +	ida_simple_remove(&rpmsg_ctrl_ida, dev->id);
+> +free_minor_ida:
+> +	ida_simple_remove(&rpmsg_minor_ida, MINOR(dev->devt));
+> +free_ctrldev:
+> +	put_device(dev);
+> +	kfree(ctrldev);
+> +
+> +	return ret;
 > +}
 > +
-> +static const struct spi_device_id ad7293_id[] = {
-> +	{ "ad7293", 0 },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(spi, ad7293_id);
+> +static void rpmsg_ctrldev_remove(struct rpmsg_device *rpdev)
+> +{
+> +	struct rpmsg_ctrldev *ctrldev = dev_get_drvdata(&rpdev->dev);
+> +	int ret;
 > +
-> +static const struct of_device_id ad7293_of_match[] = {
-> +	{ .compatible = "adi,ad7293" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, ad7293_of_match);
+> +	/* Destroy all endpoints */
+> +	ret = device_for_each_child(&ctrldev->dev, NULL, rpmsg_chrdev_eptdev_destroy);
+> +	if (ret)
+> +		dev_warn(&rpdev->dev, "failed to nuke endpoints: %d\n", ret);
 > +
-> +static struct spi_driver ad7293_driver = {
-> +	.driver = {
-> +		.name = "ad7293",
-> +		.of_match_table = ad7293_of_match,
+> +	device_del(&ctrldev->dev);
+> +	put_device(&ctrldev->dev);
+> +}
+> +
+> +static struct rpmsg_driver rpmsg_ctrldev_driver = {
+> +	.probe = rpmsg_ctrldev_probe,
+> +	.remove = rpmsg_ctrldev_remove,
+> +	.drv = {
+> +		.name = "rpmsg_chrdev",
 > +	},
-> +	.probe = ad7293_probe,
-> +	.id_table = ad7293_id,
 > +};
-> +module_spi_driver(ad7293_driver);
 > +
-> +MODULE_AUTHOR("Antoniu Miclaus <antoniu.miclaus@analog.com");
-> +MODULE_DESCRIPTION("Analog Devices AD7293");
+> +static int rpmsg_ctrldev_init(void)
+> +{
+> +	int ret;
+> +
+> +	ret = alloc_chrdev_region(&rpmsg_major, 0, RPMSG_DEV_MAX, "rpmsg_ctrl");
+> +	if (ret < 0) {
+> +		pr_err("rpmsg: failed to allocate char dev region\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = register_rpmsg_driver(&rpmsg_ctrldev_driver);
+> +	if (ret < 0) {
+> +		pr_err("rpmsg ctrl: failed to register rpmsg driver\n");
+> +		unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+> +	}
+> +
+> +	return ret;
+> +}
+> +postcore_initcall(rpmsg_ctrldev_init);
+> +
+> +static void rpmsg_ctrldev_exit(void)
+> +{
+> +	unregister_rpmsg_driver(&rpmsg_ctrldev_driver);
+> +	unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+> +}
+> +module_exit(rpmsg_ctrldev_exit);
+> +
+> +MODULE_DESCRIPTION("rpmsg control interface");
+> +MODULE_ALIAS("rpmsg:" KBUILD_MODNAME);
 > +MODULE_LICENSE("GPL v2");
 > -- 
-> 2.34.1
+> 2.17.1
 > 

@@ -2,230 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 104FA4677ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B9C4677FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352175AbhLCNSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 08:18:18 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:55176 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238833AbhLCNSR (ORCPT
+        id S1352241AbhLCNVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 08:21:55 -0500
+Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:51777 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244198AbhLCNVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 08:18:17 -0500
-Date:   Fri, 3 Dec 2021 14:14:51 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638537292;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7gD/yRCj6iH5Z38Ok8ZKXwadPmr3m6EbXsHhsjZCA5Q=;
-        b=N/HaGw01Xovigsgb/pbbQDoAjMGfAtO5/iTG5FC7ecYM3OzX3/zWFIWX6BkzbdVkT6SMlT
-        TyezQ6QZ28kJTlOCCMJTqGPsX1ylfqTdSqEz+93OcY0dFel8I+PKIOIINTUagaW8cvXydS
-        b848hPKGLJSwl7r2NJfUPUaJBtjUGuRuXgqHaRRwgtvBREa9e1VXstSFVhJm4tAiZr2ALV
-        VJigq77+9lzFaSGKuZ5tzRCk1UwFu0i0JOt4LTVvOBXjzL0L205hEruSK7rlr6LHLMHQ3e
-        +K0N4AES/9u/MPCqw7dCcBu2zf75uVI7bC5hhmRkWdQfz2ewJi7y59X+d35r8A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638537292;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7gD/yRCj6iH5Z38Ok8ZKXwadPmr3m6EbXsHhsjZCA5Q=;
-        b=DR2LOQ8ZcWrmiraBX0Eg8k0YiC9ITwzjvzcdEpUjFmeKwl1t+avEuPAxR4BvdiYe5VUiIz
-        VLuDrcTcEIjQBQAw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        brian.murray@canonical.com
-Subject: Re: [PATCH] panic: Remove oops_id.
-Message-ID: <20211203131451.j5zd42flgfyqoyxo@linutronix.de>
-References: <20211202142713.ofadr43tawengfw4@linutronix.de>
- <20211202144308.70fd454883c1d1e643491471@linux-foundation.org>
+        Fri, 3 Dec 2021 08:21:54 -0500
+Received: from localhost.localdomain ([114.149.34.46])
+        by smtp.orange.fr with ESMTPA
+        id t8S9mZgOjWUfjt8SGmn0s3; Fri, 03 Dec 2021 14:18:28 +0100
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
+X-ME-Date: Fri, 03 Dec 2021 14:18:28 +0100
+X-ME-IP: 114.149.34.46
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Jimmy Assarsson <extja@kvaser.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v4 0/5] fix statistics and payload issues for error
+Date:   Fri,  3 Dec 2021 22:18:03 +0900
+Message-Id: <20211203131808.2380042-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211202144308.70fd454883c1d1e643491471@linux-foundation.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-02 14:43:08 [-0800], Andrew Morton wrote:
-> On Thu, 2 Dec 2021 15:27:13 +0100 Sebastian Andrzej Siewior <bigeasy@linu=
-tronix.de> wrote:
->=20
-> > The oops id has been added as part of the end of trace marker for the
-> > kerneloops.org project. The id is used to automatically identify duplic=
-ate
-> > submissions of the same report. Identical looking reports with different
-> > a id can be considered as the same oops occurred again.
-> >=20
-> > The early initialisation of the oops_id can create a warning if the
-> > random core is not yet fully initialized. On PREEMPT_RT it is
-> > problematic if the id is initialized on demand from non preemptible
-> > context.
->=20
-> "problematic" isn't very useful :(
->=20
-> What exactly goes wrong under -rt?
+Important: this patch series depends on below patch:
+https://lore.kernel.org/linux-can/20211123111654.621610-1-mailhol.vincent@wanadoo.fr/T/#u
 
-Sorry, I indeed forgot that part.
-get_random_bytes() acquires crng_state::lock (spinlock_t) which is a
-sleeping lock on PREEMPT_RT and can not be acquired in non-preemptible
-context.
+There are some common errors which are made when updating the network
+statistics or processing the CAN payload:
 
-> > The kernel oops project is not available since 2017.
-> > Remove the oops_id.
->=20
-> (googles "linux oops_id")
->=20
-> https://wiki.ubuntu.com/UbuntuWeeklyNewsletter/Issue565#What.2BIBk-s_the_=
-OOPS_ID.3F
->=20
-> Seems someone was using it in 2019.  My search was very brief.
+  1. Incrementing the "normal" stats when generating or sending a CAN
+  error message frame. Error message frames are an abstraction of
+  Socket CAN and do not exist on the wire. The first patch of this
+  series fixes the RX stats for 22 different drivers, the second one
+  fixes the TX stasts for the kvaser driver (N.B. only this driver is
+  capable of sending error on the bus).
 
-The referenced blog entry is gone. So I can't tell what it is used for.
-But I noticed whoopsie and added Brian on Cc. Brian, is the oops-id from
-kernel backtrace (the numbers after "end trace") used for anything by
-oopsie? The source of whoopsie has something named "oopsid" but it
-appears to be something sent by the server as a response. So it could be
-something different or kernel's oops-id parsed=E2=80=A6
+  2. Copying the payload of RTR frames: RTR frames have no payload and
+  the data buffer only contains garbage. The DLC/length should not be
+  used to do a memory copy. The third patch of this series address
+  this issue for 3 different drivers.
 
-> The world wouldn't end if we removed this.  But perhaps it would be better
-> to replace the oops id with "0" to avoid breaking parsers.
->=20
-> It's just a fairly unique number.  We could use anything.  Simply
-> jiffies or ktime_get() would suffice?
+  3. Counting the length of the Remote Transmission Frames (RTR). The
+  length of an RTR frame is the length of the requested frame not the
+  actual payload. In reality the payload of an RTR frame is always 0
+  bytes long. The fourth patch of this series fixes the RX stats for
+  27 different drivers and the fifth one fixes the TX stats for 25
+  different ones.
 
-I had a patch to get rid of the RT problem and avoid the
-warn_unseeded_randomness() warning but then I was looking at it and
-asking myself why keeping it=E2=80=A6
-I definitely could replace it with ktime_get() or dig the old patch
-fixing it and keeping the random id if there is the need for it.
 
-After looking at it, maybe something like a fingerprint of the warning
-would make sense. You could throw it into google and find reports which
-might indicate the same warning as you currently having, say something
-like:
+* Changelog *
 
-diff --git a/arch/x86/kernel/dumpstack.c b/arch/x86/kernel/dumpstack.c
-index ea4fe192189d5..f4bbed25e4dd9 100644
---- a/arch/x86/kernel/dumpstack.c
-+++ b/arch/x86/kernel/dumpstack.c
-@@ -23,6 +23,8 @@
- #include <asm/stacktrace.h>
- #include <asm/unwind.h>
-=20
-+void report_fp_add(const char *s, int len);
-+
- int panic_on_unrecovered_nmi;
- int panic_on_io_nmi;
- static int die_counter;
-@@ -70,6 +72,14 @@ static void printk_stack_address(unsigned long address, =
-int reliable,
- {
- 	touch_nmi_watchdog();
- 	printk("%s %s%pBb\n", log_lvl, reliable ? "" : "? ", (void *)address);
-+	if (reliable) {
-+		char buf[64];
-+		int len;
-+
-+		len =3D snprintf(buf, sizeof(buf), "%ps", (void *)address);
-+		len =3D min(len, sizeof(buf));
-+		report_fp_add(buf, len);
-+	}
- }
-=20
- static int copy_code(struct pt_regs *regs, u8 *buf, unsigned long src,
-diff --git a/init/main.c b/init/main.c
-index bb984ed79de0e..70e2c0d6a9c94 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -1495,6 +1495,7 @@ static int __ref kernel_init(void *unused)
- 	 * Wait until kthreadd is all set-up.
- 	 */
- 	wait_for_completion(&kthreadd_done);
-+	WARN_ON(1);
-=20
- 	kernel_init_freeable();
- 	/* need to finish all async __init code before freeing the memory */
-@@ -1520,6 +1521,7 @@ static int __ref kernel_init(void *unused)
- 	rcu_end_inkernel_boot();
-=20
- 	do_sysctl_args();
-+	WARN_ON(1);
-=20
- 	if (ramdisk_execute_command) {
- 		ret =3D run_init_process(ramdisk_execute_command);
-@@ -1581,6 +1583,7 @@ static noinline void __init kernel_init_freeable(void)
- {
- 	/* Now the scheduler is fully set up and can do blocking allocations */
- 	gfp_allowed_mask =3D __GFP_BITS_MASK;
-+	WARN_ON(1);
-=20
- 	/*
- 	 * init can allocate pages on any node
-@@ -1614,6 +1617,7 @@ static noinline void __init kernel_init_freeable(void)
- 	wait_for_initramfs();
- 	console_on_rootfs();
-=20
-+	WARN_ON(1);
- 	/*
- 	 * check if there is an early userspace init.  If yes, let it do all
- 	 * the work
-diff --git a/kernel/panic.c b/kernel/panic.c
-index cefd7d82366fb..c6bd135815b0b 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -533,6 +533,20 @@ void oops_enter(void)
- 		trigger_all_cpu_backtrace();
- }
-=20
-+#include <linux/jhash.h>
-+
-+static unsigned int fingerprint_state;
-+
-+static void fingerprint_state_init(void)
-+{
-+	fingerprint_state =3D 0;
-+}
-+
-+void report_fp_add(const char *s, int len)
-+{
-+	fingerprint_state =3D jhash(s, len, fingerprint_state);
-+}
-+
- /*
-  * 64-bit random ID for oopses:
-  */
-@@ -552,7 +566,8 @@ late_initcall(init_oops_id);
- static void print_oops_end_marker(void)
- {
- 	init_oops_id();
--	pr_warn("---[ end trace %016llx ]---\n", (unsigned long long)oops_id);
-+	pr_warn("---[ end trace %016llx fingerprint: %08x ]---\n",
-+		(unsigned long long)oops_id, fingerprint_state);
- }
-=20
- /*
-@@ -574,6 +589,7 @@ struct warn_args {
- void __warn(const char *file, int line, void *caller, unsigned taint,
- 	    struct pt_regs *regs, struct warn_args *args)
- {
-+	fingerprint_state_init();
- 	disable_trace_on_warning();
-=20
- 	if (file)
---=20
+v3 -> v4:
 
-produces four backtraces, two with the same fingerprint.
+  * patch 2/5: kvaser: include the suggestion from Jimmy Assarsson so
+    that we don't need to get the original CAN frame anymore to
+    determine whether or not it was an error frame. patch 5/5 is
+    rebased accordingly.
 
-Adding fingerprint states to lockdep might be able to produce the same
-fingerprint for the same report, e.g. same two variables reported in a
-circular locking dependency.
+  * patch 5/5: kvaser: kvaser_usb_hydra_frame_to_cmd_std: remove
+    unrelated change.
 
-Sebastian
+  * patch 5/5: slcan: better factorize code for the tx RTR frames
+    (reorder the line instead of adding a new "if" branch).
+
+
+v2 -> v3:
+
+  * Fix an issue in the fourth patch ("do not increase rx_bytes
+    statistics for RTR frames"). In ucan_rx_can_msg() of the ucan
+    driver, the changes in v2 made no sense. Reverted it to v1.
+
+
+v1 -> v2:
+
+  * can_rx_offload_napi_poll: v1 used CAN_ERR_MASK instead of
+    CAN_ERR_FLAG. Fixed the issue.
+
+  * use correct vocabulary. The correct term to designate the Socket
+    CAN specific error skb is "error message frames" not "error
+    frames". "error frames" is used in the standard and has a
+    different meaning.
+
+  * better factorize code for the rx RTR frames. Most of the driver
+    already has a switch to check if the frame is a RTR. Moved the
+    instruction to increase net_device_stats:rx_bytes inside the else
+    branch of those switches whenever possible (for some drivers with
+    some complex logic, putting and additional RTR check was easier).
+
+  * add a patch which prevent drivers to copy the payload of RTR
+    frames.
+
+  * add a patch to cover the tx RTR frames (the fifth patch of
+    v2). The tx RTR frames issue was supposedly covered by the
+    can_get_echo_skb() function which returns the correct length for
+    drivers to increase their stats. However, the reality is that most
+    of the drivers do not check this value and instead use a local
+    copy of the length/dlc.
+
+Vincent Mailhol (5):
+  can: do not increase rx statistics when generating a CAN rx error
+    message frame
+  can: kvaser_usb: do not increase tx statistics when sending error
+    message frames
+  can: do not copy the payload of RTR frames
+  can: do not increase rx_bytes statistics for RTR frames
+  can: do not increase tx_bytes statistics for RTR frames
+
+ drivers/net/can/at91_can.c                    | 18 ++---
+ drivers/net/can/c_can/c_can.h                 |  1 -
+ drivers/net/can/c_can/c_can_main.c            | 16 ++---
+ drivers/net/can/cc770/cc770.c                 | 16 ++---
+ drivers/net/can/dev/dev.c                     |  4 --
+ drivers/net/can/dev/rx-offload.c              |  7 +-
+ drivers/net/can/grcan.c                       |  6 +-
+ drivers/net/can/ifi_canfd/ifi_canfd.c         | 11 +--
+ drivers/net/can/janz-ican3.c                  |  6 +-
+ drivers/net/can/kvaser_pciefd.c               | 16 ++---
+ drivers/net/can/m_can/m_can.c                 | 13 +---
+ drivers/net/can/mscan/mscan.c                 | 14 ++--
+ drivers/net/can/pch_can.c                     | 33 ++++-----
+ drivers/net/can/peak_canfd/peak_canfd.c       | 14 ++--
+ drivers/net/can/rcar/rcar_can.c               | 22 +++---
+ drivers/net/can/rcar/rcar_canfd.c             | 13 +---
+ drivers/net/can/sja1000/sja1000.c             | 11 ++-
+ drivers/net/can/slcan.c                       |  7 +-
+ drivers/net/can/softing/softing_main.c        |  8 +--
+ drivers/net/can/spi/hi311x.c                  | 31 ++++----
+ drivers/net/can/spi/mcp251x.c                 | 31 ++++----
+ drivers/net/can/sun4i_can.c                   | 22 +++---
+ drivers/net/can/usb/ems_usb.c                 | 14 ++--
+ drivers/net/can/usb/esd_usb2.c                | 13 ++--
+ drivers/net/can/usb/etas_es58x/es58x_core.c   |  7 --
+ drivers/net/can/usb/gs_usb.c                  |  7 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb.h   |  5 +-
+ .../net/can/usb/kvaser_usb/kvaser_usb_core.c  |  4 +-
+ .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 71 +++++++++----------
+ .../net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 20 ++----
+ drivers/net/can/usb/mcba_usb.c                | 23 +++---
+ drivers/net/can/usb/peak_usb/pcan_usb.c       |  9 ++-
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c  | 20 +++---
+ drivers/net/can/usb/peak_usb/pcan_usb_core.h  |  1 -
+ drivers/net/can/usb/peak_usb/pcan_usb_fd.c    | 11 ++-
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.c   | 12 ++--
+ drivers/net/can/usb/ucan.c                    | 17 +++--
+ drivers/net/can/usb/usb_8dev.c                | 17 ++---
+ drivers/net/can/vcan.c                        |  7 +-
+ drivers/net/can/vxcan.c                       |  2 +-
+ drivers/net/can/xilinx_can.c                  | 19 +++--
+ include/linux/can/skb.h                       |  5 +-
+ 42 files changed, 254 insertions(+), 350 deletions(-)
+
+
+base-commit: 4cc19cc269921210f3da65e4b038ad987835b342
+-- 
+2.32.0
+

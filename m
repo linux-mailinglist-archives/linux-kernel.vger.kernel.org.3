@@ -2,61 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FF546704B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 03:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 869FE46704E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 03:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378267AbhLCCzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 21:55:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49974 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243536AbhLCCzC (ORCPT
+        id S1378298AbhLCCzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 21:55:42 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:43600 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243536AbhLCCzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 21:55:02 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85252B825A5;
-        Fri,  3 Dec 2021 02:51:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F00D6C00446;
-        Fri,  3 Dec 2021 02:51:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638499897;
-        bh=SPyWCI8ZuPK4KnQdtSifu2zrWu2175zpw89LiBJE9qE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gZ4p7GvY5pv+BrYDsURNHh+DbsdYNX25UFmQuBoPNAzSPqZU8IeDD2xByrrK3p2V/
-         b5pl/+KBiErbBMBuUjNOyJsemGPB71AL8WeOddXp5Sg7sCAJu96uWnOOWVwmRP9PHK
-         Hj7EHVoUhdjjJ3BMdPi7QE+TAF4OIZ88UNoTPgfE+Sa+AHtKQ0hsrxTTEYRk25hw34
-         eB4eyyg9H9hBs6IzxssWyOEAUyO4esUCYjeexvQIWQuWs0rykgbAnJfjql7vkoDhv6
-         S2gitia4NfJNRWHPOsaNhkqlJOmSVL0TWqi9Wd2l0iFC0BhUhl1ULBJMmNF3g95AoY
-         Uf7Pes7OL4giw==
-Date:   Thu, 2 Dec 2021 18:51:35 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     rafal@milecki.pl, bcm-kernel-feedback-list@broadcom.com,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: broadcom: Catch the Exception
-Message-ID: <20211202185135.5b1f4d1a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211203012615.1512601-1-jiasheng@iscas.ac.cn>
-References: <20211203012615.1512601-1-jiasheng@iscas.ac.cn>
+        Thu, 2 Dec 2021 21:55:36 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3CCD0A59;
+        Fri,  3 Dec 2021 03:52:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1638499931;
+        bh=SnLYL+0P6D8oVgyVFOJ1csGxGyPoyV1B0+a7dbROoU4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Aovp1RYOso//aS2JCm4doWvuV7yCnSgfRfPj0XMp0VCcWoQUnGvunRC9foIIti6WZ
+         MFNg8E8DMelbhR/ll1UR3gEpfS3L0+Akyri3sy++veWG9wN0j3gqVYBC8xekLv91G+
+         rIh8EXOF6vUuSB26/ALJ5Ix+NrVHfxlHb8nv6yU8=
+Date:   Fri, 3 Dec 2021 04:51:45 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     sakari.ailus@linux.intel.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] media: mc: mc-entity.c: Use bitmap_zalloc() when
+ applicable
+Message-ID: <YamGQbD+abET4rmx@pendragon.ideasonboard.com>
+References: <b11f646dda189f490c06bf671f64a2cc0af4d45c.1638397089.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b11f646dda189f490c06bf671f64a2cc0af4d45c.1638397089.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  3 Dec 2021 09:26:15 +0800 Jiasheng Jiang wrote:
-> The return value of dma_set_coherent_mask() is not always 0.
-> To catch the exception in case that dma is not support the mask.
+Hi Christophe,
+
+Thank you for the patch.
+
+On Wed, Dec 01, 2021 at 11:19:40PM +0100, Christophe JAILLET wrote:
+> 'ent_enum->bmap' is a bitmap. So use 'bitmap_zalloc()' to simplify
+> code, improve the semantic and avoid some open-coded arithmetic in
+> allocator arguments.
 > 
-> Fixes: 9d61d138ab30 ("net: broadcom: rename BCM4908 driver & update DT
-> binding")
+> Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
+> consistency.
+> 
+> While at it, remove a useless 'bitmap_zero()'.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Please don't line wrap the Fixes tags.
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Please CC Florian as he reviewed the original patch.
+> ---
+>  drivers/media/mc/mc-entity.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
+> index c02340698ad6..b411f9796191 100644
+> --- a/drivers/media/mc/mc-entity.c
+> +++ b/drivers/media/mc/mc-entity.c
+> @@ -48,12 +48,10 @@ __must_check int __media_entity_enum_init(struct media_entity_enum *ent_enum,
+>  					  int idx_max)
+>  {
+>  	idx_max = ALIGN(idx_max, BITS_PER_LONG);
+> -	ent_enum->bmap = kcalloc(idx_max / BITS_PER_LONG, sizeof(long),
+> -				 GFP_KERNEL);
+> +	ent_enum->bmap = bitmap_zalloc(idx_max, GFP_KERNEL);
+>  	if (!ent_enum->bmap)
+>  		return -ENOMEM;
+>  
+> -	bitmap_zero(ent_enum->bmap, idx_max);
+>  	ent_enum->idx_max = idx_max;
+>  
+>  	return 0;
+> @@ -62,7 +60,7 @@ EXPORT_SYMBOL_GPL(__media_entity_enum_init);
+>  
+>  void media_entity_enum_cleanup(struct media_entity_enum *ent_enum)
+>  {
+> -	kfree(ent_enum->bmap);
+> +	bitmap_free(ent_enum->bmap);
+>  }
+>  EXPORT_SYMBOL_GPL(media_entity_enum_cleanup);
+>  
 
-Repost with those changes made. 
+-- 
+Regards,
 
-Thanks!
+Laurent Pinchart

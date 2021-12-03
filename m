@@ -2,77 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB71467F64
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 872B8467F69
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354019AbhLCVhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 16:37:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbhLCVhD (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 16:37:03 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748D0C061751
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 13:33:38 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so5006163otv.9
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 13:33:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=7Z4bIWUJcNwasnOvZT//wASf4/xDxe1Cc4BxfIfuhGs=;
-        b=JnhWynzzIfJfkh4uKyiOvUNHUj3ZCzAtBm5dZAB+k6juZFT+1rVNbhryXtURxUWcqF
-         z9NaXcp1WXL7j2QweNwFLdqsC5yNUoih/UwNF9rCq/d+dtQKOz6BNgggk2ggwq253MJE
-         ICBcMiaHBHkIlxQzZsvEpMdX7C64EqYZF8E01u4d1tyxIrUihDSKiTX90ghnsZJA3swv
-         7s37EPBgbqJ6du1rwxkgkU2Y9xpzW5+YvzNFvfx4P248xUoMYg3/1zNVQDgm3Q/2OgyX
-         bjeVKR6TKgQtOTIRZCKJxlwy3Qg7ljxMhChAHAHb0uwmzpKY2CNpxiwLTaJZQte/FcIW
-         C2tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=7Z4bIWUJcNwasnOvZT//wASf4/xDxe1Cc4BxfIfuhGs=;
-        b=S4da0IK+uEOkKXg0c/WWu/dYFVZ0vTEbFMrqXJJ2lT75/aGiU55GVAzMkT015Zq1zR
-         TEvRtXoCQ9mg+DgdLh0k7Pda9nECrlO+xg5l0ZoHWGwdg9oN+UFsQ88etaSoasw/nWKX
-         IhuX47rsSmtdq/xFFvCYmGnsBv26NpclVxdcAcnnv3Z5n3OG5obmxtWMwjosbwwXScSw
-         +vclLFyrBh27XZ+Z9gbuKBujJQ5Nmq+Yd6jOF+TDiGQB9wNRuWxnnno2ryuc/3olFB/D
-         zgGqTaIqNyhtouy3+3MBc5bODdNunN+6KOQRkM8WEPLKR3eFsv3rosZ0OM3ycFnYBB6x
-         A/ow==
-X-Gm-Message-State: AOAM533t3XpXK7r8jKyIGG0LpHdp9Cxb8o6U0tTOOf8dmYJrtUlbF4uF
-        tC1XNolOCHy4+mekbzqV2ahJNhn1tY+BsuuwHuw=
-X-Google-Smtp-Source: ABdhPJwm5a5h+2iYvQFudDepZl7YHTGC+CTB5bDhp/Sw79/fJmGv1JJqZhB8D1Y0ZF8s2hqnBBxFLnIxi5vyNmrPEaM=
-X-Received: by 2002:a05:6830:1bcf:: with SMTP id v15mr18938746ota.200.1638567217209;
- Fri, 03 Dec 2021 13:33:37 -0800 (PST)
+        id S1354078AbhLCVjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 16:39:51 -0500
+Received: from mga11.intel.com ([192.55.52.93]:41150 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229665AbhLCVju (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 16:39:50 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="234569380"
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="234569380"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 13:36:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="478463744"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 03 Dec 2021 13:36:23 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mtGEA-000I4Q-Fs; Fri, 03 Dec 2021 21:36:22 +0000
+Date:   Sat, 4 Dec 2021 05:35:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jgunthorpe:iommufd 7/9] drivers/iommu/iommufd/selftest.c:204:1:
+ warning: the frame size of 1052 bytes is larger than 1024 bytes
+Message-ID: <202112040504.mo85qmGT-lkp@intel.com>
 MIME-Version: 1.0
-Received: by 2002:a4a:4f57:0:0:0:0:0 with HTTP; Fri, 3 Dec 2021 13:33:36 -0800 (PST)
-Reply-To: mohammedshamekh24@gmail.com
-From:   Mr mohammed shamekh <dg.tropic.negoc@gmail.com>
-Date:   Fri, 3 Dec 2021 13:33:36 -0800
-Message-ID: <CACQSYVsSpVCxy0e=RPxBdb4NLdmviARcvmH477AdrA1hdqY5Kg@mail.gmail.com>
-Subject: THE AMOUNT IS 27.5 MILLIOMS USD
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhcsKgRnJpZW5kLA0KDQpHcmVldGluZ3MuDQoNCkhvd8KgYXJlwqB5b3XCoGRvaW5nwqB0b2Rh
-ecKgacKgaG9wZcKgZmluZT8NCg0KScKgY2FtZcKgYWNyb3NzwqB5b3VywqBlLW1haWzCoGNvbnRh
-Y3TCoHByaW9ywqBhwqBwcml2YXRlwqBzZWFyY2jCoHdoaWxlwqBpbsKgbmVlZA0Kb2bCoHlvdXLC
-oGFzc2lzdGFuY2UuwqBNecKgbmFtZcKgIE1yICBtb2hhbW1lZCAgIHNoYW1la2ggIOKAmcKgScKg
-d29ya8Kgd2l0aMKgdGhlDQpkZXBhcnRtZW50wqBvZsKgQXVkaXTCoGFuZMKgYWNjb3VudGluZ8Kg
-bWFuYWdlcsKgaGVyZcKgaW7CoFVCQcKgQmFua8Kgb2bCoEFmcmljYSwNClRoZXJlwqBpc8KgdGhp
-c8KgZnVuZMKgdGhhdMKgd2FzwqBrZWVwwqBpbsKgbXnCoGN1c3RvZHnCoHllYXJzwqBhZ2/CoGFu
-ZMKgScKgbmVlZA0KeW91csKgYXNzaXN0YW5jZcKgZm9ywqB0aGXCoHRyYW5zZmVycmluZ8Kgb2bC
-oHRoaXPCoGZ1bmTCoHRvwqB5b3VywqBiYW5rwqBhY2NvdW50DQpmb3LCoGJvdGjCoG9mwqB1c8Kg
-YmVuZWZpdMKgZm9ywqBsaWZlwqB0aW1lwqBpbnZlc3RtZW50wqBhbmTCoHRoZcKgYW1vdW50wqBp
-c8KgKFVTDQokMjcsNTAwLsKgTWlsbGlvbsKgRG9sbGFycykuDQoNCknCoGhhdmXCoGV2ZXJ5wqBp
-bnF1aXJ5wqBkZXRhaWxzwqB0b8KgbWFrZcKgdGhlwqBiYW5rwqBiZWxpZXZlwqB5b3XCoGFuZMKg
-cmVsZWFzZQ0KdGhlwqBmdW5kwqB0b8KgeW91csKgYmFua8KgYWNjb3VudMKgaW7CoHdpdGhpbsKg
-N8KgYmFua2luZ8Kgd29ya2luZ8KgZGF5c8Kgd2l0aA0KeW91csKgZnVsbMKgY28tb3BlcmF0aW9u
-wqB3aXRowqBtZcKgYWZ0ZXLCoHN1Y2Nlc3PCoE5vdGXCoDUwJcKgZm9ywqB5b3XCoHdoaWxlDQo1
-MCXCoGZvcsKgbWXCoGFmdGVywqBzdWNjZXNzwqBvZsKgdGhlwqB0cmFuc2ZlcsKgb2bCoHRoZcKg
-ZnVuZHPCoHRvwqB5b3VywqBiYW5rDQphY2NvdW50wqBva2F5Lg0KDQpXQUlUSU5HwqBUT8KgSEVB
-UsKgRlJPTcKgWU9VLg0KVEhBTktTLg0KDQogTXIgIG1vaGFtbWVkICAgc2hhbWVraCAsDQo=
+tree:   https://github.com/jgunthorpe/linux iommufd
+head:   adaf58fcdccd96a03a9d6783e08303612fa3da85
+commit: 947b2f74edc5dcad1f9532abd9bdd42a25a00490 [7/9] iommufd: Add a selftest
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20211204/202112040504.mo85qmGT-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/jgunthorpe/linux/commit/947b2f74edc5dcad1f9532abd9bdd42a25a00490
+        git remote add jgunthorpe https://github.com/jgunthorpe/linux
+        git fetch --no-tags jgunthorpe iommufd
+        git checkout 947b2f74edc5dcad1f9532abd9bdd42a25a00490
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/iommu/iommufd/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/iommu/iommufd/selftest.c: In function 'iommufd_test_mock_domain.isra.0':
+>> drivers/iommu/iommufd/selftest.c:204:1: warning: the frame size of 1052 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+     204 | }
+         | ^
+
+
+vim +204 drivers/iommu/iommufd/selftest.c
+
+   181	
+   182	/* Create an hw_pagetable with the mock domain so we can test the domain ops */
+   183	static int iommufd_test_mock_domain(struct iommufd_ucmd *ucmd,
+   184					    struct iommu_test_cmd *cmd)
+   185	{
+   186		struct bus_type mock_bus = {.iommu_ops = &domain_mock_ops};
+   187		struct device mock_dev = {.bus = &mock_bus};
+   188		struct iommufd_hw_pagetable *hwpt;
+   189	
+   190		hwpt = iommufd_hw_pagetable_from_id(ucmd->ictx, cmd->id, &mock_dev);
+   191		if (IS_ERR(hwpt))
+   192			return PTR_ERR(hwpt);
+   193		if (WARN_ON(refcount_read(&hwpt->obj.users) != 1)) {
+   194			iommufd_hw_pagetable_put(ucmd->ictx, hwpt);
+   195			return -EINVAL;
+   196		}
+   197	
+   198		/* Convert auto domain to user created */
+   199		list_del_init(&hwpt->auto_domains_item);
+   200	
+   201		/* Leak on error */
+   202		cmd->id = hwpt->obj.id;
+   203		return iommufd_ucmd_respond(ucmd, sizeof(*cmd));
+ > 204	}
+   205	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

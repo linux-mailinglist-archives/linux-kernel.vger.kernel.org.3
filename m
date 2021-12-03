@@ -2,100 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 652EC467C28
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:02:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDAB5467C2B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:03:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245721AbhLCRFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 12:05:20 -0500
-Received: from isilmar-4.linta.de ([136.243.71.142]:35804 "EHLO
-        isilmar-4.linta.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240062AbhLCRFP (ORCPT
+        id S1343538AbhLCRGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 12:06:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239612AbhLCRGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 12:05:15 -0500
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-Received: from light.dominikbrodowski.net (brodo.linta [10.2.0.102])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id 149C6201378;
-        Fri,  3 Dec 2021 17:01:47 +0000 (UTC)
-Received: by light.dominikbrodowski.net (Postfix, from userid 1000)
-        id 940C620257; Fri,  3 Dec 2021 18:01:43 +0100 (CET)
-Date:   Fri, 3 Dec 2021 18:01:43 +0100
-From:   Dominik Brodowski <linux@dominikbrodowski.net>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>, "Ivan T. Ivanov" <iivanov@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, hsinyi@chromium.org
-Subject: Re: [PATCH v4] random: fix crash on multiple early calls to
- add_bootloader_randomness()
-Message-ID: <YapNd0byhBcnABei@light.dominikbrodowski.net>
-References: <20211012082708.121931-1-iivanov@suse.de>
- <YWVKAk4h5bsUA3b6@light.dominikbrodowski.net>
- <YaivhAV8LouB0zGV@light.dominikbrodowski.net>
- <CAHmME9qxBeBzfKCjzfAFX9ZWAGKv1TKCQw3x22d_DmJtaAewLw@mail.gmail.com>
- <YanOIvAV1iPBEXR3@light.dominikbrodowski.net>
- <CAHmME9qGHo4n6QGxnE+O46pagOR0bA+9E8bi8ZLPAzMuMZpPwg@mail.gmail.com>
- <b2a5b4a7-4aee-558c-5558-549fd2998165@zx2c4.com>
+        Fri, 3 Dec 2021 12:06:46 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A96C061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 09:03:22 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id t8so3340352ilu.8
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 09:03:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cwxHCbenFCripjeUjs6tCpolH4DmLSPfSlC/W5NUvwU=;
+        b=UnNTzVNfryaWbpSuR2ZXK+nlsa2MZJTa4qw0dhixOeol5VA8qCTVeaBL85KrdIkL2M
+         Twn1uyUZc5mZ2z0osmLwcC8yI6DdCR2LM1V3n6rLOK9EK/g58rCAYcvnTYgsFgS1s+gW
+         FkN7AC9w7HL1CzaP2wTyZdFSEU3Qp7dpU12f0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cwxHCbenFCripjeUjs6tCpolH4DmLSPfSlC/W5NUvwU=;
+        b=ID/HpM59rSt470p5NBc386AWzksd7BdAo9vKogHjglMjj4k43nCzeHkrq+we+JWvYP
+         2QirALxczmsPwB1a+50hX5Etc2a4YlqrR3pzdsEBua7v+Vld6IKK9SaK3JB9OCzU+vhx
+         I0RNdErSXoAVw9jouFk7YwX7KUPXVPIEKyWKL3Maj5d3wYQqcsnpaSgxSByuHwbzx2R8
+         sRKgeMcD2pK6jBBnEY9NF6iEh0XEiTD+gUI2U7NUv9/WuPrPwQhXTrQmT8vJltP4o19U
+         Is69SJ7oDRO1XMU0pgpRFIDqBNgIMApdptCDiQchyn3708PfNhmdXIQl0rIOFSe/OKNe
+         S2sA==
+X-Gm-Message-State: AOAM532mfbQSKHz4sBuYR7/xK04wGm7RiLTXDMWBkyzDLMxIicseqIoK
+        s9wCMyXUIhvcxzFNJ2hC2ZgQgQ==
+X-Google-Smtp-Source: ABdhPJyZpS6sg5hnDg8ut0BnNoPlbIah10gQ/bDD44Dxcz9yDYWQ02+U2Hjt9Wnr7/U6Hb7nYednLA==
+X-Received: by 2002:a92:c244:: with SMTP id k4mr18431483ilo.169.1638551001558;
+        Fri, 03 Dec 2021 09:03:21 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id a25sm1811479ioa.24.2021.12.03.09.03.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 09:03:21 -0800 (PST)
+Subject: Re: [PATCH 2/2] ksefltest: pidfd: Fix wait_states: Test terminated by
+ timeout
+To:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Li Zhijian <lizhijian@cn.fujitsu.com>
+Cc:     linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Christian Brauner <christian@brauner.io>,
+        Philip Li <philip.li@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20211029024528.8086-1-lizhijian@cn.fujitsu.com>
+ <20211029024528.8086-2-lizhijian@cn.fujitsu.com>
+ <20211029083248.7vttuxbwbtdylrnq@wittgenstein>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <e5567974-42ba-0864-4340-c435db6ad0c1@linuxfoundation.org>
+Date:   Fri, 3 Dec 2021 10:03:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b2a5b4a7-4aee-558c-5558-549fd2998165@zx2c4.com>
+In-Reply-To: <20211029083248.7vttuxbwbtdylrnq@wittgenstein>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
-
-Am Fri, Dec 03, 2021 at 05:47:41PM +0100 schrieb Jason A. Donenfeld:
-> On 12/3/21 16:39, Jason A. Donenfeld wrote:
-> > Hi Dominik,
-> > 
-> > Thanks for your analysis. Some more questions:
-> > 
-> > On Fri, Dec 3, 2021 at 8:59 AM Dominik Brodowski
-> > <linux@dominikbrodowski.net> wrote:
-> > > On subsequent calls to add_bootloader_randomness() and then to
-> > > add_hwgenerator_randomness(), crng_fast_load() will be skipped. Instead,
-> > > wait_event_interruptible() (which makes no sense for the init process)
-> > > and then credit_entropy_bits() will be called. If the entropy count for
-> > > that second seed is large enough, that proceeds to crng_reseed().
-> > > However, crng_reseed() may depend on workqueues being available, which
-> > > is not the case early during boot.
-> > 
-> > It sounds like *the* issue you've identified is that crng_reseed()
-> > calls into workqueue functions too early in init, right? The bug is
-> > about paths into crng_reseed() that might cause that?
-> > 
-> > If so, then specifically, are you referring to crng_reseed()'s call to
-> > numa_crng_init()? In other words, the cause of the bug would be
-> > 6c1e851c4edc ("random: fix possible sleeping allocation from irq
-> > context")? If that's the case, then I wonder if the problem you're
-> > seeing goes away if you revert both 6c1e851c4edc ("random: fix
-> > possible sleeping allocation from irq context") and its primary
-> > predecessor, 8ef35c866f88 ("random: set up the NUMA crng instances
-> > after the CRNG is fully initialized"). These fix an actual bug, so I'm
-> > not suggesting we actually revert these in the tree, but for the
-> > purpose of testing, I'm wondering if this is actually the root cause
-> > of the bug you're seeing.
+On 10/29/21 2:32 AM, Christian Brauner wrote:
+> On Fri, Oct 29, 2021 at 10:45:28AM +0800, Li Zhijian wrote:
+>> 0Day/LKP observed that the kselftest blocks foever since one of the
+>> pidfd_wait doesn't terminate in 1 of 30 runs. After digging into
+>> the source, we found that it blocks at:
+>> ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
+>>
+>> we can reproduce it by:
+>> $ while true; do make run_tests -C pidfd; done
+>>
+>> a delay to ensure that the parent can see child process WCONTINUED.
+>>
+>> CC: Christian Brauner <christian@brauner.io>
+>> CC: Shuah Khan <shuah@kernel.org>
+>> CC: Philip Li <philip.li@intel.com>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+>> ---
 > 
-> If the above holds, I wonder if something more basic like the below would do
-> the trick -- deferring the bringup of the secondary pools until later on in
-> rand_initialize.
+> Not a fan of the usleep() solution but if it fixes it it's fine for
+> a test, I think.
+> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+> 
 
-Firstly, wasn't this done before 8ef35c866f88 -- and initializing the NUMA
-crng even if not enough entropy had been obtained yet?
+I don't like introducing usleep() which will increase the kselftest
+run-time. Every little bit adds up if we allow usleep() in tests.
 
-Secondly, this approach seems works for small amounts of entropy submitted
-to add_bootloader_randomness (e.g. for four calls with 8 bytes), but not for
-larger quantities (e.g. for four calls with 64 bytes). Don't ask me why,
-though.
-
-Thirdly, this still does not fix the issue that only the second call to
-add_bootloader_randomness() credits entropy.
-
-Thanks,
-	Dominik
+thanks,
+-- Shuah

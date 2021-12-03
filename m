@@ -2,169 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E155546797E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF38467987
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381497AbhLCOiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 09:38:05 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:57166 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1381466AbhLCOiE (ORCPT
+        id S1381514AbhLCOkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 09:40:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381439AbhLCOke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 09:38:04 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B3Cqcfi015449;
-        Fri, 3 Dec 2021 15:34:35 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=VI2K8c0oDwm8vA1Za0Lg2QSYKD+dzfliBMxPDI725T4=;
- b=a3PBruJoaZ3xQ/99ImlBWmGtb5GcC+ckCtiEAN+uLKl2eSfnT48kNg1dXWsGjuT3daLM
- d3aDEMh0DF0fBuxhksHqu1dvACCq5S+IQwxRRb80X1sNghrH5QmZUZmvUmw+jpL74Qte
- KEFCvBcJ9vOv5Vc4h3zRmALrbLhEbRxcyHnFTyJrExqKnSkPnUCDTZihsE4m08xGKfP+
- E4lc6N20W6vxovjpi5jrClVG7zGzZEMiI85yykKU0DuNzH1cIWwtnuS+eiyR4+h2ob0m
- DtCct+MJz6BJleAOExGGo/F3lzWFEmYGTOZSzQ+mRZT2zkBBJ+xdMuKp3lu+ZUv6x7U/ CA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cqkmj0p9c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 15:34:35 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CCBE510002A;
-        Fri,  3 Dec 2021 15:34:34 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B186822E852;
-        Fri,  3 Dec 2021 15:34:34 +0100 (CET)
-Received: from lmecxl0889.lme.st.com (10.75.127.44) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 3 Dec
- 2021 15:34:33 +0100
-Subject: Re: [PATCH v2] rpmsg: virtio: don't let virtio core to validate used
- length
-To:     Jason Wang <jasowang@redhat.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        <linux-remoteproc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20211124162045.25983-1-arnaud.pouliquen@foss.st.com>
- <20211124161055-mutt-send-email-mst@kernel.org>
- <CACGkMEvQoUcPFgOTvEDGkZHMXhjhPrk0xq-Zq3+G20_Lp-hu8A@mail.gmail.com>
- <20211202170011.GA900071@p14s>
- <CACGkMEs5DWPT76U8KYdr385e0Y6EUQQRSfRMfR3ZZz34HBdVKA@mail.gmail.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Message-ID: <638350d2-9695-413d-a508-6b852a70f472@foss.st.com>
-Date:   Fri, 3 Dec 2021 15:34:33 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 3 Dec 2021 09:40:34 -0500
+Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C056FC061751;
+        Fri,  3 Dec 2021 06:37:09 -0800 (PST)
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9f:8608:6e64:956a:daea:cf2f])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 1B3EauaF032016
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Fri, 3 Dec 2021 15:36:56 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1638542218; bh=PEPNEv0Kw/wnByNDIDdaU8KIbUcqTaS3nEk6m9pZYqg=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=J6I9sXgxiOWfZuTmgyxGDN7VscmaGLAHncZe4JcP+f1n+CpHSfzVGVAudCY7JvDNc
+         ebO9MXi/TYzFpbqEPNNVu/ZGywXJE/XbLoU7QJwU9c3To6qN7nDJIfgqfwPGMrx/BL
+         hm+rVIP+dLfUvyld9g9vDIdHjrTk0WXiDXq47iGQ=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
+        (envelope-from <bjorn@mork.no>)
+        id 1mt9gF-001jeT-LR; Fri, 03 Dec 2021 15:36:55 +0100
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
+        "David S. Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 1/1] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset
+ or zero
+Organization: m
+References: <20211202143437.1411410-1-lee.jones@linaro.org>
+        <20211202175134.5b463e18@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <87o85yj81l.fsf@miraculix.mork.no> <Yan+nvfyS21z7ZUw@google.com>
+        <87ilw5kfrm.fsf@miraculix.mork.no> <YaoeKfmJrDPhMXWp@google.com>
+Date:   Fri, 03 Dec 2021 15:36:55 +0100
+In-Reply-To: <YaoeKfmJrDPhMXWp@google.com> (Lee Jones's message of "Fri, 3 Dec
+        2021 13:39:53 +0000")
+Message-ID: <871r2tkb5k.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <CACGkMEs5DWPT76U8KYdr385e0Y6EUQQRSfRMfR3ZZz34HBdVKA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-03_07,2021-12-02_01,2021-12-02_01
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.3 at canardo
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Lee Jones <lee.jones@linaro.org> writes:
+> On Fri, 03 Dec 2021, Bj=C3=B8rn Mork wrote:
+
+>> This I don't understand.  If we have for example
+>>=20
+>>  new_tx =3D 0
+>>  max =3D 0
+>>  min =3D 1514(=3Ddatagram) + 8(=3Dndp) + 2(=3D1+1) * 4(=3Ddpe) + 12(=3Dn=
+th) =3D 1542
+>>=20
+>> then
+>>=20
+>>  max =3D max(min, max) =3D 1542
+>>  val =3D clamp_t(u32, new_tx, min, max) =3D 1542
+>>=20
+>> so we return 1542 and everything is fine.
+>
+> I don't believe so.
+>
+> #define clamp_t(type, val, lo, hi) \
+>               min_t(type, max_t(type, val, lo), hi)
+>
+> So:
+>               min_t(u32, max_t(u32, 0, 1542), 0)
 
 
-On 12/3/21 3:07 AM, Jason Wang wrote:
-> On Fri, Dec 3, 2021 at 1:00 AM Mathieu Poirier
-> <mathieu.poirier@linaro.org> wrote:
->>
->> Hey guys,
->>
->> On Thu, Nov 25, 2021 at 10:15:44AM +0800, Jason Wang wrote:
->>> On Thu, Nov 25, 2021 at 5:12 AM Michael S. Tsirkin <mst@redhat.com> wrote:
->>>>
->>>> On Wed, Nov 24, 2021 at 05:20:45PM +0100, Arnaud Pouliquen wrote:
->>>>> Using OpenAMP library on remote side, when the rpmsg framework tries to
->>>>> reuse the buffer the following error message is displayed in
->>>>> the virtqueue_get_buf_ctx_split function:
->>>>> "virtio_rpmsg_bus virtio0: output:used len 28 is larger than in buflen 0"
->>>>>
->>>>> As described in virtio specification:
->>>>> "many drivers ignored the len value, as a result, many devices set len
->>>>> incorrectly. Thus, when using the legacy interface, it is generally
->>>>> a good idea to ignore the len value in used ring entries if possible."
->>>>>
->>>>> To stay in compliance with the legacy libraries, this patch prevents the
->>>>> virtio core from validating used length.
->>>>>
->>>>> Fixes: 939779f5152d ("virtio_ring: validate used buffer length")
->>>>>
->>>>> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
->>>>> Cc: Jason Wang <jasowang@redhat.com>
->>>>> Cc: Michael S. Tsirkin <mst@redhat.com>
->>>>> ---
->>>>
->>>> Arnaud, thanks a lot for the analysis.
->>>>
->>>> Jason, I think this is another good point. We really should not
->>>> validate input for legacy devices at all.
->>>
->>> I agree. Will do that in the next version.
->>
->> I'm a little unclear about the "next version" in the above comment - is this
->> something I should wait for?  Should I move forward with Arnaud's patch?
-> 
-> Just to make it clear. If my understanding is correct, my series was
-> reverted so this patch is not needed.
+I don't think so.  If we have:
 
-Indeed your patchset is no longer in the v5.16-rc3
+ new_tx =3D 0
+ max =3D 0
+ min =3D 1514(=3Ddatagram) + 8(=3Dndp) + 2(=3D1+1) * 4(=3Ddpe) + 12(=3Dnth)=
+ =3D 1542
+ max =3D max(min, max) =3D 1542
 
-Thanks,
-Arnaud
+Then we have
 
-> 
-> For "next version", I meant I will resend the new version of used
-> length validation that
-> 
-> - only do the validation when it was explicitly enabled
-> - warn instead of bug
-> - do not validate legacy device
-> 
-> Thanks
-> 
->>
->> Thanks,
->> Mathieu
->>
->>>
->>> Thanks
->>>
->>>>
->>>>
->>>>> Update vs v1[1]: update commit message to clarify the context.
->>>>>
->>>>> base-commit: fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf
->>>>>
->>>>> [1]https://lore.kernel.org/lkml/20211122160812.25125-1-arnaud.pouliquen@foss.st.com/T/
->>>>> ---
->>>>>  drivers/rpmsg/virtio_rpmsg_bus.c | 1 +
->>>>>  1 file changed, 1 insertion(+)
->>>>>
->>>>> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
->>>>> index 9c112aa65040..5f73f19c2c38 100644
->>>>> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
->>>>> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
->>>>> @@ -1054,6 +1054,7 @@ static struct virtio_driver virtio_ipc_driver = {
->>>>>       .feature_table_size = ARRAY_SIZE(features),
->>>>>       .driver.name    = KBUILD_MODNAME,
->>>>>       .driver.owner   = THIS_MODULE,
->>>>> +     .suppress_used_validation = true,
->>>>>       .id_table       = id_table,
->>>>>       .probe          = rpmsg_probe,
->>>>>       .remove         = rpmsg_remove,
->>>>> --
->>>>> 2.17.1
->>>>
->>>
->>
-> 
+  min_t(u32, max_t(u32, 0, 1542), 1542)
+
+
+If it wasn't clear - My proposal was to change this:
+
+  - min =3D min(min, max);
+  + max =3D max(min, max);
+
+in the original code.
+
+
+But looking further I don't think that's a good idea either.  I searched
+through old email and found this commit:
+
+commit a6fe67087d7cb916e41b4ad1b3a57c91150edb88
+Author: Bj=C3=B8rn Mork <bjorn@mork.no>
+Date:   Fri Nov 1 11:17:01 2013 +0100
+
+    net: cdc_ncm: no not set tx_max higher than the device supports
+=20=20=20=20
+    There are MBIM devices out there reporting
+=20=20=20=20
+      dwNtbInMaxSize=3D2048 dwNtbOutMaxSize=3D2048
+=20=20=20=20
+    and since the spec require a datagram max size of at least
+    2048, this means that a full sized datagram will never fit.
+=20=20=20=20
+    Still, sending larger NTBs than the device supports is not
+    going to help.  We do not have any other options than either
+     a) refusing to bindi, or
+     b) respect the insanely low value.
+=20=20=20=20
+    Alternative b will at least make these devices work, so go
+    for it.
+=20=20=20=20
+    Cc: Alexey Orishko <alexey.orishko@gmail.com>
+    Signed-off-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+    Signed-off-by: David S. Miller <davem@davemloft.net>
+
+diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+index 4531f38fc0e5..11c703337577 100644
+--- a/drivers/net/usb/cdc_ncm.c
++++ b/drivers/net/usb/cdc_ncm.c
+@@ -159,8 +159,7 @@ static u8 cdc_ncm_setup(struct usbnet *dev)
+        }
+=20
+        /* verify maximum size of transmitted NTB in bytes */
+-       if ((ctx->tx_max < (CDC_NCM_MIN_HDR_SIZE + ctx->max_datagram_size))=
+ ||
+-           (ctx->tx_max > CDC_NCM_NTB_MAX_SIZE_TX)) {
++       if (ctx->tx_max > CDC_NCM_NTB_MAX_SIZE_TX) {
+                dev_dbg(&dev->intf->dev, "Using default maximum transmit le=
+ngth=3D%d\n",
+                        CDC_NCM_NTB_MAX_SIZE_TX);
+                ctx->tx_max =3D CDC_NCM_NTB_MAX_SIZE_TX;
+
+
+
+
+
+So there are real devices depending on a dwNtbOutMaxSize which is too
+low.  Our calculated minimum for MBIM will not fit.
+
+So let's go back your original test for zero.  It's better than
+nothing.  I'll just ack that.
+
+
+> Perhaps we should use max_t() here instead of clamp?
+
+No.  That would allow userspace to set an unlimited buffer size.
+
+
+
+Bj=C3=B8rn

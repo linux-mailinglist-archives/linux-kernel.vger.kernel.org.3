@@ -2,136 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB4A467915
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C253A467917
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381333AbhLCOKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 09:10:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
+        id S1381337AbhLCOK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 09:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381220AbhLCOKR (ORCPT
+        with ESMTP id S1352478AbhLCOKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 09:10:17 -0500
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D18C06174A
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 06:06:53 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:3191:9890:620a:6f4])
-        by albert.telenet-ops.be with bizsmtp
-        id Rq6p2600X3eLghq06q6pGr; Fri, 03 Dec 2021 15:06:51 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mt9D6-002LpO-U9; Fri, 03 Dec 2021 15:06:48 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mt9D6-000lfI-H9; Fri, 03 Dec 2021 15:06:48 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Enrico Weigelt metux IT consult <info@metux.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        stratos-dev@op-lists.linaro.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH resend] gpio: aggregator: Add interrupt support
-Date:   Fri,  3 Dec 2021 15:06:44 +0100
-Message-Id: <ba7f82f348d77b6a65498dd13a92550949e69cc3.1638540167.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Fri, 3 Dec 2021 09:10:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C700C06173E;
+        Fri,  3 Dec 2021 06:07:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A6BC62B11;
+        Fri,  3 Dec 2021 14:07:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED970C53FAD;
+        Fri,  3 Dec 2021 14:07:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638540444;
+        bh=WEsQ0YJT+JFvn7QDLZTVVdMDj0ZbFJUPEDcXxcmqgb4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2DWYXrjYmNzSNDnhxE/MEx/GMkOnZw+kLuV0oub7rrSZ52F9c4mFo6+SauUHZh1PU
+         eVkBF3maLXvofb0p27PsEYxte9z0hKrmX5aF9kbQvWv4DRJEklH9CZks4mgJ2q5bKN
+         L1t9R9baN2GsSTsj/dZHNBg/ap/ej/hFH0HcHE0M=
+Date:   Fri, 3 Dec 2021 15:07:21 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sboyd@kernel.org, john@phrozen.org, linux-staging@lists.linux.dev,
+        neil@brown.name
+Subject: Re: [PATCH v5 4/4] staging: mt7621-dts: align resets with binding
+ documentation
+Message-ID: <YaokmRHYsazdMByi@kroah.com>
+References: <20211107074200.18911-1-sergio.paracuellos@gmail.com>
+ <20211107074200.18911-5-sergio.paracuellos@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211107074200.18911-5-sergio.paracuellos@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the GPIO Aggregator does not support interrupts.  This means
-that kernel drivers going from a GPIO to an IRQ using gpiod_to_irq(),
-and userspace applications using line events do not work.
+On Sun, Nov 07, 2021 at 08:42:00AM +0100, Sergio Paracuellos wrote:
+> Binding documentation for compatible 'mediatek,mt7621-sysc' has been updated
+> to be used as a reset provider. Align reset related bits and system controller
+> node with binding documentation along the dtsi file.
+> 
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> ---
+>  drivers/staging/mt7621-dts/mt7621.dtsi | 25 +++++++++++--------------
+>  1 file changed, 11 insertions(+), 14 deletions(-)
 
-Add interrupt support by providing a gpio_chip.to_irq() callback, which
-just calls into the parent GPIO controller.
+This patch does not apply to my tree :(
 
-Note that this does not implement full interrupt controller (irq_chip)
-support, so using e.g. gpio-keys with "interrupts" instead of "gpios"
-still does not work.
+thanks,
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-I would prefer to avoid implementing irq_chip support, until there is a
-real use case for this.
-
-This has been tested with gpio-keys and gpiomon on the Koelsch
-development board:
-
-  - gpio-keys, using a DT overlay[1]:
-
-	$ overlay add r8a7791-koelsch-keyboard-controlled-led
-	$ echo gpio-aggregator > /sys/devices/platform/frobnicator/driver_override
-	$ echo frobnicator > /sys/bus/platform/drivers/gpio-aggregator/bind
-
-	$ gpioinfo frobnicator
-	gpiochip12 - 3 lines:
-		line   0:      "light"      "light"  output  active-high [used]
-		line   1:         "on"         "On"   input   active-low [used]
-		line   2:        "off"        "Off"   input   active-low [used]
-
-	$ echo 255 > /sys/class/leds/light/brightness
-	$ echo 0 > /sys/class/leds/light/brightness
-
-	$ evtest /dev/input/event0
-
-  - gpiomon, using the GPIO sysfs API:
-
-	$ echo keyboard > /sys/bus/platform/drivers/gpio-keys/unbind
-	$ echo e6055800.gpio 2,6 > /sys/bus/platform/drivers/gpio-aggregator/new_device
-	$ gpiomon gpiochip12 0 1
-
-[1] "ARM: dts: koelsch: Add overlay for keyboard-controlled LED"
-    https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/commit/?h=topic/renesas-overlays&id=c78d817869e63a3485bb4ab98aeea6ce368a396e
----
- drivers/gpio/gpio-aggregator.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpio/gpio-aggregator.c b/drivers/gpio/gpio-aggregator.c
-index e9671d1660ef4b40..869dc952cf45218b 100644
---- a/drivers/gpio/gpio-aggregator.c
-+++ b/drivers/gpio/gpio-aggregator.c
-@@ -371,6 +371,13 @@ static int gpio_fwd_set_config(struct gpio_chip *chip, unsigned int offset,
- 	return gpiod_set_config(fwd->descs[offset], config);
- }
- 
-+static int gpio_fwd_to_irq(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct gpiochip_fwd *fwd = gpiochip_get_data(chip);
-+
-+	return gpiod_to_irq(fwd->descs[offset]);
-+}
-+
- /**
-  * gpiochip_fwd_create() - Create a new GPIO forwarder
-  * @dev: Parent device pointer
-@@ -411,7 +418,8 @@ static struct gpiochip_fwd *gpiochip_fwd_create(struct device *dev,
- 	for (i = 0; i < ngpios; i++) {
- 		struct gpio_chip *parent = gpiod_to_chip(descs[i]);
- 
--		dev_dbg(dev, "%u => gpio-%d\n", i, desc_to_gpio(descs[i]));
-+		dev_dbg(dev, "%u => gpio %d irq %d\n", i,
-+			desc_to_gpio(descs[i]), gpiod_to_irq(descs[i]));
- 
- 		if (gpiod_cansleep(descs[i]))
- 			chip->can_sleep = true;
-@@ -429,6 +437,7 @@ static struct gpiochip_fwd *gpiochip_fwd_create(struct device *dev,
- 	chip->get_multiple = gpio_fwd_get_multiple_locked;
- 	chip->set = gpio_fwd_set;
- 	chip->set_multiple = gpio_fwd_set_multiple_locked;
-+	chip->to_irq = gpio_fwd_to_irq;
- 	chip->base = -1;
- 	chip->ngpio = ngpios;
- 	fwd->descs = descs;
--- 
-2.25.1
-
+greg k-h

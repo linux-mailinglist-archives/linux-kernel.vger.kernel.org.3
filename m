@@ -2,157 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16733466E56
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 01:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74FAB466E60
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 01:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349738AbhLCAOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 19:14:41 -0500
-Received: from out2-smtp.messagingengine.com ([66.111.4.26]:39035 "EHLO
-        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233413AbhLCAOj (ORCPT
+        id S233657AbhLCAS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 19:18:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229598AbhLCASu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 19:14:39 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2CFF15C0316;
-        Thu,  2 Dec 2021 19:11:16 -0500 (EST)
-Received: from imap45 ([10.202.2.95])
-  by compute5.internal (MEProxy); Thu, 02 Dec 2021 19:11:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=owlfolio.org; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm2; bh=4lwOqAOjiqgPdGNyVJBcnRov6B/MBYi
-        /SQsQ344Kws8=; b=iZTEsHJPzFYGerrtuIFEF8lvFfZ1myqisgEcFN1ffbWQ+3E
-        v+C/FJbVGEoXsjAIOMpneXLU5eFM2354eY9ExknLCU8BXqlwsSTRZ8YHbCghdyWh
-        SUrBWT16y0q0fa4mzL8/EBn74/lTQ/pxV1u0sxO0h72ULPDUY/ov0wM9HASMW2R0
-        RYn8ABqRMMKLHe6W3diodUPobl5qanP2mqsTrtIKalZL1VJv5WBAlcWb1k3Pg3vy
-        vTr/w58e2e8iKduW2f9a1KBdOPZwNLvOoPKBADUJY1li+R9Bvp1PWugAH8YzgvzL
-        xgGFIb2H9A/PS5I3wgGIGdRaqeQd9kCC72Pyz6A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=4lwOqA
-        OjiqgPdGNyVJBcnRov6B/MBYi/SQsQ344Kws8=; b=F+4V/vqA0mdN07pmSi4Sup
-        bZ1wYJ3VkqKHUSAz5fxinzf6sNcTmp0nQuUkyXu/4bNq1sDcqapETlmRLBJLldX6
-        djLlx9XPYcYpT5cW+U1wcRmFQvbJNnVYe0tNOUwYIB/HpKQMcz5jT6H3XIwBpoDQ
-        Wb5NowOmSx10GLEtFgoDgSR84RiPvi3O9fa7TPLtPetKWSxo8vGRz33CuGQ7GkvE
-        Tsg6XNNQCb8kqe7y78xm9tFPdQ1SV/snIQnb6X74Rmy/FwxGeQ8w6rFE1ty88//T
-        14h1TrMJnRmELFu+QejOxgW3t+DyX2DgMLWawiuYXVhgw9jPlziCyEYROYm8Rosw
-        ==
-X-ME-Sender: <xms:o2CpYVkFEV2f4rfGPZevc3_fyVsSkOlmrjf2nSkQsi-flCYkAf3DRA>
-    <xme:o2CpYQ1ZD0-Sgjs_ufHCwHaI1gnEubYppLUKG1Nga-LEDZKGoYNfSgTfwFEDdrLPT
-    xSyys-agwM36sUdAKI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrieeigddukecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfkggrtghk
-    ucghvghinhgsvghrghdfuceoiigrtghksehofihlfhholhhiohdrohhrgheqnecuggftrf
-    grthhtvghrnhephfeuhfevueffteffgfejtefgkeekheeftdeflefgheffffevheekleef
-    gfehffdunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epiigrtghksehofihlfhholhhiohdrohhrgh
-X-ME-Proxy: <xmx:o2CpYbrw5sjhOj-qcwg0AljYtdAcB4SNvKWJfO21fsb9OlLPajktvw>
-    <xmx:o2CpYVkH94KabekVxhFbhMPVxZGUtPX3A4_QMMU_JSkwpC82XWlC4w>
-    <xmx:o2CpYT3bF-Q8WARuO9lFtFvyRTvYe8M1FfNbToVDvt_3MSMt6psgNw>
-    <xmx:pGCpYeSifUh_WhZNjYJBjKUDgNgWJwSIhrs3URgu5Fb3E1dWRGpxSQ>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 34AB724A0074; Thu,  2 Dec 2021 19:11:15 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4458-g51a91c06b2-fm-20211130.004-g51a91c06
-Mime-Version: 1.0
-Message-Id: <9d24f699-386a-4881-b09a-ebd747310187@www.fastmail.com>
-In-Reply-To: <855a47d1-a89c-bbc8-7ddd-b89104c6138a@linaro.org>
-References: <YZvIlz7J6vOEY+Xu@yuki>
- <c5993ee9-1b5d-4469-9c0e-8d4e0fbd575a@www.fastmail.com>
- <20211202153422.GH7074@brightrain.aerifal.cx>
- <20211202232954.GI7074@brightrain.aerifal.cx>
- <855a47d1-a89c-bbc8-7ddd-b89104c6138a@linaro.org>
-Date:   Thu, 02 Dec 2021 19:10:52 -0500
-From:   "Zack Weinberg" <zack@owlfolio.org>
-To:     "Adhemerval Zanella" <adhemerval.zanella@linaro.org>,
-        "Rich Felker" <dalias@libc.org>
-Cc:     linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        libc-alpha@sourceware.org, linux-kernel@vger.kernel.org,
-        ltp@lists.linux.it
-Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Content-Type: text/plain
+        Thu, 2 Dec 2021 19:18:50 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03275C06174A;
+        Thu,  2 Dec 2021 16:15:19 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J4td20mpMz4xZ4;
+        Fri,  3 Dec 2021 11:15:17 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638490518;
+        bh=MpVMBw9H1sDbcQJnxKdIN+V8pRD1fEVLC6dEr0fpgAA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TPm2o3ayYQVJASgIPbu63tca+bJK+dxorLNRNccIbOcXAJPKW64wEgv/5eIwImhm9
+         Vne3Ho61th5BJpbV1z+wM2ah4dNeMYay7Mt5YGr9Xsn+CDxBku0zmTL+QB/m6b2w8C
+         6hubdg25vvXIDzU+EJt2suAUeXVRpsANJ+vn00n4Bngx745HSRPTMGAci0/h+3jZ7P
+         IzrGBxIukoluaUiyomNXMKdgc7HHtotxLbQHt0G4qqEbaJTqSExvqwCQNNzuc25KbL
+         y412XMudpf4VgM0wY9gjr+iQH70qUmqSpn6PPEaV3/eVyj0oiLRhgNz6VH1niSyUmN
+         P5r1whRd1wBSg==
+Date:   Fri, 3 Dec 2021 11:15:16 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the bpf-next tree
+Message-ID: <20211203111516.3f22aa95@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/KmNnKRBrIaMX/2EzgPiwUoA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021, at 6:43 PM, Adhemerval Zanella via Libc-alpha wrote:
-> On 02/12/2021 20:29, Rich Felker wrote:
->> On Thu, Dec 02, 2021 at 10:34:23AM -0500, Rich Felker wrote:
->>> On Mon, Nov 22, 2021 at 10:19:59PM +0000, Zack Weinberg via Libc-alpha wrote:
->>>> On Mon, Nov 22, 2021, at 4:43 PM, Cyril Hrubis wrote:
->>>>> This changes the __u64 and __s64 in userspace on 64bit platforms from
->>>>> long long (unsigned) int to just long (unsigned) int in order to match
->>>>> the uint64_t and int64_t size in userspace.
->>>> ....
->>>>> +
->>>>> +#include <asm/bitsperlong.h>
->>>>> +
->>>>>  /*
->>>>> - * int-ll64 is used everywhere now.
->>>>> + * int-ll64 is used everywhere in kernel now.
->>>>>   */
->>>>> -#include <asm-generic/int-ll64.h>
->>>>> +#if __BITS_PER_LONG == 64 && !defined(__KERNEL__)
->>>>> +# include <asm-generic/int-l64.h>
->>>>> +#else
->>>>> +# include <asm-generic/int-ll64.h>
->>>>> +#endif
->>>>
->>>> I am all for matching __uN / __sN to uintN_t / intN_t in userspace, but may I suggest the technically simpler and guaranteed-to-be-accurate
->>>>
->>>>  /*
->>>> - * int-ll64 is used everywhere now.
->>>> + * int-ll64 is used everywhere in kernel now.
->>>> + * In user space match <stdint.h>.
->>>>   */
->>>> +#ifdef __KERNEL__
->>>>  # include <asm-generic/int-ll64.h>
->>>> +#elif __has_include (<bits/types.h>)
->>>> +# include <bits/types.h>
->>>> +typedef __int8_t __s8;
->>>> +typedef __uint8_t __u8;
->>>> +typedef __int16_t __s16;
->>>> +typedef __uint16_t __u16;
->>>> +typedef __int32_t __s32;
->>>> +typedef __uint32_t __u32;
->>>> +typedef __int64_t __s64;
->>>> +typedef __uint64_t __u64;
->>>> +#else
->>>> +# include <stdint.h>
->>>> +typedef int8_t __s8;
->>>> +typedef uint8_t __u8;
->>>> +typedef int16_t __s16;
->>>> +typedef uint16_t __u16;
->>>> +typedef int32_t __s32;
->>>> +typedef uint32_t __u32;
->>>> +typedef int64_t __s64;
->>>> +typedef uint64_t __u64;
->>>> +#endif
->>>>
->>>> The middle clause could be dropped if we are okay with all uapi
->>>> headers potentially exposing the non-implementation-namespace names
->>>> defined by <stdint.h>. I do not know what the musl libc equivalent
->>>> of <bits/types.h> is.
->>>
->>> We (musl) don't have an equivalent header or __-prefixed versions of
->>> these types.
->>>
->>> FWIW I don't think stdint.h exposes anything that would be problematic
->>> alongside arbitrary use of kernel headers.
->> 
->> Also, per glibc's bits/types.h:
->> 
->> /*
->>  * Never include this file directly; use <sys/types.h> instead.
->>  */
->> 
->> it's not permitted (not supported usage) to #include <bits/types.h>.
->> So I think the above patch is wrong for glibc too. As I understand it,
->> this is general policy for bits/* -- they're only intended to work as
->> included by the libc system headers, not directly by something else.
->
-> You are right, the idea is to allow glibc to create and remove internal headers.
+--Sig_/KmNnKRBrIaMX/2EzgPiwUoA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-As a general rule yes, but we could make a deal that some specific bits headers are permanent API for use by things like this. They probably should be less of a dumping ground than bits/types.h though.
+Hi all,
+
+After merging the bpf-next tree, today's linux-next build (native perf)
+failed like this:
+
+tests/bpf.c: In function 'check_env':
+tests/bpf.c:299:2: error: 'bpf_load_program' is deprecated: libbpf v0.7+: u=
+se bpf_prog_load() instead [-Werror=3Ddeprecated-declarations]
+  299 |  err =3D bpf_load_program(BPF_PROG_TYPE_KPROBE, insns,
+      |  ^~~
+In file included from tests/bpf.c:28:
+tools/lib/bpf/bpf.h:204:16: note: declared here
+  204 | LIBBPF_API int bpf_load_program(enum bpf_prog_type type,
+      |                ^~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+util/bpf-loader.c: In function 'bpf__clear':
+util/bpf-loader.c:115:2: error: 'bpf_object__next' is deprecated: libbpf v0=
+.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-de=
+clarations]
+  115 |  bpf_object__for_each_safe(obj, tmp) {
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from util/bpf-loader.c:10:
+tools/lib/bpf/libbpf.h:176:20: note: declared here
+  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
+      |                    ^~~~~~~~~~~~~~~~
+util/bpf-loader.c:115:2: error: 'bpf_object__next' is deprecated: libbpf v0=
+.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-de=
+clarations]
+  115 |  bpf_object__for_each_safe(obj, tmp) {
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from util/bpf-loader.c:10:
+tools/lib/bpf/libbpf.h:176:20: note: declared here
+  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
+      |                    ^~~~~~~~~~~~~~~~
+util/bpf-loader.c:115:2: error: 'bpf_object__next' is deprecated: libbpf v0=
+.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-de=
+clarations]
+  115 |  bpf_object__for_each_safe(obj, tmp) {
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from util/bpf-loader.c:10:
+tools/lib/bpf/libbpf.h:176:20: note: declared here
+  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
+      |                    ^~~~~~~~~~~~~~~~
+util/bpf-loader.c: In function 'hook_load_preprocessor':
+util/bpf-loader.c:621:2: error: 'bpf_program__set_prep' is deprecated: libb=
+pf v0.7+: use bpf_program__insns() for getting bpf_program instructions [-W=
+error=3Ddeprecated-declarations]
+  621 |  err =3D bpf_program__set_prep(prog, priv->nr_types,
+      |  ^~~
+In file included from util/bpf-loader.c:10:
+tools/lib/bpf/libbpf.h:467:16: note: declared here
+  467 | LIBBPF_API int bpf_program__set_prep(struct bpf_program *prog, int =
+nr_instance,
+      |                ^~~~~~~~~~~~~~~~~~~~~
+util/bpf-loader.c: In function 'bpf__foreach_event':
+util/bpf-loader.c:776:5: error: 'bpf_program__nth_fd' is deprecated: libbpf=
+ v0.7+: multi-instance bpf_program support is deprecated [-Werror=3Ddepreca=
+ted-declarations]
+  776 |     fd =3D bpf_program__nth_fd(prog, type);
+      |     ^~
+In file included from util/bpf-loader.c:10:
+tools/lib/bpf/libbpf.h:471:16: note: declared here
+  471 | LIBBPF_API int bpf_program__nth_fd(const struct bpf_program *prog, =
+int n);
+      |                ^~~~~~~~~~~~~~~~~~~
+util/bpf-loader.c: In function 'bpf__apply_obj_config':
+util/bpf-loader.c:1501:2: error: 'bpf_object__next' is deprecated: libbpf v=
+0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
+eclarations]
+ 1501 |  bpf_object__for_each_safe(obj, tmp) {
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from util/bpf-loader.c:10:
+tools/lib/bpf/libbpf.h:176:20: note: declared here
+  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
+      |                    ^~~~~~~~~~~~~~~~
+util/bpf-loader.c:1501:2: error: 'bpf_object__next' is deprecated: libbpf v=
+0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
+eclarations]
+ 1501 |  bpf_object__for_each_safe(obj, tmp) {
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from util/bpf-loader.c:10:
+tools/lib/bpf/libbpf.h:176:20: note: declared here
+  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
+      |                    ^~~~~~~~~~~~~~~~
+util/bpf-loader.c:1501:2: error: 'bpf_object__next' is deprecated: libbpf v=
+0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
+eclarations]
+ 1501 |  bpf_object__for_each_safe(obj, tmp) {
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from util/bpf-loader.c:10:
+tools/lib/bpf/libbpf.h:176:20: note: declared here
+  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
+      |                    ^~~~~~~~~~~~~~~~
+util/bpf-loader.c: In function 'bpf__setup_output_event':
+util/bpf-loader.c:1529:2: error: 'bpf_object__next' is deprecated: libbpf v=
+0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
+eclarations]
+ 1529 |  bpf__for_each_map_named(map, obj, tmp, name) {
+      |  ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from util/bpf-loader.c:10:
+tools/lib/bpf/libbpf.h:176:20: note: declared here
+  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
+      |                    ^~~~~~~~~~~~~~~~
+util/bpf-loader.c:1529:2: error: 'bpf_object__next' is deprecated: libbpf v=
+0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
+eclarations]
+ 1529 |  bpf__for_each_map_named(map, obj, tmp, name) {
+      |  ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from util/bpf-loader.c:10:
+tools/lib/bpf/libbpf.h:176:20: note: declared here
+  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
+      |                    ^~~~~~~~~~~~~~~~
+util/bpf-loader.c:1529:2: error: 'bpf_object__next' is deprecated: libbpf v=
+0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
+eclarations]
+ 1529 |  bpf__for_each_map_named(map, obj, tmp, name) {
+      |  ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from util/bpf-loader.c:10:
+tools/lib/bpf/libbpf.h:176:20: note: declared here
+  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
+      |                    ^~~~~~~~~~~~~~~~
+util/bpf-loader.c:1565:2: error: 'bpf_object__next' is deprecated: libbpf v=
+0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
+eclarations]
+ 1565 |  bpf__for_each_map_named(map, obj, tmp, name) {
+      |  ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from util/bpf-loader.c:10:
+tools/lib/bpf/libbpf.h:176:20: note: declared here
+  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
+      |                    ^~~~~~~~~~~~~~~~
+util/bpf-loader.c:1565:2: error: 'bpf_object__next' is deprecated: libbpf v=
+0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
+eclarations]
+ 1565 |  bpf__for_each_map_named(map, obj, tmp, name) {
+      |  ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from util/bpf-loader.c:10:
+tools/lib/bpf/libbpf.h:176:20: note: declared here
+  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
+      |                    ^~~~~~~~~~~~~~~~
+util/bpf-loader.c:1565:2: error: 'bpf_object__next' is deprecated: libbpf v=
+0.7+: track bpf_objects in application code instead [-Werror=3Ddeprecated-d=
+eclarations]
+ 1565 |  bpf__for_each_map_named(map, obj, tmp, name) {
+      |  ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from util/bpf-loader.c:10:
+tools/lib/bpf/libbpf.h:176:20: note: declared here
+  176 | struct bpf_object *bpf_object__next(struct bpf_object *prev);
+      |                    ^~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+
+I am not sure what caused this, but I have just used the bpf-next tree
+from next-20211202 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/KmNnKRBrIaMX/2EzgPiwUoA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGpYZQACgkQAVBC80lX
+0GxT1AgAn37c09ci5LxrwKVewgxdKFgU66BwND4c8dUpMZ7enT6IrmmK2wfSyOdL
+9DFZXM8NPGbfDxUN3b5JhRg3zvcTEDx7edHY3du7NDZ5Pion5cduvkenpmwcf5QK
+VTH+Y6KLI4Y/yInJ+biDjhBzEujo2ZK24vO1NguyDkKjEyhxjx855GABp8CkeRT9
+h4cAZ3qMwWcRMWRac3RFbgry1Ai8P3yqVGAlF0QBG33cWt0OgpjehrgTga33eR1+
+b99STtlHMDZj9C1OJHaTZplqyMjmvcrxNChf82sS/wlrHEuQHmVHH7iK/ZhryI68
+aZTx9YELDNlVmQBre5l4lzC8uNytWQ==
+=RZbd
+-----END PGP SIGNATURE-----
+
+--Sig_/KmNnKRBrIaMX/2EzgPiwUoA--

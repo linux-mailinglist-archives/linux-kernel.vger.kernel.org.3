@@ -2,152 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39510466FA7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 03:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B55C466FAA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 03:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378040AbhLCCVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 21:21:02 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:60464
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244477AbhLCCVB (ORCPT
+        id S1378050AbhLCCVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 21:21:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244477AbhLCCVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 21:21:01 -0500
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DB5EB40013
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 02:17:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638497857;
-        bh=qfyozt5gD9lEmxnli46SoyRwFPECwlTwdID8kel9iLs=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=cd5HzG/Ru3tS1l3ybGnKgVzV7WtBRQVyV8fY9xkSS7ZV9bOJIlz3UVm4+QiaHla3u
-         qTTRTY6NmxgDFemYNqrTHRmgCZWGVV2QiGFKpokQzBS+VanYz7zdnNIrhe8zOpAfhL
-         iq7M61HQPqi2H4UsRZRb8xXuX/vVCYB0u4VY+r7UUcLDqQ9l3Uvnjuq65kM4ZeG5gq
-         327RSbTCyaK9WqD9x64bl11CmQFy15W8vATkbGf3UbezxTmrzMhMYx9WqzJn4nmbZ4
-         Ri3hIcKYRQwiMJ0whZtIP7fDbbAlu2+tTjP4709qDM0PHiFp0K9SjrA0Dw5+gcznP5
-         bFtsUM8b6tMdg==
-Received: by mail-ot1-f69.google.com with SMTP id y19-20020a0568301d9300b0056396063834so941741oti.18
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 18:17:37 -0800 (PST)
+        Thu, 2 Dec 2021 21:21:10 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979BEC061757
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 18:17:47 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id r26so2979016oiw.5
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 18:17:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/xEnHpiNZIiBMq7VBpsg6nm2XEWpv3RfgGXRqVy/dX0=;
+        b=eJ1BxUe4FjEz+PM1veXkHjD2GeDsLhl/S/Ao8DVTTwWFV0zv5YP6gIR1tWDCNVVrfL
+         p3LMroMnIwU3vCIgySbWESxtfifSg0xB19iBaCrIw2hvdwVj9QKFnXtr6MqQBB4ukbOt
+         m4eWGLXMpkbRdiGFPA5HVkhElxP1/a474m5+sjJCPTt7gwiIl27T7QtNI2V+y9WWvXmI
+         rNEkpqS6EoVbOJ2Fh9jXovBmS+kZiWGQ1s7rvq2y2MiDJ1yMh+4GU2z0rF84E2rSH2Ho
+         Fz/RzpU35ty1T//CDyXQF622ngb/QUg2piSTU0ooUYqd5VgZif9Z1tQdT8bWdN8wKXL6
+         zKJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qfyozt5gD9lEmxnli46SoyRwFPECwlTwdID8kel9iLs=;
-        b=6wtNjp2cDPRSvBx0G57cB0cllZ5PvjPFZMkM2V/1ULEpmi2F64+4ZEn+0sFYC7HTU2
-         KvEDkF2EnRUj/GL0uODFMKLwSVFBGHDQ3IKfLnqRwvIMc9NW0xxzwf73ZdAW87ymbmbF
-         oY85yEZsWo3feXtlbplULj+PsrAG+s1FzNXo4xDva/O6EhP+B95m+QW0+W82P/MDdO10
-         qO9CVURaia9AKWVpA3P5Y6+nvH332OccEL32TNJQZ9xAc3I3OqRmj1SauU6EYrPY1xpF
-         GqOU5M7Bw8alZSfO+wgJZa19/cH1dzg4o6qTlcF7GUM0dYKrTNg1ArvVY7Pbr+B5LbIe
-         n1yA==
-X-Gm-Message-State: AOAM530jDBmxlHzW86lL59yt92GmocN2FilHh5OBMBT3aHbKIbBAT/An
-        gJRKj7jZhlEgDZ3aCS+qqE80shQtaQqEc4VYdcZcfiVjNXApq3R2q9HXxwN9sgzyJvSJUYCLjD7
-        PtqXLLXGNY8jHv8Pqnc1HlJsPiAQ+p8DgvHoBCfW1BrDi5oqbxpRTMmNjMw==
-X-Received: by 2002:a05:6830:1d87:: with SMTP id y7mr13928433oti.269.1638497856395;
-        Thu, 02 Dec 2021 18:17:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx0Y5KK/9L3X38Sru202AtXDZcQ4avMirFEyU7tJSwXzVnljxw7vYZv9QuNQBb2h/lQrsMYJQTvZmdYLtCjxxc=
-X-Received: by 2002:a05:6830:1d87:: with SMTP id y7mr13928407oti.269.1638497856117;
- Thu, 02 Dec 2021 18:17:36 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/xEnHpiNZIiBMq7VBpsg6nm2XEWpv3RfgGXRqVy/dX0=;
+        b=Jw8K/hNeVmrglwM4JKPL1ZUvG8VHFKeCeswL0CEJQrJlnOYHZ55dKlVZq6BNBs8xF4
+         lOeuf9su0LjTty3G7CShZPluD4xY0tBy6y774Vjf3/h4uCn/Swa/VwWlQ/JnOjcauZ4r
+         wjFjONDwaPBlx1j9Y9tqXx1lrFBLCg5F0EvC5G0ut1YTjG19gFVlImNOub/LzE8PzKiA
+         FfYJFNYi48T2+cxxMps0UzaN7jLiKPwbk4dzL3ew1ZKHKantjfbXw0JhB7gSijq5rqJO
+         PWMPzg226qOV4/cKENHurZQIYRCedi6VM58L8YvquBKAyEbviyBpA+sUIjNRRfDIdw+O
+         U6qg==
+X-Gm-Message-State: AOAM533SCHlBuIXWOOeQCQ2XXffGs+vRPioEqnsMvKyEMZG+Us9bMoe+
+        ffCU5kTN9nyCZIhS048cM/ZHKw==
+X-Google-Smtp-Source: ABdhPJzlnEGMLizbKrS+0DrTUk/CTUO+16IImKgwrRBAvDWOmTbdjreM/mOhfK3TclNVwBf5MCqklQ==
+X-Received: by 2002:a05:6808:23c3:: with SMTP id bq3mr7483254oib.124.1638497866914;
+        Thu, 02 Dec 2021 18:17:46 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id t14sm379403otr.23.2021.12.02.18.17.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 18:17:46 -0800 (PST)
+Date:   Thu, 2 Dec 2021 20:17:43 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, julien.massot@iot.bzh
+Subject: Re: [PATCH v7 02/12] rpmsg: Create the rpmsg class in core instead
+ of in rpmsg char
+Message-ID: <Yal+R7nd1tuBHioi@builder.lan>
+References: <20211108141937.13016-1-arnaud.pouliquen@foss.st.com>
+ <20211108141937.13016-3-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
-References: <20211126003246.1068770-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20211126003246.1068770-1-kai.heng.feng@canonical.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Fri, 3 Dec 2021 10:17:24 +0800
-Message-ID: <CAAd53p6_6hCPSm5G02wC1TWHyT_cwK-6KQh9ex+QwyE_P-ErBQ@mail.gmail.com>
-Subject: Re: [PATCH] misc: rtsx: Avoid mangling IRQ during runtime PM
-To:     Ricky Wu <ricky_wu@realtek.com>
-Cc:     gregkh@linuxfoundation.org, Arnd Bergmann <arnd@arndb.de>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211108141937.13016-3-arnaud.pouliquen@foss.st.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rick,
+On Mon 08 Nov 08:19 CST 2021, Arnaud Pouliquen wrote:
 
-On Fri, Nov 26, 2021 at 8:33 AM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
->
-> After commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM"), when the
-> rtsx controller is runtime suspended, bring CPUs offline and back online, the
-> runtime resume of the controller will fail:
->
-> [   47.319391] smpboot: CPU 1 is now offline
-> [   47.414140] x86: Booting SMP configuration:
-> [   47.414147] smpboot: Booting Node 0 Processor 1 APIC 0x2
-> [   47.571334] smpboot: CPU 2 is now offline
-> [   47.686055] smpboot: Booting Node 0 Processor 2 APIC 0x4
-> [   47.808174] smpboot: CPU 3 is now offline
-> [   47.878146] smpboot: Booting Node 0 Processor 3 APIC 0x6
-> [   48.003679] smpboot: CPU 4 is now offline
-> [   48.086187] smpboot: Booting Node 0 Processor 4 APIC 0x1
-> [   48.239627] smpboot: CPU 5 is now offline
-> [   48.326059] smpboot: Booting Node 0 Processor 5 APIC 0x3
-> [   48.472193] smpboot: CPU 6 is now offline
-> [   48.574181] smpboot: Booting Node 0 Processor 6 APIC 0x5
-> [   48.743375] smpboot: CPU 7 is now offline
-> [   48.838047] smpboot: Booting Node 0 Processor 7 APIC 0x7
-> [   48.965447] __common_interrupt: 1.35 No irq handler for vector
-> [   51.174065] mmc0: error -110 doing runtime resume
-> [   54.978088] I/O error, dev mmcblk0, sector 21479 op 0x1:(WRITE) flags 0x0 phys_seg 11 prio class 0
-> [   54.978108] Buffer I/O error on dev mmcblk0p1, logical block 19431, lost async page write
-> [   54.978129] Buffer I/O error on dev mmcblk0p1, logical block 19432, lost async page write
-> [   54.978134] Buffer I/O error on dev mmcblk0p1, logical block 19433, lost async page write
-> [   54.978137] Buffer I/O error on dev mmcblk0p1, logical block 19434, lost async page write
-> [   54.978141] Buffer I/O error on dev mmcblk0p1, logical block 19435, lost async page write
-> [   54.978145] Buffer I/O error on dev mmcblk0p1, logical block 19436, lost async page write
-> [   54.978148] Buffer I/O error on dev mmcblk0p1, logical block 19437, lost async page write
-> [   54.978152] Buffer I/O error on dev mmcblk0p1, logical block 19438, lost async page write
-> [   54.978155] Buffer I/O error on dev mmcblk0p1, logical block 19439, lost async page write
-> [   54.978160] Buffer I/O error on dev mmcblk0p1, logical block 19440, lost async page write
-> [   54.978244] mmc0: card aaaa removed
-> [   54.978452] FAT-fs (mmcblk0p1): FAT read failed (blocknr 4257)
->
-> There's interrupt immediately raised on rtsx_pci_write_register() in
-> runtime resume routine, but the IRQ handler hasn't registered yet.
->
-> So we can either move rtsx_pci_write_register() after rtsx_pci_acquire_irq(),
-> or just stop mangling IRQ on runtime PM. Choose the latter to save some
-> CPU cycles.
->
-> BugLink: https://bugs.launchpad.net/bugs/1951784
-> Fixes: 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM")
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Migrate the creation of the rpmsg class from the rpmsg_char
+> to the core that the class is usable by the rpmsg_char and
+> the futur rpmsg_ctrl module.
+> 
+> Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
 
-May I get an Ack from you?
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Kai-Heng
+Regards,
+Bjorn
 
 > ---
->  drivers/misc/cardreader/rtsx_pcr.c | 4 ----
->  1 file changed, 4 deletions(-)
->
-> diff --git a/drivers/misc/cardreader/rtsx_pcr.c b/drivers/misc/cardreader/rtsx_pcr.c
-> index 8c72eb590f79d..6ac509c1821c9 100644
-> --- a/drivers/misc/cardreader/rtsx_pcr.c
-> +++ b/drivers/misc/cardreader/rtsx_pcr.c
-> @@ -1803,8 +1803,6 @@ static int rtsx_pci_runtime_suspend(struct device *device)
->         mutex_lock(&pcr->pcr_mutex);
->         rtsx_pci_power_off(pcr, HOST_ENTER_S3);
->
-> -       free_irq(pcr->irq, (void *)pcr);
+> Update vs previous revision:
+> - remove rpmsg_get_class API and export the rpmsg_class in rpmsg_internal.h
+> ---
+>  drivers/rpmsg/rpmsg_char.c     | 10 ----------
+>  drivers/rpmsg/rpmsg_core.c     | 15 +++++++++++++--
+>  drivers/rpmsg/rpmsg_internal.h |  2 ++
+>  3 files changed, 15 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+> index 44934d7fa3c4..8ab5ac23850c 100644
+> --- a/drivers/rpmsg/rpmsg_char.c
+> +++ b/drivers/rpmsg/rpmsg_char.c
+> @@ -29,7 +29,6 @@
+>  #define RPMSG_DEV_MAX	(MINORMASK + 1)
+>  
+>  static dev_t rpmsg_major;
+> -static struct class *rpmsg_class;
+>  
+>  static DEFINE_IDA(rpmsg_ctrl_ida);
+>  static DEFINE_IDA(rpmsg_ept_ida);
+> @@ -559,17 +558,9 @@ static int rpmsg_chrdev_init(void)
+>  		return ret;
+>  	}
+>  
+> -	rpmsg_class = class_create(THIS_MODULE, "rpmsg");
+> -	if (IS_ERR(rpmsg_class)) {
+> -		pr_err("failed to create rpmsg class\n");
+> -		unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+> -		return PTR_ERR(rpmsg_class);
+> -	}
 > -
->         mutex_unlock(&pcr->pcr_mutex);
->
->         pcr->is_runtime_suspended = true;
-> @@ -1825,8 +1823,6 @@ static int rtsx_pci_runtime_resume(struct device *device)
->         mutex_lock(&pcr->pcr_mutex);
->
->         rtsx_pci_write_register(pcr, HOST_SLEEP_STATE, 0x03, 0x00);
-> -       rtsx_pci_acquire_irq(pcr);
-> -       synchronize_irq(pcr->irq);
->
->         if (pcr->ops->fetch_vendor_settings)
->                 pcr->ops->fetch_vendor_settings(pcr);
-> --
-> 2.32.0
->
+>  	ret = register_rpmsg_driver(&rpmsg_chrdev_driver);
+>  	if (ret < 0) {
+>  		pr_err("rpmsgchr: failed to register rpmsg driver\n");
+> -		class_destroy(rpmsg_class);
+>  		unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+>  	}
+>  
+> @@ -580,7 +571,6 @@ postcore_initcall(rpmsg_chrdev_init);
+>  static void rpmsg_chrdev_exit(void)
+>  {
+>  	unregister_rpmsg_driver(&rpmsg_chrdev_driver);
+> -	class_destroy(rpmsg_class);
+>  	unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+>  }
+>  module_exit(rpmsg_chrdev_exit);
+> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+> index 9151836190ce..45227c864aa2 100644
+> --- a/drivers/rpmsg/rpmsg_core.c
+> +++ b/drivers/rpmsg/rpmsg_core.c
+> @@ -20,6 +20,9 @@
+>  
+>  #include "rpmsg_internal.h"
+>  
+> +struct class *rpmsg_class;
+> +EXPORT_SYMBOL(rpmsg_class);
+> +
+>  /**
+>   * rpmsg_create_channel() - create a new rpmsg channel
+>   * using its name and address info.
+> @@ -629,10 +632,17 @@ static int __init rpmsg_init(void)
+>  {
+>  	int ret;
+>  
+> +	rpmsg_class = class_create(THIS_MODULE, "rpmsg");
+> +	if (IS_ERR(rpmsg_class)) {
+> +		pr_err("failed to create rpmsg class\n");
+> +		return PTR_ERR(rpmsg_class);
+> +	}
+> +
+>  	ret = bus_register(&rpmsg_bus);
+> -	if (ret)
+> +	if (ret) {
+>  		pr_err("failed to register rpmsg bus: %d\n", ret);
+> -
+> +		class_destroy(rpmsg_class);
+> +	}
+>  	return ret;
+>  }
+>  postcore_initcall(rpmsg_init);
+> @@ -640,6 +650,7 @@ postcore_initcall(rpmsg_init);
+>  static void __exit rpmsg_fini(void)
+>  {
+>  	bus_unregister(&rpmsg_bus);
+> +	class_destroy(rpmsg_class);
+>  }
+>  module_exit(rpmsg_fini);
+>  
+> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
+> index a76c344253bf..1b6f998e1a4a 100644
+> --- a/drivers/rpmsg/rpmsg_internal.h
+> +++ b/drivers/rpmsg/rpmsg_internal.h
+> @@ -18,6 +18,8 @@
+>  #define to_rpmsg_device(d) container_of(d, struct rpmsg_device, dev)
+>  #define to_rpmsg_driver(d) container_of(d, struct rpmsg_driver, drv)
+>  
+> +extern struct class *rpmsg_class;
+> +
+>  /**
+>   * struct rpmsg_device_ops - indirection table for the rpmsg_device operations
+>   * @create_channel:	create backend-specific channel, optional
+> -- 
+> 2.17.1
+> 

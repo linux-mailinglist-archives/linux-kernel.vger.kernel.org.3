@@ -2,84 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 351DD4673DD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1270F4673EB
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:25:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379550AbhLCJXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 04:23:30 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:29123 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351316AbhLCJX3 (ORCPT
+        id S1379594AbhLCJ3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 04:29:05 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:29085 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351356AbhLCJ3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 04:23:29 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-91--7c1WWoYN2uhy3DyISQqag-1; Fri, 03 Dec 2021 09:20:03 +0000
-X-MC-Unique: -7c1WWoYN2uhy3DyISQqag-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.26; Fri, 3 Dec 2021 09:20:02 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.026; Fri, 3 Dec 2021 09:20:02 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Dave Hansen' <dave.hansen@intel.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "x86@kernel.org" <x86@kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "chang.seok.bae@intel.com" <chang.seok.bae@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC PATCH 00/10] x86: Allocate AVX512 xstate ondemand
-Thread-Topic: [RFC PATCH 00/10] x86: Allocate AVX512 xstate ondemand
-Thread-Index: AQHX5+Ds8R196ucx3kmBJZhfmN/yXawgfKWg
-Date:   Fri, 3 Dec 2021 09:20:01 +0000
-Message-ID: <e332573f03ec441d9b357c7cfb6852ba@AcuMS.aculab.com>
-References: <20211203003636.11417-1-jiaxun.yang@flygoat.com>
- <822ced92-f165-3c5a-e0bf-dafa6f808b76@intel.com>
- <27b6387f-fa93-484e-a56e-12452a82f069@www.fastmail.com>
- <d7be6ef4-f73e-923e-93b7-ef254bf347c0@intel.com>
-In-Reply-To: <d7be6ef4-f73e-923e-93b7-ef254bf347c0@intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 3 Dec 2021 04:29:04 -0500
+Received: from kwepemi500005.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J56mv41tNz1DHyG;
+        Fri,  3 Dec 2021 17:22:55 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ kwepemi500005.china.huawei.com (7.221.188.179) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 3 Dec 2021 17:25:39 +0800
+Received: from localhost.localdomain (10.67.165.24) by
+ kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 3 Dec 2021 17:25:38 +0800
+From:   Guangbin Huang <huangguangbin2@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <wangjie125@huawei.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
+        <chenhao288@hisilicon.com>
+Subject: [PATCH net-next 00/11] net: hns3: some cleanups for -next
+Date:   Fri, 3 Dec 2021 17:20:48 +0800
+Message-ID: <20211203092059.24947-1-huangguangbin2@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600016.china.huawei.com (7.193.23.20)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogRGF2ZSBIYW5zZW4NCj4gU2VudDogMDMgRGVjZW1iZXIgMjAyMSAwMDo1OQ0KPiANCj4g
-T24gMTIvMi8yMSA0OjQ1IFBNLCBKaWF4dW4gWWFuZyB3cm90ZToNCj4gPiDlnKgyMDIx5bm0MTLm
-nIgz5pel5Y2B5LqM5pyIIOS4iuWNiDEyOjQw77yMRGF2ZSBIYW5zZW7lhpnpgZPvvJoNCj4gPj4g
-T24gMTIvMi8yMSA0OjM2IFBNLCBKaWF4dW4gWWFuZyB3cm90ZToNCj4gPj4+IEFsc28gd2UgYXJl
-IGdvaW5nIHRvIGhhdmUgaGV0ZXJvZ2VuZW91cyBwcm9jZXNzb3JzIHRoYXQNCj4gPj4+IG9ubHkg
-c29tZSBjb3JlcyBzdXBwb3J0IEFWWDUxMiwgaXQgY2FuIGJlIGhlbHBmdWwgd2hlbg0KPiA+Pj4g
-ZGVhbGluZyB3aXRoIHN1Y2ggcHJvY2Vzc29ycy4NCj4gPj4gUmVhbGx5PyAgV2hpY2ggeDg2IHZl
-bmRvciBpcyBkb2luZyB0aGF0Pw0KDQo+ID4gQ2xlYXIgbG93ZXIgdHdvIGJpdHMgb2YgTVNSIDB4
-QUYgb24gQWxkZXIgTGFrZSBnaXZlIG1lIHNvbWUgc3VwcmlzZSA6LSkNCj4gDQo+IEkgaG9uZXN0
-bHkgZG9uJ3Qga25vdyB3aGF0IHlvdSdyZSB0YWxraW5nIGFib3V0LiAgRG9lcyBwb2tpbmcgdGhh
-dCBNU1INCj4gYWxsb3dpbmcgQVZYNTEyIGluc3RydWN0aW9ucyB0byBiZSBleGVjdXRlZCBvbiBj
-b3JlcyB3aGVyZSBpdCB3YXMNCj4gb3RoZXJ3aXNlIGRpc2FibGVkPyAgVGhhdCdzIGVudGVydGFp
-bmluZywgYnV0IGl0J3MgZmFyIGZyb20gInN1cHBvcnRlZCINCj4gb3IgZXZlbiBzdXBwb3J0KmFi
-bGUqIGluIExpbnV4Lg0KDQpJIGNhbiBhbHNvIGltYWdpbmUgY2hpcHMgYmVpbmcgdGVzdGVkIGFu
-ZCB0ZXN0ZWQgYW5kIG1hcmtlZA0KZGlmZmVyZW50bHkgZGVwZW5kaW5nIG9uIHdoYXQgd29ya3Mu
-DQoNClNvIGEgcGFydCB3aXRoIGZhdWx0eSBBVlg1MTIgd2lsbCBiZSBtYXJrZWQgYXMgQklHK2xp
-dHRsZSB3aXRoIEFWWDUxMiBkaXNhYmxlZC4NCkEgcGFydCB3aXRoIHdvcmtpbmcgQVZYNTEyIHdp
-bGwgaGF2ZSB0aGUgJ2xpdHRsZScgY3B1IGRpc2FibGVkLg0KDQpBIGxvdCBvZiB0aGlzIGlzIGFj
-dHVhbGx5IHNldHVwIGJ5IHRoZSBCSU9TIGNvZGUuDQpDaGVhdGluZyB3aWxsIGNhdXNlIGdyaWVm
-Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJv
-YWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24g
-Tm86IDEzOTczODYgKFdhbGVzKQ0K
+To improve code readability and simplicity, this series add some cleanup
+patches for the HNS3 ethernet driver.
+
+Guangbin Huang (3):
+  net: hns3: refactor function hclge_set_vlan_filter_hw
+  net: hns3: add print vport id for failed message of vlan
+  net: hns3: modify one argument type of function
+    hclge_ncl_config_data_print
+
+Hao Chen (6):
+  net: hns3: Align type of some variables with their print type
+  net: hns3: align return value type of atomic_read() with its output
+  net: hns3: add void before function which don't receive ret
+  net: hns3: add comments for hclge_dbg_fill_content()
+  net: hns3: remove rebundant line for hclge_dbg_dump_tm_pg()
+  net: hns3: replace one tab with space in for statement
+
+Jie Wang (1):
+  net: hns3: fix hns3 driver header file not self-contained issue
+
+Yufeng Mo (1):
+  net: hns3: optimize function hclge_cfg_common_loopback()
+
+ .../ethernet/hisilicon/hns3/hns3_debugfs.c    |   2 +-
+ .../ethernet/hisilicon/hns3/hns3_debugfs.h    |   2 +
+ .../net/ethernet/hisilicon/hns3/hns3_enet.h   |   3 +
+ .../hisilicon/hns3/hns3pf/hclge_debugfs.c     |  13 +-
+ .../hisilicon/hns3/hns3pf/hclge_devlink.c     |   2 +-
+ .../hisilicon/hns3/hns3pf/hclge_main.c        | 121 +++++++++++-------
+ .../hisilicon/hns3/hns3pf/hclge_mbx.c         |   2 +-
+ .../hisilicon/hns3/hns3pf/hclge_mdio.h        |   4 +
+ .../hisilicon/hns3/hns3pf/hclge_ptp.h         |   3 +
+ .../ethernet/hisilicon/hns3/hns3pf/hclge_tm.h |   6 +
+ .../hisilicon/hns3/hns3vf/hclgevf_devlink.c   |   2 +-
+ 11 files changed, 106 insertions(+), 54 deletions(-)
+
+-- 
+2.33.0
 

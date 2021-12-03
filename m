@@ -2,121 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B374678AC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0724678B5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:47:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381202AbhLCNrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 08:47:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346278AbhLCNrI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 08:47:08 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEFDC06173E
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 05:43:44 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id r25so11641581edq.7
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 05:43:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=caqYbeB05zXLjGSVGUuCqdI7HQ2llCrRlhq6cVUWiV0=;
-        b=Ygqjtiv4kbuWrWiNOsYjnB0ekFqH7NOzoufn67zHKL7N9FW69D0gKais/bI+zxeFF9
-         4ahlcOaV35sfw4iwxmvyY5FLR5MMEPmms2RWsMPDd8TMtYLkAIP1wDpMsoF2VylH1eQg
-         ZrqJBTF8yfExwx9kJaT8P9KyuHqRku+Smpuns=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=caqYbeB05zXLjGSVGUuCqdI7HQ2llCrRlhq6cVUWiV0=;
-        b=hcP+wVW281NF8TVM7bhQk0YpRraRFdG3pWzKmDJCHwllLlIYvl8s2NU92xNxR6YeWq
-         zZ1ObX2PcsiRWZLG28URtgnQm1Prg7QB7qZxlOu3rrd0//6XqYZSx3fggEnYn25AgzKa
-         lK4RHygzTfAZVB7i+8vPpiUpZ4eF0en7GL4jfUlyEoW/TD2c1FsMPYN8k1G9ZJUYnAlP
-         P9lL2cTn7vsiX8Jwikwdj8UR6N5+CQadszPgy8Ls0Wej7I5qJdmlZYz6+XRHH/tS6B98
-         g4/miWoQrKg8Kj6eZQnfCRFJeCdtjnojKzH/sTuR2SZsmUNmhg5Qjr382/Zixv2bxBSm
-         2w7Q==
-X-Gm-Message-State: AOAM532/+iisHxP4tdqgGjojjArGlwPFueIRNCeTlfKt22Upsl18yGAv
-        CMjjZ6S2325Hs42JsDjp3sYjuw==
-X-Google-Smtp-Source: ABdhPJyCdv61zjdeT962tknIyH1upj+6b4k5awfM5eC95e/jSTjCO3VCvZ+1wiRUefnxexjNqJ3mAg==
-X-Received: by 2002:a05:6402:350e:: with SMTP id b14mr27416602edd.313.1638539023238;
-        Fri, 03 Dec 2021 05:43:43 -0800 (PST)
-Received: from gmail.com ([100.104.168.197])
-        by smtp.gmail.com with ESMTPSA id e26sm2041942edr.82.2021.12.03.05.43.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 05:43:43 -0800 (PST)
-Date:   Fri, 3 Dec 2021 14:43:25 +0100
-From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     "kyrie.wu" <kyrie.wu@mediatek.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, xia.jiang@mediatek.com,
-        maoguang.meng@mediatek.com, srv_heupstream@mediatek.com,
-        irui.wang@mediatek.com
-Subject: Re: [PATCH V6, 1/5] dt-bindings: mediatek: Add mediatek,
- mt8195-jpgenc compatible
-Message-ID: <Yaoe/Tk1wMyFoB1s@gmail.com>
-References: <1638501230-13417-1-git-send-email-kyrie.wu@mediatek.com>
- <1638501230-13417-2-git-send-email-kyrie.wu@mediatek.com>
+        id S1352369AbhLCNuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 08:50:39 -0500
+Received: from marcansoft.com ([212.63.210.85]:52918 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238055AbhLCNui (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 08:50:38 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id E1B6C41E96;
+        Fri,  3 Dec 2021 13:47:10 +0000 (UTC)
+To:     Rob Herring <robh@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        PCI <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20211122111332.72264-1-marcan@marcan.st>
+ <CAL_Jsq+vFbFN+WQhi3dRicW+kaP1Oi9JPSmnAFL7XAc0eCvgrA@mail.gmail.com>
+ <8e881b80-614c-dccf-ddaf-895d1acf26c7@marcan.st>
+ <CAL_JsqLMgkTdbKNP=kAvwKFQp+m330ztTX8v_UFmj2zvzsB-KA@mail.gmail.com>
+ <7f6928fc-97fd-cbe8-f7e9-954945b4574b@marcan.st>
+ <CAL_Jsq+2svQ+1GOw2HcxR88dHog7V=5dbCVgi37Dw6ariZsiqQ@mail.gmail.com>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH] PCI: apple: Configure link speeds properly
+Message-ID: <f3c5f961-d06c-47e2-453f-ec48e758a684@marcan.st>
+Date:   Fri, 3 Dec 2021 22:47:08 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1638501230-13417-2-git-send-email-kyrie.wu@mediatek.com>
+In-Reply-To: <CAL_Jsq+2svQ+1GOw2HcxR88dHog7V=5dbCVgi37Dw6ariZsiqQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kyrie.wu wrote:
-
-> Add mediatek, mt8195-jpgenc compatible to binding document
+On 02/12/2021 23.33, Rob Herring wrote:
+>>>>>> +       max_gen = of_pci_get_max_link_speed(port->np);
+>>>>>> +       if (max_gen < 0) {
+>>>>>> +               dev_err(port->pcie->dev, "max link speed not specified\n");
+>>>>>
+>>>>> Better to fail than limp along in gen1? Though you don't check the
+>>>>> return value...
+>>>>>
+>>>>> Usually, the DT property is there to limit the speed when there's a
+>>>>> board limitation.
+>>>>
+>>>> The default *setting* is actually Gen4, but without
+>>>> PCIE_LINK_WIDTH_SPEED_CONTROL poked it always trains at Gen1. Might make
+>>>> more sense to only set the LNKCTL field if max-link-speed is specified,
+>>>> and unconditionally poke that bit. That'll get us Gen4 by default (or
+>>>> even presumably Gen5 in future controllers, if everything else stays
+>>>> compatible).
+>>>
+>>> You already do some setup in firmware for ECAM, right? I think it
+>>> would be better if you can do any default setup there and then
+>>> max-link-speed is only an override for the kernel.
+>>
+>> I thought the PCIE_LINK_WIDTH_SPEED_CONTROL thing had to be set later,
+>> but trying it now I realized we were missing a bit of initialization
+>> that was causing it not to work. Indeed it can be done there and we can
+>> drop it from the kernel.
+>>
+>> We could even do the max-link-speed thing in m1n1 if we want. It has
+>> access to the value from the ADT directly, which to be correct we'd have
+>> to dynamically transplant to the DT, since there's at least one device
+>> that has different PCIe devices on one port depending on hardware
+>> variant, while sharing a devicetree. If we're okay with the kernel just
+>> not implementing this feature for now, we can say it's the bootloader's job.
+>>
+>> Ultimately we ship the DTs along with m1n1, so there's an argument that
+>> if some day we need to override the max-link-speed for whatever reason
+>> over what the ADT says, well, we'd be shipping the updated DT along with
+>> m1n1 anyway, so we might as well make m1n1 do it... if so, it might make
+>> sense to drop those properties from the actual DTs we ship altogether,
+>> at least for now.
+>>
+>> If we decide to make it m1n1's job entirely, we can drop this patch
+>> altogether, at least for now (I can't say how this will interact with
+>> suspend/resume and other power management, and hotplug... but we'll open
+>> that can of worms when we get there).
 > 
-> Signed-off-by: kyrie.wu <kyrie.wu@mediatek.com>
-> ---
-> V6: no change
+> Shouldn't you be setting PCI_EXP_LNKCAP_SLS and/or PCI_EXP_LNKCAP2 if
+> you need to limit the max speed and then you can use that instead of
+> max-link-speed? If that's lost in low power modes, the driver just has
+> to save and restore it.
 
-Hi Kyrie
+Those registers aren't writable as far as I can tell. All we can do is 
+set LNKCTL2 to tell the hardware what actual max speed to use, the same 
+thing this patch does.
 
-Your patch does not seem to apply on top of linus or linus/next.
-
-In linus/next they still have the .txt file:
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.txt?id=7afeac307a9561e3a93682c1e7eb22f918aa1187
-
-What are you using?
-
-Thanks
-
-
-> ---
->  Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml b/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml
-> index fcd9b82..e93ccf5 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml
-> @@ -18,6 +18,9 @@ properties:
->        - enum:
->            - mediatek,mt2701-jpgenc
->            - mediatek,mt8183-jpgenc
-> +          - mediatek,mt8195-jpgenc
-> +          - mediatek,mt8195-jpgenc0
-> +          - mediatek,mt8195-jpgenc1
->        - const: mediatek,mtk-jpgenc
->    reg:
->      maxItems: 1
-> -- 
-> 2.6.4
-> 
-> 
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek
-> 
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

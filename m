@@ -2,322 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED31467823
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E9346782F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380550AbhLCN1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 08:27:10 -0500
-Received: from mga11.intel.com ([192.55.52.93]:65181 "EHLO mga11.intel.com"
+        id S1380764AbhLCNa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 08:30:58 -0500
+Received: from shark2.inbox.lv ([194.152.32.82]:60866 "EHLO shark2.inbox.lv"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232181AbhLCN1J (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 08:27:09 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="234479778"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="234479778"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 05:23:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="460045259"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 03 Dec 2021 05:23:41 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 1F10F336; Fri,  3 Dec 2021 15:23:47 +0200 (EET)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        thomas.lendacky@amd.com, jroedel@suse.de
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        dan.j.williams@intel.com, hpa@zytor.com,
-        kirill.shutemov@linux.intel.com, knsathya@kernel.org,
-        linux-kernel@vger.kernel.org, luto@kernel.org,
-        peterz@infradead.org, tony.luck@intel.com
-Subject: [PATCHv2 3/3] x86: Move common memory encryption code to mem_encrypt.c
-Date:   Fri,  3 Dec 2021 16:23:40 +0300
-Message-Id: <20211203132340.41741-4-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211203132340.41741-1-kirill.shutemov@linux.intel.com>
-References: <20211203132340.41741-1-kirill.shutemov@linux.intel.com>
+        id S242067AbhLCNa5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 08:30:57 -0500
+Received: from shark2.inbox.lv (localhost [127.0.0.1])
+        by shark2-out.inbox.lv (Postfix) with ESMTP id 3BF9FC00E7;
+        Fri,  3 Dec 2021 15:27:31 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=inbox.lv; s=30062014;
+        t=1638538051; bh=YfvuJWhcGETYf4OTNXR5X6hUT0nORdfU2wn3p7utGEI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=poc5ql6NScHuyUgCLMmqYjcbw/NDCkcOzgttJY5lM1n9AaEV8soOUcwlNl36xC8ey
+         1btbJMj76K9ajA78knN3aPalbYlOyMl/LXpolFMYjo+rFwdgD0ZfuSFbpJTZvxjK4i
+         +iXRODvuns4ll236gmHGgOvUo4n7OlhMLkd4q69c=
+Received: from localhost (localhost [127.0.0.1])
+        by shark2-in.inbox.lv (Postfix) with ESMTP id 25D51C0129;
+        Fri,  3 Dec 2021 15:27:31 +0200 (EET)
+Received: from shark2.inbox.lv ([127.0.0.1])
+        by localhost (shark2.inbox.lv [127.0.0.1]) (spamfilter, port 35)
+        with ESMTP id UTsJVqqtlOz2; Fri,  3 Dec 2021 15:27:30 +0200 (EET)
+Received: from mail.inbox.lv (pop1 [127.0.0.1])
+        by shark2-in.inbox.lv (Postfix) with ESMTP id 8BC96C0084;
+        Fri,  3 Dec 2021 15:27:30 +0200 (EET)
+Date:   Fri, 3 Dec 2021 22:27:10 +0900
+From:   Alexey Avramov <hakavlad@inbox.lv>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        ValdikSS <iam@valdikss.org.ru>, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, corbet@lwn.net, mcgrof@kernel.org,
+        keescook@chromium.org, yzaikin@google.com,
+        oleksandr@natalenko.name, kernel@xanmod.org, aros@gmx.com,
+        hakavlad@gmail.com, Yu Zhao <yuzhao@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>
+Subject: Re: [PATCH] mm/vmscan: add sysctl knobs for protecting the working
+ set
+Message-ID: <20211203222710.3f0ba239@mail.inbox.lv>
+In-Reply-To: <cca17e9f-0d4f-f23a-2bc4-b36e834f7ef8@suse.cz>
+References: <20211130201652.2218636d@mail.inbox.lv>
+        <2dc51fc8-f14e-17ed-a8c6-0ec70423bf54@valdikss.org.ru>
+        <20211202135824.33d2421bf5116801cfa2040d@linux-foundation.org>
+        <cca17e9f-0d4f-f23a-2bc4-b36e834f7ef8@suse.cz>
+X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: OK
+X-ESPOL: AJqEQ3EB+w1Luca/KI1r7+Xnw8rAJVdB2DuDrrA34GxYtrbfsttzbmyRB/eRFELmMn8=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SEV and TDX both protect guest memory from the host access. They both
-use guest physical address bits to communicate to the hardware which
-pages receive protection or not. SEV and TDX both assume that all I/O
-(real devices and virtio) must be performed to pages *without*
-protection.
+>I'd also like to know where that malfunction happens in this case.
 
-To add this support, AMD SEV code forces force_dma_unencrypted() to
-decrypt DMA pages when DMA pages were allocated for I/O. It also uses
-swiotlb_update_mem_attributes() to update decryption bits in SWIOTLB
-DMA buffers.
+User-space processes need to always access shared libraries to work.
+It can be tens or hundreds of megabytes, depending on the type of workload. 
+This is a hot cache, which is pushed out and then read leads to thrashing. 
+There is no way in the kernel to forbid evicting the minimum file cache. 
+This is the problem that the patch solves. And the malfunction is exactly
+that - the inability of the kernel to hold the minimum amount of the
+hottest cache in memory.
 
-Since TDX also uses a similar memory sharing design, all the above
-mentioned changes can be reused. So move force_dma_unencrypted(),
-SWIOTLB update code and virtio changes out of mem_encrypt_amd.c to
-mem_encrypt.c.
+Anothe explanation:
 
-Introduce a new config option X86_MEM_ENCRYPT that can be selected
-by platforms which uses x86 memory encryption features (needed in both
-AMD SEV and Intel TDX guest platforms).
+> in normal operation you will have nearly all of your executables nad 
+> libraries sitting in good ol' physical RAM. But when RAM runs low, but 
+> not low enough for the out-of-memory killer to be run, these pages are 
+> evicted from RAM. So you end up with a situation where pages are 
+> evicted -- at first, no problem, because they are evicted 
+> least-recently-used first and it kicks out pages you aren't using 
+> anyway. But then, it kicks out the ones you are using, just to have 
+> to page them right back in moments later. Thrash city.
+-- [0]
 
-Since the code is moved from mem_encrypt_amdc.c, inherit the same make
-flags.
+Just look at prelockd [1]. This is the process that mlocks mmapped
+libraries/binaries of existing processes. The result of it's work:
+it's impossible to invoke thrashing under memory pressure, at least 
+with noswap. And OOM killer comes *instantly* when it runs.
+Please see the demo [2]. The same effect we can get when set
+vm.clean_min_kbytes=250000, for example.
 
-This is preparation for enabling TDX memory encryption support and it
-has no functional changes.
+>something PSI should be able to help with
 
-Co-developed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
- arch/x86/Kconfig              | 10 +++--
- arch/x86/mm/Makefile          |  5 +++
- arch/x86/mm/mem_encrypt.c     | 84 +++++++++++++++++++++++++++++++++++
- arch/x86/mm/mem_encrypt_amd.c | 69 ----------------------------
- 4 files changed, 96 insertions(+), 72 deletions(-)
- create mode 100644 arch/x86/mm/mem_encrypt.c
+PSI acts post-factum: on the basis of PSI we react when memory 
+pressure is already high. PSI annot help *prevent* thrashing.
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 95dd1ee01546..793e9b42ace0 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1523,16 +1523,20 @@ config X86_CPA_STATISTICS
- 	  helps to determine the effectiveness of preserving large and huge
- 	  page mappings when mapping protections are changed.
- 
-+config X86_MEM_ENCRYPT
-+	select ARCH_HAS_FORCE_DMA_UNENCRYPTED
-+	select DYNAMIC_PHYSICAL_MASK
-+	select ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
-+	def_bool n
-+
- config AMD_MEM_ENCRYPT
- 	bool "AMD Secure Memory Encryption (SME) support"
- 	depends on X86_64 && CPU_SUP_AMD
- 	select DMA_COHERENT_POOL
--	select DYNAMIC_PHYSICAL_MASK
- 	select ARCH_USE_MEMREMAP_PROT
--	select ARCH_HAS_FORCE_DMA_UNENCRYPTED
- 	select INSTRUCTION_DECODER
--	select ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
- 	select ARCH_HAS_CC_PLATFORM
-+	select X86_MEM_ENCRYPT
- 	help
- 	  Say yes to enable support for the encryption of system memory.
- 	  This requires an AMD processor that supports Secure Memory
-diff --git a/arch/x86/mm/Makefile b/arch/x86/mm/Makefile
-index c9c480641153..fe3d3061fc11 100644
---- a/arch/x86/mm/Makefile
-+++ b/arch/x86/mm/Makefile
-@@ -1,9 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0
- # Kernel does not boot with instrumentation of tlb.c and mem_encrypt*.c
- KCOV_INSTRUMENT_tlb.o			:= n
-+KCOV_INSTRUMENT_mem_encrypt.o		:= n
- KCOV_INSTRUMENT_mem_encrypt_amd.o	:= n
- KCOV_INSTRUMENT_mem_encrypt_identity.o	:= n
- 
-+KASAN_SANITIZE_mem_encrypt.o		:= n
- KASAN_SANITIZE_mem_encrypt_amd.o	:= n
- KASAN_SANITIZE_mem_encrypt_identity.o	:= n
- 
-@@ -12,6 +14,7 @@ KASAN_SANITIZE_mem_encrypt_identity.o	:= n
- KCSAN_SANITIZE := n
- 
- ifdef CONFIG_FUNCTION_TRACER
-+CFLAGS_REMOVE_mem_encrypt.o		= -pg
- CFLAGS_REMOVE_mem_encrypt_amd.o		= -pg
- CFLAGS_REMOVE_mem_encrypt_identity.o	= -pg
- endif
-@@ -52,6 +55,8 @@ obj-$(CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS)	+= pkeys.o
- obj-$(CONFIG_RANDOMIZE_MEMORY)			+= kaslr.o
- obj-$(CONFIG_PAGE_TABLE_ISOLATION)		+= pti.o
- 
-+obj-$(CONFIG_X86_MEM_ENCRYPT)	+= mem_encrypt.o
- obj-$(CONFIG_AMD_MEM_ENCRYPT)	+= mem_encrypt_amd.o
-+
- obj-$(CONFIG_AMD_MEM_ENCRYPT)	+= mem_encrypt_identity.o
- obj-$(CONFIG_AMD_MEM_ENCRYPT)	+= mem_encrypt_boot.o
-diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
-new file mode 100644
-index 000000000000..50d209939c66
---- /dev/null
-+++ b/arch/x86/mm/mem_encrypt.c
-@@ -0,0 +1,84 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Memory Encryption Support Common Code
-+ *
-+ * Copyright (C) 2016 Advanced Micro Devices, Inc.
-+ *
-+ * Author: Tom Lendacky <thomas.lendacky@amd.com>
-+ */
-+
-+#include <linux/dma-direct.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/swiotlb.h>
-+#include <linux/cc_platform.h>
-+#include <linux/mem_encrypt.h>
-+#include <linux/virtio_config.h>
-+
-+/* Override for DMA direct allocation check - ARCH_HAS_FORCE_DMA_UNENCRYPTED */
-+bool force_dma_unencrypted(struct device *dev)
-+{
-+	/*
-+	 * For SEV, all DMA must be to unencrypted addresses.
-+	 */
-+	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT))
-+		return true;
-+
-+	/*
-+	 * For SME, all DMA must be to unencrypted addresses if the
-+	 * device does not support DMA to addresses that include the
-+	 * encryption mask.
-+	 */
-+	if (cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT)) {
-+		u64 dma_enc_mask = DMA_BIT_MASK(__ffs64(sme_me_mask));
-+		u64 dma_dev_mask = min_not_zero(dev->coherent_dma_mask,
-+						dev->bus_dma_limit);
-+
-+		if (dma_dev_mask <= dma_enc_mask)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
-+static void print_mem_encrypt_feature_info(void)
-+{
-+	pr_info("AMD Memory Encryption Features active:");
-+
-+	/* Secure Memory Encryption */
-+	if (cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT)) {
-+		/*
-+		 * SME is mutually exclusive with any of the SEV
-+		 * features below.
-+		 */
-+		pr_cont(" SME\n");
-+		return;
-+	}
-+
-+	/* Secure Encrypted Virtualization */
-+	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT))
-+		pr_cont(" SEV");
-+
-+	/* Encrypted Register State */
-+	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
-+		pr_cont(" SEV-ES");
-+
-+	pr_cont("\n");
-+}
-+
-+/* Architecture __weak replacement functions */
-+void __init mem_encrypt_init(void)
-+{
-+	if (!cc_platform_has(CC_ATTR_MEM_ENCRYPT))
-+		return;
-+
-+	/* Call into SWIOTLB to update the SWIOTLB DMA buffers */
-+	swiotlb_update_mem_attributes();
-+
-+	print_mem_encrypt_feature_info();
-+}
-+
-+int arch_has_restricted_virtio_memory_access(void)
-+{
-+	return cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT);
-+}
-+EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
-diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
-index b520021a7e7b..2b2d018ea345 100644
---- a/arch/x86/mm/mem_encrypt_amd.c
-+++ b/arch/x86/mm/mem_encrypt_amd.c
-@@ -413,32 +413,6 @@ void __init early_set_mem_enc_dec_hypercall(unsigned long vaddr, int npages, boo
- 	notify_range_enc_status_changed(vaddr, npages, enc);
- }
- 
--/* Override for DMA direct allocation check - ARCH_HAS_FORCE_DMA_UNENCRYPTED */
--bool force_dma_unencrypted(struct device *dev)
--{
--	/*
--	 * For SEV, all DMA must be to unencrypted addresses.
--	 */
--	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT))
--		return true;
--
--	/*
--	 * For SME, all DMA must be to unencrypted addresses if the
--	 * device does not support DMA to addresses that include the
--	 * encryption mask.
--	 */
--	if (cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT)) {
--		u64 dma_enc_mask = DMA_BIT_MASK(__ffs64(sme_me_mask));
--		u64 dma_dev_mask = min_not_zero(dev->coherent_dma_mask,
--						dev->bus_dma_limit);
--
--		if (dma_dev_mask <= dma_enc_mask)
--			return true;
--	}
--
--	return false;
--}
--
- void __init mem_encrypt_free_decrypted_mem(void)
- {
- 	unsigned long vaddr, vaddr_end, npages;
-@@ -462,46 +436,3 @@ void __init mem_encrypt_free_decrypted_mem(void)
- 
- 	free_init_pages("unused decrypted", vaddr, vaddr_end);
- }
--
--static void print_mem_encrypt_feature_info(void)
--{
--	pr_info("AMD Memory Encryption Features active:");
--
--	/* Secure Memory Encryption */
--	if (cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT)) {
--		/*
--		 * SME is mutually exclusive with any of the SEV
--		 * features below.
--		 */
--		pr_cont(" SME\n");
--		return;
--	}
--
--	/* Secure Encrypted Virtualization */
--	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT))
--		pr_cont(" SEV");
--
--	/* Encrypted Register State */
--	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
--		pr_cont(" SEV-ES");
--
--	pr_cont("\n");
--}
--
--/* Architecture __weak replacement functions */
--void __init mem_encrypt_init(void)
--{
--	if (!sme_me_mask)
--		return;
--
--	/* Call into SWIOTLB to update the SWIOTLB DMA buffers */
--	swiotlb_update_mem_attributes();
--
--	print_mem_encrypt_feature_info();
--}
--
--int arch_has_restricted_virtio_memory_access(void)
--{
--	return cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT);
--}
--EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
--- 
-2.32.0
+Using vm.clean_min_kbytes knob allows you to get OOM *before*
+memory/io pressure gets high and keep the system manageable instead
+of getting livelock indefinitely.
+
+Demo [3]: playing supertux under stress, fs on HDD,
+vm.clean_low_kbytes=250000, no thrashing, no freeze,
+io pressure closed to 0.
+
+Yet another demo [4]: no stalls with the case that was reported [5] by
+Artem S. Tashkinov in 2019. Interesting that in that thread ndrw
+suggested [6] the right solution:
+
+> Would it be possible to reserve a fixed (configurable) amount of RAM 
+> for caches, and trigger OOM killer earlier, before most UI code is 
+> evicted from memory? In my use case, I am happy sacrificing e.g. 0.5GB 
+> and kill runaway tasks _before_ the system freezes. Potentially OOM 
+> killer would also work better in such conditions. I almost never work 
+> at close to full memory capacity, it's always a single task that goes 
+> wrong and brings the system down.
+
+> The problem with PSI sensing is that it works after the fact (after 
+> the freeze has already occurred). It is not very different from issuing 
+> SysRq-f manually on a frozen system, although it would still be a 
+> handy feature for batched tasks and remote access. 
+
+but Michal Hocko immediately criticized [7] the proposal unfairly. 
+This patch just implements ndrw's suggestion.
+
+[0] https://serverfault.com/a/319818
+[1] https://github.com/hakavlad/prelockd
+
+[2] https://www.youtube.com/watch?v=vykUrP1UvcI
+    On this video: running fast memory hog in a loop on Debian 10 GNOME, 
+    4 GiB MemTotal without swap space. FS is ext4 on *HDD*.
+    - 1. prelockd enabled: about 500 MiB mlocked. Starting 
+        `while true; do tail /dev/zero; done`: no freezes. 
+        The OOM killer comes quickly, the system recovers quickly.
+    - 2. prelockd disabled: system hangs.
+
+[3] https://www.youtube.com/watch?v=g9GCmp-7WXw
+[4] https://www.youtube.com/watch?v=iU3ikgNgp3M
+[5] Let's talk about the elephant in the room - the Linux kernel's 
+    inability to gracefully handle low memory pressure
+    https://lore.kernel.org/all/d9802b6a-949b-b327-c4a6-3dbca485ec20@gmx.com/
+[6] https://lore.kernel.org/all/806F5696-A8D6-481D-A82F-49DEC1F2B035@redhazel.co.uk/
+[7] https://lore.kernel.org/all/20190808163228.GE18351@dhcp22.suse.cz/
 

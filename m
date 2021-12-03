@@ -2,85 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA8A467278
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1BEF46727B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378831AbhLCHVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 02:21:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38964 "EHLO
+        id S1378835AbhLCHWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 02:22:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378800AbhLCHVJ (ORCPT
+        with ESMTP id S243222AbhLCHWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 02:21:09 -0500
+        Fri, 3 Dec 2021 02:22:23 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCAEC06174A;
-        Thu,  2 Dec 2021 23:17:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D214C06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 23:19:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B46B62942;
-        Fri,  3 Dec 2021 07:17:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58404C53FC7;
-        Fri,  3 Dec 2021 07:17:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12A7861EB4
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 07:19:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91B43C53FAD;
+        Fri,  3 Dec 2021 07:18:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638515864;
-        bh=i0rhTufR5Dba/BowNYQm/wav9bcJqB5wt7mHJZWPIHM=;
+        s=korg; t=1638515939;
+        bh=QmeH0cSAwndwQ/gNv727qvVaI4uFqZ8k3R0fK10THR8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N2B+u4sxzOHJm99qhNdGH9F0JtekTu5tqzDRdbW0ez1b0i8V0bH1N4ty5wUl8/5ZA
-         rQX3fIq6EQgtDzKmqxy0+Q3pr3EZ1i8a1tOmfEisp7ltnO5oobyHwR8HDaxkEspvDM
-         12XjIK5S53dpCAASYVBkJzwCZDQHwJHE0e/WEg/Y=
-Date:   Fri, 3 Dec 2021 08:17:40 +0100
+        b=vK9xGNrCTxFIfoi6vCbd+vgK7cJN0ljmTuLpob0DiT8WhC74lwTJacqt/7JJX1OcZ
+         9zPCLIKvy7KcCHXWi6NxkQRAVy6v8OM1b2JJmZ2V7DTGz05MXWjowG5KElg6WxTrVU
+         EsB5hVRl5k97RQ/YtuT8EKD68YjUJD+tBEw4W7L8=
+Date:   Fri, 3 Dec 2021 08:18:55 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Li Hua <hucool.lihua@huawei.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2, RESEND] sched/rt: Try to restart rt period timer when
- rt runtime exceeded
-Message-ID: <YanElPGuGJ8J6UK9@kroah.com>
-References: <20211203033618.11895-1-hucool.lihua@huawei.com>
+To:     davidcomponentone@gmail.com
+Cc:     TheSven73@gmail.com, dan.carpenter@oracle.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Yang Guang <yang.guang5@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH v3] staging: fieldbus: replace snprintf with sysfs_emit
+Message-ID: <YanE3wbiQ3iiEe7s@kroah.com>
+References: <36a8d3be94d3575656d08204228eaa921db64c03.1638493815.git.yang.guang5@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211203033618.11895-1-hucool.lihua@huawei.com>
+In-Reply-To: <36a8d3be94d3575656d08204228eaa921db64c03.1638493815.git.yang.guang5@zte.com.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 03:36:18AM +0000, Li Hua wrote:
-> When rt_runtime is modified from -1 to a valid control value, it may
-> cause the task to be throttled all the time. Operations like the following
-> will trigger the bug. E.g:
-> 1. echo -1 > /proc/sys/kernel/sched_rt_runtime_us
-> 2. Run a FIFO task named A that executes while(1)
-> 3. echo 950000 > /proc/sys/kernel/sched_rt_runtime_us
+On Fri, Dec 03, 2021 at 09:17:32AM +0800, davidcomponentone@gmail.com wrote:
+> From: Yang Guang <yang.guang5@zte.com.cn>
+
+Does not match the address you send this email from as reported many
+times to you.
+
 > 
-> When rt_runtime is -1, The rt period timer will not be activated when task
-> A enqueued. And then the task will be throttled after setting rt_runtime to
-> 950,000. The task will always be throttled because the rt period timer is
-> not activated.
+> coccinelle report:
+> ./drivers/staging/fieldbus/dev_core.c:73:8-16:
+> WARNING: use scnprintf or sprintf
 > 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Li Hua <hucool.lihua@huawei.com>
-> ---
-> v1->v2:
->   - call do_start_rt_bandwidth to reduce repetitive code.
->   - use raw_spin_lock_irqsave to avoid deadlock on a timer context.
-> ---
->  kernel/sched/rt.c | 23 ++++++++++++++++++-----
->  1 file changed, 18 insertions(+), 5 deletions(-)
+> Use sysfs_emit instead of scnprintf or sprintf makes more sense.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
 
-<formletter>
+Again, I have commented on the use of this many times already.  I will
+not take this change until you at least discuss it with us.
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
+sorry,
 
-</formletter>
+greg k-h

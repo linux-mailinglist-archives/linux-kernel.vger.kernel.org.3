@@ -2,84 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1594672D9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:44:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B059F4672E5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350233AbhLCHro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 02:47:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231460AbhLCHrk (ORCPT
+        id S1351036AbhLCHt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 02:49:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43030 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1378987AbhLCHt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 02:47:40 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE64C061759
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 23:44:16 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id x32so6722430ybi.12
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 23:44:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UAVL9gAJ9L8uH+kEA+xjZGKt7HfdI9ctRFtotrW3lBk=;
-        b=ib9GmhM7RHt8aAYLVx/Kgn+4sCphD+hO/mq/WH0eps59vJyGA040zGmkt/I2f5wNQO
-         q/7qoqL35jF7fImXFJzFCwzsCNAc2I/2epM3ycQjb1OdNc7cW6+emTFAKT5uXZuSTiiE
-         LJTQR7ejxp7GMzSCTW5frYCpBvLB0VwVMRoEjogXzKQf5hbqpMZxwhYuOqxhHM5/S33k
-         kllBkKI8wNTHL4/PmqMCMNyYqAyg9N8oVxDtKeNUMSpThIIoHhB/yWr5HYgDulgMHCpR
-         UEzBcf7JpUqB73tkeKA+hxjkpNjuv9+FIlvPI9bVjLmrUecmIGuWNKniRrHNF5l0JR6K
-         P+fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UAVL9gAJ9L8uH+kEA+xjZGKt7HfdI9ctRFtotrW3lBk=;
-        b=3dQx0juvt+F0KsY8rl71uZZafcJJfqgY2hPvY4sHOrEGCBWq4KULDy7HM6T4EQi3yd
-         fi0SDCScSJd6D+chI5AQNWGmmAeZqD63abWUxlh0ogAHA7XnAFj0iTgHbR4vV7bJe/Ge
-         r5xPZ2Tc8wYXFuPRcsfExpL0/6e0kqB/agLgazHRUJhwS2j0zCVlmM6AFvrLsyRxB5DL
-         NLuGqxEU9ZBagbBELUA4nwcA5h6KngsKZZ1WlDd/6HS/2TLdtj4H/FJVvmqQ8UdCYrkM
-         0Bxnt133nhLCcw3SFg10XFp+lupo2xIktdZVS7LCN0ht28wD8c6obpLoNhmfp4evC00F
-         IK2A==
-X-Gm-Message-State: AOAM532O5o2WeDFUrBIiNA/dalWshoEsvDujrGFfB033ROmC+Qe5xO6x
-        vyB5YRQ+tSoxlzFq9iL2RRgFziC2OXAEPZLPOVAs/ktsXmAiqHac
-X-Google-Smtp-Source: ABdhPJyU7RtgdFpAiVz5xqahn/qyuv+79mBq3j9EZn5MJCyqHFBNnd+/EJH7t6ORkJIAzd+WWu3ypyX5expzKX/cRug=
-X-Received: by 2002:a25:d685:: with SMTP id n127mr20888122ybg.523.1638517456254;
- Thu, 02 Dec 2021 23:44:16 -0800 (PST)
-MIME-Version: 1.0
-References: <20211203065647.2819707-1-keescook@chromium.org>
-In-Reply-To: <20211203065647.2819707-1-keescook@chromium.org>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Fri, 3 Dec 2021 15:43:37 +0800
-Message-ID: <CAMZfGtX-V35SbUJ6BE7Psa6dqrbcoyP9ABcjroAn_bO8rQ-6wg@mail.gmail.com>
-Subject: Re: [PATCH] hugetlb/cgroup: Fix copy/paste array assignment
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-hardening@vger.kernel.org
+        Fri, 3 Dec 2021 02:49:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638517592;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=C857ynlLvgo/jXt0qPiJ3y2KIqa88RzxMT/SlvNUgfw=;
+        b=SbhCrQ7G2FisUiJFUSHGDWaE97hZfwtKXz5Sm8cnUIAyavCS7fFRAj90XtNbSn0F4AOfW+
+        FagmFNJBGo/aD8QEHyVPZit5hgUuX8nkGe2Ykbkjxya0UBQPlhiFfpSgx7ZEOopv0BiulR
+        oeuzdhUMJj6GDSwoMNK7O8AF/8sKe1s=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-454-Cbbq90tDOwKVKP9euiAD6g-1; Fri, 03 Dec 2021 02:46:31 -0500
+X-MC-Unique: Cbbq90tDOwKVKP9euiAD6g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 752A3100D680;
+        Fri,  3 Dec 2021 07:46:29 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1E10945D64;
+        Fri,  3 Dec 2021 07:46:16 +0000 (UTC)
+Message-ID: <7dd1e7d1510f17f1140b7174dd42fed752eefc38.camel@redhat.com>
+Subject: Re: [PATCH v2 3/3] KVM: SVM: Extend host physical APIC ID field to
+ support more than 8-bit
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org
+Cc:     pbonzini@redhat.com, joro@8bytes.org, seanjc@google.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        peterz@infradead.org, hpa@zytor.com, thomas.lendacky@amd.com,
+        jon.grimm@amd.com
+Date:   Fri, 03 Dec 2021 09:46:15 +0200
+In-Reply-To: <20211202235825.12562-4-suravee.suthikulpanit@amd.com>
+References: <20211202235825.12562-1-suravee.suthikulpanit@amd.com>
+         <20211202235825.12562-4-suravee.suthikulpanit@amd.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 2:56 PM Kees Cook <keescook@chromium.org> wrote:
->
-> Fix mismatched array assignment, reported by an -Warray-bounds build:
->
-> mm/hugetlb_cgroup.c: In function '__hugetlb_cgroup_file_legacy_init':
-> mm/hugetlb_cgroup.c:850:35: error: array subscript 8 is above array bounds of 'struct cftype[8]' [-Werror=array-bounds ]
->   850 |         cft = &h->cgroup_files_dfl[8];
->       |                ~~~~~~~~~~~~~~~~~~~^~~
-> In file included from mm/hugetlb_cgroup.c:23:
-> ./include/linux/hugetlb.h:625:23: note: while referencing 'cgroup_files_dfl'
->   625 |         struct cftype cgroup_files_dfl[8];
->       |                       ^~~~~~~~~~~~~~~~
->
-> Fixes: e45f4726bcad ("hugetlb: add hugetlb.*.numa_stat file")
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+On Thu, 2021-12-02 at 17:58 -0600, Suravee Suthikulpanit wrote:
+> The AVIC physical APIC ID table entry contains the host physical
+> APIC ID field, which the hardware uses to keep track of where each
+> vCPU is running. Originally, the field is an 8-bit value, which can
+> only support physical APIC ID up to 255.
+> 
+> To support system with larger APIC ID, the AVIC hardware extends
+> this field to support up to the largest possible physical APIC ID
+> available on the system.
+> 
+> Therefore, replace the hard-coded mask value with the value
+> calculated from the maximum possible physical APIC ID in the system.
+> 
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> ---
+>  arch/x86/kvm/svm/avic.c | 28 ++++++++++++++++++++--------
+>  arch/x86/kvm/svm/svm.h  |  1 -
+>  2 files changed, 20 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 6aca1682f4b7..2a0f58e6edf5 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/amd-iommu.h>
+>  #include <linux/kvm_host.h>
+>  
+> +#include <asm/apic.h>
+>  #include <asm/irq_remapping.h>
+>  
+>  #include "trace.h"
+> @@ -63,6 +64,7 @@
+>  static DEFINE_HASHTABLE(svm_vm_data_hash, SVM_VM_DATA_HASH_BITS);
+>  static u32 next_vm_id = 0;
+>  static bool next_vm_id_wrapped = 0;
+> +static u64 avic_host_physical_id_mask;
+>  static DEFINE_SPINLOCK(svm_vm_data_hash_lock);
+>  
+>  /*
+> @@ -133,6 +135,20 @@ void avic_vm_destroy(struct kvm *kvm)
+>  	spin_unlock_irqrestore(&svm_vm_data_hash_lock, flags);
+>  }
+>  
+> +static void avic_init_host_physical_apicid_mask(void)
+> +{
+> +	if (!x2apic_mode) {
+Wonder why this is a exported  global variable and not function.
+Not the patch fault though.
+> +		/* If host is in xAPIC mode, default to only 8-bit mask. */
+> +		avic_host_physical_id_mask = 0xffULL;
+> +	} else {
+> +		u32 count = get_count_order(apic_get_max_phys_apicid());
+> +
+> +		avic_host_physical_id_mask = BIT(count) - 1;
+I think that there were some complains about using this macro and instead encouraged
+to use 1 << x directly, but I see it used already in other places in avic.c so I don't know.
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-Thanks.
+> +	}
+> +	pr_debug("Using AVIC host physical APIC ID mask %#0llx\n",
+> +		 avic_host_physical_id_mask);
+> +}
+> +
+>  int avic_vm_init(struct kvm *kvm)
+>  {
+>  	unsigned long flags;
+> @@ -943,22 +959,17 @@ avic_update_iommu_vcpu_affinity(struct kvm_vcpu *vcpu, int cpu, bool r)
+>  void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+>  {
+>  	u64 entry;
+> -	/* ID = 0xff (broadcast), ID > 0xff (reserved) */
+>  	int h_physical_id = kvm_cpu_get_apicid(cpu);
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+>  
+> -	/*
+> -	 * Since the host physical APIC id is 8 bits,
+> -	 * we can support host APIC ID upto 255.
+> -	 */
+> -	if (WARN_ON(h_physical_id > AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK))
+> +	if (WARN_ON(h_physical_id > avic_host_physical_id_mask))
+>  		return;
+>  
+>  	entry = READ_ONCE(*(svm->avic_physical_id_cache));
+>  	WARN_ON(entry & AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK);
+>  
+> -	entry &= ~AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK;
+> -	entry |= (h_physical_id & AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK);
+> +	entry &= ~avic_host_physical_id_mask;
+> +	entry |= h_physical_id;
+>  
+>  	entry &= ~AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK;
+>  	if (svm->avic_is_running)
+> @@ -1018,6 +1029,7 @@ bool avic_hardware_setup(bool avic, bool npt)
+>  		return false;
+>  
+>  	pr_info("AVIC enabled\n");
+> +	avic_init_host_physical_apicid_mask();
+>  	amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
+>  	return true;
+>  }
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index 1d2d72e56dd1..b4cb71c538b3 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -497,7 +497,6 @@ extern struct kvm_x86_nested_ops svm_nested_ops;
+>  #define AVIC_LOGICAL_ID_ENTRY_VALID_BIT			31
+>  #define AVIC_LOGICAL_ID_ENTRY_VALID_MASK		(1 << 31)
+>  
+> -#define AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK	(0xFFULL)
+>  #define AVIC_PHYSICAL_ID_ENTRY_BACKING_PAGE_MASK	(0xFFFFFFFFFFULL << 12)
+>  #define AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK		(1ULL << 62)
+>  #define AVIC_PHYSICAL_ID_ENTRY_VALID_MASK		(1ULL << 63)
+
+
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+Best regards,
+	Maxim Levitsky
+

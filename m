@@ -2,115 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A374671AF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 06:35:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6594671B1
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 06:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378498AbhLCFil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 00:38:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378490AbhLCFik (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 00:38:40 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7729C06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 21:35:16 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id g18so1844711pfk.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 21:35:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1MNPz6WE52QSr+7j6Q9Dzeo7RAlFzOR7yieEdRW5DUg=;
-        b=LNr6GWB9XpqtlOa6lOOVUPMjte+sUfDC8tYwcxhqkLYMyOxDeLzJD2P9Lhdbx5JWaP
-         rsFRO/doQwQ+vWvx0kWBDSsOCRyKGYEvVZ3sinZ1z6T5tlD/VUc26AqnUiiJ4emN+Z6c
-         cUnHYqwrz5Hot0raOBt4mkQSF/uTCukbPoRf/l7ThAtkbmAuj4lfTHSV48cOyl4abcjM
-         sJ6Em0MQsfGI2HNrLbhWLJCQRBhVMnB3qBsGpgB8pMHMdxXazLq+5d2YOAzPz8HNsSHj
-         RlMRzCZ1uraWlXY9gIpwaPKmLIr75T4lsS8DdeNflnl8DaSyHEBJerCBqi5Lz+MtlQP5
-         k7tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1MNPz6WE52QSr+7j6Q9Dzeo7RAlFzOR7yieEdRW5DUg=;
-        b=7M7Y6hLCdxJNLKOaiYd9g1z1VIhePSL2huTEiDTjG28EbhLip6Nn0APWaa5iBxkQJZ
-         AYBiyixhWZkyiHXfQhJq+8b/0GR4GvdL92pDNFTxFi1YEAx0H7TnPR7N6wEYiUVC20MV
-         wSYO8jjEiH3e76rm0MejQ/Mw/0nRIv42DXaAdrh64KMwozg5dRoVg9hpXzgcBlOj5hC9
-         hPXYWb72a5dcVB1e9MRET4TDuGdOVAY5GXYIT2FUMoRnsPX7LeHxfCKvXnUdks/rUNSj
-         QgczcORKtpBV5qWWzh2S/71UqmWEf7zFtvqZz9+GoQmaVbzmr4w6IYwJZeS25V2BzMs4
-         aqBQ==
-X-Gm-Message-State: AOAM532/IuhexeoRcyU/fGLjl9rwtcUp71yleazK/ii5FfhE9ooBzjLW
-        KP19WDNwThD8ybEipK5dPBSfuQ==
-X-Google-Smtp-Source: ABdhPJwfEKBuVAwyPLEbgiyRgYzjB/g3+CZ7ZcN067XoXFLuPgfSdoSs/5GNP9AhFYeiYJMmFC8daw==
-X-Received: by 2002:a63:4d8:: with SMTP id 207mr2900748pge.549.1638509716161;
-        Thu, 02 Dec 2021 21:35:16 -0800 (PST)
-Received: from [100.115.92.196] (c-73-189-176-14.hsd1.ca.comcast.net. [73.189.176.14])
-        by smtp.gmail.com with ESMTPSA id t8sm1181698pgk.66.2021.12.02.21.35.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Dec 2021 21:35:15 -0800 (PST)
-Subject: Re: [RFC Patch v2 1/3] i2c debug counters as sysfs attributes
-To:     Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org
-Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        joel@jms.id.au, andrew@aj.id.au, tali.perry1@gmail.com,
-        benjaminfair@google.com, krellan@google.com
-References: <20211203023728.3699610-1-suichen@google.com>
- <20211203023728.3699610-2-suichen@google.com>
- <10e59e850894524d34cc7d89c126ab9133e6a1a7.camel@perches.com>
-From:   Sui Chen <suichen@google.com>
-Message-ID: <c3e3d7fe-765e-defa-275b-0b5e731c77ce@google.com>
-Date:   Thu, 2 Dec 2021 21:35:13 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1378508AbhLCFjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 00:39:13 -0500
+Received: from mail-bn8nam08on2057.outbound.protection.outlook.com ([40.107.100.57]:62335
+        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1378490AbhLCFjL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 00:39:11 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h6f+32FXd0ZOIwbEQKXzs9cImJ/sCfBVR2vKSKplDWPqPVV8YK9H3kPjbabtPG1DQhzhI4xBtolxNT+94656sRF4fzIAKc9iZd+SX/JWpjp0NB9yEM0kdtRt9IZ921tk6E5JmSWaPCc2CTJ2DnXGkAJoUmWj1h5WDKM2ADVpeDnx8EFHk/nWrb/5h3XxLma2PyfMLs/JWTRCXy5cle+9MYg71yLZCgf+Zds+aAGYsypYxbKpVZ+XrCbsIi21rfWHaVHvYX3f+g1BhBAoPmZxYPyayr3JeTGq2ulSjNaOc9mBDDVAlxYDyLxpD2Dd6Rzq7xDJ73V1Kds/od5aPjDw6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L6Tvs+yqSAQ519e+yGcETckQAOarcl+pD1wVIQFPauE=;
+ b=EVc95BNhQwFU385GqsApcv1qgFOnhY2mzm8jFYmPjznIVGAuwIutwdwr+XLqMmcBFe2sVGttEkDK984Xvh56HcjWZHKPJylbbeYMI8NItAIhU1SfO5JyHb90I1wxls3o+DgDiCJJx8/aNpBL7UaEm9LzY2FaZR0Ro+PV5JJ+rydDZZt+VKeIKl/sRrcGSditerDjGvIJdiNF1y32OKNOPtkcL0bU5Dbpx+ZnTV+Wijk5sXAPuU8N3Legjup/XB8Wi2E2yXFul+MQtgGkPuqs3iPBb1IUYX5gDgxXK3cxWhe4LGNFvq6t8bexCPYAcnTDrqW6G6O/wCB4PEZ0eypXpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.112.35) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L6Tvs+yqSAQ519e+yGcETckQAOarcl+pD1wVIQFPauE=;
+ b=sMVCtWqMo1/5EhrojnDjsVFVrjQgEoK0uJd5D5LKcNLK8QzClG9EJgepiCqkh0cvf5yF2ZlUt0Rnrnw6J85tTwAZHC8az261SlQVON9s3n/fMEfi+0Ez+OFafwf8AsENH2INyzVLc3/+Zg3SBjxRq/1gxc4bcO65bzm8NbLG91fjpvmSPFZniRg4wywDIiJJhWpg3VOTcgklPhY0Zj0NJnuECNSnF81hnDctu4LVkBSplVME9QkQQWsk2vYkY1qQakONS2iHO5kerLMHvzmZPZ8HsNmE5pOrpfIhm3VJRwh6+PV0+M+zOqBM4Tz8g/5nkJnzxgT8Pdq1hhoFp8XqXg==
+Received: from CO2PR04CA0188.namprd04.prod.outlook.com (2603:10b6:104:5::18)
+ by DM5PR12MB1900.namprd12.prod.outlook.com (2603:10b6:3:10f::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Fri, 3 Dec
+ 2021 05:35:44 +0000
+Received: from CO1NAM11FT022.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:104:5:cafe::3d) by CO2PR04CA0188.outlook.office365.com
+ (2603:10b6:104:5::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11 via Frontend
+ Transport; Fri, 3 Dec 2021 05:35:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.35)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.112.35 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.35; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.35) by
+ CO1NAM11FT022.mail.protection.outlook.com (10.13.175.199) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4755.13 via Frontend Transport; Fri, 3 Dec 2021 05:35:44 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 3 Dec
+ 2021 05:35:43 +0000
+Received: from nvdebian.localnet (172.20.187.5) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.9; Thu, 2 Dec 2021
+ 21:35:40 -0800
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Peter Xu <peterx@redhat.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Hugh Dickins <hughd@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: [PATCH v6 01/23] mm: Introduce PTE_MARKER swap entry
+Date:   Fri, 3 Dec 2021 16:35:38 +1100
+Message-ID: <3832555.7SGzcYD3YQ@nvdebian>
+In-Reply-To: <YambOGGK/K7saiHM@xz-m1.local>
+References: <20211115075522.73795-1-peterx@redhat.com> <11462319.U46FXHIEPT@nvdebian> <YambOGGK/K7saiHM@xz-m1.local>
 MIME-Version: 1.0
-In-Reply-To: <10e59e850894524d34cc7d89c126ab9133e6a1a7.camel@perches.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Originating-IP: [172.20.187.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2215670e-a580-4e93-7e60-08d9b61ec06a
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1900:
+X-Microsoft-Antispam-PRVS: <DM5PR12MB1900CA892D83773CA103D42FDF6A9@DM5PR12MB1900.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ygp7fhs9hztPUaGxNRr0WNESfTFxgdOodxBT6EH32ujL65SCO7kWXz6OVvslwJefFaXqWiAoW5yGgz8sVam/WdXblv29NFtx+jczrmMrQI+Gx5eYGPCsg5kNE7eyrfHTOopq0X9Xp3gwOsBmu8abS5YgQGeK0JlBt2ZTcZpmI8Uv+lXSLFxnmb/4kdRlvmTcqTWyKqdsMYYuA8ymBCbrGagGNwaMW9w7ssD6KjZ33uY+i8SiSZPM3ozL1UGPABXqFCH3PJYRvaEIBShaGEr998GAoViUVW3e+NQsEJu0vILLHhCmX+xOHHM2u6mJCWcZsQkDjov0pc8/F4fvkY/f4O1q8ceSXqxtvnMLEQU7HSZIw81PyGKI7WhQbxSUzy77qxjNlXFPQiNABtwJzAGZDM14vwsEooU6Ku+jmNPAJcsHrPxPQt3qKS1/AMVTJQMeV3d37x8G0w4zYM2AL+uvxpXk361JbuJbiTK1Z6dapjsXa00b2kjQRCkipriSSQnDnAvnYo34IwgSheRC4BeOMvM3HwI08VV8OPmRxY2irrOX2n/2SgESYZ8tX3fBHvp99hM3I774CmTxdnM2PTsq8abKop2M9HtjvIzrSgH7V5pgTRZAeVkKW4DkresDpTasnQ+YS2fqDy4zSwWriifX3y+9YYqhxGvjmN+mfG7R0mvCkASQ4lBGPaWqGibxGIlAO/3RvKhojrxnDtldAIlRYv2oeJpJAbmY12VTcLw3RiuZxJkD6Zr7fr5rnTQj3IWtCMemTwL6+wJMfL4IQ9PjH0CsflERz7i17u4ryzNNtMY=
+X-Forefront-Antispam-Report: CIP:216.228.112.35;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid02.nvidia.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(47076005)(6916009)(5660300002)(33716001)(4326008)(86362001)(9576002)(8676002)(508600001)(70206006)(7636003)(16526019)(83380400001)(356005)(186003)(70586007)(36860700001)(336012)(426003)(7416002)(8936002)(26005)(2906002)(54906003)(316002)(9686003)(82310400004)(40460700001)(39026012);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2021 05:35:44.2020
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2215670e-a580-4e93-7e60-08d9b61ec06a
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.35];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT022.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1900
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/21 6:50 PM, Joe Perches wrote:
-> On Thu, 2021-12-02 at 18:37 -0800, Sui Chen wrote:
->> This change adds a few example I2C debug counters as sysfs attributes:
->> - ber_cnt (bus error count)
->> - nack_cnt (NACK count)
->> - rec_fail_cnt, rec_succ_cnt (recovery failure/success count)
->> - timeout_cnt (timeout count)
->> - i2c_speed (bus frequency)
->> - tx_complete_cnt (transaction completed, including both as an initiator
->>    and as a target)
->>
->> The function i2c_adapter_create_stats_folder creates a stats directory
->> in the device's sysfs directory to hold the debug counters. The platform
->> drivers are responsible for instantiating the counters in the stats
->> directory if applicable.
+On Friday, 3 December 2021 3:21:12 PM AEDT Peter Xu wrote:
+> On Fri, Dec 03, 2021 at 02:30:00PM +1100, Alistair Popple wrote:
+> > On Monday, 15 November 2021 6:55:00 PM AEDT Peter Xu wrote:
+> > 
+> > [...]
+> > 
+> > > diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+> > > index d356ab4047f7..5103d2a4ae38 100644
+> > > --- a/include/linux/swapops.h
+> > > +++ b/include/linux/swapops.h
+> > > @@ -247,6 +247,84 @@ static inline int is_writable_migration_entry(swp_entry_t entry)
+> > >  
+> > >  #endif
+> > >  
+> > > +typedef unsigned long pte_marker;
+> > > +
+> > > +#define  PTE_MARKER_MASK     (0)
+> > > +
+> > > +#ifdef CONFIG_PTE_MARKER
+> > > +
+> > > +static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
+> > > +{
+> > > +	return swp_entry(SWP_PTE_MARKER, marker);
+> > > +}
+> > > +
+> > > +static inline bool is_pte_marker_entry(swp_entry_t entry)
+> > > +{
+> > > +	return swp_type(entry) == SWP_PTE_MARKER;
+> > > +}
+> > > +
+> > > +static inline pte_marker pte_marker_get(swp_entry_t entry)
+> > > +{
+> > > +	return swp_offset(entry) & PTE_MARKER_MASK;
+> > 
+> > I'm not sure the PTE_MARKER_MASK adds much, especially as we only have one
+> > user. I don't see a problem with open-coding these kind of checks (ie.
 > 
-> Please try to use scripts/checkpatch.pl on your patches and see if
-> you should be more 'typical kernel style' compliant.
+> It's more or less a safety belt to make sure anything pte_marker_get() returned
+> will be pte_marker defined bits only.
 > 
-> Ideally, use the --strict option too.
+> > swp_offset(entry) & PTE_MARKER_UFFD_WP) as you kind of end up doing that anyway.
+> > Alternatively if you want helper functions I think it would be better to define
+> > them for each marker. Eg: is_pte_marker_uffd_wp().
+> 
+> Yes we can have something like is_pte_marker_uffd_wp(), I didn't do that
+> explicitly because I want us to be clear that pte_marker is a bitmask, so
+> calling "is_*" will be slightly opaque - strictly speaking it should be
+> "pte_marker_has_uffd_wp_bit()" if there will be more bits defined, but then the
+> name of the helper will look a bit odd too.  Hence I just keep the only
+> interface to fetch the whole marker and use "&" in the call sites to check.
+
+Why does a caller need to care if it's a bitmask or not though? Isn't that an
+implementation detail that could be left to the "is_*" functions? I must admit
+I'm still working through the rest of this series though - is it because you
+end up storing some kind of value in the upper bits of the PTE marker?
+
+> > 
+> > > +}
+> > > +
+> > > +static inline bool is_pte_marker(pte_t pte)
+> > > +{
+> > > +	return is_swap_pte(pte) && is_pte_marker_entry(pte_to_swp_entry(pte));
+> > > +}
+> > > +
+> > > +#else /* CONFIG_PTE_MARKER */
+> > > +
+> > > +static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
+> > > +{
+> > > +	/* This should never be called if !CONFIG_PTE_MARKER */
+> > 
+> > Can we leave this function undefined then? That way we will get an obvious
+> > build error.
+> 
+> We can, but then we need more macros to cover the common code.  E.g. currently
+> in hugetlb_change_protection() we have:
+> 
+>         /* None pte */
+>         if (unlikely(uffd_wp))
+>                 /* Safe to modify directly (none->non-present). */
+>                 set_huge_pte_at(mm, address, ptep,
+>                                 make_pte_marker(PTE_MARKER_UFFD_WP));
+> 
+> If we drop this definition, to let it compile with !PTE_MARKER, we'll need:
+> 
+> +#ifdef PTE_MARKER
+>         /* None pte */
+>         if (unlikely(uffd_wp))
+>                 /* Safe to modify directly (none->non-present). */
+>                 set_huge_pte_at(mm, address, ptep,
+>                                 make_pte_marker(PTE_MARKER_UFFD_WP));
+> +#endif
+> 
+> Comparing to adding macro checks over a few other places, I figured maybe it's
+> easier to define them in the header once then we proper WARN_ON_ONCE() if
+> triggered (while they should just never).
+
+Ok, makes sense. Agree that adding macro checks everywhere isn't great.
+
+> > 
+> > Overall I'm liking the swap entry approach a lot more than the special pte
+> > approach, but maybe that's just because I'm more familiar with special swap
+> > entries :-)
+> 
+> Swap entry solution is definitely cleaner to me if not considering wasting it
+> with one bit.
+> 
+> Operating on pte directly is actually slightly more challenging, because we
+> don't have the protection of is_swap_pte() anymore.  It can help shield out
+> quite some strange stuff due to the pte->swp level hierachy.
+
+So I guess now we have the protection of is_swap_pte() there are probably a few
+places where we need to check for marker pte entries when we find swap entries.
+I'm not suggesting you haven't already found all of those cases of course, just
+noting that it's something to review.
+
+> Thanks,
+> 
 > 
 
-Hello Joe,
 
-I thank and really appreciate your spending time commenting on the 
-patch, and on its previous version too. I ran checkpatch.pl and found a 
-few code style fixes on patches 1 and 2.
-Sorry for not checking the format before sending the email, I will 
-definitely do the format check next time.
 
-Regarding the patch itself, code style aside, we're wondering if this 
-idea of exporting I2C statistics to sysfs looks reasonable? Do we need 
-to accompany this change with design documents too (similar to PCIe AER 
-reporting?)
 
-We have done some more I2C-related performance and reliability tests; 
-however it might take some more efforts to explore those ideas and 
-summarize them into patches/documents. For now we would like to know 
-about the comments on this sysfs attribute change first, since it is the 
-initial step to the larger effort. Any comments will be greatly appreciated.
-
-Thanks,
-Sui

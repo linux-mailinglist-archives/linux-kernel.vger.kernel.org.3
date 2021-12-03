@@ -2,73 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F15467D28
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 571EC467D2A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:20:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382550AbhLCSXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 13:23:52 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59084 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbhLCSXv (ORCPT
+        id S1382557AbhLCSYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 13:24:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50888 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1382554AbhLCSYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 13:23:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8672BB826AE;
-        Fri,  3 Dec 2021 18:20:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EADCC53FAD;
-        Fri,  3 Dec 2021 18:20:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638555625;
-        bh=OB4Bx6jJijh7+JRIkpwpBVOrUJtz1NtAnmSn6rSLTJU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=epCSKUqma0APZHSuaqurmjtsNySskl2XDvGOhZw2jd40QkkpNJ1hoSvpO7f9yo//m
-         1lgU1ZUfJi3wp0tqe5RQtyBCugzs/2nr+SPSy7n3Sq2hD7Im9Y6LR0zOwBGG0T65Lw
-         OsMMM+Ks0rYeUKVbA28xXkkL4ntjKFRJfp2SdZ0u/vU7NeOiZdfTJWbFB7Y6LcKL6T
-         C72kvpsMStNT7+4kB0gHpldmUMywE2QAtvNIGRaFNq7tmlj7c+G+S2C0te3XI2g+bH
-         b9WLVekYKPVnGpmptg1lSdpwkFdcIInxN8Y7V7xOARWOBi1j971wgw58sC1ynbbl+l
-         Bci9wSA5Wofgg==
-Date:   Fri, 3 Dec 2021 13:20:23 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Wen Gu <guwen@linux.alibaba.com>,
-        Tony Lu <tonylu@linux.alibaba.com>,
-        "David S . Miller" <davem@davemloft.net>, kgraul@linux.ibm.com,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.15 10/39] net/smc: Transfer remaining wait
- queue entries during fallback
-Message-ID: <Yapf55An+RCmIr7G@sashalap>
-References: <20211126023156.441292-1-sashal@kernel.org>
- <20211126023156.441292-10-sashal@kernel.org>
- <20211125185139.0007069f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        Fri, 3 Dec 2021 13:24:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638555649;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qgsO3oHAmFJzKq+dVmJv06T3M/ORmohx5le6ux9ty9c=;
+        b=bhHBJvxiCWUR7VbhYghOxUAsBMzqMUHmBzvarYUAVK4RFNESORb5UiThllxjfUWSJFOYsP
+        xrfHMd963etXqtitrFa+4VSDhMgOUh8rDxwzcoC/HRM4lLzhWjAs3QXenA3Z1vKTIbPKM7
+        yM0qYmKX0uscRwoQMCbW4ecRNNleJYQ=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-429-gdKGskOcMl65EJmEf3iUFA-1; Fri, 03 Dec 2021 13:20:48 -0500
+X-MC-Unique: gdKGskOcMl65EJmEf3iUFA-1
+Received: by mail-wm1-f70.google.com with SMTP id g80-20020a1c2053000000b003331a764709so3818722wmg.2
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 10:20:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=qgsO3oHAmFJzKq+dVmJv06T3M/ORmohx5le6ux9ty9c=;
+        b=ItdfjF9zDesYrsnDxceXUkatfr4wG5M/dflJHQjlP26ZzwloS6vrs8c6MhAo28Ufjs
+         NmN+NMa20PXyTKPNMw2R50otEjwmeo0hWzRn+0ttithcu2LLc6OEILQVj64fR6XWMzyd
+         KhLrh40nDhlSe//dFd+s6Y+hYbHr5t7cFgR74RcRDFnoJFC6n9WaRVr59WLjH056RO+V
+         4Bcu+9MqG/bi3zQckGyyDoqfx0n6YuX0jPhnFoTIy21nNC0bLhiyDxBxfTMmu+c+RepT
+         rSKfk5mMTgdWDmX1GGH2rC94ObcsDgFDGlp4PB+bs5jSsJURmbjpGt2xZ5m3UyfhHSGy
+         RHzg==
+X-Gm-Message-State: AOAM530AeaWDISxvVRTAoAK8S1Q48wT+nk0a1pc5/pxZd5JyvEGQIdE9
+        us0Q9Q2bbzwjQpmcb+W+D/O/tpCLf/QSthku0RZY5m3k9q1IbygoYl4J4LK0kamr4SmA1nPI+km
+        vWKdBZ/Ua3yv8SjJllT9srvkH
+X-Received: by 2002:a05:6000:2c7:: with SMTP id o7mr24017457wry.62.1638555647057;
+        Fri, 03 Dec 2021 10:20:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy8CavJ4evptW+LbrLlZf/myYwiY1F8lIjOYR0WgVLxsVzfjSUUsdpB9qGAHvDNHYUc5Gd9IQ==
+X-Received: by 2002:a05:6000:2c7:: with SMTP id o7mr24017435wry.62.1638555646881;
+        Fri, 03 Dec 2021 10:20:46 -0800 (PST)
+Received: from ?IPV6:2003:d8:2f44:9200:3344:447e:353c:bf0b? (p200300d82f4492003344447e353cbf0b.dip0.t-ipconnect.de. [2003:d8:2f44:9200:3344:447e:353c:bf0b])
+        by smtp.gmail.com with ESMTPSA id l22sm3203749wmp.34.2021.12.03.10.20.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 10:20:46 -0800 (PST)
+Message-ID: <1e0ce8f6-332b-399f-5ac7-5a56639172b3@redhat.com>
+Date:   Fri, 3 Dec 2021 19:20:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20211125185139.0007069f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [RFD] clear virtual machine memory when virtual machine is turned
+ off
+Content-Language: en-US
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        fei luo <morphyluo@gmail.com>, akpm@linux-foundation.org,
+        arnd@arndb.de, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org
+Cc:     Joao Martins <joao.m.martins@oracle.com>
+References: <CAMgLiBskDz7XW9-0=azOgVJ00t8zFOXjdGaH7NLpKDfNH9wsGQ@mail.gmail.com>
+ <673c5628-da97-83d3-028f-46219f203caf@redhat.com>
+ <e13bd5e9-981f-e2f1-fdd9-049a1926d70f@oracle.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <e13bd5e9-981f-e2f1-fdd9-049a1926d70f@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 25, 2021 at 06:51:39PM -0800, Jakub Kicinski wrote:
->On Thu, 25 Nov 2021 21:31:27 -0500 Sasha Levin wrote:
->> From: Wen Gu <guwen@linux.alibaba.com>
+On 02.12.21 18:27, Mike Kravetz wrote:
+> On 12/2/21 04:47, David Hildenbrand wrote:
+>> On 02.12.21 11:19, fei luo wrote:
+>>>
+>>> When reusing the page that has been cleared, there is no need to clear it
+>>>
+>>> again, which also speeds up the memory allocation of user-mode programs.
+>>>
+>>>
+>>> Is this feature feasible?
 >>
->> [ Upstream commit 2153bd1e3d3dbf6a3403572084ef6ed31c53c5f0 ]
+>> "init_on_free=1" for the system as a whole, which might sounds like what
+>> might tackle part of your use case.
 >>
->> The SMC fallback is incomplete currently. There may be some
->> wait queue entries remaining in smc socket->wq, which should
->> be removed to clcsocket->wq during the fallback.
->>
->> For example, in nginx/wrk benchmark, this issue causes an
->> all-zeros test result:
->
->Hold this one, please, there is a fix coming: 7a61432dc813 ("net/smc:
->Avoid warning of possible recursive locking").
+> 
+> Certainly init_on_free will not make much difference if VMs are backed by
+> hugetlb pages.  We (Joao and myself) have thought about clearing hugetlb
+> pages from user space in an attempt speed up launching of VMs backed by
+> hugetlb pages.
+> 
 
-I'll grab that one too, thanks!
+I remember that discussion. And I also recall a discussion regarding
+extending init_on_free semantics to hugetlbfs.
 
 -- 
 Thanks,
-Sasha
+
+David / dhildenb
+

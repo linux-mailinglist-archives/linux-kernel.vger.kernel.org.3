@@ -2,67 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A6C467E74
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BA6467E75
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353508AbhLCTxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 14:53:37 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34176 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353441AbhLCTxg (ORCPT
+        id S1353551AbhLCTyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 14:54:16 -0500
+Received: from smtprelay0218.hostedemail.com ([216.40.44.218]:40124 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1353441AbhLCTyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 14:53:36 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 22A89CE2817;
-        Fri,  3 Dec 2021 19:50:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 516B2C53FAD;
-        Fri,  3 Dec 2021 19:50:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638561009;
-        bh=3zpaER5clmvC/+uoSi6iXpa2sHBo5rlHOifUHCh/0/M=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=a2sF5zXF0aMmyUcZ0aMICpj6eqUr3hXHYJpqRN+bnsQVAmB60slRpAnQs0tuvsYnn
-         bdC6JSL6MqHHKcnNnHJhB/k8aNncdQOEQZC+715yvL5KnPCShwjLSlQQfda6G/zFcY
-         Lyv3J7gZHBGJcyy+S30B05CKxEBjEuNfN5zmolcXT3cIFHMfW9Xf8SOt0SIDban9OA
-         g5HZjE6NahAnc2MAeieHJHcIlW1XzRAO3tbRwmsr1/Fy9uoheQVTWenvN1VkG9Bjre
-         zNSlEC/ycnlsPA4W1YthbgvV/o6IMskTyEyk1R9FvtYZs+OzygO6GnURTnJqRSxjB3
-         +tUWd0A/0odAA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 32D0760A50;
-        Fri,  3 Dec 2021 19:50:09 +0000 (UTC)
-Subject: Re: [GIT PULL] s390 updates for 5.16-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yapz2thD1GK8yQ6J@osiris>
-References: <Yapz2thD1GK8yQ6J@osiris>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Yapz2thD1GK8yQ6J@osiris>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.16-4
-X-PR-Tracked-Commit-Id: 3c088b1e82cfb7c889823d39846d32079f190f3f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 757f3e6ddd6811221f3a0586bd8de90cd046e5fd
-Message-Id: <163856100919.9946.302615582661120490.pr-tracker-bot@kernel.org>
-Date:   Fri, 03 Dec 2021 19:50:09 +0000
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+        Fri, 3 Dec 2021 14:54:15 -0500
+Received: from omf10.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay07.hostedemail.com (Postfix) with ESMTP id 39E0A1833B033;
+        Fri,  3 Dec 2021 19:50:49 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id E054846;
+        Fri,  3 Dec 2021 19:50:47 +0000 (UTC)
+Message-ID: <983ee57718a6e5838f79be96b7f7efc638177f76.camel@perches.com>
+Subject: Re: [PATCH] mnt: remove unneeded conversion to bool
+From:   Joe Perches <joe@perches.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        davidcomponentone@gmail.com, shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Guang <yang.guang5@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Date:   Fri, 03 Dec 2021 11:50:47 -0800
+In-Reply-To: <07f4ba23-cf4c-6817-f7a4-5428f35d966c@linuxfoundation.org>
+References: <3a7435c9e7e7aa8f24d22fd576ce912eb0540272.1637737086.git.yang.guang5@zte.com.cn>
+         <07f4ba23-cf4c-6817-f7a4-5428f35d966c@linuxfoundation.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: E054846
+X-Spam-Status: No, score=-4.80
+X-Stat-Signature: 8azozw8hph8h4bhn76oots7xepur15ww
+X-Rspamd-Server: rspamout03
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+HQzYyVsx4UOivXp9oYFki3fVdhkr27jI=
+X-HE-Tag: 1638561047-943619
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 3 Dec 2021 20:45:30 +0100:
+On Fri, 2021-12-03 at 11:26 -0700, Shuah Khan wrote:
+> On 11/24/21 5:56 PM, davidcomponentone@gmail.com wrote:
+> > From: Yang Guang <yang.guang5@zte.com.cn>
+> > 
+> > The coccinelle report
+> > ./tools/testing/selftests/mount/unprivileged-remount-test.c:285:54-59:
+> > WARNING: conversion to bool not needed here
+> > ./tools/testing/selftests/mount/unprivileged-remount-test.c:207:54-59:
+> > WARNING: conversion to bool not needed here
+> > Relational and logical operators evaluate to bool,
+> > explicit conversion is overly verbose and unneeded.
+> > 
+> > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+> > ---
+> >   tools/testing/selftests/mount/unprivileged-remount-test.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/mount/unprivileged-remount-test.c b/tools/testing/selftests/mount/unprivileged-remount-test.c
+> > index 584dc6bc3b06..d2917054fe3a 100644
+> > --- a/tools/testing/selftests/mount/unprivileged-remount-test.c
+> > +++ b/tools/testing/selftests/mount/unprivileged-remount-test.c
+> > @@ -204,7 +204,7 @@ bool test_unpriv_remount(const char *fstype, const char *mount_options,
+> >   		if (!WIFEXITED(status)) {
+> >   			die("child did not terminate cleanly\n");
+> >   		}
+> > -		return WEXITSTATUS(status) == EXIT_SUCCESS ? true : false;
+> > +		return WEXITSTATUS(status) == EXIT_SUCCESS;
+> >   	}
+> >   
+> >   	create_and_enter_userns();
+> > @@ -282,7 +282,7 @@ static bool test_priv_mount_unpriv_remount(void)
+> >   		if (!WIFEXITED(status)) {
+> >   			die("child did not terminate cleanly\n");
+> >   		}
+> > -		return WEXITSTATUS(status) == EXIT_SUCCESS ? true : false;
+> > +		return WEXITSTATUS(status) == EXIT_SUCCESS;
+> >   	}
+> >   
+> >   	orig_mnt_flags = read_mnt_flags(orig_path);
+> > 
+> 
+> This change doesn't look right. WEXITSTATUS(status) return could be
+> > 1 or 0 or negative.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.16-4
+The change is at least logically correct.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/757f3e6ddd6811221f3a0586bd8de90cd046e5fd
+And isn't WEXITSTATUS range limited from 0->255 ?
 
-Thank you!
+https://www.gnu.org/software/libc/manual/html_node/Exit-Status.html
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+

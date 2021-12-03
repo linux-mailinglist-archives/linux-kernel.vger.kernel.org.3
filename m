@@ -2,131 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5099A467E36
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:27:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E2D467E38
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:28:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382791AbhLCTbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 14:31:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33102 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245460AbhLCTbK (ORCPT
+        id S1382861AbhLCTbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 14:31:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353754AbhLCTbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 14:31:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638559665;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pmMKiB3N4p3pnZNkTKPE5eWVpNIexw+a16FHU/X1k2I=;
-        b=ITvoRtlA15KBwPBaV1BoV2Y6n1Xgqm7P0heIWPjD9dhP1c5Vr34DsmGOh4f0K3TpfHiGp9
-        lZ1ZXO/aquB/Yga9xrgtEg62uKs9HyrN47eK3sA5U+gqNazV9NhmNjsFQp4LC42uoo34Oh
-        giiG0PXvTb6/4DsKvwVsKS3rm3mbf/0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-224-JaaTEwooP-GuQcILlIVSxQ-1; Fri, 03 Dec 2021 14:27:42 -0500
-X-MC-Unique: JaaTEwooP-GuQcILlIVSxQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 3 Dec 2021 14:31:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDE4C061751;
+        Fri,  3 Dec 2021 11:28:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C495A81CCC8;
-        Fri,  3 Dec 2021 19:27:39 +0000 (UTC)
-Received: from [10.22.32.36] (unknown [10.22.32.36])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A7CF760BD8;
-        Fri,  3 Dec 2021 19:27:20 +0000 (UTC)
-Message-ID: <583191c1-4153-cee8-1836-a4037b9ea304@redhat.com>
-Date:   Fri, 3 Dec 2021 14:27:20 -0500
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9EEBFB828D3;
+        Fri,  3 Dec 2021 19:28:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF9F8C53FAD;
+        Fri,  3 Dec 2021 19:28:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638559686;
+        bh=sAJaLNzg+JVMUerDY4yeRe8FVaUg2LjpY6jSf5lZmcg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FxRyB3OnmGsrkVo7DOQ9T47jUs6CmY5H5Zzq/Fjf7mI1765jNRxrEHB/TbHLxoT/C
+         5xoVEVv3cPFY2wee470DfWaMJTVVYNXc9OPCG59JqBKvbSFsRnlHtaRrlpp3pRuWSg
+         uHbW9HFZchd1EsZ3epAuGQsG0ZBmURO3s83PnuSsvkzEE8njEU2RSA32/kXmmZEHJM
+         xa6UcuqV48Qf5OUPTychoRyiBkoqmXcYvEdQZou+yNsO/FNLyTReIcqzye5A7ddR2j
+         GPFmJ+C1eZ1W/3Mw1Ph+RRR8Y3y9JOMssUzzhj63NhzALYFzU+9dp8bI9AvRllPcU0
+         6sXvoKQxiVu3g==
+Message-ID: <db9b7bc9-fdca-4dd2-2c3f-3b7354c165bb@kernel.org>
+Date:   Fri, 3 Dec 2021 11:28:04 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
 Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-References: <20211018143619.205065-6-longman@redhat.com>
- <20211115193122.GA16798@blackbody.suse.cz>
- <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
- <20211116175411.GA50019@blackbody.suse.cz>
- <293d7abf-aff6-fcd8-c999-b1dbda1cffb8@redhat.com>
- <YaZbXArNIMNvwJD/@slm.duckdns.org>
- <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
- <Yaem+r/YZ9BNXv9R@slm.duckdns.org>
- <4a021678-1896-2d16-4075-f626c7ab8513@redhat.com>
- <8f56f7a3-1d4b-679b-7348-d8ecb4ef3d6c@redhat.com>
- <20211203182500.GD16798@blackbody.suse.cz>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20211203182500.GD16798@blackbody.suse.cz>
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
+        bp@alien8.de, mingo@redhat.com, linux-sgx@vger.kernel.org,
+        x86@kernel.org
+Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
+        cedric.xing@intel.com, haitao.huang@intel.com,
+        mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+References: <cover.1638381245.git.reinette.chatre@intel.com>
+ <2f6b04dd8949591ee6139072c72eb93da3dd07b0.1638381245.git.reinette.chatre@intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+In-Reply-To: <2f6b04dd8949591ee6139072c72eb93da3dd07b0.1638381245.git.reinette.chatre@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/21 13:25, Michal Koutný wrote:
-> Hello Longman.
->
-> On Wed, Dec 01, 2021 at 08:28:09PM -0500, Waiman Long <longman@redhat.com> wrote:
->> 1) The limitation that "cpuset.cpus" has to be a superset of child's
->> "cpuset.cpus" has been removed as a new patch to remove that limitation will
->> be added.
-> Superb!
->
->> 2) The initial transition from "member" to partition root now requires that
->> "cpuset.cpus" overlap with that of the parent's "cpuset.cpus" instead of
->> being a superset.
-> That's sensible.
->
->> For the transition back to "member", I haven't changed the current wording
->> of forcing child partition roots to become "member" yet. If you think
->> keeping them as invalid partition root is better, I can made that change
->> too.
-> I wrote I was indifferent about this in a previous mail but when I think
-> about it now, switching to invalid root is perhaps better than switching
-> to member since it'd effectively mean that modifications of the parent
-> config propagate (permanently) also to a descendant config, which is
-> an undesired v1-ism.
+On 12/1/21 11:23, Reinette Chatre wrote:
+> Enclave creators declare their paging permission intent at the time
+> the pages are added to the enclave. These paging permissions are
+> vetted when pages are added to the enclave and stashed off
+> (in sgx_encl_page->vm_max_prot_bits) for later comparison with
+> enclave PTEs.
+> 
 
-That makes sense. I will keep those child partitions in an invalid state 
-then.
+I'm a bit confused here. ENCLU[EMODPE] allows the enclave to change the 
+EPCM permission bits however it likes with no oversight from the kernel. 
+  So we end up with a whole bunch of permission masks:
 
->
->> Please let me know what other changes you would like to see.
-> I hope my remarks below are just clarifications and not substantial
-> changes. Besides that I find your new draft good. Thanks!
->
->> [...]
->>      An invalid partition root can be reverted back to a valid one
->>      if none of the validity constraints of a valid partition root
->>      are violated.
-> s/can be/will be/
->
-> (I understand the intention is to make it asynchronously and
-> automatically, i.e. without writing into the affected descendant(s)
-> cpuset.partition again.)
-Yes, that will be automatic and the partition will become valid again if 
-other events cause changes that unbreak the validity constraints.
->
->>      Poll and inotify events are triggered whenever the state of
->>      "cpuset.cpus.partition" changes.  That includes changes caused by
->>      write to "cpuset.cpus.partition", cpu hotplug and other changes
->>      that make the partition invalid.
-> -> that change validity status
->
-> (In accordance with the comment above.)
-Cheers,
-Longman
+The PTE: controlled by complex kernel policy
 
+The VMA: with your series, this is entirely controlled by userspace.  I 
+think I'm fine with that.
+
+vm_max_prot_bits: populated from secinfo at setup time, unless I missed 
+something that changes it later.  Maybe I'm confused or missed something 
+in one of the patches,
+
+vm_run_prot_bits: populated from some combination of ioctls.  I'm 
+entirely lost as to what this is for.
+
+EPCM bits: controlled by the guest.  basically useless for any host 
+purpose on SGX2 hardware (with or without kernel support -- the enclave 
+can do ENCLU[EMODPE] whether we like it or not, even on old kernels)
+
+So I guess I don't understand the purpose of this patch	or of the rules 
+in the later patches, and I feel like this is getting more complicated 
+than makes sense.
+
+
+Could we perhaps make vm_max_prot_bits dynamic or at least controllable 
+in some useful way?  My initial proposal (years ago) was for 
+vm_max_prot_bits to be *separately* configured at initial load time 
+instead of being inferred from secinfo with the intent being that the 
+user untrusted runtime would set it appropriately.  I have no problem 
+with allowing runtime changes as long as the security policy makes sense 
+and it's kept consistent with PTEs.
+
+Also, I think we need a changelog message or, even better, actual docs 
+in kernel, explaining the actual final set of rules and invariants for 
+all these masks.
+
+--Andy

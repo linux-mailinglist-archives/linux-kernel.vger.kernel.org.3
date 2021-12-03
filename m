@@ -2,267 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DAE467105
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 05:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61154467109
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 05:10:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378463AbhLCEGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 23:06:01 -0500
-Received: from mail-yb1-f170.google.com ([209.85.219.170]:40908 "EHLO
-        mail-yb1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbhLCEGA (ORCPT
+        id S1346509AbhLCEN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 23:13:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241617AbhLCEN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 23:06:00 -0500
-Received: by mail-yb1-f170.google.com with SMTP id 131so5472081ybc.7;
-        Thu, 02 Dec 2021 20:02:37 -0800 (PST)
+        Thu, 2 Dec 2021 23:13:26 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AEC2C061757
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 20:10:02 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id q64so2209952qkd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 20:10:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=G03Bg9mTbcDJu1/QL9hBZCtHuqV9yBXy6ux9CJibey4=;
+        b=bsEwGmmgf3txjglpzc5YaAeR4W/oyU1/zOUTXDpJEiYetY7SY62/raSqON9gmUIUlO
+         pIaF83D6yBL+YIf0k+fPrwFiu8RGvAo9fMnqsVFfdTvuMwuJ1/n9yaFkOzCknc/grbD8
+         wFd/iCeaO512Wvko11rRHcQLa0Pc4A5MNi2YgGkQDnXt+aAc6t5yPLAQn6IIJIyAXGPD
+         oLNY7r0mElPAYns97rN9VRcQV/S7mJXlIf7lk2bdLQ9dDY3XzKOR7AzRTRM4yGGe64DE
+         bLbuRcFFeitDq7MPircuDFOirWW7a8MgSPiBfhBWZccsijmvYUJFZDWN2NDw0Fkkt6uz
+         U6eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=19hCyDKy/B7S/cI0K7RhbaWfULo5jaQrSZvu4b6gsm8=;
-        b=Q/XrBPOl8YWMM9iBOSEnYPAP/9q1vdjuXjD3TzG+ujZ/KTmGZxJIYF9Zznrco3ksQP
-         2+/7HWlx0FPEiHxJhLmK92JDo3Ca/Lrm8Y8V6MGcdHQuTMYgNKHdycR7Pvl/+Xag0HJN
-         HdjQDqqFfpk/7p4XUrlg4JMdauebnVVhH/+eSv4ZBJfSSLzwi866ewgUkds2yYPtYdkJ
-         kyqV1qVUbmCYTIG5/0rlIzu9wlOYOWuFfUSWV1wJULRiZ4H3z5z9OM1Bewmtr/17g5s0
-         oPsM64oyd0QhppJiuSeHDGdQdlsh/ah6vZ/z8u6CiyTRNV3efdmegBseLa7xBT4QKrS6
-         9D/w==
-X-Gm-Message-State: AOAM531c0KEnOtNdq6n3ypXBkXywvnCCvPJkeXIcTjw8mGoxGlMZCkFG
-        Id1YI1tqdg/yTqDOlSoQuOab/LeQNVGaOjQWNyw=
-X-Google-Smtp-Source: ABdhPJy5ljPR9oVlYJtDzNkoBV6J+otLipyX13p4J620nsixV2XoLB97ERTZ+P3Jim0EpPeW7r+DHvSN8CZbNKOUYPk=
-X-Received: by 2002:a25:b3c3:: with SMTP id x3mr20262120ybf.25.1638504156482;
- Thu, 02 Dec 2021 20:02:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20211128123734.1049786-1-mailhol.vincent@wanadoo.fr>
- <20211128123734.1049786-3-mailhol.vincent@wanadoo.fr> <82ea8723-a234-0dad-ea9f-1b5ccac0b812@kvaser.com>
-In-Reply-To: <82ea8723-a234-0dad-ea9f-1b5ccac0b812@kvaser.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Fri, 3 Dec 2021 13:02:25 +0900
-Message-ID: <CAMZ6RqKtn-EuSLCTAppzz0THzr7KUYBUBOTHkwhSCzrDyzSzhw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] can: kvaser_usb: do not increase tx statistics
- when sending error message frames
-To:     Jimmy Assarsson <extja@kvaser.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=G03Bg9mTbcDJu1/QL9hBZCtHuqV9yBXy6ux9CJibey4=;
+        b=UGQTS0JEWoBoNmc6ua57ODQ8/vXGXV4DwhBo6byRWaFyiZu3Kwl2DDLLknsIFxahNt
+         85EcFN9L5SOV23OhzAjNwZ98J5PJkGGqtmxFcRi/vHBXrQgLPc7Pg01+1t15lKbe5C24
+         Rxu8WQykCOla0PxCH6gzZEHT2J/MW5ugbdtk6Oe/9DqRsJqeR0Ez9JjyuWDYKgcdOD8K
+         VJodz+XaWkQQUAnmMVE9pQbpt/Syf01b5jmY9M90ckJtR+cddgFk/9wlQLbQvGpG03Um
+         xoRCYT5WCaCIlAbjGtOdoolA2uA6MLmqJVQuZPC2YFbr8lgOpgyH44n8z3XIQSkcFEkl
+         eb7A==
+X-Gm-Message-State: AOAM533z+mwX0x90k+l7ihhsm9l7+Yd+/+8HneCR2qqet4m6WpA7dRWB
+        BZKmRqyY0HfmM59A108OLVtt2w==
+X-Google-Smtp-Source: ABdhPJy3lE+zu/WVZLgfUkQvuqOJwbFKWmqUTJpWqvRPMzY5LH3zWKkSuJbd0Fpv/Y2ZoYYy7lCd0Q==
+X-Received: by 2002:a05:620a:f07:: with SMTP id v7mr15253259qkl.289.1638504601624;
+        Thu, 02 Dec 2021 20:10:01 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
+        by smtp.gmail.com with ESMTPSA id h3sm1456297qko.78.2021.12.02.20.10.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 20:10:01 -0800 (PST)
+Message-ID: <a77c2fca8bd1e95e1948d3fa98fe106c228221c7.camel@ndufresne.ca>
+Subject: Re: [EXT] Re: [PATCH v12 00/13] amphion video decoder/encoder driver
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Ming Qian <ming.qian@nxp.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+Cc:     "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Thu, 02 Dec 2021 23:09:59 -0500
+In-Reply-To: <DB8PR04MB6346B64E4129D81BA0CF0A1CE7639@DB8PR04MB6346.eurprd04.prod.outlook.com>
+References: <cover.1636445575.git.ming.qian@nxp.com>
+         <9947131322e034bb6336802e5afb4b6132ca5071.camel@ndufresne.ca>
+         <AM6PR04MB6341BF1FB2A839961DBADF4EE7619@AM6PR04MB6341.eurprd04.prod.outlook.com>
+         <9b7fd6802c89c5d3bb6a42b44f13a90f6c3caf22.camel@ndufresne.ca>
+         <AM6PR04MB6341F599A97253C1BA812467E7629@AM6PR04MB6341.eurprd04.prod.outlook.com>
+         <0deb3fa15dd162d7c7b6dbe24821fdf9523dddd3.camel@ndufresne.ca>
+         <DB8PR04MB6346B64E4129D81BA0CF0A1CE7639@DB8PR04MB6346.eurprd04.prod.outlook.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.1 (3.42.1-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri. 3 Dec 2021 at 08:35, Jimmy Assarsson <extja@kvaser.com> wrote:
-> On 2021-11-28 13:37, Vincent Mailhol wrote:
-> > The CAN error message frames (i.e. error skb) are an interface
-> > specific to socket CAN. The payload of the CAN error message frames
-> > does not correspond to any actual data sent on the wire. Only an error
-> > flag and a delimiter are transmitted when an error occurs (c.f. ISO
-> > 11898-1 section 10.4.4.2 "Error flag").
-> >
-> > For this reason, it makes no sense to increment the tx_packets and
-> > tx_bytes fields of struct net_device_stats when sending an error
-> > message frame because no actual payload will be transmitted on the
-> > wire.
-> >
-> > N.B. Sending error message frames is a very specific feature which, at
-> > the moment, is only supported by the Kvaser Hydra hardware. Please
-> > refer to [1] for more details on the topic.
-> >
-> > [1] https://lore.kernel.org/linux-can/CAMZ6RqK0rTNg3u3mBpZOoY51jLZ-et-J01tY6-+mWsM4meVw-A@mail.gmail.com/t/#u
-> >
-> > CC: Jimmy Assarsson <extja@kvaser.com>
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->
-> Hi Vincent!
->
-> Thanks for the patch.
-> There are flags in the TX ACK package, which makes it possible to
-> determine if it was an error frame or not. So we don't need to get
-> the original CAN frame to determine this.
-> I suggest the following change:
+Le vendredi 26 novembre 2021 à 06:31 +0000, Ming Qian a écrit :
+> > -----Original Message-----
+> > From: Nicolas Dufresne [mailto:nicolas@ndufresne.ca]
+> > Sent: Thursday, November 25, 2021 11:36 PM
+> > To: Ming Qian <ming.qian@nxp.com>; mchehab@kernel.org;
+> > shawnguo@kernel.org; robh+dt@kernel.org; s.hauer@pengutronix.de
+> > Cc: hverkuil-cisco@xs4all.nl; kernel@pengutronix.de; festevam@gmail.com;
+> > dl-linux-imx <linux-imx@nxp.com>; Aisheng Dong <aisheng.dong@nxp.com>;
+> > linux-media@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org
+> > Subject: Re: [EXT] Re: [PATCH v12 00/13] amphion video decoder/encoder
+> > driver
+> > 
+> > Caution: EXT Email
+> > 
+> > Le jeudi 25 novembre 2021 à 05:25 +0000, Ming Qian a écrit :
+> > > For test [JCT-VC-HEVC_V1] (GStreamer-H.265-V4L2-Gst1.0)
+> > > VPSSPSPPS_A_MainConcept_1, The vpu report an unsupported message to
+> > driver, so driver report pollerr to gstreamer.
+> > > But this stream can be decoded using the amphion vpu when I test it
+> > > using our unit test, I checked the difference, there are many vps, sps
+> > > and pps at the beginning, gstreamer will skip the first vpu and two
+> > > pps, totally skip 56 bytes. It leds to vpu can't decode And our unit test
+> > > won't
+> > skip anthing, so the vpu can decode the stream.
+> > 
+> > This specific test triggers a bug in GStreamer HEVC parser, I'm aware of
+> > this
+> > one, and it is on my todo to fix (just not as trivial as it looks like, the
+> > VCL nal
+> > detection code was implemented wrong and that ended up leaking into the
+> > rest of the design). This specific test will of course be marked and skipped
+> > for CI
+> > test that uses GStreamer.
+> > 
+> > regards,
+> > Nicolas
+> 
+> Hi Nicolas,
+> 
+>     For the h264 decoder test, If I test with our unit test tool, the result
+> is 124/135 tests successfully,
+> But only 75/135 tests successfully when test using gstreamer.
+>     There are 49 tests with different results, and all of the 49 test streams
+> are interlaced stream.
+> The amphion vpu will output the interlaced frame directly, it won't merge the
+> interlaced two parts into one progressive frame.
+>      And the gstreamer tiled unpack function(unpack_NV12_TILED) won't handle
+> the interlaced case, so the output frame is abnormal, and led to test fail.
+>      I think it should be a hardware limitation of the amphion vpu. And maybe
 
-This is a great suggestion. I was not a fan of getting the
-original CAN frame, this TX ACK solves the issue.
+If this is the case, it needs to be signaled as ALTERNATE (if you have 1 v4l2
+buffer per field) or SEQ if they are stored in the same v4l2_buffer but on top
+of each other instead of interleaved.
 
-> ---
->   .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 25 ++++++++++++-------
->   1 file changed, 16 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> index 3398da323126..01b076f04e26 100644
-> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> @@ -295,6 +295,7 @@ struct kvaser_cmd {
->   #define KVASER_USB_HYDRA_CF_FLAG_OVERRUN      BIT(1)
->   #define KVASER_USB_HYDRA_CF_FLAG_REMOTE_FRAME BIT(4)
->   #define KVASER_USB_HYDRA_CF_FLAG_EXTENDED_ID  BIT(5)
-> +#define KVASER_USB_HYDRA_CF_FLAG_TX_ACK        BIT(6)
->   /* CAN frame flags. Used in ext_rx_can and ext_tx_can */
->   #define KVASER_USB_HYDRA_CF_FLAG_OSM_NACK     BIT(12)
->   #define KVASER_USB_HYDRA_CF_FLAG_ABL          BIT(13)
-> @@ -1112,7 +1113,9 @@ static void kvaser_usb_hydra_tx_acknowledge(const
-> struct kvaser_usb *dev,
->         struct kvaser_usb_tx_urb_context *context;
->         struct kvaser_usb_net_priv *priv;
->         unsigned long irq_flags;
-> +       unsigned int len;
->         bool one_shot_fail = false;
-> +       bool is_err_frame = false;
->         u16 transid = kvaser_usb_hydra_get_cmd_transid(cmd);
->
->         priv = kvaser_usb_hydra_net_priv_from_cmd(dev, cmd);
-> @@ -1131,24 +1134,28 @@ static void
-> kvaser_usb_hydra_tx_acknowledge(const struct kvaser_usb *dev,
->                         kvaser_usb_hydra_one_shot_fail(priv, cmd_ext);
->                         one_shot_fail = true;
->                 }
-> -       }
-> -
-> -       context = &priv->tx_contexts[transid % dev->max_tx_urbs];
-> -       if (!one_shot_fail) {
-> -               struct net_device_stats *stats = &priv->netdev->stats;
-> -
-> -               stats->tx_packets++;
-> -               stats->tx_bytes += can_fd_dlc2len(context->dlc);
-> +               if (flags & KVASER_USB_HYDRA_CF_FLAG_TX_ACK &&
-> +                   flags & KVASER_USB_HYDRA_CF_FLAG_ERROR_FRAME)
-> +                        is_err_frame = true;
+Some bit about this might not we all wired properly, I have only tested
+alternate field for capture devices (Xilinx ZinqMP). Please check the signalling
+of interlace field in your driver, I'll check the state of GStreamer in this
+regard.
 
-Nitpick, but I prefer to write:
+> the gstreamer videoconvert can handle it.
+> The interlaced list is as below:
+> [JVT-AVC_V1] cabac_mot_fld0_full
+> [JVT-AVC_V1] cabac_mot_mbaff0_full
+> [JVT-AVC_V1] cabac_mot_picaff0_full
+> [JVT-AVC_V1] CABREF3_Sand_D
+> [JVT-AVC_V1] CAFI1_SVA_C
+> [JVT-AVC_V1] CAMA1_Sony_C
+> [JVT-AVC_V1] CAMA1_TOSHIBA_B
+> [JVT-AVC_V1] CAMA3_Sand_E
+> [JVT-AVC_V1] CAMACI3_Sony_C
+> [JVT-AVC_V1] CAMANL1_TOSHIBA_B
+> [JVT-AVC_V1] CAMANL2_TOSHIBA_B
+> [JVT-AVC_V1] CAMANL3_Sand_E
+> [JVT-AVC_V1] CAMASL3_Sony_B
+> [JVT-AVC_V1] CAMP_MOT_MBAFF_L30
+> [JVT-AVC_V1] CAMP_MOT_MBAFF_L31
+> [JVT-AVC_V1] CANLMA2_Sony_C
+> [JVT-AVC_V1] CANLMA3_Sony_C
+> [JVT-AVC_V1] CAPA1_TOSHIBA_B
+> [JVT-AVC_V1] CAPAMA3_Sand_F
+> [JVT-AVC_V1] cavlc_mot_fld0_full_B
+> [JVT-AVC_V1] cavlc_mot_mbaff0_full_B
+> [JVT-AVC_V1] cavlc_mot_picaff0_full_B
+> [JVT-AVC_V1] CVCANLMA2_Sony_C
+> [JVT-AVC_V1] CVFI1_Sony_D
+> [JVT-AVC_V1] CVFI1_SVA_C
+> [JVT-AVC_V1] CVFI2_Sony_H
+> [JVT-AVC_V1] CVFI2_SVA_C
+> [JVT-AVC_V1] CVMA1_Sony_D
+> [JVT-AVC_V1] CVMA1_TOSHIBA_B
+> [JVT-AVC_V1] CVMANL1_TOSHIBA_B
+> [JVT-AVC_V1] CVMANL2_TOSHIBA_B
+> [JVT-AVC_V1] CVMAPAQP3_Sony_E
+> [JVT-AVC_V1] CVMAQP2_Sony_G
+> [JVT-AVC_V1] CVMAQP3_Sony_D
+> [JVT-AVC_V1] CVMP_MOT_FLD_L30_B
+> [JVT-AVC_V1] CVMP_MOT_FRM_L31_B
+> [JVT-AVC_V1] CVNLFI1_Sony_C
+> [JVT-AVC_V1] CVNLFI2_Sony_H
+> [JVT-AVC_V1] CVPA1_TOSHIBA_B
+> [JVT-AVC_V1] FI1_Sony_E
+> [JVT-AVC_V1] MR6_BT_B
+> [JVT-AVC_V1] MR7_BT_B
+> [JVT-AVC_V1] MR8_BT_B
+> [JVT-AVC_V1] MR9_BT_B
+> [JVT-AVC_V1] Sharp_MP_Field_1_B
+> [JVT-AVC_V1] Sharp_MP_Field_2_B
+> [JVT-AVC_V1] Sharp_MP_Field_3_B
+> [JVT-AVC_V1] Sharp_MP_PAFF_1r2
+> [JVT-AVC_V1] Sharp_MP_PAFF_2r
+> 
 
-+                is_err_frame = flags & KVASER_USB_HYDRA_CF_FLAG_TX_ACK &&
-+                               flags & KVASER_USB_HYDRA_CF_FLAG_ERROR_FRAME;
-
->         }
->
->         spin_lock_irqsave(&priv->tx_contexts_lock, irq_flags);
->
-> -       can_get_echo_skb(priv->netdev, context->echo_index, NULL);
-> +       context = &priv->tx_contexts[transid % dev->max_tx_urbs];
-> +       len = can_get_echo_skb(priv->netdev, context->echo_index, NULL);
-
-This line is related to the tx RTR. I will rebase this into
-"can: do not increase rx_bytes statistics for RTR frames" (patch 4/5).
-
-> +
->         context->echo_index = dev->max_tx_urbs;
->         --priv->active_tx_contexts;
->         netif_wake_queue(priv->netdev);
->
->         spin_unlock_irqrestore(&priv->tx_contexts_lock, irq_flags);
-> +
-> +       if (!one_shot_fail && !is_err_frame) {
-> +               struct net_device_stats *stats = &priv->netdev->stats;
-> +
-> +               stats->tx_packets++;
-> +               stats->tx_bytes += len;
-> +       }
-
-Same here, there is no need anymore to move this block *in this
-patch*, will rebase it.
-
->   }
->
->   static void kvaser_usb_hydra_rx_msg_std(const struct kvaser_usb *dev,
-
-
-This patch ("can: kvaser_usb: do not increase tx statistics when
-sending error message frames") will become:
-
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-index 3398da323126..75009d38f8e3 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-@@ -295,6 +295,7 @@ struct kvaser_cmd {
- #define KVASER_USB_HYDRA_CF_FLAG_OVERRUN       BIT(1)
- #define KVASER_USB_HYDRA_CF_FLAG_REMOTE_FRAME  BIT(4)
- #define KVASER_USB_HYDRA_CF_FLAG_EXTENDED_ID   BIT(5)
-+#define KVASER_USB_HYDRA_CF_FLAG_TX_ACK                BIT(6)
- /* CAN frame flags. Used in ext_rx_can and ext_tx_can */
- #define KVASER_USB_HYDRA_CF_FLAG_OSM_NACK      BIT(12)
- #define KVASER_USB_HYDRA_CF_FLAG_ABL           BIT(13)
-@@ -1113,6 +1114,7 @@ static void
-kvaser_usb_hydra_tx_acknowledge(const struct kvaser_usb *dev,
-        struct kvaser_usb_net_priv *priv;
-        unsigned long irq_flags;
-        bool one_shot_fail = false;
-+       bool is_err_frame = false;
-        u16 transid = kvaser_usb_hydra_get_cmd_transid(cmd);
-
-        priv = kvaser_usb_hydra_net_priv_from_cmd(dev, cmd);
-@@ -1131,10 +1133,13 @@ static void
-kvaser_usb_hydra_tx_acknowledge(const struct kvaser_usb *dev,
-                        kvaser_usb_hydra_one_shot_fail(priv, cmd_ext);
-                        one_shot_fail = true;
-                }
-+
-+               is_err_frame = flags & KVASER_USB_HYDRA_CF_FLAG_TX_ACK &&
-+                              flags & KVASER_USB_HYDRA_CF_FLAG_ERROR_FRAME;
-        }
-
-        context = &priv->tx_contexts[transid % dev->max_tx_urbs];
--       if (!one_shot_fail) {
-+       if (!one_shot_fail && !is_err_frame) {
-                struct net_device_stats *stats = &priv->netdev->stats;
-
-                stats->tx_packets++;
-
-
-And patch 5/5 ("can: do not increase tx_bytes
-statistics for RTR frames") becomes:
-
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-index 75009d38f8e3..2cb35bd162a4 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-@@ -1113,6 +1113,7 @@ static void
-kvaser_usb_hydra_tx_acknowledge(const struct kvaser_usb *dev,
-        struct kvaser_usb_tx_urb_context *context;
-        struct kvaser_usb_net_priv *priv;
-        unsigned long irq_flags;
-+       unsigned int len;
-        bool one_shot_fail = false;
-        bool is_err_frame = false;
-        u16 transid = kvaser_usb_hydra_get_cmd_transid(cmd);
-@@ -1139,21 +1140,23 @@ static void
-kvaser_usb_hydra_tx_acknowledge(const struct kvaser_usb *dev,
-        }
-
-        context = &priv->tx_contexts[transid % dev->max_tx_urbs];
--       if (!one_shot_fail && !is_err_frame) {
--               struct net_device_stats *stats = &priv->netdev->stats;
--
--               stats->tx_packets++;
--               stats->tx_bytes += can_fd_dlc2len(context->dlc);
--       }
-
-        spin_lock_irqsave(&priv->tx_contexts_lock, irq_flags);
-
--       can_get_echo_skb(priv->netdev, context->echo_index, NULL);
-+       len = can_get_echo_skb(priv->netdev, context->echo_index, NULL);
-        context->echo_index = dev->max_tx_urbs;
-        --priv->active_tx_contexts;
-        netif_wake_queue(priv->netdev);
-
-        spin_unlock_irqrestore(&priv->tx_contexts_lock, irq_flags);
-+
-+       if (!one_shot_fail && !is_err_frame) {
-+               struct net_device_stats *stats = &priv->netdev->stats;
-+
-+               stats->tx_packets++;
-+               stats->tx_bytes += len;
-+       }
- }
-
-Does this look good to you? If so, can I add these tags to patch 2/5?
-Co-developed-by: Jimmy Assarsson <extja@kvaser.com>
-Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
-
-
-Also, can I add your tested-by to patches 1/5, 4/5 and 5/5?
-Tested-by: Jimmy Assarsson <extja@kvaser.com>
-
-
-Yours sincerely,
-Vincent Mailhol

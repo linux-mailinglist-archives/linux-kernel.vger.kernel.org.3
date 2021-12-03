@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C88A3467956
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 422CF467951
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381456AbhLCOXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 09:23:40 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53406 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381425AbhLCOXh (ORCPT
+        id S1381437AbhLCOXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 09:23:36 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:51148 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381427AbhLCOXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 09:23:37 -0500
+        Fri, 3 Dec 2021 09:23:35 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4244B827EA;
-        Fri,  3 Dec 2021 14:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 61B52C56748;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E697562B7B;
+        Fri,  3 Dec 2021 14:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 55376C53FD5;
         Fri,  3 Dec 2021 14:20:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1638541210;
-        bh=yV3wdHzXaKOwKj+kN5SAnF3kYw3yz1aTyYemhpCNt2Q=;
+        bh=yaeljxhxqATiU8N/mBSWMOV52BpsAoy5W9rf6zLD2ZM=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=HmPx/dg5h69N4YEhu8fqd20nqRkamtWUyc5fVK/tuPAeOOyg8jkNaVU03Im3Aw1Qk
-         RjBbXG+eoN9GYinYZJJ4bIrVQT1hLKCDOTfo1swFjnx8A9MTizfjl/8T31sDTPEj1H
-         uLUjXon8cxq/9xCVp1diThFfmLtPmCItAxB46gjpx874VnAeqdvDKi1dXkq72mCFSY
-         TrY+DzUGJp1C8kzHGlDX04DyeYuutzml2RfUBqtIAcGtQ/XzJ9oVqboW4drAAsHiqr
-         ujgAomDVLCK9oA8MuAWSeQxqeSq7DFMUnbbxz7E9XozurbMz0uqUlJCfoHX1t7Sa8Q
-         IJAc9iew1qurw==
+        b=o/LUe9CJl/9q5upDR68VqCLxQFfErYKr1pnXatyN6/CdZB/jENjRO9y3IjBLKZo4E
+         hsBiXLrYLTbGOAsXmCZYcdeHrfzwZ+NSooW4AF8zASubZR/NqVyHqxRMzeeUUmLKcw
+         DJG74VczjpcFbMWXZUADgvnqsA4nDQu6nvnBaAERKbzcQdlrZPu5OUiCniLdrijbS0
+         rONko7XrdIndZf+Pl1CW2toj8Rz/ZFuffsDdG3mnvDHa4jgbrYN4IEoLUT0qAh8BP7
+         AFwJCK2+0dntTh1dF8Mm6qQ4HiWyozuEVLw6yXvIdD2Z48XTxGFMU/Hm1ul+BopmxI
+         sWwNolALPKxXA==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 48C9B60C76;
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 3DA5B60A90;
         Fri,  3 Dec 2021 14:20:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests: net/fcnal-test.sh: add exit code
+Subject: Re: [PATCH v3] net: bcm4908: Handle dma_set_coherent_mask error codes
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163854121029.27426.1385573117041703444.git-patchwork-notify@kernel.org>
+Message-Id: <163854121024.27426.13358637043446344617.git-patchwork-notify@kernel.org>
 Date:   Fri, 03 Dec 2021 14:20:10 +0000
-References: <20211203023213.5021-1-zhijianx.li@intel.com>
-In-Reply-To: <20211203023213.5021-1-zhijianx.li@intel.com>
-To:     Li Zhijian <zhijianx.li@intel.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, philip.li@intel.com, lkp@intel.com
+References: <20211203033106.1512770-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20211203033106.1512770-1-jiasheng@iscas.ac.cn>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     rafal@milecki.pl, bcm-kernel-feedback-list@broadcom.com,
+        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, fw@strlen.de
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
@@ -54,22 +54,20 @@ Hello:
 This patch was applied to netdev/net.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Fri,  3 Dec 2021 10:32:13 +0800 you wrote:
-> Previously, the selftest framework always treats it as *ok* even though
-> some of them are failed actually. That's because the script always
-> returns 0.
+On Fri,  3 Dec 2021 11:31:06 +0800 you wrote:
+> The return value of dma_set_coherent_mask() is not always 0.
+> To catch the exception in case that dma is not support the mask.
 > 
-> It supports PASS/FAIL/SKIP exit code now.
-> 
-> CC: Philip Li <philip.li@intel.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Li Zhijian <zhijianx.li@intel.com>
+> Fixes: 9d61d138ab30 ("net: broadcom: rename BCM4908 driver & update DT binding")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+> Changelog
 > 
 > [...]
 
 Here is the summary with links:
-  - selftests: net/fcnal-test.sh: add exit code
-    https://git.kernel.org/netdev/net/c/0f8a3b48f91b
+  - [v3] net: bcm4908: Handle dma_set_coherent_mask error codes
+    https://git.kernel.org/netdev/net/c/128f6ec95a28
 
 You are awesome, thank you!
 -- 

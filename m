@@ -2,110 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0600B467440
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:44:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E04C5467444
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:46:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379609AbhLCJsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 04:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351584AbhLCJr7 (ORCPT
+        id S1379635AbhLCJsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 04:48:10 -0500
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:54614 "EHLO
+        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1379612AbhLCJsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 04:47:59 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1040C06173E;
-        Fri,  3 Dec 2021 01:44:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gTnHqkfzLtUUnM8N8lqBeVzaVDRXNIXSujmvHUeEVJU=; b=Ossui9j3n7ZaF8nNg68B0YfiS4
-        sZobSjph6YcFCc2VdDc956x8AJvEjoVQqGF/2+eI/ZWFJNJcB5BVJ68VHsq3S+8jDrDSiZLLTU9+Q
-        r2Z417y/TOqqhg2amrUXSkag1wdEULBglThhyX6OlhscWzhjwILIv3vYmmdoEW+T85mySpbScuuGf
-        AJ+eGoQPWYKAGaGFE8RX4S6zVTxvU+hrTdZwhyDqHboxwqwZUTODSsR0KKvonbWSVrQ40HwdRGc+v
-        RKxyo6fH+uSGfMIrMklHvaerprMrjGjl1WzjxSntg/qq59SWTNrVD4myEyJpWQ3ot5X9bEcnyinFX
-        h7CMfV7w==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mt56y-0083fc-Ez; Fri, 03 Dec 2021 09:44:13 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B88F3300293;
-        Fri,  3 Dec 2021 10:44:10 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9DBC42B36B3A8; Fri,  3 Dec 2021 10:44:10 +0100 (CET)
-Date:   Fri, 3 Dec 2021 10:44:10 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev, hjl.tools@gmail.com
-Subject: Re: [PATCH v8 05/14] x86: conditionally place regular ASM functions
- into separate sections
-Message-ID: <Yanm6tJ2obi1aKv6@hirez.programming.kicks-ass.net>
-References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
- <20211202223214.72888-6-alexandr.lobakin@intel.com>
+        Fri, 3 Dec 2021 04:48:09 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3AewDhkK6Yx6AvaCeURWuN7AxRtH3GchMFZxGqfqr?=
+ =?us-ascii?q?LsXjdYENSgzdUzmZKWWuOPP+CNjajeI0kbNiyp0MAsMODmoM1GQY5pCpnJ55og?=
+ =?us-ascii?q?ZqcVI7Bdi8cHAvLc5adFBo/hykmh2ipwPkcFhcwnT/wdOi+xZVA/fvQHOOlUra?=
+ =?us-ascii?q?eYnsZqTJME0/NtzoywobVvaY42bBVMyvV0T/Di5W31G2Ng1aYAUpIg063ky6Di?=
+ =?us-ascii?q?dyp0N8uUvPSUtgQ1LPWvyF94JvyvshdJVOgKmVfNrbSq+ouUNiEEm3lExcFUrt?=
+ =?us-ascii?q?Jk577e0EQQ7PUVeSMoioLHfbyxEEY/2prjf1T2Pk0MC+7jx2LgtRwwZNJvIO5T?=
+ =?us-ascii?q?QMBP6vWme1bXQMw/yRWbfQdoeKcexBTtuTWlSUqaUDE3fB/EEcnPqUd8/xpDGV?=
+ =?us-ascii?q?Ks/cfLVglbRqehua6hbu/TsFoh98/N4+zZcUYoH4I5TXYC+s2BJXGa6bU7NRbm?=
+ =?us-ascii?q?jAqiahmBvvEZ8sILzBobRfHSxhGIEkaDJZ4l+Ct7lHjeD1fslSEpIIy6nLNwQh?=
+ =?us-ascii?q?1lrPqNbL9ecGATO1Wk1yeq2aA+H72ajkcOcCTxCSt7H2hnKnMkDn9VYZUE6e3n?=
+ =?us-ascii?q?tZugVuO1ikQBQcQWF+Tv/a0kAi9VshZJkhS/TAhxZXeXmTDosLVBkLj5ife51h?=
+ =?us-ascii?q?CC5wATqsg5R/L0aTOpQCUGgA5ovd6QIROnKcLqfYCjDdlR+/UOAE=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3ASAs6O6ifFRbQn3FR4TTqWRlBx3BQX4x13DAb?=
+ =?us-ascii?q?v31ZSRFFG/Fws/re7cjzsiWEwQr5OUtQ0exoXZPwJU80mqQFm7X5V43OYODZgh?=
+ =?us-ascii?q?riEGgP1/qU/9SCIVyBygc+79YcT0EkMqyFMbESt6+Ti2XWYrRQpajhgcbY/Jan?=
+ =?us-ascii?q?vgxQoBlRGsJdBmFCe3Cm+2JNNUN77PECZemhD6R81kadkDgsH7uG7rhsZZmwm/?=
+ =?us-ascii?q?T70LbvYRsDDxliwBCWljW25LO/OwXw5GZvb9vBqY1ShFQt/jaS2oyT986W8SL9?=
+ =?us-ascii?q?/Uf3q7Ru3OP8wsBKA9GNjcRQChiEsGiVTbUkZJG4gRAeiMTqyG9vqvPlhDANEq?=
+ =?us-ascii?q?1Iik/5TyWLjSDR+yPJ9XIP0jvZ0FedxUHop9f0LQhbN/Z8?=
+X-IronPort-AV: E=Sophos;i="5.87,283,1631570400"; 
+   d="scan'208";a="8131532"
+Received: from 173.121.68.85.rev.sfr.net (HELO hadrien) ([85.68.121.173])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 10:44:44 +0100
+Date:   Fri, 3 Dec 2021 10:44:43 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Volodymyr Mytnyk <vmytnyk@marvell.com>
+cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Serhiy Boiko <serhiy.boiko@marvell.com>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net: prestera: fix flexible_array.cocci warnings
+Message-ID: <alpine.DEB.2.22.394.2112031043180.5247@hadrien>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211202223214.72888-6-alexandr.lobakin@intel.com>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 11:32:05PM +0100, Alexander Lobakin wrote:
-> Use the newly introduces macros to create unique separate sections
-> for (almost) every "regular" ASM function (i.e. for those which
-> aren't explicitly put into a specific one).
-> There should be no leftovers as input .text will be size-asserted
-> in the LD script generated for FG-KASLR.
+From: kernel test robot <lkp@intel.com>
 
-*groan*...
+Zero-length and one-element arrays are deprecated, see
+Documentation/process/deprecated.rst
+Flexible-array members should be used instead.
 
-Please, can't we do something like:
+Generated by: scripts/coccinelle/misc/flexible_array.cocci
 
-#define SYM_PUSH_SECTION(name)	\
-.if section == .text		\
-.push_section .text.##name	\
-.else				\
-.push_section .text		\
-.endif
+Fixes: 6e36c7bcb461 ("net: prestera: add counter HW API")
+CC: Volodymyr Mytnyk <vmytnyk@marvell.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
+---
 
-#define SYM_POP_SECTION()	\
-.pop_section
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   9606f9efb1cec7f8f5912326f182fbfbcad34382
+commit: 6e36c7bcb4611414b339173cdc33fdcb55c08f9e [4129/4921] net: prestera: add counter HW API
+:::::: branch date: 19 hours ago
+:::::: commit date: 3 days ago
 
-and wrap that inside the existing SYM_FUNC_START*() SYM_FUNC_END()
-macros.
+Please take the patch only if it's a positive warning. Thanks!
 
+ prestera_hw.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/drivers/net/ethernet/marvell/prestera/prestera_hw.c
++++ b/drivers/net/ethernet/marvell/prestera/prestera_hw.c
+@@ -443,7 +443,7 @@ struct prestera_msg_counter_resp {
+ 	__le32 offset;
+ 	__le32 num_counters;
+ 	__le32 done;
+-	struct prestera_msg_counter_stats stats[0];
++	struct prestera_msg_counter_stats stats[];
+ };
+
+ struct prestera_msg_span_req {

@@ -2,128 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AECF246737D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:47:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89648467368
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379350AbhLCIvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 03:51:14 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15691 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379306AbhLCIvN (ORCPT
+        id S1351240AbhLCIrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379246AbhLCIrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 03:51:13 -0500
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J55xD2gCpzZdQQ;
-        Fri,  3 Dec 2021 16:45:04 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 3 Dec 2021 16:47:48 +0800
-Received: from huawei.com (10.67.165.24) by dggpeml100012.china.huawei.com
- (7.185.36.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 3 Dec
- 2021 16:47:48 +0800
-From:   Kai Ye <yekai13@huawei.com>
-To:     <herbert@gondor.apana.org.au>
-CC:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <wangzhou1@hisilicon.com>, <yekai13@huawei.com>
-Subject: [PATCH v2] crypto: hisilicon - replace 'smp_processor_id' with the raw version of the macro
-Date:   Fri, 3 Dec 2021 16:43:05 +0800
-Message-ID: <20211203084305.14078-1-yekai13@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        Fri, 3 Dec 2021 03:47:00 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D8BC06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 00:43:36 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id 133so2333045pgc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 00:43:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZE+eyVTlgGs9+AIP2vmWrN/5/319nQUIDXkWbwr6YtE=;
+        b=VDbYfoQXRs9UHxCEK9S7OW6FTx6guHxJyZPP8BKTaq0BFlv1ouM9tI/H+QI2QIkmUK
+         vgNlj4Ue10IZAYAlk/k49AlI32/okqaqbppNdQK7LogVZRyeh01/lzK3NNuCqwX+eMPD
+         rsCM4drqg2NnCzdiVRNfrrH8YCSrmsLck/IT0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZE+eyVTlgGs9+AIP2vmWrN/5/319nQUIDXkWbwr6YtE=;
+        b=e1XnlV586zMaHk8Y37eyWkNkj+UWh+47vPgnirUdIGWzAe9eq9XXGy4D6iveOy9PJt
+         ScaYpMkCQX200jDRg7bak0mTtV57rr34TroPGYYTaBqpVcpvywR4Seqb0bBVFzCnNGpN
+         j0JPDLxCL9DRnqjY2p3Q4Z2M8jTn6NjnJ+3O0B8uMnZ80yMbBjH+a8We20jT+tqeC7ob
+         fiBWUPSoSm+tk9H9z4nQppwvubbp9ZDjHLqcoAEbJVQGBRuDXNWIEn/Ptob+PSP6tKJg
+         AEx7mZJ38mxQJ3rhY8jk8OC0Z/D23EkY3ltvFruSjf9T2VBFr1SVVGUf1trmdIrAWUSD
+         ta4w==
+X-Gm-Message-State: AOAM533GQBaGkuwmEBZDz8AIdXHKPiSWrC1ogX3+5SUwe2D6nkddCCAf
+        ajfZaTJCqYNaF3WAWTMHWHeCNw==
+X-Google-Smtp-Source: ABdhPJwQfA/hRvvynLK4rv8xy6QfeakwaLWnL/8X265xiYrZ7weDjYz9N+w5NMQ2McIaic7OerHAMA==
+X-Received: by 2002:a63:2542:: with SMTP id l63mr3502793pgl.431.1638521016128;
+        Fri, 03 Dec 2021 00:43:36 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id g20sm2838048pfj.12.2021.12.03.00.43.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 00:43:35 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
+        Uma Shankar <uma.shankar@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] drm/dp: Fix off-by-one in register cache size
+Date:   Fri,  3 Dec 2021 00:43:33 -0800
+Message-Id: <20211203084333.3105038-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1934; h=from:subject; bh=rsrmXkTfjT0xKWn6tW4v+AFF+Qh9FSj0rQAAqFtZsnE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhqdi1VB8a7JgU9iVrIiez0JAFg3QRkKnyojAvpfmk xGJenGaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYanYtQAKCRCJcvTf3G3AJqDrD/ 0Q+WlLCtIOelpAxkp8i+3mzggF/AKL3hGb0fhgFfr9eL9oxCO1iQd/QVz2OFadF0kFQnNrCXYxSJs8 1/B1Bzi03yQGmwxPIuwwbg9ptXI7iFNa+s80WXYT/HVmQ5YhLMiRE/TyY3AQBt9xDgYWpHRD97reQr 49WW92g7ss6Q4EU6rXL3s3iooH1ZRsg6dueYFAzVgOO8O7YIjMRPKFwhquL9zdU3fjZqzYmKEwLt22 tkERTbWN82Q6g0k+SVAeLR1iTI4tPwFr3Vy9FzAf+USQA2EAG/v9EQilBmGbRgmjDMXr+4EXqyqTie 7904y4yhNPlflKyU/Y34LYTBQTddQWL7QjK78RtgwFjtKptCyj+WMnHReEExsZnfGLeiKW/KmN8IhW l7ftFOGMzOUiwOQQkdEuveoUoxciBZFbzpwsqoA4uwwMajShbSLtO/c1JP/x+/A/XTHdz3bsussdV1 ehpcCbWNIN1WZJnX3GHM/K4eUT6ESl1ZWnkex/7KfwKXmwOydgLLuzhVjEYGXWhT30kj7HSIaZp6WI Xbk10bTyszsaJunW6tdhjRtB4FjbGYT0Y0KuAbKTHqkihlqeXUv7Ss0zJJ9u5EU/FWY9YKHE6NrLIg 077Wg3pDM8XyeZ6VIeYvaqhsWd0ceqfxO2gwgpDqf6WJwg/Gm7y1dFUxnofg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smp_processor_id() is unsafe if it's used in a preemption-on critical
-section. It will cause the call trace when the preemption-on and sets the
-CONFIG_DEBUG_PREEMPT. Due to does not need CPU ID stability. So replace
-'smp_processor_id' with the raw version of the marco in preemptible to
-avoid the following call trace:
+The pcon_dsc_dpcd array holds 13 registers (0x92 through 0x9E). Fix the
+math to calculate the max size. Found from a -Warray-bounds build:
 
-[ 7538.874350] BUG: using smp_processor_id() in preemptible [00000000] code: af_alg06/8438
-[ 7538.874368] caller is debug_smp_processor_id+0x1c/0x28
-[ 7538.874373] CPU: 50 PID: 8438 Comm: af_alg06 Kdump: loaded Not tainted 5.10.0.pc+ #18
-[ 7538.874377] Call trace:
-[ 7538.874387]  dump_backtrace+0x0/0x210
-[ 7538.874389]  show_stack+0x2c/0x38
-[ 7538.874392]  dump_stack+0x110/0x164
-[ 7538.874394]  check_preemption_disabled+0xf4/0x108
-[ 7538.874396]  debug_smp_processor_id+0x1c/0x28
-[ 7538.874406]  sec_create_qps+0x24/0xe8 [hisi_sec2]
-[ 7538.874408]  sec_ctx_base_init+0x20/0x4d8 [hisi_sec2]
-[ 7538.874411]  sec_aead_ctx_init+0x68/0x180 [hisi_sec2]
-[ 7538.874413]  sec_aead_sha256_ctx_init+0x28/0x38 [hisi_sec2]
-[ 7538.874421]  crypto_aead_init_tfm+0x54/0x68
-[ 7538.874423]  crypto_create_tfm_node+0x6c/0x110
-[ 7538.874424]  crypto_alloc_tfm_node+0x74/0x288
-[ 7538.874426]  crypto_alloc_aead+0x40/0x50
-[ 7538.874431]  aead_bind+0x50/0xd0
-[ 7538.874433]  alg_bind+0x94/0x148
-[ 7538.874439]  __sys_bind+0x98/0x118
-[ 7538.874441]  __arm64_sys_bind+0x28/0x38
-[ 7538.874445]  do_el0_svc+0x88/0x258
-[ 7538.874447]  el0_svc+0x1c/0x28
-[ 7538.874449]  el0_sync_handler+0x8c/0xb8
-[ 7538.874452]  el0_sync+0x148/0x180
+drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_pcon_dsc_bpp_incr':
+drivers/gpu/drm/drm_dp_helper.c:3130:28: error: array subscript 12 is outside array bounds of 'const u8[12]' {aka 'const unsigned char[12]'} [-Werror=array-bounds]
+ 3130 |         buf = pcon_dsc_dpcd[DP_PCON_DSC_BPP_INCR - DP_PCON_DSC_ENCODER];
+      |               ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/drm_dp_helper.c:3126:39: note: while referencing 'pcon_dsc_dpcd'
+ 3126 | int drm_dp_pcon_dsc_bpp_incr(const u8 pcon_dsc_dpcd[DP_PCON_DSC_ENCODER_CAP_SIZE])
+      |                              ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Signed-off-by: Kai Ye <yekai13@huawei.com>
-
-changes v1->v2:
-	modify the comments, and use the raw version of
-the marco instead of wrong code modification
+Fixes: e2e16da398d9 ("drm/dp_helper: Add support for Configuring DSC for HDMI2.1 Pcon")
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: dri-devel@lists.freedesktop.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/crypto/hisilicon/hpre/hpre_main.c | 2 +-
- drivers/crypto/hisilicon/sec2/sec_main.c  | 2 +-
- drivers/crypto/hisilicon/zip/zip_main.c   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ include/drm/drm_dp_helper.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/crypto/hisilicon/hpre/hpre_main.c b/drivers/crypto/hisilicon/hpre/hpre_main.c
-index ebfab3e14499..e5ff3a46a30a 100644
---- a/drivers/crypto/hisilicon/hpre/hpre_main.c
-+++ b/drivers/crypto/hisilicon/hpre/hpre_main.c
-@@ -277,7 +277,7 @@ static inline int hpre_cluster_core_mask(struct hisi_qm *qm)
+diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
+index 30359e434c3f..472dac376284 100644
+--- a/include/drm/drm_dp_helper.h
++++ b/include/drm/drm_dp_helper.h
+@@ -456,7 +456,7 @@ struct drm_panel;
+ #define DP_FEC_CAPABILITY_1			0x091   /* 2.0 */
  
- struct hisi_qp *hpre_create_qp(u8 type)
- {
--	int node = cpu_to_node(smp_processor_id());
-+	int node = cpu_to_node(raw_smp_processor_id());
- 	struct hisi_qp *qp = NULL;
- 	int ret;
- 
-diff --git a/drivers/crypto/hisilicon/sec2/sec_main.c b/drivers/crypto/hisilicon/sec2/sec_main.c
-index 26d3ab1d308b..7b5c7d049487 100644
---- a/drivers/crypto/hisilicon/sec2/sec_main.c
-+++ b/drivers/crypto/hisilicon/sec2/sec_main.c
-@@ -282,7 +282,7 @@ void sec_destroy_qps(struct hisi_qp **qps, int qp_num)
- 
- struct hisi_qp **sec_create_qps(void)
- {
--	int node = cpu_to_node(smp_processor_id());
-+	int node = cpu_to_node(raw_smp_processor_id());
- 	u32 ctx_num = ctx_q_num;
- 	struct hisi_qp **qps;
- 	int ret;
-diff --git a/drivers/crypto/hisilicon/zip/zip_main.c b/drivers/crypto/hisilicon/zip/zip_main.c
-index 1a237d95d482..9f9311f981c3 100644
---- a/drivers/crypto/hisilicon/zip/zip_main.c
-+++ b/drivers/crypto/hisilicon/zip/zip_main.c
-@@ -277,7 +277,7 @@ MODULE_DEVICE_TABLE(pci, hisi_zip_dev_ids);
- int zip_create_qps(struct hisi_qp **qps, int qp_num, int node)
- {
- 	if (node == NUMA_NO_NODE)
--		node = cpu_to_node(smp_processor_id());
-+		node = cpu_to_node(raw_smp_processor_id());
- 
- 	return hisi_qm_alloc_qps_node(&zip_devices, qp_num, 0, node, qps);
- }
+ /* DP-HDMI2.1 PCON DSC ENCODER SUPPORT */
+-#define DP_PCON_DSC_ENCODER_CAP_SIZE        0xC	/* 0x9E - 0x92 */
++#define DP_PCON_DSC_ENCODER_CAP_SIZE        0xD	/* 0x92 through 0x9E */
+ #define DP_PCON_DSC_ENCODER                 0x092
+ # define DP_PCON_DSC_ENCODER_SUPPORTED      (1 << 0)
+ # define DP_PCON_DSC_PPS_ENC_OVERRIDE       (1 << 1)
 -- 
-2.33.0
+2.30.2
 

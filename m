@@ -2,89 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 886B6467D9B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4492B467D9E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240245AbhLCTAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 14:00:35 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:41150 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231935AbhLCTAd (ORCPT
+        id S241573AbhLCTAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 14:00:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241254AbhLCTAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 14:00:33 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 20C0FCE281C;
-        Fri,  3 Dec 2021 18:57:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 544E6C53FCD;
-        Fri,  3 Dec 2021 18:57:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638557826;
-        bh=dp0Dwd7/FHERsJ8wdDWfIhc5JTBnL6SdxrHXd1BnkM4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NI4Hs4SiNcOvJHXCSQ7uZ4OyzZ37IDbKuol2GAoBpzOyDSLaoQ1N2GDQnRFTz5WWv
-         hKvHUrO4MhSqnm2Y9kNlMFs4OufqeNo1Gk68HKJt6LS+6stm8Og0umfW7EdlNSmrHu
-         PGrxS6zZn/m5kspUgpt0Aiw1qDjoBqCiocWRV5O4mVYrsT1dzyqgKSSXl16fFWRmPe
-         qlXS4YdTClsMJWIR2yq9ZZ2VSfADE2R0g2dIulZEDjRMLKaEEauYNpngCmL81YAI+E
-         VVowzcBB2iRhwoln8XzGFrQrGZ2iz+IHIYT0somlBepEf0/rME/cis76Ob24WD93t4
-         wr+tH1TSXwU5Q==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Finn Behrens <me@kloenk.dev>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Ilan Peer <ilan.peer@intel.com>,
-        Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
-        Sriram R <srirrama@codeaurora.org>,
-        Qiheng Lin <linqiheng@huawei.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] nl80211: use correct enum type in reg_reload_regdb
-Date:   Fri,  3 Dec 2021 19:56:45 +0100
-Message-Id: <20211203185700.756121-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        Fri, 3 Dec 2021 14:00:46 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF17C061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 10:57:22 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id v1so15450052edx.2
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 10:57:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hD4l+D/+jBR1l02iiNBBh1vx/MLSXsOsv7EqwsEMIxs=;
+        b=SI1RrBe/+gvFatPLC2kgaqo/6TWht95sThyAYn1qmUY6JraFMWuGcE/ItoxFURH4MV
+         F7EXSzrlCYr9d125SpZLx7dkTkPuWh9tIlMRCjbAvBaYum5qvS8mOKqH2QksW0v9d4Ly
+         GUs8H5jGJ5VsHEn6MUZDi+NsGv2pV1OWg71dDo3h3pMvkm28ZrhUmMxORWYxfsIFexkR
+         lWDOAhhIfTJUaoT6VpOCTbfOaBpwrBNbwQbDFHgWX/B+htYaEN0pMVwJiWBgmgTMmWYw
+         nyaMq6cYLs+N6URbX+meM8xNRMotLWtmLlVIvnzUd7mhnlREhlHPau5v+bfrOASxcF5d
+         Hr1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hD4l+D/+jBR1l02iiNBBh1vx/MLSXsOsv7EqwsEMIxs=;
+        b=VTL30CLBv8glPMIOZHmDovHiWIC1864++UTw5nXTUEePVVGDo6GhRGvbXAmWO1ns62
+         7Kben7uooJiCnoO0xw72IOvYCCJu9caDw9+OtxRGOLpxBP5MZNFjZqdZfRN/waEb2Dl6
+         HBKtMPFQifQRSXuxhOG2WoTlu73wA6omhHPdeid64lO6Ghyf+9Sq0RFbD3jQVzb0C7bA
+         5BHqGEXpb+qzDMOo+O5+/GOnsFPdMGDFxyZGYo5tWZzqA7ilTiYwbgMUDBPQC7VlNfVb
+         6xCkFHhw/faU6w+alsxcHEzb8A2bWJ3jXxKPAWH+WjYJVgTPuI4nxrsaDM8AUVon0pVb
+         SRuQ==
+X-Gm-Message-State: AOAM5311gbcpZi8jwNeqtGN/MI4EYVegRCP3weaMOp289+d4cWj3k/8z
+        vYZynDwXi4zrJTmFD7j9X3rugr8zNA2YklaKzhtYWQ==
+X-Google-Smtp-Source: ABdhPJxQ4BgzO/ntM4IZnhN5zAD/ZEj2i9Ud/iiJnXbHBqNRxbXwei7sOQHFI7g8w+H8BpIPlEFJk2EfoX0ZTTe7rwE=
+X-Received: by 2002:a05:6402:2551:: with SMTP id l17mr29467140edb.142.1638557840962;
+ Fri, 03 Dec 2021 10:57:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211124162045.25983-1-arnaud.pouliquen@foss.st.com>
+ <20211124161055-mutt-send-email-mst@kernel.org> <CACGkMEvQoUcPFgOTvEDGkZHMXhjhPrk0xq-Zq3+G20_Lp-hu8A@mail.gmail.com>
+ <20211202170011.GA900071@p14s> <CACGkMEs5DWPT76U8KYdr385e0Y6EUQQRSfRMfR3ZZz34HBdVKA@mail.gmail.com>
+In-Reply-To: <CACGkMEs5DWPT76U8KYdr385e0Y6EUQQRSfRMfR3ZZz34HBdVKA@mail.gmail.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Fri, 3 Dec 2021 11:57:08 -0700
+Message-ID: <CANLsYkxfhamUU0bb4j7y6N4_G9odKxLCjXxgXEx4SJ6_Kf+M2Q@mail.gmail.com>
+Subject: Re: [PATCH v2] rpmsg: virtio: don't let virtio core to validate used length
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        linux-remoteproc@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu, 2 Dec 2021 at 19:07, Jason Wang <jasowang@redhat.com> wrote:
+>
+> On Fri, Dec 3, 2021 at 1:00 AM Mathieu Poirier
+> <mathieu.poirier@linaro.org> wrote:
+> >
+> > Hey guys,
+> >
+> > On Thu, Nov 25, 2021 at 10:15:44AM +0800, Jason Wang wrote:
+> > > On Thu, Nov 25, 2021 at 5:12 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > >
+> > > > On Wed, Nov 24, 2021 at 05:20:45PM +0100, Arnaud Pouliquen wrote:
+> > > > > Using OpenAMP library on remote side, when the rpmsg framework tries to
+> > > > > reuse the buffer the following error message is displayed in
+> > > > > the virtqueue_get_buf_ctx_split function:
+> > > > > "virtio_rpmsg_bus virtio0: output:used len 28 is larger than in buflen 0"
+> > > > >
+> > > > > As described in virtio specification:
+> > > > > "many drivers ignored the len value, as a result, many devices set len
+> > > > > incorrectly. Thus, when using the legacy interface, it is generally
+> > > > > a good idea to ignore the len value in used ring entries if possible."
+> > > > >
+> > > > > To stay in compliance with the legacy libraries, this patch prevents the
+> > > > > virtio core from validating used length.
+> > > > >
+> > > > > Fixes: 939779f5152d ("virtio_ring: validate used buffer length")
+> > > > >
+> > > > > Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> > > > > Cc: Jason Wang <jasowang@redhat.com>
+> > > > > Cc: Michael S. Tsirkin <mst@redhat.com>
+> > > > > ---
+> > > >
+> > > > Arnaud, thanks a lot for the analysis.
+> > > >
+> > > > Jason, I think this is another good point. We really should not
+> > > > validate input for legacy devices at all.
+> > >
+> > > I agree. Will do that in the next version.
+> >
+> > I'm a little unclear about the "next version" in the above comment - is this
+> > something I should wait for?  Should I move forward with Arnaud's patch?
+>
+> Just to make it clear. If my understanding is correct, my series was
+> reverted so this patch is not needed.
 
-NL80211_USER_REG_HINT_USER is not something that can be
-assigned to an 'enum nl80211_reg_initiator', as pointed out
-by gcc.
-
-net/wireless/reg.c: In function 'reg_reload_regdb':
-net/wireless/reg.c:1137:28: error: implicit conversion from 'enum nl80211_user_reg_hint_type' to 'enum nl80211_reg_initiator' [-Werror=enum-conversion]
-
-I don't know what was intended here, most likely it was either
-NL80211_REGDOM_SET_BY_CORE (same numeric value) or
-NL80211_REGDOM_SET_BY_USER (most similar name), so I pick the former
-here, leaving the behavior unchanged while avoiding the warning.
-
-Fixes: 1eda919126b4 ("nl80211: reset regdom when reloading regdb")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- net/wireless/reg.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/wireless/reg.c b/net/wireless/reg.c
-index 61f1bf1bc4a7..edb2081f75e8 100644
---- a/net/wireless/reg.c
-+++ b/net/wireless/reg.c
-@@ -1134,7 +1134,7 @@ int reg_reload_regdb(void)
- 	request->wiphy_idx = WIPHY_IDX_INVALID;
- 	request->alpha2[0] = current_regdomain->alpha2[0];
- 	request->alpha2[1] = current_regdomain->alpha2[1];
--	request->initiator = NL80211_USER_REG_HINT_USER;
-+	request->initiator = NL80211_REGDOM_SET_BY_CORE;
- 	request->user_reg_hint_type = NL80211_USER_REG_HINT_USER;
- 	request->reload = true;
- 
--- 
-2.29.2
-
+Ok - thanks

@@ -2,77 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD7D466EA4
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 01:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C4B466EAC
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 01:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377907AbhLCAo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 19:44:26 -0500
-Received: from smtpweb150.aruba.it ([62.149.158.150]:41658 "EHLO
-        smtpweb150.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377855AbhLCAoN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 19:44:13 -0500
-Received: from localhost.localdomain ([146.241.138.59])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id swcymiEudrmmOswd6mQfXc; Fri, 03 Dec 2021 01:40:49 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1638492049; bh=aGCPFqajCMl1i2im53TPumZwZRUvjzem3K/WfI6jqYs=;
-        h=From:To:Subject:Date:MIME-Version;
-        b=GgVGr07Lnt9RI0lG0Wc4Wwbr6suzkjyBFIpbjBdV/yBgPdieGXwLZsfd8cHsUHfZM
-         iErI5dSjBWMt/bKPcN2UBghunPcHGGIeIkEQuDXRqgWHUDjNYYPjW3bEgxuF1lzhcN
-         QMpoxu6nx5HtmZxwxwziGLGOw1JZgSn6UKUSh1eQyud6YcSevQDspZw8ZNuKX0Fsrv
-         Ao17kG6aYxsty6JOLjptLjvv8fXG5WnbuWm7Pni6QwbuBQxSQCROjIxzd4ElwHpfMN
-         J2u6YFfaMHu1PK9VbYKdl6rfZ2G5ASCsiyZ8oqqepvrmNTLFkeDC0HHRrmi/OwD58U
-         Kr9SMtqZ0om0g==
-From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Jesse Taube <mr.bossman075@gmail.com>,
-        Giulio Benetti <giulio.benetti@benettiengineering.com>
-Subject: [PATCH 17/17] ARM: dts: imx6qdl: drop "fsl,imx-ckih1"
-Date:   Fri,  3 Dec 2021 01:40:39 +0100
-Message-Id: <20211203004039.48752-18-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211203004039.48752-1-giulio.benetti@benettiengineering.com>
-References: <20211203004039.48752-1-giulio.benetti@benettiengineering.com>
+        id S1349956AbhLCAsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 19:48:22 -0500
+Received: from mga12.intel.com ([192.55.52.136]:42768 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238220AbhLCAsU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 19:48:20 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="216900654"
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="216900654"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 16:44:57 -0800
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="513456309"
+Received: from msdenney-mobl.amr.corp.intel.com (HELO [10.209.114.233]) ([10.209.114.233])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 16:44:56 -0800
+Subject: Re: [RFC PATCH 07/10] x86/fpu: Rellocate fpstate on
+ save_fpregs_to_fpstate
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, x86@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        chang.seok.bae@intel.com, linux-kernel@vger.kernel.org,
+        Jiaxun Yang <j.yang-87@sms.ed.ac.uk>
+References: <20211203003636.11417-1-jiaxun.yang@flygoat.com>
+ <20211203003636.11417-8-jiaxun.yang@flygoat.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <343c2c64-4d0b-6e21-80e0-834d0b7147aa@intel.com>
+Date:   Thu, 2 Dec 2021 16:44:54 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20211203003636.11417-8-jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfIlFaOYGDSgCyRE3rJ3IAAr4OUyJn7DF+9xUpQQ1FoJ6ORjQcqTwcqJpIQuTKoWCe/MZdJdpIjCAyZ0I7bLKj1M1g1EymneNXU9aA/pI+vEEG4LNS8kj
- rRaiGS00tu3LIpqXYeZrzOtJtfq12ZdEQW7Sn57w/Tq1LQT08h/VcKt2IeJdbGVSyMC2W0UImyynp8rUYDLWYP8cZlE3bkFAYrXKc+cNSXhWXATjt5/83wpC
- 3JBNsZDJfFrHYUIJhq0RzekyMXw3pPHWZXdVtnj99SQQXbrQu+YETCSC21jxmtniXFrnp9xEJ63ZM6/vpntO3FLdpzNNH7Xpx9LNEtV3zPLLoGaMJtKX44Rd
- yXLW+lerfwdSgmdkxi+m7+HWm+5cMF5DLks34PD4wSFps0+sh5koxdmuHe3chBZw6FZB1z1Og548ENtE5PKGoXyF/pOb+oRzHUEFItjCEfwf2GHH26u+NLiV
- WksMNw6g0PbuUSNzCLp61cNoDmT83r4LXXSfUaUOXtDvbJzuodedqTr+XMP5QMDnl253UdOrh2+vQ0Kne3yDK1cmkMmat8RZUglCN8dOmG0IMAeqrX5dK4hA
- AJA=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"fsl,imx-ckih1" is useless since no driver deals with it, so let's drop it.
+On 12/2/21 4:36 PM, Jiaxun Yang wrote:
+> --- a/arch/x86/kernel/fpu/core.c
+> +++ b/arch/x86/kernel/fpu/core.c
+> @@ -112,6 +112,22 @@ static void update_avx_timestamp(struct fpu *fpu)
+>  		fpu->avx512_timestamp = jiffies;
+>  }
+>  
+> +/* Update xstate size if it more dynamic features are opted-in. */
+> +static inline void xstate_update_size(struct fpu *fpu)
+> +{
+> +	int err;
+> +	struct fpstate *fpstate = fpu->fpstate;
+> +	u64 fpsmask = fpstate->xfeatures;
+> +	u64 curmask = fpsmask | xfeatures_in_use();
+> +
+> +	if (fpu_state_size_dynamic()) {
+> +		if (fpsmask != curmask) {
+> +			err = fpstate_realloc(fpu, curmask);
+> +			WARN_ON_FPU(err);
+> +		}
+> +	}
+> +}
+> +
+>  /*
+>   * Save the FPU register state in fpu->fpstate->regs. The register state is
+>   * preserved.
+> @@ -129,6 +145,7 @@ static void update_avx_timestamp(struct fpu *fpu)
+>  void save_fpregs_to_fpstate(struct fpu *fpu)
+>  {
+>  	if (likely(use_xsave())) {
+> +		xstate_update_size(fpu);
+>  		os_xsave(fpu->fpstate);
+>  		update_avx_timestamp(fpu);
+>  		return;
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- arch/arm/boot/dts/imx6qdl.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm/boot/dts/imx6qdl.dtsi b/arch/arm/boot/dts/imx6qdl.dtsi
-index 215e835a9b93..d0e4b6b18fca 100644
---- a/arch/arm/boot/dts/imx6qdl.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl.dtsi
-@@ -61,7 +61,7 @@ ckil {
- 		};
- 
- 		ckih1 {
--			compatible = "fsl,imx-ckih1", "fixed-clock";
-+			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <0>;
- 		};
--- 
-2.25.1
+Have you considered what exactly happens when you hit that WARN_ON_FPU()
+which otherwise ignores the allocation error?  Have you considered what
+happens on the os_xsave() that follows it immediately?  How about what
+happens the next time this task runs after that failure?
 

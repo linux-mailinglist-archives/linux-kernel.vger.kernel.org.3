@@ -2,86 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93343467E15
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A0F3467E17
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353603AbhLCTZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 14:25:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
+        id S1357448AbhLCT0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 14:26:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240241AbhLCTZ4 (ORCPT
+        with ESMTP id S1353616AbhLCT0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 14:25:56 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFEEC061751;
-        Fri,  3 Dec 2021 11:22:32 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id p18so2751534plf.13;
-        Fri, 03 Dec 2021 11:22:32 -0800 (PST)
+        Fri, 3 Dec 2021 14:26:00 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD9AC061353
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 11:22:36 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id k4so4006601pgb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 11:22:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LZ5pu7ZRL5O2EGlU1hcOfyJ0qzyouTYq2e6urTHkqCw=;
-        b=isPzW0rmg3EgLl+sAvrm9iMKrFTx5cAa3s/e7sr25l0DlqsqAB3mbqLHxBxKvHCvy5
-         07SQBviJtyjeIjHGJw1KJ6o8a/baViOJ5fKXZBnu3JLlmtSIwiGCJH4aK+RGy/LQgYHI
-         IK7JDZ2YrjQIXXIVGK2tPTnNIxoH6ixYCcey8QFRY45aef0YAM0B0xpFC/H0D42X5ArG
-         /u0XEVohnyL0HuWpoxNPZNcsffUUPdPqcuA61o0zv0OJ8KNQlmvkyLqYLrU3HXkS1VEd
-         duhEVaPmK+D2nR70LMNBpkl4RMgbopk5F8RLP/5/Od9LgpsTjUbI5hvoTFdbzEVgkH6y
-         2feA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/90PCdFLYo7iabwSg/5r4Oa0mkLy5fk4gqP0uy7XyaQ=;
+        b=LEgwlZN0NSitU9fDxS6Uu49vw2fLHNNi5i4ybvCu8PX5td6BhB8D3MPzr8I3yPb/MZ
+         7VJvEADOuKMKsRL4oVY70B4/E2haJeIj0kGEVbuk8uLXNa7NU58QSKJrZFxC96qCo16b
+         V4/o58b0tqJycHrx/x6BjFjsjlFNetNSNZJXsrHzvJpzAGaaGXCpezuGDOVPW3DQTdQd
+         nvJTWPV9E+uGXKpCn6eju2PcXJ1s6FvQflhN0lWQebxR3pcpO2knyjrC/9cz+56FPkMk
+         5muCpD9PI9pWhaIqPrWv/7nMl29xzMLx/k9xG5i448kmnnhOMwey0Hhwrow0OAd1HZ6z
+         lhyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LZ5pu7ZRL5O2EGlU1hcOfyJ0qzyouTYq2e6urTHkqCw=;
-        b=p4oQEQvgAGtJ7JcnLKfAeFLVbb6IzBS4v9cDsaOHSuGTHOeaUk1LnKLemJ4byTXXYm
-         RXNHnroBCXVxMJSMLzy/vxjeBOGpc7i5UQWUyMPYfL9T/qGY2YirDOJkCaP5JljDoNV+
-         Njw+Zr/FB9IF+0wDH+Pli5nhX5mwKkQjjKTGDFDXgiGrVApJ2kO2EKWtktpwisZNWDnA
-         RWHd0mDuYI1X4AceARMH+2WhYlUPrTlxPCUNSPtmIRrSwprAqPdlYGGfyKZjckyNZuKz
-         G5JMf8Tf1plO1PlCbDwy9jCqFuzaHXA7GI73CLJSD3WdXhl48goP/dxNgWlSCuZXlpQH
-         KnDg==
-X-Gm-Message-State: AOAM533XD/gIkAasSVZYu/GED6as7037LdSHizdA677T9ngX2FaHs2TN
-        jHrTqr0KSWOpsD4Ge/8wjrjj1ZnCciXpe+BgYl8=
-X-Google-Smtp-Source: ABdhPJwN6xw87FHw1o0DuqnWnt3+kHpnhIR22Qoh1ALcQtnUAU7BoeJ9oOObvo97LkCvIMg2hjmBBWlCbLDPgRA4ZQI=
-X-Received: by 2002:a17:90a:1f45:: with SMTP id y5mr16742587pjy.138.1638559351448;
- Fri, 03 Dec 2021 11:22:31 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/90PCdFLYo7iabwSg/5r4Oa0mkLy5fk4gqP0uy7XyaQ=;
+        b=v9hZcLGrD7lhn3jqxO2L3+Tlg07nHG9bj4JEOKOOBjQfobQIKMwqnZVF0RMS3NWVkr
+         fTEX9K368ZDBlpyF/SaB5SByfRD8a4MQ61sO/9ON+kYMmZmnCoqvxMr9FXWe4EAR1x2+
+         FjqIfvz0lvzpuevAbR/gvvhbyxboXAIKSjQErh7+dZ/yQo/A2boc8mYefeI0dJVtwVJZ
+         B9yiJhhJFovETJHT2s2j87AB7DRO7RvH8qqXVOzg6Z9L108BksmZhD5rvOB+Yz5tC1Ab
+         FK4OP7GCOeafv591ElzJd8Ux2kbPwgNN5Ey8CUdJ0zoY+WRiTLdqFupvkpRGpDnh7lqf
+         CJqg==
+X-Gm-Message-State: AOAM530dckPqiRgYS2v2PuZVhAGx7Ys2BH8cZ+1n5t/vjgEhOYuQuhqy
+        quYvt2AC62jX+HTpgAXqPa40VA==
+X-Google-Smtp-Source: ABdhPJwSMQSLYnVpQfE2DqpTRcbO41suJFGcIGZaIrVpjeF0pLM58qiyEyk5atUB/Oz7fZZpnT5dog==
+X-Received: by 2002:aa7:88d6:0:b0:49f:dd4b:ddbc with SMTP id k22-20020aa788d6000000b0049fdd4bddbcmr20865509pff.31.1638559355814;
+        Fri, 03 Dec 2021 11:22:35 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id z22sm4463902pfe.93.2021.12.03.11.22.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 11:22:35 -0800 (PST)
+Date:   Fri, 3 Dec 2021 19:22:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Brijesh Singh <brijesh.singh@amd.com>
+Subject: Re: [PATCH] KVM: SVM: Do not terminate SEV-ES guests on GHCB
+ validation failure
+Message-ID: <Yapud4DmBwvNHXBi@google.com>
+References: <b57280b5562893e2616257ac9c2d4525a9aeeb42.1638471124.git.thomas.lendacky@amd.com>
+ <YapIMYiJ+iIfHI+c@google.com>
+ <9ac5cf9c-0afb-86d1-1ef2-b3a7138010f2@amd.com>
 MIME-Version: 1.0
-References: <20211203191844.69709-1-mcroce@linux.microsoft.com>
-In-Reply-To: <20211203191844.69709-1-mcroce@linux.microsoft.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 3 Dec 2021 11:22:20 -0800
-Message-ID: <CAADnVQLDEPxOvGn8CxwcG7phy26BKuOqpSQ5j7yZhZeEVoCC4w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/3] bpf: add signature
-To:     Matteo Croce <mcroce@linux.microsoft.com>
-Cc:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        keyrings@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Luca Boccassi <bluca@debian.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9ac5cf9c-0afb-86d1-1ef2-b3a7138010f2@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 11:18 AM Matteo Croce <mcroce@linux.microsoft.com> wrote:
->
-> From: Matteo Croce <mcroce@microsoft.com>
->
-> This series add signature verification for BPF files.
-> The first patch implements the signature validation in the kernel,
-> the second patch optionally makes the signature mandatory,
-> the third adds signature generation to bpftool.
+On Fri, Dec 03, 2021, Tom Lendacky wrote:
+> On 12/3/21 10:39 AM, Sean Christopherson wrote:
+> > On Thu, Dec 02, 2021, Tom Lendacky wrote:
+> > > +			goto e_scratch;
+> > >   		if (kvm_read_guest(svm->vcpu.kvm, scratch_gpa_beg, scratch_va, len)) {
+> > >   			/* Unable to copy scratch area from guest */
+> > >   			pr_err("vmgexit: kvm_read_guest for scratch area failed\n");
+> > >   			kvfree(scratch_va);
+> > > -			return -EFAULT;
+> > > +			goto e_scratch;
+> > 
+> > Same here, failure to read guest memory is a userspace issue and needs to be
+> > reported to userspace.
+> 
+> But it could be a guest issue as well...  whichever is preferred is ok by me.
 
-Matteo,
+Arguably, any guest issue is a violation of the guest's contract with userspace,
+and thus userspace needs to decide how to proceed.  E.g. userspace defines what
+is RAM vs. MMIO and communicates that directly to the guest, KVM is not involved
+in deciding what is/isn't RAM nor in communicating that information to the guest.
+If the scratch GPA doesn't resolve to a memslot, then the guest is not honoring
+the memory configuration as defined by userspace.
 
-I think I already mentioned that it's no-go as-is.
-We've agreed to go with John's suggestion.
+And if userspace unmaps an hva for whatever reason, then exiting to userspace
+with -EFAULT is absolutely the right thing to do.  KVM's ABI currently sucks and
+doesn't provide enough information to act on the -EFAULT, but I really want to
+change that as there are multiple use cases, e.g. uffd and virtiofs truncation,
+that shouldn't require any work in KVM beyond returning -EFAULT with a small
+amount of metadata.
+
+KVM could define its ABI such that failure to access the scratch area is reflected
+into the guest, i.e. establish a contract with userspace, but IMO that's undesirable
+as it limits KVM's options in the future, e.g. IIRC, in the potential uffd case any
+failure on a uaccess needs to kick out to userspace.  KVM does have several cases
+where it reflects these errors into the guest, e.g. kvm_pv_clock_pairing() and
+Hyper-V emulation, but I would prefer we change those instead of adding more code
+that assumes any memory failure is the guest's fault.

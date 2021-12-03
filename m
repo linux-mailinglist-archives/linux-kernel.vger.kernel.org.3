@@ -2,138 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F7646731D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B6B46731F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379134AbhLCIMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 03:12:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351103AbhLCIMB (ORCPT
+        id S1379143AbhLCIMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:12:36 -0500
+Received: from smtpbg703.qq.com ([203.205.195.89]:43200 "EHLO
+        smtpproxy21.qq.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1379138AbhLCIMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 03:12:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2072EC06173E;
-        Fri,  3 Dec 2021 00:08:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B45AF62963;
-        Fri,  3 Dec 2021 08:08:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C601EC53FC7;
-        Fri,  3 Dec 2021 08:08:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638518917;
-        bh=KxH7ZGxVJfrcf6JYVcVHtDcyryoNErHSgyXmxhiT11I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MM898awN9WfEXhnii4ChAHzhExx0NwP6S7X/fowg1zrBLgziKiv7K2aD+Zr+zJF1I
-         zfjWXTsOQ8/UBbdibW6PV0Q9dklH2IcWgHzRAAl4I9302qbCj+qO7e4G8wLy/ndeQd
-         Ht/8JbdQMDYn2ftCsGZ8asGmKeBAlC/Y0+gyr12A02k010jd5YkyLxBt/04HwjuQZq
-         r2oH42a3lBuZR6LrbCPexQPX/gEr+09oehLCuxC4Q3Th5nrfmv8o7/latrhqak28oV
-         671QzCH/v+KWjKg2O278qIYQU+Wke88Ur/MpXcwxrbWg11RxVH3skXf4shpXYlxIvy
-         FuRBk9avNtuSw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-xtensa@linux-xtensa.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH] futex: Fix additional regressions
-Date:   Fri,  3 Dec 2021 09:07:56 +0100
-Message-Id: <20211203080823.2938839-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        Fri, 3 Dec 2021 03:12:34 -0500
+X-QQ-mid: bizesmtp50t1638518887t4ydjjwp
+Received: from localhost.localdomain (unknown [124.126.19.250])
+        by esmtp6.qq.com (ESMTP) with 
+        id ; Fri, 03 Dec 2021 16:08:05 +0800 (CST)
+X-QQ-SSF: 0140000000200050C000B00A0000000
+X-QQ-FEAT: HoyAXBWgsknQr7AMlTD/ZJdcFjHnvRIYmLXIcckAZZ9zNNgfv0HwvZc0mCw32
+        IIZ4Kw+X20S2laKHXgCovAKOk7TrVF1+zvJ8wxQE8wdcVKnRKREkcDL3+qkwCM4N//kemwS
+        eAbTIww8GP0LR/p1V2mO6c9GY1iHx4ZNX0sy85/OW6M98lxeSjtSeo+PHEvQBWUldm396+M
+        VqsmQjXX3xZHTpri9pZ6iivp1YKiJnX1DDtwlq9N3ddBt1G0Li+ZvI0kFAYCyt7F9WchyJo
+        YJr2cq6Tg6BsGX2kDD8L7kcifFQTrIfiLRrUObpEEoVev/4tABogklcXuEpRa2InYgTgnU9
+        IJaavozYEFz9Fr7EaNccMI0XFfJUw==
+X-QQ-GoodBg: 2
+From:   Longji Guo <guolongji@uniontech.com>
+To:     bhelgaas@google.com, tglx@linutronix.de
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Longji Guo <guolongji@uniontech.com>
+Subject: [PATCH] X86: PCI: ACPI: Remove initialization of static variables to false
+Date:   Fri,  3 Dec 2021 16:07:58 +0800
+Message-Id: <20211203080758.962-1-guolongji@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Remove the initialization of pci_ignore_seg to false which is pointless.
 
-Naresh reported another architecture that was broken by the same typo
-that I already fixed for three architectures: mips also refers to the
-futex_atomic_op_inuser_local() function by the wrong name and runs into
-a missing closing '}' as well.
-
-Going through the source tree I found that I also had the same typo in the
-documentation as well as the xtensa code, both of which ended up escaping
-the regression testing so far. In the case of xtensa, it appears that
-the broken code path is only used when building for platforms that are
-not supported by the default gcc configuration, so they are impossible
-to test for with my setup.
-
-After going through these more carefully and fixing up the typos, I
-build-tested all architectures again to ensure I'm not introducing a
-new regression or missing one more obvious issue with my series.
-
-Fixes: 4e0d84634445 ("futex: Fix sparc32/m68k/nds32 build regression")
-Fixes: 3f2bedabb62c ("futex: Ensure futex_atomic_cmpxchg_inatomic() is present")
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: linux-mips@vger.kernel.org
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-xtensa@linux-xtensa.org
-Cc: Chris Zankel <chris@zankel.net>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Longji Guo <guolongji@uniontech.com>
 ---
- arch/mips/include/asm/futex.h   | 6 +++---
- arch/xtensa/include/asm/futex.h | 2 +-
- include/asm-generic/futex.h     | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ arch/x86/pci/acpi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/include/asm/futex.h b/arch/mips/include/asm/futex.h
-index 9287110cb06d..8612a7e42d78 100644
---- a/arch/mips/include/asm/futex.h
-+++ b/arch/mips/include/asm/futex.h
-@@ -86,9 +86,9 @@
- 		: "memory");						\
- 	} else {							\
- 		/* fallback for non-SMP */				\
--		ret = arch_futex_atomic_op_inuser_local(op, oparg, oval,\
--							uaddr);	\
--	}
-+		ret = futex_atomic_op_inuser_local(op, oparg, oval, uaddr);	\
-+	}								\
-+}
+diff --git a/arch/x86/pci/acpi.c b/arch/x86/pci/acpi.c
+index 948656069cdd..052f1d78a562 100644
+--- a/arch/x86/pci/acpi.c
++++ b/arch/x86/pci/acpi.c
+@@ -20,7 +20,7 @@ struct pci_root_info {
+ };
  
- static inline int
- arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
-diff --git a/arch/xtensa/include/asm/futex.h b/arch/xtensa/include/asm/futex.h
-index fe8f31575ab1..a6f7d7ab5950 100644
---- a/arch/xtensa/include/asm/futex.h
-+++ b/arch/xtensa/include/asm/futex.h
-@@ -109,7 +109,7 @@ static inline int arch_futex_atomic_op_inuser(int op, int oparg, int *oval,
+ static bool pci_use_crs = true;
+-static bool pci_ignore_seg = false;
++static bool pci_ignore_seg;
  
- 	return ret;
- #else
--	return arch_futex_atomic_op_inuser_local(op, oparg, oval, uaddr);
-+	return futex_atomic_op_inuser_local(op, oparg, oval, uaddr);
- #endif
- }
- 
-diff --git a/include/asm-generic/futex.h b/include/asm-generic/futex.h
-index 66d6843bfd02..2a19215baae5 100644
---- a/include/asm-generic/futex.h
-+++ b/include/asm-generic/futex.h
-@@ -21,7 +21,7 @@
- #endif
- 
- /**
-- * arch_futex_atomic_op_inuser_local() - Atomic arithmetic operation with constant
-+ * futex_atomic_op_inuser_local() - Atomic arithmetic operation with constant
-  *			  argument and comparison of the previous
-  *			  futex value with another constant.
-  *
+ static int __init set_use_crs(const struct dmi_system_id *id)
+ {
 -- 
-2.29.2
+2.20.1
+
+
 

@@ -2,86 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A7C467E86
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A6C467E74
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382940AbhLCT7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 14:59:05 -0500
-Received: from mga05.intel.com ([192.55.52.43]:21039 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353675AbhLCT7B (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 14:59:01 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="323301133"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="323301133"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 11:55:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="501312024"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga007.jf.intel.com with ESMTP; 03 Dec 2021 11:55:33 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B3JtUVN022961;
-        Fri, 3 Dec 2021 19:55:31 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH bpf 2/2] samples: bpf: fix 'unknown warning group' build warning on Clang
-Date:   Fri,  3 Dec 2021 20:50:04 +0100
-Message-Id: <20211203195004.5803-3-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211203195004.5803-1-alexandr.lobakin@intel.com>
-References: <20211203195004.5803-1-alexandr.lobakin@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1353508AbhLCTxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 14:53:37 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:34176 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353441AbhLCTxg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 14:53:36 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 22A89CE2817;
+        Fri,  3 Dec 2021 19:50:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 516B2C53FAD;
+        Fri,  3 Dec 2021 19:50:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638561009;
+        bh=3zpaER5clmvC/+uoSi6iXpa2sHBo5rlHOifUHCh/0/M=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=a2sF5zXF0aMmyUcZ0aMICpj6eqUr3hXHYJpqRN+bnsQVAmB60slRpAnQs0tuvsYnn
+         bdC6JSL6MqHHKcnNnHJhB/k8aNncdQOEQZC+715yvL5KnPCShwjLSlQQfda6G/zFcY
+         Lyv3J7gZHBGJcyy+S30B05CKxEBjEuNfN5zmolcXT3cIFHMfW9Xf8SOt0SIDban9OA
+         g5HZjE6NahAnc2MAeieHJHcIlW1XzRAO3tbRwmsr1/Fy9uoheQVTWenvN1VkG9Bjre
+         zNSlEC/ycnlsPA4W1YthbgvV/o6IMskTyEyk1R9FvtYZs+OzygO6GnURTnJqRSxjB3
+         +tUWd0A/0odAA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 32D0760A50;
+        Fri,  3 Dec 2021 19:50:09 +0000 (UTC)
+Subject: Re: [GIT PULL] s390 updates for 5.16-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Yapz2thD1GK8yQ6J@osiris>
+References: <Yapz2thD1GK8yQ6J@osiris>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Yapz2thD1GK8yQ6J@osiris>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.16-4
+X-PR-Tracked-Commit-Id: 3c088b1e82cfb7c889823d39846d32079f190f3f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 757f3e6ddd6811221f3a0586bd8de90cd046e5fd
+Message-Id: <163856100919.9946.302615582661120490.pr-tracker-bot@kernel.org>
+Date:   Fri, 03 Dec 2021 19:50:09 +0000
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang doesn't have 'stringop-truncation' group like GCC does, and
-complains about it when building samples which use xdp_sample_user
-infra:
+The pull request you sent on Fri, 3 Dec 2021 20:45:30 +0100:
 
- samples/bpf/xdp_sample_user.h:48:32: warning: unknown warning group '-Wstringop-truncation', ignored [-Wunknown-warning-option]
- #pragma GCC diagnostic ignored "-Wstringop-truncation"
-                                ^
-[ repeat ]
+> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.16-4
 
-Those are harmless, but avoidable when guarding it with ifdef.
-I could guard push/pop as well, but this would require one more
-ifdef cruft around a single line which I don't think is reasonable.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/757f3e6ddd6811221f3a0586bd8de90cd046e5fd
 
-Fixes: 156f886cf697 ("samples: bpf: Add basic infrastructure for XDP samples")
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
----
- samples/bpf/xdp_sample_user.h | 2 ++
- 1 file changed, 2 insertions(+)
+Thank you!
 
-diff --git a/samples/bpf/xdp_sample_user.h b/samples/bpf/xdp_sample_user.h
-index d97465ff8c62..5f44b877ecf5 100644
---- a/samples/bpf/xdp_sample_user.h
-+++ b/samples/bpf/xdp_sample_user.h
-@@ -45,7 +45,9 @@ const char *get_driver_name(int ifindex);
- int get_mac_addr(int ifindex, void *mac_addr);
- 
- #pragma GCC diagnostic push
-+#ifndef __clang__
- #pragma GCC diagnostic ignored "-Wstringop-truncation"
-+#endif
- __attribute__((unused))
- static inline char *safe_strncpy(char *dst, const char *src, size_t size)
- {
 -- 
-2.33.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

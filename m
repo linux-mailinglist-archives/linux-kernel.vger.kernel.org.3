@@ -2,113 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3D74673E1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2D64673E6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:25:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379563AbhLCJZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 04:25:40 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37728 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351316AbhLCJZj (ORCPT
+        id S1379573AbhLCJ2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 04:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379567AbhLCJ2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 04:25:39 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7985162985
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 09:22:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CE4DC53FAD;
-        Fri,  3 Dec 2021 09:22:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638523334;
-        bh=4JEFNZRdq3WznXssMg2+WLRPghAzeUklMa4y9yBiDOk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HeMdtqAUHnJD+Qi8mwhPBNbJvHKbl8DwvcUciu4lGRhTCtMLRwEPx+lj4ENApJsm9
-         mPem/FPwSmPznrngUP/0qb898/xRFXarKVbzm7psfrsEXoGwDAwouFopX0S31jdqP7
-         EQQSOjjV7WRr4ZeOxW44PBiOcoZ/nwzxMNCSa0vI=
-Date:   Fri, 3 Dec 2021 10:22:12 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ronak Jain <ronak.jain@xilinx.com>
-Cc:     michal.simek@xilinx.com, linux-kernel@vger.kernel.org,
-        rajan.vaja@xilinx.com, corbet@lwn.net,
-        linux-arm-kernel@lists.infradead.org, arnd@arndb.de,
-        lakshmi.sai.krishna.potthuri@xilinx.com
-Subject: Re: [PATCH v3 3/3] firmware: xilinx: Add sysfs support for feature
- config
-Message-ID: <YanhxIoxkPb+rYN5@kroah.com>
-References: <20211203091814.15582-1-ronak.jain@xilinx.com>
- <20211203091814.15582-4-ronak.jain@xilinx.com>
+        Fri, 3 Dec 2021 04:28:44 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5322EC06174A
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 01:25:20 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id 71so2467263pgb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 01:25:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ay7XRE2rD2I+7gg1x2EDf6O3JoxM77TpfPU8SOa5edA=;
+        b=i3XxHF+gHaRCpRZmAYCifGU00eO9bKCbebuWYQI5dC2+HdNurJEGT/zgRSGxLuWkn9
+         ZTeaLmsGhm4PQu2Mc+A1nQD1VS+0wqe/I+IlLJu2Kx/FnsEvmOJqqrXDc6zPiq+3F2I9
+         VbUgc4nouQdgnY/5XBVOtUeBjonoxTnLiIl7Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ay7XRE2rD2I+7gg1x2EDf6O3JoxM77TpfPU8SOa5edA=;
+        b=BBsUs9hN9iQZywfqe++mT/b9rqD3N0fby71CTGPbdrxdvaZ6Do8IOf4iC2ugnqNoKo
+         Cy8luK7ixyoVZ0aCeGmjXYMbLZG5mwmM3wfmuri+Samf7hWh5MrOrUM0QsUUfv/c6HMf
+         pHNtpdbjmqGr5Pi2BtHikGbBe4rpMwY1O//v5QK+HFpLXw8wEs5fmG1c/OWiRyt0k6v6
+         KcF7Ag79opx2tpmSJR3N2D3N0FvUgW1zVpeXJO7wCy7gCZBNXTDdG8yFJ+ojodJaPK2T
+         ToD6QduMJshEvlK6xg4asFFDjdZiLcvyfJzxhJT2qMCGkITiVXRZvAgDBs/dCfjoa7Ac
+         aU4Q==
+X-Gm-Message-State: AOAM531bFB0bSE+PddHWiHfifXRrAK45+LMXmeffuPgl9veLOSaXt4Cq
+        wSISWldhmPxqmallvqbyVGh6Bw==
+X-Google-Smtp-Source: ABdhPJwJi+OcMzlYRpc4XdvGNKEi1tFSpvHjpF8caac+kl7RhNRGyW9zE8g4Wn2j5nvvy6Si+3F7AA==
+X-Received: by 2002:a05:6a00:22d2:b0:4a0:93a:e165 with SMTP id f18-20020a056a0022d200b004a0093ae165mr18055631pfj.68.1638523519678;
+        Fri, 03 Dec 2021 01:25:19 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w186sm1844630pgb.80.2021.12.03.01.25.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 01:25:19 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, Imre Deak <imre.deak@intel.com>,
+        Uma Shankar <uma.shankar@intel.com>,
+        Manasi Navare <manasi.d.navare@intel.com>,
+        Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
+        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Lyude Paul <lyude@redhat.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v2] drm/dp: Actually read Adjust Request Post Cursor2 register
+Date:   Fri,  3 Dec 2021 01:25:17 -0800
+Message-Id: <20211203092517.3592532-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211203091814.15582-4-ronak.jain@xilinx.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2990; h=from:subject; bh=EDL54WuXbUixxVch1YJlggYbmNuBFOLBhCWw5v5p1Yk=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhqeJ8s17VDWgb8AUyVOeH19b0QFsCGC/PP9t5ifhw Fjt6sAeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYanifAAKCRCJcvTf3G3AJsyjD/ 9kUFZ6QVigvhYHljTPsjOw7rSBaK61jBsu9yB/fgaQ9kLZwGgimnLY5rQAOlbn8Qjh17GJnibI+3N9 d86iwJb86SR438UrqeBcB88DaZ+tq5qO8KXZRasDBJjMrJxRrTDDrFj729jL2rnw2pjuSlYD/qjT3q QjnM5ypttORxdG8AO8/RmTlL/VaqGHOwE/q0zUI4BFm3hNhI+5LfyGXlhPcOKqEKQBmHM9Ctdfb2Po Tpb4UtvClUal0jP8cz5zxxloSVoMpanOi7DYZ5YdiwG9eBDEO9kMlSPAUVRzSvocRLftWgIitpxUFe yLqqXLs5xf7UhbgdpUuUIsXikNPReqemZI/qFqI98IrK9bOxKXaJ3FkGkap+itUc1nUVKpfMuEdI2H aqkKrQRpKqYPpIR7EXvwacLC/NXvzbO2MFcOhxtvtzoq0crXSPYVmKey+NGAp9wiTb1hDkqDiKGbu8 VZU26m70TADkJyMHkaA/4HRAvb3hYh9V9T4PWgW1iloeRbopjURYfo0lc1Rx7ACr8AX+XuvjlgarcG EgVZ0qI7j3cFD91FananEbQAy+x66ezF+wtmFKSpt4uR6SlWodA15diBD7+y8XotGGJx2hY8teWHc4 rog0jpgf6wdIqD0CcbzekT5lAKTU0hMOPemXXH3Lx2mBrM0wQPwGGxRslu1A==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 01:18:14AM -0800, Ronak Jain wrote:
-> Add support for sysfs interface for runtime features configuration.
->  The user can configure the features at runtime. First the user need
->  to select the config id of the supported features and then the user
->  can configure the parameters of the feature based on the config id.
->  So far the support is added for the over temperature and external
->  watchdog features.
-> 
-> Added zynqmp_devinfo structure to handle muliple driver instances
->  when accessed by multiple devices.
-> 
-> Signed-off-by: Ronak Jain <ronak.jain@xilinx.com>
-> ---
-> Changes in v3:
-> - Added zynqmp_devinfo structure to store device instances
-> - Modified feature_conf_id from atomic variable to u32
-> - Update commit message
-> - Resolved merge conflicts
-> 
-> Changes in v2:
-> - Update commit message
-> ---
->  drivers/firmware/xilinx/zynqmp.c | 93 ++++++++++++++++++++++++++++++++
->  1 file changed, 93 insertions(+)
-> 
-> diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
-> index 6b05844e67d7..f37a8e805cd7 100644
-> --- a/drivers/firmware/xilinx/zynqmp.c
-> +++ b/drivers/firmware/xilinx/zynqmp.c
-> @@ -38,6 +38,16 @@
->  static bool feature_check_enabled;
->  static DEFINE_HASHTABLE(pm_api_features_map, PM_API_FEATURE_CHECK_MAX_ORDER);
->  
-> +/**
-> + * struct zynqmp_devinfo - Structure for Zynqmp device instance
-> + * @dev:		Device Pointer
-> + * @feature_conf_id:	Feature conf id
-> + */
-> +struct zynqmp_devinfo {
-> +	struct device *dev;
-> +	u32 feature_conf_id;
-> +};
-> +
->  /**
->   * struct pm_api_feature_data - PM API Feature data
->   * @pm_api_id:		PM API Id, used as key to index into hashmap
-> @@ -1424,6 +1434,78 @@ static DEVICE_ATTR_RW(pggs1);
->  static DEVICE_ATTR_RW(pggs2);
->  static DEVICE_ATTR_RW(pggs3);
->  
-> +static ssize_t feature_config_id_show(struct device *device,
-> +				      struct device_attribute *attr,
-> +				      char *buf)
-> +{
-> +	struct zynqmp_devinfo *devinfo = dev_get_drvdata(device);
-> +
-> +	return sysfs_emit(buf, "%d\n", devinfo->feature_conf_id);
-> +}
+The link_status array was not large enough to read the Adjust Request
+Post Cursor2 register. Adjust the size to include it. Found with a
+-Warray-bounds build:
 
-You are adding new sysfs files without any Documentation/ABI/ entries :(
+drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_post_cursor':
+drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=array-bounds]
+   59 |         return link_status[r - DP_LANE0_1_STATUS];
+      |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_status'
+  147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
+      |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Please fix.
+Fixes: 79465e0ffeb9 ("drm/dp: Add helper to get post-cursor adjustments")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v2: Fix missed array size change in intel_dp_check_mst_status()
+---
+ drivers/gpu/drm/i915/display/intel_dp.c |  8 ++++----
+ include/drm/drm_dp_helper.h             | 10 +++++++++-
+ 2 files changed, 13 insertions(+), 5 deletions(-)
 
-thanks,
+diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
+index 5a8206298691..97367afc7243 100644
+--- a/drivers/gpu/drm/i915/display/intel_dp.c
++++ b/drivers/gpu/drm/i915/display/intel_dp.c
+@@ -3647,17 +3647,17 @@ intel_dp_check_mst_status(struct intel_dp *intel_dp)
+ 
+ 	for (;;) {
+ 		/*
+-		 * The +2 is because DP_DPRX_ESI_LEN is 14, but we then
++		 * The +10 is because while DP_DPRX_ESI_LEN is 14, we then
+ 		 * pass in "esi+10" to drm_dp_channel_eq_ok(), which
+-		 * takes a 6-byte array. So we actually need 16 bytes
+-		 * here.
++		 * takes a DP_LINK_STATUS_SIZE array. So we actually need
++		 * 10 bytes more than DP_LINK_STATUS_SIZE.
+ 		 *
+ 		 * Somebody who knows what the limits actually are
+ 		 * should check this, but for now this is at least
+ 		 * harmless and avoids a valid compiler warning about
+ 		 * using more of the array than we have allocated.
+ 		 */
+-		u8 esi[DP_DPRX_ESI_LEN+2] = {};
++		u8 esi[DP_LINK_STATUS_SIZE + 10] = {};
+ 		bool handled;
+ 		int retry;
+ 
+diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
+index 472dac376284..277643d2fe2c 100644
+--- a/include/drm/drm_dp_helper.h
++++ b/include/drm/drm_dp_helper.h
+@@ -1517,7 +1517,15 @@ enum drm_dp_phy {
+ #define DP_MST_LOGICAL_PORT_0 8
+ 
+ #define DP_LINK_CONSTANT_N_VALUE 0x8000
+-#define DP_LINK_STATUS_SIZE	   6
++/*
++ * DPCD registers in link_status:
++ * Link Status:		0x202 through 0x204
++ * Sink Status:		0x205
++ * Adjust Request:	0x206 through 0x207
++ * Training Score:	0x208 through 0x20b
++ * AR Post Cursor2:	0x20c
++ */
++#define DP_LINK_STATUS_SIZE	   11
+ bool drm_dp_channel_eq_ok(const u8 link_status[DP_LINK_STATUS_SIZE],
+ 			  int lane_count);
+ bool drm_dp_clock_recovery_ok(const u8 link_status[DP_LINK_STATUS_SIZE],
+-- 
+2.30.2
 
-greg k-h

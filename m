@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D27E46785D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 455D246785F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381062AbhLCNeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 08:34:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S1352416AbhLCNeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 08:34:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381043AbhLCNdy (ORCPT
+        with ESMTP id S1381040AbhLCNdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 3 Dec 2021 08:33:54 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE854C06175B
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 05:30:29 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id d24so5900429wra.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 05:30:29 -0800 (PST)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D445BC061758
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 05:30:30 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id o29so2367356wms.2
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 05:30:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OLE3QPwL4b8b/ee9pGQMjsQcF3NssyLlDXPOSMNwayg=;
-        b=inqTLd+UidSJWDiQpapSdiFQCp6X12PxJReDFzdberXJgpVrzCpqsutmvJoqEx4n1H
-         1786xp8mvAO7daoh4uhyOunioChOGtNjTd0z/ccdz+YvlCmZ8mYtoaFNpWv2Bjjc2P0F
-         ofH9Ho6SlWHAuzYIyh0JlpykA/zngdUgolQrUAyI1Nu3haI/IkOB3kWwbNtpwCRpQWZy
-         ncaCW6UviVxnR7p9QPuh9KHVswELItObJvZ8sGZBJwvVfEyNPf8UGbsjN3hFFXvEup35
-         /IOVSajPlDbgAZTstHFFE+GtgzWKm1dEH6fFxcy3hKvRDiWdo+UOYM+6n9g3zhK2a83L
-         SqFA==
+        bh=sdC8L7KcajeuYgRxRzq/BDd9/Try3NuMaNKMjlQg9Bs=;
+        b=eOPfFHeEJBk64UrSwG47YQttEAuD8/mJPEeLRH8X546NQcfeNqddQ6U8yWjfSbXMQS
+         W/hZwO8AcyahQDyMW+qXPYnV1TFxcL05m3aTiFa14G/bY7lkbT80m+btoErQg4GMMwWy
+         6c6wFs8/QIX7tXuFSwf1tfQ7qFVPG7jwPI17qBfxNVCKbtR39wFE1gGRaUXjVlKxpH3s
+         azd+m+wDbr3qFbIdf9UayMMjTYIy05t3kr5BBlUuGvbLXRYsVqdBLqWKidJ+vviHYcwT
+         r/PtmP+TStZtpbZIgaw2RoHvBJj5t4icZjYpSvdF1GsEgrThHStujb4uAT5OAEulil3e
+         KOBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OLE3QPwL4b8b/ee9pGQMjsQcF3NssyLlDXPOSMNwayg=;
-        b=HO4TQjWWNeYaCIx0ItRTr165aPHFrJQhkY0W2fGTZUO87mcMsp0pGEYSsPEvwzSfej
-         IihwRfiyBXfHgIQWvGpGVzU8C+yJb1nYz/mWfdChR8LXNxsO+bu/zqdlGVvGhAHhIaHV
-         f5FzTrOcp3PNvdPQ83nCi+wYIGcfR/hDXYFJKiHqFcXV3oIzowDC1zYjLBvD9j+LlB4e
-         nkuMFtKSaOPliDVUhsUH2zyrl06rqrxjxcXbTDwQ5fQYE4xRI0EwJNTH48h1SN1SnJHn
-         1IJP86/mzVoncDGousIkuM7j9QelPgM+iGvtQA8xbSse0qQQALa7YvCStR5f03HifyrH
-         GNog==
-X-Gm-Message-State: AOAM531QZHB86bsHGYEb55IOZuxO18KbAUxgCsH5BzsQt0SxdO/qwhYv
-        J0eRvurIfinUWMEIIgAPUrETlw==
-X-Google-Smtp-Source: ABdhPJzOJMqea8JZBCGLqnGpTk1MW+6vAFHXG0OCTgyHLFydyuZLvxu7ywVJZbvEbqGnkSoo86bLNA==
-X-Received: by 2002:a5d:4ece:: with SMTP id s14mr22409779wrv.371.1638538228347;
-        Fri, 03 Dec 2021 05:30:28 -0800 (PST)
+        bh=sdC8L7KcajeuYgRxRzq/BDd9/Try3NuMaNKMjlQg9Bs=;
+        b=FZAbN8YPQ5bh9e/+Y4YenLTU4U3dVavGNVqm5fXkbmh8z/lkbRVKXv0xUpcCqvMoKO
+         ASTeZlIGwKV9s+t8bE0OeHEaCLnz/ChhXLv3mnSiBV+QrI+fmdsL6JbcdJ/SmW0Lcf7e
+         wCGyqha5tFao2z0BKCiHr2GBTFEdtaCxPxtePe9d/IUTbnsxgBnRhTfI9jrvSZXzkTbx
+         dcGhlrXJ2LIbFmkolo0VgutrfK/XRiwqMzSgKURNCRCLRV2dFAfSTEaEAFmHSqWPBhrf
+         7vUsbInBak+AJCNqq1+RVIA/gz4UAgSUh5aov0CUBs1fUXBZ95knslTcfUiIvWJwO4p+
+         FrgA==
+X-Gm-Message-State: AOAM530F97TO1kExeL7b8DMn8bKTfju3PGDU7JxWCplRSy0ftf0z0Z6P
+        LiKOhj309pNP45dGENsb/v0n2g==
+X-Google-Smtp-Source: ABdhPJzjwGj5PkvCKIzMba+1+kZH4qwprMHh0Gdl1cJBZ+0jDoq/GmJCCZ8a9/uKwUd30SjZN0U7RA==
+X-Received: by 2002:a05:600c:500a:: with SMTP id n10mr15680676wmr.136.1638538229299;
+        Fri, 03 Dec 2021 05:30:29 -0800 (PST)
 Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
-        by smtp.gmail.com with ESMTPSA id j11sm2755910wrt.3.2021.12.03.05.30.27
+        by smtp.gmail.com with ESMTPSA id j11sm2755910wrt.3.2021.12.03.05.30.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 05:30:28 -0800 (PST)
+        Fri, 03 Dec 2021 05:30:29 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Kent Gibson <warthog618@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -58,9 +58,9 @@ To:     Kent Gibson <warthog618@gmail.com>,
 Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH v12 5/7] selftests: gpio: provide a helper for reading chip info
-Date:   Fri,  3 Dec 2021 14:30:01 +0100
-Message-Id: <20211203133003.31786-6-brgl@bgdev.pl>
+Subject: [PATCH v12 6/7] selftests: gpio: add a helper for reading GPIO line names
+Date:   Fri,  3 Dec 2021 14:30:02 +0100
+Message-Id: <20211203133003.31786-7-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20211203133003.31786-1-brgl@bgdev.pl>
 References: <20211203133003.31786-1-brgl@bgdev.pl>
@@ -70,47 +70,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a simple program that allows to retrieve chip properties from the
-GPIO character device. This will be used in gpio-sim selftests.
+Add a simple program that allows to read GPIO line names from the
+character device. This will be used in gpio-sim selftests.
 
 Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 ---
  tools/testing/selftests/gpio/.gitignore       |  1 +
  tools/testing/selftests/gpio/Makefile         |  2 +-
- tools/testing/selftests/gpio/gpio-chip-info.c | 57 +++++++++++++++++++
- 3 files changed, 59 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/gpio/gpio-chip-info.c
+ tools/testing/selftests/gpio/gpio-line-name.c | 55 +++++++++++++++++++
+ 3 files changed, 57 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/gpio/gpio-line-name.c
 
 diff --git a/tools/testing/selftests/gpio/.gitignore b/tools/testing/selftests/gpio/.gitignore
-index a4969f7ee020..4ea4f58dab1a 100644
+index 4ea4f58dab1a..ededb077a3a6 100644
 --- a/tools/testing/selftests/gpio/.gitignore
 +++ b/tools/testing/selftests/gpio/.gitignore
-@@ -1,2 +1,3 @@
+@@ -1,3 +1,4 @@
  # SPDX-License-Identifier: GPL-2.0-only
  gpio-mockup-cdev
-+gpio-chip-info
+ gpio-chip-info
++gpio-line-name
 diff --git a/tools/testing/selftests/gpio/Makefile b/tools/testing/selftests/gpio/Makefile
-index d7b312b44a62..a40b818c394e 100644
+index a40b818c394e..293aa9749408 100644
 --- a/tools/testing/selftests/gpio/Makefile
 +++ b/tools/testing/selftests/gpio/Makefile
 @@ -2,7 +2,7 @@
  
  TEST_PROGS := gpio-mockup.sh
  TEST_FILES := gpio-mockup-sysfs.sh
--TEST_GEN_PROGS_EXTENDED := gpio-mockup-cdev
-+TEST_GEN_PROGS_EXTENDED := gpio-mockup-cdev gpio-chip-info
+-TEST_GEN_PROGS_EXTENDED := gpio-mockup-cdev gpio-chip-info
++TEST_GEN_PROGS_EXTENDED := gpio-mockup-cdev gpio-chip-info gpio-line-name
  CFLAGS += -O2 -g -Wall -I../../../../usr/include/
  
  include ../lib.mk
-diff --git a/tools/testing/selftests/gpio/gpio-chip-info.c b/tools/testing/selftests/gpio/gpio-chip-info.c
+diff --git a/tools/testing/selftests/gpio/gpio-line-name.c b/tools/testing/selftests/gpio/gpio-line-name.c
 new file mode 100644
-index 000000000000..fdc07e742fba
+index 000000000000..e635cfadbded
 --- /dev/null
-+++ b/tools/testing/selftests/gpio/gpio-chip-info.c
-@@ -0,0 +1,57 @@
++++ b/tools/testing/selftests/gpio/gpio-line-name.c
+@@ -0,0 +1,55 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * GPIO character device helper for reading chip information.
++ * GPIO character device helper for reading line names.
 + *
 + * Copyright (C) 2021 Bartosz Golaszewski <brgl@bgdev.pl>
 + */
@@ -126,13 +127,14 @@ index 000000000000..fdc07e742fba
 +static void print_usage(void)
 +{
 +	printf("usage:\n");
-+	printf("  gpio-chip-info <chip path> [name|label|num-lines]\n");
++	printf("  gpio-line-name <chip path> <line offset>\n");
 +}
 +
 +int main(int argc, char **argv)
 +{
-+	struct gpiochip_info info;
++	struct gpio_v2_line_info info;
 +	int fd, ret;
++	char *endp;
 +
 +	if (argc != 3) {
 +		print_usage();
@@ -146,22 +148,19 @@ index 000000000000..fdc07e742fba
 +	}
 +
 +	memset(&info, 0, sizeof(info));
-+	ret = ioctl(fd, GPIO_GET_CHIPINFO_IOCTL, &info);
-+	if (ret) {
-+		perror("chip info ioctl failed");
++	info.offset = strtoul(argv[2], &endp, 10);
++	if (*endp != '\0') {
++		print_usage();
 +		return EXIT_FAILURE;
 +	}
 +
-+	if (strcmp(argv[2], "name") == 0) {
-+		printf("%s\n", info.name);
-+	} else if (strcmp(argv[2], "label") == 0) {
-+		printf("%s\n", info.label);
-+	} else if (strcmp(argv[2], "num-lines") == 0) {
-+		printf("%u\n", info.lines);
-+	} else {
-+		fprintf(stderr, "unknown command: %s\n", argv[2]);
++	ret = ioctl(fd, GPIO_V2_GET_LINEINFO_IOCTL, &info);
++	if (ret) {
++		perror("line info ioctl failed");
 +		return EXIT_FAILURE;
 +	}
++
++	printf("%s\n", info.name);
 +
 +	return EXIT_SUCCESS;
 +}

@@ -2,64 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C25D46742C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:39:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 359D5467446
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:46:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351548AbhLCJmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 04:42:54 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:56254 "EHLO mail.skyhub.de"
+        id S1379663AbhLCJsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 04:48:13 -0500
+Received: from mga03.intel.com ([134.134.136.65]:57888 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351460AbhLCJmx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 04:42:53 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DF06D1EC056D;
-        Fri,  3 Dec 2021 10:39:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1638524365;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=erx7Grh6f9xu51WALClCrV83+AKmHQ8bL8nyvUzpln0=;
-        b=D2qljebn2T9ZhBbKvW9GDcgdKoWix5xa1D6kF9iWZy3YqvpQxlc76CAoHxFv+rmOToaZ9z
-        opvSmcY7mfAqwyKkwGA8oUzzIprNABRTtsMYO6aMEIt5vNFwELf0aPOhAi3H20/19MsUSq
-        FTYDmYE4lNmy4hNFrkqHY7YXxAjOb0I=
-Date:   Fri, 3 Dec 2021 10:39:32 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Lai Jiangshan <laijs@linux.alibaba.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH V6 00/49] x86/entry/64: Convert a bunch of ASM entry code
- into C code
-Message-ID: <Yanl1HeO1m2TNbyv@zn.tnic>
-References: <20211126101209.8613-1-jiangshanlai@gmail.com>
- <8dc8ec1c-3146-09fe-36ce-52999b06f6a0@linux.alibaba.com>
+        id S1379642AbhLCJsL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 04:48:11 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="236886214"
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="236886214"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 01:42:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="655897030"
+Received: from stinkbox.fi.intel.com (HELO stinkbox) ([10.237.72.171])
+  by fmsmga001.fm.intel.com with SMTP; 03 Dec 2021 01:42:07 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Fri, 03 Dec 2021 11:42:06 +0200
+Date:   Fri, 3 Dec 2021 11:42:06 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     Felix.Kuehling@amd.com, airlied@linux.ie, Xinhui.Pan@amd.com,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH] drm/amdkfd: Use max() instead of doing it manually
+Message-ID: <YanmbhwDrdpu+Zup@intel.com>
+References: <1638523913-117827-1-git-send-email-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <8dc8ec1c-3146-09fe-36ce-52999b06f6a0@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1638523913-117827-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+X-Patchwork-Hint: comment
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 05:31:11PM +0800, Lai Jiangshan wrote:
-> Ping.
+On Fri, Dec 03, 2021 at 05:31:53PM +0800, Jiapeng Chong wrote:
+> Fix following coccicheck warning:
+> 
+> ./drivers/gpu/drm/amd/amdkfd/kfd_svm.c:2193:16-17: WARNING opportunity
+> for max().
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
+> index f2db49c..4f7e7b1 100644
+> --- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
+> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
+> @@ -2190,7 +2190,7 @@ void schedule_deferred_list_work(struct svm_range_list *svms)
+>  
+>  	start = mni->interval_tree.start;
+>  	last = mni->interval_tree.last;
+> -	start = (start > range->start ? start : range->start) >> PAGE_SHIFT;
+> +	start = max(start, range->start) >> PAGE_SHIFT;
+>  	last = (last < (range->end - 1) ? last : range->end - 1) >> PAGE_SHIFT;
 
-Can you explain to me what's with all the pinging?
+There's an open coded min() on the very next line.
 
-Does your patchset contain anything urgent that needs immediate review
-and handling or is it something which is a nice idea but needs to be
-reviewed very carefully because it is asm entry code which is always a
-pain and careful review cannot be done when rushing people?
+>  	pr_debug("[0x%lx 0x%lx] range[0x%lx 0x%lx] notifier[0x%lx 0x%lx] %d\n",
+>  		 start, last, range->start >> PAGE_SHIFT,
+> -- 
+> 1.8.3.1
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Ville Syrjälä
+Intel

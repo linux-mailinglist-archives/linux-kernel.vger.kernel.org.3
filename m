@@ -2,93 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B92F8467B02
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A1F467B05
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237522AbhLCQN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 11:13:58 -0500
-Received: from foss.arm.com ([217.140.110.172]:50998 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230370AbhLCQN5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 11:13:57 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B02A81435;
-        Fri,  3 Dec 2021 08:10:33 -0800 (PST)
-Received: from [10.1.38.15] (e122027.cambridge.arm.com [10.1.38.15])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 783AC3F73B;
-        Fri,  3 Dec 2021 08:10:32 -0800 (PST)
-Subject: Re: [PATCH v3] MAINTAINERS: Update Atish's email address
-To:     Atish Patra <atishp@atishpatra.org>, linux-kernel@vger.kernel.org
-Cc:     anup.patel@wdc.com, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org
-References: <20211202235823.1926970-1-atishp@atishpatra.org>
-From:   Steven Price <steven.price@arm.com>
-Message-ID: <f63e9f1b-4b8e-6c3e-8e21-f9a5f97ca17d@arm.com>
-Date:   Fri, 3 Dec 2021 16:10:30 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S241840AbhLCQOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 11:14:06 -0500
+Received: from smtprelay0235.hostedemail.com ([216.40.44.235]:44414 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229943AbhLCQOF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 11:14:05 -0500
+Received: from omf12.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 0E2FB180AF868;
+        Fri,  3 Dec 2021 16:10:40 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf12.hostedemail.com (Postfix) with ESMTPA id 564242D;
+        Fri,  3 Dec 2021 16:10:38 +0000 (UTC)
+Message-ID: <737d7d96deec73039699d62cd42b26b8862ae373.camel@perches.com>
+Subject: Re: [PATCH] xen-blkfront: Use the bitmap API when applicable
+From:   Joe Perches <joe@perches.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Juergen Gross <jgross@suse.com>, boris.ostrovsky@oracle.com,
+        sstabellini@kernel.org, roger.pau@citrix.com, axboe@kernel.dk
+Cc:     xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Date:   Fri, 03 Dec 2021 08:10:37 -0800
+In-Reply-To: <1e9291c6-48bb-88e5-37dc-f604cfa4c4db@wanadoo.fr>
+References: <1c73cf8eaff02ea19439ec676c063e592d273cfe.1638392965.git.christophe.jaillet@wanadoo.fr>
+         <c529a221-f444-ad26-11ff-f693401c9429@suse.com>
+         <d8f87c17-75d1-2e6b-65e1-23adc75bb515@wanadoo.fr>
+         <6fcddba84070c021eb92aa9a5ff15fb2a47e9acb.camel@perches.com>
+         <3d71577f-dabe-6e1a-4b03-2a44f304b702@wanadoo.fr>
+         <863f2cddacac590d581cda09d548ee0a652df8a1.camel@perches.com>
+         <1e9291c6-48bb-88e5-37dc-f604cfa4c4db@wanadoo.fr>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-In-Reply-To: <20211202235823.1926970-1-atishp@atishpatra.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 564242D
+X-Spam-Status: No, score=-4.90
+X-Stat-Signature: skzu1e47gn4yh4br1u6yk3izt6hqdaja
+X-Rspamd-Server: rspamout03
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/Cp6pUluPgKVCI9lR+/9PfIk4J2JPI1hA=
+X-HE-Tag: 1638547838-500636
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/12/2021 23:58, Atish Patra wrote:
-> I am no longer employed by western digital. Update my email address to
-> personal one and add entries to .mailmap as well.
+On Fri, 2021-12-03 at 16:54 +0100, Christophe JAILLET wrote:
+> Le 03/12/2021 à 04:03, Joe Perches a écrit :
+> > On Thu, 2021-12-02 at 20:07 +0100, Christophe JAILLET wrote:
+> > > Le 02/12/2021 à 19:16, Joe Perches a écrit :
+> > > > On Thu, 2021-12-02 at 19:12 +0100, Christophe JAILLET wrote:
+> > > > > Le 02/12/2021 à 07:12, Juergen Gross a écrit :
+> > > > > > On 01.12.21 22:10, Christophe JAILLET wrote:
+> > > > > > > Use 'bitmap_zalloc()' to simplify code, improve the semantic and avoid
+> > > > > > > some open-coded arithmetic in allocator arguments.
+> > > > > > > 
+> > > > > > > Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
+> > > > > > > consistency.
+> > > > > > > 
+> > > > > > > Use 'bitmap_copy()' to avoid an explicit 'memcpy()'
+> > > > []
+> > > > > > > diff --git a/drivers/block/xen-blkfront.c b/drivers/block/xen-blkfront.c
+> > > > []
+> > > > > > > @@ -442,16 +442,14 @@ static int xlbd_reserve_minors(unsigned int
+> > > > > > > minor, unsigned int nr)
+> > > > > > >         if (end > nr_minors) {
+> > > > > > >             unsigned long *bitmap, *old;
+> > > > > > > -        bitmap = kcalloc(BITS_TO_LONGS(end), sizeof(*bitmap),
+> > > > > > > -                 GFP_KERNEL);
+> > > > > > > +        bitmap = bitmap_zalloc(end, GFP_KERNEL);
+> > > > > > >             if (bitmap == NULL)
+> > > > > > >                 return -ENOMEM;
+> > > > > > >             spin_lock(&minor_lock);
+> > > > > > >             if (end > nr_minors) {
+> > > > > > >                 old = minors;
+> > > > > > > -            memcpy(bitmap, minors,
+> > > > > > > -                   BITS_TO_LONGS(nr_minors) * sizeof(*bitmap));
+> > > > > > > +            bitmap_copy(bitmap, minors, nr_minors);
+> > > > > > >                 minors = bitmap;
+> > > > > > >                 nr_minors = BITS_TO_LONGS(end) * BITS_PER_LONG;
+> > > > 
+> > > > 		nr_minors = end;
+> > > > ?
+> > > > 
+> > > 
+> > > No,
+> > > My understanding of the code is that if we lack space (end > nr_minors),
+> > > we need to allocate more. In such a case, we want to keep track of what
+> > > we have allocated, not what we needed.
+> > > The "padding" bits in the "long align" allocation, can be used later.
+> > 
+> > > 
+> > > first call
+> > > ----------
+> > > end = 65
+> > > nr_minors = 63
+> > > 
+> > > --> we need some space
+> > > --> we allocate 2 longs = 128 bits
+> > > --> we now use 65 bits of these 128 bits
+> > 
+> > or 96, 32 or 64 bit longs remember.
 > 
-> Signed-off-by: Atish Patra <atishp@atishpatra.org>
-> ---
->  .mailmap    | 1 +
->  MAINTAINERS | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
+> 32 and 64 for sure, but I was not aware of 96. On which arch?
+
+For more clarity that should have been a period instead of comma after 96.
+
+
+> > The initial allocation is now bitmap_zalloc which
+> > specifies only bits and the nr_minors is then in
+> > BITS_TO_LONGS(bits) * BITS_PER_LONG
+> > 
+> > Perhaps that assumes too much about the internal
+> > implementation of bitmap_alloc
 > 
-> diff --git a/.mailmap b/.mailmap
-> index 6277bb27b4bf..23f6b0a60adf 100644
-> --- a/.mailmap
-> +++ b/.mailmap
-> @@ -50,6 +50,7 @@ Archit Taneja <archit@ti.com>
->  Ard Biesheuvel <ardb@kernel.org> <ard.biesheuvel@linaro.org>
->  Arnaud Patard <arnaud.patard@rtp-net.org>
->  Arnd Bergmann <arnd@arndb.de>
-> +Atish Patra <atishp@atishpatra.org> <atish.patra@wdc.com> <atishp@rivosinc.com>
-
-I don't think this does what you expect. You can't list more than one
-email address to replace on the same line. You can use the command "git
-check-mailmap" to test what happens, e.g. with this change applied:
-
-  $ git check-mailmap "<atishp@rivosinc.com>"
-  <atishp@rivosinc.com>
-  $ git check-mailmap "<atish.patra@wdc.com>"
-  Atish Patra <atishp@atishpatra.org>
-  $ git check-mailmap "<atishp@atishpatra.org>"
-  <atishp@atishpatra.org>
-
-So only your @wdc.com address is translated. If you want to translate
-the @rivosinc.com address as well you need a second line. As the file says:
-
-# For format details, see "MAPPING AUTHORS" in "man git-shortlog".
-
-Steve
-
->  Axel Dyks <xl@xlsigned.net>
->  Axel Lin <axel.lin@gmail.com>
->  Bart Van Assche <bvanassche@acm.org> <bart.vanassche@sandisk.com>
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5250298d2817..6c2a34da0314 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10434,7 +10434,7 @@ F:	arch/powerpc/kvm/
->  
->  KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)
->  M:	Anup Patel <anup.patel@wdc.com>
-> -R:	Atish Patra <atish.patra@wdc.com>
-> +R:	Atish Patra <atishp@atishpatra.org>
->  L:	kvm@vger.kernel.org
->  L:	kvm-riscv@lists.infradead.org
->  L:	linux-riscv@lists.infradead.org
+> I get your point now, and I agree with you.
 > 
+> Maybe something as what is done in mc-entity.c?
+> Explicitly require more bits (which will be allocated anyway), instead 
+> of taking advantage (read "hoping") that it will be done.
+
+Sure, that's sensible.
+
+> Could be:
+> 
+> @@ -440,26 +440,25 @@ static int xlbd_reserve_minors(unsigned int minor, 
+> unsigned int nr)
+>   	int rc;
+> 
+>   	if (end > nr_minors) {
+>   		unsigned long *bitmap, *old;
+> 
+> -		bitmap = kcalloc(BITS_TO_LONGS(end), sizeof(*bitmap),
+> -				 GFP_KERNEL);
+> +		end = ALIGN(end, BITS_PER_LONG);
+
+Though it may be more sensible to use some other alignment
+like round_up and not use BITS_PER_LONG at all as the
+number of these may not be dependent on 32/64 bit arches
+at all.
+
+Maybe something like:
+
+#define GROW_MINORS	64
+
+		end = round_up(nr_minors, GROW_MINORS);
+
+etc...
 

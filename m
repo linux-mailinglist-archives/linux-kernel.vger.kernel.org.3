@@ -2,142 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83983466E50
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 01:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16733466E56
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 01:11:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245374AbhLCAK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 19:10:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:32868 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235444AbhLCAKY (ORCPT
+        id S1349738AbhLCAOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 19:14:41 -0500
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:39035 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233413AbhLCAOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 19:10:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35AE9B82570;
-        Fri,  3 Dec 2021 00:07:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8F7CC53FD5;
-        Fri,  3 Dec 2021 00:06:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638490018;
-        bh=hUUGmi1Kxjg4GVMJJk27j4s8CR+5/UrEzujzqqM7DVc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lODZkcZ6BvnOCz4O6iIV8krAEhmKF9YU38giD5x/tcmBjHGC3UagRE9v+yFJwvKCg
-         vj6BIa+dluXsClTi/MxisQBtIOISTtvwatHIfILWRDwS17zmq05s5SQqKHNHB4nvNG
-         J5JxyfEG+BRwHjpfqF4Hxj4PRPsQ/AbshzYRawqO+P4dJhXlv19pa/4EHR4XseSRsA
-         B3ObZEF8xI3U7IwT6l9AUu8peIJdLqzRkud5+SUOpKyn0T+TEhwHhMaynBvaFn8xRq
-         6BH/qAfQJ+saTZr6CJWlVOqGhYAWlwJ9fMb4Z8wNYSVxzyALMQZfhrwdwnNdYOdvcF
-         dGzEVF5XoTayQ==
-Received: by mail-ed1-f54.google.com with SMTP id y12so4359351eda.12;
-        Thu, 02 Dec 2021 16:06:58 -0800 (PST)
-X-Gm-Message-State: AOAM533T36jn6E+O4qP/th9ASEvUqdQ6IVX+6TU+AoaJiKhJ/KF0z+M/
-        1PAiVR9GtU3Nd19/aX3cHcOJePCGlt8JTWNK8Q==
-X-Google-Smtp-Source: ABdhPJy/vfyFg8Uq9KjiNMxw9kzU+8NVCXfS+xyKdO85QAO1nUO0e3tnO/OopVm4P79WiTBhXyFZoO0samMN/lsdoo4=
-X-Received: by 2002:a17:907:7f2a:: with SMTP id qf42mr19657908ejc.388.1638490017099;
- Thu, 02 Dec 2021 16:06:57 -0800 (PST)
-MIME-Version: 1.0
-References: <20211129184439.16892-1-jason-jh.lin@mediatek.com> <20211129184439.16892-11-jason-jh.lin@mediatek.com>
-In-Reply-To: <20211129184439.16892-11-jason-jh.lin@mediatek.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Fri, 3 Dec 2021 08:06:45 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-edo+HagSJPxgFyYT2itXk4isbY=fnd=o6YO8kx0Ms=g@mail.gmail.com>
-Message-ID: <CAAOTY_-edo+HagSJPxgFyYT2itXk4isbY=fnd=o6YO8kx0Ms=g@mail.gmail.com>
-Subject: Re: [PATCH v13 10/15] drm/mediatek: remove unused define in mtk_drm_ddp_comp.c
-To:     "jason-jh.lin" <jason-jh.lin@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fei Shao <fshao@chromium.org>,
-        Moudy Ho <moudy.ho@mediatek.com>, roy-cw.yeh@mediatek.com,
-        Fabien Parent <fparent@baylibre.com>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>, singo.chang@mediatek.com,
-        DTML <devicetree@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 2 Dec 2021 19:14:39 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2CFF15C0316;
+        Thu,  2 Dec 2021 19:11:16 -0500 (EST)
+Received: from imap45 ([10.202.2.95])
+  by compute5.internal (MEProxy); Thu, 02 Dec 2021 19:11:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=owlfolio.org; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm2; bh=4lwOqAOjiqgPdGNyVJBcnRov6B/MBYi
+        /SQsQ344Kws8=; b=iZTEsHJPzFYGerrtuIFEF8lvFfZ1myqisgEcFN1ffbWQ+3E
+        v+C/FJbVGEoXsjAIOMpneXLU5eFM2354eY9ExknLCU8BXqlwsSTRZ8YHbCghdyWh
+        SUrBWT16y0q0fa4mzL8/EBn74/lTQ/pxV1u0sxO0h72ULPDUY/ov0wM9HASMW2R0
+        RYn8ABqRMMKLHe6W3diodUPobl5qanP2mqsTrtIKalZL1VJv5WBAlcWb1k3Pg3vy
+        vTr/w58e2e8iKduW2f9a1KBdOPZwNLvOoPKBADUJY1li+R9Bvp1PWugAH8YzgvzL
+        xgGFIb2H9A/PS5I3wgGIGdRaqeQd9kCC72Pyz6A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=4lwOqA
+        OjiqgPdGNyVJBcnRov6B/MBYi/SQsQ344Kws8=; b=F+4V/vqA0mdN07pmSi4Sup
+        bZ1wYJ3VkqKHUSAz5fxinzf6sNcTmp0nQuUkyXu/4bNq1sDcqapETlmRLBJLldX6
+        djLlx9XPYcYpT5cW+U1wcRmFQvbJNnVYe0tNOUwYIB/HpKQMcz5jT6H3XIwBpoDQ
+        Wb5NowOmSx10GLEtFgoDgSR84RiPvi3O9fa7TPLtPetKWSxo8vGRz33CuGQ7GkvE
+        Tsg6XNNQCb8kqe7y78xm9tFPdQ1SV/snIQnb6X74Rmy/FwxGeQ8w6rFE1ty88//T
+        14h1TrMJnRmELFu+QejOxgW3t+DyX2DgMLWawiuYXVhgw9jPlziCyEYROYm8Rosw
+        ==
+X-ME-Sender: <xms:o2CpYVkFEV2f4rfGPZevc3_fyVsSkOlmrjf2nSkQsi-flCYkAf3DRA>
+    <xme:o2CpYQ1ZD0-Sgjs_ufHCwHaI1gnEubYppLUKG1Nga-LEDZKGoYNfSgTfwFEDdrLPT
+    xSyys-agwM36sUdAKI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrieeigddukecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfkggrtghk
+    ucghvghinhgsvghrghdfuceoiigrtghksehofihlfhholhhiohdrohhrgheqnecuggftrf
+    grthhtvghrnhephfeuhfevueffteffgfejtefgkeekheeftdeflefgheffffevheekleef
+    gfehffdunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epiigrtghksehofihlfhholhhiohdrohhrgh
+X-ME-Proxy: <xmx:o2CpYbrw5sjhOj-qcwg0AljYtdAcB4SNvKWJfO21fsb9OlLPajktvw>
+    <xmx:o2CpYVkH94KabekVxhFbhMPVxZGUtPX3A4_QMMU_JSkwpC82XWlC4w>
+    <xmx:o2CpYT3bF-Q8WARuO9lFtFvyRTvYe8M1FfNbToVDvt_3MSMt6psgNw>
+    <xmx:pGCpYeSifUh_WhZNjYJBjKUDgNgWJwSIhrs3URgu5Fb3E1dWRGpxSQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 34AB724A0074; Thu,  2 Dec 2021 19:11:15 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4458-g51a91c06b2-fm-20211130.004-g51a91c06
+Mime-Version: 1.0
+Message-Id: <9d24f699-386a-4881-b09a-ebd747310187@www.fastmail.com>
+In-Reply-To: <855a47d1-a89c-bbc8-7ddd-b89104c6138a@linaro.org>
+References: <YZvIlz7J6vOEY+Xu@yuki>
+ <c5993ee9-1b5d-4469-9c0e-8d4e0fbd575a@www.fastmail.com>
+ <20211202153422.GH7074@brightrain.aerifal.cx>
+ <20211202232954.GI7074@brightrain.aerifal.cx>
+ <855a47d1-a89c-bbc8-7ddd-b89104c6138a@linaro.org>
+Date:   Thu, 02 Dec 2021 19:10:52 -0500
+From:   "Zack Weinberg" <zack@owlfolio.org>
+To:     "Adhemerval Zanella" <adhemerval.zanella@linaro.org>,
+        "Rich Felker" <dalias@libc.org>
+Cc:     linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        libc-alpha@sourceware.org, linux-kernel@vger.kernel.org,
+        ltp@lists.linux.it
+Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jason:
+On Thu, Dec 2, 2021, at 6:43 PM, Adhemerval Zanella via Libc-alpha wrote:
+> On 02/12/2021 20:29, Rich Felker wrote:
+>> On Thu, Dec 02, 2021 at 10:34:23AM -0500, Rich Felker wrote:
+>>> On Mon, Nov 22, 2021 at 10:19:59PM +0000, Zack Weinberg via Libc-alpha wrote:
+>>>> On Mon, Nov 22, 2021, at 4:43 PM, Cyril Hrubis wrote:
+>>>>> This changes the __u64 and __s64 in userspace on 64bit platforms from
+>>>>> long long (unsigned) int to just long (unsigned) int in order to match
+>>>>> the uint64_t and int64_t size in userspace.
+>>>> ....
+>>>>> +
+>>>>> +#include <asm/bitsperlong.h>
+>>>>> +
+>>>>>  /*
+>>>>> - * int-ll64 is used everywhere now.
+>>>>> + * int-ll64 is used everywhere in kernel now.
+>>>>>   */
+>>>>> -#include <asm-generic/int-ll64.h>
+>>>>> +#if __BITS_PER_LONG == 64 && !defined(__KERNEL__)
+>>>>> +# include <asm-generic/int-l64.h>
+>>>>> +#else
+>>>>> +# include <asm-generic/int-ll64.h>
+>>>>> +#endif
+>>>>
+>>>> I am all for matching __uN / __sN to uintN_t / intN_t in userspace, but may I suggest the technically simpler and guaranteed-to-be-accurate
+>>>>
+>>>>  /*
+>>>> - * int-ll64 is used everywhere now.
+>>>> + * int-ll64 is used everywhere in kernel now.
+>>>> + * In user space match <stdint.h>.
+>>>>   */
+>>>> +#ifdef __KERNEL__
+>>>>  # include <asm-generic/int-ll64.h>
+>>>> +#elif __has_include (<bits/types.h>)
+>>>> +# include <bits/types.h>
+>>>> +typedef __int8_t __s8;
+>>>> +typedef __uint8_t __u8;
+>>>> +typedef __int16_t __s16;
+>>>> +typedef __uint16_t __u16;
+>>>> +typedef __int32_t __s32;
+>>>> +typedef __uint32_t __u32;
+>>>> +typedef __int64_t __s64;
+>>>> +typedef __uint64_t __u64;
+>>>> +#else
+>>>> +# include <stdint.h>
+>>>> +typedef int8_t __s8;
+>>>> +typedef uint8_t __u8;
+>>>> +typedef int16_t __s16;
+>>>> +typedef uint16_t __u16;
+>>>> +typedef int32_t __s32;
+>>>> +typedef uint32_t __u32;
+>>>> +typedef int64_t __s64;
+>>>> +typedef uint64_t __u64;
+>>>> +#endif
+>>>>
+>>>> The middle clause could be dropped if we are okay with all uapi
+>>>> headers potentially exposing the non-implementation-namespace names
+>>>> defined by <stdint.h>. I do not know what the musl libc equivalent
+>>>> of <bits/types.h> is.
+>>>
+>>> We (musl) don't have an equivalent header or __-prefixed versions of
+>>> these types.
+>>>
+>>> FWIW I don't think stdint.h exposes anything that would be problematic
+>>> alongside arbitrary use of kernel headers.
+>> 
+>> Also, per glibc's bits/types.h:
+>> 
+>> /*
+>>  * Never include this file directly; use <sys/types.h> instead.
+>>  */
+>> 
+>> it's not permitted (not supported usage) to #include <bits/types.h>.
+>> So I think the above patch is wrong for glibc too. As I understand it,
+>> this is general policy for bits/* -- they're only intended to work as
+>> included by the libc system headers, not directly by something else.
+>
+> You are right, the idea is to allow glibc to create and remove internal headers.
 
-jason-jh.lin <jason-jh.lin@mediatek.com> =E6=96=BC 2021=E5=B9=B411=E6=9C=88=
-30=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=882:44=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> Remove the unsed define in mtk_drm_ddp_comp.c
-
-Applied to mediatek-drm-next [1], thanks.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
-log/?h=3Dmediatek-drm-next
-
-Regards,
-Chun-Kuang.
-
->
-> Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
-> Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> ---
->  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c | 10 ----------
->  1 file changed, 10 deletions(-)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c b/drivers/gpu/dr=
-m/mediatek/mtk_drm_ddp_comp.c
-> index 3704e4b7f3c5..7d3bd6214c15 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
-> @@ -21,8 +21,6 @@
->  #include "mtk_drm_crtc.h"
->
->  #define DISP_OD_EN                             0x0000
-> -#define DISP_OD_INTEN                          0x0008
-> -#define DISP_OD_INTSTA                         0x000c
->  #define DISP_OD_CFG                            0x0020
->  #define DISP_OD_SIZE                           0x0030
->  #define DISP_DITHER_5                          0x0114
-> @@ -39,26 +37,18 @@
->  #define DITHER_ENGINE_EN                       BIT(1)
->  #define DISP_DITHER_SIZE                       0x0030
->
-> -#define LUT_10BIT_MASK                         0x03ff
-> -
->  #define OD_RELAYMODE                           BIT(0)
->
->  #define UFO_BYPASS                             BIT(2)
->
->  #define DISP_DITHERING                         BIT(2)
->  #define DITHER_LSB_ERR_SHIFT_R(x)              (((x) & 0x7) << 28)
-> -#define DITHER_OVFLW_BIT_R(x)                  (((x) & 0x7) << 24)
->  #define DITHER_ADD_LSHIFT_R(x)                 (((x) & 0x7) << 20)
-> -#define DITHER_ADD_RSHIFT_R(x)                 (((x) & 0x7) << 16)
->  #define DITHER_NEW_BIT_MODE                    BIT(0)
->  #define DITHER_LSB_ERR_SHIFT_B(x)              (((x) & 0x7) << 28)
-> -#define DITHER_OVFLW_BIT_B(x)                  (((x) & 0x7) << 24)
->  #define DITHER_ADD_LSHIFT_B(x)                 (((x) & 0x7) << 20)
-> -#define DITHER_ADD_RSHIFT_B(x)                 (((x) & 0x7) << 16)
->  #define DITHER_LSB_ERR_SHIFT_G(x)              (((x) & 0x7) << 12)
-> -#define DITHER_OVFLW_BIT_G(x)                  (((x) & 0x7) << 8)
->  #define DITHER_ADD_LSHIFT_G(x)                 (((x) & 0x7) << 4)
-> -#define DITHER_ADD_RSHIFT_G(x)                 (((x) & 0x7) << 0)
->
->  #define DISP_POSTMASK_EN                       0x0000
->  #define POSTMASK_EN                                    BIT(0)
-> --
-> 2.18.0
->
+As a general rule yes, but we could make a deal that some specific bits headers are permanent API for use by things like this. They probably should be less of a dumping ground than bits/types.h though.

@@ -2,105 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C26AF4673CA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:17:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 079CC4673CE
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379481AbhLCJUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 04:20:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
+        id S1379493AbhLCJVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 04:21:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351294AbhLCJUc (ORCPT
+        with ESMTP id S1379483AbhLCJVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 04:20:32 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B43C06173E
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 01:17:08 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id q64so2743026qkd.5
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 01:17:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jgvMwOkDcRoUF6R7PGhUdw3mIh9JYIpn/aXxn0rHolQ=;
-        b=nWccPpijhFPpxe62l6g043xtvIKpN4xKMVs4CaZGS92+m9gNBa5P1/seNwuuKz157r
-         avZG6v5LcPlAzEJiEEA7NvXEvb8qQCsX2PW/YApleUrHn4/t5BfILeIa10oQquZQaGhI
-         VEVXb0YgWQc+VF36v6V5CpTczgIXpdBrJVYBDqLQWly8Z9foXAfUsQ5NF3A8QbhFjoLd
-         GHNWpXwBq5pKeZrC1DmEnDziTeUzcS58/62urVJOSdciDK8w0Jj9D3YQOtdLWaZjb2KS
-         JQl1ONfgjwIW1E8YCufzPstnfeNSv6XJfOwQ2zLSHdjq6A+HEDVY5yI5q6sWmk2W2ZAe
-         gHbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jgvMwOkDcRoUF6R7PGhUdw3mIh9JYIpn/aXxn0rHolQ=;
-        b=QfY/e0TCn5Ich7V8lHTP5Ei7VrvjAv/UJxqWNIohsuRrRZWzVQbvnMRBpYPW9DmUh9
-         aBmjZIaZHgmjFG2S4v7JtKCza+ztH3N657+otRTmAhLyT5AmBHus7J3hHl6B0fjREfy8
-         PUGh0kfk96DfGUSkv4m7DG5fhNlM1DFsJoWvhiklXXs3IYnSt4RJ/1u9558J1ksaee6f
-         JcRmFZ40svtTcwK4GvNCyLsk5dwdNAVBxhotRA3dN3aoLi1YfMH35c4sjzEBguBUWjvr
-         IoXiKfqhAL9oUZfxkdejL4pMIPm1Nv6I9v//+q7oxXR13dk4NXlJtWTnCikQJR8/jnuc
-         kozw==
-X-Gm-Message-State: AOAM530qY89xn0j7Qb4Q0S/b6ZGPp8ujmZMwxxHBbnj3kX9lbSlQsO4F
-        pFrK4uzEGc6m8LjNkPnu7XJRvsyQ7HslixIHqVcd43T0BFuIKA==
-X-Google-Smtp-Source: ABdhPJxAFBqQY6PWlnykAzmKxVmXsxvG6coacu8lAxuXBr0Kgrlh2Jfe1aY7MuMC1/QFtZH//XO0uIVKWVWUuYCDcaI=
-X-Received: by 2002:a05:620a:2989:: with SMTP id r9mr16108300qkp.630.1638523027682;
- Fri, 03 Dec 2021 01:17:07 -0800 (PST)
-MIME-Version: 1.0
-References: <1638356341-17014-1-git-send-email-huangzhaoyang@gmail.com>
- <CAGWkznHq15QN5Dn6_QfbAm7jS9OPCV4TVqn2_9RxUBx0V9v78w@mail.gmail.com> <Yaj0KTp17AaHMQyC@cmpxchg.org>
-In-Reply-To: <Yaj0KTp17AaHMQyC@cmpxchg.org>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Fri, 3 Dec 2021 17:16:47 +0800
-Message-ID: <CAGWkznEHTVJzrCqfZRSHN=HtFjKHBGy0yyxpK8paP+9W1DsX_w@mail.gmail.com>
-Subject: Re: [RFC PATCH] mm: count zram read/write into PSI_IO_WAIT
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Jens Axboe <axboe@kernel.dk>, Minchan Kim <minchan@kernel.org>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        Fri, 3 Dec 2021 04:21:12 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9BAC06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 01:17:48 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1mt4hE-0000j9-TQ; Fri, 03 Dec 2021 10:17:36 +0100
+Message-ID: <6a274996f96c799db2efef4498a8fc42e78e1d2d.camel@pengutronix.de>
+Subject: Re: [RFC V3 0/2] arm64: imx8mm: Enable Hantro VPUs
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Tim Harvey <tharvey@gateworks.com>, Adam Ford <aford173@gmail.com>
+Cc:     linux-media <linux-media@vger.kernel.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:HANTRO VPU CODEC DRIVER" 
+        <linux-rockchip@lists.infradead.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
+Date:   Fri, 03 Dec 2021 10:17:33 +0100
+In-Reply-To: <CAJ+vNU2t7Yp5OGtWj432Y-8hL62nQBbG58zM-gAj5YfuCO__sA@mail.gmail.com>
+References: <20211202041627.291625-1-aford173@gmail.com>
+         <CAHCN7xJHuOFTQBQWk1yKsk3M0iDB7aKc0=L2DisUoSXVeO3xXQ@mail.gmail.com>
+         <CAJ+vNU2t7Yp5OGtWj432Y-8hL62nQBbG58zM-gAj5YfuCO__sA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 12:28 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
->
-> On Wed, Dec 01, 2021 at 07:12:30PM +0800, Zhaoyang Huang wrote:
-> > There is no chance for zram reading/writing to be counted in
-> > PSI_IO_WAIT so far as zram will deal with the request just in current
-> > context without invoking submit_bio and io_schedule.
->
-> Hm, but you're also not waiting for a real io device - during which
-> the CPU could be doing something else e.g. You're waiting for
-> decompression. The thread also isn't in D-state during that time. What
-> scenario would benefit from this accounting? How is IO pressure from
-> comp/decomp paths actionable to you?
-No. Block device related D-state will be counted in via
-psi_dequeue(io_wait). What I am proposing here is do NOT ignore the
-influence on non-productive time by huge numbers of in-context swap
-in/out (zram like). This can help to make IO pressure more accurate
-and coordinate with the number of PSWPIN/OUT. It is like counting the
-IO time within filemap_fault->wait_on_page_bit_common into
-psi_mem_stall, which introduces memory pressure high by IO.
->
-> What about when you use zram with disk writeback enabled, and you see
-> a mix of decompression and actual disk IO. Wouldn't you want to be
-> able to tell the two apart, to see if you're short on CPU or short on
-> IO bandwidth in this setup? Your patch would make that impossible.
-OK. Is it better to start the IO counting from pageout? Both of the
-bdev and ram backed swap would benefit from it.
->
-> This needs a much more comprehensive changelog.
->
-> > > @@ -1246,7 +1247,9 @@ static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
-> > >                                 zram_get_element(zram, index),
-> > >                                 bio, partial_io);
-> > >         }
-> > > -
-> > > +#ifdef CONFIG_PSI
-> > > +       psi_task_change(current, 0, TSK_IOWAIT);
-> > > +#endif
->
-> Add psi_iostall_enter() and leave helpers that encapsulate the ifdefs.
-OK.
+Am Donnerstag, dem 02.12.2021 um 10:54 -0800 schrieb Tim Harvey:
+> On Thu, Dec 2, 2021 at 4:29 AM Adam Ford <aford173@gmail.com> wrote:
+> > 
+> > On Wed, Dec 1, 2021 at 10:17 PM Adam Ford <aford173@gmail.com> wrote:
+> > > 
+> > > The i.MX8M has two Hantro video decoders, called G1 and G2 which appear
+> > > to be related to the video decoders used on the i.MX8MQ, but because of
+> > > how the Mini handles the power domains, the VPU driver does not need to
+> > > handle all the functions, so a new compatible flag is required.
+> > > 
+> > > V3 is rebased from git://linuxtv.org/hverkuil/media_tree.git for-v5.17c
+> > > This branch has support for VP9.
+> > > 
+> > > I set cma=512M, but this may not be enough memory as some tests appeard to run out of memory
+> > > 
+> > > V3 of this series has several changes:
+> > > 
+> > > Update imx8m_vpu_hw to add missing 'reg' reference names for G2 and include references to VP9
+> > > Update device tree to remove IMX8MQ_VPU_RESET, remove some duplicate vpu clock parenting
+> > > Fix missing reg-names from vpu_g2 node.
+> > > Apply patch [1] to manage the power domains powering down.
+> > > [1] - https://lore.kernel.org/linux-arm-kernel/20211016210547.171717-1-marex@denx.de/t/
+> > > 
+> > > With the above, the following Fluster scores are produced:
+> > > 
+> > > G1:
+> > > ./fluster.py run -dGStreamer-H.264-V4L2SL-Gst1.0
+> > > Ran 90/135 tests successfully               in 74.406 secs
+> > > 
+> > > ./fluster.py run -d GStreamer-VP8-V4L2SL-Gst1.0
+> > > Ran 55/61 tests successfully               in 8.080 secs
+> > > 
+> > > G2:
+> > > ./fluster.py run -d GStreamer-VP9-V4L2SL-Gst1.0
+> > > Ran 127/303 tests successfully               in 203.873 secs
+> > > 
+> > > Fluster and G-Streamer were both built from their respective git repos using their respective master/main branches.
+> > > 
+> > 
+> > I should note, that both interrupts appear to be triggering.
+> > 
+> > # cat /proc/interrupts |grep codec
+> >  57:      13442          0          0          0     GICv3  39 Level
+> >   38300000.video-codec
+> >  58:       7815          0          0          0     GICv3  40 Level
+> >   38310000.video-codec
+> > 
+> 
+> Adam,
+> 
+> On another thread you had let me know that you also removed the reset
+> from the pgc_vpumix power domain which does appear to resolve the
+> hang:
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+> b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+> index eb9dcd9d1a31..31710af544dc 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+> @@ -681,7 +681,6 @@
+>                                                 clocks = <&clk
+> IMX8MM_CLK_VPU_DEC_ROOT>;
+>                                                 assigned-clocks =
+> <&clk IMX8MM_CLK_VPU_BUS>;
+>                                                 assigned-clock-parents
+> = <&clk IMX8MM_SYS_PLL1_800M>;
+> -                                               resets = <&src
+> IMX8MQ_RESET_VPU_RESET>;
+>                                         };
+> 
+>                                         pgc_vpu_g1: power-domain@7 {
+> 
+> That would make such a patch have a 'Fixes commit d39d4bb15310
+> ("arm64: dts: imx8mm: add GPC node")' but of course that vpu domain
+> isn't active until your series so I'm not sure if we should send this
+> separate or squash it with "arm64: dts: imx8mm: Enable VPU-G1 and
+> VPU-G2". I'm also not clear if removing the reset requires some
+> further discussion with Lucas.
+> 
+I'm fine with removing the reset when it fixes things. In normal
+operation the reset should already be triggered by the GPC itself via a
+hardware mechanism. We know that this doesn't work for the GPU reset on
+the i.MX8MM, so we have the ability for the driver to handle it by
+poking the SRC explicitly.
+
+Adding the reset to the VPU DT description wasn't done because I know
+that we need it, but more of a "I know that things are broken with the
+GPU domain, so better be safe than sorry with the VPU domain". My line
+of thought clearly was that it may not be needed, but it may prevent
+some issues in the long run. If it is _causing_ issues however, there
+is no need to discuss anything, just get rid of it.
+
+Regards,
+Lucas
+

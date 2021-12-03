@@ -2,71 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B70C1466EE5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 01:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E4D466EE9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 02:01:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344768AbhLCBCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 20:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38970 "EHLO
+        id S245080AbhLCBFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 20:05:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344077AbhLCBCy (ORCPT
+        with ESMTP id S233835AbhLCBFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 20:02:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D66C06174A;
-        Thu,  2 Dec 2021 16:59:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9E1EB82025;
-        Fri,  3 Dec 2021 00:59:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52BEDC00446;
-        Fri,  3 Dec 2021 00:59:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638493168;
-        bh=gAszAJGGHye2RgWWyEPNSetu+idKR1JbBRTAAgjo8Bk=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=rHPfzz0Ngj45MaTUdSw87sLOh6NZ6A922ZLOMQtP/7C0N6o6b9hTcZ7HN15YqRpqI
-         sGCwNZo/2LbqPg/rn4c1Ho7uyLeHrawQHHtcJ/+mk32kdhqN5EbynXNf/bWN12Mf6K
-         NNuNX1V8T7Ip217EQ3WdcIpVv92FkH+G8cjYLOYHwcHs3Yy88/RV1ItRuWnvdCaLd6
-         EQhuAIYeI6lFTGd34+k2QydiSv4s5uSzlhfsaSXk3lf+C8NIJcGiVgJwR3eE79xHiW
-         GwTfRuzrcAcq1g2j8rzDAoI0Q0BLb4UxVudOBaGwIj/WiHLli9nuzoEJRvdJ6x7TDa
-         /MbNv6nY2eXsA==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 2 Dec 2021 20:05:13 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD745C06174A;
+        Thu,  2 Dec 2021 17:01:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=BoIKGnMfoc1IIOUC9w9w20aJB0DTazO4q6nZD2D5Ghc=; b=Il2dm8mIqf66EY6d6kB9VZGiP4
+        rjysYplfEm5MIZalhXfe8wOli3cUvUclPkyrIBMnLPgjmXp+9CBB9EDL22hGs7CAi6Y3JE6xAk595
+        nJ8w1aY/WQrKkVDHD9l3EITK5fO6zJN6MXVgmpdz+i6uT/DFzc8BvtCyUofV7PGlum+CJ+YB5W4OH
+        wNKxXfipgzcEXsUMJoq286cQHmUynw2cnuM+0kluZ0+CTQDoFN1ctbmk+ezhdej0qGIMeZhG1z0J6
+        SMJwS0vBlDCclLxeFSaCPYqn41Y6i4tiDAcARoLAx7vT9FDT7zd6W18LVHN2wSIONhSKUk5MBn/wR
+        8vw+k+PA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mswxQ-00DtnM-NW; Fri, 03 Dec 2021 01:01:48 +0000
+Date:   Thu, 2 Dec 2021 17:01:48 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH] module: add in-kernel support for decompressing
+Message-ID: <YalsfEC7vix/WsDI@bombadil.infradead.org>
+References: <YaMYJv539OEBz5B/@google.com>
+ <202112011112.83416FCA2C@keescook>
+ <YafYvA5JWMgb6PVy@google.com>
+ <202112020012.8B4C205@keescook>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211123162508.153711-1-bjorn.andersson@linaro.org>
-References: <20211123162508.153711-1-bjorn.andersson@linaro.org>
-Subject: Re: [PATCH v2] clk: qcom: clk-alpha-pll: Don't reconfigure running Trion
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Robert Foss <robert.foss@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <tdas@codeaurora.org>, Vinod Koul <vkoul@kernel.org>
-Date:   Thu, 02 Dec 2021 16:59:27 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20211203005928.52BEDC00446@smtp.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202112020012.8B4C205@keescook>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Bjorn Andersson (2021-11-23 08:25:08)
-> In the event that the bootloader has configured the Trion PLL as source
-> for the display clocks, e.g. for the continuous splashscreen, then there
-> will also be RCGs that are clocked by this instance.
->=20
-> Reconfiguring, and in particular disabling the output of, the PLL will
-> cause issues for these downstream RCGs and has been shown to prevent
-> them from being re-parented.
->=20
-> Follow downstream and skip configuration if it's determined that the PLL
-> is already running.
->=20
-> Fixes: 59128c20a6a9 ("clk: qcom: clk-alpha-pll: Add support for controlli=
-ng Lucid PLLs")
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
+On Thu, Dec 02, 2021 at 12:14:18AM -0800, Kees Cook wrote:
+> I still wonder if it might be able to use of the "acomp" API
+> instead of calling directly into the specific decompressor.
 
-Applied to clk-fixes
+drivers/base/firmware_loader/main.c also deals with decompression
+of files, so I wonder if something can be shared with that code too?
+
+  Luis

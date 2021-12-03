@@ -2,70 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBEA6467B5A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 680ED467B66
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:31:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353044AbhLCQaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 11:30:17 -0500
-Received: from mga05.intel.com ([192.55.52.43]:2762 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234626AbhLCQaQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 11:30:16 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="323258721"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="323258721"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 08:26:52 -0800
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="678146833"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 08:26:50 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mtBNb-001pDg-LZ;
-        Fri, 03 Dec 2021 18:25:47 +0200
-Date:   Fri, 3 Dec 2021 18:25:47 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?iso-8859-1?Q?P=E9ter?= Ujfalusi <peter.ujfalusi@gmail.com>
-Cc:     Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [PATCH v1 1/2] ASoC: ti: davinci-mcasp: Get rid of duplicate
- of_node assignment
-Message-ID: <YapFC9ksQmGy6llL@smile.fi.intel.com>
-References: <20211202205612.76216-1-andriy.shevchenko@linux.intel.com>
- <1a2831d2-49bb-f1fc-14e8-d6a0d53664cf@gmail.com>
+        id S1357583AbhLCQeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 11:34:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353221AbhLCQeX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 11:34:23 -0500
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CF0C061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 08:30:59 -0800 (PST)
+Received: by mail-ua1-x92d.google.com with SMTP id ay21so6466335uab.12
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 08:30:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fy6nFfjADw6fr8YI8a7lhyf+7ziGDaRPP8bieG/IP5k=;
+        b=U0hdU6lIyPXdwQfpH3O2TsoxFPwgmk/EQR7bf+BguobfjjsTaPzo/xXepEyXbpgBpm
+         0XmdjKHmqxI4pIGbwNnjVVkGY8R3NAwdJARNAWqSDEcv3kHiIeVjmO23yneUZG1BPZQK
+         p+DQ0iLSMVfK15FPrwV6xU7fUziB2e5f21qUpiWXEeosvVDivvAJf6lX6cYnupY6SvMX
+         8D68n2lV3lSdZ72dhYgwV1s21v6RktQrVJ8nLALQD0Yfyt9DvwcsOdX1vmKCpdKGBYuQ
+         aFoum+p9Qc38DaE9qDg5CQ5mJtBwJm2x5zFe5gLBcScxC3hsv+5NA65IxmjQdC8tK9Lk
+         OYxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fy6nFfjADw6fr8YI8a7lhyf+7ziGDaRPP8bieG/IP5k=;
+        b=26SMXrEvL0m4o+bCdHTRmt9H/habChH4GNl1eJXxtgL862wRSMCb3Mba/cTNrxn+1t
+         sT6pbCnHXjMkiTW15b+Le8K1i3qhf8w59sTmJuv7ZCJEnnkLhIWhba0Fx6ZvQlkx/lEN
+         MrgAlGJhdfRab4NFolepd2TW4Bv471mqXlZyyPVjDSLRM+8Y/OohmjpQW/sCHAukm1bJ
+         EATnq/9o59hrpLhFwsLqKgBi8nLxzs7Gtd5+ovTH1kKQMLP8aBSNnLvfftPY5nsqsOiw
+         0uwsi0ZRDjBD4QgH6DOxyWtqNTGMG7VqimHlS4jsoGLx6QbLvFMfbfSgN2hh0do9LUFE
+         LwHQ==
+X-Gm-Message-State: AOAM5306mkQI/Jk9n1u/4l1Zu44AdNU1wv9jE0mG1AwPfnawXZ9WbkI5
+        XS4nPj6yaqoE3Wj9OqJBdxh6Rc88IdY=
+X-Google-Smtp-Source: ABdhPJyDT6bMnJD0P8O4puSN4C9DcK86wDHm6Bi70ZYAhl9a5Cerqpj6scE3Jq4uF+Rhidg/ufys8g==
+X-Received: by 2002:a05:6102:5109:: with SMTP id bm9mr22186989vsb.10.1638549058745;
+        Fri, 03 Dec 2021 08:30:58 -0800 (PST)
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com. [209.85.221.174])
+        by smtp.gmail.com with ESMTPSA id i1sm513048vkn.55.2021.12.03.08.30.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 08:30:57 -0800 (PST)
+Received: by mail-vk1-f174.google.com with SMTP id e27so2205021vkd.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 08:30:57 -0800 (PST)
+X-Received: by 2002:a05:6122:1350:: with SMTP id f16mr24382684vkp.10.1638549057130;
+ Fri, 03 Dec 2021 08:30:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1a2831d2-49bb-f1fc-14e8-d6a0d53664cf@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <cover.1638282789.git.asml.silence@gmail.com> <CA+FuTSf-N08d6pcbie2=zFcQJf3_e2dBJRUZuop4pOhNfSANUA@mail.gmail.com>
+ <0d82f4e2-730f-4888-ec82-2354ffa9c2d8@gmail.com> <CA+FuTSf1dk-ZCN_=oFcYo31XdkLLAaHJHHNfHwJKe01CVq3X+A@mail.gmail.com>
+ <6e07fb0c-075b-4072-273b-f9d55ba1e1dd@gmail.com> <CA+FuTSfe63=SuuZeC=eZPLWstgOL6oFUrsL4o+J8=3BwHJSTVg@mail.gmail.com>
+ <e79a9cf6-b315-d4a5-a4a8-1071b5046c6e@gmail.com>
+In-Reply-To: <e79a9cf6-b315-d4a5-a4a8-1071b5046c6e@gmail.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Fri, 3 Dec 2021 11:30:21 -0500
+X-Gmail-Original-Message-ID: <CA+FuTSeNvG9XCv0a8W0h1vZL+CrVQJnv-Ym57LfS3HnsDjLKSA@mail.gmail.com>
+Message-ID: <CA+FuTSeNvG9XCv0a8W0h1vZL+CrVQJnv-Ym57LfS3HnsDjLKSA@mail.gmail.com>
+Subject: Re: [RFC 00/12] io_uring zerocopy send
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        io-uring@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 04:45:31PM +0200, Péter Ujfalusi wrote:
-> On 02/12/2021 22:56, Andy Shevchenko wrote:
-> > GPIO library does copy the of_node from the parent device of
-> > the GPIO chip, there is no need to repeat this in the individual
-> > drivers. Remove assignment here.
-> 
-> Thanks, looks good,
-> Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+On Fri, Dec 3, 2021 at 11:19 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>
+> On 12/2/21 21:25, Willem de Bruijn wrote:
+> >>> What if the ubuf pool can be found from the sk, and the index in that
+> >>> pool is passed as a cmsg?
+> >>
+> >> It looks to me that ubufs are by nature is something that is not
+> >> tightly bound to a socket (at least for io_uring API in the patchset),
+> >> it'll be pretty ugly:
+> >>
+> >> 1) io_uring'd need to care to register the pool in the socket. Having
+> >> multiple rings using the same socket would be horrible. It may be that
+> >> it doesn't make much sense to send in parallel from multiple rings, but
+> >> a per thread io_uring is a popular solution, and then someone would
+> >> want to pass a socket from one thread to another and we'd need to support
+> >> it.
+> >>
+> >> 2) And io_uring would also need to unregister it, so the pool would
+> >> store a list of sockets where it's used, and so referencing sockets
+> >> and then we need to bind it somehow to io_uring fixed files or
+> >> register all that for tracking referencing circular dependencies.
+> >>
+> >> 3) IIRC, we can't add a cmsg entry from the kernel, right? May be wrong,
+> >> but if so I don't like exposing basically io_uring's referencing through
+> >> cmsg. And it sounds io_uring would need to parse cmsg then.
+> >>
+> >>
+> >> A lot of nuances :) I'd really prefer to pass it on per-request basis,
+> >
+> > Ok
+> >
+> >> it's much cleaner, but still haven't got what's up with msghdr
+> >> initialisation...
+> >
+> > And passing the struct through multiple layers of functions.
+>
+> If you refer to ip_make_skb(ubuf) -> __ip_append_data(ubuf), I agree
+> it's a bit messier, will see what can be done. If you're about
+> msghdr::msg_ubuf, for me it's more like passing a callback,
+> which sounds like a normal thing to do.
 
-Thanks!
+Thanks, I do mean the first.
 
-> > For the details one may look into the of_gpio_dev_init() implementation.
-> 
-> Which works after commit 1df62542e0161.
+Also, small nit now that it comes up again msghdr::msg_ubuf is not
+plain C. I would avoid that pseudo C++ notation (in the subject line
+of 3/12)
+>
+> >> Maybe, it's better to add a flags field, which would include
+> >> "msg_control_is_user : 1" and whether msghdr includes msg_iocb, msg_ubuf,
+> >> and everything else that may be optional. Does it sound sane?
+> >
+> > If sendmsg takes the argument, it will just have to be initialized, I think.
+> >
+> > Other functions are not aware of its existence so it can remain
+> > uninitialized there.
+>
+> Got it, need to double check, but looks something like 1/12 should
+> be as you outlined.
+>
+> And if there will be multiple optional fields that have to be
+> initialised, we would be able to hide all the zeroing under a
+> single bitmask. E.g. instead of
+>
+> msg->field1 = NULL;
+> ...
+> msg->fieldN = NULL;
+>
+> It may look like
+>
+> msg->mask = 0; // HAS_FIELD1 | HAS_FIELDN;
 
-Actually even before that.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Makes sense to me. This patch series only adds one field, so you can
+leave the optimization for a possible future separate patch series?

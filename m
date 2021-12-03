@@ -2,221 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DB2467644
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E8F467650
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380405AbhLCL2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 06:28:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380423AbhLCL2q (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 06:28:46 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C30DC061758
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 03:25:22 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id i12so2059069wmq.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 03:25:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=3RjuwLlrhM4RaugB5EqP8K7MgHWl2y/JDvpsw8Kh3Kw=;
-        b=u9sKOqg0RFOM8iEFk5rD0bJttsvjSiLECk8MJ6OqCT+4RDfTQ8BEXuGmr6T6DIv9rG
-         EPOIdbNCga0jxADLP2Kmjok3kywdVdeEIxa7ixv/fhnf+ZYVWBGtFSxGlImyRyVZMpps
-         22wFeafTo7+Lm6cQVWCgAFg3zy2+dU+BQu+WK9N219MT0u1R6fzhV2QUXNv3bwDXkoDl
-         eJbS+OcnTXNQh/N4qCpOZsOy0bk3bFiFQdxjyb7Tufy0EaiSPZcDL482wNAmNMYClb09
-         EQiNFmsFxZ0YKegbeMu8XRouHWvAeqJ8iL6sti0e2VhBrSY0mJhE7edTi5xjnmiO5h93
-         r9XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=3RjuwLlrhM4RaugB5EqP8K7MgHWl2y/JDvpsw8Kh3Kw=;
-        b=QiqtpQULhl4r1S635USRfjTDEb697qCIMxINqZl9PeFMhmUN7LmLDLeaEEIWO2raUF
-         rEE2cTNEy4ouuhVnHRwneUuXbqd9VGMKRWxVA1GnDYvw9IeD1KTQYN/GY7hkPSB8OLK/
-         6CZxNIdeImSwAg57sXVGDQoX1YgTsuhCurYMrOwThiYN/EaLSWqeSrMMYgcYsIIEOa6M
-         /EsmxRPJzh1ZUpVITkAzcUwElnPck/NV9gwyn5ueoXd3VAL9UH3xRwHi5S6vlys/Dluc
-         rIDUD7hirb9ieQvCa59ysOz3sKBMuCx/jEUSszB4UHwDb/VpAeYIhV0osEs/9NEFeFo+
-         uWrA==
-X-Gm-Message-State: AOAM5336xfTRdR1qKp1kcMD2dI8xL4+0OyOZgMDn8dOsPLIMhTZAeVu1
-        AeK35jzEPazhZ6d9W1eAM3UPjMB3gXZVaA==
-X-Google-Smtp-Source: ABdhPJz+cGHOxy5Mt0/jQV/UOWaSpy9XrPsrHUAMDW7DVVzwmjio8rNtLAaEoel4rwUawHO2LQoEwQ==
-X-Received: by 2002:a05:600c:4308:: with SMTP id p8mr13873064wme.132.1638530720576;
-        Fri, 03 Dec 2021 03:25:20 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id c10sm2525955wrb.81.2021.12.03.03.25.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 03:25:20 -0800 (PST)
-Date:   Fri, 3 Dec 2021 11:25:18 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Cc:     Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/1] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset
- or zero
-Message-ID: <Yan+nvfyS21z7ZUw@google.com>
-References: <20211202143437.1411410-1-lee.jones@linaro.org>
- <20211202175134.5b463e18@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <87o85yj81l.fsf@miraculix.mork.no>
+        id S1380446AbhLCL35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 06:29:57 -0500
+Received: from mga09.intel.com ([134.134.136.24]:30453 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243703AbhLCL3e (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 06:29:34 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="236770703"
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="236770703"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 03:26:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="501155930"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 03 Dec 2021 03:26:08 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mt6hb-000HVv-HU; Fri, 03 Dec 2021 11:26:07 +0000
+Date:   Fri, 3 Dec 2021 19:25:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [peterz-queue:x86/wip.ibt 9/15] arch/x86/include/asm/ibt.h:19:15:
+ error: unknown type name 'bool'
+Message-ID: <202112031911.oFNVAdph-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87o85yj81l.fsf@miraculix.mork.no>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 03 Dec 2021, Bjørn Mork wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
+head:   80bc7f2a129848b0885cf214fda77f623ba2f5f9
+commit: 2d27d6fd4034bc446885ee6bd234df59e2b11cdb [9/15] x86/linkage: Add ENDBR to SYM_FUNC_START*()
+config: x86_64-randconfig-r003-20211203 (https://download.01.org/0day-ci/archive/20211203/202112031911.oFNVAdph-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=2d27d6fd4034bc446885ee6bd234df59e2b11cdb
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue x86/wip.ibt
+        git checkout 2d27d6fd4034bc446885ee6bd234df59e2b11cdb
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-> Hello Lee!
-> 
-> Jakub Kicinski <kuba@kernel.org> writes:
-> 
-> > On Thu,  2 Dec 2021 14:34:37 +0000 Lee Jones wrote:
-> >> Currently, due to the sequential use of min_t() and clamp_t() macros,
-> >> in cdc_ncm_check_tx_max(), if dwNtbOutMaxSize is not set, the logic
-> >> sets tx_max to 0.  This is then used to allocate the data area of the
-> >> SKB requested later in cdc_ncm_fill_tx_frame().
-> >> 
-> >> This does not cause an issue presently because when memory is
-> >> allocated during initialisation phase of SKB creation, more memory
-> >> (512b) is allocated than is required for the SKB headers alone (320b),
-> >> leaving some space (512b - 320b = 192b) for CDC data (172b).
-> >> 
-> >> However, if more elements (for example 3 x u64 = [24b]) were added to
-> >> one of the SKB header structs, say 'struct skb_shared_info',
-> >> increasing its original size (320b [320b aligned]) to something larger
-> >> (344b [384b aligned]), then suddenly the CDC data (172b) no longer
-> >> fits in the spare SKB data area (512b - 384b = 128b).
-> >> 
-> >> Consequently the SKB bounds checking semantics fails and panics:
-> >> 
-> >>   skbuff: skb_over_panic: text:ffffffff830a5b5f len:184 put:172   \
-> >>      head:ffff888119227c00 data:ffff888119227c00 tail:0xb8 end:0x80 dev:<NULL>
-> >> 
-> >>   ------------[ cut here ]------------
-> >>   kernel BUG at net/core/skbuff.c:110!
-> >>   RIP: 0010:skb_panic+0x14f/0x160 net/core/skbuff.c:106
-> >>   <snip>
-> >>   Call Trace:
-> >>    <IRQ>
-> >>    skb_over_panic+0x2c/0x30 net/core/skbuff.c:115
-> >>    skb_put+0x205/0x210 net/core/skbuff.c:1877
-> >>    skb_put_zero include/linux/skbuff.h:2270 [inline]
-> >>    cdc_ncm_ndp16 drivers/net/usb/cdc_ncm.c:1116 [inline]
-> >>    cdc_ncm_fill_tx_frame+0x127f/0x3d50 drivers/net/usb/cdc_ncm.c:1293
-> >>    cdc_ncm_tx_fixup+0x98/0xf0 drivers/net/usb/cdc_ncm.c:1514
-> >> 
-> >> By overriding the max value with the default CDC_NCM_NTB_MAX_SIZE_TX
-> >> when not offered through the system provided params, we ensure enough
-> >> data space is allocated to handle the CDC data, meaning no crash will
-> >> occur.
-> 
-> Just out of curiouslity: Is this a real device, or was this the result
-> of fuzzing around?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This is the result of "fuzzing around" on qemu. :)
+Note: the peterz-queue/x86/wip.ibt HEAD 80bc7f2a129848b0885cf214fda77f623ba2f5f9 builds fine.
+      It only hurts bisectability.
 
-https://syzkaller.appspot.com/bug?extid=2c9b6751e87ab8706cb3
+All errors (new ones prefixed by >>):
 
-> Not that it matters - it's obviously a bug to fix in any case.  Good catch!
-> 
-> (We probably have many more of the same, assuming the device presents
-> semi-sane values in the NCM parameter struct)
-> 
-> >> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-> >> index 24753a4da7e60..e303b522efb50 100644
-> >> --- a/drivers/net/usb/cdc_ncm.c
-> >> +++ b/drivers/net/usb/cdc_ncm.c
-> >> @@ -181,6 +181,8 @@ static u32 cdc_ncm_check_tx_max(struct usbnet *dev, u32 new_tx)
-> >>  		min = ctx->max_datagram_size + ctx->max_ndp_size + sizeof(struct usb_cdc_ncm_nth32);
-> >>  
-> >>  	max = min_t(u32, CDC_NCM_NTB_MAX_SIZE_TX, le32_to_cpu(ctx->ncm_parm.dwNtbOutMaxSize));
-> >> +	if (max == 0)
-> >> +		max = CDC_NCM_NTB_MAX_SIZE_TX; /* dwNtbOutMaxSize not set */
-> >>  
-> >>  	/* some devices set dwNtbOutMaxSize too low for the above default */
-> >>  	min = min(min, max);
-> 
-> It's been a while since I looked at this, so excuse me if I read it
-> wrongly.  But I think we need to catch more illegal/impossible values
-> than just zero here?  Any buffer size which cannot hold a single
-> datagram is pointless.
-> 
-> Trying to figure out what I possible meant to do with that
-> 
->  	min = min(min, max);
-> 
-> I don't think it makes any sense?  Does it?  The "min" value we've
-> carefully calculated allow one max sized datagram and headers. I don't
-> think we should ever continue with a smaller buffer than that
+   In file included from arch/x86/include/asm/linkage.h:7,
+                    from include/linux/instruction_pointer.h:5,
+                    from include/linux/bottom_half.h:5,
+                    from net/ipv4/tcp_ipv4.c:50:
+>> arch/x86/include/asm/ibt.h:19:15: error: unknown type name 'bool'
+      19 | static inline bool is_endbr(const void *addr)
+         |               ^~~~
 
-I was more confused with the comment you added to that code:
 
-   /* some devices set dwNtbOutMaxSize too low for the above default */
-   min = min(min, max);
+vim +/bool +19 arch/x86/include/asm/ibt.h
 
-... which looks as though it should solve the issue of an inadequate
-dwNtbOutMaxSize, but it almost does the opposite.  I initially
-changed this segment to use the max() macro instead, but the
-subsequent clamp_t() macro simply chooses 'max' (0) value over the now
-sane 'min' one.
+7446adeec86172 Peter Zijlstra 2021-11-22  14  
+7446adeec86172 Peter Zijlstra 2021-11-22  15  /*
+7446adeec86172 Peter Zijlstra 2021-11-22  16   * A bit convoluted, but matches both endbr32 and endbr64 without
+7446adeec86172 Peter Zijlstra 2021-11-22  17   * having either as literal in the text.
+7446adeec86172 Peter Zijlstra 2021-11-22  18   */
+7446adeec86172 Peter Zijlstra 2021-11-22 @19  static inline bool is_endbr(const void *addr)
+7446adeec86172 Peter Zijlstra 2021-11-22  20  {
+7446adeec86172 Peter Zijlstra 2021-11-22  21  	unsigned int val = ~*(unsigned int *)addr;
+7446adeec86172 Peter Zijlstra 2021-11-22  22  	val |= 0x01000000U;
+7446adeec86172 Peter Zijlstra 2021-11-22  23  	return val == ~0xfa1e0ff3;
+7446adeec86172 Peter Zijlstra 2021-11-22  24  }
+7446adeec86172 Peter Zijlstra 2021-11-22  25  
 
-Which is why I chose 
-> Or are there cases where this is valid?
+:::::: The code at line 19 was first introduced by commit
+:::::: 7446adeec8617255600933e8da5e7daf20eb2263 x86: Base IBT bits
 
-I'm not an expert on the SKB code, but in my simple view of the world,
-if you wish to use a buffer for any amount of data, you should
-allocate space for it.
+:::::: TO: Peter Zijlstra <peterz@infradead.org>
+:::::: CC: Peter Zijlstra <peterz@infradead.org>
 
-> So that really should haven been catching this bug with a
-> 
->   max = max(min, max)
-
-I tried this.  It didn't work either.
-
-See the subsequent clamp_t() call a few lines down.
-
-> or maybe more readable
-> 
->   if (max < min)
->      max = min
-> 
-> What do you think?
-
-So the data that is added to the SKB is ctx->max_ndp_size, which is
-allocated in cdc_ncm_init().  The code that does it looks like:
-
-   if (ctx->is_ndp16)                                                                                         
-        ctx->max_ndp_size = sizeof(struct usb_cdc_ncm_ndp16) +
-	                    (ctx->tx_max_datagrams + 1) *
-			    sizeof(struct usb_cdc_ncm_dpe16);                                                                                               
-    else                                                                                                       
-        ctx->max_ndp_size = sizeof(struct usb_cdc_ncm_ndp32) +
-	                    (ctx->tx_max_datagrams + 1) *
-			    sizeof(struct usb_cdc_ncm_dpe32);  
-
-So this should be the size of the allocation too, right?
-
-Why would the platform ever need to over-ride this?  The platform
-can't make the data area smaller since there won't be enough room.  It
-could perhaps make it bigger, but the min_t() and clamp_t() macros
-will end up choosing the above allocation anyway.
-
-This leaves me feeling a little perplexed.
-
-If there isn't a good reason for over-riding then I could simplify
-cdc_ncm_check_tx_max() greatly.
-
-What do *you* think? :)
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,103 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1FE74675CD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C56C4675D2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380244AbhLCLB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 06:01:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
+        id S243867AbhLCLEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 06:04:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237898AbhLCLBY (ORCPT
+        with ESMTP id S232427AbhLCLD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 06:01:24 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9501C06173E
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 02:58:00 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id l25so9721718eda.11
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 02:58:00 -0800 (PST)
+        Fri, 3 Dec 2021 06:03:59 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70C9C06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 03:00:35 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id w1so9891042edc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 03:00:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dL9Doftx7SsrphxuZsOqQd7wOm1YbbJk8+5XQsZLlm0=;
-        b=eN8F4WnbbKtSgAFI7LGmb78vOkq7F4X85cb6co9pialUAR0d6/bogCs6k9V1C00cCb
-         VcjZ+BMUBwZuy8ga0DF0XShJKY60R6h5kMhE/yokynDDT2vYa+xs1DjOit10zciPrGsB
-         ZslnfT/WjLXG04OJ4jdMbSS3l6OyhXLIhaGDg=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Atm6kUPFrjqhMfEA8vYU4uHaSeCYZZiREgM4UQPf+EQ=;
+        b=hYkDrQLefu5ul0S+UrYKK2S0d/yanoklGeTN/ksbQrEabnQMTFNe4SYDlw3uRFyoKR
+         dt9GOWzBwdfzOzupKGmZ9B4DQlL/P21QJiLlvHM7hBrnWoPQQTYcZ59KP6nn5Uvxe+av
+         Dquyh4msZ7751ixJwR0ZiJS7AeI4zeUSFVIYWjDe8sDOj1bJRS+xPNlOlTmALpSZmy+H
+         88U4BWhP2c0r5FpMNfC1MtVgi+ir47luWjaayL1fLsfrufPjEt/tWVW44seBp1I9W/Hs
+         SNE4gfUmlll7GGZxSMBwvKap8AvTt527rek7blPInh0ZCO2Y+CKGo5g56QaUIM20DWc6
+         gcaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dL9Doftx7SsrphxuZsOqQd7wOm1YbbJk8+5XQsZLlm0=;
-        b=OQa0PxCw6LBM6Ov2ghfQ0F4F9HfKQq2M/r0PABgouj9RVWiiNg4rVikmcKBUgLKSXQ
-         tt3QEzsvy3I/+BHLiknycc+9TVro6875l3mExOZ3G/v24pEZrVECTeK15z65aLV2QZys
-         n4kQW7N+RDtX11WdXod6NIRcaScZT1m+X5Nwb0RKTa5ooAp4PIeL1xZSpk7n+wE5LYtK
-         KzopaJ/FFAUiLNrj47uKMfEDUq58aUsoWDLhI5I60jeVzbVHQDXn8ZdNmRDkmWVZ0Ar8
-         XMQCtN6iGyB7uIGwcLYKykWhsyFaO33qHZcLRbPfUsXr8nyK5Ireq0tQp49nGYaGrwH6
-         vwjg==
-X-Gm-Message-State: AOAM533hCPNKIiBSGb2PHVYBNS0k+O8BagjdhaQoNc72gdw5Iz5Y25uf
-        2yXDr2MAN7Y23vekeunP1j9Z7g==
-X-Google-Smtp-Source: ABdhPJyqC23S2y/KFhAVAGoa8zFNPaGUHEiQ0LFXx450o6VcXoNIld07YR+hpDXDIig7z/GjDAcg2Q==
-X-Received: by 2002:a17:907:86a6:: with SMTP id qa38mr21673773ejc.286.1638529079375;
-        Fri, 03 Dec 2021 02:57:59 -0800 (PST)
-Received: from alco.corp.google.com ([100.104.168.197])
-        by smtp.gmail.com with ESMTPSA id ar2sm1699775ejc.20.2021.12.03.02.57.58
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Atm6kUPFrjqhMfEA8vYU4uHaSeCYZZiREgM4UQPf+EQ=;
+        b=qokdRZ/Fi/hmKc4S8O44korJO3nLv5aYFyUe2o+Szqu6hvkej2f+GId9rf3ih5uLHX
+         R9VYSm1cuKUBtaGWGyZ+4oSt6INf1xa4/dYVupPrlZ6qYgqrx2oWFbIdeBhOcWN8KAYI
+         VY01FOBQuaC7PoqhKlg6cK0y4TRZWNnorKWtDZ2287aLi+aIMsNG/mdcP+0PvCiQ1mba
+         +6cIJTQEdN2Kxrk1gedDq9Y/2UOzhih/wTOGMpOQqJFNnwn6zrqVQZwx2Uw6989YP12Z
+         kn1zjUSzi9aUUzm7OJNcs0TjErxHmBFa12Mc4vtGuCMoT++jzgaI4vDYhPKPFryWy2bx
+         N7qg==
+X-Gm-Message-State: AOAM531WcL7Q/xf7WcAExzk4Usfuvqm0Hitb+V28voGab0ITiMNVZz8P
+        U7B6QzRV1QXKezi4L65xn+4=
+X-Google-Smtp-Source: ABdhPJzusLijj9H2edDfF5wbJaBKimd55M/CoHJ3VeCm3kuAFVE19JbVcaFcGUaDEZYSltN+3j9HTA==
+X-Received: by 2002:aa7:d652:: with SMTP id v18mr25392679edr.68.1638529233931;
+        Fri, 03 Dec 2021 03:00:33 -0800 (PST)
+Received: from localhost.localdomain (host-95-239-199-20.retail.telecomitalia.it. [95.239.199.20])
+        by smtp.gmail.com with ESMTPSA id jg32sm2000794ejc.43.2021.12.03.03.00.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 02:57:59 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>
-Subject: [PATCH] media: uvcvideo: Fix handling on Bitmask controls
-Date:   Fri,  3 Dec 2021 11:57:40 +0100
-Message-Id: <20211203105740.1084689-1-ribalda@chromium.org>
-X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
+        Fri, 03 Dec 2021 03:00:33 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Hurley <peter@hurleysoftware.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] tty: vt: make do_con_write() no-op if IRQ is disabled
+Date:   Fri, 03 Dec 2021 12:00:11 +0100
+Message-ID: <3017492.JFOoIcAZ2s@localhost.localdomain>
+In-Reply-To: <CAHk-=wiXNJ86W=gwAHH1qd+cE9dmfk_dEKFmNa89XH19NhPNkg@mail.gmail.com>
+References: <20211116144937.19035-1-fmdefrancesco@gmail.com> <86452127-70e8-c0cf-de18-6f98e77849a6@i-love.sakura.ne.jp> <CAHk-=wiXNJ86W=gwAHH1qd+cE9dmfk_dEKFmNa89XH19NhPNkg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Minimum and step values for V4L2_CTRL_TYPE_BITMASK controls should be 0.
-There is no need to query the camera firmware about this and maybe get
-invalid results.
+On Thursday, December 2, 2021 7:35:16 PM CET Linus Torvalds wrote:
+> On Thu, Dec 2, 2021 at 7:41 AM Tetsuo Handa
+> <penguin-kernel@i-love.sakura.ne.jp> wrote:
+> >
+> > > Looking at the backtrace, I see
+> > >
+> > >    n_hdlc_send_frames+0x24b/0x490 drivers/tty/n_hdlc.c:290
+> > >    tty_wakeup+0xe1/0x120 drivers/tty/tty_io.c:534
+> > >    __start_tty drivers/tty/tty_io.c:806 [inline]
+> > >    __start_tty+0xfb/0x130 drivers/tty/tty_io.c:799
+> > >
+> > > and apparently it's that hdlc line discipline (and
+> > > n_hdlc_send_frames() in particular) that is the problem here.
+> > >
+> > > I think that's where the fix should be.
+> >
+> > Do you mean that we should change the behavior of n_hdlc_send_frames()
+> > rather than trying to make __start_tty() schedulable again?
+> 
+> I wouldn't change n_hdlc_send_frames() itself. It does what it says it does.
+> 
+> But n_hdlc_tty_wakeup() probably shouldn't call it directly. Other tty
+> line disciplines don't do that kind of thing - although I only looked
+> at a couple. They all seem to just set bits and prepare things. Like a
+> wakeup function should do.
+> 
+> So I think n_hdlc_tty_wakeup() should perhaps only do a
+> "schedule_work()" or similar to get that n_hdlc_send_frames() started,
+> rather than doing it itself.
+> 
+> Example: net/nfc/nci/uart.c. It does that
+> 
+>         schedule_work(&nu->write_work);
+> 
+> instead of actually trying to do a write from a wakeup routine
+> (similar examples in ppp - "tasklet_schedule(&ap->tsk)" etc).
+> 
+> I mean, it's called "wakeup", not "write". So I think the fundamental
+> confusion here is in hdlc, not the tty layer.
+> 
+>               Linus
+> 
+This is what I understand from the above argument: do a schedule_work() to get 
+that n_hdlc_send_frames() started; in this way, n_hdlc_tty_wakeup() can
+return to the caller and n_hdlc_send_frames() is executed asynchronously 
+(i.e., no longer in an atomic context). 
 
-Fixes v4l2-compliane:
-Control ioctls (Input 0):
-                fail: v4l2-test-controls.cpp(97): minimum must be 0 for a bitmask control
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: FAIL
+I hope that I'm not missing something. If the above summary is correct, 
+please forgive a newbie for the following questions... 
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- drivers/media/usb/uvc/uvc_ctrl.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Commit f9e053dcfc02 ("tty: Serialize tty flow control changes with flow_lock") 
+has introduced spinlocks to serialize flow control changes and avoid the 
+concurrent executions of __start_tty() and __stop_tty().
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index b4f6edf968bc..d478cfbad5bb 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -1156,7 +1156,8 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
- 		break;
- 	}
- 
--	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MIN)
-+	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_MIN &&
-+	    mapping->v4l2_type != V4L2_CTRL_TYPE_BITMASK)
- 		v4l2_ctrl->minimum = mapping->get(mapping, UVC_GET_MIN,
- 				     uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MIN));
- 
-@@ -1164,7 +1165,8 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
- 		v4l2_ctrl->maximum = mapping->get(mapping, UVC_GET_MAX,
- 				     uvc_ctrl_data(ctrl, UVC_CTRL_DATA_MAX));
- 
--	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES)
-+	if (ctrl->info.flags & UVC_CTRL_FLAG_GET_RES &&
-+	    mapping->v4l2_type != V4L2_CTRL_TYPE_BITMASK)
- 		v4l2_ctrl->step = mapping->get(mapping, UVC_GET_RES,
- 				  uvc_ctrl_data(ctrl, UVC_CTRL_DATA_RES));
- 
--- 
-2.34.1.400.ga245620fadb-goog
+This is an excerpt from the above-mentioned commit:
+
+->
+    Introduce tty->flow_lock spinlock to serialize tty flow control changes.
+    Split out unlocked __start_tty()/__stop_tty() flavors for use by
+    ioctl(TCXONC) in follow-on patch.
+<-
+
+This is the reason why we are dealing with this bug. Currently we have __start_tty() 
+called with an acquired spinlock and IRQs disabled and the calls chain leads to 
+console_lock() while in atomic context.
+
+In summation, my questions are... 
+
+1) Why do we still need to protect __start_tty() and __stop_tty() with spin_lock_irq() 
+if the solution to the bug is to execute n_hdlc_send_frames() asynchronously?
+
+2) If it is true that we need to avoid concurrent executions of __start_tty() and 
+__stop_tty(), can we just use a Mutex in the IOCTL's helper?
+
+Thanks,
+
+Fabio M. De Francesco
+
 

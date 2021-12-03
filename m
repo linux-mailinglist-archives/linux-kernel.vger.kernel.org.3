@@ -2,81 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FDCE4676BA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5756D4676BB
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380555AbhLCLxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 06:53:37 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35414 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231944AbhLCLxg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 06:53:36 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        id S1380568AbhLCLyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 06:54:32 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:48534 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231944AbhLCLyb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 06:54:31 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77879B825B7;
-        Fri,  3 Dec 2021 11:50:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0CBB9C53FCB;
-        Fri,  3 Dec 2021 11:50:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638532210;
-        bh=nz1rdy8mTg+6h44HhRn77M8064IfHx4IJ0EH7ACo3zc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=D3Aa0f5NDP/obRqGxWrChpkcOw3pT7MyCABvZqWfjMqvshretW5FJb/QJzZ5NCZ01
-         bOEDUtdF9z2niz6nsInvEkugtByfLU+A37avqx2XYU3oGW/CSU4sByX4XTFHx4TIui
-         3oveAAYTJEQDAVBfes3MM03uF5p4h/0FS0FXr4bNzMDNmY70vnIoPfsPUlHnnwsxLr
-         y0VNjCZ27rG8YM31pzMau/vV+GoVUdrMvteewjvQEnMQ4svRPDoF37L/o1yQfjXVXF
-         8C/4zR8UDOTtA7/CRwzBYvCmSJXtm30t/jbb4gbdPilNuUzdAACGJIq96fR4NyRx1x
-         HNalByG6p9mMw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E8D0E60A5A;
-        Fri,  3 Dec 2021 11:50:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7CBBA1EC0570;
+        Fri,  3 Dec 2021 12:51:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1638532262;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=zPDfAsiEDZYwc7di78bVJXliTS+tIc4om0YLnQEcosY=;
+        b=GuB3HfWhO3KTpiED8bs6HFOYE/kdCXYNV0IAIa/GgJGxBvLy1XPoI22vX8/cYehGvRjAUp
+        s/zfjijqvepEcu/ulBjJsbTarW1ueD0/AsvqcqNqAxU4WgGHqWoOLQzIojvj65GV76RGR1
+        zq8oLTxaNuCLOS4bNnGvS1ovg32HK7M=
+Date:   Fri, 3 Dec 2021 12:51:06 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, dave.hansen@linux.intel.com,
+        hpa@zytor.com, chang.seok.bae@intel.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 00/10] x86: Allocate AVX512 xstate ondemand
+Message-ID: <YaoEqpNkuAqSlPaq@zn.tnic>
+References: <20211203003636.11417-1-jiaxun.yang@flygoat.com>
+ <822ced92-f165-3c5a-e0bf-dafa6f808b76@intel.com>
+ <27b6387f-fa93-484e-a56e-12452a82f069@www.fastmail.com>
+ <d7be6ef4-f73e-923e-93b7-ef254bf347c0@intel.com>
+ <e249390b-6f87-47f6-8676-fa727b2fa932@www.fastmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 1/3] selftests/tc-testing: add exit code
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163853220994.27545.12950451952422618579.git-patchwork-notify@kernel.org>
-Date:   Fri, 03 Dec 2021 11:50:09 +0000
-References: <20211203025323.6052-1-zhijianx.li@intel.com>
-In-Reply-To: <20211203025323.6052-1-zhijianx.li@intel.com>
-To:     Li Zhijian <zhijianx.li@intel.com>
-Cc:     kuba@kernel.org, jhs@mojatatu.com, xiyou.wangcong@gmail.com,
-        jiri@resnulli.us, shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lizhijian@cn.fujitsu.com, philip.li@intel.com, lkp@intel.com,
-        dcaratti@redhat.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e249390b-6f87-47f6-8676-fa727b2fa932@www.fastmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Fri, Dec 03, 2021 at 11:42:10AM +0000, Jiaxun Yang wrote:
+> If it's improper I'll drop the statement in commit message :-)
 
-This series was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+Actually you should answer his question about what happens if you clear
+those two bits in that MSR.
 
-On Fri,  3 Dec 2021 10:53:21 +0800 you wrote:
-> Mark the summary result as FAIL to prevent from confusing the selftest
-> framework if some of them are failed.
-> 
-> Previously, the selftest framework always treats it as *ok* even though
-> some of them are failed actually. That's because the script tdc.sh always
-> return 0.
-> 
-> [...]
-
-Here is the summary with links:
-  - [v3,1/3] selftests/tc-testing: add exit code
-    https://git.kernel.org/netdev/net/c/96f389678015
-  - [v3,2/3] selftests/tc-testing: add missing config
-    https://git.kernel.org/netdev/net/c/a8c9505c53c5
-  - [v3,3/3] selftests/tc-testing: Fix cannot create /sys/bus/netdevsim/new_device: Directory nonexistent
-    https://git.kernel.org/netdev/net/c/db925bca33a9
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Regards/Gruss,
+    Boris.
 
-
+https://people.kernel.org/tglx/notes-about-netiquette

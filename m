@@ -2,95 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 754C1467DB6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:01:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98FBB467DD5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:10:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353058AbhLCTFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 14:05:09 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:43312 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243519AbhLCTFF (ORCPT
+        id S1353336AbhLCTOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 14:14:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344093AbhLCTOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 14:05:05 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 26EE5CE281E;
-        Fri,  3 Dec 2021 19:01:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD4BEC53FCD;
-        Fri,  3 Dec 2021 19:01:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638558098;
-        bh=qhIqzvUuq7x/CDXgiR+YK9vTB/venL5eiKQkZSnYM4E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kJl9sArEjy2oeAV/PGgVpQ3PDQ+MwLOFnwS7uw4wDcqY3Hh6JtR5ePUyFPFKyK/hK
-         NrWpZPI0ZVW4tDRhAEHxkrHCS2lGSYWCjUuTlM+Qmqwim1DJZonDHcRxet9UneTfMD
-         +hEBNlRQeBDkF6k6Aw27kZcE9XtMkU7yesmVjWAotAetOxVEQfGv8X6UASWdobEuf5
-         pSDHa2r2J1H5HtUAvz6yi2+/ARXYlv3I/FpHQGmlppquQ2vom7H5hreE3XSSIiRCYY
-         0a9f5XT9sqGZM8MJz9eu+xyqa/NpX/j2eqxuEPz3mv5o5FpjMNrK0MV6K/DLlksSKO
-         F+6e+1TXVx0wg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Hao Li <lihao2018.fnst@cn.fujitsu.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] fs/dcache: avoid unused-function warning
-Date:   Fri,  3 Dec 2021 20:01:02 +0100
-Message-Id: <20211203190123.874239-2-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20211203190123.874239-1-arnd@kernel.org>
-References: <20211203190123.874239-1-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Fri, 3 Dec 2021 14:14:06 -0500
+X-Greylist: delayed 476 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Dec 2021 11:10:41 PST
+Received: from gimli.kloenk.dev (gimli.kloenk.dev [IPv6:2a0f:4ac0:0:1::cb2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938B2C061751;
+        Fri,  3 Dec 2021 11:10:41 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kloenk.dev; s=mail;
+        t=1638558160; bh=PJHqZmjT3PnRyKxLBEa+PZQKrzNlbhOqvNAuE9mhDOs=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To;
+        b=sOLaR4R9vIPwFEJjSjtLPLGE25SIm7tqOMgaCmB5kmfT2OQ1gWqqgwEsrHjMmq8+1
+         bXt9cR2IsJW2958D4HkPWNhazRQF+TZlQ+fByCzP0QSC7oUjGGHfJzW5PJQVfC3hFM
+         /UnHs9ApwCgX1ACoQED5yqWoZ4cHHnC+uuTVp4dk=
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.20.0.1.32\))
+Subject: Re: [PATCH] nl80211: use correct enum type in reg_reload_regdb
+From:   Finn Behrens <me@kloenk.dev>
+In-Reply-To: <20211203185700.756121-1-arnd@kernel.org>
+Date:   Fri, 3 Dec 2021 20:02:38 +0100
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Ilan Peer <ilan.peer@intel.com>,
+        Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+        Sriram R <srirrama@codeaurora.org>,
+        Qiheng Lin <linqiheng@huawei.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E95BFD18-CB51-4CA5-A6A8-370444F9E714@kloenk.dev>
+References: <20211203185700.756121-1-arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
 
-Now that 'dentry_stat' is marked 'static', we can run into this warning:
 
-fs/dcache.c:128:29: error: 'dentry_stat' defined but not used [-Werror=unused-variable]
-  128 | static struct dentry_stat_t dentry_stat = {
+> On 3. Dec 2021, at 19:56, Arnd Bergmann <arnd@kernel.org> wrote:
+>=20
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> NL80211_USER_REG_HINT_USER is not something that can be
+> assigned to an 'enum nl80211_reg_initiator', as pointed out
+> by gcc.
+>=20
+> net/wireless/reg.c: In function 'reg_reload_regdb':
+> net/wireless/reg.c:1137:28: error: implicit conversion from 'enum =
+nl80211_user_reg_hint_type' to 'enum nl80211_reg_initiator' =
+[-Werror=3Denum-conversion]
+>=20
+> I don't know what was intended here, most likely it was either
+> NL80211_REGDOM_SET_BY_CORE (same numeric value) or
+> NL80211_REGDOM_SET_BY_USER (most similar name), so I pick the former
+> here, leaving the behavior unchanged while avoiding the warning.
+>=20
+> Fixes: 1eda919126b4 ("nl80211: reset regdom when reloading regdb")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
 
-Hide it in the same #ifdef as its only references.
+Thanks,
+I did miss it somehow, but after Intels robot mail about it, I did write =
+a proper patch, as this is a different value as I wanted for the =
+original proposed patch. But It works better this way.
+See =
+https://lore.kernel.org/linux-wireless/YadvTolO8rQcNCd%2F@gimli.kloenk.dev=
+/
 
-Fixes: f0eea17ca8da ("fs: move dcache sysctls to its own file")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- fs/dcache.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+Cheers,
+Finn
 
-diff --git a/fs/dcache.c b/fs/dcache.c
-index 0eef1102f460..c84269c6e8bf 100644
---- a/fs/dcache.c
-+++ b/fs/dcache.c
-@@ -124,16 +124,15 @@ struct dentry_stat_t {
- 	long dummy;		/* Reserved for future use */
- };
- 
--/* Statistics gathering. */
--static struct dentry_stat_t dentry_stat = {
--	.age_limit = 45,
--};
--
- static DEFINE_PER_CPU(long, nr_dentry);
- static DEFINE_PER_CPU(long, nr_dentry_unused);
- static DEFINE_PER_CPU(long, nr_dentry_negative);
- 
- #if defined(CONFIG_SYSCTL) && defined(CONFIG_PROC_FS)
-+/* Statistics gathering. */
-+static struct dentry_stat_t dentry_stat = {
-+	.age_limit = 45,
-+};
- 
- /*
-  * Here we resort to our own counters instead of using generic per-cpu counters
--- 
-2.29.2
+> net/wireless/reg.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/net/wireless/reg.c b/net/wireless/reg.c
+> index 61f1bf1bc4a7..edb2081f75e8 100644
+> --- a/net/wireless/reg.c
+> +++ b/net/wireless/reg.c
+> @@ -1134,7 +1134,7 @@ int reg_reload_regdb(void)
+> 	request->wiphy_idx =3D WIPHY_IDX_INVALID;
+> 	request->alpha2[0] =3D current_regdomain->alpha2[0];
+> 	request->alpha2[1] =3D current_regdomain->alpha2[1];
+> -	request->initiator =3D NL80211_USER_REG_HINT_USER;
+> +	request->initiator =3D NL80211_REGDOM_SET_BY_CORE;
+> 	request->user_reg_hint_type =3D NL80211_USER_REG_HINT_USER;
+> 	request->reload =3D true;
+>=20
+> --=20
+> 2.29.2
+>=20
 

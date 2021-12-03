@@ -2,107 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A55467354
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 562C9467356
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351270AbhLCImN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 03:42:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239222AbhLCImK (ORCPT
+        id S1379233AbhLCIml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:42:41 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:43661 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239222AbhLCImk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 03:42:10 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67C1C06173E
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 00:38:46 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id y13so8315293edd.13
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 00:38:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/hxTqolfOQ3FDOOsyAsOMku4CKIQ1N9vFZMGfezW3TA=;
-        b=c5bJ1hfl8GDQNHIng0EDrHR05UK+6cbZSllOIjLNHpqkONHfwp3OH19iBbhYzw73xY
-         WFMDH6Y/zHKg1yeIkfGVrIcsxBd8+Ag82nMxvTvgOL0maXpMdDAtMC42n1XVkiyS7qN6
-         gT/9gNZD4fI/dNK6Dcyvgt/NEsoFeHoOPpqp915DZRiniQRngAi0xKFtrB2Waqsi60MT
-         UXn3p5bAex5kW+pV3DGhT3WNwaGsA8eA/MNKy5+x4Z9suS2qolwplgouDYRhleJp+Msu
-         M+9WXwcXGZN5zmCOcoydZjy7heq6PrdetXb+932jUSg66GnjvSK/hQqhynsvkW2BXYl+
-         Iqhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/hxTqolfOQ3FDOOsyAsOMku4CKIQ1N9vFZMGfezW3TA=;
-        b=kbpe03XIxgQeIOPy+tQ7VEJQGyKZd2GSk3NepUQqfy4QobqJTLS6X8dqtrmjm1hKHS
-         +kOyGnIJ73fc8bk0M/mIayNMMTcxMW5Y/hBoe+B45pi2ACm+wC3aaqqUg1/B0vAExNOq
-         k7tmPvMhAbePqkuZEdC+TBnY99mEgmHnU2OjsGYFFmBp+mIhpyT06BxCMxq3J5h5Bwq8
-         x0y3GnqqcWm4iJXbZKFrZWz4wj6UlDk0iAuVym9XdGnl2TZZu8/k22Dv6OuLHrRgcHAJ
-         VR1J7PGMZJ7CQz+I74+B6DEGCtF19zAZT3J/b+LocScU6k84//lR0FBgsvkF7PNCofDk
-         Hf/w==
-X-Gm-Message-State: AOAM5311ZlR1dExIzA7RKMca6UkcdEpzq41dWFgWbp2gbMDSYsPJqc+k
-        e1Df7c1yvbxUtKNzo63T64M7TRp+9rkuygvtk3A=
-X-Google-Smtp-Source: ABdhPJwlrQRxHiszcP8md2A6vOTKpwQGV/cmfohOs+gXkvRYvaM08C7lLoDTwlhvLO8zm6TWB0a5Ucq/g1H4tTtKb6Y=
-X-Received: by 2002:a17:906:7109:: with SMTP id x9mr21779119ejj.559.1638520725285;
- Fri, 03 Dec 2021 00:38:45 -0800 (PST)
+        Fri, 3 Dec 2021 03:42:40 -0500
+Received: (Authenticated sender: alex@ghiti.fr)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 7A40A24000C;
+        Fri,  3 Dec 2021 08:39:13 +0000 (UTC)
+Message-ID: <ffc2e8f2-83f1-2dcb-b046-0b11cb010157@ghiti.fr>
+Date:   Fri, 3 Dec 2021 09:39:12 +0100
 MIME-Version: 1.0
-References: <20211201151844.20488-1-mgorman@techsingularity.net> <20211201151844.20488-2-mgorman@techsingularity.net>
-In-Reply-To: <20211201151844.20488-2-mgorman@techsingularity.net>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Fri, 3 Dec 2021 21:38:33 +1300
-Message-ID: <CAGsJ_4z30yfw=kyBNZuSLMaCcMBmstD=bK4VOsVW3vKO3kO+fA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] sched/fair: Use weight of SD_NUMA domain in find_busiest_group
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH 4/5] riscv: mm: init: try IS_ENABLED(CONFIG_XIP_KERNEL)
+ instead of #ifdef
+Content-Language: en-US
+To:     Jisheng Zhang <jszhang@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20211203050317.2102-1-jszhang@kernel.org>
+ <20211203050317.2102-5-jszhang@kernel.org>
+From:   Alexandre ghiti <alex@ghiti.fr>
+In-Reply-To: <20211203050317.2102-5-jszhang@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 8:27 PM Mel Gorman <mgorman@techsingularity.net> wrote:
+On 12/3/21 06:03, Jisheng Zhang wrote:
+> Try our best to replace the conditional compilation using
+> "#ifdef CONFIG_XIP_KERNEL" with "IS_ENABLED(CONFIG_XIP_KERNEL)", to
+> simplify the code and to increase compile coverage.
 >
-> find_busiest_group uses the child domain's group weight instead of
-> the sched_domain's weight that has SD_NUMA set when calculating the
-> allowed imbalance between NUMA nodes. This is wrong and inconsistent
-> with find_idlest_group.
->
-> This patch uses the SD_NUMA weight in both.
->
-> Fixes: c4e8f691d926 ("sched/fair: Adjust the allowed NUMA imbalance when SD_NUMA spans multiple LLCS")
-
-Hi Mel,
-
-sorry I might be missing something. but I have failed to figure out
-where this commit is.
-
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 > ---
->  kernel/sched/fair.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>   arch/riscv/mm/init.c | 16 +++++++---------
+>   1 file changed, 7 insertions(+), 9 deletions(-)
 >
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 6e476f6d9435..0a969affca76 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -9397,7 +9397,7 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
->                 /* Consider allowing a small imbalance between NUMA groups */
->                 if (env->sd->flags & SD_NUMA) {
->                         env->imbalance = adjust_numa_imbalance(env->imbalance,
-> -                               busiest->sum_nr_running, busiest->group_weight);
-> +                               busiest->sum_nr_running, env->sd->span_weight);
->                 }
->
->                 return;
-> --
-> 2.31.1
->
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 4d4fcd7ef1a9..4a9e3f429042 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -161,13 +161,13 @@ early_param("mem", early_mem);
+>   static void __init setup_bootmem(void)
+>   {
+>   	phys_addr_t vmlinux_end = __pa_symbol(&_end);
+> -	phys_addr_t vmlinux_start = __pa_symbol(&_start);
+>   	phys_addr_t __maybe_unused max_mapped_addr;
+> -	phys_addr_t phys_ram_end;
+> +	phys_addr_t phys_ram_end, vmlinux_start;
+>   
+> -#ifdef CONFIG_XIP_KERNEL
+> -	vmlinux_start = __pa_symbol(&_sdata);
+> -#endif
+> +	if (IS_ENABLED(CONFIG_XIP_KERNEL))
+> +		vmlinux_start = __pa_symbol(&_sdata);
+> +	else
+> +		vmlinux_start = __pa_symbol(&_start);
+>   
+>   	memblock_enforce_memory_limit(memory_limit);
+>   
+> @@ -183,11 +183,9 @@ static void __init setup_bootmem(void)
+>   	 */
+>   	memblock_reserve(vmlinux_start, vmlinux_end - vmlinux_start);
+>   
+> -
+>   	phys_ram_end = memblock_end_of_DRAM();
+> -#ifndef CONFIG_XIP_KERNEL
+> -	phys_ram_base = memblock_start_of_DRAM();
+> -#endif
+> +	if (!IS_ENABLED(CONFIG_XIP_KERNEL))
+> +		phys_ram_base = memblock_start_of_DRAM();
+>   	/*
+>   	 * memblock allocator is not aware of the fact that last 4K bytes of
+>   	 * the addressable memory can not be mapped because of IS_ERR_VALUE
 
-Thanks
-Barry
+
+Reviewed-by: Alexandre Ghiti <alex@ghiti.fr>
+
+Thanks,
+
+Alex
+

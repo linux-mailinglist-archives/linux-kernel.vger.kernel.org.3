@@ -2,118 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC43467EE0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 21:38:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E1C467EE6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 21:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383107AbhLCUk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 15:40:59 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:41191 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353752AbhLCUk6 (ORCPT
+        id S1383112AbhLCUoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 15:44:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245055AbhLCUoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 15:40:58 -0500
-Received: from mail-wm1-f45.google.com ([209.85.128.45]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MBDvU-1miqWI2Lj4-00Ckh7 for <linux-kernel@vger.kernel.org>; Fri, 03 Dec
- 2021 21:37:32 +0100
-Received: by mail-wm1-f45.google.com with SMTP id c6-20020a05600c0ac600b0033c3aedd30aso3091347wmr.5
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 12:37:32 -0800 (PST)
-X-Gm-Message-State: AOAM532MojgN58+wO6GcnXKRo6k91ja1IO3XP2OWpOwX83//JWLy7M7z
-        IXzLNx4j6+OcLu79fF+yD2sIhdtnJiRPjdnUc+I=
-X-Google-Smtp-Source: ABdhPJyyu/mNPIx+gaH9S7TpV6aDPad02G1UIpJnk69+ESFtOrvhAtsJJyy7AdaD1IGK4L5nggu0NbTZZHWfTzeqgh8=
-X-Received: by 2002:a7b:c007:: with SMTP id c7mr17806298wmb.82.1638563852156;
- Fri, 03 Dec 2021 12:37:32 -0800 (PST)
+        Fri, 3 Dec 2021 15:44:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661CEC061751;
+        Fri,  3 Dec 2021 12:40:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E64FF62B8F;
+        Fri,  3 Dec 2021 20:40:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 538A6C53FAD;
+        Fri,  3 Dec 2021 20:40:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638564052;
+        bh=m/5PNs48MvJxvCWalvbPIW7VE7yADXqjdRwRebDhHmg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rXG5OVPOVOC/Y5koeJfN89aqKHZBfjlF8b1b1dJRqI5qnN0b7zUNyxxEXQEcFb8MP
+         h8IKbnPKNW0LnLG2f7oZQ2NrC0DkK2OsNqce001oad5Z3P7hH5d6fiqIS2mQxgu7BM
+         +k5P8IRZdhtOpblLS2Zh201IaaXoWvdtGZwuYULPuon2u6R6Kee/1MNnUU9LH+D0g9
+         2EQoj+TJIVoMy5CX296EoGR/eXCem8Y6N6O5mUB2TcbphsjOXY77EQafnSZy/hNeK0
+         B93y5lkwNmvog+A3lFURbCm6NELOH/+q/wWGCKPM+Ms91uuNhAKJ7ifOWkRqqlGlYd
+         PVbvdiK+zXYtw==
+Received: by mail-ed1-f48.google.com with SMTP id g14so15902622edb.8;
+        Fri, 03 Dec 2021 12:40:52 -0800 (PST)
+X-Gm-Message-State: AOAM532YwVUSNC/za+mTFJx9iEtcm+PmueR4MtMttXokCKipeameVXs+
+        I+qMThwN4dpo4utG18sTLShjycC/vQXGW8y7VA==
+X-Google-Smtp-Source: ABdhPJwSKh/+Zdzs0BqV3JsAvevaoPtzNtQ899Uf3tZORxb4AK5AJVjbsbNnwmQZIy2/s5EX16YVN77kD3Kpl8+dqgw=
+X-Received: by 2002:a17:906:9941:: with SMTP id zm1mr25999001ejb.466.1638564050644;
+ Fri, 03 Dec 2021 12:40:50 -0800 (PST)
 MIME-Version: 1.0
-References: <163477765570.264901.3851692300287671122.stgit@devnote2> <163477772593.264901.7405996794526239017.stgit@devnote2>
-In-Reply-To: <163477772593.264901.7405996794526239017.stgit@devnote2>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 3 Dec 2021 21:37:16 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3jCGWjauD0+k5C-VpLDQ8WkcCHs5UpoAb-x_yHU0eEkw@mail.gmail.com>
-Message-ID: <CAK8P3a3jCGWjauD0+k5C-VpLDQ8WkcCHs5UpoAb-x_yHU0eEkw@mail.gmail.com>
-Subject: Re: [PATCH v3 8/9] ARM: kprobes: Make a frame pointer on __kretprobe_trampoline
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Ananth N Mavinakayanahalli <ananth@linux.ibm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20211130111325.29328-1-semen.protsenko@linaro.org>
+ <20211130111325.29328-2-semen.protsenko@linaro.org> <YaZ8BpUaaC+sJYqx@robh.at.kernel.org>
+ <CAPLW+4kGGk+umKTVRPNM7R=GaUQa31Uid=K+9ofq8w2mqzGAEA@mail.gmail.com>
+In-Reply-To: <CAPLW+4kGGk+umKTVRPNM7R=GaUQa31Uid=K+9ofq8w2mqzGAEA@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 3 Dec 2021 14:40:33 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLopqkOEWmnvMDWr2rBa5Dm3jf17soqVA=Jx5Hn9BDS_g@mail.gmail.com>
+Message-ID: <CAL_JsqLopqkOEWmnvMDWr2rBa5Dm3jf17soqVA=Jx5Hn9BDS_g@mail.gmail.com>
+Subject: Re: [PATCH v2 RESEND 1/5] dt-bindings: soc: samsung: Add Exynos USI bindings
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:jF9W6wnDt1LL13Wea5zauC/TGUQZ/H/rRNbIFWFUTcnpX1W298V
- AZzD8KrMQO6a+wYv0QtZOep9Y3bEoHVmewKQ/DjC3eqFFfgEz8F0zIALYb0P3uIn+leySli
- z8KkbqVVXakb3QtwpBf3OSIOO7kbbmCgkJ06cdDkFfQGVQHChTm904ZYSMY/1qIoZK3h1OJ
- iqIug+kqOGNfvjntKbUOg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KL+MnRO1W48=:pDkG8W+9R90xaLWZEb4IM4
- I0gequyx7CfQOcYnambgytHg3p03ZwO7pVqgV4nJ5iPsCP6y+VnkLWZDifAwLc1ST3V8ZFtQi
- KmxCwbKgae9sPrV4cfmJUtq7JcuQGIEZZ7xHVpgndmVgCdkHGsgwO4C72AsABOskqczEtWAf+
- G5i5qkNH7bbrDMliJTdj72d1iRFYQZI9LUYqaKLkaO1UAiN2B3xHwnUsUmp41ulmEjicSbo0N
- gZdFezaSjA84IpR/eR1DqXT8mHnV5PC8wqb/E2SK6gBUyOQqziX7jRVOL1jx/OHsAHbsYED7J
- oj+FILhi+rYm3CDWxPuLSSiELDRMCskwlyyUbFbkdgA33CTgt1FWkDETffkE3vHYkEDEGLjEE
- PiEOnCPmB2fqRrHUy9EG8a/cVYxL6gVKHkGPv5XTnULOKARnsxKeop5ncTL+/F4VDjdC42bAP
- xlERUW60cE9cqiXBXQuSbCTJi0wYcuWU3PvuRX2L1O4fZgVndAlxBlRobCt8aj/BbXcWL/5tm
- 0yfys7tjx4QmfzAxGMwRK8kBeK9ZeX6ybYAVh0h/iEygVCIAL5UgYHesep5d9fsUtzWvprf5K
- 7DZNZQG+uj/nYEV0kkpQ8hbR4NxOC6J53N8KAIk9rnyB+vOOi66Cp7nZFAEPN/eAZLOnPeQwA
- 2Kse1EzawwVmXtZ8gFMHxDPVnTFu1uWFtkVfC9aRTUf7/zTI/tYwSJD5Jr3d7zXNSIvypcLF7
- zxiWaXgpdXht8tTdPOitcptDKqjSAu2ShYGqVFKK45JrQWa2FdLNJeI/z99mEzSdgEjl82XT9
- v8/YYRcgv8kKGkAlVXKU2yZc3Fr2phTJrxHl+jJD8wq1kj3CoU=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 21, 2021 at 2:55 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+On Fri, Dec 3, 2021 at 1:36 PM Sam Protsenko <semen.protsenko@linaro.org> wrote:
 >
-> Currently kretprobe on ARM just fills r0-r11 of pt_regs, but
-> that is not enough for the stacktrace. Moreover, from the user
-> kretprobe handler, stacktrace needs a frame pointer on the
-> __kretprobe_trampoline.
+> On Tue, 30 Nov 2021 at 21:31, Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Tue, Nov 30, 2021 at 01:13:21PM +0200, Sam Protsenko wrote:
+> > > Add constants for choosing USIv2 configuration mode in device tree.
+> > > Those are further used in USI driver to figure out which value to write
+> > > into SW_CONF register. Also document USIv2 IP-core bindings.
+> > >
+> > > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > > ---
+> > > Changes in v2:
+> > >   - Combined dt-bindings doc and dt-bindings header patches
+> > >   - Added i2c node to example in bindings doc
+> > >   - Added mentioning of shared internal circuits
+> > >   - Added USI_V2_NONE value to bindings header
+> > >
+> > >  .../bindings/soc/samsung/exynos-usi.yaml      | 135 ++++++++++++++++++
+> > >  include/dt-bindings/soc/samsung,exynos-usi.h  |  17 +++
+> > >  2 files changed, 152 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+> > >  create mode 100644 include/dt-bindings/soc/samsung,exynos-usi.h
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+> > > new file mode 100644
+> > > index 000000000000..a822bc62b3cd
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+> > > @@ -0,0 +1,135 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/soc/samsung/exynos-usi.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Samsung's Exynos USI (Universal Serial Interface) binding
+> > > +
+> > > +maintainers:
+> > > +  - Sam Protsenko <semen.protsenko@linaro.org>
+> > > +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> > > +
+> > > +description: |
+> > > +  USI IP-core provides selectable serial protocol (UART, SPI or High-Speed I2C).
+> > > +  USI shares almost all internal circuits within each protocol, so only one
+> > > +  protocol can be chosen at a time. USI is modeled as a node with zero or more
+> > > +  child nodes, each representing a serial sub-node device. The mode setting
+> > > +  selects which particular function will be used.
+> > > +
+> > > +  Refer to next bindings documentation for information on protocol subnodes that
+> > > +  can exist under USI node:
+> > > +
+> > > +  [1] Documentation/devicetree/bindings/serial/samsung_uart.yaml
+> > > +  [2] Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
+> > > +  [3] Documentation/devicetree/bindings/spi/spi-samsung.txt
+> > > +
+> > > +properties:
+> > > +  $nodename:
+> > > +    pattern: "^usi@[0-9a-f]+$"
+> > > +
+> > > +  compatible:
+> > > +    const: samsung,exynos-usi-v2
+> >
+> > Use SoC based compatibles.
+> >
 >
-> This adds a frame pointer on __kretprobe_trampoline for both gcc
-> and clang case. Those have different frame pointer so we need
-> different but similar stack on pt_regs.
->
-> Gcc makes the frame pointer (fp) to point the 'pc' address of
-> the {fp, ip (=sp), lr, pc}, this means {r11, r13, r14, r15}.
-> Thus if we save the r11 (fp) on pt_regs->r12, we can make this
-> set on the end of pt_regs.
->
-> On the other hand, Clang makes the frame pointer to point the
-> 'fp' address of {fp, lr} on stack. Since the next to the
-> pt_regs->lr is pt_regs->sp, I reused the pair of pt_regs->fp
-> and pt_regs->ip.
-> So this stores the 'lr' on pt_regs->ip and make the fp to point
-> pt_regs->fp.
->
-> For both cases, saves __kretprobe_trampoline address to
-> pt_regs->lr, so that the stack tracer can identify this frame
-> pointer has been made by the __kretprobe_trampoline.
->
-> Note that if the CONFIG_FRAME_POINTER is not set, this keeps
-> fp as is.
->
-> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> In this particular case, I'd really prefer to have it like this. Most
+> likely we'll only have USIv1 and USIv1 in the end, and I think that
+> would be more clear to have USI version in compatible, rather than SoC
+> name. Please let me know if you have a strong opinion on this one --
+> if so I'll re-send.
 
-This causes a regression that I see in randconfig builds with gcc-11:
+Fine if you have some evidence the ratio of versions to SoC are much
+more than 1:1 and the versions correspond to something (IOW, you
+aren't making them up).
 
-/tmp/ccovvQNw.s: Assembler messages:
-/tmp/ccovvQNw.s:32: Error: invalid literal constant: pool needs to be closer
-make[5]: *** [/git/arm-soc/scripts/Makefile.build:288:
-arch/arm/probes/kprobes/core.o] Error 1
+We went down the version # path with QCom and in the end about every
+SoC had a different version.
 
-I have two randconfigs that reproduce it locally, here is a .config
-[1] and assembly
-output[2] for reference. I have not done any further analysis, but
-maybe you have
-an idea.
+>
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  clocks:
+> > > +    items:
+> > > +      - description: Bus (APB) clock
+> > > +      - description: Operating clock for UART/SPI/I2C protocol
+> > > +
+> > > +  clock-names:
+> > > +    items:
+> > > +      - const: pclk
+> > > +      - const: ipclk
+> > > +
+> > > +  ranges: true
+> > > +
+> > > +  "#address-cells":
+> > > +    const: 1
+> > > +
+> > > +  "#size-cells":
+> > > +    const: 1
+> > > +
+> > > +  samsung,sysreg:
+> > > +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> > > +    description:
+> > > +      Should be phandle/offset pair. The phandle to System Register syscon node
+> > > +      (for the same domain where this USI controller resides) and the offset
+> > > +      of SW_CONF register for this USI controller.
+> > > +
+> > > +  samsung,mode:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    description:
+> > > +      Selects USI function (which serial protocol to use). Refer to
+> > > +      <include/dt-bindings/soc/samsung,exynos-usi.h> for valid USI mode values.
+> >
+> > This seems to be redundant. Just check which child is enabled.
+> >
+>
+> I think it's not that easy. Soon we'll have USIv1 support added, and
+> that has some weird configurations, like having dual I2C mode (two
+> child I2C nodes must be enabled) and UART+I2C mode, etc.
 
-        Arnd
+So you are going to turn around and make this an array? If you already
+know you have changes, I'd rather review this all at once.
 
-[1] https://pastebin.com/y4rkH8qX
-[2] https://pastebin.com/9mEVU8Rd
+> Looks like it
+> might take some not very elegant logic to figure out which exactly
+> mode value should be written in SW_CONF register in that way, it's
+> much easier to just specify mode in USI node. Also, that reflects
+> hardware better: we actually write that specified mode to SW_CONF
+> register.
+
+You just have to compare the child node names or compatibles.
+
+> Also, later we might want to be able to switch that mode via
+> SysFS, e.g. for testing purposes. Current design seems to be better
+> suited for some things like that.
+
+The binding should have no impact on that. If for testing, use debugfs.
+
+> Please let me know if you have a strong opinion on this one, or it's
+> ok to leave it as is.
+>
+> All other comments are addressed and will be present in v3. Thanks for
+> the review!

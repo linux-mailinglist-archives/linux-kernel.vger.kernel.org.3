@@ -2,95 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 869FE46704E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 03:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2EB46705F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 03:59:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378298AbhLCCzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 21:55:42 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:43600 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243536AbhLCCzg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 21:55:36 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3CCD0A59;
-        Fri,  3 Dec 2021 03:52:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638499931;
-        bh=SnLYL+0P6D8oVgyVFOJ1csGxGyPoyV1B0+a7dbROoU4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Aovp1RYOso//aS2JCm4doWvuV7yCnSgfRfPj0XMp0VCcWoQUnGvunRC9foIIti6WZ
-         MFNg8E8DMelbhR/ll1UR3gEpfS3L0+Akyri3sy++veWG9wN0j3gqVYBC8xekLv91G+
-         rIh8EXOF6vUuSB26/ALJ5Ix+NrVHfxlHb8nv6yU8=
-Date:   Fri, 3 Dec 2021 04:51:45 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     sakari.ailus@linux.intel.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] media: mc: mc-entity.c: Use bitmap_zalloc() when
- applicable
-Message-ID: <YamGQbD+abET4rmx@pendragon.ideasonboard.com>
-References: <b11f646dda189f490c06bf671f64a2cc0af4d45c.1638397089.git.christophe.jaillet@wanadoo.fr>
+        id S1356138AbhLCDCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 22:02:36 -0500
+Received: from mga01.intel.com ([192.55.52.88]:57249 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347836AbhLCDCf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 22:02:35 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="260901961"
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="260901961"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 18:59:11 -0800
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="501015253"
+Received: from liweilv-mobl.ccr.corp.intel.com (HELO lkp-bingo.fnst-test.com) ([10.255.30.243])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 18:59:05 -0800
+From:   Li Zhijian <zhijianx.li@intel.com>
+To:     kuba@kernel.org, jhs@mojatatu.com, xiyou.wangcong@gmail.com,
+        jiri@resnulli.us, shuah@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lizhijian@cn.fujitsu.com,
+        Li Zhijian <zhijianx.li@intel.com>,
+        Philip Li <philip.li@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        Davide Caratti <dcaratti@redhat.com>
+Subject: [PATCH v3 1/3] selftests/tc-testing: add exit code
+Date:   Fri,  3 Dec 2021 10:53:21 +0800
+Message-Id: <20211203025323.6052-1-zhijianx.li@intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b11f646dda189f490c06bf671f64a2cc0af4d45c.1638397089.git.christophe.jaillet@wanadoo.fr>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+Mark the summary result as FAIL to prevent from confusing the selftest
+framework if some of them are failed.
 
-Thank you for the patch.
+Previously, the selftest framework always treats it as *ok* even though
+some of them are failed actually. That's because the script tdc.sh always
+return 0.
 
-On Wed, Dec 01, 2021 at 11:19:40PM +0100, Christophe JAILLET wrote:
-> 'ent_enum->bmap' is a bitmap. So use 'bitmap_zalloc()' to simplify
-> code, improve the semantic and avoid some open-coded arithmetic in
-> allocator arguments.
-> 
-> Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
-> consistency.
-> 
-> While at it, remove a useless 'bitmap_zero()'.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+ # All test results:
+ #
+ # 1..97
+ # ok 1 83be - Create FQ-PIE with invalid number of flows
+ # ok 2 8b6e - Create RED with no flags
+[...snip]
+ # ok 6 5f15 - Create RED with flags ECN, harddrop
+ # ok 7 53e8 - Create RED with flags ECN, nodrop
+ # ok 8 d091 - Fail to create RED with only nodrop flag
+ # ok 9 af8e - Create RED with flags ECN, nodrop, harddrop
+ # not ok 10 ce7d - Add mq Qdisc to multi-queue device (4 queues)
+ #       Could not match regex pattern. Verify command output:
+ # qdisc mq 1: root
+ # qdisc fq_codel 0: parent 1:4 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64
+ # qdisc fq_codel 0: parent 1:3 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64
+[...snip]
+ # ok 96 6979 - Change quantum of a strict ETS band
+ # ok 97 9a7d - Change ETS strict band without quantum
+ #
+ #
+ #
+ #
+ ok 1 selftests: tc-testing: tdc.sh <<< summary result
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+CC: Philip Li <philip.li@intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Li Zhijian <zhijianx.li@intel.com>
+Acked-by: Davide Caratti <dcaratti@redhat.com>
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+---
+V3: repost to netdev
+V2: Fix missing ':'
+---
+ tools/testing/selftests/tc-testing/tdc.py | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-> ---
->  drivers/media/mc/mc-entity.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-> index c02340698ad6..b411f9796191 100644
-> --- a/drivers/media/mc/mc-entity.c
-> +++ b/drivers/media/mc/mc-entity.c
-> @@ -48,12 +48,10 @@ __must_check int __media_entity_enum_init(struct media_entity_enum *ent_enum,
->  					  int idx_max)
->  {
->  	idx_max = ALIGN(idx_max, BITS_PER_LONG);
-> -	ent_enum->bmap = kcalloc(idx_max / BITS_PER_LONG, sizeof(long),
-> -				 GFP_KERNEL);
-> +	ent_enum->bmap = bitmap_zalloc(idx_max, GFP_KERNEL);
->  	if (!ent_enum->bmap)
->  		return -ENOMEM;
->  
-> -	bitmap_zero(ent_enum->bmap, idx_max);
->  	ent_enum->idx_max = idx_max;
->  
->  	return 0;
-> @@ -62,7 +60,7 @@ EXPORT_SYMBOL_GPL(__media_entity_enum_init);
->  
->  void media_entity_enum_cleanup(struct media_entity_enum *ent_enum)
->  {
-> -	kfree(ent_enum->bmap);
-> +	bitmap_free(ent_enum->bmap);
->  }
->  EXPORT_SYMBOL_GPL(media_entity_enum_cleanup);
->  
-
+diff --git a/tools/testing/selftests/tc-testing/tdc.py b/tools/testing/selftests/tc-testing/tdc.py
+index a3e43189d940..ee22e3447ec7 100755
+--- a/tools/testing/selftests/tc-testing/tdc.py
++++ b/tools/testing/selftests/tc-testing/tdc.py
+@@ -716,6 +716,7 @@ def set_operation_mode(pm, parser, args, remaining):
+         list_test_cases(alltests)
+         exit(0)
+ 
++    exit_code = 0 # KSFT_PASS
+     if len(alltests):
+         req_plugins = pm.get_required_plugins(alltests)
+         try:
+@@ -724,6 +725,8 @@ def set_operation_mode(pm, parser, args, remaining):
+             print('The following plugins were not found:')
+             print('{}'.format(pde.missing_pg))
+         catresults = test_runner(pm, args, alltests)
++        if catresults.count_failures() != 0:
++            exit_code = 1 # KSFT_FAIL
+         if args.format == 'none':
+             print('Test results output suppression requested\n')
+         else:
+@@ -748,6 +751,8 @@ def set_operation_mode(pm, parser, args, remaining):
+                         gid=int(os.getenv('SUDO_GID')))
+     else:
+         print('No tests found\n')
++        exit_code = 4 # KSFT_SKIP
++    exit(exit_code)
+ 
+ def main():
+     """
+@@ -767,8 +772,5 @@ def main():
+ 
+     set_operation_mode(pm, parser, args, remaining)
+ 
+-    exit(0)
+-
+-
+ if __name__ == "__main__":
+     main()
 -- 
-Regards,
+2.32.0
 
-Laurent Pinchart

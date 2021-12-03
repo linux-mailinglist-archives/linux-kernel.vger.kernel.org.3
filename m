@@ -2,106 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 367F8467C07
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F405467C24
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382524AbhLCRCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 12:02:19 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3496 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1382251AbhLCRB4 (ORCPT
+        id S245618AbhLCREh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 12:04:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240062AbhLCREe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 12:01:56 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B3GlUrY007617;
-        Fri, 3 Dec 2021 16:58:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=sN7ig15cTuudwMhjSIMPGl7CzWlQaYl4qV5UPqKOS2s=;
- b=IpV/KYlNHd6yaZ21NyYGwvxtlkYnA3dJZGLtzVXj8N89/PCCQd/9uiU1QExLOKGvU65I
- 3aqtMJPLSHY0VcjsAzXnED/EhAVOsobemvzldtvFOsZhjF34cgyndsI4KTjEpPgzW0Rz
- e3rBTl4Qo/Swy5I7JrsIQh4Iu3e8M4BjEHbUk6pXuCPNSkVmGtvi02ZTaPIV6EV9OCzD
- bzUNaJvSsmGsvWDfZh2jIQULaX4wFL4P+JIJuqJ3kGCtQKsneJPtoERIFG2nYYDEFW1p
- YcQx8nhuWHbdFqVGrtEtnDLKISdrD88QkLZg2bZcXgd789YSEPpIyG+SQqBzX25zrpA1 3g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cqq2qr5ty-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 16:58:31 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B3Gn9Bj014194;
-        Fri, 3 Dec 2021 16:58:31 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cqq2qr5tk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 16:58:30 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B3Gv4B8014034;
-        Fri, 3 Dec 2021 16:58:28 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ckcadfrx7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 16:58:28 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B3GwPVH30867828
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 3 Dec 2021 16:58:25 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7AD645204E;
-        Fri,  3 Dec 2021 16:58:25 +0000 (GMT)
-Received: from p-imbrenda.bredband2.com (unknown [9.145.14.21])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id E288F52057;
-        Fri,  3 Dec 2021 16:58:24 +0000 (GMT)
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     kvm@vger.kernel.org
-Cc:     cohuck@redhat.com, borntraeger@de.ibm.com, frankja@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, david@redhat.com,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 17/17] KVM: s390: pv: avoid export before import if possible
-Date:   Fri,  3 Dec 2021 17:58:14 +0100
-Message-Id: <20211203165814.73016-18-imbrenda@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211203165814.73016-1-imbrenda@linux.ibm.com>
-References: <20211203165814.73016-1-imbrenda@linux.ibm.com>
+        Fri, 3 Dec 2021 12:04:34 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99283C061353;
+        Fri,  3 Dec 2021 09:01:10 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so4068998otl.8;
+        Fri, 03 Dec 2021 09:01:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=4pLxk7I16UyPlVEly608dE6yaANiOeOiDzOCIy8vIzw=;
+        b=LJqxQ5gmqDmXZRVWGXjXcv8c8wLJeavWLuQiDkpKvGdA2p5B4HWuMHN7FO7bhuxeuY
+         XyRw5fjcCGMDc/BZWLQSR2X6isokgZa0W2tN/Rihr50j3MEb6EIvOavkaYIyEJGoxjcU
+         NjpC8ptVkkp2anyf4+sPulwLVg2+Rb3gSMD/B0LdFiebvE/qO6hOTh5Skzluo+vlUKcY
+         G3SNo4rG5Dm4zbbznb7VrFB6YnX9tUnqqYGj0S3h+CfRyZf0FdkKQtuyzOwBSEwsWUME
+         zDmuu7Va5hZs1MyU0YoySVS/GR9lzSyUEIWdYgFNu+cY5Ea6mgJqyxsKLxfajTMEqxBg
+         CD+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=4pLxk7I16UyPlVEly608dE6yaANiOeOiDzOCIy8vIzw=;
+        b=UA98MM+eVxLhUEGFF291HFEaqMxRxYqppqEW7ZPPL3BDkaJpeHPkjSxVdBYybUqZUA
+         Wx12vrn9DIvP4BXjaS+PhIg0kcAGqeoAEJ7BYMAl7UNhK2gcBe8lrD4GiZXc2m1Q8Zdv
+         pEvv1SSNoImSBXf2mwzyfnApgoap/4+yxlZhWwO0FVi7BMT1SLDfWXQ693W8pZaYPXtT
+         c0/CM3n69YB/QalnTBGiuTCZtDJG+ktc7AKmiikR0BeYG+fDZTTRpGLYIZP4vTg317bx
+         o0KtT+qtCEJFqnKH9OdeVQnD/uEGY5XmkKrf47CW/UQYjGk4x9JTheW80Bai/B946P6c
+         X6ww==
+X-Gm-Message-State: AOAM530ClhMG5XwtEsakSuOKD8TI+QU5lS5QyTWCP49Ba8zNBgtkLY1P
+        LW66RYgSydiZYL7sE6HHoLQHQrqV80hK5qEG3wuYGZ01Hk8=
+X-Google-Smtp-Source: ABdhPJw6hrdacJ62/3uuSmIXkCjCzl0C1Zw3yi2uUMB/pAe+QA6JvioigWOi4C3G4DUZuUvfRsZDsjQM86VN8uF8dVg=
+X-Received: by 2002:a05:6830:30b7:: with SMTP id g23mr16995052ots.159.1638550869641;
+ Fri, 03 Dec 2021 09:01:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Yvkz6aRIeorxeMs7fqmIuV6wLBZHuPxP
-X-Proofpoint-ORIG-GUID: 1kyTWO5bzS4nyGnGD7R4QWG6GsgkS1ei
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-03_07,2021-12-02_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=999
- spamscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112030105
+From:   Subhashini Rao Beerisetty <subhashbeerisetty@gmail.com>
+Date:   Fri, 3 Dec 2021 22:30:58 +0530
+Message-ID: <CAPY=qRQJ-YbRi0AStrytsE3ke4vFN9K4Cos2T+b1JKDPJGUVOg@mail.gmail.com>
+Subject: PCI: latency
+To:     linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        kernelnewbies <kernelnewbies@kernelnewbies.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the appropriate UV feature bit is set, there is no need to perform
-an export before import.
+ [ Please keep me in CC as I'm not subscribed to the list]
 
-Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
----
- arch/s390/kernel/uv.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Hi all,
 
-diff --git a/arch/s390/kernel/uv.c b/arch/s390/kernel/uv.c
-index ec01c3f8b13c..a29c7b3085b1 100644
---- a/arch/s390/kernel/uv.c
-+++ b/arch/s390/kernel/uv.c
-@@ -236,7 +236,8 @@ static int make_secure_pte(pte_t *ptep, unsigned long addr,
- 
- static bool should_export_before_import(struct uv_cb_header *uvcb, struct mm_struct *mm)
- {
--	return uvcb->cmd != UVC_CMD_UNPIN_PAGE_SHARED &&
-+	return !test_bit_inv(BIT_UV_FEAT_MISC, &uv_info.uv_feature_indications) &&
-+		uvcb->cmd != UVC_CMD_UNPIN_PAGE_SHARED &&
- 		atomic_read(&mm->context.protected_count) > 1;
- }
- 
--- 
-2.31.1
+We are using the Linux OS on an x86_64 machine. I need to measure the
+PCIe latency on my system, does kernel have any latency measurement
+module for the PCIe bus?
 
+Thanks,

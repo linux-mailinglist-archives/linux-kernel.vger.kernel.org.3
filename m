@@ -2,262 +2,435 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73645467B8B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE24467B8D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382074AbhLCQks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 11:40:48 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:49810 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230157AbhLCQkr (ORCPT
+        id S230157AbhLCQkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 11:40:55 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:42014 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1382075AbhLCQky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 11:40:47 -0500
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B3CpZ94024579;
-        Fri, 3 Dec 2021 17:37:13 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=K4RgWknMLLCexYIeFwEvklWtlYteDyJWi9FQJ3DntfY=;
- b=wyhBHP4LriCxRflwPLpgrnKJUsp3CYNzxH49oNJet4xXoZnZ3IH1Ni9tPPSjDx3mKBXy
- RYHhBUCxg+oFulhQAfAP5Krg6aPNF+qu5QiXFHo2/XUcWf298pjjXv/TJI+GcWofR55L
- c/q4L5Q0/4YD0DrCxUnZ8IjF5yvROaIvHWswbECihbOT8iGOPQo1HwvwWb8M9zItiUm3
- HYvTbxVs6Ep+ivSEMHq25YKy5vcQqWK9Iqwt6LJKtU54MitYNY9aPVBDSR5I3BXRS/9X
- lbb1dKR4y6RduPLre5MTpGeA4JkXZKx4U7oFAhqkI9JZ7G2rzMZ/EkH9OT/YgIJW5o/l Sw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cqg9utsy8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 17:37:13 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 560E410002A;
-        Fri,  3 Dec 2021 17:37:12 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 449F320B088;
-        Fri,  3 Dec 2021 17:37:12 +0100 (CET)
-Received: from lmecxl0889.lme.st.com (10.75.127.47) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 3 Dec
- 2021 17:37:11 +0100
-Subject: Re: [PATCH v7 01/12] rpmsg: char: Export eptdev create an destroy
- functions
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>, <julien.massot@iot.bzh>
-References: <20211108141937.13016-1-arnaud.pouliquen@foss.st.com>
- <20211108141937.13016-2-arnaud.pouliquen@foss.st.com>
- <Yal+LKVqvp2v26BD@builder.lan>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Message-ID: <54cc46a3-b8bd-a6ac-cd7b-9741eee5131d@foss.st.com>
-Date:   Fri, 3 Dec 2021 17:37:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 3 Dec 2021 11:40:54 -0500
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 3.0.1)
+ id af30dad34f8a4c6f; Fri, 3 Dec 2021 17:37:29 +0100
+Received: from kreacher.localnet (unknown [213.134.175.202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id ABD6766AD69;
+        Fri,  3 Dec 2021 17:37:28 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [PATCH 2/2] ACPI: Use acpi_fetch_acpi_dev() instead of acpi_bus_get_device()
+Date:   Fri, 03 Dec 2021 17:37:10 +0100
+Message-ID: <10019174.nUPlyArG6x@kreacher>
+In-Reply-To: <2828957.e9J7NaK4W3@kreacher>
+References: <2828957.e9J7NaK4W3@kreacher>
 MIME-Version: 1.0
-In-Reply-To: <Yal+LKVqvp2v26BD@builder.lan>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-03_07,2021-12-02_01,2021-12-02_01
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.175.202
+X-CLIENT-HOSTNAME: 213.134.175.202
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrieejgdelgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdejlefghfeiudektdelkeekvddugfeghffggeejgfeukeejleevgffgvdeluddtnecukfhppedvudefrddufeegrddujeehrddvtddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudejhedrvddtvddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohephhguvghgohgvuggvsehrvgguhhgrthdrtghomhdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohep
+ lhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshgrkhgrrhhirdgrihhluhhssehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Bjorn,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On 12/3/21 3:17 AM, Bjorn Andersson wrote:
-> On Mon 08 Nov 08:19 CST 2021, Arnaud Pouliquen wrote:
-> 
->> To prepare the split of the code related to the control (ctrldev)
->> and the endpoint (eptdev) devices in 2 separate files:
->>
->> - Rename and export the functions in rpmsg_char.h.
->>
->> - Suppress the dependency with the rpmsg_ctrldev struct in the
->>   rpmsg_eptdev_create function.
->>
->> Suggested-by: Mathieu Poirier <mathieu.poirier@linaro.org>
->> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
->> ---
->> Update vs previous revision:
->> - change IS_REACHABLE by IS_ENABLE ( dependency will be fixed in kconfig instead
->> - fix licensing
->> ---
->>  drivers/rpmsg/rpmsg_char.c | 17 +++++++------
->>  drivers/rpmsg/rpmsg_char.h | 51 ++++++++++++++++++++++++++++++++++++++
->>  2 files changed, 61 insertions(+), 7 deletions(-)
->>  create mode 100644 drivers/rpmsg/rpmsg_char.h
->>
->> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
->> index 2bebc9b2d163..44934d7fa3c4 100644
->> --- a/drivers/rpmsg/rpmsg_char.c
->> +++ b/drivers/rpmsg/rpmsg_char.c
->> @@ -1,5 +1,6 @@
->>  // SPDX-License-Identifier: GPL-2.0
->>  /*
->> + * Copyright (C) 2021, STMicroelectronics
->>   * Copyright (c) 2016, Linaro Ltd.
->>   * Copyright (c) 2012, Michal Simek <monstr@monstr.eu>
->>   * Copyright (c) 2012, PetaLogix
->> @@ -23,6 +24,7 @@
->>  #include <uapi/linux/rpmsg.h>
->>  
->>  #include "rpmsg_internal.h"
->> +#include "rpmsg_char.h"
->>  
->>  #define RPMSG_DEV_MAX	(MINORMASK + 1)
->>  
->> @@ -78,7 +80,7 @@ struct rpmsg_eptdev {
->>  	wait_queue_head_t readq;
->>  };
->>  
->> -static int rpmsg_eptdev_destroy(struct device *dev, void *data)
->> +int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
->>  {
->>  	struct rpmsg_eptdev *eptdev = dev_to_eptdev(dev);
->>  
->> @@ -97,6 +99,7 @@ static int rpmsg_eptdev_destroy(struct device *dev, void *data)
->>  
->>  	return 0;
->>  }
->> +EXPORT_SYMBOL(rpmsg_chrdev_eptdev_destroy);
->>  
->>  static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
->>  			void *priv, u32 addr)
->> @@ -280,7 +283,7 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
->>  	if (cmd != RPMSG_DESTROY_EPT_IOCTL)
->>  		return -EINVAL;
->>  
->> -	return rpmsg_eptdev_destroy(&eptdev->dev, NULL);
->> +	return rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
->>  }
->>  
->>  static const struct file_operations rpmsg_eptdev_fops = {
->> @@ -339,10 +342,9 @@ static void rpmsg_eptdev_release_device(struct device *dev)
->>  	kfree(eptdev);
->>  }
->>  
->> -static int rpmsg_eptdev_create(struct rpmsg_ctrldev *ctrldev,
->> +int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent,
->>  			       struct rpmsg_channel_info chinfo)
->>  {
->> -	struct rpmsg_device *rpdev = ctrldev->rpdev;
->>  	struct rpmsg_eptdev *eptdev;
->>  	struct device *dev;
->>  	int ret;
->> @@ -362,7 +364,7 @@ static int rpmsg_eptdev_create(struct rpmsg_ctrldev *ctrldev,
->>  
->>  	device_initialize(dev);
->>  	dev->class = rpmsg_class;
->> -	dev->parent = &ctrldev->dev;
->> +	dev->parent = parent;
->>  	dev->groups = rpmsg_eptdev_groups;
->>  	dev_set_drvdata(dev, eptdev);
->>  
->> @@ -405,6 +407,7 @@ static int rpmsg_eptdev_create(struct rpmsg_ctrldev *ctrldev,
->>  
->>  	return ret;
->>  }
->> +EXPORT_SYMBOL(rpmsg_chrdev_eptdev_create);
->>  
->>  static int rpmsg_ctrldev_open(struct inode *inode, struct file *filp)
->>  {
->> @@ -444,7 +447,7 @@ static long rpmsg_ctrldev_ioctl(struct file *fp, unsigned int cmd,
->>  	chinfo.src = eptinfo.src;
->>  	chinfo.dst = eptinfo.dst;
->>  
->> -	return rpmsg_eptdev_create(ctrldev, chinfo);
->> +	return rpmsg_chrdev_eptdev_create(ctrldev->rpdev, &ctrldev->dev, chinfo);
->>  };
->>  
->>  static const struct file_operations rpmsg_ctrldev_fops = {
->> @@ -530,7 +533,7 @@ static void rpmsg_chrdev_remove(struct rpmsg_device *rpdev)
->>  	int ret;
->>  
->>  	/* Destroy all endpoints */
->> -	ret = device_for_each_child(&ctrldev->dev, NULL, rpmsg_eptdev_destroy);
->> +	ret = device_for_each_child(&ctrldev->dev, NULL, rpmsg_chrdev_eptdev_destroy);
->>  	if (ret)
->>  		dev_warn(&rpdev->dev, "failed to nuke endpoints: %d\n", ret);
->>  
->> diff --git a/drivers/rpmsg/rpmsg_char.h b/drivers/rpmsg/rpmsg_char.h
->> new file mode 100644
->> index 000000000000..aa6e08a04577
->> --- /dev/null
->> +++ b/drivers/rpmsg/rpmsg_char.h
->> @@ -0,0 +1,51 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Copyright (C) STMicroelectronics 2021.
->> + */
->> +
->> +#ifndef __RPMSG_CHRDEV_H__
->> +#define __RPMSG_CHRDEV_H__
->> +
->> +#if IS_ENABLED(CONFIG_RPMSG_CHAR)
->> +/**
->> + * rpmsg_chrdev_eptdev_create() - register char device based on an endpoint
->> + * @rpdev:  prepared rpdev to be used for creating endpoints
->> + * @parent: parent device
->> + * @chinfo: associated endpoint channel information.
->> + *
->> + * This function create a new rpmsg char endpoint device to instantiate a new
->> + * endpoint based on chinfo information.
->> + */
->> +int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent,
->> +			       struct rpmsg_channel_info chinfo);
->> +
->> +/**
->> + * rpmsg_chrdev_eptdev_destroy() - destroy created char device endpoint.
->> + * @data: private data associated to the endpoint device
->> + *
->> + * This function destroys a rpmsg char endpoint device created by the RPMSG_DESTROY_EPT_IOCTL
->> + * control.
->> + */
->> +int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data);
->> +
->> +#else  /*IS_ENABLED(CONFIG_RPMSG_CHAR) */
->> +
->> +static inline int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent,
->> +					     struct rpmsg_channel_info chinfo)
->> +{
->> +	/* This shouldn't be possible */
-> 
-> But isn't it very much possible that userspace invokes this function
-> through the ioctl that you move to the separate rpmsg_ctrl driver?
-> 
->> +	WARN_ON(1);
-> 
-> Which would mean that this will spam the kernel with stack dumps.
+Modify the ACPI code to use acpi_fetch_acpi_dev() instead of
+acpi_bus_get_device() where applicable.
 
-Good catch, I will suppress the WARM_ON. I propose also to return -ENXIO
-instead of -EINVAL to be aligned with other functions in rpmsg.h
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/acpi_video.c       |    5 ++---
+ drivers/acpi/device_pm.c        |   31 +++++++++++++------------------
+ drivers/acpi/dock.c             |    3 +--
+ drivers/acpi/pci_link.c         |   12 ++++--------
+ drivers/acpi/pci_root.c         |   10 ++++------
+ drivers/acpi/power.c            |    7 +++----
+ drivers/acpi/processor_driver.c |   10 +++++++---
+ drivers/acpi/processor_idle.c   |    2 +-
+ drivers/acpi/property.c         |   11 +++++------
+ drivers/acpi/resource.c         |    4 ++--
+ drivers/acpi/thermal.c          |    9 ++++-----
+ drivers/acpi/video_detect.c     |    6 ++----
+ drivers/acpi/x86/s2idle.c       |    4 ++--
+ 13 files changed, 50 insertions(+), 64 deletions(-)
 
-Thanks,
-Arnaud
+Index: linux-pm/drivers/acpi/acpi_video.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/acpi_video.c
++++ linux-pm/drivers/acpi/acpi_video.c
+@@ -1733,13 +1733,12 @@ acpi_video_bus_match(acpi_handle handle,
+ {
+ 	struct acpi_device *device = context;
+ 	struct acpi_device *sibling;
+-	int result;
+ 
+ 	if (handle == device->handle)
+ 		return AE_CTRL_TERMINATE;
+ 
+-	result = acpi_bus_get_device(handle, &sibling);
+-	if (result)
++	sibling = acpi_fetch_acpi_dev(handle);
++	if (!sibling)
+ 		return AE_OK;
+ 
+ 	if (!strcmp(acpi_device_name(sibling), ACPI_VIDEO_BUS_NAME))
+Index: linux-pm/drivers/acpi/device_pm.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/device_pm.c
++++ linux-pm/drivers/acpi/device_pm.c
+@@ -285,14 +285,12 @@ EXPORT_SYMBOL(acpi_device_set_power);
+ 
+ int acpi_bus_set_power(acpi_handle handle, int state)
+ {
+-	struct acpi_device *device;
+-	int result;
++	struct acpi_device *device = acpi_fetch_acpi_dev(handle);
+ 
+-	result = acpi_bus_get_device(handle, &device);
+-	if (result)
+-		return result;
++	if (device)
++		return acpi_device_set_power(device, state);
+ 
+-	return acpi_device_set_power(device, state);
++	return -ENODEV;
+ }
+ EXPORT_SYMBOL(acpi_bus_set_power);
+ 
+@@ -410,21 +408,20 @@ EXPORT_SYMBOL_GPL(acpi_device_update_pow
+ 
+ int acpi_bus_update_power(acpi_handle handle, int *state_p)
+ {
+-	struct acpi_device *device;
+-	int result;
++	struct acpi_device *device = acpi_fetch_acpi_dev(handle);
+ 
+-	result = acpi_bus_get_device(handle, &device);
+-	return result ? result : acpi_device_update_power(device, state_p);
++	if (device)
++		return acpi_device_update_power(device, state_p);
++
++	return -ENODEV;
+ }
+ EXPORT_SYMBOL_GPL(acpi_bus_update_power);
+ 
+ bool acpi_bus_power_manageable(acpi_handle handle)
+ {
+-	struct acpi_device *device;
+-	int result;
++	struct acpi_device *device = acpi_fetch_acpi_dev(handle);
+ 
+-	result = acpi_bus_get_device(handle, &device);
+-	return result ? false : device->flags.power_manageable;
++	return device && device->flags.power_manageable;
+ }
+ EXPORT_SYMBOL(acpi_bus_power_manageable);
+ 
+@@ -543,11 +540,9 @@ acpi_status acpi_remove_pm_notifier(stru
+ 
+ bool acpi_bus_can_wakeup(acpi_handle handle)
+ {
+-	struct acpi_device *device;
+-	int result;
++	struct acpi_device *device = acpi_fetch_acpi_dev(handle);
+ 
+-	result = acpi_bus_get_device(handle, &device);
+-	return result ? false : device->wakeup.flags.valid;
++	return device && device->wakeup.flags.valid;
+ }
+ EXPORT_SYMBOL(acpi_bus_can_wakeup);
+ 
+Index: linux-pm/drivers/acpi/dock.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/dock.c
++++ linux-pm/drivers/acpi/dock.c
+@@ -489,9 +489,8 @@ static ssize_t docked_show(struct device
+ 			   struct device_attribute *attr, char *buf)
+ {
+ 	struct dock_station *dock_station = dev->platform_data;
+-	struct acpi_device *adev = NULL;
++	struct acpi_device *adev = acpi_fetch_acpi_dev(dock_station->handle);
+ 
+-	acpi_bus_get_device(dock_station->handle, &adev);
+ 	return sysfs_emit(buf, "%u\n", acpi_device_enumerated(adev));
+ }
+ static DEVICE_ATTR_RO(docked);
+Index: linux-pm/drivers/acpi/pci_link.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/pci_link.c
++++ linux-pm/drivers/acpi/pci_link.c
+@@ -606,12 +606,10 @@ static int acpi_pci_link_allocate(struct
+ int acpi_pci_link_allocate_irq(acpi_handle handle, int index, int *triggering,
+ 			       int *polarity, char **name)
+ {
+-	int result;
+-	struct acpi_device *device;
++	struct acpi_device *device = acpi_fetch_acpi_dev(handle);
+ 	struct acpi_pci_link *link;
+ 
+-	result = acpi_bus_get_device(handle, &device);
+-	if (result) {
++	if (!device) {
+ 		acpi_handle_err(handle, "Invalid link device\n");
+ 		return -1;
+ 	}
+@@ -658,12 +656,10 @@ int acpi_pci_link_allocate_irq(acpi_hand
+  */
+ int acpi_pci_link_free_irq(acpi_handle handle)
+ {
+-	struct acpi_device *device;
++	struct acpi_device *device = acpi_fetch_acpi_dev(handle);
+ 	struct acpi_pci_link *link;
+-	acpi_status result;
+ 
+-	result = acpi_bus_get_device(handle, &device);
+-	if (result) {
++	if (!device) {
+ 		acpi_handle_err(handle, "Invalid link device\n");
+ 		return -1;
+ 	}
+Index: linux-pm/drivers/acpi/pci_root.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/pci_root.c
++++ linux-pm/drivers/acpi/pci_root.c
+@@ -67,11 +67,10 @@ static struct acpi_scan_handler pci_root
+  */
+ int acpi_is_root_bridge(acpi_handle handle)
+ {
++	struct acpi_device *device = acpi_fetch_acpi_dev(handle);
+ 	int ret;
+-	struct acpi_device *device;
+ 
+-	ret = acpi_bus_get_device(handle, &device);
+-	if (ret)
++	if (!device)
+ 		return 0;
+ 
+ 	ret = acpi_match_device_ids(device, root_device_ids);
+@@ -215,11 +214,10 @@ static acpi_status acpi_pci_query_osc(st
+ 
+ struct acpi_pci_root *acpi_pci_find_root(acpi_handle handle)
+ {
++	struct acpi_device *device = acpi_fetch_acpi_dev(handle);
+ 	struct acpi_pci_root *root;
+-	struct acpi_device *device;
+ 
+-	if (acpi_bus_get_device(handle, &device) ||
+-	    acpi_match_device_ids(device, root_device_ids))
++	if (!device || acpi_match_device_ids(device, root_device_ids))
+ 		return NULL;
+ 
+ 	root = acpi_driver_data(device);
+Index: linux-pm/drivers/acpi/power.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/power.c
++++ linux-pm/drivers/acpi/power.c
+@@ -81,9 +81,9 @@ struct acpi_power_resource *to_power_res
+ 
+ static struct acpi_power_resource *acpi_power_get_context(acpi_handle handle)
+ {
+-	struct acpi_device *device;
++	struct acpi_device *device = acpi_fetch_acpi_dev(handle);
+ 
+-	if (acpi_bus_get_device(handle, &device))
++	if (!device)
+ 		return NULL;
+ 
+ 	return to_power_resource(device);
+@@ -928,15 +928,14 @@ static void acpi_power_add_resource_to_l
+ 
+ struct acpi_device *acpi_add_power_resource(acpi_handle handle)
+ {
++	struct acpi_device *device = acpi_fetch_acpi_dev(handle);
+ 	struct acpi_power_resource *resource;
+-	struct acpi_device *device = NULL;
+ 	union acpi_object acpi_object;
+ 	struct acpi_buffer buffer = { sizeof(acpi_object), &acpi_object };
+ 	acpi_status status;
+ 	u8 state_dummy;
+ 	int result;
+ 
+-	acpi_bus_get_device(handle, &device);
+ 	if (device)
+ 		return device;
+ 
+Index: linux-pm/drivers/acpi/processor_driver.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/processor_driver.c
++++ linux-pm/drivers/acpi/processor_driver.c
+@@ -98,8 +98,13 @@ static int acpi_soft_cpu_online(unsigned
+ 	struct acpi_processor *pr = per_cpu(processors, cpu);
+ 	struct acpi_device *device;
+ 
+-	if (!pr || acpi_bus_get_device(pr->handle, &device))
++	if (!pr)
+ 		return 0;
++
++	device = acpi_fetch_acpi_dev(pr->handle);
++	if (!device)
++		return 0;
++
+ 	/*
+ 	 * CPU got physically hotplugged and onlined for the first time:
+ 	 * Initialize missing things.
+@@ -125,9 +130,8 @@ static int acpi_soft_cpu_online(unsigned
+ static int acpi_soft_cpu_dead(unsigned int cpu)
+ {
+ 	struct acpi_processor *pr = per_cpu(processors, cpu);
+-	struct acpi_device *device;
+ 
+-	if (!pr || acpi_bus_get_device(pr->handle, &device))
++	if (!pr || !acpi_fetch_acpi_dev(pr->handle))
+ 		return 0;
+ 
+ 	acpi_processor_reevaluate_tstate(pr, true);
+Index: linux-pm/drivers/acpi/processor_idle.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/processor_idle.c
++++ linux-pm/drivers/acpi/processor_idle.c
+@@ -1099,7 +1099,7 @@ static int acpi_processor_get_lpi_info(s
+ 
+ 	status = acpi_get_parent(handle, &pr_ahandle);
+ 	while (ACPI_SUCCESS(status)) {
+-		acpi_bus_get_device(pr_ahandle, &d);
++		d = acpi_fetch_acpi_dev(pr_ahandle);
+ 		handle = pr_ahandle;
+ 
+ 		if (strcmp(acpi_device_hid(d), ACPI_PROCESSOR_CONTAINER_HID))
+Index: linux-pm/drivers/acpi/property.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/property.c
++++ linux-pm/drivers/acpi/property.c
+@@ -687,9 +687,9 @@ int __acpi_node_get_property_reference(c
+ 		if (index)
+ 			return -EINVAL;
+ 
+-		ret = acpi_bus_get_device(obj->reference.handle, &device);
+-		if (ret)
+-			return ret == -ENODEV ? -EINVAL : ret;
++		device = acpi_fetch_acpi_dev(obj->reference.handle);
++		if (!device)
++			return -EINVAL;
+ 
+ 		args->fwnode = acpi_fwnode_handle(device);
+ 		args->nargs = 0;
+@@ -719,9 +719,8 @@ int __acpi_node_get_property_reference(c
+ 		if (element->type == ACPI_TYPE_LOCAL_REFERENCE) {
+ 			struct fwnode_handle *ref_fwnode;
+ 
+-			ret = acpi_bus_get_device(element->reference.handle,
+-						  &device);
+-			if (ret)
++			device = acpi_fetch_acpi_dev(element->reference.handle);
++			if (!device)
+ 				return -EINVAL;
+ 
+ 			nargs = 0;
+Index: linux-pm/drivers/acpi/resource.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/resource.c
++++ linux-pm/drivers/acpi/resource.c
+@@ -791,9 +791,9 @@ static acpi_status acpi_res_consumer_cb(
+ {
+ 	struct resource *res = context;
+ 	struct acpi_device **consumer = (struct acpi_device **) ret;
+-	struct acpi_device *adev;
++	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
+ 
+-	if (acpi_bus_get_device(handle, &adev))
++	if (!adev)
+ 		return AE_OK;
+ 
+ 	if (acpi_dev_consumes_res(adev, res)) {
+Index: linux-pm/drivers/acpi/thermal.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/thermal.c
++++ linux-pm/drivers/acpi/thermal.c
+@@ -697,7 +697,6 @@ static int acpi_thermal_cooling_device_c
+ 	struct acpi_device *device = cdev->devdata;
+ 	struct acpi_thermal *tz = thermal->devdata;
+ 	struct acpi_device *dev;
+-	acpi_status status;
+ 	acpi_handle handle;
+ 	int i;
+ 	int j;
+@@ -715,8 +714,8 @@ static int acpi_thermal_cooling_device_c
+ 		for (i = 0; i < tz->trips.passive.devices.count;
+ 		    i++) {
+ 			handle = tz->trips.passive.devices.handles[i];
+-			status = acpi_bus_get_device(handle, &dev);
+-			if (ACPI_FAILURE(status) || dev != device)
++			dev = acpi_fetch_acpi_dev(handle);
++			if (dev != device)
+ 				continue;
+ 			if (bind)
+ 				result =
+@@ -741,8 +740,8 @@ static int acpi_thermal_cooling_device_c
+ 		    j < tz->trips.active[i].devices.count;
+ 		    j++) {
+ 			handle = tz->trips.active[i].devices.handles[j];
+-			status = acpi_bus_get_device(handle, &dev);
+-			if (ACPI_FAILURE(status) || dev != device)
++			dev = acpi_fetch_acpi_dev(handle);
++			if (dev != device)
+ 				continue;
+ 			if (bind)
+ 				result = thermal_zone_bind_cooling_device
+Index: linux-pm/drivers/acpi/video_detect.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/video_detect.c
++++ linux-pm/drivers/acpi/video_detect.c
+@@ -59,18 +59,16 @@ static void acpi_video_parse_cmdline(voi
+ static acpi_status
+ find_video(acpi_handle handle, u32 lvl, void *context, void **rv)
+ {
++	struct acpi_device *acpi_dev = acpi_fetch_acpi_dev(handle);
+ 	long *cap = context;
+ 	struct pci_dev *dev;
+-	struct acpi_device *acpi_dev;
+ 
+ 	static const struct acpi_device_id video_ids[] = {
+ 		{ACPI_VIDEO_HID, 0},
+ 		{"", 0},
+ 	};
+-	if (acpi_bus_get_device(handle, &acpi_dev))
+-		return AE_OK;
+ 
+-	if (!acpi_match_device_ids(acpi_dev, video_ids)) {
++	if (acpi_dev && !acpi_match_device_ids(acpi_dev, video_ids)) {
+ 		dev = acpi_get_pci_dev(handle);
+ 		if (!dev)
+ 			return AE_OK;
+Index: linux-pm/drivers/acpi/x86/s2idle.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/x86/s2idle.c
++++ linux-pm/drivers/acpi/x86/s2idle.c
+@@ -293,9 +293,9 @@ static void lpi_check_constraints(void)
+ 
+ 	for (i = 0; i < lpi_constraints_table_size; ++i) {
+ 		acpi_handle handle = lpi_constraints_table[i].handle;
+-		struct acpi_device *adev;
++		struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
+ 
+-		if (!handle || acpi_bus_get_device(handle, &adev))
++		if (!adev)
+ 			continue;
+ 
+ 		acpi_handle_debug(handle,
 
-> 
-> Regards,
-> Bjorn
-> 
->> +	return -EINVAL;
->> +}
->> +
->> +static inline int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
->> +{
->> +	/* This shouldn't be possible */
->> +	WARN_ON(1);
->> +
->> +	return 0;
->> +}
->> +
->> +#endif /*IS_ENABLED(CONFIG_RPMSG_CHAR) */
->> +
->> +#endif /*__RPMSG_CHRDEV_H__ */
->> -- 
->> 2.17.1
->>
+
+

@@ -2,129 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72153467BD8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2B6467BE6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 17:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382225AbhLCQ4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 11:56:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345203AbhLCQ4w (ORCPT
+        id S1358643AbhLCRAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 12:00:25 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:59496 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240527AbhLCRAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 11:56:52 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2E6C061751
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 08:53:27 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso4160952otf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 08:53:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=qpCvSmXosx1WH8jKO1/esH6bI+63Y23SrI45rVdnNE8=;
-        b=dsc1rSwQ61xSHEZWCXJkzlb8DGemiMujE7SoQTc9e5sfDFaOeWc9lXtcTAk6LJlkO8
-         0aVZZaWz6NKE85HP1zrt0BUvRtsB4oITNjqOuO6pOxaBfRsgNHKx0+L9PTvL8FPBUPwh
-         dm1OIaR7ShKERlxpc5okWaiJiueamY3UII8HTxM74lIQ7fnVxwjN22sfeK9FlPq31iI0
-         0DbGqMs2H6wjAXZCvNpsdOqpa6IUEMksy/5qS3d3GSN6s8fgIm5Mrx+1dJvZ9JieuY7K
-         wcq6ZRtIIp/9D9PaKMxLSyMjCks66on3dPfnQPV3s5ikujBaQvDeva/dhkubjFHchYi5
-         u45Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qpCvSmXosx1WH8jKO1/esH6bI+63Y23SrI45rVdnNE8=;
-        b=jt5GqmS4PaLC1ikx3Je/cauum1HJMrpe7tT3HdwW/8M5G/BQRVhfFUfWgY9zw/wUQE
-         JPBobm1It2q/rB1nZ6IbDGAoUjGr3OXl9l9o7dqKM+TAd+ZSWu7Qr0s/DwzjZjJe67Ja
-         d5Igd2tuZ1q0a+CpN1VRZEY3/KU0iuRAdiFHAB6/TcVOUlEsXdS6low7zQu0hYLaxFyt
-         Ja60DnIt/7UjBm5frht1GYhgbOEa+APCjU0w6VGPx6rpsZ7NyemFfhktN2HpZujS5/YD
-         6z2h0N6WNvfY82huvMbQqR01qWNtJWKM5ltUNEi33tHblL6GpVdKpTIgGZGKSk3yRtUJ
-         Q0Hw==
-X-Gm-Message-State: AOAM532nCmNZM0Sa1aPhQ/YvbqJe97r+tNjpE/LOkz3RlUZvr2TyhmNR
-        mPWnEdyuthHERU1lTzqlWlwlx4Qh6fJL54Wm/+S7+Q==
-X-Google-Smtp-Source: ABdhPJzRAC70hV/vdXCu824GJhpmhteP0JzcwqqihmbC7A5owodohjiSu47SEwBa1GAo9AMopTEOhXq/48Rqtq3cVGQ=
-X-Received: by 2002:a9d:2ae1:: with SMTP id e88mr13032680otb.157.1638550406487;
- Fri, 03 Dec 2021 08:53:26 -0800 (PST)
+        Fri, 3 Dec 2021 12:00:22 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B3FHjxt024476;
+        Fri, 3 Dec 2021 17:56:50 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=lVFPlD5zTSPixkBBTEMlFlHKw7YEEz4hyL4vWG8qF4A=;
+ b=ZNWWUMWGhQ0vTcZDWynG49WfgKhPG35aeVNdMit6tCxev/MdNmA2C5M3YuUO7fMxwN1d
+ Kmk4OTV4L3m2KFaA2/Oa+aHZxlNvQPkWxeV4sQOEL5vlmQ+8z5ZphGr5mX+JjA370jdR
+ 1LwRkdtXtCAWQULvoMupxV4v51Ujv0c0c8PHVYJf9dz/Evmb7yPvqZ7XnSMUiDmJfoWV
+ IJZzahGlnkamkfrF6jMqcfA0rzlhYcYvo7wqgUOCfoPFfmvkKcIrQSDPmeNvnMC/hc6U
+ LDJcZ5x/vFXUwZeExp3vjmD7xcA/+U1fdDV/K84aPxlGjsNiCQR2x7gghrct7Fh9Caq7 TQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cqnrmrdw4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Dec 2021 17:56:50 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CC64510002A;
+        Fri,  3 Dec 2021 17:56:49 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C467D20C118;
+        Fri,  3 Dec 2021 17:56:49 +0100 (CET)
+Received: from lmecxl0889.lme.st.com (10.75.127.45) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 3 Dec
+ 2021 17:56:49 +0100
+Subject: Re: [PATCH v7 12/12] rpmsg: core: send a ns announcement when a
+ default endpoint is created
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>, <julien.massot@iot.bzh>
+References: <20211108141937.13016-1-arnaud.pouliquen@foss.st.com>
+ <20211108141937.13016-13-arnaud.pouliquen@foss.st.com>
+ <Yal5tplvcqDjEeTs@builder.lan>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Message-ID: <eb3cc7a1-251e-7d40-225a-a5528a22323e@foss.st.com>
+Date:   Fri, 3 Dec 2021 17:56:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211203093000.3714620-1-keescook@chromium.org>
- <CANpmjNPCjXp_0iQjdznpvS2vF-VvDkxJrtWnBAoj6TAU488VAQ@mail.gmail.com> <CE7F1A95-67C7-4BDA-B803-D93901EC2378@chromium.org>
-In-Reply-To: <CE7F1A95-67C7-4BDA-B803-D93901EC2378@chromium.org>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 3 Dec 2021 17:53:15 +0100
-Message-ID: <CANpmjNMCrLU0J3W+-=wihEaHXMytSfNy=iu-8-oO8JDvEUYAJw@mail.gmail.com>
-Subject: Re: [PATCH] lib/test_ubsan: Silence compile-time array bounds warnings
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <Yal5tplvcqDjEeTs@builder.lan>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-03_07,2021-12-02_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Dec 2021 at 17:21, Kees Cook <keescook@chromium.org> wrote:
-> On December 3, 2021 2:49:53 AM PST, Marco Elver <elver@google.com> wrote:
-[...]
-> >Are there other warnings or only the one for the fsanitize=3Dobject-size
-> >test? I think this is fine if there are other warnings.
->
-> I will double check, but I think it's only the object-size test, which se=
-ems to confirm my suspicion that -Warray-bounds provides sufficient coverag=
-e and object-size can be removed.
->
-> I have another patch I intend to send today for the sk_buff/sk_buff_head =
-issue, as -Warray-bounds warns for that as well.
 
-Nice.
 
-Do you want to send the patch removing UBSAN_OBJECT_SIZE, or shall I
-do it? Perhaps it ties in better with the rest of your patches which I
-have no state of.
+On 12/3/21 2:58 AM, Bjorn Andersson wrote:
+> On Mon 08 Nov 08:19 CST 2021, Arnaud Pouliquen wrote:
+> 
+>> When a channel is created by user space application with the
+>> RPMSG_CREATE_DEV_IOCTL controls, a ns announcement has to be sent
+>> (depending on backend) to inform the remote side that a new service
+>> is available.
+>>
+>> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+>> ---
+>>  drivers/rpmsg/rpmsg_core.c | 14 ++++++++++++++
+>>  1 file changed, 14 insertions(+)
+>>
+>> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+>> index bdcde57c22f6..63227279397d 100644
+>> --- a/drivers/rpmsg/rpmsg_core.c
+>> +++ b/drivers/rpmsg/rpmsg_core.c
+>> @@ -145,6 +145,9 @@ EXPORT_SYMBOL(rpmsg_destroy_ept);
+>>   *
+>>   * This function returns a pointer to an endpoint created and assigned as the default
+>>   * endpoint of the rpmsg device.
+>> + * If we need to, we also announce about this channel to the remote
+>> + * processor. This announcement is needed in case the driver is exposing an rpmsg service that has
+>> + * been created locally.
+>>   *
+>>   * Drivers should provide their @rpdev channel (so the new endpoint would belong
+>>   * to the same remote processor their channel belongs to), an rx callback
+>> @@ -161,6 +164,7 @@ struct rpmsg_endpoint *rpmsg_create_default_ept(struct rpmsg_device *rpdev,
+>>  						struct rpmsg_channel_info chinfo)
+>>  {
+>>  	struct rpmsg_endpoint *ept;
+>> +	int err = 0;
+>>  
+>>  	if (WARN_ON(!rpdev))
+>>  		return NULL;
+>> @@ -183,6 +187,16 @@ struct rpmsg_endpoint *rpmsg_create_default_ept(struct rpmsg_device *rpdev,
+>>  	rpdev->ept = ept;
+>>  	rpdev->src = ept->addr;
+>>  
+>> +	if (rpdev->ops->announce_create)
+>> +		err = rpdev->ops->announce_create(rpdev);
+>> +	if (err) {
+>> +		rpmsg_destroy_ept(ept);
+>> +		rpdev->ept = NULL;
+>> +		rpdev->src = RPMSG_ADDR_ANY;
+>> +
+>> +		return NULL;
+>> +	}
+>> +
+> 
+> Unless I'm missing something I think this would be cleaner as:
+> 
+> 	if (rpdev->ops->announce_create) {
+> 		err = rpdev->ops->announce_create(rpdev);
+> 		if (err) {
+> 			...;
+> 		}
+> 	}
+> 
+> which also implies that you don't need to zero-initialize err.
 
-> >But, if it's only about the fsanitize=3Dobject-size test, I'm going to
-> >propose something more drastic. :-)
->
-> Are there any cases where object-size does a run-time check that couldn't=
- be done at compile time? That's the only reason I could see to keep it at =
-this point, as -Warray-bounds can do the compile time checks.
+Ack, i will change this.
 
-No, I don't think so.
+> 
+> Other than that, this looks good and follows what would happen in
+> rpmsg_dev_probe()...
+> 
+> 
+> PS. In rpmsg_dev_probe(), if rpdrv->probe() succeeds but announce_create
+> returns a failure we will exit the function with an error, which will
+> just fail really_probe() and we won't ever clean up the device (i.e.
+> call rpdev->remove()).
 
-I stared at the LLVM code several times now, because I still couldn't
-quite believe it myself, but I think it really doesn't do any dynamic
-checks. Hence, why below I say it should have been a compiler warning.
-As mentioned in the bugzilla bug, there's a FIXME in the LLVM code to
-do a dynamic check with the help of fsanitize=3Daddress, but that never
-happened. And that doesn't make much sense anyway if fsanitize=3Daddress
-(viz. KASAN for us) is already on and does checking itself.
-
-> >I had wanted to wait a bit and dig a little deeper, but I just posted
-> >part of my analysis here:
-> >https://bugzilla.kernel.org/show_bug.cgi?id=3D214861#c4
->
-> Thanks, I'll refer to that in my sk_buff patch. It seems -Warray-bounds s=
-uffers from the same conservativism about object casts, which is frustratin=
-g on the one hand since the warning can be a false positive (cast vs access=
-), but on the other, it does call attention to fragile arrangements which m=
-aybe could do with adjustment.
->
-> >My proposal is to remove UBSAN_OBJECT_SIZE and its related tests. The
-> >bugzilla bug goes into the details, but the TLDR is:
-> >1. fsanitize=3Dobject-size is incomplete,
-> >2. it should have been a compiler warning,
-> >3. for everything else there is KASAN which detects real OOB,
-> >4. for GCC we already disable UBSAN_OBJECT_SIZE.
->
-> And maybe:
-> 5. -Warray-bounds provides the same coverage and is about to be enabled g=
-lobally.
-
-Yup, in which case the compiler warning already exists and point #2
-above is moot.
+Right the error management in rpmsg_dev_probe needs to be improved.
+I will probably found time to address this when preparing the next revision
+of my patchset (just need before a clarification from you about patch
+v7 10/12] rpmsg: char: Introduce the "rpmsg-raw" channel).
 
 Thanks,
--- Marco
+Arnaud
+
+> 
+> Regards,
+> Bjorn
+> 
+>>  	return ept;
+>>  }
+>>  EXPORT_SYMBOL(rpmsg_create_default_ept);
+>> -- 
+>> 2.17.1
+>>

@@ -2,565 +2,400 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0301F467DAB
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:59:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD4C467DAD
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243796AbhLCTDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 14:03:05 -0500
-Received: from mail-cusazlp17010005.outbound.protection.outlook.com ([40.93.13.5]:31537
-        "EHLO na01-obe.outbound.protection.outlook.com"
+        id S243231AbhLCTDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 14:03:16 -0500
+Received: from mail-bn7nam10on2046.outbound.protection.outlook.com ([40.107.92.46]:19169
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S242639AbhLCTDC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 14:03:02 -0500
+        id S243519AbhLCTDM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 14:03:12 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lwvvorw3+A+YYcD5vSTxaajypwrEDSblNTf15y8nBuFDxy9pl2iteCEGoAzTWU4+Neck9CAlJlGg47Syj+46hZmHGC/VuM1nJnorGizfpa3YGQ7PRL1h3YiB1/qEJmHDWkMQ482EA17hW3AleMLlfOuDeWwP8Nyu5aUbUukOGtZ3tPnHW/O7MDCeN6hIDbARVOttrQ/JI620sN9+uWOwdoyTZ2vviv+IjXg1WCqJkSNZ44ASHtV0Y7+AusIHsiR6i1Mm8l3crOpaMOCcBtSdIgBOOE+Qp6Sw/cUT5fzB1Yhai29RBKMKh2BNO/rKXE2Taev5aufAcAHKjWcAZ/ReWw==
+ b=XA0RLTaIwoXPm4SRYDH8nCv/+yOas2xdhb9qfiMcn/jQiw0AKI4s44Kv58FwnEyNIemouCSD2rkVQ0Xt80p2yvxDIh0KTPbizsGxdeuOhRLFFyzllqOmAUKP1DulPWTdOcYn20qz61UCuYwiBqrRBDOYW81C2BpnMIH28jr6NWH6DNHE8cHC5Trufn9OAOTU6CiXnYgp9ivEsCoc81z9kQlwgenfQ5SFGPuMvE7WBysHydzQvUjz/0yrSK0/6h9dYnJio4KVBpoqmCfh/Tpow/iv/RLprckS8YQD4RC5tNVNt3DYZjmTVAMSMownutlOjhs0PJ/xp65JhGEfy1ukBw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1zvSmGZWeL7RWAEcBm9oIjTfTcaBDiK4JIFwRC9Z5qI=;
- b=DmA9wQkU4WWD70vdJ0rTD7Utt4ya1UcV9DrNvYAkSwSk2FZMOWwb7QsIbs6cRwzxRUCFb0k8LE0mhH46wwrUg2hWxz2JuLz52YzNKugvjGUe47SerHwK52YKCmlCOIf11P/6hxKHtgJTE0NoqHoKaShnDpW45eXETGCYLFLzNmYvS8UKHw+QSX8B4nIefEWx5rw72hvJ02EN7KGoLcPl8NUjzuHAxWbYf1+t0xA/BipuZc6sHKj3/UR1Xwy+LkfWRc6/kuZ1GkQ+NDGyAbBFOTwQfq3BgH2R524Arty1KNdNkfHcUiaBCZo7XTMGw0022uI8t2S1AtgCTd7N866Z9A==
+ bh=MPundRD0QFz9/5T9BvePjXsJG5sxYSNayQQH2XZR9IE=;
+ b=NL2okNJrcS+gTmUjxMSKZFsrz+x/bJiyx/ggTCGZ9AR/Paw+svNxvCbVk/QDl64AMLqSnmsz6hhcFZ2dv1I1zgAA73kdf1yi+cyJv44R3oVfpzKhTTpztbD3pB6BrH4fZiDFeF6EjhApE4bMMoPJ2yacnDnJAZ2vsTqebF0eHsv+8vBWtBiSTfXtgf4CJB3qoOxPTOK5YbThVmsDb7y4eiaoxRyMkExyqlgBDMug8QT3hKXpRovWHiNqD1BvzH4AZ8dpmwy+mhML39ISddIeC4bHfZYskIJXggzQrxcfX1l87b76/nPrHOe8cxUccynPNnnONS67MhD7FxaXq0jyCA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1zvSmGZWeL7RWAEcBm9oIjTfTcaBDiK4JIFwRC9Z5qI=;
- b=BiC27HDQ44LRg9RXfOjZHExAaPOFEGxSNUX1P8QoDaUcBh8HcGtMWo/XjI9KTkBpjCqf829atRtTQUtzU285LfbyFmgSUL9mKjzGT9hjoee1TATPnI0wcuCFKA23nyxvxREAKRdkP4vidPKJBTbfCFg+6WCUAN4eXASP+yAtXSs=
-Received: from MWHPR21MB1593.namprd21.prod.outlook.com (2603:10b6:301:7c::11)
- by MW2PR2101MB1019.namprd21.prod.outlook.com (2603:10b6:302:5::10) with
+ bh=MPundRD0QFz9/5T9BvePjXsJG5sxYSNayQQH2XZR9IE=;
+ b=3ntx59691sjRopD9JVAIdwLwNx1mFYJhZ1PmW9b7Bd3d9pUqG9ipbw4btg15YaDUb6GM+LjHP/ZIQuL6MlZhZoSUbgAy4URDiobHyeLRrdiuMPVrR9I862GO0JupWIFpUxlKQrHCDgkZbcfWiuWduZNHZVd34UJ3inf73TeBsLg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by DM6PR12MB5552.namprd12.prod.outlook.com (2603:10b6:5:1bd::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.4; Fri, 3 Dec
- 2021 18:59:29 +0000
-Received: from MWHPR21MB1593.namprd21.prod.outlook.com
- ([fe80::40d7:92be:b38f:a9cd]) by MWHPR21MB1593.namprd21.prod.outlook.com
- ([fe80::40d7:92be:b38f:a9cd%3]) with mapi id 15.20.4778.007; Fri, 3 Dec 2021
- 18:59:28 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Tianyu Lan <ltykernel@gmail.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
-CC:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        vkuznets <vkuznets@redhat.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "hch@lst.de" <hch@lst.de>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "dave.hansen@intel.com" <dave.hansen@intel.com>
-Subject: RE: [PATCH V3 5/5] hv_netvsc: Add Isolation VM support for netvsc
- driver
-Thread-Topic: [PATCH V3 5/5] hv_netvsc: Add Isolation VM support for netvsc
- driver
-Thread-Index: AQHX5sz1lOYUX8sXwkWf4jhcdD0xcKwhHfRw
-Date:   Fri, 3 Dec 2021 18:59:28 +0000
-Message-ID: <MWHPR21MB15934DE25012A8565256336ED76A9@MWHPR21MB1593.namprd21.prod.outlook.com>
-References: <20211201160257.1003912-1-ltykernel@gmail.com>
- <20211201160257.1003912-6-ltykernel@gmail.com>
-In-Reply-To: <20211201160257.1003912-6-ltykernel@gmail.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Fri, 3 Dec
+ 2021 18:59:45 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::1ddd:71e4:5803:e44a]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::1ddd:71e4:5803:e44a%3]) with mapi id 15.20.4734.028; Fri, 3 Dec 2021
+ 18:59:45 +0000
+Subject: Re: [PATCH] KVM: SVM: Do not terminate SEV-ES guests on GHCB
+ validation failure
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Brijesh Singh <brijesh.singh@amd.com>
+References: <b57280b5562893e2616257ac9c2d4525a9aeeb42.1638471124.git.thomas.lendacky@amd.com>
+ <YapIMYiJ+iIfHI+c@google.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+Message-ID: <9ac5cf9c-0afb-86d1-1ef2-b3a7138010f2@amd.com>
+Date:   Fri, 3 Dec 2021 12:59:42 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+In-Reply-To: <YapIMYiJ+iIfHI+c@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=7aa46730-7ac1-4f56-a342-d06f8d3c5a0d;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-12-03T18:44:18Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e4fd0545-1fe9-490d-11ea-08d9b68f0888
-x-ms-traffictypediagnostic: MW2PR2101MB1019:EE_
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-microsoft-antispam-prvs: <MW2PR2101MB1019D55A2C3EF51484B7E581D76A9@MW2PR2101MB1019.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:862;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ydoQvVlPfMxx+YfYtW+339jBk6xMiWetvoI6kXCiqRvtC6JfucpyOWfrd0a+h5RxygwYl1I15pZuDA/v6Wjcp3XaJ1B83XVnxyWcHSKltL3yJuiSFfAwXb7WKwZ154+PE8lS46uTBLyzoFr21VpaXTifhDJylakapYurHcVSWxqt7rOZkj9rlLmhPfRbTVUwUXqrZqjYrsGAY7idYxiUuG5Rj2qrTI+1Cvsqr3NbYEtWUINEvXyOYDmvWq0wC0c92gUaJX1U5XKYyeDdVq2OusotUAhVrhTXmkLb04/Z4ZBTzf2pZ3djvQczH1R0zfTcqyMZkFQ/HZcStt8NYkJ0cIa4AO2C2CaspPns3WLiw1h7hEbRVnUbAugzCm2Tm64htPq9XL8lIE9Iqgke5rYfmAMvVBfZwPVj9ZS/IqL3oc5A80gv+QQBaq5M0Zl/MnpPu1OcJBKmwqNVcJnyUiVuOS9RabA/rjQFKa63SHLSOfFl9lZwXAA7axn7q5ffN9ZlnJbLnoVSuw62EiPDZ+pyMTrB6z8uxekQq1O8CoN2H1lcAW/gNHrPHg34zJmH/TApJTIXZKHyl0XHBUZxx+W/a8U4OUzRedAdNFREgbEM52vLDdmUj8sbzjN4wjUH5SB4ovixqy060ke6VuebNhQBHkYGMhRIOHV2WYVJ9Tz+gv3xectNAtgHdZkeOiTk8egzDXvUNcIGI9n4GCeaSzB6uinDf7/YrcewVU2V2KDxWj2EcAQBIU3a0vW83ymH8zlCPHru2tVQ/LoBsV4dtth2iQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7406005)(83380400001)(7696005)(38100700002)(52536014)(26005)(122000001)(7416002)(33656002)(2906002)(30864003)(55016003)(8990500004)(921005)(76116006)(110136005)(10290500003)(66476007)(54906003)(508600001)(66946007)(38070700005)(71200400001)(9686003)(316002)(64756008)(4326008)(186003)(66446008)(82960400001)(8676002)(8936002)(82950400001)(5660300002)(6506007)(86362001)(66556008)(20210929001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?zro05vSCjNhuL5MHhJZOTjES/UopVWOcpIskjM1HonsMdpJeWb4uyjKZK49+?=
- =?us-ascii?Q?sPTbWrp09l4kVjrnPUElkyQPSW2rCsjz9I0uqEYXSscsthBnmLBxIn9OFuIn?=
- =?us-ascii?Q?/ko3l7vahMQIWCVgMS/3clNRo8sbdGJ5KSN2jUawD6pr/3m+Psh7Jzpt1zEQ?=
- =?us-ascii?Q?Jo7rc1X4wPqQvquhEWhM0xaZf6BcSdmfAmq5oyLzqWxYdyTJMT6D3Nv1IZoP?=
- =?us-ascii?Q?G5S6svamQHo/NG72c6H1PIyRkVThXgCZ3TFHfTKL5mSGkbfMmz3L9ofEOVkG?=
- =?us-ascii?Q?hz4W72vOpX/2jIXdE0XrP1g7TOIt9Euax44m2MkDuaA5K9MegcMEjJjBMTH7?=
- =?us-ascii?Q?uEUas+uIia4ztMbRKx7d/v0XVEjHFiAfySOL7pCa0OLlQ30Att4f6rmBQQmG?=
- =?us-ascii?Q?eG3bdaBrnYhaxeD7M7lV/Nux6v/mcc4gErL5Ek2QWc8JizuQN/XpSsJdGg9y?=
- =?us-ascii?Q?NJQ3DVOjgBuhQBPIdd9BaeNTA3YuoZHCGdMnY/cgQxDqGqvm9go9EaA1/LfZ?=
- =?us-ascii?Q?QrlLu/dnubx1sw92+WypKQcH8BRbW/a6hCxKmDjYYO9kls5FWRsTllUzPQcQ?=
- =?us-ascii?Q?AjjfxzU/CReHsPVVAjj2X+8CozdfyXNgeU3F3vNpN7gmiSiEZ7IIwa69v2Az?=
- =?us-ascii?Q?ydOhQIzKdk2xL7PZup1Qi1LaEHZKNz/4zh9H+iH9aZg6KgxkZs1PbfbdgiI1?=
- =?us-ascii?Q?pZW9idJgm8kIDWzDfxW6Z4Ycyr66zEdbkrtcVnNY7O+5BXwlxst96aJAj+va?=
- =?us-ascii?Q?uGNSZu81g3h2Acq4GNRQxb/1fdEDa01z6/9Tiu73WxzTprkmlrqV8cTO3MmJ?=
- =?us-ascii?Q?I2GixJzZjMahihMWVm+gILXztvQQjyjGEQm+2JKNRflygrVIQllAzhf/FhCS?=
- =?us-ascii?Q?+247wG9pKiyt2JF7bph+WCgID9oRz90f/AqwVG2JSdM7Uj3H7IFuCXiibXw7?=
- =?us-ascii?Q?Z5CIgeeV0XFrHXT/1Nu1vAO9ceHSzVeEL/rHUDBp67rXjOutI2+lqgWTKTeO?=
- =?us-ascii?Q?f1vR1eEABitU9o9v3kHjGkgPLwF4V7aNHXqPmzLnpgTSCQ4cQzk2oal1cAJD?=
- =?us-ascii?Q?YN/2lAfhZCo/gwpodcKhFT9/R/sNpwGwtI0+4gbTXJ3b/U7jHJDY2ZhkDRDc?=
- =?us-ascii?Q?LwIW15Tg5VbdX+hcaVnPNvMTJFSbakCQCm7cOSh+4lNhi1dWe2mnuBBb3Pig?=
- =?us-ascii?Q?/6V6BEnNe/xjAuu0yO4fc8kRTSDXPv99wtqcMFQ4Ygsmd1VYaPGOHrk/7nvz?=
- =?us-ascii?Q?wyXUbAlq1VOevie58iYz06IJn0uRxxqzKCZ3WnD9X7eDNgCwJUUU36Bc0cBl?=
- =?us-ascii?Q?jQvDM79Xd8wsUD8PEGR8F0J0vKgcxSc+1EnINQRLjntgo1ELCmE2REZSZ/fN?=
- =?us-ascii?Q?GRseoeIIFNtDnDxO2JKwMGlnQIsKBY+nAH/Jp1VZ3NbYVxiNU7LuuwvZkEz6?=
- =?us-ascii?Q?76Mg1mInYSEe7Xh27WOuH1Av+0Shqefq64UumAWF4FB2m1sBvHvYXXfx8xHq?=
- =?us-ascii?Q?ah4Ul6oRzXrIQUL5/YXRuzb1yKj618fuHOVSq+UzA+6kToluDHd4w0XfFOOq?=
- =?us-ascii?Q?5cuYbfyBTSZnEyFbShNhPGM5BuhBHX/yNn/Pq4tMkSOwJjzQ2TTma10tmB9S?=
- =?us-ascii?Q?d402NcSXuQalpQsaEegUQG2pmbbC1GUqaMH59uPaQpgJqr25hurQg7ODq8ET?=
- =?us-ascii?Q?QmrLAA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN6PR2101CA0029.namprd21.prod.outlook.com
+ (2603:10b6:805:106::39) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
+Received: from office-ryzen.texastahm.com (67.79.209.213) by SN6PR2101CA0029.namprd21.prod.outlook.com (2603:10b6:805:106::39) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Fri, 3 Dec 2021 18:59:44 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1fa5a275-7d14-4b49-c512-08d9b68f1243
+X-MS-TrafficTypeDiagnostic: DM6PR12MB5552:
+X-Microsoft-Antispam-PRVS: <DM6PR12MB55521AEC9365090443DF56F2EC6A9@DM6PR12MB5552.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: k+rIRrDwCT4D5ZNrCtaJBTayS26fap0xpDaiSSPwxzMVeH5FyO0WpA4B4M6pn2a1IM7CNkjhQIkxK6poszIoOKHLw0Lu9tNPHXUWkkpsVLP3gpLQu/628n/cl8NEAxi/BKsZJN7APhYmnhxTko/TQFX2e5UMJ1oXsB+kX2EjTJoa5x4NA4KilobfkBjiWJ65Mmv6AIn3AyHUlRhdpTOLwBvqKb/aPrCo4TVvhoZBMGJJ11s2cpg+iBpfrK02ksrl2KQaFSm2KI3HMlQUmf6pgKTtJKKklaNgcj20zPPqIa9xi0ylgPPmZxLmUowhvt1p6g2H9A1E+yvKSgIjLs3uKLTU3u8qAjQ78lVoXNTYhuEm5UyS38Cib59RYkoA32MGG0eSmOvaNU2C76m5gRPNbj6z7b/vs8MbnObVob+cUaezwx5xsxFYaZJ/7aKxnXmCjgBn2M+CVP1HTbu5jeKIFcbqVbxA/jLnKQ9x6vvr3i5PnJYkn1puzujBQSwl661SJisYEMGADalVT6uOeKjZse1wRMvtWH+7P9IrnxAo4j9UOzrK1hEK8k022t7wPtbemGL/Wsmj20iTPLxgezxYRQu6D9lyOBNkaWiBl926yqrw4PlD0H20ILoiBUTLBm/f1rB03DzN/oDiaeeJshP51bef2T3i4xlt6DJl2kNQTwuUh3mNq2YwUu8NBcQ4EM0SdMMuX8C6wgFrUn9f+dDZ/Pex+SF9DvHsnaQ3pnv7Rqj7W/+Wzir4lCGG8dXtcZg9
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(31696002)(66946007)(4326008)(66476007)(53546011)(38100700002)(5660300002)(31686004)(186003)(86362001)(8936002)(8676002)(26005)(6916009)(36756003)(66556008)(2906002)(6512007)(508600001)(2616005)(83380400001)(6506007)(7416002)(54906003)(316002)(6486002)(956004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K0p0QVRVVWdYQ0lVV09XWGNpMnhiWDNFM0E0TVgweXVKNytKOVJkUVcyR3RD?=
+ =?utf-8?B?dHZqOExFaVBTV0t3U1gydk1ML0E1Q1Z6M0djSVJTWXBia3VvSjA0NlI2QS9x?=
+ =?utf-8?B?ZTEvZWlWUHErSkVKbFZMRmlzUnQxMTQzbWd3TlFRWTlFaDRDK3Vuejk5NDJQ?=
+ =?utf-8?B?MEh5dHNHNWtaTDZpdTFYYlo4TVcxRHhwZ29MYUNqVHJnQTZVaFJLVUZaV05G?=
+ =?utf-8?B?U1BPTDNKQ3U3NHptWE10dk1pN0JTZjNseUJrKzR3LzFuSSt3TDVhM3VSS2sv?=
+ =?utf-8?B?ZVpLclJRWU1uRUVGb3lqWUtVVHU2TzFLMzFia2M4aWxrYU4yVTlZLzNoY3lH?=
+ =?utf-8?B?d0phd2hpWjV0b1pxcy9FcUVQNkN3akFvLzd1Y0JUeFU4TzluVEkxZHFPT1lG?=
+ =?utf-8?B?ck1yaEZaY1h2WVlMdFl3QkpkRW4ySHVUbzE4eGRHQlM2bTY0dEpTcGF1LzlB?=
+ =?utf-8?B?RTljVkRoc3RyUCt5NUJ0bVY3UXo2QkNic0tma00rUVVnT0k3bEtwSHR2eGVX?=
+ =?utf-8?B?WU9UMEx1K1dGSDlNNWlaVU5TZTUrb2Z0czJNYU9ONmZ0YXFFMFRtVHB6RTFi?=
+ =?utf-8?B?LzQ0SzVuVGovRXF6OHVzSlRDSDJaYjdxMzJZanNvdEhyc0J3dzk4VkVMMTdG?=
+ =?utf-8?B?M2N4aXVhbnJJV2NvVnk5dGs1cHBPNDVNL3FuelNVcDV3S0RLQjJmMzdlaHk1?=
+ =?utf-8?B?MkV1K2xIaVljRnRPMlQ4MFpDWVd5V0V4VFBZbnBZS3pWQll5bW1IMk8rcFNm?=
+ =?utf-8?B?Q0UrZDBhSGxoMEVqeUdKNVQvT3htVkt3eURUdmRZaDFqNkVVOTZqRWRLKzIz?=
+ =?utf-8?B?OUcwRVR4Z1RMTlBrS2l0VmpYY1BqOWcza2VuRWIycExER3pLRzBINy91ekxW?=
+ =?utf-8?B?cE9rTE9aaXJjMVRLSndZaEpPQ1BHRFIxVElqNHMwN2QzZk91N1JQSE9BZTJs?=
+ =?utf-8?B?aitNQlpyTmwxbnZzSjBaVU4rK2pOTHFUbDVRcVRsTHZJbi9Yd1Y2MnBST2Fm?=
+ =?utf-8?B?eWtERFdSRXg3eThLZVcrcGJxNzJoT1V4SmFIaG1IbnNzNE8vZjZtTHZnSHdh?=
+ =?utf-8?B?aDZXckJwS2ZWdXJTNEcwcWVxc3JJM3FVMGpweFhJSE4yZVJsTk1OZUNrRTBR?=
+ =?utf-8?B?Rm5iR3NjT1RaSjArdXFuQ2pqYlIxMDV0R0RtVXVxQklWaFdJQWVnTVZsL2Qy?=
+ =?utf-8?B?NGxETUozeTI1OVpCVi9rRnJ5T29tbEdteDBqQTd4cVpNZWQ2aC9JQTNSWG5l?=
+ =?utf-8?B?QXhIckpGSkpWRVY3ZXhmZzRrcGFmSExZQkw5NHJCdWxrK2JmMWtQMW95K0ZC?=
+ =?utf-8?B?b2pCK2MxRXV4UUR4TEdBOEMrdUgwYmMxMHk2UXc5aVRxRVcrSUVYVWhiNVpz?=
+ =?utf-8?B?RVRMV0NhVk1mV3d3ZFJFQ2U1UzBHdmUvT2k0cmJBcnkyK1RoVDVQVG5MemZx?=
+ =?utf-8?B?WlJBU2ZvZGtnaHlVd0xXUW5wNHJuTVcvWC9BMUp4SUJueStwVVRwd200cFFG?=
+ =?utf-8?B?RjVCR1BmMnpsOCtWUExoUlE3VjkydDNwZmw3SmFKTlo0SW9hc1hnNE9Kdkx2?=
+ =?utf-8?B?aXVyRmkyOEd0a1pCcU80QWdNaVFOeTlFa2VwV2RFcFYyMG9yNGlYWXQ4UjJU?=
+ =?utf-8?B?TCtzVW4yRVpHTnlmYW9JNTlmeWVaWlo3eFptdlYzUllYK3hzQTdJRmZnODYr?=
+ =?utf-8?B?MndLYjN2ZGdZYzNvWkNEV1ZHRDI3WWNHOUJzM1N6S2JqUzNkVUhVemlJWXFQ?=
+ =?utf-8?B?Z2Q2WG53eUZ4dHgzdHI3RmxnRjAwMTlIcjc4dzZyNXVSQmM0K1A1aHRBa1px?=
+ =?utf-8?B?TlkvNFdtQVhPZWtIU0dlcmp0MDJ5Y1RtWFl2UjZUcDRPM0wyVWRaV2ZKU2lZ?=
+ =?utf-8?B?VW9hT3dwamtPUEJhQ1RzcjBURDM3ZWMwS3k1aXdoeCtVdkU4bU9QUlBKbnVa?=
+ =?utf-8?B?RDYxd3dxZzhqRlI2VmlCUEU2dzZmRXVmYUZpaVhMS09ZYUpUMTJuVDlhem1Z?=
+ =?utf-8?B?RDBTdnhscG0xMW1QOUlIbkpPQ080ZWI5b0lvWmgyL3hZNlRTejdMTHFDVS9y?=
+ =?utf-8?B?cFBpWmJGa05DTSsxWUJ4dmVTb0RqMXNTMzZPeHUxU0YwdU9DemVoQk5hVits?=
+ =?utf-8?B?M2VIanF5SlhNeWJib0E5WjJWenY2Q2hubkwvVHRDRzJ0eG9hR0o3SUgzei9D?=
+ =?utf-8?Q?DzhXsvPk9PvCk370Vqi7joE=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1fa5a275-7d14-4b49-c512-08d9b68f1243
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR21MB1593.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4fd0545-1fe9-490d-11ea-08d9b68f0888
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Dec 2021 18:59:28.7049
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2021 18:59:45.4716
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NNhAqCcIO2/MvZ83887pIu/DkGlbprQSyQM4VAMD175E+8fHTfeqdSeFGghpyHZnawQeWGOLtdfagQjnJczuCNx+Z3JOc24ccqsSmogkqcU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR2101MB1019
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zhkL4wYgf9d4BcgYoq21W4br1y9Xs8fX+qum/MTxaj0PYcfH8r+ABcfQh8b6vcF4ur/orrOTlahx1hrHHAazpA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB5552
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tianyu Lan <ltykernel@gmail.com> Sent: Wednesday, December 1, 2021 8:=
-03 AM
->=20
-> In Isolation VM, all shared memory with host needs to mark visible
-> to host via hvcall. vmbus_establish_gpadl() has already done it for
-> netvsc rx/tx ring buffer. The page buffer used by vmbus_sendpacket_
-> pagebuffer() stills need to be handled. Use DMA API to map/umap
-> these memory during sending/receiving packet and Hyper-V swiotlb
-> bounce buffer dma adress will be returned. The swiotlb bounce buffer
-> has been masked to be visible to host during boot up.
->=20
-> rx/tx ring buffer is allocated via vzalloc() and they need to be
-> mapped into unencrypted address space(above vTOM) before sharing
-> with host and accessing. Add hv_map/unmap_memory() to map/umap rx
-> /tx ring buffer.
->=20
-> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+On 12/3/21 10:39 AM, Sean Christopherson wrote:
+> On Thu, Dec 02, 2021, Tom Lendacky wrote:
+
+>>   
+>> -	return -EINVAL;
+>> +	return false;
+> 
+> I'd really prefer that this helper continue to return 0/-EINVAL, there's no hint
+> in the function name that this return true/false.  And given the usage, there's
+> no advantage to returning true/false.  On the contrary, if there's a future
+> condition where this needs to exit to userspace, we'll end up switching this all
+> back to int.
+
+I don't have any objection to that.
+
+> 
+
+>>   		}
+>>   		scratch_va = kvzalloc(len, GFP_KERNEL_ACCOUNT);
+>>   		if (!scratch_va)
+>> -			return -ENOMEM;
+> 
+> ...because this is wrong.  Failure to allocate memory should exit to userspace,
+> not report an error to the guest.
+> 
+>> +			goto e_scratch;
+>>   
+>>   		if (kvm_read_guest(svm->vcpu.kvm, scratch_gpa_beg, scratch_va, len)) {
+>>   			/* Unable to copy scratch area from guest */
+>>   			pr_err("vmgexit: kvm_read_guest for scratch area failed\n");
+>>   
+>>   			kvfree(scratch_va);
+>> -			return -EFAULT;
+>> +			goto e_scratch;
+> 
+> Same here, failure to read guest memory is a userspace issue and needs to be
+> reported to userspace.
+
+But it could be a guest issue as well...  whichever is preferred is ok by me.
+
+> 
+>>   		}
+>>   
+>>   		/*
+> 
+> IMO, this should be the patch (compile tested only).
+
+I can test this, but probably won't be able to get to it until Monday.
+
+Thanks,
+Tom
+
+> 
 > ---
-> Change since v2:
->        * Add hv_map/unmap_memory() to map/umap rx/tx ring buffer.
-> ---
->  arch/x86/hyperv/ivm.c             |  28 ++++++
->  drivers/hv/hv_common.c            |  11 +++
->  drivers/net/hyperv/hyperv_net.h   |   5 ++
->  drivers/net/hyperv/netvsc.c       | 136 +++++++++++++++++++++++++++++-
->  drivers/net/hyperv/netvsc_drv.c   |   1 +
->  drivers/net/hyperv/rndis_filter.c |   2 +
->  include/asm-generic/mshyperv.h    |   2 +
->  include/linux/hyperv.h            |   5 ++
->  8 files changed, 187 insertions(+), 3 deletions(-)
->=20
-> diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-> index 69c7a57f3307..9f78d8f67ea3 100644
-> --- a/arch/x86/hyperv/ivm.c
-> +++ b/arch/x86/hyperv/ivm.c
-> @@ -287,3 +287,31 @@ int hv_set_mem_host_visibility(unsigned long kbuffer=
-, int pagecount, bool visibl
->  	kfree(pfn_array);
->  	return ret;
->  }
-> +
+>   arch/x86/include/asm/sev-common.h | 11 +++++
+>   arch/x86/kvm/svm/sev.c            | 75 +++++++++++++++++++------------
+>   2 files changed, 58 insertions(+), 28 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
+> index 2cef6c5a52c2..6acaf5af0a3d 100644
+> --- a/arch/x86/include/asm/sev-common.h
+> +++ b/arch/x86/include/asm/sev-common.h
+> @@ -73,4 +73,15 @@
+> 
+>   #define GHCB_RESP_CODE(v)		((v) & GHCB_MSR_INFO_MASK)
+> 
 > +/*
-> + * hv_map_memory - map memory to extra space in the AMD SEV-SNP Isolatio=
-n VM.
+> + * Error codes related to GHCB input that can be communicated back to the guest
+> + * by setting the lower 32-bits of the GHCB SW_EXITINFO1 field to 2.
 > + */
-> +void *hv_map_memory(void *addr, unsigned long size)
-> +{
-> +	unsigned long *pfns =3D kcalloc(size / HV_HYP_PAGE_SIZE,
-
-This should be just PAGE_SIZE, as this code is unrelated to communication
-with Hyper-V.
-
-> +				      sizeof(unsigned long), GFP_KERNEL);
-> +	void *vaddr;
-> +	int i;
+> +#define GHCB_ERR_NOT_REGISTERED		1
+> +#define GHCB_ERR_INVALID_USAGE		2
+> +#define GHCB_ERR_INVALID_SCRATCH_AREA	3
+> +#define GHCB_ERR_MISSING_INPUT		4
+> +#define GHCB_ERR_INVALID_INPUT		5
+> +#define GHCB_ERR_INVALID_EVENT		6
 > +
-> +	if (!pfns)
-> +		return NULL;
-> +
-> +	for (i =3D 0; i < size / PAGE_SIZE; i++)
-> +		pfns[i] =3D virt_to_hvpfn(addr + i * PAGE_SIZE) +
-
-Same here:  Use virt_to_pfn().
-
-> +			(ms_hyperv.shared_gpa_boundary >> PAGE_SHIFT);
-> +
-> +	vaddr =3D vmap_pfn(pfns, size / PAGE_SIZE, PAGE_KERNEL_IO);
-> +	kfree(pfns);
-> +
-> +	return vaddr;
-> +}
-> +
-> +void hv_unmap_memory(void *addr)
-> +{
-> +	vunmap(addr);
-> +}
-> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-> index 7be173a99f27..3c5cb1f70319 100644
-> --- a/drivers/hv/hv_common.c
-> +++ b/drivers/hv/hv_common.c
-> @@ -295,3 +295,14 @@ u64 __weak hv_ghcb_hypercall(u64 control, void *inpu=
-t, void *output, u32 input_s
->  	return HV_STATUS_INVALID_PARAMETER;
->  }
->  EXPORT_SYMBOL_GPL(hv_ghcb_hypercall);
-> +
-> +void __weak *hv_map_memory(void *addr, unsigned long size)
-> +{
-> +	return NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(hv_map_memory);
-> +
-> +void __weak hv_unmap_memory(void *addr)
-> +{
-> +}
-> +EXPORT_SYMBOL_GPL(hv_unmap_memory);
-> diff --git a/drivers/net/hyperv/hyperv_net.h b/drivers/net/hyperv/hyperv_=
-net.h
-> index 315278a7cf88..cf69da0e296c 100644
-> --- a/drivers/net/hyperv/hyperv_net.h
-> +++ b/drivers/net/hyperv/hyperv_net.h
-> @@ -164,6 +164,7 @@ struct hv_netvsc_packet {
->  	u32 total_bytes;
->  	u32 send_buf_index;
->  	u32 total_data_buflen;
-> +	struct hv_dma_range *dma_range;
->  };
->=20
->  #define NETVSC_HASH_KEYLEN 40
-> @@ -1074,6 +1075,7 @@ struct netvsc_device {
->=20
->  	/* Receive buffer allocated by us but manages by NetVSP */
->  	void *recv_buf;
-> +	void *recv_original_buf;
->  	u32 recv_buf_size; /* allocated bytes */
->  	struct vmbus_gpadl recv_buf_gpadl_handle;
->  	u32 recv_section_cnt;
-> @@ -1082,6 +1084,7 @@ struct netvsc_device {
->=20
->  	/* Send buffer allocated by us */
->  	void *send_buf;
-> +	void *send_original_buf;
->  	u32 send_buf_size;
->  	struct vmbus_gpadl send_buf_gpadl_handle;
->  	u32 send_section_cnt;
-> @@ -1731,4 +1734,6 @@ struct rndis_message {
->  #define RETRY_US_HI	10000
->  #define RETRY_MAX	2000	/* >10 sec */
->=20
-> +void netvsc_dma_unmap(struct hv_device *hv_dev,
-> +		      struct hv_netvsc_packet *packet);
->  #endif /* _HYPERV_NET_H */
-> diff --git a/drivers/net/hyperv/netvsc.c b/drivers/net/hyperv/netvsc.c
-> index 396bc1c204e6..b7ade735a806 100644
-> --- a/drivers/net/hyperv/netvsc.c
-> +++ b/drivers/net/hyperv/netvsc.c
-> @@ -153,8 +153,21 @@ static void free_netvsc_device(struct rcu_head *head=
-)
->  	int i;
->=20
->  	kfree(nvdev->extension);
-> -	vfree(nvdev->recv_buf);
-> -	vfree(nvdev->send_buf);
-> +
-> +	if (nvdev->recv_original_buf) {
-> +		hv_unmap_memory(nvdev->recv_buf);
-> +		vfree(nvdev->recv_original_buf);
-> +	} else {
-> +		vfree(nvdev->recv_buf);
+>   #endif
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 713e3daa9574..60c6d7b216eb 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -2357,20 +2357,25 @@ static int sev_es_validate_vmgexit(struct vcpu_svm *svm)
+>   {
+>   	struct kvm_vcpu *vcpu;
+>   	struct ghcb *ghcb;
+> -	u64 exit_code = 0;
+> +	u64 exit_code;
+> +	u64 reason;
+> 
+>   	ghcb = svm->sev_es.ghcb;
+> 
+> -	/* Only GHCB Usage code 0 is supported */
+> -	if (ghcb->ghcb_usage)
+> -		goto vmgexit_err;
+> -
+>   	/*
+> -	 * Retrieve the exit code now even though is may not be marked valid
+> +	 * Retrieve the exit code now even though it may not be marked valid
+>   	 * as it could help with debugging.
+>   	 */
+>   	exit_code = ghcb_get_sw_exit_code(ghcb);
+> 
+> +	/* Only GHCB Usage code 0 is supported */
+> +	if (ghcb->ghcb_usage) {
+> +		reason = GHCB_ERR_INVALID_USAGE;
+> +		goto vmgexit_err;
 > +	}
 > +
-> +	if (nvdev->send_original_buf) {
-> +		hv_unmap_memory(nvdev->send_buf);
-> +		vfree(nvdev->send_original_buf);
-> +	} else {
-> +		vfree(nvdev->send_buf);
-> +	}
+> +	reason = GHCB_ERR_MISSING_INPUT;
 > +
->  	kfree(nvdev->send_section_map);
->=20
->  	for (i =3D 0; i < VRSS_CHANNEL_MAX; i++) {
-> @@ -338,6 +351,7 @@ static int netvsc_init_buf(struct hv_device *device,
->  	unsigned int buf_size;
->  	size_t map_words;
->  	int i, ret =3D 0;
-> +	void *vaddr;
->=20
->  	/* Get receive buffer area. */
->  	buf_size =3D device_info->recv_sections * device_info->recv_section_siz=
-e;
-> @@ -373,6 +387,17 @@ static int netvsc_init_buf(struct hv_device *device,
->  		goto cleanup;
->  	}
->=20
-> +	if (hv_isolation_type_snp()) {
-> +		vaddr =3D hv_map_memory(net_device->recv_buf, buf_size);
-> +		if (!vaddr) {
-> +			ret =3D -ENOMEM;
-> +			goto cleanup;
-> +		}
+>   	if (!ghcb_sw_exit_code_is_valid(ghcb) ||
+>   	    !ghcb_sw_exit_info_1_is_valid(ghcb) ||
+>   	    !ghcb_sw_exit_info_2_is_valid(ghcb))
+> @@ -2449,6 +2454,7 @@ static int sev_es_validate_vmgexit(struct vcpu_svm *svm)
+>   	case SVM_VMGEXIT_UNSUPPORTED_EVENT:
+>   		break;
+>   	default:
+> +		reason = GHCB_ERR_INVALID_EVENT;
+>   		goto vmgexit_err;
+>   	}
+> 
+> @@ -2457,22 +2463,25 @@ static int sev_es_validate_vmgexit(struct vcpu_svm *svm)
+>   vmgexit_err:
+>   	vcpu = &svm->vcpu;
+> 
+> -	if (ghcb->ghcb_usage) {
+> +	if (reason == GHCB_ERR_INVALID_USAGE) {
+>   		vcpu_unimpl(vcpu, "vmgexit: ghcb usage %#x is not valid\n",
+>   			    ghcb->ghcb_usage);
+> +	} else if (reason == GHCB_ERR_INVALID_EVENT) {
+> +		vcpu_unimpl(vcpu, "vmgexit: exit code %#llx is not valid\n",
+> +			    exit_code);
+>   	} else {
+> -		vcpu_unimpl(vcpu, "vmgexit: exit reason %#llx is not valid\n",
+> +		vcpu_unimpl(vcpu, "vmgexit: exit code %#llx input is not valid\n",
+>   			    exit_code);
+>   		dump_ghcb(svm);
+>   	}
+> 
+> -	vcpu->run->exit_reason = KVM_EXIT_INTERNAL_ERROR;
+> -	vcpu->run->internal.suberror = KVM_INTERNAL_ERROR_UNEXPECTED_EXIT_REASON;
+> -	vcpu->run->internal.ndata = 2;
+> -	vcpu->run->internal.data[0] = exit_code;
+> -	vcpu->run->internal.data[1] = vcpu->arch.last_vmentry_cpu;
+> +	/* Clear the valid entries fields */
+> +	memset(ghcb->save.valid_bitmap, 0, sizeof(ghcb->save.valid_bitmap));
+> 
+> -	return -EINVAL;
+> +	ghcb_set_sw_exit_info_1(ghcb, 2);
+> +	ghcb_set_sw_exit_info_2(ghcb, reason);
 > +
-> +		net_device->recv_original_buf =3D net_device->recv_buf;
-> +		net_device->recv_buf =3D vaddr;
-> +	}
+> +	return 1;
+>   }
+> 
+>   void sev_es_unmap_ghcb(struct vcpu_svm *svm)
+> @@ -2542,14 +2551,14 @@ static int setup_vmgexit_scratch(struct vcpu_svm *svm, bool sync, u64 len)
+>   	scratch_gpa_beg = ghcb_get_sw_scratch(ghcb);
+>   	if (!scratch_gpa_beg) {
+>   		pr_err("vmgexit: scratch gpa not provided\n");
+> -		return -EINVAL;
+> +		goto e_scratch;
+>   	}
+> 
+>   	scratch_gpa_end = scratch_gpa_beg + len;
+>   	if (scratch_gpa_end < scratch_gpa_beg) {
+>   		pr_err("vmgexit: scratch length (%#llx) not valid for scratch address (%#llx)\n",
+>   		       len, scratch_gpa_beg);
+> -		return -EINVAL;
+> +		goto e_scratch;
+>   	}
+> 
+>   	if ((scratch_gpa_beg & PAGE_MASK) == control->ghcb_gpa) {
+> @@ -2567,7 +2576,7 @@ static int setup_vmgexit_scratch(struct vcpu_svm *svm, bool sync, u64 len)
+>   		    scratch_gpa_end > ghcb_scratch_end) {
+>   			pr_err("vmgexit: scratch area is outside of GHCB shared buffer area (%#llx - %#llx)\n",
+>   			       scratch_gpa_beg, scratch_gpa_end);
+> -			return -EINVAL;
+> +			goto e_scratch;
+>   		}
+> 
+>   		scratch_va = (void *)svm->sev_es.ghcb;
+> @@ -2580,7 +2589,7 @@ static int setup_vmgexit_scratch(struct vcpu_svm *svm, bool sync, u64 len)
+>   		if (len > GHCB_SCRATCH_AREA_LIMIT) {
+>   			pr_err("vmgexit: scratch area exceeds KVM limits (%#llx requested, %#llx limit)\n",
+>   			       len, GHCB_SCRATCH_AREA_LIMIT);
+> -			return -EINVAL;
+> +			goto e_scratch;
+>   		}
+>   		scratch_va = kvzalloc(len, GFP_KERNEL_ACCOUNT);
+>   		if (!scratch_va)
+> @@ -2608,6 +2617,12 @@ static int setup_vmgexit_scratch(struct vcpu_svm *svm, bool sync, u64 len)
+>   	svm->sev_es.ghcb_sa_len = len;
+> 
+>   	return 0;
 > +
->  	/* Notify the NetVsp of the gpadl handle */
->  	init_packet =3D &net_device->channel_init_pkt;
->  	memset(init_packet, 0, sizeof(struct nvsp_message));
-> @@ -476,6 +501,17 @@ static int netvsc_init_buf(struct hv_device *device,
->  		goto cleanup;
->  	}
->=20
-> +	if (hv_isolation_type_snp()) {
-> +		vaddr =3D hv_map_memory(net_device->send_buf, buf_size);
-> +		if (!vaddr) {
-> +			ret =3D -ENOMEM;
-> +			goto cleanup;
-> +		}
+> +e_scratch:
+> +	ghcb_set_sw_exit_info_1(ghcb, 2);
+> +	ghcb_set_sw_exit_info_2(ghcb, GHCB_ERR_INVALID_SCRATCH_AREA);
 > +
-> +		net_device->send_original_buf =3D net_device->send_buf;
-> +		net_device->send_buf =3D vaddr;
-> +	}
+> +	return 1;
+>   }
+> 
+>   static void set_ghcb_msr_bits(struct vcpu_svm *svm, u64 value, u64 mask,
+> @@ -2658,7 +2673,7 @@ static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
+> 
+>   		ret = svm_invoke_exit_handler(vcpu, SVM_EXIT_CPUID);
+>   		if (!ret) {
+> -			ret = -EINVAL;
+> +			/* Error, keep GHCB MSR value as-is */
+>   			break;
+>   		}
+> 
+> @@ -2694,10 +2709,13 @@ static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
+>   						GHCB_MSR_TERM_REASON_POS);
+>   		pr_info("SEV-ES guest requested termination: %#llx:%#llx\n",
+>   			reason_set, reason_code);
+> -		fallthrough;
 > +
->  	/* Notify the NetVsp of the gpadl handle */
->  	init_packet =3D &net_device->channel_init_pkt;
->  	memset(init_packet, 0, sizeof(struct nvsp_message));
-> @@ -766,7 +802,7 @@ static void netvsc_send_tx_complete(struct net_device=
- *ndev,
->=20
->  	/* Notify the layer above us */
->  	if (likely(skb)) {
-> -		const struct hv_netvsc_packet *packet
-> +		struct hv_netvsc_packet *packet
->  			=3D (struct hv_netvsc_packet *)skb->cb;
->  		u32 send_index =3D packet->send_buf_index;
->  		struct netvsc_stats *tx_stats;
-> @@ -782,6 +818,7 @@ static void netvsc_send_tx_complete(struct net_device=
- *ndev,
->  		tx_stats->bytes +=3D packet->total_bytes;
->  		u64_stats_update_end(&tx_stats->syncp);
->=20
-> +		netvsc_dma_unmap(ndev_ctx->device_ctx, packet);
->  		napi_consume_skb(skb, budget);
->  	}
->=20
-> @@ -946,6 +983,88 @@ static void netvsc_copy_to_send_buf(struct netvsc_de=
-vice *net_device,
->  		memset(dest, 0, padding);
->  }
->=20
-> +void netvsc_dma_unmap(struct hv_device *hv_dev,
-> +		      struct hv_netvsc_packet *packet)
-> +{
-> +	u32 page_count =3D packet->cp_partial ?
-> +		packet->page_buf_cnt - packet->rmsg_pgcnt :
-> +		packet->page_buf_cnt;
-> +	int i;
+> +		ret = -EINVAL;
+> +		break;
+>   	}
+>   	default:
+> -		ret = -EINVAL;
+> +		/* Error, keep GHCB MSR value as-is */
+> +		break;
+>   	}
+> 
+>   	trace_kvm_vmgexit_msr_protocol_exit(svm->vcpu.vcpu_id,
+> @@ -2721,14 +2739,18 @@ int sev_handle_vmgexit(struct kvm_vcpu *vcpu)
+> 
+>   	if (!ghcb_gpa) {
+>   		vcpu_unimpl(vcpu, "vmgexit: GHCB gpa is not set\n");
+> -		return -EINVAL;
 > +
-> +	if (!hv_is_isolation_supported())
-> +		return;
+> +		/* Without a GHCB, just return right back to the guest */
+> +		return 1;
+>   	}
+> 
+>   	if (kvm_vcpu_map(vcpu, ghcb_gpa >> PAGE_SHIFT, &svm->sev_es.ghcb_map)) {
+>   		/* Unable to map GHCB from guest */
+>   		vcpu_unimpl(vcpu, "vmgexit: error mapping GHCB [%#llx] from guest\n",
+>   			    ghcb_gpa);
+> -		return -EINVAL;
 > +
-> +	if (!packet->dma_range)
-> +		return;
-> +
-> +	for (i =3D 0; i < page_count; i++)
-> +		dma_unmap_single(&hv_dev->device, packet->dma_range[i].dma,
-> +				 packet->dma_range[i].mapping_size,
-> +				 DMA_TO_DEVICE);
-> +
-> +	kfree(packet->dma_range);
-> +}
-> +
-> +/* netvsc_dma_map - Map swiotlb bounce buffer with data page of
-> + * packet sent by vmbus_sendpacket_pagebuffer() in the Isolation
-> + * VM.
-> + *
-> + * In isolation VM, netvsc send buffer has been marked visible to
-> + * host and so the data copied to send buffer doesn't need to use
-> + * bounce buffer. The data pages handled by vmbus_sendpacket_pagebuffer(=
-)
-> + * may not be copied to send buffer and so these pages need to be
-> + * mapped with swiotlb bounce buffer. netvsc_dma_map() is to do
-> + * that. The pfns in the struct hv_page_buffer need to be converted
-> + * to bounce buffer's pfn. The loop here is necessary because the
-> + * entries in the page buffer array are not necessarily full
-> + * pages of data.  Each entry in the array has a separate offset and
-> + * len that may be non-zero, even for entries in the middle of the
-> + * array.  And the entries are not physically contiguous.  So each
-> + * entry must be individually mapped rather than as a contiguous unit.
-> + * So not use dma_map_sg() here.
-> + */
-> +int netvsc_dma_map(struct hv_device *hv_dev,
-> +		   struct hv_netvsc_packet *packet,
-> +		   struct hv_page_buffer *pb)
-> +{
-> +	u32 page_count =3D  packet->cp_partial ?
-> +		packet->page_buf_cnt - packet->rmsg_pgcnt :
-> +		packet->page_buf_cnt;
-> +	dma_addr_t dma;
-> +	int i;
-> +
-> +	if (!hv_is_isolation_supported())
-> +		return 0;
-> +
-> +	packet->dma_range =3D kcalloc(page_count,
-> +				    sizeof(*packet->dma_range),
-> +				    GFP_KERNEL);
-> +	if (!packet->dma_range)
-> +		return -ENOMEM;
-> +
-> +	for (i =3D 0; i < page_count; i++) {
-> +		char *src =3D phys_to_virt((pb[i].pfn << HV_HYP_PAGE_SHIFT)
-> +					 + pb[i].offset);
-> +		u32 len =3D pb[i].len;
-> +
-> +		dma =3D dma_map_single(&hv_dev->device, src, len,
-> +				     DMA_TO_DEVICE);
-> +		if (dma_mapping_error(&hv_dev->device, dma)) {
-> +			kfree(packet->dma_range);
-> +			return -ENOMEM;
-> +		}
-> +
-> +		/* pb[].offset and pb[].len are not changed during dma mapping
-> +		 * and so not reassign.
-> +		 */
-> +		packet->dma_range[i].dma =3D dma;
-> +		packet->dma_range[i].mapping_size =3D len;
-> +		pb[i].pfn =3D dma >> HV_HYP_PAGE_SHIFT;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static inline int netvsc_send_pkt(
->  	struct hv_device *device,
->  	struct hv_netvsc_packet *packet,
-> @@ -986,14 +1105,24 @@ static inline int netvsc_send_pkt(
->=20
->  	trace_nvsp_send_pkt(ndev, out_channel, rpkt);
->=20
-> +	packet->dma_range =3D NULL;
->  	if (packet->page_buf_cnt) {
->  		if (packet->cp_partial)
->  			pb +=3D packet->rmsg_pgcnt;
->=20
-> +		ret =3D netvsc_dma_map(ndev_ctx->device_ctx, packet, pb);
-> +		if (ret) {
-> +			ret =3D -EAGAIN;
-> +			goto exit;
-> +		}
-> +
->  		ret =3D vmbus_sendpacket_pagebuffer(out_channel,
->  						  pb, packet->page_buf_cnt,
->  						  &nvmsg, sizeof(nvmsg),
->  						  req_id);
-> +
-> +		if (ret)
-> +			netvsc_dma_unmap(ndev_ctx->device_ctx, packet);
->  	} else {
->  		ret =3D vmbus_sendpacket(out_channel,
->  				       &nvmsg, sizeof(nvmsg),
-> @@ -1001,6 +1130,7 @@ static inline int netvsc_send_pkt(
->  				       VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
->  	}
->=20
-> +exit:
->  	if (ret =3D=3D 0) {
->  		atomic_inc_return(&nvchan->queue_sends);
->=20
-> diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_=
-drv.c
-> index 7e66ae1d2a59..17958533bf30 100644
-> --- a/drivers/net/hyperv/netvsc_drv.c
-> +++ b/drivers/net/hyperv/netvsc_drv.c
-> @@ -2512,6 +2512,7 @@ static int netvsc_probe(struct hv_device *dev,
->  	net->netdev_ops =3D &device_ops;
->  	net->ethtool_ops =3D &ethtool_ops;
->  	SET_NETDEV_DEV(net, &dev->device);
-> +	dma_set_min_align_mask(&dev->device, HV_HYP_PAGE_SIZE - 1);
->=20
->  	/* We always need headroom for rndis header */
->  	net->needed_headroom =3D RNDIS_AND_PPI_SIZE;
-> diff --git a/drivers/net/hyperv/rndis_filter.c b/drivers/net/hyperv/rndis=
-_filter.c
-> index f6c9c2a670f9..448fcc325ed7 100644
-> --- a/drivers/net/hyperv/rndis_filter.c
-> +++ b/drivers/net/hyperv/rndis_filter.c
-> @@ -361,6 +361,8 @@ static void rndis_filter_receive_response(struct net_=
-device *ndev,
->  			}
->  		}
->=20
-> +		netvsc_dma_unmap(((struct net_device_context *)
-> +			netdev_priv(ndev))->device_ctx, &request->pkt);
->  		complete(&request->wait_event);
->  	} else {
->  		netdev_err(ndev,
-> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyper=
-v.h
-> index 3e2248ac328e..94e73ba129c5 100644
-> --- a/include/asm-generic/mshyperv.h
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -269,6 +269,8 @@ bool hv_isolation_type_snp(void);
->  u64 hv_ghcb_hypercall(u64 control, void *input, void *output, u32 input_=
-size);
->  void hyperv_cleanup(void);
->  bool hv_query_ext_cap(u64 cap_query);
-> +void *hv_map_memory(void *addr, unsigned long size);
-> +void hv_unmap_memory(void *addr);
->  #else /* CONFIG_HYPERV */
->  static inline bool hv_is_hyperv_initialized(void) { return false; }
->  static inline bool hv_is_hibernation_supported(void) { return false; }
-> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
-> index 74f5e92f91a0..b53cfc4163af 100644
-> --- a/include/linux/hyperv.h
-> +++ b/include/linux/hyperv.h
-> @@ -1584,6 +1584,11 @@ struct hyperv_service_callback {
->  	void (*callback)(void *context);
->  };
->=20
-> +struct hv_dma_range {
-> +	dma_addr_t dma;
-> +	u32 mapping_size;
-> +};
-> +
->  #define MAX_SRV_VER	0x7ffffff
->  extern bool vmbus_prep_negotiate_resp(struct icmsg_hdr *icmsghdrp, u8 *b=
-uf, u32 buflen,
->  				const int *fw_version, int fw_vercnt,
+> +		/* Without a GHCB, just return right back to the guest */
+> +		return 1;
+>   	}
+> 
+>   	svm->sev_es.ghcb = svm->sev_es.ghcb_map.hva;
+> @@ -2788,11 +2810,8 @@ int sev_handle_vmgexit(struct kvm_vcpu *vcpu)
+>   		default:
+>   			pr_err("svm: vmgexit: unsupported AP jump table request - exit_info_1=%#llx\n",
+>   			       control->exit_info_1);
+> -			ghcb_set_sw_exit_info_1(ghcb, 1);
+> -			ghcb_set_sw_exit_info_2(ghcb,
+> -						X86_TRAP_UD |
+> -						SVM_EVTINJ_TYPE_EXEPT |
+> -						SVM_EVTINJ_VALID);
+> +			ghcb_set_sw_exit_info_1(ghcb, 2);
+> +			ghcb_set_sw_exit_info_2(ghcb, GHCB_ERR_INVALID_INPUT);
+>   		}
+> 
+>   		ret = 1;
+> 
+> base-commit: 70f433c2193fbfb5541ef98f973e087ddf2f9dfb
 > --
-> 2.25.1
-
+> 

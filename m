@@ -2,118 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF55467A17
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 16:10:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C377467A13
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 16:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381702AbhLCPNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 10:13:39 -0500
-Received: from mga12.intel.com ([192.55.52.136]:57395 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1381611AbhLCPNi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 10:13:38 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="217007855"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="217007855"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 07:10:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="513273709"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 03 Dec 2021 07:10:12 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mtACS-000Hht-5b; Fri, 03 Dec 2021 15:10:12 +0000
-Date:   Fri, 3 Dec 2021 23:09:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [asahilinux:asahi 45/56] drivers/gpu/drm/tiny/simpledrm.c:915:1:
- error: redefinition of '__inittest'
-Message-ID: <202112032244.L0cMZUzs-lkp@intel.com>
+        id S1381636AbhLCPNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 10:13:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34624 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352696AbhLCPNJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 10:13:09 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3A1C061353
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 07:09:45 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id c4so6326865wrd.9
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 07:09:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=waV1npKtrBCQx1BdtxDZJlwzTMwSFFCWDGHrj9kXp+g=;
+        b=ojLwcLS3q+5lu9Md+ylAfjdkQjmhI3t0vBLaOWzMZaSbzQsN801Uv+Rs8JlM+Fnefz
+         dLi8R30/TTbF3vL2wSCNQo4o5NxscRaPCjak/3yolpMikXNDtF1qXzylYLQhWvTVG/ai
+         0Gxrz7ppbDeJcHJR/sDTiOOF/fMa+a0NL50YK9+R7jmKC0M+m/nrMEpmnhlFc8f2YlDj
+         MiytKJwnfe9xoEOUeRXrGW4DyE61Oz57CNZAPNrBvxhc1F5XRLBZdcT7SNpQlITSain7
+         yxvtPecFBTnRsaP629RuTQGe9XxUB53qk0XBY/fWvc5zovkWFEjwD3xr39NIcn/rkhYX
+         uN5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=waV1npKtrBCQx1BdtxDZJlwzTMwSFFCWDGHrj9kXp+g=;
+        b=67VGt9W+DufLiuxJDJsjoVlLBOxGfOMDQE6DIZw8lU7bygFdSYGwrmutCRcZSZUe1D
+         43W4EdrmoGcV9qre8/zfF8apOXho5pBG3lAfSiBGoOtrGfhl/AX6Fb0JhevhaGkp1FNc
+         S4Xx9GXCx7pzFpIUXvjmj8l0y7UTPJzwoZN3HfSLiBLK9d/mw91Hyix35al6sa0HkkJH
+         mjcXkSaM/9U1PYxn1g04YW2GiRWrcgNSmf16jCk7tdaQBEr4n59LXdsXa70kw+LPMQ05
+         cxcuf+CInsoxagtX5FY82RrmVzgg1ImRDV/bTbA0SLGV4AVq7iRuidRlDeHx0xmhzyE6
+         4IqA==
+X-Gm-Message-State: AOAM531BWGwZTSV+Q/cQQsM5kyIxCZ9IJniwHQQl5vB436rTGJGiWL8e
+        8zU7zZP98j8u83HPLk/D6DuzXX3Ao3ZrL0fh
+X-Google-Smtp-Source: ABdhPJyqLILEVhNUxFLPLtBUGu4NPp9AokVet23hbEKTHhte6QSXOYL1Wbtj5MT8I5aKoY+hEy5Upw==
+X-Received: by 2002:a5d:68c1:: with SMTP id p1mr21450510wrw.585.1638544183855;
+        Fri, 03 Dec 2021 07:09:43 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:d539:1fa4:f06d:ec1? ([2001:861:44c0:66c0:d539:1fa4:f06d:ec1])
+        by smtp.gmail.com with ESMTPSA id a10sm5469480wmq.27.2021.12.03.07.09.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 07:09:43 -0800 (PST)
+Subject: Re: [PATCH v7 0/9] drm/omap: Add virtual-planes support
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-omap@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com
+References: <20211117141928.771082-1-narmstrong@baylibre.com>
+ <bab2b84a-ebef-ec69-187f-745e739079eb@ideasonboard.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <71f01ce0-bc1d-0ac0-9bf2-7f2c3738eeaa@baylibre.com>
+Date:   Fri, 3 Dec 2021 16:09:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <bab2b84a-ebef-ec69-187f-745e739079eb@ideasonboard.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux asahi
-head:   69711d887d3f10a4f7dd6fd648bfff63ff66ba18
-commit: 06412fc74f71c816ec5b0aab62be86b3d5cb3b83 [45/56] drm/simpledrm: Bind to OF framebuffers in /chosen
-config: x86_64-randconfig-a015-20211203 (https://download.01.org/0day-ci/archive/20211203/202112032244.L0cMZUzs-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 1e328b06c15273edf4a40a27ca24931b5efb3a87)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/06412fc74f71c816ec5b0aab62be86b3d5cb3b83
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux asahi
-        git checkout 06412fc74f71c816ec5b0aab62be86b3d5cb3b83
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/tiny/ net/mac80211/
+Hi,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 03/12/2021 12:31, Tomi Valkeinen wrote:
+> On 17/11/2021 16:19, Neil Armstrong wrote:
+>> This patchset is the follow-up the v4 patchset from Benoit Parrot at [1].
+>>
+>> This patch series adds virtual-plane support to omapdrm driver to allow the use
+>> of display wider than 2048 pixels.
+>>
+>> In order to do so we introduce the concept of hw_overlay which can then be
+>> dynamically allocated to a plane. When the requested output width exceed what
+>> be supported by one overlay a second is then allocated if possible to handle
+>> display wider then 2048.
+>>
+>> This series replaces an earlier series which was DT based and using statically
+>> allocated resources.
+>>
+>> This implementation is inspired from the work done in msm/disp/mdp5
+>> driver.
+> 
+> I think this looks good. I'll apply this to my work tree to see if I see any issues during my daily work, and if not, I'll push to drm-misc-next.
+> 
+> Have you tested this with other platforms than x15? I'm mostly thinking about omap3/4, as the DSS is somewhat different on those platforms.
 
-All errors (new ones prefixed by >>):
+I haven't tested the last version non non-x15, but I haven't changed the logic from the original patchset which was in the TI BSP
+tree for multiple years.
 
->> drivers/gpu/drm/tiny/simpledrm.c:915:1: error: redefinition of '__inittest'
-   fs_initcall(simplefb_init);
-   ^
-   include/linux/module.h:119:27: note: expanded from macro 'fs_initcall'
-   #define fs_initcall(fn)                 module_init(fn)
-                                           ^
-   include/linux/module.h:131:42: note: expanded from macro 'module_init'
-           static inline initcall_t __maybe_unused __inittest(void)                \
-                                                   ^
-   drivers/gpu/drm/tiny/simpledrm.c:899:1: note: previous definition is here
-   module_platform_driver(simpledrm_platform_driver);
-   ^
-   include/linux/platform_device.h:252:2: note: expanded from macro 'module_platform_driver'
-           module_driver(__platform_driver, platform_driver_register, \
-           ^
-   include/linux/device/driver.h:262:3: note: expanded from macro 'module_driver'
-   } \
-     ^
-   include/linux/module.h:131:42: note: expanded from macro '\
-   module_init'
-           static inline initcall_t __maybe_unused __inittest(void)                \
-                                                   ^
->> drivers/gpu/drm/tiny/simpledrm.c:915:1: error: redefinition of 'init_module'
-   fs_initcall(simplefb_init);
-   ^
-   include/linux/module.h:119:27: note: expanded from macro 'fs_initcall'
-   #define fs_initcall(fn)                 module_init(fn)
-                                           ^
-   include/linux/module.h:133:6: note: expanded from macro 'module_init'
-           int init_module(void) __copy(initfn)                    \
-               ^
-   drivers/gpu/drm/tiny/simpledrm.c:899:1: note: previous definition is here
-   module_platform_driver(simpledrm_platform_driver);
-   ^
-   include/linux/platform_device.h:252:2: note: expanded from macro 'module_platform_driver'
-           module_driver(__platform_driver, platform_driver_register, \
-           ^
-   include/linux/device/driver.h:262:3: note: expanded from macro 'module_driver'
-   } \
-     ^
-   include/linux/module.h:133:6: note: expanded from macro '\
-   module_init'
-           int init_module(void) __copy(initfn)                    \
-               ^
-   2 errors generated.
+Neil
 
+> 
+>  Tomi
 
-vim +/__inittest +915 drivers/gpu/drm/tiny/simpledrm.c
-
-   914	
- > 915	fs_initcall(simplefb_init);
-   916	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

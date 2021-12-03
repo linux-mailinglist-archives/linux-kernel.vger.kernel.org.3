@@ -2,104 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E85B46734E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA38F46734F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:35:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379233AbhLCIhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 03:37:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379190AbhLCIhp (ORCPT
+        id S1351095AbhLCIjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:39:14 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:43621 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236266AbhLCIjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 03:37:45 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C51C06173E
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 00:34:21 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id b1so4675939lfs.13
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 00:34:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OSsWAic1UX7djA//WKZasRn0ryPGcG2K/mnPAhkcyxs=;
-        b=E9X7LgipKk+y21qeodzzCY3Dwa9XyGbPg3+NfvYvSeALpHnamTpMUYaSNt5n6bsLL8
-         utgG8F7BcjrnzNFFNjVNAf569RFLT7KixV2lc54QJJS6A64FLMo7cDX5wir3wKhrKJWI
-         xKvCITS7VZFyfvMnvjYEcmeukzNe3L+34616EabJND/jcCi+R9TCDmi399j7gY1+oPab
-         QpthdKJHeSmb+uPHMj2BLX5z+7WYLj1S8abrM9d+t9co+weg9BXMyoKpHPrZ3+u9sqR2
-         eCe4HUVwAj+OkYOJ2BY4ljT2EqKEutW/EVeX801Bys7H0k3QLg9gSeFabwaaWIQJ0x1r
-         sAYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OSsWAic1UX7djA//WKZasRn0ryPGcG2K/mnPAhkcyxs=;
-        b=h2ptodhc15V0oaQAO0YrCOjWw2mrmMLu3H/d2CCiiCZQfQHn6M9rPr/L1hl0jQJ+Ay
-         I2N6qZvwFyW+PRZbjJJ6uT2ioahpX1i+tAkuUS4zPL5+dDVsimK/jmuHa+b1hUbFwgOQ
-         w+/xjl8FGgCFdhotSz3pfEkrsp2hkEUt5fdsKicg4caVvBOV7ZhY0JmcMpLpDXLEonQw
-         lBvTJ7mobnRPRxdK15y/dndlJqsaSGWm2YUELmywzOeLi9qGlB/bli+zu2BZ2f05ATBo
-         7355Wi6XFWCZ9+JyP+oHaXRLNDEgxNyXA127HYxmciNU+mz4EbVgDlUkW/U4i7rJFANF
-         I24w==
-X-Gm-Message-State: AOAM531oQ/LPXWAYjLx4/ytRhv6x4Pbsaf84AOjGB4fKdzwNTus9X26P
-        eTNl+U3IXVHeKeY5bKy6qN+AfPZmsanzenTmws4IKw==
-X-Google-Smtp-Source: ABdhPJwAkc6QvO86U3JYrHagstwfPXW0hlVn0b//aL2NTQ2xcnzuovyUlh6cLCHblssxAIPehPZ8LnAUe0uImRFyVaA=
-X-Received: by 2002:a05:6512:230e:: with SMTP id o14mr17363516lfu.490.1638520459858;
- Fri, 03 Dec 2021 00:34:19 -0800 (PST)
+        Fri, 3 Dec 2021 03:39:13 -0500
+Received: (Authenticated sender: alex@ghiti.fr)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 3DE8460021;
+        Fri,  3 Dec 2021 08:35:48 +0000 (UTC)
+Message-ID: <59c8b150-3811-a057-eb73-50f14698c993@ghiti.fr>
+Date:   Fri, 3 Dec 2021 09:35:47 +0100
 MIME-Version: 1.0
-References: <20211201143450.479472-1-vincent.donnefort@arm.com>
-In-Reply-To: <20211201143450.479472-1-vincent.donnefort@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 3 Dec 2021 09:34:08 +0100
-Message-ID: <CAKfTPtBM0U05E=-Q5mVnLb6gJCxXt_fHD-UsBANqR1C=bq_mPQ@mail.gmail.com>
-Subject: Re: [PATCH v2] sched/fair: Fix detection of per-CPU kthreads waking a task
-To:     Vincent Donnefort <Vincent.Donnefort@arm.com>
-Cc:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, mgorman@techsingularity.net,
-        dietmar.eggemann@arm.com, Valentin.Schneider@arm.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH 2/5] riscv: mm: init: try best to IS_ENABLED(CONFIG_64BIT)
+ instead of #ifdef
+Content-Language: en-US
+To:     Jisheng Zhang <jszhang@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20211203050317.2102-1-jszhang@kernel.org>
+ <20211203050317.2102-3-jszhang@kernel.org>
+From:   Alexandre ghiti <alex@ghiti.fr>
+In-Reply-To: <20211203050317.2102-3-jszhang@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Dec 2021 at 15:35, Vincent Donnefort
-<vincent.donnefort@arm.com> wrote:
+On 12/3/21 06:03, Jisheng Zhang wrote:
+> Try our best to replace the conditional compilation using
+> "#ifdef CONFIG_64BIT" by a check for "IS_ENABLED(CONFIG_64BIT)", to
+> simplify the code and to increase compile coverage.
 >
-> select_idle_sibling() has a special case for tasks woken up by a per-CPU
-> kthread, where the selected CPU is the previous one. However, the current
-> condition for this exit path is incomplete. A task can wake up from an
-> interrupt context (e.g. hrtimer), while a per-CPU kthread is running. A
-> such scenario would spuriously trigger the special case described above.
-> Also, a recent change made the idle task like a regular per-CPU kthread,
-> hence making that situation more likely to happen
-> (is_per_cpu_kthread(swapper) being true now).
->
-> Checking for task context makes sure select_idle_sibling() will not
-> interpret a wake up from any other context as a wake up by a per-CPU
-> kthread.
->
-> Fixes: 52262ee567ad ("sched/fair: Allow a per-CPU kthread waking a task to stack on the same CPU, to fix XFS performance regression")
-> Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
-
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-
->
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 > ---
-> v1 -> v2:
->   * is_idle_thread() -> in_task() to also include spurious detection when
->     current != swapper. (Vincent Guittot)
-> ---
+>   arch/riscv/mm/init.c | 38 +++++++++++++++++---------------------
+>   1 file changed, 17 insertions(+), 21 deletions(-)
 >
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 945d987246c5..56db4ae85995 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -6399,6 +6399,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
->          * pattern is IO completions.
->          */
->         if (is_per_cpu_kthread(current) &&
-> +           in_task() &&
->             prev == smp_processor_id() &&
->             this_rq()->nr_running <= 1) {
->                 return prev;
-> --
-> 2.25.1
->
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 745f26a3b02e..bd445ac778a8 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -102,10 +102,9 @@ static void __init print_vm_layout(void)
+>   		  (unsigned long)VMALLOC_END);
+>   	print_mlm("lowmem", (unsigned long)PAGE_OFFSET,
+>   		  (unsigned long)high_memory);
+> -#ifdef CONFIG_64BIT
+> -	print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
+> -		  (unsigned long)ADDRESS_SPACE_END);
+> -#endif
+> +	if (IS_ENABLED(CONFIG_64BIT))
+> +		print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
+> +			  (unsigned long)ADDRESS_SPACE_END);
+>   }
+>   #else
+>   static void print_vm_layout(void) { }
+> @@ -172,17 +171,16 @@ static void __init setup_bootmem(void)
+>   
+>   	memblock_enforce_memory_limit(memory_limit);
+>   
+> -	/*
+> -	 * Reserve from the start of the kernel to the end of the kernel
+> -	 */
+> -#if defined(CONFIG_64BIT) && defined(CONFIG_STRICT_KERNEL_RWX)
+>   	/*
+>   	 * Make sure we align the reservation on PMD_SIZE since we will
+>   	 * map the kernel in the linear mapping as read-only: we do not want
+>   	 * any allocation to happen between _end and the next pmd aligned page.
+>   	 */
+> -	vmlinux_end = (vmlinux_end + PMD_SIZE - 1) & PMD_MASK;
+> -#endif
+> +	if (IS_ENABLED(CONFIG_64BIT) && IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
+> +		vmlinux_end = (vmlinux_end + PMD_SIZE - 1) & PMD_MASK;
+> +	/*
+> +	 * Reserve from the start of the kernel to the end of the kernel
+> +	 */
+>   	memblock_reserve(vmlinux_start, vmlinux_end - vmlinux_start);
+>   
+>   
+> @@ -190,7 +188,6 @@ static void __init setup_bootmem(void)
+>   #ifndef CONFIG_XIP_KERNEL
+>   	phys_ram_base = memblock_start_of_DRAM();
+>   #endif
+> -#ifndef CONFIG_64BIT
+>   	/*
+>   	 * memblock allocator is not aware of the fact that last 4K bytes of
+>   	 * the addressable memory can not be mapped because of IS_ERR_VALUE
+> @@ -200,10 +197,11 @@ static void __init setup_bootmem(void)
+>   	 * address space is occupied by the kernel mapping then this check must
+>   	 * be done as soon as the kernel mapping base address is determined.
+>   	 */
+> -	max_mapped_addr = __pa(~(ulong)0);
+> -	if (max_mapped_addr == (phys_ram_end - 1))
+> -		memblock_set_current_limit(max_mapped_addr - 4096);
+> -#endif
+> +	if (!IS_ENABLED(CONFIG_64BIT)) {
+> +		max_mapped_addr = __pa(~(ulong)0);
+> +		if (max_mapped_addr == (phys_ram_end - 1))
+> +			memblock_set_current_limit(max_mapped_addr - 4096);
+> +	}
+>   
+
+
+And remove the __maybe_unused used in max_mapped_addr declaration.
+
+
+>   	min_low_pfn = PFN_UP(phys_ram_base);
+>   	max_low_pfn = max_pfn = PFN_DOWN(phys_ram_end);
+> @@ -616,13 +614,12 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>   	BUG_ON((PAGE_OFFSET % PGDIR_SIZE) != 0);
+>   	BUG_ON((kernel_map.phys_addr % PMD_SIZE) != 0);
+>   
+> -#ifdef CONFIG_64BIT
+>   	/*
+>   	 * The last 4K bytes of the addressable memory can not be mapped because
+>   	 * of IS_ERR_VALUE macro.
+>   	 */
+> -	BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);
+> -#endif
+> +	if (IS_ENABLED(CONFIG_64BIT))
+> +		BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);
+>   
+>   	pt_ops.alloc_pte = alloc_pte_early;
+>   	pt_ops.get_pte_virt = get_pte_virt_early;
+> @@ -735,10 +732,9 @@ static void __init setup_vm_final(void)
+>   		}
+>   	}
+>   
+> -#ifdef CONFIG_64BIT
+>   	/* Map the kernel */
+> -	create_kernel_page_table(swapper_pg_dir, false);
+> -#endif
+> +	if (IS_ENABLED(CONFIG_64BIT))
+> +		create_kernel_page_table(swapper_pg_dir, false);
+>   
+>   	/* Clear fixmap PTE and PMD mappings */
+>   	clear_fixmap(FIX_PTE);

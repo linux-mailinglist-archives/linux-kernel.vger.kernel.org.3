@@ -2,116 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC7346709B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 04:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4105B4670A4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 04:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236430AbhLCDTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 22:19:55 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:35626
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231585AbhLCDTy (ORCPT
+        id S240202AbhLCDXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 22:23:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237773AbhLCDXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 22:19:54 -0500
-Received: from localhost.localdomain (unknown [10.101.196.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 820B54007C;
-        Fri,  3 Dec 2021 03:16:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638501390;
-        bh=Ugxulh7BMZxGlTFeVZ7SV3BB1ydn8nF9gDW7rGrY2pk=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=KTZyLMv3nhUmRJc84SPrGaHoBtv+NfznQKqz/uF+2zw1tvGXHdxY+c1jbCe/n0VL4
-         x0MoPpTqVRPGmc6QIuSP6bzaEVttyTF3RIWbhb4I8QVXjBLUsqgk0Vmjkv8ZSpy4gq
-         RYWFFhGjwjpiaf87zxacNEGB3NpvJAFg8yurr/LHqVk6x/KbJX6bDzbY2RRV48nzTx
-         25Xfx2ZswClWHlz76OsFDMv85OmSWK9d/iyTV9nV8H9FRFOFcdZ1p/C1t9/KGA0H7l
-         WyB5OK+3uKyqSQ+og1MonaMC+cZ1dagDJBOcDivRJCIUnRPV9j2bpILaOZ4wKUHner
-         BGlG2n1xTbaAA==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     bhelgaas@google.com
-Cc:     linux-pm@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Nirmal Patel <nirmal.patel@linux.intel.com>,
-        Jonathan Derrick <jonathan.derrick@linux.dev>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] PCI: vmd: Honor ACPI _OSC on PCIe features
-Date:   Fri,  3 Dec 2021 11:15:41 +0800
-Message-Id: <20211203031541.1428904-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        Thu, 2 Dec 2021 22:23:12 -0500
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AED5C06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 19:19:49 -0800 (PST)
+Received: by mail-oo1-xc36.google.com with SMTP id g11-20020a4a754b000000b002c679a02b18so638361oof.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 19:19:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HDps2h2SWpU4Y94NDG4hPcR7AZPRkd1wfAyLJyas85E=;
+        b=iqgpLT8egn4PIMWsEDOkPYE+RgYdrE6libBZXgFiThm4cinKjw7geQDuINCFfWn09A
+         tIGLKTiGej1fB9A9oqta/iqAVKevU4g0Phacs2pjKP+4igkQzqvZAe1VsII8qFiQSR1I
+         YXIvlweVfBAbmJS8fDPZhYjhraL/YCEku3vCYPT3eO6rn7k0G8+J2MAFn2i6Hbc3yhbc
+         7Oq7ymRfxBprWwo6duLAEB/nO8VYoiL9XbkOhGHL0cvPxa7wfPWAVgFIQPMP8pt6UXY/
+         wYQVtlT/9h0Ps0zbDW7WiTswJh4yvhb4GRSYQ6j+EotrsNQNkPEx3M1GSFpludCOrarG
+         9BQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HDps2h2SWpU4Y94NDG4hPcR7AZPRkd1wfAyLJyas85E=;
+        b=UUKWFnvef2O8gYh4+X9pyNsbhwhM9YiZNVQwu6A7oCY3NtcM0uGBta3ZX8po8NZmeU
+         qcEuhFKCKpA7zjjc/Zyx2IJNho2rkumPgB1ePVlMobtUvKp+pFj3oCzjIx9tXRKjFkzg
+         E1DRoZXIBELCA6vbfHfdPX3VPk+K7gkYtpeKdYfZcTS416CnsIEBL0udFydN75VskT4/
+         ioRlVB0TkMOdMbnQFvFlJemit7zQhiACT+frig18NhY0wxaDxULesRoKQ9NY2CQBKUS3
+         jcgq9+lkzm/WZQQtP8mGaCuOCrx77qVEMy9BcqsWgZ15OqcjkhAIbiXz0M8gpY8EIFOK
+         fmLg==
+X-Gm-Message-State: AOAM533WAAZNjg/GaRzsb+uStVlQY6HDgPStk241oqdbhILoPdLX67ux
+        pnKMHjMliGfIdGvDmv30xT1dOg==
+X-Google-Smtp-Source: ABdhPJyysufsZZCbU1g7sOlT62sjkNFODXgIPH+tINlFxiO0KOVS5s/AJ0HJthESGvOmoWsrPbnv3g==
+X-Received: by 2002:a4a:d486:: with SMTP id o6mr11038405oos.49.1638501588648;
+        Thu, 02 Dec 2021 19:19:48 -0800 (PST)
+Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id s9sm440136otg.42.2021.12.02.19.19.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 19:19:48 -0800 (PST)
+Date:   Thu, 2 Dec 2021 21:19:43 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: phy: qcom,qmp: Add SM8450 UFS phy
+ compatible
+Message-ID: <YamMz3JYoyDh8O4B@yoga>
+References: <20211201074456.3969849-1-vkoul@kernel.org>
+ <20211201074456.3969849-3-vkoul@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211201074456.3969849-3-vkoul@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When Samsung PCIe Gen4 NVMe is connected to Intel ADL VMD, the
-combination causes AER message flood and drags the system performance
-down.
+On Wed 01 Dec 01:44 CST 2021, Vinod Koul wrote:
 
-The issue doesn't happen when VMD mode is disabled in BIOS, since AER
-isn't enabled by acpi_pci_root_create() . When VMD mode is enabled, AER
-is enabled regardless of _OSC:
-[    0.410076] acpi PNP0A08:00: _OSC: platform does not support [AER]
-...
-[    1.486704] pcieport 10000:e0:06.0: AER: enabled with IRQ 146
+> Document the UFS phy compatible for QMP UFS phy found in SM8450 SoC.
+> 
 
-Since VMD is an aperture to regular PCIe root ports, honor ACPI _OSC to
-disable PCIe features accordingly to resolve the issue.
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215027
-Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
-v3:
- - Use a new helper function.
+Regards,
+Bjorn
 
-v2:
- - Use pci_find_host_bridge() instead of open coding.
-
- drivers/pci/controller/vmd.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-index a45e8e59d3d48..691765e6c12aa 100644
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@ -661,6 +661,21 @@ static int vmd_alloc_irqs(struct vmd_dev *vmd)
- 	return 0;
- }
- 
-+/*
-+ * Since VMD is an aperture to regular PCIe root ports, only allow it to
-+ * control features that the OS is allowed to control on the physical PCI bus.
-+ */
-+static void vmd_copy_host_bridge_flags(struct pci_host_bridge *root_bridge,
-+				       struct pci_host_bridge *vmd_bridge)
-+{
-+	vmd_bridge->native_pcie_hotplug = root_bridge->native_pcie_hotplug;
-+	vmd_bridge->native_shpc_hotplug = root_bridge->native_shpc_hotplug;
-+	vmd_bridge->native_aer = root_bridge->native_aer;
-+	vmd_bridge->native_pme = root_bridge->native_pme;
-+	vmd_bridge->native_ltr = root_bridge->native_ltr;
-+	vmd_bridge->native_dpc = root_bridge->native_dpc;
-+}
-+
- static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- {
- 	struct pci_sysdata *sd = &vmd->sysdata;
-@@ -798,6 +813,9 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- 		return -ENODEV;
- 	}
- 
-+	vmd_copy_host_bridge_flags(pci_find_host_bridge(vmd->dev->bus),
-+				   to_pci_host_bridge(vmd->bus->bridge));
-+
- 	vmd_attach_resources(vmd);
- 	if (vmd->irq_domain)
- 		dev_set_msi_domain(&vmd->bus->dev, vmd->irq_domain);
--- 
-2.32.0
-
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> index 630ceaf915e2..c59bbca9a900 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+> @@ -50,6 +50,7 @@ properties:
+>        - qcom,sm8350-qmp-ufs-phy
+>        - qcom,sm8350-qmp-usb3-phy
+>        - qcom,sm8350-qmp-usb3-uni-phy
+> +      - qcom,sm8450-qmp-ufs-phy
+>        - qcom,sdx55-qmp-pcie-phy
+>        - qcom,sdx55-qmp-usb3-uni-phy
+>  
+> -- 
+> 2.31.1
+> 

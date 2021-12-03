@@ -2,118 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD174672E8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 657BE467303
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378970AbhLCHwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 02:52:21 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:27340 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351054AbhLCHwS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 02:52:18 -0500
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J54hD59c9zbjJb;
-        Fri,  3 Dec 2021 15:48:44 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 3 Dec 2021 15:48:53 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 3 Dec 2021 15:48:52 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kasan-dev@googlegroups.com>,
-        Marco Elver <elver@google.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v2 2/2] locking: Mark racy reads of owner->on_cpu
-Date:   Fri, 3 Dec 2021 15:59:35 +0800
-Message-ID: <20211203075935.136808-3-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20211203075935.136808-1-wangkefeng.wang@huawei.com>
-References: <20211203075935.136808-1-wangkefeng.wang@huawei.com>
+        id S1379083AbhLCIFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:05:01 -0500
+Received: from smtp21.cstnet.cn ([159.226.251.21]:45552 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1350557AbhLCIFB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 03:05:01 -0500
+Received: from localhost.localdomain (unknown [124.16.138.128])
+        by APP-01 (Coremail) with SMTP id qwCowADn71fDzqlhyu4dAQ--.56664S2;
+        Fri, 03 Dec 2021 16:01:11 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     peter.chen@kernel.org, gregkh@linuxfoundation.org,
+        p.zabel@pengutronix.de
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] usb: chipidea: msm: Handle error codes
+Date:   Fri,  3 Dec 2021 16:01:06 +0800
+Message-Id: <20211203080106.1559983-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowADn71fDzqlhyu4dAQ--.56664S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZrW7Kw4fAF15tr13AryxZrb_yoWDJrb_CF
+        1xWrWxuFya9F1Skr1DtFW2vrW0kwnY9Fn5WFs2g3WfKa4UZF1xJay09ryxt34UuF4Fyrn8
+        GayvvwsxCFW8CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb48FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r43
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JV
+        WxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjMKZJUUUU
+        U==
+X-Originating-IP: [124.16.138.128]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marco Elver <elver@google.com>
+The return value of of_get_next_available_child() and
+of_device_is_compatible() is not always 0.
+To catch the exception in case of the failure.
 
-One of the more frequent data races reported by KCSAN is the racy read
-in mutex_spin_on_owner(), which is usually reported as "race of unknown
-origin" without showing the writer. This is due to the racing write
-occurring in kernel/sched. Locally enabling KCSAN in kernel/sched shows:
-
- | write (marked) to 0xffff97f205079934 of 4 bytes by task 316 on cpu 6:
- |  finish_task                kernel/sched/core.c:4632 [inline]
- |  finish_task_switch         kernel/sched/core.c:4848
- |  context_switch             kernel/sched/core.c:4975 [inline]
- |  __schedule                 kernel/sched/core.c:6253
- |  schedule                   kernel/sched/core.c:6326
- |  schedule_preempt_disabled  kernel/sched/core.c:6385
- |  __mutex_lock_common        kernel/locking/mutex.c:680
- |  __mutex_lock               kernel/locking/mutex.c:740 [inline]
- |  __mutex_lock_slowpath      kernel/locking/mutex.c:1028
- |  mutex_lock                 kernel/locking/mutex.c:283
- |  tty_open_by_driver         drivers/tty/tty_io.c:2062 [inline]
- |  ...
- |
- | read to 0xffff97f205079934 of 4 bytes by task 322 on cpu 3:
- |  mutex_spin_on_owner        kernel/locking/mutex.c:370
- |  mutex_optimistic_spin      kernel/locking/mutex.c:480
- |  __mutex_lock_common        kernel/locking/mutex.c:610
- |  __mutex_lock               kernel/locking/mutex.c:740 [inline]
- |  __mutex_lock_slowpath      kernel/locking/mutex.c:1028
- |  mutex_lock                 kernel/locking/mutex.c:283
- |  tty_open_by_driver         drivers/tty/tty_io.c:2062 [inline]
- |  ...
- |
- | value changed: 0x00000001 -> 0x00000000
-
-This race is clearly intentional, and the potential for miscompilation
-is slim due to surrounding barrier() and cpu_relax(), and the value
-being used as a boolean.
-
-Nevertheless, marking this reader would more clearly denote intent and
-make it obvious that concurrency is expected. Use READ_ONCE() to avoid
-having to reason about compiler optimizations now and in future.
-
-With previous refactor, mark the read to owner->on_cpu in owner_on_cpu(),
-which immediately precedes the loop executing mutex_spin_on_owner().
-
-Signed-off-by: Marco Elver <elver@google.com>
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Fixes: 47654a162081 ("usb: chipidea: msm: Restore wrapper settings after reset")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- include/linux/sched.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/chipidea/ci_hdrc_msm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index ff609d9c2f21..0b9b0e3f4791 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -2177,7 +2177,7 @@ static inline bool owner_on_cpu(struct task_struct *owner)
- 	 * As lock holder preemption issue, we both skip spinning if
- 	 * task is not on cpu or its cpu is preempted
- 	 */
--	return owner->on_cpu && !vcpu_is_preempted(task_cpu(owner));
-+	return READ_ONCE(owner->on_cpu) && !vcpu_is_preempted(task_cpu(owner));
- }
- 
- /* Returns effective CPU energy utilization, as seen by the scheduler */
+diff --git a/drivers/usb/chipidea/ci_hdrc_msm.c b/drivers/usb/chipidea/ci_hdrc_msm.c
+index 46105457e1ca..13218f0a2bed 100644
+--- a/drivers/usb/chipidea/ci_hdrc_msm.c
++++ b/drivers/usb/chipidea/ci_hdrc_msm.c
+@@ -246,6 +246,8 @@ static int ci_hdrc_msm_probe(struct platform_device *pdev)
+ 	if (ulpi_node) {
+ 		phy_node = of_get_next_available_child(ulpi_node, NULL);
+ 		ci->hsic = of_device_is_compatible(phy_node, "qcom,usb-hsic-phy");
++		if (!phy_node || !ci->hsic)
++			goto err_mux;
+ 		of_node_put(phy_node);
+ 	}
+ 	of_node_put(ulpi_node);
 -- 
-2.26.2
+2.25.1
 

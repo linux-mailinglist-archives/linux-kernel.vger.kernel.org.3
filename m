@@ -2,174 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC075467D80
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E00E3467D87
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:51:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344093AbhLCSxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 13:53:18 -0500
-Received: from mga02.intel.com ([134.134.136.20]:12962 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231605AbhLCSxQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 13:53:16 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="224285215"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="224285215"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 10:49:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="513366403"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga007.fm.intel.com with ESMTP; 03 Dec 2021 10:49:51 -0800
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 3 Dec 2021 10:49:51 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Fri, 3 Dec 2021 10:49:51 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.106)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Fri, 3 Dec 2021 10:49:51 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fWuFmkKXvULRJUbv6SO7jDz5BN96OB6TtgN4y+d5RJKPiGLdOXQj7YtNCJrOQEMsvzIjyPNxMcjHTQm4eLBTfAikM7GS0t6I9fCI1LCxIVYmB/EnrWV7XgG7gSoLy/ev973me1qHrNxCZEe7SWA3seIJOqd60Nc5YY9uB0ulO823kwfw7BVcKzTXCVSFBpem3ifHnGdz88DBjYfCZ/VayI7b1YNar9iY03s1oUaoaOZ1fDKiWZUq3QyuuAM6WXzD/6NnGJEd4TJaTfagDwUtd77FWuk63ZgUIas8LxEYdCS+imYUAdw8oJQwLw1sa8E/Iq0PIjqMBZr9R1PJES9lNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mCAc2QUnqx+HimV2vK/MHmflwFOO0Fj6m98Uli4WLos=;
- b=NXhqxVdUSO/qCJ6IM5NBAR/Nc7UI/V+WuyK53QPM4XXiCj0FoMU1zj57Ipa1gafAWie33SArwfU8qZkv/hjNfgxWDXarW5G6BHJahr2fpTiT6Vf1En8JnVv823GZxM63LlrUdoylJOy+rKoiNzPnedJsSD+DNY99qHAE/IirwI7Eg1YaH9AiM7Y9fU47tigAoB7EQ3E5tCc5SbG5zi0aYVfFtT292s4rqFgl1ZPTjB9uh80CZ/EdDkzGRVhQ7OnMg7IdCvFUHxXqOhV2KVwLu1A+J0tjuDIkxO68PcHGju0l1qZ6LwjMUmGlu6S/Q6nV9oZbG7ccq+xFmC7Mp2mjEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mCAc2QUnqx+HimV2vK/MHmflwFOO0Fj6m98Uli4WLos=;
- b=RrnNoeKgKUJoSDU0dOToyMllemCn3Ynqo2L3rJnDAWxVBPWcuWrx9Pq6kcov6lRDa3tIuHyTjo4S100MaKo1xt4twMmVyCOXE1d2eVQ5PYOtJaS8PY6MbOPupAAPGtv4YzBgo29yI9s0o/uExoJHmRoHDMpid0uh1lRoA55saNY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
- by BN9PR11MB5515.namprd11.prod.outlook.com (2603:10b6:408:104::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.24; Fri, 3 Dec
- 2021 18:49:49 +0000
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::bcd0:77e1:3a2e:1e10]) by BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::bcd0:77e1:3a2e:1e10%3]) with mapi id 15.20.4734.023; Fri, 3 Dec 2021
- 18:49:49 +0000
-Message-ID: <1d1eea17-6279-878a-e52a-2a9e9c8452f8@intel.com>
-Date:   Fri, 3 Dec 2021 10:49:44 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.3.2
-Subject: Re: [PATCH 10/25] x86/sgx: Support enclave page permission changes
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>, <dave.hansen@linux.intel.com>,
-        <jarkko@kernel.org>, <tglx@linutronix.de>, <bp@alien8.de>,
-        <luto@kernel.org>, <mingo@redhat.com>, <linux-sgx@vger.kernel.org>,
-        <x86@kernel.org>
-CC:     <seanjc@google.com>, <kai.huang@intel.com>,
-        <cathy.zhang@intel.com>, <cedric.xing@intel.com>,
-        <haitao.huang@intel.com>, <mark.shanahan@intel.com>,
-        <hpa@zytor.com>, <linux-kernel@vger.kernel.org>
-References: <cover.1638381245.git.reinette.chatre@intel.com>
- <44fe170cfd855760857660b9f56cae8c4747cc15.1638381245.git.reinette.chatre@intel.com>
- <8087c21c-195b-3ffa-a3ca-542752db6462@intel.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <8087c21c-195b-3ffa-a3ca-542752db6462@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MWHPR10CA0068.namprd10.prod.outlook.com
- (2603:10b6:300:2c::30) To BN0PR11MB5744.namprd11.prod.outlook.com
- (2603:10b6:408:166::16)
+        id S1353144AbhLCSyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 13:54:45 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:6952 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231605AbhLCSyn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 13:54:43 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B3IkINr022600;
+        Fri, 3 Dec 2021 18:51:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=CeqDmYVcHZKTTCv8hx7p20HEo4XinK/+V4PT0rTIPQs=;
+ b=mP1h5n+oXKrdger+9qxg6m/lwWgWGCUH1KnWZF9cDqJEG4qvDqIT5+uSCa8lPoR31iol
+ llVKcv3X95FoQ/YseHGQ9ivsIrUwXh2w/EeWxVMbzaf1VQl4jYCcwtNO12zVaFlIt+fI
+ att7NS8H50DHKZDL1QoX1TmdH/Tjdeh/7YqcEF52CQB8oPU7cGumBj8NFjq9aWvmdUwD
+ 3n7WCZPLhV70Q3XGfd5UVFlxMJeqy4ZrMYkYrJ0x3UNpdEDjY4v15V2eQO0xsR8c7tTo
+ ZevP8rS1QNwXQopJKFe2yFI4DOUhwD/eifgrdZPRk7WN7grtr7raLXyQR7mUYie5zoJ9 PQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cqrte02qr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Dec 2021 18:51:02 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B3InxVi002415;
+        Fri, 3 Dec 2021 18:51:01 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cqrte02qk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Dec 2021 18:51:01 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B3IkxLW010396;
+        Fri, 3 Dec 2021 18:51:01 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma02dal.us.ibm.com with ESMTP id 3cn5f1xdgu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Dec 2021 18:51:01 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B3Ioxe956426974
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Dec 2021 18:50:59 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 369E578064;
+        Fri,  3 Dec 2021 18:50:59 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E3DB778060;
+        Fri,  3 Dec 2021 18:50:50 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.211.96.125])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri,  3 Dec 2021 18:50:50 +0000 (GMT)
+Message-ID: <11b557b58de74828b1c16334a5fb52c4d3f6ad0f.camel@linux.ibm.com>
+Subject: Re: [RFC v2 19/19] ima: Setup securityfs for IMA namespace
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, serge@hallyn.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Date:   Fri, 03 Dec 2021 13:50:49 -0500
+In-Reply-To: <6306b4e5-f26d-1704-6344-354eb5387abf@linux.ibm.com>
+References: <20211203023118.1447229-1-stefanb@linux.ibm.com>
+         <20211203023118.1447229-20-stefanb@linux.ibm.com>
+         <df433bc52ca1e0408d48bbace4c34a573991f5ba.camel@linux.ibm.com>
+         <6306b4e5-f26d-1704-6344-354eb5387abf@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Received: from [192.168.1.221] (71.238.111.198) by MWHPR10CA0068.namprd10.prod.outlook.com (2603:10b6:300:2c::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.17 via Frontend Transport; Fri, 3 Dec 2021 18:49:47 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5a866448-a32e-48b9-5eb7-08d9b68daee0
-X-MS-TrafficTypeDiagnostic: BN9PR11MB5515:
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <BN9PR11MB551527D5D72BFD55CCA4BF35F86A9@BN9PR11MB5515.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5GD9TiIrOi9hAKBMATcfjmGCDuIZArdzZzKaRWOe26VWKMiIcB8IRnniqcg28bl2uXujmTlTsj+EDTJEw1jE/1PiZzuo8P33MJPEV7mgluWBXkSQ6dFmtlguKYbdSPXt+0VOQC7E78WaJ6J5jbaqD/k7kGf2X5SvrLG8KWTP/jCL8WMg6J/c5iVNvbXV5BjJtUB4oM9UVxzcEL0YbpKRIuXv+OX8CBrNEjPTgFN3z7a64ykxFXGSqDwZxy+JsdJmdiQtOAhNSJNqwnIW0VbO/fmajtLH59kH8fp/rFi7dHgV9nwk16JlOSWj/Vkfh9utwQ6TXOQRqHijHVpPMvucfPw+L+hUI49p28iJY64fSFfrerr0NUXXYYquz6bElNg835hDRWAA/6t4gEzkOFnmY1gQLWC8nv6wfbUR2g2Qatm+dq0sX5ClZi4wnc4gmQh5C8QaU1OdUpp0yacxXQPQHKEEZHeBS4XvzwRPx4dWndKlhyMksU16YOhfumUgXktbSf5wW6vf96qpq62G6ziWvnF+MfqWieydCR0yxNVSlv6wphK5T86ZFFieH658TSrIrgn3WQqFa7IrVUA3WZRkQg7HYuwqALxtsDN3Q3cbD59nCUEaTj0nh1KvkEhgSlteepBHcV9WGzt45ONjwVKQlA10woFRjNGL65HCUgC+Z7AVrNIee/amQ+P3Xk2QumIGa9hay2T6D1WQhBs1Ex3uK6J6spiGFsoX/126HlOkczLzjg8u61w3csDSp4Z6owTe
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(956004)(6486002)(31696002)(86362001)(53546011)(66946007)(316002)(16576012)(66556008)(66476007)(2906002)(5660300002)(82960400001)(186003)(2616005)(38100700002)(8676002)(4744005)(36756003)(44832011)(4326008)(508600001)(7416002)(83380400001)(31686004)(26005)(6666004)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cDJGUThNN05vNEpqMVJtYnlTc1hFV0VYemVGL0hrSTlBM0hQa1lqTldCd3NN?=
- =?utf-8?B?dHBsczY4cVMySFg1TlkyNFg2cUVVa3JWVUlTNWhWWnZzOEVOcUNQTWkxVUMz?=
- =?utf-8?B?bXFhOGVNelhnS2Y3R2o4NVFHRkY2ekpOTlFpVHh0aFRhdGFkOUV0TThIMFlq?=
- =?utf-8?B?SEtFRlhNeWZnZXVIeHVlVkpxMC9nRENnbHFGYklhOUZuRCs2a1RYczZrRGk2?=
- =?utf-8?B?WlBlOUhmaWZtRjg3NTdtUlVFK2VjS0hpNGZVY0tDaFFRNlpDYUFVNXRqaito?=
- =?utf-8?B?cHhITVQxQ0dGRGNucGovQjJjNGQweFZXTEpMVU40WXk2c25MZ2xnZ0pnK3o1?=
- =?utf-8?B?a1FVWjFRcUx4QkpLOU9lOWxZQ3NOL2w4cDhtMTJQK2YyRHppb1VrRzB0OUVh?=
- =?utf-8?B?WnJHUVZWU3EzMHNGWnlWV2J5TWl4YmNwYTdPbUsxNHYwZ21Uc3M3cWZPd1p2?=
- =?utf-8?B?SVBVdnBoRzI5YStxWTk3am9rYU4yQVVGZWtuOTZOSGdyaWJJSnFxdU9aUXBD?=
- =?utf-8?B?VU44azZ0eG5lOWJIVXZueTIzUjQ1VFE4TVdOeVFCdzRtVy9DWHFQL3RhcUVh?=
- =?utf-8?B?c2Z4ODV4d2lGV3lHTzA1VzR5Y3B2dzM4bUh3TktoMHlaTnQwamVrZkRSUUs4?=
- =?utf-8?B?OGp5bkFJelBUYXF6emcxbnlodnVnWTRMZTVEYlVHaUlBVUMzcGNnU2VodzI0?=
- =?utf-8?B?c1N5dEl6YllhdmNTbll6UWNtdmNsWW14NWdSb09GUjdvcXMyMDJLejRFUExD?=
- =?utf-8?B?Z3RRTHFRV0NWWkN1WWpCVlZaWTRsbTg1NlgybzVhdldaZ3FJdktERnlHQVNH?=
- =?utf-8?B?UEFzbU8wcm1CMENNRGdwcERNSzZNT0RjK0swRGZDU2FncE1rS01MWDROTm1Y?=
- =?utf-8?B?MXo5TDZ1Z29KaDlMalhFMW5aWXRVRS9QRi95M3VxOWNYVW5lL3czUURNNmtD?=
- =?utf-8?B?WWdSWVBIK1BKMGFlU2dxWjdjR3ZqRzFBWWtVYUZ0TEF2ZVdnVnZxKzJ3NDF0?=
- =?utf-8?B?Z0FKUk1QNERnQTczeHNySkhVc2VvM1pVNnU5MEp0elFBczlmNUV4dXNxZVFa?=
- =?utf-8?B?TjVUUG5ISG15aFQzQ0EySUlHeEpiODFySzNuZCt3cm52Vm9mbFpYdmNrdXUz?=
- =?utf-8?B?TVVlamh6N0QxaW00TG85V0RLTEhXbXpwTDFidjE2RVhnejNsMnZ2bk50dlhC?=
- =?utf-8?B?NHhFZkVnM0RqU1llYXRKczZiaERsZGRmNXJZYlZ0c2dmbGZtRk9SRnNhTkFU?=
- =?utf-8?B?YmRjSWNGdUpqbC9EZlBDTWtmZ2piRGNxVDc4WDR0UzFCcmhxNVFNRFFubUxH?=
- =?utf-8?B?U21zVzV4UE5LZFhQblM4N0gyY1RhSnE5bmd1eXRGR1h1UzFCeC9HOHdHUVU0?=
- =?utf-8?B?c21vZ0pIWU9YdlI3Nzk5QUl4SE9HZThHdU84elJIQ05Objk0OHZ1NnA5QUMw?=
- =?utf-8?B?MS9SODhuSE0zbjJhenEwTFgyRHNoZnZpbm5LN2twMC9SVWh2YU5HTFFxR292?=
- =?utf-8?B?U3FJUEh3d1pudGIvVjIxMXU3SDk5UVdNQ0ZjZ2pWT0c5L2NoaEZ6OUhic0NU?=
- =?utf-8?B?ZGlpU1RKOUR4SW5mTjZWZGMyK09MYjZCelBmU2tISXdwazJyaGJMZXFncDVj?=
- =?utf-8?B?QnJsMHZZSGRmTVZtN2c0cUVNQzIrTFNLZlpMMVdCdjBlbU1PbFVWUEp5Y3VK?=
- =?utf-8?B?U3hxK0Y1WUYwSHZnbW5xSDg3M25waUpNMjg3UWliVzFRdlhBbHZrZUlGWHhL?=
- =?utf-8?B?aVpvd0JCd1FxY3RKU3pvb0NvTktlK1BNY3VEazY3emhzWFBrNEpUTWpyOWE0?=
- =?utf-8?B?Qnhqc0FZQjR0QnNDUTVaYXdsaTEwMmxFWVBwQjhsQldXMUxBRlJ4NFRDcVZr?=
- =?utf-8?B?dGRkVndBeFZWQWlPaWFRb05OVVBtdUZ3K2Q5UG9mYlh6TU5WLytKOExqL1FO?=
- =?utf-8?B?ZnVUaWc3WnAva01rU25zaGxPRkZncW9LSTZFaXZNTHE5UGhVdHovY3hmNm9T?=
- =?utf-8?B?S3JkMTRUTmU2Z3BUWkxsZ3JORWgxVWllelhMVjcyOVNWc1c0YmQxSW5tR25y?=
- =?utf-8?B?dDBveFR0YzBmRFU4R3FDK1pZTFVkRkhSOHcySTJPSzNLRGs2dTkzakZxSXBx?=
- =?utf-8?B?RFJwVEJGdytTVVJsTGdtdWVHSGw2cGNKcTJpYzdUMlBWWW1BMS93eDBNSld6?=
- =?utf-8?B?ODFoNVBXZVpDSm5NTWM2YXVMZURhRzVRUTBhZU45NENHMVJCc0xQUHJnallx?=
- =?utf-8?Q?G7G8w9dQlCZ3zAnLA7PvBPS1u0dnJ6WkaYQh4fVW2o=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a866448-a32e-48b9-5eb7-08d9b68daee0
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2021 18:49:49.1703
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ioa9iSUeLopiKouXqGgCE5tcNeFMvQwtEQjEUR5hdIHe6EyNMRrM26+S/n1PxMLdVlXgxPVQ/siGYBRmYF0uXxvGh3HLFirhnL9TEMltwfU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5515
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: vWCj3NGAJe7hWcTddG7p0UD3l0VofSYo
+X-Proofpoint-ORIG-GUID: j204tRZAMpl2_A2FaR9kURtBhTuIcMyN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-03_07,2021-12-02_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ malwarescore=0 mlxscore=0 clxscore=1015 priorityscore=1501 impostorscore=0
+ mlxlogscore=999 adultscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112030118
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
-
-On 12/3/2021 10:14 AM, Dave Hansen wrote:
-> On 12/1/21 11:23 AM, Reinette Chatre wrote:
->> Enclave page permission changes need to be approached with care and
->> for this reason this initial support is to allow enclave page
->> permission changes _only_ if the new permissions are the same or
->> more restrictive that the permissions originally vetted at the time the
->> pages were added to the enclave. Support for extending enclave page
->> permissions beyond what was originally vetted is deferred.
+On Fri, 2021-12-03 at 13:06 -0500, Stefan Berger wrote:
+> On 12/3/21 12:03, James Bottomley wrote:
+> > On Thu, 2021-12-02 at 21:31 -0500, Stefan Berger wrote:
+> > [...]
+> > >   static int securityfs_init_fs_context(struct fs_context *fc)
+> > >   {
+> > > +	int rc;
+> > > +
+> > > +	if (fc->user_ns->ima_ns->late_fs_init) {
+> > > +		rc = fc->user_ns->ima_ns->late_fs_init(fc->user_ns);
+> > > +		if (rc)
+> > > +			return rc;
+> > > +	}
+> > >   	fc->ops = &securityfs_context_ops;
+> > >   	return 0;
+> > >   }
+> > I know I suggested this, but to get this to work in general, it's
+> > going to have to not be specific to IMA, so it's going to have to
+> > become something generic like a notifier chain.  The other problem
+> > is it's only working still by accident:
 > 
-> It's probably worth adding a few examples here:
+> I had thought about this also but the rationale was:
 > 
->   * RWX => RW => RX => RW => R => RWX
->   * RW => R => RW
->   * RX => R => RX
+> securityfs is compiled due to CONFIG_IMA_NS and the user namespace 
+> exists there and that has a pointer now to ima_namespace, which can
+> have that callback. I assumed that other namespaced subsystems could
+> also be  reached then via such a callback, but I don't know.
+
+Well securityfs is supposed to exist for LSMs.  At some point each of
+those is going to need to be namespaced, which may eventually be quite
+a pile of callbacks, which is why I thought of a notifier.
+
+> I suppose any late filesystem init callchain would have to be
+> connected to the user_namespace somehow?
+
+I don't think so; I think just moving some securityfs entries into the
+user_namespace and managing the notifier chain from within securityfs
+will do for now.  [although I'd have to spec this out in code before I
+knew for sure].
+
+> > > +int ima_fs_ns_init(struct ima_namespace *ns)
+> > > +{
+> > > +	ns->mount = securityfs_ns_create_mount(ns->user_ns);
+> > This actually triggers on the call to securityfs_init_fs_context,
+> > but nothing happens because the callback is null.  Every subsequent
+> > use of fscontext will trigger this.  The point of a keyed supeblock
+> > is that fill_super is only called once per key, that's the place we
+> > should be doing this.   It should also probably be a blocking
+> > notifier so anyconsumer of securityfs can be namespaced by
+> > registering for this notifier.
 > 
+> What I don't like about the fill_super is that it gets called too
+> early:
+> 
+> [   67.058611] securityfs_ns_create_mount @ 102 target user_ns: 
+> ffff95c010698c80; nr_extents: 0
+> [   67.059836] securityfs_fill_super @ 47  user_ns:
+> ffff95c010698c80; 
+> nr_extents: 0
 
-Indeed - that would make the implications of this change clear.
+Right, it's being activated by securityfs_ns_create_mount which is
+called as soon as the user_ns is created.
 
-Will do. Thank you very much.
+> We are switching to the target user namespace in 
+> securityfs_ns_create_mount. The expected nr_extents at this point is
+> 0, since user_ns hasn't been configured, yet. But then
+> security_fill_super is also called with nr_extents 0. We cannot use
+> that, it's too early!
 
-Reinette
+Exactly, so I was thinking of not having a securityfs_ns_create_mount
+at all.  All the securityfs_ns_create.. calls would be in the notifier
+call chain. This means there's nothing to fill the superblock until an
+actual mount on it is called.
+
+> > > +	if (IS_ERR(ns->mount)) {
+> > > +		ns->mount = NULL;
+> > > +		return -1;
+> > > +	}
+> > > +	ns->mount_count = 1;
+> > This is a bit nasty, too: we're spilling the guts of mount count
+> > tracking into IMA instead of encapsulating it inside securityfs.
+> 
+> Ok, I can make this disappear.
+> 
+> 
+> > > +
+> > > +	/* Adjust the trigger for user namespace's early teardown of
+> > > dependent
+> > > +	 * namespaces. Due to the filesystem there's an additional
+> > > reference
+> > > +	 * to the user namespace.
+> > > +	 */
+> > > +	ns->user_ns->refcount_teardown += 1;
+> > > +
+> > > +	ns->late_fs_init = ima_fs_ns_late_init;
+> > > +
+> > > +	return 0;
+> > > +}
+> > I think what should be happening is that we shouldn't so the
+> > simple_pin_fs, which creates the inodes, ahead of time; we should
+> > do it inside fill_super using a notifier, meaning it gets called
+> > once per
+> 
+> fill_super would only work for the init_user_ns from what I can see.
+> 
+> 
+> > key, creates the root dentry then triggers the notifier which
+> > instantiates all the namespaced entries.  We can still use
+> > simple_pin_fs for this because there's no locking across
+> > fill_super.
+> > This would mean fill_super would be called the first time the
+> > securityfs is mounted inside the namespace.
+> 
+> I guess I would need to know how fill_super would work or how it
+> could be called late/delayed as well.
+
+So it would be called early in the init_user_ns by non-namespaced
+consumers of securityfs, like it is now.
+
+Namespaced consumers wouldn't call any securityfs_ns_create callbacks
+to create dentries until they were notified from the fill_super
+notifier, which would now only be triggered on first mount of
+securityfs inside the namespace.
+
+> > If we do it this way, we can now make securityfs have its own mount
+> > and mount_count inside the user namespace, which it uses internally
+> > to the securityfs code, thus avoiding exposing them to ima or any
+> > other namespaced consumer.
+> > 
+> > I also think we now don't need the securityfs_ns_ duplicated
+> > functions because the callback via the notifier chain now ensures
+> > we can usethe namespace they were created in to distinguish between
+> > non namespaced and namespaced entries.
+> 
+> Is there then no need to pass a separate vfsmount * in anymore? 
+
+I don't think so no.  It could be entirely managed internally to
+securityfs.
+
+> Where would the vfsmount pointer reside? For now it's in
+> ima_namespace, but it sounds like it should be in a more centralized
+> place? Should it also be  connected to the user_namespace so we can
+> pick it up using get_user_ns()?
+
+exactly.  I think struct user_namespace should have two elements gated
+by a #ifdef CONFIG_SECURITYFS which are the vfsmount and the
+mount_count for passing into simple_pin_fs.
+
+
+James
+
+

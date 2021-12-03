@@ -2,184 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3C2467F6E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1DB467F76
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:45:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354132AbhLCVnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 16:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39152 "EHLO
+        id S1383250AbhLCVsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 16:48:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbhLCVnB (ORCPT
+        with ESMTP id S236204AbhLCVsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 16:43:01 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B84C061751;
-        Fri,  3 Dec 2021 13:39:36 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id t19so8386563oij.1;
-        Fri, 03 Dec 2021 13:39:36 -0800 (PST)
+        Fri, 3 Dec 2021 16:48:40 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C41C061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 13:45:16 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id x5-20020a2584c5000000b005f89a35e57eso8583559ybm.19
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 13:45:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZyNCIgbiIUOsipewSvB8dSHnTmGN087PJADPNaEzhY0=;
-        b=S7F9W7eDO6jsIw3246StQzBS+HGkMuuEuUoNVdlPPKe8Ja3zbROrmY7tJeOpNf5pKm
-         LWOJPqNg1mC25OgMfI5BhwokJoUpRJoAwGQfentShI0NMgZuWZwx1ePj7Gayxd4ISJLK
-         tNsHYf/Qi3ND6pc46PGHvxd1CcSjRdm2BNTfm6Vk6xtwRLir+949wxzSQd4u2rAgLKaJ
-         27qs7a1XVaqrM1cDEvWcH1ODGxwAKsbAPPLJSjdwKl0NuE1D6wu2z51Ezu57WV4uEj8K
-         pMh6fRwthx+tkY6VnRrvBHjZXIDbbqHL1Qk+4fRD502zYKw/muhhHiH5vrjelJB/f9kk
-         3Oog==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=RHK+edLmIUWz40oQK0k2EB+zsYPqIcWKG5v/bzlYL3s=;
+        b=WTpIu+BmV2MaJXQyIPqMOuqudR4ipfc/lBSg/RwPhhwNmdblAQrffksib3XJwv3Cz6
+         9tArGjUra1DnWSC+O3WXDwjzhA2gap58LpwCvnFxcVLqvGZj9H2eQxaY2T3i12uZAtMf
+         T2csBQYtknK6kXc2h/Adb7hE8pXt5rN3ocgdA52wcbyltoh+5ndKLtmNg+zKk80qHtXW
+         XEDaaVX0jGPWzQGY7IUWoZhiuN27QNILDNtJtpzoOYUEJXXpe2jjlnZp7tBuwyAN2pzR
+         N4F7vcCr5yccev+SlZyBMxN9mnkf/Qfa7yoTm4KW62ytrBEmdHZoe/sGWtydBcHq/x0b
+         yomQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ZyNCIgbiIUOsipewSvB8dSHnTmGN087PJADPNaEzhY0=;
-        b=5ScrDPQ4UkPV0WcXdPMuoXV/dK0Drq5zRBcP/Dkf4u6VnXbg//wwUSQRCCTYi0R+xG
-         DzwMPX+sdQyU4dv8LYuF1bPAqf6tVWAghKQruz6ajJ4/43JuGI/MMmAk7Hp1Kd8agCf0
-         QOxsZ5nit+vRurcRkVgya/sK+cLkY6NJw6JRVvc2qivTOQyPSAtBuTpATZRw/KDL6eG4
-         PasI+bl/c64Ef3yenUq0i2L+hplX68QrYijEoOsuvCh61ljS7kG2oOGoQ0qg6aQ4O4oM
-         jbMzo2fiu4I2EVfjgPTIN1TP/IdMCgtDzYO4fRaJux/V+luyq8aEXkkm/g/+yp4Ddgf7
-         b35g==
-X-Gm-Message-State: AOAM5332J8nvwJCa3EPGfjGXos2wQ6cENwbM9mi8GYE7BvRGYfXjCcIA
-        zeguZ38MyujIH1qrRIEECVraZycHy5M=
-X-Google-Smtp-Source: ABdhPJwK2AaO9PxR5ndkWa/sJyuxW6vQyapK7lFhRRL6gQ+wQVkhDWzh/ALnOAWSd4619q3h970Cbw==
-X-Received: by 2002:a05:6808:2324:: with SMTP id bn36mr11712695oib.131.1638567575896;
-        Fri, 03 Dec 2021 13:39:35 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n22sm802920oop.29.2021.12.03.13.39.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 13:39:35 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2 1/2] watchdog: Add watchdog driver for Sunplus SP7021
-To:     =?UTF-8?B?eHQuaHVb6IOh5YWI6Z+sXQ==?= <xt.hu@cqplus1.com>
-Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        =?UTF-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-References: <20211112105952.216280-1-xt.hu@cqplus1.com>
- <20211124104149.361019-1-xt.hu@cqplus1.com>
- <20211124104149.361019-2-xt.hu@cqplus1.com>
- <20211124142522.GA3939252@roeck-us.net>
- <0024d27919c04c84a3f13ecba86a3c70@cqplus1.com>
- <f69d663a-982b-5876-08c9-b1a4f35e8098@roeck-us.net>
- <8604284aa38d4ab6bc263d4881107e13@cqplus1.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <de9665a9-5fe0-7f57-d281-1b11455f7016@roeck-us.net>
-Date:   Fri, 3 Dec 2021 13:39:33 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <8604284aa38d4ab6bc263d4881107e13@cqplus1.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=RHK+edLmIUWz40oQK0k2EB+zsYPqIcWKG5v/bzlYL3s=;
+        b=iicBxN+s3/ThiIakeFrSUnCsdeozZLgfe2WRyRXwBMjpEV4gQ9APTvJn5ExSZWjg5Y
+         XV9N2mYjDkqOmZCJMB23/6QGB7MtHvh+hnCLEYw6wycLDeNUpMyHYoKLfxdZiS/3fbE/
+         EbmghD9pVyBqdxFozPphIMU73za3rL6rvjhFCiGpSFfT9bWcVKWrmbh1Ixa5F2Xrn4BD
+         G5g/jBvqIZwfr2sSfCr7F9lOh+YP5nHH1VUWAHFRBTKJQVZ1j73M7XxUTANQ72W4tQ7+
+         ww2VTXY11bBRYBJ9TbHAztev2VVJVopu8g7q7zx7Aa79Lals9Ous8doDbyEiI26iEIhq
+         Hvkg==
+X-Gm-Message-State: AOAM530wAAsJF+lPe73CKsV1grtJGM1/R7zb7C57ZNO8StGhUpjF17IC
+        6cJMH0BFMbWRvz2gZlDxZv9IfskyByE=
+X-Google-Smtp-Source: ABdhPJy8UUaWD9v/1ifwYxxl6TnM6YwGFeelAwYAclkqiL0CQB7fPjx/km6+ewYKV0rAfywPEA3pB3mifTk=
+X-Received: from pgonda2.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:ac9])
+ (user=pgonda job=sendgmr) by 2002:a05:6902:701:: with SMTP id
+ k1mr27777503ybt.71.1638567915585; Fri, 03 Dec 2021 13:45:15 -0800 (PST)
+Date:   Fri,  3 Dec 2021 21:45:02 +0000
+Message-Id: <20211203214502.3545842-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
+Subject: [PATCH V5.1 3/5] crypto: ccp - Refactor out sev_fw_alloc()
+From:   Peter Gonda <pgonda@google.com>
+To:     thomas.lendacky@amd.com
+Cc:     Peter Gonda <pgonda@google.com>, Marc Orr <marcorr@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        John Allen <john.allen@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/28/21 11:57 PM, xt.hu[胡先韬] wrote:
-> 
->> -----Original Message-----
->> From: Guenter Roeck [mailto:groeck7@gmail.com] On Behalf Of Guenter Roeck
->> Sent: Thursday, November 25, 2021 12:26 PM
->> To: xt.hu[胡先韬] <xt.hu@cqplus1.com>
->> Cc: wim@linux-watchdog.org; p.zabel@pengutronix.de; linux-kernel@vger.kernel.org;
->> linux-watchdog@vger.kernel.org; robh+dt@kernel.org; devicetree@vger.kernel.org; Wells Lu 呂芳騰
->> <wells.lu@sunplus.com>; qinjian[覃健] <qinjian@cqplus1.com>
->> Subject: Re: [PATCH v2 1/2] watchdog: Add watchdog driver for Sunplus SP7021
->>
->> On 11/24/21 6:42 PM, xt.hu[胡先韬] wrote:
->>> Hi
->>> 	Thanks for your review. I explain this in detail below the comment.
->>>
->>> Best Regards,
->>> Xiantao
->>>> -----Original Message-----
->>>> From: Guenter Roeck [mailto:groeck7@gmail.com] On Behalf Of Guenter Roeck
->>>> Sent: Wednesday, November 24, 2021 10:25 PM
->>>> To: xt.hu[胡先韬] <xt.hu@cqplus1.com>
->>>> Cc: wim@linux-watchdog.org; p.zabel@pengutronix.de; linux-kernel@vger.kernel.org;
->>>> linux-watchdog@vger.kernel.org; robh+dt@kernel.org; devicetree@vger.kernel.org; Wells Lu 呂芳
->> 騰
->>>> <wells.lu@sunplus.com>; qinjian[覃健] <qinjian@cqplus1.com>
->>>> Subject: Re: [PATCH v2 1/2] watchdog: Add watchdog driver for Sunplus SP7021
->>>>
->>>> On Wed, Nov 24, 2021 at 06:41:48PM +0800, Xiantao Hu wrote:
->>>>> Sunplus SP7021 requires watchdog timer support.
->>>>> Add watchdog driver to enable this.
->>>>>
->>>>> Signed-off-by: Xiantao Hu <xt.hu@cqplus1.com>
->>>>> ---
->>>>> +
->>>>> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
->>>>> +	if (IS_ERR(priv->base))
->>>>> +		return PTR_ERR(priv->base);
->>>>> +
->>>>> +	/* The registers accessed here shared by multiple drivers. */
->>>>> +	wdt_res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
->>>>
->>>> This is unusual. Why would other drivers access WDT_CTRL and WDT_CNT registers, and how is it
->>>> ensured that the other drivers do not interfer with the accesses by this driver ?
->>>>
->>>> Normally such a resource would be shared through a parent driver with appropriate access functions
->> to
->>>> ensure that accesses are synchronized.
->>>>
->>>
->>> The register used by this driver consists of two parts. The first part which contains WDT_CTRL and
->> WDT_CNT
->>> registers is exclusive by watchdog.
->>> In specially, the second part is belong to a multifunctional register group which control IP and bus.
->> Refer to
->>> register manual below:
->>> -------------------------------------------------------------------------------------------------------------------------------------------------
->>> MO1_STC_WDG_RST_EN	4	RW		STC Watchdog Timeout Trigger System Reset Enable
->>> 									0: STC watchdog 2 timeout will not trigger system
->> reset(default)
->>> 									1: STC watchdog 2 timeout will trigger system reset
->>> MO1_RI_WDG_RST_EN		1	RW		RBUS Watchdog Timeout Trigger System Reset Enable
->>> 									0: RBUS watchdog timeout will not trigger system
->> reset(default)
->>> 									1: RBUS watchdog timeout will trigger system reset
->>> MO1_TIMER_STAND_BY_EN	0	RW		Timer Standby Mode Enable
->>> 									0: Disable (default)
->>> 									1: Enable Active high to enter timer standby mode,
->>> 											default not in standby mode
->>> -------------------------------------------------------------------------------------------------------------------------------------------------
->>> You can see that in addition to the bits for watchdog there are bit fields for other modules.
->>> I use this register bit4 and bit1. Default value is 0 that watchdog internal interrupt signal can't trigger
->> system
->>> and RBUS reset. I need set 1 when watchdog probe. Early I implement the operation in
->>> arch/arm/mach-sunplus/sp7021.c and configure by macro. But in arch/arm64, directory mach-XXX is
->> removed.
->>> So I solve in this way. Any better way?
->>>
->> If the register at 0x9C000274 is accessed by other drivers, accesses
->> to it must be protected against each other to avoid race conditions.
->> How to do that would be up to you.
->>
-> Hi Guenter,
-> 
->  From the perspective of software, 0x9C000274 is only accessed during
-> driver probe. If the driver is build-in and only one core is running at kernel
-> startup. There is no competition.
-> The only possibility of an error is to compile the driver into a module. In this
-> case, the register at 0x9C000274 offer MASK_BITS[31:16] which write valid
-> bit for each LSB 16 bits. Refer to the define in driver:
-> #define MASK_SET(mask)		((mask) | (mask << 16))
-> Even if both drivers access the register at the same time, the instructions are
-> executed in order on the RBUS. So as long as the same bit in the same register
-> is not accessed at the same time, no error will occur.
-> 
+Create a helper function sev_fw_alloc() which can be used to allocate
+aligned memory regions for use by the PSP firmware. Currently only used
+for the SEV-ES TMR region but will be used for the SEV_INIT_EX NV memory
+region.
 
-This is inherently risky and racy. I am sure there is a better way to solve this
-without risking race conditions, but I don't have time to analyze it further.
-The above rationale needs to be added in detail to the driver as comments,
-including references to all other drivers accessing the same register or
-memory space.
+Signed-off-by: Peter Gonda <pgonda@google.com>
+Reviewed-by: Marc Orr <marcorr@google.com>
+Acked-by: David Rientjes <rientjes@google.com>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Brijesh Singh <brijesh.singh@amd.com>
+Cc: Marc Orr <marcorr@google.com>
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: David Rientjes <rientjes@google.com>
+Cc: John Allen <john.allen@amd.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
 
-Guenter
+Mistakenly send old patch, this is the fixed version.
+
+---
+ drivers/crypto/ccp/sev-dev.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+index ef7e8b4c6e02..8ea362ac014f 100644
+--- a/drivers/crypto/ccp/sev-dev.c
++++ b/drivers/crypto/ccp/sev-dev.c
+@@ -141,6 +141,17 @@ static int sev_cmd_buffer_len(int cmd)
+ 	return 0;
+ }
+ 
++static void *sev_fw_alloc(unsigned long len)
++{
++	struct page *page;
++
++	page = alloc_pages(GFP_KERNEL, get_order(len));
++	if (!page)
++		return NULL;
++
++	return page_address(page);
++}
++
+ static int __sev_do_cmd_locked(int cmd, void *data, int *psp_ret)
+ {
+ 	struct psp_device *psp = psp_master;
+@@ -1078,7 +1089,6 @@ EXPORT_SYMBOL_GPL(sev_issue_cmd_external_user);
+ void sev_pci_init(void)
+ {
+ 	struct sev_device *sev = psp_master->sev_data;
+-	struct page *tmr_page;
+ 	int error, rc;
+ 
+ 	if (!sev)
+@@ -1094,14 +1104,10 @@ void sev_pci_init(void)
+ 		sev_get_api_version();
+ 
+ 	/* Obtain the TMR memory area for SEV-ES use */
+-	tmr_page = alloc_pages(GFP_KERNEL, get_order(SEV_ES_TMR_SIZE));
+-	if (tmr_page) {
+-		sev_es_tmr = page_address(tmr_page);
+-	} else {
+-		sev_es_tmr = NULL;
++	sev_es_tmr = sev_fw_alloc(SEV_ES_TMR_SIZE);
++	if (!sev_es_tmr)
+ 		dev_warn(sev->dev,
+ 			 "SEV: TMR allocation failed, SEV-ES support unavailable\n");
+-	}
+ 
+ 	/* Initialize the platform */
+ 	rc = sev_platform_init(&error);
+-- 
+2.34.1.400.ga245620fadb-goog
+

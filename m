@@ -2,219 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BD2467C77
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9AB467C7A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353159AbhLCR2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 12:28:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239848AbhLCR2X (ORCPT
+        id S1353266AbhLCR2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 12:28:52 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:58814 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239848AbhLCR2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 12:28:23 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2521C061751;
-        Fri,  3 Dec 2021 09:24:58 -0800 (PST)
-Date:   Fri, 03 Dec 2021 17:24:55 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638552296;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4CyPF4oSKJofICxsOH5Syn8vW6QBsoHFOWykbMl8UJA=;
-        b=wws14ULRTKo3GMjYN8PCTPaQz6m1uOYknJir5dyJoaYW2ZiJdIuG0fGV2oDaf87PPwqh/y
-        O5/YrJYiHnUItJBRUxPjB3RbHJZwYm7q2ZtfFn8hk5fTfzyLkJbke27WBKcot1HZnDzWkH
-        olq6IiVL3qDdr8WxsbO2l7fY+j6mN0yUscCOPG1g1xM3Y0FqxXwYU6qkIz+53ZILJsJOIy
-        QSorNMMeX5fDH7BcFtxGB7HhJhX3sjZuNW3YAxhmZCU+H9f7kr0yim7I+RGWB7IwIJ8NHo
-        +O78S2gdP4AQpAZhgepP/JmkMHEBZqdUKAY0b83npcJ41RAWE1Ca9B1HRKTP+Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638552296;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4CyPF4oSKJofICxsOH5Syn8vW6QBsoHFOWykbMl8UJA=;
-        b=Tb4CfCFiV4MYe27CJ8duC5oYv2OekIiBgvmNTvJEOKbtpYRiyZn5VKhMLVUKIcRMtqGOea
-        9lE+2eg8fjzdv8AA==
-From:   "tip-bot2 for Michael Sterritt" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/sev: Fix SEV-ES INS/OUTS instructions for word,
- dword, and qword
-Cc:     Michael Sterritt <sterritt@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Orr <marcorr@google.com>, Peter Gonda <pgonda@google.com>,
-        Joerg Roedel <jroedel@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211119232757.176201-1-sterritt@google.com>
-References: <20211119232757.176201-1-sterritt@google.com>
+        Fri, 3 Dec 2021 12:28:51 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: adalessandro)
+        with ESMTPSA id 383891F471D5
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638552325; bh=FfHl0DYl6uyJ+Pe9q9LrI9NG8e5zR5nC/wqOuKSucMk=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=lkHCYNfXoK7UKNmOkE+sUmLPa7Rw/CVkK/GO0EbcQNE4PrM1mAzsUEYOYRWTRwKpX
+         D6tgtpxKg412ooKPvNVnt8ChkyWJ0Ol9+MD/OA2RQ4HnsP5+ORC3ZbFf1IqKg44hxT
+         sRq7f/FJsTya+wDer8EFjI8unXh6dMQ9QWU9gB5FTCaabN49pdg286DJRvnF4zx530
+         ldqQlxF3JrVGa1ePMTJZimP5bFYXaXq9zF5Fe5qxF6JYNz4eqzcb0X9MHwVuFfOeXm
+         /D9tYleuCN0V1GnFtiD0VyqsX6GMHmGn5fcJPInRQLZrcGxFW3EnOmbxU5RBcF4j6o
+         VL5ciryfoiRPA==
+Subject: Re: [RFC patch 0/5] Support BCLK input clock in tlv320aic31xx
+To:     Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc:     Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
+        perex@perex.cz, kuninori.morimoto.gx@renesas.com,
+        michael@amarulasolutions.com, shengjiu.wang@gmail.com,
+        lgirdwood@gmail.com, tiwai@suse.com, bkylerussell@gmail.com
+References: <20211119153248.419802-1-ariel.dalessandro@collabora.com>
+ <163762561675.2471742.16439171676950432106.b4-ty@kernel.org>
+From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+Message-ID: <6a2ff1f0-ebd9-be6d-9b2c-5704edd7c25d@collabora.com>
+Date:   Fri, 3 Dec 2021 14:25:17 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Message-ID: <163855229549.11128.12985055978691624996.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <163762561675.2471742.16439171676950432106.b4-ty@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+Hi Mark,
 
-Commit-ID:     1d5379d0475419085d3575bd9155f2e558e96390
-Gitweb:        https://git.kernel.org/tip/1d5379d0475419085d3575bd9155f2e558e96390
-Author:        Michael Sterritt <sterritt@google.com>
-AuthorDate:    Fri, 19 Nov 2021 15:27:57 -08:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 03 Dec 2021 18:09:30 +01:00
+On 11/22/21 9:00 PM, Mark Brown wrote:
+> On Fri, 19 Nov 2021 12:32:43 -0300, Ariel D'Alessandro wrote:
+>> The tlv320aic31xx codec allows using BCLK as the input clock for PLL,
+>> deriving all the frequencies through a set of divisors.
+>>
+>> In this case, codec sysclk is determined by the hwparams sample
+>> rate/format. So its frequency must be updated from the codec itself when
+>> these are changed.
+>>
+>> [...]
+> 
+> Applied to
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> 
+> Thanks!
+> 
+> [1/5] ASoC: tlv320aic31xx: Fix typo in BCLK clock name
+>       commit: 7016fd940adf2f4d86032339b546c6ecd737062f
+> [2/5] ASoC: tlv320aic31xx: Add support for pll_r coefficient
+>       commit: 2664b24a8c51c21b24c2b37b7f10d6485c35b7c1
+> [3/5] ASoC: tlv320aic31xx: Add divs for bclk as clk_in
+>       commit: 6e6752a9c78738e27bde6da5cefa393b589276bb
+> [4/5] ASoC: tlv320aic31xx: Handle BCLK set as PLL input configuration
+>       commit: c5d22d5e12e776fee4e346dc098fe51d00c2f983
+> [5/5] ASoC: fsl-asoc-card: Support fsl,imx-audio-tlv320aic31xx codec
+>       commit: 8c9b9cfb7724685ce705f511b882f30597596536
+> 
+> All being well this means that it will be integrated into the linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+> 
+> You may get further e-mails resulting from automated or manual testing
+> and review of the tree, please engage with people reporting problems and
+> send followup patches addressing any issues that are reported if needed.
+> 
+> If any updates are required or you are submitting further changes they
+> should be sent as incremental updates against current git, existing
+> patches will not be replaced.
 
-x86/sev: Fix SEV-ES INS/OUTS instructions for word, dword, and qword
+Quick question:
 
-Properly type the operands being passed to __put_user()/__get_user().
-Otherwise, these routines truncate data for dependent instructions
-(e.g., INSW) and only read/write one byte.
+I gotta send a fix for one of the patches. So, should it be a new
+incremental patch or I can still send a patchset v2?
 
-This has been tested by sending a string with REP OUTSW to a port and
-then reading it back in with REP INSW on the same port.
+Also, I sent an incremental update patchset on top of this one:
 
-Previous behavior was to only send and receive the first char of the
-size. For example, word operations for "abcd" would only read/write
-"ac". With change, the full string is now written and read back.
+  [PATCH 0/4] fsl-asoc-card: Add optional dt property for setting mclk-id
 
-Fixes: f980f9c31a923 (x86/sev-es: Compile early handler code into kernel image)
-Signed-off-by: Michael Sterritt <sterritt@google.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
-Reviewed-by: Marc Orr <marcorr@google.com>
-Reviewed-by: Peter Gonda <pgonda@google.com>
-Reviewed-by: Joerg Roedel <jroedel@suse.de>
-Link: https://lkml.kernel.org/r/20211119232757.176201-1-sterritt@google.com
----
- arch/x86/kernel/sev.c | 57 ++++++++++++++++++++++++++++--------------
- 1 file changed, 39 insertions(+), 18 deletions(-)
+I could merge altogether on a patchset v2. Please let me know, and sorry
+the process it's not clear to me :-)
 
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index 74f0ec9..a9fc2ac 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -294,11 +294,6 @@ static enum es_result vc_write_mem(struct es_em_ctxt *ctxt,
- 				   char *dst, char *buf, size_t size)
- {
- 	unsigned long error_code = X86_PF_PROT | X86_PF_WRITE;
--	char __user *target = (char __user *)dst;
--	u64 d8;
--	u32 d4;
--	u16 d2;
--	u8  d1;
- 
- 	/*
- 	 * This function uses __put_user() independent of whether kernel or user
-@@ -320,26 +315,42 @@ static enum es_result vc_write_mem(struct es_em_ctxt *ctxt,
- 	 * instructions here would cause infinite nesting.
- 	 */
- 	switch (size) {
--	case 1:
-+	case 1: {
-+		u8 d1;
-+		u8 __user *target = (u8 __user *)dst;
-+
- 		memcpy(&d1, buf, 1);
- 		if (__put_user(d1, target))
- 			goto fault;
- 		break;
--	case 2:
-+	}
-+	case 2: {
-+		u16 d2;
-+		u16 __user *target = (u16 __user *)dst;
-+
- 		memcpy(&d2, buf, 2);
- 		if (__put_user(d2, target))
- 			goto fault;
- 		break;
--	case 4:
-+	}
-+	case 4: {
-+		u32 d4;
-+		u32 __user *target = (u32 __user *)dst;
-+
- 		memcpy(&d4, buf, 4);
- 		if (__put_user(d4, target))
- 			goto fault;
- 		break;
--	case 8:
-+	}
-+	case 8: {
-+		u64 d8;
-+		u64 __user *target = (u64 __user *)dst;
-+
- 		memcpy(&d8, buf, 8);
- 		if (__put_user(d8, target))
- 			goto fault;
- 		break;
-+	}
- 	default:
- 		WARN_ONCE(1, "%s: Invalid size: %zu\n", __func__, size);
- 		return ES_UNSUPPORTED;
-@@ -362,11 +373,6 @@ static enum es_result vc_read_mem(struct es_em_ctxt *ctxt,
- 				  char *src, char *buf, size_t size)
- {
- 	unsigned long error_code = X86_PF_PROT;
--	char __user *s = (char __user *)src;
--	u64 d8;
--	u32 d4;
--	u16 d2;
--	u8  d1;
- 
- 	/*
- 	 * This function uses __get_user() independent of whether kernel or user
-@@ -388,26 +394,41 @@ static enum es_result vc_read_mem(struct es_em_ctxt *ctxt,
- 	 * instructions here would cause infinite nesting.
- 	 */
- 	switch (size) {
--	case 1:
-+	case 1: {
-+		u8 d1;
-+		u8 __user *s = (u8 __user *)src;
-+
- 		if (__get_user(d1, s))
- 			goto fault;
- 		memcpy(buf, &d1, 1);
- 		break;
--	case 2:
-+	}
-+	case 2: {
-+		u16 d2;
-+		u16 __user *s = (u16 __user *)src;
-+
- 		if (__get_user(d2, s))
- 			goto fault;
- 		memcpy(buf, &d2, 2);
- 		break;
--	case 4:
-+	}
-+	case 4: {
-+		u32 d4;
-+		u32 __user *s = (u32 __user *)src;
-+
- 		if (__get_user(d4, s))
- 			goto fault;
- 		memcpy(buf, &d4, 4);
- 		break;
--	case 8:
-+	}
-+	case 8: {
-+		u64 d8;
-+		u64 __user *s = (u64 __user *)src;
- 		if (__get_user(d8, s))
- 			goto fault;
- 		memcpy(buf, &d8, 8);
- 		break;
-+	}
- 	default:
- 		WARN_ONCE(1, "%s: Invalid size: %zu\n", __func__, size);
- 		return ES_UNSUPPORTED;
+Thanks,
+Ariel
+
+
+
+
+

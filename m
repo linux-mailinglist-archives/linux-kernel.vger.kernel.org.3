@@ -2,89 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2CF466EFF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 02:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1A8466F01
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 02:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbhLCBOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 20:14:31 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34040 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbhLCBOa (ORCPT
+        id S231896AbhLCBOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 20:14:48 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:58209 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231902AbhLCBOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 20:14:30 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 2 Dec 2021 20:14:46 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 136EEB823BC;
-        Fri,  3 Dec 2021 01:11:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C284C00446;
-        Fri,  3 Dec 2021 01:11:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638493864;
-        bh=R/KWoIy8A+QpAIZYriI3L7Yc6+H44YcDyCxAm0FjAwA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ihyFPI+9wQEgGHtHHyI1UGBdo+aBGtm3Q77KfZWJr/tltJr8YQZ5lCMqyoAZvT2ei
-         +0CEvmFJIvBpYSzkeX9SOGZDBbhnkT2plO8mlGlqmtatHrcFa9oH0wEoWyXZhmiL5L
-         Xcx3SIJrFK/qJzumkKdvu0dPrQkMjEtIhUv3OBMv5Horb4JfJZeDX3gJVN34m8EBGD
-         b1XNke6O36NiZpOq2AgwGIX9u3/fKt/OzTD+uuL6XgwkwFjfGgVpmZdAVvOqZNd8uN
-         Tn9A2X6WCVg4n2Wfid1giUg69N3xc1ggzwygloYsifUBdqDcD0TVL9vIvYQnnE/8ar
-         zdvAaEh0D0mRA==
-Message-ID: <faf88ba7-cb9c-f7ec-07f5-e3971bd35a4c@kernel.org>
-Date:   Thu, 2 Dec 2021 17:11:02 -0800
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J4vsh14kQz4xbC;
+        Fri,  3 Dec 2021 12:11:20 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638493881;
+        bh=WNY7OQiMece9tZ8GrfuUHJSD+XmDM7erV1iQqdBnuOs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=AJzM3RF4pR/VkBAufrEUi9wYTIgjes7/7AeJHUAuV66u9QUeu8DmBVGkxT20bqWeW
+         HxANj714F6HXZuwIfwEAJ0Vur8+B1AJSZDlPRCVjiyUMLBg4VSsjArNGS2wpgkxPhm
+         R4BDsS539fgrEYmV8eONSTBqb05dCi69DgsvCY9GT52/bdQuXFvqVX3/U/CwjGmb2e
+         itZEOGunX/JahDvQhl3c9CmQz1KthKz4dOZmW/DyiHEitl2pDqw8joQtBLS5eIgzH4
+         OmVUnqxisiY081k7vF+LbX121DUmEKMjNbP3NRNpTydd420TMrqQSlXVb4knpdg2J+
+         mJMIpn/psNjLQ==
+Date:   Fri, 3 Dec 2021 12:11:19 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Flora Cui <flora.cui@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20211203121119.25674209@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC v2 PATCH 01/13] mm/shmem: Introduce F_SEAL_GUEST
-Content-Language: en-US
-To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, qemu-devel@nongnu.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        john.ji@intel.com, susie.li@intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, ak@linux.intel.com, david@redhat.com
-References: <20211119134739.20218-1-chao.p.peng@linux.intel.com>
- <20211119134739.20218-2-chao.p.peng@linux.intel.com>
-From:   Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <20211119134739.20218-2-chao.p.peng@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/G4D4CT346Q9OVzb_.d.VqS_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/19/21 05:47, Chao Peng wrote:
-> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> 
-> The new seal type provides semantics required for KVM guest private
-> memory support. A file descriptor with the seal set is going to be used
-> as source of guest memory in confidential computing environments such as
-> Intel TDX and AMD SEV.
-> 
-> F_SEAL_GUEST can only be set on empty memfd. After the seal is set
-> userspace cannot read, write or mmap the memfd.
+--Sig_/G4D4CT346Q9OVzb_.d.VqS_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I don't have a strong objection here, but, given that you're only 
-supporting it for memfd, would a memfd_create() flag be more 
-straightforward?  If nothing else, it would avoid any possible locking 
-issue.
+Hi all,
 
-I'm also very very slightly nervous about a situation in which one 
-program sends a memfd to an untrusted other process and that process 
-truncates the memfd and then F_SEAL_GUESTs it.  This could be mostly 
-mitigated by also requiring that no other seals be set when F_SEAL_GUEST 
-happens, but the alternative MFD_GUEST would eliminate this issue too.
+After merging the amdgpu tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
+
+drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c: In function 'amdgpu_vkms_sw_fini':
+drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c:521:34: error: 'struct amdgpu_vkms=
+_output' has no member named 'vblank_hrtimer'
+  521 |   if (adev->amdgpu_vkms_output[i].vblank_hrtimer.function)
+      |                                  ^
+drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c:522:47: error: 'struct amdgpu_vkms=
+_output' has no member named 'vblank_hrtimer'
+  522 |    hrtimer_cancel(&adev->amdgpu_vkms_output[i].vblank_hrtimer);
+      |                                               ^
+
+Caused by commit
+
+  deefd07eedb7 ("drm/amdgpu: fix vkms crtc settings")
+
+interacting with commit
+
+  3e467e478ed3 ("drm/amdgpu: cancel the correct hrtimer on exit")
+
+from the drm-fixes tree.  The problem is that this latter patch also
+appears in the amdgpu tree as a different commit and git resolves it
+incorrectly in the presence of the former commit :-(
+
+I have applied the following merge fix patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 3 Dec 2021 12:06:57 +1100
+Subject: [PATCH] fix up for "drm/amdgpu: cancel the correct hrtimer on exit"
+
+interacting with "drm/amdgpu: fix vkms crtc settings"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c b/drivers/gpu/drm/amd=
+/amdgpu/amdgpu_vkms.c
+index e07fc64b655e..6c62c45e3e3e 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c
+@@ -518,8 +518,8 @@ static int amdgpu_vkms_sw_fini(void *handle)
+ 	int i =3D 0;
+=20
+ 	for (i =3D 0; i < adev->mode_info.num_crtc; i++)
+-		if (adev->amdgpu_vkms_output[i].vblank_hrtimer.function)
+-			hrtimer_cancel(&adev->amdgpu_vkms_output[i].vblank_hrtimer);
++		if (adev->mode_info.crtcs[i])
++			hrtimer_cancel(&adev->mode_info.crtcs[i]->vblank_timer);
+=20
+ 	kfree(adev->mode_info.bios_hardcoded_edid);
+ 	kfree(adev->amdgpu_vkms_output);
+--=20
+2.33.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/G4D4CT346Q9OVzb_.d.VqS_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGpbrcACgkQAVBC80lX
+0GwxMAgAhOYipZixSAIcd4IjhkofawUXcJnKRimQeSwWi4sk10wq+9I+8S3FiEJL
+DfIAw1FOedP5fk4Xa4dhvJ6Kv1UD2SxbZ23KJANhWdQ0czkGUZmCpNgLy9D9Mn+r
+yJN5/ha8OPnQAUG/MasNrjVlvlfxttvQy03G70SCW6eOhE3ujsOTwv2jqfgg3GE2
+HBKkpn8Kq4PEnp/jlgqfjydHWdWJttoHMZ6ki/ELLDdNkjg47cTj84t/NVyQryBC
+ogx+ubiHEqbKY2Zu6t1R66wSGcPRmb3TqVXod0f9xWBYnMIP+T7ie07+JOrn5ZB1
+IOeJbPDUy7kJoBvTFhjQE5zf8TFZ0A==
+=6jYe
+-----END PGP SIGNATURE-----
+
+--Sig_/G4D4CT346Q9OVzb_.d.VqS_--

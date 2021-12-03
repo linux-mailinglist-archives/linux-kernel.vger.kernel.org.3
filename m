@@ -2,93 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E7F46702E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 03:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F00D467031
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 03:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378217AbhLCCuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 21:50:40 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:32906
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1378119AbhLCCui (ORCPT
+        id S1378236AbhLCCum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 21:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378218AbhLCCuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 21:50:38 -0500
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 2 Dec 2021 21:50:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76ED7C06174A;
+        Thu,  2 Dec 2021 18:47:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 87EB83F1F2
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 02:47:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638499634;
-        bh=fDAstI6DIL9UfbvksL4gr0n/7nHn2PQecVhugGjIupQ=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=ZU2eeVXNzUJZSbPZSbWV7gv2FZvbkcJq5o/p9hk2JSueAWv0NvgkZ3McG4dnKpkEQ
-         F8zwFn2Yjrhg2LAPlRnJj8dmuxEgFcqJgWbIVUfRlp1b7KJR4OSTWLkseDFXrUdOb3
-         rUsTZ4/zhaIBdEzv+Qr9bUN0ICAiZXWSpEkPCa06WVBHljfnou54RBRvTPym6FinGx
-         6Atd56dvaxdsh2doyIL6HDz9ozV0twyWFQH1JCWL5Ke4B5/iDTMBSBVeK2vk2KT6S3
-         nzD/e3ItZkky2/QW0UKD3hzGIUmB6svbDeR6wFYP+yUAXFAFxPUKrsx25ocsh6ZdWl
-         VnCFB5jl9Z6HA==
-Received: by mail-oi1-f199.google.com with SMTP id t26-20020a056808159a00b002bce1f1c045so990768oiw.16
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 18:47:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fDAstI6DIL9UfbvksL4gr0n/7nHn2PQecVhugGjIupQ=;
-        b=jcdEuXz5NkmFLVnIZumEIOYcpPh1uzLFDmhXvown8VCpXc+lRQGnZeqEgt/gB+yhR+
-         tlGTTWNg3qpxokkOgYwFV9hlW95wykjqHz+aCYFidVqL2exPR5itH6hc//JQ11qOUqG4
-         oGrnUGdi+sBnKv00JOc9DQv1lYlp2TYqF2LyXLgceNEyIk5wh9H+hHM0MqlcIlhUCBGl
-         jXiuaKe9QHQRHnNh+QtaXlSH3keb3BELTQBh0Om7AxPZIW6DBzXbUQSEZwXhYUA9o4f7
-         JriS1kVsKKdPi6Hc7g5n3jFvx56ywgbw8BeJZAaaf2m3cXsdNGaB52d+E8BBwnNpNGUC
-         Rqig==
-X-Gm-Message-State: AOAM532L0qtMRBlJxC3npd1G7gQuguGwUM1bXsd5IoLhjH1GHXIY6A0d
-        eiWR+lbfeP8rqA/jVcUAf+j8G2DU2nNSHmSp6melcta2ODLOqJkWJGszUu0GfUnsIz3iO8U3xBG
-        qGC/cnzSHtlCxl2bpuEzco26lYTr1+pXJ8FGyJQil/g==
-X-Received: by 2002:a05:6830:25d4:: with SMTP id d20mr14480135otu.143.1638499633049;
-        Thu, 02 Dec 2021 18:47:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwhvmsZ9uP4iST+5v+2YQgJz4fxTD7lkuQNSN+Aaq46H6JYE7tj9XMThgNR4o3MjXZvoX2lvg==
-X-Received: by 2002:a05:6830:25d4:: with SMTP id d20mr14480122otu.143.1638499632877;
-        Thu, 02 Dec 2021 18:47:12 -0800 (PST)
-Received: from lukenow-XPS-13-9380.attlocal.net (108-249-109-234.lightspeed.sndgca.sbcglobal.net. [108.249.109.234])
-        by smtp.gmail.com with ESMTPSA id s26sm452642oiw.19.2021.12.02.18.47.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 18:47:12 -0800 (PST)
-From:   Luke Nowakowski-Krijger <luke.nowakowskikrijger@canonical.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/memfd: include <asm/types.h> in fuse_test.c
-Date:   Thu,  2 Dec 2021 18:47:06 -0800
-Message-Id: <20211203024706.10094-1-luke.nowakowskikrijger@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 119CC62775;
+        Fri,  3 Dec 2021 02:47:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00388C00446;
+        Fri,  3 Dec 2021 02:47:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638499635;
+        bh=SzRDDa9c6PtEphb+1OK8jXRhKNO0W+uy+jB5FALjy6s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WmL8NC3Vg10qxWLWiF/ifRzdihaVcrnNTO7/vShEitsh/zSubrafXYRx/KsBCh2o3
+         y1YhLY//eDCk3FmjP1ly8bRU3FliuUtn/RueyXlAySU+v2NNcFXRenly5EXr6FHS1m
+         b9NBzsn9bNKI2gtXbLIB3Wz5sw9LtnynTmmoTfC5OkTzSq2YNT7bcF+OVASMR8BEaY
+         VaVVBCrpxggqIZnI90EtYIzbf5KN02fjAyhZLPYlQx5LsQZyNqR1tm6KJHgu8IHiHC
+         XosUjntUqUc4NIeHhDiL7mpqa22uGGAmUbc2Qwb6hEMH6HhMBldyvDowE6tGV2Ejad
+         AUuHGufpvCq9A==
+Date:   Thu, 2 Dec 2021 18:47:13 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Li Zhijian <zhijianx.li@intel.com>
+Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
+        Davide Caratti <dcaratti@redhat.com>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, lizhijian@cn.fujitsu.com,
+        linux-kernel@vger.kernel.org, lkp@intel.com, philip.li@intel.com,
+        Networking <netdev@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] selftests/tc-testing: add exit code
+Message-ID: <20211202184713.4afbdf26@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <236a81d3-db14-902f-8833-377ec0a9b7da@intel.com>
+References: <20211117054517.31847-1-zhijianx.li@intel.com>
+        <YZTDcjv4ZPXv8Oaz@dcaratti.users.ipa.redhat.com>
+        <20211117060535.1d47295a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <4ed23cd5-f4a1-aa70-183f-fbea407c19ee@mojatatu.com>
+        <20211117084854.0d44d64b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <d0c32c34-b0a4-ce1e-35d6-1894222e825a@mojatatu.com>
+        <236a81d3-db14-902f-8833-377ec0a9b7da@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add <asm/types.h> include which eventually includes __u64 typedef.
+On Fri, 3 Dec 2021 10:21:31 +0800 Li Zhijian wrote:
+> CCed netdev
 
-The __u64 typedef is sometimes missing depending on the system headers
-installed, leading to compile errors. Adding this include makes this
-test more likely to compile on a wider variety of systems.
-
-Signed-off-by: Luke Nowakowski-Krijger <luke.nowakowskikrijger@canonical.com>
----
- tools/testing/selftests/memfd/fuse_test.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/memfd/fuse_test.c b/tools/testing/selftests/memfd/fuse_test.c
-index be675002f918..725561ac5a38 100644
---- a/tools/testing/selftests/memfd/fuse_test.c
-+++ b/tools/testing/selftests/memfd/fuse_test.c
-@@ -32,6 +32,7 @@
- #include <sys/syscall.h>
- #include <sys/wait.h>
- #include <unistd.h>
-+#include <asm/types.h>
- 
- #include "common.h"
- 
--- 
-2.32.0
+Please repost the patches.
 

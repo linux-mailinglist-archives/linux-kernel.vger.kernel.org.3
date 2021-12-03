@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8187046715C
+	by mail.lfdr.de (Postfix) with ESMTP id CD05F46715D
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 06:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349188AbhLCFOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 00:14:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245643AbhLCFOB (ORCPT
+        id S1346328AbhLCFOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 00:14:06 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48476 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346136AbhLCFOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 00:14:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B7FC06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 21:10:38 -0800 (PST)
+        Fri, 3 Dec 2021 00:14:03 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41B5FB825B7
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 05:10:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C3BCC53FAD;
-        Fri,  3 Dec 2021 05:10:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5603CB825BE
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 05:10:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78123C53FCE;
+        Fri,  3 Dec 2021 05:10:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638508236;
-        bh=Z9O0bsmRr34zqnd3Uvp4s5rM+blcuSgXDGFFVFUQkew=;
+        s=k20201202; t=1638508238;
+        bh=B/zsYpq5+A4GvqC7QPKWBXDoi6KpkUlp/0uSJZbfvns=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mr8jPQDEGXl+QN1k4OfnoglcVkDl2396AfCef8Jh2ewQWSdAg9Z7TRd9Tk1RZ8UnU
-         EMyg9YIbn8xq7RapjYOw9sOyUfhffUG6DI6RmFkzPPR6dEiCiA2XkZtFAiQr8Mx9+k
-         qQgnAHE5qPyVSfrt/mCW4IctFnd4eNH/gC6XW59lKLuIoS7V0R6RD8JPNX4mwyo1di
-         fk1XWRg2MJ7vFQMp6+kFTNF8Ynk6FkcXdgLcOgPpjqE9vyAub2wUXLJgje40Pp1lwQ
-         IaEY5uoWja9oar1QWrzVMjtl7TVd/Jb2vCwjltneZdVD9hGRjPwZoZk783qJeGZF8J
-         WXDPZcq95/BJA==
+        b=WD6Qtv0Sh02axx6BSHidc9fhCdMLUOK4Lec+xUPnxJ7D3vjMjl2Ryx+w3uazem6OL
+         6gB+d1URWrUBOBChJJdRbgDne9TOQMftsvmYyedqO6lv7WC6SxsB222hc2dk3W1Jv0
+         ZZE74zGZnewmIwTeAoqSLV3E43RRcevXkl93u/RK+VMj6O/e+A3Eu81HjL9/CaKVzo
+         WRMBRO3yUp21rVVbpsgDea1jGM90d0lopTSi0CHHmzgHcJQlwFAE5jPqoZ6FvVzPOU
+         fjxQ2Eyvq0VMZPj53GsOi43Q89K+VXG7rCc4WHQRX52O7cqozUyfFZ168oCojUr/G1
+         eRveUrGvgdt9Q==
 From:   Jisheng Zhang <jszhang@kernel.org>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Alexandre Ghiti <alex@ghiti.fr>
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/5] riscv: mm: init: remove _pt_ops and use pt_ops directly
-Date:   Fri,  3 Dec 2021 13:03:15 +0800
-Message-Id: <20211203050317.2102-4-jszhang@kernel.org>
+Subject: [PATCH 4/5] riscv: mm: init: try IS_ENABLED(CONFIG_XIP_KERNEL) instead of #ifdef
+Date:   Fri,  3 Dec 2021 13:03:16 +0800
+Message-Id: <20211203050317.2102-5-jszhang@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211203050317.2102-1-jszhang@kernel.org>
 References: <20211203050317.2102-1-jszhang@kernel.org>
@@ -50,40 +47,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Except "pt_ops", other global vars when CONFIG_XIP_KERNEL=y is defined
-as below:
-
-|foo_type foo;
-|#ifdef CONFIG_XIP_KERNEL
-|#define foo	(*(foo_type *)XIP_FIXUP(&foo))
-|#endif
-
-Follow the same way for pt_ops to unify the style and to simplify code.
+Try our best to replace the conditional compilation using
+"#ifdef CONFIG_XIP_KERNEL" with "IS_ENABLED(CONFIG_XIP_KERNEL)", to
+simplify the code and to increase compile coverage.
 
 Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 ---
- arch/riscv/mm/init.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ arch/riscv/mm/init.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
 diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index bd445ac778a8..4d4fcd7ef1a9 100644
+index 4d4fcd7ef1a9..4a9e3f429042 100644
 --- a/arch/riscv/mm/init.c
 +++ b/arch/riscv/mm/init.c
-@@ -227,12 +227,10 @@ static void __init setup_bootmem(void)
- }
+@@ -161,13 +161,13 @@ early_param("mem", early_mem);
+ static void __init setup_bootmem(void)
+ {
+ 	phys_addr_t vmlinux_end = __pa_symbol(&_end);
+-	phys_addr_t vmlinux_start = __pa_symbol(&_start);
+ 	phys_addr_t __maybe_unused max_mapped_addr;
+-	phys_addr_t phys_ram_end;
++	phys_addr_t phys_ram_end, vmlinux_start;
  
- #ifdef CONFIG_MMU
--static struct pt_alloc_ops _pt_ops __initdata;
-+static struct pt_alloc_ops pt_ops __initdata;
+-#ifdef CONFIG_XIP_KERNEL
+-	vmlinux_start = __pa_symbol(&_sdata);
+-#endif
++	if (IS_ENABLED(CONFIG_XIP_KERNEL))
++		vmlinux_start = __pa_symbol(&_sdata);
++	else
++		vmlinux_start = __pa_symbol(&_start);
  
- #ifdef CONFIG_XIP_KERNEL
--#define pt_ops (*(struct pt_alloc_ops *)XIP_FIXUP(&_pt_ops))
--#else
--#define pt_ops _pt_ops
-+#define pt_ops (*(struct pt_alloc_ops *)XIP_FIXUP(&pt_ops))
- #endif
+ 	memblock_enforce_memory_limit(memory_limit);
  
- unsigned long riscv_pfn_base __ro_after_init;
+@@ -183,11 +183,9 @@ static void __init setup_bootmem(void)
+ 	 */
+ 	memblock_reserve(vmlinux_start, vmlinux_end - vmlinux_start);
+ 
+-
+ 	phys_ram_end = memblock_end_of_DRAM();
+-#ifndef CONFIG_XIP_KERNEL
+-	phys_ram_base = memblock_start_of_DRAM();
+-#endif
++	if (!IS_ENABLED(CONFIG_XIP_KERNEL))
++		phys_ram_base = memblock_start_of_DRAM();
+ 	/*
+ 	 * memblock allocator is not aware of the fact that last 4K bytes of
+ 	 * the addressable memory can not be mapped because of IS_ERR_VALUE
 -- 
 2.34.1
 

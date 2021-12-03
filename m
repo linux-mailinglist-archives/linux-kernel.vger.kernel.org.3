@@ -2,148 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA38F46734F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75180467352
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351095AbhLCIjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 03:39:14 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:43621 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236266AbhLCIjN (ORCPT
+        id S1351200AbhLCIks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:40:48 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:38525 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351098AbhLCIkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 03:39:13 -0500
-Received: (Authenticated sender: alex@ghiti.fr)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 3DE8460021;
-        Fri,  3 Dec 2021 08:35:48 +0000 (UTC)
-Message-ID: <59c8b150-3811-a057-eb73-50f14698c993@ghiti.fr>
-Date:   Fri, 3 Dec 2021 09:35:47 +0100
+        Fri, 3 Dec 2021 03:40:47 -0500
+Received: by mail-io1-f71.google.com with SMTP id l124-20020a6b3e82000000b005ed165a1506so1757456ioa.5
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 00:37:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=9IwCa73Z+YOPimzGCLvws6NS4HcM322L2UNd+WfcjfU=;
+        b=fgVGqntH0vDACx4ZCjNTE5gTtlzwRzm5Wxd8c5tBm7G5meyyKvQTo2vRoS+AQYKqnw
+         nH+nsq7evtcA1EMMwhk1ntABf2VjxCo3Yf7+InWsBUs47iw60kFkjz6H19iAI7byvAIm
+         /fIq5Bi9numvxmh5MM1oKpK23WtGBU6VhkORwzzcy2FhMH8ooCGpg7VWKdwFmzsvp7oS
+         ED3yIUesNAIa5sdJmgPToz4obi6J/MmmijSZ2EA+QbNiWg/u5MMtElt1usXIY//hNH7v
+         pe3priz2IhpKwpfWlB+vzecVavlBtnZtYaVePmcy3wTpsvyQELNK90VbZO+EOXcMlw5+
+         Hdhw==
+X-Gm-Message-State: AOAM5318CS0VJ2Y6PHSz6sH8yQj/NTTvyg8I8DGaNna1vEedDz59jgRR
+        jlYU3gCgoDsRvoGaJ77UYvqp6zJqiXeMBzqCehaChAvGnPHy
+X-Google-Smtp-Source: ABdhPJwOhxJ8k9CxVj5qHJRG2zMLOjTBuo7Kbqu1FlFRNoCJKXKifJVilN+/b0gvhrBEArWoR58i1zo6RwhQMngmnaCPrzMYEmgq
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH 2/5] riscv: mm: init: try best to IS_ENABLED(CONFIG_64BIT)
- instead of #ifdef
-Content-Language: en-US
-To:     Jisheng Zhang <jszhang@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211203050317.2102-1-jszhang@kernel.org>
- <20211203050317.2102-3-jszhang@kernel.org>
-From:   Alexandre ghiti <alex@ghiti.fr>
-In-Reply-To: <20211203050317.2102-3-jszhang@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a02:ba8b:: with SMTP id g11mr22420185jao.128.1638520643115;
+ Fri, 03 Dec 2021 00:37:23 -0800 (PST)
+Date:   Fri, 03 Dec 2021 00:37:23 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e3df8e05d239d08a@google.com>
+Subject: [syzbot] INFO: task hung in io_sq_thread_park (3)
+From:   syzbot <syzbot+0fad9252b67f73124db9@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/21 06:03, Jisheng Zhang wrote:
-> Try our best to replace the conditional compilation using
-> "#ifdef CONFIG_64BIT" by a check for "IS_ENABLED(CONFIG_64BIT)", to
-> simplify the code and to increase compile coverage.
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->   arch/riscv/mm/init.c | 38 +++++++++++++++++---------------------
->   1 file changed, 17 insertions(+), 21 deletions(-)
->
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index 745f26a3b02e..bd445ac778a8 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -102,10 +102,9 @@ static void __init print_vm_layout(void)
->   		  (unsigned long)VMALLOC_END);
->   	print_mlm("lowmem", (unsigned long)PAGE_OFFSET,
->   		  (unsigned long)high_memory);
-> -#ifdef CONFIG_64BIT
-> -	print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
-> -		  (unsigned long)ADDRESS_SPACE_END);
-> -#endif
-> +	if (IS_ENABLED(CONFIG_64BIT))
-> +		print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
-> +			  (unsigned long)ADDRESS_SPACE_END);
->   }
->   #else
->   static void print_vm_layout(void) { }
-> @@ -172,17 +171,16 @@ static void __init setup_bootmem(void)
->   
->   	memblock_enforce_memory_limit(memory_limit);
->   
-> -	/*
-> -	 * Reserve from the start of the kernel to the end of the kernel
-> -	 */
-> -#if defined(CONFIG_64BIT) && defined(CONFIG_STRICT_KERNEL_RWX)
->   	/*
->   	 * Make sure we align the reservation on PMD_SIZE since we will
->   	 * map the kernel in the linear mapping as read-only: we do not want
->   	 * any allocation to happen between _end and the next pmd aligned page.
->   	 */
-> -	vmlinux_end = (vmlinux_end + PMD_SIZE - 1) & PMD_MASK;
-> -#endif
-> +	if (IS_ENABLED(CONFIG_64BIT) && IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
-> +		vmlinux_end = (vmlinux_end + PMD_SIZE - 1) & PMD_MASK;
-> +	/*
-> +	 * Reserve from the start of the kernel to the end of the kernel
-> +	 */
->   	memblock_reserve(vmlinux_start, vmlinux_end - vmlinux_start);
->   
->   
-> @@ -190,7 +188,6 @@ static void __init setup_bootmem(void)
->   #ifndef CONFIG_XIP_KERNEL
->   	phys_ram_base = memblock_start_of_DRAM();
->   #endif
-> -#ifndef CONFIG_64BIT
->   	/*
->   	 * memblock allocator is not aware of the fact that last 4K bytes of
->   	 * the addressable memory can not be mapped because of IS_ERR_VALUE
-> @@ -200,10 +197,11 @@ static void __init setup_bootmem(void)
->   	 * address space is occupied by the kernel mapping then this check must
->   	 * be done as soon as the kernel mapping base address is determined.
->   	 */
-> -	max_mapped_addr = __pa(~(ulong)0);
-> -	if (max_mapped_addr == (phys_ram_end - 1))
-> -		memblock_set_current_limit(max_mapped_addr - 4096);
-> -#endif
-> +	if (!IS_ENABLED(CONFIG_64BIT)) {
-> +		max_mapped_addr = __pa(~(ulong)0);
-> +		if (max_mapped_addr == (phys_ram_end - 1))
-> +			memblock_set_current_limit(max_mapped_addr - 4096);
-> +	}
->   
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    58e1100fdc59 MAINTAINERS: co-maintain random.c
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17cbc8c5b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5b0eee8ab3ea1839
+dashboard link: https://syzkaller.appspot.com/bug?extid=0fad9252b67f73124db9
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0fad9252b67f73124db9@syzkaller.appspotmail.com
+
+INFO: task kworker/u4:4:964 blocked for more than 143 seconds.
+      Not tainted 5.16.0-rc3-syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/u4:4    state:D stack:23392 pid:  964 ppid:     2 flags:0x00004000
+Workqueue: events_unbound io_ring_exit_work
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:4972 [inline]
+ __schedule+0xa9a/0x4940 kernel/sched/core.c:6253
+ schedule+0xd2/0x260 kernel/sched/core.c:6326
+ schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6385
+ __mutex_lock_common kernel/locking/mutex.c:680 [inline]
+ __mutex_lock+0xa32/0x12f0 kernel/locking/mutex.c:740
+ io_sq_thread_park+0x83/0xc1 fs/io_uring.c:7985
+ io_ring_exit_work+0x132/0xbd0 fs/io_uring.c:9488
+ process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
+ worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+
+Showing all locks held in the system:
+1 lock held by khungtaskd/27:
+ #0: ffffffff8bb83b60 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6458
+3 locks held by kworker/u4:4/964:
+ #0: ffff888010c69138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888010c69138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888010c69138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1198 [inline]
+ #0: ffff888010c69138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:635 [inline]
+ #0: ffff888010c69138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:662 [inline]
+ #0: ffff888010c69138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x896/0x1690 kernel/workqueue.c:2269
+ #1: ffffc9000469fdb0 ((work_completion)(&ctx->exit_work)){+.+.}-{0:0}, at: process_one_work+0x8ca/0x1690 kernel/workqueue.c:2273
+ #2: ffff888072ba4870 (&sqd->lock){+.+.}-{3:3}, at: io_sq_thread_park+0x83/0xc1 fs/io_uring.c:7985
+1 lock held by in:imklog/6214:
+ #0: ffff888073710370 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe9/0x100 fs/file.c:990
+4 locks held by iou-sqp-18541/18543:
+
+=============================================
+
+NMI backtrace for cpu 0
+CPU: 0 PID: 27 Comm: khungtaskd Not tainted 5.16.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111
+ nmi_trigger_cpumask_backtrace+0x1b3/0x230 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:210 [inline]
+ watchdog+0xc1d/0xf50 kernel/hung_task.c:295
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 2956 Comm: systemd-journal Not tainted 5.16.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:security_cred_free+0xae/0x130 security/security.c:1686
+Code: 80 3c 28 00 75 67 48 8b 1b 48 85 db 75 cb e8 69 4b d8 fd 4c 89 ea 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 80 3c 02 00 75 6e <49> 8b ac 24 88 00 00 00 e8 45 4b d8 fd 48 89 ef e8 ed 6d 1e fe 4c
+RSP: 0018:ffffc90001a4fde8 EFLAGS: 00000246
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 1ffff110039675f1 RSI: ffffffff839f5f57 RDI: ffff88801cb3af00
+RBP: dffffc0000000000 R08: 0000000000000000 R09: ffff888010db4ab3
+R10: ffffffff83a776d6 R11: 0000000000000000 R12: ffff88801cb3af00
+R13: ffff88801cb3af88 R14: 0000000000000000 R15: 0000000000000000
+FS:  00007fea3d76c8c0(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fea3abe6000 CR3: 000000007e621000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ put_cred_rcu+0x122/0x520 kernel/cred.c:115
+ __put_cred+0x1de/0x250 kernel/cred.c:151
+ put_cred include/linux/cred.h:288 [inline]
+ put_cred include/linux/cred.h:281 [inline]
+ revert_creds+0x1a8/0x1f0 kernel/cred.c:608
+ do_faccessat+0x2e7/0x850 fs/open.c:462
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fea3ca279c7
+Code: 83 c4 08 48 3d 01 f0 ff ff 73 01 c3 48 8b 0d c8 d4 2b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 b8 15 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d a1 d4 2b 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffe79700ca8 EFLAGS: 00000246 ORIG_RAX: 0000000000000015
+RAX: ffffffffffffffda RBX: 00007ffe79703cd0 RCX: 00007fea3ca279c7
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000561873cda9a3
+RBP: 00007ffe79700df0 R08: 0000561873cd03e5 R09: 0000000000000018
+R10: 0000000000000069 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000000 R14: 000056187561e8a0 R15: 00007ffe797012e0
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	80 3c 28 00          	cmpb   $0x0,(%rax,%rbp,1)
+   4:	75 67                	jne    0x6d
+   6:	48 8b 1b             	mov    (%rbx),%rbx
+   9:	48 85 db             	test   %rbx,%rbx
+   c:	75 cb                	jne    0xffffffd9
+   e:	e8 69 4b d8 fd       	callq  0xfdd84b7c
+  13:	4c 89 ea             	mov    %r13,%rdx
+  16:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  1d:	fc ff df
+  20:	48 c1 ea 03          	shr    $0x3,%rdx
+  24:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+  28:	75 6e                	jne    0x98
+* 2a:	49 8b ac 24 88 00 00 	mov    0x88(%r12),%rbp <-- trapping instruction
+  31:	00
+  32:	e8 45 4b d8 fd       	callq  0xfdd84b7c
+  37:	48 89 ef             	mov    %rbp,%rdi
+  3a:	e8 ed 6d 1e fe       	callq  0xfe1e6e2c
+  3f:	4c                   	rex.WR
 
 
-And remove the __maybe_unused used in max_mapped_addr declaration.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-
->   	min_low_pfn = PFN_UP(phys_ram_base);
->   	max_low_pfn = max_pfn = PFN_DOWN(phys_ram_end);
-> @@ -616,13 +614,12 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->   	BUG_ON((PAGE_OFFSET % PGDIR_SIZE) != 0);
->   	BUG_ON((kernel_map.phys_addr % PMD_SIZE) != 0);
->   
-> -#ifdef CONFIG_64BIT
->   	/*
->   	 * The last 4K bytes of the addressable memory can not be mapped because
->   	 * of IS_ERR_VALUE macro.
->   	 */
-> -	BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);
-> -#endif
-> +	if (IS_ENABLED(CONFIG_64BIT))
-> +		BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);
->   
->   	pt_ops.alloc_pte = alloc_pte_early;
->   	pt_ops.get_pte_virt = get_pte_virt_early;
-> @@ -735,10 +732,9 @@ static void __init setup_vm_final(void)
->   		}
->   	}
->   
-> -#ifdef CONFIG_64BIT
->   	/* Map the kernel */
-> -	create_kernel_page_table(swapper_pg_dir, false);
-> -#endif
-> +	if (IS_ENABLED(CONFIG_64BIT))
-> +		create_kernel_page_table(swapper_pg_dir, false);
->   
->   	/* Clear fixmap PTE and PMD mappings */
->   	clear_fixmap(FIX_PTE);
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

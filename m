@@ -2,87 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEF246793F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31733467937
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381405AbhLCOTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 09:19:05 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:39024 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1381318AbhLCOTE (ORCPT
+        id S1381383AbhLCOSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 09:18:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50058 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352612AbhLCOSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 09:19:04 -0500
-X-UUID: 2d0978e4593f45a7a832ca40b3596156-20211203
-X-UUID: 2d0978e4593f45a7a832ca40b3596156-20211203
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <mark-pk.tsai@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2115325506; Fri, 03 Dec 2021 22:15:37 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 3 Dec 2021 22:15:36 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 3 Dec
- 2021 22:14:39 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 3 Dec 2021 22:14:18 +0800
-From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-To:     <linux@armlinux.org.uk>, <matthias.bgg@gmail.com>,
-        <rmk+kernel@armlinux.org.uk>
-CC:     <arnd@arndb.de>, <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <rppt@kernel.org>, <wangkefeng.wang@huawei.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <yj.chiang@mediatek.com>,
-        <mark-pk.tsai@mediatek.com>
-Subject: [PATCH] arm: remove [_text, _stext) from kernel code resource
-Date:   Fri, 3 Dec 2021 22:14:16 +0800
-Message-ID: <20211203141416.31121-1-mark-pk.tsai@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Fri, 3 Dec 2021 09:18:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F095C06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 06:14:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C958B8272C
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 14:14:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 394A6C53FC7;
+        Fri,  3 Dec 2021 14:14:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638540873;
+        bh=v59ThzrQR/E+1jWqDwNoI8yFOz1/2zQOK8rBUFsUf78=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EXwfjp8IaVILiahinc6Cg76eh0RncqnxmNtFczEj858OKdZBfHHdDuIa3hkwxf9j+
+         RedHdhVJyAj01SjTWy0ldmNPjz+5X7Wpq5/fNxF9uKEVyP0gqFO6Qvq8ChQMc+7quU
+         NxP6cvPflcs4B9HhQMTnli8Qd1SAEOlZnXe+EFFg=
+Date:   Fri, 3 Dec 2021 15:14:31 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Martin Kaiser <martin@kaiser.cx>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] staging: r8188eu: use a delayed worker for led updates
+Message-ID: <YaomR72ytUd9jmAt@kroah.com>
+References: <20211125162513.25039-1-martin@kaiser.cx>
+ <20211126114135.18228-1-martin@kaiser.cx>
+ <20211129110427.GQ6514@kadam>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129110427.GQ6514@kadam>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the [_text, _stext) from Kernel Code.
-Although there are some startup code in head.text, they
-are freed to the buddy system after kernel boot.
+On Mon, Nov 29, 2021 at 02:04:27PM +0300, Dan Carpenter wrote:
+> This was confusing becuase it should have been [PATCH 4/4 v2].  These
+> days I think the prefered way is to just resend the whole series as a
+> new thread.
+> 
+> Greg doesn't use patchwork, but these rules especially apply for
+> subsystems which use patchwork.  People say that patchwork gets confused
+> when people use the --in-reply-to option and I guess it's hard to
+> apply individual patches in patchwork?  Anyway, just always start a new
+> thread and resend everything.
+> 
+> Send a reply to the original thread to say "Don't apply this one, it has
+> sleeping in atomic bugs", otherwise it might get applied by mistake.
 
-And we have memory protection mechanism use this
-which have false alarm when some other IPs doing dma
-if the dma page frame is in the [_text, _stext).
+I had already reverted that patch from my tree, so I would not have
+applied it again :)
 
-Below are my iomem resource and reserved memory information:
-console:/ # grep Kernel /proc/iomem
-  20208000-219fffff : Kernel code
-  21b00000-21c2e76f : Kernel data
+thanks,
 
-console:/ # cat /sys/kernel/debug/memblock/reserved
-0: 0x20201000..0x20207fff
-1: 0x20300000..0x21c2e76f
-
-Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
----
- arch/arm/kernel/setup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm/kernel/setup.c b/arch/arm/kernel/setup.c
-index 284a80c0b6e1..85ffc9501e38 100644
---- a/arch/arm/kernel/setup.c
-+++ b/arch/arm/kernel/setup.c
-@@ -851,7 +851,7 @@ static void __init request_standard_resources(const struct machine_desc *mdesc)
- 	struct resource *res;
- 	u64 i;
- 
--	kernel_code.start   = virt_to_phys(_text);
-+	kernel_code.start   = virt_to_phys(_stext);
- 	kernel_code.end     = virt_to_phys(__init_begin - 1);
- 	kernel_data.start   = virt_to_phys(_sdata);
- 	kernel_data.end     = virt_to_phys(_end - 1);
--- 
-2.18.0
-
+greg k-h

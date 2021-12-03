@@ -2,105 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E5846792C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFBB346792F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381370AbhLCOOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 09:14:53 -0500
-Received: from mga14.intel.com ([192.55.52.115]:58062 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229735AbhLCOOw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 09:14:52 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="237203619"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="237203619"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 06:11:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="513259816"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga007.fm.intel.com with ESMTP; 03 Dec 2021 06:11:18 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B3EBBT7008557;
-        Fri, 3 Dec 2021 14:11:11 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev, hjl.tools@gmail.com
-Subject: Re: [PATCH v8 05/14] x86: conditionally place regular ASM functions into separate sections
-Date:   Fri,  3 Dec 2021 15:10:51 +0100
-Message-Id: <20211203141051.82467-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <Yanm6tJ2obi1aKv6@hirez.programming.kicks-ass.net>
-References: <20211202223214.72888-1-alexandr.lobakin@intel.com> <20211202223214.72888-6-alexandr.lobakin@intel.com> <Yanm6tJ2obi1aKv6@hirez.programming.kicks-ass.net>
+        id S1357792AbhLCOPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 09:15:54 -0500
+Received: from mail-4018.proton.ch ([185.70.40.18]:40797 "EHLO
+        mail-4018.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233920AbhLCOPw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 09:15:52 -0500
+Date:   Fri, 03 Dec 2021 14:12:07 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wujek.eu;
+        s=protonmail; t=1638540745;
+        bh=o4WyFWh7JuWwZ/Mqq+iDh7Rd1ojXp+gx7VT03s0CIPY=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc;
+        b=qH59D9CnADsjHUxAuCqCyBbzx/8mNeN9PBGR9dwRlK5i6rW6BaxhjBD27FuaNwewF
+         zdv0K1bb5sKZ6UuYaafy1r2VLncXrYU4yX8lTk2OVHMOFR4v10G9ODqjyq5Cwz2ZKc
+         Pg7n3RCyCH1JKGyVsHsZgR3sz4tU1ymKbzg/6rll+aAcGcpZZQ3ryW8RsUE+WNYN/7
+         pv0PNYUDWtNr0wCtScuNEwlB9xVy/+wC6cIvTl2DDxBTLg22+kOcBEk3P63aHoS4pY
+         X0PyXfOsC5w9R2mVDN3qe/vTr2HlRiy1YBPIbp5siGX7yDchCqgJQ8rM7Lc9loiVSh
+         sjJz/eZTG4TPg==
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+From:   Adam Wujek <dev_public@wujek.eu>
+Cc:     Adam Wujek <dev_public@wujek.eu>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Reply-To: Adam Wujek <dev_public@wujek.eu>
+Subject: [PATCH] clk: si5341: fix reported clk_rate when output divider is 2
+Message-ID: <20211203141125.2447520-1-dev_public@wujek.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Fri, 3 Dec 2021 10:44:10 +0100
+SI5341_OUT_CFG_RDIV_FORCE2 shall be checked first to distinguish whether
+a divider for a given output is set to 2 (SI5341_OUT_CFG_RDIV_FORCE2
+is set) or the output is disabled (SI5341_OUT_CFG_RDIV_FORCE2 not set,
+SI5341_OUT_R_REG is set 0).
+Before the change, divider set to 2 (SI5341_OUT_R_REG set to 0) was
+interpreted as output is disabled.
 
-> On Thu, Dec 02, 2021 at 11:32:05PM +0100, Alexander Lobakin wrote:
-> > Use the newly introduces macros to create unique separate sections
-> > for (almost) every "regular" ASM function (i.e. for those which
-> > aren't explicitly put into a specific one).
-> > There should be no leftovers as input .text will be size-asserted
-> > in the LD script generated for FG-KASLR.
-> 
-> *groan*...
-> 
-> Please, can't we do something like:
-> 
-> #define SYM_PUSH_SECTION(name)	\
-> .if section == .text		\
-> .push_section .text.##name	\
-> .else				\
-> .push_section .text		\
-> .endif
-> 
-> #define SYM_POP_SECTION()	\
-> .pop_section
-> 
-> and wrap that inside the existing SYM_FUNC_START*() SYM_FUNC_END()
-> macros.
+Signed-off-by: Adam Wujek <dev_public@wujek.eu>
+---
+ drivers/clk/clk-si5341.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-Ah I see. I asked about this in my previous mail and you replied
-already (: Cool stuff, I'll use it, it simplifies things a lot.
+diff --git a/drivers/clk/clk-si5341.c b/drivers/clk/clk-si5341.c
+index b7641abe6747..15b1c90cafe5 100644
+--- a/drivers/clk/clk-si5341.c
++++ b/drivers/clk/clk-si5341.c
+@@ -798,6 +798,15 @@ static unsigned long si5341_output_clk_recalc_rate(str=
+uct clk_hw *hw,
+ =09u32 r_divider;
+ =09u8 r[3];
 
-Thanks!
-Al
++=09err =3D regmap_read(output->data->regmap,
++=09=09=09SI5341_OUT_CONFIG(output), &val);
++=09if (err < 0)
++=09=09return err;
++
++=09/* If SI5341_OUT_CFG_RDIV_FORCE2 is set, r_divider is 2 */
++=09if (val & SI5341_OUT_CFG_RDIV_FORCE2)
++=09=09return parent_rate / 2;
++
+ =09err =3D regmap_bulk_read(output->data->regmap,
+ =09=09=09SI5341_OUT_R_REG(output), r, 3);
+ =09if (err < 0)
+@@ -814,13 +823,6 @@ static unsigned long si5341_output_clk_recalc_rate(str=
+uct clk_hw *hw,
+ =09r_divider +=3D 1;
+ =09r_divider <<=3D 1;
+
+-=09err =3D regmap_read(output->data->regmap,
+-=09=09=09SI5341_OUT_CONFIG(output), &val);
+-=09if (err < 0)
+-=09=09return err;
+-
+-=09if (val & SI5341_OUT_CFG_RDIV_FORCE2)
+-=09=09r_divider =3D 2;
+
+ =09return parent_rate / r_divider;
+ }
+--
+2.25.1
+
+

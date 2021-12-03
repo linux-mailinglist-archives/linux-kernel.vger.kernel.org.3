@@ -2,107 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 343974676DD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04EE14676EB
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380630AbhLCL7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 06:59:48 -0500
-Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:39913 "EHLO
-        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1380634AbhLCL7b (ORCPT
+        id S1380648AbhLCMDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 07:03:21 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:45948 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238939AbhLCMDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 06:59:31 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 718773200D18;
-        Fri,  3 Dec 2021 06:56:06 -0500 (EST)
-Received: from imap44 ([10.202.2.94])
-  by compute5.internal (MEProxy); Fri, 03 Dec 2021 06:56:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type:content-transfer-encoding; s=fm3; bh=P1JnN
-        uOJBaEFcRxzCTmeX1soA0TSx1mKmYgCyg0MaC0=; b=h2ozRM++TDYySVKq6ir9o
-        ixVDLSBihIDC8Fh+BPHH7EZQFQQ89GYA2tTrzWnYxjef0qQaw1dKKjUGh9rhNlb+
-        X6UmgyWd2XBlqmL+0fCBFeUAxa7XX2PY7lMHdLk9F6qT10Cj1BkgqxGYS5vYUfcS
-        ZzvSLYVr7dQLC1WZA5pf1MrkmijqFMsv7mDj8bVWoCH6SGYsAGlg8HJ/6KcB7NmG
-        1kiGl3QzhPAbaZjj9WOFNxMYVCTS5nTOy3EFihML1DXo+oRJ2Yh861WpHVdnMPFJ
-        2aa+BM9OuSXnX2dKKPtbP/nZTOY3XvlbxqS8KgbFS7wH1GMIKej9/ZgFsgrJP4xJ
-        w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=P1JnNuOJBaEFcRxzCTmeX1soA0TSx1mKmYgCyg0Ma
-        C0=; b=gY3fpsSy9a+AXRuPbpBE0t7tEUFOHGZa90si+wggOcZDuTvc2c9M53Ktz
-        75Oop4TcMEt0E4z62Bl6s1J7m1LEl+bISB6QERPFOp9QYeIE76LNkMeSGx2tJrrL
-        Eys5qi5mR2u7V7WEVAsFaPPAOL3Acb1XPjpV6JSrBdYTzp/kuC9xEfFTPQ6J5er+
-        OH68Ieln2TDaWADKbCAHoNk7o2n4yZffVhTDyZB4LLHHbe4hApJNv2Fpg99WnZhk
-        VeZzu33oDPYj+jAkxIeDsACX1FlXsbRmiVeHGmK3aoxHBQt5OSIt27GDvwcAABXi
-        KyrFvWNaBXEU1zL5oOsJTRez3qXQA==
-X-ME-Sender: <xms:1QWqYYq3qMU5N3vtGf7vBIvMymp4TYxV1AnGI-qCdQoldVSI0mwH6A>
-    <xme:1QWqYeo96uQ73sVxVHHOQnvjgZZb1tAtf7R0xugowwGYAS0oKuecxQ9Yr5r5tOTrv
-    4-9poWGAnZG6AyCdJU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrieejgdefhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdflihgr
-    gihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeettdejvddvtdfhgfehueejtddttdfgkedtgefhledtkeel
-    fefhhfelledvjeekffenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsth
-    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghn
-    ghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:1QWqYdPwdOLFjVRqtjLC2MGrpbSoj9VUStAVtIr4aXQe_J8Qg3JZpw>
-    <xmx:1QWqYf6Hj73bXShaNaTC16dIVwqXnnlQkVV26dWswmclUyu6iGNfnw>
-    <xmx:1QWqYX7ftohda9o2tAmSp1NwTMBZcCDOzg4vZHEZMy0i1k8Z_O2iEw>
-    <xmx:1QWqYUsTOxfMSmJ3cB9dLGAKg6ev0nqDh8SON8ojwQPkS3QsSZ7vpw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 4ADB6FA0AA6; Fri,  3 Dec 2021 06:56:05 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4458-g51a91c06b2-fm-20211130.004-g51a91c06
-Mime-Version: 1.0
-Message-Id: <8aa8ed78-5c78-49c2-b100-607a8f4e8eae@www.fastmail.com>
-In-Reply-To: <YaoEqpNkuAqSlPaq@zn.tnic>
-References: <20211203003636.11417-1-jiaxun.yang@flygoat.com>
- <822ced92-f165-3c5a-e0bf-dafa6f808b76@intel.com>
- <27b6387f-fa93-484e-a56e-12452a82f069@www.fastmail.com>
- <d7be6ef4-f73e-923e-93b7-ef254bf347c0@intel.com>
- <e249390b-6f87-47f6-8676-fa727b2fa932@www.fastmail.com>
- <YaoEqpNkuAqSlPaq@zn.tnic>
-Date:   Fri, 03 Dec 2021 11:55:44 +0000
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Borislav Petkov" <bp@alien8.de>
-Cc:     "Dave Hansen" <dave.hansen@intel.com>, x86@kernel.org,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, dave.hansen@linux.intel.com,
-        hpa@zytor.com, chang.seok.bae@intel.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 00/10] x86: Allocate AVX512 xstate ondemand
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        Fri, 3 Dec 2021 07:03:19 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4D1891FD3F;
+        Fri,  3 Dec 2021 11:59:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1638532794; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KdazV+5dpFcxcu5IXEP+kgN/NpeXmvpoVUL6S+BnkZ4=;
+        b=zeFPFPekdXm0eeHHD9fukFGRrduVhvLP09oVZXTR84us+XgctbD0Cr0CA8V9TvWmb9hO5C
+        jeZaKurvasjR+ZAMMAKEuSio4ikrCFqOVcy/7L/GdCC1JP/ZAkuSzCMmAHUKQTTXI3P+gq
+        7lsQ0eCfBk16Cq3yVNsYLupTenWnQ54=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1638532794;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KdazV+5dpFcxcu5IXEP+kgN/NpeXmvpoVUL6S+BnkZ4=;
+        b=97fRlWE3/DYli8de6+Duv/6JqJT8Bj06QCOf0ZrA2uZx1ntBxj+iw5JlIijTxVyZKt8tZw
+        g8Y8A3+ScReqkQDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0ADDD13DF5;
+        Fri,  3 Dec 2021 11:59:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1i6gAboGqmHoOAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 03 Dec 2021 11:59:54 +0000
+Message-ID: <cca17e9f-0d4f-f23a-2bc4-b36e834f7ef8@suse.cz>
+Date:   Fri, 3 Dec 2021 12:59:53 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] mm/vmscan: add sysctl knobs for protecting the working
+ set
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        ValdikSS <iam@valdikss.org.ru>
+Cc:     Alexey Avramov <hakavlad@inbox.lv>, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, corbet@lwn.net, mcgrof@kernel.org,
+        keescook@chromium.org, yzaikin@google.com,
+        oleksandr@natalenko.name, kernel@xanmod.org, aros@gmx.com,
+        hakavlad@gmail.com, Yu Zhao <yuzhao@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+References: <20211130201652.2218636d@mail.inbox.lv>
+ <2dc51fc8-f14e-17ed-a8c6-0ec70423bf54@valdikss.org.ru>
+ <20211202135824.33d2421bf5116801cfa2040d@linux-foundation.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20211202135824.33d2421bf5116801cfa2040d@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/2/21 22:58, Andrew Morton wrote:
+> On Thu, 2 Dec 2021 21:05:01 +0300 ValdikSS <iam@valdikss.org.ru> wrote:
+> 
+>> This patchset is surprisingly effective and very useful for low-end PC 
+>> with slow HDD, single-board ARM boards with slow storage, cheap Android 
+>> smartphones with limited amount of memory. It almost completely prevents 
+>> thrashing condition and aids in fast OOM killer invocation.
+>> 
+>> The similar file-locking patch is used in ChromeOS for nearly 10 years 
+>> but not on stock Linux or Android. It would be very beneficial for 
+>> lower-performance Android phones, SBCs, old PCs and other devices.
+>> 
+>> With this patch, combined with zram, I'm able to run the following 
+>> software on an old office PC from 2007 with __only 2GB of RAM__ 
+>> simultaneously:
+>> 
+>>   * Firefox with 37 active tabs (all data in RAM, no tab unloading)
+>>   * Discord
+>>   * Skype
+>>   * LibreOffice with the document opened
+>>   * Two PDF files (14 and 47 megabytes in size)
+>> 
+>> And the PC doesn't crawl like a snail, even with 2+ GB in zram!
+>> Without the patch, this PC is barely usable.
+>> Please watch the video:
+>> https://notes.valdikss.org.ru/linux-for-old-pc-from-2007/en/
+>> 
+> 
+> This is quite a condemnation of the current VM.  It shouldn't crawl
+> like a snail.
+> 
+> The patch simply sets hard limits on page reclaim's malfunctioning. 
+> I'd prefer that reclaim not malfunction :(
 
++CC Johannes
 
-=E5=9C=A82021=E5=B9=B412=E6=9C=883=E6=97=A5=E5=8D=81=E4=BA=8C=E6=9C=88 =E4=
-=B8=8A=E5=8D=8811:51=EF=BC=8CBorislav Petkov=E5=86=99=E9=81=93=EF=BC=9A
-> On Fri, Dec 03, 2021 at 11:42:10AM +0000, Jiaxun Yang wrote:
->> If it's improper I'll drop the statement in commit message :-)
->
-> Actually you should answer his question about what happens if you clear
-> those two bits in that MSR.
+I'd also like to know where that malfunction happens in this case. The
+relatively well known scenario is that memory overloaded systems thrash
+instead of going OOM quickly - something PSI should be able to help with.
 
-It made AVX512 states available in XCR0. I'm still doing some experiments
-to see if AVX512 is actually enabled by this.
+But in your case, if there is no OOM due to the added protections, it would
+mean that the system is in fact not overloaded, just that the normal reclaim
+decisions lead to reclaming something that should be left in memory, while
+there is other memory that can be reclaimed without causing thrashing?
+That's perhaps worse and worth investigating.
 
-Thanks.
+> That being said, I can see that a blunt instrument like this would be
+> useful.
+> 
+> I don't think that the limits should be "N bytes on the current node". 
+> Nodes can have different amounts of memory so I expect it should scale
+> the hard limits on a per-node basis.  And of course, the various zones
+> have different size as well.
+> 
+> We do already have a lot of sysctls for controlling these sort of
+> things.  Was much work put into attempting to utilize the existing
+> sysctls to overcome these issues?
+> 
+> 
 
->
-> --=20
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
-
---=20
-- Jiaxun

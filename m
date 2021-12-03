@@ -2,94 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0AA7468010
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 23:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 641AA468028
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 00:01:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376300AbhLCXBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 18:01:55 -0500
-Received: from mga07.intel.com ([134.134.136.100]:31676 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233523AbhLCXBx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 18:01:53 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="300456852"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="300456852"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 14:58:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="513897480"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 03 Dec 2021 14:58:25 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mtHVY-000I9y-FE; Fri, 03 Dec 2021 22:58:24 +0000
-Date:   Sat, 4 Dec 2021 06:58:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     kbuild-all@lists.01.org, Rob Landley <rob@landley.net>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [PATCH v2 resend] sh: Use generic GCC library routines
-Message-ID: <202112040630.oGvlSViB-lkp@intel.com>
-References: <411814148d311d5a545672cdd2b0721195e53252.1638539376.git.geert+renesas@glider.be>
+        id S1376375AbhLCXE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 18:04:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233523AbhLCXE4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 18:04:56 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF4FC061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 15:01:31 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 200so4512111pga.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 15:01:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=h7eG/LpBpIoDnmkkVRB1Vl+hz0IOd/cbgCmXoaPwHfQ=;
+        b=Kqdt+V2+8MMJ+dlp+a/a0oLuuQr8cvKUDrkpYQuwEiuxsngWfr17BQf4DOTq2Lh4fu
+         N8ITGCBtg143Ru+FsXq4bDQwC1z6lwkwdx2wZwDqAO0/zpvj8+pD2B7RW86gbi69lZmF
+         UvVbp8QJPz8k/E0XNi5H5DmyRVDDL+cUFAv6U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=h7eG/LpBpIoDnmkkVRB1Vl+hz0IOd/cbgCmXoaPwHfQ=;
+        b=D1XtZcDKDZX4kwJggAa2KXOjlFvo3ynzaN7ijHi2q/2MTYRHpPHW/OF7sUGV2ANWtF
+         CPybNE3yrNPRF6VmcH4stMZev+int7xx3ie/f1itJ9PDdFNz3wtUVeNBhqH0SkyGX3nc
+         WNZHvUeJdj4wKw4f0cb2GUjPvnN6b4m5/PgOckO5Icn+4zOsTeJgalh58ClK/tprFn97
+         42kdUuvNgIZG1XWX2MSBy+As5Ir5T2aeH1XMawnQsKAY2KRLJ5TZkUaLIlhAackhi4+m
+         IU+apc9lypzSVp2zD6XzsihEl0PY2SIm9ooRDVVMdQOmjT7wsvgKKELhd6/dU16uoDO3
+         Dozw==
+X-Gm-Message-State: AOAM533p7ewA+R1/h/ORUE4fRwerb4nO7g5LUe2JJN06fjnrEClsgkHM
+        ZY6xcxlqBETN5mRIDx9XzrJOLQ==
+X-Google-Smtp-Source: ABdhPJxfq+pZGUTD+G+gefYGdCFsLh79Rg82YRWjEdarh3PeOrocMsXVVva9firtbRXWQagQJ2vS1w==
+X-Received: by 2002:a63:5f8d:: with SMTP id t135mr6624293pgb.610.1638572491418;
+        Fri, 03 Dec 2021 15:01:31 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id pc10sm3567730pjb.9.2021.12.03.15.01.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 15:01:31 -0800 (PST)
+Date:   Fri, 3 Dec 2021 15:01:30 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH] find: Do not read beyond variable boundaries on small
+ sizes
+Message-ID: <202112031450.EFE7B7B4A@keescook>
+References: <20211203100846.3977195-1-keescook@chromium.org>
+ <YaoN6wnNezMvyyd5@smile.fi.intel.com>
+ <20211203182638.GA450223@lapt>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <411814148d311d5a545672cdd2b0721195e53252.1638539376.git.geert+renesas@glider.be>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211203182638.GA450223@lapt>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Fri, Dec 03, 2021 at 10:26:38AM -0800, Yury Norov wrote:
+> On Fri, Dec 03, 2021 at 02:30:35PM +0200, Andy Shevchenko wrote:
+> > On Fri, Dec 03, 2021 at 02:08:46AM -0800, Kees Cook wrote:
+> > > It's common practice to cast small variable arguments to the find_*_bit()
+> 
+> Not that common - I found 19 examples of this cast, and most of them
+> are in drivers.
 
-I love your patch! Perhaps something to improve:
+I find 51 (most are in the for_each_* wrappers):
 
-[auto build test WARNING on soc/for-next]
-[also build test WARNING on linus/master v5.16-rc3 next-20211203]
-[cannot apply to uclinux-h8/h8300-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+$ RE=$(echo '\b('$(echo $(grep -E '^(unsigned long find|#define for_each)_' include/linux/find.h | cut -d'(' -f1 | awk '{print $NF}') | tr ' ' '|')')\(.*\(unsigned long \*\)')
+$ git grep -E "$RE" | wc -l
+51
 
-url:    https://github.com/0day-ci/linux/commits/Geert-Uytterhoeven/sh-Use-generic-GCC-library-routines/20211203-215311
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-config: sh-se7712_defconfig (https://download.01.org/0day-ci/archive/20211204/202112040630.oGvlSViB-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/8bd73efbe5666e7df737c423c9269d039bb92f8b
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Geert-Uytterhoeven/sh-Use-generic-GCC-library-routines/20211203-215311
-        git checkout 8bd73efbe5666e7df737c423c9269d039bb92f8b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash
+> > > This leads to the find helper dereferencing a full unsigned long,
+> > > regardless of the size of the actual variable. The unwanted bits
+> > > get masked away, but strictly speaking, a read beyond the end of
+> > > the target variable happens. Builds under -Warray-bounds complain
+> > > about this situation, for example:
+> > > 
+> > > In file included from ./include/linux/bitmap.h:9,
+> > >                  from drivers/iommu/intel/iommu.c:17:
+> > > drivers/iommu/intel/iommu.c: In function 'domain_context_mapping_one':
+> > > ./include/linux/find.h:119:37: error: array subscript 'long unsigned int[0]' is partly outside array bounds of 'int[1]' [-Werror=array-bounds]
+> > >   119 |                 unsigned long val = *addr & GENMASK(size - 1, 0);
+> > >       |                                     ^~~~~
+> > > drivers/iommu/intel/iommu.c:2115:18: note: while referencing 'max_pde'
+> > >  2115 |         int pds, max_pde;
+> > >       |                  ^~~~~~~
+> 
+> The driver should be fixed. I would suggest using one of ffs/fls/ffz from
+> include/asm/bitops.h
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I don't think it's a good API design to make developers choose between
+functions based on the size of their target. This also doesn't work well
+for the main problem which is the for_each_* usage.
 
-All warnings (new ones prefixed by >>):
+The existing API is totally fine: it already diverts the constant
+expression small sizes to ffs/etc, and this change is only to that
+part. It's just changing the C description of how to get at the desired
+bits, so that -Warray-bounds doesn't (correctly) get upset about the
+wider-than-underlying-type OOB read.
 
-   In file included from arch/sh/boot/compressed/ashldi3.c:2:
->> arch/sh/boot/compressed/../../../../lib/ashldi3.c:9:19: warning: no previous prototype for '__ashldi3' [-Wmissing-prototypes]
-       9 | long long notrace __ashldi3(long long u, word_type b)
-         |                   ^~~~~~~~~
+This is one of the last issues with -Warray-bounds, which has proven to
+be an effective compiler flag for finding real bugs. Since this patch
+doesn't change performance, doesn't change the resulting executable
+instructions, doesn't require any caller changes, and helps gain global
+-Warray-bounds coverage, I'm hoping to convince you of its value. :)
 
+-Kees
 
-vim +/__ashldi3 +9 arch/sh/boot/compressed/../../../../lib/ashldi3.c
-
-b35cd9884fa5d8 Palmer Dabbelt 2017-05-23  8  
-b35cd9884fa5d8 Palmer Dabbelt 2017-05-23 @9  long long notrace __ashldi3(long long u, word_type b)
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Kees Cook

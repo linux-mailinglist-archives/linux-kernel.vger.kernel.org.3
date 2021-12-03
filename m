@@ -2,206 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2C146765A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8120846765C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242972AbhLCLc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 06:32:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26372 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232921AbhLCLc6 (ORCPT
+        id S243493AbhLCLeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 06:34:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243546AbhLCLe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 06:32:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638530974;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i+CIEvgg++DU+7jpob1iXyG3lXaTsLjuBqRp72NQIfk=;
-        b=BHV3+sb3Dd0BySnWBmV97fAAw3kRF4TN0b9cZfMiw3+mDWvBkBcp0RPWxkRoHtCkGL89T2
-        3aoGN/99DWDGJaOvcjGGnHq4j+SXgrceuR5RXJD2baJHiT4TNUGwE4u9CYpR0bPAFEz4NH
-        +3OlCBhad7uZIhRjHpf72J+uNadgjVc=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-117-CCM5oN7aMjuRur_5t8vM_w-1; Fri, 03 Dec 2021 06:29:33 -0500
-X-MC-Unique: CCM5oN7aMjuRur_5t8vM_w-1
-Received: by mail-ed1-f69.google.com with SMTP id l15-20020a056402124f00b003e57269ab87so2317833edw.6
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 03:29:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=i+CIEvgg++DU+7jpob1iXyG3lXaTsLjuBqRp72NQIfk=;
-        b=3CQJZIY5d/IL/8c98bOOo8si6ighiqwAIfnT64aBFeLPqmbhZRBTsFBCehq04/HQ9D
-         GPh+LM9rHE3S8Mv815/5SsPNYNSugi0J0o6xESuuSJCyt+JBKteVkkdFQ311so+sb2Rc
-         LYLTpwKw7PO/Byc2c8nmNsNdG4noPWM+Jmf5NIZAY0+XtCM41FF/tjJhZlv+/8dkBYjd
-         eUH8u1JvI8Fi+reNj0GGyssp80yoxk3YilETec2ZxgROJv4B+T8tj1g22ZoOkdpuZOCw
-         W2rzwdUSKyJUbBM5GMzPFMBq8erKb/9OUuxCbH15p/WtH4LjoTDxtGLQSM+gD8P1HC7b
-         rbLg==
-X-Gm-Message-State: AOAM530Ml6w8D2WGFADJ4jYS40vBH/IqKTN47LWDcX/RsrZjaXVXtBAm
-        APNL//YANjpIO3A8W9VVrjzXPYMhuuptCy6SNBSn52Fe5vpoK2ah6ccNgLCVeVKSHmXu1p9GIxn
-        E5zzYGJ3CMA8C+iGub7uLd+Lh
-X-Received: by 2002:a17:907:7f18:: with SMTP id qf24mr22912309ejc.568.1638530972318;
-        Fri, 03 Dec 2021 03:29:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyljo0yzyit+aVuiSXzB3zF77d7gRe2Vqs+2cSCDKlXjj7zW5AkwPH+bRMAsPpMUAOo2IFmKw==
-X-Received: by 2002:a17:907:7f18:: with SMTP id qf24mr22912286ejc.568.1638530972159;
-        Fri, 03 Dec 2021 03:29:32 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id aq6sm1770485ejc.41.2021.12.03.03.29.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 03:29:31 -0800 (PST)
-Message-ID: <c9e9b173-022c-696f-699a-1a4d4d369255@redhat.com>
-Date:   Fri, 3 Dec 2021 12:29:30 +0100
+        Fri, 3 Dec 2021 06:34:27 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C232C06173E;
+        Fri,  3 Dec 2021 03:31:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=0RFYGismENxwP+jaxLHTrZjrtbEuIPpeDDZE6JkcEEE=; b=C94QI
+        6CBtQh9rKmomxNnpS2FUjsmdr7U2vrhKD/4it5rwf8L1UqhI6f+7l8caHcvj4vheFqw3yg+FAYKOt
+        Cb2ET3Mnth7jNKWkqANhYv2Lu3qqaTWZyIXz3d6otAa7bWp9F579UMBPv9/O3ciHga1Ruuk4NhP+Y
+        5xpiYw1GgiQMIW/Q9upcv22KjmvdKmeBe0Uon2elAmlsWwih2zva8mJupnDpaAmnrrF7x8VVstrfg
+        bugii8JK7n8YD2vIF+V25yUwImIrZJ8s2fx+GGn4+YBxUJvy/HGfpHvBDIIYSxtamMHi023JT3ANu
+        8p+CdqGizE7FR8aa2+v5nTsysQQfw==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1mt6mB-0002Sr-Vs; Fri, 03 Dec 2021 11:30:52 +0000
+Date:   Fri, 3 Dec 2021 11:30:50 +0000
+From:   John Keeping <john@metanate.com>
+To:     Wesley Cheng <wcheng@codeaurora.org>
+Cc:     Wesley Cheng <quic_wcheng@quicinc.com>, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com
+Subject: Re: [PATCH] usb: gadget: f_fs: Wake up IO thread during disconnect
+Message-ID: <Yan/6o/0YsaYuUgr@donbot>
+References: <20211201100205.25448-1-quic_wcheng@quicinc.com>
+ <YaelpmsJXmhTY4A0@donbot>
+ <Yajc5f3LDm+dSji/@donbot>
+ <dcfb2b21-6ae8-6921-663d-85cb71f3f5ae@codeaurora.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] mfd: intel-lpss: Fix I2C4 not being available on the
- Microsoft Surface Go & Go 2
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Dan Scally <djrscally@gmail.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>
-References: <20211202201351.74419-1-hdegoede@redhat.com>
- <Yakv+JF+euUlE1Tv@pendragon.ideasonboard.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <Yakv+JF+euUlE1Tv@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dcfb2b21-6ae8-6921-663d-85cb71f3f5ae@codeaurora.org>
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+Hi Wesley,
 
-On 12/2/21 21:43, Laurent Pinchart wrote:
-> Hi Hans,
+On Thu, Dec 02, 2021 at 11:33:40PM -0800, Wesley Cheng wrote:
+> On 12/2/2021 6:49 AM, John Keeping wrote:
+> > On Wed, Dec 01, 2021 at 04:41:10PM +0000, John Keeping wrote:
+> >> On Wed, Dec 01, 2021 at 02:02:05AM -0800, Wesley Cheng wrote:
+> >>> During device disconnect or composition unbind, applications should be
+> >>> notified that the endpoints are no longer enabled, so that it can take
+> >>> the proper actions to handle its IO threads.  Otherwise, they can be
+> >>> left waiting for endpoints until EPs are re-enabled.
+> >>>
+> >>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> >>> ---
+> >>>  drivers/usb/gadget/function/f_fs.c | 7 +++++--
+> >>>  1 file changed, 5 insertions(+), 2 deletions(-)
+> >>>
+> >>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> >>> index 3c584da9118c..0b0747d96378 100644
+> >>> --- a/drivers/usb/gadget/function/f_fs.c
+> >>> +++ b/drivers/usb/gadget/function/f_fs.c
+> >>> @@ -957,10 +957,12 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+> >>>  		if (file->f_flags & O_NONBLOCK)
+> >>>  			return -EAGAIN;
+> >>>  
+> >>> -		ret = wait_event_interruptible(
+> >>> -				epfile->ffs->wait, (ep = epfile->ep));
+> >>> +		ret = wait_event_interruptible(epfile->ffs->wait,
+> >>> +				(ep = epfile->ep) || !epfile->ffs->func);
+> > 
+> > I looked at this again, and doesn't this totally break the wait
+> > condition?
+> > 
+> > epfile->ep is set to non-null in ffs_func_eps_enable() which is called
+> > from ffs_func_set_alt() just after ffs->func is set to non-null, and
+> > then those are also set back to null at the same time.
+> > 
+> > So the condition boils down to a || !a and this never blocks.  Or am I
+> > missing something?
 > 
-> Thank you for the patch.
+> Thanks for the feedback.  Hmm...yes, I get what you're saying.  The
+> EPfiles and func is basically being set/cleared together, so the above
+> change wouldn't be any different than checking for ep != epfile->ep.
+> Let me see if there's another way we can address the issue this change
+> is trying to resolve.
 > 
-> On Thu, Dec 02, 2021 at 09:13:51PM +0100, Hans de Goede wrote:
->> Many DSDTs for Kaby Lake and Kaby Lake Refresh models contain a
->> _SB.PCI0.GEXP ACPI Device node describing an I2C attached GPIO expander.
->>
->> This seems to be something which is copy and pasted from the DSDT
->> from some reference design since this ACPI Device is present even on
->> models where no such GPIO expander is used at all, such as on the
->> Microsoft Surface Go & Go 2.
->>
->> This ACPI Device is a problem because it contains a SystemMemory
->> OperationRegion which covers the MMIO for the I2C4 I2C controller this
-> 
-> s/this/that/ (or ". This" ?)
+> > 
+> >>>  		if (ret)
+> >>>  			return -EINTR;
+> >>> +		if (!epfile->ffs->func)
+> >>> +			return -ENODEV;
+> >>
+> >> This seems strange - we are inside the case where the endpoint is not
+> >> initially enabled, if we're returning ENODEV here shouldn't that happen
+> >> in all cases?
+> >>
+> >> Beyond that, there is no locking for accessing ffs->func here;
+> >> modification happens in gadget callbacks so it's guarded by the gadget
+> >> core (the existing case in ffs_ep0_ioctl() looks suspicious as well).
+> >>
+> >> But I can't see why this change is necessary - there are event
+> >> notifications through ep0 when this happens, as can be seen in the hunk
+> >> below from the ffs_event_add(ffs, FUNCTIONFS_DISABLE) line.  If
+> >> userspace cares about this, then it can read the events from ep0.
+> >>
+> In short, the change is basically trying to resolve an issue in an
+> application that has a separate thread handling the IO ops.  When the
+> USB cable is disconnected, the application would expect for this IO
+> thread to be completed and exit gracefully, and restarting it on the
+> next connect.  However, since we are stuck in the read() it can not
+> proceed further.
 
-I've gone with ". This" for v2.
+Did you see the other recent thread on FunctionFS [1]?  It seems that
+the separate I/O thread is not required and in fact there is a race here
+in general even using AIO via io_submit().
 
+[1] https://lore.kernel.org/linux-usb/CAJkDvNk4G3WJuitZa+oPuNhkrCPNiwwG-zyNET+urWVWAda+cw@mail.gmail.com/
 
-> 
->> causes the MFD cell for the I2C4 controller to not be instantiated due
->> to a resource conflict, requiring the use of acpi_enforce_resources=lax
->> to work around this.
->>
->> I have done an extensive analysis of all the ACPI tables on the
->> Microsoft Surface Go and the _SB.PCI0.GEXP ACPI Device's methods are
->> not used by any code in the ACPI tables, neither are any of them
->> directly called by any Linux kernel code. This is unsurprising since
->> running i2cdetect on the I2C4 bus shows that there is no GPIO
->> expander chip present on these devices at all.
->>
->> This commit adds a PCI subsystem vendor:device table listing PCI devices
->> where it is known to be safe to ignore a resource-conflicts with ACPI
->> declared SystemMemory regions.
->>
->> This makes the I2C4 bus work out of the box on the Microsoft Surface
->> Go & Go 2, which is necessary for the cameras on these devices to work.
-> 
-> This will make the life of the Go and Go2 users *much* easier.
-> 
->> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->> Cc: Dan Scally <djrscally@gmail.com>
->> Cc: Kate Hsuan <hpa@redhat.com>
->> Cc: Maximilian Luz <luzmaximilian@gmail.com>
->> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->> ---
->>  drivers/mfd/intel-lpss-pci.c | 12 ++++++++++++
->>  drivers/mfd/intel-lpss.c     |  1 +
->>  drivers/mfd/intel-lpss.h     |  1 +
->>  3 files changed, 14 insertions(+)
->>
->> diff --git a/drivers/mfd/intel-lpss-pci.c b/drivers/mfd/intel-lpss-pci.c
->> index a872b4485eac..593290ff08a6 100644
->> --- a/drivers/mfd/intel-lpss-pci.c
->> +++ b/drivers/mfd/intel-lpss-pci.c
->> @@ -17,6 +17,15 @@
->>  
->>  #include "intel-lpss.h"
->>  
->> +/* Some DSDTs have an unused GEXP ACPI device conflicting with I2C4 resources */
->> +static const struct pci_device_id ignore_resource_conflicts_ids[] = {
->> +	/* Microsoft Surface Go (version 1) I2C4 */
->> +	{ PCI_DEVICE_SUB(0x8086, 0x9d64, 0x152d, 0x1182), },
->> +	/* Microsoft Surface Go 2 I2C4 */
->> +	{ PCI_DEVICE_SUB(0x8086, 0x9d64, 0x152d, 0x1237), },
->> +	{ }
-> 
-> Reading the commit message, I was going to mention that the match should
-> probably be machine-dependent, but that seems to be covered by the PCI
-> subsystem ID.
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> I guess in these situations, we should utilize the O_NONBLOCK file
+> parameter?
 
-Thanks you.
+Yes, using O_NONBLOCK does avoid the problems.
 
-Regards,
+I'm not sure what the general solution is - right now I don't see any
+way to resolve the requirements to wait for the host to connect and
+handle disconnection without blocking here.
 
-Hans
+The simplest thing would be to refuse epfile I/O when FunctionFS is not
+enabled, which neatly resolves the race in favour of returning an error.
+But it means that applications need to wait for a FUNCTIONFS_ENABLE
+event on ep0 before submitting any transfers on other endpoints, which
+is a change from the current behaviour.  And there's no way to know how
+many applications rely on that.
 
-
-> 
->> +};
->> +
->>  static int intel_lpss_pci_probe(struct pci_dev *pdev,
->>  				const struct pci_device_id *id)
->>  {
->> @@ -35,6 +44,9 @@ static int intel_lpss_pci_probe(struct pci_dev *pdev,
->>  	info->mem = &pdev->resource[0];
->>  	info->irq = pdev->irq;
->>  
->> +	if (pci_match_id(ignore_resource_conflicts_ids, pdev))
->> +		info->ignore_resource_conflicts = true;
->> +
->>  	pdev->d3cold_delay = 0;
->>  
->>  	/* Probably it is enough to set this for iDMA capable devices only */
->> diff --git a/drivers/mfd/intel-lpss.c b/drivers/mfd/intel-lpss.c
->> index 0e15afc39f54..cfbee2cfba6b 100644
->> --- a/drivers/mfd/intel-lpss.c
->> +++ b/drivers/mfd/intel-lpss.c
->> @@ -401,6 +401,7 @@ int intel_lpss_probe(struct device *dev,
->>  		return ret;
->>  
->>  	lpss->cell->swnode = info->swnode;
->> +	lpss->cell->ignore_resource_conflicts = info->ignore_resource_conflicts;
->>  
->>  	intel_lpss_init_dev(lpss);
->>  
->> diff --git a/drivers/mfd/intel-lpss.h b/drivers/mfd/intel-lpss.h
->> index 22dbc4aed793..062ce95b68b9 100644
->> --- a/drivers/mfd/intel-lpss.h
->> +++ b/drivers/mfd/intel-lpss.h
->> @@ -19,6 +19,7 @@ struct software_node;
->>  
->>  struct intel_lpss_platform_info {
->>  	struct resource *mem;
->> +	bool ignore_resource_conflicts;
->>  	int irq;
->>  	unsigned long clk_rate;
->>  	const char *clk_con_id;
-> 
-
+So I don't think that's an option, at least not without providing some
+way for userspace to opt in to the new behaviour.

@@ -2,265 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7237A467A45
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 16:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C57467A49
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 16:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381772AbhLCPc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 10:32:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:22637 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1381762AbhLCPc5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 10:32:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638545373;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kZK0syLLqjpq6njv36WRrKUspASDFOkpbYPR5Q5+s6I=;
-        b=VaOY6ZdnrJUghBjn2kKDQZDgFxUv70WwWU5F/iA5Oiac8/28gik6Jtp+Df2U63TtAl5h7c
-        gSOIxD+T4m1l2J8kDJZrOYYNQjxkPQF+/al66SEubIwN252k51s6Lsnv7al0dJteHjY0/h
-        dS7JxVEqVRqGd/RtgbOjv4aXtPDhejg=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-225-h_r8DHKhN8mQ31k4aEQKMg-1; Fri, 03 Dec 2021 10:29:32 -0500
-X-MC-Unique: h_r8DHKhN8mQ31k4aEQKMg-1
-Received: by mail-wr1-f69.google.com with SMTP id x17-20020a5d6511000000b0019838caab88so734173wru.6
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 07:29:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kZK0syLLqjpq6njv36WRrKUspASDFOkpbYPR5Q5+s6I=;
-        b=KwEL8OI+96hBRTNtCp8U6DFTSLUFvl89pwxIxbGpP3yBLTvBMVpbcPTlFgggi0blLG
-         HIAymHOClikT3rbfEI2Vv2Yn0NTzqhH8Sx50u+A82LQCf9+OiVD9PEYE3oJNYH6MV44J
-         bos8G95soHRkWRNaJAVJEA4ubBdH28D6iTIontDJmvOWytsDOgdIx1kkwxe07IKLJifc
-         0we6IJ9GnW+3RYitFSRdty74kjspi3lskyMNvjaYiQCkT6CyQsQXo8wy9ACEu3hdM7CC
-         Jl+IL4XlM0qzglU2985i0I+0/V5q8EaITDz8kpykq2OY5Ssl3CCgIhNe6vJpsUotTg/G
-         stog==
-X-Gm-Message-State: AOAM531cW6DWK8xJR93x/+y7d/1gCR7Ymtwoje7LXMTl0o15xT4H9Qx/
-        PnBMxBn+A4G17MvbJrGIzvR/yJbLXxBSZP80X4RJPxcPtvdpSQ9apOBO3y3bGPRsit+JTVEvUx/
-        qwDu7iW09l+uvX+xMZiwkuYNdX/+B2hnDaVrKCJwA
-X-Received: by 2002:a05:6000:1aca:: with SMTP id i10mr22761252wry.407.1638545370704;
-        Fri, 03 Dec 2021 07:29:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzf+rd8AQbcRoQ9qoprsu7E4RnUUhZf2ON01ZcT6SMxdUoaQyB9fbO1vLlf46sthspy91qP8csNPtRCEW2vbF8=
-X-Received: by 2002:a05:6000:1aca:: with SMTP id i10mr22761212wry.407.1638545370404;
- Fri, 03 Dec 2021 07:29:30 -0800 (PST)
+        id S1381780AbhLCPdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 10:33:12 -0500
+Received: from m43-7.mailgun.net ([69.72.43.7]:61187 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1381783AbhLCPdI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 10:33:08 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1638545382; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=f3d8XLjrfeunVf9qAZPSRFMs4nRqEca9QkB22J8l4rU=; b=UE5e01+ZzCNEAN5sKNto6THM+gBss80az7Es/COkr7jsK2D5v6CQA9JDdsSBgFLbwiuPrE+d
+ ew/ajgpp6oMbS3gUoFWmT1hkD07aQ9Bne1xILgvuwHf5TVE/mfw+WUwrY51/WIFft6piXxS5
+ GyE9OaPPUTA4RJRg3jFP4FiI5Ts=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n10.prod.us-east-1.postgun.com with SMTP id
+ 61aa37e6642caac318de2848 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 03 Dec 2021 15:29:42
+ GMT
+Sender: srivasam=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 7BEE4C43635; Fri,  3 Dec 2021 15:29:41 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.8 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.0
+Received: from [10.242.143.72] (unknown [202.46.23.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: srivasam)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id DF733C4338F;
+        Fri,  3 Dec 2021 15:29:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org DF733C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH v7 03/10] ASoC: qcom: Add register definition for codec
+ rddma and wrdma
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Srinivasa Rao Mandadapu <srivasam@codeaurora.com>,
+        agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org, plai@codeaurora.org,
+        bgoswami@codeaurora.org, perex@perex.cz, tiwai@suse.com,
+        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org
+Cc:     Venkata Prasad Potturu <potturu@codeaurora.org>
+References: <1638459806-27600-1-git-send-email-srivasam@codeaurora.com>
+ <1638459806-27600-4-git-send-email-srivasam@codeaurora.com>
+ <87df2562-f9c0-188d-601b-d9c896b3719e@linaro.org>
+From:   Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
+Organization: Qualcomm India Private Limited.
+Message-ID: <5cea3676-f8e8-b6e6-84f9-685e7625cb95@codeaurora.org>
+Date:   Fri, 3 Dec 2021 20:59:31 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211201193750.2097885-1-catalin.marinas@arm.com>
-In-Reply-To: <20211201193750.2097885-1-catalin.marinas@arm.com>
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-Date:   Fri, 3 Dec 2021 16:29:18 +0100
-Message-ID: <CAHc6FU7gXfZk7=Xj+RjxCqkmsrcAhenfbeoqa4AmHd5+vgja7g@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] Avoid live-lock in fault-in+uaccess loops with
- sub-page faults
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-btrfs <linux-btrfs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <87df2562-f9c0-188d-601b-d9c896b3719e@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Catalin,
 
-On Wed, Dec 1, 2021 at 8:38 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+On 12/3/2021 6:58 PM, Srinivas Kandagatla wrote:
+Thanks for your time Srini!!!
 >
-> Hi,
+> On 02/12/2021 15:43, Srinivasa Rao Mandadapu wrote:
+>> From: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
+>>
+>> This patch adds register definitions for codec read dma and write dma
+>> lpass interface.
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
+>> Co-developed-by: Venkata Prasad Potturu <potturu@codeaurora.org>
+>> Signed-off-by: Venkata Prasad Potturu <potturu@codeaurora.org>
 >
-> Following the discussions on the first series,
+> Overall the patch LGTM,
+> but for bisectablity reasons, pleas make sure these macros
 >
-> https://lore.kernel.org/r/20211124192024.2408218-1-catalin.marinas@arm.com
+> is_rxtx_cdc_dma_port()
+> is_cdc_dma_port()
 >
-> this new patchset aims to generalise the sub-page probing and introduce
-> a minimum size to the fault_in_*() functions. I called this 'v2' but I
-> can rebase it on top of v1 and keep v1 as a btrfs live-lock
-> back-portable fix.
-
-that's what I was actually expecting, an updated patch series that
-changes the btrfs code to keep track of the user-copy fault address,
-the corresponding changes to the fault_in functions to call the
-appropriate arch functions, and the arch functions that probe far
-enough from the fault address to prevent deadlocks. In this step, how
-far the arch functions need to probe depends on the fault windows of
-the user-copy functions.
-
-A next step (as a patch series on top) would be to make sure direct
-I/O also takes sub-page faults into account. That seems to require
-probing the entire address range before the actual copying. A concern
-I have about this is time-of-check versus time-of-use: what if
-sub-page faults are added after the probing but before the copying?
-Other than that, an approach like adding min_size parameters might
-work except that maybe we can find a better name. Also, in order not
-to make things even more messy, the fault_in functions should probably
-continue to report how much of the address range they've failed to
-fault in. Callers can then check for themselves whether the function
-could fault in min_size bytes or not.
-
-> The fault_in_*() API improvements would be a new
-> series. Anyway, I'd first like to know whether this is heading in the
-> right direction and whether it's worth adding min_size to all
-> fault_in_*() (more below).
+> to be avaiable in this patch.
+Okay. Will change accordingly.
 >
-> v2 adds a 'min_size' argument to all fault_in_*() functions with current
-> callers passing 0 (or we could make it 1). A probe_subpage_*() call is
-> made for the min_size range, though with all 0 this wouldn't have any
-> effect. The only difference is btrfs search_ioctl() in the last patch
-> which passes a non-zero min_size to avoid the live-lock (functionally
-> that's the same as the v1 series).
-
-In the btrfs case, the copying will already trigger sub-page faults;
-we only need to make sure that the next fault-in attempt happens at
-the fault address. (And that the fault_in functions take the user-copy
-fuzz into account, which we also need for byte granularity copying
-anyway.) Otherwise, we're creating the same time-of-check versus
-time-of-use disparity as for direct-IO here, unnecessarily.
-
-> In terms of sub-page probing, I don't think with the current kernel
-> anything other than search_ioctl() matters. The buffered file I/O can
-> already cope with current fault_in_*() + copy_*_user() loops (the
-> uaccess makes progress). Direct I/O either goes via GUP + kernel mapping
-> access (and memcpy() can't fault) or, if the user buffer is not PAGE
-> aligned, it may fall back to buffered I/O. So we really only care about
-> fault_in_writeable(), as in v1.
-
-Yes from a regression point of view, but note that direct I/O still
-circumvents the sub-page fault checking, which seems to defeat the
-whole point.
-
-> Linus suggested that we could use the min_size to request a minimum
-> guaranteed probed size (in most cases this would be 1) and put a cap on
-> the faulted-in size, say two pages. All the fault_in_iov_iter_*()
-> callers will need to check the actual quantity returned by fault_in_*()
-> rather than bail out on non-zero but Andreas has a patch already (though
-> I think there are a few cases in btrfs etc.):
+> Once that is fixed you could add my
 >
-> https://lore.kernel.org/r/20211123151812.361624-1-agruenba@redhat.com
+> Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 >
-> With these callers fixed, we could add something like the diff below.
-> But, again, min_size doesn't actually have any current use in the kernel
-> other than fault_in_writeable() and search_ioctl().
-
-We're trying pretty hard to handle large I/O requests efficiently at
-the filesystem level. A small, static upper limit in the fault-in
-functions has the potential to ruin those efforts. So I'm not a fan of
-that.
-
-> Thanks for having a look. Suggestions welcomed.
+> --srini
 >
-> ------------------8<-------------------------------
-> diff --git a/mm/gup.c b/mm/gup.c
-> index 7fa69b0fb859..3aa88aa8ce9d 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -1658,6 +1658,8 @@ static long __get_user_pages_locked(struct mm_struct *mm, unsigned long start,
->  }
->  #endif /* !CONFIG_MMU */
 >
-> +#define MAX_FAULT_IN_SIZE      (2 * PAGE_SIZE)
-> +
->  /**
->   * fault_in_writeable - fault in userspace address range for writing
->   * @uaddr: start of address range
-> @@ -1671,6 +1673,7 @@ size_t fault_in_writeable(char __user *uaddr, size_t size, size_t min_size)
->  {
->         char __user *start = uaddr, *end;
->         size_t faulted_in = size;
-> +       size_t max_size = max_t(size_t, MAX_FAULT_IN_SIZE, min_size);
->
->         if (unlikely(size == 0))
->                 return 0;
-> @@ -1679,7 +1682,7 @@ size_t fault_in_writeable(char __user *uaddr, size_t size, size_t min_size)
->                         return size;
->                 uaddr = (char __user *)PAGE_ALIGN((unsigned long)uaddr);
->         }
-> -       end = (char __user *)PAGE_ALIGN((unsigned long)start + size);
-> +       end = (char __user *)PAGE_ALIGN((unsigned long)start + max_size);
->         if (unlikely(end < start))
->                 end = NULL;
->         while (uaddr != end) {
-> @@ -1726,9 +1729,10 @@ size_t fault_in_safe_writeable(const char __user *uaddr, size_t size,
->         struct vm_area_struct *vma = NULL;
->         int locked = 0;
->         size_t faulted_in = size;
-> +       size_t max_size = max_t(size_t, MAX_FAULT_IN_SIZE, min_size);
->
->         nstart = start & PAGE_MASK;
-> -       end = PAGE_ALIGN(start + size);
-> +       end = PAGE_ALIGN(start + max_size);
->         if (end < nstart)
->                 end = 0;
->         for (; nstart != end; nstart = nend) {
-> @@ -1759,7 +1763,7 @@ size_t fault_in_safe_writeable(const char __user *uaddr, size_t size,
->         if (locked)
->                 mmap_read_unlock(mm);
->         if (nstart != end)
-> -               faulted_in = min_t(size_t, nstart - start, size);
-> +               faulted_in = min_t(size_t, nstart - start, max_size);
->         if (faulted_in < min_size ||
->             (min_size && probe_subpage_safe_writeable(uaddr, min_size)))
->                 return size;
-> @@ -1782,6 +1786,7 @@ size_t fault_in_readable(const char __user *uaddr, size_t size,
->         const char __user *start = uaddr, *end;
->         volatile char c;
->         size_t faulted_in = size;
-> +       size_t max_size = max_t(size_t, MAX_FAULT_IN_SIZE, min_size);
->
->         if (unlikely(size == 0))
->                 return 0;
-> @@ -1790,7 +1795,7 @@ size_t fault_in_readable(const char __user *uaddr, size_t size,
->                         return size;
->                 uaddr = (const char __user *)PAGE_ALIGN((unsigned long)uaddr);
->         }
-> -       end = (const char __user *)PAGE_ALIGN((unsigned long)start + size);
-> +       end = (const char __user *)PAGE_ALIGN((unsigned long)start + max_size);
->         if (unlikely(end < start))
->                 end = NULL;
->         while (uaddr != end) {
-> ------------------8<-------------------------------
->
-> Catalin Marinas (4):
->   mm: Introduce a 'min_size' argument to fault_in_*()
->   mm: Probe for sub-page faults in fault_in_*()
->   arm64: Add support for user sub-page fault probing
->   btrfs: Avoid live-lock in search_ioctl() on hardware with sub-page
->     faults
->
->  arch/Kconfig                        |  7 ++++
->  arch/arm64/Kconfig                  |  1 +
->  arch/arm64/include/asm/uaccess.h    | 59 +++++++++++++++++++++++++++++
->  arch/powerpc/kernel/kvm.c           |  2 +-
->  arch/powerpc/kernel/signal_32.c     |  4 +-
->  arch/powerpc/kernel/signal_64.c     |  2 +-
->  arch/x86/kernel/fpu/signal.c        |  2 +-
->  drivers/gpu/drm/armada/armada_gem.c |  2 +-
->  fs/btrfs/file.c                     |  6 +--
->  fs/btrfs/ioctl.c                    |  7 +++-
->  fs/f2fs/file.c                      |  2 +-
->  fs/fuse/file.c                      |  2 +-
->  fs/gfs2/file.c                      |  8 ++--
->  fs/iomap/buffered-io.c              |  2 +-
->  fs/ntfs/file.c                      |  2 +-
->  fs/ntfs3/file.c                     |  2 +-
->  include/linux/pagemap.h             |  8 ++--
->  include/linux/uaccess.h             | 53 ++++++++++++++++++++++++++
->  include/linux/uio.h                 |  6 ++-
->  lib/iov_iter.c                      | 28 +++++++++++---
->  mm/filemap.c                        |  2 +-
->  mm/gup.c                            | 37 +++++++++++++-----
->  22 files changed, 203 insertions(+), 41 deletions(-)
->
-
-Thanks,
-Andreas
+>> ---
+>>   sound/soc/qcom/lpass-lpaif-reg.h | 127 
+>> +++++++++++++++++++++++++++++++++++++--
+>>   1 file changed, 121 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/sound/soc/qcom/lpass-lpaif-reg.h 
+>> b/sound/soc/qcom/lpass-lpaif-reg.h
+>> index 2eb03ad..6d9d9d1 100644
+>> --- a/sound/soc/qcom/lpass-lpaif-reg.h
+>> +++ b/sound/soc/qcom/lpass-lpaif-reg.h
+>> @@ -74,6 +74,21 @@
+>>   #define LPAIF_IRQSTAT_REG(v, port)    LPAIF_IRQ_REG_ADDR(v, 0x4, 
+>> (port))
+>>   #define LPAIF_IRQCLEAR_REG(v, port)    LPAIF_IRQ_REG_ADDR(v, 0xC, 
+>> (port))
+>>   +/* LPAIF RXTX IRQ */
+>> +#define LPAIF_RXTX_IRQ_REG_ADDR(v, addr, port) \
+>> +        (v->rxtx_irq_reg_base + (addr) + v->rxtx_irq_reg_stride * 
+>> (port))
+>> +
+>> +#define LPAIF_RXTX_IRQEN_REG(v, port) LPAIF_RXTX_IRQ_REG_ADDR(v, 
+>> 0x0, port)
+>> +#define LPAIF_RXTX_IRQSTAT_REG(v, port) LPAIF_RXTX_IRQ_REG_ADDR(v, 
+>> 0x4, port)
+>> +#define LPAIF_RXTX_IRQCLEAR_REG(v, port) LPAIF_RXTX_IRQ_REG_ADDR(v, 
+>> 0xC, port)
+>> +
+>> +/* LPAIF VA IRQ */
+>> +#define LPAIF_VA_IRQ_REG_ADDR(v, addr, port) \
+>> +        (v->va_irq_reg_base + (addr) + v->va_irq_reg_stride * (port))
+>> +
+>> +#define LPAIF_VA_IRQEN_REG(v, port) LPAIF_VA_IRQ_REG_ADDR(v, 0x0, port)
+>> +#define LPAIF_VA_IRQSTAT_REG(v, port) LPAIF_VA_IRQ_REG_ADDR(v, 0x4, 
+>> port)
+>> +#define LPAIF_VA_IRQCLEAR_REG(v, port) LPAIF_VA_IRQ_REG_ADDR(v, 0xC, 
+>> port)
+>>     #define LPASS_HDMITX_APP_IRQ_REG_ADDR(v, addr)  \
+>>       ((v->hdmi_irq_reg_base) + (addr))
+>> @@ -139,12 +154,112 @@
+>>           (LPAIF_INTFDMA_REG(v, chan, reg, dai_id)) : \
+>>           LPAIF_WRDMA##reg##_REG(v, chan))
+>>   -#define LPAIF_DMACTL_REG(v, chan, dir, dai_id) __LPAIF_DMA_REG(v, 
+>> chan, dir, CTL, dai_id)
+>> -#define LPAIF_DMABASE_REG(v, chan, dir, dai_id) __LPAIF_DMA_REG(v, 
+>> chan, dir, BASE, dai_id)
+>> -#define    LPAIF_DMABUFF_REG(v, chan, dir, dai_id) 
+>> __LPAIF_DMA_REG(v, chan, dir, BUFF, dai_id)
+>> -#define LPAIF_DMACURR_REG(v, chan, dir, dai_id) __LPAIF_DMA_REG(v, 
+>> chan, dir, CURR, dai_id)
+>> -#define    LPAIF_DMAPER_REG(v, chan, dir, dai_id) __LPAIF_DMA_REG(v, 
+>> chan, dir, PER, dai_id)
+>> -#define    LPAIF_DMAPERCNT_REG(v, chan, dir, dai_id) 
+>> __LPAIF_DMA_REG(v, chan, dir, PERCNT, dai_id)
+>> +#define LPAIF_DMACTL_REG(v, chan, dir, dai_id) \
+>> +    (is_cdc_dma_port(dai_id) ? \
+>> +    __LPAIF_CDC_DMA_REG(v, chan, dir, CTL, dai_id) : \
+>> +    __LPAIF_DMA_REG(v, chan, dir, CTL, dai_id))
+>> +#define LPAIF_DMABASE_REG(v, chan, dir, dai_id) \
+>> +    (is_cdc_dma_port(dai_id) ? \
+>> +    __LPAIF_CDC_DMA_REG(v, chan, dir, BASE, dai_id) : \
+>> +    __LPAIF_DMA_REG(v, chan, dir, BASE, dai_id))
+>> +#define LPAIF_DMABUFF_REG(v, chan, dir, dai_id) \
+>> +    (is_cdc_dma_port(dai_id) ? \
+>> +    __LPAIF_CDC_DMA_REG(v, chan, dir, BUFF, dai_id) : \
+>> +    __LPAIF_DMA_REG(v, chan, dir, BUFF, dai_id))
+>> +#define LPAIF_DMACURR_REG(v, chan, dir, dai_id) \
+>> +    (is_cdc_dma_port(dai_id) ? \
+>> +    __LPAIF_CDC_DMA_REG(v, chan, dir, CURR, dai_id) : \
+>> +    __LPAIF_DMA_REG(v, chan, dir, CURR, dai_id))
+>> +#define LPAIF_DMAPER_REG(v, chan, dir, dai_id)  \
+>> +    (is_cdc_dma_port(dai_id) ? \
+>> +    __LPAIF_CDC_DMA_REG(v, chan, dir, PER, dai_id) : \
+>> +    __LPAIF_DMA_REG(v, chan, dir, PER, dai_id))
+>> +#define LPAIF_DMAPERCNT_REG(v, chan, dir, dai_id) \
+>> +    (is_cdc_dma_port(dai_id) ? \
+>> +    __LPAIF_CDC_DMA_REG(v, chan, dir, PERCNT, dai_id) : \
+>> +    __LPAIF_DMA_REG(v, chan, dir, PERCNT, dai_id))
+>> +
+>> +#define LPAIF_CDC_RDMA_REG_ADDR(v, addr, chan, dai_id) \
+>> +    (is_rxtx_cdc_dma_port(dai_id) ? \
+>> +    (v->rxtx_rdma_reg_base + (addr) + v->rxtx_rdma_reg_stride * 
+>> (chan)) : \
+>> +    (v->va_rdma_reg_base + (addr) + v->va_rdma_reg_stride * (chan)))
+>> +
+>> +#define LPAIF_CDC_RXTX_RDMACTL_REG(v, chan, dai_id) \
+>> +        LPAIF_CDC_RDMA_REG_ADDR(v, 0x00, (chan), dai_id)
+>> +#define LPAIF_CDC_RXTX_RDMABASE_REG(v, chan, dai_id) \
+>> +        LPAIF_CDC_RDMA_REG_ADDR(v, 0x04, (chan), dai_id)
+>> +#define LPAIF_CDC_RXTX_RDMABUFF_REG(v, chan, dai_id) \
+>> +        LPAIF_CDC_RDMA_REG_ADDR(v, 0x08, (chan), dai_id)
+>> +#define LPAIF_CDC_RXTX_RDMACURR_REG(v, chan, dai_id) \
+>> +        LPAIF_CDC_RDMA_REG_ADDR(v, 0x0C, (chan), dai_id)
+>> +#define LPAIF_CDC_RXTX_RDMAPER_REG(v, chan, dai_id) \
+>> +        LPAIF_CDC_RDMA_REG_ADDR(v, 0x10, (chan), dai_id)
+>> +#define LPAIF_CDC_RXTX_RDMA_INTF_REG(v, chan, dai_id) \
+>> +    LPAIF_CDC_RDMA_REG_ADDR(v, 0x50, (chan), dai_id)
+>> +
+>> +#define LPAIF_CDC_VA_RDMACTL_REG(v, chan, dai_id) 
+>> LPAIF_CDC_RDMA_REG_ADDR(v, 0x00, (chan), dai_id)
+>> +#define LPAIF_CDC_VA_RDMABASE_REG(v, chan, dai_id) 
+>> LPAIF_CDC_RDMA_REG_ADDR(v, 0x04, (chan), dai_id)
+>> +#define LPAIF_CDC_VA_RDMABUFF_REG(v, chan, dai_id) 
+>> LPAIF_CDC_RDMA_REG_ADDR(v, 0x08, (chan), dai_id)
+>> +#define LPAIF_CDC_VA_RDMACURR_REG(v, chan, dai_id) 
+>> LPAIF_CDC_RDMA_REG_ADDR(v, 0x0C, (chan), dai_id)
+>> +#define LPAIF_CDC_VA_RDMAPER_REG(v, chan, dai_id) 
+>> LPAIF_CDC_RDMA_REG_ADDR(v, 0x10, (chan), dai_id)
+>> +#define LPAIF_CDC_VA_RDMA_INTF_REG(v, chan, dai_id) \
+>> +    LPAIF_CDC_RDMA_REG_ADDR(v, 0x50, (chan), dai_id)
+>> +
+>> +#define LPAIF_CDC_WRDMA_REG_ADDR(v, addr, chan, dai_id) \
+>> +    (is_rxtx_cdc_dma_port(dai_id) ? \
+>> +    (v->rxtx_wrdma_reg_base + (addr) + \
+>> +        v->rxtx_wrdma_reg_stride * (chan - 
+>> v->rxtx_wrdma_channel_start)) : \
+>> +    (v->va_wrdma_reg_base + (addr) + \
+>> +        v->va_wrdma_reg_stride * (chan - v->va_wrdma_channel_start)))
+>> +
+>> +#define LPAIF_CDC_RXTX_WRDMACTL_REG(v, chan, dai_id) \
+>> +    LPAIF_CDC_WRDMA_REG_ADDR(v, 0x00, (chan), dai_id)
+>> +#define LPAIF_CDC_RXTX_WRDMABASE_REG(v, chan, dai_id) \
+>> +    LPAIF_CDC_WRDMA_REG_ADDR(v, 0x04, (chan), dai_id)
+>> +#define LPAIF_CDC_RXTX_WRDMABUFF_REG(v, chan, dai_id) \
+>> +    LPAIF_CDC_WRDMA_REG_ADDR(v, 0x08, (chan), dai_id)
+>> +#define LPAIF_CDC_RXTX_WRDMACURR_REG(v, chan, dai_id) \
+>> +    LPAIF_CDC_WRDMA_REG_ADDR(v, 0x0C, (chan), dai_id)
+>> +#define LPAIF_CDC_RXTX_WRDMAPER_REG(v, chan, dai_id) \
+>> +    LPAIF_CDC_WRDMA_REG_ADDR(v, 0x10, (chan), dai_id)
+>> +#define LPAIF_CDC_RXTX_WRDMA_INTF_REG(v, chan, dai_id) \
+>> +    LPAIF_CDC_WRDMA_REG_ADDR(v, 0x50, (chan), dai_id)
+>> +
+>> +#define LPAIF_CDC_VA_WRDMACTL_REG(v, chan, dai_id) \
+>> +    LPAIF_CDC_WRDMA_REG_ADDR(v, 0x00, (chan), dai_id)
+>> +#define LPAIF_CDC_VA_WRDMABASE_REG(v, chan, dai_id) \
+>> +    LPAIF_CDC_WRDMA_REG_ADDR(v, 0x04, (chan), dai_id)
+>> +#define LPAIF_CDC_VA_WRDMABUFF_REG(v, chan, dai_id) \
+>> +    LPAIF_CDC_WRDMA_REG_ADDR(v, 0x08, (chan), dai_id)
+>> +#define LPAIF_CDC_VA_WRDMACURR_REG(v, chan, dai_id) \
+>> +    LPAIF_CDC_WRDMA_REG_ADDR(v, 0x0C, (chan), dai_id)
+>> +#define LPAIF_CDC_VA_WRDMAPER_REG(v, chan, dai_id) \
+>> +    LPAIF_CDC_WRDMA_REG_ADDR(v, 0x10, (chan), dai_id)
+>> +#define LPAIF_CDC_VA_WRDMA_INTF_REG(v, chan, dai_id) \
+>> +    LPAIF_CDC_WRDMA_REG_ADDR(v, 0x50, (chan), dai_id)
+>> +
+>> +#define __LPAIF_CDC_RDDMA_REG(v, chan, dir, reg, dai_id) \
+>> +        (is_rxtx_cdc_dma_port(dai_id) ? 
+>> LPAIF_CDC_RXTX_RDMA##reg##_REG(v, chan, dai_id) : \
+>> +            LPAIF_CDC_VA_RDMA##reg##_REG(v, chan, dai_id))
+>> +
+>> +#define __LPAIF_CDC_WRDMA_REG(v, chan, dir, reg, dai_id) \
+>> +        (is_rxtx_cdc_dma_port(dai_id) ? 
+>> LPAIF_CDC_RXTX_WRDMA##reg##_REG(v, chan, dai_id) : \
+>> +            LPAIF_CDC_VA_WRDMA##reg##_REG(v, chan, dai_id))
+>> +
+>> +#define __LPAIF_CDC_DMA_REG(v, chan, dir, reg, dai_id) \
+>> +        ((dir ==  SNDRV_PCM_STREAM_PLAYBACK) ? \
+>> +            __LPAIF_CDC_RDDMA_REG(v, chan, dir, reg, dai_id) : \
+>> +            __LPAIF_CDC_WRDMA_REG(v, chan, dir, reg, dai_id))
+>> +
+>> +#define LPAIF_CDC_INTF_REG(v, chan, dir, dai_id) \
+>> +        ((dir ==  SNDRV_PCM_STREAM_PLAYBACK) ? \
+>> +        LPAIF_CDC_RDMA_INTF_REG(v, chan, dai_id) : \
+>> +        LPAIF_CDC_WRDMA_INTF_REG(v, chan, dai_id))
+>> +
+>> +#define LPAIF_INTF_REG(v, chan, dir, dai_id) \
+>> +        (is_cdc_dma_port(dai_id) ? \
+>> +        LPAIF_CDC_INTF_REG(v, chan, dir, dai_id) : \
+>> +        LPAIF_DMACTL_REG(v, chan, dir, dai_id))
+>>     #define LPAIF_DMACTL_BURSTEN_SINGLE    0
+>>   #define LPAIF_DMACTL_BURSTEN_INCR4    1
+>>
+-- 
+Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
+is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 

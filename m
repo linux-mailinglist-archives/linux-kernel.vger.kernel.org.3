@@ -2,122 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 107B74674B9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F264674C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379858AbhLCK1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 05:27:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243470AbhLCK1U (ORCPT
+        id S1356964AbhLCKbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 05:31:06 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:37546 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235349AbhLCKbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 05:27:20 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AE3C06173E;
-        Fri,  3 Dec 2021 02:23:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=WDJ7DRgTIJi/G608Ewn/RZmWDD8diylwBXPBUlmJ67Q=; b=tAGWACfEhPD9yiB9avdDZw/3D+
-        u1zeKcjJBBX7BlGGG9yjkYMGpDrMSUAsGinn9VupILRwY3PCGRQ0mBbTY5hbbArnNK07glNj3Wjrz
-        2DcKNoe59YMJW3ScyhGWJLlYbLAMYnJVoEixt7SfGMjHg+e/mbuiTdlDtQf7ciC+lgg1FVTxgjF5A
-        IkSpa8q0dSesDMLHaXZjYUzpYF4fZuVzUP335nbXvDzpjGcbBebGeLo9Z8vxHTl1ppx3wEruwSLvC
-        84GoyS6A1M8FTLB4MJBtZgbRxyVjWXD3Ca8OrI7XEJ6zYB2p/YJi9DrRTEJGj0neUazl0QVpKocUD
-        EMpJjwCA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mt5iy-008BaQ-Jh; Fri, 03 Dec 2021 10:23:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Fri, 3 Dec 2021 05:31:05 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5CF54300293;
-        Fri,  3 Dec 2021 11:23:27 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 424512B36B3B7; Fri,  3 Dec 2021 11:23:27 +0100 (CET)
-Date:   Fri, 3 Dec 2021 11:23:27 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v8 11/14] module: Reorder functions
-Message-ID: <YanwH4bgCgJnwsRW@hirez.programming.kicks-ass.net>
-References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
- <20211202223214.72888-12-alexandr.lobakin@intel.com>
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D8E38212C6;
+        Fri,  3 Dec 2021 10:27:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638527260; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DvmP4cB/KNSRMgh4UcYVFP3x4fPHzjzEcFBhVdgCru0=;
+        b=MhFZ5ke24T5q0Sb3wHgjIeX2G1ZCb5g6d41PhS8Trge8RFGVLrwzMO/HycD4Jd2kNRV7bz
+        LrhPHTIzUonH7t8N+MMz6ch2dmM1oBJQagD7Ep3UpZ4/paqZtZNwk4JwzY92h8umG1HitZ
+        tMhsu1WaLNQpPDIgIacn1YgtL6q7hC8=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B86D713CF5;
+        Fri,  3 Dec 2021 10:27:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id vRFZLBzxqWFoDwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Fri, 03 Dec 2021 10:27:40 +0000
+Date:   Fri, 3 Dec 2021 11:27:39 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     "yukuai (C)" <yukuai3@huawei.com>
+Cc:     hch@infradead.org, tj@kernel.org, axboe@kernel.dk,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+Subject: Re: [PATCH v4 2/2] block: cancel all throttled bios in del_gendisk()
+Message-ID: <20211203102739.GB64349@blackbody.suse.cz>
+References: <20211202130440.1943847-1-yukuai3@huawei.com>
+ <20211202130440.1943847-3-yukuai3@huawei.com>
+ <20211202144818.GB16798@blackbody.suse.cz>
+ <95825098-a532-a0e4-9ed0-0b5f2a0e5f04@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="tjCHc7DPkfUGtrlw"
 Content-Disposition: inline
-In-Reply-To: <20211202223214.72888-12-alexandr.lobakin@intel.com>
+In-Reply-To: <95825098-a532-a0e4-9ed0-0b5f2a0e5f04@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 11:32:11PM +0100, Alexander Lobakin wrote:
-> +/*
-> + * shuffle_text_list()
-> + * Use a Fisher Yates algorithm to shuffle a list of text sections.
-> + */
-> +static void shuffle_text_list(Elf_Shdr **list, int size)
-> +{
-> +	u32 i, j;
-> +
-> +	for (i = size - 1; i > 0; i--) {
-> +		/*
-> +		 * pick a random index from 0 to i
-> +		 */
-> +		j = get_random_u32() % (i + 1);
-> +
-> +		swap(list[i], list[j]);
-> +	}
-> +}
 
-I'm sure I've seen pretty much that exact function earlier in this
-series; does we really need two of them?
+--tjCHc7DPkfUGtrlw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-#define shuffle_me_harder(_base, _size, _nr)				\
-do {									\
-	struct { unsigned char _[_size]; } _t, *_a = (void *)(_base);	\
-	int _i, _j;							\
-	for (_i = (_nr)-1; _i > 0; _i--) {				\
-		_j = get_random_u32() % (_i + 1);			\
-		_t = _a[_i];						\
-		_a[_i] = _a[_j];					\
-		_a[_j] = _t;						\
-	}								\
-} while (0)
+On Fri, Dec 03, 2021 at 03:50:01PM +0800, "yukuai (C)" <yukuai3@huawei.com>=
+ wrote:
+> blkg_destroy() is protected by the queue_lock=EF=BC=8Cso I think queue_lo=
+ck can
+> protect such concurrent scenario.
 
-#define shuffle_array(_array)	shuffle_me_harder(_array, sizeof(_array[0]), sizeof(_array)/sizeof(_array[0]))
+blkg_destroy() is not as destroying :-) as actual free, you should
+synchronize against (the queue_lock ensures this for
+pd_free_fn=3Dthrotl_pd_free but you may still trip on blkcg after
+blkcg_css_free()).
 
-Or something like that...
+[Actually, I think you should see a warning in your situation if you
+enable CONFIG_PROVE_RCU.]
+
+HTH,
+Michal
+
+--tjCHc7DPkfUGtrlw
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQTiq06H1IhXbF2mqzsiXqxkP0JkRwUCYanxCgAKCRAiXqxkP0Jk
+R3lBAP4oljvRynKApFVPUyqI5k6NuqpWC4Yv1Ll3PdCiKrZkiwEAtozR8aRyinFF
+NPyhhAKCpdU+IAXi7JXzqU982GQDEAs=
+=YebJ
+-----END PGP SIGNATURE-----
+
+--tjCHc7DPkfUGtrlw--

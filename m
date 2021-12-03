@@ -2,305 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A61F467375
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:45:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A1C467377
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379316AbhLCIs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 03:48:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351242AbhLCIsy (ORCPT
+        id S1379328AbhLCItT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:49:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27469 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351242AbhLCItS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 03:48:54 -0500
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D392C06174A
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 00:45:31 -0800 (PST)
-Received: by mail-lf1-x144.google.com with SMTP id b40so4762743lfv.10
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 00:45:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kvaser.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hSx51RMOJ0FTpbNjbF8SUJHv2Jt1L4wZn0byvDbwpqw=;
-        b=vF1QhrGNoXlmfo+Gg/HioWHmjlt8+4x+C+M765Sk4W5C5OFYMYW9trh22FFQbyWf4D
-         BbxipvLIx58URkbPDORYjR0acoTLVfsXA9C1wwy/3OHqC7b1iQv3ChbiKxv49RymEJpW
-         oqJn3akpr+srYxImuI/9qcC2HAY69OolUvppbTIRKlBj56eyclKkSMHQTRWFwriYFEgS
-         FCogvElrQLVWRw6cJhh2kt8dvClvQ8YFplNS5wOmVW3ut8LlULohBMcU9FuskMXhKjBy
-         B6UV7mqxxT06fwVxPcy5GWKJgN013rK28rGGczvVsE1JJm0N62lcz8GdOAwWOwEcD/Gz
-         InMQ==
+        Fri, 3 Dec 2021 03:49:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638521154;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wr5FuvjVcX7SC5c2qwRq/4np3gbYK+aB0OUFPg2us1g=;
+        b=eTVkikQeA1ui8qJOeFggtyMRsGhyuO+88aCi7kq1js52GJkRXV0S5LwkpV/Z+oXfjYi6mF
+        LE4N+OGlEN4z1Vt7JZ8RHVdUL091so5syN4Btxx/X7/O2EysEjh27tNxaOUdDpWSAnUfcf
+        eNAjdLwkLL/enrnmjDxItmTgMUZ+H2A=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-476-S1B6L-tQNVi46-l_SoNbzg-1; Fri, 03 Dec 2021 03:45:53 -0500
+X-MC-Unique: S1B6L-tQNVi46-l_SoNbzg-1
+Received: by mail-pg1-f197.google.com with SMTP id r15-20020a63ec4f000000b002e582189837so1483829pgj.20
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 00:45:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hSx51RMOJ0FTpbNjbF8SUJHv2Jt1L4wZn0byvDbwpqw=;
-        b=aeInsNYMw6KvJvgaEdKszvmmhvyIjqka8NMdj4i9DDqniIL/cEMBOi1yp4Ckg5DOx7
-         T9b1QCaAyKTnCCEWRmwpmt5kjSlxfgQR8NbC9nBjDx/4R3EfPv5eOzAu02G3dw6n9sRg
-         TNzyLiNwY0KNl35Q/YWM1X0mxWYF2G7/V9k6BOvxKQiIih4Rei9FVXu9Lx1hT4lc+oD2
-         7mfB8XpB8TlFoB+3azMTM6IsIPuTr/Wo7dudFHkzBDCBHTElzdb0fb9vBnUMW3w6dUMN
-         hag7cW0770h2XX/TuzvUtnp7XDgBF3eNmvIyTsswWeBACANvUdSaiaHHx+7YOJznPs4P
-         z98Q==
-X-Gm-Message-State: AOAM530Lasy3T4r8HdNOXgMnOGJ+bUSWrDbM8ctWn9LW8DJILABv0iYC
-        jTUaNeSIs6pNxss8FaOUUB2YRQ==
-X-Google-Smtp-Source: ABdhPJxeQssufK3tURdiz+ycvGo9XOJGEiN1TZZMIhqRH1ceM8gOFosx2s1ThPMX8v8le8XBXR4Ffw==
-X-Received: by 2002:a19:431b:: with SMTP id q27mr16049380lfa.562.1638521129280;
-        Fri, 03 Dec 2021 00:45:29 -0800 (PST)
-Received: from [10.0.6.3] (rota.kvaser.com. [195.22.86.90])
-        by smtp.gmail.com with ESMTPSA id a7sm283093lfk.233.2021.12.03.00.45.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 00:45:28 -0800 (PST)
-Subject: Re: [PATCH v3 2/5] can: kvaser_usb: do not increase tx statistics
- when sending error message frames
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-References: <20211128123734.1049786-1-mailhol.vincent@wanadoo.fr>
- <20211128123734.1049786-3-mailhol.vincent@wanadoo.fr>
- <82ea8723-a234-0dad-ea9f-1b5ccac0b812@kvaser.com>
- <CAMZ6RqKtn-EuSLCTAppzz0THzr7KUYBUBOTHkwhSCzrDyzSzhw@mail.gmail.com>
-From:   Jimmy Assarsson <extja@kvaser.com>
-Message-ID: <5aed4f5a-cc80-7ad9-2834-a31da53412a5@kvaser.com>
-Date:   Fri, 3 Dec 2021 09:45:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=wr5FuvjVcX7SC5c2qwRq/4np3gbYK+aB0OUFPg2us1g=;
+        b=FxkUGIAMBsErXundLAMwv5JzbMVjblfu0hvwThNYRFX7MCACcZ47Y++Wbpv6C/+Awv
+         zaOqvU0YhvjTzXcBNyQuzYP0MWeuqqH07FSYhWZFD5Xc1BBlptu9cKWSUsTzgVe7Rp4d
+         y0KcTdGHu5Wg/AqiQQ1OHSpLg7Yyps4ZXdAx14LTly8h7Lc+g4HEoRwv3qzmH+UsAum6
+         tGOFvx3yMv3hlnk6yRBkDTmi0QvBzkBcCGZub64tzXnOy1fqE/M8alJPNEFN5NEQ3h8W
+         XdBNaZG5H/4uUi74aDtUW0yU4hs6P7MV/bVFqYKvid/GuHKToxy1craT3VfPTZiuUOcp
+         60nw==
+X-Gm-Message-State: AOAM530tiobHNE9A6k6yM+dJRjMgQ63SYowvhM38GyQ2sSxOrlPL4qO/
+        8e2xN/jhZHjVfajiwIR1DIrEnBYAqGQZyz8dRfR8xU0wtwj2CwtjfYwhKUqCVdKd9WY7C18LNOn
+        hz+o/thKEucsvuhivcZxNmgSrYxSRx0L/aFxqNPBd
+X-Received: by 2002:a17:903:1c7:b0:141:e630:130c with SMTP id e7-20020a17090301c700b00141e630130cmr21352724plh.80.1638521152214;
+        Fri, 03 Dec 2021 00:45:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwvs+4WyxBsI0PowrRG0Yz/rESddXVKNX1pGr8vIxAXqTpV2FXSAFuNa5ZcbscddqQPJag+OktCbi1zZBRw0CI=
+X-Received: by 2002:a17:903:1c7:b0:141:e630:130c with SMTP id
+ e7-20020a17090301c700b00141e630130cmr21352701plh.80.1638521151949; Fri, 03
+ Dec 2021 00:45:51 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAMZ6RqKtn-EuSLCTAppzz0THzr7KUYBUBOTHkwhSCzrDyzSzhw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211130060117.3026-1-linux@weissschuh.net> <2a336482fb73d8093ed284942c6b63c53b9a8727.camel@linux.intel.com>
+In-Reply-To: <2a336482fb73d8093ed284942c6b63c53b9a8727.camel@linux.intel.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 3 Dec 2021 09:45:41 +0100
+Message-ID: <CAO-hwJKkCZg7JbAk=hj=X80tB744F5_F9_TgR0DibcRKk-fNPA@mail.gmail.com>
+Subject: Re: [PATCH] HID: intel-ish-hid: ipc: only enable IRQ wakeup when requested
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Jiri Kosina <jikos@kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Mark Pearson <markpearson@lenovo.com>,
+        Daniel Drubin <daniel.drubin@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-03 05:02, Vincent MAILHOL wrote:
-> On Fri. 3 Dec 2021 at 08:35, Jimmy Assarsson <extja@kvaser.com> wrote:
->> On 2021-11-28 13:37, Vincent Mailhol wrote:
->>> The CAN error message frames (i.e. error skb) are an interface
->>> specific to socket CAN. The payload of the CAN error message frames
->>> does not correspond to any actual data sent on the wire. Only an error
->>> flag and a delimiter are transmitted when an error occurs (c.f. ISO
->>> 11898-1 section 10.4.4.2 "Error flag").
->>>
->>> For this reason, it makes no sense to increment the tx_packets and
->>> tx_bytes fields of struct net_device_stats when sending an error
->>> message frame because no actual payload will be transmitted on the
->>> wire.
->>>
->>> N.B. Sending error message frames is a very specific feature which, at
->>> the moment, is only supported by the Kvaser Hydra hardware. Please
->>> refer to [1] for more details on the topic.
->>>
->>> [1] https://lore.kernel.org/linux-can/CAMZ6RqK0rTNg3u3mBpZOoY51jLZ-et-J01tY6-+mWsM4meVw-A@mail.gmail.com/t/#u
->>>
->>> CC: Jimmy Assarsson <extja@kvaser.com>
->>> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->>
->> Hi Vincent!
->>
->> Thanks for the patch.
->> There are flags in the TX ACK package, which makes it possible to
->> determine if it was an error frame or not. So we don't need to get
->> the original CAN frame to determine this.
->> I suggest the following change:
-> 
-> This is a great suggestion. I was not a fan of getting the
-> original CAN frame, this TX ACK solves the issue.
-> 
->> ---
->>    .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 25 ++++++++++++-------
->>    1 file changed, 16 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
->> b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
->> index 3398da323126..01b076f04e26 100644
->> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
->> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
->> @@ -295,6 +295,7 @@ struct kvaser_cmd {
->>    #define KVASER_USB_HYDRA_CF_FLAG_OVERRUN      BIT(1)
->>    #define KVASER_USB_HYDRA_CF_FLAG_REMOTE_FRAME BIT(4)
->>    #define KVASER_USB_HYDRA_CF_FLAG_EXTENDED_ID  BIT(5)
->> +#define KVASER_USB_HYDRA_CF_FLAG_TX_ACK        BIT(6)
->>    /* CAN frame flags. Used in ext_rx_can and ext_tx_can */
->>    #define KVASER_USB_HYDRA_CF_FLAG_OSM_NACK     BIT(12)
->>    #define KVASER_USB_HYDRA_CF_FLAG_ABL          BIT(13)
->> @@ -1112,7 +1113,9 @@ static void kvaser_usb_hydra_tx_acknowledge(const
->> struct kvaser_usb *dev,
->>          struct kvaser_usb_tx_urb_context *context;
->>          struct kvaser_usb_net_priv *priv;
->>          unsigned long irq_flags;
->> +       unsigned int len;
->>          bool one_shot_fail = false;
->> +       bool is_err_frame = false;
->>          u16 transid = kvaser_usb_hydra_get_cmd_transid(cmd);
->>
->>          priv = kvaser_usb_hydra_net_priv_from_cmd(dev, cmd);
->> @@ -1131,24 +1134,28 @@ static void
->> kvaser_usb_hydra_tx_acknowledge(const struct kvaser_usb *dev,
->>                          kvaser_usb_hydra_one_shot_fail(priv, cmd_ext);
->>                          one_shot_fail = true;
->>                  }
->> -       }
->> -
->> -       context = &priv->tx_contexts[transid % dev->max_tx_urbs];
->> -       if (!one_shot_fail) {
->> -               struct net_device_stats *stats = &priv->netdev->stats;
->> -
->> -               stats->tx_packets++;
->> -               stats->tx_bytes += can_fd_dlc2len(context->dlc);
->> +               if (flags & KVASER_USB_HYDRA_CF_FLAG_TX_ACK &&
->> +                   flags & KVASER_USB_HYDRA_CF_FLAG_ERROR_FRAME)
->> +                        is_err_frame = true;
-> 
-> Nitpick, but I prefer to write:
-> 
-> +                is_err_frame = flags & KVASER_USB_HYDRA_CF_FLAG_TX_ACK &&
-> +                               flags & KVASER_USB_HYDRA_CF_FLAG_ERROR_FRAME;
-> 
+On Wed, Dec 1, 2021 at 2:35 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> On Tue, 2021-11-30 at 07:01 +0100, Thomas Wei=C3=9Fschuh wrote:
+> > Fixes spurious wakeups from s0ix on Lenovo ThinkPad X1 Cargon Gen 9
+> > on
+> > lid close.
+> >
+> > These wakeups are generated by interrupts from the ISH on changes to
+> > the
+> > lid status.
+> >
+> > By disabling the wake IRQ from the ISH we inhibit these spurious
+> > wakeups while keeping the resume from LID open through the ACPI
+> > interrupt.
+> >
+> > Reports on the Lenovo forums indicate that Lenovo ThinkPad X1 Yoga
+> > Gen6
+> > is also affected.
+> >
+> > Fixes: ae02e5d40d5f ("HID: intel-ish-hid: ipc layer")
+> > BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=3D214855
+> > Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-Agree, I also prefer this.
+Applied to for-5.16/upstream-fixes in hid.git
 
->>          }
->>
->>          spin_lock_irqsave(&priv->tx_contexts_lock, irq_flags);
->>
->> -       can_get_echo_skb(priv->netdev, context->echo_index, NULL);
->> +       context = &priv->tx_contexts[transid % dev->max_tx_urbs];
->> +       len = can_get_echo_skb(priv->netdev, context->echo_index, NULL);
-> 
-> This line is related to the tx RTR. I will rebase this into
-> "can: do not increase rx_bytes statistics for RTR frames" (patch 4/5).
-> 
->> +
->>          context->echo_index = dev->max_tx_urbs;
->>          --priv->active_tx_contexts;
->>          netif_wake_queue(priv->netdev);
->>
->>          spin_unlock_irqrestore(&priv->tx_contexts_lock, irq_flags);
->> +
->> +       if (!one_shot_fail && !is_err_frame) {
->> +               struct net_device_stats *stats = &priv->netdev->stats;
->> +
->> +               stats->tx_packets++;
->> +               stats->tx_bytes += len;
->> +       }
-> 
-> Same here, there is no need anymore to move this block *in this
-> patch*, will rebase it.
+thanks
 
-Agree.
+Cheers,
+Benjamin
 
->>    }
->>
->>    static void kvaser_usb_hydra_rx_msg_std(const struct kvaser_usb *dev,
-> 
-> 
-> This patch ("can: kvaser_usb: do not increase tx statistics when
-> sending error message frames") will become:
-> 
-> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> index 3398da323126..75009d38f8e3 100644
-> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> @@ -295,6 +295,7 @@ struct kvaser_cmd {
->   #define KVASER_USB_HYDRA_CF_FLAG_OVERRUN       BIT(1)
->   #define KVASER_USB_HYDRA_CF_FLAG_REMOTE_FRAME  BIT(4)
->   #define KVASER_USB_HYDRA_CF_FLAG_EXTENDED_ID   BIT(5)
-> +#define KVASER_USB_HYDRA_CF_FLAG_TX_ACK                BIT(6)
->   /* CAN frame flags. Used in ext_rx_can and ext_tx_can */
->   #define KVASER_USB_HYDRA_CF_FLAG_OSM_NACK      BIT(12)
->   #define KVASER_USB_HYDRA_CF_FLAG_ABL           BIT(13)
-> @@ -1113,6 +1114,7 @@ static void
-> kvaser_usb_hydra_tx_acknowledge(const struct kvaser_usb *dev,
->          struct kvaser_usb_net_priv *priv;
->          unsigned long irq_flags;
->          bool one_shot_fail = false;
-> +       bool is_err_frame = false;
->          u16 transid = kvaser_usb_hydra_get_cmd_transid(cmd);
-> 
->          priv = kvaser_usb_hydra_net_priv_from_cmd(dev, cmd);
-> @@ -1131,10 +1133,13 @@ static void
-> kvaser_usb_hydra_tx_acknowledge(const struct kvaser_usb *dev,
->                          kvaser_usb_hydra_one_shot_fail(priv, cmd_ext);
->                          one_shot_fail = true;
->                  }
-> +
-> +               is_err_frame = flags & KVASER_USB_HYDRA_CF_FLAG_TX_ACK &&
-> +                              flags & KVASER_USB_HYDRA_CF_FLAG_ERROR_FRAME;
->          }
-> 
->          context = &priv->tx_contexts[transid % dev->max_tx_urbs];
-> -       if (!one_shot_fail) {
-> +       if (!one_shot_fail && !is_err_frame) {
->                  struct net_device_stats *stats = &priv->netdev->stats;
-> 
->                  stats->tx_packets++;
-> 
-> 
-> And patch 5/5 ("can: do not increase tx_bytes
-> statistics for RTR frames") becomes:
-> 
-> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> index 75009d38f8e3..2cb35bd162a4 100644
-> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> @@ -1113,6 +1113,7 @@ static void
-> kvaser_usb_hydra_tx_acknowledge(const struct kvaser_usb *dev,
->          struct kvaser_usb_tx_urb_context *context;
->          struct kvaser_usb_net_priv *priv;
->          unsigned long irq_flags;
-> +       unsigned int len;
->          bool one_shot_fail = false;
->          bool is_err_frame = false;
->          u16 transid = kvaser_usb_hydra_get_cmd_transid(cmd);
-> @@ -1139,21 +1140,23 @@ static void
-> kvaser_usb_hydra_tx_acknowledge(const struct kvaser_usb *dev,
->          }
-> 
->          context = &priv->tx_contexts[transid % dev->max_tx_urbs];
-> -       if (!one_shot_fail && !is_err_frame) {
-> -               struct net_device_stats *stats = &priv->netdev->stats;
-> -
-> -               stats->tx_packets++;
-> -               stats->tx_bytes += can_fd_dlc2len(context->dlc);
-> -       }
-> 
->          spin_lock_irqsave(&priv->tx_contexts_lock, irq_flags);
-> 
-> -       can_get_echo_skb(priv->netdev, context->echo_index, NULL);
-> +       len = can_get_echo_skb(priv->netdev, context->echo_index, NULL);
->          context->echo_index = dev->max_tx_urbs;
->          --priv->active_tx_contexts;
->          netif_wake_queue(priv->netdev);
-> 
->          spin_unlock_irqrestore(&priv->tx_contexts_lock, irq_flags);
-> +
-> +       if (!one_shot_fail && !is_err_frame) {
-> +               struct net_device_stats *stats = &priv->netdev->stats;
-> +
-> +               stats->tx_packets++;
-> +               stats->tx_bytes += len;
-> +       }
->   }
-> 
-> Does this look good to you? If so, can I add these tags to patch 2/5?
-> Co-developed-by: Jimmy Assarsson <extja@kvaser.com>
-> Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+>
+> > ---
+> >  drivers/hid/intel-ish-hid/ipc/pci-ish.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+> > b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+> > index 1c5039081db2..8e9d9450cb83 100644
+> > --- a/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+> > +++ b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+> > @@ -266,7 +266,8 @@ static void __maybe_unused
+> > ish_resume_handler(struct work_struct *work)
+> >
+> >         if (ish_should_leave_d0i3(pdev) && !dev->suspend_flag
+> >                         && IPC_IS_ISH_ILUP(fwsts)) {
+> > -               disable_irq_wake(pdev->irq);
+> > +               if (device_may_wakeup(&pdev->dev))
+> > +                       disable_irq_wake(pdev->irq);
+> >
+> >                 ish_set_host_ready(dev);
+> >
+> > @@ -337,7 +338,8 @@ static int __maybe_unused ish_suspend(struct device
+> > *device)
+> >                          */
+> >                         pci_save_state(pdev);
+> >
+> > -                       enable_irq_wake(pdev->irq);
+> > +                       if (device_may_wakeup(&pdev->dev))
+> > +                               enable_irq_wake(pdev->irq);
+> >                 }
+> >         } else {
+> >                 /*
+> >
+> > base-commit: d58071a8a76d779eedab38033ae4c821c30295a5
+>
+>
 
-Yes.
-
-> Also, can I add your tested-by to patches 1/5, 4/5 and 5/5?
-> Tested-by: Jimmy Assarsson <extja@kvaser.com>
-
-Yes.
-
-> Yours sincerely,
-> Vincent Mailhol
-
-Thanks!
-
-Best regards,
-jimmy

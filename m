@@ -2,307 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E0B467E6E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:45:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BEB3467E8F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353441AbhLCTtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 14:49:04 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49668 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232563AbhLCTtD (ORCPT
+        id S1382971AbhLCUBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 15:01:15 -0500
+Received: from pb-sasl-trial2.pobox.com ([64.147.108.86]:62956 "EHLO
+        pb-sasl-trial2.pobox.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353557AbhLCUBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 14:49:03 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B3JM9Mq029940;
-        Fri, 3 Dec 2021 19:45:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : content-type : mime-version; s=pp1;
- bh=AvmOL/7dy3eBq2s8abNKFtLLigRsr8Yw7hlNUXwG2pc=;
- b=Cf/PDIHjQdyKX9QnIZUV/TKAmagaG6D1ZpiUsDFwo1hRicp04+hgaE3y8pdniG5vQy8R
- wMUHim2aQX9MMjxHDbUMkcaWSzO7fDn6JuwshRiXsccsUL8VP2YEbM4EVifDVdXnUEQy
- EX6VSw18gEypy73SoHmti/tzWleXxf1u13anInVHwUprq6QqBPRzCPPO3ilk+wvWtXq3
- tLioOI0mwh9yUqBAO/qx41ebGRJF1y0NoyJrnyqIr8bTaNdh2vzZeKAJ2BJpYcJeXhBj
- g17dgxDmzccJeKrp1SuisWj3ICoNqySHxzYppCYXCNefrlZK/HeQmCEIJWPSYGcKcz2U Vw== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cqsb30cc7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 19:45:37 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B3JgHdo031516;
-        Fri, 3 Dec 2021 19:45:35 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3ckbxm0u8c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 19:45:35 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B3JjWmT13042154
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 3 Dec 2021 19:45:32 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E4DB6A405B;
-        Fri,  3 Dec 2021 19:45:31 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A1018A4040;
-        Fri,  3 Dec 2021 19:45:31 +0000 (GMT)
-Received: from osiris (unknown [9.145.9.173])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri,  3 Dec 2021 19:45:31 +0000 (GMT)
-Date:   Fri, 3 Dec 2021 20:45:30 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] s390 updates for 5.16-rc4
-Message-ID: <Yapz2thD1GK8yQ6J@osiris>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: G4ITLETFjZNAsh3wGqw2aW6JLhGNVrSb
-X-Proofpoint-ORIG-GUID: G4ITLETFjZNAsh3wGqw2aW6JLhGNVrSb
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 3 Dec 2021 15:01:14 -0500
+X-Greylist: delayed 667 seconds by postgrey-1.27 at vger.kernel.org; Fri, 03 Dec 2021 15:01:13 EST
+Received: from pb-sasl-trial2.pobox.com (localhost.local [127.0.0.1])
+        by pb-sasl-trial2.pobox.com (Postfix) with ESMTP id 28F2B3126D;
+        Fri,  3 Dec 2021 14:46:41 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=pobox.com; h=date:from:to
+        :cc:subject:in-reply-to:message-id:references:mime-version
+        :content-type; s=sasl; bh=e8GgRkOhPDs0qbjQ+TyMJjHJwoc=; b=VlY0jw
+        I3S9UFo0N8mAzqUxKilSQw88vfBvUEQ+fPSIZVVtiZo4uN9UfL+MzH/YW89QLGU0
+        ThZifqctfrlukloFaxmmfeK6aE6/5fEgll7I+GJkp5FeuJwSXuhkxpZOUmvn6+YI
+        Qqyj9v7b2fDNyfRezv90mlbrGCZI3XsUujbkA=
+Received: from pb-smtp1.nyi.icgroup.com (pb-smtp1.pobox.com [10.90.30.53])
+        by pb-sasl-trial2.pobox.com (Postfix) with ESMTP id 065DD3126A;
+        Fri,  3 Dec 2021 14:46:41 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
+ h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=0KiVSGYQPApVsC/eIr9S8dRge8YHqZbB1plM/jwiKw0=; b=kmMPHM+dF+VxidAAH0bLmn6Nrlkq+z+DGVgxeG3CfuOtP/X4kZMQv70fgjnm1WftLsHj2g4UdhCug2PKw2S6fcR3DQ4rlIQnRIsVk+D4WRMLH3J/7so1oMK8fCeAqm9kGkFvm1bD4rQh+j0pRaTeVn12mFS2NwhrSv27gGvypcw=
+Received: from yoda.home (unknown [96.21.170.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by pb-smtp1.pobox.com (Postfix) with ESMTPSA id 5CE5BEA5F7;
+        Fri,  3 Dec 2021 14:46:40 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+Received: from xanadu.home (xanadu.home [192.168.2.2])
+        by yoda.home (Postfix) with ESMTPSA id 329B92DA0092;
+        Fri,  3 Dec 2021 14:46:39 -0500 (EST)
+Date:   Fri, 3 Dec 2021 14:46:39 -0500 (EST)
+From:   Nicolas Pitre <nico@fluxnic.net>
+To:     Peter Zijlstra <peterz@infradead.org>
+cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev, hjl.tools@gmail.com
+Subject: Re: [PATCH v8 05/14] x86: conditionally place regular ASM functions
+ into separate sections
+In-Reply-To: <20211203163424.GK16608@worktop.programming.kicks-ass.net>
+Message-ID: <28856p61-r54s-791n-q6s1-27575s62r2q9@syhkavp.arg>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com> <20211202223214.72888-6-alexandr.lobakin@intel.com> <Yanm6tJ2obi1aKv6@hirez.programming.kicks-ass.net> <20211203141051.82467-1-alexandr.lobakin@intel.com>
+ <20211203163424.GK16608@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-03_07,2021-12-02_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 bulkscore=0 priorityscore=1501 phishscore=0 spamscore=0
- clxscore=1015 adultscore=0 impostorscore=0 malwarescore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112030126
+Content-Type: text/plain; charset=US-ASCII
+X-Pobox-Relay-ID: BC045B9E-5471-11EC-B3F6-62A2C8D8090B-78420484!pb-smtp1.pobox.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, 3 Dec 2021, Peter Zijlstra wrote:
 
-please pull some small s390 updates for 5.16-rc4.
+> On Fri, Dec 03, 2021 at 03:10:51PM +0100, Alexander Lobakin wrote:
+> > From: Peter Zijlstra <peterz@infradead.org>
+> > Date: Fri, 3 Dec 2021 10:44:10 +0100
+> > 
+> > > On Thu, Dec 02, 2021 at 11:32:05PM +0100, Alexander Lobakin wrote:
+> > > > Use the newly introduces macros to create unique separate sections
+> > > > for (almost) every "regular" ASM function (i.e. for those which
+> > > > aren't explicitly put into a specific one).
+> > > > There should be no leftovers as input .text will be size-asserted
+> > > > in the LD script generated for FG-KASLR.
+> > > 
+> > > *groan*...
+> > > 
+> > > Please, can't we do something like:
+> > > 
+> > > #define SYM_PUSH_SECTION(name)	\
+> > > .if section == .text		\
+> > > .push_section .text.##name	\
+> > > .else				\
+> > > .push_section .text		\
+> > > .endif
+> > > 
+> > > #define SYM_POP_SECTION()	\
+> > > .pop_section
+> > > 
+> > > and wrap that inside the existing SYM_FUNC_START*() SYM_FUNC_END()
+> > > macros.
+> > 
+> > Ah I see. I asked about this in my previous mail and you replied
+> > already (: Cool stuff, I'll use it, it simplifies things a lot.
+> 
+> Note, I've no idea if it works. GAS and me aren't really on speaking
+> terms. It would be my luck for that to be totally impossible, hjl?
 
-Thanks,
-Heiko
+Surely this would do it:
 
-The following changes since commit 136057256686de39cc3a07c2e39ef6bc43003ff6:
+http://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=451133cefa839104
 
-  Linux 5.16-rc2 (2021-11-21 13:47:39 -0800)
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.16-4
-
-for you to fetch changes up to 3c088b1e82cfb7c889823d39846d32079f190f3f:
-
-  s390: update defconfigs (2021-12-02 19:29:44 +0100)
-
-----------------------------------------------------------------
-s390 updates for 5.16-rc4
-
-- Fix potential overlap of pseudo-MMIO addresses with MIO addresses.
-
-- Fix stack unwinder test case inline assembly compile error that
-  happens with LLVM's integrated assembler.
-
-- Update defconfigs.
-
-----------------------------------------------------------------
-Heiko Carstens (1):
-      s390: update defconfigs
-
-Ilie Halip (1):
-      s390/test_unwind: use raw opcode instead of invalid instruction
-
-Niklas Schnelle (1):
-      s390/pci: move pseudo-MMIO to prevent MIO overlap
-
- arch/s390/configs/debug_defconfig    | 10 ++++++++--
- arch/s390/configs/defconfig          |  7 ++++++-
- arch/s390/configs/zfcpdump_defconfig |  2 ++
- arch/s390/include/asm/pci_io.h       |  7 ++++---
- arch/s390/lib/test_unwind.c          |  5 +++--
- 5 files changed, 23 insertions(+), 8 deletions(-)
-
-diff --git a/arch/s390/configs/debug_defconfig b/arch/s390/configs/debug_defconfig
-index fd825097cf04..b626bc6e0eaf 100644
---- a/arch/s390/configs/debug_defconfig
-+++ b/arch/s390/configs/debug_defconfig
-@@ -403,7 +403,6 @@ CONFIG_DEVTMPFS=y
- CONFIG_CONNECTOR=y
- CONFIG_ZRAM=y
- CONFIG_BLK_DEV_LOOP=m
--CONFIG_BLK_DEV_CRYPTOLOOP=m
- CONFIG_BLK_DEV_DRBD=m
- CONFIG_BLK_DEV_NBD=m
- CONFIG_BLK_DEV_RAM=y
-@@ -476,6 +475,7 @@ CONFIG_MACVLAN=m
- CONFIG_MACVTAP=m
- CONFIG_VXLAN=m
- CONFIG_BAREUDP=m
-+CONFIG_AMT=m
- CONFIG_TUN=m
- CONFIG_VETH=m
- CONFIG_VIRTIO_NET=m
-@@ -489,6 +489,7 @@ CONFIG_NLMON=m
- # CONFIG_NET_VENDOR_AMD is not set
- # CONFIG_NET_VENDOR_AQUANTIA is not set
- # CONFIG_NET_VENDOR_ARC is not set
-+# CONFIG_NET_VENDOR_ASIX is not set
- # CONFIG_NET_VENDOR_ATHEROS is not set
- # CONFIG_NET_VENDOR_BROADCOM is not set
- # CONFIG_NET_VENDOR_BROCADE is not set
-@@ -571,6 +572,7 @@ CONFIG_WATCHDOG=y
- CONFIG_WATCHDOG_NOWAYOUT=y
- CONFIG_SOFT_WATCHDOG=m
- CONFIG_DIAG288_WATCHDOG=m
-+# CONFIG_DRM_DEBUG_MODESET_LOCK is not set
- CONFIG_FB=y
- CONFIG_FRAMEBUFFER_CONSOLE=y
- CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
-@@ -775,12 +777,14 @@ CONFIG_CRC4=m
- CONFIG_CRC7=m
- CONFIG_CRC8=m
- CONFIG_RANDOM32_SELFTEST=y
-+CONFIG_XZ_DEC_MICROLZMA=y
- CONFIG_DMA_CMA=y
- CONFIG_CMA_SIZE_MBYTES=0
- CONFIG_PRINTK_TIME=y
- CONFIG_DYNAMIC_DEBUG=y
- CONFIG_DEBUG_INFO=y
- CONFIG_DEBUG_INFO_DWARF4=y
-+CONFIG_DEBUG_INFO_BTF=y
- CONFIG_GDB_SCRIPTS=y
- CONFIG_HEADERS_INSTALL=y
- CONFIG_DEBUG_SECTION_MISMATCH=y
-@@ -807,6 +811,7 @@ CONFIG_DEBUG_MEMORY_INIT=y
- CONFIG_MEMORY_NOTIFIER_ERROR_INJECT=m
- CONFIG_DEBUG_PER_CPU_MAPS=y
- CONFIG_KFENCE=y
-+CONFIG_KFENCE_STATIC_KEYS=y
- CONFIG_DEBUG_SHIRQ=y
- CONFIG_PANIC_ON_OOPS=y
- CONFIG_DETECT_HUNG_TASK=y
-@@ -842,6 +847,7 @@ CONFIG_FTRACE_STARTUP_TEST=y
- CONFIG_SAMPLES=y
- CONFIG_SAMPLE_TRACE_PRINTK=m
- CONFIG_SAMPLE_FTRACE_DIRECT=m
-+CONFIG_SAMPLE_FTRACE_DIRECT_MULTI=m
- CONFIG_DEBUG_ENTRY=y
- CONFIG_CIO_INJECT=y
- CONFIG_KUNIT=m
-@@ -860,7 +866,7 @@ CONFIG_FAIL_FUNCTION=y
- CONFIG_FAULT_INJECTION_STACKTRACE_FILTER=y
- CONFIG_LKDTM=m
- CONFIG_TEST_MIN_HEAP=y
--CONFIG_KPROBES_SANITY_TEST=y
-+CONFIG_KPROBES_SANITY_TEST=m
- CONFIG_RBTREE_TEST=y
- CONFIG_INTERVAL_TREE_TEST=m
- CONFIG_PERCPU_TEST=m
-diff --git a/arch/s390/configs/defconfig b/arch/s390/configs/defconfig
-index c9c3cedff2d8..0056cab27372 100644
---- a/arch/s390/configs/defconfig
-+++ b/arch/s390/configs/defconfig
-@@ -394,7 +394,6 @@ CONFIG_DEVTMPFS=y
- CONFIG_CONNECTOR=y
- CONFIG_ZRAM=y
- CONFIG_BLK_DEV_LOOP=m
--CONFIG_BLK_DEV_CRYPTOLOOP=m
- CONFIG_BLK_DEV_DRBD=m
- CONFIG_BLK_DEV_NBD=m
- CONFIG_BLK_DEV_RAM=y
-@@ -467,6 +466,7 @@ CONFIG_MACVLAN=m
- CONFIG_MACVTAP=m
- CONFIG_VXLAN=m
- CONFIG_BAREUDP=m
-+CONFIG_AMT=m
- CONFIG_TUN=m
- CONFIG_VETH=m
- CONFIG_VIRTIO_NET=m
-@@ -480,6 +480,7 @@ CONFIG_NLMON=m
- # CONFIG_NET_VENDOR_AMD is not set
- # CONFIG_NET_VENDOR_AQUANTIA is not set
- # CONFIG_NET_VENDOR_ARC is not set
-+# CONFIG_NET_VENDOR_ASIX is not set
- # CONFIG_NET_VENDOR_ATHEROS is not set
- # CONFIG_NET_VENDOR_BROADCOM is not set
- # CONFIG_NET_VENDOR_BROCADE is not set
-@@ -762,12 +763,14 @@ CONFIG_PRIME_NUMBERS=m
- CONFIG_CRC4=m
- CONFIG_CRC7=m
- CONFIG_CRC8=m
-+CONFIG_XZ_DEC_MICROLZMA=y
- CONFIG_DMA_CMA=y
- CONFIG_CMA_SIZE_MBYTES=0
- CONFIG_PRINTK_TIME=y
- CONFIG_DYNAMIC_DEBUG=y
- CONFIG_DEBUG_INFO=y
- CONFIG_DEBUG_INFO_DWARF4=y
-+CONFIG_DEBUG_INFO_BTF=y
- CONFIG_GDB_SCRIPTS=y
- CONFIG_DEBUG_SECTION_MISMATCH=y
- CONFIG_MAGIC_SYSRQ=y
-@@ -792,9 +795,11 @@ CONFIG_HIST_TRIGGERS=y
- CONFIG_SAMPLES=y
- CONFIG_SAMPLE_TRACE_PRINTK=m
- CONFIG_SAMPLE_FTRACE_DIRECT=m
-+CONFIG_SAMPLE_FTRACE_DIRECT_MULTI=m
- CONFIG_KUNIT=m
- CONFIG_KUNIT_DEBUGFS=y
- CONFIG_LKDTM=m
-+CONFIG_KPROBES_SANITY_TEST=m
- CONFIG_PERCPU_TEST=m
- CONFIG_ATOMIC64_SELFTEST=y
- CONFIG_TEST_BPF=m
-diff --git a/arch/s390/configs/zfcpdump_defconfig b/arch/s390/configs/zfcpdump_defconfig
-index aceccf3b9a88..eed3b9acfa71 100644
---- a/arch/s390/configs/zfcpdump_defconfig
-+++ b/arch/s390/configs/zfcpdump_defconfig
-@@ -65,9 +65,11 @@ CONFIG_ZFCP=y
- # CONFIG_NETWORK_FILESYSTEMS is not set
- CONFIG_LSM="yama,loadpin,safesetid,integrity"
- # CONFIG_ZLIB_DFLTCC is not set
-+CONFIG_XZ_DEC_MICROLZMA=y
- CONFIG_PRINTK_TIME=y
- # CONFIG_SYMBOLIC_ERRNAME is not set
- CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_INFO_BTF=y
- CONFIG_DEBUG_FS=y
- CONFIG_DEBUG_KERNEL=y
- CONFIG_PANIC_ON_OOPS=y
-diff --git a/arch/s390/include/asm/pci_io.h b/arch/s390/include/asm/pci_io.h
-index e4dc64cc9c55..287bb88f7698 100644
---- a/arch/s390/include/asm/pci_io.h
-+++ b/arch/s390/include/asm/pci_io.h
-@@ -14,12 +14,13 @@
- 
- /* I/O Map */
- #define ZPCI_IOMAP_SHIFT		48
--#define ZPCI_IOMAP_ADDR_BASE		0x8000000000000000UL
-+#define ZPCI_IOMAP_ADDR_SHIFT		62
-+#define ZPCI_IOMAP_ADDR_BASE		(1UL << ZPCI_IOMAP_ADDR_SHIFT)
- #define ZPCI_IOMAP_ADDR_OFF_MASK	((1UL << ZPCI_IOMAP_SHIFT) - 1)
- #define ZPCI_IOMAP_MAX_ENTRIES							\
--	((ULONG_MAX - ZPCI_IOMAP_ADDR_BASE + 1) / (1UL << ZPCI_IOMAP_SHIFT))
-+	(1UL << (ZPCI_IOMAP_ADDR_SHIFT - ZPCI_IOMAP_SHIFT))
- #define ZPCI_IOMAP_ADDR_IDX_MASK						\
--	(~ZPCI_IOMAP_ADDR_OFF_MASK - ZPCI_IOMAP_ADDR_BASE)
-+	((ZPCI_IOMAP_ADDR_BASE - 1) & ~ZPCI_IOMAP_ADDR_OFF_MASK)
- 
- struct zpci_iomap_entry {
- 	u32 fh;
-diff --git a/arch/s390/lib/test_unwind.c b/arch/s390/lib/test_unwind.c
-index cfc5f5557c06..bc7973359ae2 100644
---- a/arch/s390/lib/test_unwind.c
-+++ b/arch/s390/lib/test_unwind.c
-@@ -173,10 +173,11 @@ static noinline int unwindme_func4(struct unwindme *u)
- 		}
- 
- 		/*
--		 * trigger specification exception
-+		 * Trigger operation exception; use insn notation to bypass
-+		 * llvm's integrated assembler sanity checks.
- 		 */
- 		asm volatile(
--			"	mvcl	%%r1,%%r1\n"
-+			"	.insn	e,0x0000\n"	/* illegal opcode */
- 			"0:	nopr	%%r7\n"
- 			EX_TABLE(0b, 0b)
- 			:);
+Nicolas

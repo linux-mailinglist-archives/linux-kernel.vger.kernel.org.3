@@ -2,108 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9F846750E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:31:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD8F467528
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379946AbhLCKeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 05:34:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
+        id S242454AbhLCKh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 05:37:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379987AbhLCKeO (ORCPT
+        with ESMTP id S231604AbhLCKh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 05:34:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01604C06174A;
-        Fri,  3 Dec 2021 02:30:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 684F26294D;
-        Fri,  3 Dec 2021 10:30:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0D71C58319;
-        Fri,  3 Dec 2021 10:30:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638527449;
-        bh=RcP5xgutHpVuMEDTVWRPy+67aJdjE6dJ1nDSLasNx/c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=W+iH1k3C1COL2C6s3ufbZmCN/rV3mlz920873ga9RQ+nDaYynAq7fboLEKoE0F/SR
-         ncxc+cRqnH29+S57+x37i1XfgjPWsBICHcXG1fpOAMft104hfDn9JHTSJkAu3aDooB
-         bEbUkphQq2+FT60lgSkDVzcJrbbAhMCGjmEz4QbeiAOvMHYR61USrTNvoU/DqFrlxI
-         2cpBaQCLMGPLv0g9afv5A/oCfhu28fC0OujMyjK2GTborVwz5kshRopRj2G+qWImlX
-         q010pMTrK5XPFe8uhTc2w85w0lbWf/oUKIdp3omioGH4WpTnGtWyhmGqTLYdx7zkzz
-         Sd5VasHqO2ARA==
-Received: by mail-oi1-f178.google.com with SMTP id bk14so4944674oib.7;
-        Fri, 03 Dec 2021 02:30:49 -0800 (PST)
-X-Gm-Message-State: AOAM531PC8gxLJWE6rbilgoQ+qZDxXsbwkfVv68TkCJAih3Yw+RdlHnS
-        nswvvVZx5KaZoujDUrbdA4O6dWhKPjtSp/ZlbOA=
-X-Google-Smtp-Source: ABdhPJytzC+ann1KB6ekO12wj9Cbt3QWXfD0JkS+I2NnDbz/4AI+D2NUXfy/tm83h/6XocNBZUBH3AXB9BXLZqFrb18=
-X-Received: by 2002:a05:6808:12:: with SMTP id u18mr9337072oic.174.1638527449029;
- Fri, 03 Dec 2021 02:30:49 -0800 (PST)
-MIME-Version: 1.0
-References: <8afff0c64feb6b96db36112cb865243f4ae280ca.1634922135.git.thomas.lendacky@amd.com>
- <c997e8a2-b364-2a8e-d247-438e9d937a1e@amd.com> <CAMj1kXGH7aGR==o1L2dnA9U9L==gM0__10UGznnyZwkHrT84sw@mail.gmail.com>
- <YXmEo8iMNIn1esYC@zn.tnic> <CAMj1kXEZkw99MPssHWFRL_k0okeGF47VYL+o8p72hBWkqW927g@mail.gmail.com>
- <f939e968-149f-1caf-c1fb-5939eafae31c@amd.com> <15ceb556-0b56-2833-206e-0cf9b9d2cb45@amd.com>
-In-Reply-To: <15ceb556-0b56-2833-206e-0cf9b9d2cb45@amd.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 3 Dec 2021 11:30:38 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHKxObuebZJMWQQwg014rYzvoBgWPZxfCYakuf+GSoqhg@mail.gmail.com>
-Message-ID: <CAMj1kXHKxObuebZJMWQQwg014rYzvoBgWPZxfCYakuf+GSoqhg@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/sme: Explicitly map new EFI memmap table as encrypted
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org,
+        Fri, 3 Dec 2021 05:37:56 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCE3C06173E;
+        Fri,  3 Dec 2021 02:34:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=iQOZYPV15R8sQtGsNxxSZM8cpuOcklhqnmhhGetQ6C4=; b=nvYPaHgT4ifzzo6ZzAtpNMUdeU
+        FrDvs/TU4zODC/ZwQ/nYZSp/FUL2RMd27qrocg1Havnw6GaM6UHMezi9J4V6V/ewBRyNmTv2Rpd7u
+        5GGWCx99PPw6hl4RLTYLEUGeTr74CKTPDn8OABWL3+f5UuRN97l3b5xdK6qbq6vfu/UHlBSn6IqGH
+        S1/cTHIi2rfcfV9dwoXjgZiYdtgGfAHJ4BTjTgzRgC5n3tyPYkBW8CCRnOQeHULFSRIagVL87FQ1C
+        2ifd5aBe55MvgEEwyZAKi3sXw8bs07TbcwYfreO8WmvK9kcKPd25hs+tSAdlqZa4V+hyZu7kUL6Wx
+        2lomda0A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mt5tH-001ynl-3b; Fri, 03 Dec 2021 10:34:07 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AEC8C300243;
+        Fri,  3 Dec 2021 11:34:05 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 960992B36B3BA; Fri,  3 Dec 2021 11:34:05 +0100 (CET)
+Date:   Fri, 3 Dec 2021 11:34:05 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Matt Fleming <matt@codeblueprint.co.uk>,
-        "# 3.4.x" <stable@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v8 03/14] x86: Add support for function granular KASLR
+Message-ID: <YanynaifaUNMqQ7p@hirez.programming.kicks-ass.net>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+ <20211202223214.72888-4-alexandr.lobakin@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211202223214.72888-4-alexandr.lobakin@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Dec 2021 at 15:06, Tom Lendacky <thomas.lendacky@amd.com> wrote:
->
-> On 10/27/21 12:04 PM, Tom Lendacky wrote:
-> >
-> >
-> > On 10/27/21 11:59 AM, Ard Biesheuvel wrote:
-> >> On Wed, 27 Oct 2021 at 18:56, Borislav Petkov <bp@alien8.de> wrote:
-> >>>
-> >>> On Wed, Oct 27, 2021 at 05:14:35PM +0200, Ard Biesheuvel wrote:
-> >>>> I could take it, but since it will ultimately go through -tip anyway,
-> >>>> perhaps better if they just take it directly? (This will change after
-> >>>> the next -rc1 though)
-> >>>>
-> >>>> Boris?
-> >>>
-> >>> Yeah, I'm being told this is not urgent enough to rush in now so you
-> >>> could queue it into your fixes branch for 5.16 once -rc1 is out and send
-> >>> it to Linus then. The stable tag is just so it gets backported to the
-> >>> respective trees.
-> >>>
-> >>> But if you prefer I should take it, then I can queue it after -rc1.
-> >>> It'll boil down to the same thing though.
-> >>>
-> >>
-> >> No, in that case, I can take it myself.
-> >>
-> >> Tom, does that work for you?
-> >
-> > Yup, that works for me. Thanks guys!
->
-> I don't see this in any tree yet, so just a gentle reminder in case it
-> dropped off the radar.
->
+On Thu, Dec 02, 2021 at 11:32:03PM +0100, Alexander Lobakin wrote:
+> +static struct orc_entry *cur_orc_table;
+> +static int *cur_orc_ip_table;
 
-Apologies for the delay, I've pushed this out to -next now.
+> +static int cmp_section_addr_orc(const void *a, const void *b)
+> +{
+> +	unsigned long ptr = (unsigned long)a;
+> +	Elf_Shdr *s = *(Elf_Shdr **)b;
+> +	unsigned long end = s->sh_addr + s->sh_size;
+> +
+> +	/* orc relocations can be one past the end of the section */
+> +	if (ptr >= s->sh_addr && ptr <= end)
+> +		return 0;
+> +
+> +	if (ptr < s->sh_addr)
+> +		return -1;
+> +
+> +	return 1;
+> +}
+> +
+> +/*
+> + * Discover if the orc_unwind address is in a randomized section and if so,
+> + * adjust by the saved offset.
+> + */
+> +Elf_Shdr *adjust_address_orc(long *address)
+> +{
+> +	Elf_Shdr **s;
+> +	Elf_Shdr *shdr;
+> +
+> +	if (nofgkaslr)
+> +		return NULL;
+> +
+> +	s = bsearch((const void *)*address, sections, sections_size, sizeof(*s),
+> +		    cmp_section_addr_orc);
+> +	if (s) {
+> +		shdr = *s;
+> +		*address += shdr->sh_offset;
+> +		return shdr;
+> +	}
+> +
+> +	return NULL;
+> +}
 
-Before I send it to Linus, can you please confirm (for my peace of
-mind) how this only affects systems that have memory encryption
-available and enabled in the first place?
+> +static inline unsigned long orc_ip(const int *ip)
+> +{
+> +	return (unsigned long)ip + *ip;
+> +}
+> +
+> +static void orc_sort_swap(void *_a, void *_b, int size)
+> +{
+> +	struct orc_entry *orc_a, *orc_b;
+> +	struct orc_entry orc_tmp;
+> +	int *a = _a, *b = _b, tmp;
+> +	int delta = _b - _a;
+> +
+> +	/* Swap the .orc_unwind_ip entries: */
+> +	tmp = *a;
+> +	*a = *b + delta;
+> +	*b = tmp - delta;
+> +
+> +	/* Swap the corresponding .orc_unwind entries: */
+> +	orc_a = cur_orc_table + (a - cur_orc_ip_table);
+> +	orc_b = cur_orc_table + (b - cur_orc_ip_table);
+> +	orc_tmp = *orc_a;
+> +	*orc_a = *orc_b;
+> +	*orc_b = orc_tmp;
+> +}
+> +
+> +static int orc_sort_cmp(const void *_a, const void *_b)
+> +{
+> +	struct orc_entry *orc_a;
+> +	const int *a = _a, *b = _b;
+> +	unsigned long a_val = orc_ip(a);
+> +	unsigned long b_val = orc_ip(b);
+> +
+> +	if (a_val > b_val)
+> +		return 1;
+> +	if (a_val < b_val)
+> +		return -1;
+> +
+> +	/*
+> +	 * The "weak" section terminator entries need to always be on the left
+> +	 * to ensure the lookup code skips them in favor of real entries.
+> +	 * These terminator entries exist to handle any gaps created by
+> +	 * whitelisted .o files which didn't get objtool generation.
+> +	 */
+> +	orc_a = cur_orc_table + (a - cur_orc_ip_table);
+> +	return orc_a->sp_reg == ORC_REG_UNDEFINED && !orc_a->end ? -1 : 1;
+> +}
+> +
+> +static void update_orc_table(unsigned long map)
+> +{
+> +	int i;
+> +	int num_entries =
+> +		(addr___stop_orc_unwind_ip - addr___start_orc_unwind_ip) / sizeof(int);
+> +
+> +	cur_orc_ip_table = (int *)(addr___start_orc_unwind_ip + map);
+> +	cur_orc_table = (struct orc_entry *)(addr___start_orc_unwind + map);
+> +
+> +	debug_putstr("\nUpdating orc tables...\n");
+> +	for (i = 0; i < num_entries; i++) {
+> +		unsigned long ip = orc_ip(&cur_orc_ip_table[i]);
+> +		Elf_Shdr *s;
+> +
+> +		/* check each address to see if it needs adjusting */
+> +		ip = ip - map;
+> +
+> +		/*
+> +		 * objtool places terminator entries just outside the end of
+> +		 * the section. To identify an orc_unwind_ip address that might
+> +		 * need adjusting, the address should be compared differently
+> +		 * than a normal address.
+> +		 */
+> +		s = adjust_address_orc(&ip);
+> +		if (s)
+> +			cur_orc_ip_table[i] += s->sh_offset;
+> +	}
+> +}
+> +
+> +static void sort_orc_table(unsigned long map)
+> +{
+> +	int num_entries =
+> +		(addr___stop_orc_unwind_ip - addr___start_orc_unwind_ip) / sizeof(int);
+> +
+> +	cur_orc_ip_table = (int *)(addr___start_orc_unwind_ip + map);
+> +	cur_orc_table = (struct orc_entry *)(addr___start_orc_unwind + map);
+> +
+> +	debug_putstr("\nRe-sorting orc tables...\n");
+> +	sort(cur_orc_ip_table, num_entries, sizeof(int), orc_sort_cmp,
+> +	     orc_sort_swap);
+> +}
+
+Is this somehow different from what we already have in
+arch/x86/kernel/unwind_orc.c for module support? Do we really need two
+copies of all that?

@@ -2,113 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB84A467CC0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CDE467CC4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353051AbhLCRro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 12:47:44 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42378 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbhLCRrn (ORCPT
+        id S1382409AbhLCRs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 12:48:27 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:56604 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353385AbhLCRsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 12:47:43 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4ABB1B828E3
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 17:44:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 110E3C53FCD;
-        Fri,  3 Dec 2021 17:44:14 +0000 (UTC)
-Date:   Fri, 3 Dec 2021 17:44:11 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Jianyong Wu <Jianyong.Wu@arm.com>
-Cc:     Anshuman Khandual <Anshuman.Khandual@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "david@redhat.com" <david@redhat.com>,
-        "gshan@redhat.com" <gshan@redhat.com>,
-        Justin He <Justin.He@arm.com>, nd <nd@arm.com>
-Subject: Re: [PATCH v1] arm64/mm: avoid race condition of update page table
- when kernel init
-Message-ID: <YapXa8JWPNhkePwO@arm.com>
-References: <20211027094828.7629-1-jianyong.wu@arm.com>
- <1cd8e875-24b1-2904-4e9f-2a4eb13674dc@arm.com>
- <AM9PR08MB72767A6DFA5A7ED8117E7C44F4869@AM9PR08MB7276.eurprd08.prod.outlook.com>
+        Fri, 3 Dec 2021 12:48:25 -0500
+Date:   Fri, 03 Dec 2021 17:44:59 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638553500;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RoACRO/DB5qjDEz/XpyclBOEktpzo44c+wSmwT4PCTU=;
+        b=NZClIZeH4iYvYK8jBVrTLzOt7nEzAcFLhNYY3XlG0oowxaGFjBd2fvP8bMHNBePQWp1xTV
+        CLmgzr5M1on80/l3i3hZiWSRs3ntTz3pbHlZ1oHdLDHJufk8P0qYmVPkSWj2Cy2Hs5A1E3
+        H2ZbdWqrxyTfWYrgb9ihSRVbNY+iNgL2p/BcQenPdaEcjTXXOmxqw1A1e0V90rpSaEkTqq
+        aSM+OobsQuj+Z2UPGFgIwrzVrDrA7B6wFLuDeWK6bLIw5j4lPOFVzJKNLx7xPL1DWG+Rln
+        pFoCDsn4VMzIp8/Uo6m0xT9Rsg71MyA1zt6GIkHwChJcF7OydiAmIzkBQKpIzA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638553500;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RoACRO/DB5qjDEz/XpyclBOEktpzo44c+wSmwT4PCTU=;
+        b=cGagb5o7UOoXrJGzlY+Op/OPD1Y1LkAxXAYcSp2RGFHVMBRlyr1R5k/DhZS08gYoRzpXi4
+        y8+32WE/AxhUnjDA==
+From:   "tip-bot2 for Geert Uytterhoeven" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/platform] x86/ce4100: Replace "ti,pcf8575" by "nxp,pcf8575"
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Borislav Petkov <bp@suse.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: =?utf-8?q?=3C0c00cec971f5c405e47d04e493d854de0efc2e49=2E16385?=
+ =?utf-8?q?39629=2Egit=2Egeert+renesas=40glider=2Ebe=3E?=
+References: =?utf-8?q?=3C0c00cec971f5c405e47d04e493d854de0efc2e49=2E163853?=
+ =?utf-8?q?9629=2Egit=2Egeert+renesas=40glider=2Ebe=3E?=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM9PR08MB72767A6DFA5A7ED8117E7C44F4869@AM9PR08MB7276.eurprd08.prod.outlook.com>
+Message-ID: <163855349926.11128.14527362647058338597.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 28, 2021 at 08:36:07AM +0100, Jianyong Wu wrote:
-> From Anshuman Khandual <anshuman.khandual@arm.com>:
-> > On 10/27/21 3:18 PM, Jianyong Wu wrote:
-> > > Race condition of page table update can happen in kernel boot period
-> > > as both of memory hotplug action when kernel init and the
-> > > mark_rodata_ro can update page table. For virtio-mem, the function excute flow chart is:
-> > >
-> > > -------------------------
-> > > kernel_init
-> > >   kernel_init_freeable
-> > >     ...
-> > >       do_initcall
-> > >         ...
-> > >           module_init [A]
-> > >
-> > >   ...
-> > >   mark_readonly
-> > >     mark_rodata_ro [B]
-> > > -------------------------
-[...]
-> > > We can see that the error derived from the l3 translation as the pte
-> > > value is *0*. That is because the fixmap has been clear when access.
-> > >
-> > > Signed-off-by: Jianyong Wu <jianyong.wu@arm.com>
-> > > ---
-> > >  arch/arm64/mm/mmu.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c index
-> > > cfd9deb347c3..567dfba8f08a 100644
-> > > --- a/arch/arm64/mm/mmu.c
-> > > +++ b/arch/arm64/mm/mmu.c
-> > > @@ -564,8 +564,10 @@ void mark_rodata_ro(void)
-> > >      * to cover NOTES and EXCEPTION_TABLE.
-> > >      */
-> > >     section_size = (unsigned long)__init_begin - (unsigned long)__start_rodata;
-> > > +   get_online_mems();
-> > >     update_mapping_prot(__pa_symbol(__start_rodata), (unsigned long)__start_rodata,
-> > >                         section_size, PAGE_KERNEL_RO);
-> > > +   put_online_mems();
-> > >
-> > >     debug_checkwx();
-> > >  }
-> >
-> > While this should solve the current problem i.e race between concurrent
-> > memory hotplug operation and mark_rodata_ro(), but I am still wondering
-> > whether this is the fix at the right place and granularity. Basically a hotplug
-> > operation queued in an work queue at [A] can execute during [B] is the root
-> > cause of this problem.
-> 
-> Not exactly, this issue doesn't only happen at the the *pure* kernel
-> boot. For example, hotplug memory through VM monitor when VM boot. We
-> can't foresee when that happen. Thus, this issue can affect all kinds
-> of memory hotplug mechanism, including ACPI based memory hotplug and
-> virtio-mem. I'm not sure that fix it here is the best way. If the race
-> only happens between kernel init and memory hotplug, I think it's fine
-> to fix it here. IMO, this issue results from the race for "fixmap"
-> resource. I wonder why this global resource is not protected by a
-> lock. Maybe we can add one and fix it there.
+The following commit has been merged into the x86/platform branch of tip:
 
-IIUC the race is caused by multiple attempts to use the fixmap at the
-same time. We can add a fixmap_lock and hold it during
-__create_pgd_mapping().
+Commit-ID:     9e4d52a00a0217857fa40dc998971a375f861a61
+Gitweb:        https://git.kernel.org/tip/9e4d52a00a0217857fa40dc998971a375f861a61
+Author:        Geert Uytterhoeven <geert+renesas@glider.be>
+AuthorDate:    Fri, 03 Dec 2021 14:55:23 +01:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Fri, 03 Dec 2021 18:23:57 +01:00
 
--- 
-Catalin
+x86/ce4100: Replace "ti,pcf8575" by "nxp,pcf8575"
+
+The TI part is equivalent to the NXP part, and its compatible value is
+not documented in the DT bindings.
+
+Note that while the Linux driver DT match table does not contain the
+compatible value of the TI part, it could still match to this part, as
+i2c_device_id-based matching ignores the vendor part of the compatible
+value.
+
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lkml.kernel.org/r/0c00cec971f5c405e47d04e493d854de0efc2e49.1638539629.git.geert+renesas@glider.be
+---
+ arch/x86/platform/ce4100/falconfalls.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/platform/ce4100/falconfalls.dts b/arch/x86/platform/ce4100/falconfalls.dts
+index 0ac3d43..65fa3d8 100644
+--- a/arch/x86/platform/ce4100/falconfalls.dts
++++ b/arch/x86/platform/ce4100/falconfalls.dts
+@@ -249,7 +249,7 @@
+ 
+ 						gpio@26 {
+ 							#gpio-cells = <2>;
+-							compatible = "ti,pcf8575";
++							compatible = "nxp,pcf8575";
+ 							reg = <0x26>;
+ 							gpio-controller;
+ 						};
+@@ -263,7 +263,7 @@
+ 
+ 						gpio@26 {
+ 							#gpio-cells = <2>;
+-							compatible = "ti,pcf8575";
++							compatible = "nxp,pcf8575";
+ 							reg = <0x26>;
+ 							gpio-controller;
+ 						};

@@ -2,122 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E5B467CFA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A0F467CBB
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382268AbhLCSKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 13:10:16 -0500
-Received: from gateway24.websitewelcome.com ([192.185.50.73]:15563 "EHLO
-        gateway24.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1353418AbhLCSKM (ORCPT
+        id S1351113AbhLCRpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 12:45:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238577AbhLCRpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 13:10:12 -0500
-X-Greylist: delayed 1478 seconds by postgrey-1.27 at vger.kernel.org; Fri, 03 Dec 2021 13:10:12 EST
-Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id 533E24F9C
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 11:42:10 -0600 (CST)
-Received: from gator4132.hostgator.com ([192.185.4.144])
-        by cmsmtp with SMTP
-        id tCZVm3fLl0ESotCZVmtZxe; Fri, 03 Dec 2021 11:42:10 -0600
-X-Authority-Reason: nr=8
-Received: from host-79-34-250-122.business.telecomitalia.it ([79.34.250.122]:47268 helo=[10.0.0.165])
-        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <bristot@kernel.org>)
-        id 1mtCZU-002YlH-6q; Fri, 03 Dec 2021 11:42:08 -0600
-Message-ID: <aabde006-ce0e-fc68-63fb-58eb43648ef1@kernel.org>
-Date:   Fri, 3 Dec 2021 18:42:04 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH V8 07/14] rtla/timerlat: Add timerlat hist mode
-Content-Language: en-US
-To:     Tao Zhou <tao.zhou@linux.dev>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        John Kacur <jkacur@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        Fri, 3 Dec 2021 12:45:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7DDC061751;
+        Fri,  3 Dec 2021 09:42:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 706B8B8266A;
+        Fri,  3 Dec 2021 17:42:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF428C53FCD;
+        Fri,  3 Dec 2021 17:42:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638553343;
+        bh=qITFqiG4aRPHfdbrFqKNAIXEJYa92PD9iA88TTUUpvk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PTslTplSSM3NgsfkrOcGGYigkM7RR1b//xUEigcwoNqUUzR+P5Z6wb35HzUpJpzof
+         QR5qeLn7M7+lqmgnfUiMFJ9UKKyteCoz6kafvHGnoKagMzA34ye0hcI8a1p5TBSR2v
+         qSAUKtJFXlqfwxY19FdQAhAWUlKLKxOGKiaRV6e75fvo6LdoI8ajoM0oFmUCDYfX0Q
+         io3r3izXCheQzxtsnaFS46q77E7yS1aSajmo0XJJh5sZtbTFxhKIdWLfX705SQyKFD
+         ildsABREWdyGvQQOUlYnuuTDilhibn+Lh/y3zD4dpYu6Lk4tPqWL/iNQxuP1JnSXog
+         Ih3rpRwkYeZ1A==
+Date:   Fri, 3 Dec 2021 23:12:16 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <cover.1638182284.git.bristot@kernel.org>
- <eb486340cc983bd8f7f69fe6f99f8d2927fcd296.1638182284.git.bristot@kernel.org>
- <YangwS/M9hO+o7TH@geo.homenetwork>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <YangwS/M9hO+o7TH@geo.homenetwork>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - kernel.org
-X-BWhitelist: no
-X-Source-IP: 79.34.250.122
-X-Source-L: No
-X-Exim-ID: 1mtCZU-002YlH-6q
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: host-79-34-250-122.business.telecomitalia.it ([10.0.0.165]) [79.34.250.122]:47268
-X-Source-Auth: kernel@bristot.me
-X-Email-Count: 15
-X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
-X-Local-Domain: no
+Subject: Re: [PATCH 0/3] scsi|phy: Add SM8450 UFS & Phy support
+Message-ID: <YapW+EY/IeUk1BLz@matsya>
+References: <20211201074456.3969849-1-vkoul@kernel.org>
+ <yq135nawg3q.fsf@ca-mkp.ca.oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yq135nawg3q.fsf@ca-mkp.ca.oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/21 10:17, Tao Zhou wrote:
-> On Mon, Nov 29, 2021 at 12:07:45PM +0100,
-> Daniel Bristot de Oliveira wrote:
+On 02-12-21, 21:58, Martin K. Petersen wrote:
 > 
->> +static void timerlat_hist_usage(char *usage)
->> +{
->> +	int i;
->> +
->> +	char *msg[] = {
->> +		"",
->> +		"  usage: [rtla] timerlat hist [-h] [-q] [-p us] [-i us] [-t us] [-s us] [-T[=file]] \\",
->> +		"         [-c cpu-list] [-P priority] [--no-irq] [--no-thread] [--no-header] [--no-summary] \\",
->> +		"         [--no-index] [--with-zeros]",
->> +		"",
->> +		"	  -h/--help: print this menu",
->> +		"	  -p/--period us: timerlat period in us",
->> +		"	  -i/--irq us: stop trace if the irq latency is higher than the argument in us",
->> +		"	  -T/--thread us: stop trace if the thread latency is higher than the argument in us",
->> +		"	  -s/--stack us: save the stack trace at the IRQ if a thread latency is higher than the argument in us",
->> +		"	  -c/--cpus cpus: run the tracer only on the given cpus",
->> +		"	  -d/--duration time[m|h|d]: duration of the session in seconds",
->> +		"	  -T/--trace[=file]: save the stopped trace to [file|timerlat_trace.txt]",
->> +		"	  -n/--nano: display data in nanoseconds",
->> +		"	  -b/--bucket-size N: set the histogram bucket size (default 1)",
->> +		"	  -e/--entries N: set the number of entries of the histogram (default 256)",
->> +		"	     --no-irq: ignore IRQ latencies",
->> +		"	     --no-thread: ignore thread latencies",
->> +		"	     --no-header: do not print header",
->> +		"	     --no-summary: do not print summary",
->> +		"	     --no-index: do not print index",
->> +		"	     --with-zeros: print zero only entries",
->> +		"	  -P/--priority o:prio|r:prio|f:prio|d:runtime:period : set scheduling parameters",
->> +		"		o:prio - use SCHED_OTHER with prio",
->> +		"		r:prio - use SCHED_RR with prio",
->> +		"		f:prio - use SCHED_FIFO with prio",
->> +		"		d:runtime[us|ms|s]:period[us|ms|s] - use SCHED_DEADLINE with runtime and period",
->> +		"						       in nanoseconds",
->> +		NULL,
->> +	};
+> Vinod,
 > 
-> [-t us] --> [-T us]
-> [-T[=file]] --> [-t[=file]]
-> [-d] [-b] [-e] [-n] lack in usage info. this is not important tho.
+> > Add the binding documentation for ufs SM8450 compatible, phy
+> > compatible and SM8450 UFS QMP Phy support.
 > 
+> >  .../devicetree/bindings/phy/qcom,qmp-phy.yaml |  1 +
+> >  .../devicetree/bindings/ufs/ufshcd-pltfrm.txt |  1 +
+> >  drivers/phy/qualcomm/phy-qcom-qmp.c           | 32 +++++++++++++++++++
+> 
+> No objections from me. However, these patches should go through the DT
+> and phy trees.
 
-Fixed in V9
+Ok I can pick these up wearing my phy maintainer hat, can u pls ack
+it...
 
--- Daniel
+Thanks
+
+-- 
+~Vinod

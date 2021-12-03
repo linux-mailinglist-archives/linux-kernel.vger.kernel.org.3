@@ -2,102 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B58C0468098
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 00:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5336546809B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 00:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383530AbhLCXhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 18:37:55 -0500
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:35705 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383487AbhLCXhu (ORCPT
+        id S1383548AbhLCXh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 18:37:59 -0500
+Received: from mail-ot1-f49.google.com ([209.85.210.49]:37847 "EHLO
+        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1383433AbhLCXhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 18:37:50 -0500
-Received: by mail-oi1-f172.google.com with SMTP id m6so8846755oim.2;
-        Fri, 03 Dec 2021 15:34:26 -0800 (PST)
+        Fri, 3 Dec 2021 18:37:53 -0500
+Received: by mail-ot1-f49.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so5388972otg.4;
+        Fri, 03 Dec 2021 15:34:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=slc3RtjWJ70IyFjnYg6xCGKvBvcnCTAMFh09lWbkjek=;
-        b=jd15mJlfGqJS5iEgzAP2amStzUumOMhMPv8mxMCEflbtoKu/qgpnXY/dA6I4fMPVRc
-         xpSo+6x5NQj+9rei3atLcea34xRXtWC+FnhFcipHBRgUOOBYNJn+A4zIe8P98iH59nVQ
-         1Ctv0fRHW/+f2JQRFwjp/yA7M04TMQyK7E0T6YDqrdAHzlUwtQnWWgtHNjx+FzbYYobS
-         4LGVuQvbxyqwpzAH7m3sfcwWYygkADIKb0bBSo46we4t2LBwThO7wwEy+eTK4tzR8m5t
-         dnFySZxxUXisOB+ymYsfqXNIqgklGebjTvHX66aweSFPNadefUFXQdq6fpIQnlNiuXOc
-         AH0w==
-X-Gm-Message-State: AOAM5323iWHzdhgfK78zMlBxQFLhChbDHYyzVLQjxFFF5cBj723wzLuJ
-        HViGLC4OMZ+P04pLOjyoew==
-X-Google-Smtp-Source: ABdhPJyBqKs2RECYaJ9RF6QpjpusBKfo+tfpB2ONa7QgO/1CXxO3kC9NItNo8IWqQhVntJqv6sGJxg==
-X-Received: by 2002:aca:180c:: with SMTP id h12mr12700584oih.138.1638574465907;
-        Fri, 03 Dec 2021 15:34:25 -0800 (PST)
+        bh=GE0Zk+eX8sZDvupP4sJ6Ohc20e/z8kxjxl7o4izocKY=;
+        b=LEwadYRErEUe0KjWhZze3VleEKu9o7JzSh8xGEZwRCGLGP0Qo42WSTzMebJDpdhRlj
+         H6pY9gecUdwPrlab42Dt0CXyS1sT1W0ilH9Jp2kM616dIZbD/ITsSdntK+U44SwspwV5
+         lDwnqKCiZoX60uuktFi/gfCNqHA+2z52sLISQ7uRph8pXl4GFTJrvfjEx/Nr2Rlztxqr
+         evVjtaqNfBeMZ/GkLlE5gc10eJ8vEDY45eUPbeAKh6O6ZXNPS01r5IzbIiivQt9IvGva
+         HI9grcVW2MIia9neAPJy7IAS+mR4yCVDzMfDa5wmk0Pz2KpHAqgqiHnqs2hfr9FZ1YAi
+         vBGw==
+X-Gm-Message-State: AOAM530/9laHdhbkPVILU54XJxRm971/h6L2kdx18zLjX3p5TmG5ZVeT
+        j7Sij5w1+cqQi4rHpFxojhb7zcHOdg==
+X-Google-Smtp-Source: ABdhPJy3PCupkz+n/wmG78XL1Oz6xk1rXf5k7wFa5WXphozZiozk+A42lWVF0CAkCDKJY7uEHFyW9w==
+X-Received: by 2002:a9d:2486:: with SMTP id z6mr19250720ota.210.1638574468140;
+        Fri, 03 Dec 2021 15:34:28 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id e16sm869290ook.38.2021.12.03.15.34.24
+        by smtp.gmail.com with ESMTPSA id c41sm939822otu.7.2021.12.03.15.34.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 15:34:25 -0800 (PST)
-Received: (nullmailer pid 1043009 invoked by uid 1000);
+        Fri, 03 Dec 2021 15:34:27 -0800 (PST)
+Received: (nullmailer pid 1043011 invoked by uid 1000);
         Fri, 03 Dec 2021 23:34:15 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Srinivasa Rao Mandadapu <srivasam@codeaurora.com>
-Cc:     judyhsiao@chromium.org, bjorn.andersson@linaro.org,
-        Srinivasa Rao Mandadapu <srivasam@codeaurora.org>,
-        tiwai@suse.com, swboyd@chromium.org, agross@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, perex@perex.cz, lgirdwood@gmail.com,
-        bgoswami@codeaurora.org, rohitkr@codeaurora.org,
-        srinivas.kandagatla@linaro.org, broonie@kernel.org,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        plai@codeaurora.org
-In-Reply-To: <1638551345-24979-2-git-send-email-srivasam@codeaurora.com>
-References: <1638551345-24979-1-git-send-email-srivasam@codeaurora.com> <1638551345-24979-2-git-send-email-srivasam@codeaurora.com>
-Subject: Re: [PATCH v8 1/3] ASoC: google: dt-bindings: Add sc7280-herobrine machine bindings
+To:     Biao Huang <biao.huang@mediatek.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Jose Abreu <joabreu@synopsys.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        srv_heupstream@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, dkirjanov@suse.de,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        angelogioacchino.delregno@collabora.com, davem@davemloft.net,
+        macpaul.lin@mediatek.com, Rob Herring <robh+dt@kernel.org>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        devicetree@vger.kernel.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+In-Reply-To: <20211203063418.14892-5-biao.huang@mediatek.com>
+References: <20211203063418.14892-1-biao.huang@mediatek.com> <20211203063418.14892-5-biao.huang@mediatek.com>
+Subject: Re: [PATCH v4 4/7] net-next: dt-bindings: dwmac: Convert mediatek-dwmac to DT schema
 Date:   Fri, 03 Dec 2021 17:34:15 -0600
-Message-Id: <1638574455.258949.1043008.nullmailer@robh.at.kernel.org>
+Message-Id: <1638574455.270026.1043010.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 03 Dec 2021 22:39:03 +0530, Srinivasa Rao Mandadapu wrote:
-> From: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
+On Fri, 03 Dec 2021 14:34:15 +0800, Biao Huang wrote:
+> Convert mediatek-dwmac to DT schema, and delete old mediatek-dwmac.txt.
+> And there are some changes in .yaml than .txt, others almost keep the same:
+>   1. compatible "const: snps,dwmac-4.20".
+>   2. delete "snps,reset-active-low;" in example, since driver remove this
+>      property long ago.
+>   3. add "snps,reset-delay-us = <0 10000 10000>" in example.
+>   4. the example is for rgmii interface, keep related properties only.
 > 
-> Add devicetree bindings documentation file for sc7280 sound card
-> registration.
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
+> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
 > ---
->  .../bindings/sound/google,sc7280-herobrine.yaml    | 171 +++++++++++++++++++++
->  1 file changed, 171 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/google,sc7280-herobrine.yaml
+>  .../bindings/net/mediatek-dwmac.txt           |  91 ----------
+>  .../bindings/net/mediatek-dwmac.yaml          | 156 ++++++++++++++++++
+>  2 files changed, 156 insertions(+), 91 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/net/mediatek-dwmac.txt
+>  create mode 100644 Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-yamllint warnings/errors:
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/google,sc7280-herobrine.example.dt.yaml: sound: dai-link@0: 'sound-dai' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/google,sc7280-herobrine.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/google,sc7280-herobrine.example.dt.yaml: sound: dai-link@1: 'sound-dai' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/google,sc7280-herobrine.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/google,sc7280-herobrine.example.dt.yaml: sound: dai-link@2: 'sound-dai' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/google,sc7280-herobrine.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/google,sc7280-herobrine.example.dt.yaml: sound: dai-link@3: 'sound-dai' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/google,sc7280-herobrine.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/google,sc7280-herobrine.example.dt.yaml: sound: dai-link@5: 'sound-dai' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/google,sc7280-herobrine.yaml
+Full log is available here: https://patchwork.ozlabs.org/patch/1563125
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1563335
+ethernet@1101c000: clock-names: ['axi', 'apb', 'mac_main', 'ptp_ref'] is too short
+	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+ethernet@1101c000: clocks: [[27, 34], [27, 37], [6, 154], [6, 155]] is too short
+	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+ethernet@1101c000: compatible: ['mediatek,mt2712-gmac'] does not contain items matching the given schema
+	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
 
-pip3 install dtschema --upgrade
+ethernet@1101c000: compatible: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
 
-Please check and re-submit.
+ethernet@1101c000: Unevaluated properties are not allowed ('compatible', 'reg', 'interrupts', 'interrupt-names', 'mac-address', 'clock-names', 'clocks', 'power-domains', 'snps,axi-config', 'snps,mtl-rx-config', 'snps,mtl-tx-config', 'snps,txpbl', 'snps,rxpbl', 'clk_csr', 'phy-mode', 'phy-handle', 'snps,reset-gpio', 'mdio' were unexpected)
+	arch/arm64/boot/dts/mediatek/mt2712-evb.dt.yaml
 

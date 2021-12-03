@@ -2,69 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5509B467F18
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 894B3467F20
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383160AbhLCVLf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Dec 2021 16:11:35 -0500
-Received: from coyote.holtmann.net ([212.227.132.17]:51960 "EHLO
-        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353780AbhLCVLf (ORCPT
+        id S1383176AbhLCVMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 16:12:23 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59064 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236111AbhLCVMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 16:11:35 -0500
-Received: from smtpclient.apple (p5b3d2e91.dip0.t-ipconnect.de [91.61.46.145])
-        by mail.holtmann.org (Postfix) with ESMTPSA id A7971CED20;
-        Fri,  3 Dec 2021 22:08:08 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.20.0.1.32\))
-Subject: Re: [PATCH v2 2/2] Bluetooth: btmtksdio: fix resume failure
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <7da7852d8fc936c97a0fe4cd00c723e42b889c84.1638381385.git.objelf@gmail.com>
-Date:   Fri, 3 Dec 2021 22:08:07 +0100
-Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
-        =?utf-8?B?Ik1hcmstWVcgQ2hlbiAo6Zmz5o+a5paHKSI=?= 
-        <Mark-YW.Chen@mediatek.com>, Soul.Huang@mediatek.com,
-        YN.Chen@mediatek.com, Leon.Yen@mediatek.com,
-        Eric-SY.Chang@mediatek.com, Deren.Wu@mediatek.com,
-        km.lin@mediatek.com, robin.chiu@mediatek.com,
-        Eddie.Chen@mediatek.com, ch.yeh@mediatek.com,
-        posh.sun@mediatek.com, ted.huang@mediatek.com,
-        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
-        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
-        frankgor@google.com, jemele@google.com, abhishekpandit@google.com,
-        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
-        linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <41B08D65-864D-4D02-89D3-147298E86B1D@holtmann.org>
-References: <73960845c299e2cd22c11b84014ff6ba4758e9bb.1638381385.git.objelf@gmail.com>
- <7da7852d8fc936c97a0fe4cd00c723e42b889c84.1638381385.git.objelf@gmail.com>
-To:     Sean Wang <sean.wang@mediatek.com>
-X-Mailer: Apple Mail (2.3693.20.0.1.32)
+        Fri, 3 Dec 2021 16:12:22 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C461662B8E;
+        Fri,  3 Dec 2021 21:08:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D79AC53FCB;
+        Fri,  3 Dec 2021 21:08:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638565737;
+        bh=BlTRvCdOzdAHgLT03YhsdUB2IyQJNEwbQ4P+5iYkKTE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ur99wvPABOPqzeGjz2Doyg7rgvFw/Y7v7zGc+pOIb5dCTfLBIKMG0NTijfXG0V6Pv
+         img0MSBLke7jIIoZ9NfWc1wv2YbS06NtG0GmVnFrf0qOpSiHzbD7X7rKqMl+KE+lLV
+         yvwwOLGZ1f4Qs9hDWGjPED4ENdi2F+OaBDLrVey8bEmIAqg3W/OfiLnVPfaVjh/hP9
+         CN5vgcKaQ7gBWfBkdtS4UeP8QYTNxelHnpeP2kG1mrnN9qMlxe2hATX7gqJG8ukELp
+         m+NSTPZgnM/Fe+j8k+Yn7R81z5iWSg/gaDp07URVsMck0vqao25NzhtSuwnazBW+lM
+         6UYR5q7ShG9nA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id DB1665C1108; Fri,  3 Dec 2021 13:08:56 -0800 (PST)
+Date:   Fri, 3 Dec 2021 13:08:56 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Marco Elver <elver@google.com>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev, x86@kernel.org
+Subject: Re: [PATCH v3 04/25] kcsan: Add core support for a subset of weak
+ memory modeling
+Message-ID: <20211203210856.GA712591@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20211130114433.2580590-1-elver@google.com>
+ <20211130114433.2580590-5-elver@google.com>
+ <YanbzWyhR0LwdinE@elver.google.com>
+ <20211203165020.GR641268@paulmck-ThinkPad-P17-Gen-1>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211203165020.GR641268@paulmck-ThinkPad-P17-Gen-1>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
-
-> btmtksdio have to rely on MMC_PM_KEEP_POWER in pm_flags to avoid that
-> SDIO power is being shut off during the device is in suspend. That fixes
-> the SDIO command fails to access the bus after the device is resumed.
+On Fri, Dec 03, 2021 at 08:50:20AM -0800, Paul E. McKenney wrote:
+> On Fri, Dec 03, 2021 at 09:56:45AM +0100, Marco Elver wrote:
+> > On Tue, Nov 30, 2021 at 12:44PM +0100, Marco Elver wrote:
+> > [...]
+> > > v3:
+> > > * Remove kcsan_noinstr hackery, since we now try to avoid adding any
+> > >   instrumentation to .noinstr.text in the first place.
+> > [...]
+> > 
+> > I missed some cleanups after changes from v2 to v3 -- the below cleanup
+> > is missing.
+> > 
+> > Full replacement patch attached.
 > 
-> Fixes: 7f3c563c575e7 ("Bluetooth: btmtksdio: Add runtime PM support to SDIO based Bluetooth")
-> Co-developed-by: Mark-yw Chen <mark-yw.chen@mediatek.com>
-> Signed-off-by: Mark-yw Chen <mark-yw.chen@mediatek.com>
-> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-> ---
-> v2: rebase and resend
-> ---
-> drivers/bluetooth/btmtksdio.c | 2 ++
-> 1 file changed, 2 insertions(+)
+> I pulled this into -rcu with the other patches from your v3 post, thank
+> you all!
 
-patch has been applied to bluetooth-next tree.
+A few quick tests located the following:
 
-Regards
+[    0.635383] INFO: trying to register non-static key.
+[    0.635804] The code is fine but needs lockdep annotation, or maybe
+[    0.636194] you didn't initialize this object before use?
+[    0.636194] turning off the locking correctness validator.
+[    0.636194] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.16.0-rc1+ #3208
+[    0.636194] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+[    0.636194] Call Trace:
+[    0.636194]  <TASK>
+[    0.636194]  dump_stack_lvl+0x88/0xd8
+[    0.636194]  dump_stack+0x15/0x1b
+[    0.636194]  register_lock_class+0x6b3/0x840
+[    0.636194]  ? __this_cpu_preempt_check+0x1d/0x30
+[    0.636194]  __lock_acquire+0x81/0xee0
+[    0.636194]  ? lock_is_held_type+0xf1/0x160
+[    0.636194]  lock_acquire+0xce/0x230
+[    0.636194]  ? test_barrier+0x490/0x14c7
+[    0.636194]  ? lock_is_held_type+0xf1/0x160
+[    0.636194]  ? test_barrier+0x490/0x14c7
+[    0.636194]  _raw_spin_lock+0x36/0x50
+[    0.636194]  ? test_barrier+0x490/0x14c7
+[    0.636194]  ? kcsan_init+0xf/0x80
+[    0.636194]  test_barrier+0x490/0x14c7
+[    0.636194]  ? kcsan_debugfs_init+0x1f/0x1f
+[    0.636194]  kcsan_selftest+0x47/0xa0
+[    0.636194]  do_one_initcall+0x104/0x230
+[    0.636194]  ? rcu_read_lock_sched_held+0x5b/0xc0
+[    0.636194]  ? kernel_init+0x1c/0x200
+[    0.636194]  do_initcall_level+0xa5/0xb6
+[    0.636194]  do_initcalls+0x66/0x95
+[    0.636194]  do_basic_setup+0x1d/0x23
+[    0.636194]  kernel_init_freeable+0x254/0x2ed
+[    0.636194]  ? rest_init+0x290/0x290
+[    0.636194]  kernel_init+0x1c/0x200
+[    0.636194]  ? rest_init+0x290/0x290
+[    0.636194]  ret_from_fork+0x22/0x30
+[    0.636194]  </TASK>
 
-Marcel
+When running without the new patch series, this splat does not appear.
 
+Do I need a toolchain upgrade?  I see the Clang 14.0 in the cover letter,
+but that seems to apply only to non-x86 architectures.
+
+$ clang-11 -v
+Ubuntu clang version 11.1.0-++20210805102428+1fdec59bffc1-1~exp1~20210805203044.169
+
+							Thanx, Paul

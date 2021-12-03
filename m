@@ -2,134 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD07E4677B2
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C03794677BB
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380969AbhLCM5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 07:57:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
+        id S1357597AbhLCNAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 08:00:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380953AbhLCM5p (ORCPT
+        with ESMTP id S239742AbhLCNAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 07:57:45 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80832C06173E;
-        Fri,  3 Dec 2021 04:54:21 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id d9so5555984wrw.4;
-        Fri, 03 Dec 2021 04:54:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=M29EUicDRNc21LwZ/GYwswFr7ylJnq6+9wpg0/9AZO8=;
-        b=FoBKm5BewmXcIyykMn+POmO0ZC5EFzD8XchEJpxKnVGZ2xez9VQE5HVYHmiSZ4emck
-         HSYQjT6j5IDy6Yn+HqwIUneNe/yO77iK/NDreBPXZ9Gyiy9+KIYc1j5cEz/eI1oqLM/N
-         AlmPWLOjkuQYu2X166a/6/ogEOKOmVr3/Kx22zyvZ3g/8U4I/8ogDilbSmmI1sxXdXuC
-         0+C9X4hLcowYS6GjBu8AC3Dm6sFjAcgA5ldagKmfHccg1nICX092yI5gJ2ArXSbCRL4L
-         GD6u09FdZ9fYGrM1pkqLRqRG7SrQ6L6biQTJ1Lf5evjeKSfTEBcp2fZmyddLINY2JF7X
-         FIEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=M29EUicDRNc21LwZ/GYwswFr7ylJnq6+9wpg0/9AZO8=;
-        b=zvNwhmuAOaNTXUo5XuwALeQmCDz4t/AfeVcSjWGleTpAAnv8Ord8hIHewybNdSzJYq
-         qsXqWsohnECDRJ8CSeXhH4LjHyF0y5Dluo2l5cfc6yEX/UN1ixjnLed/RitDIgbZzmQa
-         G+w1tjfOFVZGgedXIslVNtNa3U+q/NJk4mZBJwf7UyRNYD9BpnkiluRX5diJgniV3Dxa
-         BGetptiWI16am/ME/6pNBXEBUsRMw80SPikKMZ6DruInIjGoGIzCT0QbjRwdeIra0gxH
-         lPENuNqZwr1xgZrJb+DHAL3iPr1MR+SzMQ3n1q+VqNq7tCSuoqvGbr8/N2iulIzZitUw
-         CEBw==
-X-Gm-Message-State: AOAM530KPJOXui0AAfbHFEtYA24O/59C/iCXUIWo3N26LkR/zE6BsO6E
-        E5dZM0SVBi6+sxVeBguC4ZDVJblBxi6ZVA==
-X-Google-Smtp-Source: ABdhPJxCcHfpP6/ls4pjRE3J3PBUm2yjHM3aCu1AlP68mHE7HmJUXTBzqWbgL9wMas377UObF7VxlQ==
-X-Received: by 2002:a05:6000:cd:: with SMTP id q13mr21507618wrx.488.1638536059799;
-        Fri, 03 Dec 2021 04:54:19 -0800 (PST)
-Received: from [10.168.10.170] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id m7sm2472292wml.38.2021.12.03.04.54.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 04:54:19 -0800 (PST)
-Message-ID: <7d3c34ab-41c1-f9b7-43cc-21a18fa61c27@gmail.com>
-Date:   Fri, 3 Dec 2021 13:54:17 +0100
+        Fri, 3 Dec 2021 08:00:54 -0500
+Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DCEC06173E;
+        Fri,  3 Dec 2021 04:57:30 -0800 (PST)
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9f:8608:6e64:956a:daea:cf2f])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 1B3CvIb2021165
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Fri, 3 Dec 2021 13:57:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1638536239; bh=gI7M7yPnJx/oBhAt4SBRGRDw8I96J5PZcHTVDS0LQsg=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=BAsTFALgaSBRgoSJ0MIH4yunIjYB5cZCqpotcxvGBP7TFsAAshQY7JHDrtKil90J8
+         5DoaPmZByVBxtEGfFDbp6RkrvbBM8hR6k0Mr5kIssXGR6RLXjwnh2+YSo7y+ZshL/4
+         lz8VAebIYeiVEJiPRdJkJF6HeWfuB7xY+9XgXjAE=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
+        (envelope-from <bjorn@mork.no>)
+        id 1mt87p-001jVy-N0; Fri, 03 Dec 2021 13:57:17 +0100
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
+        "David S. Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 1/1] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset
+ or zero
+Organization: m
+References: <20211202143437.1411410-1-lee.jones@linaro.org>
+        <20211202175134.5b463e18@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <87o85yj81l.fsf@miraculix.mork.no> <Yan+nvfyS21z7ZUw@google.com>
+Date:   Fri, 03 Dec 2021 13:57:17 +0100
+In-Reply-To: <Yan+nvfyS21z7ZUw@google.com> (Lee Jones's message of "Fri, 3 Dec
+        2021 11:25:18 +0000")
+Message-ID: <87ilw5kfrm.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Content-Language: en-US
-To:     Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-        Zack Weinberg <zack@owlfolio.org>,
-        Rich Felker <dalias@libc.org>
-Cc:     linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        libc-alpha@sourceware.org, linux-kernel@vger.kernel.org,
-        ltp@lists.linux.it
-References: <YZvIlz7J6vOEY+Xu@yuki>
- <c5993ee9-1b5d-4469-9c0e-8d4e0fbd575a@www.fastmail.com>
- <20211202153422.GH7074@brightrain.aerifal.cx>
- <20211202232954.GI7074@brightrain.aerifal.cx>
- <855a47d1-a89c-bbc8-7ddd-b89104c6138a@linaro.org>
- <9d24f699-386a-4881-b09a-ebd747310187@www.fastmail.com>
- <0864bd62-7a93-106d-8a36-23dd72a7ab58@linaro.org>
-From:   "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
-In-Reply-To: <0864bd62-7a93-106d-8a36-23dd72a7ab58@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.3 at canardo
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/21 13:32, Adhemerval Zanella via Libc-alpha wrote:
->>>>> We (musl) don't have an equivalent header or __-prefixed versions of
->>>>> these types.
->>>>>
->>>>> FWIW I don't think stdint.h exposes anything that would be problematic
->>>>> alongside arbitrary use of kernel headers.
+Lee Jones <lee.jones@linaro.org> writes:
+> On Fri, 03 Dec 2021, Bj=C3=B8rn Mork wrote:
+>
+>> Just out of curiouslity: Is this a real device, or was this the result
+>> of fuzzing around?
+>
+> This is the result of "fuzzing around" on qemu. :)
+>
+> https://syzkaller.appspot.com/bug?extid=3D2c9b6751e87ab8706cb3
 
->>>>
->>>> Also, per glibc's bits/types.h:
->>>>
->>>> /*
->>>>   * Never include this file directly; use <sys/types.h> instead.
->>>>   */
->>>>
->>>> it's not permitted (not supported usage) to #include <bits/types.h>.
->>>> So I think the above patch is wrong for glibc too. As I understand it,
->>>> this is general policy for bits/* -- they're only intended to work as
->>>> included by the libc system headers, not directly by something else.
->>>
->>> You are right, the idea is to allow glibc to create and remove internal headers.
->>
->> As a general rule yes, but we could make a deal that some specific bits headers are permanent API for use by things like this. They probably should be less of a dumping ground than bits/types.h though.
-> 
-> I really don't think adding such constraints really would improve the project
-> in long term, we already have issues about the need to support some internal
-> symbols that were exported by accident.
-> 
+OK.  Makes sense.  I'd be surprised of such a device worked on that
+other OS.
 
-I think there are a few headers that should be safe to include from the 
-kernel.
+>> Not that it matters - it's obviously a bug to fix in any case.  Good cat=
+ch!
+>>=20
+>> (We probably have many more of the same, assuming the device presents
+>> semi-sane values in the NCM parameter struct)
+>>=20
+>> >> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+>> >> index 24753a4da7e60..e303b522efb50 100644
+>> >> --- a/drivers/net/usb/cdc_ncm.c
+>> >> +++ b/drivers/net/usb/cdc_ncm.c
+>> >> @@ -181,6 +181,8 @@ static u32 cdc_ncm_check_tx_max(struct usbnet *de=
+v, u32 new_tx)
+>> >>  		min =3D ctx->max_datagram_size + ctx->max_ndp_size + sizeof(struct=
+ usb_cdc_ncm_nth32);
+>> >>=20=20
+>> >>  	max =3D min_t(u32, CDC_NCM_NTB_MAX_SIZE_TX, le32_to_cpu(ctx->ncm_pa=
+rm.dwNtbOutMaxSize));
+>> >> +	if (max =3D=3D 0)
+>> >> +		max =3D CDC_NCM_NTB_MAX_SIZE_TX; /* dwNtbOutMaxSize not set */
+>> >>=20=20
+>> >>  	/* some devices set dwNtbOutMaxSize too low for the above default */
+>> >>  	min =3D min(min, max);
+>>=20
+>> It's been a while since I looked at this, so excuse me if I read it
+>> wrongly.  But I think we need to catch more illegal/impossible values
+>> than just zero here?  Any buffer size which cannot hold a single
+>> datagram is pointless.
+>>=20
+>> Trying to figure out what I possible meant to do with that
+>>=20
+>>  	min =3D min(min, max);
+>>=20
+>> I don't think it makes any sense?  Does it?  The "min" value we've
+>> carefully calculated allow one max sized datagram and headers. I don't
+>> think we should ever continue with a smaller buffer than that
+>
+> I was more confused with the comment you added to that code:
+>
+>    /* some devices set dwNtbOutMaxSize too low for the above default */
+>    min =3D min(min, max);
+>
+> ... which looks as though it should solve the issue of an inadequate
+> dwNtbOutMaxSize, but it almost does the opposite.
 
-Could anyone foresee any problem that could arise by including any of 
-the following headers in kernel code?:
+That's what I read too.  I must admit that I cannot remember writing any
+of this stuff.  But I trust git...
 
-<stdint.h>
-<stddef.h>
+> I initially
+> changed this segment to use the max() macro instead, but the
+> subsequent clamp_t() macro simply chooses 'max' (0) value over the now
+> sane 'min' one.
 
-They are the intended interface, and they only provide macros and types 
-but not functions, and there should be no need to require libcs to 
-define another identical stable interface.  If there's an existing 
-program that would break by including any of those in uapi headers, I'm 
-curious to see that program.
+Yes, but what if we adjust max here instead of min?
 
-Of course, the kernel already defined some of the macros defined there, 
-but the solution would be easy:  remove the redefinitions, since they 
-should be defined to equivalent code (e.g., offsetof(), NULL; although 
-these are from <stddef.h>, which for this change would be unnecessary, 
-but if <stdint.h> can be used within the kernel, a next step could be to 
-rely on libc <stddef.h>)
+> Which is why I chose=20
+>> Or are there cases where this is valid?
+>
+> I'm not an expert on the SKB code, but in my simple view of the world,
+> if you wish to use a buffer for any amount of data, you should
+> allocate space for it.
+>
+>> So that really should haven been catching this bug with a
+>>=20
+>>   max =3D max(min, max)
+>
+> I tried this.  It didn't work either.
+>
+> See the subsequent clamp_t() call a few lines down.
 
-Thanks,
-Alex
+This I don't understand.  If we have for example
 
--- 
-Alejandro Colomar
-Linux man-pages comaintainer; http://www.kernel.org/doc/man-pages/
+ new_tx =3D 0
+ max =3D 0
+ min =3D 1514(=3Ddatagram) + 8(=3Dndp) + 2(=3D1+1) * 4(=3Ddpe) + 12(=3Dnth)=
+ =3D 1542
+
+then
+
+ max =3D max(min, max) =3D 1542
+ val =3D clamp_t(u32, new_tx, min, max) =3D 1542
+
+so we return 1542 and everything is fine.
+
+>> or maybe more readable
+>>=20
+>>   if (max < min)
+>>      max =3D min
+>>=20
+>> What do you think?
+>
+> So the data that is added to the SKB is ctx->max_ndp_size, which is
+> allocated in cdc_ncm_init().  The code that does it looks like:
+>
+>    if (ctx->is_ndp16)=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
+>         ctx->max_ndp_size =3D sizeof(struct usb_cdc_ncm_ndp16) +
+> 	                    (ctx->tx_max_datagrams + 1) *
+> 			    sizeof(struct usb_cdc_ncm_dpe16);=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20
+>     else=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20
+>         ctx->max_ndp_size =3D sizeof(struct usb_cdc_ncm_ndp32) +
+> 	                    (ctx->tx_max_datagrams + 1) *
+> 			    sizeof(struct usb_cdc_ncm_dpe32);=20=20
+>
+> So this should be the size of the allocation too, right?
+
+This driver doesn't add data to the skb.  It allocates a new buffer and
+copies one or more skbs into it.  I'm sure that could be improved too..
+
+Without a complete rewrite we need to allocate new skbs large enough to hold
+
+NTH          - frame header
+NDP x 1      - index table, with minimum two entries (1 datagram + terminat=
+or)
+datagram x 1 - ethernet frame
+
+This gives the minimum "tx_max" value.
+
+The device is supposed to tell us the maximum "tx_max" value in
+dwNtbOutMaxSize.  In theory.  In practice we cannot trust the device, as
+you point out.  We know aleady deal with too large values (which are
+commonly seen in real products), but we also need to deal with too low
+values.
+
+I believe the "too low" is defined by the calculated minimum value, and
+the comment indicates that this what I tried to express but failed.
+
+
+> Why would the platform ever need to over-ride this?  The platform
+> can't make the data area smaller since there won't be enough room.  It
+> could perhaps make it bigger, but the min_t() and clamp_t() macros
+> will end up choosing the above allocation anyway.
+>
+> This leaves me feeling a little perplexed.
+>
+> If there isn't a good reason for over-riding then I could simplify
+> cdc_ncm_check_tx_max() greatly.
+>
+> What do *you* think? :)
+
+I also have the feeling that this could and should be simplified. This
+discussion shows that refactoring is required.  git blame makes this all
+too embarrassing ;-)
+
+
+
+Bj=C3=B8rn

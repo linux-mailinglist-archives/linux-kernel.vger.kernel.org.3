@@ -2,149 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E672A467D46
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D572B467D48
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359515AbhLCSaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 13:30:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382714AbhLCSaF (ORCPT
+        id S1382708AbhLCSaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 13:30:21 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:60137 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1359662AbhLCSaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 13:30:05 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8836AC061751;
-        Fri,  3 Dec 2021 10:26:41 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id j9so3555762qvm.10;
-        Fri, 03 Dec 2021 10:26:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EwdyKi75KKswk2QfbKpEYyGLv09EUR9IJeToSYVhRWQ=;
-        b=W38ot1tcCSbjmyqud55X3YgaLmd6fRFcb9mHmPbNLCYs6QDzxLTEVRBjRM2wrlRxiQ
-         3Zogxk9fhR+hzw5HEljJ/i9beF3BMuos0+Q9UBxru3ovqzqdKAS2rMuwN/I7Hy7Rs8Fw
-         jOLLla0Gws/MGv7LN7WMMvTDQUimICe4FafYZTkwrb4QU4uy1ZWnDUO8KIstLQdz5JTK
-         FZXRXecY3qnV59brlqxZsuH4qDoWiOXEOW2ChJyIZ6gwQ6BCGVgHWCcos228Xu3yzBsI
-         Vx5/IA9YqhqVlKKmnfq3SBshMgonRHFr1Owf5oFAosafUwXAvS3JSpj3Rx79EB62RJQx
-         z7Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EwdyKi75KKswk2QfbKpEYyGLv09EUR9IJeToSYVhRWQ=;
-        b=mboyJuhle/shyOcrDjHcKu7gTJcstv1KrH8NM9PrizXN0yNTUGIoVeIqHuvaZ05yoI
-         k9Xo6rVli5MDaMWPl+OINgqVymGnp4hTk9uEN5e3jwtPG+sUIxYyth3dHk5VhWVdl7Hp
-         N/qrWh5IMXdNfjaYoByMUryMcxeOP+HSUssrhP6OJLehfw9LXzZu7eyTLslZhFDFdgrP
-         OqbL5UEevvneU0WoD2ASA6zx5TRkQ3EwcwQ95F5ta5Pt58Pg0iIjkCc4vrC+xVylnLwq
-         m48FJN6yzc96j56uTngqHZsn4pw6UVaYJrrfQGS6RpAfNkOmlSXjenUxl/MhyQG2tEdd
-         drXg==
-X-Gm-Message-State: AOAM533X28TslaPzExle9FgOFGpC1PX+5rHKY7IgHY9EpL0Sr2NtDddr
-        lYvoBqo998s1g1VK9qi9pWs6I67szv8=
-X-Google-Smtp-Source: ABdhPJyIY9Lf45PQeVA46yUfwcfIBMhyOpfHzmidYGdQ1zcW9Atz1ekGaXN3nZoVLdoMrKIJHxLSaA==
-X-Received: by 2002:ad4:596f:: with SMTP id eq15mr20521055qvb.89.1638556000572;
-        Fri, 03 Dec 2021 10:26:40 -0800 (PST)
-Received: from localhost ([66.216.211.25])
-        by smtp.gmail.com with ESMTPSA id c8sm2571116qkp.8.2021.12.03.10.26.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 10:26:40 -0800 (PST)
-Date:   Fri, 3 Dec 2021 10:26:38 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH] find: Do not read beyond variable boundaries on small
- sizes
-Message-ID: <20211203182638.GA450223@lapt>
-References: <20211203100846.3977195-1-keescook@chromium.org>
- <YaoN6wnNezMvyyd5@smile.fi.intel.com>
+        Fri, 3 Dec 2021 13:30:20 -0500
+Received: (qmail 429917 invoked by uid 1000); 3 Dec 2021 13:26:55 -0500
+Date:   Fri, 3 Dec 2021 13:26:55 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Maulik Shah <mkshah@codeaurora.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] PM: runtime: Capture device status before disabling
+ runtime PM
+Message-ID: <Yaphb0hcqTQ3S78n@rowland.harvard.edu>
+References: <4723000.31r3eYUQgx@kreacher>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YaoN6wnNezMvyyd5@smile.fi.intel.com>
+In-Reply-To: <4723000.31r3eYUQgx@kreacher>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 02:30:35PM +0200, Andy Shevchenko wrote:
-> On Fri, Dec 03, 2021 at 02:08:46AM -0800, Kees Cook wrote:
-> > It's common practice to cast small variable arguments to the find_*_bit()
-
-Not that common - I found 19 examples of this cast, and most of them
-are in drivers. The only non-driver case is kernel/trace/pid_list.c:
-
-        static inline bool upper_empty(union upper_chunk *chunk)
-        {
-                /*
-                 * If chunk->data has no lower chunks, it will be the same
-                 * as a zeroed bitmask. Use find_first_bit() to test it
-                 * and if it doesn't find any bits set, then the array
-                 * is empty.
-                 */
-                int bit = find_first_bit((unsigned long *)chunk->data,
-                                         sizeof(chunk->data) * 8);
-                return bit >= sizeof(chunk->data) * 8;
-        }
-
-And it's OK wrt type conversion because chunk->data is:
-
-        union lower_chunk {
-                union lower_chunk               *next;
-                unsigned long                   data[LOWER_SIZE]; // 2K in size
-        };
-
-Although, this function should use bitmap_empty(), probably like this:
-
-        static inline bool upper_empty(union upper_chunk *chunk)
-        {
-                return bitmap_empty(chunk->data->data[0], BITS_PER_LONG);
-        }
-
-Steven, can you comment on this?
-
-> It's a bad practice and should be fixed accordingly, no?
-
-Yes.
-
-> > helpers to unsigned long and then use a size argument smaller than
-> > sizeof(unsigned long):
-> > 
-> > 	unsigned int bits;
-> > 	...
-> > 	out = find_first_bit((unsigned long *)&bits, 32);
-> > 
-> > This leads to the find helper dereferencing a full unsigned long,
-> > regardless of the size of the actual variable. The unwanted bits
-> > get masked away, but strictly speaking, a read beyond the end of
-> > the target variable happens. Builds under -Warray-bounds complain
-> > about this situation, for example:
-> > 
-> > In file included from ./include/linux/bitmap.h:9,
-> >                  from drivers/iommu/intel/iommu.c:17:
-> > drivers/iommu/intel/iommu.c: In function 'domain_context_mapping_one':
-> > ./include/linux/find.h:119:37: error: array subscript 'long unsigned int[0]' is partly outside array bounds of 'int[1]' [-Werror=array-bounds]
-> >   119 |                 unsigned long val = *addr & GENMASK(size - 1, 0);
-> >       |                                     ^~~~~
-> > drivers/iommu/intel/iommu.c:2115:18: note: while referencing 'max_pde'
-> >  2115 |         int pds, max_pde;
-> >       |                  ^~~~~~~
-
-The driver should be fixed. I would suggest using one of ffs/fls/ffz from
-include/asm/bitops.h
-
-Thanks,
-Yury
-
-> > Instead, just carefully read the correct variable size, all of which
-> > happens at compile time since small_const_nbits(size) has already
-> > determined that arguments are constant expressions.
+On Fri, Dec 03, 2021 at 05:24:45PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> What is the performance impact?
+> In some cases (for example, during system-wide suspend and resume of
+> devices) it is useful to know whether or not runtime PM has ever been
+> enabled for a given device and, if so, what the runtime PM status of
+> it had been right before runtime PM was disabled for it last time.
 > 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+> For this reason, introduce a new struct dev_pm_info field called
+> last_status that will be used for capturing the runtime PM status of
+> the device when its power.disable_depth counter changes from 0 to 1.
 > 
+> The new field will be set to RPM_INVALID to start with and whenever
+> power.disable_depth changes from 1 to 0, so it will be valid only
+> when runtime PM of the device is currently disabled, but it has been
+> enabled at least once.
+> 
+> Immediately use power.last_status in rpm_resume() to make it handle
+> the case when PM runtime is disabled for the device, but its runtime
+> PM status is RPM_ACTIVE more consistently.  Namely, make it return 1
+> if power.last_status is also equal to RPM_ACTIVE in that case (the
+> idea being that if the status was RPM_ACTIVE last time when
+> power.disable_depth was changing from 0 to 1 and it is still
+> RPM_ACTIVE, it can be assumed to reflect what happened to the device
+> last time when it was using runtime PM) and -EACCES otherwise.
+> 
+> Update the documentation to provide a description of last_status and
+> change the description of pm_runtime_resume() in it to reflect the
+> new behavior of rpm_active().
+> 
+> While at it, rearrange the code in pm_runtime_enable() to be more
+> straightforward and replace the WARN() macro in it with a pr_warn()
+> invocation which is less disruptive.
+> 
+> Link: https://lore.kernel.org/linux-pm/20211026222626.39222-1-ulf.hansson@linaro.org/t/#u
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  Documentation/power/runtime_pm.rst |   14 +++++++++----
+>  drivers/base/power/runtime.c       |   38 +++++++++++++++++++------------------
+>  include/linux/pm.h                 |    2 +
+>  3 files changed, 32 insertions(+), 22 deletions(-)
+> 
+> Index: linux-pm/drivers/base/power/runtime.c
+> ===================================================================
+> --- linux-pm.orig/drivers/base/power/runtime.c
+> +++ linux-pm/drivers/base/power/runtime.c
+> @@ -744,11 +744,10 @@ static int rpm_resume(struct device *dev
+>   repeat:
+>  	if (dev->power.runtime_error)
+>  		retval = -EINVAL;
+> -	else if (dev->power.disable_depth == 1 && dev->power.is_suspended
+> -	    && dev->power.runtime_status == RPM_ACTIVE)
+> -		retval = 1;
+>  	else if (dev->power.disable_depth > 0)
+> -		retval = -EACCES;
+> +		retval = dev->power.runtime_status == RPM_ACTIVE &&
+> +			 dev->power.last_status == RPM_ACTIVE ? 1 : -EACCES;
+
+Suggestion for a small improvement in readability: The way this 
+statement is broken between two lines, it looks as if the ?: operator 
+has higher precedence than the && operator, which is very confusing.  
+Adding parentheses would help.  Even better would be to rewrite this as 
+an "if" statement:
+
+		if (dev->power.runtime_status == RPM_ACTIVE &&
+		    dev->power.last_status == RPM_ACTIVE)
+			retval = 1;
+		else
+			retval = -EACCES;
+
+Alan Stern

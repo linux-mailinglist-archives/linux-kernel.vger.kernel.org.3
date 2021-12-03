@@ -2,96 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD040467347
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF1146734B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379203AbhLCIf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 03:35:28 -0500
-Received: from mga12.intel.com ([192.55.52.136]:31285 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244052AbhLCIf1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 03:35:27 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="216958121"
-X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
-   d="scan'208";a="216958121"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 00:32:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
-   d="scan'208";a="460807244"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 03 Dec 2021 00:32:01 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mt3z7-000HHp-5x; Fri, 03 Dec 2021 08:32:01 +0000
-Date:   Fri, 3 Dec 2021 16:31:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [peterz-queue:x86/wip.ibt 15/15] vmlinux.o: warning: objtool:
- copy_thread()+0x3c: relocation to !ENDBR: .text+0x1760
-Message-ID: <202112031602.fE432NFZ-lkp@intel.com>
+        id S1379218AbhLCIgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:36:44 -0500
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:46459 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379202AbhLCIgn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 03:36:43 -0500
+Received: (Authenticated sender: alex@ghiti.fr)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 5C96B40016;
+        Fri,  3 Dec 2021 08:33:13 +0000 (UTC)
+Message-ID: <3344a7ae-aaa6-2f35-09fc-60039bb8184d@ghiti.fr>
+Date:   Fri, 3 Dec 2021 09:33:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH 2/5] riscv: mm: init: try best to IS_ENABLED(CONFIG_64BIT)
+ instead of #ifdef
+Content-Language: en-US
+To:     Jisheng Zhang <jszhang@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20211203050317.2102-1-jszhang@kernel.org>
+ <20211203050317.2102-3-jszhang@kernel.org>
+From:   Alexandre ghiti <alex@ghiti.fr>
+In-Reply-To: <20211203050317.2102-3-jszhang@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
-head:   80bc7f2a129848b0885cf214fda77f623ba2f5f9
-commit: 80bc7f2a129848b0885cf214fda77f623ba2f5f9 [15/15] x86/Makefile: Frob IBT objtool pass
-config: x86_64-randconfig-r003-20211203 (https://download.01.org/0day-ci/archive/20211203/202112031602.fE432NFZ-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=80bc7f2a129848b0885cf214fda77f623ba2f5f9
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue x86/wip.ibt
-        git checkout 80bc7f2a129848b0885cf214fda77f623ba2f5f9
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On 12/3/21 06:03, Jisheng Zhang wrote:
+> Try our best to replace the conditional compilation using
+> "#ifdef CONFIG_64BIT" by a check for "IS_ENABLED(CONFIG_64BIT)", to
+> simplify the code and to increase compile coverage.
+>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>   arch/riscv/mm/init.c | 38 +++++++++++++++++---------------------
+>   1 file changed, 17 insertions(+), 21 deletions(-)
+>
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 745f26a3b02e..bd445ac778a8 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -102,10 +102,9 @@ static void __init print_vm_layout(void)
+>   		  (unsigned long)VMALLOC_END);
+>   	print_mlm("lowmem", (unsigned long)PAGE_OFFSET,
+>   		  (unsigned long)high_memory);
+> -#ifdef CONFIG_64BIT
+> -	print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
+> -		  (unsigned long)ADDRESS_SPACE_END);
+> -#endif
+> +	if (IS_ENABLED(CONFIG_64BIT))
+> +		print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
+> +			  (unsigned long)ADDRESS_SPACE_END);
+>   }
+>   #else
+>   static void print_vm_layout(void) { }
+> @@ -172,17 +171,16 @@ static void __init setup_bootmem(void)
+>   
+>   	memblock_enforce_memory_limit(memory_limit);
+>   
+> -	/*
+> -	 * Reserve from the start of the kernel to the end of the kernel
+> -	 */
+> -#if defined(CONFIG_64BIT) && defined(CONFIG_STRICT_KERNEL_RWX)
+>   	/*
+>   	 * Make sure we align the reservation on PMD_SIZE since we will
+>   	 * map the kernel in the linear mapping as read-only: we do not want
+>   	 * any allocation to happen between _end and the next pmd aligned page.
+>   	 */
+> -	vmlinux_end = (vmlinux_end + PMD_SIZE - 1) & PMD_MASK;
+> -#endif
+> +	if (IS_ENABLED(CONFIG_64BIT) && IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
+> +		vmlinux_end = (vmlinux_end + PMD_SIZE - 1) & PMD_MASK;
+> +	/*
+> +	 * Reserve from the start of the kernel to the end of the kernel
+> +	 */
+>   	memblock_reserve(vmlinux_start, vmlinux_end - vmlinux_start);
+>   
+>   
+> @@ -190,7 +188,6 @@ static void __init setup_bootmem(void)
+>   #ifndef CONFIG_XIP_KERNEL
+>   	phys_ram_base = memblock_start_of_DRAM();
+>   #endif
+> -#ifndef CONFIG_64BIT
+>   	/*
+>   	 * memblock allocator is not aware of the fact that last 4K bytes of
+>   	 * the addressable memory can not be mapped because of IS_ERR_VALUE
+> @@ -200,10 +197,11 @@ static void __init setup_bootmem(void)
+>   	 * address space is occupied by the kernel mapping then this check must
+>   	 * be done as soon as the kernel mapping base address is determined.
+>   	 */
+> -	max_mapped_addr = __pa(~(ulong)0);
+> -	if (max_mapped_addr == (phys_ram_end - 1))
+> -		memblock_set_current_limit(max_mapped_addr - 4096);
+> -#endif
+> +	if (!IS_ENABLED(CONFIG_64BIT)) {
+> +		max_mapped_addr = __pa(~(ulong)0);
+> +		if (max_mapped_addr == (phys_ram_end - 1))
+> +			memblock_set_current_limit(max_mapped_addr - 4096);
+> +	}
+>   
+>   	min_low_pfn = PFN_UP(phys_ram_base);
+>   	max_low_pfn = max_pfn = PFN_DOWN(phys_ram_end);
+> @@ -616,13 +614,12 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>   	BUG_ON((PAGE_OFFSET % PGDIR_SIZE) != 0);
+>   	BUG_ON((kernel_map.phys_addr % PMD_SIZE) != 0);
+>   
+> -#ifdef CONFIG_64BIT
+>   	/*
+>   	 * The last 4K bytes of the addressable memory can not be mapped because
+>   	 * of IS_ERR_VALUE macro.
+>   	 */
+> -	BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);
+> -#endif
+> +	if (IS_ENABLED(CONFIG_64BIT))
+> +		BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+For this one, I think we can just get rid of the condition since this is 
+true for every kernel actually.
 
->> vmlinux.o: warning: objtool: copy_thread()+0x3c: relocation to !ENDBR: .text+0x1760
->> vmlinux.o: warning: objtool: syscall_init()+0x2e: relocation to !ENDBR: .entry.text+0x1790
-   vmlinux.o: warning: objtool: syscall_init()+0xe7: relocation to !ENDBR: .entry.text+0x1790
->> vmlinux.o: warning: objtool: init_transition_pgtable()+0x7: relocation to !ENDBR: .text+0x54000
->> vmlinux.o: warning: objtool: init_transition_pgtable.cold()+0x2: relocation to !ENDBR: .text+0x54000
->> vmlinux.o: warning: objtool: machine_kexec()+0x41: relocation to !ENDBR: .text+0x54000
->> vmlinux.o: warning: objtool: __kretprobe_trampoline()+0x0: relocation to !ENDBR: __kretprobe_trampoline+0x0
->> vmlinux.o: warning: objtool: arch_prepare_kretprobe()+0x23: relocation to !ENDBR: __kretprobe_trampoline+0x0
->> vmlinux.o: warning: objtool: trampoline_handler()+0x20: relocation to !ENDBR: __kretprobe_trampoline+0x0
->> vmlinux.o: warning: objtool: paravirt_patch()+0x15: relocation to !ENDBR: _paravirt_nop+0x0
->> vmlinux.o: warning: objtool: unwind_next_frame()+0x478: relocation to !ENDBR: __kretprobe_trampoline+0x0
-   vmlinux.o: warning: objtool: unwind_next_frame()+0x165: relocation to !ENDBR: __kretprobe_trampoline+0x0
-   vmlinux.o: warning: objtool: unwind_next_frame()+0x31a: relocation to !ENDBR: __kretprobe_trampoline+0x0
->> vmlinux.o: warning: objtool: __unwind_start()+0xe0: relocation to !ENDBR: .text+0x1760
->> vmlinux.o: warning: objtool: filter_irq_stacks()+0x20: relocation to !ENDBR: .entry.text+0x1410
->> vmlinux.o: warning: objtool: __kretprobe_find_ret_addr()+0x43: relocation to !ENDBR: __kretprobe_trampoline+0x0
->> vmlinux.o: warning: objtool: kretprobe_find_ret_addr()+0x5c: relocation to !ENDBR: __kretprobe_trampoline+0x0
->> vmlinux.o: warning: objtool: __kretprobe_trampoline_handler()+0x50: relocation to !ENDBR: __kretprobe_trampoline+0x0
->> vmlinux.o: warning: objtool: trace_seq_print_sym()+0x97: relocation to !ENDBR: __kretprobe_trampoline+0x0
-   vmlinux.o: warning: objtool: trace_seq_print_sym()+0x3a: relocation to !ENDBR: __kretprobe_trampoline+0x0
->> vmlinux.o: warning: objtool: override_function_with_return()+0xd: relocation to !ENDBR: just_return_func+0x0
->> vmlinux.o: warning: objtool: init_real_mode()+0x14e: relocation to !ENDBR: .head.text+0x40
->> vmlinux.o: warning: objtool: int3_exception_notify()+0x52: relocation to !ENDBR: int3_magic+0x0
->> vmlinux.o: warning: objtool: vmware_platform_setup()+0x171: relocation to !ENDBR: _paravirt_nop+0x0
-   vmlinux.o: warning: objtool: .text+0x5411c: relocation to !ENDBR: .text+0x54125
-   vmlinux.o: warning: objtool: .head.text+0x80: relocation to !ENDBR: .head.text+0x89
-   vmlinux.o: warning: objtool: .head.text+0xf4: relocation to !ENDBR: .head.text+0x107
-   vmlinux.o: warning: objtool: .entry.text+0x15b3: relocation to !ENDBR: asm_load_gs_index+0x7
-   vmlinux.o: warning: objtool: .entry.text+0x168e: relocation to !ENDBR: .entry.text+0x171d
-   vmlinux.o: warning: objtool: .entry.text+0x16e1: relocation to !ENDBR: .entry.text+0x171d
-   vmlinux.o: warning: objtool: .entry.text+0x1716: relocation to !ENDBR: .entry.text+0x171d
-   vmlinux.o: warning: objtool: .entry.text+0x169c: relocation to !ENDBR: .entry.text+0x1742
-   vmlinux.o: warning: objtool: .text+0xc20: unreachable instruction
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>   
+>   	pt_ops.alloc_pte = alloc_pte_early;
+>   	pt_ops.get_pte_virt = get_pte_virt_early;
+> @@ -735,10 +732,9 @@ static void __init setup_vm_final(void)
+>   		}
+>   	}
+>   
+> -#ifdef CONFIG_64BIT
+>   	/* Map the kernel */
+> -	create_kernel_page_table(swapper_pg_dir, false);
+> -#endif
+> +	if (IS_ENABLED(CONFIG_64BIT))
+> +		create_kernel_page_table(swapper_pg_dir, false);
+
+
+Wouldn't it be better to introduce a create_kernel_page_table function 
+that does nothing for !CONFIG_64BIT?
+
+
+>   
+>   	/* Clear fixmap PTE and PMD mappings */
+>   	clear_fixmap(FIX_PTE);

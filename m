@@ -2,87 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F7FB46771B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6258346771A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380727AbhLCMMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 07:12:50 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:49458 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352004AbhLCMMq (ORCPT
+        id S1380720AbhLCMMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 07:12:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352251AbhLCMMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 3 Dec 2021 07:12:46 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B3C9ItB016776;
-        Fri, 3 Dec 2021 06:09:18 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638533358;
-        bh=06cwBrxsMnk03y/AEmhUPhS021s3XUHatnZteejmans=;
-        h=From:To:CC:Subject:Date;
-        b=Pv2/UZAB/ikGD0Ma3Ji/cDArnLi5zKc7+m9+oBVlVbM5uyA4p6Od7itLPuI9Rc2kI
-         epL1yLzMiDfktb0+XpenatuUzwys/nV5ugtsjjmJsLSwgNU0x9Tm6IqioYcb/WYyf1
-         KHwvxIr6DomKcrlsqaRyf53cYvfRU1UcpGrKORhE=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B3C9Iw8129286
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 3 Dec 2021 06:09:18 -0600
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 3
- Dec 2021 06:09:18 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 3 Dec 2021 06:09:18 -0600
-Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B3C9Fu2122882;
-        Fri, 3 Dec 2021 06:09:16 -0600
-From:   Aswath Govindraju <a-govindraju@ti.com>
-CC:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v2] soc: ti: k3-socinfo: Add entry for J721S2 SoC family
-Date:   Fri, 3 Dec 2021 17:39:13 +0530
-Message-ID: <20211203120913.14737-1-a-govindraju@ti.com>
-X-Mailer: git-send-email 2.17.1
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BD8C06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 04:09:22 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id y196so2163926wmc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 04:09:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zGjZvzsKy1y8icyn9C690f6JNNVuD1rBRqAJbaQP+Us=;
+        b=acfUr0YAFpvDvLUyEYHQKw3jSJgrVzHPjnjeYI6AQbruy/ucTIq7JPWKqCNZHxUspp
+         c8lMbagvW/ZB3eWpADyHC9yfGxrM8X5/S+2VHa/KGIyI4X3n1b8TiKz3sIIxO2+9We5C
+         Q79W3KG3163wsxgPwrcPTaQrfYxCFxG3c62Eo2znUVsgs+n7C4hTFWqTDY9vllreJHh+
+         f4HuvZNmrVcBFvmRg0f8t7cXgwx3MFkviNCA60Hf1J+K9qf3WTj7H09pH2LCK+NoogZA
+         00zDyQBfcf1f0PDYURPrI9HI7q75Tma/eyXf0gWW+XDJ/sMJjqWSy/M+haDIUK1DhkSw
+         GMHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zGjZvzsKy1y8icyn9C690f6JNNVuD1rBRqAJbaQP+Us=;
+        b=CngZqc7+XI4WFND8+W3AUCyNJn8+dEhWO2qxl2a0GNXFB2xDjwAFrZvM56jauZym25
+         Hqo31BWFbatTzmL5aMrnQ4WbvlZmRtF7uGtkRBB3R6H2MNlgjzbjfaMMhMQ5axHDYqTE
+         HXSmUkFv9up7jOmAtCs5vjCL/mKhPON7zDsbJiuy74zn5LpG1l7rQLcQbiRzUNxo/Gku
+         eWze2DlUXebakIHIlAwOdufjC9lCC30jYAgjEUsXbhA8pDCRbx0yS63DTVG8QUkgQsDJ
+         5puxeQWFGVIqbSYFO3m4huAdgD2w4KR/b861izRKl1E4ldjwUntgggURTNRpUduaU4hL
+         761A==
+X-Gm-Message-State: AOAM531ROggJ/P7+yhP9t5YtJfPld0UepVyIeS1Z16Pc0kQoARTNdvyy
+        icchbW1z41aGkbR7o2pv4SupnQ==
+X-Google-Smtp-Source: ABdhPJwHucFnTLpZlWgqBXiJBfxY11D6RbDtAI8sfkcbPU+MyH9yA562Kr1oXNIjZgGghpfN02gfTQ==
+X-Received: by 2002:a1c:4d15:: with SMTP id o21mr14191061wmh.171.1638533360735;
+        Fri, 03 Dec 2021 04:09:20 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:15:13:cb5f:d3e:205e:c7c4])
+        by smtp.gmail.com with ESMTPSA id p12sm2699606wro.33.2021.12.03.04.09.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 04:09:20 -0800 (PST)
+Date:   Fri, 3 Dec 2021 13:09:14 +0100
+From:   Marco Elver <elver@google.com>
+To:     andrey.konovalov@linux.dev
+Cc:     Alexander Potapenko <glider@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Evgenii Stepanov <eugenis@google.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: Re: [PATCH 28/31] kasan: add kasan.vmalloc command line flag
+Message-ID: <YaoI6qgQEmzNU/In@elver.google.com>
+References: <cover.1638308023.git.andreyknvl@google.com>
+ <b82fe56af4aa45a0895eb31f8e611f24512cf85b.1638308023.git.andreyknvl@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b82fe56af4aa45a0895eb31f8e611f24512cf85b.1638308023.git.andreyknvl@google.com>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-J721S2 SoC's JTAG PARTNO is 0xBB75.
+On Tue, Nov 30, 2021 at 11:08PM +0100, andrey.konovalov@linux.dev wrote:
+[...]
+>  enum kasan_arg_stacktrace {
+>  	KASAN_ARG_STACKTRACE_DEFAULT,
+>  	KASAN_ARG_STACKTRACE_OFF,
+> @@ -40,6 +46,7 @@ enum kasan_arg_stacktrace {
+>  
+>  static enum kasan_arg kasan_arg __ro_after_init;
+>  static enum kasan_arg_mode kasan_arg_mode __ro_after_init;
+> +static enum kasan_arg_vmalloc kasan_arg_vmalloc __ro_after_init;
+>  static enum kasan_arg_stacktrace kasan_arg_stacktrace __ro_after_init;
 
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
----
+It just occurred to me that all of these (except kasan_arg_mode) are
+only used by __init functions, so they could actually be marked
+__initdata instead of __ro_after_init to free up some bytes after init.
 
-Changes since v1:
-- Added ',' in the last entry too
-- Fixed the commit desciption
+Not sure if you think it's worth it, I leave it to you.
 
- drivers/soc/ti/k3-socinfo.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+[...] 
+> +	switch (kasan_arg_vmalloc) {
+> +	case KASAN_ARG_VMALLOC_DEFAULT:
+> +		/* Default to enabling vmalloc tagging. */
+> +		static_branch_enable(&kasan_flag_vmalloc);
+> +		break;
+> +	case KASAN_ARG_VMALLOC_OFF:
+> +		/* Do nothing, kasan_flag_vmalloc keeps its default value. */
+> +		break;
+> +	case KASAN_ARG_VMALLOC_ON:
+> +		static_branch_enable(&kasan_flag_vmalloc);
+> +		break;
+> +	}
 
-diff --git a/drivers/soc/ti/k3-socinfo.c b/drivers/soc/ti/k3-socinfo.c
-index fd91129de6e5..b6b2150aca4e 100644
---- a/drivers/soc/ti/k3-socinfo.c
-+++ b/drivers/soc/ti/k3-socinfo.c
-@@ -40,7 +40,8 @@ static const struct k3_soc_id {
- 	{ 0xBB5A, "AM65X" },
- 	{ 0xBB64, "J721E" },
- 	{ 0xBB6D, "J7200" },
--	{ 0xBB38, "AM64X" }
-+	{ 0xBB38, "AM64X" },
-+	{ 0xBB75, "J721S2"},
- };
- 
- static int
--- 
-2.17.1
-
+The KASAN_ARG_STACKTRACE_DEFAULT and KASAN_ARG_VMALLOC_ON cases can be
+combined.

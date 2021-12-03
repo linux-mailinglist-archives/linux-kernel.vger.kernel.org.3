@@ -2,100 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E45D94680B1
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 00:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5C7C4680B3
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 00:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354192AbhLCXlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 18:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
+        id S1354222AbhLCXly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 18:41:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240671AbhLCXlq (ORCPT
+        with ESMTP id S1354205AbhLCXlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 18:41:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A37C061751;
-        Fri,  3 Dec 2021 15:38:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABBD662D2F;
-        Fri,  3 Dec 2021 23:38:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20828C53FAD;
-        Fri,  3 Dec 2021 23:38:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638574700;
-        bh=ugjl0H7vwIDAKErgbbl0nHdANyCUHl1G37yscnbU5YY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=X6r9KGXEbceJ0Up6Zpwiczm/NBz1vJdPLKlKmw7rcXBkFMqH0o7YkVaWlccMMdQ6a
-         EA8EmX77KnwxPXtzbIqgWoZj9quNOcjXGXGkKawHekDwCarjZmrDto8iz15Vuk/ESB
-         +0bS/DWq/epaBlE7NepAatAGNylv/vUrXvDtY2WnWyooZFavy8tXg1I0JwUme/LGTo
-         5oPyOKv0ofbANpwqtgiy6E0RoGRdwj93fPnoWHO4nhDibSU6YOhsWctZ4fr1bdsd6m
-         1WsA5bnbHOF0TmZueQ6N9q9j1CGZTi9i7OjCJkn2mLcoX87yjzh9xCbyUVE2W4RW1t
-         AaymrUsj6eDIA==
-Received: by mail-ed1-f49.google.com with SMTP id y12so17397624eda.12;
-        Fri, 03 Dec 2021 15:38:20 -0800 (PST)
-X-Gm-Message-State: AOAM530pDPA7JGb9NUuPKGvCx87aHGcHacWijv2rFUylzEzd558cuRhN
-        FwXmKaaE89wOXQsNtRfOiLvyeT0HCbhvYnd+JA==
-X-Google-Smtp-Source: ABdhPJw+XO3cjO5SrZ8n1uXXjNbXhXGWsrFPtegxV4Y0/WHLg25PF4V8x+BXMIt5VKVNdrF0HCq7JUvus1wH1rof8RI=
-X-Received: by 2002:a17:907:16ac:: with SMTP id hc44mr26234009ejc.363.1638574698507;
- Fri, 03 Dec 2021 15:38:18 -0800 (PST)
-MIME-Version: 1.0
-References: <1638547658-22032-1-git-send-email-srivasam@codeaurora.com>
- <1638547658-22032-10-git-send-email-srivasam@codeaurora.com> <1638574455.248037.1043006.nullmailer@robh.at.kernel.org>
-In-Reply-To: <1638574455.248037.1043006.nullmailer@robh.at.kernel.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 3 Dec 2021 17:38:07 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKf4Y84+_PQqhwMEEiJNrR92urMUYSqYTEU0_c7fYnyhQ@mail.gmail.com>
-Message-ID: <CAL_JsqKf4Y84+_PQqhwMEEiJNrR92urMUYSqYTEU0_c7fYnyhQ@mail.gmail.com>
-Subject: Re: [PATCH v8 09/10] ASoC: dt-bindings: Add SC7280 lpass cpu bindings
-To:     Srinivasa Rao Mandadapu <srivasam@codeaurora.com>,
-        Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-Cc:     alsa-devel@alsa-project.org, bjorn.andersson@linaro.org,
-        judyhsiao@chromium.org, tiwai@suse.com,
-        linux-kernel@vger.kernel.org, bgoswami@codeaurora.org,
-        agross@kernel.org, plai@codeaurora.org,
-        Venkata Prasad Potturu <potturu@codeaurora.org>,
-        perex@perex.cz, devicetree@vger.kernel.org, lgirdwood@gmail.com,
-        linux-arm-msm@vger.kernel.org, swboyd@chromium.org,
-        rohitkr@codeaurora.org, broonie@kernel.org,
-        srinivas.kandagatla@linaro.org
+        Fri, 3 Dec 2021 18:41:53 -0500
+Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80434C061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 15:38:28 -0800 (PST)
+Received: by mail-wm1-x349.google.com with SMTP id j193-20020a1c23ca000000b003306ae8bfb7so2274902wmj.7
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 15:38:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=xmREXnUvl8E4KQZMwmE4VO+WOMe+bIkkKyKZ1+a5fBU=;
+        b=pay3ge79EMWU6N1ZAacynMBEkySGk8UMvPIsRjMw+KmLJ8q8lB0bO9FHIddOPwQtEQ
+         JJ7jnL+4q+V94vnN3GyHo54dkG/Zzm6dRPf80XoPdQmZqXyO/uubTvYih98W7ImISNMs
+         bDkV8qZ5k8ls9X/AyzVtKtVByg1bUqfgm5uLhgnYrfl4Xs3mG8Cadl73Rt7SRKCmnxBA
+         x4fhUPLiuElSSg7flGIGwxhMlTXfD+xbTCJt5L+H5dsw3KZaSwFspSMZ3FH7zueqm3zV
+         BSPvtEf61gxHXSZDmd69UldePI2AofNwhtpSTuCG/cSflPxumyoSGn9n4+mZd49ycwHJ
+         5duA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=xmREXnUvl8E4KQZMwmE4VO+WOMe+bIkkKyKZ1+a5fBU=;
+        b=wcnJT+Qj+ESmO9OsGJrLbxF+Uydv/2qc55lK4cIMG5f/UhQEMUFIb3dejw6Xi1zoEs
+         2uA40sfmZuzdcTwaEb75+eICi/23UEpSL+BqLBJzmfY8VhBgJSmvOmIMkYMmbarbRuEO
+         L3xYmt0G/PNCo8GzcVZ6f045fMNcns5fIm6a8SpmUUtSTZNuMLqXIg24TYetQ7q/OM1J
+         ze/SOTwtJDXAfZPO4VSbhvNKedcgE2Gz4HOUYryIzIjlp6EoBraRWC2EI/n7a4bMdT8v
+         pGojwgsAJ6+BanyU7w8I9U1p3+vl/zqlgsLTG0hNPHoxWHAuGruz00rVaVprkXxRenaP
+         GfHQ==
+X-Gm-Message-State: AOAM532012Ic+fuzArvwzmJxDF8d3iya9uEumG+vOVpheLct5uivpOMc
+        K/bdhpa15+dU0xgZM9Ns70Rp6Ism6w==
+X-Google-Smtp-Source: ABdhPJwiILOpTmGn4Y5cMeXnkVbxBPo5Cg7B97CUG21nN1oVaAXo5lZikNXGVJ/6bBtX+FjjdwOKP8j/hw==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:565a:3964:11db:fb41])
+ (user=elver job=sendgmr) by 2002:a5d:6691:: with SMTP id l17mr24686079wru.227.1638574706604;
+ Fri, 03 Dec 2021 15:38:26 -0800 (PST)
+Date:   Sat,  4 Dec 2021 00:38:17 +0100
+Message-Id: <20211203233817.2815340-1-elver@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
+Subject: [PATCH -rcu] kcsan: Make barrier tests compatible with lockdep
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com, "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 5:34 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Fri, 03 Dec 2021 21:37:37 +0530, Srinivasa Rao Mandadapu wrote:
-> > From: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-> >
-> > Add bindings for sc7280 lpass cpu driver which supports
-> > audio over i2s based speaker, soundwire based headset, msm dmics
-> > and HDMI Port.
-> >
-> > Signed-off-by: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-> > Co-developed-by: Venkata Prasad Potturu <potturu@codeaurora.org>
-> > Signed-off-by: Venkata Prasad Potturu <potturu@codeaurora.org>
-> > ---
-> >  .../devicetree/bindings/sound/qcom,lpass-cpu.yaml  | 70 +++++++++++++++++++---
-> >  1 file changed, 62 insertions(+), 8 deletions(-)
-> >
->
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->
-> yamllint warnings/errors:
->
-> dtschema/dtc warnings/errors:
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.example.dt.yaml: lpass@62d80000: reg: [[0, 1658351616, 0, 425984], [0, 1659895808, 0, 167936]] is too short
->         From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
+The barrier tests in selftest and the kcsan_test module only need the
+spinlock and mutex to test correct barrier instrumentation. Therefore,
+these were initially placed on the stack.
 
-Are you running the checks before you send out your patches. Because
-it seems like you keep sending things with the same errors.
+However, lockdep asserts that locks are in static storage, and will
+generate this warning:
 
-If there's errors, I'm not going to review this. If you need help
-getting it to work, then ask.
+ | INFO: trying to register non-static key.
+ | The code is fine but needs lockdep annotation, or maybe
+ | you didn't initialize this object before use?
+ | turning off the locking correctness validator.
+ | CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.16.0-rc1+ #3208
+ | Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+ | Call Trace:
+ |  <TASK>
+ |  dump_stack_lvl+0x88/0xd8
+ |  dump_stack+0x15/0x1b
+ |  register_lock_class+0x6b3/0x840
+ |  ...
+ |  test_barrier+0x490/0x14c7
+ |  kcsan_selftest+0x47/0xa0
+ |  ...
 
-And what's with your email setup? codeaurora.com bounces.
+To fix, move the test locks into static storage.
 
-Rob
+Fixing the above also revealed that lock operations are strengthened on
+first use with lockdep enabled, due to lockdep calling out into
+non-instrumented files (recall that kernel/locking/lockdep.c is not
+instrumented with KCSAN).
+
+Only kcsan_test checks for over-instrumentation of *_lock() operations,
+where we can simply "warm up" the test locks to avoid the test case
+failing with lockdep.
+
+Reported-by: Paul E. McKenney <paulmck@kernel.org>
+Signed-off-by: Marco Elver <elver@google.com>
+---
+ kernel/kcsan/kcsan_test.c | 37 +++++++++++++++++++++++--------------
+ kernel/kcsan/selftest.c   | 14 +++++++-------
+ 2 files changed, 30 insertions(+), 21 deletions(-)
+
+diff --git a/kernel/kcsan/kcsan_test.c b/kernel/kcsan/kcsan_test.c
+index 5bf94550bcdf..2bad0820f73a 100644
+--- a/kernel/kcsan/kcsan_test.c
++++ b/kernel/kcsan/kcsan_test.c
+@@ -300,6 +300,8 @@ static struct {
+ 	long val[8];
+ } test_struct;
+ static DEFINE_SEQLOCK(test_seqlock);
++static DEFINE_SPINLOCK(test_spinlock);
++static DEFINE_MUTEX(test_mutex);
+ 
+ /*
+  * Helper to avoid compiler optimizing out reads, and to generate source values
+@@ -523,8 +525,6 @@ static void test_barrier_nothreads(struct kunit *test)
+ 	struct kcsan_scoped_access *reorder_access = NULL;
+ #endif
+ 	arch_spinlock_t arch_spinlock = __ARCH_SPIN_LOCK_UNLOCKED;
+-	DEFINE_SPINLOCK(spinlock);
+-	DEFINE_MUTEX(mutex);
+ 	atomic_t dummy;
+ 
+ 	KCSAN_TEST_REQUIRES(test, reorder_access != NULL);
+@@ -543,6 +543,15 @@ static void test_barrier_nothreads(struct kunit *test)
+ #define KCSAN_EXPECT_WRITE_BARRIER(b, o) __KCSAN_EXPECT_BARRIER(KCSAN_ACCESS_WRITE, b, o, #b)
+ #define KCSAN_EXPECT_RW_BARRIER(b, o)    __KCSAN_EXPECT_BARRIER(KCSAN_ACCESS_COMPOUND | KCSAN_ACCESS_WRITE, b, o, #b)
+ 
++	/*
++	 * Lockdep initialization can strengthen certain locking operations due
++	 * to calling into instrumented files; "warm up" our locks.
++	 */
++	spin_lock(&test_spinlock);
++	spin_unlock(&test_spinlock);
++	mutex_lock(&test_mutex);
++	mutex_unlock(&test_mutex);
++
+ 	/* Force creating a valid entry in reorder_access first. */
+ 	test_var = 0;
+ 	while (test_var++ < 1000000 && reorder_access->size != sizeof(test_var))
+@@ -592,10 +601,10 @@ static void test_barrier_nothreads(struct kunit *test)
+ 	KCSAN_EXPECT_READ_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
+ 	KCSAN_EXPECT_READ_BARRIER(arch_spin_lock(&arch_spinlock), false);
+ 	KCSAN_EXPECT_READ_BARRIER(arch_spin_unlock(&arch_spinlock), true);
+-	KCSAN_EXPECT_READ_BARRIER(spin_lock(&spinlock), false);
+-	KCSAN_EXPECT_READ_BARRIER(spin_unlock(&spinlock), true);
+-	KCSAN_EXPECT_READ_BARRIER(mutex_lock(&mutex), false);
+-	KCSAN_EXPECT_READ_BARRIER(mutex_unlock(&mutex), true);
++	KCSAN_EXPECT_READ_BARRIER(spin_lock(&test_spinlock), false);
++	KCSAN_EXPECT_READ_BARRIER(spin_unlock(&test_spinlock), true);
++	KCSAN_EXPECT_READ_BARRIER(mutex_lock(&test_mutex), false);
++	KCSAN_EXPECT_READ_BARRIER(mutex_unlock(&test_mutex), true);
+ 
+ 	KCSAN_EXPECT_WRITE_BARRIER(mb(), true);
+ 	KCSAN_EXPECT_WRITE_BARRIER(wmb(), true);
+@@ -638,10 +647,10 @@ static void test_barrier_nothreads(struct kunit *test)
+ 	KCSAN_EXPECT_WRITE_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
+ 	KCSAN_EXPECT_WRITE_BARRIER(arch_spin_lock(&arch_spinlock), false);
+ 	KCSAN_EXPECT_WRITE_BARRIER(arch_spin_unlock(&arch_spinlock), true);
+-	KCSAN_EXPECT_WRITE_BARRIER(spin_lock(&spinlock), false);
+-	KCSAN_EXPECT_WRITE_BARRIER(spin_unlock(&spinlock), true);
+-	KCSAN_EXPECT_WRITE_BARRIER(mutex_lock(&mutex), false);
+-	KCSAN_EXPECT_WRITE_BARRIER(mutex_unlock(&mutex), true);
++	KCSAN_EXPECT_WRITE_BARRIER(spin_lock(&test_spinlock), false);
++	KCSAN_EXPECT_WRITE_BARRIER(spin_unlock(&test_spinlock), true);
++	KCSAN_EXPECT_WRITE_BARRIER(mutex_lock(&test_mutex), false);
++	KCSAN_EXPECT_WRITE_BARRIER(mutex_unlock(&test_mutex), true);
+ 
+ 	KCSAN_EXPECT_RW_BARRIER(mb(), true);
+ 	KCSAN_EXPECT_RW_BARRIER(wmb(), true);
+@@ -684,10 +693,10 @@ static void test_barrier_nothreads(struct kunit *test)
+ 	KCSAN_EXPECT_RW_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
+ 	KCSAN_EXPECT_RW_BARRIER(arch_spin_lock(&arch_spinlock), false);
+ 	KCSAN_EXPECT_RW_BARRIER(arch_spin_unlock(&arch_spinlock), true);
+-	KCSAN_EXPECT_RW_BARRIER(spin_lock(&spinlock), false);
+-	KCSAN_EXPECT_RW_BARRIER(spin_unlock(&spinlock), true);
+-	KCSAN_EXPECT_RW_BARRIER(mutex_lock(&mutex), false);
+-	KCSAN_EXPECT_RW_BARRIER(mutex_unlock(&mutex), true);
++	KCSAN_EXPECT_RW_BARRIER(spin_lock(&test_spinlock), false);
++	KCSAN_EXPECT_RW_BARRIER(spin_unlock(&test_spinlock), true);
++	KCSAN_EXPECT_RW_BARRIER(mutex_lock(&test_mutex), false);
++	KCSAN_EXPECT_RW_BARRIER(mutex_unlock(&test_mutex), true);
+ 
+ 	kcsan_nestable_atomic_end();
+ }
+diff --git a/kernel/kcsan/selftest.c b/kernel/kcsan/selftest.c
+index 08c6b84b9ebe..b6d4da07d80a 100644
+--- a/kernel/kcsan/selftest.c
++++ b/kernel/kcsan/selftest.c
+@@ -113,6 +113,7 @@ static bool __init test_matching_access(void)
+  * positives: simple test to check at boot certain barriers are always properly
+  * instrumented. See kcsan_test for a more complete test.
+  */
++static DEFINE_SPINLOCK(test_spinlock);
+ static bool __init test_barrier(void)
+ {
+ #ifdef CONFIG_KCSAN_WEAK_MEMORY
+@@ -122,7 +123,6 @@ static bool __init test_barrier(void)
+ #endif
+ 	bool ret = true;
+ 	arch_spinlock_t arch_spinlock = __ARCH_SPIN_LOCK_UNLOCKED;
+-	DEFINE_SPINLOCK(spinlock);
+ 	atomic_t dummy;
+ 	long test_var;
+ 
+@@ -172,8 +172,8 @@ static bool __init test_barrier(void)
+ 	KCSAN_CHECK_READ_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
+ 	arch_spin_lock(&arch_spinlock);
+ 	KCSAN_CHECK_READ_BARRIER(arch_spin_unlock(&arch_spinlock));
+-	spin_lock(&spinlock);
+-	KCSAN_CHECK_READ_BARRIER(spin_unlock(&spinlock));
++	spin_lock(&test_spinlock);
++	KCSAN_CHECK_READ_BARRIER(spin_unlock(&test_spinlock));
+ 
+ 	KCSAN_CHECK_WRITE_BARRIER(mb());
+ 	KCSAN_CHECK_WRITE_BARRIER(wmb());
+@@ -202,8 +202,8 @@ static bool __init test_barrier(void)
+ 	KCSAN_CHECK_WRITE_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
+ 	arch_spin_lock(&arch_spinlock);
+ 	KCSAN_CHECK_WRITE_BARRIER(arch_spin_unlock(&arch_spinlock));
+-	spin_lock(&spinlock);
+-	KCSAN_CHECK_WRITE_BARRIER(spin_unlock(&spinlock));
++	spin_lock(&test_spinlock);
++	KCSAN_CHECK_WRITE_BARRIER(spin_unlock(&test_spinlock));
+ 
+ 	KCSAN_CHECK_RW_BARRIER(mb());
+ 	KCSAN_CHECK_RW_BARRIER(wmb());
+@@ -235,8 +235,8 @@ static bool __init test_barrier(void)
+ 	KCSAN_CHECK_RW_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
+ 	arch_spin_lock(&arch_spinlock);
+ 	KCSAN_CHECK_RW_BARRIER(arch_spin_unlock(&arch_spinlock));
+-	spin_lock(&spinlock);
+-	KCSAN_CHECK_RW_BARRIER(spin_unlock(&spinlock));
++	spin_lock(&test_spinlock);
++	KCSAN_CHECK_RW_BARRIER(spin_unlock(&test_spinlock));
+ 
+ 	kcsan_nestable_atomic_end();
+ 
+-- 
+2.34.1.400.ga245620fadb-goog
+

@@ -2,93 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 062DA4673BC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:13:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 876C34673BF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:14:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379450AbhLCJQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 04:16:34 -0500
-Received: from mga07.intel.com ([134.134.136.100]:61721 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243758AbhLCJQ2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 04:16:28 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="300329317"
-X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
-   d="scan'208";a="300329317"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 01:13:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
-   d="scan'208";a="610330849"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 03 Dec 2021 01:13:02 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mt4cn-000HJh-RL; Fri, 03 Dec 2021 09:13:01 +0000
-Date:   Fri, 3 Dec 2021 17:12:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tony Huang <tonyhuang.sunplus@gmail.com>, derek.kiernan@xilinx.com,
-        dragan.cvetic@xilinx.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, wells.lu@sunplus.com,
-        tony.huang@sunplus.com, Tony Huang <tonyhuang.sunplus@gmail.com>
-Subject: Re: [PATCH v2 2/2] misc: Add iop driver for Sunplus SP7021
-Message-ID: <202112031753.KIjg9ffN-lkp@intel.com>
-References: <9bb79f74ff1b08a5f9a1f6707b3b41484506468a.1638499659.git.tonyhuang.sunplus@gmail.com>
+        id S1379445AbhLCJRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 04:17:32 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:43617 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351182AbhLCJRV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 04:17:21 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 1B39DcpB6015228, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 1B39DcpB6015228
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 3 Dec 2021 17:13:38 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 3 Dec 2021 17:13:38 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 3 Dec 2021 01:13:38 -0800
+Received: from RTEXMBS01.realtek.com.tw ([fe80::38af:5429:2b43:3b95]) by
+ RTEXMBS01.realtek.com.tw ([fe80::38af:5429:2b43:3b95%5]) with mapi id
+ 15.01.2308.015; Fri, 3 Dec 2021 17:13:38 +0800
+From:   Ricky WU <ricky_wu@realtek.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] misc: rtsx: Avoid mangling IRQ during runtime PM
+Thread-Topic: [PATCH] misc: rtsx: Avoid mangling IRQ during runtime PM
+Thread-Index: AQHX4l1FnspO9HEStESGVR+k3rWE8KwfjPoAgAD28xA=
+Date:   Fri, 3 Dec 2021 09:13:38 +0000
+Message-ID: <312fedea64f04be2adf613ff039506b8@realtek.com>
+References: <20211126003246.1068770-1-kai.heng.feng@canonical.com>
+ <CAAd53p6_6hCPSm5G02wC1TWHyT_cwK-6KQh9ex+QwyE_P-ErBQ@mail.gmail.com>
+In-Reply-To: <CAAd53p6_6hCPSm5G02wC1TWHyT_cwK-6KQh9ex+QwyE_P-ErBQ@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.22.88.113]
+x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzEyLzMg5LiK5Y2IIDA3OjQwOjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9bb79f74ff1b08a5f9a1f6707b3b41484506468a.1638499659.git.tonyhuang.sunplus@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tony,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on char-misc/char-misc-testing]
-[also build test ERROR on robh/for-next soc/for-next linus/master v5.16-rc3 next-20211202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Tony-Huang/Add-iop-driver-for-Sunplus-SP7021/20211203-114932
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 5d331b5922551637c586cdf5fdc1778910fc937f
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20211203/202112031753.KIjg9ffN-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/5a13966416937e820ad198a487deb9308cb86061
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Tony-Huang/Add-iop-driver-for-Sunplus-SP7021/20211203-114932
-        git checkout 5a13966416937e820ad198a487deb9308cb86061
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/misc/iop/sunplus_iop.c:10:
->> drivers/misc/iop/sunplus_iop.h:5:10: fatal error: mach/io_map.h: No such file or directory
-       5 | #include <mach/io_map.h>
-         |          ^~~~~~~~~~~~~~~
-   compilation terminated.
-
-
-vim +5 drivers/misc/iop/sunplus_iop.h
-
-     2	
-     3	#ifndef __SP_IOP_H__
-     4	#define __SP_IOP_H__
-   > 5	#include <mach/io_map.h>
-     6	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBLYWktSGVuZyBGZW5nIDxrYWku
+aGVuZy5mZW5nQGNhbm9uaWNhbC5jb20+DQo+IFNlbnQ6IEZyaWRheSwgRGVjZW1iZXIgMywgMjAy
+MSAxMDoxNyBBTQ0KPiBUbzogUmlja3kgV1UgPHJpY2t5X3d1QHJlYWx0ZWsuY29tPg0KPiBDYzog
+Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc7IEFybmQgQmVyZ21hbm4gPGFybmRAYXJuZGIuZGU+
+Ow0KPiBDaHJpc3RvcGhlIEpBSUxMRVQgPGNocmlzdG9waGUuamFpbGxldEB3YW5hZG9vLmZyPjsg
+WWFuZyBMaQ0KPiA8eWFuZy5sZWVAbGludXguYWxpYmFiYS5jb20+OyBvcGVuIGxpc3QgPGxpbnV4
+LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIG1pc2M6IHJ0
+c3g6IEF2b2lkIG1hbmdsaW5nIElSUSBkdXJpbmcgcnVudGltZSBQTQ0KPiANCj4gSGkgUmljaywN
+Cj4gDQo+IE9uIEZyaSwgTm92IDI2LCAyMDIxIGF0IDg6MzMgQU0gS2FpLUhlbmcgRmVuZw0KPiA8
+a2FpLmhlbmcuZmVuZ0BjYW5vbmljYWwuY29tPiB3cm90ZToNCj4gPg0KPiA+IEFmdGVyIGNvbW1p
+dCA1YjQyNThmNjcyMWYgKCJtaXNjOiBydHN4OiBydHM1MjQ5IHN1cHBvcnQgcnVudGltZSBQTSIp
+LA0KPiA+IHdoZW4gdGhlIHJ0c3ggY29udHJvbGxlciBpcyBydW50aW1lIHN1c3BlbmRlZCwgYnJp
+bmcgQ1BVcyBvZmZsaW5lIGFuZA0KPiA+IGJhY2sgb25saW5lLCB0aGUgcnVudGltZSByZXN1bWUg
+b2YgdGhlIGNvbnRyb2xsZXIgd2lsbCBmYWlsOg0KPiA+DQo+ID4gWyAgIDQ3LjMxOTM5MV0gc21w
+Ym9vdDogQ1BVIDEgaXMgbm93IG9mZmxpbmUNCj4gPiBbICAgNDcuNDE0MTQwXSB4ODY6IEJvb3Rp
+bmcgU01QIGNvbmZpZ3VyYXRpb246DQo+ID4gWyAgIDQ3LjQxNDE0N10gc21wYm9vdDogQm9vdGlu
+ZyBOb2RlIDAgUHJvY2Vzc29yIDEgQVBJQyAweDINCj4gPiBbICAgNDcuNTcxMzM0XSBzbXBib290
+OiBDUFUgMiBpcyBub3cgb2ZmbGluZQ0KPiA+IFsgICA0Ny42ODYwNTVdIHNtcGJvb3Q6IEJvb3Rp
+bmcgTm9kZSAwIFByb2Nlc3NvciAyIEFQSUMgMHg0DQo+ID4gWyAgIDQ3LjgwODE3NF0gc21wYm9v
+dDogQ1BVIDMgaXMgbm93IG9mZmxpbmUNCj4gPiBbICAgNDcuODc4MTQ2XSBzbXBib290OiBCb290
+aW5nIE5vZGUgMCBQcm9jZXNzb3IgMyBBUElDIDB4Ng0KPiA+IFsgICA0OC4wMDM2NzldIHNtcGJv
+b3Q6IENQVSA0IGlzIG5vdyBvZmZsaW5lDQo+ID4gWyAgIDQ4LjA4NjE4N10gc21wYm9vdDogQm9v
+dGluZyBOb2RlIDAgUHJvY2Vzc29yIDQgQVBJQyAweDENCj4gPiBbICAgNDguMjM5NjI3XSBzbXBi
+b290OiBDUFUgNSBpcyBub3cgb2ZmbGluZQ0KPiA+IFsgICA0OC4zMjYwNTldIHNtcGJvb3Q6IEJv
+b3RpbmcgTm9kZSAwIFByb2Nlc3NvciA1IEFQSUMgMHgzDQo+ID4gWyAgIDQ4LjQ3MjE5M10gc21w
+Ym9vdDogQ1BVIDYgaXMgbm93IG9mZmxpbmUNCj4gPiBbICAgNDguNTc0MTgxXSBzbXBib290OiBC
+b290aW5nIE5vZGUgMCBQcm9jZXNzb3IgNiBBUElDIDB4NQ0KPiA+IFsgICA0OC43NDMzNzVdIHNt
+cGJvb3Q6IENQVSA3IGlzIG5vdyBvZmZsaW5lDQo+ID4gWyAgIDQ4LjgzODA0N10gc21wYm9vdDog
+Qm9vdGluZyBOb2RlIDAgUHJvY2Vzc29yIDcgQVBJQyAweDcNCj4gPiBbICAgNDguOTY1NDQ3XSBf
+X2NvbW1vbl9pbnRlcnJ1cHQ6IDEuMzUgTm8gaXJxIGhhbmRsZXIgZm9yIHZlY3Rvcg0KPiA+IFsg
+ICA1MS4xNzQwNjVdIG1tYzA6IGVycm9yIC0xMTAgZG9pbmcgcnVudGltZSByZXN1bWUNCj4gPiBb
+ICAgNTQuOTc4MDg4XSBJL08gZXJyb3IsIGRldiBtbWNibGswLCBzZWN0b3IgMjE0Nzkgb3AgMHgx
+OihXUklURSkgZmxhZ3MNCj4gMHgwIHBoeXNfc2VnIDExIHByaW8gY2xhc3MgMA0KPiA+IFsgICA1
+NC45NzgxMDhdIEJ1ZmZlciBJL08gZXJyb3Igb24gZGV2IG1tY2JsazBwMSwgbG9naWNhbCBibG9j
+ayAxOTQzMSwgbG9zdA0KPiBhc3luYyBwYWdlIHdyaXRlDQo+ID4gWyAgIDU0Ljk3ODEyOV0gQnVm
+ZmVyIEkvTyBlcnJvciBvbiBkZXYgbW1jYmxrMHAxLCBsb2dpY2FsIGJsb2NrIDE5NDMyLCBsb3N0
+DQo+IGFzeW5jIHBhZ2Ugd3JpdGUNCj4gPiBbICAgNTQuOTc4MTM0XSBCdWZmZXIgSS9PIGVycm9y
+IG9uIGRldiBtbWNibGswcDEsIGxvZ2ljYWwgYmxvY2sgMTk0MzMsIGxvc3QNCj4gYXN5bmMgcGFn
+ZSB3cml0ZQ0KPiA+IFsgICA1NC45NzgxMzddIEJ1ZmZlciBJL08gZXJyb3Igb24gZGV2IG1tY2Js
+azBwMSwgbG9naWNhbCBibG9jayAxOTQzNCwgbG9zdA0KPiBhc3luYyBwYWdlIHdyaXRlDQo+ID4g
+WyAgIDU0Ljk3ODE0MV0gQnVmZmVyIEkvTyBlcnJvciBvbiBkZXYgbW1jYmxrMHAxLCBsb2dpY2Fs
+IGJsb2NrIDE5NDM1LCBsb3N0DQo+IGFzeW5jIHBhZ2Ugd3JpdGUNCj4gPiBbICAgNTQuOTc4MTQ1
+XSBCdWZmZXIgSS9PIGVycm9yIG9uIGRldiBtbWNibGswcDEsIGxvZ2ljYWwgYmxvY2sgMTk0MzYs
+IGxvc3QNCj4gYXN5bmMgcGFnZSB3cml0ZQ0KPiA+IFsgICA1NC45NzgxNDhdIEJ1ZmZlciBJL08g
+ZXJyb3Igb24gZGV2IG1tY2JsazBwMSwgbG9naWNhbCBibG9jayAxOTQzNywgbG9zdA0KPiBhc3lu
+YyBwYWdlIHdyaXRlDQo+ID4gWyAgIDU0Ljk3ODE1Ml0gQnVmZmVyIEkvTyBlcnJvciBvbiBkZXYg
+bW1jYmxrMHAxLCBsb2dpY2FsIGJsb2NrIDE5NDM4LCBsb3N0DQo+IGFzeW5jIHBhZ2Ugd3JpdGUN
+Cj4gPiBbICAgNTQuOTc4MTU1XSBCdWZmZXIgSS9PIGVycm9yIG9uIGRldiBtbWNibGswcDEsIGxv
+Z2ljYWwgYmxvY2sgMTk0MzksIGxvc3QNCj4gYXN5bmMgcGFnZSB3cml0ZQ0KPiA+IFsgICA1NC45
+NzgxNjBdIEJ1ZmZlciBJL08gZXJyb3Igb24gZGV2IG1tY2JsazBwMSwgbG9naWNhbCBibG9jayAx
+OTQ0MCwgbG9zdA0KPiBhc3luYyBwYWdlIHdyaXRlDQo+ID4gWyAgIDU0Ljk3ODI0NF0gbW1jMDog
+Y2FyZCBhYWFhIHJlbW92ZWQNCj4gPiBbICAgNTQuOTc4NDUyXSBGQVQtZnMgKG1tY2JsazBwMSk6
+IEZBVCByZWFkIGZhaWxlZCAoYmxvY2tuciA0MjU3KQ0KPiA+DQo+ID4gVGhlcmUncyBpbnRlcnJ1
+cHQgaW1tZWRpYXRlbHkgcmFpc2VkIG9uIHJ0c3hfcGNpX3dyaXRlX3JlZ2lzdGVyKCkgaW4NCj4g
+PiBydW50aW1lIHJlc3VtZSByb3V0aW5lLCBidXQgdGhlIElSUSBoYW5kbGVyIGhhc24ndCByZWdp
+c3RlcmVkIHlldC4NCj4gPg0KPiA+IFNvIHdlIGNhbiBlaXRoZXIgbW92ZSBydHN4X3BjaV93cml0
+ZV9yZWdpc3RlcigpIGFmdGVyDQo+ID4gcnRzeF9wY2lfYWNxdWlyZV9pcnEoKSwgb3IganVzdCBz
+dG9wIG1hbmdsaW5nIElSUSBvbiBydW50aW1lIFBNLg0KPiA+IENob29zZSB0aGUgbGF0dGVyIHRv
+IHNhdmUgc29tZSBDUFUgY3ljbGVzLg0KPiA+DQo+ID4gQnVnTGluazogaHR0cHM6Ly9idWdzLmxh
+dW5jaHBhZC5uZXQvYnVncy8xOTUxNzg0DQo+ID4gRml4ZXM6IDViNDI1OGY2NzIxZiAoIm1pc2M6
+IHJ0c3g6IHJ0czUyNDkgc3VwcG9ydCBydW50aW1lIFBNIikNCj4gPiBTaWduZWQtb2ZmLWJ5OiBL
+YWktSGVuZyBGZW5nIDxrYWkuaGVuZy5mZW5nQGNhbm9uaWNhbC5jb20+DQo+IA0KPiBNYXkgSSBn
+ZXQgYW4gQWNrIGZyb20geW91Pw0KPiANCg0KV2UgZGlkbid0IG1lZXQgdGhpcyBlcnJvciBsb2cg
+YmVmb3JlLCBidXQgdGhlIGNvZGUgbWF5YmUgY2F1c2UgdGhpcyAgIA0KSWYgcnVudGltZV9zdXNw
+ZW5kKCkgZG9uJ3QgbmVlZCB0byBmcmVlIGlycSwgSSB0aGluayB0aGlzIGNoYW5nZSBpcyBmaW5l
+Li4uDQpBbmQgd2UgdHJpZWQgdGhpcyBwYXRjaCwgd29yayBmaW5lIGJldHdlZW4gcnVudGltZV9z
+dXNwZW5kL3Jlc3VtZSANCg0KPiBLYWktSGVuZw0KPiANCj4gPiAtLS0NCj4gPiAgZHJpdmVycy9t
+aXNjL2NhcmRyZWFkZXIvcnRzeF9wY3IuYyB8IDQgLS0tLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwg
+NCBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL21pc2MvY2FyZHJl
+YWRlci9ydHN4X3Bjci5jDQo+ID4gYi9kcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHN4X3Bjci5j
+DQo+ID4gaW5kZXggOGM3MmViNTkwZjc5ZC4uNmFjNTA5YzE4MjFjOSAxMDA2NDQNCj4gPiAtLS0g
+YS9kcml2ZXJzL21pc2MvY2FyZHJlYWRlci9ydHN4X3Bjci5jDQo+ID4gKysrIGIvZHJpdmVycy9t
+aXNjL2NhcmRyZWFkZXIvcnRzeF9wY3IuYw0KPiA+IEBAIC0xODAzLDggKzE4MDMsNiBAQCBzdGF0
+aWMgaW50IHJ0c3hfcGNpX3J1bnRpbWVfc3VzcGVuZChzdHJ1Y3QgZGV2aWNlDQo+ICpkZXZpY2Up
+DQo+ID4gICAgICAgICBtdXRleF9sb2NrKCZwY3ItPnBjcl9tdXRleCk7DQo+ID4gICAgICAgICBy
+dHN4X3BjaV9wb3dlcl9vZmYocGNyLCBIT1NUX0VOVEVSX1MzKTsNCj4gPg0KPiA+IC0gICAgICAg
+ZnJlZV9pcnEocGNyLT5pcnEsICh2b2lkICopcGNyKTsNCj4gPiAtDQo+ID4gICAgICAgICBtdXRl
+eF91bmxvY2soJnBjci0+cGNyX211dGV4KTsNCj4gPg0KPiA+ICAgICAgICAgcGNyLT5pc19ydW50
+aW1lX3N1c3BlbmRlZCA9IHRydWU7IEBAIC0xODI1LDggKzE4MjMsNiBAQA0KPiBzdGF0aWMNCj4g
+PiBpbnQgcnRzeF9wY2lfcnVudGltZV9yZXN1bWUoc3RydWN0IGRldmljZSAqZGV2aWNlKQ0KPiA+
+ICAgICAgICAgbXV0ZXhfbG9jaygmcGNyLT5wY3JfbXV0ZXgpOw0KPiA+DQo+ID4gICAgICAgICBy
+dHN4X3BjaV93cml0ZV9yZWdpc3RlcihwY3IsIEhPU1RfU0xFRVBfU1RBVEUsIDB4MDMsIDB4MDAp
+Ow0KPiA+IC0gICAgICAgcnRzeF9wY2lfYWNxdWlyZV9pcnEocGNyKTsNCj4gPiAtICAgICAgIHN5
+bmNocm9uaXplX2lycShwY3ItPmlycSk7DQo+ID4NCj4gPiAgICAgICAgIGlmIChwY3ItPm9wcy0+
+ZmV0Y2hfdmVuZG9yX3NldHRpbmdzKQ0KPiA+ICAgICAgICAgICAgICAgICBwY3ItPm9wcy0+ZmV0
+Y2hfdmVuZG9yX3NldHRpbmdzKHBjcik7DQo+ID4gLS0NCj4gPiAyLjMyLjANCj4gPg0KPiAtLS0t
+LS1QbGVhc2UgY29uc2lkZXIgdGhlIGVudmlyb25tZW50IGJlZm9yZSBwcmludGluZyB0aGlzIGUt
+bWFpbC4NCg==

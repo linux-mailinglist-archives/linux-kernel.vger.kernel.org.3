@@ -2,76 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B660466F15
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 02:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E67D9466F17
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 02:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356720AbhLCBaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S1376928AbhLCBaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 20:30:13 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42882 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356794AbhLCBaJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 2 Dec 2021 20:30:09 -0500
-Received: from smtp25.cstnet.cn ([159.226.251.25]:46886 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1356785AbhLCBaI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 20:30:08 -0500
-Received: from localhost.localdomain (unknown [124.16.138.128])
-        by APP-05 (Coremail) with SMTP id zQCowACXeRY6cqlhWmQDAQ--.63145S2;
-        Fri, 03 Dec 2021 09:26:18 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     rafal@milecki.pl, bcm-kernel-feedback-list@broadcom.com,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] net: broadcom: Catch the Exception
-Date:   Fri,  3 Dec 2021 09:26:15 +0800
-Message-Id: <20211203012615.1512601-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B5D3628A9;
+        Fri,  3 Dec 2021 01:26:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2EA9C00446;
+        Fri,  3 Dec 2021 01:26:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638494806;
+        bh=X+YiYktzByoUj3nOnnjfIh2j31/JPhOGcu8FfoM3lmQ=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=MD7Ffr986h5shGcce0hE2Tk/QubgbjLBz6j6nVEzhYHHNSMm0aEizP/g4Utb97NcV
+         cle8Od1DMYCXNJksHUs6kROLan3+OnxDS0o9oRBnvV4q1cFlgofp8cOFtl97gAMoAv
+         tVipMmDNqw1ravWInO2k6LRGBYEJY2nC3WMtoZr993wKhna5jxrvwpLOD0xmSNnpNG
+         Ez5TnTdpX/F4qXZecFobbxr7fDZQNMT/5vwAB+EnXiTFnpat4j7F12LajRo0MzRmAz
+         Sr1p7SXKI5aRmdlEAVsKuEJmlxiUgkdAtJptYNTMzhcaC2gyIDVVvOPqrO6Tf2h8bw
+         2P4Cz0iki700Q==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowACXeRY6cqlhWmQDAQ--.63145S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrur43Jw1rJr15CF4fJryxXwb_yoWDWrg_KF
-        y7Z3s2g395CryY9w4Skw43Zry0k3yqvr1ruFy09rZaqryDuryUtayvyFyFyw1UWrW8JFyf
-        GrnIyFZxA340gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVWk
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUHpB-UUUUU=
-X-Originating-IP: [124.16.138.128]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211115032607.28970-1-rdunlap@infradead.org>
+References: <20211115032607.28970-1-rdunlap@infradead.org>
+Subject: Re: [PATCH] clk: imx: pllv1: fix kernel-doc notation for struct clk_pllv1
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Abel Vesa <abel.vesa@nxp.com>, linux-clk@vger.kernel.org,
+        linux-imx@nxp.com, Alexander Shiyan <shc_work@mail.ru>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Date:   Thu, 02 Dec 2021 17:26:44 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20211203012645.F2EA9C00446@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of dma_set_coherent_mask() is not always 0.
-To catch the exception in case that dma is not support the mask.
+Quoting Randy Dunlap (2021-11-14 19:26:07)
+> Convert struct clk_pllv1 comments to kernel-doc notation and move them
+> below the MFN_* macros.
+>=20
+> Fixes this kernel-doc warning:
+>=20
+> drivers/clk/imx/clk-pllv1.c:12: warning: This comment starts with '/**', =
+but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>     * pll v1
+>=20
+> Fixes: 2af9e6db14db ("ARM i.MX: Add common clock support for pllv1")
+> Fixes: a594790368a8 ("ARM: imx: pllv1: Fix PLL calculation for i.MX27")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Abel Vesa <abel.vesa@nxp.com>
+> Cc: linux-clk@vger.kernel.org
+> Cc: linux-imx@nxp.com
+> Cc: Alexander Shiyan <shc_work@mail.ru>
+> Cc: Shawn Guo <shawn.guo@linaro.org>
+> Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> ---
 
-Fixes: 9d61d138ab30 ("net: broadcom: rename BCM4908 driver & update DT
-binding")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/net/ethernet/broadcom/bcm4908_enet.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/broadcom/bcm4908_enet.c b/drivers/net/ethernet/broadcom/bcm4908_enet.c
-index 02a569500234..376f81796a29 100644
---- a/drivers/net/ethernet/broadcom/bcm4908_enet.c
-+++ b/drivers/net/ethernet/broadcom/bcm4908_enet.c
-@@ -708,7 +708,9 @@ static int bcm4908_enet_probe(struct platform_device *pdev)
- 
- 	enet->irq_tx = platform_get_irq_byname(pdev, "tx");
- 
--	dma_set_coherent_mask(dev, DMA_BIT_MASK(32));
-+	err = dma_set_coherent_mask(dev, DMA_BIT_MASK(32));
-+	if (err)
-+		return err;
- 
- 	err = bcm4908_enet_dma_alloc(enet);
- 	if (err)
--- 
-2.25.1
-
+Applied to clk-next

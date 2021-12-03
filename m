@@ -2,107 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84BFD466F27
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 02:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C4D466F42
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 02:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377953AbhLCBlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 20:41:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377960AbhLCBl2 (ORCPT
+        id S235608AbhLCBxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 20:53:35 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:46636 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229678AbhLCBxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 20:41:28 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E61C061758
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 17:37:31 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso2147156otj.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 17:37:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0IX7VBvn7NWi1LknLBHaVLXoYOBoRawJUhOn065lnpw=;
-        b=JRJH2qlyWjZbCGhQsj/8MZq6Lwn0fIuLp/Dc1Samp2uQze8qQJtkyMuelJkep6VxAf
-         07DonGQBLaXjhnXmP5HDrxEoj95Z2AchZFeLQvFnk22ChVo1NeijWnOr3iHKAddd8NNu
-         LiunLfhDqJOW04xaWEtTAM5dSiBHXfOzdZ7PsoSu54qdleqHQDB17OXSzR+RSOrtmoAX
-         uwl4McTrMieSNk25VmvwZsDwkDOAp6OpuHz45ZspbhyVmXd0z8iwd0AL0LMIPsmAXAgm
-         zH99zOpZnkJPsBTlEFEs1z6GR1m3Bwk0xyg3ViNzmybwqemjcfbtYlfeT+XJqJSpp5HN
-         qGUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0IX7VBvn7NWi1LknLBHaVLXoYOBoRawJUhOn065lnpw=;
-        b=KnAfqOQx6eR+wXbRC3s+BdVmXtxACGJJU4p+8YF0p6tZkJmGyWAG/qs+8QbYx64xP3
-         /5bvGMliwfKeIaNIMWu2V6eHYr+xwXLG1Gv4i0fDNNgbGgkxLTgOhdkDLHAfPwSoByK/
-         yk+gOZtqx3RajszBf1U8IN2yEGNjy1/ixCD62ZPDWNLAGkREgiBTJNHHsabOC7UXVatS
-         DDupAYvbD3NFRUt/xsQMBLA0hCnTOUNSmBD48Y8NodfTl/jOdn4REtolRL2t13QOcWWU
-         7k+ykeeIxpPcE5GdAYiEg+KGr10LtAFZkkVGm5uNnvBXCx4tliybORgplT7X7NYsSop+
-         dy1Q==
-X-Gm-Message-State: AOAM5329OpLd6V/YcvxuX8ZkYkY2Epqbi2EZ+WShrGomObGCibI961J3
-        Pu67t+YVoDrO4aZNTtBRRIVEvg==
-X-Google-Smtp-Source: ABdhPJzb/5EkCMdfjL4J+cmlmwPkC7eXYxem6MJ509mG20Wcev7hszG6NX8Sle8RxgzOOMQ8KUN7SA==
-X-Received: by 2002:a9d:5185:: with SMTP id y5mr13898744otg.110.1638495450204;
-        Thu, 02 Dec 2021 17:37:30 -0800 (PST)
-Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id e26sm321323oog.46.2021.12.02.17.37.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 17:37:29 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: Add entry for Qualcomm clock drivers
-Date:   Thu,  2 Dec 2021 17:39:01 -0800
-Message-Id: <20211203013901.3460496-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.33.1
+        Thu, 2 Dec 2021 20:53:34 -0500
+X-UUID: 961fbc40fc0044feae65e29ead907f67-20211203
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=U8O6yZXk1USP9a3ivghloEgtx5u1o7Sb0yAqTaln6E0=;
+        b=LXCZxpgvnJNaixibysFu6THwLAjpiQDuMaOu82bZHmCJnAK7sVz3xqv0oqO6GTzpzIZH/IfdViNKKhRSS67GViVX5+zm1B+ekaF/LaqJsxEmjyd4HT0xSv2IAUu+4J7ykDh6aAqH0p7vISoasIF2U+WA+MV7e6Qa51viR+osql0=;
+X-UUID: 961fbc40fc0044feae65e29ead907f67-20211203
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1071865208; Fri, 03 Dec 2021 09:50:06 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 3 Dec 2021 09:50:05 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 3 Dec 2021 09:50:04 +0800
+Message-ID: <e4be43859ea07a8382f927905c32f047dda77584.camel@mediatek.com>
+Subject: Re: [PATCH v11, 04/19] media: mtk-vcodec: export decoder pm
+ functions
+From:   "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "Tzung-Bi Shih" <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 3 Dec 2021 09:50:04 +0800
+In-Reply-To: <2fa4e19f-d57c-6264-4284-8387c4182d1f@collabora.com>
+References: <20211129034201.5767-1-yunfei.dong@mediatek.com>
+         <20211129034201.5767-5-yunfei.dong@mediatek.com>
+         <2fa4e19f-d57c-6264-4284-8387c4182d1f@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most SoC specific clock drivers are picked by respective SoC maintainer
-and then sent to the clock maintainers on their way upstream.
-
-This has however not been the case for the Qualcomm clock drivers -
-which doesn't actually have a maintainer per MAINTAINERS and where the
-framework maintainers have just carried the Qualcomm effort as well,
-presumably as a result of Stephen's history.
-
-Move the maintainership of the Qualcomm clock drivers to use the same
-model as other SoC vendors and document the ownership by actually
-introducing an entry in MAINTAINERS.
-
-Cc: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 88fcc4e7ff37..a644e2a5e79f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15671,6 +15671,15 @@ F:	Documentation/admin-guide/media/qcom_camss.rst
- F:	Documentation/devicetree/bindings/media/*camss*
- F:	drivers/media/platform/qcom/camss/
- 
-+QUALCOMM CLOCK DRIVERS
-+M:	Bjorn Andersson <bjorn.andersson@linaro.org>
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Supported
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git
-+F:	Documentation/devicetree/bindings/clock/qcom,*
-+F:	drivers/clk/qcom/
-+F:	include/dt-bindings/clock/qcom,*
-+
- QUALCOMM CORE POWER REDUCTION (CPR) AVS DRIVER
- M:	Niklas Cassel <nks@flawful.org>
- L:	linux-pm@vger.kernel.org
--- 
-2.33.1
+SGkgQmVuamFtaW4sDQoNClRoYW5rcyBmb3IgeW91ciBzdWdnZXN0aW9uLg0KT24gVHVlLCAyMDIx
+LTExLTMwIGF0IDE0OjM0ICswMTAwLCBCZW5qYW1pbiBHYWlnbmFyZCB3cm90ZToNCj4gTGUgMjkv
+MTEvMjAyMSDDoCAwNDo0MSwgWXVuZmVpIERvbmcgYSDDqWNyaXQgOg0KPiA+IFJlZ2lzdGVyIGVh
+Y2ggaGFyZHdhcmUgYXMgcGxhdGZvcm0gZGV2aWNlLCBuZWVkIHRvIGNhbGwgcG0NCj4gPiBmdW5j
+dGlvbnMNCj4gPiB0byBvcGVuL2Nsb3NlIHBvd2VyIGFuZCBjbG9jayBmcm9tIG1vZHVsZSBtdGst
+dmNvZGVjLWRlYywgZXhwb3J0DQo+ID4gdGhlc2UNCj4gPiBmdW5jdGlvbnMuDQo+IA0KPiBUaGUg
+Y29tbWl0IG1lc3NhZ2UgY29uZnVzZSBtZSwgbWF5YmUgc29tZXRoaW5nIGxpa2U6DQo+ICJXaGVu
+IG10ayB2Y29kZWMgZGVjb2RlciBpcyBidWlsZCBhcyBhIG1vZHVsZSB3ZSBuZWVkIHRvIGV4cG9y
+dA0KPiBtdGstdmNvZGVjLWRlYyBwbSBmdW5jdGlvbnMgdG8gbWFrZSB0aGVtIHZpc2libGUgYnkg
+dGhlIG90aGVyDQo+IGNvbXBvbmVudHMiDQo+IA0KRml4IGluIHBhdGNoIHYxMg0KPiBXaXRoIHRo
+YXQ6DQo+IFJldmlld2VkLWJ5OiBCZW5qYW1pbiBHYWlnbmFyZCA8YmVuamFtaW4uZ2FpZ25hcmRA
+Y29sbGFib3JhLmNvbT4NCj4gDQpCZXN0IFJlZ2FyZHMsDQpZdW5mZWkgRG9uZw0KPiA+IA0KPiA+
+IFNpZ25lZC1vZmYtYnk6IFl1bmZlaSBEb25nIDx5dW5mZWkuZG9uZ0BtZWRpYXRlay5jb20+DQo+
+ID4gLS0tDQo+ID4gICBkcml2ZXJzL21lZGlhL3BsYXRmb3JtL210ay12Y29kZWMvbXRrX3Zjb2Rl
+Y19kZWNfcG0uYyB8IDYgKysrKysrDQo+ID4gICAxIGZpbGUgY2hhbmdlZCwgNiBpbnNlcnRpb25z
+KCspDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vbXRrLXZj
+b2RlYy9tdGtfdmNvZGVjX2RlY19wbS5jDQo+ID4gYi9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL210
+ay12Y29kZWMvbXRrX3Zjb2RlY19kZWNfcG0uYw0KPiA+IGluZGV4IDIwYmQxNTdhODU1Yy4uMjIx
+Y2Y2MGU5ZmJmIDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vbXRrLXZj
+b2RlYy9tdGtfdmNvZGVjX2RlY19wbS5jDQo+ID4gKysrIGIvZHJpdmVycy9tZWRpYS9wbGF0Zm9y
+bS9tdGstdmNvZGVjL210a192Y29kZWNfZGVjX3BtLmMNCj4gPiBAQCAtNzcsMTIgKzc3LDE0IEBA
+IGludCBtdGtfdmNvZGVjX2luaXRfZGVjX3BtKHN0cnVjdA0KPiA+IHBsYXRmb3JtX2RldmljZSAq
+cGRldiwNCj4gPiAgIAlwdXRfZGV2aWNlKHBtLT5sYXJidmRlYyk7DQo+ID4gICAJcmV0dXJuIHJl
+dDsNCj4gPiAgIH0NCj4gPiArRVhQT1JUX1NZTUJPTF9HUEwobXRrX3Zjb2RlY19pbml0X2RlY19w
+bSk7DQo+ID4gICANCj4gPiAgIHZvaWQgbXRrX3Zjb2RlY19yZWxlYXNlX2RlY19wbShzdHJ1Y3Qg
+bXRrX3Zjb2RlY19wbSAqcG0pDQo+ID4gICB7DQo+ID4gICAJcG1fcnVudGltZV9kaXNhYmxlKHBt
+LT5kZXYpOw0KPiA+ICAgCXB1dF9kZXZpY2UocG0tPmxhcmJ2ZGVjKTsNCj4gPiAgIH0NCj4gPiAr
+RVhQT1JUX1NZTUJPTF9HUEwobXRrX3Zjb2RlY19yZWxlYXNlX2RlY19wbSk7DQo+ID4gICANCj4g
+PiAgIGludCBtdGtfdmNvZGVjX2RlY19wd19vbihzdHJ1Y3QgbXRrX3Zjb2RlY19wbSAqcG0pDQo+
+ID4gICB7DQo+ID4gQEAgLTk0LDYgKzk2LDcgQEAgaW50IG10a192Y29kZWNfZGVjX3B3X29uKHN0
+cnVjdCBtdGtfdmNvZGVjX3BtDQo+ID4gKnBtKQ0KPiA+ICAgDQo+ID4gICAJcmV0dXJuIHJldDsN
+Cj4gPiAgIH0NCj4gPiArRVhQT1JUX1NZTUJPTF9HUEwobXRrX3Zjb2RlY19kZWNfcHdfb24pOw0K
+PiA+ICAgDQo+ID4gICB2b2lkIG10a192Y29kZWNfZGVjX3B3X29mZihzdHJ1Y3QgbXRrX3Zjb2Rl
+Y19wbSAqcG0pDQo+ID4gICB7DQo+ID4gQEAgLTEwMyw2ICsxMDYsNyBAQCB2b2lkIG10a192Y29k
+ZWNfZGVjX3B3X29mZihzdHJ1Y3QgbXRrX3Zjb2RlY19wbQ0KPiA+ICpwbSkNCj4gPiAgIAlpZiAo
+cmV0KQ0KPiA+ICAgCQltdGtfdjRsMl9lcnIoInBtX3J1bnRpbWVfcHV0X3N5bmMgZmFpbCAlZCIs
+IHJldCk7DQo+ID4gICB9DQo+ID4gK0VYUE9SVF9TWU1CT0xfR1BMKG10a192Y29kZWNfZGVjX3B3
+X29mZik7DQo+ID4gICANCj4gPiAgIHZvaWQgbXRrX3Zjb2RlY19kZWNfY2xvY2tfb24oc3RydWN0
+IG10a192Y29kZWNfcG0gKnBtKQ0KPiA+ICAgew0KPiA+IEBAIC0xMjksNiArMTMzLDcgQEAgdm9p
+ZCBtdGtfdmNvZGVjX2RlY19jbG9ja19vbihzdHJ1Y3QNCj4gPiBtdGtfdmNvZGVjX3BtICpwbSkN
+Cj4gPiAgIAlmb3IgKGkgLT0gMTsgaSA+PSAwOyBpLS0pDQo+ID4gICAJCWNsa19kaXNhYmxlX3Vu
+cHJlcGFyZShkZWNfY2xrLT5jbGtfaW5mb1tpXS52Y29kZWNfY2xrKTsNCj4gPiAgIH0NCj4gPiAr
+RVhQT1JUX1NZTUJPTF9HUEwobXRrX3Zjb2RlY19kZWNfY2xvY2tfb24pOw0KPiA+ICAgDQo+ID4g
+ICB2b2lkIG10a192Y29kZWNfZGVjX2Nsb2NrX29mZihzdHJ1Y3QgbXRrX3Zjb2RlY19wbSAqcG0p
+DQo+ID4gICB7DQo+ID4gQEAgLTEzOSwzICsxNDQsNCBAQCB2b2lkIG10a192Y29kZWNfZGVjX2Ns
+b2NrX29mZihzdHJ1Y3QNCj4gPiBtdGtfdmNvZGVjX3BtICpwbSkNCj4gPiAgIAlmb3IgKGkgPSBk
+ZWNfY2xrLT5jbGtfbnVtIC0gMTsgaSA+PSAwOyBpLS0pDQo+ID4gICAJCWNsa19kaXNhYmxlX3Vu
+cHJlcGFyZShkZWNfY2xrLT5jbGtfaW5mb1tpXS52Y29kZWNfY2xrKTsNCj4gPiAgIH0NCj4gPiAr
+RVhQT1JUX1NZTUJPTF9HUEwobXRrX3Zjb2RlY19kZWNfY2xvY2tfb2ZmKTsNCg==
 

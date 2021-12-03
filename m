@@ -2,108 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5814C467D7D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 705C8467D7F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343911AbhLCSvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 13:51:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233187AbhLCSva (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 13:51:30 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B17BC061751;
-        Fri,  3 Dec 2021 10:48:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=kF6dmKlPKnjUDrUnQOFbFf+3qy5XKLqFHNl3T/IoT5I=; b=HrIXJSAhpv5A42dLxSAvzmFi2l
-        i4Upfw202xAcBuWfW8eLIHpzOCYwb5mWQh3Y4RiKwoaOltJoMvEo485AtvZLPQMd9De7UxVF8uGFY
-        YOha9TFu8gwOhpZMIbdxCz3Okdk/dfQuDtD5bz6kE9t7gTDrU3VgL0VCuRN6nXpUTTEsb0iFKay2C
-        l4zQehntOL7UKleJy2EHltIJm6Txkc0vZ+wGZVEX8BOvKGhlNRgxO6mOwl8Xj7MzTXVCwdMCNdbvy
-        uBAuKDq7/B69hXM6fPFgrW20jeuJfnXbdlJ1R3S+Tk4UyqXEGQdmG1+trEW6fLtnLIVOJ+JtL6kzY
-        Z6/p1/DQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mtDbG-009pzR-Q8; Fri, 03 Dec 2021 18:48:02 +0000
-Date:   Fri, 3 Dec 2021 18:48:02 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Christoph Hellwig <hch@infradead.org>,
-        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [GIT PULL] iomap folio conversion for 5.17
-Message-ID: <YapmYhfP3Vx2m9CJ@casper.infradead.org>
+        id S1344069AbhLCSvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 13:51:44 -0500
+Received: from mga09.intel.com ([134.134.136.24]:60467 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233187AbhLCSvn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 13:51:43 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="236849443"
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="236849443"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 10:48:19 -0800
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="460980151"
+Received: from rlpollvo-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.5.132])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 10:48:18 -0800
+Date:   Fri, 3 Dec 2021 10:48:18 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, hpa@zytor.com,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
+Subject: Re: [PATCH] x86/mm: Fix PAGE_KERNEL_IO removal breakage
+Message-ID: <20211203184818.3jqqrwq7ctnd6fin@ldmartin-desk2>
+X-Patchwork-Hint: comment
+References: <20211202144646.23186-1-joro@8bytes.org>
+ <20211202155452.jh4qnvpx52r3od67@ldmartin-desk2>
+ <20211203002513.fa43j6uvsn2ho4mm@ldmartin-desk2>
+ <35ba181f-c182-aa74-07e2-fcff94bf345a@amd.com>
+ <45962757-d539-0caf-1031-9340ca4ce0e0@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <45962757-d539-0caf-1031-9340ca4ce0e0@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Darrick,
+On Fri, Dec 03, 2021 at 11:32:45AM -0600, Tom Lendacky wrote:
+>On 12/3/21 11:28 AM, Tom Lendacky wrote:
+>>On 12/2/21 6:25 PM, Lucas De Marchi wrote:
+>>>On Thu, Dec 02, 2021 at 07:55:14AM -0800, Lucas De Marchi wrote:
+>>>>On Thu, Dec 02, 2021 at 03:46:46PM +0100, Joerg Roedel wrote:
+>>>>>From: Joerg Roedel <jroedel@suse.de>
+>>>>>
+>>>>>The removal of PAGE_KERNEL_IO broke SEV-ES because it changed the
+>>>>>mapping of ioremap and some fixmap areas (like the local APIC page)
+>>>>>from unencrypted to encrypted. Change those mappings back to
+>>>>>be unencrypted.
+>>>>>
+>>>>>Cc: Lucas De Marchi <lucas.demarchi@intel.com>
+>>>>>Fixes: 27dff0f58bde ("x86/mm: Nuke PAGE_KERNEL_IO")
+>>>>>Signed-off-by: Joerg Roedel <jroedel@suse.de>
+>>>>
+>>>>oops, missed the fact PAGE_KERNEL had `| ENC` while PAGE_KERENL_IO
+>>>>didn't have it. Thanks for the fixup.
+>>>
+>>>on a second thought, the fact that PAGE_KERNEL is _not_ the same as
+>>>PAGE_KERNEL_IO, completely invalidates those 2 patches I sent. It seems
+>>>I screwed it up big here.
+>>>
+>>>About the first patch,
+>>>6b2a2138cf36 ("drm/i915/gem: Stop using PAGE_KERNEL_IO"),
+>>>I didn't notice any regression on the i915
+>>>side though. Is it safe to keep it? Otherwise we are probably better
+>>>off reverting everything.
+>
+>Is i915 for just integrated graphics? In which case SME/SEV-ES aren't 
+>available on Intel.
 
-Would you like to pull the folio changes from my git tree?
-They are generally as posted previously, with minor tweaks to match
-upstream changes.  They do not introduce any new xfstests problems
-in my testing.
+No, it's also for discrete graphics - so it could also be paired with an
+AMD cpu.
 
-The following changes since commit d58071a8a76d779eedab38033ae4c821c30295a5:
+Currently the i915 driver has some assumptions about the architecture
+(x86/x86-64) since it used to be for integrated-only and thus Intel-only.
+But we are now extending it to other architectures like arm64.  That's
+why this patch was written: I misread PAGE_KERNEL and PAGE_KERNEL_IO
+being the same thing nowadays, so I was switched to the one available in
+other archs.
 
-  Linux 5.16-rc3 (2021-11-28 14:09:19 -0800)
+thanks
+Lucas De Marchi
 
-are available in the Git repository at:
-
-  git://git.infradead.org/users/willy/linux.git tags/iomap-folio-5.17
-
-for you to fetch changes up to 0976b3cc2108b11c106ecad72459cceb35158553:
-
-  xfs: Support large folios (2021-11-29 08:30:52 -0500)
-
-----------------------------------------------------------------
-Convert fs/iomap to use folios
-
-These patches prepare XFS to use large folios to cache files.
-There are some preliminary patches to add folio interfaces to the
-block layer & buffer layer, then all the iomap functions are
-converted to use folios instead of pages.
-
-----------------------------------------------------------------
-Matthew Wilcox (Oracle) (24):
-      block: Add bio_add_folio()
-      block: Add bio_for_each_folio_all()
-      fs/buffer: Convert __block_write_begin_int() to take a folio
-      iomap: Convert to_iomap_page to take a folio
-      iomap: Convert iomap_page_create to take a folio
-      iomap: Convert iomap_page_release to take a folio
-      iomap: Convert iomap_releasepage to use a folio
-      iomap: Add iomap_invalidate_folio
-      iomap: Pass the iomap_page into iomap_set_range_uptodate
-      iomap: Convert bio completions to use folios
-      iomap: Use folio offsets instead of page offsets
-      iomap: Convert iomap_read_inline_data to take a folio
-      iomap: Convert readahead and readpage to use a folio
-      iomap: Convert iomap_page_mkwrite to use a folio
-      iomap: Convert __iomap_zero_iter to use a folio
-      iomap: Convert iomap_write_begin() and iomap_write_end() to folios
-      iomap: Convert iomap_write_end_inline to take a folio
-      iomap,xfs: Convert ->discard_page to ->discard_folio
-      iomap: Simplify iomap_writepage_map()
-      iomap: Simplify iomap_do_writepage()
-      iomap: Convert iomap_add_to_ioend() to take a folio
-      iomap: Convert iomap_migrate_page() to use folios
-      iomap: Support large folios in invalidatepage
-      xfs: Support large folios
-
- Documentation/core-api/kernel-api.rst |   1 +
- block/bio.c                           |  22 ++
- fs/buffer.c                           |  23 +-
- fs/internal.h                         |   2 +-
- fs/iomap/buffered-io.c                | 510 +++++++++++++++++-----------------
- fs/xfs/xfs_aops.c                     |  24 +-
- fs/xfs/xfs_icache.c                   |   2 +
- include/linux/bio.h                   |  56 +++-
- include/linux/iomap.h                 |   3 +-
- 9 files changed, 365 insertions(+), 278 deletions(-)
-
+>
+>Thanks,
+>Tom
+>
+>>>
+>>>I'm wondering why the addition of memory encryption
+>>>in 21729f81ce8a ("x86/mm: Provide general kernel support for 
+>>>memory encryption")
+>>>didn't break io_mapping_init_wc() though as it had already done a
+>>>s/PAGE_KERNEL_IO/PAGE_KERNEL/ in commit
+>>>ac96b5566926 ("io-mapping.h: s/PAGE_KERNEL_IO/PAGE_KERNEL/")
+>>
+>>If I follow it correctly, since SME/SEV-ES are X86_64 only, 
+>>io_mapping_init_wc() takes the ioremap_wc() path which uses 
+>>PAGE_KERNEL_IO. iomap_create_wc() is only called when 
+>>CONFIG_HAVE_ATOMIC_IOMAP is set, which isn't set for X86_64.
+>>
+>>Thanks,
+>>Tom
+>>
+>>>
+>>>thanks
+>>>Lucas De Marchi
+>>>
+>>>>
+>>>>Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
+>>>>
+>>>>Lucas De Marchi
+>>>>
+>>>>>---
+>>>>>arch/x86/include/asm/fixmap.h        |  2 +-
+>>>>>arch/x86/include/asm/pgtable_types.h | 21 +++++++++++----------
+>>>>>arch/x86/mm/ioremap.c                |  2 +-
+>>>>>3 files changed, 13 insertions(+), 12 deletions(-)
+>>>>>
+>>>>>diff --git a/arch/x86/include/asm/fixmap.h 
+>>>>>b/arch/x86/include/asm/fixmap.h
+>>>>>index 5e186a69db10..a2eaf265f784 100644
+>>>>>--- a/arch/x86/include/asm/fixmap.h
+>>>>>+++ b/arch/x86/include/asm/fixmap.h
+>>>>>@@ -173,7 +173,7 @@ static inline void __set_fixmap(enum 
+>>>>>fixed_addresses idx,
+>>>>>* supported for MMIO addresses, so make sure that the memory encryption
+>>>>>* mask is not part of the page attributes.
+>>>>>*/
+>>>>>-#define FIXMAP_PAGE_NOCACHE PAGE_KERNEL_NOCACHE
+>>>>>+#define FIXMAP_PAGE_NOCACHE PAGE_KERNEL_NOCACHE_NOENC
+>>>>>
+>>>>>/*
+>>>>>* Early memremap routines used for in-place encryption. The 
+>>>>>mappings created
+>>>>>diff --git a/arch/x86/include/asm/pgtable_types.h 
+>>>>>b/arch/x86/include/asm/pgtable_types.h
+>>>>>index a87224767ff3..fc9b6995cb22 100644
+>>>>>--- a/arch/x86/include/asm/pgtable_types.h
+>>>>>+++ b/arch/x86/include/asm/pgtable_types.h
+>>>>>@@ -208,16 +208,17 @@ enum page_cache_mode {
+>>>>>
+>>>>>#define __pgprot_mask(x)    __pgprot((x) & __default_kernel_pte_mask)
+>>>>>
+>>>>>-#define PAGE_KERNEL        
+>>>>>__pgprot_mask(__PAGE_KERNEL            | _ENC)
+>>>>>-#define PAGE_KERNEL_NOENC    __pgprot_mask(__PAGE_KERNEL |    0)
+>>>>>-#define PAGE_KERNEL_RO        __pgprot_mask(__PAGE_KERNEL_RO         
+>>>>>| _ENC)
+>>>>>-#define PAGE_KERNEL_EXEC    
+>>>>>__pgprot_mask(__PAGE_KERNEL_EXEC       | _ENC)
+>>>>>-#define PAGE_KERNEL_EXEC_NOENC 
+>>>>>__pgprot_mask(__PAGE_KERNEL_EXEC       |    0)
+>>>>>-#define PAGE_KERNEL_ROX        __pgprot_mask(__PAGE_KERNEL_ROX | _ENC)
+>>>>>-#define PAGE_KERNEL_NOCACHE    
+>>>>>__pgprot_mask(__PAGE_KERNEL_NOCACHE | _ENC)
+>>>>>-#define PAGE_KERNEL_LARGE    
+>>>>>__pgprot_mask(__PAGE_KERNEL_LARGE      | _ENC)
+>>>>>-#define PAGE_KERNEL_LARGE_EXEC 
+>>>>>__pgprot_mask(__PAGE_KERNEL_LARGE_EXEC | _ENC)
+>>>>>-#define PAGE_KERNEL_VVAR    
+>>>>>__pgprot_mask(__PAGE_KERNEL_VVAR       | _ENC)
+>>>>>+#define PAGE_KERNEL            __pgprot_mask(__PAGE_KERNEL | _ENC)
+>>>>>+#define PAGE_KERNEL_NOENC __pgprot_mask(__PAGE_KERNEL            |    0)
+>>>>>+#define PAGE_KERNEL_RO __pgprot_mask(__PAGE_KERNEL_RO         | _ENC)
+>>>>>+#define PAGE_KERNEL_EXEC        __pgprot_mask(__PAGE_KERNEL_EXEC | _ENC)
+>>>>>+#define PAGE_KERNEL_EXEC_NOENC 
+>>>>>__pgprot_mask(__PAGE_KERNEL_EXEC       |    0)
+>>>>>+#define PAGE_KERNEL_ROX __pgprot_mask(__PAGE_KERNEL_ROX        | _ENC)
+>>>>>+#define PAGE_KERNEL_NOCACHE 
+>>>>>__pgprot_mask(__PAGE_KERNEL_NOCACHE    | _ENC)
+>>>>>+#define PAGE_KERNEL_NOCACHE_NOENC 
+>>>>>__pgprot_mask(__PAGE_KERNEL_NOCACHE    |    0)
+>>>>>+#define PAGE_KERNEL_LARGE __pgprot_mask(__PAGE_KERNEL_LARGE      | _ENC)
+>>>>>+#define PAGE_KERNEL_LARGE_EXEC 
+>>>>>__pgprot_mask(__PAGE_KERNEL_LARGE_EXEC | _ENC)
+>>>>>+#define PAGE_KERNEL_VVAR        __pgprot_mask(__PAGE_KERNEL_VVAR | _ENC)
+>>>>>
+>>>>>#endif    /* __ASSEMBLY__ */
+>>>>>
+>>>>>diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
+>>>>>index 3102dda4b152..4fe8d43d53bb 100644
+>>>>>--- a/arch/x86/mm/ioremap.c
+>>>>>+++ b/arch/x86/mm/ioremap.c
+>>>>>@@ -243,7 +243,7 @@ __ioremap_caller(resource_size_t 
+>>>>>phys_addr, unsigned long size,
+>>>>>     * make sure the memory encryption attribute is enabled in the
+>>>>>     * resulting mapping.
+>>>>>     */
+>>>>>-    prot = PAGE_KERNEL;
+>>>>>+    prot = PAGE_KERNEL_NOENC;
+>>>>>    if ((io_desc.flags & IORES_MAP_ENCRYPTED) || encrypted)
+>>>>>        prot = pgprot_encrypted(prot);
+>>>>>
+>>>>>-- 
+>>>>>2.34.0
+>>>>>

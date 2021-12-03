@@ -2,101 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C7A4676FF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 231FC46770A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380700AbhLCMIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 07:08:11 -0500
-Received: from foss.arm.com ([217.140.110.172]:48358 "EHLO foss.arm.com"
+        id S1380594AbhLCMKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 07:10:10 -0500
+Received: from m43-7.mailgun.net ([69.72.43.7]:11577 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1380690AbhLCMID (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 07:08:03 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BAA281396;
-        Fri,  3 Dec 2021 04:04:39 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.66.214])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF9613F5A1;
-        Fri,  3 Dec 2021 04:04:37 -0800 (PST)
-Date:   Fri, 3 Dec 2021 12:04:35 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dougall <dougallj@gmail.com>, kernel-team@android.com
-Subject: Re: [PATCH v2 8/8] drivers/perf: Add Apple icestorm/firestorm CPU
- PMU driver
-Message-ID: <YaoH07BzWSLKQ6K3@FVFF77S0Q05N>
-References: <20211201134909.390490-1-maz@kernel.org>
- <20211201134909.390490-9-maz@kernel.org>
- <YaepolizIKkzDQoV@FVFF77S0Q05N>
- <877dcnm2wt.wl-maz@kernel.org>
- <Yajwydy37psEPaS2@lakrids>
- <875ys6lype.wl-maz@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <875ys6lype.wl-maz@kernel.org>
+        id S1380680AbhLCMKE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 07:10:04 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1638533200; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=pQZT8IsW4jYbFaXDYqbHE6v8CLACutQ1h0TkuVwudoo=; b=aOqoswpWfdUCR+3mF03fLQl0PoeLuoSGwKZmOa+qGK9DZmpsRjeXMmCv3HbYM33JPzufMHDt
+ yzq0wkJTqK0FqlfR42qRzsDjuBuXCi07JVrHonoqTUwnWsJD8lMYV9SH3Y0V5SrUBQ5TuADh
+ gTNI/Nd9V3vkLncvvREMJECy06c=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 61aa084f642caac318e54d46 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 03 Dec 2021 12:06:39
+ GMT
+Sender: srivasam=codeaurora.com@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 09FEBC43637; Fri,  3 Dec 2021 12:06:38 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from hu-srivasam-hyd.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: srivasam)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 61E28C4360C;
+        Fri,  3 Dec 2021 12:06:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 61E28C4360C
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.com
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.com
+From:   Srinivasa Rao Mandadapu <srivasam@codeaurora.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org, plai@codeaurora.org,
+        bgoswami@codeaurora.org, perex@perex.cz, tiwai@suse.com,
+        srinivas.kandagatla@linaro.org, rohitkr@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, judyhsiao@chromium.org
+Cc:     Srinivasa Rao Mandadapu <srivasam@codeaurora.com>
+Subject: [PATCH v7 0/2] Machine driver to support LPASS SC7280 sound card registration
+Date:   Fri,  3 Dec 2021 17:36:21 +0530
+Message-Id: <1638533183-19023-1-git-send-email-srivasam@codeaurora.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 11:22:53AM +0000, Marc Zyngier wrote:
-> On Thu, 02 Dec 2021 16:14:01 +0000, Mark Rutland <mark.rutland@arm.com> wrote:
-> > On Thu, Dec 02, 2021 at 03:39:46PM +0000, Marc Zyngier wrote:
-> > > On Wed, 01 Dec 2021 16:58:10 +0000, Mark Rutland <mark.rutland@arm.com> wrote:
-> > > > On Wed, Dec 01, 2021 at 01:49:09PM +0000, Marc Zyngier wrote:
-> > > > > +	state = read_sysreg_s(SYS_IMP_APL_PMCR0_EL1);
-> > > > > +	overflow = read_sysreg_s(SYS_IMP_APL_PMSR_EL1);
-> > > > 
-> > > > I assume the overflow behaviour is free-running rather than stopping?
-> > > 
-> > > Configurable, apparently. At the moment, I set it to stop on overflow.
-> > > Happy to change the behaviour though.
-> > 
-> > The architected PMU continues counting upon overflow (which prevents
-> > losing counts around the overlflow occurring), so I'd prefer that.
-> > 
-> > Is that behaviour per-counter, or for the PMU as a whole?
-> 
-> It is global. This will probably require some additional rework to
-> clear bit 47 in overflowing counters, which we can't do atomically.
+This patch set is to add support for SC7280 sound card registration and
+to add dt-bindings documentation file.
 
-Ah; I see.
+Srinivasa Rao Mandadapu (2):
+  ASoC: google: dt-bindings: Add sc7280-herobrine machine bindings
+  ASoC: qcom: SC7280: Add machine driver
 
-To calrify my comment above, the reason for wanting the counter to keep
-counting is to count during the window between the IRQ being asserted and the
-PMU IRQ handler being invoked, and it's fine for there to be a blackout period
-*within* the PMU IRQ handler.
+Changes Since V6:
+    -- Remove redundant headers.
+    -- Move max ports macro to lpass.h header.
+    -- Arrange structure alignment.
+    -- Fix indentation errors.
+    -- Update module license.
+Changes Since V5:
+    -- Add required properties to dt-bindings
+Changes Since V4:
+    -- Add COMPILE_TEST flag in sc7280 configuration.
+    -- Remove redundant startup and shutdown callbacks of snd_soc_ops.
+    -- Fix typo errors.
+Changes Since V3:
+    -- Change audio jack playpause key value.
+Changes Since V2:
+    -- updated required field in bindings
+    -- updated Return type check with proper enum in sc7280.c
+    -- Updated Header name and Typos in sc7280.c
+Changes Since V1:
+    -- Indentation changes and typo.
 
-So for example it would be fine to have:
+ .../bindings/sound/google,sc7280-herobrine.yaml    | 171 ++++++++++++
+ sound/soc/qcom/Kconfig                             |  14 +
+ sound/soc/qcom/Makefile                            |   2 +
+ sound/soc/qcom/lpass.h                             |   1 +
+ sound/soc/qcom/sc7280.c                            | 290 +++++++++++++++++++++
+ 5 files changed, 478 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/google,sc7280-herobrine.yaml
+ create mode 100644 sound/soc/qcom/sc7280.c
 
-	irq_handler() 
-	{
-		if (!any_counter_overflowed())
-			return IRQ_NONE;
+-- 
+Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
+is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 
-		stop_all_counters();
-
-		for_each_counter(c) {
-			handle_counter(c);
-		}
-		
-		start_all_counters();
-
-		return IRQ_HANDLED;
-
-	}
-
-... and I think with that the regular per-counter period reprogramming would do
-the right thing?
-
-Really, all the PMU drivers should do that so that repgoramming is consistent
-and we don't get skewed groups.
-
-Thanks,
-Mark.

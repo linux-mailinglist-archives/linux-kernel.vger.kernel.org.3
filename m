@@ -2,231 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F554672FC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23FBB4672FE
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379052AbhLCICP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 03:02:15 -0500
-Received: from mail-sgaapc01on2134.outbound.protection.outlook.com ([40.107.215.134]:28608
-        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1350800AbhLCICN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 03:02:13 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jpCdrOG9kagxpr//YV+41q8fmjnrNCz4a/2FkEWBaPLAzs+NA3+LxmGIy2u2Ji9QqLCuJAMMQW8YgMuiASsdjjJ9kf00jwxaiEDksFj6V3cpe2t1mdlAPLOwO5nC5tFtnpJLAfcvEvBMxKUr/51ZfVTTza7X401glWIz6cR99myw4fOdoKGYHZQJZn0OuohyO5oabbzZWQXI+qdsd08AFGKEJgCprwbMofDtErrOFNToLMcqUZ9dg3YgvboHuVqLKm/FwE9kpl6zm20GH+y+kl+eX2sHG4KLE9d4wFGB2pmDn3b9nJTMPzXCTknf3BrbVhVzbt26qf/Tjmz86o0D5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wKo+Zqwe7OVlhaPJFUOo017opDIl8mbQepDZobp/WCY=;
- b=M4PtYTC+IFybiDork4vRjpqhqgoXLS7UlrZHlupDWxNSanQhuNhpXLP3c518/MIIXNkeSR/nvfBgyK7R6vQj4z7kqavwUbArqYU8YVfZZj8GzpmdQD6gHNAxHeYGWVoHtKc3mtzMJdJIuM1o0WEaTnYf+LzS9MLAtZfdDanEid+e9GS5mpnvY4c0vzM1ThytQipe2y6ANjHOj8PtKsjWnsA6cbOh1lGV9oXa+qiTFWyhLeX5mzaQ/lE6NwuJMPj1cSRvaV7NV2h4G178nBO0MnBWELg2lDt2gIAm071AuBLKXeroQzdRB+46fFANDCub0cYdDVNY/rtpOHm5TJ3VUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wKo+Zqwe7OVlhaPJFUOo017opDIl8mbQepDZobp/WCY=;
- b=J9cVJn/dTCtmxuvKCpud2XP/3XNnus8x34wYu0Je8kGpGBXxJGnbzEdzbhnwyuBlFdKCinq64yXdPF9Z+hq94+UgnIlCv95oel+h1BOX202bPtxOSmtjL/78Wf8eM+dB43VMJdE9jvRq1BbqndFGk3pNB64oKtiQxKkSB6gPpS0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
- by TY2PR06MB2462.apcprd06.prod.outlook.com (2603:1096:404:4d::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22; Fri, 3 Dec
- 2021 07:58:46 +0000
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::6093:831:2123:6092]) by TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::6093:831:2123:6092%5]) with mapi id 15.20.4734.027; Fri, 3 Dec 2021
- 07:58:46 +0000
-From:   Yihao Han <hanyihao@vivo.com>
-To:     Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
-        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
-Subject: [PATCH] scsi: bfa: Replace snprintf in show functions with sysfs_emit
-Date:   Thu,  2 Dec 2021 23:58:33 -0800
-Message-Id: <20211203075833.4435-1-hanyihao@vivo.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0185.apcprd02.prod.outlook.com
- (2603:1096:201:21::21) To TYZPR06MB4173.apcprd06.prod.outlook.com
- (2603:1096:400:26::14)
+        id S1379064AbhLCICk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:02:40 -0500
+Received: from mga14.intel.com ([192.55.52.115]:34396 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350800AbhLCICj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 03:02:39 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="237158712"
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="237158712"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 23:59:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="561582959"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.76]) ([10.237.72.76])
+  by fmsmga008.fm.intel.com with ESMTP; 02 Dec 2021 23:59:13 -0800
+Subject: Re: [PATCH 1/2] mmc: sdhci-iproc: "mmc1: Internal clock never
+ stabilised." seen on 72113
+To:     Al Cooper <alcooperx@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-kernel@vger.kernel.org
+References: <20211202163050.46810-1-alcooperx@gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <632d1979-261f-2486-6a25-bab89797616f@intel.com>
+Date:   Fri, 3 Dec 2021 09:59:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.13.0
 MIME-Version: 1.0
-Received: from ubuntu.vivo.xyz (103.220.76.181) by HK2PR02CA0185.apcprd02.prod.outlook.com (2603:1096:201:21::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11 via Frontend Transport; Fri, 3 Dec 2021 07:58:45 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b1d6eedc-ea86-4f5b-029f-08d9b632bb9b
-X-MS-TrafficTypeDiagnostic: TY2PR06MB2462:
-X-Microsoft-Antispam-PRVS: <TY2PR06MB24620D4D21E16B3274086F23A26A9@TY2PR06MB2462.apcprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:111;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +PfgzXa+uUb+/xys56GQbz7qju5mOPUFV9bPU3eaNbFpZ0W/2EtHrz5w/KTtZiaHWRbOb4JowVuXfYSD5u+TP65+L9vP7WpNxjC1LGYmb9Q4Rg0wOi9ISi8z5rciDlNPHVCEBFBYY1o0GHg9UxROGieJyVMOJ1rmGOCNw/Fk6Jxyuf1GmPpMj/0+3aNGhpXGoTrm0FCzLTNy/4nIv74Q06nluhd3UKmfJ/VDSUTcm89WuB5OLOF6xMyipc0OJBzFVdIEh8J2D3gI8QaZNSAJ9j4x/TKIYjgQTqcOVghEFdvOhER0Nzk9LmRPv3CYUuPa426mPw/GfDKxG0Ic3jeUfgQwXIHZ3Mf82BhFI3u01Kbo9WUXLYZX7miDEUd8EsXvHyj54WNcbczvO++ZHb+wR7qML1bWPor2jlXFt8teI3KZA49Ix75BW5lcy+YMgw+cpPQuYCpD0eQTdHE6H1Z5KUQmJAj+3uQToxDAfOT8pn38CEZFT+Y/HtNxyAb/U3e3U4r8/ipLvPzSOFy37rk5hf1c6JFXIB3toeKhex6vumAPp88c7Y0FbwD7YiPSERmfJXrCoAXH1/HmNViaHlKvNorWHQ48cUELTSI52uHvfeZlbkktW0UbeljI3LWchVfZ3UPwC1dGnEnoxn6I6p8+Q9RZKeYhIanEUv6VdmI8OfQwlHsJ5vcu7GhMRtgpSBUv0laXaCHBtB0er4gm9mbDOKTXDit6FwA7X+a4NzfcA78=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(186003)(8676002)(956004)(107886003)(2616005)(26005)(36756003)(6512007)(66476007)(110136005)(508600001)(83380400001)(66556008)(66946007)(1076003)(52116002)(4326008)(38100700002)(6486002)(5660300002)(6506007)(86362001)(38350700002)(8936002)(2906002)(6666004)(316002)(182500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OhhXzx/ntGIwLjcvy3P5Kg6t7ZL7R79n9i+iC11qaj9kwKF0ZKWBosmxiiZ+?=
- =?us-ascii?Q?plWgwPb4Ks1Yw5OpXY0ezKRHM8IjAe/z3eR97uLCcyo70wPdKgQX+X09aEXt?=
- =?us-ascii?Q?hZG0ZifCZByb1Ycs5q/H9R7DKgZS9LsJaGZmRqx1ORif6GLORiNcqt12n99z?=
- =?us-ascii?Q?5+HnkVjjiBJqSb6t0MFUBXxApt9CTNfAwuwGh984noKekny17lDfdHKQvVQA?=
- =?us-ascii?Q?pdvIFNswSs5K7qHy8npvXTe7o+PPtaxQnJKHx1NIEVNyvm2nn3yiQnf5Fw25?=
- =?us-ascii?Q?cdUJN3Sh81jqqD03TZybW5ZGhrFz6TQ3B17pZQXU9oQw9dNQy/W/RU87Ez+o?=
- =?us-ascii?Q?6DnTzgBDWLkLWpNltgWSv3qyhDtMUs4y7ZdPnUELA81IR6XmegA1/uKtAhrj?=
- =?us-ascii?Q?kDq7iq3Xhbbw/yw7AanHUZj2HGHy1XZ8x1iaPvvmc7raO26Q+qwzkfuHBsMj?=
- =?us-ascii?Q?mt11wdtUb0L1KRKbSN6cjSD7P2Jgrig+NMuGzMpNP9+TQ16wxrP1ebOmd2dL?=
- =?us-ascii?Q?EZQj/cwbfF8dgmpfzyNx65oedF6dyRmmb1mo7LIaogfw73cGfMWiPopMfS/o?=
- =?us-ascii?Q?FF/cvmbHCRTtVL8SfVKPS7T5uO8t7zuAAKnZ6W0V7ONgtcq6X2y77cWFFcrg?=
- =?us-ascii?Q?FWYeFAp8M/cZ9xc/b8suWd0FQYPYYD0Cf5uG99j4Pt9U4WPjSlll4L5M65Fq?=
- =?us-ascii?Q?Zk0N12wB1YrwTAifPgIKeiwlSFU0evONzjDym6tySC12wp6zpeAmiDe5tGkE?=
- =?us-ascii?Q?ubTPysr2bWGuVo4iz7eJWosytxlMcDFR7PZCS6ocqbmEVl9Ra4SSX0p9Mzx8?=
- =?us-ascii?Q?ecJM9vL/fzlSd51J5yJdDIkImdstGwwKZoFnBWIyUSA5mB2JfowSCuuS8FRc?=
- =?us-ascii?Q?9lWsFqe66Ks1aY+FoCFnuDuBUfme/oOdCoVR4UsgTCLbNTGopx07kc3Y4ckF?=
- =?us-ascii?Q?nHpOGTq9PhXsfZYdikh6v/7c4XixW9sezHUsWZpbhsPaOb2yuZ2CDMw5WYXR?=
- =?us-ascii?Q?+Ra66htq8ff2tD43+gNTBURtx+jOmnecnsfZCPWWLrvj8V9zRst2XIOtukG5?=
- =?us-ascii?Q?VX+pnicv0PhefA1sdsXqYV+5Ad+3m5wVGzEgvLqS/wH3cILaBgpKcimyq2sW?=
- =?us-ascii?Q?4y5Tf1jYT3dQXuyClZ/uNYLZzaClj9Vqo2PWZVydJh9cAc2xrtMq7nlxZ2vx?=
- =?us-ascii?Q?lPwHq6kHDuEvESeLMzZ+q2h0yzvKjWbA8Oc4BHtCqbzON1byZceCIKYAY+Gb?=
- =?us-ascii?Q?0FXYz7/cLbEmXxeoEuivu4guBgh4HnSI29OzVzrlqK4uNLAoEwAOYw2c2BVw?=
- =?us-ascii?Q?V8EZIpaZzRRnu4oMLGwehdjkxJnB9Xedmc9zxmGwEe/BwaSvucuKbCzxNLdq?=
- =?us-ascii?Q?cwbc+3XOdNsaSbyfpTRiuXSqkGRCfJkP4N7shSDAErC0RfooIsopKU9Fz7Ft?=
- =?us-ascii?Q?eHtpS7KA16LeJB92j4XvtqpVbXDytcfgzKaf1b+CQPPINiOc0PrLLc4MlDzk?=
- =?us-ascii?Q?vRFayUeR8c9jwfn3lRIR8KMXwhd9Tgp08HDKsZvpRcUJxBUchG4O9XC1iY2a?=
- =?us-ascii?Q?2jp1InfljUHOy5J/f6T/QxEhfZOxqPWjFaYIYrWVX8pJRkgLBSxT736c2a+i?=
- =?us-ascii?Q?Lvno2vLP7XfN1wsBI3T0hv0=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b1d6eedc-ea86-4f5b-029f-08d9b632bb9b
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2021 07:58:46.2779
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JiMHFOGnVpBaKEIyAZe9Zci4U3UmZaSlfI6fY8/K9YqFP+EL7WfC6IITSXGz2Nd1syKBmtiiQ26QprO+ocGOpQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR06MB2462
+In-Reply-To: <20211202163050.46810-1-alcooperx@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use sysfs_emit instead of scnprintf or sprintf makes more sense.
+On 02/12/2021 18:30, Al Cooper wrote:
+> The problem is in the .shutdown callback that was added to the
+> sdhci-iproc and sdhci-brcmstb drivers to save power in S5. The
+> shutdown callback will just call the sdhci_pltfm_suspend() function
+> to suspend the lower level driver and then stop the sdhci system
+> clock. The problem is that in some cases there can be a worker
+> thread in the "system_freezable_wq" work queue that is scanning
+> for a device every second. In normal system suspend, this queue
+> is suspended before the driver suspend is called. In shutdown the
+> queue is not suspended and the thread my run after we stop the
+> sdhci clock in the shutdown callback which will cause the "clock
+> never stabilised" error. The solution will be to have the shutdown
+> callback cancel the worker thread before calling suspend (and
+> stopping the sdhci clock).
+> 
+> NOTE: This is only happening on systems with the Legacy RPi SDIO
+> core because that's the only controller that doesn't have the
+> presence signal and needs to use a worker thread to do a 1 second
+> poll loop.
+> 
+> Fixes: 98b5ce4c08ca ("mmc: sdhci-iproc: Add support for the legacy sdhci controller on the BCM7211")
+> Signed-off-by: Al Cooper <alcooperx@gmail.com>
+> ---
+>  drivers/mmc/host/sdhci-iproc.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/mmc/host/sdhci-iproc.c b/drivers/mmc/host/sdhci-iproc.c
+> index 032bf852397f..05db768edcfc 100644
+> --- a/drivers/mmc/host/sdhci-iproc.c
+> +++ b/drivers/mmc/host/sdhci-iproc.c
+> @@ -428,6 +428,10 @@ static int sdhci_iproc_probe(struct platform_device *pdev)
+>  
+>  static void sdhci_iproc_shutdown(struct platform_device *pdev)
+>  {
+> +	struct sdhci_host *host = platform_get_drvdata(pdev);
+> +
+> +	/* Cancel possible rescan worker thread */
+> +	cancel_delayed_work_sync(&host->mmc->detect);
+>  	sdhci_pltfm_suspend(&pdev->dev);
+>  }
+>  
+> 
+> base-commit: 58e1100fdc5990b0cc0d4beaf2562a92e621ac7d
+> 
 
-Signed-off-by: Yihao Han <hanyihao@vivo.com>
----
- drivers/scsi/bfa/bfad_attr.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+I wonder if mmc core should handle this instead. e.g.
 
-diff --git a/drivers/scsi/bfa/bfad_attr.c b/drivers/scsi/bfa/bfad_attr.c
-index f46989bd083c..662f1e66c22f 100644
---- a/drivers/scsi/bfa/bfad_attr.c
-+++ b/drivers/scsi/bfa/bfad_attr.c
-@@ -711,7 +711,7 @@ bfad_im_serial_num_show(struct device *dev, struct device_attribute *attr,
- 	char serial_num[BFA_ADAPTER_SERIAL_NUM_LEN];
- 
- 	bfa_get_adapter_serial_num(&bfad->bfa, serial_num);
--	return snprintf(buf, PAGE_SIZE, "%s\n", serial_num);
-+	return sysfs_emit(buf, "%s\n", serial_num);
+diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
+index 240c5af793dc..55c509442659 100644
+--- a/drivers/mmc/core/core.c
++++ b/drivers/mmc/core/core.c
+@@ -2264,15 +2264,21 @@ void mmc_start_host(struct mmc_host *host)
+ 	_mmc_detect_change(host, 0, false);
  }
  
- static ssize_t
-@@ -725,7 +725,7 @@ bfad_im_model_show(struct device *dev, struct device_attribute *attr,
- 	char model[BFA_ADAPTER_MODEL_NAME_LEN];
- 
- 	bfa_get_adapter_model(&bfad->bfa, model);
--	return snprintf(buf, PAGE_SIZE, "%s\n", model);
-+	return sysfs_emit(buf, "%s\n", model);
- }
- 
- static ssize_t
-@@ -805,7 +805,7 @@ bfad_im_model_desc_show(struct device *dev, struct device_attribute *attr,
- 		snprintf(model_descr, BFA_ADAPTER_MODEL_DESCR_LEN,
- 			"Invalid Model");
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n", model_descr);
-+	return sysfs_emit(buf, "%s\n", model_descr);
- }
- 
- static ssize_t
-@@ -819,7 +819,7 @@ bfad_im_node_name_show(struct device *dev, struct device_attribute *attr,
- 	u64        nwwn;
- 
- 	nwwn = bfa_fcs_lport_get_nwwn(port->fcs_port);
--	return snprintf(buf, PAGE_SIZE, "0x%llx\n", cpu_to_be64(nwwn));
-+	return sysfs_emit(buf, "0x%llx\n", cpu_to_be64(nwwn));
- }
- 
- static ssize_t
-@@ -836,7 +836,7 @@ bfad_im_symbolic_name_show(struct device *dev, struct device_attribute *attr,
- 	bfa_fcs_lport_get_attr(&bfad->bfa_fcs.fabric.bport, &port_attr);
- 	strlcpy(symname, port_attr.port_cfg.sym_name.symname,
- 			BFA_SYMNAME_MAXLEN);
--	return snprintf(buf, PAGE_SIZE, "%s\n", symname);
-+	return sysfs_emit(buf, "%s\n", symname);
- }
- 
- static ssize_t
-@@ -850,14 +850,14 @@ bfad_im_hw_version_show(struct device *dev, struct device_attribute *attr,
- 	char hw_ver[BFA_VERSION_LEN];
- 
- 	bfa_get_pci_chip_rev(&bfad->bfa, hw_ver);
--	return snprintf(buf, PAGE_SIZE, "%s\n", hw_ver);
-+	return sysfs_emit(buf, "%s\n", hw_ver);
- }
- 
- static ssize_t
- bfad_im_drv_version_show(struct device *dev, struct device_attribute *attr,
- 				char *buf)
+-void mmc_stop_host(struct mmc_host *host)
++void mmc_quiesce_host(struct mmc_host *host)
  {
--	return snprintf(buf, PAGE_SIZE, "%s\n", BFAD_DRIVER_VERSION);
-+	return sysfs_emit(buf, "%s\n", BFAD_DRIVER_VERSION);
+-	if (host->slot.cd_irq >= 0) {
++	if (host->slot.cd_irq >= 0 && host->slot.irq_enabled) {
+ 		mmc_gpio_set_cd_wake(host, false);
+ 		disable_irq(host->slot.cd_irq);
++		host->slot.irq_enabled = false;
+ 	}
+ 
+ 	host->rescan_disable = 1;
+ 	cancel_delayed_work_sync(&host->detect);
++}
++
++void mmc_stop_host(struct mmc_host *host)
++{
++	mmc_quiesce_host(host);
+ 
+ 	/* clear pm flags now and let card drivers set them as needed */
+ 	host->pm_flags = 0;
+diff --git a/drivers/mmc/core/core.h b/drivers/mmc/core/core.h
+index 7931a4f0137d..dcee28eec9a6 100644
+--- a/drivers/mmc/core/core.h
++++ b/drivers/mmc/core/core.h
+@@ -71,6 +71,7 @@ static inline void mmc_delay(unsigned int ms)
+ void mmc_rescan(struct work_struct *work);
+ void mmc_start_host(struct mmc_host *host);
+ void mmc_stop_host(struct mmc_host *host);
++void mmc_quiesce_host(struct mmc_host *host);
+ 
+ void _mmc_detect_change(struct mmc_host *host, unsigned long delay,
+ 			bool cd_irq);
+diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
+index d4683b1d263f..5b272f938558 100644
+--- a/drivers/mmc/core/host.c
++++ b/drivers/mmc/core/host.c
+@@ -80,9 +80,18 @@ static void mmc_host_classdev_release(struct device *dev)
+ 	kfree(host);
  }
  
- static ssize_t
-@@ -871,7 +871,7 @@ bfad_im_optionrom_version_show(struct device *dev,
- 	char optrom_ver[BFA_VERSION_LEN];
++static int mmc_host_shutdown_pre(struct device *dev)
++{
++	struct mmc_host *host = cls_dev_to_mmc_host(dev);
++
++	mmc_quiesce_host(host);
++	return 0;
++}
++
+ static struct class mmc_host_class = {
+ 	.name		= "mmc_host",
+ 	.dev_release	= mmc_host_classdev_release,
++	.shutdown_pre	= mmc_host_shutdown_pre,
+ 	.pm		= MMC_HOST_CLASS_DEV_PM_OPS,
+ };
  
- 	bfa_get_adapter_optrom_ver(&bfad->bfa, optrom_ver);
--	return snprintf(buf, PAGE_SIZE, "%s\n", optrom_ver);
-+	return sysfs_emit(buf, "%s\n", optrom_ver);
- }
+diff --git a/drivers/mmc/core/slot-gpio.c b/drivers/mmc/core/slot-gpio.c
+index dd2a4b6ab6ad..4967f0b15806 100644
+--- a/drivers/mmc/core/slot-gpio.c
++++ b/drivers/mmc/core/slot-gpio.c
+@@ -110,6 +110,8 @@ void mmc_gpiod_request_cd_irq(struct mmc_host *host)
+ 			ctx->cd_label, host);
+ 		if (ret < 0)
+ 			irq = ret;
++		else
++			host->slot.irq_enabled = true;
+ 	}
  
- static ssize_t
-@@ -885,7 +885,7 @@ bfad_im_fw_version_show(struct device *dev, struct device_attribute *attr,
- 	char fw_ver[BFA_VERSION_LEN];
+ 	host->slot.cd_irq = irq;
+diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
+index 7afb57cab00b..d1fd9b05274b 100644
+--- a/include/linux/mmc/host.h
++++ b/include/linux/mmc/host.h
+@@ -263,6 +263,7 @@ struct mmc_async_req {
+ struct mmc_slot {
+ 	int cd_irq;
+ 	bool cd_wake_enabled;
++	bool irq_enabled;
+ 	void *handler_priv;
+ };
  
- 	bfa_get_adapter_fw_ver(&bfad->bfa, fw_ver);
--	return snprintf(buf, PAGE_SIZE, "%s\n", fw_ver);
-+	return sysfs_emit(buf, "%s\n", fw_ver);
- }
- 
- static ssize_t
-@@ -897,7 +897,7 @@ bfad_im_num_of_ports_show(struct device *dev, struct device_attribute *attr,
- 			(struct bfad_im_port_s *) shost->hostdata[0];
- 	struct bfad_s *bfad = im_port->bfad;
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n",
-+	return sysfs_emit(buf, "%d\n",
- 			bfa_get_nports(&bfad->bfa));
- }
- 
-@@ -905,7 +905,7 @@ static ssize_t
- bfad_im_drv_name_show(struct device *dev, struct device_attribute *attr,
- 				char *buf)
- {
--	return snprintf(buf, PAGE_SIZE, "%s\n", BFAD_DRIVER_NAME);
-+	return sysfs_emit(buf, "%s\n", BFAD_DRIVER_NAME);
- }
- 
- static ssize_t
-@@ -924,7 +924,7 @@ bfad_im_num_of_discovered_ports_show(struct device *dev,
- 	rports = kcalloc(nrports, sizeof(struct bfa_rport_qualifier_s),
- 			 GFP_ATOMIC);
- 	if (rports == NULL)
--		return snprintf(buf, PAGE_SIZE, "Failed\n");
-+		return sysfs_emit(buf, "Failed\n");
- 
- 	spin_lock_irqsave(&bfad->bfad_lock, flags);
- 	bfa_fcs_lport_get_rport_quals(port->fcs_port, rports, &nrports);
--- 
-2.17.1
+
 

@@ -2,84 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5711B4672EC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5368B4672EF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378996AbhLCHxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 02:53:22 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:42544 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234833AbhLCHxV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 02:53:21 -0500
-Received: from localhost.localdomain (unknown [124.16.138.128])
-        by APP-01 (Coremail) with SMTP id qwCowACHj58QzKlhr48dAQ--.48715S2;
-        Fri, 03 Dec 2021 15:49:36 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     linus.walleij@linaro.org, bgolaszewski@baylibre.com, vz@mleia.com
-Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH RESEND] gpio: lpc32xx: Handle devm_gpiochip_add_data error codes
-Date:   Fri,  3 Dec 2021 15:49:34 +0800
-Message-Id: <20211203074934.1559805-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1379006AbhLCHx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 02:53:58 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:32876 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378991AbhLCHx4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 02:53:56 -0500
+Received: from kwepemi100009.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J54k64k7Nzcbn4;
+        Fri,  3 Dec 2021 15:50:22 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100009.china.huawei.com (7.221.188.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 3 Dec 2021 15:50:30 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 3 Dec 2021 15:50:30 +0800
+Subject: Re: [PATCH v4 2/2] block: cancel all throttled bios in del_gendisk()
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+CC:     <hch@infradead.org>, <tj@kernel.org>, <axboe@kernel.dk>,
+        <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20211202130440.1943847-1-yukuai3@huawei.com>
+ <20211202130440.1943847-3-yukuai3@huawei.com>
+ <20211202144818.GB16798@blackbody.suse.cz>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <95825098-a532-a0e4-9ed0-0b5f2a0e5f04@huawei.com>
+Date:   Fri, 3 Dec 2021 15:50:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20211202144818.GB16798@blackbody.suse.cz>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowACHj58QzKlhr48dAQ--.48715S2
-X-Coremail-Antispam: 1UD129KBjvJXoWrtr4kAF43WFyruFW3ZrW7twb_yoW8Jr48pw
-        40gayIyryUAF17J34jkF1UAa4Uua10yFW2gFZ2k392v3W5JFWkKF4fXFWkXF4FyFyrGr47
-        ZFs3tFW8Zr18Zw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
-        CwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUBpB-UUU
-        UU=
-X-Originating-IP: [124.16.138.128]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of devm_gpiochip_add_data() is not always 0.
-To catch the exception in case of the failure.
+在 2021/12/02 22:48, Michal Koutný 写道:
+> Hello Kuai.
+> 
+> On Thu, Dec 02, 2021 at 09:04:40PM +0800, Yu Kuai <yukuai3@huawei.com> wrote:
+>> For example, if user thread is throttled with low bps while it's
+>> issuing large io, and the device is deleted. The user thread will
+>> wait for a long time for io to return.
+> 
+> Do I understand correctly the "long time" here is
+> outstanding_IO_size/throttled_bandwidth? Or are you getting at some
 
-Fixes: 69c0a0a52cde ("gpio: lpc32xx: Use devm_gpiochip_add_data() for gpio registration")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/gpio/gpio-lpc32xx.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Hi, Michal
 
-diff --git a/drivers/gpio/gpio-lpc32xx.c b/drivers/gpio/gpio-lpc32xx.c
-index 4e626c4235c2..e3b734302b76 100644
---- a/drivers/gpio/gpio-lpc32xx.c
-+++ b/drivers/gpio/gpio-lpc32xx.c
-@@ -505,6 +505,7 @@ static int lpc32xx_of_xlate(struct gpio_chip *gc,
- static int lpc32xx_gpio_probe(struct platform_device *pdev)
- {
- 	int i;
-+	int err;
- 	void __iomem *reg_base;
- 
- 	reg_base = devm_platform_ioremap_resource(pdev, 0);
-@@ -518,8 +519,10 @@ static int lpc32xx_gpio_probe(struct platform_device *pdev)
- 			lpc32xx_gpiochip[i].chip.of_node = pdev->dev.of_node;
- 			lpc32xx_gpiochip[i].reg_base = reg_base;
- 		}
--		devm_gpiochip_add_data(&pdev->dev, &lpc32xx_gpiochip[i].chip,
-+		err = devm_gpiochip_add_data(&pdev->dev, &lpc32xx_gpiochip[i].chip,
- 				  &lpc32xx_gpiochip[i]);
-+		if (err)
-+			return err;
- 	}
- 
- 	return 0;
--- 
-2.25.1
+Yes, this is exactly what I mean.
+> other cause/longer time?
+> 
+>> +void blk_throtl_cancel_bios(struct request_queue *q)
+>> +{
+>> +	struct throtl_data *td = q->td;
+>> +	struct bio_list bio_list_on_stack;
+>> +	struct blkcg_gq *blkg;
+>> +	struct cgroup_subsys_state *pos_css;
+>> +	struct bio *bio;
+>> +	int rw;
+>> +
+>> +	bio_list_init(&bio_list_on_stack);
+>> +
+>> +	/*
+>> +	 * hold queue_lock to prevent concurrent with dispatching
+>> +	 * throttled bios by timer.
+>> +	 */
+>> +	spin_lock_irq(&q->queue_lock);
+> 
+> You've replaced the rcu_read_lock() with the queue lock but...
+> 
+>> +
+>> +	/*
+>> +	 * Drain each tg while doing post-order walk on the blkg tree, so
+>> +	 * that all bios are propagated to td->service_queue.  It'd be
+>> +	 * better to walk service_queue tree directly but blkg walk is
+>> +	 * easier.
+>> +	 */
+>> +	blkg_for_each_descendant_post(blkg, pos_css, td->queue->root_blkg)
+>> +		tg_drain_bios(&blkg_to_tg(blkg)->service_queue);
+> 
+> ...you also need the rcu_read_lock() here since you may encounter a
+> (descendant) blkcg that's removed concurrently.
 
+blkg_destroy() is protected by the queue_lock，so I think queue_lock can
+protect such concurrent scenario.
+
+Thanks,
+Kuai
+> 
+> (I may miss some consequences of doing this under the queue_lock so if
+> the concurrent removal is ruled out, please make a comment about it.)
+> 
+> 
+> Regards,
+> Michal
+> 

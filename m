@@ -2,108 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 571EC467D2A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18AF9467D2D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382557AbhLCSYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 13:24:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50888 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1382554AbhLCSYN (ORCPT
+        id S1382565AbhLCSYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 13:24:35 -0500
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:40810 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1382531AbhLCSYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 13:24:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638555649;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qgsO3oHAmFJzKq+dVmJv06T3M/ORmohx5le6ux9ty9c=;
-        b=bhHBJvxiCWUR7VbhYghOxUAsBMzqMUHmBzvarYUAVK4RFNESORb5UiThllxjfUWSJFOYsP
-        xrfHMd963etXqtitrFa+4VSDhMgOUh8rDxwzcoC/HRM4lLzhWjAs3QXenA3Z1vKTIbPKM7
-        yM0qYmKX0uscRwoQMCbW4ecRNNleJYQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-429-gdKGskOcMl65EJmEf3iUFA-1; Fri, 03 Dec 2021 13:20:48 -0500
-X-MC-Unique: gdKGskOcMl65EJmEf3iUFA-1
-Received: by mail-wm1-f70.google.com with SMTP id g80-20020a1c2053000000b003331a764709so3818722wmg.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 10:20:47 -0800 (PST)
+        Fri, 3 Dec 2021 13:24:34 -0500
+Received: by mail-ot1-f54.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so4374958otj.7;
+        Fri, 03 Dec 2021 10:21:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=qgsO3oHAmFJzKq+dVmJv06T3M/ORmohx5le6ux9ty9c=;
-        b=ItdfjF9zDesYrsnDxceXUkatfr4wG5M/dflJHQjlP26ZzwloS6vrs8c6MhAo28Ufjs
-         NmN+NMa20PXyTKPNMw2R50otEjwmeo0hWzRn+0ttithcu2LLc6OEILQVj64fR6XWMzyd
-         KhLrh40nDhlSe//dFd+s6Y+hYbHr5t7cFgR74RcRDFnoJFC6n9WaRVr59WLjH056RO+V
-         4Bcu+9MqG/bi3zQckGyyDoqfx0n6YuX0jPhnFoTIy21nNC0bLhiyDxBxfTMmu+c+RepT
-         rSKfk5mMTgdWDmX1GGH2rC94ObcsDgFDGlp4PB+bs5jSsJURmbjpGt2xZ5m3UyfhHSGy
-         RHzg==
-X-Gm-Message-State: AOAM530AeaWDISxvVRTAoAK8S1Q48wT+nk0a1pc5/pxZd5JyvEGQIdE9
-        us0Q9Q2bbzwjQpmcb+W+D/O/tpCLf/QSthku0RZY5m3k9q1IbygoYl4J4LK0kamr4SmA1nPI+km
-        vWKdBZ/Ua3yv8SjJllT9srvkH
-X-Received: by 2002:a05:6000:2c7:: with SMTP id o7mr24017457wry.62.1638555647057;
-        Fri, 03 Dec 2021 10:20:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy8CavJ4evptW+LbrLlZf/myYwiY1F8lIjOYR0WgVLxsVzfjSUUsdpB9qGAHvDNHYUc5Gd9IQ==
-X-Received: by 2002:a05:6000:2c7:: with SMTP id o7mr24017435wry.62.1638555646881;
-        Fri, 03 Dec 2021 10:20:46 -0800 (PST)
-Received: from ?IPV6:2003:d8:2f44:9200:3344:447e:353c:bf0b? (p200300d82f4492003344447e353cbf0b.dip0.t-ipconnect.de. [2003:d8:2f44:9200:3344:447e:353c:bf0b])
-        by smtp.gmail.com with ESMTPSA id l22sm3203749wmp.34.2021.12.03.10.20.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 10:20:46 -0800 (PST)
-Message-ID: <1e0ce8f6-332b-399f-5ac7-5a56639172b3@redhat.com>
-Date:   Fri, 3 Dec 2021 19:20:45 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8aR/ePfeH8SZCsR0u6Fq5Cd4+fUSZxl31ja5HBnpdJk=;
+        b=SbAz/yjtAQPKhDVYKjgo1eAEwlUNRq4fvIuQz836veR5b/LQkow5Gsu78iyqqjILou
+         xaSsY3MriF1s6t9Rw33O58M6Hm4cRTg35BUiLL5tUoJGSYSIpoCBBolpSVNRI53YEI7u
+         WfEM3R4Wwn28D4FYP589P1gW3KwgwkSmXJ6Kq4hPoWPnXVD+Gd8IhAo68tcyotk5cXq6
+         Ohne60KQ9UDIHbGxP2FrgcR2wdtH8LLr2Jpk9k4JZOMQ42qyg2HQcNAlZpaTXTzEti5O
+         BbmLIF+QrbGydUjhoLUOMqT1300laYw3OlnSnoIChsfmQtHDPHDKJy/ej+zA/GxksW9x
+         bU7Q==
+X-Gm-Message-State: AOAM533EAknQ6QY6NW4M4VFBViAsyVIXIgAywVpN+ITfTS+ySTbUmDaq
+        eLDs/BQaDXyg+WvBBe9TdFMZ9z5dYHnKIINzk8g=
+X-Google-Smtp-Source: ABdhPJzy9knuAYlk6AtNOv+Y+i94nixQ52AbrpYzyGiTk7CSQSduZwCCOkNUuECq+ySBG7+w+dLbWxLm04YW6W4kiiY=
+X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr18082042otu.254.1638555669383;
+ Fri, 03 Dec 2021 10:21:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFD] clear virtual machine memory when virtual machine is turned
- off
-Content-Language: en-US
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        fei luo <morphyluo@gmail.com>, akpm@linux-foundation.org,
-        arnd@arndb.de, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org
-Cc:     Joao Martins <joao.m.martins@oracle.com>
-References: <CAMgLiBskDz7XW9-0=azOgVJ00t8zFOXjdGaH7NLpKDfNH9wsGQ@mail.gmail.com>
- <673c5628-da97-83d3-028f-46219f203caf@redhat.com>
- <e13bd5e9-981f-e2f1-fdd9-049a1926d70f@oracle.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <e13bd5e9-981f-e2f1-fdd9-049a1926d70f@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <cover.1637505679.git.yu.c.chen@intel.com> <6774dd4cce68a68b1ac54df3dfd295bb4b04bf2b.1637505679.git.yu.c.chen@intel.com>
+In-Reply-To: <6774dd4cce68a68b1ac54df3dfd295bb4b04bf2b.1637505679.git.yu.c.chen@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 3 Dec 2021 19:20:58 +0100
+Message-ID: <CAJZ5v0j2m8EOVM2EDWtff3tZ9V0eaw3PhA8-bXR-kdMyCfHyHg@mail.gmail.com>
+Subject: Re: [PATCH v11 1/4] efi: Introduce EFI_FIRMWARE_MANAGEMENT_CAPSULE_HEADER
+ and corresponding structures
+To:     Chen Yu <yu.c.chen@intel.com>, Ard Biesheuvel <ardb@kernel.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Ashok Raj <ashok.raj@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.12.21 18:27, Mike Kravetz wrote:
-> On 12/2/21 04:47, David Hildenbrand wrote:
->> On 02.12.21 11:19, fei luo wrote:
->>>
->>> When reusing the page that has been cleared, there is no need to clear it
->>>
->>> again, which also speeds up the memory allocation of user-mode programs.
->>>
->>>
->>> Is this feature feasible?
->>
->> "init_on_free=1" for the system as a whole, which might sounds like what
->> might tackle part of your use case.
->>
-> 
-> Certainly init_on_free will not make much difference if VMs are backed by
-> hugetlb pages.  We (Joao and myself) have thought about clearing hugetlb
-> pages from user space in an attempt speed up launching of VMs backed by
-> hugetlb pages.
-> 
+On Sun, Nov 21, 2021 at 4:17 PM Chen Yu <yu.c.chen@intel.com> wrote:
+>
+> Platform Firmware Runtime Update image starts with UEFI headers, and the
+> headers are defined in UEFI specification, but some of them have not been
+> defined in the kernel yet.
+>
+> For example, the header layout of a capsule file looks like this:
+>
+> EFI_CAPSULE_HEADER
+> EFI_FIRMWARE_MANAGEMENT_CAPSULE_HEADER
+> EFI_FIRMWARE_MANAGEMENT_CAPSULE_IMAGE_HEADER
+> EFI_FIRMWARE_IMAGE_AUTHENTICATION
+>
+> These structures would be used by the Platform Firmware Runtime Update
+> driver to parse the format of capsule file to verify if the corresponding
+> version number is valid. In this way, if the user provides an invalid
+> capsule image, the kernel could be used as a guard to reject it, without
+> switching to the Management Mode (which might be costly).
+>
+> EFI_CAPSULE_HEADER has been defined in the kernel, but the other
+> structures have not been defined yet, so do that. Besides,
+> EFI_FIRMWARE_MANAGEMENT_CAPSULE_HEADER and
+> EFI_FIRMWARE_MANAGEMENT_CAPSULE_IMAGE_HEADER are required to be packed
+> in the uefi specification. For this reason, use the __packed attribute
+> to indicate to the compiler that the entire structure can appear
+> misaligned in memory (as suggested by Ard) in case one of them follows
+> the other directly in a capsule header.
+>
+> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> ---
+> v11:Add explanation on why version check is introduced
+>     in kernel rather than letting Management Mode to do it.
+>     (Rafael J. Wysocki)
+>     Revise the commit log to better describe the pack attribute.
+>     (Rafael J. Wysocki)
+>     Refine the comment for hw_ins and capsule_support.
+>     (Rafael J. Wysocki)
+> v10:Remove the explicit assignment of the last item of enum.
+>     (Andy Shevchenko)
+> v9: Use GUID_INIT() instead of guid_parse() during boot up.
+>     (Andy Shevchenko)
+>     Drop uuid, code_uuid, drv_uuid in struct pfru_device as they
+>     are not needed. (Andy Shevchenko)
+>     Drop type casting from void * in valid_version().
+>     (Andy Shevchenko)
+>     Use kfree() instead of ACPI_FREE() in non-ACPICA usage.
+>     (Andy Shevchenko)
+>     Use sizeof(rev) instead of sizeof(u32) in copy_from_user().
+>     (Andy Shevchenko)
+>     Generate physical address from MSB part to LSB.
+>     (Andy Shevchenko)
+>     Use devm_add_action_or_reset() to add ida release into dev resource
+>     management. (Andy Shevchenko)
+>     Use devm_kasprintf() instead of kasprintf() to format the
+>     pfru_dev name.(Andy Shevchenko)
+>     Remove redundant 0 in acpi_pfru_ids. (Andy Shevchenko)
+>     Adjust the order of included headers in pfru.h.
+>     (Andy Shevchenko)
+>     Replace PFRU_MAGIC with PFRU_MAGIC_FOR_IOCTL in uapi file.
+>     (Andy Shevchenko)
+> v8: Remove the variable-length array in struct pfru_update_cap_info, and
+>     copy the non-variable-length struct pfru_update_cap_info to userspace
+>     directly. (Greg Kroah-Hartman)
+>     Change the type of rev_id from int to u32, because this data will
+>     be copied between kernel and userspace. (Greg Kroah-Hartman)
+>     Add a prefix for dev in struct pfru_device to parent_dev, so as
+>     to indicate that this filed is the parent of the created miscdev.
+>     (Greg Kroah-Hartman)
+>     Use blank lines between different macro sections. (Greg Kroah-Hartman)
+>     Illusatrate the possible errno for each ioctl interface.
+>     (Greg Kroah-Hartman)
+>     Remove pfru_valid_revid() from uapi header to avoid poluting the global
+>     namespace.(Greg Kroah-Hartman)
+>     Assign the value to the enum type explicitly.(Greg Kroah-Hartman)
+>     Change the guid_t to efi_guid_t when parsing image header in get_image_type()
+>     (Greg Kroah-Hartman)
+>     Remove the void * to other type casting in valid_version(). (Andy Shevchenko)
+>     Combined the assignment of variables with definitions. (Andy Shevchenko)
+>     Define this magic for revision ID. (Andy Shevchenko)
+>     Make the labeling consistent for error handling. (Andy Shevchenko)
+>     Replace the UUID_SIZE in uapi with 16 directly. (Andy Shevchenko)
+>     Add blank line between generic include header and uapi header.
+>     (Andy Shevchenko)
+>     Arrange the order between devm_kzalloc() and normal allocation in
+>     acpi_pfru_probe() that, the former should always be ahead of the
+>     latter. (Andy Shevchenko)
+>     Move the UUID from uapi header to the c file. (Andy Shevchenko)
+> v7: Use ida_alloc() to allocate a ID, and release the ID when
+>     device is removed. (Greg Kroah-Hartman)
+>     Check the _DSM method at early stage, before allocate or parse
+>     anything in acpi_pfru_probe(). (Greg Kroah-Hartman)
+>     Set the parent of the misc device. (Greg Kroah-Hartman)
+>     Use module_platform_driver() instead of platform_driver_register()
+>     in module_init(). Separate pfru driver and pfru_telemetry driver
+>     to two files. (Greg Kroah-Hartman)
+> v6: Use Link: tag to add the specification download address.
+>     (Andy Shevchenko)
+>     Remove linux/uuid.h and use raw buffers to contain uuid.
+>     (Andy Shevchenko)
+>     Drop comma for each terminator entry in the enum structure.
+>     (Andy Shevchenko)
+>     Remove redundant 'else' in get_image_type().
+>     (Andy Shevchenko)
+>     Directly return results from the switch cases in adjust_efi_size()
+>     and pfru_ioctl().(Andy Shevchenko)
+>     Keep comment style consistent by removing the period for
+>     one line comment.
+>     (Andy Shevchenko)
+>     Remove devm_kfree() if .probe() failed.
+>     (Andy Shevchenko)
+> v5: Remove Documentation/ABI/pfru, and move the content to kernel doc
+>     in include/uapi/linux/pfru.h (Greg Kroah-Hartman)
+>     Shrink the range of ioctl numbers declared in
+>     Documentation/userspace-api/ioctl/ioctl-number.rst
+>     from 16 to 8. (Greg Kroah-Hartman)
+>     Change global variable struct pfru_device *pfru_dev to
+>     per ACPI device. (Greg Kroah-Hartman)
+>     Unregister the misc device in acpi_pfru_remove().
+>     (Greg Kroah-Hartman)
+>     Convert the kzalloc() to devm_kzalloc() in the driver so
+>     as to avoid freeing the memory. (Greg Kroah-Hartman)
+>     Fix the compile error by declaring the pfru_log_ioctl() as
+>     static. (kernel test robot LKP)
+>     Change to global variable misc_device to per ACPI device.
+>     (Greg Kroah-Hartman)
+> v4: Replace all pr_err() with dev_dbg() (Greg Kroah-Hartman,
+>     Rafael J. Wysocki)
+>     Returns ENOTTY rather than ENOIOCTLCMD if invalid ioctl command
+>     is provided. (Greg Kroah-Hartman)
+>     Remove compat ioctl. (Greg Kroah-Hartman)
+>     Rename /dev/pfru/pfru_update to /dev/acpi_pfru (Greg Kroah-Hartman)
+>     Simplify the check for element of the package in query_capability()
+>     (Rafael J. Wysocki)
+>     Remove the loop in query_capability(), query_buffer() and query
+>     the package elemenet directly. (Rafael J. Wysocki)
+>     Check the the number of elements in case the number of package
+>     elements is too small. (Rafael J. Wysocki)
+>     Doing the assignment as initialization in get_image_type().
+>     Meanwhile, returns the type or a negative error code in
+>     get_image_type(). (Rafael J. Wysocki)
+>     Put the comments inside the function. (Rafael J. Wysocki)
+>     Returns the size or a negative error code in adjust_efi_size()
+>     (Rafael J. Wysocki)
+>     Fix the return value from EFAULT to EINVAL if pfru_valid_revid()
+>     does not pass. (Rafael J. Wysocki)
+>     Change the write() to be the code injection/update, the read() to
+>     be telemetry retrieval and all of the rest to be ioctl()s under
+>     one special device file.(Rafael J. Wysocki)
+>     Putting empty code lines after an if () statement that is not
+>     followed by a block. (Rafael J. Wysocki)
+>     Remove "goto" tags to make the code more readable. (Rafael J. Wysocki)
+> v3: Use __u32 instead of int and __64 instead of unsigned long
+>     in include/uapi/linux/pfru.h (Greg Kroah-Hartman)
+>     Rename the structure in uapi to start with a prefix pfru so as
+>     to avoid confusing in the global namespace. (Greg Kroah-Hartman)
+> v2: Add sanity check for duplicated instance of ACPI device.
+>     Update the driver to work with allocated pfru_device objects.
+>     (Mike Rapoport)
+>     For each switch case pair, get rid of the magic case numbers
+>     and add a default clause with the error handling.
+>     (Mike Rapoport)
+>     Move the obj->type checks outside the switch to reduce redundancy.
+>     (Mike Rapoport)
+>     Parse the code_inj_id and drv_update_id at driver initialization time
+>     to reduce the re-parsing at runtime.(Mike Rapoport)
+>     Explain in detail how the size needs to be adjusted when doing
+>     version check.(Mike Rapoport)
+>     Rename parse_update_result() to dump_update_result()(Mike Rapoport)
+>     Remove redundant return.(Mike Rapoport)
+>     Do not expose struct capsulate_buf_info to uapi, since it is
+>     not needed in userspace.(Mike Rapoport)
+> ---
 
-I remember that discussion. And I also recall a discussion regarding
-extending init_on_free semantics to hugetlbfs.
+OK, this is simple enough.
 
--- 
-Thanks,
+Ard, any concerns?
 
-David / dhildenb
-
+>  include/linux/efi.h | 46 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+>
+> diff --git a/include/linux/efi.h b/include/linux/efi.h
+> index dbd39b20e034..80e970f7e6f8 100644
+> --- a/include/linux/efi.h
+> +++ b/include/linux/efi.h
+> @@ -148,6 +148,52 @@ typedef struct {
+>         u32 imagesize;
+>  } efi_capsule_header_t;
+>
+> +/* EFI_FIRMWARE_MANAGEMENT_CAPSULE_HEADER */
+> +struct efi_manage_capsule_header {
+> +       u32 ver;
+> +       u16 emb_drv_cnt;
+> +       u16 payload_cnt;
+> +       /*
+> +        * Variable-size array of the size given by the sum of
+> +        * emb_drv_cnt and payload_cnt.
+> +        */
+> +       u64 offset_list[];
+> +} __packed;
+> +
+> +/* EFI_FIRMWARE_MANAGEMENT_CAPSULE_IMAGE_HEADER */
+> +struct efi_manage_capsule_image_header {
+> +       u32 ver;
+> +       efi_guid_t image_type_id;
+> +       u8 image_index;
+> +       u8 reserved_bytes[3];
+> +       u32 image_size;
+> +       u32 vendor_code_size;
+> +       /* hw_ins was introduced in version 2 */
+> +       u64 hw_ins;
+> +       /* capsule_support was introduced in version 3 */
+> +       u64 capsule_support;
+> +} __packed;
+> +
+> +/* WIN_CERTIFICATE */
+> +struct win_cert {
+> +       u32 len;
+> +       u16 rev;
+> +       u16 cert_type;
+> +};
+> +
+> +/* WIN_CERTIFICATE_UEFI_GUID */
+> +struct win_cert_uefi_guid {
+> +       struct win_cert hdr;
+> +       efi_guid_t cert_type;
+> +       u8 cert_data[];
+> +};
+> +
+> +/* EFI_FIRMWARE_IMAGE_AUTHENTICATION */
+> +struct efi_image_auth {
+> +       u64 mon_count;
+> +       struct win_cert_uefi_guid auth_info;
+> +};
+> +
+>  /*
+>   * EFI capsule flags
+>   */
+> --
+> 2.25.1
+>

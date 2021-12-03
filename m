@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F119467C4D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13204467C50
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343634AbhLCRPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 12:15:32 -0500
-Received: from foss.arm.com ([217.140.110.172]:51776 "EHLO foss.arm.com"
+        id S1353065AbhLCRQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 12:16:50 -0500
+Received: from mga07.intel.com ([134.134.136.100]:4516 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235278AbhLCRPa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 12:15:30 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 98AE31477;
-        Fri,  3 Dec 2021 09:12:06 -0800 (PST)
-Received: from [10.57.0.218] (unknown [10.57.0.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7FE1F3F73B;
-        Fri,  3 Dec 2021 09:12:04 -0800 (PST)
-Subject: Re: [PATCH] ARM: Kconfig: improve ARM_SINGLE_ARMV7M with ARMv8-M too
-To:     Giulio Benetti <giulio.benetti@benettiengineering.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Mike Rapoport <rppt@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-References: <ea2679ec-9bfd-6a78-a82d-7b160350ddfb@arm.com>
- <20211203170947.84283-1-giulio.benetti@benettiengineering.com>
-From:   Vladimir Murzin <vladimir.murzin@arm.com>
-Message-ID: <f8674032-ebcb-88be-2579-d65954c830b7@arm.com>
-Date:   Fri, 3 Dec 2021 17:12:06 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S235278AbhLCRQt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 12:16:49 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="300399758"
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="300399758"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 09:13:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="577551858"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 03 Dec 2021 09:13:16 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 2EC8A178; Fri,  3 Dec 2021 19:13:21 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v1 1/1] i2c: designware: Add a note about struct dw_scl_sda_cfg usage
+Date:   Fri,  3 Dec 2021 19:13:18 +0200
+Message-Id: <20211203171318.62503-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <20211203170947.84283-1-giulio.benetti@benettiengineering.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/21 5:09 PM, Giulio Benetti wrote:
-> ARM_SINGLE_ARMV7M implies ARMv7-M and ARMv8-M, so let's remove
-> "Cortex-M0/M3/M4" mention and add "/v8-M" after ARMv7-M instead.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  arch/arm/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index c2724d986fa0..4a36a80e57b7 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -329,7 +329,7 @@ config ARCH_MULTIPLATFORM
->  	select USE_OF
->  
->  config ARM_SINGLE_ARMV7M
-> -	bool "ARMv7-M based platforms (Cortex-M0/M3/M4)"
-> +	bool "ARMv7-M/v8-M based platforms"
->  	depends on !MMU
->  	select ARM_NVIC
->  	select AUTO_ZRELADDR
-> 
+Add a note about struct dw_scl_sda_cfg usage to discourage people
+of using this structure on new platforms. Instead they should try
+hard to put the needed information into firmware descriptions.
 
-Reviewed-by: Vladimir Murzin <vladimir.murzin@arm.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/i2c/busses/i2c-designware-pcidrv.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thanks
-Vladimir
+diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
+index 0f409a4c2da0..3ba506c3a9a9 100644
+--- a/drivers/i2c/busses/i2c-designware-pcidrv.c
++++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
+@@ -38,6 +38,13 @@ enum dw_pci_ctl_id_t {
+ 	navi_amd,
+ };
+ 
++/*
++ * This is a legacy structure to describe the hardware counters
++ * to configure signal timings on the bus. For Device Tree platforms
++ * one should use the respective properties and for ACPI there is
++ * a set of ACPI methods that provide these counters. No new
++ * platform should use this structure.
++ */
+ struct dw_scl_sda_cfg {
+ 	u32 ss_hcnt;
+ 	u32 fs_hcnt;
+-- 
+2.33.0
+

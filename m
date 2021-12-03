@@ -2,74 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D60468090
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 00:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02227468082
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 00:34:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383493AbhLCXhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 18:37:51 -0500
-Received: from mail-oi1-f179.google.com ([209.85.167.179]:39453 "EHLO
-        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383460AbhLCXhr (ORCPT
+        id S1376688AbhLCXhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 18:37:42 -0500
+Received: from mail-oo1-f42.google.com ([209.85.161.42]:35715 "EHLO
+        mail-oo1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240573AbhLCXhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 18:37:47 -0500
-Received: by mail-oi1-f179.google.com with SMTP id bf8so8817170oib.6;
-        Fri, 03 Dec 2021 15:34:22 -0800 (PST)
+        Fri, 3 Dec 2021 18:37:41 -0500
+Received: by mail-oo1-f42.google.com with SMTP id e17-20020a4a8291000000b002c5ee0645e7so2520702oog.2;
+        Fri, 03 Dec 2021 15:34:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=ZUn8FQjnjR741tg20DRe7x9CBP4T6IYKxGJddf96ELA=;
-        b=bahHkcjGCTGScl2PChNQXZiOIHCaooNteHlLJR4/0//WOmEI3p9/jBg3C8N3+jsUqQ
-         YyxLDOi5vkt58Y95xH0BPJ9UkNIlH+9K4wKWn5JUkgZl9zQG/iGx9XOtiyshrzcr3umd
-         kVEflZ5KWWRs5YYcRAFDscmZ6JZ879fuWgLGhJCb0rfRyrcmEhddb6MNN3wuroUqQGMX
-         xMFSarKog8NegfnkiKSCcaJlST4J1kOSkWSY+q1uRqDgDXOTZietYY4mXzxvyOdoFyor
-         FA/0cBvC0pz1oRF3UWlXfinbbfhvXho5QYlfQss01/3UubkdiuEVQMbrWBwDrhykrhCB
-         po8Q==
-X-Gm-Message-State: AOAM531afPDP4iMuAu4tujrqlUm1o1eBijr3ihk2lRPxRrXy3BnerrDw
-        dsdkhWzIw4QCYFREBslqLA==
-X-Google-Smtp-Source: ABdhPJy74AGa4UHO7hdrd29dN3VU/Loo392gOIOQymkwJy/3MH/KDPcfhRkKc17lGn8+nkOjPntwIA==
-X-Received: by 2002:a05:6808:2392:: with SMTP id bp18mr12443295oib.89.1638574461990;
-        Fri, 03 Dec 2021 15:34:21 -0800 (PST)
+        bh=HvmUO3stczSOHy4AZ2u5yjtXBe51DiBBMcIExmIvsPk=;
+        b=1JIchbjaLZzDknM343KPGEgCIqPPJrvHeVDDbfmLuaCZNcU7k0dOvAdCGp4Rc6TUuX
+         fL/1ABebaTigvQBCfPUcW4znZpo1rTYPLU0lcEhwMXwuKYRGrglsakmVTkZxGEdzKbOY
+         C3vTv9GILsq57fC/9Ww08EtIVOsfFUp6lfc5z7gxvsKxQep2x//CiwPM0TNSfugUSujY
+         dNMPUCjXRayLjWZ6uOBuuPvdg479WWSlCC6IMizDT8w7ZqQUebd+5IiLoW6ngrG9W5Rh
+         7qyOyR6CpxjgHBqjOyQATdYEKQJH7lLYmDrDanyKo7VE/705Q/6zBqSLbHUXovul7q3D
+         TIJg==
+X-Gm-Message-State: AOAM5325xrrAUXovEFxNYS0DHzf98OHq6Z82f+WTa2Rb1Ht1qHf5S+wF
+        Lx6WU403cVLdvTbxiEqn7Q==
+X-Google-Smtp-Source: ABdhPJwgEbmNp7uLje0JTDCKmsCzjEkEBrgzlOt1VkyxJTN4CmOwWISnvXbaId1z31yTwIqQdnFCXg==
+X-Received: by 2002:a4a:9406:: with SMTP id h6mr14654887ooi.80.1638574456759;
+        Fri, 03 Dec 2021 15:34:16 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id d8sm1093713oiw.24.2021.12.03.15.34.20
+        by smtp.gmail.com with ESMTPSA id w71sm939444oiw.6.2021.12.03.15.34.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 15:34:21 -0800 (PST)
-Received: (nullmailer pid 1043007 invoked by uid 1000);
+        Fri, 03 Dec 2021 15:34:16 -0800 (PST)
+Received: (nullmailer pid 1042998 invoked by uid 1000);
         Fri, 03 Dec 2021 23:34:15 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Srinivasa Rao Mandadapu <srivasam@codeaurora.com>
-Cc:     alsa-devel@alsa-project.org,
-        Srinivasa Rao Mandadapu <srivasam@codeaurora.org>,
-        bjorn.andersson@linaro.org, judyhsiao@chromium.org, tiwai@suse.com,
-        linux-kernel@vger.kernel.org, bgoswami@codeaurora.org,
-        agross@kernel.org, plai@codeaurora.org,
-        Venkata Prasad Potturu <potturu@codeaurora.org>,
-        perex@perex.cz, devicetree@vger.kernel.org, lgirdwood@gmail.com,
-        linux-arm-msm@vger.kernel.org, swboyd@chromium.org,
-        rohitkr@codeaurora.org, robh+dt@kernel.org, broonie@kernel.org,
-        srinivas.kandagatla@linaro.org
-In-Reply-To: <1638547658-22032-10-git-send-email-srivasam@codeaurora.com>
-References: <1638547658-22032-1-git-send-email-srivasam@codeaurora.com> <1638547658-22032-10-git-send-email-srivasam@codeaurora.com>
-Subject: Re: [PATCH v8 09/10] ASoC: dt-bindings: Add SC7280 lpass cpu bindings
+To:     Jarrett Schultz <jaschultzms@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        platform-driver-x86@vger.kernel.org, devicetree@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jarrett Schultz <jaschultz@microsoft.com>
+In-Reply-To: <20211202191630.12450-2-jaschultz@microsoft.com>
+References: <20211202191630.12450-1-jaschultz@microsoft.com> <20211202191630.12450-2-jaschultz@microsoft.com>
+Subject: Re: [PATCH 1/5] dt-bindings: platform: microsoft: Document surface xbl
 Date:   Fri, 03 Dec 2021 17:34:15 -0600
-Message-Id: <1638574455.248037.1043006.nullmailer@robh.at.kernel.org>
+Message-Id: <1638574455.193372.1042997.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 03 Dec 2021 21:37:37 +0530, Srinivasa Rao Mandadapu wrote:
-> From: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
+On Thu, 02 Dec 2021 11:16:26 -0800, Jarrett Schultz wrote:
+> Introduce yaml for surface xbl driver.
 > 
-> Add bindings for sc7280 lpass cpu driver which supports
-> audio over i2s based speaker, soundwire based headset, msm dmics
-> and HDMI Port.
+> Signed-off-by: Jarrett Schultz <jaschultz@microsoft.com>
 > 
-> Signed-off-by: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-> Co-developed-by: Venkata Prasad Potturu <potturu@codeaurora.org>
-> Signed-off-by: Venkata Prasad Potturu <potturu@codeaurora.org>
 > ---
->  .../devicetree/bindings/sound/qcom,lpass-cpu.yaml  | 70 +++++++++++++++++++---
->  1 file changed, 62 insertions(+), 8 deletions(-)
+> 
+> Changes in v3:
+>  - Updated description to only pertain to the hardware
+>  - Updated the required field to properly reflect the binding
+>  - Removed the first example
+>  - Fixed the size of the reg field in the second example
+> 
+> ---
+> 
+> Changes in v2:
+>  - Removed json-schema dependence
+>  - Elaborated on description of driver
+>  - Updated example
+> ---
+>  .../platform/microsoft/surface-xbl.yaml       | 69 +++++++++++++++++++
+>  MAINTAINERS                                   |  7 ++
+>  2 files changed, 76 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -78,20 +88,18 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.example.dt.yaml: lpass@62d80000: reg: [[0, 1658351616, 0, 425984], [0, 1659895808, 0, 167936]] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.example.dt.yaml: lpass@62d80000: reg-names: ['lpass-hdmiif', 'lpass-lpaif'] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.example.dt.yaml: lpass@62d80000: interrupts: [[0, 160, 1], [0, 268, 1]] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.example.dt.yaml: lpass@62d80000: interrupt-names: ['lpass-irq-lpaif', 'lpass-irq-hdmi'] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.example.dt.yaml: lpass@62d80000: iommus: [[4294967295, 4128, 0], [4294967295, 4146, 0]] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml: properties:properties: 'compatible' is not one of ['$ref', 'additionalItems', 'additionalProperties', 'allOf', 'anyOf', 'const', 'contains', 'default', 'dependencies', 'dependentRequired', 'dependentSchemas', 'deprecated', 'description', 'else', 'enum', 'exclusiveMaximum', 'exclusiveMinimum', 'items', 'if', 'minItems', 'minimum', 'maxItems', 'maximum', 'multipleOf', 'not', 'oneOf', 'pattern', 'patternProperties', 'properties', 'required', 'then', 'type', 'typeSize', 'unevaluatedProperties', 'uniqueItems']
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml: properties: 'properties' should not be valid under {'enum': ['$ref', 'additionalItems', 'additionalProperties', 'allOf', 'anyOf', 'const', 'contains', 'default', 'dependencies', 'dependentRequired', 'dependentSchemas', 'deprecated', 'description', 'else', 'enum', 'if', 'items', 'maxItems', 'maximum', 'minItems', 'minimum', 'multipleOf', 'not', 'oneOf', 'pattern', 'patternProperties', 'properties', 'propertyNames', 'required', 'then', 'unevaluatedProperties']}
+	hint: A json-schema keyword was found instead of a DT property name.
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml: ignoring, error in schema: properties: properties
+warning: no schema found in file: ./Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml
+Documentation/devicetree/bindings/platform/microsoft/surface-xbl.example.dt.yaml:0:0: /example-0/imem@146bf000/xbl@a94: failed to match any schema with compatible: ['microsoft,sm8150-surface-duo-xbl']
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1563323
+See https://patchwork.ozlabs.org/patch/1562961
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

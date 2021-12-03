@@ -2,152 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A01794672F2
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC78467316
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:05:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378929AbhLCH6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 02:58:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32410 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231537AbhLCH6f (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 02:58:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638518111;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cvJ2lpX+tqY4cC2bOGam94PSlCFquDfAJX6mgIvRyFA=;
-        b=QHvlI9skq150iGVUnai+DU4wf6yLBtupRmOM9VF/P9ZA6l43mX97a7syWZU6s56F74Wwdg
-        Io+h8ulCpKUcQ1bzep6jOROQhq7cLqlUuo8dUp2nCWvnUAv/nKI8pjF0vg7lUu7V8mQPk5
-        6dSNerSAv44qJ3ekWT8IFLakbpPwUrs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-562-hL9BxUIwPAuTe8fn28d6lA-1; Fri, 03 Dec 2021 02:55:08 -0500
-X-MC-Unique: hL9BxUIwPAuTe8fn28d6lA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1379122AbhLCIIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:08:32 -0500
+Received: from mleia.com ([178.79.152.223]:60400 "EHLO mail.mleia.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351105AbhLCIIb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 03:08:31 -0500
+X-Greylist: delayed 475 seconds by postgrey-1.27 at vger.kernel.org; Fri, 03 Dec 2021 03:08:31 EST
+Received: from mail.mleia.com (localhost [127.0.0.1])
+        by mail.mleia.com (Postfix) with ESMTP id 0E5EB3809A0;
+        Fri,  3 Dec 2021 07:56:42 +0000 (UTC)
+Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi [88.113.46.102])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E11541015211;
-        Fri,  3 Dec 2021 07:53:56 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8003B60C13;
-        Fri,  3 Dec 2021 07:53:54 +0000 (UTC)
-Message-ID: <ce49cc3e3ae5885d992261589cd0f4adad118776.camel@redhat.com>
-Subject: Re: Re: [PATCH v2 2/2] KVM: x86: use x86_get_freq to get freq for
- kvmclock
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     zhenwei pi <pizhenwei@bytedance.com>,
-        Thomas Gleixner <tglx@linutronix.de>, pbonzini@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org
-Date:   Fri, 03 Dec 2021 09:53:53 +0200
-In-Reply-To: <20211202224555.GE16608@worktop.programming.kicks-ass.net>
-References: <20211201024650.88254-1-pizhenwei@bytedance.com>
-         <20211201024650.88254-3-pizhenwei@bytedance.com> <877dcn7md2.ffs@tglx>
-         <b37ffc3d-4038-fc5e-d681-b89c04a37b04@bytedance.com>
-         <ffbb8a16f267e73316084d1252696edaf81e35a9.camel@redhat.com>
-         <20211202224555.GE16608@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by mail.mleia.com (Postfix) with ESMTPSA id A95D23808DE;
+        Fri,  3 Dec 2021 07:56:41 +0000 (UTC)
+Subject: Re: [PATCH RESEND] gpio: lpc32xx: Handle devm_gpiochip_add_data error
+ codes
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com
+Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20211203074934.1559805-1-jiasheng@iscas.ac.cn>
+From:   Vladimir Zapolskiy <vz@mleia.com>
+Message-ID: <0b6c05ec-638a-10d5-a3e7-e6bf69adb678@mleia.com>
+Date:   Fri, 3 Dec 2021 09:56:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
+In-Reply-To: <20211203074934.1559805-1-jiasheng@iscas.ac.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20211203_075642_081474_F9ADD3D4 
+X-CRM114-Status: GOOD (  18.07  )
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-02 at 23:45 +0100, Peter Zijlstra wrote:
-> On Thu, Dec 02, 2021 at 09:19:25AM +0200, Maxim Levitsky wrote:
-> > On Thu, 2021-12-02 at 13:26 +0800, zhenwei pi wrote:
-> > Note that on my Zen2 machine (3970X), aperf/mperf returns current cpu freqency,
+On 12/3/21 9:49 AM, Jiasheng Jiang wrote:
+> The return value of devm_gpiochip_add_data() is not always 0.
+> To catch the exception in case of the failure.
 > 
-> Correct, and it computes it over a random period of history. IOW, it's a
-> random number generator.
-> 
-> > 1. It sucks that on AMD, the TSC frequency is calibrated from other 
-> > clocksources like PIT/HPET, since the result is not exact and varies
-> > from boot to boot.
-> 
-> CPUID.15h is supposed to tell us the actual frequency; except even Intel
-> find it very hard to actually put the right (or any, really) number in
-> there :/ Bribe your friendly AMD engineer with beers or something.
-
-That what I thought. I asked just in case maybe AMD does have some vendor specific msrs
-you know about but we didn't bother to support it.
-I didn't find any in their PRM.
-
-> 
-> > 2. In the guest on AMD, we mark the TSC as unsynchronized always due to the code
-> > in unsynchronized_tsc, unless invariant tsc is used in guest cpuid,
-> > which is IMHO not fair to AMD as we don't do this for  Intel cpus.
-> > (look at unsynchronized_tsc function)
-> 
-> Possibly we could treat >= Zen similar to Intel there. Also that comment
-> there is hillarious, it talks about multi-socket and then tests
-> num_possible_cpus(). Clearly that code hasn't been touched in like
-> forever.
-Thank you!
-
-> 
-> > 3. I wish the kernel would export the tsc frequency it found to userspace
-> > somewhere in /sys or /proc, as this would be very useful for userspace applications.
-> > Currently it can only be found in dmesg if I am not mistaken..
-> > I don't mind if such frequency would only be exported if the TSC is stable,
-> > always running, not affected by CPUfreq, etc.
-> 
-> Perf exposes it, it's not really convenient if you're not using perf,
-> but it can be found there.
-That is good to know! I will check out the source but if you remember,
-is there cli option in perf to show it, or it only uses it for internal
-purposes?
-
-> 
-> 
+> Fixes: 69c0a0a52cde ("gpio: lpc32xx: Use devm_gpiochip_add_data() for gpio registration")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 > ---
-> diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-> index 2e076a459a0c..09da2935534a 100644
-> --- a/arch/x86/kernel/tsc.c
-> +++ b/arch/x86/kernel/tsc.c
-> @@ -29,6 +29,7 @@
->  #include <asm/intel-family.h>
->  #include <asm/i8259.h>
->  #include <asm/uv/uv.h>
-> +#include <asm/topology.h>
->  
->  unsigned int __read_mostly cpu_khz;	/* TSC clocks / usec, not used here */
->  EXPORT_SYMBOL(cpu_khz);
-> @@ -1221,9 +1222,20 @@ int unsynchronized_tsc(void)
->  	 * Intel systems are normally all synchronized.
->  	 * Exceptions must mark TSC as unstable:
->  	 */
-> -	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL) {
-> +	switch (boot_cpu_data.x86_vendor) {
-> +	case X86_VENDOR_INTEL:
-> +		/* Really only Core and later */
-> +		break;
-> +
-> +	case X86_VENDOR_AMD:
-> +	case X86_VENDOR_HYGON:
-> +		if (boot_cpu_data.x86 >= 0x17) /* >= Zen */
-> +			break;
-> +		fallthrough;
-> +
-> +	default:
->  		/* assume multi socket systems are not synchronized: */
-> -		if (num_possible_cpus() > 1)
-> +		if (topology_max_packages() > 1)
->  			return 1;
->  	}
->  
+>   drivers/gpio/gpio-lpc32xx.c | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpio/gpio-lpc32xx.c b/drivers/gpio/gpio-lpc32xx.c
+> index 4e626c4235c2..e3b734302b76 100644
+> --- a/drivers/gpio/gpio-lpc32xx.c
+> +++ b/drivers/gpio/gpio-lpc32xx.c
+> @@ -505,6 +505,7 @@ static int lpc32xx_of_xlate(struct gpio_chip *gc,
+>   static int lpc32xx_gpio_probe(struct platform_device *pdev)
+>   {
+>   	int i;
+> +	int err;
 
-This makes sense!
+This was missed in v1, so formally it is not a resend, but a v2 change.
 
+>   	void __iomem *reg_base;
+>   
+>   	reg_base = devm_platform_ioremap_resource(pdev, 0);
+> @@ -518,8 +519,10 @@ static int lpc32xx_gpio_probe(struct platform_device *pdev)
+>   			lpc32xx_gpiochip[i].chip.of_node = pdev->dev.of_node;
+>   			lpc32xx_gpiochip[i].reg_base = reg_base;
+>   		}
+> -		devm_gpiochip_add_data(&pdev->dev, &lpc32xx_gpiochip[i].chip,
+> +		err = devm_gpiochip_add_data(&pdev->dev, &lpc32xx_gpiochip[i].chip,
+>   				  &lpc32xx_gpiochip[i]);
+> +		if (err)
+> +			return err;
+>   	}
+>   
+>   	return 0;
 > 
 
+Thank you for the fix.
 
-Best regards,
-	Maxim Levitsky
+Acked-by: Vladimir Zapolskiy <vz@mleia.com>
 
+--
+Best wishes,
+Vladimir

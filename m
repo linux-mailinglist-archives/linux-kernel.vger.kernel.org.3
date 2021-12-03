@@ -2,129 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 894B3467F20
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CF0467F27
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383176AbhLCVMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 16:12:23 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59064 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236111AbhLCVMW (ORCPT
+        id S1383169AbhLCVQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 16:16:59 -0500
+Received: from coyote.holtmann.net ([212.227.132.17]:43655 "EHLO
+        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353164AbhLCVQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 16:12:22 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C461662B8E;
-        Fri,  3 Dec 2021 21:08:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D79AC53FCB;
-        Fri,  3 Dec 2021 21:08:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638565737;
-        bh=BlTRvCdOzdAHgLT03YhsdUB2IyQJNEwbQ4P+5iYkKTE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ur99wvPABOPqzeGjz2Doyg7rgvFw/Y7v7zGc+pOIb5dCTfLBIKMG0NTijfXG0V6Pv
-         img0MSBLke7jIIoZ9NfWc1wv2YbS06NtG0GmVnFrf0qOpSiHzbD7X7rKqMl+KE+lLV
-         yvwwOLGZ1f4Qs9hDWGjPED4ENdi2F+OaBDLrVey8bEmIAqg3W/OfiLnVPfaVjh/hP9
-         CN5vgcKaQ7gBWfBkdtS4UeP8QYTNxelHnpeP2kG1mrnN9qMlxe2hATX7gqJG8ukELp
-         m+NSTPZgnM/Fe+j8k+Yn7R81z5iWSg/gaDp07URVsMck0vqao25NzhtSuwnazBW+lM
-         6UYR5q7ShG9nA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id DB1665C1108; Fri,  3 Dec 2021 13:08:56 -0800 (PST)
-Date:   Fri, 3 Dec 2021 13:08:56 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev, x86@kernel.org
-Subject: Re: [PATCH v3 04/25] kcsan: Add core support for a subset of weak
- memory modeling
-Message-ID: <20211203210856.GA712591@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20211130114433.2580590-1-elver@google.com>
- <20211130114433.2580590-5-elver@google.com>
- <YanbzWyhR0LwdinE@elver.google.com>
- <20211203165020.GR641268@paulmck-ThinkPad-P17-Gen-1>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211203165020.GR641268@paulmck-ThinkPad-P17-Gen-1>
+        Fri, 3 Dec 2021 16:16:58 -0500
+Received: from smtpclient.apple (p5b3d2e91.dip0.t-ipconnect.de [91.61.46.145])
+        by mail.holtmann.org (Postfix) with ESMTPSA id 9129ACED1F;
+        Fri,  3 Dec 2021 22:13:30 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.20.0.1.32\))
+Subject: Re: [PATCH v3] Bluetooth: btusb: Add one more Bluetooth part for
+ WCN6855
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <1638525697-12436-1-git-send-email-zijuhu@codeaurora.org>
+Date:   Fri, 3 Dec 2021 22:13:30 +0100
+Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        MSM <linux-arm-msm@vger.kernel.org>, c-hbandi@codeaurora.org,
+        Hemantg <hemantg@codeaurora.org>,
+        Rocky Liao <rjliao@codeaurora.org>, tjiang@codeaurora.org,
+        Zijun Hu <quic_zijuhu@quicinc.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <099C52EF-D192-4090-A345-9A63BFF0F26D@holtmann.org>
+References: <1638525697-12436-1-git-send-email-zijuhu@codeaurora.org>
+To:     Zijun Hu <zijuhu@codeaurora.org>
+X-Mailer: Apple Mail (2.3693.20.0.1.32)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 08:50:20AM -0800, Paul E. McKenney wrote:
-> On Fri, Dec 03, 2021 at 09:56:45AM +0100, Marco Elver wrote:
-> > On Tue, Nov 30, 2021 at 12:44PM +0100, Marco Elver wrote:
-> > [...]
-> > > v3:
-> > > * Remove kcsan_noinstr hackery, since we now try to avoid adding any
-> > >   instrumentation to .noinstr.text in the first place.
-> > [...]
-> > 
-> > I missed some cleanups after changes from v2 to v3 -- the below cleanup
-> > is missing.
-> > 
-> > Full replacement patch attached.
+Hi Zijun,
+
+> Add a USB ID 0489:e0e3 of HP to usb_device_id table for WCN6855.
 > 
-> I pulled this into -rcu with the other patches from your v3 post, thank
-> you all!
+> -Device(0489:e0e3) from /sys/kernel/debug/usb/devices
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=12   MxCh= 0
+> D:  Ver= 1.10 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=0489 ProdID=e0e3 Rev= 0.01
+> C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=100mA
+> I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
+> E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+> I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+> I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+> I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+> I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+> I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+> I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+> I:  If#= 1 Alt= 7 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+> E:  Ad=83(I) Atr=01(Isoc) MxPS=  65 Ivl=1ms
+> E:  Ad=03(O) Atr=01(Isoc) MxPS=  65 Ivl=1ms
+> 
+> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+> ---
+> drivers/bluetooth/btusb.c | 3 +++
+> 1 file changed, 3 insertions(+)
 
-A few quick tests located the following:
+patch has been applied to bluetooth-next tree.
 
-[    0.635383] INFO: trying to register non-static key.
-[    0.635804] The code is fine but needs lockdep annotation, or maybe
-[    0.636194] you didn't initialize this object before use?
-[    0.636194] turning off the locking correctness validator.
-[    0.636194] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.16.0-rc1+ #3208
-[    0.636194] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-[    0.636194] Call Trace:
-[    0.636194]  <TASK>
-[    0.636194]  dump_stack_lvl+0x88/0xd8
-[    0.636194]  dump_stack+0x15/0x1b
-[    0.636194]  register_lock_class+0x6b3/0x840
-[    0.636194]  ? __this_cpu_preempt_check+0x1d/0x30
-[    0.636194]  __lock_acquire+0x81/0xee0
-[    0.636194]  ? lock_is_held_type+0xf1/0x160
-[    0.636194]  lock_acquire+0xce/0x230
-[    0.636194]  ? test_barrier+0x490/0x14c7
-[    0.636194]  ? lock_is_held_type+0xf1/0x160
-[    0.636194]  ? test_barrier+0x490/0x14c7
-[    0.636194]  _raw_spin_lock+0x36/0x50
-[    0.636194]  ? test_barrier+0x490/0x14c7
-[    0.636194]  ? kcsan_init+0xf/0x80
-[    0.636194]  test_barrier+0x490/0x14c7
-[    0.636194]  ? kcsan_debugfs_init+0x1f/0x1f
-[    0.636194]  kcsan_selftest+0x47/0xa0
-[    0.636194]  do_one_initcall+0x104/0x230
-[    0.636194]  ? rcu_read_lock_sched_held+0x5b/0xc0
-[    0.636194]  ? kernel_init+0x1c/0x200
-[    0.636194]  do_initcall_level+0xa5/0xb6
-[    0.636194]  do_initcalls+0x66/0x95
-[    0.636194]  do_basic_setup+0x1d/0x23
-[    0.636194]  kernel_init_freeable+0x254/0x2ed
-[    0.636194]  ? rest_init+0x290/0x290
-[    0.636194]  kernel_init+0x1c/0x200
-[    0.636194]  ? rest_init+0x290/0x290
-[    0.636194]  ret_from_fork+0x22/0x30
-[    0.636194]  </TASK>
+Regards
 
-When running without the new patch series, this splat does not appear.
+Marcel
 
-Do I need a toolchain upgrade?  I see the Clang 14.0 in the cover letter,
-but that seems to apply only to non-x86 architectures.
-
-$ clang-11 -v
-Ubuntu clang version 11.1.0-++20210805102428+1fdec59bffc1-1~exp1~20210805203044.169
-
-							Thanx, Paul

@@ -2,99 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9E67467F83
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 269EF467F88
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 22:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383300AbhLCVvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 16:51:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
+        id S1383307AbhLCVw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 16:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383250AbhLCVvg (ORCPT
+        with ESMTP id S1344144AbhLCVwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 16:51:36 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868CFC061751
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 13:48:11 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id o29so3415635wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 13:48:11 -0800 (PST)
+        Fri, 3 Dec 2021 16:52:24 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE3BC061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 13:48:59 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id j18so8630971ljc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 13:48:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=8U4LuV4nTWBRHMuVX5JcdO7RS1Lp3x1GY6HwFLoLa1o=;
-        b=ixZPcTPlfySA5CLgeCs5+PMqZS7zZvGQIo8krngYbtprFmruMLtvCc3I1ctD5qtQj/
-         s02vSmHKAhKO7yhi64NOqWmqbJNZQtb73CmGfDYkukfWvby7DPR1L2u83tjOSw8L/BbR
-         KxVhFmfkki/lBvMW4+pmlJHEfz2smewpbkQxP5KFAZTddmwPgQK31E7sWyFaeSpckQ8X
-         fm1Q/EnZa6Od+nHBatimTSfk9SjOTKSnRXP1GnEND+0Csqd6xbmVF9+OhPhhvn6WnluU
-         vc2M6lBOwl5e97tO5ZvqeZCkvyZ/QldWvKhIkgm+I+EoauQaq/YmovQF+Pw9ZYypJBlY
-         uHRg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=IDeRdhpoAj5TSghltVaQSNuQnQhtbp2XMUe5m+RBa+I=;
+        b=AmnHaybw1fg068uclusv+Qkf8yVpSqijeFrG4mXWsQ+WSlp7R4+WViXHmBDTFmVCpM
+         aUnDsTw8VWeCO+uN6p553IHfpe1Xvy/YAnpBLWbOAe/mp12nU3bH9E8k6VL1vxD7ECzs
+         jIl5sfF2WjIRwm9rNigtt3g2SZnMWQuhbnSTG+d2OYwEvExlf8qejUhFTurjvYh9zL1/
+         Ff7jdhpmm6HEk+QgmCq8SZB7yjg5YKh01/MyUqtvfyUrEVWesoK4I4m99rDgMe/+mCT0
+         aQhJIr+NwwbZ5bFGXXAifh2g4xPZkFZE+PsQeVgO5hdOfocvAPkNi5rrzB9TIbDD01L/
+         VhRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8U4LuV4nTWBRHMuVX5JcdO7RS1Lp3x1GY6HwFLoLa1o=;
-        b=p2vnZkx87pKXkDfSy/CY8Suvj8LfDapYOQkdeDS3bpr/GRZq6hOjg4S+If7MwkYrfL
-         kdaK3xHa5KlfWGyl37E0A20J+XPwvli6ZEZnnV963hyQ85Nkj03x65FfUAk6arY5Xk7a
-         FSR5D9+Ueb1ms/WxarkOGaDJFTAWTTWyWP9HAjA8Ml9xOd5V2TU/mH08/NKL08CVH7Ed
-         jMC5pex7O/fuU/mfu1VNTbun7Ex4oZpKsoLAeiEWcMIJum5GU4Xagm9SfetYzml8z0Oc
-         X95dckI8G+c8BLVGZc1m+wuaVM+VbctrAFBDGh7jpt/Ko910wfwGa59vmuLzd+o/PLKK
-         oSCw==
-X-Gm-Message-State: AOAM5337QEKrqRjRPwFC05s3KigQgdHE4wQIc8MkZK/XGKwXsubvTdtU
-        iS8Gq+NGsrBB6AKqkjgjILkAbZJADSPLlQ==
-X-Google-Smtp-Source: ABdhPJzU8wrfNhPs32jCMw44mRyRekp5WmNIfDLRTCZUyVz0EC6XhFbwb4nQaUrYdN11UgAJVoSBBA==
-X-Received: by 2002:a1c:98ca:: with SMTP id a193mr18593537wme.162.1638568089728;
-        Fri, 03 Dec 2021 13:48:09 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:98bf:72f4:f216:41dc? ([2a01:e34:ed2f:f020:98bf:72f4:f216:41dc])
-        by smtp.googlemail.com with ESMTPSA id p14sm5901698wms.29.2021.12.03.13.48.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 13:48:09 -0800 (PST)
-Subject: Re: Time: new clocksource
-To:     Muni Sekhar <munisekharrms@gmail.com>, tglx@linutronix.de,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernelnewbies <kernelnewbies@kernelnewbies.org>
-References: <CAHhAz+jpmksehY4BSH9jJPYuY+jykSHtx9TNiG-gAkq10zaXSQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <fe9dbf81-e060-36ab-b769-215af3d65ba7@linaro.org>
-Date:   Fri, 3 Dec 2021 22:48:08 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=IDeRdhpoAj5TSghltVaQSNuQnQhtbp2XMUe5m+RBa+I=;
+        b=iBZ2VoSnKOwymnUCaNSLuawL77XoQYSs07k4H0P+Ui1bm9THWKSXnyB9VYQBIfMgxQ
+         lJXnPGjTrLdj3R00kEZ9W7e0AhfAQor5U7vMJ5Z9Z8CNqfLfXbFtsx1dRmkIGnBEewbk
+         FejBqa0jo03kZFj08jJZw9vKrp0xyW4Twt/ttkMVufwn8D1lt+uPmDgGrZpYxojkIoym
+         rPCy3lZeKuCg5jVMCrjTnGH+reNM466qCL33VWiMHPvHLnOjugvto/mVz2o94FRwDY0E
+         oqK5BGLSsuEIHsd6DJbkKuNXSKkGG7ccHnZYWDAu9Y4Ox4jtQx/E0gQFcbj6hCZGjkSn
+         zWAg==
+X-Gm-Message-State: AOAM531MvmVZWeASYowcmEv1PtSRFB/pYLVwOoHr7dQ4Fa/SEaKvcRiF
+        3Eq/N7o6IMAzXRSKyNkCSHSeACWGwZ+x5OLEKXCG5w==
+X-Google-Smtp-Source: ABdhPJxM7LeVBwx6zhzZJsNSW09G7vvN0O+sWKe2aJIvH1OvYBXnNTsyCYdJVgv1iUularp0CKJShjGpLxkPivWjvAc=
+X-Received: by 2002:a2e:b169:: with SMTP id a9mr21273034ljm.369.1638568137816;
+ Fri, 03 Dec 2021 13:48:57 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAHhAz+jpmksehY4BSH9jJPYuY+jykSHtx9TNiG-gAkq10zaXSQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20211115174102.2211126-1-pgonda@google.com> <20211126051944.GA17358@gondor.apana.org.au>
+In-Reply-To: <20211126051944.GA17358@gondor.apana.org.au>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Fri, 3 Dec 2021 14:48:46 -0700
+Message-ID: <CAMkAt6o_bjdoQ7zTs7ZY5QrYcd2Wd7GzMzRMq8m5ZUBQRQMtVw@mail.gmail.com>
+Subject: Re: [PATCH V4 0/5] Add SEV_INIT_EX support
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Thomas.Lendacky@amd.com, Marc Orr <marcorr@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        John Allen <john.allen@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sekhar,
+On Thu, Nov 25, 2021 at 10:20 PM Herbert Xu <herbert@gondor.apana.org.au> w=
+rote:
+>
+> On Mon, Nov 15, 2021 at 09:40:57AM -0800, Peter Gonda wrote:
+> > SEV_INIT requires users to unlock their SPI bus for the PSP's non
+> > volatile (NV) storage. Users may wish to lock their SPI bus for numerou=
+s
+> > reasons, to support this the PSP firmware supports SEV_INIT_EX. INIT_EX
+> > allows the firmware to use a region of memory for its NV storage leavin=
+g
+> > the kernel responsible for actually storing the data in a persistent
+> > way. This series adds a new module parameter to ccp allowing users to
+> > specify a path to a file for use as the PSP's NV storage. The ccp drive=
+r
+> > then reads the file into memory for the PSP to use and is responsible
+> > for writing the file whenever the PSP modifies the memory region.
+> >
+> > V3
+> > * Add another module parameter 'psp_init_on_probe' to allow for skippin=
+g
+> >   PSP init on module init.
+> > * Fixes review comments from Sean.
+> > * Fixes missing error checking with file reading.
+> > * Removed setting 'error' to a set value in patch 1.
+>
+> This doesn't compile cleanly for me with C=3D1 W=3D1:
+>
+>   CC [M]  drivers/crypto/ccp/sev-dev.o
+> In file included from ../arch/x86/include/asm/bug.h:84,
+>                  from ../include/linux/bug.h:5,
+>                  from ../include/linux/cpumask.h:14,
+>                  from ../arch/x86/include/asm/cpumask.h:5,
+>                  from ../arch/x86/include/asm/msr.h:11,
+>                  from ../arch/x86/include/asm/processor.h:22,
+>                  from ../arch/x86/include/asm/timex.h:5,
+>                  from ../include/linux/timex.h:65,
+>                  from ../include/linux/time32.h:13,
+>                  from ../include/linux/time.h:60,
+>                  from ../include/linux/stat.h:19,
+>                  from ../include/linux/module.h:13,
+>                  from ../drivers/crypto/ccp/sev-dev.c:10:
+> ../drivers/crypto/ccp/sev-dev.c: In function =E2=80=98sev_read_init_ex_fi=
+le=E2=80=99:
+> ../include/linux/lockdep.h:286:52: error: invalid type argument of =E2=80=
+=98->=E2=80=99 (have =E2=80=98struct mutex=E2=80=99)
+>  #define lockdep_is_held(lock)  lock_is_held(&(lock)->dep_map)
+>                                                     ^~
+> Please fix and resubmit.
 
-On 03/12/2021 17:50, Muni Sekhar wrote:
-> Hi All,
-> 
-> We have a Digital PLL with 64 bit timer counter hardware and the
-> counter is accessible from the CPU over the PCIe bus.
-> 
-> Is it possible to add this timer counter hardware as new clocksource
-> driver? To do this, can someone please point me to the existing
-> reference source code(or patch) for this task.
+Thanks. Submitted a V5.1 with fixes.
 
-You can refer to the drivers located in drivers/clocksource
-
-git annotate on one of the driver can give you the initial commit where
-recent submissions explain the timer internals.
-
-> Suppose if it is possible to add a new clocksource driver for this
-> hardware then does any userspace get_timestamp* API would get the time
-> from this new hardware?
-
-It should if the timer is selected as the clocksource
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+>
+> Thanks,
+> --
+> Email: Herbert Xu <herbert@gondor.apana.org.au>
+> Home Page: http://gondor.apana.org.au/~herbert/
+> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

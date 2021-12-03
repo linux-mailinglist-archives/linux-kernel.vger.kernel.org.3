@@ -2,121 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A047D467D68
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F15F5467D6D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382754AbhLCSjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 13:39:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
+        id S239710AbhLCSnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 13:43:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382714AbhLCSip (ORCPT
+        with ESMTP id S235199AbhLCSnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 13:38:45 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034C1C061353
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 10:35:21 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id v15so7995516ljc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 10:35:20 -0800 (PST)
+        Fri, 3 Dec 2021 13:43:23 -0500
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D2CC061354
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 10:39:58 -0800 (PST)
+Received: by mail-ua1-x936.google.com with SMTP id ay21so7132621uab.12
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 10:39:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aQnrspX0S8NnC4mxCmKPdkJ6I75373YtJdts4KCHDH8=;
-        b=qYK9cCqqjz4Qv85bmedDRlhwPofmfrLO949h2gjaDftYpZEPsucz4ommT5hBAk6+9z
-         P/55ZUobXmg6hhr0wiBP9Lv6hu9/eS5TCPMJdkUdVcuvn8ta0CTR+betnF8V5TlFu2id
-         UjKfuqV7P7yEJgF3hYBxAsSHUeY+fJRuiUqu/NLbjk8Kj3D4HqARTAYnCz2+PHGnaKgH
-         0ATTA5TiEVmka2z0SjtA1AorX+BpJVRgs/ii6vwd2Magx4EsF5aoRpskY3nSYEjcK0qq
-         Q+W3Bu5xLPXwMBGIawjEPMfMU+pLWHCl3JhiSASuGe9A9ccrlF7Ujg2I4SL1Ss5KEquV
-         AO5Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b5p3ztxRNGHTryECHF1HMG/gYrhBfwJYEjUwDGuarzA=;
+        b=F9+NXkfAn7qWTyNBpgH+F8s1jl70XfqRKv24CTx6q8kWm9ziIds9qi9GpCvPCRbEla
+         P+oYUrVaWbQo0Um8iugAtOoiHU2lg2T17KCHt/tDMIlWbvExmWAyDl4Ilkr4hnfO5Cs/
+         T7+puOuC0ieEp+xllRPUwcQphG+2lYnQ43XjTtwOK1E6ie2WRXrWY2+pksimxZBW5x85
+         qFcLmzPR7v1Q3ffkcp7ycqRfWEJGMcrJDG0+d4ZOAFDnar26/IthG8pHajcR+FQGto2l
+         Qho1y5EAVBnR5Kf5wbfgdoitWwB96YA2BViX+48hTCeBtE7K5GFgvzk3gMycOpagDPpx
+         S1KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aQnrspX0S8NnC4mxCmKPdkJ6I75373YtJdts4KCHDH8=;
-        b=uFR0jzH+fET8b/s+1CxlOUMgvAenqBuKyxU2KWBd5DMceqAiY06BP4bqmDL/DJS2Zp
-         J/rZKGYf9GpL5lI1/egVw9w+s10HA6MHC1DNCJFS2V7nAJKvFgDIiBT8dHNF0PPuyGCG
-         YUJzCCdgr0GQMP2cauHnalQwodbZpHgqdYHBb0kP+C6RsOLU6tvXNHA5Tbys6DqtPfie
-         Hkr8ZEsPGcetd35/8U5AENfdogoXvVmFq6eN1FHq6LM54/hIgHI647B+k9WfyRYaM0dR
-         FFKxLnAljzsrrJ7QknXAkLScuRv0kMDvdVX6Jd8Ob3exW/wnOBNBgogVOj91tPz9naHX
-         ivsA==
-X-Gm-Message-State: AOAM530b2ToM3HVic4yG5rMJtlXUk4yKVEEJ16dWHIqeEvuRhoYlQnsK
-        SYagWGMeenUUppQPWPV4otMeNw==
-X-Google-Smtp-Source: ABdhPJwj4GY/waMrbwCZWa+p5cuBxz4LdUMdBeiNnkEryxqskHF71WC2CXIypDg2pYfKf9/x2sxgfw==
-X-Received: by 2002:a2e:9787:: with SMTP id y7mr19557627lji.228.1638556519298;
-        Fri, 03 Dec 2021 10:35:19 -0800 (PST)
-Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id f13sm462261lfc.215.2021.12.03.10.35.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 10:35:18 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b5p3ztxRNGHTryECHF1HMG/gYrhBfwJYEjUwDGuarzA=;
+        b=TFvuExvo5feW0jNQPfrnZw7U3sJZfIDB44G/b7DJqn9Jm7l+HIJ0byK02eUeMHieP+
+         gPIdqTMYMLBTw5wqiw6WDlRO1l9AI+gNSXVXcp9fu+xc3VDE3tWo76be538Q6LWtsSqp
+         2ZxmNX1vm5LZwv2zojkiE43gREoDhh0SOz/OaUxnGlaWrXoCjotIpMOYMPZQXzAP68UY
+         mYv22uy9+vWHdWDlsXhaKatArioU56t/KDYrBrOrN6iJei4NZOgq5vNsQj/VvWNPhZmX
+         eX9h5natv32FDP57uT618LzCR1+Gf8g7rtxYPB4tEnTBAKnmQfcJeekUcJOAY6jZD5iC
+         6tlw==
+X-Gm-Message-State: AOAM5304LQPWJmF4IjkyAISNsrhiKNoPnNl3KOszbpOXUoRWefWkBAgR
+        HX6amvBqLrDvEjg4lJXLnl+aaMl+2IFk4o+rRZEwHw==
+X-Google-Smtp-Source: ABdhPJxoN0d+Ha4ydEmot87mUT0b4uygWp+/4MhofvqZsJysvO/S1XvMIB/hIYACy+ZMw6KdNYPl1P9orZjjE+00clM=
+X-Received: by 2002:a9f:2431:: with SMTP id 46mr23233053uaq.114.1638556797916;
+ Fri, 03 Dec 2021 10:39:57 -0800 (PST)
+MIME-Version: 1.0
+References: <20211130111325.29328-1-semen.protsenko@linaro.org>
+ <20211130111325.29328-2-semen.protsenko@linaro.org> <1638294184.179325.2713642.nullmailer@robh.at.kernel.org>
+ <4b5bebb0-ed74-8132-1e6b-cb7cbc21439c@canonical.com> <CAL_JsqJb4nMBoGLcf-bKpi5kEE+zXQ=dfo5JSBhrqPFeLnCsHw@mail.gmail.com>
+ <CAPLW+4=Zdvf4HRNUeVMR9URLSdA867hdXVLYy+k47yLH82uTnA@mail.gmail.com> <CAL_Jsq+FTB+mWOyCBwLFifk8obpMh1ysJ6pqpUzSoW7jzo5FAg@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+FTB+mWOyCBwLFifk8obpMh1ysJ6pqpUzSoW7jzo5FAg@mail.gmail.com>
 From:   Sam Protsenko <semen.protsenko@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 3 Dec 2021 20:39:46 +0200
+Message-ID: <CAPLW+4nPrGRHbHPfNX0q0O26hDLBiV0s_FRWOUfALNg8kbqgKA@mail.gmail.com>
+Subject: Re: [PATCH v2 RESEND 1/5] dt-bindings: soc: samsung: Add Exynos USI bindings
+To:     Rob Herring <robh@kernel.org>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chanho Park <chanho61.park@samsung.com>,
+        linux-serial@vger.kernel.org,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         David Virag <virag.david003@gmail.com>,
         Jaewon Kim <jaewon02.kim@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: Only show unique unit address warning for enabled nodes
-Date:   Fri,  3 Dec 2021 20:35:17 +0200
-Message-Id: <20211203183517.11390-1-semen.protsenko@linaro.org>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are valid cases when two nodes can have the same address. For
-example, in Exynos SoCs there is USI IP-core, which might be configured
-to provide UART, SPI or I2C block, all of which having the same base
-register address. But only one can be enabled at a time. That looks like
-this:
+On Thu, 2 Dec 2021 at 22:44, Rob Herring <robh@kernel.org> wrote:
+>
+> On Thu, Dec 2, 2021 at 5:01 AM Sam Protsenko <semen.protsenko@linaro.org> wrote:
+> >
+> > On Wed, 1 Dec 2021 at 18:20, Rob Herring <robh@kernel.org> wrote:
+> > >
+> > > On Tue, Nov 30, 2021 at 2:04 PM Krzysztof Kozlowski
+> > > <krzysztof.kozlowski@canonical.com> wrote:
+> > > >
+> > > > On 30/11/2021 18:43, Rob Herring wrote:
+> > > > > On Tue, 30 Nov 2021 13:13:21 +0200, Sam Protsenko wrote:
+> > > > >> Add constants for choosing USIv2 configuration mode in device tree.
+> > > > >> Those are further used in USI driver to figure out which value to write
+> > > > >> into SW_CONF register. Also document USIv2 IP-core bindings.
+> > > > >>
+> > > > >> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > > > >> ---
+> > > > >> Changes in v2:
+> > > > >>   - Combined dt-bindings doc and dt-bindings header patches
+> > > > >>   - Added i2c node to example in bindings doc
+> > > > >>   - Added mentioning of shared internal circuits
+> > > > >>   - Added USI_V2_NONE value to bindings header
+> > > > >>
+> > > > >>  .../bindings/soc/samsung/exynos-usi.yaml      | 135 ++++++++++++++++++
+> > > > >>  include/dt-bindings/soc/samsung,exynos-usi.h  |  17 +++
+> > > > >>  2 files changed, 152 insertions(+)
+> > > > >>  create mode 100644 Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+> > > > >>  create mode 100644 include/dt-bindings/soc/samsung,exynos-usi.h
+> > > > >>
+> > > > >
+> > > > > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > > > > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > > > >
+> > > > > yamllint warnings/errors:
+> > > > >
+> > > > > dtschema/dtc warnings/errors:
+> > > > > Documentation/devicetree/bindings/soc/samsung/exynos-usi.example.dts:35.39-42.15: Warning (unique_unit_address): /example-0/usi@138200c0/serial@13820000: duplicate unit-address (also used in node /example-0/usi@138200c0/i2c@13820000)
+> > > >
+> > > > Rob,
+> > > >
+> > > > The checker complains about two nodes with same unit-address, even
+> > > > though the node name is different. Does it mean that our idea of
+> > > > embedding two children in USI and having enabled only one (used one) is
+> > > > wrong?
+> > >
+> > > IIRC, we allow for this exact scenario, and there was a change in dtc
+> > > for it. So I'm not sure why this triggered.
+> > >
+> >
+> > It's triggered from WARNING(unique_unit_address, ...), because it
+> > calls static void check_unique_unit_address_common() function with
+> > disable_check=false. I guess we should interpret that this way: the
+> > warning makes sense in regular case, when having the same unit address
+> > for two nodes is wrong. So the warning is reasonable, it's just not
+> > relevant in this particular case. What can be done:
+> >
+> >   1. We can introduce some specific property to mark nodes with
+> > duplicated address as intentional. check_unique_unit_address_common()
+> > can be extended then to omit checking the nodes if that property is
+> > present.
+> >   2. We can just ignore that warning in this particular case (and
+> > similar cases).
+> >   3. We can add some disambiguation note to that warning message, like
+> > "if it's intentional -- please ignore this message"
+> >
+> > I'm all for option (3), as it's the easiest one, and still reasonable.
+> > Rob, what do you think? Can we just ignore that warning in further
+> > versions of this patch series?
+>
+> Just change the dtc flags to '-Wno-unique_unit_address
+> -Wunique_unit_address_if_enabled' for both examples and dtbs.
+>
 
-    usi@138200c0 {
-        serial@13820000 {
-            status = "okay";
-        };
+Thanks. Submitted that separately from this series: [1].
 
-        i2c@13820000 {
-            status = "disabled";
-        };
-    };
+[1] https://lkml.org/lkml/2021/12/3/762
 
-When running "make dt_binding_check", it reports next warning:
-
-    Warning (unique_unit_address):
-    /example-0/usi@138200c0/serial@13820000:
-    duplicate unit-address (also used in node
-    /example-0/usi@138200c0/i2c@13820000)
-
-Disable "unique_unit_address" in DTC_FLAGS to suppress warnings like
-that, but enable "unique_unit_address_if_enabled" warning, so that dtc
-still reports a warning when two enabled nodes are having the same
-address.
-
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-Reported-by: Rob Herring <robh@kernel.org>
-Suggested-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/Makefile | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/Makefile b/Documentation/devicetree/bindings/Makefile
-index c9abfbe3f0aa..41c555181b6f 100644
---- a/Documentation/devicetree/bindings/Makefile
-+++ b/Documentation/devicetree/bindings/Makefile
-@@ -65,7 +65,9 @@ DT_DOCS = $(patsubst $(srctree)/%,%,$(shell $(find_all_cmd)))
- override DTC_FLAGS := \
- 	-Wno-avoid_unnecessary_addr_size \
- 	-Wno-graph_child_address \
--	-Wno-interrupt_provider
-+	-Wno-interrupt_provider \
-+	-Wno-unique_unit_address \
-+	-Wunique_unit_address_if_enabled
- 
- # Disable undocumented compatible checks until warning free
- override DT_CHECKER_FLAGS ?=
--- 
-2.30.2
-
+> Rob

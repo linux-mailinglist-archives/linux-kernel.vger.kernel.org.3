@@ -2,104 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 743464673E8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B7A467405
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:26:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379582AbhLCJ2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 04:28:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39666 "EHLO
+        id S1351325AbhLCJaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 04:30:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379567AbhLCJ2s (ORCPT
+        with ESMTP id S232463AbhLCJaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 04:28:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FF4C06173E
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 01:25:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFE01629A4
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 09:25:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9115DC53FD2;
-        Fri,  3 Dec 2021 09:25:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638523524;
-        bh=3AUOk2ZKqKhp8BtiY8AjFGaXIUAdD2D1gvG87zbIadw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VfXW3A+ArzE1LYCd+V9np3vB+r74BAunrm0OT2Be6KvHUl5TRVL4slL6Lj1F3efM+
-         ivNk++0+dTuZrT3rbXCzW83e1cm7TpqmBECkHpC+AC7woPwyeEv/3eahML4jNnvBXg
-         zdLPRYj1WPyXZxAIGPPstSQ/5hkl+rE0xsa4S1Do=
-Date:   Fri, 3 Dec 2021 10:25:21 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ronak Jain <ronak.jain@xilinx.com>
-Cc:     michal.simek@xilinx.com, linux-kernel@vger.kernel.org,
-        rajan.vaja@xilinx.com, corbet@lwn.net,
-        linux-arm-kernel@lists.infradead.org, arnd@arndb.de,
-        lakshmi.sai.krishna.potthuri@xilinx.com
-Subject: Re: [PATCH v3 2/3] firmware: zynqmp: Add sysfs entry for runtime
- features
-Message-ID: <YanigXDtuo7MpVg8@kroah.com>
-References: <20211203091814.15582-1-ronak.jain@xilinx.com>
- <20211203091814.15582-3-ronak.jain@xilinx.com>
+        Fri, 3 Dec 2021 04:30:16 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB29EC06173E;
+        Fri,  3 Dec 2021 01:26:52 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id b11so1663731pld.12;
+        Fri, 03 Dec 2021 01:26:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dMjtefQPD8LMKp7HsI40U7ExFBle/hPa8kdDB8ErYSQ=;
+        b=DJlpvcH7FkSrOa3ZkTlNitW5TQcKtglRXBezAJRUh9Ahzk7/EHwD7xSltWy1j6mW2u
+         yf47DLXbBp4XtzWSaxZwAFUle8vojCrdF/zfq5lUKwFKHFGgIYZKyhIj0byc4kgQWnk1
+         VqncEYJJbR6QJWnWMa/tSPWIHSe1FjGuvED/nAhSwg0dE1Iew0tm2kcXdAT9s3kcA9kx
+         o82XsRDCp3Z25sOQw4gDeLzu8oRAjEDNlJlSe9eYmY5tshn7cZmDF753ZzDIQ8U6Lr/v
+         LYk7QnVym6mKVY9kl/U7GWLUD5wQmq+/gOesQh8GkUQb3vgVBL6mQiB9O4w3gOuYq8dI
+         FOVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dMjtefQPD8LMKp7HsI40U7ExFBle/hPa8kdDB8ErYSQ=;
+        b=WduuRRYeBWupdSshCSCcTO87n6uDmfmGoJriSDKy7dQmFxM4FDQhIj17Pmp8IncGlK
+         HFdpPds2xoiP1Ek2zABs7q8+hCRKZL4To/AhntDo/qa8RnAjCgyCauwPly2i7IJUcs2u
+         wyyuROb5m7oOeoEA4crY71uSP0ua15xyoCW5zCJyUU99fpQru75l16LH9IAA9X8he0TL
+         ry3uqQtWMnP+GHmaSsDyAs2McSchARtIQFZQ/FOp6RHNuodZ8oUD/payYQGk4bu+nCGx
+         b2b5HBm75vEb+UTQidrR3QCvHaNDdkHd9tRP295geBEbQVUwC/MDAN6MBDGkPiTIb6Ug
+         L08w==
+X-Gm-Message-State: AOAM531h5be8H7R2glNQy1hfLjrzZOWbLwHP4DfYaqlj+qzPFuN0eHpu
+        jtHuxccwfQe7ZBb8styZqCDL8yz7iPs=
+X-Google-Smtp-Source: ABdhPJyz00I6JdsvrIgMwB7IELtD022bY6FOhfE0ySNfkapKPEmIGeHUD0GJfqfWcye2xgiTfOUc0g==
+X-Received: by 2002:a17:90b:615:: with SMTP id gb21mr13086859pjb.10.1638523612208;
+        Fri, 03 Dec 2021 01:26:52 -0800 (PST)
+Received: from richard-System-Product-Name.. ([49.216.238.137])
+        by smtp.gmail.com with ESMTPSA id h13sm2489100pfv.37.2021.12.03.01.26.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 01:26:51 -0800 (PST)
+From:   Richard Hsu <saraon640529@gmail.com>
+X-Google-Original-From: Richard Hsu <Richard_Hsu@asmedia.com.tw>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl, Richard_Hsu@asmedia.com.tw
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yd_Tseng@asmedia.com.tw, Cindy1_Hsu@asmedia.com.tw,
+        Andrew_Su@asmedia.com.tw
+Subject: [PATCH] gpio Add my driver new id
+Date:   Fri,  3 Dec 2021 17:26:09 +0800
+Message-Id: <20211203092609.8502-1-Richard_Hsu@asmedia.com.tw>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211203091814.15582-3-ronak.jain@xilinx.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 01:18:13AM -0800, Ronak Jain wrote:
-> Create sysfs entry for runtime feature configuration. The support
->  is added for an over temperature and external watchdog feature.
-> 
-> The below listed files are used for runtime features configuration:
-> /sys/devices/platform/firmware\:zynqmp-firmware/feature_config_id
-> /sys/devices/platform/firmware\:zynqmp-firmware/feature_config_value
-> 
-> In order to configure an over temperature or external watchdog
->  features, first the user need to select the valid config id and then
->  the user can configure the value for selected feature config id.
-> 
-> Signed-off-by: Ronak Jain <ronak.jain@xilinx.com>
+ drivers/gpio/gpio-amdpt.c | 12 ++++++++++--
+ 1 files changed, 11 insertions(+), 2 deletions(-)
 
-Ah, here's the documentation.
+diff --git a/drivers/gpio/gpio-amdpt.c b/drivers/gpio/gpio-amdpt.c
+index bbf53e289141..4d01d4341a67 100644
+--- a/drivers/gpio/gpio-amdpt.c
++++ b/drivers/gpio/gpio-amdpt.c
+@@ -14,6 +14,7 @@
+ #include <linux/platform_device.h>
 
-You should say so in the Subject line, and the changelog text is not
-correct, this is a documentation update.
+ #define PT_TOTAL_GPIO 8
++#define PT_TOTAL_GPIO_EX 24
 
+ /* PCI-E MMIO register offsets */
+ #define PT_DIRECTION_REG   0x00
+@@ -72,10 +73,12 @@ static void pt_gpio_free(struct gpio_chip *gc, unsigned offset)
+ static int pt_gpio_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
++	struct acpi_device *acpi_dev;
++	acpi_handle handle = ACPI_HANDLE(dev);
+ 	struct pt_gpio_chip *pt_gpio;
+ 	int ret = 0;
 
-> ---
-> Changes in v3:
-> - None
-> 
-> Changes in v2:
-> - Update commit message
-> ---
->  .../ABI/stable/sysfs-driver-firmware-zynqmp   | 84 +++++++++++++++++++
->  1 file changed, 84 insertions(+)
-> 
-> diff --git a/Documentation/ABI/stable/sysfs-driver-firmware-zynqmp b/Documentation/ABI/stable/sysfs-driver-firmware-zynqmp
-> index f5724bb5b462..2fde354715a5 100644
-> --- a/Documentation/ABI/stable/sysfs-driver-firmware-zynqmp
-> +++ b/Documentation/ABI/stable/sysfs-driver-firmware-zynqmp
-> @@ -113,3 +113,87 @@ Description:
->  		    # echo 0 > /sys/devices/platform/firmware\:zynqmp-firmware/health_status
->  
->  Users:		Xilinx
-> +
-> +What:		/sys/devices/platform/firmware\:zynqmp-firmware/feature_config_*
-> +Date:		Aug 2021
-> +KernelVersion:	5.14
+-	if (!ACPI_COMPANION(dev)) {
++	if (acpi_bus_get_device(handle, &acpi_dev)) {
+ 		dev_err(dev, "PT GPIO device node not found\n");
+ 		return -ENODEV;
+ 	}
+@@ -100,10 +103,14 @@ static int pt_gpio_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
 
-5.14?
++	if (!strncmp(acpi_dev_name(acpi_dev), "AMDIF031", 8))
++		pt_gpio->gc.ngpio = PT_TOTAL_GPIO_EX;
++	else
++		pt_gpio->gc.ngpio = PT_TOTAL_GPIO;
++
+ 	pt_gpio->gc.owner            = THIS_MODULE;
+ 	pt_gpio->gc.request          = pt_gpio_request;
+ 	pt_gpio->gc.free             = pt_gpio_free;
+-	pt_gpio->gc.ngpio            = PT_TOTAL_GPIO;
+ #if defined(CONFIG_OF_GPIO)
+ 	pt_gpio->gc.of_node          = dev->of_node;
+ #endif
+@@ -135,6 +142,7 @@ static int pt_gpio_remove(struct platform_device *pdev)
+ static const struct acpi_device_id pt_gpio_acpi_match[] = {
+ 	{ "AMDF030", 0 },
+ 	{ "AMDIF030", 0 },
++	{ "AMDIF031", 0 },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(acpi, pt_gpio_acpi_match);
+--
+2.30.2
 
-Are these sysfs files already in the kernel tree?
-
-And can you break this up into one entry per sysfs file?
-
-One for the feature_config_id file and one for feature_config_value?
-
-thanks,
-
-greg k-h

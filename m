@@ -2,113 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC0D646736E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:44:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B559E467371
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:45:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379299AbhLCIrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 03:47:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:25236 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351255AbhLCIro (ORCPT
+        id S1379309AbhLCIsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:48:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351242AbhLCIsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 03:47:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638521060;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OwOgBsAqeM8nCc99h1P3E89qpglyfHpzTAJ8c3y42RU=;
-        b=EptM6ht/wCAef7cRjcsDdn+sALLH3RktmTrmaYg9K1U1DI228nmQUXyOGNJcZEFQlrL2CM
-        thEycqDxI4WfNO/yZUOAoqjOOup+GIQqzPgrVXpdgdLZsaVpp842WYCHfx6B62C/3do5E1
-        rSzyhb1DWBykuE3UG9WrNeR7FdZghyQ=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-333-ZjU7mKG0PRqNi30TsLfCVg-1; Fri, 03 Dec 2021 03:44:19 -0500
-X-MC-Unique: ZjU7mKG0PRqNi30TsLfCVg-1
-Received: by mail-pf1-f199.google.com with SMTP id q2-20020a056a00084200b004a2582fcec1so1519026pfk.15
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 00:44:19 -0800 (PST)
+        Fri, 3 Dec 2021 03:48:18 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E6EC06174A
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 00:44:54 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id j18so4704541ljc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 00:44:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kvaser.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=nDjpRXICPCHSQs+2lhepbmHrGRwDJ4dTdulpB2X4trg=;
+        b=w7sogOVV3GtH1yYeWK4dNiijGxnd/G6LgDUEvA7aETzpcCJsrKbHSEZGyLPy1bkI+2
+         Jj3qbDACJnKt7XVDSExH4aPn3vo1WG8ejfmPtJiPy/qp6DnnlJzeXsCVTvywvfhU4yt3
+         EgoJZaUCezxgKoG4+H6rtZdXMhBrCnNZcnxTjKIEm4j5gbbf6QTOh2kMEUrtKlWKaPjk
+         x4/e55VyBCJ4i5kwcCqfl8p2r5wlliVQBlMDBQs6CdGzeqVIgi/0QzVaNiJ+ssa3DCF2
+         1GQY3Wdzg//UNZdCykAjUA46NNloSoaE9eOdphKPVetCA+h1NCSyFkupra0edwda6IGE
+         afWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OwOgBsAqeM8nCc99h1P3E89qpglyfHpzTAJ8c3y42RU=;
-        b=6AXugWnLAYhQPpX3Bn/5ZpVnRPcrZpohqUiUC4WS4CcrzmWjZ7DVF4FEJFNCGHUGg+
-         R4O4BXMskfaOAMbe1+s5Lzf814Cido0cmEvksCZlMrO5xjgBwL1VTEgEFlujsm1KTaia
-         mXd23vQ+DaA3I+QR5kT+b3wyX81L9wrhTAPFO8mQiokovrb2OFgyKZmTnXDcfjXyup5e
-         TGFXFVzDitaJHWKpoFPQv/eqsxOllJH6/DVPBamxjgv1/rgZN0WykCBsydLafvOSauFw
-         k1x3d6bjaODW52lmvN1UGbQUGDpaRJEPyJr8fwC8TTT/VWKRn4Y5gVuRMMJfhmH6xtNe
-         kULQ==
-X-Gm-Message-State: AOAM532zDgycUwqYVvQXJiqwxu90oLV5QIqI1ITMSHz/D8yQZ8/XsXLv
-        os914i+g8RXQUq2DqsoxSz94/QPsxgmkTUmM3vXX3KZbYjOrccT8MvrJubitadfPQH3JdnrtLhV
-        Z/VYMDRP1ot+i6cXZIFO9qU0J5KQntZEFipx0zNZh
-X-Received: by 2002:a05:6a00:1741:b0:4a6:3de7:a816 with SMTP id j1-20020a056a00174100b004a63de7a816mr18228914pfc.29.1638521058371;
-        Fri, 03 Dec 2021 00:44:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzcFgiszaGcpNTDAyqOTnAd7lzOOq04bLVpu+i3J2p9LDN9SMN6RsYGzYHtQFhVPg/ujvYDj7XnUe8+M+7jQ5o=
-X-Received: by 2002:a05:6a00:1741:b0:4a6:3de7:a816 with SMTP id
- j1-20020a056a00174100b004a63de7a816mr18228884pfc.29.1638521058050; Fri, 03
- Dec 2021 00:44:18 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=nDjpRXICPCHSQs+2lhepbmHrGRwDJ4dTdulpB2X4trg=;
+        b=oCrZQ4Al3xvWmVR0I0b6BXh6FfPsSm3UQEisbTe7WMVg4UwYYC+wEl7rkyJ2+OY82+
+         FEtJkaDDSbrNplSkYDYmCLKcC/9zsgMYTPNMzHCUwAFswthd8i7ErM6szSb+/jApBH5k
+         XKI3fuvzzLzz67iefykeMyW7QVeycew2YYQ7V+kaVrskdoDflzBN9TDVHhZL6+A9SJoz
+         4/vnYXQn2OyUp4+6XvDJDLjq/nTkKKmctDZSLJijwpTXmwBLX0t5VuhZ6/l+WGVI+YKD
+         EaQwcMPGil1Q7B6FdWoMLY5IkAUUMk6nFOhtNJP7lmEXWXLrkBiXWz+Dpz97z2YmVz8F
+         53fw==
+X-Gm-Message-State: AOAM5314DV8hd2rXqEJr7z7ZgDUnqJUhHnwMKTMfK8KNTzBOTmhIzCNf
+        MCV/hvT2j2wCzCe1qCdrfNMFug==
+X-Google-Smtp-Source: ABdhPJyIQbv4VdsCECR2QyApqxy4jXuqALQ61Fmppv4TEoJSvmR1d4Bg9aeDsHVPkA2XtfkBwLL31g==
+X-Received: by 2002:a2e:151b:: with SMTP id s27mr16824453ljd.274.1638521092718;
+        Fri, 03 Dec 2021 00:44:52 -0800 (PST)
+Received: from [10.0.6.3] (rota.kvaser.com. [195.22.86.90])
+        by smtp.gmail.com with ESMTPSA id e17sm283187lfq.102.2021.12.03.00.44.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 00:44:52 -0800 (PST)
+Subject: Re: [PATCH v3 5/5] can: do not increase tx_bytes statistics for RTR
+ frames
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Yasushi SHOJI <yashi@spacecubics.com>,
+        Stephane Grosjean <s.grosjean@peak-system.com>
+References: <20211128123734.1049786-1-mailhol.vincent@wanadoo.fr>
+ <20211128123734.1049786-6-mailhol.vincent@wanadoo.fr>
+ <5ba88e96-444e-39c0-d00d-03f2153e7e6f@kvaser.com>
+ <CAMZ6RqJ4WWAZSrk1AqS=TFbyrx7Ys49=fN-GTxkwh62GCS8Rqw@mail.gmail.com>
+From:   Jimmy Assarsson <extja@kvaser.com>
+Message-ID: <79c86cf6-26bd-6a84-81a3-577ae7f01c7d@kvaser.com>
+Date:   Fri, 3 Dec 2021 09:44:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-References: <20211203030119.28612-1-xiazhengqiao@huaqin.corp-partner.google.com>
-In-Reply-To: <20211203030119.28612-1-xiazhengqiao@huaqin.corp-partner.google.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Fri, 3 Dec 2021 09:44:07 +0100
-Message-ID: <CAO-hwJKA-+Vu44RnOAjkBB12QOWaq68sHngy=gX+dAgeFztiZA@mail.gmail.com>
-Subject: Re: [PATCH] HID: google: add eel USB id
-To:     xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, phoenixshen@google.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAMZ6RqJ4WWAZSrk1AqS=TFbyrx7Ys49=fN-GTxkwh62GCS8Rqw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 4:01 AM xiazhengqiao
-<xiazhengqiao@huaqin.corp-partner.google.com> wrote:
->
-> Add one additional hammer-like device.
->
-> Signed-off-by: xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
+On 2021-12-03 02:05, Vincent MAILHOL wrote:
+> On Fri. 3 Dec. 2021 at 08:35, Jimmy Assarsson <extja@kvaser.com> wrote:
+>> On 2021-11-28 13:37, Vincent Mailhol wrote:
+>>> The actual payload length of the CAN Remote Transmission Request (RTR)
+>>> frames is always 0, i.e. nothing is transmitted on the wire. However,
+>>> those RTR frames still use the DLC to indicate the length of the
+>>> requested frame.
+>>>
+>>> As such, net_device_stats:tx_bytes should not be increased when
+>>> sending RTR frames.
+>>>
+>>> The function can_get_echo_skb() already returns the correct length,
+>>> even for RTR frames (c.f. [1]). However, for historical reasons, the
+>>> drivers do not use can_get_echo_skb()'s return value and instead, most
+>>> of them store a temporary length (or dlc) in some local structure or
+>>> array. Using the return value of can_get_echo_skb() solves the
+>>> issue. After doing this, such length/dlc fields become unused and so
+>>> this patch does the adequate cleaning when needed.
+>>>
+>>> This patch fixes all the CAN drivers.
+>>>
+>>> Finally, can_get_echo_skb() is decorated with the __must_check
+>>> attribute in order to force future drivers to correctly use its return
+>>> value (else the compiler would emit a warning).
+>>>
+>>> [1] commit ed3320cec279 ("can: dev: __can_get_echo_skb():
+>>> fix real payload length return value for RTR frames")
+>>
+>> Hi Vincent!
+>>
+>> Thanks for the patch!
+>> I've reviewed and tested the changes affecting kvaser_usb.
+>> Looks good to me, only a minor nitpick inline :)
 
-Applied to for-5.16/upstream-fixes in hid.git
+...
 
-thanks
+>>> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+>>> index 17fabd3d0613..9f423a5fb63f 100644
+>>> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+>>> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
 
-Cheers,
-Benjamin
+...
 
-> ---
->  drivers/hid/hid-google-hammer.c | 2 ++
->  drivers/hid/hid-ids.h           | 1 +
->  2 files changed, 3 insertions(+)
->
-> diff --git a/drivers/hid/hid-google-hammer.c b/drivers/hid/hid-google-hammer.c
-> index 8123b871a3eb..0403beb3104b 100644
-> --- a/drivers/hid/hid-google-hammer.c
-> +++ b/drivers/hid/hid-google-hammer.c
-> @@ -585,6 +585,8 @@ static void hammer_remove(struct hid_device *hdev)
->  static const struct hid_device_id hammer_devices[] = {
->         { HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
->                      USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_DON) },
-> +       { HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
-> +                    USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_EEL) },
->         { HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
->                      USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_HAMMER) },
->         { HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
-> diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-> index 96a455921c67..b02d8b1d907a 100644
-> --- a/drivers/hid/hid-ids.h
-> +++ b/drivers/hid/hid-ids.h
-> @@ -501,6 +501,7 @@
->  #define USB_DEVICE_ID_GOOGLE_MAGNEMITE 0x503d
->  #define USB_DEVICE_ID_GOOGLE_MOONBALL  0x5044
->  #define USB_DEVICE_ID_GOOGLE_DON       0x5050
-> +#define USB_DEVICE_ID_GOOGLE_EEL       0x5057
->
->  #define USB_VENDOR_ID_GOTOP            0x08f2
->  #define USB_DEVICE_ID_SUPER_Q2         0x007f
-> --
-> 2.17.1
->
+>>> @@ -1493,13 +1489,13 @@ kvaser_usb_hydra_frame_to_cmd_std(const struct kvaser_usb_net_priv *priv,
+>>>        if (cf->can_id & CAN_RTR_FLAG)
+>>>                flags |= KVASER_USB_HYDRA_CF_FLAG_REMOTE_FRAME;
+>>>
+>>> -     flags |= (cf->can_id & CAN_ERR_FLAG ?
+>>> -               KVASER_USB_HYDRA_CF_FLAG_ERROR_FRAME : 0);
+>>> +     if (cf->can_id & CAN_ERR_FLAG)
+>>> +             flags |= KVASER_USB_HYDRA_CF_FLAG_ERROR_FRAME;
+>>
+>> This has nothing to do with RTR. Maybe put it in a separate patch?
+> 
+> Arg... You are right. This should not be here. I saw it in my
+> final check, removed it in my tree and forgot to redo a "git
+> format-patch".
+> 
+> This is some leftover of a previous version in which I did more
+> heavy changes to kvaser_usb_hydra_frame_to_cmd_std(). This is
+> purely cosmetic though. I am not willing to go into a clean up
+> crusade of all CAN drivers so I will just leave the ternary
+> operator untouched. Free to you to reuse it if you want to do a
+> clean up later on.
 
+Sure, I'll save it for later :) If you got more changes, feel free to share
+them.
+
+Best regards,
+jimmy

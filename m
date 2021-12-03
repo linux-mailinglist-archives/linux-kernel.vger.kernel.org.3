@@ -2,126 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64574467AB1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 16:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8BC467AB5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 16:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381917AbhLCQBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 11:01:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45562 "EHLO
+        id S1381927AbhLCQCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 11:02:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233934AbhLCQBi (ORCPT
+        with ESMTP id S1381930AbhLCQB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 11:01:38 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5C1C061751
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 07:58:14 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id o13so6603052wrs.12
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 07:58:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=ws1r6luiKcFLGmHQC5MDCjqpZbp9tkgkP1274bUaIqI=;
-        b=mFH6sAT74XBZpwpRsrazCgeKuR+w0HKUbHU339AyglhpjbFAtrr2MpWPRW3o4vYTgE
-         5NNR8yknW97iI+ayHGDRva6uFly5IwNUbh2+UBtB/Bc/aG7F2plZdb77b/9iSargagRD
-         Pvmh5qAEN6OEdnGCiWmMd8qc6o3eySTNgN0i4zxrpCBUpF4MXQkxXgVBpxUVtAfpbzQJ
-         ZxyvKh1jokMepLFzRzOSUhmJsKV9MVqy3IbPs89ff4PrJxHxuSLOdom/7P5nwT5yVylX
-         GwZBYAZ4nVsxArMh0zBnzhzrp9isgnKGCmdBZqBLGwLC22EG6/ACgocu3pVt+hoJJmNv
-         OeHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=ws1r6luiKcFLGmHQC5MDCjqpZbp9tkgkP1274bUaIqI=;
-        b=2YK4j1g61DOLYZc3AIgatyN2N+jrr1JnWRFxiP4lZPvd9r0lfdnXh5IomnLpSt1aqO
-         IolygasAew7jjwfTWfs7KOQ8h5nIPe7GCqSOcENNfMqIR/P0zIcp0hgsV4lGMuamiDlP
-         hiS+BOWt3F1lwzpekQsUf9cYYRefUdf4fGYR3tXZQi20ZaJ11pfM2OLldAVfj/74ZtJX
-         GvCOqy71r1dW/kooJgniTWEyElyQFYgnyFmWHZpkmGvaUL3TqGRzUv38ryvx93qS5oFg
-         hdOonQzcUL3i6hMrHwGFxJGKjRDUyh7p6TUwEodORfSHTnf+vJ//wzHOlgsyMuzDg1yX
-         Szng==
-X-Gm-Message-State: AOAM5329u+0M/padgKmewFeH3io7HFGiKW3AB9zKdMrs1mniYm0ykaEP
-        BlCbkXwGd8hIsPKjHMXRpzc=
-X-Google-Smtp-Source: ABdhPJx9c2tj3IZsUkjwbdvjCpvJizQK/Uv5qccGFVRnfb5Xwoc0YO5mQChU8gdeUwfda+nlsE8QbA==
-X-Received: by 2002:a5d:40c8:: with SMTP id b8mr22407962wrq.610.1638547092871;
-        Fri, 03 Dec 2021 07:58:12 -0800 (PST)
-Received: from [192.168.0.23] (static-66-219-86-188.ipcom.comunitel.net. [188.86.219.66])
-        by smtp.gmail.com with ESMTPSA id s24sm2770012wmj.26.2021.12.03.07.58.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 07:58:12 -0800 (PST)
-Message-ID: <392a239a-14da-c544-a1f9-09d8b25d3e07@gmail.com>
-Date:   Fri, 3 Dec 2021 16:58:11 +0100
+        Fri, 3 Dec 2021 11:01:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16B9C061D7F;
+        Fri,  3 Dec 2021 07:58:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AAC662C25;
+        Fri,  3 Dec 2021 15:58:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F28C56749;
+        Fri,  3 Dec 2021 15:58:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638547110;
+        bh=qJD2danQ3URRcIzZOzZCHOD8e3NiOVJf9PCw7v9jiOo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ori/ZGk47+C7oKVNvK8nvrqZilkaYX4hJMzPeZbO9/PA794ttpWuXs+GdstK8W3Uw
+         iprj6d0aDSRA3Ve+f/r8oYR2MqVn28YPIdLEI3rUWv+U5vK6Nnx4Y1rJNrfX5WbUPy
+         J0FjeJLwYpSg4EJOvuV8sfCoGRfNhDBe/p38PUR84jPQQQWQKsmLzmraVJd2q+O/6X
+         obMA7/MRzdz/V/cDFhcOVSadSUTf2fIcbUgRKODtK43n6N/M1whSfOYZEWGy5bKl4d
+         9WCNIZkIj6qfp8lhO7OpYVYiW6YRk6PbNoW3e13CIIW11ZapX0TjI2pC1tkZ4HB8M+
+         dY9dFUUbss0+g==
+Received: by mail-ed1-f50.google.com with SMTP id y13so13268384edd.13;
+        Fri, 03 Dec 2021 07:58:30 -0800 (PST)
+X-Gm-Message-State: AOAM530DIPMNkcYlutGCwyXiGREbYxR90ixGqxoY54QMtsPZkGjA01b8
+        4JGbaO0WxRhzqOH52ttjhyCndisIo8Soq5lObQ==
+X-Google-Smtp-Source: ABdhPJyv+1SOK4GHulPDylE33hTa9bzB6wGwF5kWEz0yW4prK9flpy66cDUS/NwpPf/gHONFOoLeme0BGX6swm4QNGM=
+X-Received: by 2002:a17:907:a411:: with SMTP id sg17mr24193953ejc.84.1638547107328;
+ Fri, 03 Dec 2021 07:58:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-US
-To:     Mark Yacoub <markyacoub@chromium.org>,
-        dri-devel@lists.freedesktop.org
-Cc:     seanpaul@chromium.org, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, jason-jh.lin@mediatek.com,
-        tzungbi@google.com, Mark Yacoub <markyacoub@google.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
-References: <20211202151200.3125685-1-markyacoub@chromium.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH] drm: send vblank event with the attached sequence rather
- than current
-In-Reply-To: <20211202151200.3125685-1-markyacoub@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211027201641.2076427-1-robh@kernel.org> <20211027201641.2076427-3-robh@kernel.org>
+ <87zgpl9rqq.ffs@tglx>
+In-Reply-To: <87zgpl9rqq.ffs@tglx>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 3 Dec 2021 09:58:15 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJ9kkch_SB6LT_fwxk9QS36zbwsj5wu+dtY7yWe6SEMug@mail.gmail.com>
+Message-ID: <CAL_JsqJ9kkch_SB6LT_fwxk9QS36zbwsj5wu+dtY7yWe6SEMug@mail.gmail.com>
+Subject: Re: [PATCH v12 2/5] perf: Add a counter for number of user access
+ events in context
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On Tue, Nov 30, 2021 at 4:57 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> On Wed, Oct 27 2021 at 15:16, Rob Herring wrote:
+> > For controlling user space counter access, we need to know if any event
+> > in a context (currently scheduled or not) is using user space counters.
+>
+> Who is 'we'?
+>
+> Come on. How is someone without context supposed to figure out that 'we'
+> means ARM64 when staring at that changelog a year later?
+>
+> Is it really that hard to write coherent changelogs which make sense on
+> their own and actually follow Documentation/process/ which exists for a
+> reason?
 
-On 02/12/2021 16:11, Mark Yacoub wrote:
-> From: Mark Yacoub <markyacoub@google.com>
-> 
+I've rewritten it like this:
 
-please make sure to add the linux-mediatek mailinglist in any follow-up 
-communication.
+On arm64, user space counter access will be controlled differently
+compared to x86. On x86, access in the strictest mode is enabled for all
+tasks in an MM when any event is mmap'ed. For arm64, access is
+explicitly requested for an event and only enabled when the event's
+context is active. This avoids hooks into the arch context switch code
+and gives better control of when access is enabled.
 
-Regards,
-Matthias
-
-> [Why]
-> drm_handle_vblank_events loops over vblank_event_list to send any event
-> that is current or has passed.
-> More than 1 event could be pending with past sequence time that need to
-> be send. This can be a side effect of drivers without hardware vblank
-> counter and they depend on the difference in the timestamps and the
-> frame/field duration calculated in drm_update_vblank_count. This can
-> lead to 1 vblirq being ignored due to very small diff, resulting in a
-> subsequent vblank with 2 pending vblank events to be sent, each with a
-> unique sequence expected by user space.
-> 
-> [How]
-> Send each pending vblank event with the sequence it's waiting on instead
-> of assigning the current sequence to all of them.
-> 
-> Fixes igt@kms_flip "Unexpected frame sequence"
-> Tested on Jacuzzi (MT8183)
-> 
-> Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
-> ---
->   drivers/gpu/drm/drm_vblank.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
-> index 3417e1ac79185..47da8056abc14 100644
-> --- a/drivers/gpu/drm/drm_vblank.c
-> +++ b/drivers/gpu/drm/drm_vblank.c
-> @@ -1902,7 +1902,7 @@ static void drm_handle_vblank_events(struct drm_device *dev, unsigned int pipe)
->   
->   		list_del(&e->base.link);
->   		drm_vblank_put(dev, pipe);
-> -		send_vblank_event(dev, e, seq, now);
-> +		send_vblank_event(dev, e, e->sequence, now);
->   	}
->   
->   	if (crtc && crtc->funcs->get_vblank_timestamp)
-> 
+In order to configure user space access when the PMU is enabled, it is
+necessary to know if any event (currently active or not) in the current
+context has user space accessed enabled. Add a counter similar to other
+counters in the context to avoid walking the event list every time.

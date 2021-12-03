@@ -2,36 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D80546716D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 06:19:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE45946716E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 06:19:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350602AbhLCFWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 00:22:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40948 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350312AbhLCFWt (ORCPT
+        id S1350423AbhLCFW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 00:22:59 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52264 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378497AbhLCFWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 00:22:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00452C06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 21:19:25 -0800 (PST)
+        Fri, 3 Dec 2021 00:22:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C5E162943
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 05:19:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A459C53FD3;
-        Fri,  3 Dec 2021 05:19:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5EDCBB825BD
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 05:19:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70A1FC53FAD;
+        Fri,  3 Dec 2021 05:19:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638508765;
-        bh=wV/b0hF7y3zy43Frcbos22daBFox+EfkOXqMxi+aJWI=;
+        s=k20201202; t=1638508769;
+        bh=kRChCS06ixTKVgpe7b9Wuqso2wFqw6W6lFZFIfBAfZc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HMkaFZ8GXMAQNbOGmHuxHQoTvdk2KZtX181kJkyT1+qqJVFz2rXoy9yU0Gx/NRpGZ
-         hxMMSzie86ToVMkXFTuEh51Oc5LCWGtQUAzqr1Z3UoE7It7c4D2MtEdJP9KjNjBfv2
-         SVxtubOUKUMje60uOwpOln+WxANdMyeaXurlWODGCX/7SGmn9FiZwznuI7BbaNdBQe
-         fTGOTC+xgVzVgHK/hxvlhML2CnsZMUOF64Xlc35T6giVbu+xPTyHJWNBL+gUeObLP6
-         r2asA+RbfoKmN/eS4ScAXe9ttlhiOnL3KK/7EBIOSUFtaa+DHeQg3m4/WB1PyoubA7
-         U5Zk7U/nNMutA==
+        b=iE9FKuBVEQloHyNsn2y92aOUC57PTVDh6lCAmD20cAeOCFQUMGhsEPjGXDgPoryte
+         Kctd+FU9xSTV1yrHfy9k8eFg57vj4/ezmXf5vLqWZDNF8pfWjTtLaglXNCg75UmdPE
+         Wjn1LcXP7SwfC1HFqvSZhp5gzkhzaqkPYbvznZzG07by4zbpgVzbwQdOHngz3aWSWS
+         ezpw/2GLRQTVCfT32lpGndQg2Ac52N67WsYfC6XnIexjTGK30ni4fjwHZ/tI3pSCsw
+         rFyfAw1RYv/7ktRzNf9B3MouLWlYGP7QyVDkn5WZgu/+ngvWry3x0Su1hRuh+e5d3E
+         QyPWDrnYBN1Fg==
 From:   Jisheng Zhang <jszhang@kernel.org>
 To:     Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -46,9 +43,9 @@ To:     Russell King <linux@armlinux.org.uk>,
         Alexandre Ghiti <alex@ghiti.fr>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, kexec@lists.infradead.org
-Subject: [RFC PATCH 3/5] x86/setup: use IS_ENABLED(CONFIG_KEXEC_CORE) instead of #ifdef
-Date:   Fri,  3 Dec 2021 13:11:55 +0800
-Message-Id: <20211203051157.2160-4-jszhang@kernel.org>
+Subject: [RFC PATCH 4/5] arm64: mm: use IS_ENABLED(CONFIG_KEXEC_CORE) instead of #ifdef
+Date:   Fri,  3 Dec 2021 13:11:56 +0800
+Message-Id: <20211203051157.2160-5-jszhang@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211203051157.2160-1-jszhang@kernel.org>
 References: <20211203051157.2160-1-jszhang@kernel.org>
@@ -64,44 +61,43 @@ code and increase compile coverage.
 
 Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 ---
- arch/x86/kernel/setup.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ arch/arm64/mm/init.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index c410be738ae7..56b738c1ca33 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -390,8 +390,6 @@ static void __init memblock_x86_reserve_range_setup_data(void)
-  * --------- Crashkernel reservation ------------------------------
+diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+index a8834434af99..b4b8b4dc2d31 100644
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -64,7 +64,6 @@ EXPORT_SYMBOL(memstart_addr);
   */
+ phys_addr_t arm64_dma_phys_limit __ro_after_init;
  
 -#ifdef CONFIG_KEXEC_CORE
--
- /* 16M alignment for crash kernel regions */
- #define CRASH_ALIGN		SZ_16M
- 
-@@ -469,6 +467,9 @@ static void __init reserve_crashkernel(void)
- 	bool high = false;
+ /*
+  * reserve_crashkernel() - reserves memory for crash kernel
+  *
+@@ -78,6 +77,9 @@ static void __init reserve_crashkernel(void)
+ 	unsigned long long crash_max = arm64_dma_phys_limit;
  	int ret;
  
 +	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
 +		return;
 +
- 	total_mem = memblock_phys_mem_size();
- 
- 	/* crashkernel=XM */
-@@ -534,11 +535,6 @@ static void __init reserve_crashkernel(void)
- 	crashk_res.end   = crash_base + crash_size - 1;
- 	insert_resource(&iomem_resource, &crashk_res);
+ 	ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
+ 				&crash_size, &crash_base);
+ 	/* no crashkernel= or invalid value specified */
+@@ -110,11 +112,6 @@ static void __init reserve_crashkernel(void)
+ 	crashk_res.start = crash_base;
+ 	crashk_res.end = crash_base + crash_size - 1;
  }
 -#else
 -static void __init reserve_crashkernel(void)
 -{
 -}
--#endif
+-#endif /* CONFIG_KEXEC_CORE */
  
- static struct resource standard_io_resources[] = {
- 	{ .name = "dma1", .start = 0x00, .end = 0x1f,
+ /*
+  * Return the maximum physical address for a zone accessible by the given bits
 -- 
 2.34.1
 

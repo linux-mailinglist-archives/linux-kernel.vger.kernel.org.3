@@ -2,79 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D4A46706B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 04:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2562F46706D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 04:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350921AbhLCDFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 22:05:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38250 "EHLO
+        id S1378310AbhLCDF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 22:05:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233750AbhLCDFi (ORCPT
+        with ESMTP id S1350655AbhLCDF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 22:05:38 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6372C061757
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 19:02:15 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id g17so5063338ybe.13
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 19:02:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K7PaP8tSfENa0iq44ql6ZAlEC/JeVO3TL0+8pVjJNAs=;
-        b=kWNAEBAC02bV50QGF/i0k6/BGpUVnovxXt7Bdh8Oi+xN+Cl3Uwf7n4tservsKdy+Ye
-         vu/gZaHuSQxlZk3MLBc7WtJXHNIzyb4FIlN2oN11jTmKj8bmQwTY2N3nCLMBd/UUQgwT
-         UfQyhrogfhvFyNwleewGOVMhbVdN8vqCoGXAy6iFf9hWuamq2HCcupXgIUi+z/6miFkI
-         bvOc7pXXlK/0ERZSxLOys2Ppkz8s+HBWfQ1WHXGKuu0Q72tHUPIEpwKqnwfjZc3g52uI
-         bjg0Kp3i+IASjSyTh/HdIL+5VuNOPEWUwdpzqOtWsDFvEHEdAmqmMX9IU74496f4opvP
-         OE+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K7PaP8tSfENa0iq44ql6ZAlEC/JeVO3TL0+8pVjJNAs=;
-        b=WZmcmScNkkg1yFWHThVOf/k8PMTZ7EfnxgErfglstw3Kk9oa1fuhycLugLLNaQb2FU
-         cpfvt7T3JD27EYfoHBNCJ9WIpe8EF5+QsDeNfDBRqSeIe40CEEZumMvG0YyZiYP+MeL5
-         1VHEX5poNLlYeA6RlyyJeNB21uPr0RXdCrfMZvj2kNCkU40onQj02IjXT6B9a9dHbvhn
-         HJm9tu26LwtypKNZN/rpphkx6xtwVcOsNC5LjF3J8rdi28+PvgU7F6eD+O79oIdobyAt
-         EW7KS1x29JvMfmZBpIIQ+/QHZ9n+idZz3DMR01oltfa/vczF2B9LS/sV1Z4xaL1x37dF
-         HJ4w==
-X-Gm-Message-State: AOAM533Uv5EE1MXAED4xj2+LWXRzwjAxXrxKHVSMvz7jSOm10uEiYuq1
-        AhV5iU1HWwC+f6F4Q9VFltxsDC+vGu5DeEeA/r7csA==
-X-Google-Smtp-Source: ABdhPJz99Yxf8WWAJww+VYX8V78U0MvyH5Oy353Ttz5ekTrjiy9CNWit3BY/k9oGR+/J9ggrpG6DX2xplKmKqkZ/V/U=
-X-Received: by 2002:a25:b285:: with SMTP id k5mr19708197ybj.132.1638500535048;
- Thu, 02 Dec 2021 19:02:15 -0800 (PST)
+        Thu, 2 Dec 2021 22:05:58 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D786C06174A;
+        Thu,  2 Dec 2021 19:02:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=QcwFxPn9nE8J9gnpBF33bqWSPwkn/afutb7ps1YKtnY=; b=pcnJRkhlBE9fK3RH27u57l3bOr
+        Vftkv38HJYFmL4uaosFQnONcmimpmYeoskhOGX9fqUkCG6QPN/YCTtOg+eNmr6TLtN2VQwTZELfSr
+        Oi2d+JWYJCXE1KHFINcz7fUULWvpamiNplui4ff2QHOe+5d6D1GcFRYtbGYRO+i2l+q9GYuCFEep+
+        F0eU1DMNi3G4N0DQhi1qRDwfow02y7uJDNFHl0W/sfJEOzBj6ro/19yx+rkabY+ocHvYQboiMVYvl
+        IXnMjWFAC4H2iSwUz2A9TuUnD+rlxfOhy679QI9AwGA1OTGSLU7SSEmBlME4cFfPBolFWaClEnpqx
+        K3u4oCLg==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1msyq5-006jXW-NI; Fri, 03 Dec 2021 03:02:22 +0000
+Message-ID: <dd215074-38bc-5011-3e52-78858e9e2ea6@infradead.org>
+Date:   Thu, 2 Dec 2021 19:02:16 -0800
 MIME-Version: 1.0
-References: <20211201150440.1088-1-sj@kernel.org> <20211201150440.1088-5-sj@kernel.org>
-In-Reply-To: <20211201150440.1088-5-sj@kernel.org>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Fri, 3 Dec 2021 11:01:36 +0800
-Message-ID: <CAMZfGtUPSmquyMd70HtqFVvxU68kbTdYN1fJU8g35zeXHMJHVA@mail.gmail.com>
-Subject: Re: [PATCH 04/11] mm/damon/vaddr: Remove an unnecessary warning message
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, brendanhiggins@google.com,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH -next] fpga: region: fix kernel-doc
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>, mdf@kernel.org
+Cc:     hao.wu@intel.com, yilun.xu@intel.com, trix@redhat.com,
+        nathan@kernel.org, ndesaulniers@google.com,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <1638499487-74388-1-git-send-email-yang.lee@linux.alibaba.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <1638499487-74388-1-git-send-email-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 11:05 PM SeongJae Park <sj@kernel.org> wrote:
->
-> The DAMON virtual address space monitoring primitive prints a warning
-> message for wrong DAMOS action.  However, it is not essential as the
-> code returns appropriate failure in the case.  This commit removes the
-> message to make the log clean.
->
-> Fixes: 6dea8add4d28 ("mm/damon/vaddr: support DAMON-based Operation Schemes")
+Hi--
 
-I don't think there should be a Fixes tag since it's not a serious bug.
+On 12/2/21 18:44, Yang Li wrote:
+> Fix function name in of-fpga-region.c kernel-doc comment
+> to remove a warning found by clang(make W=1 LLVM=1).
 
-Without this:
+The patch below looks good, but the commit message about
+"found by clang" is not correct. Using 'make W=1' causes
+scripts/kernel-doc to run, and this warning message is from kernel-doc,
+not from clang.
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+> drivers/fpga/of-fpga-region.c:451: warning: expecting prototype for
+> fpga_region_init(). Prototype was for of_fpga_region_init() instead.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  drivers/fpga/of-fpga-region.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/fpga/of-fpga-region.c b/drivers/fpga/of-fpga-region.c
+> index 9c662db..50b8305 100644
+> --- a/drivers/fpga/of-fpga-region.c
+> +++ b/drivers/fpga/of-fpga-region.c
+> @@ -444,7 +444,7 @@ static int of_fpga_region_remove(struct platform_device *pdev)
+>  };
+>  
+>  /**
+> - * fpga_region_init - init function for fpga_region class
+> + * of_fpga_region_init - init function for fpga_region class
+>   * Creates the fpga_region class and registers a reconfig notifier.
+>   */
+>  static int __init of_fpga_region_init(void)
+> 
 
-Thanks.
+thanks.
+-- 
+~Randy

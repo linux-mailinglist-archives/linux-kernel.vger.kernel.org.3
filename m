@@ -2,119 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F15467397
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDA246739A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379404AbhLCJCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 04:02:31 -0500
-Received: from cpanel.siel.si ([46.19.9.99]:44618 "EHLO cpanel.siel.si"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351168AbhLCJC3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 04:02:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:
-        Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=SusT965a0ta5c2aDyA4YCYsj79hiy5hbuJlqiijsxnM=; b=Ll6dxuzuFyJ22sroDwYh3iICLA
-        TFR2jx/1rxJzsWCIX80rvWx0P5F+6fFzQrvKwVEYCVPIpbo0iOaD6pLp41E/4GRLvxdOMZzcF98qH
-        BJ1rwD8X3SXHHHLVdr7+9dvlBCmMGAI0Cp4N142wWg1fJ4oEICWWVyUQAwYKKrs2WuZhaFoWRkJHN
-        tXlNQel9FC8139ETFOgC4iwYFNW/lNc/kF+2IWEXbX7W2CSxVv+s3ixvjx+fMXR0Rqz5G3kmvQTvr
-        aFjnMf4wvUXwb60Dt9/YQ3iwYZ5ksUvOhPw4u1nkwEFrxcrQnrIFWrtqaeA6BHNxFYhqbiv4hsdSN
-        eCS9XbcQ==;
-Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:39492 helo=[192.168.69.215])
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <andrej.picej@norik.com>)
-        id 1mt4P8-001CNz-3X; Fri, 03 Dec 2021 09:59:01 +0100
-Subject: Re: [PATCH v4 1/4] mfd: da9062: make register CONFIG_I writable
-To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        "support.opensource@diasemi.com" <support.opensource@diasemi.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20211202093230.3951996-1-andrej.picej@norik.com>
- <9e35530f629044e595decb101a097fde@dh-electronics.com>
-From:   Andrej Picej <andrej.picej@norik.com>
-Message-ID: <9524a32b-d7f5-487c-e791-12bf0554a90f@norik.com>
-Date:   Fri, 3 Dec 2021 09:59:02 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1379409AbhLCJDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 04:03:16 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:43214 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351168AbhLCJDP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 04:03:15 -0500
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B3849ZO003734;
+        Fri, 3 Dec 2021 09:59:34 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : subject
+ : date : message-id : mime-version : content-type; s=selector1;
+ bh=xJbkzbTOcFXwhysz0nkb+xey1rfJAjwt5y6oXXuNsqE=;
+ b=XyrZ0pSc2HHP9AroIS5gL/rjovV0b7DJJMkICoxtIIJYgRe4mR2D+CweievkEFg+40wt
+ D4vyjhwjnIXVAk+EknkTh+rKqSGZGVp4L/oEC84o8stoCJ6hk9jO44ljatXXs9hGnUKS
+ LdFuzshA97oqXqXk2a1OKfOIQrABc56xSWyvkdotUDFQji13ZZbJ13inexzCM9dD5exq
+ YLV3bx2bj+B9x12z8Jy82eujeXX/zO+fMWYlAvqMWFLFCDp+l7OsR6hX2gxUNyEMFfqu
+ 6FBCGvoivRcp81/DUltFmCf1iHqXk/jfaM5wVaDcRfnVceyWoK+VVQSq5BQ1KsRmdgEm VA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cpxs3ms3r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Dec 2021 09:59:34 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A6B32100034;
+        Fri,  3 Dec 2021 09:59:33 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9F233226FC9;
+        Fri,  3 Dec 2021 09:59:33 +0100 (CET)
+Received: from localhost (10.75.127.46) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 3 Dec 2021 09:59:33
+ +0100
+From:   Yannick Fertre <yannick.fertre@foss.st.com>
+To:     Yannick Fertre <yannick.fertre@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm: bridge: remove error message for EPROBE_DEFER in bridge_attach
+Date:   Fri, 3 Dec 2021 09:59:31 +0100
+Message-ID: <20211203085931.11693-1-yannick.fertre@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <9e35530f629044e595decb101a097fde@dh-electronics.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
-X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-03_05,2021-12-02_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Probe deferred is not an error, don't print it.
 
+Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+---
+ drivers/gpu/drm/drm_bridge.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-On 2. 12. 21 16:18, Christoph Niedermaier wrote:
-> From: Andrej Picej
-> Sent: Thursday, December 2, 2021 10:32 AM
->> From: Stefan Christ <s.christ@phytec.de>
->>
->> Make the config register CONFIG_I writable to change the watchdog mode.
->>
->> Signed-off-by: Stefan Christ <s.christ@phytec.de>
->> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
->> ---
->> Chnages in v4:
->>   - no changes
->>
->> Changes in v3:
->>   - no chagnes
->>
->> Changes in v2:
->>   - no changes
->> ---
->>   drivers/mfd/da9062-core.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/mfd/da9062-core.c b/drivers/mfd/da9062-core.c
->> index 01f8e10dfa55..7041ba53efb4 100644
->> --- a/drivers/mfd/da9062-core.c
->> +++ b/drivers/mfd/da9062-core.c
->> @@ -556,6 +556,7 @@ static const struct regmap_range
->> da9062_aa_writeable_ranges[] = {
->>          regmap_reg_range(DA9062AA_VBUCK3_B, DA9062AA_VBUCK3_B),
->>          regmap_reg_range(DA9062AA_VLDO1_B, DA9062AA_VLDO4_B),
->>          regmap_reg_range(DA9062AA_BBAT_CONT, DA9062AA_BBAT_CONT),
->> +       regmap_reg_range(DA9062AA_CONFIG_I, DA9062AA_CONFIG_I),
->>          regmap_reg_range(DA9062AA_GP_ID_0, DA9062AA_GP_ID_19),
->>   };
+diff --git a/drivers/gpu/drm/drm_bridge.c b/drivers/gpu/drm/drm_bridge.c
+index c96847fc0ebc..cef0a62ef5d0 100644
+--- a/drivers/gpu/drm/drm_bridge.c
++++ b/drivers/gpu/drm/drm_bridge.c
+@@ -288,11 +288,13 @@ int drm_bridge_attach(struct drm_encoder *encoder, struct drm_bridge *bridge,
+ 	list_del(&bridge->chain_node);
+ 
+ #ifdef CONFIG_OF
+-	DRM_ERROR("failed to attach bridge %pOF to encoder %s: %d\n",
+-		  bridge->of_node, encoder->name, ret);
++	if (ret != -EPROBE_DEFER)
++		DRM_ERROR("failed to attach bridge %pOF to encoder %s: %d\n",
++			  bridge->of_node, encoder->name, ret);
+ #else
+-	DRM_ERROR("failed to attach bridge to encoder %s: %d\n",
+-		  encoder->name, ret);
++	if (ret != -EPROBE_DEFER)
++		DRM_ERROR("failed to attach bridge to encoder %s: %d\n",
++			  encoder->name, ret);
+ #endif
+ 
+ 	return ret;
+-- 
+2.17.1
 
-> Could you also include the CONFIG_I for the DA9061?
-> So I can test it on my system.
-> 
-
-Yes, I don't see the problem here.
-@Maintainers, should I send a new version with this (then I would also 
-fix the minor spelling mistake in commit message of 2/4), or do you 
-prefer a separate patch?
-
-Thanks,
-Andrej.

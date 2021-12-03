@@ -2,130 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8E04674AC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C32164674B3
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379840AbhLCKYe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Dec 2021 05:24:34 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4193 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379862AbhLCKXz (ORCPT
+        id S1379857AbhLCKYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 05:24:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46942 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1379849AbhLCKYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 05:23:55 -0500
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J582D1KjQz67wM9;
-        Fri,  3 Dec 2021 18:19:32 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 3 Dec 2021 11:20:27 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.020;
- Fri, 3 Dec 2021 11:20:27 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Christoph Hellwig <hch@infradead.org>
-CC:     "deven.desai@linux.microsoft.com" <deven.desai@linux.microsoft.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "snitzer@redhat.com" <snitzer@redhat.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "eparis@redhat.com" <eparis@redhat.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-audit@redhat.com" <linux-audit@redhat.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "tusharsu@linux.microsoft.com" <tusharsu@linux.microsoft.com>
-Subject: RE: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
-Thread-Topic: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
-Thread-Index: AQHX5tHI6VSZDPA0J0GM0KIP7fuaeKweu+CAgAAaFvD///01gIAAEg9QgAFg9oCAAC4FMA==
-Date:   Fri, 3 Dec 2021 10:20:27 +0000
-Message-ID: <28208b7f142f4295ac5c857af5cffe07@huawei.com>
-References: <81d5e825-1ee2-8f6b-cd9d-07b0f8bd36d3@linux.microsoft.com>
- <20211201163708.3578176-1-roberto.sassu@huawei.com>
- <Yahz1SYRG1CQIh0z@infradead.org>
- <e57d2d23ec7845febb79ca4476c73fcb@huawei.com>
- <YaiHX+dWNUlmsNac@infradead.org>
- <b4bf4a384b334cdab1522b3b082bd088@huawei.com>
- <Yam+m9eiLxIamGXm@infradead.org>
-In-Reply-To: <Yam+m9eiLxIamGXm@infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Fri, 3 Dec 2021 05:24:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638526880;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=16tCcBN6A3Kz/QH+fwsigWZzWp8j5LhPyBwzqPVfU+s=;
+        b=XDiVye4NHAeEYwtI08iauyqBMQ9igNTDxN05rx4eSiiUpaAUQg+SwnJoTRfAhTVKVNv91e
+        SVNvMM4cbiR/xLt+o+AOpjMs+RcmiPLWXhosP78niNajktNWuJzH3Trp6qRsXlLQDholD/
+        V3sgbasyXE2fLTsxHaH9KL4zOhnBDAo=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-191-9Vn-MG_wPP6ciT-nt1Y09A-1; Fri, 03 Dec 2021 05:21:19 -0500
+X-MC-Unique: 9Vn-MG_wPP6ciT-nt1Y09A-1
+Received: by mail-ed1-f70.google.com with SMTP id n11-20020aa7c68b000000b003e7d68e9874so2173417edq.8
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 02:21:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=16tCcBN6A3Kz/QH+fwsigWZzWp8j5LhPyBwzqPVfU+s=;
+        b=0cxXGHL+DsPULhHFXzApxfd2HL/X5t51EZCKC/fHVl/WYCPioqG0Iq/HDdA2ezKsmx
+         +rJoFRy+qYVnQy+0MnJu+PyyeJWKmw7GfSGXTCFaTZgQm/OZM0kDhFCS9LEUdZ4PrMpN
+         wsI5mRzUK9jLF90IfIxLWZ2bXs0GZ/PNqrM/vBEfV6qmlLkO7dtz7BriQAzgJ81V5OT5
+         8SzBO04T8pi5UWnd33EXWXbYyIyihAfxuwDpniaCi2hSbYhw8quqfk+roC4V+wunKkmd
+         ETwfFPZTbDMKFZGpl5KOnbFExdARIWlDcxYsFGWdgvoKBT46PAT0T1Blz9nyXjRlX92D
+         7f/g==
+X-Gm-Message-State: AOAM533H/ih72P8jJDkOIa4n87uXLQmslmJTrgk6HSoGuNrIX5pp4OL2
+        u5y7L7zY4EIcKDwnN6+BpSo7++dWkOQfqnYOCa5h9WxdzkB3M7F4uPBdqpn1mEeVMrioX9jCdRj
+        P20TH/fmBroLPydQWh1cvugw2
+X-Received: by 2002:a17:906:1290:: with SMTP id k16mr21809399ejb.566.1638526878103;
+        Fri, 03 Dec 2021 02:21:18 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzfDVxFlYIQsj184u1/mFOHQafz2Rc5BDIkEaP4xxF7HrxkWS23R3eWGG8P7RWdWV8e7yqKbg==
+X-Received: by 2002:a17:906:1290:: with SMTP id k16mr21809366ejb.566.1638526877844;
+        Fri, 03 Dec 2021 02:21:17 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id d18sm1634905edj.23.2021.12.03.02.21.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 02:21:17 -0800 (PST)
+Message-ID: <724ab9d5-7ba1-dae6-49b9-831bafca5b84@redhat.com>
+Date:   Fri, 3 Dec 2021 11:21:16 +0100
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v6 07/15] platform/x86: int3472: Enable I2c daisy chain
+Content-Language: en-US
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Daniel Scally <djrscally@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20211125165412.535063-1-hdegoede@redhat.com>
+ <20211125165412.535063-8-hdegoede@redhat.com>
+ <YaAel9HuAvemRg2s@pendragon.ideasonboard.com>
+ <03306e12-40ec-39ab-3b40-42b0395e1b65@redhat.com>
+ <4ab5efa7-65b0-009c-293a-d7a49776e78d@gmail.com>
+ <2fd5400e-e587-54d2-1071-ad8df49a8a68@redhat.com>
+In-Reply-To: <2fd5400e-e587-54d2-1071-ad8df49a8a68@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Christoph Hellwig [mailto:hch@infradead.org]
-> Sent: Friday, December 3, 2021 7:52 AM
-> On Thu, Dec 02, 2021 at 09:29:52AM +0000, Roberto Sassu wrote:
-> > The problem being solved is how to grant access to files
-> > which satisfy a property defined in the policy.
+Hi,
+
+On 11/26/21 12:45, Hans de Goede wrote:
+> Hi,
 > 
-> If you have want to enforce access to files in the block layer using
-> a specific stacking block driver you don't just have one layering
-> violation but a bunch of them.  Please go back to the drawing board.
+> On 11/26/21 12:39, Daniel Scally wrote:
+>> Hello
+>>
+>> On 26/11/2021 11:30, Hans de Goede wrote:
+>>> Hi,
+>>>
+>>> On 11/26/21 00:39, Laurent Pinchart wrote:
+>>>> Hi Hans,
+>>>>
+>>>> Thank you for the patch.
+>>>>
+>>>> On Thu, Nov 25, 2021 at 05:54:04PM +0100, Hans de Goede wrote:
+>>>>> From: Daniel Scally <djrscally@gmail.com>
+>>>>>
+>>>>> The TPS68470 PMIC has an I2C passthrough mode through which I2C traffic
+>>>>> can be forwarded to a device connected to the PMIC as though it were
+>>>>> connected directly to the system bus. Enable this mode when the chip
+>>>>> is initialised.
+>>>> Is there any drawback doing this unconditionally, if nothing is
+>>>> connected to the bus on the other side (including no pull-ups) ?
+>>> I actually never took a really close look at this patch, I just
+>>> sorta inherited it from Daniel.
+>>>
+>>> Now that I have taken a close look, I see that it is setting the
+>>> exact same bits as which get set when enabling the VSIO regulator.
+>>>
+>>> The idea here is that the I2C-passthrough only gets enabled when
+>>> the VSIO regulator is turned on, because some sensors end up
+>>> shorting the I2C pins to ground when the sensor is not powered.
+>>>
+>>> Since we set these bits when powering up the VSIO regulator
+>>> and since we do that before trying to talk to the sensor
+>>> I don't think that we need this (hack) anymore.
+>>>
+>>> I will give things a try without this change and if things
+>>> still work I will drop this patch from the set.
+>>>
+>>> Daniel, what do you think?
+>>
+>>
+>> Humm, we're only using the VSIO regulator with the VCM though right?
+> 
+> Nope, there is a mapping from VSIO to dovdd for the ov8865 in the
+> board_data; and I'm pretty sure I copied that from your earlier
+> attempts at getting regulator lookups registered :)
+> 
+> And even if the VSIO regulator was only used by the VCM, then it would
+> get turned off after probing the VCM, clearing the 2 bits which this
+> commit sets. Which would break things if we did not re-enable it when
+> the ov8865 needs it.
+> 
+>> Which might not be on when the ov8865 tries to probe. I haven't tried
+>> without this patch to be honest; I set it because that was what Windows
+>> does when powering on the PMIC.
+> 
+> See above, I'm pretty sure we can do without this patch which means
+> that the INT3472 code will no longer be poking at the PMIC directly
+> itself, which is good :)
+> 
+> Anyways I'll give this a try sometime next week and then drop the
+> patch.
 
-Ok. I write my thoughts here, so that it is easier to align.
+I can confirm that this patch indeed is no longer necessary with
+the current regulator code already taking care of this.
 
-dm-verity provides block-level integrity, which means that
-the block layer itself is responsible to not pass data to the
-upper layer, the filesystem, if a block is found corrupted.
+I will post version 7 of this patch-set soon, with this patch dropped.
 
-The dm-verity root digest represents the immutable state
-of the block device. dm-verity is still responsible to enforce
-accesses to the block device according to the root digest
-passed at device setup time. Nothing changes, the block
-layer still detects data corruption against the passed
-reference value.
+Regards,
 
-The task of the security layer is to decide whether or not
-the root digest passed at device setup time is acceptable,
-e.g. it represents a device containing genuine files coming
-from a software vendor.
+Hans
 
-The mandatory policy can be enforced at different layers,
-depending on whether the security controls are placed.
-A possibility would be to deny mounting block devices that
-don't satisfy the mandatory policy.
 
-However, if the mandatory policy wants only to restrict
-execution of approved files and allowing the rest, making
-the decision at the block layer is too coarse and restrictive.
-It would force the user to mount only approved block
-devices. The security layer must operate on files to enforce
-this policy.
 
-Now probably there is the part where there is no agreement.
+>>>>> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+>>>>> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+>>>>> ---
+>>>>>  .../x86/intel/int3472/intel_skl_int3472_tps68470.c         | 7 +++++++
+>>>>>  1 file changed, 7 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c b/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
+>>>>> index c05b4cf502fe..42e688f4cad4 100644
+>>>>> --- a/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
+>>>>> +++ b/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
+>>>>> @@ -45,6 +45,13 @@ static int tps68470_chip_init(struct device *dev, struct regmap *regmap)
+>>>>>  		return ret;
+>>>>>  	}
+>>>>>  
+>>>>> +	/* Enable I2C daisy chain */
+>>>>> +	ret = regmap_write(regmap, TPS68470_REG_S_I2C_CTL, 0x03);
+>>>>> +	if (ret) {
+>>>>> +		dev_err(dev, "Failed to enable i2c daisy chain\n");
+>>>>> +		return ret;
+>>>>> +	}
+>>>>> +
+>>>>>  	dev_info(dev, "TPS68470 REVID: 0x%02x\n", version);
+>>>>>  
+>>>>>  	return 0;
+>>
 
-The integrity property of a block device applies also to the
-files on the filesystem mounted from that device. User space
-programs cannot access files in that filesystem coming from a
-device with a different dm-verity root digest, or files stored
-in a corrupted block device.
-
-If what I wrote is correct, that the integrity property is preserved
-across the layers, this would give enough flexibility to enforce
-policies at a higher layer, although that property is guaranteed
-by a lower layer.
-
-Roberto
-
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Zhong Ronghua

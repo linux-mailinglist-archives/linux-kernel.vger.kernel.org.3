@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A19CC4674F2
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA594674F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379983AbhLCKdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 05:33:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46858 "EHLO
+        id S1379938AbhLCKdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 05:33:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56697 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1379936AbhLCKd1 (ORCPT
+        by vger.kernel.org with ESMTP id S234527AbhLCKdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 05:33:27 -0500
+        Fri, 3 Dec 2021 05:33:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638527403;
+        s=mimecast20190719; t=1638527421;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wsb7KlrO3809+mCLm2p9t4R1qixwrmO0ViYxTZXad98=;
-        b=Mh1RWMHc9MzQ4zgLie9uqWLGLaQ7cDQbx8Xw46Ci5Or7nM6ZVa9uyMmp+hbcLFEy//amWr
-        Px70btoDn9e+6iC1TCpG1HBU7HUnPwvaqYDB2J6VEp8DpoNvxl7P4AuR2Y68UTQS4fDTk/
-        4946jrQmjj+BFZWriIk0uVtD9glBxZk=
+        bh=TDcCbNPnDvsJ+bUn+O1I64F2/UVE1qKLcgj6B95Cl8o=;
+        b=Lqm0R6QvcKuHtW53Lg+GP2eyaY8s5zU/fvELkki1XMj5iiFp/dVL6WHKFncqd4ismBypz+
+        JbBVnQ2ahXcImAh5CRzvHBe6u39pSPncnM2AzbfGGySFP15fLfvm6IjOp9gzWDaqMJt+h9
+        YeqTyMvYmJZOwRuYLCgVVxQrY1tfnvk=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-50-5I1JdfLjMByO-RsQfX4qZw-1; Fri, 03 Dec 2021 05:30:01 -0500
-X-MC-Unique: 5I1JdfLjMByO-RsQfX4qZw-1
+ us-mta-526-b5DjCDu2N3GO4ErDnyx_bg-1; Fri, 03 Dec 2021 05:30:18 -0500
+X-MC-Unique: b5DjCDu2N3GO4ErDnyx_bg-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 08765190A7A2;
-        Fri,  3 Dec 2021 10:29:59 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ABAB181CCB6;
+        Fri,  3 Dec 2021 10:30:15 +0000 (UTC)
 Received: from x1.localdomain.com (unknown [10.39.194.90])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2E0A460843;
-        Fri,  3 Dec 2021 10:29:47 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9F01960843;
+        Fri,  3 Dec 2021 10:29:59 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Mark Gross <markgross@kernel.org>,
@@ -55,9 +55,9 @@ Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
         Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
         linux-clk@vger.kernel.org,
         Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v7 06/14] clk: Introduce clk-tps68470 driver
-Date:   Fri,  3 Dec 2021 11:28:49 +0100
-Message-Id: <20211203102857.44539-7-hdegoede@redhat.com>
+Subject: [PATCH v7 07/14] platform/x86: int3472: Split into 2 drivers
+Date:   Fri,  3 Dec 2021 11:28:50 +0100
+Message-Id: <20211203102857.44539-8-hdegoede@redhat.com>
 In-Reply-To: <20211203102857.44539-1-hdegoede@redhat.com>
 References: <20211203102857.44539-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -67,369 +67,375 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The TPS68470 PMIC provides Clocks, GPIOs and Regulators. At present in
-the kernel the Regulators and Clocks are controlled by an OpRegion
-driver designed to work with power control methods defined in ACPI, but
-some platforms lack those methods, meaning drivers need to be able to
-consume the resources of these chips through the usual frameworks.
+The intel_skl_int3472.ko module contains 2 separate drivers,
+the int3472_discrete platform driver and the int3472_tps68470
+I2C-driver.
 
-This commit adds a driver for the clocks provided by the tps68470,
-and is designed to bind to the platform_device registered by the
-intel_skl_int3472 module.
+These 2 drivers contain very little shared code, only
+skl_int3472_get_acpi_buffer() and skl_int3472_fill_cldb() are
+shared.
 
-This is based on this out of tree driver written by Intel:
-https://github.com/intel/linux-intel-lts/blob/4.14/base/drivers/clk/clk-tps68470.c
-with various cleanups added.
+Split the module into 2 drivers, linking the little shared code
+directly into both.
+
+This will allow us to add soft-module dependencies for the
+tps68470 clk, gpio and regulator drivers to the new
+intel_skl_int3472_tps68470.ko to help with probe ordering issues
+without causing these modules to get loaded on boards which only
+use the int3472_discrete platform driver.
+
+While at it also rename the .c and .h files to remove the
+cumbersome intel_skl_int3472_ prefix.
 
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
-Chnages in v6:
-- Use CLK_SET_RATE_GATE flag
-- Move programming of dividers to tps68470_clk_set_rate()
-- Put struct clk_init_data tps68470_clk_initdata on the stack
-
-Changes in v5:
-- Small comment cleanups based on review from Andy
-
-Changes in v4:
-- Kconfig: select REGMAP_I2C, add || COMPILE_TEST, fix help text
-- tps68470_clk_prepare(): Wait for the PLL to lock before returning
-- tps68470_clk_unprepare(): Remove unnecesary clearing of divider regs
-- tps68470_clk_probe(): Use devm_clk_hw_register()
-- Misc. small cleanups
-
-Changes in v2:
-- Update the comment on why a subsys_initcall is used to register the drv
-- Fix trailing whitespice on line 100
+Note git rename detection is failing for the new common.c but this is
+just the old intel_skl_int3472_common.c with the driver registering
+bits removed.
 ---
- drivers/clk/Kconfig          |   8 ++
- drivers/clk/Makefile         |   1 +
- drivers/clk/clk-tps68470.c   | 261 +++++++++++++++++++++++++++++++++++
- include/linux/mfd/tps68470.h |  11 ++
- 4 files changed, 281 insertions(+)
- create mode 100644 drivers/clk/clk-tps68470.c
+ drivers/platform/x86/intel/int3472/Makefile   |   9 +-
+ ...lk_and_regulator.c => clk_and_regulator.c} |   2 +-
+ drivers/platform/x86/intel/int3472/common.c   |  54 +++++++++
+ .../{intel_skl_int3472_common.h => common.h}  |   3 -
+ ...ntel_skl_int3472_discrete.c => discrete.c} |  28 ++++-
+ .../intel/int3472/intel_skl_int3472_common.c  | 106 ------------------
+ ...ntel_skl_int3472_tps68470.c => tps68470.c} |  23 +++-
+ 7 files changed, 105 insertions(+), 120 deletions(-)
+ rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_clk_and_regulator.c => clk_and_regulator.c} (99%)
+ create mode 100644 drivers/platform/x86/intel/int3472/common.c
+ rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_common.h => common.h} (94%)
+ rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_discrete.c => discrete.c} (93%)
+ delete mode 100644 drivers/platform/x86/intel/int3472/intel_skl_int3472_common.c
+ rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_tps68470.c => tps68470.c} (85%)
 
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index c5b3dc97396a..4e9098d79249 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -169,6 +169,14 @@ config COMMON_CLK_CDCE706
- 	help
- 	  This driver supports TI CDCE706 programmable 3-PLL clock synthesizer.
+diff --git a/drivers/platform/x86/intel/int3472/Makefile b/drivers/platform/x86/intel/int3472/Makefile
+index 2362e04db18d..771e720528a0 100644
+--- a/drivers/platform/x86/intel/int3472/Makefile
++++ b/drivers/platform/x86/intel/int3472/Makefile
+@@ -1,5 +1,4 @@
+-obj-$(CONFIG_INTEL_SKL_INT3472)		+= intel_skl_int3472.o
+-intel_skl_int3472-y			:= intel_skl_int3472_common.o \
+-					   intel_skl_int3472_discrete.o \
+-					   intel_skl_int3472_tps68470.o \
+-					   intel_skl_int3472_clk_and_regulator.o
++obj-$(CONFIG_INTEL_SKL_INT3472)		+= intel_skl_int3472_discrete.o \
++					   intel_skl_int3472_tps68470.o
++intel_skl_int3472_discrete-y		:= discrete.o clk_and_regulator.o common.o
++intel_skl_int3472_tps68470-y		:= tps68470.o common.o
+diff --git a/drivers/platform/x86/intel/int3472/intel_skl_int3472_clk_and_regulator.c b/drivers/platform/x86/intel/int3472/clk_and_regulator.c
+similarity index 99%
+rename from drivers/platform/x86/intel/int3472/intel_skl_int3472_clk_and_regulator.c
+rename to drivers/platform/x86/intel/int3472/clk_and_regulator.c
+index 1700e7557a82..1cf958983e86 100644
+--- a/drivers/platform/x86/intel/int3472/intel_skl_int3472_clk_and_regulator.c
++++ b/drivers/platform/x86/intel/int3472/clk_and_regulator.c
+@@ -9,7 +9,7 @@
+ #include <linux/regulator/driver.h>
+ #include <linux/slab.h>
  
-+config COMMON_CLK_TPS68470
-+	tristate "Clock Driver for TI TPS68470 PMIC"
-+	depends on I2C
-+	depends on INTEL_SKL_INT3472 || COMPILE_TEST
-+	select REGMAP_I2C
-+	help
-+	  This driver supports the clocks provided by the TPS68470 PMIC.
-+
- config COMMON_CLK_CDCE925
- 	tristate "Clock driver for TI CDCE913/925/937/949 devices"
- 	depends on I2C
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index e42312121e51..6b6a88ae1425 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -63,6 +63,7 @@ obj-$(CONFIG_COMMON_CLK_SI570)		+= clk-si570.o
- obj-$(CONFIG_COMMON_CLK_STM32F)		+= clk-stm32f4.o
- obj-$(CONFIG_COMMON_CLK_STM32H7)	+= clk-stm32h7.o
- obj-$(CONFIG_COMMON_CLK_STM32MP157)	+= clk-stm32mp1.o
-+obj-$(CONFIG_COMMON_CLK_TPS68470)      += clk-tps68470.o
- obj-$(CONFIG_CLK_TWL6040)		+= clk-twl6040.o
- obj-$(CONFIG_ARCH_VT8500)		+= clk-vt8500.o
- obj-$(CONFIG_COMMON_CLK_VC5)		+= clk-versaclock5.o
-diff --git a/drivers/clk/clk-tps68470.c b/drivers/clk/clk-tps68470.c
+-#include "intel_skl_int3472_common.h"
++#include "common.h"
+ 
+ /*
+  * The regulators have to have .ops to be valid, but the only ops we actually
+diff --git a/drivers/platform/x86/intel/int3472/common.c b/drivers/platform/x86/intel/int3472/common.c
 new file mode 100644
-index 000000000000..e5fbefd6ac2d
+index 000000000000..350655a9515b
 --- /dev/null
-+++ b/drivers/clk/clk-tps68470.c
-@@ -0,0 +1,261 @@
++++ b/drivers/platform/x86/intel/int3472/common.c
+@@ -0,0 +1,54 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Clock driver for TPS68470 PMIC
-+ *
-+ * Copyright (c) 2021 Red Hat Inc.
-+ * Copyright (C) 2018 Intel Corporation
-+ *
-+ * Authors:
-+ *	Hans de Goede <hdegoede@redhat.com>
-+ *	Zaikuo Wang <zaikuo.wang@intel.com>
-+ *	Tianshu Qiu <tian.shu.qiu@intel.com>
-+ *	Jian Xu Zheng <jian.xu.zheng@intel.com>
-+ *	Yuning Pu <yuning.pu@intel.com>
-+ *	Antti Laakso <antti.laakso@intel.com>
-+ */
++/* Author: Dan Scally <djrscally@gmail.com> */
 +
-+#include <linux/clk-provider.h>
-+#include <linux/clkdev.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/tps68470.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/platform_data/tps68470.h>
-+#include <linux/regmap.h>
++#include <linux/acpi.h>
++#include <linux/slab.h>
 +
-+#define TPS68470_CLK_NAME "tps68470-clk"
++#include "common.h"
 +
-+#define to_tps68470_clkdata(clkd) \
-+	container_of(clkd, struct tps68470_clkdata, clkout_hw)
-+
-+static struct tps68470_clkout_freqs {
-+	unsigned long freq;
-+	unsigned int xtaldiv;
-+	unsigned int plldiv;
-+	unsigned int postdiv;
-+	unsigned int buckdiv;
-+	unsigned int boostdiv;
-+} clk_freqs[] = {
-+/*
-+ *  The PLL is used to multiply the crystal oscillator
-+ *  frequency range of 3 MHz to 27 MHz by a programmable
-+ *  factor of F = (M/N)*(1/P) such that the output
-+ *  available at the HCLK_A or HCLK_B pins are in the range
-+ *  of 4 MHz to 64 MHz in increments of 0.1 MHz.
-+ *
-+ * hclk_# = osc_in * (((plldiv*2)+320) / (xtaldiv+30)) * (1 / 2^postdiv)
-+ *
-+ * PLL_REF_CLK should be as close as possible to 100kHz
-+ * PLL_REF_CLK = input clk / XTALDIV[7:0] + 30)
-+ *
-+ * PLL_VCO_CLK = (PLL_REF_CLK * (plldiv*2 + 320))
-+ *
-+ * BOOST should be as close as possible to 2Mhz
-+ * BOOST = PLL_VCO_CLK / (BOOSTDIV[4:0] + 16) *
-+ *
-+ * BUCK should be as close as possible to 5.2Mhz
-+ * BUCK = PLL_VCO_CLK / (BUCKDIV[3:0] + 5)
-+ *
-+ * osc_in   xtaldiv  plldiv   postdiv   hclk_#
-+ * 20Mhz    170      32       1         19.2Mhz
-+ * 20Mhz    170      40       1         20Mhz
-+ * 20Mhz    170      80       1         24Mhz
-+ */
-+	{ 19200000, 170, 32, 1, 2, 3 },
-+	{ 20000000, 170, 40, 1, 3, 4 },
-+	{ 24000000, 170, 80, 1, 4, 8 },
-+};
-+
-+struct tps68470_clkdata {
-+	struct clk_hw clkout_hw;
-+	struct regmap *regmap;
-+	unsigned long rate;
-+};
-+
-+static int tps68470_clk_is_prepared(struct clk_hw *hw)
++union acpi_object *skl_int3472_get_acpi_buffer(struct acpi_device *adev, char *id)
 +{
-+	struct tps68470_clkdata *clkdata = to_tps68470_clkdata(hw);
-+	int val;
++	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
++	acpi_handle handle = adev->handle;
++	union acpi_object *obj;
++	acpi_status status;
 +
-+	if (regmap_read(clkdata->regmap, TPS68470_REG_PLLCTL, &val))
-+		return 0;
++	status = acpi_evaluate_object(handle, id, NULL, &buffer);
++	if (ACPI_FAILURE(status))
++		return ERR_PTR(-ENODEV);
 +
-+	return val & TPS68470_PLL_EN_MASK;
-+}
++	obj = buffer.pointer;
++	if (!obj)
++		return ERR_PTR(-ENODEV);
 +
-+static int tps68470_clk_prepare(struct clk_hw *hw)
-+{
-+	struct tps68470_clkdata *clkdata = to_tps68470_clkdata(hw);
-+
-+	regmap_write(clkdata->regmap, TPS68470_REG_CLKCFG1,
-+			   (TPS68470_PLL_OUTPUT_ENABLE << TPS68470_OUTPUT_A_SHIFT) |
-+			   (TPS68470_PLL_OUTPUT_ENABLE << TPS68470_OUTPUT_B_SHIFT));
-+
-+	regmap_update_bits(clkdata->regmap, TPS68470_REG_PLLCTL,
-+			   TPS68470_PLL_EN_MASK, TPS68470_PLL_EN_MASK);
-+
-+	/*
-+	 * The PLLCTL reg lock bit is set by the PMIC after approx. 4ms and
-+	 * does not indicate a true lock, so just wait 4 ms.
-+	 */
-+	usleep_range(4000, 5000);
-+
-+	return 0;
-+}
-+
-+static void tps68470_clk_unprepare(struct clk_hw *hw)
-+{
-+	struct tps68470_clkdata *clkdata = to_tps68470_clkdata(hw);
-+
-+	/* Disable clock first ... */
-+	regmap_update_bits(clkdata->regmap, TPS68470_REG_PLLCTL, TPS68470_PLL_EN_MASK, 0);
-+
-+	/* ... and then tri-state the clock outputs. */
-+	regmap_write(clkdata->regmap, TPS68470_REG_CLKCFG1, 0);
-+}
-+
-+static unsigned long tps68470_clk_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-+{
-+	struct tps68470_clkdata *clkdata = to_tps68470_clkdata(hw);
-+
-+	return clkdata->rate;
-+}
-+
-+/*
-+ * This returns the index of the clk_freqs[] cfg with the closest rate for
-+ * use in tps68470_clk_round_rate(). tps68470_clk_set_rate() checks that
-+ * the rate of the returned cfg is an exact match.
-+ */
-+static unsigned int tps68470_clk_cfg_lookup(unsigned long rate)
-+{
-+	long diff, best_diff = LONG_MAX;
-+	unsigned int i, best_idx = 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(clk_freqs); i++) {
-+		diff = clk_freqs[i].freq - rate;
-+		if (diff == 0)
-+			return i;
-+
-+		diff = abs(diff);
-+		if (diff < best_diff) {
-+			best_diff = diff;
-+			best_idx = i;
-+		}
++	if (obj->type != ACPI_TYPE_BUFFER) {
++		acpi_handle_err(handle, "%s object is not an ACPI buffer\n", id);
++		kfree(obj);
++		return ERR_PTR(-EINVAL);
 +	}
 +
-+	return best_idx;
++	return obj;
 +}
 +
-+static long tps68470_clk_round_rate(struct clk_hw *hw, unsigned long rate,
-+				    unsigned long *parent_rate)
++int skl_int3472_fill_cldb(struct acpi_device *adev, struct int3472_cldb *cldb)
 +{
-+	unsigned int idx = tps68470_clk_cfg_lookup(rate);
-+
-+	return clk_freqs[idx].freq;
-+}
-+
-+static int tps68470_clk_set_rate(struct clk_hw *hw, unsigned long rate,
-+				 unsigned long parent_rate)
-+{
-+	struct tps68470_clkdata *clkdata = to_tps68470_clkdata(hw);
-+	unsigned int idx = tps68470_clk_cfg_lookup(rate);
-+
-+	if (rate != clk_freqs[idx].freq)
-+		return -EINVAL;
-+
-+	regmap_write(clkdata->regmap, TPS68470_REG_BOOSTDIV, clk_freqs[idx].boostdiv);
-+	regmap_write(clkdata->regmap, TPS68470_REG_BUCKDIV, clk_freqs[idx].buckdiv);
-+	regmap_write(clkdata->regmap, TPS68470_REG_PLLSWR, TPS68470_PLLSWR_DEFAULT);
-+	regmap_write(clkdata->regmap, TPS68470_REG_XTALDIV, clk_freqs[idx].xtaldiv);
-+	regmap_write(clkdata->regmap, TPS68470_REG_PLLDIV, clk_freqs[idx].plldiv);
-+	regmap_write(clkdata->regmap, TPS68470_REG_POSTDIV, clk_freqs[idx].postdiv);
-+	regmap_write(clkdata->regmap, TPS68470_REG_POSTDIV2, clk_freqs[idx].postdiv);
-+	regmap_write(clkdata->regmap, TPS68470_REG_CLKCFG2, TPS68470_CLKCFG2_DRV_STR_2MA);
-+
-+	regmap_write(clkdata->regmap, TPS68470_REG_PLLCTL,
-+		     TPS68470_OSC_EXT_CAP_DEFAULT << TPS68470_OSC_EXT_CAP_SHIFT |
-+		     TPS68470_CLK_SRC_XTAL << TPS68470_CLK_SRC_SHIFT);
-+
-+	clkdata->rate = rate;
-+
-+	return 0;
-+}
-+
-+static const struct clk_ops tps68470_clk_ops = {
-+	.is_prepared = tps68470_clk_is_prepared,
-+	.prepare = tps68470_clk_prepare,
-+	.unprepare = tps68470_clk_unprepare,
-+	.recalc_rate = tps68470_clk_recalc_rate,
-+	.round_rate = tps68470_clk_round_rate,
-+	.set_rate = tps68470_clk_set_rate,
-+};
-+
-+static int tps68470_clk_probe(struct platform_device *pdev)
-+{
-+	struct tps68470_clk_platform_data *pdata = pdev->dev.platform_data;
-+	struct clk_init_data tps68470_clk_initdata = {
-+		.name = TPS68470_CLK_NAME,
-+		.ops = &tps68470_clk_ops,
-+		/* Changing the dividers when the PLL is on is not allowed */
-+		.flags = CLK_SET_RATE_GATE,
-+	};
-+	struct tps68470_clkdata *tps68470_clkdata;
++	union acpi_object *obj;
 +	int ret;
 +
-+	tps68470_clkdata = devm_kzalloc(&pdev->dev, sizeof(*tps68470_clkdata),
-+					GFP_KERNEL);
-+	if (!tps68470_clkdata)
-+		return -ENOMEM;
++	obj = skl_int3472_get_acpi_buffer(adev, "CLDB");
++	if (IS_ERR(obj))
++		return PTR_ERR(obj);
 +
-+	tps68470_clkdata->regmap = dev_get_drvdata(pdev->dev.parent);
-+	tps68470_clkdata->clkout_hw.init = &tps68470_clk_initdata;
-+
-+	/* Set initial rate */
-+	tps68470_clk_set_rate(&tps68470_clkdata->clkout_hw, clk_freqs[0].freq, 0);
-+
-+	ret = devm_clk_hw_register(&pdev->dev, &tps68470_clkdata->clkout_hw);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_clk_hw_register_clkdev(&pdev->dev, &tps68470_clkdata->clkout_hw,
-+					  TPS68470_CLK_NAME, NULL);
-+	if (ret)
-+		return ret;
-+
-+	if (pdata) {
-+		ret = devm_clk_hw_register_clkdev(&pdev->dev,
-+						  &tps68470_clkdata->clkout_hw,
-+						  pdata->consumer_con_id,
-+						  pdata->consumer_dev_name);
++	if (obj->buffer.length > sizeof(*cldb)) {
++		acpi_handle_err(adev->handle, "The CLDB buffer is too large\n");
++		ret = -EINVAL;
++		goto out_free_obj;
 +	}
 +
++	memcpy(cldb, obj->buffer.pointer, obj->buffer.length);
++	ret = 0;
++
++out_free_obj:
++	kfree(obj);
 +	return ret;
 +}
-+
-+static struct platform_driver tps68470_clk_driver = {
-+	.driver = {
-+		.name = TPS68470_CLK_NAME,
-+	},
-+	.probe = tps68470_clk_probe,
-+};
-+
-+/*
-+ * The ACPI tps68470 probe-ordering depends on the clk/gpio/regulator drivers
-+ * registering before the drivers for the camera-sensors which use them bind.
-+ * subsys_initcall() ensures this when the drivers are builtin.
-+ */
-+static int __init tps68470_clk_init(void)
-+{
-+	return platform_driver_register(&tps68470_clk_driver);
-+}
-+subsys_initcall(tps68470_clk_init);
-+
-+static void __exit tps68470_clk_exit(void)
-+{
-+	platform_driver_unregister(&tps68470_clk_driver);
-+}
-+module_exit(tps68470_clk_exit);
-+
-+MODULE_ALIAS("platform:tps68470-clk");
-+MODULE_DESCRIPTION("clock driver for TPS68470 pmic");
-+MODULE_LICENSE("GPL");
-diff --git a/include/linux/mfd/tps68470.h b/include/linux/mfd/tps68470.h
-index ffe81127d91c..7807fa329db0 100644
---- a/include/linux/mfd/tps68470.h
-+++ b/include/linux/mfd/tps68470.h
-@@ -75,6 +75,17 @@
- #define TPS68470_CLKCFG1_MODE_A_MASK	GENMASK(1, 0)
- #define TPS68470_CLKCFG1_MODE_B_MASK	GENMASK(3, 2)
+diff --git a/drivers/platform/x86/intel/int3472/intel_skl_int3472_common.h b/drivers/platform/x86/intel/int3472/common.h
+similarity index 94%
+rename from drivers/platform/x86/intel/int3472/intel_skl_int3472_common.h
+rename to drivers/platform/x86/intel/int3472/common.h
+index 714fde73b524..d14944ee8586 100644
+--- a/drivers/platform/x86/intel/int3472/intel_skl_int3472_common.h
++++ b/drivers/platform/x86/intel/int3472/common.h
+@@ -105,9 +105,6 @@ struct int3472_discrete_device {
+ 	struct gpiod_lookup_table gpios;
+ };
  
-+#define TPS68470_CLKCFG2_DRV_STR_2MA	0x05
-+#define TPS68470_PLL_OUTPUT_ENABLE	0x02
-+#define TPS68470_CLK_SRC_XTAL		BIT(0)
-+#define TPS68470_PLLSWR_DEFAULT		GENMASK(1, 0)
-+#define TPS68470_OSC_EXT_CAP_DEFAULT	0x05
+-int skl_int3472_discrete_probe(struct platform_device *pdev);
+-int skl_int3472_discrete_remove(struct platform_device *pdev);
+-int skl_int3472_tps68470_probe(struct i2c_client *client);
+ union acpi_object *skl_int3472_get_acpi_buffer(struct acpi_device *adev,
+ 					       char *id);
+ int skl_int3472_fill_cldb(struct acpi_device *adev, struct int3472_cldb *cldb);
+diff --git a/drivers/platform/x86/intel/int3472/intel_skl_int3472_discrete.c b/drivers/platform/x86/intel/int3472/discrete.c
+similarity index 93%
+rename from drivers/platform/x86/intel/int3472/intel_skl_int3472_discrete.c
+rename to drivers/platform/x86/intel/int3472/discrete.c
+index e59d79c7e82f..d2e8a87a077e 100644
+--- a/drivers/platform/x86/intel/int3472/intel_skl_int3472_discrete.c
++++ b/drivers/platform/x86/intel/int3472/discrete.c
+@@ -14,7 +14,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/uuid.h>
+ 
+-#include "intel_skl_int3472_common.h"
++#include "common.h"
+ 
+ /*
+  * 79234640-9e10-4fea-a5c1-b5aa8b19756f
+@@ -332,7 +332,9 @@ static int skl_int3472_parse_crs(struct int3472_discrete_device *int3472)
+ 	return 0;
+ }
+ 
+-int skl_int3472_discrete_probe(struct platform_device *pdev)
++static int skl_int3472_discrete_remove(struct platform_device *pdev);
 +
-+#define TPS68470_OUTPUT_A_SHIFT		0x00
-+#define TPS68470_OUTPUT_B_SHIFT		0x02
-+#define TPS68470_CLK_SRC_SHIFT		GENMASK(2, 0)
-+#define TPS68470_OSC_EXT_CAP_SHIFT	BIT(2)
++static int skl_int3472_discrete_probe(struct platform_device *pdev)
+ {
+ 	struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
+ 	struct int3472_discrete_device *int3472;
+@@ -395,7 +397,7 @@ int skl_int3472_discrete_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-int skl_int3472_discrete_remove(struct platform_device *pdev)
++static int skl_int3472_discrete_remove(struct platform_device *pdev)
+ {
+ 	struct int3472_discrete_device *int3472 = platform_get_drvdata(pdev);
+ 
+@@ -411,3 +413,23 @@ int skl_int3472_discrete_remove(struct platform_device *pdev)
+ 
+ 	return 0;
+ }
 +
- #define TPS68470_GPIO_CTL_REG_A(x)	(TPS68470_REG_GPCTL0A + (x) * 2)
- #define TPS68470_GPIO_CTL_REG_B(x)	(TPS68470_REG_GPCTL0B + (x) * 2)
- #define TPS68470_GPIO_MODE_MASK		GENMASK(1, 0)
++static const struct acpi_device_id int3472_device_id[] = {
++	{ "INT3472", 0 },
++	{ }
++};
++MODULE_DEVICE_TABLE(acpi, int3472_device_id);
++
++static struct platform_driver int3472_discrete = {
++	.driver = {
++		.name = "int3472-discrete",
++		.acpi_match_table = int3472_device_id,
++	},
++	.probe = skl_int3472_discrete_probe,
++	.remove = skl_int3472_discrete_remove,
++};
++module_platform_driver(int3472_discrete);
++
++MODULE_DESCRIPTION("Intel SkyLake INT3472 ACPI Discrete Device Driver");
++MODULE_AUTHOR("Daniel Scally <djrscally@gmail.com>");
++MODULE_LICENSE("GPL v2");
+diff --git a/drivers/platform/x86/intel/int3472/intel_skl_int3472_common.c b/drivers/platform/x86/intel/int3472/intel_skl_int3472_common.c
+deleted file mode 100644
+index 497e74fba75f..000000000000
+--- a/drivers/platform/x86/intel/int3472/intel_skl_int3472_common.c
++++ /dev/null
+@@ -1,106 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/* Author: Dan Scally <djrscally@gmail.com> */
+-
+-#include <linux/acpi.h>
+-#include <linux/i2c.h>
+-#include <linux/platform_device.h>
+-#include <linux/slab.h>
+-
+-#include "intel_skl_int3472_common.h"
+-
+-union acpi_object *skl_int3472_get_acpi_buffer(struct acpi_device *adev, char *id)
+-{
+-	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+-	acpi_handle handle = adev->handle;
+-	union acpi_object *obj;
+-	acpi_status status;
+-
+-	status = acpi_evaluate_object(handle, id, NULL, &buffer);
+-	if (ACPI_FAILURE(status))
+-		return ERR_PTR(-ENODEV);
+-
+-	obj = buffer.pointer;
+-	if (!obj)
+-		return ERR_PTR(-ENODEV);
+-
+-	if (obj->type != ACPI_TYPE_BUFFER) {
+-		acpi_handle_err(handle, "%s object is not an ACPI buffer\n", id);
+-		kfree(obj);
+-		return ERR_PTR(-EINVAL);
+-	}
+-
+-	return obj;
+-}
+-
+-int skl_int3472_fill_cldb(struct acpi_device *adev, struct int3472_cldb *cldb)
+-{
+-	union acpi_object *obj;
+-	int ret;
+-
+-	obj = skl_int3472_get_acpi_buffer(adev, "CLDB");
+-	if (IS_ERR(obj))
+-		return PTR_ERR(obj);
+-
+-	if (obj->buffer.length > sizeof(*cldb)) {
+-		acpi_handle_err(adev->handle, "The CLDB buffer is too large\n");
+-		ret = -EINVAL;
+-		goto out_free_obj;
+-	}
+-
+-	memcpy(cldb, obj->buffer.pointer, obj->buffer.length);
+-	ret = 0;
+-
+-out_free_obj:
+-	kfree(obj);
+-	return ret;
+-}
+-
+-static const struct acpi_device_id int3472_device_id[] = {
+-	{ "INT3472", 0 },
+-	{ }
+-};
+-MODULE_DEVICE_TABLE(acpi, int3472_device_id);
+-
+-static struct platform_driver int3472_discrete = {
+-	.driver = {
+-		.name = "int3472-discrete",
+-		.acpi_match_table = int3472_device_id,
+-	},
+-	.probe = skl_int3472_discrete_probe,
+-	.remove = skl_int3472_discrete_remove,
+-};
+-
+-static struct i2c_driver int3472_tps68470 = {
+-	.driver = {
+-		.name = "int3472-tps68470",
+-		.acpi_match_table = int3472_device_id,
+-	},
+-	.probe_new = skl_int3472_tps68470_probe,
+-};
+-
+-static int skl_int3472_init(void)
+-{
+-	int ret;
+-
+-	ret = platform_driver_register(&int3472_discrete);
+-	if (ret)
+-		return ret;
+-
+-	ret = i2c_register_driver(THIS_MODULE, &int3472_tps68470);
+-	if (ret)
+-		platform_driver_unregister(&int3472_discrete);
+-
+-	return ret;
+-}
+-module_init(skl_int3472_init);
+-
+-static void skl_int3472_exit(void)
+-{
+-	platform_driver_unregister(&int3472_discrete);
+-	i2c_del_driver(&int3472_tps68470);
+-}
+-module_exit(skl_int3472_exit);
+-
+-MODULE_DESCRIPTION("Intel SkyLake INT3472 ACPI Device Driver");
+-MODULE_AUTHOR("Daniel Scally <djrscally@gmail.com>");
+-MODULE_LICENSE("GPL v2");
+diff --git a/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c b/drivers/platform/x86/intel/int3472/tps68470.c
+similarity index 85%
+rename from drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
+rename to drivers/platform/x86/intel/int3472/tps68470.c
+index c05b4cf502fe..fd3bef449137 100644
+--- a/drivers/platform/x86/intel/int3472/intel_skl_int3472_tps68470.c
++++ b/drivers/platform/x86/intel/int3472/tps68470.c
+@@ -7,7 +7,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ 
+-#include "intel_skl_int3472_common.h"
++#include "common.h"
+ 
+ #define DESIGNED_FOR_CHROMEOS		1
+ #define DESIGNED_FOR_WINDOWS		2
+@@ -95,7 +95,7 @@ static int skl_int3472_tps68470_calc_type(struct acpi_device *adev)
+ 	return DESIGNED_FOR_WINDOWS;
+ }
+ 
+-int skl_int3472_tps68470_probe(struct i2c_client *client)
++static int skl_int3472_tps68470_probe(struct i2c_client *client)
+ {
+ 	struct acpi_device *adev = ACPI_COMPANION(&client->dev);
+ 	struct regmap *regmap;
+@@ -135,3 +135,22 @@ int skl_int3472_tps68470_probe(struct i2c_client *client)
+ 
+ 	return ret;
+ }
++
++static const struct acpi_device_id int3472_device_id[] = {
++	{ "INT3472", 0 },
++	{ }
++};
++MODULE_DEVICE_TABLE(acpi, int3472_device_id);
++
++static struct i2c_driver int3472_tps68470 = {
++	.driver = {
++		.name = "int3472-tps68470",
++		.acpi_match_table = int3472_device_id,
++	},
++	.probe_new = skl_int3472_tps68470_probe,
++};
++module_i2c_driver(int3472_tps68470);
++
++MODULE_DESCRIPTION("Intel SkyLake INT3472 ACPI TPS68470 Device Driver");
++MODULE_AUTHOR("Daniel Scally <djrscally@gmail.com>");
++MODULE_LICENSE("GPL v2");
 -- 
 2.33.1
 

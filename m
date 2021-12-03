@@ -2,159 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C25EC467D05
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAEB9467D09
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382427AbhLCSRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 13:17:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35248 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233009AbhLCSQ7 (ORCPT
+        id S1382478AbhLCSRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 13:17:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36536 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235884AbhLCSRN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 13:16:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638555214;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7dzgYUnnXmqI6YYZ1H+a9PomNsLF/wjAkKHffLwa6ac=;
-        b=N5M1+QJMsRc71lUhz9BlH72Il2zwkTlUqPZgBY5e3xFp8r4kVSHgDd+hiCccPdkdTtTDZW
-        IgogZOZmc8VCnLeHDJ3Sipn1dnnzax/mykDphestN6rwmIXU4PV7Mhec/jGtb3boITMKti
-        SU1JiYt2oFp/a00XTqHCObHUX92mt8E=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-385-1_gJO3NDPDu1JnQgf4cY1w-1; Fri, 03 Dec 2021 13:13:34 -0500
-X-MC-Unique: 1_gJO3NDPDu1JnQgf4cY1w-1
-Received: by mail-wm1-f70.google.com with SMTP id 201-20020a1c04d2000000b003335bf8075fso1922184wme.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 10:13:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=7dzgYUnnXmqI6YYZ1H+a9PomNsLF/wjAkKHffLwa6ac=;
-        b=OxR1cmrUsK9RwQJPtSOFc4+H3z4cAxwWetH28Ll36/Sex0q65PusYoYkDYE4HHEkq6
-         EGhB7s2pjwKJ769OyA+PXsinqV8adjewyNx2XoviIifyRV8+eFjds+JllnLnIjIvlADq
-         xg414p8XwKRqHo8UVzy3TdLqRFLwKf1SH3DvkAZmJ+uuR0KJpOrICEJZcTW+x1pglVzt
-         27bVarw2PrP+nd1TaTJfuhSPwZIxbp1Jl1AOf1zSE1i3/ZQQF57IaRg8XKkHYVLVuywJ
-         hcuSNV67pXtIa6arwhOZKpI5H+Xzg4XpWj8Mgmfw+fUKhGBrnhw9Cgt8+oGxWRPUrDYL
-         N7gg==
-X-Gm-Message-State: AOAM530w+zLVth5lPPkBGB79ZbHcUxgODWzLuQLBtb1EH6geKPwtCyTo
-        R3HRZxkPoLMLxhkw0AaIi7nwbwcyVGZJmJXNLAAKbCCq4wks/UECOaEK1incl0TUKRZBvp78Rmt
-        H/BiuaJnbB/B4wuFzVpMZQfqy
-X-Received: by 2002:a05:600c:3586:: with SMTP id p6mr16839749wmq.34.1638555212867;
-        Fri, 03 Dec 2021 10:13:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwlQzTObk/hk9+jr+MMNRGtLfch/MMPjlS2I6c1elKm0x59UVclr7egOypIDfOXdG7Naygxrw==
-X-Received: by 2002:a05:600c:3586:: with SMTP id p6mr16839715wmq.34.1638555212592;
-        Fri, 03 Dec 2021 10:13:32 -0800 (PST)
-Received: from ?IPV6:2003:d8:2f44:9200:3344:447e:353c:bf0b? (p200300d82f4492003344447e353cbf0b.dip0.t-ipconnect.de. [2003:d8:2f44:9200:3344:447e:353c:bf0b])
-        by smtp.gmail.com with ESMTPSA id n32sm6760560wms.1.2021.12.03.10.13.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 10:13:32 -0800 (PST)
-Message-ID: <3c971e70-f8c7-4406-d098-74e92f3c7dc4@redhat.com>
-Date:   Fri, 3 Dec 2021 19:13:31 +0100
+        Fri, 3 Dec 2021 13:17:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFB9262C80;
+        Fri,  3 Dec 2021 18:13:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1010DC53FAD;
+        Fri,  3 Dec 2021 18:13:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638555228;
+        bh=E90SW7IezprzON0XL09cv7YjYR918uAvsP1m3+lB75U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mUZBFxgDYgPpfatw21IfMbBLSAWSrGYfF4nrh3zsDvHkmLW8kIW0V44NIuaJ9ZHk4
+         PcCp570Minqx39sXU+ffHYl/rBlXmH9m0CigeeKsdTUqbnTWcGDP8SniUbxow5jfJH
+         Ra6wfVQQmaQvo1hWkKm9fsDOqNGaJHfzchiYj8VPuFVgDVJO0EWkF+XR+RRs0FNBmF
+         SnGnVrYqrgm5ktlPUZAbLUrDWFdxPXmKKWDsp3PqF341ayJ0aN7egKSOzGVp+s+Y7X
+         RwaxX+KXMvlnQhqdb9FAW699sV1t2iyQK2krFDitQNV4ZxD+AVPQQUCtXAquVAFVCq
+         ymkFmido93uNg==
+Received: by mail-oi1-f179.google.com with SMTP id u74so7311155oie.8;
+        Fri, 03 Dec 2021 10:13:48 -0800 (PST)
+X-Gm-Message-State: AOAM5335VRoyx7NRtTBGlR9ktA16RFXvXtHgCOkqDCUFGeWjJp4eDWep
+        x7pninEX7YYS5bEBtSc8efZmFtjRuNK+G0wllCw=
+X-Google-Smtp-Source: ABdhPJwqDfN3YlV4nM2a1pe/9ZpwcgcOtGI/Dw4iZR82jtHqY0rmw12khrU6X6Kt61PNKhsOnkINyfsWJ9tYXwSAG7Y=
+X-Received: by 2002:a05:6808:12:: with SMTP id u18mr11260456oic.174.1638555227284;
+ Fri, 03 Dec 2021 10:13:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v1] arm64/mm: avoid race condition of update page table
- when kernel init
-Content-Language: en-US
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Jianyong Wu <Jianyong.Wu@arm.com>
-Cc:     Anshuman Khandual <Anshuman.Khandual@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "gshan@redhat.com" <gshan@redhat.com>,
-        Justin He <Justin.He@arm.com>, nd <nd@arm.com>
-References: <20211027094828.7629-1-jianyong.wu@arm.com>
- <1cd8e875-24b1-2904-4e9f-2a4eb13674dc@arm.com>
- <AM9PR08MB72767A6DFA5A7ED8117E7C44F4869@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <YapXa8JWPNhkePwO@arm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <YapXa8JWPNhkePwO@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <8afff0c64feb6b96db36112cb865243f4ae280ca.1634922135.git.thomas.lendacky@amd.com>
+ <c997e8a2-b364-2a8e-d247-438e9d937a1e@amd.com> <CAMj1kXGH7aGR==o1L2dnA9U9L==gM0__10UGznnyZwkHrT84sw@mail.gmail.com>
+ <YXmEo8iMNIn1esYC@zn.tnic> <CAMj1kXEZkw99MPssHWFRL_k0okeGF47VYL+o8p72hBWkqW927g@mail.gmail.com>
+ <f939e968-149f-1caf-c1fb-5939eafae31c@amd.com> <15ceb556-0b56-2833-206e-0cf9b9d2cb45@amd.com>
+ <CAMj1kXHKxObuebZJMWQQwg014rYzvoBgWPZxfCYakuf+GSoqhg@mail.gmail.com> <6d6b4982-ce69-4fd4-1bb8-5c35b360a95f@amd.com>
+In-Reply-To: <6d6b4982-ce69-4fd4-1bb8-5c35b360a95f@amd.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 3 Dec 2021 19:13:36 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFkL8AkgE431CJWsD2T7uXh5PiR44iXLBKfTQQuDuNbyg@mail.gmail.com>
+Message-ID: <CAMj1kXFkL8AkgE431CJWsD2T7uXh5PiR44iXLBKfTQQuDuNbyg@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/sme: Explicitly map new EFI memmap table as encrypted
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Matt Fleming <matt@codeblueprint.co.uk>,
+        "# 3.4.x" <stable@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03.12.21 18:44, Catalin Marinas wrote:
-> On Thu, Oct 28, 2021 at 08:36:07AM +0100, Jianyong Wu wrote:
->> From Anshuman Khandual <anshuman.khandual@arm.com>:
->>> On 10/27/21 3:18 PM, Jianyong Wu wrote:
->>>> Race condition of page table update can happen in kernel boot period
->>>> as both of memory hotplug action when kernel init and the
->>>> mark_rodata_ro can update page table. For virtio-mem, the function excute flow chart is:
->>>>
->>>> -------------------------
->>>> kernel_init
->>>>   kernel_init_freeable
->>>>     ...
->>>>       do_initcall
->>>>         ...
->>>>           module_init [A]
->>>>
->>>>   ...
->>>>   mark_readonly
->>>>     mark_rodata_ro [B]
->>>> -------------------------
-> [...]
->>>> We can see that the error derived from the l3 translation as the pte
->>>> value is *0*. That is because the fixmap has been clear when access.
->>>>
->>>> Signed-off-by: Jianyong Wu <jianyong.wu@arm.com>
->>>> ---
->>>>  arch/arm64/mm/mmu.c | 2 ++
->>>>  1 file changed, 2 insertions(+)
->>>>
->>>> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c index
->>>> cfd9deb347c3..567dfba8f08a 100644
->>>> --- a/arch/arm64/mm/mmu.c
->>>> +++ b/arch/arm64/mm/mmu.c
->>>> @@ -564,8 +564,10 @@ void mark_rodata_ro(void)
->>>>      * to cover NOTES and EXCEPTION_TABLE.
->>>>      */
->>>>     section_size = (unsigned long)__init_begin - (unsigned long)__start_rodata;
->>>> +   get_online_mems();
->>>>     update_mapping_prot(__pa_symbol(__start_rodata), (unsigned long)__start_rodata,
->>>>                         section_size, PAGE_KERNEL_RO);
->>>> +   put_online_mems();
->>>>
->>>>     debug_checkwx();
->>>>  }
->>>
->>> While this should solve the current problem i.e race between concurrent
->>> memory hotplug operation and mark_rodata_ro(), but I am still wondering
->>> whether this is the fix at the right place and granularity. Basically a hotplug
->>> operation queued in an work queue at [A] can execute during [B] is the root
->>> cause of this problem.
->>
->> Not exactly, this issue doesn't only happen at the the *pure* kernel
->> boot. For example, hotplug memory through VM monitor when VM boot. We
->> can't foresee when that happen. Thus, this issue can affect all kinds
->> of memory hotplug mechanism, including ACPI based memory hotplug and
->> virtio-mem. I'm not sure that fix it here is the best way. If the race
->> only happens between kernel init and memory hotplug, I think it's fine
->> to fix it here. IMO, this issue results from the race for "fixmap"
->> resource. I wonder why this global resource is not protected by a
->> lock. Maybe we can add one and fix it there.
-> 
-> IIUC the race is caused by multiple attempts to use the fixmap at the
-> same time. We can add a fixmap_lock and hold it during
-> __create_pgd_mapping().
-> 
+On Fri, 3 Dec 2021 at 17:22, Tom Lendacky <thomas.lendacky@amd.com> wrote:
+>
+> On 12/3/21 4:30 AM, Ard Biesheuvel wrote:
+> > On Wed, 1 Dec 2021 at 15:06, Tom Lendacky <thomas.lendacky@amd.com> wrote:
+> >>
+> >> On 10/27/21 12:04 PM, Tom Lendacky wrote:
+> >>>
+> >>>
+> >>> On 10/27/21 11:59 AM, Ard Biesheuvel wrote:
+> >>>> On Wed, 27 Oct 2021 at 18:56, Borislav Petkov <bp@alien8.de> wrote:
+> >>>>>
+> >>>>> On Wed, Oct 27, 2021 at 05:14:35PM +0200, Ard Biesheuvel wrote:
+> >>>>>> I could take it, but since it will ultimately go through -tip anyway,
+> >>>>>> perhaps better if they just take it directly? (This will change after
+> >>>>>> the next -rc1 though)
+> >>>>>>
+> >>>>>> Boris?
+> >>>>>
+> >>>>> Yeah, I'm being told this is not urgent enough to rush in now so you
+> >>>>> could queue it into your fixes branch for 5.16 once -rc1 is out and send
+> >>>>> it to Linus then. The stable tag is just so it gets backported to the
+> >>>>> respective trees.
+> >>>>>
+> >>>>> But if you prefer I should take it, then I can queue it after -rc1.
+> >>>>> It'll boil down to the same thing though.
+> >>>>>
+> >>>>
+> >>>> No, in that case, I can take it myself.
+> >>>>
+> >>>> Tom, does that work for you?
+> >>>
+> >>> Yup, that works for me. Thanks guys!
+> >>
+> >> I don't see this in any tree yet, so just a gentle reminder in case it
+> >> dropped off the radar.
+> >>
+> >
+> > Apologies for the delay, I've pushed this out to -next now.
+> >
+> > Before I send it to Linus, can you please confirm (for my peace of
+> > mind) how this only affects systems that have memory encryption
+> > available and enabled in the first place?
+>
+> Certainly.
+>
+> An early_memremap() call uses the FIXMAP_PAGE_NORMAL protection value for
+> performing the mapping. Prior to performing the actual mapping though, a
+> call to early_memremap_pgprot_adjust() is made to possibly alter the
+> protection value, but only if memory encryption is active.
+>
+> Changing the call to early_memremap_prot() and providing
+> pgprot_encrypted(FIXMAP_PAGE_NORMAL) as the protection value results in an
+> equivalent call to early_memremap() when memory encryption is not active.
+> This is because the pgprot_encrypted() is, in effect, a NOP when memory
+> encryption is not active.
+>
+> So when memory encryption is not available or active, the result of an
+> early_memremap_prot() call with a protection value of
+> pgprot_encrypted(FIXMAP_PAGE_NORMAL) is equivalent to an early_memremap()
+> call.
+>
+> Let me know if that answers your question.
+>
 
-IIRC that's something along the lines I suggested, so, yes :)
-
--- 
-Thanks,
-
-David / dhildenb
-
+It does, thanks.

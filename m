@@ -2,126 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A74C446723B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 07:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6070D467242
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 07:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348938AbhLCGyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 01:54:46 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47324 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233948AbhLCGyp (ORCPT
+        id S1378704AbhLCGzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 01:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233948AbhLCGzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 01:54:45 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DDEF362942
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 06:51:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AF4DC53FAD;
-        Fri,  3 Dec 2021 06:51:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638514281;
-        bh=34SFPgg3ArvbMFrw5JC591DMTXjD/TO+MiQWb5X3ym8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QBhHl6RWBlamf3vNxCoGNKiLxekNfYSbEqncAKb/7+EwY2XQf3e/9iy1wheuldXCu
-         Sx5qvAOSMf1CClb8ISSEkPDREEfOAAJy1Qa9cZLEo7ruf/PM5w5h/wxTdveTJHMUK5
-         PfMzjphMwcKMXFsZojqKPHuSd9fusZiR6hczBkH95656wPdPEe5yeFu/kSm+Qtgg7n
-         JY7I80xTjqa9Y42kHOfXE2T0nClAUAFtQTkwxwLDXs0XRBbs1cZ8Bko4x9zU4wQjCR
-         L+XWcTe2qYEqrAGeBAFZ8HXDCuRlpgSYYh1+61VVf6m21JVxhMQkOsPySxUS3rV/jv
-         irT7LbGG4D/Cw==
-Message-ID: <a0c55b6d-a325-d40d-e030-bc936ef592fe@kernel.org>
-Date:   Fri, 3 Dec 2021 14:51:18 +0800
+        Fri, 3 Dec 2021 01:55:51 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C74C06174A;
+        Thu,  2 Dec 2021 22:52:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aXFyrFXL34W2GHR0/Nvm2nUYcaAkgVvbt+pu+4SPxHo=; b=2Bh3M1lFWUbkvyW3FEXuOXaiAo
+        i7u6LQiJ9HryjYiirrSbqsmzjgC8S5NKB0UqFUixHbp6hu3eeJzGaNfT7vMJHMuJo56XBCX6RZbsC
+        keOcI0vyuDdr5+tKWiGwq7Ued6g7CK2EcYLwU/jiId0mt24kohFVkeHgZcmLoKMtOB3MYsTIDU4S0
+        RmtSwngpujPT+z6BiFl/BXTKStDY7kUw8bwalKUywe6Zp35WnSvqVOB0CTJX8loyCDipuDRrdbbsO
+        LkQtVp4jbqQz5v8KnKEFwpLtmgYScavc7n7vkoBRbIHkvHr+DDEIyaQsj9KGB6WR68Hlxap95VK1/
+        pH5+0YFA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mt2QV-00EcqD-Aj; Fri, 03 Dec 2021 06:52:11 +0000
+Date:   Thu, 2 Dec 2021 22:52:11 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        "deven.desai@linux.microsoft.com" <deven.desai@linux.microsoft.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "agk@redhat.com" <agk@redhat.com>,
+        "snitzer@redhat.com" <snitzer@redhat.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "eparis@redhat.com" <eparis@redhat.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+        "linux-audit@redhat.com" <linux-audit@redhat.com>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "tusharsu@linux.microsoft.com" <tusharsu@linux.microsoft.com>
+Subject: Re: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
+Message-ID: <Yam+m9eiLxIamGXm@infradead.org>
+References: <81d5e825-1ee2-8f6b-cd9d-07b0f8bd36d3@linux.microsoft.com>
+ <20211201163708.3578176-1-roberto.sassu@huawei.com>
+ <Yahz1SYRG1CQIh0z@infradead.org>
+ <e57d2d23ec7845febb79ca4476c73fcb@huawei.com>
+ <YaiHX+dWNUlmsNac@infradead.org>
+ <b4bf4a384b334cdab1522b3b082bd088@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [f2fs-dev] [PATCH 5/6] f2fs: implement iomap operations
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20211116214510.2934905-1-jaegeuk@kernel.org>
- <20211116214510.2934905-5-jaegeuk@kernel.org>
- <b36e2d44-4834-3931-6a32-4fa52d1d7785@kernel.org>
- <YahIf3UlhuxJT1O4@sol.localdomain>
- <1ba0f002-42c7-b085-0c54-6071664ba79b@kernel.org>
- <YakPrVPz5+qQm3kQ@sol.localdomain> <YakXMV0UvBV7TVwe@google.com>
- <YakX38onzsW5Ef8B@google.com> <YakzVAkHAVMueJwe@sol.localdomain>
- <Yak4cxU6htgQk7ck@google.com> <Yak6gtXthBRK3eeM@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Yak6gtXthBRK3eeM@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b4bf4a384b334cdab1522b3b082bd088@huawei.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/3 5:28, Jaegeuk Kim wrote:
-> On 12/02, Jaegeuk Kim wrote:
->> On 12/02, Eric Biggers wrote:
->>> On Thu, Dec 02, 2021 at 11:00:47AM -0800, Jaegeuk Kim wrote:
->>>> On 12/02, Jaegeuk Kim wrote:
->>>>> On 12/02, Eric Biggers wrote:
->>>>>> On Thu, Dec 02, 2021 at 10:04:11PM +0800, Chao Yu wrote:
->>>>>>> On 2021/12/2 12:15, Eric Biggers wrote:
->>>>>>>> On Thu, Dec 02, 2021 at 11:10:41AM +0800, Chao Yu wrote:
->>>>>>>>> Why not relocating this check before f2fs_map_blocks()?
->>>>>>>
->>>>>>> Wait, it supports DIO in multi-device image after commit 	71f2c8206202
->>>>>>> ("f2fs: multidevice: support direct IO"), how about
->>>>>>> checking with f2fs_allow_multi_device_dio()?
->>>>>>>
->>>>>>> Thanks,
->>>>>>>
->>>>>>
->>>>>> Okay, that was not the case when I sent this patch originally.  We'll need to
->>>>>> update this to support multiple devices.
->>>>>
->>>>> Chao/Eric, does this make sense?
->>>>>
->>>>> --- a/fs/f2fs/data.c
->>>>> +++ b/fs/f2fs/data.c
->>>>> @@ -4070,11 +4070,10 @@ static int f2fs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
->>>>>                  }
->>>>>                  if (WARN_ON_ONCE(!__is_valid_data_blkaddr(map.m_pblk)))
->>>>>                          return -EINVAL;
->>>>> -               iomap->addr = blks_to_bytes(inode, map.m_pblk);
->>>>>
->>>>> -               if (WARN_ON_ONCE(f2fs_is_multi_device(F2FS_I_SB(inode))))
->>>>> -                       return -EINVAL;
->>>>> -               iomap->bdev = inode->i_sb->s_bdev;
->>>>> +               iomap->bdev = map->m_multidev_dio ? map.m_bdev :
->>>>
->>>> correction:			map.m_multidev_dio
->>>>
->>>
->>> I guess so, but why doesn't f2fs_map_blocks() just always set m_bdev to the
->>> correct block device?  What is the point of m_multidev_dio?
->>
->> It seems we can simply assign iomap->bdev = map.m_bdev, and remove
->> map->m_multidev_dio.
-> 
-> Ok, it was used in previous get_block flow, but I think it'd be worth to keep it
-> to show by f2fs_map_blocks tracepoint.
+On Thu, Dec 02, 2021 at 09:29:52AM +0000, Roberto Sassu wrote:
+> The problem being solved is how to grant access to files
+> which satisfy a property defined in the policy.
 
-Yes, it was added for that.
-
-Thanks,
-
-> 
->>
->>>
->>> - Eric
->>
->>
->> _______________________________________________
->> Linux-f2fs-devel mailing list
->> Linux-f2fs-devel@lists.sourceforge.net
->> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
-> 
-> 
-> _______________________________________________
-> Linux-f2fs-devel mailing list
-> Linux-f2fs-devel@lists.sourceforge.net
-> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
-> 
+If you have want to enforce access to files in the block layer using
+a specific stacking block driver you don't just have one layering
+violation but a bunch of them.  Please go back to the drawing board.

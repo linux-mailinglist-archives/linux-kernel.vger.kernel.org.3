@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 376C6467D60
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9959467D62
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 19:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382539AbhLCSiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 13:38:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
+        id S1382679AbhLCSia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 13:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239825AbhLCSiX (ORCPT
+        with ESMTP id S239825AbhLCSi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 13:38:23 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525EAC061353
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 10:34:59 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id m9so4999548iop.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 10:34:59 -0800 (PST)
+        Fri, 3 Dec 2021 13:38:29 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92ABC061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 10:35:05 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id b187so4874437iof.11
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 10:35:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
         bh=Dvb4sebfbgF5tG7jNm/fwyVvE8C324Y2j6ohBL2yz/g=;
-        b=AYvBrz6T9TLZMoIC9kskY1SI7yufrV/ryoGHXv440jZSnPh9Et0mg3C1O5GU8l3OXq
-         Pwy8zESuOHjP9NdlIDKrtYk1lLpHUXaPdxChJZ40GWN5O/Yz1rOynaTkSrswJEoOuG8W
-         rZJgo0ys6O7cyy0NXBGQEjPn4Ui3v3qZ/wg7g=
+        b=e4eV32esPJVMasZjHWwwKo1SrNWPcIfXXZB2nTOhb47i1AIYSO+F4BhmI8DMxNfhNp
+         zieVZcDPs2FoqVu37wepru6WTLgg8kQ5VU3jKS8q2lom+rfYmZRy5QSTxZXHHuql+ylQ
+         BEoQQMkYsD7OBczq+40JVnXYv9ELM/+tGpl6Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
         bh=Dvb4sebfbgF5tG7jNm/fwyVvE8C324Y2j6ohBL2yz/g=;
-        b=1RjPjsf7zrbBb+DYB+KSANk2H3IIXIIBH+Bmj0kYXa+zC2XjDR7qrag2kp29tS3IWS
-         6reuqSF3tKktFGyxfMUdTuG4F4a6SPqXfP+MLVKZcWGyrfDHG0EcrpyiOzY3nk/Mf/A5
-         73dfApeKCYg/CDJocLAugcZCmJ+0JGdCcW26Pb/HW2B/J7GnexPUctzmMKdvFqMjp5bX
-         XDWj3vNViv3o/PZW6EVxZoJ9UkVUyNITMn45m3a1qaaKtw4wJc3a2Lyo0PfGYmec6TG2
-         ska9rcCq9fpt8HWwBxhJbiRtU33o3Tyd0ENd/kSgVPQdcguEEIGE5MWMSu+COYOTpr+v
-         hv+w==
-X-Gm-Message-State: AOAM531eFFOLqVkEDDxlsnfwkeaSJ8wcE+6LiAfuAHsNEkWxwYWfKq/t
-        Zqwxm3t+CkqpxBle4ygHLYmbYA==
-X-Google-Smtp-Source: ABdhPJxGTNb85pzcqMlNpqWNolTOrnkarUma79HNUyQhS0ohb1umtNL2ovXsv7ZwEJYoOeA40LrEoQ==
-X-Received: by 2002:a02:ab8f:: with SMTP id t15mr27279823jan.147.1638556498668;
-        Fri, 03 Dec 2021 10:34:58 -0800 (PST)
+        b=jNpwkFajKuz1RmiMpjB5Lx0fAISAj7WlT3onMk9JI+0ldPa/XErq0SU3fa7yoFlwk6
+         AoNSaQ58V/mXE5sct+DIUx0Gw10cTFCjmViEx1lYtGugYcJrShxh86DS0qloR6zWE6UH
+         f/zKBCrHkx96ckoou22j3dvO1jzB3Fb4HlwNj7IV+wGelaBusE2f8H6+i15PgNubaABq
+         Fi8tEXpeEUQFVyCJ6+CF5MBHqS3ZXn3gvdpKDZkvO78wX0qAIEh1hY9REoClk4EjqqIt
+         jNsmho1K7dpd8sHnkQ3WqTm04gW2x61NXRidmjGZevvYGpQAP9nu0jxcLmk0K+yLj3u2
+         QXRQ==
+X-Gm-Message-State: AOAM5331IcoBB6rQUb+NPOLp94pgq7+hWtl4MfYiFDX70CCwUS9m1g4Q
+        vhQBmSK2cN9TobWI3xc06uQ/6w==
+X-Google-Smtp-Source: ABdhPJz3Pg+8n2+rp3lqwQiUSXkIrBpuhyJUc3cFSjOCT8MenJj612dBl7sMBJUFEmsrEmq646DYKA==
+X-Received: by 2002:a5d:9650:: with SMTP id d16mr22177930ios.15.1638556505083;
+        Fri, 03 Dec 2021 10:35:05 -0800 (PST)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 11sm2153989ilq.23.2021.12.03.10.34.58
+        by smtp.gmail.com with ESMTPSA id j8sm2183345ilu.64.2021.12.03.10.35.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 10:34:58 -0800 (PST)
+        Fri, 03 Dec 2021 10:35:04 -0800 (PST)
 Subject: Re: [PATCH] tests: remove unneeded conversion to bool
 To:     davidcomponentone@gmail.com, shuah@kernel.org
 Cc:     christian.brauner@ubuntu.com, ptikhomirov@virtuozzo.com,
@@ -55,8 +55,8 @@ Cc:     christian.brauner@ubuntu.com, ptikhomirov@virtuozzo.com,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <f1fe5f6b00e62a6f70c47f1d8b4c41d5d7d03d7d.1637736469.git.yang.guang5@zte.com.cn>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <bc39340a-8daf-fbe2-1450-2f074608c08b@linuxfoundation.org>
-Date:   Fri, 3 Dec 2021 11:34:57 -0700
+Message-ID: <3fd7f268-9113-1ac0-dd41-bd2f3b7b9298@linuxfoundation.org>
+Date:   Fri, 3 Dec 2021 11:35:04 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0

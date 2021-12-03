@@ -2,167 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF38467987
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 638F746798A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 15:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381514AbhLCOkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 09:40:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381439AbhLCOke (ORCPT
+        id S1381521AbhLCOlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 09:41:03 -0500
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:38543 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1352361AbhLCOlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 09:40:34 -0500
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C056FC061751;
-        Fri,  3 Dec 2021 06:37:09 -0800 (PST)
-Received: from miraculix.mork.no ([IPv6:2a01:799:c9f:8608:6e64:956a:daea:cf2f])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 1B3EauaF032016
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Fri, 3 Dec 2021 15:36:56 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1638542218; bh=PEPNEv0Kw/wnByNDIDdaU8KIbUcqTaS3nEk6m9pZYqg=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=J6I9sXgxiOWfZuTmgyxGDN7VscmaGLAHncZe4JcP+f1n+CpHSfzVGVAudCY7JvDNc
-         ebO9MXi/TYzFpbqEPNNVu/ZGywXJE/XbLoU7QJwU9c3To6qN7nDJIfgqfwPGMrx/BL
-         hm+rVIP+dLfUvyld9g9vDIdHjrTk0WXiDXq47iGQ=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
-        (envelope-from <bjorn@mork.no>)
-        id 1mt9gF-001jeT-LR; Fri, 03 Dec 2021 15:36:55 +0100
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/1] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset
- or zero
-Organization: m
-References: <20211202143437.1411410-1-lee.jones@linaro.org>
-        <20211202175134.5b463e18@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <87o85yj81l.fsf@miraculix.mork.no> <Yan+nvfyS21z7ZUw@google.com>
-        <87ilw5kfrm.fsf@miraculix.mork.no> <YaoeKfmJrDPhMXWp@google.com>
-Date:   Fri, 03 Dec 2021 15:36:55 +0100
-In-Reply-To: <YaoeKfmJrDPhMXWp@google.com> (Lee Jones's message of "Fri, 3 Dec
-        2021 13:39:53 +0000")
-Message-ID: <871r2tkb5k.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 3 Dec 2021 09:41:02 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 9EDDE58017A;
+        Fri,  3 Dec 2021 09:37:37 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Fri, 03 Dec 2021 09:37:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=i+PDizJ4CygpKjnA6GeSt+T0s59
+        0lhPcJnx/bPZhFRM=; b=J4jfRbK2W0THIdVkbDLJx6o7KjK428mCbchaoQWCtED
+        aJxs3mjZxESxpigGG6Pu7/FCOOFiLnhHFMASA2E/2vzTE7dLWHaEocBSAecapGns
+        v/GgTN7mpVdj3daGcFe04TILklv7Z4AjA8CW1SLDpbI7UjVQU5GA4GqvZnc9WH8o
+        zOq4SlZUhjCvuDk8b1hpkG+ggIrS0d0XLAMUa0VLYtIW+PkSfqX7CrEFC28g2X3d
+        6c59U70mAaf2VrWYFu/6ITh3rO+80YLn6UwF14+pNFIxGE3TUjBMxM6jMKolmi3y
+        XcorOTdFCwras1vM56pEBO4AEt0sZ+BckmgLKxUANlg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=i+PDiz
+        J4CygpKjnA6GeSt+T0s590lhPcJnx/bPZhFRM=; b=C/rT67gmxFNiW49lJW8qsT
+        Npf3M89Enwg5Ozfh0uTs3oGF1OgGa57tBFQLtInIEwNBs4BaUHz7LABFVVT2dONm
+        sluQ4ozF3f7AzsIM/E1LvlbNrwmmlaiWptkdl+9ATfH0nN6Vl3PdnwCpSPMFj45L
+        bytURRM8YFZJluWMeHMYL6dUyN5TNvQTpgGhQ6o6rRRPhv9AhjDIOP6+TerVJQMh
+        QrFha3IThGdhgjTUUmkZNmu9ktGTecxRcEyI+YXyuhF8wuxjRGKQuonxE/oKDb0C
+        6Q7DQBW+NZtueWIlNd3RmqXyeRRmWVfHFD8A/sG4tsogjYTMOUyehAEsl/FL9zIg
+        ==
+X-ME-Sender: <xms:sSuqYVrnnQprUF-dMcQsEjVv3YCCYjwCmXWugrST_noZt3m88lZj-w>
+    <xme:sSuqYXp5BP4ch2g2n6hWV8-QgnPG0ZP2S-YvRYFSpOkxT258fQ0NrYiJ8CSbpFQ9U
+    qHgcAETSByssrH-nkM>
+X-ME-Received: <xmr:sSuqYSOt4-w-i0sZtMYI5s9F_XLPvEed10aD4L0Z3P4ws9dQgmXofFwLrJYcKZDD5YPEsElin3lt0s8ApQ64abQtcjH9UXt7Xtyx5TOP6b3lOQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrieejgdeilecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeeutdfgjeeuudehvefgvedvtedtudelfffgffekledtffekgedukeejueevieeg
+    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    igihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:sSuqYQ6WpaWjTrKNkdI3nOEk_-O2I8vri1YOmeMMlfCHhLCaw4XfXw>
+    <xmx:sSuqYU48fQGsdTu-kJD-yfKCpqYRXvPyLQA9UlAi44QbLTsVFFzAVQ>
+    <xmx:sSuqYYhdT-NaidE9kDoeWEw5fYUmA2lYVBvXYwE4REazLm2F9FOcwA>
+    <xmx:sSuqYUjiF_bvGMgFoBtm4yUOOfB7mwQvv5-qkZQvMvsVIJ3m9on9tQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 3 Dec 2021 09:37:36 -0500 (EST)
+Date:   Fri, 3 Dec 2021 15:37:34 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Kevin Tang <kevin3.tang@gmail.com>
+Cc:     maarten.lankhorst@linux.intel.com, sean@poorly.run,
+        airlied@linux.ie, daniel@ffwll.ch, robh+dt@kernel.org,
+        mark.rutland@arm.com, pony1.wu@gmail.com, orsonzhai@gmail.com,
+        zhang.lyra@gmail.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 6/6] drm/sprd: add Unisoc's drm mipi dsi&dphy driver
+Message-ID: <20211203143734.pn4q6wft4s37ckut@houat>
+References: <20211025093418.20545-1-kevin3.tang@gmail.com>
+ <20211025093418.20545-7-kevin3.tang@gmail.com>
+ <20211203103841.vkl3sjsbaohsviou@houat>
+ <CAFPSGXbWv94vShNAQ9xfkDZRKgZTdjRzH9i60ak1NYaPW-OKgA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.3 at canardo
-X-Virus-Status: Clean
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xcgm6vftby67t4i2"
+Content-Disposition: inline
+In-Reply-To: <CAFPSGXbWv94vShNAQ9xfkDZRKgZTdjRzH9i60ak1NYaPW-OKgA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lee Jones <lee.jones@linaro.org> writes:
-> On Fri, 03 Dec 2021, Bj=C3=B8rn Mork wrote:
 
->> This I don't understand.  If we have for example
->>=20
->>  new_tx =3D 0
->>  max =3D 0
->>  min =3D 1514(=3Ddatagram) + 8(=3Dndp) + 2(=3D1+1) * 4(=3Ddpe) + 12(=3Dn=
-th) =3D 1542
->>=20
->> then
->>=20
->>  max =3D max(min, max) =3D 1542
->>  val =3D clamp_t(u32, new_tx, min, max) =3D 1542
->>=20
->> so we return 1542 and everything is fine.
->
-> I don't believe so.
->
-> #define clamp_t(type, val, lo, hi) \
->               min_t(type, max_t(type, val, lo), hi)
->
-> So:
->               min_t(u32, max_t(u32, 0, 1542), 0)
+--xcgm6vftby67t4i2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Dec 03, 2021 at 08:34:50PM +0800, Kevin Tang wrote:
+> Maxime Ripard <maxime@cerno.tech> =E4=BA=8E2021=E5=B9=B412=E6=9C=883=E6=
+=97=A5=E5=91=A8=E4=BA=94 18:38=E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > On Mon, Oct 25, 2021 at 05:34:18PM +0800, Kevin Tang wrote:
+> > > @@ -618,9 +619,25 @@ static void sprd_crtc_mode_set_nofb(struct drm_c=
+rtc *crtc)
+> > >  {
+> > >       struct sprd_dpu *dpu =3D to_sprd_crtc(crtc);
+> > >       struct drm_display_mode *mode =3D &crtc->state->adjusted_mode;
+> > > +     struct drm_encoder *encoder;
+> > > +     struct mipi_dsi_device *slave;
+> > > +     struct sprd_dsi *dsi;
+> > >
+> > >       drm_display_mode_to_videomode(mode, &dpu->ctx.vm);
+> > >
+> > > +     drm_for_each_encoder(encoder, crtc->dev) {
+> > > +             if (encoder->crtc !=3D crtc)
+> > > +                     continue;
+> >
+> > encoder->crtc is deprecated. You should be using
+> > encoder->drm_for_each_encoder_mask, using the encoder_mask in
+> > encoder->drm_crtc_state.
+>=20
+> Use drm_for_each_encoder_mask to replace drm_for_each_encoder? like this:
+> drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask) {
+>     dsi =3D encoder_to_dsi(encoder);
+>     slave =3D dsi->slave;
+>=20
+>     if (slave->mode_flags & MIPI_DSI_MODE_VIDEO)
+>         dpu->ctx.if_type =3D SPRD_DPU_IF_DPI;
+>     else
+>          dpu->ctx.if_type =3D SPRD_DPU_IF_EDPI;
+> }
 
-I don't think so.  If we have:
+Yes
 
- new_tx =3D 0
- max =3D 0
- min =3D 1514(=3Ddatagram) + 8(=3Dndp) + 2(=3D1+1) * 4(=3Ddpe) + 12(=3Dnth)=
- =3D 1542
- max =3D max(min, max) =3D 1542
+Maxime
 
-Then we have
+--xcgm6vftby67t4i2
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  min_t(u32, max_t(u32, 0, 1542), 1542)
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYaorrgAKCRDj7w1vZxhR
+xeExAP9ZFUc9viR8jVqxFYksuwT5OhewO0DsPjv856NwUpY+EQEAmIOyKr/k09XD
+mqk6Hu3g1notikrNRfGp2DSQV5MkYgg=
+=yyH3
+-----END PGP SIGNATURE-----
 
-If it wasn't clear - My proposal was to change this:
-
-  - min =3D min(min, max);
-  + max =3D max(min, max);
-
-in the original code.
-
-
-But looking further I don't think that's a good idea either.  I searched
-through old email and found this commit:
-
-commit a6fe67087d7cb916e41b4ad1b3a57c91150edb88
-Author: Bj=C3=B8rn Mork <bjorn@mork.no>
-Date:   Fri Nov 1 11:17:01 2013 +0100
-
-    net: cdc_ncm: no not set tx_max higher than the device supports
-=20=20=20=20
-    There are MBIM devices out there reporting
-=20=20=20=20
-      dwNtbInMaxSize=3D2048 dwNtbOutMaxSize=3D2048
-=20=20=20=20
-    and since the spec require a datagram max size of at least
-    2048, this means that a full sized datagram will never fit.
-=20=20=20=20
-    Still, sending larger NTBs than the device supports is not
-    going to help.  We do not have any other options than either
-     a) refusing to bindi, or
-     b) respect the insanely low value.
-=20=20=20=20
-    Alternative b will at least make these devices work, so go
-    for it.
-=20=20=20=20
-    Cc: Alexey Orishko <alexey.orishko@gmail.com>
-    Signed-off-by: Bj=C3=B8rn Mork <bjorn@mork.no>
-    Signed-off-by: David S. Miller <davem@davemloft.net>
-
-diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-index 4531f38fc0e5..11c703337577 100644
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -159,8 +159,7 @@ static u8 cdc_ncm_setup(struct usbnet *dev)
-        }
-=20
-        /* verify maximum size of transmitted NTB in bytes */
--       if ((ctx->tx_max < (CDC_NCM_MIN_HDR_SIZE + ctx->max_datagram_size))=
- ||
--           (ctx->tx_max > CDC_NCM_NTB_MAX_SIZE_TX)) {
-+       if (ctx->tx_max > CDC_NCM_NTB_MAX_SIZE_TX) {
-                dev_dbg(&dev->intf->dev, "Using default maximum transmit le=
-ngth=3D%d\n",
-                        CDC_NCM_NTB_MAX_SIZE_TX);
-                ctx->tx_max =3D CDC_NCM_NTB_MAX_SIZE_TX;
-
-
-
-
-
-So there are real devices depending on a dwNtbOutMaxSize which is too
-low.  Our calculated minimum for MBIM will not fit.
-
-So let's go back your original test for zero.  It's better than
-nothing.  I'll just ack that.
-
-
-> Perhaps we should use max_t() here instead of clamp?
-
-No.  That would allow userspace to set an unlimited buffer size.
-
-
-
-Bj=C3=B8rn
+--xcgm6vftby67t4i2--

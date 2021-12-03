@@ -2,119 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D41467EF7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 21:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A79C7467EFA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 21:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383143AbhLCUx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 15:53:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
+        id S1383147AbhLCUyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 15:54:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239909AbhLCUx1 (ORCPT
+        with ESMTP id S240562AbhLCUyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 15:53:27 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E14C061353
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 12:50:03 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id k6-20020a17090a7f0600b001ad9d73b20bso1148459pjl.3
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 12:50:03 -0800 (PST)
+        Fri, 3 Dec 2021 15:54:14 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09BBC061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 12:50:49 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id a9so8194182wrr.8
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 12:50:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IiqXSBmJKS4kFGk8I5OsxyFVKYg9Egn5AKwrNVhe8+s=;
-        b=0BG1lqGydoNBgMiY7AcikoL6dXY9LlGIHnXTfzov/oVqxmQB0ZXnBNrshPew1B0fOB
-         TGxV5rt6TyDDqBx+CqReMnCqD0jpKZAbFCroW78Ma+Fjyba1GojEGlehVTfwg+5CSgPL
-         TswwN3Zl7H86Z0GFLhM89qbG38sfFpuYbBDvm1c8Ao6k9A9HrfybPD1n/kq1ANbdnDzS
-         Wchoc7OsFCuX2mEr5tzUzfEbOINoGOjh8Etewa4p8yAbM6D5wZLNtTxsh+8bb5ccwPiu
-         I9sS0YTOUDqcPmPz/AFCrExO3jGBF2CsRPo4C4HtJzlcfKvp6TACro9z1OcLvVj9Pv/7
-         B1Bg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DOSjPGQ1kXbuiRCx0e8BVbhaDhMGDo7Gzfr415kJ7+4=;
+        b=Ci65Su0CDpc4xoQmXxTan/Xs5wTt6gXS9TGLMDXimi5gzYKIQNdWKZ9rFgbm7bVGAU
+         zyI9uIl7vvBG9r8vtBN4YQ3I4S7edjnCTyOX4x1RaS8jz0Y6JmM8ZTk3+9966ZfSxhSw
+         BkaBcRjd5/FxZIICQEXJHHBocNmNtZXzwQCdv0TJcBjDKR3W0/sFkHkQBUFGAKOHFdRE
+         npif+CHo6Akr+wIuBzwSeN8q/jn5SyUXz5VcQdP7sUm1ynv9cH/jO25gEpyXaxKTAGsQ
+         Orv+AIR6AMdBoiU/90j/WwS4Wk7iMvxOGsBiCM2QSL3u+PHvJRmy6tE7kr5MaAMRmqQp
+         Ye1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IiqXSBmJKS4kFGk8I5OsxyFVKYg9Egn5AKwrNVhe8+s=;
-        b=Df7Q05QnfPJEcBHka0Fp4BagR75hr7rthFka8t9VZA8yDES5KJSvYaMazolqIft+oI
-         VvpXKfegKlgHJNjsnEYESLuwSfIOvMEIutw9AElLAOLpjITBrMdxkhgOtukwegZrT3F8
-         Okw3d22F2FVJ45RG1TxDBoY+KuW2DqQ0fOi+HKbN8ymBcAQS3cuMuYL6gfz7ebu1eAQC
-         /M8tPdIgWxQVU6FF4xd5YMWQDiigafQLLdyoGSZQNgB4my7ueU64s2xDOF19w2j5QX2W
-         paV1bmumUsM9gh/RWD3e+L46E0rTbz760pMwPwWT2uxoD6CX3OTc/oepMblEWMWqI84X
-         b9yQ==
-X-Gm-Message-State: AOAM5310Njr69zfR5rWY6rMAHAPvvYXWW2tuDsQUFzeFnZPu3VNY4Dsv
-        X1AxQvLr162c/mp6vRwawkDip0hDUKLN2ZR3HjSMtg==
-X-Google-Smtp-Source: ABdhPJxbAQxHMArZuK3BX5qF3GrctQzCOwlbmxEmbIGAClliQ6dzUfk0Lmg9b98HGiDZAeBceGNDNNUjELHnf1amUG8=
-X-Received: by 2002:a17:902:714f:b0:142:892d:a46 with SMTP id
- u15-20020a170902714f00b00142892d0a46mr24999096plm.39.1638564602684; Fri, 03
- Dec 2021 12:50:02 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DOSjPGQ1kXbuiRCx0e8BVbhaDhMGDo7Gzfr415kJ7+4=;
+        b=Ju5oQPOKAQj1VH9uFFD1Oo7IbhOKda2Un6nmcLeE1c6dfUBPQwE2PrCzops2P+A7jm
+         IAOGdvGt0/qFhuXEMeXUmyRO0vGDsg2KdxwHHoN4ZxuAih/5elcSPLuxyg+JUqIvOqfP
+         5yrPS8UbsAebzYVCrNhEedGeEPnBex4YCLXaqbV5ASxEWyDVVVhECAEiISp4ki4AZWw2
+         x4CfDJrLvkNrCyuFF+hGRzZV89eLEHsl5F7hLN5SCBTqASiwXhJYLK6K29Vth70b1MAH
+         LHHBOSw2imn5cOhD+C+aEOhtedPWZTqRuBWr+yjELvDcgKhQTwGIKodDy355zKvWxIXE
+         nykQ==
+X-Gm-Message-State: AOAM530wHMm1mbSQo+8KPFBDa7wOdPRBH8ykJ47xQgGAONc1BcrKrfuv
+        UVz/eTPoNoXiJgHmUPzag64=
+X-Google-Smtp-Source: ABdhPJzgPmN9BqpsRZmJ3JbkyuiI8qdgPL9m/ymoK+3sbjhYuPKxW78qfuAHhqYlHLxO5Gm3UFPj2w==
+X-Received: by 2002:a5d:64a2:: with SMTP id m2mr24877775wrp.248.1638564648306;
+        Fri, 03 Dec 2021 12:50:48 -0800 (PST)
+Received: from localhost.localdomain ([39.48.194.133])
+        by smtp.gmail.com with ESMTPSA id h15sm6661592wmq.32.2021.12.03.12.50.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 12:50:47 -0800 (PST)
+From:   Ameer Hamza <amhamza.mgc@gmail.com>
+To:     gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
+        maco@android.com, joel@joelfernandes.org, christian@brauner.io,
+        hridya@google.com, surenb@google.com
+Cc:     linux-kernel@vger.kernel.org, amhamza.mgc@gmail.com
+Subject: [PATCH] binder: fixed coverity warning by moving pr_warn outside lock
+Date:   Sat,  4 Dec 2021 01:50:41 +0500
+Message-Id: <20211203205041.115331-1-amhamza.mgc@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAJ+vNU2Pfwz5e0Jj6c5npceOwuNTB_dTVuL4NMD2qxr0CGyeGQ@mail.gmail.com>
- <20211203202831.GA3020182@bhelgaas>
-In-Reply-To: <20211203202831.GA3020182@bhelgaas>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Fri, 3 Dec 2021 12:49:51 -0800
-Message-ID: <CAJ+vNU0bZv4OKVgZCwqjstZrncU5pggzVZ_RnpON7XKYpKZ+EA@mail.gmail.com>
-Subject: Re: [PATCH] PCI: imx: do not remap invalid res
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Rob Herring <robh@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Richard Zhu <hongxing.zhu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 12:28 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Wed, Dec 01, 2021 at 02:06:44PM -0800, Tim Harvey wrote:
-> > On Mon, Nov 1, 2021 at 11:03 AM Tim Harvey <tharvey@gateworks.com> wrote:
-> > >
-> > > On imx6 and perhaps others when pcie probes you get a:
-> > > imx6q-pcie 33800000.pcie: invalid resource
-> > >
-> > > This occurs because the atu is not specified in the DT and as such it
-> > > should not be remapped.
-> > >
-> > > Cc: Richard Zhu <hongxing.zhu@nxp.com>
-> > > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> > > ---
-> > >  drivers/pci/controller/dwc/pcie-designware.c | 7 ++++---
-> > >  1 file changed, 4 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> > > index a945f0c0e73d..3254f60d1713 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-designware.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> > > @@ -671,10 +671,11 @@ void dw_pcie_iatu_detect(struct dw_pcie *pci)
-> > >                 if (!pci->atu_base) {
-> > >                         struct resource *res =
-> > >                                 platform_get_resource_byname(pdev, IORESOURCE_MEM, "atu");
-> > > -                       if (res)
-> > > +                       if (res) {
-> > >                                 pci->atu_size = resource_size(res);
-> > > -                       pci->atu_base = devm_ioremap_resource(dev, res);
-> > > -                       if (IS_ERR(pci->atu_base))
-> > > +                               pci->atu_base = devm_ioremap_resource(dev, res);
-> > > +                       }
-> > > +                       if (!pci->atu_base || IS_ERR(pci->atu_base))
-> > >                                 pci->atu_base = pci->dbi_base + DEFAULT_DBI_ATU_OFFSET;
-> > >                 }
-> > >
-> > > --
-> > > 2.17.1
-> > >
-> >
-> > ping - any feedback on this?
->
-> Looks like Lorenzo corrected the subject line for you and applied it:
->
-> https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/commit/?id=6e5ebc96ec65
+Coverity warns about using print operations within a lock due to
+unlikely possible deadlock scenario, however, this warning can be
+easily avoided here without having any effect on the program flow.
 
-Yes, I saw that. Thanks everyone!
+Addresses-Coverity: 1494148 ("Thread deadlock")
 
-Best regards,
+Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+---
+ drivers/android/binder.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Tim
+diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+index cffbe57a8e08..8ee942eef51d 100644
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -1507,14 +1507,14 @@ static void binder_free_transaction(struct binder_transaction *t)
+ 	if (target_proc) {
+ 		binder_inner_proc_lock(target_proc);
+ 		target_proc->outstanding_txns--;
+-		if (target_proc->outstanding_txns < 0)
+-			pr_warn("%s: Unexpected outstanding_txns %d\n",
+-				__func__, target_proc->outstanding_txns);
+ 		if (!target_proc->outstanding_txns && target_proc->is_frozen)
+ 			wake_up_interruptible_all(&target_proc->freeze_wait);
+ 		if (t->buffer)
+ 			t->buffer->transaction = NULL;
+ 		binder_inner_proc_unlock(target_proc);
++		if (target_proc->outstanding_txns < 0)
++			pr_warn("%s: Unexpected outstanding_txns %d\n",
++				__func__, target_proc->outstanding_txns);
+ 	}
+ 	if (trace_binder_txn_latency_free_enabled())
+ 		binder_txn_latency_free(t);
+-- 
+2.25.1
+

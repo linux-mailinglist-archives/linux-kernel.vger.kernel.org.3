@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9D8467826
+	by mail.lfdr.de (Postfix) with ESMTP id 55438467825
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:23:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380987AbhLCN1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 08:27:16 -0500
-Received: from mga06.intel.com ([134.134.136.31]:58362 "EHLO mga06.intel.com"
+        id S1380772AbhLCN1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 08:27:13 -0500
+Received: from mga17.intel.com ([192.55.52.151]:36292 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1380097AbhLCN1K (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 08:27:10 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="297769704"
+        id S1379956AbhLCN1J (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 08:27:09 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="217661390"
 X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="297769704"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 05:23:45 -0800
+   d="scan'208";a="217661390"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 05:23:45 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="460872076"
+   d="scan'208";a="603603271"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 03 Dec 2021 05:23:41 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 03 Dec 2021 05:23:41 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 0412D165; Fri,  3 Dec 2021 15:23:46 +0200 (EET)
+        id 0A9EF17D; Fri,  3 Dec 2021 15:23:47 +0200 (EET)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com, x86@kernel.org,
@@ -32,9 +32,9 @@ Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
         kirill.shutemov@linux.intel.com, knsathya@kernel.org,
         linux-kernel@vger.kernel.org, luto@kernel.org,
         peterz@infradead.org, tony.luck@intel.com
-Subject: [PATCHv2 1/3] x86/sev: Use CC_ATTR attribute to generalize string I/O unroll
-Date:   Fri,  3 Dec 2021 16:23:38 +0300
-Message-Id: <20211203132340.41741-2-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv2 2/3] x86/sev: Rename mem_encrypt.c to mem_encrypt_amd.c
+Date:   Fri,  3 Dec 2021 16:23:39 +0300
+Message-Id: <20211203132340.41741-3-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211203132340.41741-1-kirill.shutemov@linux.intel.com>
 References: <20211203132340.41741-1-kirill.shutemov@linux.intel.com>
@@ -46,146 +46,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 
-INS/OUTS instructions are obsolete and hence many hypervisors do not
-support its emulation. To support existing usage, string I/O operations
-are unrolled using IN/OUT instructions.
+Both TDX and AMD SEV/SME implement memory encryption features. But
+the bulk of the code in mem_encrypt.c is AMD specific. Rename the
+file to mem_encrypt_amd.c. A subsequent patch will extract the
+parts that can be shared by both TDX and AMD SEV/SME into a generic
+file.
 
-AMD SEV platform implements this support by adding unroll logic in
-ins#bwl()/outs#bwl() macros with SEV specific checks. Since TDX VM
-guests will also need similar support, use CC_ATTR_GUEST_UNROLL_STRING_IO
-and generic cc_platform_has() API to implement it.
+No functional changes.
 
-String I/O helpers were the last users of sev_key_active() interface and
-sev_enable_key static key. Remove them.
-
-Suggested-by: Tom Lendacky <thomas.lendacky@amd.com>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- arch/x86/include/asm/io.h     | 20 +++-----------------
- arch/x86/kernel/cc_platform.c |  4 ++++
- arch/x86/mm/mem_encrypt.c     | 10 ----------
- include/linux/cc_platform.h   | 11 +++++++++++
- 4 files changed, 18 insertions(+), 27 deletions(-)
+ arch/x86/mm/Makefile                             | 8 ++++----
+ arch/x86/mm/{mem_encrypt.c => mem_encrypt_amd.c} | 0
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+ rename arch/x86/mm/{mem_encrypt.c => mem_encrypt_amd.c} (100%)
 
-diff --git a/arch/x86/include/asm/io.h b/arch/x86/include/asm/io.h
-index 5c6a4af0b911..f6d91ecb8026 100644
---- a/arch/x86/include/asm/io.h
-+++ b/arch/x86/include/asm/io.h
-@@ -40,6 +40,7 @@
+diff --git a/arch/x86/mm/Makefile b/arch/x86/mm/Makefile
+index 5864219221ca..c9c480641153 100644
+--- a/arch/x86/mm/Makefile
++++ b/arch/x86/mm/Makefile
+@@ -1,10 +1,10 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Kernel does not boot with instrumentation of tlb.c and mem_encrypt*.c
+ KCOV_INSTRUMENT_tlb.o			:= n
+-KCOV_INSTRUMENT_mem_encrypt.o		:= n
++KCOV_INSTRUMENT_mem_encrypt_amd.o	:= n
+ KCOV_INSTRUMENT_mem_encrypt_identity.o	:= n
  
- #include <linux/string.h>
- #include <linux/compiler.h>
-+#include <linux/cc_platform.h>
- #include <asm/page.h>
- #include <asm/early_ioremap.h>
- #include <asm/pgtable_types.h>
-@@ -256,21 +257,6 @@ static inline void slow_down_io(void)
+-KASAN_SANITIZE_mem_encrypt.o		:= n
++KASAN_SANITIZE_mem_encrypt_amd.o	:= n
+ KASAN_SANITIZE_mem_encrypt_identity.o	:= n
  
- #endif
+ # Disable KCSAN entirely, because otherwise we get warnings that some functions
+@@ -12,7 +12,7 @@ KASAN_SANITIZE_mem_encrypt_identity.o	:= n
+ KCSAN_SANITIZE := n
  
--#ifdef CONFIG_AMD_MEM_ENCRYPT
--#include <linux/jump_label.h>
--
--extern struct static_key_false sev_enable_key;
--static inline bool sev_key_active(void)
--{
--	return static_branch_unlikely(&sev_enable_key);
--}
--
--#else /* !CONFIG_AMD_MEM_ENCRYPT */
--
--static inline bool sev_key_active(void) { return false; }
--
--#endif /* CONFIG_AMD_MEM_ENCRYPT */
--
- #define BUILDIO(bwl, bw, type)						\
- static inline void out##bwl(unsigned type value, int port)		\
- {									\
-@@ -301,7 +287,7 @@ static inline unsigned type in##bwl##_p(int port)			\
- 									\
- static inline void outs##bwl(int port, const void *addr, unsigned long count) \
- {									\
--	if (sev_key_active()) {						\
-+	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO)) {		\
- 		unsigned type *value = (unsigned type *)addr;		\
- 		while (count) {						\
- 			out##bwl(*value, port);				\
-@@ -317,7 +303,7 @@ static inline void outs##bwl(int port, const void *addr, unsigned long count) \
- 									\
- static inline void ins##bwl(int port, void *addr, unsigned long count)	\
- {									\
--	if (sev_key_active()) {						\
-+	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO)) {		\
- 		unsigned type *value = (unsigned type *)addr;		\
- 		while (count) {						\
- 			*value = in##bwl(port);				\
-diff --git a/arch/x86/kernel/cc_platform.c b/arch/x86/kernel/cc_platform.c
-index 03bb2f343ddb..cc1ffe710dd2 100644
---- a/arch/x86/kernel/cc_platform.c
-+++ b/arch/x86/kernel/cc_platform.c
-@@ -50,6 +50,10 @@ static bool amd_cc_platform_has(enum cc_attr attr)
- 	case CC_ATTR_GUEST_STATE_ENCRYPT:
- 		return sev_status & MSR_AMD64_SEV_ES_ENABLED;
+ ifdef CONFIG_FUNCTION_TRACER
+-CFLAGS_REMOVE_mem_encrypt.o		= -pg
++CFLAGS_REMOVE_mem_encrypt_amd.o		= -pg
+ CFLAGS_REMOVE_mem_encrypt_identity.o	= -pg
+ endif
  
-+	case CC_ATTR_GUEST_UNROLL_STRING_IO:
-+		return (sev_status & MSR_AMD64_SEV_ENABLED) &&
-+			!(sev_status & MSR_AMD64_SEV_ES_ENABLED);
-+
- 	default:
- 		return false;
- 	}
-diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
-index 35487305d8af..b520021a7e7b 100644
---- a/arch/x86/mm/mem_encrypt.c
-+++ b/arch/x86/mm/mem_encrypt.c
-@@ -43,8 +43,6 @@ u64 sme_me_mask __section(".data") = 0;
- u64 sev_status __section(".data") = 0;
- u64 sev_check_data __section(".data") = 0;
- EXPORT_SYMBOL(sme_me_mask);
--DEFINE_STATIC_KEY_FALSE(sev_enable_key);
--EXPORT_SYMBOL_GPL(sev_enable_key);
+@@ -52,6 +52,6 @@ obj-$(CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS)	+= pkeys.o
+ obj-$(CONFIG_RANDOMIZE_MEMORY)			+= kaslr.o
+ obj-$(CONFIG_PAGE_TABLE_ISOLATION)		+= pti.o
  
- /* Buffer used for early in-place encryption by BSP, no locking needed */
- static char sme_early_buffer[PAGE_SIZE] __initdata __aligned(PAGE_SIZE);
-@@ -499,14 +497,6 @@ void __init mem_encrypt_init(void)
- 	/* Call into SWIOTLB to update the SWIOTLB DMA buffers */
- 	swiotlb_update_mem_attributes();
- 
--	/*
--	 * With SEV, we need to unroll the rep string I/O instructions,
--	 * but SEV-ES supports them through the #VC handler.
--	 */
--	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT) &&
--	    !cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
--		static_branch_enable(&sev_enable_key);
--
- 	print_mem_encrypt_feature_info();
- }
- 
-diff --git a/include/linux/cc_platform.h b/include/linux/cc_platform.h
-index a075b70b9a70..f47f0c9edb3b 100644
---- a/include/linux/cc_platform.h
-+++ b/include/linux/cc_platform.h
-@@ -61,6 +61,17 @@ enum cc_attr {
- 	 * Examples include SEV-ES.
- 	 */
- 	CC_ATTR_GUEST_STATE_ENCRYPT,
-+
-+	/**
-+	 * @CC_ATTR_GUEST_UNROLL_STRING_IO: String I/O is implemented with
-+	 *                                  IN/OUT instructions
-+	 *
-+	 * The platform/OS is running as a guest/virtual machine and uses
-+	 * IN/OUT instructions in place of string I/O.
-+	 *
-+	 * Examples include TDX Guest & SEV.
-+	 */
-+	CC_ATTR_GUEST_UNROLL_STRING_IO,
- };
- 
- #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
+-obj-$(CONFIG_AMD_MEM_ENCRYPT)	+= mem_encrypt.o
++obj-$(CONFIG_AMD_MEM_ENCRYPT)	+= mem_encrypt_amd.o
+ obj-$(CONFIG_AMD_MEM_ENCRYPT)	+= mem_encrypt_identity.o
+ obj-$(CONFIG_AMD_MEM_ENCRYPT)	+= mem_encrypt_boot.o
+diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt_amd.c
+similarity index 100%
+rename from arch/x86/mm/mem_encrypt.c
+rename to arch/x86/mm/mem_encrypt_amd.c
 -- 
 2.32.0
 

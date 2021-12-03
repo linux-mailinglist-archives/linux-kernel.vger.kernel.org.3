@@ -2,88 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F8446724F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 07:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 985A946725A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 08:01:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378736AbhLCHDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 02:03:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47838 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345605AbhLCHDF (ORCPT
+        id S1378748AbhLCHEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 02:04:52 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:56981 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345605AbhLCHEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 02:03:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638514781;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KE0+9VTqUtutX9N/PKRYwD8dprp7IA/RPBuLlGpqS5s=;
-        b=S/gTRCAtr52b94lKtWZ9hAlnN+NV/F+PlJ29Q8aMXsshH97IwrS9aSuodag3NRi9cB0uqp
-        bi1prjeXp5ygmuaOfus4SH4zR4roOgl0oVIGGsK/+ixVbPnZfKs9kigd0BwwE/UtKTd0Zp
-        2L2W42FCJIqXK0e5LTVDfS9H8X3GzGw=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-408-xsPI_-_ANTWtj0v1JQwH0w-1; Fri, 03 Dec 2021 01:59:38 -0500
-X-MC-Unique: xsPI_-_ANTWtj0v1JQwH0w-1
-Received: by mail-wm1-f69.google.com with SMTP id ay34-20020a05600c1e2200b00337fd217772so942072wmb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 22:59:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KE0+9VTqUtutX9N/PKRYwD8dprp7IA/RPBuLlGpqS5s=;
-        b=Ll47nOCXwChMro4ayvjksrAU5YVxnA28gLCUu8LimJaAKItvsIKz7ieeeGUT6Kz9Zn
-         ujU5nBWY3FeEfwkXoIMkHrqZ3jMSPqS3AT+gyhfHECbbP9XjX58YTJgNz28dArKeYZOe
-         xEHSMPWe7LI5YBd8iDk8IC0wPxJ/4Vyu0yF8S35uCqjj+qN6hM0wFFdgFueESnn7xw+9
-         aaIyDp+fZxD5c2lGJgAqTqq6QP1OW0qbQuaUPrmsh3uzJmzyYCilgsXFIc474OTnapHM
-         KkUT9WZ4aCWlcLcwHoJ1cqWhGHYkBUwSh+RmJZP7xbaBk4tFo1pj0TuJNsqZgLUj3z3f
-         tmfw==
-X-Gm-Message-State: AOAM5306KpiUkb/YE6Eij+h9eOm/LSmT7bujAnQAKjDQRZHMi8lE6S0q
-        1gi8T4UBxnyGy7iakNBNUaAp1IW2qKA1LSOQRbo/VKOgow1FJGuFsziymmvbrYC9rHJZIFKEpsY
-        nKL9PGtM+SRbDX8B5OlA2RWJg
-X-Received: by 2002:a1c:1903:: with SMTP id 3mr12641390wmz.89.1638514777012;
-        Thu, 02 Dec 2021 22:59:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzDvEuQtuInBoFLdJ/X94tFtHj0cyBmHwQq+fzE9Q5jUVeCVwUUXYjORfnYYPAJ1RcNp9uiaA==
-X-Received: by 2002:a1c:1903:: with SMTP id 3mr12641369wmz.89.1638514776774;
-        Thu, 02 Dec 2021 22:59:36 -0800 (PST)
-Received: from xz-m1.local ([64.64.123.26])
-        by smtp.gmail.com with ESMTPSA id u15sm1526782wmq.13.2021.12.02.22.59.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 22:59:36 -0800 (PST)
-Date:   Fri, 3 Dec 2021 14:59:30 +0800
-From:   Peter Xu <peterx@redhat.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        David Hildenbrand <david@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>
-Subject: Re: [PATCH RFC v2 1/2] mm: Don't skip swap entry even if zap_details
- specified
-Message-ID: <YanAUpa6HoVOwxU6@xz-m1.local>
-References: <20211115134951.85286-1-peterx@redhat.com>
- <5393877.lttFOZEo4r@nvdebian>
- <YamNRcrLDOPjG9wg@xz-m1.local>
- <11226930.BYJfa7kJGD@nvdebian>
+        Fri, 3 Dec 2021 02:04:51 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J53df06TJz4xRC;
+        Fri,  3 Dec 2021 18:01:25 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638514886;
+        bh=SUVbQnKpFA54I6+lh3rt6Aj++o7uT7IfrdkwC1qkkao=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CTFIL+ElB0+MhBAbUx2HFgXBQVZZGCvd1jUoOdkaOw9nDpxTKQbZnpkZyCdY0+atl
+         GLnE1bU8FVpxaXyhA8aJwoy7S0ry1XYyCXKjMjhaYC01Dkdek0/9MoxMhzXOfagI2o
+         aB7+UGpPiDcF5WHMP+hovwWUeSRrifcl+ljKwqe8+ZoB6JaYDlNTqAcLu+uT5H3YOX
+         F3ZAwJcDAlNEi4zzVAdi9o0cAXb+mLL/kxgezpL+L+k4gvoe3bt0mvLrxQKa2adDr2
+         Jyza/uEg0SZHGXyvxqFfeuVbMd+DTQ1lb9hiXZQYZzUZR/k/zi4RojzE8rtDEqjHqk
+         guw7PX0CrDXWg==
+Date:   Fri, 3 Dec 2021 18:01:24 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the hid tree
+Message-ID: <20211203180124.1721cbe4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <11226930.BYJfa7kJGD@nvdebian>
+Content-Type: multipart/signed; boundary="Sig_/GVJp0TQPTsRXCGqVXCSwXdK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 04:33:43PM +1100, Alistair Popple wrote:
-> Thanks. That was the detail I was trying to figure out. Ie. why might something
-> want to skip swap entries. I will spend some more time looking to be sure
-> though.
+--Sig_/GVJp0TQPTsRXCGqVXCSwXdK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sure, please take your time, and thanks again for working together on this.
+Hi all,
 
--- 
-Peter Xu
+After merging the hid tree, today's linux-next build (sparc defconfig)
+failed like this:
 
+hid-chicony.c:(.text+0x4): undefined reference to `usb_hid_driver'
+hid-chicony.c:(.text+0xc): undefined reference to `usb_hid_driver'
+
+Caused by commit
+
+  93020953d0fa ("HID: check for valid USB device for many HID drivers")
+
+I have marked CONFIG_HID_CHICONY as BROKEN for now.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/GVJp0TQPTsRXCGqVXCSwXdK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGpwMQACgkQAVBC80lX
+0GyBtQf/THK2cZDDhBQjLpDGzqf8zMK+k4fPDx/S0thryzBAlnutvyX2cg5YbuWw
+jSf8TpJV10YMcvuNg5nlB7CAwvC+7rOXIAVWvYEAwOLSWbjH98JzW1mEkOh+42wM
+X8H78mh2fX7KseiVY624gPJCbsEd74Ve+2v63cajLUbDUk1k6LJJuWbPxOelUYnt
+Nq3sPOvpDpduOJOQUPJjtz/qGG6C8G6ko9xFmym8VsKQ5FyMOk73PU2r2QavSf1d
+kK32zDHzm1qFd9UxsFu93NuX3WOsvEz2YSvoURwpXQ2WafMIf4nqJoAU32yAKaVQ
+MPTJ/lL0cRmwuUZgvBfDlUTiQSgw2A==
+=XIwj
+-----END PGP SIGNATURE-----
+
+--Sig_/GVJp0TQPTsRXCGqVXCSwXdK--

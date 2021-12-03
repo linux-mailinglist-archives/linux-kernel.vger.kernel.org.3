@@ -2,80 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2FC467231
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 07:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FF5467236
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 07:48:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378601AbhLCGud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 01:50:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
+        id S1378672AbhLCGvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 01:51:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378618AbhLCGub (ORCPT
+        with ESMTP id S233948AbhLCGvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 01:50:31 -0500
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CD6C06175C
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 22:47:08 -0800 (PST)
-Received: by mail-vk1-xa2f.google.com with SMTP id h1so1223747vkh.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 22:47:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=2Mv9jrqjT3MhcoaOxxXoXpTQsXNDwfELgjBdMyKMz0g=;
-        b=CA4vNH46C0KK7hSqW2b/ddr9Ch7IYLCPEsc7akZCZNwAuCLIQwga+kxjQALQDTWat5
-         sd5m51oV2BTnTW0V+GN2rBjDhVJIJfejwYB918TWWeuH/tT3vwSmczcGWoE08y90//as
-         Yh0luuvLois814qvYVA0LLSwbADloiKFE+UOkmpv9BCTZ+AtRttwpZkCcKT/eahLSlfh
-         hPqqsvKCzmUM9J7KyBghWPaKnGomwiTVa8NBCPsRbErJa9nDfJqUQZ8kx4ZaOQdD+n9Q
-         UC6JGUkd7mnWZTpnFzcgdUz8sEdlGToBn/PwyPO4GBe6rWAgIUCryz7UpPqxNAnaOmBb
-         0LtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=2Mv9jrqjT3MhcoaOxxXoXpTQsXNDwfELgjBdMyKMz0g=;
-        b=0uSUUIv3UPCDPiuy4YeKBD6Lr4Vw3bmyT+kEjG4i8MGfgmYlVqJDWXCamSexJx/yIA
-         RigTs+obn3Hh2HSC7tkIsSHvBx9yB+UYV8zAm/nUJ2gfrasci3Jfzeju3Kks7LPhNzaT
-         eiFAr8ENouCIWI0EUbJiCivZMyJI++Jd6NukctGxrEvBgIsxYswpUwWE7K4UwDrWwcWv
-         s9LW5nXwUT0tSrm1Y7/Fw64KXMytACtlJcuni3cqEL4zoOtgBTJcomG0fzucuOgXelnw
-         zmE+B6jmIMK3Ef5qc40Io+XO5TkELE/794zg3z33jicFG6LHyuu0ckwwknKEdq1Y62DD
-         yL5Q==
-X-Gm-Message-State: AOAM530cGe7C4F3VuKw8SCJKBgVU16vXzQXYNSZR9olVkEjms6l0xkiO
-        x/16hGQAhYLtppTI+q8iSm71y/4EowkO/1PEGAA=
-X-Google-Smtp-Source: ABdhPJwspBP1I8oh6fDs9qhPQrKOWG2PXd05GkRcjSZ41DSltO7R00QqbySJZAbzb5idm+P82IabegLJwzV+5RE2/ys=
-X-Received: by 2002:a05:6122:1350:: with SMTP id f16mr21400461vkp.10.1638514026719;
- Thu, 02 Dec 2021 22:47:06 -0800 (PST)
+        Fri, 3 Dec 2021 01:51:47 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3F5C06174A;
+        Thu,  2 Dec 2021 22:48:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=cgumDvF/SvvAwGatAQcfW/TSl74/7WNzdYZKLNvlSWI=; b=YJadRQGoEGNKj7n6OYngPI/7mE
+        buIYGRT373KpxW9c+J86+urCWUoWSpwLjpW29gXuMqVAukzkqPXYMyXDAZo3kNun2uQnd43cieb7X
+        J9PMatTOWubUDtjpdo37TPJ/F7OMEF8IW7YzVDvP2hIolHmJ/vkxSx/DTFPa9noXBlli3S9ZFWdZI
+        9lkOLPKRj61m00k09v4XuuybkqyxEcuxPzcljuHXh5qpHNWZ0c0VPQV25zX5zblGcjvZf7CxmyYGo
+        jNjAX0ByXTlXe0YD0fFvca0UO4HpxOgTm1cURRJKvby/Pj9hK2WQp5vmIcH49zWlZ+I6TxtAAMHKh
+        V27vBtyA==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mt2Mo-00EbYm-Gy; Fri, 03 Dec 2021 06:48:22 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        David Sterba <dsterba@suse.com>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>, linux-btrfs@vger.kernel.org
+Subject: [PATCH] btrfs: zoned: convert comment to kernel-doc format
+Date:   Thu,  2 Dec 2021 22:48:20 -0800
+Message-Id: <20211203064820.27033-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Received: by 2002:a59:8852:0:b0:262:687d:8d8f with HTTP; Thu, 2 Dec 2021
- 22:47:06 -0800 (PST)
-Reply-To: jeffery1@jefferylambertesq.co.uk
-From:   Jeffery Lambert ESQ <ericofili5@gmail.com>
-Date:   Thu, 2 Dec 2021 22:47:06 -0800
-Message-ID: <CANNckNv5ABgXqOE+BBWhGZNqZxcsVT2dmcn6G0vfCGBD2wRG1A@mail.gmail.com>
-Subject: Can i trust you?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good day,
+Complete kernel-doc notation for btrfs_zone_activate() to prevent
+kernel-doc warnings:
 
-This is a personal email directed to you and I request that it=E2=80=99s be=
-en
-treated as such. I got your email from online directory; I would need
-your assistance in re-profiling funds belonging to my late client who
-shares similar surnames with you. Contact me for more detailed
-information.
+zoned.c:1784: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * Activate block group and underlying device zones
+zoned.c:1784: warning: missing initial short description on line:
+ * Activate block group and underlying device zones
 
-Regards,
+Fixes: afba2bc036b0 ("btrfs: zoned: implement active zone tracking")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Naohiro Aota <naohiro.aota@wdc.com>
+Cc: David Sterba <dsterba@suse.com>
+Cc: Chris Mason <clm@fb.com>
+Cc: Josef Bacik <josef@toxicpanda.com>
+Cc: linux-btrfs@vger.kernel.org
+---
+ fs/btrfs/zoned.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Jeffery Lambert ESQ
-
-____________________________________________________________________
-This e-mail contains legally privileged and confidential information
-intended for the individual or entity named in the message. If the
-reader of this message is not the intended recipient, or the agent
-responsible to deliver it to the intended recipient, you are hereby
-notified that any review, disseminating or copying of this
-communication is strictly prohibited
+--- linux-next-20211202.orig/fs/btrfs/zoned.c
++++ linux-next-20211202/fs/btrfs/zoned.c
+@@ -1781,7 +1781,7 @@ struct btrfs_device *btrfs_zoned_get_dev
+ }
+ 
+ /**
+- * Activate block group and underlying device zones
++ * btrfs_zone_activate - Activate block group and underlying device zones
+  *
+  * @block_group: the block group to activate
+  *

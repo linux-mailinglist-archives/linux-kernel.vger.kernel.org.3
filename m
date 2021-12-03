@@ -2,78 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 359D5467446
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:46:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0600B467440
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 10:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379663AbhLCJsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 04:48:13 -0500
-Received: from mga03.intel.com ([134.134.136.65]:57888 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1379642AbhLCJsL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 04:48:11 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="236886214"
-X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
-   d="scan'208";a="236886214"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 01:42:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
-   d="scan'208";a="655897030"
-Received: from stinkbox.fi.intel.com (HELO stinkbox) ([10.237.72.171])
-  by fmsmga001.fm.intel.com with SMTP; 03 Dec 2021 01:42:07 -0800
-Received: by stinkbox (sSMTP sendmail emulation); Fri, 03 Dec 2021 11:42:06 +0200
-Date:   Fri, 3 Dec 2021 11:42:06 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     Felix.Kuehling@amd.com, airlied@linux.ie, Xinhui.Pan@amd.com,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, dri-devel@lists.freedesktop.org,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH] drm/amdkfd: Use max() instead of doing it manually
-Message-ID: <YanmbhwDrdpu+Zup@intel.com>
-References: <1638523913-117827-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+        id S1379609AbhLCJsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 04:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351584AbhLCJr7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 04:47:59 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1040C06173E;
+        Fri,  3 Dec 2021 01:44:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gTnHqkfzLtUUnM8N8lqBeVzaVDRXNIXSujmvHUeEVJU=; b=Ossui9j3n7ZaF8nNg68B0YfiS4
+        sZobSjph6YcFCc2VdDc956x8AJvEjoVQqGF/2+eI/ZWFJNJcB5BVJ68VHsq3S+8jDrDSiZLLTU9+Q
+        r2Z417y/TOqqhg2amrUXSkag1wdEULBglThhyX6OlhscWzhjwILIv3vYmmdoEW+T85mySpbScuuGf
+        AJ+eGoQPWYKAGaGFE8RX4S6zVTxvU+hrTdZwhyDqHboxwqwZUTODSsR0KKvonbWSVrQ40HwdRGc+v
+        RKxyo6fH+uSGfMIrMklHvaerprMrjGjl1WzjxSntg/qq59SWTNrVD4myEyJpWQ3ot5X9bEcnyinFX
+        h7CMfV7w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mt56y-0083fc-Ez; Fri, 03 Dec 2021 09:44:13 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B88F3300293;
+        Fri,  3 Dec 2021 10:44:10 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9DBC42B36B3A8; Fri,  3 Dec 2021 10:44:10 +0100 (CET)
+Date:   Fri, 3 Dec 2021 10:44:10 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev, hjl.tools@gmail.com
+Subject: Re: [PATCH v8 05/14] x86: conditionally place regular ASM functions
+ into separate sections
+Message-ID: <Yanm6tJ2obi1aKv6@hirez.programming.kicks-ass.net>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+ <20211202223214.72888-6-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1638523913-117827-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-X-Patchwork-Hint: comment
+In-Reply-To: <20211202223214.72888-6-alexandr.lobakin@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 05:31:53PM +0800, Jiapeng Chong wrote:
-> Fix following coccicheck warning:
-> 
-> ./drivers/gpu/drm/amd/amdkfd/kfd_svm.c:2193:16-17: WARNING opportunity
-> for max().
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-> index f2db49c..4f7e7b1 100644
-> --- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-> @@ -2190,7 +2190,7 @@ void schedule_deferred_list_work(struct svm_range_list *svms)
->  
->  	start = mni->interval_tree.start;
->  	last = mni->interval_tree.last;
-> -	start = (start > range->start ? start : range->start) >> PAGE_SHIFT;
-> +	start = max(start, range->start) >> PAGE_SHIFT;
->  	last = (last < (range->end - 1) ? last : range->end - 1) >> PAGE_SHIFT;
+On Thu, Dec 02, 2021 at 11:32:05PM +0100, Alexander Lobakin wrote:
+> Use the newly introduces macros to create unique separate sections
+> for (almost) every "regular" ASM function (i.e. for those which
+> aren't explicitly put into a specific one).
+> There should be no leftovers as input .text will be size-asserted
+> in the LD script generated for FG-KASLR.
 
-There's an open coded min() on the very next line.
+*groan*...
 
->  	pr_debug("[0x%lx 0x%lx] range[0x%lx 0x%lx] notifier[0x%lx 0x%lx] %d\n",
->  		 start, last, range->start >> PAGE_SHIFT,
-> -- 
-> 1.8.3.1
+Please, can't we do something like:
 
--- 
-Ville Syrjälä
-Intel
+#define SYM_PUSH_SECTION(name)	\
+.if section == .text		\
+.push_section .text.##name	\
+.else				\
+.push_section .text		\
+.endif
+
+#define SYM_POP_SECTION()	\
+.pop_section
+
+and wrap that inside the existing SYM_FUNC_START*() SYM_FUNC_END()
+macros.
+

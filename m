@@ -2,83 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C9624676AF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDCE4676BA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 12:50:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380508AbhLCLtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 06:49:47 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:47546 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234517AbhLCLtq (ORCPT
+        id S1380555AbhLCLxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 06:53:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35414 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231944AbhLCLxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 06:49:46 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B3BkFfB012028;
-        Fri, 3 Dec 2021 05:46:15 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638531975;
-        bh=S843qUaoy9ANfMUAngWIervNBlNyhONi9iljLEuE674=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=fpmxGXorVBeGIeh9TiwwGYiIelR61a/2EnLdxJAS2GsumSkADQkn+pG/LTN4jz0HH
-         KvWzzPVWd0BWEAXim9qGOGQCMmX7Hn5gZlG7roX7KpH8B9s1CMsgZyvr6F15cZb5Qx
-         TGyeVcbPTPU8MppibfmDMI04GvJn0RaRIBIQDipM=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B3BkFgl095901
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 3 Dec 2021 05:46:15 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 3
- Dec 2021 05:46:14 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 3 Dec 2021 05:46:14 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B3BkDhq011552;
-        Fri, 3 Dec 2021 05:46:14 -0600
-Date:   Fri, 3 Dec 2021 17:16:13 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Nishanth Menon <nm@ti.com>
-CC:     Rob Herring <robh+dt@kernel.org>, Tero Kristo <kristo@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-omap@vger.kernel.org>, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V2] arm64: dts: ti: k3-j7200: Correct the d-cache-sets
- info
-Message-ID: <20211203114611.dqorti3g6q7k64sz@ti.com>
-References: <20211113042640.30955-1-nm@ti.com>
+        Fri, 3 Dec 2021 06:53:36 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77879B825B7;
+        Fri,  3 Dec 2021 11:50:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0CBB9C53FCB;
+        Fri,  3 Dec 2021 11:50:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638532210;
+        bh=nz1rdy8mTg+6h44HhRn77M8064IfHx4IJ0EH7ACo3zc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=D3Aa0f5NDP/obRqGxWrChpkcOw3pT7MyCABvZqWfjMqvshretW5FJb/QJzZ5NCZ01
+         bOEDUtdF9z2niz6nsInvEkugtByfLU+A37avqx2XYU3oGW/CSU4sByX4XTFHx4TIui
+         3oveAAYTJEQDAVBfes3MM03uF5p4h/0FS0FXr4bNzMDNmY70vnIoPfsPUlHnnwsxLr
+         y0VNjCZ27rG8YM31pzMau/vV+GoVUdrMvteewjvQEnMQ4svRPDoF37L/o1yQfjXVXF
+         8C/4zR8UDOTtA7/CRwzBYvCmSJXtm30t/jbb4gbdPilNuUzdAACGJIq96fR4NyRx1x
+         HNalByG6p9mMw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E8D0E60A5A;
+        Fri,  3 Dec 2021 11:50:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20211113042640.30955-1-nm@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3 1/3] selftests/tc-testing: add exit code
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163853220994.27545.12950451952422618579.git-patchwork-notify@kernel.org>
+Date:   Fri, 03 Dec 2021 11:50:09 +0000
+References: <20211203025323.6052-1-zhijianx.li@intel.com>
+In-Reply-To: <20211203025323.6052-1-zhijianx.li@intel.com>
+To:     Li Zhijian <zhijianx.li@intel.com>
+Cc:     kuba@kernel.org, jhs@mojatatu.com, xiyou.wangcong@gmail.com,
+        jiri@resnulli.us, shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lizhijian@cn.fujitsu.com, philip.li@intel.com, lkp@intel.com,
+        dcaratti@redhat.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/11/21 10:26PM, Nishanth Menon wrote:
-> A72 Cluster (chapter 1.3.1 [1]) has 48KB Icache, 32KB Dcache and 1MB L2 Cache
->  - ICache is 3-way set-associative
->  - Dcache is 2-way set-associative
->  - Line size are 64bytes
-> 
-> 32KB (Dcache)/64 (fixed line length of 64 bytes) = 512 ways
-> 512 ways / 2 (Dcache is 2-way per set) = 256 sets.
-> 
-> So, correct the d-cache-sets info.
-> 
-> [1] https://www.ti.com/lit/pdf/spruiu1
-> 
-> Fixes: d361ed88455f ("arm64: dts: ti: Add support for J7200 SoC")
-> Reported-by: Peng Fan <peng.fan@nxp.com>
-> Signed-off-by: Nishanth Menon <nm@ti.com>
+Hello:
 
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
+This series was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
+On Fri,  3 Dec 2021 10:53:21 +0800 you wrote:
+> Mark the summary result as FAIL to prevent from confusing the selftest
+> framework if some of them are failed.
+> 
+> Previously, the selftest framework always treats it as *ok* even though
+> some of them are failed actually. That's because the script tdc.sh always
+> return 0.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v3,1/3] selftests/tc-testing: add exit code
+    https://git.kernel.org/netdev/net/c/96f389678015
+  - [v3,2/3] selftests/tc-testing: add missing config
+    https://git.kernel.org/netdev/net/c/a8c9505c53c5
+  - [v3,3/3] selftests/tc-testing: Fix cannot create /sys/bus/netdevsim/new_device: Directory nonexistent
+    https://git.kernel.org/netdev/net/c/db925bca33a9
+
+You are awesome, thank you!
 -- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

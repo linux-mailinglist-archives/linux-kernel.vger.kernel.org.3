@@ -2,125 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EDC0467EC4
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 21:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9249467ECA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 21:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383088AbhLCU1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 15:27:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383061AbhLCU1h (ORCPT
+        id S1383100AbhLCUb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 15:31:59 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41356 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233528AbhLCUb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 15:27:37 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E7FC061751;
-        Fri,  3 Dec 2021 12:24:13 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so4786108otv.9;
-        Fri, 03 Dec 2021 12:24:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=SB5nO6GMOsdpAGwiwGyDMuxFOk1QphTKVAVEfv8rscg=;
-        b=Exo5knQ8sty9K+cjzjD8nzNce34e5NeGbr+rxKC30t8FITLhyfwAsxjZNEuVIX9g36
-         r+Zc7wqmS4u2BccDc5F+Uw8aYlBbLLlHHv4a5tyut2aer/8jqPPplMlom0X06x26X/tG
-         3bDQ97n4fDt+yoK0sAmjId4ufKqxQIMCLyGSqagmCnzBt56iZwADKRBETqsgakN++aCs
-         o75TVLJF4GvX7pyFQMk67bSpFcYTUq2PM4RzCm/KIP8bce/zcg+qPU2kWoOQpTiIxkKa
-         PA9FnLpzVJD0pQxUHKUewhgS0NruDMTDHH6aRJ/STj6KG+5cF6ZjBJSyPy58yuhHPgUG
-         wmkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=SB5nO6GMOsdpAGwiwGyDMuxFOk1QphTKVAVEfv8rscg=;
-        b=AXKj+PI89Vnyr9ZucOHZS9RvFPX0kgbeDWz0WycMu+Jn+YJWdRsKCi1xho+A+1oiZP
-         GKFG+agh+wVN215ruxJDb5WA6YUkYwfWXYpJhy585MF8nsGcKgZuJ8uYEXeW8++OoD0V
-         Y2TPOzQDxsxmCgcCC29TJnvUjN8zXaPcoU80hRj0Ka67HDHJT8sa60qybIys0rB2sJji
-         ccw26tmgei1eI0OLwrfrekxs8zwymvANtWQLthnzoyKViA2s/4/coOAbcfjPlLwtLZQW
-         d+HRnjrSVIolWyxap+WkoFpxTHsYUcl5y2cWtPoMejv9eIIijqMRVVyMOkfAUeCRR0r8
-         1eKA==
-X-Gm-Message-State: AOAM532ldo++iJSstJ17t5blBMdwuzoEaT2Ab2r5lqz8PP2Rz0Inmc/d
-        4ZGpNoHwM1s23YqWhRLtZsU=
-X-Google-Smtp-Source: ABdhPJyRXmuAJ5KD1CBwaCKjwejh0mP+Mkxn6KJLaD7Q/fJvj6Q4zZs4/EQfOpQV0EaN/0bziR8QmQ==
-X-Received: by 2002:a05:6830:1358:: with SMTP id r24mr18303979otq.8.1638563052437;
-        Fri, 03 Dec 2021 12:24:12 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b22sm849627oib.41.2021.12.03.12.24.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 12:24:11 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v5 0/7] Removal of bcm63xx-wdt
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "maintainer:BROADCOM BCM63XX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "moderated list:BROADCOM BCM63XX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20211112224636.395101-1-f.fainelli@gmail.com>
- <78c9c9f7-7e7c-abde-066a-240d642f3412@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <e63401b1-b924-a08c-98dd-5ce8ba1a89c3@roeck-us.net>
-Date:   Fri, 3 Dec 2021 12:24:09 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 3 Dec 2021 15:31:58 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F1E362CD5;
+        Fri,  3 Dec 2021 20:28:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 406A6C53FAD;
+        Fri,  3 Dec 2021 20:28:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638563313;
+        bh=d/tTsA6UHiD5aC0USnJZwrx9SEeSI7IC0tDkYQUh6jw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=UEbZtu6eJPNBaLtl1F+pFfeoyV/EX8eo+tAAUl7Lnt5mgzw8nPIh2rrquvQkrt16m
+         aQwK7orohNYpLHkzvgFSH2yOGfzjnviK0CoERvK3Qu8G3UcbBFJt0YwqFLWG15tFH+
+         J5tfvoJ6L3YzqWoeKoIp3vUN6dawZzbG8i0OwBzyTZhwTYf9f8YcVeZtpHt8uWgM+v
+         MRcsvAhANVWOtyZHueLT4G1atJnb8e3ytr2kF2uGbBZrPk2QgkokiJfMReQai0IiXl
+         auiZMeXNPDh2DWOWF64x+tW8ZxU+uIdaOiv9f/zzik1yedXsg4m/StzTMTke/6iUN8
+         U9uxMj1HzynyA==
+Date:   Fri, 3 Dec 2021 14:28:31 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Rob Herring <robh@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Richard Zhu <hongxing.zhu@nxp.com>
+Subject: Re: [PATCH] PCI: imx: do not remap invalid res
+Message-ID: <20211203202831.GA3020182@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <78c9c9f7-7e7c-abde-066a-240d642f3412@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJ+vNU2Pfwz5e0Jj6c5npceOwuNTB_dTVuL4NMD2qxr0CGyeGQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/21 12:07 PM, Florian Fainelli wrote:
-> On 11/12/21 2:46 PM, Florian Fainelli wrote:
->> his patch series prepares the bcm7038_wdt driver to support its bcm63xx
->> counter part, updates the MIPS BCM63xx platform code to provide the
->> necessary information about the "periph" clock, and finally proceeds
->> with removing the bcm63xx_wdt altogether.
->>
->> This was only compiled tested as I did not have a readily available
->> BCM63xx system to test with.
->>
->> This should also help with adding support for BCM4908 which Rafal is
->> working on.
->>
->> Changes in v5:
->> - removed unnecessary "bcm7038-wdt" platform devtype
->> - added Rob's Reviewed-by tags to the 2 binding patches
->>
->> Changes in v4:
->> - fixed binding patch (Rob, Guenter)
->> - updated Kconfig description title to mention BCM63xx
->>
->> Changes in v3:
->>
->> - added Guenter's and Thomas' tags to patch 6
->> - added missing initialization of id_table
->> - use Rafal's latest binding patch
->>
->> Changes in v2:
->>
->> - added Guenter's Reviewed-by where given
->> - update binding patch to pass make dt_bindings_check (Rob)
+On Wed, Dec 01, 2021 at 02:06:44PM -0800, Tim Harvey wrote:
+> On Mon, Nov 1, 2021 at 11:03 AM Tim Harvey <tharvey@gateworks.com> wrote:
+> >
+> > On imx6 and perhaps others when pcie probes you get a:
+> > imx6q-pcie 33800000.pcie: invalid resource
+> >
+> > This occurs because the atu is not specified in the DT and as such it
+> > should not be remapped.
+> >
+> > Cc: Richard Zhu <hongxing.zhu@nxp.com>
+> > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> > ---
+> >  drivers/pci/controller/dwc/pcie-designware.c | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> > index a945f0c0e73d..3254f60d1713 100644
+> > --- a/drivers/pci/controller/dwc/pcie-designware.c
+> > +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> > @@ -671,10 +671,11 @@ void dw_pcie_iatu_detect(struct dw_pcie *pci)
+> >                 if (!pci->atu_base) {
+> >                         struct resource *res =
+> >                                 platform_get_resource_byname(pdev, IORESOURCE_MEM, "atu");
+> > -                       if (res)
+> > +                       if (res) {
+> >                                 pci->atu_size = resource_size(res);
+> > -                       pci->atu_base = devm_ioremap_resource(dev, res);
+> > -                       if (IS_ERR(pci->atu_base))
+> > +                               pci->atu_base = devm_ioremap_resource(dev, res);
+> > +                       }
+> > +                       if (!pci->atu_base || IS_ERR(pci->atu_base))
+> >                                 pci->atu_base = pci->dbi_base + DEFAULT_DBI_ATU_OFFSET;
+> >                 }
+> >
+> > --
+> > 2.17.1
+> >
 > 
-> Are we good with this version? If so, could it be picked up so we have
-> one less driver to care about, and we have one additional binding
-> converted to YAML?
-> 
+> ping - any feedback on this?
 
-It is queued in my watchdog-next branch, so Wim will hopefully
-pick it up either from there or from the mailing list.
+Looks like Lorenzo corrected the subject line for you and applied it:
 
-Guenter
-
-
+https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/commit/?id=6e5ebc96ec65

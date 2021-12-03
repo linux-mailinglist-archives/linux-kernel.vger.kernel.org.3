@@ -2,295 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1F2467E47
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 443BE467E4B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382894AbhLCTj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 14:39:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343888AbhLCTj2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 14:39:28 -0500
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710DCC061751
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 11:36:03 -0800 (PST)
-Received: by mail-ua1-x92e.google.com with SMTP id ay21so7405505uab.12
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 11:36:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pSx+w54klGuKdyt/Un3Z3/lbOI5wwX527aHiYsNckNM=;
-        b=g1iuVtVfLev2/JnJbWWAnGGWRo55ELpwERWRCixjW9lUjdOplstty8WTG4TdggNkmk
-         FAiHTaXQ/hk9R8J3foJaRGFsYhqVviIR2e6wkU/CvE47Oyk8bPyQsRJVuQKBiHUF5E8J
-         Yl4N9R0dWrjS8k6PjcWaFXUJnFPJ/Z4V0/aHBvBFZElMZlIyf/rjVGSia6bdeGT+94zO
-         ikEw8P0COhI2yD5r0Yyek1POIqV2xkwJijBxxHRQDLFqs9mAVZ+SBo6LwHGVqghwSZs+
-         wgLUUhIJWJjU3gRiNsxit5FWKqlu/+JEeFcF0e/fAg4XGTKxlpkhnoSVjfe3cn1n8iXV
-         jKiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pSx+w54klGuKdyt/Un3Z3/lbOI5wwX527aHiYsNckNM=;
-        b=s5FZLXEm4fhxbWrltBLnmhaqWYk5ounFcHYmrUDEnzYzzVUMhEpAI49o/C/kb6LxwP
-         pAjyOLq60pPTPb1wmRcFLmmYOLv2dbb83nmnytfqiyffzbLudZ0diYwUDgfBLUS99+p3
-         dBDLOHvRfTSHug2S3uvTRowLvG4oRZmseONn20v6xODwj1VM5C3+m2vSIEfCfhrkGg9H
-         XstnCdrK3g1Eu2qFTiu/DhlsUXws9GkfA+f/u+SRpGuSeEEEg/jfsvsx3XN9NcxdAMI/
-         a8QYBfIlM1QCYqdGR/VKmEurQaCzvsl7JF2kI8E99i/f7s4BEyjHQuIhZ1mgJuIPOri+
-         Eokg==
-X-Gm-Message-State: AOAM533A6zGD+Fmf0WZjCoPsebr52hMUeFOaH6SY8cUYAoSdXpRsNq4S
-        6YxjF1InCnQE6/gTdk7qYucKmVmByjByEhkjRO0ClQ==
-X-Google-Smtp-Source: ABdhPJwK5xgq7p4wgh3VKjYDgxwNIVxLXmzl2/lBJJF3NnAK1jP9sXAl8rZi5X4mJ+y8WZzQmAD7cj8QOBL12BBfl4g=
-X-Received: by 2002:a67:d31c:: with SMTP id a28mr23447616vsj.20.1638560162395;
- Fri, 03 Dec 2021 11:36:02 -0800 (PST)
+        id S1382909AbhLCTje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 14:39:34 -0500
+Received: from mail-eopbgr70077.outbound.protection.outlook.com ([40.107.7.77]:54852
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1382892AbhLCTja (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 14:39:30 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JZM+MjF+P9VH/ZDMW/JAaDFSHzo8sMD04JjrR1AJHV+SrS//jLwUUsL55oK1i+OC94Hv8/98131QjFrsc80RvaRhQQllpQjuP1Lp1xKhlVA3DfmGS1gd3S71AHiDkNvU9Mz4KCC1cnA5vJcAk6UN8FF5C0faRtLwzhvYSr+ReFY4mIPLkJtPbjS2aNAnjskFA9KdmkFAdsZoifRaqx5f+pGROeijGMJq6/uU/bT7FHUcruDd/nqIx0AUgnPGlL6VBx/Trv24Oox6lN4x/3U+KQvb1Z4CPvvtB7itkzwq+XwiiGp9mnyV/zDHsjbEqATeSNA8hMGJe6rAhezrcPPD4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iFI8L6R8dSTl4BuIEwj0LQXEwVosAYm2K+T7n5zUrVc=;
+ b=i7+cReO+lUzsJ25XDAc6sSTURn5dsozhMfrVZ4pswYRo3oDGwVluOLBas/J8T0FmJ0xrNMbPSbsgPeyt6h5K7c9+7lzc6AkzDornSNAgPNDna+6FK9k2SmD+T/knV8WEkM0sg767tRbXZKOHRWgpTCG4p93VhsTo7EppgeE/7SIeGIsKuJwXOvygchti/AXa/ErueHpJLrZ4SfNjer0rZCg851UbMQJpTbl3wneiqo+uuDQIDVqb8JCoUGgXLcfIAfT/8Td1rTeUUGoYh3OkrYNZHQb/AKC5SHrYhq2LUJnsKy73Z4IqrrFYh52V0fcsH2eMkHTA2+YMuzMgnZYQYQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.72) smtp.rcpttodomain=gmail.com smtp.mailfrom=siemens.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iFI8L6R8dSTl4BuIEwj0LQXEwVosAYm2K+T7n5zUrVc=;
+ b=KJNdBjGoUV/zdaLNsZZoKhuPpQLgQx7R7clJQxw+dBivjgeESZOzHSjmfalF2UDdDMyglW/QcEHzzEDTFae+3Mivn/TPUnkN8bGHh4/EAy8s+xA4X7E/8Zot4fjEWYgz5K0vAxm5R7oXxI9lPpss0A23S/g8nxGJmOkGx52YUUOl0n6eEKcN5jsX3JGg5AxSANZ/ZLH7EmWK4NuBaPlcNR80jybGzo5Yf/XDkWrWvo9nlJ7js8X48JSABLcWsf1jH6G68Cj0GAFj96bsWiLNhEgsV0HVDA8alFkN7Wja5h/k+bFXQhPiTjm3bsRwLEbIwwhpi0UyNjiYTQs7YyKuQw==
+Received: from DB7PR03CA0090.eurprd03.prod.outlook.com (2603:10a6:10:72::31)
+ by AS8PR10MB4725.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:337::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Fri, 3 Dec
+ 2021 19:35:58 +0000
+Received: from DB5EUR01FT033.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:10:72:cafe::47) by DB7PR03CA0090.outlook.office365.com
+ (2603:10a6:10:72::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23 via Frontend
+ Transport; Fri, 3 Dec 2021 19:35:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.72)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.72 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.72; helo=hybrid.siemens.com;
+Received: from hybrid.siemens.com (194.138.21.72) by
+ DB5EUR01FT033.mail.protection.outlook.com (10.152.4.248) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4755.13 via Frontend Transport; Fri, 3 Dec 2021 19:35:57 +0000
+Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
+ DEMCHDC9SMA.ad011.siemens.net (194.138.21.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 3 Dec 2021 20:35:57 +0100
+Received: from md1za8fc.ad001.siemens.net (139.22.45.74) by
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 3 Dec 2021 20:35:56 +0100
+Date:   Fri, 3 Dec 2021 20:35:54 +0100
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     <kai.svahn@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>,
+        Srikanth Krishnakar <skrishnakar@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        "Hans de Goede" <hdegoede@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Enrico Weigelt <lkml@metux.net>
+Subject: Re: [PATCH v4 2/4] leds: simatic-ipc-leds: add new driver for
+ Siemens Industial PCs
+Message-ID: <20211203203554.0b43f14f@md1za8fc.ad001.siemens.net>
+In-Reply-To: <YaZAAgDPquDMpvIn@smile.fi.intel.com>
+References: <20211126141027.16161-1-henning.schild@siemens.com>
+        <20211126141027.16161-3-henning.schild@siemens.com>
+        <CAHp75VcD0FQuG_AToNkVHHD9e6WV6=18P4U0cSi0qzD3FL=ssw@mail.gmail.com>
+        <20211126191203.663e0d90@md1za8fc.ad001.siemens.net>
+        <YaZAAgDPquDMpvIn@smile.fi.intel.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20211130111325.29328-1-semen.protsenko@linaro.org>
- <20211130111325.29328-2-semen.protsenko@linaro.org> <YaZ8BpUaaC+sJYqx@robh.at.kernel.org>
-In-Reply-To: <YaZ8BpUaaC+sJYqx@robh.at.kernel.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Fri, 3 Dec 2021 21:35:51 +0200
-Message-ID: <CAPLW+4kGGk+umKTVRPNM7R=GaUQa31Uid=K+9ofq8w2mqzGAEA@mail.gmail.com>
-Subject: Re: [PATCH v2 RESEND 1/5] dt-bindings: soc: samsung: Add Exynos USI bindings
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [139.22.45.74]
+X-ClientProxiedBy: DEMCHDC8A1A.ad011.siemens.net (139.25.226.107) To
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: dc3568b3-f4ba-4fb6-bd97-08d9b694213e
+X-MS-TrafficTypeDiagnostic: AS8PR10MB4725:
+X-Microsoft-Antispam-PRVS: <AS8PR10MB4725C9553C27282AB339563F856A9@AS8PR10MB4725.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5CTQkxcuHNrB5kiaxvDnZWxfFhQ48vpzKs4OsQHSjemSn1/QDEiVNwdpNmkBfwjQ3a29zaeK+ZKe7ucAmPNZeQ45rDGRJVw/qRMxURv38lPocJgPsyUt/bWOgfdqV0ytosmFzKIb6oHq17BWSaaC6JhZ6V873K8KiV82kghVVCXAhaGdf7I/zj+XtdgSP3rsqvOnrfXHOq1txrhnbHUVKOnE8l3gAUx+i/i1oj3R7fqnz7wAnqSg/wvpcpGtdDEv9I6bm8KQiVukpY4SoL5t6ewwvBN4vWt/SNzHlQuzu2oEtTcyh22R1fYhq+j+6D8O9WSFoVeDO2T+p+h/seqZQObte1ubH44tkNjFanebYrdOmNiRG2GSIr1HNqc3022lHDoJCoQdXAB8VS/WtvIzipAM6uVTWhER/RipAgbCIvmXAeEiU+4M4SFiyU5EMaGVc3b7a43E67pUXtGrO4IKeTsH32cWhbwYxEvq57okqdNXUnJ2RQHmAzoJCGnjr0qBla3JMfdxXzEwYRSFjwdW62DZiniW7MN6sNnCrK5wg7xxmudPsnMhSqGNYHXDAenLXVFDrA3OnIufBI4N0q8DpTQwTNzVJOiM2gf2OMbzNGeB0gL6Oxpu3Ou5otnJaoc4s9f23ZXUVfViJvcS7hhD22meRoo+BmrC4otKS8nCU2C28ggNdFItk6T7zRKRv362mNcOuQd2jz33YLUCNGKOASfXrQPAXrFFZM5u0drp2igbvMmIhsNZolbyZul5je4iJz2OQFuWysiMb+ny2HNze9bGuZpO21C7SIsuXQwiv4c=
+X-Forefront-Antispam-Report: CIP:194.138.21.72;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(1076003)(7416002)(9686003)(956004)(70586007)(86362001)(53546011)(8936002)(356005)(8676002)(82310400004)(5660300002)(54906003)(70206006)(16526019)(7696005)(36860700001)(6916009)(44832011)(508600001)(2906002)(82960400001)(336012)(4326008)(81166007)(55016003)(47076005)(316002)(40460700001)(83380400001)(186003)(26005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2021 19:35:57.8082
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc3568b3-f4ba-4fb6-bd97-08d9b694213e
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.72];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT033.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR10MB4725
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 Nov 2021 at 21:31, Rob Herring <robh@kernel.org> wrote:
->
-> On Tue, Nov 30, 2021 at 01:13:21PM +0200, Sam Protsenko wrote:
-> > Add constants for choosing USIv2 configuration mode in device tree.
-> > Those are further used in USI driver to figure out which value to write
-> > into SW_CONF register. Also document USIv2 IP-core bindings.
-> >
-> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > ---
-> > Changes in v2:
-> >   - Combined dt-bindings doc and dt-bindings header patches
-> >   - Added i2c node to example in bindings doc
-> >   - Added mentioning of shared internal circuits
-> >   - Added USI_V2_NONE value to bindings header
-> >
-> >  .../bindings/soc/samsung/exynos-usi.yaml      | 135 ++++++++++++++++++
-> >  include/dt-bindings/soc/samsung,exynos-usi.h  |  17 +++
-> >  2 files changed, 152 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
-> >  create mode 100644 include/dt-bindings/soc/samsung,exynos-usi.h
-> >
-> > diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
-> > new file mode 100644
-> > index 000000000000..a822bc62b3cd
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
-> > @@ -0,0 +1,135 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/soc/samsung/exynos-usi.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Samsung's Exynos USI (Universal Serial Interface) binding
-> > +
-> > +maintainers:
-> > +  - Sam Protsenko <semen.protsenko@linaro.org>
-> > +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> > +
-> > +description: |
-> > +  USI IP-core provides selectable serial protocol (UART, SPI or High-Speed I2C).
-> > +  USI shares almost all internal circuits within each protocol, so only one
-> > +  protocol can be chosen at a time. USI is modeled as a node with zero or more
-> > +  child nodes, each representing a serial sub-node device. The mode setting
-> > +  selects which particular function will be used.
-> > +
-> > +  Refer to next bindings documentation for information on protocol subnodes that
-> > +  can exist under USI node:
-> > +
-> > +  [1] Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> > +  [2] Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
-> > +  [3] Documentation/devicetree/bindings/spi/spi-samsung.txt
-> > +
-> > +properties:
-> > +  $nodename:
-> > +    pattern: "^usi@[0-9a-f]+$"
-> > +
-> > +  compatible:
-> > +    const: samsung,exynos-usi-v2
->
-> Use SoC based compatibles.
->
+Am Tue, 30 Nov 2021 17:15:14 +0200
+schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:
 
-In this particular case, I'd really prefer to have it like this. Most
-likely we'll only have USIv1 and USIv1 in the end, and I think that
-would be more clear to have USI version in compatible, rather than SoC
-name. Please let me know if you have a strong opinion on this one --
-if so I'll re-send.
+> On Fri, Nov 26, 2021 at 07:12:03PM +0100, Henning Schild wrote:
+> > Am Fri, 26 Nov 2021 17:02:00 +0200
+> > schrieb Andy Shevchenko <andy.shevchenko@gmail.com>:  
+> > > On Fri, Nov 26, 2021 at 4:10 PM Henning Schild
+> > > <henning.schild@siemens.com> wrote:  
+> > > >
+> > > > This driver adds initial support for several devices from
+> > > > Siemens. It is based on a platform driver introduced in an
+> > > > earlier commit.    
+> > > 
+> > > ...
+> > >   
+> > > > +static struct simatic_ipc_led simatic_ipc_leds_mem[] = {
+> > > > +       {0x500 + 0x1A0, "red:" LED_FUNCTION_STATUS "-1"},
+> > > > +       {0x500 + 0x1A8, "green:" LED_FUNCTION_STATUS "-1"},
+> > > > +       {0x500 + 0x1C8, "red:" LED_FUNCTION_STATUS "-2"},
+> > > > +       {0x500 + 0x1D0, "green:" LED_FUNCTION_STATUS "-2"},
+> > > > +       {0x500 + 0x1E0, "red:" LED_FUNCTION_STATUS "-3"},
+> > > > +       {0x500 + 0x198, "green:" LED_FUNCTION_STATUS "-3"},
+> > > > +       { }
+> > > > +};    
+> > > 
+> > > Like I said, this is not okay.
+> > > 
+> > > Why can't you simply enable the pinctrl driver and use it?  
+> 
+> I have talked to my boss today and I have got an approval to
+> prioritize the task, so I'm all yours starting from tomorrow.
 
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: Bus (APB) clock
-> > +      - description: Operating clock for UART/SPI/I2C protocol
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: pclk
-> > +      - const: ipclk
-> > +
-> > +  ranges: true
-> > +
-> > +  "#address-cells":
-> > +    const: 1
-> > +
-> > +  "#size-cells":
-> > +    const: 1
-> > +
-> > +  samsung,sysreg:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> > +    description:
-> > +      Should be phandle/offset pair. The phandle to System Register syscon node
-> > +      (for the same domain where this USI controller resides) and the offset
-> > +      of SW_CONF register for this USI controller.
-> > +
-> > +  samsung,mode:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    description:
-> > +      Selects USI function (which serial protocol to use). Refer to
-> > +      <include/dt-bindings/soc/samsung,exynos-usi.h> for valid USI mode values.
->
-> This seems to be redundant. Just check which child is enabled.
->
+We had a long and fruitful conversation today. In very short the story
+will be that i will send a v5. It will make clear in the cover letter,
+in the FIXME, and in commit messages that the P2SB bits are hacky, same
+for poking on GPIO memory.
+And also say again why it is like that and why it currently can
+probably not be done much better.
+With these documentation changes Andy said he would be willing to ack.
 
-I think it's not that easy. Soon we'll have USIv1 support added, and
-that has some weird configurations, like having dual I2C mode (two
-child I2C nodes must be enabled) and UART+I2C mode, etc. Looks like it
-might take some not very elegant logic to figure out which exactly
-mode value should be written in SW_CONF register in that way, it's
-much easier to just specify mode in USI node. Also, that reflects
-hardware better: we actually write that specified mode to SW_CONF
-register. Also, later we might want to be able to switch that mode via
-SysFS, e.g. for testing purposes. Current design seems to be better
-suited for some things like that.
+On top Andy will work on P2SB improvements, and maybe also pinctrl
+infrastructure to make the existing drivers actually probe without a
+need for ACPI fixes in firmware.
 
-Please let me know if you have a strong opinion on this one, or it's
-ok to leave it as is.
+When these patches are ready i will change the Siemens drivers to use
+that and take out hackery where possible.
 
-All other comments are addressed and will be present in v3. Thanks for
-the review!
+Andy please follow up in case i summarized things wrong, but i bet i do
+not have to tell you.
 
-> > +
-> > +  samsung,clkreq-on:
-> > +    type: boolean
-> > +    description:
-> > +      Enable this property if underlying protocol requires the clock to be
-> > +      continuously provided without automatic gating. As suggested by SoC
-> > +      manual, it should be set in case of SPI/I2C slave, UART Rx and I2C
-> > +      multi-master mode. Usually this property is needed if USI mode is set
-> > +      to "UART".
-> > +
-> > +      This property is optional.
-> > +
-> > +patternProperties:
-> > +  # All other properties should be child nodes
-> > +  "^.*@[0-9a-f]+$":
->
-> Only 'serial', 'spi', or 'i2c' are valid.
->
-> > +    type: object
-> > +    description: Child node describing underlying USI serial protocol
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - clocks
-> > +  - clock-names
-> > +  - ranges
-> > +  - "#address-cells"
-> > +  - "#size-cells"
-> > +  - samsung,sysreg
-> > +  - samsung,mode
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +    #include <dt-bindings/soc/samsung,exynos-usi.h>
-> > +
-> > +    usi0: usi@138200c0 {
-> > +        compatible = "samsung,exynos-usi-v2";
-> > +        reg = <0x138200c0 0x20>;
-> > +        samsung,sysreg = <&sysreg_peri 0x1010>;
-> > +        samsung,mode = <USI_V2_UART>;
-> > +        samsung,clkreq-on; /* needed for UART mode */
-> > +        #address-cells = <1>;
-> > +        #size-cells = <1>;
-> > +        ranges;
-> > +        clocks = <&cmu_peri 32>, <&cmu_peri 31>;
-> > +        clock-names = "pclk", "ipclk";
-> > +        status = "disabled";
->
-> Why are you disabling your example? Remove status.
->
-> > +
-> > +        serial_0: serial@13820000 {
-> > +            compatible = "samsung,exynos850-uart";
-> > +            reg = <0x13820000 0xc0>;
-> > +            interrupts = <GIC_SPI 227 IRQ_TYPE_LEVEL_HIGH>;
-> > +            clocks = <&cmu_peri 32>, <&cmu_peri 31>;
-> > +            clock-names = "uart", "clk_uart_baud0";
-> > +            status = "disabled";
-> > +        };
-> > +
-> > +        hsi2c_0: i2c@13820000 {
-> > +            compatible = "samsung,exynosautov9-hsi2c";
-> > +            reg = <0x13820000 0xc0>;
-> > +            interrupts = <GIC_SPI 227 IRQ_TYPE_LEVEL_HIGH>;
-> > +            #address-cells = <1>;
-> > +            #size-cells = <0>;
-> > +            clocks = <&cmu_peri 32>, <&cmu_peri 31>;
-> > +            clock-names = "hsi2c_pclk", "hsi2c";
-> > +            status = "disabled";
-> > +        };
-> > +    };
-> > diff --git a/include/dt-bindings/soc/samsung,exynos-usi.h b/include/dt-bindings/soc/samsung,exynos-usi.h
-> > new file mode 100644
-> > index 000000000000..a01af169d249
-> > --- /dev/null
-> > +++ b/include/dt-bindings/soc/samsung,exynos-usi.h
-> > @@ -0,0 +1,17 @@
-> > +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> > +/*
-> > + * Copyright (c) 2021 Linaro Ltd.
-> > + * Author: Sam Protsenko <semen.protsenko@linaro.org>
-> > + *
-> > + * Device Tree bindings for Samsung Exynos USI (Universal Serial Interface).
-> > + */
-> > +
-> > +#ifndef __DT_BINDINGS_SAMSUNG_EXYNOS_USI_H
-> > +#define __DT_BINDINGS_SAMSUNG_EXYNOS_USI_H
-> > +
-> > +#define USI_V2_NONE          0
-> > +#define USI_V2_UART          1
-> > +#define USI_V2_SPI           2
-> > +#define USI_V2_I2C           3
-> > +
-> > +#endif /* __DT_BINDINGS_SAMSUNG_EXYNOS_USI_H */
-> > --
-> > 2.30.2
-> >
-> >
+> Let's finish it once for all!
+
+I sure hope we get there!
+
+regards,
+Henning
+
+> > I propose we set up a call, that might help clearing up the
+> > situation. If you agree please send me an email and possibly
+> > propose a time-slot. I would take it from there and send you a
+> > meeting link.  
+> 
+> Sure!
+> 
+

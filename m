@@ -2,113 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02227468082
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 00:34:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8478C4680AE
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 00:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376688AbhLCXhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 18:37:42 -0500
-Received: from mail-oo1-f42.google.com ([209.85.161.42]:35715 "EHLO
-        mail-oo1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240573AbhLCXhl (ORCPT
+        id S1354148AbhLCXlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 18:41:04 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:47850 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240671AbhLCXlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 18:37:41 -0500
-Received: by mail-oo1-f42.google.com with SMTP id e17-20020a4a8291000000b002c5ee0645e7so2520702oog.2;
-        Fri, 03 Dec 2021 15:34:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=HvmUO3stczSOHy4AZ2u5yjtXBe51DiBBMcIExmIvsPk=;
-        b=1JIchbjaLZzDknM343KPGEgCIqPPJrvHeVDDbfmLuaCZNcU7k0dOvAdCGp4Rc6TUuX
-         fL/1ABebaTigvQBCfPUcW4znZpo1rTYPLU0lcEhwMXwuKYRGrglsakmVTkZxGEdzKbOY
-         C3vTv9GILsq57fC/9Ww08EtIVOsfFUp6lfc5z7gxvsKxQep2x//CiwPM0TNSfugUSujY
-         dNMPUCjXRayLjWZ6uOBuuPvdg479WWSlCC6IMizDT8w7ZqQUebd+5IiLoW6ngrG9W5Rh
-         7qyOyR6CpxjgHBqjOyQATdYEKQJH7lLYmDrDanyKo7VE/705Q/6zBqSLbHUXovul7q3D
-         TIJg==
-X-Gm-Message-State: AOAM5325xrrAUXovEFxNYS0DHzf98OHq6Z82f+WTa2Rb1Ht1qHf5S+wF
-        Lx6WU403cVLdvTbxiEqn7Q==
-X-Google-Smtp-Source: ABdhPJwgEbmNp7uLje0JTDCKmsCzjEkEBrgzlOt1VkyxJTN4CmOwWISnvXbaId1z31yTwIqQdnFCXg==
-X-Received: by 2002:a4a:9406:: with SMTP id h6mr14654887ooi.80.1638574456759;
-        Fri, 03 Dec 2021 15:34:16 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id w71sm939444oiw.6.2021.12.03.15.34.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 15:34:16 -0800 (PST)
-Received: (nullmailer pid 1042998 invoked by uid 1000);
-        Fri, 03 Dec 2021 23:34:15 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Jarrett Schultz <jaschultzms@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        platform-driver-x86@vger.kernel.org, devicetree@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jarrett Schultz <jaschultz@microsoft.com>
-In-Reply-To: <20211202191630.12450-2-jaschultz@microsoft.com>
-References: <20211202191630.12450-1-jaschultz@microsoft.com> <20211202191630.12450-2-jaschultz@microsoft.com>
-Subject: Re: [PATCH 1/5] dt-bindings: platform: microsoft: Document surface xbl
-Date:   Fri, 03 Dec 2021 17:34:15 -0600
-Message-Id: <1638574455.193372.1042997.nullmailer@robh.at.kernel.org>
+        Fri, 3 Dec 2021 18:41:03 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B3L6Oel026069;
+        Fri, 3 Dec 2021 15:37:16 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=oBR2+xUVvPcb5jyrgmPTBCCS07U+FThFRatAqFHsCYY=;
+ b=pGTxt6a/BbFCqXN73eJXT2fQIIlvyytSPYUOl4jMtY+rBZKorarUUOwfn/tvtYZItnoX
+ VaC7KE73XDlkSO7eXHVLi6YHlinn+WLiKW6Rx9kNOVJD72beY4xnEPuQxxsyh/My5hRd
+ flgbXe7qNDtFJBlOKVyD0yioaGIzadU1XtQ= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3cqhvdn50u-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 03 Dec 2021 15:37:16 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.230) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 3 Dec 2021 15:37:15 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hnMRwqsgIHR8AsYtOXR827AVJ9AUv83RY4mT3hmpoRvwtFi1vIsuwCYdSU5Nx2CuMjp2yhC0iiZLKoumGais836N/xDhOxN0RfEC4fruqAn/JNNoVnOmHhZY/nSpwUzvxQ4EE53A4dUD7u+Rq3j9UDj2nos8T65b3E4XbfPkTEWFXNARNr5/W17Ahx0CJ2nY0vkZXfnK6UkBPkW8hqaclqPGZte0/uH3hI/9yw+tSuqpWG952hwoF6q8WbUsU8ZAgYnsATFA6c2qbBaidwG4vhVwXWr09V/lzGjijuIRIoXdiQtUzPbQo63ebbNKPc/+QWf617OMXxajJhvoZXNIpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oBR2+xUVvPcb5jyrgmPTBCCS07U+FThFRatAqFHsCYY=;
+ b=Wv9sBzY8UdZYVlU0C0+CLrGaeNC0BCE7NmlXU/nBl9rHCkzEQsN05jeVYz3nS92lpJAv3oY6XVWISpafKpdrmxZ0SZAeBT9o839VJofz7fsBG8gBWK4gb1Y/TT6lf9oU9YDilXvJwGZDbmpagYIgyJ2NzrmBp/H3Krl4D6R0x+fG8lGyivCLgtadR89umXi47F4vKhPP5CIgZuBvmV1aM20R+GVQurb7p5kY+8uTwggc0NFosckw5YGOBUlrLWT1Rx4Q2DT6JMED8LLLyLUWdNmfjSbEisu38o3QFGfPSRXjuUwIC4U0mPTbk38tYwW0cV81r1LSwbP1o77PC6WvDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SN6PR1501MB4141.namprd15.prod.outlook.com
+ (2603:10b6:805:e3::14) by SN6PR1501MB1997.namprd15.prod.outlook.com
+ (2603:10b6:805:8::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16; Fri, 3 Dec
+ 2021 23:37:14 +0000
+Received: from SN6PR1501MB4141.namprd15.prod.outlook.com
+ ([fe80::5977:c3b1:4b5d:9e2a]) by SN6PR1501MB4141.namprd15.prod.outlook.com
+ ([fe80::5977:c3b1:4b5d:9e2a%3]) with mapi id 15.20.4734.024; Fri, 3 Dec 2021
+ 23:37:14 +0000
+Date:   Fri, 3 Dec 2021 15:37:08 -0800
+From:   Roman Gushchin <guro@fb.com>
+To:     Dan Schatzberg <schatzberg.dan@gmail.com>
+CC:     Johannes Weiner <hannes@cmpxchg.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Alex Shi <alexs@kernel.org>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" 
+        <linux-mm@kvack.org>
+Subject: Re: [PATCH] mm: add group_oom_kill memory event
+Message-ID: <YaqqJPe9yvhLfQgM@carbon.dhcp.thefacebook.com>
+References: <20211203162426.3375036-1-schatzberg.dan@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20211203162426.3375036-1-schatzberg.dan@gmail.com>
+X-ClientProxiedBy: MWHPR02CA0012.namprd02.prod.outlook.com
+ (2603:10b6:300:4b::22) To SN6PR1501MB4141.namprd15.prod.outlook.com
+ (2603:10b6:805:e3::14)
+MIME-Version: 1.0
+Received: from carbon.dhcp.thefacebook.com (2620:10d:c090:400::5:8982) by MWHPR02CA0012.namprd02.prod.outlook.com (2603:10b6:300:4b::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11 via Frontend Transport; Fri, 3 Dec 2021 23:37:12 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 12e8c93c-da72-4c8e-ca81-08d9b6b5d5c8
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB1997:
+X-Microsoft-Antispam-PRVS: <SN6PR1501MB19973AF608CC5BB40404A8ECBE6A9@SN6PR1501MB1997.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:2887;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: juJZTeOMpotHZVaXwkwsXI4svo3o/8Vfb60zX0RqeeoxJcwzcWn8ON/PZekZQ9edNev3qeIqHqQlASGy98LiBfqp6QVLQ9+9LMYQObOb5VFlT1kcVHVC3ITcL7EZoxZSc86hsnaZA4NN394cSZt/JXW+zCUM68j0/XS/1+Q5ZUJqF+hMnGdHg4MMW0GN8zvWDrA4vMWc05dDdypH80Y19P+ZeDmRinokI7cl7IXSsYWhEOZuFR21zV9aLfDeoUwVq+/dU6S4Lx2C42z3kxUhApjyln3/VRdMzLLzAk19vxpFTtmoAS0fcK2AqOrdyz7xxB5dRKcFWu/y7jEGyn5EnDW7etQ2yds9r4s1gq4fWi41ne5HEMgTY1AUnQmewbhWcUJEdo3gJonRmW55ajm90APWwo9Z90tV6ZAam7lcsJVUi9zh1UgpVfI/VeHw8yWJfmCGS7j1kgJ3tWxxouMNDVE3r8UhbqD+64QTGwWYvIlsUpSyPCzBhiSVkTCHGjFc39XKCd6Kp9khE6z9gPc+vk6dPHjQgrX4gCK2RxOvDTfvCkPQD0n/9i7MWo+CxBZuLtuoJlUbJMdmLqdHn2NLylVMmevdEbaiYN/J8dl/6tqCMFdpLCAFvkZa3y0UpQ/z9QGqwcUCQ8Uc5f/9pBum6A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB4141.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(6916009)(66476007)(7416002)(55016003)(66556008)(66946007)(6506007)(186003)(9686003)(2906002)(86362001)(54906003)(6666004)(4326008)(8676002)(52116002)(316002)(7696005)(5660300002)(8936002)(508600001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?p0gkQAEdcCzFcqMRHUK6Ku9zM1axWC4y8PUXfkaGGVCtZA09EnN3+BWRu29v?=
+ =?us-ascii?Q?kFVEXyxomNmvJGNdZXstq47WosimOlzpizwzNOJiIo9n7oCpiX21Ezxo6nJm?=
+ =?us-ascii?Q?fZfnDj0Zx2aTLWb3WtAz/SnQ2GhfncLAh9EUVe7sbGvDnzKL4HJPFSC9VRTi?=
+ =?us-ascii?Q?nWcPlnyBpvcmUDx58q3+lLT8mQfC/AUWgtSEfOOTlLLF/7ghx7TmJ7U/tHel?=
+ =?us-ascii?Q?nj5yq3mdrzXEX9+IDK6Dmsog2cwEsseKgDo8p9f/DyFoQlVFIJ9/qyBw0rG3?=
+ =?us-ascii?Q?b+mtZjhlMlnlcAgU88y2vnJf3QPknfHkvErZXfiGryftQKatHtR/k5qzlUdH?=
+ =?us-ascii?Q?xdM0PRxttLnz6/vZfLuxpRO8wAHMmAi6c/775aqqzox0sD6+BPkKpfgi9sG8?=
+ =?us-ascii?Q?2IQAfrAga9lRLpx6lb6YUy5z7JfFzJVeCzLpleEs5IZs4O7wyVACw7fE1CbQ?=
+ =?us-ascii?Q?YtSP9KIQ5guOzQYkobrN37k0LrTtNAzt2PcAVmmWXYvWMq1KrK9vStbswzta?=
+ =?us-ascii?Q?jip9+nV0L5QIEwTFFiIM8U0iAHL9y/9I5vDZjcfHU7dtubpQ/DM+Hp5t6Iq5?=
+ =?us-ascii?Q?cjHw5MjiQ/0WkEgvsDLGz3o/xAi/b7m2k3akJoTg95jq8jezSskzAmXfRTX1?=
+ =?us-ascii?Q?LrySbopQs5twBBqxiCSUqiXyqP/2KfIzJ86+PiuSJlwZryiHcswefnni1iNi?=
+ =?us-ascii?Q?2dFz19ftBbn6AmucSSJ00dPxvTxylgiPxSEZ9feqSENF13wrTlw0mLDgJOyo?=
+ =?us-ascii?Q?UPYSlUkSQIxxL06KGh81PeM6dYlyXz7extuSBWUo+Od7L61sSt+faFspQuxG?=
+ =?us-ascii?Q?NLftNysgYTMw6MeSsXfl5Vf+AwrYI+++duwZOQD6TQkINw28wr1S6RRPmbgS?=
+ =?us-ascii?Q?7S1Saj1tvVvWFetPymY428V8MdwrNzN+OaW4qXeZtBttRYnfW55c6zXaZhfC?=
+ =?us-ascii?Q?gYszFDn+MGFsf+le2EELpx7o8KagBTHLFmPZajjydTX87UYlbXPiPabjZTRd?=
+ =?us-ascii?Q?/8HmUOaF/c8P9c+uLqPRkLOg/OCA5pbmYIYOUHRWJkB9Y7MDN87Q3Dv8surP?=
+ =?us-ascii?Q?ov+epHygmoZJppadyNpbY9nE360WUsX/BThZDpWlPOmbyvSB0CplHeCiEi5n?=
+ =?us-ascii?Q?KPvgiF8HNgyTRWLvEjrB6qD7STa5bibdr3kZJ91IIzOZyTJ5sho4QLnFaQWx?=
+ =?us-ascii?Q?MsemjakMGuTbmycQHaJpJHKxZNyjfEVwJ6ERQesCP+I8fyEHaP4afMh3zdQY?=
+ =?us-ascii?Q?5EXcLFqzn3hMNARofMz2zuK6Ha8IAX1lVPYnKqKi3myyR6G1uW/4upyqau1S?=
+ =?us-ascii?Q?8NsuSWtQSl3iv8IU6cu3rDHSLHxXJFOCJTiKVbWEmRMg2XOXvu4QD4uuTt8N?=
+ =?us-ascii?Q?ljBQfQn1sT4Bu0O1nFgTRWE9R4Pyba3u43y+xb98IA8gQ9H92M5JIOMKSMH3?=
+ =?us-ascii?Q?YRjCZfvDtMo/S/DOMamEXUNO6Pg7VAGNMBqEXdTzUqa+VVye8LFgSLS4U0uT?=
+ =?us-ascii?Q?Ojc1dn93R4JzxO7Tvbt70K4Tkc1wNMtukxRVSAt5gdmYoanZX7PwXr5qPtWY?=
+ =?us-ascii?Q?LzGvRvqedTPNFbGlMLnIgzGOG17N7YaSuwfRaPMw?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12e8c93c-da72-4c8e-ca81-08d9b6b5d5c8
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB4141.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2021 23:37:14.4076
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QWHQsEWre5dVrFP/sUxnB8K/zRhGh6tgmTeih2Smhj6Bc33s7tf225HThz4/MpPT
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR1501MB1997
+X-OriginatorOrg: fb.com
+X-Proofpoint-ORIG-GUID: dD0bSgGLLrXQijetQtTL_nLFxQOZvWi7
+X-Proofpoint-GUID: dD0bSgGLLrXQijetQtTL_nLFxQOZvWi7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-03_11,2021-12-02_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ lowpriorityscore=0 spamscore=0 mlxscore=0 suspectscore=0 mlxlogscore=999
+ priorityscore=1501 phishscore=0 malwarescore=0 adultscore=0 bulkscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112030150
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 02 Dec 2021 11:16:26 -0800, Jarrett Schultz wrote:
-> Introduce yaml for surface xbl driver.
+On Fri, Dec 03, 2021 at 08:24:23AM -0800, Dan Schatzberg wrote:
+> Our container agent wants to know when a container exits if it was OOM
+> killed or not to report to the user. We use memory.oom.group = 1 to
+> ensure that OOM kills within the container's cgroup kill
+> everything. Existing memory.events are insufficient for knowing if
+> this triggered:
 > 
-> Signed-off-by: Jarrett Schultz <jaschultz@microsoft.com>
+> 1) Our current approach reads memory.events oom_kill and reports the
+> container was killed if the value is non-zero. This is erroneous in
+> some cases where containers create their children cgroups with
+> memory.oom.group=1 as such OOM kills will get counted against the
+> container cgroup's oom_kill counter despite not actually OOM killing
+> the entire container.
 > 
-> ---
+> 2) Reading memory.events.local will fail to identify OOM kills in leaf
+> cgroups (that don't set memory.oom.group) within the container cgroup.
 > 
-> Changes in v3:
->  - Updated description to only pertain to the hardware
->  - Updated the required field to properly reflect the binding
->  - Removed the first example
->  - Fixed the size of the reg field in the second example
+> This patch adds a new oom_group_kill event when memory.oom.group
+> triggers to allow userspace to cleanly identify when an entire cgroup
+> is oom killed.
 > 
-> ---
-> 
-> Changes in v2:
->  - Removed json-schema dependence
->  - Elaborated on description of driver
->  - Updated example
-> ---
->  .../platform/microsoft/surface-xbl.yaml       | 69 +++++++++++++++++++
->  MAINTAINERS                                   |  7 ++
->  2 files changed, 76 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml
-> 
+> Signed-off-by: Dan Schatzberg <schatzberg.dan@gmail.com>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Reviewed-by: Roman Gushchin <guro@fb.com>
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml: properties:properties: 'compatible' is not one of ['$ref', 'additionalItems', 'additionalProperties', 'allOf', 'anyOf', 'const', 'contains', 'default', 'dependencies', 'dependentRequired', 'dependentSchemas', 'deprecated', 'description', 'else', 'enum', 'exclusiveMaximum', 'exclusiveMinimum', 'items', 'if', 'minItems', 'minimum', 'maxItems', 'maximum', 'multipleOf', 'not', 'oneOf', 'pattern', 'patternProperties', 'properties', 'required', 'then', 'type', 'typeSize', 'unevaluatedProperties', 'uniqueItems']
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml: properties: 'properties' should not be valid under {'enum': ['$ref', 'additionalItems', 'additionalProperties', 'allOf', 'anyOf', 'const', 'contains', 'default', 'dependencies', 'dependentRequired', 'dependentSchemas', 'deprecated', 'description', 'else', 'enum', 'if', 'items', 'maxItems', 'maximum', 'minItems', 'minimum', 'multipleOf', 'not', 'oneOf', 'pattern', 'patternProperties', 'properties', 'propertyNames', 'required', 'then', 'unevaluatedProperties']}
-	hint: A json-schema keyword was found instead of a DT property name.
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml: ignoring, error in schema: properties: properties
-warning: no schema found in file: ./Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml
-Documentation/devicetree/bindings/platform/microsoft/surface-xbl.example.dt.yaml:0:0: /example-0/imem@146bf000/xbl@a94: failed to match any schema with compatible: ['microsoft,sm8150-surface-duo-xbl']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1562961
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Thanks!

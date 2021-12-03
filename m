@@ -2,107 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DDA4467365
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AECF246737D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:47:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379279AbhLCIqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 03:46:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379268AbhLCIqc (ORCPT
+        id S1379350AbhLCIvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:51:14 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:15691 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379306AbhLCIvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 03:46:32 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E70C06174A
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 00:43:09 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id n8so1628037plf.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 00:43:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KCOdy3fLrIckFFP2lKLlpo99jfWSPyEX2EKLwlFJXHw=;
-        b=YrjvB9g87wSHTK9Mpg7nHVtai4Wo1DQCQazzwpBlOmFmjdfdsMknpZEzX18EjDqxCt
-         RYEhAX6yVLcwKjpd0dJp1ZUWPXu0+mYsSgmBrx/SXlKEwHVa6daFi3hy6EcRCJQj+j4p
-         y90EfmmqRu77AHo/7g0abIkplntukPE5/or/L+Fn8JCo58RUc2Z0ngyf2l/KrtK/zBlI
-         N5YZKOKm7TSlViU/o+8mFc4tQ3+SWNf3hH/A0hQ+s/VyAL6fUaGLM7Vfe9wyZIoBtzam
-         uWu7WIGYKY6ATs2ocamX/VGmZgJDqPBQPHWeGzWEa2ZNbKJyBo9K4NhhPac5TcOhJkWS
-         O1SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KCOdy3fLrIckFFP2lKLlpo99jfWSPyEX2EKLwlFJXHw=;
-        b=BGP01McdDiZ3csKr7ArTb+aH9kmeO3NoNyhOHtLAoMIFl1FG1VUaYoOScLavtQl9qj
-         1mEl48YlCPrCg16czv5BFKwykflgPCD2ScwktyYAkEcM9a/LH1z6ZxQQoIlKzpJhyRu4
-         RTvJqg9nRrumyMwocJvCUXOc7v64Vk10KK+B43zQyGsKGzcXtNsiY3vRGbN7u4tZdKSR
-         /YpqdDSpbd9JbbAqp3cFRU56ksZSztvlTxQicd5NR9Yeh5pTnK7D8EuaGdLrnkFX9ED1
-         uD/OqlVwj/XkwH1r64J6IQCgElbeu42AaIXV00jXfmollml/93aoIjAveKJ8Qkh2gH9U
-         lSnA==
-X-Gm-Message-State: AOAM532FJXIXVasdLkzID/CGKkXYROLlGupNHSzYQXKk3z1QoJbQFIMz
-        cQyiEk0HCxmQa3SxVgtmr760
-X-Google-Smtp-Source: ABdhPJxs7GG70chTt6hGwV8bD8adqdSCvTb07/634kDWLqsHtkwFyEvymQiBuqjImQU+fSX0eEHDSg==
-X-Received: by 2002:a17:90a:fe0b:: with SMTP id ck11mr12221312pjb.15.1638520988875;
-        Fri, 03 Dec 2021 00:43:08 -0800 (PST)
-Received: from thinkpad ([117.202.184.5])
-        by smtp.gmail.com with ESMTPSA id k18sm1706240pgb.70.2021.12.03.00.43.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 00:43:08 -0800 (PST)
-Date:   Fri, 3 Dec 2021 14:13:01 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Bhaumik Bhatt <quic_bbhatt@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, quic_hemantk@quicinc.com,
-        quic_jhugo@quicinc.com, linux-kernel@vger.kernel.org,
-        mhi@lists.linux.dev, stable@vger.kernel.org,
-        quic_olgak@quicinc.com, loic.poulain@linaro.org
-Subject: Re: [PATCH v2] bus: mhi: core: Fix reading wake_capable channel
- configuration
-Message-ID: <20211203084301.GA18809@thinkpad>
-References: <1638320491-13382-1-git-send-email-quic_bbhatt@quicinc.com>
+        Fri, 3 Dec 2021 03:51:13 -0500
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J55xD2gCpzZdQQ;
+        Fri,  3 Dec 2021 16:45:04 +0800 (CST)
+Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 3 Dec 2021 16:47:48 +0800
+Received: from huawei.com (10.67.165.24) by dggpeml100012.china.huawei.com
+ (7.185.36.121) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 3 Dec
+ 2021 16:47:48 +0800
+From:   Kai Ye <yekai13@huawei.com>
+To:     <herbert@gondor.apana.org.au>
+CC:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <wangzhou1@hisilicon.com>, <yekai13@huawei.com>
+Subject: [PATCH v2] crypto: hisilicon - replace 'smp_processor_id' with the raw version of the macro
+Date:   Fri, 3 Dec 2021 16:43:05 +0800
+Message-ID: <20211203084305.14078-1-yekai13@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1638320491-13382-1-git-send-email-quic_bbhatt@quicinc.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 05:01:31PM -0800, Bhaumik Bhatt wrote:
-> The 'wake-capable' entry in channel configuration is not set when
-> parsing the configuration specified by the controller driver. Add
-> the missing entry to ensure channel is correctly specified as a
-> 'wake-capable' channel.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 0cbf260820fa ("bus: mhi: core: Add support for registering MHI controllers")
-> Signed-off-by: Bhaumik Bhatt <quic_bbhatt@quicinc.com>
-> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+smp_processor_id() is unsafe if it's used in a preemption-on critical
+section. It will cause the call trace when the preemption-on and sets the
+CONFIG_DEBUG_PREEMPT. Due to does not need CPU ID stability. So replace
+'smp_processor_id' with the raw version of the marco in preemptible to
+avoid the following call trace:
 
-Applied to mhi-next!
+[ 7538.874350] BUG: using smp_processor_id() in preemptible [00000000] code: af_alg06/8438
+[ 7538.874368] caller is debug_smp_processor_id+0x1c/0x28
+[ 7538.874373] CPU: 50 PID: 8438 Comm: af_alg06 Kdump: loaded Not tainted 5.10.0.pc+ #18
+[ 7538.874377] Call trace:
+[ 7538.874387]  dump_backtrace+0x0/0x210
+[ 7538.874389]  show_stack+0x2c/0x38
+[ 7538.874392]  dump_stack+0x110/0x164
+[ 7538.874394]  check_preemption_disabled+0xf4/0x108
+[ 7538.874396]  debug_smp_processor_id+0x1c/0x28
+[ 7538.874406]  sec_create_qps+0x24/0xe8 [hisi_sec2]
+[ 7538.874408]  sec_ctx_base_init+0x20/0x4d8 [hisi_sec2]
+[ 7538.874411]  sec_aead_ctx_init+0x68/0x180 [hisi_sec2]
+[ 7538.874413]  sec_aead_sha256_ctx_init+0x28/0x38 [hisi_sec2]
+[ 7538.874421]  crypto_aead_init_tfm+0x54/0x68
+[ 7538.874423]  crypto_create_tfm_node+0x6c/0x110
+[ 7538.874424]  crypto_alloc_tfm_node+0x74/0x288
+[ 7538.874426]  crypto_alloc_aead+0x40/0x50
+[ 7538.874431]  aead_bind+0x50/0xd0
+[ 7538.874433]  alg_bind+0x94/0x148
+[ 7538.874439]  __sys_bind+0x98/0x118
+[ 7538.874441]  __arm64_sys_bind+0x28/0x38
+[ 7538.874445]  do_el0_svc+0x88/0x258
+[ 7538.874447]  el0_svc+0x1c/0x28
+[ 7538.874449]  el0_sync_handler+0x8c/0xb8
+[ 7538.874452]  el0_sync+0x148/0x180
 
-Thanks,
-Mani
+Signed-off-by: Kai Ye <yekai13@huawei.com>
 
-> ---
->  drivers/bus/mhi/core/init.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> v2:
-> -Update subject as per comments
-> -Add fixes tag and CC stable
-> 
-> diff --git a/drivers/bus/mhi/core/init.c b/drivers/bus/mhi/core/init.c
-> index 5aaca6d..f1ec3441 100644
-> --- a/drivers/bus/mhi/core/init.c
-> +++ b/drivers/bus/mhi/core/init.c
-> @@ -788,6 +788,7 @@ static int parse_ch_cfg(struct mhi_controller *mhi_cntrl,
->  		mhi_chan->offload_ch = ch_cfg->offload_channel;
->  		mhi_chan->db_cfg.reset_req = ch_cfg->doorbell_mode_switch;
->  		mhi_chan->pre_alloc = ch_cfg->auto_queue;
-> +		mhi_chan->wake_capable = ch_cfg->wake_capable;
->  
->  		/*
->  		 * If MHI host allocates buffers, then the channel direction
-> -- 
-> 2.7.4
-> 
+changes v1->v2:
+	modify the comments, and use the raw version of
+the marco instead of wrong code modification
+---
+ drivers/crypto/hisilicon/hpre/hpre_main.c | 2 +-
+ drivers/crypto/hisilicon/sec2/sec_main.c  | 2 +-
+ drivers/crypto/hisilicon/zip/zip_main.c   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/crypto/hisilicon/hpre/hpre_main.c b/drivers/crypto/hisilicon/hpre/hpre_main.c
+index ebfab3e14499..e5ff3a46a30a 100644
+--- a/drivers/crypto/hisilicon/hpre/hpre_main.c
++++ b/drivers/crypto/hisilicon/hpre/hpre_main.c
+@@ -277,7 +277,7 @@ static inline int hpre_cluster_core_mask(struct hisi_qm *qm)
+ 
+ struct hisi_qp *hpre_create_qp(u8 type)
+ {
+-	int node = cpu_to_node(smp_processor_id());
++	int node = cpu_to_node(raw_smp_processor_id());
+ 	struct hisi_qp *qp = NULL;
+ 	int ret;
+ 
+diff --git a/drivers/crypto/hisilicon/sec2/sec_main.c b/drivers/crypto/hisilicon/sec2/sec_main.c
+index 26d3ab1d308b..7b5c7d049487 100644
+--- a/drivers/crypto/hisilicon/sec2/sec_main.c
++++ b/drivers/crypto/hisilicon/sec2/sec_main.c
+@@ -282,7 +282,7 @@ void sec_destroy_qps(struct hisi_qp **qps, int qp_num)
+ 
+ struct hisi_qp **sec_create_qps(void)
+ {
+-	int node = cpu_to_node(smp_processor_id());
++	int node = cpu_to_node(raw_smp_processor_id());
+ 	u32 ctx_num = ctx_q_num;
+ 	struct hisi_qp **qps;
+ 	int ret;
+diff --git a/drivers/crypto/hisilicon/zip/zip_main.c b/drivers/crypto/hisilicon/zip/zip_main.c
+index 1a237d95d482..9f9311f981c3 100644
+--- a/drivers/crypto/hisilicon/zip/zip_main.c
++++ b/drivers/crypto/hisilicon/zip/zip_main.c
+@@ -277,7 +277,7 @@ MODULE_DEVICE_TABLE(pci, hisi_zip_dev_ids);
+ int zip_create_qps(struct hisi_qp **qps, int qp_num, int node)
+ {
+ 	if (node == NUMA_NO_NODE)
+-		node = cpu_to_node(smp_processor_id());
++		node = cpu_to_node(raw_smp_processor_id());
+ 
+ 	return hisi_qm_alloc_qps_node(&zip_devices, qp_num, 0, node, qps);
+ }
+-- 
+2.33.0
+

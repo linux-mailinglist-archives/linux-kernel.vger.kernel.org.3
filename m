@@ -2,125 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2BA467CB4
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D76D467CB8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 18:41:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382394AbhLCRmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 12:42:50 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:22778 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1353430AbhLCRmu (ORCPT
+        id S1382396AbhLCRpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 12:45:12 -0500
+Received: from gateway30.websitewelcome.com ([192.185.198.26]:40473 "EHLO
+        gateway30.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239496AbhLCRpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 12:42:50 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B3GlVRc007660;
-        Fri, 3 Dec 2021 17:39:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=/7LhyGIZH6v6tPB7DC3vcIfS3YrBDj9yF1r+y5dVl90=;
- b=bfO3mJdipvHwh2mP7NU/mMbb0l6nlFgFoCj2C4QS2dHvbjQLc+1xSzeyvXydHoxTqo7O
- yjOXYta1Loun+vAJF+1Cgar/imqJNJhLfzkvQt6UwH0O4Br42A8NB6HYOIJUXjY/zV5C
- pCh16tnT2Qupn2m485gFPlYxhj6bhkWgwDC3lDLtmDGO4HUQWCX5RYfVS4sk+XqVbvgY
- qISRHOdG8NyoXg2xncViw5/UTSo8Z02W69W5llu3JQn06e/9GdmW9CHYu/kADoxzs6ef
- 2N+Z0iHUIW04dXAppRQUdsl9PuDV0qxmr6vKlmn3/WwRmE4DdHay16hyvrPiO0GxC3md ZQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cqq2qrxnp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 17:39:09 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B3HZ9Wn011228;
-        Fri, 3 Dec 2021 17:39:09 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cqq2qrxn6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 17:39:08 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B3HbTOe029820;
-        Fri, 3 Dec 2021 17:39:07 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma04dal.us.ibm.com with ESMTP id 3cnne45fpd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 17:39:07 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B3Hd5XP15073584
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 3 Dec 2021 17:39:05 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BCFFD6A054;
-        Fri,  3 Dec 2021 17:39:05 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BFC996A057;
-        Fri,  3 Dec 2021 17:39:02 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri,  3 Dec 2021 17:39:02 +0000 (GMT)
-Message-ID: <75aca493-e8d6-ab1e-2aaf-9e9a6b183ed7@linux.ibm.com>
-Date:   Fri, 3 Dec 2021 12:39:01 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC v2 15/19] capabilities: Introduce CAP_INTEGRITY_ADMIN
-Content-Language: en-US
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, serge@hallyn.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Denis Semakin <denis.semakin@huawei.com>
-References: <20211203023118.1447229-1-stefanb@linux.ibm.com>
- <20211203023118.1447229-16-stefanb@linux.ibm.com>
- <2f145bcf-72a7-3697-0bce-f7a74e6ecc93@schaufler-ca.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <2f145bcf-72a7-3697-0bce-f7a74e6ecc93@schaufler-ca.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: HBTmL5KWKRrmWjl2NBBTkqNqb7Y646vT
-X-Proofpoint-ORIG-GUID: 2oQLY0P3JcJk2IXrLUywr7QCnOxW9aYe
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 3 Dec 2021 12:45:11 -0500
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway30.websitewelcome.com (Postfix) with ESMTP id 3B31324B9D
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 11:41:43 -0600 (CST)
+Received: from gator4132.hostgator.com ([192.185.4.144])
+        by cmsmtp with SMTP
+        id tCZ5mDAH1jXZUtCZ5mZZCP; Fri, 03 Dec 2021 11:41:43 -0600
+X-Authority-Reason: nr=8
+Received: from host-79-34-250-122.business.telecomitalia.it ([79.34.250.122]:47266 helo=[10.0.0.165])
+        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <bristot@kernel.org>)
+        id 1mtCZ3-002YDG-So; Fri, 03 Dec 2021 11:41:42 -0600
+Message-ID: <e39ddd6d-27f0-e70e-17a1-b5bb1134d2fc@kernel.org>
+Date:   Fri, 3 Dec 2021 18:41:37 +0100
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-03_07,2021-12-02_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=999
- spamscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112030111
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH V8 06/14] rtla: Add timerlat tool and timelart top mode
+Content-Language: en-US
+To:     Tao Zhou <tao.zhou@linux.dev>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        John Kacur <jkacur@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1638182284.git.bristot@kernel.org>
+ <e65a6899bbde6ecb129cfaf55e402d785ad124eb.1638182284.git.bristot@kernel.org>
+ <YanfyfUgMW6KWpxS@geo.homenetwork>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <YanfyfUgMW6KWpxS@geo.homenetwork>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - kernel.org
+X-BWhitelist: no
+X-Source-IP: 79.34.250.122
+X-Source-L: No
+X-Exim-ID: 1mtCZ3-002YDG-So
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: host-79-34-250-122.business.telecomitalia.it ([10.0.0.165]) [79.34.250.122]:47266
+X-Source-Auth: kernel@bristot.me
+X-Email-Count: 1
+X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
+X-Local-Domain: no
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/3/21 10:13, Tao Zhou wrote:
+>> +/*
+>> + * timerlat_top_usage - prints timerlat top usage message
+>> + */
+>> +static void timerlat_top_usage(char *usage)
+>> +{
+>> +	int i;
+>> +
+>> +	static const char *const msg[] = {
+>> +		"",
+>> +		"  usage: rtla timerlat [top] [-h] [-q] [-p us] [-i us] [-t us] [-s us] [-T[=file]] \\",
+>> +		"	  [-c cpu-list] [-P priority]",
+>> +		"",
+>> +		"	  -h/--help: print this menu",
+>> +		"	  -p/--period us: timerlat period in us",
+>> +		"	  -i/--irq us: stop trace if the irq latency is higher than the argument in us",
+>> +		"	  -T/--thread us: stop trace if the thread latency is higher than the argument in us",
+>> +		"	  -s/--stack us: save the stack trace at the IRQ if a thread latency is higher than the argument in us",
+>> +		"	  -c/--cpus cpus: run the tracer only on the given cpus	  -d/--duration time[m|h|d]: duration of the session in seconds",
+>> +		"	  -t/--trace[=file]: save the stopped trace to [file|timerlat_trace.txt]",
+>> +		"	  -n/--nano: display data in nanoseconds",
+>> +		"	  -q/--quiet print only a summary at the end",
+>> +		"	  -P/--priority o:prio|r:prio|f:prio|d:runtime:period : set scheduling parameters",
+>> +		"		o:prio - use SCHED_OTHER with prio",
+>> +		"		r:prio - use SCHED_RR with prio",
+>> +		"		f:prio - use SCHED_FIFO with prio",
+>> +		"		d:runtime[us|ms|s]:period[us|ms|s] - use SCHED_DEADLINE with runtime and period",
+>> +		"						       in nanoseconds",
+>> +		NULL,
+>> +	};
+> About help usage msg.
+> 
+> [-t us] --> [-T us]
+> [-T=[file]] --> [-t[=file]]
+> 
+> [-d] [-D] [-n] lack in the head usage info 'usage: ...'
+> 
 
-On 12/3/21 11:40, Casey Schaufler wrote:
-> On 12/2/2021 6:31 PM, Stefan Berger wrote:
->> From: Denis Semakin <denis.semakin@huawei.com>
->>
->> This patch introduces CAP_INTEGRITY_ADMIN, a new capability that allows
->> to setup IMA (Integrity Measurement Architecture) policies per container
->> for non-root users.
->>
->> The main purpose of this new capability is discribed in this document:
->> https://kernsec.org/wiki/index.php/IMA_Namespacing_design_considerations
->> It is said: "setting the policy should be possibly without the powerful
->> CAP_SYS_ADMIN and there should be the opportunity to gate this with a 
->> new
->> capability CAP_INTEGRITY_ADMIN that allows a user to set the IMA policy
->> during container runtime.."
->>
->> In other words it should be possible to setup IMA policies while not
->> giving too many privilges to the user, therefore splitting the
->> CAP_INTEGRITY_ADMIN off from CAP_SYS_ADMIN.
->
-> Please use CAP_MAC_ADMIN, as discussed on the previous submission.
+Fixed in V9
 
-I wasn't clear on consensus. But sure, let's go with CAP_MAC_ADMIN.
-
-    Stefan
-
-
+-- Daniel

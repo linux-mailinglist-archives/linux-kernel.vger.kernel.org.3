@@ -2,221 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5772D467DE0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 926E4467DE4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 20:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359410AbhLCTPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 14:15:17 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47620 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S241573AbhLCTPQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 14:15:16 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B3HpN0J000860;
-        Fri, 3 Dec 2021 19:11:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=5OvUbO420IAXTkw6nVb1/4Rmq8Kpxkr2q6l1JzmLcg8=;
- b=cRlYDmvqcqNMEhAxFRAdjBRKijBDEhwMhDaaCAL6JXwGBYqFCgyQHHOVFCiX/uVq58RE
- fA9mKimXhoVs/egJfczXl6rjhNOAMgkrGmN/rFasxiUl8OHkKvkm2P9252Jub91vgZLP
- I0dcM6xiPMVoSXT36X6jjufOe3Gw+VoBK3JWWRlUpJHUHPqekXUl5Gr7y78XE3EbK3ST
- Jac9qUY0CQHcbLhKfaS62DQ+A/jQ9c/B1+Feri/U27eobXuueG23EZJy9PXLJwiAb409
- evSf4oVJDnvx+5Buj+h1rgBliS9LFuR3C/qkMjhoPIoknAUsL8zc6LbABSsW0WXVOoW7 2g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cqr0p9d9p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 19:11:40 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B3IollV014490;
-        Fri, 3 Dec 2021 19:11:40 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cqr0p9d9d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 19:11:40 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B3J8Bim009403;
-        Fri, 3 Dec 2021 19:11:39 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma03wdc.us.ibm.com with ESMTP id 3cn3k426wm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Dec 2021 19:11:39 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B3JBaia32375184
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 3 Dec 2021 19:11:36 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2C76DAE05F;
-        Fri,  3 Dec 2021 19:11:36 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DCD80AE062;
-        Fri,  3 Dec 2021 19:11:35 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri,  3 Dec 2021 19:11:35 +0000 (GMT)
-Message-ID: <cd05433a-3630-e7f5-e144-ff766d7792fa@linux.ibm.com>
-Date:   Fri, 3 Dec 2021 14:11:35 -0500
+        id S1382763AbhLCTQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 14:16:04 -0500
+Received: from foss.arm.com ([217.140.110.172]:52600 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239754AbhLCTQD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 14:16:03 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4EE971396;
+        Fri,  3 Dec 2021 11:12:39 -0800 (PST)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4E5553F5A1;
+        Fri,  3 Dec 2021 11:12:38 -0800 (PST)
+Date:   Fri, 3 Dec 2021 19:12:36 +0000
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sjpark@amazon.de, shuah@kernel.org
+Subject: Re: [PATCH] selftests/kselftest/runner.sh: Add optional command
+ parameters in settings
+Message-ID: <20211203191236.GG56473@e120937-lin>
+References: <20211202142056.17386-1-cristian.marussi@arm.com>
+ <202112021310.E1B3208@keescook>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC v2 19/19] ima: Setup securityfs for IMA namespace
-Content-Language: en-US
-To:     jejb@linux.ibm.com, linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, serge@hallyn.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20211203023118.1447229-1-stefanb@linux.ibm.com>
- <20211203023118.1447229-20-stefanb@linux.ibm.com>
- <df433bc52ca1e0408d48bbace4c34a573991f5ba.camel@linux.ibm.com>
- <6306b4e5-f26d-1704-6344-354eb5387abf@linux.ibm.com>
- <11b557b58de74828b1c16334a5fb52c4d3f6ad0f.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <11b557b58de74828b1c16334a5fb52c4d3f6ad0f.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: brTutpzHVTiKJX_IbnV7N6xgla3vvqzC
-X-Proofpoint-ORIG-GUID: uA7gP3kRgTYMePS4rPB0ZuCrAh2AgYRN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-03_07,2021-12-02_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- bulkscore=0 impostorscore=0 malwarescore=0 clxscore=1015
- priorityscore=1501 spamscore=0 phishscore=0 lowpriorityscore=0
- suspectscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2112030122
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202112021310.E1B3208@keescook>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 02, 2021 at 01:18:35PM -0800, Kees Cook wrote:
+> On Thu, Dec 02, 2021 at 02:20:56PM +0000, Cristian Marussi wrote:
+> > Some testcases allow for optional commandline parameters but as of now
+> > there is now way to provide such arguments to the runner script.
+> > 
+> > Add support to the per-test-directory "settings" file to provide such
+> > optional arguments; two new optional fields can now be defined in
+> > "settings":
+> > 
+> >  - args="<options>": general arguments common to all testcase commands in
+> >    the test directory
+> > 
+> >  - <BASENAME_TEST>_args="<options>": custom arguments specific to only one
+> >    specific testcase command
+> > 
+> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> > ---
 
-On 12/3/21 13:50, James Bottomley wrote:
-> On Fri, 2021-12-03 at 13:06 -0500, Stefan Berger wrote:
->> On 12/3/21 12:03, James Bottomley wrote:
->>> On Thu, 2021-12-02 at 21:31 -0500, Stefan Berger wrote:
->>> [...]
->>>>    static int securityfs_init_fs_context(struct fs_context *fc)
->>>>    {
->>>> +	int rc;
->>>> +
->>>> +	if (fc->user_ns->ima_ns->late_fs_init) {
->>>> +		rc = fc->user_ns->ima_ns->late_fs_init(fc->user_ns);
->>>> +		if (rc)
->>>> +			return rc;
->>>> +	}
->>>>    	fc->ops = &securityfs_context_ops;
->>>>    	return 0;
->>>>    }
->>> I know I suggested this, but to get this to work in general, it's
->>> going to have to not be specific to IMA, so it's going to have to
->>> become something generic like a notifier chain.  The other problem
->>> is it's only working still by accident:
->> I had thought about this also but the rationale was:
->>
->> securityfs is compiled due to CONFIG_IMA_NS and the user namespace
->> exists there and that has a pointer now to ima_namespace, which can
->> have that callback. I assumed that other namespaced subsystems could
->> also be  reached then via such a callback, but I don't know.
-> Well securityfs is supposed to exist for LSMs.  At some point each of
-> those is going to need to be namespaced, which may eventually be quite
-> a pile of callbacks, which is why I thought of a notifier.
->
->> I suppose any late filesystem init callchain would have to be
->> connected to the user_namespace somehow?
-> I don't think so; I think just moving some securityfs entries into the
-> user_namespace and managing the notifier chain from within securityfs
-> will do for now.  [although I'd have to spec this out in code before I
-> knew for sure].
+Hi Kees,
 
-It doesn't have to be right in the user_namespace. The IMA namespace is 
-connected to the user namespace and holds the dentries now...
+thanks for the review.
 
-Please spec it out...
+> > Used to configure the use of a specific rtc device on CI systems with:
+> >  tools/testing/selftests/rtc/settings:
+> >    timeout=90
+> >    rtctest_args="/dev/rtc1"
+> 
+> I like this idea generally, but I have some concern that this is
+> muddling the test's settings ("do not expect me to finish before
+> timeout=90") vs the local system's settings ("here is where to find the
+> rtc to test"). I can't, however, think of a better way to handle this
+> currently. :P
+> 
 
+The idea stems from the need to workaround some broken setup in CI, but
+beside this (which is opinable) then I realized that, indeed, the rtctest
+could already accept as first argument the rtc to use but simply there's
+no way as of now to pass any argument down to the tests through the
+run_kselftest/runner scripts, so, it seemed to me a general nice to have
+for any kind of test that needs local configuration, beside the specific
+issue I was facing.
 
->
->>>> +int ima_fs_ns_init(struct ima_namespace *ns)
->>>> +{
->>>> +	ns->mount = securityfs_ns_create_mount(ns->user_ns);
->>> This actually triggers on the call to securityfs_init_fs_context,
->>> but nothing happens because the callback is null.  Every subsequent
->>> use of fscontext will trigger this.  The point of a keyed supeblock
->>> is that fill_super is only called once per key, that's the place we
->>> should be doing this.   It should also probably be a blocking
->>> notifier so anyconsumer of securityfs can be namespaced by
->>> registering for this notifier.
->> What I don't like about the fill_super is that it gets called too
->> early:
->>
->> [   67.058611] securityfs_ns_create_mount @ 102 target user_ns:
->> ffff95c010698c80; nr_extents: 0
->> [   67.059836] securityfs_fill_super @ 47  user_ns:
->> ffff95c010698c80;
->> nr_extents: 0
-> Right, it's being activated by securityfs_ns_create_mount which is
-> called as soon as the user_ns is created.
+So basically enabling a mechanism that allows me to tell the CI automation
+guys how to overlay a specific platform tests-config on top of the default
+one found in setting, right before the test starts.
 
-Well, that doesn't help us then...
+At the end, both timeouts and test-specific args are configuration params
+with the only difference that the first is general the second address
+test specific capabilities.
+(there are quite a few: egrep -R "argv\[1\]" tools/testing/selftests/)
 
+> Is this case common enough that a given test shouldn't, instead, just
+> take config from environment variables set by the CI?
+> 
+That would mean patch every single test though, right ? or do you mean
+maybe instead using the same variable indirection mechanism as it is now
+but let the CI system provide the exported var instead of picking it from
+the overlayed settings file like:
 
->> We are switching to the target user namespace in
->> securityfs_ns_create_mount. The expected nr_extents at this point is
->> 0, since user_ns hasn't been configured, yet. But then
->> security_fill_super is also called with nr_extents 0. We cannot use
->> that, it's too early!
-> Exactly, so I was thinking of not having a securityfs_ns_create_mount
-> at all.  All the securityfs_ns_create.. calls would be in the notifier
+export kselftest_rtctest_args=/dev/rtc1; /opt/ksft/run_kselftest.sh -c rtc
 
-But we need to somehow have a call to get_tree_keyed() and have that 
-user namespace switched out. I don't know how else to do this other than 
-having some function that does that and that is now called 
-securityfs_ns_create_mount().
+...in fact it works fine on my local setup and maybe it's better than the
+overlaying thing for the CI perspective
 
-get_tree_keyed() will also call the fill_super() which is called when 
-securityfs_ns_create_mount() is called.
+> (Also, will we need to worry in the future about running the same test
+> multiple times with different system settings? ("try each of these /dev
+> nodes...")
+> 
 
-[  196.739071] ima_fs_ns_init @ 639 before securityfs_ns_create_mount()
-[  196.740426] securityfs_init_fs_context @ 72  user_ns: 
-ffffffff98a3cc60; nr_extents: 1
-[  196.741519] securityfs_ns_create_mount @ 105 target user_ns: 
-ffff9e239753eb80; nr_extents: 0
-[  196.742657] securityfs_get_tree @ 60 before get_tree_keyed()
-[  196.743418] securityfs_fill_super @ 47  user_ns: ffff9e239753eb80; 
-nr_extents: 0
-[  196.744467] ima_fs_ns_init @ 641 after securityfs_ns_create_mount()
-[  196.745304] ima: Allocated hash algorithm: sha256
-[  196.757650] securityfs_init_fs_context @ 72  user_ns: 
-ffff9e239753eb80; nr_extents: 1
-[  196.758759] securityfs_get_tree @ 60 before get_tree_keyed()
+I would let this to be in charge of the CI automation machinery (if they
+want to run multiple runs with different setups and so different ENVs)
 
-You said it works by 'accident'. I know it works because the function 
-securityfs_init_fs_context() that now populates the filesystem via the 
-late_fs_init() is getting called twice. Does 'accident' here mean the 
-call sequence could change?
+> Is there a patch for the changes to the RTC test?
+> 
 
+The rtctest already interprets argv[1] as the rtc to use, if provided and,
+as said, I was thinking to use this as a CI-directed overlaying mechanism,
+so that's no need of further patches to the test to be commited upstream
+(if this was what you meant)
 
->
->> Where would the vfsmount pointer reside? For now it's in
->> ima_namespace, but it sounds like it should be in a more centralized
->> place? Should it also be  connected to the user_namespace so we can
->> pick it up using get_user_ns()?
-> exactly.  I think struct user_namespace should have two elements gated
-> by a #ifdef CONFIG_SECURITYFS which are the vfsmount and the
-> mount_count for passing into simple_pin_fs.
+> > ---
+> >  tools/testing/selftests/kselftest/runner.sh | 12 +++++++++++-
+> >  1 file changed, 11 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+> > index a9ba782d8ca0..f877a8571927 100644
+> > --- a/tools/testing/selftests/kselftest/runner.sh
+> > +++ b/tools/testing/selftests/kselftest/runner.sh
+> > @@ -49,6 +49,15 @@ run_one()
+> >  
+> >  	# Reset any "settings"-file variables.
+> >  	export kselftest_timeout="$kselftest_default_timeout"
+> > +
+> > +	# Optional arguments for any command, possibly defined in settings
+> > +	# as args="<options>"
+> > +	kselftest_args=""
+> > +
+> > +	# Optional arguments for this command, possibly defined in settings
+> > +	# as <$BASENAME_TEST>_args="<options>"
+> > +	kselftest_cmd_args_ref="kselftest_${BASENAME_TEST}_args"
+> > +
+> >  	# Load per-test-directory kselftest "settings" file.
+> >  	settings="$BASE_DIR/$DIR/settings"
+> >  	if [ -r "$settings" ] ; then
+> > @@ -69,7 +78,8 @@ run_one()
+> >  		echo "# Warning: file $TEST is missing!"
+> >  		echo "not ok $test_num $TEST_HDR_MSG"
+> >  	else
+> > -		cmd="./$BASENAME_TEST"
+> > +		eval kselftest_cmd_args="\$$kselftest_cmd_args_ref"
+> 
+> nitpit: Just to avoid tripping any future work to gracefully handle
+> unset variables, maybe this could specify an empty-string default:
+> 
+> 		eval kselftest_cmd_args="\${$kselftest_cmd_args_ref:-}"
+> 
 
-Also that we can do for as long as it flies beyond the conversation 
-here... :-) Anyone else have an opinion ?
+Right, I'll fix.
 
-   Stefan
+Thanks again,
+Cristian
 
-
->
-> James
->
->

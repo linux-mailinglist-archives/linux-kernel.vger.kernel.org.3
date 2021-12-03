@@ -2,96 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4FD466FC2
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 03:28:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 901F0466FC4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 03:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240566AbhLCCcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 21:32:12 -0500
-Received: from helcar.hmeau.com ([216.24.177.18]:57374 "EHLO fornost.hmeau.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234029AbhLCCcL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 21:32:11 -0500
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1msyJB-0008Pj-HO; Fri, 03 Dec 2021 13:28:22 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 03 Dec 2021 13:28:21 +1100
-Date:   Fri, 3 Dec 2021 13:28:21 +1100
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Geliang Tang <geliangtang@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Haren Myneni <haren@us.ibm.com>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        linux-crypto <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: Re: [PATCH 1/9] crypto: add zbufsize() interface
-Message-ID: <20211203022821.GA16082@gondor.apana.org.au>
-References: <20180802215118.17752-1-keescook@chromium.org>
- <20180802215118.17752-2-keescook@chromium.org>
- <20180807094513.vstt5dhbb7n6kvds@gondor.apana.org.au>
- <CAGXu5j+dPqpJZbO_AuGsNqJzq7XGcB2deXA5RELWv1-Ywi5QOA@mail.gmail.com>
- <20180808025319.32d57wtjpyyapwo5@gondor.apana.org.au>
- <202112011529.699092F@keescook>
- <20211202015820.GB8138@gondor.apana.org.au>
- <202112011947.7FA0A587C@keescook>
- <20211202035727.GC8138@gondor.apana.org.au>
- <202112012304.973C04859C@keescook>
+        id S1378021AbhLCCct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 21:32:49 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:15689 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234029AbhLCCcs (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 21:32:48 -0500
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J4xXb5rHXzZdNW;
+        Fri,  3 Dec 2021 10:26:39 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 3 Dec 2021 10:29:23 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2308.20; Fri, 3 Dec 2021 10:29:23 +0800
+Message-ID: <4cd6d815-aaf2-2d62-cff9-8fb4fae3781d@huawei.com>
+Date:   Fri, 3 Dec 2021 10:29:22 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202112012304.973C04859C@keescook>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v3] arm64: Enable KCSAN
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>, Marco Elver <elver@google.com>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <joey.gouly@arm.com>
+References: <20211202143331.15259-1-wangkefeng.wang@huawei.com>
+ <CANpmjNO5DUk=biDkfP9iepKYBeROO8wL58n8HziOTXuRMOXpvQ@mail.gmail.com>
+ <Yajb4w6R4nqPpELq@lakrids>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <Yajb4w6R4nqPpELq@lakrids>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggeme712-chm.china.huawei.com (10.1.199.108) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 12:10:13AM -0800, Kees Cook wrote:
+
+On 2021/12/2 22:44, Mark Rutland wrote:
+> On Thu, Dec 02, 2021 at 03:36:06PM +0100, Marco Elver wrote:
+>> On Thu, 2 Dec 2021 at 15:23, Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+>>> This patch enables KCSAN for arm64, with updates to build rules
+>>> to not use KCSAN for several incompatible compilation units.
+>>>
+>>> Resent GCC version(at least GCC10) made outline-atomics as the
+>> s/Resent/Recent/
+>>
+>>> default option(unlike Clang), which will cause linker errors
+>>> for kernel/kcsan/core.o. Disables the out-of-line atomics by
+>>> no-outline-atomics to fix the linker errors.
+>>>
+>>> Meanwhile, as Mark said[1], there is a specific issue on arm64
+>>> about ARM64_BTI with Clang 11 if KCSAN enabled, which is fixed
+>>> by Clang 12, add CLANG_VERSION check. And also some latent issues
+>>> are need to be fixed which isn't just a KCSAN problem, we make
+>>> the KCSAN depends on EXPERT for now.
+>>>
+>>> Tested selftest and kcsan_test(built with GCC11 and Clang 13),
+>>> and all passed.
+>>>
+>>> [1] https://lkml.org/lkml/2021/12/1/354
+>> Please use lore/kernel.org permalinks. For this one it'd be:
+>> https://lkml.kernel.org/r/YadiUPpJ0gADbiHQ@FVFF77S0Q05N
+>>
+>> (But I think if this is the final version of the patch, hopefully a
+>> maintainer can amend the commit message.)
+>>
+>>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>> Acked-by: Marco Elver <elver@google.com> # kernel/kcsan
+>>
+>> is still valid, given nothing changed there. I leave the rest to Mark.
+> I want to do some compiler / config testing before I ack this (just to
+> make sure there isn't some latent issue I've forgotten about), but
+> otherwise I think this should be fine.
 >
-> I'd rather just have a simple API that hid all the async (or sync) details
-> and would work with whatever was the "best" implementation. Neither pstore
-> nor the module loader has anything else to do while decompression happens.
+> I'll try to have that done in the next few days.
 
-Well that's exactly what the acomp interface is supposed to be.
-It supports any algorithm, whether sync or async.  However, for
-obvious reasons this interface has to be async.
+I will wait for some time, thanks Marco/Mark.
 
-> > Typically this would only make sense if you process a very small
-> > amount of data, but this seems counter-intuitive with compression
-> > (it does make sense with hashing where we often hash just 16 bytes).
-> 
-> pstore works on usually a handful of small buffers. (One of the largest
-> I've seen is used by Chrome OS: 6 128K buffers.) Speed is not important
-> (done at most 6 times at boot, and 1 time on panic), and, in fact,
-> offload is probably a bad idea just to keep the machinery needed to
-> store a panic log as small as possible.
+>
+> Any other review/testing would be appreciated!
 
-In that case creating an scomp user interface is probably the best
-course of action.
+As Nathan points, commit 8cdd23c23c3d ("arm64: Restrict ARM64_BTI_KERNEL
 
-> Why can't crypto_comp_*() be refactored to wrap crypto_acomp_*() (and
-> crypto_scomp_*())? I can see so many other places that would benefit from
-> this. Here are just some of the places that appear to be hand-rolling
-> compression/decompression routines that might benefit from this kind of
-> code re-use and compression alg agnosticism:
+to clang 12.0.0 and newer"), so need to add Clang version check, which 
+is v2 does.
 
-We cannot provide async hardware through a sync-only interface
-because that may lead to dead-lock.  For your use-cases you should
-avoid using any async implementations.
+is there some other requirement that we need this check, what's your option,
 
-The scomp interface is meant to be pretty much identical to the
-legacy comp interface except that it supports integration with
-acomp.
+thanks.
 
-Because nobody has had a need for scomp we have not added an
-interface for it so it only exists as part of the low-level API.
-You're most welcome to expose it if you don't need the async
-support part of acomp.
-
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+>
+> Thanks,
+> Mark.
+>
+>

@@ -2,125 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A647746722C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 07:45:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2FC467231
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 07:47:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378596AbhLCGtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 01:49:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37335 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234449AbhLCGtN (ORCPT
+        id S1378601AbhLCGud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 01:50:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378618AbhLCGub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 01:49:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638513949;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=B0n7JcNAcYn+Bd11okNue8IqT9XrfBBrxPPRZCGg20A=;
-        b=XZZGPtpeyVaHcfgnJq0Wqoq3RYIvLKVFTIdJ/z8yZScgR9zIHi1fbArBEv2vkKt7ovKHmT
-        CqphCpcl9Yy1XOml9tIqTZJ+3U+ub/fOsYP+JqPS6JmUe11ryukRBw3BWkTqtS8AVouMys
-        TMUlA0W7TccY/YnpbjuPWF44jmcnEzQ=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-314-jaBjDCGaNaqBb7bqisk7oA-1; Fri, 03 Dec 2021 01:45:48 -0500
-X-MC-Unique: jaBjDCGaNaqBb7bqisk7oA-1
-Received: by mail-wm1-f72.google.com with SMTP id g11-20020a1c200b000000b003320d092d08so1021244wmg.9
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 22:45:47 -0800 (PST)
+        Fri, 3 Dec 2021 01:50:31 -0500
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CD6C06175C
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 22:47:08 -0800 (PST)
+Received: by mail-vk1-xa2f.google.com with SMTP id h1so1223747vkh.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 22:47:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=2Mv9jrqjT3MhcoaOxxXoXpTQsXNDwfELgjBdMyKMz0g=;
+        b=CA4vNH46C0KK7hSqW2b/ddr9Ch7IYLCPEsc7akZCZNwAuCLIQwga+kxjQALQDTWat5
+         sd5m51oV2BTnTW0V+GN2rBjDhVJIJfejwYB918TWWeuH/tT3vwSmczcGWoE08y90//as
+         Yh0luuvLois814qvYVA0LLSwbADloiKFE+UOkmpv9BCTZ+AtRttwpZkCcKT/eahLSlfh
+         hPqqsvKCzmUM9J7KyBghWPaKnGomwiTVa8NBCPsRbErJa9nDfJqUQZ8kx4ZaOQdD+n9Q
+         UC6JGUkd7mnWZTpnFzcgdUz8sEdlGToBn/PwyPO4GBe6rWAgIUCryz7UpPqxNAnaOmBb
+         0LtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B0n7JcNAcYn+Bd11okNue8IqT9XrfBBrxPPRZCGg20A=;
-        b=v/C8tm9WIbTJSzzg23p55igBHfW/wwx0Fd4LYvonsorgPk60rwRsScphCdoaKQrpci
-         jNwt7qeFOQ8+Jlu+qBv5eJstqqcx4l6XZzherSuVsNL9zJah7dcYOYXRRjIxlPqJTnVt
-         3jj4UPshavF87/vQ/FtNiDaEqoaVp513xU+H1btvEVJM907yZ3LPjx2lfnNhRP/UyOdc
-         N11VoAfLCj1FSrj7JETuFhMFAXRh5TLfoYGq2SvmoaF6T30IQcDkNCoV8Uft6jljQ+Eg
-         WF9Hcfk7I9WoIQhOh241o2z6tik2Cmu82fDS2ZXN2vV2Ku1vydKt3yA0Vd+n0M4A5d+u
-         aTzA==
-X-Gm-Message-State: AOAM532S3+2sIufplxLlj5ikKtyBXQJgcBXnUpwBQXzoz1SDxXXANeC7
-        C2JExqyGeAuuksJ+AwLjISDxKEomJXj0KLSrtxyUxDKfnfB6rGlgIR6LX1/9HllK+y1NbkiTqMb
-        vBLkimKcUq3HtLVb0VMIdmQ/j
-X-Received: by 2002:a05:600c:d0:: with SMTP id u16mr12211152wmm.7.1638513946725;
-        Thu, 02 Dec 2021 22:45:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw4QxLQdwPZWAy1sF4nI2kLftVNVchu51EysUwQMm50HtRmJU/m6AC98u7ekwAGwe+6P2l5Zg==
-X-Received: by 2002:a05:600c:d0:: with SMTP id u16mr12211119wmm.7.1638513946428;
-        Thu, 02 Dec 2021 22:45:46 -0800 (PST)
-Received: from xz-m1.local ([64.64.123.26])
-        by smtp.gmail.com with ESMTPSA id o9sm1810290wrs.4.2021.12.02.22.45.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 22:45:46 -0800 (PST)
-Date:   Fri, 3 Dec 2021 14:45:37 +0800
-From:   Peter Xu <peterx@redhat.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Hugh Dickins <hughd@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: Re: [PATCH v6 01/23] mm: Introduce PTE_MARKER swap entry
-Message-ID: <Yam9EezLTANRA+Rf@xz-m1.local>
-References: <20211115075522.73795-1-peterx@redhat.com>
- <11462319.U46FXHIEPT@nvdebian>
- <YambOGGK/K7saiHM@xz-m1.local>
- <3832555.7SGzcYD3YQ@nvdebian>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=2Mv9jrqjT3MhcoaOxxXoXpTQsXNDwfELgjBdMyKMz0g=;
+        b=0uSUUIv3UPCDPiuy4YeKBD6Lr4Vw3bmyT+kEjG4i8MGfgmYlVqJDWXCamSexJx/yIA
+         RigTs+obn3Hh2HSC7tkIsSHvBx9yB+UYV8zAm/nUJ2gfrasci3Jfzeju3Kks7LPhNzaT
+         eiFAr8ENouCIWI0EUbJiCivZMyJI++Jd6NukctGxrEvBgIsxYswpUwWE7K4UwDrWwcWv
+         s9LW5nXwUT0tSrm1Y7/Fw64KXMytACtlJcuni3cqEL4zoOtgBTJcomG0fzucuOgXelnw
+         zmE+B6jmIMK3Ef5qc40Io+XO5TkELE/794zg3z33jicFG6LHyuu0ckwwknKEdq1Y62DD
+         yL5Q==
+X-Gm-Message-State: AOAM530cGe7C4F3VuKw8SCJKBgVU16vXzQXYNSZR9olVkEjms6l0xkiO
+        x/16hGQAhYLtppTI+q8iSm71y/4EowkO/1PEGAA=
+X-Google-Smtp-Source: ABdhPJwspBP1I8oh6fDs9qhPQrKOWG2PXd05GkRcjSZ41DSltO7R00QqbySJZAbzb5idm+P82IabegLJwzV+5RE2/ys=
+X-Received: by 2002:a05:6122:1350:: with SMTP id f16mr21400461vkp.10.1638514026719;
+ Thu, 02 Dec 2021 22:47:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3832555.7SGzcYD3YQ@nvdebian>
+Received: by 2002:a59:8852:0:b0:262:687d:8d8f with HTTP; Thu, 2 Dec 2021
+ 22:47:06 -0800 (PST)
+Reply-To: jeffery1@jefferylambertesq.co.uk
+From:   Jeffery Lambert ESQ <ericofili5@gmail.com>
+Date:   Thu, 2 Dec 2021 22:47:06 -0800
+Message-ID: <CANNckNv5ABgXqOE+BBWhGZNqZxcsVT2dmcn6G0vfCGBD2wRG1A@mail.gmail.com>
+Subject: Can i trust you?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 04:35:38PM +1100, Alistair Popple wrote:
-> > > > +static inline pte_marker pte_marker_get(swp_entry_t entry)
-> > > > +{
-> > > > +	return swp_offset(entry) & PTE_MARKER_MASK;
-> > > 
-> > > I'm not sure the PTE_MARKER_MASK adds much, especially as we only have one
-> > > user. I don't see a problem with open-coding these kind of checks (ie.
-> > 
-> > It's more or less a safety belt to make sure anything pte_marker_get() returned
-> > will be pte_marker defined bits only.
-> > 
-> > > swp_offset(entry) & PTE_MARKER_UFFD_WP) as you kind of end up doing that anyway.
-> > > Alternatively if you want helper functions I think it would be better to define
-> > > them for each marker. Eg: is_pte_marker_uffd_wp().
-> > 
-> > Yes we can have something like is_pte_marker_uffd_wp(), I didn't do that
-> > explicitly because I want us to be clear that pte_marker is a bitmask, so
-> > calling "is_*" will be slightly opaque - strictly speaking it should be
-> > "pte_marker_has_uffd_wp_bit()" if there will be more bits defined, but then the
-> > name of the helper will look a bit odd too.  Hence I just keep the only
-> > interface to fetch the whole marker and use "&" in the call sites to check.
-> 
-> Why does a caller need to care if it's a bitmask or not though? Isn't that an
-> implementation detail that could be left to the "is_*" functions? I must admit
-> I'm still working through the rest of this series though - is it because you
-> end up storing some kind of value in the upper bits of the PTE marker?
+Good day,
 
-Nop. I'm just afraid the caller could overlook the fact that it's a bitmask,
-then there can be code like:
+This is a personal email directed to you and I request that it=E2=80=99s be=
+en
+treated as such. I got your email from online directory; I would need
+your assistance in re-profiling funds belonging to my late client who
+shares similar surnames with you. Contact me for more detailed
+information.
 
-  if (is_pte_marker_uffd_wp(*ptep) && drop_uffd_wp)
-      pte_clear(ptep)
+Regards,
 
-While we should only do:
+Jeffery Lambert ESQ
 
-  if (is_pte_marker_uffd_wp(*ptep) && drop_uffd_wp)
-      // remove uffd-wp bit in the pte_marker, keep the reset bitmask
-
-I could be worrying too much, there's no real user of it.  If you prefer the
-helper a lot I can add it in the new version.  Thanks,
-
--- 
-Peter Xu
-
+____________________________________________________________________
+This e-mail contains legally privileged and confidential information
+intended for the individual or entity named in the message. If the
+reader of this message is not the intended recipient, or the agent
+responsible to deliver it to the intended recipient, you are hereby
+notified that any review, disseminating or copying of this
+communication is strictly prohibited

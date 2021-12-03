@@ -2,80 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39DD24677CC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B194677D2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 14:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380979AbhLCNF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 08:05:58 -0500
-Received: from so254-9.mailgun.net ([198.61.254.9]:34121 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239885AbhLCNF5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 08:05:57 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1638536553; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=S0boIMq9CsUZ+THAcamuP4gAY6wx2Qx7eFqNdDb2HYs=; b=gY6eEB8AWQjO59qXNYENcxrr5BUy2usMd/DYUvI3X8KqYt9/758TP8orPaKJ6EeBhrg2u2Pj
- gCcl+14PGzq1gnqU6EvtWu/4tXsNOhThJ+9uHqsWd+LMVzBHx2KQXgsvNGBnIc6PwhkFpkHE
- R22imDnSXrswvPfgFbirvHFljyQ=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n09.prod.us-east-1.postgun.com with SMTP id
- 61aa15687d878c8ded86aecd (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 03 Dec 2021 13:02:32
- GMT
-Sender: charante=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D1B68C43616; Fri,  3 Dec 2021 13:02:31 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.29.110] (unknown [49.37.157.144])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: charante)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 04359C4338F;
-        Fri,  3 Dec 2021 13:02:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 04359C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [PATCH v2] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for
- shmem
-To:     Matthew Wilcox <willy@infradead.org>,
-        Charan Teja Reddy <quic_charante@quicinc.com>
-Cc:     hughd@google.com, akpm@linux-foundation.org, vbabka@suse.cz,
-        rientjes@google.com, david@redhat.com, mhocko@suse.com,
-        surenb@google.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <1638442253-1591-1-git-send-email-quic_charante@quicinc.com>
- <YajfQiEHYA6E5CeY@casper.infradead.org>
-From:   Charan Teja Kalla <charante@codeaurora.org>
-Message-ID: <1a88ed3f-ad7d-9d06-108e-e00f06b0ed19@codeaurora.org>
-Date:   Fri, 3 Dec 2021 18:32:25 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S244359AbhLCNKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 08:10:55 -0500
+Received: from foss.arm.com ([217.140.110.172]:49102 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235590AbhLCNKw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 08:10:52 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F307B1396;
+        Fri,  3 Dec 2021 05:07:27 -0800 (PST)
+Received: from [10.57.34.58] (unknown [10.57.34.58])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D8E7A3F5A1;
+        Fri,  3 Dec 2021 05:07:25 -0800 (PST)
+Message-ID: <46d9c8dd-d2dc-0d2a-aeb4-08dff9dcb733@arm.com>
+Date:   Fri, 3 Dec 2021 13:07:21 +0000
 MIME-Version: 1.0
-In-Reply-To: <YajfQiEHYA6E5CeY@casper.infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+From:   Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH 0/3] Allow restricted-dma-pool to customize IO_TLB_SEGSIZE
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        - <devicetree-spec@vger.kernel.org>, devicetree@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, senozhatsky@chromium.org
+References: <20211123112104.3530135-1-hsinyi@chromium.org>
+ <75ea1026-63e5-165a-9e07-27b5ac4c7579@arm.com>
+ <CAAFQd5AA3XCqxOSdQOOCMEdByDKRz5J9vWB0QghO2SSCqOvQBQ@mail.gmail.com>
+Content-Language: en-GB
+In-Reply-To: <CAAFQd5AA3XCqxOSdQOOCMEdByDKRz5J9vWB0QghO2SSCqOvQBQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2021-11-25 07:35, Tomasz Figa wrote:
+> Hi Robin,
+> 
+> On Tue, Nov 23, 2021 at 8:59 PM Robin Murphy <robin.murphy@arm.com> wrote:
+>>
+>> On 2021-11-23 11:21, Hsin-Yi Wang wrote:
+>>> Default IO_TLB_SEGSIZE (128) slabs may be not enough for some use cases.
+>>> This series adds support to customize io_tlb_segsize for each
+>>> restricted-dma-pool.
+>>>
+>>> Example use case:
+>>>
+>>> mtk-isp drivers[1] are controlled by mtk-scp[2] and allocate memory through
+>>> mtk-scp. In order to use the noncontiguous DMA API[3], we need to use
+>>> the swiotlb pool. mtk-scp needs to allocate memory with 2560 slabs.
+>>> mtk-isp drivers also needs to allocate memory with 200+ slabs. Both are
+>>> larger than the default IO_TLB_SEGSIZE (128) slabs.
+>>
+>> Are drivers really doing streaming DMA mappings that large? If so, that
+>> seems like it might be worth trying to address in its own right for the
+>> sake of efficiency - allocating ~5MB of memory twice and copying it back
+>> and forth doesn't sound like the ideal thing to do.
+>>
+>> If it's really about coherent DMA buffer allocation, I thought the plan
+>> was that devices which expect to use a significant amount and/or size of
+>> coherent buffers would continue to use a shared-dma-pool for that? It's
+>> still what the binding implies. My understanding was that
+>> swiotlb_alloc() is mostly just a fallback for the sake of drivers which
+>> mostly do streaming DMA but may allocate a handful of pages worth of
+>> coherent buffers here and there. Certainly looking at the mtk_scp
+>> driver, that seems like it shouldn't be going anywhere near SWIOTLB at all.
+> 
+> First, thanks a lot for taking a look at this patch series.
+> 
+> The drivers would do streaming DMA within a reserved region that is
+> the only memory accessible to them for security reasons. This seems to
+> exactly match the definition of the restricted pool as merged
+> recently.
 
+Huh? Of the drivers indicated, the SCP driver is doing nothing but 
+coherent allocations, and I'm not entirely sure what those ISP driver 
+patches are supposed to be doing but I suspect it's probably just buffer 
+allocation too. I don't see any actual streaming DMA anywhere :/
 
-On 12/2/2021 8:29 PM, Matthew Wilcox wrote:
->> +		list_add(&page->lru, list);
->> +		inc_node_page_state(page, NR_ISOLATED_ANON +
->> +						page_is_file_lru(page));
-> ... what if the page is a THP?
+> The new dma_alloc_noncontiguous() API would allow allocating suitable
+> memory directly from the pool, which would eliminate the need to copy.
 
-Will take care of THP pages in the next spin. Thanks for pointing it out.
+Can you clarify what's being copied, and where? I'm not all that 
+familiar with the media APIs, but I thought it was all based around 
+preallocated DMA buffers (the whole dedicated "videobuf" thing)? The few 
+instances of actual streaming DMA I can see in drivers/media/ look to be 
+mostly PCI drivers mapping private descriptors, whereas the MTK ISP 
+appears to be entirely register-based.
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora
-Forum, a Linux Foundation Collaborative Project
+> However, for a restricted pool, this would exercise the SWIOTLB
+> allocator, which currently suffers from the limitation as described by
+> Hsin-Yi. Since the allocator in general is quite general purpose and
+> already used for coherent allocations as per the current restricted
+> pool implementation, I think it indeed makes sense to lift the
+> limitation, rather than trying to come up with yet another thing.
+
+No, just fix the dma_alloc_noncontiguous() fallback case to split the 
+allocation into dma_max_mapping_size() chunks. *That* makes sense.
+
+Thanks,
+Robin.
+
+> 
+> Best regards,
+> Tomasz
+> 
+>>
+>> Robin.
+>>
+>>> [1] (not in upstream) https://patchwork.kernel.org/project/linux-media/cover/20190611035344.29814-1-jungo.lin@mediatek.com/
+>>> [2] https://elixir.bootlin.com/linux/latest/source/drivers/remoteproc/mtk_scp.c
+>>> [3] https://patchwork.kernel.org/project/linux-media/cover/20210909112430.61243-1-senozhatsky@chromium.org/
+>>>
+>>> Hsin-Yi Wang (3):
+>>>     dma: swiotlb: Allow restricted-dma-pool to customize IO_TLB_SEGSIZE
+>>>     dt-bindings: Add io-tlb-segsize property for restricted-dma-pool
+>>>     arm64: dts: mt8183: use restricted swiotlb for scp mem
+>>>
+>>>    .../reserved-memory/shared-dma-pool.yaml      |  8 +++++
+>>>    .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  4 +--
+>>>    include/linux/swiotlb.h                       |  1 +
+>>>    kernel/dma/swiotlb.c                          | 34 ++++++++++++++-----
+>>>    4 files changed, 37 insertions(+), 10 deletions(-)
+>>>

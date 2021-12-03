@@ -2,118 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8704B467482
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2234A467486
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 11:06:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379758AbhLCKIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 05:08:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
+        id S1379772AbhLCKJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 05:09:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379738AbhLCKIL (ORCPT
+        with ESMTP id S1351346AbhLCKJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 05:08:11 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF60C06173E;
-        Fri,  3 Dec 2021 02:04:47 -0800 (PST)
-Date:   Fri, 03 Dec 2021 10:04:44 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638525885;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8qB0YgACl6GqKRsQYZB69SiEN4qAv5+34fsVCnVr5eU=;
-        b=W22sfpdUPaFr+9GHFqWXE8e7Ia9g8NO9FmiixXynRJN4iX7URVqerX6uGkzLQkeyN39OlU
-        y5A3f+j66CZLRkyUN+9utTdEigqY2PQM6AfUMQjM1a4CnXvKOXW7ogT7/DLYMVkUfai/AL
-        RW5t7cApJM3tRTs96wJNsNCy+rMqFsF6TzwANVV5JgaD4ADfvbLconzPuD8Lflb6IFqdEo
-        3ZdFC+VFIQOcuvthQyAHnBDX0ZabXaiS+i4VrBrV2ShmDSud4fQcscggEgb4+fH8irj+sZ
-        hdDtJYtSzrrlagRYOrNQX8Fw6NAuuYhKKN1ET3eJ09qflK9ymiR9k6Yl1W8Wfw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638525885;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8qB0YgACl6GqKRsQYZB69SiEN4qAv5+34fsVCnVr5eU=;
-        b=qULKMZIs2ukkrrOW4tBGTAKjrHFng8ggnyQi+OE20KU8z47wKevPm5EPaDncXuTQTOnnv7
-        esc0TOvXBjMJylAA==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] objtool: Fix pv_ops noinstr validation
-Cc:     Borislav Petkov <bp@alien8.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211202204534.GA16608@worktop.programming.kicks-ass.net>
-References: <20211202204534.GA16608@worktop.programming.kicks-ass.net>
+        Fri, 3 Dec 2021 05:09:40 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F849C06173E;
+        Fri,  3 Dec 2021 02:06:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=a/ys6cskAlNWsULashfoqrEixGaH4KiNUxE+1OiguW0=; b=J0VIv2PGI2YMODNat75+3pt+oG
+        /murTVznnyShQpHUdjfI7fVlowa5qhKNmHF1NCj283L/0bVE9Nd1trwDldCbTlwcaznPlMfdIKTSe
+        8sHNMAMEhlMLgA4Q0kgaEbFp5exVv813ND6187LX9qdsSu/YIq93W7lExi80GQ/Lf9uyjWLusP1lS
+        zwrATFYnDJRV7SN9B+EES34aX7F3M41Mnqm5Z+DkcpdAZJxEJw9N72oAZRzqt7DwneDuKoiPtbrFG
+        LQbccx5+9SZgqeSkh891Jn9Ekcwwcb/2ImzdLtwGsGdUy4E3wjQCwnHTMbhszn42EiXpV3tPMyQ8g
+        b7Mc3oIg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mt5Rz-00884w-4M; Fri, 03 Dec 2021 10:05:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AF99230001C;
+        Fri,  3 Dec 2021 11:05:54 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 98C2B2B36B3B2; Fri,  3 Dec 2021 11:05:54 +0100 (CET)
+Date:   Fri, 3 Dec 2021 11:05:54 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v8 08/14] livepatch: only match unique symbols when using
+ FG-KASLR
+Message-ID: <YansAlTr0/MfNxWc@hirez.programming.kicks-ass.net>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+ <20211202223214.72888-9-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Message-ID: <163852588454.11128.16369385038253612673.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211202223214.72888-9-alexandr.lobakin@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Thu, Dec 02, 2021 at 11:32:08PM +0100, Alexander Lobakin wrote:
+> If any type of function granular randomization is enabled, the sympos
+> algorithm will fail, as it will be impossible to resolve symbols when
+> there are duplicates using the previous symbol position.
+> 
+> We could override sympos to 0, but make it more clear to the user
+> and bail out if the symbol is not unique.
 
-Commit-ID:     988f01683c7f2bf9f8fe2bae1cf4010fcd1baaf5
-Gitweb:        https://git.kernel.org/tip/988f01683c7f2bf9f8fe2bae1cf4010fcd1baaf5
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 02 Dec 2021 21:45:34 +01:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 03 Dec 2021 09:11:42 +01:00
-
-objtool: Fix pv_ops noinstr validation
-
-Boris reported that in one of his randconfig builds, objtool got
-infinitely stuck. Turns out there's trivial list corruption in the
-pv_ops tracking when a function is both in a static table and in a code
-assignment.
-
-Avoid re-adding function to the pv_ops[] lists when they're already on
-it.
-
-Fixes: db2b0c5d7b6f ("objtool: Support pv_opsindirect calls for noinstr")
-Reported-by: Borislav Petkov <bp@alien8.de>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Tested-by: Borislav Petkov <bp@alien8.de>
-Link: https://lkml.kernel.org/r/20211202204534.GA16608@worktop.programming.kicks-ass.net
----
- tools/objtool/elf.c     | 1 +
- tools/objtool/objtool.c | 4 ++++
- 2 files changed, 5 insertions(+)
-
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 81a4c54..4b384c9 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -375,6 +375,7 @@ static int read_symbols(struct elf *elf)
- 			return -1;
- 		}
- 		memset(sym, 0, sizeof(*sym));
-+		INIT_LIST_HEAD(&sym->pv_target);
- 		sym->alias = sym;
- 
- 		sym->idx = i;
-diff --git a/tools/objtool/objtool.c b/tools/objtool/objtool.c
-index c90c708..bdf699f 100644
---- a/tools/objtool/objtool.c
-+++ b/tools/objtool/objtool.c
-@@ -153,6 +153,10 @@ void objtool_pv_add(struct objtool_file *f, int idx, struct symbol *func)
- 	    !strcmp(func->name, "_paravirt_ident_64"))
- 		return;
- 
-+	/* already added this function */
-+	if (!list_empty(&func->pv_target))
-+		return;
-+
- 	list_add(&func->pv_target, &f->pv_ops[idx].targets);
- 	f->pv_ops[idx].clean = false;
- }
+Since we're going lots of horrendous things already, why can't we fix
+this duplicate nonsense too?

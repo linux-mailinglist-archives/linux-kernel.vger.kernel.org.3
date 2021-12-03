@@ -2,89 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D64AC467311
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:04:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F7646731D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 09:08:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379111AbhLCIIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 03:08:07 -0500
-Received: from smtp21.cstnet.cn ([159.226.251.21]:46184 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1351084AbhLCIIH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 03:08:07 -0500
-Received: from localhost.localdomain (unknown [124.16.138.128])
-        by APP-01 (Coremail) with SMTP id qwCowAAH3aWFz6lh8P8dAQ--.53042S2;
-        Fri, 03 Dec 2021 16:04:22 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     linus.walleij@linaro.org, bgolaszewski@baylibre.com, vz@mleia.com
-Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] gpio: lpc32xx: Handle devm_gpiochip_add_data error codes
-Date:   Fri,  3 Dec 2021 16:04:20 +0800
-Message-Id: <20211203080420.1560039-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        id S1379134AbhLCIMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 03:12:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351103AbhLCIMB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 03:12:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2072EC06173E;
+        Fri,  3 Dec 2021 00:08:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B45AF62963;
+        Fri,  3 Dec 2021 08:08:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C601EC53FC7;
+        Fri,  3 Dec 2021 08:08:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638518917;
+        bh=KxH7ZGxVJfrcf6JYVcVHtDcyryoNErHSgyXmxhiT11I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MM898awN9WfEXhnii4ChAHzhExx0NwP6S7X/fowg1zrBLgziKiv7K2aD+Zr+zJF1I
+         zfjWXTsOQ8/UBbdibW6PV0Q9dklH2IcWgHzRAAl4I9302qbCj+qO7e4G8wLy/ndeQd
+         Ht/8JbdQMDYn2ftCsGZ8asGmKeBAlC/Y0+gyr12A02k010jd5YkyLxBt/04HwjuQZq
+         r2oH42a3lBuZR6LrbCPexQPX/gEr+09oehLCuxC4Q3Th5nrfmv8o7/latrhqak28oV
+         671QzCH/v+KWjKg2O278qIYQU+Wke88Ur/MpXcwxrbWg11RxVH3skXf4shpXYlxIvy
+         FuRBk9avNtuSw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-xtensa@linux-xtensa.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: [PATCH] futex: Fix additional regressions
+Date:   Fri,  3 Dec 2021 09:07:56 +0100
+Message-Id: <20211203080823.2938839-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAAH3aWFz6lh8P8dAQ--.53042S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uw48AF4fKryDCrWUKr4Uurg_yoW8JFWUpw
-        10g3yIyryUAF17J34jkF18Aa4Uua10yFWjqFZ2k392q3W5JFy8tF4fXFWkXF4FyFy8Gr4U
-        ZFs7tFW8Zr48Zw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
-        ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr
-        0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOnmRUUUUU
-X-Originating-IP: [124.16.138.128]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of devm_gpiochip_add_data() is not always 0.
-To catch the exception in case of the failure.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Fixes: 69c0a0a52cde ("gpio: lpc32xx: Use devm_gpiochip_add_data() for gpio registration")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog
- 
-v1 -> v2
- 
-* Change 1. Correct mixed declarations and code.
----
- drivers/gpio/gpio-lpc32xx.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Naresh reported another architecture that was broken by the same typo
+that I already fixed for three architectures: mips also refers to the
+futex_atomic_op_inuser_local() function by the wrong name and runs into
+a missing closing '}' as well.
 
-diff --git a/drivers/gpio/gpio-lpc32xx.c b/drivers/gpio/gpio-lpc32xx.c
-index 4e626c4235c2..e3b734302b76 100644
---- a/drivers/gpio/gpio-lpc32xx.c
-+++ b/drivers/gpio/gpio-lpc32xx.c
-@@ -505,6 +505,7 @@ static int lpc32xx_of_xlate(struct gpio_chip *gc,
- static int lpc32xx_gpio_probe(struct platform_device *pdev)
- {
- 	int i;
-+	int err;
- 	void __iomem *reg_base;
+Going through the source tree I found that I also had the same typo in the
+documentation as well as the xtensa code, both of which ended up escaping
+the regression testing so far. In the case of xtensa, it appears that
+the broken code path is only used when building for platforms that are
+not supported by the default gcc configuration, so they are impossible
+to test for with my setup.
+
+After going through these more carefully and fixing up the typos, I
+build-tested all architectures again to ensure I'm not introducing a
+new regression or missing one more obvious issue with my series.
+
+Fixes: 4e0d84634445 ("futex: Fix sparc32/m68k/nds32 build regression")
+Fixes: 3f2bedabb62c ("futex: Ensure futex_atomic_cmpxchg_inatomic() is present")
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: linux-mips@vger.kernel.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-xtensa@linux-xtensa.org
+Cc: Chris Zankel <chris@zankel.net>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/mips/include/asm/futex.h   | 6 +++---
+ arch/xtensa/include/asm/futex.h | 2 +-
+ include/asm-generic/futex.h     | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/arch/mips/include/asm/futex.h b/arch/mips/include/asm/futex.h
+index 9287110cb06d..8612a7e42d78 100644
+--- a/arch/mips/include/asm/futex.h
++++ b/arch/mips/include/asm/futex.h
+@@ -86,9 +86,9 @@
+ 		: "memory");						\
+ 	} else {							\
+ 		/* fallback for non-SMP */				\
+-		ret = arch_futex_atomic_op_inuser_local(op, oparg, oval,\
+-							uaddr);	\
+-	}
++		ret = futex_atomic_op_inuser_local(op, oparg, oval, uaddr);	\
++	}								\
++}
  
- 	reg_base = devm_platform_ioremap_resource(pdev, 0);
-@@ -518,8 +519,10 @@ static int lpc32xx_gpio_probe(struct platform_device *pdev)
- 			lpc32xx_gpiochip[i].chip.of_node = pdev->dev.of_node;
- 			lpc32xx_gpiochip[i].reg_base = reg_base;
- 		}
--		devm_gpiochip_add_data(&pdev->dev, &lpc32xx_gpiochip[i].chip,
-+		err = devm_gpiochip_add_data(&pdev->dev, &lpc32xx_gpiochip[i].chip,
- 				  &lpc32xx_gpiochip[i]);
-+		if (err)
-+			return err;
- 	}
+ static inline int
+ arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
+diff --git a/arch/xtensa/include/asm/futex.h b/arch/xtensa/include/asm/futex.h
+index fe8f31575ab1..a6f7d7ab5950 100644
+--- a/arch/xtensa/include/asm/futex.h
++++ b/arch/xtensa/include/asm/futex.h
+@@ -109,7 +109,7 @@ static inline int arch_futex_atomic_op_inuser(int op, int oparg, int *oval,
  
- 	return 0;
+ 	return ret;
+ #else
+-	return arch_futex_atomic_op_inuser_local(op, oparg, oval, uaddr);
++	return futex_atomic_op_inuser_local(op, oparg, oval, uaddr);
+ #endif
+ }
+ 
+diff --git a/include/asm-generic/futex.h b/include/asm-generic/futex.h
+index 66d6843bfd02..2a19215baae5 100644
+--- a/include/asm-generic/futex.h
++++ b/include/asm-generic/futex.h
+@@ -21,7 +21,7 @@
+ #endif
+ 
+ /**
+- * arch_futex_atomic_op_inuser_local() - Atomic arithmetic operation with constant
++ * futex_atomic_op_inuser_local() - Atomic arithmetic operation with constant
+  *			  argument and comparison of the previous
+  *			  futex value with another constant.
+  *
 -- 
-2.25.1
+2.29.2
 

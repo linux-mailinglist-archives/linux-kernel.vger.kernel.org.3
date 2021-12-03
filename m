@@ -2,83 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 356724676F9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:03:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C7A4676FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 13:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380677AbhLCMHF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Dec 2021 07:07:05 -0500
-Received: from foss.arm.com ([217.140.110.172]:48330 "EHLO foss.arm.com"
+        id S1380700AbhLCMIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 07:08:11 -0500
+Received: from foss.arm.com ([217.140.110.172]:48358 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230154AbhLCMHA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 07:07:00 -0500
+        id S1380690AbhLCMID (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 07:08:03 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19D381396;
-        Fri,  3 Dec 2021 04:03:36 -0800 (PST)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.196.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 325A23F5A1;
-        Fri,  3 Dec 2021 04:03:35 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Josef Bacik <josef@toxicpanda.com>
-Cc:     peterz@infradead.org, vincent.guittot@linaro.org,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-Subject: Re: [REGRESSION] 5-10% increase in IO latencies with nohz balance patch
-In-Reply-To: <878rx6bia5.mognet@arm.com>
-References: <YaUH5GFFoLiS4/3/@localhost.localdomain> <87ee6yc00j.mognet@arm.com> <YaUYsUHSKI5P2ulk@localhost.localdomain> <87bl22byq2.mognet@arm.com> <YaUuyN3h07xlEx8j@localhost.localdomain> <878rx6bia5.mognet@arm.com>
-Date:   Fri, 03 Dec 2021 12:03:27 +0000
-Message-ID: <87wnklaoa8.mognet@arm.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BAA281396;
+        Fri,  3 Dec 2021 04:04:39 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.66.214])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF9613F5A1;
+        Fri,  3 Dec 2021 04:04:37 -0800 (PST)
+Date:   Fri, 3 Dec 2021 12:04:35 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dougall <dougallj@gmail.com>, kernel-team@android.com
+Subject: Re: [PATCH v2 8/8] drivers/perf: Add Apple icestorm/firestorm CPU
+ PMU driver
+Message-ID: <YaoH07BzWSLKQ6K3@FVFF77S0Q05N>
+References: <20211201134909.390490-1-maz@kernel.org>
+ <20211201134909.390490-9-maz@kernel.org>
+ <YaepolizIKkzDQoV@FVFF77S0Q05N>
+ <877dcnm2wt.wl-maz@kernel.org>
+ <Yajwydy37psEPaS2@lakrids>
+ <875ys6lype.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <875ys6lype.wl-maz@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/11/21 00:26, Valentin Schneider wrote:
-> On 29/11/21 14:49, Josef Bacik wrote:
->> On Mon, Nov 29, 2021 at 06:31:17PM +0000, Valentin Schneider wrote:
->>> On 29/11/21 13:15, Josef Bacik wrote:
->>> > On Mon, Nov 29, 2021 at 06:03:24PM +0000, Valentin Schneider wrote:
->>> >> Would you happen to have execution traces by any chance? If not I should be
->>> >> able to get one out of that fsperf thingie.
->>> >>
->>> >
->>> > I don't, if you want to tell me how I can do it right now.  I've disabled
->>> > everything on this box for now so it's literally just sitting there waiting to
->>> > have things done to it.  Thanks,
->>> >
->>>
->>> I see you have Ftrace enabled in your config, so that ought to do it:
->>>
->>>   trace-cmd record -e 'sched:*' -e 'cpu_idle' $your_test_cmd
->>>
->>
->> http://toxicpanda.com/performance/trace.dat
->>
->> it's like 16mib.  Enjoy,
->>
->
-> Neat, thanks!
->
-> Runqueue depth seems to be very rarely greater than 1, tasks with ~1ms
-> runtime and lots of sleeping (also bursty kworker activity with activations
-> of tens of µs), and some cores (Internet tells me that Xeon Bronze 3204
-> doesn't have SMT) spend most of their time idling. Not the most apocalyptic
-> task placement vs ILB selection, but the task activation patterns roughly
-> look like what I was thinking of - there might be hope for me yet.
->
-> I'll continue the headscratching after tomorrow's round of thinking juice.
->
+On Fri, Dec 03, 2021 at 11:22:53AM +0000, Marc Zyngier wrote:
+> On Thu, 02 Dec 2021 16:14:01 +0000, Mark Rutland <mark.rutland@arm.com> wrote:
+> > On Thu, Dec 02, 2021 at 03:39:46PM +0000, Marc Zyngier wrote:
+> > > On Wed, 01 Dec 2021 16:58:10 +0000, Mark Rutland <mark.rutland@arm.com> wrote:
+> > > > On Wed, Dec 01, 2021 at 01:49:09PM +0000, Marc Zyngier wrote:
+> > > > > +	state = read_sysreg_s(SYS_IMP_APL_PMCR0_EL1);
+> > > > > +	overflow = read_sysreg_s(SYS_IMP_APL_PMSR_EL1);
+> > > > 
+> > > > I assume the overflow behaviour is free-running rather than stopping?
+> > > 
+> > > Configurable, apparently. At the moment, I set it to stop on overflow.
+> > > Happy to change the behaviour though.
+> > 
+> > The architected PMU continues counting upon overflow (which prevents
+> > losing counts around the overlflow occurring), so I'd prefer that.
+> > 
+> > Is that behaviour per-counter, or for the PMU as a whole?
+> 
+> It is global. This will probably require some additional rework to
+> clear bit 47 in overflowing counters, which we can't do atomically.
 
-Could you give the 4 top patches, i.e. those above
-8c92606ab810 ("sched/cpuacct: Make user/system times in cpuacct.stat more precise")
-a try?
+Ah; I see.
 
-https://git.gitlab.arm.com/linux-arm/linux-vs.git -b mainline/sched/nohz-next-update-regression
+To calrify my comment above, the reason for wanting the counter to keep
+counting is to count during the window between the IRQ being asserted and the
+PMU IRQ handler being invoked, and it's fine for there to be a blackout period
+*within* the PMU IRQ handler.
 
-I gave that a quick test on the platform that caused me to write the patch
-you bisected and looks like it didn't break the original fix. If the above
-counter-measures aren't sufficient, I'll have to go poke at your
-reproducers...
+So for example it would be fine to have:
 
->> Josef
+	irq_handler() 
+	{
+		if (!any_counter_overflowed())
+			return IRQ_NONE;
+
+		stop_all_counters();
+
+		for_each_counter(c) {
+			handle_counter(c);
+		}
+		
+		start_all_counters();
+
+		return IRQ_HANDLED;
+
+	}
+
+... and I think with that the regular per-counter period reprogramming would do
+the right thing?
+
+Really, all the PMU drivers should do that so that repgoramming is consistent
+and we don't get skewed groups.
+
+Thanks,
+Mark.

@@ -2,104 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C010468418
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 11:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13AF6468419
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 11:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384595AbhLDKez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 05:34:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38116 "EHLO
+        id S232949AbhLDKhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 05:37:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344486AbhLDKey (ORCPT
+        with ESMTP id S229982AbhLDKhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 05:34:54 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4001FC061751
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 02:31:29 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id t5so21822931edd.0
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 02:31:29 -0800 (PST)
+        Sat, 4 Dec 2021 05:37:51 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77318C061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 02:34:26 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id l16so11192284wrp.11
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 02:34:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y3uS29sk8arDOYaFNgLSLpZuH9ffdqV+pSvuIUovPK4=;
-        b=YhhQj9HCudkWRmnADXEgimSoMFYflHNMbKWLIpnxXt/cOosIWp50u8k/tsNa2N61Th
-         sczVRRGRB8DyjTCj9Gh1GF3iXERAA7QekNlB9oahVr1a6PmDzofk5Hd7+PcNjobDvMqL
-         G0dUFGZ4wIZoVUdAVKiBrjvyrkqa58ttP7X4HywxF8SLZj6Vq2sRUhNK9V7FrKoxO/VG
-         IWVPjdfLAMLits9qP0J7NEZDp6oCaMd2z8pbMQjZFgZsyeiXhlOMWjB24jszIOMRmYeR
-         IE7c8AuBZUYrW7CItlQzUezv6SQDe2cC3VwomQEEvdRl4Q+5Pux8ebq15Z6OoLHx8OfN
-         Am1g==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rIBi++LLRfApTygqsmDvOw4VuLRt/jFZLaE08XHXPPM=;
+        b=j0G6kWrcXrJgrM/IXsIc4hjDwRAsfWPx9+uLktxBpxuXHwfLXCqn1gRxBjBd0zGQPI
+         /+bk75KogNsnqx1TJ9/1LjRbR5yJ20jcoRh5MYWohEThPHJdvxsawKocCrqo1LPGTi76
+         GooPDjl9ynacl60tnCdLrdBtOyfUA7OBc6WpV4MeSl0daoO5KRoW/sjB0ljg22Xa/bPN
+         vsRlJ/IhIKdf9wv2Sm8OPdWB/LGi7OZ6UckTMmxLgKGUYJWu//yEBhVEpzi11L1mvq9F
+         NfSUKOxknuN82kR1yR8bhie46X8eERWtslXQg9I03/a6X7QuqQ3SvK7SJopZC+Q/bZUa
+         bdbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y3uS29sk8arDOYaFNgLSLpZuH9ffdqV+pSvuIUovPK4=;
-        b=O4TNHaf4JBefz1gC2DHiJfB+GVaMETEf02cs2LGaDPw5RRA+vw2F84etp8nDvWY6UY
-         OFo+hcRvBS0jicfqyhlV4hmAYM7oPTzZ/O3/tuEhOZLM+wHOwd9cR3QJ/cgsD/b7ehR7
-         ojL5/FO9d/4PxRQ74+/C6fqkCSsRXovEaGts4T9BK2f0S2A5msDtmVUxYlPiCzROSWE6
-         8YPbOkC6/EzrpGDpmYjRP2mZoPKDZZ59ZFO8f74GEQY2bHsZLrMlTzl0Eznc3gdCjGd6
-         9DOisLusfb0r0a9dGIcgUuTdht0No5z3rgLPWCd8voYkfvuCD39TbiFgt8HMPYDFRFIK
-         lHWw==
-X-Gm-Message-State: AOAM531guENTJcisFlmHfdXDZB49BWX0czr893UP0XCYwDJ8PDvHkOLj
-        XBAsH6cJxJC4LT8mCranCvM=
-X-Google-Smtp-Source: ABdhPJz7rJ9I38MlIcRMZJyEReJY0j+1NmLLm+8pFNACCpSnaMORuCo37VnckADa1fJc8+GKULTl9Q==
-X-Received: by 2002:a17:907:a40b:: with SMTP id sg11mr30013595ejc.534.1638613887907;
-        Sat, 04 Dec 2021 02:31:27 -0800 (PST)
-Received: from bulldog.fritz.box (host-79-17-112-183.retail.telecomitalia.it. [79.17.112.183])
-        by smtp.gmail.com with ESMTPSA id bd12sm3499839edb.11.2021.12.04.02.31.27
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rIBi++LLRfApTygqsmDvOw4VuLRt/jFZLaE08XHXPPM=;
+        b=QfaoZIlcXp/5ABYK99Ypxfko5X1e/wEDrIgwRAgUOU7r8PRukyeF4M5b4nSicRE6yg
+         X31k2kubFBZeBrj96McMouOKDbwntYtKbdKZLIDLWwL6dtWwLTHyaQ8Z9UFOADvuuS1L
+         f0GAYF26NCzLm1qDVvsjCFh/I9OgGcquaHwCMDahSUUMTZw6XnYuh3W4ay1+P02V4yrQ
+         u7+QqZNErFMxkyyfpnWJyjX99GjtrGQwyEg3Pe/asw0JJ7Br/vOP2js+FQPDoCYvijj+
+         a2043mq22Qt2POicrskbtMxHKbzGWRwi6vRaAZT/ndf0yWePzxqAssH7H6ZmNXqXwL9s
+         qJzw==
+X-Gm-Message-State: AOAM533yVloCSCN0C5mhHOkZ+jkOQvFJ6OrzGyHawSbUabVhhluUy6i8
+        jhEm+0Wl3QSIoU78mxDIKdkEzRr1YLDasgf4
+X-Google-Smtp-Source: ABdhPJwYczFvU0eC4/W6aR+nTtE3ghLNASH3UQrFEIDcI74daIVXCK//bqFQ/ODSZT5mr5xfKAcKzw==
+X-Received: by 2002:a05:6000:1548:: with SMTP id 8mr28048036wry.279.1638614064862;
+        Sat, 04 Dec 2021 02:34:24 -0800 (PST)
+Received: from hamza-OptiPlex-7040 ([39.48.222.235])
+        by smtp.gmail.com with ESMTPSA id o4sm8834265wmq.31.2021.12.04.02.34.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Dec 2021 02:31:27 -0800 (PST)
-From:   Alberto Merciai <alb3rt0.m3rciai@gmail.com>
-To:     alb3rt0.m3rciai@gmail.com
-Cc:     Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tommaso Merciai <tomm.merciai@gmail.com>,
-        Karolina Drobnik <karolinadrobnik@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        =?UTF-8?q?Aldas=20Tara=C5=A1kevi=C4=8Dius?= <aldas60@gmail.com>,
-        Lucas Henneman <lucas.henneman@linaro.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: vt6655: remove unused variable byMinChannel
-Date:   Sat,  4 Dec 2021 11:30:51 +0100
-Message-Id: <20211204103053.3934783-1-alb3rt0.m3rciai@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 04 Dec 2021 02:34:24 -0800 (PST)
+Date:   Sat, 4 Dec 2021 15:34:19 +0500
+From:   Ameer Hamza <amhamza.mgc@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     arve@android.com, tkjos@android.com, maco@android.com,
+        joel@joelfernandes.org, christian@brauner.io,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] binder: fixed coverity warning by moving pr_warn outside
+ lock
+Message-ID: <20211204103419.GA13093@hamza-OptiPlex-7040>
+References: <20211203205041.115331-1-amhamza.mgc@gmail.com>
+ <YasfXUW1rNrj3Mgo@kroah.com>
+ <CANAWnNyyBR3EEtT=SecqGQsc+tnJi6GiqrW0xkqRn5jrV7CpDA@mail.gmail.com>
+ <YasuMNXHlJEKNSwX@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YasuMNXHlJEKNSwX@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove set but not used variable byMinChannel.
+On Sat, Dec 04, 2021 at 10:00:32AM +0100, Greg KH wrote:
+> A: http://en.wikipedia.org/wiki/Top_post
+> Q: Were do I find info about this thing called top-posting?
+> A: Because it messes up the order in which people normally read text.
+> Q: Why is top-posting such a bad thing?
+> A: Top-posting.
+> Q: What is the most annoying thing in e-mail?
+> 
+> A: No.
+> Q: Should I include quotations after my reply?
+> 
+> http://daringfireball.net/2007/07/on_top
+Thank you so much sharing the useful post as I have just started my open source journey very recently
 
----
- drivers/staging/vt6655/device.h      | 1 -
- drivers/staging/vt6655/device_main.c | 2 --
- 2 files changed, 3 deletions(-)
+> 
+> On Sat, Dec 04, 2021 at 01:50:44PM +0500, Ameer Hamza wrote:
+> > Thank you Greg for your response. The link to Coverity warning:
+> > https://scan5.coverity.com/reports.htm#v56991/p10063/fileInstanceId=204668511&defectInstanceId=52305699&mergedDefectId=1494148
+> 
+> That link does not seem to be public.  What project are you looking at?
+Its Linux project under coverity scan and CID for this warning is 1494148
 
-diff --git a/drivers/staging/vt6655/device.h b/drivers/staging/vt6655/device.h
-index 9e5f060f3784..b2aee3b8bc8d 100644
---- a/drivers/staging/vt6655/device.h
-+++ b/drivers/staging/vt6655/device.h
-@@ -200,7 +200,6 @@ struct vnt_private {
- 	unsigned char byTopOFDMBasicRate;
- 	unsigned char byTopCCKBasicRate;
- 
--	unsigned char byMinChannel;
- 	unsigned char byMaxChannel;
- 
- 	unsigned char preamble_type;
-diff --git a/drivers/staging/vt6655/device_main.c b/drivers/staging/vt6655/device_main.c
-index 6c5140e29f6b..d008b22cb98a 100644
---- a/drivers/staging/vt6655/device_main.c
-+++ b/drivers/staging/vt6655/device_main.c
-@@ -227,8 +227,6 @@ static void device_init_registers(struct vnt_private *priv)
- 
- 	spin_unlock_irqrestore(&priv->lock, flags);
- 
--	/* Get Channel range */
--	priv->byMinChannel = 1;
- 	priv->byMaxChannel = CB_MAX_CHANNEL;
- 
- 	/* Get Antena */
--- 
-2.25.1
+> 
+> > I have seen similar warnings if the print operation is used inside a lock,
+> > i.e., Coverity speculates a possible deadlock scenario, which might be a
+> > false positive because internal printk implementation uses a separate lock.
+> 
+> When dealing with Coverity, it is up to you to determine if what it says
+> is actually true before sending out patches for it, due to the HUGE
+> number of false-positives it spits out.
+I will keep keep this under consideration for now, thanks
 
+Best Regards,
+Hamza

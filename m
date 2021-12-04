@@ -2,99 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5AF468777
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 21:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2937F468778
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 21:32:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234433AbhLDUdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 15:33:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
+        id S235174AbhLDUgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 15:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbhLDUdJ (ORCPT
+        with ESMTP id S229923AbhLDUgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 15:33:09 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDCBC061751;
-        Sat,  4 Dec 2021 12:29:43 -0800 (PST)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 18AB730C;
-        Sat,  4 Dec 2021 21:29:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638649781;
-        bh=tI1r2v4uMJbswYcNOL1eafqOlKzNWaxrE2NiCINNAT0=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=CL/Ukw62wHJp3IGXVn3Rnaw3hKADe93qjH+oBABWe5DDAKgn/Nryuk2mcyDLxpD/Z
-         5xtBkxI7tZb8nMwffSIx3E+br2xtn4fL05+eHu34ULTZouOYc5ieCp4pSpztPm3gOa
-         /PvE0D71PhuQUxR0P4x3KxCwLnp7GZOjhs5gqoUU=
-Content-Type: text/plain; charset="utf-8"
+        Sat, 4 Dec 2021 15:36:07 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B47DC061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 12:32:41 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id r26so15160326lfn.8
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 12:32:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VbnObieNhN4HWcKCIDaKmm9vJMYD6S4kiEivj9DQbno=;
+        b=qTWmTPzr5SZINLiFebGd1GKy5SqScFEc8DpbfZiPUh2HEwK+4unFEYZ37E+6TFOx4P
+         auJ+RrOHY32Ozud0AmRiv2iIo+FdMdHkt+Ke/jiXg7C+WOuUA3b9+iUHb82EhiD0BnIB
+         2xuuBEvbgqFbjqo2SFmNxZX704fMAGRH1zmVNIir+3Yho9Se/MYVhSvF2G5gNTFWNaH+
+         ZhjT6KcCNA5mdbV3Fh/E5UU4dabez87RLIBHvyeu0Gt8EhFQux2UnIjRu0NU1rucSHWU
+         NeaUxM5k4UxkVWGE+zm6/3zo3N5TZAJPsIlKNxrfJgWDk4shZBYF9IcIkVvW5KLOZ9V1
+         FzRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VbnObieNhN4HWcKCIDaKmm9vJMYD6S4kiEivj9DQbno=;
+        b=jJ9Z2vvwxWrs2qYxHOk8PPDgsNpzNMhirBZW/TUyWYP9xzSk2mPPx000zNpnv7MK0C
+         sGfDcB62lGyS7JG4kkCy9bbEIwA0+ntx9ZuICK0R3I84Jx1M3VVqdXcAgWbZ3uWHRxPf
+         6YYsvTRkMla01iJykpgyIzcCRdu3+CZfSO8kFNKPu0mFHsUil83PJCCka+MekovLacvC
+         QulcARTEWg9KLvVNh3x2s6EOsOTcKf2Bx6PO6wT2QtoyklreGXLkUYdhcbt29c1Raker
+         849F+r9NPpu4rRHWvzBCspUfOJY51qeNFW9lMHorz94YfI7Md3WGv2WDw+YR7wMkmixW
+         k3cg==
+X-Gm-Message-State: AOAM532TCkv+qnp8pLbEVTNeevqje2XVD9ePYXxo654khs55QSVGtNw7
+        Iiv0+IaXB0HgwDbb+vv1SuI=
+X-Google-Smtp-Source: ABdhPJxer4cUDJ8cf408x7zVsz6ZxrHKFF+7H9r9tcHCQgYBt6n3/uKuWJULjhyVKQLscMciNUdSCw==
+X-Received: by 2002:a05:6512:2101:: with SMTP id q1mr24570781lfr.663.1638649959603;
+        Sat, 04 Dec 2021 12:32:39 -0800 (PST)
+Received: from localhost.localdomain (h-155-4-221-129.NA.cust.bahnhof.se. [155.4.221.129])
+        by smtp.gmail.com with ESMTPSA id s4sm861049lfp.198.2021.12.04.12.32.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Dec 2021 12:32:38 -0800 (PST)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Subject: [PATCH] ASoC: SOF: sof-probes: Constify sof_probe_compr_ops
+Date:   Sat,  4 Dec 2021 21:32:20 +0100
+Message-Id: <20211204203220.54712-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211204121123.22180-1-amhamza.mgc@gmail.com>
-References: <20211204121123.22180-1-amhamza.mgc@gmail.com>
-Subject: Re: [PATCH] media: venus: vdec: fixed possible memory leak issue
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, amhamza.mgc@gmail.com
-To:     Ameer Hamza <amhamza.mgc@gmail.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, mchehab@kernel.org,
-        stanimir.varbanov@linaro.org
-Date:   Sat, 04 Dec 2021 20:29:38 +0000
-Message-ID: <163864977875.3153335.18099399866051099554@Monstersaurus>
-User-Agent: alot/0.10
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ameer,
+The only usage of sof_probe_compr_ops is to assign its address to the
+cops field in the snd_soc_dai_driver struct (in
+sound/soc/sof/intel/hda-dai.c). Make it const to allow the compiler to
+put it in read-only memory.
 
-Quoting Ameer Hamza (2021-12-04 12:11:23)
-> Fixed coverity warning by freeing the allocated memory before return
->=20
-> Addresses-Coverity: 1494120 ("Resource leak")
->=20
-> Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
-> ---
->  drivers/media/platform/qcom/venus/helpers.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/=
-platform/qcom/venus/helpers.c
-> index 84c3a511ec31..344a42853898 100644
-> --- a/drivers/media/platform/qcom/venus/helpers.c
-> +++ b/drivers/media/platform/qcom/venus/helpers.c
-> @@ -197,6 +197,7 @@ int venus_helper_alloc_dpb_bufs(struct venus_inst *in=
-st)
-> =20
->                 id =3D ida_alloc_min(&inst->dpb_ids, VB2_MAX_FRAME, GFP_K=
-ERNEL);
->                 if (id < 0) {
-> +                       kfree(buf);
->                         ret =3D id;
->                         goto fail;
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+---
+ sound/soc/sof/sof-probes.c | 2 +-
+ sound/soc/sof/sof-probes.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Indeed, this is definitely a leak here.
+diff --git a/sound/soc/sof/sof-probes.c b/sound/soc/sof/sof-probes.c
+index 5586af9f1a25..c79026cdb8c7 100644
+--- a/sound/soc/sof/sof-probes.c
++++ b/sound/soc/sof/sof-probes.c
+@@ -321,7 +321,7 @@ static int sof_probe_compr_pointer(struct snd_compr_stream *cstream,
+ 	return snd_sof_probe_compr_pointer(sdev, cstream, tstamp, dai);
+ }
+ 
+-struct snd_soc_cdai_ops sof_probe_compr_ops = {
++const struct snd_soc_cdai_ops sof_probe_compr_ops = {
+ 	.startup	= sof_probe_compr_startup,
+ 	.shutdown	= sof_probe_compr_shutdown,
+ 	.set_params	= sof_probe_compr_set_params,
+diff --git a/sound/soc/sof/sof-probes.h b/sound/soc/sof/sof-probes.h
+index 35e1dd8d9e03..4a1ed2942d28 100644
+--- a/sound/soc/sof/sof-probes.h
++++ b/sound/soc/sof/sof-probes.h
+@@ -32,7 +32,7 @@ int sof_ipc_probe_points_add(struct snd_sof_dev *sdev,
+ int sof_ipc_probe_points_remove(struct snd_sof_dev *sdev,
+ 				unsigned int *buffer_id, size_t num_buffer_id);
+ 
+-extern struct snd_soc_cdai_ops sof_probe_compr_ops;
++extern const struct snd_soc_cdai_ops sof_probe_compr_ops;
+ extern const struct snd_compress_ops sof_probe_compressed_ops;
+ 
+ #endif
+-- 
+2.34.1
 
-Normally I think resources would be cleaned up in the fail path in a
-situation like this.
-
-That would then make sure that all paths out of this loop will free on
-error.
-
-If buf is null, kfree(null) is a valid noop call, so it will not
-adversely affect the kzalloc() fail path.
-
-Given that, I would suspect that a cleaner fix is to move the kfree()
-from after  " if (!buf->va) { " to immediately after the fail label so
-that both dma_alloc_attrs() and ida_alloc_min() failures are cleaned up
-in the same way by the same error path.
-
-That way, if anyone later adds another operation in this loop, it won't
-get missed and will also clean up correctly.
-
-Regards
---
-Kieran
-
->                 }
-> --=20
-> 2.25.1
->

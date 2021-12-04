@@ -2,105 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E64F24684F3
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 14:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A8E4684EB
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 14:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385008AbhLDNOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 08:14:34 -0500
-Received: from mail.sig21.net ([217.197.84.222]:43621 "EHLO mail.sig21.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229837AbhLDNOd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 08:14:33 -0500
-X-Greylist: delayed 1753 seconds by postgrey-1.27 at vger.kernel.org; Sat, 04 Dec 2021 08:14:33 EST
-Received: from localhorst ([127.0.0.1])
-         by mail.sig21.net with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-         (Exim 4.92)
-        (envelope-from <js@sig21.net>)
-         id 1mtULv-0001cO-Gx ; Sat, 04 Dec 2021 13:41:19 +0100
-Received: from js by abc.local with local (Exim 4.95)
-        (envelope-from <js@sig21.net>)
-        id 1mtULp-0005XL-2J;
-        Sat, 04 Dec 2021 13:41:13 +0100
-Date:   Sat, 4 Dec 2021 13:41:13 +0100
-From:   Johannes Stezenbach <js@sig21.net>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
-        <ville.syrjala@linux.intel.com>, David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2] Revert "drm/fb-helper: improve DRM fbdev emulation
- device names"
-Message-ID: <Yath6T5ET17GbkI7@sig21.net>
-References: <20211020165740.3011927-1-javierm@redhat.com>
+        id S1384977AbhLDNGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 08:06:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233028AbhLDNGF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 08:06:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8DFC061751;
+        Sat,  4 Dec 2021 05:02:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A52460E65;
+        Sat,  4 Dec 2021 13:02:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8815EC341C2;
+        Sat,  4 Dec 2021 13:02:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638622958;
+        bh=/x1aa856JFb/fOGEdAlpjcExNViaTRki3QeCUAm3jMQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aP0mo6G21LcfeajXQ1Rv05WLLaHScjFsH1wclF6USqjCQU8ki3rF8FTCvmew/8ehE
+         riePcBi3Aje00YVswEg301ABrlE22xTB/VjWrRn+sTFOxdMCbR784zxFuu9Tt7RR6Y
+         +TNZznHLHqu1VJL1Cz/mWEKyHO6nHXqgETPphgz9gKtez4C2+s6sZQNn2OdwcZ/JH/
+         GQU/NrJ+yJXzxuMOcgYNeQ2BKIosHwBvDoAJqtvThEhV8pD6hFx5VFF3giAxulHTsl
+         gEQQJEY/GIrRATrlXoFJjEz4vvKjl9xOwynpLmQVxY1g3bmnM2IxPGo5EHybGwZO/T
+         u7HSLflPn/CZw==
+Date:   Sat, 4 Dec 2021 21:02:32 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     gregkh@linuxfoundation.org, p.zabel@pengutronix.de,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: chipidea: msm: Handle error codes
+Message-ID: <20211204130232.GA8231@Peter>
+References: <20211203080106.1559983-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211020165740.3011927-1-javierm@redhat.com>
+In-Reply-To: <20211203080106.1559983-1-jiasheng@iscas.ac.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Wed, Oct 20, 2021 at 06:57:40PM +0200, Javier Martinez Canillas wrote:
-> This reverts commit b3484d2b03e4c940a9598aa841a52d69729c582a.
+On 21-12-03 16:01:06, Jiasheng Jiang wrote:
+> The return value of of_get_next_available_child() and
+> of_device_is_compatible() is not always 0.
+> To catch the exception in case of the failure.
 > 
-> That change attempted to improve the DRM drivers fbdev emulation device
-> names to avoid having confusing names like "simpledrmdrmfb" in /proc/fb.
+> Fixes: 47654a162081 ("usb: chipidea: msm: Restore wrapper settings after reset")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  drivers/usb/chipidea/ci_hdrc_msm.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> But unfortunately, there are user-space programs such as pm-utils that
-> match against the fbdev names and so broke after the mentioned commit.
+> diff --git a/drivers/usb/chipidea/ci_hdrc_msm.c b/drivers/usb/chipidea/ci_hdrc_msm.c
+> index 46105457e1ca..13218f0a2bed 100644
+> --- a/drivers/usb/chipidea/ci_hdrc_msm.c
+> +++ b/drivers/usb/chipidea/ci_hdrc_msm.c
+> @@ -246,6 +246,8 @@ static int ci_hdrc_msm_probe(struct platform_device *pdev)
+>  	if (ulpi_node) {
+>  		phy_node = of_get_next_available_child(ulpi_node, NULL);
+>  		ci->hsic = of_device_is_compatible(phy_node, "qcom,usb-hsic-phy");
+> +		if (!phy_node || !ci->hsic)
+> +			goto err_mux;
+
+I afraid I could not understand your change with your patch description,
+no matter phy_node is NULL or ci->hsic is NULL, the code should be OK,
+right?
+
+>  		of_node_put(phy_node);
+>  	}
+>  	of_node_put(ulpi_node);
+> -- 
+> 2.25.1
 > 
-> Since the names in /proc/fb are used by tools that consider it an uAPI,
-> let's restore the old names even when this lead to silly names like the
-> one mentioned above.
 
-I would like to ask about the fate of this patch. It doesn't
-seem to have been picked up by anyone, does it?
-
+-- 
 
 Thanks,
-Johannes
+Peter Chen
 
-
-> Fixes: b3484d2b03e4 ("drm/fb-helper: improve DRM fbdev emulation device names")
-> Reported-by: Johannes Stezenbach <js@sig21.net>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-> ---
-> 
-> Changes in v2:
-> - Add a comment explaining that the current /proc/fb names are an uAPI.
-> - Add a Fixes: tag so it can be cherry-picked by stable kernels.
-> - Add Ville Syrjälä's Reviewed-by tag.
-> 
->  drivers/gpu/drm/drm_fb_helper.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
-> index 8e7a124d6c5a..22bf690910b2 100644
-> --- a/drivers/gpu/drm/drm_fb_helper.c
-> +++ b/drivers/gpu/drm/drm_fb_helper.c
-> @@ -1743,7 +1743,13 @@ void drm_fb_helper_fill_info(struct fb_info *info,
->  			       sizes->fb_width, sizes->fb_height);
->  
->  	info->par = fb_helper;
-> -	snprintf(info->fix.id, sizeof(info->fix.id), "%s",
-> +	/*
-> +	 * The DRM drivers fbdev emulation device name can be confusing if the
-> +	 * driver name also has a "drm" suffix on it. Leading to names such as
-> +	 * "simpledrmdrmfb" in /proc/fb. Unfortunately, it's an uAPI and can't
-> +	 * be changed due user-space tools (e.g: pm-utils) matching against it.
-> +	 */
-> +	snprintf(info->fix.id, sizeof(info->fix.id), "%sdrmfb",
->  		 fb_helper->dev->driver->name);
->  
->  }
-> -- 
-> 2.31.1
-> 
-> 

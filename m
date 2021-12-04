@@ -2,91 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04809468683
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 18:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A4246868D
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 18:33:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377914AbhLDRZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 12:25:36 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36156 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345154AbhLDRZf (ORCPT
+        id S1378449AbhLDRg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 12:36:26 -0500
+Received: from esa2.mentor.iphmx.com ([68.232.141.98]:39206 "EHLO
+        esa2.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345154AbhLDRgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 12:25:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA88960E8C;
-        Sat,  4 Dec 2021 17:22:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8250FC341C0;
-        Sat,  4 Dec 2021 17:22:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638638529;
-        bh=kss5LJXXOIKzYcAiXOd4LQe8tPaaVa8hpEWHOf47pZg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0ZFnbUVIf7Ph16TBe0sJk0stTgTNMWosAVjYf/gkHxMnGZfCBp9JlWlWO39ctlB84
-         cB5f6Z9qqyRi2irs2/cooZhEzpv2DmyHwaBRKWPJCdSZYHhaq3DxHtrBzp+uxHezqO
-         bmo/0n25SV1u/a6IlUXMiHCtD+XUvGEAde+lspmQ=
-Date:   Sat, 4 Dec 2021 18:22:06 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Martin Fernandez <martin.fernandez@eclypsium.com>
-Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
-        rafael@kernel.org, rppt@kernel.org, akpm@linux-foundation.org,
-        daniel.gutson@eclypsium.com, hughsient@gmail.com,
-        alex.bazhaniuk@eclypsium.com, alison.schofield@intel.com
-Subject: Re: [PATCH v3 5/5] drivers/node: Show in sysfs node's crypto
- capabilities
-Message-ID: <YaujvjBFsb3ricUx@kroah.com>
-References: <20211203192148.585399-1-martin.fernandez@eclypsium.com>
- <20211203192148.585399-6-martin.fernandez@eclypsium.com>
- <YaslQCg2G1pWUPVV@kroah.com>
- <CAKgze5Yw6=PjY9+cn=FKX5UsiSon5rVOK_Gc-3Hs8dQspSFaYA@mail.gmail.com>
+        Sat, 4 Dec 2021 12:36:25 -0500
+X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Sat, 04 Dec 2021 12:36:25 EST
+IronPort-SDR: cdjzRu4O0aDPaKIznXfkZ1gg4qmAR8pP7oznVce+ZOKuTy6R55m2EVQscLSWXJ+BqOJNVvo7Ni
+ uF0y5IwpuhJFlKD5b0egl1/7RVFQFc0qPmL9xj50raIpWwgNAmt9cc2bSPiDTEPL68URlNmrdq
+ AYmpOYVIQS1oIWGavOrcyBShxRJU2gxGar689Hq11lDMRTeE1KIEadSrFdAgNKRYvcbhYkWAjp
+ GYvh+1CPmkBrkyYu1KYImFMO0gdHxeNU+jsEHz8Tz3eDxzlQ7KYYyKdoFAXl2YVThOCxne4RfU
+ Tl7dZraN3+RP8GqkUPFkII2o
+X-IronPort-AV: E=Sophos;i="5.87,287,1631606400"; 
+   d="scan'208";a="69277906"
+Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
+  by esa2.mentor.iphmx.com with ESMTP; 04 Dec 2021 09:25:51 -0800
+IronPort-SDR: Lk58CnbOOdJuy3uU+QVenspLk63/eMP1Sc3jjRQ3Lyx9mCE022czQbYZ3sTL0ld57XgRfTjMkm
+ GcBECKZfP+8TCwDh1zDOM1wA5gvb6O0ErRFtpGv+iXg5C2VlmDX78kruRlZYN0JmBaLhz5HkWe
+ u6JG/CYd8LQgFasIqcNt6GsZ1pmYovIy2M8p0qrotOu2lCWUuqd4pF4qOzmUFTJzFwVyOg82oM
+ k6CrriQXYjoL063AIEs3ilJyEz3NrMxVw+SQKXaavC31CNvauqqfwKIw6b2D16Sg/rSltSTiN3
+ BEA=
+Subject: Re: [PATCH 1/2] rtc: max31343: Add a driver for Maxim MAX31343
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     <a.zummo@towertech.it>, <robh+dt@kernel.org>,
+        <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
+References: <20211016192118.255624-1-alexey_firago@mentor.com>
+ <20211016192118.255624-2-alexey_firago@mentor.com>
+ <YaamZW1nyOGDXfyw@piout.net>
+From:   afirago <alexey_firago@mentor.com>
+Message-ID: <37ef2ad4-d044-5183-892c-e1fd6ded1b69@mentor.com>
+Date:   Sat, 4 Dec 2021 20:25:38 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKgze5Yw6=PjY9+cn=FKX5UsiSon5rVOK_Gc-3Hs8dQspSFaYA@mail.gmail.com>
+In-Reply-To: <YaamZW1nyOGDXfyw@piout.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [137.202.0.90]
+X-ClientProxiedBy: svr-ies-mbx-15.mgc.mentorg.com (139.181.222.15) To
+ SVR-IES-MBX-04.mgc.mentorg.com (139.181.222.4)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 04, 2021 at 01:35:15PM -0300, Martin Fernandez wrote:
-> On 12/4/21, Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > You forgot a Documentation/ABI/ update for this new sysfs file you
-> > added :(
-> >
+Hello,
+
+Thanks for your review.
+
+On 01.12.2021 01:32, Alexandre Belloni wrote:
+> Hello,
 > 
-> Damn, I forgot to add it to the patch. It will be in my next patch,
-> this is what it looks like:
+> On 16/10/2021 22:21:17+0300, Alexey Firago wrote:
+>> +#define MAX31343_REG_TIMER_CFG	(0x05)
+>> +#define  TIMER_CFG_TFS		GENMASK(1, 0) /* Timer frequency */
+>> +#define  TIMER_CFG_TRPT		BIT(2) /* Timer repeat mode */
+>> +#define  TIMER_CFG_TPAUSE	BIT(3) /* Timer Pause */
+>> +#define  TIMER_CFG_TE		BIT(4) /* Timer enable */
+>> +
+>> +/* RTC section */
+>> +#define MAX31343_REG_SEC	(0x06)
+>> +#define  SEC10_MASK	GENMASK(6, 4) /* RTC seconds in multiples of 10 */
+>> +#define  SEC_MASK	GENMASK(3, 0) /* RTC seconds value */
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-devices-node
-> b/Documentation/ABI/testing/sysfs-devices-node
-> new file mode 100644
-> index 000000000000..ab46fdd3f6a8
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-devices-node
-> @@ -0,0 +1,10 @@
-> +What:		/sys/devices/system/node/nodeX/crypto_capable
-> +Date:		October 2021
+> I'm not convinced having separate masks is useful here, was that
+> automatically generated?
 
-October is long gone :(
+I've just exported those definitions from the table in the datasheet 
+prior to creating the driver.
 
-> +Contact:	Martin Fernandez <martin.fernandez@eclypsium.com>
-> +Users:		fwupd
+>> +static int max31343_rtc_set_time(struct device *dev, struct rtc_time *tm)
+>> +{
+>> +	struct max31343_rtc_data *max31343 = dev_get_drvdata(dev);
+>> +	u8 date[7];
+>> +	int ret;
+>> +
+>> +	dev_dbg(dev, "RTC set time %04d-%02d-%02d %02d/%02d/%02d\n",
+>> +		tm->tm_year + 1900, tm->tm_mon, tm->tm_mday,
+>> +		tm->tm_hour, tm->tm_min, tm->tm_sec);
+>> +
+> 
+> This could use %ptR
 
-Maybe a link to what 'fwupd' is?
+Will change it (or probably completely remove it) after hwmon review.
 
-> +Description:
-> +		This value is 1 if all system memory in this node is
-> +		marked with EFI_MEMORY_CPU_CRYPTO, indicating that the
-> +		system memory is capable of being protected with the
-> +		CPU’s memory cryptographic capabilities. It is 0
-> +		otherwise.
+>> +	date[0] = bin2bcd(tm->tm_sec);
+>> +	date[1] = bin2bcd(tm->tm_min);
+>> +	date[2] = bin2bcd(tm->tm_hour);
+>> +	date[3] = tm->tm_wday;
+>> +	date[4] = bin2bcd(tm->tm_mday);
+>> +	date[5] = bin2bcd(tm->tm_mon + 1);
+>> +
+>> +	if (tm->tm_year >= 200)
+>> +		date[5] |= CENTURY;
+>> +	date[6] = bin2bcd(tm->tm_year % 100);
+>> +
+>> +	ret = regmap_bulk_write(max31343->regmap, MAX31343_REG_SEC, date,
+>> +				sizeof(date));
+>> +	return ret;
+>> +}
+>> +
+> 
+> [...]
+> 
+>> +static int
+>> +max31343_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>> +{
+>> +	struct max31343_rtc_data *max31343 = NULL;
+>> +	int ret, status;
+>> +	struct nvmem_config nvmem_cfg = {
+>> +		.name = "max31343_nvram",
+>> +		.word_size = 1,
+>> +		.stride = 1,
+>> +		.size = MAX31343_RAM_SIZE,
+>> +		.type = NVMEM_TYPE_BATTERY_BACKED,
+>> +		.reg_read = max31343_nvram_read,
+>> +		.reg_write = max31343_nvram_write,
+>> +	};
+>> +
+>> +	max31343 = devm_kzalloc(&client->dev, sizeof(struct max31343_rtc_data),
+>> +				GFP_KERNEL);
+>> +	if (!max31343)
+>> +		return -ENOMEM;
+>> +
+>> +	max31343->regmap = devm_regmap_init_i2c(client, &max31343_regmap_config);
+>> +	if (IS_ERR(max31343->regmap))
+>> +		return PTR_ERR(max31343->regmap);
+>> +
+>> +	i2c_set_clientdata(client, max31343);
+>> +
+>> +	ret = regmap_read(max31343->regmap, MAX31343_REG_STATUS, &status);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	max31343->rtc = devm_rtc_allocate_device(&client->dev);
+>> +	if (IS_ERR(max31343->rtc))
+>> +		return PTR_ERR(max31343->rtc);
+>> +
+>> +	max31343->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+>> +	max31343->rtc->range_max = RTC_TIMESTAMP_END_2199;
+> 
+> For my information, did you check the time continuity in this interval?
 
-thanks,
+Yes, I've checked setting of out-of-range values, checked edge values 
+and checked 2099 -> 2100 -> 2101 transitions.
 
-greg k-h
+> 
+>> +	max31343->rtc->ops = &max31343_rtc_ops;
+>> +	ret = devm_rtc_register_device(max31343->rtc);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	nvmem_cfg.priv = max31343->regmap;
+>> +	devm_rtc_nvmem_register(max31343->rtc, &nvmem_cfg);
+>> +	max31343_hwmon_register(&client->dev);
+> 
+> The whole driver seems ok, I'd like to get a review from the hwmon
+> maintainers on the hwmon part as it is quite large.
+
+Ok.
+
+Thanks,
+Alexey
+

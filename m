@@ -2,100 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 743E8468641
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 17:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12AFE468643
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 17:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355358AbhLDQiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 11:38:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355368AbhLDQir (ORCPT
+        id S1355453AbhLDQiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 11:38:52 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:37464 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355427AbhLDQit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 11:38:47 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5179C061751;
-        Sat,  4 Dec 2021 08:35:21 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id p3-20020a05600c1d8300b003334fab53afso7223421wms.3;
-        Sat, 04 Dec 2021 08:35:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=u3KULnMm+NurqHrJGvU91cGjIx8E0SlKbgyOAzOc/P8=;
-        b=o/q4NKNPWU+/+Q7uJ2QnVJNjV/l1DQgTt3tS0zxSf9jLrpPUikVG3f0xrC80TVbALT
-         7WuW6ZPUHvbU2fU714ZfFpFt5o/cJT0ASlF+blHSBVvDm5dkjumhV3OXLp/op7tQwMF8
-         rMqscaP9Q3QzBybWBbzhMQ88OKqSnpFgldYJGqfm+2BhUvIDeJd3xpyE1FdXF1GEzkZ7
-         8jhwoZsvV1ltqUpGonw8SwJbo3+zcFr87kpze3/QRGIAwALSg2cfUqHf2GalDkDBvWc8
-         Ff4Oxn578jCy0eTD2Q1mAmfV6nVC3X/0lkZ3RGZ5dE4scOO53TFVQh8L+w1ivnLNLAXV
-         AEZQ==
+        Sat, 4 Dec 2021 11:38:49 -0500
+Received: by mail-io1-f72.google.com with SMTP id m127-20020a6b3f85000000b005f045ba51f9so5033754ioa.4
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 08:35:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=u3KULnMm+NurqHrJGvU91cGjIx8E0SlKbgyOAzOc/P8=;
-        b=66Q3xxvXzeGr6yBHMpVBZSLLhRwyzQ8Ze1E5ncSOqaQ8889aHqB/mk6gM107rjgXMR
-         L0yP9+INxbfeSlPajiXHxuk4F1hyxT28axZdY7ENUKQ85gPelHLMEs3zn3ZkuRcX1+AG
-         MXQC6pLxzBS9A0VXgqnKkxAj1X5FUQVmk7RfauvKg9inQ4ekTZbyZPf/tuW0Ao+xCgUO
-         LCgkX++1ro3walhXbkYOr23gqTl2D8kZOUkZuOCKwKIJF1oxtEWWvSSoeXKR8qO2og5A
-         Jnqcr/3t8SPvR1A4vogep6cy0v1RkvBEjo2pMa4b0JT7auueJj1/rL5BfBgFgr9eFMrH
-         LGkw==
-X-Gm-Message-State: AOAM532fj31j587iQzSAu+Oh1qRSMyFZPKVVyHlTfT0aWQoW88mjW1fk
-        9jtSWx84E86UkmSGPP97KhwvmI+k2WtqCw==
-X-Google-Smtp-Source: ABdhPJx/F75BE2+08L0UH9gcthsmKQ303WAiJM2UNJLWXarJwnkDq+Y1nxiH1H9cxgtSSApIoqDVuw==
-X-Received: by 2002:a05:600c:b43:: with SMTP id k3mr24354880wmr.159.1638635720232;
-        Sat, 04 Dec 2021 08:35:20 -0800 (PST)
-Received: from matrix-ESPRIMO-P710 (p200300c78f4e0685b3447c22a42fc55e.dip0.t-ipconnect.de. [2003:c7:8f4e:685:b344:7c22:a42f:c55e])
-        by smtp.gmail.com with ESMTPSA id az4sm8680185wmb.20.2021.12.04.08.35.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Dec 2021 08:35:19 -0800 (PST)
-Date:   Sat, 4 Dec 2021 17:35:18 +0100
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH v2 2/4] Docs: usb: update comment and code near decrement our
- usage count for the device
-Message-ID: <40aa115e18d1139a7642bf4034835cdfb9f5b066.1638630342.git.philipp.g.hortmann@gmail.com>
-References: <cover.1638630342.git.philipp.g.hortmann@gmail.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=BA9OwP3e4KSpyoZW+XzJWCMfEa5xkpbba0Rxgywsghc=;
+        b=EDB294uZrozwpg14JbWffKRCvzeCn6dNKNsAvwz2e3TvascgvtDr9f9UWe9zGTm4Qi
+         SV5zX1sayhN0HuaXw2D0zeLsHahOFbU8N89cDNZqxcrXnXLmqnM5apE7jXQuLqa6cjF8
+         hJZ/RXXySALrxr3ZVY8Yy7WpXVdEsCTQF/jOiHXFvI2B016xDnM3ausMgraYhsURk9zf
+         z0gtJhP2Vg66t6Uh1CyqNqtADsJQQc10K5DP9NT/yDKIELCSLo9cCoohbyc8jVP7qfJH
+         SQ9CyQHvmX9LiV+E/STr4ObixqAh53CGgtkanBFx4W9cPymaQmOu0pajyynbOhiCjEM+
+         7FHA==
+X-Gm-Message-State: AOAM531gDpV6Ko5w3aFHqvaCxD7wAnz/fbshmuZ8lbT3gQm8D0uWQmGz
+        aFwaBxMG7xuWOHhzocNdCxGNdVSLZAV7T025683SdcWmC4oE
+X-Google-Smtp-Source: ABdhPJxxznh9Q5hCHWgnwvJ6XXsUs0D50cBHWOW6zK9XJmrmos7R9Ap1SlHUG3GwLkFakTQVL9lP37VnIwwgNfklMYJK4c/OBW5L
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1638630342.git.philipp.g.hortmann@gmail.com>
+X-Received: by 2002:a05:6638:24ca:: with SMTP id y10mr30640190jat.109.1638635723454;
+ Sat, 04 Dec 2021 08:35:23 -0800 (PST)
+Date:   Sat, 04 Dec 2021 08:35:23 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000367c2205d2549cb9@google.com>
+Subject: [syzbot] KASAN: vmalloc-out-of-bounds Read in __bpf_prog_put
+From:   syzbot <syzbot+5027de09e0964fd78ce1@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Put release function in the document typical form
-Update comment: decrement our usage count ..
-and code according to usb-skeleton.c
+Hello,
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+syzbot found the following issue on:
+
+HEAD commit:    ce83278f313c Merge branch 'qed-enhancements'
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=11c8ce3ab00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b5949d4891208a1b
+dashboard link: https://syzkaller.appspot.com/bug?extid=5027de09e0964fd78ce1
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5027de09e0964fd78ce1@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put.constprop.0+0x1dd/0x220 kernel/bpf/syscall.c:1812
+Read of size 8 at addr ffffc90000cf2038 by task kworker/0:24/16179
+
+CPU: 0 PID: 16179 Comm: kworker/0:24 Not tainted 5.16.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events sk_psock_destroy
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xf/0x320 mm/kasan/report.c:247
+ __kasan_report mm/kasan/report.c:433 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:450
+ __bpf_prog_put.constprop.0+0x1dd/0x220 kernel/bpf/syscall.c:1812
+ psock_set_prog include/linux/skmsg.h:477 [inline]
+ psock_progs_drop include/linux/skmsg.h:495 [inline]
+ sk_psock_destroy+0xad/0x620 net/core/skmsg.c:804
+ process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
+ worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+
+
+Memory state around the buggy address:
+ ffffc90000cf1f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc90000cf1f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>ffffc90000cf2000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+                                        ^
+ ffffc90000cf2080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc90000cf2100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+==================================================================
+
+
 ---
-V1 -> V2: Corrected format of function name to skel_release()
----
- Documentation/driver-api/usb/writing_usb_driver.rst | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
-index ed11398837e5..297b622f5438 100644
---- a/Documentation/driver-api/usb/writing_usb_driver.rst
-+++ b/Documentation/driver-api/usb/writing_usb_driver.rst
-@@ -250,12 +250,12 @@ a device, it is recommended to set up your own urbs and submit them to
- the USB subsystem. The template uses urbs for read and write.
- 
- When the user program releases the file handle that it has been using to
--talk to the device, the release function in the driver is called. In
-+talk to the device, skel_release() in the driver is called. In
- this function we decrement our private usage count and wait for possible
- pending writes::
- 
--    /* decrement our usage count for the device */
--    --skel->open_count;
-+    /* decrement the count on our device */
-+    kref_put(&dev->kref, skel_delete);
- 
- 
- One of the more difficult problems that USB drivers must be able to
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

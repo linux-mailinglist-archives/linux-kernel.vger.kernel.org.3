@@ -2,151 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C7746854E
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 15:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EFB6468551
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 15:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385194AbhLDOVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 09:21:22 -0500
-Received: from mga14.intel.com ([192.55.52.115]:63379 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1385174AbhLDOVV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 09:21:21 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="237346832"
-X-IronPort-AV: E=Sophos;i="5.87,287,1631602800"; 
-   d="scan'208";a="237346832"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 06:17:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,287,1631602800"; 
-   d="scan'208";a="514100772"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 04 Dec 2021 06:17:52 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mtVrL-000J5T-Lo; Sat, 04 Dec 2021 14:17:51 +0000
-Date:   Sat, 4 Dec 2021 22:16:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Lizhi Hou <lizhi.hou@xilinx.com>, linux-fpga@vger.kernel.org,
-        maxz@xilinx.com, sonal.santan@xilinx.com, yliu@xilinx.com,
-        michal.simek@xilinx.com, stefanos@xilinx.com,
-        devicetree@vger.kernel.org, trix@redhat.com
-Subject: Re: [PATCH V3 XRT Alveo Infrastructure 3/8] of: create empty of root
-Message-ID: <202112042255.DZihRncD-lkp@intel.com>
-References: <20211204003957.1448567-4-lizhi.hou@xilinx.com>
+        id S1385202AbhLDOXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 09:23:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241124AbhLDOXP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 09:23:15 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8E8C061751;
+        Sat,  4 Dec 2021 06:19:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1638627589;
+        bh=4UpQiGaFFla6kEoSrEB6tjLYKfWhGPQkWDOaRHaaWeo=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=MI5kuW6om69NEOKzJEHolPs3JdY2ks6Lgyl9en+keXRWI8VKBCNDtipB2HI1/9K99
+         KaeFwH5SpodqCVaTcC/v7JgYxSkqtZe98R0lHth6TueCJSBAFyJtK4KG7Hy+/1T2Pe
+         h2tQX5xTcJIEOhfVtNhCobGasUagStfp+Oi7SGMY=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 478221280998;
+        Sat,  4 Dec 2021 09:19:49 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 2xSxmAU7tXoP; Sat,  4 Dec 2021 09:19:49 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1638627589;
+        bh=4UpQiGaFFla6kEoSrEB6tjLYKfWhGPQkWDOaRHaaWeo=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=MI5kuW6om69NEOKzJEHolPs3JdY2ks6Lgyl9en+keXRWI8VKBCNDtipB2HI1/9K99
+         KaeFwH5SpodqCVaTcC/v7JgYxSkqtZe98R0lHth6TueCJSBAFyJtK4KG7Hy+/1T2Pe
+         h2tQX5xTcJIEOhfVtNhCobGasUagStfp+Oi7SGMY=
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C24271280994;
+        Sat,  4 Dec 2021 09:19:48 -0500 (EST)
+Message-ID: <a6cae8ac4c95123d9dbda07a7cc553ea0367f4b8.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 5.16-rc3
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Sat, 04 Dec 2021 09:19:47 -0500
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211204003957.1448567-4-lizhi.hou@xilinx.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lizhi,
+two patches, both in drivers.  One is a fix to FC recovery (lpfc) and
+the other is an enhancement to support the Intel Alder Motherboard with
+the UFS driver which comes under the -rc exception process for hardware
+enabling.
 
-I love your patch! Yet something to improve:
+The patch is available here:
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linux/master linus/master v5.16-rc3 next-20211203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
-url:    https://github.com/0day-ci/linux/commits/Lizhi-Hou/XRT-Alveo-driver-infrastructure-overview/20211204-084333
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: mips-randconfig-c004-20211203 (https://download.01.org/0day-ci/archive/20211204/202112042255.DZihRncD-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f1d1854eb1450d352663ee732235893c5782237)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/1b36c19ebc303a293dff82ed399ea70bf4ddde50
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Lizhi-Hou/XRT-Alveo-driver-infrastructure-overview/20211204-084333
-        git checkout 1b36c19ebc303a293dff82ed399ea70bf4ddde50
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/
+The short changelog is:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Adrian Hunter (1):
+      scsi: ufs: ufs-pci: Add support for Intel ADL
 
-All errors (new ones prefixed by >>):
+James Smart (1):
+      scsi: lpfc: Fix non-recovery of remote ports following an unsolicited LOGO
 
->> drivers/of/fdt.c:505:7: error: implicit declaration of function 'of_resolve_phandles' [-Werror,-Wimplicit-function-declaration]
-           rc = of_resolve_phandles(dt);
-                ^
-   1 error generated.
+And the diffstat:
 
+ drivers/scsi/lpfc/lpfc_els.c  |  9 ++-------
+ drivers/scsi/ufs/ufshcd-pci.c | 18 ++++++++++++++++++
+ 2 files changed, 20 insertions(+), 7 deletions(-)
 
-vim +/of_resolve_phandles +505 drivers/of/fdt.c
+With full diff below.
 
-   468	
-   469	static int __init of_fdt_root_init(void)
-   470	{
-   471		struct device_node *dt = NULL, *np;
-   472		void *fdt, *fdt_aligned;
-   473		int size, rc;
-   474	
-   475	#if !defined(CONFIG_OF_UNITTEST)
-   476		if (of_root)
-   477			return 0;
-   478	#endif
-   479		size = __dtb_fdt_default_end - __dtb_fdt_default_begin;
-   480	
-   481		fdt = kmalloc(size + FDT_ALIGN_SIZE, GFP_KERNEL);
-   482		if (!fdt)
-   483			return -ENOMEM;
-   484	
-   485		fdt_aligned = PTR_ALIGN(fdt, FDT_ALIGN_SIZE);
-   486		memcpy(fdt_aligned, __dtb_fdt_default_begin, size);
-   487	
-   488		if (!of_fdt_unflatten_tree((const unsigned long *)fdt_aligned,
-   489					   NULL, &dt)) {
-   490			pr_warn("%s: unflatten default tree failed\n", __func__);
-   491			kfree(fdt);
-   492			return -ENODATA;
-   493		}
-   494		if (!dt) {
-   495			pr_warn("%s: empty default tree\n", __func__);
-   496			kfree(fdt);
-   497			return -ENODATA;
-   498		}
-   499	
-   500		/*
-   501		 * This lock normally encloses of_resolve_phandles()
-   502		 */
-   503		of_overlay_mutex_lock();
-   504	
- > 505		rc = of_resolve_phandles(dt);
-   506		if (rc) {
-   507			pr_err("%s: Failed to resolve phandles (rc=%i)\n", __func__, rc);
-   508			of_overlay_mutex_unlock();
-   509			return -EINVAL;
-   510		}
-   511	
-   512		if (!of_root) {
-   513			of_root = dt;
-   514			for_each_of_allnodes(np)
-   515				__of_attach_node_sysfs(np);
-   516			of_aliases = of_find_node_by_path("/aliases");
-   517			of_chosen = of_find_node_by_path("/chosen");
-   518			of_overlay_mutex_unlock();
-   519			return 0;
-   520		}
-   521	
-   522		unittest_data_add(dt);
-   523	
-   524		of_overlay_mutex_unlock();
-   525	
-   526		return 0;
-   527	}
-   528	pure_initcall(of_fdt_root_init);
-   529	
+James
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
+index b940e0268f96..e83453bea2ae 100644
+--- a/drivers/scsi/lpfc/lpfc_els.c
++++ b/drivers/scsi/lpfc/lpfc_els.c
+@@ -5095,14 +5095,9 @@ lpfc_cmpl_els_logo_acc(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 		/* NPort Recovery mode or node is just allocated */
+ 		if (!lpfc_nlp_not_used(ndlp)) {
+ 			/* A LOGO is completing and the node is in NPR state.
+-			 * If this a fabric node that cleared its transport
+-			 * registration, release the rpi.
++			 * Just unregister the RPI because the node is still
++			 * required.
+ 			 */
+-			spin_lock_irq(&ndlp->lock);
+-			ndlp->nlp_flag &= ~NLP_NPR_2B_DISC;
+-			if (phba->sli_rev == LPFC_SLI_REV4)
+-				ndlp->nlp_flag |= NLP_RELEASE_RPI;
+-			spin_unlock_irq(&ndlp->lock);
+ 			lpfc_unreg_rpi(vport, ndlp);
+ 		} else {
+ 			/* Indicate the node has already released, should
+diff --git a/drivers/scsi/ufs/ufshcd-pci.c b/drivers/scsi/ufs/ufshcd-pci.c
+index 51424557810d..f725248ba57f 100644
+--- a/drivers/scsi/ufs/ufshcd-pci.c
++++ b/drivers/scsi/ufs/ufshcd-pci.c
+@@ -421,6 +421,13 @@ static int ufs_intel_lkf_init(struct ufs_hba *hba)
+ 	return err;
+ }
+ 
++static int ufs_intel_adl_init(struct ufs_hba *hba)
++{
++	hba->nop_out_timeout = 200;
++	hba->quirks |= UFSHCD_QUIRK_BROKEN_AUTO_HIBERN8;
++	return ufs_intel_common_init(hba);
++}
++
+ static struct ufs_hba_variant_ops ufs_intel_cnl_hba_vops = {
+ 	.name                   = "intel-pci",
+ 	.init			= ufs_intel_common_init,
+@@ -449,6 +456,15 @@ static struct ufs_hba_variant_ops ufs_intel_lkf_hba_vops = {
+ 	.device_reset		= ufs_intel_device_reset,
+ };
+ 
++static struct ufs_hba_variant_ops ufs_intel_adl_hba_vops = {
++	.name			= "intel-pci",
++	.init			= ufs_intel_adl_init,
++	.exit			= ufs_intel_common_exit,
++	.link_startup_notify	= ufs_intel_link_startup_notify,
++	.resume			= ufs_intel_resume,
++	.device_reset		= ufs_intel_device_reset,
++};
++
+ #ifdef CONFIG_PM_SLEEP
+ static int ufshcd_pci_restore(struct device *dev)
+ {
+@@ -563,6 +579,8 @@ static const struct pci_device_id ufshcd_pci_tbl[] = {
+ 	{ PCI_VDEVICE(INTEL, 0x4B41), (kernel_ulong_t)&ufs_intel_ehl_hba_vops },
+ 	{ PCI_VDEVICE(INTEL, 0x4B43), (kernel_ulong_t)&ufs_intel_ehl_hba_vops },
+ 	{ PCI_VDEVICE(INTEL, 0x98FA), (kernel_ulong_t)&ufs_intel_lkf_hba_vops },
++	{ PCI_VDEVICE(INTEL, 0x51FF), (kernel_ulong_t)&ufs_intel_adl_hba_vops },
++	{ PCI_VDEVICE(INTEL, 0x54FF), (kernel_ulong_t)&ufs_intel_adl_hba_vops },
+ 	{ }	/* terminate list */
+ };
+ 
+

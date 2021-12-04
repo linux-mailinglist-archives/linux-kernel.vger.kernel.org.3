@@ -2,235 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB8646852D
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 14:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B892046851C
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 14:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385165AbhLDNzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 08:55:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
+        id S1385080AbhLDNrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 08:47:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236142AbhLDNzB (ORCPT
+        with ESMTP id S1385083AbhLDNrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 08:55:01 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1BCC0613F8
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 05:51:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=JG+nOrxYO6sWxp1PSYVonhH2By05Ih5pIi8iuuznKLU=; b=P+RuraStW5pWCgdVFFI0+mOVQK
-        HH2lWikmuwajt6kQbOwPOGHtukgASUa6aCXs/SioH0qm5oOTGFRjbzb8NKPZZ8zhPqApB29049MdL
-        EP9aZ9IfBIou5T0NVvnkEMMU7X+gB79IKG8oHOTQzQc9rqi1rwMOOSMXvIiehIMKjrJ+O9Ctxw5ok
-        tbTHq5lyeUUdpiFhu9arI+FpJYKA+ewuj8BCnCc50/8NaEtyTuvHnaZ4YhgzyCypsi8EhOF/0v4EE
-        OmgyBGqbs+LSRLw9rUG3UKnNWyJrllEEqpHEUm5UiDPw0bCppTx7NSKTbcugufX7jIhS5b4WhUdmR
-        tW7O8D6A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mtVRm-002CkZ-Q4; Sat, 04 Dec 2021 13:51:26 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2344330073F;
-        Sat,  4 Dec 2021 14:51:25 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 8D38A2DD2562E; Sat,  4 Dec 2021 14:51:24 +0100 (CET)
-Message-ID: <20211204134908.140103474@infradead.org>
-User-Agent: quilt/0.66
-Date:   Sat, 04 Dec 2021 14:43:44 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        keescook@chromium.org, hjl.tools@gmail.com,
-        andrew.cooper3@citrix.com, mark.rutland@arm.com, will@kernel.org,
-        ndesaulniers@google.com
-Subject: [PATCH v2 6/6] x86: Add straight-line-speculation mitigation
-References: <20211204134338.760603010@infradead.org>
+        Sat, 4 Dec 2021 08:47:21 -0500
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E41C0613F8
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 05:43:56 -0800 (PST)
+Received: by mail-vk1-xa2e.google.com with SMTP id s1so3714662vks.9
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 05:43:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AydR8F2XpQAwIIfynMtw323GpH8B4sQw/G4MzaU8WuQ=;
+        b=Y90YtdyZGO6pOjo6kMX8e6oJmhT5v4ENZvx82CUq+gQVik7EfzsAPm6hlO/oiiPyvO
+         F/+WB/QnmhfOln5IWC8h+TkNpwBmyvm6d2OID2Em45rtf+nNNgB8HdbdQyNUDG1JhKIm
+         CmwcCN3vX0bfFnF62LppXDl7K8oKr6PDjIL1A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AydR8F2XpQAwIIfynMtw323GpH8B4sQw/G4MzaU8WuQ=;
+        b=c2mOpJyKx25BwDZ3axg4TqshfYAeceSK4AorKzIzD5Ph1edXV1UINq/N2QoTCC82Dl
+         Zz2IPqDDZUY8+hG8bk3eCOIsq75PxhFOG/myIEMooeRgVvMEq9Y66lEWXwYRAGRQ6DqD
+         zoIpfzOgwd43AwOpNdLRR/1UrOZxZw25hxGG+uC3yGr3Equ+3/ba1flmFJvE/oXaP/LM
+         tvXQbjRceeOehJPvX8mUIvRqS8lFhwNDofQ3IHwJyV3ttAM167HpWR7n19erT/Nq8Wxj
+         iMKYRin7+XnPZ646TCMSJ6VdX/lGyorIEx5mIHAI0hi94A5lSPfB8QDbC6GCW+4Rd6Xj
+         VRRQ==
+X-Gm-Message-State: AOAM532HV0e0czYw0yxw0KVtqg1YV6zWVC7+iECb6VF0FkaaUOkO+mkp
+        sWRFr1Not1ORC3TvKmoFlovt+L+Y2Agj0l8k5Q180w==
+X-Google-Smtp-Source: ABdhPJyWq3GJEv3s6U1N7Tj4Vpnfo92Fykb0igbE9UCam071qn22efeIi3Q5vxJfMv+lS5V/Yj6Ry14ehVV/Y9DphRY=
+X-Received: by 2002:ac5:cdad:: with SMTP id l13mr29280068vka.39.1638625435253;
+ Sat, 04 Dec 2021 05:43:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20211201175613.13710-1-dafna.hirschfeld@collabora.com> <20211201175613.13710-2-dafna.hirschfeld@collabora.com>
+In-Reply-To: <20211201175613.13710-2-dafna.hirschfeld@collabora.com>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Sat, 4 Dec 2021 22:43:44 +0900
+Message-ID: <CAFr9PX=6Pd1Rg=wJvpuX6WX63L=iAnwPA24e59An3Kac5f_vzA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/6] staging: media: wave5: Add vpuapi layer
+To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Cc:     "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
+        <linux-media@vger.kernel.org>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        open list <linux-kernel@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
+        kiril.bicevski@collabora.com,
+        Nas Chung <nas.chung@chipsnmedia.com>,
+        lafley.kim@chipsnmedia.com, scott.woo@chipsnmedia.com,
+        olivier.crete@collabora.com, dan.carpenter@oracle.com,
+        Randy Dunlap <rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of an upcomming GCC feature to mitigate
-straight-line-speculation for x86:
+Hi Dafna,
 
-  https://gcc.gnu.org/g:53a643f8568067d7700a9f2facc8ba39974973d3
-  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102952
-  https://bugs.llvm.org/show_bug.cgi?id=52323
+Sorry for the piecemeal emails..
 
-It's built tested on x86_64-allyesconfig using GCC-12 and GCC-11.
+On Thu, 2 Dec 2021 at 02:56, Dafna Hirschfeld
+<dafna.hirschfeld@collabora.com> wrote:
+> diff --git a/drivers/staging/media/wave5/wave5-hw.c b/drivers/staging/media/wave5/wave5-hw.c
 
-Maintenace overhead of this should be fairly low due to objtool
-validation.
+... snip ...
 
-Size overhead of all these additional int3 instructions comes to:
+> +static int wave5_wait_bus_busy(struct vpu_device *vpu_dev, int timeout, unsigned int addr)
+> +{
+> +       u32 gdi_status_check_value = 0x3f;
+> +       u32 data;
+> +
+> +       if (vpu_dev->product_code == WAVE521C_CODE ||
+> +           vpu_dev->product_code == WAVE521_CODE ||
+> +        vpu_dev->product_code == WAVE521E1_CODE)
+> +               gdi_status_check_value = 0x00ff1f3f;
+> +
+> +       return read_poll_timeout(wave5_vdi_read_register, data, data == gdi_status_check_value,
+> +                                0, timeout * 1000, false, vpu_dev, addr);
+> +}
+> +
 
-   text	   data	    bss	    dec	    hex	filename
-22267751	6933356	2011368	31212475	1dc43bb	defconfig-build/vmlinux
-22804126	6933356	1470696	31208178	1dc32f2	defconfig-build/vmlinux.sls
+This looks like it should be s/wave5_vdi_read_register/wave5_read_register/.
+For wave511 addr passed in here is 0x8e14 so well outside of what is
+directly accessible.
 
-Or roughly 2.4% additional text.
+Also it seems that this can either return 0 or -ETIMEDOUT...
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/Kconfig                   |   12 ++++++++++++
- arch/x86/Makefile                  |    4 ++++
- arch/x86/include/asm/linkage.h     |   10 ++++++++++
- arch/x86/include/asm/static_call.h |    2 +-
- arch/x86/kernel/ftrace.c           |    2 +-
- arch/x86/kernel/static_call.c      |    5 +++--
- arch/x86/lib/memmove_64.S          |    2 +-
- arch/x86/lib/retpoline.S           |    2 +-
- scripts/Makefile.build             |    3 ++-
- scripts/link-vmlinux.sh            |    3 +++
- 10 files changed, 38 insertions(+), 7 deletions(-)
+... snip ...
 
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -472,6 +472,18 @@ config RETPOLINE
- 	  branches. Requires a compiler with -mindirect-branch=thunk-extern
- 	  support for full protection. The kernel may run slower.
- 
-+config CC_HAS_SLS
-+	def_bool $(cc-option,-mharden-sls=all)
-+
-+config SLS
-+	bool "Mitigate Straight-Line-Speculation"
-+	depends on CC_HAS_SLS && X86_64
-+	default n
-+	help
-+	  Compile the kernel with straight-line-speculation options to guard
-+	  against straight line speculation. The kernel image might be slightly
-+	  larger.
-+
- config X86_CPU_RESCTRL
- 	bool "x86 CPU resource control support"
- 	depends on X86 && (CPU_SUP_INTEL || CPU_SUP_AMD)
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -179,6 +179,10 @@ ifdef CONFIG_RETPOLINE
-   endif
- endif
- 
-+ifdef CONFIG_SLS
-+  KBUILD_CFLAGS += -mharden-sls=all
-+endif
-+
- KBUILD_LDFLAGS += -m elf_$(UTS_MACHINE)
- 
- ifdef CONFIG_LTO_CLANG
---- a/arch/x86/include/asm/linkage.h
-+++ b/arch/x86/include/asm/linkage.h
-@@ -18,9 +18,19 @@
- #define __ALIGN_STR	__stringify(__ALIGN)
- #endif
- 
-+#ifdef CONFIG_SLS
-+#define RET	ret; int3
-+#else
-+#define RET	ret
-+#endif
-+
- #else /* __ASSEMBLY__ */
- 
-+#ifdef CONFIG_SLS
-+#define ASM_RET	"ret; int3\n\t"
-+#else
- #define ASM_RET	"ret\n\t"
-+#endif
- 
- #endif /* __ASSEMBLY__ */
- 
---- a/arch/x86/include/asm/static_call.h
-+++ b/arch/x86/include/asm/static_call.h
-@@ -36,7 +36,7 @@
- 	__ARCH_DEFINE_STATIC_CALL_TRAMP(name, ".byte 0xe9; .long " #func " - (. + 4)")
- 
- #define ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)			\
--	__ARCH_DEFINE_STATIC_CALL_TRAMP(name, "ret; nop; nop; nop; nop")
-+	__ARCH_DEFINE_STATIC_CALL_TRAMP(name, "ret; int3; nop; nop; nop")
- 
- 
- #define ARCH_ADD_TRAMP_KEY(name)					\
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -303,7 +303,7 @@ union ftrace_op_code_union {
- 	} __attribute__((packed));
- };
- 
--#define RET_SIZE		1
-+#define RET_SIZE		1 + IS_ENABLED(CONFIG_SLS)
- 
- static unsigned long
- create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
---- a/arch/x86/kernel/static_call.c
-+++ b/arch/x86/kernel/static_call.c
-@@ -17,6 +17,8 @@ enum insn_type {
-  */
- static const u8 xor5rax[] = { 0x66, 0x66, 0x48, 0x31, 0xc0 };
- 
-+static const u8 retinsn[] = { RET_INSN_OPCODE, 0xcc, 0xcc, 0xcc, 0xcc };
-+
- static void __ref __static_call_transform(void *insn, enum insn_type type, void *func)
- {
- 	const void *emulate = NULL;
-@@ -42,8 +44,7 @@ static void __ref __static_call_transfor
- 		break;
- 
- 	case RET:
--		code = text_gen_insn(RET_INSN_OPCODE, insn, func);
--		size = RET_INSN_SIZE;
-+		code = &retinsn;
- 		break;
- 	}
- 
---- a/arch/x86/lib/memmove_64.S
-+++ b/arch/x86/lib/memmove_64.S
-@@ -40,7 +40,7 @@ SYM_FUNC_START(__memmove)
- 	/* FSRM implies ERMS => no length checks, do the copy directly */
- .Lmemmove_begin_forward:
- 	ALTERNATIVE "cmp $0x20, %rdx; jb 1f", "", X86_FEATURE_FSRM
--	ALTERNATIVE "", "movq %rdx, %rcx; rep movsb; RET", X86_FEATURE_ERMS
-+	ALTERNATIVE "", __stringify(movq %rdx, %rcx; rep movsb; RET), X86_FEATURE_ERMS
- 
- 	/*
- 	 * movsq instruction have many startup latency
---- a/arch/x86/lib/retpoline.S
-+++ b/arch/x86/lib/retpoline.S
-@@ -34,7 +34,7 @@ SYM_INNER_LABEL(__x86_indirect_thunk_\re
- 
- 	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
- 		      __stringify(RETPOLINE \reg), X86_FEATURE_RETPOLINE, \
--		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), X86_FEATURE_RETPOLINE_AMD
-+		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg; int3), X86_FEATURE_RETPOLINE_AMD
- 
- .endm
- 
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -234,7 +234,8 @@ objtool_args =								\
- 	$(if $(CONFIG_GCOV_KERNEL)$(CONFIG_LTO_CLANG), --no-unreachable)\
- 	$(if $(CONFIG_RETPOLINE), --retpoline)				\
- 	$(if $(CONFIG_X86_SMAP), --uaccess)				\
--	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)
-+	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
-+	$(if $(CONFIG_SLS), --sls)
- 
- cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
- cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -139,6 +139,9 @@ objtool_link()
- 		if [ -n "${CONFIG_X86_SMAP}" ]; then
- 			objtoolopt="${objtoolopt} --uaccess"
- 		fi
-+		if [ -n "${CONFIG_SLS}" ]; then
-+			objtoolopt="${objtoolopt} --sls"
-+		fi
- 		info OBJTOOL ${1}
- 		tools/objtool/objtool ${objtoolcmd} ${objtoolopt} ${1}
- 	fi
+> +int wave5_vpu_reset(struct device *dev, enum sw_reset_mode reset_mode)
+> +{
+> +       u32 val = 0;
+> +       int ret = 0;
+> +       struct vpu_device *vpu_dev = dev_get_drvdata(dev);
+> +       struct vpu_attr *p_attr = &vpu_dev->attr;
+> +       // VPU doesn't send response. force to set BUSY flag to 0.
+> +       vpu_write_reg(vpu_dev, W5_VPU_BUSY_STATUS, 0);
+> +
+> +       if (reset_mode == SW_RESET_SAFETY) {
+> +               ret = wave5_vpu_sleep_wake(dev, true, NULL, 0);
+> +               if (ret)
+> +                       return ret;
+> +       }
+> +
+> +       val = vpu_read_reg(vpu_dev, W5_VPU_RET_VPU_CONFIG0);
+> +       if ((val >> 16) & 0x1)
+> +               p_attr->support_backbone = true;
+> +       if ((val >> 22) & 0x1)
+> +               p_attr->support_vcore_backbone = true;
+> +       if ((val >> 28) & 0x1)
+> +               p_attr->support_vcpu_backbone = true;
+> +
+> +       val = vpu_read_reg(vpu_dev, W5_VPU_RET_VPU_CONFIG1);
+> +       if ((val >> 26) & 0x1)
+> +               p_attr->support_dual_core = true;
+> +
+> +       // waiting for completion of bus transaction
+> +       if (p_attr->support_backbone) {
+> +               if (p_attr->support_dual_core) {
+> +                       // check CORE0
+> +                       wave5_write_register(vpu_dev, W5_BACKBONE_BUS_CTRL_VCORE0, 0x7);
+> +
+> +                       ret = wave5_wait_bus_busy(vpu_dev, VPU_BUSY_CHECK_TIMEOUT,
+> +                                                 W5_BACKBONE_BUS_STATUS_VCORE0);
+> +                       if (ret) {
+> +                               wave5_write_register(vpu_dev, W5_BACKBONE_BUS_CTRL_VCORE0, 0x00);
+> +                               return ret;
+> +                       }
+> +
+> +                       // check CORE1
+> +                       wave5_write_register(vpu_dev, W5_BACKBONE_BUS_CTRL_VCORE1, 0x7);
+> +
+> +                       ret = wave5_wait_bus_busy(vpu_dev, VPU_BUSY_CHECK_TIMEOUT,
+> +                                                 W5_BACKBONE_BUS_STATUS_VCORE1);
+> +                       if (ret) {
+> +                               wave5_write_register(vpu_dev, W5_BACKBONE_BUS_CTRL_VCORE1, 0x00);
+> +                               return ret;
+> +                       }
+> +
+> +               } else if (p_attr->support_vcore_backbone) {
+> +                       if (p_attr->support_vcpu_backbone) {
+> +                               // step1 : disable request
+> +                               wave5_write_register(vpu_dev, W5_BACKBONE_BUS_CTRL_VCPU,
+> +                                                    0xFF);
+> +
+> +                               // step2 : waiting for completion of bus transaction
+> +                               ret = wave5_wait_vcpu_bus_busy(vpu_dev, VPU_BUSY_CHECK_TIMEOUT,
+> +                                                              W5_BACKBONE_BUS_STATUS_VCPU);
+> +                               if (ret) {
+> +                                       wave5_write_register(vpu_dev,
+> +                                                            W5_BACKBONE_BUS_CTRL_VCPU, 0x00);
+> +                                       return ret;
+> +                               }
+> +                       }
+> +                       // step1 : disable request
+> +                       wave5_write_register(vpu_dev, W5_BACKBONE_BUS_CTRL_VCORE0, 0x7);
+> +
+> +                       // step2 : waiting for completion of bus transaction
+> +                       if (wave5_wait_bus_busy(vpu_dev, VPU_BUSY_CHECK_TIMEOUT,
+> +                                               W5_BACKBONE_BUS_STATUS_VCORE0) == -1) {
+> +                               wave5_write_register(vpu_dev, W5_BACKBONE_BUS_CTRL_VCORE0, 0x00);
+> +                               return -EBUSY;
+> +                       }
 
+but this is looking for -1 on failure.
 
+> +               } else {
+> +                       // step1 : disable request
+> +                       wave5_write_register(vpu_dev, W5_COMBINED_BACKBONE_BUS_CTRL, 0x7);
+> +
+> +                       // step2 : waiting for completion of bus transaction
+> +                       if (wave5_wait_bus_busy(vpu_dev, VPU_BUSY_CHECK_TIMEOUT,
+> +                                               W5_COMBINED_BACKBONE_BUS_STATUS) == -1) {
+> +                               wave5_write_register(vpu_dev, W5_COMBINED_BACKBONE_BUS_CTRL, 0x00);
+> +                               return -EBUSY;
+> +                       }
+> +               }
+
+Here too.
+
+Cheers,
+
+Daniel

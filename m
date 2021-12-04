@@ -2,117 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD171468736
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 20:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CAC946873B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 20:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349287AbhLDTi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 14:38:29 -0500
-Received: from mga11.intel.com ([192.55.52.93]:25569 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230379AbhLDTi1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 14:38:27 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="234652420"
-X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
-   d="scan'208";a="234652420"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 11:35:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
-   d="scan'208";a="562125982"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 04 Dec 2021 11:34:59 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mtaoF-000JMV-B5; Sat, 04 Dec 2021 19:34:59 +0000
-Date:   Sun, 5 Dec 2021 03:34:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>, Kai Huang <kai.huang@intel.com>
-Subject: arch/x86/kernel/cpu/sgx/virt.c:59:13: sparse: sparse: incorrect type
- in assignment (different base types)
-Message-ID: <202112050357.x46al1AR-lkp@intel.com>
+        id S1349813AbhLDTtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 14:49:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349441AbhLDTte (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 14:49:34 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0365CC061751;
+        Sat,  4 Dec 2021 11:46:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=1Wx0sNFc4nRwhtP15w8D3y+GxIPogNNpQRDFakzYmm0=; b=hFNtobnXBDHvelC3AlP2yV1DEC
+        8lNkI+0+AhlngJ9q0LW3UGxj2Yns4Q6tC6ljiHqprE6kbnHOuIKoSsCFk2Q2qGM4fAmny9t8oHDo1
+        LAm4HAiOANCU1pjkYnpKZLz4jDNj8M6v6RGM2Y6UNLv2cCd4Cb+QKLCGNq8g3U8pOLpo=;
+Received: from p200300ccff382c001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff38:2c00:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1mtayx-0006rL-SI; Sat, 04 Dec 2021 20:46:04 +0100
+Date:   Sat, 4 Dec 2021 20:46:02 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Alistair Francis <alistair@alistair23.me>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        robh+dt@kernel.org, alistair23@gmail.com,
+        dmitry.torokhov@gmail.com, linus.walleij@linaro.org,
+        rydberg@bitmath.org,
+        =?UTF-8?B?TXlsw6huZQ==?= Josserand <mylene.josserand@bootlin.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>
+Subject: Re: [PATCH v3 1/4] Input: Add driver for Cypress Generation 5
+ touchscreen
+Message-ID: <20211204204602.58b6cc12@aktux>
+In-Reply-To: <20211202122021.43124-2-alistair@alistair23.me>
+References: <20211202122021.43124-1-alistair@alistair23.me>
+        <20211202122021.43124-2-alistair@alistair23.me>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   12119cfa1052d512a92524e90ebee85029a918f8
-commit: 540745ddbc70eabdc7dbd3fcc00fe4fb17cd59ba x86/sgx: Introduce virtual EPC for use by KVM guests
-date:   8 months ago
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20211205/202112050357.x46al1AR-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=540745ddbc70eabdc7dbd3fcc00fe4fb17cd59ba
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 540745ddbc70eabdc7dbd3fcc00fe4fb17cd59ba
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/hyperv/ arch/x86/kernel/cpu/sgx/ drivers/hv/
+Hi,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Thu,  2 Dec 2021 22:20:18 +1000
+Alistair Francis <alistair@alistair23.me> wrote:
 
+> +static int cyttsp5_setup_input_device(struct device *dev)
+> +{
+> +	struct cyttsp5 *ts = dev_get_drvdata(dev);
+> +	struct cyttsp5_sysinfo *si = &ts->sysinfo;
+> +	int max_x, max_y, max_p;
+> +	int max_x_tmp, max_y_tmp;
+> +	int error;
+> +
+> +	__set_bit(EV_REL, ts->input->evbit);
+> +
+> +	max_x_tmp = si->sensing_conf_data.res_x;
+> +	max_y_tmp = si->sensing_conf_data.res_y;
+> +	max_x = max_x_tmp - 1;
+> +	max_y = max_y_tmp - 1;
+> +	max_p = si->sensing_conf_data.max_z;
+> +
+> +	error = input_mt_init_slots(ts->input, si->tch_abs[CY_TCH_T].max,
+> +		INPUT_MT_DROP_UNUSED | INPUT_MT_POINTER);
+> +	if (error < 0)
+> +		return error;
+still some issues with X, sometimes it is even a mouse, depending on
+config.
+hmm, why is it INPUT_MT_POINTER and not INPUT_MT_DIRECT?
 
-sparse warnings: (new ones prefixed by >>)
->> arch/x86/kernel/cpu/sgx/virt.c:59:13: sparse: sparse: incorrect type in assignment (different base types) @@     expected int [assigned] ret @@     got restricted vm_fault_t @@
-   arch/x86/kernel/cpu/sgx/virt.c:59:13: sparse:     expected int [assigned] ret
-   arch/x86/kernel/cpu/sgx/virt.c:59:13: sparse:     got restricted vm_fault_t
->> arch/x86/kernel/cpu/sgx/virt.c:60:20: sparse: sparse: restricted vm_fault_t degrades to integer
-   arch/x86/kernel/cpu/sgx/virt.c:95:35: sparse: sparse: symbol 'sgx_vepc_vm_ops' was not declared. Should it be static?
+#define INPUT_MT_POINTER        0x0001  /* pointer device, e.g. trackpad */
+#define INPUT_MT_DIRECT         0x0002  /* direct device, e.g. touchscreen */
 
-vim +59 arch/x86/kernel/cpu/sgx/virt.c
-
-    32	
-    33	static int __sgx_vepc_fault(struct sgx_vepc *vepc,
-    34				    struct vm_area_struct *vma, unsigned long addr)
-    35	{
-    36		struct sgx_epc_page *epc_page;
-    37		unsigned long index, pfn;
-    38		int ret;
-    39	
-    40		WARN_ON(!mutex_is_locked(&vepc->lock));
-    41	
-    42		/* Calculate index of EPC page in virtual EPC's page_array */
-    43		index = vma->vm_pgoff + PFN_DOWN(addr - vma->vm_start);
-    44	
-    45		epc_page = xa_load(&vepc->page_array, index);
-    46		if (epc_page)
-    47			return 0;
-    48	
-    49		epc_page = sgx_alloc_epc_page(vepc, false);
-    50		if (IS_ERR(epc_page))
-    51			return PTR_ERR(epc_page);
-    52	
-    53		ret = xa_err(xa_store(&vepc->page_array, index, epc_page, GFP_KERNEL));
-    54		if (ret)
-    55			goto err_free;
-    56	
-    57		pfn = PFN_DOWN(sgx_get_epc_phys_addr(epc_page));
-    58	
-  > 59		ret = vmf_insert_pfn(vma, addr, pfn);
-  > 60		if (ret != VM_FAULT_NOPAGE) {
-    61			ret = -EFAULT;
-    62			goto err_delete;
-    63		}
-    64	
-    65		return 0;
-    66	
-    67	err_delete:
-    68		xa_erase(&vepc->page_array, index);
-    69	err_free:
-    70		sgx_free_epc_page(epc_page);
-    71		return ret;
-    72	}
-    73	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Regards,
+Andreas

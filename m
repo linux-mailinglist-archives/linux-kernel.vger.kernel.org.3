@@ -2,194 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC2746870A
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 19:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2575946870E
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 19:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385469AbhLDS1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 13:27:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385461AbhLDS0r (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 13:26:47 -0500
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88ECFC061D60
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 10:23:21 -0800 (PST)
-Received: by mail-qv1-xf32.google.com with SMTP id i12so6054229qvh.11
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 10:23:21 -0800 (PST)
+        id S1347600AbhLDSco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 13:32:44 -0500
+Received: from mail-dm6nam11on2112.outbound.protection.outlook.com ([40.107.223.112]:6588
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233170AbhLDSco (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 13:32:44 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kn95Guk5hx0RSvFx71dICIoNqTcbyRmB4zcXI6hWLhuiC+Fm879d2HUG9yhhaBwSpaNTVr3WeNzWoPpI+2ksdsL0Pi7xhSXytKJ9mvODKW5ZLV7J22amVmjIgTl22NmbGBoDaFsnJaBn5mVBmSJAMATJvkySyxQTbQVW5qoQXYiso0l15IM4Gqj0ifN+B0Ukhp44O78WIRPcW/OQFq1ZZ5eErCwZboYJPm/BKL82El7Km8GM5Ttty9FeSiU2RvM0yWQJvQmRPndgnSaKkghUZnLGQ6VSX8ZG/7NrA6j3YU71xdKjhlwFn0aXoaXREtWkVY+jxGz4CBmTg6fjN6U7qw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5+x4T5WnsWVPfFokKCsu8GBdbpISEMYV/UPtXOcKvKU=;
+ b=F91r3I4bKg1KiIkAb1kQgD9YZscJS9AsT0UWbIt4RgiP7Q6pqojVUbSwcCeBEgYOX2vWSKncWsDI/+gkgLu6sOdv81vTqd6AkQaDR/eZhax5iBzP0I/9qy75HyYn1R49zWoB0yVIYSjopgbOvrYQLzrQCsdVm+SO9VlL4wFIZSwjCymIL8NcGOG8uSGqLLWHtDkXbkUKlvRHSUJ2O2dp+CKU6AzpsCUzZf6qJAEIyFN+uOVaw4aMXaBHuvOt5z6WAgjYdT5pAhYBAMl5NJzPP3vu8IHPWWjL8n7P+CHOLk2z4zcS2w3Js7G2LM0Ur3D1+Zfg5i5cf15iz+pv+mnZxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=JjYKEJcTyq7gxxwF/qsfUV8xV15YsFb8MoAiHyojDyw=;
-        b=fxFPKGKGmjFVeeQhXbIUZYdRSXvIWE/CzCjUnvZrLiETxDBowMyU/cmr4fjdBfMxoj
-         IfE5nyLBXTp10mSWnOmKjr+8PSJqHahFmmhLQrO6bV0tnTKYZaOXITNLJF8UmTUu6i+5
-         QTKH/xSpLDBkEHwemKUTiLxwrQKxUxbedRLWGYFeFz9wLJVtCqQebPorPKgigVsj/qzo
-         MRUVGDlGzUzfbvxMqGrmPLD3GiwhD3ewCPTtPSDVRFDlaMiyXwFHFcrhlw6BDYDTIqhH
-         MqnHoVvmqaL/uFqOIsLIW17hJHEyl36jkrqr6vkJzjrHfuc1chqtRQTCFW8GcD6apMDW
-         M2pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JjYKEJcTyq7gxxwF/qsfUV8xV15YsFb8MoAiHyojDyw=;
-        b=3/yZqVATbd7NLg8FXHk+Gbg34D9RTntQa0JioO56H+u7QFGeYLXq6UYX3UU4nx3mBZ
-         JqleCTwihkp9N2KDLrbZOFFBo8YC2AYMLiObP3NhqnXu1/cWl5nnau/4Gx7KVjwauSn5
-         GRCDSDDUzrg+URVuaTgpLp4twI40BfVbx1QdqIzgY4JPLYZduuMdjXVOe0DNd289Hq85
-         7D3xrbzyGh5ZhoGmynmDK7ra4kJS8juUKICJ0SL7lHDMMgpDDQgNnFroe9+RiPoqggih
-         kH3Y8SJvMjBHnAvLSF6WQdfkk6RjMj6/xPtzYWmzbOTYcRBCSAmy1/E98s9SPQ6mI9F+
-         DpVg==
-X-Gm-Message-State: AOAM530FdlfwbTaWlW6oUOmOnymKvJrHQNxzAou7Jj/3snjQXEjXbPKs
-        Vof+eqn7S0nbaULAI7zrDF/otWy3YuxVHw==
-X-Google-Smtp-Source: ABdhPJxIq+kzgXQQCk00YqMBJ4oav+C29EWpXkfE4hU1sZ72bgR5ZiRVt5i/2I3KRZFKaZcjkTvslA==
-X-Received: by 2002:ad4:4452:: with SMTP id l18mr26855725qvt.8.1638642200754;
-        Sat, 04 Dec 2021 10:23:20 -0800 (PST)
-Received: from soleen.c.googlers.com.com (189.216.85.34.bc.googleusercontent.com. [34.85.216.189])
-        by smtp.gmail.com with ESMTPSA id a24sm4394728qtp.95.2021.12.04.10.23.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Dec 2021 10:23:20 -0800 (PST)
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        akpm@linux-foundation.org, rientjes@google.com, pjt@google.com,
-        weixugc@google.com, gthelen@google.com, mingo@redhat.com,
-        corbet@lwn.net, will@kernel.org, rppt@kernel.org,
-        keescook@chromium.org, tglx@linutronix.de, peterz@infradead.org,
-        masahiroy@kernel.org, samitolvanen@google.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, frederic@kernel.org,
-        hpa@zytor.com, aneesh.kumar@linux.ibm.com, jirislaby@kernel.org,
-        songmuchun@bytedance.com, qydwhotmail@gmail.com
-Subject: [PATCH v2 4/4] x86: mm: add x86_64 support for page table check
-Date:   Sat,  4 Dec 2021 18:23:14 +0000
-Message-Id: <20211204182314.1470076-5-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-In-Reply-To: <20211204182314.1470076-1-pasha.tatashin@soleen.com>
-References: <20211204182314.1470076-1-pasha.tatashin@soleen.com>
-MIME-Version: 1.0
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5+x4T5WnsWVPfFokKCsu8GBdbpISEMYV/UPtXOcKvKU=;
+ b=0V3/2FeygQP/DDgC2Amb+d6Bh8LZkdoA6XqD34VKXxO1HlcfqrRBYK3LredYtNxljbo2HZ3YwAv8+1zPgAFC04MIEOgDuS5g22xwQUVD9wH6GYQvXK4Ix/uxdoYk1roaUd9Oluhv/ZOs8mpWv/eG0x1dlS9x/qM71/11mkHuOy8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com (10.174.170.165) by
+ MWHPR1001MB2063.namprd10.prod.outlook.com (10.174.170.29) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4734.23; Sat, 4 Dec 2021 18:29:15 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::6430:b20:8805:cd9f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::6430:b20:8805:cd9f%5]) with mapi id 15.20.4755.020; Sat, 4 Dec 2021
+ 18:29:08 +0000
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>
+Subject: [PATCH v4 net-next 0/5] prepare ocelot for external interface control 
+Date:   Sat,  4 Dec 2021 10:28:53 -0800
+Message-Id: <20211204182858.1052710-1-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MWHPR11CA0045.namprd11.prod.outlook.com
+ (2603:10b6:300:115::31) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
+MIME-Version: 1.0
+Received: from localhost.localdomain (67.185.175.147) by MWHPR11CA0045.namprd11.prod.outlook.com (2603:10b6:300:115::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.19 via Frontend Transport; Sat, 4 Dec 2021 18:29:08 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b68d3fde-2e0b-459c-7eb7-08d9b753f5bc
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2063:
+X-Microsoft-Antispam-PRVS: <MWHPR1001MB20630D991E1C1B942B301C92A46B9@MWHPR1001MB2063.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wp4CD2L8EF3Rtlu6hdafSdjWxoCUUY7vj1leGnufJAYpIud0CbORRnzskC4JtQPD9abcXQNF41bg878IXKSmulup+6BeOn2tIowaa/DWnxqBPTMgrnATAh5VgortaCuapoKh3lFNMb4iibFyi6KSPR7kO1IDVIFofb7Av29YCWgZJORy/4oddXDZyUjN3rX0mTkOViYO2pb7Au0noHJb/aVrNqJXl3yhsUCIeS1GWs55WGvdlEwmNxDYkSiiMl5jIrGDayhlbrhgdM9BIYr3lWvfvnxORXcWnhLwiuMt9qKl65Ihg5xoQ5wQowCkU8KdJopuv+fldJr2jSZw42fe8rBHYNLwEB58FIzFcDlX/cDLLGqNK67vknN5DPHcKnXZbQ61TGaX5QyjgY3mr/+k3mWNsInaD5WozUPeHC6P+udnNKOmCsqZiXUVDRPZ6TVPNhrmDdnflJfE57L63vKsxq1zRP+TFhTocdyKYusRCJu3oUyeoTk8cyE+1pj57ApaAnQzi/WhRpB3zIjvaxXk7zsVv3PsFlPbm4qN3Jb04QujZAgJOo+T3ErkfILsuOZBNN2T+NFB6EYXA4TZM6ORatckn0bDM4g6QLZxpzjGwGgwt8jOGoF8hP34EGb7ueWT4pLLOYhrOrZTxFZ+/+thKNCXJdAUPg2PDft8u6A2wGGKyhpKwiA1ypOCfYHNuN1+
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(39830400003)(366004)(376002)(136003)(346002)(396003)(8936002)(2616005)(956004)(86362001)(4326008)(508600001)(1076003)(66556008)(7416002)(4743002)(6486002)(66946007)(6506007)(52116002)(6512007)(36756003)(54906003)(66476007)(8676002)(83380400001)(26005)(5660300002)(44832011)(316002)(2906002)(38350700002)(6666004)(38100700002)(186003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JlxKzPd1vynAU42GQTr8EVJ8Yl3PzQwnYuKMkk4HjZgIXnwa1sYl3hL/m5bN?=
+ =?us-ascii?Q?G+nTPd5VJxj9sqm+Vq5EN+9EFoHIuw0afAFoic0Nx/sjoH89KgiGng/0y83e?=
+ =?us-ascii?Q?Q8k/GzH0a6czF/1ebq3+BoRyK5SZB1cO3lo8quPEXHyO6YgnElRi0+tESM1B?=
+ =?us-ascii?Q?y1KjRbVUTDRTWTEnKFKwPQj4mwkUfaF5prqUQeiZna+qshveCJWh2mhH+c4g?=
+ =?us-ascii?Q?rHf82+Z0V8ysnu2ntLaeiQ1+saSneXsKNbrz0oqSn7Sq75qURcbu2RKQDKmu?=
+ =?us-ascii?Q?GUUF73xmCLN80DB+zMa7AC7MuEKQGJvtSaM0Z2bluz4yUfsqThHAYRW3c1PH?=
+ =?us-ascii?Q?EjSfsFKz5/aoOJa1ll0Tkv0qSvzhLzwZZh7ReD81/MlChTbsqgiNN3vxpgts?=
+ =?us-ascii?Q?h/KEPb+aQfU9XULgO/BDmuV4KXShM+R+rDje+zyUcgWAntGanQ1knhjADPT+?=
+ =?us-ascii?Q?+ocrSwrfppx4dN1VLbHniTZOoD43jU1ew6DSOh5wbvkWzROS9y2PZp75nHqg?=
+ =?us-ascii?Q?AT2DYk0eb72RNVEju1sHC4PyLuyqpmiqM513chw3Nl+6kwhKqzKqyzinKGXp?=
+ =?us-ascii?Q?rFZdYpIMkqskBv6rzac8JSvLYu2U0OSUi8Hg/9mNZP5Rv/O4Xx/46lN/fo7H?=
+ =?us-ascii?Q?nFv82czp89ajquVW1opMo+kxC+RUYorg+Dy07HUHuVYzzAU62xQv2foQW4ar?=
+ =?us-ascii?Q?Wm0sw4J2E6fsTUEsWlyQGteXs4SIBzlc9rK+RCOtqlLAGXd76OgiL/nMKFYy?=
+ =?us-ascii?Q?H0FI1o3CpoXUVrnGN4pZkzOJHd0XlshLoCQB8o6DTQ24PmU1A0YSR+Md/ttJ?=
+ =?us-ascii?Q?DMwVGfVynUmA7k9WDFR8WiC04s5SMqu1kwpaOUHfmtI6GTpyZhAcsllU4RPR?=
+ =?us-ascii?Q?CxqoX3w7w/EjSK595FRLuf8SeNh3b/8FQWeK6X+8B0Si2gSq1SSENxvO7wHA?=
+ =?us-ascii?Q?CMKD0/Y3OqrXFMR2ddx9aBH2LyH7guHO/yAkHFzAXqnfWybcWyla3/Jed6fb?=
+ =?us-ascii?Q?RFSFenurr6eXiZtEQ1wQukRPU9f9yXnXoFr43purxenJRsdAr+eUGqSzRn9I?=
+ =?us-ascii?Q?PUtaxiObSiEt+p0kaXcxN3fgCozqVfnC3cyPVi8S9nHVKDBsoNmo7YkRdQBh?=
+ =?us-ascii?Q?gsPaqljE2sfVMDQKhMDAiJvwLhQw75ZFAG414dMPoGRrkWPaLfc2dKJQ2sJo?=
+ =?us-ascii?Q?4MAaqK7laUUy3t+pIp06JTv3JL3wWBmOm0obre2KE6YdvTabCYz8cR9/qTJO?=
+ =?us-ascii?Q?CXmLSrUYh+l4jSjZNpoL1YD9HqeWbvtY+4hWnuo9ZXYy4cR52tiYUpb5b/ch?=
+ =?us-ascii?Q?VeU6AKCkkaLUyX17lXexk+09HStL6lcaD33rph/9nJFUWOtx08r+iZnn0GAn?=
+ =?us-ascii?Q?gQXstRCWRwqcyd5KeDcSD97yAG/Ac1idlXTxPjVony+HtJAbR4keCFmbfnQS?=
+ =?us-ascii?Q?cGzS2kydMjzGrZGfBW0INnggTouLlEMU3XYZEow+MgoS8yc6IaUsGsGBVifh?=
+ =?us-ascii?Q?ug8TLhhz+L7xAQVsmOAERCycBmgM0rhbBIlP4mEZJKrKfSADlVvPoRXX1Le3?=
+ =?us-ascii?Q?L3OnduYmhu3yyg4y+bQt7u0zDKvvNdlWtaa5znwppSlJEnUnt08yCPOBqXOI?=
+ =?us-ascii?Q?Ts9jUNrsLGxQYkH9Kk3L8uLqmo+0PR6jG4fMJWQ0rf3Qh4VGKq69qAJiVGlg?=
+ =?us-ascii?Q?fFsa04CZIXBvuOYWtyTHmqzdHR4=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b68d3fde-2e0b-459c-7eb7-08d9b753f5bc
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Dec 2021 18:29:08.3854
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KkOKQJbctT/k2aYkY5BJ+jEMCLoDnQSjRVN6qL4VYXfANb9/RYGTN4IGzb6cAYgdA2GkBKi0Ptfnx9fitkRYrVekKvX+weO6/89mShoXVcU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2063
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add page table check hooks into routines that modify user page tables.
+This patch set is derived from an attempt to include external control
+for a VSC751[1234] chip via SPI. That patch set has grown large and is
+getting unwieldy for reviewers and the developers... me.
 
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
----
- arch/x86/Kconfig               |  1 +
- arch/x86/include/asm/pgtable.h | 29 +++++++++++++++++++++++++++--
- 2 files changed, 28 insertions(+), 2 deletions(-)
+I'm breaking out the changes from that patch set. Some are trivial 
+  net: dsa: ocelot: remove unnecessary pci_bar variables
+  net: dsa: ocelot: felix: Remove requirement for PCS in felix devices
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 5e16393d9988..7636ea400a71 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -104,6 +104,7 @@ config X86
- 	select ARCH_SUPPORTS_ACPI
- 	select ARCH_SUPPORTS_ATOMIC_RMW
- 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
-+	select ARCH_SUPPORTS_PAGE_TABLE_CHECK	if X86_64
- 	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
- 	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <= 4096
- 	select ARCH_SUPPORTS_LTO_CLANG
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 448cd01eb3ec..ae34614b7e8d 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -26,6 +26,7 @@
- #include <asm/pkru.h>
- #include <asm/fpu/api.h>
- #include <asm-generic/pgtable_uffd.h>
-+#include <linux/page_table_check.h>
- 
- extern pgd_t early_top_pgt[PTRS_PER_PGD];
- bool __init __early_make_pgtable(unsigned long address, pmdval_t pmd);
-@@ -1006,18 +1007,21 @@ static inline pud_t native_local_pudp_get_and_clear(pud_t *pudp)
- static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
- 			      pte_t *ptep, pte_t pte)
- {
-+	page_table_check_pte_set(mm, addr, ptep, pte);
- 	set_pte(ptep, pte);
- }
- 
- static inline void set_pmd_at(struct mm_struct *mm, unsigned long addr,
- 			      pmd_t *pmdp, pmd_t pmd)
- {
-+	page_table_check_pmd_set(mm, addr, pmdp, pmd);
- 	set_pmd(pmdp, pmd);
- }
- 
- static inline void set_pud_at(struct mm_struct *mm, unsigned long addr,
- 			      pud_t *pudp, pud_t pud)
- {
-+	page_table_check_pud_set(mm, addr, pudp, pud);
- 	native_set_pud(pudp, pud);
- }
- 
-@@ -1048,6 +1052,7 @@ static inline pte_t ptep_get_and_clear(struct mm_struct *mm, unsigned long addr,
- 				       pte_t *ptep)
- {
- 	pte_t pte = native_ptep_get_and_clear(ptep);
-+	page_table_check_pte_clear(mm, addr, pte);
- 	return pte;
- }
- 
-@@ -1063,12 +1068,23 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
- 		 * care about updates and native needs no locking
- 		 */
- 		pte = native_local_ptep_get_and_clear(ptep);
-+		page_table_check_pte_clear(mm, addr, pte);
- 	} else {
- 		pte = ptep_get_and_clear(mm, addr, ptep);
- 	}
- 	return pte;
- }
- 
-+#define __HAVE_ARCH_PTEP_CLEAR
-+static inline void ptep_clear(struct mm_struct *mm, unsigned long addr,
-+			      pte_t *ptep)
-+{
-+	if (IS_ENABLED(CONFIG_PAGE_TABLE_CHECK))
-+		ptep_get_and_clear(mm, addr, ptep);
-+	else
-+		pte_clear(mm, addr, ptep);
-+}
-+
- #define __HAVE_ARCH_PTEP_SET_WRPROTECT
- static inline void ptep_set_wrprotect(struct mm_struct *mm,
- 				      unsigned long addr, pte_t *ptep)
-@@ -1109,14 +1125,22 @@ static inline int pmd_write(pmd_t pmd)
- static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm, unsigned long addr,
- 				       pmd_t *pmdp)
- {
--	return native_pmdp_get_and_clear(pmdp);
-+	pmd_t pmd = native_pmdp_get_and_clear(pmdp);
-+
-+	page_table_check_pmd_clear(mm, addr, pmd);
-+
-+	return pmd;
- }
- 
- #define __HAVE_ARCH_PUDP_HUGE_GET_AND_CLEAR
- static inline pud_t pudp_huge_get_and_clear(struct mm_struct *mm,
- 					unsigned long addr, pud_t *pudp)
- {
--	return native_pudp_get_and_clear(pudp);
-+	pud_t pud = native_pudp_get_and_clear(pudp);
-+
-+	page_table_check_pud_clear(mm, addr, pud);
-+
-+	return pud;
- }
- 
- #define __HAVE_ARCH_PMDP_SET_WRPROTECT
-@@ -1137,6 +1161,7 @@ static inline int pud_write(pud_t pud)
- static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
- 		unsigned long address, pmd_t *pmdp, pmd_t pmd)
- {
-+	page_table_check_pmd_set(vma->vm_mm, address, pmdp, pmd);
- 	if (IS_ENABLED(CONFIG_SMP)) {
- 		return xchg(pmdp, pmd);
- 	} else {
+some are required for SPI
+  net: dsa: ocelot: felix: add interface for custom regmaps
+
+and some are just to expose code to be shared
+  net: mscc: ocelot: split register definitions to a separate file
+  net: mscc: ocelot: expose ocelot wm functions
+
+
+The entirety of this patch set should have essentially no impact on the
+system performance.
+
+v1 -> v2
+    * Removed the per-device-per-port quirks for Felix. Might be
+    completely unnecessary.
+    * Fixed the renaming issue for vec7514_regs. It includes the
+    Reported-by kernel test robot by way of git b4... If that isn't the
+    right thing to do in this instance, let me know :-)
+
+v2 -> v3
+    * Fix an include. Thanks Jakub Kicinski!
+
+v3 -> v4
+    * Add reviewed by tags
+
+Colin Foster (5):
+  net: dsa: ocelot: remove unnecessary pci_bar variables
+  net: dsa: ocelot: felix: Remove requirement for PCS in felix devices
+  net: dsa: ocelot: felix: add interface for custom regmaps
+  net: mscc: ocelot: split register definitions to a separate file
+  net: mscc: ocelot: expose ocelot wm functions
+
+ drivers/net/dsa/ocelot/felix.c             |   6 +-
+ drivers/net/dsa/ocelot/felix.h             |   4 +-
+ drivers/net/dsa/ocelot/felix_vsc9959.c     |  11 +-
+ drivers/net/dsa/ocelot/seville_vsc9953.c   |   1 +
+ drivers/net/ethernet/mscc/Makefile         |   3 +-
+ drivers/net/ethernet/mscc/ocelot_devlink.c |  31 ++
+ drivers/net/ethernet/mscc/ocelot_vsc7514.c | 548 +--------------------
+ drivers/net/ethernet/mscc/vsc7514_regs.c   | 523 ++++++++++++++++++++
+ include/soc/mscc/ocelot.h                  |   5 +
+ include/soc/mscc/vsc7514_regs.h            |  27 +
+ 10 files changed, 610 insertions(+), 549 deletions(-)
+ create mode 100644 drivers/net/ethernet/mscc/vsc7514_regs.c
+ create mode 100644 include/soc/mscc/vsc7514_regs.h
+
 -- 
-2.34.1.400.ga245620fadb-goog
+2.25.1
 

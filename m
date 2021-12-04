@@ -2,93 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DAD8468537
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 15:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CF6468545
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 15:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385129AbhLDOEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 09:04:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
+        id S1385172AbhLDOQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 09:16:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344839AbhLDOED (ORCPT
+        with ESMTP id S1385162AbhLDOQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 09:04:03 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E066C061751;
-        Sat,  4 Dec 2021 06:00:38 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id d9so12049977wrw.4;
-        Sat, 04 Dec 2021 06:00:38 -0800 (PST)
+        Sat, 4 Dec 2021 09:16:30 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF431C061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 06:13:04 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id m6so11916286oim.2
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 06:13:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jRydfW5dCvLP5M5W9G1L390OMoiuU4elPL4v0ocR8GI=;
-        b=KfBlGlO8ievFtXcZ7gIBb6tFFJy1t6XUKHG/+LBpAlwkhYzMt4QygssKPV4cSEp9wr
-         l8v7mvBYvpnvaoybP7iEBDWWBLj88MUDWtLVwWwcQ7bogU9kgBUFI+blguQoahyTJdwg
-         74Gf23L4aIFOZuTq/B+31fc5qrMC4ihUcVyeuE/krOPX/sNL4KgOw1+Dy2+jbc3ejX9W
-         ogG1Pj0IrNllvaQB8qIU71LDG/R5LJUxrM3yy7eSbTDwOfk6v3qzNT1X6hgSyftXnqDt
-         uqwFaxyaHDbfstTuvUmfoAuxpljnwINbegY+dUs/3NQq5sdMdYBF7MhdfyWTzHX8G7Wm
-         Yllw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=yLwatZiT4SVEKTvY8N+iFzmHoRw4ES5HD0ZbBaXfMt8=;
+        b=QC7S6nIZ5ZB7WgZkL4ELTo6ERxNpAbWm3lbMHUu0kMEsyEO8rVD7QBoVfSqjir5Tgw
+         OQIU39I5uoWI/SLkK1+aN/iH4U7AaUCNpw8mLWgkN6R1mz3InS8TJI2U7HoLLShZDP0X
+         WFuGDbrDBxZ0PfuhKy/FSBlGtFcJE+STqS6TW+TYgBoWMeHF4fYtvKWbvsQdxpTu4PPz
+         36ZVDJO3Q2C/tRtPq9x/uNgVEOlv7a9DRbbxvNOHs0lgbQQKFr/5SKdgbmMTXckUtjQF
+         brl/9CMhjHctT3ohE4XuWb3usFPhbb71F8i26FxhnLZ+BRwIkV/UMMXeYWmYFvWbzcd6
+         UQqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jRydfW5dCvLP5M5W9G1L390OMoiuU4elPL4v0ocR8GI=;
-        b=dPi0eVa/6SxE7ztlDmfgLPkj/sRwQv22UBuRSe5+XZb2xl0GTjhkUydTz8lRYq0zFJ
-         stlqLhLeoIdWW2Ynl47kKVhXnmz5X/kUm6nI/UebsIMr8ZSYNrZ1FfyoU4wmCmztoy4O
-         XkWZth8s+21OD6U/+7bnrvqNr1mILcatCEvI274DqBU66Om4XAcyrQkJZCYS6Ri/hLX3
-         KTOUTbdfiXUOwijIoyIUJ6b2tIqpE2+RSuXk2DSHuvmZYZ1vo7Twx/ywwtmfEFje6s91
-         1HzAop9W1iiQB8fDchRIfNA004bbQkrS1x4pbCZTo1KK4kdWNiN2DbM5a+y4/1y3hpKD
-         Kq0w==
-X-Gm-Message-State: AOAM531G/p9xSbe4T08N5o/Yg0nSwSXlxGRE5O5CvEMmhap1glwrP0jE
-        bOG0c8hT8dUNu1mvVleXJA4=
-X-Google-Smtp-Source: ABdhPJyp7Kwzh+WrHOuorXsYydzGifWlvVI1GsnYoZkSBQZorTbVIt+cVUlpC6Lv0Xx65iNRHim+7g==
-X-Received: by 2002:a05:6000:15c1:: with SMTP id y1mr31001064wry.63.1638626434368;
-        Sat, 04 Dec 2021 06:00:34 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id i7sm5593646wro.58.2021.12.04.06.00.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Dec 2021 06:00:33 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        dmaengine@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dmaengine: stm32-mdma: Remove redundant initialization of pointer hwdesc
-Date:   Sat,  4 Dec 2021 14:00:32 +0000
-Message-Id: <20211204140032.548066-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=yLwatZiT4SVEKTvY8N+iFzmHoRw4ES5HD0ZbBaXfMt8=;
+        b=vRsKGOL4nTByNVp50QBAAnAEw2lW7eRAVmP37t5eLc2kFwcSIhlMp6z/67/Q9bmxbx
+         abwcU79Cq+J0iC2S2iMYocwumLxlzLE4csltBzF4jPFKvOE/7tlJ+nG5Pv1sc5zjeyo8
+         XEjTdXqXDMeIlz6IDzDte+RZGpkMTOFIMzQktO/OkAR62c6/loUcB0H/Q7ZueA5EQo+u
+         bSygXqC5IopcMKqLYpGPBgrwLRT68nJVmNYmB2RJjeBHTGurvVbWKxZUQcEKReSyV+Ja
+         Ggbi0mHkPUorQFZNwww1KYSvp70g+kxB5f3kkJrePze3dMeiDk13aoH0xw1wzi+OIe82
+         HSCg==
+X-Gm-Message-State: AOAM531wmMjez/ie94d6/0RvuM7e6AXB51jLxEjU1ZSI4sX97NtAm0+Z
+        G6SmI8/fajX/MWxkNSBgFXhubIfx8GHXg08m5os=
+X-Google-Smtp-Source: ABdhPJzedpn0QezEgFZkhFICzzYiYXALDlV55Dadk6rRF67AQQThXxFfB9TmvBV/F3Xb9LMAxnH9TMHHHMMJS9G8j1s=
+X-Received: by 2002:a54:4418:: with SMTP id k24mr15162493oiw.23.1638627184178;
+ Sat, 04 Dec 2021 06:13:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6838:ac0c:0:0:0:0 with HTTP; Sat, 4 Dec 2021 06:13:03
+ -0800 (PST)
+Reply-To: mmjanee02@gmail.com
+From:   Mary Jane Kallon <maurmbama1@gmail.com>
+Date:   Sat, 4 Dec 2021 06:13:03 -0800
+Message-ID: <CAD2nLk7gFiDW4HQ4fVsffROY=vdPOB89o3W=PC+LB3=3+fZSqA@mail.gmail.com>
+Subject: HAPPY WEEKEND
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pointer hwdesc is being initialized with a value that is never
-read, it is being updated later in a for-loop. The assignment is
-redundant and can be removed.
-
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/dma/stm32-mdma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
-index d30a4a28d3bf..805a449ff301 100644
---- a/drivers/dma/stm32-mdma.c
-+++ b/drivers/dma/stm32-mdma.c
-@@ -1279,7 +1279,7 @@ static size_t stm32_mdma_desc_residue(struct stm32_mdma_chan *chan,
- 				      u32 curr_hwdesc)
- {
- 	struct stm32_mdma_device *dmadev = stm32_mdma_get_dev(chan);
--	struct stm32_mdma_hwdesc *hwdesc = desc->node[0].hwdesc;
-+	struct stm32_mdma_hwdesc *hwdesc;
- 	u32 cbndtr, residue, modulo, burst_size;
- 	int i;
- 
 -- 
-2.33.1
+Dear,
+How are you doing today? I got your contact from a directory and
+picked interest to communicate you by faith, though we have not met
+before, I believe we can achieve something together. My husband died
+few years ago after battling with brain cancer, before his death, he
+deposited ($10.5 Million) in one of the financial institution. He
+wanted to establish coco processing factory and also real estate
+business.
 
+After the death of my husband, I have been receiving all manner of
+life threats from the family members, now the pressure is getting more
+severe I decided to leave this country. Please can you partner with me
+and receive the fund in your account while I come over there with my
+son for investment. If you  agree, get back for more details and what
+will be your commission for the assistance. I wait for your reply,
+Mary Jane Kallon

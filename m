@@ -2,188 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 955324687A1
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 22:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9E84687A8
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 22:35:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344863AbhLDVJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 16:09:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
+        id S1355734AbhLDVix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 16:38:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232749AbhLDVJc (ORCPT
+        with ESMTP id S231646AbhLDViw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 16:09:32 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17BAC061751;
-        Sat,  4 Dec 2021 13:06:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=JMDfMLkmy9vZ+DWnVm3H854hWHUeVhzdVnP8kYwWhWw=; b=YTLEawqfbScqsn20pWtQNsfSNj
-        EvcnePg4REVrqzqP/Dn/dnygAsYHl2yvWml9F3e+jmH+cmYdtpqQwkg+FDHO0A7MHVyCK9Is4Sb55
-        OEUOUSfEG0plmTSjQ3F7aqggXGEVqQn8ADQKSv82VM/e2s2gYc7wo6jOo4GnGnmgufWIY/DjznM4q
-        /rLqSG+RJPaqKQOdgYhXnOkCkxwnq0/FFXjhyZyGJpbcQn4oNNp3XMEABdc/7XXgT5s2ZXonkEkP/
-        FCcca97gg/cJZVdGXYSfo3lgOqDf3AykfHNo2WFNuD5odngsT63BlsWwvLY73MhUoaSPwUv6psGka
-        XyJsEJ8g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56066)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1mtcEK-0003XU-0K; Sat, 04 Dec 2021 21:06:00 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1mtcEF-0002ix-7E; Sat, 04 Dec 2021 21:05:55 +0000
-Date:   Sat, 4 Dec 2021 21:05:55 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH v3 1/2] modpost: file2alias: make mdio alias configure
- match mdio uevent
-Message-ID: <YavYM2cs0RuY0JdM@shell.armlinux.org.uk>
-References: <1638260517-13634-1-git-send-email-zhuyinbo@loongson.cn>
- <YaXrP1AyZ3AWaQzt@shell.armlinux.org.uk>
- <ea3f6904-c610-0ee6-fbab-913ba6ae36c5@loongson.cn>
- <Yas2+yq3h5/Bfvy9@shell.armlinux.org.uk>
+        Sat, 4 Dec 2021 16:38:52 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD5CC061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 13:35:26 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id n12so15434861lfe.1
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 13:35:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=msUpArhRy8wdm0cKy+shcB9fiwW0FQ4TneJPMUYT/ss=;
+        b=YqvFBc4mcIl6uAotVZR2uxM+tlsrr1RraJjIa6qupLo2aXuHdYxbW9tfV7bbuqcn8m
+         RnvgN15bRivsuVpZqu/Wm7HBrvV9AJs4+b7iEh1XNQCh2aIxKcP3S7YRo3ixof+u+iK5
+         mZYk5jJZpl3MP2RWvc11I8UtShJ/oB6tPpHEstv13FC4dMACTCfhcAXsTFDV77kHV5k2
+         Mgt3ss4f/BQ/E2IdCQo83Aordps/YM6fAMWiVoCYXYW2eWYzgJOR5EwZxlitcdY3s1e7
+         msrVl9LyEsHAs6jzt9hoxEV827K72b0p+p991rXS3zVeygOlNq/nfSNgl3nvgRBAcxHl
+         BlKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=msUpArhRy8wdm0cKy+shcB9fiwW0FQ4TneJPMUYT/ss=;
+        b=YQ8pzlL54EDH9NAGVS1/o3YPBMKDDeELxaqK+GkoBxwRSTr8cL7c3mP1M3/UUnlwnw
+         NlBkWHg0sBlKTPsKvyDIHys41jsiQtGEiclQs+F7wbwv8QiErVhvOngCQPJ1RY6WMzRQ
+         IsEHTN5Zr7HE/Y85R+j9Qo/wkNbIJlx49ZC2rpUGAyfIpvvyb3wjqpHsq/tx6gB1eaRZ
+         X/y0Vc0E660Xnyw1adXMGPu3RaaHa1au2Rt2T8xg37gmtxMgR8Gd1OQ9HfKvPbFueq47
+         dcX4BfCQDiswTYLC3votpUI8uqbwYrWODzYAwz270b9fVEDDzUMLxasjfHCT4i7Dnnak
+         ahWw==
+X-Gm-Message-State: AOAM53048mJpxkpBt3nYtN+Sbj5RyvFefMaRARVVo+Q6L9jBPNYWwd8O
+        tL1VtAiKKeahZPjqjUNZjIc=
+X-Google-Smtp-Source: ABdhPJy1foNQC1fgBE39jI5YX063JtAdtVHP0Vv+8WDaFnUy2KJ/0i1ix7+RrnYn6SjeA/Tb6hx43Q==
+X-Received: by 2002:a19:e046:: with SMTP id g6mr25638279lfj.176.1638653724763;
+        Sat, 04 Dec 2021 13:35:24 -0800 (PST)
+Received: from localhost.localdomain (h-155-4-221-129.NA.cust.bahnhof.se. [155.4.221.129])
+        by smtp.gmail.com with ESMTPSA id q24sm873218lfp.103.2021.12.04.13.35.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Dec 2021 13:35:24 -0800 (PST)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Subject: [PATCH] KVM: arm64: Constify kvm_io_gic_ops
+Date:   Sat,  4 Dec 2021 22:35:18 +0100
+Message-Id: <20211204213518.83642-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yas2+yq3h5/Bfvy9@shell.armlinux.org.uk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 04, 2021 at 09:38:03AM +0000, Russell King (Oracle) wrote:
-> I have told you several times to separate out the change to the name
-> used in bus_type. You have completely ignored that. I will quite simply
-> NAK that patch every time you post it as long as you have not made that
-> change.
-> 
-> I have told you that your patch will cause regressions. You continue
-> to repost it. I will NAK your patch as long as it contains a known
-> regression because causing a regression is totally _unacceptable_.
+The only usage of kvm_io_gic_ops is to make a comparison with its
+address and to pass its address to kvm_iodevice_init() which takes a
+pointer to const kvm_io_device_ops as input. Make it const to allow the
+compiler to put it in read-only memory.
 
-Here is a patch that stands a far better chance of being acceptable
-and resolving your issue. Please test this patch and check whether
-it solves your issue.
-
-If it does not solve your issue, then please post a _full_ kernel
-boot log and provide your kernel configuration (the .config file).
-
-Thanks.
-
-8<====
-From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH net-next] net: phy: generate PHY mdio modalias
-
-The modalias string provided in the uevent sysfs file does not conform
-to the format used in PHY driver modules. One of the reasons is that
-udev loading of PHY driver modules has not been an expected use case.
-
-This patch changes the MODALIAS entry for only PHY devices from:
-	MODALIAS=of:Nethernet-phyT(null)
-to:
-	MODALIAS=mdio:00000000001000100001010100010011
-
-Other MDIO devices (such as DSA) remain as before.
-
-However, having udev automatically load the module has the advantage
-of making use of existing functionality to have the module loaded
-before the device is bound to the driver, thus taking advantage of
-multithreaded boot systems, potentially decreasing the boot time.
-
-However, this patch will not solve any issues with the driver module
-not being loaded prior to the network device needing to use the PHY.
-This is something that is completely out of control of any patch to
-change the uevent mechanism.
-
-Reported-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
 ---
- drivers/net/phy/mdio_bus.c   |  8 ++++++++
- drivers/net/phy/phy_device.c | 14 ++++++++++++++
- include/linux/mdio.h         |  2 ++
- 3 files changed, 24 insertions(+)
+ arch/arm64/kvm/vgic/vgic-mmio.c | 2 +-
+ arch/arm64/kvm/vgic/vgic-mmio.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
-index 9b6f2df07211..68cf59ce7343 100644
---- a/drivers/net/phy/mdio_bus.c
-+++ b/drivers/net/phy/mdio_bus.c
-@@ -994,8 +994,16 @@ static int mdio_bus_match(struct device *dev, struct device_driver *drv)
- 
- static int mdio_uevent(struct device *dev, struct kobj_uevent_env *env)
- {
-+	struct mdio_device *mdio = to_mdio_device(dev);
- 	int rc;
- 
-+	/* Use the device-specific uevent if specified */
-+	if (mdio->bus_uevent) {
-+		rc = mdio->bus_uevent(mdio, env);
-+		if (rc != -ENODEV)
-+			return rc;
-+	}
-+
- 	/* Some devices have extra OF data and an OF-style MODALIAS */
- 	rc = of_device_uevent_modalias(dev, env);
- 	if (rc != -ENODEV)
-diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 74d8e1dc125f..208ef5342798 100644
---- a/drivers/net/phy/phy_device.c
-+++ b/drivers/net/phy/phy_device.c
-@@ -565,6 +565,19 @@ static int phy_request_driver_module(struct phy_device *dev, u32 phy_id)
+diff --git a/arch/arm64/kvm/vgic/vgic-mmio.c b/arch/arm64/kvm/vgic/vgic-mmio.c
+index 48c6067fc5ec..7068da080799 100644
+--- a/arch/arm64/kvm/vgic/vgic-mmio.c
++++ b/arch/arm64/kvm/vgic/vgic-mmio.c
+@@ -1050,7 +1050,7 @@ static int dispatch_mmio_write(struct kvm_vcpu *vcpu, struct kvm_io_device *dev,
  	return 0;
  }
  
-+static int phy_bus_uevent(struct mdio_device *mdiodev,
-+			  struct kobj_uevent_env *env)
-+{
-+	struct phy_device *phydev;
-+
-+	phydev = container_of(mdiodev, struct phy_device, mdio);
-+
-+	add_uevent_var(env, "MODALIAS=" MDIO_MODULE_PREFIX MDIO_ID_FMT,
-+		       MDIO_ID_ARGS(phydev->phy_id));
-+
-+	return 0;
-+}
-+
- struct phy_device *phy_device_create(struct mii_bus *bus, int addr, u32 phy_id,
- 				     bool is_c45,
- 				     struct phy_c45_device_ids *c45_ids)
-@@ -584,6 +597,7 @@ struct phy_device *phy_device_create(struct mii_bus *bus, int addr, u32 phy_id,
- 	mdiodev->dev.type = &mdio_bus_phy_type;
- 	mdiodev->bus = bus;
- 	mdiodev->bus_match = phy_bus_match;
-+	mdiodev->bus_uevent = phy_bus_uevent;
- 	mdiodev->addr = addr;
- 	mdiodev->flags = MDIO_DEVICE_FLAG_PHY;
- 	mdiodev->device_free = phy_mdio_device_free;
-diff --git a/include/linux/mdio.h b/include/linux/mdio.h
-index 9f3587a61e14..fb97cbf65ec7 100644
---- a/include/linux/mdio.h
-+++ b/include/linux/mdio.h
-@@ -38,6 +38,8 @@ struct mdio_device {
- 	char modalias[MDIO_NAME_SIZE];
+-struct kvm_io_device_ops kvm_io_gic_ops = {
++const struct kvm_io_device_ops kvm_io_gic_ops = {
+ 	.read = dispatch_mmio_read,
+ 	.write = dispatch_mmio_write,
+ };
+diff --git a/arch/arm64/kvm/vgic/vgic-mmio.h b/arch/arm64/kvm/vgic/vgic-mmio.h
+index fefcca2b14dc..3fa696f198a3 100644
+--- a/arch/arm64/kvm/vgic/vgic-mmio.h
++++ b/arch/arm64/kvm/vgic/vgic-mmio.h
+@@ -34,7 +34,7 @@ struct vgic_register_region {
+ 	};
+ };
  
- 	int (*bus_match)(struct device *dev, struct device_driver *drv);
-+	int (*bus_uevent)(struct mdio_device *mdiodev,
-+			  struct kobj_uevent_env *env);
- 	void (*device_free)(struct mdio_device *mdiodev);
- 	void (*device_remove)(struct mdio_device *mdiodev);
+-extern struct kvm_io_device_ops kvm_io_gic_ops;
++extern const struct kvm_io_device_ops kvm_io_gic_ops;
  
+ #define VGIC_ACCESS_8bit	1
+ #define VGIC_ACCESS_32bit	2
 -- 
-2.30.2
+2.34.1
 
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

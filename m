@@ -2,129 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9F4468366
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 09:47:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2325B46836A
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 09:55:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384342AbhLDIsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 03:48:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
+        id S1384363AbhLDI7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 03:59:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354761AbhLDIsu (ORCPT
+        with ESMTP id S1354761AbhLDI7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 03:48:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155BEC061751
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 00:45:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 710E160AE4
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 08:45:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA5F5C341C5
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 08:45:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638607523;
-        bh=ootFt2XPS5y2Q9hPMbXe0aAjBh64rPkdG0eY3FUEcjs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BydKqd2F0DHkR4OmxjlA81eRsFFGS9/Rz6rVkBp5IwS5EDauk8K6/0nOHspETpmAg
-         wziwckyYtrW1lzC7Hrpb1mrJe/EzP4OATduElYIVsrwEsmoP0RqBjIQ3FrMZxlppR7
-         t6OyAMHOzXZyIr4AEaYklvnc9gAHDfn48+/fw7DUKpV6vLN7Z9XAOhk25AKz9grN/L
-         321pBRVPUNEwyveXxdm9/M23pOMeB0lT0BrOCFr3fjjvF3Dl5uRRislPEwomwRDd/R
-         7xVOxOWdyBEee7wOSk9574qI6D2WVCNk5Ek6IpGf3/6e/ptSD4m+lemCcbL76abMSj
-         glcehVPzBNJ8w==
-Received: by mail-oi1-f172.google.com with SMTP id bk14so10714028oib.7
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 00:45:23 -0800 (PST)
-X-Gm-Message-State: AOAM53301FsV9lAYW+sFGdoobJewBlV6u7A15X5wUxBfe31MMtAFBnjC
-        NX1EmbN9H38WdaykYFMS5+R4Rm4GXN8EWNQE7dg=
-X-Google-Smtp-Source: ABdhPJyQDdDnp/YR0EXe1jOAGLUO0OHHU0hOnxkTTijaKSUXPgGCfq0o7e9D4E6gxlU+CQfR/j2AvktERXS/WE/5q7U=
-X-Received: by 2002:a05:6808:12:: with SMTP id u18mr14242217oic.174.1638607523000;
- Sat, 04 Dec 2021 00:45:23 -0800 (PST)
-MIME-Version: 1.0
-References: <163477765570.264901.3851692300287671122.stgit@devnote2>
- <163477772593.264901.7405996794526239017.stgit@devnote2> <CAK8P3a3jCGWjauD0+k5C-VpLDQ8WkcCHs5UpoAb-x_yHU0eEkw@mail.gmail.com>
-In-Reply-To: <CAK8P3a3jCGWjauD0+k5C-VpLDQ8WkcCHs5UpoAb-x_yHU0eEkw@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Sat, 4 Dec 2021 09:45:11 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXF3ZQ__trDo4PDfBmJsNoiqBkNB2CLK5pTFARTEYzDOzw@mail.gmail.com>
-Message-ID: <CAMj1kXF3ZQ__trDo4PDfBmJsNoiqBkNB2CLK5pTFARTEYzDOzw@mail.gmail.com>
-Subject: Re: [PATCH v3 8/9] ARM: kprobes: Make a frame pointer on __kretprobe_trampoline
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Ananth N Mavinakayanahalli <ananth@linux.ibm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Nathan Chancellor <nathan@kernel.org>,
+        Sat, 4 Dec 2021 03:59:13 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02908C061751;
+        Sat,  4 Dec 2021 00:55:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Vwdl1xKa4HYu9irhFaCnjVvl+U+9xbF06W/a7qens7k=; b=vfPGu83j2gIsLgLE3DxB3r9q9/
+        dbtwfJyG9lDZtbNYQGVmVKocVsH2s9u0wX0ATvcJHRY2i/ueC7uoief9HZrymphH9VddBvVkWXUt1
+        XnEiRvUqWKLajju+56+0EXRIX1Gn6KmdV+QivZcC5SgysDZoqTnwaTqbDjF2o/QgKisFGSbHUrrwq
+        4TkW84iHfLM1ke2YdGrB5rOc8pvI+YuYx3DgIU8nYsZFAk9oDk8YMaMvwdHJeD9mKOxOhdrVOnZIf
+        w5g5jFMajbIyO1Avs7hHiBcvmQ1DKcYAx1a9IuDAejtXgGNiltk3qGyvkQcbNPhgEb6YBIX/qPMmR
+        /1LPU4jQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mtQov-00CL1l-IB; Sat, 04 Dec 2021 08:55:02 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0FB8998106D; Sat,  4 Dec 2021 09:55:01 +0100 (CET)
+Date:   Sat, 4 Dec 2021 09:55:00 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nicolas Pitre <nico@fluxnic.net>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev, hjl.tools@gmail.com
+Subject: Re: [PATCH v8 05/14] x86: conditionally place regular ASM functions
+ into separate sections
+Message-ID: <20211204085500.GL16608@worktop.programming.kicks-ass.net>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+ <20211202223214.72888-6-alexandr.lobakin@intel.com>
+ <Yanm6tJ2obi1aKv6@hirez.programming.kicks-ass.net>
+ <20211203141051.82467-1-alexandr.lobakin@intel.com>
+ <20211203163424.GK16608@worktop.programming.kicks-ass.net>
+ <28856p61-r54s-791n-q6s1-27575s62r2q9@syhkavp.arg>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <28856p61-r54s-791n-q6s1-27575s62r2q9@syhkavp.arg>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Dec 2021 at 21:38, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Thu, Oct 21, 2021 at 2:55 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > Currently kretprobe on ARM just fills r0-r11 of pt_regs, but
-> > that is not enough for the stacktrace. Moreover, from the user
-> > kretprobe handler, stacktrace needs a frame pointer on the
-> > __kretprobe_trampoline.
-> >
-> > This adds a frame pointer on __kretprobe_trampoline for both gcc
-> > and clang case. Those have different frame pointer so we need
-> > different but similar stack on pt_regs.
-> >
-> > Gcc makes the frame pointer (fp) to point the 'pc' address of
-> > the {fp, ip (=sp), lr, pc}, this means {r11, r13, r14, r15}.
-> > Thus if we save the r11 (fp) on pt_regs->r12, we can make this
-> > set on the end of pt_regs.
-> >
-> > On the other hand, Clang makes the frame pointer to point the
-> > 'fp' address of {fp, lr} on stack. Since the next to the
-> > pt_regs->lr is pt_regs->sp, I reused the pair of pt_regs->fp
-> > and pt_regs->ip.
-> > So this stores the 'lr' on pt_regs->ip and make the fp to point
-> > pt_regs->fp.
-> >
-> > For both cases, saves __kretprobe_trampoline address to
-> > pt_regs->lr, so that the stack tracer can identify this frame
-> > pointer has been made by the __kretprobe_trampoline.
-> >
-> > Note that if the CONFIG_FRAME_POINTER is not set, this keeps
-> > fp as is.
-> >
-> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->
-> This causes a regression that I see in randconfig builds with gcc-11:
->
-> /tmp/ccovvQNw.s: Assembler messages:
-> /tmp/ccovvQNw.s:32: Error: invalid literal constant: pool needs to be closer
-> make[5]: *** [/git/arm-soc/scripts/Makefile.build:288:
-> arch/arm/probes/kprobes/core.o] Error 1
->
-> I have two randconfigs that reproduce it locally, here is a .config
-> [1] and assembly
-> output[2] for reference. I have not done any further analysis, but
-> maybe you have
-> an idea.
+On Fri, Dec 03, 2021 at 02:46:39PM -0500, Nicolas Pitre wrote:
 
-Does this help?
+> Surely this would do it:
+> 
+> http://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=451133cefa839104
 
-diff --git a/arch/arm/probes/kprobes/core.c b/arch/arm/probes/kprobes/core.c
-index 9090c3a74dcc..88999ed2cfc4 100644
---- a/arch/arm/probes/kprobes/core.c
-+++ b/arch/arm/probes/kprobes/core.c
-@@ -408,6 +408,7 @@ void __naked __kprobes __kretprobe_trampoline(void)
- #else
-                "mov    pc, lr                  \n\t"
- #endif
-+               ".ltorg                         \n\t"
-                : : : "memory");
- }
+Ooh, yes, excellent that, thanks!

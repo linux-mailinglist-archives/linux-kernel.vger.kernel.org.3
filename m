@@ -2,95 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7768468653
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 17:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 560EC468658
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 17:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355347AbhLDQtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 11:49:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
+        id S1355388AbhLDQ4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 11:56:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234749AbhLDQtW (ORCPT
+        with ESMTP id S1355365AbhLDQ4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 11:49:22 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C3EC061751;
-        Sat,  4 Dec 2021 08:45:56 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id m24so4221758pls.10;
-        Sat, 04 Dec 2021 08:45:56 -0800 (PST)
+        Sat, 4 Dec 2021 11:56:33 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D41C061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 08:53:06 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id y13so24439893edd.13
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 08:53:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Ou8MCZUKr64qRr/skxLC3cSf8qAEbYCJImJhLBz+XPg=;
-        b=aP4Srzc3BqseYAo4mv4qrVDjpirw2ZULF1TPTFiy3P5lcuxGU4/q2Ez/bzVvegPok9
-         9K6/jag7mIxJxirlwSVjYfKzLqPKesXAdfkwopIiTKseWla39XCoskaNL/a8VRrOz+Km
-         E5p8wsTq0Acbh3Ln7dtsvTBCwZlaRDnY5OQ2ukfXTi99efBIn9pMv2tGqs/n3xenMiaY
-         G2hzPyQatvLRiedijOZ/gkoEVpyaZKB8ZqniwtfFCGylH0FakQatiK4AXyEl5YyszYih
-         Rw3K8VsYcqXcWFFqwFiqi78csx4jXfxLLRl/LeGmqECMrqFAfWhPnduhSdvcSw5Ghlhv
-         5Ojg==
+        bh=HLxsYVhxp8kc6YMducknuw0Thmrn67yEeEH0fvOg79Q=;
+        b=dYml2e6b1/2yUxtumtq1wCDHEHpViPjaXkLJZuvbCYNcd1mB2oZRtxhd/NOrrQZwPa
+         su9obZKSQkCReBQgmeeMTf7GYYITRAdrqL/GuxniUdEMiSf6t1nyn5cCaJWBPVEwQZZ8
+         vp+fr2vrhw8rMb7JcSt4KhVasin4xVoWXxXFs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Ou8MCZUKr64qRr/skxLC3cSf8qAEbYCJImJhLBz+XPg=;
-        b=kclVElIhRIwL5qXrRQgTLuqJKMhRujdewHP6Aj7Ui3XF3wfulizGk2sGvfnHL1eHS2
-         YRRHM4VxcNqdQ5eQoO6yuu5yGNxdChRQKXNFBo5d445mIj+w1wT2JWPlWs1qce/gmaHU
-         9x37QxK+jJsMKuW3Du5Ae0G4W4ro+ejvLzn6RcjnXan8e6M5tjop+tH4G4wDuvUt4hyl
-         KI2DMYBwbiax+aEy4iVQ2pf01RQdJezMguCopo+aUo8aP70EP71uy8Grn7jXBVSXLCdq
-         sOSTR/eeBF4dZUz+umWPuzMUT29uhSwHKdUDpMn6pF6NwGS4T5QvPg3rkeooDah3zuEN
-         hefA==
-X-Gm-Message-State: AOAM532UU7tDQEhp1rTl+hwD0f5nP8cKItrlkB2Tx4uGPHr9z0b8+hdJ
-        Q1ZUGxg9pY1hk/gD1XwTz8oT4e68SmVBLz2EHc0=
-X-Google-Smtp-Source: ABdhPJys2RkngGFtmTCazg47B4ViGpNE9hIzgYpzzqwZSUBXheVoeoJh9O21QqSQxzOnlPnE2IW9uVcPVl2w5VMXfIc=
-X-Received: by 2002:a17:902:b588:b0:143:b732:834 with SMTP id
- a8-20020a170902b58800b00143b7320834mr31432185pls.22.1638636356196; Sat, 04
- Dec 2021 08:45:56 -0800 (PST)
+        bh=HLxsYVhxp8kc6YMducknuw0Thmrn67yEeEH0fvOg79Q=;
+        b=LsLHl4djOH/M0PHGevt50ORNwyxn6GcbA1sI+Yd9Cait/Os3QWbatw8EcvIQG3R+ej
+         rjQLywH8vIHYZ2ckSsuWOEOu2cAnsWlxTPalj1HUWNtFebCAoLbyYWN4uFEaIdEk+XGo
+         1UT4EU1tqvy4ug/szsQHoEaCvYxjA1/YC652+f8pNvDjLbxzMn4g/MF4aJh3myovWA2f
+         Zjg6UU3JGdsu2Q7/EHB9SV/1f4PsQ9ntoU0xqtXC9zgsewsOT7hwxHIoz5n54jGuLyOt
+         P0actD9m853mBzFHIKTTnpYveJLM9Y9GEeEGs7DqGr4Aykua9vFSSzjLCyi2JkoHhvgW
+         kVCw==
+X-Gm-Message-State: AOAM531M/1HH0ee9ijaAvKChH00rkXoTq9/cpTEIxOu5pjKO1zHhn1RJ
+        6K1kPmAnJmdOJzc3Ol/LDbKCfK3N5SJ6zsEk
+X-Google-Smtp-Source: ABdhPJykgkkC/JaOiWRZhJkORP1rCPpK4FXOtzIl0DgcTs1DhT8VUSCf5yXqsWJtusnhSKXRms7k6A==
+X-Received: by 2002:a17:907:1626:: with SMTP id hb38mr32906928ejc.481.1638636784447;
+        Sat, 04 Dec 2021 08:53:04 -0800 (PST)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
+        by smtp.gmail.com with ESMTPSA id lk22sm3994443ejb.83.2021.12.04.08.53.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 Dec 2021 08:53:03 -0800 (PST)
+Received: by mail-wr1-f54.google.com with SMTP id c4so12647620wrd.9
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 08:53:01 -0800 (PST)
+X-Received: by 2002:adf:9d88:: with SMTP id p8mr31156174wre.140.1638636781618;
+ Sat, 04 Dec 2021 08:53:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20211204095256.78042-1-laoar.shao@gmail.com> <20211204095256.78042-4-laoar.shao@gmail.com>
-In-Reply-To: <20211204095256.78042-4-laoar.shao@gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Sat, 4 Dec 2021 08:45:45 -0800
-Message-ID: <CAADnVQJnkTYXZhmEg50HOwN3FP2S6uK_TRJD+oUP7V=OzAn30Q@mail.gmail.com>
-Subject: Re: [PATCH -mm 3/5] samples/bpf/tracex2: replace hard-coded 16 with TASK_COMM_LEN
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+References: <YatpectAYsWnmPy2@eldamar.lan>
+In-Reply-To: <YatpectAYsWnmPy2@eldamar.lan>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 4 Dec 2021 08:52:45 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whTTWUyL5j5_-UeRT6k9VcJM_VOfjiKuU2NBJkxhbnXpw@mail.gmail.com>
+Message-ID: <CAHk-=whTTWUyL5j5_-UeRT6k9VcJM_VOfjiKuU2NBJkxhbnXpw@mail.gmail.com>
+Subject: Re: Makefile: CC_IMPLICIT_FALLTHROUGH passed quoted as argument to gcc
+To:     Salvatore Bonaccorso <carnil@debian.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>, david@redhat.com,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        linux-mm <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
+        Nathan Chancellor <nathan@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 4, 2021 at 1:53 AM Yafang Shao <laoar.shao@gmail.com> wrote:
-> diff --git a/samples/bpf/tracex2_user.c b/samples/bpf/tracex2_user.c
-> index 1626d51dfffd..b728a946d83d 100644
-> --- a/samples/bpf/tracex2_user.c
-> +++ b/samples/bpf/tracex2_user.c
-> @@ -12,6 +12,7 @@
+On Sat, Dec 4, 2021 at 5:13 AM Salvatore Bonaccorso <carnil@debian.org> wrote:
 >
->  #define MAX_INDEX      64
->  #define MAX_STARS      38
-> +#define TASK_COMM_LEN  16
+> Andreas suggested to replace the
 >
->  /* my_map, my_hist_map */
->  static int map_fd[2];
-> @@ -28,7 +29,7 @@ static void stars(char *str, long val, long max, int width)
->  }
+> KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
 >
->  struct task {
-> -       char comm[16];
-> +       char comm[TASK_COMM_LEN];
+> with
+>
+> KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(patsubst "%",%,$(CONFIG_CC_IMPLICIT_FALLTHROUGH))
 
-Also Nack.
+Ugh. I think the external build environment is a bit broken, but
+whatever. The above is ugly but I guess it works.
+
+Another alternative would be to make the Kconfig strings simply not
+have '"' as part of them.
+
+When you do
+
+    a = "hello"
+    print $a
+
+in any normal language, you generally wouldn't expect it to print the
+quotes, it should just print the bare word.
+
+But that's what the Kconfig string language basically does in this
+case. And I guess several users expect and take advantage of that ;(
+
+Masahiro? Comments?
+
+             Linus

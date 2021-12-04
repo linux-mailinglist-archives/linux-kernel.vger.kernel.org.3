@@ -2,147 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F1346838D
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 871EB46838E
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354914AbhLDJXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 04:23:49 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:42746 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236112AbhLDJXr (ORCPT
+        id S1384441AbhLDJ0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 04:26:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236112AbhLDJ0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 04:23:47 -0500
-Received: by mail-il1-f197.google.com with SMTP id l3-20020a056e021c0300b0029fcec8f2ccso3635078ilh.9
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 01:20:22 -0800 (PST)
+        Sat, 4 Dec 2021 04:26:31 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8F2C061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 01:23:05 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id d11so10860905ljg.8
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 01:23:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/vA1+3g8Svc4sefTqC+kMMaFu0/gR+beNxXDUxYQ/HY=;
+        b=pznYLXifFUPpwNbW6Ga0WJ/nvNzklczY//vyoZNdu0N2YAvn9TUIz8KHSQu0njGAAL
+         RDEBiaCaUZE8bkJaLQF8MW/l6lGHVLcP8fDNWhGZHLkUfQVvOufVjvgFau4CCOs0GpMX
+         fzj6yt8hVhVnO5UlyQM974Yg57CA0LyJoEGr+6bMxcgo4IfGJK94XFTp3t2XWo32IrVh
+         ZS/diQrDyWCHmWcmHzyGskkOLcaYznlbqnM/Hvt0w9ziVuqHjylHZn55suWSuEbtnYOe
+         kEEHOi55tBJ+nZfG+Z5liDMs+dKX9wUMtbpzf0qDylgkdyBGFHmoI+hYZR4OIffEMNb9
+         ndrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=TaC0QVPJsV+s3B4z6Sw+T+4Q19LiHEd6dzUgZmid5ak=;
-        b=UNxiL+u+0mAb80fi8mW1Injo2NEL2sp3GD9uvOXBE5zr8I5lsmz6Ork86HTdZIKaPz
-         WzMuLJkdL+iuJx0s0bznRNpsK9t9I+5ez/ZLIvsLRssFi9gGVTQTfyM0m19ZyS6K4RKz
-         dKSIFGM5oAh/1/awwaSDujf5/WvoArYF6VbOpbm5ARX2IySYl7StxNw5GhizrWk0K/dG
-         f2mdhEioBjz4hQ3KD09vKE6+x6UDMtyagy63ruzKby6gHY23aGP/b8+ikKjHhQ2is1dm
-         Hu1yNT2v3WvKg7ZJSEuoHwzKbYy2P8jhfZlOzoyQYnP8/p5UnZK9Z/NZNUNyBA9/4jTu
-         Sjbw==
-X-Gm-Message-State: AOAM530P9FllLnbZTkcOJdF6o1a9xUxiNbjg/9wGKnM/G1KOuwWXACc/
-        39BGM+jK+bTTx0vGaaBoKOxJbGt26Y37XoXG0MOYE58Izaej
-X-Google-Smtp-Source: ABdhPJzVVgqieeiqWo2ZBoiCyubc0oISNRRiz4ysr54Y02fEpywP0nVAIAP1YiGviCyzLm3aRMDADaVPNQ2jBwHDiS5UHWejdlx/
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/vA1+3g8Svc4sefTqC+kMMaFu0/gR+beNxXDUxYQ/HY=;
+        b=jguehcy8z2+9+fIn18AC460AlAM+xmRGO3qXKKv09EFg9BPfpycMP5t61Sj2haJYbk
+         62hnytCccT1NANjQeXtITu+wUv534tKj7epTYyR7gayBsZ0OrjGdYctrFsEXvpSMQXFE
+         QGO1OcqSD/FumKwLqZWe4dW5s6f6LkM6v5QZRHQWc6+cpxnqyEFf4IoLFrL4w0K2n4JX
+         rvBAS7q7uKcj0XZKFqlA0Pdea5F2Gh5w3n6HCma1HPdBYVwPwOd7UdIMvWxYUq/DVlxX
+         zo0oTYtTptH1/PID0VnAc5y0EVoX8pw/sHgiZpGeDnBT7ZaOld46ieZp3eGSMbpJ1CxM
+         ht4Q==
+X-Gm-Message-State: AOAM532s31gnvTPDhL5V+2L3Rx0XHP1YafKK0CFPveuj3W1F01do2oxr
+        v+PPrbUBcrVwthQVWr9usKk=
+X-Google-Smtp-Source: ABdhPJx75qgk/RIsFe2xWeB1XcY2udJoO3qcN/ImOu87iJqn9ZlZcFhA8yGmJvmnhpMsZ2rhe/C5JQ==
+X-Received: by 2002:a2e:9c81:: with SMTP id x1mr24548937lji.326.1638609783836;
+        Sat, 04 Dec 2021 01:23:03 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.229.236])
+        by smtp.gmail.com with ESMTPSA id f9sm697989lfv.44.2021.12.04.01.23.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 Dec 2021 01:23:03 -0800 (PST)
+Message-ID: <a10f1013-069e-7f56-8a5b-80621af8a158@gmail.com>
+Date:   Sat, 4 Dec 2021 12:22:59 +0300
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:2144:: with SMTP id d4mr25271653ilv.11.1638609618767;
- Sat, 04 Dec 2021 01:20:18 -0800 (PST)
-Date:   Sat, 04 Dec 2021 01:20:18 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000040972505d24e88e3@google.com>
-Subject: [syzbot] general protection fault in tls_init
-From:   syzbot <syzbot+1fd9b69cde42967d1add@syzkaller.appspotmail.com>
-To:     borisp@nvidia.com, daniel@iogearbox.net, davem@davemloft.net,
-        john.fastabend@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] staging: vt6655: refactor byMinChannel to min_channel
+Content-Language: en-US
+To:     Alberto Merciai <alb3rt0.m3rciai@gmail.com>
+Cc:     Forest Bond <forest@alittletooquiet.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tommaso Merciai <tomm.merciai@gmail.com>,
+        =?UTF-8?B?QWxkYXMgVGFyYcWha2V2acSNaXVz?= <aldas60@gmail.com>,
+        Karolina Drobnik <karolinadrobnik@gmail.com>,
+        Lucas Henneman <lucas.henneman@linaro.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20211204004041.3825744-1-alb3rt0.m3rciai@gmail.com>
+ <e0fea904-1861-0003-1b04-6d2e966657da@gmail.com>
+ <20211204090941.GA3805206@bulldog>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20211204090941.GA3805206@bulldog>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 12/4/21 12:09, Alberto Merciai wrote:
+> On Sat, Dec 04, 2021 at 11:27:43AM +0300, Pavel Skripkin wrote:
+>> Looks like this variable is set, but never used. Shouldn't it be just
+>> removed?
+>> 
+>> Same for max_channel (or byMaxChannel).
+> 
+> To be honest, I would prefer leave them where they are. I'm only
+> refactoring the code considering less the logic aspect.
+> 
+> I don't know if these variables will become usefull in a second
+> moment.
+> 
+> Anyway, If you consider that this could be a good moment to remove
+> them we can proceed.
+> 
+> What do you think about that?
+> 
 
-syzbot found the following issue on:
-
-HEAD commit:    3498e7f2bb41 Merge tag '5.16-rc2-ksmbd-fixes' of git://git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17e50a29b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=33f08a46bc9aea3d
-dashboard link: https://syzkaller.appspot.com/bug?extid=1fd9b69cde42967d1add
-compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1fd9b69cde42967d1add@syzkaller.appspotmail.com
-
-general protection fault, probably for non-canonical address 0xdffffc0000000004: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000020-0x0000000000000027]
-CPU: 1 PID: 1083 Comm: syz-executor.3 Not tainted 5.16.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:tls_build_proto net/tls/tls_main.c:776 [inline]
-RIP: 0010:tls_init+0x44b/0x940 net/tls/tls_main.c:844
-Code: 8d 9d 80 04 00 00 48 89 d8 48 c1 e8 03 42 80 3c 20 00 74 08 48 89 df e8 a3 15 fa f8 48 8b 1b 48 83 c3 20 48 89 d8 48 c1 e8 03 <42> 80 3c 20 00 74 08 48 89 df e8 86 15 fa f8 48 8b 1b ba e0 00 00
-RSP: 0018:ffffc90018ba79e8 EFLAGS: 00010202
-RAX: 0000000000000004 RBX: 0000000000000020 RCX: 0000000000000000
-RDX: 00000000000001b8 RSI: ffffffff8dc8dad8 RDI: ffffffff91040ae0
-RBP: ffffffff8dc8d920 R08: dffffc0000000000 R09: fffffbfff2208158
-R10: 0000000000000004 R11: 0000000000000000 R12: dffffc0000000000
-R13: ffff888077c9b300 R14: 1ffff1100ef93665 R15: ffff888077c9b328
-FS:  00007f618497c700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f5df59d8004 CR3: 00000000a43f0000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __tcp_set_ulp net/ipv4/tcp_ulp.c:139 [inline]
- tcp_set_ulp+0x428/0x4c0 net/ipv4/tcp_ulp.c:160
- do_tcp_setsockopt+0x455/0x37c0 net/ipv4/tcp.c:3391
- mptcp_setsockopt+0x1b47/0x2400 net/mptcp/sockopt.c:638
- __sys_setsockopt+0x552/0x980 net/socket.c:2176
- __do_sys_setsockopt net/socket.c:2187 [inline]
- __se_sys_setsockopt net/socket.c:2184 [inline]
- __x64_sys_setsockopt+0xb1/0xc0 net/socket.c:2184
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f6187427ae9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f618497c188 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
-RAX: ffffffffffffffda RBX: 00007f618753b020 RCX: 00007f6187427ae9
-RDX: 000000000000001f RSI: 0000000000000006 RDI: 0000000000000003
-RBP: 00007f6187481f6d R08: 0000000000000004 R09: 0000000000000000
-R10: 0000000020000100 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe6784d25f R14: 00007f618497c300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace db2630bf612a55f1 ]---
-RIP: 0010:tls_build_proto net/tls/tls_main.c:776 [inline]
-RIP: 0010:tls_init+0x44b/0x940 net/tls/tls_main.c:844
-Code: 8d 9d 80 04 00 00 48 89 d8 48 c1 e8 03 42 80 3c 20 00 74 08 48 89 df e8 a3 15 fa f8 48 8b 1b 48 83 c3 20 48 89 d8 48 c1 e8 03 <42> 80 3c 20 00 74 08 48 89 df e8 86 15 fa f8 48 8b 1b ba e0 00 00
-RSP: 0018:ffffc90018ba79e8 EFLAGS: 00010202
-RAX: 0000000000000004 RBX: 0000000000000020 RCX: 0000000000000000
-RDX: 00000000000001b8 RSI: ffffffff8dc8dad8 RDI: ffffffff91040ae0
-RBP: ffffffff8dc8d920 R08: dffffc0000000000 R09: fffffbfff2208158
-R10: 0000000000000004 R11: 0000000000000000 R12: dffffc0000000000
-R13: ffff888077c9b300 R14: 1ffff1100ef93665 R15: ffff888077c9b328
-FS:  00007f618497c700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020001580 CR3: 00000000a43f0000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	8d 9d 80 04 00 00    	lea    0x480(%rbp),%ebx
-   6:	48 89 d8             	mov    %rbx,%rax
-   9:	48 c1 e8 03          	shr    $0x3,%rax
-   d:	42 80 3c 20 00       	cmpb   $0x0,(%rax,%r12,1)
-  12:	74 08                	je     0x1c
-  14:	48 89 df             	mov    %rbx,%rdi
-  17:	e8 a3 15 fa f8       	callq  0xf8fa15bf
-  1c:	48 8b 1b             	mov    (%rbx),%rbx
-  1f:	48 83 c3 20          	add    $0x20,%rbx
-  23:	48 89 d8             	mov    %rbx,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	42 80 3c 20 00       	cmpb   $0x0,(%rax,%r12,1) <-- trapping instruction
-  2f:	74 08                	je     0x39
-  31:	48 89 df             	mov    %rbx,%rdi
-  34:	e8 86 15 fa f8       	callq  0xf8fa15bf
-  39:	48 8b 1b             	mov    (%rbx),%rbx
-  3c:	ba                   	.byte 0xba
-  3d:	e0 00                	loopne 0x3f
+I think, it should be up to maintainers to decide, but them can be 
+removed now and if somebody will need them later, he can bring them back 
+without any pain. For now it's just useless memory usage.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+I skimmed through priv fields usage and looks like many of them are just 
+set, but never used. I guess, some kind of evolution removed all uses of 
+them...
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+
+
+With regards,
+Pavel Skripkin

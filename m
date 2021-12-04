@@ -2,112 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE66468454
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 12:06:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D33F468457
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 12:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349523AbhLDLKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 06:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
+        id S1352709AbhLDLMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 06:12:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbhLDLKA (ORCPT
+        with ESMTP id S1350310AbhLDLMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 06:10:00 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA9EC061751;
-        Sat,  4 Dec 2021 03:06:34 -0800 (PST)
-Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1mtSsD-0003mW-AQ; Sat, 04 Dec 2021 12:06:33 +0100
-Message-ID: <7d5df080-0564-f265-f0b3-eb3dbca41599@leemhuis.info>
-Date:   Sat, 4 Dec 2021 12:06:32 +0100
+        Sat, 4 Dec 2021 06:12:21 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114F2C061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 03:08:56 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id i63so11251377lji.3
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 03:08:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EE2Aep+jzbNqeFIyDplIxE6aoRA2LQ+0Z3/L7vZF67o=;
+        b=VkyAlKODkweCl4uYOVgFOaCyEaVJQwOIfx7o1nriD6KMOg0uThbCiFgNzvZf4nMy1f
+         bABo8G2x62Nwq6qGlxemlgDCvNMonPRQwBF7FVG7aNvj0osuPLFXtMorzLubywKq8Uwx
+         LfPuOGstqgkdTcoQq1XicAMbs9B/E2F45T7Q3Kkzg6eAoHG2ayBqgvtiK0tvmF63n0VP
+         sWZS/tX4leOdcPJPTq+p9v4XrPIjtVAitiG+2PfEVr9gM//giBIJGwGXYBxUrfJ1cF5o
+         YTUtyzu43K7wZ6EDVoBhafSAuMtLxzTMF2ZOgknNyknyE/L6pvgwhz35BpkjhkxGpciE
+         6A6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EE2Aep+jzbNqeFIyDplIxE6aoRA2LQ+0Z3/L7vZF67o=;
+        b=VwZPtJLHh23lWq9LucfMC5EXWwhtmORh5Openvx31UzFkRIOak3PiBaPkJjDsxta4f
+         3YPNns+h3AialNj9OQodSbuOOC412sY00F9+HWgfVUB0Q4RAoO0In4boV32R/3aFlZsE
+         DiC4q02pT9grMDrcfc7XbzCj0YqYpXBHvsOcAlrlFdDWQRUvWGLeHfu1t7jCTfLiQwTl
+         igq0jRFF8ZVjVRDy2+5mRFCJgm7LfFNxU5bKjbc0BH7z6xyQ7N9m2u+6jehBS7R2dg/6
+         ewlKVrBmDJHlNGz7sN0ReEmw1l5tt6zNfJgWQVvW5GFjRgNwCSBHvsVzrn7o1O5OYwIc
+         TT8w==
+X-Gm-Message-State: AOAM532ZTd8rGlVkcrJYK14/HVwqtZAKToa3yFnIFN0yThMtrIsy1bqm
+        4bBMidzSYy/lMMo7Q6HBilQ=
+X-Google-Smtp-Source: ABdhPJyhhMJAekexkhVaSN1HqWhcFK5cczGTw1oAaXDgTGPyddkMDM9bs2c1jJFfrysr1i4qkNI7Tw==
+X-Received: by 2002:a2e:b5d2:: with SMTP id g18mr23741985ljn.354.1638616134335;
+        Sat, 04 Dec 2021 03:08:54 -0800 (PST)
+Received: from localhost.localdomain (h-155-4-221-129.NA.cust.bahnhof.se. [155.4.221.129])
+        by smtp.gmail.com with ESMTPSA id h8sm724538lfe.94.2021.12.04.03.08.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Dec 2021 03:08:53 -0800 (PST)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Subject: [PATCH] ASoC: amd: acp6x-pdm-dma: Constify static snd_soc_dai_ops
+Date:   Sat,  4 Dec 2021 12:08:48 +0100
+Message-Id: <20211204110848.21322-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: Regression: plugging in USB scanner breaks all USB functionality
-Content-Language: en-BS
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     regressions@lists.linux.dev, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <35f7428b39f996c793f5b4a6a314772681c73d7a.camel@apache.org>
- <3eb9c3f8-6bca-da08-47ec-af2a02d6a485@leemhuis.info>
- <e03ddc81-c60b-bd28-b959-0602142f0efc@leemhuis.info>
- <Yas83rCCAQcabahe@kroah.com>
- <73b325e3-d5d9-f768-9033-3aa0d3683e47@leemhuis.info>
- <YatGfEzzniH/Srn4@kroah.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <YatGfEzzniH/Srn4@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1638615994;65b5bb11;
-X-HE-SMSGID: 1mtSsD-0003mW-AQ
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The only usage of acp6x_pdm_dai_ops is to assign its address to the ops
+field in the snd_soc_dai_driver struct, which is a pointer to const
+snd_soc_dai_ops. Make it const to allow the compiler to put it in
+read-only memory.
 
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+---
+ sound/soc/amd/yc/acp6x-pdm-dma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 04.12.21 11:44, Greg KH wrote:
-> On Sat, Dec 04, 2021 at 11:26:45AM +0100, Thorsten Leemhuis wrote:
->>
->> On 04.12.21 11:03, Greg KH wrote:
->>> On Fri, Dec 03, 2021 at 06:24:52PM +0100, Thorsten Leemhuis wrote:
->>>> On 02.12.21 16:13, Thorsten Leemhuis wrote:
->>>>> Hi, this is your Linux kernel regression tracker speaking.
->>>>>
->>>>> Thanks for the report.
->>>>>
->>>>> Top-posting for once, to make this easy accessible to everyone.
->>>>>
->>>>> FWIW, 5.14 is EOL, so it might not be fixed there. As the problem is in
->>>>> newer kernels as well, I suspect that it was a change applies to 5.15 or
->>>>> 5.16 that got backported. Maybe one of the developers might have an idea
->>>>> which commit causes it. If that's not the case you likely should try a
->>>>> bisection to find the culprit. Performing one between v5.14.11..v5.14.14
->>>>> is likely the easiest and quickest way to find it.
->>>>>
->>>>> To be sure this issue doesn't fall through the cracks unnoticed, I'm
->>>>> adding it to regzbot, my Linux kernel regression tracking bot:
->>>>>
->>>>> #regzbot ^introduced v5.14.11..v5.14.14
->>>>> #regzbot title usb: plugging in USB scanner breaks all USB functionality
->>>>> [regression present in 5.15.2 und 5.16-rc3, too]
->>>>> #regzbot ignore-activity
->>>>
->>>> #regzbot introduced ff0e50d3564f
->>>> #regzbot fixed-by 385b5b09c3546c87cfb730b76abe5f8d73c579a2
->>>
->>> Odd, where did that git commit id come from?  I don't see it in
->>> linux-next or Linus's tree.
->>>
->>> confused,
->>
->> Yeah, sorry, after sending that mail it occurred to me that this wasn't
->> ideal and hard to follow.
->>
->> I got it from here:
->> https://lore.kernel.org/lkml/a649395b-0b91-a0d2-c510-ea8ec4aef917@linux.intel.com/
->>
->> I already decided that next time something like this comes up I'll reply
->> to the mail with the details instead (with proper quoting) to make this
->> easier to follow.
->>
->> Reading that message again I suspect that I might have been a bit quick
->> as well, as this might not be the commit id this ends up with when it
->> gets merged: I now see that this is likely a developers tree and not one
->> that gets indirectly merged.
->>
->> Sorry, I'll manually keep an eye on things to fix this up once that
->> patch gets its real it.
-> 
-> Ah, found it, it's now in my usb-linus branch, and I'll send it to Linus
-> later today:
-> 	09f736aa9547 ("xhci: Fix commad ring abort, write all 64 bits to CRCR register.")
+diff --git a/sound/soc/amd/yc/acp6x-pdm-dma.c b/sound/soc/amd/yc/acp6x-pdm-dma.c
+index e604f4ea524f..7e66393e4153 100644
+--- a/sound/soc/amd/yc/acp6x-pdm-dma.c
++++ b/sound/soc/amd/yc/acp6x-pdm-dma.c
+@@ -318,7 +318,7 @@ static int acp6x_pdm_dai_trigger(struct snd_pcm_substream *substream,
+ 	return ret;
+ }
+ 
+-static struct snd_soc_dai_ops acp6x_pdm_dai_ops = {
++static const struct snd_soc_dai_ops acp6x_pdm_dai_ops = {
+ 	.trigger   = acp6x_pdm_dai_trigger,
+ };
+ 
+-- 
+2.34.1
 
-Great, thx for letting me known, then I will let regzbot know:
-
-#regbzot fixed-by: 09f736aa9547
-
-TWIMC: regbzot will automatically pick up the title once it sees the
-commit in next or mainline.
-
-Ciao, Thorsten

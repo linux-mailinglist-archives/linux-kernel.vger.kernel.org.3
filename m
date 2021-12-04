@@ -2,132 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6960468329
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 08:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9135946832F
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 08:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351305AbhLDHaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 02:30:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344803AbhLDHaP (ORCPT
+        id S1354727AbhLDHcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 02:32:11 -0500
+Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:59034 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344803AbhLDHcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 02:30:15 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF03C061751;
-        Fri,  3 Dec 2021 23:26:50 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id n26so5093389pff.3;
-        Fri, 03 Dec 2021 23:26:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eCoo4UdX0KSai3rgxqp+sZCsWhUUBGl2p1rpp3l5eBw=;
-        b=SrgtERJGlFYclhGBMZWqWPGAIZbR6fQ6Uu4tpnTSOZi4kEEMeogHi+38ibOB1Ey21P
-         NsKwL8E3bcEDfz8ZW+SzX7lW4BoeQcApz4UUqds31/0hKjtB8GC+RLIm017R9iXqjTQ5
-         5L1ib+SOX+p6av7/1hxf7B+3Qxk2Iw7WqrJvdJo9bhmIi2CFI/RD70cSaIdmmD4TnbkS
-         5y6tetKfkLX0NGXFeSmkkx7JTdHF8qPgaL8esKv9vgiuB4mG86p3+JuYbDIU/22ynW84
-         XgstoStjjO1fceJiyUS6HIleMKpq85ai6WbYYTiWfwnyb44HUdjQ0qsdqcUOoB5fcM8p
-         lk9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eCoo4UdX0KSai3rgxqp+sZCsWhUUBGl2p1rpp3l5eBw=;
-        b=paI9ynkNdEFp8apqFpcAXt7YeovGZJBAWBcy/sDNgOJcn4Pu3Fa/btEBkX4r8h2MyN
-         ODKzK5PfzLL7WpuqiQmUSTxOQS7OB+zCRZGQx4n8IhpHmCdoC/QoA+Hm+VSXkorrl+ia
-         vgLF3xPTDAm3wWdw+/v1ET421xkrCTKvHEqfsgL6KF/8R3e0nmDL5dz2lZ4FhuASUiY/
-         i+MSPNEmcrBhyW05F7KnfdFrfRJ9UI7u43fWkJ4OPLs+Q/9+8+IhSokkZb2MwNrGLO48
-         H0who+yquuy+gKS/Ad3JF/4r9Nw7xjm4Rg8rjygCE//Dkv9E3dQdHe6amqPExi7pl8fy
-         VoqA==
-X-Gm-Message-State: AOAM531AmJ3cdjgUIQcIxzpD9zgoLCKUQqynoctANCvz21lsD4Pt3327
-        ETXNH7g4KZkBULt0+xaj0Rg=
-X-Google-Smtp-Source: ABdhPJwCQRkn3xmR+kfR3YlZKVCxe03wvGUj2OGYKR6Vkh9NokqMfnW2TUg5Koi/TslOtDsFr3TRJg==
-X-Received: by 2002:a63:8ac1:: with SMTP id y184mr8696835pgd.48.1638602809615;
-        Fri, 03 Dec 2021 23:26:49 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::50b? ([2404:f801:9000:18:efec::50b])
-        by smtp.gmail.com with ESMTPSA id m184sm4248180pga.61.2021.12.03.23.26.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 23:26:49 -0800 (PST)
-Message-ID: <877e6f24-2004-0681-f9f3-241fb6ace427@gmail.com>
-Date:   Sat, 4 Dec 2021 15:26:36 +0800
+        Sat, 4 Dec 2021 02:32:09 -0500
+Received: from pop-os.home ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id tPTNmu8nXMNzvtPTNm2IQC; Sat, 04 Dec 2021 08:28:42 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 04 Dec 2021 08:28:42 +0100
+X-ME-IP: 86.243.171.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
+        broonie@kernel.org, leon@kernel.org
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] sound: Fix some typo
+Date:   Sat,  4 Dec 2021 08:28:40 +0100
+Message-Id: <7b2bcbda298f02a34d46d8b6593daaaed9a09a45.1638602790.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH V3 3/5] hyperv/IOMMU: Enable swiotlb bounce buffer for
- Isolation VM
-Content-Language: en-US
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
-Cc:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        vkuznets <vkuznets@redhat.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "hch@lst.de" <hch@lst.de>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "dave.hansen@intel.com" <dave.hansen@intel.com>
-References: <20211201160257.1003912-1-ltykernel@gmail.com>
- <20211201160257.1003912-4-ltykernel@gmail.com>
- <MWHPR21MB159390BE1B546A6F90FB1F18D76A9@MWHPR21MB1593.namprd21.prod.outlook.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <MWHPR21MB159390BE1B546A6F90FB1F18D76A9@MWHPR21MB1593.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Some comments and include guards are not consistent with the name of the
+file where they can be found.
 
+This is likely some typo or cut'n'paste issues.
 
-On 12/4/2021 3:17 AM, Michael Kelley (LINUX) wrote:
->> +static void __init hyperv_iommu_swiotlb_init(void)
->> +{
->> +	unsigned long hyperv_io_tlb_size;
->> +	void *hyperv_io_tlb_start;
->> +
->> +	/*
->> +	 * Allocate Hyper-V swiotlb bounce buffer at early place
->> +	 * to reserve large contiguous memory.
->> +	 */
->> +	hyperv_io_tlb_size = swiotlb_size_or_default();
->> +	hyperv_io_tlb_start = memblock_alloc(hyperv_io_tlb_size, PAGE_SIZE);
->> +
->> +	if (!hyperv_io_tlb_start)
->> +		pr_warn("Fail to allocate Hyper-V swiotlb buffer.\n");
-> In the error case, won't swiotlb_init_with_tlb() end up panic'ing when
-> it tries to zero out the memory?   The only real choice here is to
-> return immediately after printing the message, and not call
-> swiotlb_init_with_tlb().
-> 
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ sound/pci/ac97/ac97_pcm.c      | 2 +-
+ sound/pci/hda/hda_generic.h    | 2 +-
+ sound/soc/codecs/sta350.h      | 2 +-
+ sound/soc/codecs/tlv320aic26.h | 6 +++---
+ sound/usb/usx2y/usbusx2y.c     | 2 +-
+ 5 files changed, 7 insertions(+), 7 deletions(-)
 
-Yes, agree. Will update.
+diff --git a/sound/pci/ac97/ac97_pcm.c b/sound/pci/ac97/ac97_pcm.c
+index 491de1a623cb..5fee8e89790f 100644
+--- a/sound/pci/ac97/ac97_pcm.c
++++ b/sound/pci/ac97/ac97_pcm.c
+@@ -231,7 +231,7 @@ static int set_spdif_rate(struct snd_ac97 *ac97, unsigned short rate)
+  * If the codec doesn't support VAR, the rate must be 48000 (except
+  * for SPDIF).
+  *
+- * The valid registers are AC97_PMC_MIC_ADC_RATE,
++ * The valid registers are AC97_PCM_MIC_ADC_RATE,
+  * AC97_PCM_FRONT_DAC_RATE, AC97_PCM_LR_ADC_RATE.
+  * AC97_PCM_SURR_DAC_RATE and AC97_PCM_LFE_DAC_RATE are accepted
+  * if the codec supports them.
+diff --git a/sound/pci/hda/hda_generic.h b/sound/pci/hda/hda_generic.h
+index c43bd0f0338e..8e1bc8ea74fc 100644
+--- a/sound/pci/hda/hda_generic.h
++++ b/sound/pci/hda/hda_generic.h
+@@ -183,7 +183,7 @@ struct hda_gen_spec {
+ 	struct automic_entry am_entry[MAX_AUTO_MIC_PINS];
+ 
+ 	/* for pin sensing */
+-	/* current status; set in hda_geneic.c */
++	/* current status; set in hda_generic.c */
+ 	unsigned int hp_jack_present:1;
+ 	unsigned int line_jack_present:1;
+ 	unsigned int speaker_muted:1; /* current status of speaker mute */
+diff --git a/sound/soc/codecs/sta350.h b/sound/soc/codecs/sta350.h
+index f16900e00afa..80bf56093d94 100644
+--- a/sound/soc/codecs/sta350.h
++++ b/sound/soc/codecs/sta350.h
+@@ -14,7 +14,7 @@
+ #ifndef _ASOC_STA_350_H
+ #define _ASOC_STA_350_H
+ 
+-/* STA50 register addresses */
++/* STA350 register addresses */
+ 
+ #define STA350_REGISTER_COUNT	0x4D
+ #define STA350_COEF_COUNT 62
+diff --git a/sound/soc/codecs/tlv320aic26.h b/sound/soc/codecs/tlv320aic26.h
+index 1f2879b7a080..c86569883e0c 100644
+--- a/sound/soc/codecs/tlv320aic26.h
++++ b/sound/soc/codecs/tlv320aic26.h
+@@ -6,8 +6,8 @@
+  * Copyright (C) 2008 Secret Lab Technologies Ltd.
+  */
+ 
+-#ifndef _TLV320AIC16_H_
+-#define _TLV320AIC16_H_
++#ifndef _TLV320AIC26_H_
++#define _TLV320AIC26_H_
+ 
+ /* AIC26 Registers */
+ #define AIC26_PAGE_ADDR(page, offset)	((page << 11) | offset << 5)
+@@ -88,4 +88,4 @@ enum aic26_wlen {
+ 	AIC26_WLEN_32	= 3 << 10,
+ };
+ 
+-#endif /* _TLV320AIC16_H_ */
++#endif /* _TLV320AIC26_H_ */
+diff --git a/sound/usb/usx2y/usbusx2y.c b/sound/usb/usx2y/usbusx2y.c
+index 099bee662af6..52f4e6652407 100644
+--- a/sound/usb/usx2y/usbusx2y.c
++++ b/sound/usb/usx2y/usbusx2y.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ /*
+- * usbusy2y.c - ALSA USB US-428 Driver
++ * usbusx2y.c - ALSA USB US-428 Driver
+  *
+ 2005-04-14 Karsten Wiese
+ 	Version 0.8.7.2:
+-- 
+2.30.2
+

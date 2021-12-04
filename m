@@ -2,85 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B607946880B
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 23:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D08E468810
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 23:26:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbhLDWRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 17:17:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
+        id S231355AbhLDW32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 17:29:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbhLDWRW (ORCPT
+        with ESMTP id S229674AbhLDW31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 17:17:22 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F10C061354
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 14:13:56 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id y68so20193134ybe.1
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 14:13:56 -0800 (PST)
+        Sat, 4 Dec 2021 17:29:27 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD37C061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 14:26:01 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id y68so20235744ybe.1
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 14:26:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=N5DhA+n6UJSAz6Ft1NTY91Ftj5wKhHYLdUBvUL+ORbE=;
-        b=DzI6c/2052ToimeuuqlhZYoaslJJBOZtgqUKqtnREuj6YLWvWJqKOtimTVP1gSg52S
-         x9N4gSOfxpbSmW4fPgGXgOEPWe5cigpYwzjN2uvu2VBCCoLnVXMWbgoQKFlfw5S51ijr
-         EIb/XjciohFeZp238UbjYUmAJOhe+acM2rXVsnvanZu3iSC8G92cFET+yH9laftTsnCS
-         awobfsaCrU12eic7AnjFivjHPizMS4ugTEiu6kF99J5g+CV9XKe8o/N1FKjYl/fJg73F
-         Lf3pEJmUp6dR/0wvEEBH9reW5Ac5kiI/eOCxJH77yAikdCCtWAuUasQvn/hxwYMtN/KV
-         Tcrw==
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qcg0aEVPOQ3a95B0ETH9mS6ByVpwHi67XqdndVxxFvQ=;
+        b=MIZKLa9Cx6Tf6Bwvb0+Z/17NPkeAlVEgERWE04/qWUXKpJ87fisyXocTBmfjKpOG81
+         wvYHxqhY1+FeTsjc27qF8df8RBlVqLtziIjV+DIhO7X4xquPEIl3WJw8zHyMnnj/uVe3
+         fxOnRAu44x1xpx4aYqZGVTKaN2Bw4/PxRasS8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=N5DhA+n6UJSAz6Ft1NTY91Ftj5wKhHYLdUBvUL+ORbE=;
-        b=PDgtiUza+RQqIhmM1/irdmw8xVJk+aw/sESAP0RrTOmCHC0cfWTssjYwAtpq9mqMBs
-         7CQZmsfXZdzsHOnMyUCIK26VgO5kFJDpWbw4FIM8H85cKgJwudB0I6vEOspbkvuGV21G
-         Ysp4ysmcSTDlhUjBhvfp+7PjMT2DNPGB7CZGLqURBLoER6kQihk6M+TZzScE26xATu+Z
-         TWRgUvyjfy08lyejEwZSyn2zztCytCkTbEGNr2laIayB+52gEGzY2XvE3v20ITHIxZwX
-         OlKhyiiRYMdcOiCNzsmd6Q59Z/0X4Dw7rjWLaJPCTdspQeMOmAU4VtmG5v9zpPQGmF1u
-         uzQg==
-X-Gm-Message-State: AOAM530W3LSgMMrD1Ci3+QDel34gjzki7/7mx05201owJp+QFY885UHz
-        lj5B546EUj6Lg3wX3ZJxSUN23AoyGhWOP5iW0J8=
-X-Google-Smtp-Source: ABdhPJw18EEYeT3S0mGs11kLNHlajLGHYLR57b7yCFtrGlgdjsYrYLgKLyAONE8crCR9H90y6KhHunYdg9j6lBwAvYM=
-X-Received: by 2002:a25:ac24:: with SMTP id w36mr31122526ybi.118.1638656035578;
- Sat, 04 Dec 2021 14:13:55 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qcg0aEVPOQ3a95B0ETH9mS6ByVpwHi67XqdndVxxFvQ=;
+        b=dTMgbmkLxyYbz/+KKtIGwZ8v06k6HUdnfiX6dvu+xiqFEij41qy3Co6LFpNSH/LTNW
+         EG83r0Vv7IiwDlGzHbim332I3n5QIWw+IQU64tzIZRm7uumMMk72nZfhaHDB8JqzNOy1
+         5n6aviGSMgt5XwuS9VRLKqtC00ALfvxaglvTLk1srBDSW6gh8ScrmVsDJPxH7vJCy4QD
+         ql/LIOnYrvts9Ccy3TKKWG9m1SEC3MtlT3Dy2WcT0Mo8DFFbLOUx5MSNS1QUDiEcIn5q
+         6U8Nx+Bj5aAsjoYpbbBBWPZ8fdA3YBZFnjOfm51Sf9Vr2E3Zkw6A5dJtvB8W8hNcMR0q
+         hjeg==
+X-Gm-Message-State: AOAM531IRYH/cSFT7Jsu2lOmEQDkoTu0ryleFAMhlagkWiUb3+hszANU
+        PeUEmZG8TuU5QMKhCiMZSlY5d3/em8nEMZZfkdx9jgyigyXB
+X-Google-Smtp-Source: ABdhPJzVvqa7FoBwJ6nErsYp08ao5SKye++77MfXJmWLigHPRM/FFHyZemC5cgwIIH02w0nZQqrIF0L+JOTATQ4+19c=
+X-Received: by 2002:a25:bbc4:: with SMTP id c4mr30734398ybk.309.1638656760120;
+ Sat, 04 Dec 2021 14:26:00 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:7108:6104:0:0:0:0 with HTTP; Sat, 4 Dec 2021 14:13:55
- -0800 (PST)
-Reply-To: mohammedshamekh24@gmail.com
-From:   Mrmohammed shamekh <yousefzongo994@gmail.com>
-Date:   Sat, 4 Dec 2021 14:13:55 -0800
-Message-ID: <CAHQV77hSg5bwbC5KofeiajZ6qjxdPF=0Htm+vvk9mgJxs+gMfg@mail.gmail.com>
-Subject: THE AMOUNT IS 27.5 MILLIOMS USD
-To:     undisclosed-recipients:;
+References: <20211202235823.1926970-1-atishp@atishpatra.org>
+ <f63e9f1b-4b8e-6c3e-8e21-f9a5f97ca17d@arm.com> <CAAhSdy2xRwUmdi7Kc7ZokgB5W1LWKZ7YU-doHZ5dfaVKvzRdUg@mail.gmail.com>
+In-Reply-To: <CAAhSdy2xRwUmdi7Kc7ZokgB5W1LWKZ7YU-doHZ5dfaVKvzRdUg@mail.gmail.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Sat, 4 Dec 2021 14:25:49 -0800
+Message-ID: <CAOnJCULO06SFXuJBXUGsYursBgoJk3bS9c=T9wyu3B-KhQHm3Q@mail.gmail.com>
+Subject: Re: [PATCH v3] MAINTAINERS: Update Atish's email address
+To:     Anup Patel <anup@brainfault.org>
+Cc:     Steven Price <steven.price@arm.com>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        KVM General <kvm@vger.kernel.org>,
+        kvm-riscv@lists.infradead.org,
+        linux-riscv <linux-riscv@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,
+On Fri, Dec 3, 2021 at 8:09 PM Anup Patel <anup@brainfault.org> wrote:
+>
+> On Fri, Dec 3, 2021 at 9:40 PM Steven Price <steven.price@arm.com> wrote:
+> >
+> > On 02/12/2021 23:58, Atish Patra wrote:
+> > > I am no longer employed by western digital. Update my email address to
+> > > personal one and add entries to .mailmap as well.
+> > >
+> > > Signed-off-by: Atish Patra <atishp@atishpatra.org>
+> > > ---
+> > >  .mailmap    | 1 +
+> > >  MAINTAINERS | 2 +-
+> > >  2 files changed, 2 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/.mailmap b/.mailmap
+> > > index 6277bb27b4bf..23f6b0a60adf 100644
+> > > --- a/.mailmap
+> > > +++ b/.mailmap
+> > > @@ -50,6 +50,7 @@ Archit Taneja <archit@ti.com>
+> > >  Ard Biesheuvel <ardb@kernel.org> <ard.biesheuvel@linaro.org>
+> > >  Arnaud Patard <arnaud.patard@rtp-net.org>
+> > >  Arnd Bergmann <arnd@arndb.de>
+> > > +Atish Patra <atishp@atishpatra.org> <atish.patra@wdc.com> <atishp@rivosinc.com>
+> >
+> > I don't think this does what you expect. You can't list more than one
+> > email address to replace on the same line. You can use the command "git
+> > check-mailmap" to test what happens, e.g. with this change applied:
+> >
+> >   $ git check-mailmap "<atishp@rivosinc.com>"
+> >   <atishp@rivosinc.com>
+> >   $ git check-mailmap "<atish.patra@wdc.com>"
+> >   Atish Patra <atishp@atishpatra.org>
+> >   $ git check-mailmap "<atishp@atishpatra.org>"
+> >   <atishp@atishpatra.org>
+> >
+> > So only your @wdc.com address is translated. If you want to translate
+> > the @rivosinc.com address as well you need a second line. As the file says:
+>
+> Thanks Steve for noticing this. Even, I realized this while queuing the patch.
+>
+> I have removed @rivosinc.com email address from the patch in my queue. I
+> believe Atish currently uses both personal and @rivosinc.com email addresses
+> on LKML.
+>
 
-Greetings.
+Thanks!
 
-How are you doing today i hope fine?
+> Refer,
+> https://github.com/kvm-riscv/linux/commit/2255b100410179bb8151e99e8396debddea0ef1d
+> https://github.com/kvm-riscv/linux/commits/riscv_kvm_queue
+>
+> Regards,
+> Anup
+>
+> >
+> > # For format details, see "MAPPING AUTHORS" in "man git-shortlog".
+> >
+> > Steve
+> >
+> > >  Axel Dyks <xl@xlsigned.net>
+> > >  Axel Lin <axel.lin@gmail.com>
+> > >  Bart Van Assche <bvanassche@acm.org> <bart.vanassche@sandisk.com>
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index 5250298d2817..6c2a34da0314 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -10434,7 +10434,7 @@ F:    arch/powerpc/kvm/
+> > >
+> > >  KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)
+> > >  M:   Anup Patel <anup.patel@wdc.com>
+> > > -R:   Atish Patra <atish.patra@wdc.com>
+> > > +R:   Atish Patra <atishp@atishpatra.org>
+> > >  L:   kvm@vger.kernel.org
+> > >  L:   kvm-riscv@lists.infradead.org
+> > >  L:   linux-riscv@lists.infradead.org
+> > >
+> >
 
-I came across your e-mail contact prior a private search while in need
-of your assistance. My name  Mr  mohammed   shamekh  =E2=80=99 I work with =
-the
-department of Audit and accounting manager here in UBA Bank of Africa,
-There is this fund that was keep in my custody years ago and I need
-your assistance for the transferring of this fund to your bank account
-for both of us benefit for life time investment and the amount is (US
-$27,500. Million Dollars).
 
-I have every inquiry details to make the bank believe you and release
-the fund to your bank account in within 7 banking working days with
-your full co-operation with me after success Note 50% for you while
-50% for me after success of the transfer of the funds to your bank
-account okay.
 
-WAITING TO HEAR FROM YOU.
-THANKS.
-
- Mr  mohammed   shamekh ,
+-- 
+Regards,
+Atish

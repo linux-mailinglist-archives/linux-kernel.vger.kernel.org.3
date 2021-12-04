@@ -2,115 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48878468466
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 12:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CDA146846B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 12:19:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243981AbhLDLQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 06:16:22 -0500
-Received: from mga12.intel.com ([192.55.52.136]:16218 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229546AbhLDLQP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 06:16:15 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="217136386"
-X-IronPort-AV: E=Sophos;i="5.87,287,1631602800"; 
-   d="scan'208";a="217136386"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 03:12:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,287,1631602800"; 
-   d="scan'208";a="541881001"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 04 Dec 2021 03:12:48 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mtSyF-000Iv0-Mh; Sat, 04 Dec 2021 11:12:47 +0000
-Date:   Sat, 4 Dec 2021 19:11:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>
-Subject: drivers/irqchip/irq-sun6i-r.c:215:79: sparse: sparse: Using plain
- integer as NULL pointer
-Message-ID: <202112041935.i7Ys29HJ-lkp@intel.com>
+        id S1346699AbhLDLWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 06:22:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238982AbhLDLWO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 06:22:14 -0500
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C0DC061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 03:18:49 -0800 (PST)
+Received: by mail-yb1-xb44.google.com with SMTP id e136so17068075ybc.4
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 03:18:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Oo3+EU1aRdNVz+7gQaybjHNQJt2Dn1ifOsTIR90+fG4=;
+        b=GtT8KhfAydLdB2KMCURpjqm/u4uwi6ZzNdspNtbBU4H/w6Hd+G5b4REdPKk9G/xgbs
+         RcjsktZsryfTPqNzLxxo3d8R+spn08LYGPLIBvQe/P8zvDXoWquXgCS2YDKTjYSNb0Mc
+         wmtx+qVzbuC7c8VBr6K898t0rx0wesK6zbyne27WerJOT3JXz43SwGrI9pjsr6fe84Ur
+         h2VLA+nrNwup1Q91hmZx84HwUk/lDmimC87PQY+f6YVFFFSs9L/khsF5o2TYUFR8Uj6a
+         UPja5dtYIdOIUb27UiFncwWWibRlp74fsd8DBIRp/DyFEjmj+/lRf+cs2QZbI3uQeqFd
+         Az4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Oo3+EU1aRdNVz+7gQaybjHNQJt2Dn1ifOsTIR90+fG4=;
+        b=OkwCH/icVIiKSUR009Bmy9jvUXqPJMIceMmy+Yw9j/0N7O7zmLTQfLRT9ja41BhweQ
+         dQ3x/e8Cfe8R8AR6o3TqgALWBaZ94yTpz8Bdd0JajhQTlQYT0N5Bj+5jgjogk8QoGYZx
+         hts8hCR+2gSqCNmm1m/TJXjFdubW3QBpz6g5wsRvo0ovXdszPDoBxfRY+kTkx3q0PaOI
+         BKArhrKLuctgAAUICFrFKQqykPrAZZ2fcn9rs24bsnA5TfN3IAgjaF7OSzfVOi23jVJj
+         Fg5Us4eXsQq4OSoZdbkLfvJK6PM0EyrZel1cILM4YmuhvlV79usCAQTZ9N5LY7I4e4Vj
+         2+5w==
+X-Gm-Message-State: AOAM533OW4Whqa+cdPNWoO2WKt6/MG4EPa4eGMdXNoQSVPFlYQxtQUy2
+        ja5WeMXH9jb/J0dKlmIFdagqJnQxk3IOJFlJlS0=
+X-Google-Smtp-Source: ABdhPJwhDZYfXzsCy1CR9kXB6D+Knz5tCOoD1n0UPZKOq38xCQBNnmHyCu8xwPHmY2PUyJ4KyWMZ6W8Yk3GhClcW6C0=
+X-Received: by 2002:a25:ce94:: with SMTP id x142mr30541558ybe.145.1638616728485;
+ Sat, 04 Dec 2021 03:18:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a05:7000:4cd6:0:0:0:0 with HTTP; Sat, 4 Dec 2021 03:18:48
+ -0800 (PST)
+Reply-To: michelkafando16@gmail.com
+From:   mr mikchel kafando <angellaboso@gmail.com>
+Date:   Sat, 4 Dec 2021 11:18:48 +0000
+Message-ID: <CAJi3HVA3-+e5EFF9W6dm2bJPqdKGOX5mCvMWA8diaiFt24dOvQ@mail.gmail.com>
+Subject: Dear Friend,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   12119cfa1052d512a92524e90ebee85029a918f8
-commit: 4e34614636b31747b190488240a95647c227021f irqchip/sun6i-r: Use a stacked irqchip driver
-date:   11 months ago
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20211204/202112041935.i7Ys29HJ-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e34614636b31747b190488240a95647c227021f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4e34614636b31747b190488240a95647c227021f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-socfpga/ drivers/dma/ drivers/edac/ drivers/gpu/drm/msm/ drivers/gpu/drm/tegra/ drivers/interconnect/qcom/ drivers/irqchip/ drivers/net/ethernet/mediatek/ drivers/net/vmxnet3/ drivers/net/wireless/mediatek/mt76/mt7915/ drivers/remoteproc/ drivers/scsi/bnx2fc/ drivers/scsi/lpfc/ drivers/staging/ fs/proc/
+-- 
+Dear Friend,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+With due respect to your person and much sincerity of purpose,Well it
+is a pleasure to contact you on this regard and i pray that this will
+turn out to be everlasting relationship for both of us.Presently i
+work in the Bank as bill and exchange manager.
 
+I have the opportunity of transferring the left over fund $10.4
+Million us dollars to your Bank account, and i will use my position
+here in the bank to effect a hitch free transfer of the fund to your
+bank account and there will be no trace.I agree that 40% of this money
+will be for you as my foriegn partner,50% for me while 10% will be for
+the expenses that will occur in this transaction .If you are really
+interested in my proposal further details of the Transfer will be
+forwarded unto you as soon as I receive your willingness mail for
+successful transfer.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/irqchip/irq-sun6i-r.c:215:79: sparse: sparse: Using plain integer as NULL pointer
-
-vim +215 drivers/irqchip/irq-sun6i-r.c
-
-   184	
-   185	static int sun6i_r_intc_domain_alloc(struct irq_domain *domain,
-   186					     unsigned int virq,
-   187					     unsigned int nr_irqs, void *arg)
-   188	{
-   189		struct irq_fwspec *fwspec = arg;
-   190		struct irq_fwspec gic_fwspec;
-   191		unsigned long hwirq;
-   192		unsigned int type;
-   193		int i, ret;
-   194	
-   195		ret = sun6i_r_intc_domain_translate(domain, fwspec, &hwirq, &type);
-   196		if (ret)
-   197			return ret;
-   198		if (hwirq + nr_irqs > SUN6I_NR_MUX_BITS)
-   199			return -EINVAL;
-   200	
-   201		/* Construct a GIC-compatible fwspec from this fwspec. */
-   202		gic_fwspec = (struct irq_fwspec) {
-   203			.fwnode      = domain->parent->fwnode,
-   204			.param_count = 3,
-   205			.param       = { GIC_SPI, hwirq, type },
-   206		};
-   207	
-   208		ret = irq_domain_alloc_irqs_parent(domain, virq, nr_irqs, &gic_fwspec);
-   209		if (ret)
-   210			return ret;
-   211	
-   212		for (i = 0; i < nr_irqs; ++i, ++hwirq, ++virq) {
-   213			if (hwirq == nmi_hwirq) {
-   214				irq_domain_set_hwirq_and_chip(domain, virq, hwirq,
- > 215							      &sun6i_r_intc_nmi_chip, 0);
-   216				irq_set_handler(virq, handle_fasteoi_ack_irq);
-   217			} else {
-   218				/* Only the NMI is currently supported. */
-   219				return -EINVAL;
-   220			}
-   221		}
-   222	
-   223		return 0;
-   224	}
-   225	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Yours Faithfully,
+Mr.michel kafando.

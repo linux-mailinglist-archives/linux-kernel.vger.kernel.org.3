@@ -2,143 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B0FF468364
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 09:38:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9F4468366
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 09:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384329AbhLDIlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 03:41:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
+        id S1384342AbhLDIsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 03:48:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354761AbhLDIlt (ORCPT
+        with ESMTP id S1354761AbhLDIsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 03:41:49 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC492C061751
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 00:38:23 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id bu18so12455924lfb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 00:38:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Iq91punDd7cKLt5NHGxJuQc18kZP0dgQtqZmR6jVBZM=;
-        b=B8pVjFT5w2dL+65gFXHPa5Qu8kWqrX2ZEFd4TrDk8lPm4Lx6Q/PI6hHNZ1e+O0a0Xa
-         u7s7GcySQEE1q2XApr3kPJyhz9cpg7JtmCbcWqU2HGYR5icFGLIkzICWChvIrRML8ktK
-         qEX/INs2y5pC6g9BFJ9BLgEL3xNIjHQTYRrcZCmdf4Bk5FlrkkI88VRt3TPdY01SuTcp
-         1PevbpDttW12Pkx+g+1HqzHQku8nQ+I8hDDpoW43a0BLIMTzjGocM6amOFtwHt72261f
-         /G/S6Qk2el/piag++QoQULoqx0wq2OLZwhhQHxQWe/O3YuSHx8yJtNdASbY39CiUCMmO
-         zr1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Iq91punDd7cKLt5NHGxJuQc18kZP0dgQtqZmR6jVBZM=;
-        b=Su2TJdHPcGlllaJT1ZYnNcoKY8J7mEUr04aMsXG2Mk02xeg+76M8OGQBmmnuuPPQ5p
-         hOE4XqvSS+hEcMthQHq0vlfNpERaK30CTLy7fst7kxGLQe/475aGWp4Eqt2xLX2nBrxg
-         aQDa5lCt8zr9V1jq/JSi7yk+oR87WQAuPlduYRXZGDMEI5VAlVFpyUyCdU1dlu5WWJhw
-         bPFnKJbMcVVY5f0/19UAF5O/nDks65oX2af70ZmCQDDURpy/5cFG+KpXMUC+Zpcv9Zbh
-         WJ9wisIxc/N3wJXLmNIkbZKHruJKV6ZUcnp4Gi6UbBuLFUzbc3OK+FHZOhlLvaePp0je
-         lruA==
-X-Gm-Message-State: AOAM5300NaIvshN4HzO0XhYm2p1Pp9B1wN8BBWYgtWoVzUhZ9tzN2VHL
-        0bl65sZhJukAtlwtdHCe1+E=
-X-Google-Smtp-Source: ABdhPJwyVgZ536/k6VjtKdFHBUUYhqOvFzG5ibN+LIc3/B3tmdsyDtGMtZBrYlNTHEMDnSD1LmwSQw==
-X-Received: by 2002:a05:6512:519:: with SMTP id o25mr22179619lfb.422.1638607101886;
-        Sat, 04 Dec 2021 00:38:21 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.229.236])
-        by smtp.gmail.com with ESMTPSA id s4sm745615ljp.73.2021.12.04.00.38.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Dec 2021 00:38:21 -0800 (PST)
-Message-ID: <19041795-e692-dd19-c14f-cd951bc7a3de@gmail.com>
-Date:   Sat, 4 Dec 2021 11:38:16 +0300
+        Sat, 4 Dec 2021 03:48:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155BEC061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 00:45:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 710E160AE4
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 08:45:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA5F5C341C5
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 08:45:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638607523;
+        bh=ootFt2XPS5y2Q9hPMbXe0aAjBh64rPkdG0eY3FUEcjs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BydKqd2F0DHkR4OmxjlA81eRsFFGS9/Rz6rVkBp5IwS5EDauk8K6/0nOHspETpmAg
+         wziwckyYtrW1lzC7Hrpb1mrJe/EzP4OATduElYIVsrwEsmoP0RqBjIQ3FrMZxlppR7
+         t6OyAMHOzXZyIr4AEaYklvnc9gAHDfn48+/fw7DUKpV6vLN7Z9XAOhk25AKz9grN/L
+         321pBRVPUNEwyveXxdm9/M23pOMeB0lT0BrOCFr3fjjvF3Dl5uRRislPEwomwRDd/R
+         7xVOxOWdyBEee7wOSk9574qI6D2WVCNk5Ek6IpGf3/6e/ptSD4m+lemCcbL76abMSj
+         glcehVPzBNJ8w==
+Received: by mail-oi1-f172.google.com with SMTP id bk14so10714028oib.7
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 00:45:23 -0800 (PST)
+X-Gm-Message-State: AOAM53301FsV9lAYW+sFGdoobJewBlV6u7A15X5wUxBfe31MMtAFBnjC
+        NX1EmbN9H38WdaykYFMS5+R4Rm4GXN8EWNQE7dg=
+X-Google-Smtp-Source: ABdhPJyQDdDnp/YR0EXe1jOAGLUO0OHHU0hOnxkTTijaKSUXPgGCfq0o7e9D4E6gxlU+CQfR/j2AvktERXS/WE/5q7U=
+X-Received: by 2002:a05:6808:12:: with SMTP id u18mr14242217oic.174.1638607523000;
+ Sat, 04 Dec 2021 00:45:23 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3] staging: vt6655: refactor byRadioCtl to radio_ctl
-Content-Language: en-US
-To:     Alberto Merciai <alb3rt0.m3rciai@gmail.com>
-Cc:     Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tommaso Merciai <tomm.merciai@gmail.com>,
-        =?UTF-8?B?QWxkYXMgVGFyYcWha2V2acSNaXVz?= <aldas60@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Karolina Drobnik <karolinadrobnik@gmail.com>,
-        Lucas Henneman <lucas.henneman@linaro.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20211203202410.3807147-1-alb3rt0.m3rciai@gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20211203202410.3807147-1-alb3rt0.m3rciai@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <163477765570.264901.3851692300287671122.stgit@devnote2>
+ <163477772593.264901.7405996794526239017.stgit@devnote2> <CAK8P3a3jCGWjauD0+k5C-VpLDQ8WkcCHs5UpoAb-x_yHU0eEkw@mail.gmail.com>
+In-Reply-To: <CAK8P3a3jCGWjauD0+k5C-VpLDQ8WkcCHs5UpoAb-x_yHU0eEkw@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 4 Dec 2021 09:45:11 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXF3ZQ__trDo4PDfBmJsNoiqBkNB2CLK5pTFARTEYzDOzw@mail.gmail.com>
+Message-ID: <CAMj1kXF3ZQ__trDo4PDfBmJsNoiqBkNB2CLK5pTFARTEYzDOzw@mail.gmail.com>
+Subject: Re: [PATCH v3 8/9] ARM: kprobes: Make a frame pointer on __kretprobe_trampoline
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Ananth N Mavinakayanahalli <ananth@linux.ibm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/21 23:24, Alberto Merciai wrote:
-> Replace camelcase hungarian notated variable "byRadioCtl"
-> into linux kernel coding style equivalent variable "radio_ctl".
-> 
-> Signed-off-by: Alberto Merciai <alb3rt0.m3rciai@gmail.com>
-> ---
-> 
-> v2 -> v3
-> - replace typo inside mail message body
-> v1 -> v2
-> - Correct mail subject
-> 
->   drivers/staging/vt6655/device.h      | 2 +-
->   drivers/staging/vt6655/device_main.c | 8 ++++----
->   2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/staging/vt6655/device.h b/drivers/staging/vt6655/device.h
-> index c51eba94230d..245f992e5a23 100644
-> --- a/drivers/staging/vt6655/device.h
-> +++ b/drivers/staging/vt6655/device.h
-> @@ -227,7 +227,7 @@ struct vnt_private {
->   	bool bPWBitOn;
->   
->   	/* GPIO Radio Control */
-> -	unsigned char byRadioCtl;
-> +	unsigned char radio_ctl;
->   	unsigned char byGPIO;
->   	bool hw_radio_off;
->   	bool bPrvActive4RadioOFF;
-> diff --git a/drivers/staging/vt6655/device_main.c b/drivers/staging/vt6655/device_main.c
-> index 897d70cf32b8..37a82550ca82 100644
-> --- a/drivers/staging/vt6655/device_main.c
-> +++ b/drivers/staging/vt6655/device_main.c
-> @@ -371,18 +371,18 @@ static void device_init_registers(struct vnt_private *priv)
->   
->   	priv->radio_off = false;
->   
-> -	priv->byRadioCtl = SROMbyReadEmbedded(priv->port_offset,
-> +	priv->radio_ctl = SROMbyReadEmbedded(priv->port_offset,
->   					      EEP_OFS_RADIOCTL);
->   	priv->hw_radio_off = false;
->   
-> -	if (priv->byRadioCtl & EEP_RADIOCTL_ENABLE) {
-> +	if (priv->radio_ctl & EEP_RADIOCTL_ENABLE) {
->   		/* Get GPIO */
->   		MACvGPIOIn(priv->port_offset, &priv->byGPIO);
->   
->   		if (((priv->byGPIO & GPIO0_DATA) &&
-> -		     !(priv->byRadioCtl & EEP_RADIOCTL_INV)) ||
-> +		     !(priv->radio_ctl & EEP_RADIOCTL_INV)) ||
->   		     (!(priv->byGPIO & GPIO0_DATA) &&
-> -		     (priv->byRadioCtl & EEP_RADIOCTL_INV)))
-> +		     (priv->radio_ctl & EEP_RADIOCTL_INV)))
->   			priv->hw_radio_off = true;
->   	}
->   
-> 
+On Fri, 3 Dec 2021 at 21:38, Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Thu, Oct 21, 2021 at 2:55 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > Currently kretprobe on ARM just fills r0-r11 of pt_regs, but
+> > that is not enough for the stacktrace. Moreover, from the user
+> > kretprobe handler, stacktrace needs a frame pointer on the
+> > __kretprobe_trampoline.
+> >
+> > This adds a frame pointer on __kretprobe_trampoline for both gcc
+> > and clang case. Those have different frame pointer so we need
+> > different but similar stack on pt_regs.
+> >
+> > Gcc makes the frame pointer (fp) to point the 'pc' address of
+> > the {fp, ip (=sp), lr, pc}, this means {r11, r13, r14, r15}.
+> > Thus if we save the r11 (fp) on pt_regs->r12, we can make this
+> > set on the end of pt_regs.
+> >
+> > On the other hand, Clang makes the frame pointer to point the
+> > 'fp' address of {fp, lr} on stack. Since the next to the
+> > pt_regs->lr is pt_regs->sp, I reused the pair of pt_regs->fp
+> > and pt_regs->ip.
+> > So this stores the 'lr' on pt_regs->ip and make the fp to point
+> > pt_regs->fp.
+> >
+> > For both cases, saves __kretprobe_trampoline address to
+> > pt_regs->lr, so that the stack tracer can identify this frame
+> > pointer has been made by the __kretprobe_trampoline.
+> >
+> > Note that if the CONFIG_FRAME_POINTER is not set, this keeps
+> > fp as is.
+> >
+> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> This causes a regression that I see in randconfig builds with gcc-11:
+>
+> /tmp/ccovvQNw.s: Assembler messages:
+> /tmp/ccovvQNw.s:32: Error: invalid literal constant: pool needs to be closer
+> make[5]: *** [/git/arm-soc/scripts/Makefile.build:288:
+> arch/arm/probes/kprobes/core.o] Error 1
+>
+> I have two randconfigs that reproduce it locally, here is a .config
+> [1] and assembly
+> output[2] for reference. I have not done any further analysis, but
+> maybe you have
+> an idea.
 
-This one is odd. Code uses byRadioCtl as local storage to check register 
-value within one function...
+Does this help?
 
-I might be missing something, but I think, it can be removed as well.
-
-
-
-
-With regards,
-Pavel Skripkin
+diff --git a/arch/arm/probes/kprobes/core.c b/arch/arm/probes/kprobes/core.c
+index 9090c3a74dcc..88999ed2cfc4 100644
+--- a/arch/arm/probes/kprobes/core.c
++++ b/arch/arm/probes/kprobes/core.c
+@@ -408,6 +408,7 @@ void __naked __kprobes __kretprobe_trampoline(void)
+ #else
+                "mov    pc, lr                  \n\t"
+ #endif
++               ".ltorg                         \n\t"
+                : : : "memory");
+ }

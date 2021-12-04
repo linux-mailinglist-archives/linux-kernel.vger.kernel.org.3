@@ -2,106 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2AA468174
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:41:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40897468183
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:42:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383877AbhLDAok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 19:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354180AbhLDAoi (ORCPT
+        id S1383900AbhLDAqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 19:46:12 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:42884 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345008AbhLDAqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 19:44:38 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962F1C061353
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 16:41:13 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id x15so18342819edv.1
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 16:41:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M3I4C4YUq1izmLBQSvsN84pqvyOl0SwNapJXdQ6Zcfg=;
-        b=fk8fUfFKTqb8eEsJ2g0dy6rGLiOjZ0SzK7lQscTqB6z6PXqbzp4n4iApEzXwm/4Txx
-         icQY/8vhH9AT1fXdSlCYacgg33ep+fAW8/HAXXubbST9QOqh7vwQgzN5fvWgvslwgq1l
-         N8dCRvbc4+cdEbC2chZhzZWfjfg1JhdeLujaLwD1MAg382cn2/RcL3mahGC15tKnqtZm
-         71AP4Tmh3jSDD7ZNbXgdQiKFaKs4IlOpa64lXEgQccgQe/tAtAkAyomyyT5y0nfQOAVX
-         +zdF7lkGrtAJezLGlrwUgakAIppdbtSfNNS4BydjGmk81ULuhBWtm3pgjvKoHtXzWKbz
-         rDtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M3I4C4YUq1izmLBQSvsN84pqvyOl0SwNapJXdQ6Zcfg=;
-        b=kdtfcjwo44lfb7udhItg/tjGqit5VG/V31n8W7V1/XTcyYphkxy7PqvzfsFTXBRJ1j
-         IJ5pIJBe9z6wtfaY8Svb9Jradc9v9rlMiBhpcW0ooRaPrOK/JV2mjiaQ0+T8JHSmxtOf
-         6dDaHyxk3IGTIuW2uuaNPMGGnZzRNFS2CoMb0BHDGsIOibPyXp1/nh82JQxllxjvjaeh
-         QGz6ZghzesdkoIHVsGHqJwmdhPs4Ho0XdJ29qWP47/sIkNVBiQyVU75RIyYBX48Pt5cL
-         Ik0pGP8OfmWXO3BLpfK9HX5VAlK2XwnnyLj4Oedpcj/xkBlcu6t183sO2AbI+PGOdFPr
-         ppLg==
-X-Gm-Message-State: AOAM530dHeqmfR2MWjRB1Yc9OqyQ0hHmNJy1fwoqxyqC2+8nWwMXSXQ0
-        XljZYCTEccavhlwROuiRW6E=
-X-Google-Smtp-Source: ABdhPJxrNqqWyIhGv7QNSuF4/CNZkxU7lf1uC8vo9Me6EcByVcUvRbXmXr9f7M5Z5QEkXUXuKgGj4g==
-X-Received: by 2002:a05:6402:2686:: with SMTP id w6mr30860901edd.141.1638578472191;
-        Fri, 03 Dec 2021 16:41:12 -0800 (PST)
-Received: from bulldog.fritz.box (host-79-17-112-183.retail.telecomitalia.it. [79.17.112.183])
-        by smtp.gmail.com with ESMTPSA id oz31sm2731858ejc.35.2021.12.03.16.41.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 16:41:11 -0800 (PST)
-From:   Alberto Merciai <alb3rt0.m3rciai@gmail.com>
-To:     alb3rt0.m3rciai@gmail.com
-Cc:     Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tommaso Merciai <tomm.merciai@gmail.com>,
-        =?UTF-8?q?Aldas=20Tara=C5=A1kevi=C4=8Dius?= <aldas60@gmail.com>,
-        Karolina Drobnik <karolinadrobnik@gmail.com>,
-        Lucas Henneman <lucas.henneman@linaro.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: vt6655: refactor byMinChannel to min_channel
-Date:   Sat,  4 Dec 2021 01:40:38 +0100
-Message-Id: <20211204004041.3825744-1-alb3rt0.m3rciai@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 3 Dec 2021 19:46:11 -0500
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 67B2820E694B;
+        Fri,  3 Dec 2021 16:42:46 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 67B2820E694B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1638578566;
+        bh=lXUni3I/ybswjXgtwnT3esCqFp0K1gkOc8i9Mt2Wif8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UUQLwyva8eYh69kLIH9Z6PLWd4iLDM5hFxtBQQUf22ZBZDhTmFKxF+Yn4GeX8ZFks
+         RkQonqEp1J4cICt+vEtRkHe2keL+6VUif/SbkxAA0Bl3/ErvzzSbmzQhvdhzikKdGh
+         rhmH2w1AOupjisH6LZ9t+3Fqb9rzc0KPFW2nWxBM=
+Received: by mail-pj1-f49.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso6473625pji.0;
+        Fri, 03 Dec 2021 16:42:46 -0800 (PST)
+X-Gm-Message-State: AOAM53216EDhWtfqKUIEWANHzwu84Z3oNlIJ7oCPy3VfB7hpINfH7S7S
+        povmy7XeYx9mdS6GJf4ucKhPbwDm/bRLFV/pt6Q=
+X-Google-Smtp-Source: ABdhPJyNnMQOpntjmq0qxJMtkrL9naW5mTWhRXVn3joVrzDgJ44SFlCLHUuD+8ibNbofaICHrdC4N2qxz/m7vX0Ai5A=
+X-Received: by 2002:a17:90a:aa88:: with SMTP id l8mr5803413pjq.20.1638578565899;
+ Fri, 03 Dec 2021 16:42:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211203191844.69709-1-mcroce@linux.microsoft.com>
+ <CAADnVQLDEPxOvGn8CxwcG7phy26BKuOqpSQ5j7yZhZeEVoCC4w@mail.gmail.com>
+ <CAFnufp1_p8XCUf-RdHpByKnR9MfXQoDWw6Pvm_dtuH4nD6dZnQ@mail.gmail.com>
+ <CAADnVQ+DSGoF2YoTrp2kTLoFBNAgdU8KbcCupicrVGCWvdxZ7w@mail.gmail.com>
+ <86e70da74cb34b59c53b1e5e4d94375c1ef30aa1.camel@debian.org> <CAADnVQLCmbUJD29y2ovD+SV93r8jon2-f+fJzJFp6qZOUTWA4w@mail.gmail.com>
+In-Reply-To: <CAADnVQLCmbUJD29y2ovD+SV93r8jon2-f+fJzJFp6qZOUTWA4w@mail.gmail.com>
+From:   Matteo Croce <mcroce@linux.microsoft.com>
+Date:   Sat, 4 Dec 2021 01:42:09 +0100
+X-Gmail-Original-Message-ID: <CAFnufp2S7fPt7CKSjH+MBBvvFu9F9Yop_RAkX_3ZtgtZhRqrHw@mail.gmail.com>
+Message-ID: <CAFnufp2S7fPt7CKSjH+MBBvvFu9F9Yop_RAkX_3ZtgtZhRqrHw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/3] bpf: add signature
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Luca Boccassi <bluca@debian.org>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        keyrings@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace camelcase hungarian notated variable "byMinChannel"
-into linux kernel coding style equivalent variable "min_channel".
+On Fri, Dec 3, 2021 at 11:20 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Dec 3, 2021 at 2:06 PM Luca Boccassi <bluca@debian.org> wrote:
+> >
+> > On Fri, 2021-12-03 at 11:37 -0800, Alexei Starovoitov wrote:
+> > > On Fri, Dec 3, 2021 at 11:36 AM Matteo Croce
+> > > <mcroce@linux.microsoft.com> wrote:
+> > > >
+> > > > On Fri, Dec 3, 2021 at 8:22 PM Alexei Starovoitov
+> > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > >
+> > > > > On Fri, Dec 3, 2021 at 11:18 AM Matteo Croce
+> > > > > <mcroce@linux.microsoft.com> wrote:
+> > > > > >
+> > > > > > From: Matteo Croce <mcroce@microsoft.com>
+> > > > > >
+> > > > > > This series add signature verification for BPF files.
+> > > > > > The first patch implements the signature validation in the
+> > > > > > kernel,
+> > > > > > the second patch optionally makes the signature mandatory,
+> > > > > > the third adds signature generation to bpftool.
+> > > > >
+> > > > > Matteo,
+> > > > >
+> > > > > I think I already mentioned that it's no-go as-is.
+> > > > > We've agreed to go with John's suggestion.
+> > > >
+> > > > Hi,
+> > > >
+> > > > my previous attempt was loading a whole ELF file and parsing it in
+> > > > kernel.
+> > > > In this series I just validate the instructions against a
+> > > > signature,
+> > > > as with kernel CO-RE libbpf doesn't need to mangle it.
+> > > >
+> > > > Which suggestion? I think I missed this one..
+> > >
+> > > This talk and discussion:
+> > > https://linuxplumbersconf.org/event/11/contributions/947/
+> >
+> > Thanks for the link - but for those of us who don't have ~5 hours to
+> > watch a video recording, would you mind sharing a one line summary,
+> > please? Is there an alternative patch series implementing BPF signing
+> > that you can link us so that we can look at it? Just a link or
+> > googlable reference would be more than enough.
+>
+> It's not 5 hours and you have to read slides and watch
+> John's presentation to follow the conversation.
 
-Signed-off-by: Alberto Merciai <alb3rt0.m3rciai@gmail.com>
----
- drivers/staging/vt6655/device.h      | 2 +-
- drivers/staging/vt6655/device_main.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+So, If I have understood correctly, the proposal is to validate the
+tools which loads the BPF (e.g. perf, ip) with fs-verity, and only
+allow BPF loading from those validated binaries?
+That's nice, but I think that this could be complementary to the
+instructions signature.
+Imagine a validated binary being exploited somehow at runtime, that
+could be vector of malicious BPF program load.
+Can't we have both available, and use one or other, or even both
+together depending on the use case?
 
-diff --git a/drivers/staging/vt6655/device.h b/drivers/staging/vt6655/device.h
-index 6ea4165e4929..109d20a010ab 100644
---- a/drivers/staging/vt6655/device.h
-+++ b/drivers/staging/vt6655/device.h
-@@ -200,7 +200,7 @@ struct vnt_private {
- 	unsigned char byTopOFDMBasicRate;
- 	unsigned char byTopCCKBasicRate;
- 
--	unsigned char byMinChannel;
-+	unsigned char min_channel;
- 	unsigned char max_channel;
- 
- 	unsigned char preamble_type;
-diff --git a/drivers/staging/vt6655/device_main.c b/drivers/staging/vt6655/device_main.c
-index 313f0241d989..4d92b5df5312 100644
---- a/drivers/staging/vt6655/device_main.c
-+++ b/drivers/staging/vt6655/device_main.c
-@@ -228,7 +228,7 @@ static void device_init_registers(struct vnt_private *priv)
- 	spin_unlock_irqrestore(&priv->lock, flags);
- 
- 	/* Get Channel range */
--	priv->byMinChannel = 1;
-+	priv->min_channel = 1;
- 	priv->max_channel = CB_MAX_CHANNEL;
- 
- 	/* Get Antena */
+Regards,
 -- 
-2.25.1
-
+per aspera ad upstream

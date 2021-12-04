@@ -2,70 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA0346843F
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 11:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC2E468443
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 11:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384709AbhLDKyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 05:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42562 "EHLO
+        id S1384718AbhLDK5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 05:57:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbhLDKyh (ORCPT
+        with ESMTP id S233089AbhLDK5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 05:54:37 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852ABC061751;
-        Sat,  4 Dec 2021 02:51:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=QRqMG8RGfuulyL/MI0Y5Pjs+qEIm3XSHn3xpOu7rjTc=; b=rQlOAVr97mx1/sQxkZUR7Dfcur
-        GJPPDvZY+jrQ/8M9gvVzpQYE+Yx4prmqBcEqa04XQ/8YedUDEIh1uObKhv+L0uHhblI6Rctc5gewF
-        MRHqCkt3iiOAh3sa77R7yhj2ufJXj6uMNeiTyOrosmJp49NycAViPKDhdcYo/QVoka8Y/My5ezaYA
-        otd20+CaZErP1hJzxTgOw3FLcfXq0eifXZXRqodeAOYTTHaNZdtmuOwkQAKBZuFGrVc/gKQBVz0a/
-        IepWVxwmnM71Cf2UNJeRejyKjKbp7YpW9ftsyr0Fn+De163tbBEFY7q6f5HymbCKoV7q6RM4M1jLh
-        R/cmqSDg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56052)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1mtSdF-0003F5-OJ; Sat, 04 Dec 2021 10:51:05 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1mtSdB-0002Ln-Pm; Sat, 04 Dec 2021 10:51:01 +0000
-Date:   Sat, 4 Dec 2021 10:51:01 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] arm/arm64: dts: Add MV88E6393X to CN9130-CRB
- device tree
-Message-ID: <YatIFWHBlTV/jm9U@shell.armlinux.org.uk>
-References: <20211018011211.3836590-1-chris.packham@alliedtelesis.co.nz>
- <20211018011211.3836590-3-chris.packham@alliedtelesis.co.nz>
+        Sat, 4 Dec 2021 05:57:33 -0500
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0410C061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 02:54:07 -0800 (PST)
+Received: by mail-yb1-xb43.google.com with SMTP id v203so16939011ybe.6
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 02:54:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Oo3+EU1aRdNVz+7gQaybjHNQJt2Dn1ifOsTIR90+fG4=;
+        b=cbRRnyhen6p/eAARc204oNM37Aa4IWjh6bKQ+1t4/COSkKs3lNPsVg0kM3MytYzPwL
+         Qlk3V3OgeBro3JE2M1/oSw6Zu1IhxKOLaa/Pz8AkS0pqsbC2DStTbac2U259YtvbzKSX
+         z18mtCfg1tPT1qCqNo18q0+7slIeyhoFej9UFyVEKWddZWguNcaITyvdSGGXUTo7dg0O
+         X5mv+0SxbMJJl4QenVnuFD2m65imOtXPT6PV/SJ9/ADsJw3aUZVVoTNO4BxSZDcesbE1
+         ATZ30B402KMIO/pR6ocI1BR+Vjg9ptQqLtTbFdqoWvm1rKtJhufh9iI+4cpWl50hgvsE
+         HxHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Oo3+EU1aRdNVz+7gQaybjHNQJt2Dn1ifOsTIR90+fG4=;
+        b=E8IN9xRxDcKHrIUmYyFBYz62ai1bxbdy48u2onLCSD/O+1rlNSj1SeAeKXM3FwnVK8
+         rLtZRXel//1JCgmKt4zOCEDhyOwWRweh4tGsXp1MLSCJqT6doqb0WSs0+LLN7udJrh0q
+         INAPaBUuCzdL9TQ9/DxAsIUHey68D8W627fwvyCBjhMTwhocEqV1Cainy+ykDONtiaLc
+         oAITgr8laTpB/WYj+cyHzpEMUZDhZELwKGkBaAJnbx688FAePiFJHK3U0Vm3glQQs75M
+         n10lIoV8R9wKIRTglBaD9WOMFvOaGEjotaKyC7sv0rMXTL+Iez5bC6riFdddYLO6D7VT
+         4bFA==
+X-Gm-Message-State: AOAM533Uejkq+ZnXb4v+UTqOVZjpK0KSCILVeLpMl+6ZBUwJaztemHh6
+        CIFpfnBWzgCfzxuyRpkwQdgwwuZCYzR9RUde+Eo=
+X-Google-Smtp-Source: ABdhPJzMFr303xYxZ2DXvZZnYPIEzfC1najOOCpQiFRUI73L9ZcvTYoDKSyjIQgpj5G3Otkz3jF7I7+AyDQcXmyY8Zg=
+X-Received: by 2002:a25:b50:: with SMTP id 77mr30080516ybl.72.1638615246617;
+ Sat, 04 Dec 2021 02:54:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211018011211.3836590-3-chris.packham@alliedtelesis.co.nz>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Received: by 2002:a05:7000:4cd6:0:0:0:0 with HTTP; Sat, 4 Dec 2021 02:54:06
+ -0800 (PST)
+Reply-To: michelkafando16@gmail.com
+From:   mr mikchel kafando <angellaboso@gmail.com>
+Date:   Sat, 4 Dec 2021 10:54:06 +0000
+Message-ID: <CAJi3HVD88AjhXftZbLaWfjF=Sy4YnObX-fgyAyRQw4fd+xtZzw@mail.gmail.com>
+Subject: Dear Friend,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 18, 2021 at 02:12:11PM +1300, Chris Packham wrote:
-> The CN9130-CRB boards have a MV88E6393X switch connected to eth0. Add
-> the necessary dts nodes and properties for this.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-
-This looks fine, thanks.
-
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Dear Friend,
+
+With due respect to your person and much sincerity of purpose,Well it
+is a pleasure to contact you on this regard and i pray that this will
+turn out to be everlasting relationship for both of us.Presently i
+work in the Bank as bill and exchange manager.
+
+I have the opportunity of transferring the left over fund $10.4
+Million us dollars to your Bank account, and i will use my position
+here in the bank to effect a hitch free transfer of the fund to your
+bank account and there will be no trace.I agree that 40% of this money
+will be for you as my foriegn partner,50% for me while 10% will be for
+the expenses that will occur in this transaction .If you are really
+interested in my proposal further details of the Transfer will be
+forwarded unto you as soon as I receive your willingness mail for
+successful transfer.
+
+Yours Faithfully,
+Mr.michel kafando.

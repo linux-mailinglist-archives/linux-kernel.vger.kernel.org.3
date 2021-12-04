@@ -2,104 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6428346867D
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 18:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04809468683
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 18:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377803AbhLDRRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 12:17:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345154AbhLDRRw (ORCPT
+        id S1377914AbhLDRZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 12:25:36 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36156 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345154AbhLDRZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 12:17:52 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D0CC061751;
-        Sat,  4 Dec 2021 09:14:26 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id d9so12798813wrw.4;
-        Sat, 04 Dec 2021 09:14:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/cksNdFZj9IWFAKVJL2S+JO52BCjhptq1rRTsh39hwU=;
-        b=hDkp38Hh5EL0JAbauIY7IrYLaUFIMb2J4WxSWavCR0/NMFUkQswvhavyBvH0Xhmr65
-         hT646y40uhe90P6mM9+QwIF0UgGfQhtPf7M9HH8prcEgoduOae0QeHKbuOF+2SzQpUKE
-         LWdbd3HfEbQzzu/k1Z8Ot2PeTPSOztxBWbpDticprF7d+Tlwv7HoaMz3sysO+Vuasebj
-         RKzcTIJBqNejda+yMZGuNE7mNbWWap4zkLHwKrtyThPJXQ8uVF93thxI9Am15jPsjU3e
-         09VeM7aFt+UKrrWRaY4OGlJvgamgXlrjz037CYX/0Ic2tUzXgPEGehiwazukuSVDEMmu
-         m/Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/cksNdFZj9IWFAKVJL2S+JO52BCjhptq1rRTsh39hwU=;
-        b=JOGh5fxFiYwkGisYwJ4rEFaLkBlcdjO7WXV8RjiiPchBNO4bVWREiA6C6eh4VnzJ3y
-         0zwI+hTwcCNnnEQo2lcQ9lx3GqXS7+w2dZnnCHqMPqU1rbNlV0nhNInxUZC3w6v4R65u
-         2AQu8OMVnj4fDg4Xk6nxf7MGJXnftljZqIHuZoLDuoJYuAtij5HGW1t95A/1OhLAe4K0
-         OBHFLsPwFA4dmSSSMsnQO5O1/ePmjiz0Fu58RLZUlY4g7ssxEec+67TwJUtu5nQsuflu
-         DvSF0ahzgwF/92jkkiH+Tc6MC1XJ2J61R2zQ89i631Dwl1cZW/D7VMiET++VF9a5Q0T9
-         eHMQ==
-X-Gm-Message-State: AOAM533Jzw3s+94h9fRfhTy4cXOYagQoFfLlv+AqedeKdCBTndL+etMz
-        Rp6FuIzOc6TY6pQhnFdN01J1ZYzAbWQ=
-X-Google-Smtp-Source: ABdhPJzrI2rcwOxTlv1tvwELn9+hzWwa9IDuSn8C7BHPXcI4Rul83GKkIdn2/l/7qHb0tWVXpNgnrQ==
-X-Received: by 2002:adf:f189:: with SMTP id h9mr31297571wro.463.1638638065263;
-        Sat, 04 Dec 2021 09:14:25 -0800 (PST)
-Received: from localhost.localdomain ([217.113.240.86])
-        by smtp.gmail.com with ESMTPSA id h13sm6122049wrx.82.2021.12.04.09.14.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Dec 2021 09:14:24 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     tchornyi@marvell.com
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        kernel-hardening@lists.openwall.com, gustavoars@kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH] net: prestera: replace zero-length array with flexible-array member
-Date:   Sat,  4 Dec 2021 18:13:49 +0100
-Message-Id: <20211204171349.22776-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 4 Dec 2021 12:25:35 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA88960E8C;
+        Sat,  4 Dec 2021 17:22:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8250FC341C0;
+        Sat,  4 Dec 2021 17:22:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638638529;
+        bh=kss5LJXXOIKzYcAiXOd4LQe8tPaaVa8hpEWHOf47pZg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0ZFnbUVIf7Ph16TBe0sJk0stTgTNMWosAVjYf/gkHxMnGZfCBp9JlWlWO39ctlB84
+         cB5f6Z9qqyRi2irs2/cooZhEzpv2DmyHwaBRKWPJCdSZYHhaq3DxHtrBzp+uxHezqO
+         bmo/0n25SV1u/a6IlUXMiHCtD+XUvGEAde+lspmQ=
+Date:   Sat, 4 Dec 2021 18:22:06 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Martin Fernandez <martin.fernandez@eclypsium.com>
+Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        rafael@kernel.org, rppt@kernel.org, akpm@linux-foundation.org,
+        daniel.gutson@eclypsium.com, hughsient@gmail.com,
+        alex.bazhaniuk@eclypsium.com, alison.schofield@intel.com
+Subject: Re: [PATCH v3 5/5] drivers/node: Show in sysfs node's crypto
+ capabilities
+Message-ID: <YaujvjBFsb3ricUx@kroah.com>
+References: <20211203192148.585399-1-martin.fernandez@eclypsium.com>
+ <20211203192148.585399-6-martin.fernandez@eclypsium.com>
+ <YaslQCg2G1pWUPVV@kroah.com>
+ <CAKgze5Yw6=PjY9+cn=FKX5UsiSon5rVOK_Gc-3Hs8dQspSFaYA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKgze5Yw6=PjY9+cn=FKX5UsiSon5rVOK_Gc-3Hs8dQspSFaYA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One-element and zero-length arrays are deprecated and should be
-replaced with flexible-array members:
-https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+On Sat, Dec 04, 2021 at 01:35:15PM -0300, Martin Fernandez wrote:
+> On 12/4/21, Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > You forgot a Documentation/ABI/ update for this new sysfs file you
+> > added :(
+> >
+> 
+> Damn, I forgot to add it to the patch. It will be in my next patch,
+> this is what it looks like:
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-devices-node
+> b/Documentation/ABI/testing/sysfs-devices-node
+> new file mode 100644
+> index 000000000000..ab46fdd3f6a8
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-devices-node
+> @@ -0,0 +1,10 @@
+> +What:		/sys/devices/system/node/nodeX/crypto_capable
+> +Date:		October 2021
 
-Replace zero-length array with flexible-array member and make use
-of the struct_size() helper.
+October is long gone :(
 
-Link: https://github.com/KSPP/linux/issues/78
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/net/ethernet/marvell/prestera/prestera_hw.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> +Contact:	Martin Fernandez <martin.fernandez@eclypsium.com>
+> +Users:		fwupd
 
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_hw.c b/drivers/net/ethernet/marvell/prestera/prestera_hw.c
-index 92cb5e9099c6..6282c9822e2b 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_hw.c
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_hw.c
-@@ -443,7 +443,7 @@ struct prestera_msg_counter_resp {
- 	__le32 offset;
- 	__le32 num_counters;
- 	__le32 done;
--	struct prestera_msg_counter_stats stats[0];
-+	struct prestera_msg_counter_stats stats[];
- };
- 
- struct prestera_msg_span_req {
-@@ -1900,7 +1900,7 @@ int prestera_hw_counters_get(struct prestera_switch *sw, u32 idx,
- 		.block_id = __cpu_to_le32(idx),
- 		.num_counters = __cpu_to_le32(*len),
- 	};
--	size_t size = sizeof(*resp) + sizeof(*resp->stats) * (*len);
-+	size_t size = struct_size(resp, stats, *len);
- 	int err, i;
- 
- 	resp = kmalloc(size, GFP_KERNEL);
--- 
-2.25.1
+Maybe a link to what 'fwupd' is?
 
+> +Description:
+> +		This value is 1 if all system memory in this node is
+> +		marked with EFI_MEMORY_CPU_CRYPTO, indicating that the
+> +		system memory is capable of being protected with the
+> +		CPU’s memory cryptographic capabilities. It is 0
+> +		otherwise.
+
+thanks,
+
+greg k-h

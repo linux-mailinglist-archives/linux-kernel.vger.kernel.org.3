@@ -2,109 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C77468484
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 12:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB63468483
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 12:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384812AbhLDLjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 06:39:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
+        id S1384810AbhLDLiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 06:38:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236588AbhLDLjW (ORCPT
+        with ESMTP id S1384799AbhLDLiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 06:39:22 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C99C061751
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 03:35:57 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id x6so22165658edr.5
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 03:35:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u2R0orPglkc/iYke1YrfwxBgDd6DiAIV0f2a8XXmni4=;
-        b=Z6xyFcHRMe7fS0uKkQjJLvUlqdakl4vneZpTnP46Z8P9NziSx3xfA2jD2o9aQ5eqL4
-         j/yAltV0+wSVjCXFg8qgza4l6X0i3+GQowTrE3uECYPrjbxcr0XCrOA4PAls37QdDI19
-         CzX78x9Hkcxb3WUiWzDSiQMaNu4n3PKxW2luN/+ePE6fIZwy0UY+Im+cLxLVI5CZKrCr
-         HYGPVhzIw+Pot+PF/joHi9yI3GPSgu1bVvzVymUrht7F1SB+XDXChk5RLSC/jDqVY61a
-         XxknRJ1zsimNARAal4fvwLCz7WWDx0C6PkrRn2Oq87Ra/AJ10gIlLacA+aYXAoRXOdRH
-         m1Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u2R0orPglkc/iYke1YrfwxBgDd6DiAIV0f2a8XXmni4=;
-        b=YL47pvoDlLBUdeUWwEIKWTn4QCl3VUYSf+3ca09IYROFSLwRdmKMK1AsjpGRzAfGR2
-         z2EDX+MsZkIrecE0fjZJfaVwD6Mb7ulF7RHaHcjcLYnxytsj8teNQBqla5NLeExTK8hN
-         CvxSRUlhTkBCPqOF7Cg6zgLwFNDbmbtJxKH7MOpE7/MDKAiOU1/F4N5z7V8C3Kk9r+ID
-         QBIguHeZcLGk/CAnwfYTZzFUFpHwGreVqpIFlXL1dK+zng0D+uVJfrqg5nhpqbJHsYgt
-         WFzj92TkI7XMDIZp8/e73zOW322s/7cTcPMrCj4IKqDviBjw94rDuMZysaV47m9XS40a
-         dU+w==
-X-Gm-Message-State: AOAM533mOlmooKwFv87xTLeXnqnhHhLjeSOC3u19S026FoLgbvAToPFv
-        7JjzDzz4agV4+VphYjkQqps=
-X-Google-Smtp-Source: ABdhPJwHxWRE3xt6pWka7RVepmGrrBgBaSNEpnE7EqgwKTpqyxIW0+BEb2jA4w3DhX+fdgsQH34eyw==
-X-Received: by 2002:aa7:d5d6:: with SMTP id d22mr34864522eds.364.1638617755845;
-        Sat, 04 Dec 2021 03:35:55 -0800 (PST)
-Received: from bulldog.fritz.box (host-79-17-112-183.retail.telecomitalia.it. [79.17.112.183])
-        by smtp.gmail.com with ESMTPSA id he17sm3657577ejc.110.2021.12.04.03.35.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Dec 2021 03:35:55 -0800 (PST)
-From:   Alberto Merciai <alb3rt0.m3rciai@gmail.com>
-To:     alb3rt0.m3rciai@gmail.com
-Cc:     Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tommaso Merciai <tomm.merciai@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Karolina Drobnik <karolinadrobnik@gmail.com>,
-        =?UTF-8?q?Aldas=20Tara=C5=A1kevi=C4=8Dius?= <aldas60@gmail.com>,
-        Lucas Henneman <lucas.henneman@linaro.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] staging: vt6655: remove unused variable byMinChannel
-Date:   Sat,  4 Dec 2021 12:34:04 +0100
-Message-Id: <20211204113407.3941035-1-alb3rt0.m3rciai@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 4 Dec 2021 06:38:07 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF69C061751;
+        Sat,  4 Dec 2021 03:34:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=RcNzHUNX3EEmYfNiycUBXscMa+FJs+tAlKOz7nOSxLY=; b=ePMvWSYDm+6PJd+5CWtIjZJPDR
+        htzS4nQxLYERY/pDV8M1sYdy94w+8I0UCJN584W3QdMS54maFnRQhG2nBG359cIFMMxwpeq9xfYIm
+        4yHvSrRzW4fZoJ+b8MHNzga27+x4u63MrFBYbd8LDe2kfUrslEw8TRtHm82G2g4X37b95KpgT87ox
+        WlAo09vGzJlZhZiis4imeFBOaLpmSRbX/P30oT3/7+ATWYrmVbg+Co2/9DfIzMNohU99XRERRb9Xa
+        Duw9xgVklhj62Q53ps2j5dHRmiOA1gUsTLVgIx8TAHF+RNmGWKzLNf3sqcoAo93wntl3arpboZmKR
+        VdIZozCQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mtTJ3-002Bkc-BB; Sat, 04 Dec 2021 11:34:17 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1AB9598106D; Sat,  4 Dec 2021 12:34:15 +0100 (CET)
+Date:   Sat, 4 Dec 2021 12:34:15 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Li Hua <hucool.lihua@huawei.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2, RESEND] sched/rt: Try to restart rt period timer when
+ rt runtime exceeded
+Message-ID: <20211204113415.GV16608@worktop.programming.kicks-ass.net>
+References: <20211203033618.11895-1-hucool.lihua@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211203033618.11895-1-hucool.lihua@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove set but not used variable byMinChannel.
+On Fri, Dec 03, 2021 at 03:36:18AM +0000, Li Hua wrote:
+> When rt_runtime is modified from -1 to a valid control value, it may
+> cause the task to be throttled all the time. Operations like the following
+> will trigger the bug. E.g:
+> 1. echo -1 > /proc/sys/kernel/sched_rt_runtime_us
+> 2. Run a FIFO task named A that executes while(1)
+> 3. echo 950000 > /proc/sys/kernel/sched_rt_runtime_us
+> 
+> When rt_runtime is -1, The rt period timer will not be activated when task
+> A enqueued. And then the task will be throttled after setting rt_runtime to
+> 950,000. The task will always be throttled because the rt period timer is
+> not activated.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Li Hua <hucool.lihua@huawei.com>
 
-Signed-off-by: Alberto Merciai <alb3rt0.m3rciai@gmail.com>
----
-
-v1 -> v2
-- Add Signed-off-by
-
- drivers/staging/vt6655/device.h      | 1 -
- drivers/staging/vt6655/device_main.c | 2 --
- 2 files changed, 3 deletions(-)
-
-diff --git a/drivers/staging/vt6655/device.h b/drivers/staging/vt6655/device.h
-index 9e5f060f3784..b2aee3b8bc8d 100644
---- a/drivers/staging/vt6655/device.h
-+++ b/drivers/staging/vt6655/device.h
-@@ -200,7 +200,6 @@ struct vnt_private {
- 	unsigned char byTopOFDMBasicRate;
- 	unsigned char byTopCCKBasicRate;
- 
--	unsigned char byMinChannel;
- 	unsigned char byMaxChannel;
- 
- 	unsigned char preamble_type;
-diff --git a/drivers/staging/vt6655/device_main.c b/drivers/staging/vt6655/device_main.c
-index 6c5140e29f6b..d008b22cb98a 100644
---- a/drivers/staging/vt6655/device_main.c
-+++ b/drivers/staging/vt6655/device_main.c
-@@ -227,8 +227,6 @@ static void device_init_registers(struct vnt_private *priv)
- 
- 	spin_unlock_irqrestore(&priv->lock, flags);
- 
--	/* Get Channel range */
--	priv->byMinChannel = 1;
- 	priv->byMaxChannel = CB_MAX_CHANNEL;
- 
- 	/* Get Antena */
--- 
-2.25.1
-
+Thanks, do you think you can reply here with a Fixes: tag so I can add
+it?

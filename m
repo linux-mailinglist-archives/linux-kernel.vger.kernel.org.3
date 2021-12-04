@@ -2,109 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D73468426
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 11:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84ABF468429
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 11:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384618AbhLDKro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 05:47:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
+        id S1384662AbhLDKsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 05:48:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbhLDKrn (ORCPT
+        with ESMTP id S1384654AbhLDKr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 05:47:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBE9C061751;
-        Sat,  4 Dec 2021 02:44:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9D1C0B80315;
-        Sat,  4 Dec 2021 10:44:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA52CC341C0;
-        Sat,  4 Dec 2021 10:44:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638614655;
-        bh=03ultkCDIAoTutwVzv8jZpQbHU9d6HK0vaXgZTieX38=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a7lxzZjoZy9/XNSjw35zcKf8Y2PQJYap9pXGyWDp1A88gfLy8BJXuOFHeI2jJpFbW
-         ldEvjAfWIDFupX+6ZtkXlQkk7wbHI9PPAFSkucwiT/WzmWfjVonQ7JRxsPVUiPMEPP
-         2ly4V5uF7N5IuItQ0Bnj4ORvhXE1SkeRCrf0fzJQ=
-Date:   Sat, 4 Dec 2021 11:44:12 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     regressions@lists.linux.dev, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Regression: plugging in USB scanner breaks all USB functionality
-Message-ID: <YatGfEzzniH/Srn4@kroah.com>
-References: <35f7428b39f996c793f5b4a6a314772681c73d7a.camel@apache.org>
- <3eb9c3f8-6bca-da08-47ec-af2a02d6a485@leemhuis.info>
- <e03ddc81-c60b-bd28-b959-0602142f0efc@leemhuis.info>
- <Yas83rCCAQcabahe@kroah.com>
- <73b325e3-d5d9-f768-9033-3aa0d3683e47@leemhuis.info>
+        Sat, 4 Dec 2021 05:47:57 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0736BC061A83;
+        Sat,  4 Dec 2021 02:44:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4DwiWocxoqHSGz1u4qAh5y9ItqoTFtIB/ysJofOf7YQ=; b=l+OyV1xGlNckqnaPS9/kYVtFUk
+        wBPCWfz+jNfVR8PbFFt8o7Taza9gSNwWxTz+YPPTeMz4qmT5R9WOCW5n1W/0Nu97Qt7y3/TSEfqKn
+        5vo9DXDVDRyMm3N2Ghsf/LzgnifpX/vDz/WlWMw3h9brUGYmAxGleuc6OQwN8UJpKBg4MdnAE7PNI
+        zHqH7R3q4eaGhGpTsel15sRc0h2OK5z4knDVvdyD91YXj2ZY17rwRemzq4xLZOknYtUBvGO23J9Yo
+        GF/3OCav8htY02KaCDtX7phuXrLc2aHfolCk8L479IE4GylxF1M2rP2P4SZDqMUgDD+4PWKA0dUKH
+        a1fMDSIA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mtSWn-00CgMm-CK; Sat, 04 Dec 2021 10:44:26 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B3C5B98106D; Sat,  4 Dec 2021 11:44:25 +0100 (CET)
+Date:   Sat, 4 Dec 2021 11:44:25 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     zhenwei pi <pizhenwei@bytedance.com>,
+        Thomas Gleixner <tglx@linutronix.de>, pbonzini@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: Re: [PATCH v2 2/2] KVM: x86: use x86_get_freq to get freq for
+ kvmclock
+Message-ID: <20211204104425.GS16608@worktop.programming.kicks-ass.net>
+References: <20211201024650.88254-1-pizhenwei@bytedance.com>
+ <20211201024650.88254-3-pizhenwei@bytedance.com>
+ <877dcn7md2.ffs@tglx>
+ <b37ffc3d-4038-fc5e-d681-b89c04a37b04@bytedance.com>
+ <ffbb8a16f267e73316084d1252696edaf81e35a9.camel@redhat.com>
+ <20211202224555.GE16608@worktop.programming.kicks-ass.net>
+ <ce49cc3e3ae5885d992261589cd0f4adad118776.camel@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <73b325e3-d5d9-f768-9033-3aa0d3683e47@leemhuis.info>
+In-Reply-To: <ce49cc3e3ae5885d992261589cd0f4adad118776.camel@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 04, 2021 at 11:26:45AM +0100, Thorsten Leemhuis wrote:
-> 
-> On 04.12.21 11:03, Greg KH wrote:
-> > On Fri, Dec 03, 2021 at 06:24:52PM +0100, Thorsten Leemhuis wrote:
-> >> On 02.12.21 16:13, Thorsten Leemhuis wrote:
-> >>> Hi, this is your Linux kernel regression tracker speaking.
-> >>>
-> >>> Thanks for the report.
-> >>>
-> >>> Top-posting for once, to make this easy accessible to everyone.
-> >>>
-> >>> FWIW, 5.14 is EOL, so it might not be fixed there. As the problem is in
-> >>> newer kernels as well, I suspect that it was a change applies to 5.15 or
-> >>> 5.16 that got backported. Maybe one of the developers might have an idea
-> >>> which commit causes it. If that's not the case you likely should try a
-> >>> bisection to find the culprit. Performing one between v5.14.11..v5.14.14
-> >>> is likely the easiest and quickest way to find it.
-> >>>
-> >>> To be sure this issue doesn't fall through the cracks unnoticed, I'm
-> >>> adding it to regzbot, my Linux kernel regression tracking bot:
-> >>>
-> >>> #regzbot ^introduced v5.14.11..v5.14.14
-> >>> #regzbot title usb: plugging in USB scanner breaks all USB functionality
-> >>> [regression present in 5.15.2 und 5.16-rc3, too]
-> >>> #regzbot ignore-activity
-> >>
-> >> #regzbot introduced ff0e50d3564f
-> >> #regzbot fixed-by 385b5b09c3546c87cfb730b76abe5f8d73c579a2
-> >
-> > Odd, where did that git commit id come from?  I don't see it in
-> > linux-next or Linus's tree.
-> > 
-> > confused,
-> 
-> Yeah, sorry, after sending that mail it occurred to me that this wasn't
-> ideal and hard to follow.
-> 
-> I got it from here:
-> https://lore.kernel.org/lkml/a649395b-0b91-a0d2-c510-ea8ec4aef917@linux.intel.com/
-> 
-> I already decided that next time something like this comes up I'll reply
-> to the mail with the details instead (with proper quoting) to make this
-> easier to follow.
-> 
-> Reading that message again I suspect that I might have been a bit quick
-> as well, as this might not be the commit id this ends up with when it
-> gets merged: I now see that this is likely a developers tree and not one
-> that gets indirectly merged.
-> 
-> Sorry, I'll manually keep an eye on things to fix this up once that
-> patch gets its real it.
+On Fri, Dec 03, 2021 at 09:53:53AM +0200, Maxim Levitsky wrote:
 
-Ah, found it, it's now in my usb-linus branch, and I'll send it to Linus
-later today:
-	09f736aa9547 ("xhci: Fix commad ring abort, write all 64 bits to CRCR register.")
+> > Perf exposes it, it's not really convenient if you're not using perf,
+> > but it can be found there.
+> That is good to know! I will check out the source but if you remember,
+> is there cli option in perf to show it, or it only uses it for internal
+> purposes?
 
-thanks,
-
-greg k-h
+perf tool doesn't expose it I think, it's stuffed in
+perf_event_mmap_page::time_* fields, see
+include/uapi/linux/perf_event.h, it has comments on.

@@ -2,97 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D66468729
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 20:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9515346871F
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 19:44:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346919AbhLDTEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 14:04:01 -0500
-Received: from mail.mutex.one ([62.77.152.124]:59774 "EHLO mail.mutex.one"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234141AbhLDTEA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 14:04:00 -0500
-X-Greylist: delayed 1057 seconds by postgrey-1.27 at vger.kernel.org; Sat, 04 Dec 2021 14:04:00 EST
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.mutex.one (Postfix) with ESMTP id 4698416C27F2;
-        Sat,  4 Dec 2021 20:42:56 +0200 (EET)
-X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
-Received: from mail.mutex.one ([127.0.0.1])
-        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id oKVK5PS9LakU; Sat,  4 Dec 2021 20:42:55 +0200 (EET)
-Received:  [127.0.0.1] (localhost [127.0.0.1])nknown [79.112.88.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mutex.one (Postfix) with ESMTPSA id D422416C08F2;
-        Sat,  4 Dec 2021 20:42:54 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
-        t=1638643375; bh=52k49UyMB40olKhbEBwyV83YUbOTAqmTQKzOI/7iBGY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=iywXr+OwfC+udFJqLZoJcQVQ41y/OuLapkTtmZqhzmGniQMrbGLltI8gDMjufrwbv
-         9YU2eZcCnh+4XyRrmhrvtKYrdWzpde+m+BpuLYR6SN4091IOwMinpw5Yv+qmu2p/m3
-         uYQJTPngbrh+0Y1pB1lwuwaf5MTzMG/AzpBZTcn4=
-From:   Marian Postevca <posteuca@mutex.one>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: u_ether: fix race in setting MAC address
- in setup phase
-In-Reply-To: <YaoSkbMBk90zr3N7@kroah.com>
-References: <20211129221229.31845-1-posteuca@mutex.one>
- <YaoSkbMBk90zr3N7@kroah.com>
-Date:   Sat, 04 Dec 2021 20:42:52 +0200
-Message-ID: <87ee6sxlcj.fsf@mutex.one>
+        id S234141AbhLDSre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 13:47:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235259AbhLDSrc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 13:47:32 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9FDC061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 10:44:06 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id a11so6125310ilj.6
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 10:44:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=W7jPqp5IYfRBn5BMz/jvF57MeJqppL5+XSMOa/5rfGw=;
+        b=qAIPwMyO3R78m5EVO6KVHkXy2jxxAesryB4ri5K1wjm1suZSqs8ichwFX2kkQ2j3Rh
+         8WoXObeA5cOR7dX1UdI0AnaAJnUKFK948KfX72T3raXs1/4MvrMDajsaApkzuso48BOn
+         MfEMo8vuMh1xP+9eOtxUdguNRlfzPb9E+8/U4GkXrhhnNSlo2xhCSS7ksUnJQrz0KYT3
+         9J4hi3JSQHnIYgwMfZPFxZFfkUn20z0qTKLWTWhZBl6eWbnqiHgS+74IRUNtHaI4dt0N
+         hr6n4r3sEJQkQVhv/OYXZ2/Vf1aGTAoAlZCaEDxevfLh6Llk1a+j+M3cP/zSCrq8FrGz
+         NXwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=W7jPqp5IYfRBn5BMz/jvF57MeJqppL5+XSMOa/5rfGw=;
+        b=74Ou9EFk4NtZKt5LfQ/EnWc5GcuA291p5yUKo5vpSyAOtvZHeI6a+cuDDdrYH67OY1
+         ekr2I3RYMZnk+cjPBD2CbFNTHsozFBOj4A1Yd8lI6kiqufkWL+McajrQMrb8QTZWiHHN
+         cZfksdaYXa+K+u0Y5EDbe0TfejnJz1c9pPHHB8JOJZ8zkblXNXgVmWPRa8lOlrKCPAhn
+         q0woBnq3X2zHGBd1tsHTlirFCqfn+MnXm/M+LefWIn1p5tM1T2g/02HnsmoVeV0XScby
+         NjF6zwHHuka8PyHIm0sROt7MvSikoNl3WKdPVkpkXa2u+alAvNly62V9Etr4Z0JFpg5Y
+         DESQ==
+X-Gm-Message-State: AOAM5307g4P3kgDvRpxtCdNEdMEpM2m5FLNUT4z/xnkYiPN9PiWM8xR3
+        81gKJb7hFirzUFmQZmlC+Jb+tPJuLP1nXSG3jmM=
+X-Google-Smtp-Source: ABdhPJzusE0FWJwzm4COg2ibJNGKFggfrPYPOlEfIjYBGvwSTZsGRhvez7IR2sleaOKNLOHmiBsc1B2UBB/Ttyq12qE=
+X-Received: by 2002:a05:6e02:19c7:: with SMTP id r7mr26208969ill.87.1638643446147;
+ Sat, 04 Dec 2021 10:44:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+Received: by 2002:a5d:9c04:0:0:0:0:0 with HTTP; Sat, 4 Dec 2021 10:44:05 -0800 (PST)
+Reply-To: maragbegood@yahoo.com
+From:   Mrs Marafa Hagg <jonathannykor@gmail.com>
+Date:   Sun, 5 Dec 2021 01:44:05 +0700
+Message-ID: <CAEjsn0aFo-uxq07+sh=Rier=SaBr2C283+6hb40AUMaVN=ienQ@mail.gmail.com>
+Subject: From Mrs. Marafa Hagg
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
-
-> On Tue, Nov 30, 2021 at 12:12:29AM +0200, Marian Postevca wrote:
->> When listening for notifications through netlink of a new interface being
->> registered, sporadically, it is possible for the MAC to be read as zero.
->> The zero MAC address lasts a short period of time and then switches to a
->> valid random MAC address.
->> 
->> This causes problems for netd in Android, which assumes that the interface
->> is malfunctioning and will not use it.
->> 
->> In the good case we get this log:
->> InterfaceController::getCfg() ifName usb0
->>  hwAddr 92:a8:f0:73:79:5b ipv4Addr 0.0.0.0 flags 0x1002
->> 
->> In the error case we get these logs:
->> InterfaceController::getCfg() ifName usb0
->>  hwAddr 00:00:00:00:00:00 ipv4Addr 0.0.0.0 flags 0x1002
->> 
->> netd : interfaceGetCfg("usb0")
->> netd : interfaceSetCfg() -> ServiceSpecificException
->>  (99, "[Cannot assign requested address] : ioctl() failed")
->> 
->> The reason for the issue is the order in which the interface is setup,
->> it is first registered through register_netdev() and after the MAC
->> address is set.
->> 
->> Fixed by first setting the MAC address of the net_device and after that
->> calling register_netdev().
->> 
->> Signed-off-by: Marian Postevca <posteuca@mutex.one>
->> ---
->>  drivers/usb/gadget/function/u_ether.c | 16 ++++++----------
->>  1 file changed, 6 insertions(+), 10 deletions(-)
->
-> What commit does this fix?  Should it go to stable kernel releases?
->
-> thanks,
->
-> greg k-h
-
-This fixes bcd4a1c40bee885e ("usb: gadget: u_ether: construct with
-default values and add setters/getters").
-
-I think it should go to stable kernel releases.
-
-Should I send a second version of the patch with a Fixes tag?
-
-Thanks
+As salam aleikum,
+I am Mrs. Marafa Hagg from Kuwait, I am currently on a sick bed and
+have the sum of ( Five Million Two Hundred Thousand United States
+Dollars only) to donate to Non Governmental organization, Religious
+institution, orphanage/charity home or individual that will follow my
+instructions, contact me for full details.
+Mrs. M.H.

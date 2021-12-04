@@ -2,80 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1346C468217
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 04:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62BEA46821B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 04:14:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384120AbhLDDJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 22:09:09 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:57438
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244657AbhLDDJI (ORCPT
+        id S1384134AbhLDDR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 22:17:26 -0500
+Received: from relay038.a.hostedemail.com ([64.99.140.38]:26511 "EHLO
+        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1384126AbhLDDRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 22:09:08 -0500
-Received: from localhost.localdomain (unknown [10.101.196.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 2657E4019B;
-        Sat,  4 Dec 2021 03:05:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638587142;
-        bh=jcDoHCvgsu6eXt/oRTi0+yecaX7b2PiElaljnlYmQFg=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=Iy8EHRtxB2XrLuXBFF7sb3ComEJZbWKGJeThIxJ+2LUfunDPBGnUAVgKr2a/FdWCq
-         jnJ6NssIRJXXEI+XGW/T9Rxvp1NwJl/B/tNesPPtaj23Jv9j7ONcmJlHDImk5DnED3
-         l76ZtgVL0DzQ5/ndUibvruqIw2VP/KBgMalsqc3ZjzDLQzjB73Htbm7XSTsYY0fK9w
-         IviovFV9wyE7ztq7bKkZ+6uDP1DF1ty8LVrcqarTQir49+Z4z0dM4C2oRBacwW3t6w
-         YItiVW3nDTaLhvu1SDQBHNi5xrHCmhiC4akyBmYduqMjfDrR1mySZiH7KoHupx7mQ9
-         EsGiOem0RZp9w==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     mika.westerberg@linux.intel.com, andy@kernel.org
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] pinctrl: intel: Assume 0 by default for PNP UID
-Date:   Sat,  4 Dec 2021 11:04:52 +0800
-Message-Id: <20211204030452.1482507-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        Fri, 3 Dec 2021 22:17:25 -0500
+X-Greylist: delayed 377 seconds by postgrey-1.27 at vger.kernel.org; Fri, 03 Dec 2021 22:17:25 EST
+Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id 5B693203FE;
+        Sat,  4 Dec 2021 03:07:42 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf07.hostedemail.com (Postfix) with ESMTPA id 078B52002F;
+        Sat,  4 Dec 2021 03:06:40 +0000 (UTC)
+Message-ID: <2236458d6a4e77bd09afb13bba65747a3416f293.camel@perches.com>
+Subject: Re: [PATCH] mnt: remove unneeded conversion to bool
+From:   Joe Perches <joe@perches.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        davidcomponentone@gmail.com, shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Guang <yang.guang5@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Date:   Fri, 03 Dec 2021 19:06:40 -0800
+In-Reply-To: <eef8e264-7cf7-8747-867e-b40c9f180d0d@linuxfoundation.org>
+References: <3a7435c9e7e7aa8f24d22fd576ce912eb0540272.1637737086.git.yang.guang5@zte.com.cn>
+         <07f4ba23-cf4c-6817-f7a4-5428f35d966c@linuxfoundation.org>
+         <983ee57718a6e5838f79be96b7f7efc638177f76.camel@perches.com>
+         <eef8e264-7cf7-8747-867e-b40c9f180d0d@linuxfoundation.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: smr71dzt7ndresc7qrttbw7o6ocaxgfd
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 078B52002F
+X-Spam-Status: No, score=-4.90
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/gRbVzh7w/1ujJibE/Phog2pI4ecg335U=
+X-HE-Tag: 1638587200-314246
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's an EHL board that the DSDT doesn't have _UID for pinctrl device,
-and that causes a NULL pointer dereference in strcmp().
+On Fri, 2021-12-03 at 17:24 -0700, Shuah Khan wrote:
+> On 12/3/21 12:50 PM, Joe Perches wrote:
+> > On Fri, 2021-12-03 at 11:26 -0700, Shuah Khan wrote:
+> > > On 11/24/21 5:56 PM, davidcomponentone@gmail.com wrote:
+> > > > From: Yang Guang <yang.guang5@zte.com.cn>
+> > > > 
+> > > > The coccinelle report
+> > > > ./tools/testing/selftests/mount/unprivileged-remount-test.c:285:54-59:
+> > > > WARNING: conversion to bool not needed here
+> > > > ./tools/testing/selftests/mount/unprivileged-remount-test.c:207:54-59:
+> > > > WARNING: conversion to bool not needed here
+> > > > Relational and logical operators evaluate to bool,
+> > > > explicit conversion is overly verbose and unneeded.
+> > > > 
+> > > > Reported-by: Zeal Robot <zealci@zte.com.cn>
+> > > > Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+> > > > ---
+> > > >    tools/testing/selftests/mount/unprivileged-remount-test.c | 4 ++--
+> > > >    1 file changed, 2 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/tools/testing/selftests/mount/unprivileged-remount-test.c b/tools/testing/selftests/mount/unprivileged-remount-test.c
+> > > > index 584dc6bc3b06..d2917054fe3a 100644
+> > > > --- a/tools/testing/selftests/mount/unprivileged-remount-test.c
+> > > > +++ b/tools/testing/selftests/mount/unprivileged-remount-test.c
+> > > > @@ -204,7 +204,7 @@ bool test_unpriv_remount(const char *fstype, const char *mount_options,
+> > > >    		if (!WIFEXITED(status)) {
+> > > >    			die("child did not terminate cleanly\n");
+> > > >    		}
+> > > > -		return WEXITSTATUS(status) == EXIT_SUCCESS ? true : false;
+> > > > +		return WEXITSTATUS(status) == EXIT_SUCCESS;
+> > > >    	}
+> > > >    
+> > > >    	create_and_enter_userns();
+> > > > @@ -282,7 +282,7 @@ static bool test_priv_mount_unpriv_remount(void)
+> > > >    		if (!WIFEXITED(status)) {
+> > > >    			die("child did not terminate cleanly\n");
+> > > >    		}
+> > > > -		return WEXITSTATUS(status) == EXIT_SUCCESS ? true : false;
+> > > > +		return WEXITSTATUS(status) == EXIT_SUCCESS;
+> > > >    	}
+> > > >    
+> > > >    	orig_mnt_flags = read_mnt_flags(orig_path);
+> > > > 
+> > > 
+> > > This change doesn't look right. WEXITSTATUS(status) return could be
+> > > > 1 or 0 or negative.
+> > 
+> > The change is at least logically correct.
+> > 
+> > And isn't WEXITSTATUS range limited from 0->255 ?
+> > 
+> > https://www.gnu.org/software/libc/manual/html_node/Exit-Status.html
+> > 
+> 
+> You are right. In any case, I don't see any value in changing the current
+> logic. The way it is coded is cryptic enough :)
 
-So in the absence of _UID, assume it's 0 by default to avoid the issue
-and get a pinmap.
+Well, it'd be more like the rest of the kernel when changed.
 
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
- drivers/pinctrl/intel/pinctrl-intel.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+bool function()
+{
+	...
+	return <foo> ? true : false;
+}
 
-diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
-index 85750974d1825..fbbff6d1683c2 100644
---- a/drivers/pinctrl/intel/pinctrl-intel.c
-+++ b/drivers/pinctrl/intel/pinctrl-intel.c
-@@ -1602,14 +1602,16 @@ const struct intel_pinctrl_soc_data *intel_pinctrl_get_soc_data(struct platform_
- 	const struct intel_pinctrl_soc_data **table;
- 	struct acpi_device *adev;
- 	unsigned int i;
-+	char *uid;
- 
- 	adev = ACPI_COMPANION(&pdev->dev);
- 	if (adev) {
- 		const void *match = device_get_match_data(&pdev->dev);
-+		uid = adev->pnp.unique_id ?: "0";
- 
- 		table = (const struct intel_pinctrl_soc_data **)match;
- 		for (i = 0; table[i]; i++) {
--			if (!strcmp(adev->pnp.unique_id, table[i]->uid)) {
-+			if (!strcmp(uid, table[i]->uid)) {
- 				data = table[i];
- 				break;
- 			}
--- 
-2.32.0
+is pretty redundant.
+
 

@@ -2,118 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E4546837F
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:14:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B9E468384
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384428AbhLDJRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 04:17:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384422AbhLDJRs (ORCPT
+        id S1384441AbhLDJV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 04:21:56 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:50871 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1384431AbhLDJVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 04:17:48 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75860C061751
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 01:14:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=40DL9oGEmTOO27E5h86qeKzj4QLj0MixZPKrxmbZcRY=; b=W9a+nB1BVI9r7k9+iZw5Q9+WAV
-        GgWiL9BHUHoIkoGzuxyBApTFU06msZ6L0uiPbvUPA6OUBh1gBFhBK2kFXdkcog1ToXA0BM2V+yAsD
-        Wkt3G98n1h0nX+OJAnkBRMGLjXHk+5hJpLg8NK7vj3nW/p2nd7qiTwVOca9g0DHOHp9GDDQWcUE8b
-        6do//wLUZ5Lh4qyufeq760xK4ObD0Xgd3Vp/iYBn+iTTD/rUOJ1TBgxMCY5FOtWFC4tw3bbHS4WQM
-        kO23j+q1+KoNbTceRYTC9Dlo5iFtYmFbt3/SxfkHrWu9KFR9A1khGNYFDBWJW6ek9anOx+DaXzjdM
-        1nhh9olQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mtR7L-002AUX-0j; Sat, 04 Dec 2021 09:14:03 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1A89C98106D; Sat,  4 Dec 2021 10:14:02 +0100 (CET)
-Date:   Sat, 4 Dec 2021 10:14:02 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     Arjan Van De Ven <arjan.van.de.ven@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-        Chen Yu <yu.c.chen@intel.com>,
-        Song Bao Hua <song.bao.hua@hisilicon.com>,
-        yangyicong <yangyicong@huawei.com>,
-        Michael Larabel <Michael@MichaelLarabel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/5] Make Cluster Scheduling Configurable
-Message-ID: <20211204091402.GM16608@worktop.programming.kicks-ass.net>
-References: <cover.1638563225.git.tim.c.chen@linux.intel.com>
+        Sat, 4 Dec 2021 04:21:53 -0500
+Received: by mail-io1-f69.google.com with SMTP id e14-20020a6bf10e000000b005e23f0f5e08so4359950iog.17
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 01:18:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=CUg3SKRRr5AZRrrRAfBqwmKAe9l+DABQvp0lKUAZGW4=;
+        b=VRI3oEVbwrOZmSZ4k0EGZreG1Qqfb3ycRDKvJQ/Lsj0C//TobFTiy0HlS75Q4Jkiep
+         PxgYOWQvz74qYyZ/Dr+v2TGaY/lg6dXRBTOatrPi3i/o6uPXcDOYXfSI/xjPEtVJbqbt
+         sFMft78aXQx4xKUGAbsF0VEqiOC7NcRYQlV5mILFZF+S3cXwUNNelgVUh6zWXUd9T7f1
+         nU0nhsko9bxpeHZvLfL6H6oQc4w1bljGmwWk2zL7tB21k5oFzq7W7sZA4d+/e2TbcDOz
+         Yy4CaJRx4DiyTeHSoULefJX+VmR8JLMWp4L3wdB872U7lgXEosm2xgLQ+SvN66+oyTG6
+         YXNg==
+X-Gm-Message-State: AOAM5331/FvDZhrgUhBYWXg6w6OKDI1VV/HZ9X/LzrW5ctPQ74mZ9kqP
+        hdj1HE/H1NBhkGcY6TW0gvv7bis8EkhesdXlhnXrix6fF4lq
+X-Google-Smtp-Source: ABdhPJzAficTU5yYxlsBfgJBI6iE30UopThIcBDgy4Jniw7LCPCs+V9xZYzu/6bHKQNczIo5WTUTgJ5bl1S+aT7AL2HCH+lLOjIV
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1638563225.git.tim.c.chen@linux.intel.com>
+X-Received: by 2002:a6b:7602:: with SMTP id g2mr24178579iom.37.1638609508327;
+ Sat, 04 Dec 2021 01:18:28 -0800 (PST)
+Date:   Sat, 04 Dec 2021 01:18:28 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ab655805d24e814a@google.com>
+Subject: [syzbot] general protection fault in kernel_accept (3)
+From:   syzbot <syzbot+03655f787f231d1b7b6c@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 12:32:37PM -0800, Tim Chen wrote:
-> Tim Chen (5):
->   scheduler: Create SDTL_SKIP flag to skip topology level
->   scheduler: Add SD_CLUSTER topology flag to cluster sched domain
->   scheduler: Add runtime knob sysctl_sched_cluster
->   scheduler: Add boot time enabling/disabling of cluster scheduling
->   scheduler: Default cluster scheduling to off on x86 hybrid CPU
+Hello,
 
-s/scheduler:/sched:/, surely?
+syzbot found the following issue on:
 
->  .../admin-guide/kernel-parameters.txt         |  4 +
->  arch/x86/kernel/smpboot.c                     | 26 +++++++
->  drivers/base/arch_topology.c                  | 23 +++++-
->  include/linux/sched/sd_flags.h                |  7 ++
->  include/linux/sched/sysctl.h                  |  6 ++
->  include/linux/sched/topology.h                |  3 +-
->  include/linux/topology.h                      |  7 ++
->  kernel/sched/core.c                           |  1 +
->  kernel/sched/sched.h                          |  6 ++
->  kernel/sched/topology.c                       | 75 ++++++++++++++++++-
->  kernel/sysctl.c                               | 11 +++
->  11 files changed, 163 insertions(+), 6 deletions(-)
+HEAD commit:    d40ce48cb3a6 Merge branch 'af_unix-replace-unix_table_lock..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=14b86465b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7cc851c2debde333
+dashboard link: https://syzkaller.appspot.com/bug?extid=03655f787f231d1b7b6c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-*groan*,... I was more thinking of something like so.
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+03655f787f231d1b7b6c@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc0000000072: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000390-0x0000000000000397]
+CPU: 0 PID: 15597 Comm: kworker/u4:6 Not tainted 5.16.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: tipc_rcv tipc_topsrv_accept
+RIP: 0010:kernel_accept+0x56/0x350 net/socket.c:3417
+Code: c1 ea 03 80 3c 02 00 0f 85 90 02 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 65 18 49 8d bc 24 94 03 00 00 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 50
+RSP: 0018:ffffc90002fdfc30 EFLAGS: 00010207
+RAX: dffffc0000000000 RBX: ffffc90002fdfca8 RCX: 0000000000000000
+RDX: 0000000000000072 RSI: ffffffff87211fca RDI: 0000000000000394
+RBP: ffff888035524800 R08: 0000000000000001 R09: ffffffff8ff7bb3f
+R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000800 R14: ffff88802668f770 R15: ffff88802668f2c0
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f41e78fc1b8 CR3: 0000000021d55000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ tipc_topsrv_accept+0x197/0x280 net/tipc/topsrv.c:460
+ process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
+ worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+Modules linked in:
+---[ end trace d8fc85c5be0bfa88 ]---
+RIP: 0010:kernel_accept+0x56/0x350 net/socket.c:3417
+Code: c1 ea 03 80 3c 02 00 0f 85 90 02 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 65 18 49 8d bc 24 94 03 00 00 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 50
+RSP: 0018:ffffc90002fdfc30 EFLAGS: 00010207
+RAX: dffffc0000000000 RBX: ffffc90002fdfca8 RCX: 0000000000000000
+RDX: 0000000000000072 RSI: ffffffff87211fca RDI: 0000000000000394
+RBP: ffff888035524800 R08: 0000000000000001 R09: ffffffff8ff7bb3f
+R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000800 R14: ffff88802668f770 R15: ffff88802668f2c0
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f93092d2000 CR3: 000000001bf56000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	c1 ea 03             	shr    $0x3,%edx
+   3:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   7:	0f 85 90 02 00 00    	jne    0x29d
+   d:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  14:	fc ff df
+  17:	4c 8b 65 18          	mov    0x18(%rbp),%r12
+  1b:	49 8d bc 24 94 03 00 	lea    0x394(%r12),%rdi
+  22:	00
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 14 02          	movzbl (%rdx,%rax,1),%edx <-- trapping instruction
+  2e:	48 89 f8             	mov    %rdi,%rax
+  31:	83 e0 07             	and    $0x7,%eax
+  34:	83 c0 01             	add    $0x1,%eax
+  37:	38 d0                	cmp    %dl,%al
+  39:	7c 08                	jl     0x43
+  3b:	84 d2                	test   %dl,%dl
+  3d:	0f                   	.byte 0xf
+  3e:	85                   	.byte 0x85
+  3f:	50                   	push   %rax
+
 
 ---
- arch/x86/kernel/smpboot.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index ac2909f0cab3..617012f4619f 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -579,6 +579,17 @@ static struct sched_domain_topology_level x86_numa_in_package_topology[] = {
- 	{ NULL, },
- };
- 
-+static struct sched_domain_topology_level x86_hybrid_topology[] = {
-+#ifdef CONFIG_SCHED_SMT
-+	{ cpu_smt_mask, x86_smt_flags, SD_INIT_NAME(SMT) },
-+#endif
-+#ifdef CONFIG_SCHED_MC
-+	{ cpu_coregroup_mask, x86_core_flags, SD_INIT_NAME(MC) },
-+#endif
-+	{ cpu_cpu_mask, SD_INIT_NAME(DIE) },
-+	{ NULL, },
-+};
-+
- static struct sched_domain_topology_level x86_topology[] = {
- #ifdef CONFIG_SCHED_SMT
- 	{ cpu_smt_mask, x86_smt_flags, SD_INIT_NAME(SMT) },
-@@ -1469,8 +1480,11 @@ void __init native_smp_cpus_done(unsigned int max_cpus)
- 
- 	calculate_max_logical_packages();
- 
-+	/* XXX for now assume numa-in-package and hybrid don't overlap */
- 	if (x86_has_numa_in_package)
- 		set_sched_topology(x86_numa_in_package_topology);
-+	if (cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
-+		set_sched_topology(x86_hybrid_topology);
- 
- 	nmi_selftest();
- 	impress_friends();
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

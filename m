@@ -2,141 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1CC4682E2
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 07:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 807B64682EF
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 07:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384420AbhLDGOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 01:14:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384250AbhLDGOb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 01:14:31 -0500
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97F3C061D7E;
-        Fri,  3 Dec 2021 22:11:04 -0800 (PST)
-Received: by mail-qk1-x72f.google.com with SMTP id m192so5854214qke.2;
-        Fri, 03 Dec 2021 22:11:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9ZCWkWDq48UBrai2D1TmmTdR94DXJ7wnNUbZMk//cy0=;
-        b=I9LQ1IKEGyvcAR3A0a3KP68qCAVxBVNMzdKp5+/XJFuQS8vHQQw+dQkr7PewYJ+tDG
-         dROhPyxEo3vSN32ugBWmMDwJBFdkSWoaYGT9bmgh+OzFog68gRlUk0b4vXfDStVjIa2y
-         lLp7ecVo06SK+LeWBlISSXMHHMiLgbn1OZ9kD+xWy88mf/cEuHsdHt9/Aq5pnSMOA0ih
-         0bj94+9mjaYqyn3TUYCfU0cmScJKIBw1NiS9CV1BYF0mzFhEk0p/a70Cjh9l8Cyc11Bp
-         P8T3ZSLCMAmtzFpOlKzpSo+HjqG7wC9Y5gqvRk6VJJ4qtOJ1mWL4SP+lUFP407XLuDOD
-         pOcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9ZCWkWDq48UBrai2D1TmmTdR94DXJ7wnNUbZMk//cy0=;
-        b=iYXE+Z7hfAuhdk9hji2723pm4EIhsB/J2c4qVEQxv0NftX40KQn0rTE00u8seURSAM
-         2xexSzvSVmVzZBjWMSkUxBIaZKbl4B4o8gLeJmblpK5LLE5g5cqqcCKh8sYK6uM5hsja
-         8UFv2WIXih/KjRvz56ER12WL6Sl1B1KHNAwleG+hIdVoZu41dpzmolZovPi3I6UD/uo5
-         nOtRnpULfrVz9riOZnrdherkfb/qsaTv4+sl4/riDDct9RjbI8p0PFfL56z7d5CzptDv
-         ddNrzM5YUBFdZw7gH6SFhriUluW4S8yzyMpqliPmIEsF/e6pOLcOmtamFJ2+4o/jk8sZ
-         /POw==
-X-Gm-Message-State: AOAM5314jwmlBLkt2dOS2ubNat5QmCKAoXWzY5VITAusTuui8ix9e2BK
-        pGzuxfy2x7M2v4GmtXh5R8w=
-X-Google-Smtp-Source: ABdhPJxa7N3sj9y3U0qhseSAE9RbeBnuLXpuDSxXyLC5PHjjucbquP8Bcd5yPE3s/LDy99YXV1GcBA==
-X-Received: by 2002:a05:620a:4087:: with SMTP id f7mr21508305qko.56.1638598263928;
-        Fri, 03 Dec 2021 22:11:03 -0800 (PST)
-Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id l1sm3500913qkp.125.2021.12.03.22.11.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 22:11:03 -0800 (PST)
-From:   Jesse Taube <mr.bossman075@gmail.com>
-X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
-To:     linux-imx@nxp.com
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, ulf.hansson@linaro.org, aisheng.dong@nxp.com,
-        stefan@agner.ch, linus.walleij@linaro.org,
-        gregkh@linuxfoundation.org, arnd@arndb.de, olof@lixom.net,
-        soc@kernel.org, linux@armlinux.org.uk, abel.vesa@nxp.com,
-        adrian.hunter@intel.com, jirislaby@kernel.org,
-        giulio.benetti@benettiengineering.com,
-        nobuhiro1.iwamatsu@toshiba.co.jp, Mr.Bossman075@gmail.com,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: [PATCH v4 13/13] ARM: imxrt1050_defconfig: add i.MXRT1050 defconfig
-Date:   Sat,  4 Dec 2021 01:10:42 -0500
-Message-Id: <20211204061042.1248028-14-Mr.Bossman075@gmail.com>
-X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20211204061042.1248028-1-Mr.Bossman075@gmail.com>
-References: <20211204061042.1248028-1-Mr.Bossman075@gmail.com>
+        id S233346AbhLDG3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 01:29:07 -0500
+Received: from mga01.intel.com ([192.55.52.88]:17724 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229784AbhLDG3G (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 01:29:06 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="261117340"
+X-IronPort-AV: E=Sophos;i="5.87,286,1631602800"; 
+   d="scan'208";a="261117340"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 22:25:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,286,1631602800"; 
+   d="scan'208";a="461156492"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 03 Dec 2021 22:25:39 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mtOUN-000Iai-43; Sat, 04 Dec 2021 06:25:39 +0000
+Date:   Sat, 4 Dec 2021 14:24:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Max Filippov <jcmvbkbc@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:linux-4.14.y 433/827]
+ arch/xtensa/platforms/xtfpga/include/platform/hardware.h:59:26: error:
+ initializer element is not constant
+Message-ID: <202112041418.fZua0hjC-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
+head:   5ac6c9b22d13374b471b6c01f8af76540fa84b3b
+commit: fe700bd139564d097d1ebed90da637b80bd7f5c1 [433/827] xtensa: xtfpga: use CONFIG_USE_OF instead of CONFIG_OF
+config: xtensa-buildonly-randconfig-r002-20211203 (https://download.01.org/0day-ci/archive/20211204/202112041418.fZua0hjC-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 7.5.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=fe700bd139564d097d1ebed90da637b80bd7f5c1
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-4.14.y
+        git checkout fe700bd139564d097d1ebed90da637b80bd7f5c1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-7.5.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash
 
-Add i.MXRT1050 defconfig, that will be the basis for the i.MXRT family.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+All errors (new ones prefixed by >>):
+
+                           ^~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:59:36: note: in expansion of macro 'unlikely'
+    #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+                                       ^~~~~~~~
+   include/linux/dma-mapping.h:327:2: note: in expansion of macro 'BUG_ON'
+     BUG_ON(pfn_valid(PHYS_PFN(phys_addr)));
+     ^~~~~~
+   include/linux/dma-mapping.h:327:9: note: in expansion of macro 'pfn_valid'
+     BUG_ON(pfn_valid(PHYS_PFN(phys_addr)));
+            ^~~~~~~~~
+   arch/xtensa/include/asm/page.h:185:9: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
+     ((pfn) >= ARCH_PFN_OFFSET && ((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
+            ^
+   include/linux/compiler.h:58:42: note: in definition of macro '__trace_if'
+     if (__builtin_constant_p(!!(cond)) ? !!(cond) :   \
+                                             ^~~~
+   include/asm-generic/bug.h:59:32: note: in expansion of macro 'if'
+    #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+                                   ^~
+   include/linux/compiler.h:48:24: note: in expansion of macro '__branch_check__'
+    #  define unlikely(x) (__branch_check__(x, 0, __builtin_constant_p(x)))
+                           ^~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:59:36: note: in expansion of macro 'unlikely'
+    #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+                                       ^~~~~~~~
+   include/linux/dma-mapping.h:327:2: note: in expansion of macro 'BUG_ON'
+     BUG_ON(pfn_valid(PHYS_PFN(phys_addr)));
+     ^~~~~~
+   include/linux/dma-mapping.h:327:9: note: in expansion of macro 'pfn_valid'
+     BUG_ON(pfn_valid(PHYS_PFN(phys_addr)));
+            ^~~~~~~~~
+   arch/xtensa/include/asm/page.h:185:9: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
+     ((pfn) >= ARCH_PFN_OFFSET && ((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
+            ^
+   include/linux/compiler.h:58:42: note: in definition of macro '__trace_if'
+     if (__builtin_constant_p(!!(cond)) ? !!(cond) :   \
+                                             ^~~~
+   include/asm-generic/bug.h:59:32: note: in expansion of macro 'if'
+    #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+                                   ^~
+   include/linux/compiler.h:48:24: note: in expansion of macro '__branch_check__'
+    #  define unlikely(x) (__branch_check__(x, 0, __builtin_constant_p(x)))
+                           ^~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:59:36: note: in expansion of macro 'unlikely'
+    #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+                                       ^~~~~~~~
+   include/linux/dma-mapping.h:327:2: note: in expansion of macro 'BUG_ON'
+     BUG_ON(pfn_valid(PHYS_PFN(phys_addr)));
+     ^~~~~~
+   include/linux/dma-mapping.h:327:9: note: in expansion of macro 'pfn_valid'
+     BUG_ON(pfn_valid(PHYS_PFN(phys_addr)));
+            ^~~~~~~~~
+   arch/xtensa/include/asm/page.h:185:9: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
+     ((pfn) >= ARCH_PFN_OFFSET && ((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
+            ^
+   include/linux/compiler.h:69:16: note: in definition of macro '__trace_if'
+      ______r = !!(cond);     \
+                   ^~~~
+   include/asm-generic/bug.h:59:32: note: in expansion of macro 'if'
+    #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+                                   ^~
+   include/linux/compiler.h:48:24: note: in expansion of macro '__branch_check__'
+    #  define unlikely(x) (__branch_check__(x, 0, __builtin_constant_p(x)))
+                           ^~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:59:36: note: in expansion of macro 'unlikely'
+    #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+                                       ^~~~~~~~
+   include/linux/dma-mapping.h:327:2: note: in expansion of macro 'BUG_ON'
+     BUG_ON(pfn_valid(PHYS_PFN(phys_addr)));
+     ^~~~~~
+   include/linux/dma-mapping.h:327:9: note: in expansion of macro 'pfn_valid'
+     BUG_ON(pfn_valid(PHYS_PFN(phys_addr)));
+            ^~~~~~~~~
+   arch/xtensa/include/asm/page.h:185:9: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
+     ((pfn) >= ARCH_PFN_OFFSET && ((pfn) - ARCH_PFN_OFFSET) < max_mapnr)
+            ^
+   include/linux/compiler.h:69:16: note: in definition of macro '__trace_if'
+      ______r = !!(cond);     \
+                   ^~~~
+   include/asm-generic/bug.h:59:32: note: in expansion of macro 'if'
+    #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+                                   ^~
+   include/linux/compiler.h:48:24: note: in expansion of macro '__branch_check__'
+    #  define unlikely(x) (__branch_check__(x, 0, __builtin_constant_p(x)))
+                           ^~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:59:36: note: in expansion of macro 'unlikely'
+    #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+                                       ^~~~~~~~
+   include/linux/dma-mapping.h:327:2: note: in expansion of macro 'BUG_ON'
+     BUG_ON(pfn_valid(PHYS_PFN(phys_addr)));
+     ^~~~~~
+   include/linux/dma-mapping.h:327:9: note: in expansion of macro 'pfn_valid'
+     BUG_ON(pfn_valid(PHYS_PFN(phys_addr)));
+            ^~~~~~~~~
+   In file included from arch/xtensa/include/asm/processor.h:14:0,
+                    from arch/xtensa/include/asm/bitops.h:22,
+                    from include/linux/bitops.h:19,
+                    from include/linux/kernel.h:11,
+                    from arch/xtensa/platforms/xtfpga/setup.c:19:
+   arch/xtensa/platforms/xtfpga/setup.c: At top level:
+>> arch/xtensa/platforms/xtfpga/include/platform/hardware.h:59:26: error: initializer element is not constant
+    #define OETH_REGS_PADDR  (XCHAL_KIO_PADDR + 0x0D030000)
+                             ^
+   arch/xtensa/platforms/xtfpga/setup.c:168:12: note: in expansion of macro 'OETH_REGS_PADDR'
+      .start = OETH_REGS_PADDR,
+               ^~~~~~~~~~~~~~~
+   arch/xtensa/platforms/xtfpga/include/platform/hardware.h:59:26: note: (near initialization for 'ethoc_res[0].start')
+    #define OETH_REGS_PADDR  (XCHAL_KIO_PADDR + 0x0D030000)
+                             ^
+   arch/xtensa/platforms/xtfpga/setup.c:168:12: note: in expansion of macro 'OETH_REGS_PADDR'
+      .start = OETH_REGS_PADDR,
+               ^~~~~~~~~~~~~~~
+>> arch/xtensa/platforms/xtfpga/include/platform/hardware.h:59:26: error: initializer element is not constant
+    #define OETH_REGS_PADDR  (XCHAL_KIO_PADDR + 0x0D030000)
+                             ^
+   arch/xtensa/platforms/xtfpga/setup.c:169:12: note: in expansion of macro 'OETH_REGS_PADDR'
+      .end   = OETH_REGS_PADDR + OETH_REGS_SIZE - 1,
+               ^~~~~~~~~~~~~~~
+   arch/xtensa/platforms/xtfpga/include/platform/hardware.h:59:26: note: (near initialization for 'ethoc_res[0].end')
+    #define OETH_REGS_PADDR  (XCHAL_KIO_PADDR + 0x0D030000)
+                             ^
+   arch/xtensa/platforms/xtfpga/setup.c:169:12: note: in expansion of macro 'OETH_REGS_PADDR'
+      .end   = OETH_REGS_PADDR + OETH_REGS_SIZE - 1,
+               ^~~~~~~~~~~~~~~
+   arch/xtensa/platforms/xtfpga/include/platform/hardware.h:61:29: error: initializer element is not constant
+    #define OETH_SRAMBUFF_PADDR (XCHAL_KIO_PADDR + 0x0D800000)
+                                ^
+   arch/xtensa/platforms/xtfpga/setup.c:173:12: note: in expansion of macro 'OETH_SRAMBUFF_PADDR'
+      .start = OETH_SRAMBUFF_PADDR,
+               ^~~~~~~~~~~~~~~~~~~
+   arch/xtensa/platforms/xtfpga/include/platform/hardware.h:61:29: note: (near initialization for 'ethoc_res[1].start')
+    #define OETH_SRAMBUFF_PADDR (XCHAL_KIO_PADDR + 0x0D800000)
+                                ^
+   arch/xtensa/platforms/xtfpga/setup.c:173:12: note: in expansion of macro 'OETH_SRAMBUFF_PADDR'
+      .start = OETH_SRAMBUFF_PADDR,
+               ^~~~~~~~~~~~~~~~~~~
+   arch/xtensa/platforms/xtfpga/include/platform/hardware.h:61:29: error: initializer element is not constant
+    #define OETH_SRAMBUFF_PADDR (XCHAL_KIO_PADDR + 0x0D800000)
+                                ^
+   arch/xtensa/platforms/xtfpga/setup.c:174:12: note: in expansion of macro 'OETH_SRAMBUFF_PADDR'
+      .end   = OETH_SRAMBUFF_PADDR + OETH_SRAMBUFF_SIZE - 1,
+               ^~~~~~~~~~~~~~~~~~~
+   arch/xtensa/platforms/xtfpga/include/platform/hardware.h:61:29: note: (near initialization for 'ethoc_res[1].end')
+    #define OETH_SRAMBUFF_PADDR (XCHAL_KIO_PADDR + 0x0D800000)
+                                ^
+   arch/xtensa/platforms/xtfpga/setup.c:174:12: note: in expansion of macro 'OETH_SRAMBUFF_PADDR'
+      .end   = OETH_SRAMBUFF_PADDR + OETH_SRAMBUFF_SIZE - 1,
+               ^~~~~~~~~~~~~~~~~~~
+   arch/xtensa/platforms/xtfpga/include/platform/hardware.h:66:23: error: initializer element is not constant
+    #define C67X00_PADDR  (XCHAL_KIO_PADDR + 0x0D0D0000)
+                          ^
+   arch/xtensa/platforms/xtfpga/setup.c:211:12: note: in expansion of macro 'C67X00_PADDR'
+      .start = C67X00_PADDR,
+               ^~~~~~~~~~~~
+   arch/xtensa/platforms/xtfpga/include/platform/hardware.h:66:23: note: (near initialization for 'c67x00_res[0].start')
+    #define C67X00_PADDR  (XCHAL_KIO_PADDR + 0x0D0D0000)
+                          ^
+   arch/xtensa/platforms/xtfpga/setup.c:211:12: note: in expansion of macro 'C67X00_PADDR'
+      .start = C67X00_PADDR,
+               ^~~~~~~~~~~~
+   arch/xtensa/platforms/xtfpga/include/platform/hardware.h:66:23: error: initializer element is not constant
+    #define C67X00_PADDR  (XCHAL_KIO_PADDR + 0x0D0D0000)
+                          ^
+   arch/xtensa/platforms/xtfpga/setup.c:212:12: note: in expansion of macro 'C67X00_PADDR'
+      .end   = C67X00_PADDR + C67X00_SIZE - 1,
+               ^~~~~~~~~~~~
+   arch/xtensa/platforms/xtfpga/include/platform/hardware.h:66:23: note: (near initialization for 'c67x00_res[0].end')
+    #define C67X00_PADDR  (XCHAL_KIO_PADDR + 0x0D0D0000)
+                          ^
+   arch/xtensa/platforms/xtfpga/setup.c:212:12: note: in expansion of macro 'C67X00_PADDR'
+      .end   = C67X00_PADDR + C67X00_SIZE - 1,
+               ^~~~~~~~~~~~
+   arch/xtensa/platforms/xtfpga/include/platform/hardware.h:46:26: error: initializer element is not constant
+    #define DUART16552_PADDR (XCHAL_KIO_PADDR + 0x0D050020)
+                             ^
+   arch/xtensa/platforms/xtfpga/setup.c:242:11: note: in expansion of macro 'DUART16552_PADDR'
+     .start = DUART16552_PADDR,
+              ^~~~~~~~~~~~~~~~
+   arch/xtensa/platforms/xtfpga/include/platform/hardware.h:46:26: note: (near initialization for 'serial_resource.start')
+    #define DUART16552_PADDR (XCHAL_KIO_PADDR + 0x0D050020)
+                             ^
+   arch/xtensa/platforms/xtfpga/setup.c:242:11: note: in expansion of macro 'DUART16552_PADDR'
+     .start = DUART16552_PADDR,
+              ^~~~~~~~~~~~~~~~
+   arch/xtensa/platforms/xtfpga/include/platform/hardware.h:46:26: error: initializer element is not constant
+    #define DUART16552_PADDR (XCHAL_KIO_PADDR + 0x0D050020)
+                             ^
+   arch/xtensa/platforms/xtfpga/setup.c:243:9: note: in expansion of macro 'DUART16552_PADDR'
+     .end = DUART16552_PADDR + 0x1f,
+            ^~~~~~~~~~~~~~~~
+   arch/xtensa/platforms/xtfpga/include/platform/hardware.h:46:26: note: (near initialization for 'serial_resource.end')
+    #define DUART16552_PADDR (XCHAL_KIO_PADDR + 0x0D050020)
+                             ^
+   arch/xtensa/platforms/xtfpga/setup.c:243:9: note: in expansion of macro 'DUART16552_PADDR'
+     .end = DUART16552_PADDR + 0x1f,
+            ^~~~~~~~~~~~~~~~
+   arch/xtensa/platforms/xtfpga/include/platform/hardware.h:46:26: error: initializer element is not constant
+    #define DUART16552_PADDR (XCHAL_KIO_PADDR + 0x0D050020)
+                             ^
+   arch/xtensa/platforms/xtfpga/setup.c:249:14: note: in expansion of macro 'DUART16552_PADDR'
+      .mapbase = DUART16552_PADDR,
+                 ^~~~~~~~~~~~~~~~
+   arch/xtensa/platforms/xtfpga/include/platform/hardware.h:46:26: note: (near initialization for 'serial_platform_data[0].mapbase')
+    #define DUART16552_PADDR (XCHAL_KIO_PADDR + 0x0D050020)
+                             ^
+   arch/xtensa/platforms/xtfpga/setup.c:249:14: note: in expansion of macro 'DUART16552_PADDR'
+      .mapbase = DUART16552_PADDR,
+                 ^~~~~~~~~~~~~~~~
+
+
+vim +59 arch/xtensa/platforms/xtfpga/include/platform/hardware.h
+
+0d456bad36d42d Max Filippov 2012-11-05  56  
+0d456bad36d42d Max Filippov 2012-11-05  57  /*  OpenCores Ethernet controller:  */
+0d456bad36d42d Max Filippov 2012-11-05  58  				/* regs + RX/TX descriptors */
+0d456bad36d42d Max Filippov 2012-11-05 @59  #define OETH_REGS_PADDR		(XCHAL_KIO_PADDR + 0x0D030000)
+0d456bad36d42d Max Filippov 2012-11-05  60  #define OETH_REGS_SIZE		0x1000
+0d456bad36d42d Max Filippov 2012-11-05  61  #define OETH_SRAMBUFF_PADDR	(XCHAL_KIO_PADDR + 0x0D800000)
+0d456bad36d42d Max Filippov 2012-11-05  62  
+0d456bad36d42d Max Filippov 2012-11-05  63  				/* 5*rx buffs + 5*tx buffs */
+0d456bad36d42d Max Filippov 2012-11-05  64  #define OETH_SRAMBUFF_SIZE	(5 * 0x600 + 5 * 0x600)
+0d456bad36d42d Max Filippov 2012-11-05  65  
+
+:::::: The code at line 59 was first introduced by commit
+:::::: 0d456bad36d42d16022be045c8a53ddbb59ee478 xtensa: add support for the XTFPGA boards
+
+:::::: TO: Max Filippov <jcmvbkbc@gmail.com>
+:::::: CC: Chris Zankel <chris@zankel.net>
+
 ---
-V1->V2:
-* Nothing done
-V2->V3:
-* Nothing done
-V3->V4:
-* Remove unnecessary CONFIGs
-* Add futex suport after "ARM: 9122/1: select HAVE_FUTEX_CMPXCHG"
-9d417cbe36eee7afdd85c2e871685f8dab7c2dba
----
- arch/arm/configs/imxrt_defconfig | 35 ++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 arch/arm/configs/imxrt_defconfig
-
-diff --git a/arch/arm/configs/imxrt_defconfig b/arch/arm/configs/imxrt_defconfig
-new file mode 100644
-index 000000000000..52dba3762996
---- /dev/null
-+++ b/arch/arm/configs/imxrt_defconfig
-@@ -0,0 +1,35 @@
-+# CONFIG_LOCALVERSION_AUTO is not set
-+CONFIG_BPF_SYSCALL=y
-+CONFIG_SCHED_AUTOGROUP=y
-+# CONFIG_MMU is not set
-+CONFIG_ARCH_MXC=y
-+CONFIG_SOC_IMXRT=y
-+CONFIG_SET_MEM_PARAM=y
-+CONFIG_DRAM_BASE=0x80000000
-+CONFIG_DRAM_SIZE=0x02000000
-+CONFIG_BINFMT_FLAT=y
-+CONFIG_UEVENT_HELPER=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_IMX_WEIM=y
-+CONFIG_LEGACY_PTY_COUNT=2
-+CONFIG_SERIAL_FSL_LPUART=y
-+CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
-+CONFIG_SERIAL_DEV_BUS=y
-+CONFIG_PINCTRL_IMXRT1050=y
-+CONFIG_GPIO_MXC=y
-+CONFIG_MMC=y
-+CONFIG_MMC_SDHCI=y
-+CONFIG_MMC_SDHCI_PLTFM=y
-+CONFIG_MMC_SDHCI_ESDHC_IMX=y
-+CONFIG_DMADEVICES=y
-+CONFIG_FSL_EDMA=y
-+CONFIG_CLK_IMXRT1050=y
-+CONFIG_EXT4_FS=y
-+CONFIG_EXT4_FS_POSIX_ACL=y
-+CONFIG_EXT4_FS_SECURITY=y
-+CONFIG_VFAT_FS=y
-+CONFIG_FAT_DEFAULT_UTF8=y
-+CONFIG_EXFAT_FS=y
-+CONFIG_NLS_ASCII=y
-+CONFIG_NLS_UTF8=y
--- 
-2.34.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

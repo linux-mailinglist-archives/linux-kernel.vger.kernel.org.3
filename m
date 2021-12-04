@@ -2,36 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F276146862A
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 17:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D88468633
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 17:29:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355137AbhLDQ1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 11:27:17 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35672 "EHLO
+        id S1355276AbhLDQcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 11:32:32 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37626 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237189AbhLDQ1Q (ORCPT
+        with ESMTP id S1355261AbhLDQcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 11:27:16 -0500
+        Sat, 4 Dec 2021 11:32:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72D7BB80D19;
-        Sat,  4 Dec 2021 16:23:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9FBDDB80D13;
+        Sat,  4 Dec 2021 16:29:04 +0000 (UTC)
 Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp.kernel.org (Postfix) with ESMTPSA id 4C82CC341C2;
-        Sat,  4 Dec 2021 16:23:45 +0000 (UTC)
-Date:   Sat, 4 Dec 2021 16:28:53 +0000
+        by smtp.kernel.org (Postfix) with ESMTPSA id A96C0C341C0;
+        Sat,  4 Dec 2021 16:29:00 +0000 (UTC)
+Date:   Sat, 4 Dec 2021 16:34:09 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Cai Huoqing <caihuoqing@baidu.com>
-Cc:     <festevam@gmail.com>, <linux-imx@nxp.com>, <kernel@pengutronix.de>,
-        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] MAINTAINERS: Update i.MX 8QXP ADC info
-Message-ID: <20211204162853.2ebcfa55@jic23-huawei>
-In-Reply-To: <20211201083100.1587-1-caihuoqing@baidu.com>
-References: <20211201083100.1587-1-caihuoqing@baidu.com>
+To:     Nishanth Menon <nm@ti.com>
+Cc:     Jason Kridner <jkridner@beagleboard.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] counter: ti-eqep: Enable for TDA4VM/J721E
+Message-ID: <20211204163409.2a4fd5c5@jic23-huawei>
+In-Reply-To: <20211130211628.3zxkixf6bu3mcfnx@brook>
+References: <20211130193346.678544-1-jkridner@beagleboard.org>
+        <20211130211628.3zxkixf6bu3mcfnx@brook>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -40,48 +41,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Dec 2021 16:31:00 +0800
-Cai Huoqing <caihuoqing@baidu.com> wrote:
+On Tue, 30 Nov 2021 15:16:28 -0600
+Nishanth Menon <nm@ti.com> wrote:
 
-> Update my email address to use developer mail address,
-> because the old address will be dropped soon.
+> On 14:33-20211130, Jason Kridner wrote:
+> > Counter TI-EQEP was tested on TDA4VM/J721E SoC.
+> >   
+> Thanks for doing this patch,
+> You could drop the example - This is an example which is probably
+> better addressed in Documentation/devicetree/bindings/counter/ti-eqep.yaml
+> or in the actual device tree for j721e itself.
 > 
-> And change the status from 'Supported' to 'Maintained' for me
-> to look after this code without any payment now.
+> Instead, I would suggest to keep the commit message short:
 > 
-> Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
+> Enable TI-QEP for TI's K3 architecture as the driver is reusable
+> or something of that form.
+> 
+> The actual devicetree dts patch should be separate and posted once the
+> driver support is enabled.
+> 
+> > Overlay used for testing EQEP0 and EQEP1:
+> > 
+> >     &cbass_main {
+> > 	#address-cells = <2>;
+> > 	#size-cells = <2>;
+> > 
+> > 	eqep0: qep@3200000 {  
+> 
+> 	[...]
+> 
+> > 	};
+> >     };
 
-Good luck with whatever you do next and thanks for continuing to look after
-this driver.
+Note this is perfectly reasonable detail to have in a cover letter but I agree
+with Nishanth that it is too much for the patch description. 
 
-You may also want to send a patch for .mailmap so that scripts
-etc can get your updated email address.
+Given we have very little for counter so far this cycle, please +CC
+gregkh@linuxfoundation.org on v2.  That way we can be lazy and ask him to
+queue it up directly if that makes sense at the time.
 
-Applied to the togreg branch of iio.git. It's behind some other stuff that
-0-day will poke at so currently just pushed out as testing.
+For background to this, as of last cycle I split the IIO and counter
+pull requests for the first time.
 
 Thanks,
 
 Jonathan
 
-> ---
->  MAINTAINERS | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+
+> > 
+> > Signed-off-by: Jason Kridner <jkridner@beagleboard.org>
+> > ---
+> >  drivers/counter/Kconfig | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/counter/Kconfig b/drivers/counter/Kconfig
+> > index 2de53ab0dd25..453490059c88 100644
+> > --- a/drivers/counter/Kconfig
+> > +++ b/drivers/counter/Kconfig
+> > @@ -51,7 +51,7 @@ config STM32_LPTIMER_CNT
+> >  
+> >  config TI_EQEP
+> >  	tristate "TI eQEP counter driver"
+> > -	depends on (SOC_AM33XX || COMPILE_TEST)
+> > +	depends on (SOC_AM33XX || ARCH_K3 || COMPILE_TEST)
+> >  	select REGMAP_MMIO
+> >  	help
+> >  	  Select this option to enable the Texas Instruments Enhanced Quadrature
+> > -- 
+> > 2.30.2
+> >   
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 9331225b7162..79b89056ecd9 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13774,9 +13774,9 @@ F:	Documentation/devicetree/bindings/display/imx/nxp,imx8mq-dcss.yaml
->  F:	drivers/gpu/drm/imx/dcss/
->  
->  NXP i.MX 8QXP ADC DRIVER
-> -M:	Cai Huoqing <caihuoqing@baidu.com>
-> +M:	Cai Huoqing <cai.huoqing@linux.dev>
->  L:	linux-iio@vger.kernel.org
-> -S:	Supported
-> +S:	Maintained
->  F:	Documentation/devicetree/bindings/iio/adc/nxp,imx8qxp-adc.yaml
->  F:	drivers/iio/adc/imx8qxp-adc.c
->  
 

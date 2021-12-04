@@ -2,83 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F14D8468370
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83511468373
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384383AbhLDJEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 04:04:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354761AbhLDJEc (ORCPT
+        id S1384390AbhLDJKq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 4 Dec 2021 04:10:46 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4194 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236591AbhLDJKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 04:04:32 -0500
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD0DC061751;
-        Sat,  4 Dec 2021 01:01:06 -0800 (PST)
-Received: by mail-vk1-xa34.google.com with SMTP id s1so3394859vks.9;
-        Sat, 04 Dec 2021 01:01:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sgkXK4fzPp8AURP0vpQC+y8wZbCa2aBdXDsi6gZTVEk=;
-        b=Xe6rTxvlXQLPige+SFQNHduMJJ2Tey+oTWTNx1h/kAl04ekfeuI2htcVESF9/ll0c4
-         V8RPNM41gknCyY4G/WjGnFitkXvMODSyDnY4cd8wS3j22OBVP763K6BP645yynOKJIVF
-         piz90pbN84eB1g1mELB3qSnd3BnglPrENCfe7EJeYjkJowcTiQ6BGTKDygtsfuEhqNp3
-         54fsFGM+03S1w7uiBlC5EkSjpM4ofa/v6yrqUWgyNzcJw1YVvetPPOwq5aevvyYtWWB/
-         FOPk3HrlhtTxfefguHITUr+ALPaskQ5WUR5UrNWofQ/9yhv3QgbNzYS392xSaEW/DDzT
-         65mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sgkXK4fzPp8AURP0vpQC+y8wZbCa2aBdXDsi6gZTVEk=;
-        b=QyqNQV8ym91BHegRkTzJN8ebNSfuaUvCwoV/HNYrp/DHJJ9rz0Z44GKMib3Z8aNtg0
-         BhpNaN8gl0DwYgFDNoTrau2eK0tGHfzwsQZEtz+fTdMn7KafZlzWhXZ9hvtslZKFaWvT
-         jZEQ8fd+tVUypuqDlgigldBVDfqDltZU55HN1QNsluO1jgb6XVREeCq8mu/BqzluRWM0
-         tC5zYylJRF8rxUsCNoX3Rk+Hkcwv1iHmscESCsr7VuUAUqy4jun6e3CBes4d0Xb/51QM
-         YuXRuPXjvE5PjPmLIwj0fRrHJFiuyIPbXLLtTARI1ff960X2iJMGFKveCbjUa5fbmH/H
-         7HHA==
-X-Gm-Message-State: AOAM530OghMhlwcqJIbW0zdtQ6XRi5+FNgxMT+k3unfZMZ1yr0GAWR7y
-        aduFgwGHPv52LOV4Q8Wa+fKxYoUOCO95zcwSLuM=
-X-Google-Smtp-Source: ABdhPJynKjuz8/DslXEf7RBM3BMvCzkle4Q2GbIckxgZSyxOBJ9oEsmwBL7tCWyn6AbTc9M2TIdMynGaQEKY4MhEqKo=
-X-Received: by 2002:a05:6122:98d:: with SMTP id g13mr28579156vkd.15.1638608466080;
- Sat, 04 Dec 2021 01:01:06 -0800 (PST)
+        Sat, 4 Dec 2021 04:10:45 -0500
+Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J5kLY3p0cz67gsl;
+        Sat,  4 Dec 2021 17:05:41 +0800 (CST)
+Received: from lhreml712-chm.china.huawei.com (10.201.108.63) by
+ fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sat, 4 Dec 2021 10:07:15 +0100
+Received: from kwepemm600014.china.huawei.com (7.193.23.54) by
+ lhreml712-chm.china.huawei.com (10.201.108.63) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sat, 4 Dec 2021 09:07:14 +0000
+Received: from kwepemm600014.china.huawei.com ([7.193.23.54]) by
+ kwepemm600014.china.huawei.com ([7.193.23.54]) with mapi id 15.01.2308.020;
+ Sat, 4 Dec 2021 17:07:12 +0800
+From:   "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Brice Goglin <Brice.Goglin@inria.fr>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Jonathan Cameron" <jonathan.cameron@huawei.com>,
+        Len Brown <len.brown@intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Ian Rogers <irogers@google.com>
+Subject: RE: [PATCH v2 0/3] topology/sysfs: only export used sysfs attributes
+Thread-Topic: [PATCH v2 0/3] topology/sysfs: only export used sysfs attributes
+Thread-Index: AQHX5SHRAlmFSCd89Uy1sBtsuCn0LqwaA1gAgAS8PoCAAAFFAIADT7Qw
+Date:   Sat, 4 Dec 2021 09:07:12 +0000
+Message-ID: <60d13e6233df4aa78494bb51a2792bbe@hisilicon.com>
+References: <20211129130309.3256168-1-hca@linux.ibm.com>
+ <YaTdpsVCDQMlscON@hirez.programming.kicks-ass.net> <YajWjasdqnibSRJm@osiris>
+ <YajXnjVGEWeUmEqA@kroah.com>
+In-Reply-To: <YajXnjVGEWeUmEqA@kroah.com>
+Accept-Language: en-GB, zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.126.203.91]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <20211201213402.22802-1-sergio.paracuellos@gmail.com> <20211203182307.GA3013031@bhelgaas>
-In-Reply-To: <20211203182307.GA3013031@bhelgaas>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Sat, 4 Dec 2021 10:00:55 +0100
-Message-ID: <CAMhs-H9J73dRD9HB5OocSGRQ5NWf-StSaTU10C0uHopSSpe2Sg@mail.gmail.com>
-Subject: Re: [PATCH] PCI: mt7621: Kconfig: Convert driver into 'bool'
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci <linux-pci@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 7:23 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> s/PCI: mt7621: Kconfig:/PCI: mt7621:/
->
-> in subject.  You can run "git log --oneline
-> drivers/pci/controller/Kconfig" to learn the convention.
 
-Will take it into account from now, thanks.
 
-Sent: https://lore.kernel.org/linux-pci/20211203192454.32624-1-sergio.paracuellos@gmail.com/T/#u
+> -----Original Message-----
+> From: Greg Kroah-Hartman [mailto:gregkh@linuxfoundation.org]
+> Sent: Friday, December 3, 2021 3:27 AM
+> To: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>; Rafael J . Wysocki
+> <rafael@kernel.org>; Andrew Morton <akpm@linux-foundation.org>;
+> linux-kernel@vger.kernel.org; Jonathan Cameron <jonathan.cameron@huawei.com>;
+> Len Brown <len.brown@intel.com>; Thomas Richter <tmricht@linux.ibm.com>; Ian
+> Rogers <irogers@google.com>
+> Subject: Re: [PATCH v2 0/3] topology/sysfs: only export used sysfs attributes
+> 
+> On Thu, Dec 02, 2021 at 03:22:05PM +0100, Heiko Carstens wrote:
+> > On Mon, Nov 29, 2021 at 03:03:18PM +0100, Peter Zijlstra wrote:
+> > > On Mon, Nov 29, 2021 at 02:03:06PM +0100, Heiko Carstens wrote:
+> > > > v2:
+> > > > As requested by Greg KH: avoid negative logic and use uppercase defines.
+> > > >
+> > > > v1:
+> > > > Create die and cluster cpu topology sysfs attributes only if an
+> > > > architecture makes uses of it, instead of creating them always for all
+> > > > architectures with bogus default values.
+> > > > Also change the book and drawer cpu topology macros so they match all
+> > > > all other topology macros.
+> > > >
+> > > > v1:
+> https://lore.kernel.org/lkml/20211128212221.1069726-1-hca@linux.ibm.com/
+> > > >
+> > > > Heiko Carstens (3):
+> > > >   topology/sysfs: export die attributes only if an architectures has
+> support
+> > > >   topology/sysfs: export cluster attributes only if an architectures has
+> support
+> > > >   topology/sysfs: rework book and drawer topology ifdefery
+> > > >
+> > > >  Documentation/admin-guide/cputopology.rst | 33 +++++++++++------------
+> > > >  drivers/base/topology.c                   | 28 ++++++++++++++-----
+> > > >  include/linux/topology.h                  | 25 +++++++++++++++++
+> > > >  3 files changed, 62 insertions(+), 24 deletions(-)
+> > >
+> > > Seems entirely reasonable to me,
+> > >
+> > > Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> >
+> > Since there seem to be no objections, who should pick this up?
+> > I'd assume the s390 tree would not be appropriate.
+> >
+> > Andrew, Greg, Peter?
+> 
+> I will take it, thanks.
 
-Best regards,
-    Sergio Paracuellos
->
-> On Wed, Dec 01, 2021 at 10:34:02PM +0100, Sergio Paracuellos wrote:
-> > Driver is not ready yet to be compiled as a module since it depends on some
-> > MIPS not exported symbols. We have the following current problems:
-> > ...
+Could you give me one minute?
+
++Brice
+
+I'd like to hear some feedbacks from hwloc if there
+is a chance to break userspace and if userspace depends
+on the existence of sysfs even though the topology
+doesn't exist.
+
+If no, I feel it is safe to take.
+
+> 
+> greg k-h
+
+Thanks
+Barry

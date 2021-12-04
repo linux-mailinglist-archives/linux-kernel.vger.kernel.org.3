@@ -2,77 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F3546861B
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 17:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AAC1468624
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 17:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355137AbhLDQJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 11:09:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236441AbhLDQJJ (ORCPT
+        id S1355205AbhLDQV2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 4 Dec 2021 11:21:28 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33684 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242107AbhLDQV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 11:09:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407E8C061751;
-        Sat,  4 Dec 2021 08:05:44 -0800 (PST)
+        Sat, 4 Dec 2021 11:21:27 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CD7B60EAC;
-        Sat,  4 Dec 2021 16:05:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 897C0C341C2;
-        Sat,  4 Dec 2021 16:05:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638633943;
-        bh=o1O9LmUdjqsQPV5YfC4LWxo9o42K7wj4e2mA0GGl5kA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MY7L9hs2Ruv1BDZ+Yj+J1gXqZzRhlxzYN5IVYNwklt5dA4QV0m1LuBWfm9vo+nQ8V
-         SnNr2ohL/6L/IHzAqC5VY+N/fGaW+WTnlBY45A1p0gFRLhqOeUX2ZvlKgXt/tCz1NI
-         v4AUQxtTViAkDrcVTwQN9YDzwVXtV1wS5fB6w0WrfOI8poUKy66y2gTpMIVJYd1wTm
-         G6fJ4wvQ9W3ClzKPyqiK8O6l+FhSQ5c2MEayhcLRz8Rt9ew0mJFc8lxKpaFD/yk4Mw
-         yAE4b6kKTMRE3MNMGjgRFCiWi0kp1wgf4d9fDAnYjJ3Jzoz9PvXTw9aVJb2sTqz4OD
-         LPQ4nZSxdjWyA==
-Date:   Sat, 4 Dec 2021 18:05:30 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Martin Fernandez <martin.fernandez@eclypsium.com>,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
-        rafael@kernel.org, akpm@linux-foundation.org,
-        daniel.gutson@eclypsium.com, hughsient@gmail.com,
-        alex.bazhaniuk@eclypsium.com, alison.schofield@intel.com
-Subject: Re: [PATCH v3 3/5] Tag e820_entry with crypto capabilities
-Message-ID: <YauRykMtyjNKTp+q@kernel.org>
-References: <20211203192148.585399-1-martin.fernandez@eclypsium.com>
- <20211203192148.585399-4-martin.fernandez@eclypsium.com>
- <YaslH6kSDljPpC5/@kroah.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1E9FB80CF9;
+        Sat,  4 Dec 2021 16:18:00 +0000 (UTC)
+Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp.kernel.org (Postfix) with ESMTPSA id C9A48C341C6;
+        Sat,  4 Dec 2021 16:17:43 +0000 (UTC)
+Date:   Sat, 4 Dec 2021 16:22:52 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     Antoniu Miclaus <antoniu.miclaus@analog.com>, robh+dt@kernel.org,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/2] iio:dac:ad7293: add support for AD7293
+Message-ID: <20211204162252.66e62306@jic23-huawei>
+In-Reply-To: <20211203022204.GA12289@chq-T47>
+References: <20211202150819.24832-1-antoniu.miclaus@analog.com>
+        <20211203022204.GA12289@chq-T47>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YaslH6kSDljPpC5/@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 04, 2021 at 09:21:51AM +0100, Greg KH wrote:
-> On Fri, Dec 03, 2021 at 04:21:46PM -0300, Martin Fernandez wrote:
-> > Add a new member in e820_entry to hold whether an entry is able to do
-> > hardware memory encryption or not.
+On Fri, 3 Dec 2021 10:22:04 +0800
+Cai Huoqing <cai.huoqing@linux.dev> wrote:
+
+> On 02 12月 21 17:08:18, Antoniu Miclaus wrote:
+> > The AD7293 is a Power Amplifier drain current controller
+> > containing functionality for general-purpose monitoring
+> > and control of current, voltage, and temperature, integrated
+> > into a single chip solution with an SPI-compatible interface.
 > > 
-> > Add a new argument to __e820__range_add to accept this new
-> > crypto_capable.
-> 
-> Shouldn't this Subject have the same prefix as patch 4/5?
+> > Datasheet:
+> > https://www.analog.com/media/en/technical-documentation/data-sheets/AD7293.pdf
+> > Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
 
-I'd say it should be x86/e820
- 
-> thanks,
-> 
-> greg k-h
+Hi Antoniu
 
--- 
-Sincerely yours,
-Mike.
+I've made a bunch of white space tweaks whilst applying this.
+A few things to keep in mind for future submissions.
+
+1) Whilst the rule is 100 chars per line, 80 chars is preferred where it
+   doesn't hurt readability.
+2) Don't do this pattern.
+	betty(x, y, z, fred +
+	      wilma, barny)
+
+If you have to break fred + wilma, then
+
+	betty(x, y, z,
+	      fred +
+	      wilma,
+	      barny);
+
+is more readable in my view.
+
+
+Otherwise endian issue in your debugfs functions.  Don't cast pointers like
+that...
+
+Please sanity check the changes I made and shout if I messed anything up.
+
+Applied to the togreg branch of iio.git but pushed out as testing first to see
+if 0-day finds anything we missed.
+
+
+
+
+> > ---
+
+
+> > +
+> > +static int ad7293_reg_access(struct iio_dev *indio_dev,
+> > +			     unsigned int reg,
+> > +			     unsigned int write_val,
+> > +			     unsigned int *read_val)
+> > +{
+> > +	struct ad7293_state *st = iio_priv(indio_dev);
+> > +	int ret;
+> > +
+> > +	if (read_val)
+> > +		ret = ad7293_spi_read(st, reg, (u16 *)read_val);
+
+This only works on little endian platforms...
+Think about where the data ends up on a big endian platform.
+
+I've added a local variable to fix this.
+
+> > +	else
+> > +		ret = ad7293_spi_write(st, reg, (u16)write_val);
+
+
+Jonathan

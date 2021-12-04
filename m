@@ -2,76 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBA0468879
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 00:59:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4977F46887A
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 00:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbhLEACo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 19:02:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
+        id S231148AbhLEACq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 19:02:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236466AbhLEABC (ORCPT
+        with ESMTP id S237056AbhLEAB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 19:01:02 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B9BC0613F8
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 15:57:36 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso8528381otf.12
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 15:57:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O2Are/pOeo/9e+L+foVN7ZV/ID2TszqSQl2DcVZYr+s=;
-        b=AQMbi/3cy1tKxN6gXp+JvWfHQTZgZn9dnnzs0J9GqbJYtAEbnB+XEj86F77+G/yE0A
-         OGYY4N3MBdWan4gpG/UY4H/oWILmTCIPKchkgCyWCQhbmKS5XLuP/sd0+xZ8ZFJjKSUB
-         /f+5kLqhlOAiIed0vF27tTt03HvKYBYY39Wbk9UqmyFmNHb15aUrv5jkecnjQvFCcfM1
-         ek5MbLK41cw6AzXRGJa/qA7WxnRPQK8ZW4x95XtpTV0lNIvZITC4uKCupmcEYAvQ1a2N
-         F46d32eDdS41pG86kXhe+Pe2EqdIUc/j6ZYcl3/qxXrUfD4HrUGK1usTGm/1/yxbqq5/
-         FAMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O2Are/pOeo/9e+L+foVN7ZV/ID2TszqSQl2DcVZYr+s=;
-        b=wd8DEC9i0q6Xt//NqM0YGhY20gw0+D5IYfaHu3jKl10kU6EcVcD7PsxAHRGCFQ8yna
-         6uvWCFfBgE/9xHqS0Uc9zUYS5VfDTsFL+UOhYjg4oQNo6oQr0DLmLTB4NZQKO6T9BTZt
-         ofuRenY4uBEPdwiLNlzsRWu/38QmoMtKRKaNnAjszlxZL9qZML+DlHCjNptM7DNVECcF
-         ZIDueyD9b+nAZs22FULlwvSNXyrVOdDD2d1a0NWj04H7iHV2JxuyM8BUReQCekFqe9BZ
-         ZpVaP068vrrBxZAIOPFDhrnirzRM+KlKdrbtLe7BV9h41huz3qKv2RERqdIr9dhhHFUP
-         wwAw==
-X-Gm-Message-State: AOAM5314Kf803dDHIB02GdLlXXqk/9PPDmGjrcP5ZiTjDM7eGpwWRo3K
-        VNeH35HVWpUImaST82KU3vnMslJpjX+1bZ+THilz8w==
-X-Google-Smtp-Source: ABdhPJwTCZBbVyT5ZyFmeQQXcWw2Tcmz1VahQQn526w+qv7ID1nUKQ0NoVTLw1PQcnohuV19A3c7RmJyeu2D1TQ5JZ4=
-X-Received: by 2002:a9d:74d0:: with SMTP id a16mr22103278otl.237.1638662255645;
- Sat, 04 Dec 2021 15:57:35 -0800 (PST)
+        Sat, 4 Dec 2021 19:01:29 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C58C061751;
+        Sat,  4 Dec 2021 15:58:03 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J668324Fvz4xcM;
+        Sun,  5 Dec 2021 10:57:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638662278;
+        bh=X6WeDTc3Ct7VorixcarZ9kQ33I1FYmvGgfpE7zVoA08=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HnyHbw5BeEkgtcO7l6Qafg4tAljBiy22VbAXarT8OttC6jzqaBGH69eypCd5x8xZa
+         wAP9+hJlnTrBeGmj+WWT0eNNAkbz1T8yzwbVTQVfBl3Gwqn7MTd4XEWB1NZMwjR67G
+         rXzLJ60ghBL347HMiQA46at7rUjwkyYhvANjVBaWHw/feQoYxfbq+8FbciXeIcVFo6
+         iBr06u1ij4sjkEzhzoDfUmrhAbZPpzRGpsLZf4UCtK+DmLCGncADC6+6XMxN/fYqVo
+         m8Xbbzr7NBAokGz5XeAcTtvRxyMNslgmy3Z7F72YHmpqJbqz2BLYZZli7w0yQnCzjD
+         FChQtJcPGtzqg==
+Date:   Sun, 5 Dec 2021 10:57:52 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Peter Xu <peterx@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Yu Zhao <yuzhao@google.com>, Vlastimil Babka <vbabka@suse.cz>,
+        Colin Cross <ccross@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH] mm: split out anon_vma declarations to separate header
+Message-ID: <20211205105752.2098963d@canb.auug.org.au>
+In-Reply-To: <20211204174417.1025328-1-arnd@kernel.org>
+References: <20211204174417.1025328-1-arnd@kernel.org>
 MIME-Version: 1.0
-References: <20211129153330.37719-1-nbd@nbd.name> <20211129153330.37719-13-nbd@nbd.name>
- <CACRpkdacgoT-K4qZoBpMx8RiPcvOf=YmrTP36LKyizcQk+VyUQ@mail.gmail.com> <c42f4ea0-2879-01cf-1db8-ed39844959fc@nbd.name>
-In-Reply-To: <c42f4ea0-2879-01cf-1db8-ed39844959fc@nbd.name>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 5 Dec 2021 00:57:24 +0100
-Message-ID: <CACRpkdbekZsKvoMmCtDV2Ui=ZyZA3ymZJL459Y0WgD=-mNyd=w@mail.gmail.com>
-Subject: Re: [PATCH v5 12/13] gpio: Add support for Airoha EN7523 GPIO controller
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>, john@phrozen.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/ZBpG8PmE8HzHV.TPtvI/DCm";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 6:59 PM Felix Fietkau <nbd@nbd.name> wrote:
+--Sig_/ZBpG8PmE8HzHV.TPtvI/DCm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> I just looked at the datasheet and the driver code again, and I think
-> EN7523 is too strange for proper generic GPIO support.
+Hi Arnd,
 
-Yup I see that John explained it to me in the past, no problem.
-Let's do it like this then, but just drop select GPIO_GENERIC
-from KConfig since it's not used.
+On Sat,  4 Dec 2021 18:42:17 +0100 Arnd Bergmann <arnd@kernel.org> wrote:
+>
 
-With that oneliner change:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> diff --git a/include/linux/anon_vma.h b/include/linux/anon_vma.h
+> new file mode 100644
+> index 000000000000..5ce8b5be31ae
+> --- /dev/null
+> +++ b/include/linux/anon_vma.h
+> @@ -0,0 +1,55 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_ANON_VMA_H
+> +#define _LINUX_ANON_VMA_H
+> +
+> +#include <linux/mm_types.h>
+> +
 
-Yours,
-Linus Walleij
+Shouldn't this also include string.h to fix the original problem?
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ZBpG8PmE8HzHV.TPtvI/DCm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGsAIAACgkQAVBC80lX
+0GzBTwf+Lt5PsU8PxWqIob4oCOkUuS3cZ/Zs8ANWuzjQRH6yfYjzA1lhq73cSFSg
+ONb7Xb1f2f9/ew45Dcv8hjLi4b6MNtcAqyJN0gE8gq2otc+mw4YkoG/ZsE6FE5UK
++nWx6ZD0Nea2J+Wq9GMrdB24jCC69MOfpgRHySxaisxHjGT/Q9Kl9IkR1+KWw2o/
+z1TIDJy79hP7DgGcEzWH1mOFj0Acn3jYVtv0JYB7ZBS4jReBGDIKt/+j8+DlW8MK
+tpzqDZcIvJ6nZgsMxsz4XuHn6EIBy8GypheXHy2R2nsDydU0m3gN3cUk95W1U7bU
+lAqlhPv73T8wiYGxArG55RJtH2v/9g==
+=Ebnu
+-----END PGP SIGNATURE-----
+
+--Sig_/ZBpG8PmE8HzHV.TPtvI/DCm--

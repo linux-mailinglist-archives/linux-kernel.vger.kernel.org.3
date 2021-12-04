@@ -2,35 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E7F468730
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 20:24:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD171468736
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 20:36:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348573AbhLDT12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 14:27:28 -0500
-Received: from mga04.intel.com ([192.55.52.120]:18469 "EHLO mga04.intel.com"
+        id S1349287AbhLDTi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 14:38:29 -0500
+Received: from mga11.intel.com ([192.55.52.93]:25569 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347719AbhLDT11 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 14:27:27 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="235876561"
+        id S230379AbhLDTi1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 14:38:27 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="234652420"
 X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
-   d="scan'208";a="235876561"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 11:24:01 -0800
+   d="scan'208";a="234652420"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 11:35:01 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
-   d="scan'208";a="461339091"
+   d="scan'208";a="562125982"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 04 Dec 2021 11:23:59 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 04 Dec 2021 11:34:59 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1mtadb-000JLm-2c; Sat, 04 Dec 2021 19:23:59 +0000
-Date:   Sun, 5 Dec 2021 03:23:45 +0800
+        id 1mtaoF-000JMV-B5; Sat, 04 Dec 2021 19:34:59 +0000
+Date:   Sun, 5 Dec 2021 03:34:04 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     M Chetan Kumar <m.chetan.kumar@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/net/wwan/iosm/iosm_ipc_mux_codec.c:833:21: sparse: sparse:
- Using plain integer as NULL pointer
-Message-ID: <202112050318.uBUvlyTo-lkp@intel.com>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>, Kai Huang <kai.huang@intel.com>
+Subject: arch/x86/kernel/cpu/sgx/virt.c:59:13: sparse: sparse: incorrect type
+ in assignment (different base types)
+Message-ID: <202112050357.x46al1AR-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -40,63 +41,77 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   bbef3c7a63d2a4cb0f3f839db9e767f168c5e348
-commit: f7af616c632ee2ac3af0876fe33bf9e0232e665a net: iosm: infrastructure
-date:   6 months ago
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20211205/202112050318.uBUvlyTo-lkp@intel.com/config)
+head:   12119cfa1052d512a92524e90ebee85029a918f8
+commit: 540745ddbc70eabdc7dbd3fcc00fe4fb17cd59ba x86/sgx: Introduce virtual EPC for use by KVM guests
+date:   8 months ago
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20211205/202112050357.x46al1AR-lkp@intel.com/config)
 compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
 reproduce:
         # apt-get install sparse
         # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f7af616c632ee2ac3af0876fe33bf9e0232e665a
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=540745ddbc70eabdc7dbd3fcc00fe4fb17cd59ba
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout f7af616c632ee2ac3af0876fe33bf9e0232e665a
+        git checkout 540745ddbc70eabdc7dbd3fcc00fe4fb17cd59ba
         # save the config file to linux build tree
         mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/wwan/iosm/ drivers/staging/
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/hyperv/ arch/x86/kernel/cpu/sgx/ drivers/hv/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 
 sparse warnings: (new ones prefixed by >>)
->> drivers/net/wwan/iosm/iosm_ipc_mux_codec.c:833:21: sparse: sparse: Using plain integer as NULL pointer
+>> arch/x86/kernel/cpu/sgx/virt.c:59:13: sparse: sparse: incorrect type in assignment (different base types) @@     expected int [assigned] ret @@     got restricted vm_fault_t @@
+   arch/x86/kernel/cpu/sgx/virt.c:59:13: sparse:     expected int [assigned] ret
+   arch/x86/kernel/cpu/sgx/virt.c:59:13: sparse:     got restricted vm_fault_t
+>> arch/x86/kernel/cpu/sgx/virt.c:60:20: sparse: sparse: restricted vm_fault_t degrades to integer
+   arch/x86/kernel/cpu/sgx/virt.c:95:35: sparse: sparse: symbol 'sgx_vepc_vm_ops' was not declared. Should it be static?
 
-vim +833 drivers/net/wwan/iosm/iosm_ipc_mux_codec.c
+vim +59 arch/x86/kernel/cpu/sgx/virt.c
 
-9413491e20e1ab M Chetan Kumar 2021-06-13  814  
-9413491e20e1ab M Chetan Kumar 2021-06-13  815  void ipc_mux_ul_encoded_process(struct iosm_mux *ipc_mux, struct sk_buff *skb)
-9413491e20e1ab M Chetan Kumar 2021-06-13  816  {
-9413491e20e1ab M Chetan Kumar 2021-06-13  817  	struct mux_adgh *adgh;
-9413491e20e1ab M Chetan Kumar 2021-06-13  818  	u16 adgh_len;
-9413491e20e1ab M Chetan Kumar 2021-06-13  819  
-9413491e20e1ab M Chetan Kumar 2021-06-13  820  	adgh = (struct mux_adgh *)skb->data;
-9413491e20e1ab M Chetan Kumar 2021-06-13  821  	adgh_len = le16_to_cpu(adgh->length);
-9413491e20e1ab M Chetan Kumar 2021-06-13  822  
-9413491e20e1ab M Chetan Kumar 2021-06-13  823  	if (adgh->signature == cpu_to_le32(MUX_SIG_ADGH) &&
-9413491e20e1ab M Chetan Kumar 2021-06-13  824  	    ipc_mux->ul_flow == MUX_UL)
-9413491e20e1ab M Chetan Kumar 2021-06-13  825  		ipc_mux->ul_data_pend_bytes = ipc_mux->ul_data_pend_bytes -
-9413491e20e1ab M Chetan Kumar 2021-06-13  826  					      adgh_len;
-9413491e20e1ab M Chetan Kumar 2021-06-13  827  
-9413491e20e1ab M Chetan Kumar 2021-06-13  828  	if (ipc_mux->ul_flow == MUX_UL)
-9413491e20e1ab M Chetan Kumar 2021-06-13  829  		dev_dbg(ipc_mux->dev, "ul_data_pend_bytes: %lld",
-9413491e20e1ab M Chetan Kumar 2021-06-13  830  			ipc_mux->ul_data_pend_bytes);
-9413491e20e1ab M Chetan Kumar 2021-06-13  831  
-9413491e20e1ab M Chetan Kumar 2021-06-13  832  	/* Reset the skb settings. */
-9413491e20e1ab M Chetan Kumar 2021-06-13 @833  	skb->tail = 0;
-9413491e20e1ab M Chetan Kumar 2021-06-13  834  	skb->len = 0;
-9413491e20e1ab M Chetan Kumar 2021-06-13  835  
-9413491e20e1ab M Chetan Kumar 2021-06-13  836  	/* Add the consumed ADB to the free list. */
-9413491e20e1ab M Chetan Kumar 2021-06-13  837  	skb_queue_tail((&ipc_mux->ul_adb.free_list), skb);
-9413491e20e1ab M Chetan Kumar 2021-06-13  838  }
-9413491e20e1ab M Chetan Kumar 2021-06-13  839  
-
-:::::: The code at line 833 was first introduced by commit
-:::::: 9413491e20e1aba6e471d90c19cc43e523216a4d net: iosm: encode or decode datagram
-
-:::::: TO: M Chetan Kumar <m.chetan.kumar@intel.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+    32	
+    33	static int __sgx_vepc_fault(struct sgx_vepc *vepc,
+    34				    struct vm_area_struct *vma, unsigned long addr)
+    35	{
+    36		struct sgx_epc_page *epc_page;
+    37		unsigned long index, pfn;
+    38		int ret;
+    39	
+    40		WARN_ON(!mutex_is_locked(&vepc->lock));
+    41	
+    42		/* Calculate index of EPC page in virtual EPC's page_array */
+    43		index = vma->vm_pgoff + PFN_DOWN(addr - vma->vm_start);
+    44	
+    45		epc_page = xa_load(&vepc->page_array, index);
+    46		if (epc_page)
+    47			return 0;
+    48	
+    49		epc_page = sgx_alloc_epc_page(vepc, false);
+    50		if (IS_ERR(epc_page))
+    51			return PTR_ERR(epc_page);
+    52	
+    53		ret = xa_err(xa_store(&vepc->page_array, index, epc_page, GFP_KERNEL));
+    54		if (ret)
+    55			goto err_free;
+    56	
+    57		pfn = PFN_DOWN(sgx_get_epc_phys_addr(epc_page));
+    58	
+  > 59		ret = vmf_insert_pfn(vma, addr, pfn);
+  > 60		if (ret != VM_FAULT_NOPAGE) {
+    61			ret = -EFAULT;
+    62			goto err_delete;
+    63		}
+    64	
+    65		return 0;
+    66	
+    67	err_delete:
+    68		xa_erase(&vepc->page_array, index);
+    69	err_free:
+    70		sgx_free_epc_page(epc_page);
+    71		return ret;
+    72	}
+    73	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

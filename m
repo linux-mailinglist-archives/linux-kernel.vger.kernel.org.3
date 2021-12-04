@@ -2,97 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA99E468394
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1424683A2
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384471AbhLDJfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 04:35:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53194 "EHLO
+        id S1384483AbhLDJkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 04:40:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245490AbhLDJfg (ORCPT
+        with ESMTP id S1384475AbhLDJkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 04:35:36 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6E5C061354
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 01:32:11 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id u74so10825838oie.8
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 01:32:11 -0800 (PST)
+        Sat, 4 Dec 2021 04:40:15 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AB2C061354
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 01:36:50 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so6715492wmj.5
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 01:36:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dp2mOcmnCUzYV/E9OQFo/xxl9rHZk/eGzBOBjZN1XYM=;
-        b=WSTQ5SrqnlJYb5MwWXeSFWwAIj+R4+Bn1eUxHR+003PnwHgtvHR/tKMkX4wh48f4ud
-         nlReAt7US/Ey/8pQ203BdU5uK7s5ZiQd6d6Fieh1nqfKJChGXOU4GE7yrmDfpHX9n0W0
-         7SpCq7c28PvftiP9zRbNIpzjnQoe2Z4IDYL10DdcNFGAarkTJWcEBVw3HzTneEfkXGFz
-         kEga0ebNY2oOFHlh4KbYekS7mA8PiehapP3sOnumOMu6QIWZJtzZVYY4y04W1Ti7Xxr7
-         tRfo/2ISAGL5qK3E8WskkTo6NNmQrKkh5XM/80FMs9ji48HtM8UkEmnZi883zYj15RVH
-         F6lA==
+        d=chrisdown.name; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Fa6xeDSp50/P8rOL+C54lxIGIVulHb+9yCsfNo1/Wpw=;
+        b=FWWeWvzsX0lVcVoLsRisdgMqOjZy/JOgW6iYDCzNR3aS7WRsMEBPIai+ZFNIuMynAr
+         BT2jMNkIswwTyxFGrp3xMLb/eXReYAVYgdBy/v3oHKfoEgRChUczwjAU2SBhL9tXhriA
+         MJOvZgEQz3GgTo7U+U9Zs7ICijCpUjoRP6E8g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dp2mOcmnCUzYV/E9OQFo/xxl9rHZk/eGzBOBjZN1XYM=;
-        b=YppAtr/caq175E8hNWdOcRmMqk7jtkU+ie2vTUgCJsUDMQrtGC8zwvjNCMobQV+m9G
-         mWRnty9vMBxCDLgWA5zWFTgBgVwBLhV3uaMAMH7JM9vhcdXJh6+iKhAXM4InLJg/owb3
-         YSRaST0FjkF/4V4Vp5eOaMeYtJjl7b/CESo9vLjUTmQYKDNUYKKhi6Bi9RC1hlObQVyw
-         XnH11MgRXZX3CGps2xR2Qo7LeUoXdbQOXrs2DCIai0Slb6KW+c97Cm/8BL+GasmZQ/QB
-         t/4h/WbGmEmZHNF9RPmw71s6kZkHaepklwXgxMYF/TN+2jLi+FmCAtoYehfz0gi4ZuE+
-         WYZw==
-X-Gm-Message-State: AOAM531LkqsYOyXngcU1GV3DGhb0qabVodQ5rp7v/f0ay+z96LER6DDV
-        h23H154psxe4yw79us5KsIt+3e6JLh5wDJ2Ol1GvR7prDuy6cg==
-X-Google-Smtp-Source: ABdhPJwHT61kOEJ6OKmVIbikhcKXSAgYjacMdWWfxmWruZekkbmJkcsbN+UN0YGjvX52pd7TgLy63T2wrCG4P4k6CM0=
-X-Received: by 2002:a05:6808:120b:: with SMTP id a11mr14692196oil.128.1638610330910;
- Sat, 04 Dec 2021 01:32:10 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Fa6xeDSp50/P8rOL+C54lxIGIVulHb+9yCsfNo1/Wpw=;
+        b=rAFN6qLycaCktUhs+VIgEJua3N4S0dUHnLTQFIM1wj4HYYVb5yMpMzR7fOe3jrc4v+
+         st8VO+QuVzhkUuRjHV9KonLjlRpYltF9sCi/GXHOShtWbfcjrHt8MOYLMj1TMwNbEoBr
+         5TNuHVGcvIx/Ogv2vy31R4b6F7fx0h9LvWMTkpVO3zJZp3x1Ia5hZ+cEuuB3E4o3WyM8
+         b86IE8IjYq6gKiW7JDbKry4NYU3+GpSL7p16VCjIEUkbEIZbz8Dc/AbJDCh7O8wehW1I
+         if7SeXIpEeYTuzJhnhUEyoytv4hH4dOs4e9O/NGlSGEREpRZ+3ynh4WzCP1NWsWUlGqu
+         5Gmg==
+X-Gm-Message-State: AOAM5322MqvrhNakPEkC2s56r1Jw0298R3vysaKvjxfieZkoFMjYoC9s
+        hVqvSZwyJTYN14Rp2cH+cUJ/6w==
+X-Google-Smtp-Source: ABdhPJwiOTmQCn38xCf3cLyyJfvN07htPUbre2qVQ4wfsE4L4QKy64fvmr02+djFj6Wlf0GKZ/75tw==
+X-Received: by 2002:a7b:c301:: with SMTP id k1mr22029998wmj.36.1638610608329;
+        Sat, 04 Dec 2021 01:36:48 -0800 (PST)
+Received: from localhost ([2a01:4b00:8432:8a00:5ee4:2aff:fe50:f48d])
+        by smtp.gmail.com with ESMTPSA id i17sm5622892wmq.48.2021.12.04.01.36.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Dec 2021 01:36:47 -0800 (PST)
+Date:   Sat, 4 Dec 2021 09:36:46 +0000
+From:   Chris Down <chris@chrisdown.name>
+To:     Dan Schatzberg <schatzberg.dan@gmail.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>, Roman Gushchin <guro@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Alex Shi <alexs@kernel.org>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" 
+        <linux-mm@kvack.org>
+Subject: Re: [PATCH] mm: add group_oom_kill memory event
+Message-ID: <Yas2ro/NCDY+1n09@chrisdown.name>
+References: <20211203162426.3375036-1-schatzberg.dan@gmail.com>
 MIME-Version: 1.0
-References: <000000000000f5964705b7d47d8c@google.com> <000000000000dc091705d203eac6@google.com>
-In-Reply-To: <000000000000dc091705d203eac6@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Sat, 4 Dec 2021 10:32:00 +0100
-Message-ID: <CACT4Y+bN9OX1t4v80n5OPN68fySSVWxx0FKOsTHRTff9Xuokng@mail.gmail.com>
-Subject: Re: [syzbot] INFO: trying to register non-static key in l2cap_sock_teardown_cb
-To:     syzbot <syzbot+a41dfef1d2e04910eb2e@syzkaller.appspotmail.com>
-Cc:     a@unstable.cc, b.a.t.m.a.n@lists.open-mesh.org,
-        bobo.shaobowang@huawei.com, davem@davemloft.net, hdanton@sina.com,
-        johan.hedberg@gmail.com, kuba@kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
-        luiz.von.dentz@intel.com, marcel@holtmann.org,
-        mareklindner@neomailbox.ch, miklos@szeredi.hu, mszeredi@redhat.com,
-        netdev@vger.kernel.org, sw@simonwunderlich.de,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20211203162426.3375036-1-schatzberg.dan@gmail.com>
+User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 Nov 2021 at 17:19, syzbot
-<syzbot+a41dfef1d2e04910eb2e@syzkaller.appspotmail.com> wrote:
+Dan Schatzberg writes:
+>Our container agent wants to know when a container exits if it was OOM
+>killed or not to report to the user. We use memory.oom.group = 1 to
+>ensure that OOM kills within the container's cgroup kill
+>everything. Existing memory.events are insufficient for knowing if
+>this triggered:
 >
-> syzbot suspects this issue was fixed by commit:
+>1) Our current approach reads memory.events oom_kill and reports the
+>container was killed if the value is non-zero. This is erroneous in
+>some cases where containers create their children cgroups with
+>memory.oom.group=1 as such OOM kills will get counted against the
+>container cgroup's oom_kill counter despite not actually OOM killing
+>the entire container.
 >
-> commit 1bff51ea59a9afb67d2dd78518ab0582a54a472c
-> Author: Wang ShaoBo <bobo.shaobowang@huawei.com>
-> Date:   Wed Sep 1 00:35:37 2021 +0000
+>2) Reading memory.events.local will fail to identify OOM kills in leaf
+>cgroups (that don't set memory.oom.group) within the container cgroup.
 >
->     Bluetooth: fix use-after-free error in lock_sock_nested()
+>This patch adds a new oom_group_kill event when memory.oom.group
+>triggers to allow userspace to cleanly identify when an entire cgroup
+>is oom killed.
 >
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=134c881eb00000
-> start commit:   73b7a6047971 net: dsa: bcm_sf2: support BCM4908's integrat..
-> git tree:       net-next
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=9ce34124da4c882b
-> dashboard link: https://syzkaller.appspot.com/bug?extid=a41dfef1d2e04910eb2e
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=166ee4cf500000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1337172f500000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: Bluetooth: fix use-after-free error in lock_sock_nested()
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+>Signed-off-by: Dan Schatzberg <schatzberg.dan@gmail.com>
 
-A use-after-free can lead to other random consequences, and there
-actually was a KASAN report after the lockdep report in the original
-report. So w/o a better candidate let's do:
+Thanks! Acking with one minor point on the documentation front.
 
-#syz fix: Bluetooth: fix use-after-free error in lock_sock_nested()
+Acked-by: Chris Down <chris@chrisdown.name>
+
+>---
+> Documentation/admin-guide/cgroup-v2.rst | 4 ++++
+> include/linux/memcontrol.h              | 1 +
+> mm/memcontrol.c                         | 5 +++++
+> mm/oom_kill.c                           | 1 +
+> 4 files changed, 11 insertions(+)
+>
+>diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+>index 2aeb7ae8b393..eec830ce2068 100644
+>--- a/Documentation/admin-guide/cgroup-v2.rst
+>+++ b/Documentation/admin-guide/cgroup-v2.rst
+>@@ -1268,6 +1268,10 @@ PAGE_SIZE multiple when read back.
+> 		The number of processes belonging to this cgroup
+> 		killed by any kind of OOM killer.
+>
+>+          oom_group_kill
+>+                The number of times all tasks in the cgroup were killed
+>+                due to memory.oom.group.
+
+Maybe pedantic, but this reads as unclear to me whether in cgroup with 3 tasks 
+we get the value "3" or "1" when a group kill occurs.
+
+Maybe rephrase to not make be about tasks and just say "number of times a group 
+OOM occurred"?

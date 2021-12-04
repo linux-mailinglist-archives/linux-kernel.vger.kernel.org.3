@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F374685DE
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 16:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 939EA4685EF
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 16:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344656AbhLDPTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 10:19:02 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33948 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236002AbhLDPTC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 10:19:02 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5423860E9D
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 15:15:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85563C341C2
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 15:15:35 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Wb3ExR6P"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1638630932;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nzxAtLM8TN2eNRhKXbnNdtLPpfPJzruxJ4ipdwIBkS0=;
-        b=Wb3ExR6P+68BQ5G3PmOHHPUkAJRFYh6LzskmunY/Ww5tDE5QcitkDFK23LWnVbRrkHrTMx
-        5V1A4hYKYTtewGc1/8p1M/g6/P3EAL4IunPP0oVuzdyWq+fsCA0KwwO0dEhrcCs7OJln89
-        tdGuUSk5dMhD2dvfeeZN71BRUU//35E=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ceccb8af (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Sat, 4 Dec 2021 15:15:32 +0000 (UTC)
-Received: by mail-yb1-f179.google.com with SMTP id g17so18209775ybe.13
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 07:15:32 -0800 (PST)
-X-Gm-Message-State: AOAM533hH/ob+7Ex3VZobIKJ1bt+GNik3j3IHewJWFTyQyreA3ZSF15R
-        d8eaIc82lxyEy4EnthxLuBEdtSheEmcJRc3Nx38=
-X-Google-Smtp-Source: ABdhPJxcKyNrMcMm+v7SJM68o2cirQPOSC9lqit5v953BtUIgklksdL0caoVAvd2YJQqQ6pjlYG8dpj152NAGe7RCOk=
-X-Received: by 2002:a5b:c81:: with SMTP id i1mr1277436ybq.115.1638630931416;
- Sat, 04 Dec 2021 07:15:31 -0800 (PST)
+        id S1344961AbhLDPcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 10:32:21 -0500
+Received: from mga01.intel.com ([192.55.52.88]:28706 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232182AbhLDPcU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 10:32:20 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="261147408"
+X-IronPort-AV: E=Sophos;i="5.87,287,1631602800"; 
+   d="scan'208";a="261147408"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 07:28:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,287,1631602800"; 
+   d="scan'208";a="610754836"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 04 Dec 2021 07:28:53 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mtWy4-000J8Y-Fv; Sat, 04 Dec 2021 15:28:52 +0000
+Date:   Sat, 4 Dec 2021 23:28:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tero Kristo <tero.kristo@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH t-kristo-pm] HID: bpf: hid_bpf_add_report() can be static
+Message-ID: <20211204152814.GA74975@f51396ba56c0>
 MIME-Version: 1.0
-References: <20211130184315.258150-1-Jason@zx2c4.com> <1c2862682ff04463c7ca1f58f1c46aec4d6af03d.camel@perches.com>
- <CAHmME9q7kVREOGPpG+kafS25Ny1=geFPwLRREe+nkC=UkGQUHw@mail.gmail.com> <YauCkjsgDL4sdCId@mit.edu>
-In-Reply-To: <YauCkjsgDL4sdCId@mit.edu>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Sat, 4 Dec 2021 16:15:20 +0100
-X-Gmail-Original-Message-ID: <CAHmME9q_hYyiUKb+H82-njugXaruQc6=sVa3HCQHnOHEOsGVwQ@mail.gmail.com>
-Message-ID: <CAHmME9q_hYyiUKb+H82-njugXaruQc6=sVa3HCQHnOHEOsGVwQ@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: co-maintain random.c
-To:     "Theodore Y. Ts'o" <tytso@mit.edu>
-Cc:     Joe Perches <joe@perches.com>, LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ted,
+drivers/hid/hid-bpf.c:229:23: warning: symbol 'hid_bpf_add_report' was not declared. Should it be static?
+drivers/hid/hid-bpf.c:257:6: warning: symbol 'hid_bpf_free_reports' was not declared. Should it be static?
 
-On Sat, Dec 4, 2021 at 4:00 PM Theodore Y. Ts'o <tytso@mit.edu> wrote:
-> Thanks for stepping up.  There's no question that this Fall has been
-> insanely busy for me, and for the past 3 weeks or so, I've been on
-> vacation and Thanksgiving travel, and I'm still catching up on a
-> mountain of e-mail.
->
-> Something that I think would make sense is that we set up a joint git
-> tree on git.kernel.org, for which we would both have access to push
-> to, and use a group maintainership model much like what other teams
-> have done.  Do you agree?
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
+ hid-bpf.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Sure, that works for me. I had started using zx2c4/random.git. But
-I'll talk to Konstantin about moving that over to a shared repository
-in a group namespace.
-
-Jason
+diff --git a/drivers/hid/hid-bpf.c b/drivers/hid/hid-bpf.c
+index b46b68d54ea80..6b39c48d3d85c 100644
+--- a/drivers/hid/hid-bpf.c
++++ b/drivers/hid/hid-bpf.c
+@@ -226,9 +226,9 @@ struct hid_bpf_parser_and_data {
+ 	struct hid_bpf_report_enum report_enum[HID_REPORT_TYPES];
+ };
+ 
+-struct hid_bpf_report *hid_bpf_add_report(struct hid_bpf_parser_and_data *data,
+-					  unsigned int type, unsigned int id,
+-					  unsigned int application)
++static struct hid_bpf_report *hid_bpf_add_report(struct hid_bpf_parser_and_data *data,
++						 unsigned int type, unsigned int id,
++						 unsigned int application)
+ {
+ 	struct hid_bpf_report_enum *report_enum = data->report_enum + type;
+ 	struct hid_bpf_report *report;
+@@ -254,7 +254,7 @@ struct hid_bpf_report *hid_bpf_add_report(struct hid_bpf_parser_and_data *data,
+ 	return report;
+ }
+ 
+-void hid_bpf_free_reports(struct hid_bpf_parser_and_data *data)
++static void hid_bpf_free_reports(struct hid_bpf_parser_and_data *data)
+ {
+ 	unsigned i, j;
+ 

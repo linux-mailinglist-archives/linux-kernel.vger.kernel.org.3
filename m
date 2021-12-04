@@ -2,137 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A834687AD
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 22:49:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A204687B1
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 22:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355808AbhLDVws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 16:52:48 -0500
-Received: from mail.mutex.one ([62.77.152.124]:33710 "EHLO mail.mutex.one"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231646AbhLDVwr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 16:52:47 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.mutex.one (Postfix) with ESMTP id F3E0A16C27F2;
-        Sat,  4 Dec 2021 23:49:16 +0200 (EET)
-X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
-Received: from mail.mutex.one ([127.0.0.1])
-        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id eMoWQPvIqDML; Sat,  4 Dec 2021 23:49:16 +0200 (EET)
-Received:  [127.0.0.1] (localhost [127.0.0.1])nknown [109.103.89.101])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mutex.one (Postfix) with ESMTPSA id 9D94F16C08F2;
-        Sat,  4 Dec 2021 23:49:15 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
-        t=1638654556; bh=EVhTg8nYuNCbP3r7ALG6+8NWgoFsT6iIYwfUXSTMBzA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Mz7Lx+o60D1QKd4Ke8Rslyqwui25ukjc13FPs/g2VZZuVW/0ZycSp+s908bnzbcG3
-         On7euWIxjhLt+/shYmapUmW1J8uHvRTmJxkPEs01vyFuitg3uER8hY/0WNUZ6b7Y6F
-         BbFlkF3cwoP7b3pgsbncHABJbTyQnpKg/BcLB/aE=
-From:   Marian Postevca <posteuca@mutex.one>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Marian Postevca <posteuca@mutex.one>, stable@vger.kernel.org
-Subject: [PATCH v2] usb: gadget: u_ether: fix race in setting MAC address in setup phase
-Date:   Sat,  4 Dec 2021 23:49:12 +0200
-Message-Id: <20211204214912.17627-1-posteuca@mutex.one>
+        id S1377939AbhLDVyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 16:54:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359655AbhLDVyC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 16:54:02 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79CCFC061359
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 13:50:36 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id u17so6338965wrt.3
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 13:50:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jHZ/NY52q+fJ8ZyowbxA7ltlvG1kl7aRGse+qxxLYbY=;
+        b=HWiGCfL53Wa7TGAKg5tgcgNN4csXPz7IboCQqiRoy+A6ZZrbHrnX4sxBbaOqjdmC7j
+         XGXNjYR1rqi4HGDjbNtsnyg7c0N8YfghXJ6/uGwv/xufzkhBChwYohLnVJGFW3LOlaZN
+         yesGoqbzzjIcUOXySXtROFeuY/1zEnNSNfbZgBsFWzJ1XUasrcvHIF6ox1xQ4f/pM5N5
+         xxxJlSF54r2U1CbE99za6RLpDwyqCPfGgXicMVRhyBlQU86R5Uj+wD/OsPF6pO11/D3e
+         exB2fQrVXOQX+U0h3aUTxYx2wcFMwcWuUaWk8AgGLiR6aYs0HiuEycv2LSZVzHFCGnq2
+         ge6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jHZ/NY52q+fJ8ZyowbxA7ltlvG1kl7aRGse+qxxLYbY=;
+        b=iVKdCk8VKhb6qWQC/Z7bWMLfMEPXUfL0WBY/rJX/3mU8Ra34eEB8D4thHNc0TdQyci
+         Ff1d54DCZpr0uXVXVN1mUyBfLJ8Y60wRhMiEi7v0aBmMidrMMicAmZdIBBgqzkKUrNeT
+         CP3YlqBTseGNu4HTRjlf4pHj6Lz39K8HlIZ2DPvvoSdZawptB9NVOCzT/ZBYyzf4oqp5
+         eGyKvMRrRW1tKiog9aLkEvlfOw62hJGrc+SONrPQHG+9/M0ZDgeuUyRQAVwIC2EcZdSu
+         fPZC2iu0Spn4watlpYqZ2ZOUsXXVrNabV5WaFFEHFiAflKJcct4ainqmdDP2aBaZ0+fA
+         Cy9Q==
+X-Gm-Message-State: AOAM530/hU4bOAT99TgwQwVq1bQK/u+qQqtbI/H/gWwXCif9Lc+wIPyz
+        nJftNXNehlLFItMMjVwmEstRGg==
+X-Google-Smtp-Source: ABdhPJxILtMVzSvS1Vrd7Lgmv2DVMqTdPl18sdA4LtSUsO6snCPl5qQQFsJ/cYVbFis/6/c3Drwj6w==
+X-Received: by 2002:a5d:59a2:: with SMTP id p2mr31486819wrr.252.1638654635019;
+        Sat, 04 Dec 2021 13:50:35 -0800 (PST)
+Received: from localhost ([31.134.121.151])
+        by smtp.gmail.com with ESMTPSA id h2sm6328676wrz.23.2021.12.04.13.50.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Dec 2021 13:50:34 -0800 (PST)
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Wolfram Sang <wsa@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject:        From a5f512cb01e48f5bfcdef800dd477c8b04a4cacf Mon Sep 17 00:00:00 2001
+Date:   Sat,  4 Dec 2021 23:50:25 +0200
+Message-Id: <20211204215033.5134-1-semen.protsenko@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When listening for notifications through netlink of a new interface being
-registered, sporadically, it is possible for the MAC to be read as zero.
-The zero MAC address lasts a short period of time and then switches to a
-valid random MAC address.
+Modern ARM64 Samsung Exynos SoCs (like Exynos Auto V9 and Exynos850) use
+pretty much the same High-Speed I2C controller supported in i2c-exynos5
+driver ("samsung,exynos7-hsi2c" variant), but with some differences:
+- timings are now calculated and configured a bit differently
+- two clocks are now provided to HSI2C controller (and must be
+asserted during I2C operation and register access)
 
-This causes problems for netd in Android, which assumes that the interface
-is malfunctioning and will not use it.
+This patch series implements these changes, making it possible to use
+HSI2C driver on modern Exynos SoCs.
 
-In the good case we get this log:
-InterfaceController::getCfg() ifName usb0
- hwAddr 92:a8:f0:73:79:5b ipv4Addr 0.0.0.0 flags 0x1002
+Another change in mentioned SoCs is that HSI2C controller is now a part
+of USIv2 IP-core. But no USI modifications are needed in HSI2C driver,
+as all USI related configuration is done in USI driver independently.
+USI driver is added in [1] series (or its later revision, if available).
+To make HSI2C functional, both patch series (this one and [1]) have to
+be applied, but those can be applied independently.
 
-In the error case we get these logs:
-InterfaceController::getCfg() ifName usb0
- hwAddr 00:00:00:00:00:00 ipv4Addr 0.0.0.0 flags 0x1002
+Changes in v2:
+- Added new patches renaming "hsi2c@*" nodes to "i2c@*" for Exynos
+dts's
+- Added R-b tags from v1 review
+- Fixed and improved i2c-exynos5 dt-bindings
 
-netd : interfaceGetCfg("usb0")
-netd : interfaceSetCfg() -> ServiceSpecificException
- (99, "[Cannot assign requested address] : ioctl() failed")
+[1] https://patchwork.kernel.org/project/linux-samsung-soc/cover/20211204195757.8600-1-semen.protsenko@linaro.org/
 
-The reason for the issue is the order in which the interface is setup,
-it is first registered through register_netdev() and after the MAC
-address is set.
+Jaewon Kim (2):
+  dt-bindings: i2c: exynos5: Add exynosautov9-hsi2c compatible
+  i2c: exynos5: Add support for ExynosAutoV9 SoC
 
-Fixed by first setting the MAC address of the net_device and after that
-calling register_netdev().
+Sam Protsenko (6):
+  dt-bindings: i2c: exynos5: Convert to dtschema
+  dt-bindings: i2c: exynos5: Add bus clock
+  i2c: exynos5: Add bus clock support
+  i2c: exynos5: Mention Exynos850 and ExynosAutoV9 in Kconfig
+  arm: dts: exynos: Rename hsi2c nodes to i2c for Exynos5260
+  arm64: dts: exynos: Rename hsi2c nodes to i2c for Exynos5433 and
+    Exynos7
 
-Signed-off-by: Marian Postevca <posteuca@mutex.one>
-Fixes: bcd4a1c40bee885e ("usb: gadget: u_ether: construct with default values and add setters/getters")
-Cc: stable@vger.kernel.org
----
+ .../devicetree/bindings/i2c/i2c-exynos5.txt   |  53 -------
+ .../devicetree/bindings/i2c/i2c-exynos5.yaml  | 133 ++++++++++++++++++
+ arch/arm/boot/dts/exynos5260.dtsi             |   8 +-
+ arch/arm64/boot/dts/exynos/exynos5433.dtsi    |  24 ++--
+ arch/arm64/boot/dts/exynos/exynos7.dtsi       |  24 ++--
+ drivers/i2c/busses/Kconfig                    |   2 +-
+ drivers/i2c/busses/i2c-exynos5.c              | 108 +++++++++++---
+ 7 files changed, 253 insertions(+), 99 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
 
-v2: Added Fixes and Cc tags to commit message.
-
- drivers/usb/gadget/function/u_ether.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index e0ad5aed6ac9..6f5d45ef2e39 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -17,6 +17,7 @@
- #include <linux/etherdevice.h>
- #include <linux/ethtool.h>
- #include <linux/if_vlan.h>
-+#include <linux/etherdevice.h>
- 
- #include "u_ether.h"
- 
-@@ -863,19 +864,23 @@ int gether_register_netdev(struct net_device *net)
- {
- 	struct eth_dev *dev;
- 	struct usb_gadget *g;
--	struct sockaddr sa;
- 	int status;
- 
- 	if (!net->dev.parent)
- 		return -EINVAL;
- 	dev = netdev_priv(net);
- 	g = dev->gadget;
-+
-+	net->addr_assign_type = NET_ADDR_RANDOM;
-+	eth_hw_addr_set(net, dev->dev_mac);
-+
- 	status = register_netdev(net);
- 	if (status < 0) {
- 		dev_dbg(&g->dev, "register_netdev failed, %d\n", status);
- 		return status;
- 	} else {
- 		INFO(dev, "HOST MAC %pM\n", dev->host_mac);
-+		INFO(dev, "MAC %pM\n", dev->dev_mac);
- 
- 		/* two kinds of host-initiated state changes:
- 		 *  - iff DATA transfer is active, carrier is "on"
-@@ -883,15 +888,6 @@ int gether_register_netdev(struct net_device *net)
- 		 */
- 		netif_carrier_off(net);
- 	}
--	sa.sa_family = net->type;
--	memcpy(sa.sa_data, dev->dev_mac, ETH_ALEN);
--	rtnl_lock();
--	status = dev_set_mac_address(net, &sa, NULL);
--	rtnl_unlock();
--	if (status)
--		pr_warn("cannot set self ethernet address: %d\n", status);
--	else
--		INFO(dev, "MAC %pM\n", dev->dev_mac);
- 
- 	return status;
- }
 -- 
-2.32.0
+2.30.2
 

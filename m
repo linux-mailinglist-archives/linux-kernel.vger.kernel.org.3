@@ -2,78 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A13B046836E
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F14D8468370
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384376AbhLDJEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 04:04:04 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49232 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354761AbhLDJED (ORCPT
+        id S1384383AbhLDJEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 04:04:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354761AbhLDJEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 04:04:03 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69C8F60DD8
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 09:00:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72DC3C341C0;
-        Sat,  4 Dec 2021 09:00:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638608437;
-        bh=h/zpQrO/E2cPY6/AXZk2zsMPe9CYqo6/SLtTqkx6tkw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OmszMhdIxopPTR/nTbQFmrFNLTzFad3eCzKgtNEhW2922qqxehUmA2NXSQA9RpGrJ
-         SDaiMwFW+QAoc/M4Owfx0HzyLtlS8mcwOgrE9m7muzpdxfSL7910YW+2Yom/7xqoxN
-         mhyjF/hGAPPYWUVzDCPuXCSOhmt9eE8WDLgC99+w=
-Date:   Sat, 4 Dec 2021 10:00:32 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ameer Hamza <amhamza.mgc@gmail.com>
-Cc:     arve@android.com, tkjos@android.com, maco@android.com,
-        joel@joelfernandes.org, christian@brauner.io,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] binder: fixed coverity warning by moving pr_warn outside
- lock
-Message-ID: <YasuMNXHlJEKNSwX@kroah.com>
-References: <20211203205041.115331-1-amhamza.mgc@gmail.com>
- <YasfXUW1rNrj3Mgo@kroah.com>
- <CANAWnNyyBR3EEtT=SecqGQsc+tnJi6GiqrW0xkqRn5jrV7CpDA@mail.gmail.com>
+        Sat, 4 Dec 2021 04:04:32 -0500
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD0DC061751;
+        Sat,  4 Dec 2021 01:01:06 -0800 (PST)
+Received: by mail-vk1-xa34.google.com with SMTP id s1so3394859vks.9;
+        Sat, 04 Dec 2021 01:01:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sgkXK4fzPp8AURP0vpQC+y8wZbCa2aBdXDsi6gZTVEk=;
+        b=Xe6rTxvlXQLPige+SFQNHduMJJ2Tey+oTWTNx1h/kAl04ekfeuI2htcVESF9/ll0c4
+         V8RPNM41gknCyY4G/WjGnFitkXvMODSyDnY4cd8wS3j22OBVP763K6BP645yynOKJIVF
+         piz90pbN84eB1g1mELB3qSnd3BnglPrENCfe7EJeYjkJowcTiQ6BGTKDygtsfuEhqNp3
+         54fsFGM+03S1w7uiBlC5EkSjpM4ofa/v6yrqUWgyNzcJw1YVvetPPOwq5aevvyYtWWB/
+         FOPk3HrlhtTxfefguHITUr+ALPaskQ5WUR5UrNWofQ/9yhv3QgbNzYS392xSaEW/DDzT
+         65mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sgkXK4fzPp8AURP0vpQC+y8wZbCa2aBdXDsi6gZTVEk=;
+        b=QyqNQV8ym91BHegRkTzJN8ebNSfuaUvCwoV/HNYrp/DHJJ9rz0Z44GKMib3Z8aNtg0
+         BhpNaN8gl0DwYgFDNoTrau2eK0tGHfzwsQZEtz+fTdMn7KafZlzWhXZ9hvtslZKFaWvT
+         jZEQ8fd+tVUypuqDlgigldBVDfqDltZU55HN1QNsluO1jgb6XVREeCq8mu/BqzluRWM0
+         tC5zYylJRF8rxUsCNoX3Rk+Hkcwv1iHmscESCsr7VuUAUqy4jun6e3CBes4d0Xb/51QM
+         YuXRuPXjvE5PjPmLIwj0fRrHJFiuyIPbXLLtTARI1ff960X2iJMGFKveCbjUa5fbmH/H
+         7HHA==
+X-Gm-Message-State: AOAM530OghMhlwcqJIbW0zdtQ6XRi5+FNgxMT+k3unfZMZ1yr0GAWR7y
+        aduFgwGHPv52LOV4Q8Wa+fKxYoUOCO95zcwSLuM=
+X-Google-Smtp-Source: ABdhPJynKjuz8/DslXEf7RBM3BMvCzkle4Q2GbIckxgZSyxOBJ9oEsmwBL7tCWyn6AbTc9M2TIdMynGaQEKY4MhEqKo=
+X-Received: by 2002:a05:6122:98d:: with SMTP id g13mr28579156vkd.15.1638608466080;
+ Sat, 04 Dec 2021 01:01:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANAWnNyyBR3EEtT=SecqGQsc+tnJi6GiqrW0xkqRn5jrV7CpDA@mail.gmail.com>
+References: <20211201213402.22802-1-sergio.paracuellos@gmail.com> <20211203182307.GA3013031@bhelgaas>
+In-Reply-To: <20211203182307.GA3013031@bhelgaas>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Sat, 4 Dec 2021 10:00:55 +0100
+Message-ID: <CAMhs-H9J73dRD9HB5OocSGRQ5NWf-StSaTU10C0uHopSSpe2Sg@mail.gmail.com>
+Subject: Re: [PATCH] PCI: mt7621: Kconfig: Convert driver into 'bool'
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci <linux-pci@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A: http://en.wikipedia.org/wiki/Top_post
-Q: Were do I find info about this thing called top-posting?
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
+On Fri, Dec 3, 2021 at 7:23 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> s/PCI: mt7621: Kconfig:/PCI: mt7621:/
+>
+> in subject.  You can run "git log --oneline
+> drivers/pci/controller/Kconfig" to learn the convention.
 
-A: No.
-Q: Should I include quotations after my reply?
+Will take it into account from now, thanks.
 
-http://daringfireball.net/2007/07/on_top
+Sent: https://lore.kernel.org/linux-pci/20211203192454.32624-1-sergio.paracuellos@gmail.com/T/#u
 
-On Sat, Dec 04, 2021 at 01:50:44PM +0500, Ameer Hamza wrote:
-> Thank you Greg for your response. The link to Coverity warning:
-> https://scan5.coverity.com/reports.htm#v56991/p10063/fileInstanceId=204668511&defectInstanceId=52305699&mergedDefectId=1494148
-
-That link does not seem to be public.  What project are you looking at?
-
-> I have seen similar warnings if the print operation is used inside a lock,
-> i.e., Coverity speculates a possible deadlock scenario, which might be a
-> false positive because internal printk implementation uses a separate lock.
-
-When dealing with Coverity, it is up to you to determine if what it says
-is actually true before sending out patches for it, due to the HUGE
-number of false-positives it spits out.
-
-thanks,
-
-greg k-h
+Best regards,
+    Sergio Paracuellos
+>
+> On Wed, Dec 01, 2021 at 10:34:02PM +0100, Sergio Paracuellos wrote:
+> > Driver is not ready yet to be compiled as a module since it depends on some
+> > MIPS not exported symbols. We have the following current problems:
+> > ...

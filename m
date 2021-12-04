@@ -2,63 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3B74681C0
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 02:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD22B4681CD
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 02:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354750AbhLDBTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 20:19:11 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:44636 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1354658AbhLDBTI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 20:19:08 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 6E12D1A0793;
-        Sat,  4 Dec 2021 02:15:43 +0100 (CET)
-Received: from smtp.na-rdc02.nxp.com (usphx01srsp001v.us-phx01.nxp.com [134.27.49.11])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 335FC1A07CE;
-        Sat,  4 Dec 2021 02:15:43 +0100 (CET)
-Received: from right.am.freescale.net (right.am.freescale.net [10.81.116.142])
-        by usphx01srsp001v.us-phx01.nxp.com (Postfix) with ESMTP id 5A10340577;
-        Fri,  3 Dec 2021 18:15:42 -0700 (MST)
-From:   Li Yang <leoyang.li@nxp.com>
-To:     Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Li Yang <leoyang.li@nxp.com>, Pengbo Mu <pengbo.mu@nxp.com>
-Subject: [PATCH 2/2] arm64: dts: ls1088a: add snps incr burst type adjustment for usb1
-Date:   Fri,  3 Dec 2021 19:15:37 -0600
-Message-Id: <20211204011537.8963-2-leoyang.li@nxp.com>
-X-Mailer: git-send-email 2.25.1.377.g2d2118b
-In-Reply-To: <20211204011537.8963-1-leoyang.li@nxp.com>
-References: <20211204011537.8963-1-leoyang.li@nxp.com>
+        id S1383982AbhLDBc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 20:32:56 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:32877 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237601AbhLDBcz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 20:32:55 -0500
+Received: from kwepemi100004.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J5XD034DLzcbmW;
+        Sat,  4 Dec 2021 09:29:20 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ kwepemi100004.china.huawei.com (7.221.188.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sat, 4 Dec 2021 09:29:29 +0800
+Received: from localhost.localdomain (10.67.165.24) by
+ kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sat, 4 Dec 2021 09:29:28 +0800
+From:   Guangbin Huang <huangguangbin2@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <wangjie125@huawei.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
+        <chenhao288@hisilicon.com>
+Subject: [PATCH net-next] Revert "net: hns3: add void before function which don't receive ret"
+Date:   Sat, 4 Dec 2021 09:24:48 +0800
+Message-ID: <20211204012448.51360-1-huangguangbin2@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600016.china.huawei.com (7.193.23.20)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This property could fix the defect that external usb device
-always prints this error log --- 'reset SuperSpeed USB device number n
-using xhci_hcd' when system power on.
+This reverts commit 5ac4f180bd07116c1e57858bc3f6741adbca3eb6.
 
-Signed-off-by: Pengbo Mu <pengbo.mu@nxp.com>
-Signed-off-by: Li Yang <leoyang.li@nxp.com>
+Sorry for taking no notice that the function devlink_register() has been
+already declared as void, so it is needs to revert this patch.
+
+Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
 ---
- arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c   | 2 +-
+ drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_devlink.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
-index 1eda080b497c..3ed1f2c51cad 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
-@@ -497,6 +497,7 @@ usb1: usb@3110000 {
- 			dr_mode = "host";
- 			snps,quirk-frame-length-adjustment = <0x20>;
- 			snps,dis_rxdet_inp3_quirk;
-+			snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
- 			status = "disabled";
- 		};
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c
+index 9c3199d3c8ee..4c441e6a5082 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_devlink.c
+@@ -120,7 +120,7 @@ int hclge_devlink_init(struct hclge_dev *hdev)
+ 	hdev->devlink = devlink;
+ 
+ 	devlink_set_features(devlink, DEVLINK_F_RELOAD);
+-	(void)devlink_register(devlink);
++	devlink_register(devlink);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_devlink.c b/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_devlink.c
+index 75d2926729d3..fdc19868b818 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_devlink.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_devlink.c
+@@ -122,7 +122,7 @@ int hclgevf_devlink_init(struct hclgevf_dev *hdev)
+ 	hdev->devlink = devlink;
+ 
+ 	devlink_set_features(devlink, DEVLINK_F_RELOAD);
+-	(void)devlink_register(devlink);
++	devlink_register(devlink);
+ 	return 0;
+ }
  
 -- 
-2.25.1
+2.33.0
 

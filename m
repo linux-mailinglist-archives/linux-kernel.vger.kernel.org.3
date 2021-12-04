@@ -2,141 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BEFB4683BD
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8224683C4
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384506AbhLDJvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 04:51:38 -0500
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:9075 "EHLO
-        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245192AbhLDJvh (ORCPT
+        id S1384537AbhLDJyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 04:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244915AbhLDJyY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 04:51:37 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3A2sU1p6oQswglGD/Wvy0elwf6fQReBmI8ZBIvgKr?=
- =?us-ascii?q?LsJaIsI5as4F+vmIXXz2AP/yPZmH3co9xOd+zo0NX65PUnINqTgptryxkQiMRo?=
- =?us-ascii?q?6IpJ/zJdxaqZ3v6wu7rFR88sZ1GMrEsFC2FJ5Pljk/F3oPJ8D8sislkepKmULS?=
- =?us-ascii?q?dY3opGVc+IMscoUkLd9AR09cAbeeRU1vlVePa+6UzCXf9s9JGGjp8B5Gr9HuDi?=
- =?us-ascii?q?M/PVAYw5TTSUxzkUGj2zBH5BLpHTU24wuCRroN8RoZWTM6bpF21E/+wwvsjNj+?=
- =?us-ascii?q?luu6TnkwiceeIbU7f0TwPC/Dk20UYk0Te0I5ibqpaOBwR0mXR2Ykskr2htrTpI?=
- =?us-ascii?q?estFofWme8QFTZfHCV/O4VH/qXGKD6xq6R/ymWWKCu2mKw1ZK0xFchCkgptOkl?=
- =?us-ascii?q?P7/sXJSoWRh+EgO2yzfSwTewErtgmNsjgPJ83vnBm0CGfDPwjB5vERs3i4dJem?=
- =?us-ascii?q?j0qgd9INffYe8cdLzFoaXzoYRpJM0sXAZR4l+6ti2P4dRVYtVuKqKtx6G/WpCR?=
- =?us-ascii?q?10b7wIJ/Wd8aMSMF9gEmVvCTF8n7/DxVcM8aQoRKM8WqpruvOmz7rHYwVCbu0/?=
- =?us-ascii?q?+Jrh1vVwXYcYDUMXFWyrP2RiUOkXd9bbUsO9UIGtaUu+Va5Ztj7UQexrHONslg?=
- =?us-ascii?q?bQdU4O+0x4SmJy6zJ80CYDG1CRTlEAPQprsI5RjwC0l6PgsPnAiFpvLSJSHWbs?=
- =?us-ascii?q?LCOoluaIi8TIikIbChCTRYMy9niu4A3jxnISJBoF6vdszFfMVkc2BiBqDR73u9?=
- =?us-ascii?q?DyJ9QkvzrpRWe3mjquIDPCA8z/ATeGGy/hj6VrbWNP+SAgWU3J94aRGpBcmS8g?=
- =?us-ascii?q?Q=3D=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AaJyoKa8BzjPsR97p08Zuk+DmI+orL9Y04lQ7?=
- =?us-ascii?q?vn2ZKCY0TiX8rauTdZsguCMc9wxhP03I9ertBED4ewK+yXcX2+gs1NWZLW3bUT?=
- =?us-ascii?q?CTXeNfBOLZqlXd8kbFmNK1u50OT0EvMrfNJGk/sNj7/RS1CJIL4PTvytHMudvj?=
-X-IronPort-AV: E=Sophos;i="5.87,287,1631570400"; 
-   d="scan'208";a="8382313"
-Received: from clt-128-93-180-152.vpn.inria.fr (HELO [128.93.180.152]) ([128.93.180.152])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/AES256-GCM-SHA384; 04 Dec 2021 10:48:12 +0100
-Subject: Re: [PATCH v2 0/3] topology/sysfs: only export used sysfs attributes
-To:     "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Len Brown <len.brown@intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Ian Rogers <irogers@google.com>
-References: <20211129130309.3256168-1-hca@linux.ibm.com>
- <YaTdpsVCDQMlscON@hirez.programming.kicks-ass.net> <YajWjasdqnibSRJm@osiris>
- <YajXnjVGEWeUmEqA@kroah.com> <60d13e6233df4aa78494bb51a2792bbe@hisilicon.com>
-From:   Brice Goglin <Brice.Goglin@inria.fr>
-Message-ID: <63384337-ba36-9b2a-c9ae-75e3f5ac02d7@inria.fr>
-Date:   Sat, 4 Dec 2021 10:48:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Sat, 4 Dec 2021 04:54:24 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8697C061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 01:50:58 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id u74so10886726oie.8
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 01:50:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PWtuf7THffxb2Es2MbGam96iZCp8PZrhow4j8nKkn2I=;
+        b=qCwONOHi/mWcgDGZzxk3CEBQ7bn33eptyIeHj0MQtbU8CfuJnOy2EoRpBvu0gZefxB
+         D2N7xY45c5w/TIn0CEJZLZ71rP+t5v5rFFqJ9/6bU5/y5onp0ymLK9qOxd/DLgq7bV1Y
+         bzWrUNC9Tcg3jsO5Rw6273N75GEx1yYZBtwOGG5Oo0oz4V72aTMh/eGKIR0Qp2daPmiI
+         3NK7P+Of2NUkXefTW/qXCXESnerCkQn9RjmymSTR9e3nYSWmVYj3aQptegJnCqw/4qMv
+         4Hon2M7qYOmy2Ndju9kig0yzXSN6ouSjgZN7lHChSGN6kjyUWTsjgLppNLOgEpGAw1KT
+         pOUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PWtuf7THffxb2Es2MbGam96iZCp8PZrhow4j8nKkn2I=;
+        b=7HEIzjMOeN8oBb/8hPNsWgs66G2gqbWWqrgynoDt+DXvKWIwYUtEOSnHubUhw/TLuw
+         px08TcUyrIqCkS+BHlEtZExiFqHg4B1N0rAsTVLLXB/Op56Ja0Cey6OwIHhR2IHWrsX6
+         GmQoXvIS16qIjstTj50XqG30RJ6edQYEqZ/bklJuDssU+HnsGkZUb7pyWwqsz8BYqagI
+         kB6IvN2B3JgQALhrJ302byK5kgiY+EBn6bCifeBW4asZ9CZZ/+jvCV+obgX0/DJ0Hkrp
+         PrEy/6/3yQzPNBNXjfqhk/7eClUH8WCOTooKTAqowSxLMo8RXCdBpY91nj19tObPCmfj
+         xP1w==
+X-Gm-Message-State: AOAM531WuHe8oz2OWwPZ3lmmNc7E8RAJ8gTvq4EvWDoIrgtX4WLi2xNq
+        iUkJ5c41I72i6G/ITAK0tL6fj3Ghi3hJQhNIP8xahg==
+X-Google-Smtp-Source: ABdhPJwwBH9zXdUYAnaJBWPnWbHiNbfLcB1X1AwG7D4qKSiW0nnK/miv4vVx+LXsXpfUUiKKAaBv8iBsc+pPdD/oPsA=
+X-Received: by 2002:aca:b843:: with SMTP id i64mr14569342oif.109.1638611457909;
+ Sat, 04 Dec 2021 01:50:57 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <60d13e6233df4aa78494bb51a2792bbe@hisilicon.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="Y5C3IJQNSjYBTH3jFttcPF1ZnmLBgUjqd"
+References: <00000000000069924b05c8cc3b84@google.com> <000000000000b7e3ee05d21bd19d@google.com>
+ <20211201210938.GL641268@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20211201210938.GL641268@paulmck-ThinkPad-P17-Gen-1>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Sat, 4 Dec 2021 10:50:47 +0100
+Message-ID: <CACT4Y+bLs5ycD1khkbMFDW=5UxMqxmbkXQoskyEz74H-u98pDw@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in trc_read_check_handler
+To:     paulmck@kernel.org
+Cc:     syzbot <syzbot+fe9d8c955bd1d0f02dc1@syzkaller.appspotmail.com>,
+        bigeasy@linutronix.de, jgross@suse.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        linux-kernel@vger.kernel.org, mathieu.desnoyers@efficios.com,
+        mingo@kernel.org, namit@vmware.com, netdev@vger.kernel.org,
+        peterz@infradead.org, rcu@vger.kernel.org, rdunlap@infradead.org,
+        rostedt@goodmis.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Y5C3IJQNSjYBTH3jFttcPF1ZnmLBgUjqd
-Content-Type: multipart/mixed; boundary="o1iT760ICFik431n9xKFirdLjrEKMQr6t";
- protected-headers="v1"
-From: Brice Goglin <Brice.Goglin@inria.fr>
-To: "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Heiko Carstens <hca@linux.ibm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Len Brown <len.brown@intel.com>, Thomas Richter <tmricht@linux.ibm.com>,
- Ian Rogers <irogers@google.com>
-Message-ID: <63384337-ba36-9b2a-c9ae-75e3f5ac02d7@inria.fr>
-Subject: Re: [PATCH v2 0/3] topology/sysfs: only export used sysfs attributes
-References: <20211129130309.3256168-1-hca@linux.ibm.com>
- <YaTdpsVCDQMlscON@hirez.programming.kicks-ass.net> <YajWjasdqnibSRJm@osiris>
- <YajXnjVGEWeUmEqA@kroah.com> <60d13e6233df4aa78494bb51a2792bbe@hisilicon.com>
-In-Reply-To: <60d13e6233df4aa78494bb51a2792bbe@hisilicon.com>
-
---o1iT760ICFik431n9xKFirdLjrEKMQr6t
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-
-Le 04/12/2021 =C3=A0 10:07, Song Bao Hua (Barry Song) a =C3=A9crit=C2=A0:=
-
+On Wed, 1 Dec 2021 at 22:09, Paul E. McKenney <paulmck@kernel.org> wrote:
 >
-> Could you give me one minute?
+> On Wed, Dec 01, 2021 at 12:50:07PM -0800, syzbot wrote:
+> > syzbot suspects this issue was fixed by commit:
+> >
+> > commit 96017bf9039763a2e02dcc6adaa18592cd73a39d
+> > Author: Paul E. McKenney <paulmck@kernel.org>
+> > Date:   Wed Jul 28 17:53:41 2021 +0000
+> >
+> >     rcu-tasks: Simplify trc_read_check_handler() atomic operations
+> >
+> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1281d89db00000
+> > start commit:   5319255b8df9 selftests/bpf: Skip verifier tests that fail ..
+> > git tree:       bpf-next
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=9290a409049988d4
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=fe9d8c955bd1d0f02dc1
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14990477300000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=105ebd84b00000
+> >
+> > If the result looks correct, please mark the issue as fixed by replying with:
 >
-> +Brice
+> #syz fix: rcu-tasks: Simplify trc_read_check_handler() atomic operations
 >
-> I'd like to hear some feedbacks from hwloc if there
-> is a chance to break userspace and if userspace depends
-> on the existence of sysfs even though the topology
-> doesn't exist.
+> > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 >
-> If no, I feel it is safe to take.
+> Give or take.  There were quite a few related bugs, so some or all of
+> the following commits might also have helped:
 >
+> cbe0d8d91415c rcu-tasks: Wait for trc_read_check_handler() IPIs
+> 18f08e758f34e rcu-tasks: Add trc_inspect_reader() checks for exiting critical section
+> 46aa886c483f5 rcu-tasks: Fix IPI failure handling in trc_wait_for_one_reader
 
-Hello
+Thanks for checking. If we don't have one exact fix, let's go with
+what syzbot suggested. At this point it does not matter much since all
+of them are in most trees I assume. We just need to close the bug with
+something.
 
-If the question is whether hwloc *requires* cluster/die/book/drawer=20
-sysfs files to exist, then the answer is no. We have to support old=20
-kernels without those files anyway.
+#syz fix: rcu-tasks: Simplify trc_read_check_handler() atomic operations
 
-Brice
+> Quibbles aside, it is nice to get an automated email about having fixed
+> a bug as opposed to having added one.  ;-)
 
-
-
-
---o1iT760ICFik431n9xKFirdLjrEKMQr6t--
-
---Y5C3IJQNSjYBTH3jFttcPF1ZnmLBgUjqd
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEEelpOgOQAl7r26tY4RJGQ8yNavTsFAmGrOVoFAwAAAAAACgkQRJGQ8yNavTtF
-sg//RA3OKI+ZgqqSFHQoOb1fBi/W5brllIl2UUEcPHCo6T1us4JAtPzX2LppOLZVk8qYWPue6E00
-e1Wk+u0kuePN5QrpD9krWyQJqO0RotCVWUssqfwpr0htyRskxEPiHmFOiOHAtpaTcJsYC6NG1vqL
-LXhJjaMqHzI13CtF5NiD/iCz9zy6ePhA1oxwBcNfvOgjhzzrvQqIztolQrEUFQ980W8W09aJEsnE
-XUleq+poTr5vaqHFTMCuB84jOWTMH73aJ3Oh/qDUw/oqsBPdgnGcIhWnWMBRRhQZToDyn+UK6q7n
-YXjLgjSU8hj4OuDHZIo9/MhWZ0Gi/mZDbXmH3o0mqv9W3bmWPoP+jqZiHynYhIF0yxZyU8UzzWPV
-H53Rr4PzSDxzWT2HgGy8kPHp8Kz2TtH9XyBwYwpoX7tqgtYFqLPape76xcep6NbY5E3nxgww/W8T
-s8DPJuDuh1LMa+TLajnIrvSgGzoCxnIhzjeZC0+2T8Y76uPldU71gFZZgRhVrIzlDEG8nycj1Q3j
-OhIfqhC39tJUwOdwDBRVCW+w2bnOtgTzhe87dGrfzHU34gZdvRzMW5KoJJiKnVShdbA3Rl9G6t/R
-3csQEk3pLIdh1P172h4J/n0FZ8/1u3X/TuYLXFFgRGoiEf1OBHTEbtY8Q6iBcyqX6L5r8pgFawxo
-5EQ=
-=H4gY
------END PGP SIGNATURE-----
-
---Y5C3IJQNSjYBTH3jFttcPF1ZnmLBgUjqd--
+Yes, but one is not possible without the other :-)

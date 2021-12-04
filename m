@@ -2,110 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D5C468664
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 18:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE97C468677
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 18:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355347AbhLDRH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 12:07:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236818AbhLDRH4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 12:07:56 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD76C061751
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 09:04:31 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id v1so24755534edx.2
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 09:04:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=R+IHFqT+1cIu4d25MxA/33I5hw37sbqf3L8hQmO39cs=;
-        b=gdi/hrEsdJa+MtfK1vcA4icU4vcH7+xTuMkSP1+Kea3LWAERjc6zptW/sunycSyp5v
-         7GO/CviYc2t+irIBL4f5IVweYDR37BBXHv0XPvKNO3yTVOTfhx3PLAdMKNBU8l/5h01P
-         gMrZXiGARkAf9jAbSY4vCAHvvk4TJ3KY/gPhk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=R+IHFqT+1cIu4d25MxA/33I5hw37sbqf3L8hQmO39cs=;
-        b=K7oZ+qNKHM8W8vGn9qE9WdjgBa/PWhFAziobEAEpnLmZXW6lLHvUjHiDbw1PwlRdVz
-         RKqn/xpkZi7FInZbwxK+3cQTxclVy/SG4Mux13j7ZCQf7FfMwBAMXzRMV2CCCdNw4S45
-         B8ccjn5sZlwX+dr51v37YlYG90siOYr/WpezObluobW1dtLpfZHzD+Y8s3EGGZnGw2c9
-         6tTJHPAYBWD8GOql4ih7qOaDm/tq9HwBvvacygXL1vOdQPZRCq/Mq2cvsI3guIgdFj9w
-         mAlU/PCAcCASdOR/L+GNEoRaWJPodod5BLozxVXeW4cThkp44CcqWZNRe61Vg7nVi9xv
-         kePw==
-X-Gm-Message-State: AOAM532gpgD4XpiJ4Bn5rAxCJOVvnpiS6xs/oQghni4Y8nbghJiPn1JE
-        a2hyBJTY13ZhBapjrJu8bipj4MiMpgGnXyXD
-X-Google-Smtp-Source: ABdhPJyBaLTzkYiv34MUn/9NwhHPE8mI5p8SshaXg8+//2kLZp6E33oaeL0tT65qKN+aeMsQ+CQ/pA==
-X-Received: by 2002:a05:6402:270d:: with SMTP id y13mr36886564edd.362.1638637469154;
-        Sat, 04 Dec 2021 09:04:29 -0800 (PST)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id mp26sm4089602ejc.61.2021.12.04.09.04.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Dec 2021 09:04:28 -0800 (PST)
-Received: by mail-wr1-f41.google.com with SMTP id q3so12712585wru.5
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 09:04:28 -0800 (PST)
-X-Received: by 2002:adf:f8c3:: with SMTP id f3mr30048229wrq.495.1638637467944;
- Sat, 04 Dec 2021 09:04:27 -0800 (PST)
+        id S1377474AbhLDRO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 12:14:26 -0500
+Received: from mga02.intel.com ([134.134.136.20]:2775 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1355675AbhLDROZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 12:14:25 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="224384353"
+X-IronPort-AV: E=Sophos;i="5.87,287,1631602800"; 
+   d="scan'208";a="224384353"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 09:10:58 -0800
+X-IronPort-AV: E=Sophos;i="5.87,287,1631602800"; 
+   d="scan'208";a="514135791"
+Received: from skoikkar-mobl.ger.corp.intel.com (HELO localhost) ([10.249.144.57])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 09:10:54 -0800
+From:   Iwona Winiarska <iwona.winiarska@intel.com>
+To:     linux-gpio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Iwona Winiarska <iwona.winiarska@intel.com>
+Subject: [PATCH 1/2] gpio: aspeed: Convert aspeed_gpio.lock to raw_spinlock
+Date:   Sat,  4 Dec 2021 18:10:26 +0100
+Message-Id: <20211204171027.451220-1-iwona.winiarska@intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <CAJZ5v0hQaF-ANLc4JO=Ub_JMsqLFpZev_gmpb=NPpg=zmqcauA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hQaF-ANLc4JO=Ub_JMsqLFpZev_gmpb=NPpg=zmqcauA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 4 Dec 2021 09:04:12 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiGbtmc+FoUjcgaQRavL=B=rfTmA_VhTtGpmhmk2873cA@mail.gmail.com>
-Message-ID: <CAHk-=wiGbtmc+FoUjcgaQRavL=B=rfTmA_VhTtGpmhmk2873cA@mail.gmail.com>
-Subject: Re: [GIT PULL] ACPI fixes for v5.16-rc3
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 26, 2021 at 11:38 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
->  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
->  acpi-5.16-rc3
+The gpio-aspeed driver implements an irq_chip which need to be invoked
+from hardirq context. Since spin_lock() can sleep with PREEMPT_RT, it is
+no longer legal to invoke it while interrupts are disabled.
+This also causes lockdep to complain about:
+[    0.649797] [ BUG: Invalid wait context ]
+because aspeed_gpio.lock (spin_lock_t) is taken under irq_desc.lock
+(raw_spinlock_t).
+Let's use of raw_spinlock_t instead of spinlock_t.
 
-Hmm. This may be unrelated, but I don't think I've seen this before..
-On my laptop, I get
+Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
+---
+ drivers/gpio/gpio-aspeed.c | 52 +++++++++++++++++++-------------------
+ 1 file changed, 26 insertions(+), 26 deletions(-)
 
-  WARNING: CPU: 4 PID: 95940 at kernel/workqueue.c:1441 __queue_work+0x2f9/0x3b0
-  Workqueue: kec_query acpi_ec_event_processor
-  ..
-  Call Trace:
-   <TASK>
-   queue_work_on+0x20/0x30
-   advance_transaction+0x1a1/0x500
-   acpi_ec_transaction+0x15c/0x410
-   acpi_ec_space_handler+0xd2/0x270
-   acpi_ev_address_space_dispatch+0x216/0x2a3
-   ? acpi_ec_resume+0x20/0x20
-   acpi_ex_access_region+0x1dc/0x255
-   ? acpi_os_wait_semaphore+0x48/0x70
-   acpi_ex_field_datum_io+0xfd/0x178
-   acpi_ex_read_data_from_field+0x12e/0x171
-   acpi_ex_resolve_node_to_value+0x1fe/0x281
-   acpi_ds_evaluate_name_path+0x75/0xe9
-   acpi_ds_exec_end_op+0x8f/0x411
-   acpi_ps_parse_loop+0x495/0x5bc
-   acpi_ps_parse_aml+0x94/0x2c2
-   acpi_ps_execute_method+0x15e/0x193
-   acpi_ns_evaluate+0x1c6/0x25d
-   acpi_evaluate_object+0x12e/0x226
-   acpi_ec_event_processor+0x63/0x90
-   process_one_work+0x217/0x3c0
+diff --git a/drivers/gpio/gpio-aspeed.c b/drivers/gpio/gpio-aspeed.c
+index 3c8f20c57695..318a7d95a1a8 100644
+--- a/drivers/gpio/gpio-aspeed.c
++++ b/drivers/gpio/gpio-aspeed.c
+@@ -53,7 +53,7 @@ struct aspeed_gpio_config {
+ struct aspeed_gpio {
+ 	struct gpio_chip chip;
+ 	struct irq_chip irqc;
+-	spinlock_t lock;
++	raw_spinlock_t lock;
+ 	void __iomem *base;
+ 	int irq;
+ 	const struct aspeed_gpio_config *config;
+@@ -413,14 +413,14 @@ static void aspeed_gpio_set(struct gpio_chip *gc, unsigned int offset,
+ 	unsigned long flags;
+ 	bool copro;
+ 
+-	spin_lock_irqsave(&gpio->lock, flags);
++	raw_spin_lock_irqsave(&gpio->lock, flags);
+ 	copro = aspeed_gpio_copro_request(gpio, offset);
+ 
+ 	__aspeed_gpio_set(gc, offset, val);
+ 
+ 	if (copro)
+ 		aspeed_gpio_copro_release(gpio, offset);
+-	spin_unlock_irqrestore(&gpio->lock, flags);
++	raw_spin_unlock_irqrestore(&gpio->lock, flags);
+ }
+ 
+ static int aspeed_gpio_dir_in(struct gpio_chip *gc, unsigned int offset)
+@@ -435,7 +435,7 @@ static int aspeed_gpio_dir_in(struct gpio_chip *gc, unsigned int offset)
+ 	if (!have_input(gpio, offset))
+ 		return -ENOTSUPP;
+ 
+-	spin_lock_irqsave(&gpio->lock, flags);
++	raw_spin_lock_irqsave(&gpio->lock, flags);
+ 
+ 	reg = ioread32(addr);
+ 	reg &= ~GPIO_BIT(offset);
+@@ -445,7 +445,7 @@ static int aspeed_gpio_dir_in(struct gpio_chip *gc, unsigned int offset)
+ 	if (copro)
+ 		aspeed_gpio_copro_release(gpio, offset);
+ 
+-	spin_unlock_irqrestore(&gpio->lock, flags);
++	raw_spin_unlock_irqrestore(&gpio->lock, flags);
+ 
+ 	return 0;
+ }
+@@ -463,7 +463,7 @@ static int aspeed_gpio_dir_out(struct gpio_chip *gc,
+ 	if (!have_output(gpio, offset))
+ 		return -ENOTSUPP;
+ 
+-	spin_lock_irqsave(&gpio->lock, flags);
++	raw_spin_lock_irqsave(&gpio->lock, flags);
+ 
+ 	reg = ioread32(addr);
+ 	reg |= GPIO_BIT(offset);
+@@ -474,7 +474,7 @@ static int aspeed_gpio_dir_out(struct gpio_chip *gc,
+ 
+ 	if (copro)
+ 		aspeed_gpio_copro_release(gpio, offset);
+-	spin_unlock_irqrestore(&gpio->lock, flags);
++	raw_spin_unlock_irqrestore(&gpio->lock, flags);
+ 
+ 	return 0;
+ }
+@@ -492,11 +492,11 @@ static int aspeed_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
+ 	if (!have_output(gpio, offset))
+ 		return GPIO_LINE_DIRECTION_IN;
+ 
+-	spin_lock_irqsave(&gpio->lock, flags);
++	raw_spin_lock_irqsave(&gpio->lock, flags);
+ 
+ 	val = ioread32(bank_reg(gpio, bank, reg_dir)) & GPIO_BIT(offset);
+ 
+-	spin_unlock_irqrestore(&gpio->lock, flags);
++	raw_spin_unlock_irqrestore(&gpio->lock, flags);
+ 
+ 	return val ? GPIO_LINE_DIRECTION_OUT : GPIO_LINE_DIRECTION_IN;
+ }
+@@ -539,14 +539,14 @@ static void aspeed_gpio_irq_ack(struct irq_data *d)
+ 
+ 	status_addr = bank_reg(gpio, bank, reg_irq_status);
+ 
+-	spin_lock_irqsave(&gpio->lock, flags);
++	raw_spin_lock_irqsave(&gpio->lock, flags);
+ 	copro = aspeed_gpio_copro_request(gpio, offset);
+ 
+ 	iowrite32(bit, status_addr);
+ 
+ 	if (copro)
+ 		aspeed_gpio_copro_release(gpio, offset);
+-	spin_unlock_irqrestore(&gpio->lock, flags);
++	raw_spin_unlock_irqrestore(&gpio->lock, flags);
+ }
+ 
+ static void aspeed_gpio_irq_set_mask(struct irq_data *d, bool set)
+@@ -565,7 +565,7 @@ static void aspeed_gpio_irq_set_mask(struct irq_data *d, bool set)
+ 
+ 	addr = bank_reg(gpio, bank, reg_irq_enable);
+ 
+-	spin_lock_irqsave(&gpio->lock, flags);
++	raw_spin_lock_irqsave(&gpio->lock, flags);
+ 	copro = aspeed_gpio_copro_request(gpio, offset);
+ 
+ 	reg = ioread32(addr);
+@@ -577,7 +577,7 @@ static void aspeed_gpio_irq_set_mask(struct irq_data *d, bool set)
+ 
+ 	if (copro)
+ 		aspeed_gpio_copro_release(gpio, offset);
+-	spin_unlock_irqrestore(&gpio->lock, flags);
++	raw_spin_unlock_irqrestore(&gpio->lock, flags);
+ }
+ 
+ static void aspeed_gpio_irq_mask(struct irq_data *d)
+@@ -629,7 +629,7 @@ static int aspeed_gpio_set_type(struct irq_data *d, unsigned int type)
+ 		return -EINVAL;
+ 	}
+ 
+-	spin_lock_irqsave(&gpio->lock, flags);
++	raw_spin_lock_irqsave(&gpio->lock, flags);
+ 	copro = aspeed_gpio_copro_request(gpio, offset);
+ 
+ 	addr = bank_reg(gpio, bank, reg_irq_type0);
+@@ -649,7 +649,7 @@ static int aspeed_gpio_set_type(struct irq_data *d, unsigned int type)
+ 
+ 	if (copro)
+ 		aspeed_gpio_copro_release(gpio, offset);
+-	spin_unlock_irqrestore(&gpio->lock, flags);
++	raw_spin_unlock_irqrestore(&gpio->lock, flags);
+ 
+ 	irq_set_handler_locked(d, handler);
+ 
+@@ -716,7 +716,7 @@ static int aspeed_gpio_reset_tolerance(struct gpio_chip *chip,
+ 
+ 	treg = bank_reg(gpio, to_bank(offset), reg_tolerance);
+ 
+-	spin_lock_irqsave(&gpio->lock, flags);
++	raw_spin_lock_irqsave(&gpio->lock, flags);
+ 	copro = aspeed_gpio_copro_request(gpio, offset);
+ 
+ 	val = readl(treg);
+@@ -730,7 +730,7 @@ static int aspeed_gpio_reset_tolerance(struct gpio_chip *chip,
+ 
+ 	if (copro)
+ 		aspeed_gpio_copro_release(gpio, offset);
+-	spin_unlock_irqrestore(&gpio->lock, flags);
++	raw_spin_unlock_irqrestore(&gpio->lock, flags);
+ 
+ 	return 0;
+ }
+@@ -856,7 +856,7 @@ static int enable_debounce(struct gpio_chip *chip, unsigned int offset,
+ 		return rc;
+ 	}
+ 
+-	spin_lock_irqsave(&gpio->lock, flags);
++	raw_spin_lock_irqsave(&gpio->lock, flags);
+ 
+ 	if (timer_allocation_registered(gpio, offset)) {
+ 		rc = unregister_allocated_timer(gpio, offset);
+@@ -916,7 +916,7 @@ static int enable_debounce(struct gpio_chip *chip, unsigned int offset,
+ 	configure_timer(gpio, offset, i);
+ 
+ out:
+-	spin_unlock_irqrestore(&gpio->lock, flags);
++	raw_spin_unlock_irqrestore(&gpio->lock, flags);
+ 
+ 	return rc;
+ }
+@@ -927,13 +927,13 @@ static int disable_debounce(struct gpio_chip *chip, unsigned int offset)
+ 	unsigned long flags;
+ 	int rc;
+ 
+-	spin_lock_irqsave(&gpio->lock, flags);
++	raw_spin_lock_irqsave(&gpio->lock, flags);
+ 
+ 	rc = unregister_allocated_timer(gpio, offset);
+ 	if (!rc)
+ 		configure_timer(gpio, offset, 0);
+ 
+-	spin_unlock_irqrestore(&gpio->lock, flags);
++	raw_spin_unlock_irqrestore(&gpio->lock, flags);
+ 
+ 	return rc;
+ }
+@@ -1015,7 +1015,7 @@ int aspeed_gpio_copro_grab_gpio(struct gpio_desc *desc,
+ 		return -EINVAL;
+ 	bindex = offset >> 3;
+ 
+-	spin_lock_irqsave(&gpio->lock, flags);
++	raw_spin_lock_irqsave(&gpio->lock, flags);
+ 
+ 	/* Sanity check, this shouldn't happen */
+ 	if (gpio->cf_copro_bankmap[bindex] == 0xff) {
+@@ -1036,7 +1036,7 @@ int aspeed_gpio_copro_grab_gpio(struct gpio_desc *desc,
+ 	if (bit)
+ 		*bit = GPIO_OFFSET(offset);
+  bail:
+-	spin_unlock_irqrestore(&gpio->lock, flags);
++	raw_spin_unlock_irqrestore(&gpio->lock, flags);
+ 	return rc;
+ }
+ EXPORT_SYMBOL_GPL(aspeed_gpio_copro_grab_gpio);
+@@ -1060,7 +1060,7 @@ int aspeed_gpio_copro_release_gpio(struct gpio_desc *desc)
+ 		return -EINVAL;
+ 	bindex = offset >> 3;
+ 
+-	spin_lock_irqsave(&gpio->lock, flags);
++	raw_spin_lock_irqsave(&gpio->lock, flags);
+ 
+ 	/* Sanity check, this shouldn't happen */
+ 	if (gpio->cf_copro_bankmap[bindex] == 0) {
+@@ -1074,7 +1074,7 @@ int aspeed_gpio_copro_release_gpio(struct gpio_desc *desc)
+ 		aspeed_gpio_change_cmd_source(gpio, bank, bindex,
+ 					      GPIO_CMDSRC_ARM);
+  bail:
+-	spin_unlock_irqrestore(&gpio->lock, flags);
++	raw_spin_unlock_irqrestore(&gpio->lock, flags);
+ 	return rc;
+ }
+ EXPORT_SYMBOL_GPL(aspeed_gpio_copro_release_gpio);
+@@ -1148,7 +1148,7 @@ static int __init aspeed_gpio_probe(struct platform_device *pdev)
+ 	if (IS_ERR(gpio->base))
+ 		return PTR_ERR(gpio->base);
+ 
+-	spin_lock_init(&gpio->lock);
++	raw_spin_lock_init(&gpio->lock);
+ 
+ 	gpio_id = of_match_node(aspeed_gpio_of_table, pdev->dev.of_node);
+ 	if (!gpio_id)
+-- 
+2.31.1
 
-and it seems to be happening at resume time.
-
-This was when running a51e3ac43ddb, so not the very latest git tree,
-but recent.
-
-Maybe I've missed a report of this?
-
-               Linus

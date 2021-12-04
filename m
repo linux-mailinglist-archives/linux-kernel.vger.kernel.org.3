@@ -2,89 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CAC946873B
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 20:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D81346873E
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 20:48:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349813AbhLDTtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 14:49:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46798 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349441AbhLDTte (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 14:49:34 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0365CC061751;
-        Sat,  4 Dec 2021 11:46:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=1Wx0sNFc4nRwhtP15w8D3y+GxIPogNNpQRDFakzYmm0=; b=hFNtobnXBDHvelC3AlP2yV1DEC
-        8lNkI+0+AhlngJ9q0LW3UGxj2Yns4Q6tC6ljiHqprE6kbnHOuIKoSsCFk2Q2qGM4fAmny9t8oHDo1
-        LAm4HAiOANCU1pjkYnpKZLz4jDNj8M6v6RGM2Y6UNLv2cCd4Cb+QKLCGNq8g3U8pOLpo=;
-Received: from p200300ccff382c001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff38:2c00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1mtayx-0006rL-SI; Sat, 04 Dec 2021 20:46:04 +0100
-Date:   Sat, 4 Dec 2021 20:46:02 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        robh+dt@kernel.org, alistair23@gmail.com,
-        dmitry.torokhov@gmail.com, linus.walleij@linaro.org,
-        rydberg@bitmath.org,
-        =?UTF-8?B?TXlsw6huZQ==?= Josserand <mylene.josserand@bootlin.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>
-Subject: Re: [PATCH v3 1/4] Input: Add driver for Cypress Generation 5
- touchscreen
-Message-ID: <20211204204602.58b6cc12@aktux>
-In-Reply-To: <20211202122021.43124-2-alistair@alistair23.me>
-References: <20211202122021.43124-1-alistair@alistair23.me>
-        <20211202122021.43124-2-alistair@alistair23.me>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S1350398AbhLDTwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 14:52:02 -0500
+Received: from mout.gmx.net ([212.227.15.15]:43059 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349441AbhLDTwB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 14:52:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1638647298;
+        bh=PrgmBUyfxqtpVy1lwWQb2aVCmUol9Hr5FDzh3x1bgZo=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=gL2YIDlIE6qQ3da8brSoJUDmy4jGsmbwJSXzZmtCheuUfzU/VVd4rHq4PzrLkNyOv
+         Kn+XCmJlaT5ymYQtUF5X+DZnwlxB1U2wGklfwMCr96yqfQFhKQOJGYuH0bV3oJcpbs
+         Fh3zqwBlYNVikW6/lfmK4o6J+8j+DO2eXZLeRJNo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MLzBj-1nAqv50woz-00Htgr; Sat, 04
+ Dec 2021 20:48:18 +0100
+Date:   Sat, 4 Dec 2021 20:48:16 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Joe Perches <joe@perches.com>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-riscv@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] MAINTAINERS: Sort entries using parse-maintainers.pl
+Message-ID: <YavGALvWdsW+BO9w@latitude>
+References: <20211204175255.1361385-1-j.neuschaefer@gmx.net>
+ <429227f33cf14aee6f0668a3d98aa220b54383d6.camel@perches.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ROvq4wnVg2ILd55W"
+Content-Disposition: inline
+In-Reply-To: <429227f33cf14aee6f0668a3d98aa220b54383d6.camel@perches.com>
+X-Provags-ID: V03:K1:Mfj+DDgT2I4N38q2aei8davRHgCE1wdFIJ1g8ujVKryRuGnw1/6
+ R3Q1MR/FfJJYbiNJJjCSvuFjAhMz16vQWesCPTP5qnvjRXVSTlqpZf//kOboyarVCfJ7YoL
+ RvOwyh/7qTvtQHEc7OhPyEsPKUlb3N3S0MzYPaBmXIXjL85tN/rdL0B1bTleNuDf0KEW4Lr
+ j/gZc4WBkWHxXkuRW93Lg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:hSSBK00JIFY=:Onp6Mv0JrmzhzTgrvwFgri
+ ohWVhm0yixQ+wnmPwzweulJ2DTav9xKEej9IKthN3yC3umPene19QmdkyMoOOx9bk7WojKPqg
+ 5S+Kq9LW1TOWlf5BpL4finTgF4MqTuF3oXVLfUg/5Fuql1RSFZvfztmvOJH2qN0/4EVBSP+Pe
+ 8XHdJph5hkXUlbGAyB0QvHJh+xFj7lPsC2Q6jbOuFBWOkgWY5Tno27J3ipAEdhvJdivck0NqD
+ 2JkNOBauKa+Sg/7gTe/fh60/Y2zbP+3v/ZJ4YMuMFc4tDjrIcAPa6Zw7SYZmJsUyZnhP/qZRP
+ nBlais9bZ2rhii82oSxy603GAq9K0GDjEiSvheyXTjlwtrUhrE6pmOFLpZvysnQtDepR5Ydke
+ xP6ENq3Yq+GIabRgLtyahNldGoLlJgBlsX8hCfcC15oWAnz8DqPWH1AhGKjw9JtiSC67V1nj2
+ DZQlLGZURRGsc1lRQ69evq22PNOiOY6v88d6EcNDm9dhheAS9BYlkIUi03FYQeClyQIG17K2A
+ j/suDLiekMC1Kol5VL7AE3BYcaDK/Y5xMs3SwBz3moeQXAPkHS/6voAuLBDM5dwYDaOgMJF7f
+ eAlQSif/RU/0++dR52m727m9xOf2Feh+2JTqjG3if/DI1ImQdTFP7jVpPEnOcJKU04QvCszMt
+ 6HYoqXeqvZNEFG5edNG6G04orVbZlLBFMzmh4N4iJtRBvbrlOlU4w2LrvpHHwNHdbTFCrY0qo
+ SIeGhKwl+Vd77jW8Ct4hdgs2AFe/YnOzDQWJA8QV4OxWFnBpbuSed+MO/tPYwEvpd364mSqLk
+ P3jiwz760GFWw+jgpRi3Z6qkdPoSq9C6BsaP5qB66OiCl5QTmSuJs2beDCdRloPXoSBPzuqoj
+ YHnbPNea4zPOd6jcaVcMm9zONaTh1UZwBqpTXdVkg8pa+3dygXIZHy24WSOJ6ySDjB0IabRsj
+ ctskX7idyGMhP0Rhvli/cu1OEBbChHMAkpF+kLnxSWpN5vXzdubeX34avFxr64WUPk3tumddy
+ ZwRZ6m6FjomXdzcduxLvXvWMGGSvbvXhSItt+i0Q2gFVgwzLY9CN5Fc8pCEJqsKU3oizEbEs8
+ kTV7TMz8WUPkm8=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Thu,  2 Dec 2021 22:20:18 +1000
-Alistair Francis <alistair@alistair23.me> wrote:
+--ROvq4wnVg2ILd55W
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +static int cyttsp5_setup_input_device(struct device *dev)
-> +{
-> +	struct cyttsp5 *ts = dev_get_drvdata(dev);
-> +	struct cyttsp5_sysinfo *si = &ts->sysinfo;
-> +	int max_x, max_y, max_p;
-> +	int max_x_tmp, max_y_tmp;
-> +	int error;
-> +
-> +	__set_bit(EV_REL, ts->input->evbit);
-> +
-> +	max_x_tmp = si->sensing_conf_data.res_x;
-> +	max_y_tmp = si->sensing_conf_data.res_y;
-> +	max_x = max_x_tmp - 1;
-> +	max_y = max_y_tmp - 1;
-> +	max_p = si->sensing_conf_data.max_z;
-> +
-> +	error = input_mt_init_slots(ts->input, si->tch_abs[CY_TCH_T].max,
-> +		INPUT_MT_DROP_UNUSED | INPUT_MT_POINTER);
-> +	if (error < 0)
-> +		return error;
-still some issues with X, sometimes it is even a mouse, depending on
-config.
-hmm, why is it INPUT_MT_POINTER and not INPUT_MT_DIRECT?
+On Sat, Dec 04, 2021 at 10:20:24AM -0800, Joe Perches wrote:
+> On Sat, 2021-12-04 at 18:52 +0100, Jonathan Neusch=C3=A4fer wrote:
+> > The MAINTAINERS file got slightly out of order again, making it
+> > difficult to put new entries at the right (alphabetical) position.
+> >=20
+> > Run parse-maintainers.pl to restore the alphabetical order.
+> []
+> > Checkpatch warns about a few unordered "F:" lines within sections, but I
+> > left those alone because I wanted this patch to be as automated as poss=
+ible.
+>=20
+> The --order option does that.
+>=20
+> $ ./scripts/parse-maintainers.pl --order --output MAINTAINERS
 
-#define INPUT_MT_POINTER        0x0001  /* pointer device, e.g. trackpad */
-#define INPUT_MT_DIRECT         0x0002  /* direct device, e.g. touchscreen */
+Ah, good point.
 
-Regards,
-Andreas
+Unfortunately, the result of parse-maintainers.pl --order currently
+produces a (small) merge conflict when merged/cherry-picked on top of
+-next, so it might be better to start without --order. (Not sure.)
+
+
+Jonathan
+
+--ROvq4wnVg2ILd55W
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmGrxcIACgkQCDBEmo7z
+X9tVJA//aISsE+7K0fQ3JOcW81DBxVamtjIVwDlgWZY4/GydoC2/Ixgyab2/SNX+
++sKYYtB1zlrkYtDQFG7UQ7b2dATpwntvZuLMM9j+MtZ9ZxXDmDZz52omGGlZlMIp
+XIVpoglmN9YTWOc0p2iCi2P9wMwdZSghfpjSBdzyp4iZ2OCYpI+Rzuo0Mh+sKpV2
+l5DTv8+kV9gjRgoQGNktF/grwyJZVF5tJqXex5rQg+cftse+cOi5/awVepvG6czD
+w7OrbVzbyt+/M47hI81XtnNsP3nTEXQW8fJsbEIeBpdP+OUwWtP+FI0et1Q4jnaG
+6I0+4xFZcg87jbD/2FpIuEyCvWiw1YBJ52nkfcOFTSjLkuBTdqGc+DmJbZrZEe52
+ZdSmN2l36IKA1Rw+quMe8eCNAI4eiSqtR8M+tar9ydhUxKBiCcVExpraEhXW5E4I
+jBJnzwxb3FFHopI97VhXvTTqdSxVov2cU7vDLoLdGz1LDQr8/ni6pMj8tCkLmYoj
+s3eQ5mdnb86hpObpkbRViFymzJPtxYq/pUzgz0JDubJhUjOVtvqixO+JkP2Uy1qP
+locYLqWcgHoJVXH5k9d6Sbo16FB3ZAPhDGO0mkQhVOHjr2zX/gbqIqeuXO86vSQ2
+IYDaxBZQBPLhgs5v0Na3yyFa51K9/706r+eJYCtvGPboGUwFUx4=
+=7ALR
+-----END PGP SIGNATURE-----
+
+--ROvq4wnVg2ILd55W--

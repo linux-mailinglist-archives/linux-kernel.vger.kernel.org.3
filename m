@@ -2,75 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94CF6468545
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 15:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE7D46854A
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 15:16:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385172AbhLDOQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 09:16:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385162AbhLDOQa (ORCPT
+        id S1385185AbhLDOUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 09:20:07 -0500
+Received: from gateway24.websitewelcome.com ([192.185.50.252]:20871 "EHLO
+        gateway24.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1385174AbhLDOUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 09:16:30 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF431C061751
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 06:13:04 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id m6so11916286oim.2
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 06:13:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=yLwatZiT4SVEKTvY8N+iFzmHoRw4ES5HD0ZbBaXfMt8=;
-        b=QC7S6nIZ5ZB7WgZkL4ELTo6ERxNpAbWm3lbMHUu0kMEsyEO8rVD7QBoVfSqjir5Tgw
-         OQIU39I5uoWI/SLkK1+aN/iH4U7AaUCNpw8mLWgkN6R1mz3InS8TJI2U7HoLLShZDP0X
-         WFuGDbrDBxZ0PfuhKy/FSBlGtFcJE+STqS6TW+TYgBoWMeHF4fYtvKWbvsQdxpTu4PPz
-         36ZVDJO3Q2C/tRtPq9x/uNgVEOlv7a9DRbbxvNOHs0lgbQQKFr/5SKdgbmMTXckUtjQF
-         brl/9CMhjHctT3ohE4XuWb3usFPhbb71F8i26FxhnLZ+BRwIkV/UMMXeYWmYFvWbzcd6
-         UQqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=yLwatZiT4SVEKTvY8N+iFzmHoRw4ES5HD0ZbBaXfMt8=;
-        b=vRsKGOL4nTByNVp50QBAAnAEw2lW7eRAVmP37t5eLc2kFwcSIhlMp6z/67/Q9bmxbx
-         abwcU79Cq+J0iC2S2iMYocwumLxlzLE4csltBzF4jPFKvOE/7tlJ+nG5Pv1sc5zjeyo8
-         XEjTdXqXDMeIlz6IDzDte+RZGpkMTOFIMzQktO/OkAR62c6/loUcB0H/Q7ZueA5EQo+u
-         bSygXqC5IopcMKqLYpGPBgrwLRT68nJVmNYmB2RJjeBHTGurvVbWKxZUQcEKReSyV+Ja
-         Ggbi0mHkPUorQFZNwww1KYSvp70g+kxB5f3kkJrePze3dMeiDk13aoH0xw1wzi+OIe82
-         HSCg==
-X-Gm-Message-State: AOAM531wmMjez/ie94d6/0RvuM7e6AXB51jLxEjU1ZSI4sX97NtAm0+Z
-        G6SmI8/fajX/MWxkNSBgFXhubIfx8GHXg08m5os=
-X-Google-Smtp-Source: ABdhPJzedpn0QezEgFZkhFICzzYiYXALDlV55Dadk6rRF67AQQThXxFfB9TmvBV/F3Xb9LMAxnH9TMHHHMMJS9G8j1s=
-X-Received: by 2002:a54:4418:: with SMTP id k24mr15162493oiw.23.1638627184178;
- Sat, 04 Dec 2021 06:13:04 -0800 (PST)
+        Sat, 4 Dec 2021 09:20:06 -0500
+Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
+        by gateway24.websitewelcome.com (Postfix) with ESMTP id 8AE2FEFC9
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 08:16:38 -0600 (CST)
+Received: from gator4132.hostgator.com ([192.185.4.144])
+        by cmsmtp with SMTP
+        id tVqAmbEaklpqdtVqAmHW5Z; Sat, 04 Dec 2021 08:16:38 -0600
+X-Authority-Reason: nr=8
+Received: from host-79-34-250-122.business.telecomitalia.it ([79.34.250.122]:59996 helo=[10.0.0.166])
+        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <bristot@kernel.org>)
+        id 1mtVq9-0022Oy-3q; Sat, 04 Dec 2021 08:16:37 -0600
+Message-ID: <858068da-0b2c-36f0-3ac0-9d223863ea28@kernel.org>
+Date:   Sat, 4 Dec 2021 15:16:31 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:6838:ac0c:0:0:0:0 with HTTP; Sat, 4 Dec 2021 06:13:03
- -0800 (PST)
-Reply-To: mmjanee02@gmail.com
-From:   Mary Jane Kallon <maurmbama1@gmail.com>
-Date:   Sat, 4 Dec 2021 06:13:03 -0800
-Message-ID: <CAD2nLk7gFiDW4HQ4fVsffROY=vdPOB89o3W=PC+LB3=3+fZSqA@mail.gmail.com>
-Subject: HAPPY WEEKEND
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH V8 00/14] RTLA: An interface for osnoise/timerlat tracers
+Content-Language: en-US
+To:     Tao Zhou <tao.zhou@linux.dev>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        John Kacur <jkacur@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1638182284.git.bristot@kernel.org>
+ <YatsNcmqxnMZ5ONS@geo.homenetwork>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <YatsNcmqxnMZ5ONS@geo.homenetwork>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - kernel.org
+X-BWhitelist: no
+X-Source-IP: 79.34.250.122
+X-Source-L: No
+X-Exim-ID: 1mtVq9-0022Oy-3q
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: host-79-34-250-122.business.telecomitalia.it ([10.0.0.166]) [79.34.250.122]:59996
+X-Source-Auth: kernel@bristot.me
+X-Email-Count: 1
+X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
+X-Local-Domain: no
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Dear,
-How are you doing today? I got your contact from a directory and
-picked interest to communicate you by faith, though we have not met
-before, I believe we can achieve something together. My husband died
-few years ago after battling with brain cancer, before his death, he
-deposited ($10.5 Million) in one of the financial institution. He
-wanted to establish coco processing factory and also real estate
-business.
+On 12/4/21 14:25, Tao Zhou wrote:
+> On Mon, Nov 29, 2021 at 12:07:38PM +0100, Daniel Bristot de Oliveira wrote:
+> 
+>> The rtla(1) is a meta-tool that includes a set of commands that
+>> aims to analyze the real-time properties of Linux. But instead of
+>> testing Linux as a black box, rtla leverages kernel tracing
+>> capabilities to provide precise information about the properties
+>> and root causes of unexpected results.
+>>
+>> To start, it presents an interface to the osnoise and timerlat tracers.
+>> In the future, it will also serve as home to the rtsl [1] and other
+>> latency/noise tracers.
+>>
+>> If you just want to run it, you can download the tarball here:
+>>   - https://bristot.me/files/rtla/tarball/rtla-0.4.tar.bz2
+>>
+>> To compile rtla on fedora you need:
+>>   $ git clone git://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git
+>>   $ cd libtraceevent/
+>>   $ make
+>>   $ sudo make install
+>>   $ cd ..
+>>   $ git clone git://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git
+>>   $ cd libtracefs/
+>>   $ make
+>>   $ sudo make install
+>>   $ cd ..
+>>   $ sudo dnf install python3-docutils procps-devel
+>>   $ cd $rtla_src
+>>   $ make
+>>   $ sudo make install
+> 
+> Set osnoise/x to DEADLINE, the return is not success. see:
+> 
+> tao@geo ~/opensource/rtla-0.4 $ sudo rtla osnoise top -P d:100us:1ms -c 0-3 -r 900000 -d 1M -q
+> boost_with_deadline failed to boost pid 4766: Operation not permitted
+> Failed to set sched parameters
 
-After the death of my husband, I have been receiving all manner of
-life threats from the family members, now the pressure is getting more
-severe I decided to leave this country. Please can you partner with me
-and receive the fund in your account while I come over there with my
-son for investment. If you  agree, get back for more details and what
-will be your commission for the assistance. I wait for your reply,
-Mary Jane Kallon
+Did you disable the admission control?
+
+e.g.,
+
+  $ sudo sysctl -w kernel.sched_rt_runtime_us=-1
+
+-- Daniel

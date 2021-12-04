@@ -2,136 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95EB8468239
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 05:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F44468245
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 05:42:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377139AbhLDEM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 23:12:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbhLDEM6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 23:12:58 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE68C061751
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 20:09:33 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id p18so3888124wmq.5
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 20:09:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4tpeccUSJsSvJStEMWbp4Kpifv0i5piggQ5Q0bjyTPA=;
-        b=lQqC1ucSfqkj6ErW6i6uVxmWz2Ddcj3w7qmEBbovctdRbp6rkD8Isid4VbPDf/gYRB
-         S4fALxLnn2HH2WUSaWcfzPi0Bcp1APHkcJDJQmWE9mZc0+cQiA/JFjYcw3fWKFMQm6AQ
-         kNl1YijqrzJcfR+rs72T/qAn54aVsry59XOHTvSO5fWlaBoeGC0tBvrwef0jF+nJ9wLO
-         JFmgqQKq0IGiXBVXJCvSuO53PAu+MYoVl4QbB2dzlP/QMviEzORW+TiHHpZ4riRf/Ro2
-         k5LzXNu9OT1TxUb6voyzJ4mqBSupe9ggvCUnzvNZqCvfmDqpfT5oMgAtUHbG0L2iBUWh
-         pRKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4tpeccUSJsSvJStEMWbp4Kpifv0i5piggQ5Q0bjyTPA=;
-        b=lkqpoocuh+Ffq3YXdomnuAup6QRGuMS7253uaRWDcEoh3WhrjjKaHeEI2+sN9qMKWv
-         +aZ3+BkVb6todPW/TXezw3xnGE934CH7xdAE3w+m/PQ7XZ3ZBCCzcrvCAS3Hl7ipIhLl
-         M24p5ASQdokxDTjaYX1+mB8XhzcRRz6HmUJVMmgYK/fQv6YQB6iaT8TirNSqzBmehtl9
-         fNPRVbSQ3NQ/tWfHKiimOUSk35lDPlYytciIovZgicl9w64Zx0tfHp4oh6gyU3MZLnnP
-         6uN9BeLNAsU+d1NUlXQmgQd7BKY4W4LnMpJvg2MSqaqOOEqR2J+nS8QdlBAzlvWieLIf
-         sxGg==
-X-Gm-Message-State: AOAM530ox5HZs9eDCxTEJTmb7J/3uP26rJAGbjoXHYl3trTqeAk88467
-        JkIAasiCa4CaUkGWlFJWq/j/GRiNlNVvnZlDAuNze4mWYJiTgg==
-X-Google-Smtp-Source: ABdhPJw51KWA7sJPb31HUd4HOH4EkxzkMBiXdbkuk+r3buWjXUnh3vSsgBHiqTq5ETSkoyKshmo70CmljLiANghRt8w=
-X-Received: by 2002:a7b:c256:: with SMTP id b22mr20250612wmj.176.1638590971589;
- Fri, 03 Dec 2021 20:09:31 -0800 (PST)
+        id S1377361AbhLDEqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 23:46:00 -0500
+Received: from mga14.intel.com ([192.55.52.115]:31155 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233688AbhLDEp7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 23:45:59 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="237319527"
+X-IronPort-AV: E=Sophos;i="5.87,286,1631602800"; 
+   d="scan'208";a="237319527"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 20:42:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,286,1631602800"; 
+   d="scan'208";a="656479297"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 03 Dec 2021 20:42:31 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mtMsY-000ITh-Tg; Sat, 04 Dec 2021 04:42:30 +0000
+Date:   Sat, 4 Dec 2021 12:41:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lizhi Hou <lizhi.hou@xilinx.com>, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Lizhi Hou <lizhi.hou@xilinx.com>,
+        linux-fpga@vger.kernel.org, maxz@xilinx.com,
+        sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
+        stefanos@xilinx.com, devicetree@vger.kernel.org, trix@redhat.com
+Subject: Re: [PATCH V3 XRT Alveo Infrastructure 3/8] of: create empty of root
+Message-ID: <202112041242.HCDtTlb5-lkp@intel.com>
+References: <20211204003957.1448567-4-lizhi.hou@xilinx.com>
 MIME-Version: 1.0
-References: <20211202235823.1926970-1-atishp@atishpatra.org> <f63e9f1b-4b8e-6c3e-8e21-f9a5f97ca17d@arm.com>
-In-Reply-To: <f63e9f1b-4b8e-6c3e-8e21-f9a5f97ca17d@arm.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Sat, 4 Dec 2021 09:39:20 +0530
-Message-ID: <CAAhSdy2xRwUmdi7Kc7ZokgB5W1LWKZ7YU-doHZ5dfaVKvzRdUg@mail.gmail.com>
-Subject: Re: [PATCH v3] MAINTAINERS: Update Atish's email address
-To:     Steven Price <steven.price@arm.com>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        KVM General <kvm@vger.kernel.org>,
-        kvm-riscv@lists.infradead.org,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211204003957.1448567-4-lizhi.hou@xilinx.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 9:40 PM Steven Price <steven.price@arm.com> wrote:
->
-> On 02/12/2021 23:58, Atish Patra wrote:
-> > I am no longer employed by western digital. Update my email address to
-> > personal one and add entries to .mailmap as well.
-> >
-> > Signed-off-by: Atish Patra <atishp@atishpatra.org>
-> > ---
-> >  .mailmap    | 1 +
-> >  MAINTAINERS | 2 +-
-> >  2 files changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/.mailmap b/.mailmap
-> > index 6277bb27b4bf..23f6b0a60adf 100644
-> > --- a/.mailmap
-> > +++ b/.mailmap
-> > @@ -50,6 +50,7 @@ Archit Taneja <archit@ti.com>
-> >  Ard Biesheuvel <ardb@kernel.org> <ard.biesheuvel@linaro.org>
-> >  Arnaud Patard <arnaud.patard@rtp-net.org>
-> >  Arnd Bergmann <arnd@arndb.de>
-> > +Atish Patra <atishp@atishpatra.org> <atish.patra@wdc.com> <atishp@rivosinc.com>
->
-> I don't think this does what you expect. You can't list more than one
-> email address to replace on the same line. You can use the command "git
-> check-mailmap" to test what happens, e.g. with this change applied:
->
->   $ git check-mailmap "<atishp@rivosinc.com>"
->   <atishp@rivosinc.com>
->   $ git check-mailmap "<atish.patra@wdc.com>"
->   Atish Patra <atishp@atishpatra.org>
->   $ git check-mailmap "<atishp@atishpatra.org>"
->   <atishp@atishpatra.org>
->
-> So only your @wdc.com address is translated. If you want to translate
-> the @rivosinc.com address as well you need a second line. As the file says:
+Hi Lizhi,
 
-Thanks Steve for noticing this. Even, I realized this while queuing the patch.
+I love your patch! Yet something to improve:
 
-I have removed @rivosinc.com email address from the patch in my queue. I
-believe Atish currently uses both personal and @rivosinc.com email addresses
-on LKML.
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linux/master linus/master v5.16-rc3 next-20211203]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Refer,
-https://github.com/kvm-riscv/linux/commit/2255b100410179bb8151e99e8396debddea0ef1d
-https://github.com/kvm-riscv/linux/commits/riscv_kvm_queue
+url:    https://github.com/0day-ci/linux/commits/Lizhi-Hou/XRT-Alveo-driver-infrastructure-overview/20211204-084333
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: nds32-allnoconfig (https://download.01.org/0day-ci/archive/20211204/202112041242.HCDtTlb5-lkp@intel.com/config)
+compiler: nds32le-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/1b36c19ebc303a293dff82ed399ea70bf4ddde50
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Lizhi-Hou/XRT-Alveo-driver-infrastructure-overview/20211204-084333
+        git checkout 1b36c19ebc303a293dff82ed399ea70bf4ddde50
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash drivers/of/
 
-Regards,
-Anup
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> # For format details, see "MAPPING AUTHORS" in "man git-shortlog".
->
-> Steve
->
-> >  Axel Dyks <xl@xlsigned.net>
-> >  Axel Lin <axel.lin@gmail.com>
-> >  Bart Van Assche <bvanassche@acm.org> <bart.vanassche@sandisk.com>
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 5250298d2817..6c2a34da0314 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -10434,7 +10434,7 @@ F:    arch/powerpc/kvm/
-> >
-> >  KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)
-> >  M:   Anup Patel <anup.patel@wdc.com>
-> > -R:   Atish Patra <atish.patra@wdc.com>
-> > +R:   Atish Patra <atishp@atishpatra.org>
-> >  L:   kvm@vger.kernel.org
-> >  L:   kvm-riscv@lists.infradead.org
-> >  L:   linux-riscv@lists.infradead.org
-> >
->
+All errors (new ones prefixed by >>):
+
+   drivers/of/fdt.c: In function 'of_fdt_root_init':
+>> drivers/of/fdt.c:505:14: error: implicit declaration of function 'of_resolve_phandles'; did you mean 'of_parse_phandle'? [-Werror=implicit-function-declaration]
+     505 |         rc = of_resolve_phandles(dt);
+         |              ^~~~~~~~~~~~~~~~~~~
+         |              of_parse_phandle
+   cc1: some warnings being treated as errors
+
+
+vim +505 drivers/of/fdt.c
+
+   468	
+   469	static int __init of_fdt_root_init(void)
+   470	{
+   471		struct device_node *dt = NULL, *np;
+   472		void *fdt, *fdt_aligned;
+   473		int size, rc;
+   474	
+   475	#if !defined(CONFIG_OF_UNITTEST)
+   476		if (of_root)
+   477			return 0;
+   478	#endif
+   479		size = __dtb_fdt_default_end - __dtb_fdt_default_begin;
+   480	
+   481		fdt = kmalloc(size + FDT_ALIGN_SIZE, GFP_KERNEL);
+   482		if (!fdt)
+   483			return -ENOMEM;
+   484	
+   485		fdt_aligned = PTR_ALIGN(fdt, FDT_ALIGN_SIZE);
+   486		memcpy(fdt_aligned, __dtb_fdt_default_begin, size);
+   487	
+   488		if (!of_fdt_unflatten_tree((const unsigned long *)fdt_aligned,
+   489					   NULL, &dt)) {
+   490			pr_warn("%s: unflatten default tree failed\n", __func__);
+   491			kfree(fdt);
+   492			return -ENODATA;
+   493		}
+   494		if (!dt) {
+   495			pr_warn("%s: empty default tree\n", __func__);
+   496			kfree(fdt);
+   497			return -ENODATA;
+   498		}
+   499	
+   500		/*
+   501		 * This lock normally encloses of_resolve_phandles()
+   502		 */
+   503		of_overlay_mutex_lock();
+   504	
+ > 505		rc = of_resolve_phandles(dt);
+   506		if (rc) {
+   507			pr_err("%s: Failed to resolve phandles (rc=%i)\n", __func__, rc);
+   508			of_overlay_mutex_unlock();
+   509			return -EINVAL;
+   510		}
+   511	
+   512		if (!of_root) {
+   513			of_root = dt;
+   514			for_each_of_allnodes(np)
+   515				__of_attach_node_sysfs(np);
+   516			of_aliases = of_find_node_by_path("/aliases");
+   517			of_chosen = of_find_node_by_path("/chosen");
+   518			of_overlay_mutex_unlock();
+   519			return 0;
+   520		}
+   521	
+   522		unittest_data_add(dt);
+   523	
+   524		of_overlay_mutex_unlock();
+   525	
+   526		return 0;
+   527	}
+   528	pure_initcall(of_fdt_root_init);
+   529	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

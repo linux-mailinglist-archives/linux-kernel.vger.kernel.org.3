@@ -2,123 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3148A4683AC
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B454683B1
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384506AbhLDJmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 04:42:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
+        id S1384475AbhLDJoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 04:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384511AbhLDJmL (ORCPT
+        with ESMTP id S244166AbhLDJoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 04:42:11 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11FDC061751;
-        Sat,  4 Dec 2021 01:38:45 -0800 (PST)
+        Sat, 4 Dec 2021 04:44:11 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D83C061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 01:40:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=rYta9gPwuaVvMDMj1SLe7iAQbRnQu1U6Lp/ngUwMtJU=; b=uU1yR8SjvptWkMxfjLOVVkRM+b
-        p/FRdejrX42VNZl5uqo3HG+U2BsZ5DiJnrLcwTZv3lShRLai1yw73PiT13m1BMUrhTexAt1PZHYer
-        3Lje0RFAb0IwOOkEckbX4vMmc3rXu2arr9AcIcbJcVrd9Uy129ivqAQK30+PaaHLDvnhPbGrnIS7K
-        nl65DBIcxFvj6MA7Drivm9+iik9cZr7mCtdzfrh+0JQ8YswpAToohKNcCP0CDHsACLPlYBqaznjwg
-        ifMjoczMhnFeFhey5ZFLUlyiIesJzt/+g0FYXpouTx1hytlslB4ZDxspZlCQdoBroE31j64N0S7L6
-        x4QaVtSQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56048)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1mtRV9-0003C4-FX; Sat, 04 Dec 2021 09:38:39 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1mtRV8-0002IW-Md; Sat, 04 Dec 2021 09:38:38 +0000
-Date:   Sat, 4 Dec 2021 09:38:38 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] net: mdio: rework mdio_uevent for mdio ethernet
- phy device
-Message-ID: <Yas3HpT59X4dnXCg@shell.armlinux.org.uk>
-References: <1638609208-10339-1-git-send-email-zhuyinbo@loongson.cn>
- <1638609208-10339-2-git-send-email-zhuyinbo@loongson.cn>
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CabEUrityYp5BqyqfatQFaxjhKlMnkTqu2pZZbvUMEk=; b=LxkOzDTQ+yQe6sujWoUvEVScr/
+        mTYeWVmNtgi/2VKdHIfPq/gTWx/O3CbjN0x7ttlzoOduneN92hrep9zrqCfmEFLt6LP5+vNruFpNH
+        FXqSQcGspCq2LYgNAWa3lARUPx1mLSaeFqMOMJLNv/0nBGS8Vr04M5JV3ExYgDE6Q7cJaUM2f61xQ
+        mc9xT2h8q2OUSD++cqusWLvP851wKk9M9TIkWpWXhnzEOj+3NqQ+AHUMfXpILK6bqiFZaz+E80Dv7
+        vh3Yl1aomvxaseyBXrtNitF6VcM6FjdFTgqum1LEsZPoMjGr1HenkX/q1fvK9rAYz2BZzKwJJvE4T
+        2l8ZIsgg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mtRX6-00CTor-En; Sat, 04 Dec 2021 09:40:41 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 816D998106D; Sat,  4 Dec 2021 10:40:40 +0100 (CET)
+Date:   Sat, 4 Dec 2021 10:40:40 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Vincent Donnefort <vincent.donnefort@arm.com>
+Cc:     mingo@redhat.com, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        valentin.schneider@arm.com
+Subject: Re: [PATCH v3] sched/fair: Fix per-CPU kthread and wakee stacking
+ for asym CPU capacity
+Message-ID: <20211204094040.GN16608@worktop.programming.kicks-ass.net>
+References: <20211129173115.4006346-1-vincent.donnefort@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1638609208-10339-2-git-send-email-zhuyinbo@loongson.cn>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <20211129173115.4006346-1-vincent.donnefort@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 04, 2021 at 05:13:28PM +0800, Yinbo Zhu wrote:
-> The of_device_uevent_modalias is service for 'of' type platform driver
-> , which ask the first args must be 'of' that use MODULE_DEVICE_TABLE
-> when driver was exported, but ethernet phy is a kind of 'mdio' type
-> device and it is inappropriate if driver use 'of' type for exporting,
-> in fact, most mainstream ethernet phy driver hasn't used 'of' type,
-> even though phy driver was exported use 'of' type and it's irrelevant
-> with mdio_uevent, at this time, platform_uevent was responsible for
-> reporting uevent to match modules.alias configure, so, whatever that
-> of_device_uevent_modalias was unnecessary, this patch was to remove it
-> and add phy_id as modio uevent then ethernet phy module auto load
-> function will work well.
+On Mon, Nov 29, 2021 at 05:31:15PM +0000, Vincent Donnefort wrote:
+> select_idle_sibling() has a special case for tasks woken up by a per-CPU
+> kthread where the selected CPU is the previous one. For asymmetric CPU
+> capacity systems, the assumption was that the wakee couldn't have a
+> bigger utilization during task placement than it used to have during the
+> last activation. That was not considering uclamp.min which can completely
+> change between two task activations and as a consequence mandates the
+> fitness criterion asym_fits_capacity(), even for the exit path described
+> above.
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> Fixes: b4c9c9f15649 ("sched/fair: Prefer prev cpu in asymmetric wakeup path")
+> Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+> Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
+> Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 
-NAK.
-
-> ---
-> 
->  drivers/net/phy/mdio_bus.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
-> index 6865d93..999f0d4 100644
-> --- a/drivers/net/phy/mdio_bus.c
-> +++ b/drivers/net/phy/mdio_bus.c
-> @@ -962,12 +962,12 @@ static int mdio_bus_match(struct device *dev, struct device_driver *drv)
->  
->  static int mdio_uevent(struct device *dev, struct kobj_uevent_env *env)
->  {
-> -	int rc;
-> +	struct phy_device *pdev;
->  
-> -	/* Some devices have extra OF data and an OF-style MODALIAS */
-> -	rc = of_device_uevent_modalias(dev, env);
-> -	if (rc != -ENODEV)
-> -		return rc;
-> +	pdev = to_phy_device(dev);
-> +
-> +	if (add_uevent_var(env, "MODALIAS=mdio:p%08X", pdev->phy_id))
-> +		return -ENOMEM;
->  
->  	return 0;
->  }
-> @@ -991,7 +991,7 @@ static int mdio_uevent(struct device *dev, struct kobj_uevent_env *env)
->  };
->  
->  struct bus_type mdio_bus_type = {
-> -	.name		= "mdio_bus",
-> +	.name		= "mdio",
->  	.dev_groups	= mdio_bus_dev_groups,
->  	.match		= mdio_bus_match,
->  	.uevent		= mdio_uevent,
-> -- 
-> 1.8.3.1
-> 
-> 
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Thanks!

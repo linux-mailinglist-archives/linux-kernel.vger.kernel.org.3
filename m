@@ -2,676 +2,519 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F169468165
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:40:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A017146815F
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:39:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383832AbhLDAn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 19:43:57 -0500
-Received: from mail-mw2nam12on2068.outbound.protection.outlook.com ([40.107.244.68]:20289
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1383817AbhLDAnz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 19:43:55 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BUWD8NNIqhkV3VVaiFfSFgwZ+88gWuTfSxyklSvSh/cullLkR8wd6XzEDmyUGLpOS5nD1UhKG7PpJn/YjuE10t8SBoCJzEvehnQLc2IjuUlOGUVDhfOlzkM2OwPpWQC0ZFzsL4HhSofQr5ccsSQvQf8RVY6xDWztAX0TdSEs0sJkDHUcXMhhJBWKCUb6MnjuXyF81pgqndKheuu7Ad0F4x/wRRjCQS8cvHWkR/rd5gUSvq/TJlSChnKpgKgaojLSNmHeh1/qwTE7NlQN1xCn8dPzdTaBGzesL/vyTs4py6AKou2xSmvPjj+/cUD5bcFtsjjYFF1RV6dGb8+eKWTXgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+n6r7W3TPGDH7Ay8PmUJGY+wlppbFthoFxtNRG2cJ2I=;
- b=lISBvN7IZaRfTt9/8NJJajkL9nW8tZWZH9qRGyjinamdphBTBBE6m355BvqtjfquTvxk4kgrS5AN7kFmJCEMpYxNeXbN9Ke9yoXZX4dZnbnsH4nTSSUC8LXjqLO5LGGNwEEN+FPbh939BFfRVbo8df3K+5k40EVAGjMErG3zTURgRQ5mgPa2Vnt/prd+G6Luz+Sn1IprBz2i0bg9fvBSnHi0G075Vyzcm2i8X567GuibHjbp7vXcScLXX9UY0SK8JtFQuvSwvGfrYD2S6MbqjaCCsJj3S+3OEQqIy8DxMV1I8vbh9MaSVyMPEGMzj3Mc/LHKgLHNPnkvb4RqRIzBww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=infradead.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
+        id S1383810AbhLDAnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 19:43:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354411AbhLDAnS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 19:43:18 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBBFC061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 16:39:53 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id bj13so9065256oib.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 16:39:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+n6r7W3TPGDH7Ay8PmUJGY+wlppbFthoFxtNRG2cJ2I=;
- b=OcptePEAKyxJH2O2mfDhGSGUmWC2Alystx8uk+ypM1OOOAuQ67gwZj9CH6NW/RVr50QBTcDlrRDABJE9xuglLtcqLSVI8Churg6HttFxgG08NoGuo/aetgApWGk5u5p0nZ88llbSV8IrZYqtc4C7uaOSvpNwj3v2BXLq/c50/D4=
-Received: from BN6PR1101CA0002.namprd11.prod.outlook.com
- (2603:10b6:405:4a::12) by SJ0PR02MB8452.namprd02.prod.outlook.com
- (2603:10b6:a03:3f9::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Sat, 4 Dec
- 2021 00:40:28 +0000
-Received: from BN1NAM02FT008.eop-nam02.prod.protection.outlook.com
- (2603:10b6:405:4a:cafe::52) by BN6PR1101CA0002.outlook.office365.com
- (2603:10b6:405:4a::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.17 via Frontend
- Transport; Sat, 4 Dec 2021 00:40:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT008.mail.protection.outlook.com (10.13.2.126) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4755.13 via Frontend Transport; Sat, 4 Dec 2021 00:40:28 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Fri, 3 Dec 2021 16:40:27 -0800
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Fri, 3 Dec 2021 16:40:27 -0800
-Envelope-to: dwmw2@infradead.org,
- mdf@kernel.org,
- robh@kernel.org,
- trix@redhat.com,
- devicetree@vger.kernel.org,
- linux-fpga@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Received: from [172.19.72.93] (port=55512 helo=xsj-xw9400.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <lizhi.hou@xilinx.com>)
-        id 1mtJ6I-000DVb-Ts; Fri, 03 Dec 2021 16:40:26 -0800
-Received: by xsj-xw9400.xilinx.com (Postfix, from userid 21952)
-        id 39EC760084E; Fri,  3 Dec 2021 16:40:01 -0800 (PST)
-From:   Lizhi Hou <lizhi.hou@xilinx.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-fpga@vger.kernel.org>,
-        <maxz@xilinx.com>, <sonal.santan@xilinx.com>, <yliu@xilinx.com>,
-        <michal.simek@xilinx.com>, <stefanos@xilinx.com>,
-        <devicetree@vger.kernel.org>, <trix@redhat.com>, <mdf@kernel.org>,
-        <robh@kernel.org>, <dwmw2@infradead.org>,
-        Max Zhen <max.zhen@xilinx.com>
-Subject: [PATCH V3 XRT Alveo Infrastructure 1/8] Documentation: fpga: Add a document describing XRT Alveo driver infrastructure
-Date:   Fri, 3 Dec 2021 16:39:50 -0800
-Message-ID: <20211204003957.1448567-2-lizhi.hou@xilinx.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211204003957.1448567-1-lizhi.hou@xilinx.com>
-References: <20211204003957.1448567-1-lizhi.hou@xilinx.com>
+        d=kali.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6CTGWOJj33TbulfanFz3rqoqcXrsGW03hcSOMWhm314=;
+        b=FDXgLoedqqqlHKiundq7+LUsj5n6C2jNRFvwHiQ+BWnO/HGra5MEmej1Op+sNWpYkb
+         QJ7SbRSQ17+Ywx7KW+uIBJY4XCoUWXjtqUc9po7+VB4Y8pCKVpOBzOReH4FIdFsChUeU
+         hjVPTRF/dxykhzfSa/3ujFIARnFh32H1z6jkUCbz1vpgpfzvK14jxOQwpcJposrPcPzx
+         S46FYZhdV5ESq88Iy3ZbOL7vnoo7vtjUe8phPA2/UbIp3Xt2bqg7iihn8H7PmCKrkJMY
+         Wydwf6tS46lYPHgEPXGFMu+aRKA2Fbw1jCpzCzBnwElv6W8sKEtFZEXlrybHYR+7oY6j
+         M1Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6CTGWOJj33TbulfanFz3rqoqcXrsGW03hcSOMWhm314=;
+        b=2wudnZX7dCi/Q99+A99UuNBc0mJB3z5sgixPSuAcfPV+R/PA9+A5jihPdfWiMhtQyx
+         PH2l5wsQzmwjQ4Gx8mOlU8XVWfcbw2K/F9VdBGPaijSPso+HCuF40DLbngkEN+WpiykN
+         5FXhhM4YD3IzKcLSN/ETIZerCKcHmpH6Kdht9end7vWT2Jq1oDSDZmF3QI0O7tEN3B5u
+         0T9UqWmI4dh+PW7R4534N33h+HzvmFC4qKqPBraFGsbJQU/143arRuRJif9VOiwfG8DM
+         cmFgC/RtWaDlX9SLWdPaU0OsrFZfI71e08c66bJU4Yxz+htTadMPyHR3N5QCTMcKHKqe
+         RZYA==
+X-Gm-Message-State: AOAM530UgCnJk7X1LJ46lzMnRjlxWoiyOxbUYKPI9tQEdZAkR9KnQgHF
+        Pp5/vPsWik8U5jkziqI7yY+ViA==
+X-Google-Smtp-Source: ABdhPJwSLwNd3ieqEdRIjGzhp0qxGW1x6Z9p7l/jWYwmHL510J79atRWdIOHK3VrfGzaBBlh9bCkpQ==
+X-Received: by 2002:a05:6808:1381:: with SMTP id c1mr12347552oiw.129.1638578392617;
+        Fri, 03 Dec 2021 16:39:52 -0800 (PST)
+Received: from [192.168.11.48] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
+        by smtp.gmail.com with ESMTPSA id s26sm1048794oiw.19.2021.12.03.16.39.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 16:39:52 -0800 (PST)
+Message-ID: <9f9ad753-a97c-b11c-4b8b-5ddad0508e0e@kali.org>
+Date:   Fri, 3 Dec 2021 18:39:50 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [PATCH] clk: qcom: rcg2: Cache rate changes for parked RCGs
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Amit Nischal <anischal@codeaurora.org>,
+        Taniya Das <tdas@codeaurora.org>
+Cc:     dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211203035601.3505780-1-bjorn.andersson@linaro.org>
+From:   Steev Klimaszewski <steev@kali.org>
+In-Reply-To: <20211203035601.3505780-1-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 282908ca-226e-4b2b-3d07-08d9b6beab60
-X-MS-TrafficTypeDiagnostic: SJ0PR02MB8452:
-X-Microsoft-Antispam-PRVS: <SJ0PR02MB8452568688652FCE069A9579A16B9@SJ0PR02MB8452.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eRXpsIlf23XKHkXQksNKnaXTcjTOWQ8LNBny1cRTiaV7uDPW7zbsUEaoRCgu5B6ANBygUrwlBQTHPN6Pyyil66btjW9bmYYI51AQUvvNNdrcXLZzxRFD3PDrXZg3YW6+kTstWwl4bmmyvuVoA3d/NOjj7W7+R7dI3EP7DMm5s+MF6YwHwC97RtDl/JmSg2NdXCw+MNjidVjw05EXe/wgvsij2ax3v9LoUhIECAwmtzXvzYbkmRgd4sYObc0TPAgdRCg4MDggeUkdIz2hwfk0Qw5E16nENkNF7XJfJywOqEm/zceLZyoA5lnkUUpqGfH0oyjKgSkkvsM9N8iep15yJNiXQEy6yt44Y6SrnXgZBzTBDV+DpgJN8E4EkQBtmWEdm8duoZFUxOSX/UIw+9adJsBiYBjWiC0yd+2WKW1cUn/ppqHM68j2yeKsIlnfkWhRW6WTsolGi/6/DKv/VJFyxEdewSYKUo3qlW2jD9l+xc2bBqA2vbH7JOoHYW/8b2ZM9oZD5p+xYQx8CQBIFZIvjEI0m9JsQKy9TYu3c5WNC+qgCW2zll0/nT3+lvnb/IfTkvSXvGTpua+lyYz1dlUaxpV5jcLeLRcQ5h2x+Xyofhidm3VdzTznBnevRBmfZiHPMq64SUHtcjcksuabj9wPMU3GSdDgZxLZqoKLT84GKzmt5easghUd7E4aiTzH4JPadeWSsMibVHcRWLpq/5sgqpGz8d+Qnsteylj0cK7wXQFNyy4MIOgQ3A4MWQg/ZXithge9HcprReAi6BE6SHGCMtNLInKdjksrK2xfujzhG5uCkBxSj8sJeDt1qhVTAPM7fbDhx5WBgh5an/wNgDTivQ==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(36840700001)(46966006)(426003)(47076005)(44832011)(4326008)(336012)(36860700001)(70206006)(6916009)(30864003)(107886003)(70586007)(5660300002)(54906003)(186003)(6666004)(2616005)(508600001)(42186006)(7636003)(1076003)(83380400001)(316002)(2906002)(8676002)(26005)(82310400004)(6266002)(966005)(8936002)(356005)(36756003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Dec 2021 00:40:28.3638
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 282908ca-226e-4b2b-3d07-08d9b6beab60
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT008.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB8452
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe XRT driver architecture and provide basic overview of
-Xilinx Alveo platform.
 
-Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
-Signed-off-by: Max Zhen <max.zhen@xilinx.com>
-Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
----
- Documentation/fpga/index.rst |   1 +
- Documentation/fpga/xrt.rst   | 510 +++++++++++++++++++++++++++++++++++
- MAINTAINERS                  |  10 +
- 3 files changed, 521 insertions(+)
- create mode 100644 Documentation/fpga/xrt.rst
+On 12/2/21 9:56 PM, Bjorn Andersson wrote:
+> As GDSCs are turned on and off some associated clocks are momentarily
+> enabled for house keeping purposes. Failure to enable these clocks seems
+> to have been silently ignored in the past, but starting in SM8350 this
+> failure will prevent the GDSC to turn on.
+>
+> At least on SM8350 this operation will enable the RCG per the
+> configuration in CFG_REG. This means that the current model where the
+> current configuration is written back to CF_REG immediately after
+> parking the RCG doesn't work.
+>
+> Instead, keep track of the currently requested rate of the clock and
+> upon enabling the clock reapply the configuration per the saved rate.
+>
+> Fixes: 7ef6f11887bd ("clk: qcom: Configure the RCGs to a safe source as needed")
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>   drivers/clk/qcom/clk-rcg.h  |  2 ++
+>   drivers/clk/qcom/clk-rcg2.c | 32 +++++++++++++++++---------------
+>   2 files changed, 19 insertions(+), 15 deletions(-)
+>
+> <snip patch>
 
-diff --git a/Documentation/fpga/index.rst b/Documentation/fpga/index.rst
-index f80f95667ca2..30134357b70d 100644
---- a/Documentation/fpga/index.rst
-+++ b/Documentation/fpga/index.rst
-@@ -8,6 +8,7 @@ fpga
-     :maxdepth: 1
- 
-     dfl
-+    xrt
- 
- .. only::  subproject and html
- 
-diff --git a/Documentation/fpga/xrt.rst b/Documentation/fpga/xrt.rst
-new file mode 100644
-index 000000000000..323ded5c0f4a
---- /dev/null
-+++ b/Documentation/fpga/xrt.rst
-@@ -0,0 +1,510 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==================================
-+XRTV2 Linux Kernel Driver Overview
-+==================================
-+
-+Authors:
-+
-+* Sonal Santan <sonal.santan@xilinx.com>
-+* Max Zhen <max.zhen@xilinx.com>
-+* Lizhi Hou <lizhi.hou@xilinx.com>
-+
-+XRTV2 drivers are second generation `XRT <https://github.com/Xilinx/XRT>`_
-+drivers which support `Alveo <https://www.xilinx.com/products/boards-and-kits/alveo.html>`_
-+PCIe platforms from Xilinx.
-+
-+XRTV2 drivers support *subsystem* style data driven platforms where driver's
-+configuration and behavior are determined by metadata provided by the platform
-+(in *device tree* format). Primary management physical function (MPF) driver
-+is called **xrt-mgmt**. Primary user physical function (UPF) driver is called
-+**xrt-user** and is under development. xrt_driver framework and FPGA subsystem
-+drivers are packaged into a library module called **xrt-lib**, which is shared
-+by **xrt-mgmt** and **xrt-user** (under development). The xrt_driver framework
-+implements a ``bus_type`` called **xrt_bus_type** which is used to discover HW
-+subsystems and facilitate inter HW subsystem interaction.
-+
-+Driver Modules
-+==============
-+
-+xrt-lib.ko
-+----------
-+
-+xrt-lib is the repository of xrt drivers and pure software modules that can
-+potentially be shared between xrt-mgmt and xrt-user. All these drivers are
-+structured as **xrt_driver** and are instantiated by xrt-mgmt (or xrt-user under
-+development) based on the metadata associated with the hardware.  The metadata
-+is in the form of a device tree as mentioned before.
-+
-+xrt-lib relies on OF kernel APIs to unflatten the metadata and overlay the
-+unflattened device tree nodes to system device tree. In xrt-lib module initialization
-+routine, "/xrt-bus" is created in system device tree, all XRT device
-+tree nodes and properties will be under "/xrt-bus".
-+
-+The xrt-lib infrastructure provides hooks to xrt_drivers for device node
-+management, user file operations and ioctl callbacks. The core infrastructure also
-+provides a bus functionality called **xrt_bus_type** for xrt_driver registration,
-+discovery and inter xrt_driver calls. xrt-lib does not have any dependency on PCIe
-+subsystem.
-+
-+xrt-mgmt.ko
-+------------
-+
-+The xrt-mgmt driver is a PCIe device driver driving MPF found on Xilinx's Alveo
-+PCIe device. It creates one or more *group* device and one or more *xleaf* device.
-+The group and xleaf drivers are in xrt-lib and instantiations of the xrt_driver but
-+are called group and xleaf to symbolize the logical operation performed by them.
-+
-+The xrt-mgmt driver uses xrt-lib APIs to manages the life cycle of multiple group
-+drivers, which, in turn, manages multiple xleaf drivers. This flexibility allows
-+xrt-mgmt.ko and xrt-lib.ko to support various HW subsystems exposed by different
-+Alveo shells. The differences among these Alveo shells is handled in xleaf drivers.
-+The group driver is part of the infrastructure which provides common services to xleaf
-+drivers found on various Alveo shells. See :ref:`alveo_platform_overview`.
-+
-+The instantiation of specific group driver or xleaf drivers is completely data
-+driven based on metadata (mostly in device tree format) found through VSEC
-+capability and inside the firmware files, such as platform xsabin or user xclbin
-+file.
-+
-+
-+Driver Object Model
-+===================
-+
-+The driver object model looks like the following::
-+
-+                              +-----------+
-+                              |  of root  |
-+                              +-----+-----+
-+                                    |
-+                          +---------+---------+
-+                          |                   |
-+                    +-----------+        +----------+
-+                    |  xrt-bus  |        |   ...    |
-+                    +-----+-----+        +----------+
-+                          |
-+              +-----------+-----------+
-+              |                       |
-+              v                       v
-+        +-----------+          +-----------+
-+        |   group   |    ...   |   group   |
-+        +-----+-----+          +------+----+
-+              |                       |
-+              |                       |
-+        +-----+----+            +-----+----+
-+        |          |            |          |
-+        v          v            v          v
-+    +-------+  +-------+    +-------+  +-------+
-+    | xleaf |..| xleaf |    | xleaf |..| xleaf |
-+    +-------+  +-------+    +-------+  +-------+
-+
-+As an example, for Xilinx Alveo U50 before user xclbin download, the tree
-+looks like the following::
-+
-+                                +-----------+
-+                                |  xrt-bus  |
-+                                +-----+-----+
-+                                      |
-+            +-------------------------+--------------------+
-+            |                         |                    |
-+            v                         v                    v
-+       +--------+                +--------+            +--------+
-+       | group0 |                | group1 |            | group2 |
-+       +----+---+                +----+---+            +---+----+
-+            |                         |                    |
-+            |                         |                    |
-+      +-----+-----+        +----+-----+---+    +-----+-----+----+--------+
-+      |           |        |    |         |    |     |          |        |
-+      v           v        |    v         v    |     v          v        |
-+ +------------+  +------+  | +------+ +------+ |  +------+ +-----------+ |
-+ | xmgmt_main |  | VSEC |  | | GPIO | | QSPI | |  |  CMC | | AXI-GATE0 | |
-+ +------------+  +------+  | +------+ +------+ |  +------+ +-----------+ |
-+                           | +---------+       |  +------+ +-----------+ |
-+                           +>| MAILBOX |       +->| ICAP | | AXI-GATE1 |<+
-+                             +---------+       |  +------+ +-----------+
-+                                               |  +-------+
-+                                               +->| CALIB |
-+                                                  +-------+
-+
-+After a xclbin is downloaded, group3 will be added and the tree looks like the
-+following::
-+
-+                                +-----------+
-+                                |  xrt-bus  |
-+                                +-----+-----+
-+                                      |
-+            +-------------------------+--------------------+-----------------+
-+            |                         |                    |                 |
-+            v                         v                    v                 |
-+       +--------+                +--------+            +--------+            |
-+       | group0 |                | group1 |            | group2 |            |
-+       +----+---+                +----+---+            +---+----+            |
-+            |                         |                    |                 |
-+            |                         |                    |                 |
-+      +-----+-----+       +-----+-----+---+    +-----+-----+----+--------+   |
-+      |           |       |     |         |    |     |          |        |   |
-+      v           v       |     v         v    |     v          v        |   |
-+ +------------+  +------+ | +------+ +------+  |  +------+ +-----------+ |   |
-+ | xmgmt_main |  | VSEC | | | GPIO | | QSPI |  |  |  CMC | | AXI-GATE0 | |   |
-+ +------------+  +------+ | +------+ +------+  |  +------+ +-----------+ |   |
-+                          | +---------+        |  +------+ +-----------+ |   |
-+                          +>| MAILBOX |        +->| ICAP | | AXI-GATE1 |<+   |
-+                            +---------+        |  +------+ +-----------+     |
-+                                               |  +-------+                  |
-+                                               +->| CALIB |                  |
-+                                                  +-------+                  |
-+                      +---+----+                                             |
-+                      | group3 |<--------------------------------------------+
-+                      +--------+
-+                          |
-+                          |
-+     +-------+--------+---+--+--------+------+-------+
-+     |       |        |      |        |      |       |
-+     v       |        v      |        v      |       v
-+ +--------+  |   +--------+  |   +--------+  |    +-----+
-+ | CLOCK0 |  |   | CLOCK1 |  |   | CLOCK2 |  |    | UCS |
-+ +--------+  v   +--------+  v   +--------+  v    +-----+
-+ +-------------+ +-------------+ +-------------+
-+ | CLOCK-FREQ0 | | CLOCK-FREQ1 | | CLOCK-FREQ2 |
-+ +-------------+ +-------------+ +-------------+
-+
-+
-+group
-+-----
-+
-+The group driver represents a pseudo device whose life cycle is managed by
-+root and does not have real IO mem or IRQ resources. It's part of the
-+infrastructure of the MPF driver and resides in xrt-lib.ko. This driver
-+
-+* manages one or more xleaf drivers
-+* handle requests from xleaf drivers. For example event notifications and
-+  inter xleaf calls.
-+
-+In xrt-mgmt, an initial group driver instance will be created by the PCIe driver.
-+This instance contains xleaf drivers that will trigger group instances to be
-+created to manage groups of xleaf drivers found on different partitions of
-+hardware, such as VSEC, Shell, and User.
-+
-+xleaf
-+-----
-+
-+The xleaf driver is a xrt_driver whose life cycle is managed by
-+a group driver and may or may not have real IO mem or IRQ resources. They
-+manage HW subsystems they are attached to.
-+
-+A xleaf driver without real hardware resources manages in-memory states for
-+xrt-mgmt. These states are shareable by other xleaf drivers.
-+
-+Xleaf drivers assigned to specific hardware resources drive a specific subsystem
-+in the device. To manipulate the subsystem or carry out a task, a xleaf driver
-+may ask for help from the root via root calls and/or from other leaves via
-+inter xleaf calls.
-+
-+A xleaf can also broadcast events through infrastructure code for other leaves
-+to process. It can also receive event notification from infrastructure about
-+certain events, such as post-creation or pre-exit of a particular xleaf.
-+
-+xrt_bus_type
-+------------
-+
-+xrt_bus_type defines a virtual bus which handles xrt_driver probe, remove and match
-+operations. All xrt_drivers register with xrt_bus_type as part of xrt-lib driver
-+``module_init`` and un-register as part of xrt-lib driver ``module_exit``.
-+
-+FPGA Manager Interaction
-+========================
-+
-+fpga_manager
-+------------
-+
-+An instance of fpga_manager is created by xmgmt_main and is used for xclbin
-+image download. fpga_manager requires the full xclbin image before it can
-+start programming the FPGA configuration engine via Internal Configuration
-+Access Port (ICAP) xrt_driver.
-+
-+fpga_region
-+-----------
-+
-+For every interface exposed by the currently loaded xclbin/xsabin in the
-+*parent* fpga_region a new instance of fpga_region is created like a *child*
-+fpga_region. The device tree of the *parent* fpga_region defines the
-+resources for a new instance of fpga_bridge which isolates the parent from
-+child fpga_region. This new instance of fpga_bridge will be used when a
-+xclbin image is loaded on the child fpga_region. After the xclbin image is
-+downloaded to the fpga_region, an instance of a group is created for the
-+fpga_region using the device tree obtained as part of the xclbin. If this
-+device tree defines any child interfaces, it can trigger the creation of
-+fpga_bridge and fpga_region for the next region in the chain.
-+
-+fpga_bridge
-+-----------
-+
-+Like the fpga_region, an fpga_bridge is created by walking the device tree
-+of the parent group. The bridge is used for isolation between a parent and
-+its child.
-+
-+Driver Interfaces
-+=================
-+
-+xrt-mgmt Driver Ioctls
-+----------------------
-+
-+Ioctls exposed by the xrt-mgmt driver to user space are enumerated in the
-+following table:
-+
-+== ===================== ============================ ==========================
-+#  Functionality         ioctl request code            data format
-+== ===================== ============================ ==========================
-+1  FPGA image download   XMGMT_IOCICAPDOWNLOAD_AXLF    xmgmt_ioc_bitstream_axlf
-+== ===================== ============================ ==========================
-+
-+A user xclbin can be downloaded by using the xbmgmt tool from the XRT open source
-+suite. See example usage below::
-+
-+  xbmgmt partition --program --path /lib/firmware/xilinx/862c7020a250293e32036f19956669e5/test/verify.xclbin --force
-+
-+.. _alveo_platform_overview:
-+
-+Alveo Platform Overview
-+=======================
-+
-+Alveo platforms are architected as two physical FPGA partitions: *Shell* and
-+*User*. The Shell provides basic infrastructure for the Alveo platform like
-+PCIe connectivity, board management, Dynamic Function Exchange (DFX), sensors,
-+clocking, reset, and security. DFX, partial reconfiguration, is responsible for
-+loading the user compiled FPGA binary.
-+
-+For DFX to work properly, physical partitions require strict HW compatibility
-+with each other. Every physical partition has two interface UUIDs: the *parent*
-+UUID and the *child* UUID. For simple single stage platforms, Shell → User forms
-+the parent child relationship.
-+
-+.. note::
-+   Partition compatibility matching is a key design component of the Alveo platforms
-+   and XRT. Partitions have child and parent relationship. A loaded partition
-+   exposes child partition UUID to advertise its compatibility requirement. When
-+   loading a child partition, the xrt-mgmt driver matches the parent
-+   UUID of the child partition against the child UUID exported by the parent.
-+   The parent and child partition UUIDs are stored in the *xclbin* (for the user)
-+   and the *xsabin* (for the shell). Except for the root UUID exported by VSEC,
-+   the hardware itself does not know about the UUIDs. The UUIDs are stored in
-+   xsabin and xclbin. The image format has a special node called Partition UUIDs
-+   which define the compatibility UUIDs.
-+
-+
-+The physical partitions and their loading are illustrated below::
-+
-+           SHELL                               USER
-+        +-----------+                  +-------------------+
-+        |           |                  |                   |
-+        | VSEC UUID | CHILD     PARENT |    LOGIC UUID     |
-+        |           o------->|<--------o                   |
-+        |           | UUID       UUID  |                   |
-+        +-----+-----+                  +--------+----------+
-+              |                                 |
-+              .                                 .
-+              |                                 |
-+          +---+---+                      +------+--------+
-+          |  POR  |                      | USER COMPILED |
-+          | FLASH |                      |    XCLBIN     |
-+          +-------+                      +---------------+
-+
-+
-+Loading Sequence
-+----------------
-+
-+The Shell partition is loaded from flash at system boot time. It establishes the
-+PCIe link and exposes two physical functions to the BIOS. After the OS boots,
-+the xrt-mgmt driver attaches to the PCIe physical function 0 exposed by the Shell
-+and then looks for VSEC in the PCIe extended configuration space. Using VSEC, it
-+determines the logic UUID of the Shell and uses the UUID to load matching *xsabin*
-+file from Linux firmware directory. The xsabin file contains the metadata to
-+discover the peripherals that are part of the Shell and the firmware for any
-+embedded soft processors in the Shell. The xsabin file also contains Partition
-+UUIDs.
-+
-+The Shell exports a child interface UUID which is used for the compatibility
-+check when loading the user compiled xclbin over the User partition as part of DFX.
-+When a user requests loading of a specific xclbin, the xrt-mgmt driver reads
-+the parent interface UUID specified in the xclbin and matches it with the child
-+interface UUID exported by the Shell to determine if the xclbin is compatible with
-+the Shell. If the match fails, loading of xclbin is denied.
-+
-+xclbin loading is requested using the ICAP_DOWNLOAD_AXLF ioctl command. When loading
-+a xclbin, the xrt-mgmt driver performs the following *logical* operations:
-+
-+1. Copy xclbin from user to kernel memory
-+2. Sanity check the xclbin contents
-+3. Isolate the User partition
-+4. Download the bitstream using the FPGA config engine (ICAP)
-+5. De-isolate the User partition
-+6. Program the clocks (ClockWiz) driving the User partition
-+7. Wait for the memory controller (MIG) calibration
-+8. Return the loading status back to the caller
-+
-+`Platform Loading Overview <https://xilinx.github.io/XRT/master/html/platforms_partitions.html>`_
-+provides more detailed information on platform loading.
-+
-+
-+xsabin
-+------
-+
-+Each Alveo platform comes packaged with its own xsabin. The xsabin is a trusted
-+component of the platform. For format details refer to :ref:`xsabin_xclbin_container_format`
-+below. xsabin contains basic information like UUIDs, platform name and metadata in the
-+form of device tree. See :ref:`device_tree_usage` below for details and example.
-+
-+xclbin
-+------
-+
-+xclbin is compiled by end user using
-+`Vitis <https://www.xilinx.com/products/design-tools/vitis/vitis-platform.html>`_
-+tool set from Xilinx. The xclbin contains sections describing user compiled
-+acceleration engines/kernels, memory subsystems, clocking information etc. It also
-+contains an FPGA bitstream for the user partition, UUIDs, platform name, etc.
-+
-+
-+.. _xsabin_xclbin_container_format:
-+
-+xsabin/xclbin Container Format
-+------------------------------
-+
-+xclbin/xsabin is ELF-like binary container format. It is structured as series of
-+sections. There is a file header followed by several section headers which is
-+followed by sections. A section header points to an actual section. There is an
-+optional signature at the end. The format is defined by the header file ``xclbin.h``.
-+The following figure illustrates a typical xclbin::
-+
-+
-+           +---------------------+
-+           |                     |
-+           |       HEADER        |
-+           +---------------------+
-+           |   SECTION  HEADER   |
-+           |                     |
-+           +---------------------+
-+           |         ...         |
-+           |                     |
-+           +---------------------+
-+           |   SECTION  HEADER   |
-+           |                     |
-+           +---------------------+
-+           |       SECTION       |
-+           |                     |
-+           +---------------------+
-+           |         ...         |
-+           |                     |
-+           +---------------------+
-+           |       SECTION       |
-+           |                     |
-+           +---------------------+
-+           |      SIGNATURE      |
-+           |      (OPTIONAL)     |
-+           +---------------------+
-+
-+
-+xclbin/xsabin files can be packaged, un-packaged and inspected using an XRT
-+utility called **xclbinutil**. xclbinutil is part of the XRT open source
-+software stack. The source code for xclbinutil can be found at
-+https://github.com/Xilinx/XRT/tree/master/src/runtime_src/tools/xclbinutil
-+
-+For example, to enumerate the contents of a xclbin/xsabin use the *--info* switch
-+as shown below::
-+
-+
-+  xclbinutil --info --input /opt/xilinx/firmware/u50/gen3x16-xdma/blp/test/bandwidth.xclbin
-+  xclbinutil --info --input /lib/firmware/xilinx/862c7020a250293e32036f19956669e5/partition.xsabin
-+
-+
-+.. _device_tree_usage:
-+
-+Device Tree Usage
-+-----------------
-+
-+The xsabin file stores metadata which advertise HW subsystems present in a
-+partition. The metadata is stored in device tree format with a well defined
-+schema. XRT management driver uses this information to create *xrt_devices* and
-+bind *xrt_drivers* to them. The xrt_drivers could be independent modules or
-+found in **xrt-lib.ko** kernel module.
-+
-+Deployment Models
-+=================
-+
-+Baremetal
-+---------
-+
-+In bare-metal deployments, both MPF and UPF are visible and accessible. The
-+xrt-mgmt driver binds to MPF. The xrt-mgmt driver operations are privileged and
-+available to system administrator. The full stack is illustrated below::
-+
-+                            HOST
-+
-+               [XRT-MGMT]         [XRT-USER]
-+                    |                  |
-+                    |                  |
-+                 +-----+            +-----+
-+                 | MPF |            | UPF |
-+                 |     |            |     |
-+                 | PF0 |            | PF1 |
-+                 +--+--+            +--+--+
-+          ......... ^................. ^..........
-+                    |                  |
-+                    |   PCIe DEVICE    |
-+                    |                  |
-+                 +--+------------------+--+
-+                 |         SHELL          |
-+                 |                        |
-+                 +------------------------+
-+                 |         USER           |
-+                 |                        |
-+                 |                        |
-+                 |                        |
-+                 |                        |
-+                 +------------------------+
-+
-+
-+
-+Virtualized
-+-----------
-+
-+In virtualized deployments, the privileged MPF is assigned to the host but the
-+unprivileged UPF is assigned to a guest VM via PCIe pass-through. The xrt-mgmt
-+driver in host binds to MPF. The xrt-mgmt driver operations are privileged and
-+only accessible to the MPF. The full stack is illustrated below::
-+
-+
-+                                 ..............
-+                  HOST           .    VM      .
-+                                 .            .
-+               [XRT-MGMT]        . [XRT-USER] .
-+                    |            .     |      .
-+                    |            .     |      .
-+                 +-----+         .  +-----+   .
-+                 | MPF |         .  | UPF |   .
-+                 |     |         .  |     |   .
-+                 | PF0 |         .  | PF1 |   .
-+                 +--+--+         .  +--+--+   .
-+          ......... ^................. ^..........
-+                    |                  |
-+                    |   PCIe DEVICE    |
-+                    |                  |
-+                 +--+------------------+--+
-+                 |         SHELL          |
-+                 |                        |
-+                 +------------------------+
-+                 |         USER           |
-+                 |                        |
-+                 |                        |
-+                 |                        |
-+                 |                        |
-+                 +------------------------+
-+
-+
-+
-+
-+
-+Platform Security Considerations
-+================================
-+
-+`Security of Alveo Platform <https://xilinx.github.io/XRT/master/html/security.html>`_
-+discusses the deployment options and security implications in great detail.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 80eebc1d9ed5..fd7053bcfdb0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7369,6 +7369,16 @@ F:	Documentation/fpga/
- F:	drivers/fpga/
- F:	include/linux/fpga/
- 
-+FPGA XRT DRIVERS
-+M:	Lizhi Hou <lizhi.hou@xilinx.com>
-+R:	Max Zhen <max.zhen@xilinx.com>
-+R:	Sonal Santan <sonal.santan@xilinx.com>
-+L:	linux-fpga@vger.kernel.org
-+S:	Supported
-+W:	https://github.com/Xilinx/XRT
-+F:	Documentation/fpga/xrt.rst
-+F:	drivers/fpga/xrt/
-+
- FPU EMULATOR
- M:	Bill Metzenthen <billm@melbpc.org.au>
- S:	Maintained
--- 
-2.27.0
+With this applied, I'm getting
+
+[   28.404134] ------------[ cut here ]------------
+[   28.404448] video_cc_venus_clk_src: rcg didn't update its configuration.
+[   28.405500] WARNING: CPU: 7 PID: 372 at 
+drivers/clk/qcom/clk-rcg2.c:122 update_config+0xd0/0xe0
+[   28.405999] Modules linked in: snd_timer(+) snd hci_uart(+) soundcore 
+btqca btrtl venus_core(+) btbcm v4l2_mem2mem videobuf2_v4l2 btintel 
+bluetooth videobuf2_common videodev mc ecdh_generic hid_multitouch(+) 
+ecc ath10k_snoc ath10k_core qcom_rng ath mac80211 qcom_q6v5_mss libarc4 
+cfg80211 rfkill sg qcom_wdt qcom_q6v5_pas evdev slim_qcom_ngd_ctrl qrtr 
+qcom_pil_info pdr_interface qcom_q6v5 slimbus qcom_sysmon rmtfs_mem 
+tcp_bbr sch_fq fuse configfs ip_tables x_tables autofs4 ext4 mbcache 
+jbd2 panel_simple rtc_pm8xxx msm llcc_qcom ocmem ti_sn65dsi86 
+drm_dp_aux_bus gpu_sched drm_kms_helper drm camcc_sdm845 ipa qcom_common 
+qmi_helpers mdt_loader gpio_keys pwm_bl
+[   28.407149] CPU: 7 PID: 372 Comm: systemd-udevd Not tainted 5.15.6 #45
+[   28.407175] Hardware name: LENOVO 81JL/LNVNB161216, BIOS 
+9UCN33WW(V2.06) 06/ 4/2019
+[   28.407212] pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS 
+BTYPE=--)
+[   28.407243] pc : update_config+0xd0/0xe0
+[   28.407261] lr : update_config+0xd0/0xe0
+[   28.407265] sp : ffff800010833620
+[   28.407268] x29: ffff800010833620 x28: ffffd0c345fa7000 x27: 
+ffffd0c345fa7a80
+[   28.407274] x26: ffff2ed90222e100 x25: 0000000005f5e100 x24: 
+0000000000000000
+[   28.407288] x23: ffffd0c2fdc80cd0 x22: ffff2ed9092480c8 x21: 
+ffffd0c345852bb0
+[   28.407293] x20: ffffd0c34615a9d0 x19: 0000000000000000 x18: 
+ffffd0c346209900
+[   28.407305] x17: ffffd0c346209918 x16: ffffd0c344f7c4d0 x15: 
+00000000000500a8
+[   28.407309] x14: 0000000000000000 x13: 2e6e6f6974617275 x12: 
+6769666e6f632073
+[   28.407314] x11: ffffffffffff56a0 x10: ffffffffffff5658 x9 : 
+ffffd0c34499b66c
+[   28.407329] x8 : 00000000ffffefff x7 : ffffd0c34602b0a8 x6 : 
+0000000000017ce0
+[   28.407333] x5 : ffff2eda737e5a48 x4 : ffff800010833460 x3 : 
+0000000000000001
+[   28.407338] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 
+ffff2ed90aa6e740
+[   28.407378] Call trace:
+[   28.407425]  update_config+0xd0/0xe0
+[   28.407429]  clk_rcg2_shared_enable+0x74/0xb4
+[   28.407471]  clk_core_enable+0x78/0x220
+[   28.407536]  clk_core_enable+0x58/0x220
+[   28.407540]  clk_enable+0x38/0x60
+[   28.407544]  core_clks_enable+0xd8/0x160 [venus_core]
+[   28.408358]  core_power_v4+0xe0/0x150 [venus_core]
+[   28.408419]  venus_runtime_resume+0x70/0x90 [venus_core]
+[   28.408451]  pm_generic_runtime_resume+0x38/0x50
+[   28.408538]  __rpm_callback+0x50/0x1b0
+[   28.408570]  rpm_callback+0x74/0x80
+[   28.408588]  rpm_resume+0x618/0x8b0
+[   28.408595]  __pm_runtime_resume+0x4c/0xa4
+[   28.408599]  venus_probe+0x2f8/0x4d0 [venus_core]
+[   28.408616]  platform_probe+0x74/0xf0
+[   28.408693]  really_probe+0xc4/0x470
+[   28.408722]  __driver_probe_device+0x11c/0x190
+[   28.408729]  driver_probe_device+0x48/0x110
+[   28.408734]  __driver_attach+0xd8/0x1f0
+[   28.408738]  bus_for_each_dev+0x7c/0xe0
+[   28.408814]  driver_attach+0x30/0x40
+[   28.408816]  bus_add_driver+0x154/0x250
+[   28.408820]  driver_register+0x84/0x140
+[   28.408823]  __platform_driver_register+0x34/0x40
+[   28.408841]  qcom_venus_driver_init+0x30/0x1000 [venus_core]
+[   28.408857]  do_one_initcall+0x50/0x240
+[   28.408955]  do_init_module+0x60/0x270
+[   28.409106]  load_module+0x2050/0x2460
+[   28.409109]  __do_sys_finit_module+0xa8/0x114
+[   28.409130]  __arm64_sys_finit_module+0x2c/0x3c
+[   28.409139]  invoke_syscall+0x50/0x120
+[   28.409272]  el0_svc_common.constprop.0+0xdc/0x100
+[   28.409295]  do_el0_svc+0x34/0xa0
+[   28.409307]  el0_svc+0x28/0x80
+[   28.409426]  el0t_64_sync_handler+0xa4/0x130
+[   28.409430]  el0t_64_sync+0x1a0/0x1a4
+[   28.409453] ---[ end trace f08b1f47ee3d43ed ]---
+
+
+And a blank screen - it seems similar to the "blue" screen that I see 
+every few reboots, however this time, closing the lid and letting it 
+suspend and then waking back up by opening it up - during the suspend, 
+we get:
+
+[  141.357919] ldo1: Underflow of regulator enable count
+[  141.357940] Failed to disable vdds: -EINVAL
+[  141.606278] ------------[ cut here ]------------
+[  141.606368] disp_cc_mdss_ahb_clk already disabled
+[  141.607229] WARNING: CPU: 3 PID: 1277 at drivers/clk/clk.c:952 
+clk_core_disable+0x1dc/0x1f4
+[  141.607470] Modules linked in: rfcomm xt_conntrack aes_ce_ccm 
+nft_chain_nat xt_MASQUERADE nf_nat nf_conntrack_netlink nf_conntrack 
+nf_defrag_ipv6 nf_defrag_ipv4 xfrm_user xfrm_algo nft_counter 
+snd_seq_dummy snd_hrtimer snd_seq snd_seq_device xt_addrtype nft_compat 
+nf_tables libcrc32c nfnetlink br_netfilter bridge stp llc overlay 
+q6asm_dai snd_soc_wsa881x regmap_sdw q6routing q6afe_dai soundwire_qcom 
+snd_soc_wcd934x gpio_wcd934x q6adm snd_soc_wcd_mbhc cpufreq_ondemand 
+cpufreq_conservative q6asm q6dsp_common cpufreq_powersave q6afe 
+algif_hash algif_skcipher q6core af_alg bnep cpufreq_userspace lz4 
+lz4_compress wcd934x regmap_slimbus zram zsmalloc apr qrtr_smd fastrpc 
+binfmt_misc snd_soc_sdm845 nls_ascii uvcvideo nls_cp437 
+videobuf2_vmalloc snd_soc_rt5663 vfat videobuf2_memops fat 
+snd_soc_qcom_common snd_soc_rl6231 aes_ce_blk soundwire_bus crypto_simd 
+cryptd aes_ce_cipher pm8941_pwrkey snd_soc_core snd_compress 
+crct10dif_ce ghash_ce gf128mul snd_pcm_dmaengine sha2_ce sha256_arm64
+[  141.608446]  qcom_spmi_adc5 snd_pcm sha1_ce qcom_vadc_common 
+qcom_spmi_temp_alarm joydev industrialio snd_timer snd hci_uart 
+soundcore btqca btrtl venus_core btbcm v4l2_mem2mem videobuf2_v4l2 
+btintel bluetooth videobuf2_common videodev mc ecdh_generic 
+hid_multitouch ecc ath10k_snoc ath10k_core qcom_rng ath mac80211 
+qcom_q6v5_mss libarc4 cfg80211 rfkill sg qcom_wdt qcom_q6v5_pas evdev 
+slim_qcom_ngd_ctrl qrtr qcom_pil_info pdr_interface qcom_q6v5 slimbus 
+qcom_sysmon rmtfs_mem tcp_bbr sch_fq fuse configfs ip_tables x_tables 
+autofs4 ext4 mbcache jbd2 panel_simple rtc_pm8xxx msm llcc_qcom ocmem 
+ti_sn65dsi86 drm_dp_aux_bus gpu_sched drm_kms_helper drm camcc_sdm845 
+ipa qcom_common qmi_helpers mdt_loader gpio_keys pwm_bl
+[  141.609150] CPU: 3 PID: 1277 Comm: systemd-sleep Tainted: G        
+W         5.15.6 #45
+[  141.609184] Hardware name: LENOVO 81JL/LNVNB161216, BIOS 
+9UCN33WW(V2.06) 06/ 4/2019
+[  141.609204] pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS 
+BTYPE=--)
+[  141.609236] pc : clk_core_disable+0x1dc/0x1f4
+[  141.609265] lr : clk_core_disable+0x1dc/0x1f4
+[  141.609292] sp : ffff800017c63940
+[  141.609303] x29: ffff800017c63940 x28: ffff2ed900fb8118 x27: 
+ffffd0c3450bbe20
+[  141.609348] x26: 0000000000000002 x25: 0000000000000000 x24: 
+ffff2ed90bf23200
+[  141.609388] x23: ffffd0c3461a1590 x22: 0000000000000001 x21: 
+ffff2ed90c90dd00
+[  141.609427] x20: ffff2ed909bccf00 x19: ffff2ed909bccf00 x18: 
+0000000000000000
+[  141.609466] x17: 000000040044ffff x16: ffffd0c344f7c154 x15: 
+0000000000000000
+[  141.609505] x14: ffff2ed900296740 x13: 0a64656c62617369 x12: 
+642079646165726c
+[  141.609545] x11: 656820747563205b x10: 2d2d2d2d2d2d2d2d x9 : 
+ffffd0c34499b66c
+[  141.609584] x8 : 00000000ffffffff x7 : 656c626173696420 x6 : 
+00000000fffff633
+[  141.609622] x5 : ffff2eda73771a48 x4 : ffff800017c63780 x3 : 
+0000000000000001
+[  141.609659] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 
+ffff2ed920b70000
+[  141.609700] Call trace:
+[  141.609714]  clk_core_disable+0x1dc/0x1f4
+[  141.609745]  clk_disable+0x3c/0x5c
+[  141.609773]  msm_dsi_runtime_suspend+0x68/0x90 [msm]
+[  141.610617]  pm_generic_runtime_suspend+0x38/0x50
+[  141.610696]  genpd_runtime_suspend+0xb4/0x314
+[  141.610761]  pm_runtime_force_suspend+0x54/0x140
+[  141.610794]  dpm_run_callback+0x60/0x180
+[  141.610816]  __device_suspend+0x120/0x5a0
+[  141.610839]  dpm_suspend+0x158/0x2c0
+[  141.610863]  dpm_suspend_start+0xa8/0xb0
+[  141.610886]  suspend_devices_and_enter+0x100/0x810
+[  141.610960]  pm_suspend+0x38c/0x480
+[  141.610982]  state_store+0x98/0x11c
+[  141.611005]  kobj_attr_store+0x1c/0x30
+[  141.611063]  sysfs_kf_write+0x50/0x60
+[  141.611089]  kernfs_fop_write_iter+0x134/0x1c4
+[  141.611140]  new_sync_write+0xf0/0x18c
+[  141.611192]  vfs_write+0x210/0x2b0
+[  141.611220]  ksys_write+0x74/0x100
+[  141.611246]  __arm64_sys_write+0x28/0x3c
+[  141.611275]  invoke_syscall+0x50/0x120
+[  141.611339]  el0_svc_common.constprop.0+0x4c/0x100
+[  141.611368]  do_el0_svc+0x34/0xa0
+[  141.611393]  el0_svc+0x28/0x80
+[  141.611431]  el0t_64_sync_handler+0xa4/0x130
+[  141.611455]  el0t_64_sync+0x1a0/0x1a4
+[  141.611483] ---[ end trace f08b1f47ee3d43ee ]---
+[  141.611653] ------------[ cut here ]------------
+[  141.611664] disp_cc_mdss_ahb_clk already unprepared
+[  141.611831] WARNING: CPU: 3 PID: 1277 at drivers/clk/clk.c:810 
+clk_core_unprepare+0x1a0/0x1c0
+[  141.611880] Modules linked in: rfcomm xt_conntrack aes_ce_ccm 
+nft_chain_nat xt_MASQUERADE nf_nat nf_conntrack_netlink nf_conntrack 
+nf_defrag_ipv6 nf_defrag_ipv4 xfrm_user xfrm_algo nft_counter 
+snd_seq_dummy snd_hrtimer snd_seq snd_seq_device xt_addrtype nft_compat 
+nf_tables libcrc32c nfnetlink br_netfilter bridge stp llc overlay 
+q6asm_dai snd_soc_wsa881x regmap_sdw q6routing q6afe_dai soundwire_qcom 
+snd_soc_wcd934x gpio_wcd934x q6adm snd_soc_wcd_mbhc cpufreq_ondemand 
+cpufreq_conservative q6asm q6dsp_common cpufreq_powersave q6afe 
+algif_hash algif_skcipher q6core af_alg bnep cpufreq_userspace lz4 
+lz4_compress wcd934x regmap_slimbus zram zsmalloc apr qrtr_smd fastrpc 
+binfmt_misc snd_soc_sdm845 nls_ascii uvcvideo nls_cp437 
+videobuf2_vmalloc snd_soc_rt5663 vfat videobuf2_memops fat 
+snd_soc_qcom_common snd_soc_rl6231 aes_ce_blk soundwire_bus crypto_simd 
+cryptd aes_ce_cipher pm8941_pwrkey snd_soc_core snd_compress 
+crct10dif_ce ghash_ce gf128mul snd_pcm_dmaengine sha2_ce sha256_arm64
+[  141.612553]  qcom_spmi_adc5 snd_pcm sha1_ce qcom_vadc_common 
+qcom_spmi_temp_alarm joydev industrialio snd_timer snd hci_uart 
+soundcore btqca btrtl venus_core btbcm v4l2_mem2mem videobuf2_v4l2 
+btintel bluetooth videobuf2_common videodev mc ecdh_generic 
+hid_multitouch ecc ath10k_snoc ath10k_core qcom_rng ath mac80211 
+qcom_q6v5_mss libarc4 cfg80211 rfkill sg qcom_wdt qcom_q6v5_pas evdev 
+slim_qcom_ngd_ctrl qrtr qcom_pil_info pdr_interface qcom_q6v5 slimbus 
+qcom_sysmon rmtfs_mem tcp_bbr sch_fq fuse configfs ip_tables x_tables 
+autofs4 ext4 mbcache jbd2 panel_simple rtc_pm8xxx msm llcc_qcom ocmem 
+ti_sn65dsi86 drm_dp_aux_bus gpu_sched drm_kms_helper drm camcc_sdm845 
+ipa qcom_common qmi_helpers mdt_loader gpio_keys pwm_bl
+[  141.613142] CPU: 3 PID: 1277 Comm: systemd-sleep Tainted: G        
+W         5.15.6 #45
+[  141.613167] Hardware name: LENOVO 81JL/LNVNB161216, BIOS 
+9UCN33WW(V2.06) 06/ 4/2019
+[  141.613181] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS 
+BTYPE=--)
+[  141.613206] pc : clk_core_unprepare+0x1a0/0x1c0
+[  141.613236] lr : clk_core_unprepare+0x1a0/0x1c0
+[  141.613264] sp : ffff800017c63950
+[  141.613275] x29: ffff800017c63950 x28: ffff2ed900fb8118 x27: 
+ffffd0c3450bbe20
+[  141.613318] x26: 0000000000000002 x25: 0000000000000000 x24: 
+ffff2ed90bf23200
+[  141.613358] x23: ffffd0c3461a1590 x22: 0000000000000001 x21: 
+ffff2ed90c90dd00
+[  141.613396] x20: ffff2ed900fa0c78 x19: ffff2ed909bccf00 x18: 
+0000000000000000
+[  141.613436] x17: 000000040044ffff x16: ffffd0c344f7bdf0 x15: 
+0000000000000000
+[  141.613475] x14: ffff2ed900296740 x13: 0a64657261706572 x12: 
+706e752079646165
+[  141.613515] x11: 656820747563205b x10: 2d2d2d2d2d2d2d2d x9 : 
+ffffd0c34499b66c
+[  141.613554] x8 : 00000000ffffffff x7 : 61706572706e7520 x6 : 
+00000000fffff664
+[  141.613592] x5 : ffff2eda73771a48 x4 : ffff800017c63790 x3 : 
+0000000000000001
+[  141.613629] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 
+ffff2ed920b70000
+[  141.613667] Call trace:
+[  141.613678]  clk_core_unprepare+0x1a0/0x1c0
+[  141.613710]  clk_unprepare+0x38/0x50
+[  141.613736]  msm_dsi_runtime_suspend+0x70/0x90 [msm]
+[  141.614063]  pm_generic_runtime_suspend+0x38/0x50
+[  141.614091]  genpd_runtime_suspend+0xb4/0x314
+[  141.614121]  pm_runtime_force_suspend+0x54/0x140
+[  141.614151]  dpm_run_callback+0x60/0x180
+[  141.614173]  __device_suspend+0x120/0x5a0
+[  141.614195]  dpm_suspend+0x158/0x2c0
+[  141.614218]  dpm_suspend_start+0xa8/0xb0
+[  141.614241]  suspend_devices_and_enter+0x100/0x810
+[  141.614267]  pm_suspend+0x38c/0x480
+[  141.614290]  state_store+0x98/0x11c
+[  141.614311]  kobj_attr_store+0x1c/0x30
+[  141.614340]  sysfs_kf_write+0x50/0x60
+[  141.614360]  kernfs_fop_write_iter+0x134/0x1c4
+[  141.614390]  new_sync_write+0xf0/0x18c
+[  141.614418]  vfs_write+0x210/0x2b0
+[  141.614443]  ksys_write+0x74/0x100
+[  141.614469]  __arm64_sys_write+0x28/0x3c
+[  141.614496]  invoke_syscall+0x50/0x120
+[  141.614523]  el0_svc_common.constprop.0+0x4c/0x100
+[  141.614551]  do_el0_svc+0x34/0xa0
+[  141.614576]  el0_svc+0x28/0x80
+[  141.614597]  el0t_64_sync_handler+0xa4/0x130
+[  141.614621]  el0t_64_sync+0x1a0/0x1a4
+[  141.614643] ---[ end trace f08b1f47ee3d43ef ]---
+
+
+And then upon wake, we get
+
+[  144.822647] OOM killer enabled.
+[  144.822660] Restarting tasks ... done.
+[  144.828624] PM: suspend exit
+[  144.854302] [drm:dpu_encoder_frame_done_timeout:2127] [dpu 
+error]enc31 frame done timeout
+[  145.153281] rfkill: input handler disabled
+[  145.679342] usb 3-1.3: new high-speed USB device number 4 using xhci-hcd
+[  145.734319] [drm:dpu_encoder_phys_vid_wait_for_commit_done:513] [dpu 
+error]vblank timeout
+[  145.734336] [drm:dpu_kms_wait_for_commit_done:454] [dpu error]wait 
+for commit done returned -110
+[  145.792887] usb 3-1.3: New USB device found, idVendor=5986, 
+idProduct=2115, bcdDevice=54.20
+[  145.792909] usb 3-1.3: New USB device strings: Mfr=1, Product=2, 
+SerialNumber=0
+[  145.792915] usb 3-1.3: Product: Integrated Camera
+[  145.792920] usb 3-1.3: Manufacturer: SunplusIT Inc
+[  145.822516] [drm:dpu_encoder_helper_report_irq_timeout [msm]] *ERROR* 
+irq timeout id=31, intf=1, pp=0, intr=0
+[  145.870521] usb 3-1.3: can't set config #1, error -71
+[  145.910326] [drm:dpu_encoder_helper_report_irq_timeout [msm]] *ERROR* 
+irq timeout id=31, intf=1, pp=0, intr=0
+[  145.910369] [drm:dpu_encoder_phys_vid_disable [msm]] *ERROR* wait 
+disable failed: id:31 intf:1 ret:-110
+[  145.932329] ldo1: Underflow of regulator enable count
+[  145.932343] Failed to disable vdds: -EINVAL
+[  145.936885] dsi_link_clk_enable_6g: Failed to enable dsi pixel clk
+[  145.936901] msm_dsi_host_power_on: failed to enable link clocks. ret=-22
+[  145.936906] dsi_mgr_bridge_pre_enable: power on host 0 failed, -22
+
+
+And then a little later...
+
+[  462.153015] ldo1: Underflow of regulator enable count
+[  462.153049] Failed to disable vdds: -EINVAL
+[  462.155657] Internal error: synchronous external abort: 96000010 [#1] SMP
+[  462.155702] Modules linked in: rfcomm xt_conntrack aes_ce_ccm 
+nft_chain_nat xt_MASQUERADE nf_nat nf_conntrack_netlink nf_conntrack 
+nf_defrag_ipv6 nf_defrag_ipv4 xfrm_user xfrm_algo nft_counter 
+snd_seq_dummy snd_hrtimer snd_seq snd_seq_device xt_addrtype nft_compat 
+nf_tables libcrc32c nfnetlink br_netfilter bridge stp llc overlay 
+q6asm_dai snd_soc_wsa881x regmap_sdw q6routing q6afe_dai soundwire_qcom 
+snd_soc_wcd934x gpio_wcd934x q6adm snd_soc_wcd_mbhc cpufreq_ondemand 
+cpufreq_conservative q6asm q6dsp_common cpufreq_powersave q6afe 
+algif_hash algif_skcipher q6core af_alg bnep cpufreq_userspace lz4 
+lz4_compress wcd934x regmap_slimbus zram zsmalloc apr qrtr_smd fastrpc 
+binfmt_misc snd_soc_sdm845 nls_ascii uvcvideo nls_cp437 
+videobuf2_vmalloc snd_soc_rt5663 vfat videobuf2_memops fat 
+snd_soc_qcom_common snd_soc_rl6231 aes_ce_blk soundwire_bus crypto_simd 
+cryptd aes_ce_cipher pm8941_pwrkey snd_soc_core snd_compress 
+crct10dif_ce ghash_ce gf128mul snd_pcm_dmaengine sha2_ce sha256_arm64
+[  462.156645]  qcom_spmi_adc5 snd_pcm sha1_ce qcom_vadc_common 
+qcom_spmi_temp_alarm joydev industrialio snd_timer snd hci_uart 
+soundcore btqca btrtl venus_core btbcm v4l2_mem2mem videobuf2_v4l2 
+btintel bluetooth videobuf2_common videodev mc ecdh_generic 
+hid_multitouch ecc ath10k_snoc ath10k_core qcom_rng ath mac80211 
+qcom_q6v5_mss libarc4 cfg80211 rfkill sg qcom_wdt qcom_q6v5_pas evdev 
+slim_qcom_ngd_ctrl qrtr qcom_pil_info pdr_interface qcom_q6v5 slimbus 
+qcom_sysmon rmtfs_mem tcp_bbr sch_fq fuse configfs ip_tables x_tables 
+autofs4 ext4 mbcache jbd2 panel_simple rtc_pm8xxx msm llcc_qcom ocmem 
+ti_sn65dsi86 drm_dp_aux_bus gpu_sched drm_kms_helper drm camcc_sdm845 
+ipa qcom_common qmi_helpers mdt_loader gpio_keys pwm_bl
+[  462.157479] CPU: 1 PID: 961 Comm: gnome-shell Tainted: G W         
+5.15.6 #45
+[  462.157517] Hardware name: LENOVO 81JL/LNVNB161216, BIOS 
+9UCN33WW(V2.06) 06/ 4/2019
+[  462.157542] pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS 
+BTYPE=--)
+[  462.157579] pc : dpu_reg_read+0x20/0x30 [msm]
+[  462.157870] lr : dpu_hw_intf_get_status+0x2c/0x90 [msm]
+[  462.158158] sp : ffff800015f237e0
+[  462.158177] x29: ffff800015f237e0 x28: ffffd0c2fd91cc90 x27: 
+00000000ffffffff
+[  462.158234] x26: ffff2ed907c6c000 x25: 0000000000fe45a8 x24: 
+0000000000000000
+[  462.158287] x23: ffff2ed90bda9880 x22: 0000000000000003 x21: 
+000000000000043b
+[  462.158339] x20: ffff2ed901483180 x19: ffff800015f2383c x18: 
+ffffffffffffffff
+[  462.158393] x17: 000000040044ffff x16: ffffd0c3450b84f0 x15: 
+0000000000000000
+[  462.158444] x14: 0000000000000000 x13: ffff5e172dc1d000 x12: 
+000000003474591d
+[  462.158496] x11: 0000000000000000 x10: 0000000000000080 x9 : 
+ffffd0c2fd8c3dbc
+[  462.158548] x8 : ffff2ed9050fbb00 x7 : ffffd0c3460484c0 x6 : 
+0000000000000000
+[  462.158598] x5 : 0000000000000000 x4 : 00000000ffffffff x3 : 
+ffffd0c2fd8c3d90
+[  462.158648] x2 : 000000000006a800 x1 : 000000000006a800 x0 : 
+ffff800010f6a800
+[  462.158700] Call trace:
+[  462.158720]  dpu_reg_read+0x20/0x30 [msm]
+[  462.159003]  dpu_encoder_phys_vid_get_frame_count+0x74/0xf0 [msm]
+[  462.159288]  dpu_encoder_get_frame_count+0x38/0x50 [msm]
+[  462.159544]  dpu_crtc_get_vblank_counter+0x5c/0x8c [msm]
+[  462.159592]  __get_vblank_counter+0xec/0x140 [drm]
+[  462.159709]  drm_update_vblank_count+0x70/0x390 [drm]
+[  462.159740]  drm_vblank_disable_and_save+0x84/0x11c [drm]
+[  462.159772]  drm_crtc_vblank_off+0x108/0x320 [drm]
+[  462.159803]  dpu_crtc_disable+0x60/0x3d4 [msm]
+[  462.159853]  disable_outputs+0x25c/0x320 [drm_kms_helper]
+[  462.159893] drm_atomic_helper_commit_modeset_disables+0x28/0x54 
+[drm_kms_helper]
+[  462.159910]  msm_atomic_commit_tail+0x1a0/0x780 [msm]
+[  462.159959]  commit_tail+0xac/0x190 [drm_kms_helper]
+[  462.159977]  drm_atomic_helper_commit+0x168/0x400 [drm_kms_helper]
+[  462.159995]  drm_atomic_commit+0x58/0x70 [drm]
+[  462.160032]  drm_mode_atomic_ioctl+0x864/0xb80 [drm]
+[  462.160063]  drm_ioctl_kernel+0xd0/0x120 [drm]
+[  462.160093]  drm_ioctl+0x248/0x470 [drm]
+[  462.160124]  __arm64_sys_ioctl+0xb4/0xfc
+[  462.160136]  invoke_syscall+0x50/0x120
+[  462.160148]  el0_svc_common.constprop.0+0x4c/0x100
+[  462.160156]  do_el0_svc+0x34/0xa0
+[  462.160164]  el0_svc+0x28/0x80
+[  462.160174]  el0t_64_sync_handler+0xa4/0x130
+[  462.160179]  el0t_64_sync+0x1a0/0x1a4
+[  462.160192] Code: d503233f f9400000 8b214041 8b010000 (b9400000)
+[  462.160200] ---[ end trace f08b1f47ee3d43f0 ]---
+[  462.195181] usb 3-1.3: USB disconnect, device number 5
+[  483.266267] rcu: INFO: rcu_sched detected stalls on CPUs/tasks:
+[  483.266287] rcu:     1-...0: (7 ticks this GP) 
+idle=bfb/1/0x4000000000000000 softirq=18411/18411 fqs=4691
+[  483.266304]     (detected by 6, t=21002 jiffies, g=40289, q=8854)
+[  483.266313] Task dump for CPU 1:
+[  483.266319] task:gmain           state:R  running task stack:    0 
+pid: 1562 ppid:     1 flags:0x0000000e
+[  483.266336] Call trace:
+[  483.266341]  __switch_to+0x138/0x190
+[  483.266361]  0x8b007afdbf2f3900
+[  546.283350] rcu: INFO: rcu_sched detected stalls on CPUs/tasks:
+[  546.283375] rcu:     1-...0: (7 ticks this GP) 
+idle=bfb/1/0x4000000000000000 softirq=18411/18411 fqs=18763
+[  546.283387]     (detected by 0, t=84007 jiffies, g=40289, q=8931)
+[  546.283395] Task dump for CPU 1:
+[  546.283401] task:gmain           state:R  running task stack:    0 
+pid: 1562 ppid:     1 flags:0x0000000e
+[  546.283412] Call trace:
+[  546.283416]  __switch_to+0x138/0x190
+[  546.283433]  0x8b007afdbf2f3900
+[  609.319122] rcu: INFO: rcu_sched detected stalls on CPUs/tasks:
+[  609.319145] rcu:     1-...0: (7 ticks this GP) 
+idle=bfb/1/0x4000000000000000 softirq=18411/18411 fqs=32816
+[  609.319162]     (detected by 6, t=147012 jiffies, g=40289, q=8968)
+[  609.319172] Task dump for CPU 1:
+[  609.319177] task:gmain           state:R  running task stack:    0 
+pid: 1562 ppid:     1 flags:0x0000000e
+[  609.319195] Call trace:
+[  609.319200]  __switch_to+0x138/0x190
+[  609.319222]  0x8b007afdbf2f3900
 

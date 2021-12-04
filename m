@@ -2,141 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 402494681E7
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 03:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC16B4681F0
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 03:20:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384047AbhLDCGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 21:06:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40986 "EHLO
+        id S1384053AbhLDCW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 21:22:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231452AbhLDCGT (ORCPT
+        with ESMTP id S231452AbhLDCW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 21:06:19 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C92C061751;
-        Fri,  3 Dec 2021 18:02:54 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id o14so3295689plg.5;
-        Fri, 03 Dec 2021 18:02:54 -0800 (PST)
+        Fri, 3 Dec 2021 21:22:27 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2F0C061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 18:19:03 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id u17so3304953plg.9
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 18:19:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2dt/HhZYeQD2DFLA4IdY175U1ND++ujFbnP+5vOBlAA=;
-        b=oMU49gcdvOygLCTTI6gpAwDkcix9DcSHa68rySpeANCNScTY4LuMUSOdjzMKSqXJMm
-         /VU+XwE/YeYT7nuQf1SZWvINlgPBwndCcFAXjZMEFOxqnewOsRikwvecRqe20vTjOFTd
-         PzDRL8Si8W6avEeiybuWxUYrIsVtIi6Ynm2k9Cl2JNzjluyM8GqXN1YH6qBi6TVxVsvy
-         Okq3AmRWScnAxc8xIqAOd5I9cRnPcrsyhOg3GCrd1G7lmz/2+sk0H/DxKwSHUuNgXozY
-         ERkBGO36yDMwj+4HQqvyH3UKvBnfvtfVsPBqz+rKAJfXWqVYBPZk5xbX4PPemzQ+627i
-         1ywg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=119nixz5wqDPjb6GHxuJGyOiwK7q6RFXR3RKZpsye+A=;
+        b=BUVmAmsbLsSXqaFbJ+8sF+JGLxzz81tfarondwu2O/bcl5T2KS14wAK+9TrcW/4m7A
+         f+DoQyQyPjFZYETvdxd3WPeiqoHfejJQd9ZxYbLy+nHCGBYosddmge5oLpWuUcze7BKh
+         /djOlLnRZUk4bAcB6SIg7hoRKo0bnZUH+mqOR96IrZBlgWY7fbKI8go43By6UEZj2yVr
+         wpfNFYkEdw+zf7QRDxt8R4U/Pv8jcLeFAauTdyZf13uMmSnhqfavLjBqSzBekhTLcN3l
+         E2x/Pbg2Wci3WLcDJCT1stF+0t5lznSPleW7LLHRBdCBujZldiL6c2h+yBp0IRqQ+hbp
+         BjyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2dt/HhZYeQD2DFLA4IdY175U1ND++ujFbnP+5vOBlAA=;
-        b=3K71RtZ7Y8HZCOQcgFDpRp1xnFQezey3jCbbdWyzextXJNHO4BWjwrasvjEfno0dEu
-         8zmt1f0QuzVsWaCqakUL8Q6+kb32M8h5Ukkf2SRS2/ZSTdsJKJo7i7N1RtYmVXLPRJ9n
-         kmxdOunV3IM6kEe1fYAjLBeFrrYgv8+N49HNmLbxYU5hTpd99pKDr5PsdPfQ06sepDyy
-         l+rc6NYMH9j44a+HBFxmJpGGc2SyA1zK0W6Oz++KrNeFHephXUOxD0Et7b92ikYcdNU8
-         lApMFXxfplps6ECE99/MhXaWAXCbXJxZdlULr19v11oTMY5FJFlBw6H16Djlp7ZGEyzS
-         d7Lg==
-X-Gm-Message-State: AOAM531VtzsjKvhJWz+CxH3IJkHlJT/sda8Y7Ej+9VQACskUJGe/F/yq
-        b9sCI+QQ4lqym8cNAhNbYnXHdEK31HLQHKbpfRY=
-X-Google-Smtp-Source: ABdhPJyOnDkyHV7ofs6BxuWCzq095VA5AS4isx/p1BCSbvYO8OZef/xVLvN7N9eFsUeApSuCVgI2losG0qYZ1AW0a04=
-X-Received: by 2002:a17:90a:1f45:: with SMTP id y5mr19113499pjy.138.1638583374087;
- Fri, 03 Dec 2021 18:02:54 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=119nixz5wqDPjb6GHxuJGyOiwK7q6RFXR3RKZpsye+A=;
+        b=dn1Uy/9YnkoemnACmlg5Scd1xo3gfpr+9njQ/DzYq6BWJj57w1rahVQpFjPw1fjWW8
+         YfRBOQ9+BYcFzjtEkltecW+t12Obx1CkGNSXxyUjLzvq422/U9QSIbmARI28LGChfRDC
+         kAhBrSvHE95/fQK7rCq+Tx33SC3pM9fmDBnTpSxEeMp1LGEqOb0h4Hj2isXpxl64Nsm5
+         S7LEykHdZmjHjkWZzPRFT/n5v2At8TOabFnpG4gRiyLwmrmmQqJFGv2YttkNRMF2YWxd
+         /DfjMCC9Me4HTXitouadAUUHUEXt5/C2uB8NyoqxJ57f6qtq11e4NcknqvIdcIATDt5F
+         nA+w==
+X-Gm-Message-State: AOAM530DEM1S3y+RQd+QMzB+lgC8kUzEFBaLlc/cESZxotoNYo2KIIGI
+        sQw+FoeXHQB4sXehhWDVgUBsQsiXj/0=
+X-Google-Smtp-Source: ABdhPJz/aOjP+uKqlWX8Ogmjv8dFSRlrGGhFV6K2vsQ9J79rq+tVUn1oU5Hcui6dZW5ZtogqRLDdeQ==
+X-Received: by 2002:a17:902:f209:b0:141:99d1:7cef with SMTP id m9-20020a170902f20900b0014199d17cefmr27407930plc.70.1638584342206;
+        Fri, 03 Dec 2021 18:19:02 -0800 (PST)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id m10sm3396102pgv.75.2021.12.03.18.19.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 18:19:01 -0800 (PST)
+From:   Stafford Horne <shorne@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Openrisc <openrisc@lists.librecores.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Christian Brauner <christian@brauner.io>
+Subject: [PATCH 0/3] OpenRISC Switch and Clone cleanups
+Date:   Sat,  4 Dec 2021 11:18:39 +0900
+Message-Id: <20211204021842.1853549-1-shorne@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20211203191844.69709-1-mcroce@linux.microsoft.com>
- <CAADnVQLDEPxOvGn8CxwcG7phy26BKuOqpSQ5j7yZhZeEVoCC4w@mail.gmail.com>
- <CAFnufp1_p8XCUf-RdHpByKnR9MfXQoDWw6Pvm_dtuH4nD6dZnQ@mail.gmail.com>
- <CAADnVQ+DSGoF2YoTrp2kTLoFBNAgdU8KbcCupicrVGCWvdxZ7w@mail.gmail.com>
- <86e70da74cb34b59c53b1e5e4d94375c1ef30aa1.camel@debian.org>
- <CAADnVQLCmbUJD29y2ovD+SV93r8jon2-f+fJzJFp6qZOUTWA4w@mail.gmail.com> <CAFnufp2S7fPt7CKSjH+MBBvvFu9F9Yop_RAkX_3ZtgtZhRqrHw@mail.gmail.com>
-In-Reply-To: <CAFnufp2S7fPt7CKSjH+MBBvvFu9F9Yop_RAkX_3ZtgtZhRqrHw@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 3 Dec 2021 18:02:43 -0800
-Message-ID: <CAADnVQ+WLGiQvaoTPwu_oRj54h4oMwh-z5RV0WAMFRA9Wco_iA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/3] bpf: add signature
-To:     Matteo Croce <mcroce@linux.microsoft.com>
-Cc:     Luca Boccassi <bluca@debian.org>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        keyrings@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 4:42 PM Matteo Croce <mcroce@linux.microsoft.com> wrote:
->
-> On Fri, Dec 3, 2021 at 11:20 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Fri, Dec 3, 2021 at 2:06 PM Luca Boccassi <bluca@debian.org> wrote:
-> > >
-> > > On Fri, 2021-12-03 at 11:37 -0800, Alexei Starovoitov wrote:
-> > > > On Fri, Dec 3, 2021 at 11:36 AM Matteo Croce
-> > > > <mcroce@linux.microsoft.com> wrote:
-> > > > >
-> > > > > On Fri, Dec 3, 2021 at 8:22 PM Alexei Starovoitov
-> > > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > > >
-> > > > > > On Fri, Dec 3, 2021 at 11:18 AM Matteo Croce
-> > > > > > <mcroce@linux.microsoft.com> wrote:
-> > > > > > >
-> > > > > > > From: Matteo Croce <mcroce@microsoft.com>
-> > > > > > >
-> > > > > > > This series add signature verification for BPF files.
-> > > > > > > The first patch implements the signature validation in the
-> > > > > > > kernel,
-> > > > > > > the second patch optionally makes the signature mandatory,
-> > > > > > > the third adds signature generation to bpftool.
-> > > > > >
-> > > > > > Matteo,
-> > > > > >
-> > > > > > I think I already mentioned that it's no-go as-is.
-> > > > > > We've agreed to go with John's suggestion.
-> > > > >
-> > > > > Hi,
-> > > > >
-> > > > > my previous attempt was loading a whole ELF file and parsing it in
-> > > > > kernel.
-> > > > > In this series I just validate the instructions against a
-> > > > > signature,
-> > > > > as with kernel CO-RE libbpf doesn't need to mangle it.
-> > > > >
-> > > > > Which suggestion? I think I missed this one..
-> > > >
-> > > > This talk and discussion:
-> > > > https://linuxplumbersconf.org/event/11/contributions/947/
-> > >
-> > > Thanks for the link - but for those of us who don't have ~5 hours to
-> > > watch a video recording, would you mind sharing a one line summary,
-> > > please? Is there an alternative patch series implementing BPF signing
-> > > that you can link us so that we can look at it? Just a link or
-> > > googlable reference would be more than enough.
-> >
-> > It's not 5 hours and you have to read slides and watch
-> > John's presentation to follow the conversation.
->
-> So, If I have understood correctly, the proposal is to validate the
-> tools which loads the BPF (e.g. perf, ip) with fs-verity, and only
-> allow BPF loading from those validated binaries?
-> That's nice, but I think that this could be complementary to the
-> instructions signature.
-> Imagine a validated binary being exploited somehow at runtime, that
-> could be vector of malicious BPF program load.
-> Can't we have both available, and use one or other, or even both
-> together depending on the use case?
+These are a few patches that came after auditing the OpenRISC switch code
+recently following the discussion with Rob and Arnd and the clone and clone3
+wrappers [0].
 
-I'll let John comment.
+I noticed a few places where OpenRISC could shave a few instructions and also
+that we need a ABI wrapper for clone3.
+
+[0] https://lore.kernel.org/all/41206fc7-f8ce-98aa-3718-ba3e1431e320@landley.net/T/#m9c0cdb2703813b9df4da04cf6b30de1f1aa89944
+
+Stafford Horne (3):
+  openrisc: Cleanup switch code and comments
+  openrisc: Use delay slot for clone and fork wrappers
+  openrisc: Add clone3 ABI wrapper
+
+ arch/openrisc/include/asm/syscalls.h |  2 ++
+ arch/openrisc/kernel/entry.S         | 27 +++++++++++++--------------
+ 2 files changed, 15 insertions(+), 14 deletions(-)
+
+-- 
+2.31.1
+

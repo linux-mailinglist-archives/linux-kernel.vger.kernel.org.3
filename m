@@ -2,264 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA5246811C
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CBAE468121
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383587AbhLDAWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 19:22:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
+        id S1383690AbhLDAYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 19:24:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383572AbhLDAWb (ORCPT
+        with ESMTP id S1383644AbhLDAYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 19:22:31 -0500
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A72C061751
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 16:18:55 -0800 (PST)
-Received: by mail-ua1-x933.google.com with SMTP id j14so8506083uan.10
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 16:18:55 -0800 (PST)
+        Fri, 3 Dec 2021 19:24:17 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EA8C061354
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 16:20:52 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id b68so4355672pfg.11
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 16:20:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nUnZRxTL6ognPaiE7BB97hG4ug8rkGAOljqHJFVZ5r4=;
-        b=aQfwEJSLSdf67rkRPangsInyk0VPOSvzVsdYMS1VWq+PjubUwHEIw6nd8IFiYJg4Zp
-         K3sxb+/aU9cS7nei/9iiWESXaKpF0U50RT36VnMmycHHhdwc2Yty9cFwbKE9CDuS2eaH
-         We/6RIqJgf9BIjUrGYz3UvnYFuxokFY95KBcICPTw3EvUmje9CvgDGk1xiY3DbyTdBQW
-         wiCU9yqXFO3a3poIA+tndxufY869OZl2qMrKq06nplWk3pLs3WKlLryyBFAl2n1ctI7G
-         OLOWu6+XeLzDm8fsDsU4HCePkWReTxWUTw221/M0LqxELuhjPQPqpogVIIX8ds3rrrPr
-         V4PA==
+        d=atishpatra.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZAj3/ce5O2ZrRi0wWpAgfPpvWzW6SpIzMmjlaeDyTEs=;
+        b=s6KVVmyJS2rECd00TuEz0H035FZF4S14FINOzD3WgMXi7nJBDoWfnuTGAoPeYN8pvd
+         1Xrl/7T6U1NnFXuu86JtIR2AE9YyqJKC+I/vx/w857O+wC+hQnPoyXcmz2jvbX/zfjxL
+         03LErAs0yNF5xrh0z+DUvMCIdHjIZljP9xKcs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nUnZRxTL6ognPaiE7BB97hG4ug8rkGAOljqHJFVZ5r4=;
-        b=IQ5ZDX57dlTPgkAN8R8+reN6jWSfZmtcjIbquf4Uu9m3GmfhT65Jz6jtpb+ua8yh0w
-         RKSaqFeTIg5fHYvZ2o7ZFe7opPjzN5MjiZnZmHneJYA2GB/d6fU4zy4STPmMJdW5ok66
-         PNxOAZbEkRCz2hzNFhWb+m/AxByICtycJwYCNGMzsiIHEU8hECocKgNDu5fc7JMhV2ZH
-         8SpRthwR3tEGYZLJkOcg1nWgERvarkEDjJsOBAeUWMhnZ6aE4Db98dZz83BVoEGwPkuj
-         wJoOfA67HFjdkNkn2bEHO3radS228avmjRSjgD+JkhiVJUteOZ+cbHDvvz+NB9Fmor1i
-         JokA==
-X-Gm-Message-State: AOAM532y5KLE3pqlPvCJtYfFEIn58TrMT7n3BAwnlToMB16v4kOkhQkA
-        UkJKxmEjz1nSEavEPzLhwNEGp0pnE8ekug0L1H229/LeX7ZVWcGx
-X-Google-Smtp-Source: ABdhPJxv7l/eQFFci2XCPTiX4KBmCNHGcXRuO+2735BU5+2FzBKDMNBN2407vdfc2vhyk8/WVJO5qNG0YDPgo2FpdJM=
-X-Received: by 2002:a05:6102:f10:: with SMTP id v16mr25678337vss.86.1638577134675;
- Fri, 03 Dec 2021 16:18:54 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZAj3/ce5O2ZrRi0wWpAgfPpvWzW6SpIzMmjlaeDyTEs=;
+        b=DpsRjuZr5Q9zhuyayG/kIY68xXa3ZN+IyjjxHl6Kk/fFW1lwl9EVhF+YzNszvIzrvn
+         LE2CKiVZ+wPxlgrLnxHeBydr+S0Ejp85aj6BbCr/TnkLbAZ7FXkuQtwGr1yWhdxBT4bQ
+         PLD0EN+x4BHi96fiyLeeUnYFG4Kd5762HwEevXgSPCGdT+2zRMPRquYf7LdGhU0ijJuo
+         UrHfy8v+BBFJLmcXW804aKKYgiB6nV/I0RMQwoLPY2MombatyCdp9L5J38fqS1KLT/4Y
+         dPo4GHlEl9XsQKYlQCQpIQkbFpjZMLgzgYyMokYwwK93IfNndH8dZ3M7LisonWpoz+30
+         L37Q==
+X-Gm-Message-State: AOAM531DGMQjUvpEYs2HqcF78cFUihDVb/NNnjb9X2qlD33N/cUf9PGY
+        4E0J9JKFlTPypE6Sef1rkbW0lwwlcmG8cCw=
+X-Google-Smtp-Source: ABdhPJxPDj3DWbT7QqjNKVsjj1yuYyzu1X+tTz+Do5tfnZ9g5efBXY2tvN30FJZSJp/0d+/KXVB6Dw==
+X-Received: by 2002:a05:6a00:1816:b0:49f:cd0d:b51b with SMTP id y22-20020a056a00181600b0049fcd0db51bmr21994104pfa.6.1638577251449;
+        Fri, 03 Dec 2021 16:20:51 -0800 (PST)
+Received: from fedora.ba.rivosinc.com (99-13-229-45.lightspeed.snjsca.sbcglobal.net. [99.13.229.45])
+        by smtp.gmail.com with ESMTPSA id r6sm3272402pjg.21.2021.12.03.16.20.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 16:20:51 -0800 (PST)
+From:   Atish Patra <atishp@atishpatra.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Atish Patra <atishp@atishpatra.org>,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Anup Patel <anup.patel@wdc.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
+        Nanyong Sun <sunnanyong@huawei.com>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Vitaly Wool <vitaly.wool@konsulko.com>
+Subject: [RFC 0/6] Sparse HART id support 
+Date:   Fri,  3 Dec 2021 16:20:32 -0800
+Message-Id: <20211204002038.113653-1-atishp@atishpatra.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20211130111325.29328-1-semen.protsenko@linaro.org>
- <20211130111325.29328-2-semen.protsenko@linaro.org> <YaZ8BpUaaC+sJYqx@robh.at.kernel.org>
- <CAPLW+4kGGk+umKTVRPNM7R=GaUQa31Uid=K+9ofq8w2mqzGAEA@mail.gmail.com> <CAL_JsqLopqkOEWmnvMDWr2rBa5Dm3jf17soqVA=Jx5Hn9BDS_g@mail.gmail.com>
-In-Reply-To: <CAL_JsqLopqkOEWmnvMDWr2rBa5Dm3jf17soqVA=Jx5Hn9BDS_g@mail.gmail.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Sat, 4 Dec 2021 02:18:42 +0200
-Message-ID: <CAPLW+4=i0hncEjNAYTyGRxd7Y3peDEgMf-Kw8qGhMW-kpNVv2Q@mail.gmail.com>
-Subject: Re: [PATCH v2 RESEND 1/5] dt-bindings: soc: samsung: Add Exynos USI bindings
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Dec 2021 at 22:40, Rob Herring <robh@kernel.org> wrote:
->
-> On Fri, Dec 3, 2021 at 1:36 PM Sam Protsenko <semen.protsenko@linaro.org> wrote:
-> >
-> > On Tue, 30 Nov 2021 at 21:31, Rob Herring <robh@kernel.org> wrote:
-> > >
-> > > On Tue, Nov 30, 2021 at 01:13:21PM +0200, Sam Protsenko wrote:
-> > > > Add constants for choosing USIv2 configuration mode in device tree.
-> > > > Those are further used in USI driver to figure out which value to write
-> > > > into SW_CONF register. Also document USIv2 IP-core bindings.
-> > > >
-> > > > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > > > ---
-> > > > Changes in v2:
-> > > >   - Combined dt-bindings doc and dt-bindings header patches
-> > > >   - Added i2c node to example in bindings doc
-> > > >   - Added mentioning of shared internal circuits
-> > > >   - Added USI_V2_NONE value to bindings header
-> > > >
-> > > >  .../bindings/soc/samsung/exynos-usi.yaml      | 135 ++++++++++++++++++
-> > > >  include/dt-bindings/soc/samsung,exynos-usi.h  |  17 +++
-> > > >  2 files changed, 152 insertions(+)
-> > > >  create mode 100644 Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
-> > > >  create mode 100644 include/dt-bindings/soc/samsung,exynos-usi.h
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..a822bc62b3cd
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
-> > > > @@ -0,0 +1,135 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/soc/samsung/exynos-usi.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: Samsung's Exynos USI (Universal Serial Interface) binding
-> > > > +
-> > > > +maintainers:
-> > > > +  - Sam Protsenko <semen.protsenko@linaro.org>
-> > > > +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> > > > +
-> > > > +description: |
-> > > > +  USI IP-core provides selectable serial protocol (UART, SPI or High-Speed I2C).
-> > > > +  USI shares almost all internal circuits within each protocol, so only one
-> > > > +  protocol can be chosen at a time. USI is modeled as a node with zero or more
-> > > > +  child nodes, each representing a serial sub-node device. The mode setting
-> > > > +  selects which particular function will be used.
-> > > > +
-> > > > +  Refer to next bindings documentation for information on protocol subnodes that
-> > > > +  can exist under USI node:
-> > > > +
-> > > > +  [1] Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> > > > +  [2] Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
-> > > > +  [3] Documentation/devicetree/bindings/spi/spi-samsung.txt
-> > > > +
-> > > > +properties:
-> > > > +  $nodename:
-> > > > +    pattern: "^usi@[0-9a-f]+$"
-> > > > +
-> > > > +  compatible:
-> > > > +    const: samsung,exynos-usi-v2
-> > >
-> > > Use SoC based compatibles.
-> > >
-> >
-> > In this particular case, I'd really prefer to have it like this. Most
-> > likely we'll only have USIv1 and USIv1 in the end, and I think that
-> > would be more clear to have USI version in compatible, rather than SoC
-> > name. Please let me know if you have a strong opinion on this one --
-> > if so I'll re-send.
->
-> Fine if you have some evidence the ratio of versions to SoC are much
-> more than 1:1 and the versions correspond to something (IOW, you
-> aren't making them up).
->
+Currently, sparse hartid is not supported for Linux RISC-V for the following
+reasons.
+1. Both spinwait and ordered booting method uses __cpu_up_stack/task_pointer
+   which is an array size of NR_CPUs.
+2. During early booting, any hartid greater than NR_CPUs are not booted at all.
+3. riscv_cpuid_to_hartid_mask uses struct cpumask for generating hartid bitmap.
+4. SBI v0.2 implementation uses NR_CPUs as the maximum hartid number while
+   generating hartmask.
 
-Yes, it's documented in TRM for different SoCs (USI version 2), and
-there are even dedicated registers where you can read the USI IP-core
-version. Right now we only know about two USI versions: v1 and v2 (can
-be found for example from different published Samsung downstream
-kernels, and from TRMs). So the USI block is standardized and
-versioned.
+In order to support sparse hartid, the hartid & NR_CPUS needs to be disassociated
+which was logically incorrect anyways. NR_CPUs represent the maximum logical|
+CPU id configured in the kernel while the hartid represent the physical hartid
+stored in mhartid CSR defined by the privilege specification. Thus, hartid
+can have much greater value than logical cpuid.
 
-> We went down the version # path with QCom and in the end about every
-> SoC had a different version.
->
-> >
-> > > > +
-> > > > +  reg:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  clocks:
-> > > > +    items:
-> > > > +      - description: Bus (APB) clock
-> > > > +      - description: Operating clock for UART/SPI/I2C protocol
-> > > > +
-> > > > +  clock-names:
-> > > > +    items:
-> > > > +      - const: pclk
-> > > > +      - const: ipclk
-> > > > +
-> > > > +  ranges: true
-> > > > +
-> > > > +  "#address-cells":
-> > > > +    const: 1
-> > > > +
-> > > > +  "#size-cells":
-> > > > +    const: 1
-> > > > +
-> > > > +  samsung,sysreg:
-> > > > +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> > > > +    description:
-> > > > +      Should be phandle/offset pair. The phandle to System Register syscon node
-> > > > +      (for the same domain where this USI controller resides) and the offset
-> > > > +      of SW_CONF register for this USI controller.
-> > > > +
-> > > > +  samsung,mode:
-> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > > +    description:
-> > > > +      Selects USI function (which serial protocol to use). Refer to
-> > > > +      <include/dt-bindings/soc/samsung,exynos-usi.h> for valid USI mode values.
-> > >
-> > > This seems to be redundant. Just check which child is enabled.
-> > >
-> >
-> > I think it's not that easy. Soon we'll have USIv1 support added, and
-> > that has some weird configurations, like having dual I2C mode (two
-> > child I2C nodes must be enabled) and UART+I2C mode, etc.
->
-> So you are going to turn around and make this an array? If you already
-> know you have changes, I'd rather review this all at once.
->
+Currently, we have two methods of booting. Ordered booting where the booting
+hart brings up each non-booting hart one by one using SBI HSM extension.
+The spinwait booting method relies on harts jumping to Linux kernel randomly
+and boot hart is selected by a lottery. All other non-booting harts keep
+spinning on __cpu_up_stack/task_pointer until boot hart initializes the data.
+Both these methods rely on __cpu_up_stack/task_pointer to setup the stack/
+task pointer. The spinwait method is mostly used to support older firmwares
+without SBI HSM extension and M-mode Linux.  The ordered booting method is the
+preferred booting method for booting general Linux because it can support
+cpu hotplug and kexec.
 
-No, I'd imagine that would be just a bunch of new dt-bindings
-constants, for USI_V1. For example, for USI_V2 you already can see
-these:
+The first patch modified the ordered booting method to use an opaque parameter
+already available in HSM start API to setup the stack/task pointer. The third
+patch resolves the issue #1 by limiting the usage of
+__cpu_up_stack/task_pointer to spinwait specific booting method. The fourth 
+and fifth patch moves the entire hart lottery selection and spinwait method
+to a separate config that can be disabled if required. It solves the issue #2.
+The 6th patch solves issue #3 and #4 by removing riscv_cpuid_to_hartid_mask
+completely. All the SBI APIs directly pass a pointer to struct cpumask and
+the SBI implementation takes care of generating the hart bitmap from the
+cpumask.
 
-    #define USI_V2_NONE        0
-    #define USI_V2_UART        1
-    #define USI_V2_SPI        2
-    #define USI_V2_I2C        3
+It is not trivial to support sparse hartid for spinwait booting method and
+there are no usecases to support sparse hartid for spinwait method as well.
+Any platform with sparse hartid will probably require more advanced features
+such as cpu hotplug and kexec. Thus, the series supports the sparse hartid via
+ordered booting method only. To maintain backward compatibility, spinwait
+booting method is currently enabled in defconfig so that M-mode linux will
+continue to work. Any platform that requires to sparse hartid must disable the
+spinwait method.
 
-and for USI_V1 it would probably be something like this, judging from [1]:
+This series also fixes the out-of-bounds access error[1] reported by Geert.
+The issue can be reproduced with SMP booting with NR_CPUS=4 on platforms with
+discontiguous hart numbering (HiFive unleashed/unmatched & polarfire).
+Spinwait method should also be disabled for such configuration where NR_CPUS
+value is less than maximum hartid in the platform. 
 
-    #define USI_V1_NONE        4
-    #define USI_V1_I2C0  5
-    #define USI_V1_I2C1  6
-    #define USI_V1_I2C0_I2C1_DUAL  7
-    #define USI_V1_SPI  8
-    #define USI_V1_UART  9
-    #define USI_V1_UART_I2C1_DUAL  10
+[1] https://lore.kernel.org/lkml/CAMuHMdUPWOjJfJohxLJefHOrJBtXZ0xfHQt4=hXpUXnasiN+AQ@mail.gmail.com/#t
 
-Guess in that case parsing enabled nodes and figuring out which mode
-we have, and which value should be written into SW_CONF -- might be
-not trivial. Having explicit "mode" property simplifies things.
+The series is based on queue branch on kvm-riscv as it has kvm related changes
+as well. I have tested it on HiFive Unmatched and Qemu.
 
-[1] https://github.com/ibanezbass/universal7885/blob/oneui/drivers/soc/samsung/usi.c
+Atish Patra (6):
+RISC-V: Avoid using per cpu array for ordered booting
+RISC-V: Do not print the SBI version during HSM extension boot print
+RISC-V: Use __cpu_up_stack/task_pointer only for spinwait method
+RISC-V: Move the entire hart selection via lottery to SMP
+RISC-V: Move spinwait booting method to its own config
+RISC-V: Do not use cpumask data structure for hartid bitmap
 
-> > Looks like it
-> > might take some not very elegant logic to figure out which exactly
-> > mode value should be written in SW_CONF register in that way, it's
-> > much easier to just specify mode in USI node. Also, that reflects
-> > hardware better: we actually write that specified mode to SW_CONF
-> > register.
->
-> You just have to compare the child node names or compatibles.
->
+arch/riscv/Kconfig                   |  14 ++
+arch/riscv/include/asm/cpu_ops.h     |   2 -
+arch/riscv/include/asm/cpu_ops_sbi.h |  28 ++++
+arch/riscv/include/asm/sbi.h         |  19 +--
+arch/riscv/include/asm/smp.h         |   8 --
+arch/riscv/kernel/Makefile           |   3 +-
+arch/riscv/kernel/cpu_ops.c          |  26 ++--
+arch/riscv/kernel/cpu_ops_sbi.c      |  23 +++-
+arch/riscv/kernel/cpu_ops_spinwait.c |  27 +++-
+arch/riscv/kernel/head.S             |  33 +++--
+arch/riscv/kernel/head.h             |   6 +-
+arch/riscv/kernel/sbi.c              | 189 +++++++++++++++------------
+arch/riscv/kernel/smp.c              |  10 --
+arch/riscv/kernel/smpboot.c          |   2 +-
+arch/riscv/kvm/mmu.c                 |   4 +-
+arch/riscv/kvm/vcpu_sbi_replace.c    |  11 +-
+arch/riscv/kvm/vcpu_sbi_v01.c        |  11 +-
+arch/riscv/kvm/vmid.c                |   4 +-
+arch/riscv/mm/cacheflush.c           |   5 +-
+arch/riscv/mm/tlbflush.c             |   9 +-
+20 files changed, 252 insertions(+), 182 deletions(-)
+create mode 100644 arch/riscv/include/asm/cpu_ops_sbi.h
 
-For USIv1 that would allow for some invalid combinations (e.g.
-UART+I2C1 is possible, but SPI+I2C1 can't be configured). Also, the
-list of supported compatibles might grow in future, which will have us
-constantly add the list to the driver. And node names might be not
-valid (e.g. you can see @hsi2c names are used in some dts's instead of
-@i2c; also downstream kernels might have all kinds of names -- not a
-strong point, but still).
+--
+2.33.1
 
-Anyway, it can be implemented, and maybe I'm a bit biased here; so if
-I still didn't convince you that benefits of having "mode" property
-outweigh the disadvantages, please let me know -- I can send it in
-next submission.
-
-> > Also, later we might want to be able to switch that mode via
-> > SysFS, e.g. for testing purposes. Current design seems to be better
-> > suited for some things like that.
->
-> The binding should have no impact on that. If for testing, use debugfs.
->
-> > Please let me know if you have a strong opinion on this one, or it's
-> > ok to leave it as is.
-> >
-> > All other comments are addressed and will be present in v3. Thanks for
-> > the review!

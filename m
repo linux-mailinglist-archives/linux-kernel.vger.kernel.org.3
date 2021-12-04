@@ -2,113 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86312468198
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:54:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6479946819C
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:57:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383883AbhLDA5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 19:57:52 -0500
-Received: from mga14.intel.com ([192.55.52.115]:28230 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1354600AbhLDA5v (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 19:57:51 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="237305485"
-X-IronPort-AV: E=Sophos;i="5.87,286,1631602800"; 
-   d="scan'208";a="237305485"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 16:54:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,286,1631602800"; 
-   d="scan'208";a="478507703"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 03 Dec 2021 16:54:22 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id E34EC109; Sat,  4 Dec 2021 02:54:27 +0200 (EET)
-Date:   Sat, 4 Dec 2021 03:54:27 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2] x86: Skip WBINVD instruction for VM guest
-Message-ID: <20211204005427.ccinxlwwab3jsuct@black.fi.intel.com>
-References: <YZPbQVwWOJCrAH78@zn.tnic>
- <20211119040330.4013045-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <87pmqpjcef.ffs@tglx>
- <20211202222109.pcsgm2jska3obvmx@black.fi.intel.com>
- <87lf126010.ffs@tglx>
- <20211203234915.jw6kdd2qnfrionch@black.fi.intel.com>
- <2519e6b6-4f74-e2f8-c428-0fceb0e16472@intel.com>
+        id S1383936AbhLDBBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 20:01:15 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34514 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354600AbhLDBBO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 20:01:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96A3D62C49;
+        Sat,  4 Dec 2021 00:57:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98653C341C1;
+        Sat,  4 Dec 2021 00:57:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638579469;
+        bh=BO0A14QvdxOco1MToTU7UoxsRX6rp+stunCYa4CcvQs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kG21PKb7tDDmzOv3CgyB7TtkPfefmCb2tTpnfKaYiOysQ/miDFq0sDlUHqqOfmj/Y
+         +1OVMAikrDmbgKmnhGS/SD54xjnFNXkMLkVfQ9jAthj8MYC3JV7jMMbs8KV6l+a+iC
+         DW4MdUmwbfxyo35AkYqtxvJ70yvd2eNxxjB3Zm8IA+tIqQ5EriYSJL8I0LrKPqAYut
+         OqrSnTdojANxf+YWwG3yMKyvlCcDsDeyUqeqxmUz610i7Slgidjs5K5tplipKr/SvX
+         2b3wFh50k9FmzaweHB1UlwC6ZtQlS4wfTW5NrKH0rwHdnhbCE0APT2qPZoHMtgeTeU
+         vUYtrtvhzZi6A==
+Date:   Fri, 3 Dec 2021 16:57:47 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>,
+        Lee Jones <lee.jones@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Oliver Neukum <oliver@neukum.org>,
+        "David S. Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 1/1] net: cdc_ncm: Allow for dwNtbOutMaxSize to be unset
+ or zero
+Message-ID: <20211203165747.7e1e7554@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <87wnklivun.fsf@miraculix.mork.no>
+References: <20211202143437.1411410-1-lee.jones@linaro.org>
+        <87wnklivun.fsf@miraculix.mork.no>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2519e6b6-4f74-e2f8-c428-0fceb0e16472@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 04:20:34PM -0800, Dave Hansen wrote:
-> On 12/3/21 3:49 PM, Kirill A. Shutemov wrote:
-> > -	ACPI_FLUSH_CPU_CACHE();
-> > +	if (acpi_state >= ACPI_STATE_S1 && acpi_state <= ACPI_STATE_S3)
-> > +		ACPI_FLUSH_CPU_CACHE();
-> 
-> It's a bit of a bummer that this per-sleep-state logic has to be
-> repeated so many time.
-> 
-> If you pass acpi_state into ACPI_FLUSH_CPU_CACHE() can you centralize
-> the set of places where that knowledge about which sleep states require
-> flushing?
+On Fri, 03 Dec 2021 15:52:48 +0100 Bj=C3=B8rn Mork wrote:
+> Lee Jones <lee.jones@linaro.org> writes:
+>=20
+> > diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+> > index 24753a4da7e60..e303b522efb50 100644
+> > --- a/drivers/net/usb/cdc_ncm.c
+> > +++ b/drivers/net/usb/cdc_ncm.c
+> > @@ -181,6 +181,8 @@ static u32 cdc_ncm_check_tx_max(struct usbnet *dev,=
+ u32 new_tx)
+> >  		min =3D ctx->max_datagram_size + ctx->max_ndp_size + sizeof(struct u=
+sb_cdc_ncm_nth32);
+> > =20
+> >  	max =3D min_t(u32, CDC_NCM_NTB_MAX_SIZE_TX, le32_to_cpu(ctx->ncm_parm=
+.dwNtbOutMaxSize));
+> > +	if (max =3D=3D 0)
+> > +		max =3D CDC_NCM_NTB_MAX_SIZE_TX; /* dwNtbOutMaxSize not set */
+> > =20
+> >  	/* some devices set dwNtbOutMaxSize too low for the above default */
+> >  	min =3D min(min, max); =20
+>=20
+> I believe this is the best possible fix, considering the regressions
+> anything stricter might cause.
+>=20
+> We know of at least one MBIM device where dwNtbOutMaxSize is as low as
+> 2048.
+>=20
+> According to the MBIM spec, the minimum and default value for
+> wMaxSegmentSize is also 2048.  This implies that the calculated "min"
+> value is at least 2076, which is why we need that odd looking
+>=20
+>   min =3D min(min, max);
+>=20
+> So let's just fix this specific zero case without breaking the
+> non-conforming devices.
+>=20
+>=20
+> Reviewed-by: Bj=C3=B8rn Mork <bjorn@mork.no>
 
-Yes, sure, it is doable. It we decide that it is the way to go.
-
-> > TDX doesn't support these S- and C-states. TDX is only supports S0 and S5.
-> 
-> This makes me a bit nervous.  Is this "the first TDX implementation
-> supports..." or "the TDX architecture *prohibits* supporting S1 (or
-> whatever"?
-
-TDX Virtual Firmware Design Guide only states that "ACPI S3 (not supported
-by TDX guests)".
-
-Kernel reports in dmesg "ACPI: PM: (supports S0 S5)".
-
-But I don't see how any state beyond S0 and S5 make sense in TDX context.
-Do you?
-
-I find it neat that adjusting ACPI code to conform the spec makes TDX
-work.
-
-> I really think we need some kind of architecture guarantee.  Without
-> that, we risk breaking things if someone at our employer simply changes
-> their mind.
-
-Guarantees are hard.
-
-If somebody change their mind we will get unexpected #VE and crash.
-I think it is acceptable way to handle unexpected change in confidential
-computing environment.
-
-> The:
-> 
-> > #define ACPI_FLUSH_CPU_CACHE_PHYS()     \
-> >         if (!cpu_feature_enabled(XXX))	\
-> >         	wbinvd();               \  
-> 
-> does seem simpler and less error-prone than this, though.
-
-If it it the way to go, I can make a patch.
-
-But there's no reason to have ACPI_FLUSH_CPU_CACHE_PHYS in addition to
-ACPI_FLUSH_CPU_CACHE. All ACPI_FLUSH_CPU_CACHE can skip cache flush on
-TDX.
-
--- 
- Kirill A. Shutemov
+Applied to net, thanks!

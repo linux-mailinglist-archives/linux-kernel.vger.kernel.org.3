@@ -2,176 +2,751 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D77468703
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 19:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1563D468709
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 19:24:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385471AbhLDS0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 13:26:51 -0500
-Received: from mail-dm6nam10on2091.outbound.protection.outlook.com ([40.107.93.91]:64320
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1355318AbhLDS0m (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 13:26:42 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MObG0D67u9CrUSxPcedikc0YXQaZHHIEQeenPH9b2pymKaX4/FYTzepryPjIiX1LIDGTJsnph5pEHnLj7XCsD0KpCrmw+7ARWIBILUJSJcA1ZbUMCPLsR9nkZ11VFB0uDD2glT3GYberwoSUAzbTE64CSOqodDpgaR1CwBygE1KTn+xFWzQtWo0bQ9gY+20XmjQVhf44Ob6O+IshsktyAcWU7vwmEXT1PhmieFlHvkTvdUUkzz+god2EJOYsLuRTYa8aA/Lch1AliTnWjM+pMwIcf/AON2KqO5KWzpXlMHeApjSzVOpPDylLdgJYqTUCe1dPHs1yjdoRcoGWR0dtSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iUNk4QKNdYcH7XLhl/4P/gFMYdJp7bV3Sh5atD3YpfU=;
- b=QxaUzxhkJiuWZVNkz2AVU9w01XLusnQycgLE5hztNuYPpaDVyo/0maqZATNzUItWzHjMAKA7mgMkbNmlrx9POdaocc3Cg84kInC9h1bt9yT4uHXHXJuN6uYECDiIJ/re3mmPSGMm0bWtbQvpsy4fAUiSf38eWEBAc02e/wNY3OlqSv2dQmig88pFJZbDsbrWQihKuiHdvkkrz1c3DIIiABjT2AQURfakBwsmlljjz9/e347fSNZUowlu1s5Tqz89Idn4BL6j4Q+4/uuOb7ob434XdhJBAsCwEQvdPNv5beetxFjC/ASt0WhpY6iVUf5rv8UOHBx0AEc4IOw1UlQjRw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+        id S1385523AbhLDS1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 13:27:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385457AbhLDS0q (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 13:26:46 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B7FC061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 10:23:20 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id a24so6087321qvb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 10:23:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iUNk4QKNdYcH7XLhl/4P/gFMYdJp7bV3Sh5atD3YpfU=;
- b=KtyiPoGc7wCb5apOYUzIZmfyKIRiqjTWnjV4Vhxv63JJpUvgxrsGfkNl+nw1UZ3jQ4JGsAetqSZu9uKmgUEUYwS5XJlSxj5YnTzF9CwNsaR97ErA7l9gmg9u4jGg2WjUXZUuJAWzR01BO2MCFo1whIpVRk7mw60Erhi7Q9mNlRo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by MWHPR1001MB2061.namprd10.prod.outlook.com
- (2603:10b6:301:36::39) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Sat, 4 Dec
- 2021 18:23:15 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::6430:b20:8805:cd9f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::6430:b20:8805:cd9f%5]) with mapi id 15.20.4755.020; Sat, 4 Dec 2021
- 18:23:15 +0000
-Date:   Sat, 4 Dec 2021 10:23:13 -0800
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH v3 net-next 0/5] prepare ocelot for external interface
- control
-Message-ID: <20211204182313.GB1037231@euler>
-References: <20211204182129.1044899-1-colin.foster@in-advantage.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211204182129.1044899-1-colin.foster@in-advantage.com>
-X-ClientProxiedBy: MW4PR03CA0096.namprd03.prod.outlook.com
- (2603:10b6:303:b7::11) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        d=soleen.com; s=google;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=Z4ZJ40j45cjy2AuzNLU2pcD88ZaE1d5Vm0ENIkoX9KQ=;
+        b=QzMieIeABDCUMv8FXrMGO1JjWpTprR5tbZESA3cR/0WzucGYrbZp8oAT9gM/MRVKNO
+         fT0k4OlDyTkn4tuX2XDTSUrmnvTtiHVFO+j4LXiJcrrmTUw2CHWwwrBUOHBRD/YsPVO3
+         l7eduYAG0wspLo0fZZg3a8z8fC0C59D1jlJoyY1olXn2T4DCwGbay/oyeXb8vZOSav/T
+         sW3k0wutmHrFD6Mjc3tX9s3VLE9NEmT/hEpHoXZKxChILlsi5Q21s/LSO8q1cuDzyCIx
+         Xg/8Ab2+hYt7U6AaIGGNlKJ2Giwn+VlQEMj6m8+XOIp+ir0n1yZwC35GgJQE4IK95ikm
+         3nYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Z4ZJ40j45cjy2AuzNLU2pcD88ZaE1d5Vm0ENIkoX9KQ=;
+        b=zaWHjGxgMAVof6xN05rDHNCD3FZc4804Ne5iShiZ/UslCzSDL2zcJyTKZ9MGrg8a77
+         42KPMryWTCtwSMuOxMdiRs8S7ABpVTwlrmolcoWGEmHk/Rb3qwg+JKf/UdhKz4qxYnTr
+         qjFQn7qWpy/KTnTivn2TxhuCSwvEDkSJ6ihaciP3Evh6bFpwLMmBp1Z3a+0xfpOdvius
+         SLSjkSRhw+lM6AAIh2pLAyKQjIS7YkEcULit/OqyvklnLU155pnvbbzg4Bxr30YcZn1j
+         XOBoQBDrL9ehT6o7KqVbbv45YQ29IYc8YItTvh+e5fTz8iccgU/dL8Od66c7E5QwNFD3
+         MCOA==
+X-Gm-Message-State: AOAM5320HAOzkUIzK0wFKqdRUdlAXIC9K71lzYNki06F0fUZQPzWrfLw
+        HUSoUDy1Q9ZHTf2fSrdlChErFw==
+X-Google-Smtp-Source: ABdhPJzbMsiX1AaqJLFthfX8BE+EsMtlB3hRYHbu0uEk034s31QMXKthGNYEe79xf3mZLSzIGrRCxQ==
+X-Received: by 2002:a05:6214:c8a:: with SMTP id r10mr26448932qvr.38.1638642199888;
+        Sat, 04 Dec 2021 10:23:19 -0800 (PST)
+Received: from soleen.c.googlers.com.com (189.216.85.34.bc.googleusercontent.com. [34.85.216.189])
+        by smtp.gmail.com with ESMTPSA id a24sm4394728qtp.95.2021.12.04.10.23.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Dec 2021 10:23:19 -0800 (PST)
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-doc@vger.kernel.org,
+        akpm@linux-foundation.org, rientjes@google.com, pjt@google.com,
+        weixugc@google.com, gthelen@google.com, mingo@redhat.com,
+        corbet@lwn.net, will@kernel.org, rppt@kernel.org,
+        keescook@chromium.org, tglx@linutronix.de, peterz@infradead.org,
+        masahiroy@kernel.org, samitolvanen@google.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, frederic@kernel.org,
+        hpa@zytor.com, aneesh.kumar@linux.ibm.com, jirislaby@kernel.org,
+        songmuchun@bytedance.com, qydwhotmail@gmail.com
+Subject: [PATCH v2 3/4] mm: page table check
+Date:   Sat,  4 Dec 2021 18:23:13 +0000
+Message-Id: <20211204182314.1470076-4-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
+In-Reply-To: <20211204182314.1470076-1-pasha.tatashin@soleen.com>
+References: <20211204182314.1470076-1-pasha.tatashin@soleen.com>
 MIME-Version: 1.0
-Received: from euler (67.185.175.147) by MW4PR03CA0096.namprd03.prod.outlook.com (2603:10b6:303:b7::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.17 via Frontend Transport; Sat, 4 Dec 2021 18:23:14 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 06708b3e-8082-4f3c-d584-08d9b753234b
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2061:
-X-Microsoft-Antispam-PRVS: <MWHPR1001MB20617E4D6542C4FCDFCF8E46A46B9@MWHPR1001MB2061.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BCb4IHF5j2vwh+gpx8HfxSG1e717o1mgWKnV6IeH+pxxLaORfnbl8O5/jU9vTS3TsEZb4322fyQWldQmjU4sPA2MIdbk1q9bk/8JLVyeSxiVd3BBBeRspsedkGh8qkAdK6hB5VxBG8CvbFNQDFmNoxIcL9r/NISYAlsZYth4id9kcJBrwZbBSrBqikMiDUzuExKCOZ/lMnP+Zn4x51t0uS/Kt+A/0dtPgcaeOXWylHfpzcOaf09y2r9Ckgg+KlTkiN552lDRAnE1JCBpCM3kjJJTfkSIkpEi9UWDMq9+9e/On4Nqp/3hcdBZCp9kollOT5ugf97fpw0FYm02ugpjQDiZCRuYDLaYBuBvvo9SV6XiYrYBbTDoJwBA6xw1DxgJYek94mHvO0e8RvuifDb7u1awllXIH6ybmMD2YG6qUOxEJrGfhFIijTT6HQUVQ0Au38d6eT4paDuAJz858potY9KbFi4I+vt5L4l6YlU3Cz7fvV7PXdSKh8IpxZTCWp5N3x61lEHD4HlYJK9PHzf12OFyhRtATfn1zJZ3chZR93xj42cW9KrUjLCKUm575XvFcs3E1KwQ8MQigTG+fdYSZpH7LS5gQ55Rrx1ooZcxdtrHP9xD7QuYQxzx7U/flDJWf2gczwUeWLb8x19eAALTxwpoPPwXwwHg3xYft8sIAuMSlgMxyG7GNyflzWqs1ZkXdR9kA1B/NIR4j5qVh0C/Iw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(366004)(396003)(376002)(39830400003)(346002)(33716001)(54906003)(52116002)(7416002)(9576002)(2906002)(6496006)(66556008)(8676002)(26005)(186003)(55016003)(66476007)(316002)(8936002)(83380400001)(9686003)(86362001)(33656002)(5660300002)(66946007)(956004)(38100700002)(4326008)(38350700002)(44832011)(508600001)(1076003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MvKfHy1J4xwimDljnvY5Too+CjNQB5sC4xzMtrGTLlcaDRcEwyDzju8l2MQA?=
- =?us-ascii?Q?EUEjlyY2Tjvw8nG/ghbUfexiVrU0D4wcILqLiiCc4QE7ap4LmtRPk2A/CLKA?=
- =?us-ascii?Q?HkkxOVdBOPlvyk++WGOvGnvah7G66jMXKL/vIL3TMZdB4tdJ2bqqeKmU9Jwd?=
- =?us-ascii?Q?2DMuWaupqh98jZ3ev0G/BmS0hK2qw0+8HxnYBWcadJospkNXp3j/vEJtM/z7?=
- =?us-ascii?Q?5lbDA39SfMNUbzWoJGRzNSQhyEKlKsBfYzOMJN6boQDx/ldK7JMgXynQPAnB?=
- =?us-ascii?Q?nR+31nEvsjcsVHl30L51572537xNU2Sca8o0Jvw1MFt/sbSA7GRRsJP63or7?=
- =?us-ascii?Q?5ru+2badAhopi8UF2xjGET/vw2oWPWv4RnIL4dTHhuRrSB+bZH5Qw3yZTea/?=
- =?us-ascii?Q?ln/jWADgEUllNr1JORGq6rE1q1inY8YsNFZdkg9nczM/VLurjxjOBHinimwL?=
- =?us-ascii?Q?4nnseQnx/GtAT1BXI/tnjnUkxxKMjOpHSyRDez7cQacPPFNFJAGxBglxMjBi?=
- =?us-ascii?Q?s3hK37LYoync7IGK4dzHk4MLbZvvCGYxlfF8E7aH1UxtclwLGV9s6FVVJeuz?=
- =?us-ascii?Q?c4TyVOYk61ZZTYxGQdE3hl2+iBiI0DCXpYdbk6iGRuckuwxL1rKDdwu45yWO?=
- =?us-ascii?Q?IM9s8HBMHudQicrHeLW0xhW00dYq2tJMdTVJys607kokrLJzp/b/Vb9celHk?=
- =?us-ascii?Q?BUmDqUfJopQM5paht9yDIvGA4V+CVNQyk3vXsyPIchBikWo1SmjbcO01AEE4?=
- =?us-ascii?Q?6wbrdaqaeREINrr0dq/3I2xa7qNOnyJ/tPt7EdQ74q4TCVAX04h957TZDyNX?=
- =?us-ascii?Q?u3ym9JFl/jWrzqak5m5bNtNEJKXuhihPg2nu0HyWDLxmflGoEFyzK4skeg2Z?=
- =?us-ascii?Q?8LPAvaWRv0DykKUh7oTrearuNJgYqEyWNoePvB6bdjNchS5HS0JhTYjMOmBK?=
- =?us-ascii?Q?77ISX60gUd20OH3KszLnBSp7Scjsly5uu0T5TX0FbnOdqPrxVm+a78GXhY0Z?=
- =?us-ascii?Q?BfUI3CVoS7Tz2jwziXPsdZjQy4JtgJGljQHcZjMJ+Z5f4nQEmkuECPxAOyYV?=
- =?us-ascii?Q?C5+Qc3+sOpPzQGpiyqz9Z/WR7Xk+8kWFSzSDCm2dXJC7RDRM6bVQ3Z8VQAY7?=
- =?us-ascii?Q?y69A5uQkbFAWxMjPV7JjCEHqob8z3y0bqCOv67Qt6gz+fMtg2UwY4wfUP4d9?=
- =?us-ascii?Q?SWqAMYlFi/fzuWyEtKMjv8/nuyxY8qJrL2g7ORMPvmO+6l6dob3BwNFslo9v?=
- =?us-ascii?Q?3Ly0JvdciBORIFshNEkf6Cs1jYf/mrQHnw0wfYVC/1ZCk3O8YRptaNwU08d1?=
- =?us-ascii?Q?EKnTWzU3CHKGTB67m7FVmBlWqI8Nf4qs8g0JfG8fzzBc1crgGMAdaDx5ry82?=
- =?us-ascii?Q?Ku9a7MiLmSHYOmW9o7RV9fy+SUJsBz+3HAWD/Rc40qae9Xz2rYeMEKe+fhtz?=
- =?us-ascii?Q?s57A6YESs9ylSP+HsteIBirCcJt6XxhDrn/OpfBj6W7YY5iwlFr1qTs+BSJN?=
- =?us-ascii?Q?AuLPH8eIfqhJ3t3PbhxVvPYt788z9HXHGOSSAwGyjslQdIGjZtY4p04nHSen?=
- =?us-ascii?Q?06EjeiL87lVQqqCkQPwC+eLv8Ba7FtmMETBp8+ISZSMA0KeKGwOgIMRX6L+z?=
- =?us-ascii?Q?gYS5tesVrUb7qIlplsZukONzbCAD/Th0SpRso5dtwsUciv+xt5Iio9rDlJM2?=
- =?us-ascii?Q?guWKD/ksn1t9657x3Lbo6ge9i1w=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06708b3e-8082-4f3c-d584-08d9b753234b
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Dec 2021 18:23:15.2966
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ry8/tY0/7MA9RA/NYoh7tg3PsU9DRETJ1wMalVlZlkRBiXr3hqCl3MIPy5gwY+z17Imjvu1LaP6VaAn4xYmJto9iwsoO4JvHVOcTcqZDXsY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2061
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 04, 2021 at 10:21:24AM -0800, Colin Foster wrote:
-> This patch set is derived from an attempt to include external control
-> for a VSC751[1234] chip via SPI. That patch set has grown large and is
-> getting unwieldy for reviewers and the developers... me.
-> 
-> I'm breaking out the changes from that patch set. Some are trivial 
->   net: dsa: ocelot: remove unnecessary pci_bar variables
->   net: dsa: ocelot: felix: Remove requirement for PCS in felix devices
-> 
-> some are required for SPI
->   net: dsa: ocelot: felix: add interface for custom regmaps
-> 
-> and some are just to expose code to be shared
->   net: mscc: ocelot: split register definitions to a separate file
->   net: mscc: ocelot: expose ocelot wm functions
-> 
-> 
-> The entirety of this patch set should have essentially no impact on the
-> system performance.
-> 
-> v1 -> v2
->     * Removed the per-device-per-port quirks for Felix. Might be
->     completely unnecessary.
->     * Fixed the renaming issue for vec7514_regs. It includes the
->     Reported-by kernel test robot by way of git b4... If that isn't the
->     right thing to do in this instance, let me know :-)
-> 
-> v2 -> v3
->     * Fix an include. Thanks Jakub Kicinski!
+Check user page table entries at the time they are added and removed.
 
-Oops - I didn't use git b4 to pull in the reviewed by tags. Sending V4
-with those changes and this fix. Apologies!
+Allows to synchronously catch memory corruption issues related to double
+mapping.
 
-> 
-> Colin Foster (5):
->   net: dsa: ocelot: remove unnecessary pci_bar variables
->   net: dsa: ocelot: felix: Remove requirement for PCS in felix devices
->   net: dsa: ocelot: felix: add interface for custom regmaps
->   net: mscc: ocelot: split register definitions to a separate file
->   net: mscc: ocelot: expose ocelot wm functions
-> 
->  drivers/net/dsa/ocelot/felix.c             |   6 +-
->  drivers/net/dsa/ocelot/felix.h             |   4 +-
->  drivers/net/dsa/ocelot/felix_vsc9959.c     |  11 +-
->  drivers/net/dsa/ocelot/seville_vsc9953.c   |   1 +
->  drivers/net/ethernet/mscc/Makefile         |   3 +-
->  drivers/net/ethernet/mscc/ocelot_devlink.c |  31 ++
->  drivers/net/ethernet/mscc/ocelot_vsc7514.c | 548 +--------------------
->  drivers/net/ethernet/mscc/vsc7514_regs.c   | 523 ++++++++++++++++++++
->  include/soc/mscc/ocelot.h                  |   5 +
->  include/soc/mscc/vsc7514_regs.h            |  27 +
->  10 files changed, 610 insertions(+), 549 deletions(-)
->  create mode 100644 drivers/net/ethernet/mscc/vsc7514_regs.c
->  create mode 100644 include/soc/mscc/vsc7514_regs.h
-> 
-> -- 
-> 2.25.1
-> 
+When a pte for an anonymous page is added into page table, we verify that
+this pte does not already point to a file backed page, and vice versa if
+this is a file backed page that is being added we verify that this page
+does not have an anonymous mapping
+
+We also enforce that read-only sharing for anonymous pages is allowed
+(i.e.  cow after fork).  All other sharing must be for file pages.
+
+Page table check allows to protect and debug cases where "struct page"
+metadata became corrupted for some reason.  For example, when refcnt or
+mapcount become invalid.
+
+Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+---
+ Documentation/vm/index.rst            |   1 +
+ Documentation/vm/page_table_check.rst |  56 ++++++
+ MAINTAINERS                           |   9 +
+ arch/Kconfig                          |   3 +
+ include/linux/page_table_check.h      | 147 ++++++++++++++
+ mm/Kconfig.debug                      |  24 +++
+ mm/Makefile                           |   1 +
+ mm/page_alloc.c                       |   4 +
+ mm/page_ext.c                         |   4 +
+ mm/page_table_check.c                 | 270 ++++++++++++++++++++++++++
+ 10 files changed, 519 insertions(+)
+ create mode 100644 Documentation/vm/page_table_check.rst
+ create mode 100644 include/linux/page_table_check.h
+ create mode 100644 mm/page_table_check.c
+
+diff --git a/Documentation/vm/index.rst b/Documentation/vm/index.rst
+index 6f5ffef4b716..43bb54d897d9 100644
+--- a/Documentation/vm/index.rst
++++ b/Documentation/vm/index.rst
+@@ -31,6 +31,7 @@ algorithms.  If you are looking for advice on simply allocating memory, see the
+    page_migration
+    page_frags
+    page_owner
++   page_table_check
+    remap_file_pages
+    slub
+    split_page_table_lock
+diff --git a/Documentation/vm/page_table_check.rst b/Documentation/vm/page_table_check.rst
+new file mode 100644
+index 000000000000..51d2e273d345
+--- /dev/null
++++ b/Documentation/vm/page_table_check.rst
+@@ -0,0 +1,56 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++.. _page_table_check:
++
++================
++Page Table Check
++================
++
++Introduction
++============
++
++Page table check allows to hardern the kernel by ensuring that some types of
++the memory corruptions are prevented.
++
++Page table check performs extra verifications at the time when new pages become
++accessible from the userspace by getting their page table entries (PTEs PMDs
++etc.) added into the table.
++
++In case of detected corruption, the kernel is crashed. There is a small
++performance and memory overhead associated with the page table check. Therefore,
++it is disabled by default, but can be optionally be enabled on systems where
++the extra hardening outweighs the performance costs. Also, because page table
++check is synchronous, it can help with debugging double map memory corruption
++issues, by crashing kernel at the time wrong mapping occurs instead of later
++which is often the case with memory corruptions bugs.
++
++Double mapping detection logic
++==============================
++
+++-------------------+-------------------+-------------------+------------------+
++| Current Mapping   | New mapping       | Permissions       | Rule             |
+++===================+===================+===================+==================+
++| Anonymous         | Anonymous         | Read              | Allow            |
+++-------------------+-------------------+-------------------+------------------+
++| Anonymous         | Anonymous         | Read / Write      | Prohibit         |
+++-------------------+-------------------+-------------------+------------------+
++| Anonymous         | Named             | Any               | Prohibit         |
+++-------------------+-------------------+-------------------+------------------+
++| Named             | Anonymous         | Any               | Prohibit         |
+++-------------------+-------------------+-------------------+------------------+
++| Named             | Named             | Any               | Allow            |
+++-------------------+-------------------+-------------------+------------------+
++
++Enabling Page Table Check
++=========================
++
++Build kernel with:
++
++- PAGE_TABLE_CHECK=y
++  Note, it can only be enabled on platforms where ARCH_SUPPORTS_PAGE_TABLE_CHECK
++  is available.
++
++- Boot with 'page_table_check=on' kernel parameter.
++
++Optionally, build kernel with PAGE_TABLE_CHECK_ENFORCED in order to have page
++table support without extra kernel parameter.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 02ed1d2fae00..5b1e79f8e3d8 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14463,6 +14463,15 @@ F:	include/net/page_pool.h
+ F:	include/trace/events/page_pool.h
+ F:	net/core/page_pool.c
+ 
++PAGE TABLE CHECK
++M:	Pasha Tatashin <pasha.tatashin@soleen.com>
++M:	Andrew Morton <akpm@linux-foundation.org>
++L:	linux-mm@kvack.org
++S:	Maintained
++F:	Documentation/vm/page_table_check.rst
++F:	include/linux/page_table_check.h
++F:	mm/page_table_check.c
++
+ PANASONIC LAPTOP ACPI EXTRAS DRIVER
+ M:	Kenneth Chan <kenneth.t.chan@gmail.com>
+ L:	platform-driver-x86@vger.kernel.org
+diff --git a/arch/Kconfig b/arch/Kconfig
+index fa962a3dd5f8..ef0fda9166cc 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -1307,6 +1307,9 @@ config HAVE_ARCH_PFN_VALID
+ config ARCH_SUPPORTS_DEBUG_PAGEALLOC
+ 	bool
+ 
++config ARCH_SUPPORTS_PAGE_TABLE_CHECK
++	bool
++
+ config ARCH_SPLIT_ARG64
+ 	bool
+ 	help
+diff --git a/include/linux/page_table_check.h b/include/linux/page_table_check.h
+new file mode 100644
+index 000000000000..38cace1da7b6
+--- /dev/null
++++ b/include/linux/page_table_check.h
+@@ -0,0 +1,147 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++/*
++ * Copyright (c) 2021, Google LLC.
++ * Pasha Tatashin <pasha.tatashin@soleen.com>
++ */
++#ifndef __LINUX_PAGE_TABLE_CHECK_H
++#define __LINUX_PAGE_TABLE_CHECK_H
++
++#ifdef CONFIG_PAGE_TABLE_CHECK
++#include <linux/jump_label.h>
++
++extern struct static_key_true page_table_check_disabled;
++extern struct page_ext_operations page_table_check_ops;
++
++void __page_table_check_zero(struct page *page, unsigned int order);
++void __page_table_check_pte_clear(struct mm_struct *mm, unsigned long addr,
++				  pte_t pte);
++void __page_table_check_pmd_clear(struct mm_struct *mm, unsigned long addr,
++				  pmd_t pmd);
++void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
++				  pud_t pud);
++void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
++				pte_t *ptep, pte_t pte);
++void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
++				pmd_t *pmdp, pmd_t pmd);
++void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
++				pud_t *pudp, pud_t pud);
++
++static inline void page_table_check_alloc(struct page *page, unsigned int order)
++{
++	if (static_branch_likely(&page_table_check_disabled))
++		return;
++
++	__page_table_check_zero(page, order);
++}
++
++static inline void page_table_check_free(struct page *page, unsigned int order)
++{
++	if (static_branch_likely(&page_table_check_disabled))
++		return;
++
++	__page_table_check_zero(page, order);
++}
++
++static inline void page_table_check_pte_clear(struct mm_struct *mm,
++					      unsigned long addr, pte_t pte)
++{
++	if (static_branch_likely(&page_table_check_disabled))
++		return;
++
++	__page_table_check_pte_clear(mm, addr, pte);
++}
++
++static inline void page_table_check_pmd_clear(struct mm_struct *mm,
++					      unsigned long addr, pmd_t pmd)
++{
++	if (static_branch_likely(&page_table_check_disabled))
++		return;
++
++	__page_table_check_pmd_clear(mm, addr, pmd);
++}
++
++static inline void page_table_check_pud_clear(struct mm_struct *mm,
++					      unsigned long addr, pud_t pud)
++{
++	if (static_branch_likely(&page_table_check_disabled))
++		return;
++
++	__page_table_check_pud_clear(mm, addr, pud);
++}
++
++static inline void page_table_check_pte_set(struct mm_struct *mm,
++					    unsigned long addr, pte_t *ptep,
++					    pte_t pte)
++{
++	if (static_branch_likely(&page_table_check_disabled))
++		return;
++
++	__page_table_check_pte_set(mm, addr, ptep, pte);
++}
++
++static inline void page_table_check_pmd_set(struct mm_struct *mm,
++					    unsigned long addr, pmd_t *pmdp,
++					    pmd_t pmd)
++{
++	if (static_branch_likely(&page_table_check_disabled))
++		return;
++
++	__page_table_check_pmd_set(mm, addr, pmdp, pmd);
++}
++
++static inline void page_table_check_pud_set(struct mm_struct *mm,
++					    unsigned long addr, pud_t *pudp,
++					    pud_t pud)
++{
++	if (static_branch_likely(&page_table_check_disabled))
++		return;
++
++	__page_table_check_pud_set(mm, addr, pudp, pud);
++}
++
++#else
++
++static inline void page_table_check_alloc(struct page *page, unsigned int order)
++{
++}
++
++static inline void page_table_check_free(struct page *page, unsigned int order)
++{
++}
++
++static inline void page_table_check_pte_clear(struct mm_struct *mm,
++					      unsigned long addr, pte_t pte)
++{
++}
++
++static inline void page_table_check_pmd_clear(struct mm_struct *mm,
++					      unsigned long addr, pmd_t pmd)
++{
++}
++
++static inline void page_table_check_pud_clear(struct mm_struct *mm,
++					      unsigned long addr, pud_t pud)
++{
++}
++
++static inline void page_table_check_pte_set(struct mm_struct *mm,
++					    unsigned long addr, pte_t *ptep,
++					    pte_t pte)
++{
++}
++
++static inline void page_table_check_pmd_set(struct mm_struct *mm,
++					    unsigned long addr, pmd_t *pmdp,
++					    pmd_t pmd)
++{
++}
++
++static inline void page_table_check_pud_set(struct mm_struct *mm,
++					    unsigned long addr, pud_t *pudp,
++					    pud_t pud)
++{
++}
++
++#endif /* CONFIG_PAGE_TABLE_CHECK */
++#endif /* __LINUX_PAGE_TABLE_CHECK_H */
+diff --git a/mm/Kconfig.debug b/mm/Kconfig.debug
+index 1e73717802f8..5bd5bb097252 100644
+--- a/mm/Kconfig.debug
++++ b/mm/Kconfig.debug
+@@ -62,6 +62,30 @@ config PAGE_OWNER
+ 
+ 	  If unsure, say N.
+ 
++config PAGE_TABLE_CHECK
++	bool "Check for invalid mappings in user page tables"
++	depends on ARCH_SUPPORTS_PAGE_TABLE_CHECK
++	select PAGE_EXTENSION
++	help
++	  Check that anonymous page is not being mapped twice with read write
++	  permissions. Check that anonymous and file pages are not being
++	  erroneously shared. Since the checking is performed at the time
++	  entries are added and removed to user page tables, leaking, corruption
++	  and double mapping problems are detected synchronously.
++
++	  If unsure say "n".
++
++config PAGE_TABLE_CHECK_ENFORCED
++	bool "Enforce the page table checking by default"
++	depends on PAGE_TABLE_CHECK
++	help
++	  Always enable page table checking.  By default the page table checking
++	  is disabled, and can be optionally enabled via page_table_check=on
++	  kernel parameter. This config enforces that page table check is always
++	  enabled.
++
++	  If unsure say "n".
++
+ config PAGE_POISONING
+ 	bool "Poison pages after freeing"
+ 	help
+diff --git a/mm/Makefile b/mm/Makefile
+index d6c0042e3aa0..5c5a3a480fa6 100644
+--- a/mm/Makefile
++++ b/mm/Makefile
+@@ -112,6 +112,7 @@ obj-$(CONFIG_GENERIC_EARLY_IOREMAP) += early_ioremap.o
+ obj-$(CONFIG_CMA)	+= cma.o
+ obj-$(CONFIG_MEMORY_BALLOON) += balloon_compaction.o
+ obj-$(CONFIG_PAGE_EXTENSION) += page_ext.o
++obj-$(CONFIG_PAGE_TABLE_CHECK) += page_table_check.o
+ obj-$(CONFIG_CMA_DEBUGFS) += cma_debug.o
+ obj-$(CONFIG_SECRETMEM) += secretmem.o
+ obj-$(CONFIG_CMA_SYSFS) += cma_sysfs.o
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 77253ea6031e..edfd6c81af82 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -64,6 +64,7 @@
+ #include <linux/sched/rt.h>
+ #include <linux/sched/mm.h>
+ #include <linux/page_owner.h>
++#include <linux/page_table_check.h>
+ #include <linux/kthread.h>
+ #include <linux/memcontrol.h>
+ #include <linux/ftrace.h>
+@@ -1308,6 +1309,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ 		if (memcg_kmem_enabled() && PageMemcgKmem(page))
+ 			__memcg_kmem_uncharge_page(page, order);
+ 		reset_page_owner(page, order);
++		page_table_check_free(page, order);
+ 		return false;
+ 	}
+ 
+@@ -1347,6 +1349,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ 	page_cpupid_reset_last(page);
+ 	page->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
+ 	reset_page_owner(page, order);
++	page_table_check_free(page, order);
+ 
+ 	if (!PageHighMem(page)) {
+ 		debug_check_no_locks_freed(page_address(page),
+@@ -2421,6 +2424,7 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
+ 	}
+ 
+ 	set_page_owner(page, order, gfp_flags);
++	page_table_check_alloc(page, order);
+ }
+ 
+ static void prep_new_page(struct page *page, unsigned int order, gfp_t gfp_flags,
+diff --git a/mm/page_ext.c b/mm/page_ext.c
+index 6242afb24d84..bee3240604dc 100644
+--- a/mm/page_ext.c
++++ b/mm/page_ext.c
+@@ -8,6 +8,7 @@
+ #include <linux/kmemleak.h>
+ #include <linux/page_owner.h>
+ #include <linux/page_idle.h>
++#include <linux/page_table_check.h>
+ 
+ /*
+  * struct page extension
+@@ -75,6 +76,9 @@ static struct page_ext_operations *page_ext_ops[] = {
+ #if defined(CONFIG_PAGE_IDLE_FLAG) && !defined(CONFIG_64BIT)
+ 	&page_idle_ops,
+ #endif
++#ifdef CONFIG_PAGE_TABLE_CHECK
++	&page_table_check_ops,
++#endif
+ };
+ 
+ unsigned long page_ext_size = sizeof(struct page_ext);
+diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+new file mode 100644
+index 000000000000..7504e7caa2a1
+--- /dev/null
++++ b/mm/page_table_check.c
+@@ -0,0 +1,270 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Copyright (c) 2021, Google LLC.
++ * Pasha Tatashin <pasha.tatashin@soleen.com>
++ */
++#include <linux/mm.h>
++#include <linux/page_table_check.h>
++
++#undef pr_fmt
++#define pr_fmt(fmt)	"page_table_check: " fmt
++
++struct page_table_check {
++	atomic_t anon_map_count;
++	atomic_t file_map_count;
++};
++
++static bool __page_table_check_enabled __initdata =
++				IS_ENABLED(CONFIG_PAGE_TABLE_CHECK_ENFORCED);
++
++DEFINE_STATIC_KEY_TRUE(page_table_check_disabled);
++EXPORT_SYMBOL(page_table_check_disabled);
++
++static int __init early_page_table_check_param(char *buf)
++{
++	if (!buf)
++		return -EINVAL;
++
++	if (strcmp(buf, "on") == 0)
++		__page_table_check_enabled = true;
++	else if (strcmp(buf, "off") == 0)
++		__page_table_check_enabled = false;
++
++	return 0;
++}
++
++early_param("page_table_check", early_page_table_check_param);
++
++static bool __init need_page_table_check(void)
++{
++	return __page_table_check_enabled;
++}
++
++static void __init init_page_table_check(void)
++{
++	if (!__page_table_check_enabled)
++		return;
++	static_branch_disable(&page_table_check_disabled);
++}
++
++struct page_ext_operations page_table_check_ops = {
++	.size = sizeof(struct page_table_check),
++	.need = need_page_table_check,
++	.init = init_page_table_check,
++};
++
++static struct page_table_check *get_page_table_check(struct page_ext *page_ext)
++{
++	BUG_ON(!page_ext);
++	return (void *)(page_ext) + page_table_check_ops.offset;
++}
++
++static inline bool pte_user_accessible_page(pte_t pte)
++{
++	return (pte_val(pte) & _PAGE_PRESENT) && (pte_val(pte) & _PAGE_USER);
++}
++
++static inline bool pmd_user_accessible_page(pmd_t pmd)
++{
++	return pmd_leaf(pmd) && (pmd_val(pmd) & _PAGE_PRESENT) &&
++		(pmd_val(pmd) & _PAGE_USER);
++}
++
++static inline bool pud_user_accessible_page(pud_t pud)
++{
++	return pud_leaf(pud) && (pud_val(pud) & _PAGE_PRESENT) &&
++		(pud_val(pud) & _PAGE_USER);
++}
++
++/*
++ * An enty is removed from the page table, decrement the counters for that page
++ * verify that it is of correct type and counters do not become negative.
++ */
++static void page_table_check_clear(struct mm_struct *mm, unsigned long addr,
++				   unsigned long pfn, unsigned long pgcnt)
++{
++	struct page_ext *page_ext;
++	struct page *page;
++	bool anon;
++	int i;
++
++	if (!pfn_valid(pfn))
++		return;
++
++	page = pfn_to_page(pfn);
++	page_ext = lookup_page_ext(page);
++	anon = PageAnon(page);
++
++	for (i = 0; i < pgcnt; i++) {
++		struct page_table_check *ptc = get_page_table_check(page_ext);
++
++		if (anon) {
++			BUG_ON(atomic_read(&ptc->file_map_count));
++			BUG_ON(atomic_dec_return(&ptc->anon_map_count) < 0);
++		} else {
++			BUG_ON(atomic_read(&ptc->anon_map_count));
++			BUG_ON(atomic_dec_return(&ptc->file_map_count) < 0);
++		}
++		page_ext = page_ext_next(page_ext);
++	}
++}
++
++/*
++ * A new enty is added to the page table, increment the counters for that page
++ * verify that it is of correct type and is not being mapped with a different
++ * type to a different process.
++ */
++static void page_table_check_set(struct mm_struct *mm, unsigned long addr,
++				 unsigned long pfn, unsigned long pgcnt,
++				 bool rw)
++{
++	struct page_ext *page_ext;
++	struct page *page;
++	bool anon;
++	int i;
++
++	if (!pfn_valid(pfn))
++		return;
++
++	page = pfn_to_page(pfn);
++	page_ext = lookup_page_ext(page);
++	anon = PageAnon(page);
++
++	for (i = 0; i < pgcnt; i++) {
++		struct page_table_check *ptc = get_page_table_check(page_ext);
++
++		if (anon) {
++			BUG_ON(atomic_read(&ptc->file_map_count));
++			BUG_ON(atomic_inc_return(&ptc->anon_map_count) > 1 && rw);
++		} else {
++			BUG_ON(atomic_read(&ptc->anon_map_count));
++			BUG_ON(atomic_inc_return(&ptc->file_map_count) < 0);
++		}
++		page_ext = page_ext_next(page_ext);
++	}
++}
++
++/*
++ * page is on free list, or is being allocated, verify that counters are zeroes
++ * crash if they are not.
++ */
++void __page_table_check_zero(struct page *page, unsigned int order)
++{
++	struct page_ext *page_ext = lookup_page_ext(page);
++	int i;
++
++	BUG_ON(!page_ext);
++	for (i = 0; i < (1 << order); i++) {
++		struct page_table_check *ptc = get_page_table_check(page_ext);
++
++		BUG_ON(atomic_read(&ptc->anon_map_count));
++		BUG_ON(atomic_read(&ptc->file_map_count));
++		page_ext = page_ext_next(page_ext);
++	}
++}
++
++void __page_table_check_pte_clear(struct mm_struct *mm, unsigned long addr,
++				  pte_t pte)
++{
++	if (&init_mm == mm)
++		return;
++
++	if (pte_user_accessible_page(pte)) {
++		page_table_check_clear(mm, addr, pte_pfn(pte),
++				       PAGE_SIZE >> PAGE_SHIFT);
++	}
++}
++EXPORT_SYMBOL(__page_table_check_pte_clear);
++
++void __page_table_check_pmd_clear(struct mm_struct *mm, unsigned long addr,
++				  pmd_t pmd)
++{
++	if (&init_mm == mm)
++		return;
++
++	if (pmd_user_accessible_page(pmd)) {
++		page_table_check_clear(mm, addr, pmd_pfn(pmd),
++				       PMD_PAGE_SIZE >> PAGE_SHIFT);
++	}
++}
++EXPORT_SYMBOL(__page_table_check_pmd_clear);
++
++void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
++				  pud_t pud)
++{
++	if (&init_mm == mm)
++		return;
++
++	if (pud_user_accessible_page(pud)) {
++		page_table_check_clear(mm, addr, pud_pfn(pud),
++				       PUD_PAGE_SIZE >> PAGE_SHIFT);
++	}
++}
++EXPORT_SYMBOL(__page_table_check_pud_clear);
++
++void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
++				pte_t *ptep, pte_t pte)
++{
++	pte_t old_pte;
++
++	if (&init_mm == mm)
++		return;
++
++	old_pte = *ptep;
++	if (pte_user_accessible_page(old_pte)) {
++		page_table_check_clear(mm, addr, pte_pfn(old_pte),
++				       PAGE_SIZE >> PAGE_SHIFT);
++	}
++
++	if (pte_user_accessible_page(pte)) {
++		page_table_check_set(mm, addr, pte_pfn(pte),
++				     PAGE_SIZE >> PAGE_SHIFT,
++				     pte_write(pte));
++	}
++}
++EXPORT_SYMBOL(__page_table_check_pte_set);
++
++void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
++				pmd_t *pmdp, pmd_t pmd)
++{
++	pmd_t old_pmd;
++
++	if (&init_mm == mm)
++		return;
++
++	old_pmd = *pmdp;
++	if (pmd_user_accessible_page(old_pmd)) {
++		page_table_check_clear(mm, addr, pmd_pfn(old_pmd),
++				       PMD_PAGE_SIZE >> PAGE_SHIFT);
++	}
++
++	if (pmd_user_accessible_page(pmd)) {
++		page_table_check_set(mm, addr, pmd_pfn(pmd),
++				     PMD_PAGE_SIZE >> PAGE_SHIFT,
++				     pmd_write(pmd));
++	}
++}
++EXPORT_SYMBOL(__page_table_check_pmd_set);
++
++void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
++				pud_t *pudp, pud_t pud)
++{
++	pud_t old_pud;
++
++	if (&init_mm == mm)
++		return;
++
++	old_pud = *pudp;
++	if (pud_user_accessible_page(old_pud)) {
++		page_table_check_clear(mm, addr, pud_pfn(old_pud),
++				       PUD_PAGE_SIZE >> PAGE_SHIFT);
++	}
++
++	if (pud_user_accessible_page(pud)) {
++		page_table_check_set(mm, addr, pud_pfn(pud),
++				     PUD_PAGE_SIZE >> PAGE_SHIFT,
++				     pud_write(pud));
++	}
++}
++EXPORT_SYMBOL(__page_table_check_pud_set);
+-- 
+2.34.1.400.ga245620fadb-goog
+

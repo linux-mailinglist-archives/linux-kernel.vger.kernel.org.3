@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0121546883C
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 00:21:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C67468840
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 00:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbhLDXYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 18:24:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
+        id S233608AbhLDXfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 18:35:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbhLDXYe (ORCPT
+        with ESMTP id S231145AbhLDXfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 18:24:34 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02314C061751;
-        Sat,  4 Dec 2021 15:21:08 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id j3so13969399wrp.1;
-        Sat, 04 Dec 2021 15:21:07 -0800 (PST)
+        Sat, 4 Dec 2021 18:35:24 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E9BC061751;
+        Sat,  4 Dec 2021 15:31:58 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id v11so13882851wrw.10;
+        Sat, 04 Dec 2021 15:31:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=vmhLeOr94OYlbQhipNIZ1kv4mnRG0TgvipPVx8r866Y=;
-        b=RInm1Q/N3j6EcqmgREZi7vD2tPFV7rFOfP2Lea1HDh/SYi0DcXRlHmLpzoMjLcAzj4
-         sZXygngRcUGxlUzuBS8KMQ+bY432IIe5YxzUnDuvg5FPnCKlifEGenXKfGSkFQ7BDvcX
-         TqBr2CbjPyqoLvUW9V4Bdz2U8CsSy8r8g2LFhqVTFza6Q9hKGOTn5p6vATf72xGcPSy5
-         DLxi8lOwFLy7k/rbGDcrzaxFTp4zfHfoeh7jb0ltKldUyjMO0vYI0zQ6TICYYP9bD/Y+
-         Jdhsez8lrkwgHEan5blGE4TjhzuxS9ngscmROTyzdaIBHUBlZBWNiC36qhppemrZiOdk
-         ubAA==
+        bh=TwHuq68BGqmW2Fn/QSPttgnID1EQBPBbIWi17rr9Wt0=;
+        b=p3aA+/XK9CZR2UZFRQ+oUvl5Qz4iSfm7XKTtBgNt9sXe20sZXdZDtmOsPk2WTjoIhW
+         zxQHi8P9zHfCCKyfyxNjRFIHu0gop+wbNKPkIKPR4oGRkVrLuTz3BOCAohSN8CUxBwHg
+         xMxHqyRMT5n9phe4ECe3vf5XPgxd+M8oLDD1NYAnlI/tObDdLuTC+0StpKh2mG19I66b
+         sCGpnBUmvi1BeDUVJqdiUe21suYTYc9l6qnfFdFiPBLQc7JX8viCrFW9syg2S346Aerj
+         cG2bKUa4udoBTOBLWoaSUP6o6UcGF3lLLEhmT0neCMluPf/zszV//T+1do/9n194d/f0
+         LOlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=vmhLeOr94OYlbQhipNIZ1kv4mnRG0TgvipPVx8r866Y=;
-        b=fZHch6rlbI/VnbdMN88pqUxn7gyjw2DLCwNC3aKXZotx7b/61SYOr0Q8h+nvuyMqi4
-         sS8SiWG/ZDvo67pnSZYhB2EuoAwA77fmkiFc0RsU6VtfGK1aEBN+VgBmHWWOMZMrURH+
-         rELcUktsQF338BZVUeOP1llFlXVf+a1iebtFHHve+R7bguA5wu4p7PzneAgE7J2UsVf1
-         ItqWO4S8jhLxErtGoBy56WsBFNQlHR+WAumYjPPCby2PrvPZvjRus7r//lOtJ/kKu6yT
-         671xf+6L8e+lQsXYxRFzXbvC0VxC2M9reHAyzBCZpXSgS/qiZ4xpSTEcS6AIW0D0DeI6
-         ygog==
-X-Gm-Message-State: AOAM532zVKhJ8DcscAR56o8+aRrnqO+k34TAEb4sPE0hzv9lEaogQJKV
-        Sgy8u2r4aWEONqxj6riK8eg=
-X-Google-Smtp-Source: ABdhPJwK0MCKKGrmYg0/9KFK32EssuGrvF1rMUeX+2SA3jvpySxX91heEhKCNGH76NX7DorbXIEsYg==
-X-Received: by 2002:a5d:6e04:: with SMTP id h4mr31041542wrz.127.1638660066603;
-        Sat, 04 Dec 2021 15:21:06 -0800 (PST)
+        bh=TwHuq68BGqmW2Fn/QSPttgnID1EQBPBbIWi17rr9Wt0=;
+        b=S+v/VnVIIsq0ICV1V1Aw6dJ08JRtCZsi5dEHUfDGikiXNO2PpscRDoYGdepdcwznUi
+         2ynMQP8m6V7d3FrGxoY+Ry7pblKkMvWTOjuxRumZah++Dc1E2KOiKVrQXx5XWFpFNdHV
+         453RVCJXA5ReK4Hyu6y+vBUqhSA/gPHJkt8dgCRTAaDh05WJmvvAnOA2CWunKUbwU8Y+
+         H9eszQrXa4arL3Fv9R0vVe/GSBh9Viu13hoeKUlHyDfGnE1eNJDKZY4VVF/XsvpKsgVO
+         KmIS1pVdGUw4uUu07EeJ2nIx7FZOe7BJpkif1D+yQ56y/a28VizlOrjuGTJGMlAMvqQF
+         gYJA==
+X-Gm-Message-State: AOAM533LNJsWhqDfUVL5pX9Y20SVBl0I0ii5TV4UmpJd00M89kaDuuJs
+        /jVK+mbDHrqO2VsbCRx/y/C7e7YQi4KESw==
+X-Google-Smtp-Source: ABdhPJxaehApPnDPynBlXoaSmySz8HBQiG7JsfudAeFDxcAt3kKx61NAAawUPNZyaQWoRIVZP/YMtQ==
+X-Received: by 2002:adf:d1e2:: with SMTP id g2mr32679075wrd.362.1638660716448;
+        Sat, 04 Dec 2021 15:31:56 -0800 (PST)
 Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id p2sm9290881wmq.23.2021.12.04.15.21.05
+        by smtp.gmail.com with ESMTPSA id w4sm6740284wrs.88.2021.12.04.15.31.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Dec 2021 15:21:06 -0800 (PST)
+        Sat, 04 Dec 2021 15:31:56 -0800 (PST)
 From:   Colin Ian King <colin.i.king@gmail.com>
-To:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-        linux-mips@vger.kernel.org
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] firmware: tee_bnxt: Remove redundant assignment to variable nbytes
-Date:   Sat,  4 Dec 2021 23:21:05 +0000
-Message-Id: <20211204232105.31114-1-colin.i.king@gmail.com>
+Subject: [PATCH] hwmon: (adm1031): Remove redundant assignment to variable range
+Date:   Sat,  4 Dec 2021 23:31:55 +0000
+Message-Id: <20211204233155.55454-1-colin.i.king@gmail.com>
 X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -63,28 +63,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable nbytes is being assigned a value that is never read, it is
-being re-assigned in the next statement. The assignment is redundant
-and can be removed.
+Variable range is being initialized with a value that is never read, it
+is being re-assigned in the next statement. The assignment is redundant,
+remove it and initialize range using the second assigned value. Clean up
+the formatting too by adding missing spaces.
 
 Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/firmware/broadcom/tee_bnxt_fw.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/hwmon/adm1031.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/firmware/broadcom/tee_bnxt_fw.c b/drivers/firmware/broadcom/tee_bnxt_fw.c
-index a5bf4c3f6dc7..6d92ec02f2c7 100644
---- a/drivers/firmware/broadcom/tee_bnxt_fw.c
-+++ b/drivers/firmware/broadcom/tee_bnxt_fw.c
-@@ -143,8 +143,6 @@ int tee_bnxt_copy_coredump(void *buf, u32 offset, u32 size)
- 	prepare_args(TA_CMD_BNXT_COPY_COREDUMP, &arg, param);
+diff --git a/drivers/hwmon/adm1031.c b/drivers/hwmon/adm1031.c
+index 257ec53ae723..ac841fa3a369 100644
+--- a/drivers/hwmon/adm1031.c
++++ b/drivers/hwmon/adm1031.c
+@@ -242,9 +242,8 @@ static int FAN_TO_REG(int reg, int div)
+ static int AUTO_TEMP_MAX_TO_REG(int val, int reg, int pwm)
+ {
+ 	int ret;
+-	int range = val - AUTO_TEMP_MIN_FROM_REG(reg);
++	int range = ((val - AUTO_TEMP_MIN_FROM_REG(reg)) * 10) / (16 - pwm);
  
- 	while (rbytes)  {
--		nbytes = rbytes;
--
- 		nbytes = min_t(u32, rbytes, param[0].u.memref.size);
- 
- 		/* Fill additional invoke cmd params */
+-	range = ((val - AUTO_TEMP_MIN_FROM_REG(reg))*10)/(16 - pwm);
+ 	ret = ((reg & 0xf8) |
+ 	       (range < 10000 ? 0 :
+ 		range < 20000 ? 1 :
 -- 
 2.33.1
 

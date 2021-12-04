@@ -2,184 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B877468530
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 14:56:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAD8468537
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 15:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385109AbhLDN7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 08:59:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56427 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235843AbhLDN73 (ORCPT
+        id S1385129AbhLDOEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 09:04:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344839AbhLDOED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 08:59:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638626163;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3DklwqLIbhF70738BmmNkWjzvOd8rpPIg3v//EXAr9M=;
-        b=HB1CnTnoEntHBO719lxhyuVtu9v5jDv8IHllrkTFHkslPDaV2vhFGN0jWiDx+PtX7PHY3v
-        QwrT9st8YAXe49iUNELqK10AGGuDfxMs9KqcZlEAcCLhhOcDz6RKRDFxhX6eVqil0f2/Rr
-        hvHe5fzlxFndCBiimc8hJrBr4V5QPB0=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-434-5E0sPUhDOoaoXnqikblOdw-1; Sat, 04 Dec 2021 08:56:02 -0500
-X-MC-Unique: 5E0sPUhDOoaoXnqikblOdw-1
-Received: by mail-ed1-f71.google.com with SMTP id bx28-20020a0564020b5c00b003e7c42443dbso4805251edb.15
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 05:56:02 -0800 (PST)
+        Sat, 4 Dec 2021 09:04:03 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E066C061751;
+        Sat,  4 Dec 2021 06:00:38 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id d9so12049977wrw.4;
+        Sat, 04 Dec 2021 06:00:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jRydfW5dCvLP5M5W9G1L390OMoiuU4elPL4v0ocR8GI=;
+        b=KfBlGlO8ievFtXcZ7gIBb6tFFJy1t6XUKHG/+LBpAlwkhYzMt4QygssKPV4cSEp9wr
+         l8v7mvBYvpnvaoybP7iEBDWWBLj88MUDWtLVwWwcQ7bogU9kgBUFI+blguQoahyTJdwg
+         74Gf23L4aIFOZuTq/B+31fc5qrMC4ihUcVyeuE/krOPX/sNL4KgOw1+Dy2+jbc3ejX9W
+         ogG1Pj0IrNllvaQB8qIU71LDG/R5LJUxrM3yy7eSbTDwOfk6v3qzNT1X6hgSyftXnqDt
+         uqwFaxyaHDbfstTuvUmfoAuxpljnwINbegY+dUs/3NQq5sdMdYBF7MhdfyWTzHX8G7Wm
+         Yllw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=3DklwqLIbhF70738BmmNkWjzvOd8rpPIg3v//EXAr9M=;
-        b=gvgZn7PY2HdA+RUDWCcD7WMOsJngH6OBPLRuh/kPCbM7WyolUtCfIHq+bzdyegJqbp
-         n5GGIkWqmEnZOK/jgkOgwxrPr2xfUgx0pkzOo3U7eWKjFyuf9EYv7IZTDOse0woejfSC
-         GP9BGoQ9UjeLqunzhdEnrL5QK+7UQM7YTCUFw/mFhPfHB5cau+mcLdW2DAzU8iw0QfKm
-         d0jRWi5UjYAxcg9j3Yhlb3nvIWIrTuMJlIQPc2R9JBWJO+03yUr8kD6ekJAGfwRwSzQI
-         zBSWVZeKfC/JYVbSGR+MhTcU/Dt4NOHhXX7TtMnoeVUq+3VzWro8Jp0RCA+iPEVlU0LZ
-         yOFg==
-X-Gm-Message-State: AOAM533jGNkNxtEvuLw48qLq8A6E2g0+xeu2RhQ5P2HGsdxwgKtu8cBD
-        tPrXRTqrNsTzJsFiV5qvDU/1N3eG9tA/LA205ZYid1nqbCYn7i0Bw6efNcCzTZ9juVe/akRUFog
-        CLB5hXr/uwFTxnHLAnexEDMKF
-X-Received: by 2002:a05:6402:100e:: with SMTP id c14mr36308598edu.196.1638626161378;
-        Sat, 04 Dec 2021 05:56:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy720jlD8y093U5xCfFPqtufnO7SYwJMPNYXI69mU0Ze3KrgsMlDFozoRuc1r8FLrioVjtByg==
-X-Received: by 2002:a05:6402:100e:: with SMTP id c14mr36308579edu.196.1638626161173;
-        Sat, 04 Dec 2021 05:56:01 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id ho17sm3820836ejc.111.2021.12.04.05.56.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Dec 2021 05:56:00 -0800 (PST)
-Message-ID: <015913c3-171f-3ecb-2813-54404d6db273@redhat.com>
-Date:   Sat, 4 Dec 2021 14:56:00 +0100
+        bh=jRydfW5dCvLP5M5W9G1L390OMoiuU4elPL4v0ocR8GI=;
+        b=dPi0eVa/6SxE7ztlDmfgLPkj/sRwQv22UBuRSe5+XZb2xl0GTjhkUydTz8lRYq0zFJ
+         stlqLhLeoIdWW2Ynl47kKVhXnmz5X/kUm6nI/UebsIMr8ZSYNrZ1FfyoU4wmCmztoy4O
+         XkWZth8s+21OD6U/+7bnrvqNr1mILcatCEvI274DqBU66Om4XAcyrQkJZCYS6Ri/hLX3
+         KTOUTbdfiXUOwijIoyIUJ6b2tIqpE2+RSuXk2DSHuvmZYZ1vo7Twx/ywwtmfEFje6s91
+         1HzAop9W1iiQB8fDchRIfNA004bbQkrS1x4pbCZTo1KK4kdWNiN2DbM5a+y4/1y3hpKD
+         Kq0w==
+X-Gm-Message-State: AOAM531G/p9xSbe4T08N5o/Yg0nSwSXlxGRE5O5CvEMmhap1glwrP0jE
+        bOG0c8hT8dUNu1mvVleXJA4=
+X-Google-Smtp-Source: ABdhPJyp7Kwzh+WrHOuorXsYydzGifWlvVI1GsnYoZkSBQZorTbVIt+cVUlpC6Lv0Xx65iNRHim+7g==
+X-Received: by 2002:a05:6000:15c1:: with SMTP id y1mr31001064wry.63.1638626434368;
+        Sat, 04 Dec 2021 06:00:34 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id i7sm5593646wro.58.2021.12.04.06.00.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Dec 2021 06:00:33 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        dmaengine@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dmaengine: stm32-mdma: Remove redundant initialization of pointer hwdesc
+Date:   Sat,  4 Dec 2021 14:00:32 +0000
+Message-Id: <20211204140032.548066-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 0/4] power: supply: add charge_behaviour property
- (force-discharge, inhibit-charge)
-Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>
-Cc:     linux-pm@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>,
-        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-        linux-kernel@vger.kernel.org, linrunner@gmx.net, bberg@redhat.com,
-        hadess@hadess.net, markpearson@lenovo.com,
-        nicolopiazzalunga@gmail.com, njoshi1@lenovo.com, smclt30p@gmail.com
-References: <20211123232704.25394-1-linux@weissschuh.net>
- <20211203213305.dfjedjj3b25ftj2z@earth.universe>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20211203213305.dfjedjj3b25ftj2z@earth.universe>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The pointer hwdesc is being initialized with a value that is never
+read, it is being updated later in a for-loop. The assignment is
+redundant and can be removed.
 
-On 12/3/21 22:33, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Wed, Nov 24, 2021 at 12:27:00AM +0100, Thomas Weißschuh wrote:
->> This series adds support for the charge_behaviour property to the power
->> subsystem and thinkpad_acpi driver.
->>
->> As thinkpad_acpi has to use the 'struct power_supply' created by the generic
->> ACPI driver it has to rely on custom sysfs attributes instead of proper
->> power_supply properties to implement this property.
->>
->> Patch 1: Adds the power_supply documentation and basic public API
->> Patch 2: Adds helpers to power_supply core to help drivers implement the
->>   charge_behaviour attribute
->> Patch 3: Adds support for force-discharge to thinkpad_acpi.
->> Patch 4: Adds support for inhibit-discharge to thinkpad_acpi.
->>
->> Patch 3 and 4 are largely taken from other patches and adapted to the new API.
->> (Links are in the patch trailer)
->>
->> Ognjen Galic:
->>
->> Your S-o-b is on the original inhibit_charge and force_discharge patches.
->> I would like to add you as Co-developed-by but to do that it will also require
->> your S-o-b. Could you give your sign-offs for the new patches, so you can be
->> properly attributed?
->>
->> Sebastian Reichel:
->>
->> Currently the series does not actually support the property as a proper
->> powersupply property handled fully by power_supply_sysfs.c because there would
->> be no user for this property.
-> 
-> I'm not too happy how the acpi-battery hooks work, but that's not
-> your fault and this patchset does not really make the situation
-> worse. So:
-> 
-> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/dma/stm32-mdma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I haven't looked at the thinkpad_apci.c bits closely yet (for this new version),
-but assuming those are ready for merging too, we need to discuss about how
-to merge this.
-
-The thinkpad_acpi code has already seen quite a lot of changes in -next,
-so I would like the thinkpad_acpi changes to go upstream through the
-platform-drivers-x86.git tree to avoid conflicts.
-
-As such I think it is best if you (Sebastian) can prepare an immutable
-branch with patch 1 + 2 for me to merge. Then even if patch 3 + 4 need
-more work, Thomas can just respin those on top of the immutable branch.
-
-Alternatively I can take the entire series upstream through the
-platform-drivers-x86.git tree if that is ok with you (Sebastian).
-
-Either way please let me know how you want to proceed with this.
-
-Regards,
-
-Hans
-
-
-
->> Previous discussions about the API:
->>
->> https://lore.kernel.org/platform-driver-x86/20211108192852.357473-1-linux@weissschuh.net/
->> https://lore.kernel.org/platform-driver-x86/21569a89-8303-8573-05fb-c2fec29983d1@gmail.com/
->>
->> v1: https://lore.kernel.org/lkml/20211113104225.141333-1-linux@weissschuh.net/
->> v1 -> v2:
->>
->> * Use sysfs_emit-APIs instead of plain sprintf
->> * More cecks for actual feature availability
->> * Validation of the written values
->> * Read inhibit-charge via BICG instead of PSSG (peak shift state)
->> * Don't mangle error numbers in charge_behaviour_store()
->>
->> Open points:
->>
->> Thomas Koch has observed that on a T450s with two batteries
->> inhibit-charge on BAT0 will affect both batteries and for BAT1 it is ignored
->> entirely, this seems to be a bug in the EC.
->> On my T460s with two batteries it works correctly.
->>
->> Thomas Weißschuh (4):
->>   power: supply: add charge_behaviour attributes
->>   power: supply: add helpers for charge_behaviour sysfs
->>   platform/x86: thinkpad_acpi: support force-discharge
->>   platform/x86: thinkpad_acpi: support inhibit-charge
->>
->>  Documentation/ABI/testing/sysfs-class-power |  14 ++
->>  drivers/platform/x86/thinkpad_acpi.c        | 191 +++++++++++++++++++-
->>  drivers/power/supply/power_supply_sysfs.c   |  51 ++++++
->>  include/linux/power_supply.h                |  16 ++
->>  4 files changed, 268 insertions(+), 4 deletions(-)
->>
->>
->> base-commit: 66f4beaa6c1d28161f534471484b2daa2de1dce0
->> -- 
->> 2.34.0
->>
+diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
+index d30a4a28d3bf..805a449ff301 100644
+--- a/drivers/dma/stm32-mdma.c
++++ b/drivers/dma/stm32-mdma.c
+@@ -1279,7 +1279,7 @@ static size_t stm32_mdma_desc_residue(struct stm32_mdma_chan *chan,
+ 				      u32 curr_hwdesc)
+ {
+ 	struct stm32_mdma_device *dmadev = stm32_mdma_get_dev(chan);
+-	struct stm32_mdma_hwdesc *hwdesc = desc->node[0].hwdesc;
++	struct stm32_mdma_hwdesc *hwdesc;
+ 	u32 cbndtr, residue, modulo, burst_size;
+ 	int i;
+ 
+-- 
+2.33.1
 

@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 409E0468872
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 00:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4238468876
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 00:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbhLEACf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 19:02:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
+        id S229999AbhLEACk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 19:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233017AbhLDX5K (ORCPT
+        with ESMTP id S234842AbhLDX71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 18:57:10 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615C2C061751;
-        Sat,  4 Dec 2021 15:53:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=lSqkhUtVhnqxYJBPgDIzRRfQncz5CKDcUotTy5RlLGA=; b=UfzUu3/z/m7s3v2ZPGOuzzWiP3
-        3Gi9RX7+8QkRaQNOOXU77aZkmc4dTmMdFOd18VYhvZSA9aphHmIYGrF+Rz7A6PF7FuZYvWhaIOBhy
-        oFAWcf/HKVy36QHwogU5eDvDifiIB//rAtG5qWblJxQpZhr58sT63yNLvTKgnVB4DhkTDhNgxe8g6
-        wr3BMg244QAsGQztOte+qyts43Aw5XWWsJA+G5fD1wrCWv5u/J5ZIq2WXUO1D2pzxiGQnwPppz6Ae
-        7gNKoA6oAxooiEjWD+Nfy9BLjLHqKr/8O0SDSJU2EdaI5Fb01DvD2UUeJF5YBEG79kz3JD/wrs8D3
-        +ryIhIFw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mteqM-00F8FV-GZ; Sat, 04 Dec 2021 23:53:26 +0000
-Date:   Sat, 4 Dec 2021 23:53:26 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Peter Xu <peterx@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Yu Zhao <yuzhao@google.com>, Vlastimil Babka <vbabka@suse.cz>,
-        Colin Cross <ccross@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] mm: split out anon_vma declarations to separate header
-Message-ID: <Yav/dvIWxuZ59+d6@casper.infradead.org>
-References: <20211204174417.1025328-1-arnd@kernel.org>
+        Sat, 4 Dec 2021 18:59:27 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0A0C0613F8
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 15:56:01 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so8519004oto.13
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 15:56:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zY3i7ftL+qU7EaeCEo0Da0c8vVJG5AN/hKQi41H+yLI=;
+        b=hXY+SVGQvC0dITFV/8cw66YveTL2VrAPWypCzem5wLj0zfH0E8//nkk0PU9MlEuimD
+         8GJR/HNR80LvvLGcBjuQtk9mGAL+RtIsU24DzgSNKw/CGq/6tIQQ2kVGxDURajHvLdwJ
+         xUGOkiJOTh5nc4PFGiaTqbZodn2nnLUqEAXoV387GuNy8z9H88bl/anUL9OZ+i61/VgN
+         wrWgmcBkiHuQpbaFDJ2yYWTsYMSt0NaCe2WKez4U3aIVPTRCoMMb9A59BLNcSYBGT5qD
+         9YTPNYXfPElaKANjF9CszCxad0tRKRhcaE4Dev27/x+XspjJ/k748foEPQZJZzW6OSaw
+         Atzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zY3i7ftL+qU7EaeCEo0Da0c8vVJG5AN/hKQi41H+yLI=;
+        b=kOiZ2biCGbbJyzdgvnEf9TBZrSQSDEyfr6e21JtWiw+ZMhLZf520b+XXonCI4uM2Et
+         wt10qa8Ad7JNBejw1oQTmG5xNwPdetYy4JOmbRDvD7n7zJfDaUt6Kg0JLhg0CLdeX88y
+         nbJmA7jZh6WMlWSImNXX3b9VX5ECOT7W4oyjP33sIIMfo+Fw26uD/lJafcYdrURK47BM
+         129yAd2sYf6vEd34srpJyZq+kEQMUMGssCLuhUMU1V0acFEPKXNoscW8ZUptFJOR2Wug
+         CNGM74wC0Ffs3/VU3bAFrQPQrM0N2KRblCocoZFBMsrIkFc4TNIaSkbOWP1VzAbKcSgt
+         +2RA==
+X-Gm-Message-State: AOAM533+Gz2HzzkPRUKvIXvL9Dgy3bs6JcZBHKS39/I5+Q8tN78U9i+c
+        uZvThc1zxmPncOphUKzJfrxzmk5XHTf73BLvO2nFYA==
+X-Google-Smtp-Source: ABdhPJz2vvD7CFG8AqSlV1zqwUTjhaC64nFB3oOay4IJHNTFWeP7piR/EKMbqPy9/EM8NpCWA32hXh9F6VlWbbXvFlI=
+X-Received: by 2002:a9d:a42:: with SMTP id 60mr23737125otg.179.1638662160588;
+ Sat, 04 Dec 2021 15:56:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211204174417.1025328-1-arnd@kernel.org>
+References: <20211129153330.37719-1-nbd@nbd.name> <20211129153330.37719-13-nbd@nbd.name>
+ <CACRpkdacgoT-K4qZoBpMx8RiPcvOf=YmrTP36LKyizcQk+VyUQ@mail.gmail.com>
+ <c42f4ea0-2879-01cf-1db8-ed39844959fc@nbd.name> <c721ac4a-8b80-2241-3380-6b55e953d754@phrozen.org>
+In-Reply-To: <c721ac4a-8b80-2241-3380-6b55e953d754@phrozen.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 5 Dec 2021 00:55:49 +0100
+Message-ID: <CACRpkdbOC_CgB_jsVKq7z+mhyK0jo4dvXtjYOuaVeJcCJXufBg@mail.gmail.com>
+Subject: Re: [PATCH v5 12/13] gpio: Add support for Airoha EN7523 GPIO controller
+To:     John Crispin <john@phrozen.org>
+Cc:     Felix Fietkau <nbd@nbd.name>, linux-arm-kernel@lists.infradead.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 04, 2021 at 06:42:17PM +0100, Arnd Bergmann wrote:
-> This should not really be part of linux/mm_types.h in the first
-> place, as that header is meant to only contain structure defintions
-> and need a minimum set of indirect includes itself. While the
-> header clearly includes more than it should at this point, let's
-> not make it worse by including string.h as well, which would
-> pull in the expensive (compile-speed wise) fortify-string logic.
-> 
-> Move the new functions to a separate header that is only included
-> where necessary to avoid bloating linux/mm_types.h further.
+On Thu, Dec 2, 2021 at 8:02 PM John Crispin <john@phrozen.org> wrote:
 
-We already have an mm_inline.h.  Why do we need a new header file?
+> Hi Linus,
+> I sent an email to you 16.06.21 explaining all of this and you replied,
+> telling me that this approach is the most reasonable one to take.
+>         John
+
+Sadly I don't remember that, too long ago!
+
+Anyways let's just go ahead with this.
+
+Yours,
+Linus Walleij

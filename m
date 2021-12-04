@@ -2,173 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A4246868D
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 18:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC49468687
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 18:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378449AbhLDRg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 12:36:26 -0500
-Received: from esa2.mentor.iphmx.com ([68.232.141.98]:39206 "EHLO
-        esa2.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345154AbhLDRgZ (ORCPT
+        id S1378139AbhLDRdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 12:33:31 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39408 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345154AbhLDRda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 12:36:25 -0500
-X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Sat, 04 Dec 2021 12:36:25 EST
-IronPort-SDR: cdjzRu4O0aDPaKIznXfkZ1gg4qmAR8pP7oznVce+ZOKuTy6R55m2EVQscLSWXJ+BqOJNVvo7Ni
- uF0y5IwpuhJFlKD5b0egl1/7RVFQFc0qPmL9xj50raIpWwgNAmt9cc2bSPiDTEPL68URlNmrdq
- AYmpOYVIQS1oIWGavOrcyBShxRJU2gxGar689Hq11lDMRTeE1KIEadSrFdAgNKRYvcbhYkWAjp
- GYvh+1CPmkBrkyYu1KYImFMO0gdHxeNU+jsEHz8Tz3eDxzlQ7KYYyKdoFAXl2YVThOCxne4RfU
- Tl7dZraN3+RP8GqkUPFkII2o
-X-IronPort-AV: E=Sophos;i="5.87,287,1631606400"; 
-   d="scan'208";a="69277906"
-Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
-  by esa2.mentor.iphmx.com with ESMTP; 04 Dec 2021 09:25:51 -0800
-IronPort-SDR: Lk58CnbOOdJuy3uU+QVenspLk63/eMP1Sc3jjRQ3Lyx9mCE022czQbYZ3sTL0ld57XgRfTjMkm
- GcBECKZfP+8TCwDh1zDOM1wA5gvb6O0ErRFtpGv+iXg5C2VlmDX78kruRlZYN0JmBaLhz5HkWe
- u6JG/CYd8LQgFasIqcNt6GsZ1pmYovIy2M8p0qrotOu2lCWUuqd4pF4qOzmUFTJzFwVyOg82oM
- k6CrriQXYjoL063AIEs3ilJyEz3NrMxVw+SQKXaavC31CNvauqqfwKIw6b2D16Sg/rSltSTiN3
- BEA=
-Subject: Re: [PATCH 1/2] rtc: max31343: Add a driver for Maxim MAX31343
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     <a.zummo@towertech.it>, <robh+dt@kernel.org>,
-        <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
-References: <20211016192118.255624-1-alexey_firago@mentor.com>
- <20211016192118.255624-2-alexey_firago@mentor.com>
- <YaamZW1nyOGDXfyw@piout.net>
-From:   afirago <alexey_firago@mentor.com>
-Message-ID: <37ef2ad4-d044-5183-892c-e1fd6ded1b69@mentor.com>
-Date:   Sat, 4 Dec 2021 20:25:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <YaamZW1nyOGDXfyw@piout.net>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [137.202.0.90]
-X-ClientProxiedBy: svr-ies-mbx-15.mgc.mentorg.com (139.181.222.15) To
- SVR-IES-MBX-04.mgc.mentorg.com (139.181.222.4)
+        Sat, 4 Dec 2021 12:33:30 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DCD960EBE;
+        Sat,  4 Dec 2021 17:30:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90A64C341C0;
+        Sat,  4 Dec 2021 17:30:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638639003;
+        bh=DwkAMiWPSSim7I98y5KceSbox18Jr0xqyzxRp2VfsUM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=d55+TIFV18tDmSYppsjXNyN6HBn9PsDenkBdnmA2uQ4FMOFVlpa3v8stooBszNN/l
+         qKW+r/Goip7i50Ll6IYI7mIcZ0wvAwjv46xR8D7hek5aZnQMa5V7SkkUCkVOJn/j5f
+         uQorj2/JGZ/6cVcvIEjuaojy/RdyZSS5pXuST4+fchz5aSpS1YnlCrW4bX/zLbqAL/
+         Rc8/HR8CcSow/ysDw/oPMm5BSoNfpRyo3wxhavxICxFC16PiVohYZCU9en8QdA6oWm
+         Ao+A+MZO/cWfGDiAob3KfKd1/Xdvj9pQEDCszrBF0XXekm/nE03budDm13xVo1OVUF
+         44jUUShnt1Vdg==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mtYrJ-009rxd-7Q; Sat, 04 Dec 2021 17:30:01 +0000
+Date:   Sat, 04 Dec 2021 17:30:05 +0000
+Message-ID: <87zgpgqnvm.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Hikaru Nishida <hikalium@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, dme@dme.org, tglx@linutronix.de,
+        mlevitsk@redhat.com, linux@roeck-us.net, pbonzini@redhat.com,
+        vkuznets@redhat.com, will@kernel.org, suleiman@google.com,
+        senozhatsky@google.com, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Juergen Gross <jgross@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Wanpeng Li <wanpengli@tencent.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, x86@kernel.org
+Subject: Re: [RFC PATCH v3 0/5] x86/kvm: Virtual suspend time injection support
+In-Reply-To: <CACTzKb+vVU0Ymh2Nx5B6kSydBsJ6AgrbQMF39RFvqoHpvL_riw@mail.gmail.com>
+References: <20211020120431.776494-1-hikalium@chromium.org>
+        <874k9bdcrk.wl-maz@kernel.org>
+        <CACTzKb+vVU0Ymh2Nx5B6kSydBsJ6AgrbQMF39RFvqoHpvL_riw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: hikalium@chromium.org, linux-kernel@vger.kernel.org, dme@dme.org, tglx@linutronix.de, mlevitsk@redhat.com, linux@roeck-us.net, pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org, suleiman@google.com, senozhatsky@google.com, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, luto@kernel.org, arnd@arndb.de, bp@alien8.de, dave.hansen@linux.intel.com, geert@linux-m68k.org, hpa@zytor.com, mingo@kernel.org, mingo@redhat.com, jmattson@google.com, joro@8bytes.org, john.stultz@linaro.org, corbet@lwn.net, jgross@suse.com, keescook@chromium.org, laijs@linux.alibaba.com, linus.walleij@linaro.org, peterz@infradead.org, seanjc@google.com, sboyd@kernel.org, wanpengli@tencent.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org, x86@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Hikaru,
 
-Thanks for your review.
+Apologies for the much delayed reply.
 
-On 01.12.2021 01:32, Alexandre Belloni wrote:
-> Hello,
+> The problems described by Thomas in the thread was:
+> - User space or kernel space can observe the stale timestamp before
+> the adjustment
+>   - Moving CLOCK_MONOTONIC forward will trigger all sorts of timeouts,
+> watchdogs, etc...
+> - The last attempt to make CLOCK_MONOTONIC behave like CLOCK_BOOTTIME
+> was reverted within 3 weeks. a3ed0e4393d6 ("Revert: Unify
+> CLOCK_MONOTONIC and CLOCK_BOOTTIME")
+>   - CLOCK_MONOTONIC correctness (stops during the suspend) should be maintained.
 > 
-> On 16/10/2021 22:21:17+0300, Alexey Firago wrote:
->> +#define MAX31343_REG_TIMER_CFG	(0x05)
->> +#define  TIMER_CFG_TFS		GENMASK(1, 0) /* Timer frequency */
->> +#define  TIMER_CFG_TRPT		BIT(2) /* Timer repeat mode */
->> +#define  TIMER_CFG_TPAUSE	BIT(3) /* Timer Pause */
->> +#define  TIMER_CFG_TE		BIT(4) /* Timer enable */
->> +
->> +/* RTC section */
->> +#define MAX31343_REG_SEC	(0x06)
->> +#define  SEC10_MASK	GENMASK(6, 4) /* RTC seconds in multiples of 10 */
->> +#define  SEC_MASK	GENMASK(3, 0) /* RTC seconds value */
+> I agree with the points above. And, the current CLOCK_MONOTONIC
+> behavior in the KVM guest is not aligned with the statements above.
+> (it advances during the host's suspension.)
+> This causes the problems described above (triggering watchdog
+> timeouts, etc...) so my patches are going to fix this by 2 steps
+> roughly:
+> 1. Stopping the guest's clocks during the host's suspension
+> 2. Adjusting CLOCK_BOOTTIME later
+> This will make the clocks behave like the host does, not making
+> CLOCK_MONOTONIC behave like CLOCK_BOOTTIME.
 > 
-> I'm not convinced having separate masks is useful here, was that
-> automatically generated?
-
-I've just exported those definitions from the table in the datasheet 
-prior to creating the driver.
-
->> +static int max31343_rtc_set_time(struct device *dev, struct rtc_time *tm)
->> +{
->> +	struct max31343_rtc_data *max31343 = dev_get_drvdata(dev);
->> +	u8 date[7];
->> +	int ret;
->> +
->> +	dev_dbg(dev, "RTC set time %04d-%02d-%02d %02d/%02d/%02d\n",
->> +		tm->tm_year + 1900, tm->tm_mon, tm->tm_mday,
->> +		tm->tm_hour, tm->tm_min, tm->tm_sec);
->> +
+> First one is a bit tricky since the guest can use a timestamp counter
+> in each CPUs (TSC in x86) and we need to adjust it without stale
+> values are observed by the guest kernel to prevent rewinding of
+> CLOCK_MONOTONIC (which is our top priority to make the kernel happy).
+> To achieve this, my patch adjusts TSCs (and a kvm-clock) before the
+> first vcpu runs of each vcpus after the resume.
 > 
-> This could use %ptR
-
-Will change it (or probably completely remove it) after hwmon review.
-
->> +	date[0] = bin2bcd(tm->tm_sec);
->> +	date[1] = bin2bcd(tm->tm_min);
->> +	date[2] = bin2bcd(tm->tm_hour);
->> +	date[3] = tm->tm_wday;
->> +	date[4] = bin2bcd(tm->tm_mday);
->> +	date[5] = bin2bcd(tm->tm_mon + 1);
->> +
->> +	if (tm->tm_year >= 200)
->> +		date[5] |= CENTURY;
->> +	date[6] = bin2bcd(tm->tm_year % 100);
->> +
->> +	ret = regmap_bulk_write(max31343->regmap, MAX31343_REG_SEC, date,
->> +				sizeof(date));
->> +	return ret;
->> +}
->> +
+> Second one is relatively safe: since jumping CLOCK_BOOTTIME forward
+> can happen even before my patches when suspend/resume happens, and
+> that will not break the monotonicity of the clocks, we can do that
+> through IRQ.
 > 
-> [...]
+> [1] shows the flow of the adjustment logic, and [2] shows how the
+> clocks behave in the guest and the host before/after my patches.
+> The numbers on each step in [1] corresponds to the timing shown in [2].
+> The left side of [2] is showing the behavior of the clocks before the
+> patches, and the right side shows after the patches. Also, upper
+> charts show the guest clocks, and bottom charts are host clocks.
 > 
->> +static int
->> +max31343_probe(struct i2c_client *client, const struct i2c_device_id *id)
->> +{
->> +	struct max31343_rtc_data *max31343 = NULL;
->> +	int ret, status;
->> +	struct nvmem_config nvmem_cfg = {
->> +		.name = "max31343_nvram",
->> +		.word_size = 1,
->> +		.stride = 1,
->> +		.size = MAX31343_RAM_SIZE,
->> +		.type = NVMEM_TYPE_BATTERY_BACKED,
->> +		.reg_read = max31343_nvram_read,
->> +		.reg_write = max31343_nvram_write,
->> +	};
->> +
->> +	max31343 = devm_kzalloc(&client->dev, sizeof(struct max31343_rtc_data),
->> +				GFP_KERNEL);
->> +	if (!max31343)
->> +		return -ENOMEM;
->> +
->> +	max31343->regmap = devm_regmap_init_i2c(client, &max31343_regmap_config);
->> +	if (IS_ERR(max31343->regmap))
->> +		return PTR_ERR(max31343->regmap);
->> +
->> +	i2c_set_clientdata(client, max31343);
->> +
->> +	ret = regmap_read(max31343->regmap, MAX31343_REG_STATUS, &status);
->> +	if (ret < 0)
->> +		return ret;
->> +
->> +	max31343->rtc = devm_rtc_allocate_device(&client->dev);
->> +	if (IS_ERR(max31343->rtc))
->> +		return PTR_ERR(max31343->rtc);
->> +
->> +	max31343->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
->> +	max31343->rtc->range_max = RTC_TIMESTAMP_END_2199;
+> Before the patches(left side), CLOCK_MONOTONIC seems to be jumped from
+> the guest's perspective after the host's suspension. As Thomas says,
+> large jumps of CLOCK_MONOTONIC may lead to watchdog timeouts and other
+> bad things that we want to avoid.
+> With the patches(right side), both clocks will be adjusted (t=4,5) as
+> if they are stopped during the suspension. This adjustment is done by
+> the host side and invisible to the guest since it is done before the
+> first vcpu run after the resume. After that, CLOCK_BOOTTIME will be
+> adjusted from the guest side, triggered by the IRQ sent from the host.
 > 
-> For my information, did you check the time continuity in this interval?
+> [1]: https://hikalium.com/files/kvm_virt_suspend_time_seq.png
+> [2]: https://hikalium.com/files/kvm_virt_suspend_time_clocks.png
 
-Yes, I've checked setting of out-of-range values, checked edge values 
-and checked 2099 -> 2100 -> 2101 transitions.
+Thanks for the very detailed explanation. You obviously have though
+about this, and it makes sense.
 
-> 
->> +	max31343->rtc->ops = &max31343_rtc_ops;
->> +	ret = devm_rtc_register_device(max31343->rtc);
->> +	if (ret)
->> +		return ret;
->> +
->> +	nvmem_cfg.priv = max31343->regmap;
->> +	devm_rtc_nvmem_register(max31343->rtc, &nvmem_cfg);
->> +	max31343_hwmon_register(&client->dev);
-> 
-> The whole driver seems ok, I'd like to get a review from the hwmon
-> maintainers on the hwmon part as it is quite large.
+My worry is that this looks to be designed for the needs of Linux on
+x86, and does not match the reality of KVM on arm64, where there is no
+KVM clock (there is no need for it, and I have no plan to support it),
+and there is more than a single counter visible to the guest (at least
+two, and up to four with NV, all with various offsets). This also
+deals with concepts that are Linux-specific. How would it work for
+another (arbitrary) guest operating system?
 
-Ok.
+Can we please take a step back and look at what we want to expose from
+a hypervisor PoV? It seems to me that all we want is:
+
+(1) tell the guest that time has moved forward
+(2) tell the guest by how much time has moved forward
+
+In a way, this isn't different from stolen time, only that it affects
+the whole VM and not just a single CPU (and for a much longer quantum
+of time).
+
+How the event is handled by the guest (what it means for its clocks
+and all that) is a guest problem. Why should KVM itself adjust the
+counters? This goes against what the architecture specifies (the
+counter is in an always-on domain that keeps counting when suspended),
+and KVM must preserve the architectural guarantees instead of
+deviating from them.
+
+> > Assuming you solve these, you should model the guest memory access
+> > similarly to what we do for stolen time. As for injecting an
+> > interrupt, why can't this be a userspace thing?
+> 
+> Since CLOCK_BOOTTIME is calculated by adding a gap
+> (tk->monotonic_to_boot) to CLOCK_MONOTONIC, and there are no way to
+> change the value from the outside of the guest kernel, we should
+> implement some mechanism in the kernel to adjust it.
+> (Actually, I tried to add a sysfs interface to modify the gap [3], but
+> I learned that that is not a good idea...)
+
+It is not what I was suggesting.
+
+My suggestion was to have a shared memory between the VMM and the
+guest again, similar to the way we handle stolen time), let the VMM
+expose the drift in this shared memory, and inject an interrupt from
+userspace to signify a wake-up. All this requires is that on suspend,
+you force the vcpus to exit. On resume, the VMM update the guest
+visible drift, posts an interrupt, and let things rip.
+
+This requires very minimal KVM support, and squarely places the logic
+in the guest. Why doesn't this work?
+
+Another question is maybe even more naive: on bare metal, we don't
+need any of this. The system suspends, resumes, and recovers well
+enough. Nobody hides anything, and yet everything works just fine.
+That's because the kernel knows it is being suspended, and it acts
+accordingly. It looks to me that there is some value in following the
+same principles, even if this means that the host suspend has to
+synchronise with the guest being suspended.
 
 Thanks,
-Alexey
 
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

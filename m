@@ -2,85 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22799468814
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 23:27:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F60C468816
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 23:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbhLDWax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 17:30:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbhLDWaw (ORCPT
+        id S231528AbhLDWcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 17:32:06 -0500
+Received: from mail-wr1-f43.google.com ([209.85.221.43]:40667 "EHLO
+        mail-wr1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229732AbhLDWcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 17:30:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA8EC061751;
-        Sat,  4 Dec 2021 14:27:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E78B3B80D14;
-        Sat,  4 Dec 2021 22:27:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFE4EC341C0;
-        Sat,  4 Dec 2021 22:27:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638656843;
-        bh=U2jHqPN74XnPBal++8zreKkt4ASv3x+oh3bBY2NsWFQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jo+24WchSW9zmxTdu+yoZwb9TT5VGQKEXr9Hue0i6PiiWeOc1V1f5IjcZFm+q0FvR
-         aloJrxXHvO9udrhZIMOSjztWeY45CLTf/rvz4j+75n9vpMEOX4yHsgwqIuokUHet4J
-         hiuLmSkcedxAnvvye0q5dAh+GfRgNWIUZMHDeiCM4rbtk75JCgYkH5NG26hVBVa95B
-         QpcmuRc5oyF4f8/j1wCiu9hJdJzivGQ4VIHQr2cOCY3Y5GKfRtTSItoxjdBtDGPVS1
-         QIgluKHFjuYtY/I8V6Q27njMvD+yiL7SfVdp9TPTrhRKsCojg6U2lgylDGXP49eT3S
-         U7sPdpPLw540w==
-Date:   Sun, 5 Dec 2021 00:27:20 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
-        cathy.zhang@intel.com, cedric.xing@intel.com,
-        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/25] x86/sgx: Support VMA permissions exceeding enclave
- permissions
-Message-ID: <YavrSFDJBGqe7K46@iki.fi>
-References: <cover.1638381245.git.reinette.chatre@intel.com>
- <7e622156315c9c22c3ef84a7c0aeb01b5c001ff9.1638381245.git.reinette.chatre@intel.com>
- <Yavq83gZzvkVaDqq@iki.fi>
+        Sat, 4 Dec 2021 17:32:05 -0500
+Received: by mail-wr1-f43.google.com with SMTP id t9so13735300wrx.7;
+        Sat, 04 Dec 2021 14:28:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Hi1hBN0ZZGAK29KBqWC91yf7Z/SKLKVcZrDZGGHDVmA=;
+        b=rCqXdNx8amEM97QNQgsyaVn304NUBqIt7X89Im+1lX748NqWEYMqu0k6J4lJARxxmO
+         OYtJ8MQ8WOAI2eIpFXAM+sZIKZz5pkdJwF3U8P2ejU8qG9vrCeM6h4i0GeizmayiiimV
+         C8Hssl1/IMdGYDGA2aQ6zJfdzIq/M3JFUuRyswMpapnpUsIgakJKaJ9tj7vX67Y0mLai
+         l7Gh351VFJrLswpxasEcIl5PyhpQaiIu5VkWCaHHr3WgFOgS6vhcU6bRZnknUnSLIuMT
+         qqQ3Wf1jdPrKIWvw3mPO2naSM6AmnGrEyFQxgIUN5Mp54rwM9Yu3CO0Xnb8iL2F/E06L
+         L1AQ==
+X-Gm-Message-State: AOAM531zfJthlKwgOFGqpXJ8RksEAuk3Ws4rrKdj62t8V4mAGjovKfyA
+        FH8Jgbiv28nOhGk4j1b8EG8=
+X-Google-Smtp-Source: ABdhPJxQt7PAQp8vz1RQgOpbsI+sp+5/9oe6Z2imLXJiwBNE7p4Nn2fjW3Qutx2HGvoUKL8aCTy7hw==
+X-Received: by 2002:a5d:588b:: with SMTP id n11mr31434291wrf.344.1638656917872;
+        Sat, 04 Dec 2021 14:28:37 -0800 (PST)
+Received: from rocinante ([95.155.85.46])
+        by smtp.gmail.com with ESMTPSA id c1sm6520469wrt.14.2021.12.04.14.28.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Dec 2021 14:28:37 -0800 (PST)
+Date:   Sat, 4 Dec 2021 23:28:36 +0100
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: qcom-ep: Constify static dw_pcie_ep_ops
+Message-ID: <YavrlE+5LdvvefMP@rocinante>
+References: <20211204220316.88655-1-rikard.falkeborn@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yavq83gZzvkVaDqq@iki.fi>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211204220316.88655-1-rikard.falkeborn@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 05, 2021 at 12:25:59AM +0200, Jarkko Sakkinen wrote:
-> On Wed, Dec 01, 2021 at 11:23:01AM -0800, Reinette Chatre wrote:
-> > === Summary ===
-> > 
-> > An SGX VMA can only be created if its permissions are the same or
-> > weaker than the Enclave Page Cache Map (EPCM) permissions. After VMA
-> > creation this rule continues to be enforced by the page fault handler.
-> > 
-> > With SGX2 the EPCM permissions of a page can change after VMA
-> > creation resulting in the VMA exceeding the EPCM permissions and the
-> > page fault handler incorrectly blocking access.
-> > 
-> > Enable the VMA's pages to remain accessible while ensuring that
-> > the page table entries are installed to match the EPCM permissions
-> > without exceeding the VMA perms issions.
-> 
-> I don't understand what the short summary means in English, and the
-> commit message is way too bloated to make any conclusions. It really
-> needs a rewrite.
-> 
-> These were the questions I could not find answer for:
-> 
-> 1. Why it would be by any means safe to remove a permission check?
-> 2. Why not re-issuing mmap()'s is unfeasible? I.e. close existing
->    VMA's and mmap() new ones.
+Hi Rikard,
 
-3. Isn't this an API/ABI break?
+> The only usage of pci_ep_ops is to assign its address to the ops field
+> in the dw_pcie_ep struct which is a pointer to const struct dw_pcie_ep_ops.
+> Make it const to allow the compiler to put it in read-only memory.
 
-/Jarkko
+[...]
+> @@ -619,7 +619,7 @@ static void qcom_pcie_ep_init(struct dw_pcie_ep *ep)
+>  		dw_pcie_ep_reset_bar(pci, bar);
+>  }
+>  
+> -static struct dw_pcie_ep_ops pci_ep_ops = {
+> +static const struct dw_pcie_ep_ops pci_ep_ops = {
+>  	.ep_init = qcom_pcie_ep_init,
+>  	.raise_irq = qcom_pcie_ep_raise_irq,
+>  	.get_features = qcom_pcie_epc_get_features,
+
+Looks good, thank you!
+
+Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
+
+	Krzysztof

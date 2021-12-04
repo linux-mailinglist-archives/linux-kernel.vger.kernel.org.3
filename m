@@ -2,311 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3804686BB
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 18:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA694686A1
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 18:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355448AbhLDRsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 12:48:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48542 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbhLDRsA (ORCPT
+        id S1385230AbhLDRm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 12:42:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39290 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385211AbhLDRmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 12:48:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE2BC061751;
-        Sat,  4 Dec 2021 09:44:33 -0800 (PST)
+        Sat, 4 Dec 2021 12:42:24 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B783B80CC3;
-        Sat,  4 Dec 2021 17:44:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBAA4C341C0;
-        Sat,  4 Dec 2021 17:44:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638639871;
-        bh=tdPtUII1fRnZ1rUqrCV8xPrX1J4M7IiTb3hxZtz7sKc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RoFNbHhhNUcCtIyLfJEvy+AxDIY8qcVpD3FffcostuQzSxmuSwkN59IPBSMKTAUhk
-         +BomHBNcQgqvfozSni+91KNLWlu9Zkqo2eq4GwT4gcAGG/Ld5svtsOeVhJ4S0bR+7r
-         FJ/s1Z23iwoUAPl0nbWbLoL3sFCBfrE/JAT/WsvsQgECUhdIaBB3wZ5/iB0IXStuJL
-         8DRM4aa0wpDL6sw3S5br31+VfVZ9ICJBMyQAPbU036EtVXK0zfPZOS8/Ydjyo0+GMX
-         IOWribTtPYbJdJ5ZyDmNL13qO9lpjpb1S5uWO/dWcy3iOKpNX9MvaYUaXUtx3dE2A9
-         rMtbWoT11Ew3A==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Peter Xu <peterx@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Yu Zhao <yuzhao@google.com>, Vlastimil Babka <vbabka@suse.cz>,
-        Colin Cross <ccross@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH] mm: split out anon_vma declarations to separate header
-Date:   Sat,  4 Dec 2021 18:42:17 +0100
-Message-Id: <20211204174417.1025328-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        by ams.source.kernel.org (Postfix) with ESMTPS id 345BCB80D39;
+        Sat,  4 Dec 2021 17:38:57 +0000 (UTC)
+Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp.kernel.org (Postfix) with ESMTPSA id 26DFBC341C3;
+        Sat,  4 Dec 2021 17:38:51 +0000 (UTC)
+Date:   Sat, 4 Dec 2021 17:44:01 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     cosmin.tanislav@analog.com, Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v9 2/3] dt-bindings: iio: add AD74413R
+Message-ID: <20211204174401.464bf109@jic23-huawei>
+In-Reply-To: <20211202232507.358113-3-cosmin.tanislav@analog.com>
+References: <20211202232507.358113-1-cosmin.tanislav@analog.com>
+        <20211202232507.358113-3-cosmin.tanislav@analog.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Fri,  3 Dec 2021 01:25:06 +0200
+Cosmin Tanislav <demonsingur@gmail.com> wrote:
 
-The patch to add anonymous vma names causes a build failure in
-some configurations:
+> The AD74412R and AD74413R are quad-channel, software configurable,
+> input/output solutions for building and process control applications.
+> 
+> They contain functionality for analog output, analog input, digital input,
+> resistance temperature detector, and thermocouple measurements integrated
+> into a single chip solution with an SPI interface.
+> 
+> The devices feature a 16-bit ADC and four configurable 13-bit DACs to
+> provide four configurable input/output channels and a suite of diagnostic
+> functions.
+> 
+> The AD74413R differentiates itself from the AD74412R by being
+> HART-compatible.
+> 
+> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 
-include/linux/mm_types.h: In function 'is_same_vma_anon_name':
-include/linux/mm_types.h:924:37: error: implicit declaration of function 'strcmp' [-Werror=implicit-function-declaration]
-  924 |         return name && vma_name && !strcmp(name, vma_name);
-      |                                     ^~~~~~
-include/linux/mm_types.h:22:1: note: 'strcmp' is defined in header '<string.h>'; did you forget to '#include <string.h>'?
+Hi Cosmin,
 
-This should not really be part of linux/mm_types.h in the first
-place, as that header is meant to only contain structure defintions
-and need a minimum set of indirect includes itself. While the
-header clearly includes more than it should at this point, let's
-not make it worse by including string.h as well, which would
-pull in the expensive (compile-speed wise) fortify-string logic.
+Some odd alignment in the header. Otherwise looks good to me.
+Given I don't think anything much has changed, you should have
+picked up Rob's tag from v7.  Please do so for v10 or call out why not in the change
+log so Rob knows what to look at.
 
-Move the new functions to a separate header that is only included
-where necessary to avoid bloating linux/mm_types.h further.
+Thanks
 
-Fixes: 52f545eb6dd7 ("mm: add a field to store names for private anonymous memory")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- fs/proc/task_mmu.c       |  1 +
- fs/userfaultfd.c         |  1 +
- include/linux/anon_vma.h | 55 ++++++++++++++++++++++++++++++++++++++++
- include/linux/mm_types.h | 48 -----------------------------------
- kernel/fork.c            |  1 +
- mm/madvise.c             |  1 +
- mm/mempolicy.c           |  1 +
- mm/mlock.c               |  1 +
- mm/mmap.c                |  1 +
- mm/mprotect.c            |  1 +
- 10 files changed, 63 insertions(+), 48 deletions(-)
- create mode 100644 include/linux/anon_vma.h
+Jonathan
 
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index e6998652fd67..5b0106afa870 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/pagewalk.h>
- #include <linux/vmacache.h>
-+#include <linux/anon_vma.h>
- #include <linux/hugetlb.h>
- #include <linux/huge_mm.h>
- #include <linux/mount.h>
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 5b2af7b82776..f1d9265e8581 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -15,6 +15,7 @@
- #include <linux/sched/signal.h>
- #include <linux/sched/mm.h>
- #include <linux/mm.h>
-+#include <linux/anon_vma.h>
- #include <linux/mmu_notifier.h>
- #include <linux/poll.h>
- #include <linux/slab.h>
-diff --git a/include/linux/anon_vma.h b/include/linux/anon_vma.h
-new file mode 100644
-index 000000000000..5ce8b5be31ae
---- /dev/null
-+++ b/include/linux/anon_vma.h
-@@ -0,0 +1,55 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_ANON_VMA_H
-+#define _LINUX_ANON_VMA_H
-+
-+#include <linux/mm_types.h>
-+
-+#ifdef CONFIG_ANON_VMA_NAME
-+/*
-+ * mmap_lock should be read-locked when calling vma_anon_name() and while using
-+ * the returned pointer.
-+ */
-+extern const char *vma_anon_name(struct vm_area_struct *vma);
-+
-+/*
-+ * mmap_lock should be read-locked for orig_vma->vm_mm.
-+ * mmap_lock should be write-locked for new_vma->vm_mm or new_vma should be
-+ * isolated.
-+ */
-+extern void dup_vma_anon_name(struct vm_area_struct *orig_vma,
-+			      struct vm_area_struct *new_vma);
-+
-+/*
-+ * mmap_lock should be write-locked or vma should have been isolated under
-+ * write-locked mmap_lock protection.
-+ */
-+extern void free_vma_anon_name(struct vm_area_struct *vma);
-+
-+/* mmap_lock should be read-locked */
-+static inline bool is_same_vma_anon_name(struct vm_area_struct *vma,
-+					 const char *name)
-+{
-+	const char *vma_name = vma_anon_name(vma);
-+
-+	/* either both NULL, or pointers to same string */
-+	if (vma_name == name)
-+		return true;
-+
-+	return name && vma_name && !strcmp(name, vma_name);
-+}
-+#else /* CONFIG_ANON_VMA_NAME */
-+static inline const char *vma_anon_name(struct vm_area_struct *vma)
-+{
-+	return NULL;
-+}
-+static inline void dup_vma_anon_name(struct vm_area_struct *orig_vma,
-+			      struct vm_area_struct *new_vma) {}
-+static inline void free_vma_anon_name(struct vm_area_struct *vma) {}
-+static inline bool is_same_vma_anon_name(struct vm_area_struct *vma,
-+					 const char *name)
-+{
-+	return true;
-+}
-+#endif  /* CONFIG_ANON_VMA_NAME */
-+
-+#endif /* _LINUX_ANON_VMA_H */
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 850e71986b9d..555f51de1fe0 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -890,52 +890,4 @@ typedef struct {
- 	unsigned long val;
- } swp_entry_t;
- 
--#ifdef CONFIG_ANON_VMA_NAME
--/*
-- * mmap_lock should be read-locked when calling vma_anon_name() and while using
-- * the returned pointer.
-- */
--extern const char *vma_anon_name(struct vm_area_struct *vma);
--
--/*
-- * mmap_lock should be read-locked for orig_vma->vm_mm.
-- * mmap_lock should be write-locked for new_vma->vm_mm or new_vma should be
-- * isolated.
-- */
--extern void dup_vma_anon_name(struct vm_area_struct *orig_vma,
--			      struct vm_area_struct *new_vma);
--
--/*
-- * mmap_lock should be write-locked or vma should have been isolated under
-- * write-locked mmap_lock protection.
-- */
--extern void free_vma_anon_name(struct vm_area_struct *vma);
--
--/* mmap_lock should be read-locked */
--static inline bool is_same_vma_anon_name(struct vm_area_struct *vma,
--					 const char *name)
--{
--	const char *vma_name = vma_anon_name(vma);
--
--	/* either both NULL, or pointers to same string */
--	if (vma_name == name)
--		return true;
--
--	return name && vma_name && !strcmp(name, vma_name);
--}
--#else /* CONFIG_ANON_VMA_NAME */
--static inline const char *vma_anon_name(struct vm_area_struct *vma)
--{
--	return NULL;
--}
--static inline void dup_vma_anon_name(struct vm_area_struct *orig_vma,
--			      struct vm_area_struct *new_vma) {}
--static inline void free_vma_anon_name(struct vm_area_struct *vma) {}
--static inline bool is_same_vma_anon_name(struct vm_area_struct *vma,
--					 const char *name)
--{
--	return true;
--}
--#endif  /* CONFIG_ANON_VMA_NAME */
--
- #endif /* _LINUX_MM_TYPES_H */
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 7c06be0ca31b..8964e1559722 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -42,6 +42,7 @@
- #include <linux/mmu_notifier.h>
- #include <linux/fs.h>
- #include <linux/mm.h>
-+#include <linux/anon_vma.h>
- #include <linux/vmacache.h>
- #include <linux/nsproxy.h>
- #include <linux/capability.h>
-diff --git a/mm/madvise.c b/mm/madvise.c
-index c63aacbbfa78..4d0ab22b31c0 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -18,6 +18,7 @@
- #include <linux/fadvise.h>
- #include <linux/sched.h>
- #include <linux/sched/mm.h>
-+#include <linux/anon_vma.h>
- #include <linux/string.h>
- #include <linux/uio.h>
- #include <linux/ksm.h>
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index e0066ca91d9a..58fbd8ec527f 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -99,6 +99,7 @@
- #include <linux/syscalls.h>
- #include <linux/ctype.h>
- #include <linux/mm_inline.h>
-+#include <linux/anon_vma.h>
- #include <linux/mmu_notifier.h>
- #include <linux/printk.h>
- #include <linux/swapops.h>
-diff --git a/mm/mlock.c b/mm/mlock.c
-index 8f584eddd305..f3179d8169e4 100644
---- a/mm/mlock.c
-+++ b/mm/mlock.c
-@@ -9,6 +9,7 @@
- #include <linux/capability.h>
- #include <linux/mman.h>
- #include <linux/mm.h>
-+#include <linux/anon_vma.h>
- #include <linux/sched/user.h>
- #include <linux/swap.h>
- #include <linux/swapops.h>
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 6ea9e6775fa3..289a40d1d4f3 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -13,6 +13,7 @@
- #include <linux/slab.h>
- #include <linux/backing-dev.h>
- #include <linux/mm.h>
-+#include <linux/anon_vma.h>
- #include <linux/vmacache.h>
- #include <linux/shm.h>
- #include <linux/mman.h>
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 0138dfcdb1d8..96d57b1b41cd 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -28,6 +28,7 @@
- #include <linux/ksm.h>
- #include <linux/uaccess.h>
- #include <linux/mm_inline.h>
-+#include <linux/anon_vma.h>
- #include <linux/pgtable.h>
- #include <asm/cacheflush.h>
- #include <asm/mmu_context.h>
--- 
-2.29.2
+
+
+> ---
+>  .../bindings/iio/addac/adi,ad74413r.yaml      | 158 ++++++++++++++++++
+>  include/dt-bindings/iio/addac/adi,ad74413r.h  |  21 +++
+>  2 files changed, 179 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml
+>  create mode 100644 include/dt-bindings/iio/addac/adi,ad74413r.h
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml b/Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml
+> new file mode 100644
+> index 000000000000..baa65a521bad
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml
+> @@ -0,0 +1,158 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/addac/adi,ad74413r.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices AD74412R/AD74413R device
+> +
+> +maintainers:
+> +  - Cosmin Tanislav <cosmin.tanislav@analog.com>
+> +
+> +description: |
+> +  The AD74412R and AD74413R are quad-channel software configurable input/output
+> +  solutions for building and process control applications. They contain
+> +  functionality for analog output, analog input, digital input, resistance
+> +  temperature detector, and thermocouple measurements integrated
+> +  into a single chip solution with an SPI interface.
+> +  The devices feature a 16-bit ADC and four configurable 13-bit DACs to provide
+> +  four configurable input/output channels and a suite of diagnostic functions.
+> +  The AD74413R differentiates itself from the AD74412R by being HART-compatible.
+> +    https://www.analog.com/en/products/ad74412r.html
+> +    https://www.analog.com/en/products/ad74413r.html
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,ad74412r
+> +      - adi,ad74413r
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +  spi-max-frequency:
+> +    maximum: 1000000
+> +
+> +  spi-cpol: true
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  refin-supply: true
+> +
+> +  shunt-resistor-micro-ohms:
+> +    description:
+> +      Shunt (sense) resistor value in micro-Ohms.
+> +    default: 100000000
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - spi-max-frequency
+> +  - spi-cpol
+> +  - refin-supply
+> +
+> +additionalProperties: false
+> +
+> +patternProperties:
+> +  "^channel@[0-3]$":
+> +    type: object
+> +    description: Represents the external channels which are connected to the device.
+> +
+> +    properties:
+> +      reg:
+> +        description: |
+> +          The channel number. It can have up to 4 channels numbered from 0 to 3.
+> +        minimum: 0
+> +        maximum: 3
+> +
+> +      adi,ch-func:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        description: |
+> +          Channel function.
+> +          HART functions are not supported on AD74412R.
+> +          0 - CH_FUNC_HIGH_IMPEDANCE
+> +          1 - CH_FUNC_VOLTAGE_OUTPUT
+> +          2 - CH_FUNC_CURRENT_OUTPUT
+> +          3 - CH_FUNC_VOLTAGE_INPUT
+> +          4 - CH_FUNC_CURRENT_INPUT_EXT_POWER
+> +          5 - CH_FUNC_CURRENT_INPUT_LOOP_POWER
+> +          6 - CH_FUNC_RESISTANCE_INPUT
+> +          7 - CH_FUNC_DIGITAL_INPUT_LOGIC
+> +          8 - CH_FUNC_DIGITAL_INPUT_LOOP_POWER
+> +          9 - CH_FUNC_CURRENT_INPUT_EXT_POWER_HART
+> +          10 - CH_FUNC_CURRENT_INPUT_LOOP_POWER_HART
+> +        minimum: 0
+> +        maximum: 10
+> +        default: 0
+> +
+> +      adi,gpo-comparator:
+> +        type: boolean
+> +        description: |
+> +          Whether to configure GPO as a comparator or not.
+> +          When not configured as a comparator, the GPO will be treated as an
+> +          output-only GPIO.
+> +
+> +    required:
+> +      - reg
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/iio/addac/adi,ad74413r.h>
+> +
+> +    spi {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      cs-gpios = <&gpio 17 GPIO_ACTIVE_LOW>;
+> +      status = "okay";
+> +
+> +      ad74413r@0 {
+> +        compatible = "adi,ad74413r";
+> +        reg = <0>;
+> +        spi-max-frequency = <1000000>;
+> +        spi-cpol;
+> +
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        interrupt-parent = <&gpio>;
+> +        interrupts = <26 IRQ_TYPE_EDGE_FALLING>;
+> +
+> +        refin-supply = <&ad74413r_refin>;
+> +
+> +        channel@0 {
+> +          reg = <0>;
+> +
+> +          adi,ch-func = <CH_FUNC_VOLTAGE_OUTPUT>;
+> +        };
+> +
+> +        channel@1 {
+> +          reg = <1>;
+> +
+> +          adi,ch-func = <CH_FUNC_CURRENT_OUTPUT>;
+> +        };
+> +
+> +        channel@2 {
+> +          reg = <2>;
+> +
+> +          adi,ch-func = <CH_FUNC_DIGITAL_INPUT_LOGIC>;
+> +          adi,gpo-comparator;
+> +        };
+> +
+> +        channel@3 {
+> +          reg = <3>;
+> +
+> +          adi,ch-func = <CH_FUNC_CURRENT_INPUT_EXT_POWER>;
+> +        };
+> +      };
+> +    };
+> +...
+> diff --git a/include/dt-bindings/iio/addac/adi,ad74413r.h b/include/dt-bindings/iio/addac/adi,ad74413r.h
+> new file mode 100644
+> index 000000000000..a43b010f974f
+> --- /dev/null
+> +++ b/include/dt-bindings/iio/addac/adi,ad74413r.h
+> @@ -0,0 +1,21 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#ifndef _DT_BINDINGS_ADI_AD74413R_H
+> +#define _DT_BINDINGS_ADI_AD74413R_H
+> +
+> +#define CH_FUNC_HIGH_IMPEDANCE					0x0
+> +#define CH_FUNC_VOLTAGE_OUTPUT					0x1
+> +#define CH_FUNC_CURRENT_OUTPUT					0x2
+> +#define CH_FUNC_VOLTAGE_INPUT					0x3
+
+Something very odd going on with indenting in here. I can fix up whilst applying
+if this is all that needs tidying up.
+
+> +#define CH_FUNC_CURRENT_INPUT_EXT_POWER			0x4
+> +#define CH_FUNC_CURRENT_INPUT_LOOP_POWER		0x5
+> +#define CH_FUNC_RESISTANCE_INPUT				0x6
+> +#define CH_FUNC_DIGITAL_INPUT_LOGIC				0x7
+> +#define CH_FUNC_DIGITAL_INPUT_LOOP_POWER		0x8
+> +#define CH_FUNC_CURRENT_INPUT_EXT_POWER_HART	0x9
+> +#define CH_FUNC_CURRENT_INPUT_LOOP_POWER_HART	0xA
+> +
+> +#define CH_FUNC_MIN		CH_FUNC_HIGH_IMPEDANCE
+> +#define CH_FUNC_MAX		CH_FUNC_CURRENT_INPUT_LOOP_POWER_HART
+> +
+> +#endif /* _DT_BINDINGS_ADI_AD74413R_H */
 

@@ -2,104 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D72E74683F5
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 11:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08FD14683F8
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 11:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346976AbhLDKTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 05:19:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        id S1348130AbhLDKWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 05:22:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241100AbhLDKTe (ORCPT
+        with ESMTP id S1347426AbhLDKWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 05:19:34 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67CAC061751
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 02:16:08 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id t5so21718196edd.0
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 02:16:08 -0800 (PST)
+        Sat, 4 Dec 2021 05:22:12 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B62C061359
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 02:18:47 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso6759017otf.12
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 02:18:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dN/oUTilGDj3oSXc/q4PkakZnOiuYdXeFtx+QhztwZA=;
-        b=QZkgxOOa/GICNARrrQMFysa/639SFGfT5VLuY3Sr7X59mjlh7Zw79O+BHJAlPn73R0
-         bT9wfgAYoCw+sqnqY+aZQTLXNbJwumTP9utTA0Az6kKhvEcWWLXcTFHtNxkmK7lgw9sN
-         FXSVGX+DFAbS2ATE09pjoyTFuabtpkgNDclcqdDzWaKOkBvPKTUqNpXLtFOzXNRIJl3b
-         r4jQNjjyMBIg5XrpE9+SwqQa06x2JcHURzndIvKT5cn43zWk/9mJT7QmOUvgSTVUovan
-         mQ/9vx0NxzSTGUkR5xHNH/q0Tdk9Nmb0spYfustwtfTDRsPnyuRWvUL5dHEFtxvSZ7QL
-         M0Gw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qTSQonO6cpdOT/9lK6N01NZXgDCMfbNPFb3L0B3C7TY=;
+        b=E5OcN2+thklji0N2xi8yxr8M9qAHTMjuxXh2pQjPypGOgiGE8ZKwW1FP35jaLE1hje
+         QpUv251xaqESYrfqqMbXmoXRoQ5f/7n8/FrMjQ3tHGorNSpgKQSAkJegS/wofzOwiKBJ
+         xEOEFW08O2Bt3ZBPf9fdWMa2MkCHY3SmTLKc2KKb/16sDpYkigQ3aj/gj0Yu9Q+u32Y9
+         mDKgfHKbPh/cZlQLbcEmzs0n8s9VeXJlyUE90+F2vUcHauJ3PnDm6JvJvnh5q/UU7bnM
+         8PXQVTmFD+YMWpnjJhPjlQH2cVdSBDC9LtXcXMyuu0J5PfznbavWTktVMTgzdTeojYei
+         ihXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dN/oUTilGDj3oSXc/q4PkakZnOiuYdXeFtx+QhztwZA=;
-        b=Q+0E3Ufi5JXzDT0QQCeWO34q0/LjSXAZsMzU+JfnJ6lhSPexVxP1xoP5mePOwO0sKC
-         8aJgRLGt4GOqexwoOyP2mij2viYQmQ/E2fGWV1ICeBT7vF2+YaMd6wnqd7hFxuNx68FL
-         kN16ECf1QREMV8YILjQFJ11IuhbX9rE6qGUJGiqz68USTCEHsF4cdfO4pMNQR2iD+b/O
-         kYlGXa8p69XBB4hqIpuGOaE53B+vk/ga7o1mI6C+9gu3Fj+0No5ViCD7PTLhBKyaCl2G
-         xaKQR+FYtX4q3bONNMnAbkmzv8pOzpscRBZdQEoH0XwbsOjlhM22PcfWCqQ+IKGMpB1B
-         7Igg==
-X-Gm-Message-State: AOAM533qQYEQnKy06mB8jqVh5V9BekX9KNpf4zXjv+q8y5kqU0v+L7sw
-        tAyir0M+ToAC7ig3G1WcVS0=
-X-Google-Smtp-Source: ABdhPJwVLDiOANQkH4Ll5oiEzFwfCG34wXuP1nXwD1GDPPlHp5IGj+n4Tq50NJRFRjph8q1z78iINQ==
-X-Received: by 2002:a17:906:d550:: with SMTP id cr16mr30655646ejc.544.1638612967289;
-        Sat, 04 Dec 2021 02:16:07 -0800 (PST)
-Received: from bulldog.fritz.box (host-79-17-112-183.retail.telecomitalia.it. [79.17.112.183])
-        by smtp.gmail.com with ESMTPSA id d18sm3534450edj.23.2021.12.04.02.16.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Dec 2021 02:16:06 -0800 (PST)
-From:   Alberto Merciai <alb3rt0.m3rciai@gmail.com>
-To:     alb3rt0.m3rciai@gmail.com
-Cc:     Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tommaso Merciai <tomm.merciai@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Karolina Drobnik <karolinadrobnik@gmail.com>,
-        =?UTF-8?q?Aldas=20Tara=C5=A1kevi=C4=8Dius?= <aldas60@gmail.com>,
-        Lucas Henneman <lucas.henneman@linaro.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: vt6655: remove unused variable byMaxChannel
-Date:   Sat,  4 Dec 2021 11:15:28 +0100
-Message-Id: <20211204101531.3924430-1-alb3rt0.m3rciai@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qTSQonO6cpdOT/9lK6N01NZXgDCMfbNPFb3L0B3C7TY=;
+        b=UK3isY4wtBxWnJtNx/s6y3bq92qRz1nx5F4CFmMycYb64QlfSHSKjOrjVGZzh22EHZ
+         znQfmHv91vZ/YdWkR5zhzljFFm/eSN7OtrlRo6xO5jMa2CQbJVr0vkihjz1HfAx17LyY
+         Mn5dG840OSFu6YsMonEz+bfCtdc/aqy+7vcQi/8gMXOdSxT3Rkqdw2wnHaj7OT/7R7XZ
+         y1fgEf0YmRkPHas0QrKN5ti8I1sw1xRmKjToO0ORzQM8LDGU2sMVC/jueBYDI6/BPGPH
+         CaV45G+zS626tzvYX5gpFBH4WD4QtOV88WudLy1ni3uPh2t+wk2pVkXYZtaLsgMW+HhO
+         yD3w==
+X-Gm-Message-State: AOAM531NJ84ljZnXE3ckGOCcrcypv1jf092uLWAIlUSMaUGqQgH3R/50
+        0JL4vUufufj/fIJY5mcL+eN69239G2tTmEXtg/nNuw==
+X-Google-Smtp-Source: ABdhPJx6mZbpcwe2rwwXgkqjIfJCq7YZmY8eKqWNuUTjv5tCDwtrERGexd3z9kft8T7L3n7+03HjEghubp7tRlKQKV8=
+X-Received: by 2002:a05:6830:2425:: with SMTP id k5mr20582747ots.319.1638613126667;
+ Sat, 04 Dec 2021 02:18:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <000000000000a56e9105d0cec021@google.com> <042900c4-7758-bb90-bac1-c01b12df49bc@suse.com>
+In-Reply-To: <042900c4-7758-bb90-bac1-c01b12df49bc@suse.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Sat, 4 Dec 2021 11:18:35 +0100
+Message-ID: <CACT4Y+bS=GfjNah0pGCt2DzifxVGK3QacvYtq_9==TXeZsL7NQ@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in usbnet_start_xmit/usb_submit_urb
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     syzbot <syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com>,
+        davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        Aleksandr Nogikh <nogikh@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove set but not used variable byMaxChannel.
+On Mon, 15 Nov 2021 at 15:31, 'Oliver Neukum' via syzkaller-bugs
+<syzkaller-bugs@googlegroups.com> wrote:
+>
+>
+> On 15.11.21 08:28, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    048ff8629e11 Merge tag 'usb-5.16-rc1' of git://git.kernel...
+> > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=1480ade1b00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=d6b387bc5d3e50f3
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=63ee658b9a100ffadbe2
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1313cb7cb00000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16a2f676b00000
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+63ee658b9a100ffadbe2@syzkaller.appspotmail.com
+> >
+> > ------------[ cut here ]------------
+> > usb 5-1: BOGUS urb xfer, pipe 3 != type 1
+> > WARNING: CPU: 0 PID: 1291 at drivers/usb/core/urb.c:502 usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
+>
+> Hi,
+>
+> here I understand what is happening, but not why it can happen. Usbnet
+> checks the endpoint type.
+>
+> May I request an addition to syzbot? Could you include the output of
+> "lsusb -v" at the time
+> of the error condition for USB bugs?
 
-Signed-off-by: Alberto Merciai <alb3rt0.m3rciai@gmail.com>
----
- drivers/staging/vt6655/device.h      | 1 -
- drivers/staging/vt6655/device_main.c | 1 -
- 2 files changed, 2 deletions(-)
+Hi Oliver,
 
-diff --git a/drivers/staging/vt6655/device.h b/drivers/staging/vt6655/device.h
-index 245f992e5a23..bf2698056c55 100644
---- a/drivers/staging/vt6655/device.h
-+++ b/drivers/staging/vt6655/device.h
-@@ -201,7 +201,6 @@ struct vnt_private {
- 	unsigned char byTopCCKBasicRate;
- 
- 	unsigned char byMinChannel;
--	unsigned char byMaxChannel;
- 
- 	unsigned char preamble_type;
- 	unsigned char byShortPreamble;
-diff --git a/drivers/staging/vt6655/device_main.c b/drivers/staging/vt6655/device_main.c
-index 37a82550ca82..cf8d9a05734d 100644
---- a/drivers/staging/vt6655/device_main.c
-+++ b/drivers/staging/vt6655/device_main.c
-@@ -229,7 +229,6 @@ static void device_init_registers(struct vnt_private *priv)
- 
- 	/* Get Channel range */
- 	priv->byMinChannel = 1;
--	priv->byMaxChannel = CB_MAX_CHANNEL;
- 
- 	/* Get Antena */
- 	byValue = SROMbyReadEmbedded(priv->port_offset, EEP_OFS_ANTENNA);
--- 
-2.25.1
-
+Aleksandr filed https://github.com/google/syzkaller/issues/2889 for
+this request.
+But so far we did not find a good solution. syzbot collects some info
+about the machine after boot, but that's obviously wrong moment. After
+the bug it's also too late -- the kernel is dead/corrupted. It's also
+unclear what exactly is "usb bug".
+It may be easier to do from the kernel by hooking into panic. Would
+also benefit all other kernel testing as this is not really
+syzbot-specific, so better belongs to kernel. Is it possible to do it
+from the kernel? If not, maybe the kernel could at least log
+connect/disconnect events to the console.

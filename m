@@ -2,42 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 082064681D5
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 02:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D054681D8
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 02:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384023AbhLDBkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 20:40:37 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34062 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383963AbhLDBkg (ORCPT
+        id S1384026AbhLDBrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 20:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231452AbhLDBrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 20:40:36 -0500
+        Fri, 3 Dec 2021 20:47:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E768C061751;
+        Fri,  3 Dec 2021 17:43:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 009E9B80DD7;
-        Sat,  4 Dec 2021 01:37:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85908C341C0;
-        Sat,  4 Dec 2021 01:37:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B8B162D86;
+        Sat,  4 Dec 2021 01:43:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66DD8C341C1;
+        Sat,  4 Dec 2021 01:43:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638581829;
-        bh=V0YJGTiKuStUo8QL0j7QQLTPjfAZmi+KAdffmnVsFGU=;
+        s=k20201202; t=1638582214;
+        bh=u56gr7zj5ULbDe9nL04VKFinW1g9P0pbmmGrQ/7dF20=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZPdfrIApgMrXUqbkfWnHmIST78D9yIPx4Vbp5TaCU/DmbHukP0RaLd+3KejgSfjn7
-         SKuaUVG+rC2R6y2q8ALYubwkXMdi7upubn2YffF8pD0xp7y1TmJNy0O9NsWDUzB2Np
-         hm0jklRFE0baY8zlIIlIoWasLXTfuvmqq/o7mm2eVymRLpm8CGM64P5zV6L5un0Rx4
-         8p7pA0EWOuuunPrc8nKHCFjX9Td27KbILoZBucQf0uM5wJbix+MgZeYSt9eNfWZMDI
-         +szTRhMATJ2Mcp3s4ncRCF8t7ZL+LEwfLqd9s7sBuOTRkV5ptleAvXWmpCAfTfPGWr
-         A1icEHinrqFyQ==
-Date:   Fri, 3 Dec 2021 17:37:08 -0800
+        b=VPFcuZv3RXZZYVOkfBw+JjB8YtFF4c7Mua6AAJCHo6l2ykzUqFhfafo7N624+t7u2
+         uc9YmbiN/9OSYFSt8RHAejkbl9P/fCI1BNuriM8MpFZ2nORmV/rkhgJfIYcBBoXhnE
+         JgTrBgYy69OwDfWu+jqbiZO7U27qCYOaz2s2R2XzZz3zNeDb8OtmIddkMc5JaMBzVu
+         kREmf2KChf3N+kxK5vjWJJ6VexGifG95Zml6oE6hcRs/cKV7nmtCBUTBk6+dwC5LGY
+         qxm1FouvyavOErOeROg77GDmV3iRWoOJtW0Gf2Y9GoEOCw1Pl1HdkXgjl81mvSKGaL
+         IoBhBFWg8GXJA==
+Date:   Fri, 3 Dec 2021 17:43:33 -0800
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     Ameer Hamza <amhamza.mgc@gmail.com>
-Cc:     davem@davemloft.net, mcoquelin.stm32@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: stmmac: Fix possible division by zero
-Message-ID: <20211203173708.7fdbed06@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211202223729.134238-1-amhamza.mgc@gmail.com>
-References: <20211202223729.134238-1-amhamza.mgc@gmail.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Russell King <linux@armlinux.org.uk>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2 net-next 4/5] net: mscc: ocelot: split register
+ definitions to a separate file
+Message-ID: <20211203174333.074d87b3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211204010050.1013718-5-colin.foster@in-advantage.com>
+References: <20211204010050.1013718-1-colin.foster@in-advantage.com>
+        <20211204010050.1013718-5-colin.foster@in-advantage.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -45,13 +58,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  3 Dec 2021 03:37:29 +0500 Ameer Hamza wrote:
-> Fix for divide by zero error reported by Coverity.
-> 
-> Addresses-Coverity: 1494557 ("Division or modulo by zero")
-> 
-> Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+On Fri,  3 Dec 2021 17:00:49 -0800 Colin Foster wrote:
+> +#include <soc/mscc/ocelot_vcap.h>
+> +#include "ocelot.h"
 
-Please include justification that this issue can actually happen, Fixes
-tag pointing to the commit which introduced the problem, and CC the
-author and reviewers of that commit.
+You need to include <soc/mscc/vsc7514_regs.h> here.
+
+> +const u32 vsc7514_ana_regmap[] = {
+

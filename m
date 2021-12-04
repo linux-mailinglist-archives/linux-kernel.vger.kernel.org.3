@@ -2,101 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F4746818C
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3DF46818F
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:47:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383798AbhLDAtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 19:49:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
+        id S1383916AbhLDAuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 19:50:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354618AbhLDAtc (ORCPT
+        with ESMTP id S1354618AbhLDAuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 19:49:32 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B338AC061353
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 16:46:07 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id k2so9339849lji.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 16:46:07 -0800 (PST)
+        Fri, 3 Dec 2021 19:50:50 -0500
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B25C061751;
+        Fri,  3 Dec 2021 16:47:25 -0800 (PST)
+Received: by mail-pg1-x542.google.com with SMTP id s37so4639600pga.9;
+        Fri, 03 Dec 2021 16:47:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=84mOUp3LokD6J3j/XPGM8Gdyu0TNZ1hY1SXnt8ueQl0=;
-        b=W00VL1dQdtqB96CSXr76uDShRNGRcJZoc5gxPBZH6JD2lO3sXg/MbNgoIepxvjgy/v
-         1ngl4zAcaMGNYSSMFZUmcTZGNuuO8BREoXOAvrLF1NuaG6twbr/BvF8zVlA2WCvc2n+s
-         3atBTFjXpvf1BSw+xfGON8yWnXNLilAs33nqQ3TOiIIAryw8JTfFkO7b1WoJAv3zh/vW
-         q1r05yy7mWaFNdo7OI46VANrC5cGCWMoG3EInP4CFFm8+Q/q39qu7nPEsJ9jSHTc3IgO
-         oyiqNf62GHUrdj+I5THRVlKdw6jqwGTlCFLYmU1q+05R2IZ7CtOuatZgdbmNpnfUpW6C
-         1BoA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=82zoxTyylQxErFpnuqHNAfQjAlvM/1ajL8oX6RGNRyI=;
+        b=aMSOLBzknMmr7Jy2594bk5fDz23voRIfH9ahtg/4gH8smT/JhXJoq4fjXKCbOOfQjh
+         JUO/v7GkGRHtren+t3KBBl40Rs/JgiZblRLOWgoWBhOBRf8qzifPQlnq6XSj/enr9ThV
+         1aOzFbaf4wrME/iyezfw4MteryJuFrUZrU/14/clVNgji46r3pj9Xtsb9Wxy/mJ9hfnc
+         JVQspMpiF/UGMiBOj7zJNGxjrMo7KwQ0uwTqgEXjylne4xjRtWT3V8v0voG8ixydYmOP
+         Ni0yDsASH66wl/cQXwUJtHxssbuRy/tL9jd9QMez6T4f5pZDY7dd78TAtoE0GY0mVAM0
+         iuEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=84mOUp3LokD6J3j/XPGM8Gdyu0TNZ1hY1SXnt8ueQl0=;
-        b=r9AcnJU1seePJwy2wrhlLX6Du4GVMvh723p/OvZXklGRrqfqvP2xIvZWJo/x9KufeB
-         p6ccOP1CYhkaJf6Ghl9g6MAYmAzdpgjajKik+Q/zcTyfOXvGsUFa/avYUcJBTbpvfb0W
-         fSERwATLYsPFNAkywOktwfIa1um831nXXcwLK/5PD7xenPnHcfd58ojOQbaN0j+A+JH2
-         GmAIhpUQ/pUSErIOhRuP7gGSIM5we/zGr5oK/Hw9wHan+aS0JMcd7AnpoxVkRiSNM19I
-         lb5X1Gt2v3nWBiHnzmWdwz3xW/Vvfh8JwVocEgrvMkfb8SmB0rlgHuD7F0cXtlgonTxb
-         ACAA==
-X-Gm-Message-State: AOAM533BhD2qj3NurkmvyC7kUGYs0eilNCwWWCIsIQUpLpGhTzSzHCG7
-        5oEa/S2etVsKDFUbNG8vEbHu2hakNxYFsD9JDb+36g==
-X-Google-Smtp-Source: ABdhPJzLV+ZZmoda/NgcR2Lu4eylwVG/7x4I9dAzKn8K8L/25X9VSHMV6CmA5i65Wuva7AzCKFziwlqii0mxLRX3B38=
-X-Received: by 2002:a05:651c:545:: with SMTP id q5mr20684058ljp.202.1638578765757;
- Fri, 03 Dec 2021 16:46:05 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=82zoxTyylQxErFpnuqHNAfQjAlvM/1ajL8oX6RGNRyI=;
+        b=jiKuOzVEgZTCqnou5V9+hf27e5388IEoWoEseKv1yafjuscNcA25uHjfdcYdRHtsKP
+         PEA7TxlVOnOhmbzkDDcyQ0rz2IW6M0EVqTdEFHqzzpAqkgfh8ZIPU65sMpXomiCiLtVS
+         PXkWRflxEa3YrPpLT6cQO9JmFMs/d5/G+mpNtxWFTePD6x+HhuXQtHsmyRUhlT6EbJ7p
+         wjXysv3Y6eGggqDhcbXrV1yCUgqtwzQm/QUxnPOvZL28BLoBu+1kYMLkxk+1qRQXLkYm
+         FNaY7flABL5kvyuzzsdTPXZ7OcL8haIhxTbWuSu3gJu6BS0ISnQfQj6iUQ18tDL0uQa0
+         vwtg==
+X-Gm-Message-State: AOAM533pGV2zPGB0DcrHrSKgnA9S2k/bXJzefWe64B1hXOm2o8U98hgu
+        CkLU5DLFgzlBfJOxB9h94hw=
+X-Google-Smtp-Source: ABdhPJxcDwxNnWas1calrP2vbMdflZjfU2uftdHg9+YuF/nnzOevI8b8awiRgB40YfH/csy2leAZ7A==
+X-Received: by 2002:a05:6a00:2402:b0:4a8:4557:e96b with SMTP id z2-20020a056a00240200b004a84557e96bmr22050497pfh.76.1638578845439;
+        Fri, 03 Dec 2021 16:47:25 -0800 (PST)
+Received: from localhost ([2405:201:6014:d064:502e:73f4:8af1:9522])
+        by smtp.gmail.com with ESMTPSA id ot18sm3589156pjb.14.2021.12.03.16.47.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 16:47:25 -0800 (PST)
+Date:   Sat, 4 Dec 2021 06:17:21 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH bpf 1/2] samples: bpf: fix xdp_sample_user.o linking with
+ Clang
+Message-ID: <20211204004721.ubdt2kcshorcmhw4@apollo.legion>
+References: <20211203195004.5803-1-alexandr.lobakin@intel.com>
+ <20211203195004.5803-2-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-References: <20211203162426.3375036-1-schatzberg.dan@gmail.com>
-In-Reply-To: <20211203162426.3375036-1-schatzberg.dan@gmail.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Fri, 3 Dec 2021 16:45:54 -0800
-Message-ID: <CALvZod6y+_O49jzuD9wLXncCEGCgun4f-uf_yBzYcsfEiH1WOQ@mail.gmail.com>
-Subject: Re: [PATCH] mm: add group_oom_kill memory event
-To:     Dan Schatzberg <schatzberg.dan@gmail.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>, Roman Gushchin <guro@fb.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Alex Shi <alexs@kernel.org>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" 
-        <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211203195004.5803-2-alexandr.lobakin@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 8:24 AM Dan Schatzberg <schatzberg.dan@gmail.com> wrote:
+On Sat, Dec 04, 2021 at 01:20:03AM IST, Alexander Lobakin wrote:
+> Clang (13) doesn't get the jokes about specifying libraries to link in
+> cclags of individual .o objects:
 >
-> Our container agent wants to know when a container exits if it was OOM
-> killed or not to report to the user. We use memory.oom.group = 1 to
-> ensure that OOM kills within the container's cgroup kill
-> everything. Existing memory.events are insufficient for knowing if
-> this triggered:
+> clang-13: warning: -lm: 'linker' input unused [-Wunused-command-line-argument]
+> [ ... ]
+>   LD  samples/bpf/xdp_redirect_cpu
+>   LD  samples/bpf/xdp_redirect_map_multi
+>   LD  samples/bpf/xdp_redirect_map
+>   LD  samples/bpf/xdp_redirect
+>   LD  samples/bpf/xdp_monitor
+> /usr/bin/ld: samples/bpf/xdp_sample_user.o: in function `sample_summary_print':
+> xdp_sample_user.c:(.text+0x84c): undefined reference to `floor'
+> /usr/bin/ld: xdp_sample_user.c:(.text+0x870): undefined reference to `ceil'
+> /usr/bin/ld: xdp_sample_user.c:(.text+0x8cf): undefined reference to `floor'
+> /usr/bin/ld: xdp_sample_user.c:(.text+0x8f3): undefined reference to `ceil'
+> [ more ]
 >
-> 1) Our current approach reads memory.events oom_kill and reports the
-> container was killed if the value is non-zero. This is erroneous in
-> some cases where containers create their children cgroups with
-> memory.oom.group=1 as such OOM kills will get counted against the
-> container cgroup's oom_kill counter despite not actually OOM killing
-> the entire container.
+> Specify '-lm' as ldflags for all xdp_sample_user.o users in the main
+> Makefile and remove it from ccflags of ^ in Makefile.target -- just
+> like it's done for all other samples. This works with all compilers.
 >
-> 2) Reading memory.events.local will fail to identify OOM kills in leaf
-> cgroups (that don't set memory.oom.group) within the container cgroup.
->
-> This patch adds a new oom_group_kill event when memory.oom.group
-> triggers to allow userspace to cleanly identify when an entire cgroup
-> is oom killed.
->
-> Signed-off-by: Dan Schatzberg <schatzberg.dan@gmail.com>
+> Fixes: 6e1051a54e31 ("samples: bpf: Convert xdp_monitor to XDP samples helper")
+> Fixes: b926c55d856c ("samples: bpf: Convert xdp_redirect to XDP samples helper")
+> Fixes: e531a220cc59 ("samples: bpf: Convert xdp_redirect_cpu to XDP samples helper")
+> Fixes: bbe65865aa05 ("samples: bpf: Convert xdp_redirect_map to XDP samples helper")
+> Fixes: 594a116b2aa1 ("samples: bpf: Convert xdp_redirect_map_multi to XDP samples helper")
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> ---
 
-So, with this patch, will you be watching oom_group_kill from
-memory.events or memory.events.local file for your use-case?
+Thanks, something to remember to test for next time.
 
-Reviewed-by: Shakeel Butt <shakeelb@google.com>
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+
+--
+Kartikeya

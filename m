@@ -2,164 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5011E46849E
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 13:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 691DE4684A0
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 13:01:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350445AbhLDMEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 07:04:04 -0500
-Received: from mail-db8eur05on2062.outbound.protection.outlook.com ([40.107.20.62]:23379
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        id S1354819AbhLDME1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 07:04:27 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:60010 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234627AbhLDMEB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 07:04:01 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eszbhlmts13o7b+Ssp3anIKRk3iAZZds+HUXhCZ8hTBzX7OLzHByYz/tS3J1B/cxvFujZefWgh5BK8weaWpIrfaeZb8mrRzstKBPULus6IQ/F87SWkrlEVdeQHIkEyqAsg4RbYiOX02ZsDEEUc9i66wAPOBTM9Kum3wFaUOwrOtx/Rm2bhbpsNXlo849VfvlX9zNO6+cSitplR8BBI6shvGckKQUDfbC4AQCm5CdnAtLorA4VpLTYB5XMW0sPYvCUcasXcDsaspmJ3hPLJCN48QytCcWjvLJ6K4vEjeIfoJ+Bu9YnkGO8rk9L6XxMGlUZuQiYWDsqOFu6RBGrzrfUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CCkjyoHLcdk2/TyYG0VAqawJVQd9KGJwpY3hG1JFKCE=;
- b=VAS9SNU4hemL60THB2eJAweoT2ZU1dxMnvHvp51uioK8vbil85VuNfU733/bdfi3A/SmKXQlyT7KQJOixGXjDoJ8Rx85cA92/unzL15e41ULtq10RwOE7VpfgpztDPJfI0OH8PtOYVozDhe+LWm0MiJGxNlvyPeW8qdrlIwpvCER+XrpMjPnoQpJI7srWYUrXXFcwkCh+Tfl76V9jIh8vyjyLi8whPp90+pJWvNrRfPb7DccY4QETYvKk91T5/0gZIIlIxIk8JxW0ASVg5VDQasNV7e6m5coBF/TJLUdXwbr4kY/7Ynh1p81384BmqGwx2SBu7pky27ticTNoUKaew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CCkjyoHLcdk2/TyYG0VAqawJVQd9KGJwpY3hG1JFKCE=;
- b=Pjv4L4fZDMjSm1LsbUqZDXeeGA4qTzjttq4yxRK/dYAng0t3snCvHSisioVapzcmhaazgbHLNWndVMWNhwjZOyY6w5Qh6C4MaiYCsU/SQf6YznoKGE4+02XE8wHpwBziT06P8DBN6X+xiQ3A9082TiJYAcvSDlkP8rR+/vyaQBc=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by VI1PR0402MB2800.eurprd04.prod.outlook.com (2603:10a6:800:b8::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Sat, 4 Dec
- 2021 12:00:28 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::796e:38c:5706:b802]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::796e:38c:5706:b802%3]) with mapi id 15.20.4755.020; Sat, 4 Dec 2021
- 12:00:28 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2 net-next 4/5] net: mscc: ocelot: split register
- definitions to a separate file
-Thread-Topic: [PATCH v2 net-next 4/5] net: mscc: ocelot: split register
- definitions to a separate file
-Thread-Index: AQHX6KpvFCgGsEi6gkyWUdzaZYVwl6wiO7iA
-Date:   Sat, 4 Dec 2021 12:00:28 +0000
-Message-ID: <20211204120027.vov363wzmk6yngbz@skbuf>
-References: <20211204010050.1013718-1-colin.foster@in-advantage.com>
- <20211204010050.1013718-5-colin.foster@in-advantage.com>
-In-Reply-To: <20211204010050.1013718-5-colin.foster@in-advantage.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 094c2b97-13e6-4e30-33a3-08d9b71daa0a
-x-ms-traffictypediagnostic: VI1PR0402MB2800:
-x-microsoft-antispam-prvs: <VI1PR0402MB280018DD24D03F79A6F61BF0E06B9@VI1PR0402MB2800.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hGBNJZrK9N2kPucJo0RTkbDz7cg6OnAip+4zpHhFRefhuDSRJerSG0rnOm22iQFhXu/3cAK8RGboTi7mmQZcAMWbQwS0Ay9h4A922T0nnkfKyZO4KQPOd9/o/1QszkPnQMHeqCUehWcDLvuaoYQ2K8DG0ru7V+PJ29FrfJsU+ckDeTimQicpLlB5MsWo22Cz+HoUjcNVAd3NrOh2OVLE2CIuZ65lbTXECMoLw3RCatEDmd17aqxkQcrtSWuSYCKcYPozqLPyXE14tkcHEAhxbhGYUthfawM7rU+tTbEXnL33IqlU013H3YR1blu1do7tDdFLhATQZZYxQtQWyIuztP/+JjcVej42eM0S1G0Xd6nj450uVapF/z6/PGugUjBj74uECq8f807kGDAZcwIXMpoi1Scnk3HAS9GBvNTMuMiO8kNkiORZpgRY6Gnq+pNtL5tj7PeWtTTfyRXOt2iyjQfAaoKPyUbwOZcasNvJmSqrbZTnAgQeKg30BKwuqv0GEmYs+CFqvxAo/aSlJalMaJKigomgPrHQ5q6J40+JX74+m0G6ldmBs/0wpQYoq80xQ48ZsLQhcNQn8LP8HIUt4G5qCFI4GP6r6MDUi1qBKDKq6RelZJWF5fVLs/D1qbGYTRI6xlLHdR4eh+mPB3TMxZD9zzCIR5o9i/539CH6KvbKv9rjDfgnLGFC9rC2JefXytsoQOy7fF5L420PkBE1NQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(366004)(44832011)(91956017)(7416002)(76116006)(66946007)(316002)(66556008)(64756008)(86362001)(66476007)(66446008)(83380400001)(8936002)(4326008)(6916009)(8676002)(54906003)(1076003)(5660300002)(33716001)(26005)(6506007)(2906002)(38100700002)(6486002)(508600001)(186003)(122000001)(9686003)(966005)(71200400001)(38070700005)(6512007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?EdUWh+TQNSVtVXzFQzUHXTwf8xgV88rLOBm+57cVNs14wvP1KnuCcOCKeTtM?=
- =?us-ascii?Q?tphzTA+sKmqgo6aCevOHmQtfuIgCXeVI8AVvpDkuoYEv5RgzaWTTdEdR2YdX?=
- =?us-ascii?Q?zuzf9qChY0b4hPUrNMdCUJLvmZzR5J91QRVzlpmRWlazvFXLTv1g5ZvOP6Kr?=
- =?us-ascii?Q?oKjRvWCNNmN3+5QbGiGRxIbWnds2A0LZcgi67aAPDy43ZYnR9LssTfjUmzMC?=
- =?us-ascii?Q?uvoDa37Ua347C5b7SMuDfsS43UljACymMfvXWVJxVDxffVa5jhMcvZ50zaLt?=
- =?us-ascii?Q?QWJ8tS+BbllPXmp+k69xxzHTSLcZH4OWUhb0EodOshC1sfEpw0aZucKgnNMf?=
- =?us-ascii?Q?mBd3JYZfVfL3WjCnoTaJzaq99Ei4FLU603mVfgew6ApwrzkGW+iseq9ajU5k?=
- =?us-ascii?Q?XqcGIHuX0xbQIGBPFNITlu3asgSvjSS5Vn/MPZCVIcuAly8VdTb8sMIOo7lR?=
- =?us-ascii?Q?vw3SoqW3mym+JJTzXI2w0CfQv6s4bzoygEG9gl3ftjqMNq08UyUAJsdG5JYP?=
- =?us-ascii?Q?Aglssw39QSr6W4mfAKthTKrcZUxDVE+o2DwUI8x0M2XzHcvI4O8uE1GIm0Y9?=
- =?us-ascii?Q?m5PknEnkQD4LRxxWP1if9uSDzsZkbDIBFffa7WsBNHUxU59jI9fs1/LsmJ/w?=
- =?us-ascii?Q?e+nwuc8+awr103p1rVxSnole46QmZCnDfNqIgcNURYEPBuK2G8Jiol+o3R7Q?=
- =?us-ascii?Q?lfV8QZLLhZTnRpZFIHs0zQUrpSaB04yxfxCK1Ia7ONoYMpdvrKJdMdw3qpIU?=
- =?us-ascii?Q?Alo7PUkMwsG21HLZMnSzNZvoMz/dnDesFP+XL7nzLQx3sWE5XBjezOyfaIJj?=
- =?us-ascii?Q?RZnVW/RoARJj0npciv4giTOhx/gpFHNA7fCYaJXxgo8lxif58y8SKzUIetIN?=
- =?us-ascii?Q?EuNlTsrFvAzl/crnRPGeu0zkpvUfAb7JOvXJxaSlhMS10ELz90v6gpZcybXl?=
- =?us-ascii?Q?vsSfIj+UG7qOQBE6Nv/0+fT4hw8CiqWOblApKbTdwDaKRfULoYT1U+zmdMay?=
- =?us-ascii?Q?5wxDAzwTLsGAP7mN1tg5K81ju0Hmq0KBnXs9UdkBm7pnIVR3BcV030yTLbCJ?=
- =?us-ascii?Q?xaMOq0bBNQtrjp8TeGPi8vqs+lIw/sVyrCbVOTN/s2NWbuPlHuI0ZWfzJizO?=
- =?us-ascii?Q?VHFDFQ4IL7BvpOIGxv2fxhdmB4XxZS50ZlHZDVXt8Vxc/+D0HpMxiNu9izKq?=
- =?us-ascii?Q?ucHaQArichXioCOQiED3mf6q7LvNcOh//8WooU5mjXIURTiyTsL5zXDU9eGe?=
- =?us-ascii?Q?14s1HGbuWYo2g/FD8mdC1oTI7CtDbPxQmWnCb26SfrRl32j6G9KmizkEncN9?=
- =?us-ascii?Q?IzNfHAcf4yGGc45WscrbBdsYOkUFUit8g8/lD8aHCQ6Iv8hGsV3B3PZalkV4?=
- =?us-ascii?Q?ki6cfkil4lCQZfFAZISGzGB9j2SUZhaPLBTQWGMLhYgV+HhEc4Bax/e0pDHr?=
- =?us-ascii?Q?iwxUubfK37o2JOHPRTAmC31fYG5mBOqLcIF/EeHI9SvQZHQ+g7+ZU9CmAI24?=
- =?us-ascii?Q?P/tE1BEKygu8h3Zd+vYukcrzW8ZpwvHEaqQmt4sOFzc14jo7ivwc24PXOGBz?=
- =?us-ascii?Q?x/g6vIRl/9bpGymQIZQpm2r3U3t+DdCmI3e3WpO0Vm3+9PjVKRiRql23oU4M?=
- =?us-ascii?Q?enNDHlj4GWxV3PgnMmKB1ks=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <74FE4A84F4835D43B2B42D31421CB254@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S234627AbhLDMEZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 07:04:25 -0500
+Received: from openarena.loongson.cn (unknown [10.20.41.56])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Axash0WKthy+ECAA--.5894S2;
+        Sat, 04 Dec 2021 20:00:52 +0800 (CST)
+From:   suijingfeng <suijingfeng@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mips/loongson64: using __fast_iob implement __wbflush() instead of sync
+Date:   Sat,  4 Dec 2021 20:00:51 +0800
+Message-Id: <20211204120051.376260-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 094c2b97-13e6-4e30-33a3-08d9b71daa0a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Dec 2021 12:00:28.2959
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 271xGjGel0BRUtA0BZLvwM5LYSsTN83bVs1WtaozGHf48H/0OXhFt8u61z5KKPqimvx6uRwjjg7bfH2K5bvIkA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB2800
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Axash0WKthy+ECAA--.5894S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJw4kur1fKrW8XryUCF48Zwb_yoWrur17p3
+        9Iyws8Wr4kZr1xGr93CryUAr4rZa95JFWxZF42vFyUZ3sFqr92vFyftryrJr4DXry8Xayr
+        u3y5WrWDuFy7Aw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkFb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
+        C2z280aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
+        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK6svPMxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07bOoGdUUUUU=
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 05:00:49PM -0800, Colin Foster wrote:
-> Move these to a separate file will allow them to be shared to other
-> drivers.
->=20
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> Reported-by: kernel test robot <lkp@intel.com>
+ 1) loongson's cpu(ls3a3000, ls3a4000, ls3a5000) have uncache store buffers
+    which is for uncache accleration.
 
-I wouldn't keep the "Reported-by" tag in this case.
+    Uncached Accelerated is the name under which the R10000 introduced
+    a cache mode that uses the CPU's write buffer to combine writes
+    but that otherwise is uncached.
 
-> ---
->  drivers/net/ethernet/mscc/Makefile         |   3 +-
->  drivers/net/ethernet/mscc/ocelot_vsc7514.c | 520 +-------------------
->  drivers/net/ethernet/mscc/vsc7514_regs.c   | 522 +++++++++++++++++++++
->  include/soc/mscc/vsc7514_regs.h            |  27 ++
->  4 files changed, 562 insertions(+), 510 deletions(-)
->  create mode 100644 drivers/net/ethernet/mscc/vsc7514_regs.c
->  create mode 100644 include/soc/mscc/vsc7514_regs.h
->=20
-> diff --git a/drivers/net/ethernet/mscc/vsc7514_regs.c b/drivers/net/ether=
-net/mscc/vsc7514_regs.c
-> new file mode 100644
-> index 000000000000..b041756d1b78
-> --- /dev/null
-> +++ b/drivers/net/ethernet/mscc/vsc7514_regs.c
-> @@ -0,0 +1,522 @@
-> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> +/*
-> + * Microsemi Ocelot Switch driver
-> + *
-> + * Copyright (c) 2017 Microsemi Corporation
-> + * Copyright (c) 2021 Innovative Advantage
-> + */
-> +#include <soc/mscc/ocelot_vcap.h>
+    wbflush is mean to empty data gathered in the uncache store buffers
+    within the CPU.
 
-With Jakub's comment to add an include here (which is to resolve these
-warnings):
-https://patchwork.hopto.org/static/nipa/590203/12656181/build_32bit/stderr
-it looks fine, so please change this and then add my:
+ 2) The SYNC instruction in R10000
 
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>=
+    A SYNC instruction is not prevented from graduating if the uncached
+    buffer contains any uncached accelerated stores[1].
+
+ 3) wbflush() implementation of IDT CPU.
+
+    IDT CPUs enforce strict write priority (all pending writes retired
+    to memory before main memory is read). Thus, implementing wbflush()
+    is as simple as implementing an uncached load.
+
+    for loongson's cpu, __wbflush should also be implemented with
+    __fast_iob not sync.
+
+[1] https://www.ele.uva.es/~jesman/BigSeti/ftp/Microprocesadores/MIPS/t5.ver.2.0.book.pdf
+
+Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+---
+ arch/mips/loongson64/Makefile  |  1 +
+ arch/mips/loongson64/setup.c   | 17 -----------------
+ arch/mips/loongson64/smp.c     |  6 +++---
+ arch/mips/loongson64/wbflush.c | 28 ++++++++++++++++++++++++++++
+ 4 files changed, 32 insertions(+), 20 deletions(-)
+ create mode 100644 arch/mips/loongson64/wbflush.c
+
+diff --git a/arch/mips/loongson64/Makefile b/arch/mips/loongson64/Makefile
+index e806280bbb85..ad00d92c2871 100644
+--- a/arch/mips/loongson64/Makefile
++++ b/arch/mips/loongson64/Makefile
+@@ -12,3 +12,4 @@ obj-$(CONFIG_SUSPEND) += pm.o
+ obj-$(CONFIG_PCI_QUIRKS) += vbios_quirk.o
+ obj-$(CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION) += cpucfg-emul.o
+ obj-$(CONFIG_SYSFS) += boardinfo.o
++obj-$(CONFIG_CPU_HAS_WB) += wbflush.o
+diff --git a/arch/mips/loongson64/setup.c b/arch/mips/loongson64/setup.c
+index 6fe3ffffcaa6..cb10d14da433 100644
+--- a/arch/mips/loongson64/setup.c
++++ b/arch/mips/loongson64/setup.c
+@@ -3,10 +3,7 @@
+  * Copyright (C) 2007 Lemote Inc. & Institute of Computing Technology
+  * Author: Fuxin Zhang, zhangfx@lemote.com
+  */
+-#include <linux/export.h>
+ #include <linux/init.h>
+-
+-#include <asm/wbflush.h>
+ #include <asm/bootinfo.h>
+ #include <linux/libfdt.h>
+ #include <linux/of_fdt.h>
+@@ -17,20 +14,6 @@
+ 
+ void *loongson_fdt_blob;
+ 
+-static void wbflush_loongson(void)
+-{
+-	asm(".set\tpush\n\t"
+-	    ".set\tnoreorder\n\t"
+-	    ".set mips3\n\t"
+-	    "sync\n\t"
+-	    "nop\n\t"
+-	    ".set\tpop\n\t"
+-	    ".set mips0\n\t");
+-}
+-
+-void (*__wbflush)(void) = wbflush_loongson;
+-EXPORT_SYMBOL(__wbflush);
+-
+ void __init plat_mem_setup(void)
+ {
+ 	if (loongson_fdt_blob)
+diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
+index 660e1de4412a..0d9f249c95f9 100644
+--- a/arch/mips/loongson64/smp.c
++++ b/arch/mips/loongson64/smp.c
+@@ -42,13 +42,13 @@ static uint32_t core0_c0count[NR_CPUS];
+ #define loongson3_ipi_write32(action, addr)	\
+ 	do {					\
+ 		writel(action, addr);		\
+-		__wbflush();			\
++		wbflush();			\
+ 	} while (0)
+ /* write a 64bit value to ipi register */
+ #define loongson3_ipi_write64(action, addr)	\
+ 	do {					\
+ 		writeq(action, addr);		\
+-		__wbflush();			\
++		wbflush();			\
+ 	} while (0)
+ 
+ static u32 (*ipi_read_clear)(int cpu);
+@@ -418,7 +418,7 @@ static irqreturn_t loongson3_ipi_interrupt(int irq, void *dev_id)
+ 		c0count = c0count ? c0count : 1;
+ 		for (i = 1; i < nr_cpu_ids; i++)
+ 			core0_c0count[i] = c0count;
+-		__wbflush(); /* Let others see the result ASAP */
++		wbflush(); /* Let others see the result ASAP */
+ 	}
+ 
+ 	return IRQ_HANDLED;
+diff --git a/arch/mips/loongson64/wbflush.c b/arch/mips/loongson64/wbflush.c
+new file mode 100644
+index 000000000000..49f0e4c53196
+--- /dev/null
++++ b/arch/mips/loongson64/wbflush.c
+@@ -0,0 +1,28 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * This file is subject to the terms and conditions of the GNU General Public
++ * License.  See the file "COPYING" in the main directory of this archive
++ * for more details.
++ *
++ * Copyright (C) 2021 suijingfeng@loongson.cn
++ */
++#include <linux/export.h>
++#include <linux/init.h>
++#include <asm/wbflush.h>
++#include <asm/barrier.h>
++
++#ifdef CONFIG_CPU_HAS_WB
++
++/*
++ * I/O ASIC systems use a standard writeback buffer that gets flushed
++ * upon an uncached read.
++ */
++static void wbflush_mips(void)
++{
++	__fast_iob();
++}
++
++void (*__wbflush)(void) = wbflush_mips;
++EXPORT_SYMBOL(__wbflush);
++
++#endif
+-- 
+2.25.1
+

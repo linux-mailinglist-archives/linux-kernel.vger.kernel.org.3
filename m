@@ -2,124 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0E246811E
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:20:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB32846812A
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383647AbhLDAYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 19:24:03 -0500
-Received: from mga01.intel.com ([192.55.52.88]:59903 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1383572AbhLDAYC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 19:24:02 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="261094376"
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="261094376"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 16:20:37 -0800
-X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
-   d="scan'208";a="478501677"
-Received: from lbriscoe-mobl.amr.corp.intel.com (HELO [10.209.18.147]) ([10.209.18.147])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 16:20:36 -0800
-Subject: Re: [PATCH v2] x86: Skip WBINVD instruction for VM guest
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
-References: <YZPbQVwWOJCrAH78@zn.tnic>
- <20211119040330.4013045-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <87pmqpjcef.ffs@tglx> <20211202222109.pcsgm2jska3obvmx@black.fi.intel.com>
- <87lf126010.ffs@tglx> <20211203234915.jw6kdd2qnfrionch@black.fi.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <2519e6b6-4f74-e2f8-c428-0fceb0e16472@intel.com>
-Date:   Fri, 3 Dec 2021 16:20:34 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1383832AbhLDAYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 19:24:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1383711AbhLDAYU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 19:24:20 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D506AC061353
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 16:20:55 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id y8so3204205plg.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 16:20:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=7u6cD3eNj3Nkz8bLxeT8gXWEPzrZ4rsNyC+UwyU7rX8=;
+        b=HtWNX3NIjismwcfV3/6U6eycTiG77Gg/c59ukN5EkaAmDSnfrtXmyyuQ1hXtS08qGt
+         OU0IzlvEOWrW5blZbay633YznjVgLOXlswB6l17YD3XneWQQgbzwFXBRStqaQH1/ZmPM
+         naNSIO6zEJIInS8dDaxkdABynCJE62dzhIUGU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=7u6cD3eNj3Nkz8bLxeT8gXWEPzrZ4rsNyC+UwyU7rX8=;
+        b=ktaYTr7UPZ6GTNDqs2gPaW4KKpbgSvvxGXG1GkweHguvCl8/HPx6BgZOU+0Dkx9FCv
+         nOS2sg8PRoSCskguA/wnRNDQsWl3NXvf79rCCHokEfs7JJfKXz8WzpJ4xGCGvsyoDMDi
+         SZEJ7/otTy5FkmU2crlXcFOdJ7FUjQbh+xtwo3n7g0osHXJ0pDmsonxxm0c8H7P1Fhtp
+         +wnbIUB6uv4aIKmu9R7l1+DL6Xj2D0XH/jB3CytxJWPJgnwEF+UoKM0boAcOPqxe0jxH
+         YZ2MVrJvVRG1h9yXv9uzCwyj55lUOxIhEA4W4xgpBEgqO1jMwgpZExuKc15FdzNOc9Yj
+         IDHA==
+X-Gm-Message-State: AOAM530ywUtXpRRuNJ9jauZBnfu2OBaPA7AujZxKntdL11rjzHtExjbC
+        j9L5VmH/bHWlFnf2HUsNQb5E4PfY1IDATQk=
+X-Google-Smtp-Source: ABdhPJzKp/tA+vtP8sQx/u94F7a3amr0c187EQ3qwQTlVnU49o2PFuDEg8ylYHVWzgY7vyaJcLC54A==
+X-Received: by 2002:a17:90a:657:: with SMTP id q23mr17992099pje.21.1638577255185;
+        Fri, 03 Dec 2021 16:20:55 -0800 (PST)
+Received: from fedora.ba.rivosinc.com (99-13-229-45.lightspeed.snjsca.sbcglobal.net. [99.13.229.45])
+        by smtp.gmail.com with ESMTPSA id r6sm3272402pjg.21.2021.12.03.16.20.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 16:20:54 -0800 (PST)
+From:   Atish Patra <atishp@atishpatra.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Atish Patra <atishp@rivosinc.com>, Alexandre Ghiti <alex@ghiti.fr>,
+        Anup Patel <anup.patel@wdc.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
+        Nanyong Sun <sunnanyong@huawei.com>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Vitaly Wool <vitaly.wool@konsulko.com>
+Subject: [RFC 3/6] RISC-V: Use __cpu_up_stack/task_pointer only for spinwait method
+Date:   Fri,  3 Dec 2021 16:20:35 -0800
+Message-Id: <20211204002038.113653-4-atishp@atishpatra.org>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211204002038.113653-1-atishp@atishpatra.org>
+References: <20211204002038.113653-1-atishp@atishpatra.org>
 MIME-Version: 1.0
-In-Reply-To: <20211203234915.jw6kdd2qnfrionch@black.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/21 3:49 PM, Kirill A. Shutemov wrote:
-> -	ACPI_FLUSH_CPU_CACHE();
-> +	if (acpi_state >= ACPI_STATE_S1 && acpi_state <= ACPI_STATE_S3)
-> +		ACPI_FLUSH_CPU_CACHE();
+From: Atish Patra <atishp@rivosinc.com>
 
-It's a bit of a bummer that this per-sleep-state logic has to be
-repeated so many time.
+The __cpu_up_stack/task_pointer array is only used for spinwait method
+now. The per cpu array based lookup is also fragile for platforms with
+discontiguous/sparse hartids. The spinwait method is only used for
+M-mode Linux or older firmwares without SBI HSM extension. For general
+Linux systems, ordered booting method is preferred anyways to support
+cpu hotplug and kexec.
 
-If you pass acpi_state into ACPI_FLUSH_CPU_CACHE() can you centralize
-the set of places where that knowledge about which sleep states require
-flushing?
+Make sure that __cpu_up_stack/task_pointer is only used for spinwait
+method. Take this opportunity to rename it to
+__cpu_spinwait_stack/task_pointer to emphasize the purpose as well.
 
-> TDX doesn't support these S- and C-states. TDX is only supports S0 and S5.
+Signed-off-by: Atish Patra <atishp@rivosinc.com>
+---
+ arch/riscv/include/asm/cpu_ops.h     |  2 --
+ arch/riscv/kernel/cpu_ops.c          | 16 ----------------
+ arch/riscv/kernel/cpu_ops_spinwait.c | 27 ++++++++++++++++++++++++++-
+ arch/riscv/kernel/head.S             |  4 ++--
+ arch/riscv/kernel/head.h             |  4 ++--
+ 5 files changed, 30 insertions(+), 23 deletions(-)
 
-This makes me a bit nervous.  Is this "the first TDX implementation
-supports..." or "the TDX architecture *prohibits* supporting S1 (or
-whatever"?
+diff --git a/arch/riscv/include/asm/cpu_ops.h b/arch/riscv/include/asm/cpu_ops.h
+index a8ec3c5c1bd2..134590f1b843 100644
+--- a/arch/riscv/include/asm/cpu_ops.h
++++ b/arch/riscv/include/asm/cpu_ops.h
+@@ -40,7 +40,5 @@ struct cpu_operations {
+ 
+ extern const struct cpu_operations *cpu_ops[NR_CPUS];
+ void __init cpu_set_ops(int cpu);
+-void cpu_update_secondary_bootdata(unsigned int cpuid,
+-				   struct task_struct *tidle);
+ 
+ #endif /* ifndef __ASM_CPU_OPS_H */
+diff --git a/arch/riscv/kernel/cpu_ops.c b/arch/riscv/kernel/cpu_ops.c
+index 3f5a38b03044..c1e30f403c3b 100644
+--- a/arch/riscv/kernel/cpu_ops.c
++++ b/arch/riscv/kernel/cpu_ops.c
+@@ -8,31 +8,15 @@
+ #include <linux/of.h>
+ #include <linux/string.h>
+ #include <linux/sched.h>
+-#include <linux/sched/task_stack.h>
+ #include <asm/cpu_ops.h>
+ #include <asm/sbi.h>
+ #include <asm/smp.h>
+ 
+ const struct cpu_operations *cpu_ops[NR_CPUS] __ro_after_init;
+ 
+-void *__cpu_up_stack_pointer[NR_CPUS] __section(".data");
+-void *__cpu_up_task_pointer[NR_CPUS] __section(".data");
+-
+ extern const struct cpu_operations cpu_ops_sbi;
+ extern const struct cpu_operations cpu_ops_spinwait;
+ 
+-void cpu_update_secondary_bootdata(unsigned int cpuid,
+-				   struct task_struct *tidle)
+-{
+-	int hartid = cpuid_to_hartid_map(cpuid);
+-
+-	/* Make sure tidle is updated */
+-	smp_mb();
+-	WRITE_ONCE(__cpu_up_stack_pointer[hartid],
+-		   task_stack_page(tidle) + THREAD_SIZE);
+-	WRITE_ONCE(__cpu_up_task_pointer[hartid], tidle);
+-}
+-
+ void __init cpu_set_ops(int cpuid)
+ {
+ #if IS_ENABLED(CONFIG_RISCV_SBI)
+diff --git a/arch/riscv/kernel/cpu_ops_spinwait.c b/arch/riscv/kernel/cpu_ops_spinwait.c
+index b2c957bb68c1..9f398eb94f7a 100644
+--- a/arch/riscv/kernel/cpu_ops_spinwait.c
++++ b/arch/riscv/kernel/cpu_ops_spinwait.c
+@@ -6,11 +6,36 @@
+ #include <linux/errno.h>
+ #include <linux/of.h>
+ #include <linux/string.h>
++#include <linux/sched/task_stack.h>
+ #include <asm/cpu_ops.h>
+ #include <asm/sbi.h>
+ #include <asm/smp.h>
+ 
+ const struct cpu_operations cpu_ops_spinwait;
++void *__cpu_spinwait_stack_pointer[NR_CPUS] __section(".data");
++void *__cpu_spinwait_task_pointer[NR_CPUS] __section(".data");
++
++static void cpu_update_secondary_bootdata(unsigned int cpuid,
++				   struct task_struct *tidle)
++{
++	int hartid = cpuid_to_hartid_map(cpuid);
++
++	/*
++	 * The hartid must be less than NR_CPUS to avoid out-of-bound access
++	 * errors for __cpu_spinwait_stack/task_pointer. That is not always possible
++	 * for platforms with discontiguous hartid numbering scheme. That's why
++	 * spinwait booting is not the recommended approach for any platforms
++	 * and will be removed in future.
++	 */
++	if (hartid == INVALID_HARTID || hartid >= NR_CPUS)
++		return;
++
++	/* Make sure tidle is updated */
++	smp_mb();
++	WRITE_ONCE(__cpu_spinwait_stack_pointer[hartid],
++		   task_stack_page(tidle) + THREAD_SIZE);
++	WRITE_ONCE(__cpu_spinwait_task_pointer[hartid], tidle);
++}
+ 
+ static int spinwait_cpu_prepare(unsigned int cpuid)
+ {
+@@ -28,7 +53,7 @@ static int spinwait_cpu_start(unsigned int cpuid, struct task_struct *tidle)
+ 	 * selects the first cpu to boot the kernel and causes the remainder
+ 	 * of the cpus to spin in a loop waiting for their stack pointer to be
+ 	 * setup by that main cpu.  Writing to bootdata
+-	 * (i.e __cpu_up_stack_pointer) signals to the spinning cpus that they
++	 * (i.e __cpu_spinwait_stack_pointer) signals to the spinning cpus that they
+ 	 * can continue the boot process.
+ 	 */
+ 	cpu_update_secondary_bootdata(cpuid, tidle);
+diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+index 40d4c625513c..6f8e99eac6a1 100644
+--- a/arch/riscv/kernel/head.S
++++ b/arch/riscv/kernel/head.S
+@@ -347,9 +347,9 @@ clear_bss_done:
+ 	csrw CSR_TVEC, a3
+ 
+ 	slli a3, a0, LGREG
+-	la a1, __cpu_up_stack_pointer
++	la a1, __cpu_spinwait_stack_pointer
+ 	XIP_FIXUP_OFFSET a1
+-	la a2, __cpu_up_task_pointer
++	la a2, __cpu_spinwait_task_pointer
+ 	XIP_FIXUP_OFFSET a2
+ 	add a1, a3, a1
+ 	add a2, a3, a2
+diff --git a/arch/riscv/kernel/head.h b/arch/riscv/kernel/head.h
+index aabbc3ac3e48..5393cca77790 100644
+--- a/arch/riscv/kernel/head.h
++++ b/arch/riscv/kernel/head.h
+@@ -16,7 +16,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa);
+ asmlinkage void __init __copy_data(void);
+ #endif
+ 
+-extern void *__cpu_up_stack_pointer[];
+-extern void *__cpu_up_task_pointer[];
++extern void *__cpu_spinwait_stack_pointer[];
++extern void *__cpu_spinwait_task_pointer[];
+ 
+ #endif /* __ASM_HEAD_H */
+-- 
+2.33.1
 
-I really think we need some kind of architecture guarantee.  Without
-that, we risk breaking things if someone at our employer simply changes
-their mind.
-
-The:
-
-> #define ACPI_FLUSH_CPU_CACHE_PHYS()     \
->         if (!cpu_feature_enabled(XXX))	\
->         	wbinvd();               \  
-
-does seem simpler and less error-prone than this, though.

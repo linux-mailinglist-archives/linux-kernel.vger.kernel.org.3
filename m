@@ -2,210 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B39B468250
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 05:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4682F468254
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 06:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384178AbhLDEz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 23:55:59 -0500
-Received: from mga03.intel.com ([134.134.136.65]:61781 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1384151AbhLDEz7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 23:55:59 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="237035841"
-X-IronPort-AV: E=Sophos;i="5.87,286,1631602800"; 
-   d="scan'208";a="237035841"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 20:52:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,286,1631602800"; 
-   d="scan'208";a="478545344"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 03 Dec 2021 20:52:31 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mtN2F-000IUZ-7F; Sat, 04 Dec 2021 04:52:31 +0000
-Date:   Sat, 04 Dec 2021 12:52:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 4a234a84720f9ee0788a7cd04a337ff9f151be2f
-Message-ID: <61aaf3f5.LZzFBfKFVoJwiWlu%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229784AbhLDFR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 00:17:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229568AbhLDFR4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 00:17:56 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0ACC061354
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 21:14:31 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so6153114otj.7
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 21:14:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y/BPPy9m8im+hhuoZQePxpZc51/ab2hLFWDQfb5X/9I=;
+        b=H/yNUwm9CmyzcLUNDWhTAbx9TbIVhmUtwt6S8HUeOWOQUkumfeJyGUUBwJZCkQCGEU
+         Wd5v6YpjOsoRq+h9GBVAuMtKOkHWzYBXzGI/hojTku8VZe0d9CuWMfyV72VPe4Py4DQU
+         RAyZwjgaTFtPBYZMNLJmYJAPkRZAVt5IqbAuuKXaEP5X0r/tyY7PPBA4+IMB/0ZsmJkg
+         BdhsVki9tZHwgatH9YKV+VFltcFLkLMbljykbb2zQ3yusTle/TLdcx9Qi6Wm66Ahm+V/
+         Oyn6yc2xM28C8AgaLPkN+cqwLDtuQtDm2F0hPD0elLYgtMFTyRTS7Y2QzS8SexxWs25E
+         ENtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y/BPPy9m8im+hhuoZQePxpZc51/ab2hLFWDQfb5X/9I=;
+        b=E3Pf0Q6oAsMaXx/BWusl3H7kEnKRtJ7DcXCRifdiyuqJE7ahEiarqDMaT8gCZaM8cB
+         Gv87DvCck9xUIeMP8QCwigVByhPJsq+oLHqEQR4AKXR3v8qU5eCgEBFGX1AUVRNnx7K0
+         FshxuBdVkgJCKeUj3AAzxdoG0FEaERAjTnUOPtPUInTnPsabDyHBQH8llVvlDEgTpig2
+         a+SkW5TC8uVKcn25HeueBA1Uul4xkckTJHHWHZ4bErPxB4Xe3oKL+hHpDgwp1wQImkNF
+         kC1vp32sSQIwR1iHayTnCfjiVThk4A1BpUnJaGci/JHFdbIrkmxUpg1jLScsPSiWkq9i
+         AGWw==
+X-Gm-Message-State: AOAM5329AYbjHPm4mJHFgm6TOjM9Ql/TP6egrx0uOl0e0MF3ZR0l/Soi
+        WFO45a7x1crx5h+OaSVCjOfoTOWWox4OyxlEZhP4lw==
+X-Google-Smtp-Source: ABdhPJxghcCQpyrr8AC+WikPzYCuxK5sEzUgYuWtzGi5NXwaoYNBCMWGWG914X6+tpfyQSCRghgwxpXCcIclt3k0vsw=
+X-Received: by 2002:a9d:6389:: with SMTP id w9mr19659797otk.29.1638594870449;
+ Fri, 03 Dec 2021 21:14:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <b57280b5562893e2616257ac9c2d4525a9aeeb42.1638471124.git.thomas.lendacky@amd.com>
+ <YapIMYiJ+iIfHI+c@google.com> <9ac5cf9c-0afb-86d1-1ef2-b3a7138010f2@amd.com>
+In-Reply-To: <9ac5cf9c-0afb-86d1-1ef2-b3a7138010f2@amd.com>
+From:   Marc Orr <marcorr@google.com>
+Date:   Fri, 3 Dec 2021 21:14:19 -0800
+Message-ID: <CAA03e5EYV785FSEh2mXK=jzEhp-wM8XcaBk0S4vx7h-f7jevjA@mail.gmail.com>
+Subject: Re: [PATCH] KVM: SVM: Do not terminate SEV-ES guests on GHCB
+ validation failure
+To:     Tom Lendacky <Thomas.Lendacky@amd.com>
+Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Brijesh Singh <brijesh.singh@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 4a234a84720f9ee0788a7cd04a337ff9f151be2f  torture: Allow four-digit repetition numbers for --configs parameter
+On Fri, Dec 3, 2021 at 11:00 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+>
+> On 12/3/21 10:39 AM, Sean Christopherson wrote:
+> > On Thu, Dec 02, 2021, Tom Lendacky wrote:
+>
+> >>
+> >> -    return -EINVAL;
+> >> +    return false;
+> >
+> > I'd really prefer that this helper continue to return 0/-EINVAL, there's no hint
+> > in the function name that this return true/false.  And given the usage, there's
+> > no advantage to returning true/false.  On the contrary, if there's a future
+> > condition where this needs to exit to userspace, we'll end up switching this all
+> > back to int.
+>
+> I don't have any objection to that.
 
-elapsed time: 724m
+I think Sean's review makes a pretty compelling case that we should
+keep the int return value for `setup_vmgexit_scratch()`. In
+particular, failing to allocate a host kernel buffer definitely seems
+like a host error that should return to userspace. Though, failing to
+read the guest GPA seems less clear cut on who is at fault (host vs.
+guest), as Tom mentioned. My understanding from the commit description
+is that the entire point of the patch is to protect the guest from
+mis-behaving guest userspace code. So I would think that if we have a
+case like mapping the guest GPA that could fail due to the guest or
+the host, we should probably go ahead and use the new GHCB error codes
+to return back to the guest in this case. But either way, having an
+int return code seems like the way to go for
+`setup_vmgexit_scratch()`. Because if we are wrong in either
+direction, it's a trivial fix.
 
-configs tested: 149
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-mips                 randconfig-c004-20211203
-i386                 randconfig-c001-20211203
-xtensa                generic_kc705_defconfig
-nds32                               defconfig
-mips                      pic32mzda_defconfig
-arm64                            alldefconfig
-powerpc                          g5_defconfig
-arm                        clps711x_defconfig
-alpha                            alldefconfig
-ia64                         bigsur_defconfig
-sh                             shx3_defconfig
-arm                         shannon_defconfig
-powerpc                 mpc8540_ads_defconfig
-mips                      fuloong2e_defconfig
-sh                        edosk7760_defconfig
-powerpc                     tqm8555_defconfig
-openrisc                    or1ksim_defconfig
-powerpc                  mpc866_ads_defconfig
-sh                          kfr2r09_defconfig
-mips                           mtx1_defconfig
-nios2                               defconfig
-powerpc                 mpc834x_itx_defconfig
-sh                          rsk7269_defconfig
-arc                        nsim_700_defconfig
-arm                         s5pv210_defconfig
-um                           x86_64_defconfig
-mips                           xway_defconfig
-arm                            xcep_defconfig
-powerpc                       holly_defconfig
-powerpc                      ppc40x_defconfig
-powerpc                 mpc836x_rdk_defconfig
-arm                         at91_dt_defconfig
-powerpc                     powernv_defconfig
-powerpc                      cm5200_defconfig
-sh                         microdev_defconfig
-powerpc                 canyonlands_defconfig
-arm                      jornada720_defconfig
-mips                         tb0226_defconfig
-arm                       multi_v4t_defconfig
-sh                            migor_defconfig
-arm                          simpad_defconfig
-arm                         bcm2835_defconfig
-powerpc                 mpc8272_ads_defconfig
-arc                      axs103_smp_defconfig
-arm                         palmz72_defconfig
-xtensa                       common_defconfig
-sh                         ap325rxa_defconfig
-arm                         socfpga_defconfig
-mips                          rm200_defconfig
-mips                            gpr_defconfig
-h8300                               defconfig
-mips                         rt305x_defconfig
-sh                           se7712_defconfig
-arm                        mvebu_v5_defconfig
-mips                       bmips_be_defconfig
-sparc                       sparc32_defconfig
-sh                           se7751_defconfig
-m68k                       m5208evb_defconfig
-nios2                            allyesconfig
-arm                          ep93xx_defconfig
-powerpc                       eiger_defconfig
-arm                       aspeed_g4_defconfig
-sparc                            alldefconfig
-mips                          malta_defconfig
-powerpc                        warp_defconfig
-microblaze                          defconfig
-arm                  randconfig-c002-20211203
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20211203
-x86_64               randconfig-a005-20211203
-x86_64               randconfig-a001-20211203
-x86_64               randconfig-a002-20211203
-x86_64               randconfig-a004-20211203
-x86_64               randconfig-a003-20211203
-i386                 randconfig-a001-20211203
-i386                 randconfig-a005-20211203
-i386                 randconfig-a002-20211203
-i386                 randconfig-a003-20211203
-i386                 randconfig-a006-20211203
-i386                 randconfig-a004-20211203
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-arm                  randconfig-c002-20211203
-x86_64               randconfig-c007-20211203
-riscv                randconfig-c006-20211203
-mips                 randconfig-c004-20211203
-i386                 randconfig-c001-20211203
-powerpc              randconfig-c003-20211203
-s390                 randconfig-c005-20211203
-x86_64               randconfig-a016-20211203
-x86_64               randconfig-a011-20211203
-x86_64               randconfig-a013-20211203
-x86_64               randconfig-a014-20211203
-x86_64               randconfig-a015-20211203
-x86_64               randconfig-a012-20211203
-i386                 randconfig-a016-20211203
-i386                 randconfig-a013-20211203
-i386                 randconfig-a011-20211203
-i386                 randconfig-a014-20211203
-i386                 randconfig-a012-20211203
-i386                 randconfig-a015-20211203
-hexagon              randconfig-r045-20211203
-s390                 randconfig-r044-20211203
-hexagon              randconfig-r041-20211203
-riscv                randconfig-r042-20211203
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+It's not as obvious to me that converting `sev_es_validate_vmgexit()`
+to return a bool is not cleaner than returning an int. This function
+seems to pretty much just process the GHCB buffer as a self-contained
+set of bits. So it's hard to imagine how this could fail in a way
+where exiting to userspace is the right thing to do. That being said,
+I do not have a strong objection to returning an int. Sean is right
+that an int is definitely more future proof. And I'm sure Sean (and
+Tom) have much better insight into how validating the bits written
+into the GHCB could potentially require code that could justify
+exiting out to userspace.

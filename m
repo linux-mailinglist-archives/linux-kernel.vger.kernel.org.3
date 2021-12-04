@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8114683E1
+	by mail.lfdr.de (Postfix) with ESMTP id 26FD84683E0
 	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384575AbhLDJ5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 04:57:48 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:35692 "EHLO
+        id S1384580AbhLDJ5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 04:57:45 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:38551 "EHLO
         mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384604AbhLDJ5n (ORCPT
+        with ESMTP id S1345071AbhLDJ5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 04:57:43 -0500
-Received: by mail-io1-f69.google.com with SMTP id x11-20020a0566022c4b00b005e702603028so4474733iov.2
+        Sat, 4 Dec 2021 04:57:42 -0500
+Received: by mail-io1-f69.google.com with SMTP id l124-20020a6b3e82000000b005ed165a1506so4454965ioa.5
         for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 01:54:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=6BRacZEyRxHIlxqM1e6e2FDlog/Bi3Tc4ToxnAE9B0k=;
-        b=CKgr1eDlD1I0lJpsw075RFyXt6wRbOLldGyMnP4ITSj6ITB4VcNnCuWKg6CY3N6LjL
-         QepMJUzjoBs4HI+SMyxUxsijcaCNDB2QIzJfB9zU4D8TEpTBpLNo/vE36957TnQZ9gVy
-         dBRBxEef74nTACEuJ4M3dNSV85YaAhxCWRE9nIkDGCRxkjiKIaOxjYC5F6uTl7FhGHCC
-         DfzEMMomyPezRPw3zcGcGo9y9142+CWoboP/c+Va/iEKUwGa0THZrlVNKPBiSAhL1QxV
-         LsVgIm+SYOVGo1zozdNDH1Q+npqa4uCMhFG9Uu9jLhv8JrQaZ3f/Oksv6GSmmQmlC4i8
-         GZ5A==
-X-Gm-Message-State: AOAM531HEm55uKnofwgU0n+0lZugnkZcqKWzu0/lO/DX8GbzvQmTCUi5
-        WCWLpYc1R9JZXAtpU8zCV0VMQAxeBfG9vw4ee5G9mB6YEsOF
-X-Google-Smtp-Source: ABdhPJxy225ujbxOgiVYY383gQxMBC7YzeQDVWfjE9PAI2gtRB/9YTxe4uS9uKXLFWPDZV8fDfAAfpWOUit2s3ZM8/PEFq2EmazO
+        bh=OGiefsgn2KtHR6deIKaDSxA7HkbB2bKmq2vn9lWPXfA=;
+        b=n9Z9KniADl3VKwCfk2flQUlyLggdtmOR4sUycNmXyb2+MnGuY0UCRhVZ+Ud/lQD8PE
+         dMQGMjNdvNWp2+YxhvO8zN0OxC2YNpQyPbQUYqoBpcdLWLlFIJqCVjWJwLvZszOWLMfy
+         Ka98pytLIaz0AiO4MPh1MLzb7d+Hp2UysOr8EXZV0diBryYXvF80ikVEqvTqR8YC2aZO
+         BZaX9fo339gZEoRmZCjAq7WK0ifVhzOzIAu+Mf57G/9e5+0Bi5L27s90EJWB27RYsbRQ
+         chdUqpiKdkLQ/ruzVdWtYYiKrqt9CKul/wFEsw6Vh3Ac3KQxOTqfyOuXW185RrUdZf4n
+         FsYw==
+X-Gm-Message-State: AOAM530xPxOQPwdWytODa/OzLGEM0wRfl6p7MlnCOaLpJmgTq2tH5jaX
+        fkmtw7kuUm1fDwKLi8EIc5+02QLtA1X+Frlllua8yO2Mx00q
+X-Google-Smtp-Source: ABdhPJwZMaRW+iNdlY9wG40TtzxcKhpYNsr3I8V0yleAtYob9HHu/9WEEFYkd0fKWa6Pkj5KZSPG3txjPDf7D+q5TYxuG4H+njkD
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1b01:: with SMTP id i1mr20369909ilv.94.1638611657660;
+X-Received: by 2002:a05:6638:1445:: with SMTP id l5mr30081353jad.36.1638611657418;
  Sat, 04 Dec 2021 01:54:17 -0800 (PST)
 Date:   Sat, 04 Dec 2021 01:54:17 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c79f2605d24f0151@google.com>
-Subject: [syzbot] general protection fault in gfs2_evict_inode
-From:   syzbot <syzbot+f77e2d1dc867b6accaf9@syzkaller.appspotmail.com>
-To:     agruenba@redhat.com, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org, rpeterso@redhat.com,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <000000000000c3eace05d24f0189@google.com>
+Subject: [syzbot] BUG: corrupted list in rdma_listen (2)
+From:   syzbot <syzbot+c94a3675a626f6333d74@syzkaller.appspotmail.com>
+To:     avihaih@nvidia.com, dledford@redhat.com, haakon.bugge@oracle.com,
+        jgg@ziepe.ca, leon@kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -48,111 +48,82 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    d4439a1189f9 Merge tag 'hsi-for-5.16' of git://git.kernel...
+HEAD commit:    bf152b0b41dc Merge tag 'for_linus' of git://git.kernel.org..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13fae7cab00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7f2760850058fbfb
-dashboard link: https://syzkaller.appspot.com/bug?extid=f77e2d1dc867b6accaf9
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+console output: https://syzkaller.appspot.com/x/log.txt?x=136e3a46b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4a0a845d34d07474
+dashboard link: https://syzkaller.appspot.com/bug?extid=c94a3675a626f6333d74
+userspace arch: arm
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f77e2d1dc867b6accaf9@syzkaller.appspotmail.com
+Reported-by: syzbot+c94a3675a626f6333d74@syzkaller.appspotmail.com
 
-R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000
-R13: 0000000020000100 R14: 00007f4836721000 R15: 0000000020047a20
- </TASK>
-gfs2: fsid=syz:syz.0: can't read journal index: -5
-general protection fault, probably for non-canonical address 0xdffffc0000000011: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000088-0x000000000000008f]
-CPU: 1 PID: 25372 Comm: syz-executor.3 Not tainted 5.15.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:evict_linked_inode fs/gfs2/super.c:1331 [inline]
-RIP: 0010:gfs2_evict_inode+0xbe2/0x2070 fs/gfs2/super.c:1386
-Code: 03 80 3c 02 00 0f 85 d0 13 00 00 48 8b 9d 00 09 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bb 8c 00 00 00 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 09 84 d2 74 05 e8
-RSP: 0018:ffffc90009bb77c8 EFLAGS: 00010217
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc9000b53c000
-RDX: 0000000000000011 RSI: ffffffff836c5f71 RDI: 000000000000008c
-RBP: ffff88803ae28000 R08: 0000000000000000 R09: ffff88807115fb43
-R10: ffffffff83666100 R11: 0000000000000000 R12: 0000000000000001
-R13: ffff88807115fcb8 R14: ffff8880959e5cd8 R15: ffff8880959e5828
-FS:  00007f4836721700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2fb011f000 CR3: 0000000022ee7000 CR4: 0000000000350ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000600
-Call Trace:
- <TASK>
- evict+0x2ed/0x6b0 fs/inode.c:588
- iput_final fs/inode.c:1664 [inline]
- iput.part.0+0x539/0x850 fs/inode.c:1690
- iput+0x58/0x70 fs/inode.c:1680
- dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:376
- __dentry_kill+0x3c0/0x640 fs/dcache.c:582
- dentry_kill fs/dcache.c:708 [inline]
- dput+0x738/0xbc0 fs/dcache.c:888
- gfs2_fill_super+0x2048/0x28a0 fs/gfs2/ops_fstype.c:1296
- get_tree_bdev+0x440/0x760 fs/super.c:1293
- gfs2_get_tree+0x4a/0x270 fs/gfs2/ops_fstype.c:1327
- vfs_get_tree+0x89/0x2f0 fs/super.c:1498
- do_new_mount fs/namespace.c:2988 [inline]
- path_mount+0x1320/0x1fa0 fs/namespace.c:3318
- do_mount fs/namespace.c:3331 [inline]
- __do_sys_mount fs/namespace.c:3539 [inline]
- __se_sys_mount fs/namespace.c:3516 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3516
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f48391ad01a
-Code: 48 c7 c2 bc ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f4836720fa8 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f48391ad01a
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f4836721000
-RBP: 00007f4836721040 R08: 00007f4836721040 R09: 0000000020000000
-R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000
-R13: 0000000020000100 R14: 00007f4836721000 R15: 0000000020047a20
- </TASK>
+list_add corruption. prev->next should be next (82bbca08), but was 00000000. (prev=865e75ac).
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:26!
+Internal error: Oops - BUG: 0 [#1] PREEMPT SMP ARM
 Modules linked in:
----[ end trace 68c9d12f167f0520 ]---
-RIP: 0010:evict_linked_inode fs/gfs2/super.c:1331 [inline]
-RIP: 0010:gfs2_evict_inode+0xbe2/0x2070 fs/gfs2/super.c:1386
-Code: 03 80 3c 02 00 0f 85 d0 13 00 00 48 8b 9d 00 09 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bb 8c 00 00 00 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 09 84 d2 74 05 e8
-RSP: 0018:ffffc90009bb77c8 EFLAGS: 00010217
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc9000b53c000
-RDX: 0000000000000011 RSI: ffffffff836c5f71 RDI: 000000000000008c
-RBP: ffff88803ae28000 R08: 0000000000000000 R09: ffff88807115fb43
-R10: ffffffff83666100 R11: 0000000000000000 R12: 0000000000000001
-R13: ffff88807115fcb8 R14: ffff8880959e5cd8 R15: ffff8880959e5828
-FS:  00007f4836721700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2fb011f000 CR3: 0000000022ee7000 CR4: 0000000000350ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000600
+CPU: 1 PID: 5339 Comm: syz-executor.1 Not tainted 5.12.0-rc3-syzkaller #0
+Hardware name: ARM-Versatile Express
+PC is at __list_add_valid+0x80/0x84 lib/list_debug.c:26
+LR is at wake_up_klogd.part.0+0x7c/0xb4 kernel/printk/printk.c:3118
+pc : [<808072b8>]    lr : [<802d21b0>]    psr: 60000013
+sp : 86657e30  ip : 86657d60  fp : 86657e3c
+r10: 81104354  r9 : 00000010  r8 : 865e75ac
+r7 : 82bbca08  r6 : 865e7400  r5 : 865e75ac  r4 : 82bbc6d8
+r3 : 00000000  r2 : 00000000  r1 : ddfd6688  r0 : 0000005d
+Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+Control: 30c5387d  Table: 86712700  DAC: 00000000
+Process syz-executor.1 (pid: 5339, stack limit = 0x86656210)
+Stack: (0x86657e30 to 0x86658000)
+7e20:                                     86657e6c 86657e40 810e61b8 80807244
+7e40: 00000010 56b92eae 86657e6c 86424900 86ca70c0 86424948 811034c0 84343b40
+7e60: 86657e9c 86657e70 811035a0 810e6048 8046d9e4 00000000 00000005 56b92eae
+7e80: 86ca70c0 00000010 200008c0 86ca70c0 86657ed4 86657ea0 811044a0 811034cc
+7ea0: 804d8fc8 00000007 fa000008 56b92eae 00004000 00000000 86c46140 200008c0
+7ec0: ffffe000 00000000 86657f64 86657ed8 804da914 81104360 853d5140 82bfd5ec
+7ee0: 86c46140 81f40284 86657f3c 86657ef8 80502e64 802bf578 00000000 00000000
+7f00: 80502d24 835f4000 86657f3c 81f718ac 8020d140 00000000 00000000 200008c0
+7f20: 00000010 80200224 86656000 00000004 86657f4c 56b92eae 80502f48 86c46141
+7f40: 86c46140 200008c0 00000010 80200224 86656000 00000004 86657f94 86657f68
+7f60: 804dad30 804da838 86657f94 86657f78 828abd1c 56b92eae 00000000 00000000
+7f80: ffffffff 00000004 86657fa4 86657f98 804dad78 804dac88 00000000 86657fa8
+7fa0: 80200060 804dad74 00000000 00000000 00000003 200008c0 00000010 00000000
+7fc0: 00000000 00000000 ffffffff 00000004 7ebc531a 76f7b6d0 7ebc54a4 76f7b20c
+7fe0: 76f7b048 76f7b038 00018e9c 0004ba40 60000010 00000003 00000000 00000000
+Backtrace: 
+[<80807238>] (__list_add_valid) from [<810e61b8>] (__list_add include/linux/list.h:67 [inline])
+[<80807238>] (__list_add_valid) from [<810e61b8>] (list_add_tail include/linux/list.h:100 [inline])
+[<80807238>] (__list_add_valid) from [<810e61b8>] (cma_listen_on_all drivers/infiniband/core/cma.c:2557 [inline])
+[<80807238>] (__list_add_valid) from [<810e61b8>] (rdma_listen+0x17c/0x37c drivers/infiniband/core/cma.c:3751)
+[<810e603c>] (rdma_listen) from [<811035a0>] (ucma_listen+0xe0/0x130 drivers/infiniband/core/ucma.c:1102)
+ r8:84343b40 r7:811034c0 r6:86424948 r5:86ca70c0 r4:86424900
+[<811034c0>] (ucma_listen) from [<811044a0>] (ucma_write+0x14c/0x1b0 drivers/infiniband/core/ucma.c:1732)
+ r6:86ca70c0 r5:200008c0 r4:00000010
+[<81104354>] (ucma_write) from [<804da914>] (vfs_write+0xe8/0x350 fs/read_write.c:603)
+ r8:00000000 r7:ffffe000 r6:200008c0 r5:86c46140 r4:00000000
+[<804da82c>] (vfs_write) from [<804dad30>] (ksys_write+0xb4/0xec fs/read_write.c:658)
+ r10:00000004 r9:86656000 r8:80200224 r7:00000010 r6:200008c0 r5:86c46140
+ r4:86c46141
+[<804dac7c>] (ksys_write) from [<804dad78>] (__do_sys_write fs/read_write.c:670 [inline])
+[<804dac7c>] (ksys_write) from [<804dad78>] (sys_write+0x10/0x14 fs/read_write.c:667)
+ r7:00000004 r6:ffffffff r5:00000000 r4:00000000
+[<804dad68>] (sys_write) from [<80200060>] (ret_fast_syscall+0x0/0x2c arch/arm/mm/proc-v7.S:64)
+Exception stack(0x86657fa8 to 0x86657ff0)
+7fa0:                   00000000 00000000 00000003 200008c0 00000010 00000000
+7fc0: 00000000 00000000 ffffffff 00000004 7ebc531a 76f7b6d0 7ebc54a4 76f7b20c
+7fe0: 76f7b048 76f7b038 00018e9c 0004ba40
+Code: e34801fa e1a02001 e1a0100c eb3ffb2e (e7f001f2) 
+---[ end trace 7ea3f2e08d88cef1 ]---
 ----------------
 Code disassembly (best guess):
-   0:	03 80 3c 02 00 0f    	add    0xf00023c(%rax),%eax
-   6:	85 d0                	test   %edx,%eax
-   8:	13 00                	adc    (%rax),%eax
-   a:	00 48 8b             	add    %cl,-0x75(%rax)
-   d:	9d                   	popfq
-   e:	00 09                	add    %cl,(%rcx)
-  10:	00 00                	add    %al,(%rax)
-  12:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  19:	fc ff df
-  1c:	48 8d bb 8c 00 00 00 	lea    0x8c(%rbx),%rdi
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	0f b6 14 02          	movzbl (%rdx,%rax,1),%edx <-- trapping instruction
-  2e:	48 89 f8             	mov    %rdi,%rax
-  31:	83 e0 07             	and    $0x7,%eax
-  34:	83 c0 03             	add    $0x3,%eax
-  37:	38 d0                	cmp    %dl,%al
-  39:	7c 09                	jl     0x44
-  3b:	84 d2                	test   %dl,%dl
-  3d:	74 05                	je     0x44
-  3f:	e8                   	.byte 0xe8
+   0:	e34801fa 	movt	r0, #33274	; 0x81fa
+   4:	e1a02001 	mov	r2, r1
+   8:	e1a0100c 	mov	r1, ip
+   c:	eb3ffb2e 	bl	0xffeccc
+* 10:	e7f001f2 	udf	#18 <-- trapping instruction
 
 
 ---

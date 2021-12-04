@@ -2,76 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2220E46812D
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B4C468132
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383780AbhLDAZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 19:25:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46784 "EHLO
+        id S1354317AbhLDA07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 19:26:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383797AbhLDAY5 (ORCPT
+        with ESMTP id S1344335AbhLDA06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 19:24:57 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6B0C0698C6;
-        Fri,  3 Dec 2021 16:21:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=M+BqA3rXZtwt3zvm2Ce0wZmvZqrcJ5BQBRxgNgeLfYY=; b=Q/qFEbDwrJlie4IzpJKcaWx3FC
-        qiuYDb4Oj+ucW9qJ65P3PpMN7i5PYrLCdoUdmwrS+FMFCwg/iM278WySuS9xjjSYmBitQISsOUt5X
-        4HvNfqh/urxc9xe8wqQ/XOi3LlrjE4ZQ83X8GV/j8cMRvezx5Thd2VzhR03ZwCrBJfaBJAljfPxmW
-        tusb02nlMc0gZ+qqZr2MTVDIa2sLAAG47vEB9FxkS16U9dKWOW2tAZqaduMc8j1JyYm3b5o0Y73Mt
-        bLokosQGwQQ4DZLOi/99G44jL6/YSXHTUZ42Q4iGjlmix6wGaIeYIN/0pBug6hsVOpvTHMe927P5T
-        WEB7gq3Q==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mtInY-00At13-Kv; Sat, 04 Dec 2021 00:21:05 +0000
-Message-ID: <d63edcb7-18c0-06fb-2216-2b1ed3b0215b@infradead.org>
-Date:   Fri, 3 Dec 2021 16:20:59 -0800
+        Fri, 3 Dec 2021 19:26:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6654AC061751;
+        Fri,  3 Dec 2021 16:23:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE8EDB829BB;
+        Sat,  4 Dec 2021 00:23:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53496C341C1;
+        Sat,  4 Dec 2021 00:23:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638577410;
+        bh=MWLPGPvSEBOeSGv3V//27du0LgznvwiHFxKx5VhWjl8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Sb9vQiJwJj32RMcNcYtlIQjV/g5YBTijPgIW7pEA9foTrqxtCOBeh01gHr3SCUWB1
+         R1Q2R+cwb0/jnlehuOy1QK45INFx5k1m/KrtjiGEFdUWfuKuAxTKWX5ltrtvdD8DeI
+         gX+9QI1uphvvgObhVuj7S8CskfHxkM7YZ1QWKcopO6L5rj2CXkvIXEpWx8c8SS+/Hk
+         EMOgAdP0pN/lTSRCID01fw4wOf2uH3e4am4PbzbMzud6H0BLLEao2GbrOjEXnZKhVg
+         wRtDnIsgfkkQrbi4SIjUnir/URP3ly9GcECy3OasnKcIknuHwAbt3Gw0pKnIFGw/K1
+         YAXaHlbneBhAw==
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Benjamin LaHaise <bcrl@kvack.org>
+Cc:     linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ramji Jiyani <ramjiyani@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        stable@vger.kernel.org
+Subject: [PATCH 0/2] aio poll: fix use-after-free and missing wakeups
+Date:   Fri,  3 Dec 2021 16:22:59 -0800
+Message-Id: <20211204002301.116139-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v1 3/3] mmc: Add driver for LiteX's LiteSDCard interface
-Content-Language: en-US
-To:     Gabriel Somlo <gsomlo@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        kgugala@antmicro.com, mholenko@antmicro.com, krakoczy@antmicro.com,
-        mdudek@internships.antmicro.com, paulus@ozlabs.org, joel@jms.id.au,
-        shorne@gmail.com, geert@linux-m68k.org,
-        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr
-References: <20211203234155.2319803-1-gsomlo@gmail.com>
- <20211203234155.2319803-4-gsomlo@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20211203234155.2319803-4-gsomlo@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+This series fixes some bugs in aio poll.  This is intended to replace
+"[PATCH v5] aio: Add support for the POLLFREE"
+(https://lore.kernel.org/r/20211027011834.2497484-1-ramjiyani@google.com)
+which has some bugs.
 
-On 12/3/21 15:41, Gabriel Somlo wrote:
-> diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-> index 5af8494c31b5..84c64e72195d 100644
-> --- a/drivers/mmc/host/Kconfig
-> +++ b/drivers/mmc/host/Kconfig
-> @@ -1093,3 +1093,9 @@ config MMC_OWL
->  
->  config MMC_SDHCI_EXTERNAL_DMA
->  	bool
-> +
-> +config MMC_LITEX
-> +	tristate "Support for the MMC Controller in LiteX SOCs"
-> +	depends on OF && LITEX
-> +	help
-> +	  Generic MCC driver for LiteX
+Careful review is appreciated; this code is very hard to work with, and
+I don't know of an easy way to test it.
 
-	          MMC            LiteX.
+Note, it looks like io_uring has these same bugs too.  I haven't tried
+to fix io_uring.
+
+This applies to v5.16-rc3.
+
+Eric Biggers (2):
+  aio: keep poll requests on waitqueue until completed
+  aio: fix use-after-free due to missing POLLFREE handling
+
+ fs/aio.c                        | 138 +++++++++++++++++++++++++-------
+ include/uapi/asm-generic/poll.h |   2 +-
+ 2 files changed, 111 insertions(+), 29 deletions(-)
 
 
+base-commit: d58071a8a76d779eedab38033ae4c821c30295a5
 -- 
-~Randy
+2.34.1
+

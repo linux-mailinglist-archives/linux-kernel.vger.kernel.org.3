@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC5E4687C4
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 22:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC414687D3
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 22:51:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379621AbhLDVyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 16:54:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45598 "EHLO
+        id S1379420AbhLDVzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 16:55:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379169AbhLDVyI (ORCPT
+        with ESMTP id S1379242AbhLDVyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 16:54:08 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70DDC061354
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 13:50:41 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id j3so13726059wrp.1
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 13:50:41 -0800 (PST)
+        Sat, 4 Dec 2021 16:54:09 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787BBC061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 13:50:43 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id k37-20020a05600c1ca500b00330cb84834fso7566731wms.2
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 13:50:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vEb8bBQagJewWHBtqfwwcwV4cYSi0vIEBAgk0xJn/s0=;
-        b=tWU1iRILCon2IGsJZ+QOcUsVjfIGiIo7+PBAd75TTPQNflZjQJBMsANrbGwO3jiWnx
-         7/0/J0ntrduakW0bi1UAwu3jrGQauAfgFRttbYeDJQLOC1aOEk6OT806r7FBKo3jWbV9
-         RVB7NVMcn5gEjYX0H16ppaaZLdG+gIKbewuo07DLYtG4oeRVkA0/KyO2N0f+62UGGfu5
-         hVYnsiQGZU5eD+F/eOy0lngTKlmK/8+segq7mkbAK/1SgcC+/Yy7XBOgj5ez+NKNaad4
-         z+FIHuM3oN1TG9R/v3QqXhUL97N6ApouL87Edua3A6rH37Bb4ZZEHpvr8DaSWVVfXjoZ
-         yVzQ==
+        bh=pVkIUWY0OSvWRa+LskKzcmg/hbEtnNu06lHh+/SBJ88=;
+        b=FpJlj8JqtuSaC21wsmqZDhvAYKWzvMA5cei5fusZjowiLmCrphGiOdzasy8e4fUpEz
+         MoCdSAuC6Yyqpf0gEqhux7DWayKOff556o3FMgJPrdy0sfzk/75DgbkvDundR4zStIoU
+         x3fhnvpJH/u9TopmkgxTklKzXAnk4JFKItqsTfp5rS0G5ZkjiWbU0mZH8k44JR/xvdwL
+         BvnYd4VPvrlwaX2gZt+hbFx2WzAaQHBX+aGoFgJ15Om2C/2HkLB2JZ6RugBUzz36SVUz
+         DeMFw+H+xbQbGiIIL7SYo00MARX/A/I5aB607hlLyty4vz+9WxohxIp1tpM6YhcvygD3
+         q6Eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vEb8bBQagJewWHBtqfwwcwV4cYSi0vIEBAgk0xJn/s0=;
-        b=KoMXQ72fpKT6FjuxTWbQIcze5uMv0l8+BT6UQBS732BaIf0s59D3E/6RTSKBkUTbgp
-         nai3txLilhcQ0687NVRPiczfe7Ey7aIktMtRrIKHDZmcVJ/KS6SBqgyUMHKh0RA/QQWS
-         FXdRdMUfnq6lbDa0YbXi0ZPaoNAHtlm5yRwR/z89/HYj8f4dnmzHjjjCxCrfw8uT1su0
-         7xZhN05KDu3f6uUPGgEH1hotxPkesW2mWn/e1nXaq1FNQbtUl+Ay8pp/wa7HaFC1S+Na
-         sj/lQa1958yFJ0F6JXPxH3Ddex6EAHh6zykOOLfbSLB4kECVXk6ANxo620VBL0GC5K+B
-         sWWw==
-X-Gm-Message-State: AOAM530WLlba7E7DnsnLSaYaezKn1BRnbqSMkzmZzvLdV6iXXu2zx5Rx
-        VUvQnMuDtEoYN1Z4gM2Ajk+osg==
-X-Google-Smtp-Source: ABdhPJwxgArL5m9gzkY+cj69KGRBE7XH+2IKR5k0FGlqqnSEoH59ulCYdN13TPwl2feuzOZXqTzj9Q==
-X-Received: by 2002:adf:dbd2:: with SMTP id e18mr30816892wrj.478.1638654640492;
-        Sat, 04 Dec 2021 13:50:40 -0800 (PST)
+        bh=pVkIUWY0OSvWRa+LskKzcmg/hbEtnNu06lHh+/SBJ88=;
+        b=HX9Bfn08Ch1D602aRgjPciBWGej5rehZ9zG9kTibFSQjuAsKTCt9OCL28QlO30wwCg
+         AXjh7BV9inohamnr9adBQ4ScPulrADSiZlNRmI0uQTKjqGge2KI9H1W2+SR8fa6i88V3
+         4UT/Qywzt4jpBElAtnsbRPM44lSUfgd/HkJLMiu2zochtLy1m3HZSQEAPTh77bVnmsSh
+         zr+oyHxyDnc1jatQJsk221l4ic1fs+MIRDGSWPyKptiS3srQ8mYP48W38maMGAdA3RWp
+         ESaf9dpSFdPg9tKxoMTcCIPptKg/oZG7WUE4mtY1P3decqXrVtYT8M3GKLnDTQvGOnIt
+         aMZA==
+X-Gm-Message-State: AOAM533m+hg8dDKO0SuGePTCg9H1+h5jYIXAVDLHJhV0z5gsPnr5dRL8
+        n5PmviSkvUkvSj1xqEOlSxjShQ==
+X-Google-Smtp-Source: ABdhPJzlV1DW8PKUpxjP73QanGy9XDrP9z1KHI3+n/qz+wxRQ/2ZHlW5QhepDn2YDnt1aTVmYxzZpg==
+X-Received: by 2002:a05:600c:1d97:: with SMTP id p23mr26535412wms.186.1638654642106;
+        Sat, 04 Dec 2021 13:50:42 -0800 (PST)
 Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id p19sm7164342wmq.4.2021.12.04.13.50.39
+        by smtp.gmail.com with ESMTPSA id i17sm7355238wmq.48.2021.12.04.13.50.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Dec 2021 13:50:40 -0800 (PST)
+        Sat, 04 Dec 2021 13:50:41 -0800 (PST)
 From:   Sam Protsenko <semen.protsenko@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Rob Herring <robh+dt@kernel.org>
@@ -59,9 +59,9 @@ Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v2 4/8] i2c: exynos5: Add support for ExynosAutoV9 SoC
-Date:   Sat,  4 Dec 2021 23:50:29 +0200
-Message-Id: <20211204215033.5134-5-semen.protsenko@linaro.org>
+Subject: [PATCH v2 5/8] i2c: exynos5: Add bus clock support
+Date:   Sat,  4 Dec 2021 23:50:30 +0200
+Message-Id: <20211204215033.5134-6-semen.protsenko@linaro.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211204215033.5134-1-semen.protsenko@linaro.org>
 References: <20211204215033.5134-1-semen.protsenko@linaro.org>
@@ -71,159 +71,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jaewon Kim <jaewon02.kim@samsung.com>
+In new Exynos SoCs (like Exynos850) where HSI2C is implemented as a
+part of USIv2 block, there are two clocks provided to HSI2C controller:
+  - PCLK: bus clock (APB), provides access to register interface
+  - IPCLK: operating IP-core clock; SCL is derived from this one
 
-ExynosAutoV9 functioning logic mostly follows I2C_TYPE_EXYNOS7, but
-timing calculation and configuration procedure is changed: e.g. only
-timing_s3 has to be set now.
+Both clocks have to be asserted for HSI2C to be functional in that case.
 
-Another change of HSI2C controller in ExynosAutoV9 SoC is that it's now
-a part of USIv2 IP-core. No changes is needed for I2C driver though, as
-all USI related configuration is done in USI driver.
+Add code to obtain and enable/disable PCLK in addition to already
+handled operating clock. Make it optional though, as older Exynos SoC
+variants only have one HSI2C clock.
 
-Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
 Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reviewed-by: Chanho Park <chanho61.park@samsung.com>
 ---
 Changes in v2:
   - Added R-b tag by Krzysztof Kozlowski
+  - Added R-b tag by Chanho Park
 
- drivers/i2c/busses/i2c-exynos5.c | 62 +++++++++++++++++++++++++++-----
- 1 file changed, 53 insertions(+), 9 deletions(-)
+ drivers/i2c/busses/i2c-exynos5.c | 46 ++++++++++++++++++++++++++------
+ 1 file changed, 38 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/i2c/busses/i2c-exynos5.c b/drivers/i2c/busses/i2c-exynos5.c
-index c2e4bab11366..5198e71e8dab 100644
+index 5198e71e8dab..9cde5ecb9449 100644
 --- a/drivers/i2c/busses/i2c-exynos5.c
 +++ b/drivers/i2c/busses/i2c-exynos5.c
-@@ -169,6 +169,7 @@
- enum i2c_type_exynos {
- 	I2C_TYPE_EXYNOS5,
- 	I2C_TYPE_EXYNOS7,
-+	I2C_TYPE_EXYNOSAUTOV9,
- };
+@@ -182,7 +182,8 @@ struct exynos5_i2c {
+ 	unsigned int		irq;
  
- struct exynos5_i2c {
-@@ -230,6 +231,11 @@ static const struct exynos_hsi2c_variant exynos7_hsi2c_data = {
- 	.hw		= I2C_TYPE_EXYNOS7,
- };
+ 	void __iomem		*regs;
+-	struct clk		*clk;
++	struct clk		*clk;		/* operating clock */
++	struct clk		*pclk;		/* bus clock */
+ 	struct device		*dev;
+ 	int			state;
  
-+static const struct exynos_hsi2c_variant exynosautov9_hsi2c_data = {
-+	.fifo_depth	= 64,
-+	.hw		= I2C_TYPE_EXYNOSAUTOV9,
-+};
-+
- static const struct of_device_id exynos5_i2c_match[] = {
- 	{
- 		.compatible = "samsung,exynos5-hsi2c",
-@@ -243,6 +249,9 @@ static const struct of_device_id exynos5_i2c_match[] = {
- 	}, {
- 		.compatible = "samsung,exynos7-hsi2c",
- 		.data = &exynos7_hsi2c_data
-+	}, {
-+		.compatible = "samsung,exynosautov9-hsi2c",
-+		.data = &exynosautov9_hsi2c_data
- 	}, {},
- };
- MODULE_DEVICE_TABLE(of, exynos5_i2c_match);
-@@ -281,6 +290,31 @@ static int exynos5_i2c_set_timing(struct exynos5_i2c *i2c, bool hs_timings)
- 		i2c->op_clock;
- 	int div, clk_cycle, temp;
+@@ -757,10 +758,14 @@ static int exynos5_i2c_xfer(struct i2c_adapter *adap,
+ 	struct exynos5_i2c *i2c = adap->algo_data;
+ 	int i, ret;
  
-+	/*
-+	 * In case of HSI2C controllers in ExynosAutoV9:
-+	 *
-+	 * FSCL = IPCLK / ((CLK_DIV + 1) * 16)
-+	 * T_SCL_LOW = IPCLK * (CLK_DIV + 1) * (N + M)
-+	 *   [N : number of 0's in the TSCL_H_HS]
-+	 *   [M : number of 0's in the TSCL_L_HS]
-+	 * T_SCL_HIGH = IPCLK * (CLK_DIV + 1) * (N + M)
-+	 *   [N : number of 1's in the TSCL_H_HS]
-+	 *   [M : number of 1's in the TSCL_L_HS]
-+	 *
-+	 * Result of (N + M) is always 8.
-+	 * In general case, we don't need to control timing_s1 and timing_s2.
-+	 */
-+	if (i2c->variant->hw == I2C_TYPE_EXYNOSAUTOV9) {
-+		div = ((clkin / (16 * i2c->op_clock)) - 1);
-+		i2c_timing_s3 = div << 16;
-+		if (hs_timings)
-+			writel(i2c_timing_s3, i2c->regs + HSI2C_TIMING_HS3);
-+		else
-+			writel(i2c_timing_s3, i2c->regs + HSI2C_TIMING_FS3);
-+
-+		return 0;
-+	}
-+
- 	/*
- 	 * In case of HSI2C controller in Exynos5 series
- 	 * FPCLK / FI2C =
-@@ -422,7 +456,10 @@ static irqreturn_t exynos5_i2c_irq(int irqno, void *dev_id)
- 	writel(int_status, i2c->regs + HSI2C_INT_STATUS);
+-	ret = clk_enable(i2c->clk);
++	ret = clk_enable(i2c->pclk);
+ 	if (ret)
+ 		return ret;
  
- 	/* handle interrupt related to the transfer status */
--	if (i2c->variant->hw == I2C_TYPE_EXYNOS7) {
-+	switch (i2c->variant->hw) {
-+	case I2C_TYPE_EXYNOSAUTOV9:
-+		fallthrough;
-+	case I2C_TYPE_EXYNOS7:
- 		if (int_status & HSI2C_INT_TRANS_DONE) {
- 			i2c->trans_done = 1;
- 			i2c->state = 0;
-@@ -443,7 +480,12 @@ static irqreturn_t exynos5_i2c_irq(int irqno, void *dev_id)
- 			i2c->state = -ETIMEDOUT;
- 			goto stop;
- 		}
--	} else if (int_status & HSI2C_INT_I2C) {
++	ret = clk_enable(i2c->clk);
++	if (ret)
++		goto err_pclk;
 +
-+		break;
-+	case I2C_TYPE_EXYNOS5:
-+		if (!(int_status & HSI2C_INT_I2C))
-+			break;
-+
- 		trans_status = readl(i2c->regs + HSI2C_TRANS_STATUS);
- 		if (trans_status & HSI2C_NO_DEV_ACK) {
- 			dev_dbg(i2c->dev, "No ACK from device\n");
-@@ -465,6 +507,8 @@ static irqreturn_t exynos5_i2c_irq(int irqno, void *dev_id)
- 			i2c->trans_done = 1;
- 			i2c->state = 0;
- 		}
-+
-+		break;
+ 	for (i = 0; i < num; ++i) {
+ 		ret = exynos5_i2c_xfer_msg(i2c, msgs + i, i + 1 == num);
+ 		if (ret)
+@@ -768,6 +773,8 @@ static int exynos5_i2c_xfer(struct i2c_adapter *adap,
  	}
  
- 	if ((i2c->msg->flags & I2C_M_RD) && (int_status &
-@@ -569,13 +613,13 @@ static void exynos5_i2c_bus_check(struct exynos5_i2c *i2c)
- {
- 	unsigned long timeout;
+ 	clk_disable(i2c->clk);
++err_pclk:
++	clk_disable(i2c->pclk);
  
--	if (i2c->variant->hw != I2C_TYPE_EXYNOS7)
-+	if (i2c->variant->hw == I2C_TYPE_EXYNOS5)
- 		return;
+ 	return ret ?: num;
+ }
+@@ -807,10 +814,18 @@ static int exynos5_i2c_probe(struct platform_device *pdev)
+ 		return -ENOENT;
+ 	}
  
- 	/*
--	 * HSI2C_MASTER_ST_LOSE state in EXYNOS7 variant before transaction
--	 * indicates that bus is stuck (SDA is low). In such case bus recovery
--	 * can be performed.
-+	 * HSI2C_MASTER_ST_LOSE state (in Exynos7 and ExynosAutoV9 variants)
-+	 * before transaction indicates that bus is stuck (SDA is low).
-+	 * In such case bus recovery can be performed.
- 	 */
- 	timeout = jiffies + msecs_to_jiffies(100);
- 	for (;;) {
-@@ -611,10 +655,10 @@ static void exynos5_i2c_message_start(struct exynos5_i2c *i2c, int stop)
- 	unsigned long flags;
- 	unsigned short trig_lvl;
+-	ret = clk_prepare_enable(i2c->clk);
++	i2c->pclk = devm_clk_get(&pdev->dev, "hsi2c_pclk");
++	if (IS_ERR(i2c->pclk))
++		i2c->pclk = NULL; /* pclk is optional */
++
++	ret = clk_prepare_enable(i2c->pclk);
+ 	if (ret)
+ 		return ret;
  
--	if (i2c->variant->hw == I2C_TYPE_EXYNOS7)
--		int_en |= HSI2C_INT_I2C_TRANS;
--	else
-+	if (i2c->variant->hw == I2C_TYPE_EXYNOS5)
- 		int_en |= HSI2C_INT_I2C;
-+	else
-+		int_en |= HSI2C_INT_I2C_TRANS;
++	ret = clk_prepare_enable(i2c->clk);
++	if (ret)
++		goto err_pclk;
++
+ 	i2c->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(i2c->regs)) {
+ 		ret = PTR_ERR(i2c->regs);
+@@ -853,6 +868,7 @@ static int exynos5_i2c_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, i2c);
  
- 	i2c_ctl = readl(i2c->regs + HSI2C_CTL);
- 	i2c_ctl &= ~(HSI2C_TXCHON | HSI2C_RXCHON);
+ 	clk_disable(i2c->clk);
++	clk_disable(i2c->pclk);
+ 
+ 	dev_info(&pdev->dev, "%s: HSI2C adapter\n", dev_name(&i2c->adap.dev));
+ 
+@@ -860,6 +876,9 @@ static int exynos5_i2c_probe(struct platform_device *pdev)
+ 
+  err_clk:
+ 	clk_disable_unprepare(i2c->clk);
++
++ err_pclk:
++	clk_disable_unprepare(i2c->pclk);
+ 	return ret;
+ }
+ 
+@@ -870,6 +889,7 @@ static int exynos5_i2c_remove(struct platform_device *pdev)
+ 	i2c_del_adapter(&i2c->adap);
+ 
+ 	clk_unprepare(i2c->clk);
++	clk_unprepare(i2c->pclk);
+ 
+ 	return 0;
+ }
+@@ -881,6 +901,7 @@ static int exynos5_i2c_suspend_noirq(struct device *dev)
+ 
+ 	i2c_mark_adapter_suspended(&i2c->adap);
+ 	clk_unprepare(i2c->clk);
++	clk_unprepare(i2c->pclk);
+ 
+ 	return 0;
+ }
+@@ -890,21 +911,30 @@ static int exynos5_i2c_resume_noirq(struct device *dev)
+ 	struct exynos5_i2c *i2c = dev_get_drvdata(dev);
+ 	int ret = 0;
+ 
+-	ret = clk_prepare_enable(i2c->clk);
++	ret = clk_prepare_enable(i2c->pclk);
+ 	if (ret)
+ 		return ret;
+ 
++	ret = clk_prepare_enable(i2c->clk);
++	if (ret)
++		goto err_pclk;
++
+ 	ret = exynos5_hsi2c_clock_setup(i2c);
+-	if (ret) {
+-		clk_disable_unprepare(i2c->clk);
+-		return ret;
+-	}
++	if (ret)
++		goto err_clk;
+ 
+ 	exynos5_i2c_init(i2c);
+ 	clk_disable(i2c->clk);
++	clk_disable(i2c->pclk);
+ 	i2c_mark_adapter_resumed(&i2c->adap);
+ 
+ 	return 0;
++
++err_clk:
++	clk_disable_unprepare(i2c->clk);
++err_pclk:
++	clk_disable_unprepare(i2c->pclk);
++	return ret;
+ }
+ #endif
+ 
 -- 
 2.30.2
 

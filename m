@@ -2,92 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2325B46836A
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 09:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A13B046836E
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384363AbhLDI7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 03:59:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354761AbhLDI7N (ORCPT
+        id S1384376AbhLDJEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 04:04:04 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:49232 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354761AbhLDJED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 03:59:13 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02908C061751;
-        Sat,  4 Dec 2021 00:55:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Vwdl1xKa4HYu9irhFaCnjVvl+U+9xbF06W/a7qens7k=; b=vfPGu83j2gIsLgLE3DxB3r9q9/
-        dbtwfJyG9lDZtbNYQGVmVKocVsH2s9u0wX0ATvcJHRY2i/ueC7uoief9HZrymphH9VddBvVkWXUt1
-        XnEiRvUqWKLajju+56+0EXRIX1Gn6KmdV+QivZcC5SgysDZoqTnwaTqbDjF2o/QgKisFGSbHUrrwq
-        4TkW84iHfLM1ke2YdGrB5rOc8pvI+YuYx3DgIU8nYsZFAk9oDk8YMaMvwdHJeD9mKOxOhdrVOnZIf
-        w5g5jFMajbIyO1Avs7hHiBcvmQ1DKcYAx1a9IuDAejtXgGNiltk3qGyvkQcbNPhgEb6YBIX/qPMmR
-        /1LPU4jQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mtQov-00CL1l-IB; Sat, 04 Dec 2021 08:55:02 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0FB8998106D; Sat,  4 Dec 2021 09:55:01 +0100 (CET)
-Date:   Sat, 4 Dec 2021 09:55:00 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nicolas Pitre <nico@fluxnic.net>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev, hjl.tools@gmail.com
-Subject: Re: [PATCH v8 05/14] x86: conditionally place regular ASM functions
- into separate sections
-Message-ID: <20211204085500.GL16608@worktop.programming.kicks-ass.net>
-References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
- <20211202223214.72888-6-alexandr.lobakin@intel.com>
- <Yanm6tJ2obi1aKv6@hirez.programming.kicks-ass.net>
- <20211203141051.82467-1-alexandr.lobakin@intel.com>
- <20211203163424.GK16608@worktop.programming.kicks-ass.net>
- <28856p61-r54s-791n-q6s1-27575s62r2q9@syhkavp.arg>
+        Sat, 4 Dec 2021 04:04:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69C8F60DD8
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 09:00:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72DC3C341C0;
+        Sat,  4 Dec 2021 09:00:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638608437;
+        bh=h/zpQrO/E2cPY6/AXZk2zsMPe9CYqo6/SLtTqkx6tkw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OmszMhdIxopPTR/nTbQFmrFNLTzFad3eCzKgtNEhW2922qqxehUmA2NXSQA9RpGrJ
+         SDaiMwFW+QAoc/M4Owfx0HzyLtlS8mcwOgrE9m7muzpdxfSL7910YW+2Yom/7xqoxN
+         mhyjF/hGAPPYWUVzDCPuXCSOhmt9eE8WDLgC99+w=
+Date:   Sat, 4 Dec 2021 10:00:32 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ameer Hamza <amhamza.mgc@gmail.com>
+Cc:     arve@android.com, tkjos@android.com, maco@android.com,
+        joel@joelfernandes.org, christian@brauner.io,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] binder: fixed coverity warning by moving pr_warn outside
+ lock
+Message-ID: <YasuMNXHlJEKNSwX@kroah.com>
+References: <20211203205041.115331-1-amhamza.mgc@gmail.com>
+ <YasfXUW1rNrj3Mgo@kroah.com>
+ <CANAWnNyyBR3EEtT=SecqGQsc+tnJi6GiqrW0xkqRn5jrV7CpDA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <28856p61-r54s-791n-q6s1-27575s62r2q9@syhkavp.arg>
+In-Reply-To: <CANAWnNyyBR3EEtT=SecqGQsc+tnJi6GiqrW0xkqRn5jrV7CpDA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 02:46:39PM -0500, Nicolas Pitre wrote:
+A: http://en.wikipedia.org/wiki/Top_post
+Q: Were do I find info about this thing called top-posting?
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
 
-> Surely this would do it:
-> 
-> http://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=451133cefa839104
+A: No.
+Q: Should I include quotations after my reply?
 
-Ooh, yes, excellent that, thanks!
+http://daringfireball.net/2007/07/on_top
+
+On Sat, Dec 04, 2021 at 01:50:44PM +0500, Ameer Hamza wrote:
+> Thank you Greg for your response. The link to Coverity warning:
+> https://scan5.coverity.com/reports.htm#v56991/p10063/fileInstanceId=204668511&defectInstanceId=52305699&mergedDefectId=1494148
+
+That link does not seem to be public.  What project are you looking at?
+
+> I have seen similar warnings if the print operation is used inside a lock,
+> i.e., Coverity speculates a possible deadlock scenario, which might be a
+> false positive because internal printk implementation uses a separate lock.
+
+When dealing with Coverity, it is up to you to determine if what it says
+is actually true before sending out patches for it, due to the HUGE
+number of false-positives it spits out.
+
+thanks,
+
+greg k-h

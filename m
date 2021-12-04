@@ -2,74 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A452C46843C
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 11:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6E446844F
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 11:57:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384697AbhLDKvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 05:51:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238470AbhLDKvj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 05:51:39 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FDDC061751;
-        Sat,  4 Dec 2021 02:48:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=uN0UUJmT6U4ujQ7E/bslhmkUFeYza+A9RdqNPKnTQeI=; b=rgJcyJP/TqzPesH7TRhUviB8F9
-        LpyX5is/aE6j9gDfc9U3QDZnL3x1ZxwxrzoR7M00MhiXZzIL26AnHlOp2Q6SnTC2OGqrNIRX0jBi4
-        ssrwGsLsn8QqvnOoZtBpRpjyTLscqAOni/mCT42IZDpeCsr/k0IQxD5VqFGpVhr1ZQfqh477DGdb6
-        ukXDtF7oEkNLvswXzjd67qLuMKS8WvX3VYC3bEEXmRAWr0sTO08kb7gHdD2Q7V4lHo280od+a42BY
-        v0dsmNod4J/DPVPZgdPvHpkdQI1QVFOLquv/rHsF6X+4NGyikUEfptzcDE/Y1/qi9P2RLqrxXzlqu
-        QQ/U+ZNw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56050)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1mtSaJ-0003Ec-77; Sat, 04 Dec 2021 10:48:03 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1mtSaE-0002Lg-Dq; Sat, 04 Dec 2021 10:47:58 +0000
-Date:   Sat, 4 Dec 2021 10:47:58 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] arm/arm64: dts: Enable more network hardware
-Message-ID: <YatHXrO1DQXFpqA+@shell.armlinux.org.uk>
-References: <20211018011211.3836590-1-chris.packham@alliedtelesis.co.nz>
+        id S1346699AbhLDLA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 06:00:58 -0500
+Received: from sv740.xserver.jp ([120.136.14.41]:47366 "EHLO sv740.xserver.jp"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1384734AbhLDLAk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 06:00:40 -0500
+X-Greylist: delayed 450 seconds by postgrey-1.27 at vger.kernel.org; Sat, 04 Dec 2021 06:00:40 EST
+Received: from virusgw4.xserver.jp (virusgw4.xserver.jp [120.136.14.122])
+        by sv740.xserver.jp (Postfix) with ESMTP id 68D6E14BD85A
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 19:49:43 +0900 (JST)
+Received: from sv740.xserver.jp (120.136.14.41)
+ by virusgw4.xserver.jp (F-Secure/fsigk_smtp/521/virusgw4.xserver.jp);
+ Sat, 04 Dec 2021 19:49:42 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/521/virusgw4.xserver.jp)
+Received: by sv740.xserver.jp (Postfix, from userid 20126)
+        id 652B214BD85B; Sat,  4 Dec 2021 19:49:43 +0900 (JST)
+To:     linux-kernel@vger.kernel.org
+Subject: =?ISO-2022-JP?B?GyRCIVo8K0YwSlY/LiVhITwlayFbJCpMZCQkOWckbyQ7RDokLUA/JEskIiRqJCwkSCQmJDQkNiQkJF4kOSEjGyhC?=
+Date:   Sat, 4 Dec 2021 10:49:43 +0000
+From:   =?ISO-2022-JP?B?GyRCSmw7UiVVJSMlOCUrJWslNSVdITwlSDgmNWYycRsoQg==?= 
+        <info@boshi.jp>
+Message-ID: <e3a5ab9849d72e43a7df1225f385bb5d@boshi.jp>
+X-Mailer: PHPMailer 5.2.22 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211018011211.3836590-1-chris.packham@alliedtelesis.co.nz>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Type: text/plain; charset=ISO-2022-JP
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 18, 2021 at 02:12:09PM +1300, Chris Packham wrote:
-> This series enables the Switch and 2.5G Ethernet port on the CN9130-CRB. The
-> changes are based on the Marvell SDK.
-> 
-> Note Gregory has already picked up the 2.5G Ethernet patch from v1 so I've not
-> included it in v2 of this series.
-> 
-> Also note that if anyone tries out the SFP+ port on a complete CRB shipped from
-> Marvell the chassis prevents the ejector from working so the SFP will get
-> stuck. Taking the board out of the chassis allows the SFP to be
-> insterted/removed.
+?? Alice want to meet you! Click Here: http://bit.do/fSMvk?o7b43 ?? 様
 
-Oh, these patches contain a SFP block... I suppose I should review them
-then. Sadly not on the To/Cc, I guess I need to add something to
-MAINTAINERS to detect the DT compatible...
+この度は「母子フィジカルサポート研究会」にお問い合せ頂き誠にありがとうございました。
+このメールは、お問い合わせ頂いたお客様に自動で送信しております。
+確認が出来次第、改めて担当者よりご連絡をさせていただきますので、
+それまでの間、もう暫くお待ち下さい。
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+※当方既定休業日（年末年始・お盆休みなどを含む）にお問い合わせいただいた場合、
+翌営業日以降の回答となる場合がございますので予めご了承下さい。
+
+─ご送信内容の確認───────────────────────────
+
+■会員番号：277824866020
+■お名前：?? Alice want to meet you! Click Here: http://bit.do/fSMvk?o7b43 ??
+■ふりがな：36kfzii9
+■性別：女性
+■住所：〒 5fedy3
+■メールアドレス：linux-kernel@vger.kernel.org
+■電話番号：277824866020
+
+■お問い合わせ内容：
+4sfbom
+
+────────────────────────────────────
+
+この度はお問い合せ頂き、誠にありがとうございました。
+
+--
+-------------------------------------------------------
+母子フィジカルサポート研究会
+https://boshi.jp
+-------------------------------------------------------
+

@@ -2,115 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21DB8468719
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 19:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D66468729
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 20:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243635AbhLDSeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 13:34:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232009AbhLDSeC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 13:34:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111B8C061751;
-        Sat,  4 Dec 2021 10:30:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        id S1346919AbhLDTEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 14:04:01 -0500
+Received: from mail.mutex.one ([62.77.152.124]:59774 "EHLO mail.mutex.one"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234141AbhLDTEA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 14:04:00 -0500
+X-Greylist: delayed 1057 seconds by postgrey-1.27 at vger.kernel.org; Sat, 04 Dec 2021 14:04:00 EST
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.mutex.one (Postfix) with ESMTP id 4698416C27F2;
+        Sat,  4 Dec 2021 20:42:56 +0200 (EET)
+X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
+Received: from mail.mutex.one ([127.0.0.1])
+        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id oKVK5PS9LakU; Sat,  4 Dec 2021 20:42:55 +0200 (EET)
+Received:  [127.0.0.1] (localhost [127.0.0.1])nknown [79.112.88.78])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD498B80D40;
-        Sat,  4 Dec 2021 18:30:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59171C341C2;
-        Sat,  4 Dec 2021 18:30:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638642634;
-        bh=vpZJzbz83/r/7Zk6WlXuLGdQvsG896LAUclP0lH086M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Fo4fIwVbOy9dzWFaBEcYV9fF/anITNia8T/lRCYT0LLdDNh8MQZqz4s2+Wx6+CtA5
-         odwlAVRxtMsWxvXKoIlVGiSW1vNx52KMk3B91jLWa/dOfGL9YXKxS1pqzO3pUdYPMh
-         TLncHoIQ+qYGsLeDOtKtJrZ1GXVYA4bw8/DlqC7km7vT7IRrln1QzWQcgiABL6sfE6
-         sfqiFtQugpwWc11vfnNEpdsOQfXp1Uz7mvHtR3zZlqiB5qI1tYBoLaDTm1vkYjZG7E
-         zi6qvarrc2cvdrbKdVMmBBeN2O8Rb9zhDfFmpOzpT+Qq4eheyV4jbVL8Z7O/MtBLui
-         eNrar0Y4SLrFQ==
-Date:   Sat, 4 Dec 2021 20:30:28 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
-        cathy.zhang@intel.com, cedric.xing@intel.com,
-        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        by mail.mutex.one (Postfix) with ESMTPSA id D422416C08F2;
+        Sat,  4 Dec 2021 20:42:54 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
+        t=1638643375; bh=52k49UyMB40olKhbEBwyV83YUbOTAqmTQKzOI/7iBGY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=iywXr+OwfC+udFJqLZoJcQVQ41y/OuLapkTtmZqhzmGniQMrbGLltI8gDMjufrwbv
+         9YU2eZcCnh+4XyRrmhrvtKYrdWzpde+m+BpuLYR6SN4091IOwMinpw5Yv+qmu2p/m3
+         uYQJTPngbrh+0Y1pB1lwuwaf5MTzMG/AzpBZTcn4=
+From:   Marian Postevca <posteuca@mutex.one>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/25] x86/sgx: Add shortlog descriptions to ENCLS
- wrappers
-Message-ID: <YauzxOEmmpeGF/K3@iki.fi>
-References: <cover.1638381245.git.reinette.chatre@intel.com>
- <fd9ab4d760a2ea7a42ab9e60b9e19b8620abe11d.1638381245.git.reinette.chatre@intel.com>
+Subject: Re: [PATCH] usb: gadget: u_ether: fix race in setting MAC address
+ in setup phase
+In-Reply-To: <YaoSkbMBk90zr3N7@kroah.com>
+References: <20211129221229.31845-1-posteuca@mutex.one>
+ <YaoSkbMBk90zr3N7@kroah.com>
+Date:   Sat, 04 Dec 2021 20:42:52 +0200
+Message-ID: <87ee6sxlcj.fsf@mutex.one>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fd9ab4d760a2ea7a42ab9e60b9e19b8620abe11d.1638381245.git.reinette.chatre@intel.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 11:22:59AM -0800, Reinette Chatre wrote:
-> The SGX ENCLS instruction uses EAX to specify an SGX function and
-> may require additional registers, depending on the SGX function.
-> ENCLS invokes the specified privileged SGX function for managing
-> and debugging enclaves. Macros are used to wrap the ENCLS
-> functionality and several wrappers are used to wrap the macros to
-> make the different SGX functions accessible in the code.
-> 
-> The wrappers of the supported SGX functions are cryptic. Add short
-> changelog descriptions of each to a comment.
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
 
-I think you are adding function descriptions.
+> On Tue, Nov 30, 2021 at 12:12:29AM +0200, Marian Postevca wrote:
+>> When listening for notifications through netlink of a new interface being
+>> registered, sporadically, it is possible for the MAC to be read as zero.
+>> The zero MAC address lasts a short period of time and then switches to a
+>> valid random MAC address.
+>> 
+>> This causes problems for netd in Android, which assumes that the interface
+>> is malfunctioning and will not use it.
+>> 
+>> In the good case we get this log:
+>> InterfaceController::getCfg() ifName usb0
+>>  hwAddr 92:a8:f0:73:79:5b ipv4Addr 0.0.0.0 flags 0x1002
+>> 
+>> In the error case we get these logs:
+>> InterfaceController::getCfg() ifName usb0
+>>  hwAddr 00:00:00:00:00:00 ipv4Addr 0.0.0.0 flags 0x1002
+>> 
+>> netd : interfaceGetCfg("usb0")
+>> netd : interfaceSetCfg() -> ServiceSpecificException
+>>  (99, "[Cannot assign requested address] : ioctl() failed")
+>> 
+>> The reason for the issue is the order in which the interface is setup,
+>> it is first registered through register_netdev() and after the MAC
+>> address is set.
+>> 
+>> Fixed by first setting the MAC address of the net_device and after that
+>> calling register_netdev().
+>> 
+>> Signed-off-by: Marian Postevca <posteuca@mutex.one>
+>> ---
+>>  drivers/usb/gadget/function/u_ether.c | 16 ++++++----------
+>>  1 file changed, 6 insertions(+), 10 deletions(-)
+>
+> What commit does this fix?  Should it go to stable kernel releases?
+>
+> thanks,
+>
+> greg k-h
 
-> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> ---
->  arch/x86/kernel/cpu/sgx/encls.h | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/cpu/sgx/encls.h b/arch/x86/kernel/cpu/sgx/encls.h
-> index 9b204843b78d..241b766265d3 100644
-> --- a/arch/x86/kernel/cpu/sgx/encls.h
-> +++ b/arch/x86/kernel/cpu/sgx/encls.h
-> @@ -162,57 +162,68 @@ static inline bool encls_failed(int ret)
->  	ret;						\
->  	})
->  
-> +/* Create an SECS page in the Enclave Page Cache (EPC) */
->  static inline int __ecreate(struct sgx_pageinfo *pginfo, void *secs)
->  {
->  	return __encls_2(ECREATE, pginfo, secs);
->  }
+This fixes bcd4a1c40bee885e ("usb: gadget: u_ether: construct with
+default values and add setters/getters").
 
-You have:
+I think it should go to stable kernel releases.
 
-* "Create an SECS page in the Enclave Page Cache (EPC)"
-* "Add a Version Array (VA) page to the Enclave Page Cache (EPC)"
+Should I send a second version of the patch with a Fixes tag?
 
-They should have similar descriptions, e.g.
-
-* "Initialize an EPC page into SGX Enclave Control Structure (SECS) page."
-* "Initialize an EPC page into Version Array (VA) page."
-
-> +/* Extend uninitialized enclave measurement */
->  static inline int __eextend(void *secs, void *addr)
->  {
->  	return __encls_2(EEXTEND, secs, addr);
->  }
-
-That description does not make __eextend any less cryptic.
-
-Something like this would be already more informative:
-
-/* Hash a 256 byte region of an enclave page to SECS:MRENCLAVE. */
-
-This same remark applies to the rest of these comments. They should
-provide a clue what the wrapper does rather than an English open coded
-function name.
-
-/Jarkko
+Thanks

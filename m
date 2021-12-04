@@ -2,128 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDF9468152
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B674468153
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383755AbhLDAhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 19:37:39 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:32206 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1354317AbhLDAhd (ORCPT
+        id S1383764AbhLDAiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 19:38:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354317AbhLDAiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 19:37:33 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B40HYZZ011700;
-        Sat, 4 Dec 2021 00:33:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : from : to : cc : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=+hROM4sO6hA+iv7/9x++tjAsBm8+dd1jwZt+bNLs8l0=;
- b=jfP+Y7uL+GY4OwllaHNpQdMmGEzZ/BLSOQjNzT7wFJVpdN8clQX5HjJ36KqaExDVijVD
- LtN3pXeo4uew3AkaL5aj2a3TyIlSF/z9euf9ldmnsNptPMiNwGiSdoKdhARnbaQa9grq
- 8bi3Q1t2MCGD0g2JKuuybGSLeR6czdsb/jFnvcBBrY7eenfsx5YGt7l6cpBH6nkGq7Gz
- FDPzKcL7Nt8CCCsyIet2dmeWJ1Po0xGlb/rDeibvjZY2MUZvdFFDi3JmxbR1cZzpJ0uP
- bP5iFrIWG/CQe3bPJ+cuhbfGlI5HC9n5GfwItgtGhJHgGj966f3CYOE21CP0msupTAmT qA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cqwnpg6gx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 04 Dec 2021 00:33:44 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B40OgJY030422;
-        Sat, 4 Dec 2021 00:33:44 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cqwnpg6gr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 04 Dec 2021 00:33:44 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B40V1As024895;
-        Sat, 4 Dec 2021 00:33:43 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma01dal.us.ibm.com with ESMTP id 3ckcaes9fy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 04 Dec 2021 00:33:42 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B40XeEl60948756
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 4 Dec 2021 00:33:41 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D76CE6A051;
-        Sat,  4 Dec 2021 00:33:40 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BB9F16A047;
-        Sat,  4 Dec 2021 00:33:39 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Sat,  4 Dec 2021 00:33:39 +0000 (GMT)
-Message-ID: <b285b0d4-e615-bea4-f22f-09d83f8f8edb@linux.ibm.com>
-Date:   Fri, 3 Dec 2021 19:33:39 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC v2 19/19] ima: Setup securityfs for IMA namespace
-Content-Language: en-US
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     jejb@linux.ibm.com, linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, serge@hallyn.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20211203023118.1447229-1-stefanb@linux.ibm.com>
- <20211203023118.1447229-20-stefanb@linux.ibm.com>
- <df433bc52ca1e0408d48bbace4c34a573991f5ba.camel@linux.ibm.com>
- <6306b4e5-f26d-1704-6344-354eb5387abf@linux.ibm.com>
- <11b557b58de74828b1c16334a5fb52c4d3f6ad0f.camel@linux.ibm.com>
- <cd05433a-3630-e7f5-e144-ff766d7792fa@linux.ibm.com>
-In-Reply-To: <cd05433a-3630-e7f5-e144-ff766d7792fa@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: CZ0cfq8uxoQhgGLsVAoOmsRdPCs2uWjB
-X-Proofpoint-GUID: evADAffd-nUhjqi_m_Mz1yuxXpiFgQ5o
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 3 Dec 2021 19:38:10 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C8DC061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 16:34:45 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id x6so17941921edr.5
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 16:34:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lrb4dejM62PcILwc0JnaQtpVY00TzngEYMl62VuFaVQ=;
+        b=MNMh/4aPmTZN2oa04S2xiyz3v2sylXYSKmpJiOAXMMxrLDRpjWE2ZTofkA56li/YSe
+         uOHADelxjhOsI7OAdi6GaCAhpXhWZjYH3O4ryJrY7Jobh6Q7g7BvyF6yQrYlQoSodOvM
+         6fdIM/6S2qT94BF4fNAqInetUccxCkvae8853Fj5MPdfzv6ZIRWii/mRXAyhRT81nRLl
+         1ieb5M3lJnPwgaiGriztM3nMLBOeAqxv8cIXlVFnwt/sTenGE2fUpQVVpFWLFM+BZKro
+         L+TLSVfGEzHVs8VumBJ3qCGKcp3xKnOLOepvOfKx0TfaNj2Uu+x1gMdxYTRLatijX0iR
+         cF9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lrb4dejM62PcILwc0JnaQtpVY00TzngEYMl62VuFaVQ=;
+        b=F79clOrisDqDa2nDZXcH7fHJVe3gO8hUWe5BDe2jK2nUX4sl1G0Tyr3WsA1CxgW53j
+         N7dnawWDx36RdYsq5kBf/sBgDbQYeYJvq3vK1U7vDQG6kBAQen50bwSCn+zCcb7M6n4P
+         3/U/kb+VIQzYNx+Ynd0Y4pqFvhbNITPQiiOYUz3ia3DQlhCrSsQtgwOjZ0ww47jk9CDc
+         p18c1YwcHSNCfAE0RzDzCVrZVPwcuqStMGHmRXuy+1bQYm4ywBOGxJ0uyDnAY5FPUww3
+         VQUpLeMecF21qtMkXaLwxwA1xNM0P1rOvjROq/udZWyl1DvcrQxhVIhmVRDd8AFL8Xgs
+         jhwg==
+X-Gm-Message-State: AOAM53195+j6/0iuSDCZ5uZ+d1BKESLllbtTyCEGmwCa1zbhpas4w4+K
+        6oy90lqhLYxj7Okyks4lURY=
+X-Google-Smtp-Source: ABdhPJwa/j6G63K81l3abOOuJc9zfYONpyPOwtxabooNBafb63TRxtesHWMAjX6+T6bimsNx5OFNAw==
+X-Received: by 2002:a17:906:b01:: with SMTP id u1mr27043991ejg.504.1638578083848;
+        Fri, 03 Dec 2021 16:34:43 -0800 (PST)
+Received: from bulldog.fritz.box (host-79-17-112-183.retail.telecomitalia.it. [79.17.112.183])
+        by smtp.gmail.com with ESMTPSA id hd15sm3058178ejc.69.2021.12.03.16.34.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 16:34:43 -0800 (PST)
+From:   Alberto Merciai <alb3rt0.m3rciai@gmail.com>
+To:     alb3rt0.m3rciai@gmail.com
+Cc:     Forest Bond <forest@alittletooquiet.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tommaso Merciai <tomm.merciai@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        =?UTF-8?q?Aldas=20Tara=C5=A1kevi=C4=8Dius?= <aldas60@gmail.com>,
+        Karolina Drobnik <karolinadrobnik@gmail.com>,
+        Lucas Henneman <lucas.henneman@linaro.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: vt6655: refactor byMaxChannel to max_channel
+Date:   Sat,  4 Dec 2021 01:34:11 +0100
+Message-Id: <20211204003414.3824745-1-alb3rt0.m3rciai@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-03_11,2021-12-02_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- priorityscore=1501 mlxscore=0 malwarescore=0 bulkscore=0 impostorscore=0
- mlxlogscore=999 spamscore=0 phishscore=0 suspectscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112040002
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Replace camelcase hungarian notated variable "byMaxChannel"
+into linux kernel coding style equivalent variable "max_channel".
 
-On 12/3/21 14:11, Stefan Berger wrote:
->
-> On 12/3/21 13:50, James Bottomley wrote:
->
->
->>
->>> Where would the vfsmount pointer reside? For now it's in
->>> ima_namespace, but it sounds like it should be in a more centralized
->>> place? Should it also be  connected to the user_namespace so we can
->>> pick it up using get_user_ns()?
->> exactly.  I think struct user_namespace should have two elements gated
->> by a #ifdef CONFIG_SECURITYFS which are the vfsmount and the
->> mount_count for passing into simple_pin_fs.
->
-> Also that we can do for as long as it flies beyond the conversation 
-> here... :-) Anyone else have an opinion ?
+Signed-off-by: Alberto Merciai <alb3rt0.m3rciai@gmail.com>
+---
+ drivers/staging/vt6655/device.h      | 2 +-
+ drivers/staging/vt6655/device_main.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I moved it now and this greatly reduced the amount of changes. The 
-dentries are now all in the ima_namespace and it works with one API. Thanks!
-
-I wonder whether to move the integrity dir also into the ima_namespace. 
-It's generated in integrity/iint.c, so not in the IMA territory... For 
-the IMA namespacing case I need to create it as well, though.
-
-https://elixir.bootlin.com/linux/latest/source/security/integrity/iint.c#L218
-
-    Stefan
-
+diff --git a/drivers/staging/vt6655/device.h b/drivers/staging/vt6655/device.h
+index 245f992e5a23..6ea4165e4929 100644
+--- a/drivers/staging/vt6655/device.h
++++ b/drivers/staging/vt6655/device.h
+@@ -201,7 +201,7 @@ struct vnt_private {
+ 	unsigned char byTopCCKBasicRate;
+ 
+ 	unsigned char byMinChannel;
+-	unsigned char byMaxChannel;
++	unsigned char max_channel;
+ 
+ 	unsigned char preamble_type;
+ 	unsigned char byShortPreamble;
+diff --git a/drivers/staging/vt6655/device_main.c b/drivers/staging/vt6655/device_main.c
+index 37a82550ca82..313f0241d989 100644
+--- a/drivers/staging/vt6655/device_main.c
++++ b/drivers/staging/vt6655/device_main.c
+@@ -229,7 +229,7 @@ static void device_init_registers(struct vnt_private *priv)
+ 
+ 	/* Get Channel range */
+ 	priv->byMinChannel = 1;
+-	priv->byMaxChannel = CB_MAX_CHANNEL;
++	priv->max_channel = CB_MAX_CHANNEL;
+ 
+ 	/* Get Antena */
+ 	byValue = SROMbyReadEmbedded(priv->port_offset, EEP_OFS_ANTENNA);
+-- 
+2.25.1
 

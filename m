@@ -2,203 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC0A46848D
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 12:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8478A468493
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 12:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384812AbhLDLwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 06:52:12 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:56454
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229551AbhLDLwK (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 06:52:10 -0500
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 623053F317
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 11:48:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638618524;
-        bh=1lFAfFri95NobHHfuhDqwKUl/WgnOhHBeDas/mq7lKQ=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=jeMDyAlAQdwBl4jRdI0lhWG0PVK7ngCbRZ2w+4W/ovx5hTgnAYlGwRAZIsD9EdOW6
-         dCt+XPn1RiDFjdjdXOnb7tyd830TdMDL144yLJZZb40reI9cfowLT4Tn4jQNmgVjxu
-         kKObBSKV/hDboOp7P4tj0wtqjcWi+z7/OBQG9G4fIwEzHOg16wd/wkVGvPqFvSNadn
-         F+2XsP8mi7EcSSVc8li6cDIQkQjkD03et8SOFXIfmbRGS/4TvFSdOZQZzI6OUbkl/U
-         OypULsYfcH6LpgwNaN7Fnw37dHPTLX2/sg3h3s4LiJJPnfL8b0kSjkXPky2IMBPdm0
-         SXY5fGqID3vBw==
-Received: by mail-lf1-f71.google.com with SMTP id 24-20020ac25f58000000b0041799ebf529so1859477lfz.1
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 03:48:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1lFAfFri95NobHHfuhDqwKUl/WgnOhHBeDas/mq7lKQ=;
-        b=dGJGEtVt4omv0481eI4/YwI2br0KwlkyZzjJLaDh7vWR8bU5NUS254soPeAfdVNcko
-         H3ghWX19MxFz6cFYjW+0F2j+cmmeKTAGGM4AweA8VS13EsEHOwlsavPRznOVZINlQMfG
-         tdxrGrw91xt51XbBIrjAw0Jo5EPr2rPyndoTmT3fril1rW9YFno3CbV4uSKl88UTwSNx
-         h7WzowQ6Hf25XbBiq0qzO6/dIiTmvqowdwRFocTo4ehuvYK/k98XdJXp1dtfTY+lzMFL
-         8xA6oKLS6UM5/73sTuZITUFerCjVlP4ICInPHgT89N9jGKjtMqSr8O+kRPjWsovCdHeY
-         ECEA==
-X-Gm-Message-State: AOAM530fsuCsuhLsMyPshGUTQQ0ZcFhihH31dnYnwjqoi7YCni9cOYKH
-        sejUe/7vqvNISrqSSxhxOwfq4JeUhGCQa9iOmlZ3eRqLnPSKF6RPtCqN89pQdBTrmkW1RXuHsCN
-        yYhugz59c6GkkiUN2jet8uJjjwx9yNnkCqJGm3ipMfQ==
-X-Received: by 2002:ac2:55b2:: with SMTP id y18mr22500763lfg.63.1638618523698;
-        Sat, 04 Dec 2021 03:48:43 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy8VY1xCGJelFHJMdlqnOnN6muluQiZeh4zdF+O15Whdka1EH+b6V5t0L4S8RYhNAMtWAAoJw==
-X-Received: by 2002:ac2:55b2:: with SMTP id y18mr22500750lfg.63.1638618523478;
-        Sat, 04 Dec 2021 03:48:43 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id p26sm798181ljj.70.2021.12.04.03.48.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Dec 2021 03:48:42 -0800 (PST)
-Message-ID: <9631fe7c-b878-79b0-1680-80b0be089429@canonical.com>
-Date:   Sat, 4 Dec 2021 12:48:41 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 3/4] memory: mtk-smi: Add sleep ctrl function
+        id S1384824AbhLDLz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 06:55:28 -0500
+Received: from mail-eopbgr80048.outbound.protection.outlook.com ([40.107.8.48]:48982
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229551AbhLDLz0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 06:55:26 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l1SWd2JRx6/gxHDCor8MYF1SAEnAg9wpt3vDQVypRhibPyMfTKW+SoIPLqr90yli5TZOnJYAbStSg6PxUlYGqp924iLhZs+UpToJzZP3Umg9F5eI9T6aK/B9LhwfYSwFxAuekbyPemECDP7/UO+i5pGhxtISOWapx2jL9/bXcxKcfTGlwS9agdkWpMxDVui8skc+QM+x8aLawcDMb9nqyA0uVAUhr+J2vYclGwD7XVXzzaPhKRlppVKRN50oo9SdOGHtV/UaeecE0qA/HL1tEQiUjmGSsGek8de1b+T3GCTLkFV9zPrLWg8fa6tBzZk1PLwbW2V2rl+KJYzqV03wHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=f7VnX2Bv7TorzJc2YFgWc7gy/41xE6RR2YsPPfJbjs8=;
+ b=JRBeTK/0h6og7y4lZp3atJPuynq1UhK4QaFRYkFLuZYj+niY98aQQDVv9ECqjAEHtn47kL1fuynlbTDk5sgXQBiligUtn/c+PRIvWRZhureAPjM3BekRsNdVbu/1lvrWN9ecRg7Vi6aMNoBgZxUFe6WeBmmfz4tedSFty1CPQbe5dBYuTHeYI6ZftLeY45ftSH6/YzABvfVNmujckx2meTKkfsgi+3RikH1LXmrFWBY9Xg42lDdU6fofbYfHgSC8EJVOYaUNdHnQ8HOMzW3YNnZAe5kDV8HTt/huiA2zPtu0buZTvyaJ+J5/ZPoGoKEx2Mw/CkpMzTppwuYeExp/aQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=f7VnX2Bv7TorzJc2YFgWc7gy/41xE6RR2YsPPfJbjs8=;
+ b=rwMaVznB1aSToQPMAOSzw0tW+V7Ud8Bl43DR0QOK/w29mwLdFC5zmDYETYY9HpUegukLi/EBgR1hlSznZihqUWbMU5Y+UWhk22BlizKW3+k08VNu1mftoQNRdN4aoidVW37b/JUKgNHMMJBi60yVEwsIUV27VKeFGUsrBepVaxk=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by VI1PR0402MB2864.eurprd04.prod.outlook.com (2603:10a6:800:b7::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Sat, 4 Dec
+ 2021 11:51:52 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::796e:38c:5706:b802]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::796e:38c:5706:b802%3]) with mapi id 15.20.4755.020; Sat, 4 Dec 2021
+ 11:51:52 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Denis Kirjanov <dkirjanov@suse.de>,
+        Julian Wiedmann <jwi@linux.ibm.com>
+Subject: Re: [PATCH net-next v4 4/4] net: ocelot: add FDMA support
+Thread-Topic: [PATCH net-next v4 4/4] net: ocelot: add FDMA support
+Thread-Index: AQHX6GoBQOKMK7t4rE2bRf8FEkqhQ6wh5hIAgABTwIA=
+Date:   Sat, 4 Dec 2021 11:51:52 +0000
+Message-ID: <20211204115151.6na4cb3tspxbtt36@skbuf>
+References: <20211203171916.378735-1-clement.leger@bootlin.com>
+ <20211203171916.378735-5-clement.leger@bootlin.com>
+ <20211204075206.0f942fb1@fixe.home>
+In-Reply-To: <20211204075206.0f942fb1@fixe.home>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Yong Wu <yong.wu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com,
-        anan.sun@mediatek.com, lc.kan@mediatek.com, yi.kuo@mediatek.com,
-        anthony.huang@mediatek.com
-References: <20211203064027.14993-1-yong.wu@mediatek.com>
- <20211203064027.14993-4-yong.wu@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211203064027.14993-4-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b3dd6bf0-9ef8-4bb3-a340-08d9b71c769a
+x-ms-traffictypediagnostic: VI1PR0402MB2864:
+x-microsoft-antispam-prvs: <VI1PR0402MB2864223CA13E2757343B4875E06B9@VI1PR0402MB2864.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: w/0Dzxeqg2o0tPxX9j/yF8qWIfHszYozWafXRG4yPjinPg0Ywbvt9OZSFuaex4A/pWxdJB9igIlsf/eBNgjJyGP8NXawgj89bYmcAQx79rWsE+Fbl6s3jmhwY8+npNTogkH/Xk7V7KuNW7b6gQwdQphG0hrkwNNwh9rVmlIPCRWdt4quytRzPefRj/X0qKHhFFg2EF3grG0t76m3yiOeKY6L/SJ8TLstKb0FPMKnVExs1cnsriJ8Tc0cH83Xaov445xuI8cd5Ri3Vr1bnjt0B4aJuIEdgFxdeUBlCEJvHH3zXsdutseetY8IiHF8EHbGbuaFGSAxTTNlPWGgV+H7PFXUTShL4S+aMsrEiRixB64KLW9K1mJt/YGdLpXAj2RVGEREXyC6ucjWNqr/uwyYt2FhU4J14t4BmjAkcyUmVJGpmDsbYvvDRW1kzadKFcuMEsY1SNRva32xU456bDB57GkNo5o8EX5Tby5bB5KTotebfzcG9cKj8JBIDl0FxnoAnDYx39PKojbAdiZh5si59MeoEJxqF2lPKGGttuFpGb+jRt/At8hmIGMHzDkuGYcD3nE2qF7T+6YrrQnYteak4gdmGy521V+UjRBy+QmL58REsV/WT1iTfrELXMwpJONF33RET8JhdnhgyMDjqsV0qgkosJh0sPQpm00y3/kOM0oiu58/YIZ4wVN7R52Sa8YoPJEW2mqoo5ccS1/l9ZK5NA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(366004)(33716001)(76116006)(66946007)(316002)(91956017)(9686003)(66476007)(66446008)(64756008)(66556008)(26005)(83380400001)(6506007)(6512007)(44832011)(186003)(8936002)(8676002)(6486002)(508600001)(54906003)(1076003)(6916009)(5660300002)(71200400001)(2906002)(4326008)(122000001)(86362001)(7416002)(38100700002)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?lVbocNXY99RT6qtjuvJ4iARUNFy4QmtYADlYKE6lAWwhfkAUKd6vUzj4eT?=
+ =?iso-8859-1?Q?R9vHPGVH/dhkik/PKYoPnN8ezqqd+BM4WS/YhQHKS78vaCFR53kOhD1WT/?=
+ =?iso-8859-1?Q?RvzCUrxkZowdA9TyI47Bx2f4j23L0dsdP7G8fo0THMdTN5sSJA2mcA3mwo?=
+ =?iso-8859-1?Q?ux/z+hx+B1aHT7lmHx68550iR2nI8a2cnFuLrt5c9posADRorOMv/uIDXQ?=
+ =?iso-8859-1?Q?Ktu+mLC2tQF7R7qZyIzReqGvW1q9xBt5dRxIEsTomPyDaCf/hsWRRiNbmw?=
+ =?iso-8859-1?Q?nAX2gv97LCTR94c20vbw/M2xudsxxNiroYdVkZ4uEw00j3FnmbKExdX8cW?=
+ =?iso-8859-1?Q?dE61033kaSAY+rxCuxEmHk+0N2NXoM5CKhW+tkOMX+F34qyItBkKbg/MWR?=
+ =?iso-8859-1?Q?8X7v2WpFAAQ8Qu2Krn6u9G+3Vn+DGqvMdnJhKUpiPu24AuKHBcE404zm+j?=
+ =?iso-8859-1?Q?+i0ekJzcMRjrbuj/A9JuDQNpP5xIl5AGaGwjxQNVQrgeFC6COaFH9gwkPr?=
+ =?iso-8859-1?Q?FIyNMTJ6+DDHxUULgdvnau3aXAurVyv5QChBw7RUjheZ0fkC7nwVpDb2P5?=
+ =?iso-8859-1?Q?8+qz0MgzEhchtB1oiJoRn3uRsAExPo75LAX2x6NdplVL/iwSQFb9LDScsn?=
+ =?iso-8859-1?Q?O20ASvrxprU6l0+LC8XpI3od0xIydBv5mBqCjpWUyg+94S6eGa6x89roid?=
+ =?iso-8859-1?Q?DjDwgnxkFQ7pNY0EJQ4yb0AlU5vhy3KHQfPskNK/lzzkKUC4mv29tXuC0u?=
+ =?iso-8859-1?Q?PZ+HKphJPeEUenVDqC9Rkzss55ndrcTOvNQC99DdVdz5IHyP6vMDkLslnM?=
+ =?iso-8859-1?Q?TfUpQ2FcOpBLQZJlShoRsSjKBqUKJILVru+my7x+JkyAzCB9DcnNT5H4Gy?=
+ =?iso-8859-1?Q?83OhbX/zVbISndxVJP8Wbv82935krui7YhJ5njq2BahYigmjJuJJFQbnre?=
+ =?iso-8859-1?Q?feK4UJVtttP5QWMvGUALTZS8I+heTk773ucPrbgC8CcmrJi05ag1TWmi4r?=
+ =?iso-8859-1?Q?oxHKeKspXbxP//5gNnqOYg3nXEwhqmu/dsDUDq7Bf0NvhGrt4nRr25yQOP?=
+ =?iso-8859-1?Q?qF3mMfK60AL5uTYqCWUv30akS7Wqta/9c3YUI7xc2y5Y8sx5hlVoPXESwu?=
+ =?iso-8859-1?Q?28vdvxxYZw7seJAIVpvAIUGxccLH8JCTVlyKLoxHUNMTQqBY7pxpHKwwpu?=
+ =?iso-8859-1?Q?opbfBqD3FAJE7KAAYBZLkvaFxg7zR1cjGMc4ds8YyaIk6QE0mxsee/QLR8?=
+ =?iso-8859-1?Q?U8KRW5tBrbN5BXxJaJn/rrBmM33Izlmq5zWZIGb452tf4zsxAE4eH8d2Qf?=
+ =?iso-8859-1?Q?Hx09zISYo76qondJbOQ3MZ3fpEHg7RJfWenDxnJNooRiJAFUdCixnV44fJ?=
+ =?iso-8859-1?Q?kFi2XK1BzB0coIQHLw1omYTSaj3XCg/W+jBgWilPmifOnKcs4G2dNSJ/Sd?=
+ =?iso-8859-1?Q?/5hM6x0Fc6UjsEWdJpap2ewkx2ewQmE4Hn092BGgu0Djcf8JDH41zyb3iC?=
+ =?iso-8859-1?Q?wxVUHmt8x2utLcxGO7bYyifNJ2n0fTFFcYo68i8weN0GhPutvfwWrAACu9?=
+ =?iso-8859-1?Q?+dXL9TIzYxlZ503BAE+7WmuNgXHLFEwdDhy3RlG4aXoo1EgirG8IK96Dni?=
+ =?iso-8859-1?Q?sXNi4+IL82zPtRGMAmN/LBADqVjCRLbeJYuSJPiiKuAtoqL0quiDe5O77W?=
+ =?iso-8859-1?Q?zu1QnMYQ2DAtl5PhF4k=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-ID: <9055667298C0DF46B03C9573DBF324D6@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3dd6bf0-9ef8-4bb3-a340-08d9b71c769a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Dec 2021 11:51:52.5042
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UoIx5lV8H/zoMBQZlO6rGPKfKHIuxDN3CD5oLOpUJv9wkIMTWkOHeFBVBsV/BF2bbdr59Cq6LTN9Ls9VsdgG9w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB2864
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/12/2021 07:40, Yong Wu wrote:
-> sleep control means that when the larb go to sleep, we should wait a bit
+On Sat, Dec 04, 2021 at 07:52:06AM +0100, Cl=E9ment L=E9ger wrote:
+> > +void ocelot_fdma_netdev_init(struct ocelot *ocelot, struct net_device =
+*dev)
+> > +{
+> > +	struct ocelot_fdma *fdma =3D ocelot->fdma;
+> > +
+> > +	dev->needed_headroom =3D OCELOT_TAG_LEN;
+> > +	dev->needed_tailroom =3D ETH_FCS_LEN;
+> > +
+> > +	if (fdma->napi_init)
+> > +		return;
+> > +
+> > +	fdma->napi_init =3D true;
+> > +	netif_napi_add(dev, &ocelot->napi, ocelot_fdma_napi_poll,
+> > +		       OCELOT_FDMA_WEIGHT);
+> > +}
+> > +
+> > +void ocelot_fdma_netdev_deinit(struct ocelot *ocelot, struct net_devic=
+e *dev)
+> > +{
+> > +	struct ocelot_fdma *fdma =3D ocelot->fdma;
+> > +
+> > +	if (fdma->napi_init) {
+> > +		netif_napi_del(&ocelot->napi);
+> > +		fdma->napi_init =3D false;
+> > +	}
+>=20
+> Using a boolean  is acutally a bad idea, if the last netdev
+> registration fails in ocelot, then the napi context will be deleted.
+> The net_device should actually be used.
 
-s/go/goes/
-
-> until all the current commands are finished. thus, when the larb runtime
-
-Please start every sentence with a capital letter.
-
-> suspend, we need enable this function to wait until all the existed
-
-s/suspend/suspends/
-s/we need enable/we need to enable/
-
-> command are finished. when the larb resume, just disable this function.
-
-s/command/commands/
-s/resume/resumes/
-
-> This function only improve the safe of bus. Add a new flag for this
-
-s/improve/improves/
-s/the safe/the safety/
-
-> function. Prepare for mt8186.
-
-In total it is hard to parse, really.
-
-> 
-> Signed-off-by: Anan Sun <anan.sun@mediatek.com>
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> ---
->  drivers/memory/mtk-smi.c | 39 +++++++++++++++++++++++++++++++++++----
->  1 file changed, 35 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
-> index b883dcc0bbfa..4b59b28e4d73 100644
-> --- a/drivers/memory/mtk-smi.c
-> +++ b/drivers/memory/mtk-smi.c
-> @@ -8,6 +8,7 @@
->  #include <linux/device.h>
->  #include <linux/err.h>
->  #include <linux/io.h>
-> +#include <linux/iopoll.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/of_platform.h>
-> @@ -32,6 +33,10 @@
->  #define SMI_DUMMY			0x444
->  
->  /* SMI LARB */
-> +#define SMI_LARB_SLP_CON                0x00c
-> +#define SLP_PROT_EN                     BIT(0)
-> +#define SLP_PROT_RDY                    BIT(16)
-> +
->  #define SMI_LARB_CMD_THRT_CON		0x24
->  #define SMI_LARB_THRT_RD_NU_LMT_MSK	GENMASK(7, 4)
->  #define SMI_LARB_THRT_RD_NU_LMT		(5 << 4)
-> @@ -81,6 +86,7 @@
->  
->  #define MTK_SMI_FLAG_THRT_UPDATE	BIT(0)
->  #define MTK_SMI_FLAG_SW_FLAG		BIT(1)
-> +#define MTK_SMI_FLAG_SLEEP_CTL		BIT(2)
->  #define MTK_SMI_CAPS(flags, _x)		(!!((flags) & (_x)))
->  
->  struct mtk_smi_reg_pair {
-> @@ -371,6 +377,24 @@ static const struct of_device_id mtk_smi_larb_of_ids[] = {
->  	{}
->  };
->  
-> +static int mtk_smi_larb_sleep_ctrl(struct device *dev, bool to_sleep)
-> +{
-
-Make two functions instead. There is no single code reuse (shared)
-between sleep and resume. In the same time bool arguments are confusing
-when looking at caller and one never knows whether true means to resume
-or to sleep. Having two functions is obvious. Obvious code is easier to
-read and maintain.
-
-> +	struct mtk_smi_larb *larb = dev_get_drvdata(dev);
-> +	int ret = 0;
-> +	u32 tmp;
-> +
-> +	if (to_sleep) {
-> +		writel_relaxed(SLP_PROT_EN, larb->base + SMI_LARB_SLP_CON);
-> +		ret = readl_poll_timeout_atomic(larb->base + SMI_LARB_SLP_CON,
-> +						tmp, !!(tmp & SLP_PROT_RDY), 10, 1000);
-> +		if (ret)
-> +			dev_warn(dev, "sleep ctrl is not ready(0x%x).\n", tmp);
-> +	} else {
-> +		writel_relaxed(0, larb->base + SMI_LARB_SLP_CON);
-> +	}
-> +	return ret;
-> +}
-> +
->  static int mtk_smi_device_link_common(struct device *dev, struct device **com_dev)
->  {
->  	struct platform_device *smi_com_pdev;
-> @@ -477,24 +501,31 @@ static int __maybe_unused mtk_smi_larb_resume(struct device *dev)
->  {
->  	struct mtk_smi_larb *larb = dev_get_drvdata(dev);
->  	const struct mtk_smi_larb_gen *larb_gen = larb->larb_gen;
-> -	int ret;
-> +	int ret = 0;
-
-This line does not have a sense.
-
->  
->  	ret = clk_bulk_prepare_enable(larb->smi.clk_num, larb->smi.clks);
-> -	if (ret < 0)
-> +	if (ret)
-
-Why changing this?
-
-
-
-Best regards,
-Krzysztof
+I think that you could try to call netif_napi_del() only if dev =3D=3D napi=
+->dev.
+Because, as you say, if the NAPI structure has been added to the first
+net device, and the registration of subsequent net devices fails, that
+NAPI might actually even be in use by now, we should not disturb it.=

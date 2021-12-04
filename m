@@ -2,102 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 560EC468658
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 17:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F89946865F
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 17:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355388AbhLDQ4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 11:56:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
+        id S1355505AbhLDQ7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 11:59:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355365AbhLDQ4d (ORCPT
+        with ESMTP id S1355427AbhLDQ72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 11:56:33 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D41C061751
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 08:53:06 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id y13so24439893edd.13
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 08:53:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HLxsYVhxp8kc6YMducknuw0Thmrn67yEeEH0fvOg79Q=;
-        b=dYml2e6b1/2yUxtumtq1wCDHEHpViPjaXkLJZuvbCYNcd1mB2oZRtxhd/NOrrQZwPa
-         su9obZKSQkCReBQgmeeMTf7GYYITRAdrqL/GuxniUdEMiSf6t1nyn5cCaJWBPVEwQZZ8
-         vp+fr2vrhw8rMb7JcSt4KhVasin4xVoWXxXFs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HLxsYVhxp8kc6YMducknuw0Thmrn67yEeEH0fvOg79Q=;
-        b=LsLHl4djOH/M0PHGevt50ORNwyxn6GcbA1sI+Yd9Cait/Os3QWbatw8EcvIQG3R+ej
-         rjQLywH8vIHYZ2ckSsuWOEOu2cAnsWlxTPalj1HUWNtFebCAoLbyYWN4uFEaIdEk+XGo
-         1UT4EU1tqvy4ug/szsQHoEaCvYxjA1/YC652+f8pNvDjLbxzMn4g/MF4aJh3myovWA2f
-         Zjg6UU3JGdsu2Q7/EHB9SV/1f4PsQ9ntoU0xqtXC9zgsewsOT7hwxHIoz5n54jGuLyOt
-         P0actD9m853mBzFHIKTTnpYveJLM9Y9GEeEGs7DqGr4Aykua9vFSSzjLCyi2JkoHhvgW
-         kVCw==
-X-Gm-Message-State: AOAM531M/1HH0ee9ijaAvKChH00rkXoTq9/cpTEIxOu5pjKO1zHhn1RJ
-        6K1kPmAnJmdOJzc3Ol/LDbKCfK3N5SJ6zsEk
-X-Google-Smtp-Source: ABdhPJykgkkC/JaOiWRZhJkORP1rCPpK4FXOtzIl0DgcTs1DhT8VUSCf5yXqsWJtusnhSKXRms7k6A==
-X-Received: by 2002:a17:907:1626:: with SMTP id hb38mr32906928ejc.481.1638636784447;
-        Sat, 04 Dec 2021 08:53:04 -0800 (PST)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
-        by smtp.gmail.com with ESMTPSA id lk22sm3994443ejb.83.2021.12.04.08.53.01
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Dec 2021 08:53:03 -0800 (PST)
-Received: by mail-wr1-f54.google.com with SMTP id c4so12647620wrd.9
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 08:53:01 -0800 (PST)
-X-Received: by 2002:adf:9d88:: with SMTP id p8mr31156174wre.140.1638636781618;
- Sat, 04 Dec 2021 08:53:01 -0800 (PST)
-MIME-Version: 1.0
-References: <YatpectAYsWnmPy2@eldamar.lan>
-In-Reply-To: <YatpectAYsWnmPy2@eldamar.lan>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 4 Dec 2021 08:52:45 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whTTWUyL5j5_-UeRT6k9VcJM_VOfjiKuU2NBJkxhbnXpw@mail.gmail.com>
-Message-ID: <CAHk-=whTTWUyL5j5_-UeRT6k9VcJM_VOfjiKuU2NBJkxhbnXpw@mail.gmail.com>
-Subject: Re: Makefile: CC_IMPLICIT_FALLTHROUGH passed quoted as argument to gcc
-To:     Salvatore Bonaccorso <carnil@debian.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Sat, 4 Dec 2021 11:59:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1ADFC061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 08:56:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54573B80D22
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 16:56:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0F2ABC341C0;
+        Sat,  4 Dec 2021 16:56:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638636960;
+        bh=XUXJDYe1dXkLDeOiXer13SyIhtJMMv7rsnsVH88o6RM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=n0v5LyHV8RdybJV9nKsR4kcYjlOLhSen6r1qEW7QKXQgtnbBnjyQMPrixb8cSytJB
+         eZWdhICsqUtIPK+naFgCaAZ5Ud7R35jGNSpcCaLgajIilyzDvzAU26auqHgCVzLEbA
+         Y3Ysl1UdK/7teglCg1zj/MZ7wWHGmVQYpk7qvJpTewy2DDtgWemw2Cbk/tXEWU/FnM
+         nL+CsqvXA1pdfc1oauVxfL4WTLeRdb6Lev4FxMkj0P8YCJnlWmT7FDliXE+s6ItuM4
+         dKzyVJLjfZWv/yzwVmvxce21fHQtKejfrDMlxHqIV/ajXzkBfg42VrxtjdyHVr8rDv
+         U2SPklPErlCWQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id DAE5460A90;
+        Sat,  4 Dec 2021 16:55:59 +0000 (UTC)
+Subject: Re: [GIT PULL] gfs2 fixes for v5.16-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20211204102446.19275-1-agruenba@redhat.com>
+References: <20211204102446.19275-1-agruenba@redhat.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20211204102446.19275-1-agruenba@redhat.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git tags/gfs2-v5.16-rc4-fixes
+X-PR-Tracked-Commit-Id: 3d36e57ff768dbb919c06ffedec4bfe4587c6254
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 5c623c368933f22fcf77e040a0ad83f90c4e39ac
+Message-Id: <163863695983.3540.14780222002136064380.pr-tracker-bot@kernel.org>
+Date:   Sat, 04 Dec 2021 16:55:59 +0000
+To:     Andreas Gruenbacher <agruenba@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 4, 2021 at 5:13 AM Salvatore Bonaccorso <carnil@debian.org> wrote:
->
-> Andreas suggested to replace the
->
-> KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
->
-> with
->
-> KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(patsubst "%",%,$(CONFIG_CC_IMPLICIT_FALLTHROUGH))
+The pull request you sent on Sat,  4 Dec 2021 11:24:46 +0100:
 
-Ugh. I think the external build environment is a bit broken, but
-whatever. The above is ugly but I guess it works.
+> git://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git tags/gfs2-v5.16-rc4-fixes
 
-Another alternative would be to make the Kconfig strings simply not
-have '"' as part of them.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/5c623c368933f22fcf77e040a0ad83f90c4e39ac
 
-When you do
+Thank you!
 
-    a = "hello"
-    print $a
-
-in any normal language, you generally wouldn't expect it to print the
-quotes, it should just print the bare word.
-
-But that's what the Kconfig string language basically does in this
-case. And I guess several users expect and take advantage of that ;(
-
-Masahiro? Comments?
-
-             Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

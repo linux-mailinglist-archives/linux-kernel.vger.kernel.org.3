@@ -2,108 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E70C46837E
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E4546837F
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384423AbhLDJR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 04:17:26 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:38794 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1384410AbhLDJRY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 04:17:24 -0500
-Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Ax6shAMathLt0CAA--.6211S3;
-        Sat, 04 Dec 2021 17:13:44 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Cc:     zhuyinbo@loongson.cn
-Subject: [PATCH v4 2/2] net: mdio: rework mdio_uevent for mdio ethernet phy device
-Date:   Sat,  4 Dec 2021 17:13:28 +0800
-Message-Id: <1638609208-10339-2-git-send-email-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1638609208-10339-1-git-send-email-zhuyinbo@loongson.cn>
-References: <1638609208-10339-1-git-send-email-zhuyinbo@loongson.cn>
-X-CM-TRANSID: AQAAf9Ax6shAMathLt0CAA--.6211S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw48GF15Arykuw48Zr4Utwb_yoW8Cr43pF
-        4rJFyYyrWjgr47Wws5C3yDuF1a9397t397Gryj9wsY9rs8AryDXFyftFy29r13AFW8u3W7
-        tayvqr18uFyDJa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPC14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4U
-        JwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-        IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
-        kIc2xKxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l
-        x2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14
-        v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IY
-        x2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
-        80aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI
-        43ZEXa7VUjeWlDUUUUU==
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+        id S1384428AbhLDJRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 04:17:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1384422AbhLDJRs (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 04:17:48 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75860C061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 01:14:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=40DL9oGEmTOO27E5h86qeKzj4QLj0MixZPKrxmbZcRY=; b=W9a+nB1BVI9r7k9+iZw5Q9+WAV
+        GgWiL9BHUHoIkoGzuxyBApTFU06msZ6L0uiPbvUPA6OUBh1gBFhBK2kFXdkcog1ToXA0BM2V+yAsD
+        Wkt3G98n1h0nX+OJAnkBRMGLjXHk+5hJpLg8NK7vj3nW/p2nd7qiTwVOca9g0DHOHp9GDDQWcUE8b
+        6do//wLUZ5Lh4qyufeq760xK4ObD0Xgd3Vp/iYBn+iTTD/rUOJ1TBgxMCY5FOtWFC4tw3bbHS4WQM
+        kO23j+q1+KoNbTceRYTC9Dlo5iFtYmFbt3/SxfkHrWu9KFR9A1khGNYFDBWJW6ek9anOx+DaXzjdM
+        1nhh9olQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mtR7L-002AUX-0j; Sat, 04 Dec 2021 09:14:03 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1A89C98106D; Sat,  4 Dec 2021 10:14:02 +0100 (CET)
+Date:   Sat, 4 Dec 2021 10:14:02 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tim Chen <tim.c.chen@linux.intel.com>
+Cc:     Arjan Van De Ven <arjan.van.de.ven@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+        Chen Yu <yu.c.chen@intel.com>,
+        Song Bao Hua <song.bao.hua@hisilicon.com>,
+        yangyicong <yangyicong@huawei.com>,
+        Michael Larabel <Michael@MichaelLarabel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] Make Cluster Scheduling Configurable
+Message-ID: <20211204091402.GM16608@worktop.programming.kicks-ass.net>
+References: <cover.1638563225.git.tim.c.chen@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1638563225.git.tim.c.chen@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The of_device_uevent_modalias is service for 'of' type platform driver
-, which ask the first args must be 'of' that use MODULE_DEVICE_TABLE
-when driver was exported, but ethernet phy is a kind of 'mdio' type
-device and it is inappropriate if driver use 'of' type for exporting,
-in fact, most mainstream ethernet phy driver hasn't used 'of' type,
-even though phy driver was exported use 'of' type and it's irrelevant
-with mdio_uevent, at this time, platform_uevent was responsible for
-reporting uevent to match modules.alias configure, so, whatever that
-of_device_uevent_modalias was unnecessary, this patch was to remove it
-and add phy_id as modio uevent then ethernet phy module auto load
-function will work well.
+On Fri, Dec 03, 2021 at 12:32:37PM -0800, Tim Chen wrote:
+> Tim Chen (5):
+>   scheduler: Create SDTL_SKIP flag to skip topology level
+>   scheduler: Add SD_CLUSTER topology flag to cluster sched domain
+>   scheduler: Add runtime knob sysctl_sched_cluster
+>   scheduler: Add boot time enabling/disabling of cluster scheduling
+>   scheduler: Default cluster scheduling to off on x86 hybrid CPU
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+s/scheduler:/sched:/, surely?
+
+>  .../admin-guide/kernel-parameters.txt         |  4 +
+>  arch/x86/kernel/smpboot.c                     | 26 +++++++
+>  drivers/base/arch_topology.c                  | 23 +++++-
+>  include/linux/sched/sd_flags.h                |  7 ++
+>  include/linux/sched/sysctl.h                  |  6 ++
+>  include/linux/sched/topology.h                |  3 +-
+>  include/linux/topology.h                      |  7 ++
+>  kernel/sched/core.c                           |  1 +
+>  kernel/sched/sched.h                          |  6 ++
+>  kernel/sched/topology.c                       | 75 ++++++++++++++++++-
+>  kernel/sysctl.c                               | 11 +++
+>  11 files changed, 163 insertions(+), 6 deletions(-)
+
+*groan*,... I was more thinking of something like so.
+
 ---
+ arch/x86/kernel/smpboot.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
- drivers/net/phy/mdio_bus.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
-index 6865d93..999f0d4 100644
---- a/drivers/net/phy/mdio_bus.c
-+++ b/drivers/net/phy/mdio_bus.c
-@@ -962,12 +962,12 @@ static int mdio_bus_match(struct device *dev, struct device_driver *drv)
- 
- static int mdio_uevent(struct device *dev, struct kobj_uevent_env *env)
- {
--	int rc;
-+	struct phy_device *pdev;
- 
--	/* Some devices have extra OF data and an OF-style MODALIAS */
--	rc = of_device_uevent_modalias(dev, env);
--	if (rc != -ENODEV)
--		return rc;
-+	pdev = to_phy_device(dev);
-+
-+	if (add_uevent_var(env, "MODALIAS=mdio:p%08X", pdev->phy_id))
-+		return -ENOMEM;
- 
- 	return 0;
- }
-@@ -991,7 +991,7 @@ static int mdio_uevent(struct device *dev, struct kobj_uevent_env *env)
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index ac2909f0cab3..617012f4619f 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -579,6 +579,17 @@ static struct sched_domain_topology_level x86_numa_in_package_topology[] = {
+ 	{ NULL, },
  };
  
- struct bus_type mdio_bus_type = {
--	.name		= "mdio_bus",
-+	.name		= "mdio",
- 	.dev_groups	= mdio_bus_dev_groups,
- 	.match		= mdio_bus_match,
- 	.uevent		= mdio_uevent,
--- 
-1.8.3.1
-
++static struct sched_domain_topology_level x86_hybrid_topology[] = {
++#ifdef CONFIG_SCHED_SMT
++	{ cpu_smt_mask, x86_smt_flags, SD_INIT_NAME(SMT) },
++#endif
++#ifdef CONFIG_SCHED_MC
++	{ cpu_coregroup_mask, x86_core_flags, SD_INIT_NAME(MC) },
++#endif
++	{ cpu_cpu_mask, SD_INIT_NAME(DIE) },
++	{ NULL, },
++};
++
+ static struct sched_domain_topology_level x86_topology[] = {
+ #ifdef CONFIG_SCHED_SMT
+ 	{ cpu_smt_mask, x86_smt_flags, SD_INIT_NAME(SMT) },
+@@ -1469,8 +1480,11 @@ void __init native_smp_cpus_done(unsigned int max_cpus)
+ 
+ 	calculate_max_logical_packages();
+ 
++	/* XXX for now assume numa-in-package and hybrid don't overlap */
+ 	if (x86_has_numa_in_package)
+ 		set_sched_topology(x86_numa_in_package_topology);
++	if (cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
++		set_sched_topology(x86_hybrid_topology);
+ 
+ 	nmi_selftest();
+ 	impress_friends();

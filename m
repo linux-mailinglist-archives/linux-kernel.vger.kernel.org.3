@@ -2,129 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A42468139
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 019DF46814A
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354411AbhLDA17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 19:27:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
+        id S1383709AbhLDAdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 19:33:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236734AbhLDA16 (ORCPT
+        with ESMTP id S1354465AbhLDAdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 19:27:58 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB6DC061751
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 16:24:33 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id z18so5903886iof.5
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 16:24:33 -0800 (PST)
+        Fri, 3 Dec 2021 19:33:38 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5B9C061353
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 16:30:13 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id k6-20020a17090a7f0600b001ad9d73b20bso1507164pjl.3
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 16:30:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=a1pLRvmy/fAvkWzuzDb9pBSfVT4A0bn5puxatHFXDoQ=;
-        b=InhScPobGRXwrp/oFbqIA/V67FIHedQF5Zw8o1cFhECd+ScGVxhSFBp6SR9M7iDDsI
-         vc/oJG9D3DgJaIaeyuxQ4BITSII/tHEOw+HohWY3GIpaOgk4M74OGmfrMHDB8jGikb7z
-         tQhFgHx7cEXIAWHBzzutM1I32XUmEEZ4x4RRQ=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Y4bA6B58sO/DZFiWQPyn2M4tT+W9TdiU/GNQ/jYac3Y=;
+        b=dONWm8orH3rHUYSth5Iu/7D5o9GfvJHjytD1XASds1m9DG5Iu2xtV+VIJqFns9+sCW
+         gtVXtQ+X75glpuBDyjZuBrz5E2x65R67MRUHyYgMxoRbtj2iT7FB4LVqbxZaCTcsZp/N
+         XgqXSY5G2qAHh4XaPeq45yLBcfhCQFiswdF4I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=a1pLRvmy/fAvkWzuzDb9pBSfVT4A0bn5puxatHFXDoQ=;
-        b=hesG11+h3jLG8puMqatCPepC3SngfIrlOGnv+gvncXtxMgT71ScJOn6pcSzjrJbr5C
-         W+xO/C1aY+FDE3BEQ32lorKrR1MxnbqBvnC+wlLpXh2mxbWYA2I1TjM59MqPXE1IakxF
-         0spSH5wLg3clI0acINvY2RTLwUb8l8FiW+zSQDSdqWq+OJm8s9v2K29jbwnV80UxSmSV
-         VmL5BZla67CO7sJgap7TowJktdgEzDXtH8JLEUCv4CflCUsn80kip/pYdXnDU4jIMLJ2
-         cxLvlKjzq1Fc8k+IGVkMTPyGWLK1+cnYE7zR0aATGQNKmhTBhLzyHv4/PJSmStYaq8f0
-         gcbw==
-X-Gm-Message-State: AOAM5310sckxsHBj0+bvSwfxHgLheH5AShgkaYAu0ZxSUMe3+NWuop8a
-        PQGJriXjgbaUZ4hCuSF9xxjEhA==
-X-Google-Smtp-Source: ABdhPJzvXTMGmtkj+/kwy7OvJb+QApx/oQeK+djC2i2VgWQLMMPYgmF/YFg+m7MMVruunGUdBwp1ug==
-X-Received: by 2002:a5d:940c:: with SMTP id v12mr23413671ion.157.1638577472721;
-        Fri, 03 Dec 2021 16:24:32 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id d16sm2264665ila.51.2021.12.03.16.24.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 16:24:32 -0800 (PST)
-Subject: Re: [PATCH] mnt: remove unneeded conversion to bool
-To:     Joe Perches <joe@perches.com>, davidcomponentone@gmail.com,
-        shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Guang <yang.guang5@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <3a7435c9e7e7aa8f24d22fd576ce912eb0540272.1637737086.git.yang.guang5@zte.com.cn>
- <07f4ba23-cf4c-6817-f7a4-5428f35d966c@linuxfoundation.org>
- <983ee57718a6e5838f79be96b7f7efc638177f76.camel@perches.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <eef8e264-7cf7-8747-867e-b40c9f180d0d@linuxfoundation.org>
-Date:   Fri, 3 Dec 2021 17:24:31 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Y4bA6B58sO/DZFiWQPyn2M4tT+W9TdiU/GNQ/jYac3Y=;
+        b=XaIozHWgCSvhNW+GR6r8YKtmbESHBnzptimv8mCHnrwx/BhzhHlXYQI0M0abtdKeOP
+         WvZjhRP/T+NEihX6HuOtoeKWXk+yYBD2M9Vrv1cLaiJNtk/SEqeWOGr3hvqN0/9ODt9l
+         Y9ehS3n3NSTReAZOrnjCtQ2aRWhpvmst2Umqo4j0SKuPSMQyNo+QlZc2fIwkI+B+kmwn
+         RGx1QW0xXV9TlCBKF76mcpWjZoSycfU01u9tf6MiABzfS7zOq2kTU5UX40rsaSWifzVl
+         cYWu5PsPKQoT6j830ncuwe9IguJ+y799G8KhB8cqap2I+Q6PhMU5puCJ6+fS3NpF7O6x
+         uOlg==
+X-Gm-Message-State: AOAM533F2vkVOsEtXcGm95kc1eyD/9djt/ZDAkTmYP/WVGiGdv6Ug3P6
+        a4pm/eUQcCpeRND8QMm8DEx7rQ==
+X-Google-Smtp-Source: ABdhPJy5+D2oCiE3ykyx5Czt8xcCI64YJaODeOVQrz0mW/Nu4udeXpuxcyGClFdtOCvXH6jCy9Bo8w==
+X-Received: by 2002:a17:90b:2251:: with SMTP id hk17mr18109616pjb.31.1638577813403;
+        Fri, 03 Dec 2021 16:30:13 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i67sm4367649pfg.189.2021.12.03.16.30.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Dec 2021 16:30:12 -0800 (PST)
+Date:   Fri, 3 Dec 2021 16:30:12 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Thierry Reding <treding@nvidia.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>, Imre Deak <imre.deak@intel.com>,
+        Uma Shankar <uma.shankar@intel.com>,
+        Manasi Navare <manasi.d.navare@intel.com>,
+        Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
+        =?iso-8859-1?Q?Jos=E9?= Roberto de Souza 
+        <jose.souza@intel.com>, Philipp Zabel <p.zabel@pengutronix.de>,
+        Lyude Paul <lyude@redhat.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] drm/dp: Actually read Adjust Request Post Cursor2
+ register
+Message-ID: <202112031627.C312CCDD0@keescook>
+References: <20211203092517.3592532-1-keescook@chromium.org>
+ <Yao3uMmXM+IvrVrF@orome.fritz.box>
 MIME-Version: 1.0
-In-Reply-To: <983ee57718a6e5838f79be96b7f7efc638177f76.camel@perches.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yao3uMmXM+IvrVrF@orome.fritz.box>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/21 12:50 PM, Joe Perches wrote:
-> On Fri, 2021-12-03 at 11:26 -0700, Shuah Khan wrote:
->> On 11/24/21 5:56 PM, davidcomponentone@gmail.com wrote:
->>> From: Yang Guang <yang.guang5@zte.com.cn>
->>>
->>> The coccinelle report
->>> ./tools/testing/selftests/mount/unprivileged-remount-test.c:285:54-59:
->>> WARNING: conversion to bool not needed here
->>> ./tools/testing/selftests/mount/unprivileged-remount-test.c:207:54-59:
->>> WARNING: conversion to bool not needed here
->>> Relational and logical operators evaluate to bool,
->>> explicit conversion is overly verbose and unneeded.
->>>
->>> Reported-by: Zeal Robot <zealci@zte.com.cn>
->>> Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
->>> ---
->>>    tools/testing/selftests/mount/unprivileged-remount-test.c | 4 ++--
->>>    1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/mount/unprivileged-remount-test.c b/tools/testing/selftests/mount/unprivileged-remount-test.c
->>> index 584dc6bc3b06..d2917054fe3a 100644
->>> --- a/tools/testing/selftests/mount/unprivileged-remount-test.c
->>> +++ b/tools/testing/selftests/mount/unprivileged-remount-test.c
->>> @@ -204,7 +204,7 @@ bool test_unpriv_remount(const char *fstype, const char *mount_options,
->>>    		if (!WIFEXITED(status)) {
->>>    			die("child did not terminate cleanly\n");
->>>    		}
->>> -		return WEXITSTATUS(status) == EXIT_SUCCESS ? true : false;
->>> +		return WEXITSTATUS(status) == EXIT_SUCCESS;
->>>    	}
->>>    
->>>    	create_and_enter_userns();
->>> @@ -282,7 +282,7 @@ static bool test_priv_mount_unpriv_remount(void)
->>>    		if (!WIFEXITED(status)) {
->>>    			die("child did not terminate cleanly\n");
->>>    		}
->>> -		return WEXITSTATUS(status) == EXIT_SUCCESS ? true : false;
->>> +		return WEXITSTATUS(status) == EXIT_SUCCESS;
->>>    	}
->>>    
->>>    	orig_mnt_flags = read_mnt_flags(orig_path);
->>>
->>
->> This change doesn't look right. WEXITSTATUS(status) return could be
->>> 1 or 0 or negative.
+On Fri, Dec 03, 2021 at 04:28:56PM +0100, Thierry Reding wrote:
+> On Fri, Dec 03, 2021 at 01:25:17AM -0800, Kees Cook wrote:
+> > The link_status array was not large enough to read the Adjust Request
+> > Post Cursor2 register. Adjust the size to include it. Found with a
+> > -Warray-bounds build:
+> > 
+> > drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_get_adjust_request_post_cursor':
+> > drivers/gpu/drm/drm_dp_helper.c:59:27: error: array subscript 10 is outside array bounds of 'const u8[6]' {aka 'const unsigned char[6]'} [-Werror=array-bounds]
+> >    59 |         return link_status[r - DP_LANE0_1_STATUS];
+> >       |                ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+> > drivers/gpu/drm/drm_dp_helper.c:147:51: note: while referencing 'link_status'
+> >   147 | u8 drm_dp_get_adjust_request_post_cursor(const u8 link_status[DP_LINK_STATUS_SIZE],
+> >       |                                          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > 
+> > Fixes: 79465e0ffeb9 ("drm/dp: Add helper to get post-cursor adjustments")
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> > v2: Fix missed array size change in intel_dp_check_mst_status()
+> > ---
+> >  drivers/gpu/drm/i915/display/intel_dp.c |  8 ++++----
+> >  include/drm/drm_dp_helper.h             | 10 +++++++++-
+> >  2 files changed, 13 insertions(+), 5 deletions(-)
 > 
-> The change is at least logically correct.
+> This sounds very familiar and I vaguely recall typing up a patch like
+> that a long time ago. But I obviously failed because that never seems
+> to have made it upstream.
 > 
-> And isn't WEXITSTATUS range limited from 0->255 ?
+> Or perhaps I'm misremembering and was thinking about this instead:
 > 
-> https://www.gnu.org/software/libc/manual/html_node/Exit-Status.html
-> 
+> 	https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/338590/
 
-You are right. In any case, I don't see any value in changing the current
-logic. The way it is coded is cryptic enough :)
+Oh! Yeah, that's the same thing. Looks like that never made its way
+upstream. :(
 
-thanks,
--- Shuah
+> 
+> Bonus points for adding that comment with background information on why
+> we need this.
+
+Thanks! Yeah, I needed to really convince myself everything added up and
+made sense, and figured I should try to capture that research. ;)
+
+> Reviewed-by: Thierry Reding <treding@nvidia.com>
+
+Thanks!
+
+-Kees
+
+-- 
+Kees Cook

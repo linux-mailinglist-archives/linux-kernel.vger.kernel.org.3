@@ -2,112 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D900468627
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 17:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0582468631
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 17:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355228AbhLDQVn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 4 Dec 2021 11:21:43 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33776 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242107AbhLDQVl (ORCPT
+        id S1355248AbhLDQas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 11:30:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59716 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237189AbhLDQar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 11:21:41 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29F36B80CFF;
-        Sat,  4 Dec 2021 16:18:15 +0000 (UTC)
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp.kernel.org (Postfix) with ESMTPSA id D2EB8C341C0;
-        Sat,  4 Dec 2021 16:18:10 +0000 (UTC)
-Date:   Sat, 4 Dec 2021 16:23:20 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Antoniu Miclaus <antoniu.miclaus@analog.com>, robh+dt@kernel.org,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/2] iio:dac:ad7293: add support for AD7293
-Message-ID: <20211204162252.66e62306@jic23-huawei>
-In-Reply-To: <20211203022204.GA12289@chq-T47>
-References: <20211202150819.24832-1-antoniu.miclaus@analog.com>
-        <20211203022204.GA12289@chq-T47>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+        Sat, 4 Dec 2021 11:30:47 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1BAC061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 08:27:22 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id gu12so5900872qvb.6
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 08:27:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=7Z4bIWUJcNwasnOvZT//wASf4/xDxe1Cc4BxfIfuhGs=;
+        b=CylHewW3ulQQFmv/P9CJWB0j1vwlBSfb9y/skh8Kj06fo+qyupUCD1XiCFX+vzgRsN
+         lFSgtw4EB93shNB4RkpqHvvVlC3pzVpDIDjjy3zR9hYAFBJdOI6kSTwIbaR/LbcTbogd
+         OibrZtbC7cCOhftBaH30VP0h3C05ERkyCj/9yT9SyF97P1ZRPsHZSxNRzvj525u0E9Xb
+         roynZIoW57i3J1Ohdy+fC3EwLlxeO8c+Zt/mF0AUznBKIX/iCSMpFqG2eKlU29S/dsRR
+         MU2qqzo/caxLVI2VurD1GZR68gd4kSQ/cPbMTldsJDGR02rLUIY6E2/d6YQlPwB4YUTe
+         3h+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=7Z4bIWUJcNwasnOvZT//wASf4/xDxe1Cc4BxfIfuhGs=;
+        b=o5SysB5sI8DzywgBKbAWrWc+SufG588V5p3M7nfNtS9sicEHxxL92kUdmuT8J+0lli
+         43joCMSXU7yDFCiKvI5FCQxaIhV6Dzok98r03qLPhigP8wcf/I09Dk8OdE1IDBjuy0pg
+         W0C5UW2woPW2I2TplUUyr50LILI8CKx0X13lVSykC+wopjZtuCuWRB7yTq3Zr9JyDfy5
+         O3nIo0B2YROsIEIKrYgRa0XoL5V2tb7l30ep/nJdQxgR6E6RNd+BWlHm2/eH7wQ87RoV
+         w99FbOdHPDHKdrcf6xwmz58Y1xNpAjZEUDguuHUYCDDy41ojtbtgmP+tbCcEArMDRh0S
+         cZhQ==
+X-Gm-Message-State: AOAM533dSWkxmXInAOJxJj4i5nJ+KyBEMu3tR6tWJl52kTo9q/jKy38J
+        fhecb1BiEnybbFvVuzD1MgWx0jSudXCPuNJ/skk=
+X-Google-Smtp-Source: ABdhPJwloyMxrKJlmw+KjbR1T1OX6399f+8oxNhjm0SzAgPHapZSB1oFeD7KSNSt/Vj0seuLGqnafDNaeriuAgi7yVc=
+X-Received: by 2002:ad4:5e8b:: with SMTP id jl11mr26361023qvb.18.1638635241182;
+ Sat, 04 Dec 2021 08:27:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Received: by 2002:a05:6214:2601:0:0:0:0 with HTTP; Sat, 4 Dec 2021 08:27:20
+ -0800 (PST)
+Reply-To: mohammedshamekh24@gmail.com
+From:   Mrmohammed shamekh <sheratonhotels.international@gmail.com>
+Date:   Sat, 4 Dec 2021 08:27:20 -0800
+Message-ID: <CALVFVBeP93vNd=VmMKYwRh-OQxYcrfjH-o8d1m5gWtpELyScxw@mail.gmail.com>
+Subject: THE AMOUNT IS 27.5 MILLIOMS USD
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Dec 2021 10:22:04 +0800
-Cai Huoqing <cai.huoqing@linux.dev> wrote:
-
-> On 02 12月 21 17:08:18, Antoniu Miclaus wrote:
-> > The AD7293 is a Power Amplifier drain current controller
-> > containing functionality for general-purpose monitoring
-> > and control of current, voltage, and temperature, integrated
-> > into a single chip solution with an SPI-compatible interface.
-> > 
-> > Datasheet:
-> > https://www.analog.com/media/en/technical-documentation/data-sheets/AD7293.pdf
-> > Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
-
-Hi Antoniu
-
-I've made a bunch of white space tweaks whilst applying this.
-A few things to keep in mind for future submissions.
-
-1) Whilst the rule is 100 chars per line, 80 chars is preferred where it
-   doesn't hurt readability.
-2) Don't do this pattern.
-	betty(x, y, z, fred +
-	      wilma, barny)
-
-If you have to break fred + wilma, then
-
-	betty(x, y, z,
-	      fred +
-	      wilma,
-	      barny);
-
-is more readable in my view.
-
-
-Otherwise endian issue in your debugfs functions.  Don't cast pointers like
-that...
-
-Please sanity check the changes I made and shout if I messed anything up.
-
-Applied to the togreg branch of iio.git but pushed out as testing first to see
-if 0-day finds anything we missed.
-
-
-
-
-> > ---
-
-
-> > +
-> > +static int ad7293_reg_access(struct iio_dev *indio_dev,
-> > +			     unsigned int reg,
-> > +			     unsigned int write_val,
-> > +			     unsigned int *read_val)
-> > +{
-> > +	struct ad7293_state *st = iio_priv(indio_dev);
-> > +	int ret;
-> > +
-> > +	if (read_val)
-> > +		ret = ad7293_spi_read(st, reg, (u16 *)read_val);
-
-This only works on little endian platforms...
-Think about where the data ends up on a big endian platform.
-
-I've added a local variable to fix this.
-
-> > +	else
-> > +		ret = ad7293_spi_write(st, reg, (u16)write_val);
-
-
-Jonathan
+RGVhcsKgRnJpZW5kLA0KDQpHcmVldGluZ3MuDQoNCkhvd8KgYXJlwqB5b3XCoGRvaW5nwqB0b2Rh
+ecKgacKgaG9wZcKgZmluZT8NCg0KScKgY2FtZcKgYWNyb3NzwqB5b3VywqBlLW1haWzCoGNvbnRh
+Y3TCoHByaW9ywqBhwqBwcml2YXRlwqBzZWFyY2jCoHdoaWxlwqBpbsKgbmVlZA0Kb2bCoHlvdXLC
+oGFzc2lzdGFuY2UuwqBNecKgbmFtZcKgIE1yICBtb2hhbW1lZCAgIHNoYW1la2ggIOKAmcKgScKg
+d29ya8Kgd2l0aMKgdGhlDQpkZXBhcnRtZW50wqBvZsKgQXVkaXTCoGFuZMKgYWNjb3VudGluZ8Kg
+bWFuYWdlcsKgaGVyZcKgaW7CoFVCQcKgQmFua8Kgb2bCoEFmcmljYSwNClRoZXJlwqBpc8KgdGhp
+c8KgZnVuZMKgdGhhdMKgd2FzwqBrZWVwwqBpbsKgbXnCoGN1c3RvZHnCoHllYXJzwqBhZ2/CoGFu
+ZMKgScKgbmVlZA0KeW91csKgYXNzaXN0YW5jZcKgZm9ywqB0aGXCoHRyYW5zZmVycmluZ8Kgb2bC
+oHRoaXPCoGZ1bmTCoHRvwqB5b3VywqBiYW5rwqBhY2NvdW50DQpmb3LCoGJvdGjCoG9mwqB1c8Kg
+YmVuZWZpdMKgZm9ywqBsaWZlwqB0aW1lwqBpbnZlc3RtZW50wqBhbmTCoHRoZcKgYW1vdW50wqBp
+c8KgKFVTDQokMjcsNTAwLsKgTWlsbGlvbsKgRG9sbGFycykuDQoNCknCoGhhdmXCoGV2ZXJ5wqBp
+bnF1aXJ5wqBkZXRhaWxzwqB0b8KgbWFrZcKgdGhlwqBiYW5rwqBiZWxpZXZlwqB5b3XCoGFuZMKg
+cmVsZWFzZQ0KdGhlwqBmdW5kwqB0b8KgeW91csKgYmFua8KgYWNjb3VudMKgaW7CoHdpdGhpbsKg
+N8KgYmFua2luZ8Kgd29ya2luZ8KgZGF5c8Kgd2l0aA0KeW91csKgZnVsbMKgY28tb3BlcmF0aW9u
+wqB3aXRowqBtZcKgYWZ0ZXLCoHN1Y2Nlc3PCoE5vdGXCoDUwJcKgZm9ywqB5b3XCoHdoaWxlDQo1
+MCXCoGZvcsKgbWXCoGFmdGVywqBzdWNjZXNzwqBvZsKgdGhlwqB0cmFuc2ZlcsKgb2bCoHRoZcKg
+ZnVuZHPCoHRvwqB5b3VywqBiYW5rDQphY2NvdW50wqBva2F5Lg0KDQpXQUlUSU5HwqBUT8KgSEVB
+UsKgRlJPTcKgWU9VLg0KVEhBTktTLg0KDQogTXIgIG1vaGFtbWVkICAgc2hhbWVraCAsDQo=

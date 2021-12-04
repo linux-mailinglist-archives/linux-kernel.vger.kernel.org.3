@@ -2,163 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 597754686D4
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 18:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB844686D5
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 18:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345102AbhLDR6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 12:58:31 -0500
-Received: from conssluserg-06.nifty.com ([210.131.2.91]:51281 "EHLO
-        conssluserg-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231254AbhLDR6a (ORCPT
+        id S1385328AbhLDR6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 12:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231254AbhLDR6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 12:58:30 -0500
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 1B4HshGU007696;
-        Sun, 5 Dec 2021 02:54:43 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 1B4HshGU007696
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1638640483;
-        bh=o7GC++yWEN8HKw/ffwwt/qH7JU8tT43ItqFd1nlqzaU=;
+        Sat, 4 Dec 2021 12:58:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C43C061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 09:55:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35F9460E33
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 17:55:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94BE9C341C9
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 17:55:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638640519;
+        bh=MsdZF5FrrSi9Tcnn9w/s8NpxeYl91jS0lBMGm17oxmY=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=G3v/omwpp4pdyk7EKkF+id7J+gxgDwZiQuU7HjuxxFr2JoOfWx+FfY77Snfd63izu
-         /+Yyu8RwrucpQpOGLBFDYqIwoPkn7I7Aos/U4HgVtMsbbXgHcDw7LaTJ+NNe1aUv1k
-         QAlHOwzNhiG5aK8efn7oEjuT3X75p91gk7+63uTEF4r3cDNng2gJKydoSebO/3okch
-         wYmZa3YtLezN3Oqe1qVXHYMzrOqCmwuO6/7fGHHi0rqwMyX9SsIifRvcJA2UhRMsqY
-         hm/ZvjbdevU60cKkmsNF7LJzUVHdI0FNXpYtYM/j1kJgDNughNYyqlvryUtg6mngvR
-         cGk61H12NCBTg==
-X-Nifty-SrcIP: [209.85.214.169]
-Received: by mail-pl1-f169.google.com with SMTP id p18so4289053plf.13;
-        Sat, 04 Dec 2021 09:54:43 -0800 (PST)
-X-Gm-Message-State: AOAM530liP/fMW07HxKyzKg0vo2NS4VjKJ9gZvt7lrNxNLL4u+HuoOAw
-        q9bq67iTbYqmVgeY6REoAchJojBoRceOyrFvTc8=
-X-Google-Smtp-Source: ABdhPJwfKs42p3AOfZfEkP0pTRjVHs3s5xdm6UxjRzm3FL2xZi7jhXNLcTuKy9+bHP051pmQ3nDmoWVppgKxFiWdcPU=
-X-Received: by 2002:a17:90a:fb43:: with SMTP id iq3mr11480514pjb.144.1638640482675;
- Sat, 04 Dec 2021 09:54:42 -0800 (PST)
+        b=pu4WU8ZDH5XclGPW5SJmHLztAo4T6sdLs8FVn91uKdzHwGKN6gWex8WlhWMZnc6ao
+         gKUu62JWTdzK72zIfvlWmErr0eGH311pbU4L52n/FtYLTxOLdRjIeD2+4/bCnZZNoa
+         dyVr5124N25mCvdqGWya/aE5MWAxlzhtfuRpj1mrok0qdCdquJn11PjtpdJwbGMGfo
+         67pHXUunwA6aCL2Wa+4/eYPih8ltgs4U8dUJQWGUAyrxlPb0wR3jbw5DepUga5Thcg
+         +Re6HqYpO+AoLNEd4OBknZCTkQY0xCgXKCn2QfvoczoM/LMtSV37HByGU7L6l2z/m3
+         KJyHGwWALET0Q==
+Received: by mail-oi1-f178.google.com with SMTP id o4so12672811oia.10
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 09:55:19 -0800 (PST)
+X-Gm-Message-State: AOAM53030RDDkmUWxQm++S3sVf8t06hpnmklQp+X0zenDliB++7XAdVd
+        lWiYbt6gcDNzTvMloGoDvRsmwCSqs2JOGs04mS8=
+X-Google-Smtp-Source: ABdhPJyel86dmPEzBEcJLPiCfEaQ3wOoNboXYxp5jyfi6GYDFMcwasis1pW7n2UzZ20uopiLk99hBLM2wL4W1yLpJ2Y=
+X-Received: by 2002:a05:6808:1919:: with SMTP id bf25mr16381541oib.33.1638640518810;
+ Sat, 04 Dec 2021 09:55:18 -0800 (PST)
 MIME-Version: 1.0
-References: <YatpectAYsWnmPy2@eldamar.lan> <CAHk-=whTTWUyL5j5_-UeRT6k9VcJM_VOfjiKuU2NBJkxhbnXpw@mail.gmail.com>
-In-Reply-To: <CAHk-=whTTWUyL5j5_-UeRT6k9VcJM_VOfjiKuU2NBJkxhbnXpw@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 5 Dec 2021 02:54:05 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR-VXwHFEJqCcrFDZj+_4+Xd6oynbj_0eS8N504_ydmyw@mail.gmail.com>
-Message-ID: <CAK7LNAR-VXwHFEJqCcrFDZj+_4+Xd6oynbj_0eS8N504_ydmyw@mail.gmail.com>
-Subject: Re: Makefile: CC_IMPLICIT_FALLTHROUGH passed quoted as argument to gcc
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Salvatore Bonaccorso <carnil@debian.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+References: <20211204174156.977245-1-arnd@kernel.org>
+In-Reply-To: <20211204174156.977245-1-arnd@kernel.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 4 Dec 2021 18:55:07 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGj=AGp6im71+OETHGSCat0mQfOf7FcDdyKwxFEBubzdw@mail.gmail.com>
+Message-ID: <CAMj1kXGj=AGp6im71+OETHGSCat0mQfOf7FcDdyKwxFEBubzdw@mail.gmail.com>
+Subject: Re: [PATCH] x86/efi: select ARCH_USE_MEMREMAP_PROT
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 5, 2021 at 1:53 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Sat, 4 Dec 2021 at 18:42, Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> On Sat, Dec 4, 2021 at 5:13 AM Salvatore Bonaccorso <carnil@debian.org> wrote:
-> >
-> > Andreas suggested to replace the
-> >
-> > KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
-> >
-> > with
-> >
-> > KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(patsubst "%",%,$(CONFIG_CC_IMPLICIT_FALLTHROUGH))
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> Ugh. I think the external build environment is a bit broken, but
-> whatever. The above is ugly but I guess it works.
+> The patch to map the EFI memmap as encrypted introduces a
+> link failure in configurations without encryption support:
 >
-> Another alternative would be to make the Kconfig strings simply not
-> have '"' as part of them.
+> x86_64-linux-ld: arch/x86/platform/efi/quirks.o: in function `efi_arch_mem_reserve':
+> quirks.c:(.init.text+0x127): undefined reference to `early_memremap_prot'
 >
-> When you do
+> Select the necessary symbol here as well to fix the build.
 >
->     a = "hello"
->     print $a
+> Fixes: 8f1dd76c9b55 ("x86/sme: Explicitly map new EFI memmap table as encrypted")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Thanks for the report. I'll fold this fix into the original patch instead.
+
+> ---
+>  arch/x86/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> in any normal language, you generally wouldn't expect it to print the
-> quotes, it should just print the bare word.
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 05362527f6b5..93befe25d787 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -1934,6 +1934,7 @@ config EFI
+>         depends on ACPI
+>         select UCS2_STRING
+>         select EFI_RUNTIME_WRAPPERS
+> +       select ARCH_USE_MEMREMAP_PROT
+>         help
+>           This enables the kernel to use EFI runtime services that are
+>           available (such as the EFI variable services).
+> --
+> 2.29.2
 >
-> But that's what the Kconfig string language basically does in this
-> case. And I guess several users expect and take advantage of that ;(
->
-> Masahiro? Comments?
-
-Yes, you get to the point.
-
-In fact, this is in my TODO list for a while
-(and this is the reason I was doing prerequisite Kconfig refactoring
-in the previous development cycle).
-I will try to find some spare time to complete this work.
-
-
-
-Kconfig generates two similar files,
-
- -   .config
- -   include/config/auto.conf
-
-Changing the format of the .config is presumably problematic
-since it is the saved user configuration as well.
-
-It is possible (and more reasonable) to change include/config/auto.conf
-so strings are not quoted.
-
-In Makefiles, quotations are just normal characters; they have no
-special functionality.
-
-So, in Makefile context, it is more handy to do
-
-     CONFIG_X=foo bar
-
-instead of
-
-    CONFIG_X="foo bar"
-
-
-
-One problem is include/config/auto.conf is included not only by Makefiles
-but also by shell scripts.
-
-
-In shell context, the right hand side must be quoted
-in case the value contains spaces.
-
-   CONFIG_X="foo bar"
-
-
-
-My plan is to fix
-  scripts/link-vmlinux.sh
-  scripts/gen_autoksyms.sh
-etc. to not directly include the auto.conf.
-Later, change Kconfig to generate the auto.conf without "".
-
-
-
-In the meantime,
-
-KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(patsubst
-"%",%,$(CONFIG_CC_IMPLICIT_FALLTHROUGH))
-
- or if you prefer slightly shorter form,
-
-KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH:"%"=%)
-
-will be a workaround.
-
-
-
-
-
->
->              Linus
-
-
-
--- 
-Best Regards
-Masahiro Yamada

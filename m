@@ -2,139 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E97B346848A
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 12:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF6246848B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 12:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353842AbhLDLtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 06:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234132AbhLDLsz (ORCPT
+        id S1377344AbhLDLt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 06:49:29 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4195 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229551AbhLDLt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 06:48:55 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50ED4C061354;
-        Sat,  4 Dec 2021 03:45:30 -0800 (PST)
-Date:   Sat, 04 Dec 2021 11:45:27 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638618328;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IHdrmbcguTtQSIVO9y+Ktomr3vJVgk+MvIzxkFtJN+U=;
-        b=18mvdTg6g2wE1tGbNR9UQfGI5OGQd4OFZphEhcOFHCd8mChLlBqjsBkqbK4yn4InzG6L8H
-        YuTuBgqgY4OdQi9TGK1yMRsFRzRRlBlm+RoVYKHMt4MtcGLGHmTChJMzwOfxjKUyRxeWOs
-        S9TBSbOVD16Xv3DjDS5ZhS0AOJCyqxHhPw/znnpZmouo0uReY32cFMoDcHl7tgL+x0L74s
-        V9ZHLaaa2AU6uRCxCn4Gi6AqbIiR/vEXjXCS+/KqHNViDzEg+GLWwEqh9TU3vOPSdY5ej3
-        maBbT4Ogbu2Y5CFdhKQZWG5qfLih4mYe89hqjpqf7F9QA8WNEiDzvdDew7MOFg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638618328;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IHdrmbcguTtQSIVO9y+Ktomr3vJVgk+MvIzxkFtJN+U=;
-        b=BNIIVVAHVPXtQbJ5qpD2yxhhaC3el82zSpq8gafJYLFxfbMKNKFBn59FOZRnUkfPG0CSq5
-        1ueulDz7JXX85QDg==
-From:   "tip-bot2 for Lai Jiangshan" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/entry: Add a fence for kernel entry SWAPGS in
- paranoid_entry()
-Cc:     Lai Jiangshan <laijs@linux.alibaba.com>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211126101209.8613-2-jiangshanlai@gmail.com>
-References: <20211126101209.8613-2-jiangshanlai@gmail.com>
-MIME-Version: 1.0
-Message-ID: <163861832744.11128.13308101823885299337.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+        Sat, 4 Dec 2021 06:49:28 -0500
+Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J5npn1jptz67L8m;
+        Sat,  4 Dec 2021 19:41:53 +0800 (CST)
+Received: from lhreml717-chm.china.huawei.com (10.201.108.68) by
+ fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sat, 4 Dec 2021 12:46:01 +0100
+Received: from kwepemm600014.china.huawei.com (7.193.23.54) by
+ lhreml717-chm.china.huawei.com (10.201.108.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sat, 4 Dec 2021 11:45:59 +0000
+Received: from kwepemm600014.china.huawei.com ([7.193.23.54]) by
+ kwepemm600014.china.huawei.com ([7.193.23.54]) with mapi id 15.01.2308.020;
+ Sat, 4 Dec 2021 19:45:58 +0800
+From:   "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>
+To:     Brice Goglin <Brice.Goglin@inria.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Jonathan Cameron" <jonathan.cameron@huawei.com>,
+        Len Brown <len.brown@intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Ian Rogers <irogers@google.com>
+Subject: RE: [PATCH v2 0/3] topology/sysfs: only export used sysfs attributes
+Thread-Topic: [PATCH v2 0/3] topology/sysfs: only export used sysfs attributes
+Thread-Index: AQHX5SHRAlmFSCd89Uy1sBtsuCn0LqwaA1gAgAS8PoCAAAFFAIADT7Qw//+HKACAAKVQcA==
+Date:   Sat, 4 Dec 2021 11:45:58 +0000
+Message-ID: <c63a4971458c49c7a0cb0a8ba48ceb2d@hisilicon.com>
+References: <20211129130309.3256168-1-hca@linux.ibm.com>
+ <YaTdpsVCDQMlscON@hirez.programming.kicks-ass.net> <YajWjasdqnibSRJm@osiris>
+ <YajXnjVGEWeUmEqA@kroah.com> <60d13e6233df4aa78494bb51a2792bbe@hisilicon.com>
+ <63384337-ba36-9b2a-c9ae-75e3f5ac02d7@inria.fr>
+In-Reply-To: <63384337-ba36-9b2a-c9ae-75e3f5ac02d7@inria.fr>
+Accept-Language: en-GB, zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.126.203.91]
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
-
-Commit-ID:     c07e45553da1808aa802e9f0ffa8108cfeaf7a17
-Gitweb:        https://git.kernel.org/tip/c07e45553da1808aa802e9f0ffa8108cfeaf7a17
-Author:        Lai Jiangshan <laijs@linux.alibaba.com>
-AuthorDate:    Fri, 26 Nov 2021 18:11:21 +08:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 03 Dec 2021 18:55:47 +01:00
-
-x86/entry: Add a fence for kernel entry SWAPGS in paranoid_entry()
-
-Commit
-
-  18ec54fdd6d18 ("x86/speculation: Prepare entry code for Spectre v1 swapgs mitigations")
-
-added FENCE_SWAPGS_{KERNEL|USER}_ENTRY for conditional SWAPGS. In
-paranoid_entry(), it uses only FENCE_SWAPGS_KERNEL_ENTRY for both
-branches. This is because the fence is required for both cases since the
-CR3 write is conditional even when PTI is enabled.
-
-But
-
-  96b2371413e8f ("x86/entry/64: Switch CR3 before SWAPGS in paranoid entry")
-
-changed the order of SWAPGS and the CR3 write. And it missed the needed
-FENCE_SWAPGS_KERNEL_ENTRY for the user gsbase case.
-
-Add it back by changing the branches so that FENCE_SWAPGS_KERNEL_ENTRY
-can cover both branches.
-
-  [ bp: Massage, fix typos, remove obsolete comment while at it. ]
-
-Fixes: 96b2371413e8f ("x86/entry/64: Switch CR3 before SWAPGS in paranoid entry")
-Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lkml.kernel.org/r/20211126101209.8613-2-jiangshanlai@gmail.com
----
- arch/x86/entry/entry_64.S | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
-
-diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index e38a4cf..f1a8b5b 100644
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -890,6 +890,7 @@ SYM_CODE_START_LOCAL(paranoid_entry)
- .Lparanoid_entry_checkgs:
- 	/* EBX = 1 -> kernel GSBASE active, no restore required */
- 	movl	$1, %ebx
-+
- 	/*
- 	 * The kernel-enforced convention is a negative GSBASE indicates
- 	 * a kernel value. No SWAPGS needed on entry and exit.
-@@ -897,21 +898,14 @@ SYM_CODE_START_LOCAL(paranoid_entry)
- 	movl	$MSR_GS_BASE, %ecx
- 	rdmsr
- 	testl	%edx, %edx
--	jns	.Lparanoid_entry_swapgs
--	ret
-+	js	.Lparanoid_kernel_gsbase
- 
--.Lparanoid_entry_swapgs:
-+	/* EBX = 0 -> SWAPGS required on exit */
-+	xorl	%ebx, %ebx
- 	swapgs
-+.Lparanoid_kernel_gsbase:
- 
--	/*
--	 * The above SAVE_AND_SWITCH_TO_KERNEL_CR3 macro doesn't do an
--	 * unconditional CR3 write, even in the PTI case.  So do an lfence
--	 * to prevent GS speculation, regardless of whether PTI is enabled.
--	 */
- 	FENCE_SWAPGS_KERNEL_ENTRY
--
--	/* EBX = 0 -> SWAPGS required on exit */
--	xorl	%ebx, %ebx
- 	ret
- SYM_CODE_END(paranoid_entry)
- 
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQnJpY2UgR29nbGluIFtt
+YWlsdG86QnJpY2UuR29nbGluQGlucmlhLmZyXQ0KPiBTZW50OiBTYXR1cmRheSwgRGVjZW1iZXIg
+NCwgMjAyMSAxMDo0OCBQTQ0KPiBUbzogU29uZyBCYW8gSHVhIChCYXJyeSBTb25nKSA8c29uZy5i
+YW8uaHVhQGhpc2lsaWNvbi5jb20+OyBHcmVnIEtyb2FoLUhhcnRtYW4NCj4gPGdyZWdraEBsaW51
+eGZvdW5kYXRpb24ub3JnPjsgSGVpa28gQ2Fyc3RlbnMgPGhjYUBsaW51eC5pYm0uY29tPg0KPiBD
+YzogUGV0ZXIgWmlqbHN0cmEgPHBldGVyekBpbmZyYWRlYWQub3JnPjsgUmFmYWVsIEogLiBXeXNv
+Y2tpDQo+IDxyYWZhZWxAa2VybmVsLm9yZz47IEFuZHJldyBNb3J0b24gPGFrcG1AbGludXgtZm91
+bmRhdGlvbi5vcmc+Ow0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBKb25hdGhhbiBD
+YW1lcm9uIDxqb25hdGhhbi5jYW1lcm9uQGh1YXdlaS5jb20+Ow0KPiBMZW4gQnJvd24gPGxlbi5i
+cm93bkBpbnRlbC5jb20+OyBUaG9tYXMgUmljaHRlciA8dG1yaWNodEBsaW51eC5pYm0uY29tPjsg
+SWFuDQo+IFJvZ2VycyA8aXJvZ2Vyc0Bnb29nbGUuY29tPg0KPiBTdWJqZWN0OiBSZTogW1BBVENI
+IHYyIDAvM10gdG9wb2xvZ3kvc3lzZnM6IG9ubHkgZXhwb3J0IHVzZWQgc3lzZnMgYXR0cmlidXRl
+cw0KPiANCj4gTGUgMDQvMTIvMjAyMSDDoCAxMDowNywgU29uZyBCYW8gSHVhIChCYXJyeSBTb25n
+KSBhIMOpY3JpdMKgOg0KPiA+DQo+ID4gQ291bGQgeW91IGdpdmUgbWUgb25lIG1pbnV0ZT8NCj4g
+Pg0KPiA+ICtCcmljZQ0KPiA+DQo+ID4gSSdkIGxpa2UgdG8gaGVhciBzb21lIGZlZWRiYWNrcyBm
+cm9tIGh3bG9jIGlmIHRoZXJlDQo+ID4gaXMgYSBjaGFuY2UgdG8gYnJlYWsgdXNlcnNwYWNlIGFu
+ZCBpZiB1c2Vyc3BhY2UgZGVwZW5kcw0KPiA+IG9uIHRoZSBleGlzdGVuY2Ugb2Ygc3lzZnMgZXZl
+biB0aG91Z2ggdGhlIHRvcG9sb2d5DQo+ID4gZG9lc24ndCBleGlzdC4NCj4gPg0KPiA+IElmIG5v
+LCBJIGZlZWwgaXQgaXMgc2FmZSB0byB0YWtlLg0KPiA+DQo+IA0KPiBIZWxsbw0KPiANCj4gSWYg
+dGhlIHF1ZXN0aW9uIGlzIHdoZXRoZXIgaHdsb2MgKnJlcXVpcmVzKiBjbHVzdGVyL2RpZS9ib29r
+L2RyYXdlcg0KPiBzeXNmcyBmaWxlcyB0byBleGlzdCwgdGhlbiB0aGUgYW5zd2VyIGlzIG5vLiBX
+ZSBoYXZlIHRvIHN1cHBvcnQgb2xkDQo+IGtlcm5lbHMgd2l0aG91dCB0aG9zZSBmaWxlcyBhbnl3
+YXkuDQoNClRoYW5rcyBmb3IgY2xhcmlmaWNhdGlvbiwgQnJpY2UuIEkgc2F3IGh3bG9jIGlzIHJl
+YWRpbmcgc3lzZnMNCmRyYXdlciwgYm9vayBhbmQgY2x1c3Rlci4gQnV0IHNpbmNlIGl0IGRvZXNu
+J3QgYXNzdW1lIHRoZWlyDQpleGlzdGVuY2UgaW4gc3lzZnMsIEkgaGF2ZSBtb3JlIGNvbmZpZGVu
+Y2Ugb24gdGhpcyBwYXRjaHNldA0Kbm93Lg0KDQpHcmVnLCBwbGVhc2UgaWdub3JlIG15IGNvbW1l
+bnQgdGhlbiA6LSkNCg0KPiANCj4gQnJpY2UNCj4gDQo+IA0KDQpUaGFua3MNCkJhcnJ5DQo=

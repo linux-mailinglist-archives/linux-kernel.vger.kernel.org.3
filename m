@@ -2,248 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A9C4684D1
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 13:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8BA34684D7
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 13:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384932AbhLDMiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 07:38:17 -0500
-Received: from mga07.intel.com ([134.134.136.100]:60418 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233028AbhLDMiR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 07:38:17 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10187"; a="300502101"
-X-IronPort-AV: E=Sophos;i="5.87,287,1631602800"; 
-   d="scan'208";a="300502101"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 04:34:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,287,1631602800"; 
-   d="scan'208";a="678412956"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 04 Dec 2021 04:34:50 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mtUFd-000J0I-MK; Sat, 04 Dec 2021 12:34:49 +0000
-Date:   Sat, 4 Dec 2021 20:34:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Romain Perier <romain.perier@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Daniel Palmer <daniel@0x0f.com>
-Subject: [chenxing:msc313_mainlining 69/73]
- drivers/clocksource/timer-msc313e.c:38:28: error: field 'delay' has
- incomplete type
-Message-ID: <202112042007.Ym1gpNiG-lkp@intel.com>
+        id S1384942AbhLDMkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 07:40:52 -0500
+Received: from mail-wm1-f45.google.com ([209.85.128.45]:38502 "EHLO
+        mail-wm1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233028AbhLDMkv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 07:40:51 -0500
+Received: by mail-wm1-f45.google.com with SMTP id p3-20020a05600c1d8300b003334fab53afso6922514wms.3;
+        Sat, 04 Dec 2021 04:37:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version;
+        bh=JMTGL4aDDh/oM5Lx+zdqid80CKODx8RvS35FK7rI+EY=;
+        b=H4ajX5UWNzjdxWMpVxmhRozj2oXBSk3z9XCMS0nZ74931GLkdQQANmP39D/EB6VnJ4
+         DJRKWC4Ip9/1u8vRhnv2YwkiBHY5ibnXYdjnxkNKZftHZR0nTHksjkyt+k7/6fsEh5Tn
+         ATafA8lfwIaHpCWRj6nxkU9LrSeTese+m8HSIeQJ6y1NFQ4jGwMYd17uTJ5DMhezKrPO
+         KZchPvE/LqFnEeKHWOaghehNXgdpzpRDdeYly0Ix+8ktUXq7NX+NSctbfpOJ4XNluChj
+         /DMnPg+kKj0SMN1kH4f0TBAAbXwQtm8fEk1Pl6A4lY19qr0w2DU8MmGXWhyQ0oX7JAmg
+         YviQ==
+X-Gm-Message-State: AOAM531wES9k86Vq4GSD7viywNnxSUvMqu1WzJIQ55rxnS29I8ZDmEvC
+        r6K6oqxXJ+MOmD5p0xcR2AE=
+X-Google-Smtp-Source: ABdhPJy9DoKeHpA1DLSMR1cWh3Ki+E8yerGb7AiYQQew+XoSLSaxSBFdbC1iKZ/nr+V+MiJtpSi+6Q==
+X-Received: by 2002:a1c:9d03:: with SMTP id g3mr22432138wme.143.1638621444563;
+        Sat, 04 Dec 2021 04:37:24 -0800 (PST)
+Received: from localhost ([2a01:4b00:f41a:3600:df86:cebc:8870:2184])
+        by smtp.gmail.com with ESMTPSA id n32sm9235060wms.1.2021.12.04.04.37.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Dec 2021 04:37:23 -0800 (PST)
+Message-ID: <0079fd757676e62f45f28510a5fd13a9996870be.camel@debian.org>
+Subject: Re: [PATCH bpf-next 0/3] bpf: add signature
+From:   Luca Boccassi <bluca@debian.org>
+To:     John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Matteo Croce <mcroce@linux.microsoft.com>
+Cc:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        keyrings@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Date:   Sat, 04 Dec 2021 12:37:19 +0000
+In-Reply-To: <61aae2da8c7b0_68de0208dd@john.notmuch>
+References: <20211203191844.69709-1-mcroce@linux.microsoft.com>
+         <CAADnVQLDEPxOvGn8CxwcG7phy26BKuOqpSQ5j7yZhZeEVoCC4w@mail.gmail.com>
+         <CAFnufp1_p8XCUf-RdHpByKnR9MfXQoDWw6Pvm_dtuH4nD6dZnQ@mail.gmail.com>
+         <CAADnVQ+DSGoF2YoTrp2kTLoFBNAgdU8KbcCupicrVGCWvdxZ7w@mail.gmail.com>
+         <86e70da74cb34b59c53b1e5e4d94375c1ef30aa1.camel@debian.org>
+         <CAADnVQLCmbUJD29y2ovD+SV93r8jon2-f+fJzJFp6qZOUTWA4w@mail.gmail.com>
+         <CAFnufp2S7fPt7CKSjH+MBBvvFu9F9Yop_RAkX_3ZtgtZhRqrHw@mail.gmail.com>
+         <CAADnVQ+WLGiQvaoTPwu_oRj54h4oMwh-z5RV0WAMFRA9Wco_iA@mail.gmail.com>
+         <61aae2da8c7b0_68de0208dd@john.notmuch>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="=-crIOEqa5c+934Qzf2TlR"
+User-Agent: Evolution 3.42.1-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
-head:   4c9fe2eaf0fcfd50fbd5abafd740731257f5a8d6
-commit: 1f8be2fbd369003b7a9689b38641af0e77526761 [69/73] clocksource: Add MStar MSC313e timer support
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20211204/202112042007.Ym1gpNiG-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/linux-chenxing/linux/commit/1f8be2fbd369003b7a9689b38641af0e77526761
-        git remote add chenxing git://github.com/linux-chenxing/linux.git
-        git fetch --no-tags chenxing msc313_mainlining
-        git checkout 1f8be2fbd369003b7a9689b38641af0e77526761
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash drivers/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+--=-crIOEqa5c+934Qzf2TlR
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-All errors (new ones prefixed by >>):
+On Fri, 2021-12-03 at 19:39 -0800, John Fastabend wrote:
+> Alexei Starovoitov wrote:
+> > On Fri, Dec 3, 2021 at 4:42 PM Matteo Croce
+> > <mcroce@linux.microsoft.com> wrote:
+> > >=20
+> > > On Fri, Dec 3, 2021 at 11:20 PM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >=20
+> > > > On Fri, Dec 3, 2021 at 2:06 PM Luca Boccassi <bluca@debian.org>
+> > > > wrote:
+> > > > >=20
+> > > > > On Fri, 2021-12-03 at 11:37 -0800, Alexei Starovoitov wrote:
+> > > > > > On Fri, Dec 3, 2021 at 11:36 AM Matteo Croce
+> > > > > > <mcroce@linux.microsoft.com> wrote:
+> > > > > > >=20
+> > > > > > > On Fri, Dec 3, 2021 at 8:22 PM Alexei Starovoitov
+> > > > > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > > > > >=20
+> > > > > > > > On Fri, Dec 3, 2021 at 11:18 AM Matteo Croce
+> > > > > > > > <mcroce@linux.microsoft.com> wrote:
+> > > > > > > > >=20
+> > > > > > > > > From: Matteo Croce <mcroce@microsoft.com>
+> > > > > > > > >=20
+> > > > > > > > > This series add signature verification for BPF files.
+> > > > > > > > > The first patch implements the signature validation
+> > > > > > > > > in the
+> > > > > > > > > kernel,
+> > > > > > > > > the second patch optionally makes the signature
+> > > > > > > > > mandatory,
+> > > > > > > > > the third adds signature generation to bpftool.
+> > > > > > > >=20
+> > > > > > > > Matteo,
+> > > > > > > >=20
+> > > > > > > > I think I already mentioned that it's no-go as-is.
+> > > > > > > > We've agreed to go with John's suggestion.
+> > > > > > >=20
+> > > > > > > Hi,
+> > > > > > >=20
+> > > > > > > my previous attempt was loading a whole ELF file and
+> > > > > > > parsing it in
+> > > > > > > kernel.
+> > > > > > > In this series I just validate the instructions against a
+> > > > > > > signature,
+> > > > > > > as with kernel CO-RE libbpf doesn't need to mangle it.
+> > > > > > >=20
+> > > > > > > Which suggestion? I think I missed this one..
+> > > > > >=20
+> > > > > > This talk and discussion:
+> > > > > > https://linuxplumbersconf.org/event/11/contributions/947/
+> > > > >=20
+> > > > > Thanks for the link - but for those of us who don't have ~5
+> > > > > hours to
+> > > > > watch a video recording, would you mind sharing a one line
+> > > > > summary,
+> > > > > please? Is there an alternative patch series implementing BPF
+> > > > > signing
+> > > > > that you can link us so that we can look at it? Just a link
+> > > > > or
+> > > > > googlable reference would be more than enough.
+> > > >=20
+> > > > It's not 5 hours and you have to read slides and watch
+> > > > John's presentation to follow the conversation.
+> > >=20
+> > > So, If I have understood correctly, the proposal is to validate
+> > > the
+> > > tools which loads the BPF (e.g. perf, ip) with fs-verity, and
+> > > only
+> > > allow BPF loading from those validated binaries?
+> > > That's nice, but I think that this could be complementary to the
+> > > instructions signature.
+> > > Imagine a validated binary being exploited somehow at runtime,
+> > > that
+> > > could be vector of malicious BPF program load.
+> > > Can't we have both available, and use one or other, or even both
+> > > together depending on the use case?
+> >=20
+> > I'll let John comment.
+>=20
+> I'll give the outline of the argument here.
+>=20
+> I do not believe signing BPF instructions for real programs provides
+> much additional security. Given most real programs if the application
+> or loader is exploited at runtime we have all sorts of trouble. First
+> simply verifying the program doesn't prevent malicious use of the
+> program. If its in the network program this means DDOS, data
+> exfiltration,
+> mitm attacks, many other possibilities. If its enforcement program
+> most enforcement actions are programmed from this application so
+> system
+> security is lost already.=C2=A0 If its observability application simply
+> drops/manipulates observations that it wants. I don't know of any
+> useful programs that exist in isolation without user space input
+> and output as a critical component. If its not a privileged user,
+> well it better not be doing anything critical anyways or disabled
+> outright for the security focused.
+>=20
+> Many critical programs can't be signed by the nature of the program.
+> Optimizing network app generates optimized code at runtime.
+> Observability
+> tools JIT the code on the fly, similarly enforcement tools will do
+> the
+> same. I think the power of being able to optimize JIT the code in
+> application and give to the kernel is something we will see more and
+> more of. Saying I'm only going to accept signed programs, for a
+> distribution or something other than niche use case, is non starter
+> IMO because it breaks so many real use cases. We should encourage
+> these optimizing use cases as I see it as critical to performance
+> and keeping overhead low.
+>=20
+> From a purely security standpoint I believe you are better off
+> defining characteristics an application is allowed to have. For
+> example allowed to probe kernel memory, make these helpers calls,
+> have this many instructions, use this much memory, this much cpu,
+> etc. This lets you sandbox a BPF application (both user space and
+> kernel side) much nicer than any signing will allow.
+>=20
+> If we want to 'sign' programs we should do that from a BPF program
+> directly where other metadata can be included in the policy. For
+> example having a hash of the program loaded along with the calls
+> made and process allows for rich policy decisions. I have other
+> use cases that need a hash/signature for data blobs, so its on
+> my todo list but not at the top yet.=C2=A0 But, being able to verify
+> arbitrary blob of data from BPF feels like a useful operation to me
+> in general. The fact in your case its a set of eBPF insns and in
+> my case its some key in a network header shouldn't matter.
+>=20
+> The series as is, scanned commit descriptions, is going to break
+> lots of in-use-today programs if it was ever enabled. And
+> is not as flexible (can't support bpftrace, etc.) or powerful
+> (can't consider fine grained policy decisions) as above.
+>=20
+> Add a function we can hook after verify (or before up for
+> debate) and helpers to verify signatures and/or generate
+> hashes and we get a better more general solution. And it can
+> also solve your use case even if I believe its not useful and
+> may break many BPF users running bpftrace, libbpf, etc.
+>=20
+> Thanks,
+> John
 
->> drivers/clocksource/timer-msc313e.c:38:28: error: field 'delay' has incomplete type
-      38 |         struct delay_timer delay;
-         |                            ^~~~~
-   drivers/clocksource/timer-msc313e.c: In function 'msc313e_clksrc_init':
->> drivers/clocksource/timer-msc313e.c:197:9: error: implicit declaration of function 'register_current_timer_delay' [-Werror=implicit-function-declaration]
-     197 |         register_current_timer_delay(&msc313e_delay.delay);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+Hello John,
 
+Thank you for the summary, this is much clearer.
 
-vim +/delay +38 drivers/clocksource/timer-msc313e.c
+First of all, I think there's some misunderstanding: this series does
+not enable optional signatures by default, and does not enable
+mandatory signatures by default either. So I don't see how it would
+break existing use cases as you are saying? Unless I'm missing
+something?
 
-    35	
-    36	struct msc313e_delay {
-    37		void __iomem *base;
-  > 38		struct delay_timer delay;
-    39	};
-    40	
-    41	static void __iomem *msc313e_clksrc;
-    42	static struct msc313e_delay msc313e_delay;
-    43	
-    44	static void msc313e_timer_stop(void __iomem *base)
-    45	{
-    46		writew(0, base + MSC313E_REG_CTRL);
-    47	}
-    48	
-    49	static void msc313e_timer_start(void __iomem *base, bool periodic)
-    50	{
-    51		u16 reg;
-    52	
-    53		reg = readw(base + MSC313E_REG_CTRL);
-    54		if (periodic)
-    55			reg |= MSC313E_REG_CTRL_TIMER_EN;
-    56		else
-    57			reg |= MSC313E_REG_CTRL_TIMER_TRIG;
-    58		writew(reg | MSC313E_REG_CTRL_TIMER_INT_EN, base + MSC313E_REG_CTRL);
-    59	}
-    60	
-    61	static void msc313e_timer_setup(void __iomem *base, unsigned long delay)
-    62	{
-    63		writew(delay >> 16, base + MSC313E_REG_TIMER_MAX_HIGH);
-    64		writew(delay & 0xffff, base + MSC313E_REG_TIMER_MAX_LOW);
-    65	}
-    66	
-    67	static unsigned long msc313e_timer_current_value(void __iomem *base)
-    68	{
-    69		unsigned long result;
-    70	
-    71		result = readw(base + MSC313E_REG_COUNTER_LOW);
-    72		result |= readw(base + MSC313E_REG_COUNTER_HIGH) << 16;
-    73	
-    74		return result;
-    75	}
-    76	
-    77	static int msc313e_timer_clkevt_shutdown(struct clock_event_device *evt)
-    78	{
-    79		struct timer_of *timer = to_timer_of(evt);
-    80	
-    81		msc313e_timer_stop(timer_of_base(timer));
-    82	
-    83		return 0;
-    84	}
-    85	
-    86	static int msc313e_timer_clkevt_set_oneshot(struct clock_event_device *evt)
-    87	{
-    88		struct timer_of *timer = to_timer_of(evt);
-    89	
-    90		msc313e_timer_stop(timer_of_base(timer));
-    91		msc313e_timer_start(timer_of_base(timer), false);
-    92	
-    93		return 0;
-    94	}
-    95	
-    96	static int msc313e_timer_clkevt_set_periodic(struct clock_event_device *evt)
-    97	{
-    98		struct timer_of *timer = to_timer_of(evt);
-    99	
-   100		msc313e_timer_stop(timer_of_base(timer));
-   101		msc313e_timer_setup(timer_of_base(timer), timer_of_period(timer));
-   102		msc313e_timer_start(timer_of_base(timer), true);
-   103	
-   104		return 0;
-   105	}
-   106	
-   107	static int msc313e_timer_clkevt_next_event(unsigned long evt, struct clock_event_device *clkevt)
-   108	{
-   109		struct timer_of *timer = to_timer_of(clkevt);
-   110	
-   111		msc313e_timer_stop(timer_of_base(timer));
-   112		msc313e_timer_setup(timer_of_base(timer), evt);
-   113		msc313e_timer_start(timer_of_base(timer), false);
-   114	
-   115		return 0;
-   116	}
-   117	
-   118	static irqreturn_t msc313e_timer_clkevt_irq(int irq, void *dev_id)
-   119	{
-   120		struct clock_event_device *evt = dev_id;
-   121	
-   122		evt->event_handler(evt);
-   123	
-   124		return IRQ_HANDLED;
-   125	}
-   126	
-   127	static u64 msc313e_timer_clksrc_read(struct clocksource *cs)
-   128	{
-   129		return msc313e_timer_current_value(msc313e_clksrc) & cs->mask;
-   130	}
-   131	
-   132	static unsigned long msc313e_read_delay_timer_read(void)
-   133	{
-   134		return msc313e_timer_current_value(msc313e_delay.base);
-   135	}
-   136	
-   137	static u64 msc313e_timer_sched_clock_read(void)
-   138	{
-   139		return msc313e_timer_current_value(msc313e_clksrc);
-   140	}
-   141	
-   142	static struct clock_event_device msc313e_clkevt = {
-   143		.name = TIMER_NAME,
-   144		.rating = 300,
-   145		.features = CLOCK_EVT_FEAT_PERIODIC | CLOCK_EVT_FEAT_ONESHOT,
-   146		.set_state_shutdown = msc313e_timer_clkevt_shutdown,
-   147		.set_state_periodic = msc313e_timer_clkevt_set_periodic,
-   148		.set_state_oneshot = msc313e_timer_clkevt_set_oneshot,
-   149		.tick_resume = msc313e_timer_clkevt_shutdown,
-   150		.set_next_event = msc313e_timer_clkevt_next_event,
-   151	};
-   152	
-   153	static int __init msc313e_clkevt_init(struct device_node *np)
-   154	{
-   155		int ret;
-   156		struct timer_of *to;
-   157	
-   158		to = kzalloc(sizeof(*to), GFP_KERNEL);
-   159		if (!to)
-   160			return -ENOMEM;
-   161	
-   162		to->flags = TIMER_OF_IRQ | TIMER_OF_CLOCK | TIMER_OF_BASE;
-   163		to->of_irq.handler = msc313e_timer_clkevt_irq;
-   164		ret = timer_of_init(np, to);
-   165		if (ret)
-   166			return ret;
-   167	
-   168		msc313e_clkevt.cpumask = cpu_possible_mask;
-   169		msc313e_clkevt.irq = to->of_irq.irq;
-   170		to->clkevt = msc313e_clkevt;
-   171	
-   172		clockevents_config_and_register(&to->clkevt, timer_of_rate(to),
-   173						TIMER_SYNC_TICKS, 0xffffffff);
-   174		return 0;
-   175	}
-   176	
-   177	static int __init msc313e_clksrc_init(struct device_node *np)
-   178	{
-   179		struct timer_of to = { 0 };
-   180		int ret;
-   181		u16 reg;
-   182	
-   183		to.flags = TIMER_OF_BASE | TIMER_OF_CLOCK;
-   184		ret = timer_of_init(np, &to);
-   185		if (ret)
-   186			return ret;
-   187	
-   188		msc313e_delay.base = timer_of_base(&to);
-   189		msc313e_delay.delay.read_current_timer = msc313e_read_delay_timer_read;
-   190		msc313e_delay.delay.freq = timer_of_rate(&to);
-   191	
-   192		msc313e_clksrc = timer_of_base(&to);
-   193		reg = readw(msc313e_clksrc + MSC313E_REG_CTRL);
-   194		reg |= MSC313E_REG_CTRL_TIMER_EN;
-   195		writew(reg, msc313e_clksrc + MSC313E_REG_CTRL);
-   196	
- > 197		register_current_timer_delay(&msc313e_delay.delay);
-   198	
-   199		sched_clock_register(msc313e_timer_sched_clock_read, 32, timer_of_rate(&to));
-   200		return clocksource_mmio_init(timer_of_base(&to), TIMER_NAME, timer_of_rate(&to), 300, 32,
-   201					     msc313e_timer_clksrc_read);
-   202	}
-   203	
+There's a kconfig to enable optional signatures - if they are there,
+they are verified, if they are not present then nothing different
+happens. Unless I am missing something, this should be backward
+compatible. This kconfig would likely be enabled in most use cases,
+just like optionally signed kernel modules are.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Then there's a kconfig on top of that which makes signatures mandatory.
+I would not imagine this to be enabled in may cases, just in custom
+builds that have more stringent requirements. It certainly would not be
+enabled in generalist distros. Perhaps a more flexible way would be to
+introduce a sysctl, like fsverity has with
+'fs.verity.require_signatures'? That would be just fine for our use
+case. Matteo can we do that instead in the next revision?
+
+Secondly, I understand that for your use case signing programs would
+not be the best approach. That's fine, and I'm glad you are working on
+an alternative that better fits your model, it will be very interesting
+to see how it looks like once implemented. But that model doesn't fit
+all cases. In our case at Microsoft, we absolutely want to be able to
+pre-define at build time a list of BPF programs that are allowed to be
+loaded, and reject anything else. Userspace processes in our case are
+mostly old and crufty c++ programs that can most likely be pwned by
+looking at them sideways, so they get locked down hard with multiple
+redundant layers and so on and so forth. But right now for BPF you only
+have a "can load BPF" or "cannot load BPF" knob, and that's it. This is
+not good enough: we need to be able to define a list of allowed
+payloads, and be able to enforce it, so when (not if) said processes do
+get tricked into loading something else, it will fail, despite having
+the capability of calling bpf(). Trying to define heuristics is also
+not good enough for us - creative malicious actors have a tendency to
+come up with ways to chain things that individually are allowed and
+benign, but combined in a way that you just couldn't foresee. It would
+certainly cover a lot of cases, but not all. A strictly pre-defined
+list of what is allowed to run and what is not is what we need for our
+case, so that we always know exactly what is going to run and what is
+not, and can deal with the consequences accordingly, without nasty
+surprises waiting around the corner. Now in my naive view the best way
+to achieve this is via signatures and certs, as it's a well-understood
+system, with processes already in place to revoke/rotate/etc, and it's
+already used for kmods. An alternative would be hard-coding hashes I
+guess, but that would be terribly inflexible.
+
+Now in terms of _how_ the signatures are done and validated, I'm sure
+there are multiple ways, and if some are better than what this series
+implements, then that's not an issue, it can be reworked. But the core
+requirement for us is: offline pre-defined list of what is allowed to
+run and what is not, with ability for hard enforcement that cannot be
+bypassed. Yes, you lose some features like JIT and so on: we don't
+care, we don't need those for our use cases. If others have different
+needs that's fine, this is all intended to be optional, not mandatory.
+There are obviously trade-offs, as always when security is involved,
+and each user can decide what's best for them.
+
+Hope this makes sense. Thanks!
+
+--=20
+Kind regards,
+Luca Boccassi
+
+--=-crIOEqa5c+934Qzf2TlR
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEE6g0RLAGYhL9yp9G8SylmgFB4UWIFAmGrYP8ACgkQSylmgFB4
+UWLJvAgAiNTM+Wuz9ey4Fwz7HSpZd3qNX0Peast5rARfdue2DsqYAHVTtb1ZjhiL
+glXQOA1YGhv8tEOG6Mg7jj8R9x716nwP34G5Y4yCueUOgsDnvz/xM7IUJDIAo+OZ
+cr4bu4YNeiRmMZ2yb86zFuqoB6CsSi0jks0VXm70Yf9zlCjlNjhq9levnrbYpDYN
+HFRb011hUY6NZIcnX75o2vu5Lt3N/csM9NuFkmh3pbuP/Mb5JdPOwEykAYCotyPp
+dTIWs57YozQacgnKJWALP8JUnsnfeqDV0FW07ImNsXfPszBdKXHE/gUf3n2jdfDY
+eSFrSF+HjgrynbpMoNsvFpdH9PU8lA==
+=rr01
+-----END PGP SIGNATURE-----
+
+--=-crIOEqa5c+934Qzf2TlR--

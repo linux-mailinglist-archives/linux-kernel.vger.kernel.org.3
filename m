@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBB34683E4
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:55:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7C74683E3
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345701AbhLDJ6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 04:58:45 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:36524 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235062AbhLDJ6n (ORCPT
+        id S1344347AbhLDJ6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 04:58:44 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:35426 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230480AbhLDJ6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 4 Dec 2021 04:58:43 -0500
-Received: by mail-io1-f72.google.com with SMTP id w16-20020a5d8a10000000b005e241c13c7bso4469950iod.3
+Received: by mail-io1-f71.google.com with SMTP id x11-20020a0566022c4b00b005e702603028so4476318iov.2
         for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 01:55:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=u3AsoxQU/tK950hpFqbByeUWB2sygjl3RJ7kN22TcwA=;
-        b=ZE0Ru8NPJSg0nBeekmQUJ6x7WRBHBy0lTC44E4hzUBdhw2jpaUvhqDrUbmcFAbwsXI
-         keOJsW98UbVD42ONq/cylo1lAGrl7PIZcNtZCQAhhfrFog5q+o1ru900gqnAsLkUWkS3
-         cH7kDmo9pdBM51Fs5Es9LcL3QW+OWjqlWFovijzPWj1+RgJBCmGvPPS5Dbd9ki559dLB
-         fWO3VEKHcXPe4/1lnc7czF91YNic5uQPnd+FlazliKjHVWSvqXIGJ7F5lSnY8ic/I6hw
-         72QUNaQFC1X9f2pn0MgxdZAddirHb+DxYl9MFKc5wwAit/HWUPYddsbWFDKiJkDsO/iq
-         tSSw==
-X-Gm-Message-State: AOAM532IqWHw1m+FhcCvjn2g4RQCXm6dpL86vmqnPzJPPBkd+AUfM8Cb
-        4DoNyC1oNaghRI/CWe48aryl2bNPCnXwoj5uWSeixEjUVP0j
-X-Google-Smtp-Source: ABdhPJw1obiBok/ARF2Pcafr1QlBTnCw+v2GFk1FSdlOe1581hI6USfe8e1YUTTgfJMIt0Q/vDZdgnIJNqpEHPs8j1trWt+9MLn1
+        bh=DyhRK3ttUVN6VH347d06HzFlgqVT0ZOXZFQ3OlFIC+Q=;
+        b=OCU6rleMHfENas4JM+wZ+ohXZIHYc55IsGxFs3obz/jVWf31hynv9WFDnVb4v7DHpZ
+         q7RwK/kxKNnnAWbunn583zB0QzZc3//NgJ2AugezBZI6i4ib8ebx1vZcYOcNzSH+M9jp
+         Mt69wtynu1BDL1isE5z/wajcWttxuOHc+tg+1msA8fpQeEO7Xhjm581MqMuiglSsaVQa
+         CE1QDjQnvd4A3T7P7J1voTVaqBF5nGriyxPBF0H6E/llnrZW9+CscwZZ4viS/AJdecj5
+         ufhH/qC6GT72n72YzJ9tHQySlN2T1ueFaw5bRwkAf4vi23xp2MyyfmITIfQhoK2jHr8M
+         V7uA==
+X-Gm-Message-State: AOAM531KcM+ehjOBSVNWWJy43KaZqD1Y4HQ8iA6CViTm1U2e9G9pCBOQ
+        iF7jVojWA1wUn2lFZCGfU4LuzxN6ygFChXppyIjPlq5aShM5
+X-Google-Smtp-Source: ABdhPJx5XhbPvyMCmR8YL5bei9Iw8lSBb9m2ZHtxGrojbG9yjSvWW18D//6dKVseTS6/IkXQ2IoRyPdVM4Hl+rWn2HWwKHn8ui3x
 MIME-Version: 1.0
-X-Received: by 2002:a92:c562:: with SMTP id b2mr23168568ilj.108.1638611717923;
+X-Received: by 2002:a05:6e02:1845:: with SMTP id b5mr21113973ilv.168.1638611717729;
  Sat, 04 Dec 2021 01:55:17 -0800 (PST)
 Date:   Sat, 04 Dec 2021 01:55:17 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005f297e05d24f05f6@google.com>
-Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in folio_mark_dirty
-From:   syzbot <syzbot+7cd473c2cac13fd2dd72@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Message-ID: <0000000000005c30f405d24f05e1@google.com>
+Subject: [syzbot] general protection fault in tipc_conn_close (2)
+From:   syzbot <syzbot+d28b439975080ea97feb@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, jmaloy@redhat.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        tipc-discussion@lists.sourceforge.net, ying.xue@windriver.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -47,80 +49,87 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    58e1100fdc59 MAINTAINERS: co-maintain random.c
+HEAD commit:    40c93d7fff6f Merge tag 'x86-urgent-2021-11-21' of git://gi..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1362881eb00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e9ea28d2c3c2c389
-dashboard link: https://syzkaller.appspot.com/bug?extid=7cd473c2cac13fd2dd72
+console output: https://syzkaller.appspot.com/x/log.txt?x=15fa11eeb00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8c5999a5ee199b97
+dashboard link: https://syzkaller.appspot.com/bug?extid=d28b439975080ea97feb
 compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7cd473c2cac13fd2dd72@syzkaller.appspotmail.com
+Reported-by: syzbot+d28b439975080ea97feb@syzkaller.appspotmail.com
 
-BUG: kernel NULL pointer dereference, address: 0000000000000000
-#PF: supervisor instruction fetch in kernel mode
-#PF: error_code(0x0010) - not-present page
-PGD 70764067 P4D 70764067 PUD 0 
-Oops: 0010 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 6541 Comm: syz-executor.3 Not tainted 5.16.0-rc3-syzkaller #0
+general protection fault, probably for non-canonical address 0xdffffc0000000003: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000018-0x000000000000001f]
+CPU: 1 PID: 9168 Comm: kworker/u4:4 Not tainted 5.16.0-rc1-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:0x0
-Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
-RSP: 0018:ffffc900027ff7f8 EFLAGS: 00010246
-RAX: 1ffffffff14fef03 RBX: ffffffff8a7f7818 RCX: ffff88801b40d700
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffea0002790ec0
-RBP: dffffc0000000000 R08: ffffffff81b0fa16 R09: fffff940004f21d9
-R10: fffff940004f21d9 R11: 0000000000000000 R12: ffff88806c11c7b0
-R13: 0000000000000000 R14: 1ffffd40004f21d9 R15: ffffea0002790ec0
-FS:  0000555557165400(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+Workqueue: netns cleanup_net
+RIP: 0010:tipc_conn_close+0x4c/0x210 net/tipc/topsrv.c:157
+Code: 5d 08 49 89 dc 49 c1 ec 03 43 80 3c 34 00 74 08 48 89 df e8 e6 b3 0a f8 48 89 1c 24 48 8b 1b 48 83 c3 18 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 df e8 c5 b3 0a f8 48 8b 1b 4c 8d bb b0
+RSP: 0018:ffffc90004777ad8 EFLAGS: 00010206
+RAX: 0000000000000003 RBX: 0000000000000018 RCX: ffff888077731d00
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff88807a888000
+RBP: ffff88807a888000 R08: dffffc0000000000 R09: fffffbfff1ff33de
+R10: fffffbfff1ff33de R11: 0000000000000000 R12: 1ffff1100f511001
+R13: ffff88807a888000 R14: dffffc0000000000 R15: ffff88807d345098
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffd6 CR3: 0000000030d85000 CR4: 00000000003526e0
+CR2: 0000560b6e50e788 CR3: 0000000089eb7000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- folio_mark_dirty+0x136/0x270 mm/page-writeback.c:2639
- f2fs_update_meta_page+0x4b/0x380 fs/f2fs/segment.c:2485
- do_checkpoint fs/f2fs/checkpoint.c:1513 [inline]
- f2fs_write_checkpoint+0x31ad/0x5430 fs/f2fs/checkpoint.c:1674
- f2fs_issue_checkpoint+0x361/0x4e0
- sync_filesystem+0x19c/0x1f0 fs/sync.c:63
- generic_shutdown_super+0x6b/0x300 fs/super.c:448
- kill_block_super+0x79/0xd0 fs/super.c:1397
- kill_f2fs_super+0x2f9/0x3c0 fs/f2fs/super.c:4478
- deactivate_locked_super+0xa7/0xf0 fs/super.c:335
- cleanup_mnt+0x462/0x510 fs/namespace.c:1137
- task_work_run+0x146/0x1c0 kernel/task_work.c:164
- tracehook_notify_resume include/linux/tracehook.h:189 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
- exit_to_user_mode_prepare+0x209/0x220 kernel/entry/common.c:207
- __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
- syscall_exit_to_user_mode+0x2e/0x70 kernel/entry/common.c:300
- do_syscall_64+0x53/0xd0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f6cfdd59f57
-Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fffcbddcad8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f6cfdd59f57
-RDX: 00007fffcbddcbac RSI: 000000000000000a RDI: 00007fffcbddcba0
-RBP: 00007fffcbddcba0 R08: 00000000ffffffff R09: 00007fffcbddc970
-R10: 0000555557166903 R11: 0000000000000246 R12: 00007f6cfddb2105
-R13: 00007fffcbdddc60 R14: 0000555557166810 R15: 00007fffcbdddca0
+ tipc_topsrv_stop net/tipc/topsrv.c:694 [inline]
+ tipc_topsrv_exit_net+0xf8/0x310 net/tipc/topsrv.c:715
+ ops_exit_list net/core/net_namespace.c:168 [inline]
+ cleanup_net+0x758/0xc50 net/core/net_namespace.c:593
+ process_one_work+0x853/0x1140 kernel/workqueue.c:2298
+ worker_thread+0xac1/0x1320 kernel/workqueue.c:2445
+ kthread+0x468/0x490 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
  </TASK>
 Modules linked in:
-CR2: 0000000000000000
----[ end trace 08eda5a5e35b48a0 ]---
-RIP: 0010:0x0
-Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
-RSP: 0018:ffffc900027ff7f8 EFLAGS: 00010246
-RAX: 1ffffffff14fef03 RBX: ffffffff8a7f7818 RCX: ffff88801b40d700
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffea0002790ec0
-RBP: dffffc0000000000 R08: ffffffff81b0fa16 R09: fffff940004f21d9
-R10: fffff940004f21d9 R11: 0000000000000000 R12: ffff88806c11c7b0
-R13: 0000000000000000 R14: 1ffffd40004f21d9 R15: ffffea0002790ec0
-FS:  0000555557165400(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+---[ end trace ff1ddf3c30f0c3d0 ]---
+RIP: 0010:tipc_conn_close+0x4c/0x210 net/tipc/topsrv.c:157
+Code: 5d 08 49 89 dc 49 c1 ec 03 43 80 3c 34 00 74 08 48 89 df e8 e6 b3 0a f8 48 89 1c 24 48 8b 1b 48 83 c3 18 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 df e8 c5 b3 0a f8 48 8b 1b 4c 8d bb b0
+RSP: 0018:ffffc90004777ad8 EFLAGS: 00010206
+RAX: 0000000000000003 RBX: 0000000000000018 RCX: ffff888077731d00
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff88807a888000
+RBP: ffff88807a888000 R08: dffffc0000000000 R09: fffffbfff1ff33de
+R10: fffffbfff1ff33de R11: 0000000000000000 R12: 1ffff1100f511001
+R13: ffff88807a888000 R14: dffffc0000000000 R15: ffff88807d345098
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffd6 CR3: 0000000030d85000 CR4: 00000000003526e0
+CR2: 00007fe625c1d058 CR3: 000000003b6ba000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	5d                   	pop    %rbp
+   1:	08 49 89             	or     %cl,-0x77(%rcx)
+   4:	dc 49 c1             	fmull  -0x3f(%rcx)
+   7:	ec                   	in     (%dx),%al
+   8:	03 43 80             	add    -0x80(%rbx),%eax
+   b:	3c 34                	cmp    $0x34,%al
+   d:	00 74 08 48          	add    %dh,0x48(%rax,%rcx,1)
+  11:	89 df                	mov    %ebx,%edi
+  13:	e8 e6 b3 0a f8       	callq  0xf80ab3fe
+  18:	48 89 1c 24          	mov    %rbx,(%rsp)
+  1c:	48 8b 1b             	mov    (%rbx),%rbx
+  1f:	48 83 c3 18          	add    $0x18,%rbx
+  23:	48 89 d8             	mov    %rbx,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 30 00       	cmpb   $0x0,(%rax,%r14,1) <-- trapping instruction
+  2f:	74 08                	je     0x39
+  31:	48 89 df             	mov    %rbx,%rdi
+  34:	e8 c5 b3 0a f8       	callq  0xf80ab3fe
+  39:	48 8b 1b             	mov    (%rbx),%rbx
+  3c:	4c                   	rex.WR
+  3d:	8d                   	.byte 0x8d
+  3e:	bb                   	.byte 0xbb
+  3f:	b0                   	.byte 0xb0
 
 
 ---

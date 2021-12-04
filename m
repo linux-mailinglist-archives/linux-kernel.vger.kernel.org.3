@@ -2,79 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC1B46885E
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 00:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 524DB468861
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 00:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237288AbhLDXuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 18:50:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42994 "EHLO
+        id S240081AbhLDXwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 18:52:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbhLDXuc (ORCPT
+        with ESMTP id S229744AbhLDXwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 18:50:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCADC061751;
-        Sat,  4 Dec 2021 15:47:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65438B80CF7;
-        Sat,  4 Dec 2021 23:47:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F050C341C0;
-        Sat,  4 Dec 2021 23:47:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638661624;
-        bh=M0wBR0Go3o9++qzyhI7FWX1Nv7TxP9Qe7aCa0GyuNUU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FTsYctHvyq29NEkv2/pgzveHfr3c8u/2Pm6Tk4x3WKBMq80puzSvgTblfF/1ldRsH
-         Ea690UdNpPHj9kunHj/exrftCPGBAbOWaPVEccfXgW9gCT0+FKytOKupDi6NOFZHoK
-         PDeku0VwEZUMmyG3oBMz0fZ6NG1BiRrbD86hvFrlvx6DWEG0Ljlr5RR9hoZDR30qZc
-         fmMHa3csJGj88SfY1VVb+XTwo28HXgKPVjSFRsRhhJrwQkCYmnCzMi4GMiS4k0s1/T
-         WCLzxF/XM1X1PtP+pMUhK8jVZ4yUi+8iEJjR16vkSaytm7cKPrQB3QndOU+Vr+KlP/
-         VkejP0TzFZilw==
-Date:   Sun, 5 Dec 2021 01:47:00 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
-        cathy.zhang@intel.com, cedric.xing@intel.com,
-        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 24/25] x86/sgx: Free up EPC pages directly to support
- large page ranges
-Message-ID: <Yav99E+wkPaQzH7N@iki.fi>
-References: <cover.1638381245.git.reinette.chatre@intel.com>
- <4d3cc24f06ae75d99449f1d505cbff9ba53819a9.1638381245.git.reinette.chatre@intel.com>
+        Sat, 4 Dec 2021 18:52:33 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8440C061751;
+        Sat,  4 Dec 2021 15:49:06 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id 137so5294050wma.1;
+        Sat, 04 Dec 2021 15:49:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iWsnLUzt7xPyfaUEp7AhtS+i4yJOhxJfuwFef1QcioQ=;
+        b=MA90VAWGZs5/+OM/gUMZQ4HvKMjYJakgjAGicJ+e96yL97S1g+cVPZoeDTO1IBOJYu
+         BLNWDR9p+aHqXP4JOPxv2SZJht6Rsshz7RoRCbmVy/L8MDrvqaw/EpIzxYO7LybwmTqu
+         AWv4jmxVsd0IcuywtoKDNpedHCgaOgNQ6bfmksEZtchBEzp9iECqLoM2HW5ZfgZtOq08
+         iI2VVYnlAcfplIy87feZTL+OSdOCFArX2Eov4pU7Z414GwLG7rwgRSRmIcZHcc7Gm6xb
+         bxte7NrTxYloDk6Q+l4eclCsWVypXvG9rl7icTJvb05LS/71k3vdRMrlZo3nYscK1py/
+         8HUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iWsnLUzt7xPyfaUEp7AhtS+i4yJOhxJfuwFef1QcioQ=;
+        b=g1kKlFTIPmW3zj/FcIXR55lfyRoHQuVeMuMureVRwtPi3G+1dD4vDXuQFNicLctzKP
+         8Sg9c2vjWiXVMl0L4vUbc8x5Fk8Qhn0jjTIscxhNbY/9Ydmdpr+cVUSJAh7j19DeZRjW
+         U3cJnDOZW3i4Xa1zDAI67CsFL5QYEkIJJLjhfT6YfxNBHp5Ctrjd0qoRgv/+T8MiyIeL
+         fgaZv0a1Cb1/zpsvDZowms22suozpHKsNdNv55ozqXrRndo9yc/YeC851khm6oC8mKSv
+         oMuyjoBxPMyMz6YDc72D5ClylvQrPRuDW6vZomJVxRA17/0Bywn2qDvLAFRFP/LNXJ/I
+         Q4cw==
+X-Gm-Message-State: AOAM532Ss8hw8y90BeM1+PLKXewxD8iYEpZ+8RxpmIawlpUuDNEYFDzf
+        gL1Zh/RO/zcDAOf4fujxvBA=
+X-Google-Smtp-Source: ABdhPJyquTw+gollfacPNGvbmh7rTCuMo2tpX9RD66yE/W5y2bKwUkROwhBXl+w0tJmpMH2LGXmsdg==
+X-Received: by 2002:a7b:c24a:: with SMTP id b10mr26535230wmj.166.1638661745589;
+        Sat, 04 Dec 2021 15:49:05 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id n15sm9278184wmq.38.2021.12.04.15.49.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Dec 2021 15:49:05 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] IB/core: Remove redundant pointer mm
+Date:   Sat,  4 Dec 2021 23:49:04 +0000
+Message-Id: <20211204234904.105026-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4d3cc24f06ae75d99449f1d505cbff9ba53819a9.1638381245.git.reinette.chatre@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 11:23:22AM -0800, Reinette Chatre wrote:
-> The page reclaimer ensures availability of EPC pages across all
-> enclaves. In support of this it runs independently from the individual
-> enclaves in order to take locks from the different enclaves as it writes
-> pages to swap.
-> 
-> When needing to load a page from swap an EPC page needs to be available for
-> its contents to be loaded into. Loading an existing enclave page from swap
-> does not reclaim EPC pages directly if none are available, instead the
-> reclaimer is woken when the available EPC pages are found to be below a
-> watermark.
-> 
-> When iterating over a large number of pages in an oversubscribed
-> environment there is a race between the reclaimer woken up and EPC pages
-> reclaimed fast enough for the page operations to proceed.
-> 
-> Instead of tuning the race between the page operations and the reclaimer
-> the page operations instead makes sure that there are EPC pages available.
-> 
-> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+The pointer mm is assigned a value but it is never used. The pointer
+is redundant and can be removed.
 
-Why this needs to be part of this patch set?
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/infiniband/core/umem_odp.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-/Jarkko
+diff --git a/drivers/infiniband/core/umem_odp.c b/drivers/infiniband/core/umem_odp.c
+index 7a47343d11f9..aead24c1a682 100644
+--- a/drivers/infiniband/core/umem_odp.c
++++ b/drivers/infiniband/core/umem_odp.c
+@@ -227,7 +227,6 @@ struct ib_umem_odp *ib_umem_odp_get(struct ib_device *device,
+ 				    const struct mmu_interval_notifier_ops *ops)
+ {
+ 	struct ib_umem_odp *umem_odp;
+-	struct mm_struct *mm;
+ 	int ret;
+ 
+ 	if (WARN_ON_ONCE(!(access & IB_ACCESS_ON_DEMAND)))
+@@ -241,7 +240,7 @@ struct ib_umem_odp *ib_umem_odp_get(struct ib_device *device,
+ 	umem_odp->umem.length = size;
+ 	umem_odp->umem.address = addr;
+ 	umem_odp->umem.writable = ib_access_writable(access);
+-	umem_odp->umem.owning_mm = mm = current->mm;
++	umem_odp->umem.owning_mm = current->mm;
+ 	umem_odp->notifier.ops = ops;
+ 
+ 	umem_odp->page_shift = PAGE_SHIFT;
+-- 
+2.33.1
+

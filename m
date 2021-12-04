@@ -2,91 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5E54683BF
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEFB4683BD
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384535AbhLDJvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 04:51:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244915AbhLDJvl (ORCPT
+        id S1384506AbhLDJvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 04:51:38 -0500
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:9075 "EHLO
+        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245192AbhLDJvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 04:51:41 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD93FC061751
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 01:48:15 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id bk14so10910365oib.7
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 01:48:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bOAkXZDiyTsKYfGEC23YRLp6n8iiidS662e1ynxgsxA=;
-        b=WNErxpaJ0vt9GBbdqCxCm7NrYJDMBAl8LPN1SiLwt3loHe/k206b12pHYF3Yx/xmEg
-         pLJcdL9Xch8oLQXlTwN35R2wEE0Ko/K28/LeEyS3cMg4VdHEsYEEn5PCot9EdNmYdc55
-         C4cSFD9Qqdj6zuZXFkxqQsivgdk+Z2YRI650E53U5DqSv5aCklUh6UCyR0WA7TsD8GJi
-         eQ5M9p4tMrbWcVZXmYdROE7HOTUWc+v6YtF2HwXKraubXnyR2Mt3D+fxwXwWy3hNe1T1
-         vinQjMCt9bkRCl3OpwbZctWQZG1cVCj20qb4CMg37elx1ZlQ3uWo+cQXAyDkFZSG1+3D
-         Fhrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bOAkXZDiyTsKYfGEC23YRLp6n8iiidS662e1ynxgsxA=;
-        b=aHvv5GxRtBZmHHHfrUIeygVxRhevEv9tCUmcm+DBSI5efFVdV8Aq+9R0lr0m8gh2BP
-         Z5bqgrztMBTJMxJWmaq3gFJDHnKunEBZq+fIjid6vqJ5hsy0ucZAQKW/8YpWR/tOVy/N
-         jgbobWzUeRao8+ojUqOr9OmGft+xlH0B/LFkTQ6DV27rjpchd/1KuWq7z2VgB6/hFlq1
-         rT2MDUHDS6oHkR5tnhmoqtLRouSvH71bbkJdqYK3B6NbtR2rMnFvqgTNYyGuQ7wRmAwS
-         0/xSONtLFHKD2QdJyzruGNdFCmdTAYTKMG/CLzzrSS36XShVcb6yKy1eptxZcSfJ2GhE
-         aGLw==
-X-Gm-Message-State: AOAM5332sbCGqtocqXggi2G9LPcUzGK2/tgpMoJTOlH9jjKZ6f6D00lC
-        v1U0xlwxhiissS53Smo5lIznI2bK8My1WH5Hu4YH6g==
-X-Google-Smtp-Source: ABdhPJxKiMFgxJ5zcd3V9wHDP+cMEBZxSFcKc2VU3eqKSIdvXpYm+andMC88m4jlKzdjIBB7Rx1ycGPNnDJpKj4FBu8=
-X-Received: by 2002:aca:b843:: with SMTP id i64mr14560842oif.109.1638611294801;
- Sat, 04 Dec 2021 01:48:14 -0800 (PST)
+        Sat, 4 Dec 2021 04:51:37 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3A2sU1p6oQswglGD/Wvy0elwf6fQReBmI8ZBIvgKr?=
+ =?us-ascii?q?LsJaIsI5as4F+vmIXXz2AP/yPZmH3co9xOd+zo0NX65PUnINqTgptryxkQiMRo?=
+ =?us-ascii?q?6IpJ/zJdxaqZ3v6wu7rFR88sZ1GMrEsFC2FJ5Pljk/F3oPJ8D8sislkepKmULS?=
+ =?us-ascii?q?dY3opGVc+IMscoUkLd9AR09cAbeeRU1vlVePa+6UzCXf9s9JGGjp8B5Gr9HuDi?=
+ =?us-ascii?q?M/PVAYw5TTSUxzkUGj2zBH5BLpHTU24wuCRroN8RoZWTM6bpF21E/+wwvsjNj+?=
+ =?us-ascii?q?luu6TnkwiceeIbU7f0TwPC/Dk20UYk0Te0I5ibqpaOBwR0mXR2Ykskr2htrTpI?=
+ =?us-ascii?q?estFofWme8QFTZfHCV/O4VH/qXGKD6xq6R/ymWWKCu2mKw1ZK0xFchCkgptOkl?=
+ =?us-ascii?q?P7/sXJSoWRh+EgO2yzfSwTewErtgmNsjgPJ83vnBm0CGfDPwjB5vERs3i4dJem?=
+ =?us-ascii?q?j0qgd9INffYe8cdLzFoaXzoYRpJM0sXAZR4l+6ti2P4dRVYtVuKqKtx6G/WpCR?=
+ =?us-ascii?q?10b7wIJ/Wd8aMSMF9gEmVvCTF8n7/DxVcM8aQoRKM8WqpruvOmz7rHYwVCbu0/?=
+ =?us-ascii?q?+Jrh1vVwXYcYDUMXFWyrP2RiUOkXd9bbUsO9UIGtaUu+Va5Ztj7UQexrHONslg?=
+ =?us-ascii?q?bQdU4O+0x4SmJy6zJ80CYDG1CRTlEAPQprsI5RjwC0l6PgsPnAiFpvLSJSHWbs?=
+ =?us-ascii?q?LCOoluaIi8TIikIbChCTRYMy9niu4A3jxnISJBoF6vdszFfMVkc2BiBqDR73u9?=
+ =?us-ascii?q?DyJ9QkvzrpRWe3mjquIDPCA8z/ATeGGy/hj6VrbWNP+SAgWU3J94aRGpBcmS8g?=
+ =?us-ascii?q?Q=3D=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AaJyoKa8BzjPsR97p08Zuk+DmI+orL9Y04lQ7?=
+ =?us-ascii?q?vn2ZKCY0TiX8rauTdZsguCMc9wxhP03I9ertBED4ewK+yXcX2+gs1NWZLW3bUT?=
+ =?us-ascii?q?CTXeNfBOLZqlXd8kbFmNK1u50OT0EvMrfNJGk/sNj7/RS1CJIL4PTvytHMudvj?=
+X-IronPort-AV: E=Sophos;i="5.87,287,1631570400"; 
+   d="scan'208";a="8382313"
+Received: from clt-128-93-180-152.vpn.inria.fr (HELO [128.93.180.152]) ([128.93.180.152])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/AES256-GCM-SHA384; 04 Dec 2021 10:48:12 +0100
+Subject: Re: [PATCH v2 0/3] topology/sysfs: only export used sysfs attributes
+To:     "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        Len Brown <len.brown@intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Ian Rogers <irogers@google.com>
+References: <20211129130309.3256168-1-hca@linux.ibm.com>
+ <YaTdpsVCDQMlscON@hirez.programming.kicks-ass.net> <YajWjasdqnibSRJm@osiris>
+ <YajXnjVGEWeUmEqA@kroah.com> <60d13e6233df4aa78494bb51a2792bbe@hisilicon.com>
+From:   Brice Goglin <Brice.Goglin@inria.fr>
+Message-ID: <63384337-ba36-9b2a-c9ae-75e3f5ac02d7@inria.fr>
+Date:   Sat, 4 Dec 2021 10:48:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-References: <0000000000000a389a05ac5a9864@google.com> <00000000000091c45705d1b3d7ea@google.com>
-In-Reply-To: <00000000000091c45705d1b3d7ea@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Sat, 4 Dec 2021 10:48:03 +0100
-Message-ID: <CACT4Y+YQC1eFH9BsrPnRaGW_H+_jzpELWuiBa9n+paB7-3k4HA@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: null-ptr-deref Write in l2cap_chan_put
-To:     syzbot <syzbot+452e9465a3b2817fa4c2@syzkaller.appspotmail.com>
-Cc:     anant.thazhemadam@gmail.com, bobo.shaobowang@huawei.com,
-        cobranza@ingcoecuador.com, davem@davemloft.net, ducheng2@gmail.com,
-        johan.hedberg@gmail.com, kuba@kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        luiz.von.dentz@intel.com, marcel@holtmann.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <60d13e6233df4aa78494bb51a2792bbe@hisilicon.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="Y5C3IJQNSjYBTH3jFttcPF1ZnmLBgUjqd"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 Nov 2021 at 17:47, syzbot
-<syzbot+452e9465a3b2817fa4c2@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit 1bff51ea59a9afb67d2dd78518ab0582a54a472c
-> Author: Wang ShaoBo <bobo.shaobowang@huawei.com>
-> Date:   Wed Sep 1 00:35:37 2021 +0000
->
->     Bluetooth: fix use-after-free error in lock_sock_nested()
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=141cfa45b00000
-> start commit:   c70672d8d316 Merge tag 's390-5.9-5' of git://git.kernel.or..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=bd46548257448703
-> dashboard link: https://syzkaller.appspot.com/bug?extid=452e9465a3b2817fa4c2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=152f31f9900000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: Bluetooth: fix use-after-free error in lock_sock_nested()
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--Y5C3IJQNSjYBTH3jFttcPF1ZnmLBgUjqd
+Content-Type: multipart/mixed; boundary="o1iT760ICFik431n9xKFirdLjrEKMQr6t";
+ protected-headers="v1"
+From: Brice Goglin <Brice.Goglin@inria.fr>
+To: "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Heiko Carstens <hca@linux.ibm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Jonathan Cameron <jonathan.cameron@huawei.com>,
+ Len Brown <len.brown@intel.com>, Thomas Richter <tmricht@linux.ibm.com>,
+ Ian Rogers <irogers@google.com>
+Message-ID: <63384337-ba36-9b2a-c9ae-75e3f5ac02d7@inria.fr>
+Subject: Re: [PATCH v2 0/3] topology/sysfs: only export used sysfs attributes
+References: <20211129130309.3256168-1-hca@linux.ibm.com>
+ <YaTdpsVCDQMlscON@hirez.programming.kicks-ass.net> <YajWjasdqnibSRJm@osiris>
+ <YajXnjVGEWeUmEqA@kroah.com> <60d13e6233df4aa78494bb51a2792bbe@hisilicon.com>
+In-Reply-To: <60d13e6233df4aa78494bb51a2792bbe@hisilicon.com>
 
-Looks reasonable:
+--o1iT760ICFik431n9xKFirdLjrEKMQr6t
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
 
-#syz fix: Bluetooth: fix use-after-free error in lock_sock_nested()
+Le 04/12/2021 =C3=A0 10:07, Song Bao Hua (Barry Song) a =C3=A9crit=C2=A0:=
+
+>
+> Could you give me one minute?
+>
+> +Brice
+>
+> I'd like to hear some feedbacks from hwloc if there
+> is a chance to break userspace and if userspace depends
+> on the existence of sysfs even though the topology
+> doesn't exist.
+>
+> If no, I feel it is safe to take.
+>
+
+Hello
+
+If the question is whether hwloc *requires* cluster/die/book/drawer=20
+sysfs files to exist, then the answer is no. We have to support old=20
+kernels without those files anyway.
+
+Brice
+
+
+
+
+--o1iT760ICFik431n9xKFirdLjrEKMQr6t--
+
+--Y5C3IJQNSjYBTH3jFttcPF1ZnmLBgUjqd
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEEelpOgOQAl7r26tY4RJGQ8yNavTsFAmGrOVoFAwAAAAAACgkQRJGQ8yNavTtF
+sg//RA3OKI+ZgqqSFHQoOb1fBi/W5brllIl2UUEcPHCo6T1us4JAtPzX2LppOLZVk8qYWPue6E00
+e1Wk+u0kuePN5QrpD9krWyQJqO0RotCVWUssqfwpr0htyRskxEPiHmFOiOHAtpaTcJsYC6NG1vqL
+LXhJjaMqHzI13CtF5NiD/iCz9zy6ePhA1oxwBcNfvOgjhzzrvQqIztolQrEUFQ980W8W09aJEsnE
+XUleq+poTr5vaqHFTMCuB84jOWTMH73aJ3Oh/qDUw/oqsBPdgnGcIhWnWMBRRhQZToDyn+UK6q7n
+YXjLgjSU8hj4OuDHZIo9/MhWZ0Gi/mZDbXmH3o0mqv9W3bmWPoP+jqZiHynYhIF0yxZyU8UzzWPV
+H53Rr4PzSDxzWT2HgGy8kPHp8Kz2TtH9XyBwYwpoX7tqgtYFqLPape76xcep6NbY5E3nxgww/W8T
+s8DPJuDuh1LMa+TLajnIrvSgGzoCxnIhzjeZC0+2T8Y76uPldU71gFZZgRhVrIzlDEG8nycj1Q3j
+OhIfqhC39tJUwOdwDBRVCW+w2bnOtgTzhe87dGrfzHU34gZdvRzMW5KoJJiKnVShdbA3Rl9G6t/R
+3csQEk3pLIdh1P172h4J/n0FZ8/1u3X/TuYLXFFgRGoiEf1OBHTEbtY8Q6iBcyqX6L5r8pgFawxo
+5EQ=
+=H4gY
+-----END PGP SIGNATURE-----
+
+--Y5C3IJQNSjYBTH3jFttcPF1ZnmLBgUjqd--

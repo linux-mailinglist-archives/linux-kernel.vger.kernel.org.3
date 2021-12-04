@@ -2,775 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AD0A468115
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA5246811C
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 01:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383719AbhLDAU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Dec 2021 19:20:59 -0500
-Received: from inva021.nxp.com ([92.121.34.21]:54232 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1383666AbhLDAUv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Dec 2021 19:20:51 -0500
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 9202220221E;
-        Sat,  4 Dec 2021 01:17:25 +0100 (CET)
-Received: from smtp.na-rdc02.nxp.com (usphx01srsp001v.us-phx01.nxp.com [134.27.49.11])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 08282200B75;
-        Sat,  4 Dec 2021 01:17:25 +0100 (CET)
-Received: from right.am.freescale.net (right.am.freescale.net [10.81.116.142])
-        by usphx01srsp001v.us-phx01.nxp.com (Postfix) with ESMTP id 70BDB40007;
-        Fri,  3 Dec 2021 17:17:24 -0700 (MST)
-From:   Li Yang <leoyang.li@nxp.com>
-To:     Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Alex Marginean <alexandru.marginean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Jason Liu <jason.hui.liu@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>
-Subject: [PATCH v2 8/8] arm64: dts: ls1028a-qds: add overlays for various serdes protocols
-Date:   Fri,  3 Dec 2021 18:17:18 -0600
-Message-Id: <20211204001718.8511-9-leoyang.li@nxp.com>
-X-Mailer: git-send-email 2.25.1.377.g2d2118b
-In-Reply-To: <20211204001718.8511-1-leoyang.li@nxp.com>
-References: <20211204001718.8511-1-leoyang.li@nxp.com>
+        id S1383587AbhLDAWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Dec 2021 19:22:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1383572AbhLDAWb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Dec 2021 19:22:31 -0500
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A72C061751
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Dec 2021 16:18:55 -0800 (PST)
+Received: by mail-ua1-x933.google.com with SMTP id j14so8506083uan.10
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Dec 2021 16:18:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nUnZRxTL6ognPaiE7BB97hG4ug8rkGAOljqHJFVZ5r4=;
+        b=aQfwEJSLSdf67rkRPangsInyk0VPOSvzVsdYMS1VWq+PjubUwHEIw6nd8IFiYJg4Zp
+         K3sxb+/aU9cS7nei/9iiWESXaKpF0U50RT36VnMmycHHhdwc2Yty9cFwbKE9CDuS2eaH
+         We/6RIqJgf9BIjUrGYz3UvnYFuxokFY95KBcICPTw3EvUmje9CvgDGk1xiY3DbyTdBQW
+         wiCU9yqXFO3a3poIA+tndxufY869OZl2qMrKq06nplWk3pLs3WKlLryyBFAl2n1ctI7G
+         OLOWu6+XeLzDm8fsDsU4HCePkWReTxWUTw221/M0LqxELuhjPQPqpogVIIX8ds3rrrPr
+         V4PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nUnZRxTL6ognPaiE7BB97hG4ug8rkGAOljqHJFVZ5r4=;
+        b=IQ5ZDX57dlTPgkAN8R8+reN6jWSfZmtcjIbquf4Uu9m3GmfhT65Jz6jtpb+ua8yh0w
+         RKSaqFeTIg5fHYvZ2o7ZFe7opPjzN5MjiZnZmHneJYA2GB/d6fU4zy4STPmMJdW5ok66
+         PNxOAZbEkRCz2hzNFhWb+m/AxByICtycJwYCNGMzsiIHEU8hECocKgNDu5fc7JMhV2ZH
+         8SpRthwR3tEGYZLJkOcg1nWgERvarkEDjJsOBAeUWMhnZ6aE4Db98dZz83BVoEGwPkuj
+         wJoOfA67HFjdkNkn2bEHO3radS228avmjRSjgD+JkhiVJUteOZ+cbHDvvz+NB9Fmor1i
+         JokA==
+X-Gm-Message-State: AOAM532y5KLE3pqlPvCJtYfFEIn58TrMT7n3BAwnlToMB16v4kOkhQkA
+        UkJKxmEjz1nSEavEPzLhwNEGp0pnE8ekug0L1H229/LeX7ZVWcGx
+X-Google-Smtp-Source: ABdhPJxv7l/eQFFci2XCPTiX4KBmCNHGcXRuO+2735BU5+2FzBKDMNBN2407vdfc2vhyk8/WVJO5qNG0YDPgo2FpdJM=
+X-Received: by 2002:a05:6102:f10:: with SMTP id v16mr25678337vss.86.1638577134675;
+ Fri, 03 Dec 2021 16:18:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
+References: <20211130111325.29328-1-semen.protsenko@linaro.org>
+ <20211130111325.29328-2-semen.protsenko@linaro.org> <YaZ8BpUaaC+sJYqx@robh.at.kernel.org>
+ <CAPLW+4kGGk+umKTVRPNM7R=GaUQa31Uid=K+9ofq8w2mqzGAEA@mail.gmail.com> <CAL_JsqLopqkOEWmnvMDWr2rBa5Dm3jf17soqVA=Jx5Hn9BDS_g@mail.gmail.com>
+In-Reply-To: <CAL_JsqLopqkOEWmnvMDWr2rBa5Dm3jf17soqVA=Jx5Hn9BDS_g@mail.gmail.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Sat, 4 Dec 2021 02:18:42 +0200
+Message-ID: <CAPLW+4=i0hncEjNAYTyGRxd7Y3peDEgMf-Kw8qGhMW-kpNVv2Q@mail.gmail.com>
+Subject: Re: [PATCH v2 RESEND 1/5] dt-bindings: soc: samsung: Add Exynos USI bindings
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Marginean <alexandru.marginean@nxp.com>
+On Fri, 3 Dec 2021 at 22:40, Rob Herring <robh@kernel.org> wrote:
+>
+> On Fri, Dec 3, 2021 at 1:36 PM Sam Protsenko <semen.protsenko@linaro.org> wrote:
+> >
+> > On Tue, 30 Nov 2021 at 21:31, Rob Herring <robh@kernel.org> wrote:
+> > >
+> > > On Tue, Nov 30, 2021 at 01:13:21PM +0200, Sam Protsenko wrote:
+> > > > Add constants for choosing USIv2 configuration mode in device tree.
+> > > > Those are further used in USI driver to figure out which value to write
+> > > > into SW_CONF register. Also document USIv2 IP-core bindings.
+> > > >
+> > > > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > > > ---
+> > > > Changes in v2:
+> > > >   - Combined dt-bindings doc and dt-bindings header patches
+> > > >   - Added i2c node to example in bindings doc
+> > > >   - Added mentioning of shared internal circuits
+> > > >   - Added USI_V2_NONE value to bindings header
+> > > >
+> > > >  .../bindings/soc/samsung/exynos-usi.yaml      | 135 ++++++++++++++++++
+> > > >  include/dt-bindings/soc/samsung,exynos-usi.h  |  17 +++
+> > > >  2 files changed, 152 insertions(+)
+> > > >  create mode 100644 Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+> > > >  create mode 100644 include/dt-bindings/soc/samsung,exynos-usi.h
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..a822bc62b3cd
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+> > > > @@ -0,0 +1,135 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/soc/samsung/exynos-usi.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: Samsung's Exynos USI (Universal Serial Interface) binding
+> > > > +
+> > > > +maintainers:
+> > > > +  - Sam Protsenko <semen.protsenko@linaro.org>
+> > > > +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> > > > +
+> > > > +description: |
+> > > > +  USI IP-core provides selectable serial protocol (UART, SPI or High-Speed I2C).
+> > > > +  USI shares almost all internal circuits within each protocol, so only one
+> > > > +  protocol can be chosen at a time. USI is modeled as a node with zero or more
+> > > > +  child nodes, each representing a serial sub-node device. The mode setting
+> > > > +  selects which particular function will be used.
+> > > > +
+> > > > +  Refer to next bindings documentation for information on protocol subnodes that
+> > > > +  can exist under USI node:
+> > > > +
+> > > > +  [1] Documentation/devicetree/bindings/serial/samsung_uart.yaml
+> > > > +  [2] Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
+> > > > +  [3] Documentation/devicetree/bindings/spi/spi-samsung.txt
+> > > > +
+> > > > +properties:
+> > > > +  $nodename:
+> > > > +    pattern: "^usi@[0-9a-f]+$"
+> > > > +
+> > > > +  compatible:
+> > > > +    const: samsung,exynos-usi-v2
+> > >
+> > > Use SoC based compatibles.
+> > >
+> >
+> > In this particular case, I'd really prefer to have it like this. Most
+> > likely we'll only have USIv1 and USIv1 in the end, and I think that
+> > would be more clear to have USI version in compatible, rather than SoC
+> > name. Please let me know if you have a strong opinion on this one --
+> > if so I'll re-send.
+>
+> Fine if you have some evidence the ratio of versions to SoC are much
+> more than 1:1 and the versions correspond to something (IOW, you
+> aren't making them up).
+>
 
-Add overlays for various serdes protocols on LS1028A QDS board using
-different PHY cards.  These should be applied at boot, based on serdes
-configuration.  If no overlay is applied, only the RGMII interface on
-the QDS is available in Linux.
+Yes, it's documented in TRM for different SoCs (USI version 2), and
+there are even dedicated registers where you can read the USI IP-core
+version. Right now we only know about two USI versions: v1 and v2 (can
+be found for example from different published Samsung downstream
+kernels, and from TRMs). So the USI block is standardized and
+versioned.
 
-Building device tree fragments requires passing the "-@" argument to
-dtc, which increases the base dtb size and might cause some platforms to
-fail to store the new binary. To avoid that, it would be nice to only
-pass "-@" for the platforms where fragments will be used, aka
-LS1028A-QDS. One approach suggested by Rob Herring is used here:
+> We went down the version # path with QCom and in the end about every
+> SoC had a different version.
+>
+> >
+> > > > +
+> > > > +  reg:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  clocks:
+> > > > +    items:
+> > > > +      - description: Bus (APB) clock
+> > > > +      - description: Operating clock for UART/SPI/I2C protocol
+> > > > +
+> > > > +  clock-names:
+> > > > +    items:
+> > > > +      - const: pclk
+> > > > +      - const: ipclk
+> > > > +
+> > > > +  ranges: true
+> > > > +
+> > > > +  "#address-cells":
+> > > > +    const: 1
+> > > > +
+> > > > +  "#size-cells":
+> > > > +    const: 1
+> > > > +
+> > > > +  samsung,sysreg:
+> > > > +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> > > > +    description:
+> > > > +      Should be phandle/offset pair. The phandle to System Register syscon node
+> > > > +      (for the same domain where this USI controller resides) and the offset
+> > > > +      of SW_CONF register for this USI controller.
+> > > > +
+> > > > +  samsung,mode:
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    description:
+> > > > +      Selects USI function (which serial protocol to use). Refer to
+> > > > +      <include/dt-bindings/soc/samsung,exynos-usi.h> for valid USI mode values.
+> > >
+> > > This seems to be redundant. Just check which child is enabled.
+> > >
+> >
+> > I think it's not that easy. Soon we'll have USIv1 support added, and
+> > that has some weird configurations, like having dual I2C mode (two
+> > child I2C nodes must be enabled) and UART+I2C mode, etc.
+>
+> So you are going to turn around and make this an array? If you already
+> know you have changes, I'd rather review this all at once.
+>
 
-https://lore.kernel.org/patchwork/patch/821645/
+No, I'd imagine that would be just a bunch of new dt-bindings
+constants, for USI_V1. For example, for USI_V2 you already can see
+these:
 
-Also moved the enet* override nodes in dts file to be in alphabetic order.
+    #define USI_V2_NONE        0
+    #define USI_V2_UART        1
+    #define USI_V2_SPI        2
+    #define USI_V2_I2C        3
 
-Signed-off-by: Alex Marginean <alexandru.marginean@nxp.com>
-Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
-Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
-Signed-off-by: Jason Liu <jason.hui.liu@nxp.com>
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Signed-off-by: Li Yang <leoyang.li@nxp.com>
----
- arch/arm64/boot/dts/freescale/Makefile        |  16 +++
- .../dts/freescale/fsl-ls1028a-qds-13bb.dts    | 113 ++++++++++++++++++
- .../dts/freescale/fsl-ls1028a-qds-65bb.dts    | 108 +++++++++++++++++
- .../dts/freescale/fsl-ls1028a-qds-7777.dts    |  82 +++++++++++++
- .../dts/freescale/fsl-ls1028a-qds-85bb.dts    | 107 +++++++++++++++++
- .../dts/freescale/fsl-ls1028a-qds-899b.dts    |  75 ++++++++++++
- .../dts/freescale/fsl-ls1028a-qds-9999.dts    |  79 ++++++++++++
- .../boot/dts/freescale/fsl-ls1028a-qds.dts    |  19 ++-
- .../arm64/boot/dts/freescale/fsl-ls1028a.dtsi |   2 +-
- 9 files changed, 595 insertions(+), 6 deletions(-)
- create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts
- create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts
- create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts
- create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts
- create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts
- create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts
+and for USI_V1 it would probably be something like this, judging from [1]:
 
-diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index a14a6173b765..f518eb1e1142 100644
---- a/arch/arm64/boot/dts/freescale/Makefile
-+++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -1,4 +1,14 @@
- # SPDX-License-Identifier: GPL-2.0
-+
-+# required for overlay support
-+DTC_FLAGS_fsl-ls1028a-qds := -@
-+DTC_FLAGS_fsl-ls1028a-qds-13bb := -@
-+DTC_FLAGS_fsl-ls1028a-qds-65bb := -@
-+DTC_FLAGS_fsl-ls1028a-qds-7777 := -@
-+DTC_FLAGS_fsl-ls1028a-qds-85bb := -@
-+DTC_FLAGS_fsl-ls1028a-qds-899b := -@
-+DTC_FLAGS_fsl-ls1028a-qds-9999 := -@
-+
- dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1012a-frdm.dtb
- dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1012a-frwy.dtb
- dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1012a-oxalis.dtb
-@@ -11,6 +21,12 @@ dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-kontron-sl28-var2.dtb
- dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-kontron-sl28-var3-ads2.dtb
- dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-kontron-sl28-var4.dtb
- dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds.dtb
-+dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-13bb.dtb
-+dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-65bb.dtb
-+dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-7777.dtb
-+dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-85bb.dtb
-+dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-899b.dtb
-+dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-qds-9999.dtb
- dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1028a-rdb.dtb
- dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1043a-qds.dtb
- dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1043a-rdb.dtb
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts
-new file mode 100644
-index 000000000000..f748a2c12a70
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts
-@@ -0,0 +1,113 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Device Tree fragment for LS1028A QDS board, serdes 13bb
-+ *
-+ * Copyright 2019-2021 NXP
-+ *
-+ * Requires a LS1028A QDS board with lane B rework.
-+ * Requires a SCH-30841 card with lane A of connector rewired to PHY lane C.
-+ * Set-up is a SCH-30842 card in slot 1 and SCH-30841 in slot 2.
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+/ {
-+	fragment@0 {
-+		target = <&mdio_slot1>;
-+
-+		__overlay__ {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			slot1_sgmii: ethernet-phy@2 {
-+				/* AQR112 */
-+				reg = <0x2>;
-+				compatible = "ethernet-phy-ieee802.3-c45";
-+			};
-+		};
-+	};
-+
-+	fragment@1 {
-+		target = <&enetc_port0>;
-+
-+		__overlay__ {
-+			phy-handle = <&slot1_sgmii>;
-+			phy-mode = "usxgmii";
-+			managed = "in-band-status";
-+			status = "okay";
-+		};
-+	};
-+
-+	fragment@2 {
-+		target = <&mdio_slot2>;
-+
-+		__overlay__ {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			/* 4 ports on AQR412 */
-+			slot2_qxgmii0: ethernet-phy@0 {
-+				reg = <0x0>;
-+				compatible = "ethernet-phy-ieee802.3-c45";
-+			};
-+
-+			slot2_qxgmii1: ethernet-phy@1 {
-+				reg = <0x1>;
-+				compatible = "ethernet-phy-ieee802.3-c45";
-+			};
-+
-+			slot2_qxgmii2: ethernet-phy@2 {
-+				reg = <0x2>;
-+				compatible = "ethernet-phy-ieee802.3-c45";
-+			};
-+
-+			slot2_qxgmii3: ethernet-phy@3 {
-+				reg = <0x3>;
-+				compatible = "ethernet-phy-ieee802.3-c45";
-+			};
-+		};
-+	};
-+
-+	fragment@3 {
-+		target = <&mscc_felix_ports>;
-+
-+		__overlay__ {
-+			port@0 {
-+				status = "okay";
-+				phy-handle = <&slot2_qxgmii0>;
-+				phy-mode = "usxgmii";
-+				managed = "in-band-status";
-+			};
-+
-+			port@1 {
-+				status = "okay";
-+				phy-handle = <&slot2_qxgmii1>;
-+				phy-mode = "usxgmii";
-+				managed = "in-band-status";
-+			};
-+
-+			port@2 {
-+				status = "okay";
-+				phy-handle = <&slot2_qxgmii2>;
-+				phy-mode = "usxgmii";
-+				managed = "in-band-status";
-+			};
-+
-+			port@3 {
-+				status = "okay";
-+				phy-handle = <&slot2_qxgmii3>;
-+				phy-mode = "usxgmii";
-+				managed = "in-band-status";
-+			};
-+		};
-+	};
-+
-+	fragment@4 {
-+		target = <&mscc_felix>;
-+
-+		__overlay__ {
-+			status = "okay";
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts
-new file mode 100644
-index 000000000000..8ffb707a1576
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts
-@@ -0,0 +1,108 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Device Tree fragment for LS1028A QDS board, serdes 69xx
-+ *
-+ * Copyright 2019-2021 NXP
-+ *
-+ * Requires a LS1028A QDS board with lane B rework.
-+ * Requires a SCH-30842 card in slot 1 and a SCH-28021 card in slot 2.
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+/ {
-+	fragment@0 {
-+		target = <&mdio_slot1>;
-+
-+		__overlay__ {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			slot1_sgmii: ethernet-phy@2 {
-+				/* AQR112 */
-+				reg = <0x2>;
-+				compatible = "ethernet-phy-ieee802.3-c45";
-+			};
-+		};
-+	};
-+
-+	fragment@1 {
-+		target = <&enetc_port0>;
-+
-+		__overlay__ {
-+			phy-handle = <&slot1_sgmii>;
-+			phy-mode = "2500base-x";
-+			managed = "in-band-status";
-+			status = "okay";
-+		};
-+	};
-+
-+	fragment@2 {
-+		target = <&mdio_slot2>;
-+
-+		__overlay__ {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			/* 4 ports on VSC8514 */
-+			slot2_qsgmii0: ethernet-phy@8 {
-+				reg = <0x8>;
-+			};
-+
-+			slot2_qsgmii1: ethernet-phy@9 {
-+				reg = <0x9>;
-+			};
-+
-+			slot2_qsgmii2: ethernet-phy@a {
-+				reg = <0xa>;
-+			};
-+
-+			slot2_qsgmii3: ethernet-phy@b {
-+				reg = <0xb>;
-+			};
-+		};
-+	};
-+
-+	fragment@3 {
-+		target = <&mscc_felix_ports>;
-+
-+		__overlay__ {
-+			port@0 {
-+				status = "okay";
-+				phy-handle = <&slot2_qsgmii0>;
-+				phy-mode = "qsgmii";
-+				managed = "in-band-status";
-+			};
-+
-+			port@1 {
-+				status = "okay";
-+				phy-handle = <&slot2_qsgmii1>;
-+				phy-mode = "qsgmii";
-+				managed = "in-band-status";
-+			};
-+
-+			port@2 {
-+				status = "okay";
-+				phy-handle = <&slot2_qsgmii2>;
-+				phy-mode = "qsgmii";
-+				managed = "in-band-status";
-+			};
-+
-+			port@3 {
-+				status = "okay";
-+				phy-handle = <&slot2_qsgmii3>;
-+				phy-mode = "qsgmii";
-+				managed = "in-band-status";
-+			};
-+		};
-+	};
-+
-+	fragment@4 {
-+		target = <&mscc_felix>;
-+
-+		__overlay__ {
-+			status = "okay";
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts
-new file mode 100644
-index 000000000000..eb6a1e674f10
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts
-@@ -0,0 +1,82 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Device Tree fragment for LS1028A QDS board, serdes 7777
-+ *
-+ * Copyright 2019-2021 NXP
-+ *
-+ * Requires a LS1028A QDS board without lane B rework.
-+ * Requires a SCH-30841 card without lane A/C rewire and with a FW with muxing
-+ * disabled, plugged in slot 1.
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+/ {
-+	fragment@0 {
-+		target = <&mdio_slot1>;
-+
-+		__overlay__ {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			/* 4 ports on AQR412 */
-+			slot1_sxgmii0: ethernet-phy@0 {
-+				reg = <0x0>;
-+				compatible = "ethernet-phy-ieee802.3-c45";
-+			};
-+
-+			slot1_sxgmii1: ethernet-phy@1 {
-+				reg = <0x1>;
-+				compatible = "ethernet-phy-ieee802.3-c45";
-+			};
-+
-+			slot1_sxgmii2: ethernet-phy@2 {
-+				reg = <0x2>;
-+				compatible = "ethernet-phy-ieee802.3-c45";
-+			};
-+
-+			slot1_sxgmii3: ethernet-phy@3 {
-+				reg = <0x3>;
-+				compatible = "ethernet-phy-ieee802.3-c45";
-+			};
-+		};
-+	};
-+
-+	fragment@1 {
-+		target = <&mscc_felix_ports>;
-+
-+		__overlay__ {
-+			port@0 {
-+				status = "okay";
-+				phy-handle = <&slot1_sxgmii0>;
-+				phy-mode = "2500base-x";
-+			};
-+
-+			port@1 {
-+				status = "okay";
-+				phy-handle = <&slot1_sxgmii1>;
-+				phy-mode = "2500base-x";
-+			};
-+
-+			port@2 {
-+				status = "okay";
-+				phy-handle = <&slot1_sxgmii2>;
-+				phy-mode = "2500base-x";
-+			};
-+
-+			port@3 {
-+				status = "okay";
-+				phy-handle = <&slot1_sxgmii3>;
-+				phy-mode = "2500base-x";
-+			};
-+		};
-+	};
-+
-+	fragment@2 {
-+		target = <&mscc_felix>;
-+		__overlay__ {
-+			status = "okay";
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts
-new file mode 100644
-index 000000000000..8e90c3088ba1
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts
-@@ -0,0 +1,107 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Device Tree fragment for LS1028A QDS board, serdes 85bb
-+ *
-+ * Copyright 2019-2021 NXP
-+ *
-+ * Requires a LS1028A QDS board with lane B rework.
-+ * Requires a SCH-24801 card in slot 1 and a SCH-28021 card in slot 2.
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+/ {
-+	fragment@0 {
-+		target = <&mdio_slot1>;
-+
-+		__overlay__ {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			slot1_sgmii: ethernet-phy@1c {
-+				/* 1st port on VSC8234 */
-+				reg = <0x1c>;
-+			};
-+		};
-+	};
-+
-+	fragment@1 {
-+		target = <&enetc_port0>;
-+
-+		__overlay__ {
-+			phy-handle = <&slot1_sgmii>;
-+			phy-mode = "sgmii";
-+			managed = "in-band-status";
-+			status = "okay";
-+		};
-+	};
-+
-+	fragment@2 {
-+		target = <&mdio_slot2>;
-+
-+		__overlay__ {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			/* 4 ports on VSC8514 */
-+			slot2_qsgmii0: ethernet-phy@8 {
-+				reg = <0x8>;
-+			};
-+
-+			slot2_qsgmii1: ethernet-phy@9 {
-+				reg = <0x9>;
-+			};
-+
-+			slot2_qsgmii2: ethernet-phy@a {
-+				reg = <0xa>;
-+			};
-+
-+			slot2_qsgmii3: ethernet-phy@b {
-+				reg = <0xb>;
-+			};
-+		};
-+	};
-+
-+	fragment@3 {
-+		target = <&mscc_felix_ports>;
-+
-+		__overlay__ {
-+			port@0 {
-+				status = "okay";
-+				phy-handle = <&slot2_qsgmii0>;
-+				phy-mode = "qsgmii";
-+				managed = "in-band-status";
-+			};
-+
-+			port@1 {
-+				status = "okay";
-+				phy-handle = <&slot2_qsgmii1>;
-+				phy-mode = "qsgmii";
-+				managed = "in-band-status";
-+			};
-+
-+			port@2 {
-+				status = "okay";
-+				phy-handle = <&slot2_qsgmii2>;
-+				phy-mode = "qsgmii";
-+				managed = "in-band-status";
-+			};
-+
-+			port@3 {
-+				status = "okay";
-+				phy-handle = <&slot2_qsgmii3>;
-+				phy-mode = "qsgmii";
-+				managed = "in-band-status";
-+			};
-+		};
-+	};
-+
-+	fragment@4 {
-+		target = <&mscc_felix>;
-+
-+		__overlay__ {
-+			status = "okay";
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts
-new file mode 100644
-index 000000000000..5d0a094e6c44
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts
-@@ -0,0 +1,75 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Device Tree fragment for LS1028A QDS board, serdes 85xx
-+ *
-+ * Copyright 2019-2021 NXP
-+ *
-+ * Requires a LS1028A QDS board without lane B rework.
-+ * Requires a SCH-24801 card in slot 1.
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+/ {
-+	fragment@0 {
-+		target = <&mdio_slot1>;
-+		__overlay__ {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			/* VSC8234 */
-+			slot1_sgmii0: ethernet-phy@1c {
-+				reg = <0x1c>;
-+			};
-+
-+			slot1_sgmii1: ethernet-phy@1d {
-+				reg = <0x1d>;
-+			};
-+
-+			slot1_sgmii2: ethernet-phy@1e {
-+				reg = <0x1e>;
-+			};
-+
-+			slot1_sgmii3: ethernet-phy@1f {
-+				reg = <0x1f>;
-+			};
-+		};
-+	};
-+
-+	fragment@1 {
-+		target = <&enetc_port0>;
-+		__overlay__ {
-+			phy-handle = <&slot1_sgmii0>;
-+			phy-mode = "sgmii";
-+			managed = "in-band-status";
-+			status = "okay";
-+		};
-+	};
-+
-+	fragment@2 {
-+		target = <&mscc_felix_ports>;
-+		__overlay__ {
-+			port@1 {
-+				status = "okay";
-+				phy-handle = <&slot1_sgmii1>;
-+				phy-mode = "sgmii";
-+				managed = "in-band-status";
-+			};
-+
-+			port@2 {
-+				status = "okay";
-+				phy-handle = <&slot1_sgmii2>;
-+				phy-mode = "sgmii";
-+				managed = "in-band-status";
-+			};
-+		};
-+	};
-+
-+	fragment@3 {
-+		target = <&mscc_felix>;
-+		__overlay__ {
-+			status = "okay";
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts
-new file mode 100644
-index 000000000000..1ef743c48e84
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts
-@@ -0,0 +1,79 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Device Tree fragment for LS1028A QDS board, serdes 85xx
-+ *
-+ * Copyright 2019-2021 NXP
-+ *
-+ * Requires a LS1028A QDS board without lane B rework.
-+ * Requires a SCH-24801 card in slot 1.
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+/ {
-+	fragment@0 {
-+		target = <&mdio_slot1>;
-+		__overlay__ {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			/* VSC8234 */
-+			slot1_sgmii0: ethernet-phy@1c {
-+				reg = <0x1c>;
-+			};
-+
-+			slot1_sgmii1: ethernet-phy@1d {
-+				reg = <0x1d>;
-+			};
-+
-+			slot1_sgmii2: ethernet-phy@1e {
-+				reg = <0x1e>;
-+			};
-+
-+			slot1_sgmii3: ethernet-phy@1f {
-+				reg = <0x1f>;
-+			};
-+		};
-+	};
-+
-+	fragment@1 {
-+		target = <&mscc_felix_ports>;
-+		__overlay__ {
-+			port@0 {
-+				status = "okay";
-+				phy-handle = <&slot1_sgmii0>;
-+				phy-mode = "sgmii";
-+				managed = "in-band-status";
-+			};
-+
-+			port@1 {
-+				status = "okay";
-+				phy-handle = <&slot1_sgmii1>;
-+				phy-mode = "sgmii";
-+				managed = "in-band-status";
-+			};
-+
-+			port@2 {
-+				status = "okay";
-+				phy-handle = <&slot1_sgmii2>;
-+				phy-mode = "sgmii";
-+				managed = "in-band-status";
-+			};
-+
-+			port@3 {
-+				status = "okay";
-+				phy-handle = <&slot1_sgmii3>;
-+				phy-mode = "sgmii";
-+				managed = "in-band-status";
-+			};
-+		};
-+	};
-+
-+	fragment@2 {
-+		target = <&mscc_felix>;
-+		__overlay__ {
-+			status = "okay";
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-index 782853a449cc..177bc1405f0f 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-@@ -211,6 +211,16 @@ &duart1 {
- 	status = "okay";
- };
- 
-+&enetc_port1 {
-+	phy-handle = <&qds_phy1>;
-+	phy-mode = "rgmii-id";
-+	status = "okay";
-+};
-+
-+&enetc_port2 {
-+	status = "okay";
-+};
-+
- &esdhc {
- 	status = "okay";
- };
-@@ -326,17 +336,16 @@ rtc@51 {
- 	};
- };
- 
--&enetc_port1 {
--	phy-handle = <&qds_phy1>;
--	phy-mode = "rgmii-id";
-+&lpuart0 {
- 	status = "okay";
- };
- 
--&lpuart0 {
-+&lpuart1 {
- 	status = "okay";
- };
- 
--&lpuart1 {
-+&mscc_felix_port4 {
-+	ethernet = <&enetc_port2>;
- 	status = "okay";
- };
- 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-index 5c17dfaa50de..f305ac2906d8 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-@@ -1115,7 +1115,7 @@ mscc_felix: ethernet-switch@0,5 {
- 				interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
- 				status = "disabled";
- 
--				ports {
-+				mscc_felix_ports: ports {
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
--- 
-2.25.1
+    #define USI_V1_NONE        4
+    #define USI_V1_I2C0  5
+    #define USI_V1_I2C1  6
+    #define USI_V1_I2C0_I2C1_DUAL  7
+    #define USI_V1_SPI  8
+    #define USI_V1_UART  9
+    #define USI_V1_UART_I2C1_DUAL  10
 
+Guess in that case parsing enabled nodes and figuring out which mode
+we have, and which value should be written into SW_CONF -- might be
+not trivial. Having explicit "mode" property simplifies things.
+
+[1] https://github.com/ibanezbass/universal7885/blob/oneui/drivers/soc/samsung/usi.c
+
+> > Looks like it
+> > might take some not very elegant logic to figure out which exactly
+> > mode value should be written in SW_CONF register in that way, it's
+> > much easier to just specify mode in USI node. Also, that reflects
+> > hardware better: we actually write that specified mode to SW_CONF
+> > register.
+>
+> You just have to compare the child node names or compatibles.
+>
+
+For USIv1 that would allow for some invalid combinations (e.g.
+UART+I2C1 is possible, but SPI+I2C1 can't be configured). Also, the
+list of supported compatibles might grow in future, which will have us
+constantly add the list to the driver. And node names might be not
+valid (e.g. you can see @hsi2c names are used in some dts's instead of
+@i2c; also downstream kernels might have all kinds of names -- not a
+strong point, but still).
+
+Anyway, it can be implemented, and maybe I'm a bit biased here; so if
+I still didn't convince you that benefits of having "mode" property
+outweigh the disadvantages, please let me know -- I can send it in
+next submission.
+
+> > Also, later we might want to be able to switch that mode via
+> > SysFS, e.g. for testing purposes. Current design seems to be better
+> > suited for some things like that.
+>
+> The binding should have no impact on that. If for testing, use debugfs.
+>
+> > Please let me know if you have a strong opinion on this one, or it's
+> > ok to leave it as is.
+> >
+> > All other comments are addressed and will be present in v3. Thanks for
+> > the review!

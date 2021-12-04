@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 711504686B1
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 18:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E08BC4686B3
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 18:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355632AbhLDRnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 12:43:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
+        id S1355606AbhLDRoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 12:44:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355573AbhLDRns (ORCPT
+        with ESMTP id S230139AbhLDRoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 12:43:48 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDD9C0613F8
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 09:40:23 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so7895472otl.3
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 09:40:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=yLwatZiT4SVEKTvY8N+iFzmHoRw4ES5HD0ZbBaXfMt8=;
-        b=YbCoruoNpYkRvV0VUBMbNUIVfdpAlB3xeZfPed6a6uQZmcL3h2F6PqV51cs1hLR6WX
-         BST0nzP9C7Q6ZSTFIFN43RgIC8WQXQv0Igh9hGIWpVg3hVPw0mMAQE2YlH9l770Zp8sK
-         8bZbih+EYpExbGUZB/FwNglsczIurA8SSlqRYm+zVn3zin2DqxWwMCj1vSAHTVTfr3k3
-         d758Dvqcn5sf0mzCidb4mS+ZlV/u1XvXn4Nk1AgKI8pq/vS7TN1HrR+T118HhuJad1Dg
-         unyqwF/ykYD/KRcrhRMCgjt0cNlx/AMx7ps1XZsnZZSrkhfGE8QFP6Tc4i+ZmbFzhRqU
-         d+EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=yLwatZiT4SVEKTvY8N+iFzmHoRw4ES5HD0ZbBaXfMt8=;
-        b=IG8vYh1l7+jLCsb6OQWWdaW9MefaNgyZhDVzC5T37zarXHKfo3DvO2QShrRiw1y/66
-         JXYNgmyhhAng77AF45xP9ISnaqG2ByfJb+3vl4mnjG02/5MQBt3hJqjCoiJX8dF3RLx3
-         cLFTwxYc5/fr1JcJy+AJwRTbEgqIAQEZ6mDDDOQAQYMGWVxPeCICq0azYHZWwtOjMhee
-         1AgLVaEqxLmxhwIMxJ3qJDy2E4nfmeHPgDpwGrBP3cXn1Y6jleTTJctos+Hu4fo0TK/O
-         TIfcK8SDOmFXxTMAbdQMuxdhuoWOv2zrIGBNA0slj5w3njc9HCIjlELD65KAis39cqYC
-         fszg==
-X-Gm-Message-State: AOAM533zk2jlUYywQlZX7WdrUthEM0Y4Mim4mznR8Bdonrk7niuyju9O
-        re4b+soJeBj2E+wxMg51vXWqo6uUktjoBhzVDrU=
-X-Google-Smtp-Source: ABdhPJxYQjfP9+0akI1ZvPGyxPsZjKGU0HlWLSZEgDFkBiI45ucLvYR+kQVv1yfOUgWRTm4ieGpy1v29XateRQyVBGI=
-X-Received: by 2002:a05:6830:1008:: with SMTP id a8mr22210615otp.373.1638639622529;
- Sat, 04 Dec 2021 09:40:22 -0800 (PST)
+        Sat, 4 Dec 2021 12:44:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB2FC061751;
+        Sat,  4 Dec 2021 09:40:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F6C9B80CC3;
+        Sat,  4 Dec 2021 17:40:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08BA6C341C0;
+        Sat,  4 Dec 2021 17:40:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638639639;
+        bh=Ejrhs8NC1d6wHHlfvszRxuznWip0SH1aBTOhWTu2GA0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UfCpjjtG/7JU3dC56E7ApVUAe4pW8ay4KqjpjAyiT4QbXPY96IYZZnf9KMFNcIwU5
+         hPBIlmKqrmj6jonIzDPHJybhyNBxTS828WiKVdnSLp8bZVh8MEgGM8CssR6dOwVYYB
+         40fLej/Y4246aHiC+MB0ZB9xHLds6vqsN4qDzdwAJ8TuOxQhDlc1UImqIKS7b7vy6e
+         p0FM7+t1OZTJ6GWZ59GZHkjT7srdrwz5PfOjCu3YL4kvE3g6WRqvpI2poQETxCzAQD
+         Pn2/WBvyYJMbZMr0jher2EsoDnKBi+wooejGVd3rBHUmfX8Ydh7HQyTxoD2QuR4Agd
+         vdGmdIk8Of2mg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        M Chetan Kumar <m.chetan.kumar@linux.intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Stephan Gerhold <stephan@gerhold.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net: wwan: iosm: select CONFIG_RELAY
+Date:   Sat,  4 Dec 2021 18:40:25 +0100
+Message-Id: <20211204174033.950528-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Received: by 2002:a05:6838:ac0c:0:0:0:0 with HTTP; Sat, 4 Dec 2021 09:40:22
- -0800 (PST)
-Reply-To: mmjanee02@gmail.com
-From:   Mary Jane Kallon <maurmbama1@gmail.com>
-Date:   Sat, 4 Dec 2021 09:40:22 -0800
-Message-ID: <CAD2nLk47_PrBCF=CJEFUnsJYDe3ygmiLNs0i1SeQaYqBoZJhZw@mail.gmail.com>
-Subject: HAPPY WEEKEND
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Dear,
-How are you doing today? I got your contact from a directory and
-picked interest to communicate you by faith, though we have not met
-before, I believe we can achieve something together. My husband died
-few years ago after battling with brain cancer, before his death, he
-deposited ($10.5 Million) in one of the financial institution. He
-wanted to establish coco processing factory and also real estate
-business.
+From: Arnd Bergmann <arnd@arndb.de>
 
-After the death of my husband, I have been receiving all manner of
-life threats from the family members, now the pressure is getting more
-severe I decided to leave this country. Please can you partner with me
-and receive the fund in your account while I come over there with my
-son for investment. If you  agree, get back for more details and what
-will be your commission for the assistance. I wait for your reply,
-Mary Jane Kallon
+The iosm driver started using relayfs, but is missing the Kconfig
+logic to ensure it's built into the kernel:
+
+x86_64-linux-ld: drivers/net/wwan/iosm/iosm_ipc_trace.o: in function `ipc_trace_create_buf_file_handler':
+iosm_ipc_trace.c:(.text+0x16): undefined reference to `relay_file_operations'
+x86_64-linux-ld: drivers/net/wwan/iosm/iosm_ipc_trace.o: in function `ipc_trace_subbuf_start_handler':
+iosm_ipc_trace.c:(.text+0x31): undefined reference to `relay_buf_full'
+x86_64-linux-ld: drivers/net/wwan/iosm/iosm_ipc_trace.o: in function `ipc_trace_ctrl_file_write':
+iosm_ipc_trace.c:(.text+0xd5): undefined reference to `relay_flush'
+x86_64-linux-ld: drivers/net/wwan/iosm/iosm_ipc_trace.o: in function `ipc_trace_port_rx':
+
+Fixes: 00ef32565b9b ("net: wwan: iosm: device trace collection using relayfs")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/net/wwan/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/wwan/Kconfig b/drivers/net/wwan/Kconfig
+index bdb2b0e46c12..9f5111a77da9 100644
+--- a/drivers/net/wwan/Kconfig
++++ b/drivers/net/wwan/Kconfig
+@@ -85,6 +85,7 @@ config IOSM
+ 	tristate "IOSM Driver for Intel M.2 WWAN Device"
+ 	depends on INTEL_IOMMU
+ 	select NET_DEVLINK
++	select RELAY
+ 	help
+ 	  This driver enables Intel M.2 WWAN Device communication.
+ 
+-- 
+2.29.2
+

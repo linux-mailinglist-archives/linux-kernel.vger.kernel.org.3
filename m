@@ -2,109 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 118E846876E
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 21:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F404468774
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 21:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344739AbhLDUTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 15:19:05 -0500
-Received: from mail-oi1-f170.google.com ([209.85.167.170]:43661 "EHLO
-        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346078AbhLDUPF (ORCPT
+        id S233744AbhLDUa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 15:30:59 -0500
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:46792 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229923AbhLDUa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 15:15:05 -0500
-Received: by mail-oi1-f170.google.com with SMTP id o4so13108904oia.10;
-        Sat, 04 Dec 2021 12:11:39 -0800 (PST)
+        Sat, 4 Dec 2021 15:30:58 -0500
+Received: by mail-ot1-f44.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so8161266oto.13;
+        Sat, 04 Dec 2021 12:27:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7uBiY0w9jiQz0c0CTtMivsvO3pUqW3Akp5HFrz8N4Is=;
-        b=8QQB3sLuBIWm6ICScZhR5YJpdFmN+3n5RZoFe/xsx796acCfMfJ+Z0qpSyWAsrUh3+
-         iyAWt7UbSFgex6DnQw2ejogfO95o6gst26FMshWUQwbMFW5UIHqLVvBFk9oz+ghKqcWO
-         tphGilXmGweTJcaSGsbnmcrY84Al6Wn8+NcHEXu8UiVJtFQNCKd8E1G8skX0nIOYMpp3
-         8wqurhQDkD4sV0TwFtxjXRC0mdAAdu1NTPWfgLWchDm+5LR8tkvf3MagrkwZy7AhRdHZ
-         AxrTGgCE9YmVkqybJMeuY5QUHK9Wldech3EkbKgUKh3kkjBFcJFoOMVvn3txiZufpf0E
-         4MHA==
-X-Gm-Message-State: AOAM530ubWYfaLSTtZNTXV1knw2M5CTk53siSRBVmfvcj9GNCgeX/uin
-        YmmB/hvzjCdAF0eaC6+yh8xwO4aU8Amk2XH7bKw=
-X-Google-Smtp-Source: ABdhPJyVdRH8ISLGx6EwWm+K33JXVkBn3dtEGv1vaDd624Yo2W4EWD95gRtwXAK5BHi/KWthgHd4+0aEY4Na+z4iet4=
-X-Received: by 2002:a05:6808:14c2:: with SMTP id f2mr16123105oiw.154.1638648699091;
- Sat, 04 Dec 2021 12:11:39 -0800 (PST)
+        bh=jj9MDQSbqV6i4mMnhwh+WmM/WeOdP1QKhWD3Q5AgA3o=;
+        b=owTMYA26uqRShDC72+3HhxkARuVCORm22UkQQ2NiN9pL6OiCdUindnWuo3HtvUy9lb
+         hHNPpXABcKnxr97IN4LiiXoJlGPuTZ6Raed+BVGOzURRVUsoCr1v2GPifXlhpjxRmOHx
+         TXgA1XzCEmIaU8IYanu+fq/W0eclgAEXmVSUUOWihIzJGNbE5EHEnHIAqWdlhWybJ2Mq
+         tQUDjHX/cpVc6WHl/hA7M053Xhpp+Ml4WMxgoMkNOOyTRH22oYCO1/wbS3iHnql8TOl1
+         A471hTS0OHHAAKfjJ2DukzeAvDOB+cKuKpwg4s2pL175mv4jkuGmhWZBj/R2cqUroAM6
+         K8lw==
+X-Gm-Message-State: AOAM530W8bTJNl506gyAKba0HqFJvTpMQDOzRxSe9huhuBI1E6jMCACq
+        XfEE2NxZukAfhjZSdihgoTcKUU4mfLC7VPD2Whk=
+X-Google-Smtp-Source: ABdhPJzgpSXpiAmecZIGTvFAIueOoHEETRH5QSK5agkuQovxsQaKAEpkNLMP1ObHB3pk4HlzObTpNxLW/irvALQ3nZg=
+X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr22911693otu.254.1638649652497;
+ Sat, 04 Dec 2021 12:27:32 -0800 (PST)
 MIME-Version: 1.0
-References: <CAJZ5v0hQaF-ANLc4JO=Ub_JMsqLFpZev_gmpb=NPpg=zmqcauA@mail.gmail.com>
- <CAHk-=wiGbtmc+FoUjcgaQRavL=B=rfTmA_VhTtGpmhmk2873cA@mail.gmail.com>
-In-Reply-To: <CAHk-=wiGbtmc+FoUjcgaQRavL=B=rfTmA_VhTtGpmhmk2873cA@mail.gmail.com>
+References: <YZPbQVwWOJCrAH78@zn.tnic> <20211119040330.4013045-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <87pmqpjcef.ffs@tglx> <20211202222109.pcsgm2jska3obvmx@black.fi.intel.com>
+ <87lf126010.ffs@tglx> <20211203234915.jw6kdd2qnfrionch@black.fi.intel.com>
+In-Reply-To: <20211203234915.jw6kdd2qnfrionch@black.fi.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 4 Dec 2021 21:11:27 +0100
-Message-ID: <CAJZ5v0janj--CTeVndJAwiaset5tP8XYdXmeW1hHREcO4BefZw@mail.gmail.com>
-Subject: Re: [GIT PULL] ACPI fixes for v5.16-rc3
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+Date:   Sat, 4 Dec 2021 21:27:20 +0100
+Message-ID: <CAJZ5v0gLwSvPfWzYwiZXee8SiPiQQoxjfKfVn4jx6wK_9VVEeg@mail.gmail.com>
+Subject: Re: [PATCH v2] x86: Skip WBINVD instruction for VM guest
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 4, 2021 at 6:04 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Sat, Dec 4, 2021 at 12:49 AM Kirill A. Shutemov
+<kirill.shutemov@linux.intel.com> wrote:
 >
-> On Fri, Nov 26, 2021 at 11:38 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> On Fri, Dec 03, 2021 at 12:48:43AM +0100, Thomas Gleixner wrote:
+> > Kirill,
 > >
-> >  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
-> >  acpi-5.16-rc3
+> > On Fri, Dec 03 2021 at 01:21, Kirill A. Shutemov wrote:
+> > > On Thu, Nov 25, 2021 at 01:40:24AM +0100, Thomas Gleixner wrote:
+> > >> Kuppuswamy,
+> > >> Either that or you provide patches with arguments which are based on
+> > >> proper analysis and not on 'appears to' observations.
+> > >
+> > > I think the right solution to the WBINVD would be to add a #VE handler
+> > > that does nothing. We don't have a reasonable way to handle it from within
+> > > the guest. We can call the VMM in hope that it would handle it, but VMM is
+> > > untrusted and it can ignore the request.
+> > >
+> > > Dave suggested that we need to do code audit to make sure that there's no
+> > > user inside TDX guest environment that relies on WBINVD to work correctly.
+> > >
+> > > Below is full call tree of WBINVD. It is substantially larger than I
+> > > anticipated from initial grep.
+> > >
+> > > Conclusions:
+> > >
+> > >   - Most of callers are in ACPI code on changing S-states. Ignoring cache
+> > >     flush for S-state change on virtual machine should be safe.
+> > >
+> > >   - The only WBINVD I was able to trigger is on poweroff from ACPI code.
+> > >     Reboot also should trigger it, but for some reason I don't see it.
+> > >
+> > >   - Few caller in CPU offline code. TDX does not allowed to offline CPU as
+> > >     we cannot bring it back -- we don't have SIPI. And even if offline
+> > >     works for vCPU it should be safe to ignore WBINVD there.
+> > >
+> > >   - NVDIMMs are not supported inside TDX. If it will change we would need
+> > >     to deal with cache flushing for this case. Hopefully, we would be able
+> > >     to avoid WBINVD.
+> > >
+> > >   - Cache QoS and MTRR use WBINVD. They are disabled in TDX, but it is
+> > >     controlled by VMM if the feature is advertised. We would need to
+> > >     filter CPUID/MSRs to make sure VMM would not mess with them.
+> > >
+> > > Is it good enough justification for do-nothing #VE WBINVD handler?
+> >
+> > first of all thank you very much for this very profound analysis.
+> >
+> > This is really what I was asking for and you probably went even a step
+> > deeper than that. Very appreciated.
+> >
+> > What we should do instead of doing a wholesale let's ignore WBINVD is to
+> > have a separate function/macro:
+> >
+> >  ACPI_FLUSH_CPU_CACHE_PHYS()
+> >
+> > and invoke that from the functions which are considered to be safe.
+> >
+> > That would default to ACPI_FLUSH_CPU_CACHE() for other architecures
+> > obviously.
+> >
+> > Then you can rightfully do:
+> >
+> > #define ACPI_FLUSH_CPU_CACHE_PHYS()     \
+> >         if (!cpu_feature_enabled(XXX))        \
+> >               wbinvd();               \
+> >
+> > where $XXX might be FEATURE_TDX_GUEST for paranoia sake and then
+> > extended to X86_FEATURE_HYPERVISOR if everyone agrees.
+> >
+> > Then you have the #VE handler which just acts on any other wbinvd
+> > invocation via warn, panic, whatever, no?
 >
-> Hmm. This may be unrelated, but I don't think I've seen this before..
-
-No, this is not related.  It shows up because of the drain_workqueue()
-in __acpi_ec_flush_work().
-
-> On my laptop, I get
+> I found another angle at the problem. According to the ACPI spec v6.4
+> section 16.2 cache flushing is required on the way to S1, S2 and S3.
+> And according to 8.2 it also is required on the way to C3.
 >
->   WARNING: CPU: 4 PID: 95940 at kernel/workqueue.c:1441 __queue_work+0x2f9/0x3b0
->   Workqueue: kec_query acpi_ec_event_processor
->   ..
->   Call Trace:
->    <TASK>
->    queue_work_on+0x20/0x30
-
-So this tries to add work to ec_wq while it is draining AFAICS.
-
->    advance_transaction+0x1a1/0x500
->    acpi_ec_transaction+0x15c/0x410
->    acpi_ec_space_handler+0xd2/0x270
->    acpi_ev_address_space_dispatch+0x216/0x2a3
->    ? acpi_ec_resume+0x20/0x20
->    acpi_ex_access_region+0x1dc/0x255
->    ? acpi_os_wait_semaphore+0x48/0x70
->    acpi_ex_field_datum_io+0xfd/0x178
->    acpi_ex_read_data_from_field+0x12e/0x171
->    acpi_ex_resolve_node_to_value+0x1fe/0x281
->    acpi_ds_evaluate_name_path+0x75/0xe9
->    acpi_ds_exec_end_op+0x8f/0x411
->    acpi_ps_parse_loop+0x495/0x5bc
->    acpi_ps_parse_aml+0x94/0x2c2
->    acpi_ps_execute_method+0x15e/0x193
->    acpi_ns_evaluate+0x1c6/0x25d
->    acpi_evaluate_object+0x12e/0x226
->    acpi_ec_event_processor+0x63/0x90
->    process_one_work+0x217/0x3c0
+> TDX doesn't support these S- and C-states. TDX is only supports S0 and S5.
 >
-> and it seems to be happening at resume time.
+> Adjusting code to match the spec would make TDX work automagically.
 >
-> This was when running a51e3ac43ddb, so not the very latest git tree,
-> but recent.
+> Any opinions on the patch below?
 >
-> Maybe I've missed a report of this?
+> I didn't touch ACPI_FLUSH_CPU_CACHE() users in cpufreq/longhaul.c because
+> it might be outside of ACPI spec, I donno.
+>
+> diff --git a/drivers/acpi/acpica/hwesleep.c b/drivers/acpi/acpica/hwesleep.c
+> index 808fdf54aeeb..b004a72a426e 100644
+> --- a/drivers/acpi/acpica/hwesleep.c
+> +++ b/drivers/acpi/acpica/hwesleep.c
+> @@ -104,7 +104,8 @@ acpi_status acpi_hw_extended_sleep(u8 sleep_state)
+>
+>         /* Flush caches, as per ACPI specification */
+>
+> -       ACPI_FLUSH_CPU_CACHE();
+> +       if (sleep_state >= ACPI_STATE_S1 && sleep_state <= ACPI_STATE_S3)
+> +               ACPI_FLUSH_CPU_CACHE();
 
-It's not been reported or at least I can't recall that, but it is not
-a new issue.
+So this basically means
 
-There is a commit to address this in my linux-next branch:
+if (sleep_state < ACPI_STATE_S14)
+        ACPI_FLUSH_CPU_CACHE();
 
-https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=linux-next&id=4a9af6cac050dce2e895ec3205c4615383ad9112
+and analogously below.
 
-but it is interesting that you can reproduce it.  I thought it would
-be rather theoretical.
+This is fine with me, but it is an ACPICA patch, so it needs to be
+submitted to the upstream project.  I think I can take care of this,
+but not urgently.
+
+>
+>         status = acpi_os_enter_sleep(sleep_state, sleep_control, 0);
+>         if (status == AE_CTRL_TERMINATE) {
+> diff --git a/drivers/acpi/acpica/hwsleep.c b/drivers/acpi/acpica/hwsleep.c
+> index 34a3825f25d3..bfcd66efeb48 100644
+> --- a/drivers/acpi/acpica/hwsleep.c
+> +++ b/drivers/acpi/acpica/hwsleep.c
+> @@ -110,7 +110,8 @@ acpi_status acpi_hw_legacy_sleep(u8 sleep_state)
+>
+>         /* Flush caches, as per ACPI specification */
+>
+> -       ACPI_FLUSH_CPU_CACHE();
+> +       if (sleep_state >= ACPI_STATE_S1 && sleep_state <= ACPI_STATE_S3)
+> +               ACPI_FLUSH_CPU_CACHE();
+>
+>         status = acpi_os_enter_sleep(sleep_state, pm1a_control, pm1b_control);
+>         if (status == AE_CTRL_TERMINATE) {
+> diff --git a/drivers/acpi/acpica/hwxfsleep.c b/drivers/acpi/acpica/hwxfsleep.c
+> index e4cde23a2906..ba77598ee43e 100644
+> --- a/drivers/acpi/acpica/hwxfsleep.c
+> +++ b/drivers/acpi/acpica/hwxfsleep.c
+> @@ -162,8 +162,6 @@ acpi_status acpi_enter_sleep_state_s4bios(void)
+>                 return_ACPI_STATUS(status);
+>         }
+>
+> -       ACPI_FLUSH_CPU_CACHE();
+> -
+>         status = acpi_hw_write_port(acpi_gbl_FADT.smi_command,
+>                                     (u32)acpi_gbl_FADT.s4_bios_request, 8);
+>         if (ACPI_FAILURE(status)) {
+> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
+> index 76ef1bcc8848..01495aca850e 100644
+> --- a/drivers/acpi/processor_idle.c
+> +++ b/drivers/acpi/processor_idle.c
+> @@ -567,7 +567,8 @@ static int acpi_idle_play_dead(struct cpuidle_device *dev, int index)
+>  {
+>         struct acpi_processor_cx *cx = per_cpu(acpi_cstate[index], dev->cpu);
+>
+> -       ACPI_FLUSH_CPU_CACHE();
+> +       if (cx->type == ACPI_STATE_C3)
+> +               ACPI_FLUSH_CPU_CACHE();
+
+And this is independent of the ACPICA changes above, so it can be made
+in a separate patch.
+
+This one is somewhat risky, though, because there is no guarantee that
+all of the platforms in the field follow the spec.
+
+>
+>         while (1) {
+>
+> diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
+> index eaa47753b758..a81d08b762c2 100644
+> --- a/drivers/acpi/sleep.c
+> +++ b/drivers/acpi/sleep.c
+> @@ -73,7 +73,9 @@ static int acpi_sleep_prepare(u32 acpi_state)
+>                 acpi_set_waking_vector(acpi_wakeup_address);
+>
+>         }
+> -       ACPI_FLUSH_CPU_CACHE();
+> +
+> +       if (acpi_state >= ACPI_STATE_S1 && acpi_state <= ACPI_STATE_S3)
+> +               ACPI_FLUSH_CPU_CACHE();
+
+This flushing and the one below looks like it may be redundant,
+because the cache will be flushed again in the ACPICA code above
+anyway.
+
+However, this needs to be double-checked.
+
+>  #endif
+>         pr_info("Preparing to enter system sleep state S%d\n", acpi_state);
+>         acpi_enable_wakeup_devices(acpi_state);
+> @@ -566,7 +568,8 @@ static int acpi_suspend_enter(suspend_state_t pm_state)
+>         u32 acpi_state = acpi_target_sleep_state;
+>         int error;
+>
+> -       ACPI_FLUSH_CPU_CACHE();
+> +       if (acpi_state >= ACPI_STATE_S1 && acpi_state <= ACPI_STATE_S3)
+> +               ACPI_FLUSH_CPU_CACHE();
+>
+>         trace_suspend_resume(TPS("acpi_suspend"), acpi_state, true);
+>         switch (acpi_state) {
+> @@ -903,8 +906,6 @@ static int acpi_hibernation_enter(void)
+>  {
+>         acpi_status status = AE_OK;
+>
+> -       ACPI_FLUSH_CPU_CACHE();
+> -
+>         /* This shouldn't return.  If it returns, we have a problem */
+>         status = acpi_enter_sleep_state(ACPI_STATE_S4);
+>         /* Reprogram control registers */
+
+This one is OK and can be done in a separate patch.

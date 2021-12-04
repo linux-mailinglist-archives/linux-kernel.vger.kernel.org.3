@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B9E468384
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:18:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C12DF468385
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:18:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384441AbhLDJV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 04:21:56 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:50871 "EHLO
+        id S1384450AbhLDJWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 04:22:00 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:38820 "EHLO
         mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384431AbhLDJVx (ORCPT
+        with ESMTP id S1384430AbhLDJVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 4 Dec 2021 04:21:53 -0500
-Received: by mail-io1-f69.google.com with SMTP id e14-20020a6bf10e000000b005e23f0f5e08so4359950iog.17
+Received: by mail-io1-f69.google.com with SMTP id l124-20020a6b3e82000000b005ed165a1506so4415858ioa.5
         for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 01:18:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=CUg3SKRRr5AZRrrRAfBqwmKAe9l+DABQvp0lKUAZGW4=;
-        b=VRI3oEVbwrOZmSZ4k0EGZreG1Qqfb3ycRDKvJQ/Lsj0C//TobFTiy0HlS75Q4Jkiep
-         PxgYOWQvz74qYyZ/Dr+v2TGaY/lg6dXRBTOatrPi3i/o6uPXcDOYXfSI/xjPEtVJbqbt
-         sFMft78aXQx4xKUGAbsF0VEqiOC7NcRYQlV5mILFZF+S3cXwUNNelgVUh6zWXUd9T7f1
-         nU0nhsko9bxpeHZvLfL6H6oQc4w1bljGmwWk2zL7tB21k5oFzq7W7sZA4d+/e2TbcDOz
-         Yy4CaJRx4DiyTeHSoULefJX+VmR8JLMWp4L3wdB872U7lgXEosm2xgLQ+SvN66+oyTG6
-         YXNg==
-X-Gm-Message-State: AOAM5331/FvDZhrgUhBYWXg6w6OKDI1VV/HZ9X/LzrW5ctPQ74mZ9kqP
-        hdj1HE/H1NBhkGcY6TW0gvv7bis8EkhesdXlhnXrix6fF4lq
-X-Google-Smtp-Source: ABdhPJzAficTU5yYxlsBfgJBI6iE30UopThIcBDgy4Jniw7LCPCs+V9xZYzu/6bHKQNczIo5WTUTgJ5bl1S+aT7AL2HCH+lLOjIV
+        bh=BieNe7yuzJXqBMx62R9EP5CNnpY06fgxYI8rI82ZXHs=;
+        b=glvSA7GeF9kMToAQirv9rdrENXNlGYcDfZBWqZoBSTEIlmTUhIyLTUgZkOzujbrGtw
+         ti4DHi1KkGWf0YaVZXqq4qJCiO2tVItTCXSC4iHgIZUHXUg3ZddAMs9nDp/aVyAOLPQQ
+         STV5Sk3jIq/e7/T2JyzdlJ+FL45NkEGbxZiAdudxRJy5fP3lRFE5L+gGhNIdlJmVc6kM
+         Pvpf6JYH7WTUEBbVGhkUw7ZaBOr29BLPGBYDCUlb7ygP8/AAtHjWzrNBaF63DdO2Bo2l
+         kuBpyAydg1sgKDnWJkwZLeT/dHQdtCLOHl3Odk9LFIbEMNWyFbhWQtkUK6dXs9r80KEP
+         8mTw==
+X-Gm-Message-State: AOAM530e/f74airK3EN5vwDOdD0MAkvapLonkFzlcXwn/pv7e9/j1ZEL
+        GEqAp7YUPANcx7x7xr4xwaqHaZOX189+3Hjq6MWlgy0ALpgm
+X-Google-Smtp-Source: ABdhPJwK+g7luujkCE5ZVxBlzyxt0QnOYsjHPTV3q/8dSsX+xVd4JRprWT3cMw6VYP/0aF5pkFjPe/jWsJ32tl18MW4XZtHBP5Om
 MIME-Version: 1.0
-X-Received: by 2002:a6b:7602:: with SMTP id g2mr24178579iom.37.1638609508327;
+X-Received: by 2002:a02:ba8b:: with SMTP id g11mr28396335jao.128.1638609508103;
  Sat, 04 Dec 2021 01:18:28 -0800 (PST)
 Date:   Sat, 04 Dec 2021 01:18:28 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ab655805d24e814a@google.com>
-Subject: [syzbot] general protection fault in kernel_accept (3)
-From:   syzbot <syzbot+03655f787f231d1b7b6c@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Message-ID: <000000000000a7fb8905d24e815b@google.com>
+Subject: [syzbot] WARNING: refcount bug in v9fs_fid_find
+From:   syzbot <syzbot+627aa2ba3ada9ff256dd@syzkaller.appspotmail.com>
+To:     asmadeus@codewreck.org, ericvh@gmail.com,
+        linux-kernel@vger.kernel.org, lucho@ionkov.net,
+        syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -51,81 +49,67 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    d40ce48cb3a6 Merge branch 'af_unix-replace-unix_table_lock..
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=14b86465b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7cc851c2debde333
-dashboard link: https://syzkaller.appspot.com/bug?extid=03655f787f231d1b7b6c
+HEAD commit:    58e1100fdc59 MAINTAINERS: co-maintain random.c
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17f41219b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=171728a464c05f2b
+dashboard link: https://syzkaller.appspot.com/bug?extid=627aa2ba3ada9ff256dd
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+03655f787f231d1b7b6c@syzkaller.appspotmail.com
+Reported-by: syzbot+627aa2ba3ada9ff256dd@syzkaller.appspotmail.com
 
-general protection fault, probably for non-canonical address 0xdffffc0000000072: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000390-0x0000000000000397]
-CPU: 0 PID: 15597 Comm: kworker/u4:6 Not tainted 5.16.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: tipc_rcv tipc_topsrv_accept
-RIP: 0010:kernel_accept+0x56/0x350 net/socket.c:3417
-Code: c1 ea 03 80 3c 02 00 0f 85 90 02 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 65 18 49 8d bc 24 94 03 00 00 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 50
-RSP: 0018:ffffc90002fdfc30 EFLAGS: 00010207
-RAX: dffffc0000000000 RBX: ffffc90002fdfca8 RCX: 0000000000000000
-RDX: 0000000000000072 RSI: ffffffff87211fca RDI: 0000000000000394
-RBP: ffff888035524800 R08: 0000000000000001 R09: ffffffff8ff7bb3f
-R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000000
-R13: 0000000000000800 R14: ffff88802668f770 R15: ffff88802668f2c0
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+------------[ cut here ]------------
+refcount_t: addition on 0; use-after-free.
+WARNING: CPU: 2 PID: 13516 at lib/refcount.c:25 refcount_warn_saturate+0x169/0x1e0 lib/refcount.c:25
+Modules linked in:
+CPU: 2 PID: 13516 Comm: syz-executor.3 Not tainted 5.16.0-rc3-syzkaller #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:refcount_warn_saturate+0x169/0x1e0 lib/refcount.c:25
+Code: 09 31 ff 89 de e8 d7 3f 9c fd 84 db 0f 85 36 ff ff ff e8 ea 3b 9c fd 48 c7 c7 20 4b 04 8a c6 05 96 c5 a1 09 01 e8 50 d2 25 05 <0f> 0b e9 17 ff ff ff e8 cb 3b 9c fd 0f b6 1d 7b c5 a1 09 31 ff 89
+RSP: 0018:ffffc90002b1f8e8 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000040000 RSI: ffffffff815e5208 RDI: fffff52000563f0f
+RBP: 0000000000000002 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff815defae R11: 0000000000000000 R12: ffff88802653b800
+R13: ffff88802653b80c R14: 1ffff92000563f22 R15: 0000000000000000
+FS:  00007f7d5c4e2700(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f41e78fc1b8 CR3: 0000000021d55000 CR4: 00000000003506f0
+CR2: 00007f07cbcd8000 CR3: 0000000069e46000 CR4: 0000000000150ee0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- tipc_topsrv_accept+0x197/0x280 net/tipc/topsrv.c:460
- process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
- worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ __refcount_add include/linux/refcount.h:199 [inline]
+ __refcount_inc include/linux/refcount.h:250 [inline]
+ refcount_inc include/linux/refcount.h:267 [inline]
+ v9fs_fid_find+0x471/0x4e0 fs/9p/fid.c:111
+ v9fs_fid_lookup_with_uid+0xa2/0xae0 fs/9p/fid.c:160
+ v9fs_fid_clone fs/9p/fid.h:27 [inline]
+ v9fs_file_open+0x2de/0x870 fs/9p/vfs_file.c:60
+ do_dentry_open+0x4c8/0x1250 fs/open.c:822
+ do_open fs/namei.c:3426 [inline]
+ path_openat+0x1cad/0x2750 fs/namei.c:3559
+ do_filp_open+0x1aa/0x400 fs/namei.c:3586
+ do_sys_openat2+0x16d/0x4d0 fs/open.c:1212
+ do_sys_open fs/open.c:1228 [inline]
+ __do_sys_creat fs/open.c:1304 [inline]
+ __se_sys_creat fs/open.c:1298 [inline]
+ __x64_sys_creat+0xc9/0x120 fs/open.c:1298
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f7d5ef6cae9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f7d5c4e2188 EFLAGS: 00000246 ORIG_RAX: 0000000000000055
+RAX: ffffffffffffffda RBX: 00007f7d5f07ff60 RCX: 00007f7d5ef6cae9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000140
+RBP: 00007f7d5efc6f6d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe7bcaa9bf R14: 00007f7d5c4e2300 R15: 0000000000022000
  </TASK>
-Modules linked in:
----[ end trace d8fc85c5be0bfa88 ]---
-RIP: 0010:kernel_accept+0x56/0x350 net/socket.c:3417
-Code: c1 ea 03 80 3c 02 00 0f 85 90 02 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 65 18 49 8d bc 24 94 03 00 00 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 50
-RSP: 0018:ffffc90002fdfc30 EFLAGS: 00010207
-RAX: dffffc0000000000 RBX: ffffc90002fdfca8 RCX: 0000000000000000
-RDX: 0000000000000072 RSI: ffffffff87211fca RDI: 0000000000000394
-RBP: ffff888035524800 R08: 0000000000000001 R09: ffffffff8ff7bb3f
-R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000000
-R13: 0000000000000800 R14: ffff88802668f770 R15: ffff88802668f2c0
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f93092d2000 CR3: 000000001bf56000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	c1 ea 03             	shr    $0x3,%edx
-   3:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
-   7:	0f 85 90 02 00 00    	jne    0x29d
-   d:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  14:	fc ff df
-  17:	4c 8b 65 18          	mov    0x18(%rbp),%r12
-  1b:	49 8d bc 24 94 03 00 	lea    0x394(%r12),%rdi
-  22:	00
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	0f b6 14 02          	movzbl (%rdx,%rax,1),%edx <-- trapping instruction
-  2e:	48 89 f8             	mov    %rdi,%rax
-  31:	83 e0 07             	and    $0x7,%eax
-  34:	83 c0 01             	add    $0x1,%eax
-  37:	38 d0                	cmp    %dl,%al
-  39:	7c 08                	jl     0x43
-  3b:	84 d2                	test   %dl,%dl
-  3d:	0f                   	.byte 0xf
-  3e:	85                   	.byte 0x85
-  3f:	50                   	push   %rax
 
 
 ---

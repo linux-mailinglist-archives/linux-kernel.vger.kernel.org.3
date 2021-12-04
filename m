@@ -2,102 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6363468515
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 14:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCFE46852A
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 14:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377677AbhLDNnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 08:43:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
+        id S1385125AbhLDNzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 08:55:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355042AbhLDNnc (ORCPT
+        with ESMTP id S240119AbhLDNzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 08:43:32 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390F0C061751;
-        Sat,  4 Dec 2021 05:40:07 -0800 (PST)
-Date:   Sat, 04 Dec 2021 13:40:04 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638625205;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bz2xrUPHCFfeXmY59v4v/41E2tC5qLNgAcSQ+qV2MZc=;
-        b=tZJ03u+0uyqR3g84eh9My2l+pVI9O9E58O3FqZZs52NQgXdP15whIwGHzYisgl+qXlsxpZ
-        aXLM4tyYRSsIIV+R3TiGkdm/vJfTUWWiYFreeSO48crvllCDKGc3s3KUp9MxH5SliU7P61
-        5wCVEfA0L6383L2ovv2D/+bpQ756SYYt5GljRS4nz8Ke/LElAG+m5TK+CB+Z8p7OozYLtD
-        N1vy8L5KuEZxO5UEAUpfsYKkbthRCDu3t6yEtSt2y4n05MilrCZ4b5RZNEp+trc2NXnAwO
-        h9MPKForK6rcY2kjDUPMBeQRnppIg0HsJU5YMsYfFNAgRFN93KHBomiOStTJpg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638625205;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bz2xrUPHCFfeXmY59v4v/41E2tC5qLNgAcSQ+qV2MZc=;
-        b=6Y3cXJMfBFE+5r7xFO2jmFSJv8xAMCjbqOANqHLRMgvrkOVttXHG5FNXgFSilJelp5r/Hy
-        FjsWYO6t2ein8cAg==
-From:   "tip-bot2 for Andrew Halaney" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/urgent] preempt/dynamic: Fix setup_preempt_mode() return value
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211203233203.133581-1-ahalaney@redhat.com>
-References: <20211203233203.133581-1-ahalaney@redhat.com>
-MIME-Version: 1.0
-Message-ID: <163862520435.11128.7753816715963167229.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Sat, 4 Dec 2021 08:55:01 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EBFC061354
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 05:51:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=72FWvOgOs59PMNnwMsJ3qHgJ07cr3+tSoXCqyzZ10M0=; b=KCIAHQGKeZHkfjPO2UA/BQADws
+        gj47eBz2CB9a5ye29pPUQkH25J2M86byb8o2bXDPH7cXJ5fX/ur3BasE4yGdS7Uzmdgs/J/co/t6M
+        c6CKQ+GrtRP0jZBXuHBibicYfZeEQYcWL5scp/FMZBLIUQpNpQU5ZzeszWgh3GaHnhTtJ+jlCn4d0
+        voIk5+SjZYWDYKyOGLoIQ7K7O87QujxsDwIgVfIEO2A2+M7Oli9ymNkjAIfUS5bMfcwgMsgs8Acx8
+        5xdJizKfgCYCuB4X9555KBtd12yYwDLWOb1IKvk3H0i4vn3nnLRsGlslQqtS5dIVSRRUJYMeYiMVc
+        CVN8iT4w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mtVRl-00DG35-Ny; Sat, 04 Dec 2021 13:51:26 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C1E813002C5;
+        Sat,  4 Dec 2021 14:51:24 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 7492824C0540F; Sat,  4 Dec 2021 14:51:24 +0100 (CET)
+Message-ID: <20211204134338.760603010@infradead.org>
+User-Agent: quilt/0.66
+Date:   Sat, 04 Dec 2021 14:43:38 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        keescook@chromium.org, hjl.tools@gmail.com,
+        andrew.cooper3@citrix.com, mark.rutland@arm.com, will@kernel.org,
+        ndesaulniers@google.com
+Subject: [PATCH v2 0/6] x86: Add stright-line-speculation mitigations
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/urgent branch of tip:
+Respin and split of the SLS patch.
 
-Commit-ID:     9ed20bafc85806ca6c97c9128cec46c3ef80ae86
-Gitweb:        https://git.kernel.org/tip/9ed20bafc85806ca6c97c9128cec46c3ef80ae86
-Author:        Andrew Halaney <ahalaney@redhat.com>
-AuthorDate:    Fri, 03 Dec 2021 17:32:03 -06:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Sat, 04 Dec 2021 10:56:18 +01:00
+Since the old patch hit a snag, I've split up the patch as per popular demand.
 
-preempt/dynamic: Fix setup_preempt_mode() return value
+New this time are patches 1 and 5 and some minor edits to the last patch, the
+rest is mostly identical.
 
-__setup() callbacks expect 1 for success and 0 for failure. Correct the
-usage here to reflect that.
+Patch 1 removes a 32bit (abuse) of the RET macro; which got exposed by the
+build robot due to a change in the last patch (defining RET even for
+!CONFIG_SLS). It would've been possible to revert to the old method of relying
+on AS being case insensitive and RET being a valid instruction etc.. but I
+figured that code was convoluted enough to warrant cleaning up anyway.
 
-Fixes: 826bfeb37bb4 ("preempt/dynamic: Support dynamic preempt with preempt= boot option")
-Reported-by: Mark Rutland <mark.rutland@arm.com>
-Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20211203233203.133581-1-ahalaney@redhat.com
----
- kernel/sched/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Patch 5 is what made Boris' machine go BUG when he tried to use the SLS patch.
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 76f9dee..814c52d 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6617,11 +6617,11 @@ static int __init setup_preempt_mode(char *str)
- 	int mode = sched_dynamic_mode(str);
- 	if (mode < 0) {
- 		pr_warn("Dynamic Preempt: unsupported mode: %s\n", str);
--		return 1;
-+		return 0;
- 	}
- 
- 	sched_dynamic_update(mode);
--	return 0;
-+	return 1;
- }
- __setup("preempt=", setup_preempt_mode);
- 
+Combined it seems to boot and build a kernel for me, so it must be perfect this
+time (fingers crossed).
+

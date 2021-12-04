@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7C74683E3
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 772554683E5
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:55:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344347AbhLDJ6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 04:58:44 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:35426 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbhLDJ6n (ORCPT
+        id S1347511AbhLDJ6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 04:58:47 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:52916 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240687AbhLDJ6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 4 Dec 2021 04:58:43 -0500
-Received: by mail-io1-f71.google.com with SMTP id x11-20020a0566022c4b00b005e702603028so4476318iov.2
+Received: by mail-io1-f69.google.com with SMTP id k12-20020a0566022a4c00b005ebe737d989so4404327iov.19
         for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 01:55:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=DyhRK3ttUVN6VH347d06HzFlgqVT0ZOXZFQ3OlFIC+Q=;
-        b=OCU6rleMHfENas4JM+wZ+ohXZIHYc55IsGxFs3obz/jVWf31hynv9WFDnVb4v7DHpZ
-         q7RwK/kxKNnnAWbunn583zB0QzZc3//NgJ2AugezBZI6i4ib8ebx1vZcYOcNzSH+M9jp
-         Mt69wtynu1BDL1isE5z/wajcWttxuOHc+tg+1msA8fpQeEO7Xhjm581MqMuiglSsaVQa
-         CE1QDjQnvd4A3T7P7J1voTVaqBF5nGriyxPBF0H6E/llnrZW9+CscwZZ4viS/AJdecj5
-         ufhH/qC6GT72n72YzJ9tHQySlN2T1ueFaw5bRwkAf4vi23xp2MyyfmITIfQhoK2jHr8M
-         V7uA==
-X-Gm-Message-State: AOAM531KcM+ehjOBSVNWWJy43KaZqD1Y4HQ8iA6CViTm1U2e9G9pCBOQ
-        iF7jVojWA1wUn2lFZCGfU4LuzxN6ygFChXppyIjPlq5aShM5
-X-Google-Smtp-Source: ABdhPJx5XhbPvyMCmR8YL5bei9Iw8lSBb9m2ZHtxGrojbG9yjSvWW18D//6dKVseTS6/IkXQ2IoRyPdVM4Hl+rWn2HWwKHn8ui3x
+        bh=+J1qB2+49Im0EdmYLOfWiB0MLUw0lYYruCB9JuWbtuw=;
+        b=6p1HM6O3Mtarwy7PdQBNSpGnBLx+smbMCjdlMwFx7hZ0sOeyON9tzUJd375ceEhaSr
+         4pS23aHRcjPkWB/qcl8u/NizXPumCYQb26KN1ziBLzvAdSZaf6TvgVfWR3vEm3F3p4zz
+         jbOl8H8nSG8jBqH9ldPbp4QQwSnrF24EtF/293YaFd+B51tUeVxYGI7FBtz5iMGbAcPY
+         GauN9qqbUgFGWYPLfibIkUh/vvz/xzba75NWXPMw0WZx+JXlbh6kd3PF0ffNDsvQtgCx
+         uXvRevWjZtfbRkg2wBu3FWV2XRtoWxUJLtjQpm7OPJ0BkTcPl49BoNctT0VwI/AUq/QA
+         xRQg==
+X-Gm-Message-State: AOAM530MHzfha+Z5rojAGuWhvGA+cdXsInEPAPwovAmV309ubioWfVlP
+        WZPHxq11WC/PipfAMHVSoTTrxz7AVBZCAfi6tcmh4UVaUfLB
+X-Google-Smtp-Source: ABdhPJxpdSl19Wc1+2UwAjyN9FL6e2TTzFsOgSkv+B2wKH2hfC55afG+DZWoWox1lThLLCVAyltLIsO7EZAST6BUQgoZgujD34+j
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1845:: with SMTP id b5mr21113973ilv.168.1638611717729;
- Sat, 04 Dec 2021 01:55:17 -0800 (PST)
-Date:   Sat, 04 Dec 2021 01:55:17 -0800
+X-Received: by 2002:a6b:7307:: with SMTP id e7mr24491133ioh.211.1638611718158;
+ Sat, 04 Dec 2021 01:55:18 -0800 (PST)
+Date:   Sat, 04 Dec 2021 01:55:18 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005c30f405d24f05e1@google.com>
-Subject: [syzbot] general protection fault in tipc_conn_close (2)
-From:   syzbot <syzbot+d28b439975080ea97feb@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, jmaloy@redhat.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+Message-ID: <00000000000062bce805d24f05ca@google.com>
+Subject: [syzbot] KASAN: out-of-bounds Write in virtio_gpu_cmd_transfer_to_host_2d
+From:   syzbot <syzbot+f01248cf57e6929868e4@syzkaller.appspotmail.com>
+To:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        kraxel@redhat.com, linux-kernel@vger.kernel.org,
         syzkaller-bugs@googlegroups.com,
-        tipc-discussion@lists.sourceforge.net, ying.xue@windriver.com
+        virtualization@lists.linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -49,87 +49,181 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    40c93d7fff6f Merge tag 'x86-urgent-2021-11-21' of git://gi..
+HEAD commit:    e66435936756 mm: fix mismerge of folio page flag manipulat..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15fa11eeb00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8c5999a5ee199b97
-dashboard link: https://syzkaller.appspot.com/bug?extid=d28b439975080ea97feb
-compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+console output: https://syzkaller.appspot.com/x/log.txt?x=14c79e0eb00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ca1c2027dfeaf335
+dashboard link: https://syzkaller.appspot.com/bug?extid=f01248cf57e6929868e4
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d28b439975080ea97feb@syzkaller.appspotmail.com
+Reported-by: syzbot+f01248cf57e6929868e4@syzkaller.appspotmail.com
 
-general protection fault, probably for non-canonical address 0xdffffc0000000003: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000018-0x000000000000001f]
-CPU: 1 PID: 9168 Comm: kworker/u4:4 Not tainted 5.16.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: netns cleanup_net
-RIP: 0010:tipc_conn_close+0x4c/0x210 net/tipc/topsrv.c:157
-Code: 5d 08 49 89 dc 49 c1 ec 03 43 80 3c 34 00 74 08 48 89 df e8 e6 b3 0a f8 48 89 1c 24 48 8b 1b 48 83 c3 18 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 df e8 c5 b3 0a f8 48 8b 1b 4c 8d bb b0
-RSP: 0018:ffffc90004777ad8 EFLAGS: 00010206
-RAX: 0000000000000003 RBX: 0000000000000018 RCX: ffff888077731d00
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff88807a888000
-RBP: ffff88807a888000 R08: dffffc0000000000 R09: fffffbfff1ff33de
-R10: fffffbfff1ff33de R11: 0000000000000000 R12: 1ffff1100f511001
-R13: ffff88807a888000 R14: dffffc0000000000 R15: ffff88807d345098
-FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+R13: 00007ffe6190e50f R14: 00007f51be874300 R15: 0000000000022000
+==================================================================
+BUG: KASAN: out-of-bounds in memset include/linux/fortify-string.h:175 [inline]
+BUG: KASAN: out-of-bounds in virtio_gpu_cmd_transfer_to_host_2d+0x160/0x4a0 drivers/gpu/drm/virtio/virtgpu_vq.c:618
+Write of size 56 at addr fffffffffffffff4 by task syz-executor.1/13670
+
+CPU: 2 PID: 13670 Comm: syz-executor.1 Not tainted 5.15.0-syzkaller #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Call Trace:
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xf/0x2d6 mm/kasan/report.c:256
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ memset+0x20/0x40 mm/kasan/shadow.c:44
+ memset include/linux/fortify-string.h:175 [inline]
+ virtio_gpu_cmd_transfer_to_host_2d+0x160/0x4a0 drivers/gpu/drm/virtio/virtgpu_vq.c:618
+ virtio_gpu_update_dumb_bo drivers/gpu/drm/virtio/virtgpu_plane.c:128 [inline]
+ virtio_gpu_primary_plane_update+0xfcb/0x1650 drivers/gpu/drm/virtio/virtgpu_plane.c:199
+ drm_atomic_helper_commit_planes+0x332/0xb60 drivers/gpu/drm/drm_atomic_helper.c:2552
+ drm_atomic_helper_commit_tail+0x62/0xf0 drivers/gpu/drm/drm_atomic_helper.c:1582
+ commit_tail+0x32d/0x420 drivers/gpu/drm/drm_atomic_helper.c:1667
+ drm_atomic_helper_commit drivers/gpu/drm/drm_atomic_helper.c:1884 [inline]
+ drm_atomic_helper_commit+0x2eb/0x370 drivers/gpu/drm/drm_atomic_helper.c:1817
+ drm_atomic_commit+0xd8/0x110 drivers/gpu/drm/drm_atomic.c:1412
+ drm_client_modeset_commit_atomic+0x685/0x7c0 drivers/gpu/drm/drm_client_modeset.c:1043
+ drm_client_modeset_commit_locked+0x145/0x580 drivers/gpu/drm/drm_client_modeset.c:1146
+ drm_client_modeset_commit+0x4d/0x80 drivers/gpu/drm/drm_client_modeset.c:1172
+ __drm_fb_helper_restore_fbdev_mode_unlocked drivers/gpu/drm/drm_fb_helper.c:252 [inline]
+ __drm_fb_helper_restore_fbdev_mode_unlocked drivers/gpu/drm/drm_fb_helper.c:231 [inline]
+ drm_fb_helper_restore_fbdev_mode_unlocked drivers/gpu/drm/drm_fb_helper.c:279 [inline]
+ drm_fb_helper_lastclose drivers/gpu/drm/drm_fb_helper.c:1997 [inline]
+ drm_fbdev_client_restore+0xe3/0x1a0 drivers/gpu/drm/drm_fb_helper.c:2397
+ drm_client_dev_restore+0x184/0x290 drivers/gpu/drm/drm_client.c:226
+ drm_lastclose drivers/gpu/drm/drm_file.c:467 [inline]
+ drm_release+0x441/0x530 drivers/gpu/drm/drm_file.c:498
+ __fput+0x286/0x9f0 fs/file_table.c:280
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ tracehook_notify_resume include/linux/tracehook.h:189 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
+ exit_to_user_mode_prepare+0x27e/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f51c12b1a04
+Code: 84 00 00 00 00 00 44 89 54 24 0c e8 96 f9 ff ff 44 8b 54 24 0c 44 89 e2 48 89 ee 41 89 c0 bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 77 34 44 89 c7 89 44 24 0c e8 c8 f9 ff ff 8b 44
+RSP: 002b:00007f51be873cc0 EFLAGS: 00000293 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffea RBX: 6666666666666667 RCX: 00007f51c12b1a04
+RDX: 000000000000ff00 RSI: 00007f51be873d60 RDI: 00000000ffffff9c
+RBP: 00007f51be873d60 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000293 R12: 000000000000ff00
+R13: 00007ffe6190e50f R14: 00007f51be874300 R15: 0000000000022000
+
+
+Memory state around the buggy address:
+ fffffffffffffe80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffffffffffff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffffffffffffff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+general protection fault, maybe for address 0xffffc9000422f80c: 0000 [#1] PREEMPT SMP KASAN
+CPU: 2 PID: 13670 Comm: syz-executor.1 Not tainted 5.15.0-syzkaller #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:memcpy_erms+0x6/0x10 arch/x86/lib/memcpy_64.S:55
+Code: cc cc cc cc eb 1e 0f 1f 00 48 89 f8 48 89 d1 48 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 c3 66 0f 1f 44 00 00 48 89 f8 48 89 d1 <f3> a4 c3 0f 1f 80 00 00 00 00 48 89 f8 48 83 fa 20 72 7e 40 38 fe
+RSP: 0018:ffffc9000422f800 EFLAGS: 00010086
+RAX: ffffc9000422f80c RBX: 0000000000000000 RCX: 0000000000000010
+RDX: 0000000000000010 RSI: dffffc0000000000 RDI: ffffc9000422f80c
+RBP: fffffffffffffff4 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff83f599a3 R11: 0000000000000000 R12: 0000000000000001
+R13: 0000000000000080 R14: ffffffff84620a60 R15: 0000000000000000
+FS:  00007f51be874700(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000560b6e50e788 CR3: 0000000089eb7000 CR4: 00000000003506e0
+CR2: 00007f51be873f78 CR3: 0000000077e04000 CR4: 0000000000150ee0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
- <TASK>
- tipc_topsrv_stop net/tipc/topsrv.c:694 [inline]
- tipc_topsrv_exit_net+0xf8/0x310 net/tipc/topsrv.c:715
- ops_exit_list net/core/net_namespace.c:168 [inline]
- cleanup_net+0x758/0xc50 net/core/net_namespace.c:593
- process_one_work+0x853/0x1140 kernel/workqueue.c:2298
- worker_thread+0xac1/0x1320 kernel/workqueue.c:2445
- kthread+0x468/0x490 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30
- </TASK>
+ print_memory_metadata+0x5a/0xdf mm/kasan/report.c:322
+ __kasan_report mm/kasan/report.c:444 [inline]
+ kasan_report.cold+0x99/0xdf mm/kasan/report.c:459
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ memset+0x20/0x40 mm/kasan/shadow.c:44
+ memset include/linux/fortify-string.h:175 [inline]
+ virtio_gpu_cmd_transfer_to_host_2d+0x160/0x4a0 drivers/gpu/drm/virtio/virtgpu_vq.c:618
+ virtio_gpu_update_dumb_bo drivers/gpu/drm/virtio/virtgpu_plane.c:128 [inline]
+ virtio_gpu_primary_plane_update+0xfcb/0x1650 drivers/gpu/drm/virtio/virtgpu_plane.c:199
+ drm_atomic_helper_commit_planes+0x332/0xb60 drivers/gpu/drm/drm_atomic_helper.c:2552
+ drm_atomic_helper_commit_tail+0x62/0xf0 drivers/gpu/drm/drm_atomic_helper.c:1582
+ commit_tail+0x32d/0x420 drivers/gpu/drm/drm_atomic_helper.c:1667
+ drm_atomic_helper_commit drivers/gpu/drm/drm_atomic_helper.c:1884 [inline]
+ drm_atomic_helper_commit+0x2eb/0x370 drivers/gpu/drm/drm_atomic_helper.c:1817
+ drm_atomic_commit+0xd8/0x110 drivers/gpu/drm/drm_atomic.c:1412
+ drm_client_modeset_commit_atomic+0x685/0x7c0 drivers/gpu/drm/drm_client_modeset.c:1043
+ drm_client_modeset_commit_locked+0x145/0x580 drivers/gpu/drm/drm_client_modeset.c:1146
+ drm_client_modeset_commit+0x4d/0x80 drivers/gpu/drm/drm_client_modeset.c:1172
+ __drm_fb_helper_restore_fbdev_mode_unlocked drivers/gpu/drm/drm_fb_helper.c:252 [inline]
+ __drm_fb_helper_restore_fbdev_mode_unlocked drivers/gpu/drm/drm_fb_helper.c:231 [inline]
+ drm_fb_helper_restore_fbdev_mode_unlocked drivers/gpu/drm/drm_fb_helper.c:279 [inline]
+ drm_fb_helper_lastclose drivers/gpu/drm/drm_fb_helper.c:1997 [inline]
+ drm_fbdev_client_restore+0xe3/0x1a0 drivers/gpu/drm/drm_fb_helper.c:2397
+ drm_client_dev_restore+0x184/0x290 drivers/gpu/drm/drm_client.c:226
+ drm_lastclose drivers/gpu/drm/drm_file.c:467 [inline]
+ drm_release+0x441/0x530 drivers/gpu/drm/drm_file.c:498
+ __fput+0x286/0x9f0 fs/file_table.c:280
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ tracehook_notify_resume include/linux/tracehook.h:189 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
+ exit_to_user_mode_prepare+0x27e/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f51c12b1a04
+Code: 84 00 00 00 00 00 44 89 54 24 0c e8 96 f9 ff ff 44 8b 54 24 0c 44 89 e2 48 89 ee 41 89 c0 bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 77 34 44 89 c7 89 44 24 0c e8 c8 f9 ff ff 8b 44
+RSP: 002b:00007f51be873cc0 EFLAGS: 00000293 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffea RBX: 6666666666666667 RCX: 00007f51c12b1a04
+RDX: 000000000000ff00 RSI: 00007f51be873d60 RDI: 00000000ffffff9c
+RBP: 00007f51be873d60 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000293 R12: 000000000000ff00
+R13: 00007ffe6190e50f R14: 00007f51be874300 R15: 0000000000022000
 Modules linked in:
----[ end trace ff1ddf3c30f0c3d0 ]---
-RIP: 0010:tipc_conn_close+0x4c/0x210 net/tipc/topsrv.c:157
-Code: 5d 08 49 89 dc 49 c1 ec 03 43 80 3c 34 00 74 08 48 89 df e8 e6 b3 0a f8 48 89 1c 24 48 8b 1b 48 83 c3 18 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 df e8 c5 b3 0a f8 48 8b 1b 4c 8d bb b0
-RSP: 0018:ffffc90004777ad8 EFLAGS: 00010206
-RAX: 0000000000000003 RBX: 0000000000000018 RCX: ffff888077731d00
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff88807a888000
-RBP: ffff88807a888000 R08: dffffc0000000000 R09: fffffbfff1ff33de
-R10: fffffbfff1ff33de R11: 0000000000000000 R12: 1ffff1100f511001
-R13: ffff88807a888000 R14: dffffc0000000000 R15: ffff88807d345098
-FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+---[ end trace f65df7177f1d34a7 ]---
+RIP: 0010:memcpy_erms+0x6/0x10 arch/x86/lib/memcpy_64.S:55
+Code: cc cc cc cc eb 1e 0f 1f 00 48 89 f8 48 89 d1 48 c1 e9 03 83 e2 07 f3 48 a5 89 d1 f3 a4 c3 66 0f 1f 44 00 00 48 89 f8 48 89 d1 <f3> a4 c3 0f 1f 80 00 00 00 00 48 89 f8 48 83 fa 20 72 7e 40 38 fe
+RSP: 0018:ffffc9000422f800 EFLAGS: 00010086
+RAX: ffffc9000422f80c RBX: 0000000000000000 RCX: 0000000000000010
+RDX: 0000000000000010 RSI: dffffc0000000000 RDI: ffffc9000422f80c
+RBP: fffffffffffffff4 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff83f599a3 R11: 0000000000000000 R12: 0000000000000001
+R13: 0000000000000080 R14: ffffffff84620a60 R15: 0000000000000000
+FS:  00007f51be874700(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fe625c1d058 CR3: 000000003b6ba000 CR4: 00000000003506e0
+CR2: 00007f51be873f78 CR3: 0000000077e04000 CR4: 0000000000150ee0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 ----------------
 Code disassembly (best guess):
-   0:	5d                   	pop    %rbp
-   1:	08 49 89             	or     %cl,-0x77(%rcx)
-   4:	dc 49 c1             	fmull  -0x3f(%rcx)
-   7:	ec                   	in     (%dx),%al
-   8:	03 43 80             	add    -0x80(%rbx),%eax
-   b:	3c 34                	cmp    $0x34,%al
-   d:	00 74 08 48          	add    %dh,0x48(%rax,%rcx,1)
-  11:	89 df                	mov    %ebx,%edi
-  13:	e8 e6 b3 0a f8       	callq  0xf80ab3fe
-  18:	48 89 1c 24          	mov    %rbx,(%rsp)
-  1c:	48 8b 1b             	mov    (%rbx),%rbx
-  1f:	48 83 c3 18          	add    $0x18,%rbx
-  23:	48 89 d8             	mov    %rbx,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	42 80 3c 30 00       	cmpb   $0x0,(%rax,%r14,1) <-- trapping instruction
-  2f:	74 08                	je     0x39
-  31:	48 89 df             	mov    %rbx,%rdi
-  34:	e8 c5 b3 0a f8       	callq  0xf80ab3fe
-  39:	48 8b 1b             	mov    (%rbx),%rbx
-  3c:	4c                   	rex.WR
-  3d:	8d                   	.byte 0x8d
-  3e:	bb                   	.byte 0xbb
-  3f:	b0                   	.byte 0xb0
+   0:	cc                   	int3
+   1:	cc                   	int3
+   2:	cc                   	int3
+   3:	cc                   	int3
+   4:	eb 1e                	jmp    0x24
+   6:	0f 1f 00             	nopl   (%rax)
+   9:	48 89 f8             	mov    %rdi,%rax
+   c:	48 89 d1             	mov    %rdx,%rcx
+   f:	48 c1 e9 03          	shr    $0x3,%rcx
+  13:	83 e2 07             	and    $0x7,%edx
+  16:	f3 48 a5             	rep movsq %ds:(%rsi),%es:(%rdi)
+  19:	89 d1                	mov    %edx,%ecx
+  1b:	f3 a4                	rep movsb %ds:(%rsi),%es:(%rdi)
+  1d:	c3                   	retq
+  1e:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+  24:	48 89 f8             	mov    %rdi,%rax
+  27:	48 89 d1             	mov    %rdx,%rcx
+* 2a:	f3 a4                	rep movsb %ds:(%rsi),%es:(%rdi) <-- trapping instruction
+  2c:	c3                   	retq
+  2d:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+  34:	48 89 f8             	mov    %rdi,%rax
+  37:	48 83 fa 20          	cmp    $0x20,%rdx
+  3b:	72 7e                	jb     0xbb
+  3d:	40 38 fe             	cmp    %dil,%sil
 
 
 ---

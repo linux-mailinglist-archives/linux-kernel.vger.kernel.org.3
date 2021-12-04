@@ -2,106 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12AFE468643
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 17:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C189468646
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 17:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355453AbhLDQiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 11:38:52 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:37464 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355427AbhLDQit (ORCPT
+        id S1355516AbhLDQi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 11:38:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355388AbhLDQiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 11:38:49 -0500
-Received: by mail-io1-f72.google.com with SMTP id m127-20020a6b3f85000000b005f045ba51f9so5033754ioa.4
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 08:35:23 -0800 (PST)
+        Sat, 4 Dec 2021 11:38:54 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203C2C061354;
+        Sat,  4 Dec 2021 08:35:28 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id u1so12559922wru.13;
+        Sat, 04 Dec 2021 08:35:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=U5oa62j24xavZIhW1pQBwsS9AFzTZJdQ7fQ+VSov/gU=;
+        b=QjujrxabGjUpNmt2NhBglQ8VAZ2txQBLtVcB/rzT2wSaX9OWozOLfKMb6CNyQTcV07
+         sG1VUu6P3i/MFJO5EMQyehuOBadwrxyW3ypLcLR885EaQy8F9T3GZO6YXDxc7UBIUMb7
+         eyh2s0R0ozfhA/fIqENgPzYmUyfX/jZg+vspyzQm9Ui5bO7uhHHiP8xzoW1EEF8VJ6yH
+         mChbLelF2crp7dWgMk/bjvkk+/M9W1Wv3S98UzxRWOFnZHoeD1dZNPHQ7aAB6hnvW86M
+         OjzmiCAqBIVnESAj0MAQqtzU43txdeDJoy+swGJyHbvy7pjNAH/iGIu4cd9DY2JAH7Oj
+         ap6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=BA9OwP3e4KSpyoZW+XzJWCMfEa5xkpbba0Rxgywsghc=;
-        b=EDB294uZrozwpg14JbWffKRCvzeCn6dNKNsAvwz2e3TvascgvtDr9f9UWe9zGTm4Qi
-         SV5zX1sayhN0HuaXw2D0zeLsHahOFbU8N89cDNZqxcrXnXLmqnM5apE7jXQuLqa6cjF8
-         hJZ/RXXySALrxr3ZVY8Yy7WpXVdEsCTQF/jOiHXFvI2B016xDnM3ausMgraYhsURk9zf
-         z0gtJhP2Vg66t6Uh1CyqNqtADsJQQc10K5DP9NT/yDKIELCSLo9cCoohbyc8jVP7qfJH
-         SQ9CyQHvmX9LiV+E/STr4ObixqAh53CGgtkanBFx4W9cPymaQmOu0pajyynbOhiCjEM+
-         7FHA==
-X-Gm-Message-State: AOAM531gDpV6Ko5w3aFHqvaCxD7wAnz/fbshmuZ8lbT3gQm8D0uWQmGz
-        aFwaBxMG7xuWOHhzocNdCxGNdVSLZAV7T025683SdcWmC4oE
-X-Google-Smtp-Source: ABdhPJxxznh9Q5hCHWgnwvJ6XXsUs0D50cBHWOW6zK9XJmrmos7R9Ap1SlHUG3GwLkFakTQVL9lP37VnIwwgNfklMYJK4c/OBW5L
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U5oa62j24xavZIhW1pQBwsS9AFzTZJdQ7fQ+VSov/gU=;
+        b=JmcX9m1nG0vhIluFXnZP4I61mgmEU6QcCU4356MDAJzP+t7kxChDTGDFFuRDVaO3bK
+         k8dZ1VTDV98qoMWex9vV68ly/t8S17UbzAgZZoVWxjd3bQBZ5d0eEqTkNyhTmYB+A1qg
+         mEgGQ7N5gk3x2PUbc6THz81opPKSX8+tRVrbfT6kgC+Nt8zQZk1mldMyVU0fJBEEWEcd
+         w5MUQAhi4a7R0uqf8w64mPUSiGOUAQkfnKslJIeSkXAYs27ng0kOcTlwhxCdHq2jJgy1
+         CUjp8CvNar4rh2EY+4y0fR8YTKMq5gGTsRA9iTjV8VAHvcQ6PQam7KFzUniK1hqR2c+j
+         mntg==
+X-Gm-Message-State: AOAM530oF0nn9+sto7ypEEAekiK7aWS2cOzWINz++GuU1lxKB4svtgvJ
+        Nmd479zC8tFt4cx+t9hdX0s=
+X-Google-Smtp-Source: ABdhPJyIdX2n3WId2lMyChYLev51YRiEPslY7xT8mJ3MVirL5jdU0inRbWxNlxnNlUeCjkxuOIKEUQ==
+X-Received: by 2002:a5d:47c9:: with SMTP id o9mr8826548wrc.55.1638635726766;
+        Sat, 04 Dec 2021 08:35:26 -0800 (PST)
+Received: from matrix-ESPRIMO-P710 (p200300c78f4e0685b3447c22a42fc55e.dip0.t-ipconnect.de. [2003:c7:8f4e:685:b344:7c22:a42f:c55e])
+        by smtp.gmail.com with ESMTPSA id n13sm6053915wrt.44.2021.12.04.08.35.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Dec 2021 08:35:26 -0800 (PST)
+Date:   Sat, 4 Dec 2021 17:35:24 +0100
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org
+Subject: [PATCH v2 3/4] Docs: usb: update comment and code of function
+ skel_delete
+Message-ID: <cff10de3381deedd002e2e8cda884593400b42cb.1638630342.git.philipp.g.hortmann@gmail.com>
+References: <cover.1638630342.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:24ca:: with SMTP id y10mr30640190jat.109.1638635723454;
- Sat, 04 Dec 2021 08:35:23 -0800 (PST)
-Date:   Sat, 04 Dec 2021 08:35:23 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000367c2205d2549cb9@google.com>
-Subject: [syzbot] KASAN: vmalloc-out-of-bounds Read in __bpf_prog_put
-From:   syzbot <syzbot+5027de09e0964fd78ce1@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1638630342.git.philipp.g.hortmann@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Put skel_delete function in the document typical form
+Update code according to usb-skeleton.c
 
-syzbot found the following issue on:
-
-HEAD commit:    ce83278f313c Merge branch 'qed-enhancements'
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=11c8ce3ab00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b5949d4891208a1b
-dashboard link: https://syzkaller.appspot.com/bug?extid=5027de09e0964fd78ce1
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5027de09e0964fd78ce1@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put.constprop.0+0x1dd/0x220 kernel/bpf/syscall.c:1812
-Read of size 8 at addr ffffc90000cf2038 by task kworker/0:24/16179
-
-CPU: 0 PID: 16179 Comm: kworker/0:24 Not tainted 5.16.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events sk_psock_destroy
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xf/0x320 mm/kasan/report.c:247
- __kasan_report mm/kasan/report.c:433 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:450
- __bpf_prog_put.constprop.0+0x1dd/0x220 kernel/bpf/syscall.c:1812
- psock_set_prog include/linux/skmsg.h:477 [inline]
- psock_progs_drop include/linux/skmsg.h:495 [inline]
- sk_psock_destroy+0xad/0x620 net/core/skmsg.c:804
- process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
- worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-
-
-Memory state around the buggy address:
- ffffc90000cf1f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90000cf1f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->ffffc90000cf2000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-                                        ^
- ffffc90000cf2080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90000cf2100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-==================================================================
-
-
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+V1 -> V2: Corrected format of function name to skel_delete()
+---
+ .../driver-api/usb/writing_usb_driver.rst     | 21 +++++++++----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
+index 297b622f5438..b459f9e089e0 100644
+--- a/Documentation/driver-api/usb/writing_usb_driver.rst
++++ b/Documentation/driver-api/usb/writing_usb_driver.rst
+@@ -262,19 +262,18 @@ One of the more difficult problems that USB drivers must be able to
+ handle smoothly is the fact that the USB device may be removed from the
+ system at any point in time, even if a program is currently talking to
+ it. It needs to be able to shut down any current reads and writes and
+-notify the user-space programs that the device is no longer there. The
+-following code (function ``skel_delete``) is an example of how to do
+-this::
++notify the user-space programs that the device is no longer there.
++skel_delete() is an example of how to do this::
+ 
+-    static inline void skel_delete (struct usb_skel *dev)
++    static void skel_delete(struct kref *kref)
+     {
+-	kfree (dev->bulk_in_buffer);
+-	if (dev->bulk_out_buffer != NULL)
+-	    usb_free_coherent (dev->udev, dev->bulk_out_size,
+-		dev->bulk_out_buffer,
+-		dev->write_urb->transfer_dma);
+-	usb_free_urb (dev->write_urb);
+-	kfree (dev);
++	struct usb_skel *dev = to_skel_dev(kref);
++
++	usb_free_urb(dev->bulk_in_urb);
++	usb_put_intf(dev->interface);
++	usb_put_dev(dev->udev);
++	kfree(dev->bulk_in_buffer);
++	kfree(dev);
+     }
+ 
+ 
+-- 
+2.25.1
+

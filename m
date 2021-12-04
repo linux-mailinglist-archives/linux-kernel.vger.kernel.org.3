@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26FD84683E0
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBB34683E4
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 10:55:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384580AbhLDJ5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 04:57:45 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:38551 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345071AbhLDJ5m (ORCPT
+        id S1345701AbhLDJ6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 04:58:45 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:36524 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235062AbhLDJ6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 04:57:42 -0500
-Received: by mail-io1-f69.google.com with SMTP id l124-20020a6b3e82000000b005ed165a1506so4454965ioa.5
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 01:54:17 -0800 (PST)
+        Sat, 4 Dec 2021 04:58:43 -0500
+Received: by mail-io1-f72.google.com with SMTP id w16-20020a5d8a10000000b005e241c13c7bso4469950iod.3
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 01:55:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=OGiefsgn2KtHR6deIKaDSxA7HkbB2bKmq2vn9lWPXfA=;
-        b=n9Z9KniADl3VKwCfk2flQUlyLggdtmOR4sUycNmXyb2+MnGuY0UCRhVZ+Ud/lQD8PE
-         dMQGMjNdvNWp2+YxhvO8zN0OxC2YNpQyPbQUYqoBpcdLWLlFIJqCVjWJwLvZszOWLMfy
-         Ka98pytLIaz0AiO4MPh1MLzb7d+Hp2UysOr8EXZV0diBryYXvF80ikVEqvTqR8YC2aZO
-         BZaX9fo339gZEoRmZCjAq7WK0ifVhzOzIAu+Mf57G/9e5+0Bi5L27s90EJWB27RYsbRQ
-         chdUqpiKdkLQ/ruzVdWtYYiKrqt9CKul/wFEsw6Vh3Ac3KQxOTqfyOuXW185RrUdZf4n
-         FsYw==
-X-Gm-Message-State: AOAM530xPxOQPwdWytODa/OzLGEM0wRfl6p7MlnCOaLpJmgTq2tH5jaX
-        fkmtw7kuUm1fDwKLi8EIc5+02QLtA1X+Frlllua8yO2Mx00q
-X-Google-Smtp-Source: ABdhPJwZMaRW+iNdlY9wG40TtzxcKhpYNsr3I8V0yleAtYob9HHu/9WEEFYkd0fKWa6Pkj5KZSPG3txjPDf7D+q5TYxuG4H+njkD
+        bh=u3AsoxQU/tK950hpFqbByeUWB2sygjl3RJ7kN22TcwA=;
+        b=ZE0Ru8NPJSg0nBeekmQUJ6x7WRBHBy0lTC44E4hzUBdhw2jpaUvhqDrUbmcFAbwsXI
+         keOJsW98UbVD42ONq/cylo1lAGrl7PIZcNtZCQAhhfrFog5q+o1ru900gqnAsLkUWkS3
+         cH7kDmo9pdBM51Fs5Es9LcL3QW+OWjqlWFovijzPWj1+RgJBCmGvPPS5Dbd9ki559dLB
+         fWO3VEKHcXPe4/1lnc7czF91YNic5uQPnd+FlazliKjHVWSvqXIGJ7F5lSnY8ic/I6hw
+         72QUNaQFC1X9f2pn0MgxdZAddirHb+DxYl9MFKc5wwAit/HWUPYddsbWFDKiJkDsO/iq
+         tSSw==
+X-Gm-Message-State: AOAM532IqWHw1m+FhcCvjn2g4RQCXm6dpL86vmqnPzJPPBkd+AUfM8Cb
+        4DoNyC1oNaghRI/CWe48aryl2bNPCnXwoj5uWSeixEjUVP0j
+X-Google-Smtp-Source: ABdhPJw1obiBok/ARF2Pcafr1QlBTnCw+v2GFk1FSdlOe1581hI6USfe8e1YUTTgfJMIt0Q/vDZdgnIJNqpEHPs8j1trWt+9MLn1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1445:: with SMTP id l5mr30081353jad.36.1638611657418;
- Sat, 04 Dec 2021 01:54:17 -0800 (PST)
-Date:   Sat, 04 Dec 2021 01:54:17 -0800
+X-Received: by 2002:a92:c562:: with SMTP id b2mr23168568ilj.108.1638611717923;
+ Sat, 04 Dec 2021 01:55:17 -0800 (PST)
+Date:   Sat, 04 Dec 2021 01:55:17 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c3eace05d24f0189@google.com>
-Subject: [syzbot] BUG: corrupted list in rdma_listen (2)
-From:   syzbot <syzbot+c94a3675a626f6333d74@syzkaller.appspotmail.com>
-To:     avihaih@nvidia.com, dledford@redhat.com, haakon.bugge@oracle.com,
-        jgg@ziepe.ca, leon@kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <0000000000005f297e05d24f05f6@google.com>
+Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in folio_mark_dirty
+From:   syzbot <syzbot+7cd473c2cac13fd2dd72@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -48,82 +47,80 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    bf152b0b41dc Merge tag 'for_linus' of git://git.kernel.org..
+HEAD commit:    58e1100fdc59 MAINTAINERS: co-maintain random.c
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=136e3a46b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4a0a845d34d07474
-dashboard link: https://syzkaller.appspot.com/bug?extid=c94a3675a626f6333d74
-userspace arch: arm
+console output: https://syzkaller.appspot.com/x/log.txt?x=1362881eb00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e9ea28d2c3c2c389
+dashboard link: https://syzkaller.appspot.com/bug?extid=7cd473c2cac13fd2dd72
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c94a3675a626f6333d74@syzkaller.appspotmail.com
+Reported-by: syzbot+7cd473c2cac13fd2dd72@syzkaller.appspotmail.com
 
-list_add corruption. prev->next should be next (82bbca08), but was 00000000. (prev=865e75ac).
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:26!
-Internal error: Oops - BUG: 0 [#1] PREEMPT SMP ARM
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+#PF: supervisor instruction fetch in kernel mode
+#PF: error_code(0x0010) - not-present page
+PGD 70764067 P4D 70764067 PUD 0 
+Oops: 0010 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 6541 Comm: syz-executor.3 Not tainted 5.16.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+RSP: 0018:ffffc900027ff7f8 EFLAGS: 00010246
+RAX: 1ffffffff14fef03 RBX: ffffffff8a7f7818 RCX: ffff88801b40d700
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffea0002790ec0
+RBP: dffffc0000000000 R08: ffffffff81b0fa16 R09: fffff940004f21d9
+R10: fffff940004f21d9 R11: 0000000000000000 R12: ffff88806c11c7b0
+R13: 0000000000000000 R14: 1ffffd40004f21d9 R15: ffffea0002790ec0
+FS:  0000555557165400(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 0000000030d85000 CR4: 00000000003526e0
+Call Trace:
+ <TASK>
+ folio_mark_dirty+0x136/0x270 mm/page-writeback.c:2639
+ f2fs_update_meta_page+0x4b/0x380 fs/f2fs/segment.c:2485
+ do_checkpoint fs/f2fs/checkpoint.c:1513 [inline]
+ f2fs_write_checkpoint+0x31ad/0x5430 fs/f2fs/checkpoint.c:1674
+ f2fs_issue_checkpoint+0x361/0x4e0
+ sync_filesystem+0x19c/0x1f0 fs/sync.c:63
+ generic_shutdown_super+0x6b/0x300 fs/super.c:448
+ kill_block_super+0x79/0xd0 fs/super.c:1397
+ kill_f2fs_super+0x2f9/0x3c0 fs/f2fs/super.c:4478
+ deactivate_locked_super+0xa7/0xf0 fs/super.c:335
+ cleanup_mnt+0x462/0x510 fs/namespace.c:1137
+ task_work_run+0x146/0x1c0 kernel/task_work.c:164
+ tracehook_notify_resume include/linux/tracehook.h:189 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
+ exit_to_user_mode_prepare+0x209/0x220 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x2e/0x70 kernel/entry/common.c:300
+ do_syscall_64+0x53/0xd0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f6cfdd59f57
+Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fffcbddcad8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f6cfdd59f57
+RDX: 00007fffcbddcbac RSI: 000000000000000a RDI: 00007fffcbddcba0
+RBP: 00007fffcbddcba0 R08: 00000000ffffffff R09: 00007fffcbddc970
+R10: 0000555557166903 R11: 0000000000000246 R12: 00007f6cfddb2105
+R13: 00007fffcbdddc60 R14: 0000555557166810 R15: 00007fffcbdddca0
+ </TASK>
 Modules linked in:
-CPU: 1 PID: 5339 Comm: syz-executor.1 Not tainted 5.12.0-rc3-syzkaller #0
-Hardware name: ARM-Versatile Express
-PC is at __list_add_valid+0x80/0x84 lib/list_debug.c:26
-LR is at wake_up_klogd.part.0+0x7c/0xb4 kernel/printk/printk.c:3118
-pc : [<808072b8>]    lr : [<802d21b0>]    psr: 60000013
-sp : 86657e30  ip : 86657d60  fp : 86657e3c
-r10: 81104354  r9 : 00000010  r8 : 865e75ac
-r7 : 82bbca08  r6 : 865e7400  r5 : 865e75ac  r4 : 82bbc6d8
-r3 : 00000000  r2 : 00000000  r1 : ddfd6688  r0 : 0000005d
-Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
-Control: 30c5387d  Table: 86712700  DAC: 00000000
-Process syz-executor.1 (pid: 5339, stack limit = 0x86656210)
-Stack: (0x86657e30 to 0x86658000)
-7e20:                                     86657e6c 86657e40 810e61b8 80807244
-7e40: 00000010 56b92eae 86657e6c 86424900 86ca70c0 86424948 811034c0 84343b40
-7e60: 86657e9c 86657e70 811035a0 810e6048 8046d9e4 00000000 00000005 56b92eae
-7e80: 86ca70c0 00000010 200008c0 86ca70c0 86657ed4 86657ea0 811044a0 811034cc
-7ea0: 804d8fc8 00000007 fa000008 56b92eae 00004000 00000000 86c46140 200008c0
-7ec0: ffffe000 00000000 86657f64 86657ed8 804da914 81104360 853d5140 82bfd5ec
-7ee0: 86c46140 81f40284 86657f3c 86657ef8 80502e64 802bf578 00000000 00000000
-7f00: 80502d24 835f4000 86657f3c 81f718ac 8020d140 00000000 00000000 200008c0
-7f20: 00000010 80200224 86656000 00000004 86657f4c 56b92eae 80502f48 86c46141
-7f40: 86c46140 200008c0 00000010 80200224 86656000 00000004 86657f94 86657f68
-7f60: 804dad30 804da838 86657f94 86657f78 828abd1c 56b92eae 00000000 00000000
-7f80: ffffffff 00000004 86657fa4 86657f98 804dad78 804dac88 00000000 86657fa8
-7fa0: 80200060 804dad74 00000000 00000000 00000003 200008c0 00000010 00000000
-7fc0: 00000000 00000000 ffffffff 00000004 7ebc531a 76f7b6d0 7ebc54a4 76f7b20c
-7fe0: 76f7b048 76f7b038 00018e9c 0004ba40 60000010 00000003 00000000 00000000
-Backtrace: 
-[<80807238>] (__list_add_valid) from [<810e61b8>] (__list_add include/linux/list.h:67 [inline])
-[<80807238>] (__list_add_valid) from [<810e61b8>] (list_add_tail include/linux/list.h:100 [inline])
-[<80807238>] (__list_add_valid) from [<810e61b8>] (cma_listen_on_all drivers/infiniband/core/cma.c:2557 [inline])
-[<80807238>] (__list_add_valid) from [<810e61b8>] (rdma_listen+0x17c/0x37c drivers/infiniband/core/cma.c:3751)
-[<810e603c>] (rdma_listen) from [<811035a0>] (ucma_listen+0xe0/0x130 drivers/infiniband/core/ucma.c:1102)
- r8:84343b40 r7:811034c0 r6:86424948 r5:86ca70c0 r4:86424900
-[<811034c0>] (ucma_listen) from [<811044a0>] (ucma_write+0x14c/0x1b0 drivers/infiniband/core/ucma.c:1732)
- r6:86ca70c0 r5:200008c0 r4:00000010
-[<81104354>] (ucma_write) from [<804da914>] (vfs_write+0xe8/0x350 fs/read_write.c:603)
- r8:00000000 r7:ffffe000 r6:200008c0 r5:86c46140 r4:00000000
-[<804da82c>] (vfs_write) from [<804dad30>] (ksys_write+0xb4/0xec fs/read_write.c:658)
- r10:00000004 r9:86656000 r8:80200224 r7:00000010 r6:200008c0 r5:86c46140
- r4:86c46141
-[<804dac7c>] (ksys_write) from [<804dad78>] (__do_sys_write fs/read_write.c:670 [inline])
-[<804dac7c>] (ksys_write) from [<804dad78>] (sys_write+0x10/0x14 fs/read_write.c:667)
- r7:00000004 r6:ffffffff r5:00000000 r4:00000000
-[<804dad68>] (sys_write) from [<80200060>] (ret_fast_syscall+0x0/0x2c arch/arm/mm/proc-v7.S:64)
-Exception stack(0x86657fa8 to 0x86657ff0)
-7fa0:                   00000000 00000000 00000003 200008c0 00000010 00000000
-7fc0: 00000000 00000000 ffffffff 00000004 7ebc531a 76f7b6d0 7ebc54a4 76f7b20c
-7fe0: 76f7b048 76f7b038 00018e9c 0004ba40
-Code: e34801fa e1a02001 e1a0100c eb3ffb2e (e7f001f2) 
----[ end trace 7ea3f2e08d88cef1 ]---
-----------------
-Code disassembly (best guess):
-   0:	e34801fa 	movt	r0, #33274	; 0x81fa
-   4:	e1a02001 	mov	r2, r1
-   8:	e1a0100c 	mov	r1, ip
-   c:	eb3ffb2e 	bl	0xffeccc
-* 10:	e7f001f2 	udf	#18 <-- trapping instruction
+CR2: 0000000000000000
+---[ end trace 08eda5a5e35b48a0 ]---
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+RSP: 0018:ffffc900027ff7f8 EFLAGS: 00010246
+RAX: 1ffffffff14fef03 RBX: ffffffff8a7f7818 RCX: ffff88801b40d700
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffea0002790ec0
+RBP: dffffc0000000000 R08: ffffffff81b0fa16 R09: fffff940004f21d9
+R10: fffff940004f21d9 R11: 0000000000000000 R12: ffff88806c11c7b0
+R13: 0000000000000000 R14: 1ffffd40004f21d9 R15: ffffea0002790ec0
+FS:  0000555557165400(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 0000000030d85000 CR4: 00000000003526e0
 
 
 ---

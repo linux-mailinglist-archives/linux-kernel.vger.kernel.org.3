@@ -2,100 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E809468474
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 12:23:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D45EE468476
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 12:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377700AbhLDL1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 06:27:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49734 "EHLO
+        id S1384657AbhLDL3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 06:29:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354802AbhLDL07 (ORCPT
+        with ESMTP id S240942AbhLDL3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 06:26:59 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644B2C061751
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 03:23:34 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id x6so22074295edr.5
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 03:23:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=gGSo1LXPHpju9mGduVyFWFR7QGPg34g4rnjIdR8CaEg=;
-        b=KeZukj81ITr50PNyXY17158kVJ0rzenC2m/j5zybDdxm1YdykdyCQGZmOb++2v287S
-         ZrMQwxwO5GZpVSRfghV59buygKimQQa6sS7xtDMgt3ZTT0GyWfwSWdr7KPLNuGbtDULZ
-         6w8gGjPJj1ov4Ox925Jkf77SYgaB0rgBDlX9QAOke5rm61munzE7OiQ5J1FhGWyPsjnP
-         z2CVPyGIT/tgF54btVKE/umCirX7+oVZxFwIh1eQ5QArtU5bhcsHYgI8opLPcyBV87aT
-         h1dG8lQFOKhR0NKmhkkkm7BoRud+zGXs+q4yl3Vmvhy8DzApo4Y4b2mzeKykrEwE4hiM
-         D5Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=gGSo1LXPHpju9mGduVyFWFR7QGPg34g4rnjIdR8CaEg=;
-        b=nPZDEn9mDEUjKmaxm5lt0V8aqqb1RH99DFA9bWpohhp4inwOHMiBNRou5/2IOtAVUV
-         y/QlSeN7mESGBO60SV0Y4z7mPYJkhruO/9JMpTg5uMpha9Dn+BwKgH37ammULj3RVteM
-         1c2FQqeerSHPYa4MpSC2+ZH+rUpmw8a3FDWTsrlMdQB+2U0KlhAKHhbyRUNdUzr+74E+
-         lg7f4HMbRJ1E3LgT2gssV/m5zSo2i4fLoe0V8bju7w90cGIADjRRYUP6B9k/LiT8LtxS
-         YWryv1mbbGMNMeed+IFdw6pmgtftVxevR64weeOBe6dC8uBkC7/Q5/egVHRaPNlAjTmG
-         GJQA==
-X-Gm-Message-State: AOAM531QGT/cNXrfXCpFexCK+vHqUTHU5dnDXJCkgNGxjHqvHX5mdUP2
-        m8VgzU2oL1pVBJojT8dGgtEZhO1VoTc6/24KOiZfrIN6wk33nV60SkB7Dw==
-X-Google-Smtp-Source: ABdhPJybjaP7D4zHj5WzphQRkSKxfM/gUVpH0MmUE2kGOLg6T84b205jfAO6Xc9/v9m0DMVLVXgF6r40C4FNMN3871o=
-X-Received: by 2002:a05:6402:14f:: with SMTP id s15mr34718768edu.118.1638617012975;
- Sat, 04 Dec 2021 03:23:32 -0800 (PST)
+        Sat, 4 Dec 2021 06:29:04 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2390C061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 03:25:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bVB5oIsXQHv4ziTx9938Q2uNGGtepbHu4+yJBjfeTCE=; b=kZeHnS8DVZ4A6f7CkGLYe7B2mN
+        XrsByLAbrSXCcLyGyIV0PzKclteS2iio9YoTW4s5LuQLH14IbHgcVIFEbVW3xzigMhuuyfdDVNnIe
+        uNlH8DXA2aiOP+WdXdSBWSH+0uWo99InJThK2EQ7DHH522sCw6gm3Zg1218/otMGVBDgEDd67ANL2
+        8JL2jIP0d1ovBK2gMm6I7BL+2uoIRNi7c5usU6Pr7HCceuoNDQi3oEIrr5WYA73845LWLlnLcoWsX
+        mXsTvC1OLKewixGR7hpsxfgOezT33fR2h4lyP861Rz5SzJKjuuhizvQr7lXl0YkYQdm4COKXu8Fst
+        NQvth2Hg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mtT9S-00Co5l-MR; Sat, 04 Dec 2021 11:24:23 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B1EF598106D; Sat,  4 Dec 2021 12:24:22 +0100 (CET)
+Date:   Sat, 4 Dec 2021 12:24:22 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     bristot@redhat.com, bsegall@google.com, dietmar.eggemann@arm.com,
+        juri.lelli@redhat.com, mgorman@suse.de, mingo@redhat.com,
+        rostedt@goodmis.org, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, linuxarm@huawei.com,
+        yangyicong@hisilicon.com, Barry Song <song.bao.hua@hisilicon.com>
+Subject: Re: [PATCH v2] sched/fair: Document the slow path and fast path in
+ select_task_rq_fair
+Message-ID: <20211204112422.GU16608@worktop.programming.kicks-ass.net>
+References: <20211016111109.5559-1-21cnbao@gmail.com>
 MIME-Version: 1.0
-References: <1638542272-15187-1-git-send-email-wang.yong12@zte.com.cn> <20211203130210.f34079f175f28bd1c5c26541@linux-foundation.org>
-In-Reply-To: <20211203130210.f34079f175f28bd1c5c26541@linux-foundation.org>
-From:   yong w <yongw.pur@gmail.com>
-Date:   Sat, 4 Dec 2021 19:23:20 +0800
-Message-ID: <CAOH5QeDZH4vsjN_hHXfe48XYA02ekf4XvynOQ=GzbtgD9cVzgw@mail.gmail.com>
-Subject: Re: [PATCH linux-next] delayacct: track delays from memory compact
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     bsingharora@gmail.com,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, mingo@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>, yang.yang29@zte.com.cn,
-        wang.yong12@zte.com.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211016111109.5559-1-21cnbao@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, the patch has something wrong.
-I'll resend the patch later.
+On Sat, Oct 16, 2021 at 07:11:09PM +0800, Barry Song wrote:
+> From: Barry Song <song.bao.hua@hisilicon.com>
+> 
+> All People I know including myself took a long time to figure out
+> that typical wakeup will always go to fast path and never go to
+> slow path except WF_FORK and WF_EXEC.
+> Vincent reminded me once in a linaro meeting and made me understand
+> slow path won't happen for WF_TTWU. But my other friends repeatedly
+> wasted a lot of time on testing this path like me before I reminded
+> them.
+> So obviously the code needs some document.
+> 
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
+> ---
 
 Thanks!
-
-Andrew Morton <akpm@linux-foundation.org> =E4=BA=8E2021=E5=B9=B412=E6=9C=88=
-4=E6=97=A5=E5=91=A8=E5=85=AD 05:02=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Fri,  3 Dec 2021 06:37:52 -0800 yongw.pur@gmail.com wrote:
->
-> > From: wangyong <wang.yong12@zte.com.cn>
-> >
-> > Delay accounting does not track the delay of memory compact.
-> > When there is not enough free memory, tasks can spend
-> > a amount of their time waiting for memory compact.
-> >
-> > To get the impact of tasks in direct memory compact, measure
-> > the delay when allocating memory through memory compact.
-> >
-> > ...
-> >
-> > --- a/include/linux/delayacct.h
-> > +++ b/include/linux/delayacct.h
-> > @@ -42,8 +42,13 @@ struct task_delay_info {
-> >       u64 thrashing_start;
-> >       u64 thrashing_delay;    /* wait for thrashing page */
-> >
-> > +     u64 compact_start;
-> > +     u64 compact_delay;      /* wait for memory compact */
-> > +
-> > +     u64 freepages_start;
->
-> task_delay_info already has a freepages_start, so it fails to compile.
->
-> Did you send the correct version?
->

@@ -2,325 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 919C9468695
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 18:36:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3804686BB
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 18:44:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378678AbhLDRjg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 4 Dec 2021 12:39:36 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38090 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345154AbhLDRjf (ORCPT
+        id S1355448AbhLDRsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 12:48:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229534AbhLDRsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 12:39:35 -0500
+        Sat, 4 Dec 2021 12:48:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE2BC061751;
+        Sat,  4 Dec 2021 09:44:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 145BFB80D35;
-        Sat,  4 Dec 2021 17:36:08 +0000 (UTC)
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp.kernel.org (Postfix) with ESMTPSA id 60241C341C2;
-        Sat,  4 Dec 2021 17:36:02 +0000 (UTC)
-Date:   Sat, 4 Dec 2021 17:41:11 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     cosmin.tanislav@analog.com, Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v9 3/3] iio: addac: add AD74413R driver
-Message-ID: <20211204174111.0c657ad1@jic23-huawei>
-In-Reply-To: <20211202232507.358113-4-cosmin.tanislav@analog.com>
-References: <20211202232507.358113-1-cosmin.tanislav@analog.com>
-        <20211202232507.358113-4-cosmin.tanislav@analog.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B783B80CC3;
+        Sat,  4 Dec 2021 17:44:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBAA4C341C0;
+        Sat,  4 Dec 2021 17:44:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638639871;
+        bh=tdPtUII1fRnZ1rUqrCV8xPrX1J4M7IiTb3hxZtz7sKc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RoFNbHhhNUcCtIyLfJEvy+AxDIY8qcVpD3FffcostuQzSxmuSwkN59IPBSMKTAUhk
+         +BomHBNcQgqvfozSni+91KNLWlu9Zkqo2eq4GwT4gcAGG/Ld5svtsOeVhJ4S0bR+7r
+         FJ/s1Z23iwoUAPl0nbWbLoL3sFCBfrE/JAT/WsvsQgECUhdIaBB3wZ5/iB0IXStuJL
+         8DRM4aa0wpDL6sw3S5br31+VfVZ9ICJBMyQAPbU036EtVXK0zfPZOS8/Ydjyo0+GMX
+         IOWribTtPYbJdJ5ZyDmNL13qO9lpjpb1S5uWO/dWcy3iOKpNX9MvaYUaXUtx3dE2A9
+         rMtbWoT11Ew3A==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Peter Xu <peterx@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Yu Zhao <yuzhao@google.com>, Vlastimil Babka <vbabka@suse.cz>,
+        Colin Cross <ccross@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH] mm: split out anon_vma declarations to separate header
+Date:   Sat,  4 Dec 2021 18:42:17 +0100
+Message-Id: <20211204174417.1025328-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  3 Dec 2021 01:25:07 +0200
-Cosmin Tanislav <demonsingur@gmail.com> wrote:
+From: Arnd Bergmann <arnd@arndb.de>
 
-> The AD74412R and AD74413R are quad-channel, software configurable,
-> input/output solutions for building and process control applications.
-> 
-> They contain functionality for analog output, analog input, digital input,
-> resistance temperature detector, and thermocouple measurements integrated
-> into a single chip solution with an SPI interface.
-> 
-> The devices feature a 16-bit ADC and four configurable 13-bit DACs to
-> provide four configurable input/output channels and a suite of diagnostic
-> functions.
-> 
-> The AD74413R differentiates itself from the AD74412R by being
-> HART-compatible.
-> 
-> When configured with channel 0 as voltage output, channel 1 as current
-> output, channel 2 as voltage input and channel 3 as current input, the
-> following structure is created under the corresponding IIO device.
-> 
-> .
-> ├── in_current0_offset
-> ├── in_current0_raw
-> ├── in_current0_sampling_frequency
-> ├── in_current0_sampling_frequency_available
-> ├── in_current0_scale
-> ├── in_voltage1_offset
-> ├── in_voltage1_raw
-> ├── in_voltage1_sampling_frequency
-> ├── in_voltage1_sampling_frequency_available
-> ├── in_voltage1_scale
-> ├── in_voltage2_offset
-> ├── in_voltage2_raw
-> ├── in_voltage2_sampling_frequency
-> ├── in_voltage2_sampling_frequency_available
-> ├── in_voltage2_scale
-> ├── in_current3_offset
-> ├── in_current3_raw
-> ├── in_current3_sampling_frequency
-> ├── in_current3_sampling_frequency_available
-> ├── in_current3_scale
-> ├── out_voltage0_raw
-> ├── out_voltage0_scale
-> ├── out_current1_raw
-> ├── out_current1_scale
-> ├── name
-> ├── buffer
-> │   ├── data_available
-> │   ├── enable
-> │   ├── length
-> │   └── watermark
-> └── scan_elements
->     ├── in_current0_en
->     ├── in_current0_index
->     ├── in_current0_type
->     ├── in_voltage1_en
->     ├── in_voltage1_index
->     ├── in_voltage1_type
->     ├── in_voltage2_en
->     ├── in_voltage2_index
->     ├── in_voltage2_type
->     ├── in_current3_en
->     ├── in_current3_index
->     └── in_current3_type
-> 
-> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+The patch to add anonymous vma names causes a build failure in
+some configurations:
 
-You haven't picked up Linus' tag from v7.  I'm assuming that wasn't deliberate
-so please add it for v10. I think there is just enough stuff in here that it makes
-more sense for you to spin a new version than for me to fix it whilst applying...
+include/linux/mm_types.h: In function 'is_same_vma_anon_name':
+include/linux/mm_types.h:924:37: error: implicit declaration of function 'strcmp' [-Werror=implicit-function-declaration]
+  924 |         return name && vma_name && !strcmp(name, vma_name);
+      |                                     ^~~~~~
+include/linux/mm_types.h:22:1: note: 'strcmp' is defined in header '<string.h>'; did you forget to '#include <string.h>'?
 
-All minor stuff so shouldn't take long hopefully + we still need a dt review
-which might take a while depending on how busy Rob is.
+This should not really be part of linux/mm_types.h in the first
+place, as that header is meant to only contain structure defintions
+and need a minimum set of indirect includes itself. While the
+header clearly includes more than it should at this point, let's
+not make it worse by including string.h as well, which would
+pull in the expensive (compile-speed wise) fortify-string logic.
 
-thanks,
+Move the new functions to a separate header that is only included
+where necessary to avoid bloating linux/mm_types.h further.
 
-Jonathan
+Fixes: 52f545eb6dd7 ("mm: add a field to store names for private anonymous memory")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ fs/proc/task_mmu.c       |  1 +
+ fs/userfaultfd.c         |  1 +
+ include/linux/anon_vma.h | 55 ++++++++++++++++++++++++++++++++++++++++
+ include/linux/mm_types.h | 48 -----------------------------------
+ kernel/fork.c            |  1 +
+ mm/madvise.c             |  1 +
+ mm/mempolicy.c           |  1 +
+ mm/mlock.c               |  1 +
+ mm/mmap.c                |  1 +
+ mm/mprotect.c            |  1 +
+ 10 files changed, 63 insertions(+), 48 deletions(-)
+ create mode 100644 include/linux/anon_vma.h
 
-> ---
-> --- /dev/null
-> +++ b/drivers/iio/addac/ad74413r.c
-> @@ -0,0 +1,1476 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2021 Analog Devices, Inc.
-> + * Author: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> + */
-> +
-
-
-...
-
-> +struct ad74413r_state {
-> +	struct ad74413r_channel_config	channel_configs[AD74413R_CHANNEL_MAX];
-> +	unsigned int			gpo_gpio_offsets[AD74413R_CHANNEL_MAX];
-> +	unsigned int			comp_gpio_offsets[AD74413R_CHANNEL_MAX];
-> +	struct gpio_chip		gpo_gpiochip;
-> +	struct gpio_chip		comp_gpiochip;
-> +	struct completion		adc_data_completion;
-> +	unsigned int			num_gpo_gpios;
-> +	unsigned int			num_comparator_gpios;
-> +	u32				sense_resistor_ohms;
-> +
-> +	/*
-> +	 * Synchronize consecutive operations when doing a one-shot
-> +	 * conversion and when updating the ADC samples SPI message.
-> +	 */
-> +	struct mutex			lock;
-> +
-> +	const struct ad74413r_chip_info	*chip_info;
-> +	struct spi_device		*spi;
-> +	struct regulator		*refin_reg;
-> +	struct regmap			*regmap;
-> +	struct device			*dev;
-> +	struct iio_trigger		*trig;
-> +
-> +	size_t			adc_active_channels;
-> +	struct spi_message	adc_samples_msg;
-> +	struct spi_transfer	adc_samples_xfer[AD74413R_CHANNEL_MAX + 1];
-> +
-> +	/*
-> +	 * DMA (thus cache coherency maintenance) requires the
-> +	 * transfer buffers to live in their own cache lines.
-> +	 */
-> +	struct {
-> +		u8 rx_buf[AD74413R_FRAME_SIZE * AD74413R_CHANNEL_MAX];
-> +		s64 timestamp;
-> +	} adc_samples_buf ____cacheline_aligned;
-> +
-> +	u8	adc_samples_tx_buf[AD74413R_FRAME_SIZE * AD74413R_CHANNEL_MAX]
-> +			____cacheline_aligned;
-
-What was your thinking for needing to have both adc_samples_buf and adc_samples_tx_buf
-at force alignment?  I would have expected only adc_samples_buf would be necessary,
-unless there are paths in which you are writing into one whilst DMA is going on into
-the other..  If there is a reason add a comment.
-
-
-> +	u8	reg_tx_buf[AD74413R_FRAME_SIZE];
-> +	u8	reg_rx_buf[AD74413R_FRAME_SIZE];
-> +};
-> +
-
-> +
-> +static int ad74413r_probe(struct spi_device *spi)
-> +{
-> +	struct ad74413r_state *st;
-> +	struct iio_dev *indio_dev;
-> +	int ret;
-> +
-> +	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*st));
-> +	if (!indio_dev)
-> +		return -ENOMEM;
-> +
-> +	st = iio_priv(indio_dev);
-> +
-> +	st->spi = spi;
-> +	st->dev = &spi->dev;
-> +	st->chip_info = device_get_match_data(&spi->dev);
-> +	mutex_init(&st->lock);
-> +	init_completion(&st->adc_data_completion);
-> +
-> +	st->regmap = devm_regmap_init(st->dev, NULL, st,
-> +				      &ad74413r_regmap_config);
-> +	if (IS_ERR(st->regmap))
-> +		return PTR_ERR(st->regmap);
-> +
-> +	st->refin_reg = devm_regulator_get(st->dev, "refin");
-> +	if (IS_ERR(st->refin_reg))
-> +		return dev_err_probe(st->dev, PTR_ERR(st->refin_reg),
-> +				     "Failed to get refin regulator\n");
-> +
-> +	ret = regulator_enable(st->refin_reg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = devm_add_action_or_reset(st->dev, ad74413r_regulator_disable,
-> +				       st->refin_reg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	st->sense_resistor_ohms = 100000000;
-> +	device_property_read_u32(st->dev, "shunt-resistor-micro-ohms",
-> +				 &st->sense_resistor_ohms);
-> +	st->sense_resistor_ohms /= 1000000;
-> +
-> +	st->trig = devm_iio_trigger_alloc(st->dev, "%s-dev%d",
-> +					  st->chip_info->name, iio_device_id(indio_dev));
-> +	if (!st->trig)
-> +		return -ENOMEM;
-> +
-> +	st->trig->ops = &ad74413r_trigger_ops;
-> +	iio_trigger_set_drvdata(st->trig, st);
-> +
-> +	ret = devm_iio_trigger_register(st->dev, st->trig);
-> +	if (ret)
-> +		return ret;
-> +
-> +	indio_dev->name = st->chip_info->name;
-> +	indio_dev->modes = INDIO_DIRECT_MODE;
-> +	indio_dev->info = &ad74413r_info;
-> +	indio_dev->trig = iio_trigger_get(st->trig);
-> +
-> +	ret = ad74413r_reset(st);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ad74413r_parse_channel_configs(indio_dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ad74413r_setup_channels(indio_dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ad74413r_setup_gpios(st);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (st->num_gpo_gpios) {
-> +		st->gpo_gpiochip.owner = THIS_MODULE;
-> +		st->gpo_gpiochip.label = st->chip_info->name;
-> +		st->gpo_gpiochip.base = -1;
-> +		st->gpo_gpiochip.ngpio = st->num_gpo_gpios;
-> +		st->gpo_gpiochip.parent = st->dev;
-> +		st->gpo_gpiochip.can_sleep = true;
-> +		st->gpo_gpiochip.set = ad74413r_gpio_set;
-> +		st->gpo_gpiochip.set_multiple = ad74413r_gpio_set_multiple;
-> +		st->gpo_gpiochip.set_config = ad74413r_gpio_set_gpo_config;
-> +		st->gpo_gpiochip.get_direction =
-> +			ad74413r_gpio_get_gpo_direction;
-> +
-> +		ret = devm_gpiochip_add_data(st->dev, &st->gpo_gpiochip, st);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	if (st->num_comparator_gpios) {
-> +		st->comp_gpiochip.owner = THIS_MODULE;
-> +		st->comp_gpiochip.label = st->chip_info->name;
-> +		st->comp_gpiochip.base = -1;
-> +		st->comp_gpiochip.ngpio = st->num_comparator_gpios;
-> +		st->comp_gpiochip.parent = st->dev;
-> +		st->comp_gpiochip.can_sleep = true;
-> +		st->comp_gpiochip.get = ad74413r_gpio_get;
-> +		st->comp_gpiochip.get_multiple = ad74413r_gpio_get_multiple;
-> +		st->comp_gpiochip.set_config = ad74413r_gpio_set_comp_config;
-> +		st->comp_gpiochip.get_direction =
-> +			ad74413r_gpio_get_comp_direction;
-> +
-> +		ret = devm_gpiochip_add_data(st->dev, &st->comp_gpiochip, st);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	ret = ad74413r_set_adc_conv_seq(st, AD74413R_CONV_SEQ_OFF);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = devm_request_irq(st->dev, spi->irq, ad74413r_adc_data_interrupt,
-> +			       0, st->chip_info->name, indio_dev);
-> +	if (ret)
-
-Minor, but would be good to have a dev_err_probe() here as
-this is something that can result in a deferred response and it would
-be good to log the debugging info.
-
-> +		return ret;
-> +
-> +	ret = devm_iio_triggered_buffer_setup(st->dev, indio_dev,
-> +					      &iio_pollfunc_store_time,
-> +					      &ad74413r_trigger_handler,
-> +					      &ad74413r_buffer_ops);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return devm_iio_device_register(st->dev, indio_dev);
-> +}
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index e6998652fd67..5b0106afa870 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <linux/pagewalk.h>
+ #include <linux/vmacache.h>
++#include <linux/anon_vma.h>
+ #include <linux/hugetlb.h>
+ #include <linux/huge_mm.h>
+ #include <linux/mount.h>
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index 5b2af7b82776..f1d9265e8581 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -15,6 +15,7 @@
+ #include <linux/sched/signal.h>
+ #include <linux/sched/mm.h>
+ #include <linux/mm.h>
++#include <linux/anon_vma.h>
+ #include <linux/mmu_notifier.h>
+ #include <linux/poll.h>
+ #include <linux/slab.h>
+diff --git a/include/linux/anon_vma.h b/include/linux/anon_vma.h
+new file mode 100644
+index 000000000000..5ce8b5be31ae
+--- /dev/null
++++ b/include/linux/anon_vma.h
+@@ -0,0 +1,55 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_ANON_VMA_H
++#define _LINUX_ANON_VMA_H
++
++#include <linux/mm_types.h>
++
++#ifdef CONFIG_ANON_VMA_NAME
++/*
++ * mmap_lock should be read-locked when calling vma_anon_name() and while using
++ * the returned pointer.
++ */
++extern const char *vma_anon_name(struct vm_area_struct *vma);
++
++/*
++ * mmap_lock should be read-locked for orig_vma->vm_mm.
++ * mmap_lock should be write-locked for new_vma->vm_mm or new_vma should be
++ * isolated.
++ */
++extern void dup_vma_anon_name(struct vm_area_struct *orig_vma,
++			      struct vm_area_struct *new_vma);
++
++/*
++ * mmap_lock should be write-locked or vma should have been isolated under
++ * write-locked mmap_lock protection.
++ */
++extern void free_vma_anon_name(struct vm_area_struct *vma);
++
++/* mmap_lock should be read-locked */
++static inline bool is_same_vma_anon_name(struct vm_area_struct *vma,
++					 const char *name)
++{
++	const char *vma_name = vma_anon_name(vma);
++
++	/* either both NULL, or pointers to same string */
++	if (vma_name == name)
++		return true;
++
++	return name && vma_name && !strcmp(name, vma_name);
++}
++#else /* CONFIG_ANON_VMA_NAME */
++static inline const char *vma_anon_name(struct vm_area_struct *vma)
++{
++	return NULL;
++}
++static inline void dup_vma_anon_name(struct vm_area_struct *orig_vma,
++			      struct vm_area_struct *new_vma) {}
++static inline void free_vma_anon_name(struct vm_area_struct *vma) {}
++static inline bool is_same_vma_anon_name(struct vm_area_struct *vma,
++					 const char *name)
++{
++	return true;
++}
++#endif  /* CONFIG_ANON_VMA_NAME */
++
++#endif /* _LINUX_ANON_VMA_H */
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 850e71986b9d..555f51de1fe0 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -890,52 +890,4 @@ typedef struct {
+ 	unsigned long val;
+ } swp_entry_t;
+ 
+-#ifdef CONFIG_ANON_VMA_NAME
+-/*
+- * mmap_lock should be read-locked when calling vma_anon_name() and while using
+- * the returned pointer.
+- */
+-extern const char *vma_anon_name(struct vm_area_struct *vma);
+-
+-/*
+- * mmap_lock should be read-locked for orig_vma->vm_mm.
+- * mmap_lock should be write-locked for new_vma->vm_mm or new_vma should be
+- * isolated.
+- */
+-extern void dup_vma_anon_name(struct vm_area_struct *orig_vma,
+-			      struct vm_area_struct *new_vma);
+-
+-/*
+- * mmap_lock should be write-locked or vma should have been isolated under
+- * write-locked mmap_lock protection.
+- */
+-extern void free_vma_anon_name(struct vm_area_struct *vma);
+-
+-/* mmap_lock should be read-locked */
+-static inline bool is_same_vma_anon_name(struct vm_area_struct *vma,
+-					 const char *name)
+-{
+-	const char *vma_name = vma_anon_name(vma);
+-
+-	/* either both NULL, or pointers to same string */
+-	if (vma_name == name)
+-		return true;
+-
+-	return name && vma_name && !strcmp(name, vma_name);
+-}
+-#else /* CONFIG_ANON_VMA_NAME */
+-static inline const char *vma_anon_name(struct vm_area_struct *vma)
+-{
+-	return NULL;
+-}
+-static inline void dup_vma_anon_name(struct vm_area_struct *orig_vma,
+-			      struct vm_area_struct *new_vma) {}
+-static inline void free_vma_anon_name(struct vm_area_struct *vma) {}
+-static inline bool is_same_vma_anon_name(struct vm_area_struct *vma,
+-					 const char *name)
+-{
+-	return true;
+-}
+-#endif  /* CONFIG_ANON_VMA_NAME */
+-
+ #endif /* _LINUX_MM_TYPES_H */
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 7c06be0ca31b..8964e1559722 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -42,6 +42,7 @@
+ #include <linux/mmu_notifier.h>
+ #include <linux/fs.h>
+ #include <linux/mm.h>
++#include <linux/anon_vma.h>
+ #include <linux/vmacache.h>
+ #include <linux/nsproxy.h>
+ #include <linux/capability.h>
+diff --git a/mm/madvise.c b/mm/madvise.c
+index c63aacbbfa78..4d0ab22b31c0 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -18,6 +18,7 @@
+ #include <linux/fadvise.h>
+ #include <linux/sched.h>
+ #include <linux/sched/mm.h>
++#include <linux/anon_vma.h>
+ #include <linux/string.h>
+ #include <linux/uio.h>
+ #include <linux/ksm.h>
+diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+index e0066ca91d9a..58fbd8ec527f 100644
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -99,6 +99,7 @@
+ #include <linux/syscalls.h>
+ #include <linux/ctype.h>
+ #include <linux/mm_inline.h>
++#include <linux/anon_vma.h>
+ #include <linux/mmu_notifier.h>
+ #include <linux/printk.h>
+ #include <linux/swapops.h>
+diff --git a/mm/mlock.c b/mm/mlock.c
+index 8f584eddd305..f3179d8169e4 100644
+--- a/mm/mlock.c
++++ b/mm/mlock.c
+@@ -9,6 +9,7 @@
+ #include <linux/capability.h>
+ #include <linux/mman.h>
+ #include <linux/mm.h>
++#include <linux/anon_vma.h>
+ #include <linux/sched/user.h>
+ #include <linux/swap.h>
+ #include <linux/swapops.h>
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 6ea9e6775fa3..289a40d1d4f3 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -13,6 +13,7 @@
+ #include <linux/slab.h>
+ #include <linux/backing-dev.h>
+ #include <linux/mm.h>
++#include <linux/anon_vma.h>
+ #include <linux/vmacache.h>
+ #include <linux/shm.h>
+ #include <linux/mman.h>
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index 0138dfcdb1d8..96d57b1b41cd 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -28,6 +28,7 @@
+ #include <linux/ksm.h>
+ #include <linux/uaccess.h>
+ #include <linux/mm_inline.h>
++#include <linux/anon_vma.h>
+ #include <linux/pgtable.h>
+ #include <asm/cacheflush.h>
+ #include <asm/mmu_context.h>
+-- 
+2.29.2
 

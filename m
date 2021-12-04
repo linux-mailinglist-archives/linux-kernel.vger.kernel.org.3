@@ -2,81 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8083468422
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 11:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60ADF46843A
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 11:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346407AbhLDKpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 05:45:53 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55924 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbhLDKpw (ORCPT
+        id S1384684AbhLDKvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 05:51:10 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:29088 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238470AbhLDKvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 05:45:52 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EDBB60AC6
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 10:42:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1379C341C2;
-        Sat,  4 Dec 2021 10:42:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638614546;
-        bh=uK8NAcUM9jyIb43R3lQXsqK6c1WdhuVGW9+5gLN3Ris=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tC4Gok7BlKwxT8gDdXNZ7rsTim4+RIU/TQ2IlPyTCuCrRxmLBbgEuZEsS6OOF2Auw
-         ImEolYePLx+NG2jX3U92NgTr72u9JmdOg4mvOtJptKCe3SRQQo3e+74c1unp/HIvCq
-         xOEpHxTdQlTCj2kz3YBvMDHSg/GfaqtCCxoZwb0U=
-Date:   Sat, 4 Dec 2021 11:42:24 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ameer Hamza <amhamza.mgc@gmail.com>
-Cc:     arve@android.com, tkjos@android.com, maco@android.com,
-        joel@joelfernandes.org, christian@brauner.io,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] binder: fixed coverity warning by moving pr_warn outside
- lock
-Message-ID: <YatGEIrn2OM3mAss@kroah.com>
-References: <20211203205041.115331-1-amhamza.mgc@gmail.com>
- <YasfXUW1rNrj3Mgo@kroah.com>
- <CANAWnNyyBR3EEtT=SecqGQsc+tnJi6GiqrW0xkqRn5jrV7CpDA@mail.gmail.com>
- <YasuMNXHlJEKNSwX@kroah.com>
- <20211204103419.GA13093@hamza-OptiPlex-7040>
+        Sat, 4 Dec 2021 05:51:08 -0500
+Received: from kwepemi100010.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J5mY428mKz1DJXX;
+        Sat,  4 Dec 2021 18:44:56 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100010.china.huawei.com (7.221.188.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sat, 4 Dec 2021 18:47:41 +0800
+Received: from localhost.localdomain (10.67.165.24) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Sat, 4 Dec 2021 18:47:40 +0800
+From:   Weili Qian <qianweili@huawei.com>
+To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>
+CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>
+Subject: [PATCH] crypto: hisilicon/qm - fix incorrect return value of hisi_qm_resume()
+Date:   Sat, 4 Dec 2021 18:43:01 +0800
+Message-ID: <20211204104301.32666-1-qianweili@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211204103419.GA13093@hamza-OptiPlex-7040>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 04, 2021 at 03:34:19PM +0500, Ameer Hamza wrote:
-> On Sat, Dec 04, 2021 at 10:00:32AM +0100, Greg KH wrote:
-> > A: http://en.wikipedia.org/wiki/Top_post
-> > Q: Were do I find info about this thing called top-posting?
-> > A: Because it messes up the order in which people normally read text.
-> > Q: Why is top-posting such a bad thing?
-> > A: Top-posting.
-> > Q: What is the most annoying thing in e-mail?
-> > 
-> > A: No.
-> > Q: Should I include quotations after my reply?
-> > 
-> > http://daringfireball.net/2007/07/on_top
-> Thank you so much sharing the useful post as I have just started my open source journey very recently
-> 
-> > 
-> > On Sat, Dec 04, 2021 at 01:50:44PM +0500, Ameer Hamza wrote:
-> > > Thank you Greg for your response. The link to Coverity warning:
-> > > https://scan5.coverity.com/reports.htm#v56991/p10063/fileInstanceId=204668511&defectInstanceId=52305699&mergedDefectId=1494148
-> > 
-> > That link does not seem to be public.  What project are you looking at?
-> Its Linux project under coverity scan and CID for this warning is 1494148
+When hisi_qm_resume() returns 0, it indicates that the device has started
+successfully.  If the device fails to start, hisi_qm_resume() needs to
+return the actual error code to the caller instead of 0.
 
-Ah, yeah, coverity is being crazy here.  Watch out for that, it is a
-VERY difficult tool to use if you are not experienced with kernel
-development.
+Fixes: d7ea53395b72 ("crypto: hisilicon - add runtime PM ops")
+Signed-off-by: Weili Qian <qianweili@huawei.com>
+---
+ drivers/crypto/hisilicon/qm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-good luck!
+diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+index ad706ccfe91a..896255aec87f 100644
+--- a/drivers/crypto/hisilicon/qm.c
++++ b/drivers/crypto/hisilicon/qm.c
+@@ -6071,7 +6071,7 @@ int hisi_qm_resume(struct device *dev)
+ 	if (ret)
+ 		pci_err(pdev, "failed to start qm(%d)\n", ret);
+ 
+-	return 0;
++	return ret;
+ }
+ EXPORT_SYMBOL_GPL(hisi_qm_resume);
+ 
+-- 
+2.33.0
 
-greg k-h

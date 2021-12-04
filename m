@@ -2,64 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E308B468721
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 19:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CA6468723
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Dec 2021 19:47:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345422AbhLDSul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 13:50:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34148 "EHLO
+        id S1345997AbhLDSvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 13:51:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235259AbhLDSuj (ORCPT
+        with ESMTP id S235259AbhLDSvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 13:50:39 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84A4C061354
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 10:47:13 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id s6so645237ild.9
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 10:47:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=W7jPqp5IYfRBn5BMz/jvF57MeJqppL5+XSMOa/5rfGw=;
-        b=c/vYJaOQXfvd0HsfpAhHbOZGVBs4DeIj5ufzu3vmkGGcPP8Iuqu1ptI9IbHy1AGhki
-         L0IpKjDp/luahjBj1HkJNfm/cdZOVuuLzz8qpSz3Y1EwJK9+1pEWcvCGBSD0tzFSrGHZ
-         F5Z7ZlFijI9AD6FtZDS6+h/6WaG6m8wxJD3ve//h76eQxD/brNB0kdzRTSE3WbcB62BY
-         fYO4fhZjLPanhzgtm/1B0nnLzwcebU2x8UWn8AVzflqQXKDN6ubTnVjqqlkjxni16VOu
-         bd4Jwm5zB+CPes2lDzilZ/jKX7BKmBmuU7nLY037sIcwknPQJ9MzLDFL0z+JUx/uicW2
-         q5Vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=W7jPqp5IYfRBn5BMz/jvF57MeJqppL5+XSMOa/5rfGw=;
-        b=3CE3e3v889RRuE2cz0EeutiekhPW3V2P1xm6oGK9tstBepo/tGUXDmiEoURb5NvRQi
-         WQXyyZe3oXHavU+FPkX+JN5GpjTvscqu1gazpOcl/L8f1TsOzANv0E9PTIkQ5R57drkg
-         dZ2upjQE5wlnp+kvKt8ymnVmVP8aBWhnQ7leKcVtwpo10qm7BnNFgxbYcJeJeLe0eB47
-         629CRKscUjvV8wpiYS3JcgCaYU/I2wxQFJ7IkD9pviEdFKcf0r82DWcSzS72MtINuvYE
-         A1j/myD4TqzeB+4++NUj4x6iIwyp1FFI26tF9NDcUBuLeDCxXCbWPL3BNErhk2neoQuQ
-         widA==
-X-Gm-Message-State: AOAM5307ourLJ1XL9QsAR2k9UDVPS6Isoo+YfyMHE+arTj6ZbC65u2iO
-        jcSdNKQ4e0JaSGqZywwxzxGfY3uTsI6bPMB3w+o=
-X-Google-Smtp-Source: ABdhPJyDIVb6n070ds+W76KmNIB/pG1Pqn/3voO50OY7qxYNrxIqa3T06kIwdRDP1p/CA9/+70xR+i827iEN0tDv8Wg=
-X-Received: by 2002:a92:cda4:: with SMTP id g4mr21789137ild.159.1638643633302;
- Sat, 04 Dec 2021 10:47:13 -0800 (PST)
+        Sat, 4 Dec 2021 13:51:13 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B45C061751;
+        Sat,  4 Dec 2021 10:47:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8F7E4CE0F02;
+        Sat,  4 Dec 2021 18:47:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03D0FC341C2;
+        Sat,  4 Dec 2021 18:47:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638643663;
+        bh=CnNRK5P/SuPxK21hCYDCHsvfDFSktd4FzF4FEV+llb4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dAAYwCA2T4PYpohFXUEYgL11Hi6cJK4dTvtDu7VBCNzq+cjHQcSyaE22duvNMOIVZ
+         L8+CLSzSqXq9hXZOLvck79WuTIa4+cGLAO7jXUosXyorlMe+qQzfg7YNDg+tai5Q2U
+         6AjSiNixz8MqfsU1+QfEs6wuK9WYveq+e703y6BA=
+Date:   Sat, 4 Dec 2021 19:47:40 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Marian Postevca <posteuca@mutex.one>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: u_ether: fix race in setting MAC address in
+ setup phase
+Message-ID: <Yau3zDEdTiLZZkRp@kroah.com>
+References: <20211129221229.31845-1-posteuca@mutex.one>
+ <YaoSkbMBk90zr3N7@kroah.com>
+ <87ee6sxlcj.fsf@mutex.one>
 MIME-Version: 1.0
-Received: by 2002:a5d:9c04:0:0:0:0:0 with HTTP; Sat, 4 Dec 2021 10:47:12 -0800 (PST)
-Reply-To: maragbegood@yahoo.com
-From:   Mrs Marafa Hagg <jonathannykor@gmail.com>
-Date:   Sun, 5 Dec 2021 01:47:12 +0700
-Message-ID: <CAEjsn0bFBLvkh9xr629RjvRkXMixCD7a7DW7YT_XtPJmCtA_yg@mail.gmail.com>
-Subject: Re: From Mrs. Marafa Hagg
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ee6sxlcj.fsf@mutex.one>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As salam aleikum,
-I am Mrs. Marafa Hagg from Kuwait, I am currently on a sick bed and
-have the sum of ( Five Million Two Hundred Thousand United States
-Dollars only) to donate to Non Governmental organization, Religious
-institution, orphanage/charity home or individual that will follow my
-instructions, contact me for full details.
-Mrs. M.H.
+On Sat, Dec 04, 2021 at 08:42:52PM +0200, Marian Postevca wrote:
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+> 
+> > On Tue, Nov 30, 2021 at 12:12:29AM +0200, Marian Postevca wrote:
+> >> When listening for notifications through netlink of a new interface being
+> >> registered, sporadically, it is possible for the MAC to be read as zero.
+> >> The zero MAC address lasts a short period of time and then switches to a
+> >> valid random MAC address.
+> >> 
+> >> This causes problems for netd in Android, which assumes that the interface
+> >> is malfunctioning and will not use it.
+> >> 
+> >> In the good case we get this log:
+> >> InterfaceController::getCfg() ifName usb0
+> >>  hwAddr 92:a8:f0:73:79:5b ipv4Addr 0.0.0.0 flags 0x1002
+> >> 
+> >> In the error case we get these logs:
+> >> InterfaceController::getCfg() ifName usb0
+> >>  hwAddr 00:00:00:00:00:00 ipv4Addr 0.0.0.0 flags 0x1002
+> >> 
+> >> netd : interfaceGetCfg("usb0")
+> >> netd : interfaceSetCfg() -> ServiceSpecificException
+> >>  (99, "[Cannot assign requested address] : ioctl() failed")
+> >> 
+> >> The reason for the issue is the order in which the interface is setup,
+> >> it is first registered through register_netdev() and after the MAC
+> >> address is set.
+> >> 
+> >> Fixed by first setting the MAC address of the net_device and after that
+> >> calling register_netdev().
+> >> 
+> >> Signed-off-by: Marian Postevca <posteuca@mutex.one>
+> >> ---
+> >>  drivers/usb/gadget/function/u_ether.c | 16 ++++++----------
+> >>  1 file changed, 6 insertions(+), 10 deletions(-)
+> >
+> > What commit does this fix?  Should it go to stable kernel releases?
+> >
+> > thanks,
+> >
+> > greg k-h
+> 
+> This fixes bcd4a1c40bee885e ("usb: gadget: u_ether: construct with
+> default values and add setters/getters").
+> 
+> I think it should go to stable kernel releases.
+> 
+> Should I send a second version of the patch with a Fixes tag?
+
+Yes please, and a cc: stable on the line after the fixes tag.
+
+thanks,
+
+greg k-h

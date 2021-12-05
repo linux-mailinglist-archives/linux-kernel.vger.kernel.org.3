@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA07468BA9
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 16:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B88468BAB
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 16:14:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235331AbhLEPRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 10:17:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:27640 "EHLO
+        id S235529AbhLEPR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 10:17:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42556 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235486AbhLEPRT (ORCPT
+        by vger.kernel.org with ESMTP id S235341AbhLEPR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 10:17:19 -0500
+        Sun, 5 Dec 2021 10:17:27 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638717231;
+        s=mimecast20190719; t=1638717239;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=kFHqY4WvaLPPdAitwIbOAjCJRLRq0SKgR+vsKb+KShY=;
-        b=ImRb2J4HAqmP2DgFSB6quaSSb8QeaJLE9RTXAQemY+y/IKT6bjZ7DlRDAOJYnvEDeV9bdS
-        6rzZdYcEw4t/vk3GG0nnPeDWv0nAeNWed5wUfQ4TiCBcm52y3d4SX7r9cDX18JnXB/Yki0
-        p5ACE48hRpcr4tY16N3f2FFne389U+k=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=QxvxQc41Ew/AKTWBd/7QLuFTH5E37kP+3Ti2L6TAk5Q=;
+        b=Lpsqwn9nWiJD4ZTVWBZ13nUCOKggk0xmhh4wktiAgjuEgHLSAnHOrlUzxDPQSFqzkpubo6
+        8sWM2ftOpebVeBL9cGSPM0r/jIaz9xdAtLBLZEERh4QEfHRXOyZLvHtbGlRbGdL5XjbQ14
+        6R166LpHSbPnWK59P9KLYpKOIyMNe/c=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-457-7wEj02CyNVyoVQZsD08kgQ-1; Sun, 05 Dec 2021 10:13:50 -0500
-X-MC-Unique: 7wEj02CyNVyoVQZsD08kgQ-1
-Received: by mail-wm1-f70.google.com with SMTP id ay17-20020a05600c1e1100b0033f27b76819so4650444wmb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 07:13:50 -0800 (PST)
+ us-mta-472-gYu_mn-OP1y-P38UtdNv1A-1; Sun, 05 Dec 2021 10:13:58 -0500
+X-MC-Unique: gYu_mn-OP1y-P38UtdNv1A-1
+Received: by mail-wm1-f72.google.com with SMTP id r129-20020a1c4487000000b00333629ed22dso6595650wma.6
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 07:13:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=kFHqY4WvaLPPdAitwIbOAjCJRLRq0SKgR+vsKb+KShY=;
-        b=YsBk6aF+EDDsjeFf/kJlnmXUc0xjs+R2Lrv1MMJnH0CcgttP6cnjbNkUC5Z4zOd8sD
-         iLaUAw0f8WgLrK768OkMmMjgNMcZ7hBCtdDyz8YmU5UbNp8Pur6HV2iWIAk4MIQLviKE
-         Qdhxi13DRKW3b5YrwRz6JKBZsBByg2rHg25cwAe22vD74/TFgHUhRgmoCmeU/Sg5llgl
-         OBN8gLWMqwLIvPKKKDmNHeRagd1xyxgta+jVGQdze52jVwLOWHbPLtI0kqFlPWnZT49i
-         J2S+6YLaqPfrJbVx1UfREE5KPHEgkgJHVe04IArlfIiLUajyRNBud5ogxa9kFLxmvMQ1
-         Vqcg==
-X-Gm-Message-State: AOAM533FiAm26pU5w20TW58DTzN2f3EnkNN+3zLF5Cs/xFfrTFWPE2ZW
-        9Gw6ZNWLeU/ngRR0UKkQdjfZs/jqMcRlbWAtCEbQAvpOW6n6/LHu9kd7S3BrM3ccuOZ05kOD1CP
-        PXnYStX/kqM0NEQo3fiQ8jXNa
-X-Received: by 2002:adf:cc8d:: with SMTP id p13mr36561853wrj.274.1638717229569;
-        Sun, 05 Dec 2021 07:13:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxB1FHjqVzHBXz++pNZsHwC5mURaue3xSCvcEI2FgVb9dhHxw/aRQ8vu6ilEeIp126F4WpvgQ==
-X-Received: by 2002:adf:cc8d:: with SMTP id p13mr36561837wrj.274.1638717229401;
-        Sun, 05 Dec 2021 07:13:49 -0800 (PST)
+        bh=QxvxQc41Ew/AKTWBd/7QLuFTH5E37kP+3Ti2L6TAk5Q=;
+        b=LTRXg63jqWBtPjQPsOeM3USC7YtXUmOfdJvZ25s+nMUzlqCiqe3+MGYsFliFnNBsIp
+         6tuVywLIWr1Ve0vT2YHvfyHHjEPrhkoOcyJGNhh1NTkTzMU0fSpjL7PeRKhdnxIpyhI8
+         V//6CEiScX5S2x2IC20x6H1yGSvMp+RQFeTMLaa5Kg179RjuBr5ubik5f+k7FHlOtrz8
+         /1yyWi5z+XL937W0y9Z7Ig5mC+tPH3rtjzs5z4QIrcs3ljOI+0ncYnF2rwQiazxta2tB
+         XPpWhKu2ooep33//L35vwlytnMtB4SB9zWuKewMFlDR+JidoIeSz3vCSmkhZ38XnltWb
+         AT9g==
+X-Gm-Message-State: AOAM533ipYzMUE7PIWaOxnmm79bhjAy7i1WU/lxBMmyjsSaVjnmsOXT0
+        EHrGb1WheGJE5ekN05xnVWL0flXiU9xcpyZZFb+GsPG1ACFFHPUCz/KweyS68DOeEMxZ7Hs8/4d
+        Gvg5mtARKCfiUNpvnsTgx+qVQ
+X-Received: by 2002:a1c:20d3:: with SMTP id g202mr32061384wmg.129.1638717236895;
+        Sun, 05 Dec 2021 07:13:56 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxEiPZOYPKBWMVLyfryKqzrDQaJxX/0GpUn1xVQTfiO9GOrRvZsZtUoYNyC2YJnHbl7Mu5hHg==
+X-Received: by 2002:a1c:20d3:: with SMTP id g202mr32061370wmg.129.1638717236699;
+        Sun, 05 Dec 2021 07:13:56 -0800 (PST)
 Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id q8sm8527650wrx.71.2021.12.05.07.13.48
+        by smtp.gmail.com with ESMTPSA id z6sm8348888wrm.93.2021.12.05.07.13.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 07:13:48 -0800 (PST)
-Date:   Sun, 5 Dec 2021 16:13:46 +0100
+        Sun, 05 Dec 2021 07:13:56 -0800 (PST)
+Date:   Sun, 5 Dec 2021 16:13:54 +0100
 From:   Jiri Olsa <jolsa@redhat.com>
 To:     Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -65,62 +65,72 @@ Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Alexander Antonov <alexander.antonov@linux.intel.com>,
         Alexei Budankov <abudankov@huawei.com>,
         Riccardo Mancini <rickyman7@gmail.com>
-Subject: Re: [PATCH v12 13/16] perf record: Extend --threads command line
- option
-Message-ID: <YazWyEU9cUabmmYC@krava>
+Subject: Re: [PATCH v12 01/16] perf record: Introduce thread affinity and
+ mmap masks
+Message-ID: <YazXMuT+oQ9cFeTi@krava>
 References: <cover.1637675515.git.alexey.v.bayduraev@linux.intel.com>
- <f103a65518a1a41700f739df75f57cb0b46fbf19.1637675515.git.alexey.v.bayduraev@linux.intel.com>
+ <22ee51ee5430b51eee5f03301fb498d5d3e33d1e.1637675515.git.alexey.v.bayduraev@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f103a65518a1a41700f739df75f57cb0b46fbf19.1637675515.git.alexey.v.bayduraev@linux.intel.com>
+In-Reply-To: <22ee51ee5430b51eee5f03301fb498d5d3e33d1e.1637675515.git.alexey.v.bayduraev@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 05:08:09PM +0300, Alexey Bayduraev wrote:
+On Tue, Nov 23, 2021 at 05:07:57PM +0300, Alexey Bayduraev wrote:
 
 SNIP
 
+> +static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_cpu_map *cpus)
+> +{
+> +	int c;
 > +
->  static int record__parse_threads(const struct option *opt, const char *str, int unset)
->  {
-> +	int s;
->  	struct record_opts *opts = opt->value;
->  
-> -	if (unset || !str || !strlen(str))
-> +	if (unset || !str || !strlen(str)) {
->  		opts->threads_spec = THREAD_SPEC__CPU;
-> +	} else {
-> +		for (s = 1; s < THREAD_SPEC__MAX; s++) {
-> +			if (s == THREAD_SPEC__USER) {
-> +				opts->threads_user_spec = strdup(str);
+> +	for (c = 0; c < cpus->nr; c++)
+> +		set_bit(cpus->map[c], mask->bits);
+> +}
+> +
+> +static void record__free_thread_masks(struct record *rec, int nr_threads)
+> +{
+> +	int t;
+> +
+> +	if (rec->thread_masks)
+> +		for (t = 0; t < nr_threads; t++)
+> +			record__thread_mask_free(&rec->thread_masks[t]);
+> +
+> +	zfree(&rec->thread_masks);
+> +}
+> +
+> +static int record__alloc_thread_masks(struct record *rec, int nr_threads, int nr_bits)
+> +{
+> +	int t, ret;
+> +
+> +	rec->thread_masks = zalloc(nr_threads * sizeof(*(rec->thread_masks)));
+> +	if (!rec->thread_masks) {
+> +		pr_err("Failed to allocate thread masks\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	for (t = 0; t < nr_threads; t++) {
+> +		ret = record__thread_mask_alloc(&rec->thread_masks[t], nr_bits);
+> +		if (ret)
+> +			goto out_free;
+> +		record__thread_mask_clear(&rec->thread_masks[t]);
 
-we should bail out if strdup fails
+nit, is this clear needed?
 
 jirka
 
-> +				opts->threads_spec = THREAD_SPEC__USER;
-> +				break;
-> +			}
-> +			if (!strncasecmp(str, thread_spec_tags[s], strlen(thread_spec_tags[s]))) {
-> +				opts->threads_spec = s;
-> +				break;
-> +			}
-> +		}
 > +	}
 > +
-> +	if (opts->threads_spec == THREAD_SPEC__USER)
-> +		pr_debug("threads_spec: %s\n", opts->threads_user_spec);
-> +	else
-> +		pr_debug("threads_spec: %s\n", thread_spec_tags[opts->threads_spec]);
->  
->  	return 0;
->  }
-> @@ -3263,6 +3327,17 @@ static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_c
->  		set_bit(cpus->map[c], mask->bits);
->  }
->  
+> +	return 0;
+> +
+> +out_free:
+> +	record__free_thread_masks(rec, nr_threads);
+> +
+> +	return ret;
+> +}
+> +
 
 SNIP
 

@@ -2,72 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 825F3468C1E
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 17:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DCC2468C26
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 17:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235929AbhLEQbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 11:31:45 -0500
-Received: from smtpbg128.qq.com ([106.55.201.39]:17984 "EHLO smtpbg587.qq.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230137AbhLEQbm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 11:31:42 -0500
-X-QQ-mid: bizesmtp54t1638721682t50lv2i0
-Received: from wangx.lan (unknown [218.88.126.113])
-        by esmtp6.qq.com (ESMTP) with 
-        id ; Mon, 06 Dec 2021 00:27:55 +0800 (CST)
-X-QQ-SSF: 0100000000600050B000B00A0000000
-X-QQ-FEAT: 7n1F6iTG2FHkQyoU75K0VgWVOVG7CDjpU6U//v44NIc9UdF+dtAIyEd9KCqV0
-        TNiJVPr78WIUA20MZAdwG8ACKmg7SjkJBgaFwewmb5URibWldMBVXUZnU5gcKJGPlH7vwvb
-        RjFTI6LxFau8D5sWln7yrI8wdLCM14mAQWDbbpaZa5j8d/fgnM/PlLFIINZw+CQoSth1zHs
-        p/ocWjktyYy3dqGqFo2XafRMpRenUQ+yW95ghcp9b20oc8oNjNFTv2cRs3WEcTzTphfPAWW
-        2xcSr5zJCsTQMUwUgYQnChmBECtl9xwFgIYfFazcwuCAgaYALjp9EHd2wCWa+4OdrQfo+Da
-        gPRg5MTJ1bp59wiiBJvQ5IrHKTtqw==
-X-QQ-GoodBg: 0
-From:   Xiang wangx <wangxiang@cdjrlc.com>
-To:     bleung@chromium.org
-Cc:     groeck@chromium.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiang wangx <wangxiang@cdjrlc.com>
-Subject: [PATCH] i2c: Fix syntax errors in comments
-Date:   Mon,  6 Dec 2021 00:27:52 +0800
-Message-Id: <20211205162752.14066-1-wangxiang@cdjrlc.com>
-X-Mailer: git-send-email 2.20.1
+        id S235971AbhLEQsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 11:48:54 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:49830
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235935AbhLEQsx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 11:48:53 -0500
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1511A40013
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 16:45:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1638722725;
+        bh=Ynkq06ZARMCOYrhIwJJNWg9AtV11IKTUxlCiNMi7yFs=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=dljC7F68rKvH1urViLspgEBeopvIOV6rXIGr9pALyoOvebzQBcJ6n92EfAfZk/9KI
+         9TdoJmyPOH5aTQ0+VmOM58ZiUNrOEBKiRAb/Ldy+Y3e+cBFi/Ig4DRGndUW04ncxq3
+         jyIweooyRIb0BRqvtq8VEtjEccRNBXNhzPCh7TcaFsmskZsU5oRsIrUrHK7/MoQ+0R
+         rBkWdAruCOK+3BqiYOFUFa1Y4C2sNNYKGj513eSVaM9WH359H2IOFE7kte/LbL0jqx
+         2Eaa2vpwdgcgFBatT2tCfb31cnF5HeQt4aQLESFiWpLWw9agILpdwJM5Kn+nAPcOGK
+         cX1P9EDCRvO/A==
+Received: by mail-lf1-f72.google.com with SMTP id g38-20020a0565123ba600b004036147023bso2685383lfv.10
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 08:45:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ynkq06ZARMCOYrhIwJJNWg9AtV11IKTUxlCiNMi7yFs=;
+        b=cxU54VS0+Q21VeI54TIqvb7dqSp4x4iShxpwZmgv1WK1wVzDKwyfsCJCBO6g4zqP8c
+         S8ItbMWIdJmgpWk5FAtqtcLsAMrDtIzwlwxH0SjrKTKv3XBfih4OReLrTbGN/o8ockby
+         0AC4YMFpSIf0uLHdGwI2hO5iVwmG9Ir4RQ4ibjFAwsILp6qj1VPwNAqsQeQn8idmA338
+         gMKYUAkU0v5dNECgPKkaq32U6ivP3XuNB3uyUowfYIDqIZh82/My09yPqUjUkBdx54hr
+         WQjLZVrQJuZTQQ0NPywCh39QjfOuMnWr4NIEtekEqfLQ9G0f/ZHjRTy3Vb/wk6ax59PT
+         D9Tg==
+X-Gm-Message-State: AOAM531J1HMNWOKQ51av7sFKSSfhD1AWT+mo9/bF42zXxGctPDOmBqtn
+        2WS6QWv0PnRq37ZQabEIRPTi9XOpzy36f3DKpeiYYN8iSApJgCEFNFXJkia7s2A6qTNC28kYPPU
+        /gZLDY91D64Iw4kh+iygB1MTQVljKQ6eYLku/UNaagg==
+X-Received: by 2002:a05:6512:3718:: with SMTP id z24mr30354651lfr.563.1638722724465;
+        Sun, 05 Dec 2021 08:45:24 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwRuYQWcf9Blj+BSef7qa3hqIyQBNi63M86AiQYiGhVbFi71sm/nCqsjP+YXZtzSaItqny9OQ==
+X-Received: by 2002:a05:6512:3718:: with SMTP id z24mr30354638lfr.563.1638722724308;
+        Sun, 05 Dec 2021 08:45:24 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id v66sm1118752lfa.6.2021.12.05.08.45.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Dec 2021 08:45:23 -0800 (PST)
+Message-ID: <b650681f-62e4-8bff-37de-ea9066559072@canonical.com>
+Date:   Sun, 5 Dec 2021 17:45:22 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam5
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 2/6] dt-bindings: clock: Add bindings definitions for
+ Exynos7885 CMU
+Content-Language: en-US
+To:     David Virag <virag.david003@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20211205153302.76418-1-virag.david003@gmail.com>
+ <20211205153302.76418-3-virag.david003@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211205153302.76418-3-virag.david003@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'to'
+On 05/12/2021 16:32, David Virag wrote:
+> Just like on Exynos850, the clock controller driver is designed to have
+> separate instances for each particular CMU, so clock IDs start from 1
+> for each CMU in this bindings header too.
+> 
+> Signed-off-by: David Virag <virag.david003@gmail.com>
+> ---
+>  include/dt-bindings/clock/exynos7885.h | 115 +++++++++++++++++++++++++
+>  1 file changed, 115 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/exynos7885.h
 
-Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
----
- drivers/i2c/busses/i2c-cros-ec-tunnel.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-cros-ec-tunnel.c b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-index 790ea3fda693..892213d51f43 100644
---- a/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-+++ b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
-@@ -107,7 +107,7 @@ static int ec_i2c_construct_message(u8 *buf, const struct i2c_msg i2c_msgs[],
- /**
-  * ec_i2c_count_response - Count bytes needed for ec_i2c_parse_response
-  *
-- * @i2c_msgs: The i2c messages to to fill up.
-+ * @i2c_msgs: The i2c messages to fill up.
-  * @num: The number of i2c messages expected.
-  *
-  * Returns the number of response bytes expeced.
-@@ -131,7 +131,7 @@ static int ec_i2c_count_response(struct i2c_msg i2c_msgs[], int num)
-  * We'll take the EC's response and copy it back into msgs.
-  *
-  * @buf: The buffer to parse.
-- * @i2c_msgs: The i2c messages to to fill up.
-+ * @i2c_msgs: The i2c messages to fill up.
-  * @num: The number of i2c messages; will be modified to include the actual
-  *	 number received.
-  *
--- 
-2.20.1
+This should be patch 1.
 
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+Best regards,
+Krzysztof

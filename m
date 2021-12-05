@@ -2,225 +2,502 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66791468E1D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 00:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F338C468E22
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 00:39:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241156AbhLEXe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 18:34:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235176AbhLEXe2 (ORCPT
+        id S241302AbhLEXnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 18:43:12 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:59557 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241256AbhLEXnK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 18:34:28 -0500
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087CDC061751
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 15:31:01 -0800 (PST)
-Received: by mail-vk1-xa2a.google.com with SMTP id 188so5623800vku.8
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 15:31:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=d3zLncXG+PQsNSIxNxS/1QO1tpBEgTzG8HllI/EvpGk=;
-        b=dSMO9H3SxhTocvFK5d8bl+J79twoNQ0iC0uPVdJqHI4++QnpeSPAMR5T3lfGY84tqh
-         dtREvaT3bI+mU3CEnhiAShUceQyh74lFofIK6QPrkwaKPMf7yGebjLAdsX17yJI17in/
-         PdxqAu0ZDWdgOdOXVKPvX9xWpj2WYhPa7DfxNoxRJujs48KfKmUOUOso1HHK3OVmLyF0
-         504+9T0qcUvckUC6+0q0F2HOOYkEuXPWOPNwoiPLWtWuDLglyLDmIdhlC7oqldrg+KWK
-         93j3BlSRLdPz9CLx8n062Siv50h2+xHB0kEPGGwgqpoIP5wNrn+k7WDE6rz3QGHP6C2M
-         e50w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=d3zLncXG+PQsNSIxNxS/1QO1tpBEgTzG8HllI/EvpGk=;
-        b=audQPH3Q9w/Iuef8uOY080oJaJAvz4ml+t3VqVbay0RHUXuVSY/dIRLBFiKSW5Y1NM
-         wG+ZLapZDRD4kMlefXdjyPpgMb12Gp7MsR75//AYQcZHfONCihoKTmRI/xLdzU8DnO7S
-         zBWxlRYgfpTL8CS52f3uG2Rsxio/UlIP4FjhkgUKad7oKx3tvgvVx7eqVRvE0rD3CASd
-         Dnc2b8stbfckBej7G8lmZjG71mD2eboXIzidkTrZbe47JVS003yDfqayxc5YATP8l1KS
-         7P3fxLS5+Z9t+4nvXIuYcNrfaQ6O4RLGOUfRyizm/QxB0eVIuiyph6np1Kf3L38TwDLY
-         4GVQ==
-X-Gm-Message-State: AOAM530RiNtTedDqoNQAMsPnqY2jXlKQih0Ja1RCLeW6H5gkCYx9EDSI
-        iUei1pHdHjZ5wji/7sx1X5BbOI+SRlypeA==
-X-Google-Smtp-Source: ABdhPJxDBYmOEWl6jseDDRbSpn7ysh4nlGhWuahlraDnJXYwXOCg3ynzr95WzAR6FUF7+kJJghyO8Q==
-X-Received: by 2002:a1f:3f4f:: with SMTP id m76mr39515074vka.1.1638747060135;
-        Sun, 05 Dec 2021 15:31:00 -0800 (PST)
-Received: from geday ([2804:7f2:8006:9290:f481:1c3e:161e:f26d])
-        by smtp.gmail.com with ESMTPSA id y7sm3315969uad.2.2021.12.05.15.30.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 15:30:59 -0800 (PST)
-Date:   Sun, 5 Dec 2021 20:30:51 -0300
-From:   Geraldo Nascimento <geraldogabriel@gmail.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     jbrunet@baylibre.com, linux-amlogic@lists.infradead.org,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Christian Hewitt <christianshewitt@gmail.com>
-Subject: Re: [PATCH RFC v1 2/2] ASoC: meson: aiu: Move AIU_I2S_MISC hold
- setting to aiu-fifo-i2s
-Message-ID: <Ya1Lq1ZLccxetJwx@geday>
-References: <20211205180816.2083864-1-martin.blumenstingl@googlemail.com>
- <20211205180816.2083864-3-martin.blumenstingl@googlemail.com>
+        Sun, 5 Dec 2021 18:43:10 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J6jhN6WH2z4xZ4;
+        Mon,  6 Dec 2021 10:39:32 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638747573;
+        bh=OYwEC5U/0QxVL+Ch7IjHIOA46R5CkpweTTN2VWUX0zw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fXK4yh+7HQOMgEtFPMsEhHCMQB9u3DbE8UtphQK48/vGf1ysUSWeX3LCoDxbr0ZNH
+         SsFL14dG+1o2Oi+nh2tnzOHF1Ayy1wAEBFvV5h+3UF5Nnm077Ysq3QKKcIInUb3I1A
+         W/mI9yhCwpk/pGJdWE1FSlVfJfQGpO5A1LmqDjjIKwJa7JB/B98VhaL63awa4e56ar
+         luWMftw+K7qWpRIzLv9b/Ll1mFONqtJwaYG73lAWJ9M+h6oU6fPrBqFY1O+GyR1dEC
+         aTzt5sumchNhpG4WriFw8O4oEcqQpl5KAHI4pqkA/Du32yWRCaTJPU46kA1YkOMqD6
+         c8Nj6w2MNXGPA==
+Date:   Mon, 6 Dec 2021 10:39:31 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
+Message-ID: <20211206103931.5e75b1a7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211205180816.2083864-3-martin.blumenstingl@googlemail.com>
+Content-Type: multipart/signed; boundary="Sig_/aFyWMXJGlUFEiu5wPX29Ork";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 05, 2021 at 07:08:16PM +0100, Martin Blumenstingl wrote:
-> The out-of-tree vendor driver uses the following approach to set the
-> AIU_I2S_MISC register:
-> 1) write AIU_MEM_I2S_START_PTR and AIU_MEM_I2S_RD_PTR
-> 2) configure AIU_I2S_MUTE_SWAP[15:0]
-> 3) write AIU_MEM_I2S_END_PTR
-> 4) set AIU_I2S_MISC[2] to 1 (documented as: "put I2S interface in hold
->    mode")
-> 5) set AIU_I2S_MISC[4] to 1 (depending on the driver revision it always
->    stays at 1 while for older drivers this bit is unset in step 4)
-> 6) set AIU_I2S_MISC[2] to 0
-> 7) write AIU_MEM_I2S_MASKS
-> 8) toggle AIU_MEM_I2S_CONTROL[0]
-> 9) toggle AIU_MEM_I2S_BUF_CNTL[0]
-> 
-> Additional testing shows that when AIU_I2S_MISC[2] is set to 1 then no
-> interrupts are generated anymore. The way this bit is managed by the
-> vendor driver as well as not getting any interrupts can mean that it's
-> related to the FIFO and not the encoder.
-> 
-> Move setting the AIU_I2S_MISC[2] bit to aiu_fifo_i2s_hw_params() so it
-> closer resembles the flow in the vendor kernel. While here also
-> configure AIU_I2S_MISC[4] (documented as: "force each audio data to
-> left or right according to the bit attached with the audio data")
-> similar to how the vendor driver does this. This fixes the infamous and
-> long-standing "machine gun noise" issue (a buffer underrun issue).
->
+--Sig_/aFyWMXJGlUFEiu5wPX29Ork
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Tested-by: Geraldo Nascimento <geraldogabriel@gmail.com>
+Hi all,
 
----
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
-About the test setup:
+  kernel/bpf/btf.c
 
-Board is from H96Pro+ TV BOX, Amlogic S912 with 3G RAM, 32GB eMMC and a
-QCA9377 SDIO wifi chip. Sticker in the underside of the board says
-CZ-S32-V6 which I suppose is the manufacturer's name/revision of the
-PCB.
+between commit:
 
-Tested with Audacious, audio output is ALSA without any plugins such as
-dmix, etc.
+  d9847eb8be3d ("bpf: Make CONFIG_DEBUG_INFO_BTF depend upon CONFIG_BPF_SYS=
+CALL")
 
-First I made sure the problem was reproducible. Just skipping the track
-on Audacious from one point to another would result in severe noise. I
-then applied Martin's patch and noise is gone for good.
+from the bpf tree and commit:
 
-Thanks,
-Geraldo Nascimento
+  29db4bea1d10 ("bpf: Prepare relo_core.c for kernel duty.")
 
-> Fixes: 6ae9ca9ce986bf ("ASoC: meson: aiu: add i2s and spdif support")
-> Reported-by: Christian Hewitt <christianshewitt@gmail.com>
-> Reported-by: Geraldo Nascimento <geraldogabriel@gmail.com>
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
->  sound/soc/meson/aiu-encoder-i2s.c | 33 -------------------------------
->  sound/soc/meson/aiu-fifo-i2s.c    | 12 +++++++++++
->  2 files changed, 12 insertions(+), 33 deletions(-)
-> 
-> diff --git a/sound/soc/meson/aiu-encoder-i2s.c b/sound/soc/meson/aiu-encoder-i2s.c
-> index 932224552146..67729de41a73 100644
-> --- a/sound/soc/meson/aiu-encoder-i2s.c
-> +++ b/sound/soc/meson/aiu-encoder-i2s.c
-> @@ -18,7 +18,6 @@
->  #define AIU_RST_SOFT_I2S_FAST		BIT(0)
->  
->  #define AIU_I2S_DAC_CFG_MSB_FIRST	BIT(2)
-> -#define AIU_I2S_MISC_HOLD_EN		BIT(2)
->  #define AIU_CLK_CTRL_I2S_DIV_EN		BIT(0)
->  #define AIU_CLK_CTRL_I2S_DIV		GENMASK(3, 2)
->  #define AIU_CLK_CTRL_AOCLK_INVERT	BIT(6)
-> @@ -36,37 +35,6 @@ static void aiu_encoder_i2s_divider_enable(struct snd_soc_component *component,
->  				      enable ? AIU_CLK_CTRL_I2S_DIV_EN : 0);
->  }
->  
-> -static void aiu_encoder_i2s_hold(struct snd_soc_component *component,
-> -				 bool enable)
-> -{
-> -	snd_soc_component_update_bits(component, AIU_I2S_MISC,
-> -				      AIU_I2S_MISC_HOLD_EN,
-> -				      enable ? AIU_I2S_MISC_HOLD_EN : 0);
-> -}
-> -
-> -static int aiu_encoder_i2s_trigger(struct snd_pcm_substream *substream, int cmd,
-> -				   struct snd_soc_dai *dai)
-> -{
-> -	struct snd_soc_component *component = dai->component;
-> -
-> -	switch (cmd) {
-> -	case SNDRV_PCM_TRIGGER_START:
-> -	case SNDRV_PCM_TRIGGER_RESUME:
-> -	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
-> -		aiu_encoder_i2s_hold(component, false);
-> -		return 0;
-> -
-> -	case SNDRV_PCM_TRIGGER_STOP:
-> -	case SNDRV_PCM_TRIGGER_SUSPEND:
-> -	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
-> -		aiu_encoder_i2s_hold(component, true);
-> -		return 0;
-> -
-> -	default:
-> -		return -EINVAL;
-> -	}
-> -}
-> -
->  static int aiu_encoder_i2s_setup_desc(struct snd_soc_component *component,
->  				      struct snd_pcm_hw_params *params)
->  {
-> @@ -353,7 +321,6 @@ static void aiu_encoder_i2s_shutdown(struct snd_pcm_substream *substream,
->  }
->  
->  const struct snd_soc_dai_ops aiu_encoder_i2s_dai_ops = {
-> -	.trigger	= aiu_encoder_i2s_trigger,
->  	.hw_params	= aiu_encoder_i2s_hw_params,
->  	.hw_free	= aiu_encoder_i2s_hw_free,
->  	.set_fmt	= aiu_encoder_i2s_set_fmt,
-> diff --git a/sound/soc/meson/aiu-fifo-i2s.c b/sound/soc/meson/aiu-fifo-i2s.c
-> index 2388a2d0b3a6..d0a1090d6465 100644
-> --- a/sound/soc/meson/aiu-fifo-i2s.c
-> +++ b/sound/soc/meson/aiu-fifo-i2s.c
-> @@ -20,6 +20,8 @@
->  #define AIU_MEM_I2S_CONTROL_MODE_16BIT	BIT(6)
->  #define AIU_MEM_I2S_BUF_CNTL_INIT	BIT(0)
->  #define AIU_RST_SOFT_I2S_FAST		BIT(0)
-> +#define AIU_I2S_MISC_HOLD_EN		BIT(2)
-> +#define AIU_I2S_MISC_FORCE_LEFT_RIGHT	BIT(4)
->  
->  #define AIU_FIFO_I2S_BLOCK		256
->  
-> @@ -90,6 +92,10 @@ static int aiu_fifo_i2s_hw_params(struct snd_pcm_substream *substream,
->  	unsigned int val;
->  	int ret;
->  
-> +	snd_soc_component_update_bits(component, AIU_I2S_MISC,
-> +				      AIU_I2S_MISC_HOLD_EN,
-> +				      AIU_I2S_MISC_HOLD_EN);
-> +
->  	ret = aiu_fifo_hw_params(substream, params, dai);
->  	if (ret)
->  		return ret;
-> @@ -117,6 +123,12 @@ static int aiu_fifo_i2s_hw_params(struct snd_pcm_substream *substream,
->  	snd_soc_component_update_bits(component, AIU_MEM_I2S_MASKS,
->  				      AIU_MEM_I2S_MASKS_IRQ_BLOCK, val);
->  
-> +	snd_soc_component_update_bits(component, AIU_I2S_MISC,
-> +				      AIU_I2S_MISC_FORCE_LEFT_RIGHT,
-> +				      AIU_I2S_MISC_FORCE_LEFT_RIGHT);
-> +	snd_soc_component_update_bits(component, AIU_I2S_MISC,
-> +				      AIU_I2S_MISC_HOLD_EN, 0);
-> +
->  	return 0;
->  }
->  
-> -- 
-> 2.34.1
-> 
+from the bpf-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc kernel/bpf/btf.c
+index 48cdf5b425a7,36a5cc0f53c6..000000000000
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@@ -6405,4 -6418,382 +6409,384 @@@ bool bpf_check_mod_kfunc_call(struct kf
+  DEFINE_KFUNC_BTF_ID_LIST(bpf_tcp_ca_kfunc_list);
+  DEFINE_KFUNC_BTF_ID_LIST(prog_test_kfunc_list);
+ =20
+ +#endif
+++
++ int bpf_core_types_are_compat(const struct btf *local_btf, __u32 local_id,
++ 			      const struct btf *targ_btf, __u32 targ_id)
++ {
++ 	return -EOPNOTSUPP;
++ }
++=20
++ static bool bpf_core_is_flavor_sep(const char *s)
++ {
++ 	/* check X___Y name pattern, where X and Y are not underscores */
++ 	return s[0] !=3D '_' &&				      /* X */
++ 	       s[1] =3D=3D '_' && s[2] =3D=3D '_' && s[3] =3D=3D '_' &&   /* ___=
+ */
++ 	       s[4] !=3D '_';				      /* Y */
++ }
++=20
++ size_t bpf_core_essential_name_len(const char *name)
++ {
++ 	size_t n =3D strlen(name);
++ 	int i;
++=20
++ 	for (i =3D n - 5; i >=3D 0; i--) {
++ 		if (bpf_core_is_flavor_sep(name + i))
++ 			return i + 1;
++ 	}
++ 	return n;
++ }
++=20
++ struct bpf_cand_cache {
++ 	const char *name;
++ 	u32 name_len;
++ 	u16 kind;
++ 	u16 cnt;
++ 	struct {
++ 		const struct btf *btf;
++ 		u32 id;
++ 	} cands[];
++ };
++=20
++ static void bpf_free_cands(struct bpf_cand_cache *cands)
++ {
++ 	if (!cands->cnt)
++ 		/* empty candidate array was allocated on stack */
++ 		return;
++ 	kfree(cands);
++ }
++=20
++ static void bpf_free_cands_from_cache(struct bpf_cand_cache *cands)
++ {
++ 	kfree(cands->name);
++ 	kfree(cands);
++ }
++=20
++ #define VMLINUX_CAND_CACHE_SIZE 31
++ static struct bpf_cand_cache *vmlinux_cand_cache[VMLINUX_CAND_CACHE_SIZE];
++=20
++ #define MODULE_CAND_CACHE_SIZE 31
++ static struct bpf_cand_cache *module_cand_cache[MODULE_CAND_CACHE_SIZE];
++=20
++ static DEFINE_MUTEX(cand_cache_mutex);
++=20
++ static void __print_cand_cache(struct bpf_verifier_log *log,
++ 			       struct bpf_cand_cache **cache,
++ 			       int cache_size)
++ {
++ 	struct bpf_cand_cache *cc;
++ 	int i, j;
++=20
++ 	for (i =3D 0; i < cache_size; i++) {
++ 		cc =3D cache[i];
++ 		if (!cc)
++ 			continue;
++ 		bpf_log(log, "[%d]%s(", i, cc->name);
++ 		for (j =3D 0; j < cc->cnt; j++) {
++ 			bpf_log(log, "%d", cc->cands[j].id);
++ 			if (j < cc->cnt - 1)
++ 				bpf_log(log, " ");
++ 		}
++ 		bpf_log(log, "), ");
++ 	}
++ }
++=20
++ static void print_cand_cache(struct bpf_verifier_log *log)
++ {
++ 	mutex_lock(&cand_cache_mutex);
++ 	bpf_log(log, "vmlinux_cand_cache:");
++ 	__print_cand_cache(log, vmlinux_cand_cache, VMLINUX_CAND_CACHE_SIZE);
++ 	bpf_log(log, "\nmodule_cand_cache:");
++ 	__print_cand_cache(log, module_cand_cache, MODULE_CAND_CACHE_SIZE);
++ 	bpf_log(log, "\n");
++ 	mutex_unlock(&cand_cache_mutex);
++ }
++=20
++ static u32 hash_cands(struct bpf_cand_cache *cands)
++ {
++ 	return jhash(cands->name, cands->name_len, 0);
++ }
++=20
++ static struct bpf_cand_cache *check_cand_cache(struct bpf_cand_cache *can=
+ds,
++ 					       struct bpf_cand_cache **cache,
++ 					       int cache_size)
++ {
++ 	struct bpf_cand_cache *cc =3D cache[hash_cands(cands) % cache_size];
++=20
++ 	if (cc && cc->name_len =3D=3D cands->name_len &&
++ 	    !strncmp(cc->name, cands->name, cands->name_len))
++ 		return cc;
++ 	return NULL;
++ }
++=20
++ static size_t sizeof_cands(int cnt)
++ {
++ 	return offsetof(struct bpf_cand_cache, cands[cnt]);
++ }
++=20
++ static struct bpf_cand_cache *populate_cand_cache(struct bpf_cand_cache *=
+cands,
++ 						  struct bpf_cand_cache **cache,
++ 						  int cache_size)
++ {
++ 	struct bpf_cand_cache **cc =3D &cache[hash_cands(cands) % cache_size], *=
+new_cands;
++=20
++ 	if (*cc) {
++ 		bpf_free_cands_from_cache(*cc);
++ 		*cc =3D NULL;
++ 	}
++ 	new_cands =3D kmalloc(sizeof_cands(cands->cnt), GFP_KERNEL);
++ 	if (!new_cands) {
++ 		bpf_free_cands(cands);
++ 		return ERR_PTR(-ENOMEM);
++ 	}
++ 	memcpy(new_cands, cands, sizeof_cands(cands->cnt));
++ 	/* strdup the name, since it will stay in cache.
++ 	 * the cands->name points to strings in prog's BTF and the prog can be u=
+nloaded.
++ 	 */
++ 	new_cands->name =3D kmemdup_nul(cands->name, cands->name_len, GFP_KERNEL=
+);
++ 	bpf_free_cands(cands);
++ 	if (!new_cands->name) {
++ 		kfree(new_cands);
++ 		return ERR_PTR(-ENOMEM);
++ 	}
++ 	*cc =3D new_cands;
++ 	return new_cands;
++ }
++=20
++ static void __purge_cand_cache(struct btf *btf, struct bpf_cand_cache **c=
+ache,
++ 			       int cache_size)
++ {
++ 	struct bpf_cand_cache *cc;
++ 	int i, j;
++=20
++ 	for (i =3D 0; i < cache_size; i++) {
++ 		cc =3D cache[i];
++ 		if (!cc)
++ 			continue;
++ 		if (!btf) {
++ 			/* when new module is loaded purge all of module_cand_cache,
++ 			 * since new module might have candidates with the name
++ 			 * that matches cached cands.
++ 			 */
++ 			bpf_free_cands_from_cache(cc);
++ 			cache[i] =3D NULL;
++ 			continue;
++ 		}
++ 		/* when module is unloaded purge cache entries
++ 		 * that match module's btf
++ 		 */
++ 		for (j =3D 0; j < cc->cnt; j++)
++ 			if (cc->cands[j].btf =3D=3D btf) {
++ 				bpf_free_cands_from_cache(cc);
++ 				cache[i] =3D NULL;
++ 				break;
++ 			}
++ 	}
++=20
++ }
++=20
++ static void purge_cand_cache(struct btf *btf)
++ {
++ 	mutex_lock(&cand_cache_mutex);
++ 	__purge_cand_cache(btf, module_cand_cache, MODULE_CAND_CACHE_SIZE);
++ 	mutex_unlock(&cand_cache_mutex);
++ }
++=20
++ static struct bpf_cand_cache *
++ bpf_core_add_cands(struct bpf_cand_cache *cands, const struct btf *targ_b=
+tf,
++ 		   int targ_start_id)
++ {
++ 	struct bpf_cand_cache *new_cands;
++ 	const struct btf_type *t;
++ 	const char *targ_name;
++ 	size_t targ_essent_len;
++ 	int n, i;
++=20
++ 	n =3D btf_nr_types(targ_btf);
++ 	for (i =3D targ_start_id; i < n; i++) {
++ 		t =3D btf_type_by_id(targ_btf, i);
++ 		if (btf_kind(t) !=3D cands->kind)
++ 			continue;
++=20
++ 		targ_name =3D btf_name_by_offset(targ_btf, t->name_off);
++ 		if (!targ_name)
++ 			continue;
++=20
++ 		/* the resched point is before strncmp to make sure that search
++ 		 * for non-existing name will have a chance to schedule().
++ 		 */
++ 		cond_resched();
++=20
++ 		if (strncmp(cands->name, targ_name, cands->name_len) !=3D 0)
++ 			continue;
++=20
++ 		targ_essent_len =3D bpf_core_essential_name_len(targ_name);
++ 		if (targ_essent_len !=3D cands->name_len)
++ 			continue;
++=20
++ 		/* most of the time there is only one candidate for a given kind+name p=
+air */
++ 		new_cands =3D kmalloc(sizeof_cands(cands->cnt + 1), GFP_KERNEL);
++ 		if (!new_cands) {
++ 			bpf_free_cands(cands);
++ 			return ERR_PTR(-ENOMEM);
++ 		}
++=20
++ 		memcpy(new_cands, cands, sizeof_cands(cands->cnt));
++ 		bpf_free_cands(cands);
++ 		cands =3D new_cands;
++ 		cands->cands[cands->cnt].btf =3D targ_btf;
++ 		cands->cands[cands->cnt].id =3D i;
++ 		cands->cnt++;
++ 	}
++ 	return cands;
++ }
++=20
++ static struct bpf_cand_cache *
++ bpf_core_find_cands(struct bpf_core_ctx *ctx, u32 local_type_id)
++ {
++ 	struct bpf_cand_cache *cands, *cc, local_cand =3D {};
++ 	const struct btf *local_btf =3D ctx->btf;
++ 	const struct btf_type *local_type;
++ 	const struct btf *main_btf;
++ 	size_t local_essent_len;
++ 	struct btf *mod_btf;
++ 	const char *name;
++ 	int id;
++=20
++ 	main_btf =3D bpf_get_btf_vmlinux();
++ 	if (IS_ERR(main_btf))
++ 		return (void *)main_btf;
++=20
++ 	local_type =3D btf_type_by_id(local_btf, local_type_id);
++ 	if (!local_type)
++ 		return ERR_PTR(-EINVAL);
++=20
++ 	name =3D btf_name_by_offset(local_btf, local_type->name_off);
++ 	if (str_is_empty(name))
++ 		return ERR_PTR(-EINVAL);
++ 	local_essent_len =3D bpf_core_essential_name_len(name);
++=20
++ 	cands =3D &local_cand;
++ 	cands->name =3D name;
++ 	cands->kind =3D btf_kind(local_type);
++ 	cands->name_len =3D local_essent_len;
++=20
++ 	cc =3D check_cand_cache(cands, vmlinux_cand_cache, VMLINUX_CAND_CACHE_SI=
+ZE);
++ 	/* cands is a pointer to stack here */
++ 	if (cc) {
++ 		if (cc->cnt)
++ 			return cc;
++ 		goto check_modules;
++ 	}
++=20
++ 	/* Attempt to find target candidates in vmlinux BTF first */
++ 	cands =3D bpf_core_add_cands(cands, main_btf, 1);
++ 	if (IS_ERR(cands))
++ 		return cands;
++=20
++ 	/* cands is a pointer to kmalloced memory here if cands->cnt > 0 */
++=20
++ 	/* populate cache even when cands->cnt =3D=3D 0 */
++ 	cc =3D populate_cand_cache(cands, vmlinux_cand_cache, VMLINUX_CAND_CACHE=
+_SIZE);
++ 	if (IS_ERR(cc))
++ 		return cc;
++=20
++ 	/* if vmlinux BTF has any candidate, don't go for module BTFs */
++ 	if (cc->cnt)
++ 		return cc;
++=20
++ check_modules:
++ 	/* cands is a pointer to stack here and cands->cnt =3D=3D 0 */
++ 	cc =3D check_cand_cache(cands, module_cand_cache, MODULE_CAND_CACHE_SIZE=
+);
++ 	if (cc)
++ 		/* if cache has it return it even if cc->cnt =3D=3D 0 */
++ 		return cc;
++=20
++ 	/* If candidate is not found in vmlinux's BTF then search in module's BT=
+Fs */
++ 	spin_lock_bh(&btf_idr_lock);
++ 	idr_for_each_entry(&btf_idr, mod_btf, id) {
++ 		if (!btf_is_module(mod_btf))
++ 			continue;
++ 		/* linear search could be slow hence unlock/lock
++ 		 * the IDR to avoiding holding it for too long
++ 		 */
++ 		btf_get(mod_btf);
++ 		spin_unlock_bh(&btf_idr_lock);
++ 		cands =3D bpf_core_add_cands(cands, mod_btf, btf_nr_types(main_btf));
++ 		if (IS_ERR(cands)) {
++ 			btf_put(mod_btf);
++ 			return cands;
++ 		}
++ 		spin_lock_bh(&btf_idr_lock);
++ 		btf_put(mod_btf);
++ 	}
++ 	spin_unlock_bh(&btf_idr_lock);
++ 	/* cands is a pointer to kmalloced memory here if cands->cnt > 0
++ 	 * or pointer to stack if cands->cnd =3D=3D 0.
++ 	 * Copy it into the cache even when cands->cnt =3D=3D 0 and
++ 	 * return the result.
++ 	 */
++ 	return populate_cand_cache(cands, module_cand_cache, MODULE_CAND_CACHE_S=
+IZE);
++ }
++=20
++ int bpf_core_apply(struct bpf_core_ctx *ctx, const struct bpf_core_relo *=
+relo,
++ 		   int relo_idx, void *insn)
++ {
++ 	bool need_cands =3D relo->kind !=3D BPF_CORE_TYPE_ID_LOCAL;
++ 	struct bpf_core_cand_list cands =3D {};
++ 	struct bpf_core_spec *specs;
++ 	int err;
++=20
++ 	/* ~4k of temp memory necessary to convert LLVM spec like "0:1:0:5"
++ 	 * into arrays of btf_ids of struct fields and array indices.
++ 	 */
++ 	specs =3D kcalloc(3, sizeof(*specs), GFP_KERNEL);
++ 	if (!specs)
++ 		return -ENOMEM;
++=20
++ 	if (need_cands) {
++ 		struct bpf_cand_cache *cc;
++ 		int i;
++=20
++ 		mutex_lock(&cand_cache_mutex);
++ 		cc =3D bpf_core_find_cands(ctx, relo->type_id);
++ 		if (IS_ERR(cc)) {
++ 			bpf_log(ctx->log, "target candidate search failed for %d\n",
++ 				relo->type_id);
++ 			err =3D PTR_ERR(cc);
++ 			goto out;
++ 		}
++ 		if (cc->cnt) {
++ 			cands.cands =3D kcalloc(cc->cnt, sizeof(*cands.cands), GFP_KERNEL);
++ 			if (!cands.cands) {
++ 				err =3D -ENOMEM;
++ 				goto out;
++ 			}
++ 		}
++ 		for (i =3D 0; i < cc->cnt; i++) {
++ 			bpf_log(ctx->log,
++ 				"CO-RE relocating %s %s: found target candidate [%d]\n",
++ 				btf_kind_str[cc->kind], cc->name, cc->cands[i].id);
++ 			cands.cands[i].btf =3D cc->cands[i].btf;
++ 			cands.cands[i].id =3D cc->cands[i].id;
++ 		}
++ 		cands.len =3D cc->cnt;
++ 		/* cand_cache_mutex needs to span the cache lookup and
++ 		 * copy of btf pointer into bpf_core_cand_list,
++ 		 * since module can be unloaded while bpf_core_apply_relo_insn
++ 		 * is working with module's btf.
++ 		 */
++ 	}
++=20
++ 	err =3D bpf_core_apply_relo_insn((void *)ctx->log, insn, relo->insn_off =
+/ 8,
++ 				       relo, relo_idx, ctx->btf, &cands, specs);
++ out:
++ 	kfree(specs);
++ 	if (need_cands) {
++ 		kfree(cands.cands);
++ 		mutex_unlock(&cand_cache_mutex);
++ 		if (ctx->log->level & BPF_LOG_LEVEL2)
++ 			print_cand_cache(ctx->log);
++ 	}
++ 	return err;
++ }
+
+--Sig_/aFyWMXJGlUFEiu5wPX29Ork
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGtTbMACgkQAVBC80lX
+0GzVQQf/dCOs/dkwf2s6QCfzapQ5eV1XPZDcmpNaXQ7b/lW2+1nbMZi/ssh/oIOt
+L7LkKJBNNfPlUnOjck4hWjuhLggcr0jUgO+AdGBVitYrYFBcQ32PGTUswifRLHtX
+V1a46v53EWCond3aX+JruppmrZ8k3R/rDf41ltjTT9A9sK0flwpNlldBL2mPqs54
+OVvrqlnzqsQEUzaHg+W9cnii6hEw1qaKeYSW/coIEtn5CivbTOxpGEyXAxzZy/5/
+VTNBgO5y4Mxf0fWMpKku/S0pf/29K3CtQ5gFZu489u77MiyxhKNIrq6bwJAMBQub
+/hfiprM1GQpGMbRzAujpTklXM4vnfA==
+=r5/f
+-----END PGP SIGNATURE-----
+
+--Sig_/aFyWMXJGlUFEiu5wPX29Ork--

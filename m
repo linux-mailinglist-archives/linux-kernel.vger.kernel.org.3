@@ -2,102 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6F4468C8B
+	by mail.lfdr.de (Postfix) with ESMTP id 5724A468C8C
 	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 19:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237011AbhLESL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 13:11:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55062 "EHLO
+        id S237034AbhLESL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 13:11:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbhLESLz (ORCPT
+        with ESMTP id S232874AbhLESLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 5 Dec 2021 13:11:55 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1029C061714
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 10:08:27 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id n33-20020a05600c502100b0032fb900951eso8748916wmr.4
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 10:08:27 -0800 (PST)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DA8C061751
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 10:08:28 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id d9so17617564wrw.4
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 10:08:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rF5hjb+HWpI1Ih1xwXVy9ddAAkLWiFGmzep35P6NJa8=;
-        b=el1s2Fn6aF3tZlnWmb8zajw9s3UfJDaH4P7gRXmjfZ0zEuwgbQ10kfgx4IMio5hn1p
-         Uu01lLR2bp1mP5HcalLld668UrcpEogLnqglK6gQCNhsPWYfbVpdwz9cJObju0IwJkgt
-         2in494V04RNe3zH+i10XdrbAXd6bPXEGKLAZGg7DNpMw1IDcQNMYGoI59YjQEBOv5MaW
-         xrfgtJ7jhiSODqLz00ZmPrE7MECID4hKFta7CvplgqryADVCiT3PF43MxF7tSnrgBrr0
-         FB7KKHgoNBy1H004sZN+ugdwQY4TeZtSiEMQv4aYM5JaHO3omtBdMj03KvEsC5cavoC3
-         m2ZA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=wVbLQURO0Z9+ByAGWQaOmsfWDUK6bDVmhiIqKeEs0aE=;
+        b=nFjzSkNR7Vt7NUjEHxsBt63+Y69rJq5h500HrTtMLIMNfhUgk7TR5niNnrdiFWf8WA
+         +RQK/ThnUEuTN2rv5dzQc2IoCzA8BqP000JH4mLP9eotfQVdXcxKlBIx8rWDaFKgO6Fy
+         pNwlAoPpzxF7X5rZcbuj2QuczHPULs64hnvYZf3i4xztjezQ5aRUfoDJ46KcglU4q+na
+         NKx/oO6l3U0+oIlMDHDWpQnu+xzCeGds/oIXYweABOqsA4yX/mLk89PXAfZ5jAx7K8YY
+         osT8Ld3oyXf1Zb4T3eqg8I8SQjsD7OOwSpfw1ICNlpOVu/RwdoX/pt/pGOK/rl4MAfMe
+         yHlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rF5hjb+HWpI1Ih1xwXVy9ddAAkLWiFGmzep35P6NJa8=;
-        b=fGRqVKUwuxhccK7549r/28s6dKZhmnNkUKv+qSLL0P4ySDxagLU+h2xCa6so1dX8Zw
-         eOGbpdX6g70TbChjuTXd0Db/iN21iyU4c38pqbl+5cQMo0i/h6RCfphOrjf10AmS7P6R
-         hWoF7kjtOywiRwjV6ieV7cQt/xFlLgMfzmiQFVFxz++TGWfjJ3qk/1XZQDT+st1QrAWc
-         JKyuQiCckkF99vMtrKC8Atw5M9OP8y/gGZgoNH49+YbTK1UEJBEAwPVe61pJPypZ/N1M
-         J0ewpf8lQhkwFZEvt/l6WBQWvUsL7TmApUi6n48RWOBbexORmh3V11WNoOw94q1XqfWc
-         21Ig==
-X-Gm-Message-State: AOAM533MZEp6kXqIiuDXlgMaEHVsgvlAoddNQewuV6T34DIu7ND+lz4P
-        aweFT27G/Zg7+WsMm2HNMeM=
-X-Google-Smtp-Source: ABdhPJxFtMAxnY+guAh4BzBOqq0b0PVbyY4w9h4fGaJTVCB19FDi+PDoMvxlhtL74NWjjqZg6FhP0A==
-X-Received: by 2002:a1c:20d3:: with SMTP id g202mr33026556wmg.129.1638727706049;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=wVbLQURO0Z9+ByAGWQaOmsfWDUK6bDVmhiIqKeEs0aE=;
+        b=5wFg0NpZKg23Psodfl0NM2PLnBO/eqzkb7rbEaKQij8c81ZzS4F2KwNMpkZ/U6V7iw
+         HLR1DSaQsIBK3AtYAPqof5TZ2s+TtlN84sGz91x91OsQ0ZN716s2L2JqAtdbvw1NEpqW
+         UlK+P4tnsKOUBgnAr/duNMUeFdf1/ySI/ht+DXSJiBQaPyFQfYUmg7c56dstkoo9g+0A
+         sUT9iDDZVSxixjLEtCaiLNWIvzHsqCCxUiDKz6nZrWwZxKoPhz8o2RGFzq8+B2h01kx6
+         Nqt6k8VK0IkIWF/0R6B3k41pb2fN61AmWcp/6ZJJkdMjMsvWdDyM5oSCAxjDpx4f1N5a
+         xG1g==
+X-Gm-Message-State: AOAM533e8im8QXGAla0YlkG0/HLrhXemCIzMiTLZYVquo24mwjtnB/Q/
+        4R7i+CTKRZYbn8AHFv73w00=
+X-Google-Smtp-Source: ABdhPJxrxANxSMd67C/dfrBs5aJyYKwDtHT0izw5kgpG/58jALhXD31larUKefLy5N5zKN1ZkX4fbw==
+X-Received: by 2002:adf:fb82:: with SMTP id a2mr36968627wrr.168.1638727706827;
         Sun, 05 Dec 2021 10:08:26 -0800 (PST)
 Received: from localhost.localdomain (dynamic-2a01-0c23-c11b-a200-f22f-74ff-fe21-0725.c23.pool.telefonica.de. [2a01:c23:c11b:a200:f22f:74ff:fe21:725])
-        by smtp.googlemail.com with ESMTPSA id x13sm9250551wrr.47.2021.12.05.10.08.24
+        by smtp.googlemail.com with ESMTPSA id x13sm9250551wrr.47.2021.12.05.10.08.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 10:08:25 -0800 (PST)
+        Sun, 05 Dec 2021 10:08:26 -0800 (PST)
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 To:     jbrunet@baylibre.com, linux-amlogic@lists.infradead.org,
         alsa-devel@alsa-project.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH RFC v1 0/2] ASoC: meson: aiu: two fixes
-Date:   Sun,  5 Dec 2021 19:08:14 +0100
-Message-Id: <20211205180816.2083864-1-martin.blumenstingl@googlemail.com>
+Subject: [PATCH RFC v1 1/2] ASoC: meson: aiu: fifo: Add missing dma_coerce_mask_and_coherent()
+Date:   Sun,  5 Dec 2021 19:08:15 +0100
+Message-Id: <20211205180816.2083864-2-martin.blumenstingl@googlemail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211205180816.2083864-1-martin.blumenstingl@googlemail.com>
+References: <20211205180816.2083864-1-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jerome,
+The FIFO registers which take an DMA-able address are only 32-bit wide
+on AIU. Add dma_coerce_mask_and_coherent() to make the DMA core aware of
+this limitation.
 
-in this series I am proposing two fixes for the "aiu" driver, used on
-Amlogic Meson8, Meson8b, Meson8m2, GXBB, GXL and GXM SoCs.
+Fixes: 6ae9ca9ce986bf ("ASoC: meson: aiu: add i2s and spdif support")
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+---
+ sound/soc/meson/aiu-fifo.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-The first patch is the result of me trying to understand the way how
-we get the DMA buffer and address for the audio data. I'm not an expert
-in terms of DMA. From what I understand we need to inform DMA core
-about the limitations of the hardware. In case of AIU it's DMA address
-registers only take 32 bits, so DMA core should be aware of this.
-
-The second patch is what I could come up with to fix the infamous I2S
-buffer underrun issue, also called the "machine gun noise" (MGN) bug.
-After a lot of testing, debugging and comparing vendor code with the
-upstream "aiu" driver I have come up with this fix. I have written down
-my thoughts in the description of that patch. To be clear: these are my
-thoughts, unfortunately I have no way of proving this other than asking
-other people to test this patch (off-list I have already received
-positive feedback along with confirmation that both 2-ch and 6-ch audio
-are still working fine. Even with Kodi's menu - which is an easy way to
-reproduce the MGN bug - sound output is fine with this patch).
-
-Please let me know what you think about these patches and especially
-the patch descriptions.
-
-
-Martin Blumenstingl (2):
-  ASoC: meson: aiu: fifo: Add missing dma_coerce_mask_and_coherent()
-  ASoC: meson: aiu: Move AIU_I2S_MISC hold setting to aiu-fifo-i2s
-
- sound/soc/meson/aiu-encoder-i2s.c | 33 -------------------------------
- sound/soc/meson/aiu-fifo-i2s.c    | 12 +++++++++++
- sound/soc/meson/aiu-fifo.c        |  6 ++++++
- 3 files changed, 18 insertions(+), 33 deletions(-)
-
+diff --git a/sound/soc/meson/aiu-fifo.c b/sound/soc/meson/aiu-fifo.c
+index 4ad23267cace..d67ff4cdabd5 100644
+--- a/sound/soc/meson/aiu-fifo.c
++++ b/sound/soc/meson/aiu-fifo.c
+@@ -5,6 +5,7 @@
+ 
+ #include <linux/bitfield.h>
+ #include <linux/clk.h>
++#include <linux/dma-mapping.h>
+ #include <sound/pcm_params.h>
+ #include <sound/soc.h>
+ #include <sound/soc-dai.h>
+@@ -179,6 +180,11 @@ int aiu_fifo_pcm_new(struct snd_soc_pcm_runtime *rtd,
+ 	struct snd_card *card = rtd->card->snd_card;
+ 	struct aiu_fifo *fifo = dai->playback_dma_data;
+ 	size_t size = fifo->pcm->buffer_bytes_max;
++	int ret;
++
++	ret = dma_coerce_mask_and_coherent(card->dev, DMA_BIT_MASK(32));
++	if (ret)
++		return ret;
+ 
+ 	snd_pcm_set_managed_buffer_all(rtd->pcm, SNDRV_DMA_TYPE_DEV,
+ 				       card->dev, size, size);
 -- 
 2.34.1
 

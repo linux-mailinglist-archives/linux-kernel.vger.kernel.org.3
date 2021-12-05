@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81733468B4D
+	by mail.lfdr.de (Postfix) with ESMTP id E04D4468B4E
 	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 14:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234602AbhLEODG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 09:03:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57054 "EHLO
+        id S234513AbhLEODI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 09:03:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234504AbhLEODA (ORCPT
+        with ESMTP id S234506AbhLEODA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 5 Dec 2021 09:03:00 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2922C061714
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 05:59:32 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id l25so31980386eda.11
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 05:59:32 -0800 (PST)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48684C0613F8
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 05:59:33 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id o20so32034010eds.10
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 05:59:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=83pxdd+2SRBEoVUaxcgazhIK0oxpvNgHcZ02CWSKft4=;
-        b=RPDAklRBFzbzn8v9y4kVi1aKzOxtQy+EKLMyas/6VgCtvHiYCbKGbVTPodPebge4FH
-         Q+iJaqYWV5mKS1HcyJ8U0mnJK8C7l0qtqecFREJXPNQdZ9HpwE5E/8Kf526iibYBMsw2
-         k1NYP+N/PebrfdqWbnt9nyhZwJM/0/5RCtRVDg1Wk711cEe2tfD67S3Pbm4RioGXWwuM
-         K3J4Jlp0nUZ42T89K7do93NVnYHWzaOCdBolozjNWi+AtioV8dEUZKMc2fKhhrouHuZs
-         vWzQiFVmL7qXlLGtpck43iMySqsCQLx8zeARwOa4rOfJL5ZV54JntJzSWuwZV/nHhOoc
-         M34Q==
+        bh=SSrPy9CqeCRB1FzpdJc+WuEu9raR/LwC5/wgRjy5qOc=;
+        b=pFuMivnuVt47x1AlXeS117p3/gNeGltcRBe/QAmyd3UI6wTA2bpEnqiLE0+IxTlD2y
+         MFR9LkKSf8PIn0foqa+p69oFcwnfxuV5nKg123U6abirnFVL2ksxv5H4uDR3RctpLFP5
+         N+I8cM46Xm3X+P9gh+5uscaS6xiGlTcyl8ApTvfE2+B4MjcXRhoOd9J+o/i0W8ipkx1C
+         N5AnZl//uoltOrRDtt/coPI3E3Gmg7XyOAIaTjy3MtvqMxjCPsGCNXHYteDGqHb0ZWYu
+         +eaJRONBruSffwQQHhj0Eitq72Uem11czhgPIZgQP6hU0sUjKK88qlCKX1btZm36hnWg
+         TuDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=83pxdd+2SRBEoVUaxcgazhIK0oxpvNgHcZ02CWSKft4=;
-        b=0C6+W7L75yn2LQRE7s0uG7/WW90i8X+MTaYaTNETfJCPvIIcJ5Au/RsPL0gQDVsGVQ
-         5tdxnasn67BjQ08Sjoax3K+Shj8X8ARx5GlyoqPyfhURX/em/GOhg/SQyo22qTQTgzhK
-         SBFK/q8OTsmEPw/+RPnteeeghrqKAdDdEHug9JWKrk1vNBUfj2u5DqQXu52xrOd5Ipzk
-         AaFyY5VnJ/INfHSGeKrEpis5heDQlePI0cel8IEKjKWbmDUT14XiLM7OQCHCTrjSNXQO
-         mKKAgUfjg5OGYNy2dEiZj0iuAZ0MlEQ645DDQ9M2bK5vgMg7WT9A1+PmM2y/2Oe4puC+
-         ALPg==
-X-Gm-Message-State: AOAM5300rWKyjIQ66CUoh/bRG9/w2VUv09k1TbNYsv1N4BqIvw667aXk
-        otrr8deQZ15cqYuu/0BrGqU=
-X-Google-Smtp-Source: ABdhPJwZFmXHDlDgKo7E1c3+OkbPFKYcscw45mb5438rhhOQyLc5us78HnACHyXJZ08yP7AULND+9w==
-X-Received: by 2002:a17:907:608b:: with SMTP id ht11mr39284151ejc.80.1638712771210;
+        bh=SSrPy9CqeCRB1FzpdJc+WuEu9raR/LwC5/wgRjy5qOc=;
+        b=L694aV2ADrjc6zS475wbJk5qh/dfEOx0GdSQzOz0eJggTr+L+v51wy/uzMnl0ZTiVY
+         5mpGxA+TUBCgA/IChSkPcoHwmwdTCsNqK1FQ/xG6QFEJg2hNLguEILJkibjWzBcwMjRX
+         KgFLvdojJ+t/i/e1rm5jF8vGTUa2ELmMld5nYgHk7WOaJiFDk3FPo3yxyTYQdmAwZc20
+         0hf/zZan/ZAoemvJ64FpYl4kpMMb5/hdcVuke3EJgcIUyJzUd5b76dSvtECCcVvWKnrx
+         H1Pwv8nBEJdwULp2rWTqK5Kg53hvoroT6A4b33r3BHkMLhfpD+6SKFzPIk67mlnF9hJ9
+         2vLQ==
+X-Gm-Message-State: AOAM53351F/4lQ3iEUe20ofMZgkGWdhelrWFTb8pYeiiXBTdIX9yZaMt
+        3TvU/n7T/erI5ZqUcbZKQaP/a1TsnWI=
+X-Google-Smtp-Source: ABdhPJzwIAAfyheFlQguVUqmmxw9xCFtsIxV14s+EAke2zPhWAeJ647PjyUP7svswGvIU0+alCWCGQ==
+X-Received: by 2002:a17:906:f43:: with SMTP id h3mr38124154ejj.414.1638712771914;
         Sun, 05 Dec 2021 05:59:31 -0800 (PST)
 Received: from localhost.localdomain ([2a02:8108:96c0:3b88::5a05])
-        by smtp.gmail.com with ESMTPSA id yd20sm5146451ejb.47.2021.12.05.05.59.30
+        by smtp.gmail.com with ESMTPSA id yd20sm5146451ejb.47.2021.12.05.05.59.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 05:59:30 -0800 (PST)
+        Sun, 05 Dec 2021 05:59:31 -0800 (PST)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 05/12] staging: r8188eu: remove macro PHY_SetBBReg
-Date:   Sun,  5 Dec 2021 14:59:12 +0100
-Message-Id: <20211205135919.30460-6-straube.linux@gmail.com>
+Subject: [PATCH 06/12] staging: r8188eu: remove macro PHY_QueryBBReg
+Date:   Sun,  5 Dec 2021 14:59:13 +0100
+Message-Id: <20211205135919.30460-7-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211205135919.30460-1-straube.linux@gmail.com>
 References: <20211205135919.30460-1-straube.linux@gmail.com>
@@ -65,200 +65,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The macro PHY_SetBBReg just re-defines rtl8188e_PHY_SetBBReg().
-Call rtl8188e_PHY_SetBBReg() directly and remove the macro.
+The macro PHY_QueryBBReg just re-defines rtl8188e_PHY_QueryBBReg().
+Call rtl8188e_PHY_QueryBBReg() directly and remove the macro.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/staging/r8188eu/hal/odm_interface.c   |  4 ++--
- drivers/staging/r8188eu/hal/rtl8188e_phycfg.c | 22 +++++++++----------
- drivers/staging/r8188eu/hal/rtl8188e_rf6052.c | 20 ++++++++---------
- drivers/staging/r8188eu/hal/usb_halinit.c     |  6 ++---
- .../staging/r8188eu/include/Hal8188EPhyCfg.h  |  2 --
- 5 files changed, 26 insertions(+), 28 deletions(-)
+ drivers/staging/r8188eu/hal/odm_interface.c      |  4 ++--
+ drivers/staging/r8188eu/hal/rtl8188e_phycfg.c    | 12 ++++++------
+ drivers/staging/r8188eu/hal/rtl8188e_rf6052.c    |  2 +-
+ drivers/staging/r8188eu/hal/usb_halinit.c        |  2 +-
+ drivers/staging/r8188eu/include/Hal8188EPhyCfg.h |  3 ---
+ 5 files changed, 10 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/hal/odm_interface.c b/drivers/staging/r8188eu/hal/odm_interface.c
-index df981ca4fb29..04c2dc3a3f32 100644
+index 04c2dc3a3f32..075e7a3307f7 100644
 --- a/drivers/staging/r8188eu/hal/odm_interface.c
 +++ b/drivers/staging/r8188eu/hal/odm_interface.c
-@@ -7,7 +7,7 @@
- void ODM_SetMACReg(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 BitMask, u32 Data)
- {
- 	struct adapter *Adapter = pDM_Odm->Adapter;
--	PHY_SetBBReg(Adapter, RegAddr, BitMask, Data);
-+	rtl8188e_PHY_SetBBReg(Adapter, RegAddr, BitMask, Data);
- }
- 
+@@ -13,7 +13,7 @@ void ODM_SetMACReg(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 BitMask, u32
  u32 ODM_GetMACReg(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 BitMask)
-@@ -19,7 +19,7 @@ u32 ODM_GetMACReg(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 BitMask)
- void ODM_SetBBReg(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 BitMask, u32 Data)
  {
  	struct adapter *Adapter = pDM_Odm->Adapter;
--	PHY_SetBBReg(Adapter, RegAddr, BitMask, Data);
-+	rtl8188e_PHY_SetBBReg(Adapter, RegAddr, BitMask, Data);
+-	return PHY_QueryBBReg(Adapter, RegAddr, BitMask);
++	return rtl8188e_PHY_QueryBBReg(Adapter, RegAddr, BitMask);
  }
  
+ void ODM_SetBBReg(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 BitMask, u32 Data)
+@@ -25,7 +25,7 @@ void ODM_SetBBReg(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 BitMask, u32 D
  u32 ODM_GetBBReg(struct odm_dm_struct *pDM_Odm, u32 RegAddr, u32 BitMask)
+ {
+ 	struct adapter *Adapter = pDM_Odm->Adapter;
+-	return PHY_QueryBBReg(Adapter, RegAddr, BitMask);
++	return rtl8188e_PHY_QueryBBReg(Adapter, RegAddr, BitMask);
+ }
+ 
+ void ODM_SetRFReg(struct odm_dm_struct *pDM_Odm, enum rf_radio_path	eRFPath, u32 RegAddr, u32 BitMask, u32 Data)
 diff --git a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-index 99096a5d3041..bf706e411d49 100644
+index bf706e411d49..02fbcf02e95c 100644
 --- a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
 +++ b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-@@ -169,10 +169,10 @@ phy_RFSerialRead(
+@@ -161,11 +161,11 @@ phy_RFSerialRead(
+ 	/*  For 92S LSSI Read RFLSSIRead */
+ 	/*  For RF A/B write 0x824/82c(does not work in the future) */
+ 	/*  We must use 0x824 for RF A and B to execute read trigger */
+-	tmplong = PHY_QueryBBReg(Adapter, rFPGA0_XA_HSSIParameter2, bMaskDWord);
++	tmplong = rtl8188e_PHY_QueryBBReg(Adapter, rFPGA0_XA_HSSIParameter2, bMaskDWord);
+ 	if (eRFPath == RF_PATH_A)
+ 		tmplong2 = tmplong;
+ 	else
+-		tmplong2 = PHY_QueryBBReg(Adapter, pPhyReg->rfHSSIPara2, bMaskDWord);
++		tmplong2 = rtl8188e_PHY_QueryBBReg(Adapter, pPhyReg->rfHSSIPara2, bMaskDWord);
  
  	tmplong2 = (tmplong2 & (~bLSSIReadAddress)) | (NewOffset << 23) | bLSSIReadEdge;	/* T65 RF */
  
--	PHY_SetBBReg(Adapter, rFPGA0_XA_HSSIParameter2, bMaskDWord, tmplong & (~bLSSIReadEdge));
-+	rtl8188e_PHY_SetBBReg(Adapter, rFPGA0_XA_HSSIParameter2, bMaskDWord, tmplong & (~bLSSIReadEdge));
- 	udelay(10);/*  PlatformStallExecution(10); */
- 
--	PHY_SetBBReg(Adapter, pPhyReg->rfHSSIPara2, bMaskDWord, tmplong2);
-+	rtl8188e_PHY_SetBBReg(Adapter, pPhyReg->rfHSSIPara2, bMaskDWord, tmplong2);
- 	udelay(100);/* PlatformStallExecution(100); */
- 
+@@ -178,14 +178,14 @@ phy_RFSerialRead(
  	udelay(10);/* PlatformStallExecution(10); */
-@@ -263,7 +263,7 @@ phy_RFSerialWrite(
- 	/*  */
- 	/*  Write Operation */
- 	/*  */
--	PHY_SetBBReg(Adapter, pPhyReg->rf3wireOffset, bMaskDWord, DataAndAddr);
-+	rtl8188e_PHY_SetBBReg(Adapter, pPhyReg->rf3wireOffset, bMaskDWord, DataAndAddr);
+ 
+ 	if (eRFPath == RF_PATH_A)
+-		RfPiEnable = (u8)PHY_QueryBBReg(Adapter, rFPGA0_XA_HSSIParameter1, BIT(8));
++		RfPiEnable = (u8)rtl8188e_PHY_QueryBBReg(Adapter, rFPGA0_XA_HSSIParameter1, BIT(8));
+ 	else if (eRFPath == RF_PATH_B)
+-		RfPiEnable = (u8)PHY_QueryBBReg(Adapter, rFPGA0_XB_HSSIParameter1, BIT(8));
++		RfPiEnable = (u8)rtl8188e_PHY_QueryBBReg(Adapter, rFPGA0_XB_HSSIParameter1, BIT(8));
+ 
+ 	if (RfPiEnable) {	/*  Read from BBreg8b8, 12 bits for 8190, 20bits for T65 RF */
+-		retValue = PHY_QueryBBReg(Adapter, pPhyReg->rfLSSIReadBackPi, bLSSIReadBackData);
++		retValue = rtl8188e_PHY_QueryBBReg(Adapter, pPhyReg->rfLSSIReadBackPi, bLSSIReadBackData);
+ 	} else {	/* Read from BBreg8a0, 12 bits for 8190, 20 bits for T65 RF */
+-		retValue = PHY_QueryBBReg(Adapter, pPhyReg->rfLSSIReadBack, bLSSIReadBackData);
++		retValue = rtl8188e_PHY_QueryBBReg(Adapter, pPhyReg->rfLSSIReadBack, bLSSIReadBackData);
+ 	}
+ 	return retValue;
  }
- 
- /**
-@@ -567,7 +567,7 @@ PHY_BBConfig8188E(
- 
- 	/*  write 0x24[16:11] = 0x24[22:17] = CrystalCap */
- 	CrystalCap = pHalData->CrystalCap & 0x3F;
--	PHY_SetBBReg(Adapter, REG_AFE_XTAL_CTRL, 0x7ff800, (CrystalCap | (CrystalCap << 6)));
-+	rtl8188e_PHY_SetBBReg(Adapter, REG_AFE_XTAL_CTRL, 0x7ff800, (CrystalCap | (CrystalCap << 6)));
- 
- 	return rtStatus;
- }
-@@ -704,17 +704,17 @@ _PHY_SetBWMode92C(
- 	switch (pHalData->CurrentChannelBW) {
- 	/* 20 MHz channel*/
- 	case HT_CHANNEL_WIDTH_20:
--		PHY_SetBBReg(Adapter, rFPGA0_RFMOD, bRFMOD, 0x0);
--		PHY_SetBBReg(Adapter, rFPGA1_RFMOD, bRFMOD, 0x0);
-+		rtl8188e_PHY_SetBBReg(Adapter, rFPGA0_RFMOD, bRFMOD, 0x0);
-+		rtl8188e_PHY_SetBBReg(Adapter, rFPGA1_RFMOD, bRFMOD, 0x0);
- 		break;
- 	/* 40 MHz channel*/
- 	case HT_CHANNEL_WIDTH_40:
--		PHY_SetBBReg(Adapter, rFPGA0_RFMOD, bRFMOD, 0x1);
--		PHY_SetBBReg(Adapter, rFPGA1_RFMOD, bRFMOD, 0x1);
-+		rtl8188e_PHY_SetBBReg(Adapter, rFPGA0_RFMOD, bRFMOD, 0x1);
-+		rtl8188e_PHY_SetBBReg(Adapter, rFPGA1_RFMOD, bRFMOD, 0x1);
- 		/*  Set Control channel to upper or lower. These settings are required only for 40MHz */
--		PHY_SetBBReg(Adapter, rCCK0_System, bCCKSideBand, (pHalData->nCur40MhzPrimeSC >> 1));
--		PHY_SetBBReg(Adapter, rOFDM1_LSTF, 0xC00, pHalData->nCur40MhzPrimeSC);
--		PHY_SetBBReg(Adapter, 0x818, (BIT(26) | BIT(27)),
-+		rtl8188e_PHY_SetBBReg(Adapter, rCCK0_System, bCCKSideBand, (pHalData->nCur40MhzPrimeSC >> 1));
-+		rtl8188e_PHY_SetBBReg(Adapter, rOFDM1_LSTF, 0xC00, pHalData->nCur40MhzPrimeSC);
-+		rtl8188e_PHY_SetBBReg(Adapter, 0x818, (BIT(26) | BIT(27)),
- 			     (pHalData->nCur40MhzPrimeSC == HAL_PRIME_CHNL_OFFSET_LOWER) ? 2 : 1);
- 		break;
- 	default:
 diff --git a/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c b/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c
-index 45ab988e9be7..3d54fd0637ce 100644
+index 3d54fd0637ce..69d887da170d 100644
 --- a/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c
 +++ b/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c
-@@ -148,15 +148,15 @@ rtl8188e_PHY_RF6052SetCckTxPower(
+@@ -389,7 +389,7 @@ static int phy_RF6052_Config_ParaFile(struct adapter *Adapter)
+ 	pPhyReg = &pHalData->PHYRegDef[eRFPath];
  
- 	/*  rf-A cck tx power */
- 	tmpval = TxAGC[RF_PATH_A] & 0xff;
--	PHY_SetBBReg(Adapter, rTxAGC_A_CCK1_Mcs32, bMaskByte1, tmpval);
-+	rtl8188e_PHY_SetBBReg(Adapter, rTxAGC_A_CCK1_Mcs32, bMaskByte1, tmpval);
- 	tmpval = TxAGC[RF_PATH_A] >> 8;
--	PHY_SetBBReg(Adapter, rTxAGC_B_CCK11_A_CCK2_11, 0xffffff00, tmpval);
-+	rtl8188e_PHY_SetBBReg(Adapter, rTxAGC_B_CCK11_A_CCK2_11, 0xffffff00, tmpval);
- 
- 	/*  rf-B cck tx power */
- 	tmpval = TxAGC[RF_PATH_B] >> 24;
--	PHY_SetBBReg(Adapter, rTxAGC_B_CCK11_A_CCK2_11, bMaskByte0, tmpval);
-+	rtl8188e_PHY_SetBBReg(Adapter, rTxAGC_B_CCK11_A_CCK2_11, bMaskByte0, tmpval);
- 	tmpval = TxAGC[RF_PATH_B] & 0x00ffffff;
--	PHY_SetBBReg(Adapter, rTxAGC_B_CCK1_55_Mcs32, 0xffffff00, tmpval);
-+	rtl8188e_PHY_SetBBReg(Adapter, rTxAGC_B_CCK1_55_Mcs32, 0xffffff00, tmpval);
- }	/* PHY_RF6052SetCckTxPower */
- 
- /*  */
-@@ -298,7 +298,7 @@ static void writeOFDMPowerReg88E(struct adapter *Adapter, u8 index, u32 *pValue)
- 		else
- 			regoffset = regoffset_b[index];
- 
--		PHY_SetBBReg(Adapter, regoffset, bMaskDWord, writeVal);
-+		rtl8188e_PHY_SetBBReg(Adapter, regoffset, bMaskDWord, writeVal);
- 
- 		/*  201005115 Joseph: Set Tx Power diff for Tx power training mechanism. */
- 		if (regoffset == rTxAGC_A_Mcs07_Mcs04 || regoffset == rTxAGC_B_Mcs07_Mcs04) {
-@@ -392,18 +392,18 @@ static int phy_RF6052_Config_ParaFile(struct adapter *Adapter)
- 	u4RegValue = PHY_QueryBBReg(Adapter, pPhyReg->rfintfs, bRFSI_RFENV);
+ 	/*----Store original RFENV control type----*/
+-	u4RegValue = PHY_QueryBBReg(Adapter, pPhyReg->rfintfs, bRFSI_RFENV);
++	u4RegValue = rtl8188e_PHY_QueryBBReg(Adapter, pPhyReg->rfintfs, bRFSI_RFENV);
  
  	/*----Set RF_ENV enable----*/
--	PHY_SetBBReg(Adapter, pPhyReg->rfintfe, bRFSI_RFENV << 16, 0x1);
-+	rtl8188e_PHY_SetBBReg(Adapter, pPhyReg->rfintfe, bRFSI_RFENV << 16, 0x1);
- 	udelay(1);/* PlatformStallExecution(1); */
- 
- 	/*----Set RF_ENV output high----*/
--	PHY_SetBBReg(Adapter, pPhyReg->rfintfo, bRFSI_RFENV, 0x1);
-+	rtl8188e_PHY_SetBBReg(Adapter, pPhyReg->rfintfo, bRFSI_RFENV, 0x1);
- 	udelay(1);/* PlatformStallExecution(1); */
- 
- 	/* Set bit number of Address and Data for RF register */
--	PHY_SetBBReg(Adapter, pPhyReg->rfHSSIPara2, b3WireAddressLength, 0x0);	/*  Set 1 to 4 bits for 8255 */
-+	rtl8188e_PHY_SetBBReg(Adapter, pPhyReg->rfHSSIPara2, b3WireAddressLength, 0x0);	/*  Set 1 to 4 bits for 8255 */
- 	udelay(1);/* PlatformStallExecution(1); */
- 
--	PHY_SetBBReg(Adapter, pPhyReg->rfHSSIPara2, b3WireDataLength, 0x0);	/*  Set 0 to 12  bits for 8255 */
-+	rtl8188e_PHY_SetBBReg(Adapter, pPhyReg->rfHSSIPara2, b3WireDataLength, 0x0);	/*  Set 0 to 12  bits for 8255 */
- 	udelay(1);/* PlatformStallExecution(1); */
- 
- 	/*----Initialize RF fom connfiguration file----*/
-@@ -411,7 +411,7 @@ static int phy_RF6052_Config_ParaFile(struct adapter *Adapter)
- 		rtStatus = _FAIL;
- 
- 	/*----Restore RFENV control type----*/;
--	PHY_SetBBReg(Adapter, pPhyReg->rfintfs, bRFSI_RFENV, u4RegValue);
-+	rtl8188e_PHY_SetBBReg(Adapter, pPhyReg->rfintfs, bRFSI_RFENV, u4RegValue);
- 
- 	if (rtStatus != _SUCCESS)
- 		goto phy_RF6052_Config_ParaFile_Fail;
+ 	rtl8188e_PHY_SetBBReg(Adapter, pPhyReg->rfintfe, bRFSI_RFENV << 16, 0x1);
 diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index b53392161f09..f91fb5237a3b 100644
+index f91fb5237a3b..b8e1b78c74a1 100644
 --- a/drivers/staging/r8188eu/hal/usb_halinit.c
 +++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -558,8 +558,8 @@ static void _BeaconFunctionEnable(struct adapter *Adapter,
- /*  Set CCK and OFDM Block "ON" */
- static void _BBTurnOnBlock(struct adapter *Adapter)
- {
--	PHY_SetBBReg(Adapter, rFPGA0_RFMOD, bCCKEn, 0x1);
--	PHY_SetBBReg(Adapter, rFPGA0_RFMOD, bOFDMEn, 0x1);
-+	rtl8188e_PHY_SetBBReg(Adapter, rFPGA0_RFMOD, bCCKEn, 0x1);
-+	rtl8188e_PHY_SetBBReg(Adapter, rFPGA0_RFMOD, bOFDMEn, 0x1);
- }
- 
- enum {
-@@ -576,7 +576,7 @@ static void _InitAntenna_Selection(struct adapter *Adapter)
- 	DBG_88E("==>  %s ....\n", __func__);
- 
+@@ -578,7 +578,7 @@ static void _InitAntenna_Selection(struct adapter *Adapter)
  	rtw_write32(Adapter, REG_LEDCFG0, rtw_read32(Adapter, REG_LEDCFG0) | BIT(23));
--	PHY_SetBBReg(Adapter, rFPGA0_XAB_RFParameter, BIT(13), 0x01);
-+	rtl8188e_PHY_SetBBReg(Adapter, rFPGA0_XAB_RFParameter, BIT(13), 0x01);
+ 	rtl8188e_PHY_SetBBReg(Adapter, rFPGA0_XAB_RFParameter, BIT(13), 0x01);
  
- 	if (PHY_QueryBBReg(Adapter, rFPGA0_XA_RFInterfaceOE, 0x300) == Antenna_A)
+-	if (PHY_QueryBBReg(Adapter, rFPGA0_XA_RFInterfaceOE, 0x300) == Antenna_A)
++	if (rtl8188e_PHY_QueryBBReg(Adapter, rFPGA0_XA_RFInterfaceOE, 0x300) == Antenna_A)
  		haldata->CurAntenna = Antenna_A;
+ 	else
+ 		haldata->CurAntenna = Antenna_B;
 diff --git a/drivers/staging/r8188eu/include/Hal8188EPhyCfg.h b/drivers/staging/r8188eu/include/Hal8188EPhyCfg.h
-index a60eb2e39684..30ede081ba47 100644
+index 30ede081ba47..f4cfd11b36c1 100644
 --- a/drivers/staging/r8188eu/include/Hal8188EPhyCfg.h
 +++ b/drivers/staging/r8188eu/include/Hal8188EPhyCfg.h
-@@ -136,7 +136,5 @@ void storePwrIndexDiffRateOffset(struct adapter *adapter, u32 regaddr,
+@@ -134,7 +134,4 @@ void storePwrIndexDiffRateOffset(struct adapter *adapter, u32 regaddr,
+ 				 u32 mask, u32 data);
+ /*--------------------------Exported Function prototype---------------------*/
  
- #define PHY_QueryBBReg(adapt, regaddr, mask)			\
- 	 rtl8188e_PHY_QueryBBReg((adapt), (regaddr), (mask))
--#define PHY_SetBBReg(adapt, regaddr, bitmask, data)		\
--	 rtl8188e_PHY_SetBBReg((adapt), (regaddr), (bitmask), (data))
- 
+-#define PHY_QueryBBReg(adapt, regaddr, mask)			\
+-	 rtl8188e_PHY_QueryBBReg((adapt), (regaddr), (mask))
+-
  #endif	/*  __INC_HAL8192CPHYCFG_H */
 -- 
 2.34.1

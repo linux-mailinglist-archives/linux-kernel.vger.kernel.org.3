@@ -2,86 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E7A4689AD
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 07:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5AF94689AF
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 07:08:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231788AbhLEGKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 01:10:46 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.84]:30394 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbhLEGKp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 01:10:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638684433;
-    s=strato-dkim-0002; d=chronox.de;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=X1QJjnxt7d9VY4UsePDANXe2aTti1wuY2g8kgKEwXdo=;
-    b=K0bBXk4I231XuXWMoFJfKfSSAhPJ3fA2NsfKrmNgziZOhGH27hIzcRPhJJnIMfNSBY
-    WsYhX+1/ge6X5+725GPmAAzp7zAQ3FKoIsW4WsYeDSn06PNEt61LFfiVyGF26xjPUSro
-    3p18lxsP/9UyeBpY1pQz4/C1wuB6d+JTveGh+xmpMVXFvVg+LYcjN7yznxfs05gIpiC5
-    IOMURNGIHA5FyKPDe6AwF5N7v1MSDGNJAXNWC4GeQW7nvM6uglJnP+p2NnbWtJbwIyGf
-    +QW8DD7zU9hNysetce32LqrSM74RG300QqbiLNTEwHa3YJlym5tCitb6mPCBHrGV88mV
-    5Ulg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2ERcEykfu11Y98lp/T7+hdri+uKZK8TKWEqNyiHySGSa9k9xmwdNnzGHXPZJfSf8vUi"
-X-RZG-CLASS-ID: mo00
-Received: from positron.chronox.de
-    by smtp.strato.de (RZmta 47.34.10 DYNA|AUTH)
-    with ESMTPSA id 006230xB567BtvE
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sun, 5 Dec 2021 07:07:11 +0100 (CET)
-From:   Stephan =?ISO-8859-1?Q?M=FCller?= <smueller@chronox.de>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Nicolai Stange <nstange@suse.de>
-Cc:     Hannes Reinecke <hare@suse.de>, Torsten Duwe <duwe@suse.de>,
-        Zaibo Xu <xuzaibo@huawei.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qat-linux@intel.com, keyrings@vger.kernel.org,
-        Nicolai Stange <nstange@suse.de>
-Subject: Re: [PATCH 16/18] crypto: dh - calculate Q from P for the full public key verification
-Date:   Sun, 05 Dec 2021 07:07:11 +0100
-Message-ID: <4182894.UPlyArG6xL@positron.chronox.de>
-In-Reply-To: <20211201004858.19831-17-nstange@suse.de>
-References: <20211201004858.19831-1-nstange@suse.de> <20211201004858.19831-17-nstange@suse.de>
+        id S231806AbhLEGLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 01:11:49 -0500
+Received: from mga03.intel.com ([134.134.136.65]:23043 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231679AbhLEGLs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 01:11:48 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="237105067"
+X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
+   d="scan'208";a="237105067"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 22:08:21 -0800
+X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
+   d="scan'208";a="514289189"
+Received: from kgodix-mobl.gar.corp.intel.com (HELO [10.215.128.183]) ([10.215.128.183])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 22:08:19 -0800
+Message-ID: <6befd600-f90c-f9fd-1196-75aa3482b1f3@linux.intel.com>
+Date:   Sun, 5 Dec 2021 11:38:16 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] net: wwan: iosm: select CONFIG_RELAY
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Stephan Gerhold <stephan@gerhold.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211204174033.950528-1-arnd@kernel.org>
+From:   "Kumar, M Chetan" <m.chetan.kumar@linux.intel.com>
+In-Reply-To: <20211204174033.950528-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 1. Dezember 2021, 01:48:56 CET schrieb Nicolai Stange:
 
-Hi Nicolai,
 
-> As the ->q in struct dh_ctx gets never set anywhere, the code
-> in dh_is_pubkey_valid() for doing the full public key validation in
-> accordance to SP800-56Arev3 is effectively dead.
+On 12/4/2021 11:10 PM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> However, for safe-prime groups, Q = (P - 1)/2 by definition and this
-> enables dh_is_pubkey_valid() to calculate Q on the fly for these groups.
-> Implement this.
+> The iosm driver started using relayfs, but is missing the Kconfig
+> logic to ensure it's built into the kernel:
 > 
-> With this change, the last code accessing struct dh_ctx's ->q is now gone.
-> Remove this member from struct dh_ctx.
+> x86_64-linux-ld: drivers/net/wwan/iosm/iosm_ipc_trace.o: in function `ipc_trace_create_buf_file_handler':
+> iosm_ipc_trace.c:(.text+0x16): undefined reference to `relay_file_operations'
+> x86_64-linux-ld: drivers/net/wwan/iosm/iosm_ipc_trace.o: in function `ipc_trace_subbuf_start_handler':
+> iosm_ipc_trace.c:(.text+0x31): undefined reference to `relay_buf_full'
+> x86_64-linux-ld: drivers/net/wwan/iosm/iosm_ipc_trace.o: in function `ipc_trace_ctrl_file_write':
+> iosm_ipc_trace.c:(.text+0xd5): undefined reference to `relay_flush'
+> x86_64-linux-ld: drivers/net/wwan/iosm/iosm_ipc_trace.o: in function `ipc_trace_port_rx':
+> 
+> Fixes: 00ef32565b9b ("net: wwan: iosm: device trace collection using relayfs")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Isn't it expensive to always calculate Q for a-priori known values? Why not 
-add Q to the safe-prime definitions and do not do this operation here?
-
-If you need Q for all of those safe-primes, you may get them from [1] and 
-following lines.
-
-[1] https://github.com/smuellerDD/acvpparser/blob/master/parser/
-safeprimes.h#L346
-
-Ciao
-Stephan
-
-
+Reviewed-by: M Chetan Kumar <m.chetan.kumar@linux.intel.com>

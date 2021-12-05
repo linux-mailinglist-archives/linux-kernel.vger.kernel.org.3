@@ -2,161 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B90468DB4
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 23:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7A7468DB8
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 23:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239755AbhLEW1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 17:27:32 -0500
-Received: from mx4.wp.pl ([212.77.101.11]:18277 "EHLO mx4.wp.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233830AbhLEW1b (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 17:27:31 -0500
-Received: (wp-smtpd smtp.wp.pl 14404 invoked from network); 5 Dec 2021 23:24:01 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1638743041; bh=hn/wVfvuI/n02J0fYi4KT6VvBCq9VK8hjDxkQWp5pMI=;
-          h=From:To:Subject;
-          b=MV/9Uefq2EeOEKx3C1kNg9LMMz6iGsXzetCmLDDuOSl6hnzcpR6pYiEcxe5eNuYQ3
-           06EkRudqHg/jl0v/SfxV1nQI9PzdW1gOwwqTgwWI77KFoit3bmP8nAKBRMwBhm7tL3
-           6OHdkp96G6/StnFeMQi2sNEUyFwIeoZy+KXfIsWY=
-Received: from riviera.nat.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.1])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <hauke@hauke-m.de>; 5 Dec 2021 23:24:01 +0100
-From:   Aleksander Jan Bajkowski <olek2@wp.pl>
-To:     hauke@hauke-m.de, davem@davemloft.net, kuba@kernel.org,
-        olek2@wp.pl, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net] net: lantiq_xrx200: increase buffer reservation
-Date:   Sun,  5 Dec 2021 23:23:59 +0100
-Message-Id: <20211205222359.42913-1-olek2@wp.pl>
-X-Mailer: git-send-email 2.30.2
+        id S239744AbhLEWba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 17:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54932 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233833AbhLEWb3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 17:31:29 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B49FC061714;
+        Sun,  5 Dec 2021 14:28:02 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id q74so25956833ybq.11;
+        Sun, 05 Dec 2021 14:28:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SERoy8mNp8PYxIRCuBvgvbxWStiuaQfRrnBn5Hx8L44=;
+        b=ZAB2QYa1bE06WOta7EStJ9OiY7PjwDFED+bNlLIZluIwP6gjM6awoHbEahTmMgA5dc
+         HQWx11KjFFSXPPKkK3OxW5jNT6uuiYrHHiqxKSHbT+nvuYFFmOAUlkEucmtjzu/7PBfA
+         WMmpqzcuUQOLo92F+KwsstQYHejFeRXsMPOOsHY0lGl1Qf6uHZnKPqiL+X8Yztd3CzWm
+         xRltYjH23o6NniRHB2ElQSUCXcQg3xsf1dTHNR+1iiBqKmuyWE6HwD2K9KE4J2zjBE6Y
+         uuqSa/pSX22iShV2EWwQLwOFAyoVgolx0Lr/VlIAjGtYeB38iu33X2wiqAtK+BHgBtdn
+         Yo1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SERoy8mNp8PYxIRCuBvgvbxWStiuaQfRrnBn5Hx8L44=;
+        b=An3TyTVkMCzp1HGwf4dX+998RlFLmwNguBf6KpzJTuzaL6FxDIGza3PySHDflWi+dp
+         bfO8MuBqs4oTSQyMA6Fe32Ce/DVQCaFph2X8EJFFYRu6KuVighOiqWBP5h3pTgCTp/gq
+         2mB6Z7Ccd8RqmUbZHiJnz7OjTv2juo3m+bROLGAQFDoMGXKpIcptXj0uodrR0vrGdPzH
+         nnaTNz4mL+mxeiUSZcQPWGG45khcsJeVY22RCULdSxw/oUKhVTGmMMQ9v2sO4cqfWAeO
+         FMu2w8mwS1TNUK9Nh6fQ8d2i9zdazueSmngIGj9ggRvZkDVkdCl/EskC8lWdn2w4oLTK
+         ZLSA==
+X-Gm-Message-State: AOAM532Xl1TksZrJr++AYMdvyhfbEZquxUpof5kjllQEzv5idpiWptvN
+        zNXFyTbGCROeOyOqZW9oqIWNDd7sP+JM5FN8kaQ=
+X-Google-Smtp-Source: ABdhPJw8wBVGUsiIWvYc9nptkmzmP+1mUFLQzE3TzCw9HJcWQmc68r/GlOuu+n1pj2Y4yS1dU62GpC3GzX8Yue/mO+4=
+X-Received: by 2002:a25:dc4d:: with SMTP id y74mr36554837ybe.422.1638743281180;
+ Sun, 05 Dec 2021 14:28:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: 257a14861c527810459a7a07d2600b30
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [kUMk]                               
+References: <20211122103032.517923-1-maz@kernel.org> <CAMuHMdX2ZRvDYA3idmw3nBcP6CO=2od6ZU-UeJo9vYsuB=fQNQ@mail.gmail.com>
+ <8735no70tt.wl-maz@kernel.org> <CAMuHMdVS67BLP2XEdD6ZvVBVE2x11gKnQa1TqG659HXPM5scqQ@mail.gmail.com>
+ <CAMuHMdWJhnXabKGpW7k944dzQHtwQtxw-yb2bRBsoaMw6N6nuA@mail.gmail.com>
+ <87tug3clvc.wl-maz@kernel.org> <CAMuHMdWGb2xik+94RVwtq8E6+9eN=HfQLX3a4sTjKQXR96Udkw@mail.gmail.com>
+ <87r1b7ck40.wl-maz@kernel.org> <OSZPR01MB7019E7DD7119EFF9C994AA62AA649@OSZPR01MB7019.jpnprd01.prod.outlook.com>
+ <87tufvmes9.wl-maz@kernel.org> <CA+V-a8siHRjF+bJu88QFwz0a_MZ+kiJEwmER58_feyr8O+WNGA@mail.gmail.com>
+ <CAL_JsqK+GcnChx3i9fsYnw+FzZgON4PtKB=CzYLUj6sXtxX6fQ@mail.gmail.com>
+ <CA+V-a8sVS_1hUWJ3uM+VffGyMtdnctBOJTyHTQAoJZGOh0a1Tw@mail.gmail.com>
+ <87bl21mqwk.wl-maz@kernel.org> <CA+V-a8vA0P-yhm2SHJmVh+cuUw7qodQLQBqzNPTz31x5q18xaA@mail.gmail.com>
+ <CAL_JsqJ1Dw9C_GQjto-E2ch7fdN=3f4Qz9qYuf2iYwMRLkdroA@mail.gmail.com> <CA+V-a8uOkkG8_mz-PjL2q22hfSXuKSpwuQ-E2_pvCc1sKCJ+zw@mail.gmail.com>
+In-Reply-To: <CA+V-a8uOkkG8_mz-PjL2q22hfSXuKSpwuQ-E2_pvCc1sKCJ+zw@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Sun, 5 Dec 2021 22:27:35 +0000
+Message-ID: <CA+V-a8uc0vHVRJ5_Zycw-qiZVbyNBw4HO2XVPbKba3ybooqFtQ@mail.gmail.com>
+Subject: Re: [PATCH] of/irq: Add a quirk for controllers with their own
+ definition of interrupt-map
+To:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        John Crispin <john@phrozen.org>, Biwen Li <biwen.li@nxp.com>,
+        Chris Brandt <Chris.Brandt@renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the user sets a smaller mtu on the CPU port than on the switch,
-then DMA inserts a few more bytes than expected. In the worst case,
-it may exceed the size of the buffer. The experiments showed that
-the buffer should be a multiple of the burst length value. This patch
-rounds the length of the rx buffer upwards and fixes this bug.
+On Wed, Dec 1, 2021 at 4:16 PM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+>
+> On Wed, Dec 1, 2021 at 2:36 PM Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Wed, Dec 1, 2021 at 7:37 AM Lad, Prabhakar
+> > <prabhakar.csengg@gmail.com> wrote:
+> > >
+> > > Hi Marc/Rob,
+> > >
+> > > On Tue, Nov 30, 2021 at 6:37 PM Marc Zyngier <maz@kernel.org> wrote:
+> > > >
+> > > > On Tue, 30 Nov 2021 12:52:21 +0000,
+> > > > "Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
+> > > > >
+> > > > > On Mon, Nov 29, 2021 at 6:33 PM Rob Herring <robh@kernel.org> wrote:
+> > > > > >
+> > > > > > interrupts would work just fine here:
+> > > > > >
+> > > > > > interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
+> > > > > >   <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
+> > > > > >   <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
+> > > > > >   <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+> > > > > >   <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+> > > > > >   <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
+> > > > > >   <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
+> > > > > >   <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+> > > > > >
+> > > > > > We don't need a different solution for N:1 interrupts from N:M. Sure,
+> > > > > > that could become unweldy if there are a lot of interrupts (just like
+> > > > > > interrupt-map), but is that an immediate problem?
+> > > > > >
+> > > > > It's just that with this approach the driver will have to index the
+> > > > > interrupts instead of reading from DT.
+> > > > >
+> > > > > Marc - is it OK with the above approach?
+> > > >
+> > > > Anything that uses standard properties in a standard way works for me.
+> > > >
+> > > I added interrupts property now instead of interrupt-map as below:
+> > >
+> > > irqc: interrupt-controller@110a0000 {
+> > >       compatible = "renesas,r9a07g044-irqc", "renesas,rzg2l-irqc";
+> > >        #address-cells = <0>;
+> > >        interrupt-parent = <&gic>;
+> > >        interrupt-controller;
+> > >        reg = <0 0x110a0000 0 0x10000>;
+> > >        interrupts =
+> > >                       <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 444 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 445 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 448 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 449 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 450 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 451 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 453 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 454 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 455 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 456 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 457 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 459 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 460 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 461 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 464 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 465 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 466 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 467 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 468 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 469 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 470 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 471 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 472 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 473 IRQ_TYPE_LEVEL_HIGH>,
+> > >                       <GIC_SPI 474 IRQ_TYPE_LEVEL_HIGH>,
+> > >                      <GIC_SPI 475 IRQ_TYPE_LEVEL_HIGH>;
+> > >          clocks = <&cpg CPG_MOD R9A07G044_IA55_CLK>,
+> > >                        <&cpg CPG_MOD R9A07G044_IA55_PCLK>;
+> > >           clock-names = "clk", "pclk";
+> > >           power-domains = <&cpg>;
+> > >           resets = <&cpg R9A07G044_IA55_RESETN>;
+> > > };
+> > >
+> > >
+> > > In the hierarchal interrupt code its parsed as below:
+> > > on probe fetch the details:
+> > > range = of_get_property(np, "interrupts", &len);
+> > > if (!range)
+> > >       return -EINVAL;
+> > >
+> > > for (len /= sizeof(*range), j = 0; len >= 3; len -= 3) {
+> > >       if (j >= IRQC_NUM_IRQ)
+> > >             return -EINVAL;
+> > >
+> > >       priv->map[j].args[0] = be32_to_cpu(*range++);
+> > >       priv->map[j].args[1] = be32_to_cpu(*range++);
+> > >       priv->map[j].args[2] = be32_to_cpu(*range++);
+> > >       priv->map[j].args_count = 3;
+> > >       j++;
+> >
+> > Not sure what's wrong, but you shouldn't be doing your own parsing.
+> > The setup shouldn't look much different than a GPIO controller
+> > interrupts except you have multiple parent interrupts.
+> >
+> Sorry does that mean the IRQ domain should be chained handler and not
+> hierarchical? Or is it I have miss-understood.
+>
+> If the IRQ domain has to be hierarchical how do we map to the parent?
+> (based on the previous reviews Marc had suggested to implement as
+> hierarchical  [1])
+>
+Gentle ping.
 
-Fixes: 998ac358019e ("net: lantiq: add support for jumbo frames")
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
----
- drivers/net/ethernet/lantiq_xrx200.c | 38 ++++++++++++++++++++--------
- 1 file changed, 28 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/net/ethernet/lantiq_xrx200.c b/drivers/net/ethernet/lantiq_xrx200.c
-index 0da09ea81980..90442d4a9e6e 100644
---- a/drivers/net/ethernet/lantiq_xrx200.c
-+++ b/drivers/net/ethernet/lantiq_xrx200.c
-@@ -71,6 +71,9 @@ struct xrx200_priv {
- 	struct xrx200_chan chan_tx;
- 	struct xrx200_chan chan_rx;
- 
-+	u16 max_frame_len;
-+	u16 rx_buf_size;
-+
- 	struct net_device *net_dev;
- 	struct device *dev;
- 
-@@ -97,6 +100,16 @@ static void xrx200_pmac_mask(struct xrx200_priv *priv, u32 clear, u32 set,
- 	xrx200_pmac_w32(priv, val, offset);
- }
- 
-+static inline int xrx200_max_frame_len(int mtu)
-+{
-+	return VLAN_ETH_HLEN + mtu + ETH_FCS_LEN;
-+}
-+
-+static inline int xrx200_buffer_size(int mtu)
-+{
-+	return round_up(xrx200_max_frame_len(mtu) - 1, 4 * XRX200_DMA_BURST_LEN);
-+}
-+
- /* drop all the packets from the DMA ring */
- static void xrx200_flush_dma(struct xrx200_chan *ch)
- {
-@@ -109,8 +122,7 @@ static void xrx200_flush_dma(struct xrx200_chan *ch)
- 			break;
- 
- 		desc->ctl = LTQ_DMA_OWN | LTQ_DMA_RX_OFFSET(NET_IP_ALIGN) |
--			    (ch->priv->net_dev->mtu + VLAN_ETH_HLEN +
--			     ETH_FCS_LEN);
-+			    ch->priv->max_frame_len;
- 		ch->dma.desc++;
- 		ch->dma.desc %= LTQ_DESC_NUM;
- 	}
-@@ -158,21 +170,21 @@ static int xrx200_close(struct net_device *net_dev)
- 
- static int xrx200_alloc_skb(struct xrx200_chan *ch)
- {
--	int len = ch->priv->net_dev->mtu + VLAN_ETH_HLEN + ETH_FCS_LEN;
- 	struct sk_buff *skb = ch->skb[ch->dma.desc];
-+	struct xrx200_priv *priv = ch->priv;
- 	dma_addr_t mapping;
- 	int ret = 0;
- 
--	ch->skb[ch->dma.desc] = netdev_alloc_skb_ip_align(ch->priv->net_dev,
--							  len);
-+	ch->skb[ch->dma.desc] = netdev_alloc_skb_ip_align(priv->net_dev,
-+							  priv->rx_buf_size);
- 	if (!ch->skb[ch->dma.desc]) {
- 		ret = -ENOMEM;
- 		goto skip;
- 	}
- 
--	mapping = dma_map_single(ch->priv->dev, ch->skb[ch->dma.desc]->data,
--				 len, DMA_FROM_DEVICE);
--	if (unlikely(dma_mapping_error(ch->priv->dev, mapping))) {
-+	mapping = dma_map_single(priv->dev, ch->skb[ch->dma.desc]->data,
-+				 priv->rx_buf_size, DMA_FROM_DEVICE);
-+	if (unlikely(dma_mapping_error(priv->dev, mapping))) {
- 		dev_kfree_skb_any(ch->skb[ch->dma.desc]);
- 		ch->skb[ch->dma.desc] = skb;
- 		ret = -ENOMEM;
-@@ -184,7 +196,7 @@ static int xrx200_alloc_skb(struct xrx200_chan *ch)
- 	wmb();
- skip:
- 	ch->dma.desc_base[ch->dma.desc].ctl =
--		LTQ_DMA_OWN | LTQ_DMA_RX_OFFSET(NET_IP_ALIGN) | len;
-+		LTQ_DMA_OWN | LTQ_DMA_RX_OFFSET(NET_IP_ALIGN) | priv->max_frame_len;
- 
- 	return ret;
- }
-@@ -356,6 +368,8 @@ xrx200_change_mtu(struct net_device *net_dev, int new_mtu)
- 	int ret = 0;
- 
- 	net_dev->mtu = new_mtu;
-+	priv->rx_buf_size = xrx200_buffer_size(new_mtu);
-+	priv->max_frame_len = xrx200_max_frame_len(new_mtu);
- 
- 	if (new_mtu <= old_mtu)
- 		return ret;
-@@ -375,6 +389,8 @@ xrx200_change_mtu(struct net_device *net_dev, int new_mtu)
- 		ret = xrx200_alloc_skb(ch_rx);
- 		if (ret) {
- 			net_dev->mtu = old_mtu;
-+			priv->rx_buf_size = xrx200_buffer_size(old_mtu);
-+			priv->max_frame_len = xrx200_max_frame_len(old_mtu);
- 			break;
- 		}
- 		dev_kfree_skb_any(skb);
-@@ -505,7 +521,9 @@ static int xrx200_probe(struct platform_device *pdev)
- 	net_dev->netdev_ops = &xrx200_netdev_ops;
- 	SET_NETDEV_DEV(net_dev, dev);
- 	net_dev->min_mtu = ETH_ZLEN;
--	net_dev->max_mtu = XRX200_DMA_DATA_LEN - VLAN_ETH_HLEN - ETH_FCS_LEN;
-+	net_dev->max_mtu = XRX200_DMA_DATA_LEN - xrx200_max_frame_len(0);
-+	priv->rx_buf_size = xrx200_buffer_size(ETH_DATA_LEN);
-+	priv->max_frame_len = xrx200_max_frame_len(ETH_DATA_LEN);
- 
- 	/* load the memory ranges */
- 	priv->pmac_reg = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
--- 
-2.30.2
-
+> [1] https://lore.kernel.org/lkml/20211110225808.16388-1-prabhakar.mahadev-lad.rj@bp.renesas.com/T/
+>
+> Cheers,
+> Prabhakar

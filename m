@@ -2,166 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34636468C51
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 18:04:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A58B6468C4C
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 18:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236243AbhLERIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 12:08:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
+        id S236259AbhLERFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 12:05:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236089AbhLERIS (ORCPT
+        with ESMTP id S236135AbhLERFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 12:08:18 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB3FC061714;
-        Sun,  5 Dec 2021 09:04:51 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so8735800wme.0;
-        Sun, 05 Dec 2021 09:04:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jCYMfFyqt6/AeKOu1W/uZvXhc4K+GFrf5xdA28bFr9M=;
-        b=lDY0kBObUw7ewFrCyvP0U3x1JxtchQ7/pv+D0sUKzSBVDl/laIv0DhpB4vdnC7LxIq
-         9fSwGSud++fNW2d4+aAfkuX2d3KccsvrlFhvlbja5Fia3JZfcaiYXg0mC3b5Rwk5SlOM
-         XyjqDhRACOv76QGmBiuMhtQk9qU6EHQDFCrINQlZpas/SfhaJCdIEYupaHvAPxUuzuRe
-         2ZKqQGQQlEI5YH7Gcu9AwhLTww5vQSmSxUZlX0xU5++AqVwjbeaA26hWVaAlEZAQdMak
-         W7y0ZvNV5Fai5d6xGRg/vm8KHwBYf2NPI2wSrYU7Sr+ec41AUfjmoMUaDbnEdCCEAIUI
-         pB1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jCYMfFyqt6/AeKOu1W/uZvXhc4K+GFrf5xdA28bFr9M=;
-        b=xrsn3Vk4qp0JdQTdIxuCzdXfbJu/Mc4gtyGFSc3vOZ3hdH+q0hygtHCAZiXDn1Ymxn
-         hN/+0oxFjkZEpluFgIm8b2BTPpRp8yug1ncYw7vj1xHKGp6DXChasND5uVbkEbz1RtqZ
-         rB7V4fEh0jEFzEVec6kEoXuta/r4Pcic4Aed5M9I2hTPnECUz5VxoBVOtUWrCIUxG0ia
-         nUd5GimAO5KxhGWRoFB0CDdPkrcqwLvYEgUfnwVEcEVijIfjr87H/xjQXWTZyoCr/+//
-         59Sggmku1PwT1r+iopCcXo/BtgYFUSs51nxAild4XoSNk9U3FTGWeYmHyNtRK2qxJyGy
-         176A==
-X-Gm-Message-State: AOAM532XUO6P/yyyvXjM6OD9yROyeWBRsQqujbgD3FAynlgfd05SMLeQ
-        5Q+UF6nruAAcmFnABuoBHH+vybEh85ps8Q==
-X-Google-Smtp-Source: ABdhPJyy9qqc2ZeFnA/K0WTxEqeQ9KDdINOKgbH2NxxZeL+BjHs4nmvsJWDKDC7PCXWKvAtrLAeQew==
-X-Received: by 2002:a05:600c:a08:: with SMTP id z8mr32449028wmp.52.1638723889960;
-        Sun, 05 Dec 2021 09:04:49 -0800 (PST)
-Received: from ?IPv6:2003:c7:8f4e:628:71b5:dda5:dfe9:acb0? (p200300c78f4e062871b5dda5dfe9acb0.dip0.t-ipconnect.de. [2003:c7:8f4e:628:71b5:dda5:dfe9:acb0])
-        by smtp.gmail.com with ESMTPSA id b15sm11070176wri.62.2021.12.05.09.04.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Dec 2021 09:04:49 -0800 (PST)
-Subject: Re: [PATCH v2 1/4] Docs: usb: update usb_bulk_msg receiving example
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <cover.1638630342.git.philipp.g.hortmann@gmail.com>
- <0bd9336e18abad338b4967664a4667b96dae6be6.1638630342.git.philipp.g.hortmann@gmail.com>
- <Yayb6+SrQKUG4bDl@kroah.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Message-ID: <f3a1b2ba-85fe-e829-0d11-07a4bc4d8756@gmail.com>
-Date:   Sun, 5 Dec 2021 18:04:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sun, 5 Dec 2021 12:05:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63247C061751;
+        Sun,  5 Dec 2021 09:02:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E69C961118;
+        Sun,  5 Dec 2021 17:02:06 +0000 (UTC)
+Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp.kernel.org (Postfix) with ESMTPSA id 847C7C341C4;
+        Sun,  5 Dec 2021 17:02:02 +0000 (UTC)
+Date:   Sun, 5 Dec 2021 17:07:13 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     cosmin.tanislav@analog.com, Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v11 0/3] Add AD74413R driver
+Message-ID: <20211205170713.3ddf0434@jic23-huawei>
+In-Reply-To: <20211205114045.173612-1-cosmin.tanislav@analog.com>
+References: <20211205114045.173612-1-cosmin.tanislav@analog.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <Yayb6+SrQKUG4bDl@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/5/21 12:00 PM, Greg KH wrote:
-> On Sat, Dec 04, 2021 at 05:35:11PM +0100, Philipp Hortmann wrote:
->> Clarification that this example is not in the driver template anymore.
->> Update code example so that it fits best to usb-skeleton.c
->> Update format of function names
->>
->> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
->> ---
->> V1 -> V2: Added "Update format of function names" to patch description
->>            Corrected format of function names like the following example:
->>            "`usb_bulk_msg` function" to "usb_bulk_msg()"
->> ---
->>   .../driver-api/usb/writing_usb_driver.rst     | 32 +++++++++----------
->>   1 file changed, 16 insertions(+), 16 deletions(-)
->>
->> diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
->> index b43e1ce49f0e..ed11398837e5 100644
->> --- a/Documentation/driver-api/usb/writing_usb_driver.rst
->> +++ b/Documentation/driver-api/usb/writing_usb_driver.rst
->> @@ -218,36 +218,36 @@ do very much processing at that time. Our implementation of
->>   ``skel_write_bulk_callback`` merely reports if the urb was completed
->>   successfully or not and then returns.
->>   
->> -The read function works a bit differently from the write function in
->> +This read function works a bit differently from the write function in
->>   that we do not use an urb to transfer data from the device to the
->> -driver. Instead we call the :c:func:`usb_bulk_msg` function, which can be used
->> +driver. Instead we call usb_bulk_msg(), which can be used
->>   to send or receive data from a device without having to create urbs and
->> -handle urb completion callback functions. We call the :c:func:`usb_bulk_msg`
->> -function, giving it a buffer into which to place any data received from
->> +handle urb completion callback functions. We call usb_bulk_msg(),
->> +giving it a buffer into which to place any data received from
->>   the device and a timeout value. If the timeout period expires without
->>   receiving any data from the device, the function will fail and return an
->>   error message. This can be shown with the following code::
->>   
->>       /* do an immediate bulk read to get data from the device */
->> -    retval = usb_bulk_msg (skel->dev,
->> -			   usb_rcvbulkpipe (skel->dev,
->> -			   skel->bulk_in_endpointAddr),
->> -			   skel->bulk_in_buffer,
->> -			   skel->bulk_in_size,
->> -			   &count, 5000);
->> +    rv = usb_bulk_msg(dev->udev,
+On Sun,  5 Dec 2021 13:40:42 +0200
+Cosmin Tanislav <demonsingur@gmail.com> wrote:
+
+> V1 -> V2
+>  * sign off using company email
 > 
-> Why are you changing the varible name?  That seems unnecessary.
-Reason is that retval does not exist in skel_read().
+> V2 -> V3
+>  * replace gpo config firmware flag with flag specifying whether gpo is in
+>    comparator mode
+>  * create two separate gpiochips, one output-only gpiochip for GPO pins not
+>    in comparator mode and one input-only for the value of digital input
+>    channels
+>  * wire up all gpo functionalities using pinconf
+>  * keep number of characters per line under 80
+>  * rework locking
+>  * do not invalidate other chip revisions
+>  * do not set indio device parent
+>  * print probe error for refin regulator
+>  * move conversion from range register value to range / offset / raw offset
+>    into separate function
+>  * module.h -> mod_devicetable.h
+>  * use generic firmware interface functions
+>  * add comment regarding cache alignment
+>  * add comment regarding ADC channels buffered read setup
+>  * un-inline comment regarding 100us delay for conversion start
+>  * inline return statements
+>  * remove assignments to val2 where not necessary
+>  * local_channels -> chans
+>  * index -> i
+>  * channel_config -> config
+>  * IIO_ALTVOLTAGE -> IIO_VOLTAGE
+>  * .info_mask_shared_by_type_available -> .info_mask_separate_available
+>  * remove unlikely probe error messages
+>  * use an array indexed by channel function for retrieving iio channels
+>  * count iio channels while parsing
+>  * move HART rate rejection outside of setter
+>  * move channel function validation outside of setter
+>  * use SPI messages for read and write
+>  * validate DAC code earlier
+>  * simplify switches to only handle existing iio channels
+>  * pass indio_dev into functions needing access to it
+>  * pass spi into devm_regmap_init
+>  * dt-bindings: sort compatibles
+>  * dt-bindings: remove driver word from description
+>  * dt-bindings: remove refin supply description
+>  * dt-bindings: specify channel function default value
+>  * dt-bindings: remove maxItems from scalar value
 > 
->> +		      usb_rcvbulkpipe (dev->udev,
->> +		      dev->bulk_in_endpointAddr),
->> +		      dev->bulk_in_buffer,
->> +	              dev->bulk_in_size,
->> +		      &len, 5000);
->>       /* if the read was successful, copy the data to user space */
->> -    if (!retval) {
->> -	    if (copy_to_user (buffer, skel->bulk_in_buffer, count))
->> -		    retval = -EFAULT;
->> +    if (!rv) {
->> +	    if (copy_to_user (buffer, dev->bulk_in_buffer, len))
->> +		    rv = -EFAULT;
->>   	    else
->> -		    retval = count;
->> +		    rv = len;
->>       }
+> V3 -> v4
+>  * remove double gpo from macro name
+>  * reset at probe
+>  * config -> chip_info and store chip name inside chip info
+>  * cacheline align every DMA buffer
+>  * simplify generation of adc samples message by caching xfer, tx_buf and
+>    rx_buf
+>  * use mask itself for writing the value of channel enable and gpo data
+>  * move reg read and write transfers to the same buffers and use local
+>    variables for transfers
+>  * merge the two for loops handling gpio configuration
+>  * let firmware decide irq edge
+>  * remove INDIO_BUFFER_SOFTWARE already set by iio framework
+>  * do not set trigger device parent
+>  * return dev_err_probe for regulator error case
+>  * do not set cs_change to 0 when not needed
+>  * do not set spi device drvdata as it is not needed
+>  * fix bug regarding wrong channels being created for resistance input,
+>    digital input, and current input with hart
+>  * use voltage input channels spec for high impedance mode
+>  * put () around macro parameters
+>  * merge AD74413R_CHANNEL macro into its uses
+>  * remove unused switch case scope
+>  * inline return IIO_VAL_INT
+>  * use {get,put}_unaligned_be16
+>  * use proper types for reg and val
+>  * move default case handling into switch statements
+>  * pass driver state into regmap functions
+>  * use genmask for generating a 16bit max value
+>  * alphanumeric order for part numbers
+>  * dt-bindings: remove $ref from ohms value
 > 
-> Leaving the variable name alone keeps this patch much smaller.
-Will leave the variable name in the next patch.
+> V4 -> V5
+>  * dt-bindings: include headers necessary
+>  * dt-bindings: add IRQ_TYPE_EDGE_FALLING to interrupt flags
+>  * dt-bindings: ohm -> ohms
+>  * dt-bindings: spi0 -> spi
 > 
->>   
->>   
->> -The :c:func:`usb_bulk_msg` function can be very useful for doing single reads
->> +usb_bulk_msg() can be very useful for doing single reads
+> V5 -> V6
+>  * fix warnings regarding overflows
 > 
-> You are doing different things in this patch, one is converting the
-> function style and one is updating the text.  How about doing just the
-> function name stuff first, all in one patch, and then the updates, as
-> that would make it much easier to read.
-Will be changed.
+> V6 -> V7
+>  * remove extra cache-line alignment
+>  * adi,rsense-resistance-ohms -> shunt-resistor-micro-ohms
+>  * dt-bindings: add product page links
 > 
-> Also, any reason you aren't cc:ing the USB maintainer on these changes?  :)
-According to:
-perl scripts/get_maintainer.pl --separator , --nokeywords --nogit 
---nogit-fallback --norolestats -f 
-Documentation/driver-api/usb/writing_usb_driver.rst
-Jonathan Corbet 
-<corbet@lwn.net>,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org
-you are not in charge.
-thanks,
-Philipp Hortmann
-> thanks,
+> V7 -> V8
+>  * also check DAC code lower bound
+>  * fix checkpath --strict complaints
+>  * add comment regarding mutex lock usage
+>  * propagate error when converting adc result to resistance
 > 
-> greg k-h
+> V8 -> V9
+>  * fix spelling mistake
+>  * undo propagate error when converting adc result to resistance
+>  * return void from adc result to resistance function
+>  * limit max adc value when doing resistance calculation to avoid
+>    a potential division-by-zero case
+> 
+> V9 -> V10
+>  * pick up Reviewed-By tags
+>  * fix odd alignment in header
+>  * add dev_err_probe to irq request error path
+> 
+> V10 -> V11
+>  * fix compile error
+
+Applied with one minor tweak to regmap_config which should have been marked
+static and turned up in my build tests.
+
+Applied to the togreg branch of iio.git and pushed out initially as testing
+to see if 0-day finds anything.
+
+Thanks,
+
+Jonathan
+
+
+> 
+> Cosmin Tanislav (3):
+>   iio: add addac subdirectory
+>   dt-bindings: iio: add AD74413R
+>   iio: addac: add AD74413R driver
+> 
+>  .../bindings/iio/addac/adi,ad74413r.yaml      |  158 ++
+>  MAINTAINERS                                   |    9 +
+>  drivers/iio/Kconfig                           |    1 +
+>  drivers/iio/Makefile                          |    1 +
+>  drivers/iio/addac/Kconfig                     |   20 +
+>  drivers/iio/addac/Makefile                    |    7 +
+>  drivers/iio/addac/ad74413r.c                  | 1475 +++++++++++++++++
+>  include/dt-bindings/iio/addac/adi,ad74413r.h  |   21 +
+>  8 files changed, 1692 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml
+>  create mode 100644 drivers/iio/addac/Kconfig
+>  create mode 100644 drivers/iio/addac/Makefile
+>  create mode 100644 drivers/iio/addac/ad74413r.c
+>  create mode 100644 include/dt-bindings/iio/addac/adi,ad74413r.h
 > 
 

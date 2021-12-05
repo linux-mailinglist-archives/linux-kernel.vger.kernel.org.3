@@ -2,93 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C684B468D5D
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 21:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D90468D61
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 21:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239058AbhLEUyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 15:54:11 -0500
-Received: from mga04.intel.com ([192.55.52.120]:50472 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238875AbhLEUyI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 15:54:08 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="235946632"
-X-IronPort-AV: E=Sophos;i="5.87,290,1631602800"; 
-   d="scan'208";a="235946632"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2021 12:50:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,290,1631602800"; 
-   d="scan'208";a="461595019"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 05 Dec 2021 12:50:39 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mtyT0-000KUu-KP; Sun, 05 Dec 2021 20:50:38 +0000
-Date:   Mon, 6 Dec 2021 04:50:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Subject: drivers/remoteproc/imx_rproc.c:413:17: sparse: sparse: cast removes
- address space '__iomem' of expression
-Message-ID: <202112060443.rxnbCl3h-lkp@intel.com>
+        id S239101AbhLEU7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 15:59:53 -0500
+Received: from mail-lj1-f178.google.com ([209.85.208.178]:35782 "EHLO
+        mail-lj1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238875AbhLEU7w (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 15:59:52 -0500
+Received: by mail-lj1-f178.google.com with SMTP id l7so17182292lja.2
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 12:56:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LswMuAPPAcR79eTSLrpfGYTCkWF+UVGPcr+71MMBB4U=;
+        b=gu/qvO/eWufPH1In7+9OA8njmz3NLStY+7Vlp7m92tnvd07WnQV93A4qpu/jLx3wIr
+         kURmzaCv5qJbA3OuIChgXlMRWYAKGkmgO9fR24sus9lNIT6S7rBL4CLd2IhbHCOkdPq6
+         5HsY+Aqggb5dCZKl8PY6vgQx42QLG7HJwAhzfa/VAK6WQEm+StIUcV7oQYMLjdE5XY6c
+         4tJNJ0Hxs4DgKdm7mDSxEmzrXWvAnzFkuW3hFSn0Mqp6jT2OgOxemj3cpmJfg2e4m010
+         mBBgrQVcLKp219byX/Sj9TUOyM47roBViHS1MykXFycwZy0Zdkse8rHohsoYMuSQIUPT
+         7jiw==
+X-Gm-Message-State: AOAM532kD/zFMQ7gj8z7Rg6nopn98fgLaqWatSqFjwntXKKCYyX0dALe
+        stkk7bfOj8Id0kuMh1spE+PPtp66J7PcA1KZ6/Y=
+X-Google-Smtp-Source: ABdhPJyoogqZ6JhkBTCGuCGA0ICxMe4rdBOncMtpJY8sCFZnBsCQcBSyMaiIuFDeryXPrEsIxoaZFpLQH/sESBbOqdk=
+X-Received: by 2002:a05:651c:545:: with SMTP id q5mr30897905ljp.202.1638737783460;
+ Sun, 05 Dec 2021 12:56:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211201045807.1223200-1-namhyung@kernel.org> <20211205141558.GX16608@worktop.programming.kicks-ass.net>
+In-Reply-To: <20211205141558.GX16608@worktop.programming.kicks-ass.net>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Sun, 5 Dec 2021 12:56:14 -0800
+Message-ID: <CAM9d7cigg3hUXfwWX6OnJDainQdsjU=okL+dG+qhPq3m3tWkDg@mail.gmail.com>
+Subject: Re: [PATCH v2] perf/core: Set event shadow time for inactive events too
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Namhyung Kim <namhyung@google.com>,
+        Song Liu <songliubraving@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   944207047ca4dabe8e288f653e7ec6da05e70230
-commit: 5e4c1243071d29ed5511121d044116b942ba6a7b remoteproc: imx_rproc: support remote cores booted before Linux Kernel
-date:   8 months ago
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20211206/202112060443.rxnbCl3h-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5e4c1243071d29ed5511121d044116b942ba6a7b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 5e4c1243071d29ed5511121d044116b942ba6a7b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/dma/ drivers/gpu/drm/tegra/ drivers/net/wireless/mediatek/mt76/mt7915/ drivers/remoteproc/ drivers/staging/ fs/proc/
+Hi Peter,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Sun, Dec 5, 2021 at 6:16 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Tue, Nov 30, 2021 at 08:58:07PM -0800, Namhyung Kim wrote:
+> > From: Namhyung Kim <namhyung@google.com>
+> >
+> > While f79256532682 ("perf/core: fix userpage->time_enabled of inactive
+> > events") fixed this problem for user rdpmc usage, bperf (perf stat
+> > with BPF) still has the same problem that accessing inactive perf
+> > events from BPF using bpf_perf_event_read_value().
+> >
+> > +static inline void group_update_event_time(struct perf_event *group_event)
+> >  {
+> > +     struct perf_event *event;
+> > +     struct perf_event_context *ctx = group_event->ctx;
+>
+> :-( surely you're aware of the reverse xmas tree thing by now?
 
+Will change the order.
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/remoteproc/imx_rproc.c:299:12: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *va @@     got void [noderef] __iomem * @@
-   drivers/remoteproc/imx_rproc.c:299:12: sparse:     expected void *va
-   drivers/remoteproc/imx_rproc.c:299:12: sparse:     got void [noderef] __iomem *
-   drivers/remoteproc/imx_rproc.c:316:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *iomem_cookie @@     got void *va @@
-   drivers/remoteproc/imx_rproc.c:316:20: sparse:     expected void volatile [noderef] __iomem *iomem_cookie
-   drivers/remoteproc/imx_rproc.c:316:20: sparse:     got void *va
->> drivers/remoteproc/imx_rproc.c:413:17: sparse: sparse: cast removes address space '__iomem' of expression
+>
+> >
+> > +     perf_event_update_time(group_event);
+> > +     perf_set_shadow_time(group_event, ctx);
+> >
+> > +     for_each_sibling_event(event, group_event) {
+> > +             perf_event_update_time(event);
+> > +             perf_set_shadow_time(event, ctx);
+> > +     }
+> >
+> > +     if (likely(!atomic_read(&group_event->mmap_count)))
+> >               return;
+> >
+> > +     perf_event_update_userpage(group_event);
+> > +
+> >       for_each_sibling_event(event, group_event)
+> > +             perf_event_update_userpage(event);
+>
+> How does it make sense to chase those pointers twice?
 
-vim +/__iomem +413 drivers/remoteproc/imx_rproc.c
+OK, then I think I can use the existing code to update
+event time before checking the mmap count.
 
-   403	
-   404	static struct resource_table *imx_rproc_get_loaded_rsc_table(struct rproc *rproc, size_t *table_sz)
-   405	{
-   406		struct imx_rproc *priv = rproc->priv;
-   407	
-   408		/* The resource table has already been mapped in imx_rproc_addr_init */
-   409		if (!priv->rsc_table)
-   410			return NULL;
-   411	
-   412		*table_sz = SZ_1K;
- > 413		return (struct resource_table *)priv->rsc_table;
-   414	}
-   415	
+Thanks,
+Namhyung
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+> >  }

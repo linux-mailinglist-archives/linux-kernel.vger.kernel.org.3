@@ -2,102 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE6D4689C8
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 07:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 197C94689CA
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 07:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231981AbhLEG7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 01:59:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
+        id S232002AbhLEHAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 02:00:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231966AbhLEG7k (ORCPT
+        with ESMTP id S231984AbhLEHAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 01:59:40 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0FFC061751
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 22:56:14 -0800 (PST)
-Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1mtlRU-0007SW-AZ; Sun, 05 Dec 2021 07:56:12 +0100
-Message-ID: <d4a5c811-5874-8889-e503-925a9bb5b225@leemhuis.info>
-Date:   Sun, 5 Dec 2021 07:56:11 +0100
+        Sun, 5 Dec 2021 02:00:47 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14058C0613F8
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 22:57:21 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id z5so29888325edd.3
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 22:57:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=wizery-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ihtUddHm1mmpZX6mKILinJnPqhvWBjnk1DVyRj7DW/k=;
+        b=ivYPueHJXr8G/tixCqpOnNNjr6hVYWpjVVhdx5eRQkBzn9DEf3V2WXDE/Ot9qCYjJM
+         +rGTZbBiIZz88jpKYaj4R5wvKsq4ARmcBObObFUS4Rcpx4aAT49bHqxGHCMeJgw1FZX3
+         rcDuxGEpp2FDmNkoARANvAb45kSP9TdK1j9e2dUXiXol2s3bCBaU291FQ49CruB3Esim
+         4PbHtWjz8PP9koYc2wpGpPx+q/pPXaT46IeoGidLEnTTTwRWDf00vHlA0HBcXonHc4Wx
+         w508nPLvO+Uk/CruDcGRus7ffM3+RzStu6IEW6BL8Ff9TZzeeavl5cJvMeNNBaY1wu3c
+         Ofhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ihtUddHm1mmpZX6mKILinJnPqhvWBjnk1DVyRj7DW/k=;
+        b=feGf0YEUplMzcw4e6UgMObzfkutGuFHTQ6c3+OTJkD8+ibL3ha1+ROWGFXk4A922Tj
+         Yk1RSD7ifabaokz3aG04s4LmwxqKB0LRG1ZO8GepBcQ7wBrFaNWeEj6MlHCA2tlLUZv5
+         pa/91kPsuyu1N8TBQTOqVQNy6EcK17mOWlxk+I7DXbWrX28d2VmEZKPd/gMa3yTra5nY
+         NEQRKcclvwMQpS/bXktceLgLbOtEmt4WWb6nu6/t9kEBbn6UjyT0pA4YbnZJlja2Sjeb
+         62KTokxcTspmqru3NQ36Go2kMfiVVqCNki7LRtaDvv2YLyug+TyW06+mY5zdtl91oDLC
+         xFPQ==
+X-Gm-Message-State: AOAM532aH7rYR2lWOUrDEfnV1h4WacFBfk9uP2BeU7JUFL/JC9VHiA7s
+        31MJ0a4E5NtReopz0Vrt0VcCHUx17HUD98vVOR8i2hVDmUXczQ==
+X-Google-Smtp-Source: ABdhPJwlQVns3tde9ZhEG7WZB+IfUFwKFTGrch9aORXkrQvhDNwdkOc7OhOOmstiIZC8N/g8H9LARkPCDOsDRJvNV+Q=
+X-Received: by 2002:a17:906:55d7:: with SMTP id z23mr36204767ejp.393.1638687439448;
+ Sat, 04 Dec 2021 22:57:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: 5.15 regression: CONFIG_SYSFB_SIMPLEFB breaks console scrolling
-Content-Language: en-BW
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        Harald Dunkel <harri@afaics.de>
-Cc:     Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <e50d5ad5-19fd-07ae-41e4-5a2d26a98bcf@afaics.de>
- <4bf94684-6410-db9f-5bec-ea0540a2ea76@leemhuis.info>
- <5de368f7-91cd-5998-9fe4-1bf448e32742@redhat.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <5de368f7-91cd-5998-9fe4-1bf448e32742@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1638687374;692f0e74;
-X-HE-SMSGID: 1mtlRU-0007SW-AZ
+References: <20211202171125.903608-1-mathieu.poirier@linaro.org>
+In-Reply-To: <20211202171125.903608-1-mathieu.poirier@linaro.org>
+From:   Ohad Ben Cohen <ohad@wizery.com>
+Date:   Sun, 5 Dec 2021 08:57:08 +0200
+Message-ID: <CAK=WgbYTfrBfW_8R5Xbfd9e2DkqnfWAOTRv-DmjfADXsxqOqyA@mail.gmail.com>
+Subject: Re: [PATCH v2] MAINTAINERS: Removing Ohad from remoteproc/rpmsg maintenance
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker speaking.
+Mathieu hi,
 
-On 03.12.21 12:20, Javier Martinez Canillas wrote:
-> Sorry for the late reply.
-> 
-> On 11/21/21 12:47, Thorsten Leemhuis wrote:
->> Hi, this is your Linux kernel regression tracker speaking.
->>
->> On 16.11.21 05:52, Harald Dunkel wrote:
->>>
->>> if I enable CONFIG_SYSFB_SIMPLEFB in 5.15.2 and use grub's default
->>> configuration
->>> (Debian sid amd64), then a few lines at the bottom of /dev/tty1 including
->>> login prompt are off-screen. Scrolling is broken. I can login, though.
->>>
->>> Enabling GRUB_TERMINAL=console in grub doesn't make a difference. Using
->>> the same kernel except for CONFIG_SYSFB_SIMPLEFB the problem is gone.
->>>
->>> Graphics card is a GeForce GTX 1650. I tried with both CONFIG_DRM_NOUVEAU
->>> and proprietary graphics drivers disabled.
->>>
->>> Attached you can find the config file. Please mail if I can help to track
->>> this problem down.
->>
->> Thx for the report. I'm not totally sure if this is a regression, as
->> that's a new config option. But it might be one considered a successor
->> to an older one, hence it might count as regression. Adding two
->> developers and a mailing list to the CC, hopefully someone can clarify.
-> 
-> I don't think this is a regression since enabling CONFIG_SYSFB_SIMPLEFB will
-> make the simpledrm driver to be bound while disabling the option makes the
-> efifb driver to be bound instead.
->  Yes, it seems to be a bug in the simpledrm driver but the solution if you
-> have issues with the simpledrm is to not enable CONFIG_SYSFB_SIMPLEFB and
-> keep using the old fbdev driver.
+Thanks for the patch.
 
-Mandy thx for the answer, Javier. Harald is quiet for some time already
-and didn't object so far, hence I'll remove this from regzbot:
+On Thu, Dec 2, 2021 at 7:11 PM Mathieu Poirier
+<mathieu.poirier@linaro.org> wrote:
+> +N: Ohad Ben Cohen
+> +E: ohad@wizery.com
+> +D: Remote Processor (remoteproc) subsystem
+> +D: Remote Processor Messaging (rpmsg) subsystem
+...
+>  REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM
+> -M:     Ohad Ben-Cohen <ohad@wizery.com>
+...
+>  REMOTE PROCESSOR MESSAGING (RPMSG) SUBSYSTEM
+> -M:     Ohad Ben-Cohen <ohad@wizery.com>
 
-#regzbot invalid: problem caused by a new CONFIG option
-
-Ciao, Thorsten
-
-P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
-on my table. I can only look briefly into most of them. Unfortunately
-therefore I sometimes will get things wrong or miss something important.
-I hope that's not the case here; if you think it is, don't hesitate to
-tell me about it in a public reply. That's in everyone's interest, as
-what I wrote above might be misleading to everyone reading this; any
-suggestion I gave they thus might sent someone reading this down the
-wrong rabbit hole, which none of us wants.
-
-BTW, I have no personal interest in this issue, which is tracked using
-regzbot, my Linux kernel regression tracking bot
-(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
-this mail to get things rolling again and hence don't need to be CC on
-all further activities wrt to this regression.
+Acked-by: Ohad Ben Cohen <ohad@wizery.com>

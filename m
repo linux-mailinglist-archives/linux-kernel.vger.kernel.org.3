@@ -2,128 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 082144688E7
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 02:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1B74688EF
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 03:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbhLEBrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 20:47:36 -0500
-Received: from mga17.intel.com ([192.55.52.151]:3061 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230204AbhLEBrf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 20:47:35 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="217843265"
-X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
-   d="scan'208";a="217843265"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 17:44:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
-   d="scan'208";a="578878252"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Dec 2021 17:44:07 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mtgZT-000Jfk-3k; Sun, 05 Dec 2021 01:44:07 +0000
-Date:   Sun, 5 Dec 2021 09:43:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Greg Ungerer <gerg@uclinux.org>
-Cc:     kbuild-all@lists.01.org, linux-m68k@lists.linux-m68k.org,
-        uclinux-dev@uclinux.org, linux-kernel@vger.kernel.org
-Subject: [gerg-m68knommu:armnommu 4/4] cc1: error:
- arch/arm/mach-versatile/include: No such file or directory
-Message-ID: <202112050940.8HUo4dw9-lkp@intel.com>
+        id S231174AbhLECja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 21:39:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230288AbhLECj3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 21:39:29 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30A9C061751;
+        Sat,  4 Dec 2021 18:36:02 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id v19so4744877plo.7;
+        Sat, 04 Dec 2021 18:36:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eXPP2xHC6+EdRLJclO8i5hHNTg/IHiFgOFmOC116mis=;
+        b=W7MHcHOgO8Kyhsyy6y3b0f9g8CPiK4d5igYkI/KH8cZiJjd9nthrJCCI/xRWpbhzYK
+         a95XG7LnHxoi2jCkdokVBXDOPcUc6q9jsw5Orhssmeh8cKo1je34+2xvZVc1JXfIRA91
+         e2dOBsMSmKY5cKk6LSKFWUJpVBZDP3REkW6nbDXamf2MS//HKnLOcqlE5ugTsUc+kjDW
+         7gn2Zltu2feKhipWDy5HnVUdLeRIfQYykKtjQUOrJoGzMXWamTPJdaVTrMp6OHessnxw
+         W8S2VfoYnJphYeX2Ey9jBGd8XwqE44Z14OEIe3YBRg5SkTk/4Lu48zWRODl75V4HNjH2
+         KGQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eXPP2xHC6+EdRLJclO8i5hHNTg/IHiFgOFmOC116mis=;
+        b=aqtpUqFacxQCzFJ6UFMuZqOfYZhz60gBuF8X/XGxDPvC0b7OiB4afsYbd2y9r5lh1l
+         OsMUornFQf7EQnnp93DNHaGVtNPLnI6Aib5dIVDXYaumoy5TGMb9nb/VqHvjrhl/4pRo
+         HKnLi1/y6YbwhfdtmUK/VmdjR7eFC61G5MNM/4Tz8D2KJbfQCo6APPlfX8tN8j3Y9wfk
+         jDwkwRAriH2jIHiboSFplmvhO/rkQ8qBW9NcsDR+tYfTndiAM5BCB9wbAmLvijalw6fy
+         slfW7+WzHIX19w4v0hpcNCav0O7RR44pDKh4cvB20XRuVkVp0YYmjedqIYJ6b9SfBkdH
+         cHwg==
+X-Gm-Message-State: AOAM532nnsc/A7044PgsvufD5fANoAoMlAryQVK1evwIfgXCORNr11Aq
+        0xVNx7AfVXhF4eqsDMBh6EcBuZiVWz/fVstJ
+X-Google-Smtp-Source: ABdhPJxUZfvhe1514Q/VjaFPxCyuwC/0dyet5Cez3psRHHoFY8Efx5Y7bRWZKnw8npq4W7vm951JIQ==
+X-Received: by 2002:a17:902:b712:b0:143:72b7:4096 with SMTP id d18-20020a170902b71200b0014372b74096mr33894174pls.25.1638671761651;
+        Sat, 04 Dec 2021 18:36:01 -0800 (PST)
+Received: from localhost.localdomain (host-219-71-72-98.dynamic.kbtelecom.net. [219.71.72.98])
+        by smtp.gmail.com with ESMTPSA id c2sm7514493pfl.200.2021.12.04.18.36.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Dec 2021 18:36:01 -0800 (PST)
+From:   Wei Ming Chen <jj251510319013@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, johan@kernel.org,
+        gregkh@linuxfoundation.org,
+        Wei Ming Chen <jj251510319013@gmail.com>
+Subject: [PATCH] usb: core: Fix file path that does not exist
+Date:   Sun,  5 Dec 2021 10:35:29 +0800
+Message-Id: <20211205023529.91165-1-jj251510319013@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gerg/m68knommu.git armnommu
-head:   6ffd7a3db739bfbe74f339ddf1ba19083ddd319e
-commit: 6ffd7a3db739bfbe74f339ddf1ba19083ddd319e [4/4] ARM: versatile: support configuring versatile machine for no-MMU
-config: arm-randconfig-p002-20211205 (https://download.01.org/0day-ci/archive/20211205/202112050940.8HUo4dw9-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gerg/m68knommu.git/commit/?id=6ffd7a3db739bfbe74f339ddf1ba19083ddd319e
-        git remote add gerg-m68knommu https://git.kernel.org/pub/scm/linux/kernel/git/gerg/m68knommu.git
-        git fetch --no-tags gerg-m68knommu armnommu
-        git checkout 6ffd7a3db739bfbe74f339ddf1ba19083ddd319e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+Both driver.c and generic.c are not under drivers/usb/, should
+be drivers/usb/core/ instead.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
->> cc1: warning: arch/arm/mach-versatile/include: No such file or directory [-Wmissing-include-dirs]
---
->> cc1: error: arch/arm/mach-versatile/include: No such file or directory [-Werror=missing-include-dirs]
-   cc1: all warnings being treated as errors
---
->> cc1: warning: arch/arm/mach-versatile/include: No such file or directory [-Wmissing-include-dirs]
-   drivers/dax/super.c:375:6: warning: no previous prototype for 'run_dax' [-Wmissing-prototypes]
-     375 | void run_dax(struct dax_device *dax_dev)
-         |      ^~~~~~~
---
->> arm-linux-gnueabi-gcc: error: unrecognized command-line option '-Wout-of-line-declaration'; did you mean '-Wold-style-declaration'?
---
->> cc1: warning: arch/arm/mach-versatile/include: No such file or directory [-Wmissing-include-dirs]
-   init/main.c:768:20: warning: no previous prototype for 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
-     768 | void __init __weak arch_post_acpi_subsys_init(void) { }
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   init/main.c:780:20: warning: no previous prototype for 'mem_encrypt_init' [-Wmissing-prototypes]
-     780 | void __init __weak mem_encrypt_init(void) { }
-         |                    ^~~~~~~~~~~~~~~~
-   init/main.c:782:20: warning: no previous prototype for 'poking_init' [-Wmissing-prototypes]
-     782 | void __init __weak poking_init(void) { }
-         |                    ^~~~~~~~~~~
---
->> cc1: warning: arch/arm/mach-versatile/include: No such file or directory [-Wmissing-include-dirs]
-   init/calibrate.c:261:37: warning: no previous prototype for 'calibrate_delay_is_known' [-Wmissing-prototypes]
-     261 | unsigned long __attribute__((weak)) calibrate_delay_is_known(void)
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~
---
->> cc1: warning: arch/arm/mach-versatile/include: No such file or directory [-Wmissing-include-dirs]
-   arch/arm/kernel/ptrace.c:854:16: warning: no previous prototype for 'syscall_trace_enter' [-Wmissing-prototypes]
-     854 | asmlinkage int syscall_trace_enter(struct pt_regs *regs)
-         |                ^~~~~~~~~~~~~~~~~~~
-   arch/arm/kernel/ptrace.c:882:17: warning: no previous prototype for 'syscall_trace_exit' [-Wmissing-prototypes]
-     882 | asmlinkage void syscall_trace_exit(struct pt_regs *regs)
-         |                 ^~~~~~~~~~~~~~~~~~
---
->> cc1: warning: arch/arm/mach-versatile/include: No such file or directory [-Wmissing-include-dirs]
-   arch/arm/kernel/reboot.c:78:6: warning: no previous prototype for 'soft_restart' [-Wmissing-prototypes]
-      78 | void soft_restart(unsigned long addr)
-         |      ^~~~~~~~~~~~
---
->> cc1: warning: arch/arm/mach-versatile/include: No such file or directory [-Wmissing-include-dirs]
-   arch/arm/kernel/signal.c:186:16: warning: no previous prototype for 'sys_sigreturn' [-Wmissing-prototypes]
-     186 | asmlinkage int sys_sigreturn(struct pt_regs *regs)
-         |                ^~~~~~~~~~~~~
-   arch/arm/kernel/signal.c:216:16: warning: no previous prototype for 'sys_rt_sigreturn' [-Wmissing-prototypes]
-     216 | asmlinkage int sys_rt_sigreturn(struct pt_regs *regs)
-         |                ^~~~~~~~~~~~~~~~
-   arch/arm/kernel/signal.c:601:1: warning: no previous prototype for 'do_work_pending' [-Wmissing-prototypes]
-     601 | do_work_pending(struct pt_regs *regs, unsigned int thread_flags, int syscall)
-         | ^~~~~~~~~~~~~~~
---
->> cc1: warning: arch/arm/mach-versatile/include: No such file or directory [-Wmissing-include-dirs]
-   arch/arm/kernel/sys_arm.c:32:17: warning: no previous prototype for 'sys_arm_fadvise64_64' [-Wmissing-prototypes]
-      32 | asmlinkage long sys_arm_fadvise64_64(int fd, int advice,
-         |                 ^~~~~~~~~~~~~~~~~~~~
---
->> cc1: warning: arch/arm/mach-versatile/include: No such file or directory [-Wmissing-include-dirs]
-   arch/arm/kernel/time.c:88:13: warning: no previous prototype for 'time_init' [-Wmissing-prototypes]
-      88 | void __init time_init(void)
-         |             ^~~~~~~~~
-..
-
+Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/usb/core/driver.c  | 2 +-
+ drivers/usb/core/generic.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index 072968c40ade..267a134311be 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * drivers/usb/driver.c - most of the driver model stuff for usb
++ * drivers/usb/core/driver.c - most of the driver model stuff for usb
+  *
+  * (C) Copyright 2005 Greg Kroah-Hartman <gregkh@suse.de>
+  *
+diff --git a/drivers/usb/core/generic.c b/drivers/usb/core/generic.c
+index 26f9fb9f67ca..740342a2812a 100644
+--- a/drivers/usb/core/generic.c
++++ b/drivers/usb/core/generic.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * drivers/usb/generic.c - generic driver for USB devices (not interfaces)
++ * drivers/usb/core/generic.c - generic driver for USB devices (not interfaces)
+  *
+  * (C) Copyright 2005 Greg Kroah-Hartman <gregkh@suse.de>
+  *
+-- 
+2.25.1
+

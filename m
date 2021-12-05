@@ -2,96 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2AA468D23
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 21:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BDDA468D28
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 21:19:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238373AbhLEUJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 15:09:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
+        id S238483AbhLEUW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 15:22:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbhLEUJ0 (ORCPT
+        with ESMTP id S238388AbhLEUWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 15:09:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277AEC061714;
-        Sun,  5 Dec 2021 12:05:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5019B80ED8;
-        Sun,  5 Dec 2021 20:05:57 +0000 (UTC)
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp.kernel.org (Postfix) with ESMTPSA id 2F563C00446;
-        Sun,  5 Dec 2021 20:05:52 +0000 (UTC)
-Date:   Sun, 5 Dec 2021 20:11:03 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Iain Hunter <drhunter95@gmail.com>, lothar.felten@gmail.com,
-        iain@hunterembedded.co.uk, Lars-Peter Clausen <lars@metafoo.de>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Zeng Tao <prime.zeng@hisilicon.com>, linux-iio@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] workaround regression in ina2xx introduced by
- cb47755725da("time: Prevent undefined behaviour in timespec64_to_ns()")
-Message-ID: <20211205201103.7e19d647@jic23-huawei>
-In-Reply-To: <CAK8P3a3LPLbJRDEsYgSL9x=rrk1=AmBWxFBNd0H591NKrLnMZA@mail.gmail.com>
-References: <20210930081025.366039-1-drhunter95@gmail.com>
-        <CAK8P3a3LPLbJRDEsYgSL9x=rrk1=AmBWxFBNd0H591NKrLnMZA@mail.gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+        Sun, 5 Dec 2021 15:22:23 -0500
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AE3C061714
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 12:18:56 -0800 (PST)
+Received: by mail-wr1-x444.google.com with SMTP id c4so18034019wrd.9
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 12:18:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G4+ZI+7GFGQ2KswckSCyD1z/fFJ1KnwaAZReLO5VybY=;
+        b=FQvtpMMZ9Uj6r1+TMXLPzpbvcdX8xjU7R4z+lTghxykqitpTX0dr3zI5qepRUV0PL9
+         dyokYSjp9qxLcGsOFiWmDdL4hprRkZJwIWLzcMt2TEqWSqXtz2r9fmPwS+Keasc1CbRJ
+         HP/UhxwYuXZa8n114ZuKzZ/4TaSp5gXfj24Uy3Q0v5waZLo9bIzXm+NeTdc+Tip6P/No
+         gVKg0wZuqGBcJQnEYIzisL1y+JCxZ+s61gfxkiyLZtTY2KNRtokvzZ690KLuAmDjNKuG
+         AM8Xpc9Krc9GNyGAMmxTzaE5VyNtZ3EeqyX6L4NYrNaB2qf8tZK5Y2lcIhKGofPKIC7a
+         /Tdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G4+ZI+7GFGQ2KswckSCyD1z/fFJ1KnwaAZReLO5VybY=;
+        b=cWh8QhiTa3yIb/jJUTRU2Yke6FVGEm73bGIjFY1k2/lHP1GKXYpYh0o4BNf7QX70PS
+         Z1ngIwUK0xRnMw2yBLmgPcUqUAYFZTMG6CddlQo2SDBTbnEcpL1aAAs/H7sPoU33GL8N
+         CAU9bURptG2lyjnWrRmAzltHIeOhYD/+Ug25mEVhI6qjeeDCTINYZpty4hDH11Mj7Yhx
+         TC3MwcsObi20jyzF3K4o9lHuol4ZpiK008PT2AY9ywE1pjxRmMsD1DZMVY0Ei1aRvu6v
+         s0vW53WZNyabaq7/iNC7MyMfyhUV6+2OKqL5MkCPv7EfMDTpEEEKz9Mca4GeSfDBGl7i
+         nA1g==
+X-Gm-Message-State: AOAM531VQiqy7aaQB88xWVzRN5PAnOxOfDGdL712rsfkSKqFguCPuGnj
+        ObWandDSJahiHOkybzn4jIl2Porj6l0IXQ==
+X-Google-Smtp-Source: ABdhPJztgn8mnSFKfWQ+h0/R5Opo8hX2CsdhLfWasYWAm5DdufhNpVlZPnBvFTNepR9HLZuKOurSGw==
+X-Received: by 2002:a05:6000:2a3:: with SMTP id l3mr37525446wry.415.1638735534265;
+        Sun, 05 Dec 2021 12:18:54 -0800 (PST)
+Received: from localhost.localdomain ([41.249.159.5])
+        by smtp.gmail.com with ESMTPSA id g19sm12043663wmg.12.2021.12.05.12.18.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Dec 2021 12:18:53 -0800 (PST)
+From:   Nour-eddine Taleb <kernel.noureddine@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Nour-eddine Taleb <kernel.noureddine@gmail.com>
+Subject: [PATCH] scripts:extract-ikconfig: add support for zstd compression
+Date:   Sun,  5 Dec 2021 21:18:31 +0100
+Message-Id: <20211205201831.115815-1-kernel.noureddine@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 30 Sep 2021 13:04:10 +0200
-Arnd Bergmann <arnd@arndb.de> wrote:
+update the script to accept kernel images that are using zstd compression.
 
-> On Thu, Sep 30, 2021 at 10:10 AM Iain Hunter <drhunter95@gmail.com> wrote:
-> >
-> > From: Iain Hunter <iain@hunterembedded.co.uk>
-> >
-> > That change adds an error check to avoid saturation during multiplication
-> > to calculate nano seconds in timespec64_to_ns().
-> > In ina2xx_capture_thread() a timespec64 structure is used to calculate
-> > the delta time until the next sample time. This delta can be negative if
-> > the next sample time was in the past. In the -1 case timespec64_to_ns()
-> > now clamps the -1 second value to KTIME_MAX. This essentially puts ina2xx
-> > thread to sleep forever.
-> > Proposed patch is to:
-> > 1 change from timespec64_XXX() to standard raw ktime_XXX() APIs to remove
-> > non-standard timespec64 calls.
-> > 2 split the functionality in the loop into two parts:
-> > - do while loop only does the test to see if the next sample time is in the
-> > future or in the past and so will be skipped and the sample time
-> > incremented until it is in the future. This test is done with a simple
-> > signed comparison as we are only interested in the sign being positive or
-> > negative.
-> > - after do while loop we know that next is later than now and so delay is
-> > positive and ksub_sub() can be used to get the delay which is positive.
-> >
-> > Signed-off-by: Iain Hunter <iain@hunterembedded.co.uk>
-> >
-> > Fixes: cb47755725da("time: Prevent undef$  
-> 
-> The changelog text could be improved to more closely follow the
-> style described in Documentation/process/submitting-patches.rst,
-> but the important information is here and the changes look good
-> to me.
-> 
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Nour-eddine Taleb <kernel.noureddine@gmail.com>
+---
+ scripts/extract-ikconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Hi Iain,
+diff --git a/scripts/extract-ikconfig b/scripts/extract-ikconfig
+index 3b42f255e2ba..5cbf6f1d7f56 100755
+--- a/scripts/extract-ikconfig
++++ b/scripts/extract-ikconfig
+@@ -62,6 +62,8 @@ try_decompress 'BZh'          xy    bunzip2
+ try_decompress '\135\0\0\0'   xxx   unlzma
+ try_decompress '\211\114\132' xy    'lzop -d'
+ try_decompress '\002\041\114\030' xyy 'lz4 -d -l'
++try_decompress '\002!L\030'   xxx   'lz4 -d'
++try_decompress '(\265/\375'   xxx   unzstd
+ 
+ # Bail out:
+ echo "$me: Cannot find kernel config." >&2
+-- 
+2.33.1
 
-Are you planning to do a v5 with change log tidied up?
-In particularly the fixes tag?
-
-Sorry, I should have followed up on this earlier to find out your plans.
-
-Jonathan

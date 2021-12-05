@@ -2,103 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F374688D2
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 02:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7984688E0
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 02:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbhLEBGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 20:06:35 -0500
-Received: from mga18.intel.com ([134.134.136.126]:63678 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230305AbhLEBGe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 20:06:34 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="224025750"
-X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
-   d="scan'208";a="224025750"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 17:03:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
-   d="scan'208";a="514234169"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 04 Dec 2021 17:03:07 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mtfvm-000Jdt-Dq; Sun, 05 Dec 2021 01:03:06 +0000
-Date:   Sun, 5 Dec 2021 09:02:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mark:linkage/alias-rework 5/5]
- arch/x86/crypto/aesni-intel_asm.S:1755:1: error: invalid instruction
- mnemonic 'sym_func_start_local_alias'
-Message-ID: <202112050817.Dak5O481-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S230442AbhLEBba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 20:31:30 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36128 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230204AbhLEBb3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 20:31:29 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5680DB80D40;
+        Sun,  5 Dec 2021 01:28:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F3BE2C341C0;
+        Sun,  5 Dec 2021 01:28:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638667681;
+        bh=x/fGfUY2oNx8jHFZm5dAp1OimT43bokcJgnNjwjavi4=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=T/M9tDnUIHJJ60Ydd5tYm/7fJo4FQQK1VTEh07RMGTxg0Ya0eIRXxG5D9LX76IMOe
+         C344sE2kHfOj8dEKna6dy+svoNu2wgvQMBHRmgW7N7UW86jwxcWFlJg2egzfDjIVh7
+         pZwUvqcFmwK/AulvG7udR0EEdVIPFM7YqhVkZmoktcXrymc0TT5nqkHgJrW9PggDYy
+         uodKOd6xBIElh+cloNWemCET12BZJBZSwfYNNTLRXwYdTeDPLjliVrLcwfXlPka0ez
+         RHsCm1jdsRRv7+iyDYeqW0aeBc8VE7yR4W/9CENgH/d3dff9X/AC7b8zDPvD61gceX
+         09RAJ27PFWBow==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C2F5A60A7E;
+        Sun,  5 Dec 2021 01:28:00 +0000 (UTC)
+Subject: Re: [GIT PULL] xfs: bug fixes for 5.16-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20211204235020.GO8467@magnolia>
+References: <20211204235020.GO8467@magnolia>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20211204235020.GO8467@magnolia>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.16-fixes-2
+X-PR-Tracked-Commit-Id: e445976537ad139162980bee015b7364e5b64fff
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 79a72162048e42a677bc7336a9f5d86fc3ff9558
+Message-Id: <163866768073.6146.4028609779231917827.pr-tracker-bot@kernel.org>
+Date:   Sun, 05 Dec 2021 01:28:00 +0000
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        david@fromorbit.com, linux-kernel@vger.kernel.org,
+        sandeen@sandeen.net, hch@lst.de
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+The pull request you sent on Sat, 4 Dec 2021 15:50:20 -0800:
 
-First bad commit (maybe != root cause):
+> git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/xfs-5.16-fixes-2
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git linkage/alias-rework
-head:   bd779ad653870d718d0df57731b1637dae509337
-commit: bd779ad653870d718d0df57731b1637dae509337 [5/5] linkage: remove START/END ALIAS macros
-config: x86_64-randconfig-a013-20211203 (https://download.01.org/0day-ci/archive/20211205/202112050817.Dak5O481-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f1d1854eb1450d352663ee732235893c5782237)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=bd779ad653870d718d0df57731b1637dae509337
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark linkage/alias-rework
-        git checkout bd779ad653870d718d0df57731b1637dae509337
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/79a72162048e42a677bc7336a9f5d86fc3ff9558
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thank you!
 
-All errors (new ones prefixed by >>):
-
->> arch/x86/crypto/aesni-intel_asm.S:1755:1: error: invalid instruction mnemonic 'sym_func_start_local_alias'
-   SYM_FUNC_START_LOCAL_ALIAS(_key_expansion_128)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> arch/x86/crypto/aesni-intel_asm.S:1767:1: error: invalid instruction mnemonic 'sym_func_end_alias'
-   SYM_FUNC_END_ALIAS(_key_expansion_128)
-   ^~~~~~~~~~~~~~~~~~
-
-
-vim +/sym_func_start_local_alias +1755 arch/x86/crypto/aesni-intel_asm.S
-
-0bd82f5f635577 Tadeusz Struk  2010-11-04  1753  
-0bd82f5f635577 Tadeusz Struk  2010-11-04  1754  
-e9b9d020c4873d Jiri Slaby     2019-10-11 @1755  SYM_FUNC_START_LOCAL_ALIAS(_key_expansion_128)
-74d8b90a889022 Jiri Slaby     2019-10-11  1756  SYM_FUNC_START_LOCAL(_key_expansion_256a)
-54b6a1bd5364ac Huang Ying     2009-01-18  1757  	pshufd $0b11111111, %xmm1, %xmm1
-54b6a1bd5364ac Huang Ying     2009-01-18  1758  	shufps $0b00010000, %xmm0, %xmm4
-54b6a1bd5364ac Huang Ying     2009-01-18  1759  	pxor %xmm4, %xmm0
-54b6a1bd5364ac Huang Ying     2009-01-18  1760  	shufps $0b10001100, %xmm0, %xmm4
-54b6a1bd5364ac Huang Ying     2009-01-18  1761  	pxor %xmm4, %xmm0
-54b6a1bd5364ac Huang Ying     2009-01-18  1762  	pxor %xmm1, %xmm0
-0d258efb6a58fe Mathias Krause 2010-11-27  1763  	movaps %xmm0, (TKEYP)
-0d258efb6a58fe Mathias Krause 2010-11-27  1764  	add $0x10, TKEYP
-54b6a1bd5364ac Huang Ying     2009-01-18  1765  	ret
-74d8b90a889022 Jiri Slaby     2019-10-11  1766  SYM_FUNC_END(_key_expansion_256a)
-e9b9d020c4873d Jiri Slaby     2019-10-11 @1767  SYM_FUNC_END_ALIAS(_key_expansion_128)
-54b6a1bd5364ac Huang Ying     2009-01-18  1768  
-
-:::::: The code at line 1755 was first introduced by commit
-:::::: e9b9d020c4873d5e90d9986cfd137afbafbc5bfa x86/asm: Annotate aliases
-
-:::::: TO: Jiri Slaby <jslaby@suse.cz>
-:::::: CC: Borislav Petkov <bp@suse.de>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

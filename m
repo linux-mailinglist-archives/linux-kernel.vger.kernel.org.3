@@ -2,149 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFEF746892D
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 05:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 719D7468937
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 06:18:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbhLEEyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 23:54:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231550AbhLEEyh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 23:54:37 -0500
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F941C061751;
-        Sat,  4 Dec 2021 20:51:10 -0800 (PST)
-Received: by mail-pl1-x641.google.com with SMTP id y7so4913394plp.0;
-        Sat, 04 Dec 2021 20:51:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TIBsLuBe2Uw4GhA4NG4hs+lUD45TYma1E3udwdUPRts=;
-        b=bT/XDIRuZKP92ukFlMRwPi92FG5D08WZ+Fe4usE+t5FKFOSc5Ow0PyJwjyXfbIVLrH
-         FcRtwn7Nk/VM4Tg5mHU1eEiz7krf2kscUxWGd3B+G/Hpo+8euP6Npdy6oCBpT/PAfvmF
-         qECO8PmqDvcLRgUfxjDntEtymML+M0Y3NCWdE3OFUA/Mc/coAKZnQ4TSo+YDqzj/8Y4j
-         BhN8Um/WBSckqdwn1pVt58TQS7h7nWjAksLf2Kykhvw1Jf/LDR1CayeHkFCH1FgLaQFU
-         +NTLMdH7PAUTFKAOfgow5G3Eju4msIuDOp2xn4nbu5VDNbmO4pC9xO2LUVBKfT/kPq/y
-         AKBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TIBsLuBe2Uw4GhA4NG4hs+lUD45TYma1E3udwdUPRts=;
-        b=xPqowiO3fmsxLpSpQaAnT7ragClBXFIij1RV8/BpCezZ4TH7o6dslLRLJTsU3lEk+4
-         phfVC+BvVuTZEt11+8PLJJp4dvOQP7kH4NALoMiaPFJu7J3dqdGZ+qX9uOkJKabY3CTo
-         7jqhAnrtchNg9l9Na1VcIOidVe5wmoiFXbrKnMkdboeSJEotL7ppktcKMjb1rnzpWkOs
-         h2Tq3xjbzYbI9SInvo/2Zbmj9vll0nXms5lD/diBycVGNiZ9RXcW0sIdwdyW81vhVr8p
-         yCRfWt3CGlRUOJle0rpadh2jYo0rEJkPm+JCmkWsGMzfMa1cxqzhEtlp16QF/Ursm0Gl
-         pW2Q==
-X-Gm-Message-State: AOAM531VjI/WKWZCQO/G+3d//rQ5NGq/OQlJxr0Ki0edqeOPB+XtRabE
-        p6ACpWeJXjITu6ZJ/YUv1nKudGmNlYdBgQ==
-X-Google-Smtp-Source: ABdhPJy9sf/N2yXY9s21KBb3U1nM5gU0lmIkS2pD4d3RJDIiXVCy6lZYp6eLyx6gV7eon/bo4eUbgA==
-X-Received: by 2002:a17:90b:2409:: with SMTP id nr9mr26807369pjb.244.1638679870063;
-        Sat, 04 Dec 2021 20:51:10 -0800 (PST)
-Received: from localhost.localdomain ([139.155.25.230])
-        by smtp.gmail.com with ESMTPSA id d18sm305582pfv.0.2021.12.04.20.51.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Dec 2021 20:51:09 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     ast@kernel.org
-Cc:     daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, quentin@isovalent.com, cong.wang@bytedance.com,
-        liujian56@huawei.com, davemarchevsky@fb.com, sdf@google.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
-Subject: [PATCH] bpftool: add support of pin prog by name
-Date:   Sun,  5 Dec 2021 12:50:41 +0800
-Message-Id: <20211205045041.129716-1-imagedong@tencent.com>
-X-Mailer: git-send-email 2.30.2
+        id S231643AbhLEFVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 00:21:50 -0500
+Received: from mga05.intel.com ([192.55.52.43]:26687 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230086AbhLEFVs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 00:21:48 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="323417422"
+X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
+   d="scan'208";a="323417422"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 21:18:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
+   d="scan'208";a="514280619"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 04 Dec 2021 21:18:20 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mtjul-000Jpx-R5; Sun, 05 Dec 2021 05:18:19 +0000
+Date:   Sun, 5 Dec 2021 13:17:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mark:linkage/alias-rework 5/5]
+ arch/x86/crypto/aesni-intel_asm.S:1755: Error: no such instruction:
+ `sym_func_start_local_alias(_key_expansion_128)'
+Message-ID: <202112051321.BwUtDKGE-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git linkage/alias-rework
+head:   bd779ad653870d718d0df57731b1637dae509337
+commit: bd779ad653870d718d0df57731b1637dae509337 [5/5] linkage: remove START/END ALIAS macros
+config: x86_64-randconfig-a001-20211203 (https://download.01.org/0day-ci/archive/20211205/202112051321.BwUtDKGE-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=bd779ad653870d718d0df57731b1637dae509337
+        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
+        git fetch --no-tags mark linkage/alias-rework
+        git checkout bd779ad653870d718d0df57731b1637dae509337
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
 
-For now, the command 'bpftool prog loadall' use section name as the
-name of the pin file. However, once there are prog with the same
-section name in ELF file, this command will failed with the error
-'File Exist'.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-So, add the support of pin prog by function name with the 'pinbyname'
-argument.
+All errors (new ones prefixed by >>):
 
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
+   arch/x86/crypto/aesni-intel_asm.S: Assembler messages:
+>> arch/x86/crypto/aesni-intel_asm.S:1755: Error: no such instruction: `sym_func_start_local_alias(_key_expansion_128)'
+>> arch/x86/crypto/aesni-intel_asm.S:1767: Error: invalid character '(' in mnemonic
+
+
+vim +1755 arch/x86/crypto/aesni-intel_asm.S
+
+0bd82f5f635577 Tadeusz Struk  2010-11-04  1753  
+0bd82f5f635577 Tadeusz Struk  2010-11-04  1754  
+e9b9d020c4873d Jiri Slaby     2019-10-11 @1755  SYM_FUNC_START_LOCAL_ALIAS(_key_expansion_128)
+74d8b90a889022 Jiri Slaby     2019-10-11  1756  SYM_FUNC_START_LOCAL(_key_expansion_256a)
+54b6a1bd5364ac Huang Ying     2009-01-18  1757  	pshufd $0b11111111, %xmm1, %xmm1
+54b6a1bd5364ac Huang Ying     2009-01-18  1758  	shufps $0b00010000, %xmm0, %xmm4
+54b6a1bd5364ac Huang Ying     2009-01-18  1759  	pxor %xmm4, %xmm0
+54b6a1bd5364ac Huang Ying     2009-01-18  1760  	shufps $0b10001100, %xmm0, %xmm4
+54b6a1bd5364ac Huang Ying     2009-01-18  1761  	pxor %xmm4, %xmm0
+54b6a1bd5364ac Huang Ying     2009-01-18  1762  	pxor %xmm1, %xmm0
+0d258efb6a58fe Mathias Krause 2010-11-27  1763  	movaps %xmm0, (TKEYP)
+0d258efb6a58fe Mathias Krause 2010-11-27  1764  	add $0x10, TKEYP
+54b6a1bd5364ac Huang Ying     2009-01-18  1765  	ret
+74d8b90a889022 Jiri Slaby     2019-10-11  1766  SYM_FUNC_END(_key_expansion_256a)
+e9b9d020c4873d Jiri Slaby     2019-10-11 @1767  SYM_FUNC_END_ALIAS(_key_expansion_128)
+54b6a1bd5364ac Huang Ying     2009-01-18  1768  
+
+:::::: The code at line 1755 was first introduced by commit
+:::::: e9b9d020c4873d5e90d9986cfd137afbafbc5bfa x86/asm: Annotate aliases
+
+:::::: TO: Jiri Slaby <jslaby@suse.cz>
+:::::: CC: Borislav Petkov <bp@suse.de>
+
 ---
- tools/bpf/bpftool/prog.c | 7 +++++++
- tools/lib/bpf/libbpf.c   | 5 +++++
- tools/lib/bpf/libbpf.h   | 2 ++
- 3 files changed, 14 insertions(+)
-
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index e47e8b06cc3d..74e0aaebfefc 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -1471,6 +1471,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
- 	unsigned int old_map_fds = 0;
- 	const char *pinmaps = NULL;
- 	struct bpf_object *obj;
-+	bool pinbyname = false;
- 	struct bpf_map *map;
- 	const char *pinfile;
- 	unsigned int i, j;
-@@ -1589,6 +1590,9 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
- 				goto err_free_reuse_maps;
- 
- 			pinmaps = GET_ARG();
-+		} else if (is_prefix(*argv, "pinbyname")) {
-+			pinbyname = true;
-+			NEXT_ARG();
- 		} else {
- 			p_err("expected no more arguments, 'type', 'map' or 'dev', got: '%s'?",
- 			      *argv);
-@@ -1616,6 +1620,9 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
- 				goto err_close_obj;
- 		}
- 
-+		if (pinbyname)
-+			bpf_program__set_pinname(pos,
-+						 (char *)bpf_program__name(pos));
- 		bpf_program__set_ifindex(pos, ifindex);
- 		bpf_program__set_type(pos, prog_type);
- 		bpf_program__set_expected_attach_type(pos, expected_attach_type);
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index f6faa33c80fa..e8fc1d0fe16e 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -8119,6 +8119,11 @@ void bpf_program__set_ifindex(struct bpf_program *prog, __u32 ifindex)
- 	prog->prog_ifindex = ifindex;
- }
- 
-+void bpf_program__set_pinname(struct bpf_program *prog, char *name)
-+{
-+	prog->pin_name = name;
-+}
-+
- const char *bpf_program__name(const struct bpf_program *prog)
- {
- 	return prog->name;
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 4ec69f224342..107cf736c2bb 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -216,6 +216,8 @@ LIBBPF_API int bpf_program__set_priv(struct bpf_program *prog, void *priv,
- LIBBPF_API void *bpf_program__priv(const struct bpf_program *prog);
- LIBBPF_API void bpf_program__set_ifindex(struct bpf_program *prog,
- 					 __u32 ifindex);
-+LIBBPF_API void bpf_program__set_pinname(struct bpf_program *prog,
-+					 char *name);
- 
- LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog);
- LIBBPF_API const char *bpf_program__section_name(const struct bpf_program *prog);
--- 
-2.30.2
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

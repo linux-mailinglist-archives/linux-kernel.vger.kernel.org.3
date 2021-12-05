@@ -2,121 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E86FD468D8A
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 22:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A18468D8F
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 23:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239678AbhLEWCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 17:02:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48542 "EHLO
+        id S239695AbhLEWL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 17:11:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239569AbhLEWC3 (ORCPT
+        with ESMTP id S232884AbhLEWL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 17:02:29 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C93C061714
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 13:59:01 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id t5so35115134edd.0
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 13:59:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Kg/EoUTvtJCV0eIOzDDw+a6fO7fnDbKWvif2j9QvU1k=;
-        b=0jJjPzSB7Fr9IOmpAWko2usGi6G/gq1tsZf77t3EBt/V8TebTy+bB3tuuQ67tI9A8J
-         W2JmJ5Q+UGzJkQggad7OqTJyJlgGYKegNGa74yG++PRfpu/NbxsjoVCB82YNi6EY9TbI
-         E86uK3wKF4jnatmn7I+qmIXvxkWOJQtWco/OAXUQ1m3HynXc8A1g3s4YUgexmdjy+2Kh
-         G3KNUNGkwm59fvzUsnBSeWaH//I1RwkSSPWI7lS/RuC1Z6HsCYia2tfAj0px6VGxhouM
-         0CVi/KJf2cYmon2jgQ6SahAQrjXsDef7xzqTJzh1wYhiC7h2jxB+hd0kjNx4h12bnPBk
-         vFHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Kg/EoUTvtJCV0eIOzDDw+a6fO7fnDbKWvif2j9QvU1k=;
-        b=TPjsePxFnBwimlCa/IL3gocahINghD4zqQzhHODVPwMZUFQiDScpKUi8Q1+MR1EJhx
-         XkmmSuY1GupblokgItU9AD+8j9hvnisFM5gEJVpDcGclI1IwILftCWWSPphhfhW8bce1
-         4tdD6VXpYpVFf3zyI3m2o0BNDgtJVqrwQairZk88SR7fuvND4sIcvq8s8RtoJX3vgU88
-         xvqhrnU1T4I7v6fUxNme9jH37XZI/xgesvwzAbby/aUPH5F2OVzPrWBPe5Dwp25xdTI6
-         0QKLryw+4WHwYmgfKYgO1m+RKrYYlSp5JCAEsJNaPea7VYFMCIWdpk3sCXRpIUwDYD9E
-         eNGg==
-X-Gm-Message-State: AOAM532VAwwIt5P2jLwbeqjF2QTzsJoUI8/h/aWUw5vpjmQdmjx/Gqw8
-        2Jz96KeyLp7RQYnpAPPhOxkMvw==
-X-Google-Smtp-Source: ABdhPJwMycCNqTJai4Fogj0S3vU9tnOWsCUMPXRynIPwKaqrJ8Vk7a5yVoJu72xQZYkFI2xyE7u5aQ==
-X-Received: by 2002:a17:907:a0d4:: with SMTP id hw20mr41300607ejc.16.1638741540143;
-        Sun, 05 Dec 2021 13:59:00 -0800 (PST)
-Received: from localhost.localdomain (203.247.120.78.rev.sfr.net. [78.120.247.203])
-        by smtp.googlemail.com with ESMTPSA id nc29sm5724291ejc.3.2021.12.05.13.58.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 13:58:59 -0800 (PST)
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-To:     khilman@baylibre.com
-Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        p.zabel@pengutronix.de, balbi@kernel.org, jbrunet@baylibre.com,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v4 3/3] phy: amlogic: meson8b-usb2: fix shared reset control use
-Date:   Sun,  5 Dec 2021 22:58:46 +0100
-Message-Id: <20211205215846.153703-4-aouledameur@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211205215846.153703-1-aouledameur@baylibre.com>
-References: <20211205215846.153703-1-aouledameur@baylibre.com>
+        Sun, 5 Dec 2021 17:11:26 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844D6C061714;
+        Sun,  5 Dec 2021 14:07:58 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J6gfh2cgcz4xZ4;
+        Mon,  6 Dec 2021 09:07:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638742077;
+        bh=6h0wSDGsvmTCrdP8xvEBwqI2YJx6kc+Q7KRhnUKa8fY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=S16q1b4G6MW1axyjzhoKDIKboBWDNthq9z5d8Nc4r+bVl+Khm4IX9xnEFlZSWtAcl
+         gr2EXylpMQyOs5wMzZKukdOiLt63uPE4Ea5/ZXhkf0Mr+sKcBtO3FpIlrHjBnnvNEN
+         CEpnNIOoOmTy6XSA3yRxo0ND6JzJv+sQrSfo7WXEER2Mjfz5qj1kTKoa4Tjp7CS8aU
+         RfIL92UgEgCo0WfjNBxqTuJO73x21eH+eOPCOoRnFlHluKrmThjJKX3BP1xrOS4Uox
+         NuwcFic+yxV1iSB+L+5hEaDdEg3nVjbhrCcmT+WW31l9gFBb5cGNjH6iGhEqVrxFWO
+         Ge5bPt8JCjHRw==
+Date:   Mon, 6 Dec 2021 09:07:55 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>,
+        Christian Brauner <christian@brauner.io>
+Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the fscache tree with the pidfd tree
+Message-ID: <20211206090755.3c6f6fe4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/WVfD4oGjTTzDLtx2C9SFd9/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use reset_control_rearm() call if an error occurs in case
-phy_meson8b_usb2_power_on() fails after reset() has been called, or in
-case phy_meson8b_usb2_power_off() is called i.e the resource is no longer
-used and the reset line may be triggered again by other devices.
+--Sig_/WVfD4oGjTTzDLtx2C9SFd9/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-reset_control_rearm() keeps use of triggered_count sane in the reset
-framework, use of reset_control_reset() on shared reset line should
-be balanced with reset_control_rearm().
+Hi all,
 
-Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Reported-by: Jerome Brunet <jbrunet@baylibre.com>
+Today's linux-next merge of the fscache tree got a conflict in:
+
+  fs/cachefiles/bind.c
+
+between commit:
+
+  bb49e9e730c2 ("fs: add is_idmapped_mnt() helper")
+
+from the pidfd tree and commit:
+
+  d18c9010376b ("cachefiles: Delete the cachefiles driver pending rewrite")
+
+from the fscache tree.
+
+I fixed it up (the latter deleted the file, so I did that and then added
+the following patch) and can carry the fix as necessary. This is now fixed
+as far as linux-next is concerned, but any non trivial conflicts should
+be mentioned to your upstream maintainer when your tree is submitted for
+merging.  You may also want to consider cooperating with the maintainer
+of the conflicting tree to minimise any particularly complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 6 Dec 2021 09:05:07 +1100
+Subject: [PATCH] fix up for "fs: add is_idmapped_mnt() helper"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- drivers/phy/amlogic/phy-meson8b-usb2.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ fs/cachefiles/cache.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/phy/amlogic/phy-meson8b-usb2.c b/drivers/phy/amlogic/phy-meson8b-usb2.c
-index 77e7e9b1428c..dd96763911b8 100644
---- a/drivers/phy/amlogic/phy-meson8b-usb2.c
-+++ b/drivers/phy/amlogic/phy-meson8b-usb2.c
-@@ -154,6 +154,7 @@ static int phy_meson8b_usb2_power_on(struct phy *phy)
- 	ret = clk_prepare_enable(priv->clk_usb_general);
- 	if (ret) {
- 		dev_err(&phy->dev, "Failed to enable USB general clock\n");
-+		reset_control_rearm(priv->reset);
- 		return ret;
+diff --git a/fs/cachefiles/cache.c b/fs/cachefiles/cache.c
+index 327cea71557f..e0aa8bf429b8 100644
+--- a/fs/cachefiles/cache.c
++++ b/fs/cachefiles/cache.c
+@@ -44,7 +44,7 @@ int cachefiles_add_cache(struct cachefiles_cache *cache)
+ 	root =3D path.dentry;
+=20
+ 	ret =3D -EINVAL;
+-	if (mnt_user_ns(path.mnt) !=3D &init_user_ns) {
++	if (is_idmapped_mnt(path.mnt)) {
+ 		pr_warn("File cache on idmapped mounts not supported");
+ 		goto error_unsupported;
  	}
- 
-@@ -161,6 +162,7 @@ static int phy_meson8b_usb2_power_on(struct phy *phy)
- 	if (ret) {
- 		dev_err(&phy->dev, "Failed to enable USB DDR clock\n");
- 		clk_disable_unprepare(priv->clk_usb_general);
-+		reset_control_rearm(priv->reset);
- 		return ret;
- 	}
- 
-@@ -199,6 +201,7 @@ static int phy_meson8b_usb2_power_on(struct phy *phy)
- 				dev_warn(&phy->dev, "USB ID detect failed!\n");
- 				clk_disable_unprepare(priv->clk_usb);
- 				clk_disable_unprepare(priv->clk_usb_general);
-+				reset_control_rearm(priv->reset);
- 				return -EINVAL;
- 			}
- 		}
-@@ -218,6 +221,7 @@ static int phy_meson8b_usb2_power_off(struct phy *phy)
- 
- 	clk_disable_unprepare(priv->clk_usb);
- 	clk_disable_unprepare(priv->clk_usb_general);
-+	reset_control_rearm(priv->reset);
- 
- 	/* power off the PHY by putting it into reset mode */
- 	regmap_update_bits(priv->regmap, REG_CTRL, REG_CTRL_POWER_ON_RESET,
--- 
-2.25.1
+--=20
+2.33.0
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/WVfD4oGjTTzDLtx2C9SFd9/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGtODsACgkQAVBC80lX
+0GyIBgf/SGTgJ4GWZbcqtcaU/T3lz2pozw8SpNki1sg5P3shIAEN76y9CKKkSFV5
+tlNg4lJ6wjpVLuDfcv5Bp7+fkGoEGXR6k6C2NYII5ZIB3z2pzNJhpt6PW2vjupTi
+fuwW48+DTebjBn5u5SePNxptWgYLTzQJWRXe7kmOrYgvLpTeQWjDoOWV4sRiL5oK
+G/wEGgq2gJY50dWxGsDEMz/1cP5wausWaQYw3+KI8n25hj9blijDG7ULLzq00x7t
+Jq+h0pBLgQ85zBLJB5btO3YSDowzAH4bDURVRFaw7IWDUrrnfFW35eygg4WQiTdI
+YjffViN7B6piQ+Pp6Q5iRnzeRnlZZw==
+=2mwl
+-----END PGP SIGNATURE-----
+
+--Sig_/WVfD4oGjTTzDLtx2C9SFd9/--

@@ -2,100 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1B74688EF
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 03:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F8E4688F2
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 03:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbhLECja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 21:39:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51264 "EHLO
+        id S231206AbhLECtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 21:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbhLECj3 (ORCPT
+        with ESMTP id S229682AbhLECs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 21:39:29 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30A9C061751;
-        Sat,  4 Dec 2021 18:36:02 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id v19so4744877plo.7;
-        Sat, 04 Dec 2021 18:36:02 -0800 (PST)
+        Sat, 4 Dec 2021 21:48:59 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3E6C061751;
+        Sat,  4 Dec 2021 18:45:32 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id n15so7552490qta.0;
+        Sat, 04 Dec 2021 18:45:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eXPP2xHC6+EdRLJclO8i5hHNTg/IHiFgOFmOC116mis=;
-        b=W7MHcHOgO8Kyhsyy6y3b0f9g8CPiK4d5igYkI/KH8cZiJjd9nthrJCCI/xRWpbhzYK
-         a95XG7LnHxoi2jCkdokVBXDOPcUc6q9jsw5Orhssmeh8cKo1je34+2xvZVc1JXfIRA91
-         e2dOBsMSmKY5cKk6LSKFWUJpVBZDP3REkW6nbDXamf2MS//HKnLOcqlE5ugTsUc+kjDW
-         7gn2Zltu2feKhipWDy5HnVUdLeRIfQYykKtjQUOrJoGzMXWamTPJdaVTrMp6OHessnxw
-         W8S2VfoYnJphYeX2Ey9jBGd8XwqE44Z14OEIe3YBRg5SkTk/4Lu48zWRODl75V4HNjH2
-         KGQQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RsJA41B8r6uTnf+Wrmk3w3cuCRFsGJe2oeQmzY1WbO8=;
+        b=dMAXUdZapHoGzFL3EcCl167DdKJlPoUlK/xEH7Q5M++yIdHjKwRUSqbHZNuAOJ4dxS
+         Ab3ejUlOhAvlFWaaYhlO+DR79ztWZ9D2h+p69USGvr08ixZzLyUu6PBmBWGiMW4aR/zI
+         Ru5N/adCCAv8akny+8xgBCv+T2kR0vCg7mSHzwCHO1HU2SdYXt2k9tPA8aqAdlDe2QMN
+         yqXaeb4MWHEtczUMmFIZTffAMDRGMAEyxI05lrY0QBc6UrEbu54b5ukKN+zC5Z66iv8L
+         0OPxSHAQXKqz9Di6hMONMuK0T8Iz0ZR1+3PxtMEe05zH4K7ujye5omQbF8ULMbC3I+S1
+         sg2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eXPP2xHC6+EdRLJclO8i5hHNTg/IHiFgOFmOC116mis=;
-        b=aqtpUqFacxQCzFJ6UFMuZqOfYZhz60gBuF8X/XGxDPvC0b7OiB4afsYbd2y9r5lh1l
-         OsMUornFQf7EQnnp93DNHaGVtNPLnI6Aib5dIVDXYaumoy5TGMb9nb/VqHvjrhl/4pRo
-         HKnLi1/y6YbwhfdtmUK/VmdjR7eFC61G5MNM/4Tz8D2KJbfQCo6APPlfX8tN8j3Y9wfk
-         jDwkwRAriH2jIHiboSFplmvhO/rkQ8qBW9NcsDR+tYfTndiAM5BCB9wbAmLvijalw6fy
-         slfW7+WzHIX19w4v0hpcNCav0O7RR44pDKh4cvB20XRuVkVp0YYmjedqIYJ6b9SfBkdH
-         cHwg==
-X-Gm-Message-State: AOAM532nnsc/A7044PgsvufD5fANoAoMlAryQVK1evwIfgXCORNr11Aq
-        0xVNx7AfVXhF4eqsDMBh6EcBuZiVWz/fVstJ
-X-Google-Smtp-Source: ABdhPJxUZfvhe1514Q/VjaFPxCyuwC/0dyet5Cez3psRHHoFY8Efx5Y7bRWZKnw8npq4W7vm951JIQ==
-X-Received: by 2002:a17:902:b712:b0:143:72b7:4096 with SMTP id d18-20020a170902b71200b0014372b74096mr33894174pls.25.1638671761651;
-        Sat, 04 Dec 2021 18:36:01 -0800 (PST)
-Received: from localhost.localdomain (host-219-71-72-98.dynamic.kbtelecom.net. [219.71.72.98])
-        by smtp.gmail.com with ESMTPSA id c2sm7514493pfl.200.2021.12.04.18.36.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Dec 2021 18:36:01 -0800 (PST)
-From:   Wei Ming Chen <jj251510319013@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, johan@kernel.org,
-        gregkh@linuxfoundation.org,
-        Wei Ming Chen <jj251510319013@gmail.com>
-Subject: [PATCH] usb: core: Fix file path that does not exist
-Date:   Sun,  5 Dec 2021 10:35:29 +0800
-Message-Id: <20211205023529.91165-1-jj251510319013@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RsJA41B8r6uTnf+Wrmk3w3cuCRFsGJe2oeQmzY1WbO8=;
+        b=jfnsn4DdkuAPL0Uf9htdlXghUid0+G/KFARv68nqdUJHErvMFgDk0r2U9T70b8ea5L
+         z1YNrsXzTwIKAk3n3bOZd1znhgDBnJy8SvPYbD9czrsW2P3mJVDbQprsMfFvU7oCAsfO
+         oWdGdDhHP748LRGjA03CdcUklkLhhADJSGGSCc+NuUxfKFBTDfnm38pISqxHvJQVaRk3
+         pLPjTo3h9y7sfyqg0a5fZpL0oDa06TTZJ4UQrMLebQtuUGIcgjimgEUPZu22wwp3Hixk
+         gff2YW7TW9YYxX3NfbVOrg0uezz1JLQsJIGggHcJRo4CvROnzSRAV8zAuhc1Z/s3GUCu
+         cZtg==
+X-Gm-Message-State: AOAM532pzjt3ekQmXoNoEC+jO8TmUYhvR7m4VcLru7chHWahJqILtkVy
+        9e4hIGeaCa/1uqaCyuCYv5islVDGmBHHSZ04ww4=
+X-Google-Smtp-Source: ABdhPJydV6WypXFvd9Ut3xKW5BOxUaSHg0tiLKXKlD0Kkgr2/7QYR43Fvjyep00bHReym6MQcAx8yiE8ysa46C1ngAQ=
+X-Received: by 2002:a05:622a:1744:: with SMTP id l4mr30592707qtk.418.1638672330785;
+ Sat, 04 Dec 2021 18:45:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211204095256.78042-1-laoar.shao@gmail.com> <20211204095256.78042-6-laoar.shao@gmail.com>
+ <CAADnVQLS4Ev7xChqCMbbJiFZ_kYSB+rbiVT6AJotheFJb1f5=w@mail.gmail.com>
+In-Reply-To: <CAADnVQLS4Ev7xChqCMbbJiFZ_kYSB+rbiVT6AJotheFJb1f5=w@mail.gmail.com>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Sun, 5 Dec 2021 10:44:54 +0800
+Message-ID: <CALOAHbCud62ivvoRuz1SV-d3sL9Y9knEga0N-jiXnM3SYzWxNA@mail.gmail.com>
+Subject: Re: [PATCH -mm 5/5] bpf/progs: replace hard-coded 16 with TASK_COMM_LEN
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Kees Cook <keescook@chromium.org>,
+        Petr Mladek <pmladek@suse.com>,
+        David Hildenbrand <david@redhat.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        linux-mm <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both driver.c and generic.c are not under drivers/usb/, should
-be drivers/usb/core/ instead.
+On Sun, Dec 5, 2021 at 12:44 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Sat, Dec 4, 2021 at 1:53 AM Yafang Shao <laoar.shao@gmail.com> wrote:
+> >
+> >  static int process_sample(void *ctx, void *data, size_t len)
+> >  {
+> > -       struct sample *s = data;
+> > +       struct sample_ringbuf *s = data;
+>
+> This is becoming pointless churn.
+> Nack.
+>
+> > index 145028b52ad8..7b1bb73c3501 100644
+> > --- a/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
+> > +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
+> > @@ -1,8 +1,7 @@
+> >  // SPDX-License-Identifier: GPL-2.0
+> >  // Copyright (c) 2019 Facebook
+> >
+> > -#include <linux/bpf.h>
+> > -#include <stdint.h>
+> > +#include <vmlinux.h>
+> >  #include <stdbool.h>
+> >  #include <bpf/bpf_helpers.h>
+> >  #include <bpf/bpf_core_read.h>
+> > @@ -23,11 +22,11 @@ struct core_reloc_kernel_output {
+> >         int comm_len;
+> >  };
+> >
+> > -struct task_struct {
+> > +struct task_struct_reloc {
+>
+> Churn that is not even compile tested.
 
-Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
----
- drivers/usb/core/driver.c  | 2 +-
- drivers/usb/core/generic.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+It is strange that I have successfully compiled it....
+Below is the compile log,
 
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index 072968c40ade..267a134311be 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * drivers/usb/driver.c - most of the driver model stuff for usb
-+ * drivers/usb/core/driver.c - most of the driver model stuff for usb
-  *
-  * (C) Copyright 2005 Greg Kroah-Hartman <gregkh@suse.de>
-  *
-diff --git a/drivers/usb/core/generic.c b/drivers/usb/core/generic.c
-index 26f9fb9f67ca..740342a2812a 100644
---- a/drivers/usb/core/generic.c
-+++ b/drivers/usb/core/generic.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * drivers/usb/generic.c - generic driver for USB devices (not interfaces)
-+ * drivers/usb/core/generic.c - generic driver for USB devices (not interfaces)
-  *
-  * (C) Copyright 2005 Greg Kroah-Hartman <gregkh@suse.de>
-  *
+$ cat make.log | grep test_core_reloc_kernel
+  CLNG-BPF [test_maps] test_core_reloc_kernel.o
+  GEN-SKEL [test_progs] test_core_reloc_kernel.skel.h
+  CLNG-BPF [test_maps] test_core_reloc_kernel.o
+  GEN-SKEL [test_progs-no_alu32] test_core_reloc_kernel.skel.h
+
+Also there's no error in the compile log.
+
 -- 
-2.25.1
-
+Thanks
+Yafang

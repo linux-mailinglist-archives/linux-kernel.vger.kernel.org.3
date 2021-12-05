@@ -2,88 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 754D7468905
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 05:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A894E46890A
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 05:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbhLEEIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 23:08:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbhLEEIy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 23:08:54 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B42C0613F8
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 20:05:28 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so9005845otl.8
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 20:05:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=AXzcZCKOBu/msJYDlg3Y+fzM95FhQ9eIvXKzuLg8CYs=;
-        b=AmuNcydbQKjrjST36znuG6aIEps8lr+NEoZm8GTsEJRrucyjgTzlxRG5CWPEAF5zLI
-         jQzT0P+RXN+fZz1zyegaxKmqkaob+q9Qx7NFgGzwYqMNNvPNLIv10p44avHxK1L5LOi3
-         bygNpdX9oJMohTtI3RY5UtfKzoaa+WypyAjpg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=AXzcZCKOBu/msJYDlg3Y+fzM95FhQ9eIvXKzuLg8CYs=;
-        b=Wpdg003S/DLdyOHdtg5VU1Wmvff9Yf6fGhsRjGUYpiD0W64gkOBDi/R4IHkgJltjpM
-         jlApRD3rZo66rFWzoY0i1wMahblVdDbFqT6F11BnZz7wtAX0Pxb12ZDg/h0RkcPC/yS6
-         XtoZIAXbyUL7JzNrE1dqGAp9LsJYgRVP7+mcBI19JgrNz3uy2QcWrEqP2svseszwh4Vv
-         nh2VcvucwjOOJ9h0dMOFs2K0d3+nGO8NsMEzo0b9R0SpfFQpdX2cPY/j9KBt98kA8BS5
-         0U/gg3x54jX7G8I+tQd7B9OMhJ+REQCZExwRHv8/EBa5RX0UIaOyDqLenu35Lff2JFi+
-         ff2A==
-X-Gm-Message-State: AOAM533Q0ikN6Ah9P8H+i2krhszRU55DVcvxaPjoG5kewvfZzmSs/CeQ
-        kPu98fvyquMjHMe08yTXQdkXnskrJTT/zRU3J782Vw==
-X-Google-Smtp-Source: ABdhPJxWcPtz+q1YJarR+oJWSUf3FTjY0xDPDQPv8K4vpWyix5KmjKghi6TmOgkMKNZ83F0NU4bIZDFmxzAfdegAiwA=
-X-Received: by 2002:a9d:2243:: with SMTP id o61mr23402340ota.126.1638677127497;
- Sat, 04 Dec 2021 20:05:27 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Sat, 4 Dec 2021 20:05:27 -0800
+        id S231349AbhLEETs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 23:19:48 -0500
+Received: from mga17.intel.com ([192.55.52.151]:31887 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229557AbhLEETr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 23:19:47 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="217848531"
+X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
+   d="scan'208";a="217848531"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 20:16:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
+   d="scan'208";a="461429476"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 04 Dec 2021 20:16:19 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mtiwk-000Jmt-QD; Sun, 05 Dec 2021 04:16:18 +0000
+Date:   Sun, 5 Dec 2021 12:15:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tianyu Lan <Tianyu.Lan@microsoft.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Wei Liu <wei.liu@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: arch/x86/hyperv/ivm.c:39:30: sparse: sparse: incorrect type in
+ initializer (different address spaces)
+Message-ID: <202112051255.MPUcV06E-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <1638568959-7564-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1638568959-7564-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Sat, 4 Dec 2021 20:05:26 -0800
-Message-ID: <CAE-0n51TZG9SjjOaNmNJPhzOZmQLsywcAT7_Vf4uz4VPga5xhw@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dp: Add "qcom,sc7280-dp" to support display port.
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dmitry.baryshkov@linaro.org, robdclark@gmail.com, sean@poorly.run,
-        vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2021-12-03 14:02:39)
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->  drivers/gpu/drm/msm/dp/dp_display.c | 1 +
->  1 file changed, 1 insertion(+)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   79a72162048e42a677bc7336a9f5d86fc3ff9558
+commit: faff44069ff538ccdfef187c4d7ec83d22dfb3a4 x86/hyperv: Add Write/Read MSR registers via ghcb page
+date:   5 weeks ago
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20211205/202112051255.MPUcV06E-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=faff44069ff538ccdfef187c4d7ec83d22dfb3a4
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout faff44069ff538ccdfef187c4d7ec83d22dfb3a4
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/hyperv/ drivers/hv/
 
-One nit
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index d44f18b..91582d3 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -146,6 +146,7 @@ static const struct msm_dp_config sc7280_dp_cfg = {
->  static const struct of_device_id dp_dt_match[] = {
->         { .compatible = "qcom,sc7180-dp", .data = &sc7180_dp_cfg },
->         { .compatible = "qcom,sc7280-edp", .data = &sc7280_dp_cfg },
-> +       { .compatible = "qcom,sc7280-dp", .data = &sc7280_dp_cfg },
+sparse warnings: (new ones prefixed by >>)
+>> arch/x86/hyperv/ivm.c:39:30: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got union hv_ghcb [noderef] __percpu ** @@
+   arch/x86/hyperv/ivm.c:39:30: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   arch/x86/hyperv/ivm.c:39:30: sparse:     got union hv_ghcb [noderef] __percpu **
+   arch/x86/hyperv/ivm.c:74:30: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got union hv_ghcb [noderef] __percpu ** @@
+   arch/x86/hyperv/ivm.c:74:30: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   arch/x86/hyperv/ivm.c:74:30: sparse:     got union hv_ghcb [noderef] __percpu **
+   arch/x86/hyperv/ivm.c:154:25: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void [noderef] __percpu ** @@
+   arch/x86/hyperv/ivm.c:154:25: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   arch/x86/hyperv/ivm.c:154:25: sparse:     got void [noderef] __percpu **
+--
+   drivers/hv/vmbus_drv.c: note: in included file (through arch/x86/include/asm/msr.h, arch/x86/include/asm/processor.h, arch/x86/include/asm/timex.h, ...):
+>> arch/x86/include/asm/paravirt.h:221:9: sparse: sparse: cast truncates bits from constant value (c000000000100000 becomes 100000)
+   arch/x86/include/asm/paravirt.h:221:9: sparse: sparse: cast truncates bits from constant value (c000000000000000 becomes 0)
 
-The letter d comes before e so it would be better to sort this
-alphanumerically and avoid conflicts later.
+vim +39 arch/x86/hyperv/ivm.c
+
+    25	
+    26	void hv_ghcb_msr_write(u64 msr, u64 value)
+    27	{
+    28		union hv_ghcb *hv_ghcb;
+    29		void **ghcb_base;
+    30		unsigned long flags;
+    31		struct es_em_ctxt ctxt;
+    32	
+    33		if (!hv_ghcb_pg)
+    34			return;
+    35	
+    36		WARN_ON(in_nmi());
+    37	
+    38		local_irq_save(flags);
+  > 39		ghcb_base = (void **)this_cpu_ptr(hv_ghcb_pg);
+    40		hv_ghcb = (union hv_ghcb *)*ghcb_base;
+    41		if (!hv_ghcb) {
+    42			local_irq_restore(flags);
+    43			return;
+    44		}
+    45	
+    46		ghcb_set_rcx(&hv_ghcb->ghcb, msr);
+    47		ghcb_set_rax(&hv_ghcb->ghcb, lower_32_bits(value));
+    48		ghcb_set_rdx(&hv_ghcb->ghcb, upper_32_bits(value));
+    49	
+    50		if (sev_es_ghcb_hv_call(&hv_ghcb->ghcb, false, &ctxt,
+    51					SVM_EXIT_MSR, 1, 0))
+    52			pr_warn("Fail to write msr via ghcb %llx.\n", msr);
+    53	
+    54		local_irq_restore(flags);
+    55	}
+    56	EXPORT_SYMBOL_GPL(hv_ghcb_msr_write);
+    57	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

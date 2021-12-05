@@ -2,61 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A1F468CFB
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 20:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03344468CFF
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 20:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238001AbhLETba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 14:31:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237946AbhLETb3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 14:31:29 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC280C061714
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 11:28:01 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id j2so25284796ybg.9
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 11:28:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=A9HUhmJkBkBT+xu9ZLPAv3zuwUrTwcu9m6a6g5e2TW7SSj9G4B4pOF+mGASk4Eg8y3
-         h/H/dEdzJXxmIHNn9PJKjkAevrHN8bICGEE2avMyt4MqSalLTV+MGgWVy2NdaqylOpNT
-         o6roc+lpPChKUzf6UljrMl3a61DTAnvhTSH8Oj/8XWlJHEq9PuQ5ySoJGZ+9pMYyFAOw
-         oELR5C54VkCnAqb+EvP6hOtd6EffgIWLeWy01acdmQv/FjN2aT7QV0jZZcHq8l5/l8Wy
-         GQNovzb/hz4eG+BpEK++1NDe8J8noU8t3VP4VgzWbdXcR5GlkhPPEVgFWVgN85XzFhbw
-         liOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=5D9TKZ5gG2MsK2pSnon4j3VNoLwWLPjKuhY+glivAxrhB/BVjOyyExD47O2xR6rDs2
-         J8SBVQxb9CjpQV0wABfQLG3fcp6la9Tr/rPQDEPk1aYw2kTufXrp2gZ4wVSAINmPw4bI
-         LwoL1PWSmytNjdkqjQj03T27J5W8dp1An6i+bL0Bm3DlgPNNzhbacgcjtA6vCiDiBS+p
-         cI+6OjVO4v4qeaMWfB8U1+v/IIjbDqKd64ZQYR8C/IwHZjYazx1ZP+KqWnUVx2dmbJtY
-         CqNlgany6OhdsS1sO/E6yXY6xi+Df2c/+/vxdsV2Bx2VQ+yQYqEzN7zK7fc8MDcRiZJW
-         v+8w==
-X-Gm-Message-State: AOAM532ZNa5IvDy6k60SLAerN5+rjzr+TT/WGLC2g9FvVo2hG4m5A06P
-        HvqP5uTcRyUzFJrCc1MQDyEbAxsWVGs8QuAcWVk=
-X-Google-Smtp-Source: ABdhPJyTCadKsyDJ1lVsUs/9Q6OPkP+sKU2ZDjXker0Ey+1AA1ddmS/Ww7NX1n+0iaRc5UyxdKr/e2kaX6u1QoYuwt8=
-X-Received: by 2002:a25:60a:: with SMTP id 10mr38471764ybg.704.1638732480774;
- Sun, 05 Dec 2021 11:28:00 -0800 (PST)
+        id S238067AbhLETdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 14:33:17 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:60854 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237946AbhLETdQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 14:33:16 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0D9B91EC01DF;
+        Sun,  5 Dec 2021 20:29:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1638732584;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=lwMdT1+VGcbyLG7dHIl+8q+JM1I2kluwGbfmD2p+DLU=;
+        b=hcRQHXcdv4avPsgyPkGuaNimYMm7lrBoqcbzqEV9DAHBnrKDyfvvcX3csRO7284YBfit8U
+        FNO6NKUOHvcvO4jWHUfzSr5Uc0h1T+vahL8MU8lT0vg7G30Q/QO77TEVP9+v30vkwHRIXH
+        St5EVEFA/6dSG+xTh/vCztqQy666KeA=
+Date:   Sun, 5 Dec 2021 20:29:45 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Yash Shah <yash.shah@sifive.com>, linux-edac@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH] EDAC/sifive: fix non-kernel-doc comment
+Message-ID: <Ya0TKe1m+WfoCFWv@zn.tnic>
+References: <20211201030913.10283-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Received: by 2002:a05:7108:2e8e:0:0:0:0 with HTTP; Sun, 5 Dec 2021 11:28:00
- -0800 (PST)
-Reply-To: giorgiobugatto@gmail.com
-From:   Giorgio Bugatto <1965adamsj@gmail.com>
-Date:   Sun, 5 Dec 2021 20:28:00 +0100
-Message-ID: <CAHaZNUaxhh_xOLBEHm-d0q+ZS2-quHONsb=PKTMUPvuK6TXozQ@mail.gmail.com>
-Subject: Good evening to you , my name is Giorgio Bugatto , i sent you a mail
- and there was no response , please confirm that you did get this mail .
- Regards. Giorgio Bugatto
-To:     1965adamsj <1965adamsj@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211201030913.10283-1-rdunlap@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 30, 2021 at 07:09:13PM -0800, Randy Dunlap wrote:
+> scripts/kernel-doc complains about a comment that begins with "/**"
+> but is not in kernel-doc format, so correct it.
+> 
+> Prevents this warning:
+> 
+> drivers/edac/sifive_edac.c:23: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * EDAC error callback
+> 
+> Fixes: 91abaeaaff35 ("EDAC/sifive: Add EDAC platform driver for SiFive SoCs")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+> Cc: Yash Shah <yash.shah@sifive.com>
+> Cc: linux-edac@vger.kernel.org
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Tony Luck <tony.luck@intel.com>
+> ---
 
+Applied, thanks.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

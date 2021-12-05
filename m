@@ -2,63 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F32A468AE1
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 13:54:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAAA9468AE3
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 13:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233867AbhLEM5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 07:57:24 -0500
-Received: from mail-eopbgr00063.outbound.protection.outlook.com ([40.107.0.63]:61838
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        id S233933AbhLENAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 08:00:53 -0500
+Received: from mail-am6eur05on2053.outbound.protection.outlook.com ([40.107.22.53]:60033
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233841AbhLEM5W (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 07:57:22 -0500
+        id S233917AbhLENAw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 08:00:52 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mGmfIR1sTX55NzZ+q4nfinHwzO+1DKRn20Y0SLOSbCb8KrCyWcjmxL75ocxAlndX3cnpuYyBkBqtZGu6CNT7lE1xn/2rDUGdRw5BjqmRFgRMRGc8lfZfPVyl/5JxFqZEAYQfCg+h8qU89LhQuDZzOkaiPBdQMzP7occ79l+VVJMfoi+fJDOZkXNCp47kwH/wGhgNcQy1xvY+3SJnK+4Cxb0XttTpgCZ3oD8R5U8P/Kx1MY+FemUW9avYuhQPMV/GigJjns6o/LHQ2XSLdkahNvKVfaiMoTGF3eJLaedami1tJQ6IYD5wrOTpqs2xBn5pqJDBOBovjN/Ec8VHrnxShg==
+ b=K451+wNHNtz8V/yual7s4tTLjzvMAHQrnZTG7iw9Vtpda56wRhLIbD+3Owwk6ncuyx8rwLEnQkCPIngikPbtqZWfp5G987trJ8q8w3GhxhATRaFI4QYBNdZsXQShkK3uHDES/LnVfk57GuL8HjNFCjyg+Y6R3TogQgApUkW9ahY7RU+ZzUW6CnlhgBHXM5QefuxFYQGZ/PyRqwuSeoFidrCppyoiR5TXBSyFQSDqdgNbvV7gjnli26m9C23dlLTMp90uLnHt4mW26jOcbRonzLqFPfJxk4j1JdLWLJ43UicOoOLA42tu8izGnLR0YSIwpnqX4Yd6DFEnRp8tv87jVw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yVNInEztrfBN/ar17m/k2oKDAQ/A2xA7R+miuZJ8zMw=;
- b=HCC7/f3w2Yphyyp4Yl1Bl3a7L3/2o1zX5WvE4GSxidHCBV6V/Y0Zv92a5R8UNQMDzHmwWLpcpWtjhSuG7t9OT+lSqKzR3BTDDvJJ0tPbhS9rMn5cDNB7dlucUG2EEBHvynj7d3cRFLADsDJg0lyAUkbFcT58Mv7C0g+p0dxno8sCeLFAww1E5nnOSU7WthWTh+ZbKjET7HSM4EYvmlNvicfaDzlTlNKs0XJTKkom/+7ulDb837LW7VZehR3TRN45Xcx6Wt7DxMUxTcFLbhmH3235Gt3cidBh/uax88zQUvzGSlSMbnneuvohWe7MECtJ+eEMgx27YSNu02XQvQBEYg==
+ bh=/qoFkDpsVOKNHx3FP8TwS1ArHb2LqVrrtc/FZ9wVr1s=;
+ b=kJDCGpU47Z8IbVjFcrdU/2QAq/zx1ToEOZvgGxGVGbOmXI8yInB5FK/83AjGmF32cupATkwGD1+vaUWYPRx10HPOywG69jPh8/avpk/kTi/6I/qrus4qXVac4Dy9HQ454t4VgFYNnEp2UA8UJbRG0GzeEqhXj0TR98sp8eldleSz6lXcGkkld+H8Mk/5m+1HPokIIMmsuV67rh9ungpNs0pERnq9xvr3b6EMZx/hTOjnn/EvVv/WXPUwk5x2/tjwZ78wGmk/sZYNl5q4VM4z1cuQbGzZOQ45o7zj1lfV30aG5IhFx0COiOvjbTUtd+NTw4ZUSzdfS/OC0XqEhdHrFA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yVNInEztrfBN/ar17m/k2oKDAQ/A2xA7R+miuZJ8zMw=;
- b=Nv+7KQwmy4wTs96w46RZbWqtA8HbvFZlv9l9BXjkd6oLXVcGknUM6GTEO+OVc1O017wKqIKETDww6MTFsnE2Lc3CU9yv6XX+szwZ/QhI3wIFPKj7rSfvVcjIKlWnEuaDwB0nHrI39N/rwSS5OO1e46fuC79UGXHB74JiwW6FbBI=
+ bh=/qoFkDpsVOKNHx3FP8TwS1ArHb2LqVrrtc/FZ9wVr1s=;
+ b=XArZUSZrby+lFvkOGtImYJW0pOBz9rNyyt5Z1mi5x3iY2r57V4DJPJWnetW3z1P6l1pliKhtcu7myMnNRgZ3NEvg94aErS+iuMV3iMnp01rmLJ8uRVfbzIN2N8RZ/y/uqdhiVXTaQXnb9fVI8zFXTjt5tNPtSsSx6DgeEH7TQbs=
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DU2PR04MB9050.eurprd04.prod.outlook.com (2603:10a6:10:2e5::6) with
+ by DU2PR04MB8792.eurprd04.prod.outlook.com (2603:10a6:10:2e3::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.14; Sun, 5 Dec
- 2021 12:53:51 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Sun, 5 Dec
+ 2021 12:57:22 +0000
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::82e:6ad2:dd1d:df43]) by DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::82e:6ad2:dd1d:df43%8]) with mapi id 15.20.4713.027; Sun, 5 Dec 2021
- 12:53:51 +0000
+ 12:57:22 +0000
 From:   Peng Fan <peng.fan@nxp.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "van.freenix@gmail.com" <van.freenix@gmail.com>
-Subject: RE: [PATCH 2/2] clocksource: timer-imx-sysctr: set cpumask to
- cpu_possible_mask
-Thread-Topic: [PATCH 2/2] clocksource: timer-imx-sysctr: set cpumask to
- cpu_possible_mask
-Thread-Index: AQHX5rIpXvvERj8j10espZggT53Quawe/42AgATgKoA=
-Date:   Sun, 5 Dec 2021 12:53:51 +0000
-Message-ID: <DU0PR04MB9417992CCF80CAA4CF78F8EF886C9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20211201125030.2307746-1-peng.fan@oss.nxp.com>
- <20211201125030.2307746-2-peng.fan@oss.nxp.com>
- <80578aa9-35dd-02ca-fb07-5895991572e2@linaro.org>
-In-Reply-To: <80578aa9-35dd-02ca-fb07-5895991572e2@linaro.org>
+To:     "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: question about IRQF_IRQPOLL in clocksource driver
+Thread-Topic: question about IRQF_IRQPOLL in clocksource driver
+Thread-Index: Adfp10rjYdf8oRrvR36gaWzXsleJ1g==
+Date:   Sun, 5 Dec 2021 12:57:22 +0000
+Message-ID: <DU0PR04MB9417B10EA8B9CA41CB1E38C3886C9@DU0PR04MB9417.eurprd04.prod.outlook.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -66,154 +51,71 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ab90afc9-ab76-466d-70fc-08d9b7ee4980
-x-ms-traffictypediagnostic: DU2PR04MB9050:
-x-microsoft-antispam-prvs: <DU2PR04MB905083C57E6ECBDDBA11F591886C9@DU2PR04MB9050.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-office365-filtering-correlation-id: 2cc3e20f-5de9-46dc-585f-08d9b7eec763
+x-ms-traffictypediagnostic: DU2PR04MB8792:
+x-microsoft-antispam-prvs: <DU2PR04MB87920C855DECAD45D55B595F886C9@DU2PR04MB8792.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: XpQfxmKavIOzHRqGfoUqxNRGZqUw520uTZpwTwNkimXZDiH7x0q5n2aqENxwqQBR36/zDCuJo2p4TJgdxL9BIAVgsE7Z6yR61VhJwVDybaV/NMy21aA0qUn+cIB/NiC0ZxjWTUh7bjNyQIRzLxAKlyzwFEZ9AWEGR5l0r+vFwbA875ajCe0Y28alonX//2Xq1CvcuP7c/QbwRywM7aLopjbtjn9uV/TmvukD4kh0sduSFWvJvjzp082EKMQi0gD0MxMRgWL+kyJf4aYuDjdwbqmoVIN0Zs9NtnAtpMo+nd+Ql2kgy2X7rTh3V4PbFiy9f9WFcC28Tub1AOd6l4+zCm8hdQw1IC34itfjZxhID0wV0Tnz5L7N6HPlqTQs8N81BK0SmnVJdSTa5nk1KnLYBUx377Gu4PizL4zTyu62yLKECcPX/puBw6H2+RuYX5hyMr6HEz5SEqoKMaU7N2WYFM43laSUpFD1cpMnVzfIe/4nUGiFG4o67eVXPjALhqzPHJw9EEZE4e20i89EZdAt1E4HVsdy7bC12w6EC9ylpMfg/M06Ffjv/Gsn8xoJbWbtsKYbm0ga94FMIdRgdGAKc7BxyaXg4phNdiBo9neOw9CpFRdRzy0Xx782+wn23MSPz2UwPBx9z1YvoH9OvSjl59mKcz2ol7CLVZgVs9Bo0hpcQEB46v0o8RPZSHZuFNc7RvFvUNU7oKt5ccobT2hbdOi1F3owHZvRW7Ev1UIeeBAXSIrYMxZ5xSWoI7mXtuWarWrxHkraF98uxPaN3bI9S934bpWpykx3facAyDsyWlo=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(54906003)(86362001)(8936002)(316002)(4326008)(122000001)(38100700002)(110136005)(9686003)(33656002)(2906002)(55016003)(8676002)(53546011)(6506007)(38070700005)(83380400001)(66476007)(66556008)(66946007)(66446008)(64756008)(76116006)(44832011)(7696005)(26005)(186003)(71200400001)(508600001)(52536014)(5660300002);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: dySgPe4qLCPiM8MWatlzIKWT1g+/loUiWkot3HThKpT+jHwkhc+V+FTapovx/ADMhJ1vPVZQQsImpTxi1g6ui+pXnPgjkFVHSqzwhaVpLYtEYP1ubNKYpluHerBjEmB1VMZwuEHBxjiS+jrgfWPB6D5RUhxZq9o0lcheMGxRjJ/w2aTnUxk19UBVUuzw+5jobUt9obrja1J3diz7tF52EivIhx9ECxLhwpl6N6QqOkNY1B9sHqbm5zsS7vdmRQuk772wl5GYi2/OtLAdGOVd17WzrsLG6eo7ycl7KYi1nPqqnyZB5LkttH5UXMAUhqDa3qqFn2ATmMl6buP6Snyq8jigZPtsP0to0P9nKMwKQCFdUGy+jOU21FDwJJK2xsQBY5i496WBaodtmNp4IdGTCgsbrrHofH1qhv7LF9YxehrKFVelYVUFvQaobi24gywWgWmy7WSnRAurb+wsfeT/yf0LgUS75B0Gu0YWHwYM04rgDlSJv1QFvtFXGRfVeQAu10MwU8ntETTbVj40DSb1/bUgKpg548MOnbSDxXxM5nyECJWfd00HcmyYObgWbW5uj5MPka6RXcARM1cxkms68fpVb4UIyVyKZT2ypbsiq+j5mO1GqSFTUyQoo3d/tGaeMKqjadxf0mx0LmwQ7SolaQ8pzEtHsSkqxrElLQuJBHRneJiqDEOIaJFHkTt0i6klAZBKZgtqe2Qw/FVmOzh1mQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(33656002)(44832011)(508600001)(186003)(4326008)(122000001)(9686003)(83380400001)(26005)(2906002)(8676002)(8936002)(4744005)(71200400001)(38070700005)(7696005)(5660300002)(86362001)(38100700002)(6506007)(64756008)(76116006)(110136005)(316002)(55016003)(66446008)(52536014)(66946007)(66476007)(66556008);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?koi8-r?Q?3em1+MK3+az9upTWSd4y7EOXhGaAnW1G8agB+ff2RpAQ/EgqFuEgrXa0qo9/i5?=
- =?koi8-r?Q?+aga69R6cDNbf6/dv4QGf4GLwJMwYP6dTRmB9+/uZIcrK/t8mGD84U8v8kdOgU?=
- =?koi8-r?Q?PLK8s7K+4TC/odkM8YH0+bzSoV8Nr1O1tmk7S0KPI3DYq6efSHVn5xOcP3DLld?=
- =?koi8-r?Q?XNAxicNxaZkZeGsLO2lYmKAxBtkf+0kTbFa/QHhYikIk70o+Q/0XkyfeP0SO+d?=
- =?koi8-r?Q?/yIDFHan+u1uN7vaQlkmOrTJev27O7eMpxJCNjx7l6OB9STK1DOD4SyBc+c3AF?=
- =?koi8-r?Q?o97jzEcjsz8BqLLuG9xJxTiR0hn14L8+iswP8TaoEl2xkPnrnaYPTxHaVdX+iA?=
- =?koi8-r?Q?fe+U+ifhoErdLfBnpamsJ6rPP5c7Gi6PyqSd1zQqP/uobXyM1bCt//g4M3O+aV?=
- =?koi8-r?Q?QDdmAhXstzVQ8kj7xVk82cn15oj9Cwafh2bzZ4OdvGFFGHawLOlkyXNgA1YARK?=
- =?koi8-r?Q?F4kwV0Mr2tIZSOhrJmg8bXGmckm/8Lc75Ey5OrdIu1LG1t56iWkhAOXCNYXres?=
- =?koi8-r?Q?dyI91nkPicdd/GePWvFvIHuj8t2FYnlNkBN5OaGz2ZDFdZSuFXF/+9Khdkw6on?=
- =?koi8-r?Q?p1zuKZ28PwtQceHiwi5iM9vlxo5f4MB0PR8gq50O8/gfBGSJnLm/eHWbhhkf37?=
- =?koi8-r?Q?wb05+8OnLqs+wwGVhAJPffZ93AYJuTkcwyvvKl8qERR7wepIhuVxk4n8vqoUiX?=
- =?koi8-r?Q?PXNnu7qaYmKu6MZFP/RDJlqFZ54aRJV5zJXh79KFatiY8mQG+cCd2P3rCSdswz?=
- =?koi8-r?Q?y8PlqGNPaQeacEXSzsLOZJ9aM3aS5YgHjr3aQmjWDWFUsFioCserjGJrsao9OL?=
- =?koi8-r?Q?Ww7OI6uLSFegoVFFwzYqPvT8zjTtEIwYIyJEfzI1JfThe+w4BeY8SAXjSXEtWY?=
- =?koi8-r?Q?aye+DVbS8Rz49lDk9o1hw3D4dij7ujogGsK+E+4szoQ2CId3CMpxym5p/W2a90?=
- =?koi8-r?Q?q4xHV5ih3FBaqpnXidNZdb8PCfwzfK70yVNrgsEiTXtxHlw7mXdgMAZE7+uX41?=
- =?koi8-r?Q?JdaiNKx/xIHamdCbteFO0hoYeTN0EqNhxkjpvX8UgRqidW6SYjaQY1vOGr+ZKO?=
- =?koi8-r?Q?FpO6fb6BrtIMbP+Eog7cI+9eAyZyT0BNwdcrpcC6NtRvFmxXA2WzH4u/zjPIW7?=
- =?koi8-r?Q?R907MrJildKJzQ7/kk8zfKA1c6zCMdvJZAMGRoEfMmj8C2jfr2l8TasMJ+v6sY?=
- =?koi8-r?Q?IBh+LeW7DWMOHOSgKrrkUsLUFz0faeOsUbUSZKGCtcL7r5ZY98NbC/hS31Q1Z5?=
- =?koi8-r?Q?SkGOLeecAvehTFtG9rIRlY/d/5THFejlgZdGGRpErFExNmVpTwIgSQnGU7/QHn?=
- =?koi8-r?Q?+akc27Dnokv9s4H5Cxb4UFcGZNv4HAWjyQzvhnl0HaHLx/akg7i91VU8vTXs4k?=
- =?koi8-r?Q?jVAcFfWGgx/pyMwEvXpK7sNpKpGJs+9v9Rn41AyxH0f0ygsPZKVc6v38NB+QVx?=
- =?koi8-r?Q?p5HDnVjYe8zCMO3S8HE34DukgvVo7BzCQEOxQ9r1EOOB3FcVK11Lpn5EnJv3bN?=
- =?koi8-r?Q?mfuuQ5fxx1pPoQ5VVA/jy6GCl4BShZB2kf2RxWJ1miDZF/lrn0c9/IOLpYTQSF?=
- =?koi8-r?Q?xlV4uECmBQ=3D=3D?=
-Content-Type: text/plain; charset="koi8-r"
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?gsr056U+sYg4FOkZmZNVp3ZiH2cj5ueDgHrxcTmXrMsFIFrl4E5QsnjsA8g3?=
+ =?us-ascii?Q?AX9YO7WcppKSGfU+QwPzHppMDUUxAWHhHu1auBXBI8NE/pzY74vAXooiwvur?=
+ =?us-ascii?Q?q/oOfApZz1hiy1M1z7DrehJPQ8ByY1CkOE6hYwBnSFkhay1159g0S898wxRX?=
+ =?us-ascii?Q?fR/zQE+Nta643kJvwdphwmN4h6WLdmBz8Tn0G/3yTxjB553JqkZLrnn8W1MC?=
+ =?us-ascii?Q?qZh6aTO9gTvMuhvnsCkgRKHEhJAOeIziF1VEkeJlvTlfQoh0w3aFooS7Z0sl?=
+ =?us-ascii?Q?rdRSDzXdaI432Ydgja4skjmycdfjwHF9m8r866Q4KsU/07EKwmof2fJCfkba?=
+ =?us-ascii?Q?i83iUjbtV/FZLqTgf7DPIUxN/eJ7wWytX//Og7dksipoI617zfXWhuOVWEbI?=
+ =?us-ascii?Q?fXBT+7lFQgGnFVGJFk5j0BaPB2diBr+qSuE+sIfWYQbXAo1re/b+9MwR4Hta?=
+ =?us-ascii?Q?40odwL09wApEaZoQ7Fgvj538GVF58lPEaJq9Ek9VUZImDSu/4c4HuksGjt6o?=
+ =?us-ascii?Q?YZX2vkM/6wAMtHcNUFaA2ojIdFQn6Cv0KDsWbdSYpoBVgnz1oI0rrHLSpN7j?=
+ =?us-ascii?Q?xMS5Jc1bfA2zPdEcn9MTGKIgXg8E05FMk051loWh4cb+U/w9fHVjb59S3ju+?=
+ =?us-ascii?Q?tIqAvZMjwKfAYQefH00C+SYQLqT9v7XcJyn6ytmq+K+VtbFeDv4RAxZoadQB?=
+ =?us-ascii?Q?WhZ8LYhCt3+hEjZpiPm7RbqNLXmFx45/2Yk9Cm56udm4nbfwliIHiH7WwXoJ?=
+ =?us-ascii?Q?UL/f6px/HZoeEOsge6/nNGm/zegMSqSkgN2Yw810JttM93bzuOo3DQQayf6L?=
+ =?us-ascii?Q?k74Ao6pOW62WR5gnyvCH+PuBvhoxvghmNVGY6k46N0Pk799iQHLHemHk24ig?=
+ =?us-ascii?Q?zvWcHPRfFlnDRkPh2LwothdMYlBLxFezRBuM11SnSp7n/VEhFnl+sQz6BS+L?=
+ =?us-ascii?Q?EemJ5xNRnvTJO7hIaUgIblY/9uvQtBL5ENPDv0BQL59pIe1Gsi+/YsP5MLGb?=
+ =?us-ascii?Q?UdAepJl/XnnTII8ZuHKXouDDBnSbS8WvmLR92Q9XvDuIiKnql8tbAp+f3kJ7?=
+ =?us-ascii?Q?xB2Ui25lLCBNJOdpycgrDdICmboec0GwVeVWpOMooilB4uCSv0FL4P2kHQ+U?=
+ =?us-ascii?Q?DlR55dw8GCcNTTPiqmiIWeFEtfYWUc5j4CKiWXMLNvwZ5+up46phAz+y4QJP?=
+ =?us-ascii?Q?MjuCIKI0u67zvahyU7kinVJ7TVa8s/EKLg1r3plWyhM0DY0pQbZB6QloHd/s?=
+ =?us-ascii?Q?9DS7str9IjhS1TuWKf7WxMOPOqolbEBUI8p0SXhVkjdfZjwGoo9Hd/UwO5ZV?=
+ =?us-ascii?Q?ApxHmsndp2Y80OjK6IZNq6XifAkU+tB5U/trc084b+jp15qlHCKTGwBBlXZw?=
+ =?us-ascii?Q?PhFlw8E+utBEgxbs8n4bnvolmjazhStGVP//bssdTs9d38FWG4EM6qctSaV7?=
+ =?us-ascii?Q?23KsFMTJlZF0Hl8L7QCxeg8Ys69MgUWvBE9ILBDo5WkdN1OSy1jYJ3mCOItu?=
+ =?us-ascii?Q?B+PNc+4huPAd9HMz0NLtHOGF8yPXWN6UVxBqmw5eDdTsY4Mu3NF3PjK+RkxD?=
+ =?us-ascii?Q?rL26ZiD5iEhUzkRZzqe18kWvq/p+aYF9pUVRdUNwq1Aq9/6uRG8VborukMX0?=
+ =?us-ascii?Q?0Q=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab90afc9-ab76-466d-70fc-08d9b7ee4980
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Dec 2021 12:53:51.1426
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2cc3e20f-5de9-46dc-585f-08d9b7eec763
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Dec 2021 12:57:22.3776
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FZHczrv5zU9A0vkx4Dyef94hzWaKx6G1/H1gAWXX/rMy7ZrY9SyrVJ5N7HIpQmzMVF3MgpOHeJtBolPLl3r6Zw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9050
+X-MS-Exchange-CrossTenant-userprincipalname: i8P90CSvzvDyg2pTxoMRKx2+YUbNnl354fZPRrk5UECgKJFvakb7Wv+6DH/xX6mHYrVwEtbeSOFIL8qHBalY4Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8792
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: Re: [PATCH 2/2] clocksource: timer-imx-sysctr: set cpumask to
-> cpu_possible_mask
->=20
-> On 01/12/2021 13:50, Peng Fan (OSS) wrote:
-> > From: Peng Fan <peng.fan@nxp.com>
-> >
-> > Actually we have CLOCK_EVT_FEAT_DYNIRQ, the irq affinity will be
-> > runtime changed and no issue. But the system counter timer is not tied
-> > to CPU0, so use cpu_possible_mask here.
->=20
-> Did you mean:
->=20
-> "There is no reason to tie the system counter timer to CPU0, change its
-> affinity to cpu_possible_mask.
->=20
-> Moreover, the timer has the flag CLOCK_EVT_FEAT_DYNIRQ set, changing to
-> cpu_possibl_mask will reduce the number of wakeups related to the system
-> timer"
+Hi All,
 
-The syctr interrupt could be set affinity to any cores in the SoC. Default =
-affinity
-is set to cpu 0.
+I found almost all the drivers under drivers/clocksource/*.c has
+IRQF_IRQPOLL flag. I am not very sure what this flag used
+for the drivers for ARM platforms.
 
-This timer will be used as broadcast timer on all the i.MX SoCs. Because DY=
-NIRQ
-flag set, the core time framework will runtime set the interrupt affinity t=
-o the cores
-that needs to wake up and the cpumask will runtime set to the core that wil=
-l be
-wake up. So even the sysctr initialization use cpumask 0, there is no issue=
-,
-the current patch is just use cpu_possible_mask to show the fact that the
-timer supports routed to all the cpu cores and nothing else.
+I think this flag is not needed for ARM platforms, BTW I just
+checked NXP i.MX driver. But not very sure, please share
+your knowledge if you have time.
 
 Thanks,
 Peng.
-
->=20
-> ?
->=20
-> Note you may want to explain why 'there is no reason'
->=20
->=20
-> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > ---
-> >  drivers/clocksource/timer-imx-sysctr.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/clocksource/timer-imx-sysctr.c
-> > b/drivers/clocksource/timer-imx-sysctr.c
-> > index 2b309af11266..55a8e198d2a1 100644
-> > --- a/drivers/clocksource/timer-imx-sysctr.c
-> > +++ b/drivers/clocksource/timer-imx-sysctr.c
-> > @@ -119,7 +119,7 @@ static struct timer_of to_sysctr =3D {
-> >
-> >  static void __init sysctr_clockevent_init(void)  {
-> > -	to_sysctr.clkevt.cpumask =3D cpumask_of(0);
-> > +	to_sysctr.clkevt.cpumask =3D cpu_possible_mask;
-> >
-> >  	clockevents_config_and_register(&to_sysctr.clkevt,
-> >  					timer_of_rate(&to_sysctr),
-> >
->=20
->=20
-> --
-> <https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fwww.l
-> inaro.org%2F&amp;data=3D04%7C01%7Cpeng.fan%40nxp.com%7C1fec86efbd5
-> 4498106c508d9b57d9e2a%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%
-> 7C0%7C637740373391832133%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC
-> 4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&
-> amp;sdata=3Dq98PLDpC8h7jt%2BjvCeXZAf2F5ZzJsMMS613OSHmjDr0%3D&am
-> p;reserved=3D0> Linaro.org =81 Open source software for ARM SoCs
->=20
-> Follow Linaro:
-> <https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fwww.f
-> acebook.com%2Fpages%2FLinaro&amp;data=3D04%7C01%7Cpeng.fan%40nxp.
-> com%7C1fec86efbd54498106c508d9b57d9e2a%7C686ea1d3bc2b4c6fa92cd
-> 99c5c301635%7C0%7C0%7C637740373391832133%7CUnknown%7CTWFpb
-> GZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI
-> 6Mn0%3D%7C3000&amp;sdata=3DKmuInvkOIYTEcR4sFHhEbQSJczarvwwm8slI
-> GfjCa70%3D&amp;reserved=3D0> Facebook |
-> <https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Ftwitt=
-er
-> .com%2F%23!%2Flinaroorg&amp;data=3D04%7C01%7Cpeng.fan%40nxp.com%
-> 7C1fec86efbd54498106c508d9b57d9e2a%7C686ea1d3bc2b4c6fa92cd99c5c
-> 301635%7C0%7C0%7C637740373391832133%7CUnknown%7CTWFpbGZsb3
-> d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0
-> %3D%7C3000&amp;sdata=3DmS9fXmEPB1798JRJWfhEpXcbdWfRiSb5%2FH6cz7
-> 9rl8E%3D&amp;reserved=3D0> Twitter |
-> <https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fwww.l
-> inaro.org%2Flinaro-blog%2F&amp;data=3D04%7C01%7Cpeng.fan%40nxp.com%
-> 7C1fec86efbd54498106c508d9b57d9e2a%7C686ea1d3bc2b4c6fa92cd99c5c
-> 301635%7C0%7C0%7C637740373391832133%7CUnknown%7CTWFpbGZsb3
-> d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0
-> %3D%7C3000&amp;sdata=3D%2BlsiYye7ZBW8jClBsZbSHkcbD0hqvvvx0H9SAlUV
-> e7U%3D&amp;reserved=3D0> Blog

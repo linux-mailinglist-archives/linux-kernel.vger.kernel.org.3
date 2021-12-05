@@ -2,183 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60484468DBF
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 23:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0049A468DC1
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 23:53:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239942AbhLEWwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 17:52:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233708AbhLEWwN (ORCPT
+        id S240061AbhLEW5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 17:57:02 -0500
+Received: from conssluserg-02.nifty.com ([210.131.2.81]:29230 "EHLO
+        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233708AbhLEW5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 17:52:13 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2CCC061714
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 14:48:46 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id r138so8655109pgr.13
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 14:48:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7MK0qgu+jx+Ly9rFkROV3Iep3bBgTueVRa2u5ntgItk=;
-        b=J5X3IT1fH3rmJbG3NsBxCA7OXU3MeFqUVqusHAsmUR0zyom1hNIBvDt5Zb8NAXRKRC
-         XDzKZ7U5RsLvNsHxn0Hzwqy2MJrm+okaoYgol0lXnW8t4+VhgZraQAQtJCcwSuaLV/HB
-         xQYLDc1I8haOyCWloM27hoJtjySY+bYH8NQ+fT++FCmE53kEO+LZLbS5nlFsYkVxXnAh
-         0oK7P/xdVXIcPcBJwhkmD88LF4Oo46rlJJLCDECswxAlKrtq4uAW1XhMOmG9imiI1u22
-         prP2PvH/W4Ik9nUj7x/iu5RLwKfT4K2CDaGiNNLtIHpJ9HJy6U8twwJEpDxE0mVKTCt+
-         i8YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=7MK0qgu+jx+Ly9rFkROV3Iep3bBgTueVRa2u5ntgItk=;
-        b=Y8iBgwPxwUCLDM05qZvisJSpgOMAdPv3cTGEM8fVqFWMDgRRxwuccQLWaZZLGyd+Cb
-         yYVofo5fYc679+wJGaivFqZe7qphn22BsyFQm6gWszBq3T+JFnZT78LMExX3Iq8eX9lG
-         KdRkOXeBLZKKYJjD959DhTzVUqDFzYaUXSWd4Hn9CyoRNs1zM1GlRpZBrJXayPSx1y/t
-         ZFo/oQU31CqnJ/6o9jEvlKV+9OhbPcEBe7lFH/KGmlg/dDfGyAjb9Nm2/b14E5xkbnAc
-         mQRJndtfPhnXM/NZ8+wTnUh/HNBSWa8VaByKge+MSDi0tdOkQDUnOPH4kZskjGcd70/f
-         j/Fg==
-X-Gm-Message-State: AOAM532AZFw4K3vXylZDWwJ5lCS8cHG5k9gf/F9LCvTna0SPR6WPu/RG
-        QaD624T039TXp5IPFFBF27Q=
-X-Google-Smtp-Source: ABdhPJzZ4WrKI4nfHZLPTM7bnUh2nHyY37IcVpXnz6UN+ah6BjNuHpOSIhmUVfxa+An+QAM02Ca2nQ==
-X-Received: by 2002:a63:554:: with SMTP id 81mr15883211pgf.298.1638744525603;
-        Sun, 05 Dec 2021 14:48:45 -0800 (PST)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:5800:1eb9:c30a:63ef:a12a])
-        by smtp.gmail.com with ESMTPSA id z8sm7790984pgc.53.2021.12.05.14.48.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 14:48:44 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Song Liu <songliubraving@fb.com>
-Subject: [PATCH v3] perf/core: Set event shadow time for inactive events too
-Date:   Sun,  5 Dec 2021 14:48:43 -0800
-Message-Id: <20211205224843.1503081-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
+        Sun, 5 Dec 2021 17:57:01 -0500
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 1B5MrK2f025862;
+        Mon, 6 Dec 2021 07:53:21 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 1B5MrK2f025862
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1638744801;
+        bh=02y8Hmq7k4uWGAUBXxegYbr6n1JwV2k+j9cXSqS837g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GxreuHn4bYs0iL/J1LTufSwbvQcC1NCB7TzmCUxf8a4lSnG631qU8obeQwwxwiwG6
+         7RTO1xszqcbcKPCMPgHg6NsWFUjvf0BvD3/2uLqSYIz+5MSHS7yDl8kO65mK5dWkcU
+         aoyRvz/AiqvxNS9RWzcs1En72Ph7SHLtZMgaSNSCXvO6i2GerLKinmT0LzcP3XhRPN
+         DraX3+4baU88Akfy6P5kTqP1tDdrdAkneDVZfD2O0hx+wOZu9yk6EYo7SaYAf5dM1X
+         7jif5Lhjt7+UiNifeGplQGZOch9P3B4hhH/Zg2Xi0FTjxOnMcv/+kWnMhDVXFTm1sd
+         0H6WaEXwfsW4A==
+X-Nifty-SrcIP: [209.85.214.181]
+Received: by mail-pl1-f181.google.com with SMTP id z6so5882105plk.6;
+        Sun, 05 Dec 2021 14:53:20 -0800 (PST)
+X-Gm-Message-State: AOAM533gCpmGxAF7D9Y2FQHOI08V4RfdV2MKycU3Jk6yjE/mcGiGZqz6
+        0OD8Hil8wtHT1Sr7clpW4MGdKlQHizv4h2uEvq8=
+X-Google-Smtp-Source: ABdhPJxxd7SYLDUb3KwfD+jjXQPAqAkN8dUiek9XQ87bpYUK5CNmtdu6FkRtHWyC1ZnRg2okpV1cxrBHSROqtSKN1aE=
+X-Received: by 2002:a17:90b:1d0e:: with SMTP id on14mr32470530pjb.119.1638744800126;
+ Sun, 05 Dec 2021 14:53:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211124153105.155739-1-alex_y_xu@yahoo.ca> <20211124153105.155739-2-alex_y_xu@yahoo.ca>
+In-Reply-To: <20211124153105.155739-2-alex_y_xu@yahoo.ca>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 6 Dec 2021 07:52:43 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASO_EmCp2zR_sBq_YNiw83Px8pKhcW78HKv1My7eKB+2w@mail.gmail.com>
+Message-ID: <CAK7LNASO_EmCp2zR_sBq_YNiw83Px8pKhcW78HKv1My7eKB+2w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] kbuild: pass --stream-size --no-content-size to zstd
+To:     "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
+Cc:     Michael Forney <forney@google.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nick Terrell <terrelln@fb.com>, Ingo Molnar <mingo@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While commit f79256532682 ("perf/core: fix userpage->time_enabled of
-inactive events") fixed this problem for user rdpmc usage, bperf (perf
-stat with BPF) still has the same problem that accessing inactive perf
-events from BPF using bpf_perf_event_read_value().
+On Thu, Nov 25, 2021 at 12:30 AM Alex Xu (Hello71) <alex_y_xu@yahoo.ca> wrote:
+>
+> Otherwise, it allocates 2 GB of memory at once. Even though the majority
+> of this memory is never touched, the default heuristic overcommit
+> refuses this request if less than 2 GB of RAM+swap is currently
+> available. This results in "zstd: error 11 : Allocation error : not
+> enough memory" and the kernel failing to build.
+>
+> When the size is specified, zstd will reduce the memory request
+> appropriately. For typical kernel sizes of ~32 MB, the largest mmap
+> request will be reduced to 512 MB, which will succeed on all but the
+> smallest devices.
+>
+> For inputs around this size, --stream-size --no-content-size may
+> slightly decrease the compressed size, or slightly increase it:
+> https://github.com/facebook/zstd/issues/2848.
+>
+> Signed-off-by: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
 
-You can reproduce this problem easily.  As this is about a small
-window with multiplexing, we need a large number of events and short
-duration like below:
 
-  # perf stat -a -v --bpf-counters -e instructions,branches,branch-misses \
-    -e cache-references,cache-misses,bus-cycles,ref-cycles,cycles sleep 0.1
 
-  Control descriptor is not initialized
-  instructions: 19616489 431324015 360374366
-  branches: 3685346 417640114 344175443
-  branch-misses: 75714 404089360 336145421
-  cache-references: 438667 390474289 327444074
-  cache-misses: 49279 349333164 272835067
-  bus-cycles: 631887 283423953 165164214
-  ref-cycles: 2578771111104847872 18446744069443110306 182116355
-  cycles: 1785221016051271680 18446744071682768912 115821694
 
-   Performance counter stats for 'system wide':
+The reason why we need this workaround is just because we do
+"cat and compress".  zstd must allocate a huge memory beforehand
+since it cannot predict how long the stream it will receive.
 
-          19,616,489      instructions              #    0.00  insn per cycle           ( 83.55%)
-           3,685,346      branches                                                      ( 82.41%)
-              75,714      branch-misses             #    2.05% of all branches          ( 83.19%)
-             438,667      cache-references                                              ( 83.86%)
-              49,279      cache-misses              #   11.234 % of all cache refs      ( 78.10%)
-             631,887      bus-cycles                                                    ( 58.27%)
-  2,578,771,111,104,847,872      ref-cycles                                                     (0.00%)
-  1,785,221,016,051,271,680      cycles                                                         (0.00%)
+If zstd is given with a file name, it can fstat it to know its file size
+and allocate the minimal amount of memory.
 
-       0.010824702 seconds time elapsed
 
-As you can see, it shows invalid values for the last two events.
-The -v option shows that the enabled time is way bigger than the
-running time.  So it scaled the counter values using the ratio
-between the two and resulted in that.  This problem can get worse
-if users want no-aggregation or cgroup aggregation with a small
-interval.
+This is my test.
+I used 'ulimit' to set the upper limit of the memory the zstd can use.
 
-Actually 18446744069443110306 is 0xffffffff01b345a2 so it seems to
-have a negative enabled time.  In fact, bperf keeps values returned by
-bpf_perf_event_read_value() which calls perf_event_read_local(), and
-accumulates delta between two calls.  When event->shadow_ctx_time is
-not set, it'd return invalid enabled time which is bigger than normal.
-Later, the shadow time is set and the function starts to return a
-valid time.  At the moment, the recent value is smaller than before so
-the delta in the bperf can be negative.
 
-I think we need to set the shadow time even the events are inactive so
-that BPF programs (or other potential users) can see valid time values
-anytime.
+[test steps]
 
-Cc: Song Liu <songliubraving@fb.com>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- kernel/events/core.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+  # Create a 1kB file
+  $ truncate --size=1k dummy
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 3b3297a57228..682408ca3413 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -3707,27 +3707,23 @@ static noinline int visit_groups_merge(struct perf_cpu_context *cpuctx,
- 	return 0;
- }
- 
--static inline bool event_update_userpage(struct perf_event *event)
-+static inline void update_event_time(struct perf_event *event)
- {
--	if (likely(!atomic_read(&event->mmap_count)))
--		return false;
--
- 	perf_event_update_time(event);
- 	perf_set_shadow_time(event, event->ctx);
--	perf_event_update_userpage(event);
- 
--	return true;
-+	if (unlikely(atomic_read(&event->mmap_count)))
-+		perf_event_update_userpage(event);
- }
- 
--static inline void group_update_userpage(struct perf_event *group_event)
-+static inline void group_update_event_time(struct perf_event *group_event)
- {
- 	struct perf_event *event;
- 
--	if (!event_update_userpage(group_event))
--		return;
-+	update_event_time(group_event);
- 
- 	for_each_sibling_event(event, group_event)
--		event_update_userpage(event);
-+		update_event_time(event);
- }
- 
- static int merge_sched_in(struct perf_event *event, void *data)
-@@ -3755,7 +3751,7 @@ static int merge_sched_in(struct perf_event *event, void *data)
- 		} else {
- 			ctx->rotate_necessary = 1;
- 			perf_mux_hrtimer_restart(cpuctx);
--			group_update_userpage(event);
-+			group_update_event_time(event);
- 		}
- 	}
- 
+  # Set the memory size limit to 10MB
+  $ ulimit -S -v 10240
+
+  # Pass the file as a argument; success
+  $ zstd -19 -o dummy.zst dummy
+  dummy                :  2.15%   (  1024 =>     22 bytes, dummy.zst)
+
+  # cat and zstd; fail
+  $ cat dummy | zstd -19 > dummy.zst
+  zstd: error 11 : Allocation error : not enough memory
+
+  # cat and zstd --stream-size; success
+  $ cat dummy | zstd -19 --stream-size=1024 > dummy.zst
+
+
+
+
+scripts/Makefile.modinst was written in such a way
+that zstd can know the file size by itself.
+
+      cmd_zstd = $(ZSTD) -T0 --rm -f -q $<
+
+
+We cannot rewrite scripts/Makefile.lib in that way because
+arch/x86/boot/compress/Makefile concatenates two files before
+compression. And this is the only use-case of this feature.
+
+So, I am seriously considering to revert this commit:
+
+commit d3dd3b5a29bb9582957451531fed461628dfc834
+Author: H. Peter Anvin <hpa@zytor.com>
+Date:   Tue May 5 21:17:15 2009 -0700
+
+    kbuild: allow compressors (gzip, bzip2, lzma) to take multiple inputs
+
+
+
+
+With that commit reverted, zstd will take a single input file,
+and we can do "zstd -o <output> <input>".
+
+
+So, I will take some time to investigate that approach.
+
+
+
+
+> ---
+>  scripts/Makefile.lib | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+>
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index ca901814986a..c98a82ca38e6 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -466,12 +466,20 @@ quiet_cmd_xzmisc = XZMISC  $@
+>  # single pass, so zstd doesn't need to allocate a window buffer. When streaming
+>  # decompression is used, like initramfs decompression, zstd22 should likely not
+>  # be used because it would require zstd to allocate a 128 MB buffer.
+> +#
+> +# --stream-size to reduce zstd memory usage (otherwise zstd -22 --ultra
+> +# allocates, but does not use, 2 GB) and potentially improve compression.
+> +#
+> +# --no-content-size to save three bytes which we do not use (we use size_append).
+> +
+> +# zstd --stream-size is only supported since 1.4.4
+> +zstd_stream_size = $(shell $(ZSTD) -1c --stream-size=0 --no-content-size </dev/null >/dev/null 2>&1 && printf '%s' '--stream-size=$(total_size) --no-content-size')
+>
+>  quiet_cmd_zstd = ZSTD    $@
+> -      cmd_zstd = { cat $(real-prereqs) | $(ZSTD) -19; $(size_append); } > $@
+> +      cmd_zstd = { cat $(real-prereqs) | $(ZSTD) $(zstd_stream_size) -19; $(size_append); } > $@
+>
+>  quiet_cmd_zstd22 = ZSTD22  $@
+> -      cmd_zstd22 = { cat $(real-prereqs) | $(ZSTD) -22 --ultra; $(size_append); } > $@
+> +      cmd_zstd22 = { cat $(real-prereqs) | $(ZSTD) $(zstd_stream_size) -22 --ultra; $(size_append); } > $@
+>
+>  # ASM offsets
+>  # ---------------------------------------------------------------------------
+> --
+> 2.34.0
+>
+
+
 -- 
-2.34.1.400.ga245620fadb-goog
-
+Best Regards
+Masahiro Yamada

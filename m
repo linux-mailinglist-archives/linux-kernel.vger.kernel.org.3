@@ -2,174 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFEF3468C93
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 19:12:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A519468C99
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 19:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237095AbhLESQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 13:16:11 -0500
-Received: from mga18.intel.com ([134.134.136.126]:27794 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231982AbhLESQK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 13:16:10 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="224072613"
-X-IronPort-AV: E=Sophos;i="5.87,289,1631602800"; 
-   d="scan'208";a="224072613"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2021 10:12:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,289,1631602800"; 
-   d="scan'208";a="542163733"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga001.jf.intel.com with ESMTP; 05 Dec 2021 10:12:42 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sun, 5 Dec 2021 10:12:42 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Sun, 5 Dec 2021 10:12:42 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.177)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Sun, 5 Dec 2021 10:12:41 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TKM6XplHRWPhLriAD4ak9V4pNGNFlboMr7wgrCCkGn+1M8QLzZUBq8p5clqXel+kPjGH4HRUcmmsVtqGcnVk9pb7odUkhN7CkaomWgB1OVdLnVJyRdJSZ0TfXUCDey8OnlGetOwidV8dC5ul6XoxH5W0BABdrWhtMmSrG5zVZIcB0qZyDazDxsVr+yw9pPLFkchKz4MxJk1WbiYWudpiK+oCizRchBPdy9zMPQ1LggzMiHRYG1DC8iCbQuVPjX8oNkxpXK+oFf4B48ouNuaVUkv9U8wAH24KPvkLp0OX62VqWEmIIDWUS7TZ10YjVKNe+BhNHfOkfahwH34fmVbMIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2sx1ZOnlopATn6UyHFT5Xi0o8JaDk5GmUf65LW+TB2M=;
- b=dVui23c2nR3wRGowYcXIm5QHhg8aPFh6I4j2KC2hvy0pxZ4ZTNedHcBNptOlv1xd4zlpJsu3npwa+ODIqEA1AP8POnPejWxokkZawTypWJwPM7E8ar4FMaRm1z3s2dvqQzhikl98VDuwzj1YKeVbE3BbMJuOy+B53YXxha9mpepvx9nOjcYreAylHTWPt2KpIZSLX4h4+3q8uVTx0ZzuZot3uiHiKb1cqzcKKUt+VSmkcFIIt0TU/x4v7oCl+UfgNesJA4b9EEepFmFVxdBAJnU4xHU1jiCqrZNRpPTK18cfEVEDfIg6EDz7wqltJY3Oz8iaYPHn+x4+WiGfmcVcbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2sx1ZOnlopATn6UyHFT5Xi0o8JaDk5GmUf65LW+TB2M=;
- b=ojJ231OAcIrqrznFbeRhVKrJHCjfMD4QZlq4CVuOuWKUIPzrIRfZTKALe55YCiUgToet7N275CVXos+bc5rPiSmJSRe2TKaywz85NFiAmUlss3Fp7hGdm2xLMrh3NZg4WryNtkilZmKAN+6LNdkpQGnRUhgJp/Hac4KiUhBrsXM=
-Received: from SA1PR11MB5825.namprd11.prod.outlook.com (2603:10b6:806:234::5)
- by SA2PR11MB4795.namprd11.prod.outlook.com (2603:10b6:806:118::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Sun, 5 Dec
- 2021 18:12:40 +0000
-Received: from SA1PR11MB5825.namprd11.prod.outlook.com
- ([fe80::787a:2f03:efff:c273]) by SA1PR11MB5825.namprd11.prod.outlook.com
- ([fe80::e814:a13b:4bbf:ef2%9]) with mapi id 15.20.4669.016; Sun, 5 Dec 2021
- 18:12:40 +0000
-From:   "Grumbach, Emmanuel" <emmanuel.grumbach@intel.com>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        "Coelho, Luciano" <luciano.coelho@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Beker, Ayala" <ayala.beker@intel.com>
-CC:     Arnd Bergmann <arnd@arndb.de>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] iwlwifi: mei: allow tracing to be disabled
-Thread-Topic: [PATCH] iwlwifi: mei: allow tracing to be disabled
-Thread-Index: AQHX6dpboJ3VcAING0q/5rZW+mljFawkM0pA
-Date:   Sun, 5 Dec 2021 18:12:40 +0000
-Message-ID: <SA1PR11MB58258B179D8ABB7738DCE76CF26C9@SA1PR11MB5825.namprd11.prod.outlook.com>
-References: <20211205131637.3203040-1-arnd@kernel.org>
-In-Reply-To: <20211205131637.3203040-1-arnd@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8594f6fc-6ed7-43f8-cc97-08d9b81ad39e
-x-ms-traffictypediagnostic: SA2PR11MB4795:
-x-microsoft-antispam-prvs: <SA2PR11MB4795AA9566A9ACE5A3AAAD6CF26C9@SA2PR11MB4795.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: om77fNQPg0gyuJO5HKIIB40SMFkaBuzYyKvqb0y5Shsuddt1aO3rYCdOoOjaPg94tV0CAJUa+VJQ/2ebz40wLVUam/KNCU7Kj7Rp3coxduVfrHjjFDnb3aAPs3nRAG5v2JDXb8DU2mnBxmFBZbthQ+kpmZhln869qX6jxD5LOgFBkE4YQU/YPN1InzUP+FBvk3wHy8djKAmuFuJ4rWddSeihg7GXnH0VupCPCiDpLbiDY6EifjHX8SG8605Mj6JqvIqof4a6xTB/JY/MFwfns8SRYDjkcE8cnrp87W123PdHJvg1TgoVZuPvQcG7PD6h6oh7wQwib20AGEZTpYG6x+wTvD07F3OWoS5p4zfXJujxlVxS6HAcXDYlL9tCxU06XZn9bJ6HHESSroO8mN5IYT8LobEHe3/KjDNch6kCSPt1DuTqp3QAorbETMT13MlMHelsKRajkygCSVlq2AQr1wm6TFpaShps8WGW3d/V+MgxicFTXOZjRY1GSay9KXoJTXIOs7Lw9quzC5/EbTkmBnj1RmZ3rtna1F9opjsbPmYPteuhj7LLRig4psHoT9xUdmLK3f6CFPdn/UVYvbvUUzhoy+0WpNqntajH41wlTrtfKcKvXQngHVhlWMPAphBHNkJJOwd0276DWE4wcXsBvxGIy0mMP8+ZZfKVDb+UwmuZnAcwy8543OohGaVRwRfou4bfV+6QMmxEcwdV4fw56Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB5825.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(54906003)(64756008)(110136005)(508600001)(8936002)(66446008)(71200400001)(6506007)(5660300002)(38070700005)(9686003)(66556008)(8676002)(66476007)(52536014)(4326008)(76116006)(26005)(2906002)(316002)(122000001)(38100700002)(86362001)(186003)(6636002)(66946007)(55016003)(33656002)(82960400001)(83380400001)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8o5UahrwUYgRpnb7JN1Ao+7/cafdDU4oNCK8d0sx8W/wFgzIRFUZtt2uVALx?=
- =?us-ascii?Q?1XBtf6fxq16nI71Xcl2k9kUIYPhdlhAj6yNvMv1iy92HXyGUKnDiHxHdGCp0?=
- =?us-ascii?Q?1j+Tza3zG8VjWT82hFStkQnGemU6L7nnJ9qSS9uQSRhRhQd5pAePTblhEDQO?=
- =?us-ascii?Q?BI7kJB1hLXxyGIlCt6qgzca8b8fH0UB/Hn2/7mUJ/RJeO1gUMlfcVC3DMPfl?=
- =?us-ascii?Q?BmawI0/P2QIaQcyMspNdZXU8FK5zz/Io8z6M/fRlyuK8HRjZz0qVeeWLpk15?=
- =?us-ascii?Q?ZmVVka0/N1RIrjiQmkrXRvRX3xgZKYOdkGAh8rm70A4GXNygTdXB5nRk6ZD6?=
- =?us-ascii?Q?XBf3SQluubL+PGdSypW8gDm2UFq6rbFxiH2LZoawT+ztIEold47w2nD1Tydo?=
- =?us-ascii?Q?lCyxVuM8XAxlkitFts+SPCawj+ebcIZv90/xROCREh+Q4RIzL7ugAKJenQqt?=
- =?us-ascii?Q?F08qAsQ3GFBCVVpFaIVk5jpeyCQvTYHMfQNdWfqP4PFORWH/rlxRwp2+7w0P?=
- =?us-ascii?Q?RpxFxFIO6eKZmsbyT+lRVkZYIfk8/3uHhqzcP2K6PnOHB1vw62ZVQ+DgWOVX?=
- =?us-ascii?Q?WPfhTEWftv0xcwv80C2AKTkNcg/sgdHyyTjgyoXeZwddEu9gBzYSszAJttZA?=
- =?us-ascii?Q?PbUElpWGFHj/JEHTLFuWYvFyGLwaWXaMFRaVROCwxxo08DA0dvpspzrARhrm?=
- =?us-ascii?Q?7iPmi5Z3uCZLol8GP7UJ8fsnaNewshovM79yxh9QWBhH6lYFmACAtXIyOiuu?=
- =?us-ascii?Q?ndrU6D8JuQRXEghqKD+5MiC7C24iAYdJxwwsDz54BYBW9alRiHcg33vmP3Co?=
- =?us-ascii?Q?vf9pi+9x7PEsJSEAPmsAgflBZGEuusipUG8faTqKE+vgHdwmG1XLXF6+dm9I?=
- =?us-ascii?Q?tJFPRj6yurUSiMn+tWsywXRiC5J88ArtEXCSe2IPtgCU+EkICrKLneg8Cr7N?=
- =?us-ascii?Q?e9txPtCSmiZBc0WSieXO2VZlP+njV9qVG7i/j/ROZDpLrZe+XmdR5WmMo5kK?=
- =?us-ascii?Q?XVMCnLQUruklu7qV7b1wODJ4WLqljCC7KOrjy1Wkct6pOyIpXzoEJh/A9NbH?=
- =?us-ascii?Q?8wBrpOpB1TfoPA1q74VN1z8MDgPFpdaeubKsa+JDE916uomDfoT7uwy7nRf6?=
- =?us-ascii?Q?ZL10RV9ZkURSJfoNoX4c66kx2Lv9mjQVcLrRtYvT449EoUnE7bdifKVs/1Wq?=
- =?us-ascii?Q?l7Y1UamlVzqG3xsdNHTcqQbWrDYwVK4P4xrVXIUAgsTfV3K1uLfIbz+kvic/?=
- =?us-ascii?Q?58vx8enJKa+jZwBoO9UCNT/jT7yfIbKsiW7DZvT9g90KIUxhD4P222aMEuKi?=
- =?us-ascii?Q?96XrgPJqxZfU/7DdZMqr9m9/37uHptKxq4J+vh+8AK/joKTXNtX4YxgdNWao?=
- =?us-ascii?Q?MmOoSHRc7sGrD15/DFcFqFh0KxGp0jVuSl0uwpjL3oY10BPcVHpoFd75ls/B?=
- =?us-ascii?Q?FM6bHLwQef3UwssK32lFo/mhokOXQ/5DKmxvfCybF/8xz/ptokmQ4+vwuuz0?=
- =?us-ascii?Q?/w1unh0FhrYvOmzOBEUY9wqutkFlkjYQ7sTlRG1VmnfIduPxTM85RhGhYJ+m?=
- =?us-ascii?Q?KQ7wDo7HLrsNblZmDHIZZ94fRxnr9oz6BqUIo6dpbMjnGUHCkk0izK5p3mln?=
- =?us-ascii?Q?k5hK12sHFMA7xAoWmA6se3fFXfxAfNbTlxhOWaapZRSDPs8cAO4Tw5ZnxnzR?=
- =?us-ascii?Q?p4MHkw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S237117AbhLESSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 13:18:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237102AbhLESSg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 13:18:36 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3552C061714;
+        Sun,  5 Dec 2021 10:15:08 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id y12so33518734eda.12;
+        Sun, 05 Dec 2021 10:15:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=SqpxYZMXggh8b1bfYQBh49tAcZib8Y6s1iaC8Hm+BT4=;
+        b=Sqf4i4BaUOCNXqqYbfnTwk1s9f/lrX0Np2cQAFBFhMaSWKhpbAVN+uKijYpPO93A6Y
+         N2YywPQC7L0sBTosu96xEiMfWJI32nUNaZ3ko77p2epREaMe3SwiuxteLrCSqbi2ucy5
+         mv/5evqFx5sHDNNHSGI1+WwdlufINIDaYHqI5a3QnR+F5V5dn0JWuUuklzsRhk6CaDaV
+         vhX8KP1SJ5yeff9CZvLdwcBbIANQWJhLuJ//D7cs1ITxAOAoGbc94+LCWOX/cEmpOPUj
+         BMnxp2mallUK8Ky1I6q9WyP06rSdXSu+sSnGBpPGm/4H4fx2m4Fli+d5qd+7rkNlHi/O
+         TVQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=SqpxYZMXggh8b1bfYQBh49tAcZib8Y6s1iaC8Hm+BT4=;
+        b=STwecnBTO4Ze5j4ZBI22yA2yH6SCFXHFdz+wwoJer5M4XqNXZrPMtZ0QNtdiVC3TU2
+         osfkZqHuay3O8Q0qt+v5pR4XS+uJKwskAfgn4rO3z2KgMO37q+jauAqAgnzCdfilflSf
+         0ehw7YvgQR9FdVwQ0A6VNT89AC3lw1HxbmjzxKvBGGYx0v/lcG0PE9sWIzRh+jR5/Ts2
+         1VIxl1dBMibSAME54PCcSsDl1X9XhzBU8WUpl2hpxp4AzQVyUXhfi0Pz236dYtuzQ+1i
+         q2f/Euo1NSV1vvYXNqgOE8VFnumiSUBQmuYnIqqvcTz8N11x3QusQWFDw1EIsahzmMb3
+         S0zA==
+X-Gm-Message-State: AOAM533mcLJ+BzMFhm7niF9OyuhsVnw4doOOv+hJpjM73D1Kqj6arbT9
+        FOc8SPf3DXpTnqaOpqXtvvAl9aJ7p3+pDJrY
+X-Google-Smtp-Source: ABdhPJwMG/LiVD2dLyeMtVmYcHkmckkGlgfY5QHSjrklYHMCivYr9eaW6k2dbUhYmswDoH6czVEmYA==
+X-Received: by 2002:a05:6402:440b:: with SMTP id y11mr47249774eda.25.1638728107268;
+        Sun, 05 Dec 2021 10:15:07 -0800 (PST)
+Received: from ?IPv6:2a02:ab88:368f:2080:eab:126a:947d:3008? ([2a02:ab88:368f:2080:eab:126a:947d:3008])
+        by smtp.gmail.com with ESMTPSA id l16sm6567822edb.59.2021.12.05.10.15.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Dec 2021 10:15:06 -0800 (PST)
+Message-ID: <60f5c2e98e3a2048f86a79c3aa1ed945dc0cb4aa.camel@gmail.com>
+Subject: Re: [PATCH 6/6] arm64: dts: exynos: Add initial device tree support
+ for Exynos7885 SoC
+From:   David Virag <virag.david003@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Date:   Sun, 05 Dec 2021 19:14:23 +0100
+In-Reply-To: <de24b968-f359-25bf-76d7-69328401f83d@canonical.com>
+References: <20211205153302.76418-1-virag.david003@gmail.com>
+         <20211205153302.76418-7-virag.david003@gmail.com>
+         <de24b968-f359-25bf-76d7-69328401f83d@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB5825.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8594f6fc-6ed7-43f8-cc97-08d9b81ad39e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Dec 2021 18:12:40.6684
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5vcl0nZ8Tq5iKFdr3zG2iiAqYsBTT8/VW/8lCrFiBx+NI6a1oi99E6Ff1A1oBIczLbAIbSB7AIThobBsw2acTs/SOKlSw2gLKAQHZOVIN+M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4795
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: [PATCH] iwlwifi: mei: allow tracing to be disabled
->=20
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> The Makefile conditionally leaves out the trace implementation, but it ge=
-ts
-> called unconditionally:
->=20
-> ERROR: modpost: "__SCT__tp_func_iwlmei_me_msg"
-> [drivers/net/wireless/intel/iwlwifi/mei/iwlmei.ko] undefined!
-> ERROR: modpost: "__tracepoint_iwlmei_me_msg"
-> [drivers/net/wireless/intel/iwlwifi/mei/iwlmei.ko] undefined!
-> ERROR: modpost: "__SCT__tp_func_iwlmei_sap_cmd"
-> [drivers/net/wireless/intel/iwlwifi/mei/iwlmei.ko] undefined!
-> ERROR: modpost: "__tracepoint_iwlmei_sap_cmd"
-> [drivers/net/wireless/intel/iwlwifi/mei/iwlmei.ko] undefined!
-> ERROR: modpost: "__SCT__tp_func_iwlmei_sap_data"
-> [drivers/net/wireless/intel/iwlwifi/mei/iwlmei.ko] undefined!
-> ERROR: modpost: "__tracepoint_iwlmei_sap_data"
-> [drivers/net/wireless/intel/iwlwifi/mei/iwlmei.ko] undefined!
->=20
-> Use the same macro incantation that is used in the main iwlwifi driver to
-> leave out the tracing when CONFIG_IWLWIFI_DEVICE_TRACING is disabled.
->=20
-> Fixes: 2da4366f9e2c ("iwlwifi: mei: add the driver to allow cooperation w=
-ith
-> CSME")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Sun, 2021-12-05 at 18:31 +0100, Krzysztof Kozlowski wrote:
 
-Thanks for this, but Kalle just merged a fix I had already sent.
-=20
+[...]
+
+> > +       fimc_is_mclk0_in: fimc_is_mclk0_in {
+> > +               samsung,pins = "gpc0-0";
+> > +               samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
+> > +               samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +               samsung,pin-drv = <2>;
+> > +       };
+> > +
+> > +       fimc_is_mclk0_out: fimc_is_mclk0_out {
+> > +               samsung,pins = "gpc0-0";
+> > +               samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+> > +               samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +               samsung,pin-drv = <2>;
+> > +       };
+> > +
+> > +       fimc_is_mclk0_fn: fimc_is_mclk0_fn {
+> 
+> I cannot get the point of these pin configurations - three groups
+> with
+> only function difference. How this would be used by the driver? Maybe
+> just keep the one really used. Same for others below.
+> 
+
+They seem to be changed in some cases by the FIMC-IS and/or Camera
+module drivers in the downstream kernel. I'm not exactly sure about why
+and how are they needed, as the code for FIMC-IS is quite large and
+it's not my priority to work on it right now. I can remove these
+configurations for now if that's okay, maybe I, or someone else will
+re-add it later if it's needed.
+
+> 
+> > +               samsung,pins = "gpc0-0";
+> > +               samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+> > +               samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+> > +               samsung,pin-drv = <2>;
+> > +       };
+> > +
+
+[...]
+
+> > +
+> > +       arm-pmu {
+> > +               compatible = "arm,armv8-pmuv3";
+> 
+> Wrong compatible. Please use specific, although I don't know which
+> one
+> you have - 53 or 73... since you have two clusters, I would expect
+> two
+> PMUs, hmm....
+
+I was thinking the same, but there's a problem: As I'm also guessing we
+have two PMUs for the a53 and a73 cores, we'd need to seperate it but I
+have no access to the documentation that would let me know which
+interrupts we would need for both of these PMUs. The downstream dts
+doesn't tell us anything specific in this case, and I have no idea how
+else am I supposed to know which interrupts are right without a TRM.
+
+I'd be guessing either the 82, 83 or the 218, 219 interrupts would be
+the right one for the a73 cores, and I suspect that it should be 82 and
+83, but I can't really confirm this.
+
+Do you have any idea how to proceed in this case? Maybe there is a way
+to test which ones would be right?
+
+> 
+> > +               interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>,
+> > +                            <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>,
+> > +                            <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
+> > +                            <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
+> > +                            <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
+> > +                            <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
+> > +                            <GIC_SPI 218 IRQ_TYPE_LEVEL_HIGH>,
+> > +                            <GIC_SPI 219 IRQ_TYPE_LEVEL_HIGH>;
+> > +               interrupt-affinity = <&cpu6>,
+> > +                                    <&cpu7>,
+> > +                                    <&cpu0>,
+> > +                                    <&cpu1>,
+> > +                                    <&cpu2>,
+> > +                                    <&cpu3>,
+> > +                                    <&cpu4>,
+> > +                                    <&cpu5>;
+> > +       };
+> > +
+
+[...]
+
+> Best regards,
+> Krzysztof
+
+The rest of the things you mentioned will be fixed in v2
+
+Best Regards,
+David

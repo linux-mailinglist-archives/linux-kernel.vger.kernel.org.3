@@ -2,98 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA69C468CD7
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 19:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3FC0468CD8
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 19:38:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237489AbhLESlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 13:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
+        id S237557AbhLESmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 13:42:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbhLESlq (ORCPT
+        with ESMTP id S230089AbhLESmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 13:41:46 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7EA1C061714;
-        Sun,  5 Dec 2021 10:38:18 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so6107727wmc.2;
-        Sun, 05 Dec 2021 10:38:18 -0800 (PST)
+        Sun, 5 Dec 2021 13:42:18 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AE7C061714
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 10:38:50 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id c3so10439908iob.6
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 10:38:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7qmACymnRp+f5lldVkIlBCWA+61jLGtYnmZv5x59OqM=;
-        b=KSCZeeDMornLhUNQ8nIRU9UbmsaVgeE6SGqpFYcOCQlI0nEHgSjHVcRFsTYrUCcDz0
-         DirrXSKQZlLnf4j2Y2FFfx7kneXVcEAdDbgefI2pWEp+4AjPVjawKm3TwvjBYkviD84E
-         10igp67xZvGztTX4zKB5aAsYBt2DLli/Be2iN8ZWQbTINwRe3h+ENcDGLgRA7WzMxX0D
-         Mg/r40zB9RN+B7iTg3k+NCS3OxjjVxqsmUHrVYA1IV2QxT+ggOSB9/Sh3kfiBpCfRorF
-         EDzd/GuvPJskN62Y7OEpWohMO81ZE8ySNQWZqMKWGEO85MOgMYkTPQorNfClIJUXcLrN
-         PX1g==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=qztlLTDQmmEb0Xq8BgFUWcdE0xJC0fnWX5znumDPlIQ=;
+        b=K7zHGv4UpLCOKCQeDqWDmUYa3NblM/M9NgBBGybWqcU/e7cQyZeW4X5Xos98U2A+kC
+         ycu43xE8U/6/6Ay3ipYgmLCjraiQV+t2UL2oHFxif90n03YtTOxc7sek6wrAnhFHpaL6
+         OzlGOkzIyWIRwWUk7kGoG8shCqHWh/wssH/arzzRk6NJm3Ll2qKs+xDLbmWAiaod4NXa
+         uYH7yeHmHFraEn6dUPwHFeqRst2SfzYgCw2t212Xik3aA+1VDLzFkoqB2U9tFEAGt+sT
+         06kJzMgNr6R6pPdXTbj3VdbGArPpY9zGGjJlZEWf60K064nRJRSCt4Wa1/7O/p7ZlFzL
+         ublA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7qmACymnRp+f5lldVkIlBCWA+61jLGtYnmZv5x59OqM=;
-        b=6puTNS75EHxUsIfJy5exmUjnLfnNLwIAlTMQiOXGrBS+SKzHEKGZstr9BSY6wXuFTi
-         BQqlOXkreyqRj0kGxzLLzb9YUwhVrdUxAK1lJbS6LpfQBxyKt78fYqj8X1HfYkwa5ZrS
-         XzZ/3T6v6bkpIBX2SmObXRJ0HUuIMkKtHEW5T1B1ANZYERm1esBPR5LwNzHnhl/MHWNc
-         qbY2HdRn/i2MisQfI7QDLoJKFk52v+92AS5QdLHVlBspHcMTMhvYtK6njcSV+LSYePVB
-         gQ5lV2U+S2vq8raq2/BGwxIDLYO2WAkzoKAsffZCYOU4H0b7L9y2u0VszYIkitOuEpoe
-         xcYg==
-X-Gm-Message-State: AOAM531+W5gr4PMvJv0pdhVE8XcVZX31f8u1IURI93gqIxFO8xenixyx
-        JoU0XT9GNUdCmUsthWTC7sdstkKKMHdJvCzj
-X-Google-Smtp-Source: ABdhPJx7cGv/2Lus4x3B1e0/JqBG+KQ+ruK05aih6u9wLmzpOVxVAm/15umdVbGyokPNUNeju8/EEA==
-X-Received: by 2002:a1c:1906:: with SMTP id 6mr33883133wmz.19.1638729497234;
-        Sun, 05 Dec 2021 10:38:17 -0800 (PST)
-Received: from localhost.localdomain ([39.48.147.147])
-        by smtp.gmail.com with ESMTPSA id z8sm9501340wrh.54.2021.12.05.10.38.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 10:38:16 -0800 (PST)
-From:   Ameer Hamza <amhamza.mgc@gmail.com>
-To:     jeroendb@google.com, csully@google.com, awogbemila@google.com,
-        davem@davemloft.net, kuba@kernel.org, bcf@google.com,
-        willemb@google.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        amhamza.mgc@gmail.com
-Subject: [PATCH v2] gve: fix for null pointer dereference.
-Date:   Sun,  5 Dec 2021 23:38:10 +0500
-Message-Id: <20211205183810.8299-1-amhamza.mgc@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211205183316.7800-1-amhamza.mgc@gmail.com>
-References: <20211205183316.7800-1-amhamza.mgc@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=qztlLTDQmmEb0Xq8BgFUWcdE0xJC0fnWX5znumDPlIQ=;
+        b=7JZUdjM+1tpnsFl+bETfueuvaLprIBw6PJK+MmFLXzByFHm//+qy7Nq4cf4v0sRvAg
+         0oTUJGP6LPCyRXtWni0Z8CV+uY4jBG9fuNR7S0tWrPrhS5dkokjBso2F7L1VpXlTdwuv
+         maY6fK0CGVZ8v5yqHrntgbf1vwMxSRqTee+bZSeK2B/RmcpfqIxaJVAN3MxN0HGKllcl
+         9HubW9AqK2NCgP6+jut1vU5EPxFTPo32gs2SvrpaHa1U7UAVeagO+L9eD8rcRhljBBFP
+         GzYv19ziKWUYGJjrFWhGpdgNvz5cJiEtlij2bYNjFYNB4j7EQTMgOkBRYzWOcpnFNGFI
+         IzBw==
+X-Gm-Message-State: AOAM531BI6jUB3QDIVLKCI7y9iTIeDkw/j8m2pz+lhSB58pOBZStvJYF
+        458cHWJOiJ25SvDM8zdRgCdCfS/TrSDGYGHRWrU=
+X-Google-Smtp-Source: ABdhPJySO3tOmOWoDItQw+ojHYyHsEBRvM0YyutTYzIj/SeIGeWQKj4UIu16m5baPZIrpXPtY9K4/gKyDnCNGw7JHDM=
+X-Received: by 2002:a5d:9ec2:: with SMTP id a2mr30468036ioe.44.1638729530163;
+ Sun, 05 Dec 2021 10:38:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6602:2a44:0:0:0:0 with HTTP; Sun, 5 Dec 2021 10:38:49
+ -0800 (PST)
+Reply-To: salemchantal@mail.ee
+From:   MRS Salem Chantal Lawrence <angelamark454@gmail.com>
+Date:   Sun, 5 Dec 2021 10:38:49 -0800
+Message-ID: <CAFirAodwJHk_safVtfBL2UpoPxyJnZKWHx5fMrZXoYZ8KC_FzA@mail.gmail.com>
+Subject: ATM VISA DAPARTCARD
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid passing NULL skb to __skb_put() function call if
-napi_alloc_skb() returns NULL.
+Attention
 
-Addresses-Coverity: 1494144 (Dereference NULL return value)
 
-Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+You have been compensated with the sum of 4.6 million dollars in this
+United Nation the payment will be issue into Atm Visa Card and send to you
 
----
-Change in v2:
-checking for correct skb pointer for NULL check
----
- drivers/net/ethernet/google/gve/gve_utils.c | 3 +++
- 1 file changed, 3 insertions(+)
+from the Santander bank of Spain we need your address, Passport and your
+whatsapp number.
 
-diff --git a/drivers/net/ethernet/google/gve/gve_utils.c b/drivers/net/ethernet/google/gve/gve_utils.c
-index 88ca49cbc1e2..d57508bc4307 100644
---- a/drivers/net/ethernet/google/gve/gve_utils.c
-+++ b/drivers/net/ethernet/google/gve/gve_utils.c
-@@ -68,6 +68,9 @@ struct sk_buff *gve_rx_copy(struct net_device *dev, struct napi_struct *napi,
- 		set_protocol = ctx->curr_frag_cnt == ctx->expected_frag_cnt - 1;
- 	} else {
- 		skb = napi_alloc_skb(napi, len);
-+
-+		if (unlikely(!skb))
-+			return NULL;
- 		set_protocol = true;
- 	}
- 	__skb_put(skb, len);
--- 
-2.25.1
 
+THANKS
+MRS Salem Chantal Lawrence

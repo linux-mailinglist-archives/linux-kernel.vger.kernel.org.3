@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF08468CA5
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 19:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8749B468CAA
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 19:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237264AbhLESUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 13:20:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
+        id S237284AbhLESU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 13:20:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237149AbhLESUK (ORCPT
+        with ESMTP id S237160AbhLESUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 13:20:10 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE85C0613F8;
-        Sun,  5 Dec 2021 10:16:42 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id s6so2602088ild.9;
-        Sun, 05 Dec 2021 10:16:42 -0800 (PST)
+        Sun, 5 Dec 2021 13:20:12 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB48C0613F8;
+        Sun,  5 Dec 2021 10:16:44 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id t8so8076222ilu.8;
+        Sun, 05 Dec 2021 10:16:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=gTzpcmEs2Hk1AEPi3IIm1xVjZo9fqCrWWz1Ibe9SDvY=;
-        b=kXHsMwYzGvY5oMXFD1fJ0SQCElcdbycIMsQIL9kKAs5TkJnQwtm0yWTLs6ZwaeUQMx
-         H3dmpMlZ088vkNr/7a+WTT0os/IuMRE7SDmAvqv2dVJA56FW31YCYB9RUSnZwbVPxPPi
-         7EQH2h9cuzbCf4GOGuCNUtkVzC5xVFD0sQloJvj9YsE8GcIotN4box0VO5OZ6e5WGoMD
-         gc0lxpHkP5PelShakb5tiHvAqvERPSWeRAMXh3R01GoMHOBa1QnLKGgAL2Km7bV0uGuf
-         P811mdslTnYzOSTvLNHhaZYoUDJu42MnMrXCcj5iB4nBs1RbGghUfffXpBSAlf2Ik0Bt
-         hLkg==
+        bh=gt+qqIZLE2dZSXAAMPQWb5DoYRB6aUa13mxL5Cp0tV8=;
+        b=AvDdJzT64SMkFCWsgnEBM1fm8bK6hcCBVM9Gt1dJjodwTeBh6f2rhG7mLVzc4FQLhv
+         99hPVTAHMHMF1RWe+NP1h1ZVVaeYxoZp54KK04hqhuAGU/OiJEsH2Azp7ipkNIhPlfUS
+         Qu+binvuYByLE6V0gns1m6U5DPtkYDtaxD7xaAl6Z4jSwpvihOvJbw2/Nf7VQd1uvhnR
+         8Xt/GAX4cWGOt61YfTjdH36twAwu0ACumePiAIcQmpfFXtWu3kxGUSh1CWCMeufmOV5h
+         NgDI6O/dYTCZ2QFWe37dOfdvEw1q+NPpfs7OXdLLveMZFLXe7NsfMnx/01ypJV+l+dEI
+         Z9Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=gTzpcmEs2Hk1AEPi3IIm1xVjZo9fqCrWWz1Ibe9SDvY=;
-        b=b9CMX4rPytWnYNO/5gv3uau0Q6a+TvMe+HZGdvVaolAftmiDAzscE1SxU7O8J7MNOG
-         pBdYAfX/TjlnpK4s04JN/HI9BoeBAZIF/IH/L0B3n9bNxHHsY8qw/zo4gkdir/6pCFgC
-         9HfPji8tnIuh6rfPQyHBb0l28jtGJ18c91am4Yi1E9LNhUiiH23F3be/QqZyPi6qADUP
-         jZ2GL18jhF4EDuOASMTaHyQ0B5fSQJeaSBa6VKTQev7uQst4K/fuIp3E0aHvGaP+ykKN
-         waMDuwR7I+j8/niGAxNs11duPqOWziq2lilaz4v46f9KsnpGAUMwuOjrIl+cepoHvsxn
-         K5Cw==
-X-Gm-Message-State: AOAM530ey4V1TeIIEybn+4UUT/e6FPAYlOkpvfZrwvH1YmXpqFPjd2oD
-        2cIN/1lIteHXtRDETUs5lkxe2dnpYSERrQ==
-X-Google-Smtp-Source: ABdhPJxdQrwwPjtDdFWdI6vQBp6tDzf6SdOvp0wgYXXjf8/BEMgksN9cf4pf2idLgcZ6XQj7YKnQYw==
-X-Received: by 2002:a05:6e02:1be9:: with SMTP id y9mr30066944ilv.219.1638728201435;
-        Sun, 05 Dec 2021 10:16:41 -0800 (PST)
+        bh=gt+qqIZLE2dZSXAAMPQWb5DoYRB6aUa13mxL5Cp0tV8=;
+        b=pPKnKI8m20kmmUiwu1tmfEZI0ujxsmvfucvaj/IzUgvVaXxPJpupQdf/WxMaOenEMP
+         rtuBO0A+xN/zGYDosnAcKzXwkm2VZAhgY96OiNtwnQLdcKHL0bmcIJK8MCkN22XPNEor
+         KXZpBXbuCxM3ADjDwh6X36HAoiLP3xP+joGwR1I4pNzA22cJLA7BRKZv16z1MiTFjnAY
+         wNTsKzgE2E4pMITES4yir8KlzmI+YsIcNlyQ8LkMTA5zpg6/9wihHylACaE00dVu3l3s
+         FWNo7s3jQbZpSZLpzsoTbHTDuknbGzESLdDJrUhxo8Tn/eQMSVEC0rWIy+fmtNU+2XDN
+         EhFQ==
+X-Gm-Message-State: AOAM530Tl1ULDbuG4TB/69Q6NRkSFzNx1wsVBq2NEqNkaGK0QxK/Gdpt
+        G6mehLmDjS44dtefiyqP6HTNhtDB+KkK2A==
+X-Google-Smtp-Source: ABdhPJw5fYMuRYYgURrYu587ORTuxZkZoRfwDLpqheEQ4Czg5lKg1oVhih5xGrdUbFWNZcndEnHcFw==
+X-Received: by 2002:a92:d24e:: with SMTP id v14mr26426762ilg.55.1638728203719;
+        Sun, 05 Dec 2021 10:16:43 -0800 (PST)
 Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:9ea0:bb99:b16a:6159])
-        by smtp.gmail.com with ESMTPSA id z12sm5808164ilu.27.2021.12.05.10.16.40
+        by smtp.gmail.com with ESMTPSA id z12sm5808164ilu.27.2021.12.05.10.16.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 10:16:41 -0800 (PST)
+        Sun, 05 Dec 2021 10:16:43 -0800 (PST)
 From:   Adam Ford <aford173@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     benjamin.gaignard@collabora.com, cphealy@gmail.com,
-        nicolas@ndufresne.ca, Lucas Stach <l.stach@pengutronix.de>,
+        nicolas@ndufresne.ca, Adam Ford <aford173@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
@@ -62,12 +62,13 @@ Cc:     benjamin.gaignard@collabora.com, cphealy@gmail.com,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-staging@lists.linux.dev
-Subject: [RFC 3/5] soc: imx: imx8m-blk-ctrl: add i.MX8MQ VPU blk-ctrl
-Date:   Sun,  5 Dec 2021 12:16:16 -0600
-Message-Id: <20211205181618.1041699-4-aford173@gmail.com>
+Subject: [RFC 4/5] media: hantro: split i.MX8MQ G1 and G2 code
+Date:   Sun,  5 Dec 2021 12:16:17 -0600
+Message-Id: <20211205181618.1041699-5-aford173@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211205181618.1041699-1-aford173@gmail.com>
 References: <20211205181618.1041699-1-aford173@gmail.com>
@@ -77,108 +78,243 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Stach <l.stach@pengutronix.de>
+The VPU in the i.MX8MQ is really the combination of Hantro G1 and
+Hantro G2. With the updated vpu-blk-ctrl, the power domains system
+can enable and disable them separately as well as pull them out of
+reset. This simplifies the code and lets them run independently.
 
-This adds the necessary bits to drive the VPU blk-ctrl on the i.MX8MQ, to
-avoid putting more of this functionality into the decoder driver.
-
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Signed-off-by: Adam Ford <aford173@gmail.com>
 ---
- drivers/soc/imx/imx8m-blk-ctrl.c | 67 ++++++++++++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ drivers/staging/media/hantro/hantro_drv.c   |   4 +-
+ drivers/staging/media/hantro/hantro_hw.h    |   2 +-
+ drivers/staging/media/hantro/imx8m_vpu_hw.c | 119 +++-----------------
+ 3 files changed, 19 insertions(+), 106 deletions(-)
 
-diff --git a/drivers/soc/imx/imx8m-blk-ctrl.c b/drivers/soc/imx/imx8m-blk-ctrl.c
-index 519b3651d1d9..66c879bcc66b 100644
---- a/drivers/soc/imx/imx8m-blk-ctrl.c
-+++ b/drivers/soc/imx/imx8m-blk-ctrl.c
-@@ -14,6 +14,7 @@
- #include <linux/clk.h>
- 
- #include <dt-bindings/power/imx8mm-power.h>
-+#include <dt-bindings/power/imx8mq-power.h>
- 
- #define BLK_SFT_RSTN	0x0
- #define BLK_CLK_EN	0x4
-@@ -498,6 +499,69 @@ static const struct imx8m_blk_ctrl_data imx8mm_disp_blk_ctl_dev_data = {
- 	.num_domains = ARRAY_SIZE(imx8mm_disp_blk_ctl_domain_data),
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index ab2467998d29..d803252a5aba 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -608,8 +608,8 @@ static const struct of_device_id of_hantro_match[] = {
+ 	{ .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
+ #endif
+ #ifdef CONFIG_VIDEO_HANTRO_IMX8M
+-	{ .compatible = "nxp,imx8mq-vpu", .data = &imx8mq_vpu_variant, },
+-	{ .compatible = "nxp,imx8mq-vpu-g2", .data = &imx8mq_vpu_g2_variant },
++	{ .compatible = "nxp,imx8mq-vpu-g1", .data = &imx8mq_vpu_g1_variant, },
++	{ .compatible = "nxp,imx8mq-vpu-g2", .data = &imx8mq_vpu_g2_variant, },
+ #endif
+ #ifdef CONFIG_VIDEO_HANTRO_SAMA5D4
+ 	{ .compatible = "microchip,sama5d4-vdec", .data = &sama5d4_vdec_variant, },
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index cff817ca8d22..122b83a16663 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -299,8 +299,8 @@ enum hantro_enc_fmt {
+ 	ROCKCHIP_VPU_ENC_FMT_UYVY422 = 3,
  };
  
-+static int imx8mq_vpu_power_notifier(struct notifier_block *nb,
-+				     unsigned long action, void *data)
-+{
-+	struct imx8m_blk_ctrl *bc = container_of(nb, struct imx8m_blk_ctrl,
-+						 power_nb);
-+
-+	if (action != GENPD_NOTIFY_ON && action != GENPD_NOTIFY_PRE_OFF)
-+		return NOTIFY_OK;
-+
-+	/*
-+	 * The ADB in the VPUMIX domain has no separate reset and clock
-+	 * enable bits, but is ungated and reset together with the VPUs. The
-+	 * reset and clock enable inputs to the ADB is a logical OR of the
-+	 * VPU bits. To avoid putting a improperly reset decoder on the bus
-+	 * while making the ADB work, we release G2 from reset, but only
-+	 * enable clocks to G1.
-+	 */
-+	regmap_update_bits(bc->regmap, BLK_SFT_RSTN, BIT(0) | BIT(1), BIT(0));
-+	regmap_set_bits(bc->regmap, BLK_CLK_EN, BIT(1));
-+
-+	if (action == GENPD_NOTIFY_ON) {
-+		/*
-+		 * On power up we have no software backchannel to the GPC to
-+		 * wait for the ADB handshake to happen, so we just delay for a
-+		 * bit. On power down the GPC driver waits for the handshake.
-+		 */
-+		udelay(5);
-+
-+		/* set "fuse" bits to enable the VPUs */
-+		regmap_set_bits(bc->regmap, 0x8, 0xffffffff);
-+		regmap_set_bits(bc->regmap, 0xc, 0xffffffff);
-+		regmap_set_bits(bc->regmap, 0x10, 0xffffffff);
-+	}
-+
-+	return NOTIFY_OK;
-+}
-+
-+static const struct imx8m_blk_ctrl_domain_data imx8mq_vpu_blk_ctl_domain_data[] = {
-+	[IMX8MQ_VPUBLK_PD_G1] = {
-+		.name = "vpublk-g1",
-+		.clk_names = (const char *[]){ "g1", },
-+		.num_clks = 1,
-+		.gpc_name = "g1",
-+		.rst_mask = BIT(1),
-+		.clk_mask = BIT(1),
-+	},
-+	[IMX8MQ_VPUBLK_PD_G2] = {
-+		.name = "vpublk-g2",
-+		.clk_names = (const char *[]){ "g2", },
-+		.num_clks = 1,
-+		.gpc_name = "g2",
-+		.rst_mask = BIT(0),
-+		.clk_mask = BIT(0),
-+	},
-+};
-+
-+static const struct imx8m_blk_ctrl_data imx8mq_vpu_blk_ctl_dev_data = {
-+	.max_reg = 0x14,
-+	.power_notifier_fn = imx8mq_vpu_power_notifier,
-+	.domains = imx8mq_vpu_blk_ctl_domain_data,
-+	.num_domains = ARRAY_SIZE(imx8mq_vpu_blk_ctl_domain_data),
-+};
-+
- static const struct of_device_id imx8m_blk_ctrl_of_match[] = {
- 	{
- 		.compatible = "fsl,imx8mm-vpu-blk-ctrl",
-@@ -505,6 +569,9 @@ static const struct of_device_id imx8m_blk_ctrl_of_match[] = {
- 	}, {
- 		.compatible = "fsl,imx8mm-disp-blk-ctrl",
- 		.data = &imx8mm_disp_blk_ctl_dev_data
-+	} ,{
-+		.compatible = "fsl,imx8mq-vpu-blk-ctrl",
-+		.data = &imx8mq_vpu_blk_ctl_dev_data
- 	} ,{
- 		/* Sentinel */
- 	}
++extern const struct hantro_variant imx8mq_vpu_g1_variant;
+ extern const struct hantro_variant imx8mq_vpu_g2_variant;
+-extern const struct hantro_variant imx8mq_vpu_variant;
+ extern const struct hantro_variant px30_vpu_variant;
+ extern const struct hantro_variant rk3036_vpu_variant;
+ extern const struct hantro_variant rk3066_vpu_variant;
+diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+index 1a43f6fceef9..c9f6e8472258 100644
+--- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
++++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+@@ -13,67 +13,6 @@
+ #include "hantro_g1_regs.h"
+ #include "hantro_g2_regs.h"
+ 
+-#define CTRL_SOFT_RESET		0x00
+-#define RESET_G1		BIT(1)
+-#define RESET_G2		BIT(0)
+-
+-#define CTRL_CLOCK_ENABLE	0x04
+-#define CLOCK_G1		BIT(1)
+-#define CLOCK_G2		BIT(0)
+-
+-#define CTRL_G1_DEC_FUSE	0x08
+-#define CTRL_G1_PP_FUSE		0x0c
+-#define CTRL_G2_DEC_FUSE	0x10
+-
+-static void imx8m_soft_reset(struct hantro_dev *vpu, u32 reset_bits)
+-{
+-	u32 val;
+-
+-	/* Assert */
+-	val = readl(vpu->ctrl_base + CTRL_SOFT_RESET);
+-	val &= ~reset_bits;
+-	writel(val, vpu->ctrl_base + CTRL_SOFT_RESET);
+-
+-	udelay(2);
+-
+-	/* Release */
+-	val = readl(vpu->ctrl_base + CTRL_SOFT_RESET);
+-	val |= reset_bits;
+-	writel(val, vpu->ctrl_base + CTRL_SOFT_RESET);
+-}
+-
+-static void imx8m_clk_enable(struct hantro_dev *vpu, u32 clock_bits)
+-{
+-	u32 val;
+-
+-	val = readl(vpu->ctrl_base + CTRL_CLOCK_ENABLE);
+-	val |= clock_bits;
+-	writel(val, vpu->ctrl_base + CTRL_CLOCK_ENABLE);
+-}
+-
+-static int imx8mq_runtime_resume(struct hantro_dev *vpu)
+-{
+-	int ret;
+-
+-	ret = clk_bulk_prepare_enable(vpu->variant->num_clocks, vpu->clocks);
+-	if (ret) {
+-		dev_err(vpu->dev, "Failed to enable clocks\n");
+-		return ret;
+-	}
+-
+-	imx8m_soft_reset(vpu, RESET_G1 | RESET_G2);
+-	imx8m_clk_enable(vpu, CLOCK_G1 | CLOCK_G2);
+-
+-	/* Set values of the fuse registers */
+-	writel(0xffffffff, vpu->ctrl_base + CTRL_G1_DEC_FUSE);
+-	writel(0xffffffff, vpu->ctrl_base + CTRL_G1_PP_FUSE);
+-	writel(0xffffffff, vpu->ctrl_base + CTRL_G2_DEC_FUSE);
+-
+-	clk_bulk_disable_unprepare(vpu->variant->num_clocks, vpu->clocks);
+-
+-	return 0;
+-}
+-
+ /*
+  * Supported formats.
+  */
+@@ -209,27 +148,6 @@ static irqreturn_t imx8m_vpu_g2_irq(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static int imx8mq_vpu_hw_init(struct hantro_dev *vpu)
+-{
+-	vpu->ctrl_base = vpu->reg_bases[vpu->variant->num_regs - 1];
+-
+-	return 0;
+-}
+-
+-static void imx8m_vpu_g1_reset(struct hantro_ctx *ctx)
+-{
+-	struct hantro_dev *vpu = ctx->dev;
+-
+-	imx8m_soft_reset(vpu, RESET_G1);
+-}
+-
+-static void imx8m_vpu_g2_reset(struct hantro_ctx *ctx)
+-{
+-	struct hantro_dev *vpu = ctx->dev;
+-
+-	imx8m_soft_reset(vpu, RESET_G2);
+-}
+-
+ /*
+  * Supported codec ops.
+  */
+@@ -237,19 +155,16 @@ static void imx8m_vpu_g2_reset(struct hantro_ctx *ctx)
+ static const struct hantro_codec_ops imx8mq_vpu_codec_ops[] = {
+ 	[HANTRO_MODE_MPEG2_DEC] = {
+ 		.run = hantro_g1_mpeg2_dec_run,
+-		.reset = imx8m_vpu_g1_reset,
+ 		.init = hantro_mpeg2_dec_init,
+ 		.exit = hantro_mpeg2_dec_exit,
+ 	},
+ 	[HANTRO_MODE_VP8_DEC] = {
+ 		.run = hantro_g1_vp8_dec_run,
+-		.reset = imx8m_vpu_g1_reset,
+ 		.init = hantro_vp8_dec_init,
+ 		.exit = hantro_vp8_dec_exit,
+ 	},
+ 	[HANTRO_MODE_H264_DEC] = {
+ 		.run = hantro_g1_h264_dec_run,
+-		.reset = imx8m_vpu_g1_reset,
+ 		.init = hantro_h264_dec_init,
+ 		.exit = hantro_h264_dec_exit,
+ 	},
+@@ -258,14 +173,12 @@ static const struct hantro_codec_ops imx8mq_vpu_codec_ops[] = {
+ static const struct hantro_codec_ops imx8mq_vpu_g2_codec_ops[] = {
+ 	[HANTRO_MODE_HEVC_DEC] = {
+ 		.run = hantro_g2_hevc_dec_run,
+-		.reset = imx8m_vpu_g2_reset,
+ 		.init = hantro_hevc_dec_init,
+ 		.exit = hantro_hevc_dec_exit,
+ 	},
+ 	[HANTRO_MODE_VP9_DEC] = {
+ 		.run = hantro_g2_vp9_dec_run,
+ 		.done = hantro_g2_vp9_dec_done,
+-		.reset = imx8m_vpu_g2_reset,
+ 		.init = hantro_vp9_dec_init,
+ 		.exit = hantro_vp9_dec_exit,
+ 	},
+@@ -275,7 +188,7 @@ static const struct hantro_codec_ops imx8mq_vpu_g2_codec_ops[] = {
+  * VPU variants.
+  */
+ 
+-static const struct hantro_irq imx8mq_irqs[] = {
++static const struct hantro_irq imx8mq_g1_irqs[] = {
+ 	{ "g1", imx8m_vpu_g1_irq },
+ };
+ 
+@@ -283,10 +196,12 @@ static const struct hantro_irq imx8mq_g2_irqs[] = {
+ 	{ "g2", imx8m_vpu_g2_irq },
+ };
+ 
+-static const char * const imx8mq_clk_names[] = { "g1", "g2", "bus" };
+-static const char * const imx8mq_reg_names[] = { "g1", "g2", "ctrl" };
++static const char * const imx8mq_g1_clk_names[] = { "g1" };
++static const char * const imx8mq_g1_reg_names[] = { "g1" };
++static const char * const imx8mq_g2_clk_names[] = { "g2" };
++static const char * const imx8mq_g2_reg_names[] = { "g2" };
+ 
+-const struct hantro_variant imx8mq_vpu_variant = {
++const struct hantro_variant imx8mq_vpu_g1_variant = {
+ 	.dec_fmts = imx8m_vpu_dec_fmts,
+ 	.num_dec_fmts = ARRAY_SIZE(imx8m_vpu_dec_fmts),
+ 	.postproc_fmts = imx8m_vpu_postproc_fmts,
+@@ -295,14 +210,12 @@ const struct hantro_variant imx8mq_vpu_variant = {
+ 	.codec = HANTRO_MPEG2_DECODER | HANTRO_VP8_DECODER |
+ 		 HANTRO_H264_DECODER,
+ 	.codec_ops = imx8mq_vpu_codec_ops,
+-	.init = imx8mq_vpu_hw_init,
+-	.runtime_resume = imx8mq_runtime_resume,
+-	.irqs = imx8mq_irqs,
+-	.num_irqs = ARRAY_SIZE(imx8mq_irqs),
+-	.clk_names = imx8mq_clk_names,
+-	.num_clocks = ARRAY_SIZE(imx8mq_clk_names),
+-	.reg_names = imx8mq_reg_names,
+-	.num_regs = ARRAY_SIZE(imx8mq_reg_names)
++	.irqs = imx8mq_g1_irqs,
++	.num_irqs = ARRAY_SIZE(imx8mq_g1_irqs),
++	.clk_names = imx8mq_g1_clk_names,
++	.num_clocks = ARRAY_SIZE(imx8mq_g1_clk_names),
++	.reg_names = imx8mq_g1_reg_names,
++	.num_regs = ARRAY_SIZE(imx8mq_g1_reg_names),
+ };
+ 
+ const struct hantro_variant imx8mq_vpu_g2_variant = {
+@@ -314,10 +227,10 @@ const struct hantro_variant imx8mq_vpu_g2_variant = {
+ 	.postproc_ops = &hantro_g2_postproc_ops,
+ 	.codec = HANTRO_HEVC_DECODER | HANTRO_VP9_DECODER,
+ 	.codec_ops = imx8mq_vpu_g2_codec_ops,
+-	.init = imx8mq_vpu_hw_init,
+-	.runtime_resume = imx8mq_runtime_resume,
+ 	.irqs = imx8mq_g2_irqs,
+ 	.num_irqs = ARRAY_SIZE(imx8mq_g2_irqs),
+-	.clk_names = imx8mq_clk_names,
+-	.num_clocks = ARRAY_SIZE(imx8mq_clk_names),
++	.clk_names = imx8mq_g2_clk_names,
++	.num_clocks = ARRAY_SIZE(imx8mq_g2_clk_names),
++	.reg_names = imx8mq_g2_reg_names,
++	.num_regs = ARRAY_SIZE(imx8mq_g2_reg_names),
+ };
 -- 
 2.32.0
 

@@ -2,362 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC99468BB4
+	by mail.lfdr.de (Postfix) with ESMTP id A5C12468BB5
 	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 16:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235666AbhLEPS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 10:18:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36479 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235646AbhLEPSl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 10:18:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638717313;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CPczSTn9rJ4tF0n02nzdBohmqW7rspZdQKioW5HUwoY=;
-        b=b6uIHn2jQZ4RKx6QXbdxIJtJZ1727eh/wV5oeAwQA6Bge1l1CF3kLX3V1+fWhjQnve7JDi
-        x5PoWh/nS97XH2kRgkGRTOlmUKeQ+GxdzMtEtyQTcNvu0ZK1Ig300gNCqz8M9p3D5fRsJX
-        lTtAKc7VM70+tigUATCQ6FxTr6chfXc=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-45-hMi48KZwN-y09zbfV0KQVA-1; Sun, 05 Dec 2021 10:15:12 -0500
-X-MC-Unique: hMi48KZwN-y09zbfV0KQVA-1
-Received: by mail-wm1-f70.google.com with SMTP id a64-20020a1c7f43000000b003335e5dc26bso4667947wmd.8
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 07:15:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CPczSTn9rJ4tF0n02nzdBohmqW7rspZdQKioW5HUwoY=;
-        b=RdoJPWgr3Sp05/fcpf/WQRjAErmE8JYDiHdo42AgadWLf0lhm+4jIl1wIQg+j8iERD
-         0ezLafIROefE8D9YOwLoN1ZHtULfFU89pJ8jZX68o1DL6IemDFlxTtM9GoBSes3Rllga
-         ms1Dx6wUs6JBntDiiDHW2qQj5BpC/G8RMvwmoXBrFJxlPk1jfgQFTJ78gthJt8O/jKfM
-         RzDXHetAhOjNXLcmIAFOrBPTlngiZ1jC4oV95CuWdZGWp2BnfpbJDFBQLqpxGeAIb8YM
-         bhVSKwOcFF5+bfaRsYqMyabk+g3ey1jQro3fHOsYty0iALcFYE0/99HvVUd0+FfB5rEP
-         b8Og==
-X-Gm-Message-State: AOAM532EObFbttS83q93WzunOzV5IxtgejfwDLaqH6otk10AXQ8wK1a7
-        DfGuuTG0j+aZgEkuw4hd86C/vvLIFJz+J0NaBlmQ9YgiHowXu+RzOqsVTCNohoMIdQQZQuG6Ea5
-        +oa0HXI8+FA/Dk/DXZPHUM4Zu
-X-Received: by 2002:adf:dd0d:: with SMTP id a13mr37533578wrm.259.1638717310710;
-        Sun, 05 Dec 2021 07:15:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz+xctttq7Lp1gADO7YjK5mN7E9NfC/+wjfBoAQ2aRUzbZkLalo/9wtKDZIOo6a5qVZRCibww==
-X-Received: by 2002:adf:dd0d:: with SMTP id a13mr37533553wrm.259.1638717310390;
-        Sun, 05 Dec 2021 07:15:10 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id l3sm9692054wmq.46.2021.12.05.07.15.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 07:15:10 -0800 (PST)
-Date:   Sun, 5 Dec 2021 16:15:08 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        Alexei Budankov <abudankov@huawei.com>,
-        Riccardo Mancini <rickyman7@gmail.com>
-Subject: Re: [PATCH v12 00/16] Introduce threaded trace streaming for basic
- perf record operation
-Message-ID: <YazXfO9CoCaR4THO@krava>
-References: <cover.1637675515.git.alexey.v.bayduraev@linux.intel.com>
+        id S235650AbhLEPTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 10:19:00 -0500
+Received: from mail-dm6nam08on2085.outbound.protection.outlook.com ([40.107.102.85]:48143
+        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235545AbhLEPSr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 10:18:47 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YMHNXnHgkfJHqQ7ZdX/iNY0ob/yL2tBYuDGU/BObMVZX1XdfrvfGgXk1VVTUJSx0QWEWsphgc8uXhjHBEv5GoCadiwuz4KzC0rsfYMoXjbpnPFPVlV9gGGOUoIb6kyMB5NKtkM47u4a13pzu7BPcCRXa6nTDmlvrM/8BeHZuTEUSQ/MGXGuy2mfOPD8fUUa+GLPx6gGXfBsrpckORLTKzCzMoeU88WR2/UIakDH5BaxUPIwRqPv5+Gnup/RISIv/GO2QkT+7Aj3c14IDxfRqlRqxS/2VYf70Y/MgTZCZgI3NRsmXwiQKnPlT9XcnH8TMVqjW8qao3aLOcHymoZG6LA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=khkHWrbJa813oXDBrGIM/UlzNE2cuGL/LHBtvtV0bco=;
+ b=d7RtvfaT0y1q1tT9isej9/UXFz8wZ+mXAl605X5l1H0OnywbEfeLz/kOs7P6OQCKTR97F8vhrzaCJscPjr61hudwB5qT+cBGepInOgkHXz3jj0Ckc9rOdqLughiNLY/jymrQIJCnaxSz+W8tRn8W+JiAxOPm0DqLV8pBIQcaKZWFiHMTmPve5Xrp7bThImNffedqHCzahCBKvTlat9KvjgfFWi3GA6AT5lH8qGyk2BkooeaeuLrG1dHh+dol6XfVcp9VVBQdwp7SD2Z79fty6F5ZaX73IATO4qg7jC2DR6WsfYEdS3ZlDs+Pf2BFE5/R2OqEdQpOj/AmDgfaWU6N7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=khkHWrbJa813oXDBrGIM/UlzNE2cuGL/LHBtvtV0bco=;
+ b=QSWQivyTTcfR4s5bvFKVgCsruu9LGRT1VkpLqs6CL3RRYVMtPpbSwd83ah+6wU1Q4dDIPwDxc/dXZBqTMTsT/fl8TBmmTVBlRdNZaknHOHyU0s8jyY9pRFq+EaUVBrepWir5+VlztFsA8F/tJO4uRBHr5p/K4PL6CfbOimINmM0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by DM4PR12MB5264.namprd12.prod.outlook.com (2603:10b6:5:39c::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Sun, 5 Dec
+ 2021 15:15:18 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::1ddd:71e4:5803:e44a]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::1ddd:71e4:5803:e44a%3]) with mapi id 15.20.4734.028; Sun, 5 Dec 2021
+ 15:15:18 +0000
+Subject: Re: [PATCH] x86/efi: select ARCH_USE_MEMREMAP_PROT
+To:     Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211204174156.977245-1-arnd@kernel.org>
+ <CAMj1kXGj=AGp6im71+OETHGSCat0mQfOf7FcDdyKwxFEBubzdw@mail.gmail.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+Message-ID: <120102a7-3c03-ce36-198c-f60f059a6cf9@amd.com>
+Date:   Sun, 5 Dec 2021 09:15:15 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+In-Reply-To: <CAMj1kXGj=AGp6im71+OETHGSCat0mQfOf7FcDdyKwxFEBubzdw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN7PR18CA0019.namprd18.prod.outlook.com
+ (2603:10b6:806:f3::30) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1637675515.git.alexey.v.bayduraev@linux.intel.com>
+Received: from office-ryzen.texastahm.com (67.79.209.213) by SN7PR18CA0019.namprd18.prod.outlook.com (2603:10b6:806:f3::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.14 via Frontend Transport; Sun, 5 Dec 2021 15:15:17 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3a082944-55ed-45da-9419-08d9b8020bee
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5264:
+X-Microsoft-Antispam-PRVS: <DM4PR12MB526459279A25ABE37128E6DCEC6C9@DM4PR12MB5264.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: knLDuJCIjNkTvSJpe3z0PixhrijuPCaKsT2VmhcTgJQCoNg4XQh+8a+yq+lVP15Ze4L+U+Qs4COJxm5l+KQPnajoVjonVgv3niUFHhadmJSGF8M56FZON4Bj8LzFR/UCc1TdwiQRLqgERF9BBoCh506JaS0ZUfuelRM5gf0G6zRzo3B2hiIacn4EFZUaRqr1vWeSZ6coxMu4pKwZOU+kMiWoNdqHz4eJ49pHzS442g1pkevKUk2NCzlEhhXX0WZUJjw7e67wI9uThuzP0FDQ781sL5COuYsHRFE9OMfScApeFdwxqsup9SQhVgYvB0FpkiYkCSpixFkYKr0ZpukP9f9OueMsm77apdHF3an0H9wh7b/Jc9iE22C6ZX2PXPeF6EVtlc5kaeZvVy0qG4DAFLr2NQktH+KW6hZ2LbqyQ8yZCQ6hfa6qXMye9SobWdrARAMGsjOAM6xRTpDFPkn01msmUTV7lj84vOwX1Ub2GkxC+XZITZ7WRjzQ5m3GRz1kT+vQmykmlPfMzmuC9vCdp+k3QHvFru3MMseOvBpYrO2njv1qYTWCjBWk+0SDBX6kIAA4z+4wO+ioWMeHIsA4luit/gGLsixO3yvXMj3osk/kr/CcTowX/8Q2z/9rRMcWumAokTvq8NO0ONxOdMsX8ZIkdX36BCK9tRC3BzpT/w6sPrq6u0UcjiQ13yhbfAvjQ8cFmO7kay7aPG6/ZL8WTtc8tjWY89SUWjqiCIm+JFFMhCDc1ak/EK2f9nQ3mTif
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(66946007)(4326008)(53546011)(508600001)(31696002)(2616005)(31686004)(110136005)(66476007)(8676002)(186003)(66556008)(36756003)(5660300002)(38100700002)(6506007)(7416002)(316002)(83380400001)(2906002)(6486002)(6512007)(54906003)(26005)(956004)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bTBXQ2JKZTlxWjVncStiY3dWc3FJbStKUmN3YjNwTG4vcWNqbFJabzhkZmtJ?=
+ =?utf-8?B?WEIvSGtNa3hlSVNGNG9qN3BCeHBiK29SbnNDYTFDSWc4ODJTMzF6NlJUckww?=
+ =?utf-8?B?RW1RTFBpT0JMZE5VZklJLzdYS3l2WGo3RTJIRHhWSXhaZmExVjlrdXFKNmhm?=
+ =?utf-8?B?ZHNOb2VXRStuNFVHejZuMnpDQjZVcmg1eGFQT2M0UU1XU1F5Q3o0ODA3Qmdm?=
+ =?utf-8?B?dnRZZmM3blRkYzIxTHM4K3JoRmtXQjg0bmVuSXR4alNaQ3hyRFhwVU53NExw?=
+ =?utf-8?B?Ti9DbUYvdjlkUkhzUXZyS055QmF1TExEeXp5bHBUQjREREk2WmN6bHQrUUNu?=
+ =?utf-8?B?ZlNleC9sU01tZzdTU0hydzBIeVVTMEZDaFdreXV2WHNXb1JWTUZTVXI3dUcr?=
+ =?utf-8?B?b2hOWmNselkxTGlPNEhMREVHK3hCRHh5ekdWS1FjZHE3d29rWE92ckxBckJM?=
+ =?utf-8?B?ck1wZnN4U1BleVZjcm1Bd3dpQWRrSWU1NVBPS2FuNVJrQktQNjVhaWNZSG84?=
+ =?utf-8?B?anVpRHpuU0oxRlcwVWY5T2hvcnRkTTNIZ24zTzZ1ekIxRGw4Zmp3NUZHS0Ex?=
+ =?utf-8?B?MmFQcHFzM1Y0R2p1V0crT0JjWGF3VGtHQnp0YUJpbEttZFJEeWZCNXRUK0xt?=
+ =?utf-8?B?TkdZcVFpbUVlREpkUWRGOGRYUjBQUkh1eEtWZy83aGhuUHM2Y2pXTWhhTjlT?=
+ =?utf-8?B?MFNmKzlmMEF4dWlhcE0rUHRkOXpld3BxcnUrZ3VaQTVNYWhhSFdmcVVsYXNk?=
+ =?utf-8?B?WVpYNlBUS1I0blRxcmZpK21oNkxLQXRwOHZ3ckkva21ETjJ5SER6aHdpQVZs?=
+ =?utf-8?B?WWN1NWpvQjBBd2Q3bDhoVU1JSXdrZEN3SnVBR2lOQnFheGdMTWxCblRPVis5?=
+ =?utf-8?B?T0QzMzNpY1htZExnNVY3d3U2elFLRXBMQU5KRWx6T1JtZk1uQ3FRaDJ4RnJh?=
+ =?utf-8?B?emNVeDA0WForTHR6US9uUGtrdUtFZ1AvUndCWUxlbEZqcU9McWJrLzJZQXh5?=
+ =?utf-8?B?MnFJVE1TUlBLcWxtMVgrRFI3dkpXTUVpSGhLVzN0SWUrSEpJQUtpTFZUNjZN?=
+ =?utf-8?B?ZUljWGNjSE1LUGVkZERuaHNjUEVyZjJPRm9jMkk1aHR5T3Rndktpd05ZVUxX?=
+ =?utf-8?B?bzJLMzBMY0tud0JacUJJTzU2M3QzbVNxeTFZTmtMSmtDZVlUV1dGK2ZtdU1L?=
+ =?utf-8?B?YXg1aTg2cWVTaVFLcUM1NXdnY2Y3SG5qK2xWcGhpNGFsUHYwQjV0UGhsOEta?=
+ =?utf-8?B?VitWMVVMQy82QjN2U0ErTE91VU9rTkZBT1ZHd09EMWVzTEJnNExSWjlwM0lZ?=
+ =?utf-8?B?Y0xKZkxUZUQzSlB3NzdNTTN0dG1xZFR4UDRaN2JRQ0x4UnVEeFhnSHhZakY5?=
+ =?utf-8?B?VjlmSmlDbTltdnA5dHd3MU1lNWJyQk9WZU03UlVaTU1OZDBRSWhseGE0MzJk?=
+ =?utf-8?B?cG4rQ3d0RkxlcTRLd3RUOEVqeWtQdmc0U2JJeTh2bjNjc1Q3bnBZVmwxQ1ZX?=
+ =?utf-8?B?SWd1RmlPNzlRYlZ3aEF1cWZNS01QWTJGRndKRlJoOWhCT1NoTFdUa01USCt1?=
+ =?utf-8?B?aEJsbVFLdCtNczRFbDhnL0VsV0tzTVpuK1gvVWdCREZkU1BEaEhqdk9aM2sv?=
+ =?utf-8?B?NDZ1eGFrR1RzYllnOHlqOFR2SnFBSWxheDZYU3BMNkMrSTRXbnNtQk1wb0xl?=
+ =?utf-8?B?UzA1ckd5WGxwcndUTDZnOWoxaEQ0bjQ5dGlDQUdUK3RPaXp5eVBVQkdHeFhw?=
+ =?utf-8?B?Y1hnZWQ4L2NUTlpxQ295Uk11dm5ndTRLVGRSR0pXNUhWRVU5ZER5VFZBcWN3?=
+ =?utf-8?B?RTFvRXhLVWxHc3o2MzJQRXFvRzJQUmQrcUZ0czU2SENIZVdqNFg1TE1rQ2Zv?=
+ =?utf-8?B?dFA3dDA0djZmRWhha2hOVE1pRU0vZlFML0lHci94dGxQeGpXdkl3cjExN1F5?=
+ =?utf-8?B?MXhiSG1QV1RUV2R6UUJwV2tLckY4dFNNRXAwSlBTYmNjQ1NLdTVOblJQak5u?=
+ =?utf-8?B?OWNzT0puU3NwN2JLbVU3cTVIQ1h4OVZ0WGg0L296NzAvdjRRTUUyL29HditH?=
+ =?utf-8?B?RXJrZEpqUEcvbmxveDFhNzNEMTNTTWUvVXBScUxSdDBHa3hjYzQwWGpXTW5M?=
+ =?utf-8?B?Mjd6anlJTGpUV2pTelJ1bCtZaFBFb0ZNeS9qTkdtWkpCY3ExUTd1Q3hvWkx6?=
+ =?utf-8?Q?uJydGMX6/1UhwMO/gOTanc8=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a082944-55ed-45da-9419-08d9b8020bee
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2021 15:15:18.2233
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XIFCBvgB55DhCMJSx/ZpFi8pkRlx2h34Q2Sgzvk4JS9INinHROXpnPa9clmUFFRKsPZP+WpOwa1c03f2ymQBjw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5264
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 05:07:56PM +0300, Alexey Bayduraev wrote:
-> Changes in v12:
-> - fixed nr_threads=1 cases
-> - fixed "Woken up %ld times" message
-> - removed unnecessary record__fini_thread_masks function
-> - moved bytes written/compressed statistics to struct record_thread
-> - moved all unnecessary debug messages to verbose=2 level
-> - renamed "socket" option to "package" for consistency with util/cputopo.h
-> - excluded single trace file reading patches
-> 
-> v11: https://lore.kernel.org/lkml/cover.1629186429.git.alexey.v.bayduraev@linux.intel.com/
 
 
-I'm getting perf record hang with:
+On 12/4/21 11:55 AM, Ard Biesheuvel wrote:
+> On Sat, 4 Dec 2021 at 18:42, Arnd Bergmann <arnd@kernel.org> wrote:
+>>
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> The patch to map the EFI memmap as encrypted introduces a
+>> link failure in configurations without encryption support:
+>>
+>> x86_64-linux-ld: arch/x86/platform/efi/quirks.o: in function `efi_arch_mem_reserve':
+>> quirks.c:(.init.text+0x127): undefined reference to `early_memremap_prot'
+>>
+>> Select the necessary symbol here as well to fix the build.
+>>
+>> Fixes: 8f1dd76c9b55 ("x86/sme: Explicitly map new EFI memmap table as encrypted")
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> Thanks for the report. I'll fold this fix into the original patch instead.
 
-[root@krava perf]# ./perf record --threads
-^C[ perf record: Woken up 1 times to write data ]
+Thanks Arnd and Ard!
 
-^C^C^C^C^C
-
-
-
-
-with following backtrace:
-
-
-(gdb) bt
-#0  0x00007f8115d2885f in __GI___poll (fds=fds@entry=0x7ffd2116b930, nfds=1, timeout=1000) at ../sysdeps/unix/sysv/linux/poll.c:29
-#1  0x00007f811574029e in poll (__timeout=<optimized out>, __nfds=<optimized out>, __fds=0x7ffd2116b930) at /usr/include/bits/poll2.h:48
-#2  Curl_poll (timeout_ms=<optimized out>, nfds=<optimized out>, ufds=0x7ffd2116b930) at ../../lib/select.c:374
-#3  Curl_poll (ufds=0x7ffd2116b930, nfds=<optimized out>, timeout_ms=<optimized out>) at ../../lib/select.c:329
-#4  0x00007f8115739cf7 in multi_wait (multi=multi@entry=0x3458c50, extra_fds=extra_fds@entry=0x0, extra_nfds=extra_nfds@entry=0, timeout_ms=<optimized out>, 
-    timeout_ms@entry=1000, ret=ret@entry=0x0, extrawait=extrawait@entry=false, use_wakeup=<optimized out>) at ../../lib/multi.c:1282
-#5  0x00007f8115739f26 in multi_wait (use_wakeup=false, extrawait=false, ret=0x0, timeout_ms=1000, extra_nfds=0, extra_fds=0x0, multi=0x3458c50)
-    at ../../lib/multi.c:1410
-#6  curl_multi_wait (multi=multi@entry=0x3458c50, extra_fds=extra_fds@entry=0x0, extra_nfds=extra_nfds@entry=0, timeout_ms=timeout_ms@entry=1000, 
-    ret=ret@entry=0x0) at ../../lib/multi.c:1411
-#7  0x00007f811653a7f2 in debuginfod_query_server (c=c@entry=0x2571fb0, build_id=build_id@entry=0x7ffd2116ed70 "c6eee0984964c63e328d13be49d68bd52595ad00", 
-    build_id_len=build_id_len@entry=0, type=type@entry=0x7f811653c3ba "debuginfo", filename=filename@entry=0x0, path=path@entry=0x7ffd2116dcf8)
-    at /usr/src/debug/elfutils-0.186-1.fc35.x86_64/debuginfod/debuginfod-client.c:1057
-#8  0x00007f811653b2a6 in debuginfod_find_debuginfo (client=client@entry=0x2571fb0, 
-    build_id=build_id@entry=0x7ffd2116ed70 "c6eee0984964c63e328d13be49d68bd52595ad00", build_id_len=build_id_len@entry=0, path=path@entry=0x7ffd2116dcf8)
-    at /usr/src/debug/elfutils-0.186-1.fc35.x86_64/debuginfod/debuginfod-client.c:1511
-#9  0x00000000004b18e1 in build_id_cache__find_debug (nsi=0x0, sbuild_id=0x7ffd2116ed70 "c6eee0984964c63e328d13be49d68bd52595ad00") at util/build-id.c:660
-#10 build_id_cache__add (sbuild_id=sbuild_id@entry=0x7ffd2116ed70 "c6eee0984964c63e328d13be49d68bd52595ad00", 
-    name=name@entry=0x259be50 "/lib/modules/5.15.6-200.fc35.x86_64/kernel/sound/core/seq/snd-seq-dummy.ko.xz", 
-    realname=realname@entry=0x27255e0 "/usr/lib/modules/5.15.6-200.fc35.x86_64/kernel/sound/core/seq/snd-seq-dummy.ko.xz", nsi=nsi@entry=0x0, 
-    is_kallsyms=is_kallsyms@entry=false, is_vdso=is_vdso@entry=false) at util/build-id.c:724
-#11 0x00000000004b1b24 in build_id_cache__add_s (is_vdso=false, is_kallsyms=false, nsi=0x0, 
-    name=0x259be50 "/lib/modules/5.15.6-200.fc35.x86_64/kernel/sound/core/seq/snd-seq-dummy.ko.xz", 
-    sbuild_id=0x7ffd2116ed70 "c6eee0984964c63e328d13be49d68bd52595ad00") at util/build-id.c:805
-#12 build_id_cache__add_b (is_vdso=false, is_kallsyms=<optimized out>, nsi=<optimized out>, name=<optimized out>, bid=<optimized out>) at util/build-id.c:821
-#13 dso__cache_build_id (dso=<optimized out>, machine=<optimized out>, priv=<optimized out>) at util/build-id.c:889
-#14 0x0000000000501674 in machine__for_each_dso (machine=machine@entry=0x2512d58, fn=fn@entry=0x4b1a00 <dso__cache_build_id>, priv=priv@entry=0x0)
-    at util/machine.c:3179
-#15 0x00000000004b1f09 in machines__for_each_dso (priv=0x0, fn=0x4b1a00 <dso__cache_build_id>, machines=0x2512d58) at util/build-id.c:896
-#16 __perf_session__cache_build_ids (priv=0x0, fn=0x4b1a00 <dso__cache_build_id>, session=0x2512b50) at util/build-id.c:917
-#17 __perf_session__cache_build_ids (session=0x2512b50, fn=0x4b1a00 <dso__cache_build_id>, priv=0x0) at util/build-id.c:908
-#18 0x00000000004e80fb in write_build_id (ff=ff@entry=0x7ffd2116ef40, evlist=evlist@entry=0x2506050) at util/header.c:329
-#19 0x00000000004f15c1 in do_write_feat (evlist=0x2506050, p=<synthetic pointer>, type=2, ff=0x7ffd2116ef40) at util/header.c:3428
-#20 perf_header__adds_write (fd=3, evlist=0x2506050, header=0x2512b50) at util/header.c:3473
-#21 perf_session__write_header (session=0x2512b50, evlist=0x2506050, fd=3, at_exit=at_exit@entry=true) at util/header.c:3565
-#22 0x0000000000423ec4 in record__finish_output (rec=0xbba300 <record>) at builtin-record.c:1673
-#23 0x0000000000426374 in __cmd_record (argc=argc@entry=0, argv=argv@entry=0x7ffd21174770, rec=0xbba300 <record>) at builtin-record.c:2600
-#24 0x00000000004298e7 in cmd_record (argc=<optimized out>, argv=<optimized out>) at builtin-record.c:3969
-#25 0x00000000004a42eb in run_builtin (p=p@entry=0xbd0f78 <commands+216>, argc=argc@entry=2, argv=argv@entry=0x7ffd21174770) at perf.c:313
-#26 0x000000000040ec23 in handle_internal_command (argv=<optimized out>, argc=<optimized out>) at perf.c:365
-#27 run_argv (argv=<optimized out>, argcp=<optimized out>) at perf.c:409
-#28 main (argc=2, argv=0x7ffd21174770) at perf.c:539
-
-
-jirka
+Tom
 
 > 
-> Changes in v11:
-> - removed python dependency on zstd (perf test 19)
-> - captured tags from Riccardo Mancini 
-> 
-> v10: https://lore.kernel.org/lkml/cover.1626072008.git.alexey.v.bayduraev@linux.intel.com/
-> 
-> Changes in v10:
-> - renamed fdarray__clone to fdarray__dup_entry_from
-> - captured Acked-by: tags by Namhyung Kim for 09/24
-> 
-> v9: https://lore.kernel.org/lkml/cover.1625227739.git.alexey.v.bayduraev@linux.intel.com/
-> 
-> Changes in v9:
-> - fixes in [v9 01/24]:
->   - move 'nr_threads' to before 'thread_masks'
->   - combined decl+assign into one line in record__thread_mask_alloc
->   - releasing masks inplace in record__alloc_thread_masks
-> - split patch [v8 02/22] to [v9 02/24] and [v9 03/24]
-> - fixes in [v9 03/24]:
->   - renamed 'struct thread_data' to 'struct record_thread'
->   - moved nr_mmaps after ctlfd_pos
->   - releasing resources inplace in record__thread_data_init_maps
->   - initializing pipes by -1 value
->   - added temporary gettid() wrapper
-> - split patch [v8 03/22] to [v9 04/24] and [v9 05/24] 
-> - removed upstreamed [v8 09/22]
-> - split [v8 10/22] to [v9 12/24] and [v9 13/24]
-> - moved --threads documentation to the related patches
-> - fixed output of written/compressed stats in [v9 10/24]
-> - split patch [v8 12/22] to [v9 15/24] and [v9 16/24]
-> - fixed order of error checking for decompressed events in [v9 16/24]
-> - merged patch [v8 21/22] with [v9 23/24] and [v9 24/24]
-> - moved patch [v8 22/22] to [v9 09/24]
-> - added max reader size constant in [v9 24/24]
-> 
-> v8: https://lore.kernel.org/lkml/cover.1625065643.git.alexey.v.bayduraev@linux.intel.com/
-> 
-> Changes in v8:
-> - captured Acked-by: tags by Namhyung Kim
-> - merged with origin/perf/core
-> - added patch 21/22 introducing READER_NODATA state
-> - added patch 22/22 fixing --max-size option
-> 
-> v7: https://lore.kernel.org/lkml/cover.1624350588.git.alexey.v.bayduraev@linux.intel.com/
-> 
-> Changes in v7:
-> - fixed possible crash after out_free_threads label
-> - added missing pthread_attr_destroy() call
-> - added check of correctness of user masks 
-> - fixed zsts_data finalization
-> 
-> v6: https://lore.kernel.org/lkml/cover.1622025774.git.alexey.v.bayduraev@linux.intel.com/
-> 
-> Changes in v6:
-> - fixed leaks and possible double free in record__thread_mask_alloc()
-> - fixed leaks in record__init_thread_user_masks()
-> - fixed final mmaps flushing for threads id > 0
-> - merged with origin/perf/core
-> 
-> v5: https://lore.kernel.org/lkml/cover.1619781188.git.alexey.v.bayduraev@linux.intel.com/
-> 
-> Changes in v5:
-> - fixed leaks in record__init_thread_masks_spec()
-> - fixed leaks after failed realloc
-> - replaced "%m" to strerror()
-> - added masks examples to the documentation
-> - captured Acked-by: tags by Andi Kleen
-> - do not allow --thread option for full_auxtrace mode 
-> - split patch 06/12 to 06/20 and 07/20
-> - split patch 08/12 to 09/20 and 10/20
-> - split patches 11/12 and 11/12 to 13/20-20/20
-> 
-> v4: https://lore.kernel.org/lkml/6c15adcb-6a9d-320e-70b5-957c4c8b6ff2@linux.intel.com/
-> 
-> Changes in v4:
-> - renamed 'comm' structure to 'pipes'
-> - moved thread fd/maps messages to verbose=2
-> - fixed leaks during allocation of thread_data structures
-> - fixed leaks during allocation of thread masks
-> - fixed possible fails when releasing thread masks
-> 
-> v3: https://lore.kernel.org/lkml/7d197a2d-56e2-896d-bf96-6de0a4db1fb8@linux.intel.com/
-> 
-> Changes in v3:
-> - avoided skipped redundant patch 3/15
-> - applied "data file" and "data directory" terms allover the patch set
-> - captured Acked-by: tags by Namhyung Kim
-> - avoided braces where don't needed
-> - employed thread local variable for serial trace streaming 
-> - added specs for --thread option - core, socket, numa and user defined
-> - added parallel loading of data directory files similar to the prototype [1]
-> 
-> v2: https://lore.kernel.org/lkml/1ec29ed6-0047-d22f-630b-a7f5ccee96b4@linux.intel.com/
-> 
-> Changes in v2:
-> - explicitly added credit tags to patches 6/15 and 15/15,
->   additionally to cites [1], [2]
-> - updated description of 3/15 to explicitly mention the reason
->   to open data directories in read access mode (e.g. for perf report)
-> - implemented fix for compilation error of 2/15
-> - explicitly elaborated on found issues to be resolved for
->   threaded AUX trace capture
-> 
-> v1: https://lore.kernel.org/lkml/810f3a69-0004-9dff-a911-b7ff97220ae0@linux.intel.com/
-> 
-> Patch set provides parallel threaded trace streaming mode for basic
-> perf record operation. Provided mode mitigates profiling data losses
-> and resolves scalability issues of serial and asynchronous (--aio)
-> trace streaming modes on multicore server systems. The design and
-> implementation are based on the prototype [1], [2].
-> 
-> Parallel threaded mode executes trace streaming threads that read kernel
-> data buffers and write captured data into several data files located at
-> data directory. Layout of trace streaming threads and their mapping to data
-> buffers to read can be configured using a value of --thread command line
-> option. Specification value provides masks separated by colon so the masks
-> define cpus to be monitored by one thread and thread affinity mask is
-> separated by slash. <cpus mask 1>/<affinity mask 1>:<cpu mask 2>/<affinity mask 2>
-> specifies parallel threads layout that consists of two threads with
-> corresponding assigned cpus to be monitored. Specification value can be
-> a string e.g. "cpu", "core" or "socket" meaning creation of data streaming
-> thread for monitoring every cpu, whole core or socket. The option provided
-> with no or empty value defaults to "cpu" layout creating data streaming
-> thread for every cpu being monitored. Specification masks are filtered
-> by the mask provided via -C option.
-> 
-> Parallel streaming mode is compatible with Zstd compression/decompression
-> (--compression-level) and external control commands (--control). The mode
-> is not enabled for pipe mode. The mode is not enabled for AUX area tracing,
-> related and derived modes like --snapshot or --aux-sample. --switch-output-*
-> and --timestamp-filename options are not enabled for parallel streaming.
-> Initial intent to enable AUX area tracing faced the need to define some
-> optimal way to store index data in data directory. --switch-output-* and
-> --timestamp-filename use cases are not clear for data directories.
-> Asynchronous(--aio) trace streaming and affinity (--affinity) modes are
-> mutually exclusive to parallel streaming mode.
-> 
-> Basic analysis of data directories is provided in perf report mode.
-> Raw dump and aggregated reports are available for data directories,
-> still with no memory consumption optimizations.
-> 
-> Tested:
-> 
-> tools/perf/perf record -o prof.data --threads -- matrix.gcc.g.O3
-> tools/perf/perf record -o prof.data --threads= -- matrix.gcc.g.O3
-> tools/perf/perf record -o prof.data --threads=cpu -- matrix.gcc.g.O3
-> tools/perf/perf record -o prof.data --threads=core -- matrix.gcc.g.O3
-> tools/perf/perf record -o prof.data --threads=socket -- matrix.gcc.g.O3
-> tools/perf/perf record -o prof.data --threads=numa -- matrix.gcc.g.O3
-> tools/perf/perf record -o prof.data --threads=0-3/3:4-7/4 -- matrix.gcc.g.O3
-> tools/perf/perf record -o prof.data -C 2,5 --threads=0-3/3:4-7/4 -- matrix.gcc.g.O3
-> tools/perf/perf record -o prof.data -C 3,4 --threads=0-3/3:4-7/4 -- matrix.gcc.g.O3
-> tools/perf/perf record -o prof.data -C 0,4,2,6 --threads=core -- matrix.gcc.g.O3
-> tools/perf/perf record -o prof.data -C 0,4,2,6 --threads=numa -- matrix.gcc.g.O3
-> tools/perf/perf record -o prof.data --threads -g --call-graph dwarf,4096 -- matrix.gcc.g.O3
-> tools/perf/perf record -o prof.data --threads -g --call-graph dwarf,4096 --compression-level=3 -- matrix.gcc.g.O3
-> tools/perf/perf record -o prof.data --threads -a
-> tools/perf/perf record -D -1 -e cpu-cycles -a --control fd:10,11 -- sleep 30
-> tools/perf/perf record --threads -D -1 -e cpu-cycles -a --control fd:10,11 -- sleep 30
-> 
-> tools/perf/perf report -i prof.data
-> tools/perf/perf report -i prof.data --call-graph=callee
-> tools/perf/perf report -i prof.data --stdio --header
-> tools/perf/perf report -i prof.data -D --header
-> 
-> [1] git clone https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git -b perf/record_threads
-> [2] https://lore.kernel.org/lkml/20180913125450.21342-1-jolsa@kernel.org/
-> 
-> Alexey Bayduraev (16):
->   perf record: Introduce thread affinity and mmap masks
->   tools lib: Introduce fdarray duplicate function
->   perf record: Introduce thread specific data array
->   perf record: Introduce function to propagate control commands
->   perf record: Introduce thread local variable
->   perf record: Stop threads in the end of trace streaming
->   perf record: Start threads in the beginning of trace streaming
->   perf record: Introduce data file at mmap buffer object
->   perf record: Introduce bytes written stats
->   perf record: Introduce compressor at mmap buffer object
->   perf record: Introduce data transferred and compressed stats
->   perf record: Introduce --threads command line option
->   perf record: Extend --threads command line option
->   perf record: Implement compatibility checks
->   perf session: Load data directory files for analysis
->   perf report: Output data file name in raw trace dump
-> 
->  tools/lib/api/fd/array.c                 |   17 +
->  tools/lib/api/fd/array.h                 |    1 +
->  tools/perf/Documentation/perf-record.txt |   30 +
->  tools/perf/builtin-inject.c              |    3 +-
->  tools/perf/builtin-kvm.c                 |    2 +-
->  tools/perf/builtin-record.c              | 1167 ++++++++++++++++++++--
->  tools/perf/builtin-top.c                 |    2 +-
->  tools/perf/builtin-trace.c               |    2 +-
->  tools/perf/util/evlist.c                 |   16 +
->  tools/perf/util/evlist.h                 |    1 +
->  tools/perf/util/mmap.c                   |   10 +
->  tools/perf/util/mmap.h                   |    3 +
->  tools/perf/util/ordered-events.c         |    3 +-
->  tools/perf/util/ordered-events.h         |    3 +-
->  tools/perf/util/record.h                 |    2 +
->  tools/perf/util/session.c                |  208 +++-
->  tools/perf/util/session.h                |    3 +-
->  tools/perf/util/tool.h                   |    3 +-
->  18 files changed, 1370 insertions(+), 106 deletions(-)
-> 
-> -- 
-> 2.19.0
-> 
-
+>> ---
+>>   arch/x86/Kconfig | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>> index 05362527f6b5..93befe25d787 100644
+>> --- a/arch/x86/Kconfig
+>> +++ b/arch/x86/Kconfig
+>> @@ -1934,6 +1934,7 @@ config EFI
+>>          depends on ACPI
+>>          select UCS2_STRING
+>>          select EFI_RUNTIME_WRAPPERS
+>> +       select ARCH_USE_MEMREMAP_PROT
+>>          help
+>>            This enables the kernel to use EFI runtime services that are
+>>            available (such as the EFI variable services).
+>> --
+>> 2.29.2
+>>

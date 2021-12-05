@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD67468BF7
+	by mail.lfdr.de (Postfix) with ESMTP id C59CD468BF8
 	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 16:44:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236012AbhLEPrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 10:47:09 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41152 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236329AbhLEPqO (ORCPT
+        id S236029AbhLEPrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 10:47:10 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37902 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236362AbhLEPqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 10:46:14 -0500
+        Sun, 5 Dec 2021 10:46:17 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01A6960FC1
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 15:42:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD321C00446
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 15:42:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16D22B80E1A
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 15:42:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBF74C341C5
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 15:42:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638718966;
-        bh=/w4AutpfxtGwg8kjXs9WhQ66b/fuK7Yh2Ze5zFX4tos=;
+        s=k20201202; t=1638718967;
+        bh=c5vXV39ulf58Fl2rwiZEuoRQCYd8DeIQh75ar1VToDc=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=cE9lzTpqqMTw9zuQ0lg/QgpFdFl5b8zsmL4TAFyej1IxmNJf9cYHbq1YYKJAw2/tU
-         3sk6zpp1bgcCp+Q2W/FwwOBAVCbGNzYomBNb36KqSpz51vX4pMMUKhzPCw6jldD7Rm
-         C0NgNWR8ZEgVYdFIJML8KtlzqQYd5pWQgBEXDzgDJc+fgtUD/MlIQhRehT+RurqY1H
-         a+oEKilRfUazLXdKmbpQGhi2NxZKra6jp6fIPCGmT8Llh5Dc1uQ8hHsVisa6FwR+JN
-         /Mww7xEAVGmqcacFbV70tyB48mlKQpqv9HfF5oQ9dueY/SksMFCEmgVDJqMZhMEEah
-         K6Bba9ONQv4Yw==
+        b=M8K6TVUl1OfqpmhaH5L+GEkdyFy7NFp/k4oOa+gHi8ofUpLBSst3eKssAGXrgMxA3
+         uvARSC9/CkrLEOUDmAdyaICsRoEUoTTRLfdy7LlXXPPYDoDPu3cIAeynsyzLvpMWqI
+         F1s/N69Nx3rfD3VrZMq69liTNbCMAvxccgGNqzWnvk3YIMAopUa/nKb6EYggxitRTB
+         v/WU/1pB7UKNnbvFZv5kfa/H33/IisBxQIMKe9Ee25lbS6F2D/0+qN/O5jSZLebA8b
+         IonEFWl/e8l2WtNhsywGsC+KO5xN+m2NvO8o40QQfoe8DGE6OJSctDwv1TrtS7SY66
+         7KGqSUbpoBidg==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Subject: [PATCH 5/9] habanalabs: save ctx inside encaps signal
-Date:   Sun,  5 Dec 2021 17:42:32 +0200
-Message-Id: <20211205154236.2198481-5-ogabbay@kernel.org>
+Subject: [PATCH 6/9] habanalabs: fix etr asid configuration
+Date:   Sun,  5 Dec 2021 17:42:33 +0200
+Message-Id: <20211205154236.2198481-6-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211205154236.2198481-1-ogabbay@kernel.org>
 References: <20211205154236.2198481-1-ogabbay@kernel.org>
@@ -43,150 +43,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compute context pointer in hdev shouldn't be used for fetching the
-context's pointer.
+Pass the user's context pointer into the etr configuration function
+to extract its ASID.
 
-If an object needs the context's pointer, it should get it while
-incrementing its kref, and when the object is released, put it.
+Using the compute_ctx pointer is an error as it is just an indication
+of whether a user has opened the compute device.
 
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/common/command_submission.c | 11 ++++++++---
- drivers/misc/habanalabs/common/context.c            | 10 +++++-----
- drivers/misc/habanalabs/common/habanalabs.h         |  2 ++
- drivers/misc/habanalabs/common/hw_queue.c           |  2 +-
- 4 files changed, 16 insertions(+), 9 deletions(-)
+ drivers/misc/habanalabs/common/context.c          |  2 +-
+ drivers/misc/habanalabs/common/device.c           |  4 ++--
+ drivers/misc/habanalabs/common/habanalabs.h       |  6 +++---
+ drivers/misc/habanalabs/common/habanalabs_ioctl.c | 13 +++++++------
+ drivers/misc/habanalabs/gaudi/gaudiP.h            |  4 ++--
+ drivers/misc/habanalabs/gaudi/gaudi_coresight.c   |  4 ++--
+ drivers/misc/habanalabs/goya/goyaP.h              |  4 ++--
+ drivers/misc/habanalabs/goya/goya_coresight.c     |  4 ++--
+ 8 files changed, 21 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/common/command_submission.c b/drivers/misc/habanalabs/common/command_submission.c
-index d169418197c0..a63ebbc04787 100644
---- a/drivers/misc/habanalabs/common/command_submission.c
-+++ b/drivers/misc/habanalabs/common/command_submission.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- 
- /*
-- * Copyright 2016-2019 HabanaLabs, Ltd.
-+ * Copyright 2016-2021 HabanaLabs, Ltd.
-  * All Rights Reserved.
-  */
- 
-@@ -1829,6 +1829,9 @@ static int cs_ioctl_reserve_signals(struct hl_fpriv *hpriv,
- 	}
- 
- 	handle->count = count;
-+
-+	hl_ctx_get(hdev, hpriv->ctx);
-+	handle->ctx = hpriv->ctx;
- 	mgr = &hpriv->ctx->sig_mgr;
- 
- 	spin_lock(&mgr->lock);
-@@ -1838,7 +1841,7 @@ static int cs_ioctl_reserve_signals(struct hl_fpriv *hpriv,
- 	if (hdl_id < 0) {
- 		dev_err(hdev->dev, "Failed to allocate IDR for a new signal reservation\n");
- 		rc = -EINVAL;
--		goto free_handle;
-+		goto put_ctx;
- 	}
- 
- 	handle->id = hdl_id;
-@@ -1891,7 +1894,8 @@ static int cs_ioctl_reserve_signals(struct hl_fpriv *hpriv,
- 	idr_remove(&mgr->handles, hdl_id);
- 	spin_unlock(&mgr->lock);
- 
--free_handle:
-+put_ctx:
-+	hl_ctx_put(handle->ctx);
- 	kfree(handle);
- 
- out:
-@@ -1953,6 +1957,7 @@ static int cs_ioctl_unreserve_signals(struct hl_fpriv *hpriv, u32 handle_id)
- 
- 		/* Release the id and free allocated memory of the handle */
- 		idr_remove(&mgr->handles, handle_id);
-+		hl_ctx_put(encaps_sig_hdl->ctx);
- 		kfree(encaps_sig_hdl);
- 	} else {
- 		rc = -EINVAL;
 diff --git a/drivers/misc/habanalabs/common/context.c b/drivers/misc/habanalabs/common/context.c
-index 4f7d39a29a42..8291151948ef 100644
+index 8291151948ef..8de1217b2ed2 100644
 --- a/drivers/misc/habanalabs/common/context.c
 +++ b/drivers/misc/habanalabs/common/context.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
+@@ -99,7 +99,7 @@ static void hl_ctx_fini(struct hl_ctx *ctx)
+ 		 * related to the stopped engines. Hence stop it explicitly.
+ 		 */
+ 		if (hdev->in_debug)
+-			hl_device_set_debug_mode(hdev, false);
++			hl_device_set_debug_mode(hdev, ctx, false);
  
- /*
-- * Copyright 2016-2019 HabanaLabs, Ltd.
-+ * Copyright 2016-2021 HabanaLabs, Ltd.
-  * All Rights Reserved.
-  */
- 
-@@ -13,13 +13,13 @@ void hl_encaps_handle_do_release(struct kref *ref)
- {
- 	struct hl_cs_encaps_sig_handle *handle =
- 		container_of(ref, struct hl_cs_encaps_sig_handle, refcount);
--	struct hl_ctx *ctx = handle->hdev->compute_ctx;
--	struct hl_encaps_signals_mgr *mgr = &ctx->sig_mgr;
-+	struct hl_encaps_signals_mgr *mgr = &handle->ctx->sig_mgr;
- 
- 	spin_lock(&mgr->lock);
- 	idr_remove(&mgr->handles, handle->id);
- 	spin_unlock(&mgr->lock);
- 
-+	hl_ctx_put(handle->ctx);
- 	kfree(handle);
+ 		hdev->asic_funcs->ctx_fini(ctx);
+ 		hl_cb_va_pool_fini(ctx);
+diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
+index db4168f35c18..bc5736ae6b70 100644
+--- a/drivers/misc/habanalabs/common/device.c
++++ b/drivers/misc/habanalabs/common/device.c
+@@ -622,7 +622,7 @@ int hl_device_utilization(struct hl_device *hdev, u32 *utilization)
+ 	return 0;
  }
  
-@@ -27,8 +27,7 @@ static void hl_encaps_handle_do_release_sob(struct kref *ref)
+-int hl_device_set_debug_mode(struct hl_device *hdev, bool enable)
++int hl_device_set_debug_mode(struct hl_device *hdev, struct hl_ctx *ctx, bool enable)
  {
- 	struct hl_cs_encaps_sig_handle *handle =
- 		container_of(ref, struct hl_cs_encaps_sig_handle, refcount);
--	struct hl_ctx *ctx = handle->hdev->compute_ctx;
--	struct hl_encaps_signals_mgr *mgr = &ctx->sig_mgr;
-+	struct hl_encaps_signals_mgr *mgr = &handle->ctx->sig_mgr;
- 
- 	/* if we're here, then there was a signals reservation but cs with
- 	 * encaps signals wasn't submitted, so need to put refcount
-@@ -40,6 +39,7 @@ static void hl_encaps_handle_do_release_sob(struct kref *ref)
- 	idr_remove(&mgr->handles, handle->id);
- 	spin_unlock(&mgr->lock);
- 
-+	hl_ctx_put(handle->ctx);
- 	kfree(handle);
- }
- 
-diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
-index 57bc55c2ddac..0ad08fdc89ea 100644
---- a/drivers/misc/habanalabs/common/habanalabs.h
-+++ b/drivers/misc/habanalabs/common/habanalabs.h
-@@ -2757,6 +2757,7 @@ struct hl_device {
-  *            wait cs are used to wait of the reserved encaps signals.
-  * @hdev: pointer to habanalabs device structure.
-  * @hw_sob: pointer to  H/W SOB used in the reservation.
-+ * @ctx: pointer to the user's context data structure
-  * @cs_seq: staged cs sequence which contains encapsulated signals
-  * @id: idr handler id to be used to fetch the handler info
-  * @q_idx: stream queue index
-@@ -2767,6 +2768,7 @@ struct hl_cs_encaps_sig_handle {
- 	struct kref refcount;
- 	struct hl_device *hdev;
- 	struct hl_hw_sob *hw_sob;
-+	struct hl_ctx *ctx;
- 	u64  cs_seq;
- 	u32  id;
- 	u32  q_idx;
-diff --git a/drivers/misc/habanalabs/common/hw_queue.c b/drivers/misc/habanalabs/common/hw_queue.c
-index fc841d651210..6103e479e855 100644
---- a/drivers/misc/habanalabs/common/hw_queue.c
-+++ b/drivers/misc/habanalabs/common/hw_queue.c
-@@ -574,7 +574,7 @@ static int encaps_sig_first_staged_cs_handler
- 	struct hl_encaps_signals_mgr *mgr;
  	int rc = 0;
  
--	mgr = &hdev->compute_ctx->sig_mgr;
-+	mgr = &cs->ctx->sig_mgr;
+@@ -637,7 +637,7 @@ int hl_device_set_debug_mode(struct hl_device *hdev, bool enable)
+ 		}
  
- 	spin_lock(&mgr->lock);
- 	encaps_sig_hdl = idr_find(&mgr->handles, cs->encaps_sig_hdl_id);
+ 		if (!hdev->hard_reset_pending)
+-			hdev->asic_funcs->halt_coresight(hdev);
++			hdev->asic_funcs->halt_coresight(hdev, ctx);
+ 
+ 		hdev->in_debug = 0;
+ 
+diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
+index 0ad08fdc89ea..670fad9b4ca0 100644
+--- a/drivers/misc/habanalabs/common/habanalabs.h
++++ b/drivers/misc/habanalabs/common/habanalabs.h
+@@ -1288,7 +1288,7 @@ struct hl_asic_funcs {
+ 	int (*send_heartbeat)(struct hl_device *hdev);
+ 	void (*set_clock_gating)(struct hl_device *hdev);
+ 	void (*disable_clock_gating)(struct hl_device *hdev);
+-	int (*debug_coresight)(struct hl_device *hdev, void *data);
++	int (*debug_coresight)(struct hl_device *hdev, struct hl_ctx *ctx, void *data);
+ 	bool (*is_device_idle)(struct hl_device *hdev, u64 *mask_arr,
+ 					u8 mask_len, struct seq_file *s);
+ 	int (*non_hard_reset_late_init)(struct hl_device *hdev);
+@@ -1303,7 +1303,7 @@ struct hl_asic_funcs {
+ 	int (*init_iatu)(struct hl_device *hdev);
+ 	u32 (*rreg)(struct hl_device *hdev, u32 reg);
+ 	void (*wreg)(struct hl_device *hdev, u32 reg, u32 val);
+-	void (*halt_coresight)(struct hl_device *hdev);
++	void (*halt_coresight)(struct hl_device *hdev, struct hl_ctx *ctx);
+ 	int (*ctx_init)(struct hl_ctx *ctx);
+ 	void (*ctx_fini)(struct hl_ctx *ctx);
+ 	int (*get_clk_rate)(struct hl_device *hdev, u32 *cur_clk, u32 *max_clk);
+@@ -2867,7 +2867,7 @@ int hl_device_open_ctrl(struct inode *inode, struct file *filp);
+ bool hl_device_operational(struct hl_device *hdev,
+ 		enum hl_device_status *status);
+ enum hl_device_status hl_device_status(struct hl_device *hdev);
+-int hl_device_set_debug_mode(struct hl_device *hdev, bool enable);
++int hl_device_set_debug_mode(struct hl_device *hdev, struct hl_ctx *ctx, bool enable);
+ int hl_hw_queues_create(struct hl_device *hdev);
+ void hl_hw_queues_destroy(struct hl_device *hdev);
+ int hl_hw_queue_send_cb_no_cmpl(struct hl_device *hdev, u32 hw_queue_id,
+diff --git a/drivers/misc/habanalabs/common/habanalabs_ioctl.c b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
+index 6c7339978bae..9210114beefe 100644
+--- a/drivers/misc/habanalabs/common/habanalabs_ioctl.c
++++ b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
+@@ -158,7 +158,7 @@ static int hw_idle(struct hl_device *hdev, struct hl_info_args *args)
+ 		min((size_t) max_size, sizeof(hw_idle))) ? -EFAULT : 0;
+ }
+ 
+-static int debug_coresight(struct hl_device *hdev, struct hl_debug_args *args)
++static int debug_coresight(struct hl_device *hdev, struct hl_ctx *ctx, struct hl_debug_args *args)
+ {
+ 	struct hl_debug_params *params;
+ 	void *input = NULL, *output = NULL;
+@@ -200,7 +200,7 @@ static int debug_coresight(struct hl_device *hdev, struct hl_debug_args *args)
+ 		params->output_size = args->output_size;
+ 	}
+ 
+-	rc = hdev->asic_funcs->debug_coresight(hdev, params);
++	rc = hdev->asic_funcs->debug_coresight(hdev, ctx, params);
+ 	if (rc) {
+ 		dev_err(hdev->dev,
+ 			"debug coresight operation failed %d\n", rc);
+@@ -738,13 +738,14 @@ static int hl_debug_ioctl(struct hl_fpriv *hpriv, void *data)
+ 				"Rejecting debug configuration request because device not in debug mode\n");
+ 			return -EFAULT;
+ 		}
+-		args->input_size =
+-			min(args->input_size, hl_debug_struct_size[args->op]);
+-		rc = debug_coresight(hdev, args);
++		args->input_size = min(args->input_size, hl_debug_struct_size[args->op]);
++		rc = debug_coresight(hdev, hpriv->ctx, args);
+ 		break;
++
+ 	case HL_DEBUG_OP_SET_MODE:
+-		rc = hl_device_set_debug_mode(hdev, (bool) args->enable);
++		rc = hl_device_set_debug_mode(hdev, hpriv->ctx, (bool) args->enable);
+ 		break;
++
+ 	default:
+ 		dev_err(hdev->dev, "Invalid request %d\n", args->op);
+ 		rc = -ENOTTY;
+diff --git a/drivers/misc/habanalabs/gaudi/gaudiP.h b/drivers/misc/habanalabs/gaudi/gaudiP.h
+index f325e36a71e6..8ac16a9b7d15 100644
+--- a/drivers/misc/habanalabs/gaudi/gaudiP.h
++++ b/drivers/misc/habanalabs/gaudi/gaudiP.h
+@@ -357,8 +357,8 @@ void gaudi_init_security(struct hl_device *hdev);
+ void gaudi_ack_protection_bits_errors(struct hl_device *hdev);
+ void gaudi_add_device_attr(struct hl_device *hdev,
+ 			struct attribute_group *dev_attr_grp);
+-int gaudi_debug_coresight(struct hl_device *hdev, void *data);
+-void gaudi_halt_coresight(struct hl_device *hdev);
++int gaudi_debug_coresight(struct hl_device *hdev, struct hl_ctx *ctx, void *data);
++void gaudi_halt_coresight(struct hl_device *hdev, struct hl_ctx *ctx);
+ void gaudi_mmu_prepare_reg(struct hl_device *hdev, u64 reg, u32 asid);
+ 
+ #endif /* GAUDIP_H_ */
+diff --git a/drivers/misc/habanalabs/gaudi/gaudi_coresight.c b/drivers/misc/habanalabs/gaudi/gaudi_coresight.c
+index 5349c1be13f9..08108f5fed67 100644
+--- a/drivers/misc/habanalabs/gaudi/gaudi_coresight.c
++++ b/drivers/misc/habanalabs/gaudi/gaudi_coresight.c
+@@ -848,7 +848,7 @@ static int gaudi_config_spmu(struct hl_device *hdev,
+ 	return 0;
+ }
+ 
+-int gaudi_debug_coresight(struct hl_device *hdev, void *data)
++int gaudi_debug_coresight(struct hl_device *hdev, struct hl_ctx *ctx, void *data)
+ {
+ 	struct hl_debug_params *params = data;
+ 	int rc = 0;
+@@ -887,7 +887,7 @@ int gaudi_debug_coresight(struct hl_device *hdev, void *data)
+ 	return rc;
+ }
+ 
+-void gaudi_halt_coresight(struct hl_device *hdev)
++void gaudi_halt_coresight(struct hl_device *hdev, struct hl_ctx *ctx)
+ {
+ 	struct hl_debug_params params = {};
+ 	int i, rc;
+diff --git a/drivers/misc/habanalabs/goya/goyaP.h b/drivers/misc/habanalabs/goya/goyaP.h
+index f0c3c6df04d5..3740fd25bf84 100644
+--- a/drivers/misc/habanalabs/goya/goyaP.h
++++ b/drivers/misc/habanalabs/goya/goyaP.h
+@@ -220,8 +220,8 @@ void goya_set_pll_profile(struct hl_device *hdev, enum hl_pll_frequency freq);
+ void goya_add_device_attr(struct hl_device *hdev,
+ 			struct attribute_group *dev_attr_grp);
+ int goya_cpucp_info_get(struct hl_device *hdev);
+-int goya_debug_coresight(struct hl_device *hdev, void *data);
+-void goya_halt_coresight(struct hl_device *hdev);
++int goya_debug_coresight(struct hl_device *hdev, struct hl_ctx *ctx, void *data);
++void goya_halt_coresight(struct hl_device *hdev, struct hl_ctx *ctx);
+ 
+ int goya_suspend(struct hl_device *hdev);
+ int goya_resume(struct hl_device *hdev);
+diff --git a/drivers/misc/habanalabs/goya/goya_coresight.c b/drivers/misc/habanalabs/goya/goya_coresight.c
+index c55c100fdd24..2c5133cfae65 100644
+--- a/drivers/misc/habanalabs/goya/goya_coresight.c
++++ b/drivers/misc/habanalabs/goya/goya_coresight.c
+@@ -652,7 +652,7 @@ static int goya_config_spmu(struct hl_device *hdev,
+ 	return 0;
+ }
+ 
+-int goya_debug_coresight(struct hl_device *hdev, void *data)
++int goya_debug_coresight(struct hl_device *hdev, struct hl_ctx *ctx, void *data)
+ {
+ 	struct hl_debug_params *params = data;
+ 	int rc = 0;
+@@ -691,7 +691,7 @@ int goya_debug_coresight(struct hl_device *hdev, void *data)
+ 	return rc;
+ }
+ 
+-void goya_halt_coresight(struct hl_device *hdev)
++void goya_halt_coresight(struct hl_device *hdev, struct hl_ctx *ctx)
+ {
+ 	struct hl_debug_params params = {};
+ 	int i, rc;
 -- 
 2.25.1
 

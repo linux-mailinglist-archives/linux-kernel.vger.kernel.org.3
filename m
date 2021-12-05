@@ -2,70 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F01C468D5B
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 21:46:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C684B468D5D
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 21:50:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238998AbhLEUtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 15:49:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238923AbhLEUt3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 15:49:29 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CC1C061714
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 12:46:02 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id z5so35062700edd.3
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 12:46:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=qztlLTDQmmEb0Xq8BgFUWcdE0xJC0fnWX5znumDPlIQ=;
-        b=JinpScpHTJTSW4zH2uiKtcCKm+LdmMwlgA9n2uzL3NBmve4AIgMnet/zU7sUMYZpDq
-         Rvmfy35EGKBUjPXNQFGDqLA4S79RzeOg445k6Da2PVpaOXatLX57yfBDfXgWAijHpYOs
-         SATVIEHSwzkWvkVpc9D5l2xKlsmfgzyPMLnVqSgF67M9byna6Ee7+ohW8yY1ISYcEdAK
-         MAbOmEGW+3HE5ZuxdkNlZ8EOzaPOeInr7vWfaNnVgw/8lC4mMmwaC2husMsW66Vp0NYF
-         MMhK5EOzIrZyGTCPmkbxylQaZwnAyKPSlOqono7bvVHV80jRakrAuJFEcs7355kSUxSi
-         WX7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=qztlLTDQmmEb0Xq8BgFUWcdE0xJC0fnWX5znumDPlIQ=;
-        b=Bt0ECTYMjQuAhmkmbfS9akE+GO/K/n6qUGDVFKH0XwvBymRToukXQMgKGnOraFjLax
-         8Do5rLTOTXKXLU2eNxJhhtsQqCWihIuotpdx7WIohksv1sIU7PJey1jWrJGWz54XWHxo
-         p/CDzZdP22y+CIvx+nuWdaLTJhlKjR4nCpDBiEl2GNoNLJdK6CZGQhret/MzoGuz7N1V
-         7KieryUV/k7N7aEz+CCg3CMm0EuaThOQI8rMz3MwEB13eZsbtM5vb4Dab48b0F2J5F8i
-         swOoT9vFNw8bBb5XGOpjUGBMpRjVTKiI2neiYg8lVzJa5FdOaIC+x6ZO6E9DnDFzSVY7
-         Im/g==
-X-Gm-Message-State: AOAM532vBTpy5l9YCH8wMGi8g+dXvoqaFDqXE+v1JbR7UlMrW6d0rEEf
-        0q3pmoomIMPLp0cs0fPdSf3BK1r7fldk7YVg5II=
-X-Google-Smtp-Source: ABdhPJwK4ZcoX9RF9wgdvCSblaRVA6OSX/iO7wqPSN4EPwTxnfxRMC3mY2rjZDUfTShmadcLsTJEl+NQS+O5E9ZOiQQ=
-X-Received: by 2002:a17:906:58ce:: with SMTP id e14mr38754480ejs.525.1638737160486;
- Sun, 05 Dec 2021 12:46:00 -0800 (PST)
+        id S239058AbhLEUyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 15:54:11 -0500
+Received: from mga04.intel.com ([192.55.52.120]:50472 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238875AbhLEUyI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 15:54:08 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="235946632"
+X-IronPort-AV: E=Sophos;i="5.87,290,1631602800"; 
+   d="scan'208";a="235946632"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2021 12:50:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,290,1631602800"; 
+   d="scan'208";a="461595019"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 05 Dec 2021 12:50:39 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mtyT0-000KUu-KP; Sun, 05 Dec 2021 20:50:38 +0000
+Date:   Mon, 6 Dec 2021 04:50:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: drivers/remoteproc/imx_rproc.c:413:17: sparse: sparse: cast removes
+ address space '__iomem' of expression
+Message-ID: <202112060443.rxnbCl3h-lkp@intel.com>
 MIME-Version: 1.0
-Received: by 2002:a55:c995:0:b0:12b:8ea5:8f4c with HTTP; Sun, 5 Dec 2021
- 12:45:59 -0800 (PST)
-Reply-To: salemchantal@mail.ee
-From:   MRS Salem Chantal Lawrence <kaborzongo01@gmail.com>
-Date:   Sun, 5 Dec 2021 12:45:59 -0800
-Message-ID: <CAJ5_0V65Lsd8wnm=Mqk899YT=avun95EH0E+u_+8KPuC447Ncg@mail.gmail.com>
-Subject: ATM VISA DAPARTCARD
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Attention
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   944207047ca4dabe8e288f653e7ec6da05e70230
+commit: 5e4c1243071d29ed5511121d044116b942ba6a7b remoteproc: imx_rproc: support remote cores booted before Linux Kernel
+date:   8 months ago
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20211206/202112060443.rxnbCl3h-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5e4c1243071d29ed5511121d044116b942ba6a7b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 5e4c1243071d29ed5511121d044116b942ba6a7b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/dma/ drivers/gpu/drm/tegra/ drivers/net/wireless/mediatek/mt76/mt7915/ drivers/remoteproc/ drivers/staging/ fs/proc/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-You have been compensated with the sum of 4.6 million dollars in this
-United Nation the payment will be issue into Atm Visa Card and send to you
+sparse warnings: (new ones prefixed by >>)
+   drivers/remoteproc/imx_rproc.c:299:12: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *va @@     got void [noderef] __iomem * @@
+   drivers/remoteproc/imx_rproc.c:299:12: sparse:     expected void *va
+   drivers/remoteproc/imx_rproc.c:299:12: sparse:     got void [noderef] __iomem *
+   drivers/remoteproc/imx_rproc.c:316:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *iomem_cookie @@     got void *va @@
+   drivers/remoteproc/imx_rproc.c:316:20: sparse:     expected void volatile [noderef] __iomem *iomem_cookie
+   drivers/remoteproc/imx_rproc.c:316:20: sparse:     got void *va
+>> drivers/remoteproc/imx_rproc.c:413:17: sparse: sparse: cast removes address space '__iomem' of expression
 
-from the Santander bank of Spain we need your address, Passport and your
-whatsapp number.
+vim +/__iomem +413 drivers/remoteproc/imx_rproc.c
 
+   403	
+   404	static struct resource_table *imx_rproc_get_loaded_rsc_table(struct rproc *rproc, size_t *table_sz)
+   405	{
+   406		struct imx_rproc *priv = rproc->priv;
+   407	
+   408		/* The resource table has already been mapped in imx_rproc_addr_init */
+   409		if (!priv->rsc_table)
+   410			return NULL;
+   411	
+   412		*table_sz = SZ_1K;
+ > 413		return (struct resource_table *)priv->rsc_table;
+   414	}
+   415	
 
-THANKS
-MRS Salem Chantal Lawrence
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

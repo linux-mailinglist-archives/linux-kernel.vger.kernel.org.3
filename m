@@ -2,92 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A89B468AB1
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 13:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01664468AC1
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 13:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233572AbhLEMIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 07:08:51 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55048 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233481AbhLEMIt (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 07:08:49 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD3F1B80E1B;
-        Sun,  5 Dec 2021 12:05:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC48AC341C1;
-        Sun,  5 Dec 2021 12:05:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638705920;
-        bh=2M5VDeecT6Sa6kwQ1njt2PR51joDLkpEq/aVUU8aVBU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=xr+2Yj82pMsK6kba58HNmEyO/Asy4151XNwFIYFZN8M1WixcSsM1RmAGfFCnDf8YP
-         Woo0ri215UOIs/2/ugvc+Ea/IOQmgj396uDQ+iGtTmJlC2rvLAmVC6itL6CV4GthPf
-         6no6/r1lxNct+xiNi0fXRx711zvkabVaR+V8uphU=
-Date:   Sun, 5 Dec 2021 13:05:17 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for 5.16-rc4
-Message-ID: <Yayq/Xdb/pHSS7/l@kroah.com>
+        id S233620AbhLEMVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 07:21:54 -0500
+Received: from smtpbg604.qq.com ([59.36.128.82]:40313 "EHLO smtpbg604.qq.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233599AbhLEMVy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 07:21:54 -0500
+X-QQ-mid: bizesmtp35t1638706702tzd8h6ni
+Received: from wangx.lan (unknown [218.88.126.113])
+        by esmtp6.qq.com (ESMTP) with 
+        id ; Sun, 05 Dec 2021 20:18:14 +0800 (CST)
+X-QQ-SSF: 0100000000600050B000B00A0000000
+X-QQ-FEAT: 8eV18jRLafShyOOqmWW34YsgpWCvxxfl0Xllq3xBDzNd3T0f26zs045UVw7TK
+        ZHotfLA5g2Mdyj5+go7x7SlsW+GFYKPGySVTGZOr9orWM5dcwo7TG5GvSghuWbJAsRrCLgV
+        1gwb0r1X7J9qaMeg2izoTM/1ErTePyHOOZVdXSniycOvCLdmaCqGH0QkBnXZ6XLaubX5rAb
+        TilyzKD1DlZHV1f0F6SwMbpOrl1IkqTqtJgclqPSz+PksyMYjnL+FZKtgMSAe9V1XaPGWJv
+        /h3PRFzolOAKwGOvcVxWH4NfWhzBwCc9sPyXTNr5IHsH+8Ifb4QCdlLWZiezTLwCS878eGf
+        D2I4irPoFnlGnpnz24=
+X-QQ-GoodBg: 0
+From:   Xiang wangx <wangxiang@cdjrlc.com>
+To:     ysato@users.sourceforge.jp
+Cc:     uclinux-h8-devel@lists.sourceforge.jp,
+        linux-kernel@vger.kernel.org, wangx <wxmige@gmail.com>
+Subject: [PATCH] h8300:replace #include <linux/processor.h> instead of <asm/processor.h>
+Date:   Sun,  5 Dec 2021 20:18:12 +0800
+Message-Id: <20211205121812.17606-1-wangxiang@cdjrlc.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit d58071a8a76d779eedab38033ae4c821c30295a5:
+From: wangx <wxmige@gmail.com>
 
-  Linux 5.16-rc3 (2021-11-28 14:09:19 -0800)
+linux/processor.h is recommended
 
-are available in the Git repository at:
+Signed-off-by: wangx <wxmige@gmail.com>
+---
+ arch/h8300/lib/delay.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.16-rc4
+diff --git a/arch/h8300/lib/delay.c b/arch/h8300/lib/delay.c
+index f4277529a9b9..8ca72f3a4883 100644
+--- a/arch/h8300/lib/delay.c
++++ b/arch/h8300/lib/delay.c
+@@ -8,7 +8,7 @@
+ #include <linux/module.h>
+ #include <linux/delay.h>
+ #include <asm/param.h>
+-#include <asm/processor.h>
++#include <linux/processor.h>
+ #include <asm/timex.h>
+ 
+ void __delay(unsigned long cycles)
+-- 
+2.20.1
 
-for you to fetch changes up to 37307f7020ab38dde0892a578249bf63d00bca64:
-
-  usb: cdnsp: Fix a NULL pointer dereference in cdnsp_endpoint_init() (2021-12-03 13:57:45 +0100)
-
-----------------------------------------------------------------
-USB fixes for 5.16-rc4
-
-Here are some small USB fixes for a few reported issues.  Included in
-here are:
-	- xhci fix for a _much_ reported regression.  I don't think
-	  there's a community distro that has not reported this problem
-	  yet :(
-	- new USB quirk addition
-	- cdns3 minor fixes
-	- typec regression fix.
-
-All of these have been in linux-next with no reported problems, and the
-xhci fix has been reported by many to resolve their reported problem.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Badhri Jagan Sridharan (1):
-      usb: typec: tcpm: Wait in SNK_DEBOUNCED until disconnect
-
-Frank Li (1):
-      usb: cdns3: gadget: fix new urb never complete if ep cancel previous requests
-
-Mathias Nyman (1):
-      xhci: Fix commad ring abort, write all 64 bits to CRCR register.
-
-Ole Ernst (1):
-      USB: NO_LPM quirk Lenovo Powered USB-C Travel Hub
-
-Zhou Qingyang (1):
-      usb: cdnsp: Fix a NULL pointer dereference in cdnsp_endpoint_init()
-
- drivers/usb/cdns3/cdns3-gadget.c | 20 ++++----------------
- drivers/usb/cdns3/cdnsp-mem.c    |  3 +++
- drivers/usb/core/quirks.c        |  3 +++
- drivers/usb/host/xhci-ring.c     | 21 ++++++++++++++-------
- drivers/usb/typec/tcpm/tcpm.c    |  4 ----
- 5 files changed, 24 insertions(+), 27 deletions(-)

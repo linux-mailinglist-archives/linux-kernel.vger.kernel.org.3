@@ -2,125 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE94A4689AA
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 07:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E7A4689AD
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 07:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbhLEGHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 01:07:55 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50474 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbhLEGHy (ORCPT
+        id S231788AbhLEGKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 01:10:46 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.84]:30394 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231733AbhLEGKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 01:07:54 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21875B80AD2;
-        Sun,  5 Dec 2021 06:04:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E941DC341C4;
-        Sun,  5 Dec 2021 06:04:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638684264;
-        bh=W+BhYvwRnMSxubxXem1oJbW5QQzLfaT+3Ll8Oy5A6SE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SjVUrnzS8KR5VE+LYjtbeQ/QzrcE/Rb8hpK9yGjp8ZosOfKj1TB058IdVdKhtqggE
-         fSi2A/rUtt7sDlG2xO1d+trZF+em3OmMqcpVnLV5ni3yMboqvWH9SJCroa46hsnq8U
-         +NSc9pCOwAGBAX6+6lUf1gUdsV1gvWmdCWpow44LXtA0cMjS754Lifh5fAjgI8LOhP
-         pSxQjwgoAEqgENEUtBYAKX01iv7Dw94krrsmALJ3iVlV7qWL6wXCJGGudkLL72UHdp
-         SAr1r6wehi/C5pQljbFUU6Z76q9Bl9kCLcrq1OXrXJotSIJC8iI6s+1XcEWLfK/orq
-         iVNkq0aA51WBg==
-Date:   Sun, 5 Dec 2021 08:04:12 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Martin Fernandez <martin.fernandez@eclypsium.com>
-Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
-        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
-        alison.schofield@intel.com
-Subject: Re: [PATCH v3 0/5] x86: Show in sysfs if a memory node is able to do
- encryption
-Message-ID: <YaxWXACBguZxWmKS@kernel.org>
-References: <20211203192148.585399-1-martin.fernandez@eclypsium.com>
+        Sun, 5 Dec 2021 01:10:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638684433;
+    s=strato-dkim-0002; d=chronox.de;
+    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
+    From:Subject:Sender;
+    bh=X1QJjnxt7d9VY4UsePDANXe2aTti1wuY2g8kgKEwXdo=;
+    b=K0bBXk4I231XuXWMoFJfKfSSAhPJ3fA2NsfKrmNgziZOhGH27hIzcRPhJJnIMfNSBY
+    WsYhX+1/ge6X5+725GPmAAzp7zAQ3FKoIsW4WsYeDSn06PNEt61LFfiVyGF26xjPUSro
+    3p18lxsP/9UyeBpY1pQz4/C1wuB6d+JTveGh+xmpMVXFvVg+LYcjN7yznxfs05gIpiC5
+    IOMURNGIHA5FyKPDe6AwF5N7v1MSDGNJAXNWC4GeQW7nvM6uglJnP+p2NnbWtJbwIyGf
+    +QW8DD7zU9hNysetce32LqrSM74RG300QqbiLNTEwHa3YJlym5tCitb6mPCBHrGV88mV
+    5Ulg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2ERcEykfu11Y98lp/T7+hdri+uKZK8TKWEqNyiHySGSa9k9xmwdNnzGHXPZJfSf8vUi"
+X-RZG-CLASS-ID: mo00
+Received: from positron.chronox.de
+    by smtp.strato.de (RZmta 47.34.10 DYNA|AUTH)
+    with ESMTPSA id 006230xB567BtvE
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 5 Dec 2021 07:07:11 +0100 (CET)
+From:   Stephan =?ISO-8859-1?Q?M=FCller?= <smueller@chronox.de>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Nicolai Stange <nstange@suse.de>
+Cc:     Hannes Reinecke <hare@suse.de>, Torsten Duwe <duwe@suse.de>,
+        Zaibo Xu <xuzaibo@huawei.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        qat-linux@intel.com, keyrings@vger.kernel.org,
+        Nicolai Stange <nstange@suse.de>
+Subject: Re: [PATCH 16/18] crypto: dh - calculate Q from P for the full public key verification
+Date:   Sun, 05 Dec 2021 07:07:11 +0100
+Message-ID: <4182894.UPlyArG6xL@positron.chronox.de>
+In-Reply-To: <20211201004858.19831-17-nstange@suse.de>
+References: <20211201004858.19831-1-nstange@suse.de> <20211201004858.19831-17-nstange@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211203192148.585399-1-martin.fernandez@eclypsium.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
+Am Mittwoch, 1. Dezember 2021, 01:48:56 CET schrieb Nicolai Stange:
 
-On Fri, Dec 03, 2021 at 04:21:43PM -0300, Martin Fernandez wrote:
-> Show for each node if every memory descriptor in that node has the
-> EFI_MEMORY_CPU_CRYPTO attribute.
-> 
-> fwupd project plans to use it as part of a check to see if the users
-> have properly configured memory hardware encryption capabilities. It's
-> planned to make it part of a specification that can be passed to
-> people purchasing hardware. It's called Host Security ID:
-> https://fwupd.github.io/libfwupdplugin/hsi.html
-> 
-> This also can be useful in the future if NUMA decides to prioritize
-> nodes that are able to do encryption.
- 
-I'm missing a description about *how* the new APIs/ABIs are going to be
-used. This comment also applies to the changelogs of the patches that
-mostly describe what the patch does and do not describe why is it needed.
- 
-> Changes since v2:
-> 
-> e820__range_mark_crypto -> e820__range_mark_crypto_capable.
-> 
-> In e820__range_remove: Create a region with crypto capabilities
-> instead of creating one without it and then mark it.
-> 
-> 
-> Changes since v1:
-> 
-> Modify __e820__range_update to update the crypto capabilities of a
-> range; now this function will change the crypto capability of a range
-> if it's called with the same old_type and new_type. Rework
-> efi_mark_e820_regions_as_crypto_capable based on this.
-> 
-> Update do_add_efi_memmap to mark the regions as it creates them.
-> 
-> Change the type of crypto_capable in e820_entry from bool to u8.
-> 
-> Fix e820__update_table changes.
-> 
-> Remove memblock_add_crypto_capable. Now you have to add the region and
-> mark it then.
-> 
-> Better place for crypto_capable in pglist_data.
-> 
-> 
-> Martin Fernandez (5):
->   mm/memblock: Tag memblocks with crypto capabilities
->   mm/mmzone: Tag pg_data_t with crypto capabilities
->   Tag e820_entry with crypto capabilities
->   x86/efi: Tag e820_entries as crypto capable from EFI memmap
->   drivers/node: Show in sysfs node's crypto capabilities
-> 
->  arch/x86/include/asm/e820/api.h   |  1 +
->  arch/x86/include/asm/e820/types.h |  1 +
->  arch/x86/kernel/e820.c            | 59 ++++++++++++++++++++++++-------
->  arch/x86/platform/efi/efi.c       | 25 +++++++++++++
->  drivers/base/node.c               | 10 ++++++
->  include/linux/memblock.h          |  5 +++
->  include/linux/mmzone.h            |  3 ++
->  mm/memblock.c                     | 49 +++++++++++++++++++++++++
->  mm/page_alloc.c                   |  1 +
->  9 files changed, 142 insertions(+), 12 deletions(-)
-> 
-> -- 
-> 2.30.2
-> 
+Hi Nicolai,
 
--- 
-Sincerely yours,
-Mike.
+> As the ->q in struct dh_ctx gets never set anywhere, the code
+> in dh_is_pubkey_valid() for doing the full public key validation in
+> accordance to SP800-56Arev3 is effectively dead.
+> 
+> However, for safe-prime groups, Q = (P - 1)/2 by definition and this
+> enables dh_is_pubkey_valid() to calculate Q on the fly for these groups.
+> Implement this.
+> 
+> With this change, the last code accessing struct dh_ctx's ->q is now gone.
+> Remove this member from struct dh_ctx.
+
+Isn't it expensive to always calculate Q for a-priori known values? Why not 
+add Q to the safe-prime definitions and do not do this operation here?
+
+If you need Q for all of those safe-primes, you may get them from [1] and 
+following lines.
+
+[1] https://github.com/smuellerDD/acvpparser/blob/master/parser/
+safeprimes.h#L346
+
+Ciao
+Stephan
+
+

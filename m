@@ -2,92 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DB4468D11
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 20:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 198F5468D14
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 20:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238192AbhLETu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 14:50:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48382 "EHLO
+        id S238252AbhLETvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 14:51:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233648AbhLETu4 (ORCPT
+        with ESMTP id S233648AbhLETvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 14:50:56 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FC4C061714;
-        Sun,  5 Dec 2021 11:47:28 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id o29so6587284wms.2;
-        Sun, 05 Dec 2021 11:47:28 -0800 (PST)
+        Sun, 5 Dec 2021 14:51:44 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7526AC061714;
+        Sun,  5 Dec 2021 11:48:16 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id x6so34229790edr.5;
+        Sun, 05 Dec 2021 11:48:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p6VZNSUViKWsvBC4D3bAKgcLTUpKM8IQ1NkUj0lnKj4=;
-        b=W50julzPbKEIBzCs7GVoL+u92IdUaKcc0pWeEnNB8D3VW0wbOp4jL0rWVMNDGBot3U
-         f70gL8hSU1ddD/n2o4GiRYTgLzW6jnrBniEajSNdd6WKLqG2ktVqxT9mnUxPW9Yh0Eol
-         /MCv2VUNAKARr0BvmW35+LOGKnlPCPtnJqRc4U6M/CabYydlnYbFGVj2M1YsxbqBwkl3
-         b5p4QDhqgO9ZehJQCHTZigxHyuDqMX76kfM4G+liEGJ9r7wwWBziSvijuulyI1aEsw3J
-         2TslKoVtwJBcDilwws1CtaSw1FRaYd3bqFKQBaqPrJaXRv83NvW9Ag8CmkOLVZOM1u97
-         XfYw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x4fF1nSTHBf3HTdpKCFdl3la1UMZb2JlN7zUcVFPI0Q=;
+        b=p2Aa7ze1cA+B7Je1fJf2L2fwd3q0Kxi7FvdtQskiHKb/loDhLVtuO4eo2BT+7loQJR
+         fHYaHl905UL8dHv7dNUzA3+QaYbxuoka6L3FKL+Xt+ui/fKtdgN8iS4t0n2DPYj0VSgB
+         fSLB6T37pZrh7fALYbn76jZAV83b+XlOQeUbCM0qTJdkMDlQsAcE91moa0z1J100Reiw
+         SrLOnX6UCdaop6DIerUP64l2raCBGNvGan6Ba3S9kbGl/4zlmOwz5JFDwGW5dS+aLstK
+         0G7pYVYSi2q9hmdZx1Ya5CVFUzk/B9YgoIYT/E2qskJa7wCWTbcOfCymsTqgjqKor0kR
+         bxlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p6VZNSUViKWsvBC4D3bAKgcLTUpKM8IQ1NkUj0lnKj4=;
-        b=O6ptHQ8JESuGTJhc2rPHf0vpOXDiKdK/2RKQSU+kY/haUY0Im4IwnCrVZNoNHAmxZn
-         8TtrrhGrLZhXdhmf9E9qVncNBZTjYJmensnZ1B540xyrUP6dl7t+8dr79JqolS+H2TmF
-         lVfPPwx/ztCWwRaWGj5xULgGf5JxSoEEiGQPx6yimmkbXTAsGJsfG/fGx0R0fdGT8/ZH
-         EP4HOtijAynOFFMI4ynO5Vmbyk60LV8rtmtW/WKIIJWqNQ+VFeh1MUKDC/Q8KfHEiArc
-         eaC/L00vzYqxF6Vyjpn1q9aIm/hPcNyO0Ed9tIRfi0pqj8htyJfj+sP2UVtm4DeIcBl9
-         qZaA==
-X-Gm-Message-State: AOAM532zofnhUn3h+JsWeiwQ90rfBW1cioE0muEx8v8PW3zqfYMhb+tQ
-        bgEPoUppojqBI9WoQckIs3M=
-X-Google-Smtp-Source: ABdhPJzzMcj1rJTNC1APFmjwJlezJA4W7THygiS9yh+7Eh+WcgqorVpHqbiWwOxQ1RZdWMaOj++TEw==
-X-Received: by 2002:a05:600c:3c91:: with SMTP id bg17mr33713320wmb.80.1638733647439;
-        Sun, 05 Dec 2021 11:47:27 -0800 (PST)
-Received: from localhost.localdomain ([39.48.147.147])
-        by smtp.gmail.com with ESMTPSA id w7sm9231516wru.51.2021.12.05.11.47.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 11:47:26 -0800 (PST)
-From:   Ameer Hamza <amhamza.mgc@gmail.com>
-To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        amhamza.mgc@gmail.com
-Subject: [PATCH] KVM: x86: fix for missing initialization of return status variable
-Date:   Mon,  6 Dec 2021 00:47:19 +0500
-Message-Id: <20211205194719.16987-1-amhamza.mgc@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x4fF1nSTHBf3HTdpKCFdl3la1UMZb2JlN7zUcVFPI0Q=;
+        b=NaExmg1IGfZPq/8mO7f+1MrUOunM0hZGLaEa2blYYQmMvzWYdPDogNbneNLfg6196v
+         qAhPUNcMQTlHiSlFBwxXUbnsrhTiFr2Gfq34ii/uPagyp5QZw79PXM0Pya3WsSmrnutP
+         T5Ge1IjZHA7AP5nkMTnTTnfVrHGjUiQXnSU+PhomzNaJHqHnUsTuFbE8kbZwhQ0GO6e0
+         Vt/d58Eza4rNiXKK07nDwyIsT6MyxQyfs2RL9zHXPo61in2pQxzmQBegP3Hca3P4hoKM
+         oY8gP/BrUPDckkYO6nqgZV3ViRfW/MTuuf4cXkcEQGqnFzrtHFWHJzi75/F3voRLzPS8
+         fDNQ==
+X-Gm-Message-State: AOAM530ryJpVnLPOITbOsJ/4DHsq4jLavMVqUII0KCjzvazDFq7vLAnh
+        BEI2LwBoy/0okUuMDJW6KbEUks9dkUrVTf9MxSM=
+X-Google-Smtp-Source: ABdhPJzvgUKoM8Bu93028z3ABP72O9wxEG3S/N7Z8Pa+EoPj2gtw7MDRqftbOQe3WIrr2K0eb12UElxeCG+uGbwlNiE=
+X-Received: by 2002:a05:6402:270c:: with SMTP id y12mr47124784edd.258.1638733695046;
+ Sun, 05 Dec 2021 11:48:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211205190101.26de4a57@jic23-huawei>
+In-Reply-To: <20211205190101.26de4a57@jic23-huawei>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 5 Dec 2021 21:47:38 +0200
+Message-ID: <CAHp75VeqVTnMyjbmfKhvgTVaj1G+gq6FXfVR4EZjXLjSdO7ETA@mail.gmail.com>
+Subject: Re: RFC: Should we have a device_for_each_available_child_node()?
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If undefined ioctl number is passed to the kvm_vcpu_ioctl_device_attr
-function, it should return with error status.
+I think we need Rob here (or anybody with DT API knowledge) to explain
+this subtle detail you found, i.e. checking node for availability in
+of_fwnode_get_next_child_node(). This raises another question why do
+we have for_each_available_child_of_node() in the first place if it's
+equivalent (is it?) to for_each_child_of_node()/
 
-Addresses-Coverity: 1494124 ("Uninitialized scalar variable")
+On Sun, Dec 5, 2021 at 8:55 PM Jonathan Cameron <jic23@kernel.org> wrote:
+>
+> Hi All,
+>
+> This came up in review of
+> https://lore.kernel.org/linux-iio/20210725172458.487343-1-jic23@kernel.org/
+> which is a series converting a dt only driver over to generic properties.
+> I'm sending a separate email to raise the profile of the question rather
+> higher than it was buried in a driver review.
+>
+> The original code used for_each_available_child_of_node(np, child)
+> and the patch converted it to device_for_each_child_node().
+>
+> Andy raised the question of whether it should have been
+> device_for_each_available_child_node() but that doesn't exist currently.
+>
+> Things get more interesting when you look at the implementation of
+> device_for_each_child_node() which uses device_get_next_child_node()
+> which in turn calls fwnode_get_next_child_node() which calls
+> the get_next_child_node() op and for of that is
+> of_fwnode_get_next_child_node() which uses of_get_next_available_child()
+> rather than of_get_next_child().
+>
+> So I think under the hood device_for_each_child_node() on of_ is going to
+> end up checking the node is available anyway.
+>
+> So this all seemed a little odd given there were obvious calls to use
+> if we wanted to separate the two cases for device tree and they weren't
+> the ones used.  However, if we conclude that there is a bug here and
+> the two cases should be handled separately then it will be really hard
+> to be sure no driver is relying on this behaviour.
+>
+> So, ultimately the question is:  Should I add a
+> device_for_each_available_child_node()?  It will be something like:
+>
+> struct fwnode_handle *device_get_next_child_node(struct device *dev,
+>                                                  struct fwnode_handle *child)
+> {
+>         const struct fwnode_handle *fwnode = dev_fwnode(dev);
+>         struct fwnode_handle *next;
+>
+>         /* Try to find a child in primary fwnode */
+>         next = fwnode_get_next_available_child_node(fwnode, child);
+>         if (next)
+>                 return next;
+>
+>         /* When no more children in primary, continue with secondary */
+>         if (fwnode && !IS_ERR_OR_NULL(fwnode->secondary))
+>                 next = fwnode_get_next_available_child_node(fwnode->secondary, child);
+>
+>         return next;
+> }
+>
+> #define device_for_each_child_node(dev, child)                          \
+>         for (child = device_get_next_available_child_node(dev, NULL); child;    \
+>              child = device_get_next_avaialble_child_node(dev, child))
+>
+> As far as I can tell it doesn't make any difference for my particular bit
+> of refactoring in the sense of I won't break anything that currently
+> works by using device_for_each_child_node() but it may cause issues with
+> other firmware by enumerating disabled child nodes.
+>
+> Jonathan
+>
+>
+>
+>
+>
 
-Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
----
- arch/x86/kvm/x86.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index e0aa4dd53c7f..55b90c185717 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -5001,7 +5001,7 @@ static int kvm_vcpu_ioctl_device_attr(struct kvm_vcpu *vcpu,
- 				      void __user *argp)
- {
- 	struct kvm_device_attr attr;
--	int r;
-+	int r = -EINVAL;
- 
- 	if (copy_from_user(&attr, argp, sizeof(attr)))
- 		return -EFAULT;
 -- 
-2.25.1
-
+With Best Regards,
+Andy Shevchenko

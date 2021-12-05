@@ -2,195 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB928468BB0
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 16:14:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E8D468BB1
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 16:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235594AbhLEPSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 10:18:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:30817 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235586AbhLEPSE (ORCPT
+        id S235585AbhLEPSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 10:18:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235606AbhLEPSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 10:18:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638717276;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H5IzgNIsCDN4CTraRVcjZncPXVQybgk7pRae5MbgbVg=;
-        b=GRJ4xw2NfX6Apj1Y2QMWIF4Np/jidhk+yfQCEGI4XLBZbc2KblVrwCp5//gQLYm1VCdvgO
-        h6fnoFPNsbphuPnCssJrYGvPf/pOdU/Ti26aPnwGjxDjGdC7UJbFq3ocnrkuHi7Hr0pBAK
-        f4oZ05yt7vH1CzBj2b4cFIs7Csdv5cE=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-GDwO-u5dOqKo4jQOma2-6A-1; Sun, 05 Dec 2021 10:14:35 -0500
-X-MC-Unique: GDwO-u5dOqKo4jQOma2-6A-1
-Received: by mail-wm1-f71.google.com with SMTP id z138-20020a1c7e90000000b003319c5f9164so6598085wmc.7
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 07:14:35 -0800 (PST)
+        Sun, 5 Dec 2021 10:18:09 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A34C061751
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 07:14:41 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id u1so16882703wru.13
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 07:14:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2/0APoaO2+RxAk+XbsfV9HVu43G2c1MKgB8KCbqjUUw=;
+        b=Z0xbodD7b6pytjY+yYuxl4raiGU18/rJdLc5zdNGz4OqRK/KFjxgn3CFdTqpUFYu2i
+         yO5/zpUd8AyGLtzGaxqiTlJopcu0HiURCef9ri4y5UjSUe2XpHbfvSvn0oN9qgqMi5K3
+         EpFYE+LqGemf4Lmmga6sXqRNownqyegUEaiZ4WKHGIMG+wzI6chFV6kwuQ3a+G3ZSfNR
+         jnKvwMXo3m54CXhjNCGrf2/3wtZaTvF0ELgJhu/HK5dIP2iXeFnxlggf5uYxvA6bWo5A
+         k1gShPojNPMwoVTROZD2QNtH5+x5qgUJXr9SaDdgvTr8sOCGD/AD/H7PrHouW5suTmct
+         +fmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=H5IzgNIsCDN4CTraRVcjZncPXVQybgk7pRae5MbgbVg=;
-        b=2NtvHoPySdsjHloZZ9tIcorDM8tEPG2ijBeUlSjB0f0QvGS4y0TEfgKYsE2klaZSIX
-         tlzA6ldcmnDJ13vJE6Y/ZdIeRZQqsjoBZrZXoF6EV3H/sRk+gqmQi6x2VyIm5uUpShN8
-         moM69hteVhOPo7xEIy6TFV2XLVax2vBQ6XJIJNhij64er59Hp0w704KqEsIRGskMHAt5
-         bPOLfgF0+VR1QpBw2oLS9A5lUEDEXzLjr1h1jRTSAH3OH5WBLVH3eXMBneTBvKVExa/H
-         menOTA18mUHgXHbGuOYmJq5+rubleZxPGZIaNW1N6AU0v93BdZlAKbkjOnB+1mWPC98Y
-         mENw==
-X-Gm-Message-State: AOAM531/Ge4zOe1BbPkk4YYOchGK9p+iZqMcDh4YB28dqU/2C5zoaByr
-        n8o9V0Zh2T3bviEi6+65lSXpEcrI5UD9mqurKYvvXWJj70YeZgDhGeB4mosDTvG8krwJ3m3/ypz
-        l5/nc1a0uXhRs5Hu377s9DiRK
-X-Received: by 2002:a05:600c:1d9b:: with SMTP id p27mr31854650wms.123.1638717274676;
-        Sun, 05 Dec 2021 07:14:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwW8j5CvDY0KV8Q1/OHn0ymJRKGXVcU3AhKys4oTQOzHUKrUsxAEh9xONde6a8Q933W0XqtkA==
-X-Received: by 2002:a05:600c:1d9b:: with SMTP id p27mr31854629wms.123.1638717274526;
-        Sun, 05 Dec 2021 07:14:34 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id o10sm10119745wri.15.2021.12.05.07.14.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 07:14:34 -0800 (PST)
-Date:   Sun, 5 Dec 2021 16:14:32 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        Alexei Budankov <abudankov@huawei.com>,
-        Riccardo Mancini <rickyman7@gmail.com>
-Subject: Re: [PATCH v12 05/16] perf record: Introduce thread local variable
-Message-ID: <YazXWM7rVdaoF4yX@krava>
-References: <cover.1637675515.git.alexey.v.bayduraev@linux.intel.com>
- <c9f2747f11fcce59b879b547f8128f2ae5a7f8c0.1637675515.git.alexey.v.bayduraev@linux.intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2/0APoaO2+RxAk+XbsfV9HVu43G2c1MKgB8KCbqjUUw=;
+        b=vP6FWps8sOh38lT+7yMn/vx1tJdsU6GHlyBF8ecP5tI+UnzlGtqK2B64m5lfKufvb0
+         YMECnWY4xZlVuxsabGXmnwB6wfW/KUAgX+lyT/pp4EmSKTMSMNg8aFAh0iFEjrR8JOTS
+         afmuyl23LIx81JUdBkJiUvOhyMftqcX5kifes4AzPbesLt7VWOtS8QSJ6riEUwr5xSSz
+         ScpIMOTAQQIXOPwnb7zt9HXDAXyXd9Nh4sgDTQ6CecM601/x0vSkbV/+6Nalrgrvr4sQ
+         ezF9DFJwvy60M0MPBPzfSKWiPjDswHgQgqF2CHItWViomLQYIgVImOqa+VoSAgu4YVKe
+         W61g==
+X-Gm-Message-State: AOAM533APHgoHrF1Wcc4jiVf4d4lDzilVSbUt91CRS4wTsIhY2OPx0LO
+        kwWkHm2xjOguMzAEfd8CYnA=
+X-Google-Smtp-Source: ABdhPJw4y4Yj3l5J6oeNCBkQ5NolC2g/qkyvZGUvgQTKsQszDjGCLzy66Yo0KBNHrRoKp8BKhLAD8Q==
+X-Received: by 2002:a5d:59af:: with SMTP id p15mr5508754wrr.561.1638717280178;
+        Sun, 05 Dec 2021 07:14:40 -0800 (PST)
+Received: from ?IPV6:2a02:8108:96c0:3b88::b792? ([2a02:8108:96c0:3b88::b792])
+        by smtp.gmail.com with ESMTPSA id d15sm11551294wri.50.2021.12.05.07.14.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Dec 2021 07:14:39 -0800 (PST)
+Message-ID: <663b392b-67a0-9ce1-6f32-158a72f3262a@gmail.com>
+Date:   Sun, 5 Dec 2021 16:14:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c9f2747f11fcce59b879b547f8128f2ae5a7f8c0.1637675515.git.alexey.v.bayduraev@linux.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 12/12] staging: r8188eu: hal_data_sz is set but never used
+Content-Language: en-US
+To:     Pavel Skripkin <paskripkin@gmail.com>, gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20211205135919.30460-1-straube.linux@gmail.com>
+ <20211205135919.30460-13-straube.linux@gmail.com>
+ <197e167b-2225-3593-dab3-4f1f61331de9@gmail.com>
+From:   Michael Straube <straube.linux@gmail.com>
+In-Reply-To: <197e167b-2225-3593-dab3-4f1f61331de9@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 05:08:01PM +0300, Alexey Bayduraev wrote:
+On 12/5/21 15:42, Pavel Skripkin wrote:
+> On 12/5/21 16:59, Michael Straube wrote:
+>> hal_data_sz in struct adapter is set but never used. Remove it.
+>>
+>> Signed-off-by: Michael Straube <straube.linux@gmail.com>
+>> ---
+>>   drivers/staging/r8188eu/hal/usb_halinit.c   | 1 -
+>>   drivers/staging/r8188eu/include/drv_types.h | 1 -
+>>   2 files changed, 2 deletions(-)
+>>
+>> diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c 
+>> b/drivers/staging/r8188eu/hal/usb_halinit.c
+>> index 641aaf299109..da966538596f 100644
+>> --- a/drivers/staging/r8188eu/hal/usb_halinit.c
+>> +++ b/drivers/staging/r8188eu/hal/usb_halinit.c
+>> @@ -1969,5 +1969,4 @@ void rtl8188eu_alloc_haldata(struct adapter *adapt)
+>>       adapt->HalData = kzalloc(sizeof(struct hal_data_8188e), 
+>> GFP_KERNEL);
+>>       if (!adapt->HalData)
+>>           DBG_88E("cant not alloc memory for HAL DATA\n");
+>> -    adapt->hal_data_sz = sizeof(struct hal_data_8188e);
+>>   }
+> 
+> Not related to your patch, but not returning an error from this function 
+>   looks very dangerous to me.
 
-SNIP
+I agree.
 
->  
-> +	if (record__start_threads(rec))
-> +		goto out_free_threads;
-> +
->  	/*
->  	 * When perf is starting the traced process, all the events
->  	 * (apart from group members) have enable_on_exec=1 set,
-> @@ -2122,7 +2175,7 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
->  	trigger_ready(&switch_output_trigger);
->  	perf_hooks__invoke_record_start();
->  	for (;;) {
-> -		unsigned long long hits = rec->samples;
-> +		unsigned long long hits = thread->samples;
->  
->  		/*
->  		 * rec->evlist->bkw_mmap_state is possible to be
-> @@ -2176,8 +2229,8 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
->  
->  			if (!quiet)
->  				fprintf(stderr, "[ perf record: dump data: Woken up %ld times ]\n",
-> -					waking);
-> -			waking = 0;
-> +					record__waking(rec));
-> +			thread->waking = 0;
->  			fd = record__switch_output(rec, false);
->  			if (fd < 0) {
->  				pr_err("Failed to switch to new file\n");
-> @@ -2191,20 +2244,24 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
->  				alarm(rec->switch_output.time);
->  		}
->  
-> -		if (hits == rec->samples) {
-> +		if (hits == thread->samples) {
->  			if (done || draining)
->  				break;
-> -			err = evlist__poll(rec->evlist, -1);
-> +			err = fdarray__poll(&thread->pollfd, -1);
->  			/*
->  			 * Propagate error, only if there's any. Ignore positive
->  			 * number of returned events and interrupt error.
->  			 */
->  			if (err > 0 || (err < 0 && errno == EINTR))
->  				err = 0;
-> -			waking++;
-> +			thread->waking++;
->  
-> -			if (evlist__filter_pollfd(rec->evlist, POLLERR | POLLHUP) == 0)
-> +			if (fdarray__filter(&thread->pollfd, POLLERR | POLLHUP,
-> +					    record__thread_munmap_filtered, NULL) == 0)
->  				draining = true;
-> +
-> +			evlist__ctlfd_update(rec->evlist,
-> +				&thread->pollfd.entries[thread->ctlfd_pos]);
-
-hm, why is this needed? we only switch to record_thread data, right?
-there should not be any processing change
-
-jirka
-
->  		}
->  
->  		if (evlist__ctlfd_process(rec->evlist, &cmd) > 0) {
-> @@ -2258,15 +2315,18 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
->  	}
->  
->  	if (!quiet)
-> -		fprintf(stderr, "[ perf record: Woken up %ld times to write data ]\n", waking);
-> +		fprintf(stderr, "[ perf record: Woken up %ld times to write data ]\n",
-> +			record__waking(rec));
->  
->  	if (target__none(&rec->opts.target))
->  		record__synthesize_workload(rec, true);
->  
->  out_child:
-> -	evlist__finalize_ctlfd(rec->evlist);
-> +	record__stop_threads(rec);
->  	record__mmap_read_all(rec, true);
-> +out_free_threads:
->  	record__free_thread_data(rec);
-> +	evlist__finalize_ctlfd(rec->evlist);
->  	record__aio_mmap_read_sync(rec);
->  
->  	if (rec->session->bytes_transferred && rec->session->bytes_compressed) {
-> @@ -3158,17 +3218,6 @@ int cmd_record(int argc, const char **argv)
->  
->  	symbol__init(NULL);
->  
-> -	if (rec->opts.affinity != PERF_AFFINITY_SYS) {
-> -		rec->affinity_mask.nbits = cpu__max_cpu();
-> -		rec->affinity_mask.bits = bitmap_zalloc(rec->affinity_mask.nbits);
-> -		if (!rec->affinity_mask.bits) {
-> -			pr_err("Failed to allocate thread mask for %zd cpus\n", rec->affinity_mask.nbits);
-> -			err = -ENOMEM;
-> -			goto out_opts;
-> -		}
-> -		pr_debug2("thread mask[%zd]: empty\n", rec->affinity_mask.nbits);
-> -	}
-> -
->  	err = record__auxtrace_init(rec);
->  	if (err)
->  		goto out;
-> @@ -3313,7 +3362,6 @@ int cmd_record(int argc, const char **argv)
->  
->  	err = __cmd_record(&record, argc, argv);
->  out:
-> -	bitmap_free(rec->affinity_mask.bits);
->  	evlist__delete(rec->evlist);
->  	symbol__exit();
->  	auxtrace_record__free(rec->itr);
-> -- 
-> 2.19.0
+> 
+> adapt->HalData is used in GET_HAL_DATA() macro all across the driver 
+> code and nobody checks if it valid or not. If allocation fails here, 
+> than we will likely hit GPF while accessing hal_data fields.
+> 
+> Maybe we can embed struct hal_data_8188e instead of storing a pointer to 
+> it?
+> 
+> 
 > 
 
+We could remove rtl8188eu_alloc_haldata() completely and replace its
+usage in the function rtw_usb_if1_init().
+
+--- a/drivers/staging/r8188eu/os_dep/usb_intf.c
++++ b/drivers/staging/r8188eu/os_dep/usb_intf.c
+@@ -362,7 +362,9 @@ static struct adapter *rtw_usb_if1_init(struct 
+dvobj_priv *dvobj,
+         padapter = rtw_netdev_priv(pnetdev);
+
+         /* step 2. allocate HalData */
+-       rtl8188eu_alloc_haldata(padapter);
++       padapter->HalData = kzalloc(sizeof(*padapter->HalData), GFP_KERNEL);
++       if (!padapter->HalData)
++               goto handle_dualmac;
+
+This way rtw_drv_init() would return -ENODEV if the allocation fails.
+What do you think?
+
+Regards,
+Michael

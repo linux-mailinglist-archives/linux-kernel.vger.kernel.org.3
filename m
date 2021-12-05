@@ -2,89 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68EFC4688F5
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 04:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 300D44688F9
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 04:13:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbhLEDIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 22:08:48 -0500
-Received: from mga14.intel.com ([192.55.52.115]:19934 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229682AbhLEDIr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 22:08:47 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="237382212"
-X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
-   d="scan'208";a="237382212"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 19:05:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,288,1631602800"; 
-   d="scan'208";a="578887804"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Dec 2021 19:05:18 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mthq1-000Jjd-NK; Sun, 05 Dec 2021 03:05:17 +0000
-Date:   Sun, 5 Dec 2021 11:04:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alistair Francis <alistair.francis@opensource.wdc.com>,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, jolsa@redhat.com, mingo@redhat.com,
-        dave@stgolabs.net, linux-perf-users@vger.kernel.org, arnd@arndb.de,
-        namhyung@kernel.org, alistair23@gmail.com, mark.rutland@arm.com,
-        tglx@linutronix.de
-Subject: Re: [PATCH v4 3/6] uapi: futex: Add a futex syscall
-Message-ID: <202112051113.Z2TMYJx9-lkp@intel.com>
-References: <20211202111659.2077911-3-alistair.francis@opensource.wdc.com>
+        id S231312AbhLEDRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 22:17:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229682AbhLEDRC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 4 Dec 2021 22:17:02 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF10C061751;
+        Sat,  4 Dec 2021 19:13:35 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id np6-20020a17090b4c4600b001a90b011e06so5630252pjb.5;
+        Sat, 04 Dec 2021 19:13:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K0undT0YJyHWH56ofdmr45Mkquy1Ol6IKr8TfIm45MQ=;
+        b=alh+KS7FZNqGSxV+8P/PVttRyAnFMPPkSjin/9bJMU8hS7JmzzhS8j8eLur35oi55H
+         A75i8/kfuqCKHqAVU5laxdL6wLaUq9RFf+1HxT2OK0u5WU1oI4adsc9mtBfKTcNG/ocq
+         o86QB2wduzEsB9KSp8j8RhqWqzE6wRFttV7EPX6vbHqstHWUwotYmaBfBPjgjH4J601X
+         KvQYgjXLDxu8TTDp1PHm4vvx0INBpZQBzIRvDsB4Ld4NXwSa3xEr1Pl36oQwhIqFDIIl
+         UGUExDQQz18m2wdtcxNUzCWWm3cEn7ulnLmMTfruOlqsHWItjbH6f4xujPhKH0hCP2ym
+         2aBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K0undT0YJyHWH56ofdmr45Mkquy1Ol6IKr8TfIm45MQ=;
+        b=XKdCXuTuxG03g0/dbAKuKOLJbawNKw9nc4kYJQSiICLdL0hk0Gzoq49XL03Lz+qBop
+         oy65S4eigvvbTqF1IlEGQ1RJ3WeGJxsBIlWpilT31TglWvjzD7wg6KQSzocBCFh//ZEk
+         kPIavNa/zxCL6th2dInWpzbe/m3Ankko54mMmDnMCPMINC43LRhiAxuzEDSrmbIHb0+m
+         3VwixK+JQbF3guGzjmk66EUlAoJpOKarBcOfj1Y1kOM49IyoiPonaJMzWdrGXBw7BYny
+         SUqI3RtBXw0JJKiqRPILYMZyEGzVFXwafrbHY3cAhvQwYIxkbJHNk3nEFv5UwzV5GJIH
+         7aaA==
+X-Gm-Message-State: AOAM533fnWdYHAW3aErT6juWS9hyqIH/0qmz8qAYkwiGjo++UUVsNCwh
+        JwRql8HkJzxseVbcdDFm16xFJkSl4eOdlpS/tseP96e2
+X-Google-Smtp-Source: ABdhPJzEGDaefqbNDy2qcJS5gL32CblBVcy3B0f9LoefTt56iGEQdx3xk6vDHLa2iGvTaoQIEcoFiVGvqdiAb5BmAfg=
+X-Received: by 2002:a17:90b:4c03:: with SMTP id na3mr26426374pjb.62.1638674015106;
+ Sat, 04 Dec 2021 19:13:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211202111659.2077911-3-alistair.francis@opensource.wdc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211204095256.78042-1-laoar.shao@gmail.com> <20211204095256.78042-6-laoar.shao@gmail.com>
+ <CAADnVQLS4Ev7xChqCMbbJiFZ_kYSB+rbiVT6AJotheFJb1f5=w@mail.gmail.com> <CALOAHbCud62ivvoRuz1SV-d3sL9Y9knEga0N-jiXnM3SYzWxNA@mail.gmail.com>
+In-Reply-To: <CALOAHbCud62ivvoRuz1SV-d3sL9Y9knEga0N-jiXnM3SYzWxNA@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sat, 4 Dec 2021 19:13:24 -0800
+Message-ID: <CAADnVQLu+RWSeMfOe5eBuTsp9gxPsFC_bRTXoWmvWP+Lv_rZzQ@mail.gmail.com>
+Subject: Re: [PATCH -mm 5/5] bpf/progs: replace hard-coded 16 with TASK_COMM_LEN
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Kees Cook <keescook@chromium.org>,
+        Petr Mladek <pmladek@suse.com>,
+        David Hildenbrand <david@redhat.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        linux-mm <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alistair,
+On Sat, Dec 4, 2021 at 6:45 PM Yafang Shao <laoar.shao@gmail.com> wrote:
+>
+> On Sun, Dec 5, 2021 at 12:44 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Sat, Dec 4, 2021 at 1:53 AM Yafang Shao <laoar.shao@gmail.com> wrote:
+> > >
+> > >  static int process_sample(void *ctx, void *data, size_t len)
+> > >  {
+> > > -       struct sample *s = data;
+> > > +       struct sample_ringbuf *s = data;
+> >
+> > This is becoming pointless churn.
+> > Nack.
+> >
+> > > index 145028b52ad8..7b1bb73c3501 100644
+> > > --- a/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
+> > > +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
+> > > @@ -1,8 +1,7 @@
+> > >  // SPDX-License-Identifier: GPL-2.0
+> > >  // Copyright (c) 2019 Facebook
+> > >
+> > > -#include <linux/bpf.h>
+> > > -#include <stdint.h>
+> > > +#include <vmlinux.h>
+> > >  #include <stdbool.h>
+> > >  #include <bpf/bpf_helpers.h>
+> > >  #include <bpf/bpf_core_read.h>
+> > > @@ -23,11 +22,11 @@ struct core_reloc_kernel_output {
+> > >         int comm_len;
+> > >  };
+> > >
+> > > -struct task_struct {
+> > > +struct task_struct_reloc {
+> >
+> > Churn that is not even compile tested.
+>
+> It is strange that I have successfully compiled it....
+> Below is the compile log,
+>
+> $ cat make.log | grep test_core_reloc_kernel
+>   CLNG-BPF [test_maps] test_core_reloc_kernel.o
+>   GEN-SKEL [test_progs] test_core_reloc_kernel.skel.h
+>   CLNG-BPF [test_maps] test_core_reloc_kernel.o
+>   GEN-SKEL [test_progs-no_alu32] test_core_reloc_kernel.skel.h
+>
+> Also there's no error in the compile log.
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on tip/locking/core]
-[also build test ERROR on linux/master soc/for-next linus/master v5.16-rc3 next-20211203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Alistair-Francis/perf-bench-futex-Add-support-for-32-bit-systems-with-64-bit-time_t/20211202-192015
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 4e0d84634445ed550498d613a49ea8f6cfa5e66c
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20211205/202112051113.Z2TMYJx9-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/710fc0b1a255e93e04efbaccf76f6445db51ff1f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Alistair-Francis/perf-bench-futex-Add-support-for-32-bit-systems-with-64-bit-time_t/20211202-192015
-        git checkout 710fc0b1a255e93e04efbaccf76f6445db51ff1f
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from <command-line>:32:
-   ./usr/include/linux/futex_syscall.h:33:16: warning: 'struct timespec' declared inside parameter list will not be visible outside of this definition or declaration
-      33 |         struct timespec *timeout, __volatile__ uint32_t *uaddr2, int val3)
-         |                ^~~~~~~~
-   ./usr/include/linux/futex_syscall.h: In function '__kernel_futex_syscall_timeout':
->> ./usr/include/linux/futex_syscall.h:36:13: error: dereferencing pointer to incomplete type 'struct timespec'
-      36 |  if (sizeof(*timeout) != sizeof(struct __kernel_old_timespec)) {
-         |             ^~~~~~~~
->> ./usr/include/linux/futex_syscall.h:37:13: error: implicit declaration of function 'syscall' [-Werror=implicit-function-declaration]
-      37 |   int ret = syscall(__NR_futex_time64, uaddr, op, val, timeout, uaddr2, val3);
-         |             ^~~~~~~
-   cc1: some warnings being treated as errors
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+and ran the tests too?

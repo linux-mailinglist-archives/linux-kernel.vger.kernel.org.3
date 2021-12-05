@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83EED468E16
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 00:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0904C468E17
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 00:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241158AbhLEXYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 18:24:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:55017 "EHLO
+        id S241228AbhLEXY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 18:24:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:42567 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241113AbhLEXYU (ORCPT
+        by vger.kernel.org with ESMTP id S241175AbhLEXY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 18:24:20 -0500
+        Sun, 5 Dec 2021 18:24:27 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638746452;
+        s=mimecast20190719; t=1638746459;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qPFBVLd1MOqofeDRgWXlKm3vhAT8CZYo8WcwT7OAfdE=;
-        b=CZQHZ3Lie8QGrpeUJNQu0wTzbXVrtkPE+SR4HbHi3I8F5LT6TPRFK3gAxlPocbPNL88EDa
-        9PsiFdafZAkiR2vEyb8cq2hAAzD3h8crU3Zl4BC4CG8GTU3Y+tT8OrRCKyDVuy/loqf0S0
-        cVupjDRiwVv0LOKcFIAfoS3pfDnJylc=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=D+r8VDO075HP3zY5B8NZqLYXy1hXR8gsbRnN4JJ18dY=;
+        b=PrOE0q/7JFeMMQmR7A4uih2zl5jPBfjFJx7YMO6H1Zzagz1zo3qm/WxaNE9eLJkBdliMNa
+        itze89seAaLslL9c0ZA16oAJ+B0rcqx7muwLBVvVuGgYAdefV643ZN5RsxwVRTgj47fg1z
+        XFknvOyUYXlAfHaGGUv3bHiDEvbrBx4=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-443-V4t0NF5yOEqXOv8x1_QzkA-1; Sun, 05 Dec 2021 18:20:51 -0500
-X-MC-Unique: V4t0NF5yOEqXOv8x1_QzkA-1
-Received: by mail-ed1-f71.google.com with SMTP id w5-20020a05640234c500b003f1b9ab06d2so6810956edc.13
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 15:20:51 -0800 (PST)
+ us-mta-37-WYXFBnyCP5yLz8FKmx27Yg-1; Sun, 05 Dec 2021 18:20:58 -0500
+X-MC-Unique: WYXFBnyCP5yLz8FKmx27Yg-1
+Received: by mail-ed1-f69.google.com with SMTP id a3-20020a05640213c300b003e7d12bb925so6823061edx.9
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 15:20:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qPFBVLd1MOqofeDRgWXlKm3vhAT8CZYo8WcwT7OAfdE=;
-        b=A84UGYokDIDlb0ewa/TzS4tGCSIt8cga7QkU9KVTELUq5wAFwX/NZrociXzUF9kSOL
-         fxew4Xe3OV0WWx0xDxkspqZLRxOj3IneW723V8jPYhEAP8AzJakjRg+MRpXAq1DN9ZiC
-         UTj6IcvzwgunAu+zhI4qCmvXjVR0mCXsrVRg0wRvPmH9goNy2wA5PZ4O3Y/+aWUr8iG+
-         hPX5TvpY632U+udPyBGu3DQ9GAIQDIAaFrqRpO4sBbH/Zgc6R8RN6uD+wzB+x/Hy6lLx
-         4EVGwTSfx3xuI0H3Mb9VDFM9vtzTxUUDrhx3pciaceVsFWaMNyIl74MK4nk5xMSlTr0O
-         w2CQ==
-X-Gm-Message-State: AOAM531BVbE25EqIQIuib9vDmIGiMO2zpu0hdJlozd+hy5kAiprWBsnH
-        4ee6EkOUwT9Ud0cY/KWpTKnOQW7Gr/kqn32rgt+ilEQdYNkeR/hE1Snd9G+cp1L3Lcg+uUaDA1p
-        AS1P1idf94uZQdfHz0XDL/0gP
-X-Received: by 2002:a05:6402:35cc:: with SMTP id z12mr48236473edc.393.1638746450110;
-        Sun, 05 Dec 2021 15:20:50 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwKYezZgx30TXWG/gKVP0Z5DwcdX9HMgfA/lBpQ7UrW8axbnrZUzd0N2momUUSCmsBXrXIy9Q==
-X-Received: by 2002:a05:6402:35cc:: with SMTP id z12mr48236454edc.393.1638746449944;
-        Sun, 05 Dec 2021 15:20:49 -0800 (PST)
+        bh=D+r8VDO075HP3zY5B8NZqLYXy1hXR8gsbRnN4JJ18dY=;
+        b=vBtvmHXzYpVrnUAcscZCaoNgXzxauXGBOzH7jmwpPksJWp/dd2+pQbfzY6En4BbTTd
+         Z/sBfc6hK+WzxmX+QcdwViuaaflArAIkWgNeWcmmBwR2u0yPLt8DV2VavaVOTBftvBUE
+         1+LXuYkX6ejmTrEsQUBUKTUI99hzkP1nOarTiwpC9+oM13VPSilqFUACPIEZ02Mv989f
+         xDQiuzdWSgjEitND5qhk6Zufuz5kxfzZVbAgPmPB+T5WlJooZNTMvWGG47hxfxxng2pW
+         VsD0RzLdcLDemR+qD2xy7UGj5DLMSPpslWH2lXHImcl8Tb182K4GtrLXhc6yhv6ak4kG
+         sNlw==
+X-Gm-Message-State: AOAM530jBj1VYYsyf4NnTzQGoFWvq4MfAbZ30qVLP5MFw5Y9zqUeTNgs
+        G+7sy9YaH1XkCUTmExuX3ySP0wAChKME+t1WrNo4SsMPdznOfocWCaq1oyEtblsB4lgYXvp3x6f
+        HIM4a8wGEHrBrNzRRV8ezUFDT
+X-Received: by 2002:a17:906:7954:: with SMTP id l20mr40354543ejo.143.1638746456622;
+        Sun, 05 Dec 2021 15:20:56 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzm5sYLGG4jFUaEKDdQCUn3GYHBw5P5kiuWLPV47yXPG1h8/cMyCT4splGY5KyGGBnycIYFyg==
+X-Received: by 2002:a17:906:7954:: with SMTP id l20mr40354524ejo.143.1638746456409;
+        Sun, 05 Dec 2021 15:20:56 -0800 (PST)
 Received: from krava.redhat.com ([83.240.60.218])
-        by smtp.gmail.com with ESMTPSA id i8sm7362450edc.12.2021.12.05.15.20.49
+        by smtp.gmail.com with ESMTPSA id t20sm6623963edv.81.2021.12.05.15.20.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 15:20:49 -0800 (PST)
+        Sun, 05 Dec 2021 15:20:56 -0800 (PST)
 From:   Jiri Olsa <jolsa@redhat.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>
 Cc:     lkml <linux-kernel@vger.kernel.org>,
         Heiko Carstens <hca@linux.ibm.com>
-Subject: [PATCH 2/3] ftrace: Add cleanup to unregister_ftrace_direct_multi
-Date:   Mon,  6 Dec 2021 00:20:35 +0100
-Message-Id: <20211205232036.51996-3-jolsa@kernel.org>
+Subject: [PATCH 3/3] ftrace/samples: Add module to test multi direct modify interface
+Date:   Mon,  6 Dec 2021 00:20:36 +0100
+Message-Id: <20211205232036.51996-4-jolsa@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211205232036.51996-1-jolsa@kernel.org>
 References: <20211205232036.51996-1-jolsa@kernel.org>
@@ -70,30 +70,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding ops cleanup to unregister_ftrace_direct_multi,
-so it can be reused in another register call.
+Adding ftrace-direct-multi-modify.ko kernel module that uses
+modify_ftrace_direct_multi API. The core functionality is taken
+from ftrace-direct-modify.ko kernel module and changed to fit
+multi direct interface.
 
-Fixes: f64dd4627ec6 ("ftrace: Add multi direct register/unregister interface")
+The init function creates kthread that periodically calls
+modify_ftrace_direct_multi to change the trampoline address
+for the direct ftrace_ops. The ftrace trace_pipe then shows
+trace from both trampolines.
+
+Also adding SAMPLE_FTRACE_MULTI_DIRECT to enable build of
+direct multi interface sample modules. It's used in Makefile,
+but not defined at the moment.
+
+Same as for ftrace-direct-multi.ko, the new module is enabled
+only for x86_64, so there's no need to ifdef the inlined assembly.
+
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- kernel/trace/ftrace.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ samples/Kconfig                             |   8 ++
+ samples/ftrace/Makefile                     |   1 +
+ samples/ftrace/ftrace-direct-multi-modify.c | 105 ++++++++++++++++++++
+ 3 files changed, 114 insertions(+)
+ create mode 100644 samples/ftrace/ftrace-direct-multi-modify.c
 
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 7f0594e28226..be5f6b32a012 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -5542,6 +5542,10 @@ int unregister_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
- 	err = unregister_ftrace_function(ops);
- 	remove_direct_functions_hash(hash, addr);
- 	mutex_unlock(&direct_mutex);
+diff --git a/samples/Kconfig b/samples/Kconfig
+index bec3528aa2de..38daae5a06b5 100644
+--- a/samples/Kconfig
++++ b/samples/Kconfig
+@@ -31,6 +31,14 @@ config SAMPLE_FTRACE_DIRECT
+ 	  This builds an ftrace direct function example
+ 	  that hooks to wake_up_process and prints the parameters.
+ 
++config SAMPLE_FTRACE_MULTI_DIRECT
++	tristate "Build register_ftrace_direct_multi() examples"
++	depends on DYNAMIC_FTRACE_WITH_DIRECT_CALLS && m
++	depends on HAVE_SAMPLE_FTRACE_MULTI_DIRECT
++	help
++	  This builds an ftrace direct multi function examples
++	  that hooks trampolines to multiple functions.
 +
-+	/* cleanup for possible another register call */
-+	ops->func = NULL;
-+	ops->trampoline = 0;
- 	return err;
- }
- EXPORT_SYMBOL_GPL(unregister_ftrace_direct_multi);
+ config SAMPLE_TRACE_ARRAY
+         tristate "Build sample module for kernel access to Ftrace instancess"
+ 	depends on EVENT_TRACING && m
+diff --git a/samples/ftrace/Makefile b/samples/ftrace/Makefile
+index e8a3f8520a44..027d375890f8 100644
+--- a/samples/ftrace/Makefile
++++ b/samples/ftrace/Makefile
+@@ -4,6 +4,7 @@ obj-$(CONFIG_SAMPLE_FTRACE_DIRECT) += ftrace-direct.o
+ obj-$(CONFIG_SAMPLE_FTRACE_DIRECT) += ftrace-direct-too.o
+ obj-$(CONFIG_SAMPLE_FTRACE_DIRECT) += ftrace-direct-modify.o
+ obj-$(CONFIG_SAMPLE_FTRACE_MULTI_DIRECT) += ftrace-direct-multi.o
++obj-$(CONFIG_SAMPLE_FTRACE_MULTI_DIRECT) += ftrace-direct-multi-modify.o
+ 
+ CFLAGS_sample-trace-array.o := -I$(src)
+ obj-$(CONFIG_SAMPLE_TRACE_ARRAY) += sample-trace-array.o
+diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
+new file mode 100644
+index 000000000000..ba309cb33c77
+--- /dev/null
++++ b/samples/ftrace/ftrace-direct-multi-modify.c
+@@ -0,0 +1,105 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include <linux/module.h>
++#include <linux/kthread.h>
++#include <linux/ftrace.h>
++
++void my_direct_func1(unsigned long ip)
++{
++	trace_printk("my direct func1 ip %lx\n", ip);
++}
++
++void my_direct_func2(unsigned long ip)
++{
++	trace_printk("my direct func2 ip %lx\n", ip);
++}
++
++extern void my_tramp1(void *);
++extern void my_tramp2(void *);
++
++asm (
++"	.pushsection    .text, \"ax\", @progbits\n"
++"	.type		my_tramp1, @function\n"
++"	.globl		my_tramp1\n"
++"   my_tramp1:"
++"	pushq %rbp\n"
++"	movq %rsp, %rbp\n"
++"	pushq %rdi\n"
++"	movq 8(%rbp), %rdi\n"
++"	call my_direct_func1\n"
++"	popq %rdi\n"
++"	leave\n"
++"	ret\n"
++"	.size		my_tramp1, .-my_tramp1\n"
++"	.type		my_tramp2, @function\n"
++"\n"
++"	.globl		my_tramp2\n"
++"   my_tramp2:"
++"	pushq %rbp\n"
++"	movq %rsp, %rbp\n"
++"	pushq %rdi\n"
++"	movq 8(%rbp), %rdi\n"
++"	call my_direct_func2\n"
++"	popq %rdi\n"
++"	leave\n"
++"	ret\n"
++"	.size		my_tramp2, .-my_tramp2\n"
++"	.popsection\n"
++);
++
++static unsigned long my_tramp = (unsigned long)my_tramp1;
++static unsigned long tramps[2] = {
++	(unsigned long)my_tramp1,
++	(unsigned long)my_tramp2,
++};
++
++static struct ftrace_ops direct;
++
++static int simple_thread(void *arg)
++{
++	static int t;
++	int ret = 0;
++
++	while (!kthread_should_stop()) {
++		set_current_state(TASK_INTERRUPTIBLE);
++		schedule_timeout(2 * HZ);
++
++		if (ret)
++			continue;
++		t ^= 1;
++		ret = modify_ftrace_direct_multi(&direct, tramps[t]);
++		if (!ret)
++			my_tramp = tramps[t];
++		WARN_ON_ONCE(ret);
++	}
++
++	return 0;
++}
++
++static struct task_struct *simple_tsk;
++
++static int __init ftrace_direct_multi_init(void)
++{
++	int ret;
++
++	ftrace_set_filter_ip(&direct, (unsigned long) wake_up_process, 0, 0);
++	ftrace_set_filter_ip(&direct, (unsigned long) schedule, 0, 0);
++
++	ret = register_ftrace_direct_multi(&direct, my_tramp);
++
++	if (!ret)
++		simple_tsk = kthread_run(simple_thread, NULL, "event-sample-fn");
++	return ret;
++}
++
++static void __exit ftrace_direct_multi_exit(void)
++{
++	kthread_stop(simple_tsk);
++	unregister_ftrace_direct_multi(&direct, my_tramp);
++}
++
++module_init(ftrace_direct_multi_init);
++module_exit(ftrace_direct_multi_exit);
++
++MODULE_AUTHOR("Jiri Olsa");
++MODULE_DESCRIPTION("Example use case of using modify_ftrace_direct_multi()");
++MODULE_LICENSE("GPL");
 -- 
 2.33.1
 

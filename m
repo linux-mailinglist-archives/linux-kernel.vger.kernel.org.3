@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B44468BA0
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFCF468BA1
 	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 16:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235358AbhLEPQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 10:16:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
+        id S235382AbhLEPQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 10:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235277AbhLEPQk (ORCPT
+        with ESMTP id S235294AbhLEPQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 5 Dec 2021 10:16:40 -0500
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAFFC061714
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99259C061714
         for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 07:13:13 -0800 (PST)
 Received: from dslb-188-097-212-203.188.097.pools.vodafone-ip.de ([188.97.212.203] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1mttCO-0007gF-UU; Sun, 05 Dec 2021 16:13:09 +0100
+        id 1mttCP-0007gF-RO; Sun, 05 Dec 2021 16:13:09 +0100
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -27,9 +27,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Michael Straube <straube.linux@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 03/10] staging: r8188eu: remove two unused macros
-Date:   Sun,  5 Dec 2021 16:12:44 +0100
-Message-Id: <20211205151251.6861-4-martin@kaiser.cx>
+Subject: [PATCH 04/10] staging: r8188eu: bHWPowerdown is set but not used
+Date:   Sun,  5 Dec 2021 16:12:45 +0100
+Message-Id: <20211205151251.6861-5-martin@kaiser.cx>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20211205151251.6861-1-martin@kaiser.cx>
 References: <20211205151251.6861-1-martin@kaiser.cx>
@@ -39,42 +39,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove two unused macros that increment and decrement a "mutex counter".
+bHWPowerdown in struct pwrctrl_priv is set but never read. Remove it.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- .../staging/r8188eu/include/osdep_service.h    | 18 ------------------
- 1 file changed, 18 deletions(-)
+ drivers/staging/r8188eu/hal/rtl8188e_hal_init.c | 10 ++--------
+ drivers/staging/r8188eu/include/rtw_pwrctrl.h   |  1 -
+ 2 files changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/include/osdep_service.h b/drivers/staging/r8188eu/include/osdep_service.h
-index 5d8b567a3165..6c8241372a06 100644
---- a/drivers/staging/r8188eu/include/osdep_service.h
-+++ b/drivers/staging/r8188eu/include/osdep_service.h
-@@ -74,24 +74,6 @@ static inline void _cancel_timer(struct timer_list *ptimer,u8 *bcancelled)
- #define RTW_TIMER_HDL_NAME(name) rtw_##name##_timer_hdl
- #define RTW_DECLARE_TIMER_HDL(name) void RTW_TIMER_HDL_NAME(name)(RTW_TIMER_HDL_ARGS)
- 
--/*  */
--/*  Global Mutex: can only be used at PASSIVE level. */
--/*  */
--
--#define ACQUIRE_GLOBAL_MUTEX(_MutexCounter)                              \
--{                                                               \
--	while (atomic_inc_return((atomic_t *)&(_MutexCounter)) != 1)\
--	{                                                           \
--		atomic_dec((atomic_t *)&(_MutexCounter));        \
--		msleep(10);                          \
--	}                                                           \
--}
--
--#define RELEASE_GLOBAL_MUTEX(_MutexCounter)                              \
--{                                                               \
--	atomic_dec((atomic_t *)&(_MutexCounter));        \
--}
--
- static inline int rtw_netif_queue_stopped(struct net_device *pnetdev)
+diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+index acd343eec280..d14c1757d7b3 100644
+--- a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
++++ b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+@@ -1118,22 +1118,16 @@ static void hal_get_chnl_group_88e(u8 chnl, u8 *group)
+ void Hal_ReadPowerSavingMode88E(struct adapter *padapter, u8 *hwinfo, bool AutoLoadFail)
  {
- 	return  netif_tx_queue_stopped(netdev_get_tx_queue(pnetdev, 0)) &&
+ 	if (AutoLoadFail) {
+-		padapter->pwrctrlpriv.bHWPowerdown = false;
+ 		padapter->pwrctrlpriv.bSupportRemoteWakeup = false;
+ 	} else {
+ 		/* hw power down mode selection , 0:rf-off / 1:power down */
+ 
+-		if (padapter->registrypriv.hwpdn_mode == 2)
+-			padapter->pwrctrlpriv.bHWPowerdown = (hwinfo[EEPROM_RF_FEATURE_OPTION_88E] & BIT(4));
+-		else
+-			padapter->pwrctrlpriv.bHWPowerdown = padapter->registrypriv.hwpdn_mode;
+-
+ 		/*  decide hw if support remote wakeup function */
+ 		/*  if hw supported, 8051 (SIE) will generate WeakUP signal(D+/D- toggle) when autoresume */
+ 		padapter->pwrctrlpriv.bSupportRemoteWakeup = (hwinfo[EEPROM_USB_OPTIONAL_FUNCTION0] & BIT(1)) ? true : false;
+ 
+-		DBG_88E("%s...bHWPowerdown(%x) , bSupportRemoteWakeup(%x)\n", __func__,
+-			padapter->pwrctrlpriv.bHWPowerdown, padapter->pwrctrlpriv.bSupportRemoteWakeup);
++		DBG_88E("%s , bSupportRemoteWakeup(%x)\n", __func__,
++			padapter->pwrctrlpriv.bSupportRemoteWakeup);
+ 
+ 		DBG_88E("### PS params =>  power_mgnt(%x), usbss_enable(%x) ###\n", padapter->registrypriv.power_mgnt, padapter->registrypriv.usbss_enable);
+ 	}
+diff --git a/drivers/staging/r8188eu/include/rtw_pwrctrl.h b/drivers/staging/r8188eu/include/rtw_pwrctrl.h
+index b19ef796ab54..a71f2f8f7c43 100644
+--- a/drivers/staging/r8188eu/include/rtw_pwrctrl.h
++++ b/drivers/staging/r8188eu/include/rtw_pwrctrl.h
+@@ -93,7 +93,6 @@ struct pwrctrl_priv {
+ 	enum rt_rf_power_state	change_rfpwrstate;
+ 
+ 	u8		wepkeymask;
+-	u8		bHWPowerdown;/* if support hw power down */
+ 	u8		bkeepfwalive;
+ };
+ 
 -- 
 2.20.1
 

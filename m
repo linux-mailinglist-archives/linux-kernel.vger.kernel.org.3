@@ -2,75 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D0D4689BE
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 07:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE6D4689C8
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 07:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbhLEGrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 01:47:33 -0500
-Received: from sv1427.xserver.jp ([183.90.253.28]:38962 "EHLO
-        sv1427.xserver.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbhLEGrb (ORCPT
+        id S231981AbhLEG7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 01:59:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231966AbhLEG7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 01:47:31 -0500
-X-Greylist: delayed 579 seconds by postgrey-1.27 at vger.kernel.org; Sun, 05 Dec 2021 01:47:31 EST
-Received: from virusgw11.xserver.jp (virusgw11.xserver.jp [183.90.253.243])
-        by sv1427.xserver.jp (Postfix) with ESMTP id 509433E047A813
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 15:34:24 +0900 (JST)
-Received: from sv1427.xserver.jp (183.90.253.28)
- by virusgw11.xserver.jp (F-Secure/fsigk_smtp/521/virusgw11.xserver.jp);
- Sun, 05 Dec 2021 15:34:24 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/521/virusgw11.xserver.jp)
-Received: by sv1427.xserver.jp (Postfix, from userid 20199)
-        id 4E0EA3E0291C57; Sun,  5 Dec 2021 15:34:24 +0900 (JST)
-To:     linux-kernel@vger.kernel.org
-Subject: =?ISO-2022-JP?B?GyRCIVokKkxkJCQ5ZyRvJDskIiRqJCwkSCQmJDQkNiQkJF4kNyQ/IVsbKEI=?=
-Date:   Sun, 5 Dec 2021 06:34:24 +0000
-From:   =?ISO-2022-JP?B?GyRCSTFPKUdjPGglOyVzJT8hPCElGyhC?= 
-        <no-reply@himeji-kaitori.com>
-Message-ID: <64dab2bf53124c5f3a315cac674ed025@himeji-kaitori.com>
-X-Mailer: PHPMailer 5.2.22 (https://github.com/PHPMailer/PHPMailer)
-X-WPCF7-Content-Type: text/plain
+        Sun, 5 Dec 2021 01:59:40 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0FFC061751
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 22:56:14 -0800 (PST)
+Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1mtlRU-0007SW-AZ; Sun, 05 Dec 2021 07:56:12 +0100
+Message-ID: <d4a5c811-5874-8889-e503-925a9bb5b225@leemhuis.info>
+Date:   Sun, 5 Dec 2021 07:56:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-2022-JP
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: 5.15 regression: CONFIG_SYSFB_SIMPLEFB breaks console scrolling
+Content-Language: en-BW
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Harald Dunkel <harri@afaics.de>
+Cc:     Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <e50d5ad5-19fd-07ae-41e4-5a2d26a98bcf@afaics.de>
+ <4bf94684-6410-db9f-5bec-ea0540a2ea76@leemhuis.info>
+ <5de368f7-91cd-5998-9fe4-1bf448e32742@redhat.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <5de368f7-91cd-5998-9fe4-1bf448e32742@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1638687374;692f0e74;
+X-HE-SMSGID: 1mtlRU-0007SW-AZ
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-お問い合わせありがとうございます。
-下記の内容にて送信いたしました。
+Hi, this is your Linux kernel regression tracker speaking.
 
-折り返し担当者よりご連絡させていただきますので、
-しばらくお待ちください。
-なお、2〜3日しても当社から連絡が無い場合はトラブルも
-考えられますので再度お送り頂くかお電話下さい。
+On 03.12.21 12:20, Javier Martinez Canillas wrote:
+> Sorry for the late reply.
+> 
+> On 11/21/21 12:47, Thorsten Leemhuis wrote:
+>> Hi, this is your Linux kernel regression tracker speaking.
+>>
+>> On 16.11.21 05:52, Harald Dunkel wrote:
+>>>
+>>> if I enable CONFIG_SYSFB_SIMPLEFB in 5.15.2 and use grub's default
+>>> configuration
+>>> (Debian sid amd64), then a few lines at the bottom of /dev/tty1 including
+>>> login prompt are off-screen. Scrolling is broken. I can login, though.
+>>>
+>>> Enabling GRUB_TERMINAL=console in grub doesn't make a difference. Using
+>>> the same kernel except for CONFIG_SYSFB_SIMPLEFB the problem is gone.
+>>>
+>>> Graphics card is a GeForce GTX 1650. I tried with both CONFIG_DRM_NOUVEAU
+>>> and proprietary graphics drivers disabled.
+>>>
+>>> Attached you can find the config file. Please mail if I can help to track
+>>> this problem down.
+>>
+>> Thx for the report. I'm not totally sure if this is a regression, as
+>> that's a new config option. But it might be one considered a successor
+>> to an older one, hence it might count as regression. Adding two
+>> developers and a mailing list to the CC, hopefully someone can clarify.
+> 
+> I don't think this is a regression since enabling CONFIG_SYSFB_SIMPLEFB will
+> make the simpledrm driver to be bound while disabling the option makes the
+> efifb driver to be bound instead.
+>  Yes, it seems to be a bug in the simpledrm driver but the solution if you
+> have issues with the simpledrm is to not enable CONFIG_SYSFB_SIMPLEFB and
+> keep using the old fbdev driver.
 
-■お名前
-?? Rose is interested in your profile! Click Here: http://bit.do/fSMVS?7dw14 ??
+Mandy thx for the answer, Javier. Harald is quiet for some time already
+and didn't object so far, hence I'll remove this from regzbot:
 
-■ふりがな
-xoxqngp
+#regzbot invalid: problem caused by a new CONFIG option
 
-■メールアドレス
-linux-kernel@vger.kernel.org
+Ciao, Thorsten
 
-■御社名
-na1vuvwl
+P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
+on my table. I can only look briefly into most of them. Unfortunately
+therefore I sometimes will get things wrong or miss something important.
+I hope that's not the case here; if you think it is, don't hesitate to
+tell me about it in a public reply. That's in everyone's interest, as
+what I wrote above might be misleading to everyone reading this; any
+suggestion I gave they thus might sent someone reading this down the
+wrong rabbit hole, which none of us wants.
 
-■電話番号
-703754284894
-
-■お問い合わせ内容
-zvvc1vg
-
----------------------------------------------------------------------------
-このメールは、自動返信メールアドレスから配信されています。
-ご返信いただいてもお答えできませんのでご了承ください。
-
-_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
-
-　姫路買取センター．
-　〒670-0964 兵庫県姫路市豊沢町156 姫路アドバンスビル5F
-　TEL 079-286-5311 / FAX 079-286-5310
-
-_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
-
+BTW, I have no personal interest in this issue, which is tracked using
+regzbot, my Linux kernel regression tracking bot
+(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
+this mail to get things rolling again and hence don't need to be CC on
+all further activities wrt to this regression.

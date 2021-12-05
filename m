@@ -2,104 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D90468D61
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 21:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D21E468D66
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 22:02:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239101AbhLEU7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 15:59:53 -0500
-Received: from mail-lj1-f178.google.com ([209.85.208.178]:35782 "EHLO
-        mail-lj1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238875AbhLEU7w (ORCPT
+        id S239148AbhLEVF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 16:05:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238875AbhLEVF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 15:59:52 -0500
-Received: by mail-lj1-f178.google.com with SMTP id l7so17182292lja.2
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 12:56:24 -0800 (PST)
+        Sun, 5 Dec 2021 16:05:26 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DD3C061714;
+        Sun,  5 Dec 2021 13:01:58 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id k21so10673855ioh.4;
+        Sun, 05 Dec 2021 13:01:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VPcO1Y+IcTWAOW3b8aTl8BTHMy3hlj9aIUfXJHwhx+k=;
+        b=BtvdlJDP0rS6N6wHUi/evu5IGoS/fXQbqh16/Aa/nfjXM5uwgs/EOw0R6/N6AQm7gN
+         9va/nBcEeutVAqsAOTZlqXz8qfD5gEYPnzBuo1p+GyT2uRPBhaS54mCIwp0DljQDkdG1
+         kvDrPiUer3cqlG/zbCIpo888RgMKVCsy81/hwLcyi0gKpFMkxWUw+4dV50sVCUq89XHD
+         lw6xJBf7nlMYDqsQXfGctWWHt+IrUrw+x37fcjB13XHURZMaexFjgdR0j/EC04xJrh8P
+         pW10rvZeli4aEFT7a17pvmcwaa7FFryHoLrR71AY5LInI1XKeFNybPICtdSOz4mLauHH
+         LQwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LswMuAPPAcR79eTSLrpfGYTCkWF+UVGPcr+71MMBB4U=;
-        b=gu/qvO/eWufPH1In7+9OA8njmz3NLStY+7Vlp7m92tnvd07WnQV93A4qpu/jLx3wIr
-         kURmzaCv5qJbA3OuIChgXlMRWYAKGkmgO9fR24sus9lNIT6S7rBL4CLd2IhbHCOkdPq6
-         5HsY+Aqggb5dCZKl8PY6vgQx42QLG7HJwAhzfa/VAK6WQEm+StIUcV7oQYMLjdE5XY6c
-         4tJNJ0Hxs4DgKdm7mDSxEmzrXWvAnzFkuW3hFSn0Mqp6jT2OgOxemj3cpmJfg2e4m010
-         mBBgrQVcLKp219byX/Sj9TUOyM47roBViHS1MykXFycwZy0Zdkse8rHohsoYMuSQIUPT
-         7jiw==
-X-Gm-Message-State: AOAM532kD/zFMQ7gj8z7Rg6nopn98fgLaqWatSqFjwntXKKCYyX0dALe
-        stkk7bfOj8Id0kuMh1spE+PPtp66J7PcA1KZ6/Y=
-X-Google-Smtp-Source: ABdhPJyoogqZ6JhkBTCGuCGA0ICxMe4rdBOncMtpJY8sCFZnBsCQcBSyMaiIuFDeryXPrEsIxoaZFpLQH/sESBbOqdk=
-X-Received: by 2002:a05:651c:545:: with SMTP id q5mr30897905ljp.202.1638737783460;
- Sun, 05 Dec 2021 12:56:23 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VPcO1Y+IcTWAOW3b8aTl8BTHMy3hlj9aIUfXJHwhx+k=;
+        b=zKXL5AztiRESXI24uFR1t1Ml1jEDzFQ6rXbXDjKpp5GFbTyCKeNbIZiED8/BDp9Z1b
+         Xumw3R/BLbWimFqsYAx3BYaurB0GxWAydHpefDxyU04JS42mkMcsK05w4kyFeWYcJV5B
+         BekTAWVk1ndliljmI2xmklDSCvYu75sakgbtcEYIeyRaTJ7YC5LaWE3qpxHJP13hiOSG
+         VotQBwwx1lzZ3cshi+osUUtzdHAOs9Cjp0gEHn76Vsi2gd/JgJKjQbuHkd0EyApx/0Bn
+         OlRq1rVBsMJhGw9ATh4WZLVD4s46fP7rTZ6pno6pkGMnIIC5FPb+DjJFltZEj3iTM/c/
+         +L7Q==
+X-Gm-Message-State: AOAM531Y/71dC8IXAxLp8WjbCypEtUqVpNcOlRz4Ow8VWHSm1GoT3ol/
+        h9lK0osJwgNq3UJhPv4qW0w=
+X-Google-Smtp-Source: ABdhPJzd8Zo8GcEOxXovkYNJBd0wu3m7p1/xWhUsBibFiELY36inPdiGnIEm5tVl2bQtvFddeVriyw==
+X-Received: by 2002:a05:6602:483:: with SMTP id y3mr29061135iov.42.1638738117886;
+        Sun, 05 Dec 2021 13:01:57 -0800 (PST)
+Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:9ea0:bb99:b16a:6159])
+        by smtp.gmail.com with ESMTPSA id e12sm2409001ilu.3.2021.12.05.13.01.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Dec 2021 13:01:57 -0800 (PST)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Adam Ford <aford173@gmail.com>, Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: fsl: imx8mq-evk: link regulator to VPU domain
+Date:   Sun,  5 Dec 2021 15:01:43 -0600
+Message-Id: <20211205210144.1072721-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20211201045807.1223200-1-namhyung@kernel.org> <20211205141558.GX16608@worktop.programming.kicks-ass.net>
-In-Reply-To: <20211205141558.GX16608@worktop.programming.kicks-ass.net>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Sun, 5 Dec 2021 12:56:14 -0800
-Message-ID: <CAM9d7cigg3hUXfwWX6OnJDainQdsjU=okL+dG+qhPq3m3tWkDg@mail.gmail.com>
-Subject: Re: [PATCH v2] perf/core: Set event shadow time for inactive events too
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Namhyung Kim <namhyung@google.com>,
-        Song Liu <songliubraving@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+The SW1C regulator powers the VPU and the state isn't guaranteed
+to always be on.  Link the VPU power-domain to the regulator to
+ensure it is turned on before using the power domain.
 
-On Sun, Dec 5, 2021 at 6:16 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Tue, Nov 30, 2021 at 08:58:07PM -0800, Namhyung Kim wrote:
-> > From: Namhyung Kim <namhyung@google.com>
-> >
-> > While f79256532682 ("perf/core: fix userpage->time_enabled of inactive
-> > events") fixed this problem for user rdpmc usage, bperf (perf stat
-> > with BPF) still has the same problem that accessing inactive perf
-> > events from BPF using bpf_perf_event_read_value().
-> >
-> > +static inline void group_update_event_time(struct perf_event *group_event)
-> >  {
-> > +     struct perf_event *event;
-> > +     struct perf_event_context *ctx = group_event->ctx;
->
-> :-( surely you're aware of the reverse xmas tree thing by now?
+Signed-off-by: Adam Ford <aford173@gmail.com>
 
-Will change the order.
+diff --git a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
+index b83df77195ec..6778306aff3b 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
+@@ -326,6 +326,10 @@ &pgc_gpu {
+ 	power-supply = <&sw1a_reg>;
+ };
+ 
++&pgc_vpu {
++	power-supply = <&sw1c_reg>;
++};
++
+ &qspi0 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_qspi>;
+-- 
+2.32.0
 
->
-> >
-> > +     perf_event_update_time(group_event);
-> > +     perf_set_shadow_time(group_event, ctx);
-> >
-> > +     for_each_sibling_event(event, group_event) {
-> > +             perf_event_update_time(event);
-> > +             perf_set_shadow_time(event, ctx);
-> > +     }
-> >
-> > +     if (likely(!atomic_read(&group_event->mmap_count)))
-> >               return;
-> >
-> > +     perf_event_update_userpage(group_event);
-> > +
-> >       for_each_sibling_event(event, group_event)
-> > +             perf_event_update_userpage(event);
->
-> How does it make sense to chase those pointers twice?
-
-OK, then I think I can use the existing code to update
-event time before checking the mmap count.
-
-Thanks,
-Namhyung
-
->
-> >  }

@@ -2,100 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F098468B3E
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 14:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBDD468B42
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 14:51:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234301AbhLENtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 08:49:36 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:18564 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234296AbhLENtd (ORCPT
+        id S234332AbhLENys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 08:54:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234182AbhLENyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 08:49:33 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B5BpqID012887;
-        Sun, 5 Dec 2021 13:45:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=jzT/tAJSsWD3NmD7AyVv5ElgyWFuPszONu9lyp3gYvs=;
- b=b9neRlTZdEFdd/NKf5eHuychFwhjPs1lVaTQdLzLSp9ai+9JXoiJNKse3tWMXcNLPxcn
- AA4haouNIMEo+U6Id3GiMO2l+yAV7szqEB7N9T8ybN3qphIfuNp2RjvY8KzRgaigFRps
- jux6TZ1tdVRWgGOPYwf7tGtyFFGN6rS/rhj5Tjm9+8BO0KOL/KyfwGBIwh+9dlzzeZ0e
- VmX8bqP5RC+Yfx+ISRC8EK4OLCZgrfMdJykEhWhdJSjrLPF+refnPDpx7mf0tjKtCDRK
- SyOdM+Xykcqve/UvplvR32utG8Q9DtKNYbgU9POSMsokvqkqdQA8vho/Qp/DTXBnTgN5 NQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3crvx21230-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 05 Dec 2021 13:45:56 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B5DjtGY028630;
-        Sun, 5 Dec 2021 13:45:55 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3crvx2122r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 05 Dec 2021 13:45:55 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B5DikR9017739;
-        Sun, 5 Dec 2021 13:45:53 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3cqykhnpbn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 05 Dec 2021 13:45:53 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B5DcEnp29491488
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 5 Dec 2021 13:38:14 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EAE494203F;
-        Sun,  5 Dec 2021 13:45:50 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BADF342041;
-        Sun,  5 Dec 2021 13:45:49 +0000 (GMT)
-Received: from sig-9-65-73-15.ibm.com (unknown [9.65.73.15])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun,  5 Dec 2021 13:45:49 +0000 (GMT)
-Message-ID: <61282ef92ad508d34e4444f6983a06804174e0ac.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 2/2] integrity: support including firmware
- ".platform" keys at build time
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Nayna Jain <nayna@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        keyrings@vger.kernel.org
-Cc:     dhowells@redhat.com, jarkko@kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dimitri John Ledkov <dimitri.ledkov@canonical.com>,
-        Seth Forshee <seth@forshee.me>
-Date:   Sun, 05 Dec 2021 08:45:49 -0500
-In-Reply-To: <20211124204714.82514-3-nayna@linux.ibm.com>
-References: <20211124204714.82514-1-nayna@linux.ibm.com>
-         <20211124204714.82514-3-nayna@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 9F-uV3BV89HIkd5W_HgTufai1Raump-5
-X-Proofpoint-ORIG-GUID: Emi7WJWQnWdwKBttCIGldM1kFycgyNmo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-05_03,2021-12-02_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- bulkscore=0 phishscore=0 priorityscore=1501 spamscore=0 mlxlogscore=913
- malwarescore=0 clxscore=1015 adultscore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112050076
+        Sun, 5 Dec 2021 08:54:47 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329CDC061714
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 05:51:20 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id y13so31826851edd.13
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 05:51:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yZRp/P0z+SfnrCvymT1hO4NZCYhrmUdNuC+3ZEb626M=;
+        b=BbtamD8tRhD9PaogXzLHMcnTmmY6F8akHApUvH3/6KOhOvPaaQnLB66+tahElMLKeX
+         EWXQt5knKzFpgkrXKsKQsC9pHVzmnoYwvAYtmIFwOZrEMD2dQq8iGIIuO5yxAKdLJDLo
+         JjQywnffto78HlzMbGPbwRsrWvPe0I67mfXuhtFVjJUiYSbcW4nq9zKqxdvsEV1C8JZJ
+         EIvVSg434drtuI3CgKCtAr0rWWvKfLUwXCrHMCvoNroHXLfZSwePgdcttqI9A+VWCgP8
+         8Z9o9vWpFdbQHLnjCOUefIgkM1h8zwbgNzRcAMaTGSop+ha6ZFamwV8BpUsYnKLsl7xl
+         B8Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yZRp/P0z+SfnrCvymT1hO4NZCYhrmUdNuC+3ZEb626M=;
+        b=0dEowUuaQeWNLPHilsYP76rSg9tgKtfSd457A8r0zuiI/2p4K9oGobXkRnazDGTtkF
+         sPcnxz490PrH9f5bxf5Q/BgXQ9uL6bnC4/4woeMqa73y2UDHBU96L/nx9KvJ2DiY0Y4H
+         8IJTlTfNDGUKaE+OU6blKgwtWLGYHlPBDS5wwWGyRi5zUlIZEfDq/MH5ZwSo47PDXBMw
+         8iME0AhfFqIi8cxFtABouAPO7kPzioKYeAYYHRCb1TAx7Gd6SkmGkv8yg+ufllktu8Oi
+         QIjMU7r/zdyrSwiRQpN9bJuUQ8ygQUjvx21xlmck6zKi0S++Y89Ul2IS/1xPMhA6pJh1
+         XzBw==
+X-Gm-Message-State: AOAM530mCTr297bKm/dK6o/cx1TrtN8EHQxytt+K5siGO0200Gt+8JBf
+        N+QUv6SZhdjvBdFSLBFUyFSPRg==
+X-Google-Smtp-Source: ABdhPJweYu2Ow+S039Z4VffiMugkCJPIAcQreCs+suGXSVdwWgTLA2K4vqXjvtIKTF/kz/CEX1m1CA==
+X-Received: by 2002:aa7:dc14:: with SMTP id b20mr44653314edu.133.1638712278531;
+        Sun, 05 Dec 2021 05:51:18 -0800 (PST)
+Received: from leoy-ThinkPad-X240s ([104.245.96.202])
+        by smtp.gmail.com with ESMTPSA id bd12sm5832378edb.11.2021.12.05.05.51.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Dec 2021 05:51:17 -0800 (PST)
+Date:   Sun, 5 Dec 2021 21:51:03 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Kees Cook <keescook@chromium.org>, Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        James Morse <james.morse@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Stephane Eranian <eranian@google.com>,
+        James Clark <james.clark@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFCv1 4/4] perf: arm_spe: Dynamically switch PID tracing to
+ contextidr
+Message-ID: <20211205135103.GA42658@leoy-ThinkPad-X240s>
+References: <20211021134530.206216-1-leo.yan@linaro.org>
+ <20211021134530.206216-5-leo.yan@linaro.org>
+ <202110210848.35971643C6@keescook>
+ <20211101152835.GB375622@leoy-ThinkPad-X240s>
+ <YapEUlcyDZ6TuE6n@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YapEUlcyDZ6TuE6n@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-11-24 at 15:47 -0500, Nayna Jain wrote:
-> A new function load_builtin_platform_cert() is defined to load compiled
-> in certificates onto the ".platform" keyring.
+Hi Catalin,
+
+On Fri, Dec 03, 2021 at 04:22:42PM +0000, Catalin Marinas wrote:
+> On Mon, Nov 01, 2021 at 11:28:35PM +0800, Leo Yan wrote:
+> > On Thu, Oct 21, 2021 at 08:49:46AM -0700, Kees Cook wrote:
+> > > On Thu, Oct 21, 2021 at 09:45:30PM +0800, Leo Yan wrote:
+> > > > Now Arm64 provides API for enabling and disable PID tracing, Arm SPE
+> > > > driver invokes these functions to dynamically enable it during
+> > > > profiling when the program runs in root PID name space, and disable PID
+> > > > tracing when the perf event is stopped.
+> > > > 
+> > > > Device drivers should not depend on CONFIG_PID_IN_CONTEXTIDR for PID
+> > > > tracing, so this patch uses the consistent condition for setting bit
+> > > > EL1_CX for PMSCR.
+> > > 
+> > > My own preference here would be to not bother with the new
+> > > enable/disable helpers, but just open code it right here. (Save a patch
+> > > and is the only user.) But I defer to the taste of arm64 maintainers. :)
+> > 
+> > Before I send out a new version for this patch set (for support
+> > dynamic PID tracing on Arm64), I'd like to get your opinions for two
+> > things:
+> > 
+> > - Firstly, as Kees suggested to directly use variable
+> >   'contextidr_in_use' in drivers, which is exported as GPL symbol,
+> >   it's not necessarily to add two helpers contextidr_{enable|disable}().
+> >   What's your preference for this?
 > 
-> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> My preference would be to keep the helpers.
 
-Thanks, Nayna.
+Okay, will keep the helpers.
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> > - Secondly, now this patch set only support dynamic PID tracing for
+> >   Arm64; and there would be two customers to use dynamic PID tracing:
+> >   Arm SPE and Coresight ETMv4.x.  So this patch set doesn't support
+> >   dynamic PID tracing for Arm32 (under arch/arm).
+> > 
+> >   Do you accept this patch set for enabling PID tracing on Arm64 and we
+> >   can defer to support Arm32 when really need PID tracing on Arm32?
+> >   Or we should enable PID dynamic tracing for Arm64 and Arm32 in one
+> >   go?
+> 
+> If it doesn't break arm32, it's fine by me.
 
+In next spin, I will introduce a patch for new Arm32 helpers.  Since
+now we have no requirement for dynamic PID tracing, the Arm32 helpers
+will be nop operations and can be used for kernel compilation.
+
+> What's the cost of always enabling CONFIG_PID_IN_CONTEXTIDR? If it's
+> negligible, I'd not bother at all with any of the enabling/disabling.
+
+Yes, I compared performance for PID tracing with always enabling and
+disabling CONFIG_PID_IN_CONTEXTIDR, and also compared with using
+static key for enabling/disabling PID tracing.  The result shows the
+cost is negligible based on the benchmark 'perf bench sched'.
+
+Please see the detailed data in below link (note the testing results
+came from my Juno board):
+https://lore.kernel.org/lkml/20211021134530.206216-1-leo.yan@linaro.org/
+
+> Another question: can you run multiple instances of SPE for different
+> threads on different CPUs? What happens to the global contextidr_in_use
+> key when one of them stops?
+
+No, I only can launch one instance for Arm SPE event via perf tool; when
+I tried to launch a second instance, perf tool reports failure:
+
+The sys_perf_event_open() syscall returned with 16 (Device or resource busy) for event (arm_spe_0/load_filter=1,store_filter=1/u).
+
+Alternatively, I'd like give several examples for contextidr_in_use key
+values when run different perf modes.
+
+Firstly, I added two kprobe points to monitor contextidr_in_use key
+values with below commands, the first probe point is to monitor static
+key's increment, and second probe point is to monitor key's
+descrement:
+
+  # perf probe --add 'arm_spe_pmu_setup_aux:45 contextidr_in_use=contextidr_in_use.key.enabled.counter:u32'
+  # perf probe --add 'arm_spe_pmu_free_aux:7 contextidr_in_use=contextidr_in_use.key.enabled.counter:u32'
+
+Case 1: run perf tool with 'per-thread' mode:
+
+  # perf record -e arm_spe_0/load_filter=1,store_filter=1/u --per-thread -- uname
+
+Trace log shows contextidr_in_use is increment to 1 when setup AUX
+buffer and it descrement to 0 when free AUX buffer (before close SPE
+event).
+
+  perf-2393    [077] d..1.   427.161612: arm_spe_pmu_setup_aux_L45: (arm_spe_pmu_setup_aux+0x130/0x200) contextidr_in_use=1
+  perf-2393    [077] d..1.   427.477993: arm_spe_pmu_free_aux_L7: (arm_spe_pmu_free_aux+0x44/0xa0) contextidr_in_use=0
+
+Case 2: perf tool runs with system-wide mode:
+
+  # perf record -e arm_spe_0/load_filter=1,store_filter=1/u -a -- uname
+
+The system has 128 cores, so every CPU has its own AUX buffer, thus
+the static key will increase from 0 to 128; reversely, the static key
+will decrease from 128 to 0 when perf tool exists:
+
+  perf-2395    [077] d..1.   435.647270: arm_spe_pmu_setup_aux_L45: (arm_spe_pmu_setup_aux+0x130/0x200) contextidr_in_use=1
+  perf-2395    [077] d..1.   435.647912: arm_spe_pmu_setup_aux_L45: (arm_spe_pmu_setup_aux+0x130/0x200) contextidr_in_use=2
+  ...
+  perf-2395    [077] d..1.   435.709717: arm_spe_pmu_setup_aux_L45: (arm_spe_pmu_setup_aux+0x130/0x200) contextidr_in_use=128
+  perf-2395    [127] d..1.   436.734142: arm_spe_pmu_free_aux_L7: (arm_spe_pmu_free_aux+0x44/0xa0) contextidr_in_use=127
+  perf-2395    [127] d..1.   436.734438: arm_spe_pmu_free_aux_L7: (arm_spe_pmu_free_aux+0x44/0xa0) contextidr_in_use=126
+  perf-2395    [127] d..1.   436.734682: arm_spe_pmu_free_aux_L7: (arm_spe_pmu_free_aux+0x44/0xa0) contextidr_in_use=125
+  ...
+  perf-2395    [127] d..1.   436.763856: arm_spe_pmu_free_aux_L7: (arm_spe_pmu_free_aux+0x44/0xa0) contextidr_in_use=0
+
+Case 3: perf tool runs for CPU-wise mode:
+
+  # perf record -e arm_spe_0/load_filter=1,store_filter=1/u -C 1,3,4  -- uname
+
+The option '-C 1,3,4' specifies to only enable Arm SPE tracing on
+three CPUs (CPU1/3/4), so the contextidr_in_use key will increment for
+3 times when open perf event, and decrement the static key for 3 times
+when close SPE event:
+
+  perf-2404    [077] d..1.   450.564087: arm_spe_pmu_setup_aux_L45: (arm_spe_pmu_setup_aux+0x130/0x200) contextidr_in_use=1
+  perf-2404    [077] d..1.   450.564744: arm_spe_pmu_setup_aux_L45: (arm_spe_pmu_setup_aux+0x130/0x200) contextidr_in_use=2
+  perf-2404    [077] d..1.   450.565369: arm_spe_pmu_setup_aux_L45: (arm_spe_pmu_setup_aux+0x130/0x200) contextidr_in_use=3
+  perf-2404    [004] d..1.   451.567532: arm_spe_pmu_free_aux_L7: (arm_spe_pmu_free_aux+0x44/0xa0) contextidr_in_use=2
+  perf-2404    [004] d..1.   451.567823: arm_spe_pmu_free_aux_L7: (arm_spe_pmu_free_aux+0x44/0xa0) contextidr_in_use=1
+  perf-2404    [004] d..1.   451.568120: arm_spe_pmu_free_aux_L7: (arm_spe_pmu_free_aux+0x44/0xa0) contextidr_in_use=0
+
+Hope these three cases can demonstrate the usage for contextidr_in_use
+static key.
+
+Thanks,
+Leo

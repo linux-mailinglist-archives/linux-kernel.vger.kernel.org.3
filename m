@@ -2,112 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A70EA468D82
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 22:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFAB4468D84
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 22:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239505AbhLEWAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 17:00:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
+        id S239540AbhLEWC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 17:02:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232165AbhLEWAV (ORCPT
+        with ESMTP id S232139AbhLEWC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 17:00:21 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546AFC061714;
-        Sun,  5 Dec 2021 13:56:53 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J6gPt64b0z4xgY;
-        Mon,  6 Dec 2021 08:56:50 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638741411;
-        bh=vNSoC4TnagwVZgyyg3N+IOkNZVLWyrUR517QIhyGaX0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IpzNW/GfJLyDwW2hITQZtGr+kKaFoglozSU2e/cfzuHSA3Q8yfwtpQBeH7bdJOdYA
-         ClEJUUtsVMTMrkkAyWpqo2SYtd1QDvTNZDMiwqXQEq3yqxETIrqibfo/2FvGksj0wc
-         RdbWj+x0DcH6LnPLDbnz56aG9yvy2nDNbMNlqIUOdPoKI7XfumijePl/LxvsG2Uy9d
-         bsOqeekES2T7qrXPWYlAAGmcroEY3PFZ5S7t/7ykSRBeHFMImCHDlzkdQk94tFvfE5
-         e0glcggjb/lB9zGmwKyji4cmJZu6G/RDM+6MZaoCO+ISGyLK4zl5S5NLrtSJ1edQOG
-         n9uUeFT5kHQyA==
-Date:   Mon, 6 Dec 2021 08:56:50 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Steve French <stfrench@microsoft.com>
-Subject: Re: linux-next: manual merge of the cifs tree with the fscache tree
-Message-ID: <20211206085650.09dcb11e@canb.auug.org.au>
-In-Reply-To: <20211203094139.059541cd@canb.auug.org.au>
-References: <20211203094139.059541cd@canb.auug.org.au>
+        Sun, 5 Dec 2021 17:02:26 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA27C061751
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 13:58:59 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id o20so35093148eds.10
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 13:58:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BxkF5ybR0sSk2Qc7tg8NydRESBO95j6lxDt9gByhy1g=;
+        b=w/G4sML9qUsb7KLbUWLibhRlfiQ80RPjmTxdQ3gAzGDCWFkY393BkGlykTq9AHPlk9
+         pvE7QEZ/DkNJ0UiB02hi9PX7jHkeusq6HShRuJhdg2APdxaehEU9ial5VdD2UUvAKL6o
+         HamHUMqhHG0k13SElimqCk0AY1ERiXlxfNGW1s0nIcf2MUwShPAb30pzzcx//i07Nznv
+         dr0l+mofibJTUpmoM061AXi1E5v8TjQEPV4tvnFzyyUxiW6kYxuaFsDGpY+ZWjEByCc5
+         itjRhNzgluXdhKyTbgJvdWAZHsALFhtOnE304y9Nx0StLWh20tY6cixNzJNlKg7yD+xa
+         FuSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BxkF5ybR0sSk2Qc7tg8NydRESBO95j6lxDt9gByhy1g=;
+        b=zloWbaf83BoGXVe3gdHqrjvhXYc7FsF6bzq+NJHZy+rzFusEBiGExe9b7ftzRw/1HS
+         +ya0vQPbfjnHNYPQ9Iwzd0LVDwaIo5tiMQRTYBhS2JWB/ywz6ADAuHvhXkLCVpm/L81m
+         dMpNQpus+oMiRMp9hDtqgAdSNtcF0jfjnYOA4WW+WZnLLS4hsO7twsoXipZ0u17JhPgR
+         SrA7U9kXWuZgQyaib6Yx9oiImZmQ400bx5IcrYZuvC1929tI+DksTFRgFx6jhtn7SutP
+         b2om6u2+86B3AN6FaTa+sWP6HN4H/IvRX9rfIyPfS9gwz0FB0I/rSBT3PpvHWSPA2QqW
+         lAzQ==
+X-Gm-Message-State: AOAM533SQ7S6EAcgmTIZIIa8/sJCLHvNAWYa9CLa1FTeL2mJrFHY2XnL
+        x5KeEyQ/a3ncoXqx1IYSesNc0w==
+X-Google-Smtp-Source: ABdhPJzLotjrC5Ff3Uclo/otA6yvJQAalYclQgEKqqe/Z2wTloRzKQO0F2RjuK9Ctb39xg6oa/xEqQ==
+X-Received: by 2002:a17:907:94c7:: with SMTP id dn7mr40207945ejc.470.1638741537718;
+        Sun, 05 Dec 2021 13:58:57 -0800 (PST)
+Received: from localhost.localdomain (203.247.120.78.rev.sfr.net. [78.120.247.203])
+        by smtp.googlemail.com with ESMTPSA id nc29sm5724291ejc.3.2021.12.05.13.58.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Dec 2021 13:58:57 -0800 (PST)
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+To:     khilman@baylibre.com
+Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        p.zabel@pengutronix.de, balbi@kernel.org, jbrunet@baylibre.com,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v4 0/3] usb: meson: fix shared reset control use
+Date:   Sun,  5 Dec 2021 22:58:43 +0100
+Message-Id: <20211205215846.153703-1-aouledameur@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fras5=MuidKBp2oz2fvryqG";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/fras5=MuidKBp2oz2fvryqG
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+This patchset fixes a usb suspend warning seen on the libretech-cc by
+using reset_control_rearm() call of the reset framework API. 
+This call allows a reset consummer to release the reset line even when 
+just triggered so that it may be triggered again by other reset
+consummers.
 
-Hi all,
+reset_control_(de)assert() calls are called, in some meson usb drivers, 
+on a shared reset line when reset_control_reset has been used. This is not
+allowed by the reset framework.
 
-On Fri, 3 Dec 2021 09:41:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Hi all,
->=20
-> Today's linux-next merge of the cifs tree got conflicts in:
->=20
->   fs/cifs/connect.c
->   fs/cifs/fscache.c
->=20
-> between commit:
->=20
->   935b45107a80 ("cifs: Support fscache indexing rewrite (untested)")
->=20
-> from the fscache tree and commits:
->=20
->   9d0245fc6a2e ("cifs: wait for tcon resource_id before getting fscache s=
-uper")
->   c148f8eb032f ("cifs: add server conn_id to fscache client cookie")
->   b1f962ba272b ("cifs: avoid use of dstaddr as key for fscache client coo=
-kie")
->=20
-> from the cifs tree.
->=20
-> I fixed it up (I just used the former versions) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
+Finally the meson usb drivers are updated to use this new call, which
+solves the suspend issue addressed by the previous reverted 
+commit 7a410953d1fb ("usb: dwc3: meson-g12a: fix shared reset control
+use").
 
-These are now conflict between the fscache tree and Linus' tree.
+changes since v3:
+- Remove unnecessary reset_control_rearm() after reset_control_reset() 
+failure.
+- Use dev_err_probe().
 
---=20
-Cheers,
-Stephen Rothwell
+Amjad Ouled-Ameur (3):
+  phy: amlogic: phy-meson-gxl-usb2: fix shared reset controller use
+  phy: amlogic: meson8b-usb2: Use dev_err_probe()
+  phy: amlogic: meson8b-usb2: fix shared reset control use
 
---Sig_/fras5=MuidKBp2oz2fvryqG
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+ drivers/phy/amlogic/phy-meson-gxl-usb2.c | 1 +
+ drivers/phy/amlogic/phy-meson8b-usb2.c   | 9 +++++++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.25.1
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGtNaIACgkQAVBC80lX
-0GyvfAf+OaKQPepClKNIFWpCtDI1s7xYxOA9GQtTYwFwkwL8pFlueE0SnA1xld4Z
-hRcuSd8hfJhoQSekHWjlqRtTC3r9T5d6XifnAQWIpX35ic8fUPU0ddmE9pxZ7w1y
-k33zZ34TbIPgz/jZ3a1p8tEXQiWOj/i/QA98Hs8NkkRcE2bI7SfLjoppZgBNFQ1E
-GtlU8kvB6tkC0LNRIqVpEoUW0n1HVoNMqpM/t68IDlJN2J0befOpAWk5gfQhFumd
-DcduIagMObqFsMr877Sa1t5LQdjXckuU9fSrqpNSdHkBum3gLj+RGzJdUOGppm63
-u7ERS/opi/KAhHBOKECJCs0ER35qaQ==
-=iFhg
------END PGP SIGNATURE-----
-
---Sig_/fras5=MuidKBp2oz2fvryqG--

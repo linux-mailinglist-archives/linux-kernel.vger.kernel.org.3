@@ -2,136 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C4F468891
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 01:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5E946889A
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 01:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbhLEAJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Dec 2021 19:09:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47266 "EHLO
+        id S229772AbhLEARC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Dec 2021 19:17:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbhLEAJp (ORCPT
+        with ESMTP id S231533AbhLEAQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Dec 2021 19:09:45 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B908C0611F7
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Dec 2021 16:06:19 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id r26so13796055oiw.5
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Dec 2021 16:06:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aLM7Vzy6+wcFi2+uw4mY6eHdc1c6QIPZ2YzBFSeQVDk=;
-        b=oypqQM9WYczOUD8yOv4W0b0J4SdrSIP2/GWFE4TR5k1CGEkHNy9WPiO008zNzsg3Pz
-         zh9bUtf/VG6/b3zJ480BiJtwEa7PuEjsHQIWuEsggMdMqcZfJwsOE3iFtiG2DEPADAsO
-         hqFPrgRv7CWtgQ4J5ZJRkR9iA1oQHlUoWYY8QDKpr7VM+f+8Yrryge0w8oCSslRvNp+6
-         exKWbX0iHLd50+WQaM9fAnPeBnEozwwfUcCOKBUJC5pSMVg0d33S/UEK3rrGtAaDpFWu
-         Uv4am7V67+qDJ2gKBQwHEmdYiUOqE7eMf4wLG94y+RQ3YPpVsZKN31tRHAbmVgDqfwLj
-         frKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aLM7Vzy6+wcFi2+uw4mY6eHdc1c6QIPZ2YzBFSeQVDk=;
-        b=dJK5aLt6MLOaqq8R38c829HmuuhsEVcaMaGidu6Dz18qFj8nBqVqbB7I0eQ7hN2EuN
-         GZBZoU8rL8q5aEFEC2qObDfVTLjvZN7T1ongA6XR2OZ4mbB84N3PRQbBkncVdH+VRvDj
-         fZAxH0syeUzzu/1BLx3M9GuRLTMbguCmabj/OXDdQDI9UkIj68nU49ncW13K0UwTFJ7c
-         Ff+9pt6eRVuJHAIcYb1H6e52SFfsWoiRaAtcW6Pr0dM/XIsxKh6lYjSpr14dcHq1GLiR
-         SundPpuJFiy1H4YIYhvEr6MG0bwmDMO5hXq6J/YXv4V2eSS5FQl/zajH7IRLRjiJAGhs
-         3xrw==
-X-Gm-Message-State: AOAM533SmCecjeOZ2CZMXmOHZnQc5B+VDN5n9YT5+KePig/BI/AqdKpD
-        jSvY6ANut8+Oq7sHxiNrjHB+xt7TOf567peNxp6iAw==
-X-Google-Smtp-Source: ABdhPJy/aeGs123LiAIPsyMW3EdsawUgHdqxl5iex8vMswm1x7JAmAebxj9z1jBeNmQdoS/RXvDPX+AOcq/DNJTtHIA=
-X-Received: by 2002:aca:120f:: with SMTP id 15mr16602417ois.132.1638662778472;
- Sat, 04 Dec 2021 16:06:18 -0800 (PST)
+        Sat, 4 Dec 2021 19:16:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1490C061751;
+        Sat,  4 Dec 2021 16:12:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46FB860F4A;
+        Sun,  5 Dec 2021 00:12:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F590C341C2;
+        Sun,  5 Dec 2021 00:12:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638663156;
+        bh=Q3FvNDDgM8imC21aPzaOnC+lsYvXc1b2ZGBV579IFwQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GRX1T78fi3d6dElxnu0+yQcfrNJG2jZQUcqwXFmnQ3NmVltdbEjHIALhAcI5QNnI7
+         8BL99z6qNKHam4yKLAIUx8uJ9Gg5wqm6JJ5FUftuaKkH+EHSSlSzRz+Dn3+XTjYIw3
+         sVeFN1s6ijL7QBJ/pFKfqQoc2ZY4AzR5l1rb9jUJPkv0t5ohlOzKDOFNtCjVdQFbYd
+         +SKZo/ghfYw34Jbpmw70Sp48cCGOhQS1hLmOK6rvGexO821FVTV6aet9MM2v/YwAUG
+         Y6NpX8p393kjAs7PW0TSuhfY3Lg7HdQ9IvCbbWZxh0Sa0oTCTlL4LqtyuMakPwscuY
+         AzZw0e4tMt7tA==
+Date:   Sun, 5 Dec 2021 02:12:32 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>, kernel@pengutronix.de,
+        Andreas Rammhold <andreas@rammhold.de>,
+        Tim Harvey <tharvey@gateworks.com>,
+        David Gstir <david@sigma-star.at>,
+        Richard Weinberger <richard@nod.at>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v4 1/5] KEYS: trusted: allow use of TEE as backend
+ without TCG_TPM support
+Message-ID: <YawD8Ey2x98vIMRt@iki.fi>
+References: <cover.8f40b6d1b93adc80aed2cac29a134f7a7fb5ee98.1633946449.git-series.a.fatoum@pengutronix.de>
+ <c36b3e3d4d215e790491e1a274a8993dd68e2a39.1633946449.git-series.a.fatoum@pengutronix.de>
 MIME-Version: 1.0
-References: <20211202210839.79140-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20211202210839.79140-1-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 5 Dec 2021 01:06:07 +0100
-Message-ID: <CACRpkdZbpKqG_uS2N8TW2-HL5CqnuKDpHVCabf66MyQQof0jOw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] gpio: Get rid of duplicate of_node assignment in
- the drivers
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Baruch Siach <baruch@tkos.co.il>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Tony Lindgren <tony@atomide.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Jianqun Xu <jay.xu@rock-chips.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        Thierry Reding <treding@nvidia.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-power@fi.rohmeurope.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-pwm@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-unisoc@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-tegra@vger.kernel.org, Ray Jui <rjui@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Keerthy <j-keerthy@ti.com>, Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c36b3e3d4d215e790491e1a274a8993dd68e2a39.1633946449.git-series.a.fatoum@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 10:17 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Mon, Oct 11, 2021 at 12:02:34PM +0200, Ahmad Fatoum wrote:
+> With recent rework, trusted keys are no longer limited to TPM as trust
+> source. The Kconfig symbol is unchanged however leading to a few issues:
+> 
+>   - TCG_TPM is required, even if only TEE is to be used
+>   - Enabling TCG_TPM, but excluding it from available trusted sources
+>     is not possible
+>   - TEE=m && TRUSTED_KEYS=y will lead to TEE support being silently
+>     dropped, which is not the best user experience
+> 
+> Remedy these issues by introducing two new boolean Kconfig symbols:
+> TRUSTED_KEYS_TPM and TRUSTED_KEYS_TEE with the appropriate
+> dependencies.
+> 
+> Any code depending on the TPM trusted key backend or symbols exported
+> by it will now need to explicitly state that it
+> 
+>   depends on TRUSTED_KEYS && TRUSTED_KEYS_TPM
+> 
+> The latter to ensure the dependency is built and the former to ensure
+> it's reachable for module builds. This currently only affects
+> CONFIG_ASYMMETRIC_TPM_KEY_SUBTYPE, so it's fixed up here as well.
+> 
+> Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+> Tested-By: Andreas Rammhold <andreas@rammhold.de>
+> Tested-By: Tim Harvey <tharvey@gateworks.com>
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> ---
+> v3 -> v4:
+>   - rebased on top of Andreas' regression fix and pulled it back
+>     into series
+> 
+> v2 -> v3:
+>   - factored this patch out as a fix for backporting
+> 
+> v1 -> v2:
+>   - Move rest of TPM-related selects from TRUSTED_KEYS to
+>     TRUSTED_KEYS_TPM (Sumit)
+>   - Remove left-over line in Makefile (Sumit)
+>   - added Fixes: tag
+>   - adjust commit message to reference the regression reported
+>     by Andreas
+>   - have ASYMMETRIC_TPM_KEY_SUBTYPE depend on TRUSTED_KEYS_TPM,
+>     because it references global symbols that are exported
+>     by the trusted key TPM backend.
+> 
+> [1]: https://lore.kernel.org/linux-integrity/f8285eb0135ba30c9d846cf9dd395d1f5f8b1efc.1624364386.git-series.a.fatoum@pengutronix.de/
+> [2]: https://lore.kernel.org/linux-integrity/20210719091335.vwfebcpkf4pag3wm@wrt/T/#t
+> 
+> To: Jarkko Sakkinen <jarkko@kernel.org>
+> To: James Morris <jmorris@namei.org>
+> To: "Serge E. Hallyn" <serge@hallyn.com>
+> To: James Bottomley <jejb@linux.ibm.com>
+> To: Mimi Zohar <zohar@linux.ibm.com>
+> To: Sumit Garg <sumit.garg@linaro.org>
+> To: David Howells <dhowells@redhat.com>
+> To: Herbert Xu <herbert@gondor.apana.org.au>
+> To: "David S. Miller" <davem@davemloft.net>
+> Cc: David Gstir <david@sigma-star.at>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: keyrings@vger.kernel.org
+> Cc: linux-crypto@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-security-module@vger.kernel.org
+> Cc: linux-integrity@vger.kernel.org
+> ---
+>  crypto/asymmetric_keys/Kconfig            |  2 +-
+>  security/keys/Kconfig                     | 18 +++++----------
+>  security/keys/trusted-keys/Kconfig        | 29 ++++++++++++++++++++++++-
+>  security/keys/trusted-keys/Makefile       |  8 +++----
+>  security/keys/trusted-keys/trusted_core.c |  4 +--
+>  5 files changed, 43 insertions(+), 18 deletions(-)
+>  create mode 100644 security/keys/trusted-keys/Kconfig
+> 
+> diff --git a/crypto/asymmetric_keys/Kconfig b/crypto/asymmetric_keys/Kconfig
+> index 1f1f004dc757..8886eddbf881 100644
+> --- a/crypto/asymmetric_keys/Kconfig
+> +++ b/crypto/asymmetric_keys/Kconfig
+> @@ -25,7 +25,7 @@ config ASYMMETRIC_PUBLIC_KEY_SUBTYPE
+>  config ASYMMETRIC_TPM_KEY_SUBTYPE
+>  	tristate "Asymmetric TPM backed private key subtype"
+>  	depends on TCG_TPM
+> -	depends on TRUSTED_KEYS
+> +	depends on TRUSTED_KEYS && TRUSTED_KEYS_TPM
+>  	select CRYPTO_HMAC
+>  	select CRYPTO_SHA1
+>  	select CRYPTO_HASH_INFO
+> diff --git a/security/keys/Kconfig b/security/keys/Kconfig
+> index 64b81abd087e..9ec302962fe2 100644
+> --- a/security/keys/Kconfig
+> +++ b/security/keys/Kconfig
+> @@ -70,23 +70,19 @@ config BIG_KEYS
+>  
+>  config TRUSTED_KEYS
+>  	tristate "TRUSTED KEYS"
+> -	depends on KEYS && TCG_TPM
+> -	select CRYPTO
+> -	select CRYPTO_HMAC
+> -	select CRYPTO_SHA1
+> -	select CRYPTO_HASH_INFO
+> -	select ASN1_ENCODER
+> -	select OID_REGISTRY
+> -	select ASN1
+> +	depends on KEYS
+>  	help
+>  	  This option provides support for creating, sealing, and unsealing
+>  	  keys in the kernel. Trusted keys are random number symmetric keys,
+> -	  generated and RSA-sealed by the TPM. The TPM only unseals the keys,
+> -	  if the boot PCRs and other criteria match.  Userspace will only ever
+> -	  see encrypted blobs.
+> +	  generated and sealed by a trust source selected at kernel boot-time.
+> +	  Userspace will only ever see encrypted blobs.
+>  
+>  	  If you are unsure as to whether this is required, answer N.
+>  
+> +if TRUSTED_KEYS
+> +source "security/keys/trusted-keys/Kconfig"
+> +endif
+> +
+>  config ENCRYPTED_KEYS
+>  	tristate "ENCRYPTED KEYS"
+>  	depends on KEYS
+> diff --git a/security/keys/trusted-keys/Kconfig b/security/keys/trusted-keys/Kconfig
+> new file mode 100644
+> index 000000000000..fc4abd581abb
+> --- /dev/null
+> +++ b/security/keys/trusted-keys/Kconfig
+> @@ -0,0 +1,29 @@
+> +config TRUSTED_KEYS_TPM
+> +	bool "TPM-based trusted keys"
+> +	depends on TCG_TPM >= TRUSTED_KEYS
+> +	default y
+> +	select CRYPTO
+> +	select CRYPTO_HMAC
+> +	select CRYPTO_SHA1
+> +	select CRYPTO_HASH_INFO
+> +	select ASN1_ENCODER
+> +	select OID_REGISTRY
+> +	select ASN1
+> +	help
+> +	  Enable use of the Trusted Platform Module (TPM) as trusted key
+> +	  backend. Trusted keys are random number symmetric keys,
+> +	  which will be generated and RSA-sealed by the TPM.
+> +	  The TPM only unseals the keys, if the boot PCRs and other
+> +	  criteria match.
+> +
+> +config TRUSTED_KEYS_TEE
+> +	bool "TEE-based trusted keys"
+> +	depends on TEE >= TRUSTED_KEYS
+> +	default y
+> +	help
+> +	  Enable use of the Trusted Execution Environment (TEE) as trusted
+> +	  key backend.
+> +
+> +if !TRUSTED_KEYS_TPM && !TRUSTED_KEYS_TEE
+> +comment "No trust source selected!"
+> +endif
+> diff --git a/security/keys/trusted-keys/Makefile b/security/keys/trusted-keys/Makefile
+> index feb8b6c3cc79..2e2371eae4d5 100644
+> --- a/security/keys/trusted-keys/Makefile
+> +++ b/security/keys/trusted-keys/Makefile
+> @@ -5,10 +5,10 @@
+>  
+>  obj-$(CONFIG_TRUSTED_KEYS) += trusted.o
+>  trusted-y += trusted_core.o
+> -trusted-y += trusted_tpm1.o
+> +trusted-$(CONFIG_TRUSTED_KEYS_TPM) += trusted_tpm1.o
+>  
+>  $(obj)/trusted_tpm2.o: $(obj)/tpm2key.asn1.h
+> -trusted-y += trusted_tpm2.o
+> -trusted-y += tpm2key.asn1.o
+> +trusted-$(CONFIG_TRUSTED_KEYS_TPM) += trusted_tpm2.o
+> +trusted-$(CONFIG_TRUSTED_KEYS_TPM) += tpm2key.asn1.o
+>  
+> -trusted-$(CONFIG_TEE) += trusted_tee.o
+> +trusted-$(CONFIG_TRUSTED_KEYS_TEE) += trusted_tee.o
+> diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+> index 5b35f1b87644..8cab69e5d0da 100644
+> --- a/security/keys/trusted-keys/trusted_core.c
+> +++ b/security/keys/trusted-keys/trusted_core.c
+> @@ -27,10 +27,10 @@ module_param_named(source, trusted_key_source, charp, 0);
+>  MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
+>  
+>  static const struct trusted_key_source trusted_key_sources[] = {
+> -#if IS_REACHABLE(CONFIG_TCG_TPM)
+> +#if defined(CONFIG_TRUSTED_KEYS_TPM)
+>  	{ "tpm", &trusted_key_tpm_ops },
+>  #endif
+> -#if IS_REACHABLE(CONFIG_TEE)
+> +#if defined(CONFIG_TRUSTED_KEYS_TEE)
+>  	{ "tee", &trusted_key_tee_ops },
+>  #endif
+>  };
+> -- 
+> git-series 0.9.1
 
-> GPIO library does copy the of_node from the parent device of
-> the GPIO chip, there is no need to repeat this in the individual
-> drivers. Remove these assignment all at once.
->
-> For the details one may look into the of_gpio_dev_init() implementation.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-This is definitely a patch in the right direction, as Bart says
-it can be a bit dangerous, the outliers are those drivers that
-assign the .dev to something completely different than the
-the dev where the of_node is copied from.
-
-The idea was definitely always to only assign it in the core
-*unless* there is a reason to have a completely different
-of_node for some reason.
-
-> +++ b/drivers/gpio/gpio-rda.c
-> @@ -240,8 +240,6 @@ static int rda_gpio_probe(struct platform_device *pdev)
->         rda_gpio->chip.label = dev_name(dev);
->         rda_gpio->chip.ngpio = ngpios;
->         rda_gpio->chip.base = -1;
-> -       rda_gpio->chip.parent = dev;
-> -       rda_gpio->chip.of_node = np;
-
-Mention in the commit message that in this driver
-you also drop the the .parent assignment because the
-core will handle it.
-
-Yours,
-Linus Walleij
+/Jarkko

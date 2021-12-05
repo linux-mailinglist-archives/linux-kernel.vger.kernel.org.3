@@ -2,128 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A2A468D7A
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 22:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A70EA468D82
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 22:56:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239429AbhLEVnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 16:43:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
+        id S239505AbhLEWAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 17:00:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232165AbhLEVnH (ORCPT
+        with ESMTP id S232165AbhLEWAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 16:43:07 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F9EC061714;
-        Sun,  5 Dec 2021 13:39:40 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id x7so6296112pjn.0;
-        Sun, 05 Dec 2021 13:39:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nJ+Pla7ZGvHQEHUB3DSoauogXISC+UwH9TH03jV2caw=;
-        b=Qu1A6lJOOwziop+bTtc3cOXfWdWTDsa3dc9dlGvErHl24bKZY0yUOGeJX3GEfdOLg7
-         R8z/DLAZFKXvHQsvZOsHzy/aBqYotqU8B2g5jAi+/7TBUG37f85ZR8H93ZUdU/E7rJqu
-         XTuxzVFk5Do3MtQ4XO5VG73SWtYhhkFO4lXGrDKBTWumxIYLS+bJgUj8ehJe0o4DlOol
-         6snfjGiaC5tYFMw2+jUKMwlW/w0Hikok4dPOZIsZtMdPAASV35LJZj2i+1r6O4d/bLI4
-         Dxv1u80vSeTPlgmW/sKK+qd7h4mnIJnn6bfMwn4ZWJzeOATv2KpJuQcK6gfWtO/deV6t
-         c3bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nJ+Pla7ZGvHQEHUB3DSoauogXISC+UwH9TH03jV2caw=;
-        b=TUPJSvGDS4/GsyWkPUWqIBEHObK2sWMNIcQNaIS25Wy5/thCStjYFn74g/U+Ljfr3t
-         rbeYf1N4NbLN3S0auYAAC/jgeefeIA45kuRDLK7Tw+UbLMpUgT4tnCmgFx2zfBDlVQue
-         TdSHZl3VWh02zvInN96WdzugvNd1ZMM//mquSly3z0lL1iAEmBx8kSFyqKogpOyS1DPc
-         VEEEdbOfAkPYbMJyuqFLP4Ab56HhU2H11L93sgDvjFYNrvLJkhlHaMq7qJ2Jj+gmDhkv
-         sR1rddPsgyoRGMi2x1cMhOzm7/UX5hnryvTReDWhnbrTTfRAHTo1AbVBm8wwSMpq1bfF
-         diMQ==
-X-Gm-Message-State: AOAM531/yBuA1G+vIGOf8TC0jKNpUDtlajxNrDpcUiTqihU6sKtLLTiU
-        EhPk4ikbRXpflDl/C4KI5Gc=
-X-Google-Smtp-Source: ABdhPJywN0CepSJUH0wjIwIrZ3rw8E0BK/gq2Ajuc86GPVBeZ7JkGYLHgMeH+DFvYhicvdNwkCM7gw==
-X-Received: by 2002:a17:90b:4c02:: with SMTP id na2mr32444046pjb.94.1638740379199;
-        Sun, 05 Dec 2021 13:39:39 -0800 (PST)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id il7sm8365725pjb.54.2021.12.05.13.39.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 13:39:38 -0800 (PST)
-Date:   Mon, 6 Dec 2021 06:39:36 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Gabriel Somlo <gsomlo@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, ulf.hansson@linaro.org,
-        linux-mmc@vger.kernel.org, kgugala@antmicro.com,
-        mholenko@antmicro.com, krakoczy@antmicro.com,
-        mdudek@internships.antmicro.com, paulus@ozlabs.org, joel@jms.id.au,
-        geert@linux-m68k.org, david.abdurachmanov@sifive.com,
-        florent@enjoy-digital.fr
-Subject: Re: [PATCH v1 3/3] mmc: Add driver for LiteX's LiteSDCard interface
-Message-ID: <Ya0xmCTrp7BJmiBs@antec>
-References: <20211203234155.2319803-1-gsomlo@gmail.com>
- <20211203234155.2319803-4-gsomlo@gmail.com>
+        Sun, 5 Dec 2021 17:00:21 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546AFC061714;
+        Sun,  5 Dec 2021 13:56:53 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J6gPt64b0z4xgY;
+        Mon,  6 Dec 2021 08:56:50 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638741411;
+        bh=vNSoC4TnagwVZgyyg3N+IOkNZVLWyrUR517QIhyGaX0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IpzNW/GfJLyDwW2hITQZtGr+kKaFoglozSU2e/cfzuHSA3Q8yfwtpQBeH7bdJOdYA
+         ClEJUUtsVMTMrkkAyWpqo2SYtd1QDvTNZDMiwqXQEq3yqxETIrqibfo/2FvGksj0wc
+         RdbWj+x0DcH6LnPLDbnz56aG9yvy2nDNbMNlqIUOdPoKI7XfumijePl/LxvsG2Uy9d
+         bsOqeekES2T7qrXPWYlAAGmcroEY3PFZ5S7t/7ykSRBeHFMImCHDlzkdQk94tFvfE5
+         e0glcggjb/lB9zGmwKyji4cmJZu6G/RDM+6MZaoCO+ISGyLK4zl5S5NLrtSJ1edQOG
+         n9uUeFT5kHQyA==
+Date:   Mon, 6 Dec 2021 08:56:50 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Steve French <stfrench@microsoft.com>
+Subject: Re: linux-next: manual merge of the cifs tree with the fscache tree
+Message-ID: <20211206085650.09dcb11e@canb.auug.org.au>
+In-Reply-To: <20211203094139.059541cd@canb.auug.org.au>
+References: <20211203094139.059541cd@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211203234155.2319803-4-gsomlo@gmail.com>
+Content-Type: multipart/signed; boundary="Sig_/fras5=MuidKBp2oz2fvryqG";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 06:41:55PM -0500, Gabriel Somlo wrote:
-> LiteX (https://github.com/enjoy-digital/litex) is a SoC framework
-> that targets FPGAs. LiteSDCard is a small footprint, configurable
-> SDCard core commonly used in LiteX designs.
-> 
-> The driver was first written in May 2020 and has been maintained
-> cooperatively by the LiteX community. Thanks to all contributors!
-> 
-> Co-developed-by: Kamil Rakoczy <krakoczy@antmicro.com>
-> Signed-off-by: Kamil Rakoczy <krakoczy@antmicro.com>
-> Co-developed-by: Maciej Dudek <mdudek@internships.antmicro.com>
-> Signed-off-by: Maciej Dudek <mdudek@internships.antmicro.com>
-> Co-developed-by: Paul Mackerras <paulus@ozlabs.org>
-> Signed-off-by: Paul Mackerras <paulus@ozlabs.org>
-> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-> Cc: Mateusz Holenko <mholenko@antmicro.com>
-> Cc: Karol Gugala <kgugala@antmicro.com>
-> Cc: Joel Stanley <joel@jms.id.au>
-> Cc: Stafford Horne <shorne@gmail.com>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: David Abdurachmanov <david.abdurachmanov@sifive.com>
-> Cc: Florent Kermarrec <florent@enjoy-digital.fr>
-> ---
->  drivers/mmc/host/Kconfig     |   6 +
->  drivers/mmc/host/Makefile    |   1 +
->  drivers/mmc/host/litex_mmc.c | 677 +++++++++++++++++++++++++++++++++++
->  3 files changed, 684 insertions(+)
->  create mode 100644 drivers/mmc/host/litex_mmc.c
-> 
-> diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-> index 5af8494c31b5..84c64e72195d 100644
-> --- a/drivers/mmc/host/Kconfig
-> +++ b/drivers/mmc/host/Kconfig
-> @@ -1093,3 +1093,9 @@ config MMC_OWL
->  
->  config MMC_SDHCI_EXTERNAL_DMA
->  	bool
-> +
-> +config MMC_LITEX
-> +	tristate "Support for the MMC Controller in LiteX SOCs"
-> +	depends on OF && LITEX
-> +	help
-> +	  Generic MCC driver for LiteX
+--Sig_/fras5=MuidKBp2oz2fvryqG
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I just noticed this while configuring the kernel.  This doesn't really follow
-the pattern of other drivers, we should think of putting "Litex" near the
-beginning of the line. It makes it easier to spot in menuconfig.
+Hi all,
 
-For example:
+On Fri, 3 Dec 2021 09:41:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> Hi all,
+>=20
+> Today's linux-next merge of the cifs tree got conflicts in:
+>=20
+>   fs/cifs/connect.c
+>   fs/cifs/fscache.c
+>=20
+> between commit:
+>=20
+>   935b45107a80 ("cifs: Support fscache indexing rewrite (untested)")
+>=20
+> from the fscache tree and commits:
+>=20
+>   9d0245fc6a2e ("cifs: wait for tcon resource_id before getting fscache s=
+uper")
+>   c148f8eb032f ("cifs: add server conn_id to fscache client cookie")
+>   b1f962ba272b ("cifs: avoid use of dstaddr as key for fscache client coo=
+kie")
+>=20
+> from the cifs tree.
+>=20
+> I fixed it up (I just used the former versions) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
-LiteX MMC Controller support
+These are now conflict between the fscache tree and Linus' tree.
 
-This selects support for the MMC Host Controller found in LiteX SOCs.
+--=20
+Cheers,
+Stephen Rothwell
 
-It unsure, say N.
+--Sig_/fras5=MuidKBp2oz2fvryqG
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--Stafford
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGtNaIACgkQAVBC80lX
+0GyvfAf+OaKQPepClKNIFWpCtDI1s7xYxOA9GQtTYwFwkwL8pFlueE0SnA1xld4Z
+hRcuSd8hfJhoQSekHWjlqRtTC3r9T5d6XifnAQWIpX35ic8fUPU0ddmE9pxZ7w1y
+k33zZ34TbIPgz/jZ3a1p8tEXQiWOj/i/QA98Hs8NkkRcE2bI7SfLjoppZgBNFQ1E
+GtlU8kvB6tkC0LNRIqVpEoUW0n1HVoNMqpM/t68IDlJN2J0befOpAWk5gfQhFumd
+DcduIagMObqFsMr877Sa1t5LQdjXckuU9fSrqpNSdHkBum3gLj+RGzJdUOGppm63
+u7ERS/opi/KAhHBOKECJCs0ER35qaQ==
+=iFhg
+-----END PGP SIGNATURE-----
+
+--Sig_/fras5=MuidKBp2oz2fvryqG--

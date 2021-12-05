@@ -2,207 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7A7468DB8
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 23:28:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C0B468DBC
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 23:40:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239744AbhLEWba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 17:31:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233833AbhLEWb3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 17:31:29 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B49FC061714;
-        Sun,  5 Dec 2021 14:28:02 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id q74so25956833ybq.11;
-        Sun, 05 Dec 2021 14:28:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SERoy8mNp8PYxIRCuBvgvbxWStiuaQfRrnBn5Hx8L44=;
-        b=ZAB2QYa1bE06WOta7EStJ9OiY7PjwDFED+bNlLIZluIwP6gjM6awoHbEahTmMgA5dc
-         HQWx11KjFFSXPPKkK3OxW5jNT6uuiYrHHiqxKSHbT+nvuYFFmOAUlkEucmtjzu/7PBfA
-         WMmpqzcuUQOLo92F+KwsstQYHejFeRXsMPOOsHY0lGl1Qf6uHZnKPqiL+X8Yztd3CzWm
-         xRltYjH23o6NniRHB2ElQSUCXcQg3xsf1dTHNR+1iiBqKmuyWE6HwD2K9KE4J2zjBE6Y
-         uuqSa/pSX22iShV2EWwQLwOFAyoVgolx0Lr/VlIAjGtYeB38iu33X2wiqAtK+BHgBtdn
-         Yo1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SERoy8mNp8PYxIRCuBvgvbxWStiuaQfRrnBn5Hx8L44=;
-        b=An3TyTVkMCzp1HGwf4dX+998RlFLmwNguBf6KpzJTuzaL6FxDIGza3PySHDflWi+dp
-         bfO8MuBqs4oTSQyMA6Fe32Ce/DVQCaFph2X8EJFFYRu6KuVighOiqWBP5h3pTgCTp/gq
-         2mB6Z7Ccd8RqmUbZHiJnz7OjTv2juo3m+bROLGAQFDoMGXKpIcptXj0uodrR0vrGdPzH
-         nnaTNz4mL+mxeiUSZcQPWGG45khcsJeVY22RCULdSxw/oUKhVTGmMMQ9v2sO4cqfWAeO
-         FMu2w8mwS1TNUK9Nh6fQ8d2i9zdazueSmngIGj9ggRvZkDVkdCl/EskC8lWdn2w4oLTK
-         ZLSA==
-X-Gm-Message-State: AOAM532Xl1TksZrJr++AYMdvyhfbEZquxUpof5kjllQEzv5idpiWptvN
-        zNXFyTbGCROeOyOqZW9oqIWNDd7sP+JM5FN8kaQ=
-X-Google-Smtp-Source: ABdhPJw8wBVGUsiIWvYc9nptkmzmP+1mUFLQzE3TzCw9HJcWQmc68r/GlOuu+n1pj2Y4yS1dU62GpC3GzX8Yue/mO+4=
-X-Received: by 2002:a25:dc4d:: with SMTP id y74mr36554837ybe.422.1638743281180;
- Sun, 05 Dec 2021 14:28:01 -0800 (PST)
+        id S239795AbhLEWn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 17:43:59 -0500
+Received: from mail-tycjpn01on2124.outbound.protection.outlook.com ([40.107.114.124]:57699
+        "EHLO JPN01-TYC-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233833AbhLEWn6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 17:43:58 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KLUFKOUU+uWkTGJdsMy8V2pXmIE1RskYUY0XDs0fMmZ46khJsy2l6a3327TNYbGraasgFDCsw9KTChWMXOmdjGsthNO7+xPVwwwE3ZM0y27BhJJ1TsDXW+j1NhyHAEi9hEHHPH97asAE4wRe/vBY9ztJs8plXwAf8AcYg7vpv2mMMvbqleE1FDaEjM73Y4nfUIhPICCRsTkLFbol/BxR2f5f17PWYK5LWKytAqf8KH6ecjwLLCkL8WQISS+67uOBeWbRm8I6i5Nm7ljPmdRrhbNKM3yNfcY8zQC1DEylvGoMMI6Q3p80H3p/lqwU5fR7QlOYeAt7zUkkp+WBvBtnOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rVG0Fk+I7OB0GfrzT6M5p6lcLbn8KXT9W7gJxDu6qnY=;
+ b=l8kFCMKyUFV3ogpm3lubW2ZqBgtGzMaEaayrd6038wkZXlUgaekSr1f6pfC9fa9yzIyY+TZs8uTdzlLwBieJxtzApAW60d16hqKZHoNNIgZ+5g0dVjmzr4RkxHnGTq00mzlseWrtiKdwpYMBigTvtC8V1kxflnaNxMzUT6QoCuD942IU5EkjW2ELN+p1enMmvMWw7ylewzGQsjSRXvS5oiyWrktk4AUQbjmrKKNeYjzh8nnGrQUU+fqeidL2U+3m3NBweXGA+9L/fuf+q0F2mnsSCtYJ4dS462F8sQUpkWQtbHiRc+64HOJzuHAfjNI+c7g3qLix3aK4FlSPKlcK9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rVG0Fk+I7OB0GfrzT6M5p6lcLbn8KXT9W7gJxDu6qnY=;
+ b=VXPyDh8scl7tswUGYuE8PJyBlbIvE1Fr/thRIPSjyX7BTPTrbkoQOEiF0CiBtADcKTZ1WoEatyGvijPnS+aG0pusTUTpuxA22srfCBM4ldC1CRqgIHBNJZrZQfT6HzWK6M1TDzAvh2LMIZOkXolMGwa686tXUnj76Kgp3TAAmvg=
+Received: from TYCPR01MB5581.jpnprd01.prod.outlook.com (2603:1096:400:a::10)
+ by TYCPR01MB6240.jpnprd01.prod.outlook.com (2603:1096:400:78::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Sun, 5 Dec
+ 2021 22:40:27 +0000
+Received: from TYCPR01MB5581.jpnprd01.prod.outlook.com
+ ([fe80::3d74:9c2e:e85a:df82]) by TYCPR01MB5581.jpnprd01.prod.outlook.com
+ ([fe80::3d74:9c2e:e85a:df82%5]) with mapi id 15.20.4755.021; Sun, 5 Dec 2021
+ 22:40:27 +0000
+From:   Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+To:     Ameer Hamza <amhamza.mgc@gmail.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] ASoC: test-component: fix null pointer dereference.
+Thread-Topic: [PATCH] ASoC: test-component: fix null pointer dereference.
+Thread-Index: AQHX6hiZRK5cTb56bk2m5NVbTZyjx6wkenEw
+Date:   Sun, 5 Dec 2021 22:40:27 +0000
+Message-ID: <TYCPR01MB55813B26BB2B3BB6D1E072F2D46C9@TYCPR01MB5581.jpnprd01.prod.outlook.com>
+References: <20211205204200.7852-1-amhamza.mgc@gmail.com>
+In-Reply-To: <20211205204200.7852-1-amhamza.mgc@gmail.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4938372d-7ffe-4bff-0d64-08d9b8403c1c
+x-ms-traffictypediagnostic: TYCPR01MB6240:
+x-microsoft-antispam-prvs: <TYCPR01MB6240F1AA5BA57C72E9939935D46C9@TYCPR01MB6240.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4941;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: BrbAbpc8wzM2weMkZsx3IcDuWCzQwM/AXpm7q/7LAutB/Plk5hLfvFOiZrYoW8LUTYtuw+P1HkEItIuIz7xPG8GT+DykJdWAiJMYXHQkUtC/Acn3IJp50P6azyzBji74d34t/i9kcHA5iopp7OXJf2zNLGaqN9WBxEkdvGpcg0nlLrXHqUwe8tCwVAjsqePhj6xBAZCw9feg8Y7wpcPnDWSv+9U/QjNrYmKxP2qvHhWQTKgqfrsf8C8WEgpPlO6Tr83m6ry2CwLM5oYj1dlcKSEw0TDF1hrjoG/GE/N15Uweqr9oMxC1gZYfogwU029fgXBtYoFgyAvm6EMDSbXT0G/CJBxBj4Tur006T0qTsJHF0EjuZtqknAhctp/EJ//TaSIWFGoa+uezr6CaEG7PU5ZIaReHUGh/eQXjrrRKMpn/J/TpoNtbG+yY/Ed7gswrpiV4c1ZByZH/1ihu+JbDO881wY338alsR3y3I6RY3KmpK8cZkJCM9ewxBzNegQCPbCR3APilmOhm+Faw0Ffa3rTfeTkmouHYwbWHj4foWcTc7FD6uY8GnLZb3oSSVU+mPOJm+ajhJgjKrSSL8lotXlEJ1UdYZapw9bcT1TmnzWwHt55/79OqDWHnf0iv50xBqsSBXaRrVFZdcYDBsCMs337Og5WsyQr3XyouZGMs3Tpt8kXO8gFLYciIlfoDpfaoeFoll4CC1GcOoRd8vrk5EQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB5581.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(76116006)(66946007)(66476007)(38070700005)(64756008)(66446008)(122000001)(66556008)(8936002)(110136005)(316002)(71200400001)(26005)(52536014)(55016003)(508600001)(33656002)(4744005)(86362001)(6506007)(186003)(9686003)(8676002)(2906002)(5660300002)(7696005)(38100700002)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5EjQ88F+vCfyiyHC4CsSB9RxfmxXh+Y7L6RLCfYftHanGjtfvTB34AFJaCvD?=
+ =?us-ascii?Q?dauDJ4ZZLDFZNBTMt6W4SRKO5239qOIrkwAWXUeBFm4zdPVM9V/G0Df6K+Bc?=
+ =?us-ascii?Q?IZeHVhkyIEN8nGgxOXw7xiCpTwFCCzYDUEbYyrollSD4x+gMEK7AGgkJSmJJ?=
+ =?us-ascii?Q?GU92OfgiXDuygxxRoK5o/BQ1VlwD1Gc/KDk931YdmlDn7xTvgahNV5pSqqGi?=
+ =?us-ascii?Q?MiWRR7riktanwSAnsGvKELpOTX127/swTSlpRe/a3E1MTb6kUy/00LvxYyXl?=
+ =?us-ascii?Q?P6nAvrK1BaxTWF1O7Z/T9ftNB/6e1UIJ7btMWaA9LSjywSth5sIKxLf9LJDc?=
+ =?us-ascii?Q?SoxNNHla6a5JhF+geiC2rB+5O0B3aaY30zjl3kQmG7kq0msguXTp+9NeLNlr?=
+ =?us-ascii?Q?Cnpyb/zGm+FsqDYJh10TZFLO+6M6mykRDwgabxM4tclQmH5sX6TyidHuvE9f?=
+ =?us-ascii?Q?J7lQ1hPmhlcv5vjPeiUATNANTDjd3YHR5XsBo67Igt7z7w1qMriHW6YEBrtY?=
+ =?us-ascii?Q?3o/+JIIlstKbHD9fkJsV57eNz0aXROFfHsn8oQmInFjzbrqYX7N626Ax3+M4?=
+ =?us-ascii?Q?Y2J0h+/o1uKFGv7Of4Of0Abe2i5HOQG368maBkKI7n5HXL2j42365pPPW0Vp?=
+ =?us-ascii?Q?Y2/Z9DpLnG3e3WuxhxNtVLMiI5J+jaJr7BtmwThC7KLhBIZ5bWiciRKfkIZC?=
+ =?us-ascii?Q?JuVZXDkW2onSJujy9BXqhgeQw7zomF63/zCxq19WoXb2RIQtxy5fEzF99XZQ?=
+ =?us-ascii?Q?hXWzgYQzE0PuTPCsPUTbitNa/urxz6IFZDqoEqqiLLOX8jrTf+7UBFVbQspW?=
+ =?us-ascii?Q?yuqjKKxgaMVajx8YA44lE16s22ZPKFM1UukU1Xfj+Y/bsxEbHvQpp+1N59V0?=
+ =?us-ascii?Q?r6MLdlZsw4m+kfVWNwpSiAuzTX7S4MGphwzsinQaXFVY6fFfYmldfE+HR8K8?=
+ =?us-ascii?Q?lB7jYmiFB2Z9WMR1ucfE3HiOfi2WNVNnUEKOO4Hy3SWr1Be8SoYsN3BaD1XN?=
+ =?us-ascii?Q?zdGKd21gbAhZ/ihMmckAQSuGyx6DvfLpufRYqXhSN7nhJZzMFoUxso/qrIiP?=
+ =?us-ascii?Q?Q+B5hjwmcWdvIQun7DF5hnaqKWke3IfSf70AJ3lYZTKNur12J0oh8JhdNihw?=
+ =?us-ascii?Q?jzxKDd+BW0r84jgRr+PqoX7ldA3CAFSX+Xq7Q9zPbI7fYb5C/D86yy3ay/0y?=
+ =?us-ascii?Q?beZtopKzqNPyhzexKOpJ8HoAYCmajkOg+HxrrgbAr5ZX+auU5W44EUak3H36?=
+ =?us-ascii?Q?p2mSPf2ruvlOn8ZcvEX2aptqWJfXcdDpFSJwoWQSGC6jAT6OwJZ/esw//zFX?=
+ =?us-ascii?Q?8kH6kwCEGWonh/kJbhC8DL2CG/vzjYzdqwO8fdPOB+kIXafn9v2OkCrLaXUl?=
+ =?us-ascii?Q?jvIG1WwoXiExd08XQn1d4JE0cvvg1fJPujd05cpTJTlR2kMxe0YLJ15jZL/G?=
+ =?us-ascii?Q?GWPlFpyx2tUULvKx+fA2mB405OFBFO3fp1v/owoleF6oPDOl+6g0bzBXkw0K?=
+ =?us-ascii?Q?LLBB23T5PgbE+T5eBnsTYwT+NG4C5VlW+LxFBGsKru4KvstGO85sF/tRktWe?=
+ =?us-ascii?Q?1xiuLj/bH8h880u5xee7294JEif7CQ+JTMqwindLkbkqtOJL+j158gkm+LfO?=
+ =?us-ascii?Q?mXES6GgBSkzbS5tyagxSQzZhP9doAimJecfdYrhXb4lZGT/jbQG5Y4H7nGnR?=
+ =?us-ascii?Q?yaWCxpgF68TgP8SlXfUYM3sdwsAHwlvg8o/v9UT6OGH5eQVP3SVHcQcso84b?=
+ =?us-ascii?Q?bu9n2HWX7w=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20211122103032.517923-1-maz@kernel.org> <CAMuHMdX2ZRvDYA3idmw3nBcP6CO=2od6ZU-UeJo9vYsuB=fQNQ@mail.gmail.com>
- <8735no70tt.wl-maz@kernel.org> <CAMuHMdVS67BLP2XEdD6ZvVBVE2x11gKnQa1TqG659HXPM5scqQ@mail.gmail.com>
- <CAMuHMdWJhnXabKGpW7k944dzQHtwQtxw-yb2bRBsoaMw6N6nuA@mail.gmail.com>
- <87tug3clvc.wl-maz@kernel.org> <CAMuHMdWGb2xik+94RVwtq8E6+9eN=HfQLX3a4sTjKQXR96Udkw@mail.gmail.com>
- <87r1b7ck40.wl-maz@kernel.org> <OSZPR01MB7019E7DD7119EFF9C994AA62AA649@OSZPR01MB7019.jpnprd01.prod.outlook.com>
- <87tufvmes9.wl-maz@kernel.org> <CA+V-a8siHRjF+bJu88QFwz0a_MZ+kiJEwmER58_feyr8O+WNGA@mail.gmail.com>
- <CAL_JsqK+GcnChx3i9fsYnw+FzZgON4PtKB=CzYLUj6sXtxX6fQ@mail.gmail.com>
- <CA+V-a8sVS_1hUWJ3uM+VffGyMtdnctBOJTyHTQAoJZGOh0a1Tw@mail.gmail.com>
- <87bl21mqwk.wl-maz@kernel.org> <CA+V-a8vA0P-yhm2SHJmVh+cuUw7qodQLQBqzNPTz31x5q18xaA@mail.gmail.com>
- <CAL_JsqJ1Dw9C_GQjto-E2ch7fdN=3f4Qz9qYuf2iYwMRLkdroA@mail.gmail.com> <CA+V-a8uOkkG8_mz-PjL2q22hfSXuKSpwuQ-E2_pvCc1sKCJ+zw@mail.gmail.com>
-In-Reply-To: <CA+V-a8uOkkG8_mz-PjL2q22hfSXuKSpwuQ-E2_pvCc1sKCJ+zw@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Sun, 5 Dec 2021 22:27:35 +0000
-Message-ID: <CA+V-a8uc0vHVRJ5_Zycw-qiZVbyNBw4HO2XVPbKba3ybooqFtQ@mail.gmail.com>
-Subject: Re: [PATCH] of/irq: Add a quirk for controllers with their own
- definition of interrupt-map
-To:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        John Crispin <john@phrozen.org>, Biwen Li <biwen.li@nxp.com>,
-        Chris Brandt <Chris.Brandt@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB5581.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4938372d-7ffe-4bff-0d64-08d9b8403c1c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Dec 2021 22:40:27.4431
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: DaOKFZJ6f2DBFi0uesJkGI8jd3uCClz1NbRqsfl/AJz+s3ryEBAzBN0D8wX0hsBVWVO1PTZeNVzvGjlH7rlkK0coz7BBv/VSBd4KyUCn2TrRWEz0fNaxtGYBggfdCI7V
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB6240
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 4:16 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
->
-> On Wed, Dec 1, 2021 at 2:36 PM Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Wed, Dec 1, 2021 at 7:37 AM Lad, Prabhakar
-> > <prabhakar.csengg@gmail.com> wrote:
-> > >
-> > > Hi Marc/Rob,
-> > >
-> > > On Tue, Nov 30, 2021 at 6:37 PM Marc Zyngier <maz@kernel.org> wrote:
-> > > >
-> > > > On Tue, 30 Nov 2021 12:52:21 +0000,
-> > > > "Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
-> > > > >
-> > > > > On Mon, Nov 29, 2021 at 6:33 PM Rob Herring <robh@kernel.org> wrote:
-> > > > > >
-> > > > > > interrupts would work just fine here:
-> > > > > >
-> > > > > > interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-> > > > > >   <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
-> > > > > >   <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
-> > > > > >   <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-> > > > > >   <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-> > > > > >   <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
-> > > > > >   <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
-> > > > > >   <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
-> > > > > >
-> > > > > > We don't need a different solution for N:1 interrupts from N:M. Sure,
-> > > > > > that could become unweldy if there are a lot of interrupts (just like
-> > > > > > interrupt-map), but is that an immediate problem?
-> > > > > >
-> > > > > It's just that with this approach the driver will have to index the
-> > > > > interrupts instead of reading from DT.
-> > > > >
-> > > > > Marc - is it OK with the above approach?
-> > > >
-> > > > Anything that uses standard properties in a standard way works for me.
-> > > >
-> > > I added interrupts property now instead of interrupt-map as below:
-> > >
-> > > irqc: interrupt-controller@110a0000 {
-> > >       compatible = "renesas,r9a07g044-irqc", "renesas,rzg2l-irqc";
-> > >        #address-cells = <0>;
-> > >        interrupt-parent = <&gic>;
-> > >        interrupt-controller;
-> > >        reg = <0 0x110a0000 0 0x10000>;
-> > >        interrupts =
-> > >                       <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 444 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 445 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 448 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 449 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 450 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 451 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 453 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 454 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 455 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 456 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 457 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 459 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 460 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 461 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 464 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 465 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 466 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 467 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 468 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 469 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 470 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 471 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 472 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 473 IRQ_TYPE_LEVEL_HIGH>,
-> > >                       <GIC_SPI 474 IRQ_TYPE_LEVEL_HIGH>,
-> > >                      <GIC_SPI 475 IRQ_TYPE_LEVEL_HIGH>;
-> > >          clocks = <&cpg CPG_MOD R9A07G044_IA55_CLK>,
-> > >                        <&cpg CPG_MOD R9A07G044_IA55_PCLK>;
-> > >           clock-names = "clk", "pclk";
-> > >           power-domains = <&cpg>;
-> > >           resets = <&cpg R9A07G044_IA55_RESETN>;
-> > > };
-> > >
-> > >
-> > > In the hierarchal interrupt code its parsed as below:
-> > > on probe fetch the details:
-> > > range = of_get_property(np, "interrupts", &len);
-> > > if (!range)
-> > >       return -EINVAL;
-> > >
-> > > for (len /= sizeof(*range), j = 0; len >= 3; len -= 3) {
-> > >       if (j >= IRQC_NUM_IRQ)
-> > >             return -EINVAL;
-> > >
-> > >       priv->map[j].args[0] = be32_to_cpu(*range++);
-> > >       priv->map[j].args[1] = be32_to_cpu(*range++);
-> > >       priv->map[j].args[2] = be32_to_cpu(*range++);
-> > >       priv->map[j].args_count = 3;
-> > >       j++;
-> >
-> > Not sure what's wrong, but you shouldn't be doing your own parsing.
-> > The setup shouldn't look much different than a GPIO controller
-> > interrupts except you have multiple parent interrupts.
-> >
-> Sorry does that mean the IRQ domain should be chained handler and not
-> hierarchical? Or is it I have miss-understood.
->
-> If the IRQ domain has to be hierarchical how do we map to the parent?
-> (based on the previous reviews Marc had suggested to implement as
-> hierarchical  [1])
->
-Gentle ping.
 
-> [1] https://lore.kernel.org/lkml/20211110225808.16388-1-prabhakar.mahadev-lad.rj@bp.renesas.com/T/
->
-> Cheers,
-> Prabhakar
+Hi Ameer
+
+Thank you for your patch.
+
+> Dereferncing of_id pointer will result in exception in current
+> implementation since of_match_device() will assign it to NULL.
+> Adding NULL check for protection.
+(snip)
+> @@ -532,13 +532,16 @@ static int test_driver_probe(struct platform_device=
+ *pdev)
+>  	struct device_node *node =3D dev->of_node;
+>  	struct device_node *ep;
+>  	const struct of_device_id *of_id =3D of_match_device(test_of_match, &pd=
+ev->dev);
+> -	const struct test_adata *adata =3D of_id->data;
+> +	const struct test_adata *adata;
+>  	struct snd_soc_component_driver *cdriv;
+>  	struct snd_soc_dai_driver *ddriv;
+>  	struct test_dai_name *dname;
+>  	struct test_priv *priv;
+>  	int num, ret, i;
+> =20
+> +	if (!of_id)
+> +		return -EINVAL;
+> +	adata =3D of_id->data;
+
+But hmm...
+Probing this driver without adata is strange for me.
+How did probe this driver ??
+
+Best regards
+---
+Kuninori Morimoto

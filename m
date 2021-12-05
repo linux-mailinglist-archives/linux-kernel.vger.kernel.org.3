@@ -2,116 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4A94689DA
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 09:08:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 128FB4689E0
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 09:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231788AbhLEHyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 02:54:53 -0500
-Received: from mga09.intel.com ([134.134.136.24]:30006 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231583AbhLEHyw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 02:54:52 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="236980539"
-X-IronPort-AV: E=Sophos;i="5.87,289,1631602800"; 
-   d="scan'208";a="236980539"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 23:51:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,289,1631602800"; 
-   d="scan'208";a="542072928"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 04 Dec 2021 23:51:24 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mtmIt-000Jwh-JB; Sun, 05 Dec 2021 07:51:23 +0000
-Date:   Sun, 5 Dec 2021 15:50:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: drivers/s390/scsi/zfcp_sysfs.c:675:18: sparse: sparse: symbol
- 'zfcp_sdev_attrs' was not declared. Should it be static?
-Message-ID: <202112051502.3n0KCWMq-lkp@intel.com>
+        id S231848AbhLEIRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 03:17:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:23770 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231583AbhLEIRO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 03:17:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638692026;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+fvYUavziIvq7sJU7R1R6ucdO1nK2nhVzkQjR1naZ5w=;
+        b=U3XGzQ1cqOihA3GfeemW3g5tN1OwObW5BfkWIe6KMx0AJ9MjjhBRQ2oHm3k1KWMJltaseR
+        HCBiaeyaJ4ftoKZdz1RsgiqDnbOsEXPga/fsaYWE4hdRWCJwlWYcVVylqz/YEyscVnf14R
+        rpVKjuPNObSV0pXoDnKyyH2aXVl+qlY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-193-Hzs7yFY5ME-hNfCmhM5nKg-1; Sun, 05 Dec 2021 03:13:42 -0500
+X-MC-Unique: Hzs7yFY5ME-hNfCmhM5nKg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A5C632F23;
+        Sun,  5 Dec 2021 08:13:40 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 57C5910016F4;
+        Sun,  5 Dec 2021 08:13:40 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] Second batch of KVM fixes for 5.16-rc4
+Date:   Sun,  5 Dec 2021 03:13:39 -0500
+Message-Id: <20211205081339.8716-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   79a72162048e42a677bc7336a9f5d86fc3ff9558
-commit: d8d7cf3f7d073cea8c3e4c3a740d5d24744280d0 scsi: zfcp: Switch to attribute groups
-date:   7 weeks ago
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20211205/202112051502.3n0KCWMq-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d8d7cf3f7d073cea8c3e4c3a740d5d24744280d0
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d8d7cf3f7d073cea8c3e4c3a740d5d24744280d0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash
+Linus,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The following changes since commit 7cfc5c653b07782e7059527df8dc1e3143a7591e:
 
+  KVM: fix avic_set_running for preemptable kernels (2021-11-30 07:40:48 -0500)
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/s390/scsi/zfcp_sysfs.c:675:18: sparse: sparse: symbol 'zfcp_sdev_attrs' was not declared. Should it be static?
+are available in the Git repository at:
 
-vim +/zfcp_sdev_attrs +675 drivers/s390/scsi/zfcp_sysfs.c
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-   646	
-   647	static ssize_t zfcp_sysfs_scsi_zfcp_failed_store(struct device *dev,
-   648						    struct device_attribute *attr,
-   649						    const char *buf, size_t count)
-   650	{
-   651		struct scsi_device *sdev = to_scsi_device(dev);
-   652		unsigned long val;
-   653	
-   654		if (kstrtoul(buf, 0, &val) || val != 0)
-   655			return -EINVAL;
-   656	
-   657		zfcp_erp_set_lun_status(sdev, ZFCP_STATUS_COMMON_RUNNING);
-   658		zfcp_erp_lun_reopen(sdev, ZFCP_STATUS_COMMON_ERP_FAILED,
-   659				    "syufai3");
-   660		zfcp_erp_wait(sdev_to_zfcp(sdev)->port->adapter);
-   661	
-   662		return count;
-   663	}
-   664	static DEVICE_ATTR(zfcp_failed, S_IWUSR | S_IRUGO,
-   665			   zfcp_sysfs_scsi_zfcp_failed_show,
-   666			   zfcp_sysfs_scsi_zfcp_failed_store);
-   667	
-   668	ZFCP_DEFINE_SCSI_ATTR(zfcp_in_recovery, "%d\n",
-   669			      (atomic_read(&zfcp_sdev->status) &
-   670			       ZFCP_STATUS_COMMON_ERP_INUSE) != 0);
-   671	
-   672	ZFCP_DEFINE_SCSI_ATTR(zfcp_status, "0x%08x\n",
-   673			      atomic_read(&zfcp_sdev->status));
-   674	
- > 675	struct attribute *zfcp_sdev_attrs[] = {
-   676		&dev_attr_fcp_lun.attr,
-   677		&dev_attr_wwpn.attr,
-   678		&dev_attr_hba_id.attr,
-   679		&dev_attr_read_latency.attr,
-   680		&dev_attr_write_latency.attr,
-   681		&dev_attr_cmd_latency.attr,
-   682		&dev_attr_zfcp_access_denied.attr,
-   683		&dev_attr_zfcp_failed.attr,
-   684		&dev_attr_zfcp_in_recovery.attr,
-   685		&dev_attr_zfcp_status.attr,
-   686		NULL
-   687	};
-   688	
+for you to fetch changes up to ad5b353240c8837109d1bcc6c3a9a501d7f6a960:
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+  KVM: SVM: Do not terminate SEV-ES guests on GHCB validation failure (2021-12-05 03:02:04 -0500)
+
+----------------------------------------------------------------
+* Static analysis fix
+* New SEV-ES protocol for communicating invalid VMGEXIT requests
+* Ensure APICv is considered inactive if there is no APIC
+* Fix reserved bits for AMD PerfEvtSeln register
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      KVM: VMX: Set failure code in prepare_vmcs02()
+
+Like Xu (1):
+      KVM: x86/pmu: Fix reserved bits for AMD PerfEvtSeln register
+
+Paolo Bonzini (1):
+      KVM: ensure APICv is considered inactive if there is no APIC
+
+Sean Christopherson (3):
+      KVM: x86/mmu: Retry page fault if root is invalidated by memslot update
+      KVM: SEV: Return appropriate error codes if SEV-ES scratch setup fails
+      KVM: SEV: Fall back to vmalloc for SEV-ES scratch area if necessary
+
+Tom Lendacky (1):
+      KVM: SVM: Do not terminate SEV-ES guests on GHCB validation failure
+
+ arch/x86/include/asm/kvm_host.h   |   1 +
+ arch/x86/include/asm/sev-common.h |  11 ++++
+ arch/x86/kvm/mmu/mmu.c            |  23 ++++++++-
+ arch/x86/kvm/mmu/paging_tmpl.h    |   3 +-
+ arch/x86/kvm/svm/avic.c           |   1 +
+ arch/x86/kvm/svm/pmu.c            |   2 +-
+ arch/x86/kvm/svm/sev.c            | 102 ++++++++++++++++++++++----------------
+ arch/x86/kvm/vmx/nested.c         |   4 +-
+ arch/x86/kvm/vmx/vmx.c            |   1 +
+ arch/x86/kvm/x86.c                |   9 ++--
+ 10 files changed, 106 insertions(+), 51 deletions(-)
+

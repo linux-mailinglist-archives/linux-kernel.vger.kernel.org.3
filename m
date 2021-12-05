@@ -2,85 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10285468BF0
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 16:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B77F468BF4
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 16:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235924AbhLEPqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 10:46:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
+        id S235814AbhLEPrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 10:47:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236221AbhLEPqG (ORCPT
+        with ESMTP id S236295AbhLEPqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 10:46:06 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F63C061714;
-        Sun,  5 Dec 2021 07:42:39 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id e3so32870670edu.4;
-        Sun, 05 Dec 2021 07:42:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=uPhNvczeuSunjNtIHb635StOQzdWe5hSGlJOVerCe70=;
-        b=AShHHdFzo/7Fw5V2v01+h5zTFl1DEJtXY04/5Pd6XjF5unBpg8/mpkD3FT6C/j//lV
-         CCqHG5v/6IWhxdkhfkJSyoB3PPcjKYhUTqd2xETGDp7439V/12PKg1Gjwr5ncwna14RI
-         ns1kd+8GIpIfPpUpRTYxEydmp+fda9uABXPUXYD5BOdmSM6u+hePrY68GiQKokNIeaQ+
-         u4m1fPU8jRZ9cakLFzmTNSGK4iyBrVtnBplS+QaS5rSCrLa0zRrEHDvg1xqQUtNTPPkP
-         PvGAxBzs0sL7wseo6l/jts4SDBFdBo5go7+IStpQtb7YYN0l0X8PU+LSPlaQObUN4c/j
-         XRJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=uPhNvczeuSunjNtIHb635StOQzdWe5hSGlJOVerCe70=;
-        b=dF95hcaF50Q70GYDzXjyJCxPIzBDeChuOPoiVYuv7vQIjg0J5fsREJjRneytvQOSfQ
-         AZJihnbdRIVd5EouFFGhhKcWFPuNz6vtNUlLGRUPzm7eRSo0ogmT0jUmtAcCiSLAqDSq
-         alp+noBT0B3fw+3dutyvRSLQAvx6hN4PrcRtF7js1NHgsSvu393hAzxYKLEm4filsDo2
-         Ble+Qobn87Z1lAzRPJytnvJq713qk6aKTbDyXemo78OYuaDqp94Cs3TLSIKzsnULRuAB
-         uevmBZGzGtZl3hOZ9OKtmmLgZDA4f228iGkEd4M2uYBKRkr9D+ojxlPqlhnGtz2hl7y4
-         4b2g==
-X-Gm-Message-State: AOAM530joAK0ShT7RwDVv1gywnJjb0Qy5EDF4xi4U0Sz61DKLL/OoAIB
-        eQibF0WD8BIcwBySXT6VDNw=
-X-Google-Smtp-Source: ABdhPJyDvq3mVFxjeVmdQzh+3GTCIxa+91K4K5U0Tont7GnRAgOdwRKi2+kgf1u5AInXTiwrz1ZWoQ==
-X-Received: by 2002:a17:906:d930:: with SMTP id rn16mr40668186ejb.223.1638718957716;
-        Sun, 05 Dec 2021 07:42:37 -0800 (PST)
-Received: from ?IPv6:2a02:ab88:368f:2080:eab:126a:947d:3008? ([2a02:ab88:368f:2080:eab:126a:947d:3008])
-        by smtp.gmail.com with ESMTPSA id j4sm5991820edk.64.2021.12.05.07.42.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 07:42:37 -0800 (PST)
-Message-ID: <b5d698b430b45b1b29e28b33b62702dd7deeaa76.camel@gmail.com>
-Subject: Re: [PATCH 0/6] Initial Samsung Galaxy A8 (2018) support
-From:   David Virag <virag.david003@gmail.com>
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Date:   Sun, 05 Dec 2021 16:41:53 +0100
-In-Reply-To: <20211205153302.76418-1-virag.david003@gmail.com>
-References: <20211205153302.76418-1-virag.david003@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 
+        Sun, 5 Dec 2021 10:46:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F174C061714
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 07:42:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D2E2B80E1A
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 15:42:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAB8FC00446;
+        Sun,  5 Dec 2021 15:42:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638718961;
+        bh=mVz86qxJJsxIyngvtQoYQe4V5iY7Ho/CQ0SDWZHDiyw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AmspzxLyH/YoBgUMyTUxAly/Qz1gtX1H4IVz3/V/GWr6Gmb1/CZTqk1N+ykcL1id4
+         KrAiDl88nJEoGk8lR3Z44u089jeniV9SZjX18PK5BiDVxhCgeBCdwr4NLosx1zY5kp
+         n1RvhLt0VPc4olxJK+lYquxnUgxRn8mUwzKETmWLnX3Y80gKKvp+2TEwStPatm1zJy
+         dGNs7CYAqEzx7KX6xJYSgm+yhqimXB7nfDpTzMx8ZUrMb+R/rMm1cHL8XWzcArRcDp
+         cFXYBXMuu9hsK2u+aN8Oi5hQJpbtKspO/mL4ykHqVfgpC9n0TfDPh3/Btp0V0jgpqx
+         1w+YQBF4/xunw==
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Tomer Tayar <ttayar@habana.ai>
+Subject: [PATCH 1/9] habanalabs: pass reset flags to reset thread
+Date:   Sun,  5 Dec 2021 17:42:28 +0200
+Message-Id: <20211205154236.2198481-1-ogabbay@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I accidentally forgot to CC Sam Protsenko, so I'll CC him in this
-email, so hopefully it gets to him!
+From: Tomer Tayar <ttayar@habana.ai>
 
-I think it would have been important to CC him as he is the author of
-the original Exynos850 clock driver that the initial 7885 clock driver
-included in this series was based on. I just realized I didn't do it
-while the emails were already being sent.
+The reset flags used by the reset thread are currently a mix of
+hard-coded values and a specific flag which is passed from the context
+that initiates the reset.
+To make it easier to pass more flags in future from this context to the
+reset thread, modify it to pass all the original reset flags to the
+thread.
 
-Best Regards,
-David
+Signed-off-by: Tomer Tayar <ttayar@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+---
+ drivers/misc/habanalabs/common/device.c     | 10 +++-------
+ drivers/misc/habanalabs/common/habanalabs.h |  4 ++--
+ 2 files changed, 5 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
+index 720eea0b7e9c..db4168f35c18 100644
+--- a/drivers/misc/habanalabs/common/device.c
++++ b/drivers/misc/habanalabs/common/device.c
+@@ -324,16 +324,12 @@ static void device_cdev_sysfs_del(struct hl_device *hdev)
+ static void device_hard_reset_pending(struct work_struct *work)
+ {
+ 	struct hl_device_reset_work *device_reset_work =
+-		container_of(work, struct hl_device_reset_work,
+-				reset_work.work);
++		container_of(work, struct hl_device_reset_work, reset_work.work);
+ 	struct hl_device *hdev = device_reset_work->hdev;
+ 	u32 flags;
+ 	int rc;
+ 
+-	flags = HL_DRV_RESET_HARD | HL_DRV_RESET_FROM_RESET_THR;
+-
+-	if (device_reset_work->fw_reset)
+-		flags |= HL_DRV_RESET_BYPASS_REQ_TO_FW;
++	flags = device_reset_work->flags | HL_DRV_RESET_FROM_RESET_THR;
+ 
+ 	rc = hl_device_reset(hdev, flags);
+ 	if ((rc == -EBUSY) && !hdev->device_fini_pending) {
+@@ -1040,7 +1036,7 @@ int hl_device_reset(struct hl_device *hdev, u32 flags)
+ 
+ 		hdev->process_kill_trial_cnt = 0;
+ 
+-		hdev->device_reset_work.fw_reset = fw_reset;
++		hdev->device_reset_work.flags = flags;
+ 
+ 		/*
+ 		 * Because the reset function can't run from heartbeat work,
+diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
+index 93d0a85265be..722fc8e69fd6 100644
+--- a/drivers/misc/habanalabs/common/habanalabs.h
++++ b/drivers/misc/habanalabs/common/habanalabs.h
+@@ -2214,13 +2214,13 @@ struct hwmon_chip_info;
+  * @wq: work queue for device reset procedure.
+  * @reset_work: reset work to be done.
+  * @hdev: habanalabs device structure.
+- * @fw_reset: whether f/w will do the reset without us sending them a message to do it.
++ * @flags: reset flags.
+  */
+ struct hl_device_reset_work {
+ 	struct workqueue_struct		*wq;
+ 	struct delayed_work		reset_work;
+ 	struct hl_device		*hdev;
+-	bool				fw_reset;
++	u32				flags;
+ };
+ 
+ /**
+-- 
+2.25.1
+

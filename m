@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB8F468B9D
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 16:13:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3A3468B9F
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 16:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235251AbhLEPQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 10:16:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
+        id S235319AbhLEPQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 10:16:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235126AbhLEPQh (ORCPT
+        with ESMTP id S235126AbhLEPQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 10:16:37 -0500
+        Sun, 5 Dec 2021 10:16:38 -0500
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5569C061714
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 07:13:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78498C061714
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 07:13:11 -0800 (PST)
 Received: from dslb-188-097-212-203.188.097.pools.vodafone-ip.de ([188.97.212.203] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1mttCL-0007gF-4U; Sun, 05 Dec 2021 16:13:05 +0100
+        id 1mttCM-0007gF-Vs; Sun, 05 Dec 2021 16:13:07 +0100
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -27,45 +27,90 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Michael Straube <straube.linux@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 00/10] staging: r8188eu: some more cleanups
-Date:   Sun,  5 Dec 2021 16:12:41 +0100
-Message-Id: <20211205151251.6861-1-martin@kaiser.cx>
+Subject: [PATCH 01/10] staging: r8188eu: bLedOpenDrain is always true for r8188eu
+Date:   Sun,  5 Dec 2021 16:12:42 +0100
+Message-Id: <20211205151251.6861-2-martin@kaiser.cx>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20211205151251.6861-1-martin@kaiser.cx>
+References: <20211205151251.6861-1-martin@kaiser.cx>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here's another patch set with simple cleanups in different parts
-of the driver.
+Remove the bLedOpenDrain variable and code that would be executed only
+if bLedOpenDrain was false.
 
-Martin Kaiser (10):
-  staging: r8188eu: bLedOpenDrain is always true for r8188eu
-  staging: r8188eu: remove a bunch of unused led defines
-  staging: r8188eu: remove two unused macros
-  staging: r8188eu: bHWPowerdown is set but not used
-  staging: r8188eu: remove unused macros from drv_types.h
-  staging: r8188eu: hal data's interfaceIndex is never read
-  staging: r8188eu: remove empty HAL_INIT_PROFILE_TAG macro
-  staging: r8188eu: remove two write-only wifi direct variables
-  staging: r8188eu: remove unused define
-  staging: r8188eu: AntCombination is always 2
+Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+---
+ drivers/staging/r8188eu/hal/rtl8188eu_led.c    | 16 +++++-----------
+ drivers/staging/r8188eu/hal/usb_halinit.c      |  2 --
+ drivers/staging/r8188eu/include/rtl8188e_hal.h |  2 --
+ 3 files changed, 5 insertions(+), 15 deletions(-)
 
- drivers/staging/r8188eu/core/rtw_p2p.c        |  3 --
- drivers/staging/r8188eu/hal/odm_RTL8188E.c    | 41 ++++---------------
- .../staging/r8188eu/hal/rtl8188e_hal_init.c   | 10 +----
- drivers/staging/r8188eu/hal/rtl8188eu_led.c   | 16 +++-----
- drivers/staging/r8188eu/hal/usb_halinit.c     | 28 -------------
- drivers/staging/r8188eu/include/drv_types.h   |  6 ---
- .../staging/r8188eu/include/osdep_service.h   | 18 --------
- .../staging/r8188eu/include/rtl8188e_hal.h    |  5 ---
- drivers/staging/r8188eu/include/rtw_led.h     | 32 ---------------
- drivers/staging/r8188eu/include/rtw_mlme.h    | 12 ------
- drivers/staging/r8188eu/include/rtw_pwrctrl.h |  1 -
- drivers/staging/r8188eu/os_dep/ioctl_linux.c  |  2 -
- 12 files changed, 15 insertions(+), 159 deletions(-)
-
+diff --git a/drivers/staging/r8188eu/hal/rtl8188eu_led.c b/drivers/staging/r8188eu/hal/rtl8188eu_led.c
+index 452d4bb87aba..2dd9b4518f13 100644
+--- a/drivers/staging/r8188eu/hal/rtl8188eu_led.c
++++ b/drivers/staging/r8188eu/hal/rtl8188eu_led.c
+@@ -36,7 +36,6 @@ void SwLedOn(struct adapter *padapter, struct LED_871x *pLed)
+ void SwLedOff(struct adapter *padapter, struct LED_871x *pLed)
+ {
+ 	u8	LedCfg;
+-	struct hal_data_8188e	*pHalData = GET_HAL_DATA(padapter);
+ 
+ 	if (padapter->bSurpriseRemoved || padapter->bDriverStopped)
+ 		goto exit;
+@@ -45,16 +44,11 @@ void SwLedOff(struct adapter *padapter, struct LED_871x *pLed)
+ 
+ 	switch (pLed->LedPin) {
+ 	case LED_PIN_LED0:
+-		if (pHalData->bLedOpenDrain) {
+-			/*  Open-drain arrangement for controlling the LED) */
+-			LedCfg &= 0x90; /*  Set to software control. */
+-			rtw_write8(padapter, REG_LEDCFG2, (LedCfg | BIT(3)));
+-			LedCfg = rtw_read8(padapter, REG_MAC_PINMUX_CFG);
+-			LedCfg &= 0xFE;
+-			rtw_write8(padapter, REG_MAC_PINMUX_CFG, LedCfg);
+-		} else {
+-			rtw_write8(padapter, REG_LEDCFG2, (LedCfg | BIT(3) | BIT(5) | BIT(6)));
+-		}
++		LedCfg &= 0x90; /*  Set to software control. */
++		rtw_write8(padapter, REG_LEDCFG2, (LedCfg | BIT(3)));
++		LedCfg = rtw_read8(padapter, REG_MAC_PINMUX_CFG);
++		LedCfg &= 0xFE;
++		rtw_write8(padapter, REG_MAC_PINMUX_CFG, LedCfg);
+ 		break;
+ 	case LED_PIN_LED1:
+ 		LedCfg &= 0x0f; /*  Set to software control. */
+diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
+index e995904cf85c..b1372a349e47 100644
+--- a/drivers/staging/r8188eu/hal/usb_halinit.c
++++ b/drivers/staging/r8188eu/hal/usb_halinit.c
+@@ -942,10 +942,8 @@ unsigned int rtl8188eu_inirp_init(struct adapter *Adapter)
+ static void _ReadLEDSetting(struct adapter *Adapter, u8 *PROMContent, bool AutoloadFail)
+ {
+ 	struct led_priv *pledpriv = &Adapter->ledpriv;
+-	struct hal_data_8188e	*haldata = GET_HAL_DATA(Adapter);
+ 
+ 	pledpriv->bRegUseLed = true;
+-	haldata->bLedOpenDrain = true;/*  Support Open-drain arrangement for controlling the LED. */
+ }
+ 
+ static void Hal_EfuseParseMACAddr_8188EU(struct adapter *adapt, u8 *hwinfo, bool AutoLoadFail)
+diff --git a/drivers/staging/r8188eu/include/rtl8188e_hal.h b/drivers/staging/r8188eu/include/rtl8188e_hal.h
+index 0ebfcb732032..39dd547a033b 100644
+--- a/drivers/staging/r8188eu/include/rtl8188e_hal.h
++++ b/drivers/staging/r8188eu/include/rtl8188e_hal.h
+@@ -221,8 +221,6 @@ struct hal_data_8188e {
+ 	u32	AntennaRxPath;			/*  Antenna path Rx */
+ 	u8	ExternalPA;
+ 
+-	u8	bLedOpenDrain; /* Open-drain support for controlling the LED.*/
+-
+ 	u8	b1x1RecvCombine;	/*  for 1T1R receive combining */
+ 
+ 	u32	AcParam_BE; /* Original parameter for BE, use for EDCA turbo. */
 -- 
 2.20.1
 

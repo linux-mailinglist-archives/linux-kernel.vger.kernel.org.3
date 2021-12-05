@@ -2,138 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF594689D8
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 08:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4A94689DA
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 09:08:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232112AbhLEH3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 02:29:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbhLEH3a (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 02:29:30 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0065AC061751;
-        Sat,  4 Dec 2021 23:26:02 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id m186so8129175qkb.4;
-        Sat, 04 Dec 2021 23:26:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zowSszGCjMgYZHdPz1ZCQ1VnEOEblLnUPR7Gj0ga0Vs=;
-        b=H8L2+8nVJ1TzoM56VfiynvmoGFyaKEcyjMd1peEexDpDjB9ClTekh46kJx5dHglpsN
-         LEnfx63YLMZOjFknCW+9ZNJocppmoS3NwNLzYuv7CvaeJvq0RXniwrT+olAZ9h/3aOD/
-         8VL6fGXO3kxlVOTdYGfWjhHcWlb/AN0MEBYJ1H+8lrYCxV1yN63EAYVLHaDO1k4OrLQ4
-         vVQppnxQ5JynrTKFam9ElX1hiZGq1BA6v4jh9D/Al6M140wUyxGa2TtFyVM9On32QaXP
-         rhe+1LJWKyiL9g6Ddc8BJQNrENHUyco6Kyd2O+6yZ7lo0TWWojZGsKlKtFsUy97h2MbY
-         VjAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zowSszGCjMgYZHdPz1ZCQ1VnEOEblLnUPR7Gj0ga0Vs=;
-        b=XK+sOOWQoZ2OgnQeNcEJX6b1jNKf9Rv7K/Bx3CsgFzac85gbyNv6e479Uc1PsfawJp
-         kuFf6hNCWQdRcmfCBvCAVJZ33I0pY8bFUejfEm5lamQLlXuGg+1rvBUvxv0MMOKxadMN
-         8ZRBCJBakwr0YTwb49dvwgkvEAso/qifN1jaYk/DFmHFtanTQ8vl9kHHFto6njqC+8ZJ
-         s4bgttFNsHyw8Wz03sFAN/WJWwLcWvfzTxqULOtwxN+4NA9VUTShAMDBzIwSGfPeby+9
-         KGrJFjUlB28nBRak6xg5mptFtH4ABhzWhUiXPaPB1bmTHoJTjaAGtNK+jHq2v8/H2DQV
-         mlng==
-X-Gm-Message-State: AOAM533maehMG5PBkGcqcz66WpuRv4zoRGIic4ZAYWHCrGIdlex2YCxi
-        t2E5euImzsyOml2EdrFA03ncQ0E86Fh+7vkirkA=
-X-Google-Smtp-Source: ABdhPJxJLKvaTSR4/NERlECHBcz96OgqGrG1jCo7M7WsfQN7m2yL5KJ1ECd+GDH+HUX2k6HIT1BhZZN0LElX5ftUrQ4=
-X-Received: by 2002:a05:620a:2148:: with SMTP id m8mr26529583qkm.435.1638689161996;
- Sat, 04 Dec 2021 23:26:01 -0800 (PST)
+        id S231788AbhLEHyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 02:54:53 -0500
+Received: from mga09.intel.com ([134.134.136.24]:30006 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231583AbhLEHyw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 02:54:52 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10188"; a="236980539"
+X-IronPort-AV: E=Sophos;i="5.87,289,1631602800"; 
+   d="scan'208";a="236980539"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2021 23:51:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,289,1631602800"; 
+   d="scan'208";a="542072928"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 04 Dec 2021 23:51:24 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mtmIt-000Jwh-JB; Sun, 05 Dec 2021 07:51:23 +0000
+Date:   Sun, 5 Dec 2021 15:50:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: drivers/s390/scsi/zfcp_sysfs.c:675:18: sparse: sparse: symbol
+ 'zfcp_sdev_attrs' was not declared. Should it be static?
+Message-ID: <202112051502.3n0KCWMq-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211204095256.78042-1-laoar.shao@gmail.com> <20211204095256.78042-6-laoar.shao@gmail.com>
- <CAADnVQLS4Ev7xChqCMbbJiFZ_kYSB+rbiVT6AJotheFJb1f5=w@mail.gmail.com>
- <CALOAHbCud62ivvoRuz1SV-d3sL9Y9knEga0N-jiXnM3SYzWxNA@mail.gmail.com> <CAADnVQLu+RWSeMfOe5eBuTsp9gxPsFC_bRTXoWmvWP+Lv_rZzQ@mail.gmail.com>
-In-Reply-To: <CAADnVQLu+RWSeMfOe5eBuTsp9gxPsFC_bRTXoWmvWP+Lv_rZzQ@mail.gmail.com>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Sun, 5 Dec 2021 15:25:27 +0800
-Message-ID: <CALOAHbBv-_5uF=T4MyC_6J08PRX6KTGora4FArdYKLC0dOy8HQ@mail.gmail.com>
-Subject: Re: [PATCH -mm 5/5] bpf/progs: replace hard-coded 16 with TASK_COMM_LEN
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        David Hildenbrand <david@redhat.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        linux-mm <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 5, 2021 at 11:13 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Sat, Dec 4, 2021 at 6:45 PM Yafang Shao <laoar.shao@gmail.com> wrote:
-> >
-> > On Sun, Dec 5, 2021 at 12:44 AM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Sat, Dec 4, 2021 at 1:53 AM Yafang Shao <laoar.shao@gmail.com> wrote:
-> > > >
-> > > >  static int process_sample(void *ctx, void *data, size_t len)
-> > > >  {
-> > > > -       struct sample *s = data;
-> > > > +       struct sample_ringbuf *s = data;
-> > >
-> > > This is becoming pointless churn.
-> > > Nack.
-> > >
-> > > > index 145028b52ad8..7b1bb73c3501 100644
-> > > > --- a/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
-> > > > +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
-> > > > @@ -1,8 +1,7 @@
-> > > >  // SPDX-License-Identifier: GPL-2.0
-> > > >  // Copyright (c) 2019 Facebook
-> > > >
-> > > > -#include <linux/bpf.h>
-> > > > -#include <stdint.h>
-> > > > +#include <vmlinux.h>
-> > > >  #include <stdbool.h>
-> > > >  #include <bpf/bpf_helpers.h>
-> > > >  #include <bpf/bpf_core_read.h>
-> > > > @@ -23,11 +22,11 @@ struct core_reloc_kernel_output {
-> > > >         int comm_len;
-> > > >  };
-> > > >
-> > > > -struct task_struct {
-> > > > +struct task_struct_reloc {
-> > >
-> > > Churn that is not even compile tested.
-> >
-> > It is strange that I have successfully compiled it....
-> > Below is the compile log,
-> >
-> > $ cat make.log | grep test_core_reloc_kernel
-> >   CLNG-BPF [test_maps] test_core_reloc_kernel.o
-> >   GEN-SKEL [test_progs] test_core_reloc_kernel.skel.h
-> >   CLNG-BPF [test_maps] test_core_reloc_kernel.o
-> >   GEN-SKEL [test_progs-no_alu32] test_core_reloc_kernel.skel.h
-> >
-> > Also there's no error in the compile log.
->
-> and ran the tests too?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   79a72162048e42a677bc7336a9f5d86fc3ff9558
+commit: d8d7cf3f7d073cea8c3e4c3a740d5d24744280d0 scsi: zfcp: Switch to attribute groups
+date:   7 weeks ago
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20211205/202112051502.3n0KCWMq-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d8d7cf3f7d073cea8c3e4c3a740d5d24744280d0
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d8d7cf3f7d073cea8c3e4c3a740d5d24744280d0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash
 
-My bad. I thought it was just a name change, which will work well if
-it can be compiled successfully.
-But it seems the task_struct in this file is a dummy struct, which
-will be relocated to the real task_struct defined in the kernel.
-We can't include vmlinux.h in this file, as it is for the relocation test.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--- 
-Thanks
-Yafang
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/s390/scsi/zfcp_sysfs.c:675:18: sparse: sparse: symbol 'zfcp_sdev_attrs' was not declared. Should it be static?
+
+vim +/zfcp_sdev_attrs +675 drivers/s390/scsi/zfcp_sysfs.c
+
+   646	
+   647	static ssize_t zfcp_sysfs_scsi_zfcp_failed_store(struct device *dev,
+   648						    struct device_attribute *attr,
+   649						    const char *buf, size_t count)
+   650	{
+   651		struct scsi_device *sdev = to_scsi_device(dev);
+   652		unsigned long val;
+   653	
+   654		if (kstrtoul(buf, 0, &val) || val != 0)
+   655			return -EINVAL;
+   656	
+   657		zfcp_erp_set_lun_status(sdev, ZFCP_STATUS_COMMON_RUNNING);
+   658		zfcp_erp_lun_reopen(sdev, ZFCP_STATUS_COMMON_ERP_FAILED,
+   659				    "syufai3");
+   660		zfcp_erp_wait(sdev_to_zfcp(sdev)->port->adapter);
+   661	
+   662		return count;
+   663	}
+   664	static DEVICE_ATTR(zfcp_failed, S_IWUSR | S_IRUGO,
+   665			   zfcp_sysfs_scsi_zfcp_failed_show,
+   666			   zfcp_sysfs_scsi_zfcp_failed_store);
+   667	
+   668	ZFCP_DEFINE_SCSI_ATTR(zfcp_in_recovery, "%d\n",
+   669			      (atomic_read(&zfcp_sdev->status) &
+   670			       ZFCP_STATUS_COMMON_ERP_INUSE) != 0);
+   671	
+   672	ZFCP_DEFINE_SCSI_ATTR(zfcp_status, "0x%08x\n",
+   673			      atomic_read(&zfcp_sdev->status));
+   674	
+ > 675	struct attribute *zfcp_sdev_attrs[] = {
+   676		&dev_attr_fcp_lun.attr,
+   677		&dev_attr_wwpn.attr,
+   678		&dev_attr_hba_id.attr,
+   679		&dev_attr_read_latency.attr,
+   680		&dev_attr_write_latency.attr,
+   681		&dev_attr_cmd_latency.attr,
+   682		&dev_attr_zfcp_access_denied.attr,
+   683		&dev_attr_zfcp_failed.attr,
+   684		&dev_attr_zfcp_in_recovery.attr,
+   685		&dev_attr_zfcp_status.attr,
+   686		NULL
+   687	};
+   688	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

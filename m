@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFB8468CE1
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 19:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF65468CE5
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Dec 2021 20:03:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237636AbhLES71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 13:59:27 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58042 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237264AbhLES7W (ORCPT
+        id S237689AbhLETG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 14:06:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237649AbhLETGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 13:59:22 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 651F66111D;
-        Sun,  5 Dec 2021 18:55:54 +0000 (UTC)
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp.kernel.org (Postfix) with ESMTPSA id 9AB8BC00446;
-        Sun,  5 Dec 2021 18:55:51 +0000 (UTC)
-Date:   Sun, 5 Dec 2021 19:01:01 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, jonathan.cameron@huawei.com
-Subject: RFC: Should we have a device_for_each_available_child_node()?
-Message-ID: <20211205190101.26de4a57@jic23-huawei>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+        Sun, 5 Dec 2021 14:06:25 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE70C061714;
+        Sun,  5 Dec 2021 11:02:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=SOXl9o+NM3H17iooiOp+N4HYzAPe9LLAu+twEINB+rs=; b=fny8pUDOqLGtQTWhQp0lxnx4LC
+        sAqFhxpZ6TBXxEN/9/qgPc0TcyBu6c0DRRakioc2++zW39hd7gcSg2qKP1Zm+CS2i0P4GWEEYZOsm
+        /+4cUOQXApIDGxGgcD08H0FYQvjglwsAkooyiczEc+LSaPtwAFsJiyPXTLmyZvrH6KVfwQVw5Z4LJ
+        0HfT5VrZFaw3A89G1aEqnwecrcw88ckGpDhBI+amQmteYzsXN8R6cnyO2iE1wP8Q6lMwW+em13I17
+        6aEXC38vhkfXUH6Wedmab81fRv42sUf412Ag5zdOP+d65SeoaIb9638w5aG8tLaDAHCJEfEH9TuHi
+        fJ/oPZLA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56088)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1mtwmh-00047b-Sw; Sun, 05 Dec 2021 19:02:51 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1mtwme-0003cE-PB; Sun, 05 Dec 2021 19:02:48 +0000
+Date:   Sun, 5 Dec 2021 19:02:48 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH v3 1/2] modpost: file2alias: make mdio alias configure
+ match mdio uevent
+Message-ID: <Ya0M2E+Pqvh1FvPF@shell.armlinux.org.uk>
+References: <1638260517-13634-1-git-send-email-zhuyinbo@loongson.cn>
+ <YaXrP1AyZ3AWaQzt@shell.armlinux.org.uk>
+ <ea3f6904-c610-0ee6-fbab-913ba6ae36c5@loongson.cn>
+ <Yas2+yq3h5/Bfvy9@shell.armlinux.org.uk>
+ <YavYM2cs0RuY0JdM@shell.armlinux.org.uk>
+ <YazhPOIIzpl43tzq@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YazhPOIIzpl43tzq@lunn.ch>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+On Sun, Dec 05, 2021 at 04:56:44PM +0100, Andrew Lunn wrote:
+> > This patch changes the MODALIAS entry for only PHY devices from:
+> > 	MODALIAS=of:Nethernet-phyT(null)
+> > to:
+> > 	MODALIAS=mdio:00000000001000100001010100010011
+> 
+> Hi Russell
+> 
+> You patch looks good for the straight forward cases.
+> 
+> What happens in the case of
+> 
+>         ethernet-phy@0 {
+>             compatible = "ethernet-phy-ieee802.3-c45";
+> 
+> 
+> Does this get appended to the end, or does it overwrite?
 
-This came up in review of
-https://lore.kernel.org/linux-iio/20210725172458.487343-1-jic23@kernel.org/
-which is a series converting a dt only driver over to generic properties.
-I'm sending a separate email to raise the profile of the question rather
-higher than it was buried in a driver review.
+Hmm, good point, I'd forgotten about clause 45 PHYs - we need to dig
+the first existing ID out of the clause 45 ID array and use that
+instead. That said, we don't publish the ID through the "phy_id"
+sysfs file either for clause 45.
 
-The original code used for_each_available_child_of_node(np, child) 
-and the patch converted it to device_for_each_child_node().
+I don't believe it's possible to publish multiple modalias strings.
 
-Andy raised the question of whether it should have been
-device_for_each_available_child_node() but that doesn't exist currently.
+This gives a problem for clause 45 PHYs which can have a different ID
+for each MMD, and the driver might match on only one of those. 88x3310
+is an example where different MMDs have different IDs. The mechanism
+we have in phy_device_create() gets around that, because we call
+phy_request_driver_module() for every ID there is in the hope that one
+of those will load the appropriate driver, but as I say, I don't
+believe that's a possibility via the udev approach.
 
-Things get more interesting when you look at the implementation of
-device_for_each_child_node() which uses device_get_next_child_node()
-which in turn calls fwnode_get_next_child_node() which calls
-the get_next_child_node() op and for of that is
-of_fwnode_get_next_child_node() which uses of_get_next_available_child()
-rather than of_get_next_child().
+So I think we may have to say that clause 45 PHYs can't reliably use
+the conventional udev mechanism.
 
-So I think under the hood device_for_each_child_node() on of_ is going to
-end up checking the node is available anyway.
-
-So this all seemed a little odd given there were obvious calls to use
-if we wanted to separate the two cases for device tree and they weren't
-the ones used.  However, if we conclude that there is a bug here and
-the two cases should be handled separately then it will be really hard
-to be sure no driver is relying on this behaviour.
-
-So, ultimately the question is:  Should I add a
-device_for_each_available_child_node()?  It will be something like:
-
-struct fwnode_handle *device_get_next_child_node(struct device *dev,
-						 struct fwnode_handle *child)
-{
-	const struct fwnode_handle *fwnode = dev_fwnode(dev);
-	struct fwnode_handle *next;
-
-	/* Try to find a child in primary fwnode */
-	next = fwnode_get_next_available_child_node(fwnode, child);
-	if (next)
-		return next;
-
-	/* When no more children in primary, continue with secondary */
-	if (fwnode && !IS_ERR_OR_NULL(fwnode->secondary))
-		next = fwnode_get_next_available_child_node(fwnode->secondary, child);
-
-	return next;
-}
-
-#define device_for_each_child_node(dev, child)				\
-	for (child = device_get_next_available_child_node(dev, NULL); child;	\
-	     child = device_get_next_avaialble_child_node(dev, child))
-
-As far as I can tell it doesn't make any difference for my particular bit
-of refactoring in the sense of I won't break anything that currently
-works by using device_for_each_child_node() but it may cause issues with
-other firmware by enumerating disabled child nodes.
-
-Jonathan
-
-
-
-
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

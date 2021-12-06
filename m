@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6E4469CC4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:23:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EAE469BCF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380227AbhLFPZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:25:11 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48672 "EHLO
+        id S1346740AbhLFPSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:18:50 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44816 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356472AbhLFPPf (ORCPT
+        with ESMTP id S1347890AbhLFPMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:15:35 -0500
+        Mon, 6 Dec 2021 10:12:39 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5AAE4B81018;
-        Mon,  6 Dec 2021 15:12:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4316C341C1;
-        Mon,  6 Dec 2021 15:12:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 571CEB81123;
+        Mon,  6 Dec 2021 15:09:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 782EDC341C2;
+        Mon,  6 Dec 2021 15:09:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803524;
-        bh=VupvxSCXWE50aePXNjfAa+vMquu+O1Wl/HPNVvY7huc=;
+        s=korg; t=1638803348;
+        bh=D6YlDbXDV9QyhA7hVPbR93FDDp0n1BRxJDJz+Qb9WJg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KQTKesvrtA69asQr8cB9jA7yQLEbYElA+zMs/vSkmU+v9frKJZ41bzEn7skXnPUWU
-         WKqnDxcQxp8VMqYNLn0g90p2e7rDSQkZgVeKXNudyZzV0CMdLxxC39uBsL+AbmsCLP
-         ifCf/jtSYbJhCgCWewzJ65Ga04gtGETZ73xItsh4=
+        b=dyz+p1ltRkOrxXDdZFCTK9fmM/wnbE0uaHHybt7LKRO0r+ym6gPoLVr2drBQkO+1i
+         wmxQejWFTjDUB6vWnAWftbsHp8dOpObiPgyOE3L+GoyM3D3oZhUMR+lLUpBwwUnqHZ
+         02EPLpvyGlMuj4fG6PtePjVn5iCEEyPazx2NKvmA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Suryaputra <ssuryaextr@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.4 23/70] vrf: Reset IPCB/IP6CB when processing outbound pkts in vrf dev xmit
+        stable@vger.kernel.org,
+        Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 10/48] thermal: core: Reset previous low and high trip during thermal zone init
 Date:   Mon,  6 Dec 2021 15:56:27 +0100
-Message-Id: <20211206145552.721093210@linuxfoundation.org>
+Message-Id: <20211206145549.207603969@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
-References: <20211206145551.909846023@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+References: <20211206145548.859182340@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,51 +48,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephen Suryaputra <ssuryaextr@gmail.com>
+From: Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
 
-commit ee201011c1e1563c114a55c86eb164b236f18e84 upstream.
+[ Upstream commit 99b63316c39988039965693f5f43d8b4ccb1c86c ]
 
-IPCB/IP6CB need to be initialized when processing outbound v4 or v6 pkts
-in the codepath of vrf device xmit function so that leftover garbage
-doesn't cause futher code that uses the CB to incorrectly process the
-pkt.
+During the suspend is in process, thermal_zone_device_update bails out
+thermal zone re-evaluation for any sensor trip violation without
+setting next valid trip to that sensor. It assumes during resume
+it will re-evaluate same thermal zone and update trip. But when it is
+in suspend temperature goes down and on resume path while updating
+thermal zone if temperature is less than previously violated trip,
+thermal zone set trip function evaluates the same previous high and
+previous low trip as new high and low trip. Since there is no change
+in high/low trip, it bails out from thermal zone set trip API without
+setting any trip. It leads to a case where sensor high trip or low
+trip is disabled forever even though thermal zone has a valid high
+or low trip.
 
-One occasion of the issue might occur when MPLS route uses the vrf
-device as the outgoing device such as when the route is added using "ip
--f mpls route add <label> dev <vrf>" command.
+During thermal zone device init, reset thermal zone previous high
+and low trip. It resolves above mentioned scenario.
 
-The problems seems to exist since day one. Hence I put the day one
-commits on the Fixes tags.
-
-Fixes: 193125dbd8eb ("net: Introduce VRF device driver")
-Fixes: 35402e313663 ("net: Add IPv6 support to VRF device")
-Cc: stable@vger.kernel.org
-Signed-off-by: Stephen Suryaputra <ssuryaextr@gmail.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Link: https://lore.kernel.org/r/20211130162637.3249-1-ssuryaextr@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
+Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/vrf.c |    2 ++
+ drivers/thermal/thermal_core.c | 2 ++
  1 file changed, 2 insertions(+)
 
---- a/drivers/net/vrf.c
-+++ b/drivers/net/vrf.c
-@@ -221,6 +221,7 @@ static netdev_tx_t vrf_process_v6_outbou
- 	/* strip the ethernet header added for pass through VRF device */
- 	__skb_pull(skb, skb_network_offset(skb));
- 
-+	memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
- 	ret = vrf_ip6_local_out(net, skb->sk, skb);
- 	if (unlikely(net_xmit_eval(ret)))
- 		dev->stats.tx_errors++;
-@@ -304,6 +305,7 @@ static netdev_tx_t vrf_process_v4_outbou
- 					       RT_SCOPE_LINK);
- 	}
- 
-+	memset(IPCB(skb), 0, sizeof(*IPCB(skb)));
- 	ret = vrf_ip_local_out(dev_net(skb_dst(skb)->dev), skb->sk, skb);
- 	if (unlikely(net_xmit_eval(ret)))
- 		vrf_dev->stats.tx_errors++;
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index ae60599c462b9..6c7825c581b5f 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -454,6 +454,8 @@ static void thermal_zone_device_init(struct thermal_zone_device *tz)
+ {
+ 	struct thermal_instance *pos;
+ 	tz->temperature = THERMAL_TEMP_INVALID;
++	tz->prev_low_trip = -INT_MAX;
++	tz->prev_high_trip = INT_MAX;
+ 	list_for_each_entry(pos, &tz->thermal_instances, tz_node)
+ 		pos->initialized = false;
+ }
+-- 
+2.33.0
+
 
 

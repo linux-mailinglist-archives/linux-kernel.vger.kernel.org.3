@@ -2,78 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C34D84692F4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 949034692F9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241484AbhLFJws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 04:52:48 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:51252 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241479AbhLFJwq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 04:52:46 -0500
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 640C5EE;
-        Mon,  6 Dec 2021 10:49:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638784156;
-        bh=oaMhsWEtCze9B8DfhiYsjOO/yQpxK0/yYA47gj6keYw=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=RGj8oAyx/Er6QO5rn12wQ615+iY+AJnk2SLKLZWR0Ne5mX24Y7P7sdb6TzZZtI2Pi
-         yNiBLgiKu+IP+VBDGoi591nX9I47M825kCbm9gpWz2P4dJvKpu+ovRErJ3INO20d6w
-         pdi2Sy/D+pYBLiWuGqSmKsKJz74iBa+CGpY6+yoY=
-Content-Type: text/plain; charset="utf-8"
+        id S241524AbhLFJyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 04:54:11 -0500
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:40137 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S241503AbhLFJyK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 04:54:10 -0500
+Received: from [192.168.0.2] (ip5f5aea86.dynamic.kabel-deutschland.de [95.90.234.134])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id CA94B61E5FE00;
+        Mon,  6 Dec 2021 10:50:39 +0100 (CET)
+Message-ID: <61e772a7-6e46-7c0f-32ba-b3e3ad88062c@molgen.mpg.de>
+Date:   Mon, 6 Dec 2021 10:50:39 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211205190415.19962-1-jose.exposito89@gmail.com>
-References: <20211205190415.19962-1-jose.exposito89@gmail.com>
-Subject: Re: [PATCH] media: venus: helpers: Fix memory leak in venus_helper_alloc_dpb_bufs
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     =?utf-8?q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        stanimir.varbanov@linaro.org, Ameer Hamza <amhamza.mgc@gmail.com>
-Date:   Mon, 06 Dec 2021 09:49:14 +0000
-Message-ID: <163878415444.147210.13155524098900308326@Monstersaurus>
-User-Agent: alot/0.10
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] Bluetooth: btusb: Handle download_firmware failure cases.
+Content-Language: en-US
+To:     mark-yw.chen@mediatek.com
+Cc:     aaron.hou@mediatek.com, kaichuan.hsieh@canonical.com,
+        linux-bluetooth@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        marcel@holtmann.org, johan.hedberg@gmail.com,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>
+References: <20211206092546.27216-1-mark-yw.chen@mediatek.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20211206092546.27216-1-mark-yw.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jos=C3=A9
+Dear Mark,
 
-Quoting Jos=C3=A9 Exp=C3=B3sito (2021-12-05 19:04:15)
-> Addresses-Coverity-ID: 1494120 ("Resource leaks")
 
-This was also recently posted by Ameer in https://lore.kernel.org/all/20211=
-204205504.6550-1-amhamza.mgc@gmail.com/
+Some small nitpicks:
 
-Regards
---
-Kieran
+Am 06.12.21 um 10:25 schrieb mark-yw.chen@mediatek.com:
+> From: mark-yw.chen <mark-yw.chen@mediatek.com>
 
-> Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
+Instead of the user name, maybe you can use Mark Chen (or the whole name)?
+
+     $ git config --global user.name "Mark Chen"
+     $ git commit --amend --reset-author="Mark Chen 
+<mark-yw.chen@mediatek.com>"
+
+Also could you please remove the trailing dot/period at the end of the 
+git commit message summary?
+
+> For Mediatek chipset, if there are no firmware bin or command_timeout,
+> the process should be terminated in btusb_mtk_setup().
+
+Otherwise what happens?
+
+> Signed-off-by: mark-yw.chen <mark-yw.chen@mediatek.com>
+> Change-Id: I99f1d7b72fa70643d9123e7e6cdc8d0b4369ce52
+
+To what Gerrit instance does the Change-Id belong? Without that 
+information (Reviewed-on tag?), it should be removed?
+
 > ---
->  drivers/media/platform/qcom/venus/helpers.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/=
-platform/qcom/venus/helpers.c
-> index 84c3a511ec31..344a42853898 100644
-> --- a/drivers/media/platform/qcom/venus/helpers.c
-> +++ b/drivers/media/platform/qcom/venus/helpers.c
-> @@ -197,6 +197,7 @@ int venus_helper_alloc_dpb_bufs(struct venus_inst *in=
-st)
-> =20
->                 id =3D ida_alloc_min(&inst->dpb_ids, VB2_MAX_FRAME, GFP_K=
-ERNEL);
->                 if (id < 0) {
-> +                       kfree(buf);
->                         ret =3D id;
->                         goto fail;
->                 }
-> --=20
-> 2.25.1
->
+>   drivers/bluetooth/btmtk.c | 1 +
+>   drivers/bluetooth/btusb.c | 4 ++++
+>   2 files changed, 5 insertions(+)
+> 
+> diff --git a/drivers/bluetooth/btmtk.c b/drivers/bluetooth/btmtk.c
+> index c2ee5c4b975a..526dfdf1fe01 100644
+> --- a/drivers/bluetooth/btmtk.c
+> +++ b/drivers/bluetooth/btmtk.c
+> @@ -121,6 +121,7 @@ int btmtk_setup_firmware_79xx(struct hci_dev *hdev, const char *fwname,
+>   				} else {
+>   					bt_dev_err(hdev, "Failed wmt patch dwnld status (%d)",
+>   						   status);
+> +					err = -EIO;
+>   					goto err_release_fw;
+>   				}
+>   			}
+> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+> index ab169fc673ea..3ea04b1d0750 100644
+> --- a/drivers/bluetooth/btusb.c
+> +++ b/drivers/bluetooth/btusb.c
+> @@ -2554,6 +2554,10 @@ static int btusb_mtk_setup(struct hci_dev *hdev)
+>   			 dev_id & 0xffff, (fw_version & 0xff) + 1);
+>   		err = btmtk_setup_firmware_79xx(hdev, fw_bin_name,
+>   						btusb_mtk_hci_wmt_sync);
+> +		if (err < 0) {
+> +			bt_dev_err(hdev, "Failed to setup firmware (%d)", err);
+
+The verb is spelled with a space: set up.
+
+Also, this error message seems unrelated to the patch in question. Maybe 
+add it in a separate commit?
+
+> +			return err;
+> +		}
+>   
+>   		/* It's Device EndPoint Reset Option Register */
+>   		btusb_mtk_uhw_reg_write(data, MTK_EP_RST_OPT, MTK_EP_RST_IN_OUT_OPT);
+> 
+
+
+Kind regards,
+
+Paul

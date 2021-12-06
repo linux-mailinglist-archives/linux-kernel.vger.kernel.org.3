@@ -2,109 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57AC946973D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DEC34696EF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:24:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244607AbhLFNjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 08:39:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240974AbhLFNja (ORCPT
+        id S244465AbhLFN2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 08:28:02 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:32880 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241389AbhLFN2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 08:39:30 -0500
-Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849DEC061746;
-        Mon,  6 Dec 2021 05:36:01 -0800 (PST)
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id A88E1396; Mon,  6 Dec 2021 14:35:58 +0100 (CET)
-Date:   Mon, 6 Dec 2021 14:35:55 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 01/18] iommu: Add device dma ownership set/release
- interfaces
-Message-ID: <Ya4Ru/GtILJYzI6j@8bytes.org>
-References: <20211206015903.88687-1-baolu.lu@linux.intel.com>
- <20211206015903.88687-2-baolu.lu@linux.intel.com>
+        Mon, 6 Dec 2021 08:28:01 -0500
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J74045l9hzcbmZ;
+        Mon,  6 Dec 2021 21:24:20 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
+ (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 6 Dec
+ 2021 21:24:31 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <glider@google.com>, <elver@google.com>, <dvyukov@google.com>,
+        <akpm@linux-foundation.org>, <viro@zeniv.linux.org.uk>
+CC:     <kasan-dev@googlegroups.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <libaokun1@huawei.com>,
+        <yukuai3@huawei.com>, Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH -next] kfence: fix memory leak when cat kfence objects
+Date:   Mon, 6 Dec 2021 21:36:28 +0800
+Message-ID: <20211206133628.2822545-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206015903.88687-2-baolu.lu@linux.intel.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500020.china.huawei.com (7.185.36.88)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 09:58:46AM +0800, Lu Baolu wrote:
-> >From the perspective of who is initiating the device to do DMA, device
-> DMA could be divided into the following types:
-> 
->         DMA_OWNER_DMA_API: Device DMAs are initiated by a kernel driver
-> 			through the kernel DMA API.
->         DMA_OWNER_PRIVATE_DOMAIN: Device DMAs are initiated by a kernel
-> 			driver with its own PRIVATE domain.
-> 	DMA_OWNER_PRIVATE_DOMAIN_USER: Device DMAs are initiated by
-> 			userspace.
+Hulk robot reported a kmemleak problem:
+-----------------------------------------------------------------------
+unreferenced object 0xffff93d1d8cc02e8 (size 248):
+  comm "cat", pid 23327, jiffies 4624670141 (age 495992.217s)
+  hex dump (first 32 bytes):
+    00 40 85 19 d4 93 ff ff 00 10 00 00 00 00 00 00  .@..............
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000db5610b3>] seq_open+0x2a/0x80
+    [<00000000d66ac99d>] full_proxy_open+0x167/0x1e0
+    [<00000000d58ef917>] do_dentry_open+0x1e1/0x3a0
+    [<0000000016c91867>] path_openat+0x961/0xa20
+    [<00000000909c9564>] do_filp_open+0xae/0x120
+    [<0000000059c761e6>] do_sys_openat2+0x216/0x2f0
+    [<00000000b7a7b239>] do_sys_open+0x57/0x80
+    [<00000000e559d671>] do_syscall_64+0x33/0x40
+    [<000000000ea1fbfd>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+unreferenced object 0xffff93d419854000 (size 4096):
+  comm "cat", pid 23327, jiffies 4624670141 (age 495992.217s)
+  hex dump (first 32 bytes):
+    6b 66 65 6e 63 65 2d 23 32 35 30 3a 20 30 78 30  kfence-#250: 0x0
+    30 30 30 30 30 30 30 37 35 34 62 64 61 31 32 2d  0000000754bda12-
+  backtrace:
+    [<000000008162c6f2>] seq_read_iter+0x313/0x440
+    [<0000000020b1b3e3>] seq_read+0x14b/0x1a0
+    [<00000000af248fbc>] full_proxy_read+0x56/0x80
+    [<00000000f97679d1>] vfs_read+0xa5/0x1b0
+    [<000000000ed8a36f>] ksys_read+0xa0/0xf0
+    [<00000000e559d671>] do_syscall_64+0x33/0x40
+    [<000000000ea1fbfd>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
+-----------------------------------------------------------------------
 
-I have looked at the other iommu patches in this series, but I still
-don't quite get what the difference in the code flow is between
-DMA_OWNER_PRIVATE_DOMAIN and DMA_OWNER_PRIVATE_DOMAIN_USER. What are the
-differences in the iommu core behavior based on this setting?
+I find that we can easily reproduce this problem with the following
+commands:
+	`cat /sys/kernel/debug/kfence/objects`
+	`echo scan > /sys/kernel/debug/kmemleak`
+	`cat /sys/kernel/debug/kmemleak`
 
->         int iommu_device_set_dma_owner(struct device *dev,
->                 enum iommu_dma_owner type, void *owner_cookie);
->         void iommu_device_release_dma_owner(struct device *dev,
->                 enum iommu_dma_owner type);
+The leaked memory is allocated in the stack below:
+----------------------------------
+do_syscall_64
+  do_sys_open
+    do_dentry_open
+      full_proxy_open
+        seq_open            ---> alloc seq_file
+  vfs_read
+    full_proxy_read
+      seq_read
+        seq_read_iter
+          traverse          ---> alloc seq_buf
+----------------------------------
 
-It the owner is a group-wide setting, it should be called with the group
-instead of the device. I have seen the group-specific funcitons are
-added later, but that leaves the question why the device-specific ones
-are needed at all.
+And it should have been released in the following process:
+----------------------------------
+do_syscall_64
+  syscall_exit_to_user_mode
+    exit_to_user_mode_prepare
+      task_work_run
+        ____fput
+          __fput
+            full_proxy_release  ---> free here
+----------------------------------
 
-> +	enum iommu_dma_owner dma_owner;
-> +	refcount_t owner_cnt;
-> +	void *owner_cookie;
->  };
+However, the release function corresponding to file_operations is not
+implemented in kfence. As a result, a memory leak occurs. Therefore,
+the solution to this problem is to implement the corresponding
+release function.
 
-I am also not quite happy yet with calling this dma_owner, but can't
-come up with a better name yet.
+Fixes: 0ce20dd84089 ("mm: add Kernel Electric-Fence infrastructure")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+ mm/kfence/core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
->  
->  struct group_device {
-> @@ -621,6 +624,7 @@ struct iommu_group *iommu_group_alloc(void)
->  	INIT_LIST_HEAD(&group->devices);
->  	INIT_LIST_HEAD(&group->entry);
->  	BLOCKING_INIT_NOTIFIER_HEAD(&group->notifier);
-> +	group->dma_owner = DMA_OWNER_NONE;
+diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+index 46103a7628a6..186838f062b2 100644
+--- a/mm/kfence/core.c
++++ b/mm/kfence/core.c
+@@ -684,6 +684,7 @@ static const struct file_operations objects_fops = {
+ 	.open = open_objects,
+ 	.read = seq_read,
+ 	.llseek = seq_lseek,
++	.release = seq_release,
+ };
+ 
+ static int __init kfence_debugfs_init(void)
+-- 
+2.31.1
 
-
-DMA_OWNER_NONE is also questionable. All devices are always in one
-domain, and the default domain is always the one used for DMA-API, so
-why isn't the initial value DMA_OWNER_DMA_API?
-
-Regards,
-
-	Joerg

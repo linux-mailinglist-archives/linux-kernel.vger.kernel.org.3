@@ -2,132 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1BA46906C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 07:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF58469071
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 07:43:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237791AbhLFGnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 01:43:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S237831AbhLFGqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 01:46:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237732AbhLFGnk (ORCPT
+        with ESMTP id S237187AbhLFGqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 01:43:40 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41BFC0613F8
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 22:40:11 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id np3so6936660pjb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 22:40:11 -0800 (PST)
+        Mon, 6 Dec 2021 01:46:42 -0500
+Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8758C0613F8
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 22:43:13 -0800 (PST)
+Received: by mail-wr1-x449.google.com with SMTP id f3-20020a5d50c3000000b00183ce1379feso1699826wrt.5
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 22:43:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=qSFiQM7fZZkVaDJle1kXPoWe9UZ/qoSibT8ivF7uePU=;
-        b=nP5acA8TgI8ZxLzOGcJPChtceDtsoweWT0bZ8TjEtmhIJ/GEMsCqx1OWqbenBSSvrW
-         YFpMf3bOEC7bDI4vdQq18EkupaXM7+x3M8CsrPHRCPYZ/z2mPPyYrK7UEAzHli5JAjEn
-         AoBgTqS2cZ+ORWREomgnEE1voXwnc5cWt49VlO8YQu+ZEJvFAsKe5l5T03a+wR+ELaJi
-         iIPmoSeNy4BC7p7erpm3F1wIj2EzC5UOU0oRuIEiy0FpCmnG9NJgqajiRQnEOQk9Hio8
-         ikvk/9VNS3xPgWRiJq9E3fJV6v3S/Bya2tsWzqDZFMmlGQP2k1Bhk3dgPdlMOsy5RMBi
-         lnvw==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Mof/wiYmoBGxtT831oqCwy9BE2boVy0/SSf3ri1WpLU=;
+        b=pu3nHfeEpZeG6yImoZEbAyqhUSpMZuQHBi1+1Ho42VxnDV1hZEZQHk+PV6dSrjeIvd
+         wRcfZeHje2p5Ms2GNMWu+/z1A9FrUt8ke9plSKySu/sNTbBN/5zQSdjnzl6eitM5+McO
+         nm9WDOaXmlWPgNd34WRoOEI5pydtMJT7SDFW9mHPaM54A086hNOguxh7RAO1SS7F2jVB
+         9LjqLqXADDKrPFg0XzYdR6rXPjCoY42u0L4/ItpZZhMy966bD9g46JeKchUVBQMjRkUP
+         A6or1trrqrET4qu8lWIw91eNSlxiDh+6tYawtkdvYJ344BPoJXhzCyFfh/hTRiHT2XEr
+         9ThQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qSFiQM7fZZkVaDJle1kXPoWe9UZ/qoSibT8ivF7uePU=;
-        b=Sqlq1l4Cx6sxBPaxn3TgWVqp66zj74WX2I7m9dy5l2JH+W1w097fYaCyVtO7N80xwW
-         /pWEbrNOxFeTy3zVlhkw65zXT8ytJynWOdxJU1PMIgr0mKwNN0oRXvjEp/ikhvYQZXLc
-         oqnxpk21Pk+AK6cwIK0xV16iFToGKYyD83oNl3jxUxy9FWY5KKYiy4lI5MqxQvynhP/A
-         MH+kZwq7rwS9Ee0QulGlVN5hXpzjLChSj67Wy3ukUAslqx2Z8CWXS2dWF8R5daPdKpc9
-         e7NhIEF8DcOd0uvADqbZaN2iS0bqfEDzJaL9z9E5Wutd0t/CElNI36tS84GGgJmL1ut0
-         HZaw==
-X-Gm-Message-State: AOAM533BMFpxYJJbFKppH3dPi5FRGzxP/wnu6kYZlBrJIkWawZFvGKjL
-        5jworkIcp6n0xXd/yCLqwkPlJw==
-X-Google-Smtp-Source: ABdhPJyOvgSetjbmp4/y0N2MwTsFrqcCnpZYD1sTdP1dnVJ4+I+lYNAYgOTpyLJiKIzlryfTIg99Mw==
-X-Received: by 2002:a17:90b:1e4e:: with SMTP id pi14mr34940115pjb.161.1638772811314;
-        Sun, 05 Dec 2021 22:40:11 -0800 (PST)
-Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id d15sm11168626pfl.126.2021.12.05.22.40.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 05 Dec 2021 22:40:11 -0800 (PST)
-Date:   Mon, 6 Dec 2021 14:40:05 +0800
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: Re: [PATCH v3 1/3] irqchip: Pass platform_device pointer to init_cb
-Message-ID: <20211206064004.GL10105@dragon>
-References: <20211202122122.23548-1-shawn.guo@linaro.org>
- <20211202122122.23548-2-shawn.guo@linaro.org>
- <b221fec0-43d0-537d-d78e-84da10a9c2d7@gmail.com>
- <fa6ae407c1da16e571aaf04eb424fecd@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fa6ae407c1da16e571aaf04eb424fecd@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Mof/wiYmoBGxtT831oqCwy9BE2boVy0/SSf3ri1WpLU=;
+        b=My6RRJpUTsUCuNjIU0eHqgoUtJpD0fm3TdAE4bRWth62h/Ku5Lbd1XBT8HAJyxrJc1
+         ORBIMpUmF7j6VNG9RFbG1i7ZspOefvwvY8IqoUrG4Kqh+xnmPyLSKZ6yIxv6qi/4fVN6
+         U04JdtCl3XFrBg7WG3VSPY0z6tcghhKcpBvv+PBsupTaDEj/pAADZd4l0wMbXZBap1Yp
+         t8UNEfbsAwQFkOgHEzZoQBiA5jKRCui/xtFTgkFIdeV4krDxlBWzLHsrXWrcwBXSsBqv
+         fOLS+PkSIr8KezKrGNF/RwX4BWpVTVAoaQECueG9CsimxLDw0oP660tgKSVFK65UD9nY
+         LxEQ==
+X-Gm-Message-State: AOAM533vBKCG9KynXDXbO9QdA7ULdRkdftSYd87PNmJUyQfAuOvySoxP
+        +AKgmd0Yd1WIAAysCawANWwPDMbo8g==
+X-Google-Smtp-Source: ABdhPJy8wYI4P3EaYgzSS6dU2eYg11EuxhUo4WY1tmrJ3wRj3VuR72ARQ6bdNLe62bo74juyCjykfPyA6g==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:88f3:db53:e34:7bb0])
+ (user=elver job=sendgmr) by 2002:a05:600c:3c91:: with SMTP id
+ bg17mr37190024wmb.80.1638772992245; Sun, 05 Dec 2021 22:43:12 -0800 (PST)
+Date:   Mon,  6 Dec 2021 07:41:50 +0100
+Message-Id: <20211206064151.3337384-1-elver@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
+Subject: [PATCH -rcu 1/2] kcsan: Avoid nested contexts reading inconsistent reorder_access
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com, "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 07:10:04PM +0000, Marc Zyngier wrote:
-> On 2021-12-02 17:52, Florian Fainelli wrote:
-> > On 12/2/21 4:21 AM, Shawn Guo wrote:
-> > > It makes sense to just pass device_node for callback in
-> > > IRQCHIP_DECLARE
-> > > case, but not so much for IRQCHIP_PLATFORM_DRIVER one, because
-> > > platform_driver probe/init usually needs device pointer for various
-> > > purposes, e.g. resource allocation, service request, device prefixed
-> > > message output, etc.  Create a new callback type irqchip_init_cb_t
-> > > which
-> > > takes platform_device pointer as parameter, and update the existing
-> > > IRQCHIP_PLATFORM_DRIVER users accordingly.
-> > > 
-> > > Cc: Florian Fainelli <f.fainelli@gmail.com>
-> > > Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
-> > > Cc: Neil Armstrong <narmstrong@baylibre.com>
-> > > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> > 
-> > Could you copy all recipients on all 3 patches plus your cover letter
-> > next time so we have the full context? Thanks!
-> > 
-> > [snip]
-> > 
-> > > 
-> > > -static int __init bcm7120_l2_intc_probe_7120(struct device_node *dn,
-> > > +static int __init bcm7120_l2_intc_probe_7120(struct platform_device
-> > > *pdev,
-> > >  					     struct device_node *parent)
-> > >  {
-> > > -	return bcm7120_l2_intc_probe(dn, parent, bcm7120_l2_intc_iomap_7120,
-> > > +	return bcm7120_l2_intc_probe(pdev->dev.of_node, parent,
-> > > +				     bcm7120_l2_intc_iomap_7120,
-> > >  				     "BCM7120 L2");
-> > 
-> > If you look further into that driver, you will see that we do something
-> > like this in bcm7120_l2_intc_probe:
-> > 
-> >           pdev = of_find_device_by_node(dn);
-> >           if (!pdev) {
-> >                   ret = -ENODEV;
-> >                   goto out_free_data;
-> >           }
-> > 
-> > which would be completely superfluous now that we pass a platform_device
-> > directly. Can you rework your patch so as to eliminate that
-> > of_find_device_by_ndoe() (and the companion put_device call)?
-> 
-> Or just adopt the same construct in the MPM driver. At this stage, drivers
-> requiring a platform_device are the minority.
+Nested contexts, such as nested interrupts or scheduler code, share the
+same kcsan_ctx. When such a nested context reads an inconsistent
+reorder_access due to an interrupt during set_reorder_access(), we can
+observe the following warning:
 
-Marc,
+ | ------------[ cut here ]------------
+ | Cannot find frame for torture_random kernel/torture.c:456 in stack trace
+ | WARNING: CPU: 13 PID: 147 at kernel/kcsan/report.c:343 replace_stack_entry kernel/kcsan/report.c:343
+ | ...
+ | Call Trace:
+ |  <TASK>
+ |  sanitize_stack_entries kernel/kcsan/report.c:351 [inline]
+ |  print_report kernel/kcsan/report.c:409
+ |  kcsan_report_known_origin kernel/kcsan/report.c:693
+ |  kcsan_setup_watchpoint kernel/kcsan/core.c:658
+ |  rcutorture_one_extend kernel/rcu/rcutorture.c:1475
+ |  rcutorture_loop_extend kernel/rcu/rcutorture.c:1558 [inline]
+ |  ...
+ |  </TASK>
+ | ---[ end trace ee5299cb933115f5 ]---
+ | ==================================================================
+ | BUG: KCSAN: data-race in _raw_spin_lock_irqsave / rcutorture_one_extend
+ |
+ | write (reordered) to 0xffffffff8c93b300 of 8 bytes by task 154 on cpu 12:
+ |  queued_spin_lock                include/asm-generic/qspinlock.h:80 [inline]
+ |  do_raw_spin_lock                include/linux/spinlock.h:185 [inline]
+ |  __raw_spin_lock_irqsave         include/linux/spinlock_api_smp.h:111 [inline]
+ |  _raw_spin_lock_irqsave          kernel/locking/spinlock.c:162
+ |  try_to_wake_up                  kernel/sched/core.c:4003
+ |  sysvec_apic_timer_interrupt     arch/x86/kernel/apic/apic.c:1097
+ |  asm_sysvec_apic_timer_interrupt arch/x86/include/asm/idtentry.h:638
+ |  set_reorder_access              kernel/kcsan/core.c:416 [inline]    <-- inconsistent reorder_access
+ |  kcsan_setup_watchpoint          kernel/kcsan/core.c:693
+ |  rcutorture_one_extend           kernel/rcu/rcutorture.c:1475
+ |  rcutorture_loop_extend          kernel/rcu/rcutorture.c:1558 [inline]
+ |  rcu_torture_one_read            kernel/rcu/rcutorture.c:1600
+ |  rcu_torture_reader              kernel/rcu/rcutorture.c:1692
+ |  kthread                         kernel/kthread.c:327
+ |  ret_from_fork                   arch/x86/entry/entry_64.S:295
+ |
+ | read to 0xffffffff8c93b300 of 8 bytes by task 147 on cpu 13:
+ |  rcutorture_one_extend           kernel/rcu/rcutorture.c:1475
+ |  rcutorture_loop_extend          kernel/rcu/rcutorture.c:1558 [inline]
+ |  ...
 
-I need to ensure I understand you comment.  Are you suggesting that I
-keep IRQCHIP_MATCH() unchanged, and go back to the MPM driver
-construction I used in v2?
+The warning is telling us that there was a data race which KCSAN wants
+to report, but the function where the original access (that is now
+reordered) happened cannot be found in the stack trace, which prevents
+KCSAN from generating the right stack trace. The stack trace of "write
+(reordered)" now only shows where the access was reordered to, but
+should instead show the stack trace of the original write, with a final
+line saying "reordered to".
 
-Shawn
+At the point where set_reorder_access() is interrupted, it just set
+reorder_access->ptr and size, at which point size is non-zero. This is
+sufficient (if ctx->disable_scoped is zero) for further accesses from
+nested contexts to perform checking of this reorder_access.
+
+That then happened in _raw_spin_lock_irqsave(), which is called by
+scheduler code. However, since reorder_access->ip is still stale (ptr
+and size belong to a different ip not yet set) this finally leads to
+replace_stack_entry() not finding the frame in reorder_access->ip and
+generating the above warning.
+
+Fix it by ensuring that a nested context cannot access reorder_access
+while we update it in set_reorder_access(): set ctx->disable_scoped for
+the duration that reorder_access is updated, which effectively locks
+reorder_access and prevents concurrent use by nested contexts. Note,
+set_reorder_access() can do the update only if disabled_scoped is zero
+on entry, and must therefore set disable_scoped back to non-zero after
+the initial check in set_reorder_access().
+
+Signed-off-by: Marco Elver <elver@google.com>
+---
+ kernel/kcsan/core.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
+index 916060913966..fe12dfe254ec 100644
+--- a/kernel/kcsan/core.c
++++ b/kernel/kcsan/core.c
+@@ -412,11 +412,20 @@ set_reorder_access(struct kcsan_ctx *ctx, const volatile void *ptr, size_t size,
+ 	if (!reorder_access || !kcsan_weak_memory)
+ 		return;
+ 
++	/*
++	 * To avoid nested interrupts or scheduler (which share kcsan_ctx)
++	 * reading an inconsistent reorder_access, ensure that the below has
++	 * exclusive access to reorder_access by disallowing concurrent use.
++	 */
++	ctx->disable_scoped++;
++	barrier();
+ 	reorder_access->ptr		= ptr;
+ 	reorder_access->size		= size;
+ 	reorder_access->type		= type | KCSAN_ACCESS_SCOPED;
+ 	reorder_access->ip		= ip;
+ 	reorder_access->stack_depth	= get_kcsan_stack_depth();
++	barrier();
++	ctx->disable_scoped--;
+ }
+ 
+ /*
+-- 
+2.34.1.400.ga245620fadb-goog
+

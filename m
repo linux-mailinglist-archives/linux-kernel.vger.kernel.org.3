@@ -2,140 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D8346A5DD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C0946A5E0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:44:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239403AbhLFTrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:47:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbhLFTra (ORCPT
+        id S244646AbhLFTrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:47:39 -0500
+Received: from mail-ot1-f42.google.com ([209.85.210.42]:34577 "EHLO
+        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239791AbhLFTri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:47:30 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFBFC061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 11:44:00 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id p8so23049240ljo.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 11:44:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qjCB24p6GO438Z2kHug+W8gH4OI8+jnRhOs5CMlBM+0=;
-        b=rwTHQlDpWAlTWiRhyS/YTA9+Gk7OVi1i07q24E4t6+1OZkW3UsgB7NhxJyLzgjIHLJ
-         gjwg+GhsR1aB/x4lotXQHzockynCfERZbav10+kby826f0T+CXKsPVtRBdk+emWgFIe5
-         2H24aO5Kn4vSCx6DP/lYe1cGw/mLPygFQYxoNuSdkhbwi0hBUZmwsPOZeT9VhxURJEG6
-         0kWaekpZGuKl5hjoV3Sa+ni73T5jj+50yg02G+PNXLNEjQWtqZEoxpPnyDz6KchCoMNj
-         hjGtCQr/h9cS6IeDob9+52ndrXHo7UC/8kQTzhrCdsciuDzzANzK9BCIhSKDqWGNU3qN
-         JUIw==
+        Mon, 6 Dec 2021 14:47:38 -0500
+Received: by mail-ot1-f42.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso15072810otj.1;
+        Mon, 06 Dec 2021 11:44:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qjCB24p6GO438Z2kHug+W8gH4OI8+jnRhOs5CMlBM+0=;
-        b=I9CpoLIOvfznPq+5hg3w26RyfwYTZDdjKVtt5Td+wuy1m3thV/wmJmWDdFW29ZYPMT
-         nc7pKZBcSRkZoDtqdvPcvCgQeDoMJ3UxmK4dLmPkGepLEEiOZyS9fLo6xiaEvJZW6VxT
-         cMRf6FYbl0kEnI5Yzu7GkUx+pcUC8sBKMvyNzJ+dVVMNQ39zuOQG2eyk8u5Ibjx3nbD4
-         bPpJNblk9GIEdEBqqYvShD8vuH4X25QWI8zJISpsbX4cqUvPetMRMMead0m2wBmX1ofF
-         88khViM/PY0KQShFwxsGk954hG9hxWA50rzNYK55DNL3XmdxdLEScZF5Kph41a/LWUa0
-         vc+A==
-X-Gm-Message-State: AOAM530EwnUpRqaKucoSHP1X++lZjSQBXD5h8oNWCxRqUqyorV9/zWDc
-        W6GTQCv8mXy2+9YDK1oVdUONTeT1d1KhoVZ30SIC4Ogad54AMA==
-X-Google-Smtp-Source: ABdhPJyTxO4MSGAXd+LGMzVZOw2ZQorvSdY4Md1d38bw5x5/n/zVWFX69aRilqa8u5wEf0MdLjLMdco8CUw7m3gXWac=
-X-Received: by 2002:a05:651c:1b0:: with SMTP id c16mr36326195ljn.339.1638819838997;
- Mon, 06 Dec 2021 11:43:58 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OV4V5cyyfp1d5JWGFe/iPBsQ41nRRI65xNtRWHtdygo=;
+        b=XtagYp0etFwKKStp+iKM33U/+sZl3DUhL0d/VN8F8vrgUkKi8zPfjjsFwqHsCtMI+I
+         yG7k3+KDDkdPqP5AgbipqlK6RkbZP8OS4ns5n8rfu/K+do9TRvYfQWGlYdR0KK5xaBMW
+         cpO/K8VEiIhPfbNSST9JGWhA1sGq+k5/SDJ6Xj9HTExKL11w8CipixKxp2EV1AXejAeI
+         jH0NAxHrUE+JXJ81Jav6Ex4OUZ9xXH2JYIfcWGv5JTiyzHOqBDgrKfWcsgaPY+yMyc4A
+         mp6zQtPh+K2AoJOyUv8i5ZJhZW2k9wvuB9nreCf/Udn91djy0/1epprZWhA0u4cr8k3t
+         uAYg==
+X-Gm-Message-State: AOAM531RG5cXJzZRK1C9PYakXrkmr234ozPwOtKHeDlMw6R7+BQ5wU7F
+        3uXva9+iq3V/57TDgqL3ReXOeyUBzQ==
+X-Google-Smtp-Source: ABdhPJwi4XEJy59m8vu3H7Fv79SUAhYZeBX8Nof8y9Mu60hPozLl0q+Nd+PTyUE+N+3I89DX4D0Azw==
+X-Received: by 2002:a05:6830:2019:: with SMTP id e25mr32350823otp.96.1638819848480;
+        Mon, 06 Dec 2021 11:44:08 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id g17sm2876640oiy.14.2021.12.06.11.44.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 11:44:08 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Abraham I <kishon@ti.com>
+Cc:     devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: PCI: Fix 'unevaluatedProperties' warnings
+Date:   Mon,  6 Dec 2021 13:44:05 -0600
+Message-Id: <20211206194406.2469361-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20211206161745.39028-1-alexandr.lobakin@intel.com>
-In-Reply-To: <20211206161745.39028-1-alexandr.lobakin@intel.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 6 Dec 2021 11:43:47 -0800
-Message-ID: <CAKwvOdnoxaHHYMN-=fW6-W_bN+VrWvD32cidGa7qnYHmR=k2YA@mail.gmail.com>
-Subject: Re: [PATCH] numa: mark __next_node() as __always_inline to fix
- section mismatch
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 8:19 AM Alexander Lobakin
-<alexandr.lobakin@intel.com> wrote:
->
-> Clang (13) uninlines __next_node() which emits the following warning
-> due to that this function is used in init code (amd_numa_init(),
-> sched_init_numa() etc.):
->
-> WARNING: modpost: vmlinux.o(.text+0x927ee): Section mismatch
-> in reference from the function __next_node() to the variable
-> .init.data:numa_nodes_parsed
-> The function __next_node() references
-> the variable __initdata numa_nodes_parsed.
-> This is often because __next_node lacks a __initdata
-> annotation or the annotation of numa_nodes_parsed is wrong.
->
-> Mark __next_node() as __always_inline() so it won't get uninlined.
-> bloat-o-meter over x86_64 binaries says this:
->
-> scripts/bloat-o-meter -c vmlinux.baseline vmlinux
-> add/remove: 1/1 grow/shrink: 2/7 up/down: 446/-2166 (-1720)
-> Function                                     old     new   delta
-> apply_wqattrs_cleanup                          -     410    +410
-> amd_numa_init                                814     842     +28
-> sched_init_numa                             1338    1346      +8
-> find_next_bit                                 38      19     -19
-> __next_node                                   45       -     -45
-> apply_wqattrs_prepare                       1069     799    -270
-> wq_nice_store                                688     414    -274
-> wq_numa_store                                805     433    -372
-> wq_cpumask_store                             789     402    -387
-> apply_workqueue_attrs                        538     147    -391
-> workqueue_set_unbound_cpumask                947     539    -408
-> Total: Before=14422603, After=14420883, chg -0.01%
->
-> So it's both win-win in terms of resolving section mismatch and
-> saving some text size (-1.7 Kb is quite nice).
->
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+With 'unevaluatedProperties' support implemented, there's several
+warnings due to undocumented properties:
 
-Thanks for the patch.  See this thread:
-https://github.com/ClangBuiltLinux/linux/issues/1302
+Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.example.dt.yaml: pcie@1e140000: pcie@0,0: Unevaluated properties are not allowed ('phy-names' was unexpected)
+Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.example.dt.yaml: pcie@1e140000: pcie@1,0: Unevaluated properties are not allowed ('phy-names' was unexpected)
+Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.example.dt.yaml: pcie@1e140000: pcie@2,0: Unevaluated properties are not allowed ('phy-names' was unexpected)
+Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.example.dt.yaml: pcie@11230000: Unevaluated properties are not allowed ('phy-names' was unexpected)
+Documentation/devicetree/bindings/pci/microchip,pcie-host.example.dt.yaml: pcie@2030000000: Unevaluated properties are not allowed ('interrupt-controller' was unexpected)
+Documentation/devicetree/bindings/pci/ti,am65-pci-ep.example.dt.yaml: pcie-ep@5500000: Unevaluated properties are not allowed ('num-ib-windows', 'num-ob-windows' were unexpected)
+Documentation/devicetree/bindings/pci/ti,am65-pci-host.example.dt.yaml: pcie@5500000: Unevaluated properties are not allowed ('num-viewport', 'interrupts' were unexpected)
+Documentation/devicetree/bindings/pci/ti,j721e-pci-host.example.dt.yaml: pcie@2900000: Unevaluated properties are not allowed ('dma-coherent' was unexpected)
 
-There's a lot more instances of these based on config.  Something like
-https://github.com/ClangBuiltLinux/linux/issues/1302#issuecomment-807260475
-would be more appropriate for fixing all instances, but I think this
-is more so an issue with the inline cost model in LLVM.
+Add the necessary property definitions or remove the properties from the
+examples to fix these warnings.
 
-I need to finish off https://reviews.llvm.org/D111456, and request
-that https://reviews.llvm.org/D111272 which landed in clang-14 get
-backported to the 13.0.1 release which should also help.
+Cc: Ryder Lee <ryder.lee@mediatek.com>
+Cc: Jianjun Wang <jianjun.wang@mediatek.com>
+Cc: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: Daire McNamara <daire.mcnamara@microchip.com>
+Cc: Abraham I <kishon@ti.com>
+Cc: linux-pci@vger.kernel.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/pci/mediatek,mt7621-pcie.yaml     |  3 +++
+ .../bindings/pci/mediatek-pcie-gen3.yaml       |  4 ++++
+ .../bindings/pci/microchip,pcie-host.yaml      | 18 ++++++++++++++++++
+ .../bindings/pci/ti,am65-pci-ep.yaml           |  2 --
+ .../bindings/pci/ti,am65-pci-host.yaml         |  4 +++-
+ .../bindings/pci/ti,j721e-pci-host.yaml        |  2 ++
+ 6 files changed, 30 insertions(+), 3 deletions(-)
 
-> ---
->  include/linux/nodemask.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-> index 567c3ddba2c4..55ba2c56f39b 100644
-> --- a/include/linux/nodemask.h
-> +++ b/include/linux/nodemask.h
-> @@ -266,7 +266,7 @@ static inline int __first_node(const nodemask_t *srcp)
->  }
->
->  #define next_node(n, src) __next_node((n), &(src))
-> -static inline int __next_node(int n, const nodemask_t *srcp)
-> +static __always_inline int __next_node(int n, const nodemask_t *srcp)
->  {
->         return min_t(int,MAX_NUMNODES,find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
->  }
-> --
-> 2.33.1
->
-
-
+diff --git a/Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.yaml b/Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.yaml
+index 044fa967bc8b..d60f43fd9c5a 100644
+--- a/Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.yaml
++++ b/Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.yaml
+@@ -45,6 +45,9 @@ patternProperties:
+       phys:
+         maxItems: 1
+ 
++      phy-names:
++        pattern: '^pcie-phy[0-2]$'
++
+     required:
+       - "#interrupt-cells"
+       - interrupt-map-mask
+diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
+index 742206dbd965..0499b94627ae 100644
+--- a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
++++ b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
+@@ -95,6 +95,10 @@ properties:
+   phys:
+     maxItems: 1
+ 
++  phy-names:
++    items:
++      - const: pcie-phy
++
+   '#interrupt-cells':
+     const: 1
+ 
+diff --git a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+index 7b0776457178..edb4f81253c8 100644
+--- a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
++++ b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+@@ -46,6 +46,24 @@ properties:
+   msi-parent:
+     description: MSI controller the device is capable of using.
+ 
++  interrupt-controller:
++    type: object
++    properties:
++      '#address-cells':
++        const: 0
++
++      '#interrupt-cells':
++        const: 1
++
++      interrupt-controller: true
++
++    required:
++      - '#address-cells'
++      - '#interrupt-cells'
++      - interrupt-controller
++
++    additionalProperties: false
++
+ required:
+   - reg
+   - reg-names
+diff --git a/Documentation/devicetree/bindings/pci/ti,am65-pci-ep.yaml b/Documentation/devicetree/bindings/pci/ti,am65-pci-ep.yaml
+index 78c217d362a7..a6896cb40e83 100644
+--- a/Documentation/devicetree/bindings/pci/ti,am65-pci-ep.yaml
++++ b/Documentation/devicetree/bindings/pci/ti,am65-pci-ep.yaml
+@@ -66,8 +66,6 @@ examples:
+         reg-names = "app", "dbics", "addr_space", "atu";
+         power-domains = <&k3_pds 120 TI_SCI_PD_EXCLUSIVE>;
+         ti,syscon-pcie-mode = <&pcie0_mode>;
+-        num-ib-windows = <16>;
+-        num-ob-windows = <16>;
+         max-link-speed = <2>;
+         dma-coherent;
+         interrupts = <GIC_SPI 340 IRQ_TYPE_EDGE_RISING>;
+diff --git a/Documentation/devicetree/bindings/pci/ti,am65-pci-host.yaml b/Documentation/devicetree/bindings/pci/ti,am65-pci-host.yaml
+index 834dc1c1743c..eabe1635e336 100644
+--- a/Documentation/devicetree/bindings/pci/ti,am65-pci-host.yaml
++++ b/Documentation/devicetree/bindings/pci/ti,am65-pci-host.yaml
+@@ -29,6 +29,9 @@ properties:
+       - const: config
+       - const: atu
+ 
++  interrupts:
++    maxItems: 1
++
+   power-domains:
+     maxItems: 1
+ 
+@@ -87,7 +90,6 @@ examples:
+         ti,syscon-pcie-id = <&pcie_devid>;
+         ti,syscon-pcie-mode = <&pcie0_mode>;
+         bus-range = <0x0 0xff>;
+-        num-viewport = <16>;
+         max-link-speed = <2>;
+         dma-coherent;
+         interrupts = <GIC_SPI 340 IRQ_TYPE_EDGE_RISING>;
+diff --git a/Documentation/devicetree/bindings/pci/ti,j721e-pci-host.yaml b/Documentation/devicetree/bindings/pci/ti,j721e-pci-host.yaml
+index cc900202df29..2115d5a3f0e1 100644
+--- a/Documentation/devicetree/bindings/pci/ti,j721e-pci-host.yaml
++++ b/Documentation/devicetree/bindings/pci/ti,j721e-pci-host.yaml
+@@ -60,6 +60,8 @@ properties:
+       - const: fck
+       - const: pcie_refclk
+ 
++  dma-coherent: true
++
+   vendor-id:
+     const: 0x104c
+ 
 -- 
-Thanks,
-~Nick Desaulniers
+2.32.0
+

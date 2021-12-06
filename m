@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D52469CBF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33547469EA1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345904AbhLFPYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:24:48 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35170 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345531AbhLFPPT (ORCPT
+        id S1380011AbhLFPnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:43:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1386662AbhLFP0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:15:19 -0500
+        Mon, 6 Dec 2021 10:26:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986D9C0613F8;
+        Mon,  6 Dec 2021 07:17:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DDF5C6130D;
-        Mon,  6 Dec 2021 15:11:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B2EC341C1;
-        Mon,  6 Dec 2021 15:11:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5DA7FB8111D;
+        Mon,  6 Dec 2021 15:17:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8210AC341C1;
+        Mon,  6 Dec 2021 15:17:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803499;
-        bh=WA0RYjt9t3R3xqN95MQc1/7KLR5qSNYVtHNyVr2+xRY=;
+        s=korg; t=1638803838;
+        bh=1DlwUNuplRc6+5FPq6tN9SP/3Jp/hV+Amu255hOEkeA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GIZstJ/ClqDsrPKTtWTN8WLyIVdNq/V1dO0AeImVReCXGSiL4nfOF7CQ90J4T5cQo
-         PJ2i2fnEiRpCkMMBYOZO47qYMOMc9GY+3btJ9r2R2tkqtqsx95OHn6Xj+xIfu/H33l
-         L42HreqvO1YNUYDl71odBhbIBjp1F6EBBcfHjd+s=
+        b=Ho5HVf59gUPhoWkH8R7G5BsBmLUe/u9G9jjTDeiuX8XvoNJROV194kNeFkh9kyvsw
+         2NKyDLJjizYoYaZYglYDsG4loG9WrJvWXnQFrx1rQYaCbaSfrVUKb+ijaXGqGELI19
+         shG15Lh/AEu95D7z+AoQs4LbheuafKJEazyMAqgs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lee Duncan <lduncan@suse.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 15/70] scsi: iscsi: Unblock session then wake up error handler
-Date:   Mon,  6 Dec 2021 15:56:19 +0100
-Message-Id: <20211206145552.431267723@linuxfoundation.org>
+        stable@vger.kernel.org, Alain Volmat <alain.volmat@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH 5.10 063/130] i2c: stm32f7: stop dma transfer in case of NACK
+Date:   Mon,  6 Dec 2021 15:56:20 +0100
+Message-Id: <20211206145601.855919516@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
-References: <20211206145551.909846023@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,53 +49,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Christie <michael.christie@oracle.com>
+From: Alain Volmat <alain.volmat@foss.st.com>
 
-[ Upstream commit a0c2f8b6709a9a4af175497ca65f93804f57b248 ]
+commit 31b90a95ccbbb4b628578ac17e3b3cc8eeacfe31 upstream.
 
-We can race where iscsi_session_recovery_timedout() has woken up the error
-handler thread and it's now setting the devices to offline, and
-session_recovery_timedout()'s call to scsi_target_unblock() is also trying
-to set the device's state to transport-offline. We can then get a mix of
-states.
+In case of receiving a NACK, the dma transfer should be stopped
+to avoid feeding data into the FIFO.
+Also ensure to properly return the proper error code and avoid
+waiting for the end of the dma completion in case of
+error happening during the transmission.
 
-For the case where we can't relogin we want the devices to be in
-transport-offline so when we have repaired the connection
-__iscsi_unblock_session() can set the state back to running.
-
-Set the device state then call into libiscsi to wake up the error handler.
-
-Link: https://lore.kernel.org/r/20211105221048.6541-2-michael.christie@oracle.com
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 7ecc8cfde553 ("i2c: i2c-stm32f7: Add DMA support")
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/scsi_transport_iscsi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/i2c/busses/i2c-stm32f7.c |    9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index 6f21cb75d95fd..f6cce0befa7de 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -1894,12 +1894,12 @@ static void session_recovery_timedout(struct work_struct *work)
+--- a/drivers/i2c/busses/i2c-stm32f7.c
++++ b/drivers/i2c/busses/i2c-stm32f7.c
+@@ -1472,6 +1472,7 @@ static irqreturn_t stm32f7_i2c_isr_event
+ {
+ 	struct stm32f7_i2c_dev *i2c_dev = data;
+ 	struct stm32f7_i2c_msg *f7_msg = &i2c_dev->f7_msg;
++	struct stm32_i2c_dma *dma = i2c_dev->dma;
+ 	void __iomem *base = i2c_dev->base;
+ 	u32 status, mask;
+ 	int ret = IRQ_HANDLED;
+@@ -1497,6 +1498,10 @@ static irqreturn_t stm32f7_i2c_isr_event
+ 		dev_dbg(i2c_dev->dev, "<%s>: Receive NACK (addr %x)\n",
+ 			__func__, f7_msg->addr);
+ 		writel_relaxed(STM32F7_I2C_ICR_NACKCF, base + STM32F7_I2C_ICR);
++		if (i2c_dev->use_dma) {
++			stm32f7_i2c_disable_dma_req(i2c_dev);
++			dmaengine_terminate_all(dma->chan_using);
++		}
+ 		f7_msg->result = -ENXIO;
  	}
- 	spin_unlock_irqrestore(&session->lock, flags);
  
--	if (session->transport->session_recovery_timedout)
--		session->transport->session_recovery_timedout(session);
--
- 	ISCSI_DBG_TRANS_SESSION(session, "Unblocking SCSI target\n");
- 	scsi_target_unblock(&session->dev, SDEV_TRANSPORT_OFFLINE);
- 	ISCSI_DBG_TRANS_SESSION(session, "Completed unblocking SCSI target\n");
-+
-+	if (session->transport->session_recovery_timedout)
-+		session->transport->session_recovery_timedout(session);
- }
+@@ -1512,7 +1517,7 @@ static irqreturn_t stm32f7_i2c_isr_event
+ 		/* Clear STOP flag */
+ 		writel_relaxed(STM32F7_I2C_ICR_STOPCF, base + STM32F7_I2C_ICR);
  
- static void __iscsi_unblock_session(struct work_struct *work)
--- 
-2.33.0
-
+-		if (i2c_dev->use_dma) {
++		if (i2c_dev->use_dma && !f7_msg->result) {
+ 			ret = IRQ_WAKE_THREAD;
+ 		} else {
+ 			i2c_dev->master_mode = false;
+@@ -1525,7 +1530,7 @@ static irqreturn_t stm32f7_i2c_isr_event
+ 		if (f7_msg->stop) {
+ 			mask = STM32F7_I2C_CR2_STOP;
+ 			stm32f7_i2c_set_bits(base + STM32F7_I2C_CR2, mask);
+-		} else if (i2c_dev->use_dma) {
++		} else if (i2c_dev->use_dma && !f7_msg->result) {
+ 			ret = IRQ_WAKE_THREAD;
+ 		} else if (f7_msg->smbus) {
+ 			stm32f7_i2c_smbus_rep_start(i2c_dev);
 
 

@@ -2,126 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 013B846A06D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D92146A0C5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351284AbhLFQEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:04:08 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:13128 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244404AbhLFPwk (ORCPT
+        id S1377585AbhLFQM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:12:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1445667AbhLFQMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:52:40 -0500
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B6CA2bh031788;
-        Mon, 6 Dec 2021 10:49:09 -0500
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3csj9d8vd0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Dec 2021 10:49:09 -0500
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 1B6Fn83F016089
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 6 Dec 2021 10:49:08 -0500
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Mon, 6 Dec 2021 10:49:07 -0500
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Mon, 6 Dec 2021 10:49:07 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Mon, 6 Dec 2021 10:49:07 -0500
-Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.181])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 1B6Fn3pM002802;
-        Mon, 6 Dec 2021 10:49:06 -0500
-From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
-To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Subject: [PATCH v6 3/3] Documentation:ABI:testing:admv1013: add ABI docs
-Date:   Mon, 6 Dec 2021 17:48:45 +0200
-Message-ID: <20211206154845.268445-3-antoniu.miclaus@analog.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206154845.268445-1-antoniu.miclaus@analog.com>
-References: <20211206154845.268445-1-antoniu.miclaus@analog.com>
+        Mon, 6 Dec 2021 11:12:08 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F262C061D5E;
+        Mon,  6 Dec 2021 07:52:03 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id n12so26477341lfe.1;
+        Mon, 06 Dec 2021 07:52:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fEMojyByZKUtRCcQzpUJpCVqQCOhDunaiwYMZcnbsWE=;
+        b=Hsb0CUqM6QRshRAXrb1ckDgRx9MUZDEvSpa/XN3Xs1buHjZHl+5RA9uDhH4bmMhWAY
+         WGS1I8pWcSRkn9ZpjLhCpMU1pRjqEtc6CWgU5pDyiwJqWp7hpAezzm80UWhArsI9ri2L
+         93OFkxlj4yQpUNiVqiob5dyC0uoOU/JOm5S5pFlRcntllPjfVY7dUB3+7a/2dBiJnW+Y
+         1LxMFh9OOBOMP0VX5vZbtYVxcBSzxV0gcoB9AmiNVvjvtBLWykE2//FoiJHpfnzR4uKv
+         uLZJm2rQtYCQCmCgykd68n1l2GY3xNouFCxBJFOfkLjprKdJcWQMf26hZe1oJ2mioAVS
+         Ks8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fEMojyByZKUtRCcQzpUJpCVqQCOhDunaiwYMZcnbsWE=;
+        b=jCn8vxx6opxGGkr5bn7u4MjQ7hZuwayOVeM/GFQnV2hwYGDrXAm4oMxKrd9Q2PtitC
+         GuWNeVEnTeACWv95xb7tqabaNuA/e4RTbr19Bkb7QtpJ+g02Fc9bGPNzMXa0rdSNXGKW
+         GJQp+xqFOH/g2iPhSWwdWkvJDnI6PGAZ/qkrkk/Vf/ALi1y+IKPJtagFXD6He7I8aNlf
+         X2VoDAyTVDRJSwPbvu4YxOPV1GpM9j/WXGhoWMm+eVLJyjiCYx7iGrlhPpA/Sc0mqq/9
+         Oki+G3xA9mNR3GohwqLrMhkJxGAyafhZL48F2Ihh/Q0Xuj/acRyiDtm5UrnKPLEfOhjB
+         LlGQ==
+X-Gm-Message-State: AOAM5300utM9115H/XJyQBec8Mvbd5UNjC1jgKYZCQwCCm1qkMtwLnjO
+        m89UuzXxBP//7vDSZa+REbHFDNUY3k8=
+X-Google-Smtp-Source: ABdhPJxn7X8g1FUQ3Iwk9mTEpSBwHa5RQVawua6/r6PtpT48+HrVktNKa5A/dwK/CVygBRWq1HLvrw==
+X-Received: by 2002:a05:6512:1324:: with SMTP id x36mr34929032lfu.495.1638805921586;
+        Mon, 06 Dec 2021 07:52:01 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id x6sm1388287lfe.201.2021.12.06.07.52.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 07:52:01 -0800 (PST)
+Subject: Re: [PATCH] dt-bindings: regulators: Document Tegra regulator
+ coupling in json-schema
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211206154032.227938-1-thierry.reding@gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <0c5e397e-d3c5-274e-b6d1-b44cabc06128@gmail.com>
+Date:   Mon, 6 Dec 2021 18:52:00 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: le9guNhiDhJ_mpz8UDlO3DkNCyKxwR7q
-X-Proofpoint-ORIG-GUID: le9guNhiDhJ_mpz8UDlO3DkNCyKxwR7q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-06_05,2021-12-06_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- mlxlogscore=999 impostorscore=0 malwarescore=0 spamscore=0 suspectscore=0
- priorityscore=1501 mlxscore=0 phishscore=0 clxscore=1015
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112060099
+In-Reply-To: <20211206154032.227938-1-thierry.reding@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for the use of the Local Oscillator Feedthrough Offset
-calibration.
+06.12.2021 18:40, Thierry Reding пишет:
+> +  nvidia,tegra-core-regulator:
+> +    $ref: "/schemas/types.yaml#/definitions/flag"
+> +    description: if present, designates the regulator as the "CORE domain" voltage regulator
+> +
+> +  nvidia,tegra-rtc-regulator:
+> +    $ref: "/schemas/types.yaml#/definitions/flag"
+> +    description: if present, designates the regulator as the "RTC domain" voltage regulator
+> +
+> +  nvidia,tegra-cpu-regulator:
+> +    $ref: "/schemas/types.yaml#/definitions/flag"
+> +    description: if present, designates the regulator as the "CPU domain" voltage regulator
 
-Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
----
-changes in v6:
- - update iio channels
- - remove frequency mode
- .../testing/sysfs-bus-iio-frequency-admv1013  | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1013
-
-diff --git a/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1013 b/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1013
-new file mode 100644
-index 000000000000..3be68dd54ed4
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1013
-@@ -0,0 +1,38 @@
-+What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0-1_i_phase
-+KernelVersion:
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		Read/write value for the Local Oscillatior path quadrature I phase shift.
-+
-+What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0-1_i_phase
-+KernelVersion:
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		Read/write value for the Local Oscillatior path quadrature Q phase shift.
-+
-+What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_i_calibbias
-+KernelVersion:
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		Read/write value for the Local Oscillatior Feedthrough Offset Calibration I Positive
-+		side.
-+
-+What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_q_calibbias
-+KernelVersion:
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		Read/write value for the Local Oscillatior Feedthrough Offset Calibration Q Positive side.
-+
-+What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage1_i_calibbias
-+KernelVersion:
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		Read/write raw value for the Local Oscillatior Feedthrough Offset Calibration I Negative
-+		side.
-+
-+What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage1_q_calibbias
-+KernelVersion:
-+Contact:	linux-iio@vger.kernel.org
-+Description:
-+		Read/write raw value for the Local Oscillatior Feedthrough Offset Calibration Q Negative
-+		side.
--- 
-2.34.1
-
+What is the difference between "boolean" and
+"/schemas/types.yaml#/definitions/flag"?

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C42469A2D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7852D46A047
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345884AbhLFPGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:06:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52042 "EHLO
+        id S239071AbhLFQAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345893AbhLFPFJ (ORCPT
+        with ESMTP id S1390512AbhLFPm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:05:09 -0500
+        Mon, 6 Dec 2021 10:42:28 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49039C0698C3;
-        Mon,  6 Dec 2021 07:01:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273E9C08ED03;
+        Mon,  6 Dec 2021 07:27:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15376B81118;
-        Mon,  6 Dec 2021 15:01:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2D9C341C1;
-        Mon,  6 Dec 2021 15:01:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD2A8B8111C;
+        Mon,  6 Dec 2021 15:27:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32AACC34901;
+        Mon,  6 Dec 2021 15:27:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802898;
-        bh=08o3bNiz9et/I82aQdPgd8MM69aVwy9hBLX9CVgrmMs=;
+        s=korg; t=1638804422;
+        bh=t/pttRSCweMqeOKweAPdtOa5THVRVa0S7pIBTkKQpME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PKa36OUEkA5K8dobZHMPR6j58F8l5Vstxi+xmV1rm70HMqoK1tEzN2Tm053Xt/oy8
-         sFxFI2pCLKGBo5/nua5IN80EShuAma2Y/4iEY8PZqHPSuzv9V9wF+A/7Rfb3c130J5
-         NC8YJWLJngblAwH9Vo/cxrOT2J5PZagSeK4PK6p8=
+        b=1dkNHKyvQxTxw1BJ2M/cuJ1a2eU1uluFs4DalydD/dMGS4Xn5I5P/XzqdmXV6Xina
+         Gi/5Q0xMYbHHV/RdoO0q9KMwq0t1c3wd3vVUv4YpPcXbjqVxJFJGWH2WyXsp7v6WXi
+         C6RfvUf2BSDHNJtDa+In305uUhOYj48lckrO9j30=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 20/62] PM: hibernate: use correct mode for swsusp_close()
+        =?UTF-8?q?=C5=81ukasz=20Bartosik?= <lb@semihalf.com>,
+        Kalle Valo <kvalo@codeaurora.org>
+Subject: [PATCH 5.15 109/207] iwlwifi: fix warnings produced by kernel debug options
 Date:   Mon,  6 Dec 2021 15:56:03 +0100
-Message-Id: <20211206145549.877829206@linuxfoundation.org>
+Message-Id: <20211206145614.016974504@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,62 +49,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
+From: Łukasz Bartosik <lb@semihalf.com>
 
-[ Upstream commit cefcf24b4d351daf70ecd945324e200d3736821e ]
+commit f5cecf1d4c5ff76172928bc32e99ca56a5ca2f56 upstream.
 
-Commit 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in
-swsusp_check()") changed the opening mode of the block device to
-(FMODE_READ | FMODE_EXCL).
+Fix warnings produced by:
+- lockdep_assert_wiphy() in function reg_process_self_managed_hint(),
+- wiphy_dereference() in function iwl_mvm_init_fw_regd().
+Both function are expected to be called in critical section.
 
-In the corresponding calls to swsusp_close(), the mode is still just
-FMODE_READ which triggers the warning in blkdev_flush_mapping() on
-resume from hibernate.
+The warnings were discovered when running v5.15 kernel
+with debug options enabled:
 
-So, use the mode (FMODE_READ | FMODE_EXCL) also when closing the
-device.
+1)
+Hardware name: Google Delbin/Delbin
+RIP: 0010:reg_process_self_managed_hint+0x254/0x347 [cfg80211]
+...
+Call Trace:
+regulatory_set_wiphy_regd_sync+0x3d/0xb0
+iwl_mvm_init_mcc+0x49d/0x5a2
+iwl_op_mode_mvm_start+0x1b58/0x2507
+? iwl_mvm_reprobe_wk+0x94/0x94
+_iwl_op_mode_start+0x146/0x1a3
+iwl_opmode_register+0xda/0x13d
+init_module+0x28/0x1000
 
-Fixes: 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
-Signed-off-by: Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+2)
+drivers/net/wireless/intel/iwlwifi/mvm/mac80211.c:263 suspicious rcu_dereference_protected() usage!
+...
+Hardware name: Google Delbin/Delbin, BIOS Google_Delbin
+Call Trace:
+dump_stack_lvl+0xb1/0xe6
+iwl_mvm_init_fw_regd+0x2e7/0x379
+iwl_mvm_init_mcc+0x2c6/0x5a2
+iwl_op_mode_mvm_start+0x1b58/0x2507
+? iwl_mvm_reprobe_wk+0x94/0x94
+_iwl_op_mode_start+0x146/0x1a3
+iwl_opmode_register+0xda/0x13d
+init_module+0x28/0x100
+
+Fixes: a05829a7222e ("cfg80211: avoid holding the RTNL when calling the driver")
+Signed-off-by: Łukasz Bartosik <lb@semihalf.com>
+Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+Link: https://lore.kernel.org/r/20211110215744.5487-1-lukasz.bartosik@semihalf.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/power/hibernate.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/mvm/ops.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 7b393faf930f8..e938fd8db056b 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -672,7 +672,7 @@ static int load_image_and_restore(void)
- 		goto Unlock;
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/ops.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/ops.c
+@@ -687,6 +687,7 @@ static int iwl_mvm_start_get_nvm(struct
+ 	int ret;
  
- 	error = swsusp_read(&flags);
--	swsusp_close(FMODE_READ);
-+	swsusp_close(FMODE_READ | FMODE_EXCL);
- 	if (!error)
- 		hibernation_restore(flags & SF_PLATFORM_MODE);
+ 	rtnl_lock();
++	wiphy_lock(mvm->hw->wiphy);
+ 	mutex_lock(&mvm->mutex);
  
-@@ -866,7 +866,7 @@ static int software_resume(void)
- 	/* The snapshot device should not be opened while we're running */
- 	if (!atomic_add_unless(&snapshot_device_available, -1, 0)) {
- 		error = -EBUSY;
--		swsusp_close(FMODE_READ);
-+		swsusp_close(FMODE_READ | FMODE_EXCL);
- 		goto Unlock;
- 	}
+ 	ret = iwl_run_init_mvm_ucode(mvm);
+@@ -702,6 +703,7 @@ static int iwl_mvm_start_get_nvm(struct
+ 		iwl_mvm_stop_device(mvm);
  
-@@ -900,7 +900,7 @@ static int software_resume(void)
- 	pr_debug("PM: Hibernation image not present or could not be loaded.\n");
- 	return error;
-  Close_Finish:
--	swsusp_close(FMODE_READ);
-+	swsusp_close(FMODE_READ | FMODE_EXCL);
- 	goto Finish;
- }
+ 	mutex_unlock(&mvm->mutex);
++	wiphy_unlock(mvm->hw->wiphy);
+ 	rtnl_unlock();
  
--- 
-2.33.0
-
+ 	if (ret < 0)
 
 

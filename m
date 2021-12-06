@@ -2,57 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADEE46971D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C35469734
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:34:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244558AbhLFNgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 08:36:09 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:40472 "EHLO vps0.lunn.ch"
+        id S244054AbhLFNhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 08:37:52 -0500
+Received: from mga11.intel.com ([192.55.52.93]:20755 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244021AbhLFNgJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 08:36:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=RC8NrBrwhX5mCdIhtGkHRsv39pzHtyYIv/DNyy3qsUg=; b=vW5WUTKphb7vVjRVrPQUmUyifI
-        EJFhNoU7pKBRFDxdloAPoVy/Skh1dW0o72MEJWqKVt/uhyHibIR/WAslXAqyMU45LZHaV/7qbqmQX
-        XfoSpBoYKRjAEztL114ZjpTsBzOEwi6s7Il65pV+CvqVSfj8zsCWN4vvqMQtndbHZmAQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1muE6f-00FfDv-2O; Mon, 06 Dec 2021 14:32:37 +0100
-Date:   Mon, 6 Dec 2021 14:32:37 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Apeksha Gupta <apeksha.gupta@nxp.com>
-Cc:     qiangqing.zhang@nxp.com, netdev@vger.kernel.org, kuba@kernel.org,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-devel@linux.nxdi.nxp.com, LnxRevLi@nxp.com,
-        sachin.saxena@nxp.com, hemant.agrawal@nxp.com
-Subject: Re: [PATCH v2 0/3] drivers/net: split FEC driver
-Message-ID: <Ya4Q9aysfYwV35MO@lunn.ch>
-References: <20211206045536.8690-1-apeksha.gupta@nxp.com>
+        id S243535AbhLFNhv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 08:37:51 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="234826440"
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="234826440"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 05:34:22 -0800
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="479116187"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 05:34:17 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1muE7J-002nHX-0A;
+        Mon, 06 Dec 2021 15:33:17 +0200
+Date:   Mon, 6 Dec 2021 15:33:16 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v12 3/7] gpiolib: of: make fwnode take precedence in
+ struct gpio_chip
+Message-ID: <Ya4RHA91Ow9frP8t@smile.fi.intel.com>
+References: <20211203133003.31786-1-brgl@bgdev.pl>
+ <20211203133003.31786-4-brgl@bgdev.pl>
+ <YapnTHQZyNCZXrgp@smile.fi.intel.com>
+ <YapoW+DL4jPo69u8@smile.fi.intel.com>
+ <Yapp4vakFxH7JV5B@smile.fi.intel.com>
+ <CAMRc=MeWfKHWFKwRjaqczrfwhAodpDLgrWKF-zqXCsjd=gMv3g@mail.gmail.com>
+ <Yap5ctmlw6NeNM+7@smile.fi.intel.com>
+ <CAMRc=MffmFgCZFRziw-QJ+Y3WobJZzUh1Nbp2oym6JLqfnZCdQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211206045536.8690-1-apeksha.gupta@nxp.com>
+In-Reply-To: <CAMRc=MffmFgCZFRziw-QJ+Y3WobJZzUh1Nbp2oym6JLqfnZCdQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 10:25:33AM +0530, Apeksha Gupta wrote:
-> This patch series is to restructure the FEC (Fast Ethernet Controller)
-> driver. All PHY functionality moved from fec_main.c to separate files
-> fec_phy.h and fec_phy.c. By these changes FEC driver become more
-> flexible to work with other PHY drivers whenever required in future.
+On Mon, Dec 06, 2021 at 09:41:33AM +0100, Bartosz Golaszewski wrote:
+> On Fri, Dec 3, 2021 at 9:10 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
 
-The MAC driver has little to do with the PHY driver. All PHY driver
-details are in the actual PHY driver and phylib. At minimum we need to
-see these other PHY driver changes, so you can justify this change.
+...
 
-What i think you are trying to do is sneak in the changes you need for
-DPDK. Please don't so that. Just implement XDP.
+> This series concerns the gpio-sim driver and it only uses configfs
+> (with manually created platform devices) or device-tree. I would
+> prefer to do ACPI separately and I'd like you to lead that because I
+> neither have any HW to test nor claim to understand it. :)
 
-NACK
+Please, mention this in the commit message that ACPI is not covered (yet).
 
-      Andrew
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

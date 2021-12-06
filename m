@@ -2,117 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B535F4691A3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 09:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF42B4691AC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 09:41:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239581AbhLFIot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 03:44:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26550 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232168AbhLFIos (ORCPT
+        id S239641AbhLFIpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 03:45:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239568AbhLFIpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 03:44:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638780079;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GWGpIh47snyALgTQHCz30lE3sTFpFQWexm7titSzVRI=;
-        b=bFzzM5mVbExASWPES66Ywhq/LsxU+FdSvs9OnUcoo4uXFkzazPZ8gOHT/ffS8+TJLVKBV0
-        +Fy+HrhCqBWvAlZj2EOBi+qAcLmBSNtnZJvjdABIvsoPJa8DxN4zVF0AUBiUfcckoI60vY
-        Emvan2e3yc6Rf/NliGjnlneqgNenZmg=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-58-9WWszUz1Psu3DEPugyf2hA-1; Mon, 06 Dec 2021 03:41:17 -0500
-X-MC-Unique: 9WWszUz1Psu3DEPugyf2hA-1
-Received: by mail-lj1-f200.google.com with SMTP id w16-20020a05651c103000b00218c9d46faeso3183266ljm.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 00:41:17 -0800 (PST)
+        Mon, 6 Dec 2021 03:45:15 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E874C061354
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 00:41:46 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id x15so39942058edv.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 00:41:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kYsv0I6A6o5uFK+UPY8fyAiz1zz4uJD9KLB+ITvNrnU=;
+        b=Na9oLGTjiwHYKrfq7A9Qz4LGmlnRJjcpjIOYPpDh/3BPi9g5o1X8rpVW4mP/sxLFWM
+         hAuDGpKChArD8g+AXlU3xZp/f/CHbnKk1crqS++1O4gK3JoooqAizE3HZFSUN9B+eaqK
+         3CZjCwIC5WElGg5rbsUrL1k4xBeKlcgQZLyMBwKuYvrHfsbaL1C8bahRh0XklvAoVPZF
+         VQN9nFEdammFsIlCeEssLeM5W9x/+5bmPw/SKWrmpagzgxdh6Q8E3taxBMV46/WvALY1
+         E6lPsbdWc7CDV7BKSnBtiGSzkK0b0Sk7YbTI4crokMt+UXLf3a/071HEN/2Woe91yaGy
+         O2nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GWGpIh47snyALgTQHCz30lE3sTFpFQWexm7titSzVRI=;
-        b=jR5Vim7g9XU2RXyEosHwuJzzFldELnqG0NzBagQ5daKk0jlJ8ThMbDM7Ts1PAOsWJA
-         AVkxnhGNBsi6WH//9Qu4P5brPQkRY3bGNojawFePKKLBWo7iEvzsbs3oH0rMyUUbfLHJ
-         1YmOYWLLjH1/aC+XfwipEQcDo+KROUY2c05r4iHr0iTLNnqioYznidl7UBSrvvyBtJTD
-         ltLoJHsGFAcA5psS2bwp77kuUh6exG23xKP9gnjUQsmsa2a4yJKrAyElBINKnuH6yYJp
-         J2cDziQGK1sbD2KQea/2RdZLZ5kciL1e7XJM6dwd5nFl2+n4nf39JUYZlzcSBLmIoC9b
-         fEnw==
-X-Gm-Message-State: AOAM532TCyX2kqhNme2iCe8yGxhtSQ/SDd8m9kDk+t0agKzqW9F5HJa+
-        ONswq7/7JptYEkr1409axqKo8LGHtYXAfzL3Iy20zJJdDVxISWM2Klbs5152IHMwC/hmquqgD6s
-        hbHk/PnbUGBaM78ugPs1LdTfdx4UgE4cTjD73QwBT
-X-Received: by 2002:a05:6512:3987:: with SMTP id j7mr6521990lfu.199.1638780076465;
-        Mon, 06 Dec 2021 00:41:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxymmwV6ZMLUAEdWBv6GE+nuHZ0FknR8xBSnM6wo3F1m8O/VtZ+7SnlzVmzqgqKI9rgjdwSd/zbzIcRywJxbrc=
-X-Received: by 2002:a05:6512:3987:: with SMTP id j7mr6521977lfu.199.1638780076299;
- Mon, 06 Dec 2021 00:41:16 -0800 (PST)
+        bh=kYsv0I6A6o5uFK+UPY8fyAiz1zz4uJD9KLB+ITvNrnU=;
+        b=YXnj8KKXpf/FETGSJJ34q9CAoSECKOZPsxhT50b1SClVDNDBZiUhMYugge57EnbYd8
+         gwzynhktRuOUdo7yP4Fx3fiV9VkFGFAuojhRLI/izaqaVpwF+ebR2SFz3B0DQVR3wC1J
+         QxBh3UqBCVuhtEXcRMY65ZPuw8Qxx0lzFpHjJ3z5UlIgJfGuXrmLbV99mtL5e/L4SxQq
+         kqzgT2plmhiI6tWOuDv5t9/IsZPCySUppeurEocOW2cTRGRG3q16eXJCzrsb95w31JUd
+         OKIqi0vFFrAD5N2nKGuglo4BTq8OCvWi4CxKFj6vN/bOrMC2dZFqbP0tYjoI4s3fFg5a
+         l3ag==
+X-Gm-Message-State: AOAM533Y8+0lS/9YNe/HbaNRm0RW0T6aUQWEQh0e5vYzaXTjLK83bM16
+        eynsWGguPvMksJv7djJgtvSNEQGXuC3KeZfDWR/hBg==
+X-Google-Smtp-Source: ABdhPJwaXHvLPRG0pSMIzqzjXufeL6J34ZTE554GDIxU4BWMdqMOHmcM0b1i3AQuocmn3XKeV23g6rGKxx5cN6iGC/8=
+X-Received: by 2002:a17:907:c15:: with SMTP id ga21mr43076617ejc.349.1638780104294;
+ Mon, 06 Dec 2021 00:41:44 -0800 (PST)
 MIME-Version: 1.0
-References: <20211203185522.692489-1-arnd@kernel.org> <CACGkMEuv2HQxUyxL8hsAXGOKxhTFED5_AcnZ1dOALh2QsL7ZKQ@mail.gmail.com>
- <CAK8P3a1mRu=CRSShyx1UKwR+nPOOM2kN0ZjZBzKTu6Hw5wLF4Q@mail.gmail.com>
-In-Reply-To: <CAK8P3a1mRu=CRSShyx1UKwR+nPOOM2kN0ZjZBzKTu6Hw5wLF4Q@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 6 Dec 2021 16:41:05 +0800
-Message-ID: <CACGkMEs-Y=67owrS9f4Spg+y5qg3p6CQ-S+Bcu=nOHZ5d0BNbQ@mail.gmail.com>
-Subject: Re: [PATCH] eni_vdpa: alibaba: select VIRTIO_PCI_LIB
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20211203133003.31786-1-brgl@bgdev.pl> <20211203133003.31786-4-brgl@bgdev.pl>
+ <YapnTHQZyNCZXrgp@smile.fi.intel.com> <YapoW+DL4jPo69u8@smile.fi.intel.com>
+ <Yapp4vakFxH7JV5B@smile.fi.intel.com> <CAMRc=MeWfKHWFKwRjaqczrfwhAodpDLgrWKF-zqXCsjd=gMv3g@mail.gmail.com>
+ <Yap5ctmlw6NeNM+7@smile.fi.intel.com>
+In-Reply-To: <Yap5ctmlw6NeNM+7@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 6 Dec 2021 09:41:33 +0100
+Message-ID: <CAMRc=MffmFgCZFRziw-QJ+Y3WobJZzUh1Nbp2oym6JLqfnZCdQ@mail.gmail.com>
+Subject: Re: [PATCH v12 3/7] gpiolib: of: make fwnode take precedence in
+ struct gpio_chip
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 4:14 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Fri, Dec 3, 2021 at 9:10 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> On Mon, Dec 6, 2021 at 4:12 AM Jason Wang <jasowang@redhat.com> wrote:
-> >
-> > On Sat, Dec 4, 2021 at 2:55 AM Arnd Bergmann <arnd@kernel.org> wrote:
+> On Fri, Dec 03, 2021 at 08:28:34PM +0100, Bartosz Golaszewski wrote:
+> > On Fri, Dec 3, 2021 at 8:04 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Fri, Dec 03, 2021 at 08:56:27PM +0200, Andy Shevchenko wrote:
+> > > > On Fri, Dec 03, 2021 at 08:51:56PM +0200, Andy Shevchenko wrote:
+> > > > > On Fri, Dec 03, 2021 at 02:29:59PM +0100, Bartosz Golaszewski wrote:
+>
+> ...
+>
+> > > > > >   if (gc->parent)
+> > > > > >           gdev->dev.of_node = gc->parent->of_node;
+> > > > > >
+> > > > > > + if (gc->fwnode)
+> > > > > > +         gc->of_node = to_of_node(gc->fwnode);
+> > > > > > +
+> > > > > >   /* If the gpiochip has an assigned OF node this takes precedence */
+> > > > > >   if (gc->of_node)
+> > > > > >           gdev->dev.of_node = gc->of_node;
+> > > > >
+> > > > > Similar should be done in acpi_gpio_dev_init():
+>
+>
+> ^^^^^^ (1)
+>
+> ...
+>
+> > > If we have parent device for several GPIO devices, this won't work right now
+> > > due to limitations of fwnode regarding to the sturct device.
 > > >
-> > > From: Arnd Bergmann <arnd@arndb.de>
+> > > So, it means we may not have shared primary with different secondary fwnodes.
 > > >
-> > > When VIRTIO_PCI_LIB is not built-in but the alibaba driver is, the
-> > > kernel runs into a link error:
+> > > So, come back to the initial suggestion (overwrite it for now):
 > > >
-> > > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_features':
-> > > eni_vdpa.c:(.text+0x23f): undefined reference to `vp_legacy_set_features'
-> > > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_state':
-> > > eni_vdpa.c:(.text+0x2fe): undefined reference to `vp_legacy_get_queue_enable'
-> > > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_address':
-> > > eni_vdpa.c:(.text+0x376): undefined reference to `vp_legacy_set_queue_address'
-> > > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_ready':
-> > > eni_vdpa.c:(.text+0x3b4): undefined reference to `vp_legacy_set_queue_address'
-> > > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_free_irq':
-> > > eni_vdpa.c:(.text+0x460): undefined reference to `vp_legacy_queue_vector'
-> > > x86_64-linux-ld: eni_vdpa.c:(.text+0x4b7): undefined reference to `vp_legacy_config_vector'
-> > > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_reset':
+> > >         /*
+> > >          * If custom fwnode provided, use it. Currently we may not
+> > >          * handle the case where shared primary node has different
+> > >          * secondary ones. Ideally we have to use
+> > >          * set_secondary_fwnode() here.
+> > >          */
+> > >         if (gc->fwnode)
+> > >                 device_set_node(&gdev->dev, gc->fwnode);
+> > >
 > >
-> > Intersting, all those belongs to the legacy library.
-> >
-> > And I just have a try and I can complie alibaba eni without
-> > VIRTIO_PCI_LIB is set.
+> > Other parts of gpiolib-of depend on the of_node being there.
+> > Converting it to fwnode is a whole other task so for now I suggest we
+> > just convert the fwnode to of_node in struct gpio_chip as per my
+> > patch.
 >
-> Ah, so the problem is in drivers/Makefile:
->
-> obj-$(CONFIG_VIRTIO)            += virtio/
-> obj-$(CONFIG_VIRTIO_PCI_LIB)    += virtio/
->
-> We only enter this directory when one of these two symbols is set, but
-> in my randconfig
-> build, neither one is. I'll send a new patch.
-
-Yes, we need to include when VIRTIO_PCI_LIB_LEGACY is set.
-
-Thanks
-
->
->          Arnd
+> But this is about ACPI counterpart. If you do this, do this in both cases.
+> Above code for ACPI (1).
 >
 
+This series concerns the gpio-sim driver and it only uses configfs
+(with manually created platform devices) or device-tree. I would
+prefer to do ACPI separately and I'd like you to lead that because I
+neither have any HW to test nor claim to understand it. :)
+
+Bart

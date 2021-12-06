@@ -2,189 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F62846AABF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3E146AADD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:46:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352833AbhLFVtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:49:15 -0500
-Received: from mga03.intel.com ([134.134.136.65]:39851 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1352691AbhLFVsu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:48:50 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237357849"
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="237357849"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 13:45:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="514938417"
-Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
-  by orsmga008.jf.intel.com with ESMTP; 06 Dec 2021 13:45:21 -0800
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 6 Dec 2021 13:45:20 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Mon, 6 Dec 2021 13:45:20 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Mon, 6 Dec 2021 13:45:20 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b75VW48eFo/7aniJJjCxV/enNTKTb0vhFnpj68SR4xGsG1y8X3UusaKYhcEwu0BXtlBaqchiE4Fq1ulDaIDN21izQXn6+SNuG/aWJmCaF12bbBLBjNbK/2awQOU38DciX3umlSja9h3y/+TrxWpbGJfHdcGUJNkII0NFdSEUskw0t2qDTxa5uKVMSL40t5ISj7OaqSVivjrHOYl2zIOkIKRC2rZ5dvwJe3+ToT1Iw6PjjanXLBlbpEyHjR+V2yRhCrn28grxGhhsZQVqEnNsSdLkglr6Df9Y4A7Fo6HPVZ28MUrFMDx1fHq6J4tYb1/OxDwXbD2fde/1dWnP0dTb4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Bsy7J96UDhkX/jSTdJJus3cEehAhS2IZD7IozhNzKLU=;
- b=jOdZtuDI3TAbqJSOf6Uko5fnC7xLkHnX0/YxiadeOh5VL8BzhQF1AhAXTAO4U1NxIqox3r4t4XX6bnqUdiB3F8Zfr0qtXCtToV95yL/Pjyx527siyjA0izjn55johumwBHJC0K0NyDuv2EyC5K4WWJz1witcXu8V2XL9Pk3zdL58EOlgf5YkrhFZToRmRSOjG/Kq7Pb+NJdEsy3cO3hiBlkUvTJuCG5XzLzsWlg79x5PSgxx3XvI6L69UJw2owKYSFjWNs7JulYYZlkhfHTYbAVurw00ohocS83bEYrcOkSszS2XABd7OcxPxSvZWvAtcdwcVdxAMzVeE9h+3C04ig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Bsy7J96UDhkX/jSTdJJus3cEehAhS2IZD7IozhNzKLU=;
- b=ckxxBtpTRQPldkUINUf/Ephnz6w/rTV+zZCpF3PhOPnX4Qn8tPeyPOMPsNr3sK16M06kZTAN+EGXu7L6C5D2Okc/cAUsLN1fP5wZlAQc74yt3Bwl1EWxv/t/JiA2SgKy/g2s4oOtdXxQ1b7M0ETQGpscjPyndPnavf4SJOAX0do=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
- by BN8PR11MB3729.namprd11.prod.outlook.com (2603:10b6:408:81::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Mon, 6 Dec
- 2021 21:45:18 +0000
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::bcd0:77e1:3a2e:1e10]) by BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::bcd0:77e1:3a2e:1e10%3]) with mapi id 15.20.4755.022; Mon, 6 Dec 2021
- 21:45:18 +0000
-Message-ID: <0522af41-59db-e621-69de-ad64dec3a5d6@intel.com>
-Date:   Mon, 6 Dec 2021 13:45:13 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.3.2
-Subject: Re: [PATCH 14/25] x86/sgx: Tighten accessible memory range after
- enclave initialization
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-CC:     <dave.hansen@linux.intel.com>, <tglx@linutronix.de>,
-        <bp@alien8.de>, <luto@kernel.org>, <mingo@redhat.com>,
-        <linux-sgx@vger.kernel.org>, <x86@kernel.org>, <seanjc@google.com>,
-        <kai.huang@intel.com>, <cathy.zhang@intel.com>,
-        <cedric.xing@intel.com>, <haitao.huang@intel.com>,
-        <mark.shanahan@intel.com>, <hpa@zytor.com>,
-        <linux-kernel@vger.kernel.org>
-References: <cover.1638381245.git.reinette.chatre@intel.com>
- <66da195d44cbbed57b6840c5d20bb789c06fb99f.1638381245.git.reinette.chatre@intel.com>
- <Yav2ckVPrHSgCw/5@iki.fi>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <Yav2ckVPrHSgCw/5@iki.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MWHPR1401CA0012.namprd14.prod.outlook.com
- (2603:10b6:301:4b::22) To BN0PR11MB5744.namprd11.prod.outlook.com
- (2603:10b6:408:166::16)
+        id S1353057AbhLFVuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:50:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53664 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1353447AbhLFVuP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 16:50:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638827205;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XD7Nb7Clb95GARwOtJlUClbhUySnCjxtvaRAf+MfT8g=;
+        b=eeHNXCS5U012FeAbEIT6fKQLYgBI76AZkKF0GIEwXwvtD4huTC6w2ZruAhSMKt4KhOgUX+
+        iA6K2Vt3+i85RIqtDBj8uIC+L6WeWHXUWYdk6XT7i8lK+jU/5qezqRazXLCN0ve5Cbni6b
+        RAgN2iRsEm20b71JX/tq/rCJwv5A6L4=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-335-0fSRCGZiPGS0iMntzUQQiA-1; Mon, 06 Dec 2021 16:46:44 -0500
+X-MC-Unique: 0fSRCGZiPGS0iMntzUQQiA-1
+Received: by mail-ed1-f70.google.com with SMTP id y9-20020aa7c249000000b003e7bf7a1579so9500160edo.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 13:46:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XD7Nb7Clb95GARwOtJlUClbhUySnCjxtvaRAf+MfT8g=;
+        b=2XYmVKe8b71Jtjy6alfiMnrYEgpJudnhrqwKnFLMB+xE44LRle3IBe377DpYJD6JCv
+         sffmPbMDAUfIc1ms3sZxcDfsgR7RtAW/vIlAEtyJrn74DYCg3QvKJGskq9v3jiUhJgq5
+         W0avun+9cpNP9NQDN27UakzUFL9MZuDRy1NiiJadpHlDkC8EmLkiMEIoFLhusUL+60sq
+         unOv7ZNHCCuXWXGD2R30exk0G2Ft+fWTXOBVyVHQqrvRHea1C+XMjt5kUQPDdDWQOaPK
+         +ZGVeNQUjCiu985yW9j77v8E5AIgtolW2z6ymSEpjjQm4KX48ohaEAdihS5tzMsV/lDF
+         FDFQ==
+X-Gm-Message-State: AOAM531mBCfpioTMebsWymePp2wtOu3FN7nE3XiEfT+7hFUu9xd3gchQ
+        h8lJ0zhQyJ36X92GlvPJcCBEVUsIN7sNojmEw66HepI+iesP5pmI80OoG3IUViRXcT+cXY7WSAB
+        pc45ogZs76f/3javlICCsBgVO
+X-Received: by 2002:a17:906:4787:: with SMTP id cw7mr51624549ejc.311.1638827203294;
+        Mon, 06 Dec 2021 13:46:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw4f2WW8YPhyWFg5/uoyC3KUk6k0aakXD8ww8CSE0oZjb95JLyqnZj9joGInxQhM8NA1Ex+gQ==
+X-Received: by 2002:a17:906:4787:: with SMTP id cw7mr51624512ejc.311.1638827202988;
+        Mon, 06 Dec 2021 13:46:42 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id j14sm9301207edw.96.2021.12.06.13.46.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 13:46:42 -0800 (PST)
+Message-ID: <94738e2d-8b8d-08a0-be39-343ac275fa5f@redhat.com>
+Date:   Mon, 6 Dec 2021 22:46:41 +0100
 MIME-Version: 1.0
-Received: from [192.168.1.221] (71.238.111.198) by MWHPR1401CA0012.namprd14.prod.outlook.com (2603:10b6:301:4b::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.17 via Frontend Transport; Mon, 6 Dec 2021 21:45:16 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4d129361-125c-4c8e-8d3e-08d9b901b1f9
-X-MS-TrafficTypeDiagnostic: BN8PR11MB3729:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <BN8PR11MB372901B312270B48D5C26263F86D9@BN8PR11MB3729.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: P16Che3FxdGkFKKFMskxb1T1l/1lc9O6uNHANns7ycy0kaG+Pr9sqaBSZiWkbtSi9Vdb5ZJJpYM8GEFli/BVQ8PJKroFgZ6Yt6gyBrW8dM5iEj8glajm0Tx7HcuZNY2xgxONJkjPKbcPsG1Pqs2ZmpBEsdA0MIYybvXdoqolSXVIR2/Ze4qNf1gG92fn57keH5u92Is4upoWIPMepGdN7J364TIUgvO7zxHLjIdnLO+azO42N5tkyfWci5Ie47lDrW6Tg+htC+1hVNIwRIo8cwcmr0YXJF12q7BXVfp7iBW2V9vt95cgbAPI01m3SdYdJi7qxrNfrIJKxzEi55+sl2c8ZqCASifC0zsYDZcXJCuIuXxTpzwNKFnxRZqAaZnx/axHMKy70EFuy+dZBltjaiFP2qetXDkNz9U/5we2lCR5YKS/fUObaSdLmeCGpeR1HZGbnmfZfsE26RbLufUCOVBUesHOvI2D/zpgVNTkmsBdGO/zQot3cJ8qGQosAO2VWyhX7W3GzCqCBCF9fOjTf927YHi5p1HX380ZeMrK2DBsxdHfVB7mHVx7TGWOKALQ6iCMROpmOg172iCr5vDKPbOs2nbjXVDggG3MJkwmy87gZyxLeHAYEtDxzSZTS9b24cPPkOrKwjWKmdkOwW5yQc09w408nqIsTq2PU82eYSIln+jCP/XsjFBIys22ycWghsDmIA8edEeBMv9M/Bkz/kKGmvH3KjxhJCftyNCjOLYd3Sr8Tl2zVG4rBoD5EP0O
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(82960400001)(6666004)(4326008)(38100700002)(186003)(5660300002)(36756003)(31696002)(26005)(31686004)(4744005)(7416002)(86362001)(6916009)(6486002)(44832011)(508600001)(2616005)(956004)(66946007)(66476007)(66556008)(8676002)(53546011)(2906002)(16576012)(316002)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cmNVR2hXaFlPTXhSOVY1Y1NKU0lmc2FQTXBjaFE1aWNOY1J2cG5mUzZMZmYr?=
- =?utf-8?B?bUJPTG00ditjZGpJLzVYRktRZEMzY2FqTnpmMjVsU01US1JWbVBsVWZTZUc2?=
- =?utf-8?B?MVdtRDlPZXRsNWtQZitiVjBrTkQyZ21hNzVISU1MU2Q0T0dlS0JLTGtmTHgw?=
- =?utf-8?B?UlB1OFg0NXJPMDJkWUxqY0pOR3ExelhsMU11UjRWdEtzRmRxdzFlU21UdWlS?=
- =?utf-8?B?ejFnL0FxSmJXTmpja3pCeWNLS1BDTnZ0cjdNMStqeXdZOUVsWnlQazY1QXpy?=
- =?utf-8?B?ZHl1RHAxR1VxM2pqcGRwcjBhUkRia1NTakJlc255b3pKNVNRM3RIZWQzWU5K?=
- =?utf-8?B?WFBXMFFUajBPNzFoK0Y3dlRLSkZ0VlNMaHlmcWwxL29ldUR6OWFCM3g3Y0J2?=
- =?utf-8?B?d2M4cWRyUmIxbEdYSmR4RzY3MllqRDdid1cxQjBzM0pHaUpCYzMyNWpDKzEx?=
- =?utf-8?B?MHZiY1FOS0M0WXRoYTQvNTdFdUN2dkV3RCtxWStXeldrVWhIU0pCV3REb0pv?=
- =?utf-8?B?ZkQ0YlNMRlRMZFpuMUtHTjNRRzJDNmlSZUthRzhUbkV3WDR4L0RHMEhJeHpn?=
- =?utf-8?B?T25BajNtZFZ0dEZQK05MOE41U2djNjBEbm9hQmo4Y0granpkRU1aVGxCOHB3?=
- =?utf-8?B?S3BoUTBLek12bVhDakhYZDJNeGlvbFVZd0xQbnIwdFcxQ1A3MTI4V3NjRmJu?=
- =?utf-8?B?TVJTWGswTEpxUHlVR2lJWTd0RUNIbTJ2eXBxWVhYNWxCc0NuZkJyRS84djNR?=
- =?utf-8?B?a2RjYXRjMW5DYzNQdTRmcG9iYTE4blV2bTVuKytlYVhITFBZTzQrMDFpeVQz?=
- =?utf-8?B?TjdybTc4TzNzUmxvYVNncXJGbWt0TjlTaUxqRTFscVlEME81MmZkTWRPcUwx?=
- =?utf-8?B?MTZyQjNFcWpFSHNZL2RPalBVY1pHUjdEcGFNcGoyeDFCU2lEZDRVMHlNa21S?=
- =?utf-8?B?dkg3RjVnTUFjYmo1THIzK0N6U0hXMjR2MVZRWk95c1RUTjNzM1dINXFQVkpR?=
- =?utf-8?B?RS9NOEU4dFBJS1dDV1cxWG1mb1dxS2NKT2FBc29INXJ1b250dFZoTlQ1dmVo?=
- =?utf-8?B?N2dzbDI5cjlqNkduRmdtcUNxMHNOZUlUbm03VWpHYUMzNW1kQW5ZMFdZdUo2?=
- =?utf-8?B?SWVKOU5zTVN5S0pYS2kvOXgyVFNBQmNvUkdPaUI5N1JuWTdNU2NzOTUvamRC?=
- =?utf-8?B?emVLTURFRVcwZjV3VFBmOW1wNENBUUxBK3pRUDJVT0hqY1ZPOWExSkZDMEd6?=
- =?utf-8?B?R0lzR1dGM1BPNUxpOUk5aHNCQWlwUW9Sb2pjNmVMWTB0cjdlZTJYRnVzTHZH?=
- =?utf-8?B?V2tORVZLRFhrdXlPZnZ0MFErQ3IyRTFwTHFkSVppU1pCK3VZcUU5NXdKOTky?=
- =?utf-8?B?WHBQT0ZUQmRaaFFZajBGaGFqcVY4SUhqcUphc3BjVElZampWNGNncmRiU3R0?=
- =?utf-8?B?bmZjNitrTE95eExyeWxCSjIzdEVJUHlYRXZmNFE5OVlTNTBjNk1qZ0NEdEFU?=
- =?utf-8?B?MHI4MjZobURRMWFlenBMOTZtR09ocnVQTmh3RktFYUNySXhKYVF4ZzFzTzIr?=
- =?utf-8?B?Q2s0UHp6MVhsVDkrOGU5aitTcXloaHYzWW5FQ0VURk5EZmRaTVRpT25vMFlB?=
- =?utf-8?B?dk5naFlIMWxxYThua0VJc3NrRUp6WWVXWm5KUktNU2ZQMVVCbGkzTmhLT2Jh?=
- =?utf-8?B?RzlMUTY2Q1FuZW9lZ0IwSGlDeDFhRm0vN0sxNldvaE8zRlM4TExJNTBJSHVE?=
- =?utf-8?B?KzBGU3hnbXprWHdCeWZCZTgwdFgxMmlsclFDZ0NnNHIrdFJQbWFSbURzdzdH?=
- =?utf-8?B?ZmxmLzMwWFFoRDVxS2xJT2xZMVNWN0diWkk1S0puY29MS2Y3Z0xxdWtiNWdz?=
- =?utf-8?B?ZU4xdmoxVVpzQUk4dDJiakRGVU9Db1BaektQZ1JZNERMWHhpVjdCYnJrMGVF?=
- =?utf-8?B?YU12azZNVCs2bTcwSHREQkplMWxXWkZ3TXVnVlk5RXhRQ0RUL3piR3REMklQ?=
- =?utf-8?B?eHplamVSd3RrNTVldkhYL1ErRE9KRFA0OElIV0pUM0tBQ1QvWlJYZU4yMFpF?=
- =?utf-8?B?WncwVzloUHJJclhTOGlFdW9PS1owVjdKSXpucEZqQURLSXRDWXVNYmxLOW1M?=
- =?utf-8?B?RzBhV2lOUmFVQXpIdVI4OWtWOWdzN3ZsZnBpYW1sN0dvbzAreW1venhlcHkw?=
- =?utf-8?B?MjJDNEdoaTkway9ObGthWTM2cFFvWmRCRXVGVGQvTXAyV0dlM1lrUUs2SS9v?=
- =?utf-8?Q?89odcQ6a32feiQRGuRYsxvmb1zGI3jF/vPqcgr+0XU=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d129361-125c-4c8e-8d3e-08d9b901b1f9
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2021 21:45:18.3843
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Rh1O+//fn7n1HEXEDeNz+14A2GZXaXSS4EpTtrZSe3xa3MtddClQqejkjIzqgSnffxlqBUdUPK3ciujoTVx9sGEn9GU+YsWBW3TRTV7PmqQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR11MB3729
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v4 14/20] mfd: intel_soc_pmic_chtwc: Add cht_wc_model data
+ to struct intel_soc_pmic
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
+References: <20211206093318.45214-1-hdegoede@redhat.com>
+ <20211206093318.45214-15-hdegoede@redhat.com>
+ <CAHp75Vc+z0nqUXbqrX9YXi2+rzz4BKT7maFipyB8QgOEKQ9SPw@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAHp75Vc+z0nqUXbqrX9YXi2+rzz4BKT7maFipyB8QgOEKQ9SPw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jarkko,
+Hi,
 
-On 12/4/2021 3:14 PM, Jarkko Sakkinen wrote:
->> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
->> index 342b97dd4c33..37203da382f8 100644
->> --- a/arch/x86/kernel/cpu/sgx/encl.c
->> +++ b/arch/x86/kernel/cpu/sgx/encl.c
->> @@ -403,6 +403,10 @@ int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
->>   
->>   	XA_STATE(xas, &encl->page_array, PFN_DOWN(start));
->>   
-> 
-> Please write a comment here.
-
-Would the comment below suffice?
-
-/* Disallow mapping outside enclave's address range. */
-
-> 
->> +	if (test_bit(SGX_ENCL_INITIALIZED, &encl->flags) &&
->> +	    (start < encl->base || end > encl->base + encl->size))
->> +		return -EACCES;
->> +
->>   	/*
->>   	 * Disallow READ_IMPLIES_EXEC tasks as their VMA permissions might
->>   	 * conflict with the enclave page permissions.
->> -- 
->> 2.25.1
+On 12/6/21 20:55, Andy Shevchenko wrote:
+> On Mon, Dec 6, 2021 at 11:35 AM Hans de Goede <hdegoede@redhat.com> wrote:
 >>
+>> Tablet / laptop designs using an Intel Cherry Trail x86 main SoC with
+>> an Intel Whiskey Cove PMIC do not use a single standard setup for
+>> the charger, fuel-gauge and other chips surrounding the PMIC /
+>> charging+data USB port.
+>>
+>> Unlike what is normal on x86 this diversity in designs is not handled
+>> by the ACPI tables. On 2 of the 3 known designs there are no standard
+>> (PNP0C0A) ACPI battery devices and on the 3th design the ACPI battery
+>> device does not work under Linux due to it requiring non-standard
+>> and undocumented ACPI behavior.
+>>
+>> So to make things work under Linux we use native charger and fuel-gauge
+>> drivers on these devices, re-using the native drivers used on ARM boards
+>> with the same charger / fuel-gauge ICs.
+>>
+>> This requires various MFD-cell drivers for the CHT-WC PMIC cells to
+>> know which model they are exactly running on so that they can e.g.
+>> instantiate an I2C-client for the right model charger-IC (the charger
+>> is connected to an I2C-controller which is part of the PMIC).
+>>
+>> Rather then duplicating DMI-id matching to check which model we are
+>> running on in each MFD-cell driver, add a check for this to the
+>> shared drivers/mfd/intel_soc_pmic_chtwc.c code by using a
+>> DMI table for all 3 known models:
+>>
+>> 1. The GPD Win and GPD Pocket mini-laptops, these are really 2 models
+>> but the Pocket re-uses the GPD Win's design in a different housing:
+>>
+>> The WC PMIC is connected to a TI BQ24292i charger, paired with
+>> a Maxim MAX17047 fuelgauge + a FUSB302 USB Type-C Controller +
+>> a PI3USB30532 USB switch, for a fully functional Type-C port.
+>>
+>> 2. The Xiaomi Mi Pad 2:
+>>
+>> The WC PMIC is connected to a TI BQ25890 charger, paired with
+>> a TI BQ27520 fuelgauge, using the TI BQ25890 for BC1.2 charger type
+>> detection, for a USB-2 only Type-C port without PD.
+>>
+>> 3. The Lenovo Yoga Book YB1-X90 / Lenovo Yoga Book YB1-X91 series:
+>>
+>> The WC PMIC is connected to a TI BQ25892 charger, paired with
+>> a TI BQ27542 fuelgauge, using the WC PMIC for BC1.2 charger type
+>> detection and using the BQ25892's Mediatek Pump Express+ (1.0)
+>> support to enable charging with up to 12V through a micro-USB port.
 > 
-> Otherwise, makes sense.
+> ...
 > 
+>> +enum intel_cht_wc_models {
+>> +       INTEL_CHT_WC_UNKNOWN,
+>> +       INTEL_CHT_WC_GPD_WIN_POCKET,
+>> +       INTEL_CHT_WC_XIAOMI_MIPAD2,
+>> +       INTEL_CHT_WC_LENOVO_YOGABOOK1,
+>> +};
+> 
+> ...
+> 
+>> +       enum intel_cht_wc_models cht_wc_model;
+> 
+> I'm wondering what will you do when something similar will be needed
+> for another PMIC?
+> 
+> I see possible solutions to eliminate additional churn:
+> - make just one enum for all models (can be done now, can be renamed later)
+> - make a union if we have such situation
+> 
+> because I wouldn't like to have another field for each possible
+> variant of PMIC in the generic structure.
+> 
+> Hence the question, does it make sense to just name it (enum and
+> member) less cht_wc oriented?
 
-Thank you
+I agree that renaming these to make them generic makes sense if we get a
+second user (which I doubt, but you never know). For now I would like to
+keep this as is though, this is a big series and I would like to avoid
+to respin it just for this and we can always rename this later.
 
-Reinette
+If I need to do a v5 anyways though, then I'll do the rename for v5.
+
+Regards,
+
+Hans
 

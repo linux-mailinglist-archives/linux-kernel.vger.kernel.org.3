@@ -2,33 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6CC469B0D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B60C469CE4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349464AbhLFPMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:12:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345738AbhLFPJT (ORCPT
+        id S1358318AbhLFPZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:25:17 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43288 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355445AbhLFPMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:09:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8B7C08E8A7;
-        Mon,  6 Dec 2021 07:04:03 -0800 (PST)
+        Mon, 6 Dec 2021 10:12:41 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1FA76132E;
-        Mon,  6 Dec 2021 15:04:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1ECEC341C9;
-        Mon,  6 Dec 2021 15:04:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 209B8B8111C;
+        Mon,  6 Dec 2021 15:09:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AAE2C341D7;
+        Mon,  6 Dec 2021 15:09:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803042;
-        bh=SCbTQ9iOmR7KLOuf5o37ZnR8TWH3EbshxaDxG0fTRR8=;
+        s=korg; t=1638803350;
+        bh=Wf9khUgkXJTef0QaH9bBZWdQSyqarpW9Xaq30MmdVw4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tGfsbzfSV9CWwD/2/bKkQsxT3EWFWQMFo4QqjvdczZqMNe15XQR3TQS27GDQclxbT
-         bIWguOu0UHiMoljoE7Aiu5uDwNYJn3mf/kFZEvdtl4++qT3q4OZznC/ANpZyITPjL9
-         fUsgbSQE17cFrCPU4dbjETkTh64AlgXv5ZndS8Ug=
+        b=YUWVleu0AgSzJeoQK9tvAvG+jFn+AkYXbE6CVIvSLoN4SBgMAuJ2SNYD9OYvy/IEC
+         200x0TRIMA2U305kf0HEDdd+98IhmpVPrV3FKrag+VW1EcqbVac2Xir/4tdYV5yoH9
+         jX+rdvQ0ZJtLXjizvZpmAJ9kNMIOBq+wtDbZGty0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +33,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mike Christie <michael.christie@oracle.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 44/62] scsi: iscsi: Unblock session then wake up error handler
-Date:   Mon,  6 Dec 2021 15:56:27 +0100
-Message-Id: <20211206145550.727655287@linuxfoundation.org>
+Subject: [PATCH 4.19 11/48] scsi: iscsi: Unblock session then wake up error handler
+Date:   Mon,  6 Dec 2021 15:56:28 +0100
+Message-Id: <20211206145549.241229158@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+References: <20211206145548.859182340@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -76,10 +73,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index aed17f958448d..acd8eb8c94cf7 100644
+index c06e648a415b5..79581771e6f61 100644
 --- a/drivers/scsi/scsi_transport_iscsi.c
 +++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -1898,12 +1898,12 @@ static void session_recovery_timedout(struct work_struct *work)
+@@ -1892,12 +1892,12 @@ static void session_recovery_timedout(struct work_struct *work)
  	}
  	spin_unlock_irqrestore(&session->lock, flags);
  

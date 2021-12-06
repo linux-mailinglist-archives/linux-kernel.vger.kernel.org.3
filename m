@@ -2,91 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4548946A06A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A195546A069
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349191AbhLFQDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:03:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
+        id S1444990AbhLFQDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:03:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356951AbhLFPwf (ORCPT
+        with ESMTP id S1358438AbhLFPwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Dec 2021 10:52:35 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E87AC036FA8;
-        Mon,  6 Dec 2021 07:37:29 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id j3so23357631wrp.1;
-        Mon, 06 Dec 2021 07:37:29 -0800 (PST)
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABA6C036FAB
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:37:48 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id u11so7311617plf.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 07:37:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CnondPYhtDqnzA9WeK7ZjYBbINrqnDY4dMWpT980crM=;
-        b=SYcNtvUZpDAdUwU3CpqBjd3Zx9k/sN00WH5X0LqXhAUoKjTgEiUkymOxw/LCSPBl6t
-         k/uaMfCkp+TBYnWZuxBugcNB69uHD6tTz/ssZdfa5WXwMzf4RUgXalzLE5CXZWH0Ahqa
-         uwkmY28OXFLig7stde9ob71xDiZ+apoRVGgAu1oavVOTAvVERzBY+H3mgpMsvkwZjRtt
-         DCJCqpDOtxb8/qpuOvnbMEY62Bn0nNwZeLluf4xmq0l9YkaNFSgO+Y0NDgoqdr4TLgP7
-         kO40eAOhvGy/fUBHNPvBzrsR9fvGyFYMP9y2FCa92DaAXYTpS6WiN3Kw51d4MwChsJK7
-         Yxjw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7HzwmvjWwTv0FeXPfbk2piEjvWmlmu/Ix95bAO30KVA=;
+        b=ZhuBW1c4dJPnblkwVVq7/i5JD1acaN3vKRPqk1vt1l4/1WVncLZ6/XF7i5mu75gzgu
+         gjeCchw5SEdKY9IS6B7CPAfcmRrUtycY7KuXQmFjBHQHAkwiOcZJ9z0v/+YNWbTW74ju
+         WW96J+3JEIUppGf6QeHbGWa7GVsgIexlxyh9hOk48GZohQPBwAtQkqiajM6rP2eObXpU
+         BB9FK4L4OBLFpwyu9xrfcQ8X7jt5+ieR5WZzveGHAm+q8YpxPYGnxSwBq7pubQ1wuMhA
+         A0WTx//Jdi0jZnVSCUhuNTOI/Ivk6mePXx6gLqDkkdRd+Kgm/eFjcy+0vGQqU+5gDD/C
+         DlVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CnondPYhtDqnzA9WeK7ZjYBbINrqnDY4dMWpT980crM=;
-        b=qd4/NEUJ/NooFqiVh4kYZEINuv+LoWTUhNqI1+xGWfV64Njoo8uLeztig4r2ArL+iQ
-         nxfP29h1TNPegJupfICtdGGtB7R0L5rhE493oisordrVlBgAL1tOh9Cue5YRw6Snq4BD
-         vD32PR9dDvDzCDw7tKuA+GtUdv4QowT9RfpbpvY4aYk68cClMGywBbKdiOR9PtA45a3Q
-         31PWJSLtdcheuFrsAAtrJKe4X3sEEEr13+BvFGhW2iTAa5R3ZxeCjc0uqtJTg4iH53FG
-         gIDYgCakA80HFxV3z6Okg/4BBFiQ6DU5tyjtnYCgQekoSvC2ADgZKog8TdfkNKGuSccE
-         lFmA==
-X-Gm-Message-State: AOAM530PlKkED1nAKCxINu83Z8/2Ubqh1/47/clP5VqUQ9NWI+MtgeSv
-        p3FO1ZXXbOxQgsVZDW50xMY=
-X-Google-Smtp-Source: ABdhPJy0sFhNh+f/5q2EBkmmMA+8xtmqzbZjvW3Valk9SbIYh7PgQUFq6fZyONKTBct2MR/Y/VMcOg==
-X-Received: by 2002:a5d:46d0:: with SMTP id g16mr43974041wrs.605.1638805048053;
-        Mon, 06 Dec 2021 07:37:28 -0800 (PST)
-Received: from localhost (pd9e51d39.dip0.t-ipconnect.de. [217.229.29.57])
-        by smtp.gmail.com with ESMTPSA id y6sm11982909wrh.18.2021.12.06.07.37.27
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7HzwmvjWwTv0FeXPfbk2piEjvWmlmu/Ix95bAO30KVA=;
+        b=JIh7Du4Z87joOLyNtbbAPX8izo2OwwgB45kZP1/06cdk4L8qbadrA15AVluEPr+D8Y
+         UQICZ5SWbqiR2w83jODT7uAlgzQMKRmE+Zrfdq6KCk7nNn3tmv0qdtJ82tJH//nV1L4A
+         s02fwOGAsh49hTRV1zzxkrBx3fnqOXD3rlTVteR6wrCOUG2c0GGtBpc8LwQ6Ijhtacs4
+         uz96pLMjz6hqPBqnb4aqrAyYqYM16jpyT35uElQvr6hUptJEenj7kdAduEGOcSSv0rcb
+         adMNE1d7QppFq/tv8n7laYCUsmthdtNgic/FLmBpl6/B+GfIipO5BdYC95DAjLvwmLMS
+         kiqQ==
+X-Gm-Message-State: AOAM5321+pNuvQzPvOGV0NRvP8rorXXso8UQl5MnyzD9Aw7SnLi4RONj
+        hgyCOC0Mu4HAYvkXIG/cWfdftg==
+X-Google-Smtp-Source: ABdhPJwcn3YT+bEUgsZ2X+gC+fgtI4ggBTfe1/BDgoKckLhZ5wuo1mJvX1iNXW4oitVJUGRb6dnE1Q==
+X-Received: by 2002:a17:90b:4c03:: with SMTP id na3mr37953644pjb.62.1638805067801;
+        Mon, 06 Dec 2021 07:37:47 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id lr6sm11226043pjb.0.2021.12.06.07.37.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 07:37:27 -0800 (PST)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: regulator: Fix type of regulator-coupled-max-spread property
-Date:   Mon,  6 Dec 2021 16:37:26 +0100
-Message-Id: <20211206153726.227464-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Mon, 06 Dec 2021 07:37:47 -0800 (PST)
+Date:   Mon, 6 Dec 2021 15:37:43 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ameer Hamza <amhamza.mgc@gmail.com>
+Cc:     vkuznets@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
+Subject: Re: [PATCH v2] KVM: x86: fix for missing initialization of return
+ status variable
+Message-ID: <Ya4uR7I/7yvrgl6c@google.com>
+References: <87ee6q6r1p.fsf@redhat.com>
+ <20211206102403.10797-1-amhamza.mgc@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206102403.10797-1-amhamza.mgc@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+On Mon, Dec 06, 2021, Ameer Hamza wrote:
+> If undefined ioctl number is passed to the kvm_vcpu_ioctl_device_attr
+> function, it should return with error status.
 
-According to the description and the various uses of this property it is
-meant to be an array of unsigned 32-bit values, so fixup the type to
-match that.
-
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- Documentation/devicetree/bindings/regulator/regulator.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/regulator/regulator.yaml b/Documentation/devicetree/bindings/regulator/regulator.yaml
-index a6ae9ecae5cc..ed560ee8714e 100644
---- a/Documentation/devicetree/bindings/regulator/regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/regulator.yaml
-@@ -218,7 +218,7 @@ properties:
-     description: Array of maximum spread between voltages of coupled regulators
-       in microvolts, each value in the array relates to the corresponding
-       couple specified by the regulator-coupled-with property.
--    $ref: "/schemas/types.yaml#/definitions/uint32"
-+    $ref: "/schemas/types.yaml#/definitions/uint32-array"
- 
-   regulator-max-step-microvolt:
-     description: Maximum difference between current and target voltages
--- 
-2.33.1
-
+No, if anything KVM should do KVM_BUG_ON() and return -EIO, because @ioctl is
+completely KVM controlled.  But I'd personally prefer we leave it as is, there's
+one call site that very clearly invokes the helper with only the three ioctls.
+It's not a strong preference though.

@@ -2,201 +2,394 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B93B146AE11
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 23:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5173646AE18
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 00:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376941AbhLFXC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 18:02:58 -0500
-Received: from mga05.intel.com ([192.55.52.43]:53102 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1377156AbhLFXCo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 18:02:44 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="323680684"
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="323680684"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 14:59:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="579549837"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Dec 2021 14:59:12 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 6 Dec 2021 14:59:12 -0800
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 6 Dec 2021 14:59:11 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Mon, 6 Dec 2021 14:59:11 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.173)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Mon, 6 Dec 2021 14:59:10 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NqAoXYkXB0AVcJFg73+lx01iDW2ZTKwzNB6F0xBzh6hxVDHxC0c8Bkne/U/yLiOjBFs3dIPyVTJ0+ISODmULmBuT6mMfPu3VXgM8/QZAZRAPQZ0qIc31kQDJmTczpvuAN1C7BX7PDZY5Qp0tVAMDgKaeQWws+jL5BvfBT64pyRIvhxRxFG91l7tS2PM9tMav0JXX/gMqJs8aodMBm5yzXgR1RMbuRiNezyx4NC4Y485DTEF+lgfGZWT1cHJCNrf2byoSsPWlaQ1ObB7WfhU2fhMlKCUBboQiCHoLDjWYwJVLaym6wsJvW3JoLC4PKay+WGMNk5qUQSbFPOxXzvTwdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+eV6zimoqRcF+XxYtI+cxbU9NlylxB0Ghy1+1cvcNJY=;
- b=SYlS0BsgqDttsvJ9cEnmPQDM9Vanz7HxUVLUk/0N79Lz1bLkPXAUr9OIUY6tx5j8xld191Rq1at0pDXhD6bHG5Lbc202Vn8wg0K/+7nohgf4hrnXh6g/rZomJfY82Wm1VGz3gcF00laxC7MeEQGmw20SV9Qp3AM4Y5FalKV9vcglFEasNZFsxiMrQen5u78WmjKPNGbwGBllS55SXpbERvUQWH3XDHz+SEKfL5hcOtaPqIInxQk7yJ3cM8ybKU2MgjLaPIRnikim1eMUWouzsYLCR/9OD69qeFfnbg12FVoQ/uGuOZadsZRD44QSPM4yE0wGd4It9YuCgfO+Bog0QA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+eV6zimoqRcF+XxYtI+cxbU9NlylxB0Ghy1+1cvcNJY=;
- b=fCbE+eTGXT0cfIPggygEfN0GjtmyRWmq/ax5S7JmNha07i6FJuc//PTvFFDCwXSCPuO/Xdsa/M4EAY+nHhTA2mV2lBIOiWRh9MgRgPqYwxW6B7Bw9kEh13BNedOuUcrJR3ZsLD2N9KOVL1ckJB+9wqRRJvTSuLgArgRAAWtPb/E=
-Received: from PH0PR11MB4855.namprd11.prod.outlook.com (2603:10b6:510:41::12)
- by PH7PR11MB5863.namprd11.prod.outlook.com (2603:10b6:510:135::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16; Mon, 6 Dec
- 2021 22:59:10 +0000
-Received: from PH0PR11MB4855.namprd11.prod.outlook.com
- ([fe80::38cc:22c0:928a:95b7]) by PH0PR11MB4855.namprd11.prod.outlook.com
- ([fe80::38cc:22c0:928a:95b7%6]) with mapi id 15.20.4755.022; Mon, 6 Dec 2021
- 22:59:10 +0000
-From:   "Bae, Chang Seok" <chang.seok.bae@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-CC:     Eric Biggers <ebiggers@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Gairuboyina, Charishma1" <charishma1.gairuboyina@intel.com>,
-        "Dwarakanath, Kumar N" <kumar.n.dwarakanath@intel.com>,
-        "Krishnakumar, Lalithambika" <lalithambika.krishnakumar@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: Re: [PATCH v3 11/15] crypto: x86/aes-kl - Support AES algorithm using
- Key Locker instructions
-Thread-Topic: [PATCH v3 11/15] crypto: x86/aes-kl - Support AES algorithm
- using Key Locker instructions
-Thread-Index: AQHX4W/kZoA3rQNJf0mSmN0oRVVbp6wbd4YAgAA0pICACm46gIAADHwA
-Date:   Mon, 6 Dec 2021 22:59:09 +0000
-Message-ID: <1F509A28-1A49-4F60-9E96-B2AD9CC6E921@intel.com>
-References: <20211124200700.15888-1-chang.seok.bae@intel.com>
- <20211124200700.15888-12-chang.seok.bae@intel.com>
- <YaWfKB+k66MzNtIi@sol.localdomain>
- <011B53ED-6D9E-41EB-834B-8A64485DBED5@intel.com>
- <CAMj1kXF1hoyW6fdidJ2Dt4R_qBv_QLNaowKf4LM5Oe3_zaJuTA@mail.gmail.com>
-In-Reply-To: <CAMj1kXF1hoyW6fdidJ2Dt4R_qBv_QLNaowKf4LM5Oe3_zaJuTA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3608.120.23.2.7)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 860d35c6-c846-4c52-ac0b-08d9b90c0395
-x-ms-traffictypediagnostic: PH7PR11MB5863:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
-x-microsoft-antispam-prvs: <PH7PR11MB58637D8E1F1E2AB01ED61383D86D9@PH7PR11MB5863.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +ezGZQRkr3F2GLXltQeH24f6cb49ssKE4G4lvp7TjRZ0Kxc/xL/lCQXxssb8p6siVBJMg0CedicBlDNFnF5XxLfSoYvZExX2nDgj0Degx7GS5teIzF6iaWJr+IZCw3+7p5xWMpfP/a/FLLUfimawuq52crac1e8TJDbqIMi8GT2jfeV7Dl+OONLAXKqq55EBIKtwRsH/Deyfj5F5PeUrJr6Q2Kusac2TmvP/fHD2JY/FxYJyJpia6cuGe8Mb0C5nrSTdBQz05bwlP82A/LHOZOKmzzFDeKucC1O08mr0D0HpwUTI3S/stOXeAOFYG4Uv54RvqYZqrwbCXnIG4qxihMRmvVHxH4Q39uUCvJ98g66FPzI5yMUNNtXVVl4nzHfsy3Ssc1Tt9CCqDOX359Zvw7i9oM5Axt6jFVDl/qJ/nGbbQnW/S66Cy7cCwMCS0Bf0ta+/SwN80ie4mT5nTJsN85aZuXVIyTY439t8SHqoxPw0qPfFl2+R2AH6TZX182ns5nxsCJwKK3+3f0CIqFCErEDqTJaHSDYAENRfHnxMXQh19s7T/UFbQgXyl0h5t6KI2ui6WIHwwtPiEh4Fwsd8LqaGVQcljxjGbPgo7ECLptPERp1QknUgCtNHXk8Yv8MuYPCiLWwX3K3gFdHpmS3rUdkJ+49El4RY7WtzG6PYveP6l26arvulzfoH7/TCk9ZRzsQV7sXmQ8M6WyJoJ77Vo0BZRvH+7nA5SWpvZdQztjk=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4855.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(64756008)(66946007)(38070700005)(71200400001)(6512007)(8676002)(66446008)(316002)(66556008)(66476007)(33656002)(6916009)(7416002)(53546011)(6486002)(8936002)(4326008)(36756003)(26005)(38100700002)(2616005)(5660300002)(54906003)(82960400001)(83380400001)(186003)(6506007)(122000001)(76116006)(86362001)(2906002)(508600001)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?kW5AqYLlIEu0Dt/kIr+C06EUHj2Q/mEI/RAWFMVSljWtTPPk246nzHOrTmWs?=
- =?us-ascii?Q?+XiDglk49d1RPbMXb4onhHd8oj7tgSW35toLggMir9Xib6sBBU87bDfGAXa5?=
- =?us-ascii?Q?PwB3gzn2ehLiJk+UbuQGYKR59Su7Ty6KkMWoHNh9Ob1dF+YCztBsfcfzYPMN?=
- =?us-ascii?Q?8UE+uXgpNJoET0gsLaK64FnZ0byqVGHWnr9tp2Vl7hkDg80i6YHszvSluM2b?=
- =?us-ascii?Q?gIUUXUQ8eb2VVvu+hq4nQT9sGXqltNH5w0WMPZUP5QPk16FeU1Mi9uq1R+dW?=
- =?us-ascii?Q?5cnilIQJqOeh7sfNPEV3du6OIF1mYvRuQM5McCWDm9vmfu2/EaaKVRIKg11f?=
- =?us-ascii?Q?DKn4v21Rr7M6AN9gmjNPqReB7QzNVMkEZgthLcJXlAl1RhY9TRkzc7yZIcI+?=
- =?us-ascii?Q?qDip43ilXIKhRNdaQlafJlAG49r5tC5FZIoL9VwmxMLvg9d+D8IxP9xBbJIB?=
- =?us-ascii?Q?UZMUiYOSv1A7/mHVtXTQcyVWyg6kRiAlV9tER0ZhEtdT/vYxZGb4uyXAi3Xj?=
- =?us-ascii?Q?MWlWGjIFhJ0nJ6rT/qde7dvWtahIUTntEwXRLi0hF/n8g8MmNGRpixMr43ka?=
- =?us-ascii?Q?ajJ2bATb5LLzYHeWqMWer7pAFF274hfZyZP/dUni3XCjFuiQiRZBg9uDSSrK?=
- =?us-ascii?Q?qmRDAyacI78ryl2j5S4h8dLHbnEGQ++YeeA+bWRvw1FHhu5MC0TEwjW7eEAQ?=
- =?us-ascii?Q?Uh/X6/L4m947RzkDX/f0/8qc1mojfCPCwcburEP9urX82wh7VDcud7Dz2IVp?=
- =?us-ascii?Q?lz88VdL++c59vKE2d9xA9QV1/iiaK93+4eZvjMCYKvfV5pcuaKp+u/YjD/Mj?=
- =?us-ascii?Q?JGP1A8lxFATBtphJeQtcGTguRHsgWlIFGMMQK7YohHrp60rLSH8+6iowylUN?=
- =?us-ascii?Q?KHyvUyp+AhMBfT8/bjtYMU/nSKMna5Im4ivz7w9DoOAtODW/pWkRtZpplEiw?=
- =?us-ascii?Q?Xq6MJ7g8lL9jZzgQFdo78efzrTvjl1vRRlOBrxmCMpNhqUrU6g9010TpibFg?=
- =?us-ascii?Q?HYUaPbY6HB1wA3oBelg71kODQk0X4maoVKA9WLb//VY39ToW90DUMJa0hmeo?=
- =?us-ascii?Q?gYjGNWttY7rG6nTyq1acxT4teXGUW2oFj1ZTC42qXwi4yl4szlO5ks3UsvLr?=
- =?us-ascii?Q?QR6h94E2+brWTzx+OPascbgacMVFN4Ryh10pujHWIfwqd9uY+CZCVO0UD0/Z?=
- =?us-ascii?Q?oJWJy8UQohZ4IyXXDnobNyQL0fSoQPNf/n8qxNkT8lCtW7kHrcMT4KDGqFQq?=
- =?us-ascii?Q?CDht1L7skMyfdxLaUXexd3xoY/5FvLwa0XaEsYyIwZFQLnUTTRtFzIGGY6BD?=
- =?us-ascii?Q?nxYUcb38akWP1k5iSxUIAghceHMiYMoWlNFZuvndVbQTXhr157y04UT+SM1M?=
- =?us-ascii?Q?E3CoTl2P2KKSJ4heVHT+1TeWv6V6i392GvFMfOfo6ka4hB54srk4Mv+dszTi?=
- =?us-ascii?Q?ySV7baC52xphFKTtHEzsv+2mMbTNrKy2FMOtShQ1/bN0Gjtb+AyqZ+qPs6YW?=
- =?us-ascii?Q?kHg3QEq0UOiOSQHykam4z3peW+vdY2OuQiBJX+SBJEWMjVK+HJ1gSzJV5zpe?=
- =?us-ascii?Q?BOyGSGYTMNLcLpHSNbea/WihGJymfF+AFgJZnFkv/lc7Mifknpl4x9LyWNk/?=
- =?us-ascii?Q?hkBpZlsLIwrMCsCnky3gCZOVtqNaWO60lLdRjSccpvSumZdd+05avz9aFrev?=
- =?us-ascii?Q?HYLLJe/9+xMIbkbYQKwuuayXur0=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <D55EC34D5B60BE4DBCAE4FB224996D41@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1358818AbhLFXDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 18:03:38 -0500
+Received: from mail-wr1-f43.google.com ([209.85.221.43]:36553 "EHLO
+        mail-wr1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244052AbhLFXD3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 18:03:29 -0500
+Received: by mail-wr1-f43.google.com with SMTP id u17so18220578wrt.3;
+        Mon, 06 Dec 2021 14:59:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version;
+        bh=gWkUoynv4OUIpOBgWRI768dyKr8CIkTDVxhW4YZ2oT8=;
+        b=Tr2WBhiuB2goKhZ4OKllDZdW0AbTEfGyO00xgJejAjhYPl2kr61HH+g+0reRPBgUkj
+         JdO1m9g0ChCJe7jn6eJJowoy1WNJ/z9B5zpiPGG/Ta9ulqszkpxN4z1u0k9Td3tixEGc
+         E3CkTqGVUUdZqZxYUb5NPrW5uZJMkHDREpYSzh2ToJ6V5r26GU5hvxBl9xaLefC0KO6T
+         ozd2XlQfzvTlf5ZzlOGVOtwiVFe6HEg5P2ukoE4rAIu2WvXrRRu7tzs52vF6qib6lVCh
+         e0FSM0gSR7ndmUrPNFs+03+4a3nal2LHbJ44FyDAAkraCbgy78CeXo2ZHd5LKoURbMtR
+         D/Cg==
+X-Gm-Message-State: AOAM530kfttPdV9AVJ8TUQ++1/iLabQuAz9qJyjaF3lY+MkhC/rnU92q
+        gfnDlNHD8VaCxJp2ZWEzVE4=
+X-Google-Smtp-Source: ABdhPJy2GoeNYp1T3Z6d6X7O+reevAF+YhO68Snf3sIsm6D80JIAFQMpzEzXTe+vNK1dBdb8lo/V4g==
+X-Received: by 2002:a5d:64cd:: with SMTP id f13mr45936133wri.382.1638831598358;
+        Mon, 06 Dec 2021 14:59:58 -0800 (PST)
+Received: from localhost ([2a01:4b00:f41a:3600:df86:cebc:8870:2184])
+        by smtp.gmail.com with ESMTPSA id bg12sm796669wmb.5.2021.12.06.14.59.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 14:59:57 -0800 (PST)
+Message-ID: <7ae146389b58f521166e9569be6c64f87359777a.camel@debian.org>
+Subject: Re: [PATCH bpf-next 0/3] bpf: add signature
+From:   Luca Boccassi <bluca@debian.org>
+To:     John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Matteo Croce <mcroce@linux.microsoft.com>
+Cc:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        keyrings@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Date:   Mon, 06 Dec 2021 22:59:56 +0000
+In-Reply-To: <61ae75487d445_c5bd20827@john.notmuch>
+References: <20211203191844.69709-1-mcroce@linux.microsoft.com>
+         <CAADnVQLDEPxOvGn8CxwcG7phy26BKuOqpSQ5j7yZhZeEVoCC4w@mail.gmail.com>
+         <CAFnufp1_p8XCUf-RdHpByKnR9MfXQoDWw6Pvm_dtuH4nD6dZnQ@mail.gmail.com>
+         <CAADnVQ+DSGoF2YoTrp2kTLoFBNAgdU8KbcCupicrVGCWvdxZ7w@mail.gmail.com>
+         <86e70da74cb34b59c53b1e5e4d94375c1ef30aa1.camel@debian.org>
+         <CAADnVQLCmbUJD29y2ovD+SV93r8jon2-f+fJzJFp6qZOUTWA4w@mail.gmail.com>
+         <CAFnufp2S7fPt7CKSjH+MBBvvFu9F9Yop_RAkX_3ZtgtZhRqrHw@mail.gmail.com>
+         <CAADnVQ+WLGiQvaoTPwu_oRj54h4oMwh-z5RV0WAMFRA9Wco_iA@mail.gmail.com>
+         <61aae2da8c7b0_68de0208dd@john.notmuch>
+         <0079fd757676e62f45f28510a5fd13a9996870be.camel@debian.org>
+         <61ae75487d445_c5bd20827@john.notmuch>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="=-cojQtYFtS/pjbdnxJtg/"
+User-Agent: Evolution 3.42.1-1 
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4855.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 860d35c6-c846-4c52-ac0b-08d9b90c0395
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2021 22:59:09.8804
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GgaHjpe7xmR1fzzxfGywCphy9wIyNO60x5ghMCBnlwyS3cFKvh8vpef2Fdltkn7XFt3TKXUIGIuL+9/pmuMVHgwLxqUXnSYRUthiv6fE4sk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB5863
-X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Dec 6, 2021, at 14:14, Ard Biesheuvel <ardb@kernel.org> wrote:
-> On Tue, 30 Nov 2021 at 07:57, Bae, Chang Seok <chang.seok.bae@intel.com> =
-wrote:
->>=20
->>=20
->> No, these two instruction sets are separate. So I think no room to share=
- the
->> ASM code.
->=20
-> On arm64, we have
->=20
-> aes-ce.S, which uses AES instructions to implement the AES core transform=
-s
->=20
-> aes-neon.S, which uses plain NEON instructions to implement the AES
-> core transforms
->=20
-> aes-modes.S, which can be combined with either of the above, and
-> implements the various chaining modes (ECB, CBC, CTR, XTS, and a
-> helper for CMAC, CBCMAC and XMAC)
->=20
-> If you have two different primitives for performing AES transforms
-> (the original round by round one, and the KL one that does 10 or 14
-> rounds at a time), you should still be able to reuse most of the code
-> that implements the non-trivial handling of the chaining modes.
 
-Yes, no question about this for maintainability.
+--=-cojQtYFtS/pjbdnxJtg/
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-However, besides the fact that a KL instruction takes multiple rounds, some
-AES-KL instructions have register constraints. E.g. AESENCWIDE256KL always
-uses XMM0-7 for input blocks.
+On Mon, 2021-12-06 at 12:40 -0800, John Fastabend wrote:
+> Luca Boccassi wrote:
+>=20
+> cutting to just the relevant pieces here.
+>=20
+> [...]
+>=20
+> >=20
+> > > I'll give the outline of the argument here.
+> > >=20
+> > > I do not believe signing BPF instructions for real programs
+> > > provides
+> > > much additional security. Given most real programs if the
+> > > application
+> > > or loader is exploited at runtime we have all sorts of trouble.
+> > > First
+> > > simply verifying the program doesn't prevent malicious use of the
+> > > program. If its in the network program this means DDOS, data
+> > > exfiltration,
+> > > mitm attacks, many other possibilities. If its enforcement
+> > > program
+> > > most enforcement actions are programmed from this application so
+> > > system
+> > > security is lost already.=C2=A0 If its observability application
+> > > simply
+> > > drops/manipulates observations that it wants. I don't know of any
+> > > useful programs that exist in isolation without user space input
+> > > and output as a critical component. If its not a privileged user,
+> > > well it better not be doing anything critical anyways or disabled
+> > > outright for the security focused.
+> > >=20
+> > > Many critical programs can't be signed by the nature of the
+> > > program.
+> > > Optimizing network app generates optimized code at runtime.
+> > > Observability
+> > > tools JIT the code on the fly, similarly enforcement tools will
+> > > do
+> > > the
+> > > same. I think the power of being able to optimize JIT the code in
+> > > application and give to the kernel is something we will see more
+> > > and
+> > > more of. Saying I'm only going to accept signed programs, for a
+> > > distribution or something other than niche use case, is non
+> > > starter
+> > > IMO because it breaks so many real use cases. We should encourage
+> > > these optimizing use cases as I see it as critical to performance
+> > > and keeping overhead low.
+> > >=20
+> > > From a purely security standpoint I believe you are better off
+> > > defining characteristics an application is allowed to have. For
+> > > example allowed to probe kernel memory, make these helpers calls,
+> > > have this many instructions, use this much memory, this much cpu,
+> > > etc. This lets you sandbox a BPF application (both user space and
+> > > kernel side) much nicer than any signing will allow.
+> > >=20
+> > > If we want to 'sign' programs we should do that from a BPF
+> > > program
+> > > directly where other metadata can be included in the policy. For
+> > > example having a hash of the program loaded along with the calls
+> > > made and process allows for rich policy decisions. I have other
+> > > use cases that need a hash/signature for data blobs, so its on
+> > > my todo list but not at the top yet.=C2=A0 But, being able to verify
+> > > arbitrary blob of data from BPF feels like a useful operation to
+> > > me
+> > > in general. The fact in your case its a set of eBPF insns and in
+> > > my case its some key in a network header shouldn't matter.
+> > >=20
+> > > The series as is, scanned commit descriptions, is going to break
+> > > lots of in-use-today programs if it was ever enabled. And
+> > > is not as flexible (can't support bpftrace, etc.) or powerful
+> > > (can't consider fine grained policy decisions) as above.
+> > >=20
+> > > Add a function we can hook after verify (or before up for
+> > > debate) and helpers to verify signatures and/or generate
+> > > hashes and we get a better more general solution. And it can
+> > > also solve your use case even if I believe its not useful and
+> > > may break many BPF users running bpftrace, libbpf, etc.
+> > >=20
+> > > Thanks,
+> > > John
+> >=20
+> > Hello John,
+> >=20
+> > Thank you for the summary, this is much clearer.
+> >=20
+> > First of all, I think there's some misunderstanding: this series
+> > does
+> > not enable optional signatures by default, and does not enable
+> > mandatory signatures by default either. So I don't see how it would
+> > break existing use cases as you are saying? Unless I'm missing
+> > something?
+> >=20
+> > There's a kconfig to enable optional signatures - if they are
+> > there,
+> > they are verified, if they are not present then nothing different
+> > happens. Unless I am missing something, this should be backward
+> > compatible. This kconfig would likely be enabled in most use cases,
+> > just like optionally signed kernel modules are.
+>=20
+> Agree, without enforcement things should continue to work.
+>=20
+> >=20
+> > Then there's a kconfig on top of that which makes signatures
+> > mandatory.
+> > I would not imagine this to be enabled in may cases, just in custom
+> > builds that have more stringent requirements. It certainly would
+> > not be
+> > enabled in generalist distros. Perhaps a more flexible way would be
+> > to
+> > introduce a sysctl, like fsverity has with
+> > 'fs.verity.require_signatures'? That would be just fine for our use
+> > case. Matteo can we do that instead in the next revision?
+>=20
+> We want to manage this from BPF side directly. It looks
+> like policy decision and we have use cases that are not as
+> simple as yes/no with global switch. For example, in k8s world
+> this might be enabled via labels which are user specific per
+> container
+> policy. e.g. lockdown some containers more strictly than others.
+>=20
+> >=20
+> > Secondly, I understand that for your use case signing programs
+> > would
+> > not be the best approach. That's fine, and I'm glad you are working
+> > on
+> > an alternative that better fits your model, it will be very
+> > interesting
+> > to see how it looks like once implemented. But that model doesn't
+> > fit
+> > all cases. In our case at Microsoft, we absolutely want to be able
+> > to
+> > pre-define at build time a list of BPF programs that are allowed to
+> > be
+> > loaded, and reject anything else. Userspace processes in our case
+> > are
+>=20
+> By building this into BPF you can get the 'reject anything else'
+> policy
+> and I get the metadata + reject/accept from the same hook. Its
+> just your program can be very simple.
+>=20
+> > mostly old and crufty c++ programs that can most likely be pwned by
+> > looking at them sideways, so they get locked down hard with
+> > multiple
+> > redundant layers and so on and so forth. But right now for BPF you
+> > only
+> > have a "can load BPF" or "cannot load BPF" knob, and that's it.
+> > This is
+> > not good enough: we need to be able to define a list of allowed
+> > payloads, and be able to enforce it, so when (not if) said
+> > processes do
+> > get tricked into loading something else, it will fail, despite
+> > having
+>=20
+> Yikes, this is a bit scary from a sec point of view right? Are those
+> programs read-only maps or can the C++ program also write into the
+> maps and control plane. Assuming they do some critical functions then
+> you really shouldn't be trusting them to not do all sorts of other
+> horrible things. Anyways not too important to this discussion.
+>=20
+> I'll just reiterate (I think you get it though) that simply signing
+> enforcement doesn't mean now BPF is safe. Further these programs
+> have very high privileges and can do all sorts of things to the
+> system. But, sure sig enforcement locks down one avenue of loading
+> bogus program.
 
-Today, AES-NI code maintains 32-bit compatibility, e.g. clobbering XMM2-3 f=
-or
-key and input vector, so sharing the code makes the AES-KL code inefficient
-and even ugly I think due to the register constraint. E.g. the AES-KL code
-does use XMM9-10 for key and an input vector, but it has to move them aroun=
-d
-just for code sharing.
+Oh it's terrifying - but business needs and all that.
+But Arnaldo is spot on - it's not strictly about what is more secure,
+but more about making it a known quantity. If we can prove what is
+allowed to run and what not before any machine has even booted (barring
+bugs in sig verification, of course) then the $org_security_team is
+satisfied and can sign off on enabling bpf. Otherwise we can keep
+dreaming.
 
-Thanks,
-Chang=
+> > the capability of calling bpf(). Trying to define heuristics is
+> > also
+> > not good enough for us - creative malicious actors have a tendency
+> > to
+> > come up with ways to chain things that individually are allowed and
+> > benign, but combined in a way that you just couldn't foresee. It
+> > would
+>=20
+> Sure, but I would argue some things can be very restrictive and
+> generally useful. For example, never allow kernel memory read could
+> be
+> enforced from BPF side directly. Never allow pkt redirect, etc.
+>=20
+> > certainly cover a lot of cases, but not all. A strictly pre-defined
+> > list of what is allowed to run and what is not is what we need for
+> > our
+> > case, so that we always know exactly what is going to run and what
+> > is
+> > not, and can deal with the consequences accordingly, without nasty
+> > surprises waiting around the corner. Now in my naive view the best
+> > way
+> > to achieve this is via signatures and certs, as it's a well-
+> > understood
+> > system, with processes already in place to revoke/rotate/etc, and
+> > it's
+> > already used for kmods. An alternative would be hard-coding hashes
+> > I
+> > guess, but that would be terribly inflexible.
+>=20
+> Another option would be to load your programs at boot time,
+> presumably
+> with trusted boot enabled and then lock down BPF completely. Then
+> ensure all your BPF 'programs' are read-only from user<->kernel
+> interface and this should start looking fairly close to what you
+> want and all programs are correct by root of trust back to
+> trusted boot. Would assume you know what programs to load at boot
+> though. May or may not be a big assumption depending on your env.
+
+One of the use cases we have for BPF is on-demand diagnostics, so
+loading at boot and blocking afterwards would not work, I think.
+Environment is constrained in terms of resources, so don't want to load
+anything that is not needed.
+
+> >=20
+> > Now in terms of _how_ the signatures are done and validated, I'm
+> > sure
+> > there are multiple ways, and if some are better than what this
+> > series
+> > implements, then that's not an issue, it can be reworked. But the
+> > core
+> > requirement for us is: offline pre-defined list of what is allowed
+> > to
+> > run and what is not, with ability for hard enforcement that cannot
+> > be
+> > bypassed. Yes, you lose some features like JIT and so on: we don't
+> > care, we don't need those for our use cases. If others have
+> > different
+> > needs that's fine, this is all intended to be optional, not
+> > mandatory.
+> > There are obviously trade-offs, as always when security is
+> > involved,
+> > and each user can decide what's best for them.
+> >=20
+> > Hope this makes sense. Thanks!
+>=20
+> I think I understand your use case. When done as BPF helper you
+> can get the behavior you want with a one line BPF program
+> loaded at boot.
+>=20
+> int verify_all(struct bpf_prog **prog) {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return verify_signature(p=
+rog->insn,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0prog->len * sizeof(struct bpf_=
+insn),
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 signature, KEYRING, BPF_SIGTYPE);
+> }
+>=20
+> And I can write some more specific things as,
+>=20
+> int verify_blobs(void data) {
+> =C2=A0 int reject =3D verify_signature(data, data_len, sig, KEYRING, TYPE=
+);
+> =C2=A0 struct policy_key *key =3D map_get_key();
+>=20
+> =C2=A0 return policy(key, reject);=C2=A0=20
+> }
+>=20
+> map_get_key() looks into some datastor with the policy likely using
+> 'current' to dig something up. It doesn't just apply to BPF progs
+> we can use it on other executables more generally. And I get more
+> interesting use cases like, allowing 'tc' programs unsigned, but
+> requiring kernel memory reads to require signatures or any N
+> other policies that may have value. Or only allowing my dbg user
+> to run read-only programs, because the dbg maybe shouldn't ever
+> be writing into packets, etc. Driving least privilege use cases
+> in fine detail.
+>=20
+> By making it a BPF program we side step the debate where the kernel
+> tries to get the 'right' policy for you, me, everyone now and in
+> the future. The only way I can see to do this without getting N
+> policies baked into the kernel and at M different hook points is via
+> a BPF helper.
+>=20
+> Thanks,
+> John
+
+Now this sounds like something that could work - we can prove that this
+could be loaded before any writable fs comes up anywhere, so in
+principle I think it would be acceptable and free of races. Matteo, we
+should talk about this tomorrow.
+And this requires some infrastructure work right? Is there a WIP git
+tree somewhere that we can test out?
+
+Thank you!
+
+--=20
+Kind regards,
+Luca Boccassi
+
+--=-cojQtYFtS/pjbdnxJtg/
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEE6g0RLAGYhL9yp9G8SylmgFB4UWIFAmGulewACgkQSylmgFB4
+UWJ4Vwf/chYkBbUMg6+zun0WZcNQkm9S4/qAWWjWMUaeSUfunWIfw+A35uMY9rdp
+OBgxEg5+wgFJmuxKrmfPBeSREsm3c07bv0gIZdI4l+4C0FLKRjHzP08+OdJmvPHd
+Uw1o63u98rAEbCehf5zwEBAypfr6v3xbYlowiyaVOYYKYl6kvZiQyqHwkSQOuqYE
+y/h8aEs4/0k699WCHOVFm18AcEuJZrixnzqFZYI3P+rUB0lNqDXr/rJCnG8dkjuU
+ASfbuDZ2LyQaSz7pGqHS2f+H+GkPk91e6vWkii76tCmUw+3FRnJPTKn1mQ4zP61C
+ZyodHBf1Fc8D2+UKwNz2rByMPZuELg==
+=wPUW
+-----END PGP SIGNATURE-----
+
+--=-cojQtYFtS/pjbdnxJtg/--

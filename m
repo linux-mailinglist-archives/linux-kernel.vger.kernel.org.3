@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 149EC46A017
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82637469FF3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386951AbhLFP5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:57:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
+        id S1442529AbhLFPzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:55:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388108AbhLFPcT (ORCPT
+        with ESMTP id S1390545AbhLFPma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:32:19 -0500
+        Mon, 6 Dec 2021 10:42:30 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B447C08E84A;
-        Mon,  6 Dec 2021 07:19:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932D2C0698D5;
+        Mon,  6 Dec 2021 07:28:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB5AFB81118;
-        Mon,  6 Dec 2021 15:19:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29E67C341C8;
-        Mon,  6 Dec 2021 15:19:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A99EB81116;
+        Mon,  6 Dec 2021 15:28:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E859C34901;
+        Mon,  6 Dec 2021 15:28:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803953;
-        bh=9velEWGf7XRota4AW/ofgutwRM87Lj20P6uIf/1mCbM=;
+        s=korg; t=1638804490;
+        bh=LBiaArAi+dUPbDDMDgK0e4u4wpKzk8/elD9OeB/XVsU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e+23TlH9wwF3cJHtspnj1omGxZ4IVVRtPWVe96pCa9CPyCrj2bfV2eECoPFSgDR19
-         OsYLOzG+XqxwjSHcVErzanPGhwejYIJ+144y9Uf5vyJU57phtKCj3co6SONpCjcULS
-         PyZAQi/X/itWhffddcQUy2/V+tNeZWXQLoS7aU/o=
+        b=YQesZQ6H+RaNtphVLBdi2iBUr4UlIVlmIIFIR1tX1wTw2UeU9ew1/mzKgUEK/I7pJ
+         SQdAi63jcYhqx+QQNzlRziBXJt6x4U9kab3qcCNiT2AvssT0ny98M15dXB7wNMpX3W
+         yKoKYkkX+jpSzHk3aFzfq0nWYftOlBnwPKVIwyC4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Sameer Pujar <spujar@nvidia.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.10 074/130] ASoC: tegra: Fix wrong value type in ADMAIF
-Date:   Mon,  6 Dec 2021 15:56:31 +0100
-Message-Id: <20211206145602.232853500@linuxfoundation.org>
+        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>
+Subject: [PATCH 5.15 138/207] drm/msm: Do hw_init() before capturing GPU state
+Date:   Mon,  6 Dec 2021 15:56:32 +0100
+Message-Id: <20211206145615.004679060@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,43 +47,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sameer Pujar <spujar@nvidia.com>
+From: Rob Clark <robdclark@chromium.org>
 
-commit 884c6cb3b7030f75c46e55b9e625d2372708c306 upstream.
+commit e4840d537c2c6b1189d4de16ee0f4820e069dcea upstream.
 
-The enum controls are expected to use enumerated value type.
-Update relevant references in control get/put callbacks.
+In particular, we need to ensure all the necessary blocks are switched
+to 64b mode (a5xx+) otherwise the high bits of the address of the BO to
+snapshot state into will be ignored, resulting in:
 
-Fixes: f74028e159bb ("ASoC: tegra: Add Tegra210 based ADMAIF driver")
-Suggested-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Sameer Pujar <spujar@nvidia.com>
-Reviewed-by: Takashi Iwai <tiwai@suse.de>
-Link: https://lore.kernel.org/r/1637219231-406-2-git-send-email-spujar@nvidia.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+  *** gpu fault: ttbr0=0000000000000000 iova=0000000000012000 dir=READ type=TRANSLATION source=CP (0,0,0,0)
+  platform 506a000.gmu: [drm:a6xx_gmu_set_oob] *ERROR* Timeout waiting for GMU OOB set BOOT_SLUMBER: 0x0
+
+Fixes: 4f776f4511c7 ("drm/msm/gpu: Convert the GPU show function to use the GPU state")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+Link: https://lore.kernel.org/r/20211108180122.487859-1-robdclark@gmail.com
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/tegra/tegra210_admaif.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/msm_debugfs.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/sound/soc/tegra/tegra210_admaif.c
-+++ b/sound/soc/tegra/tegra210_admaif.c
-@@ -430,7 +430,7 @@ static int tegra_admaif_get_control(stru
- 	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
- 	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
- 	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
--	long *uctl_val = &ucontrol->value.integer.value[0];
-+	unsigned int *uctl_val = &ucontrol->value.enumerated.item[0];
+--- a/drivers/gpu/drm/msm/msm_debugfs.c
++++ b/drivers/gpu/drm/msm/msm_debugfs.c
+@@ -77,6 +77,7 @@ static int msm_gpu_open(struct inode *in
+ 		goto free_priv;
  
- 	if (strstr(kcontrol->id.name, "Playback Mono To Stereo"))
- 		*uctl_val = admaif->mono_to_stereo[ADMAIF_TX_PATH][ec->reg];
-@@ -450,7 +450,7 @@ static int tegra_admaif_put_control(stru
- 	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
- 	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
- 	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
--	int value = ucontrol->value.integer.value[0];
-+	unsigned int value = ucontrol->value.enumerated.item[0];
+ 	pm_runtime_get_sync(&gpu->pdev->dev);
++	msm_gpu_hw_init(gpu);
+ 	show_priv->state = gpu->funcs->gpu_state_get(gpu);
+ 	pm_runtime_put_sync(&gpu->pdev->dev);
  
- 	if (strstr(kcontrol->id.name, "Playback Mono To Stereo"))
- 		admaif->mono_to_stereo[ADMAIF_TX_PATH][ec->reg] = value;
 
 

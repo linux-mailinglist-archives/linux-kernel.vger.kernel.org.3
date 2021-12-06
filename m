@@ -2,82 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4EAF46A00D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FFB846A063
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381326AbhLFP4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:56:54 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49266 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243016AbhLFPd4 (ORCPT
+        id S1443910AbhLFQBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:01:34 -0500
+Received: from unknown-3-146.windriver.com ([147.11.3.146]:10400 "EHLO
+        mail1.wrs.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1391626AbhLFPqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:33:56 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2399E61319;
-        Mon,  6 Dec 2021 15:30:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03DE4C34901;
-        Mon,  6 Dec 2021 15:30:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804626;
-        bh=PChk6+KqN/nms4bRxcrzSymUKqqjUsp9Fb9o4Gm2B2k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tIpBK/aDF/CpGYVh/7QVvt7GauOSQ3n5bfEQC1ONNhJmDec6z64SBPbyVJzMJHvkm
-         wImP1bpmKgnTJD1HspmShfUsVrB/D9qRAY5S5xLyd2ZFJBnqMmKZ5u/v6xKTC9r06e
-         cINutbre/9WJYBSArhY7QmGE6ZQY3onw5GLhF3VM=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Corey Minyard <cminyard@mvista.com>
-Subject: [PATCH 5.15 207/207] ipmi: msghandler: Make symbol remove_work_wq static
-Date:   Mon,  6 Dec 2021 15:57:41 +0100
-Message-Id: <20211206145617.463005125@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 6 Dec 2021 10:46:11 -0500
+X-Greylist: delayed 2388 seconds by postgrey-1.27 at vger.kernel.org; Mon, 06 Dec 2021 10:43:49 EST
+Received: from mail.windriver.com (mail.wrs.com [147.11.1.11])
+        by mail1.wrs.com (8.15.2/8.15.2) with ESMTPS id 1B6F04nv024882
+        (version=TLSv1.1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
+        Mon, 6 Dec 2021 07:00:04 -0800
+Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.corp.ad.wrs.com [147.11.82.252])
+        by mail.windriver.com (8.15.2/8.15.2) with ESMTPS id 1B6F03xs020369
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 6 Dec 2021 07:00:03 -0800 (PST)
+Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Mon, 6 Dec 2021 07:00:03 -0800
+Received: from hackbox.wrs.com (128.224.56.205) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
+ 15.1.2242.12 via Frontend Transport; Mon, 6 Dec 2021 07:00:02 -0800
+From:   Paul Gortmaker <paul.gortmaker@windriver.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>
+Subject: [PATCH 0/2] sched/nohz: disallow non-existent cores from nohz-full
+Date:   Mon, 6 Dec 2021 09:59:48 -0500
+Message-ID: <20211206145950.10927-1-paul.gortmaker@windriver.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Yongjun <weiyongjun1@huawei.com>
+A couple months back I sent a fix to reconcile rcu_nocbs= input
+restrictions with nohz_full= input restrictions; with the latter being
+more restrictive than the former.
 
-commit 5a3ba99b62d8486de0316334e72ac620d4b94fdd upstream.
+However, in relaxing the nohz_full restrictions, I made it possible to
+boot with a nohz_full= parameter that contains nothing but nonexistent
+and not-possible cores - which will trigger a WARN.
 
-The sparse tool complains as follows:
+This fixes the original reconcile commit by explicitly coding our
+allowed values just like RCU does, and changes the WARN_ON to a
+WARN_ON_ONCE, since it needlessly rendered the machine unusable.
 
-drivers/char/ipmi/ipmi_msghandler.c:194:25: warning:
- symbol 'remove_work_wq' was not declared. Should it be static?
-
-This symbol is not used outside of ipmi_msghandler.c, so
-marks it static.
-
-Fixes: 1d49eb91e86e ("ipmi: Move remove_work to dedicated workqueue")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
-Message-Id: <20211123083618.2366808-1-weiyongjun1@huawei.com>
-Signed-off-by: Corey Minyard <cminyard@mvista.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/ipmi/ipmi_msghandler.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/char/ipmi/ipmi_msghandler.c
-+++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -191,7 +191,7 @@ struct ipmi_user {
- 	struct work_struct remove_work;
- };
- 
--struct workqueue_struct *remove_work_wq;
-+static struct workqueue_struct *remove_work_wq;
- 
- static struct ipmi_user *acquire_ipmi_user(struct ipmi_user *user, int *index)
- 	__acquires(user->release_barrier)
+Cc: Frederic Weisbecker <fweisbec@gmail.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
 
+Paul Gortmaker (2):
+  sched/isolation: really align nohz_full with rcu_nocbs
+  tick/nohz: WARN_ON --> WARN_ON_ONCE to prevent console saturation
+
+ kernel/sched/isolation.c | 12 ++++++++++++
+ kernel/time/tick-sched.c |  2 +-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+
+-- 
+2.17.1
 

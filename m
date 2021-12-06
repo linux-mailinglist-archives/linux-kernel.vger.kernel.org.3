@@ -2,112 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE4E46A042
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F125D469F67
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:44:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388432AbhLFP7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:59:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390493AbhLFPm1 (ORCPT
+        id S1345090AbhLFPrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:47:46 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:41930 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1387701AbhLFPbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:42:27 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01931C0A8872
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:26:47 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso14082180ota.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 07:26:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/+S7xZ/J/Lmw5RKCZEGldriwwUmxNSdBbdaMcU/rL8o=;
-        b=JmSlfFhAT0/2mdCUBUSKhokDy4aXZggCgULvDuVT0DFsALxohzGGyH6jrWWjXvqkll
-         R6UedoyhN40oSn1MuRtFP1CWBHok1MXxma3mBMmAOZor3Gqr4xL5OU6lmVoR5iKQtMHu
-         CjXuhRxoEKIPk0nI+0wAHGC+VrTY5JZQ9TjIdtFc2q3CxwyGbXIeMNyYE2/ShMy79mbe
-         IRfXJl1CD8JjiwDYSZZ0TqqKGTgl256Hqxcr1D6J8YLNEhUEi/r39eTsttAAN0eB2gf6
-         9m8QEREPUzxhgp9r5cUZrq+DB3hlqWTziP4HTkc8Te9etDJAvfFVebIQhe0NdqGv2BPG
-         U7Qw==
+        Mon, 6 Dec 2021 10:31:44 -0500
+Received: by mail-oi1-f175.google.com with SMTP id u74so22006763oie.8;
+        Mon, 06 Dec 2021 07:28:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=/+S7xZ/J/Lmw5RKCZEGldriwwUmxNSdBbdaMcU/rL8o=;
-        b=W2cLLlWxzyCk+AhAxsGV3By0HHdL0jPR1uG8Dtqm+57c6xG0P3mh5ibKFywwlF642e
-         Sn3k7AeY3dGR1ntCD4w6PtS440I3TcuGt+gAl98qW7GnDnTecionID85W0154xcnBF9m
-         uyIyhDD18oAWF6LVwR3Q/n1XOrFK8gRiCcPLKm75s2M3ZHo4bOQlH9xs2uGUxDZivFDm
-         ECIUGtG02osvP5mrwhqcsiPROEYtcJSIUKGZadBmpjpWQzXuxf+H5VjUvDWYpJbeAw7z
-         gvZD5WvLkSnQvc4DjvaSotcRkpVEQMrBGxWvFklj7ENFJo1IgyrG/FlRz+BrhCsIJviW
-         +FqQ==
-X-Gm-Message-State: AOAM533mWyA6TAygpMcOXp7NCFNlo2fX6KouO9HbEVhvUbND7CbaQdKE
-        IwanNCCW4RZRj4rC2CYLyPPoSw==
-X-Google-Smtp-Source: ABdhPJzA2CSSjQl/Lw0cnPULTz2iuoU+21d0RxySX2OUR0bgAghgm+7NcJcalSV9XX+Q5S8BltbO0g==
-X-Received: by 2002:a9d:f63:: with SMTP id 90mr30482398ott.268.1638804407124;
-        Mon, 06 Dec 2021 07:26:47 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id bh12sm2770172oib.25.2021.12.06.07.26.46
+        bh=vmY9WY/IdHkBubH/d9+H2NnZMjAMu0umDpKHxPiSoSU=;
+        b=Jrg7IbYxtnNeP+fRmAsa1q5NHAFnrjui64xBACd1AENxji6+7hIFdIld6eJ1acRjAC
+         wXZ8lkl1jxQn1yJ5Mhj2wuKIs4Rbr8EULUD3TSKnnoD79YJL0z6pYupseU3ZTUGGKKmx
+         yJ3Rlc/REdpufwwa13+371WDKPdnAMMZ3E0tvQSDhNVIuK6Ch2pv3qdGXhQkm4oZqWaY
+         UxQe/a4DMnl7tQVtAilUnLDo8RvNn+Z+Z864WfbE8WBqclvUI84G+LnXdiBSmSlf2/Rz
+         zz/rQGuxvPvVL0IWLLf052G7eDInRGXcZNAmHaJVJf6DrQ3BdQqENq/1KvxyVZXZLA/m
+         4ejg==
+X-Gm-Message-State: AOAM533BgTBbtOrFxOO58v/7bLYS5pe+9dcRYqt+wjUNl96NnLcO3CxU
+        AdvZdlrskmJ6ep+K9EGtWw==
+X-Google-Smtp-Source: ABdhPJyfHepTpy+8C5WIBaswVad+pb+ARigaK7+tiIrrbzB1awNCTodg/k/StbwlXs0D2pl0zwBHtg==
+X-Received: by 2002:a05:6808:218b:: with SMTP id be11mr25541435oib.80.1638804495458;
+        Mon, 06 Dec 2021 07:28:15 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id o10sm2141225oom.32.2021.12.06.07.28.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 07:26:46 -0800 (PST)
-Date:   Mon, 6 Dec 2021 09:26:44 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Shawn Guo <shawn.guo@linaro.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] clk: qcom: smd-rpm: Drop binary value handling for
- buffered clock
-Message-ID: <Ya4rtHSS1tLm7Gbi@builder.lan>
-References: <20211031020715.21636-1-shawn.guo@linaro.org>
- <20211031020715.21636-4-shawn.guo@linaro.org>
+        Mon, 06 Dec 2021 07:28:14 -0800 (PST)
+Received: (nullmailer pid 2069157 invoked by uid 1000);
+        Mon, 06 Dec 2021 15:28:13 -0000
+Date:   Mon, 6 Dec 2021 09:28:13 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     linux-kernel@vger.kernel.org, Alexandre Ghiti <alex@ghiti.fr>,
+        Anup Patel <anup.patel@wdc.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
+        Nanyong Sun <sunnanyong@huawei.com>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Vitaly Wool <vitaly.wool@konsulko.com>
+Subject: Re: [RFC 0/6] Sparse HART id support
+Message-ID: <Ya4sDX974/dVEOQw@robh.at.kernel.org>
+References: <20211204002038.113653-1-atishp@atishpatra.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211031020715.21636-4-shawn.guo@linaro.org>
+In-Reply-To: <20211204002038.113653-1-atishp@atishpatra.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 30 Oct 21:07 CDT 2021, Shawn Guo wrote:
-
-> The buffered clock binary value handling added by commit 36354c32bd76
-> ("clk: qcom: smd-rpm: Add .recalc_rate hook for clk_smd_rpm_branch_ops")
-> is redundant, because buffered clock is branch type, and the binary
-> value handling for branch clock has been handled by
-> clk_smd_rpm_prepare/unprepare functions.
+On Fri, Dec 03, 2021 at 04:20:32PM -0800, Atish Patra wrote:
+> Currently, sparse hartid is not supported for Linux RISC-V for the following
+> reasons.
+> 1. Both spinwait and ordered booting method uses __cpu_up_stack/task_pointer
+>    which is an array size of NR_CPUs.
+> 2. During early booting, any hartid greater than NR_CPUs are not booted at all.
+> 3. riscv_cpuid_to_hartid_mask uses struct cpumask for generating hartid bitmap.
+> 4. SBI v0.2 implementation uses NR_CPUs as the maximum hartid number while
+>    generating hartmask.
 > 
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> In order to support sparse hartid, the hartid & NR_CPUS needs to be disassociated
+> which was logically incorrect anyways. NR_CPUs represent the maximum logical|
+> CPU id configured in the kernel while the hartid represent the physical hartid
+> stored in mhartid CSR defined by the privilege specification. Thus, hartid
+> can have much greater value than logical cpuid.
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+We already have a couple of architectures with logical to physical CPU 
+id maps. See cpu_logical_map. Can we make that common and use it here? 
+That would also possibly allow for common populating the map from DT.
 
-> ---
->  drivers/clk/qcom/clk-smd-rpm.c | 8 --------
->  1 file changed, 8 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-> index dd3d373a1309..ea28e45ca371 100644
-> --- a/drivers/clk/qcom/clk-smd-rpm.c
-> +++ b/drivers/clk/qcom/clk-smd-rpm.c
-> @@ -189,10 +189,6 @@ static int clk_smd_rpm_set_rate_active(struct clk_smd_rpm *r,
->  		.value = cpu_to_le32(DIV_ROUND_UP(rate, 1000)), /* to kHz */
->  	};
->  
-> -	/* Buffered clock needs a binary value */
-> -	if (r->rpm_res_type == QCOM_SMD_RPM_CLK_BUF_A)
-> -		req.value = cpu_to_le32(!!req.value);
-> -
->  	return qcom_rpm_smd_write(r->rpm, QCOM_SMD_RPM_ACTIVE_STATE,
->  				  r->rpm_res_type, r->rpm_clk_id, &req,
->  				  sizeof(req));
-> @@ -207,10 +203,6 @@ static int clk_smd_rpm_set_rate_sleep(struct clk_smd_rpm *r,
->  		.value = cpu_to_le32(DIV_ROUND_UP(rate, 1000)), /* to kHz */
->  	};
->  
-> -	/* Buffered clock needs a binary value */
-> -	if (r->rpm_res_type == QCOM_SMD_RPM_CLK_BUF_A)
-> -		req.value = cpu_to_le32(!!req.value);
-> -
->  	return qcom_rpm_smd_write(r->rpm, QCOM_SMD_RPM_SLEEP_STATE,
->  				  r->rpm_res_type, r->rpm_clk_id, &req,
->  				  sizeof(req));
-> -- 
-> 2.17.1
-> 
+Rob

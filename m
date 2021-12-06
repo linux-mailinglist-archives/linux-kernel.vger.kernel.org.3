@@ -2,128 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1EC46A8E4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8210A46A8E3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349949AbhLFVBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:01:23 -0500
-Received: from mga11.intel.com ([192.55.52.93]:62128 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349927AbhLFVBV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:01:21 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="234919413"
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="234919413"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 12:57:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="611377349"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga004.jf.intel.com with ESMTP; 06 Dec 2021 12:57:50 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B6KvnGS024029;
-        Mon, 6 Dec 2021 20:57:49 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] numa: mark __next_node() as __always_inline to fix section mismatch
-Date:   Mon,  6 Dec 2021 21:57:24 +0100
-Message-Id: <CAKwvOdnoxaHHYMN-=fW6-W_bN+VrWvD32cidGa7qnYHmR=k2YA@mail.gmail.com>
-X-Mailer: git-send-email 2.33.1
+        id S1349909AbhLFVBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:01:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235310AbhLFVBT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 16:01:19 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE64C061746;
+        Mon,  6 Dec 2021 12:57:49 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id d72-20020a1c1d4b000000b00331140f3dc8so752621wmd.1;
+        Mon, 06 Dec 2021 12:57:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=XqvFWwjigRYg/qDFlCbBpyfLDh6E1UzrKYM9j3gZVCQ=;
+        b=Ftn5O0PU35wFEBXLBVckAjE27WQTY4606alcTMJFw3R6Vqf/E2xVyLz9SW3QS+uFLt
+         lMz1uKf3x8dEnG6ez+3zfNwb4Yqim+B+rpAE9KxmrLHxzlyz70gAB5dcHR4vZ4GHX1zz
+         uGtAzitVp4YfLTMOZ9heQs4sIwotW/A/kZDeFCl9ao0S+36882dFXcS1epO+5rSAoTI4
+         tuD43xtEdk0XAmqAoXxIvA5we40SCHpm/+d2jj53MtxP7Y0z9KEst6zHGSd6mSAYUMOX
+         P9ZW3n4m27UibC8C9keBnE6aUY4pyyBlCMQl7g8r8PDghYnwON4MQyZpMgPpY4kjgqF3
+         PjTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=XqvFWwjigRYg/qDFlCbBpyfLDh6E1UzrKYM9j3gZVCQ=;
+        b=DoMQ3bY+oiHnktB5W1LNSMG98ehu8zWHfvQm0hRcFf9boq9Gxq41bSwFTNINKolPz3
+         rRvVCTEeQoXH0I4RBlpfAU0AqgfD69SUY0UVmEui6R8CGG3zasKKwLdvwMy07CTozBpp
+         FUuj1Un1wVrdfON5Za4g6sAiLdnYUn9SqGV5weeCXOpSITSyNR8shgwkKOtqFzrR2wM/
+         zdlyPt+zad/S9ZcDAMwnf5xgKMX1tbpN+48Lsn9dpNA+R63slrGA3SgB8V9g2cpng3CI
+         NYQ3sWLjXbsQaByVFKqnNudrc2ZVbkWyS3necEeCBGWpYoGNSmrZAmR834Mk0zhkLVtg
+         z47A==
+X-Gm-Message-State: AOAM530r6Q8IikvQkBaZ0SWgb4UziHIyahx3C2+mw00FU6qU6jZXVRVt
+        Bdywo85bk8wFYXDmrENvAcM=
+X-Google-Smtp-Source: ABdhPJwTKNdFslxk89avHLfOJP4PsaFEJtAuBbfAqlcBTpeq/8UaSuhpyxREzNwU+lFpuFPTsPg1BA==
+X-Received: by 2002:a05:600c:19cc:: with SMTP id u12mr1293915wmq.24.1638824268224;
+        Mon, 06 Dec 2021 12:57:48 -0800 (PST)
+Received: from matrix-ESPRIMO-P710 (p200300c78f4e06972f325cc5fe1c0146.dip0.t-ipconnect.de. [2003:c7:8f4e:697:2f32:5cc5:fe1c:146])
+        by smtp.gmail.com with ESMTPSA id e3sm12696754wrp.8.2021.12.06.12.57.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 12:57:47 -0800 (PST)
+Date:   Mon, 6 Dec 2021 21:57:45 +0100
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
+Subject: [PATCH v3 0/5] Docs: usb: Code and text updates from usb-skeleton
+Message-ID: <cover.1638771720.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 6 Dec 2021 11:43:47 -0800
+Explanation and example code updates from usb-skeleton
 
-> On Mon, Dec 6, 2021 at 8:19 AM Alexander Lobakin
-> <alexandr.lobakin@intel.com> wrote:
-> >
-> > Clang (13) uninlines __next_node() which emits the following warning
-> > due to that this function is used in init code (amd_numa_init(),
-> > sched_init_numa() etc.):
-> >
-> > WARNING: modpost: vmlinux.o(.text+0x927ee): Section mismatch
-> > in reference from the function __next_node() to the variable
-> > .init.data:numa_nodes_parsed
-> > The function __next_node() references
-> > the variable __initdata numa_nodes_parsed.
-> > This is often because __next_node lacks a __initdata
-> > annotation or the annotation of numa_nodes_parsed is wrong.
-> >
-> > Mark __next_node() as __always_inline() so it won't get uninlined.
-> > bloat-o-meter over x86_64 binaries says this:
-> >
-> > scripts/bloat-o-meter -c vmlinux.baseline vmlinux
-> > add/remove: 1/1 grow/shrink: 2/7 up/down: 446/-2166 (-1720)
-> > Function                                     old     new   delta
-> > apply_wqattrs_cleanup                          -     410    +410
-> > amd_numa_init                                814     842     +28
-> > sched_init_numa                             1338    1346      +8
-> > find_next_bit                                 38      19     -19
-> > __next_node                                   45       -     -45
-> > apply_wqattrs_prepare                       1069     799    -270
-> > wq_nice_store                                688     414    -274
-> > wq_numa_store                                805     433    -372
-> > wq_cpumask_store                             789     402    -387
-> > apply_workqueue_attrs                        538     147    -391
-> > workqueue_set_unbound_cpumask                947     539    -408
-> > Total: Before=14422603, After=14420883, chg -0.01%
-> >
-> > So it's both win-win in terms of resolving section mismatch and
-> > saving some text size (-1.7 Kb is quite nice).
-> >
-> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> 
-> Thanks for the patch.  See this thread:
-> https://github.com/ClangBuiltLinux/linux/issues/1302
-> 
-> There's a lot more instances of these based on config.  Something like
-> https://github.com/ClangBuiltLinux/linux/issues/1302#issuecomment-807260475
-> would be more appropriate for fixing all instances, but I think this
-> is more so an issue with the inline cost model in LLVM.
-> 
-> I need to finish off https://reviews.llvm.org/D111456, and request
-> that https://reviews.llvm.org/D111272 which landed in clang-14 get
-> backported to the 13.0.1 release which should also help.
+v2: update patch #1 to #4
+    - corrected format of function names like the following example:
+      "`usb_bulk_msg` function" to "usb_bulk_msg()"
+v3: update patch #1 to #4 and created patch #5
+    - moved correction of format of function names to own patch #5
+    - reverted change of variable from retval to rv in patch #1
 
-Oh I see. Sorry for redundant posting, non-applicable then.
-We'll wait for these Clang/LLVM works to be finised, thanks!
+Philipp Hortmann (5):
+  Docs: usb: update usb_bulk_msg receiving example
+  Docs: usb: update comment and code near decrement our usage count for
+    the device
+  Docs: usb: update comment and code of function skel_delete
+  Docs: usb: update explanation for device_present to disconnected
+  Docs: usb: correct format of function names in the explanations
 
-> 
-> > ---
-> >  include/linux/nodemask.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-> > index 567c3ddba2c4..55ba2c56f39b 100644
-> > --- a/include/linux/nodemask.h
-> > +++ b/include/linux/nodemask.h
-> > @@ -266,7 +266,7 @@ static inline int __first_node(const nodemask_t *srcp)
-> >  }
-> >
-> >  #define next_node(n, src) __next_node((n), &(src))
-> > -static inline int __next_node(int n, const nodemask_t *srcp)
-> > +static __always_inline int __next_node(int n, const nodemask_t *srcp)
-> >  {
-> >         return min_t(int,MAX_NUMNODES,find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
-> >  }
-> > --
-> > 2.33.1
-> >
-> 
-> 
-> -- 
-> Thanks,
-> ~Nick Desaulniers
+ .../driver-api/usb/writing_usb_driver.rst     | 69 +++++++++----------
+ 1 file changed, 33 insertions(+), 36 deletions(-)
 
-Al
+-- 
+2.25.1
+

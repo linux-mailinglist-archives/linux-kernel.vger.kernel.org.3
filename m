@@ -2,47 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4710469D78
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD08E469BFE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386265AbhLFP3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:29:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238755AbhLFPTI (ORCPT
+        id S1357854AbhLFPTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:19:16 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34344 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350729AbhLFPOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:19:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BCCC0698C8;
-        Mon,  6 Dec 2021 07:13:25 -0800 (PST)
+        Mon, 6 Dec 2021 10:14:05 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA44161319;
-        Mon,  6 Dec 2021 15:13:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB63C341C2;
-        Mon,  6 Dec 2021 15:13:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BF6E61319;
+        Mon,  6 Dec 2021 15:10:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63EEBC341C1;
+        Mon,  6 Dec 2021 15:10:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803605;
-        bh=kDLHJz7+1iszJ+bcYlCI0lFO6iKvuT4W9cMx767BR4w=;
+        s=korg; t=1638803434;
+        bh=p6LYL8+1mm261afjJwqkm3hpF347y2q+hRVR1I3Inyg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2vN3xlP7wMktQga42j5oDIiAgMYjfUlFkj82T00Y3GrUHcBW3XU0dj1Z+zL0GE5OW
-         cpNns+m2zWi0YUI2GdWYQ7qeBf3ANE8Xt5yAztLGcP6KCGApv4Rb22QEyCikWrDplP
-         QeH4vGrE/HIp7wl0oF/ukBSUai5i9oztUIissS8Y=
+        b=R5+5LrffhOcFmkmG00E6KMueR47xfN4tsNdqeE+2HJE7+kR49Un5JEujgnxI269Xu
+         bqPgRjzsLtnd8q6o3Zm9Ms6aB1MEMAB7xvavUtFADarIMsEA+zIYMUmi3Ul/4lMt1U
+         006Ho/Sq3kJ2z+55DdE8MJESm0VJXVHo3+KLd+HY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qais Yousef <qais.yousef@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 52/70] sched/uclamp: Fix rq->uclamp_max not set on first enqueue
-Date:   Mon,  6 Dec 2021 15:56:56 +0100
-Message-Id: <20211206145553.715751226@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 4.19 40/48] xhci: Fix commad ring abort, write all 64 bits to CRCR register.
+Date:   Mon,  6 Dec 2021 15:56:57 +0100
+Message-Id: <20211206145550.207939735@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
-References: <20211206145551.909846023@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+References: <20211206145548.859182340@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,66 +46,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qais Yousef <qais.yousef@arm.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-[ Upstream commit 315c4f884800c45cb6bd8c90422fad554a8b9588 ]
+commit 09f736aa95476631227d2dc0e6b9aeee1ad7ed58 upstream.
 
-Commit d81ae8aac85c ("sched/uclamp: Fix initialization of struct
-uclamp_rq") introduced a bug where uclamp_max of the rq is not reset to
-match the woken up task's uclamp_max when the rq is idle.
+Turns out some xHC controllers require all 64 bits in the CRCR register
+to be written to execute a command abort.
 
-The code was relying on rq->uclamp_max initialized to zero, so on first
-enqueue
+The lower 32 bits containing the command abort bit is written first.
+In case the command ring stops before we write the upper 32 bits then
+hardware may use these upper bits to set the commnd ring dequeue pointer.
 
-	static inline void uclamp_rq_inc_id(struct rq *rq, struct task_struct *p,
-					    enum uclamp_id clamp_id)
-	{
-		...
+Solve this by making sure the upper 32 bits contain a valid command
+ring dequeue pointer.
 
-		if (uc_se->value > READ_ONCE(uc_rq->value))
-			WRITE_ONCE(uc_rq->value, uc_se->value);
-	}
+The original patch that only wrote the first 32 to stop the ring went
+to stable, so this fix should go there as well.
 
-was actually resetting it. But since commit d81ae8aac85c changed the
-default to 1024, this no longer works. And since rq->uclamp_flags is
-also initialized to 0, neither above code path nor uclamp_idle_reset()
-update the rq->uclamp_max on first wake up from idle.
-
-This is only visible from first wake up(s) until the first dequeue to
-idle after enabling the static key. And it only matters if the
-uclamp_max of this task is < 1024 since only then its uclamp_max will be
-effectively ignored.
-
-Fix it by properly initializing rq->uclamp_flags = UCLAMP_FLAG_IDLE to
-ensure uclamp_idle_reset() is called which then will update the rq
-uclamp_max value as expected.
-
-Fixes: d81ae8aac85c ("sched/uclamp: Fix initialization of struct uclamp_rq")
-Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Valentin Schneider <Valentin.Schneider@arm.com>
-Tested-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Link: https://lkml.kernel.org/r/20211202112033.1705279-1-qais.yousef@arm.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: ff0e50d3564f ("xhci: Fix command ring pointer corruption while aborting a command")
+Cc: stable@vger.kernel.org
+Tested-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20211126122340.1193239-2-mathias.nyman@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/sched/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/host/xhci-ring.c |   21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index f8ca0738d729e..5befdecefe947 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1337,7 +1337,7 @@ static void __init init_uclamp_rq(struct rq *rq)
- 		};
- 	}
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -339,7 +339,9 @@ static void xhci_handle_stopped_cmd_ring
+ /* Must be called with xhci->lock held, releases and aquires lock back */
+ static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
+ {
+-	u32 temp_32;
++	struct xhci_segment *new_seg	= xhci->cmd_ring->deq_seg;
++	union xhci_trb *new_deq		= xhci->cmd_ring->dequeue;
++	u64 crcr;
+ 	int ret;
  
--	rq->uclamp_flags = 0;
-+	rq->uclamp_flags = UCLAMP_FLAG_IDLE;
- }
+ 	xhci_dbg(xhci, "Abort command ring\n");
+@@ -348,13 +350,18 @@ static int xhci_abort_cmd_ring(struct xh
  
- static void __init init_uclamp(void)
--- 
-2.33.0
-
+ 	/*
+ 	 * The control bits like command stop, abort are located in lower
+-	 * dword of the command ring control register. Limit the write
+-	 * to the lower dword to avoid corrupting the command ring pointer
+-	 * in case if the command ring is stopped by the time upper dword
+-	 * is written.
++	 * dword of the command ring control register.
++	 * Some controllers require all 64 bits to be written to abort the ring.
++	 * Make sure the upper dword is valid, pointing to the next command,
++	 * avoiding corrupting the command ring pointer in case the command ring
++	 * is stopped by the time the upper dword is written.
+ 	 */
+-	temp_32 = readl(&xhci->op_regs->cmd_ring);
+-	writel(temp_32 | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
++	next_trb(xhci, NULL, &new_seg, &new_deq);
++	if (trb_is_link(new_deq))
++		next_trb(xhci, NULL, &new_seg, &new_deq);
++
++	crcr = xhci_trb_virt_to_dma(new_seg, new_deq);
++	xhci_write_64(xhci, crcr | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
+ 
+ 	/* Section 4.6.1.2 of xHCI 1.0 spec says software should also time the
+ 	 * completion of the Command Abort operation. If CRR is not negated in 5
 
 

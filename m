@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8193D469E8A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:40:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F5F469CD7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:23:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351434AbhLFPje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:39:34 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42192 "EHLO
+        id S1386404AbhLFP03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:26:29 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35714 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359029AbhLFPYC (ORCPT
+        with ESMTP id S1359401AbhLFPRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:24:02 -0500
+        Mon, 6 Dec 2021 10:17:11 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C12D61353;
-        Mon,  6 Dec 2021 15:20:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3876FC341D4;
-        Mon,  6 Dec 2021 15:20:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B080612D3;
+        Mon,  6 Dec 2021 15:13:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F79EC341C5;
+        Mon,  6 Dec 2021 15:13:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804032;
-        bh=f9Ahp/2cMb3nJpI/DkOuse+2EWDaEqnz/Qcf+EJ9nR0=;
+        s=korg; t=1638803621;
+        bh=Ore5wlezD3yV5BIeDNVWyozbTsqKcJmLOke6XWdvMf0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tDdgaiPkcufYFoHEJ686iDSsdGAp6N3E9HYa36ibbZ6jbJVXq2tot1oBMEa5BFRXb
-         ziizBGZOO4oje+1QLuvps7HbETO37kJttdi+Tw/Ftd8SoJfBmSXfPt/fTULsjsvuhm
-         YOH5bIfPpCtpFOw+m2cDKCjZzLTH1r6Wa7nz1qHE=
+        b=IlKPTAe5ax2royHzp2Yn0UvJhV3zaweSsM6+X/HrOfNa6hGkdfl7oSqxI6xn+XMAi
+         NM299nTvsrVLMkUvChw5+Ij/k765z9I/catv+JZEl95fuOesJ3KyIoAT4h4DXgUoHg
+         OVl7ySlGCDWaiTON4BbFS/usUCL9I81HAFs7wzuk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 104/130] KVM: VMX: Set failure code in prepare_vmcs02()
+        stable@vger.kernel.org, Ole Ernst <olebowle@gmx.com>
+Subject: [PATCH 5.4 57/70] USB: NO_LPM quirk Lenovo Powered USB-C Travel Hub
 Date:   Mon,  6 Dec 2021 15:57:01 +0100
-Message-Id: <20211206145603.237976406@linuxfoundation.org>
+Message-Id: <20211206145553.896722991@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
+References: <20211206145551.909846023@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,41 +44,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Ole Ernst <olebowle@gmx.com>
 
-[ Upstream commit bfbb307c628676929c2d329da0daf9d22afa8ad2 ]
+commit d2a004037c3c6afd36d40c384d2905f47cd51c57 upstream.
 
-The error paths in the prepare_vmcs02() function are supposed to set
-*entry_failure_code but this path does not.  It leads to using an
-uninitialized variable in the caller.
+This is another branded 8153 device that doesn't work well with LPM:
+r8152 2-2.1:1.0 enp0s13f0u2u1: Stop submitting intr, status -71
 
-Fixes: 71f7347025bf ("KVM: nVMX: Load GUEST_IA32_PERF_GLOBAL_CTRL MSR on VM-Entry")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Message-Id: <20211130125337.GB24578@kili>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Disable LPM to resolve the issue.
+
+Signed-off-by: Ole Ernst <olebowle@gmx.com>
+Cc: stable <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20211127090546.52072-1-olebowle@gmx.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/vmx/nested.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/usb/core/quirks.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 257ec2cbf69a4..36661b15c3d04 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -2619,8 +2619,10 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -435,6 +435,9 @@ static const struct usb_device_id usb_qu
+ 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
+ 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
  
- 	if ((vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL) &&
- 	    WARN_ON_ONCE(kvm_set_msr(vcpu, MSR_CORE_PERF_GLOBAL_CTRL,
--				     vmcs12->guest_ia32_perf_global_ctrl)))
-+				     vmcs12->guest_ia32_perf_global_ctrl))) {
-+		*entry_failure_code = ENTRY_FAIL_DEFAULT;
- 		return -EINVAL;
-+	}
- 
- 	kvm_rsp_write(vcpu, vmcs12->guest_rsp);
- 	kvm_rip_write(vcpu, vmcs12->guest_rip);
--- 
-2.33.0
-
++	/* Lenovo Powered USB-C Travel Hub (4X90S92381, RTL8153 GigE) */
++	{ USB_DEVICE(0x17ef, 0x721e), .driver_info = USB_QUIRK_NO_LPM },
++
+ 	/* Lenovo ThinkCenter A630Z TI024Gen3 usb-audio */
+ 	{ USB_DEVICE(0x17ef, 0xa012), .driver_info =
+ 			USB_QUIRK_DISCONNECT_SUSPEND },
 
 

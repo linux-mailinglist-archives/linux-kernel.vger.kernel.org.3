@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2764E469B35
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2BE469E99
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350383AbhLFPNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:13:39 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58752 "EHLO
+        id S1389706AbhLFPkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:40:51 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43970 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346203AbhLFPJV (ORCPT
+        with ESMTP id S1386525AbhLFP0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:09:21 -0500
+        Mon, 6 Dec 2021 10:26:42 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3D2C61326;
-        Mon,  6 Dec 2021 15:05:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A85FDC341C2;
-        Mon,  6 Dec 2021 15:05:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A75C561316;
+        Mon,  6 Dec 2021 15:23:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88408C341C2;
+        Mon,  6 Dec 2021 15:23:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803152;
-        bh=BU1QrZcFfIDx8fq7u9yoof7T7KA5DSdjqKiRzULuERU=;
+        s=korg; t=1638804192;
+        bh=+pI/xnlfgwlltNovauDbqv0dFISbXRO1a9+9PtvXV4U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V9VBuX/zD2t6sG+45vHlHA3kfRCCGGfvGLT+eNMkEE+bMV97Hqa5o75sk/txziGTu
-         PVx77UoOb51xg4Bs500ODwopiZWqudVIRjSq+AYlQbTnu5cxcN7SnWjypprPN3WEXd
-         8z3GQSWsnzSwxxd0O8LJrNFmgwPxq8jzUdS+uaCI=
+        b=j/YG75gtf6LvGoVB92ZCNS3vI+dgcHAIZb9Aidifj0lGDzX3y+PoI8vy71YUYf1RC
+         AMHPf3yc5r+CRX+Fh6kEk+DlZxuaR7UB7rWZ34PnkexXDHYGa0pZtMYZp2Rjo1Zjj5
+         8gb5kkMGjYxkNELyeEzT8yPyuKL61cKu2Kd/DHys=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 4.14 004/106] usb: hub: Fix locking issues with address0_mutex
-Date:   Mon,  6 Dec 2021 15:55:12 +0100
-Message-Id: <20211206145555.545111529@linuxfoundation.org>
+        Mordechay Goodstein <mordechay.goodstein@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Kalle Valo <kvalo@codeaurora.org>
+Subject: [PATCH 5.15 059/207] iwlwifi: mvm: retry init flow if failed
+Date:   Mon,  6 Dec 2021 15:55:13 +0100
+Message-Id: <20211206145612.286608014@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,103 +47,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Mordechay Goodstein <mordechay.goodstein@intel.com>
 
-commit 6cca13de26eea6d32a98d96d916a048d16a12822 upstream.
+commit 5283dd677e52af9db6fe6ad11b2f12220d519d0c upstream.
 
-Fix the circular lock dependency and unbalanced unlock of addess0_mutex
-introduced when fixing an address0_mutex enumeration retry race in commit
-ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0 race")
+In some very rare cases the init flow may fail.  In many cases, this is
+recoverable, so we can retry.  Implement a loop to retry two more times
+after the first attempt failed.
 
-Make sure locking order between port_dev->status_lock and address0_mutex
-is correct, and that address0_mutex is not unlocked in hub_port_connect
-"done:" codepath which may be reached without locking address0_mutex
+This can happen in two different situations, namely during probe and
+during mac80211 start.  For the first case, a simple loop is enough.
+For the second case, we need to add a flag to prevent mac80211 from
+trying to restart it as well, leaving full control with the driver.
 
-Fixes: 6ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0 race")
 Cc: <stable@vger.kernel.org>
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Tested-by: Hans de Goede <hdegoede@redhat.com>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Acked-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20211123101656.1113518-1-mathias.nyman@linux.intel.com
+Signed-off-by: Mordechay Goodstein <mordechay.goodstein@intel.com>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+Link: https://lore.kernel.org/r/iwlwifi.20211110150132.57514296ecab.I52a0411774b700bdc7dedb124d8b59bf99456eb2@changeid
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/core/hub.c |   19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/iwl-drv.c      |   22 +++++++++++++-------
+ drivers/net/wireless/intel/iwlwifi/iwl-drv.h      |    3 ++
+ drivers/net/wireless/intel/iwlwifi/mvm/mac80211.c |   24 +++++++++++++++++++++-
+ drivers/net/wireless/intel/iwlwifi/mvm/mvm.h      |    3 ++
+ drivers/net/wireless/intel/iwlwifi/mvm/ops.c      |    3 ++
+ 5 files changed, 47 insertions(+), 8 deletions(-)
 
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -4859,6 +4859,7 @@ static void hub_port_connect(struct usb_
- 	struct usb_port *port_dev = hub->ports[port1 - 1];
- 	struct usb_device *udev = port_dev->child;
- 	static int unreliable_port = -1;
-+	bool retry_locked;
+--- a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
++++ b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
+@@ -1271,23 +1271,31 @@ _iwl_op_mode_start(struct iwl_drv *drv,
+ 	const struct iwl_op_mode_ops *ops = op->ops;
+ 	struct dentry *dbgfs_dir = NULL;
+ 	struct iwl_op_mode *op_mode = NULL;
++	int retry, max_retry = !!iwlwifi_mod_params.fw_restart * IWL_MAX_INIT_RETRY;
++
++	for (retry = 0; retry <= max_retry; retry++) {
  
- 	/* Disconnect any existing devices under this port */
- 	if (udev) {
-@@ -4915,9 +4916,10 @@ static void hub_port_connect(struct usb_
+ #ifdef CONFIG_IWLWIFI_DEBUGFS
+-	drv->dbgfs_op_mode = debugfs_create_dir(op->name,
+-						drv->dbgfs_drv);
+-	dbgfs_dir = drv->dbgfs_op_mode;
++		drv->dbgfs_op_mode = debugfs_create_dir(op->name,
++							drv->dbgfs_drv);
++		dbgfs_dir = drv->dbgfs_op_mode;
+ #endif
  
- 	status = 0;
+-	op_mode = ops->start(drv->trans, drv->trans->cfg, &drv->fw, dbgfs_dir);
++		op_mode = ops->start(drv->trans, drv->trans->cfg,
++				     &drv->fw, dbgfs_dir);
++
++		if (op_mode)
++			return op_mode;
++
++		IWL_ERR(drv, "retry init count %d\n", retry);
  
--	mutex_lock(hcd->address0_mutex);
--
- 	for (i = 0; i < SET_CONFIG_TRIES; i++) {
-+		usb_lock_port(port_dev);
-+		mutex_lock(hcd->address0_mutex);
-+		retry_locked = true;
+ #ifdef CONFIG_IWLWIFI_DEBUGFS
+-	if (!op_mode) {
+ 		debugfs_remove_recursive(drv->dbgfs_op_mode);
+ 		drv->dbgfs_op_mode = NULL;
+-	}
+ #endif
++	}
  
- 		/* reallocate for each attempt, since references
- 		 * to the previous one can escape in various ways
-@@ -4926,6 +4928,8 @@ static void hub_port_connect(struct usb_
- 		if (!udev) {
- 			dev_err(&port_dev->dev,
- 					"couldn't allocate usb_device\n");
-+			mutex_unlock(hcd->address0_mutex);
-+			usb_unlock_port(port_dev);
- 			goto done;
- 		}
+-	return op_mode;
++	return NULL;
+ }
  
-@@ -4947,13 +4951,13 @@ static void hub_port_connect(struct usb_
- 		}
+ static void _iwl_op_mode_stop(struct iwl_drv *drv)
+--- a/drivers/net/wireless/intel/iwlwifi/iwl-drv.h
++++ b/drivers/net/wireless/intel/iwlwifi/iwl-drv.h
+@@ -90,4 +90,7 @@ void iwl_drv_stop(struct iwl_drv *drv);
+ #define IWL_EXPORT_SYMBOL(sym)
+ #endif
  
- 		/* reset (non-USB 3.0 devices) and get descriptor */
--		usb_lock_port(port_dev);
- 		status = hub_port_init(hub, udev, port1, i);
--		usb_unlock_port(port_dev);
- 		if (status < 0)
- 			goto loop;
++/* max retry for init flow */
++#define IWL_MAX_INIT_RETRY 2
++
+ #endif /* __iwl_drv_h__ */
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/mac80211.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/mac80211.c
+@@ -16,6 +16,7 @@
+ #include <net/ieee80211_radiotap.h>
+ #include <net/tcp.h>
  
- 		mutex_unlock(hcd->address0_mutex);
-+		usb_unlock_port(port_dev);
-+		retry_locked = false;
++#include "iwl-drv.h"
+ #include "iwl-op-mode.h"
+ #include "iwl-io.h"
+ #include "mvm.h"
+@@ -1116,9 +1117,30 @@ static int iwl_mvm_mac_start(struct ieee
+ {
+ 	struct iwl_mvm *mvm = IWL_MAC80211_GET_MVM(hw);
+ 	int ret;
++	int retry, max_retry = 0;
  
- 		if (udev->quirks & USB_QUIRK_DELAY_INIT)
- 			msleep(2000);
-@@ -5043,11 +5047,14 @@ static void hub_port_connect(struct usb_
+ 	mutex_lock(&mvm->mutex);
+-	ret = __iwl_mvm_mac_start(mvm);
++
++	/* we are starting the mac not in error flow, and restart is enabled */
++	if (!test_bit(IWL_MVM_STATUS_HW_RESTART_REQUESTED, &mvm->status) &&
++	    iwlwifi_mod_params.fw_restart) {
++		max_retry = IWL_MAX_INIT_RETRY;
++		/*
++		 * This will prevent mac80211 recovery flows to trigger during
++		 * init failures
++		 */
++		set_bit(IWL_MVM_STATUS_STARTING, &mvm->status);
++	}
++
++	for (retry = 0; retry <= max_retry; retry++) {
++		ret = __iwl_mvm_mac_start(mvm);
++		if (!ret)
++			break;
++
++		IWL_ERR(mvm, "mac start retry %d\n", retry);
++	}
++	clear_bit(IWL_MVM_STATUS_STARTING, &mvm->status);
++
+ 	mutex_unlock(&mvm->mutex);
  
- loop_disable:
- 		hub_port_disable(hub, port1, 1);
--		mutex_lock(hcd->address0_mutex);
- loop:
- 		usb_ep0_reinit(udev);
- 		release_devnum(udev);
- 		hub_free_dev(udev);
-+		if (retry_locked) {
-+			mutex_unlock(hcd->address0_mutex);
-+			usb_unlock_port(port_dev);
-+		}
- 		usb_put_dev(udev);
- 		if ((status == -ENOTCONN) || (status == -ENOTSUPP))
- 			break;
-@@ -5070,8 +5077,6 @@ loop:
- 	}
+ 	return ret;
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
+@@ -1121,6 +1121,8 @@ struct iwl_mvm {
+  * @IWL_MVM_STATUS_FIRMWARE_RUNNING: firmware is running
+  * @IWL_MVM_STATUS_NEED_FLUSH_P2P: need to flush P2P bcast STA
+  * @IWL_MVM_STATUS_IN_D3: in D3 (or at least about to go into it)
++ * @IWL_MVM_STATUS_STARTING: starting mac,
++ *	used to disable restart flow while in STARTING state
+  */
+ enum iwl_mvm_status {
+ 	IWL_MVM_STATUS_HW_RFKILL,
+@@ -1132,6 +1134,7 @@ enum iwl_mvm_status {
+ 	IWL_MVM_STATUS_FIRMWARE_RUNNING,
+ 	IWL_MVM_STATUS_NEED_FLUSH_P2P,
+ 	IWL_MVM_STATUS_IN_D3,
++	IWL_MVM_STATUS_STARTING,
+ };
  
- done:
--	mutex_unlock(hcd->address0_mutex);
--
- 	hub_port_disable(hub, port1, 1);
- 	if (hcd->driver->relinquish_port && !hub->hdev->parent) {
- 		if (status != -ENOTCONN && status != -ENODEV)
+ /* Keep track of completed init configuration */
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/ops.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/ops.c
+@@ -1424,6 +1424,9 @@ void iwl_mvm_nic_restart(struct iwl_mvm
+ 	 */
+ 	if (!mvm->fw_restart && fw_error) {
+ 		iwl_fw_error_collect(&mvm->fwrt, false);
++	} else if (test_bit(IWL_MVM_STATUS_STARTING,
++			    &mvm->status)) {
++		IWL_ERR(mvm, "Starting mac, retry will be triggered anyway\n");
+ 	} else if (test_bit(IWL_MVM_STATUS_IN_HW_RESTART, &mvm->status)) {
+ 		struct iwl_mvm_reprobe *reprobe;
+ 
 
 

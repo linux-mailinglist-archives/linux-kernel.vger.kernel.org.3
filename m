@@ -2,171 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F25FA469557
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 12:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB8B469558
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 12:58:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242805AbhLFMBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 07:01:36 -0500
-Received: from esa3.hgst.iphmx.com ([216.71.153.141]:11374 "EHLO
-        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242590AbhLFMBe (ORCPT
+        id S242823AbhLFMB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 07:01:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242675AbhLFMBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 07:01:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1638791886; x=1670327886;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JLsPtMRwUyoWIb/S1MOjGwHtvTz17PsU2F+I+ND0T48=;
-  b=TidxbIEVOKwh7kXWolAYXE/Qgxm8hizQYUa+2rbLhtb/3mxI5pkSx5rv
-   KdXuOmd8mjoYuY+0OMpP2PQPNI0+A/YwsApTuKVeITEPetRfNR34pVvnE
-   9m3T7GHn7uNr6ULt3IW5pz4wvaLoDPHcmSzfEmADpkVerM8QBMtETskzT
-   EJHuXzr+iFmgTP3ptdaIat42RUJM/hMIRfe7HycYCZfB8vKnZCV8p8fqx
-   pAk2e93EctIguGcGL7dXwYra4DnoiQaAkTTqf+RStReOjhN13eoe9o5Th
-   k8vAQ9OiCFyJYhdt7bd+CO+jQKZOb0H7W9IAhfo2Uco49t4SXcR9he/qd
-   A==;
-X-IronPort-AV: E=Sophos;i="5.87,291,1631548800"; 
-   d="scan'208";a="192335995"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 06 Dec 2021 19:58:05 +0800
-IronPort-SDR: eB550pYQ2IA9IiOVlU9PsQyIPxXw++0LQXhWSDsyCqD06N6yIpoBgb6KoVYvtm3bDxeYak239m
- YZDUF6oMNqVRiPaZwSHtUkN4fVfTrM9N/M1QZ1Ducn8ZeOxsnsoH05oUKgyYFRypbBdw90CSjQ
- yQzO9zirXiyqsSdGxcLrNCJDFwvUfqpCHZ/ml82ReG5QM6cmjmnrHvFTHlGglMIr140M14ZGiG
- w1tAr7TFye3+3SwFV1yohRgiO2ocSipfzzZZb0EWohw9iMbOMQMqpYY8tIuiNbRylG+evmOYp/
- 5B4EeagtoGIozcOvq74nm6+e
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 03:32:43 -0800
-IronPort-SDR: JRp8c7dZm9mdtSrNxkLUDPLcrwZe2lv2839afQLY1fEXNc3rnAxn7MDNf/cEq7EjceQiKS3Nql
- tS4RhO82E/zVrNlzCb/trn0hCzr9pJ/Y4Q6JQ5cebDhvyiTT7hpsspVmCQlTxcSWG9WlIUTBbn
- +4L5rPCzpaasEvc3fV7V7ls4TUBDtdnI6SH2zEwo5KltI7CDCrBZcqpczSQjgK3BBiobC5PtBr
- t2h7euTdAx+kVJsPq8Cb8/G4uwGWXTBEC9jc+czjZAoSRcRAO+nL4nIlAQTLJdI+C5mp75iWxK
- UM0=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 03:58:04 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4J724V5LMWz1Rwns
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 03:58:02 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1638791881; x=1641383882; bh=JLsPtMRwUyoWIb/S1MOjGwHtvTz17PsU2F+
-        I+ND0T48=; b=KHuS9w9VVNTRTQs/HK84M3/UJxkpE7spResPSul5I5VI7bB1hqU
-        5ldgtm0wcz4TsLl7+TVTnEsX/CLILntNe6zDvOzuDHJqbsB+w8g29SeMxbfvw0pj
-        y9zyVN3NsbButJGHSlMl/NcScTZ9788ftGAYBVhXS2HpMdJkYDOvI4s/4/iBEG83
-        FfXh8D5c5aae+zN+w/Dv2mbQqzzMthxmDxaZf/tKlDDB9p+wgtBfZxjrtfjGrw9Y
-        jDXCT0tyftXLcZbDWbMOxscjGfD3t4kYnFo4NCCmSdQL5K/PJ69oUhAtGyTBANJY
-        zPd0Mq0SskKP6l5ruzMX3ZxUvQt3zCbTLzg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id EUnz3CgApOQR for <linux-kernel@vger.kernel.org>;
-        Mon,  6 Dec 2021 03:58:01 -0800 (PST)
-Received: from [10.225.54.48] (unknown [10.225.54.48])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4J724S3TDvz1RtVG;
-        Mon,  6 Dec 2021 03:58:00 -0800 (PST)
-Message-ID: <8dfe634c-7466-dca3-6838-b305b2eb465a@opensource.wdc.com>
-Date:   Mon, 6 Dec 2021 20:57:58 +0900
+        Mon, 6 Dec 2021 07:01:55 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BCEC061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 03:58:26 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id r11so41599684edd.9
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 03:58:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8czfXpKKKBhxk8YRASmGs2oGmsxo+rvu4GKXxhDJOmo=;
+        b=eQfk1agmaEGiWLMHRuJlv9dlvf33+lQn78XtYW5EUMfvjN3nwYfI9szIRrmhZkRSYb
+         02N3slGJVoM5dkf18YF4SorALJzn8DRJ0ORdJ6P85J2L4RA+cVgyO3XRanT12D/T2QmE
+         kgAEizCKCVqxbw+O6/eYWV6RYjNBpmxgFTkB+2JnFVPxBzdLi28fP/icJ17xieBjO4ZI
+         lM1aPttCVNaWpa7fjdupztevV6BWTv9qkKQAMqsk7jwPpyx6cTCWNSXSINS/gPisX0FQ
+         ou/7wUbNBXuMokhyyV1AHGwayHnplJVhZkGb5qMGoXFa7PbMrOxLT27cYL2R5fPMAUGn
+         hI+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8czfXpKKKBhxk8YRASmGs2oGmsxo+rvu4GKXxhDJOmo=;
+        b=4b7if5TMEJclB6ZnLWTOLSKdfQ5lS8c0YVYK0Kxn+8fHuumf+z8gEq82CoMo9c7qSi
+         a+WXtlI5E46G1EzoKV/2M5pPPPBIC5IhFDQRYJjPRuCy6qNnyJQcZCvCS1mP01dJa1ZU
+         4is1Ow2wBwhkKAJnjfyq+753nBaA4unppkbivg5PU+GLhpSDzPeEhO/OM2e7CBlTslMW
+         tZh+ZSmfqFpBJ/P8EspEOPRYXR+krgsk35pys7o2/Auzi/gDWYmjcTKlc1eR6eKJwFAf
+         bYP00I3UpM+cDU/JbPiMi9xEJZ3w1FpvzX7ZI5A+Q6HAWrX+blivx1pVPWXlagqqzGQ7
+         wVlA==
+X-Gm-Message-State: AOAM533iRSEeoQCL/FdEzFEfq662gsod2H2OcQ28mCRw7Gc1GcSzN1Xk
+        1z77cIiSeEvthFoh8SZfwDHq6jpITsPipDfdm0M=
+X-Google-Smtp-Source: ABdhPJxqXXr19fzYx3BPsLa+cMipdu652XBtn3+P+HMbwRUSW+KpUc0o4+ZKcsrmE49eZC+PVYzoCn/0puilY2e9wk8=
+X-Received: by 2002:a05:6402:604:: with SMTP id n4mr53709810edv.226.1638791904804;
+ Mon, 06 Dec 2021 03:58:24 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: Need help to debug ata errors
-Content-Language: en-US
-To:     Ayan Kumar Halder <ayan.kumar.halder@xilinx.com>,
-        linux-ide@vger.kernel.org
-Cc:     axboe@kernel.dk, linux-kernel@vger.kernel.org,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Stefano Stabellini <stefano.stabellini@xilinx.com>
-References: <df61e958-7bd6-94df-0da2-56aa1084350d@xilinx.com>
- <022c3fad-ca0b-50c9-79f7-2bfa3de75a0d@opensource.wdc.com>
- <3aba2b93-9440-e581-61aa-76161f55563f@xilinx.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital
-In-Reply-To: <3aba2b93-9440-e581-61aa-76161f55563f@xilinx.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20211206113828.42523-1-stephan@gerhold.net>
+In-Reply-To: <20211206113828.42523-1-stephan@gerhold.net>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Mon, 6 Dec 2021 08:58:13 -0300
+Message-ID: <CAOMZO5A09BDOuEbmWJVD_5d=E6wSf3YcCf0=EkB-B2wWR0r52Q@mail.gmail.com>
+Subject: Re: [PATCH] soc: imx: Register SoC device only on i.MX boards
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peng Fan <peng.fan@nxp.com>, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/06 20:18, Ayan Kumar Halder wrote:
-> Hi Damien,
-> 
-> Thanks a lot for your inputs.
-> 
-> On 06/12/2021 00:12, Damien Le Moal wrote:
->> On 2021/12/03 20:11, Ayan Kumar Halder wrote:
->>> Hi All,
->>>
->>> I am trying to run linux as a DomU guest on Xen with AHCI assigned to it.
->>> I can confirm that SATA works (ie able to detect sdb) as a Dom0 guest.
->>> However, it does not work as a DomU guest.
->>>
->>> Hardware :- ZCU102 board and it has two sata ports
->>> Kernel :- 5.10
->>>
->>> I have enabled the debug logs in drivers/ata
->>>
->>> 1. Logs from dom0 (where SATA works) https://pastebin.com/2BhMDq47
->>> 2. Logs from domU (where SATA does not work) https://pastebin.com/fE8WZnZ0
->>>
->>> Can some help me to answer these questions
->>> 1. What does this mean "1st FIS failed" ?
->>>
->>> 2. In the dom0 logs, PORT_SCR_ERR = 0x41d0002 whereas in domU logs,
->>> PORT_SCR_ERR = 0. Does it give some hints ?
->>>
->>> 3. Any other issues or hints to debug this ?
->>>
->>> I can confirm that in domU scenario, we do not get any interrupts from
->>> the device. What might be going wrong here ?
->>
->> That would be the first thing to check since without interrupts you will not get
->> any command completion. Commands will timeout and probe will not work.
->> And this IRQ problem is Xen territory, not ata.
-> 
-> I am actually debugging the interrupts from the Xen's side. I can 
-> confirm that do_IRQ() (Xen's irq handler) does not receive AHCI 
-> interrupts. It does get invoked for interrupts from serial and other 
-> devices.
-> 
-> I have seen commands being timed out which is due to the iRQ issue. But 
-> suprisingly, ahci probe is successful.
+On Mon, Dec 6, 2021 at 8:40 AM Stephan Gerhold <stephan@gerhold.net> wrote:
+>
+> At the moment, using the ARM32 multi_v7_defconfig always results in two
+> SoCs being exposed in sysfs. This is wrong, as far as I'm aware the
+> Qualcomm DragonBoard 410c does not actually make use of a i.MX SoC. :)
+>
+>   qcom-db410c:/sys/devices/soc0$ grep . *
+>   family:Freescale i.MX
+>   machine:Qualcomm Technologies, Inc. APQ 8016 SBC
+>   revision:0.0
+>   serial_number:0000000000000000
+>   soc_id:Unknown
+>
+>   qcom-db410c:/sys/devices/soc1$ grep . *
+>   family:Snapdragon
+>   machine:APQ8016
+>   ...
+>
+> This happens because imx_soc_device_init() registers the soc device
+> unconditionally, even when running on devices that do not make use of i.MX.
+> Arnd already reported this more than a year ago and even suggested a fix
+> similar to this commit, but for some reason it was never submitted.
+>
+> Fix it by checking if the "__mxc_cpu_type" variable was actually
+> initialized by earlier platform code. On devices without i.MX it will
+> simply stay 0.
+>
+> Cc: Peng Fan <peng.fan@nxp.com>
+> Fixes: d2199b34871b ("ARM: imx: use device_initcall for imx_soc_device_init")
+> Reported-by: Arnd Bergmann <arnd@arndb.de>
+> Link: https://lore.kernel.org/r/CAK8P3a0hxO1TmK6oOMQ70AHSWJnP_CAq57YMOutrxkSYNjFeuw@mail.gmail.com/
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 
-That cannot be. Without any interrupt, there will be no command completion.
-Command that timeout are retried. So you may have seen timeouts because the
-platform or device is very slow to respond, but you must be getting interrupts
-if you get a good device probe. Otherwise, you would not see any disk connected
-to your ports.
-
->>
->> The 1st FIS failed error may be due to some problems with AHCI PCI bar/register
->> accesses, which may not be working. This I think points again to Xen setup with
->> domU, which may not have the necessary access rights to get IRQ and PCI bar
->> accesses ? (I have no experience with Xen)
-> 
-> This is the device tree https://pastebin.com/HtdLx63v . I think it is 
-> not related to PCI bus. Please correct me if mistaken.
-
-Well, since you have an ahci node, I do not think that adapter is behind the PCI
-bus :) It is a child of the axi bus. Not familiar with that type of setup...
-Are you sure all properties of the ahci node are correct ?
-
-> I have the necessary debug support from Xen. Can you let me know what 
-> bits I can debug from SATA side (for eg reading a particular register) 
-> which will confirm if SATA has been programmed correctly or not ?
-
-The device probe with domU should be no different than what it is with dom0, I
-think. Again, I do not have experience with Xen, so not entirely sure.
-
-Note that from the dmesg you sent, for the working case, the port seems to be
-awfully slow to link up. Not sure if that is normal for this platform.
-
-
--- 
-Damien Le Moal
-Western Digital Research
+Reviewed-by: Fabio Estevam <festevam@gmail.com>

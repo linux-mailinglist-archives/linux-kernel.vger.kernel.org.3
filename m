@@ -2,137 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93010468E32
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 01:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCCC8468E38
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 01:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241395AbhLFALG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 19:11:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbhLFALF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 19:11:05 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9F6C061751;
-        Sun,  5 Dec 2021 16:07:38 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id iq11so6408642pjb.3;
-        Sun, 05 Dec 2021 16:07:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KdUoW978c4HLbkODJj8jA+h7g0V10B/h6DJUbLYNjB8=;
-        b=dZ+gsyxqOi1PPZeUeFnccaM67mObWiH0pygj+oIObbEQfqy5awdiesvFM00f3gQ54p
-         RRjxU03GvMpb70hjKnol1riJ/j3+q1PA6hlyNKoI7medyPa4LBx4dAICCDikG3v/7lRZ
-         /xb4fqlxs/SNZhnZJyWpjE5uYOgiK6BK/45StuhglpVglGg5yVNv0qJoE7p6H3mLt/Cb
-         yieUVj0yFpOOe9NZ1Q6/OfR8qqgdZjTQjIlPHymDj/Kks1yhYtZRyRr2oA+C3T328vPl
-         230wmaHh02KYRLxjCAOjdRtvAaIWAHyXKGfqs7CmQscIQw9MgmcjZ2MQHX0ZDylts48w
-         8Q1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KdUoW978c4HLbkODJj8jA+h7g0V10B/h6DJUbLYNjB8=;
-        b=8CIqNmCdfHE/xfQR1EsEjyyAQFmovba7tpJZqKeWaWM6D06YpIu7lkqYAjz3yN6tGw
-         exuFXGkFfs4uBnxcYyoj9KpiJQvlI19Io6c+xbify7dnkw7H3ckTYKPbvS1LdOY2pNR3
-         wzG/GMU1fgPXV7yElSnfZdMhqeDqIqVkBwloT8AzBIwuoicS+3fpsUyYbnCzNpKHuRiJ
-         BDVWou8rRcjbbx92gRZ1ftn9rtWZ87GWBRPd1M52zHpPERGDnRt99YsLQ5f0pgrauQwn
-         yffH85UMJIRqiKOvHzT29YHOxwlIDN1U5ZrW+jGJ70btL1I5fsh5RYiG8prlMnU8Jy1O
-         Eqrw==
-X-Gm-Message-State: AOAM532cOGRaEBQWLHRxZoXcsBRQ0pMRe2T26YaiCdlnZWS8C1XJCgkG
-        qWHeSLRW7/6MUddQgzp7Gmw=
-X-Google-Smtp-Source: ABdhPJwDxnjLfnDj8oqOPTDT+a6VPfh5ljdVRlRWQdR7LuBk4vfaQqOmqp0odBLoMm6ciAxffDjGxg==
-X-Received: by 2002:a17:90b:1b04:: with SMTP id nu4mr33284064pjb.72.1638749257453;
-        Sun, 05 Dec 2021 16:07:37 -0800 (PST)
-Received: from debian11-dev-61.localdomain (192.243.120.180.16clouds.com. [192.243.120.180])
-        by smtp.gmail.com with ESMTPSA id f7sm10092809pfv.89.2021.12.05.16.07.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 16:07:37 -0800 (PST)
-From:   davidcomponentone@gmail.com
-X-Google-Original-From: yang.guang5@zte.com.cn
-To:     shuah@kernel.org
-Cc:     skhan@linuxfoundation.org, davidcomponentone@gmail.com,
-        ptikhomirov@virtuozzo.com, christian.brauner@ubuntu.com,
-        yang.guang5@zte.com.cn, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH v2] tests: remove unneeded conversion to bool
-Date:   Mon,  6 Dec 2021 08:07:23 +0800
-Message-Id: <9bca1d9eb8ccacf4a64a8813f9eefe7f7272b3d6.1638581673.git.yang.guang5@zte.com.cn>
-X-Mailer: git-send-email 2.30.2
+        id S241481AbhLFASM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 19:18:12 -0500
+Received: from gate.crashing.org ([63.228.1.57]:44188 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229567AbhLFASL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 19:18:11 -0500
+Received: from ip6-localhost (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 1B608gtt022162;
+        Sun, 5 Dec 2021 18:08:44 -0600
+Message-ID: <07472b315d6adecb874f29128e9b5fe3eadad590.camel@kernel.crashing.org>
+Subject: Re: [PATCH 2/3] usb: aspeed-vhub: support remote wakeup feature
+From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Tao Ren <rentao.bupt@gmail.com>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        kernel test robot <lkp@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>
+Cc:     BMC-SW <BMC-SW@aspeedtech.com>
+Date:   Mon, 06 Dec 2021 11:08:42 +1100
+In-Reply-To: <HK0PR06MB3202F55EEE02B9931D9CD4AD80699@HK0PR06MB3202.apcprd06.prod.outlook.com>
+References: <20211126110954.2677627-1-neal_liu@aspeedtech.com>
+         <20211126110954.2677627-3-neal_liu@aspeedtech.com>
+         <279c42970790787e928ed017149e300835085235.camel@kernel.crashing.org>
+         <HK0PR06MB3202A1F0710655B3E8EA709580679@HK0PR06MB3202.apcprd06.prod.outlook.com>
+         <5d234a400a89f64ad183020b93b68f478f1addc7.camel@kernel.crashing.org>
+         <HK0PR06MB3202F55EEE02B9931D9CD4AD80699@HK0PR06MB3202.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Guang <yang.guang5@zte.com.cn>
+On Thu, 2021-12-02 at 03:03 +0000, Neal Liu wrote:
+> > 
+> Let's me describe more details for our hardware behavior and hope you
+> understand.
+> 
+> HUB00[3]: MANUAL_REMOTE_WAKEUP
+> HUB00[4]: AUTO_REMOTE_WAKEUP
+> 
+> Set HUB00[3] implies USB device will do remote wakeup if any write
+> command to vhub register.
+> Set HUB00[4] implies USB device will do remote wakeup. It can only be
+> set in suspend state.
+> 
+> For current design, d->wakeup_en only controls whether HUB00[4] can
+> be set through usb_gadget_ops.wakeup().
+> If some applications (take KVM as example) want to wakeup host by
+> sending a packet, it won't go through sb_gadget_ops.wakeup().
+> We enable HUB00[3] to fix this problem. It won't override above
+> mentioned behavior.
+> If host has enabled the USB_DEVICE_REMOTE_WAKEUP feature, it has 2
+> ways to wakeup host.
+> 1. set srp 1 (/sys/device/platform/xxxxxxxxx/udc/xxxxxx/srp)
+> 2. emulated device has activity
+> If host has disabled the USB_DEVICE_REMOTE_WAKEUP feature, these 2
+> ways still cannot wakeup host even if USB bus is in resume state.
+> Thanks
 
-The coccinelle report
-./tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c:225:18-23:
-WARNING: conversion to bool not needed here
-Relational and logical operators evaluate to bool,
-explicit conversion is overly verbose and unneeded.
+So what you are saying is that currently, the various gadgets aren't
+calling usb_gadget_wakeup() ?
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+Ie. it should be a gadget policy to decide when to wake-up I suppose,
+but it's true that nothing in the core nor the existing gadgets seem to
+handle that.
 
----
+I think what you propose is a band-aid. The real problem is that the
+gadget drivers should trigger wakeups (or the core should do so on
+activity).
 
-Changes in v2:
-- Change the return type to bool.
----
- .../move_mount_set_group/move_mount_set_group_test.c   | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+That said, for now, I don't object to adding that "auto" bit, but I
+would prefer if that behaviour was use configurable.
 
-diff --git a/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c b/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
-index 860198f83a53..50ed5d475dd1 100644
---- a/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
-+++ b/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
-@@ -191,7 +191,7 @@ static bool is_shared_mount(const char *path)
- #define SET_GROUP_FROM	"/tmp/move_mount_set_group_supported_from"
- #define SET_GROUP_TO	"/tmp/move_mount_set_group_supported_to"
- 
--static int move_mount_set_group_supported(void)
-+static bool move_mount_set_group_supported(void)
- {
- 	int ret;
- 
-@@ -222,7 +222,7 @@ static int move_mount_set_group_supported(void)
- 		      AT_FDCWD, SET_GROUP_TO, MOVE_MOUNT_SET_GROUP);
- 	umount2("/tmp", MNT_DETACH);
- 
--	return ret < 0 ? false : true;
-+	return ret >= 0;
- }
- 
- FIXTURE(move_mount_set_group) {
-@@ -232,7 +232,7 @@ FIXTURE(move_mount_set_group) {
- 
- FIXTURE_SETUP(move_mount_set_group)
- {
--	int ret;
-+	bool ret;
- 
- 	ASSERT_EQ(prepare_unpriv_mountns(), 0);
- 
-@@ -254,7 +254,7 @@ FIXTURE_SETUP(move_mount_set_group)
- 
- FIXTURE_TEARDOWN(move_mount_set_group)
- {
--	int ret;
-+	bool ret;
- 
- 	ret = move_mount_set_group_supported();
- 	ASSERT_GE(ret, 0);
-@@ -348,7 +348,7 @@ TEST_F(move_mount_set_group, complex_sharing_copying)
- 		.shared = false,
- 	};
- 	pid_t pid;
--	int ret;
-+	bool ret;
- 
- 	ret = move_mount_set_group_supported();
- 	ASSERT_GE(ret, 0);
--- 
-2.30.2
+Cheers,
+Ben.
 

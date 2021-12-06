@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA60469F97
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:53:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E57469DAC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238272AbhLFPt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:49:58 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:48216 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387971AbhLFPcK (ORCPT
+        id S1387765AbhLFPbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:31:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348149AbhLFPTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:32:10 -0500
+        Mon, 6 Dec 2021 10:19:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B06C0698E0;
+        Mon,  6 Dec 2021 07:14:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BE5B612C1;
-        Mon,  6 Dec 2021 15:28:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CD6FC34900;
-        Mon,  6 Dec 2021 15:28:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D790B8111E;
+        Mon,  6 Dec 2021 15:14:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98924C341C1;
+        Mon,  6 Dec 2021 15:14:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804520;
-        bh=eDw+q1W7elfw+uagleAtMvIxaWH/dJdNE6bytLKJtZE=;
+        s=korg; t=1638803644;
+        bh=avOXd9b3O1ewtub2dMwT36diXock8nBBzHJlmb+3gS4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p0eynON1T1eCx2BdCjfL7a0FEjmcZU3vTDS56bpYPRg2vorMBXsrctfJ9JupSdQnC
-         mBFDAVN36krKHQqENwVwmuL1CNCtAnBHHKtLnwgTRpSmSVJCeZ1VaLF8gTIXYOFe9e
-         JoeqntaNshsKTq/PHHI3CKmb/yHIiL8zOHMfBHBg=
+        b=RIUvZk9f4t2f4nI8NUTFKA5OHwuNthzbToU02chCDyB+GTKaq+ou94wDx5kNFu2qJ
+         JWmba1F2UBLIkJjG6tOhn8lwujueTcq75RO0EtrtxBOe2BaJ7J7P4X2J/ONj7Nvin5
+         ZZq+V9m9KYUJ9mtyRroU5a0MJ37zz/+CAPxvN5Bk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Jian-Hong Pan <jhp@endlessos.org>
-Subject: [PATCH 5.15 144/207] drm/vc4: kms: Fix previous HVS commit wait
+        stable@vger.kernel.org, Alain Volmat <alain.volmat@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH 5.4 34/70] i2c: stm32f7: stop dma transfer in case of NACK
 Date:   Mon,  6 Dec 2021 15:56:38 +0100
-Message-Id: <20211206145615.224712715@linuxfoundation.org>
+Message-Id: <20211206145553.106144506@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
+References: <20211206145551.909846023@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,90 +49,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Alain Volmat <alain.volmat@foss.st.com>
 
-commit 6052a3110be208e547a4a8aeb184446199a16e8a upstream.
+commit 31b90a95ccbbb4b628578ac17e3b3cc8eeacfe31 upstream.
 
-Our current code is supposed to serialise the commits by waiting for all
-the drm_crtc_commits associated to the previous HVS state.
+In case of receiving a NACK, the dma transfer should be stopped
+to avoid feeding data into the FIFO.
+Also ensure to properly return the proper error code and avoid
+waiting for the end of the dma completion in case of
+error happening during the transmission.
 
-However, assuming we have two CRTCs running and being configured and we
-configure each one alternately, we end up in a situation where we're
-not waiting at all.
-
-Indeed, starting with a state (state 0) where both CRTCs are running,
-and doing a commit (state 1) on the first CRTC (CRTC 0), we'll associate
-its commit to its assigned FIFO in vc4_hvs_state.
-
-If we get a new commit (state 2), this time affecting the second CRTC
-(CRTC 1), the DRM core will allow both commits to execute in parallel
-(assuming they don't have any share resources).
-
-Our code in vc4_atomic_commit_tail is supposed to make sure we only get
-one commit at a time and serialised by order of submission. It does so
-by using for_each_old_crtc_in_state, making sure that the CRTC has a
-FIFO assigned, is used, and has a commit pending. If it does, then we'll
-wait for the commit before going forward.
-
-During the transition from state 0 to state 1, as our old CRTC state we
-get the CRTC 0 state 0, its commit, we wait for it, everything works fine.
-
-During the transition from state 1 to state 2 though, the use of
-for_each_old_crtc_in_state is wrong. Indeed, while the code assumes it's
-returning the state of the CRTC in the old state (so CRTC 0 state 1), it
-actually returns the old state of the CRTC affected by the current
-commit, so CRTC 0 state 0 since it wasn't part of state 1.
-
-Due to this, if we alternate between the configuration of CRTC 0 and
-CRTC 1, we never actually wait for anything since we should be waiting
-on the other every time, but it never is affected by the previous
-commit.
-
-Change the logic to, at every commit, look at every FIFO in the previous
-HVS state, and if it's in use and has a commit associated to it, wait
-for that commit.
-
-Fixes: 9ec03d7f1ed3 ("drm/vc4: kms: Wait on previous FIFO users before a commit")
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Tested-by: Jian-Hong Pan <jhp@endlessos.org>
-Link: https://lore.kernel.org/r/20211117094527.146275-7-maxime@cerno.tech
+Fixes: 7ecc8cfde553 ("i2c: i2c-stm32f7: Add DMA support")
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/vc4/vc4_kms.c |   10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ drivers/i2c/busses/i2c-stm32f7.c |    9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
---- a/drivers/gpu/drm/vc4/vc4_kms.c
-+++ b/drivers/gpu/drm/vc4/vc4_kms.c
-@@ -337,10 +337,10 @@ static void vc4_atomic_commit_tail(struc
- 	struct drm_device *dev = state->dev;
- 	struct vc4_dev *vc4 = to_vc4_dev(dev);
- 	struct vc4_hvs *hvs = vc4->hvs;
--	struct drm_crtc_state *old_crtc_state;
- 	struct drm_crtc_state *new_crtc_state;
- 	struct drm_crtc *crtc;
- 	struct vc4_hvs_state *old_hvs_state;
-+	unsigned int channel;
- 	int i;
+--- a/drivers/i2c/busses/i2c-stm32f7.c
++++ b/drivers/i2c/busses/i2c-stm32f7.c
+@@ -1394,6 +1394,7 @@ static irqreturn_t stm32f7_i2c_isr_event
+ {
+ 	struct stm32f7_i2c_dev *i2c_dev = data;
+ 	struct stm32f7_i2c_msg *f7_msg = &i2c_dev->f7_msg;
++	struct stm32_i2c_dma *dma = i2c_dev->dma;
+ 	void __iomem *base = i2c_dev->base;
+ 	u32 status, mask;
+ 	int ret = IRQ_HANDLED;
+@@ -1418,6 +1419,10 @@ static irqreturn_t stm32f7_i2c_isr_event
+ 	if (status & STM32F7_I2C_ISR_NACKF) {
+ 		dev_dbg(i2c_dev->dev, "<%s>: Receive NACK\n", __func__);
+ 		writel_relaxed(STM32F7_I2C_ICR_NACKCF, base + STM32F7_I2C_ICR);
++		if (i2c_dev->use_dma) {
++			stm32f7_i2c_disable_dma_req(i2c_dev);
++			dmaengine_terminate_all(dma->chan_using);
++		}
+ 		f7_msg->result = -ENXIO;
+ 	}
  
- 	for_each_new_crtc_in_state(state, crtc, new_crtc_state, i) {
-@@ -357,16 +357,10 @@ static void vc4_atomic_commit_tail(struc
- 	if (IS_ERR(old_hvs_state))
- 		return;
+@@ -1433,7 +1438,7 @@ static irqreturn_t stm32f7_i2c_isr_event
+ 		/* Clear STOP flag */
+ 		writel_relaxed(STM32F7_I2C_ICR_STOPCF, base + STM32F7_I2C_ICR);
  
--	for_each_old_crtc_in_state(state, crtc, old_crtc_state, i) {
--		struct vc4_crtc_state *vc4_crtc_state =
--			to_vc4_crtc_state(old_crtc_state);
--		unsigned int channel = vc4_crtc_state->assigned_channel;
-+	for (channel = 0; channel < HVS_NUM_CHANNELS; channel++) {
- 		struct drm_crtc_commit *commit;
- 		int ret;
- 
--		if (channel == VC4_HVS_CHANNEL_DISABLED)
--			continue;
--
- 		if (!old_hvs_state->fifo_state[channel].in_use)
- 			continue;
- 
+-		if (i2c_dev->use_dma) {
++		if (i2c_dev->use_dma && !f7_msg->result) {
+ 			ret = IRQ_WAKE_THREAD;
+ 		} else {
+ 			i2c_dev->master_mode = false;
+@@ -1446,7 +1451,7 @@ static irqreturn_t stm32f7_i2c_isr_event
+ 		if (f7_msg->stop) {
+ 			mask = STM32F7_I2C_CR2_STOP;
+ 			stm32f7_i2c_set_bits(base + STM32F7_I2C_CR2, mask);
+-		} else if (i2c_dev->use_dma) {
++		} else if (i2c_dev->use_dma && !f7_msg->result) {
+ 			ret = IRQ_WAKE_THREAD;
+ 		} else if (f7_msg->smbus) {
+ 			stm32f7_i2c_smbus_rep_start(i2c_dev);
 
 

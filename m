@@ -2,40 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27492469E9E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C1B469D67
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389500AbhLFPkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:40:25 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55328 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348136AbhLFPWT (ORCPT
+        id S1378506AbhLFP3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:29:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357463AbhLFPTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:22:19 -0500
+        Mon, 6 Dec 2021 10:19:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF75C061359;
+        Mon,  6 Dec 2021 07:13:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8540DB8111B;
-        Mon,  6 Dec 2021 15:18:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7971C341C2;
-        Mon,  6 Dec 2021 15:18:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19E3FB810AC;
+        Mon,  6 Dec 2021 15:13:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CC7CC341C2;
+        Mon,  6 Dec 2021 15:13:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803928;
+        s=korg; t=1638803596;
         bh=LBiaArAi+dUPbDDMDgK0e4u4wpKzk8/elD9OeB/XVsU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fEpEaR9yVaxNTsD4HFzWHlbYVpJSXgtIX+0H2L+ReujYcPvFUv6w4fPGCCTdyeW98
-         ffhZmJ+aVI34My3SDzJ6rw/fH74Tykm7IlhXD/WxC8haNoxM1VssldPCI0DQlSduQx
-         WXUYzVg54fUlbf3tR+8LFNYutxGIkO+2aIhsP4OY=
+        b=M4BeLIYynnHn5M5U3sQ9lDU8BX2iNZfAvdLhwgQHRLI65nHKgpRTyKhEr0lsXGq7W
+         DrfZoPw9x3w4UEKVMCwwj7Btyn8Jhh4klPQQOab/vnGEfz9QjD5SfpPRRE3xtyvCTQ
+         nnZYS1VovlwOF4lcJSH/9FD0y3jaihwC/yYBxc1M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>
-Subject: [PATCH 5.10 095/130] drm/msm: Do hw_init() before capturing GPU state
-Date:   Mon,  6 Dec 2021 15:56:52 +0100
-Message-Id: <20211206145602.938655789@linuxfoundation.org>
+Subject: [PATCH 5.4 49/70] drm/msm: Do hw_init() before capturing GPU state
+Date:   Mon,  6 Dec 2021 15:56:53 +0100
+Message-Id: <20211206145553.622760171@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
+References: <20211206145551.909846023@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

@@ -2,93 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E32154690ED
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F994690F9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238584AbhLFHvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 02:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237150AbhLFHvb (ORCPT
+        id S238624AbhLFH4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 02:56:44 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59134 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229561AbhLFH4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 02:51:31 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5AAC0613F8;
-        Sun,  5 Dec 2021 23:48:03 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id o14so6522113plg.5;
-        Sun, 05 Dec 2021 23:48:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vIsldLhCmZH7wKYOXMosoXmaGOAAlbldleWN7ENAInA=;
-        b=bAVZy+n2NWzFrRWUPTBkg4SvcY7CRtt/abHIsPeRPa5LOddWdWJO7/57Mvseg9APlk
-         9Q+TebS7S7KW8Lu7P4RO47ow1QBwSB+EsxlUpXmWSiM3UgaJztTwtTpa8+2/obP6wTBL
-         RVfyxAS4wFsWIOgzAOFg93tVU3Z46yv26gCEvBIUMPYMvGgRSaTBYkueBy4X/mggcjL3
-         TRX7xoqMhtjdeSAQEylSKmM+deWTOgv/M7MXwZJDUSz2KjC7kN/NFZacxdKhl0C9O8sn
-         ghjfaWfe6LzBkwmTSz9Vo+z7zimhvbpLBBEYruf00Dl1L51NUMt8G3ixXWtD2TxnPc03
-         uOmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vIsldLhCmZH7wKYOXMosoXmaGOAAlbldleWN7ENAInA=;
-        b=c0BpBcXPVBvP4C+Zd+NdWY1VcV+Q/oL3hOQIA9bxRYQc9quOTXnlTUXVhDbsftiFyN
-         b+7OZEHgVlKb2+UVwyQhNcFcgLlwQLS9aZW+OfgKZMSjUzHGujWI+bYd+iei97QrlEDI
-         CSge1ABOC4TRibYcPT96EB/TeqUSrx+/v5ufnsvTMlSz9R4/fGiq49yVNUEzegPeIFWM
-         QGiVHeRqRs62eL9vUmkUGJBObgLCx+NkB9QFCYwYir3pwGvJ5R52FyWAwXvr8R67tNqK
-         OTHuo56ka4r4EeTFdkylsOIwQ7UyPuHTnGaU+j4ol16rQtecvxZemKf7WezoEn1SoASP
-         fRUw==
-X-Gm-Message-State: AOAM530wPfKrNa+84SwyY18092uQw+0w1aWJDMXzv9G9tDloewg7PaGA
-        ivCPtbbZDtXfVRT+pF8k4GM=
-X-Google-Smtp-Source: ABdhPJx9xsWWL4RWc/B/RSlpEWpCZDCrTafViiPUVdW0LXQpt6P0A72nQxwqnB2doM4/JR6vsz/3JA==
-X-Received: by 2002:a17:90b:4c89:: with SMTP id my9mr35154223pjb.229.1638776882984;
-        Sun, 05 Dec 2021 23:48:02 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id u13sm9004627pgp.27.2021.12.05.23.48.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 23:48:02 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     viro@zeniv.linux.org.uk
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chiminghao <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cm>
-Subject: [PATCH] fs:remove redundant variable
-Date:   Mon,  6 Dec 2021 07:47:54 +0000
-Message-Id: <20211206074754.398117-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 6 Dec 2021 02:56:40 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42EB661175;
+        Mon,  6 Dec 2021 07:53:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F66DC341C2;
+        Mon,  6 Dec 2021 07:53:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638777191;
+        bh=soSlk3MBczahgBfafp8U9UAyjF43LWFYVH/GoS2WyFw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iuKpbSmCNPQKVV2uMZmjGsVnK63LAVPXMIdIJN3+kY8zC6vgxKMBkxFLtn1Y7HpLf
+         Mlz939JS+5PsrgimZK0D5QTRayqWT2WhDvGym53xEhm3bnULdIi7COix+8/oJwqCh7
+         4UORKW6SE516xudv0usYnGOsKn9VKjkqilBTp068=
+Date:   Mon, 6 Dec 2021 08:53:07 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 03/18] driver core: platform: Rename
+ platform_dma_configure()
+Message-ID: <Ya3BYxrgkNK3kbGI@kroah.com>
+References: <20211206015903.88687-1-baolu.lu@linux.intel.com>
+ <20211206015903.88687-4-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206015903.88687-4-baolu.lu@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: chiminghao <chi.minghao@zte.com.cn>
+On Mon, Dec 06, 2021 at 09:58:48AM +0800, Lu Baolu wrote:
+> The platform_dma_configure() is shared between platform and amba bus
+> drivers. Rename the common helper to firmware_dma_configure() so that
+> both platform and amba bus drivers could customize their dma_configure
+> callbacks.
 
-return value form directly instead of
-taking this in another redundant variable.
+Please, if you are going to call these functions "firmware_" then move
+them to the drivers/firmware/ location, they do not belong in
+drivers/base/platform.c anymore, right?
 
-Reported-by: Zeal Robot <zealci@zte.com.cm>
-Signed-off-by: chiminghao <chi.minghao@zte.com.cn>
----
- fs/file.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+thanks,
 
-diff --git a/fs/file.c b/fs/file.c
-index 8627dacfc424..97605ef3c390 100644
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -265,8 +265,7 @@ static unsigned int count_open_files(struct fdtable *fdt)
- 		if (fdt->open_fds[--i])
- 			break;
- 	}
--	i = (i + 1) * BITS_PER_LONG;
--	return i;
-+	return (i + 1) * BITS_PER_LONG;
- }
- 
- static unsigned int sane_fdtable_size(struct fdtable *fdt, unsigned int max_fds)
--- 
-2.25.1
-
+greg k-h

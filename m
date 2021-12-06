@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA7546A034
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60EDF469CCF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:23:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387837AbhLFP7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:59:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
+        id S1386089AbhLFP0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:26:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390451AbhLFPmZ (ORCPT
+        with ESMTP id S1358800AbhLFPQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:42:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84114C0A8863;
-        Mon,  6 Dec 2021 07:26:23 -0800 (PST)
+        Mon, 6 Dec 2021 10:16:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28907C0698C4;
+        Mon,  6 Dec 2021 07:09:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49E59B81125;
-        Mon,  6 Dec 2021 15:26:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71B0BC34902;
-        Mon,  6 Dec 2021 15:26:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B24DF61310;
+        Mon,  6 Dec 2021 15:09:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B7EEC341C5;
+        Mon,  6 Dec 2021 15:09:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804381;
-        bh=NPL2biXWIFO2hsfzQxy97aAQd7Y3H85eGxpq0DxIFhQ=;
+        s=korg; t=1638803376;
+        bh=C3rkVKzteW0SpKk25N7VPYRyJsxtohM/s/8STn33ccc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sCx+hvlxW2Oyl3Q7Gtm9t03FoZZXFewDsjLorE/z7aa2UtyWdRj1WB9qTCI4qhhHz
-         YrOUGXurl77SFcjzIGNjWJsTR0XGH898gy83gNZzuzAu96WJ+61tO9anLfhdOXbHrS
-         U/tOoLij1yOePD5NQ/w66jNRZ2SOSQr5Ek5fw1qA=
+        b=hpizyjUkP95TLerZmvq8W9+mXJqNZvoAxzV89bZgX4UjFTjSL8FPvhZgMMHXenk0V
+         RArAGgiUSDOjjFxJpvWxJXhisi4/knqp4lDTXpHVUP5yVFal/enullPgqbMJGNDIRW
+         Dh9hdx+EZeCoDyK+ZQqzze/ltfz5DBtJGd28hok4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 126/207] ALSA: intel-dsp-config: add quirk for CML devices based on ES8336 codec
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: [PATCH 4.19 03/48] of: clk: Make <linux/of_clk.h> self-contained
 Date:   Mon,  6 Dec 2021 15:56:20 +0100
-Message-Id: <20211206145614.606653080@linuxfoundation.org>
+Message-Id: <20211206145548.973239115@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+References: <20211206145548.859182340@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,48 +49,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-commit ae26c08e6c8071ba8febb0c7c0829da96c75248c upstream.
+commit 5df867145f8adad9e5cdf9d67db1fbc0f71351e9 upstream.
 
-We've added quirks for ESS8336 but missed CML, add quirks for both LP
-and H versions.
+Depending on include order:
 
-BugLink: https://github.com/thesofproject/linux/issues/3248
-Fixes: 9d36ceab9415 ("ALSA: intel-dsp-config: add quirk for APL/GLK/TGL devices based on ES8336 codec")
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Link: https://lore.kernel.org/r/20211122232254.23362-1-pierre-louis.bossart@linux.intel.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+    include/linux/of_clk.h:11:45: warning: ‘struct device_node’ declared inside parameter list will not be visible outside of this definition or declaration
+     unsigned int of_clk_get_parent_count(struct device_node *np);
+						 ^~~~~~~~~~~
+    include/linux/of_clk.h:12:43: warning: ‘struct device_node’ declared inside parameter list will not be visible outside of this definition or declaration
+     const char *of_clk_get_parent_name(struct device_node *np, int index);
+					       ^~~~~~~~~~~
+    include/linux/of_clk.h:13:31: warning: ‘struct of_device_id’ declared inside parameter list will not be visible outside of this definition or declaration
+     void of_clk_init(const struct of_device_id *matches);
+				   ^~~~~~~~~~~~
+
+Fix this by adding forward declarations for struct device_node and
+struct of_device_id.
+
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Link: https://lkml.kernel.org/r/20200205194649.31309-1-geert+renesas@glider.be
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/hda/intel-dsp-config.c |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ include/linux/of_clk.h |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/sound/hda/intel-dsp-config.c
-+++ b/sound/hda/intel-dsp-config.c
-@@ -252,6 +252,11 @@ static const struct config_entry config_
- 		.flags = FLAG_SOF | FLAG_SOF_ONLY_IF_DMIC_OR_SOUNDWIRE,
- 		.device = 0x02c8,
- 	},
-+	{
-+		.flags = FLAG_SOF,
-+		.device = 0x02c8,
-+		.codec_hid = "ESSX8336",
-+	},
- /* Cometlake-H */
- 	{
- 		.flags = FLAG_SOF,
-@@ -276,6 +281,11 @@ static const struct config_entry config_
- 		.flags = FLAG_SOF | FLAG_SOF_ONLY_IF_DMIC_OR_SOUNDWIRE,
- 		.device = 0x06c8,
- 	},
-+		{
-+		.flags = FLAG_SOF,
-+		.device = 0x06c8,
-+		.codec_hid = "ESSX8336",
-+	},
- #endif
+--- a/include/linux/of_clk.h
++++ b/include/linux/of_clk.h
+@@ -6,6 +6,9 @@
+ #ifndef __LINUX_OF_CLK_H
+ #define __LINUX_OF_CLK_H
  
- /* Icelake */
++struct device_node;
++struct of_device_id;
++
+ #if defined(CONFIG_COMMON_CLK) && defined(CONFIG_OF)
+ 
+ unsigned int of_clk_get_parent_count(struct device_node *np);
 
 

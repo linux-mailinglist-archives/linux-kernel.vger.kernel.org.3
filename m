@@ -2,92 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E834346A8E0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1EC46A8E4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349921AbhLFVA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:00:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349909AbhLFVA0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:00:26 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EBEC061746;
-        Mon,  6 Dec 2021 12:56:57 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id v1so48289860edx.2;
-        Mon, 06 Dec 2021 12:56:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to
-         :content-language:content-transfer-encoding;
-        bh=zW57z/mHfDhkYIG5+O+nmTT3HcS8kaxpmLSDbRZdY6E=;
-        b=YEbQAIB6/2RNsMnrpsGeD/5kldym/jVHFX7O1XZ2R9BNaDudxi4S4NBT/27l6ajbi/
-         W3jIOvR/6h6eTVbkQ4wS6dCfV6juGR7Q3tNub6y301MwGqgEv0OdWES7G8VKxiQLIeUT
-         N6bucMA31ULwBX34K3V36MHDQn0E3HPbvS0kWNjnmX8N9Yp6+jJFbbO8xXOiEuJXWzKr
-         dUF6floksETsEf14c6cRQFIR4XpNFE1l044vtEqFpNYWSAjQov4tYfnw2dkVA87zUPdX
-         NLVfuwlyYHdNIOcDcH11XDm2MdsYFJSg6kXd+hEfOx7eUtJ6LqMvjaLyU7EaQI8PbiGe
-         TBsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:content-language:content-transfer-encoding;
-        bh=zW57z/mHfDhkYIG5+O+nmTT3HcS8kaxpmLSDbRZdY6E=;
-        b=4C2qX+TnSOVMEc6ycnsV2ZapSXjn9qUc88fisi7QCBS9qoKw3xAZMBOzalWaL1xzbB
-         C6txmnygJ2mAKbo2xljAmQkoTArBcFjpL0mEUt5ZaitHwXgV8QBH4sfSQOzgyY0z5v3f
-         kn3QUXloiSmn7rcgG0W9aqOyOgRg1xUC2H7Wfcq0I38pTXDXUNSZRyAu64VMsIDkKhSE
-         vk+RL3xjv0a31A1J1oCq/1keXhB73/BzMbiWHhPvDMuA2Tm6aXmPx5VwMSCZu92zQ4Gd
-         lP0TMmTY7zJUg2dib4kqLRd1q/z5I/UvYdE6uvflaoVPpa9R/Y4MF//gI4E33EJE5hTO
-         zewg==
-X-Gm-Message-State: AOAM533TZI3ickqupH/LHNd1kLfEs8OenMmgNOce3St5SZO5/Ow31Ja+
-        IZdd1F6qWS1YiBnah2oqgAgjnzUBWAk=
-X-Google-Smtp-Source: ABdhPJxnQc3AE2ashfXONSe9zNZIei4vvCtnrAVEdnK4+I99PfBKCjK6qbuKhNsv7P75nemmzLjl5A==
-X-Received: by 2002:a17:907:961d:: with SMTP id gb29mr47749086ejc.102.1638824216012;
-        Mon, 06 Dec 2021 12:56:56 -0800 (PST)
-Received: from ?IPV6:2001:981:6fec:1:4191:929:8d49:102e? ([2001:981:6fec:1:4191:929:8d49:102e])
-        by smtp.gmail.com with ESMTPSA id h10sm8703987edj.1.2021.12.06.12.56.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 12:56:55 -0800 (PST)
-Message-ID: <a19ca757-195d-c2d3-c1b8-529c1028a37f@gmail.com>
-Date:   Mon, 6 Dec 2021 21:56:55 +0100
+        id S1349949AbhLFVBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:01:23 -0500
+Received: from mga11.intel.com ([192.55.52.93]:62128 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349927AbhLFVBV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 16:01:21 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="234919413"
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="234919413"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 12:57:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="611377349"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga004.jf.intel.com with ESMTP; 06 Dec 2021 12:57:50 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B6KvnGS024029;
+        Mon, 6 Dec 2021 20:57:49 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] numa: mark __next_node() as __always_inline to fix section mismatch
+Date:   Mon,  6 Dec 2021 21:57:24 +0100
+Message-Id: <CAKwvOdnoxaHHYMN-=fW6-W_bN+VrWvD32cidGa7qnYHmR=k2YA@mail.gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-From:   Ferry Toth <fntoth@gmail.com>
-Subject: resource sanity check, mapping multiple BARs
-To:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 6 Dec 2021 11:43:47 -0800
 
-Between v5.15 and v5.16-rc the following (unrelated?) errors are 
-appearing in kernel.log:
+> On Mon, Dec 6, 2021 at 8:19 AM Alexander Lobakin
+> <alexandr.lobakin@intel.com> wrote:
+> >
+> > Clang (13) uninlines __next_node() which emits the following warning
+> > due to that this function is used in init code (amd_numa_init(),
+> > sched_init_numa() etc.):
+> >
+> > WARNING: modpost: vmlinux.o(.text+0x927ee): Section mismatch
+> > in reference from the function __next_node() to the variable
+> > .init.data:numa_nodes_parsed
+> > The function __next_node() references
+> > the variable __initdata numa_nodes_parsed.
+> > This is often because __next_node lacks a __initdata
+> > annotation or the annotation of numa_nodes_parsed is wrong.
+> >
+> > Mark __next_node() as __always_inline() so it won't get uninlined.
+> > bloat-o-meter over x86_64 binaries says this:
+> >
+> > scripts/bloat-o-meter -c vmlinux.baseline vmlinux
+> > add/remove: 1/1 grow/shrink: 2/7 up/down: 446/-2166 (-1720)
+> > Function                                     old     new   delta
+> > apply_wqattrs_cleanup                          -     410    +410
+> > amd_numa_init                                814     842     +28
+> > sched_init_numa                             1338    1346      +8
+> > find_next_bit                                 38      19     -19
+> > __next_node                                   45       -     -45
+> > apply_wqattrs_prepare                       1069     799    -270
+> > wq_nice_store                                688     414    -274
+> > wq_numa_store                                805     433    -372
+> > wq_cpumask_store                             789     402    -387
+> > apply_workqueue_attrs                        538     147    -391
+> > workqueue_set_unbound_cpumask                947     539    -408
+> > Total: Before=14422603, After=14420883, chg -0.01%
+> >
+> > So it's both win-win in terms of resolving section mismatch and
+> > saving some text size (-1.7 Kb is quite nice).
+> >
+> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> 
+> Thanks for the patch.  See this thread:
+> https://github.com/ClangBuiltLinux/linux/issues/1302
+> 
+> There's a lot more instances of these based on config.  Something like
+> https://github.com/ClangBuiltLinux/linux/issues/1302#issuecomment-807260475
+> would be more appropriate for fixing all instances, but I think this
+> is more so an issue with the inline cost model in LLVM.
+> 
+> I need to finish off https://reviews.llvm.org/D111456, and request
+> that https://reviews.llvm.org/D111272 which landed in clang-14 get
+> backported to the 13.0.1 release which should also help.
 
-resource sanity check: requesting [mem 0xff200000-0xff3fffff], which 
-spans more than 0000:00:0e.0 [mem 0xff298000-0xff29bfff]
-caller devm_ioremap+0x45/0x80 mapping multiple BARs
-pmd_set_huge: Cannot satisfy [mem 0x05e00000-0x06000000] with a 
-huge-page mapping due to MTRR override.
+Oh I see. Sorry for redundant posting, non-applicable then.
+We'll wait for these Clang/LLVM works to be finised, thanks!
 
-This is on Intel Edison (Merrifield), which has (from lspci):
+> 
+> > ---
+> >  include/linux/nodemask.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
+> > index 567c3ddba2c4..55ba2c56f39b 100644
+> > --- a/include/linux/nodemask.h
+> > +++ b/include/linux/nodemask.h
+> > @@ -266,7 +266,7 @@ static inline int __first_node(const nodemask_t *srcp)
+> >  }
+> >
+> >  #define next_node(n, src) __next_node((n), &(src))
+> > -static inline int __next_node(int n, const nodemask_t *srcp)
+> > +static __always_inline int __next_node(int n, const nodemask_t *srcp)
+> >  {
+> >         return min_t(int,MAX_NUMNODES,find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
+> >  }
+> > --
+> > 2.33.1
+> >
+> 
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers
 
-00:0e.0 System peripheral: Intel Corporation Device 119b (rev 01)
-     Flags: fast devsel, IRQ 25
-     Memory at ff298000 (32-bit, non-prefetchable) [size=16K]
-     Memory at ff2a2000 (32-bit, non-prefetchable) [size=4K]
-     Capabilities: [b0] Power Management version 3
-     Capabilities: [b8] Vendor Specific Information: Len=08 <?>
-     Capabilities: [c0] PCI-X non-bridge device
-     Capabilities: [100] Vendor Specific Information: ID=0000 Rev=0 
-Len=024 <?>
-
-Any suggestions on the cause of this would be welcome.
-
-Ferry
-
-
+Al

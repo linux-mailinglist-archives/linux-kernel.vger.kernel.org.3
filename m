@@ -2,86 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D20846A0FB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F1046A11A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:18:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380571AbhLFQSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:18:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41378 "EHLO
+        id S1386806AbhLFQVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:21:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380396AbhLFQRZ (ORCPT
+        with ESMTP id S1378280AbhLFQVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:17:25 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9879BC061D7E;
-        Mon,  6 Dec 2021 08:08:20 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id t9so23468701wrx.7;
-        Mon, 06 Dec 2021 08:08:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CI1AANkxv/1yNv+fQtXkIMb7xcl0y3xE+kXaERDG6uA=;
-        b=bISI35b0ErVvkvwIr9KeYD5FKJS8JeIAQWSnxf6VMJT7LXV/mqLFOFNXElyHwaTgyc
-         v2TRhYzqhnMiCTvuemStIZ6TQuwzg+PkvF3DGU8cWklKLQ5V2qqOO9xnxSlc/cycqUew
-         t+R2MMUsegSq3GDm0KWw/25fBZZ2x3M6m8Hfi+oGj65EmYd4qvOxvYi4drgZ87+oOE6F
-         eDiSiqTJv/A0x7rzN7Wtj0QHqvJI7IQ7ZCJRh+q86Amn/T7vVK/NoZdP+3FFB+k++EB8
-         b0nWMINHsj3Nm3Dwn7tf5Se1ewifVQL1OXT6mIX7Y6B+GhxvVGOhQS4mxYwVBgwOivOv
-         0P7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CI1AANkxv/1yNv+fQtXkIMb7xcl0y3xE+kXaERDG6uA=;
-        b=1qTjQ9IiUMazvsZE82p3Txr6ltkAByXemAtQZCRWiwxA2Ske5Y7MalVIaRFCx2oHxR
-         vu9RCnbcoRUEP2CQQ/W/qOsSz33is9aW9RCld3juIOd2kYTCyvw+El21Xq3BfQJmz7Uy
-         ZdvCDaMwy96Cz62EfkxfNhh284KJHJVPcaGRvaPUTA8gRnaQ+vN9WExdYz+3TKhObby8
-         WAitCIWq5aMq2Rse/sduZmQz+WrRrXZQFspCv5eAiZrzf+GkwQxIlGQdETn79h1Pavz+
-         pJAChhO5bnlolGKN/Mutay80D9ZOWvGfP5Zew6wiya0HtoY4VqWYEqNaly4EcHKL/J2Q
-         WcUA==
-X-Gm-Message-State: AOAM532OtdJhdYj1of7Kh3PytPFgxKh73uA8s+b/PXbm3d7vY+VLzbrG
-        R67g6OOSxSF9PA232Q3Fnqs=
-X-Google-Smtp-Source: ABdhPJx7fKl/HP4q0dvvQcxU11yyNS1xS6wS4ixY02Moy6KVSatxpw+qV5I7v9YFqFqix8iCZxdfOA==
-X-Received: by 2002:adf:fe81:: with SMTP id l1mr45434300wrr.522.1638806899024;
-        Mon, 06 Dec 2021 08:08:19 -0800 (PST)
-Received: from hamza-OptiPlex-7040 ([39.48.147.147])
-        by smtp.gmail.com with ESMTPSA id u23sm12505903wru.21.2021.12.06.08.08.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 08:08:18 -0800 (PST)
-Date:   Mon, 6 Dec 2021 21:08:13 +0500
-From:   Ameer Hamza <amhamza.mgc@gmail.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     vkuznets@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
-Subject: Re: [PATCH v2] KVM: x86: fix for missing initialization of return
- status variable
-Message-ID: <20211206160813.GA37599@hamza-OptiPlex-7040>
-References: <87ee6q6r1p.fsf@redhat.com>
- <20211206102403.10797-1-amhamza.mgc@gmail.com>
- <Ya4uR7I/7yvrgl6c@google.com>
+        Mon, 6 Dec 2021 11:21:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF332C061D5F
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:17:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4103961378
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 16:17:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C772C341C1;
+        Mon,  6 Dec 2021 16:17:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638807469;
+        bh=FfP+RnCEexOp4vGvCs/p1dGSWLbwqJCwgkifSRtYpwY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gnuUaKasyVuNKr9sRsH18xjgWFR/GTSkm1FW6WIECtpHcTG8SA72apwS5CxUSPCNZ
+         HH3izHUjaG7niz7SU6WZ7V+ZRMMCpZudXwEBY7JgF7sv2wCHOY5QeemzPYAF0LvUqH
+         NzopceFPooy9YHmvrgwEHpBsNf1KeYJucgv9ci8B1JsUHOnaPtlhZSdIWQPpYSaeHX
+         ZvjjxLlMuq/pKMTPnGknFqX9xBQfhva08Kczdf8yeu1bKuxFtBDNLPHJA8aU5QYRn/
+         rYOkWZZG72kcL+oIcP+SiHOHhqhrAzfgXQ43MigdR/Gce9FW6uKSvggCIoAimP+14d
+         q4HCKiPHdXLdg==
+Date:   Tue, 7 Dec 2021 00:10:30 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Alexandre ghiti <alex@ghiti.fr>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] riscv: mm: init: try best to
+ IS_ENABLED(CONFIG_64BIT) instead of #ifdef
+In-Reply-To: <3344a7ae-aaa6-2f35-09fc-60039bb8184d@ghiti.fr>
+References: <20211203050317.2102-1-jszhang@kernel.org>
+        <20211203050317.2102-3-jszhang@kernel.org>
+        <3344a7ae-aaa6-2f35-09fc-60039bb8184d@ghiti.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ya4uR7I/7yvrgl6c@google.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Message-Id: <20211206161748.0C772C341C1@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 03:37:43PM +0000, Sean Christopherson wrote:
-> On Mon, Dec 06, 2021, Ameer Hamza wrote:
-> > If undefined ioctl number is passed to the kvm_vcpu_ioctl_device_attr
-> > function, it should return with error status.
-> 
-> No, if anything KVM should do KVM_BUG_ON() and return -EIO, because @ioctl is
-> completely KVM controlled.  But I'd personally prefer we leave it as is, there's
-> one call site that very clearly invokes the helper with only the three ioctls.
-> It's not a strong preference though.
-Thank you for your response. I agree with you, but I think in my
-opinion, it would be nice to resolve coverity warning. Let me update the
-patch according to your suggestions anyway.
+On Fri, 3 Dec 2021 09:33:12 +0100
+Alexandre ghiti <alex@ghiti.fr> wrote:
 
-Thanks,
-Hamza.
+> On 12/3/21 06:03, Jisheng Zhang wrote:
+> > Try our best to replace the conditional compilation using
+> > "#ifdef CONFIG_64BIT" by a check for "IS_ENABLED(CONFIG_64BIT)", to
+> > simplify the code and to increase compile coverage.
+> >
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > ---
+> >   arch/riscv/mm/init.c | 38 +++++++++++++++++---------------------
+> >   1 file changed, 17 insertions(+), 21 deletions(-)
+> >
+> > diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> > index 745f26a3b02e..bd445ac778a8 100644
+> > --- a/arch/riscv/mm/init.c
+> > +++ b/arch/riscv/mm/init.c
+> > @@ -102,10 +102,9 @@ static void __init print_vm_layout(void)
+> >   		  (unsigned long)VMALLOC_END);
+> >   	print_mlm("lowmem", (unsigned long)PAGE_OFFSET,
+> >   		  (unsigned long)high_memory);
+> > -#ifdef CONFIG_64BIT
+> > -	print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
+> > -		  (unsigned long)ADDRESS_SPACE_END);
+> > -#endif
+> > +	if (IS_ENABLED(CONFIG_64BIT))
+> > +		print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
+> > +			  (unsigned long)ADDRESS_SPACE_END);
+> >   }
+> >   #else
+> >   static void print_vm_layout(void) { }
+> > @@ -172,17 +171,16 @@ static void __init setup_bootmem(void)
+> >   
+> >   	memblock_enforce_memory_limit(memory_limit);
+> >   
+> > -	/*
+> > -	 * Reserve from the start of the kernel to the end of the kernel
+> > -	 */
+> > -#if defined(CONFIG_64BIT) && defined(CONFIG_STRICT_KERNEL_RWX)
+> >   	/*
+> >   	 * Make sure we align the reservation on PMD_SIZE since we will
+> >   	 * map the kernel in the linear mapping as read-only: we do not want
+> >   	 * any allocation to happen between _end and the next pmd aligned page.
+> >   	 */
+> > -	vmlinux_end = (vmlinux_end + PMD_SIZE - 1) & PMD_MASK;
+> > -#endif
+> > +	if (IS_ENABLED(CONFIG_64BIT) && IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
+> > +		vmlinux_end = (vmlinux_end + PMD_SIZE - 1) & PMD_MASK;
+> > +	/*
+> > +	 * Reserve from the start of the kernel to the end of the kernel
+> > +	 */
+> >   	memblock_reserve(vmlinux_start, vmlinux_end - vmlinux_start);
+> >   
+> >   
+> > @@ -190,7 +188,6 @@ static void __init setup_bootmem(void)
+> >   #ifndef CONFIG_XIP_KERNEL
+> >   	phys_ram_base = memblock_start_of_DRAM();
+> >   #endif
+> > -#ifndef CONFIG_64BIT
+> >   	/*
+> >   	 * memblock allocator is not aware of the fact that last 4K bytes of
+> >   	 * the addressable memory can not be mapped because of IS_ERR_VALUE
+> > @@ -200,10 +197,11 @@ static void __init setup_bootmem(void)
+> >   	 * address space is occupied by the kernel mapping then this check must
+> >   	 * be done as soon as the kernel mapping base address is determined.
+> >   	 */
+> > -	max_mapped_addr = __pa(~(ulong)0);
+> > -	if (max_mapped_addr == (phys_ram_end - 1))
+> > -		memblock_set_current_limit(max_mapped_addr - 4096);
+> > -#endif
+> > +	if (!IS_ENABLED(CONFIG_64BIT)) {
+> > +		max_mapped_addr = __pa(~(ulong)0);
+> > +		if (max_mapped_addr == (phys_ram_end - 1))
+> > +			memblock_set_current_limit(max_mapped_addr - 4096);
+> > +	}
+> >   
+> >   	min_low_pfn = PFN_UP(phys_ram_base);
+> >   	max_low_pfn = max_pfn = PFN_DOWN(phys_ram_end);
+> > @@ -616,13 +614,12 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+> >   	BUG_ON((PAGE_OFFSET % PGDIR_SIZE) != 0);
+> >   	BUG_ON((kernel_map.phys_addr % PMD_SIZE) != 0);
+> >   
+> > -#ifdef CONFIG_64BIT
+> >   	/*
+> >   	 * The last 4K bytes of the addressable memory can not be mapped because
+> >   	 * of IS_ERR_VALUE macro.
+> >   	 */
+> > -	BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);
+> > -#endif
+> > +	if (IS_ENABLED(CONFIG_64BIT))
+> > +		BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);  
+> 
+> 
+> For this one, I think we can just get rid of the condition since this is 
+> true for every kernel actually.
+
+Thanks for pointing out this out. Addressed in v2
+
+> 
+> 
+> >   
+> >   	pt_ops.alloc_pte = alloc_pte_early;
+> >   	pt_ops.get_pte_virt = get_pte_virt_early;
+> > @@ -735,10 +732,9 @@ static void __init setup_vm_final(void)
+> >   		}
+> >   	}
+> >   
+> > -#ifdef CONFIG_64BIT
+> >   	/* Map the kernel */
+> > -	create_kernel_page_table(swapper_pg_dir, false);
+> > -#endif
+> > +	if (IS_ENABLED(CONFIG_64BIT))
+> > +		create_kernel_page_table(swapper_pg_dir, false);  
+> 
+> 
+> Wouldn't it be better to introduce a create_kernel_page_table function 
+> that does nothing for !CONFIG_64BIT?
+> 
+
+If so, we will have something as:
+#ifdef CONFIG_64BIT
+create_kernel_page_table()
+{
+...
+}
+#else
+create_kernel_page_table() { }
+#endif
+
+Since we already have different create_kernel_page_table() version for
+XIP and !XIP, the code would be more complex.
+
+Thanks for your code review

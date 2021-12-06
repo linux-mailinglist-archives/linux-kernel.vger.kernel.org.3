@@ -2,127 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A218446AE78
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 00:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4344D46AE7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 00:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377192AbhLFXcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 18:32:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
+        id S1377352AbhLFXcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 18:32:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243363AbhLFXcD (ORCPT
+        with ESMTP id S243940AbhLFXci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 18:32:03 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8AA1C061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 15:28:33 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id cq22-20020a17090af99600b001a9550a17a5so517608pjb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 15:28:33 -0800 (PST)
+        Mon, 6 Dec 2021 18:32:38 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAC5C0613F8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 15:29:09 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id g18so11613253pfk.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 15:29:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iYlong7BFeAPBAo6aJJAOLFXmMpt5I92OzI5hHT+4DQ=;
-        b=ZFk8Cpau3VRTYxRul9UaQIlSGM1KPnxNcxeXeHXgHZ1BacepQ3f1pgT4knSx9jmYc+
-         MC3RIYSKIZjytMmU+O0sZzWJ1Lc+lpKz3pOqma7LdlkdgiHo0ZHwOvixT+EJ95A+zKai
-         2UISRN7nlqeo9huTXdu07jKzUWlLecF5mo29Q=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dvi8cmAIXMcvHwCH7uWIth8WYsNDZ96qQSNMwpB/aDQ=;
+        b=SeQTYAU52qsx4e8jMUDFhp7renvZ2TN7fPrwjaPlu883AR1dLNakgJFX3aXOOL/tNK
+         o504lzqlSCcPX3b5OpcnQ72hJ4qSIiKt56PQV9n+JCzRHMlT2t7uG8263AcqcVJRdEDZ
+         jqzrMwlkGIB9Brzbtx80gIhBJGHO4fQUhNLxU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iYlong7BFeAPBAo6aJJAOLFXmMpt5I92OzI5hHT+4DQ=;
-        b=c7Q0j6R1QKKkiUcrGegN37WVuxzy8JltXpHoz3GIs0nX4ge8SUTB++ZmpGM9BRknR6
-         Qqyf6FOobc8BVia1euShbw9RSAWJe7ajnUKyQZ8qs+x08ZJGHXEgNn3NqxPIDW+8lfDz
-         FEMKlUIctkytOAZsepQhBqwo5PmhLB1L/CrvLY7UIyTZh3dHZbyLZXtuzya3gYWeQJyt
-         cec79xQzRoEjnFj3tBT/rZFn/q/+WVwFi+z0GeHPmmkAMU+KmlU4Q+bnOwhOWG0KgjvF
-         1FfKaEbn1jxxlRdMEIo1F+FwiGTXl2Qkcld3YfXFXFz3bkrI7HaCfO9dO9u+OhK9VZjb
-         9JcQ==
-X-Gm-Message-State: AOAM532oUrfNIkcfZCvgs80e/h9NUM58n/1XPlmc5siDTLTLu3Mgwzs7
-        8ZArG0lRdz8lYaxVRb7ebofrGHW0Azha3A==
-X-Google-Smtp-Source: ABdhPJyCWRhj7VPjT3NxliyEgMqe+IoDoJvad+ognPbn+ZXCLt+PZpfUdmrv3Mxw6QhEAAsGSoanww==
-X-Received: by 2002:a17:90b:4b4d:: with SMTP id mi13mr2027431pjb.192.1638833313291;
-        Mon, 06 Dec 2021 15:28:33 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h13sm10625918pgg.16.2021.12.06.15.28.32
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dvi8cmAIXMcvHwCH7uWIth8WYsNDZ96qQSNMwpB/aDQ=;
+        b=jOBmZ1mkuJbyzz+p9FkgYjqVJGrsWd0eKydWhisFPX+pqwFppeVrymmxrkNbky2f/u
+         d4GFO8ZX/NrDimNEhBSyg4dKHQcdscmiUyxRvZQxsrGooG0zcdFJavT/95QX/thDKfN6
+         MZblwb2UcY68755U0stv9Wvdn9p9+u/05XE8I70T5AWN0xlnuB60w3RmzYnNQsptA3h6
+         jBvwOWJG2gGYk2/sXxprdydAlb2imIlFjZDG8iVIOIGvx1oc2ZDphYH+SCyLPXQFOCwB
+         r17p5xaykaZ+3/XQnAUGjXR6WcY+6hsxt8WNGDBRcXA8mw/nhZtbsTuUOAjwCvkW65Xk
+         PEDg==
+X-Gm-Message-State: AOAM533DIX0mnrrFoIQbsZ/pH22OVINdbadSUHNOPkHFMnp5OV/hLJHV
+        4gFUOv7SFhNN3dZ+2kic/db/GA==
+X-Google-Smtp-Source: ABdhPJyF+953h97SiLXDtaLy+cI4hJhOgU3dSlwh1dj8n3ySd71Ta2YHeM8BvtWOEDX9i7Ag+6FK5A==
+X-Received: by 2002:a05:6a00:8cc:b0:4a8:262:49e1 with SMTP id s12-20020a056a0008cc00b004a8026249e1mr39411204pfu.28.1638833349024;
+        Mon, 06 Dec 2021 15:29:09 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:a783:e7e8:acf6:96a5])
+        by smtp.gmail.com with ESMTPSA id t2sm13896218pfd.36.2021.12.06.15.29.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 15:28:33 -0800 (PST)
-Date:   Mon, 6 Dec 2021 15:28:32 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] block: switch to atomic_t for request references
-Message-ID: <202112061455.F23512C3CB@keescook>
-References: <9f2ad6f1-c1bb-dfac-95c8-7d9eaa7110cc@kernel.dk>
- <Ya2zfVAwh4aQ7KVd@infradead.org>
- <Ya3KZiLg5lYjsGcQ@hirez.programming.kicks-ass.net>
- <CAHk-=wjXmGt9-JQp-wvup4y2tFNUCVjvx2W7MHzuAaxpryP4mg@mail.gmail.com>
- <282666e2-93d4-0302-b2d0-47d03395a6d4@kernel.dk>
- <202112061247.C5CD07E3C@keescook>
- <CAHk-=wh0RhnMfZG6xQJ=yHTgmPTaxjQOo1Q2=r+_ZR56yiRi4A@mail.gmail.com>
+        Mon, 06 Dec 2021 15:29:08 -0800 (PST)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>, swboyd@chromium.org,
+        Wesley Cheng <quic_wcheng@quicinc.com>, robdclark@chromium.org,
+        linux-arm-msm@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH] usb: dwc3: dwc3-qcom: Avoid use-after-free when USB defers or unbinds
+Date:   Mon,  6 Dec 2021 15:28:47 -0800
+Message-Id: <20211206152844.1.I411110cc99c1dd66b01aa9aa25651acf8ff55da1@changeid>
+X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wh0RhnMfZG6xQJ=yHTgmPTaxjQOo1Q2=r+_ZR56yiRi4A@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 01:17:17PM -0800, Linus Torvalds wrote:
-> End result: atomics are _better_ in the overflow case, and it's why
-> the page counters could not use the garbage that is refcount_t, and
-> instead did it properly.
-> 
-> See? In absolutely neither case is recount_t "safer". It's only worse.
+On sc7180-trogdor class devices with 'fw_devlink=permissive' and KASAN
+enabled, you'll see a Use-After-Free reported at bootup.
 
-Right, I understand your objection; it is valid. One of the dimensions of
-"safe" is "not exploitable", which is _also_ a valid concern. As you
-say, refcount_t works for the "never make them all handle overflows
-properly" case, and I'm fine with using something else where we need a
-better set of behaviors.
+The root of the problem is that dwc3_qcom_of_register_core() is adding
+a devm-allocated "tx-fifo-resize" property to its device tree node
+using of_add_property().
 
-> I like Jens' patches. They take the _good_ code - the code we use for
-> page counters - and make that proper interface available to others.
+The issue is that of_add_property() makes a _permanent_ addition to
+the device tree that lasts until reboot. That means allocating memory
+for the property using "devm" managed memory is a terrible idea since
+that memory will be freed upon probe deferral or device
+unbinding. Let's change to just allocate memory once and never free
+it. This sorta looks like a leak but isn't truly one, since only one
+property will be allocated per device tree node per boot.
 
-I am fine with whatever can be made safe in all dimensions, but I don't
-want to lose sight of the exploitability dimension. This is a lot like
-the BUG vs WARN situation: BUG is unfixable because there is no recovery.
-WARN allows the code to do something sensible in the pathological case,
-but the code needs to have been designed to handle that case. The
-widely used older atomic_t reference counting code pattern had no path
-to handling failure.
+NOTE: one would think that perhaps it would be better to use
+of_remove_property() and then be able to free the property on device
+remove. That sounds good until you read the comments for
+of_remove_property(), which says that properties are never really
+removed and they're just moved to the side.
 
-In the proposed API, we get a warning (sometimes) in bad states, but
-there is no handling of the broken reference counter. For example,
-with atomic_ref_inc_not_zero():
+Fixes: cefdd52fa045 ("usb: dwc3: dwc3-qcom: Enable tx-fifo-resize property by default")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
-- there's no __must_check hint for callers to actually check it happened
-- overflow is silent, so wrapping around to 1 and then having a
-  call to atomic_ref_put_and_test() has no protection against exploitation
-  at all. This particular code pattern mistake (missed "put") is the
-  fundamental path to nearly all the refcount overflow exploits of the
-  past couple decades. e.g. see:
-	- CVE-2016-0728 - Keyring refcount overflow.
-	  Exploit: https://www.exploit-db.com/exploits/39277/
-	- CVE-2016-4558 - BPF reference count mishandling.
-          Explot: https://www.exploit-db.com/exploits/39773/
-  Losing that protection is just inviting these exploits back again (of
-  which we've had none in the past few years).
+ drivers/usb/dwc3/dwc3-qcom.c | 32 +++++++++++++++++++++-----------
+ 1 file changed, 21 insertions(+), 11 deletions(-)
 
-For the API generally, nothing about the type stops someone from
-accidentally using the standard atomic_t helpers instead, accidentally
-bypassing any potential WARNs. It should do something similar to
-refcount_t so the compiler can help guide people correctly instead of
-blindly accepting an accident.
-
-And if we're speaking to safety/robustness generally, where are the unit
-tests, run-time tests (LKDTM provides this for refcount_t so it should
-be easy to repurpose them), kern-doc, etc?
-
-I'm not arguing for refcount_t -- I'm arguing for an API that isn't a
-regression of features that have been protecting the kernel from bugs.
-
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index 9abbd01028c5..34b054033116 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -658,18 +658,28 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	prop = devm_kzalloc(dev, sizeof(*prop), GFP_KERNEL);
+-	if (!prop) {
+-		ret = -ENOMEM;
+-		dev_err(dev, "unable to allocate memory for property\n");
+-		goto node_put;
+-	}
++	/*
++	 * Permanently add the "tx-fifo-resize" to the device tree. Even if
++	 * our device is unregistered this property will still be part
++	 * of the device tree until reboot. Because this is a "permanent"
++	 * change, we allocate memory _without_ devm. For some context, see
++	 * the fact that of_remove_property() doesn't actually remove things.
++	 */
++	if (!of_find_property(dwc3_np, "tx-fifo-resize", NULL)) {
++		prop = kzalloc(sizeof(*prop), GFP_KERNEL);
++		if (!prop) {
++			ret = -ENOMEM;
++			dev_err(dev, "unable to allocate memory for property\n");
++			goto node_put;
++		}
+ 
+-	prop->name = "tx-fifo-resize";
+-	ret = of_add_property(dwc3_np, prop);
+-	if (ret) {
+-		dev_err(dev, "unable to add property\n");
+-		goto node_put;
++		prop->name = "tx-fifo-resize";
++		ret = of_add_property(dwc3_np, prop);
++		if (ret) {
++			dev_err(dev, "unable to add property\n");
++			kfree(prop);
++			goto node_put;
++		}
+ 	}
+ 
+ 	ret = of_platform_populate(np, NULL, NULL, dev);
 -- 
-Kees Cook
+2.34.1.400.ga245620fadb-goog
+

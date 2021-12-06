@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FAC469B79
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6B7469A98
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355899AbhLFPRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:17:37 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43704 "EHLO
+        id S1345561AbhLFPJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:09:04 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39846 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345923AbhLFPL1 (ORCPT
+        with ESMTP id S1346588AbhLFPGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:11:27 -0500
+        Mon, 6 Dec 2021 10:06:48 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 19D18B8101C;
-        Mon,  6 Dec 2021 15:07:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EC67C341C5;
-        Mon,  6 Dec 2021 15:07:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A26BDB810F1;
+        Mon,  6 Dec 2021 15:03:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBE0EC341C5;
+        Mon,  6 Dec 2021 15:03:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803272;
+        s=korg; t=1638802997;
         bh=uYXDFSPFZbtjpC4Y373rOWrzdQGl0i1UsKHhx8qDUrM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A3H9PR+jFi2ZOqd38t6qu2A3FXQFTtILb3fxmUtA7fOgkaJjyPTy+XFzk5YYcZeLg
-         URM31bR7JmIXRukdlEjpIj3Ew9BSOhZpv/XTWpOjELKZVc55z9QMU9XuVjtTOUMPg5
-         AZJkKFEFOlbVf+x4EDig79gZ2pG8tkta0cv4DWKg=
+        b=i0mKRKld5IZoPs3mOEgEIH6U5PYKgKS9uts5dH8y4Jq4p3/9XdaIqFi9qVgeaDyyg
+         zejLZFezuBe08Aaebj9Jg+UZnhaadvO235ElLamXgmm+oTWRt+4+ujrg28VFh7qc8v
+         isd/t66bZRlBACR31lXLUI28uAY6CjNX5p+uRIVE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.14 090/106] net: qlogic: qlcnic: Fix a NULL pointer dereference in qlcnic_83xx_add_rings()
+Subject: [PATCH 4.9 55/62] net: qlogic: qlcnic: Fix a NULL pointer dereference in qlcnic_83xx_add_rings()
 Date:   Mon,  6 Dec 2021 15:56:38 +0100
-Message-Id: <20211206145558.632712660@linuxfoundation.org>
+Message-Id: <20211206145551.108279336@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
+References: <20211206145549.155163074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

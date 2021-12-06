@@ -2,253 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B23046AA4E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:21:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F100646AA4B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:21:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351690AbhLFVYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:24:34 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:50262 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351597AbhLFVYQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1351539AbhLFVY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:24:29 -0500
+Received: from mga03.intel.com ([134.134.136.65]:37954 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351365AbhLFVYQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Dec 2021 16:24:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BF9C1CE185F;
-        Mon,  6 Dec 2021 21:20:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 391EEC341C1;
-        Mon,  6 Dec 2021 21:20:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638825644;
-        bh=4JqTxbKO/DQeX4y1sMZwWKxdauS4onY3+p+pEPUjIMw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kZfFaP9xjf5BzFjU2XKcPB/BWdmar0NKMUQlObP+MHrzJ004MB9rcgX2K+3liUuqG
-         Z75HCqe8UtqagOwuk7oOO+N5eaqllhvyGPMDt9kzgkmYdMt4sHvM8k4BVqOXAAAAos
-         JDM8cIXHQXG44Mfm7O3ovRHNcxGYPbudvjMU2CseJss81RGpIsGa3FUo8AU7CQknQX
-         FQtSLRTKXueYtZBvvAiSIqSR+hc2b9HGxOosEgey9doUcmoPF2Ywb5KzEGv99LibBS
-         3zuW83RikJafNR/UBji8Fj7D79HtjCFT85LLeIF7LGVGA+sccvBEEce2mDO1wWyNj5
-         DIQ0dqNF6Q/uA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
-        dsahern@kernel.org, yajun.deng@linux.dev, fw@strlen.de,
-        edumazet@google.com, marcelo.leitner@gmail.com,
-        johannes.berg@intel.com, aahringo@redhat.com,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 3/3] net: netlink: af_netlink: Prevent empty skb by adding a check on len.
-Date:   Mon,  6 Dec 2021 16:20:34 -0500
-Message-Id: <20211206212034.1661597-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211206212034.1661597-1-sashal@kernel.org>
-References: <20211206212034.1661597-1-sashal@kernel.org>
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237353759"
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="237353759"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 13:20:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="479270769"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by orsmga002.jf.intel.com with ESMTP; 06 Dec 2021 13:20:46 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 6 Dec 2021 13:20:46 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 6 Dec 2021 13:20:45 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Mon, 6 Dec 2021 13:20:45 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.175)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Mon, 6 Dec 2021 13:20:44 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=K6/ioilRlGwE5jaFJeiuwa1NY92dtlgDt45z2FtPQLPb7mSKdZ1BH7vv12ux1NliyOq4Hmstuicb5RkiM1p5uvOMxxEe/kCsaiVTAl6CWHlHAa/hpDlopqRwadrIsXMIY6+Rg01cBcuiikQXPyi/1eTBdCK37Eh3F/X/n3nV41gAlQoflKp7Rh3wijJcgbE5b1u6QdXtrVVkuy9+tFydptzhWYf1Mwv/eDS2EwJo8iNK1krWxvAvpBSBrDJ6OWdJv5hY1AErGTQZtOEphwOP4hljPBVVebplcYQul3gwHPvaikHrmMzQoOtrsn1DmY/zyWRNARiAJMfXHc0NNZ1p7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4aDVRXP6PB3W+vbhR+uyhbkdtKeez4j8Ll1eg6khWtQ=;
+ b=EC3mQNzOTh9QMz2AxO7EnaLEVpC+DQP/c5KuVbgynlEyt8AhDrMM7Qpvg4Ih8Uv+DZeSQskMprRhl7yrl9I22IRPP3WFdyVNPrL2NNtJzQ/xhvoFJeBoK2ySTO8z/rdme5ajLoI9jVf8udFDRjFEgoK8JpyCnU56yxDTR1+vaJwvE9nYKbVxkBDbAZACe8UOdDcgWV1XN6sDHbZNRxGpxZnTAhyCcpv02BBWJRdN7ehrA+qZitTtczvz/pLfmdNCPm5YJIr7ne4G4I1PhO2rvAgv4a/vTi7ySoEJ3UAu6shhFAsk2sF0w5F4s+X0Xuiai9FGGXi9Dk6d0tBMqkAo6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4aDVRXP6PB3W+vbhR+uyhbkdtKeez4j8Ll1eg6khWtQ=;
+ b=KO5eiPCxO9aGXUQAPUaNQqiSMmL27CeWOEvR+HQROSVsH2nqYBkJpllD+CAIsAkjH4BcZr1KtW9Tp90kFTIo/oJYycExq4NfhxvqxaAxU2+Vjv96CEQgK7oL7sSGkzLR/zIhCvBcodjg5HwNJ43HTUQfyyCsnL2/wZn32/c96pg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
+ by BN8PR11MB3796.namprd11.prod.outlook.com (2603:10b6:408:90::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.14; Mon, 6 Dec
+ 2021 21:20:41 +0000
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::bcd0:77e1:3a2e:1e10]) by BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::bcd0:77e1:3a2e:1e10%3]) with mapi id 15.20.4755.022; Mon, 6 Dec 2021
+ 21:20:41 +0000
+Message-ID: <a1b14f33-5142-8cab-3b5f-4cc79b62091e@intel.com>
+Date:   Mon, 6 Dec 2021 13:20:36 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.3.2
+Subject: Re: [PATCH 05/25] x86/sgx: Introduce runtime protection bits
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>
+CC:     <dave.hansen@linux.intel.com>, <tglx@linutronix.de>,
+        <bp@alien8.de>, <mingo@redhat.com>, <linux-sgx@vger.kernel.org>,
+        <x86@kernel.org>, <seanjc@google.com>, <kai.huang@intel.com>,
+        <cathy.zhang@intel.com>, <cedric.xing@intel.com>,
+        <haitao.huang@intel.com>, <mark.shanahan@intel.com>,
+        <hpa@zytor.com>, <linux-kernel@vger.kernel.org>
+References: <cover.1638381245.git.reinette.chatre@intel.com>
+ <2f6b04dd8949591ee6139072c72eb93da3dd07b0.1638381245.git.reinette.chatre@intel.com>
+ <db9b7bc9-fdca-4dd2-2c3f-3b7354c165bb@kernel.org> <YawAWmodeNaUbzV8@iki.fi>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <YawAWmodeNaUbzV8@iki.fi>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR04CA0123.namprd04.prod.outlook.com
+ (2603:10b6:303:84::8) To BN0PR11MB5744.namprd11.prod.outlook.com
+ (2603:10b6:408:166::16)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Received: from [192.168.1.221] (71.238.111.198) by MW4PR04CA0123.namprd04.prod.outlook.com (2603:10b6:303:84::8) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20 via Frontend Transport; Mon, 6 Dec 2021 21:20:39 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: be18b798-7733-47f7-7335-08d9b8fe4165
+X-MS-TrafficTypeDiagnostic: BN8PR11MB3796:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <BN8PR11MB37961C85F984D2FA897FF80EF86D9@BN8PR11MB3796.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2331;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Z/q/c1c6L26+5TICezShW+KzlpPj2IUww0RyqE78lEhqyhw6ygWB0sXFf7UKHplsbV8rqaAK98G//d7SI69sX+gxn9j/EnAVTEDwS8c05bFPX5Uhlbaxh/5qb+gDIINAS91bnbEReI6Hzp7BXxTeCMrNeSbA8mVT56d4j4vTeddGtTZkpeteHR60dU6HU13mbvaie4Jg08qblgJ4C9rh85mYJ590eJPQymX2A5X82/J7FaB+ynBJgNCtj1zzsdbcsztc232V7b3MrYd69zH6ygRb+idQfDi7pt40uzT4VU5pJsSGPHg0jjXS3FyOVMUScHS01H2AligIKhr4n2EJzV7bLSGG+Sn5i1krv9kSjI15/6FkwN17xoSOeUs8lvkxKW3yU9w2cOLqFjq3ksiev9kQ/DxrgDQipqnp8ijntRVh38nG616L+Tu4ThI630h0aBybr7vJoMjvnc5uHyclL6FRUPBT5dIfW5vo4LBiTNYQV/WZfrtS0mHkOthrO6jF8IpInVLN3xdHuLU5ejabL570VjmkfzWBy8T/4jeThy6Wt/8FI0mH0UWGJVYmM4+XuUAITSiUT2L2taLXvZVLDk+YUFebcUElViRXtrbTC9pn669FCVOqSdhE5QIgVqBlSL76yUWiCV8NhZSKO32KsbxNPFfH5ShOiiVhvw+z7Z2zB00x9cKCOtpW/c2wC7wDIemDrILEa+Q/cu15KoPbkOqi6xQdC4yWe5kZgplERn0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(83380400001)(956004)(44832011)(86362001)(186003)(8676002)(2906002)(66946007)(66476007)(508600001)(2616005)(16576012)(31696002)(66556008)(316002)(5660300002)(36756003)(8936002)(4326008)(82960400001)(6486002)(110136005)(26005)(38100700002)(7416002)(6666004)(53546011)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eTM4TG52TTROZ092RkVRUjAyOWlSUTBqVHpBMmpka09zZFRjUUdXVjA2ejNi?=
+ =?utf-8?B?L1kyazYvQmdnK0o2RUNCQnluOElyOGNjQU5Lc1MrWDQ1R1lnZ2k2ZzlEMXZG?=
+ =?utf-8?B?cTBNU1U3YVgzY3ZQM0hRTFh0UVI1K052QjhCK0FWQUU3ZDJmTENLcUxqM2Np?=
+ =?utf-8?B?V2dvYnRoNnVjQ3dqeldONVZMdHVSVCtCQU84UFNsRER6N3FBUVkrbm92c3FX?=
+ =?utf-8?B?TjhkSVJlMTh1SGYyK1Rpa0ljODVLSkNtV3BXcmFKZTBMN0oxMHE2c3JneHpB?=
+ =?utf-8?B?SmNlZ0FMYjVlTVUraDVqQTUzSlZVY2RoR2haVTJnN3hKQnRLL09QRHNCNUx2?=
+ =?utf-8?B?cHFPVDRmb0xOMVBobUR3TnQ0ZUIxS2YyZjFoV0N4emphMXJkSkJXNlRtdVU0?=
+ =?utf-8?B?RjBUY1hLdU05WjNFbm1TT2xoWmdOYUd5N0tuaFY1cC9HYTVGRFF0MzQ1OXpX?=
+ =?utf-8?B?TVdhZ0x2VFBsdk1uVURFT3ZQeHNqWXpheFd5VXdiaVRzbTJlRDVhTVNFbmQ3?=
+ =?utf-8?B?UUdxdDhuR1JFRjYxaFZ3RW1tUldQOHh6c24yemZBVEZLVnkvTS9JRHl4dThv?=
+ =?utf-8?B?amZQUW1kYWZ2a1FMTHpjMGNZMUZtZ2wwOEhTbVp6b3dEVStTeDVkZVFZQnBm?=
+ =?utf-8?B?a3JWQlBhSnpKWGhpVDVrME1xOUNuM1Blb3ZhQldPeWVTcXB1cWcySTAzRlRK?=
+ =?utf-8?B?dk10VktBenUzZHdxZWRmZ3Y5dFZTdTdFNTczNFR3Ui9UbFZyeTlvbjNNck53?=
+ =?utf-8?B?eFNSRnRMbUt6bVZjaGVMRGVEU0dRMVg3UjFPTSttM20wL1VxaFhoOTVVeG9v?=
+ =?utf-8?B?eEV1NGpERCttNVVZOXpFN1YyMmlGNUVqaUtFYm96TmYvTlltckxLUXZqbFVw?=
+ =?utf-8?B?c2xpWVBLNmIvRGlSdEVNU1hLekkycDFVeDNQOXF1MjRFM1c2R1M3Q0Rhc2hk?=
+ =?utf-8?B?b0wvalBSRDhBd01wa1RRbnovRTQ5ZVM5RytpYXNpeTBjTUNEbTJFNkRQOWho?=
+ =?utf-8?B?S2ZNNllaVzRhYnNhVzJIZXdzYzdJQ25VV3lEWUJiUEZ1MHBGLzRGSStON1pi?=
+ =?utf-8?B?L0lWUFZpbGFSSk1Nd1daZHZ4N3FmUXhPQTFoU2RWS1EvNWRqTW04WXNQTDIr?=
+ =?utf-8?B?RVBDeHNNbmFWMEtRaUVvZzUxN0Eyd1VXZlcvTDg3RnJCMnpwOXZQZ1dRMytI?=
+ =?utf-8?B?aERVRTdQRnJMNis2Q1NnMTBydFhsejdQQWdlYkFiS0N3Q0ptVFR0UDlYaUhX?=
+ =?utf-8?B?QzRwWC91VW9aa2ZjRXR2a0o5cGJDT0dEYWJwR2JhY1hxL1VTVlNPRDNGSFg2?=
+ =?utf-8?B?cTdmTVRrK3c0bG8yWnFvcDU1dCtiSGZKT1lZcndlNzZnVHh1MzhReXFmWktL?=
+ =?utf-8?B?ajUyVmtjOEFCTi9ZVW9lMitsQWo5T2lWYU5WSzlZejJnZjRCeEZ3akdaOVdY?=
+ =?utf-8?B?dml2cnhBQjRIcjlxcWZ0aWR5TTRhS2FLV0wvenhUcVNMdHVKTGNSWS9NaEJW?=
+ =?utf-8?B?VjIzMWI4VU1PbjQ2TFlIYzNlakIybExUOFk3U3JER3hCNUl0S3lOT1pPNEhs?=
+ =?utf-8?B?b1BBdGllUUoyVjljRUsyTzEzZldJbStTT0VBZTVrSVo4WHlvTkRRc2FGVFlr?=
+ =?utf-8?B?RUVkRUJBSEJqVjQyTm9UZ3JOQWtBSzFKRkZFZXQzSEptTmJBeWhDVzhFWXRE?=
+ =?utf-8?B?VzU0emdtZHJETzFOcm9HUG5xUms0MTVHLzlJM0hRaHNrLzlEeDcrQ21iaHky?=
+ =?utf-8?B?aFR6UkJ0bHZCOUFFczFLbXNRRlEwOXZsSXpmNU9jYWxrRDhzYUlPUEZZWWNF?=
+ =?utf-8?B?YnZ2U0cwWmZKSkhqWFNwalc2VDNoalVnSUdPNmpvZFE4Ny9zQnViUzZTaGJo?=
+ =?utf-8?B?NnJUbnZ3dTRDMzNBMWl3K3hYNjZvZHkxU1hROE9majZYb0tMbWZKU0p6bGp3?=
+ =?utf-8?B?clFGdlNISVNJT3V4RldmdURKNEhSYTRXelljZWVCdS9DYTJCM3A2WGt5L2hI?=
+ =?utf-8?B?MThya0dWTTZpR3ozQU0rTEFsSFcxTUw0cmtKb0lnQ0J0WWN0VFNCK0hvTzA5?=
+ =?utf-8?B?dGdnM0dUVWlPc1pOd1AvSUtzNnQrWGJIWnV5Rm95MUdJK0JSWkdZKzdEOHg5?=
+ =?utf-8?B?eU54WWovYWMzZlBUZEdsOTdoMUY3R0hSaEV3c0cyeThXNGVCRWRzNE9FbDNI?=
+ =?utf-8?B?aUxLUHN0SnIwQktNOTJYZllTOGxFWXU1SFlhQ1l3aDkxMy9LdUJuL1pzUkN4?=
+ =?utf-8?Q?XyxUpfKJ6qdDiz0UeJjZkH4rM4fdiqigWhr1iCtMjE=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: be18b798-7733-47f7-7335-08d9b8fe4165
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2021 21:20:41.0556
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bO8t0MMYpsyGpraSk4EA38sGTQi/+BC3ApZiE8SUDFCNGqhTa32mNmO6w7C+tqj4qgbGjqPpH2wagwS+AAGAjllwAny7Ecd0SuaBi2JXCxI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR11MB3796
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Hi Jarkko,
 
-[ Upstream commit f123cffdd8fe8ea6c7fded4b88516a42798797d0 ]
+On 12/4/2021 3:57 PM, Jarkko Sakkinen wrote:
+> On Fri, Dec 03, 2021 at 11:28:04AM -0800, Andy Lutomirski wrote:
+>> On 12/1/21 11:23, Reinette Chatre wrote:
+>>> Enclave creators declare their paging permission intent at the time
+>>> the pages are added to the enclave. These paging permissions are
+>>> vetted when pages are added to the enclave and stashed off
+>>> (in sgx_encl_page->vm_max_prot_bits) for later comparison with
+>>> enclave PTEs.
+>>>
+>>
+>> I'm a bit confused here. ENCLU[EMODPE] allows the enclave to change the EPCM
+>> permission bits however it likes with no oversight from the kernel.  So we
+>> end up with a whole bunch of permission masks:
+>>
+>> The PTE: controlled by complex kernel policy
+>>
+>> The VMA: with your series, this is entirely controlled by userspace.  I
+>> think I'm fine with that.
+>>
+>> vm_max_prot_bits: populated from secinfo at setup time, unless I missed
+>> something that changes it later.  Maybe I'm confused or missed something in
+>> one of the patches,
+>>
+>> vm_run_prot_bits: populated from some combination of ioctls.  I'm entirely
+>> lost as to what this is for.
+>>
+>> EPCM bits: controlled by the guest.  basically useless for any host purpose
+>> on SGX2 hardware (with or without kernel support -- the enclave can do
+>> ENCLU[EMODPE] whether we like it or not, even on old kernels)
+>>
+>> So I guess I don't understand the purpose of this patch	or of the rules in
+>> the later patches, and I feel like this is getting more complicated than
+>> makes sense.
+>>
+>>
+>> Could we perhaps make vm_max_prot_bits dynamic or at least controllable in
+>> some useful way?  My initial proposal (years ago) was for vm_max_prot_bits
+>> to be *separately* configured at initial load time instead of being inferred
+>> from secinfo with the intent being that the user untrusted runtime would set
+>> it appropriately.  I have no problem with allowing runtime changes as long
+>> as the security policy makes sense and it's kept consistent with PTEs.
+> 
+> This is a valid question. Since EMODPE exists why not just make things for
+> EMODPE, and ignore EMODPR altogether?
+> 
 
-Adding a check on len parameter to avoid empty skb. This prevents a
-division error in netem_enqueue function which is caused when skb->len=0
-and skb->data_len=0 in the randomized corruption step as shown below.
+I believe that we should support the best practice of principle of least 
+privilege - once a page no longer needs a particular permission there 
+should be a way to remove it (the unneeded permission).
 
-skb->data[prandom_u32() % skb_headlen(skb)] ^= 1<<(prandom_u32() % 8);
-
-Crash Report:
-[  343.170349] netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family
-0 port 6081 - 0
-[  343.216110] netem: version 1.3
-[  343.235841] divide error: 0000 [#1] PREEMPT SMP KASAN NOPTI
-[  343.236680] CPU: 3 PID: 4288 Comm: reproducer Not tainted 5.16.0-rc1+
-[  343.237569] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-BIOS 1.11.0-2.el7 04/01/2014
-[  343.238707] RIP: 0010:netem_enqueue+0x1590/0x33c0 [sch_netem]
-[  343.239499] Code: 89 85 58 ff ff ff e8 5f 5d e9 d3 48 8b b5 48 ff ff
-ff 8b 8d 50 ff ff ff 8b 85 58 ff ff ff 48 8b bd 70 ff ff ff 31 d2 2b 4f
-74 <f7> f1 48 b8 00 00 00 00 00 fc ff df 49 01 d5 4c 89 e9 48 c1 e9 03
-[  343.241883] RSP: 0018:ffff88800bcd7368 EFLAGS: 00010246
-[  343.242589] RAX: 00000000ba7c0a9c RBX: 0000000000000001 RCX:
-0000000000000000
-[  343.243542] RDX: 0000000000000000 RSI: ffff88800f8edb10 RDI:
-ffff88800f8eda40
-[  343.244474] RBP: ffff88800bcd7458 R08: 0000000000000000 R09:
-ffffffff94fb8445
-[  343.245403] R10: ffffffff94fb8336 R11: ffffffff94fb8445 R12:
-0000000000000000
-[  343.246355] R13: ffff88800a5a7000 R14: ffff88800a5b5800 R15:
-0000000000000020
-[  343.247291] FS:  00007fdde2bd7700(0000) GS:ffff888109780000(0000)
-knlGS:0000000000000000
-[  343.248350] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  343.249120] CR2: 00000000200000c0 CR3: 000000000ef4c000 CR4:
-00000000000006e0
-[  343.250076] Call Trace:
-[  343.250423]  <TASK>
-[  343.250713]  ? memcpy+0x4d/0x60
-[  343.251162]  ? netem_init+0xa0/0xa0 [sch_netem]
-[  343.251795]  ? __sanitizer_cov_trace_pc+0x21/0x60
-[  343.252443]  netem_enqueue+0xe28/0x33c0 [sch_netem]
-[  343.253102]  ? stack_trace_save+0x87/0xb0
-[  343.253655]  ? filter_irq_stacks+0xb0/0xb0
-[  343.254220]  ? netem_init+0xa0/0xa0 [sch_netem]
-[  343.254837]  ? __kasan_check_write+0x14/0x20
-[  343.255418]  ? _raw_spin_lock+0x88/0xd6
-[  343.255953]  dev_qdisc_enqueue+0x50/0x180
-[  343.256508]  __dev_queue_xmit+0x1a7e/0x3090
-[  343.257083]  ? netdev_core_pick_tx+0x300/0x300
-[  343.257690]  ? check_kcov_mode+0x10/0x40
-[  343.258219]  ? _raw_spin_unlock_irqrestore+0x29/0x40
-[  343.258899]  ? __kasan_init_slab_obj+0x24/0x30
-[  343.259529]  ? setup_object.isra.71+0x23/0x90
-[  343.260121]  ? new_slab+0x26e/0x4b0
-[  343.260609]  ? kasan_poison+0x3a/0x50
-[  343.261118]  ? kasan_unpoison+0x28/0x50
-[  343.261637]  ? __kasan_slab_alloc+0x71/0x90
-[  343.262214]  ? memcpy+0x4d/0x60
-[  343.262674]  ? write_comp_data+0x2f/0x90
-[  343.263209]  ? __kasan_check_write+0x14/0x20
-[  343.263802]  ? __skb_clone+0x5d6/0x840
-[  343.264329]  ? __sanitizer_cov_trace_pc+0x21/0x60
-[  343.264958]  dev_queue_xmit+0x1c/0x20
-[  343.265470]  netlink_deliver_tap+0x652/0x9c0
-[  343.266067]  netlink_unicast+0x5a0/0x7f0
-[  343.266608]  ? netlink_attachskb+0x860/0x860
-[  343.267183]  ? __sanitizer_cov_trace_pc+0x21/0x60
-[  343.267820]  ? write_comp_data+0x2f/0x90
-[  343.268367]  netlink_sendmsg+0x922/0xe80
-[  343.268899]  ? netlink_unicast+0x7f0/0x7f0
-[  343.269472]  ? __sanitizer_cov_trace_pc+0x21/0x60
-[  343.270099]  ? write_comp_data+0x2f/0x90
-[  343.270644]  ? netlink_unicast+0x7f0/0x7f0
-[  343.271210]  sock_sendmsg+0x155/0x190
-[  343.271721]  ____sys_sendmsg+0x75f/0x8f0
-[  343.272262]  ? kernel_sendmsg+0x60/0x60
-[  343.272788]  ? write_comp_data+0x2f/0x90
-[  343.273332]  ? write_comp_data+0x2f/0x90
-[  343.273869]  ___sys_sendmsg+0x10f/0x190
-[  343.274405]  ? sendmsg_copy_msghdr+0x80/0x80
-[  343.274984]  ? slab_post_alloc_hook+0x70/0x230
-[  343.275597]  ? futex_wait_setup+0x240/0x240
-[  343.276175]  ? security_file_alloc+0x3e/0x170
-[  343.276779]  ? write_comp_data+0x2f/0x90
-[  343.277313]  ? __sanitizer_cov_trace_pc+0x21/0x60
-[  343.277969]  ? write_comp_data+0x2f/0x90
-[  343.278515]  ? __fget_files+0x1ad/0x260
-[  343.279048]  ? __sanitizer_cov_trace_pc+0x21/0x60
-[  343.279685]  ? write_comp_data+0x2f/0x90
-[  343.280234]  ? __sanitizer_cov_trace_pc+0x21/0x60
-[  343.280874]  ? sockfd_lookup_light+0xd1/0x190
-[  343.281481]  __sys_sendmsg+0x118/0x200
-[  343.281998]  ? __sys_sendmsg_sock+0x40/0x40
-[  343.282578]  ? alloc_fd+0x229/0x5e0
-[  343.283070]  ? write_comp_data+0x2f/0x90
-[  343.283610]  ? write_comp_data+0x2f/0x90
-[  343.284135]  ? __sanitizer_cov_trace_pc+0x21/0x60
-[  343.284776]  ? ktime_get_coarse_real_ts64+0xb8/0xf0
-[  343.285450]  __x64_sys_sendmsg+0x7d/0xc0
-[  343.285981]  ? syscall_enter_from_user_mode+0x4d/0x70
-[  343.286664]  do_syscall_64+0x3a/0x80
-[  343.287158]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  343.287850] RIP: 0033:0x7fdde24cf289
-[  343.288344] Code: 01 00 48 81 c4 80 00 00 00 e9 f1 fe ff ff 0f 1f 00
-48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f
-05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b7 db 2c 00 f7 d8 64 89 01 48
-[  343.290729] RSP: 002b:00007fdde2bd6d98 EFLAGS: 00000246 ORIG_RAX:
-000000000000002e
-[  343.291730] RAX: ffffffffffffffda RBX: 0000000000000000 RCX:
-00007fdde24cf289
-[  343.292673] RDX: 0000000000000000 RSI: 00000000200000c0 RDI:
-0000000000000004
-[  343.293618] RBP: 00007fdde2bd6e20 R08: 0000000100000001 R09:
-0000000000000000
-[  343.294557] R10: 0000000100000001 R11: 0000000000000246 R12:
-0000000000000000
-[  343.295493] R13: 0000000000021000 R14: 0000000000000000 R15:
-00007fdde2bd7700
-[  343.296432]  </TASK>
-[  343.296735] Modules linked in: sch_netem ip6_vti ip_vti ip_gre ipip
-sit ip_tunnel geneve macsec macvtap tap ipvlan macvlan 8021q garp mrp
-hsr wireguard libchacha20poly1305 chacha_x86_64 poly1305_x86_64
-ip6_udp_tunnel udp_tunnel libblake2s blake2s_x86_64 libblake2s_generic
-curve25519_x86_64 libcurve25519_generic libchacha xfrm_interface
-xfrm6_tunnel tunnel4 veth netdevsim psample batman_adv nlmon dummy team
-bonding tls vcan ip6_gre ip6_tunnel tunnel6 gre tun ip6t_rpfilter
-ipt_REJECT nf_reject_ipv4 ip6t_REJECT nf_reject_ipv6 xt_conntrack ip_set
-ebtable_nat ebtable_broute ip6table_nat ip6table_mangle
-ip6table_security ip6table_raw iptable_nat nf_nat nf_conntrack
-nf_defrag_ipv6 nf_defrag_ipv4 iptable_mangle iptable_security
-iptable_raw ebtable_filter ebtables rfkill ip6table_filter ip6_tables
-iptable_filter ppdev bochs drm_vram_helper drm_ttm_helper ttm
-drm_kms_helper cec parport_pc drm joydev floppy parport sg syscopyarea
-sysfillrect sysimgblt i2c_piix4 qemu_fw_cfg fb_sys_fops pcspkr
-[  343.297459]  ip_tables xfs virtio_net net_failover failover sd_mod
-sr_mod cdrom t10_pi ata_generic pata_acpi ata_piix libata virtio_pci
-virtio_pci_legacy_dev serio_raw virtio_pci_modern_dev dm_mirror
-dm_region_hash dm_log dm_mod
-[  343.311074] Dumping ftrace buffer:
-[  343.311532]    (ftrace buffer empty)
-[  343.312040] ---[ end trace a2e3db5a6ae05099 ]---
-[  343.312691] RIP: 0010:netem_enqueue+0x1590/0x33c0 [sch_netem]
-[  343.313481] Code: 89 85 58 ff ff ff e8 5f 5d e9 d3 48 8b b5 48 ff ff
-ff 8b 8d 50 ff ff ff 8b 85 58 ff ff ff 48 8b bd 70 ff ff ff 31 d2 2b 4f
-74 <f7> f1 48 b8 00 00 00 00 00 fc ff df 49 01 d5 4c 89 e9 48 c1 e9 03
-[  343.315893] RSP: 0018:ffff88800bcd7368 EFLAGS: 00010246
-[  343.316622] RAX: 00000000ba7c0a9c RBX: 0000000000000001 RCX:
-0000000000000000
-[  343.317585] RDX: 0000000000000000 RSI: ffff88800f8edb10 RDI:
-ffff88800f8eda40
-[  343.318549] RBP: ffff88800bcd7458 R08: 0000000000000000 R09:
-ffffffff94fb8445
-[  343.319503] R10: ffffffff94fb8336 R11: ffffffff94fb8445 R12:
-0000000000000000
-[  343.320455] R13: ffff88800a5a7000 R14: ffff88800a5b5800 R15:
-0000000000000020
-[  343.321414] FS:  00007fdde2bd7700(0000) GS:ffff888109780000(0000)
-knlGS:0000000000000000
-[  343.322489] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  343.323283] CR2: 00000000200000c0 CR3: 000000000ef4c000 CR4:
-00000000000006e0
-[  343.324264] Kernel panic - not syncing: Fatal exception in interrupt
-[  343.333717] Dumping ftrace buffer:
-[  343.334175]    (ftrace buffer empty)
-[  343.334653] Kernel Offset: 0x13600000 from 0xffffffff81000000
-(relocation range: 0xffffffff80000000-0xffffffffbfffffff)
-[  343.336027] Rebooting in 86400 seconds..
-
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Link: https://lore.kernel.org/r/20211129175328.55339-1-harshit.m.mogalapalli@oracle.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- net/netlink/af_netlink.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index 65cf129eaad33..2f23b7fef8ef7 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -1804,6 +1804,11 @@ static int netlink_sendmsg(struct socket *sock, struct msghdr *msg, size_t len)
- 	if (msg->msg_flags&MSG_OOB)
- 		return -EOPNOTSUPP;
- 
-+	if (len == 0) {
-+		pr_warn_once("Zero length message leads to an empty skb\n");
-+		return -ENODATA;
-+	}
-+
- 	err = scm_send(sock, msg, &scm, true);
- 	if (err < 0)
- 		return err;
--- 
-2.33.0
-
+Reinette

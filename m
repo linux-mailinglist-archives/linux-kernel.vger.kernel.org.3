@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CB8469EA5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BAE0469EFA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385726AbhLFPnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:43:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386702AbhLFP0w (ORCPT
+        id S1391127AbhLFPpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:45:10 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34442 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348184AbhLFP2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:26:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5A7C0698C1;
-        Mon,  6 Dec 2021 07:17:27 -0800 (PST)
+        Mon, 6 Dec 2021 10:28:37 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B77261357;
-        Mon,  6 Dec 2021 15:17:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C88C53FD5;
-        Mon,  6 Dec 2021 15:17:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA020B8101B;
+        Mon,  6 Dec 2021 15:25:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2664EC34901;
+        Mon,  6 Dec 2021 15:25:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803846;
-        bh=XOa1sU5GhdZPGlaJVdpQfoEu2SMilBqMZDq/aGQ1vRM=;
+        s=korg; t=1638804305;
+        bh=T0E7NFSIo4RFxI1+ieCaKPXXg6lhANU2MhXPz9uiX2M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tDIkxtU9tGx4hoL2GiGhzM8HpohghlfRo29nR6iCLcvk9MGlPj3j+S4Iq/OzfvYYC
-         5M002H8tawqrY6DQF/1mfR6qqOwCPfe5SDCgpXWUt1h7RqVGxHCf+WMZdhII9xi81x
-         g/9bQwQTDj7/uANPL5kOGlCT1eWQGa4dHGazLtMk=
+        b=Ekrv9QFdIHezLFjxE8gOU2E0/i0gW1PgZZaLLn9ayP+yrWYUXnf+QxRwzl/SY70Ro
+         z/QDAbdOWucS4lTR69PNBj1avHoCxSWISLQBcSC7WEfyY3MMRh4/aexrhG9iT1scAq
+         aA9OO49k6JLv199xSfeTVCkoIBAdS1Mdk5tdkaag=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.10 035/130] cpufreq: Fix get_cpu_device() failure in add_cpu_dev_symlink()
+        stable@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 098/207] wireguard: ratelimiter: use kvcalloc() instead of kvzalloc()
 Date:   Mon,  6 Dec 2021 15:55:52 +0100
-Message-Id: <20211206145600.881311151@linuxfoundation.org>
+Message-Id: <20211206145613.630872008@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,76 +47,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+From: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-commit 2c1b5a84669d2477d8fffe9136e86a2cff591729 upstream.
+commit 4e3fd721710553832460c179c2ee5ce67ef7f1e0 upstream.
 
-When I hot added a CPU, I found 'cpufreq' directory was not created
-below /sys/devices/system/cpu/cpuX/.
+Use 2-factor argument form kvcalloc() instead of kvzalloc().
 
-It is because get_cpu_device() failed in add_cpu_dev_symlink().
-
-cpufreq_add_dev() is the .add_dev callback of a CPU subsys interface.
-It will be called when the CPU device registered into the system.
-The call chain is as follows:
-
-  register_cpu()
-  ->device_register()
-   ->device_add()
-    ->bus_probe_device()
-     ->cpufreq_add_dev()
-
-But only after the CPU device has been registered, we can get the
-CPU device by get_cpu_device(), otherwise it will return NULL.
-
-Since we already have the CPU device in cpufreq_add_dev(), pass
-it to add_cpu_dev_symlink().
-
-I noticed that the 'kobj' of the CPU device has been added into
-the system before cpufreq_add_dev().
-
-Fixes: 2f0ba790df51 ("cpufreq: Fix creation of symbolic links to policy directories")
-Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: All applicable <stable@vger.kernel.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Link: https://github.com/KSPP/linux/issues/162
+Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+[Jason: Gustavo's link above is for KSPP, but this isn't actually a
+ security fix, as table_size is bounded to 8192 anyway, and gcc realizes
+ this, so the codegen comes out to be about the same.]
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/cpufreq/cpufreq.c |    9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/net/wireguard/ratelimiter.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1004,10 +1004,9 @@ static struct kobj_type ktype_cpufreq =
- 	.release	= cpufreq_sysfs_release,
- };
+--- a/drivers/net/wireguard/ratelimiter.c
++++ b/drivers/net/wireguard/ratelimiter.c
+@@ -176,12 +176,12 @@ int wg_ratelimiter_init(void)
+ 			(1U << 14) / sizeof(struct hlist_head)));
+ 	max_entries = table_size * 8;
  
--static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu)
-+static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu,
-+				struct device *dev)
- {
--	struct device *dev = get_cpu_device(cpu);
--
- 	if (unlikely(!dev))
- 		return;
+-	table_v4 = kvzalloc(table_size * sizeof(*table_v4), GFP_KERNEL);
++	table_v4 = kvcalloc(table_size, sizeof(*table_v4), GFP_KERNEL);
+ 	if (unlikely(!table_v4))
+ 		goto err_kmemcache;
  
-@@ -1391,7 +1390,7 @@ static int cpufreq_online(unsigned int c
- 	if (new_policy) {
- 		for_each_cpu(j, policy->related_cpus) {
- 			per_cpu(cpufreq_cpu_data, j) = policy;
--			add_cpu_dev_symlink(policy, j);
-+			add_cpu_dev_symlink(policy, j, get_cpu_device(j));
- 		}
- 
- 		policy->min_freq_req = kzalloc(2 * sizeof(*policy->min_freq_req),
-@@ -1553,7 +1552,7 @@ static int cpufreq_add_dev(struct device
- 	/* Create sysfs link on CPU registration */
- 	policy = per_cpu(cpufreq_cpu_data, cpu);
- 	if (policy)
--		add_cpu_dev_symlink(policy, cpu);
-+		add_cpu_dev_symlink(policy, cpu, dev);
- 
- 	return 0;
- }
+ #if IS_ENABLED(CONFIG_IPV6)
+-	table_v6 = kvzalloc(table_size * sizeof(*table_v6), GFP_KERNEL);
++	table_v6 = kvcalloc(table_size, sizeof(*table_v6), GFP_KERNEL);
+ 	if (unlikely(!table_v6)) {
+ 		kvfree(table_v4);
+ 		goto err_kmemcache;
 
 

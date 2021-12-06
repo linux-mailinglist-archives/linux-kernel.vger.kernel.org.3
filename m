@@ -2,119 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF10469C8B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF843469CC8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245402AbhLFPX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:23:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
+        id S1385742AbhLFPZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:25:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355965AbhLFPO3 (ORCPT
+        with ESMTP id S1357793AbhLFPQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:14:29 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBE0C0698C7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:06:33 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id bf8so21964068oib.6
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 07:06:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qi+ACrBvsCQh4aeidtMrQGAwDrCcUC2mWJ4NwcOqezo=;
-        b=Lyk3ZV2G1kBXn1OTUhDPb6Rn1v2PiSF1kFXmGNPvzvrOKeWbWhReflgDjfQVo5FeXE
-         TDDmBx7k1iI9nH1Z/jP6bdzMXtGIsMcvopIW9O/RHPHJdpPRwm0K30aYzOd91ttnPoxQ
-         iDZPE9trErEVcn3KPgYPuFWNvxkDkBtNCuS7hmfYnbv3ufxTdNbAh9Qaq3q5z5p9TWiE
-         COM3CZtxqNQC3quUP9WS1jKJUKnw718D6NLTzK1O6xWFuxF8GhGv2DopuLxQTzUjKQcD
-         vxdUiD+/JzHGqRtUStIY9pJvG0EtMOqq6iuuILThXbz+5sxAkxbDZqcbAwbsQMiQXBAP
-         pPKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qi+ACrBvsCQh4aeidtMrQGAwDrCcUC2mWJ4NwcOqezo=;
-        b=6JoTAw/4Fh+/p0GqUL8z9dSGFJ7H2XCduy9VkhmMCZRcshFXr19F5GbSnIyDwmZXHU
-         Uxa4KKh5CbxT3axvSWRJamAlNDOjco1Jg8pp1wdu/qCntAYwFJkTj8bMyBbR1GRNGKtT
-         7yl55yHGIaTwer2SXk2yoWSlM22RJXyPlUOS8HBLtj/KATGiPIR6znoQ38C91psPjKE2
-         ff9RKfmO0bBz7vDLL3l6+bzxy5hXRDRvhHJmEJNuaXKkqhhnqbFuGwe0yJ8TedIlIz44
-         kCqs5PccJKIRbaF0c3FIT91TUIWTPJ0V4BIou0EyXMeRqhmxFH2YgRgH+Q/nebgkb+ay
-         HNuA==
-X-Gm-Message-State: AOAM5301sAOIP6/jyUc0L4kqYpcVCb7kZrsuSQXmYkbY+gQZVDb/hX1P
-        eVYl7MHleBPBMcU36x3yQBPcOA==
-X-Google-Smtp-Source: ABdhPJw7H4cDbriWhAuoWmCrnYAmNuZrdWJghA25VKturF79Pb3Ge5nU5PTGydomwKHccAy6npDTAQ==
-X-Received: by 2002:a05:6808:b08:: with SMTP id s8mr24691517oij.126.1638803193100;
-        Mon, 06 Dec 2021 07:06:33 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id y12sm2838923oiv.49.2021.12.06.07.06.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 07:06:32 -0800 (PST)
-Date:   Mon, 6 Dec 2021 07:07:59 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     agross@kernel.org, todor.too@gmail.com, mchehab@kernel.org,
-        robh+dt@kernel.org, angelogioacchino.delregno@somainline.org,
-        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-Subject: Re: [PATCH v3 4/4] arm64: dts: qcom: sdm845-db845c: Remove
- clock-lanes property from &camss node
-Message-ID: <Ya4nTzE5DC096i9/@ripper>
-References: <20211118124819.1902427-1-robert.foss@linaro.org>
- <20211118124819.1902427-5-robert.foss@linaro.org>
+        Mon, 6 Dec 2021 10:16:15 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719F1C08EB55;
+        Mon,  6 Dec 2021 07:08:48 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 3EA2A1F4487E
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638803327; bh=GD5jS7X5MjRddXaASD9ovBpWNoicoY2OOGjVAS/Fkj0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=QmP9p/Xwn1DTDiTckK3f6PgxBAGeY1jfb3zUdAdtQ4HX70clXe1dHJl4ACRNYJMTw
+         ufL5NI0KUbX79T48BORKnDJIcqB/hVvvk2ZE+77/+LmCctOasRbPaOqt92dqro/Tbw
+         4Kn0b2XXytIRKaB+UhpCecMReNcm4M6aZ+Q4c7J78IJ0T8tjhCIvz83uy04OIDEK3/
+         rMS4dwOVFThMJ8C8YJDqdmdSYqT517aYtIkMEupKIBOIlOdLsIrsSCXjiHVwenRslH
+         3jjGKxEg/4qZ4b5rMbUruztYedI9xeS+tHs4u+ETj9ZJDhGLENR4ZsLJY1iBFUeHCk
+         vSH3nnqDpp8BQ==
+Subject: Re: [PATCH 3/4] memory: mtk-smi: Add sleep ctrl function
+To:     Yong Wu <yong.wu@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com,
+        anan.sun@mediatek.com, lc.kan@mediatek.com, yi.kuo@mediatek.com,
+        anthony.huang@mediatek.com
+References: <20211203064027.14993-1-yong.wu@mediatek.com>
+ <20211203064027.14993-4-yong.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <f2ffd08a-44c3-9458-1bd8-68e3c0755611@collabora.com>
+Date:   Mon, 6 Dec 2021 16:08:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211118124819.1902427-5-robert.foss@linaro.org>
+In-Reply-To: <20211203064027.14993-4-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 18 Nov 04:48 PST 2021, Robert Foss wrote:
-
-> The clock-lanes property is no longer used as it is not programmable by
-> the CSIPHY hardware block of Qcom ISPs and should be removed.
+Il 03/12/21 07:40, Yong Wu ha scritto:
+> sleep control means that when the larb go to sleep, we should wait a bit
+> until all the current commands are finished. thus, when the larb runtime
+> suspend, we need enable this function to wait until all the existed
+> command are finished. when the larb resume, just disable this function.
+> This function only improve the safe of bus. Add a new flag for this
+> function. Prepare for mt8186.
 > 
-> Signed-off-by: Robert Foss <robert.foss@linaro.org>
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Regards,
-Bjorn
-
+> Signed-off-by: Anan Sun <anan.sun@mediatek.com>
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 > ---
->  arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 3 ---
->  1 file changed, 3 deletions(-)
+>   drivers/memory/mtk-smi.c | 39 +++++++++++++++++++++++++++++++++++----
+>   1 file changed, 35 insertions(+), 4 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-> index 13f80a0b6faa..2cf4b932aee2 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-> @@ -1125,7 +1125,6 @@ ports {
->  		port@0 {
->  			reg = <0>;
->  			csiphy0_ep: endpoint {
-> -				clock-lanes = <7>;
->  				data-lanes = <0 1 2 3>;
->  				remote-endpoint = <&ov8856_ep>;
->  			};
-> @@ -1166,7 +1165,6 @@ camera@10 {
->  
->  		port {
->  			ov8856_ep: endpoint {
-> -				clock-lanes = <1>;
->  				link-frequencies = /bits/ 64
->  					<360000000 180000000>;
->  				data-lanes = <1 2 3 4>;
-> @@ -1211,7 +1209,6 @@ camera@60 {
->  
->  		port {
->  			ov7251_ep: endpoint {
-> -				clock-lanes = <1>;
->  				data-lanes = <0 1>;
->  //				remote-endpoint = <&csiphy3_ep>;
->  			};
-> -- 
-> 2.32.0
+> diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
+> index b883dcc0bbfa..4b59b28e4d73 100644
+> --- a/drivers/memory/mtk-smi.c
+> +++ b/drivers/memory/mtk-smi.c
+> @@ -8,6 +8,7 @@
+>   #include <linux/device.h>
+>   #include <linux/err.h>
+>   #include <linux/io.h>
+> +#include <linux/iopoll.h>
+>   #include <linux/module.h>
+>   #include <linux/of.h>
+>   #include <linux/of_platform.h>
+> @@ -32,6 +33,10 @@
+>   #define SMI_DUMMY			0x444
+>   
+>   /* SMI LARB */
+> +#define SMI_LARB_SLP_CON                0x00c
+> +#define SLP_PROT_EN                     BIT(0)
+> +#define SLP_PROT_RDY                    BIT(16)
+> +
+>   #define SMI_LARB_CMD_THRT_CON		0x24
+>   #define SMI_LARB_THRT_RD_NU_LMT_MSK	GENMASK(7, 4)
+>   #define SMI_LARB_THRT_RD_NU_LMT		(5 << 4)
+> @@ -81,6 +86,7 @@
+>   
+>   #define MTK_SMI_FLAG_THRT_UPDATE	BIT(0)
+>   #define MTK_SMI_FLAG_SW_FLAG		BIT(1)
+> +#define MTK_SMI_FLAG_SLEEP_CTL		BIT(2)
+>   #define MTK_SMI_CAPS(flags, _x)		(!!((flags) & (_x)))
+>   
+>   struct mtk_smi_reg_pair {
+> @@ -371,6 +377,24 @@ static const struct of_device_id mtk_smi_larb_of_ids[] = {
+>   	{}
+>   };
+>   
+> +static int mtk_smi_larb_sleep_ctrl(struct device *dev, bool to_sleep)
+> +{
+> +	struct mtk_smi_larb *larb = dev_get_drvdata(dev);
+> +	int ret = 0;
+> +	u32 tmp;
+> +
+> +	if (to_sleep) {
+> +		writel_relaxed(SLP_PROT_EN, larb->base + SMI_LARB_SLP_CON);
+> +		ret = readl_poll_timeout_atomic(larb->base + SMI_LARB_SLP_CON,
+> +						tmp, !!(tmp & SLP_PROT_RDY), 10, 1000);
+> +		if (ret)
+> +			dev_warn(dev, "sleep ctrl is not ready(0x%x).\n", tmp);
+> +	} else {
+> +		writel_relaxed(0, larb->base + SMI_LARB_SLP_CON);
+> +	}
+> +	return ret;
+> +}
+> +
+>   static int mtk_smi_device_link_common(struct device *dev, struct device **com_dev)
+>   {
+>   	struct platform_device *smi_com_pdev;
+> @@ -477,24 +501,31 @@ static int __maybe_unused mtk_smi_larb_resume(struct device *dev)
+>   {
+>   	struct mtk_smi_larb *larb = dev_get_drvdata(dev);
+>   	const struct mtk_smi_larb_gen *larb_gen = larb->larb_gen;
+> -	int ret;
+> +	int ret = 0;
+>   
+>   	ret = clk_bulk_prepare_enable(larb->smi.clk_num, larb->smi.clks);
+> -	if (ret < 0)
+> +	if (ret)
+>   		return ret;
+>   
+> +	if (MTK_SMI_CAPS(larb->larb_gen->flags_general, MTK_SMI_FLAG_SLEEP_CTL))
+> +		ret = mtk_smi_larb_sleep_ctrl(dev, false);
+> +
+>   	/* Configure the basic setting for this larb */
+>   	larb_gen->config_port(dev);
+>   
+> -	return 0;
+> +	return ret;
+>   }
+>   
+>   static int __maybe_unused mtk_smi_larb_suspend(struct device *dev)
+>   {
+>   	struct mtk_smi_larb *larb = dev_get_drvdata(dev);
+> +	int ret = 0;
+> +
+> +	if (MTK_SMI_CAPS(larb->larb_gen->flags_general, MTK_SMI_FLAG_SLEEP_CTL))
+> +		ret = mtk_smi_larb_sleep_ctrl(dev, true);
+
+Sorry but what happens if SLP_PROT_RDY is not getting set properly?
+ From what I can understand in the commit description that you wrote, if we reach
+the timeout, then the LARB transactions are not over....
+
+I see that you are indeed returning a failure here, but you are also turning off
+the clocks regardless of whether we get a failure or a success; I'm not sure that
+this is right, as this may leave the hardware in an unpredictable state (since
+there were some more LARB transactions that didn't go through), leading to crashes
+at system resume (or when retyring to suspend).
+
+>   
+>   	clk_bulk_disable_unprepare(larb->smi.clk_num, larb->smi.clks);
+> -	return 0;
+> +	return ret;
+>   }
+>   
+>   static const struct dev_pm_ops smi_larb_pm_ops = {
 > 
+

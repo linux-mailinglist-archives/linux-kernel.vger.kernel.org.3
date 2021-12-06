@@ -2,299 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C0646AAE9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:47:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F62846AABF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:45:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbhLFVvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:51:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354021AbhLFVuw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:50:52 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294F6C061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 13:47:23 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1638827241;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3pytIz/mVv/PIB06AmhSlrnOdE2zgWaSkR0qkks0t+o=;
-        b=I2Ewj6wAxAKScF6XzdWWRK1WyMk8nttk0qAXnuLWNx6Ahb/S3M7TVmP3vwhWK4FA9kObVN
-        NPhBlzB8Turix4wc4cRoC6img98Yo7bwKwUjjeICkJZk1WGIJleDPDM93IdkONF5ipIXg8
-        KhfQcNnHQLNegSXDpvAW1kTvdC+juVI=
-From:   andrey.konovalov@linux.dev
-To:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Peter Collingbourne <pcc@google.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH v2 34/34] kasan: improve vmalloc tests
-Date:   Mon,  6 Dec 2021 22:44:11 +0100
-Message-Id: <1780c3aae4f143d4bd2137cb0d2e3a137a680664.1638825394.git.andreyknvl@google.com>
-In-Reply-To: <cover.1638825394.git.andreyknvl@google.com>
-References: <cover.1638825394.git.andreyknvl@google.com>
+        id S1352833AbhLFVtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:49:15 -0500
+Received: from mga03.intel.com ([134.134.136.65]:39851 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1352691AbhLFVsu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 16:48:50 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237357849"
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="237357849"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 13:45:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="514938417"
+Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
+  by orsmga008.jf.intel.com with ESMTP; 06 Dec 2021 13:45:21 -0800
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 6 Dec 2021 13:45:20 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Mon, 6 Dec 2021 13:45:20 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Mon, 6 Dec 2021 13:45:20 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b75VW48eFo/7aniJJjCxV/enNTKTb0vhFnpj68SR4xGsG1y8X3UusaKYhcEwu0BXtlBaqchiE4Fq1ulDaIDN21izQXn6+SNuG/aWJmCaF12bbBLBjNbK/2awQOU38DciX3umlSja9h3y/+TrxWpbGJfHdcGUJNkII0NFdSEUskw0t2qDTxa5uKVMSL40t5ISj7OaqSVivjrHOYl2zIOkIKRC2rZ5dvwJe3+ToT1Iw6PjjanXLBlbpEyHjR+V2yRhCrn28grxGhhsZQVqEnNsSdLkglr6Df9Y4A7Fo6HPVZ28MUrFMDx1fHq6J4tYb1/OxDwXbD2fde/1dWnP0dTb4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Bsy7J96UDhkX/jSTdJJus3cEehAhS2IZD7IozhNzKLU=;
+ b=jOdZtuDI3TAbqJSOf6Uko5fnC7xLkHnX0/YxiadeOh5VL8BzhQF1AhAXTAO4U1NxIqox3r4t4XX6bnqUdiB3F8Zfr0qtXCtToV95yL/Pjyx527siyjA0izjn55johumwBHJC0K0NyDuv2EyC5K4WWJz1witcXu8V2XL9Pk3zdL58EOlgf5YkrhFZToRmRSOjG/Kq7Pb+NJdEsy3cO3hiBlkUvTJuCG5XzLzsWlg79x5PSgxx3XvI6L69UJw2owKYSFjWNs7JulYYZlkhfHTYbAVurw00ohocS83bEYrcOkSszS2XABd7OcxPxSvZWvAtcdwcVdxAMzVeE9h+3C04ig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Bsy7J96UDhkX/jSTdJJus3cEehAhS2IZD7IozhNzKLU=;
+ b=ckxxBtpTRQPldkUINUf/Ephnz6w/rTV+zZCpF3PhOPnX4Qn8tPeyPOMPsNr3sK16M06kZTAN+EGXu7L6C5D2Okc/cAUsLN1fP5wZlAQc74yt3Bwl1EWxv/t/JiA2SgKy/g2s4oOtdXxQ1b7M0ETQGpscjPyndPnavf4SJOAX0do=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
+ by BN8PR11MB3729.namprd11.prod.outlook.com (2603:10b6:408:81::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Mon, 6 Dec
+ 2021 21:45:18 +0000
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::bcd0:77e1:3a2e:1e10]) by BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::bcd0:77e1:3a2e:1e10%3]) with mapi id 15.20.4755.022; Mon, 6 Dec 2021
+ 21:45:18 +0000
+Message-ID: <0522af41-59db-e621-69de-ad64dec3a5d6@intel.com>
+Date:   Mon, 6 Dec 2021 13:45:13 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.3.2
+Subject: Re: [PATCH 14/25] x86/sgx: Tighten accessible memory range after
+ enclave initialization
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+CC:     <dave.hansen@linux.intel.com>, <tglx@linutronix.de>,
+        <bp@alien8.de>, <luto@kernel.org>, <mingo@redhat.com>,
+        <linux-sgx@vger.kernel.org>, <x86@kernel.org>, <seanjc@google.com>,
+        <kai.huang@intel.com>, <cathy.zhang@intel.com>,
+        <cedric.xing@intel.com>, <haitao.huang@intel.com>,
+        <mark.shanahan@intel.com>, <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>
+References: <cover.1638381245.git.reinette.chatre@intel.com>
+ <66da195d44cbbed57b6840c5d20bb789c06fb99f.1638381245.git.reinette.chatre@intel.com>
+ <Yav2ckVPrHSgCw/5@iki.fi>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <Yav2ckVPrHSgCw/5@iki.fi>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MWHPR1401CA0012.namprd14.prod.outlook.com
+ (2603:10b6:301:4b::22) To BN0PR11MB5744.namprd11.prod.outlook.com
+ (2603:10b6:408:166::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+Received: from [192.168.1.221] (71.238.111.198) by MWHPR1401CA0012.namprd14.prod.outlook.com (2603:10b6:301:4b::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.17 via Frontend Transport; Mon, 6 Dec 2021 21:45:16 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4d129361-125c-4c8e-8d3e-08d9b901b1f9
+X-MS-TrafficTypeDiagnostic: BN8PR11MB3729:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <BN8PR11MB372901B312270B48D5C26263F86D9@BN8PR11MB3729.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: P16Che3FxdGkFKKFMskxb1T1l/1lc9O6uNHANns7ycy0kaG+Pr9sqaBSZiWkbtSi9Vdb5ZJJpYM8GEFli/BVQ8PJKroFgZ6Yt6gyBrW8dM5iEj8glajm0Tx7HcuZNY2xgxONJkjPKbcPsG1Pqs2ZmpBEsdA0MIYybvXdoqolSXVIR2/Ze4qNf1gG92fn57keH5u92Is4upoWIPMepGdN7J364TIUgvO7zxHLjIdnLO+azO42N5tkyfWci5Ie47lDrW6Tg+htC+1hVNIwRIo8cwcmr0YXJF12q7BXVfp7iBW2V9vt95cgbAPI01m3SdYdJi7qxrNfrIJKxzEi55+sl2c8ZqCASifC0zsYDZcXJCuIuXxTpzwNKFnxRZqAaZnx/axHMKy70EFuy+dZBltjaiFP2qetXDkNz9U/5we2lCR5YKS/fUObaSdLmeCGpeR1HZGbnmfZfsE26RbLufUCOVBUesHOvI2D/zpgVNTkmsBdGO/zQot3cJ8qGQosAO2VWyhX7W3GzCqCBCF9fOjTf927YHi5p1HX380ZeMrK2DBsxdHfVB7mHVx7TGWOKALQ6iCMROpmOg172iCr5vDKPbOs2nbjXVDggG3MJkwmy87gZyxLeHAYEtDxzSZTS9b24cPPkOrKwjWKmdkOwW5yQc09w408nqIsTq2PU82eYSIln+jCP/XsjFBIys22ycWghsDmIA8edEeBMv9M/Bkz/kKGmvH3KjxhJCftyNCjOLYd3Sr8Tl2zVG4rBoD5EP0O
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(82960400001)(6666004)(4326008)(38100700002)(186003)(5660300002)(36756003)(31696002)(26005)(31686004)(4744005)(7416002)(86362001)(6916009)(6486002)(44832011)(508600001)(2616005)(956004)(66946007)(66476007)(66556008)(8676002)(53546011)(2906002)(16576012)(316002)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cmNVR2hXaFlPTXhSOVY1Y1NKU0lmc2FQTXBjaFE1aWNOY1J2cG5mUzZMZmYr?=
+ =?utf-8?B?bUJPTG00ditjZGpJLzVYRktRZEMzY2FqTnpmMjVsU01US1JWbVBsVWZTZUc2?=
+ =?utf-8?B?MVdtRDlPZXRsNWtQZitiVjBrTkQyZ21hNzVISU1MU2Q0T0dlS0JLTGtmTHgw?=
+ =?utf-8?B?UlB1OFg0NXJPMDJkWUxqY0pOR3ExelhsMU11UjRWdEtzRmRxdzFlU21UdWlS?=
+ =?utf-8?B?ejFnL0FxSmJXTmpja3pCeWNLS1BDTnZ0cjdNMStqeXdZOUVsWnlQazY1QXpy?=
+ =?utf-8?B?ZHl1RHAxR1VxM2pqcGRwcjBhUkRia1NTakJlc255b3pKNVNRM3RIZWQzWU5K?=
+ =?utf-8?B?WFBXMFFUajBPNzFoK0Y3dlRLSkZ0VlNMaHlmcWwxL29ldUR6OWFCM3g3Y0J2?=
+ =?utf-8?B?d2M4cWRyUmIxbEdYSmR4RzY3MllqRDdid1cxQjBzM0pHaUpCYzMyNWpDKzEx?=
+ =?utf-8?B?MHZiY1FOS0M0WXRoYTQvNTdFdUN2dkV3RCtxWStXeldrVWhIU0pCV3REb0pv?=
+ =?utf-8?B?ZkQ0YlNMRlRMZFpuMUtHTjNRRzJDNmlSZUthRzhUbkV3WDR4L0RHMEhJeHpn?=
+ =?utf-8?B?T25BajNtZFZ0dEZQK05MOE41U2djNjBEbm9hQmo4Y0granpkRU1aVGxCOHB3?=
+ =?utf-8?B?S3BoUTBLek12bVhDakhYZDJNeGlvbFVZd0xQbnIwdFcxQ1A3MTI4V3NjRmJu?=
+ =?utf-8?B?TVJTWGswTEpxUHlVR2lJWTd0RUNIbTJ2eXBxWVhYNWxCc0NuZkJyRS84djNR?=
+ =?utf-8?B?a2RjYXRjMW5DYzNQdTRmcG9iYTE4blV2bTVuKytlYVhITFBZTzQrMDFpeVQz?=
+ =?utf-8?B?TjdybTc4TzNzUmxvYVNncXJGbWt0TjlTaUxqRTFscVlEME81MmZkTWRPcUwx?=
+ =?utf-8?B?MTZyQjNFcWpFSHNZL2RPalBVY1pHUjdEcGFNcGoyeDFCU2lEZDRVMHlNa21S?=
+ =?utf-8?B?dkg3RjVnTUFjYmo1THIzK0N6U0hXMjR2MVZRWk95c1RUTjNzM1dINXFQVkpR?=
+ =?utf-8?B?RS9NOEU4dFBJS1dDV1cxWG1mb1dxS2NKT2FBc29INXJ1b250dFZoTlQ1dmVo?=
+ =?utf-8?B?N2dzbDI5cjlqNkduRmdtcUNxMHNOZUlUbm03VWpHYUMzNW1kQW5ZMFdZdUo2?=
+ =?utf-8?B?SWVKOU5zTVN5S0pYS2kvOXgyVFNBQmNvUkdPaUI5N1JuWTdNU2NzOTUvamRC?=
+ =?utf-8?B?emVLTURFRVcwZjV3VFBmOW1wNENBUUxBK3pRUDJVT0hqY1ZPOWExSkZDMEd6?=
+ =?utf-8?B?R0lzR1dGM1BPNUxpOUk5aHNCQWlwUW9Sb2pjNmVMWTB0cjdlZTJYRnVzTHZH?=
+ =?utf-8?B?V2tORVZLRFhrdXlPZnZ0MFErQ3IyRTFwTHFkSVppU1pCK3VZcUU5NXdKOTky?=
+ =?utf-8?B?WHBQT0ZUQmRaaFFZajBGaGFqcVY4SUhqcUphc3BjVElZampWNGNncmRiU3R0?=
+ =?utf-8?B?bmZjNitrTE95eExyeWxCSjIzdEVJUHlYRXZmNFE5OVlTNTBjNk1qZ0NEdEFU?=
+ =?utf-8?B?MHI4MjZobURRMWFlenBMOTZtR09ocnVQTmh3RktFYUNySXhKYVF4ZzFzTzIr?=
+ =?utf-8?B?Q2s0UHp6MVhsVDkrOGU5aitTcXloaHYzWW5FQ0VURk5EZmRaTVRpT25vMFlB?=
+ =?utf-8?B?dk5naFlIMWxxYThua0VJc3NrRUp6WWVXWm5KUktNU2ZQMVVCbGkzTmhLT2Jh?=
+ =?utf-8?B?RzlMUTY2Q1FuZW9lZ0IwSGlDeDFhRm0vN0sxNldvaE8zRlM4TExJNTBJSHVE?=
+ =?utf-8?B?KzBGU3hnbXprWHdCeWZCZTgwdFgxMmlsclFDZ0NnNHIrdFJQbWFSbURzdzdH?=
+ =?utf-8?B?ZmxmLzMwWFFoRDVxS2xJT2xZMVNWN0diWkk1S0puY29MS2Y3Z0xxdWtiNWdz?=
+ =?utf-8?B?ZU4xdmoxVVpzQUk4dDJiakRGVU9Db1BaektQZ1JZNERMWHhpVjdCYnJrMGVF?=
+ =?utf-8?B?YU12azZNVCs2bTcwSHREQkplMWxXWkZ3TXVnVlk5RXhRQ0RUL3piR3REMklQ?=
+ =?utf-8?B?eHplamVSd3RrNTVldkhYL1ErRE9KRFA0OElIV0pUM0tBQ1QvWlJYZU4yMFpF?=
+ =?utf-8?B?WncwVzloUHJJclhTOGlFdW9PS1owVjdKSXpucEZqQURLSXRDWXVNYmxLOW1M?=
+ =?utf-8?B?RzBhV2lOUmFVQXpIdVI4OWtWOWdzN3ZsZnBpYW1sN0dvbzAreW1venhlcHkw?=
+ =?utf-8?B?MjJDNEdoaTkway9ObGthWTM2cFFvWmRCRXVGVGQvTXAyV0dlM1lrUUs2SS9v?=
+ =?utf-8?Q?89odcQ6a32feiQRGuRYsxvmb1zGI3jF/vPqcgr+0XU=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d129361-125c-4c8e-8d3e-08d9b901b1f9
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2021 21:45:18.3843
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Rh1O+//fn7n1HEXEDeNz+14A2GZXaXSS4EpTtrZSe3xa3MtddClQqejkjIzqgSnffxlqBUdUPK3ciujoTVx9sGEn9GU+YsWBW3TRTV7PmqQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR11MB3729
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
+Hi Jarkko,
 
-Update the existing vmalloc_oob() test to account for the specifics
-of the tag-based modes. Also add a few new checks and comments.
+On 12/4/2021 3:14 PM, Jarkko Sakkinen wrote:
+>> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+>> index 342b97dd4c33..37203da382f8 100644
+>> --- a/arch/x86/kernel/cpu/sgx/encl.c
+>> +++ b/arch/x86/kernel/cpu/sgx/encl.c
+>> @@ -403,6 +403,10 @@ int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
+>>   
+>>   	XA_STATE(xas, &encl->page_array, PFN_DOWN(start));
+>>   
+> 
+> Please write a comment here.
 
-Add new vmalloc-related tests:
+Would the comment below suffice?
 
-- vmalloc_helpers_tags() to check that exported vmalloc helpers can
-  handle tagged pointers.
-- vmap_tags() to check that SW_TAGS mode properly tags vmap() mappings.
-- vm_map_ram_tags() to check that SW_TAGS mode properly tags
-  vm_map_ram() mappings.
-- vmalloc_percpu() to check that SW_TAGS mode tags regions allocated
-  for __alloc_percpu(). The tagging of per-cpu mappings is best-effort;
-  proper tagging is tracked in [1].
+/* Disallow mapping outside enclave's address range. */
 
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=215019
+> 
+>> +	if (test_bit(SGX_ENCL_INITIALIZED, &encl->flags) &&
+>> +	    (start < encl->base || end > encl->base + encl->size))
+>> +		return -EACCES;
+>> +
+>>   	/*
+>>   	 * Disallow READ_IMPLIES_EXEC tasks as their VMA permissions might
+>>   	 * conflict with the enclave page permissions.
+>> -- 
+>> 2.25.1
+>>
+> 
+> Otherwise, makes sense.
+> 
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- lib/test_kasan.c | 181 +++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 175 insertions(+), 6 deletions(-)
+Thank you
 
-diff --git a/lib/test_kasan.c b/lib/test_kasan.c
-index 0643573f8686..44875356278a 100644
---- a/lib/test_kasan.c
-+++ b/lib/test_kasan.c
-@@ -1025,21 +1025,174 @@ static void kmalloc_double_kzfree(struct kunit *test)
- 	KUNIT_EXPECT_KASAN_FAIL(test, kfree_sensitive(ptr));
- }
- 
-+static void vmalloc_helpers_tags(struct kunit *test)
-+{
-+	void *ptr;
-+
-+	/* This test is intended for tag-based modes. */
-+	KASAN_TEST_NEEDS_CONFIG_OFF(test, CONFIG_KASAN_GENERIC);
-+
-+	KASAN_TEST_NEEDS_CONFIG_ON(test, CONFIG_KASAN_VMALLOC);
-+
-+	ptr = vmalloc(PAGE_SIZE);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
-+
-+	/* Check that the returned pointer is tagged. */
-+	KUNIT_EXPECT_GE(test, (u8)get_tag(ptr), (u8)KASAN_TAG_MIN);
-+	KUNIT_EXPECT_LT(test, (u8)get_tag(ptr), (u8)KASAN_TAG_KERNEL);
-+
-+	/* Make sure exported vmalloc helpers handle tagged pointers. */
-+	KUNIT_ASSERT_TRUE(test, is_vmalloc_addr(ptr));
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, vmalloc_to_page(ptr));
-+
-+	vfree(ptr);
-+}
-+
- static void vmalloc_oob(struct kunit *test)
- {
--	void *area;
-+	char *v_ptr, *p_ptr;
-+	struct page *page;
-+	size_t size = PAGE_SIZE / 2 - KASAN_GRANULE_SIZE - 5;
- 
- 	KASAN_TEST_NEEDS_CONFIG_ON(test, CONFIG_KASAN_VMALLOC);
- 
-+	v_ptr = vmalloc(size);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, v_ptr);
-+
- 	/*
--	 * We have to be careful not to hit the guard page.
-+	 * We have to be careful not to hit the guard page in vmalloc tests.
- 	 * The MMU will catch that and crash us.
- 	 */
--	area = vmalloc(3000);
--	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, area);
- 
--	KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)area)[3100]);
--	vfree(area);
-+	/* Make sure in-bounds accesses are valid. */
-+	v_ptr[0] = 0;
-+	v_ptr[size - 1] = 0;
-+
-+	/*
-+	 * An unaligned access past the requested vmalloc size.
-+	 * Only generic KASAN can precisely detect these.
-+	 */
-+	if (IS_ENABLED(CONFIG_KASAN_GENERIC))
-+		KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)v_ptr)[size]);
-+
-+	/* An aligned access into the first out-of-bounds granule. */
-+	KUNIT_EXPECT_KASAN_FAIL(test, ((volatile char *)v_ptr)[size + 5]);
-+
-+	/* Check that in-bounds accesses to the physical page are valid. */
-+	page = vmalloc_to_page(v_ptr);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, page);
-+	p_ptr = page_address(page);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, p_ptr);
-+	p_ptr[0] = 0;
-+
-+	vfree(v_ptr);
-+
-+	/*
-+	 * We can't check for use-after-unmap bugs in this nor in the following
-+	 * vmalloc tests, as the page might be fully unmapped and accessing it
-+	 * will crash the kernel.
-+	 */
-+}
-+
-+static void vmap_tags(struct kunit *test)
-+{
-+	char *p_ptr, *v_ptr;
-+	struct page *p_page, *v_page;
-+	size_t order = 1;
-+
-+	/*
-+	 * This test is specifically crafted for the software tag-based mode,
-+	 * the only tag-based mode that poisons vmap mappings.
-+	 */
-+	KASAN_TEST_NEEDS_CONFIG_ON(test, CONFIG_KASAN_SW_TAGS);
-+
-+	KASAN_TEST_NEEDS_CONFIG_ON(test, CONFIG_KASAN_VMALLOC);
-+
-+	p_page = alloc_pages(GFP_KERNEL, order);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, p_page);
-+	p_ptr = page_address(p_page);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, p_ptr);
-+
-+	v_ptr = vmap(&p_page, 1 << order, VM_MAP, PAGE_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, v_ptr);
-+
-+	/*
-+	 * We can't check for out-of-bounds bugs in this nor in the following
-+	 * vmalloc tests, as allocations have page granularity and accessing
-+	 * the guard page will crash the kernel.
-+	 */
-+
-+	KUNIT_EXPECT_GE(test, (u8)get_tag(v_ptr), (u8)KASAN_TAG_MIN);
-+	KUNIT_EXPECT_LT(test, (u8)get_tag(v_ptr), (u8)KASAN_TAG_KERNEL);
-+
-+	/* Make sure that in-bounds accesses through both pointers work. */
-+	*p_ptr = 0;
-+	*v_ptr = 0;
-+
-+	/* Make sure vmalloc_to_page() correctly recovers the page pointer. */
-+	v_page = vmalloc_to_page(v_ptr);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, v_page);
-+	KUNIT_EXPECT_PTR_EQ(test, p_page, v_page);
-+
-+	vunmap(v_ptr);
-+	free_pages((unsigned long)p_ptr, order);
-+}
-+
-+static void vm_map_ram_tags(struct kunit *test)
-+{
-+	char *p_ptr, *v_ptr;
-+	struct page *page;
-+	size_t order = 1;
-+
-+	/*
-+	 * This test is specifically crafted for the software tag-based mode,
-+	 * the only tag-based mode that poisons vm_map_ram mappings.
-+	 */
-+	KASAN_TEST_NEEDS_CONFIG_ON(test, CONFIG_KASAN_SW_TAGS);
-+
-+	page = alloc_pages(GFP_KERNEL, order);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, page);
-+	p_ptr = page_address(page);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, p_ptr);
-+
-+	v_ptr = vm_map_ram(&page, 1 << order, -1);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, v_ptr);
-+
-+	KUNIT_EXPECT_GE(test, (u8)get_tag(v_ptr), (u8)KASAN_TAG_MIN);
-+	KUNIT_EXPECT_LT(test, (u8)get_tag(v_ptr), (u8)KASAN_TAG_KERNEL);
-+
-+	/* Make sure that in-bounds accesses through both pointers work. */
-+	*p_ptr = 0;
-+	*v_ptr = 0;
-+
-+	vm_unmap_ram(v_ptr, 1 << order);
-+	free_pages((unsigned long)p_ptr, order);
-+}
-+
-+static void vmalloc_percpu(struct kunit *test)
-+{
-+	char __percpu *ptr;
-+	int cpu;
-+
-+	/*
-+	 * This test is specifically crafted for the software tag-based mode,
-+	 * the only tag-based mode that poisons percpu mappings.
-+	 */
-+	KASAN_TEST_NEEDS_CONFIG_ON(test, CONFIG_KASAN_SW_TAGS);
-+
-+	ptr = __alloc_percpu(PAGE_SIZE, PAGE_SIZE);
-+
-+	for_each_possible_cpu(cpu) {
-+		char *c_ptr = per_cpu_ptr(ptr, cpu);
-+
-+		KUNIT_EXPECT_GE(test, (u8)get_tag(c_ptr), (u8)KASAN_TAG_MIN);
-+		KUNIT_EXPECT_LT(test, (u8)get_tag(c_ptr), (u8)KASAN_TAG_KERNEL);
-+
-+		/* Make sure that in-bounds accesses don't crash the kernel. */
-+		*c_ptr = 0;
-+	}
-+
-+	free_percpu(ptr);
- }
- 
- /*
-@@ -1073,6 +1226,18 @@ static void match_all_not_assigned(struct kunit *test)
- 		KUNIT_EXPECT_LT(test, (u8)get_tag(ptr), (u8)KASAN_TAG_KERNEL);
- 		free_pages((unsigned long)ptr, order);
- 	}
-+
-+	if (!IS_ENABLED(CONFIG_KASAN_VMALLOC))
-+		return;
-+
-+	for (i = 0; i < 256; i++) {
-+		size = (get_random_int() % 1024) + 1;
-+		ptr = vmalloc(size);
-+		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
-+		KUNIT_EXPECT_GE(test, (u8)get_tag(ptr), (u8)KASAN_TAG_MIN);
-+		KUNIT_EXPECT_LT(test, (u8)get_tag(ptr), (u8)KASAN_TAG_KERNEL);
-+		vfree(ptr);
-+	}
- }
- 
- /* Check that 0xff works as a match-all pointer tag for tag-based modes. */
-@@ -1176,7 +1341,11 @@ static struct kunit_case kasan_kunit_test_cases[] = {
- 	KUNIT_CASE(kasan_bitops_generic),
- 	KUNIT_CASE(kasan_bitops_tags),
- 	KUNIT_CASE(kmalloc_double_kzfree),
-+	KUNIT_CASE(vmalloc_helpers_tags),
- 	KUNIT_CASE(vmalloc_oob),
-+	KUNIT_CASE(vmap_tags),
-+	KUNIT_CASE(vm_map_ram_tags),
-+	KUNIT_CASE(vmalloc_percpu),
- 	KUNIT_CASE(match_all_not_assigned),
- 	KUNIT_CASE(match_all_ptr_tag),
- 	KUNIT_CASE(match_all_mem_tag),
--- 
-2.25.1
+Reinette
 

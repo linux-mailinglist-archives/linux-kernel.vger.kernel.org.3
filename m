@@ -2,77 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6604446975F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AAC8469770
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244695AbhLFNr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 08:47:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244642AbhLFNrZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 08:47:25 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3668C0613F8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 05:43:56 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id 207so20998760ljf.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 05:43:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=7Z4bIWUJcNwasnOvZT//wASf4/xDxe1Cc4BxfIfuhGs=;
-        b=Zm4K5rAkSdBzHfoNYuE8LV/fJbsU2mJi6Af6KlVKPW1F1QmdWVuSitegQz1IfOMs6r
-         QV7I3YPPQ+MItShMcLrLtzHC4nFOZTbMl5QFm+Sy6OctQ3IJhpz9q07UY7AQIDQby55Q
-         mwxMX5BmpCZBINPw+craorfMX/lNue9BM6iY6KWBNp4jUadrmv4E3f3Td9bvYNNrzEoK
-         KiwQnhFltU7t+mmBni8ZtTbr+jPfRa3bA57zJrBLJigMIr0x19ttD/3M7/Kct3B+zXzK
-         c7xybpgJX5oQRokyhari6LN00X+KmTryO1W3J8T4u8R8joeJV8MmV8wDpmP9RGYrkdBF
-         Xq2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=7Z4bIWUJcNwasnOvZT//wASf4/xDxe1Cc4BxfIfuhGs=;
-        b=lOxe1pIZMBCLW+BPyD1FB4K6bhJXN6ey6kxKyfr5+gfFp6JnJo9nI73rB5oz43yRLh
-         tHUdnr6qTyXxCiaeBtUTlJnEh3mXk/GbJu+QgG0FmvRIawEFAAVzyeU74R6hOv9ETsIS
-         oxqSeLKpbgLjqaue4OFDPUQ++di3dkNaIsUvGt+YXCaHURuj8Lm1TJD06t2VAS9xD2Ao
-         Wowv58jITAGUU1Mfosg6uW3+K/+iZPzEQ6Bac6f3XLsTYrirFnDLmSN9jSqjuPUbJjhm
-         aVnsW6uEv2Y47JFjjf1S+G+1VapZsm7TAP3Y34FGMjcWi/eNtd0ccFgqgt+Zg6ZsCDG2
-         6XGQ==
-X-Gm-Message-State: AOAM533RoimrPt8I3Mv6UpUu1HWDCRgsgyQzQMaH6FYxkVOqNERBx9og
-        m8eqfqfSt9xPclYNXja0UQb0WlBrDZHsPywjJmo=
-X-Google-Smtp-Source: ABdhPJy3LOpoTIu64013sqW0dHRRlXaAEBAtEtSzFkizWWdAskZOmNXhjX/UH5ypxTlqkQaxjjjECut93LqLN9L79Ho=
-X-Received: by 2002:a05:651c:a0f:: with SMTP id k15mr37383407ljq.298.1638798234767;
- Mon, 06 Dec 2021 05:43:54 -0800 (PST)
+        id S244773AbhLFNvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 08:51:20 -0500
+Received: from mga02.intel.com ([134.134.136.20]:31137 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244021AbhLFNvU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 08:51:20 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="224566255"
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="224566255"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 05:47:51 -0800
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="542393944"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 05:47:40 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1muEKG-002nTh-2c;
+        Mon, 06 Dec 2021 15:46:40 +0200
+Date:   Mon, 6 Dec 2021 15:46:39 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] serial: 8250_pci: remove redundant assignment to tmp
+ after the mask operation
+Message-ID: <Ya4UP5ceA8jINvVT@smile.fi.intel.com>
+References: <20211205232822.110099-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:ab3:7f47:0:0:0:0:0 with HTTP; Mon, 6 Dec 2021 05:43:53 -0800 (PST)
-Reply-To: mohammedshamekh24@gmail.com
-From:   Mr mohammed shamekh <nasserkhalilaljaidah90@gmail.com>
-Date:   Mon, 6 Dec 2021 05:43:53 -0800
-Message-ID: <CAERPTfHc8wGewE_pqsqrXw6L4pscwYEtXPe49K5c3y9+Mnbfqw@mail.gmail.com>
-Subject: THE AMOUNT IS 27.5 MILLIOMS USD
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211205232822.110099-1-colin.i.king@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhcsKgRnJpZW5kLA0KDQpHcmVldGluZ3MuDQoNCkhvd8KgYXJlwqB5b3XCoGRvaW5nwqB0b2Rh
-ecKgacKgaG9wZcKgZmluZT8NCg0KScKgY2FtZcKgYWNyb3NzwqB5b3VywqBlLW1haWzCoGNvbnRh
-Y3TCoHByaW9ywqBhwqBwcml2YXRlwqBzZWFyY2jCoHdoaWxlwqBpbsKgbmVlZA0Kb2bCoHlvdXLC
-oGFzc2lzdGFuY2UuwqBNecKgbmFtZcKgIE1yICBtb2hhbW1lZCAgIHNoYW1la2ggIOKAmcKgScKg
-d29ya8Kgd2l0aMKgdGhlDQpkZXBhcnRtZW50wqBvZsKgQXVkaXTCoGFuZMKgYWNjb3VudGluZ8Kg
-bWFuYWdlcsKgaGVyZcKgaW7CoFVCQcKgQmFua8Kgb2bCoEFmcmljYSwNClRoZXJlwqBpc8KgdGhp
-c8KgZnVuZMKgdGhhdMKgd2FzwqBrZWVwwqBpbsKgbXnCoGN1c3RvZHnCoHllYXJzwqBhZ2/CoGFu
-ZMKgScKgbmVlZA0KeW91csKgYXNzaXN0YW5jZcKgZm9ywqB0aGXCoHRyYW5zZmVycmluZ8Kgb2bC
-oHRoaXPCoGZ1bmTCoHRvwqB5b3VywqBiYW5rwqBhY2NvdW50DQpmb3LCoGJvdGjCoG9mwqB1c8Kg
-YmVuZWZpdMKgZm9ywqBsaWZlwqB0aW1lwqBpbnZlc3RtZW50wqBhbmTCoHRoZcKgYW1vdW50wqBp
-c8KgKFVTDQokMjcsNTAwLsKgTWlsbGlvbsKgRG9sbGFycykuDQoNCknCoGhhdmXCoGV2ZXJ5wqBp
-bnF1aXJ5wqBkZXRhaWxzwqB0b8KgbWFrZcKgdGhlwqBiYW5rwqBiZWxpZXZlwqB5b3XCoGFuZMKg
-cmVsZWFzZQ0KdGhlwqBmdW5kwqB0b8KgeW91csKgYmFua8KgYWNjb3VudMKgaW7CoHdpdGhpbsKg
-N8KgYmFua2luZ8Kgd29ya2luZ8KgZGF5c8Kgd2l0aA0KeW91csKgZnVsbMKgY28tb3BlcmF0aW9u
-wqB3aXRowqBtZcKgYWZ0ZXLCoHN1Y2Nlc3PCoE5vdGXCoDUwJcKgZm9ywqB5b3XCoHdoaWxlDQo1
-MCXCoGZvcsKgbWXCoGFmdGVywqBzdWNjZXNzwqBvZsKgdGhlwqB0cmFuc2ZlcsKgb2bCoHRoZcKg
-ZnVuZHPCoHRvwqB5b3VywqBiYW5rDQphY2NvdW50wqBva2F5Lg0KDQpXQUlUSU5HwqBUT8KgSEVB
-UsKgRlJPTcKgWU9VLg0KVEhBTktTLg0KDQogTXIgIG1vaGFtbWVkICAgc2hhbWVraCAsDQo=
+On Sun, Dec 05, 2021 at 11:28:22PM +0000, Colin Ian King wrote:
+> The variable tmp is being masked with a bitmask and the value is being
+> written to port base + 0x3c.  However, the masked value is being written
+> back to tmp and tmp is never used after this. The assignmentment is
+> redundant, replace the &= operator with just &.
+
+Make sense (maybe you can replace all those 0x00...BIT...00 by BIT()
+and GENMASK() later on).
+
+Reviewesd-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/tty/serial/8250/8250_pci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
+> index 60f8fffdfd77..81aac3c25ead 100644
+> --- a/drivers/tty/serial/8250/8250_pci.c
+> +++ b/drivers/tty/serial/8250/8250_pci.c
+> @@ -1278,7 +1278,7 @@ static int pci_quatech_init(struct pci_dev *dev)
+>  			outl(inl(base + 0x38) | 0x00002000, base + 0x38);
+>  			tmp = inl(base + 0x3c);
+>  			outl(tmp | 0x01000000, base + 0x3c);
+> -			outl(tmp &= ~0x01000000, base + 0x3c);
+> +			outl(tmp & ~0x01000000, base + 0x3c);
+>  		}
+>  	}
+>  	return 0;
+> -- 
+> 2.33.1
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

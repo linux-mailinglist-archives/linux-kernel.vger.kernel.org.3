@@ -2,105 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 183CF469862
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA10469865
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343676AbhLFORj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 09:17:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41322 "EHLO
+        id S1343794AbhLFORm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 09:17:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343688AbhLFORi (ORCPT
+        with ESMTP id S1343767AbhLFORj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 09:17:38 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5AEC0613F8;
-        Mon,  6 Dec 2021 06:14:09 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id f125so10642170pgc.0;
-        Mon, 06 Dec 2021 06:14:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=LG+zF8eXNnqFsGFKA2ZTnXSPUueJWK5YxbpbucSufXI=;
-        b=mQqUkA3xIsQY4XmQYBzGNmYRws6Q0JrMJpuTq/VEAZ58elCNocHbrP8QMV+4phw9Ut
-         vWKeJdfRRl2H6A3/U0ZfFrg46WCHuxCz5sAlIyGUXSN9dXWnqcoQP+R/jmprw5bfpFHj
-         fKOmzAhbS2g+OM1Z5BI3nXKStQ11a7SSrQ5tFd6125uR6KPjsGJebIfx224pdX+EvGle
-         FqorCYj7anmbSaX4e41EWyvuvtjfgov84k+oRDD0xrawuDr2dYvzxxLjG9dUVswmsHTE
-         elai+rbP43KznXg+HMIMYpPzORZYpPi24LOHZHh8JFVSoiDVYRN7mdHXVcauIlegBAj5
-         mHBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LG+zF8eXNnqFsGFKA2ZTnXSPUueJWK5YxbpbucSufXI=;
-        b=a/a6H3WXUQOc4RaM7MjJoynXjSlcbcd9Yu0dTzizVhzGcmw0SE2WnNEw2ggS7rTUxz
-         l6YR0WejXUMO6myj40TFebIuLWBsuobLSd6WVJJA3lKQBPsVnvfmvdodAO25s9Y+e5in
-         ySDQbEb65xcUFsG641MqU5dXvLRO1hRxCAFMUnfWzISRtaVROCOjb4yFbhfUS26VNe3i
-         SUtgfu0u5plvrmXU80U3G33ZWRYVfrxVrxVXEn2353eASEUwPB/7PlZQOaD/GKqtqXJr
-         CNHqxg9sql30CUncmMjc7B2LR2O7d64XnvsudowfSChoUAykyz4XTlg0XjOz0v5bwl6Y
-         33BQ==
-X-Gm-Message-State: AOAM5329jm21pOA/9nlt5UAbFCIgkmAOyfhk71dbT2P+spgg70P4Wg1V
-        hVBRaMzMEozSkWL/C4gsfdA=
-X-Google-Smtp-Source: ABdhPJySAj+QT4OHzaoYLk1cSWHqCc54qgRjOngjnxP5g2RiZmDR4g0TxiHn1EhVWrwC669mfsgWOQ==
-X-Received: by 2002:a62:7e4c:0:b0:4a2:678e:8793 with SMTP id z73-20020a627e4c000000b004a2678e8793mr36890086pfc.75.1638800049309;
-        Mon, 06 Dec 2021 06:14:09 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::50b? ([2404:f801:9000:18:efec::50b])
-        by smtp.gmail.com with ESMTPSA id pi17sm14658528pjb.34.2021.12.06.06.13.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 06:14:08 -0800 (PST)
-Message-ID: <4d9049eb-d3a8-3872-c4c3-4ad41d93b58c@gmail.com>
-Date:   Mon, 6 Dec 2021 22:13:57 +0800
+        Mon, 6 Dec 2021 09:17:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62B1C061746;
+        Mon,  6 Dec 2021 06:14:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9EE7AB810E8;
+        Mon,  6 Dec 2021 14:14:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D707AC341D9;
+        Mon,  6 Dec 2021 14:14:02 +0000 (UTC)
+Date:   Mon, 6 Dec 2021 15:13:59 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Subject: Re: [RFC v2 19/19] ima: Setup securityfs for IMA namespace
+Message-ID: <20211206141359.van3yjqxwp47rviw@wittgenstein>
+References: <20211203023118.1447229-1-stefanb@linux.ibm.com>
+ <20211203023118.1447229-20-stefanb@linux.ibm.com>
+ <df433bc52ca1e0408d48bbace4c34a573991f5ba.camel@linux.ibm.com>
+ <6306b4e5-f26d-1704-6344-354eb5387abf@linux.ibm.com>
+ <11b557b58de74828b1c16334a5fb52c4d3f6ad0f.camel@linux.ibm.com>
+ <ed654d0f-6194-ce29-a854-3d9128d81b7a@schaufler-ca.com>
+ <20211206120847.ayr3zycigld6rf4j@wittgenstein>
+ <36c97ac9821dfc03aa7b370648c8be423979cc5a.camel@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH V4 2/5] x86/hyper-v: Add hyperv Isolation VM check in the
- cc_platform_has()
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, jgross@suse.com,
-        sstabellini@kernel.org, boris.ostrovsky@oracle.com,
-        joro@8bytes.org, will@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        arnd@arndb.de, hch@infradead.org, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, thomas.lendacky@amd.com,
-        Tianyu.Lan@microsoft.com, xen-devel@lists.xenproject.org,
-        michael.h.kelley@microsoft.com, iommu@lists.linux-foundation.org,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        netdev@vger.kernel.org, vkuznets@redhat.com, brijesh.singh@amd.com,
-        konrad.wilk@oracle.com, parri.andrea@gmail.com,
-        dave.hansen@intel.com
-References: <20211205081815.129276-1-ltykernel@gmail.com>
- <20211205081815.129276-3-ltykernel@gmail.com> <20211206140651.GA5100@lst.de>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <20211206140651.GA5100@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <36c97ac9821dfc03aa7b370648c8be423979cc5a.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph:
-	Thanks for your review.
-
-On 12/6/2021 10:06 PM, Christoph Hellwig wrote:
-> On Sun, Dec 05, 2021 at 03:18:10AM -0500, Tianyu Lan wrote:
->> +static bool hyperv_cc_platform_has(enum cc_attr attr)
->> +{
->> +#ifdef CONFIG_HYPERV
->> +	return attr == CC_ATTR_GUEST_MEM_ENCRYPT;
->> +#else
->> +	return false;
->> +#endif
->> +}
+On Mon, Dec 06, 2021 at 08:38:29AM -0500, James Bottomley wrote:
+> On Mon, 2021-12-06 at 13:08 +0100, Christian Brauner wrote:
+> > On Fri, Dec 03, 2021 at 11:37:14AM -0800, Casey Schaufler wrote:
+> > > On 12/3/2021 10:50 AM, James Bottomley wrote:
+> > > > On Fri, 2021-12-03 at 13:06 -0500, Stefan Berger wrote:
+> > > > > On 12/3/21 12:03, James Bottomley wrote:
+> > > > > > On Thu, 2021-12-02 at 21:31 -0500, Stefan Berger wrote:
+> > > > > > [...]
+> > > > > > >    static int securityfs_init_fs_context(struct fs_context
+> > > > > > > *fc)
+> > > > > > >    {
+> > > > > > > +	int rc;
+> > > > > > > +
+> > > > > > > +	if (fc->user_ns->ima_ns->late_fs_init) {
+> > > > > > > +		rc = fc->user_ns->ima_ns->late_fs_init(fc-
+> > > > > > > >user_ns);
+> > > > > > > +		if (rc)
+> > > > > > > +			return rc;
+> > > > > > > +	}
+> > > > > > >    	fc->ops = &securityfs_context_ops;
+> > > > > > >    	return 0;
+> > > > > > >    }
+> > > > > > I know I suggested this, but to get this to work in general,
+> > > > > > it's going to have to not be specific to IMA, so it's going
+> > > > > > to have to become something generic like a notifier
+> > > > > > chain.  The other problem is it's only working still by
+> > > > > > accident:
+> > > > >  
+> > > > > I had thought about this also but the rationale was:
+> > > > > 
+> > > > > securityfs is compiled due to CONFIG_IMA_NS and the user
+> > > > > namespace exists there and that has a pointer now to
+> > > > > ima_namespace, which can have that callback. I assumed that
+> > > > > other namespaced subsystems could also be  reached then via
+> > > > > such a callback, but I don't know.
+> > > >  
+> > > > Well securityfs is supposed to exist for LSMs.  At some point
+> > > > each of those is going to need to be namespaced, which may
+> > > > eventually be quite a pile of callbacks, which is why I thought
+> > > > of a notifier.
+> > > 
+> > > While AppArmor, lockdown and the integrity family use securityfs,
+> > > SELinux and Smack do not. They have their own independent
+> > > filesystems. Implementations of namespacing for each of SELinux and
+> > > Smack have been proposed, but nothing has been adopted. It would be
+> > > really handy to namespace the infrastructure rather than each
+> > > individual LSM, but I fear that's a bigger project than anyone will
+> > > be taking on any time soon. It's likely to encounter many of the
+> > > same issues that I've been dealing with for module stacking.
+> > 
+> > The main thing that bothers me is that it uses simple_pin_fs() and
+> > simple_unpin_fs() which I would try hard to get rid of if possible.
+> > The existence of this global pinning logic makes namespacing it
+> > properly more difficult then it needs to be and it creates imho wonky
+> > semantics where the last unmount doesn't really destroy the
+> > superblock.
 > 
-> Can we even end up here without CONFIG_HYPERV?
+> So in the notifier sketch I posted, I got rid of the pinning but only
+> for the non root user namespace use case ... which basically means only
+> for converted consumers of securityfs.  The last unmount of securityfs
+> inside the namespace now does destroy the superblock ... I checked.
+
+Yeah, I saw. I'm struggling to follow the series but I pulled Stefan's
+branch and put your patch on top of it so I peruse it.
+
 > 
+> The same isn't true for the last unmount of the root namespace, but
+> that has to be so to keep the current semantics.
+> 
+> >  Instead subsequents mounts resurface the same superblock. There
+> > might be an inherent design reason why this needs to be this way but
+> > I would advise against these semantics for anything that wants to be
+> > namespaced. Probably the first securityfs mount in init_user_ns can
+> > follow these semantics but ones tied to a non-initial user namespace
+> > should not as the userns can go away. In that case the pinning logic
+> > seems strange as conceptually the userns pins the securityfs mount as
+> > evidenced by the fact that we key by it in get_tree_keyed().
+> 
+> Yes, that's basically what I did: pin if ns == &init_user_ns but don't
+> pin if not.  However, I'm still not sure I got the triggers right.  We
+> have to trigger the notifier call (which adds the namespaced file
+> entries) from context free, because that's the first place the
+> superblock mount is fully set up ... I can't do it in fill_super
+> because the mount isn't fully initialized (and the locking prevents
+> it).  I did manage to get the notifier for teardown triggered from
+> kill_super, though.
 
-Yes, I will update in the next version.
-
-Thanks.
+Once Stefan answer my questions about fill_super I _might_ have an idea
+how to improve this.

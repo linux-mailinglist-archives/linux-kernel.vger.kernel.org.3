@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E88C8469BC7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A00A0469E77
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357087AbhLFPSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:18:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
+        id S1356489AbhLFPjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:39:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346797AbhLFPMe (ORCPT
+        with ESMTP id S1377755AbhLFPYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:12:34 -0500
+        Mon, 6 Dec 2021 10:24:53 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEC0C08C5F1;
-        Mon,  6 Dec 2021 07:05:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2528DC08EB4B;
+        Mon,  6 Dec 2021 07:15:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E71D6132D;
-        Mon,  6 Dec 2021 15:05:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 134A8C341C2;
-        Mon,  6 Dec 2021 15:05:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B44C161344;
+        Mon,  6 Dec 2021 15:15:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 956EAC341C1;
+        Mon,  6 Dec 2021 15:15:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803146;
-        bh=5Aqowb9gV7qkwSZXNmtBCfXW9/hoDKZ0Ip/3lamcXO8=;
+        s=korg; t=1638803742;
+        bh=rXJNURb3QWGZip9tiCaqriBcr192K2y7MMAOeZy0vU8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gq/b+6MJjxWYCu1klTWi7BrN98ru3t5/pyRIzPElFWvivyqbHsmUa+dYbHOT79BGS
-         JFq9348G3+v9cYWsEP3j57oSP+l7tZdN6L62abaiokK5kqEdJu2ppxXZLAAB+CBapy
-         +KaT/d1tIAGBYisznKFrYBkJHZplpa1VRhLgsjTE=
+        b=1MABpgYG9YUA1MrWJpv7BWQRAtqH0bjf3+SMdMOlsDzIUJRjwpM3FoLIJ6PtrGfXg
+         D0prjOnifcops1ld0e2O83hGLHPH2Av08WGw4k/pDcOQtGfV3K1cxSfPB8HwTPbglQ
+         qJbMt0ELPIJ/cGY2+tLWVgaoLs4JQiZRuoLE7ycg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Stefano Stabellini <stefano.stabellini@xilinx.com>,
-        Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Subject: [PATCH 4.14 012/106] xen: detect uninitialized xenbus in xenbus_init
+        stable@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        Stan Hu <stanhu@gmail.com>
+Subject: [PATCH 5.10 003/130] ovl: simplify file splice
 Date:   Mon,  6 Dec 2021 15:55:20 +0100
-Message-Id: <20211206145555.813490239@linuxfoundation.org>
+Message-Id: <20211206145559.731406260@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,68 +48,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefano Stabellini <stefano.stabellini@xilinx.com>
+From: Miklos Szeredi <mszeredi@redhat.com>
 
-commit 36e8f60f0867d3b70d398d653c17108459a04efe upstream.
+commit 82a763e61e2b601309d696d4fa514c77d64ee1be upstream.
 
-If the xenstore page hasn't been allocated properly, reading the value
-of the related hvm_param (HVM_PARAM_STORE_PFN) won't actually return
-error. Instead, it will succeed and return zero. Instead of attempting
-to xen_remap a bad guest physical address, detect this condition and
-return early.
+generic_file_splice_read() and iter_file_splice_write() will call back into
+f_op->iter_read() and f_op->iter_write() respectively.  These already do
+the real file lookup and cred override.  So the code in ovl_splice_read()
+and ovl_splice_write() is redundant.
 
-Note that although a guest physical address of zero for
-HVM_PARAM_STORE_PFN is theoretically possible, it is not a good choice
-and zero has never been validly used in that capacity.
+In addition the ovl_file_accessed() call in ovl_splice_write() is
+incorrect, though probably harmless.
 
-Also recognize all bits set as an invalid value.
+Fix by calling generic_file_splice_read() and iter_file_splice_write()
+directly.
 
-For 32-bit Linux, any pfn above ULONG_MAX would get truncated. Pfns
-above ULONG_MAX should never be passed by the Xen tools to HVM guests
-anyway, so check for this condition and return early.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Stefano Stabellini <stefano.stabellini@xilinx.com>
-Reviewed-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
-Link: https://lore.kernel.org/r/20211123210748.1910236-1-sstabellini@kernel.org
-Signed-off-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+Cc: Stan Hu <stanhu@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/xen/xenbus/xenbus_probe.c |   23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ fs/overlayfs/file.c |   46 ++--------------------------------------------
+ 1 file changed, 2 insertions(+), 44 deletions(-)
 
---- a/drivers/xen/xenbus/xenbus_probe.c
-+++ b/drivers/xen/xenbus/xenbus_probe.c
-@@ -878,6 +878,29 @@ static int __init xenbus_init(void)
- 		err = hvm_get_parameter(HVM_PARAM_STORE_PFN, &v);
- 		if (err)
- 			goto out_error;
-+		/*
-+		 * Uninitialized hvm_params are zero and return no error.
-+		 * Although it is theoretically possible to have
-+		 * HVM_PARAM_STORE_PFN set to zero on purpose, in reality it is
-+		 * not zero when valid. If zero, it means that Xenstore hasn't
-+		 * been properly initialized. Instead of attempting to map a
-+		 * wrong guest physical address return error.
-+		 *
-+		 * Also recognize all bits set as an invalid value.
-+		 */
-+		if (!v || !~v) {
-+			err = -ENOENT;
-+			goto out_error;
-+		}
-+		/* Avoid truncation on 32-bit. */
-+#if BITS_PER_LONG == 32
-+		if (v > ULONG_MAX) {
-+			pr_err("%s: cannot handle HVM_PARAM_STORE_PFN=%llx > ULONG_MAX\n",
-+			       __func__, v);
-+			err = -EINVAL;
-+			goto out_error;
-+		}
-+#endif
- 		xen_store_gfn = (unsigned long)v;
- 		xen_store_interface =
- 			xen_remap(xen_store_gfn << XEN_PAGE_SHIFT,
+--- a/fs/overlayfs/file.c
++++ b/fs/overlayfs/file.c
+@@ -422,48 +422,6 @@ out_unlock:
+ 	return ret;
+ }
+ 
+-static ssize_t ovl_splice_read(struct file *in, loff_t *ppos,
+-			 struct pipe_inode_info *pipe, size_t len,
+-			 unsigned int flags)
+-{
+-	ssize_t ret;
+-	struct fd real;
+-	const struct cred *old_cred;
+-
+-	ret = ovl_real_fdget(in, &real);
+-	if (ret)
+-		return ret;
+-
+-	old_cred = ovl_override_creds(file_inode(in)->i_sb);
+-	ret = generic_file_splice_read(real.file, ppos, pipe, len, flags);
+-	revert_creds(old_cred);
+-
+-	ovl_file_accessed(in);
+-	fdput(real);
+-	return ret;
+-}
+-
+-static ssize_t
+-ovl_splice_write(struct pipe_inode_info *pipe, struct file *out,
+-			  loff_t *ppos, size_t len, unsigned int flags)
+-{
+-	struct fd real;
+-	const struct cred *old_cred;
+-	ssize_t ret;
+-
+-	ret = ovl_real_fdget(out, &real);
+-	if (ret)
+-		return ret;
+-
+-	old_cred = ovl_override_creds(file_inode(out)->i_sb);
+-	ret = iter_file_splice_write(pipe, real.file, ppos, len, flags);
+-	revert_creds(old_cred);
+-
+-	ovl_file_accessed(out);
+-	fdput(real);
+-	return ret;
+-}
+-
+ static int ovl_fsync(struct file *file, loff_t start, loff_t end, int datasync)
+ {
+ 	struct fd real;
+@@ -772,8 +730,8 @@ const struct file_operations ovl_file_op
+ #ifdef CONFIG_COMPAT
+ 	.compat_ioctl	= ovl_compat_ioctl,
+ #endif
+-	.splice_read    = ovl_splice_read,
+-	.splice_write   = ovl_splice_write,
++	.splice_read    = generic_file_splice_read,
++	.splice_write   = iter_file_splice_write,
+ 
+ 	.copy_file_range	= ovl_copy_file_range,
+ 	.remap_file_range	= ovl_remap_file_range,
 
 

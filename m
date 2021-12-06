@@ -2,47 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2091246A051
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9953F469BFF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:16:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443496AbhLFQAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:00:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390543AbhLFPma (ORCPT
+        id S244269AbhLFPTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:19:21 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34382 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346705AbhLFPOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:42:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8DFC0698D4;
-        Mon,  6 Dec 2021 07:28:09 -0800 (PST)
+        Mon, 6 Dec 2021 10:14:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 827B3B81116;
-        Mon,  6 Dec 2021 15:28:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8E56C34902;
-        Mon,  6 Dec 2021 15:28:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53BF16134A;
+        Mon,  6 Dec 2021 15:10:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B78C341C5;
+        Mon,  6 Dec 2021 15:10:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804487;
-        bh=96yIe4GIZ3JcXOCSey31u2M+MGmqJRBIdthTgp/tzxs=;
+        s=korg; t=1638803437;
+        bh=Ore5wlezD3yV5BIeDNVWyozbTsqKcJmLOke6XWdvMf0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hh2xo+nMTZWRRc+4C1h0gIEhH048tiGjq3QBs3QY5dWbAjAl8VRCkY+qBluthaLmh
-         q5LvdwPpfM+MplvjMfLzp7tZMcNZGM6IEZIoNEygwQbTXC7hGSwTwLGVp0vMqzP4Jc
-         pz33yEpaS7JjUcQl9hkCshGQoSSqSeSWFkzBQJds=
+        b=zXU7MKm5Wiy5nlqc9wyLcm7mY5GOf3czylEmWjR4yTJH8xX5s7t7tQSVazOm5vrHv
+         QNzvCIyPH52zbceyp+qaw7BnghfjahJh375p5Ix3WC9V7A49F52RQqvJFNGFUAVCJ6
+         2L/mf5tJ8Y/OLPqU2vROWdxHk4AsqNEvcT/ARPDU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmytro Linkin <dlinkin@nvidia.com>,
-        Roi Dayan <roid@nvidia.com>, Parav Pandit <parav@nvidia.com>,
-        Mark Bloch <mbloch@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 164/207] net/mlx5: E-switch, Respect BW share of the new group
+        stable@vger.kernel.org, Ole Ernst <olebowle@gmx.com>
+Subject: [PATCH 4.19 41/48] USB: NO_LPM quirk Lenovo Powered USB-C Travel Hub
 Date:   Mon,  6 Dec 2021 15:56:58 +0100
-Message-Id: <20211206145615.941996709@linuxfoundation.org>
+Message-Id: <20211206145550.241157017@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+References: <20211206145548.859182340@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,43 +44,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmytro Linkin <dlinkin@nvidia.com>
+From: Ole Ernst <olebowle@gmx.com>
 
-[ Upstream commit 1e59b32e45e47c8ea5455182286ba010bfa87813 ]
+commit d2a004037c3c6afd36d40c384d2905f47cd51c57 upstream.
 
-To enable transmit schduler on vport FW require non-zero configuration
-for vport's TSAR. If vport added to the group which has configured BW
-share value and TX rate values of the vport are zero, then scheduler
-wouldn't be enabled on this vport.
-Fix that by calling BW normalization if BW share of the new group is
-configured.
+This is another branded 8153 device that doesn't work well with LPM:
+r8152 2-2.1:1.0 enp0s13f0u2u1: Stop submitting intr, status -71
 
-Fixes: 0fe132eac38c ("net/mlx5: E-switch, Allow to add vports to rate groups")
-Signed-off-by: Dmytro Linkin <dlinkin@nvidia.com>
-Reviewed-by: Roi Dayan <roid@nvidia.com>
-Reviewed-by: Parav Pandit <parav@nvidia.com>
-Reviewed-by: Mark Bloch <mbloch@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Disable LPM to resolve the issue.
+
+Signed-off-by: Ole Ernst <olebowle@gmx.com>
+Cc: stable <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20211127090546.52072-1-olebowle@gmx.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/esw/qos.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/core/quirks.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/esw/qos.c b/drivers/net/ethernet/mellanox/mlx5/core/esw/qos.c
-index c6cc67cb4f6ad..4501e3d737f80 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/esw/qos.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/esw/qos.c
-@@ -423,7 +423,7 @@ static int esw_qos_vport_update_group(struct mlx5_eswitch *esw,
- 		return err;
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -435,6 +435,9 @@ static const struct usb_device_id usb_qu
+ 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
+ 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
  
- 	/* Recalculate bw share weights of old and new groups */
--	if (vport->qos.bw_share) {
-+	if (vport->qos.bw_share || new_group->bw_share) {
- 		esw_qos_normalize_vports_min_rate(esw, curr_group, extack);
- 		esw_qos_normalize_vports_min_rate(esw, new_group, extack);
- 	}
--- 
-2.33.0
-
++	/* Lenovo Powered USB-C Travel Hub (4X90S92381, RTL8153 GigE) */
++	{ USB_DEVICE(0x17ef, 0x721e), .driver_info = USB_QUIRK_NO_LPM },
++
+ 	/* Lenovo ThinkCenter A630Z TI024Gen3 usb-audio */
+ 	{ USB_DEVICE(0x17ef, 0xa012), .driver_info =
+ 			USB_QUIRK_DISCONNECT_SUSPEND },
 
 

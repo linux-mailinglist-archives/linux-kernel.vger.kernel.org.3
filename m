@@ -2,134 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6735446A08E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B4146A082
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445159AbhLFQFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:05:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
+        id S1388725AbhLFQE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:04:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381602AbhLFP7k (ORCPT
+        with ESMTP id S1442405AbhLFP7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:59:40 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9F8C08EB55;
-        Mon,  6 Dec 2021 07:43:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=MPeuvTxNc7e1r/s1dzAjdNjQbaM0LQOJRmSAdCiN7I4=; b=q07BlVPXYmGLZU+dKgzZJ0hiKT
-        JUrhQDg+pP5lG9oLUYCnZCHWrZnLfKLbg1+7hElhB9qbRGIylmzLvVKhVkVOSE114gPp7O+Kgn6qM
-        XQ35qg/+aEcMjank6MvVfYSt5tE2l364UAZI0FuGnqcS8+3vcnx2+ToMBXcm0nCDX15XTaUECX7F/
-        nr28FgBQeQYlLsfZZFxb4ivohfTzLrQEHYU2yg8OuixSDDOIJfSgyF/lMOrQfhOvIJcFHC0JPITjE
-        cD+3VG1/sIEG49N+bjV2sBSarVlBGseg6pmFkd6+gxAPZPk17OYN6JyvJlq6beuOTj0Fz1VXvz2G/
-        0UVjV9/Q==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56100)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1muG8j-0004w7-OQ; Mon, 06 Dec 2021 15:42:53 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1muG8d-0004Sj-CM; Mon, 06 Dec 2021 15:42:47 +0000
-Date:   Mon, 6 Dec 2021 15:42:47 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Emmanuel Deloget <emmanuel.deloget@eho.link>
-Cc:     Louis Amas <louis.amas@eho.link>, andrii@kernel.org,
-        ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
-        kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, mw@semihalf.com,
-        netdev@vger.kernel.org, songliubraving@fb.com, yhs@fb.com
-Subject: Re: [PATCH 1/1] net: mvpp2: fix XDP rx queues registering
-Message-ID: <Ya4vd9+pBbVJML+K@shell.armlinux.org.uk>
-References: <DB9PR06MB8058D71218633CD7024976CAFA929@DB9PR06MB8058.eurprd06.prod.outlook.com>
- <20211110144104.241589-1-louis.amas@eho.link>
- <bdc1f03c-036f-ee29-e2a1-a80f640adcc4@eho.link>
+        Mon, 6 Dec 2021 10:59:12 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C910C08EB4A
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:42:58 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id u74so22090701oie.8
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 07:42:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hSfDh7txPsCycOs0HAwdmZonlUVK7JVMigsN8QRLArU=;
+        b=L639osgIuxzP6akD21MGy3O6Ndpnqd2XYz6qZEokZS29GfZRMZGA+s2YDzVOCqI79c
+         R+LFM6MRgCtbinRnAB+OwABEgwTPHAFf1m8nnFvyR4QR4GE1MPivd/DGCHyRd1sk7YTy
+         b81JHHZsgL9eQPOUhUVjYBF23yK+C4Yeoi7wYJDhpH3uwh+Y+upMCpesHgCqUw7l5kYw
+         mqSlLGK5Xi5K+m0bHdRVsgdqRM6vt02/N+WXxBZPxRBJHyczvtOisEt7aoD4N8Nn7BK8
+         zYXEwzXbwu2+f62F/ylU0gLVYDVlvt+snaxhwyT41wmdFJwBKufaqwht86wE9K0vpP9C
+         yl4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hSfDh7txPsCycOs0HAwdmZonlUVK7JVMigsN8QRLArU=;
+        b=gk33oV8sQ4nhgacbo9SsyaQ+7CRNxpPd3gGPaPM/YXxevAnYq7FfC1VLKZMXETV/ob
+         uOS+Gz5EJp7hhvLTRQuSSyig+NRhjFLiFtPMxV3bK4CuuF45nK0BQocN/BgptGYAcjEY
+         XS8T5aKg9xpKXchGUioL0ZXH/cjdIgz6NvT9F8QerNpZNa1yrCIF+zjX2d0EVBDlOS/k
+         ADQkQ09lhgTtXN9gwZvDU/XonZoeaUNS/fKL7HNrL1Nks77adMdg1Q8LHtiVOGdXSO6S
+         PiODobnHfSGhtUwzOAdUS2Cr2mBbeNOcUlEDOYENdEJezbKQW89SMiNB6yyNSNlBDGqa
+         iYGQ==
+X-Gm-Message-State: AOAM5327p6DqQoSfYH39pNTyz+z3sx6sKx/KKsmWak+cbuQXkYbxerOW
+        Cegi50OS11DtmCd0AOIYUZteig==
+X-Google-Smtp-Source: ABdhPJx5cAznI7khSOPAIAXSRq2RqYuzmYvaDs63fsXB+ucYlnOMXGc8z7DWJ0RPmuy3nPu6/PqEbw==
+X-Received: by 2002:aca:1b08:: with SMTP id b8mr23615727oib.148.1638805377692;
+        Mon, 06 Dec 2021 07:42:57 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id d8sm2791187oiw.24.2021.12.06.07.42.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 07:42:57 -0800 (PST)
+Date:   Mon, 6 Dec 2021 09:42:52 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] clk: qcom: smd-rpm: Report enable state to framework
+Message-ID: <Ya4vfCZ8UTVBRpYU@builder.lan>
+References: <20211109022558.14529-1-shawn.guo@linaro.org>
+ <YYpMzau3CWRQYlkJ@gerhold.net>
+ <20211110131507.GJ7231@dragon>
+ <YYvNmrSeJNCE4BEC@ripper>
+ <20211111093926.GL7231@dragon>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bdc1f03c-036f-ee29-e2a1-a80f640adcc4@eho.link>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <20211111093926.GL7231@dragon>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 04:37:20PM +0100, Emmanuel Deloget wrote:
-> Hello,
+On Thu 11 Nov 03:39 CST 2021, Shawn Guo wrote:
+
+> On Wed, Nov 10, 2021 at 05:48:10AM -0800, Bjorn Andersson wrote:
+> > > IMHO, properly reporting enable state to framework is definitely the
+> > > right thing to do, and should have been done from day one.
+> > > 
+> > 
+> > I always thought is_enabled() should reflect the hardware state - in
+> > particular for clk_summary. The particular concern being that by
+> > initializing the is_enabled() state to either true or false, we're
+> > making an assumption about the hardware state. And if something where to
+> > do if (enabled) disable (or if (disabled) enable), we might skip a
+> > critical operation just because we tricked the logic.
 > 
-> On 10/11/2021 15:41, Louis Amas wrote:
-> > The registration of XDP queue information is incorrect because the
-> > RX queue id we use is invalid. When port->id == 0 it appears to works
-> > as expected yet it's no longer the case when port->id != 0.
-> > 
-> > When we register the XDP rx queue information (using
-> > xdp_rxq_info_reg() in function mvpp2_rxq_init()) we tell them to use
-> > rxq->id as the queue id. This value iscomputed as:
-> > rxq->id = port->id * max_rxq_count + queue_id
-> > 
-> > where max_rxq_count depends on the device version. In the MB case,
-> > this value is 32, meaning that rx queues on eth2 are numbered from
-> > 32 to 35 - there are four of them.
-> > 
-> > Clearly, this is not the per-port queue id that XDP is expecting:
-> > it wants a value in the range [0..3]. It shall directly use queue_id
-> > which is stored in rxq->logic_rxq -- so let's use that value instead.
-> > 
-> > This is consistent with the remaining part of the code in
-> > mvpp2_rxq_init().
-> > 
-> > Fixes: b27db2274ba8 ("mvpp2: use page_pool allocator")
-> > Signed-off-by: Louis Amas <louis.amas@eho.link>
-> > Signed-off-by: Emmanuel Deloget <emmanuel.deloget@eho.link>
-> > Reviewed-by: Marcin Wojtas <mw@semihalf.com>
-> > ---
-> > This is a repost of [1]. The patch itself is not changed, but the
-> > commit message has been enhanced using part of the explaination in
-> > order to make it clearer (hopefully) and to incorporate the
-> > reviewed-by tag from Marcin.
-> > 
-> > v1: original patch
-> > v2: revamped commit description (no change in the patch itself)
-> > 
-> > [1] https://lore.kernel.org/bpf/20211109103101.92382-1-louis.amas@eho.link/
-> > 
-> >   drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-> > index 587def69a6f7..f0ea377341c6 100644
-> > --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-> > +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-> > @@ -2959,11 +2959,11 @@ static int mvpp2_rxq_init(struct mvpp2_port *port,
-> >   	mvpp2_rxq_status_update(port, rxq->id, 0, rxq->size);
-> >   	if (priv->percpu_pools) {
-> > -		err = xdp_rxq_info_reg(&rxq->xdp_rxq_short, port->dev, rxq->id, 0);
-> > +		err = xdp_rxq_info_reg(&rxq->xdp_rxq_short, port->dev, rxq->logic_rxq, 0);
-> >   		if (err < 0)
-> >   			goto err_free_dma;
-> > -		err = xdp_rxq_info_reg(&rxq->xdp_rxq_long, port->dev, rxq->id, 0);
-> > +		err = xdp_rxq_info_reg(&rxq->xdp_rxq_long, port->dev, rxq->logic_rxq, 0);
-> >   		if (err < 0)
-> >   			goto err_unregister_rxq_short;
-> > 
+> That's probably why clk_smd_rpm_handoff() is called.  As there is no way
+> to query RPM for resource state, we send enable request for all RPM
+> clocks to get hardware and software state in sync.
 > 
-> Is there any update on this patch ? Without it, XDP only partially work on a
-> MACCHIATOBin (read: it works on some ports, not on others, as described in
-> our analysis sent together with the original patch).
 
-Hi,
+clk_smd_rpm_handoff() will ensure that all SMD clocks are enabled, and
+at max speed during rpm_smd_clk_probe(). Once clients starts actually
+voting for rates that will change.
 
-I suspect if you *didn't* thread your updated patch to your previous
-submission, then it would end up with a separate entry in
-patchwork.kernel.org, and the netdev maintainers will notice that the
-patch is ready for inclusion, having been reviewed by Marcin.
+(Un)fortunately as we don't provide an implementation of is_enabled()
+clk_disable_unused() won't try to turn them off. This similar to a
+problem I have elsewhere, for which I proposed:
+https://lore.kernel.org/linux-arm-msm/20211203035436.3505743-1-bjorn.andersson@linaro.org/
 
-Thanks.
+We should at some point introduce this for the SMD clocks as well.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+
+However, we have two problems:
+1) Compiling e.g. the interconnect provider as a module would mean that
+clk_disable_unused() kicks in before the client has had a chance to vote
+for the clock.
+
+2) One client may enable the clock during its probe and then disable it.
+Being the last active user the clock framework happily turns off the
+clock.
+
+
+For both of these cases, we need to ensure that the clocks aren't
+disabled until sync_state() kicks in.
+
+Regards,
+Bjorn
+
+> > So, do you need it for anything other than clk_disable_unused()?
+> 
+> Not critical, but I need it for debugfs clk_summary as well.
+> 
+> Shawn

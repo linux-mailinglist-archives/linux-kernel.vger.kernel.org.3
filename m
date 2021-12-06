@@ -2,75 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5CE469642
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C42469645
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243743AbhLFNIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 08:08:25 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:40384 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243777AbhLFNIZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 08:08:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=NhEwzWU/qPdq7k1DeYXqnguBwzCFfvpMixlYF0ay2NM=; b=eKV3SW3cBbvmMvhmC7HoVk0py3
-        AaKO6ZmmXeyp2W0zIgfWaiCMpU5fiKL4hBD6UPKp/7IRN8xR2Vy41PBl8v79TGy3lJvzdRJdntjL3
-        cUeksgB5vYyXIgRSgl074LJANXnI6UbZdGHkZvyhXXcNynY3XyeooGSVWtiH8OOd4Eic=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1muDfl-00Ff2V-FQ; Mon, 06 Dec 2021 14:04:49 +0100
-Date:   Mon, 6 Dec 2021 14:04:49 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, nicolas.diaz@nxp.com,
-        rmk+kernel@arm.linux.org.uk, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com
-Subject: Re: [PATCH] net: fec: only clear interrupt of handling queue in
- fec_enet_rx_queue()
-Message-ID: <Ya4KcYlZypEDjQbC@lunn.ch>
-References: <20211206090553.28615-1-qiangqing.zhang@nxp.com>
+        id S243823AbhLFNJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 08:09:02 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:53606 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234946AbhLFNJB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 08:09:01 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 7498421B40;
+        Mon,  6 Dec 2021 13:05:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638795931; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=seNcCVmeKjbuPvrYBKoc8yqPAgK6xtZS/e04+RONdyQ=;
+        b=gv8BtY7lhi1h6/ghlaI9FyA47oIzeGMuyuzzrPZSWAyCnBCRZEMYROlsPn7fbTGEs2F9wg
+        dBDEk4aAaJ/6RJTIT9yaXY5B3hUV3rsT+TTdH2Z3yMiIa8luuzqJ1n1k/e4WGsZY4TQ13T
+        cS5BL0l5pDz+EMTcPHb4SuPb/jX8a8Y=
+Received: from suse.cz (unknown [10.163.24.10])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 80EDAA3B8B;
+        Mon,  6 Dec 2021 13:05:30 +0000 (UTC)
+Date:   Mon, 6 Dec 2021 14:05:30 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     rostedt@goodmis.org, senozhatsky@chromium.org,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] vsprintf: Use non-atomic bitmap API when applicable
+Message-ID: <Ya4Kmsu3rO8o0gGb@alley>
+References: <1abf81a5e509d372393bd22041eed4ebc07ef9f7.1638023178.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211206090553.28615-1-qiangqing.zhang@nxp.com>
+In-Reply-To: <1abf81a5e509d372393bd22041eed4ebc07ef9f7.1638023178.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 05:05:53PM +0800, Joakim Zhang wrote:
-> Only clear interrupt of handling queue in fec_enet_rx_queue(), to avoid
-> missing packets caused by clear interrupt of other queues.
+On Sat 2021-11-27 15:27:35, Christophe JAILLET wrote:
+> The 'set' bitmap is local to this function. No concurrent access to it is
+> possible.
+> So prefer the non-atomic '__[set|clear]_bit()' function to save a few
+> cycles.
 > 
-> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
-> ---
->  drivers/net/ethernet/freescale/fec_main.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-> index 09df434b2f87..eeefed3043ad 100644
-> --- a/drivers/net/ethernet/freescale/fec_main.c
-> +++ b/drivers/net/ethernet/freescale/fec_main.c
-> @@ -1506,7 +1506,12 @@ fec_enet_rx_queue(struct net_device *ndev, int budget, u16 queue_id)
->  			break;
->  		pkt_received++;
->  
-> -		writel(FEC_ENET_RXF, fep->hwp + FEC_IEVENT);
-> +		if (queue_id == 0)
-> +			writel(FEC_ENET_RXF_0, fep->hwp + FEC_IEVENT);
-> +		else if (queue_id == 1)
-> +			writel(FEC_ENET_RXF_1, fep->hwp + FEC_IEVENT);
-> +		else
-> +			writel(FEC_ENET_RXF_2, fep->hwp + FEC_IEVENT);
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-The change itself seems find.
+The patch has been committed into printk/linux.git, branch for-5.17.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-
-But could it be moved out of the loop? If you have a budget of 64,
-don't you clear this bit 64 times? Can you just clearing it once on
-exit?
-
-    Andrew
+Best Regards,
+Petr

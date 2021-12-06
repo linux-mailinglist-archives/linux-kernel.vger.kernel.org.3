@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2F3469A88
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82CF9469CB1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347386AbhLFPIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:08:35 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56178 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346437AbhLFPG3 (ORCPT
+        id S1358484AbhLFPYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:24:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346773AbhLFPNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:06:29 -0500
+        Mon, 6 Dec 2021 10:13:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6165CC08EB1F;
+        Mon,  6 Dec 2021 07:06:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E50876130D;
-        Mon,  6 Dec 2021 15:03:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C870AC341C1;
-        Mon,  6 Dec 2021 15:02:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F281261310;
+        Mon,  6 Dec 2021 15:06:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4FA7C341C1;
+        Mon,  6 Dec 2021 15:06:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802980;
-        bh=mRHsj9aBL6OMO2joKiFcgr10RRRigkMrkExUYAI9jfo=;
+        s=korg; t=1638803166;
+        bh=4ve9A+5uIirQqqDHs00S2YT9mzjSLeHcEE6IEQxlRwU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lT+xVCSz5vPbo6bcbQHDun78KPV6ibmHIGTcu0j1ZPE+bqP4eT3s8ttatr+Qagrt+
-         t22f/R8XBOCT/ezqhRdNGwr4wljA4lnaNGPnUgCdLgK9zVjht0pf0LfSaJK4wraA2G
-         4p9xBbK4HO/Eg9QX4MYTR/0UMXJXetvwPE2R9U0w=
+        b=O8pz1U8aZg+RnHTbT+tdTZ6eURgr+u4ZQnvWbp89tpvhad5mKNT/AuggdJvFO0Z/p
+         fAsd2bjS6UwM/UjEia1azzcnUM6EipVfg9KkjL6h1/HpWHUIQUgN1rltl6AqkQgSYF
+         1Zg/XDS33y8/GmEJRkVvkJnhsrqT7z3j08yeF3Ek=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 16/62] NFSv42: Dont fail clone() unless the OP_CLONE operation failed
-Date:   Mon,  6 Dec 2021 15:55:59 +0100
-Message-Id: <20211206145549.728361164@linuxfoundation.org>
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH 4.14 052/106] pinctrl: armada-37xx: add missing pin: PCIe1 Wakeup
+Date:   Mon,  6 Dec 2021 15:56:00 +0100
+Message-Id: <20211206145557.231607944@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,38 +51,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
 
-[ Upstream commit d3c45824ad65aebf765fcf51366d317a29538820 ]
+commit 4d98fbaacd79a82f408febb66a9c42fe42361b16 upstream.
 
-The failure to retrieve post-op attributes has no bearing on whether or
-not the clone operation itself was successful. We must therefore ignore
-the return value of decode_getfattr() when looking at the success or
-failure of nfs4_xdr_dec_clone().
+Declare the PCIe1 Wakeup which was initially missing.
 
-Fixes: 36022770de6c ("nfs42: add CLONE xdr functions")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Tested-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/nfs42xdr.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/pinctrl/mvebu/pinctrl-armada-37xx.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/nfs/nfs42xdr.c b/fs/nfs/nfs42xdr.c
-index 8b2605882a201..335c34f0d1303 100644
---- a/fs/nfs/nfs42xdr.c
-+++ b/fs/nfs/nfs42xdr.c
-@@ -593,8 +593,7 @@ static int nfs4_xdr_dec_clone(struct rpc_rqst *rqstp,
- 	status = decode_clone(xdr);
- 	if (status)
- 		goto out;
--	status = decode_getfattr(xdr, res->dst_fattr, res->server);
--
-+	decode_getfattr(xdr, res->dst_fattr, res->server);
- out:
- 	res->rpc_status = status;
- 	return status;
--- 
-2.33.0
-
+--- a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
++++ b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
+@@ -185,6 +185,7 @@ static struct armada_37xx_pin_group arma
+ 	PIN_GRP_GPIO("smi", 18, 2, BIT(4), "smi"),
+ 	PIN_GRP_GPIO("pcie1", 3, 1, BIT(5), "pcie"),
+ 	PIN_GRP_GPIO("pcie1_clkreq", 4, 1, BIT(9), "pcie"),
++	PIN_GRP_GPIO("pcie1_wakeup", 5, 1, BIT(10), "pcie"),
+ 	PIN_GRP_GPIO("ptp", 20, 3, BIT(11) | BIT(12) | BIT(13), "ptp"),
+ 	PIN_GRP("ptp_clk", 21, 1, BIT(6), "ptp", "mii"),
+ 	PIN_GRP("ptp_trig", 22, 1, BIT(7), "ptp", "mii"),
 
 

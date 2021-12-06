@@ -2,123 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6404E46975A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF4546975D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244673AbhLFNqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 08:46:38 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:38300 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240974AbhLFNqh (ORCPT
+        id S244700AbhLFNqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 08:46:42 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:29050 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244675AbhLFNqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 08:46:37 -0500
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B6BTNV5004649;
-        Mon, 6 Dec 2021 14:42:55 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=F6W+F1Vf7fYffkjJdPpsISKp/C9lL7UUAM9B4MeGe9M=;
- b=h9Izmgr4eMqce9mCmp48j0IWXnASaiBlCb2qCT3AcvaKj8NI4VLMuI1Zk1JZ7D8o5DRl
- 8yuUowYCW8BDL4U6tYcUqdAChpi7+hHTu/LBPKLkGCdRV+ZNGGNqzXuI7IKK5msVPDwg
- yAIeWBcB9araYy4lwmn8fyzrLKlwPflU4t7rRPbjoT+pLGyL/kvip8Tx9aW0sVprX7Uw
- +qrtY7kw1Som+ZslVdJWnYMRR00IQeSwS2lPeqpbK8cj7WqOyIquGC/yFw8ApjnqQL88
- HjJ0G8FZWav6UrKFgQBvCSJxm/N981Hngpp1JUwBduf3U9+iPt+vOLYPucUOOaVb4u87 Qw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cryhqvsm5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Dec 2021 14:42:55 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9F82310002A;
-        Mon,  6 Dec 2021 14:42:53 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DBF3C2A4D7F;
-        Mon,  6 Dec 2021 14:42:50 +0100 (CET)
-Received: from lmecxl0951.lme.st.com (10.75.127.47) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 6 Dec
- 2021 14:42:50 +0100
-Subject: Re: [PATCH] drm/stm: remove conflicting framebuffers
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
+        Mon, 6 Dec 2021 08:46:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638798192; x=1670334192;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=0QW7DwiKKjDcGAgR40YyUnQsj2KHuLU2QR5LeUUkwYM=;
+  b=lcDedLAh0agWaogOUlR/qEtp8a+rJ9jKWNImciFHqmK4HU3Y45TYpTYr
+   5BKZ4jHGVM99i0Xw2UKZ1xvJATI6eOe7fmXX36ss0U8WQDUjmWyiHGXEq
+   DUnjyK1lCdXlqxmag/szb1JEBxlVQX8Y/dTIl0Dud8sqWpwKUuE6q0viP
+   I=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 06 Dec 2021 05:43:12 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 05:43:11 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 6 Dec 2021 05:43:11 -0800
+Received: from [10.216.22.188] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 6 Dec 2021
+ 05:43:06 -0800
+Subject: Re: [PATCH V4 2/6] dt-bindings: regulator: Add pm8008 regulator
+ bindings
+To:     Mark Brown <broonie@kernel.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, <swboyd@chromium.org>,
+        <collinsd@codeaurora.org>, <subbaram@codeaurora.org>,
+        Das Srinagesh <gurus@codeaurora.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        "Lee Jones" <lee.jones@linaro.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-References: <20211203085512.11127-1-yannick.fertre@foss.st.com>
- <7469e918-b2bf-00a9-1bbc-2f3514ec0816@suse.de>
-From:   yannick Fertre <yannick.fertre@foss.st.com>
-Message-ID: <169ba08b-fdaa-866e-91bf-7a353c1d713d@foss.st.com>
-Date:   Mon, 6 Dec 2021 14:42:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+References: <1637314953-4215-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1637314953-4215-3-git-send-email-quic_c_skakit@quicinc.com>
+ <YZ+qn2hA4MzNEqM+@sirena.org.uk>
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Message-ID: <30b21a08-f7f7-f3a6-a3ac-156c7f8964b1@quicinc.com>
+Date:   Mon, 6 Dec 2021 19:13:02 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <7469e918-b2bf-00a9-1bbc-2f3514ec0816@suse.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <YZ+qn2hA4MzNEqM+@sirena.org.uk>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-06_04,2021-12-06_02,2021-12-02_01
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+
+On 11/25/2021 8:54 PM, Mark Brown wrote:
+> On Fri, Nov 19, 2021 at 03:12:29PM +0530, Satya Priya wrote:
+>
+>> +properties:
+>> +  compatible:
+>> +    const: qcom,pm8008-regulators
+> Why are we adding a separate compatible for this when we already know
+> that this is a pm8008 based on the parent?
 
 
-On 12/3/21 10:35 AM, Thomas Zimmermann wrote:
-> Hi
-> 
-> Am 03.12.21 um 09:55 schrieb Yannick Fertre:
->> In case of using simplefb or another conflicting framebuffer,
->> call drm_aperture_remove_framebuffers() to remove memory allocated.
->>
->> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
->> ---
->>   drivers/gpu/drm/stm/drv.c | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
->> index 222869b232ae..5ba46f70f081 100644
->> --- a/drivers/gpu/drm/stm/drv.c
->> +++ b/drivers/gpu/drm/stm/drv.c
->> @@ -14,6 +14,7 @@
->>   #include <linux/of_platform.h>
->>   #include <linux/pm_runtime.h>
->> +#include <drm/drm_aperture.h>
->>   #include <drm/drm_atomic.h>
->>   #include <drm/drm_atomic_helper.h>
->>   #include <drm/drm_drv.h>
->> @@ -193,6 +194,10 @@ static int stm_drm_platform_probe(struct 
->> platform_device *pdev)
->>       if (ret)
->>           goto err_put;
->> +    ret = drm_aperture_remove_framebuffers(false, &drv_driver);
->> +    if (ret)
->> +        goto err_put;
->> +
-> 
-> This has to be done at the very top of the probe function, before 
-> anything that touches the device. Otherwise both drivers interfere with 
-> each other while probing and setup's going on.
-> 
-> Best regards
-> Thomas
-> 
->>       ret = drm_dev_register(ddev, 0);
->>       if (ret)
->>           goto err_put;
->>
-> 
-Thanks for reviewing the patch.
-I will follow your advice and push a new patch.
+For the regulator driver to be probed we do need a separate compatible 
+right? may be I didn't get your question..
 
-Yannick
+My understanding is we should have a separate compatible for each 
+peripheral under the parent mfd node.. like gpios, temp alarm, 
+regulators etc..
+
+
+>> +  vdd_l1_l2-supply:
+>> +    description: Input supply phandle of ldo1 and ldo2 regulators.
+> These supply nodes should be chip level, they're going into the chip and
+> in general the expectation is that you should be able to describe the
+> supplies going into a device without worrying about how or if any
+> particular OS splits things up.
+
+So, if i understand correctly, we don't have to mention these in the 
+documentation as these are handled at framework level?
+

@@ -2,238 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC1146AB2B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 23:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0ACF46AB36
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 23:05:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352833AbhLFWFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 17:05:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
+        id S1356251AbhLFWJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 17:09:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbhLFWFh (ORCPT
+        with ESMTP id S1356011AbhLFWJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 17:05:37 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77294C061746;
-        Mon,  6 Dec 2021 14:02:08 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id 137so9267239wma.1;
-        Mon, 06 Dec 2021 14:02:08 -0800 (PST)
+        Mon, 6 Dec 2021 17:09:09 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15D6C061746;
+        Mon,  6 Dec 2021 14:05:39 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id r25so48678898edq.7;
+        Mon, 06 Dec 2021 14:05:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=u9Fmisi3SrDLjIml42mAuJxwyIDnThC6fs7s/n4dNFo=;
-        b=Nquxc4aubMHq1itG8oeazi4Qbxvzd5x3l6YafC+/YfRFIn3VkBW5DXwJWgOOwMvJK6
-         XFl3SOovR5YbjhPuPVxddNPVX0RM3WoDDlTTNoBk3mZ8s6hbSgsnQHGeoQ8EL6uqbx4L
-         4rfzKp/AaXJXx9sDDYELXJZH3sFc7PNn+mpZldpiO3FYwqB3Dz9feGUF2e8qRANlzFG1
-         Sr8YgTwNh/iN0ZyDo0DqcVub9r5xwezNqbHVJWSNUVVA3PKmPS1liC0hX5vAH7btFC62
-         5zMO8YV4EkU/Wrw9K1P7esEuy9K2zdjLBLi9kuXvsP4nYvUXNnYvxG+KoB/+sCRV9yWf
-         9H7Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UJfiE4cGLCRU3DrNG1N9c4wCYqq8toA4+2VtacckEIk=;
+        b=QH6xU1KzmgyN6U5zZxqDFdED+AuUY0irI0GF72907SxdOLClppffOtcPq3RhwT4JsA
+         b2kGlwa2kh7UodmlsI5SUoX4SkXvoXFCHJOL5XtRNgupPU70oWfVDsiFUmyeKzkNnRX7
+         xLLOoVDMDO74fAj1fktbmyi12MNPEQVVCpoXAQNE3bEaDpGpHPrB01bU6XbE/sR+3r8X
+         H/FFwLRCXVEQaxB9mvaRXBAanNRBKHWiGB/efaHfBH22l8iGNPl90zDMF9CEVPsfty/k
+         jqEI9NeTv1AZIzuU5SawhoGhCrKJVV0tm5XvJs8nCU359d0VHm1gTANLueUrn0sBT7Iq
+         dCMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=u9Fmisi3SrDLjIml42mAuJxwyIDnThC6fs7s/n4dNFo=;
-        b=CjWS4WalgXPVNdyH64dIRXpWvGaM85pyAr6GchFxLBiyFUnhlGLG0onXMvtsTw4/4Z
-         oQEL6t21sRF7gjWkPO8cEUnV7fS94jiAvuPlz3DOiDMQXgfz/NghtTGSGTnAh6xSxWas
-         a5rU94xLbk/KOIAvCunqqWzs/k8XZA8QDK427C4SxTCKVXckK0JjgNpy51yBLuhWh4LB
-         J5dbCQ+LXQxVVroVdl8gamSAoDidD5uD8OFsJvt+BS7A9UFAZleWUWL4iLAXSHgsltel
-         OJQTXCBl2YRAC5O8JbDm7gxUA56m9GuIaIPr6g24hVa1ugKD8mohimLd1Ly3442P0S9Z
-         mPgw==
-X-Gm-Message-State: AOAM532pWrKNnPhL+qF2O2bTAEQ6li2KDOW9+KHoKiPXSrGZHpX+dBkV
-        gyutAMfGeJpKlv88ur4aGEDKM4pYmvAQtQ==
-X-Google-Smtp-Source: ABdhPJwXCWUa6vf+7I6Z2YfKzrbw3daSTjk+WrzD9/Gmy77bzmFaxshhKHLl44ZUHFmokCU/OGPyJA==
-X-Received: by 2002:a7b:c008:: with SMTP id c8mr1582090wmb.87.1638828126974;
-        Mon, 06 Dec 2021 14:02:06 -0800 (PST)
-Received: from eldamar (80-218-24-251.dclient.hispeed.ch. [80.218.24.251])
-        by smtp.gmail.com with ESMTPSA id v6sm619630wmh.8.2021.12.06.14.02.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 14:02:06 -0800 (PST)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Date:   Mon, 6 Dec 2021 23:02:05 +0100
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Makefile: CC_IMPLICIT_FALLTHROUGH passed quoted as argument to
- gcc
-Message-ID: <Ya6IXWBGkN1iZI1b@eldamar.lan>
-References: <YatpectAYsWnmPy2@eldamar.lan>
- <CAHk-=whTTWUyL5j5_-UeRT6k9VcJM_VOfjiKuU2NBJkxhbnXpw@mail.gmail.com>
- <CAK7LNAR-VXwHFEJqCcrFDZj+_4+Xd6oynbj_0eS8N504_ydmyw@mail.gmail.com>
- <202112061128.6B670358@keescook>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UJfiE4cGLCRU3DrNG1N9c4wCYqq8toA4+2VtacckEIk=;
+        b=SPNOVSXLQcMsLVjDAiLIDLH70mv2EFa9AMj/euOpTKf0FErqo7ECworJ3bBsp3gjxy
+         IQHtKbqqXTwh/09J5ZmiXfQXVFxlfJyvAG+7h/cZBk+1XHmkvIlRyqVZKQ2MaLAZ6b15
+         E2cb3uWS3w9pFM+w0TOphN8iy98YGZpNrqyqwncPcl1c9pYrEU+oZPq9wvQftjVcPK/4
+         n66vnrSn0QRMI1kmN9m4I9qBm1Ydi6AQRG3WpggJwFQsuexihLExfq9GCeof0v+fHUcD
+         RLk93925q7DZInra7dNzlDZmUl8pa65sj9za8BJFqhWZUQPYlyhi5vzt+1rD1c7XwQ4M
+         w5Gw==
+X-Gm-Message-State: AOAM533d1o210trnBPjkZeK/o80EN6BQxFr5TgOHVHsPaXXYXlfLyTF6
+        X2HttWyl4ZGBCy9Okhm0r5/nO5H8i7T7N+jhCv4=
+X-Google-Smtp-Source: ABdhPJxOLCQiTt5iJi9D8ojYBEeTXiWilxAcvNpf63FBk+kOzk7fJYSceGQCwoK/BEAWFxRygbs/uzjQjGs66UpOsX0=
+X-Received: by 2002:a05:6402:270c:: with SMTP id y12mr2723333edd.258.1638828338334;
+ Mon, 06 Dec 2021 14:05:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202112061128.6B670358@keescook>
+References: <20211206093318.45214-1-hdegoede@redhat.com> <20211206093318.45214-15-hdegoede@redhat.com>
+ <CAHp75Vc+z0nqUXbqrX9YXi2+rzz4BKT7maFipyB8QgOEKQ9SPw@mail.gmail.com> <94738e2d-8b8d-08a0-be39-343ac275fa5f@redhat.com>
+In-Reply-To: <94738e2d-8b8d-08a0-be39-343ac275fa5f@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 7 Dec 2021 00:04:04 +0200
+Message-ID: <CAHp75Vc507NWY-PyZ6j1J65fvDBj92PpikP1pW--FTk+P=2bog@mail.gmail.com>
+Subject: Re: [PATCH v4 14/20] mfd: intel_soc_pmic_chtwc: Add cht_wc_model data
+ to struct intel_soc_pmic
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Dec 6, 2021 at 11:46 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 12/6/21 20:55, Andy Shevchenko wrote:
+> > On Mon, Dec 6, 2021 at 11:35 AM Hans de Goede <hdegoede@redhat.com> wrote:
+> >>
+> >> Tablet / laptop designs using an Intel Cherry Trail x86 main SoC with
+> >> an Intel Whiskey Cove PMIC do not use a single standard setup for
+> >> the charger, fuel-gauge and other chips surrounding the PMIC /
+> >> charging+data USB port.
+> >>
+> >> Unlike what is normal on x86 this diversity in designs is not handled
+> >> by the ACPI tables. On 2 of the 3 known designs there are no standard
+> >> (PNP0C0A) ACPI battery devices and on the 3th design the ACPI battery
+> >> device does not work under Linux due to it requiring non-standard
+> >> and undocumented ACPI behavior.
+> >>
+> >> So to make things work under Linux we use native charger and fuel-gauge
+> >> drivers on these devices, re-using the native drivers used on ARM boards
+> >> with the same charger / fuel-gauge ICs.
+> >>
+> >> This requires various MFD-cell drivers for the CHT-WC PMIC cells to
+> >> know which model they are exactly running on so that they can e.g.
+> >> instantiate an I2C-client for the right model charger-IC (the charger
+> >> is connected to an I2C-controller which is part of the PMIC).
+> >>
+> >> Rather then duplicating DMI-id matching to check which model we are
+> >> running on in each MFD-cell driver, add a check for this to the
+> >> shared drivers/mfd/intel_soc_pmic_chtwc.c code by using a
+> >> DMI table for all 3 known models:
+> >>
+> >> 1. The GPD Win and GPD Pocket mini-laptops, these are really 2 models
+> >> but the Pocket re-uses the GPD Win's design in a different housing:
+> >>
+> >> The WC PMIC is connected to a TI BQ24292i charger, paired with
+> >> a Maxim MAX17047 fuelgauge + a FUSB302 USB Type-C Controller +
+> >> a PI3USB30532 USB switch, for a fully functional Type-C port.
+> >>
+> >> 2. The Xiaomi Mi Pad 2:
+> >>
+> >> The WC PMIC is connected to a TI BQ25890 charger, paired with
+> >> a TI BQ27520 fuelgauge, using the TI BQ25890 for BC1.2 charger type
+> >> detection, for a USB-2 only Type-C port without PD.
+> >>
+> >> 3. The Lenovo Yoga Book YB1-X90 / Lenovo Yoga Book YB1-X91 series:
+> >>
+> >> The WC PMIC is connected to a TI BQ25892 charger, paired with
+> >> a TI BQ27542 fuelgauge, using the WC PMIC for BC1.2 charger type
+> >> detection and using the BQ25892's Mediatek Pump Express+ (1.0)
+> >> support to enable charging with up to 12V through a micro-USB port.
+> >
+> > ...
+> >
+> >> +enum intel_cht_wc_models {
+> >> +       INTEL_CHT_WC_UNKNOWN,
+> >> +       INTEL_CHT_WC_GPD_WIN_POCKET,
+> >> +       INTEL_CHT_WC_XIAOMI_MIPAD2,
+> >> +       INTEL_CHT_WC_LENOVO_YOGABOOK1,
+> >> +};
+> >
+> > ...
+> >
+> >> +       enum intel_cht_wc_models cht_wc_model;
+> >
+> > I'm wondering what will you do when something similar will be needed
+> > for another PMIC?
+> >
+> > I see possible solutions to eliminate additional churn:
+> > - make just one enum for all models (can be done now, can be renamed later)
+> > - make a union if we have such situation
+> >
+> > because I wouldn't like to have another field for each possible
+> > variant of PMIC in the generic structure.
+> >
+> > Hence the question, does it make sense to just name it (enum and
+> > member) less cht_wc oriented?
+>
+> I agree that renaming these to make them generic makes sense if we get a
+> second user (which I doubt, but you never know). For now I would like to
+> keep this as is though, this is a big series and I would like to avoid
+> to respin it just for this and we can always rename this later.
+>
+> If I need to do a v5 anyways though, then I'll do the rename for v5.
 
-On Mon, Dec 06, 2021 at 11:53:41AM -0800, Kees Cook wrote:
-> On Sun, Dec 05, 2021 at 02:54:05AM +0900, Masahiro Yamada wrote:
-> > On Sun, Dec 5, 2021 at 1:53 AM Linus Torvalds
-> > <torvalds@linux-foundation.org> wrote:
-> > >
-> > > On Sat, Dec 4, 2021 at 5:13 AM Salvatore Bonaccorso <carnil@debian.org> wrote:
-> > > >
-> > > > Andreas suggested to replace the
-> > > >
-> > > > KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
-> > > >
-> > > > with
-> > > >
-> > > > KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(patsubst "%",%,$(CONFIG_CC_IMPLICIT_FALLTHROUGH))
-> > >
-> > > Ugh. I think the external build environment is a bit broken, but
-> > > whatever. The above is ugly but I guess it works.
-> > >
-> > > Another alternative would be to make the Kconfig strings simply not
-> > > have '"' as part of them.
-> > >
-> > > When you do
-> > >
-> > >     a = "hello"
-> > >     print $a
-> > >
-> > > in any normal language, you generally wouldn't expect it to print the
-> > > quotes, it should just print the bare word.
-> > >
-> > > But that's what the Kconfig string language basically does in this
-> > > case. And I guess several users expect and take advantage of that ;(
-> > >
-> > > Masahiro? Comments?
-> > 
-> > Yes, you get to the point.
-> > 
-> > In fact, this is in my TODO list for a while
-> > (and this is the reason I was doing prerequisite Kconfig refactoring
-> > in the previous development cycle).
-> > I will try to find some spare time to complete this work.
-> > 
-> > 
-> > 
-> > Kconfig generates two similar files,
-> > 
-> >  -   .config
-> >  -   include/config/auto.conf
-> > 
-> > Changing the format of the .config is presumably problematic
-> > since it is the saved user configuration as well.
-> > 
-> > It is possible (and more reasonable) to change include/config/auto.conf
-> > so strings are not quoted.
-> > 
-> > In Makefiles, quotations are just normal characters; they have no
-> > special functionality.
-> > 
-> > So, in Makefile context, it is more handy to do
-> > 
-> >      CONFIG_X=foo bar
-> > 
-> > instead of
-> > 
-> >     CONFIG_X="foo bar"
-> > 
-> > 
-> > 
-> > One problem is include/config/auto.conf is included not only by Makefiles
-> > but also by shell scripts.
-> > 
-> > 
-> > In shell context, the right hand side must be quoted
-> > in case the value contains spaces.
-> > 
-> >    CONFIG_X="foo bar"
-> > 
-> > 
-> > 
-> > My plan is to fix
-> >   scripts/link-vmlinux.sh
-> >   scripts/gen_autoksyms.sh
-> > etc. to not directly include the auto.conf.
-> > Later, change Kconfig to generate the auto.conf without "".
-> > 
-> > 
-> > 
-> > In the meantime,
-> > 
-> > KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(patsubst
-> > "%",%,$(CONFIG_CC_IMPLICIT_FALLTHROUGH))
-> > 
-> >  or if you prefer slightly shorter form,
-> > 
-> > KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH:"%"=%)
-> > 
-> > will be a workaround.
-> 
-> It'll be nice to get this fixed. There are a few places where there is
-> a test for a compiler flag in Kconfig, and then the option is repeated
-> in the Makefile, due to the above quoting issues. For example:
-> 
-> arch/arm64/Kconfig:
-> 	config CC_HAS_BRANCH_PROT_PAC_RET
-> 	     # GCC 9 or later, clang 8 or later
-> 	     def_bool $(cc-option,-mbranch-protection=pac-ret+leaf)
-> 
-> arch/arm64/Makefile:
-> 	branch-prot-flags-$(CONFIG_CC_HAS_BRANCH_PROT_PAC_RET) := -mbranch-protection=pac-ret+leaf
-> 
-> 
-> I like the $(CONFIG_CC_IMPLICIT_FALLTHROUGH:"%"=%) solution: it's short.
+Yeah, either way:
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Does the following look correct, as well from formal style/commit
-description? I have not yet done many contributions directly.
-
-Regards,
-Salvatore
-
-From c2d01ea3ee1c7cc539468bba5b25522245d513de Mon Sep 17 00:00:00 2001
-From: Salvatore Bonaccorso <carnil@debian.org>
-Date: Mon, 6 Dec 2021 21:42:01 +0100
-Subject: [PATCH] Makefile: Do not quote value for
- CONFIG_CC_IMPLICIT_FALLTHROUGH
-
-Andreas reported that a specific build environment for an external
-module, being a bit broken, does pass CC_IMPLICIT_FALLTHROUGH quoted as
-argument to gcc, causing an error
-
-	gcc-11: error: "-Wimplicit-fallthrough=5": linker input file not found: No such file or directory
-
-Until this is more generally fixed as outlined in [1], by fixing
-scripts/link-vmlinux.sh, scripts/gen_autoksyms.sh, etc to not directly
-include the include/config/auto.conf, and in a second step, change
-Kconfig to generate the auto.conf without "", workaround the issue by
-explicitly unquoting CC_IMPLICIT_FALLTHROUGH.
-
- [1] https://lore.kernel.org/linux-kbuild/CAK7LNAR-VXwHFEJqCcrFDZj+_4+Xd6oynbj_0eS8N504_ydmyw@mail.gmail.com/
-
-Reported-by: Andreas Beckmann <anbe@debian.org>
-Link: https://bugs.debian.org/1001083
-Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Makefile b/Makefile
-index 8e35d7804fef..ef967a26bcd3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -789,7 +789,7 @@ stackp-flags-$(CONFIG_STACKPROTECTOR_STRONG)      := -fstack-protector-strong
- KBUILD_CFLAGS += $(stackp-flags-y)
- 
- KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
--KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
-+KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH:"%"=%)
- 
- ifdef CONFIG_CC_IS_CLANG
- KBUILD_CPPFLAGS += -Qunused-arguments
 -- 
-2.34.1
-
+With Best Regards,
+Andy Shevchenko

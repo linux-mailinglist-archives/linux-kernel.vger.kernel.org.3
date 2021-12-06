@@ -2,81 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F1746A5C2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3881A46A5D6
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348531AbhLFTje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:39:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
+        id S244956AbhLFTph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:45:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345592AbhLFTjc (ORCPT
+        with ESMTP id S239522AbhLFTpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:39:32 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85470C0613F8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 11:36:03 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id z5so47892420edd.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 11:36:03 -0800 (PST)
+        Mon, 6 Dec 2021 14:45:36 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812CEC061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 11:42:07 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id a9so24622719wrr.8
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 11:42:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1WZbGUI2jgxA10QTAICPwSg3f480L4ADSnktyOVLe2k=;
-        b=GngTKpgvPeiX/nUFKS+/vZnjYQHy0JwjnyeBTrCSICMt+OObJuz/ZY47Ab5zOCNTZk
-         UNj/aJtmFS+GluXZPxqGJ5qZbuC7A0P8k3vbJ11Oz2fUgr7DYKTirs+rbaAUrk8ZURxu
-         zErFOsaHNkR15LzUr0E7qwxHEJNdkLaKcmwSM=
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=XoyDxWHFfkkShprB5fi0ZtCpkIroCq2M/CcUOnfbOhA=;
+        b=w8sZ41kEdX4SRoPkzKCBKIOpzSsDrjyDTmuhgrbbcp5zpmFSvfGY7gNpZK0p0dMxAa
+         uWrDVGdLjErc8kI0vHKRLdvR+xas3quAw8WLQmicLbCVcrujBGlSxKW5v4tNRzh5Rsld
+         PbPH7ba+Ou0DcR+MLaSif954Gu9KWrAzQrbAJ9dnM20t0XW2ozYroSORAQOs3yEGfsWc
+         0b8NifhWMgxwmzcAJ8vTR/83pq61hWtl1y1Me57+Y0zioTVaZzNksWyql3KdwajCCzjI
+         pEOgp1cAfmONXrGWtiC6RzGuyMrHDMhZRencZZIde+pIeMZPjzNdS45FL5neth6TXFke
+         HUeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1WZbGUI2jgxA10QTAICPwSg3f480L4ADSnktyOVLe2k=;
-        b=knHFy9n4kXZi/509uMMX1m471eC5UuSrMZzhdLZhyFeypKbTxmKmoLkANAztvQxWT0
-         rKdf8LtCLlnUvb2WYev5ZaDZVWIkeZUOaoF35AJ4XUnLNF2c++IW304F1RTp1AiwCOMK
-         c3RE10D3hnPkeogrP96G4DKturVYuZAEwYynjB5y4ULkkiiZ3wpSZ3QZz04WJkZjndGz
-         zuv4LiXDE56EDc7VSgtAX3TuuGhZneIlhTtduLQ90HVmOIN8/ZMuQs2WkkXGH7rHT8Vp
-         tvd7jnlIXvu1nNBcOnTj7uWQ3hwVf6+AKyP5RVwF5rUzgwQBedbov8+KBvQ+lhbfu5eo
-         uJHQ==
-X-Gm-Message-State: AOAM531CmyUWrv2/NiN/NaXup6wJ+RlIzcWC714H8PiSvS8WKPlXIbTp
-        FwYsf3awWcUn1BHQRHV+s1Rfsz1aKFu9aQpU
-X-Google-Smtp-Source: ABdhPJxU8TJGexsrpFoBTIHn7sjoXhu+d8bfOIhcJeLQQ7nRubQ0ySUbQ/ZMo9ffNbaOE0/RG0sB5w==
-X-Received: by 2002:a50:d543:: with SMTP id f3mr1677970edj.56.1638819361834;
-        Mon, 06 Dec 2021 11:36:01 -0800 (PST)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id t20sm8425559edv.81.2021.12.06.11.36.01
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 11:36:01 -0800 (PST)
-Received: by mail-wr1-f42.google.com with SMTP id d24so24797099wra.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 11:36:01 -0800 (PST)
-X-Received: by 2002:adf:9d88:: with SMTP id p8mr47263440wre.140.1638819360971;
- Mon, 06 Dec 2021 11:36:00 -0800 (PST)
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=XoyDxWHFfkkShprB5fi0ZtCpkIroCq2M/CcUOnfbOhA=;
+        b=onSOE8+kHtWK5rL6dBV+pQzh11lhjWI4LTQL4M/kb4wLt/VzP6MgNX+Dk/uhGYauxr
+         CXobPOICKG8hvRvFRzMbfpvS4sa7Opp+4DLInGDarJ6m/qY9z2WPSjR7C8ztsn0lJnxT
+         /jWt5bnT9ALuZdfbKYBvrwKL+sdKuPSRLDh9t38IIbWNl3yFbuDGCvXLNbtiapieC12L
+         qNXeV4hf4P8ibbUOdIOSaDkfUnGMhd0UwB821ulcOhb1Sh4iE3FQYG9mHEaJ/qk11rUB
+         rX5AHdZvHwsNSyiO7bvDnMw4V4FPEJ9iczfFVQmhofbPVoKKUpYrX5Lded2erd4miQ4q
+         D71w==
+X-Gm-Message-State: AOAM531pwfHijGhwPHWBHSu2YtR87EhF+0AumYRqnDuib81xyw31Kp5E
+        3uHbmWwsIb93hrHeWKR0eo7cMQ==
+X-Google-Smtp-Source: ABdhPJx8pLA553HMWI1HuMsyxL4boJMISHN0MO4UL5wXFAniqnUsOICkxQ/hPb/2AWWD4Mll3NrfjA==
+X-Received: by 2002:a5d:460d:: with SMTP id t13mr44894938wrq.44.1638819726062;
+        Mon, 06 Dec 2021 11:42:06 -0800 (PST)
+Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
+        by smtp.gmail.com with ESMTPSA id o9sm12332737wrs.4.2021.12.06.11.42.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 11:42:05 -0800 (PST)
+References: <20211205180816.2083864-1-martin.blumenstingl@googlemail.com>
+ <20211205180816.2083864-3-martin.blumenstingl@googlemail.com>
+ <1jfsr659v1.fsf@starbuckisacylon.baylibre.com>
+ <CAFBinCAceRkO86bXfUYnDwup3At9MaN-PnOiLxa-1fYO5SwOQA@mail.gmail.com>
+User-agent: mu4e 1.6.10; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-amlogic@lists.infradead.org, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Geraldo Nascimento <geraldogabriel@gmail.com>
+Subject: Re: [PATCH RFC v1 2/2] ASoC: meson: aiu: Move AIU_I2S_MISC hold
+ setting to aiu-fifo-i2s
+Date:   Mon, 06 Dec 2021 20:36:45 +0100
+In-reply-to: <CAFBinCAceRkO86bXfUYnDwup3At9MaN-PnOiLxa-1fYO5SwOQA@mail.gmail.com>
+Message-ID: <1jpmq9ed0z.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-References: <87y24x39wi.fsf@meer.lwn.net> <874k7l35t5.fsf@meer.lwn.net>
-In-Reply-To: <874k7l35t5.fsf@meer.lwn.net>
-From:   Linus Torvalds <torvalds@linuxfoundation.org>
-Date:   Mon, 6 Dec 2021 11:35:45 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjPc=K6J39Gw7TasXd0QWthG7WFHxZPGofYteJYmyx+yg@mail.gmail.com>
-Message-ID: <CAHk-=wjPc=K6J39Gw7TasXd0QWthG7WFHxZPGofYteJYmyx+yg@mail.gmail.com>
-Subject: Re: [GIT PULL] Documentation fixes for 5.16
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 11:13 AM Jonathan Corbet <corbet@lwn.net> wrote:
+
+On Mon 06 Dec 2021 at 18:28, Martin Blumenstingl <martin.blumenstingl@googlemail.com> wrote:
+
+> Hi Jerome,
 >
-> Somehow I managed to not CC the usual lists on this one, so, for the
-> record...
+> On Mon, Dec 6, 2021 at 11:02 AM Jerome Brunet <jbrunet@baylibre.com> wrote:
+>>
+>>
+>> On Sun 05 Dec 2021 at 19:08, Martin Blumenstingl <martin.blumenstingl@googlemail.com> wrote:
+>>
+>> > The out-of-tree vendor driver uses the following approach to set the
+>> > AIU_I2S_MISC register:
+>> > 1) write AIU_MEM_I2S_START_PTR and AIU_MEM_I2S_RD_PTR
+>> > 2) configure AIU_I2S_MUTE_SWAP[15:0]
+>> > 3) write AIU_MEM_I2S_END_PTR
+>> > 4) set AIU_I2S_MISC[2] to 1 (documented as: "put I2S interface in hold
+>> >    mode")
+>> > 5) set AIU_I2S_MISC[4] to 1 (depending on the driver revision it always
+>> >    stays at 1 while for older drivers this bit is unset in step 4)
+>> > 6) set AIU_I2S_MISC[2] to 0
+>> > 7) write AIU_MEM_I2S_MASKS
+>> > 8) toggle AIU_MEM_I2S_CONTROL[0]
+>> > 9) toggle AIU_MEM_I2S_BUF_CNTL[0]
+>> >
+>> > Additional testing shows that when AIU_I2S_MISC[2] is set to 1 then no
+>> > interrupts are generated anymore. The way this bit is managed by the
+>> > vendor driver as well as not getting any interrupts can mean that it's
+>> > related to the FIFO and not the encoder.
+>>
+>> Not necessarily. If the encoder stops pulling data, the FIFO will going
+>> over the DDR. Since it generates an IRQ after reading N bytes, IRQ would
+>> stop too. AFAIK, if the pipeline is stalled, the IRQ stops anyway
+> ah, right. so I think you're right: it can be either way
+>
+>> ... but this is not really important
+> I'll remove that section from the description in v2
+>
+>> >
+>> > Move setting the AIU_I2S_MISC[2] bit to aiu_fifo_i2s_hw_params() so it
+>> > closer resembles the flow in the vendor kernel. While here also
+>> > configure AIU_I2S_MISC[4] (documented as: "force each audio data to
+>> > left or right according to the bit attached with the audio data")
+>> > similar to how the vendor driver does this.
+>>
+>> I understand the part of HOLD, not about FORCE_LR.
+>> Is it necessary to fix the problem ? Have you tested without this change
+>> ?
+> On my Le Potato board (GXL / S905X) FORCE_LR is either enabled by the
+> bootloader or being enabled is the default value.
+> All versions of the vendor driver are also setting it in some way,
 
-.. and now that it was sent quoted (instead of re-sending the original
-email), pr-tracker-bot doesn't recognize it as a pull request any more
-and doesn't react to it.
++1
+Would you mind adding a comment in the code saying just that - so we
+know why it's there ?
 
-So no pr-tracker-bot replies for you.
+> including the latest one that I have access to [0].
+> I prefer to keep this explicit write in for two reasons:
+> - we're not hit by surprise if some SoC/bootloaders don't set this bit
+> by default
+> - the code in the mainline does not skip anything that the vendor
+> driver does
 
-Only this manual one.
+You can bet I've skipped a fair share of what the vendor driver does, on
+purpose.
+>
+> To specifically answer your question: I have not tried whether this
+> bit needs to be set and if unsetting it manually breaks anything.
+>
+>> > This fixes the infamous and
+>> > long-standing "machine gun noise" issue (a buffer underrun issue).
+>>
+>> Well done ! It took us a while to nail it, Thanks a lot !!
+> Thanks - this took a while to figure out but it's great to finally
+> have it solved!
+>
+>
+> Best regards,
+> Martin
+>
+>
+> [0] https://github.com/khadas/linux/blob/khadas-vims-4.9.y/sound/soc/amlogic/meson/audio_hw.c#L194:L202
 
-             Linus
+With this, feel free to repost without the RFC tag and with my
+
+Acked-by: Jerome Brunet <jbrunet@baylibre.com>

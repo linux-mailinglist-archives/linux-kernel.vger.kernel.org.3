@@ -2,129 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 818EA469DFA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:35:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDCC4469E93
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388996AbhLFPf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56998 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345674AbhLFPWY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:22:24 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24909C08EA47;
-        Mon,  6 Dec 2021 07:14:49 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 265421F4488A
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638803687; bh=0wYI5HLADYAd4xSANRFLZ/t5SGL4HjQoUDDbtVZMntw=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=F3i+qP58ek+QIKjw1gTAd6rIjXU196UrMqKi+DJqxtwKT9teAAAKYDKlz5oFjx46y
-         FPqYUOo3CrAC3nuDPAyR2f16fDPcNAwAenlgSg0xB58532r5z07c3PBmgezyJ6ti6L
-         KebBY0RT6kj0OndKhn9btJ7CLlBQznplhoMfPx+oIn44P4Yp4uw0SnnewMaBvZ7IeD
-         KxkWDS4nJRLje/JEm0LgJyq17nuMAIFq11UWBpXnIAKA8FrW2f2CGgYXRyyVob+1Mx
-         FVg68HlMTJE1lQAItxtheu4WVmAArwN9qGVH7ibsCT2t5b0jghIuqZzlmT9nYhBXVH
-         FiDZ12bt+YGDw==
-Subject: Re: [PATCH v4 1/7] net-next: stmmac: dwmac-mediatek: add platform
- level clocks management
-To:     Biao Huang <biao.huang@mediatek.com>, davem@davemloft.net,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        srv_heupstream@mediatek.com, macpaul.lin@mediatek.com,
-        dkirjanov@suse.de
-References: <20211203063418.14892-1-biao.huang@mediatek.com>
- <20211203063418.14892-2-biao.huang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <9dc0cbc3-8de0-f1ed-cfc9-852b7e69ab3c@collabora.com>
-Date:   Mon, 6 Dec 2021 16:14:44 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S1389460AbhLFPkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:40:17 -0500
+Received: from mga03.intel.com ([134.134.136.65]:4144 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1386075AbhLFP0H (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 10:26:07 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="237275625"
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="237275625"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 07:15:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="579399542"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 06 Dec 2021 07:15:18 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 31B91144; Mon,  6 Dec 2021 17:15:24 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Eric Piel <eric.piel@tremplin-utc.net>,
+        Mark Gross <markgross@kernel.org>
+Subject: [PATCH v1 1/1] platform/x86: hp_accel: Use SIMPLE_DEV_PM_OPS() for PM ops
+Date:   Mon,  6 Dec 2021 17:15:21 +0200
+Message-Id: <20211206151521.22578-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <20211203063418.14892-2-biao.huang@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/12/21 07:34, Biao Huang ha scritto:
-> This patch implements clks_config callback for dwmac-mediatek platform,
-> which could support platform level clocks management.
-> 
-> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
-> ---
->   .../ethernet/stmicro/stmmac/dwmac-mediatek.c  | 24 ++++++++++++++-----
->   1 file changed, 18 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> index 58c0feaa8131..157ff655c85e 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
-> @@ -359,9 +359,6 @@ static int mediatek_dwmac_init(struct platform_device *pdev, void *priv)
->   		return ret;
->   	}
->   
-> -	pm_runtime_enable(&pdev->dev);
-> -	pm_runtime_get_sync(&pdev->dev);
-> -
->   	return 0;
->   }
->   
-> @@ -370,11 +367,25 @@ static void mediatek_dwmac_exit(struct platform_device *pdev, void *priv)
->   	struct mediatek_dwmac_plat_data *plat = priv;
->   
->   	clk_bulk_disable_unprepare(plat->num_clks_to_config, plat->clks);
-> -
-> -	pm_runtime_put_sync(&pdev->dev);
-> -	pm_runtime_disable(&pdev->dev);
->   }
->   
-> +static int mediatek_dwmac_clks_config(void *priv, bool enabled)
-> +{
-> +	struct mediatek_dwmac_plat_data *plat = priv;
-> +	int ret = 0;
-> +
-> +	if (enabled) {
-> +		ret = clk_bulk_prepare_enable(plat->num_clks_to_config, plat->clks);
-> +		if (ret) {
-> +			dev_err(plat->dev, "failed to enable clks, err = %d\n", ret);
-> +			return ret;
-> +		}
-> +	} else {
-> +		clk_bulk_disable_unprepare(plat->num_clks_to_config, plat->clks);
-> +	}
-> +
-> +	return ret;
-> +}
->   static int mediatek_dwmac_probe(struct platform_device *pdev)
->   {
->   	struct mediatek_dwmac_plat_data *priv_plat;
-> @@ -420,6 +431,7 @@ static int mediatek_dwmac_probe(struct platform_device *pdev)
->   	plat_dat->bsp_priv = priv_plat;
->   	plat_dat->init = mediatek_dwmac_init;
->   	plat_dat->exit = mediatek_dwmac_exit;
-> +	plat_dat->clks_config = mediatek_dwmac_clks_config;
->   	mediatek_dwmac_init(pdev, priv_plat);
->   
->   	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
-> 
+After the commit 34570a898eef ("platform/x86: hp_accel: Remove
+_INI method call") there is no need to have separate methods for
+resume and restore, hence we may fold them together and use
+SIMPLE_DEV_PM_OPS() for PM ops.
 
-Hello Biao,
+While at it, switch to use __maybe_unused attribute.
 
-you're removing all calls to pm_runtime_* functions, so there is no more reason
-to include linux/pm_runtime.h in this file: please also remove the inclusion.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/platform/x86/hp_accel.c | 27 ++++-----------------------
+ 1 file changed, 4 insertions(+), 23 deletions(-)
 
-Thanks!
+diff --git a/drivers/platform/x86/hp_accel.c b/drivers/platform/x86/hp_accel.c
+index 435a91fe2568..e9f852f7c27f 100644
+--- a/drivers/platform/x86/hp_accel.c
++++ b/drivers/platform/x86/hp_accel.c
+@@ -355,39 +355,20 @@ static int lis3lv02d_remove(struct platform_device *device)
+ 	return 0;
+ }
+ 
+-#ifdef CONFIG_PM_SLEEP
+-static int lis3lv02d_suspend(struct device *dev)
++static int __maybe_unused lis3lv02d_suspend(struct device *dev)
+ {
+ 	/* make sure the device is off when we suspend */
+ 	lis3lv02d_poweroff(&lis3_dev);
+ 	return 0;
+ }
+ 
+-static int lis3lv02d_resume(struct device *dev)
++static int __maybe_unused lis3lv02d_resume(struct device *dev)
+ {
+ 	lis3lv02d_poweron(&lis3_dev);
+ 	return 0;
+ }
+ 
+-static int lis3lv02d_restore(struct device *dev)
+-{
+-	lis3lv02d_poweron(&lis3_dev);
+-	return 0;
+-}
+-
+-static const struct dev_pm_ops hp_accel_pm = {
+-	.suspend = lis3lv02d_suspend,
+-	.resume = lis3lv02d_resume,
+-	.freeze = lis3lv02d_suspend,
+-	.thaw = lis3lv02d_resume,
+-	.poweroff = lis3lv02d_suspend,
+-	.restore = lis3lv02d_restore,
+-};
+-
+-#define HP_ACCEL_PM (&hp_accel_pm)
+-#else
+-#define HP_ACCEL_PM NULL
+-#endif
++static SIMPLE_DEV_PM_OPS(hp_accel_pm, lis3lv02d_suspend, lis3lv02d_resume);
+ 
+ /* For the HP MDPS aka 3D Driveguard */
+ static struct platform_driver lis3lv02d_driver = {
+@@ -395,7 +376,7 @@ static struct platform_driver lis3lv02d_driver = {
+ 	.remove	= lis3lv02d_remove,
+ 	.driver	= {
+ 		.name	= "hp_accel",
+-		.pm	= HP_ACCEL_PM,
++		.pm	= &hp_accel_pm,
+ 		.acpi_match_table = lis3lv02d_device_ids,
+ 	},
+ };
+-- 
+2.33.0
+

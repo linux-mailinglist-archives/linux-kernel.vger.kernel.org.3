@@ -2,47 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B96469AE5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:08:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B07469CF0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347366AbhLFPLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:11:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236980AbhLFPIh (ORCPT
+        id S1385998AbhLFP0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:26:01 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35902 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358297AbhLFPQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:08:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DACC08E855;
-        Mon,  6 Dec 2021 07:03:44 -0800 (PST)
+        Mon, 6 Dec 2021 10:16:32 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0600B81120;
-        Mon,  6 Dec 2021 15:03:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B2AC341C1;
-        Mon,  6 Dec 2021 15:03:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 757A761309;
+        Mon,  6 Dec 2021 15:13:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D7D9C341C2;
+        Mon,  6 Dec 2021 15:13:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803022;
-        bh=mrB9ZfL/6zJKt4/Rk1cwFKErBGwvAzza/sx7TBu4Nas=;
+        s=korg; t=1638803582;
+        bh=1XE0mcc/tmYyynTxn2n0wMzyC4wO2YrdfxfsU9Cv+C8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VV5QKrWXBiVZ7hXekfo1KJEygEEvoLoj5nipMOLPGMF5nl1Lx49fGDadOPKPZk2p8
-         uDNn18Tk/Wfi/n6LXm4BcJtK1Y1ui7gPUOuMlKO6Z/T5AFGBB7T5DbCe5idHsAhQcK
-         LswQLCGlMhaaSjkX0D2ibcT2vTguisSkmPFOewTI=
+        b=d54ys2G5jnMXRCLMLFT1Z8QNLTPHd6IFGWqMN2pWhURQ9T+Ygfljz2uZxZNtwig6I
+         /aRNTj3hTMmEDEfIxxV0Dhm9xaLdcyP89kTV/52ir/MarjpEy23wMRzjBFD9VA37+c
+         qzcGtxE5jYkiF/ZoIAJQzKpz2T1xxNAMxnsLIu0c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Teng Qi <starmiku1207184332@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 47/62] net: ethernet: dec: tulip: de4x5: fix possible array overflows in type3_infoblock()
-Date:   Mon,  6 Dec 2021 15:56:30 +0100
-Message-Id: <20211206145550.835900654@linuxfoundation.org>
+        stable@vger.kernel.org, Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 5.4 27/70] cpufreq: Fix get_cpu_device() failure in add_cpu_dev_symlink()
+Date:   Mon,  6 Dec 2021 15:56:31 +0100
+Message-Id: <20211206145552.855681307@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
+References: <20211206145551.909846023@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,57 +46,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Teng Qi <starmiku1207184332@gmail.com>
+From: Xiongfeng Wang <wangxiongfeng2@huawei.com>
 
-[ Upstream commit 0fa68da72c3be09e06dd833258ee89c33374195f ]
+commit 2c1b5a84669d2477d8fffe9136e86a2cff591729 upstream.
 
-The definition of macro MOTO_SROM_BUG is:
-  #define MOTO_SROM_BUG    (lp->active == 8 && (get_unaligned_le32(
-  dev->dev_addr) & 0x00ffffff) == 0x3e0008)
+When I hot added a CPU, I found 'cpufreq' directory was not created
+below /sys/devices/system/cpu/cpuX/.
 
-and the if statement
-  if (MOTO_SROM_BUG) lp->active = 0;
+It is because get_cpu_device() failed in add_cpu_dev_symlink().
 
-using this macro indicates lp->active could be 8. If lp->active is 8 and
-the second comparison of this macro is false. lp->active will remain 8 in:
-  lp->phy[lp->active].gep = (*p ? p : NULL); p += (2 * (*p) + 1);
-  lp->phy[lp->active].rst = (*p ? p : NULL); p += (2 * (*p) + 1);
-  lp->phy[lp->active].mc  = get_unaligned_le16(p); p += 2;
-  lp->phy[lp->active].ana = get_unaligned_le16(p); p += 2;
-  lp->phy[lp->active].fdx = get_unaligned_le16(p); p += 2;
-  lp->phy[lp->active].ttm = get_unaligned_le16(p); p += 2;
-  lp->phy[lp->active].mci = *p;
+cpufreq_add_dev() is the .add_dev callback of a CPU subsys interface.
+It will be called when the CPU device registered into the system.
+The call chain is as follows:
 
-However, the length of array lp->phy is 8, so array overflows can occur.
-To fix these possible array overflows, we first check lp->active and then
-return -EINVAL if it is greater or equal to ARRAY_SIZE(lp->phy) (i.e. 8).
+  register_cpu()
+  ->device_register()
+   ->device_add()
+    ->bus_probe_device()
+     ->cpufreq_add_dev()
 
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Teng Qi <starmiku1207184332@gmail.com>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+But only after the CPU device has been registered, we can get the
+CPU device by get_cpu_device(), otherwise it will return NULL.
+
+Since we already have the CPU device in cpufreq_add_dev(), pass
+it to add_cpu_dev_symlink().
+
+I noticed that the 'kobj' of the CPU device has been added into
+the system before cpufreq_add_dev().
+
+Fixes: 2f0ba790df51 ("cpufreq: Fix creation of symbolic links to policy directories")
+Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: All applicable <stable@vger.kernel.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/dec/tulip/de4x5.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/cpufreq/cpufreq.c |    9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/dec/tulip/de4x5.c b/drivers/net/ethernet/dec/tulip/de4x5.c
-index b39e8315e4e27..a5a291b848b06 100644
---- a/drivers/net/ethernet/dec/tulip/de4x5.c
-+++ b/drivers/net/ethernet/dec/tulip/de4x5.c
-@@ -4704,6 +4704,10 @@ type3_infoblock(struct net_device *dev, u_char count, u_char *p)
-         lp->ibn = 3;
-         lp->active = *p++;
- 	if (MOTO_SROM_BUG) lp->active = 0;
-+	/* if (MOTO_SROM_BUG) statement indicates lp->active could
-+	 * be 8 (i.e. the size of array lp->phy) */
-+	if (WARN_ON(lp->active >= ARRAY_SIZE(lp->phy)))
-+		return -EINVAL;
- 	lp->phy[lp->active].gep = (*p ? p : NULL); p += (2 * (*p) + 1);
- 	lp->phy[lp->active].rst = (*p ? p : NULL); p += (2 * (*p) + 1);
- 	lp->phy[lp->active].mc  = get_unaligned_le16(p); p += 2;
--- 
-2.33.0
-
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -995,10 +995,9 @@ static struct kobj_type ktype_cpufreq =
+ 	.release	= cpufreq_sysfs_release,
+ };
+ 
+-static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu)
++static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu,
++				struct device *dev)
+ {
+-	struct device *dev = get_cpu_device(cpu);
+-
+ 	if (unlikely(!dev))
+ 		return;
+ 
+@@ -1384,7 +1383,7 @@ static int cpufreq_online(unsigned int c
+ 	if (new_policy) {
+ 		for_each_cpu(j, policy->related_cpus) {
+ 			per_cpu(cpufreq_cpu_data, j) = policy;
+-			add_cpu_dev_symlink(policy, j);
++			add_cpu_dev_symlink(policy, j, get_cpu_device(j));
+ 		}
+ 
+ 		policy->min_freq_req = kzalloc(2 * sizeof(*policy->min_freq_req),
+@@ -1547,7 +1546,7 @@ static int cpufreq_add_dev(struct device
+ 	/* Create sysfs link on CPU registration */
+ 	policy = per_cpu(cpufreq_cpu_data, cpu);
+ 	if (policy)
+-		add_cpu_dev_symlink(policy, cpu);
++		add_cpu_dev_symlink(policy, cpu, dev);
+ 
+ 	return 0;
+ }
 
 

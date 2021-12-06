@@ -2,78 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A195546A069
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFEE46A06E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:03:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444990AbhLFQDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:03:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
+        id S1388225AbhLFQEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:04:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358438AbhLFPwf (ORCPT
+        with ESMTP id S1359627AbhLFPxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:52:35 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABA6C036FAB
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:37:48 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id u11so7311617plf.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 07:37:48 -0800 (PST)
+        Mon, 6 Dec 2021 10:53:06 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16021C0613F8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:38:57 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id r25so44446644edq.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 07:38:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7HzwmvjWwTv0FeXPfbk2piEjvWmlmu/Ix95bAO30KVA=;
-        b=ZhuBW1c4dJPnblkwVVq7/i5JD1acaN3vKRPqk1vt1l4/1WVncLZ6/XF7i5mu75gzgu
-         gjeCchw5SEdKY9IS6B7CPAfcmRrUtycY7KuXQmFjBHQHAkwiOcZJ9z0v/+YNWbTW74ju
-         WW96J+3JEIUppGf6QeHbGWa7GVsgIexlxyh9hOk48GZohQPBwAtQkqiajM6rP2eObXpU
-         BB9FK4L4OBLFpwyu9xrfcQ8X7jt5+ieR5WZzveGHAm+q8YpxPYGnxSwBq7pubQ1wuMhA
-         A0WTx//Jdi0jZnVSCUhuNTOI/Ivk6mePXx6gLqDkkdRd+Kgm/eFjcy+0vGQqU+5gDD/C
-         DlVw==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9W76LEYV5XhSTyhRdFVRetLYZIBZdbQgyi0kE7VCZkQ=;
+        b=Ep1PRSgWEBrqoMpiSmKhUIGt1Fr0WmZ777zbXw94howGm9kNp46MfHZcAt6MoWDTs6
+         3809rEmQXOxTqUNa381ZfSyzRGqvSFsdcBMr7PxBDUTl7QWcH3StbT+fvORS4q1lII8/
+         7dkVnPx+XYhDj0WyvuUyGsza4I+pP26cDkrwVp/FY2pb+RqoRIgLk0pEVfWqPPx0O4fT
+         DM1bAqCrpnYyK0z8NCea4ofaeJwVL02LGd6KMelvL53woiW4SIu2ZvYy5S/p6qPUYhT9
+         Tu234fy2YBArgSInn5rHNsI7G8FpZ4AmP0lbQPlWK9UuEP95oFVfu7I7/H53bU2f3AOB
+         s7Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7HzwmvjWwTv0FeXPfbk2piEjvWmlmu/Ix95bAO30KVA=;
-        b=JIh7Du4Z87joOLyNtbbAPX8izo2OwwgB45kZP1/06cdk4L8qbadrA15AVluEPr+D8Y
-         UQICZ5SWbqiR2w83jODT7uAlgzQMKRmE+Zrfdq6KCk7nNn3tmv0qdtJ82tJH//nV1L4A
-         s02fwOGAsh49hTRV1zzxkrBx3fnqOXD3rlTVteR6wrCOUG2c0GGtBpc8LwQ6Ijhtacs4
-         uz96pLMjz6hqPBqnb4aqrAyYqYM16jpyT35uElQvr6hUptJEenj7kdAduEGOcSSv0rcb
-         adMNE1d7QppFq/tv8n7laYCUsmthdtNgic/FLmBpl6/B+GfIipO5BdYC95DAjLvwmLMS
-         kiqQ==
-X-Gm-Message-State: AOAM5321+pNuvQzPvOGV0NRvP8rorXXso8UQl5MnyzD9Aw7SnLi4RONj
-        hgyCOC0Mu4HAYvkXIG/cWfdftg==
-X-Google-Smtp-Source: ABdhPJwcn3YT+bEUgsZ2X+gC+fgtI4ggBTfe1/BDgoKckLhZ5wuo1mJvX1iNXW4oitVJUGRb6dnE1Q==
-X-Received: by 2002:a17:90b:4c03:: with SMTP id na3mr37953644pjb.62.1638805067801;
-        Mon, 06 Dec 2021 07:37:47 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id lr6sm11226043pjb.0.2021.12.06.07.37.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 07:37:47 -0800 (PST)
-Date:   Mon, 6 Dec 2021 15:37:43 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ameer Hamza <amhamza.mgc@gmail.com>
-Cc:     vkuznets@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
-Subject: Re: [PATCH v2] KVM: x86: fix for missing initialization of return
- status variable
-Message-ID: <Ya4uR7I/7yvrgl6c@google.com>
-References: <87ee6q6r1p.fsf@redhat.com>
- <20211206102403.10797-1-amhamza.mgc@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9W76LEYV5XhSTyhRdFVRetLYZIBZdbQgyi0kE7VCZkQ=;
+        b=vP9J3eNqAyOwY4okd2K+8gVmTxJKfKkR0un+iVeBrVXx+kzeCb9O371avnKWs3AB39
+         Utz+/7Ga65k492si6S+5u9HwTRbNkWbjMMB8euuAMaSm5k6/nwZ43W0bIYt+l0j17O9s
+         KZhV+FjhhcAiCZVY3Xx5dFvEWphWZQhvSNuK4aAUhSePh3og0MZHIkcajyJhn+KkqIfO
+         +CIbQxT9prgMyb0Xy4rXIAmTVbl7rQHFbaTkdSO/gBMizBPaBS4aX3waMmtOdiAzhkPD
+         yrRcWj24BG2B4FX8REOtC1UHu+O4GItOVd4iX3E3MybfxSEH8XXDMl2r+f82RjorURoA
+         PSIg==
+X-Gm-Message-State: AOAM530PisLQlji42E/WzxsVgxwXfmQW2jcS41cPDcE5HlydqAn90S3Z
+        SpXXJuxVTkjlKIAHn5o+yl4HOETGsHgkvCvJsgEtvg==
+X-Google-Smtp-Source: ABdhPJxB1THlRQIslUVG/FPMSytVNxteW/9OP1ov9HXjuOe9pM8XzbihMvfp6i6oAN0uC/Cg/IXdwRindazm6cTahJo=
+X-Received: by 2002:a05:6402:2805:: with SMTP id h5mr49317374ede.267.1638805135387;
+ Mon, 06 Dec 2021 07:38:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206102403.10797-1-amhamza.mgc@gmail.com>
+References: <20211203133003.31786-1-brgl@bgdev.pl> <20211203133003.31786-5-brgl@bgdev.pl>
+ <Yap4/VshDPNxLfOt@smile.fi.intel.com> <CAMRc=MegnF-VZswJym7np4sBMyFf0=gqeFGdKS0xytnmQOhUpw@mail.gmail.com>
+ <Ya4Q7s9sbk2UHNA3@smile.fi.intel.com>
+In-Reply-To: <Ya4Q7s9sbk2UHNA3@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 6 Dec 2021 16:38:44 +0100
+Message-ID: <CAMRc=Md9S20JBYYVTkkpgOTgBofDrt3QrbPK94zP4jGw30bq3g@mail.gmail.com>
+Subject: Re: [PATCH v12 4/7] gpio: sim: new testing module
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021, Ameer Hamza wrote:
-> If undefined ioctl number is passed to the kvm_vcpu_ioctl_device_attr
-> function, it should return with error status.
+On Mon, Dec 6, 2021 at 2:33 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Mon, Dec 06, 2021 at 10:48:00AM +0100, Bartosz Golaszewski wrote:
+> > On Fri, Dec 3, 2021 at 9:08 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Fri, Dec 03, 2021 at 02:30:00PM +0100, Bartosz Golaszewski wrote:
+>
+> ...
+>
+> > > > +#include <linux/gpio/driver.h>
+> > > > +#include <linux/gpio/machine.h>
+> > >
+> > > I would rather move this group below to emphasize that this is closer to GPIO
+> > > then to other APIs.
+> > >
+> > > > +#include <linux/sysfs.h>
+> > > > +
+> > >
+> > > ...here.
+> > >
+> >
+> > With the number of headers in this file, I'd stick with alphabetical order.
+>
+> I understand that and agree, but my point is orthogonal to this. The idea is to
+> emphasize that "hey. this driver has tough relations with the GPIO subsystem".
+> This is the way, for example, IIO does and I like it.
+>
 
-No, if anything KVM should do KVM_BUG_ON() and return -EIO, because @ioctl is
-completely KVM controlled.  But I'd personally prefer we leave it as is, there's
-one call site that very clearly invokes the helper with only the three ioctls.
-It's not a strong preference though.
+I really don't think this is necessary.
+
+> > > > +#include "gpiolib.h"
+>
+> ...
+>
+> > > > +static int gpio_sim_apply_pull(struct gpio_sim_chip *chip,
+> > > > +                            unsigned int offset, int value)
+> > >
+> > > I would use up to 100 here...
+> > >
+> > > > +     if (test_bit(FLAG_REQUESTED, &desc->flags) &&
+> > > > +         !test_bit(FLAG_IS_OUT, &desc->flags)) {
+> > >
+> > > ...here and so on.
+> > >
+> > > But it's up to you.
+> > >
+> >
+> > Nah, the lines are broken just fine. Let's not overuse the limit.
+>
+> Yes, but I would consider to join back those which are up to ~83 characters
+> (I already pointed out at least to one example like this).
+>
+
+I like the old-style limit TBH.
+
+> ...
+>
+> > > > +     if (sysfs_streq(buf, "pull-down"))
+> > > > +             pull = 0;
+> > > > +     else if (sysfs_streq(buf, "pull-up"))
+> > > > +             pull = 1;
+> > > > +     else
+> > > > +             return -EINVAL;
+> > >
+> > > sysfs_match_string() and use the very same string array in the above function
+> > > to print them?
+>
+> I suppose you agree on this?
+>
+
+Yes, already changed that in v13.
+
+> ...
+>
+> > > > +     /* Default to input mode. */
+> > > > +     bitmap_fill(chip->direction_map, num_lines);
+> > >
+> > > More accurate is to use bitmap_set(). If we ever debug this it also helpful.
+> >
+> > I'm not sure what you mean, this sets all bits to 1.
+>
+> Nope, it may set _more_ than all bits. That's why bitmap_set() is more
+> accurate, because it will do exact setting.
+>
+
+Can this in any way affect any of the code? If the driver is correct,
+it will never use anything beyond the last line bit. If it does, it
+needs fixing. It's as if we cared about what happens to padding added
+to structures by the compiler (as long as we're not passing it to
+user-space of course).
+
+> ...
+>
+> > > > +     if (strcmp(trimmed, "input") == 0)
+> > > > +             dir = GPIOD_IN;
+> > > > +     else if (strcmp(trimmed, "output-high") == 0)
+> > > > +             dir = GPIOD_OUT_HIGH;
+> > > > +     else if (strcmp(trimmed, "output-low") == 0)
+> > > > +             dir = GPIOD_OUT_LOW;
+> > > > +     else
+> > > > +             dir = -EINVAL;
+> > >
+> > > Same idea, i.e. static string array and use it above and here with help
+> > > of match_string().
+> >
+> > It would be great but GPIOD_IN etc. are bit flags and not sequence enums.
+>
+> Ah, okay, it will make rather sparse array.
+>
+
+Idea for the future: introduce match_string_ext() with flags one of
+which would allow sparse string arrays?
+
+Bart

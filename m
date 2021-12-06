@@ -2,160 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE97468EFC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 03:05:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A059A468F02
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 03:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233085AbhLFCJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 21:09:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbhLFCJS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 21:09:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66178C061751;
-        Sun,  5 Dec 2021 18:05:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB23860FE2;
-        Mon,  6 Dec 2021 02:05:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7336C00446;
-        Mon,  6 Dec 2021 02:05:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638756349;
-        bh=jYNEke2yNaj7kP0D636Xh+m70cSQm3OE66MK3rE+1uM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FUqfVqThFiStueV6SxKWGbfwem+jjQpxZ8n5rUnVprHizRFO1l43cQqPBnepzW5gk
-         8kUrg7FcAViXh4tjUGuzL+0IwLWzwjVeHvewmFAWZKLZN5voGL5Y67Uds+vBjasBq4
-         rM7+Z+iQBljk8rEh90/LO/deWBXaS5NkHMeg/WSoBaGBpys4nqGKT3XFyYYQj8yTc/
-         HB+RwI037vC9+Pd/a0s/AmCPN6+pzmjRS3G1IY2Ntnrin5lvk5Y5k0UnddVIPD9OTS
-         Ne8f6PMIv5LX7YCUs0wBFjzdX92nJkSE17HXCG/HIA7zabqCJJKXiOamLLsuBNije/
-         JbKtSXeUBPzPw==
-Date:   Mon, 6 Dec 2021 10:05:43 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/7] arm64: dts: imx8m: configure FEC PHY VDDIO voltage
-Message-ID: <20211206020542.GS4216@dragon>
-References: <20211123080506.21424-1-qiangqing.zhang@nxp.com>
- <20211123080506.21424-5-qiangqing.zhang@nxp.com>
- <20211206011531.GM4216@dragon>
- <DB8PR04MB6795F657BDD2962D032F567BE66D9@DB8PR04MB6795.eurprd04.prod.outlook.com>
+        id S233542AbhLFCLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 21:11:21 -0500
+Received: from mga04.intel.com ([192.55.52.120]:63381 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231177AbhLFCLU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 21:11:20 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="235967418"
+X-IronPort-AV: E=Sophos;i="5.87,290,1631602800"; 
+   d="scan'208";a="235967418"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2021 18:07:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,290,1631602800"; 
+   d="scan'208";a="514544132"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by orsmga008.jf.intel.com with ESMTP; 05 Dec 2021 18:07:45 -0800
+Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>, iommu@lists.linux-foundation.org,
+        linux-pci@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/17] Fix BUG_ON in vfio_iommu_group_notifier()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>
+References: <20211128025051.355578-1-baolu.lu@linux.intel.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Message-ID: <62de1866-f30b-84b2-6942-1d49e30eba0e@linux.intel.com>
+Date:   Mon, 6 Dec 2021 10:07:39 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DB8PR04MB6795F657BDD2962D032F567BE66D9@DB8PR04MB6795.eurprd04.prod.outlook.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20211128025051.355578-1-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 01:59:18AM +0000, Joakim Zhang wrote:
+On 11/28/21 10:50 AM, Lu Baolu wrote:
+> The original post and intent of this series is here.
+> https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/
 > 
-> Hi Shawn,
+> Change log:
+> v1: initial post
+>    - https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/
 > 
-> > -----Original Message-----
-> > From: Shawn Guo <shawnguo@kernel.org>
-> > Sent: 2021年12月6日 9:16
-> > To: Joakim Zhang <qiangqing.zhang@nxp.com>
-> > Cc: robh+dt@kernel.org; s.hauer@pengutronix.de; kernel@pengutronix.de;
-> > festevam@gmail.com; dl-linux-imx <linux-imx@nxp.com>;
-> > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH 4/7] arm64: dts: imx8m: configure FEC PHY VDDIO
-> > voltage
-> > 
-> > On Tue, Nov 23, 2021 at 04:05:03PM +0800, Joakim Zhang wrote:
-> > > As commit 2f664823a470 ("net: phy: at803x: add device tree binding")
-> > > described, configure FEC PHY VDDIO voltage according to board design.
-> > >
-> > > Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
-> > > ---
-> > >  arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 6 ++++++
-> > > arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi | 6 ++++++
-> > > arch/arm64/boot/dts/freescale/imx8mq-evk.dts  | 4 ++++
-> > >  3 files changed, 16 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> > > b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> > > index 50b3bbb662d5..3bac87b7e142 100644
-> > > --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> > > +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> > > @@ -117,6 +117,12 @@
-> > >  			reset-gpios = <&gpio4 22 GPIO_ACTIVE_LOW>;
-> > >  			reset-assert-us = <10000>;
-> > >  			qca,disable-smarteee;
-> > > +			vddio-supply = <&vddio>;
-> > > +
-> > > +			vddio: vddio-regulator {
-> > > +				regulator-min-microvolt = <1800000>;
-> > > +				regulator-max-microvolt = <1800000>;
-> > > +			};
-> > >  		};
-> > >  	};
-> > >  };
-> > > diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
-> > > b/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
-> > > index 342f57e8cf61..c3f15192b76c 100644
-> > > --- a/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
-> > > +++ b/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
-> > > @@ -100,6 +100,12 @@
-> > >  			reset-gpios = <&gpio4 22 GPIO_ACTIVE_LOW>;
-> > >  			reset-assert-us = <10000>;
-> > >  			qca,disable-smarteee;
-> > > +			vddio-supply = <&vddio>;
-> > > +
-> > > +			vddio: vddio-regulator {
-> > > +				regulator-min-microvolt = <1800000>;
-> > > +				regulator-max-microvolt = <1800000>;
-> > > +			};
-> > >  		};
-> > >  	};
-> > >  };
-> > > diff --git a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-> > > b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-> > > index a9e33548a2f3..c96d23fe3010 100644
-> > > --- a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-> > > +++ b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-> > > @@ -170,6 +170,10 @@
-> > >  			reset-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
-> > >  			reset-assert-us = <10000>;
-> > >  			qca,disable-smarteee;
-> > > +			vddio-supply = <&vddh>;
-> > > +
-> > > +			vddh: vddh-regulator {
-> > > +			};
-> > 
-> > Why does this need to be different from the one on imx8mm-evk and
-> > imx8mn-evk?
+> v2:
+>    - Move kernel dma ownership auto-claiming from driver core to bus
+>      callback. [Greg/Christoph/Robin/Jason]
+>      https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/T/#m153706912b770682cb12e3c28f57e171aa1f9d0c
 > 
-> It's depend on RGMII_IO voltage out from SoC and PHY reference design.
+>    - Code and interface refactoring for iommu_set/release_dma_owner()
+>      interfaces. [Jason]
+>      https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/T/#mea70ed8e4e3665aedf32a5a0a7db095bf680325e
 > 
-> For 8MM/MN:
-> 	SoC RGMII_IO is 1.8V, and board design use "Reference Design, 1.5/1.8 V RGMII I/O", PHY default work on 1.5V, so we need configure PHY to work on 1.8V.
-> For 8MQ:
-> 	SoC RGMII_IO is 2.5V, and board design use "Reference Design, 2.5 V/ 3.3 V RGMII I/O", PHY default work on 2.5V.
+>    - [NEW]Add new iommu_attach/detach_device_shared() interfaces for
+>      multiple devices group. [Robin/Jason]
+>      https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/T/#mea70ed8e4e3665aedf32a5a0a7db095bf680325e
+>    
+>    - [NEW]Use iommu_attach/detach_device_shared() in drm/tegra drivers.
+> 
+>    - Refactoring and description refinement.
+> 
+> This is based on v5.16-rc2 and available on github:
+> https://github.com/LuBaolu/intel-iommu/commits/iommu-dma-ownership-v2
 
-Hmm, why do you not specify 2.5V with regulator-min[max]-microvolt then?
-Also, why is the regulator named vddh instead of vddio?
+The v3 of this series has been posted here:
 
-Shawn
+https://lore.kernel.org/linux-iommu/20211206015903.88687-1-baolu.lu@linux.intel.com/
 
-> 
-> Best Regards,
-> Joakim Zhang
-> > Shawn
-> > 
-> > >  		};
-> > >  	};
-> > >  };
-> > > --
-> > > 2.17.1
-> > >
+Best regards,
+baolu

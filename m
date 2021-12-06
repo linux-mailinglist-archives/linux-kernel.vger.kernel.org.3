@@ -2,103 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 406F64698CC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 418E74698D6
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:26:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344194AbhLFO2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 09:28:54 -0500
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:46673 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236352AbhLFO2x (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 09:28:53 -0500
-Received: by mail-oi1-f176.google.com with SMTP id s139so21661152oie.13;
-        Mon, 06 Dec 2021 06:25:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=1UM6mk2YqDOCPpxKmVW4hUay67A5ShMZFccLmrgtyws=;
-        b=l1m+dAcvG6tuwyX2hv9sWXpKM9QC6dCJWTxsGuZf/wEe/H1RdrQ4BQ03FxzoEWyOHe
-         J5eGPTIhetFLIZUpl+xLlcnIgk7UBpWc9Z51k+diCzBs/ADTm488hqhnEsMK/cEKRW8/
-         8BkxxZlVfrqVAz8Dmv92lT82mq2+sI2laEYTiNZoP+sETzrF9DbKN4UUpMq9/S3H+zte
-         OQam/nwpFIBqEO8ot0jT4IT9ywd747TiQ4ykpjfYWruyMqD7U1ZbLZ2Hd5i38YjrEgvE
-         6zEFjSHtwknKkiIsmUbuvYvygB9wzYzPfz3kxWT6CzYCWsd7B6TMnknbrR6TQivhX/fh
-         Bh3g==
-X-Gm-Message-State: AOAM5337mmYznMCBu8dpkzTzxweqAFZu81MS0pZf6fowiglJZPlp6Sl4
-        w+BDrf8CvU4K/DTcIQCSo0ejeg+utQ==
-X-Google-Smtp-Source: ABdhPJwHh7iLhlSQhwyOIjqD6otmwOl55D4ggjQJihayjKesYaNOleTLyfqMib/TY7E6KZA+XSLjEA==
-X-Received: by 2002:aca:1c02:: with SMTP id c2mr24930352oic.53.1638800724490;
-        Mon, 06 Dec 2021 06:25:24 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id x12sm2181654oom.44.2021.12.06.06.25.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 06:25:23 -0800 (PST)
-Received: (nullmailer pid 1976291 invoked by uid 1000);
-        Mon, 06 Dec 2021 14:25:22 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        benjamin.gaignard@collabora.com, cphealy@gmail.com,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-staging@lists.linux.dev, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, nicolas@ndufresne.ca,
-        Fabio Estevam <festevam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>
-In-Reply-To: <20211205181618.1041699-3-aford173@gmail.com>
-References: <20211205181618.1041699-1-aford173@gmail.com> <20211205181618.1041699-3-aford173@gmail.com>
-Subject: Re: [RFC 2/5] dt-bindings: soc: add binding for i.MX8MQ VPU blk-ctrl
-Date:   Mon, 06 Dec 2021 08:25:22 -0600
-Message-Id: <1638800722.475991.1976290.nullmailer@robh.at.kernel.org>
+        id S1344255AbhLFO3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 09:29:39 -0500
+Received: from foss.arm.com ([217.140.110.172]:58812 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1343580AbhLFO3h (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 09:29:37 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C566F1FB;
+        Mon,  6 Dec 2021 06:26:08 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8FCFE3F5A1;
+        Mon,  6 Dec 2021 06:26:07 -0800 (PST)
+Date:   Mon, 6 Dec 2021 14:26:01 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh@kernel.org>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/6] PCI: pci-bridge-emul: Various fixes
+Message-ID: <20211206142601.GA20570@lpieralisi>
+References: <20211124155944.1290-1-pali@kernel.org>
+ <163879317819.3988.9390653012838076482.b4-ty@arm.com>
+ <20211206122451.v4pci63ox3hntsw6@pali>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211206122451.v4pci63ox3hntsw6@pali>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 05 Dec 2021 12:16:15 -0600, Adam Ford wrote:
-> From: Lucas Stach <l.stach@pengutronix.de>
+On Mon, Dec 06, 2021 at 01:24:51PM +0100, Pali Rohár wrote:
+> On Monday 06 December 2021 12:19:57 Lorenzo Pieralisi wrote:
+> > On Wed, 24 Nov 2021 16:59:38 +0100, Pali Rohár wrote:
+> > > This patch series contains various fixes for pci-bridge-emul code.
+> > > This code is used only by pci-aardvark.c and pci-mvebu.c drivers.
+> > > 
+> > > Pali Rohár (6):
+> > >   PCI: pci-bridge-emul: Make expansion ROM Base Address register
+> > >     read-only
+> > >   PCI: pci-bridge-emul: Properly mark reserved PCIe bits in PCI config
+> > >     space
+> > >   PCI: pci-bridge-emul: Add definitions for missing capabilities
+> > >     registers
+> > >   PCI: pci-bridge-emul: Fix definitions of reserved bits
+> > >   PCI: pci-bridge-emul: Correctly set PCIe capabilities
+> > >   PCI: pci-bridge-emul: Set PCI_STATUS_CAP_LIST for PCIe device
+> > > 
+> > > [...]
+> > 
+> > Applied to pci/bridge-emul, thanks!
+> > 
+> > [1/6] PCI: pci-bridge-emul: Make expansion ROM Base Address register read-only
+> >       https://git.kernel.org/lpieralisi/pci/c/1c1a3b4d3e
+> > [2/6] PCI: pci-bridge-emul: Properly mark reserved PCIe bits in PCI config space
+> >       https://git.kernel.org/lpieralisi/pci/c/7b067ac63a
+> > [3/6] PCI: pci-bridge-emul: Add definitions for missing capabilities registers
+> >       https://git.kernel.org/lpieralisi/pci/c/faa3e547f4
 > 
-> This adds the DT binding for the i.MX8MQ VPU blk-ctrl.
-> 
-> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> ---
->  .../soc/imx/fsl,imx8mq-vpu-blk-ctrl.yaml      | 71 +++++++++++++++++++
->  1 file changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/imx/fsl,imx8mq-vpu-blk-ctrl.yaml
-> 
+> Hello Lorenzo! This patch "PCI: pci-bridge-emul: Add definitions for
+> missing capabilities registers" is now in your two different branches:
+> pci/bridge-emul and pci/aardvark. Not sure if you want to have this same
+> patch on two places... So please check.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Dropped, thanks.
 
-yamllint warnings/errors:
+Lorenzo
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/imx/fsl,imx8mq-vpu-blk-ctrl.example.dt.yaml: blk-ctrl@38320000: compatible: ['fsl,imx8mq-vpu-blk-ctrl', 'syscon'] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/imx/fsl,imx8mq-vpu-blk-ctrl.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/imx/fsl,imx8mq-vpu-blk-ctrl.example.dt.yaml: blk-ctrl@38320000: compatible: Additional items are not allowed ('syscon' was unexpected)
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/imx/fsl,imx8mq-vpu-blk-ctrl.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1563759
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+> > [4/6] PCI: pci-bridge-emul: Fix definitions of reserved bits
+> >       https://git.kernel.org/lpieralisi/pci/c/a3ab28a2e3
+> > [5/6] PCI: pci-bridge-emul: Correctly set PCIe capabilities
+> >       https://git.kernel.org/lpieralisi/pci/c/0f7ba81700
+> > [6/6] PCI: pci-bridge-emul: Set PCI_STATUS_CAP_LIST for PCIe device
+> >       https://git.kernel.org/lpieralisi/pci/c/32051099e8
+> > 
+> > Thanks,
+> > Lorenzo

@@ -2,83 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94EFE469DA5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41117469D88
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387618AbhLFPbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:31:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358217AbhLFPTh (ORCPT
+        id S1386876AbhLFPaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:30:13 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37210 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348351AbhLFPSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:19:37 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D24C0698CF
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:13:43 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id q17so7237162plr.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 07:13:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cnQqBSAo+K5oxr9l26dxH3RShjXf+td6E+PHuLLI4y8=;
-        b=VQIiWgpFRexhnDvLc40hcuZW7IZloc67v1EO6pDc4gDJnAh0CPsQ5fznnTZhQcFJXW
-         ktjxw6RbnBpLiUVoQ/VacQo/TSIwujyyBjZaLSEgclpiWnMOU0wdE/lJEBphP9+pWKl1
-         MLh+Ujy0n3oE+c9MqT0iP4kmn7D/myUpNO+J5WgQ7hnBstrPn6rVBDc6ScOZQCYHYQoj
-         +aICtAZrE2isxEmPRNrM5erhDnCag58kMThzQA/slIoLTYR09wAa1WJmPubjtobDJ1XZ
-         9q3B9k6Z9uz/EgFWcroiQpydY7/DYNHpq0fI+n4mKDIt2+NZ47cNlDIXk/1cTE+i5Yn5
-         t7eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cnQqBSAo+K5oxr9l26dxH3RShjXf+td6E+PHuLLI4y8=;
-        b=3HuV5Em5RS0fRVq0u15UdhEwz6Vvh99jThJ6u7dh79MnYVNDVANIj6MkUT+BvqqVS1
-         0jwjcWdvzgWBSzAefXwopixWBlgnjL9luyhIgoBIYO4E4yNn9PI8sUrOZDFqE99FkvzM
-         hYnLVqeA3N7SaaxZXHzJgoJ7jpPCnpYLBhyIsJYfk6b+/BR8GjsJggmg5gxi1MMOVUzc
-         1ma0JLw2f51onimfzkgsinRQ20Snb93rd9+lt9fZL7piw1bVfD3OXOvMz3OcHCeF8A/R
-         lYWtBFQcOSnESsiBrWFs+LPDk1VCH8n4xg7uG5zOdcyvgbQc9BKeOZNiEs5HMG7Yx5gq
-         zjBg==
-X-Gm-Message-State: AOAM530qLYDcKi51y72D54CFxMn8zBrS0woNyqSyM1D1AwGup9ahlwcq
-        A0xEwJXHfnmGOUUHb9idcfkGhYSEnC2P1LEp2MsYAw==
-X-Google-Smtp-Source: ABdhPJxLJ6uUWWiSZlny/JEj/mVjhmgg6C7BE3VsA338kjFc2t92GnAbloeXMtJTb10Jeu46/eWHG5/ObtlkLgQyN8c=
-X-Received: by 2002:a17:903:2004:b0:142:6344:2c08 with SMTP id
- s4-20020a170903200400b0014263442c08mr44072941pla.51.1638803620589; Mon, 06
- Dec 2021 07:13:40 -0800 (PST)
+        Mon, 6 Dec 2021 10:18:18 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E57E61333
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 15:14:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06363C341C6;
+        Mon,  6 Dec 2021 15:14:46 +0000 (UTC)
+Date:   Mon, 6 Dec 2021 15:14:43 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Jianyong Wu <Jianyong.Wu@arm.com>,
+        Anshuman Khandual <Anshuman.Khandual@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "gshan@redhat.com" <gshan@redhat.com>,
+        Justin He <Justin.He@arm.com>, nd <nd@arm.com>
+Subject: Re: [PATCH v1] arm64/mm: avoid race condition of update page table
+ when kernel init
+Message-ID: <Ya4o4xa53YZ0SXls@arm.com>
+References: <20211027094828.7629-1-jianyong.wu@arm.com>
+ <1cd8e875-24b1-2904-4e9f-2a4eb13674dc@arm.com>
+ <AM9PR08MB72767A6DFA5A7ED8117E7C44F4869@AM9PR08MB7276.eurprd08.prod.outlook.com>
+ <YapXa8JWPNhkePwO@arm.com>
+ <3c971e70-f8c7-4406-d098-74e92f3c7dc4@redhat.com>
 MIME-Version: 1.0
-References: <20211118124819.1902427-1-robert.foss@linaro.org>
- <20211118124819.1902427-4-robert.foss@linaro.org> <Ya4nEMnZ3zQiXbaR@ripper>
-In-Reply-To: <Ya4nEMnZ3zQiXbaR@ripper>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 6 Dec 2021 16:13:29 +0100
-Message-ID: <CAG3jFytNQHK=dTHGzd57V_m_6YNwtD2zRYgBSjykd3whzqy9pQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] arm64: dts: qcom: apq8016-sbc: Remove clock-lanes
- property from &camss node
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     agross@kernel.org, todor.too@gmail.com, mchehab@kernel.org,
-        robh+dt@kernel.org, angelogioacchino.delregno@somainline.org,
-        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3c971e70-f8c7-4406-d098-74e92f3c7dc4@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Dec 2021 at 16:05, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
->
-> On Thu 18 Nov 04:48 PST 2021, Robert Foss wrote:
->
-> > The clock-lanes property is no longer used as it is not programmable by
-> > the CSIPHY hardware block of Qcom ISPs and should be removed.
-> >
-> > Signed-off-by: Robert Foss <robert.foss@linaro.org>
->
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->
-> Although I'd be happy to take the two dts patches through the Qualcomm
-> tree, once the driver changes has landed.
+On Fri, Dec 03, 2021 at 07:13:31PM +0100, David Hildenbrand wrote:
+> On 03.12.21 18:44, Catalin Marinas wrote:
+> > On Thu, Oct 28, 2021 at 08:36:07AM +0100, Jianyong Wu wrote:
+> >> From Anshuman Khandual <anshuman.khandual@arm.com>:
+> >>> On 10/27/21 3:18 PM, Jianyong Wu wrote:
+> >>>> Race condition of page table update can happen in kernel boot period
+> >>>> as both of memory hotplug action when kernel init and the
+> >>>> mark_rodata_ro can update page table. For virtio-mem, the function excute flow chart is:
+> >>>>
+> >>>> -------------------------
+> >>>> kernel_init
+> >>>>   kernel_init_freeable
+> >>>>     ...
+> >>>>       do_initcall
+> >>>>         ...
+> >>>>           module_init [A]
+> >>>>
+> >>>>   ...
+> >>>>   mark_readonly
+> >>>>     mark_rodata_ro [B]
+> >>>> -------------------------
+> > [...]
+> >>>> We can see that the error derived from the l3 translation as the pte
+> >>>> value is *0*. That is because the fixmap has been clear when access.
+> >>>>
+> >>>> Signed-off-by: Jianyong Wu <jianyong.wu@arm.com>
+> >>>> ---
+> >>>>  arch/arm64/mm/mmu.c | 2 ++
+> >>>>  1 file changed, 2 insertions(+)
+> >>>>
+> >>>> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c index
+> >>>> cfd9deb347c3..567dfba8f08a 100644
+> >>>> --- a/arch/arm64/mm/mmu.c
+> >>>> +++ b/arch/arm64/mm/mmu.c
+> >>>> @@ -564,8 +564,10 @@ void mark_rodata_ro(void)
+> >>>>      * to cover NOTES and EXCEPTION_TABLE.
+> >>>>      */
+> >>>>     section_size = (unsigned long)__init_begin - (unsigned long)__start_rodata;
+> >>>> +   get_online_mems();
+> >>>>     update_mapping_prot(__pa_symbol(__start_rodata), (unsigned long)__start_rodata,
+> >>>>                         section_size, PAGE_KERNEL_RO);
+> >>>> +   put_online_mems();
+> >>>>
+> >>>>     debug_checkwx();
+> >>>>  }
+> >>>
+> >>> While this should solve the current problem i.e race between concurrent
+> >>> memory hotplug operation and mark_rodata_ro(), but I am still wondering
+> >>> whether this is the fix at the right place and granularity. Basically a hotplug
+> >>> operation queued in an work queue at [A] can execute during [B] is the root
+> >>> cause of this problem.
+> >>
+> >> Not exactly, this issue doesn't only happen at the the *pure* kernel
+> >> boot. For example, hotplug memory through VM monitor when VM boot. We
+> >> can't foresee when that happen. Thus, this issue can affect all kinds
+> >> of memory hotplug mechanism, including ACPI based memory hotplug and
+> >> virtio-mem. I'm not sure that fix it here is the best way. If the race
+> >> only happens between kernel init and memory hotplug, I think it's fine
+> >> to fix it here. IMO, this issue results from the race for "fixmap"
+> >> resource. I wonder why this global resource is not protected by a
+> >> lock. Maybe we can add one and fix it there.
+> > 
+> > IIUC the race is caused by multiple attempts to use the fixmap at the
+> > same time. We can add a fixmap_lock and hold it during
+> > __create_pgd_mapping().
+> 
+> IIRC that's something along the lines I suggested, so, yes :)
 
-Thanks Bjorn. I'll split the series and submit two fully reviewed v4 series.
+Yeah, I just echoed what you and Anshuman said ;).
+
+-- 
+Catalin

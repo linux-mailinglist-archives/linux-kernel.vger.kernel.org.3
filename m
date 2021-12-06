@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A891A469DBC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FAA046A04F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388141AbhLFPcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:32:21 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54424 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347104AbhLFPVT (ORCPT
+        id S1443437AbhLFQAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:00:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33190 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390550AbhLFPmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:21:19 -0500
+        Mon, 6 Dec 2021 10:42:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FE5C0698D8;
+        Mon,  6 Dec 2021 07:28:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F18FB810E7;
-        Mon,  6 Dec 2021 15:17:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 635F0C341C2;
-        Mon,  6 Dec 2021 15:17:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C57FFB81120;
+        Mon,  6 Dec 2021 15:28:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16C4DC34901;
+        Mon,  6 Dec 2021 15:28:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803868;
-        bh=i+jgwPIrm0lnwRxNLGX7q2jp31+Kqd9MHs7MUO9ZOfk=;
+        s=korg; t=1638804506;
+        bh=/BKPCJEstKX1aGtbfYuiieYyZSdnXwgmEawrRs4P09c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LpRo4IhaqBrxHRwuUiiOrpLhtl7GKWXXu0tuLgaejOE48T+6sn4xDrA8hCx9Tc20y
-         gXUqupnQtEPaJvOnukhnAYGxbWpPImAqo14ZsRFo5b3k6QN7WlPMpPriuuj7Bp8Wob
-         TlaVdSBymc0/oKl2V2YR+GALLCpohncKuTtGprXM=
+        b=xiFjzwtnjuwUkhr+hNkP4GNdZD46AclX5mNxxQf4lrFchN7e2Rm6D6x3FAjZdWL0P
+         RuGM7miy78TyzIPX5aGcBl5fkvnGjfahH5XbF4oNsGW1dPCDQN5kQzb6F9I45SMezv
+         MNdWwLYITwHUHCjdWA4TnqqIqI4DzDIgClGD08Hs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Sameer Pujar <spujar@nvidia.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.10 076/130] ASoC: tegra: Fix wrong value type in DMIC
+        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Jian-Hong Pan <jhp@endlessos.org>
+Subject: [PATCH 5.15 139/207] drm/vc4: kms: Wait for the commit before increasing our clock rate
 Date:   Mon,  6 Dec 2021 15:56:33 +0100
-Message-Id: <20211206145602.296631883@linuxfoundation.org>
+Message-Id: <20211206145615.040776412@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,73 +49,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sameer Pujar <spujar@nvidia.com>
+From: Maxime Ripard <maxime@cerno.tech>
 
-commit 559d234569a998a4004de1bd1f12da5487fb826e upstream.
+commit 0c980a006d3fbee86c4d0698f66d6f5381831787 upstream.
 
-The enum controls are expected to use enumerated value type.
-Update relevant references in control get/put callbacks.
+Several DRM/KMS atomic commits can run in parallel if they affect
+different CRTC. These commits share the global HVS state, so we have
+some code to make sure we run commits in sequence. This synchronization
+code is one of the first thing that runs in vc4_atomic_commit_tail().
 
-Fixes: 8c8ff982e9e2 ("ASoC: tegra: Add Tegra210 based DMIC driver")
-Suggested-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Sameer Pujar <spujar@nvidia.com>
-Reviewed-by: Takashi Iwai <tiwai@suse.de>
-Link: https://lore.kernel.org/r/1637219231-406-4-git-send-email-spujar@nvidia.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Another constraints we have is that we need to make sure the HVS clock
+gets a boost during the commit. That code relies on clk_set_min_rate and
+will remove the old minimum and set a new one. We also need another,
+temporary, minimum for the duration of the commit.
+
+The algorithm is thus to set a temporary minimum, drop the previous
+one, do the commit, and finally set the minimum for the current mode.
+
+However, the part that sets the temporary minimum and drops the older
+one runs before the commit synchronization code.
+
+Thus, under the proper conditions, we can end up mixing up the minimums
+and ending up with the wrong one for our current step.
+
+To avoid it, let's move the clock setup in the protected section.
+
+Fixes: d7d96c00e585 ("drm/vc4: hvs: Boost the core clock during modeset")
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Tested-by: Jian-Hong Pan <jhp@endlessos.org>
+Link: https://lore.kernel.org/r/20211117094527.146275-2-maxime@cerno.tech
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/tegra/tegra210_dmic.c |   23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+ drivers/gpu/drm/vc4/vc4_kms.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/sound/soc/tegra/tegra210_dmic.c
-+++ b/sound/soc/tegra/tegra210_dmic.c
-@@ -165,15 +165,15 @@ static int tegra210_dmic_get_control(str
- 	if (strstr(kcontrol->id.name, "Boost Gain Volume"))
- 		ucontrol->value.integer.value[0] = dmic->boost_gain;
- 	else if (strstr(kcontrol->id.name, "Channel Select"))
--		ucontrol->value.integer.value[0] = dmic->ch_select;
-+		ucontrol->value.enumerated.item[0] = dmic->ch_select;
- 	else if (strstr(kcontrol->id.name, "Mono To Stereo"))
--		ucontrol->value.integer.value[0] = dmic->mono_to_stereo;
-+		ucontrol->value.enumerated.item[0] = dmic->mono_to_stereo;
- 	else if (strstr(kcontrol->id.name, "Stereo To Mono"))
--		ucontrol->value.integer.value[0] = dmic->stereo_to_mono;
-+		ucontrol->value.enumerated.item[0] = dmic->stereo_to_mono;
- 	else if (strstr(kcontrol->id.name, "OSR Value"))
--		ucontrol->value.integer.value[0] = dmic->osr_val;
-+		ucontrol->value.enumerated.item[0] = dmic->osr_val;
- 	else if (strstr(kcontrol->id.name, "LR Polarity Select"))
--		ucontrol->value.integer.value[0] = dmic->lrsel;
-+		ucontrol->value.enumerated.item[0] = dmic->lrsel;
+--- a/drivers/gpu/drm/vc4/vc4_kms.c
++++ b/drivers/gpu/drm/vc4/vc4_kms.c
+@@ -353,9 +353,6 @@ static void vc4_atomic_commit_tail(struc
+ 		vc4_hvs_mask_underrun(dev, vc4_crtc_state->assigned_channel);
+ 	}
  
- 	return 0;
- }
-@@ -183,20 +183,19 @@ static int tegra210_dmic_put_control(str
- {
- 	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
- 	struct tegra210_dmic *dmic = snd_soc_component_get_drvdata(comp);
--	int value = ucontrol->value.integer.value[0];
+-	if (vc4->hvs->hvs5)
+-		clk_set_min_rate(hvs->core_clk, 500000000);
+-
+ 	old_hvs_state = vc4_hvs_get_old_global_state(state);
+ 	if (!old_hvs_state)
+ 		return;
+@@ -377,6 +374,9 @@ static void vc4_atomic_commit_tail(struc
+ 			drm_err(dev, "Timed out waiting for commit\n");
+ 	}
  
- 	if (strstr(kcontrol->id.name, "Boost Gain Volume"))
--		dmic->boost_gain = value;
-+		dmic->boost_gain = ucontrol->value.integer.value[0];
- 	else if (strstr(kcontrol->id.name, "Channel Select"))
--		dmic->ch_select = ucontrol->value.integer.value[0];
-+		dmic->ch_select = ucontrol->value.enumerated.item[0];
- 	else if (strstr(kcontrol->id.name, "Mono To Stereo"))
--		dmic->mono_to_stereo = value;
-+		dmic->mono_to_stereo = ucontrol->value.enumerated.item[0];
- 	else if (strstr(kcontrol->id.name, "Stereo To Mono"))
--		dmic->stereo_to_mono = value;
-+		dmic->stereo_to_mono = ucontrol->value.enumerated.item[0];
- 	else if (strstr(kcontrol->id.name, "OSR Value"))
--		dmic->osr_val = value;
-+		dmic->osr_val = ucontrol->value.enumerated.item[0];
- 	else if (strstr(kcontrol->id.name, "LR Polarity Select"))
--		dmic->lrsel = value;
-+		dmic->lrsel = ucontrol->value.enumerated.item[0];
++	if (vc4->hvs->hvs5)
++		clk_set_min_rate(hvs->core_clk, 500000000);
++
+ 	drm_atomic_helper_commit_modeset_disables(dev, state);
  
- 	return 0;
- }
+ 	vc4_ctm_commit(vc4, state);
 
 

@@ -2,88 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F125D469F67
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08354469FFE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345090AbhLFPrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:47:46 -0500
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:41930 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387701AbhLFPbo (ORCPT
+        id S1442792AbhLFP4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:56:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390784AbhLFPmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:31:44 -0500
-Received: by mail-oi1-f175.google.com with SMTP id u74so22006763oie.8;
-        Mon, 06 Dec 2021 07:28:15 -0800 (PST)
+        Mon, 6 Dec 2021 10:42:50 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE571C08E852;
+        Mon,  6 Dec 2021 07:32:17 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id y12so44274360eda.12;
+        Mon, 06 Dec 2021 07:32:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jA0/Vjs8HTmbMPDycewEdsM7ryNAIr3rJJKIVuOBXQc=;
+        b=jD0l0RMMRQH80ctwcpGj3byfYrfKGQ8gME4jJ3W9eBNZRv2zYUkXOCgbaYsosE7o+p
+         lcbMIRgRMjr/hskND+XKbxGRQtamjSrY9CR4vJHMWeYK2DnDJjMvaylyMhWF2Jr1cVuk
+         y0qDtwDP5MfWISlT8GBY2saM6/H6w4yzNi+N6xvdNxWy2Wz7EIy+mn8OVb7/AKLhlsnS
+         icnHPV3qcZoQssViNggvUFbj6CR5Dpca7bRI2XOrGHMf7h2R1Ppnht5JeFx3bSJisWLC
+         XnYHRQYcdxo7IfPHQ4CgMiheO0wjR/okvvvvjbbjqSXazHgBbLxso+G4nOkHChgXu6BQ
+         E2eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vmY9WY/IdHkBubH/d9+H2NnZMjAMu0umDpKHxPiSoSU=;
-        b=Jrg7IbYxtnNeP+fRmAsa1q5NHAFnrjui64xBACd1AENxji6+7hIFdIld6eJ1acRjAC
-         wXZ8lkl1jxQn1yJ5Mhj2wuKIs4Rbr8EULUD3TSKnnoD79YJL0z6pYupseU3ZTUGGKKmx
-         yJ3Rlc/REdpufwwa13+371WDKPdnAMMZ3E0tvQSDhNVIuK6Ch2pv3qdGXhQkm4oZqWaY
-         UxQe/a4DMnl7tQVtAilUnLDo8RvNn+Z+Z864WfbE8WBqclvUI84G+LnXdiBSmSlf2/Rz
-         zz/rQGuxvPvVL0IWLLf052G7eDInRGXcZNAmHaJVJf6DrQ3BdQqENq/1KvxyVZXZLA/m
-         4ejg==
-X-Gm-Message-State: AOAM533BgTBbtOrFxOO58v/7bLYS5pe+9dcRYqt+wjUNl96NnLcO3CxU
-        AdvZdlrskmJ6ep+K9EGtWw==
-X-Google-Smtp-Source: ABdhPJyfHepTpy+8C5WIBaswVad+pb+ARigaK7+tiIrrbzB1awNCTodg/k/StbwlXs0D2pl0zwBHtg==
-X-Received: by 2002:a05:6808:218b:: with SMTP id be11mr25541435oib.80.1638804495458;
-        Mon, 06 Dec 2021 07:28:15 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o10sm2141225oom.32.2021.12.06.07.28.14
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jA0/Vjs8HTmbMPDycewEdsM7ryNAIr3rJJKIVuOBXQc=;
+        b=HDDycVUnoXF6k1laMzMb9BQotxL6MSgk2CLemsiRdiZjhTi4pE/ldHpbj17sGsJfWT
+         7M5yWhL68d5EoNOEPALJHsXoZxLYpmx9kEg+b6FC5lSzYBMqQEKhLb5MtflJdfiLEJby
+         khN/ThAYaAZ2eg43AOsWeEcdC0e9trXUgmtplNI7hnIsMbewGyWqewBz94M+Y8Bqjnjk
+         LekuJKFvbjthY077USsLa0IOG38CtB4NLSYJPchPd4VUxT/jbN1KHU+lAdPQ31x4Y5bZ
+         27DrLY4nZ4FiGfn7RvBmjDcIua+CvxDqVfzKrBhecl20romxqJwCKw9ch24koTgHI7Rd
+         +YBQ==
+X-Gm-Message-State: AOAM532earI/58x8rQ7gZ4KShp5SyM80r94kmwZshMdar13jYfyGDXdf
+        bGeOWZIiBmLi2ciw0esXIEM=
+X-Google-Smtp-Source: ABdhPJyElICCwzglnbsKWrwExz94gKjSFu9kQNBc2/inrAfLJnJFdelTd1WFkEkfIxu5bDdrxN2VFg==
+X-Received: by 2002:aa7:c415:: with SMTP id j21mr56343729edq.357.1638804736486;
+        Mon, 06 Dec 2021 07:32:16 -0800 (PST)
+Received: from localhost.localdomain ([2a02:ab88:368f:2080:eab:126a:947d:3008])
+        by smtp.googlemail.com with ESMTPSA id d19sm7364688edt.34.2021.12.06.07.32.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 07:28:14 -0800 (PST)
-Received: (nullmailer pid 2069157 invoked by uid 1000);
-        Mon, 06 Dec 2021 15:28:13 -0000
-Date:   Mon, 6 Dec 2021 09:28:13 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     linux-kernel@vger.kernel.org, Alexandre Ghiti <alex@ghiti.fr>,
-        Anup Patel <anup.patel@wdc.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Heinrich Schuchardt <xypron.glpk@gmx.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
-        Nanyong Sun <sunnanyong@huawei.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Vitaly Wool <vitaly.wool@konsulko.com>
-Subject: Re: [RFC 0/6] Sparse HART id support
-Message-ID: <Ya4sDX974/dVEOQw@robh.at.kernel.org>
-References: <20211204002038.113653-1-atishp@atishpatra.org>
+        Mon, 06 Dec 2021 07:32:15 -0800 (PST)
+From:   David Virag <virag.david003@gmail.com>
+Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
+        David Virag <virag.david003@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH v4 0/7] Initial Samsung Galaxy A8 (2018) support
+Date:   Mon,  6 Dec 2021 16:31:14 +0100
+Message-Id: <20211206153124.427102-1-virag.david003@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211204002038.113653-1-atishp@atishpatra.org>
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 04:20:32PM -0800, Atish Patra wrote:
-> Currently, sparse hartid is not supported for Linux RISC-V for the following
-> reasons.
-> 1. Both spinwait and ordered booting method uses __cpu_up_stack/task_pointer
->    which is an array size of NR_CPUs.
-> 2. During early booting, any hartid greater than NR_CPUs are not booted at all.
-> 3. riscv_cpuid_to_hartid_mask uses struct cpumask for generating hartid bitmap.
-> 4. SBI v0.2 implementation uses NR_CPUs as the maximum hartid number while
->    generating hartmask.
-> 
-> In order to support sparse hartid, the hartid & NR_CPUS needs to be disassociated
-> which was logically incorrect anyways. NR_CPUs represent the maximum logical|
-> CPU id configured in the kernel while the hartid represent the physical hartid
-> stored in mhartid CSR defined by the privilege specification. Thus, hartid
-> can have much greater value than logical cpuid.
+Add basic initial support for the Samsung Galaxy A8 (2018) smartphone.
+This phone is also known as "jackpotlte" and under the model name
+"SM-A530F". In its current state this should work on most if not all
+Exynos7885 phones/devices released.
 
-We already have a couple of architectures with logical to physical CPU 
-id maps. See cpu_logical_map. Can we make that common and use it here? 
-That would also possibly allow for common populating the map from DT.
+As of now, it supports I2C nodes (all disabled by default) and UART
+console with basic clock support in place.
 
-Rob
+To access the UART console on the A8, there are two methods:
+  -You can open up the device and solder directly to some debug pins
+   close to the display connector.
+  -Through I2C you can set the S2MU004 MFD chip to multiplex the SoC's
+   UART lines to the d+ and d- on the USB Type-C port of the device.
+
+Note that UART works on 1.8 volts, so plugging in a normal USB cable
+while multiplexed to UART may fry the SoC.
+
+Everything was tested through UART by using a minimal driver that sets
+the S2MU004 to multiplex UART.
+
+The preferred way to boot this device is by using my Minimal S-Boot
+Wrapper [1] to work around some issues caused by the stock, and
+non-replacable Samsung S-Boot bootloader.
+
+Changes in v2:
+- Added R-b tags by Krzysztof Kozlowski
+- Moved dt-bindings patches to the beginning of the series
+- Fixed double : in 7885 CMU bindings
+- Fixed multiple double line breaks
+- Made Exynos850 and 7885 clock drivers share some code in a new patch
+- Lots of dts/dtsi fixes
+
+Changes in v3:
+- Fix SPDX comment style in clk-exynos-arm64.h
+- Fix typo in dts comment
+
+Changes in v4:
+- Fixed leading 0x in clock-controller nodes
+- Fixed missing headers in clock driver patches
+- "__SAMSUNG_CLK_ARM64_H" -> "__CLK_EXYNOS_ARM64_H" in
+  clk-exynos-arm64.h everywhere (only the comment at the end had the
+  latter by accident)
+- Added R-b tag by Krzysztof Kozlowski to pll1417x patch
+- Actually suffixed pin configuration node names with "-pins"
+- Seperated Cortex-A53 and Cortex-A73 PMU
+
+[1] https://github.com/VDavid003/minimal_sboot_wrapper
+
+David Virag (7):
+  dt-bindings: clock: Add bindings definitions for Exynos7885 CMU
+  dt-bindings: clock: Document Exynos7885 CMU bindings
+  dt-bindings: arm: samsung: document jackpotlte board binding
+  clk: samsung: Make exynos850_register_cmu shared
+  clk: samsung: clk-pll: Add support for pll1417x
+  clk: samsung: Add initial Exynos7885 clock driver
+  arm64: dts: exynos: Add initial device tree support for Exynos7885 SoC
+
+ .../bindings/arm/samsung/samsung-boards.yaml  |   6 +
+ .../clock/samsung,exynos7885-clock.yaml       | 166 ++++
+ arch/arm64/boot/dts/exynos/Makefile           |   7 +-
+ .../boot/dts/exynos/exynos7885-jackpotlte.dts |  95 ++
+ .../boot/dts/exynos/exynos7885-pinctrl.dtsi   | 865 ++++++++++++++++++
+ arch/arm64/boot/dts/exynos/exynos7885.dtsi    | 438 +++++++++
+ drivers/clk/samsung/Makefile                  |   2 +
+ drivers/clk/samsung/clk-exynos-arm64.c        |  94 ++
+ drivers/clk/samsung/clk-exynos-arm64.h        |  20 +
+ drivers/clk/samsung/clk-exynos7885.c          | 597 ++++++++++++
+ drivers/clk/samsung/clk-exynos850.c           |  88 +-
+ drivers/clk/samsung/clk-pll.c                 |   1 +
+ drivers/clk/samsung/clk-pll.h                 |   1 +
+ include/dt-bindings/clock/exynos7885.h        | 115 +++
+ 14 files changed, 2408 insertions(+), 87 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.yaml
+ create mode 100644 arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts
+ create mode 100644 arch/arm64/boot/dts/exynos/exynos7885-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/exynos/exynos7885.dtsi
+ create mode 100644 drivers/clk/samsung/clk-exynos-arm64.c
+ create mode 100644 drivers/clk/samsung/clk-exynos-arm64.h
+ create mode 100644 drivers/clk/samsung/clk-exynos7885.c
+ create mode 100644 include/dt-bindings/clock/exynos7885.h
+
+-- 
+2.34.1
+

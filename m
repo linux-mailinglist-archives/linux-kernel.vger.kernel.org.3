@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08354469FFE
+	by mail.lfdr.de (Postfix) with ESMTP id 55AA7469FFF
 	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442792AbhLFP4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:56:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
+        id S1442808AbhLFP4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:56:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390784AbhLFPmu (ORCPT
+        with ESMTP id S1390783AbhLFPmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Dec 2021 10:42:50 -0500
 Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE571C08E852;
-        Mon,  6 Dec 2021 07:32:17 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id y12so44274360eda.12;
-        Mon, 06 Dec 2021 07:32:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF814C08E853;
+        Mon,  6 Dec 2021 07:32:23 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id o20so44568797eds.10;
+        Mon, 06 Dec 2021 07:32:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jA0/Vjs8HTmbMPDycewEdsM7ryNAIr3rJJKIVuOBXQc=;
-        b=jD0l0RMMRQH80ctwcpGj3byfYrfKGQ8gME4jJ3W9eBNZRv2zYUkXOCgbaYsosE7o+p
-         lcbMIRgRMjr/hskND+XKbxGRQtamjSrY9CR4vJHMWeYK2DnDJjMvaylyMhWF2Jr1cVuk
-         y0qDtwDP5MfWISlT8GBY2saM6/H6w4yzNi+N6xvdNxWy2Wz7EIy+mn8OVb7/AKLhlsnS
-         icnHPV3qcZoQssViNggvUFbj6CR5Dpca7bRI2XOrGHMf7h2R1Ppnht5JeFx3bSJisWLC
-         XnYHRQYcdxo7IfPHQ4CgMiheO0wjR/okvvvvjbbjqSXazHgBbLxso+G4nOkHChgXu6BQ
-         E2eQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=a4drl9sy7jPwrVHn24Us1LlB/9oW3/06ASZPAGQCDd8=;
+        b=bkmI8ORJBLCsFnIyL03lGPeoMRe7elyX005A+U1G2AM6IQr+QE1JJy6AVGLzSYy/uM
+         tg8nJxy1ewx6HGdjrpci20oV8koJIqWeziy9SKxFgDXYgVCoMwmsk9nyjGjZApw9kR4i
+         MKlEMY4jlTPYyOAbat1QBRqCtpY4NbzitQpYxzLJ/Fywn3qociRA5TPEd4LjRLU50ia+
+         /WcDDFoWikvkMw6ATzN5ubEN729vvU5HLTNhjBhJvSRAERUtcOOb9o+xgxVy1C5CWtWK
+         1Uv9mSSir4ctEZtkXAMlquNEHln6A7P8LGxUDHQvmSN1/9UVt6Xt5BLUf+4OGFGSDZDH
+         7HpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jA0/Vjs8HTmbMPDycewEdsM7ryNAIr3rJJKIVuOBXQc=;
-        b=HDDycVUnoXF6k1laMzMb9BQotxL6MSgk2CLemsiRdiZjhTi4pE/ldHpbj17sGsJfWT
-         7M5yWhL68d5EoNOEPALJHsXoZxLYpmx9kEg+b6FC5lSzYBMqQEKhLb5MtflJdfiLEJby
-         khN/ThAYaAZ2eg43AOsWeEcdC0e9trXUgmtplNI7hnIsMbewGyWqewBz94M+Y8Bqjnjk
-         LekuJKFvbjthY077USsLa0IOG38CtB4NLSYJPchPd4VUxT/jbN1KHU+lAdPQ31x4Y5bZ
-         27DrLY4nZ4FiGfn7RvBmjDcIua+CvxDqVfzKrBhecl20romxqJwCKw9ch24koTgHI7Rd
-         +YBQ==
-X-Gm-Message-State: AOAM532earI/58x8rQ7gZ4KShp5SyM80r94kmwZshMdar13jYfyGDXdf
-        bGeOWZIiBmLi2ciw0esXIEM=
-X-Google-Smtp-Source: ABdhPJyElICCwzglnbsKWrwExz94gKjSFu9kQNBc2/inrAfLJnJFdelTd1WFkEkfIxu5bDdrxN2VFg==
-X-Received: by 2002:aa7:c415:: with SMTP id j21mr56343729edq.357.1638804736486;
-        Mon, 06 Dec 2021 07:32:16 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=a4drl9sy7jPwrVHn24Us1LlB/9oW3/06ASZPAGQCDd8=;
+        b=np4oJT57Q/ADpFtGYy85o4deRK054kLb7fLK8i82hgOkwjKIUSzzQRe2+Mw99owAba
+         +mM3RaJQ1K4UacruLI3Ggqm038QLhPE+0U5MXdkmyM9BtsW9EZYr85NnW6zX04s/TIkT
+         flVnY3rYrigduAF/JLZ9TEqmbKysN93Q7G8PKFgK2J+Gmxcxg0UZjphiPIh/GM0xQyHX
+         /c9jICA1Ag9jWaHXG+B/h1J+KlUwrFa0Mr49DJ8PSFxwO9kpDwdDCpZLTBSQHX2lsmwW
+         T1lApvblD4DIkvrsvpX68Nf20hxPbulaW+qMgIWDNgnOwydZlDn8gbAuUWyxQD/g/QhR
+         zllA==
+X-Gm-Message-State: AOAM5313gYVmLZ0sW0wdcvhvYN4ysZOQ7FeWj4ulq0ylvxhbFeOq1CRH
+        JiMfQ9LTTDvi17VxUFQBLTo=
+X-Google-Smtp-Source: ABdhPJwiSLPe/FxpPqB2SmQDWXQxrpIwVFP9WBF7AeCPIw9EZ9Iry0ow63sDdMY8h28muQbW+6URcw==
+X-Received: by 2002:a50:bf48:: with SMTP id g8mr53090319edk.10.1638804742335;
+        Mon, 06 Dec 2021 07:32:22 -0800 (PST)
 Received: from localhost.localdomain ([2a02:ab88:368f:2080:eab:126a:947d:3008])
-        by smtp.googlemail.com with ESMTPSA id d19sm7364688edt.34.2021.12.06.07.32.14
+        by smtp.googlemail.com with ESMTPSA id d19sm7364688edt.34.2021.12.06.07.32.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 07:32:15 -0800 (PST)
+        Mon, 06 Dec 2021 07:32:21 -0800 (PST)
 From:   David Virag <virag.david003@gmail.com>
 Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
         David Virag <virag.david003@gmail.com>,
@@ -61,98 +61,161 @@ Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v4 0/7] Initial Samsung Galaxy A8 (2018) support
-Date:   Mon,  6 Dec 2021 16:31:14 +0100
-Message-Id: <20211206153124.427102-1-virag.david003@gmail.com>
+Subject: [PATCH v4 1/7] dt-bindings: clock: Add bindings definitions for Exynos7885 CMU
+Date:   Mon,  6 Dec 2021 16:31:15 +0100
+Message-Id: <20211206153124.427102-2-virag.david003@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211206153124.427102-1-virag.david003@gmail.com>
+References: <20211206153124.427102-1-virag.david003@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add basic initial support for the Samsung Galaxy A8 (2018) smartphone.
-This phone is also known as "jackpotlte" and under the model name
-"SM-A530F". In its current state this should work on most if not all
-Exynos7885 phones/devices released.
+Just like on Exynos850, the clock controller driver is designed to have
+separate instances for each particular CMU, so clock IDs start from 1
+for each CMU in this bindings header too.
 
-As of now, it supports I2C nodes (all disabled by default) and UART
-console with basic clock support in place.
-
-To access the UART console on the A8, there are two methods:
-  -You can open up the device and solder directly to some debug pins
-   close to the display connector.
-  -Through I2C you can set the S2MU004 MFD chip to multiplex the SoC's
-   UART lines to the d+ and d- on the USB Type-C port of the device.
-
-Note that UART works on 1.8 volts, so plugging in a normal USB cable
-while multiplexed to UART may fry the SoC.
-
-Everything was tested through UART by using a minimal driver that sets
-the S2MU004 to multiplex UART.
-
-The preferred way to boot this device is by using my Minimal S-Boot
-Wrapper [1] to work around some issues caused by the stock, and
-non-replacable Samsung S-Boot bootloader.
-
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Signed-off-by: David Virag <virag.david003@gmail.com>
+---
 Changes in v2:
-- Added R-b tags by Krzysztof Kozlowski
-- Moved dt-bindings patches to the beginning of the series
-- Fixed double : in 7885 CMU bindings
-- Fixed multiple double line breaks
-- Made Exynos850 and 7885 clock drivers share some code in a new patch
-- Lots of dts/dtsi fixes
+  - Added R-b tag by Krzysztof Kozlowski
 
 Changes in v3:
-- Fix SPDX comment style in clk-exynos-arm64.h
-- Fix typo in dts comment
+  - Nothing
 
 Changes in v4:
-- Fixed leading 0x in clock-controller nodes
-- Fixed missing headers in clock driver patches
-- "__SAMSUNG_CLK_ARM64_H" -> "__CLK_EXYNOS_ARM64_H" in
-  clk-exynos-arm64.h everywhere (only the comment at the end had the
-  latter by accident)
-- Added R-b tag by Krzysztof Kozlowski to pll1417x patch
-- Actually suffixed pin configuration node names with "-pins"
-- Seperated Cortex-A53 and Cortex-A73 PMU
+  - Nothing
 
-[1] https://github.com/VDavid003/minimal_sboot_wrapper
-
-David Virag (7):
-  dt-bindings: clock: Add bindings definitions for Exynos7885 CMU
-  dt-bindings: clock: Document Exynos7885 CMU bindings
-  dt-bindings: arm: samsung: document jackpotlte board binding
-  clk: samsung: Make exynos850_register_cmu shared
-  clk: samsung: clk-pll: Add support for pll1417x
-  clk: samsung: Add initial Exynos7885 clock driver
-  arm64: dts: exynos: Add initial device tree support for Exynos7885 SoC
-
- .../bindings/arm/samsung/samsung-boards.yaml  |   6 +
- .../clock/samsung,exynos7885-clock.yaml       | 166 ++++
- arch/arm64/boot/dts/exynos/Makefile           |   7 +-
- .../boot/dts/exynos/exynos7885-jackpotlte.dts |  95 ++
- .../boot/dts/exynos/exynos7885-pinctrl.dtsi   | 865 ++++++++++++++++++
- arch/arm64/boot/dts/exynos/exynos7885.dtsi    | 438 +++++++++
- drivers/clk/samsung/Makefile                  |   2 +
- drivers/clk/samsung/clk-exynos-arm64.c        |  94 ++
- drivers/clk/samsung/clk-exynos-arm64.h        |  20 +
- drivers/clk/samsung/clk-exynos7885.c          | 597 ++++++++++++
- drivers/clk/samsung/clk-exynos850.c           |  88 +-
- drivers/clk/samsung/clk-pll.c                 |   1 +
- drivers/clk/samsung/clk-pll.h                 |   1 +
- include/dt-bindings/clock/exynos7885.h        | 115 +++
- 14 files changed, 2408 insertions(+), 87 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.yaml
- create mode 100644 arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts
- create mode 100644 arch/arm64/boot/dts/exynos/exynos7885-pinctrl.dtsi
- create mode 100644 arch/arm64/boot/dts/exynos/exynos7885.dtsi
- create mode 100644 drivers/clk/samsung/clk-exynos-arm64.c
- create mode 100644 drivers/clk/samsung/clk-exynos-arm64.h
- create mode 100644 drivers/clk/samsung/clk-exynos7885.c
+ include/dt-bindings/clock/exynos7885.h | 115 +++++++++++++++++++++++++
+ 1 file changed, 115 insertions(+)
  create mode 100644 include/dt-bindings/clock/exynos7885.h
 
+diff --git a/include/dt-bindings/clock/exynos7885.h b/include/dt-bindings/clock/exynos7885.h
+new file mode 100644
+index 000000000000..1f8701691d62
+--- /dev/null
++++ b/include/dt-bindings/clock/exynos7885.h
+@@ -0,0 +1,115 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (c) 2021 Dávid Virág
++ *
++ * Device Tree binding constants for Exynos7885 clock controller.
++ */
++
++#ifndef _DT_BINDINGS_CLOCK_EXYNOS_7885_H
++#define _DT_BINDINGS_CLOCK_EXYNOS_7885_H
++
++/* CMU_TOP */
++#define CLK_FOUT_SHARED0_PLL		1
++#define CLK_FOUT_SHARED1_PLL		2
++#define CLK_DOUT_SHARED0_DIV2		3
++#define CLK_DOUT_SHARED0_DIV3		4
++#define CLK_DOUT_SHARED0_DIV4		5
++#define CLK_DOUT_SHARED0_DIV5		6
++#define CLK_DOUT_SHARED1_DIV2		7
++#define CLK_DOUT_SHARED1_DIV3		8
++#define CLK_DOUT_SHARED1_DIV4		9
++#define CLK_MOUT_CORE_BUS		10
++#define CLK_MOUT_CORE_CCI		11
++#define CLK_MOUT_CORE_G3D		12
++#define CLK_DOUT_CORE_BUS		13
++#define CLK_DOUT_CORE_CCI		14
++#define CLK_DOUT_CORE_G3D		15
++#define CLK_GOUT_CORE_BUS		16
++#define CLK_GOUT_CORE_CCI		17
++#define CLK_GOUT_CORE_G3D		18
++#define CLK_MOUT_PERI_BUS		19
++#define CLK_MOUT_PERI_SPI0		20
++#define CLK_MOUT_PERI_SPI1		21
++#define CLK_MOUT_PERI_UART0		22
++#define CLK_MOUT_PERI_UART1		23
++#define CLK_MOUT_PERI_UART2		24
++#define CLK_MOUT_PERI_USI0		25
++#define CLK_MOUT_PERI_USI1		26
++#define CLK_MOUT_PERI_USI2		27
++#define CLK_DOUT_PERI_BUS		28
++#define CLK_DOUT_PERI_SPI0		29
++#define CLK_DOUT_PERI_SPI1		30
++#define CLK_DOUT_PERI_UART0		31
++#define CLK_DOUT_PERI_UART1		32
++#define CLK_DOUT_PERI_UART2		33
++#define CLK_DOUT_PERI_USI0		34
++#define CLK_DOUT_PERI_USI1		35
++#define CLK_DOUT_PERI_USI2		36
++#define CLK_GOUT_PERI_BUS		37
++#define CLK_GOUT_PERI_SPI0		38
++#define CLK_GOUT_PERI_SPI1		39
++#define CLK_GOUT_PERI_UART0		40
++#define CLK_GOUT_PERI_UART1		41
++#define CLK_GOUT_PERI_UART2		42
++#define CLK_GOUT_PERI_USI0		43
++#define CLK_GOUT_PERI_USI1		44
++#define CLK_GOUT_PERI_USI2		45
++#define TOP_NR_CLK			46
++
++/* CMU_CORE */
++#define CLK_MOUT_CORE_BUS_USER		1
++#define CLK_MOUT_CORE_CCI_USER		2
++#define CLK_MOUT_CORE_G3D_USER		3
++#define CLK_MOUT_CORE_GIC		4
++#define CLK_DOUT_CORE_BUSP		5
++#define CLK_GOUT_CCI_ACLK		6
++#define CLK_GOUT_GIC400_CLK		7
++#define CORE_NR_CLK			8
++
++/* CMU_PERI */
++#define CLK_MOUT_PERI_BUS_USER		1
++#define CLK_MOUT_PERI_SPI0_USER		2
++#define CLK_MOUT_PERI_SPI1_USER		3
++#define CLK_MOUT_PERI_UART0_USER	4
++#define CLK_MOUT_PERI_UART1_USER	5
++#define CLK_MOUT_PERI_UART2_USER	6
++#define CLK_MOUT_PERI_USI0_USER		7
++#define CLK_MOUT_PERI_USI1_USER		8
++#define CLK_MOUT_PERI_USI2_USER		9
++#define CLK_GOUT_GPIO_TOP_PCLK		10
++#define CLK_GOUT_HSI2C0_PCLK		11
++#define CLK_GOUT_HSI2C1_PCLK		12
++#define CLK_GOUT_HSI2C2_PCLK		13
++#define CLK_GOUT_HSI2C3_PCLK		14
++#define CLK_GOUT_I2C0_PCLK		15
++#define CLK_GOUT_I2C1_PCLK		16
++#define CLK_GOUT_I2C2_PCLK		17
++#define CLK_GOUT_I2C3_PCLK		18
++#define CLK_GOUT_I2C4_PCLK		19
++#define CLK_GOUT_I2C5_PCLK		20
++#define CLK_GOUT_I2C6_PCLK		21
++#define CLK_GOUT_I2C7_PCLK		22
++#define CLK_GOUT_PWM_MOTOR_PCLK		23
++#define CLK_GOUT_SPI0_PCLK		24
++#define CLK_GOUT_SPI0_EXT_CLK		25
++#define CLK_GOUT_SPI1_PCLK		26
++#define CLK_GOUT_SPI1_EXT_CLK		27
++#define CLK_GOUT_UART0_EXT_UCLK		28
++#define CLK_GOUT_UART0_PCLK		29
++#define CLK_GOUT_UART1_EXT_UCLK		30
++#define CLK_GOUT_UART1_PCLK		31
++#define CLK_GOUT_UART2_EXT_UCLK		32
++#define CLK_GOUT_UART2_PCLK		33
++#define CLK_GOUT_USI0_PCLK		34
++#define CLK_GOUT_USI0_SCLK		35
++#define CLK_GOUT_USI1_PCLK		36
++#define CLK_GOUT_USI1_SCLK		37
++#define CLK_GOUT_USI2_PCLK		38
++#define CLK_GOUT_USI2_SCLK		39
++#define CLK_GOUT_MCT_PCLK		40
++#define CLK_GOUT_SYSREG_PERI_PCLK	41
++#define CLK_GOUT_WDT0_PCLK		42
++#define CLK_GOUT_WDT1_PCLK		43
++#define PERI_NR_CLK			44
++
++#endif /* _DT_BINDINGS_CLOCK_EXYNOS_7885_H */
 -- 
 2.34.1
 

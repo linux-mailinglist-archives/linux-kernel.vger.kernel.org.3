@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1A4469DFD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 228CF469DB3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389125AbhLFPfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:35:39 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38978 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358915AbhLFPYN (ORCPT
+        id S1387919AbhLFPcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376557AbhLFPUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:24:13 -0500
+        Mon, 6 Dec 2021 10:20:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68740C08E84D;
+        Mon,  6 Dec 2021 07:14:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A8C461309;
-        Mon,  6 Dec 2021 15:20:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FF2EC341C1;
-        Mon,  6 Dec 2021 15:20:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 077A1612EB;
+        Mon,  6 Dec 2021 15:14:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E148BC341C1;
+        Mon,  6 Dec 2021 15:14:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804044;
-        bh=8ZFSuPn7+r7bBqe3Vgh0e7Q8oD5+dJ3P2gMCzTmiPsI=;
+        s=korg; t=1638803655;
+        bh=v5OnXFIzNoHpTxFbEu11cJ1Cmar+jDZkPLdfGLe9UHc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qbV5zIPT2D/Z8xUsc4DlZoFjpBi/e+hFJCjj/2qQ8Fl/wWwjY1TnYHKKiOS5gwdto
-         hjcBqT+xEO/TPk3ql0bqzxK+UG4BjwRVb39JRMayzwocbgIaNabU0KPOL9MGhJCCvF
-         CPHbyzirlJptcB3Lv2O3ZPUuPGn5nvgIxzC/4uHQ=
+        b=mzaVesjzImgs5Tf5xjg3re1Bto5hygrfm6m/vIUQRMUms7o1tt1hIR0G/MHlxUuMZ
+         q4F6mHHDNLcz0kzx0cZ8EqMck+YSiViR9mclzOVinLyObiqIu1/U6KEadvlAuv7BxZ
+         +zL0EHefFqva7sejAXsbM09wIsevwXqKL1rcvO+8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qais Yousef <qais.yousef@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 108/130] sched/uclamp: Fix rq->uclamp_max not set on first enqueue
-Date:   Mon,  6 Dec 2021 15:57:05 +0100
-Message-Id: <20211206145603.367006033@linuxfoundation.org>
+        stable@vger.kernel.org, Sven Eckelmann <sven@narfation.org>
+Subject: [PATCH 5.4 62/70] tty: serial: msm_serial: Deactivate RX DMA for polling support
+Date:   Mon,  6 Dec 2021 15:57:06 +0100
+Message-Id: <20211206145554.066157339@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
+References: <20211206145551.909846023@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,66 +47,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qais Yousef <qais.yousef@arm.com>
+From: Sven Eckelmann <sven@narfation.org>
 
-[ Upstream commit 315c4f884800c45cb6bd8c90422fad554a8b9588 ]
+commit 7492ffc90fa126afb67d4392d56cb4134780194a upstream.
 
-Commit d81ae8aac85c ("sched/uclamp: Fix initialization of struct
-uclamp_rq") introduced a bug where uclamp_max of the rq is not reset to
-match the woken up task's uclamp_max when the rq is idle.
+The CONSOLE_POLLING mode is used for tools like k(g)db. In this kind of
+setup, it is often sharing a serial device with the normal system console.
+This is usually no problem because the polling helpers can consume input
+values directly (when in kgdb context) and the normal Linux handlers can
+only consume new input values after kgdb switched back.
 
-The code was relying on rq->uclamp_max initialized to zero, so on first
-enqueue
+This is not true anymore when RX DMA is enabled for UARTDM controllers.
+Single input values can no longer be received correctly. Instead following
+seems to happen:
 
-	static inline void uclamp_rq_inc_id(struct rq *rq, struct task_struct *p,
-					    enum uclamp_id clamp_id)
-	{
-		...
+* on 1. input, some old input is read (continuously)
+* on 2. input, two old inputs are read (continuously)
+* on 3. input, three old input values are read (continuously)
+* on 4. input, 4 previous inputs are received
 
-		if (uc_se->value > READ_ONCE(uc_rq->value))
-			WRITE_ONCE(uc_rq->value, uc_se->value);
-	}
+This repeats then for each group of 4 input values.
 
-was actually resetting it. But since commit d81ae8aac85c changed the
-default to 1024, this no longer works. And since rq->uclamp_flags is
-also initialized to 0, neither above code path nor uclamp_idle_reset()
-update the rq->uclamp_max on first wake up from idle.
+This behavior changes slightly depending on what state the controller was
+when the first input was received. But this makes working with kgdb
+basically impossible because control messages are always corrupted when
+kgdboc tries to parse them.
 
-This is only visible from first wake up(s) until the first dequeue to
-idle after enabling the static key. And it only matters if the
-uclamp_max of this task is < 1024 since only then its uclamp_max will be
-effectively ignored.
+RX DMA should therefore be off when CONSOLE_POLLING is enabled to avoid
+these kind of problems. No such problem was noticed for TX DMA.
 
-Fix it by properly initializing rq->uclamp_flags = UCLAMP_FLAG_IDLE to
-ensure uclamp_idle_reset() is called which then will update the rq
-uclamp_max value as expected.
-
-Fixes: d81ae8aac85c ("sched/uclamp: Fix initialization of struct uclamp_rq")
-Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Valentin Schneider <Valentin.Schneider@arm.com>
-Tested-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Link: https://lkml.kernel.org/r/20211202112033.1705279-1-qais.yousef@arm.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 99693945013a ("tty: serial: msm: Add RX DMA support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+Link: https://lore.kernel.org/r/20211113121050.7266-1-sven@narfation.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/sched/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/msm_serial.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 304aad997da11..0a5f9fad45e4b 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1526,7 +1526,7 @@ static void __init init_uclamp_rq(struct rq *rq)
- 		};
- 	}
+--- a/drivers/tty/serial/msm_serial.c
++++ b/drivers/tty/serial/msm_serial.c
+@@ -603,6 +603,9 @@ static void msm_start_rx_dma(struct msm_
+ 	u32 val;
+ 	int ret;
  
--	rq->uclamp_flags = 0;
-+	rq->uclamp_flags = UCLAMP_FLAG_IDLE;
- }
++	if (IS_ENABLED(CONFIG_CONSOLE_POLL))
++		return;
++
+ 	if (!dma->chan)
+ 		return;
  
- static void __init init_uclamp(void)
--- 
-2.33.0
-
 
 

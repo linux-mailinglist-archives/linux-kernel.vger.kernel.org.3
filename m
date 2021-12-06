@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB90469DBB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEDFE469A1E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388114AbhLFPcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:32:20 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54388 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348468AbhLFPVR (ORCPT
+        id S1346062AbhLFPFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:05:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345560AbhLFPEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:21:17 -0500
+        Mon, 6 Dec 2021 10:04:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D000DC0698D0;
+        Mon,  6 Dec 2021 07:00:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5474CB8111F;
-        Mon,  6 Dec 2021 15:17:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80F7DC341CA;
-        Mon,  6 Dec 2021 15:17:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99A1BB8101C;
+        Mon,  6 Dec 2021 15:00:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5EABC341C2;
+        Mon,  6 Dec 2021 15:00:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803866;
-        bh=9k/wmdh+QryMKYR7/AfSxFGhRzyTRsW/XlBFVILplNg=;
+        s=korg; t=1638802853;
+        bh=jvzNmJK63+tjJYtDhzEY6ibaTayFSQtHZM1E31RcI/w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pfs9ZwwmeWy19b653A59tLZ7cQUd20+1Eu+3NWZhknIoItlhn1+4EWzFjlOfX+6rm
-         B4zKq7xWV3MkQetMjD1Q/JmKBzAacIvcK/DCQsFVYdHPRKUdX/1rgZLzB7iDdqYQTw
-         IQLseRvQw4qL4EGYXajgSjV4oTjXqGyFihuZ75JM=
+        b=QC1IOTFnE4povdEYkw8eKRTewuxFmBj1Sgg5n1vag5jvFumAW7KxZQdCdx8iI3uWO
+         iPYE27XehkAqmBxCGzFWKs5RGAmzJARYcpvCkNEygOSg9zBPbGFkLYuxdZZv95qgVF
+         fzu3p4kEi9RrsJw4jCYE7Z7wfqxPRPBhq0HUJpR4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Sameer Pujar <spujar@nvidia.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.10 075/130] ASoC: tegra: Fix wrong value type in I2S
-Date:   Mon,  6 Dec 2021 15:56:32 +0100
-Message-Id: <20211206145602.266063962@linuxfoundation.org>
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
+Subject: [PATCH 4.4 49/52] parisc: Fix "make install" on newer debian releases
+Date:   Mon,  6 Dec 2021 15:56:33 +0100
+Message-Id: <20211206145549.568902385@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
+References: <20211206145547.892668902@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,110 +47,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sameer Pujar <spujar@nvidia.com>
+From: Helge Deller <deller@gmx.de>
 
-commit 8a2c2fa0c5331445c801e9241f2bb4e0e2a895a8 upstream.
+commit 0f9fee4cdebfbe695c297e5b603a275e2557c1cc upstream.
 
-The enum controls are expected to use enumerated value type.
-Update relevant references in control get/put callbacks.
+On newer debian releases the debian-provided "installkernel" script is
+installed in /usr/sbin. Fix the kernel install.sh script to look for the
+script in this directory as well.
 
-Fixes: c0bfa98349d1 ("ASoC: tegra: Add Tegra210 based I2S driver")
-Suggested-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Sameer Pujar <spujar@nvidia.com>
-Reviewed-by: Takashi Iwai <tiwai@suse.de>
-Link: https://lore.kernel.org/r/1637219231-406-3-git-send-email-spujar@nvidia.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Cc: <stable@vger.kernel.org> # v3.13+
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/tegra/tegra210_i2s.c |   42 +++++++++++++++++++++++------------------
- 1 file changed, 24 insertions(+), 18 deletions(-)
+ arch/parisc/install.sh |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/sound/soc/tegra/tegra210_i2s.c
-+++ b/sound/soc/tegra/tegra210_i2s.c
-@@ -317,24 +317,27 @@ static int tegra210_i2s_get_control(stru
- {
- 	struct snd_soc_component *compnt = snd_soc_kcontrol_component(kcontrol);
- 	struct tegra210_i2s *i2s = snd_soc_component_get_drvdata(compnt);
--	long *uctl_val = &ucontrol->value.integer.value[0];
+--- a/arch/parisc/install.sh
++++ b/arch/parisc/install.sh
+@@ -39,6 +39,7 @@ verify "$3"
+ if [ -n "${INSTALLKERNEL}" ]; then
+   if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
+   if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
++  if [ -x /usr/sbin/${INSTALLKERNEL} ]; then exec /usr/sbin/${INSTALLKERNEL} "$@"; fi
+ fi
  
- 	if (strstr(kcontrol->id.name, "Loopback"))
--		*uctl_val = i2s->loopback;
-+		ucontrol->value.integer.value[0] = i2s->loopback;
- 	else if (strstr(kcontrol->id.name, "FSYNC Width"))
--		*uctl_val = i2s->fsync_width;
-+		ucontrol->value.integer.value[0] = i2s->fsync_width;
- 	else if (strstr(kcontrol->id.name, "Capture Stereo To Mono"))
--		*uctl_val = i2s->stereo_to_mono[I2S_TX_PATH];
-+		ucontrol->value.enumerated.item[0] =
-+			i2s->stereo_to_mono[I2S_TX_PATH];
- 	else if (strstr(kcontrol->id.name, "Capture Mono To Stereo"))
--		*uctl_val = i2s->mono_to_stereo[I2S_TX_PATH];
-+		ucontrol->value.enumerated.item[0] =
-+			i2s->mono_to_stereo[I2S_TX_PATH];
- 	else if (strstr(kcontrol->id.name, "Playback Stereo To Mono"))
--		*uctl_val = i2s->stereo_to_mono[I2S_RX_PATH];
-+		ucontrol->value.enumerated.item[0] =
-+			i2s->stereo_to_mono[I2S_RX_PATH];
- 	else if (strstr(kcontrol->id.name, "Playback Mono To Stereo"))
--		*uctl_val = i2s->mono_to_stereo[I2S_RX_PATH];
-+		ucontrol->value.enumerated.item[0] =
-+			i2s->mono_to_stereo[I2S_RX_PATH];
- 	else if (strstr(kcontrol->id.name, "Playback FIFO Threshold"))
--		*uctl_val = i2s->rx_fifo_th;
-+		ucontrol->value.integer.value[0] = i2s->rx_fifo_th;
- 	else if (strstr(kcontrol->id.name, "BCLK Ratio"))
--		*uctl_val = i2s->bclk_ratio;
-+		ucontrol->value.integer.value[0] = i2s->bclk_ratio;
- 
- 	return 0;
- }
-@@ -344,10 +347,9 @@ static int tegra210_i2s_put_control(stru
- {
- 	struct snd_soc_component *compnt = snd_soc_kcontrol_component(kcontrol);
- 	struct tegra210_i2s *i2s = snd_soc_component_get_drvdata(compnt);
--	int value = ucontrol->value.integer.value[0];
- 
- 	if (strstr(kcontrol->id.name, "Loopback")) {
--		i2s->loopback = value;
-+		i2s->loopback = ucontrol->value.integer.value[0];
- 
- 		regmap_update_bits(i2s->regmap, TEGRA210_I2S_CTRL,
- 				   I2S_CTRL_LPBK_MASK,
-@@ -362,24 +364,28 @@ static int tegra210_i2s_put_control(stru
- 		 * cases mixer control is used to update custom values. A value
- 		 * of "N" here means, width is "N + 1" bit clock wide.
- 		 */
--		i2s->fsync_width = value;
-+		i2s->fsync_width = ucontrol->value.integer.value[0];
- 
- 		regmap_update_bits(i2s->regmap, TEGRA210_I2S_CTRL,
- 				   I2S_CTRL_FSYNC_WIDTH_MASK,
- 				   i2s->fsync_width << I2S_FSYNC_WIDTH_SHIFT);
- 
- 	} else if (strstr(kcontrol->id.name, "Capture Stereo To Mono")) {
--		i2s->stereo_to_mono[I2S_TX_PATH] = value;
-+		i2s->stereo_to_mono[I2S_TX_PATH] =
-+			ucontrol->value.enumerated.item[0];
- 	} else if (strstr(kcontrol->id.name, "Capture Mono To Stereo")) {
--		i2s->mono_to_stereo[I2S_TX_PATH] = value;
-+		i2s->mono_to_stereo[I2S_TX_PATH] =
-+			ucontrol->value.enumerated.item[0];
- 	} else if (strstr(kcontrol->id.name, "Playback Stereo To Mono")) {
--		i2s->stereo_to_mono[I2S_RX_PATH] = value;
-+		i2s->stereo_to_mono[I2S_RX_PATH] =
-+			ucontrol->value.enumerated.item[0];
- 	} else if (strstr(kcontrol->id.name, "Playback Mono To Stereo")) {
--		i2s->mono_to_stereo[I2S_RX_PATH] = value;
-+		i2s->mono_to_stereo[I2S_RX_PATH] =
-+			ucontrol->value.enumerated.item[0];
- 	} else if (strstr(kcontrol->id.name, "Playback FIFO Threshold")) {
--		i2s->rx_fifo_th = value;
-+		i2s->rx_fifo_th = ucontrol->value.integer.value[0];
- 	} else if (strstr(kcontrol->id.name, "BCLK Ratio")) {
--		i2s->bclk_ratio = value;
-+		i2s->bclk_ratio = ucontrol->value.integer.value[0];
- 	}
- 
- 	return 0;
+ # Default install
 
 

@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1C7469EEB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:41:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C81E469A23
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391083AbhLFPot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:44:49 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45726 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237886AbhLFP2V (ORCPT
+        id S1346104AbhLFPFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:05:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52500 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344364AbhLFPEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:28:21 -0500
+        Mon, 6 Dec 2021 10:04:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B884C0698C5;
+        Mon,  6 Dec 2021 07:01:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C44D6132C;
-        Mon,  6 Dec 2021 15:24:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34532C34901;
-        Mon,  6 Dec 2021 15:24:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28FC1B81125;
+        Mon,  6 Dec 2021 15:01:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ACC6C341C2;
+        Mon,  6 Dec 2021 15:01:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804291;
-        bh=K2bL7SEGCCkKp1tj6X6eOD8GLru1vr4CGyZB7K1NezQ=;
+        s=korg; t=1638802879;
+        bh=ZZ1+XS0q6JWAbqpOfJwgun9gVY07Kq7gRXICCNC0Jwc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QVM//qzDSoQi3fStnzVVVh0uh7nFa14MPNlaxTui2pl3dHujPER656yqt8OMVJD0x
-         3brVTbgz8n97GUeMEvaC4V2CuuQ6+2zcPH8zPtPghpN6PXKWtaaSQ59PFH8OXzj8TQ
-         KSgYWJj0X2f8qj5WFvV75SZi9zWCosOXrF2/TJo4=
+        b=dsFeHRVZ1+E6qML123Xsaa9e/ZBkX+DqTNeeHAda4m3rM0Q+ZZqbTPEkMa4X8q74H
+         n08AG6PMMDyUMVfuep5uDuWYHn7hiiWrG4aAzP0LJlrKSy/c79titTybQM+XQvaaol
+         MQF/kKmbtFd3Z5nt8NLpKNJEbRp2UTrmGLnLDqd0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Li Zhijian <lizhijian@cn.fujitsu.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 094/207] wireguard: selftests: rename DEBUG_PI_LIST to DEBUG_PLIST
+        stable@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 4.9 05/62] usb: hub: Fix locking issues with address0_mutex
 Date:   Mon,  6 Dec 2021 15:55:48 +0100
-Message-Id: <20211206145613.487313316@linuxfoundation.org>
+Message-Id: <20211206145549.345781230@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
+References: <20211206145549.155163074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,32 +50,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Zhijian <lizhijian@cn.fujitsu.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-commit 7e938beb8321d34f040557b8915b228af125f73c upstream.
+commit 6cca13de26eea6d32a98d96d916a048d16a12822 upstream.
 
-DEBUG_PI_LIST was renamed to DEBUG_PLIST since 8e18faeac3 ("lib/plist:
-rename DEBUG_PI_LIST to DEBUG_PLIST").
+Fix the circular lock dependency and unbalanced unlock of addess0_mutex
+introduced when fixing an address0_mutex enumeration retry race in commit
+ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0 race")
 
-Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
-Fixes: 8e18faeac3e4 ("lib/plist: rename DEBUG_PI_LIST to DEBUG_PLIST")
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Make sure locking order between port_dev->status_lock and address0_mutex
+is correct, and that address0_mutex is not unlocked in hub_port_connect
+"done:" codepath which may be reached without locking address0_mutex
+
+Fixes: 6ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0 race")
+Cc: <stable@vger.kernel.org>
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Tested-by: Hans de Goede <hdegoede@redhat.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Acked-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20211123101656.1113518-1-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/wireguard/qemu/debug.config |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/core/hub.c |   19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
---- a/tools/testing/selftests/wireguard/qemu/debug.config
-+++ b/tools/testing/selftests/wireguard/qemu/debug.config
-@@ -47,7 +47,7 @@ CONFIG_DEBUG_ATOMIC_SLEEP=y
- CONFIG_TRACE_IRQFLAGS=y
- CONFIG_DEBUG_BUGVERBOSE=y
- CONFIG_DEBUG_LIST=y
--CONFIG_DEBUG_PI_LIST=y
-+CONFIG_DEBUG_PLIST=y
- CONFIG_PROVE_RCU=y
- CONFIG_SPARSE_RCU_POINTER=y
- CONFIG_RCU_CPU_STALL_TIMEOUT=21
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -4835,6 +4835,7 @@ static void hub_port_connect(struct usb_
+ 	struct usb_port *port_dev = hub->ports[port1 - 1];
+ 	struct usb_device *udev = port_dev->child;
+ 	static int unreliable_port = -1;
++	bool retry_locked;
+ 
+ 	/* Disconnect any existing devices under this port */
+ 	if (udev) {
+@@ -4891,9 +4892,10 @@ static void hub_port_connect(struct usb_
+ 
+ 	status = 0;
+ 
+-	mutex_lock(hcd->address0_mutex);
+-
+ 	for (i = 0; i < SET_CONFIG_TRIES; i++) {
++		usb_lock_port(port_dev);
++		mutex_lock(hcd->address0_mutex);
++		retry_locked = true;
+ 
+ 		/* reallocate for each attempt, since references
+ 		 * to the previous one can escape in various ways
+@@ -4902,6 +4904,8 @@ static void hub_port_connect(struct usb_
+ 		if (!udev) {
+ 			dev_err(&port_dev->dev,
+ 					"couldn't allocate usb_device\n");
++			mutex_unlock(hcd->address0_mutex);
++			usb_unlock_port(port_dev);
+ 			goto done;
+ 		}
+ 
+@@ -4923,13 +4927,13 @@ static void hub_port_connect(struct usb_
+ 		}
+ 
+ 		/* reset (non-USB 3.0 devices) and get descriptor */
+-		usb_lock_port(port_dev);
+ 		status = hub_port_init(hub, udev, port1, i);
+-		usb_unlock_port(port_dev);
+ 		if (status < 0)
+ 			goto loop;
+ 
+ 		mutex_unlock(hcd->address0_mutex);
++		usb_unlock_port(port_dev);
++		retry_locked = false;
+ 
+ 		if (udev->quirks & USB_QUIRK_DELAY_INIT)
+ 			msleep(2000);
+@@ -5019,11 +5023,14 @@ static void hub_port_connect(struct usb_
+ 
+ loop_disable:
+ 		hub_port_disable(hub, port1, 1);
+-		mutex_lock(hcd->address0_mutex);
+ loop:
+ 		usb_ep0_reinit(udev);
+ 		release_devnum(udev);
+ 		hub_free_dev(udev);
++		if (retry_locked) {
++			mutex_unlock(hcd->address0_mutex);
++			usb_unlock_port(port_dev);
++		}
+ 		usb_put_dev(udev);
+ 		if ((status == -ENOTCONN) || (status == -ENOTSUPP))
+ 			break;
+@@ -5046,8 +5053,6 @@ loop:
+ 	}
+ 
+ done:
+-	mutex_unlock(hcd->address0_mutex);
+-
+ 	hub_port_disable(hub, port1, 1);
+ 	if (hcd->driver->relinquish_port && !hub->hdev->parent) {
+ 		if (status != -ENOTCONN && status != -ENODEV)
 
 

@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9954D46A0F8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7314946A0C3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358377AbhLFQSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:18:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41346 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380295AbhLFQRX (ORCPT
+        id S1388723AbhLFQMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:12:50 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44330 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1389964AbhLFQKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:17:23 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACC2C0412A1
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:06:31 -0800 (PST)
+        Mon, 6 Dec 2021 11:10:19 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 078E6CE16C5
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 16:06:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76A1CC341C1;
-        Mon,  6 Dec 2021 16:06:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7596612D3;
+        Mon,  6 Dec 2021 16:06:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF73CC341C1;
+        Mon,  6 Dec 2021 16:06:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638806788;
-        bh=zOrGEM1rf59ll4s1bJ0l4uWdTBMmiSkh1qpRQF40CTE=;
+        s=k20201202; t=1638806809;
+        bh=CpWhy6y6679xdjK1yqH31wIahrmeam/ZjNVyj/lHd5s=;
         h=From:To:Cc:Subject:Date:From;
-        b=XdeMg2jqFqbPtsd/oMusZu9/MpKymZLrOgN0imNJPTnHkWrG58C09BQSol0cmdWVK
-         J7FwVrMWAlOXeIivR29KNsNzPXsobhpCpWx/K6amSL65X9vXRlLirCeG9FS+pMEJnN
-         gZnKznPwGk5kZscl40G0KLmQzyrcBhejP2vlxeKhcncCaVdGCxvkil6DlMuKiEfYRv
-         CkDMdFAqTquZPvalx3I5Phkf8qv06TvMOl1mkgBm+AbWXglhZNqmbY2ffuhIHD3jum
-         YCaH4j0AlJ5Q5bck9mJnfTvAH48e2h08nvJRSmlZsiSqs/g5rq5e8vDHUPX6/rx79x
-         pSqPH11rk1H5w==
+        b=pfiaUI8eOTwSWBl4spQR7cnwWkdFXTZxH7z80sLZ4PpwHaVroJC+EnelB/yxN7ScX
+         c8RFYVoMlPCiT/yZtLZdxKCs4grkp0cAHEgv2W48zHHVLkTVZniiGr7B+Oye9N4xM3
+         31Iyto3NwMJnTKP8tEbsqXgA44H3rm0+9QwUix29CyrfVy/4H0j5nkissRonb9TE1G
+         +nG+VYWEfojf9Nb4Ik7Yiq5lQv0YDaZSwsHpQtFEaIe+i4QSTvnmJkVXO1FufhfYbs
+         bSH52G7tjCBWTlI4Rdxls4EdrPsTnjHG2C1ItLWnJ+iHBmV9EaiTHsaLogVw9nVDXq
+         Lo6nKW/7ZHMeg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] regulator fixes for v5.16-rc4
-Date:   Mon, 06 Dec 2021 16:06:11 +0000
-Message-Id: <20211206160627.76A1CC341C1@smtp.kernel.org>
+Subject: [GIT PULL] SPI fixes for v5.16-rc4
+Date:   Mon, 06 Dec 2021 16:06:34 +0000
+Message-Id: <20211206160648.CF73CC341C1@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 7492b724df4d33ca3d5b38b70fb4acb93e6d02bf:
+The following changes since commit 6c53b45c71b4920b5e62f0ea8079a1da382b9434:
 
-  Merge series "Remove TPS80031 driver" from Dmitry Osipenko <digetx@gmail.com>: (2021-10-23 17:30:21 +0100)
+  spi: fix use-after-free of the add_lock mutex (2021-11-12 18:18:03 +0000)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v5.16-rc4
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.16-rc4
 
-for you to fetch changes up to 6966df483d7b5b218aeb0e13e7e334a8fc3c1744:
+for you to fetch changes up to 07fb78a78de4e67b5d6d5407aeee1250a327a698:
 
-  regulator: Update protection IRQ helper docs (2021-11-18 13:57:09 +0000)
-
-----------------------------------------------------------------
-regulator: Documentation fix for v5.16
-
-A fix for bitrot in the documentation for protection interrupts that
-crept in as the code was revised during review.
+  spi: spi-rockchip: Add rk3568-spi compatible (2021-11-29 12:19:32 +0000)
 
 ----------------------------------------------------------------
-Matti Vaittinen (1):
-      regulator: Update protection IRQ helper docs
+spi: Update for v5.16
 
- include/linux/regulator/driver.h | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+Just one trivial update adding a device ID to the DT bindings.
+
+----------------------------------------------------------------
+Nicolas Frattaroli (1):
+      spi: spi-rockchip: Add rk3568-spi compatible
+
+ Documentation/devicetree/bindings/spi/spi-rockchip.yaml | 1 +
+ 1 file changed, 1 insertion(+)

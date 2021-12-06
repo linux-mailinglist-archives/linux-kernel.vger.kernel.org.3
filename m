@@ -2,98 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E622246AA23
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 235D446AA12
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:19:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbhLFVXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:23:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
+        id S1351202AbhLFVXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:23:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351197AbhLFVXZ (ORCPT
+        with ESMTP id S1350387AbhLFVXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:23:25 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F15C061746;
-        Mon,  6 Dec 2021 13:19:56 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id t5so48444645edd.0;
-        Mon, 06 Dec 2021 13:19:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=npVIllIrzbanEnSWMWYv86vweK4sS4wEJk4Mwyduuyo=;
-        b=Pn4keIE7pu0NvrTG9cm2WG8BpLD9VfYMriDuW+LBng1Fo/8YfSzQtIfgbKV+yP6DP+
-         0pGx9agAGyWkdecELWKTMsuI2HKt/C3nOQdL9nfUmMgjTuiXaSfjKEyVx9es4lPdq3qh
-         QvYEckGJzBjJDfH74z3nQSmZwNkRsCCfoqrzoSDeF57OCWZfjTjhDCxbBH3gtLH7+CR4
-         vWckSMzRbY10P9wEyXEY46OpX4n+2jZUYwKTpWfiCyuLLgvMCb689QCJ/e/sqhdpWGra
-         oTvK13K0/WfUl4zUIkhquYp96GKzwsHevBs/YUMiOph2CbbbuHoMp128iWwDOpU1MIbE
-         NLuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=npVIllIrzbanEnSWMWYv86vweK4sS4wEJk4Mwyduuyo=;
-        b=dEo7p7tEa7PDaSlNFxFj+1MyeWYOErVDWnxSPznDcObCrbu2w11r2tzIx0YlRJYX6e
-         3vb4n2vd03EX2PY6wJwgj9c/rHdtVZHOS0QHosaeKSTtEcpWJXT8owUmeniPUKRzZow1
-         P6HyvQSPEaLDjpeKbUDKXJhwtvBCycAWqkzFvpyH9Xq00maVTK0AIMefgXVTMp/8CGEd
-         158a+8FamagBJXh7MrTm93O+T5hn3VEnsCBfezrlDFMklIxeCmS2fk+7cxz7VbwwSMzi
-         imp1bTWeoiL2Q9agloVow+V3s3KRpYiXDb5ryHql72SQVfL3hZlJUIpJlounMPIBAfmB
-         D7WQ==
-X-Gm-Message-State: AOAM533Jyhd0D18NisoTPr5Qn4w+vNcPQeM00LkIgfh1P9zOwD2aczTh
-        d5+m97mytB3lK64OcbV2i9X2hLbzUE7q2sG8E/U=
-X-Google-Smtp-Source: ABdhPJzg5usv5f0RaSqWg9mf7QzcFnAMff1LKR1fQBgsK2p4lTLH5w1ZlTVKL6A8Jz5Sj2CrhyAHKuW6LzqUDQ6MGIA=
-X-Received: by 2002:a17:906:229b:: with SMTP id p27mr48499254eja.264.1638825594626;
- Mon, 06 Dec 2021 13:19:54 -0800 (PST)
+        Mon, 6 Dec 2021 16:23:19 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A16C0613F8;
+        Mon,  6 Dec 2021 13:19:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=dOFxYCtm3wUSPpVE0rq2J6M8PSW2ZRyy5Qu839JhE0Q=; b=BQfv1I/2cQtmvYRtpwwCJHkU9l
+        uLCZjMOsDgm5+QGw+B8Mz0u8MveBqqK06IolC2eY03Jiv6Irwu7SXGT0HE4LwlOsBnLg2mHycTlVc
+        qmKWuj4XJpteN3ihBvH+AioLT7ghsSwa3oLvgGX62QemiRFv9vUFyj3XtMRQ4BGp6S9JLdqiTrMUX
+        HHpgMQ9HhIkKEGBJgkzF+N4gsrJmgDHr5DfuQNdn8a3U+Zhha5N/DwaxioP0/X+XSqSDysGUXpHtp
+        V0GS/vIN35BsnBPuOkQotNz1vRHE/FsonXJzMSHF1DRoWg/RXLUxxNYmZWWFqobVVbRrkIhp81znV
+        AiTQwVvg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1muLOk-006GvQ-VR; Mon, 06 Dec 2021 21:19:47 +0000
+Date:   Mon, 6 Dec 2021 21:19:46 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.15 13/24] tools: Fix math.h breakage
+Message-ID: <Ya5+ckVw3ZYjdNDJ@casper.infradead.org>
+References: <20211206211230.1660072-1-sashal@kernel.org>
+ <20211206211230.1660072-13-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20211205215846.153703-1-aouledameur@baylibre.com> <20211205215846.153703-2-aouledameur@baylibre.com>
-In-Reply-To: <20211205215846.153703-2-aouledameur@baylibre.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 6 Dec 2021 22:19:43 +0100
-Message-ID: <CAFBinCDZ2nTg2V_6qxok_y+wXHTVJ6XyyvON59TLJZ9B3fKY3Q@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] phy: amlogic: phy-meson-gxl-usb2: fix shared reset
- controller use
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        p.zabel@pengutronix.de
-Cc:     khilman@baylibre.com, balbi@kernel.org, jbrunet@baylibre.com,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206211230.1660072-13-sashal@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Amjad,
+On Mon, Dec 06, 2021 at 04:12:18PM -0500, Sasha Levin wrote:
+> From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+> 
+> [ Upstream commit d6e6a27d960f9f07aef0b979c49c6736ede28f75 ]
+> 
+> Commit 98e1385ef24b ("include/linux/radix-tree.h: replace kernel.h with
+> the necessary inclusions") broke the radix tree test suite in two
+> different ways; first by including math.h which didn't exist in the
+> tools directory, and second by removing an implicit include of
+> spinlock.h before lockdep.h.  Fix both issues.
 
-On Sun, Dec 5, 2021 at 10:59 PM Amjad Ouled-Ameur
-<aouledameur@baylibre.com> wrote:
->
-> Use reset_control_rearm() call if an error occurs in case
-> phy_meson_gxl_usb2_init() fails after reset() has been called ; or in case
-> phy_meson_gxl_usb2_exit() is called i.e the resource is no longer used
-> and the reset line may be triggered again by other devices.
->
-> reset_control_rearm() keeps use of triggered_count sane in the reset
-> framework. Therefore, use of reset_control_reset() on shared reset line
-> should be balanced with reset_control_rearm().
->
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> Reported-by: Jerome Brunet <jbrunet@baylibre.com>
-> ---
-> changes since v3:
-> - Remove unnecessary reset_control_rearm() after reset_control_reset()
-> failure.
-I double-checked your patch in v3 and Philipp was right:
-reset_control_rearm() should not be right after reset_control_reset().
-However, I think reset_control_rearm() is still needed
-phy_meson_gxl_usb2_init() whenever clk_prepare_enable() fails.
-
-So my suggestion is to add reset_control_rearm() in
-phy_meson_gxl_usb2_init() if clk_prepare_enable() fails so we are
-resetting the ref-count for the reset line (just like
-phy_meson_gxl_usb2_exit() does).
-The difference compared to the previous version is that the
-reset_control_rearm() call needs to be placed a few lines down.
-
-
-Thank you!
-Martin
+I'm confused.  Was 98e1385ef24b backported to v5.15?  I don't see it
+in linux-5.15.y, and I don't know why it would be considered a stable
+backport candidate.  If not, why would this patch be needed?

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE4B46A41D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A72E46A448
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347203AbhLFSaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 13:30:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
+        id S1347224AbhLFSbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 13:31:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347059AbhLFS3x (ORCPT
+        with ESMTP id S1347112AbhLFS34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 13:29:53 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CEEC061746;
-        Mon,  6 Dec 2021 10:26:24 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso562144pjb.2;
-        Mon, 06 Dec 2021 10:26:24 -0800 (PST)
+        Mon, 6 Dec 2021 13:29:56 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40FDC061D5E;
+        Mon,  6 Dec 2021 10:26:26 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id q17so7614770plr.11;
+        Mon, 06 Dec 2021 10:26:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=22u1YgEGuUE2NUBm4aUIXRHhe1NgL4IlQ7p6nHAEJMg=;
-        b=Zh+U2u/a5Qx3uOWo98Uixyx5LiZdxs452Y1/RvET1RUL7tNPzzTZ3Y4OOkm0b8ie/K
-         foW1LcD7tb6JZbs+kIWgP5LZnk//3T3gZHNNSAFbG01vJNhjAtXS9yhJsN00v3EZNV1U
-         CKc7fS3F+j/Wj+8WVY3UpM2dBT1bZeDIAnhTK/6ZkTJ5xIGWgtc36aqlr6yOYZI2HanH
-         c1lArW+KbzPpLWPNFFsLpcuOZoaVtolS+NcpjHhUC+zKEqAH7mTsvaB3o6o0VajXlS9C
-         +i2oopFItEGl7iwTxUtXO6D7zh8+o3jUEsf7mHA2/k1iODI1rtMVcWnMzBqncSV8Vnwq
-         NsAQ==
+        bh=IlWOtQhuKoAbExjB9TTANbBFdCEDUkxd3U6sjKMMDBU=;
+        b=pzFYLXw+dgQQZ9vnU/aMWUbAlvWMVysoWrco4Ie804B20gDncofnLHx6qA19V9onoz
+         5dhtA3wI7KqTNL0icF2mNs8dmvtldxC82f4ugzSHHYOzn1LhCNGmtl20zrn+aq2oli0b
+         uUiwiQC5u0GFJPLoWCMCEHAWynShCwLnS947U67OM4wrpuifUS7mJF1wZt5p8pfkaATO
+         xVGKFIxgBEN3wrHDB7HWRVrXRBeivh5IU6SuBnYQdNdG8gZn9Ldsx6yUHAcunG/8YDWe
+         ZDLQncVbUuhbggTqkZ4T76sDaXASkGeM759fweoKI7QlRSwBYza2StEUwcd6CymvtHx0
+         1p/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=22u1YgEGuUE2NUBm4aUIXRHhe1NgL4IlQ7p6nHAEJMg=;
-        b=mzA3lOJnhnuUy6ARx9SCNJ60/TlsFyYUHtSrFl6YVWP5L0HYtr4fwpQHGB85IX47PS
-         ggGtyyaZfzjZuJEO8SyriHdFmEOa0h4jl829NG3QGpiY57I/cvcRMu6NWDoOU5saGMXT
-         j5e5gw0x5yfqjhBWcTyh7d8MxsqIkg9/gQ88MqbsOQRFV28Rft8uf5xvIlFCeq8WsGz+
-         zPfbCNNoG7Xxs7bIqNJYrOobqGML9asR6ZqEgAAw5rz0XsQ6+7GDxhnRnTOkrCBS3YDc
-         4v5oMN4MYCPqXFCO8CCftokI+jsRhN9uUPZ2dJJzsZ9UDW7G5zZZJDAr9vijMNhdmBnL
-         un2w==
-X-Gm-Message-State: AOAM530AYPG4CR8TdjHUOmO+44N4egGk2R87KF3y1I82A5R3bhJZ2/77
-        mitayZGEc6plHWudhmSu0zkHyqx8OPA=
-X-Google-Smtp-Source: ABdhPJwSVbvjR1dpvgyfdF4mNAKyCGmG960Qi+UT5jB5j7oT2D5zmuuwNPilnYXVThDeFf9l4VDShQ==
-X-Received: by 2002:a17:90a:9a8e:: with SMTP id e14mr196284pjp.231.1638815183952;
-        Mon, 06 Dec 2021 10:26:23 -0800 (PST)
+        bh=IlWOtQhuKoAbExjB9TTANbBFdCEDUkxd3U6sjKMMDBU=;
+        b=Gp3k1wyPL7FkYEcAAxmGQxo8WXeumrWDN03XJglKQhw5wuCtBHYDpqZTOZTajal55C
+         HvxVQrbSoHmfmqeXXoad2PDPT8QTGVOOIXIRQXgyHdnfCw+cVTGoaX2DQre/vYudzPE6
+         3gu82JLwFpGausHENxhuxTmiJs5kuZSrQyQvXFZyM/SJOPbFui2/0n5uV1fHZEJN3rp2
+         rGL479yPMN2QDbzPoSqi4w6JNSRrnJQ+oVOwI8d13ojipNmLIsnKHqSi5Xgc26BnnPyS
+         x8uU33spqCQxfPKpdlEqN/Fp7RH7QG7iVdASNPskTzzaeBh80/QJX/GPQ8jiPecz2m0R
+         hktQ==
+X-Gm-Message-State: AOAM532n1wYuKc+orPOTeUtjX2tDb3ZyjaaMiFhDF/TWn46WOeFFOpcI
+        +nlEtXC/AgAfSo9QrlBBMNgp8ZViJZg=
+X-Google-Smtp-Source: ABdhPJwxLXZuEFBB8yWKy6KJpxvhIK8eLJgeHKt7kxDuT1bsOthhCiGJYW4+SyHyuycD0ow42bQWgA==
+X-Received: by 2002:a17:90a:fe85:: with SMTP id co5mr261347pjb.110.1638815185903;
+        Mon, 06 Dec 2021 10:26:25 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id a22sm12773097pfh.111.2021.12.06.10.26.22
+        by smtp.gmail.com with ESMTPSA id a22sm12773097pfh.111.2021.12.06.10.26.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 10:26:23 -0800 (PST)
+        Mon, 06 Dec 2021 10:26:25 -0800 (PST)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     devicetree@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -90,9 +90,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
         linux-pm@vger.kernel.org (open list:THERMAL),
         linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-Subject: [PATCH v2 02/14] dt-bindings: reset: Convert Broadcom STB reset to YAML
-Date:   Mon,  6 Dec 2021 10:26:04 -0800
-Message-Id: <20211206182616.2089677-3-f.fainelli@gmail.com>
+Subject: [PATCH v2 03/14] dt-bindings: pwm: Convert BCM7038 PWM binding to YAML
+Date:   Mon,  6 Dec 2021 10:26:05 -0800
+Message-Id: <20211206182616.2089677-4-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211206182616.2089677-1-f.fainelli@gmail.com>
 References: <20211206182616.2089677-1-f.fainelli@gmail.com>
@@ -102,102 +102,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Broadcom STB SW_INIT style reset controller binding to YAML.
+Convert the Broadcom STB BCM7038 PWM Device Tree binding to YAML to help
+with validation.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- .../bindings/reset/brcm,brcmstb-reset.txt     | 27 -----------
- .../bindings/reset/brcm,brcmstb-reset.yaml    | 48 +++++++++++++++++++
- 2 files changed, 48 insertions(+), 27 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.txt
- create mode 100644 Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.yaml
+ .../bindings/pwm/brcm,bcm7038-pwm.txt         | 20 ---------
+ .../bindings/pwm/brcm,bcm7038-pwm.yaml        | 43 +++++++++++++++++++
+ 2 files changed, 43 insertions(+), 20 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.txt
+ create mode 100644 Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.yaml
 
-diff --git a/Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.txt b/Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.txt
+diff --git a/Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.txt b/Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.txt
 deleted file mode 100644
-index ee59409640f2..000000000000
---- a/Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.txt
+index 0e662d7f6bd1..000000000000
+--- a/Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.txt
 +++ /dev/null
-@@ -1,27 +0,0 @@
--Broadcom STB SW_INIT-style reset controller
--===========================================
--
--Broadcom STB SoCs have a SW_INIT-style reset controller with separate
--SET/CLEAR/STATUS registers and possibly multiple banks, each of 32 bit
--reset lines.
--
--Please also refer to reset.txt in this directory for common reset
--controller binding usage.
+@@ -1,20 +0,0 @@
+-Broadcom BCM7038 PWM controller (BCM7xxx Set Top Box PWM controller)
 -
 -Required properties:
--- compatible: should be brcm,brcmstb-reset
--- reg: register base and length
--- #reset-cells: must be set to 1
+-
+-- compatible: must be "brcm,bcm7038-pwm"
+-- reg: physical base address and length for this controller
+-- #pwm-cells: should be 2. See pwm.yaml in this directory for a description
+-  of the cells format
+-- clocks: a phandle to the reference clock for this block which is fed through
+-  its internal variable clock frequency generator
+-
 -
 -Example:
 -
--	reset: reset-controller@8404318 {
--		compatible = "brcm,brcmstb-reset";
--		reg = <0x8404318 0x30>;
--		#reset-cells = <1>;
+-	pwm: pwm@f0408000 {
+-		compatible = "brcm,bcm7038-pwm";
+-		reg = <0xf0408000 0x28>;
+-		#pwm-cells = <2>;
+-		clocks = <&upg_fixed>;
 -	};
--
--	&ethernet_switch {
--		resets = <&reset 26>;
--		reset-names = "switch";
--	};
-diff --git a/Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.yaml b/Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.yaml
+diff --git a/Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.yaml b/Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.yaml
 new file mode 100644
-index 000000000000..e00efa88a198
+index 000000000000..4080e098f746
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.yaml
-@@ -0,0 +1,48 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++++ b/Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.yaml
+@@ -0,0 +1,43 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: "http://devicetree.org/schemas/reset/brcm,brcmstb-reset.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/pwm/brcm,bcm7038-pwm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Broadcom STB SW_INIT-style reset controller
-+
-+description:
-+  Broadcom STB SoCs have a SW_INIT-style reset controller with separate
-+  SET/CLEAR/STATUS registers and possibly multiple banks, each of 32 bit
-+  reset lines.
-+
-+  Please also refer to reset.txt in this directory for common reset
-+  controller binding usage.
++title: Broadcom BCM7038 PWM controller (BCM7xxx Set Top Box PWM controller)
 +
 +maintainers:
 +  - Florian Fainelli <f.fainelli@gmail.com>
 +
++allOf:
++  - $ref: pwm.yaml#
++
 +properties:
 +  compatible:
-+    const: brcm,brcmstb-reset
++    const: brcm,bcm7038-pwm
 +
 +  reg:
 +    maxItems: 1
 +
-+  "#reset-cells":
-+    const: 1
++  "#pwm-cells":
++    const: 2
++
++  clocks:
++    maxItems: 1
 +
 +required:
 +  - compatible
 +  - reg
-+  - "#reset-cells"
++  - "#pwm-cells"
++  - clocks
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    reset: reset-controller@8404318 {
-+      compatible = "brcm,brcmstb-reset";
-+      reg = <0x8404318 0x30>;
-+      #reset-cells = <1>;
-+    };
-+
-+    ethernet_switch {
-+      resets = <&reset 26>;
-+      reset-names = "switch";
++    pwm: pwm@f0408000 {
++       compatible = "brcm,bcm7038-pwm";
++       reg = <0xf0408000 0x28>;
++       #pwm-cells = <2>;
++       clocks = <&upg_fixed>;
 +    };
 -- 
 2.25.1

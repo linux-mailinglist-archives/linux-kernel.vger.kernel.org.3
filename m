@@ -2,108 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3CF46A119
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0B046A12D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:22:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376403AbhLFQVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356504AbhLFQVF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:21:05 -0500
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C59C061A83
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:17:35 -0800 (PST)
-Received: by mail-qk1-x72f.google.com with SMTP id t83so11642288qke.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 08:17:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=R4jGu2qbmARxbGb3tgU7TY4VubezWvXJws2tBM5yACI=;
-        b=JrREj+GYATn/OgLASlKoyqwkpFQIbBcn3h8+rHrduh4wsclXJZXTUaIOiYwOWV38Bd
-         VJgDIV8DxO4nYZ544e8+vF3kvTIssorXg0OsQgFN2TvCzLvY9MbjarJrLOToMcG2+MW5
-         5NAUNdFuVYD3tTbEvNqBbL/V1HO4qljhIylprRvGeFoooLAn7uDiIbYSFK/twWQ/SELU
-         ZhA/x7vnd3tChmOF8PvB1zk0Aj2eKs4UzAjXGLjE5UddxW+Ca4HWej3cfmGoYlNq0vbc
-         MbU9wLo2u+1WxT7fxR1ckb3ryYE10Xf63Q5Y+26HwxleHMIpiLiK5GuvCPsk16XGldXA
-         MwBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=R4jGu2qbmARxbGb3tgU7TY4VubezWvXJws2tBM5yACI=;
-        b=pUNxd+SG4RdmAoW5cYClV2OAmCDFanTu/F3A6AUBoLB+wCsWUhtfWFgfRbxEJ+p47g
-         4eR3lt3RJpEwPIkgA8rQwxLsq8zVWEzwZLjuikWhIzKH/rEb8XprDiUgs/5m8hXc8uRN
-         vN3Wac8SOYaL5LOGDSL2I5ziy5smxxlT3DQVRf+JbH9srhRnzKdMQBsKhf0EwwV+JL9a
-         CmOzJEoot91l8IDqoyBZXmFrt/tCgQMOzQEgkR9bdw/C4D84q/z0iK1VOLNWT5H2/hub
-         ibwsUZUiAt8QAbE4VuKdOcFrVkbCgxgg48GSpyQqoo/Yz5iMB6HormXd2Wy7UZW91Qw0
-         +yEA==
-X-Gm-Message-State: AOAM530laBq+nNrvYL+YDr4d6uaz9mZPzcoC7+3rL/y6ZgLz7v0mVvHa
-        6765+3IywkpP0SeWwkND3EVYDg==
-X-Google-Smtp-Source: ABdhPJyC7uIvfU+T7FDc6RP31Z2irw5DUroyBb38U+GlqnWKWtBwkIbAJO+Rn97S2b3rckXKDuQhJQ==
-X-Received: by 2002:ae9:efd8:: with SMTP id d207mr33848579qkg.97.1638807455064;
-        Mon, 06 Dec 2021 08:17:35 -0800 (PST)
-Received: from localhost (rfs.netwinder.org. [206.248.184.2])
-        by smtp.gmail.com with ESMTPSA id f12sm7291521qtj.93.2021.12.06.08.17.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 08:17:34 -0800 (PST)
-Date:   Mon, 6 Dec 2021 11:17:34 -0500
-From:   Ralph Siemsen <ralph.siemsen@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>,
+        id S1356045AbhLFQ0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:26:05 -0500
+Received: from mga01.intel.com ([192.55.52.88]:58761 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351189AbhLFQ0B (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 11:26:01 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="261402490"
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="261402490"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 08:18:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="579417337"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga004.fm.intel.com with ESMTP; 06 Dec 2021 08:18:20 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B6GIJ0W021925;
+        Mon, 6 Dec 2021 16:18:19 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the char-misc tree with the
- char-misc.current tree
-Message-ID: <20211206161734.GA4141317@maple.netwinder.org>
-References: <20211206144901.63529ac9@canb.auug.org.au>
- <Ya4Tb9NUj33UdxmI@smile.fi.intel.com>
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH] numa: mark __next_node() as __always_inline to fix section mismatch
+Date:   Mon,  6 Dec 2021 17:17:45 +0100
+Message-Id: <20211206161745.39028-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Ya4Tb9NUj33UdxmI@smile.fi.intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 03:43:11PM +0200, Andy Shevchenko wrote:
->On Mon, Dec 06, 2021 at 02:49:01PM +1100, Stephen Rothwell wrote:
->> Hi all,
->>
->> Today's linux-next merge of the char-misc tree got a conflict in:
->>
->>   drivers/misc/eeprom/at25.c
->>
->> between commit:
->>
->>   9a626577398c ("nvmem: eeprom: at25: fix FRAM byte_len")
+Clang (13) uninlines __next_node() which emits the following warning
+due to that this function is used in init code (amd_numa_init(),
+sched_init_numa() etc.):
 
-This was my original patch from Nov 8th.
+WARNING: modpost: vmlinux.o(.text+0x927ee): Section mismatch
+in reference from the function __next_node() to the variable
+.init.data:numa_nodes_parsed
+The function __next_node() references
+the variable __initdata numa_nodes_parsed.
+This is often because __next_node lacks a __initdata
+annotation or the annotation of numa_nodes_parsed is wrong.
 
->>   5b557298d7d0 ("misc: at25: Make driver OF independent again")
->>   a692fc39bf90 ("misc: at25: Don't copy garbage to the at25->chip in FRAM case")
->>   58589a75bba9 ("misc: at25: Check proper value of chip length in FRAM case")
->>   51902c1212fe ("misc: at25: Use at25->chip instead of local chip everywhere in ->probe()")
->> (and probably more)
+Mark __next_node() as __always_inline() so it won't get uninlined.
+bloat-o-meter over x86_64 binaries says this:
 
-These are newer versions and some cleanups from Andy. I was not aware of 
-this work going on. I'm surprised at25 is getting so much attention ;-)
+scripts/bloat-o-meter -c vmlinux.baseline vmlinux
+add/remove: 1/1 grow/shrink: 2/7 up/down: 446/-2166 (-1720)
+Function                                     old     new   delta
+apply_wqattrs_cleanup                          -     410    +410
+amd_numa_init                                814     842     +28
+sched_init_numa                             1338    1346      +8
+find_next_bit                                 38      19     -19
+__next_node                                   45       -     -45
+apply_wqattrs_prepare                       1069     799    -270
+wq_nice_store                                688     414    -274
+wq_numa_store                                805     433    -372
+wq_cpumask_store                             789     402    -387
+apply_workqueue_attrs                        538     147    -391
+workqueue_set_unbound_cpumask                947     539    -408
+Total: Before=14422603, After=14420883, chg -0.01%
 
->> I fixed it up (I just used the latter version) and can carry the fix as
->> necessary. This is now fixed as far as linux-next is concerned, but any
->> non trivial conflicts should be mentioned to your upstream maintainer
->> when your tree is submitted for merging.  You may also want to consider
->> cooperating with the maintainer of the conflicting tree to minimise any
->> particularly complex conflicts.
->
->The result from char-misc.current should be used as is and I guess it's
->what you have done, thanks!
+So it's both win-win in terms of resolving section mismatch and
+saving some text size (-1.7 Kb is quite nice).
 
-Agreed - Andy's version is cleaner, and includes my fixes. I've run some 
-quick tests locally and all seems to be working as expected.
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+---
+ include/linux/nodemask.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Ralph
+diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
+index 567c3ddba2c4..55ba2c56f39b 100644
+--- a/include/linux/nodemask.h
++++ b/include/linux/nodemask.h
+@@ -266,7 +266,7 @@ static inline int __first_node(const nodemask_t *srcp)
+ }
+ 
+ #define next_node(n, src) __next_node((n), &(src))
+-static inline int __next_node(int n, const nodemask_t *srcp)
++static __always_inline int __next_node(int n, const nodemask_t *srcp)
+ {
+ 	return min_t(int,MAX_NUMNODES,find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
+ }
+-- 
+2.33.1
+

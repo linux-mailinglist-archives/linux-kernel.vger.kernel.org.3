@@ -2,131 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3B646A54F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDAB346A551
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348180AbhLFTGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:06:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
+        id S1348195AbhLFTGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:06:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232972AbhLFTGU (ORCPT
+        with ESMTP id S232972AbhLFTGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:06:20 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7170C061746;
-        Mon,  6 Dec 2021 11:02:51 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id t8so11274171ilu.8;
-        Mon, 06 Dec 2021 11:02:51 -0800 (PST)
+        Mon, 6 Dec 2021 14:06:36 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB8FC061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 11:03:07 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id m6so23242512oim.2
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 11:03:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:message-id:in-reply-to:references:subject:mime-version
-         :content-transfer-encoding;
-        bh=DGKaEcXL8IOy/SVzbuQAC3UpZ4Q1Y1ENlH6uq7i+0Hw=;
-        b=JdkupEYh9uGJbqMf0WCdukWqjLlIqPy3WUA3x8qfq0Jl3Dd2Q05Gsy0hAS5HhjbiLl
-         xHNpVRYYclUMPrcFDuFQKYAWoqxfrfMp1GLI+MxjrhFjGQuSMEkNmiU8ISvIvM2SGVCD
-         kSRqi0c6EZWSt0vAvbGjfDL1ouQHT8J92jw2n8nRb5h4LHxqXJA6qgIcZEsXnutZjpA7
-         HruZUMb+CWIv5qGMZDBBEJ0B9SqtmsLkdZYUhL9G6ngMKYY6O6cP/KhfrXtDcCwC1ndL
-         r6RUUqRMmyeSzq/1GHSgZvoJx5NyuI83y1TZV0VNE1Q5hbFSNsERiSYUWeMfMeGo6Nlo
-         yONQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fKh92gBQ/JlyboOIrCcxM8mFCnyTXSVFZXGlgmH5yVA=;
+        b=B0yZBZwlFtSOZ4ruhEcIXf2BhctcDeaksMo2201atOcJyFxBNX2Z/1LEMWNrlrATA3
+         syazv+QP4pxR6Ep0r2Yk/TCKWHYQgCUZOtDmj1DAjR0GUvxMSRzkGW125FB0bBGs4tAj
+         CurNAWmxuIJ1ufN3lDBOF39PjFvjHqtCQ+dB0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:message-id:in-reply-to:references
-         :subject:mime-version:content-transfer-encoding;
-        bh=DGKaEcXL8IOy/SVzbuQAC3UpZ4Q1Y1ENlH6uq7i+0Hw=;
-        b=tuDoN1TJ/haPEzioeLCZSrvpLsspd3L/VO79dtHBcJj0nzYKUhzHoMik2h3/K8AopB
-         4UYNag88x9kjjZTXr+D1nH4yTNBGyZcq+baLU3paZRWVUw13BSgFw4AOJYXdsbmxWfOc
-         rkutxNH2MaztFUH8n5VARtQzdT/7+d1DvTyAU2VPm8qhpHGC6fKo2oI0iDDSFDXy4Uwh
-         vyXOjpR1YX8uFcw4lbOYAVlGK3aap1cY8xXKm8UCZdDoM8RCNknUltyBtLnZXqpmluVN
-         K8ehJ1OKzR+EA1V931aKxw8hxVffKmdDCRQZglHfnaGUQKqC+YkwkiQ7Hv/bVKvpGsyi
-         elZQ==
-X-Gm-Message-State: AOAM533PPwqUWcLfkGCYaxYHGKcQRjX7IO455I827dWH388qY8z2ocfV
-        eQmndMvOVwcuO9kHaF5ho5EaEqZ6tUZ3Lw==
-X-Google-Smtp-Source: ABdhPJzW8cN3NemLiQ02j3NaTMiMGE75FnmsuoXR5qLQCsVp0c1Y6d5j2G3ltIgD6TAWzL3Xr1G2EA==
-X-Received: by 2002:a05:6e02:12cb:: with SMTP id i11mr32239553ilm.12.1638817371156;
-        Mon, 06 Dec 2021 11:02:51 -0800 (PST)
-Received: from localhost ([172.243.151.11])
-        by smtp.gmail.com with ESMTPSA id r1sm4434540ilo.38.2021.12.06.11.02.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 11:02:50 -0800 (PST)
-Date:   Mon, 06 Dec 2021 11:02:42 -0800
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     syzbot <syzbot+5027de09e0964fd78ce1@syzkaller.appspotmail.com>,
-        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-Message-ID: <61ae5e52b9712_c5bd2082e@john.notmuch>
-In-Reply-To: <000000000000367c2205d2549cb9@google.com>
-References: <000000000000367c2205d2549cb9@google.com>
-Subject: RE: [syzbot] KASAN: vmalloc-out-of-bounds Read in __bpf_prog_put
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fKh92gBQ/JlyboOIrCcxM8mFCnyTXSVFZXGlgmH5yVA=;
+        b=U9ljAaB7aDdjkmUtybimMyma7M2igERlhs8RI7GlIaN62XszsYBXad1GWjs8O8vtDC
+         pd0dU2uvmEswGD4Jtc5Yo6W5WTJdS874Qf6SCXrCK2ilD6kCfUnYRiaCmrk9L17iBAr3
+         IW1TMgr2thXlsyA0Z8PtrNirGcQYT7iZ9DZD7gtEo7loABobkYiGLzr85IPx69NSHApb
+         4f4p49Gwmu6sn4fst3hQfkZVgMqnqcFxMkA6g5kaS28z2EbTuHQEFAyXkNVVH/FZyUpr
+         RxSyKTMTl/1Sle2b5aMqcrvHXwekqkyjQwu16h3sFDne2JUMPSQZvBbu90YzUMtWxpv0
+         4MLQ==
+X-Gm-Message-State: AOAM533DMM0csVRn1m2rAIatyFMbcltXYTYuSp0TrYrxh4JbKrllA6/L
+        hY3SvYYdAKZYyaj5gamqW/CzGBoWUheyzg==
+X-Google-Smtp-Source: ABdhPJzOXSK3bacduRdgn7xIdMLmwFsU5jPIN1OyImfnzY7ewCwb3mTE0To7zAm0tG0BDKB6wDJYcw==
+X-Received: by 2002:aca:1001:: with SMTP id 1mr417971oiq.55.1638817387079;
+        Mon, 06 Dec 2021 11:03:07 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id t13sm2800562oiw.30.2021.12.06.11.03.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 11:03:06 -0800 (PST)
+Subject: Re: [PATCH v2] tests: remove unneeded conversion to bool
+To:     davidcomponentone@gmail.com, shuah@kernel.org
+Cc:     ptikhomirov@virtuozzo.com, christian.brauner@ubuntu.com,
+        yang.guang5@zte.com.cn, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <9bca1d9eb8ccacf4a64a8813f9eefe7f7272b3d6.1638581673.git.yang.guang5@zte.com.cn>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <da6c119c-993b-dae5-25ff-e6cce97b55e3@linuxfoundation.org>
+Date:   Mon, 6 Dec 2021 12:03:06 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <9bca1d9eb8ccacf4a64a8813f9eefe7f7272b3d6.1638581673.git.yang.guang5@zte.com.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot wrote:
-> Hello,
+On 12/5/21 5:07 PM, davidcomponentone@gmail.com wrote:
+> From: Yang Guang <yang.guang5@zte.com.cn>
 > 
-> syzbot found the following issue on:
+> The coccinelle report
+> ./tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c:225:18-23:
+> WARNING: conversion to bool not needed here
+> Relational and logical operators evaluate to bool,
+> explicit conversion is overly verbose and unneeded.
 > 
-> HEAD commit:    ce83278f313c Merge branch 'qed-enhancements'
-> git tree:       net-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=11c8ce3ab00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=b5949d4891208a1b
-> dashboard link: https://syzkaller.appspot.com/bug?extid=5027de09e0964fd78ce1
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+5027de09e0964fd78ce1@syzkaller.appspotmail.com
-> 
-> ==================================================================
-> BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put.constprop.0+0x1dd/0x220 kernel/bpf/syscall.c:1812
-> Read of size 8 at addr ffffc90000cf2038 by task kworker/0:24/16179
-> 
-> CPU: 0 PID: 16179 Comm: kworker/0:24 Not tainted 5.16.0-rc3-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Workqueue: events sk_psock_destroy
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  print_address_description.constprop.0.cold+0xf/0x320 mm/kasan/report.c:247
->  __kasan_report mm/kasan/report.c:433 [inline]
->  kasan_report.cold+0x83/0xdf mm/kasan/report.c:450
->  __bpf_prog_put.constprop.0+0x1dd/0x220 kernel/bpf/syscall.c:1812
->  psock_set_prog include/linux/skmsg.h:477 [inline]
->  psock_progs_drop include/linux/skmsg.h:495 [inline]
->  sk_psock_destroy+0xad/0x620 net/core/skmsg.c:804
->  process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
->  worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
->  kthread+0x405/0x4f0 kernel/kthread.c:327
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
->  </TASK>
-> 
-> 
-> Memory state around the buggy address:
->  ffffc90000cf1f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->  ffffc90000cf1f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-> >ffffc90000cf2000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->                                         ^
->  ffffc90000cf2080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->  ffffc90000cf2100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-> ==================================================================
-> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
 > 
 > ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
 > 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> Changes in v2:
+> - Change the return type to bool.
+> ---
+>   .../move_mount_set_group/move_mount_set_group_test.c   | 10 +++++-----
+>   1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c b/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
+> index 860198f83a53..50ed5d475dd1 100644
+> --- a/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
+> +++ b/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
+> @@ -191,7 +191,7 @@ static bool is_shared_mount(const char *path)
+>   #define SET_GROUP_FROM	"/tmp/move_mount_set_group_supported_from"
+>   #define SET_GROUP_TO	"/tmp/move_mount_set_group_supported_to"
+>   
+> -static int move_mount_set_group_supported(void)
+> +static bool move_mount_set_group_supported(void)
+>   {
+>   	int ret;
+>   
+> @@ -222,7 +222,7 @@ static int move_mount_set_group_supported(void)
+>   		      AT_FDCWD, SET_GROUP_TO, MOVE_MOUNT_SET_GROUP);
+>   	umount2("/tmp", MNT_DETACH);
+>   
+> -	return ret < 0 ? false : true;
+> +	return ret >= 0;
+>   }
+>   
+>   FIXTURE(move_mount_set_group) {
+> @@ -232,7 +232,7 @@ FIXTURE(move_mount_set_group) {
+>   
+>   FIXTURE_SETUP(move_mount_set_group)
+>   {
+> -	int ret;
+> +	bool ret;
+>   
+>   	ASSERT_EQ(prepare_unpriv_mountns(), 0);
+>   
+> @@ -254,7 +254,7 @@ FIXTURE_SETUP(move_mount_set_group)
+>   
+>   FIXTURE_TEARDOWN(move_mount_set_group)
+>   {
+> -	int ret;
+> +	bool ret;
+>   
+>   	ret = move_mount_set_group_supported();
+>   	ASSERT_GE(ret, 0);
+> @@ -348,7 +348,7 @@ TEST_F(move_mount_set_group, complex_sharing_copying)
+>   		.shared = false,
+>   	};
+>   	pid_t pid;
+> -	int ret;
+> +	bool ret;
+>   
+>   	ret = move_mount_set_group_supported();
+>   	ASSERT_GE(ret, 0);
+> 
 
-I'll take look some psock issue here.
+Applied. In the future use selftests/<test>: .... convention for
+patch summary. Review "git log <filename>" history for how to
+write summaries and change logs.
+
+I fixed this one for now.
+
+thanks,
+-- Shuah

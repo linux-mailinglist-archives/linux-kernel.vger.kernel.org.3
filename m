@@ -2,76 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F00469313
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:57:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9EC469314
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:58:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241658AbhLFKBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 05:01:24 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4197 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241662AbhLFKBX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 05:01:23 -0500
-Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J6zMw5682z67LSP;
-        Mon,  6 Dec 2021 17:56:12 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 6 Dec 2021 10:57:52 +0100
-Received: from [10.47.82.161] (10.47.82.161) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 6 Dec
- 2021 09:57:52 +0000
-Subject: Re: [PATCH RFT 0/3] blk-mq: Optimise blk_mq_queue_tag_busy_iter() for
- shared tags
-From:   John Garry <john.garry@huawei.com>
-To:     Kashyap Desai <kashyap.desai@broadcom.com>, <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <ming.lei@redhat.com>, <hare@suse.de>
-References: <1635852455-39935-1-git-send-email-john.garry@huawei.com>
- <7fba1b1e-63a6-6315-e5ca-6d5ae9de6dbb@huawei.com>
- <b18285f4aa0e8be796aea19cdfde0293@mail.gmail.com>
- <9859e133-e3b8-4e53-dfad-cbf75ed3102f@huawei.com>
- <9b092ca49e9b5415772cd950a3c12584@mail.gmail.com>
- <fbdf64cd-7d31-f470-b93c-5b42a1e1cf40@huawei.com>
-Message-ID: <e6069080-61e7-4345-8ff3-a26756a1c76c@huawei.com>
-Date:   Mon, 6 Dec 2021 09:57:39 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S241697AbhLFKBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 05:01:30 -0500
+Received: from foss.arm.com ([217.140.110.172]:52664 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241662AbhLFKB1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 05:01:27 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 767E411FB;
+        Mon,  6 Dec 2021 01:57:59 -0800 (PST)
+Received: from ubiquitous (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6811C3F73D;
+        Mon,  6 Dec 2021 01:57:58 -0800 (PST)
+Date:   Mon, 6 Dec 2021 09:57:47 +0000
+From:   Vincent Donnefort <vincent.donnefort@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, mgorman@techsingularity.net,
+        dietmar.eggemann@arm.com, valentin.schneider@arm.com
+Subject: Re: [PATCH v2] sched/fair: Fix detection of per-CPU kthreads waking
+ a task
+Message-ID: <20211206095747.GA486204@ubiquitous>
+References: <20211201143450.479472-1-vincent.donnefort@arm.com>
+ <20211204095316.GQ16608@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <fbdf64cd-7d31-f470-b93c-5b42a1e1cf40@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.82.161]
-X-ClientProxiedBy: lhreml721-chm.china.huawei.com (10.201.108.72) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211204095316.GQ16608@worktop.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/11/2021 11:51, John Garry wrote:
->> This patch set improves above call trace even after disk_util=0 is set.
-> ok, fine. Thanks for testing.
+On Sat, Dec 04, 2021 at 10:53:16AM +0100, Peter Zijlstra wrote:
+> On Wed, Dec 01, 2021 at 02:34:50PM +0000, Vincent Donnefort wrote:
+> > select_idle_sibling() has a special case for tasks woken up by a per-CPU
+> > kthread, where the selected CPU is the previous one. However, the current
+> > condition for this exit path is incomplete. A task can wake up from an
+> > interrupt context (e.g. hrtimer), while a per-CPU kthread is running. A
+> > such scenario would spuriously trigger the special case described above.
+> > Also, a recent change made the idle task like a regular per-CPU kthread,
+> > hence making that situation more likely to happen
+> > (is_per_cpu_kthread(swapper) being true now).
+> > 
+> > Checking for task context makes sure select_idle_sibling() will not
+> > interpret a wake up from any other context as a wake up by a per-CPU
+> > kthread.
+> > 
+> > Fixes: 52262ee567ad ("sched/fair: Allow a per-CPU kthread waking a task to stack on the same CPU, to fix XFS performance regression")
+> > Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+> > ---
 > 
-> So I guess that this is a regression, and you would want this series for 
-> v5.16, right? My changes were made with v5.17 in mind.
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index 945d987246c5..56db4ae85995 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -6399,6 +6399,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+> >  	 * pattern is IO completions.
+> >  	 */
+> >  	if (is_per_cpu_kthread(current) &&
+> > +	    in_task() &&
+> >  	    prev == smp_processor_id() &&
+> >  	    this_rq()->nr_running <= 1) {
+> >  		return prev;
 > 
-> I am not sure how Jens feels about it, since the changes are 
-> significant. It would be a lot easier to argue for v5.16 if we got to 
-> this point earlier in the cycle...
-> 
+> Hurmph, so now I have two 'trivial' patches from you that touch this
+> same function and they's conflicting. I've fixed it up, but perhaps it
+> would've been nice to have them combined in a series or somesuch :-)
+>
 
-note: I will now resend for 5.17 and add your tested-by, please let me 
-know if unhappy about that.
+I definitely should have created a single patchset. Apologies for the
+extra work and thanks for taking those two patches!
 
-> Anyway, it would be good to have full review first, so please help with 
-> that.
-> 
-> @Ming, can you please give feedback on 3/3 here?
+On another subject, in case you missed them, I also have two tiny fixes,
+reviewed by Vincent:
 
-Thanks and also to Hannes for the reviews.
+[PATCH v2 1/2] sched/fair: Fix asym_fits_capacity() task_util type
+[PATCH v2 2/2] sched/fair: Fix task_fits_capacity() capacity type
 
-john

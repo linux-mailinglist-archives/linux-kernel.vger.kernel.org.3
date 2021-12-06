@@ -2,434 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B69846AAF5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7B246AAF7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:50:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355854AbhLFVxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351944AbhLFVxO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:53:14 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5F6C061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 13:49:45 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id m5so11652539ilh.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 13:49:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ksl2Het3shbWwxstX/Qf/valmYx9RbWX8Li6L+VzZWM=;
-        b=iYqXj+SrjRuJ1ce/rrJXr2OLGlTU4k6vU6yx1BjVq4wOHt0nIPAXmYgG3uoOserfXO
-         xl8uAoYvKei1UbNWHsc7QzSQnuP/J/tdJIavj7jRBojC+IzkWUV+lqC4S7XMefgIUfMs
-         zDxZ3o5eAe0EaTMtz5t52mkI//bGconw5nR/SeCShUf72NJPfy+ecpCHeumdyhAOFJWG
-         wODIlrBH4UV/3Mz5achU830gr2luXaZ33NGtBiLFvST4V9D96UL/jTF9ifJthJRjwVxD
-         G183XInAvFxghLd5gr49mOoZiYaqZ26KopNAjdw5Xb+vvdKExhXCudEzZeQuNqhpqVxW
-         gJ+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ksl2Het3shbWwxstX/Qf/valmYx9RbWX8Li6L+VzZWM=;
-        b=A3RKxWpDxTSrXlVApObu6ja8UFVSPpKmzQ4xRG5c2ff1vAmk8YsxM9Uau5DTABn4CJ
-         /6uI2YbhFMG7QXYvK/oSzW3/SbVDeEy0ox8+e0Wg5MEecQGic/6EB305kuJg74oI1+M5
-         To+xQSdAvtZ9oBar6uUDRMK6T/wDJ4+ZZpXaXVPLfsTKnL6XCD59Hhh5nRkbVZrod415
-         yC6B9kaFiyWv1QeSavhMr4zMJh0z5YtvIM3pp8Vvsra91CIscPlGDd/f7Hxher8K1hz8
-         YMUSmuswIgCEwYJDsOepwucvXHb3ID3qWLtfjNs17PY7sZObmo6IgOBTKhayyBTxqCYj
-         oBvQ==
-X-Gm-Message-State: AOAM533fpTMGvQUgGFZfdmqKT1tS2OKNGb0QmbQZYy7RbKFYvqXlS3Kc
-        vbJPwTBWQbsocdHJE1ICUYJ56T21HX4uodp/DSc=
-X-Google-Smtp-Source: ABdhPJx9099htivpey8YiPoFDHGyaf11aKep1Im3rFuvDq/ABHdoOXbak2iEt3st309erpOtLmgip157IBPEWutjriY=
-X-Received: by 2002:a05:6e02:1605:: with SMTP id t5mr39284375ilu.233.1638827384286;
- Mon, 06 Dec 2021 13:49:44 -0800 (PST)
+        id S1355902AbhLFVxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:53:20 -0500
+Received: from mga02.intel.com ([134.134.136.20]:10688 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1355557AbhLFVxR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 16:53:17 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="224667643"
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="224667643"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 13:49:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="562996591"
+Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
+  by fmsmga008.fm.intel.com with ESMTP; 06 Dec 2021 13:49:47 -0800
+Received: from orsmsx605.amr.corp.intel.com (10.22.229.18) by
+ ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 6 Dec 2021 13:49:46 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Mon, 6 Dec 2021 13:49:46 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Mon, 6 Dec 2021 13:49:46 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JrFZGK8/NClHJk1U/2jR6rtaYTlR6HBIYs5SB++2WFD1gLqYWN1MzCbYTAQzrLi1Ttc4i5gs51x1UP39pFTRUpKExrivKLMlRLa2UM20Opn06O21C9iDYu4d8o5V1mhMz48d8AzVGCo3POU+sAPXH1Np+G88ahmOkH7oG7bwics8o9gdsN3i9G7Yko1m+VbDkIBmADlYvbxwpA2228gL5IFnEg3zCRDxCEuIHkwiq2X2OpTag+jE+SpmUg7IrmeI/Mb/SlHbwN4af+dpy8euP2847aRo8uwEJCBs48dHmDTwHpgNTligA8KXagNk+c1Ld82i8h7/dKqbnC5buK372Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3x8sbCjNYpPZE1p9QkS2cUX3lrEp/ZAnH2FRc+SC12M=;
+ b=JIUkRW6pG6Rwou4UYvFquNBqKrX+pR1GydH1m4b+MpblE7DY+Ycat8OF8Y7KXwpi+/A/3Uxujt0Nere1WmonqGx7Zboo6uV2aoEKALUZP+Tp7J1ndRx+rYvRiEWJ4fhD4FzpfuamjoVcKY2WbwVWhj1EhuU9PZufE4JObHnli60mmOkdVLHbPebsmqRgAnX3aggYAt+bqjMsHuK9DfCINwq7t0A57GzlYKjdnoRxmeU21DXN+/ceRO7iXMiImlvH4TqiYxXPix3Ale43VV+q//YoUzpauNCsGMnIPsCffhtTuim7E+gQA3CGBVWQovDOSx0ShxC6WMqSVgZUr/do+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3x8sbCjNYpPZE1p9QkS2cUX3lrEp/ZAnH2FRc+SC12M=;
+ b=p3NpgtCacz/ESOPGB2kD5zSCQCzO16lLtKJ7+SnpjXz10w7XofvfPvzCy0PpsKl3RSgE9QHRR7N8TEajZXxRRTH9mQGHdDiGgrtXaktXm4l/X2Nm8ACmiho+mX3zGXlosND3AhSVkJsye+MT4/dfuGuF0EGIve010aCprd6EMqw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
+ by BN6PR11MB1507.namprd11.prod.outlook.com (2603:10b6:405:9::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Mon, 6 Dec
+ 2021 21:49:44 +0000
+Received: from BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::bcd0:77e1:3a2e:1e10]) by BN0PR11MB5744.namprd11.prod.outlook.com
+ ([fe80::bcd0:77e1:3a2e:1e10%3]) with mapi id 15.20.4755.022; Mon, 6 Dec 2021
+ 21:49:44 +0000
+Message-ID: <80a05bdd-bb8e-93a1-b8d8-d6dcd73810a8@intel.com>
+Date:   Mon, 6 Dec 2021 13:49:38 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.3.2
+Subject: Re: [PATCH 17/25] x86/sgx: Support complete page removal
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+CC:     <dave.hansen@linux.intel.com>, <tglx@linutronix.de>,
+        <bp@alien8.de>, <luto@kernel.org>, <mingo@redhat.com>,
+        <linux-sgx@vger.kernel.org>, <x86@kernel.org>, <seanjc@google.com>,
+        <kai.huang@intel.com>, <cathy.zhang@intel.com>,
+        <cedric.xing@intel.com>, <haitao.huang@intel.com>,
+        <mark.shanahan@intel.com>, <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>
+References: <cover.1638381245.git.reinette.chatre@intel.com>
+ <737e651af6de9c0a7d43d2532047f20895d6c7d4.1638381245.git.reinette.chatre@intel.com>
+ <Yav9q0ZfQfUIEQX3@iki.fi>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <Yav9q0ZfQfUIEQX3@iki.fi>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MWHPR21CA0045.namprd21.prod.outlook.com
+ (2603:10b6:300:129::31) To BN0PR11MB5744.namprd11.prod.outlook.com
+ (2603:10b6:408:166::16)
 MIME-Version: 1.0
-References: <cover.1638825394.git.andreyknvl@google.com> <72a8a7aa09eb279d7eabf7ea1101556d13360950.1638825394.git.andreyknvl@google.com>
-In-Reply-To: <72a8a7aa09eb279d7eabf7ea1101556d13360950.1638825394.git.andreyknvl@google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Mon, 6 Dec 2021 22:49:33 +0100
-Message-ID: <CA+fCnZc2ae_j0TmDMdSD6q71S_z1LuaOrh_U8s1mByBT0SOu+Q@mail.gmail.com>
-Subject: Re: [PATCH v2 28/34] kasan, vmalloc: add vmalloc support to HW_TAGS
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        andrey.konovalov@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Received: from [192.168.1.221] (71.238.111.198) by MWHPR21CA0045.namprd21.prod.outlook.com (2603:10b6:300:129::31) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Mon, 6 Dec 2021 21:49:42 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: bf1d4694-9d16-4991-2703-08d9b9025058
+X-MS-TrafficTypeDiagnostic: BN6PR11MB1507:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <BN6PR11MB1507F31E852494427B39B9C9F86D9@BN6PR11MB1507.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:747;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jDQgJ/bbv6O3fQDC7jA2Z1J63V+NO5jqHptiN80QKHM3IipA9g+kejje1IbM4sC66BsLxefKSG05EWhQXW8NKFkSH1jtJ1al7xTmtJXpBtYQj6mtCujkINuesQqnFxTCJ9ambHRo01aWEecItrLeHOlbv0znX0l7b/kb5NJO8IoAT8WKEDoKVtK2ayTGvse2IIDi5wWOUZw+mQnf5BQKmiy/tRz4MKlovYks+abR+Vzf+EB/YAmSCOJF2bMqgklTL1epSmSioTZU3JGGnqRaVSPrq0fGkogw0DHqDITuUdsBbDZzhW8wEZ/HAJ3GVnvvUF6auk2mHFTMGG5LsAwLujYI8z9/BTVDoOws5xSbeonAHVSMLqb/X6Z2ztYj3lmoUbO3iJ1AxL3GQp1GdAdw7VjGTwZ27uLI+5bryQh48ulju4SLwH1otLHoUpk+6LsPBMyqNVOsyLoFEKFyhbr+0PbRlLxGUFPZKm5aZs+aP97VPWFSSJ+qpIVqi1FKII4yb7Dr6QTRp10g/JB406sz2rD2Hm7feIiM6gm4dJ/p9JDtX7iD9/1opB78oVLvr5hVGVA67GU1xCos59WgSyDlP9ItgnnHSEefUbHhwKH5bOBo378HrgMCvfzi7EB+7yNr79Yq/yYvwEqUHW33pJDc6Tx+GKfuzUI5tkT1PO8v/ddt/mzYhO8JKJg4q0b+JLKD3Ls/oL5VJkz4LHg5Q9n0OXtVktFE9vRVQ+hoIFXj9m1mFCqo1FN3xyh8l6GLC+lH
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(86362001)(7416002)(2906002)(31686004)(16576012)(8936002)(8676002)(316002)(6666004)(5660300002)(4326008)(6916009)(66476007)(26005)(4744005)(66556008)(66946007)(6486002)(82960400001)(508600001)(53546011)(186003)(956004)(2616005)(36756003)(38100700002)(31696002)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dDg3UlNybjZDT1hmRVcwMFFrc3psVTZQTDdaT1dYaFZWcDRLU096Ujd4MFp4?=
+ =?utf-8?B?bFdEYUpVVk5ud25CZUZ5eDAvVUtVdEVBeGd0cDFzb2FlL3RhMWdITlNWbEQ0?=
+ =?utf-8?B?eWw2V2dWdnNGaEViRG40L2RQOXFLRk5vS2ViR0l3bGR5QVV4VHBweXd6UDBO?=
+ =?utf-8?B?MUhGZUpJRk5TaFY5T21DZTZ2S0lNc1dEcnVFL1NNMnMyc0M4YXNvaDJkOTJX?=
+ =?utf-8?B?clR0cTI4YVZDR3ZOTnc1T2RUbE4wVTR0dFIwNHdWTkhPd01lRDJqR3g3bFJ6?=
+ =?utf-8?B?dmc1VUJZRmVvOTJ3QXE3RWhVblJPQnMwYXphTXNsV0Y5MDc0S292VDJrVHpx?=
+ =?utf-8?B?UENtNXRCWlFzT2lnWjltZStQc1NycmxMUHlKWldiYlJqb2crK1pzZGpaaEUx?=
+ =?utf-8?B?eE03M05HRFc2N2t3VkVGMGtaOG9oRVJkNHlOVDQ3clJLK1RnQm5HNHVJOHZR?=
+ =?utf-8?B?QXhvT2piRlpkVEJVTEhOTlZrZFN4M21Sdm5FZmszUFQxY0pqSEllejZTWkR2?=
+ =?utf-8?B?b3B4REtET2l0L0ZyeGx0cmN2NERtWmg0bHhVbGVSQUFCb2QxblBSZnBZQ1V2?=
+ =?utf-8?B?SmhOZHp2dmhaWlRJUEVjcnlxakNVU1lRZGFTaWFBbmJNK3FlNEF2SUxpbWVC?=
+ =?utf-8?B?M2pndFltNXF2S1RseURCTlZkUU5ubFhHZFRIdGdsU3h5Mjc1b3p3VEF6R2lM?=
+ =?utf-8?B?TWFYZitUOElEdmZ2dk1RWUo0V2JPT1VXeUJYUXpqQklyWmo0OTgzNXlPRm5s?=
+ =?utf-8?B?UlIvT0Z3SFFZWGNNaGFhRzBrcEQ0RGQvL2xuTCs4VmFVb2V4S0lYUUxMcVVU?=
+ =?utf-8?B?SE5pUjZzS3d5N2dQeUxLc3lUWExLSXpJK01GbTRUd2h6bXozVTNjdTMzRXFE?=
+ =?utf-8?B?MkxXVlpOaVNBbVBsb1FrSUhsY2pPa1lCUWRUL0l6RUJIOWZvd1plWXY0WmpQ?=
+ =?utf-8?B?QzFMekpVRkx0U2NBSjNFQzdXc003OFM1L1hrdzNJMEZ0VjVpSjhMZ29LUzcw?=
+ =?utf-8?B?WVJNOGlhNitUSWhUUWNhT2dxVTNyeFFLTGg3dWIvZSt6bmJlQUR5by93RmRm?=
+ =?utf-8?B?ZitSbFpUWnFnbExiWWRmOThSTjB6ZGxlaVFHTFhMaW43ZEs0QXBaQjBRM0FN?=
+ =?utf-8?B?ZnVjUUM2RmQwT3VXNkluVTYvWlB1ZTFjTHAxQWs0VlNOUmhQMTY4RkVGRVlu?=
+ =?utf-8?B?NW44L1VJNEUvY0g4aGdiT2hkenlzZFg5cGtFL1ZveVhBcjIwT2I5bXhTWS9x?=
+ =?utf-8?B?Zld1QmZaOFFIWGthNUhpb1JOYmh5d0JXU0VPeXUvbU9DdkdhNDNnOWhjTS9M?=
+ =?utf-8?B?WWtKdE84dysyaVBOZEY2YlJmRkVoclo3TlFKclBIdDVTK1B1UkFjUlQ3UHJ0?=
+ =?utf-8?B?Y0lDeWl5ZU5qZkp6VmQzSE1QNXlxRFAwMXNCT1B0Y0NRUVBHZ0JIS29TT1Yw?=
+ =?utf-8?B?Y3J1UldKSnk1Q1RaWDY1eVBVSXFuRzJpTHROQ3J0YlB6d1VuTnhIcnBDK0V5?=
+ =?utf-8?B?MFNLbkNQTTZHcy9RbWlmY0FNMGh6N1V0Zm9jQ2kyZXJGdUpMRTdUZi91ZUhm?=
+ =?utf-8?B?VCtzb0YyOTU3bWFsdkVTUTk4TlJTQTAzTER1eHV5Tjd1Ri9RSklVVWp4YVB0?=
+ =?utf-8?B?aXM1ZG1WcjRadDNWd0sxTjNZeU9yZDM5Z3c0RXRVcWVBTjNnTVgzRGI4cE9t?=
+ =?utf-8?B?QW43ZXNqWm1DdXlkeUx1RWh6aVVFamxsVTZEcEhwN3ZJenkyRXdpbGg2dHpT?=
+ =?utf-8?B?d3VNaDBUb3dEcnc0SUJJV0RvdG51TjdJb3pwTmk0Qzl3WUJyMEVXbkp0RVdq?=
+ =?utf-8?B?c3dhdDdWRWUySEdwNWlabTNWbllqazdVTnp0UkRhbUxDOHdmelRJbkNleWU4?=
+ =?utf-8?B?ZmF6WndMem9uNnhieS9GY3NzSVBMK29WSytZK3BKUVBycW9mMHNIQTJUKzRC?=
+ =?utf-8?B?anNWMEtTZlJwaXRQWFBGYkgzS3RSNWJmVnQyV1YwVGVDcTlNWEsxS0RMYm1Z?=
+ =?utf-8?B?ejBlRWtINU1STVBxSnF1TllJazZMRUttbVdEaVloT2lCMC90bnN4M0dlYXB5?=
+ =?utf-8?B?WFh5YmtZSEdFU04vSDE0T25iVUpHRDlqV3dvdzk3T2EvczhHSUxnMm5BZ3l0?=
+ =?utf-8?B?NzJNc3Z3Q1p4Y3VaWENpZkRDV3NjQ0tqYlp6MC8rUjF5Y3JDSVZQdlFidEJC?=
+ =?utf-8?B?cTdNa25sRUVoM0gzNVFqMUwyN29HelJVam55a0dOemFlcVl4M0Y2RlV6MUNy?=
+ =?utf-8?Q?SG2+pKtcLeIgA83+gRL6fIDQ/KW78JMTx44msQSSRI=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: bf1d4694-9d16-4991-2703-08d9b9025058
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2021 21:49:44.0744
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: c0X2vAtmuD/B20TFgI/LXKl6Bo+UEmgU2EIZ5IsibYAKfYKXgjm9lUnioPvWZG1l1SOm9KnUAXl0MsW38EA/iNW6y5uJMY8ukjutVCHPLEY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1507
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 10:46 PM <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> This patch adds vmalloc tagging support to HW_TAGS KASAN.
->
-> The key difference between HW_TAGS and the other two KASAN modes
-> when it comes to vmalloc: HW_TAGS KASAN can only assign tags to
-> physical memory. The other two modes have shadow memory covering
-> every mapped virtual memory region.
->
-> This patch makes __kasan_unpoison_vmalloc() for HW_TAGS KASAN:
->
-> - Skip non-VM_ALLOC mappings as HW_TAGS KASAN can only tag a single
->   mapping of normal physical memory; see the comment in the function.
-> - Generate a random tag, tag the returned pointer and the allocation,
->   and initialize the allocation at the same time.
-> - Propagate the tag into the page stucts to allow accesses through
->   page_address(vmalloc_to_page()).
->
-> The rest of vmalloc-related KASAN hooks are not needed:
->
-> - The shadow-related ones are fully skipped.
-> - __kasan_poison_vmalloc() is kept as a no-op with a comment.
->
-> Poisoning and zeroing of physical pages that are backing vmalloc()
-> allocations are skipped via __GFP_SKIP_KASAN_UNPOISON and
-> __GFP_SKIP_ZERO: __kasan_unpoison_vmalloc() does that instead.
->
-> This patch allows enabling CONFIG_KASAN_VMALLOC with HW_TAGS
-> and adjusts CONFIG_KASAN_VMALLOC description:
->
-> - Mention HW_TAGS support.
-> - Remove unneeded internal details: they have no place in Kconfig
->   description and are already explained in the documentation.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> Co-developed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
->
-> ---
->
-> Changes v1->v2:
-> - Allow enabling CONFIG_KASAN_VMALLOC with HW_TAGS in this patch.
-> - Move memory init for page_alloc pages backing vmalloc() into
->   kasan_unpoison_vmalloc().
-> ---
->  include/linux/kasan.h | 30 +++++++++++++--
->  lib/Kconfig.kasan     | 20 +++++-----
->  mm/kasan/hw_tags.c    | 89 +++++++++++++++++++++++++++++++++++++++++++
->  mm/kasan/shadow.c     | 11 +++++-
->  mm/vmalloc.c          | 32 +++++++++++++---
->  5 files changed, 162 insertions(+), 20 deletions(-)
->
-> diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-> index 6a2619759e93..0bdc2b824b9c 100644
-> --- a/include/linux/kasan.h
-> +++ b/include/linux/kasan.h
-> @@ -417,19 +417,40 @@ static inline void kasan_init_hw_tags(void) { }
->
->  #ifdef CONFIG_KASAN_VMALLOC
->
-> +#if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
-> +
->  void kasan_populate_early_vm_area_shadow(void *start, unsigned long size);
->  int kasan_populate_vmalloc(unsigned long addr, unsigned long size);
->  void kasan_release_vmalloc(unsigned long start, unsigned long end,
->                            unsigned long free_region_start,
->                            unsigned long free_region_end);
->
-> +#else /* CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS */
-> +
-> +static inline void kasan_populate_early_vm_area_shadow(void *start,
-> +                                                      unsigned long size)
-> +{ }
-> +static inline int kasan_populate_vmalloc(unsigned long start,
-> +                                       unsigned long size)
-> +{
-> +       return 0;
-> +}
-> +static inline void kasan_release_vmalloc(unsigned long start,
-> +                                        unsigned long end,
-> +                                        unsigned long free_region_start,
-> +                                        unsigned long free_region_end) { }
-> +
-> +#endif /* CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS */
-> +
->  void * __must_check __kasan_unpoison_vmalloc(const void *start,
-> -                                            unsigned long size);
-> +                                            unsigned long size,
-> +                                            bool vm_alloc, bool init);
->  static __always_inline void * __must_check kasan_unpoison_vmalloc(
-> -                                       const void *start, unsigned long size)
-> +                                       const void *start, unsigned long size,
-> +                                       bool vm_alloc, bool init)
->  {
->         if (kasan_enabled())
-> -               return __kasan_unpoison_vmalloc(start, size);
-> +               return __kasan_unpoison_vmalloc(start, size, vm_alloc, init);
->         return (void *)start;
->  }
->
-> @@ -456,7 +477,8 @@ static inline void kasan_release_vmalloc(unsigned long start,
->                                          unsigned long free_region_end) { }
->
->  static inline void *kasan_unpoison_vmalloc(const void *start,
-> -                                          unsigned long size, bool unique)
-> +                                          unsigned long size,
-> +                                          bool vm_alloc, bool init)
->  {
->         return (void *)start;
->  }
-> diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-> index 3f144a87f8a3..7834c35a7964 100644
-> --- a/lib/Kconfig.kasan
-> +++ b/lib/Kconfig.kasan
-> @@ -178,17 +178,17 @@ config KASAN_TAGS_IDENTIFY
->           memory consumption.
->
->  config KASAN_VMALLOC
-> -       bool "Back mappings in vmalloc space with real shadow memory"
-> -       depends on (KASAN_GENERIC || KASAN_SW_TAGS) && HAVE_ARCH_KASAN_VMALLOC
-> +       bool "Check accesses to vmalloc allocations"
-> +       depends on HAVE_ARCH_KASAN_VMALLOC
->         help
-> -         By default, the shadow region for vmalloc space is the read-only
-> -         zero page. This means that KASAN cannot detect errors involving
-> -         vmalloc space.
-> -
-> -         Enabling this option will hook in to vmap/vmalloc and back those
-> -         mappings with real shadow memory allocated on demand. This allows
-> -         for KASAN to detect more sorts of errors (and to support vmapped
-> -         stacks), but at the cost of higher memory usage.
-> +         This mode makes KASAN check accesses to vmalloc allocations for
-> +         validity.
-> +
-> +         With software KASAN modes, checking is done for all types of vmalloc
-> +         allocations. Enabling this option leads to higher memory usage.
-> +
-> +         With hardware tag-based KASAN, only VM_ALLOC mappings are checked.
-> +         There is no additional memory usage.
->
->  config KASAN_KUNIT_TEST
->         tristate "KUnit-compatible tests of KASAN bug detection capabilities" if !KUNIT_ALL_TESTS
-> diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
-> index 76cf2b6229c7..837c260beec6 100644
-> --- a/mm/kasan/hw_tags.c
-> +++ b/mm/kasan/hw_tags.c
-> @@ -192,6 +192,95 @@ void __init kasan_init_hw_tags(void)
->                 kasan_stack_collection_enabled() ? "on" : "off");
->  }
->
-> +#ifdef CONFIG_KASAN_VMALLOC
-> +
-> +static void unpoison_vmalloc_pages(const void *addr, u8 tag)
-> +{
-> +       struct vm_struct *area;
-> +       int i;
-> +
-> +       /*
-> +        * As hardware tag-based KASAN only tags VM_ALLOC vmalloc allocations
-> +        * (see the comment in __kasan_unpoison_vmalloc), all of the pages
-> +        * should belong to a single area.
-> +        */
-> +       area = find_vm_area((void *)addr);
-> +       if (WARN_ON(!area))
-> +               return;
-> +
-> +       for (i = 0; i < area->nr_pages; i++) {
-> +               struct page *page = area->pages[i];
-> +
-> +               page_kasan_tag_set(page, tag);
-> +       }
-> +}
-> +
-> +void *__kasan_unpoison_vmalloc(const void *start, unsigned long size,
-> +                               bool vm_alloc, bool init)
-> +{
-> +       u8 tag;
-> +       unsigned long redzone_start, redzone_size;
-> +
-> +       if (!is_vmalloc_or_module_addr(start))
-> +               return (void *)start;
-> +
-> +       /* Unpoisoning and pointer tag assignment is skipped for non-VM_ALLOC
-> +        * mappings as:
-> +        *
-> +        * 1. Unlike the software KASAN modes, hardware tag-based KASAN only
-> +        *    supports tagging physical memory. Therefore, it can only tag a
-> +        *    single mapping of normal physical pages.
-> +        * 2. Hardware tag-based KASAN can only tag memory mapped with special
-> +        *    mapping protection bits, see arch_vmalloc_pgprot_modify().
-> +        *    As non-VM_ALLOC mappings can be mapped outside of vmalloc code,
-> +        *    providing these bits would require tracking all non-VM_ALLOC
-> +        *    mappers.
-> +        *
-> +        * Thus, for VM_ALLOC mappings, hardware tag-based KASAN only tags
-> +        * the first virtual mapping, which is created by vmalloc().
-> +        * Tagging the page_alloc memory backing that vmalloc() allocation is
-> +        * skipped, see ___GFP_SKIP_KASAN_UNPOISON.
-> +        *
-> +        * For non-VM_ALLOC allocations, page_alloc memory is tagged as usual.
-> +        */
-> +       if (!vm_alloc)
-> +               return (void *)start;
-> +
-> +       tag = kasan_random_tag();
-> +       start = set_tag(start, tag);
-> +
-> +       /* Unpoison and initialize memory up to size. */
-> +       kasan_unpoison(start, size, init);
-> +
-> +       /*
-> +        * Explicitly poison and initialize the in-page vmalloc() redzone.
-> +        * Unlike software KASAN modes, hardware tag-based KASAN doesn't
-> +        * unpoison memory when populating shadow for vmalloc() space.
-> +        */
-> +       redzone_start = round_up((unsigned long)start + size, KASAN_GRANULE_SIZE);
-> +       redzone_size = round_up(redzone_start, PAGE_SIZE) - redzone_start;
-> +       kasan_poison((void *)redzone_start, redzone_size, KASAN_TAG_INVALID, init);
-> +
-> +       /*
-> +        * Set per-page tag flags to allow accessing physical memory for the
-> +        * vmalloc() mapping through page_address(vmalloc_to_page()).
-> +        */
-> +       unpoison_vmalloc_pages(start, tag);
-> +
-> +       return (void *)start;
-> +}
-> +
-> +void __kasan_poison_vmalloc(const void *start, unsigned long size)
-> +{
-> +       /*
-> +        * No tagging here.
-> +        * The physical pages backing the vmalloc() allocation are poisoned
-> +        * through the usual page_alloc paths.
-> +        */
-> +}
-> +
-> +#endif
-> +
->  #if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
->
->  void kasan_enable_tagging_sync(void)
-> diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
-> index 4ca280a96fbc..8600dd925f35 100644
-> --- a/mm/kasan/shadow.c
-> +++ b/mm/kasan/shadow.c
-> @@ -475,8 +475,17 @@ void kasan_release_vmalloc(unsigned long start, unsigned long end,
->         }
->  }
->
-> -void *__kasan_unpoison_vmalloc(const void *start, unsigned long size)
-> +void *__kasan_unpoison_vmalloc(const void *start, unsigned long size,
-> +                               bool vm_alloc, bool init)
->  {
-> +       /*
-> +        * Software tag-based KASAN tags both VM_ALLOC and non-VM_ALLOC
-> +        * mappings, so the vm_alloc argument is ignored.
-> +        * Software tag-based KASAN can't optimize zeroing memory by combining
-> +        * it with setting memory tags, so the init argument is ignored;
-> +        * vmalloc() memory is poisoned via page_alloc.
-> +        */
-> +
->         if (!is_vmalloc_or_module_addr(start))
->                 return (void *)start;
->
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 82ef1e27e2e4..d48db7cc3358 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -2214,8 +2214,12 @@ void *vm_map_ram(struct page **pages, unsigned int count, int node)
->                 return NULL;
->         }
->
-> -       /* Mark the pages as accessible after they were mapped in. */
-> -       mem = kasan_unpoison_vmalloc(mem, size);
-> +       /*
-> +        * Mark the pages as accessible after they were mapped in.
-> +        * With hardware tag-based KASAN, marking is skipped for
-> +        * non-VM_ALLOC mappings, see __kasan_unpoison_vmalloc().
-> +        */
-> +       mem = kasan_unpoison_vmalloc(mem, size, false, false);
->
->         return mem;
->  }
-> @@ -2449,9 +2453,12 @@ static struct vm_struct *__get_vm_area_node(unsigned long size,
->          * accessible after they are mapped in.
->          * Otherwise, as the pages can be mapped outside of vmalloc code,
->          * mark them now as a best-effort approach.
-> +        * With hardware tag-based KASAN, marking is skipped for
-> +        * non-VM_ALLOC mappings, see __kasan_unpoison_vmalloc().
->          */
->         if (!(flags & VM_ALLOC))
-> -               area->addr = kasan_unpoison_vmalloc(area->addr, requested_size);
-> +               area->addr = kasan_unpoison_vmalloc(area->addr, requested_size,
-> +                                                       false, false);
->
->         return area;
->  }
-> @@ -2849,6 +2856,12 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
->         struct page *page;
->         int i;
->
-> +       /*
-> +        * Skip page_alloc poisoning and zeroing for pages backing VM_ALLOC
-> +        * mappings. Only effective in HW_TAGS mode.
-> +        */
-> +       gfp &= __GFP_SKIP_KASAN_UNPOISON & __GFP_SKIP_ZERO;
-> +
->         /*
->          * For order-0 pages we make use of bulk allocator, if
->          * the page array is partly or not at all populated due
-> @@ -3027,6 +3040,7 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
->  {
->         struct vm_struct *area;
->         void *addr;
-> +       bool init;
->         unsigned long real_size = size;
->         unsigned long real_align = align;
->         unsigned int shift = PAGE_SHIFT;
-> @@ -3083,8 +3097,13 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
->         /*
->          * Mark the pages for VM_ALLOC mappings as accessible after they were
->          * mapped in.
-> +        * The init condition should match the one in post_alloc_hook()
-> +        * (except for the should_skip_init() check) to make sure that memory
-> +        * is initialized under the same conditions regardless of the enabled
-> +        * KASAN mode.
->          */
-> -       addr = kasan_unpoison_vmalloc(addr, real_size);
-> +       init = !want_init_on_free() && want_init_on_alloc(gfp_mask);
-> +       addr = kasan_unpoison_vmalloc(addr, real_size, true, init);
->
->         /*
->          * In this function, newly allocated vm_struct has VM_UNINITIALIZED
-> @@ -3784,10 +3803,13 @@ struct vm_struct **pcpu_get_vm_areas(const unsigned long *offsets,
->          * Mark allocated areas as accessible.
->          * As the pages are mapped outside of vmalloc code,
->          * mark them now as a best-effort approach.
-> +        * With hardware tag-based KASAN, marking is skipped for
-> +        * non-VM_ALLOC mappings, see __kasan_unpoison_vmalloc().
->          */
->         for (area = 0; area < nr_vms; area++)
->                 vms[area]->addr = kasan_unpoison_vmalloc(vms[area]->addr,
-> -                                                        vms[area]->size);
-> +                                                        vms[area]->size,
-> +                                                        false, false);
->
->         kfree(vas);
->         return vms;
-> --
-> 2.25.1
->
+Hi Jarkko,
 
-Hi Vincenzo,
+On 12/4/2021 3:45 PM, Jarkko Sakkinen wrote:
+> On Wed, Dec 01, 2021 at 11:23:15AM -0800, Reinette Chatre wrote:
 
-This patch is partially based on an early version of the HW_TAGS
-series you had. Could you PTAL and give your sign-off?
+...
 
-Thanks!
+>> diff --git a/arch/x86/include/uapi/asm/sgx.h b/arch/x86/include/uapi/asm/sgx.h
+>> index f70caccd166c..6648ded960f8 100644
+>> --- a/arch/x86/include/uapi/asm/sgx.h
+>> +++ b/arch/x86/include/uapi/asm/sgx.h
+>> @@ -33,6 +33,8 @@ enum sgx_page_flags {
+>>   	_IOWR(SGX_MAGIC, 0x05, struct sgx_page_modp)
+>>   #define SGX_IOC_PAGE_MODT \
+>>   	_IOWR(SGX_MAGIC, 0x06, struct sgx_page_modt)
+>> +#define SGX_IOC_PAGE_REMOVE \
+>> +	_IOWR(SGX_MAGIC, 0x07, struct sgx_page_remove)
+> 
+> Should be SGX_IOC_ENCLAVE_REMOVE_PAGES.
+> 
+
+Will do.
+
+Reinette

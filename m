@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A698846A022
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB56469B49
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357464AbhLFP62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:58:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389531AbhLFPk3 (ORCPT
+        id S1347477AbhLFPOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:14:35 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43014 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349146AbhLFPK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:40:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E342DC08EC72;
-        Mon,  6 Dec 2021 07:25:02 -0800 (PST)
+        Mon, 6 Dec 2021 10:10:27 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 73747B81126;
-        Mon,  6 Dec 2021 15:25:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A880C34902;
-        Mon,  6 Dec 2021 15:24:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC0E2B810F1;
+        Mon,  6 Dec 2021 15:06:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 316D3C341C1;
+        Mon,  6 Dec 2021 15:06:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804300;
-        bh=4VBJLaUNb63cWfnxxofnl510akopAl+BzY2QnSWSgyI=;
+        s=korg; t=1638803216;
+        bh=LV69NJAClCoVJXwtYLKOoLJx1nB+/HqCh/nkrKB0kTw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bL4X8OHNOzHtfdhO6ZIZx0KPpNY4A6FiQS1fv0ekLo11A1y+MWbr6Q9bx5MuOKeN5
-         gYE+J92t6HqpXs+Js0+CjcI2C3bRjCisu1h0tyb9k0jZYqyXDmx32wcsUNFzyTu+x6
-         wcVXjz7/yKPZluL9XXkhegpmCKr7MASXjp6Kjmic=
+        b=wtZYnZfVpb1Kw+frbH6XBcn8P3JXLaQzHNEDD2lB4HaNRbv/8RQxrU0YOTB2C8A/K
+         zwCwTGYZQlnVyRWFp2gbWDxP7sS88oyDj73PIXsTwWe2FUuUJ2fhqMQ48+2Sg34e/j
+         NC/bUXdXkT43M7bv4I9lb8m353RWRejQOAWNMW7A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Streun Fabio <fstreun@student.ethz.ch>,
-        Joel Wanner <joel.wanner@inf.ethz.ch>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 096/207] wireguard: receive: use ring buffer for incoming handshakes
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <marek.behun@nic.cz>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH 4.14 042/106] PCI: aardvark: Fix compilation on s390
 Date:   Mon,  6 Dec 2021 15:55:50 +0100
-Message-Id: <20211206145613.563349712@linuxfoundation.org>
+Message-Id: <20211206145556.846747477@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,251 +48,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Pali Rohár <pali@kernel.org>
 
-commit 886fcee939adb5e2af92741b90643a59f2b54f97 upstream.
+commit b32c012e4b98f0126aa327be2d1f409963057643 upstream.
 
-Apparently the spinlock on incoming_handshake's skb_queue is highly
-contended, and a torrent of handshake or cookie packets can bring the
-data plane to its knees, simply by virtue of enqueueing the handshake
-packets to be processed asynchronously. So, we try switching this to a
-ring buffer to hopefully have less lock contention. This alleviates the
-problem somewhat, though it still isn't perfect, so future patches will
-have to improve this further. However, it at least doesn't completely
-diminish the data plane.
+Include linux/gpio/consumer.h instead of linux/gpio.h, as is said in the
+latter file.
 
-Reported-by: Streun Fabio <fstreun@student.ethz.ch>
-Reported-by: Joel Wanner <joel.wanner@inf.ethz.ch>
-Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+This was reported by kernel test bot when compiling for s390.
+
+  drivers/pci/controller/pci-aardvark.c:350:2: error: implicit declaration of function 'gpiod_set_value_cansleep' [-Werror,-Wimplicit-function-declaration]
+  drivers/pci/controller/pci-aardvark.c:1074:21: error: implicit declaration of function 'devm_gpiod_get_from_of_node' [-Werror,-Wimplicit-function-declaration]
+  drivers/pci/controller/pci-aardvark.c:1076:14: error: use of undeclared identifier 'GPIOD_OUT_LOW'
+
+Link: https://lore.kernel.org/r/202006211118.LxtENQfl%25lkp@intel.com
+Link: https://lore.kernel.org/r/20200907111038.5811-2-pali@kernel.org
+Fixes: 5169a9851daa ("PCI: aardvark: Issue PERST via GPIO")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Reviewed-by: Marek Behún <marek.behun@nic.cz>
+Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireguard/device.c   |   36 ++++++++++++++++++------------------
- drivers/net/wireguard/device.h   |    9 +++------
- drivers/net/wireguard/queueing.c |    6 +++---
- drivers/net/wireguard/queueing.h |    2 +-
- drivers/net/wireguard/receive.c  |   27 ++++++++++++---------------
- 5 files changed, 37 insertions(+), 43 deletions(-)
+ drivers/pci/host/pci-aardvark.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/wireguard/device.c
-+++ b/drivers/net/wireguard/device.c
-@@ -98,6 +98,7 @@ static int wg_stop(struct net_device *de
- {
- 	struct wg_device *wg = netdev_priv(dev);
- 	struct wg_peer *peer;
-+	struct sk_buff *skb;
+--- a/drivers/pci/host/pci-aardvark.c
++++ b/drivers/pci/host/pci-aardvark.c
+@@ -12,7 +12,7 @@
+  */
  
- 	mutex_lock(&wg->device_update_lock);
- 	list_for_each_entry(peer, &wg->peer_list, peer_list) {
-@@ -108,7 +109,9 @@ static int wg_stop(struct net_device *de
- 		wg_noise_reset_last_sent_handshake(&peer->last_sent_handshake);
- 	}
- 	mutex_unlock(&wg->device_update_lock);
--	skb_queue_purge(&wg->incoming_handshakes);
-+	while ((skb = ptr_ring_consume(&wg->handshake_queue.ring)) != NULL)
-+		kfree_skb(skb);
-+	atomic_set(&wg->handshake_queue_len, 0);
- 	wg_socket_reinit(wg, NULL, NULL);
- 	return 0;
- }
-@@ -235,14 +238,13 @@ static void wg_destruct(struct net_devic
- 	destroy_workqueue(wg->handshake_receive_wq);
- 	destroy_workqueue(wg->handshake_send_wq);
- 	destroy_workqueue(wg->packet_crypt_wq);
--	wg_packet_queue_free(&wg->decrypt_queue);
--	wg_packet_queue_free(&wg->encrypt_queue);
-+	wg_packet_queue_free(&wg->handshake_queue, true);
-+	wg_packet_queue_free(&wg->decrypt_queue, false);
-+	wg_packet_queue_free(&wg->encrypt_queue, false);
- 	rcu_barrier(); /* Wait for all the peers to be actually freed. */
- 	wg_ratelimiter_uninit();
- 	memzero_explicit(&wg->static_identity, sizeof(wg->static_identity));
--	skb_queue_purge(&wg->incoming_handshakes);
- 	free_percpu(dev->tstats);
--	free_percpu(wg->incoming_handshakes_worker);
- 	kvfree(wg->index_hashtable);
- 	kvfree(wg->peer_hashtable);
- 	mutex_unlock(&wg->device_update_lock);
-@@ -298,7 +300,6 @@ static int wg_newlink(struct net *src_ne
- 	init_rwsem(&wg->static_identity.lock);
- 	mutex_init(&wg->socket_update_lock);
- 	mutex_init(&wg->device_update_lock);
--	skb_queue_head_init(&wg->incoming_handshakes);
- 	wg_allowedips_init(&wg->peer_allowedips);
- 	wg_cookie_checker_init(&wg->cookie_checker, wg);
- 	INIT_LIST_HEAD(&wg->peer_list);
-@@ -316,16 +317,10 @@ static int wg_newlink(struct net *src_ne
- 	if (!dev->tstats)
- 		goto err_free_index_hashtable;
- 
--	wg->incoming_handshakes_worker =
--		wg_packet_percpu_multicore_worker_alloc(
--				wg_packet_handshake_receive_worker, wg);
--	if (!wg->incoming_handshakes_worker)
--		goto err_free_tstats;
--
- 	wg->handshake_receive_wq = alloc_workqueue("wg-kex-%s",
- 			WQ_CPU_INTENSIVE | WQ_FREEZABLE, 0, dev->name);
- 	if (!wg->handshake_receive_wq)
--		goto err_free_incoming_handshakes;
-+		goto err_free_tstats;
- 
- 	wg->handshake_send_wq = alloc_workqueue("wg-kex-%s",
- 			WQ_UNBOUND | WQ_FREEZABLE, 0, dev->name);
-@@ -347,10 +342,15 @@ static int wg_newlink(struct net *src_ne
- 	if (ret < 0)
- 		goto err_free_encrypt_queue;
- 
--	ret = wg_ratelimiter_init();
-+	ret = wg_packet_queue_init(&wg->handshake_queue, wg_packet_handshake_receive_worker,
-+				   MAX_QUEUED_INCOMING_HANDSHAKES);
- 	if (ret < 0)
- 		goto err_free_decrypt_queue;
- 
-+	ret = wg_ratelimiter_init();
-+	if (ret < 0)
-+		goto err_free_handshake_queue;
-+
- 	ret = register_netdevice(dev);
- 	if (ret < 0)
- 		goto err_uninit_ratelimiter;
-@@ -367,18 +367,18 @@ static int wg_newlink(struct net *src_ne
- 
- err_uninit_ratelimiter:
- 	wg_ratelimiter_uninit();
-+err_free_handshake_queue:
-+	wg_packet_queue_free(&wg->handshake_queue, false);
- err_free_decrypt_queue:
--	wg_packet_queue_free(&wg->decrypt_queue);
-+	wg_packet_queue_free(&wg->decrypt_queue, false);
- err_free_encrypt_queue:
--	wg_packet_queue_free(&wg->encrypt_queue);
-+	wg_packet_queue_free(&wg->encrypt_queue, false);
- err_destroy_packet_crypt:
- 	destroy_workqueue(wg->packet_crypt_wq);
- err_destroy_handshake_send:
- 	destroy_workqueue(wg->handshake_send_wq);
- err_destroy_handshake_receive:
- 	destroy_workqueue(wg->handshake_receive_wq);
--err_free_incoming_handshakes:
--	free_percpu(wg->incoming_handshakes_worker);
- err_free_tstats:
- 	free_percpu(dev->tstats);
- err_free_index_hashtable:
---- a/drivers/net/wireguard/device.h
-+++ b/drivers/net/wireguard/device.h
-@@ -39,21 +39,18 @@ struct prev_queue {
- 
- struct wg_device {
- 	struct net_device *dev;
--	struct crypt_queue encrypt_queue, decrypt_queue;
-+	struct crypt_queue encrypt_queue, decrypt_queue, handshake_queue;
- 	struct sock __rcu *sock4, *sock6;
- 	struct net __rcu *creating_net;
- 	struct noise_static_identity static_identity;
--	struct workqueue_struct *handshake_receive_wq, *handshake_send_wq;
--	struct workqueue_struct *packet_crypt_wq;
--	struct sk_buff_head incoming_handshakes;
--	int incoming_handshake_cpu;
--	struct multicore_worker __percpu *incoming_handshakes_worker;
-+	struct workqueue_struct *packet_crypt_wq,*handshake_receive_wq, *handshake_send_wq;
- 	struct cookie_checker cookie_checker;
- 	struct pubkey_hashtable *peer_hashtable;
- 	struct index_hashtable *index_hashtable;
- 	struct allowedips peer_allowedips;
- 	struct mutex device_update_lock, socket_update_lock;
- 	struct list_head device_list, peer_list;
-+	atomic_t handshake_queue_len;
- 	unsigned int num_peers, device_update_gen;
- 	u32 fwmark;
- 	u16 incoming_port;
---- a/drivers/net/wireguard/queueing.c
-+++ b/drivers/net/wireguard/queueing.c
-@@ -38,11 +38,11 @@ int wg_packet_queue_init(struct crypt_qu
- 	return 0;
- }
- 
--void wg_packet_queue_free(struct crypt_queue *queue)
-+void wg_packet_queue_free(struct crypt_queue *queue, bool purge)
- {
- 	free_percpu(queue->worker);
--	WARN_ON(!__ptr_ring_empty(&queue->ring));
--	ptr_ring_cleanup(&queue->ring, NULL);
-+	WARN_ON(!purge && !__ptr_ring_empty(&queue->ring));
-+	ptr_ring_cleanup(&queue->ring, purge ? (void(*)(void*))kfree_skb : NULL);
- }
- 
- #define NEXT(skb) ((skb)->prev)
---- a/drivers/net/wireguard/queueing.h
-+++ b/drivers/net/wireguard/queueing.h
-@@ -23,7 +23,7 @@ struct sk_buff;
- /* queueing.c APIs: */
- int wg_packet_queue_init(struct crypt_queue *queue, work_func_t function,
- 			 unsigned int len);
--void wg_packet_queue_free(struct crypt_queue *queue);
-+void wg_packet_queue_free(struct crypt_queue *queue, bool purge);
- struct multicore_worker __percpu *
- wg_packet_percpu_multicore_worker_alloc(work_func_t function, void *ptr);
- 
---- a/drivers/net/wireguard/receive.c
-+++ b/drivers/net/wireguard/receive.c
-@@ -116,8 +116,8 @@ static void wg_receive_handshake_packet(
- 		return;
- 	}
- 
--	under_load = skb_queue_len(&wg->incoming_handshakes) >=
--		     MAX_QUEUED_INCOMING_HANDSHAKES / 8;
-+	under_load = atomic_read(&wg->handshake_queue_len) >=
-+			MAX_QUEUED_INCOMING_HANDSHAKES / 8;
- 	if (under_load) {
- 		last_under_load = ktime_get_coarse_boottime_ns();
- 	} else if (last_under_load) {
-@@ -212,13 +212,14 @@ static void wg_receive_handshake_packet(
- 
- void wg_packet_handshake_receive_worker(struct work_struct *work)
- {
--	struct wg_device *wg = container_of(work, struct multicore_worker,
--					    work)->ptr;
-+	struct crypt_queue *queue = container_of(work, struct multicore_worker, work)->ptr;
-+	struct wg_device *wg = container_of(queue, struct wg_device, handshake_queue);
- 	struct sk_buff *skb;
- 
--	while ((skb = skb_dequeue(&wg->incoming_handshakes)) != NULL) {
-+	while ((skb = ptr_ring_consume_bh(&queue->ring)) != NULL) {
- 		wg_receive_handshake_packet(wg, skb);
- 		dev_kfree_skb(skb);
-+		atomic_dec(&wg->handshake_queue_len);
- 		cond_resched();
- 	}
- }
-@@ -554,21 +555,17 @@ void wg_packet_receive(struct wg_device
- 	case cpu_to_le32(MESSAGE_HANDSHAKE_RESPONSE):
- 	case cpu_to_le32(MESSAGE_HANDSHAKE_COOKIE): {
- 		int cpu;
--
--		if (skb_queue_len(&wg->incoming_handshakes) >
--			    MAX_QUEUED_INCOMING_HANDSHAKES ||
--		    unlikely(!rng_is_initialized())) {
-+		if (unlikely(!rng_is_initialized() ||
-+			     ptr_ring_produce_bh(&wg->handshake_queue.ring, skb))) {
- 			net_dbg_skb_ratelimited("%s: Dropping handshake packet from %pISpfsc\n",
- 						wg->dev->name, skb);
- 			goto err;
- 		}
--		skb_queue_tail(&wg->incoming_handshakes, skb);
--		/* Queues up a call to packet_process_queued_handshake_
--		 * packets(skb):
--		 */
--		cpu = wg_cpumask_next_online(&wg->incoming_handshake_cpu);
-+		atomic_inc(&wg->handshake_queue_len);
-+		cpu = wg_cpumask_next_online(&wg->handshake_queue.last_cpu);
-+		/* Queues up a call to packet_process_queued_handshake_packets(skb): */
- 		queue_work_on(cpu, wg->handshake_receive_wq,
--			&per_cpu_ptr(wg->incoming_handshakes_worker, cpu)->work);
-+			      &per_cpu_ptr(wg->handshake_queue.worker, cpu)->work);
- 		break;
- 	}
- 	case cpu_to_le32(MESSAGE_DATA):
+ #include <linux/delay.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/interrupt.h>
+ #include <linux/irq.h>
+ #include <linux/irqdomain.h>
 
 

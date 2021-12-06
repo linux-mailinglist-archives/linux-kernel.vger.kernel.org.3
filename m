@@ -2,187 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F1046A11A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:18:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3DB46A100
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386806AbhLFQVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
+        id S1386841AbhLFQTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378280AbhLFQVV (ORCPT
+        with ESMTP id S1381006AbhLFQSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:21:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF332C061D5F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:17:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4103961378
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 16:17:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C772C341C1;
-        Mon,  6 Dec 2021 16:17:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638807469;
-        bh=FfP+RnCEexOp4vGvCs/p1dGSWLbwqJCwgkifSRtYpwY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gnuUaKasyVuNKr9sRsH18xjgWFR/GTSkm1FW6WIECtpHcTG8SA72apwS5CxUSPCNZ
-         HH3izHUjaG7niz7SU6WZ7V+ZRMMCpZudXwEBY7JgF7sv2wCHOY5QeemzPYAF0LvUqH
-         NzopceFPooy9YHmvrgwEHpBsNf1KeYJucgv9ci8B1JsUHOnaPtlhZSdIWQPpYSaeHX
-         ZvjjxLlMuq/pKMTPnGknFqX9xBQfhva08Kczdf8yeu1bKuxFtBDNLPHJA8aU5QYRn/
-         rYOkWZZG72kcL+oIcP+SiHOHhqhrAzfgXQ43MigdR/Gce9FW6uKSvggCIoAimP+14d
-         q4HCKiPHdXLdg==
-Date:   Tue, 7 Dec 2021 00:10:30 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Alexandre ghiti <alex@ghiti.fr>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] riscv: mm: init: try best to
- IS_ENABLED(CONFIG_64BIT) instead of #ifdef
-In-Reply-To: <3344a7ae-aaa6-2f35-09fc-60039bb8184d@ghiti.fr>
-References: <20211203050317.2102-1-jszhang@kernel.org>
-        <20211203050317.2102-3-jszhang@kernel.org>
-        <3344a7ae-aaa6-2f35-09fc-60039bb8184d@ghiti.fr>
+        Mon, 6 Dec 2021 11:18:46 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977DAC08E846
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:11:07 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id z6so10585255pfe.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 08:11:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/dZMe5fXW3JmkstQUnuTxaguikQO8croA43e/A9yBnw=;
+        b=wsxIo8iRiao/IrGDfq47xrllVJ4TjbrPMq5pi3ujnxN/VKCJ3gsfxKRCeoeCqPfYQu
+         kOwY5U32UUnpRggGW8w10rv9Qb+gMMChBODZE8cet49sqH0aXLIuy3Hy/fNcF2I49xtW
+         w/tPBkVH6OZ0gml4qbyNHA2LKoSRu2Duh75QZw7O02/WxlK7y7iu/eS+gRwq5vnZ0TMf
+         4NrQWs80FVlPsg+02Ay9mkBOTx6d4n9cp8+8F0Dpa7NfdGkA7BMrgrVXUDuNa+sp9Oa0
+         tBWh2Wm8WKIWHNKf1R7ackwqOJUltuACyxAA6XpX27PTUDAPkFN9K/s0tPCDvwcBdLVB
+         v8Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/dZMe5fXW3JmkstQUnuTxaguikQO8croA43e/A9yBnw=;
+        b=MvOcMKfl6jPchuPNM0dqNRYHI906WSj2hULKgnUD1DeZpS1wQYwEhWHrbGp9GHrY6P
+         z2wwvDMQkxKNGBcrxegSu/eqZ+WvnHXdmXnmLokGPn/UVUf8bvUUv2XOh8SBsp1vq5AQ
+         4Ew/45/a71tF+kYMiyIBQEAES0jLttNch9uS6/HicjGYqMjAoch7xQ3irGzf8lUkbaHE
+         lB6zU1jiI9WtJbwbN8uVUjbhPq1S7JPedsRcF3vYjEOS/wqHxWTE7ioVnE2RihYH4GFp
+         x6qq5FjcEeU98wVgDb77YKYUbhNfXjsTz8fvseBiES/in09KmPOiDdMHez78owLiKXau
+         G8mQ==
+X-Gm-Message-State: AOAM530kolCmc3jJyMTA1oIdpWry+5a8DBMQ4/a6rFzs0tk5UprG4DEo
+        ybnOeT53u7Lr1XaBj54fu8cV
+X-Google-Smtp-Source: ABdhPJzHztOd8XGPiN1RUx+EQUVKeXqRT/D1cHtxog5GiB7PeT8WgTwjvv+39GKJ//C4Nqx58PR66g==
+X-Received: by 2002:a05:6a00:1594:b0:4ae:dc6:f344 with SMTP id u20-20020a056a00159400b004ae0dc6f344mr7919655pfk.56.1638807066912;
+        Mon, 06 Dec 2021 08:11:06 -0800 (PST)
+Received: from localhost.localdomain ([117.217.176.38])
+        by smtp.gmail.com with ESMTPSA id lr6sm11288968pjb.0.2021.12.06.08.11.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 08:11:06 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     mhi@lists.linux.dev
+Cc:     hemantk@codeaurora.org, bbhatt@codeaurora.org,
+        loic.poulain@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, kvalo@codeaurora.org,
+        stable@vger.kernel.org, Pengyu Ma <mapengyu@gmail.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH] bus: mhi: core: Add support for forced PM resume
+Date:   Mon,  6 Dec 2021 21:40:59 +0530
+Message-Id: <20211206161059.107007-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Message-Id: <20211206161748.0C772C341C1@smtp.kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Dec 2021 09:33:12 +0100
-Alexandre ghiti <alex@ghiti.fr> wrote:
+From: Loic Poulain <loic.poulain@linaro.org>
 
-> On 12/3/21 06:03, Jisheng Zhang wrote:
-> > Try our best to replace the conditional compilation using
-> > "#ifdef CONFIG_64BIT" by a check for "IS_ENABLED(CONFIG_64BIT)", to
-> > simplify the code and to increase compile coverage.
-> >
-> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > ---
-> >   arch/riscv/mm/init.c | 38 +++++++++++++++++---------------------
-> >   1 file changed, 17 insertions(+), 21 deletions(-)
-> >
-> > diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> > index 745f26a3b02e..bd445ac778a8 100644
-> > --- a/arch/riscv/mm/init.c
-> > +++ b/arch/riscv/mm/init.c
-> > @@ -102,10 +102,9 @@ static void __init print_vm_layout(void)
-> >   		  (unsigned long)VMALLOC_END);
-> >   	print_mlm("lowmem", (unsigned long)PAGE_OFFSET,
-> >   		  (unsigned long)high_memory);
-> > -#ifdef CONFIG_64BIT
-> > -	print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
-> > -		  (unsigned long)ADDRESS_SPACE_END);
-> > -#endif
-> > +	if (IS_ENABLED(CONFIG_64BIT))
-> > +		print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
-> > +			  (unsigned long)ADDRESS_SPACE_END);
-> >   }
-> >   #else
-> >   static void print_vm_layout(void) { }
-> > @@ -172,17 +171,16 @@ static void __init setup_bootmem(void)
-> >   
-> >   	memblock_enforce_memory_limit(memory_limit);
-> >   
-> > -	/*
-> > -	 * Reserve from the start of the kernel to the end of the kernel
-> > -	 */
-> > -#if defined(CONFIG_64BIT) && defined(CONFIG_STRICT_KERNEL_RWX)
-> >   	/*
-> >   	 * Make sure we align the reservation on PMD_SIZE since we will
-> >   	 * map the kernel in the linear mapping as read-only: we do not want
-> >   	 * any allocation to happen between _end and the next pmd aligned page.
-> >   	 */
-> > -	vmlinux_end = (vmlinux_end + PMD_SIZE - 1) & PMD_MASK;
-> > -#endif
-> > +	if (IS_ENABLED(CONFIG_64BIT) && IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
-> > +		vmlinux_end = (vmlinux_end + PMD_SIZE - 1) & PMD_MASK;
-> > +	/*
-> > +	 * Reserve from the start of the kernel to the end of the kernel
-> > +	 */
-> >   	memblock_reserve(vmlinux_start, vmlinux_end - vmlinux_start);
-> >   
-> >   
-> > @@ -190,7 +188,6 @@ static void __init setup_bootmem(void)
-> >   #ifndef CONFIG_XIP_KERNEL
-> >   	phys_ram_base = memblock_start_of_DRAM();
-> >   #endif
-> > -#ifndef CONFIG_64BIT
-> >   	/*
-> >   	 * memblock allocator is not aware of the fact that last 4K bytes of
-> >   	 * the addressable memory can not be mapped because of IS_ERR_VALUE
-> > @@ -200,10 +197,11 @@ static void __init setup_bootmem(void)
-> >   	 * address space is occupied by the kernel mapping then this check must
-> >   	 * be done as soon as the kernel mapping base address is determined.
-> >   	 */
-> > -	max_mapped_addr = __pa(~(ulong)0);
-> > -	if (max_mapped_addr == (phys_ram_end - 1))
-> > -		memblock_set_current_limit(max_mapped_addr - 4096);
-> > -#endif
-> > +	if (!IS_ENABLED(CONFIG_64BIT)) {
-> > +		max_mapped_addr = __pa(~(ulong)0);
-> > +		if (max_mapped_addr == (phys_ram_end - 1))
-> > +			memblock_set_current_limit(max_mapped_addr - 4096);
-> > +	}
-> >   
-> >   	min_low_pfn = PFN_UP(phys_ram_base);
-> >   	max_low_pfn = max_pfn = PFN_DOWN(phys_ram_end);
-> > @@ -616,13 +614,12 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
-> >   	BUG_ON((PAGE_OFFSET % PGDIR_SIZE) != 0);
-> >   	BUG_ON((kernel_map.phys_addr % PMD_SIZE) != 0);
-> >   
-> > -#ifdef CONFIG_64BIT
-> >   	/*
-> >   	 * The last 4K bytes of the addressable memory can not be mapped because
-> >   	 * of IS_ERR_VALUE macro.
-> >   	 */
-> > -	BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);
-> > -#endif
-> > +	if (IS_ENABLED(CONFIG_64BIT))
-> > +		BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);  
-> 
-> 
-> For this one, I think we can just get rid of the condition since this is 
-> true for every kernel actually.
+For whatever reason, some devices like QCA6390, WCN6855 using ath11k
+are not in M3 state during PM resume, but still functional. The
+mhi_pm_resume should then not fail in those cases, and let the higher
+level device specific stack continue resuming process.
 
-Thanks for pointing out this out. Addressed in v2
+Add a new parameter to mhi_pm_resume, to force resuming, whatever the
+current MHI state is. This fixes a regression with non functional
+ath11k WiFi after suspend/resume cycle on some machines.
 
-> 
-> 
-> >   
-> >   	pt_ops.alloc_pte = alloc_pte_early;
-> >   	pt_ops.get_pte_virt = get_pte_virt_early;
-> > @@ -735,10 +732,9 @@ static void __init setup_vm_final(void)
-> >   		}
-> >   	}
-> >   
-> > -#ifdef CONFIG_64BIT
-> >   	/* Map the kernel */
-> > -	create_kernel_page_table(swapper_pg_dir, false);
-> > -#endif
-> > +	if (IS_ENABLED(CONFIG_64BIT))
-> > +		create_kernel_page_table(swapper_pg_dir, false);  
-> 
-> 
-> Wouldn't it be better to introduce a create_kernel_page_table function 
-> that does nothing for !CONFIG_64BIT?
-> 
+Bug report: https://bugzilla.kernel.org/show_bug.cgi?id=214179
 
-If so, we will have something as:
-#ifdef CONFIG_64BIT
-create_kernel_page_table()
-{
-...
-}
-#else
-create_kernel_page_table() { }
-#endif
+Cc: stable@vger.kernel.org #5.13
+Fixes: 020d3b26c07a ("bus: mhi: Early MHI resume failure in non M3 state")
+Reported-by: Kalle Valo <kvalo@codeaurora.org>
+Reported-by: Pengyu Ma <mapengyu@gmail.com>
+Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
+[mani: Added comment, bug report, added reported-by tags and CCed stable]
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ drivers/bus/mhi/core/pm.c             | 10 +++++++---
+ drivers/bus/mhi/pci_generic.c         |  2 +-
+ drivers/net/wireless/ath/ath11k/mhi.c |  6 +++++-
+ include/linux/mhi.h                   |  3 ++-
+ 4 files changed, 15 insertions(+), 6 deletions(-)
 
-Since we already have different create_kernel_page_table() version for
-XIP and !XIP, the code would be more complex.
+diff --git a/drivers/bus/mhi/core/pm.c b/drivers/bus/mhi/core/pm.c
+index 7464f5d09973..4ddd266e042e 100644
+--- a/drivers/bus/mhi/core/pm.c
++++ b/drivers/bus/mhi/core/pm.c
+@@ -881,7 +881,7 @@ int mhi_pm_suspend(struct mhi_controller *mhi_cntrl)
+ }
+ EXPORT_SYMBOL_GPL(mhi_pm_suspend);
+ 
+-int mhi_pm_resume(struct mhi_controller *mhi_cntrl)
++int mhi_pm_resume(struct mhi_controller *mhi_cntrl, bool force)
+ {
+ 	struct mhi_chan *itr, *tmp;
+ 	struct device *dev = &mhi_cntrl->mhi_dev->dev;
+@@ -898,8 +898,12 @@ int mhi_pm_resume(struct mhi_controller *mhi_cntrl)
+ 	if (MHI_PM_IN_ERROR_STATE(mhi_cntrl->pm_state))
+ 		return -EIO;
+ 
+-	if (mhi_get_mhi_state(mhi_cntrl) != MHI_STATE_M3)
+-		return -EINVAL;
++	if (mhi_get_mhi_state(mhi_cntrl) != MHI_STATE_M3) {
++		dev_warn(dev, "Resuming from non M3 state (%s)\n",
++			 TO_MHI_STATE_STR(mhi_get_mhi_state(mhi_cntrl)));
++		if (!force)
++			return -EINVAL;
++	}
+ 
+ 	/* Notify clients about exiting LPM */
+ 	list_for_each_entry_safe(itr, tmp, &mhi_cntrl->lpm_chans, node) {
+diff --git a/drivers/bus/mhi/pci_generic.c b/drivers/bus/mhi/pci_generic.c
+index 9ef41354237c..efd1da66fdf9 100644
+--- a/drivers/bus/mhi/pci_generic.c
++++ b/drivers/bus/mhi/pci_generic.c
+@@ -959,7 +959,7 @@ static int __maybe_unused mhi_pci_runtime_resume(struct device *dev)
+ 		return 0; /* Nothing to do at MHI level */
+ 
+ 	/* Exit M3, transition to M0 state */
+-	err = mhi_pm_resume(mhi_cntrl);
++	err = mhi_pm_resume(mhi_cntrl, false);
+ 	if (err) {
+ 		dev_err(&pdev->dev, "failed to resume device: %d\n", err);
+ 		goto err_recovery;
+diff --git a/drivers/net/wireless/ath/ath11k/mhi.c b/drivers/net/wireless/ath/ath11k/mhi.c
+index 26c7ae242db6..f1f2fa2d690d 100644
+--- a/drivers/net/wireless/ath/ath11k/mhi.c
++++ b/drivers/net/wireless/ath/ath11k/mhi.c
+@@ -533,7 +533,11 @@ static int ath11k_mhi_set_state(struct ath11k_pci *ab_pci,
+ 		ret = mhi_pm_suspend(ab_pci->mhi_ctrl);
+ 		break;
+ 	case ATH11K_MHI_RESUME:
+-		ret = mhi_pm_resume(ab_pci->mhi_ctrl);
++		/* Do force MHI resume as some devices like QCA6390, WCN6855
++		 * are not in M3 state but they are functional. So just ignore
++		 * the MHI state while resuming.
++		 */
++		ret = mhi_pm_resume(ab_pci->mhi_ctrl, true);
+ 		break;
+ 	case ATH11K_MHI_TRIGGER_RDDM:
+ 		ret = mhi_force_rddm_mode(ab_pci->mhi_ctrl);
+diff --git a/include/linux/mhi.h b/include/linux/mhi.h
+index 723985879035..102303288cee 100644
+--- a/include/linux/mhi.h
++++ b/include/linux/mhi.h
+@@ -660,8 +660,9 @@ int mhi_pm_suspend(struct mhi_controller *mhi_cntrl);
+ /**
+  * mhi_pm_resume - Resume MHI from suspended state
+  * @mhi_cntrl: MHI controller
++ * @force: Force resuming to M0 irrespective of the device MHI state
+  */
+-int mhi_pm_resume(struct mhi_controller *mhi_cntrl);
++int mhi_pm_resume(struct mhi_controller *mhi_cntrl, bool force);
+ 
+ /**
+  * mhi_download_rddm_image - Download ramdump image from device for
+-- 
+2.25.1
 
-Thanks for your code review

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 500A1469B5D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:13:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1233C46A025
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359101AbhLFPQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:16:59 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42130 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353194AbhLFPKr (ORCPT
+        id S1358703AbhLFP6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:58:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1389602AbhLFPkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:10:47 -0500
+        Mon, 6 Dec 2021 10:40:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE562C08EC98;
+        Mon,  6 Dec 2021 07:25:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90ABFB8111C;
-        Mon,  6 Dec 2021 15:07:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9653C341C2;
-        Mon,  6 Dec 2021 15:07:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98DE2B810E7;
+        Mon,  6 Dec 2021 15:25:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0C38C34901;
+        Mon,  6 Dec 2021 15:25:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803236;
-        bh=zgixiv1fbTmJSTkPrAa/v9Je8jGM81zKUkUUGjw6b1U=;
+        s=korg; t=1638804308;
+        bh=FVcsG/vdlndGr9XaEoecGs7oK7bHRHkwJE4+ab7k1FQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VXcok+wR2tmJByCfvdX3y4b7AYStqDc/BePt7nWu7a4RWm9Hdiw5Lc2gYz2m4cMJ2
-         2iRwIjPXBNiZ9IAFQg6VrDZwmdJehi+fYDt/W4jRKlkrvtBohebCLGNWT1ygoj14m+
-         5IlS/+uUYi7MfUmxdJQP9yTHHOlOAR/dyGpq7b/8=
+        b=vcd+0rLDNYZ+MatBB+L3sVxyLJtcs4j0t2Wmsl4MusOhb020T+5MVOiGBzQe3THOq
+         lHT1hePxikydZSPuYfzZhuKgNw8JdUl47mEptnZ51q3kQKLbTb3TWdtgBgCGpy4gJO
+         3anv5QbSzaGilW4njLeBdyw41m75tErmAdWB+E1I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Evan Wang <xswang@marvell.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Victor Gu <xigu@marvell.com>,
-        Nadav Haklai <nadavh@marvell.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH 4.14 045/106] PCI: aardvark: Remove PCIe outbound window configuration
+        stable@vger.kernel.org, Alain Volmat <alain.volmat@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH 5.15 099/207] i2c: stm32f7: flush TX FIFO upon transfer errors
 Date:   Mon,  6 Dec 2021 15:55:53 +0100
-Message-Id: <20211206145556.955099663@linuxfoundation.org>
+Message-Id: <20211206145613.664766095@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,125 +49,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Evan Wang <xswang@marvell.com>
+From: Alain Volmat <alain.volmat@foss.st.com>
 
-commit 6df6ba974a55678a2c7d9a0c06eb15cde0c4b184 upstream.
+commit 0c21d02ca469574d2082379db52d1a27b99eed0c upstream.
 
-Outbound window is used to translate CPU space addresses to PCIe space
-addresses when the CPU initiates PCIe transactions.
+While handling an error during transfer (ex: NACK), it could
+happen that the driver has already written data into TXDR
+before the transfer get stopped.
+This commit add TXDR Flush after end of transfer in case of error to
+avoid sending a wrong data on any other slave upon next transfer.
 
-According to the suggestion of the HW designers, the recommended
-solution is to use the default outbound parameters, even though the
-current outbound window setting does not cause any known functional
-issue.
-
-This patch doesn't address any known functional issue, but aligns to
-HW design guidelines, and removes code that isn't needed.
-
-Signed-off-by: Evan Wang <xswang@marvell.com>
-[Thomas: tweak commit log.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[lorenzo.pieralisi@arm.com: handled host->controller dir move]
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Reviewed-by: Victor Gu <xigu@marvell.com>
-Reviewed-by: Nadav Haklai <nadavh@marvell.com>
-Signed-off-by: Marek Behún <kabel@kernel.org>
+Fixes: aeb068c57214 ("i2c: i2c-stm32f7: add driver")
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/host/pci-aardvark.c |   55 ----------------------------------------
- 1 file changed, 55 deletions(-)
+ drivers/i2c/busses/i2c-stm32f7.c |   20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
---- a/drivers/pci/host/pci-aardvark.c
-+++ b/drivers/pci/host/pci-aardvark.c
-@@ -107,24 +107,6 @@
- #define PCIE_MSI_PAYLOAD_REG			(CONTROL_BASE_ADDR + 0x9C)
- #define     PCIE_MSI_DATA_MASK			GENMASK(15, 0)
+--- a/drivers/i2c/busses/i2c-stm32f7.c
++++ b/drivers/i2c/busses/i2c-stm32f7.c
+@@ -1696,6 +1696,16 @@ static int stm32f7_i2c_xfer(struct i2c_a
+ 	time_left = wait_for_completion_timeout(&i2c_dev->complete,
+ 						i2c_dev->adap.timeout);
+ 	ret = f7_msg->result;
++	if (ret) {
++		/*
++		 * It is possible that some unsent data have already been
++		 * written into TXDR. To avoid sending old data in a
++		 * further transfer, flush TXDR in case of any error
++		 */
++		writel_relaxed(STM32F7_I2C_ISR_TXE,
++			       i2c_dev->base + STM32F7_I2C_ISR);
++		goto pm_free;
++	}
  
--/* PCIe window configuration */
--#define OB_WIN_BASE_ADDR			0x4c00
--#define OB_WIN_BLOCK_SIZE			0x20
--#define OB_WIN_REG_ADDR(win, offset)		(OB_WIN_BASE_ADDR + \
--						 OB_WIN_BLOCK_SIZE * (win) + \
--						 (offset))
--#define OB_WIN_MATCH_LS(win)			OB_WIN_REG_ADDR(win, 0x00)
--#define OB_WIN_MATCH_MS(win)			OB_WIN_REG_ADDR(win, 0x04)
--#define OB_WIN_REMAP_LS(win)			OB_WIN_REG_ADDR(win, 0x08)
--#define OB_WIN_REMAP_MS(win)			OB_WIN_REG_ADDR(win, 0x0c)
--#define OB_WIN_MASK_LS(win)			OB_WIN_REG_ADDR(win, 0x10)
--#define OB_WIN_MASK_MS(win)			OB_WIN_REG_ADDR(win, 0x14)
--#define OB_WIN_ACTIONS(win)			OB_WIN_REG_ADDR(win, 0x18)
--
--/* PCIe window types */
--#define OB_PCIE_MEM				0x0
--#define OB_PCIE_IO				0x4
--
- /* LMI registers base address and register offsets */
- #define LMI_BASE_ADDR				0x6000
- #define CFG_REG					(LMI_BASE_ADDR + 0x0)
-@@ -248,26 +230,6 @@ static int advk_pcie_wait_for_link(struc
- 	return -ETIMEDOUT;
- }
+ 	if (!time_left) {
+ 		dev_dbg(i2c_dev->dev, "Access to slave 0x%x timed out\n",
+@@ -1744,8 +1754,16 @@ static int stm32f7_i2c_smbus_xfer(struct
+ 	timeout = wait_for_completion_timeout(&i2c_dev->complete,
+ 					      i2c_dev->adap.timeout);
+ 	ret = f7_msg->result;
+-	if (ret)
++	if (ret) {
++		/*
++		 * It is possible that some unsent data have already been
++		 * written into TXDR. To avoid sending old data in a
++		 * further transfer, flush TXDR in case of any error
++		 */
++		writel_relaxed(STM32F7_I2C_ISR_TXE,
++			       i2c_dev->base + STM32F7_I2C_ISR);
+ 		goto pm_free;
++	}
  
--/*
-- * Set PCIe address window register which could be used for memory
-- * mapping.
-- */
--static void advk_pcie_set_ob_win(struct advk_pcie *pcie,
--				 u32 win_num, u32 match_ms,
--				 u32 match_ls, u32 mask_ms,
--				 u32 mask_ls, u32 remap_ms,
--				 u32 remap_ls, u32 action)
--{
--	advk_writel(pcie, match_ls, OB_WIN_MATCH_LS(win_num));
--	advk_writel(pcie, match_ms, OB_WIN_MATCH_MS(win_num));
--	advk_writel(pcie, mask_ms, OB_WIN_MASK_MS(win_num));
--	advk_writel(pcie, mask_ls, OB_WIN_MASK_LS(win_num));
--	advk_writel(pcie, remap_ms, OB_WIN_REMAP_MS(win_num));
--	advk_writel(pcie, remap_ls, OB_WIN_REMAP_LS(win_num));
--	advk_writel(pcie, action, OB_WIN_ACTIONS(win_num));
--	advk_writel(pcie, match_ls | BIT(0), OB_WIN_MATCH_LS(win_num));
--}
--
- static void advk_pcie_issue_perst(struct advk_pcie *pcie)
- {
- 	u32 reg;
-@@ -391,11 +353,6 @@ err:
- static void advk_pcie_setup_hw(struct advk_pcie *pcie)
- {
- 	u32 reg;
--	int i;
--
--	/* Point PCIe unit MBUS decode windows to DRAM space */
--	for (i = 0; i < 8; i++)
--		advk_pcie_set_ob_win(pcie, i, 0, 0, 0, 0, 0, 0, 0);
- 
- 	/* Set to Direct mode */
- 	reg = advk_readl(pcie, CTRL_CONFIG_REG);
-@@ -1048,12 +1005,6 @@ static int advk_pcie_parse_request_of_pc
- 
- 		switch (resource_type(res)) {
- 		case IORESOURCE_IO:
--			advk_pcie_set_ob_win(pcie, 1,
--					     upper_32_bits(res->start),
--					     lower_32_bits(res->start),
--					     0,	0xF8000000, 0,
--					     lower_32_bits(res->start),
--					     OB_PCIE_IO);
- 			err = devm_pci_remap_iospace(dev, res, iobase);
- 			if (err) {
- 				dev_warn(dev, "error %d: failed to map resource %pR\n",
-@@ -1062,12 +1013,6 @@ static int advk_pcie_parse_request_of_pc
- 			}
- 			break;
- 		case IORESOURCE_MEM:
--			advk_pcie_set_ob_win(pcie, 0,
--					     upper_32_bits(res->start),
--					     lower_32_bits(res->start),
--					     0x0, 0xF8000000, 0,
--					     lower_32_bits(res->start),
--					     (2 << 20) | OB_PCIE_MEM);
- 			res_valid |= !(res->flags & IORESOURCE_PREFETCH);
- 			break;
- 		case IORESOURCE_BUS:
+ 	if (!timeout) {
+ 		dev_dbg(dev, "Access to slave 0x%x timed out\n", f7_msg->addr);
 
 

@@ -2,183 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFEE46A06E
+	by mail.lfdr.de (Postfix) with ESMTP id D8E0346A06F
 	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:03:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388225AbhLFQEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:04:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35680 "EHLO
+        id S1389129AbhLFQEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:04:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359627AbhLFPxG (ORCPT
+        with ESMTP id S1387549AbhLFPyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:53:06 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16021C0613F8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:38:57 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id r25so44446644edq.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 07:38:57 -0800 (PST)
+        Mon, 6 Dec 2021 10:54:20 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8677C0698E2
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:40:00 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id d72-20020a1c1d4b000000b00331140f3dc8so144363wmd.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 07:40:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9W76LEYV5XhSTyhRdFVRetLYZIBZdbQgyi0kE7VCZkQ=;
-        b=Ep1PRSgWEBrqoMpiSmKhUIGt1Fr0WmZ777zbXw94howGm9kNp46MfHZcAt6MoWDTs6
-         3809rEmQXOxTqUNa381ZfSyzRGqvSFsdcBMr7PxBDUTl7QWcH3StbT+fvORS4q1lII8/
-         7dkVnPx+XYhDj0WyvuUyGsza4I+pP26cDkrwVp/FY2pb+RqoRIgLk0pEVfWqPPx0O4fT
-         DM1bAqCrpnYyK0z8NCea4ofaeJwVL02LGd6KMelvL53woiW4SIu2ZvYy5S/p6qPUYhT9
-         Tu234fy2YBArgSInn5rHNsI7G8FpZ4AmP0lbQPlWK9UuEP95oFVfu7I7/H53bU2f3AOB
-         s7Fw==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=mCcIdVfqpMkg5UQ5BejYHI9LrriD6R4thQPfErSOuSE=;
+        b=NtT3zlVEK+QLaYp1LGYXhPXs927Vj1YkFVcClX21sebLg8GJbk41O/N4+umG7DKnbJ
+         q0i6s8149eKMO+WTMUtjOSZhJqkAK7kuFiRjzEVpFxVSLw4A0GZuq6a93jvV+tr4V1Z0
+         u53xP6jB1PWvIpGF0COi9K43LcKe7dcLT+y2kCoJbLbrgjGvKQ31l6dSylDCzWktP0HL
+         UutFe7IF6VuNnWl/N8iBpuuivGB1zveqtJc8hPk0oijZEZJ5NNP5cN4mKsWXA1WYNkqK
+         L8PJSVwHJFFH7cCg21s/L3gZx07DTcFQe+vRfhX7MQVZ1ZgAmLN9hGFFY23R3Xw08lEY
+         QMuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9W76LEYV5XhSTyhRdFVRetLYZIBZdbQgyi0kE7VCZkQ=;
-        b=vP9J3eNqAyOwY4okd2K+8gVmTxJKfKkR0un+iVeBrVXx+kzeCb9O371avnKWs3AB39
-         Utz+/7Ga65k492si6S+5u9HwTRbNkWbjMMB8euuAMaSm5k6/nwZ43W0bIYt+l0j17O9s
-         KZhV+FjhhcAiCZVY3Xx5dFvEWphWZQhvSNuK4aAUhSePh3og0MZHIkcajyJhn+KkqIfO
-         +CIbQxT9prgMyb0Xy4rXIAmTVbl7rQHFbaTkdSO/gBMizBPaBS4aX3waMmtOdiAzhkPD
-         yrRcWj24BG2B4FX8REOtC1UHu+O4GItOVd4iX3E3MybfxSEH8XXDMl2r+f82RjorURoA
-         PSIg==
-X-Gm-Message-State: AOAM530PisLQlji42E/WzxsVgxwXfmQW2jcS41cPDcE5HlydqAn90S3Z
-        SpXXJuxVTkjlKIAHn5o+yl4HOETGsHgkvCvJsgEtvg==
-X-Google-Smtp-Source: ABdhPJxB1THlRQIslUVG/FPMSytVNxteW/9OP1ov9HXjuOe9pM8XzbihMvfp6i6oAN0uC/Cg/IXdwRindazm6cTahJo=
-X-Received: by 2002:a05:6402:2805:: with SMTP id h5mr49317374ede.267.1638805135387;
- Mon, 06 Dec 2021 07:38:55 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=mCcIdVfqpMkg5UQ5BejYHI9LrriD6R4thQPfErSOuSE=;
+        b=rOQyaWEse5whCEPtLtC/gVs72glCDkjlGNy6hyyXlpnh6zLYL3fEd9CK2yf3vWvMRM
+         ujhPZJXZKb4NBq58ZN3Y7bJXu8t6Q505pwYm7Mi0dCujnhWahIr4dCauYMZXKsIycabE
+         POeTowfjfoEM8XQeVfmabJwbqRmgAMtYxWdvgda9hY5nfTxbwZhW0TaFaR88WRTP1Fq1
+         iL7uRYl6n76UNY0vqvi6KgAMiO41n+/olYksIREIHMtp/6iV3Na7KUqhH3fOTEpj9xxA
+         PVD0mFVebyBKSI+wxjgRDZSEnIkAstOlG+dZFIso22jdShDjlRfSxp8H48yG/Rgu/lGT
+         wuuw==
+X-Gm-Message-State: AOAM53324hxo4OP3HkKUJwt/3mzf1mqrvwLAilizt2HtPRUxpZQGf4Dl
+        IHmGK/Za5i1z2fGLsZlAxoAJOQ==
+X-Google-Smtp-Source: ABdhPJxfaNVDG+/hNhTbp/F9IaRl1DSEZ5QDk79u7mIA9aBJWTeKyNQxq/BvxmJ2QTsxLt7h5+ilyg==
+X-Received: by 2002:a05:600c:1549:: with SMTP id f9mr40371779wmg.118.1638805199133;
+        Mon, 06 Dec 2021 07:39:59 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:92e6:b95f:6ce2:9f04? ([2a01:e34:ed2f:f020:92e6:b95f:6ce2:9f04])
+        by smtp.googlemail.com with ESMTPSA id l1sm590039wrn.15.2021.12.06.07.39.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 07:39:58 -0800 (PST)
+Subject: Re: [PATCH] drivers/clocksource/dw_apb_timer_of: fixed probe failure
+To:     Alexey Sheplyakov <asheplyakov@basealt.ru>,
+        linux-kernel@vger.kernel.org
+Cc:     "Vadim V . Vlasov" <vadim.vlasov@elpitech.ru>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20211109153401.157491-1-asheplyakov@basealt.ru>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <05e1ee4a-7718-9cec-607d-5ce3569636fc@linaro.org>
+Date:   Mon, 6 Dec 2021 16:39:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211203133003.31786-1-brgl@bgdev.pl> <20211203133003.31786-5-brgl@bgdev.pl>
- <Yap4/VshDPNxLfOt@smile.fi.intel.com> <CAMRc=MegnF-VZswJym7np4sBMyFf0=gqeFGdKS0xytnmQOhUpw@mail.gmail.com>
- <Ya4Q7s9sbk2UHNA3@smile.fi.intel.com>
-In-Reply-To: <Ya4Q7s9sbk2UHNA3@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 6 Dec 2021 16:38:44 +0100
-Message-ID: <CAMRc=Md9S20JBYYVTkkpgOTgBofDrt3QrbPK94zP4jGw30bq3g@mail.gmail.com>
-Subject: Re: [PATCH v12 4/7] gpio: sim: new testing module
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211109153401.157491-1-asheplyakov@basealt.ru>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 2:33 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Mon, Dec 06, 2021 at 10:48:00AM +0100, Bartosz Golaszewski wrote:
-> > On Fri, Dec 3, 2021 at 9:08 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > > On Fri, Dec 03, 2021 at 02:30:00PM +0100, Bartosz Golaszewski wrote:
->
-> ...
->
-> > > > +#include <linux/gpio/driver.h>
-> > > > +#include <linux/gpio/machine.h>
-> > >
-> > > I would rather move this group below to emphasize that this is closer to GPIO
-> > > then to other APIs.
-> > >
-> > > > +#include <linux/sysfs.h>
-> > > > +
-> > >
-> > > ...here.
-> > >
-> >
-> > With the number of headers in this file, I'd stick with alphabetical order.
->
-> I understand that and agree, but my point is orthogonal to this. The idea is to
-> emphasize that "hey. this driver has tough relations with the GPIO subsystem".
-> This is the way, for example, IIO does and I like it.
->
+On 09/11/2021 16:34, Alexey Sheplyakov wrote:
+> The driver refuses to probe with -EINVAL since the commit
+> 5d9814df0aec ("clocksource/drivers/dw_apb_timer_of: Add error handling if no clock available").
+> 
+> Before the driver used to probe successfully if either
+> "clock-freq" or "clock-frequency" properties has been specified
+> in the device tree.
+> 
+> That commit changed
+> 
+> if (A && B)
+> 	panic("No clock nor clock-frequency property");
+> 
+> into
+> 
+> if (!A && !B)
+> 	return 0;
+> 
+> That's a bug: the reverse of `A && B` is '!A || !B', not '!A && !B'
+> 
+> Signed-off-by: Vadim V. Vlasov <vadim.vlasov@elpitech.ru>
+> Signed-off-by: Alexey Sheplyakov <asheplyakov@basealt.ru>
+> Fixes: 5d9814df0aec56a6 ("clocksource/drivers/dw_apb_timer_of: Add error handling if no clock available").
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Vadim V. Vlasov <vadim.vlasov@elpitech.ru>
+> ---
 
-I really don't think this is necessary.
+Applied, thanks
 
-> > > > +#include "gpiolib.h"
->
-> ...
->
-> > > > +static int gpio_sim_apply_pull(struct gpio_sim_chip *chip,
-> > > > +                            unsigned int offset, int value)
-> > >
-> > > I would use up to 100 here...
-> > >
-> > > > +     if (test_bit(FLAG_REQUESTED, &desc->flags) &&
-> > > > +         !test_bit(FLAG_IS_OUT, &desc->flags)) {
-> > >
-> > > ...here and so on.
-> > >
-> > > But it's up to you.
-> > >
-> >
-> > Nah, the lines are broken just fine. Let's not overuse the limit.
->
-> Yes, but I would consider to join back those which are up to ~83 characters
-> (I already pointed out at least to one example like this).
->
+>  drivers/clocksource/dw_apb_timer_of.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clocksource/dw_apb_timer_of.c b/drivers/clocksource/dw_apb_timer_of.c
+> index 3819ef5b7098..3245eb0c602d 100644
+> --- a/drivers/clocksource/dw_apb_timer_of.c
+> +++ b/drivers/clocksource/dw_apb_timer_of.c
+> @@ -47,7 +47,7 @@ static int __init timer_get_base_and_rate(struct device_node *np,
+>  			pr_warn("pclk for %pOFn is present, but could not be activated\n",
+>  				np);
+>  
+> -	if (!of_property_read_u32(np, "clock-freq", rate) &&
+> +	if (!of_property_read_u32(np, "clock-freq", rate) ||
+>  	    !of_property_read_u32(np, "clock-frequency", rate))
+>  		return 0;
+>  
+> 
 
-I like the old-style limit TBH.
 
-> ...
->
-> > > > +     if (sysfs_streq(buf, "pull-down"))
-> > > > +             pull = 0;
-> > > > +     else if (sysfs_streq(buf, "pull-up"))
-> > > > +             pull = 1;
-> > > > +     else
-> > > > +             return -EINVAL;
-> > >
-> > > sysfs_match_string() and use the very same string array in the above function
-> > > to print them?
->
-> I suppose you agree on this?
->
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Yes, already changed that in v13.
-
-> ...
->
-> > > > +     /* Default to input mode. */
-> > > > +     bitmap_fill(chip->direction_map, num_lines);
-> > >
-> > > More accurate is to use bitmap_set(). If we ever debug this it also helpful.
-> >
-> > I'm not sure what you mean, this sets all bits to 1.
->
-> Nope, it may set _more_ than all bits. That's why bitmap_set() is more
-> accurate, because it will do exact setting.
->
-
-Can this in any way affect any of the code? If the driver is correct,
-it will never use anything beyond the last line bit. If it does, it
-needs fixing. It's as if we cared about what happens to padding added
-to structures by the compiler (as long as we're not passing it to
-user-space of course).
-
-> ...
->
-> > > > +     if (strcmp(trimmed, "input") == 0)
-> > > > +             dir = GPIOD_IN;
-> > > > +     else if (strcmp(trimmed, "output-high") == 0)
-> > > > +             dir = GPIOD_OUT_HIGH;
-> > > > +     else if (strcmp(trimmed, "output-low") == 0)
-> > > > +             dir = GPIOD_OUT_LOW;
-> > > > +     else
-> > > > +             dir = -EINVAL;
-> > >
-> > > Same idea, i.e. static string array and use it above and here with help
-> > > of match_string().
-> >
-> > It would be great but GPIOD_IN etc. are bit flags and not sequence enums.
->
-> Ah, okay, it will make rather sparse array.
->
-
-Idea for the future: introduce match_string_ext() with flags one of
-which would allow sparse string arrays?
-
-Bart
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

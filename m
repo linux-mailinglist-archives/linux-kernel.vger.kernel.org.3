@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF344469A63
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EFB469F78
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:45:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346257AbhLFPHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:07:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52372 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345708AbhLFPEv (ORCPT
+        id S1391094AbhLFPpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:45:06 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34158 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357179AbhLFP2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:04:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFAA5C061354;
-        Mon,  6 Dec 2021 07:01:22 -0800 (PST)
+        Mon, 6 Dec 2021 10:28:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E93761322;
-        Mon,  6 Dec 2021 15:01:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D33AC341C2;
-        Mon,  6 Dec 2021 15:01:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8CBF8B8101C;
+        Mon,  6 Dec 2021 15:24:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB31EC34900;
+        Mon,  6 Dec 2021 15:24:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802881;
-        bh=rzhNHhs1j2g0urBtPmF4JNDjLmj+5T+5w+5qmfRitvA=;
+        s=korg; t=1638804297;
+        bh=r1fLnjSkFDFMM8K9EWPXdy5Sjw6FO2poZifXfJq0aCM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IdrRfxTmQaDlE3Pc8etuloK261umfIt6Yf5UgcMnFp0p5DtmnDVyPvTq0rn3ySSTR
-         H1ZOZCkBL+GNaQD/YN3giF/ugES9DA8dEh4WQwiX/dHkxPHOUq0FB27y2K6Envs+ww
-         30aUdpo3HCYCM3oAwblMH0uKlTdeYeX3oA4MezcY=
+        b=H8oI181HWiiY9+5oxhDeJcHiD3QZBRPI7+r3tzjUqUNFz1fDd+H8/XGhe8zQFvHWq
+         c9yKFSmmXJLVOwiiyTSLDJsZWUwcjmomlhXhRIBU9x32GzndKWD535ybPAye0EMkp2
+         rCcUigwV6/gkt9yIkLEEKRCVzqv4Tffvj/jwzAgo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Todd Kjos <tkjos@google.com>
-Subject: [PATCH 4.9 06/62] binder: fix test regression due to sender_euid change
+        stable@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>,
+        Xiumei Mu <xmu@redhat.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 095/207] wireguard: device: reset peer src endpoint when netns exits
 Date:   Mon,  6 Dec 2021 15:55:49 +0100
-Message-Id: <20211206145549.378566976@linuxfoundation.org>
+Message-Id: <20211206145613.525364103@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,37 +49,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Todd Kjos <tkjos@google.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit c21a80ca0684ec2910344d72556c816cb8940c01 upstream.
+commit 20ae1d6aa159eb91a9bf09ff92ccaa94dbea92c2 upstream.
 
-This is a partial revert of commit
-29bc22ac5e5b ("binder: use euid from cred instead of using task").
-Setting sender_euid using proc->cred caused some Android system test
-regressions that need further investigation. It is a partial
-reversion because subsequent patches rely on proc->cred.
+Each peer's endpoint contains a dst_cache entry that takes a reference
+to another netdev. When the containing namespace exits, we take down the
+socket and prevent future sockets from being created (by setting
+creating_net to NULL), which removes that potential reference on the
+netns. However, it doesn't release references to the netns that a netdev
+cached in dst_cache might be taking, so the netns still might fail to
+exit. Since the socket is gimped anyway, we can simply clear all the
+dst_caches (by way of clearing the endpoint src), which will release all
+references.
 
-Fixes: 29bc22ac5e5b ("binder: use euid from cred instead of using task")
-Cc: stable@vger.kernel.org # 4.4+
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
-Signed-off-by: Todd Kjos <tkjos@google.com>
-Change-Id: I9b1769a3510fed250bb21859ef8beebabe034c66
-Link: https://lore.kernel.org/r/20211112180720.2858135-1-tkjos@google.com
+However, the current dst_cache_reset function only releases those
+references lazily. But it turns out that all of our usages of
+wg_socket_clear_peer_endpoint_src are called from contexts that are not
+exactly high-speed or bottle-necked. For example, when there's
+connection difficulty, or when userspace is reconfiguring the interface.
+And in particular for this patch, when the netns is exiting. So for
+those cases, it makes more sense to call dst_release immediately. For
+that, we add a small helper function to dst_cache.
+
+This patch also adds a test to netns.sh from Hangbin Liu to ensure this
+doesn't regress.
+
+Tested-by: Hangbin Liu <liuhangbin@gmail.com>
+Reported-by: Xiumei Mu <xmu@redhat.com>
+Cc: Toke Høiland-Jørgensen <toke@redhat.com>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Fixes: 900575aa33a3 ("wireguard: device: avoid circular netns references")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/android/binder.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/wireguard/device.c             |    3 +++
+ drivers/net/wireguard/socket.c             |    2 +-
+ include/net/dst_cache.h                    |   11 +++++++++++
+ net/core/dst_cache.c                       |   19 +++++++++++++++++++
+ tools/testing/selftests/wireguard/netns.sh |   24 +++++++++++++++++++++++-
+ 5 files changed, 57 insertions(+), 2 deletions(-)
 
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -1506,7 +1506,7 @@ static void binder_transaction(struct bi
- 		t->from = thread;
- 	else
- 		t->from = NULL;
--	t->sender_euid = proc->cred->euid;
-+	t->sender_euid = task_euid(proc->tsk);
- 	t->to_proc = target_proc;
- 	t->to_thread = target_thread;
- 	t->code = tr->code;
+--- a/drivers/net/wireguard/device.c
++++ b/drivers/net/wireguard/device.c
+@@ -398,6 +398,7 @@ static struct rtnl_link_ops link_ops __r
+ static void wg_netns_pre_exit(struct net *net)
+ {
+ 	struct wg_device *wg;
++	struct wg_peer *peer;
+ 
+ 	rtnl_lock();
+ 	list_for_each_entry(wg, &device_list, device_list) {
+@@ -407,6 +408,8 @@ static void wg_netns_pre_exit(struct net
+ 			mutex_lock(&wg->device_update_lock);
+ 			rcu_assign_pointer(wg->creating_net, NULL);
+ 			wg_socket_reinit(wg, NULL, NULL);
++			list_for_each_entry(peer, &wg->peer_list, peer_list)
++				wg_socket_clear_peer_endpoint_src(peer);
+ 			mutex_unlock(&wg->device_update_lock);
+ 		}
+ 	}
+--- a/drivers/net/wireguard/socket.c
++++ b/drivers/net/wireguard/socket.c
+@@ -308,7 +308,7 @@ void wg_socket_clear_peer_endpoint_src(s
+ {
+ 	write_lock_bh(&peer->endpoint_lock);
+ 	memset(&peer->endpoint.src6, 0, sizeof(peer->endpoint.src6));
+-	dst_cache_reset(&peer->endpoint_cache);
++	dst_cache_reset_now(&peer->endpoint_cache);
+ 	write_unlock_bh(&peer->endpoint_lock);
+ }
+ 
+--- a/include/net/dst_cache.h
++++ b/include/net/dst_cache.h
+@@ -80,6 +80,17 @@ static inline void dst_cache_reset(struc
+ }
+ 
+ /**
++ *	dst_cache_reset_now - invalidate the cache contents immediately
++ *	@dst_cache: the cache
++ *
++ *	The caller must be sure there are no concurrent users, as this frees
++ *	all dst_cache users immediately, rather than waiting for the next
++ *	per-cpu usage like dst_cache_reset does. Most callers should use the
++ *	higher speed lazily-freed dst_cache_reset function instead.
++ */
++void dst_cache_reset_now(struct dst_cache *dst_cache);
++
++/**
+  *	dst_cache_init - initialize the cache, allocating the required storage
+  *	@dst_cache: the cache
+  *	@gfp: allocation flags
+--- a/net/core/dst_cache.c
++++ b/net/core/dst_cache.c
+@@ -162,3 +162,22 @@ void dst_cache_destroy(struct dst_cache
+ 	free_percpu(dst_cache->cache);
+ }
+ EXPORT_SYMBOL_GPL(dst_cache_destroy);
++
++void dst_cache_reset_now(struct dst_cache *dst_cache)
++{
++	int i;
++
++	if (!dst_cache->cache)
++		return;
++
++	dst_cache->reset_ts = jiffies;
++	for_each_possible_cpu(i) {
++		struct dst_cache_pcpu *idst = per_cpu_ptr(dst_cache->cache, i);
++		struct dst_entry *dst = idst->dst;
++
++		idst->cookie = 0;
++		idst->dst = NULL;
++		dst_release(dst);
++	}
++}
++EXPORT_SYMBOL_GPL(dst_cache_reset_now);
+--- a/tools/testing/selftests/wireguard/netns.sh
++++ b/tools/testing/selftests/wireguard/netns.sh
+@@ -613,6 +613,28 @@ ip0 link set wg0 up
+ kill $ncat_pid
+ ip0 link del wg0
+ 
++# Ensure that dst_cache references don't outlive netns lifetime
++ip1 link add dev wg0 type wireguard
++ip2 link add dev wg0 type wireguard
++configure_peers
++ip1 link add veth1 type veth peer name veth2
++ip1 link set veth2 netns $netns2
++ip1 addr add fd00:aa::1/64 dev veth1
++ip2 addr add fd00:aa::2/64 dev veth2
++ip1 link set veth1 up
++ip2 link set veth2 up
++waitiface $netns1 veth1
++waitiface $netns2 veth2
++ip1 -6 route add default dev veth1 via fd00:aa::2
++ip2 -6 route add default dev veth2 via fd00:aa::1
++n1 wg set wg0 peer "$pub2" endpoint [fd00:aa::2]:2
++n2 wg set wg0 peer "$pub1" endpoint [fd00:aa::1]:1
++n1 ping6 -c 1 fd00::2
++pp ip netns delete $netns1
++pp ip netns delete $netns2
++pp ip netns add $netns1
++pp ip netns add $netns2
++
+ # Ensure there aren't circular reference loops
+ ip1 link add wg1 type wireguard
+ ip2 link add wg2 type wireguard
+@@ -631,7 +653,7 @@ while read -t 0.1 -r line 2>/dev/null ||
+ done < /dev/kmsg
+ alldeleted=1
+ for object in "${!objects[@]}"; do
+-	if [[ ${objects["$object"]} != *createddestroyed ]]; then
++	if [[ ${objects["$object"]} != *createddestroyed && ${objects["$object"]} != *createdcreateddestroyeddestroyed ]]; then
+ 		echo "Error: $object: merely ${objects["$object"]}" >&3
+ 		alldeleted=0
+ 	fi
 
 

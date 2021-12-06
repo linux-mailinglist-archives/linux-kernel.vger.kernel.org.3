@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DEE8469AC3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:07:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D493469FF0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346872AbhLFPJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
+        id S1442412AbhLFPzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:55:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345947AbhLFPHo (ORCPT
+        with ESMTP id S1390519AbhLFPm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:07:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5157DC0698C2;
-        Mon,  6 Dec 2021 07:03:32 -0800 (PST)
+        Mon, 6 Dec 2021 10:42:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1173C061D5F;
+        Mon,  6 Dec 2021 07:27:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6F9C61342;
-        Mon,  6 Dec 2021 15:03:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7EEAC341C1;
-        Mon,  6 Dec 2021 15:03:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87BA6B8101B;
+        Mon,  6 Dec 2021 15:27:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF025C34900;
+        Mon,  6 Dec 2021 15:27:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803011;
-        bh=fzhFtjV0JZA5MKmOFmqC9SL+v6z0pKoJd1YZyse+dYU=;
+        s=korg; t=1638804442;
+        bh=w3szSjw2J7ql5NwA+A7W4Kel3hZgWbWjD6AHnWZ+Ez4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U/mF2Oq4O5PQBagOvPjwzh2e0DQr/Z+3CWhHu58pzVOdEO7gze1/BgjIrf+9fD6LL
-         SI1FlvDdMp++kbz2N0B9KOv5P4lCtpdvpqPw9yF0v00DMsv0QXHsniR8BMBttUKck0
-         jWIZJKdLA/RnznMzZmHd//08Zun2rijhqDQxryLM=
+        b=VD2N45ToCMN/TQ0DmvTH5DmRjYUSFixDwy9QAxuUd2Bgoi7zRcRyFRES2RKhHUVxM
+         tuhOWYhfJuEVmf38ol9oS8ucl6USUZr6UZLW9TD6Nxst+Pl6dgPKvML4R4omI2+H7/
+         f34EH/ssrnxM6ut0b8NifjgU6uBVnim0pCi14s+w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sven Eckelmann <sven@narfation.org>
-Subject: [PATCH 4.9 60/62] tty: serial: msm_serial: Deactivate RX DMA for polling support
+        stable@vger.kernel.org, Sameer Saurabh <ssaurabh@marvell.com>,
+        Igor Russkikh <irusskikh@marvell.com>,
+        Sudarsana Reddy Kalluru <skalluru@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 149/207] Remove Half duplex mode speed capabilities.
 Date:   Mon,  6 Dec 2021 15:56:43 +0100
-Message-Id: <20211206145551.285722826@linuxfoundation.org>
+Message-Id: <20211206145615.398603210@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,55 +50,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sven Eckelmann <sven@narfation.org>
+From: Sameer Saurabh <ssaurabh@marvell.com>
 
-commit 7492ffc90fa126afb67d4392d56cb4134780194a upstream.
+commit 03fa512189eb9b55ded5f3e81ad638315555b340 upstream.
 
-The CONSOLE_POLLING mode is used for tools like k(g)db. In this kind of
-setup, it is often sharing a serial device with the normal system console.
-This is usually no problem because the polling helpers can consume input
-values directly (when in kgdb context) and the normal Linux handlers can
-only consume new input values after kgdb switched back.
+Since Half Duplex mode has been deprecated by the firmware, driver should
+not advertise Half Duplex speed in ethtool support link speed values.
 
-This is not true anymore when RX DMA is enabled for UARTDM controllers.
-Single input values can no longer be received correctly. Instead following
-seems to happen:
-
-* on 1. input, some old input is read (continuously)
-* on 2. input, two old inputs are read (continuously)
-* on 3. input, three old input values are read (continuously)
-* on 4. input, 4 previous inputs are received
-
-This repeats then for each group of 4 input values.
-
-This behavior changes slightly depending on what state the controller was
-when the first input was received. But this makes working with kgdb
-basically impossible because control messages are always corrupted when
-kgdboc tries to parse them.
-
-RX DMA should therefore be off when CONSOLE_POLLING is enabled to avoid
-these kind of problems. No such problem was noticed for TX DMA.
-
-Fixes: 99693945013a ("tty: serial: msm: Add RX DMA support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Sven Eckelmann <sven@narfation.org>
-Link: https://lore.kernel.org/r/20211113121050.7266-1-sven@narfation.org
+Fixes: 071a02046c262 ("net: atlantic: A2: half duplex support")
+Signed-off-by: Sameer Saurabh <ssaurabh@marvell.com>
+Signed-off-by: Igor Russkikh <irusskikh@marvell.com>
+Signed-off-by: Sudarsana Reddy Kalluru <skalluru@marvell.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/msm_serial.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2.c |    5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
---- a/drivers/tty/serial/msm_serial.c
-+++ b/drivers/tty/serial/msm_serial.c
-@@ -611,6 +611,9 @@ static void msm_start_rx_dma(struct msm_
- 	u32 val;
- 	int ret;
+--- a/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2.c
++++ b/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2.c
+@@ -65,11 +65,8 @@ const struct aq_hw_caps_s hw_atl2_caps_a
+ 			  AQ_NIC_RATE_5G  |
+ 			  AQ_NIC_RATE_2G5 |
+ 			  AQ_NIC_RATE_1G  |
+-			  AQ_NIC_RATE_1G_HALF   |
+ 			  AQ_NIC_RATE_100M      |
+-			  AQ_NIC_RATE_100M_HALF |
+-			  AQ_NIC_RATE_10M       |
+-			  AQ_NIC_RATE_10M_HALF,
++			  AQ_NIC_RATE_10M,
+ };
  
-+	if (IS_ENABLED(CONFIG_CONSOLE_POLL))
-+		return;
-+
- 	if (!dma->chan)
- 		return;
- 
+ const struct aq_hw_caps_s hw_atl2_caps_aqc115c = {
 
 

@@ -2,215 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C274646A33C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:42:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F1E46A33F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244950AbhLFRpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 12:45:32 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:38857 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244866AbhLFRpY (ORCPT
+        id S244037AbhLFRpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 12:45:38 -0500
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:33432 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244862AbhLFRpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 12:45:24 -0500
-Received: by mail-oi1-f181.google.com with SMTP id r26so22830581oiw.5;
-        Mon, 06 Dec 2021 09:41:55 -0800 (PST)
+        Mon, 6 Dec 2021 12:45:33 -0500
+Received: by mail-oi1-f178.google.com with SMTP id q25so22918868oiw.0;
+        Mon, 06 Dec 2021 09:42:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=iJa24hh6sDEUpEz26btAdpVnkRSWQr1kx84SVvqDXJo=;
-        b=NGw4RnJgWAwNO6S8Cy3slj8i5ee+kfz5AB1o3oNtYombAPd71Yp1lV1HpPCVgfmEe4
-         6D2SVsAsXzR8IGbjYCA42Ol/NNgPSNttDwQKnCiJreKK3rcgHVzQoQO8trbRr9sj6nE1
-         ydEMt19i1VxMp6F9njIEHPD5LnjqImVGUzhiGO/GIkEgrol3syiUwTGC7eCw4CH4aS0P
-         SLQf6cl0d5+xA/gSzPyTX7x+Lonc1RZjDflrwV+qU2MPuKqW2XAGGZMkIVp1GguQZMYQ
-         maJgwFWgXXcumnTleadS+GAqHsHnNqR8aHrnDA/iOR7Rg3DiGDAi3YHnl84D0iUdR4GX
-         2vXg==
-X-Gm-Message-State: AOAM532+B+2din8ugcTKADOZoKOt/UOp+GxRvzox0ZcPuTcrS3U+7IgA
-        46pScDNq90vw6rt/2RBJpA==
-X-Google-Smtp-Source: ABdhPJwCOBxPc6keMUGzARcRIl4lodA3f7cfPdab0zIok2z2RMJGpP+DSzeGEUCy3de/yvSDymwccA==
-X-Received: by 2002:a05:6808:649:: with SMTP id z9mr24422724oih.125.1638812515071;
-        Mon, 06 Dec 2021 09:41:55 -0800 (PST)
+        bh=9R+vJEgrwKCKc8Zm3ZovBeKlL5zZ/+qKm2q4AQLvyzU=;
+        b=CwysV+Qtq0onQ0O8odF0JUbu5xnbQbPKSsayubTkaYvHBnZVPUfcjglltUa+SdgE10
+         16htzTmeQ8NcevwR/hHrTMZdWrEDPrbLWnAyaPLF4YJzgrLRD9gRQoYuUvsS6qC1qVo2
+         ojQrUGefGf0CHW6SQH/lfElRavbUlGMzKZNNhGWPP41Yu56JdSbUfUNmsptzw+Nb3FrD
+         ohHut3gCr8XsuSqCcacVFLUl9mPyi3mdVIAIWMyZnTNQwK3TwJYCGqyv5d0taDVvYXtD
+         2aUIXc54HzWJ6QranPSi/pchgps28ezP21bCpEMCOlSz9jHt3qmHSqNZ9pvduojLSWlv
+         VOow==
+X-Gm-Message-State: AOAM532kf8bHZMZos/q+3u6a4tdhxFfzm0BBMU+Hoq8Cw+z4A5pDVMho
+        mHfxZJ6G3Dn5jX3nvoB6gg==
+X-Google-Smtp-Source: ABdhPJzAT9mXvNX4OTFUIQkz1DBSUGY1X4B+luSF7sEsnAPRca55Q4WZLKK5Jo49VEm1FcPc1Da3mg==
+X-Received: by 2002:a05:6808:211f:: with SMTP id r31mr25253142oiw.64.1638812523325;
+        Mon, 06 Dec 2021 09:42:03 -0800 (PST)
 Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id bj8sm2965511oib.51.2021.12.06.09.41.53
+        by smtp.googlemail.com with ESMTPSA id w5sm2240534otk.70.2021.12.06.09.42.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 09:41:54 -0800 (PST)
+        Mon, 06 Dec 2021 09:42:02 -0800 (PST)
 From:   Rob Herring <robh@kernel.org>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        "G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>
 Cc:     devicetree@vger.kernel.org,
         Thierry Reding <thierry.reding@gmail.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: net: Add missing properties used in examples
-Date:   Mon,  6 Dec 2021 11:41:52 -0600
-Message-Id: <20211206174153.2296977-1-robh@kernel.org>
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: mmc: Add missing properties used in examples
+Date:   Mon,  6 Dec 2021 11:42:00 -0600
+Message-Id: <20211206174201.2297265-1-robh@kernel.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With 'unevaluatedProperties' support implemented, the following warnings
-are generated in the net bindings:
+When 'unevaluatedProperties' support is enabled, the following warnings
+are generated in the mmc bindings:
 
-Documentation/devicetree/bindings/net/actions,owl-emac.example.dt.yaml: ethernet@b0310000: Unevaluated properties are not allowed ('mdio' was unexpected)
-Documentation/devicetree/bindings/net/intel,dwmac-plat.example.dt.yaml: ethernet@3a000000: Unevaluated properties are not allowed ('snps,pbl', 'mdio0' were unexpected)
-Documentation/devicetree/bindings/net/qca,ar71xx.example.dt.yaml: ethernet@19000000: Unevaluated properties are not allowed ('qca,ethcfg' was unexpected)
-Documentation/devicetree/bindings/net/qca,ar71xx.example.dt.yaml: ethernet@1a000000: Unevaluated properties are not allowed ('mdio' was unexpected)
-Documentation/devicetree/bindings/net/stm32-dwmac.example.dt.yaml: ethernet@40028000: Unevaluated properties are not allowed ('reg-names', 'snps,pbl' were unexpected)
-Documentation/devicetree/bindings/net/ti,cpsw-switch.example.dt.yaml: mdio@1000: Unevaluated properties are not allowed ('clocks', 'clock-names' were unexpected)
-Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.example.dt.yaml: mdio@f00: Unevaluated properties are not allowed ('clocks', 'clock-names' were unexpected)
+Documentation/devicetree/bindings/mmc/mtk-sd.example.dt.yaml: mmc@11230000: Unevaluated properties are not allowed ('reg', 'interrupts' were unexpected)
+Documentation/devicetree/bindings/mmc/sdhci-am654.example.dt.yaml: mmc@4f80000: Unevaluated properties are not allowed ('sdhci-caps-mask' was unexpected)
+Documentation/devicetree/bindings/mmc/socionext,uniphier-sd.example.dt.yaml: mmc@5a400000: Unevaluated properties are not allowed ('dma-names', 'dmas' were unexpected)
+Documentation/devicetree/bindings/mmc/arm,pl18x.example.dt.yaml: mmc@80126000: Unevaluated properties are not allowed ('dmas', 'dma-names' were unexpected)
+Documentation/devicetree/bindings/mmc/arasan,sdhci.example.dt.yaml: mmc@80420000: Unevaluated properties are not allowed ('resets' was unexpected)
+Documentation/devicetree/bindings/mmc/arm,pl18x.example.dt.yaml: mmc@52007000: Unevaluated properties are not allowed ('interrupt-names' was unexpected)
+Documentation/devicetree/bindings/clock/imx8qxp-lpcg.example.dt.yaml: mmc@5b010000: Unevaluated properties are not allowed ('power-domains' was unexpected)
 
-Add the missing properties/nodes as necessary.
+Add the missing properties as necessary. For pl18x, drop interrupt-names
+as there isn't any use of it when there are 2 interrupts.
 
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: "Andreas Färber" <afaerber@suse.de>
-Cc: Manivannan Sadhasivam <mani@kernel.org>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Cc: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-Cc: "G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Christophe Roullier <christophe.roullier@foss.st.com>
-Cc: Grygorii Strashko <grygorii.strashko@ti.com>
-Cc: netdev@vger.kernel.org
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Chaotian Jing <chaotian.jing@mediatek.com>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Wenbin Mei <wenbin.mei@mediatek.com>
+Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc: linux-mmc@vger.kernel.org
 Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-actions@lists.infradead.org
-Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: linux-mediatek@lists.infradead.org
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/net/actions,owl-emac.yaml          | 3 +++
- .../devicetree/bindings/net/intel,dwmac-plat.yaml          | 2 +-
- Documentation/devicetree/bindings/net/qca,ar71xx.yaml      | 5 ++++-
- Documentation/devicetree/bindings/net/stm32-dwmac.yaml     | 6 ++++++
- Documentation/devicetree/bindings/net/ti,davinci-mdio.yaml | 7 +++++++
- .../devicetree/bindings/net/toshiba,visconti-dwmac.yaml    | 5 ++++-
- 6 files changed, 25 insertions(+), 3 deletions(-)
+ Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml  | 3 +++
+ Documentation/devicetree/bindings/mmc/arm,pl18x.yaml     | 9 ++++++++-
+ Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml | 3 +++
+ Documentation/devicetree/bindings/mmc/mtk-sd.yaml        | 6 ++++++
+ Documentation/devicetree/bindings/mmc/sdhci-am654.yaml   | 2 ++
+ .../devicetree/bindings/mmc/socionext,uniphier-sd.yaml   | 6 ++++++
+ 6 files changed, 28 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/net/actions,owl-emac.yaml b/Documentation/devicetree/bindings/net/actions,owl-emac.yaml
-index 1626e0a821b0..e9c0d6360e74 100644
---- a/Documentation/devicetree/bindings/net/actions,owl-emac.yaml
-+++ b/Documentation/devicetree/bindings/net/actions,owl-emac.yaml
-@@ -51,6 +51,9 @@ properties:
-     description:
-       Phandle to the device containing custom config.
+diff --git a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+index de6f076e0ece..83be9e93d221 100644
+--- a/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
++++ b/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+@@ -118,6 +118,9 @@ properties:
+   phy-names:
+     const: phy_arasan
  
-+  mdio:
-+    type: object
-+
- required:
-   - compatible
-   - reg
-diff --git a/Documentation/devicetree/bindings/net/intel,dwmac-plat.yaml b/Documentation/devicetree/bindings/net/intel,dwmac-plat.yaml
-index 08a3f1f6aea2..52a7fa4f49a4 100644
---- a/Documentation/devicetree/bindings/net/intel,dwmac-plat.yaml
-+++ b/Documentation/devicetree/bindings/net/intel,dwmac-plat.yaml
-@@ -117,7 +117,7 @@ examples:
-         snps,mtl-tx-config = <&mtl_tx_setup>;
-         snps,tso;
- 
--        mdio0 {
-+        mdio {
-             #address-cells = <1>;
-             #size-cells = <0>;
-             compatible = "snps,dwmac-mdio";
-diff --git a/Documentation/devicetree/bindings/net/qca,ar71xx.yaml b/Documentation/devicetree/bindings/net/qca,ar71xx.yaml
-index cf4d35edaa1b..f2bf1094d887 100644
---- a/Documentation/devicetree/bindings/net/qca,ar71xx.yaml
-+++ b/Documentation/devicetree/bindings/net/qca,ar71xx.yaml
-@@ -62,6 +62,10 @@ properties:
-       - const: mac
-       - const: mdio
- 
-+
-+  mdio:
-+    type: object
-+
- required:
-   - compatible
-   - reg
-@@ -85,7 +89,6 @@ examples:
-         reset-names = "mac", "mdio";
-         clocks = <&pll 1>, <&pll 2>;
-         clock-names = "eth", "mdio";
--        qca,ethcfg = <&ethcfg>;
-         phy-mode = "mii";
-         phy-handle = <&phy_port4>;
-     };
-diff --git a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-index 577f4e284425..86632e9d987e 100644
---- a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-@@ -44,6 +44,12 @@ properties:
-               - st,stm32-dwmac
-           - const: snps,dwmac-3.50a
- 
-+  reg: true
-+
-+  reg-names:
-+    items:
-+      - const: stmmaceth
-+
-   clocks:
-     minItems: 3
-     items:
-diff --git a/Documentation/devicetree/bindings/net/ti,davinci-mdio.yaml b/Documentation/devicetree/bindings/net/ti,davinci-mdio.yaml
-index 5728fe23f530..dbfca5ee9139 100644
---- a/Documentation/devicetree/bindings/net/ti,davinci-mdio.yaml
-+++ b/Documentation/devicetree/bindings/net/ti,davinci-mdio.yaml
-@@ -37,6 +37,13 @@ properties:
-     maximum: 2500000
-     description: MDIO Bus frequency
- 
-+  clocks:
++  resets:
 +    maxItems: 1
 +
-+  clock-names:
+   arasan,soc-ctl-syscon:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description:
+diff --git a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
+index 47595cb483be..fbc866d9bb2f 100644
+--- a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
++++ b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
+@@ -60,6 +60,14 @@ properties:
+     minItems: 1
+     maxItems: 2
+ 
++  dmas:
++    maxItems: 2
++
++  dma-names:
 +    items:
-+      - const: fck
++      - const: rx
++      - const: tx
 +
-   ti,hwmods:
-     description: TI hwmod name
-     deprecated: true
-diff --git a/Documentation/devicetree/bindings/net/toshiba,visconti-dwmac.yaml b/Documentation/devicetree/bindings/net/toshiba,visconti-dwmac.yaml
-index 59724d18e6f3..f5bec97460e4 100644
---- a/Documentation/devicetree/bindings/net/toshiba,visconti-dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/toshiba,visconti-dwmac.yaml
-@@ -42,6 +42,9 @@ properties:
-       - const: stmmaceth
-       - const: phy_ref_clk
+   power-domains: true
  
-+  mdio:
-+    type: object
+   resets:
+@@ -213,7 +221,6 @@ examples:
+       arm,primecell-periphid = <0x10153180>;
+       reg = <0x52007000 0x1000>;
+       interrupts = <49>;
+-      interrupt-names = "cmd_irq";
+       clocks = <&rcc 0>;
+       clock-names = "apb_pclk";
+       resets = <&rcc 1>;
+diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+index 19621a2f8beb..8d5cef0d3039 100644
+--- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
++++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+@@ -116,6 +116,9 @@ properties:
+       - const: ahb
+       - const: per
+ 
++  power-domains:
++    maxItems: 1
 +
- required:
-   - compatible
-   - reg
-@@ -71,7 +74,7 @@ examples:
-             phy-mode = "rgmii-id";
-             phy-handle = <&phy0>;
+   pinctrl-names:
+     oneOf:
+       - minItems: 3
+diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+index 82768a807294..faf89b0c918f 100644
+--- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
++++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+@@ -36,6 +36,9 @@ properties:
+           - const: mediatek,mt8195-mmc
+           - const: mediatek,mt8183-mmc
  
--            mdio0 {
-+            mdio {
-                 #address-cells = <0x1>;
-                 #size-cells = <0x0>;
-                 compatible = "snps,dwmac-mdio";
++  reg:
++    maxItems: 1
++
+   clocks:
+     description:
+       Should contain phandle for the clock feeding the MMC controller.
+@@ -62,6 +65,9 @@ properties:
+       - const: axi_cg
+       - const: ahb_cg
+ 
++  interrupts:
++    maxItems: 1
++
+   pinctrl-names:
+     items:
+       - const: default
+diff --git a/Documentation/devicetree/bindings/mmc/sdhci-am654.yaml b/Documentation/devicetree/bindings/mmc/sdhci-am654.yaml
+index 224303f5b913..9fbf16b3bc8d 100644
+--- a/Documentation/devicetree/bindings/mmc/sdhci-am654.yaml
++++ b/Documentation/devicetree/bindings/mmc/sdhci-am654.yaml
+@@ -48,6 +48,8 @@ properties:
+       - const: clk_ahb
+       - const: clk_xin
+ 
++  sdhci-caps-mask: true
++
+   # PHY output tap delays:
+   # Used to delay the data valid window and align it to the sampling clock.
+   # Binding needs to be provided for each supported speed mode otherwise the
+diff --git a/Documentation/devicetree/bindings/mmc/socionext,uniphier-sd.yaml b/Documentation/devicetree/bindings/mmc/socionext,uniphier-sd.yaml
+index 56f9ff12742d..a586fad0a46b 100644
+--- a/Documentation/devicetree/bindings/mmc/socionext,uniphier-sd.yaml
++++ b/Documentation/devicetree/bindings/mmc/socionext,uniphier-sd.yaml
+@@ -26,6 +26,12 @@ properties:
+   clocks:
+     maxItems: 1
+ 
++  dmas:
++    maxItems: 1
++
++  dma-names:
++    const: rx-tx
++
+   reset-names:
+     description: |
+       There are three reset signals at maximum
 -- 
 2.32.0
 

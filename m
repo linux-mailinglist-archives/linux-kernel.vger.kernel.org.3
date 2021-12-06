@@ -2,1187 +2,1061 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 323854694B5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 12:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0284694BB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 12:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242192AbhLFLHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 06:07:30 -0500
-Received: from mail-bn8nam12on2050.outbound.protection.outlook.com ([40.107.237.50]:4033
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S239746AbhLFLH3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 06:07:29 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mt4TZ/WYtWUj9+O5Phm9yhTGS8VVM60krZ5LyM7e4+lWDxxm9kUsdBxUT9PlUtQPP1lB2L0mVMklfUUSYyooWxBjoMoqCLX/6tecv3Y7iV/dTYOJjVnuj2QQ1HshfiRlIe7OGppZarpt7rLCCo8LBbWm0ebFGfdncCdX8VDyCwkyQuZ2HfDXjV3IZrsJSaDqPZxP3myGEWvos3XlE3KRioMQtoTHQim/0U/Adt1t0nVEZx9CBvUxSaM+KouVZzDGL6txjoPa6ulyBrUrtfaWFXVmevs9G/7uibtFjIRHRKuj+5LoHLUlskG5gefaC6BetTI2CgyGB2gsR+xqCA+2oA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EZH2wVHDA0vFmJO6zS+Eu01+fWWL5n0A1N1zx+8JiyU=;
- b=V91jh4Sh4dr1VHrjXeiTu32UkdbrEGC69zLxd9OiZqroR2ekxsMtuMXhlon+EcgiKcwrfK+JAMJGdlHxcEL1owYt9iCJEz2FUxmTzWxNdXrzCGLHZVBt/dIvmENfik1GbYOLZoKUCpVt/pzK0DH/KS6Wf4CrOCKXY86aSd6hLeVl63DLzv0CHQ/ZqcTytECXBbNc9l7uGl0RUlwNK9xN73PGk8uwZBC9J1jpSlIwmnZsv4NXnaAOFO4+IJlfHmnk0li9ddpJ6BM/UN4nJs5T9CsQkOOT9rNRwvrqrfLE+JUdeDOqb3rZDoAPz1Mjl9EH+Q5G8O7MU+/aly1KAlh57w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.80.198) smtp.rcpttodomain=linaro.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EZH2wVHDA0vFmJO6zS+Eu01+fWWL5n0A1N1zx+8JiyU=;
- b=os8uKLHwJbNlVdMBnYmU11OiPVsr+qXq4TuMyR6Nds3mGAXz+2EXOVhWFeu07xu0UkvKmjvIDFjOk/GmlwE7rxWBQXYJxsbw5D7Msh9Dtheojmc0gZHX6QscJOba8s3XjjaFhlezUk10rvaH70QphM9VFt7WTAYnnDsk6u7r6zY=
-Received: from BN9PR03CA0278.namprd03.prod.outlook.com (2603:10b6:408:f5::13)
- by PH0PR02MB8730.namprd02.prod.outlook.com (2603:10b6:510:d9::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Mon, 6 Dec
- 2021 11:03:56 +0000
-Received: from BN1NAM02FT036.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:f5:cafe::28) by BN9PR03CA0278.outlook.office365.com
- (2603:10b6:408:f5::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21 via Frontend
- Transport; Mon, 6 Dec 2021 11:03:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.80.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.80.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.80.198; helo=xir-pvapexch02.xlnx.xilinx.com;
-Received: from xir-pvapexch02.xlnx.xilinx.com (149.199.80.198) by
- BN1NAM02FT036.mail.protection.outlook.com (10.13.2.147) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4755.13 via Frontend Transport; Mon, 6 Dec 2021 11:03:56 +0000
-Received: from xir-pvapexch02.xlnx.xilinx.com (172.21.17.17) by
- xir-pvapexch02.xlnx.xilinx.com (172.21.17.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 6 Dec 2021 11:03:55 +0000
-Received: from smtp.xilinx.com (172.21.105.197) by
- xir-pvapexch02.xlnx.xilinx.com (172.21.17.17) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Mon, 6 Dec 2021 11:03:55 +0000
-Envelope-to: michal.simek@xilinx.com,
- ben.levinsky@xilinx.com,
- sergei.korneichuk@xilinx.com,
- mathieu.poirier@linaro.org,
- bjorn.andersson@linaro.org,
- robh+dt@kernel.org,
- laurent.pinchart@ideasonboard.com,
- bill.mills@linaro.org,
- linux-remoteproc@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Received: from [10.71.119.166] (port=49179)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <tanmay.shah@xilinx.com>)
-        id 1muBmj-0007u2-H9; Mon, 06 Dec 2021 11:03:55 +0000
-Message-ID: <245df00d-a4e1-d9b1-42ba-f73f692157a6@xilinx.com>
-Date:   Mon, 6 Dec 2021 16:33:48 +0530
+        id S242213AbhLFLJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 06:09:09 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:53261 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239746AbhLFLJG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 06:09:06 -0500
+Received: (Authenticated sender: alex@ghiti.fr)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 2AC35E001A;
+        Mon,  6 Dec 2021 11:05:27 +0000 (UTC)
+Message-ID: <73b65a52-3b52-f1aa-333b-aeb1e7daa002@ghiti.fr>
+Date:   Mon, 6 Dec 2021 12:05:27 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH v2 6/6] drivers: remoteproc: Add Xilinx r5 remoteproc
- driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v3 07/13] riscv: Implement sv48 support
 Content-Language: en-US
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
-        Ben Levinsky <ben.levinsky@xilinx.com>,
-        Bill Mills <bill.mills@linaro.org>,
-        "Sergei Korneichuk" <sergei.korneichuk@xilinx.com>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20211123062050.1442712-1-tanmay.shah@xilinx.com>
- <20211123062050.1442712-7-tanmay.shah@xilinx.com>
- <20211203185518.GA942034@p14s>
-From:   Tanmay Shah <tanmay.shah@xilinx.com>
-In-Reply-To: <20211203185518.GA942034@p14s>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Zong Li <zong.li@sifive.com>, Anup Patel <anup@brainfault.org>,
+        Atish Patra <Atish.Patra@rivosinc.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        panqinglin2020@iscas.ac.cn, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
+        linux-arch@vger.kernel.org
+References: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
+ <20211206104657.433304-8-alexandre.ghiti@canonical.com>
+From:   Alexandre ghiti <alex@ghiti.fr>
+In-Reply-To: <20211206104657.433304-8-alexandre.ghiti@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7f47ef56-81f2-4343-9d5f-08d9b8a8191a
-X-MS-TrafficTypeDiagnostic: PH0PR02MB8730:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR02MB87307784F58B74F9B5E2A0D2CA6D9@PH0PR02MB8730.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:1013;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KNVZMvhhfT0oZi113kA84B5e9wFQwLdrW7JjedFlNqvOnCjPysLlFGCtzZCz28mi3AFXXkQrBVRAdnhBGjPDwjhPc2jhLdLzzRhw7CAmK1/bbiNFGP3AC9VyDOlqBUnddO3QiW3tYCXmz8L7BXNxy82qsfL+xiARvmLusXjlbG1xJBZss+XBkYrmy8In55U4tOECpQ2n/zTHnsRfanQJoLjlMyAZujIIB1gB8u4f2Rerhf7ehagimfbj6SdESR4smPtDfz1u7qutO91iO7T6I7H8HyFJbEQJ8m81kMv3Bvi7hUCfJU5OMKSpUc9o9t/Rw1SbXapM4uo2ZpCmhvZlzu+TmHJUg0Ca/BTG94GsfwR55TmWjWq/zx5w6jOjM0j7gr6XKXrRrxRX2bPlq39yDq0jXrxfnAJANd7WQlO2kNxFdzNxeg+Aa409ZoYB7uB+vHRRHngEmPuMgtu4Mw5RSTu8MYrVgIwyA/MXJi1FHHBrl1CKmIpAfDBbyB9ZDqjQUw5mLoRyJPPRGt4CXf7We2gu87X+KF/BOKG7oPW+Xz3slsJ55eIGl6UrxvFuQHfSi1fFqwZcchLamg24ZyK4l/SZfzmWKYnDiK9ArsEPiMHMN7aYR+iF1jBgQO2l1j8Oe4CvRhIykOeuO0pTeluYahIbDQWTwu20K1chfn2Iy0fb0/miBG+TwWG598RKV99sgZ4QpMX9STKj7sFsmP78dbY2ojWIIMYUM1y9urJRwVs084oE/iVsr92hdNdjd/W9
-X-Forefront-Antispam-Report: CIP:149.199.80.198;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:xir-pvapexch02.xlnx.xilinx.com;PTR:unknown-80-198.xilinx.com;CAT:NONE;SFS:(36840700001)(46966006)(6666004)(44832011)(82310400004)(36860700001)(47076005)(316002)(54906003)(4326008)(53546011)(2906002)(83380400001)(8936002)(336012)(5660300002)(30864003)(9786002)(6916009)(356005)(186003)(26005)(7636003)(31696002)(508600001)(70586007)(31686004)(36756003)(2616005)(426003)(70206006)(8676002)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2021 11:03:56.3108
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f47ef56-81f2-4343-9d5f-08d9b8a8191a
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.80.198];Helo=[xir-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT036.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB8730
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mathieu,
-
-On 12/4/21 12:25 AM, Mathieu Poirier wrote:
-> Hi Tanmay,
+On 12/6/21 11:46, Alexandre Ghiti wrote:
+> By adding a new 4th level of page table, give the possibility to 64bit
+> kernel to address 2^48 bytes of virtual address: in practice, that offers
+> 128TB of virtual address space to userspace and allows up to 64TB of
+> physical memory.
 >
-> On Mon, Nov 22, 2021 at 10:20:50PM -0800, Tanmay Shah wrote:
->> This driver enables r5f dual core Real time Processing Unit subsystem
->> available on Xilinx Zynq Ultrascale MPSoC Platform. RPU subsystem
->> (cluster) can be configured in different modes e.g. split mode in which
->> two r5f cores work independent of each other and lock-step mode in which
->> both r5f cores execute same code clock-for-clock and notify if the
->> result is different.
->>
->> The Xilinx r5 Remoteproc Driver boots the RPU cores via calls to the Xilinx
->> Platform Management Unit that handles the R5 configuration, memory access
->> and R5 lifecycle management. The interface to this manager is done in this
->> driver via zynqmp_pm_* function calls.
->>
->> Signed-off-by: Ben Levinsky <ben.levinsky@xilinx.com>
->> Signed-off-by: Tanmay Shah <tanmay.shah@xilinx.com>
->> ---
->>   drivers/remoteproc/Kconfig              |  12 +
->>   drivers/remoteproc/Makefile             |   1 +
->>   drivers/remoteproc/xlnx_r5_remoteproc.c | 959 ++++++++++++++++++++++++
->>   3 files changed, 972 insertions(+)
->>   create mode 100644 drivers/remoteproc/xlnx_r5_remoteproc.c
->>
->> diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
->> index f30d00a3aabe..27f66910d8d3 100644
->> --- a/drivers/remoteproc/Kconfig
->> +++ b/drivers/remoteproc/Kconfig
->> @@ -315,6 +315,18 @@ config TI_K3_R5_REMOTEPROC
->>   	  It's safe to say N here if you're not interested in utilizing
->>   	  a slave processor.
->>   
->> +config XLNX_R5_REMOTEPROC
->> +	tristate "Xilinx R5 remoteproc support"
->> +	depends on PM && ARCH_ZYNQMP
->> +	depends on ZYNQMP_FIRMWARE
->> +	select RPMSG_VIRTIO
->> +	select ZYNQMP_IPI_MBOX
->> +	help
->> +	  Say y or m here to support Xilinx R5 remote processors via the remote
->> +	  processor framework.
->> +
->> +	  It's safe to say N if not interested in using RPU r5f cores.
->> +
->>   endif # REMOTEPROC
->>   
->>   endmenu
->> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
->> index bb26c9e4ef9c..334a8bed4c14 100644
->> --- a/drivers/remoteproc/Makefile
->> +++ b/drivers/remoteproc/Makefile
->> @@ -35,3 +35,4 @@ obj-$(CONFIG_ST_SLIM_REMOTEPROC)	+= st_slim_rproc.o
->>   obj-$(CONFIG_STM32_RPROC)		+= stm32_rproc.o
->>   obj-$(CONFIG_TI_K3_DSP_REMOTEPROC)	+= ti_k3_dsp_remoteproc.o
->>   obj-$(CONFIG_TI_K3_R5_REMOTEPROC)	+= ti_k3_r5_remoteproc.o
->> +obj-$(CONFIG_XLNX_R5_REMOTEPROC)	+= xlnx_r5_remoteproc.o
->> diff --git a/drivers/remoteproc/xlnx_r5_remoteproc.c b/drivers/remoteproc/xlnx_r5_remoteproc.c
->> new file mode 100644
->> index 000000000000..c2167fd3869d
->> --- /dev/null
->> +++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
->> @@ -0,0 +1,959 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * ZynqMP R5 Remote Processor driver
->> + *
->> + */
->> +
->> +#include <dt-bindings/power/xlnx-zynqmp-power.h>
->> +#include <linux/firmware/xlnx-zynqmp.h>
->> +#include <linux/interrupt.h>
->> +#include <linux/kernel.h>
->> +#include <linux/list.h>
->> +#include <linux/mailbox_client.h>
->> +#include <linux/mailbox/zynqmp-ipi-message.h>
->> +#include <linux/module.h>
->> +#include <linux/of_address.h>
->> +#include <linux/of_platform.h>
->> +#include <linux/of_reserved_mem.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/remoteproc.h>
->> +#include <linux/skbuff.h>
->> +#include <linux/sysfs.h>
->> +
->> +#include "remoteproc_internal.h"
->> +
->> +/* settings for RPU cluster mode */
->> +enum zynqmp_r5_cluster_mode {
->> +	SPLIT_MODE = 0, // RPU cluster mode when cores run as separate processor
->> +	LOCKSTEP_MODE = 1, // cores execute same code in lockstep,clk-for-clk
->> +	SINGLE_CPU_MODE = 2, // core0 is held in reset and only core1 runs
-> Please use C style comments, i.e /*...*/
+> If the underlying hardware does not support sv48, we will automatically
+> fallback to a standard 3-level page table by folding the new PUD level into
+> PGDIR level. In order to detect HW capabilities at runtime, we
+> use SATP feature that ignores writes with an unsupported mode.
 >
->> +};
->> +
->> +/**
->> + * struct mem_bank_data - Memory Bank description
->> + *
->> + * @addr: Start address of memory bank
->> + * @size: Size of Memory bank
->> + * @pm_domain_id: Power-domains id of memory bank for firmware to turn on/off
->> + * @bank_name: name of the bank for remoteproc framework
->> + */
->> +struct mem_bank_data {
->> +	phys_addr_t addr;
->> +	size_t size;
->> +	enum pm_node_id pm_domain_id;
->> +	char *bank_name;
->> +};
->> +
->> +static const struct mem_bank_data zynqmp_tcm_banks[] = {
->> +	{0xffe00000UL, 0x10000UL, PD_R5_0_ATCM, "atcm0"}, /* TCM 64KB each */
->> +	{0xffe20000UL, 0x10000UL, PD_R5_0_BTCM, "btcm0"},
->> +	{0xffe90000UL, 0x10000UL, PD_R5_1_ATCM, "atcm1"},
->> +	{0xffeb0000UL, 0x10000UL, PD_R5_1_BTCM, "btcm1"},
->> +};
-> Bizarre - more comments on this below...
+> Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+> ---
+>   arch/riscv/Kconfig                      |   4 +-
+>   arch/riscv/include/asm/csr.h            |   3 +-
+>   arch/riscv/include/asm/fixmap.h         |   1 +
+>   arch/riscv/include/asm/kasan.h          |   6 +-
+>   arch/riscv/include/asm/page.h           |  14 ++
+>   arch/riscv/include/asm/pgalloc.h        |  40 +++++
+>   arch/riscv/include/asm/pgtable-64.h     | 108 +++++++++++-
+>   arch/riscv/include/asm/pgtable.h        |  24 ++-
+>   arch/riscv/kernel/head.S                |   3 +-
+>   arch/riscv/mm/context.c                 |   4 +-
+>   arch/riscv/mm/init.c                    | 212 +++++++++++++++++++++---
+>   arch/riscv/mm/kasan_init.c              | 137 ++++++++++++++-
+>   drivers/firmware/efi/libstub/efi-stub.c |   2 +
+>   13 files changed, 514 insertions(+), 44 deletions(-)
 >
->> +
->> +/**
->> + * struct zynqmp_r5_core - ZynqMP R5 core structure
->> + *
->> + * @dev: device of RPU instance
->> + * @np: device node of RPU instance
->> + * @tcm_bank_count: number TCM banks accessible to this RPU
->> + * @tcm_banks: array of each TCM bank data
->> + * @res_mem_count: number of Reserved Memory regions per core
->> + * @res_mem: array of reserved memory regions
->> + * @rproc: rproc handle
->> + * @pm_domain_id: RPU CPU power domain id
->> + */
->> +struct zynqmp_r5_core {
->> +	struct device *dev;
->> +	struct device_node *np;
->> +	int tcm_bank_count;
->> +	struct mem_bank_data *tcm_banks;
->> +	int res_mem_count;
->> +	struct reserved_mem *res_mem;
->> +	struct rproc *rproc;
->> +	enum pm_node_id pm_domain_id;
->> +};
->> +
->> +/**
->> + * struct zynqmp_r5_cluster - ZynqMP R5 cluster structure
->> + *
->> + * @dev: r5f subsystem cluster device node
->> + * @mode: cluster mode of type zynqmp_r5_cluster_mode
->> + * @core_count: number of r5 cores used for this cluster mode
->> + * @r5_cores: Array of r5 cores of type struct zynqmp_r5_core
->> + */
->> +struct zynqmp_r5_cluster {
->> +	struct device *dev;
->> +	enum  zynqmp_r5_cluster_mode mode;
->> +	int core_count;
->> +	struct zynqmp_r5_core *r5_cores;
->> +};
->> +
->> +/*
->> + * zynqmp_r5_set_mode - set RPU operation mode
->> + *
->> + * set RPU operation mode
->> + *
->> + * Return: 0 for success, negative value for failure
->> + */
->> +static int zynqmp_r5_set_mode(struct zynqmp_r5_core *r5_core,
->> +			      enum zynqmp_r5_cluster_mode rpu_mode)
->> +{
->> +	enum rpu_tcm_comb tcm_mode;
->> +	int ret, reg_val;
->> +
->> +	reg_val = (rpu_mode == LOCKSTEP_MODE ? 0 : 1);
->> +
->> +	ret = zynqmp_pm_set_rpu_mode(r5_core->pm_domain_id, reg_val);
->> +	if (ret < 0) {
->> +		pr_err("failed to set RPU mode\n");
->> +		return ret;
->> +	}
->> +
->> +	tcm_mode = (rpu_mode == LOCKSTEP_MODE) ?
->> +		    PM_RPU_TCM_COMB : PM_RPU_TCM_SPLIT;
->> +	ret = zynqmp_pm_set_tcm_config(r5_core->pm_domain_id, tcm_mode);
->> +	if (ret < 0)
->> +		pr_err("failed to configure TCM\n");
->> +
->> +	return ret;
->> +}
->> +
->> +/*
->> + * zynqmp_r5_rproc_start
->> + * @rproc: single R5 core's corresponding rproc instance
->> + *
->> + * Start R5 Core from designated boot address.
->> + *
->> + * return 0 on success, otherwise non-zero value on failure
->> + */
->> +static int zynqmp_r5_rproc_start(struct rproc *rproc)
->> +{
->> +	struct zynqmp_r5_core *r5_core = rproc->priv;
->> +	enum rpu_boot_mem bootmem;
->> +	int ret;
->> +
->> +	if (!r5_core) {
->> +		pr_err("can't get r5 core\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	bootmem = (rproc->bootaddr >= 0xFFFC0000) ?
->> +		   PM_RPU_BOOTMEM_HIVEC : PM_RPU_BOOTMEM_LOVEC;
->> +
->> +	dev_dbg(r5_core->dev, "RPU boot addr 0x%llx from %s.", rproc->bootaddr,
->> +		bootmem == PM_RPU_BOOTMEM_HIVEC ? "OCM" : "TCM");
->> +
->> +	ret = zynqmp_pm_request_wake(r5_core->pm_domain_id, 1,
->> +				     bootmem, ZYNQMP_PM_REQUEST_ACK_NO);
->> +	if (ret)
->> +		pr_err("failed to start RPU = %d\n", r5_core->pm_domain_id);
->> +	return ret;
->> +}
->> +
->> +/*
->> + * zynqmp_r5_rproc_stop
->> + * @rproc: single R5 core's corresponding rproc instance
->> + *
->> + * Power down  R5 Core.
->> + *
->> + * return 0 on success, otherwise non-zero value on failure
->> + */
->> +static int zynqmp_r5_rproc_stop(struct rproc *rproc)
->> +{
->> +	struct zynqmp_r5_core *r5_core = rproc->priv;
->> +	int ret;
->> +
->> +	ret = zynqmp_pm_force_pwrdwn(r5_core->pm_domain_id,
->> +				     ZYNQMP_PM_REQUEST_ACK_BLOCKING);
->> +	if (ret)
->> +		pr_err("failed to stop remoteproc RPU %d\n", ret);
->> +
->> +	return ret;
->> +}
->> +
->> +/*
->> + * zynqmp_r5_rproc_mem_map
->> + * @rproc: single R5 core's corresponding rproc instance
->> + * @mem: mem entry to map
->> + *
->> + * Callback to map va for memory-region's carveout.
->> + *
->> + * return 0 on success, otherwise non-zero value on failure
->> + */
->> +static int zynqmp_r5_rproc_mem_map(struct rproc *rproc,
->> +				   struct rproc_mem_entry *mem)
->> +{
->> +	void __iomem *va;
->> +
->> +	va = ioremap_wc(mem->dma, mem->len);
->> +	if (IS_ERR_OR_NULL(va))
->> +		return -ENOMEM;
->> +
->> +	mem->va = (void *)va;
->> +
->> +	return 0;
->> +}
->> +
->> +/*
->> + * zynqmp_r5_rproc_mem_unmap
->> + * @rproc: single R5 core's corresponding rproc instance
->> + * @mem: mem entry to unmap
->> + *
->> + * Unmap memory-region carveout
->> + *
->> + * return 0 on success, otherwise non-zero value on failure
->> + */
->> +static int zynqmp_r5_rproc_mem_unmap(struct rproc *rproc,
->> +				     struct rproc_mem_entry *mem)
->> +{
->> +	iounmap((void __iomem *)mem->va);
->> +	return 0;
->> +}
->> +
->> +/*
->> + * add_mem_regions
->> + * @rproc: single R5 core's corresponding rproc instance
->> + *
->> + * Construct rproc mem carveouts from carveout provided in
->> + * memory-region property
->> + *
->> + * return 0 on success, otherwise non-zero value on failure
->> + */
->> +static int add_mem_regions(struct rproc *rproc)
->> +{
->> +	struct device *dev;
->> +	struct rproc_mem_entry *mem;
->> +	struct reserved_mem *rmem;
->> +	struct zynqmp_r5_core *r5_core;
->> +	int i;
->> +
->> +	r5_core = rproc->priv;
->> +	dev = r5_core->dev;
->> +
->> +	/* Register associated reserved memory regions */
->> +	for (i = 0; i < r5_core->res_mem_count; i++) {
->> +		rmem = &r5_core->res_mem[i];
->> +		mem = rproc_mem_entry_init(dev, NULL,
->> +					   (dma_addr_t)rmem->base,
->> +					   rmem->size, rmem->base,
->> +					   zynqmp_r5_rproc_mem_map,
->> +					   zynqmp_r5_rproc_mem_unmap,
->> +					   rmem->name);
->> +		if (IS_ERR_OR_NULL(mem))
->> +			return -ENOMEM;
->> +
->> +		rproc_add_carveout(rproc, mem);
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +/*
->> + * zynqmp_r5_rproc_mem_unmap
->> + * @rproc: single R5 core's corresponding rproc instance
->> + * @mem: mem entry to unmap
->> + *
->> + * Unmap TCM banks when powering down R5 core.
->> + *
->> + * return 0 on success, otherwise non-zero value on failure
->> + */
->> +static int tcm_mem_unmap(struct rproc *rproc, struct rproc_mem_entry *mem)
->> +{
->> +	struct zynqmp_r5_core *r5_core;
->> +	int i;
->> +	enum pm_node_id pm_domain_id;
->> +
->> +	r5_core = rproc->priv;
->> +	if (!r5_core) {
->> +		pr_err("r5 core is not available\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	iounmap((void __iomem *)mem->va);
->> +
->> +	for (i = 0; i < r5_core->tcm_bank_count; i++) {
->> +		pm_domain_id = r5_core->tcm_banks[i].pm_domain_id;
->> +		if (zynqmp_pm_release_node(pm_domain_id))
->> +			pr_warn("can't turn off TCM bank %d", pm_domain_id);
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +/*
->> + * tcm_mem_map
->> + * @rproc: single R5 core's corresponding rproc instance
->> + * @mem: mem entry to initialize the va and da fields of
->> + *
->> + * Given TCM bank entry, this callback will set device address for R5
->> + * running on TCM and also setup virtual address for TCM bank
->> + * remoteproc carveout.
->> + *
->> + * return 0 on success, otherwise non-zero value on failure
->> + */
->> +static int tcm_mem_map(struct rproc *rproc,
->> +			 struct rproc_mem_entry *mem)
->> +{
->> +	void __iomem *va;
->> +
->> +	va = ioremap_wc(mem->dma, mem->len);
->> +	if (IS_ERR_OR_NULL(va))
->> +		return -ENOMEM;
->> +
->> +	/* Update memory entry va */
->> +	mem->va = (void *)va;
->> +
->> +	/* clear TCMs */
->> +	memset_io(va, 0, mem->len);
->> +
->> +	/*
->> +	 * The R5s expect their TCM banks to be at address 0x0 and 0x2000,
->> +	 * while on the Linux side they are at 0xffexxxxx.
->> +	 *
->> +	 * Zero out the high 12 bits of the address. This will give
->> +	 * expected values for TCM Banks 0A and 0B (0x0 and 0x20000).
->> +	 */
->> +	mem->da &= 0x000fffff;
->> +
->> +	/*
->> +	 * TCM Banks 1A and 1B still have to be translated.
->> +	 *
->> +	 * Below handle these two banks' absolute addresses (0xffe90000 and
->> +	 * 0xffeb0000) and convert to the expected relative addresses
->> +	 * (0x0 and 0x20000).
->> +	 */
->> +	if (mem->da == 0x90000 || mem->da == 0xB0000)
->> +		mem->da -= 0x90000;
->> +
->> +	/* if translated TCM bank address is not valid report error */
->> +	if (mem->da != 0x0 && mem->da != 0x20000) {
->> +		dev_err(&rproc->dev, "invalid TCM address: %x\n", mem->da);
->> +		return -EINVAL;
->> +	}
->> +	return 0;
->> +}
->> +
->> +static int add_tcm_carveout_split_mode(struct rproc *rproc)
->> +{
->> +	int i, num_banks, ret;
->> +	struct rproc_mem_entry *mem;
->> +	enum pm_node_id pm_domain_id;
->> +	u32 bank_addr;
->> +	size_t bank_size = 0;
->> +	char *bank_name;
->> +	struct device *dev;
->> +	struct zynqmp_r5_core *r5_core;
->> +
->> +	r5_core = (struct zynqmp_r5_core *)rproc->priv;
->> +	if (!r5_core)
->> +		return -EINVAL;
->> +
->> +	dev = r5_core->dev;
->> +
->> +	/* go through zynqmp banks for r5 node */
->> +	num_banks = r5_core->tcm_bank_count;
->> +	if (num_banks <= 0) {
->> +		dev_err(dev, "need to specify TCM banks\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	for (i = 0; i < num_banks; i++) {
->> +		bank_addr = (u32)r5_core->tcm_banks[i].addr;
->> +		bank_name = r5_core->tcm_banks[i].bank_name;
->> +		bank_size = r5_core->tcm_banks[i].size;
->> +		pm_domain_id = r5_core->tcm_banks[i].pm_domain_id;
->> +
->> +		ret = zynqmp_pm_request_node(pm_domain_id,
->> +					     ZYNQMP_PM_CAPABILITY_ACCESS, 0,
->> +					     ZYNQMP_PM_REQUEST_ACK_BLOCKING);
->> +		if (ret < 0) {
->> +			dev_err(dev, "failed to turn on TCM %d", pm_domain_id);
->> +			return ret;
->> +		}
->> +
->> +		dev_dbg(dev, "TCM carveout split mode %s addr=%x, size=0x%lx",
->> +			bank_name, bank_addr, bank_size);
->> +
->> +		/* add carveout */
->> +		mem = rproc_mem_entry_init(dev, NULL, bank_addr,
->> +					   bank_size, bank_addr,
->> +					   tcm_mem_map, tcm_mem_unmap,
->> +					   bank_name);
->> +		if (IS_ERR_OR_NULL(mem)) {
->> +			/* Turn off all TCM banks turned on before */
->> +			do {
->> +				pm_domain_id = r5_core->tcm_banks[i].pm_domain_id;
->> +				ret = zynqmp_pm_release_node((u32)pm_domain_id);
->> +				if (ret)
->> +					dev_warn(dev,
->> +						 "fail to release node: %x, %x\n",
->> +						 (u32)pm_domain_id, ret);
->> +			} while (i--);
->> +			return -ENOMEM;
->> +		}
->> +
->> +		rproc_add_carveout(rproc, mem);
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int add_tcm_carveout_lockstep_mode(struct rproc *rproc)
->> +{
->> +	int i, num_banks, ret;
->> +	struct rproc_mem_entry *mem;
->> +	enum pm_node_id pm_domain_id;
->> +	u32 bank_addr;
->> +	size_t bank_size = 0;
->> +	char *bank_name;
->> +	struct device *dev;
->> +	struct platform_device *parent_pdev;
->> +	struct zynqmp_r5_cluster *cluster;
->> +	struct zynqmp_r5_core *r5_core;
->> +
->> +	r5_core = (struct zynqmp_r5_core *)rproc->priv;
->> +	if (!r5_core)
->> +		return -EINVAL;
->> +
->> +	dev = r5_core->dev;
->> +	if (!dev) {
->> +		pr_err("r5 core device unavailable\n");
->> +		return -ENODEV;
->> +	}
->> +
->> +	/* go through zynqmp banks for r5 node */
->> +	num_banks = r5_core->tcm_bank_count;
->> +	if (num_banks <= 0) {
->> +		dev_err(dev, "need to specify TCM banks\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	bank_addr = (u32)r5_core->tcm_banks[0].addr;
->> +	bank_name = r5_core->tcm_banks[0].bank_name;
->> +	for (i = 0; i < num_banks; i++) {
->> +		bank_size += r5_core->tcm_banks[i].size;
->> +		pm_domain_id = r5_core->tcm_banks[i].pm_domain_id;
->> +
->> +		ret = zynqmp_pm_request_node(pm_domain_id,
->> +					     ZYNQMP_PM_CAPABILITY_ACCESS, 0,
->> +					     ZYNQMP_PM_REQUEST_ACK_BLOCKING);
->> +		if (ret < 0) {
->> +			dev_err(dev, "failed to turn on TCM %d", pm_domain_id);
->> +			return ret;
->> +		}
->> +	}
->> +
->> +	dev_dbg(dev, "TCM add carveout lockstep mode %s addr=0x%x, size=0x%lx",
->> +		bank_name, bank_addr, bank_size);
->> +
->> +	/* add carveout */
->> +	mem = rproc_mem_entry_init(dev, NULL, bank_addr,
->> +				   bank_size, bank_addr,
->> +				   tcm_mem_map, tcm_mem_unmap,
->> +				   bank_name);
->> +	if (IS_ERR_OR_NULL(mem)) {
->> +		for (i = 0; i < num_banks; i++) {
->> +			pm_domain_id = r5_core->tcm_banks[i].pm_domain_id;
->> +			ret = zynqmp_pm_release_node((u32)pm_domain_id);
->> +			if (ret)
->> +				dev_warn(dev,
->> +					 "fail to release node: %x ret: %x\n",
->> +					 (u32)pm_domain_id, ret);
->> +		}
->> +		return -ENOMEM;
->> +	}
->> +
->> +	rproc_add_carveout(rproc, mem);
->> +
->> +	return 0;
->> +}
->> +
->> +/*
->> + * add_tcm_banks()
->> + * @rproc: single R5 core's corresponding rproc instance
->> + *
->> + * Given R5 node in remoteproc instance
->> + * allocate remoteproc carveout for TCM memory
->> + * needed for firmware to be loaded
->> + *
->> + * return 0 on success, otherwise non-zero value on failure
->> + */
->> +static int add_tcm_banks(struct rproc *rproc)
->> +{
->> +	struct device *dev;
->> +	struct platform_device *parent_pdev;
->> +	struct zynqmp_r5_cluster *cluster;
->> +	struct zynqmp_r5_core *r5_core;
->> +
->> +	r5_core = (struct zynqmp_r5_core *)rproc->priv;
->> +	if (!r5_core)
->> +		return -EINVAL;
->> +
->> +	dev = r5_core->dev;
->> +	if (!dev) {
->> +		pr_err("r5 core device unavailable\n");
->> +		return -ENODEV;
->> +	}
->> +
->> +	parent_pdev = to_platform_device(dev->parent);
->> +	if (!parent_pdev) {
->> +		dev_err(dev, "parent platform dev unavailable\n");
->> +		return -ENODEV;
->> +	}
->> +
->> +	cluster = platform_get_drvdata(parent_pdev);
->> +	if (!cluster) {
->> +		dev_err(&parent_pdev->dev, "Invalid driver data\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	if (cluster->mode == SPLIT_MODE)
->> +		return add_tcm_carveout_split_mode(rproc);
->> +	else if (cluster->mode == LOCKSTEP_MODE)
->> +		return add_tcm_carveout_lockstep_mode(rproc);
->> +
->> +	dev_err(cluster->dev, "invalid cluster mode\n");
->> +	return -EINVAL;
->> +}
->> +
->> +/*
->> + * zynqmp_r5_parse_fw()
->> + * @rproc: single R5 core's corresponding rproc instance
->> + * @fw: ptr to firmware to be loaded onto r5 core
->> + *
->> + * When loading firmware, ensure the necessary carveouts are in remoteproc
->> + *
->> + * return 0 on success, otherwise non-zero value on failure
->> + */
->> +static int zynqmp_r5_parse_fw(struct rproc *rproc, const struct firmware *fw)
->> +{
->> +	int ret;
->> +	struct zynqmp_r5_core *r5_core;
->> +	struct device *dev;
->> +
->> +	r5_core = rproc->priv;
->> +	if (!r5_core) {
->> +		dev_err(&rproc->dev, "r5 core not available\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	dev = r5_core->dev;
->> +
->> +	ret = add_tcm_banks(rproc);
->> +	if (ret) {
->> +		dev_err(dev, "failed to get TCM banks, err %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	ret = add_mem_regions(rproc);
->> +	if (ret)
->> +		dev_warn(dev, "failed to get reserve mem regions %d\n", ret);
->> +
->> +	ret = rproc_elf_load_rsc_table(rproc, fw);
->> +	if (ret == -EINVAL) {
->> +		/*
->> +		 * resource table only required for IPC.
->> +		 * if not present, this is not necessarily an error;
->> +		 * for example, loading r5 hello world application
->> +		 * so simply inform user and keep going.
->> +		 */
->> +		dev_info(&rproc->dev, "no resource table found.\n");
->> +		ret = 0;
->> +	}
->> +	return ret;
->> +}
->> +
->> +static struct rproc_ops zynqmp_r5_rproc_ops = {
->> +	.start		= zynqmp_r5_rproc_start,
->> +	.stop		= zynqmp_r5_rproc_stop,
->> +	.load		= rproc_elf_load_segments,
->> +	.parse_fw	= zynqmp_r5_parse_fw,
->> +	.find_loaded_rsc_table = rproc_elf_find_loaded_rsc_table,
->> +	.sanity_check	= rproc_elf_sanity_check,
->> +	.get_boot_addr	= rproc_elf_get_boot_addr,
->> +};
->> +
->> +static void zynqmp_r5_print_dt_node_info(struct zynqmp_r5_cluster *cluster)
->> +{
->> +	int i, j, k;
->> +	struct zynqmp_r5_core *r5_core;
->> +
->> +	dev_dbg(cluster->dev, "Printing dt node info\n");
-> Why mixing dev_dbg() and pr_debug()?  Please pick one and stick with it.
->
-> Even for debug level output this is very chatty - is all that information really
-> needed when it is already available in /proc/device-tree?
->
->> +
->> +	pr_debug("cluster mode = %d\n", cluster->mode);
->> +	pr_debug("r5f cluster in %s mode\n", (cluster->mode == 0) ? "SPLIT" :
->> +		 cluster->mode == 1 ? "LOCKSTEP" : "SINGLE_CPU");
->> +	pr_debug("r5f num cores = %d\n", cluster->core_count);
->> +
->> +	for (i = 0; i < cluster->core_count; i++) {
->> +		r5_core = &cluster->r5_cores[i];
->> +		if (!r5_core) {
->> +			pr_err("can't get r5_core\n");
->> +			continue;
->> +		}
->> +
->> +		pr_debug("r5 core %d nodes\n", i);
->> +		pr_debug("TCM banks = %d\n", r5_core->tcm_bank_count);
->> +		for (k = 0; k < r5_core->tcm_bank_count; k++) {
->> +			pr_debug("tcm %d addr=0x%llx size=0x%lx, pm_id=%d, %s\n",
->> +				 k, r5_core->tcm_banks[k].addr,
->> +				 r5_core->tcm_banks[k].size,
->> +				 r5_core->tcm_banks[k].pm_domain_id,
->> +				 r5_core->tcm_banks[k].bank_name);
->> +		}
->> +
->> +		pr_debug("reserve mem regions = %d\n", r5_core->res_mem_count);
->> +
->> +		for (j = 0; j < r5_core->res_mem_count; j++) {
->> +			pr_debug("mem %d addr=0x%llx, size=0x%llx, name=%s\n",
->> +				 j, r5_core->res_mem[j].base,
->> +				 r5_core->res_mem[j].size,
->> +				 r5_core->res_mem[j].name);
->> +		}
->> +	}
->> +}
->> +
->> +/**
->> + * zynqmp_r5_add_rproc_core() - Probes ZynqMP R5 processor device node
->> + *		       this is called for each individual R5 core to
->> + *		       set up mailbox, Xilinx platform manager unique ID,
->> + *		       add to rproc core
->> + *
->> + * @r5_core: zynqmp_r5_core r5 core object to initialize
->> + *
->> + * Return: 0 for success, negative value for failure.
->> + */
->> +static int zynqmp_r5_add_rproc_core(struct zynqmp_r5_core *r5_core)
->> +{
->> +	int ret;
->> +	struct rproc *r5_rproc;
->> +	struct device *dev;
->> +
->> +	dev = r5_core->dev;
->> +
->> +	/* Set up DMA mask */
->> +	ret = dma_set_coherent_mask(dev, DMA_BIT_MASK(32));
->> +	if (ret)
->> +		return ret;
->> +
->> +	/* Allocate remoteproc instance */
->> +	r5_rproc = devm_rproc_alloc(dev, dev_name(dev), &zynqmp_r5_rproc_ops,
->> +				    NULL, sizeof(struct zynqmp_r5_core));
->> +	if (IS_ERR_OR_NULL(r5_rproc))
->> +		return -ENOMEM;
->> +
->> +	r5_rproc->auto_boot = false;
->> +	r5_rproc->priv = r5_core;
->> +
->> +	/* Add R5 remoteproc */
->> +	ret = devm_rproc_add(dev, r5_rproc);
->> +	if (ret) {
->> +		pr_err("failed to add r5 remoteproc\n");
->> +		return ret;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int zynqmp_r5_get_tcm_node(struct zynqmp_r5_cluster *cluster)
->> +{
->> +	int tcm_bank_count, tcm_node;
->> +	int i = 0, j;
->> +	struct zynqmp_r5_core *r5_core;
->> +	const struct mem_bank_data *tcm = zynqmp_tcm_banks;
->> +	struct device *dev = cluster->dev;
->> +
->> +	/* ToDo: Use predefined TCM address space values from driver until
->> +	 * system-dt spec is not final fot TCM
->> +	 */
-> Multilined comment should be as follow:
->
->          /*
->           * ToDo: Use predefined TCM address space values from driver until
-> 	 * system-dt spec is not final fot TCM
->           */
->
-> s/"final fot TCM"/"final for TCM"
->
-> Any reason this can't be done with "reg" properties like TI did for K3?  It
-> would be nice to have TCMs included in the yaml file example.
->
->> +	tcm_bank_count = ARRAY_SIZE(zynqmp_tcm_banks);
->> +
->> +	/* count per core tcm banks */
->> +	tcm_bank_count = tcm_bank_count / cluster->core_count;
->> +
->> +	/* r5 core 0 will use all of TCM banks in lockstep mode.
->> +	 * In split mode, r5 core0 will use 128k and r5 core1 will use another
->> +	 * 128k. Assign TCM banks to each core accordingly
->> +	 */
->> +	tcm_node = 0;
->> +	for (j = 0; j < cluster->core_count; j++) {
->> +		r5_core = &cluster->r5_cores[j];
->> +		r5_core->tcm_banks = devm_kzalloc(dev, sizeof(struct mem_bank_data) *
->> +						  tcm_bank_count, GFP_KERNEL);
->> +		if (IS_ERR_OR_NULL(r5_core->tcm_banks))
->> +			return -ENOMEM;
->> +
->> +		for (i = 0; i < tcm_bank_count; i++) {
->> +			/* Use pre-defined TCM reg values.
->> +			 * Eventually this should be replaced by values
->> +			 * parsed from dts.
->> +			 */
->> +			r5_core->tcm_banks[i].addr = tcm[tcm_node].addr;
->> +			r5_core->tcm_banks[i].size = tcm[tcm_node].size;
->> +			r5_core->tcm_banks[i].pm_domain_id = tcm[tcm_node].pm_domain_id;
->> +			r5_core->tcm_banks[i].bank_name = tcm[tcm_node].bank_name;
->> +			tcm_node++;
->> +		}
->> +
->> +		r5_core->tcm_bank_count = tcm_bank_count;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int zynqmp_r5_get_mem_region_node(struct zynqmp_r5_core *r5_core)
->> +{
->> +	int res_mem_count, i;
->> +	struct device *dev;
->> +	struct device_node *np, *rmem_np;
->> +	struct reserved_mem *rmem;
->> +
->> +	dev = r5_core->dev;
->> +
->> +	np = r5_core->np;
->> +	if (IS_ERR_OR_NULL(np)) {
->> +		pr_err("invalid device node of r5 core\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	res_mem_count = of_property_count_elems_of_size(np, "memory-region",
->> +							sizeof(phandle));
->> +	if (res_mem_count <= 0) {
->> +		dev_warn(dev, "failed to get memory-region property %d\n",
->> +			 res_mem_count);
->> +		return -EINVAL;
->> +	}
->> +
->> +	r5_core->res_mem = devm_kzalloc(dev,
->> +					res_mem_count * sizeof(struct reserved_mem),
->> +					GFP_KERNEL);
->> +	if (!r5_core->res_mem) {
->> +		dev_err(dev, "failed to allocate mem region memory\n");
->> +		return -ENOMEM;
->> +	}
->> +
->> +	for (i = 0; i < res_mem_count; i++) {
->> +		rmem_np = of_parse_phandle(np, "memory-region", i);
->> +		if (!rmem_np)
->> +			return -EINVAL;
->> +
->> +		rmem = of_reserved_mem_lookup(rmem_np);
->> +		if (!rmem) {
->> +			of_node_put(rmem_np);
->> +			return -EINVAL;
->> +		}
->> +
->> +		memcpy(&r5_core->res_mem[i], rmem,
->> +		       sizeof(struct reserved_mem));
->> +		of_node_put(rmem_np);
->> +	}
->> +
->> +	r5_core->res_mem_count = res_mem_count;
->> +
->> +	return 0;
->> +}
->> +
->> +static int zynqmp_r5_core_init(struct zynqmp_r5_cluster *cluster)
->> +{
->> +	int ret, i;
->> +	struct zynqmp_r5_core *r5_core;
->> +	struct device *dev = cluster->dev;
->> +
->> +	ret = zynqmp_r5_get_tcm_node(cluster);
->> +	if (ret < 0) {
->> +		dev_err(dev, "can't get tcm node, err %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	for (i = 0; i < cluster->core_count; i++) {
->> +		r5_core = &cluster->r5_cores[i];
->> +		if (!r5_core) {
->> +			pr_err("invalid r5 core\n");
->> +			return -EINVAL;
->> +		}
->> +
->> +		ret = zynqmp_r5_get_mem_region_node(r5_core);
->> +		if (ret)
->> +			dev_warn(dev, "memory-region prop failed %d\n", ret);
->> +
->> +		ret = of_property_read_u32_index(r5_core->np, "power-domains",
->> +						 1, &r5_core->pm_domain_id);
->> +		if (ret) {
->> +			dev_err(dev, "failed to get power-domains property\n");
->> +			return ret;
->> +		}
->> +
->> +		ret = zynqmp_r5_set_mode(r5_core, cluster->mode);
->> +		if (ret)
->> +			return ret;
->> +
->> +		ret = zynqmp_r5_add_rproc_core(r5_core);
->> +		if (ret) {
->> +			dev_err(dev, "failed to init r5 core %d\n", i);
->> +			return ret;
->> +		}
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int zynqmp_r5_cluster_init(struct zynqmp_r5_cluster *cluster)
->> +{
->> +	struct device *dev = cluster->dev;
->> +	struct device_node *dev_node = dev_of_node(dev);
->> +	struct device_node *child;
->> +	struct platform_device *child_pdev;
->> +	int core_count = 0, ret, i;
->> +	enum zynqmp_r5_cluster_mode cluster_mode = LOCKSTEP_MODE;
->> +	struct zynqmp_r5_core *r5_cores;
->> +
->> +	ret = of_property_read_u32(dev_node, "xlnx,cluster-mode", &cluster_mode);
->> +
->> +	/* on success returns 0, if not defined then returns -EINVAL,
->> +	 * In that case, default is LOCKSTEP mode
->> +	 */
->> +	if (ret != -EINVAL && ret != 0) {
->> +		dev_err(dev, "Invalid xlnx,cluster-mode property\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	if (cluster_mode == SINGLE_CPU_MODE) {
->> +		dev_err(dev, "driver does not support single cpu mode\n");
->> +		return -EINVAL;
->> +	} else if ((cluster_mode != SPLIT_MODE &&
->> +		   cluster_mode != LOCKSTEP_MODE)) {
->> +		dev_err(dev, "Invalid cluster mode\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	core_count = of_get_available_child_count(dev_node);
->> +	if (core_count <= 0) {
->> +		dev_err(dev, "Invalid number of r5 cores %d", core_count);
->> +		return -EINVAL;
->> +	} else if (cluster_mode == SPLIT_MODE && core_count != 2) {
->> +		dev_err(dev, "Invalid number of r5 cores for split mode\n");
->> +		return -EINVAL;
->> +	} else if (cluster_mode == LOCKSTEP_MODE && core_count == 2) {
->> +		dev_warn(dev, "Only r5 core0 will be used\n");
->> +		core_count = 1;
->> +	}
->> +
->> +	r5_cores = devm_kzalloc(dev, sizeof(struct zynqmp_r5_core) *
->> +						 core_count, GFP_KERNEL);
->> +	if (IS_ERR_OR_NULL(r5_cores)) {
->> +		dev_err(dev, "can't allocate memory for cores\n");
->> +		return -ENOMEM;
->> +	}
->> +
->> +	i = 0;
->> +	for_each_available_child_of_node(dev_node, child) {
->> +		child_pdev = of_find_device_by_node(child);
->> +		if (!child_pdev)
->> +			return -ENODEV;
->> +
->> +		r5_cores[i].dev = &child_pdev->dev;
->> +		if (!r5_cores[i].dev) {
->> +			pr_err("can't get device for r5 core %d\n", i);
->> +			return -ENODEV;
->> +		}
->> +
->> +		r5_cores[i].np = dev_of_node(r5_cores[i].dev);
->> +		if (!r5_cores[i].np) {
->> +			pr_err("can't get device node for r5 core %d\n", i);
->> +			return -ENODEV;
->> +		}
->> +
->> +		i++;
->> +		if (i == core_count)
->> +			break;
->> +	}
->> +
->> +	cluster->mode = cluster_mode;
->> +	cluster->core_count = core_count;
->> +	cluster->r5_cores = r5_cores;
->> +
->> +	ret = zynqmp_r5_core_init(cluster);
->> +	if (ret < 0) {
->> +		dev_err(dev, "failed to init r5 core err %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	zynqmp_r5_print_dt_node_info(cluster);
->> +
->> +	return 0;
->> +}
->> +
->> +static void zynqmp_r5_cluster_exit(void *data)
->> +{
->> +	struct platform_device *pdev = (struct platform_device *)data;
->> +
->> +	platform_set_drvdata(pdev, NULL);
->> +
->> +	pr_info("Exit r5f subsystem driver\n");
->> +}
->> +
->> +/*
->> + * zynqmp_r5_remoteproc_probe()
->> + *
->> + * @pdev: domain platform device for R5 cluster
->> + *
->> + * called when driver is probed, for each R5 core specified in DT,
->> + * setup as needed to do remoteproc-related operations
->> + *
->> + * Return: 0 for success, negative value for failure.
->> + */
->> +static int zynqmp_r5_remoteproc_probe(struct platform_device *pdev)
->> +{
->> +	int ret;
->> +	struct zynqmp_r5_cluster *cluster;
->> +	struct device *dev = &pdev->dev;
->> +
->> +	cluster = devm_kzalloc(dev, sizeof(*cluster), GFP_KERNEL);
->> +	if (IS_ERR_OR_NULL(cluster))
->> +		return -ENOMEM;
-> Function devm_kzalloc() does not return an code on error, just NULL.  Please fix
-> throughout the driver.
->
->> +
->> +	cluster->dev = dev;
->> +
->> +	ret = devm_of_platform_populate(dev);
->> +	if (ret) {
->> +		dev_err(dev, "failed to populate platform dev %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	/* wire in so each core can be cleaned up at driver remove */
->> +	platform_set_drvdata(pdev, cluster);
->> +
->> +	ret = devm_add_action_or_reset(dev, zynqmp_r5_cluster_exit, pdev);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ret = zynqmp_r5_cluster_init(cluster);
->> +	if (ret) {
->> +		dev_err(dev, "Invalid r5f subsystem device tree\n");
->> +		return ret;
->> +	}
->> +
->> +	dev_info(dev, "Xilinx r5f remoteproc driver probe success\n");
-> Please remove this.
->
-> I am out of time for today and will continue on Monday.
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index ac6c0cd9bc29..d28fe0148e13 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -150,7 +150,7 @@ config PAGE_OFFSET
+>   	hex
+>   	default 0xC0000000 if 32BIT
+>   	default 0x80000000 if 64BIT && !MMU
+> -	default 0xffffffd800000000 if 64BIT
+> +	default 0xffffaf8000000000 if 64BIT
+>   
+>   config KASAN_SHADOW_OFFSET
+>   	hex
+> @@ -201,7 +201,7 @@ config FIX_EARLYCON_MEM
+>   
+>   config PGTABLE_LEVELS
+>   	int
+> -	default 3 if 64BIT
+> +	default 4 if 64BIT
+>   	default 2
+>   
+>   config LOCKDEP_SUPPORT
+> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> index 87ac65696871..3fdb971c7896 100644
+> --- a/arch/riscv/include/asm/csr.h
+> +++ b/arch/riscv/include/asm/csr.h
+> @@ -40,14 +40,13 @@
+>   #ifndef CONFIG_64BIT
+>   #define SATP_PPN	_AC(0x003FFFFF, UL)
+>   #define SATP_MODE_32	_AC(0x80000000, UL)
+> -#define SATP_MODE	SATP_MODE_32
+>   #define SATP_ASID_BITS	9
+>   #define SATP_ASID_SHIFT	22
+>   #define SATP_ASID_MASK	_AC(0x1FF, UL)
+>   #else
+>   #define SATP_PPN	_AC(0x00000FFFFFFFFFFF, UL)
+>   #define SATP_MODE_39	_AC(0x8000000000000000, UL)
+> -#define SATP_MODE	SATP_MODE_39
+> +#define SATP_MODE_48	_AC(0x9000000000000000, UL)
+>   #define SATP_ASID_BITS	16
+>   #define SATP_ASID_SHIFT	44
+>   #define SATP_ASID_MASK	_AC(0xFFFF, UL)
+> diff --git a/arch/riscv/include/asm/fixmap.h b/arch/riscv/include/asm/fixmap.h
+> index 54cbf07fb4e9..58a718573ad6 100644
+> --- a/arch/riscv/include/asm/fixmap.h
+> +++ b/arch/riscv/include/asm/fixmap.h
+> @@ -24,6 +24,7 @@ enum fixed_addresses {
+>   	FIX_HOLE,
+>   	FIX_PTE,
+>   	FIX_PMD,
+> +	FIX_PUD,
+>   	FIX_TEXT_POKE1,
+>   	FIX_TEXT_POKE0,
+>   	FIX_EARLYCON_MEM_BASE,
+> diff --git a/arch/riscv/include/asm/kasan.h b/arch/riscv/include/asm/kasan.h
+> index 743e6ff57996..0b85e363e778 100644
+> --- a/arch/riscv/include/asm/kasan.h
+> +++ b/arch/riscv/include/asm/kasan.h
+> @@ -28,7 +28,11 @@
+>   #define KASAN_SHADOW_SCALE_SHIFT	3
+>   
+>   #define KASAN_SHADOW_SIZE	(UL(1) << ((VA_BITS - 1) - KASAN_SHADOW_SCALE_SHIFT))
+> -#define KASAN_SHADOW_START	(KASAN_SHADOW_END - KASAN_SHADOW_SIZE)
+> +/*
+> + * Depending on the size of the virtual address space, the region may not be
+> + * aligned on PGDIR_SIZE, so force its alignment to ease its population.
+> + */
+> +#define KASAN_SHADOW_START	((KASAN_SHADOW_END - KASAN_SHADOW_SIZE) & PGDIR_MASK)
+>   #define KASAN_SHADOW_END	MODULES_LOWEST_VADDR
+>   #define KASAN_SHADOW_OFFSET	_AC(CONFIG_KASAN_SHADOW_OFFSET, UL)
+>   
+> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
+> index e03559f9b35e..d089fe46f7d8 100644
+> --- a/arch/riscv/include/asm/page.h
+> +++ b/arch/riscv/include/asm/page.h
+> @@ -31,7 +31,20 @@
+>    * When not using MMU this corresponds to the first free page in
+>    * physical memory (aligned on a page boundary).
+>    */
+> +#ifdef CONFIG_64BIT
+> +#ifdef CONFIG_MMU
+> +#define PAGE_OFFSET		kernel_map.page_offset
+> +#else
+> +#define PAGE_OFFSET		_AC(CONFIG_PAGE_OFFSET, UL)
+> +#endif
+> +/*
+> + * By default, CONFIG_PAGE_OFFSET value corresponds to SV48 address space so
+> + * define the PAGE_OFFSET value for SV39.
+> + */
+> +#define PAGE_OFFSET_L3		_AC(0xffffffd800000000, UL)
+> +#else
+>   #define PAGE_OFFSET		_AC(CONFIG_PAGE_OFFSET, UL)
+> +#endif /* CONFIG_64BIT */
+>   
+>   /*
+>    * Half of the kernel address space (half of the entries of the page global
+> @@ -90,6 +103,7 @@ extern unsigned long riscv_pfn_base;
+>   #endif /* CONFIG_MMU */
+>   
+>   struct kernel_mapping {
+> +	unsigned long page_offset;
+>   	unsigned long virt_addr;
+>   	uintptr_t phys_addr;
+>   	uintptr_t size;
+> diff --git a/arch/riscv/include/asm/pgalloc.h b/arch/riscv/include/asm/pgalloc.h
+> index 0af6933a7100..11823004b87a 100644
+> --- a/arch/riscv/include/asm/pgalloc.h
+> +++ b/arch/riscv/include/asm/pgalloc.h
+> @@ -11,6 +11,8 @@
+>   #include <asm/tlb.h>
+>   
+>   #ifdef CONFIG_MMU
+> +#define __HAVE_ARCH_PUD_ALLOC_ONE
+> +#define __HAVE_ARCH_PUD_FREE
+>   #include <asm-generic/pgalloc.h>
+>   
+>   static inline void pmd_populate_kernel(struct mm_struct *mm,
+> @@ -36,6 +38,44 @@ static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
+>   
+>   	set_pud(pud, __pud((pfn << _PAGE_PFN_SHIFT) | _PAGE_TABLE));
+>   }
+> +
+> +static inline void p4d_populate(struct mm_struct *mm, p4d_t *p4d, pud_t *pud)
+> +{
+> +	if (pgtable_l4_enabled) {
+> +		unsigned long pfn = virt_to_pfn(pud);
+> +
+> +		set_p4d(p4d, __p4d((pfn << _PAGE_PFN_SHIFT) | _PAGE_TABLE));
+> +	}
+> +}
+> +
+> +static inline void p4d_populate_safe(struct mm_struct *mm, p4d_t *p4d,
+> +				     pud_t *pud)
+> +{
+> +	if (pgtable_l4_enabled) {
+> +		unsigned long pfn = virt_to_pfn(pud);
+> +
+> +		set_p4d_safe(p4d,
+> +			     __p4d((pfn << _PAGE_PFN_SHIFT) | _PAGE_TABLE));
+> +	}
+> +}
+> +
+> +#define pud_alloc_one pud_alloc_one
+> +static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long addr)
+> +{
+> +	if (pgtable_l4_enabled)
+> +		return __pud_alloc_one(mm, addr);
+> +
+> +	return NULL;
+> +}
+> +
+> +#define pud_free pud_free
+> +static inline void pud_free(struct mm_struct *mm, pud_t *pud)
+> +{
+> +	if (pgtable_l4_enabled)
+> +		__pud_free(mm, pud);
+> +}
+> +
+> +#define __pud_free_tlb(tlb, pud, addr)  pud_free((tlb)->mm, pud)
+>   #endif /* __PAGETABLE_PMD_FOLDED */
+>   
+>   static inline pgd_t *pgd_alloc(struct mm_struct *mm)
+> diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
+> index 228261aa9628..bbbdd66e5e2f 100644
+> --- a/arch/riscv/include/asm/pgtable-64.h
+> +++ b/arch/riscv/include/asm/pgtable-64.h
+> @@ -8,16 +8,36 @@
+>   
+>   #include <linux/const.h>
+>   
+> -#define PGDIR_SHIFT     30
+> +extern bool pgtable_l4_enabled;
+> +
+> +#define PGDIR_SHIFT_L3  30
+> +#define PGDIR_SHIFT_L4  39
+> +#define PGDIR_SIZE_L3   (_AC(1, UL) << PGDIR_SHIFT_L3)
+> +
+> +#define PGDIR_SHIFT     (pgtable_l4_enabled ? PGDIR_SHIFT_L4 : PGDIR_SHIFT_L3)
+>   /* Size of region mapped by a page global directory */
+>   #define PGDIR_SIZE      (_AC(1, UL) << PGDIR_SHIFT)
+>   #define PGDIR_MASK      (~(PGDIR_SIZE - 1))
+>   
+> +/* pud is folded into pgd in case of 3-level page table */
+> +#define PUD_SHIFT      30
+> +#define PUD_SIZE       (_AC(1, UL) << PUD_SHIFT)
+> +#define PUD_MASK       (~(PUD_SIZE - 1))
+> +
+>   #define PMD_SHIFT       21
+>   /* Size of region mapped by a page middle directory */
+>   #define PMD_SIZE        (_AC(1, UL) << PMD_SHIFT)
+>   #define PMD_MASK        (~(PMD_SIZE - 1))
+>   
+> +/* Page Upper Directory entry */
+> +typedef struct {
+> +	unsigned long pud;
+> +} pud_t;
+> +
+> +#define pud_val(x)      ((x).pud)
+> +#define __pud(x)        ((pud_t) { (x) })
+> +#define PTRS_PER_PUD    (PAGE_SIZE / sizeof(pud_t))
+> +
+>   /* Page Middle Directory entry */
+>   typedef struct {
+>   	unsigned long pmd;
+> @@ -59,6 +79,16 @@ static inline void pud_clear(pud_t *pudp)
+>   	set_pud(pudp, __pud(0));
+>   }
+>   
+> +static inline pud_t pfn_pud(unsigned long pfn, pgprot_t prot)
+> +{
+> +	return __pud((pfn << _PAGE_PFN_SHIFT) | pgprot_val(prot));
+> +}
+> +
+> +static inline unsigned long _pud_pfn(pud_t pud)
+> +{
+> +	return pud_val(pud) >> _PAGE_PFN_SHIFT;
+> +}
+> +
+>   static inline pmd_t *pud_pgtable(pud_t pud)
+>   {
+>   	return (pmd_t *)pfn_to_virt(pud_val(pud) >> _PAGE_PFN_SHIFT);
+> @@ -69,6 +99,17 @@ static inline struct page *pud_page(pud_t pud)
+>   	return pfn_to_page(pud_val(pud) >> _PAGE_PFN_SHIFT);
+>   }
+>   
+> +#define mm_pud_folded  mm_pud_folded
+> +static inline bool mm_pud_folded(struct mm_struct *mm)
+> +{
+> +	if (pgtable_l4_enabled)
+> +		return false;
+> +
+> +	return true;
+> +}
+> +
+> +#define pmd_index(addr) (((addr) >> PMD_SHIFT) & (PTRS_PER_PMD - 1))
+> +
+>   static inline pmd_t pfn_pmd(unsigned long pfn, pgprot_t prot)
+>   {
+>   	return __pmd((pfn << _PAGE_PFN_SHIFT) | pgprot_val(prot));
+> @@ -84,4 +125,69 @@ static inline unsigned long _pmd_pfn(pmd_t pmd)
+>   #define pmd_ERROR(e) \
+>   	pr_err("%s:%d: bad pmd %016lx.\n", __FILE__, __LINE__, pmd_val(e))
+>   
+> +#define pud_ERROR(e)   \
+> +	pr_err("%s:%d: bad pud %016lx.\n", __FILE__, __LINE__, pud_val(e))
+> +
+> +static inline void set_p4d(p4d_t *p4dp, p4d_t p4d)
+> +{
+> +	if (pgtable_l4_enabled)
+> +		*p4dp = p4d;
+> +	else
+> +		set_pud((pud_t *)p4dp, (pud_t){ p4d_val(p4d) });
+> +}
+> +
+> +static inline int p4d_none(p4d_t p4d)
+> +{
+> +	if (pgtable_l4_enabled)
+> +		return (p4d_val(p4d) == 0);
+> +
+> +	return 0;
+> +}
+> +
+> +static inline int p4d_present(p4d_t p4d)
+> +{
+> +	if (pgtable_l4_enabled)
+> +		return (p4d_val(p4d) & _PAGE_PRESENT);
+> +
+> +	return 1;
+> +}
+> +
+> +static inline int p4d_bad(p4d_t p4d)
+> +{
+> +	if (pgtable_l4_enabled)
+> +		return !p4d_present(p4d);
+> +
+> +	return 0;
+> +}
+> +
+> +static inline void p4d_clear(p4d_t *p4d)
+> +{
+> +	if (pgtable_l4_enabled)
+> +		set_p4d(p4d, __p4d(0));
+> +}
+> +
+> +static inline pud_t *p4d_pgtable(p4d_t p4d)
+> +{
+> +	if (pgtable_l4_enabled)
+> +		return (pud_t *)pfn_to_virt(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
+> +
+> +	return (pud_t *)pud_pgtable((pud_t) { p4d_val(p4d) });
+> +}
+> +
+> +static inline struct page *p4d_page(p4d_t p4d)
+> +{
+> +	return pfn_to_page(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
+> +}
+> +
+> +#define pud_index(addr) (((addr) >> PUD_SHIFT) & (PTRS_PER_PUD - 1))
+> +
+> +#define pud_offset pud_offset
+> +static inline pud_t *pud_offset(p4d_t *p4d, unsigned long address)
+> +{
+> +	if (pgtable_l4_enabled)
+> +		return p4d_pgtable(*p4d) + pud_index(address);
+> +
+> +	return (pud_t *)p4d;
+> +}
+> +
+>   #endif /* _ASM_RISCV_PGTABLE_64_H */
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index e1a52e22ad7e..e1c74ef4ead2 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -51,7 +51,7 @@
+>    * position vmemmap directly below the VMALLOC region.
+>    */
+>   #ifdef CONFIG_64BIT
+> -#define VA_BITS		39
+> +#define VA_BITS		(pgtable_l4_enabled ? 48 : 39)
+>   #else
+>   #define VA_BITS		32
+>   #endif
+> @@ -90,8 +90,7 @@
+>   
+>   #ifndef __ASSEMBLY__
+>   
+> -/* Page Upper Directory not used in RISC-V */
+> -#include <asm-generic/pgtable-nopud.h>
+> +#include <asm-generic/pgtable-nop4d.h>
+>   #include <asm/page.h>
+>   #include <asm/tlbflush.h>
+>   #include <linux/mm_types.h>
+> @@ -113,6 +112,17 @@
+>   #define XIP_FIXUP(addr)		(addr)
+>   #endif /* CONFIG_XIP_KERNEL */
+>   
+> +struct pt_alloc_ops {
+> +	pte_t *(*get_pte_virt)(phys_addr_t pa);
+> +	phys_addr_t (*alloc_pte)(uintptr_t va);
+> +#ifndef __PAGETABLE_PMD_FOLDED
+> +	pmd_t *(*get_pmd_virt)(phys_addr_t pa);
+> +	phys_addr_t (*alloc_pmd)(uintptr_t va);
+> +	pud_t *(*get_pud_virt)(phys_addr_t pa);
+> +	phys_addr_t (*alloc_pud)(uintptr_t va);
+> +#endif
+> +};
+> +
+>   #ifdef CONFIG_MMU
+>   /* Number of entries in the page global directory */
+>   #define PTRS_PER_PGD    (PAGE_SIZE / sizeof(pgd_t))
+> @@ -669,9 +679,11 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
+>    * Note that PGDIR_SIZE must evenly divide TASK_SIZE.
+>    */
+>   #ifdef CONFIG_64BIT
+> -#define TASK_SIZE (PGDIR_SIZE * PTRS_PER_PGD / 2)
+> +#define TASK_SIZE      (PGDIR_SIZE * PTRS_PER_PGD / 2)
+> +#define TASK_SIZE_MIN  (PGDIR_SIZE_L3 * PTRS_PER_PGD / 2)
+>   #else
+> -#define TASK_SIZE FIXADDR_START
+> +#define TASK_SIZE	FIXADDR_START
+> +#define TASK_SIZE_MIN	TASK_SIZE
+>   #endif
+>   
+>   #else /* CONFIG_MMU */
+> @@ -697,6 +709,8 @@ extern uintptr_t _dtb_early_pa;
+>   #define dtb_early_va	_dtb_early_va
+>   #define dtb_early_pa	_dtb_early_pa
+>   #endif /* CONFIG_XIP_KERNEL */
+> +extern u64 satp_mode;
+> +extern bool pgtable_l4_enabled;
+>   
+>   void paging_init(void);
+>   void misc_mem_init(void);
+> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+> index 52c5ff9804c5..c3c0ed559770 100644
+> --- a/arch/riscv/kernel/head.S
+> +++ b/arch/riscv/kernel/head.S
+> @@ -95,7 +95,8 @@ relocate:
+>   
+>   	/* Compute satp for kernel page tables, but don't load it yet */
+>   	srl a2, a0, PAGE_SHIFT
+> -	li a1, SATP_MODE
+> +	la a1, satp_mode
+> +	REG_L a1, 0(a1)
+>   	or a2, a2, a1
+>   
+>   	/*
+> diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
+> index ee3459cb6750..a7246872bd30 100644
+> --- a/arch/riscv/mm/context.c
+> +++ b/arch/riscv/mm/context.c
+> @@ -192,7 +192,7 @@ static void set_mm_asid(struct mm_struct *mm, unsigned int cpu)
+>   switch_mm_fast:
+>   	csr_write(CSR_SATP, virt_to_pfn(mm->pgd) |
+>   		  ((cntx & asid_mask) << SATP_ASID_SHIFT) |
+> -		  SATP_MODE);
+> +		  satp_mode);
+>   
+>   	if (need_flush_tlb)
+>   		local_flush_tlb_all();
+> @@ -201,7 +201,7 @@ static void set_mm_asid(struct mm_struct *mm, unsigned int cpu)
+>   static void set_mm_noasid(struct mm_struct *mm)
+>   {
+>   	/* Switch the page table and blindly nuke entire local TLB */
+> -	csr_write(CSR_SATP, virt_to_pfn(mm->pgd) | SATP_MODE);
+> +	csr_write(CSR_SATP, virt_to_pfn(mm->pgd) | satp_mode);
+>   	local_flush_tlb_all();
+>   }
+>   
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 1552226fb6bd..6a19a1b1caf8 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -37,6 +37,17 @@ EXPORT_SYMBOL(kernel_map);
+>   #define kernel_map	(*(struct kernel_mapping *)XIP_FIXUP(&kernel_map))
+>   #endif
+>   
+> +#ifdef CONFIG_64BIT
+> +u64 satp_mode = !IS_ENABLED(CONFIG_XIP_KERNEL) ? SATP_MODE_48 : SATP_MODE_39;
+> +#else
+> +u64 satp_mode = SATP_MODE_32;
+> +#endif
+> +EXPORT_SYMBOL(satp_mode);
+> +
+> +bool pgtable_l4_enabled = IS_ENABLED(CONFIG_64BIT) && !IS_ENABLED(CONFIG_XIP_KERNEL) ?
+> +				true : false;
+> +EXPORT_SYMBOL(pgtable_l4_enabled);
+> +
+>   phys_addr_t phys_ram_base __ro_after_init;
+>   EXPORT_SYMBOL(phys_ram_base);
+>   
+> @@ -53,15 +64,6 @@ extern char _start[];
+>   void *_dtb_early_va __initdata;
+>   uintptr_t _dtb_early_pa __initdata;
+>   
+> -struct pt_alloc_ops {
+> -	pte_t *(*get_pte_virt)(phys_addr_t pa);
+> -	phys_addr_t (*alloc_pte)(uintptr_t va);
+> -#ifndef __PAGETABLE_PMD_FOLDED
+> -	pmd_t *(*get_pmd_virt)(phys_addr_t pa);
+> -	phys_addr_t (*alloc_pmd)(uintptr_t va);
+> -#endif
+> -};
+> -
+>   static phys_addr_t dma32_phys_limit __initdata;
+>   
+>   static void __init zone_sizes_init(void)
+> @@ -222,7 +224,7 @@ static void __init setup_bootmem(void)
+>   }
+>   
+>   #ifdef CONFIG_MMU
+> -static struct pt_alloc_ops _pt_ops __initdata;
+> +struct pt_alloc_ops _pt_ops __initdata;
+>   
+>   #ifdef CONFIG_XIP_KERNEL
+>   #define pt_ops (*(struct pt_alloc_ops *)XIP_FIXUP(&_pt_ops))
+> @@ -238,6 +240,7 @@ pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+>   static pte_t fixmap_pte[PTRS_PER_PTE] __page_aligned_bss;
+>   
+>   pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
+> +static pud_t __maybe_unused early_dtb_pud[PTRS_PER_PUD] __initdata __aligned(PAGE_SIZE);
+>   static pmd_t __maybe_unused early_dtb_pmd[PTRS_PER_PMD] __initdata __aligned(PAGE_SIZE);
+>   
+>   #ifdef CONFIG_XIP_KERNEL
+> @@ -326,6 +329,16 @@ static pmd_t early_pmd[PTRS_PER_PMD] __initdata __aligned(PAGE_SIZE);
+>   #define early_pmd      ((pmd_t *)XIP_FIXUP(early_pmd))
+>   #endif /* CONFIG_XIP_KERNEL */
+>   
+> +static pud_t trampoline_pud[PTRS_PER_PUD] __page_aligned_bss;
+> +static pud_t fixmap_pud[PTRS_PER_PUD] __page_aligned_bss;
+> +static pud_t early_pud[PTRS_PER_PUD] __initdata __aligned(PAGE_SIZE);
+> +
+> +#ifdef CONFIG_XIP_KERNEL
+> +#define trampoline_pud ((pud_t *)XIP_FIXUP(trampoline_pud))
+> +#define fixmap_pud     ((pud_t *)XIP_FIXUP(fixmap_pud))
+> +#define early_pud      ((pud_t *)XIP_FIXUP(early_pud))
+> +#endif /* CONFIG_XIP_KERNEL */
+> +
+>   static pmd_t *__init get_pmd_virt_early(phys_addr_t pa)
+>   {
+>   	/* Before MMU is enabled */
+> @@ -345,7 +358,7 @@ static pmd_t *__init get_pmd_virt_late(phys_addr_t pa)
+>   
+>   static phys_addr_t __init alloc_pmd_early(uintptr_t va)
+>   {
+> -	BUG_ON((va - kernel_map.virt_addr) >> PGDIR_SHIFT);
+> +	BUG_ON((va - kernel_map.virt_addr) >> PUD_SHIFT);
+>   
+>   	return (uintptr_t)early_pmd;
+>   }
+> @@ -391,21 +404,97 @@ static void __init create_pmd_mapping(pmd_t *pmdp,
+>   	create_pte_mapping(ptep, va, pa, sz, prot);
+>   }
+>   
+> -#define pgd_next_t		pmd_t
+> -#define alloc_pgd_next(__va)	pt_ops.alloc_pmd(__va)
+> -#define get_pgd_next_virt(__pa)	pt_ops.get_pmd_virt(__pa)
+> +static pud_t *__init get_pud_virt_early(phys_addr_t pa)
+> +{
+> +	return (pud_t *)((uintptr_t)pa);
+> +}
+> +
+> +static pud_t *__init get_pud_virt_fixmap(phys_addr_t pa)
+> +{
+> +	clear_fixmap(FIX_PUD);
+> +	return (pud_t *)set_fixmap_offset(FIX_PUD, pa);
+> +}
+> +
+> +static pud_t *__init get_pud_virt_late(phys_addr_t pa)
+> +{
+> +	return (pud_t *)__va(pa);
+> +}
+> +
+> +static phys_addr_t __init alloc_pud_early(uintptr_t va)
+> +{
+> +	/* Only one PUD is available for early mapping */
+> +	BUG_ON((va - kernel_map.virt_addr) >> PGDIR_SHIFT);
+> +
+> +	return (uintptr_t)early_pud;
+> +}
+> +
+> +static phys_addr_t __init alloc_pud_fixmap(uintptr_t va)
+> +{
+> +	return memblock_phys_alloc(PAGE_SIZE, PAGE_SIZE);
+> +}
+> +
+> +static phys_addr_t alloc_pud_late(uintptr_t va)
+> +{
+> +	unsigned long vaddr;
+> +
+> +	vaddr = __get_free_page(GFP_KERNEL);
+> +	BUG_ON(!vaddr);
+> +	return __pa(vaddr);
+> +}
+> +
+> +static void __init create_pud_mapping(pud_t *pudp,
+> +				      uintptr_t va, phys_addr_t pa,
+> +				      phys_addr_t sz, pgprot_t prot)
+> +{
+> +	pmd_t *nextp;
+> +	phys_addr_t next_phys;
+> +	uintptr_t pud_index = pud_index(va);
+> +
+> +	if (sz == PUD_SIZE) {
+> +		if (pud_val(pudp[pud_index]) == 0)
+> +			pudp[pud_index] = pfn_pud(PFN_DOWN(pa), prot);
+> +		return;
+> +	}
+> +
+> +	if (pud_val(pudp[pud_index]) == 0) {
+> +		next_phys = pt_ops.alloc_pmd(va);
+> +		pudp[pud_index] = pfn_pud(PFN_DOWN(next_phys), PAGE_TABLE);
+> +		nextp = pt_ops.get_pmd_virt(next_phys);
+> +		memset(nextp, 0, PAGE_SIZE);
+> +	} else {
+> +		next_phys = PFN_PHYS(_pud_pfn(pudp[pud_index]));
+> +		nextp = pt_ops.get_pmd_virt(next_phys);
+> +	}
+> +
+> +	create_pmd_mapping(nextp, va, pa, sz, prot);
+> +}
+> +
+> +#define pgd_next_t		pud_t
+> +#define alloc_pgd_next(__va)	(pgtable_l4_enabled ?			\
+> +		pt_ops.alloc_pud(__va) : pt_ops.alloc_pmd(__va))
+> +#define get_pgd_next_virt(__pa)	(pgtable_l4_enabled ?			\
+> +		pt_ops.get_pud_virt(__pa) : (pgd_next_t *)pt_ops.get_pmd_virt(__pa))
+>   #define create_pgd_next_mapping(__nextp, __va, __pa, __sz, __prot)	\
+> -	create_pmd_mapping(__nextp, __va, __pa, __sz, __prot)
+> -#define fixmap_pgd_next		fixmap_pmd
+> +				(pgtable_l4_enabled ?			\
+> +		create_pud_mapping(__nextp, __va, __pa, __sz, __prot) :	\
+> +		create_pmd_mapping((pmd_t *)__nextp, __va, __pa, __sz, __prot))
+> +#define fixmap_pgd_next		(pgtable_l4_enabled ?			\
+> +		(uintptr_t)fixmap_pud : (uintptr_t)fixmap_pmd)
+> +#define trampoline_pgd_next	(pgtable_l4_enabled ?			\
+> +		(uintptr_t)trampoline_pud : (uintptr_t)trampoline_pmd)
+> +#define early_dtb_pgd_next	(pgtable_l4_enabled ?			\
+> +		(uintptr_t)early_dtb_pud : (uintptr_t)early_dtb_pmd)
+>   #else
+>   #define pgd_next_t		pte_t
+>   #define alloc_pgd_next(__va)	pt_ops.alloc_pte(__va)
+>   #define get_pgd_next_virt(__pa)	pt_ops.get_pte_virt(__pa)
+>   #define create_pgd_next_mapping(__nextp, __va, __pa, __sz, __prot)	\
+>   	create_pte_mapping(__nextp, __va, __pa, __sz, __prot)
+> -#define fixmap_pgd_next		fixmap_pte
+> +#define fixmap_pgd_next		((uintptr_t)fixmap_pte)
+> +#define early_dtb_pgd_next	((uintptr_t)early_dtb_pmd)
+> +#define create_pud_mapping(__pmdp, __va, __pa, __sz, __prot)
+>   #define create_pmd_mapping(__pmdp, __va, __pa, __sz, __prot)
+> -#endif
+> +#endif /* __PAGETABLE_PMD_FOLDED */
+>   
+>   void __init create_pgd_mapping(pgd_t *pgdp,
+>   				      uintptr_t va, phys_addr_t pa,
+> @@ -493,6 +582,57 @@ static __init pgprot_t pgprot_from_va(uintptr_t va)
+>   }
+>   #endif /* CONFIG_STRICT_KERNEL_RWX */
+>   
+> +#ifdef CONFIG_64BIT
+> +static void __init disable_pgtable_l4(void)
+> +{
+> +	pgtable_l4_enabled = false;
+> +	kernel_map.page_offset = PAGE_OFFSET_L3;
+> +	satp_mode = SATP_MODE_39;
+> +}
+> +
+> +/*
+> + * There is a simple way to determine if 4-level is supported by the
+> + * underlying hardware: establish 1:1 mapping in 4-level page table mode
+> + * then read SATP to see if the configuration was taken into account
+> + * meaning sv48 is supported.
+> + */
+> +static __init void set_satp_mode(void)
+> +{
+> +	u64 identity_satp, hw_satp;
+> +	uintptr_t set_satp_mode_pmd;
+> +
+> +	set_satp_mode_pmd = ((unsigned long)set_satp_mode) & PMD_MASK;
+> +	create_pgd_mapping(early_pg_dir,
+> +			   set_satp_mode_pmd, (uintptr_t)early_pud,
+> +			   PGDIR_SIZE, PAGE_TABLE);
+> +	create_pud_mapping(early_pud,
+> +			   set_satp_mode_pmd, (uintptr_t)early_pmd,
+> +			   PUD_SIZE, PAGE_TABLE);
+> +	/* Handle the case where set_satp_mode straddles 2 PMDs */
+> +	create_pmd_mapping(early_pmd,
+> +			   set_satp_mode_pmd, set_satp_mode_pmd,
+> +			   PMD_SIZE, PAGE_KERNEL_EXEC);
+> +	create_pmd_mapping(early_pmd,
+> +			   set_satp_mode_pmd + PMD_SIZE,
+> +			   set_satp_mode_pmd + PMD_SIZE,
+> +			   PMD_SIZE, PAGE_KERNEL_EXEC);
+> +
+> +	identity_satp = PFN_DOWN((uintptr_t)&early_pg_dir) | satp_mode;
+> +
+> +	local_flush_tlb_all();
+> +	csr_write(CSR_SATP, identity_satp);
+> +	hw_satp = csr_swap(CSR_SATP, 0ULL);
+> +	local_flush_tlb_all();
+> +
+> +	if (hw_satp != identity_satp)
+> +		disable_pgtable_l4();
+> +
+> +	memset(early_pg_dir, 0, PAGE_SIZE);
+> +	memset(early_pud, 0, PAGE_SIZE);
+> +	memset(early_pmd, 0, PAGE_SIZE);
+> +}
+> +#endif
+> +
+>   /*
+>    * setup_vm() is called from head.S with MMU-off.
+>    *
+> @@ -557,10 +697,15 @@ static void __init create_fdt_early_page_table(pgd_t *pgdir, uintptr_t dtb_pa)
+>   	uintptr_t pa = dtb_pa & ~(PMD_SIZE - 1);
+>   
+>   	create_pgd_mapping(early_pg_dir, DTB_EARLY_BASE_VA,
+> -			   IS_ENABLED(CONFIG_64BIT) ? (uintptr_t)early_dtb_pmd : pa,
+> +			   IS_ENABLED(CONFIG_64BIT) ? early_dtb_pgd_next : pa,
+>   			   PGDIR_SIZE,
+>   			   IS_ENABLED(CONFIG_64BIT) ? PAGE_TABLE : PAGE_KERNEL);
+>   
+> +	if (pgtable_l4_enabled) {
+> +		create_pud_mapping(early_dtb_pud, DTB_EARLY_BASE_VA,
+> +				   (uintptr_t)early_dtb_pmd, PUD_SIZE, PAGE_TABLE);
+> +	}
+> +
+>   	if (IS_ENABLED(CONFIG_64BIT)) {
+>   		create_pmd_mapping(early_dtb_pmd, DTB_EARLY_BASE_VA,
+>   				   pa, PMD_SIZE, PAGE_KERNEL);
+> @@ -593,6 +738,8 @@ void pt_ops_set_early(void)
+>   #ifndef __PAGETABLE_PMD_FOLDED
+>   	pt_ops.alloc_pmd = alloc_pmd_early;
+>   	pt_ops.get_pmd_virt = get_pmd_virt_early;
+> +	pt_ops.alloc_pud = alloc_pud_early;
+> +	pt_ops.get_pud_virt = get_pud_virt_early;
+>   #endif
+>   }
+>   
+> @@ -611,6 +758,8 @@ void pt_ops_set_fixmap(void)
+>   #ifndef __PAGETABLE_PMD_FOLDED
+>   	pt_ops.alloc_pmd = kernel_mapping_pa_to_va((uintptr_t)alloc_pmd_fixmap);
+>   	pt_ops.get_pmd_virt = kernel_mapping_pa_to_va((uintptr_t)get_pmd_virt_fixmap);
+> +	pt_ops.alloc_pud = kernel_mapping_pa_to_va((uintptr_t)alloc_pud_fixmap);
+> +	pt_ops.get_pud_virt = kernel_mapping_pa_to_va((uintptr_t)get_pud_virt_fixmap);
+>   #endif
+>   }
+>   
+> @@ -625,6 +774,8 @@ void pt_ops_set_late(void)
+>   #ifndef __PAGETABLE_PMD_FOLDED
+>   	pt_ops.alloc_pmd = alloc_pmd_late;
+>   	pt_ops.get_pmd_virt = get_pmd_virt_late;
+> +	pt_ops.alloc_pud = alloc_pud_late;
+> +	pt_ops.get_pud_virt = get_pud_virt_late;
+>   #endif
+>   }
+>   
+> @@ -633,6 +784,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>   	pmd_t __maybe_unused fix_bmap_spmd, fix_bmap_epmd;
+>   
+>   	kernel_map.virt_addr = KERNEL_LINK_ADDR;
+> +	kernel_map.page_offset = _AC(CONFIG_PAGE_OFFSET, UL);
+>   
+>   #ifdef CONFIG_XIP_KERNEL
+>   	kernel_map.xiprom = (uintptr_t)CONFIG_XIP_PHYS_ADDR;
+> @@ -647,6 +799,11 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>   	kernel_map.phys_addr = (uintptr_t)(&_start);
+>   	kernel_map.size = (uintptr_t)(&_end) - kernel_map.phys_addr;
+>   #endif
+> +
+> +#if defined(CONFIG_64BIT) && !defined(CONFIG_XIP_KERNEL)
+> +	set_satp_mode();
+> +#endif
+> +
+>   	kernel_map.va_pa_offset = PAGE_OFFSET - kernel_map.phys_addr;
+>   	kernel_map.va_kernel_pa_offset = kernel_map.virt_addr - kernel_map.phys_addr;
+>   
+> @@ -676,15 +833,21 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>   
+>   	/* Setup early PGD for fixmap */
+>   	create_pgd_mapping(early_pg_dir, FIXADDR_START,
+> -			   (uintptr_t)fixmap_pgd_next, PGDIR_SIZE, PAGE_TABLE);
+> +			   fixmap_pgd_next, PGDIR_SIZE, PAGE_TABLE);
+>   
+>   #ifndef __PAGETABLE_PMD_FOLDED
+> -	/* Setup fixmap PMD */
+> +	/* Setup fixmap PUD and PMD */
+> +	if (pgtable_l4_enabled)
+> +		create_pud_mapping(fixmap_pud, FIXADDR_START,
+> +				   (uintptr_t)fixmap_pmd, PUD_SIZE, PAGE_TABLE);
+>   	create_pmd_mapping(fixmap_pmd, FIXADDR_START,
+>   			   (uintptr_t)fixmap_pte, PMD_SIZE, PAGE_TABLE);
+>   	/* Setup trampoline PGD and PMD */
+>   	create_pgd_mapping(trampoline_pg_dir, kernel_map.virt_addr,
+> -			   (uintptr_t)trampoline_pmd, PGDIR_SIZE, PAGE_TABLE);
+> +			   trampoline_pgd_next, PGDIR_SIZE, PAGE_TABLE);
+> +	if (pgtable_l4_enabled)
+> +		create_pud_mapping(trampoline_pud, kernel_map.virt_addr,
+> +				   (uintptr_t)trampoline_pmd, PUD_SIZE, PAGE_TABLE);
+>   #ifdef CONFIG_XIP_KERNEL
+>   	create_pmd_mapping(trampoline_pmd, kernel_map.virt_addr,
+>   			   kernel_map.xiprom, PMD_SIZE, PAGE_KERNEL_EXEC);
+> @@ -712,7 +875,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>   	 * Bootime fixmap only can handle PMD_SIZE mapping. Thus, boot-ioremap
+>   	 * range can not span multiple pmds.
+>   	 */
+> -	BUILD_BUG_ON((__fix_to_virt(FIX_BTMAP_BEGIN) >> PMD_SHIFT)
+> +	BUG_ON((__fix_to_virt(FIX_BTMAP_BEGIN) >> PMD_SHIFT)
+>   		     != (__fix_to_virt(FIX_BTMAP_END) >> PMD_SHIFT));
+>   
+>   #ifndef __PAGETABLE_PMD_FOLDED
+> @@ -783,9 +946,10 @@ static void __init setup_vm_final(void)
+>   	/* Clear fixmap PTE and PMD mappings */
+>   	clear_fixmap(FIX_PTE);
+>   	clear_fixmap(FIX_PMD);
+> +	clear_fixmap(FIX_PUD);
+>   
+>   	/* Move to swapper page table */
+> -	csr_write(CSR_SATP, PFN_DOWN(__pa_symbol(swapper_pg_dir)) | SATP_MODE);
+> +	csr_write(CSR_SATP, PFN_DOWN(__pa_symbol(swapper_pg_dir)) | satp_mode);
+>   	local_flush_tlb_all();
+>   
+>   	pt_ops_set_late();
+> diff --git a/arch/riscv/mm/kasan_init.c b/arch/riscv/mm/kasan_init.c
+> index 1434a0225140..993f50571a3b 100644
+> --- a/arch/riscv/mm/kasan_init.c
+> +++ b/arch/riscv/mm/kasan_init.c
+> @@ -11,7 +11,29 @@
+>   #include <asm/fixmap.h>
+>   #include <asm/pgalloc.h>
+>   
+> +/*
+> + * Kasan shadow region must lie at a fixed address across sv39, sv48 and sv57
+> + * which is right before the kernel.
+> + *
+> + * For sv39, the region is aligned on PGDIR_SIZE so we only need to populate
+> + * the page global directory with kasan_early_shadow_pmd.
+> + *
+> + * For sv48 and sv57, the region is not aligned on PGDIR_SIZE so the mapping
+> + * must be divided as follows:
+> + * - the first PGD entry, although incomplete, is populated with
+> + *   kasan_early_shadow_pud/p4d
+> + * - the PGD entries in the middle are populated with kasan_early_shadow_pud/p4d
+> + * - the last PGD entry is shared with the kernel mapping so populated at the
+> + *   lower levels pud/p4d
+> + *
+> + * In addition, when shallow populating a kasan region (for example vmalloc),
+> + * this region may also not be aligned on PGDIR size, so we must go down to the
+> + * pud level too.
+> + */
+> +
+>   extern pgd_t early_pg_dir[PTRS_PER_PGD];
+> +extern struct pt_alloc_ops _pt_ops __initdata;
+> +#define pt_ops	_pt_ops
+>   
+>   static void __init kasan_populate_pte(pmd_t *pmd, unsigned long vaddr, unsigned long end)
+>   {
+> @@ -35,15 +57,19 @@ static void __init kasan_populate_pte(pmd_t *pmd, unsigned long vaddr, unsigned
+>   	set_pmd(pmd, pfn_pmd(PFN_DOWN(__pa(base_pte)), PAGE_TABLE));
+>   }
+>   
+> -static void __init kasan_populate_pmd(pgd_t *pgd, unsigned long vaddr, unsigned long end)
+> +static void __init kasan_populate_pmd(pud_t *pud, unsigned long vaddr, unsigned long end)
+>   {
+>   	phys_addr_t phys_addr;
+>   	pmd_t *pmdp, *base_pmd;
+>   	unsigned long next;
+>   
+> -	base_pmd = (pmd_t *)pgd_page_vaddr(*pgd);
+> -	if (base_pmd == lm_alias(kasan_early_shadow_pmd))
+> +	if (pud_none(*pud)) {
+>   		base_pmd = memblock_alloc(PTRS_PER_PMD * sizeof(pmd_t), PAGE_SIZE);
+> +	} else {
+> +		base_pmd = (pmd_t *)pud_pgtable(*pud);
+> +		if (base_pmd == lm_alias(kasan_early_shadow_pmd))
+> +			base_pmd = memblock_alloc(PTRS_PER_PMD * sizeof(pmd_t), PAGE_SIZE);
+> +	}
+>   
+>   	pmdp = base_pmd + pmd_index(vaddr);
+>   
+> @@ -67,9 +93,72 @@ static void __init kasan_populate_pmd(pgd_t *pgd, unsigned long vaddr, unsigned
+>   	 * it entirely, memblock could allocate a page at a physical address
+>   	 * where KASAN is not populated yet and then we'd get a page fault.
+>   	 */
+> -	set_pgd(pgd, pfn_pgd(PFN_DOWN(__pa(base_pmd)), PAGE_TABLE));
+> +	set_pud(pud, pfn_pud(PFN_DOWN(__pa(base_pmd)), PAGE_TABLE));
+> +}
+> +
+> +static void __init kasan_populate_pud(pgd_t *pgd,
+> +				      unsigned long vaddr, unsigned long end,
+> +				      bool early)
+> +{
+> +	phys_addr_t phys_addr;
+> +	pud_t *pudp, *base_pud;
+> +	unsigned long next;
+> +
+> +	if (early) {
+> +		/*
+> +		 * We can't use pgd_page_vaddr here as it would return a linear
+> +		 * mapping address but it is not mapped yet, but when populating
+> +		 * early_pg_dir, we need the physical address and when populating
+> +		 * swapper_pg_dir, we need the kernel virtual address so use
+> +		 * pt_ops facility.
+> +		 */
+> +		base_pud = pt_ops.get_pud_virt(pfn_to_phys(_pgd_pfn(*pgd)));
+> +	} else {
+> +		base_pud = (pud_t *)pgd_page_vaddr(*pgd);
+> +		if (base_pud == lm_alias(kasan_early_shadow_pud))
+> +			base_pud = memblock_alloc(PTRS_PER_PUD * sizeof(pud_t), PAGE_SIZE);
+> +	}
+> +
+> +	pudp = base_pud + pud_index(vaddr);
+> +
+> +	do {
+> +		next = pud_addr_end(vaddr, end);
+> +
+> +		if (pud_none(*pudp) && IS_ALIGNED(vaddr, PUD_SIZE) && (next - vaddr) >= PUD_SIZE) {
+> +			if (early) {
+> +				phys_addr = __pa(((uintptr_t)kasan_early_shadow_pmd));
+> +				set_pud(pudp, pfn_pud(PFN_DOWN(phys_addr), PAGE_TABLE));
+> +				continue;
+> +			} else {
+> +				phys_addr = memblock_phys_alloc(PUD_SIZE, PUD_SIZE);
+> +				if (phys_addr) {
+> +					set_pud(pudp, pfn_pud(PFN_DOWN(phys_addr), PAGE_KERNEL));
+> +					continue;
+> +				}
+> +			}
+> +		}
+> +
+> +		kasan_populate_pmd(pudp, vaddr, next);
+> +	} while (pudp++, vaddr = next, vaddr != end);
+> +
+> +	/*
+> +	 * Wait for the whole PGD to be populated before setting the PGD in
+> +	 * the page table, otherwise, if we did set the PGD before populating
+> +	 * it entirely, memblock could allocate a page at a physical address
+> +	 * where KASAN is not populated yet and then we'd get a page fault.
+> +	 */
+> +	if (!early)
+> +		set_pgd(pgd, pfn_pgd(PFN_DOWN(__pa(base_pud)), PAGE_TABLE));
+>   }
+>   
+> +#define kasan_early_shadow_pgd_next			(pgtable_l4_enabled ?	\
+> +				(uintptr_t)kasan_early_shadow_pud :		\
+> +				(uintptr_t)kasan_early_shadow_pmd)
+> +#define kasan_populate_pgd_next(pgdp, vaddr, next, early)			\
+> +		(pgtable_l4_enabled ?						\
+> +			kasan_populate_pud(pgdp, vaddr, next, early) :		\
+> +			kasan_populate_pmd((pud_t *)pgdp, vaddr, next))
+> +
+>   static void __init kasan_populate_pgd(pgd_t *pgdp,
+>   				      unsigned long vaddr, unsigned long end,
+>   				      bool early)
+> @@ -102,7 +191,7 @@ static void __init kasan_populate_pgd(pgd_t *pgdp,
+>   			}
+>   		}
+>   
+> -		kasan_populate_pmd(pgdp, vaddr, next);
+> +		kasan_populate_pgd_next(pgdp, vaddr, next, early);
+>   	} while (pgdp++, vaddr = next, vaddr != end);
+>   }
+>   
+> @@ -157,18 +246,54 @@ static void __init kasan_populate(void *start, void *end)
+>   	memset(start, KASAN_SHADOW_INIT, end - start);
+>   }
+>   
+> +static void __init kasan_shallow_populate_pud(pgd_t *pgdp,
+> +					      unsigned long vaddr, unsigned long end,
+> +					      bool kasan_populate)
+> +{
+> +	unsigned long next;
+> +	pud_t *pudp, *base_pud;
+> +	pmd_t *base_pmd;
+> +	bool is_kasan_pmd;
+> +
+> +	base_pud = (pud_t *)pgd_page_vaddr(*pgdp);
+> +	pudp = base_pud + pud_index(vaddr);
+> +
+> +	if (kasan_populate)
+> +		memcpy(base_pud, (void *)kasan_early_shadow_pgd_next,
+> +		       sizeof(pud_t) * PTRS_PER_PUD);
+> +
+> +	do {
+> +		next = pud_addr_end(vaddr, end);
+> +		is_kasan_pmd = (pud_pgtable(*pudp) == lm_alias(kasan_early_shadow_pmd));
+> +
+> +		if (is_kasan_pmd) {
+> +			base_pmd = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
+> +			set_pud(pudp, pfn_pud(PFN_DOWN(__pa(base_pmd)), PAGE_TABLE));
+> +		}
+> +	} while (pudp++, vaddr = next, vaddr != end);
+> +}
+> +
+>   static void __init kasan_shallow_populate_pgd(unsigned long vaddr, unsigned long end)
+>   {
+>   	unsigned long next;
+>   	void *p;
+>   	pgd_t *pgd_k = pgd_offset_k(vaddr);
+> +	bool is_kasan_pgd_next;
+>   
+>   	do {
+>   		next = pgd_addr_end(vaddr, end);
+> -		if (pgd_page_vaddr(*pgd_k) == (unsigned long)lm_alias(kasan_early_shadow_pmd)) {
+> +		is_kasan_pgd_next = (pgd_page_vaddr(*pgd_k) ==
+> +				     (unsigned long)lm_alias(kasan_early_shadow_pgd_next));
+> +
+> +		if (is_kasan_pgd_next) {
+>   			p = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
+>   			set_pgd(pgd_k, pfn_pgd(PFN_DOWN(__pa(p)), PAGE_TABLE));
+>   		}
+> +
+> +		if (IS_ALIGNED(vaddr, PGDIR_SIZE) && (next - vaddr) >= PGDIR_SIZE)
+> +			continue;
+> +
+> +		kasan_shallow_populate_pud(pgd_k, vaddr, next, is_kasan_pgd_next);
+>   	} while (pgd_k++, vaddr = next, vaddr != end);
+>   }
 
 
-Thanks for reviews. Sure, I will respond once you are done with reviews.
+@Qinglin: I can deal with sv57 kasan population if needs be as it is a 
+bit tricky and I think it would save you quite some time :)
 
 
->
-> Thanks,
-> Mathieu
->
->> +	return 0;
->> +}
->> +
->> +/* Match table for OF platform binding */
->> +static const struct of_device_id zynqmp_r5_remoteproc_match[] = {
->> +	{ .compatible = "xlnx,zynqmp-r5fss", },
->> +	{ /* end of list */ },
->> +};
->> +MODULE_DEVICE_TABLE(of, zynqmp_r5_remoteproc_match);
->> +
->> +static struct platform_driver zynqmp_r5_remoteproc_driver = {
->> +	.probe = zynqmp_r5_remoteproc_probe,
->> +	.driver = {
->> +		.name = "zynqmp_r5_remoteproc",
->> +		.of_match_table = zynqmp_r5_remoteproc_match,
->> +	},
->> +};
->> +module_platform_driver(zynqmp_r5_remoteproc_driver);
->> +
->> +MODULE_DESCRIPTION("Xilinx R5F remote processor driver");
->> +MODULE_AUTHOR("Xilinx Inc.");
->> +MODULE_LICENSE("GPL v2");
->> -- 
->> 2.25.1
->>
+>   
+> diff --git a/drivers/firmware/efi/libstub/efi-stub.c b/drivers/firmware/efi/libstub/efi-stub.c
+> index 26e69788f27a..b3db5d91ed38 100644
+> --- a/drivers/firmware/efi/libstub/efi-stub.c
+> +++ b/drivers/firmware/efi/libstub/efi-stub.c
+> @@ -40,6 +40,8 @@
+>   
+>   #ifdef CONFIG_ARM64
+>   # define EFI_RT_VIRTUAL_LIMIT	DEFAULT_MAP_WINDOW_64
+> +#elif defined(CONFIG_RISCV)
+> +# define EFI_RT_VIRTUAL_LIMIT	TASK_SIZE_MIN
+>   #else
+>   # define EFI_RT_VIRTUAL_LIMIT	TASK_SIZE
+>   #endif

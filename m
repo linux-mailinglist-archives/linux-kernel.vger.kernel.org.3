@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44824469C15
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:17:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F083469B30
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359761AbhLFPUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:20:23 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34964 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346600AbhLFPOt (ORCPT
+        id S1345457AbhLFPN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:13:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347628AbhLFPJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:14:49 -0500
+        Mon, 6 Dec 2021 10:09:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D1DC08E897;
+        Mon,  6 Dec 2021 07:04:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56A08612EB;
-        Mon,  6 Dec 2021 15:11:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FE84C341C5;
-        Mon,  6 Dec 2021 15:11:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5A79B81125;
+        Mon,  6 Dec 2021 15:04:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F38B1C341C2;
+        Mon,  6 Dec 2021 15:03:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803479;
-        bh=+ES4ZAtP0ze0k3iOABTrk9vvFws3JdOqdRI/dQQ11+Y=;
+        s=korg; t=1638803039;
+        bh=c8PhzcmGKHbDf7AX/D/Q+/ZXvM2sns1Nys7dToprWgY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Aie+rcHxJ3Zmq2adzZhDTnLsW4IxMfQhStJ1WwXxBLBh28+2ZTlhek7MjJY6kEp0h
-         KBLd4fj1IRCFyjp77kHV7LzPs54Mj+JavgXrJcznBNpiNUMuLV2Psie2rgaHsUTrmE
-         QZDVkmM5f4QSBFFE+i0EdhaHk1defKrvwByCFRAE=
+        b=h2tfOkgyd8oNxX1GIIoRIFLcj9qIoTni5McyQO4MFnw/M0Uq+MI6e6+x1NWKlUNnS
+         Z0Y565IQqNijUorXXaJgf2QW3HafkhheC7oNdeHrq0jZ+Kvd6vc2mDikdsFgYSCHX7
+         NuszkYMOqoFVkibjAXHzufhG3JqAtX34BDHRFnBw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>,
-        Corey Minyard <cminyard@mvista.com>
-Subject: [PATCH 4.19 19/48] ipmi: Move remove_work to dedicated workqueue
+        stable@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jann Horn <jannh@google.com>
+Subject: [PATCH 4.9 53/62] fget: check that the fd still exists after getting a ref to it
 Date:   Mon,  6 Dec 2021 15:56:36 +0100
-Message-Id: <20211206145549.506806769@linuxfoundation.org>
+Message-Id: <20211206145551.036898616@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
-References: <20211206145548.859182340@linuxfoundation.org>
+In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
+References: <20211206145549.155163074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,80 +49,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-commit 1d49eb91e86e8c1c1614c72e3e958b6b7e2472a9 upstream.
+commit 054aa8d439b9185d4f5eb9a90282d1ce74772969 upstream.
 
-Currently when removing an ipmi_user the removal is deferred as a work on
-the system's workqueue. Although this guarantees the free operation will
-occur in non atomic context, it can race with the ipmi_msghandler module
-removal (see [1]) . In case a remove_user work is scheduled for removal
-and shortly after ipmi_msghandler module is removed we can end up in a
-situation where the module is removed fist and when the work is executed
-the system crashes with :
-BUG: unable to handle page fault for address: ffffffffc05c3450
-PF: supervisor instruction fetch in kernel mode
-PF: error_code(0x0010) - not-present page
-because the pages of the module are gone. In cleanup_ipmi() there is no
-easy way to detect if there are any pending works to flush them before
-removing the module. This patch creates a separate workqueue and schedules
-the remove_work works on it. When removing the module the workqueue is
-drained when destroyed to avoid the race.
+Jann Horn points out that there is another possible race wrt Unix domain
+socket garbage collection, somewhat reminiscent of the one fixed in
+commit cbcf01128d0a ("af_unix: fix garbage collect vs MSG_PEEK").
 
-[1] https://bugs.launchpad.net/bugs/1950666
+See the extended comment about the garbage collection requirements added
+to unix_peek_fds() by that commit for details.
 
-Cc: stable@vger.kernel.org # 5.1
-Fixes: 3b9a907223d7 (ipmi: fix sleep-in-atomic in free_user at cleanup SRCU user->release_barrier)
-Signed-off-by: Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
-Message-Id: <20211115131645.25116-1-ioanna-maria.alifieraki@canonical.com>
-Signed-off-by: Corey Minyard <cminyard@mvista.com>
+The race comes from how we can locklessly look up a file descriptor just
+as it is in the process of being closed, and with the right artificial
+timing (Jann added a few strategic 'mdelay(500)' calls to do that), the
+Unix domain socket garbage collector could see the reference count
+decrement of the close() happen before fget() took its reference to the
+file and the file was attached onto a new file descriptor.
+
+This is all (intentionally) correct on the 'struct file *' side, with
+RCU lookups and lockless reference counting very much part of the
+design.  Getting that reference count out of order isn't a problem per
+se.
+
+But the garbage collector can get confused by seeing this situation of
+having seen a file not having any remaining external references and then
+seeing it being attached to an fd.
+
+In commit cbcf01128d0a ("af_unix: fix garbage collect vs MSG_PEEK") the
+fix was to serialize the file descriptor install with the garbage
+collector by taking and releasing the unix_gc_lock.
+
+That's not really an option here, but since this all happens when we are
+in the process of looking up a file descriptor, we can instead simply
+just re-check that the file hasn't been closed in the meantime, and just
+re-do the lookup if we raced with a concurrent close() of the same file
+descriptor.
+
+Reported-and-tested-by: Jann Horn <jannh@google.com>
+Acked-by: Miklos Szeredi <mszeredi@redhat.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/ipmi/ipmi_msghandler.c |   13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ fs/file.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/char/ipmi/ipmi_msghandler.c
-+++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -219,6 +219,8 @@ struct ipmi_user {
- 	struct work_struct remove_work;
- };
- 
-+struct workqueue_struct *remove_work_wq;
-+
- static struct ipmi_user *acquire_ipmi_user(struct ipmi_user *user, int *index)
- 	__acquires(user->release_barrier)
- {
-@@ -1207,7 +1209,7 @@ static void free_user(struct kref *ref)
- 	struct ipmi_user *user = container_of(ref, struct ipmi_user, refcount);
- 
- 	/* SRCU cleanup must happen in task context. */
--	schedule_work(&user->remove_work);
-+	queue_work(remove_work_wq, &user->remove_work);
- }
- 
- static void _ipmi_destroy_user(struct ipmi_user *user)
-@@ -5090,6 +5092,13 @@ static int ipmi_init_msghandler(void)
- 
- 	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
- 
-+	remove_work_wq = create_singlethread_workqueue("ipmi-msghandler-remove-wq");
-+	if (!remove_work_wq) {
-+		pr_err("unable to create ipmi-msghandler-remove-wq workqueue");
-+		rv = -ENOMEM;
-+		goto out;
-+	}
-+
- 	initialized = true;
- 
- out:
-@@ -5115,6 +5124,8 @@ static void __exit cleanup_ipmi(void)
- 	int count;
- 
- 	if (initialized) {
-+		destroy_workqueue(remove_work_wq);
-+
- 		atomic_notifier_chain_unregister(&panic_notifier_list,
- 						 &panic_block);
+--- a/fs/file.c
++++ b/fs/file.c
+@@ -709,6 +709,10 @@ loop:
+ 			file = NULL;
+ 		else if (!get_file_rcu_many(file, refs))
+ 			goto loop;
++		else if (__fcheck_files(files, fd) != file) {
++			fput_many(file, refs);
++			goto loop;
++		}
+ 	}
+ 	rcu_read_unlock();
  
 
 

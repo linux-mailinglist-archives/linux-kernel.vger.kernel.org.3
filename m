@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B864D46A057
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD39469CF4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443632AbhLFQBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:01:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33584 "EHLO
+        id S1386206AbhLFP0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390582AbhLFPmd (ORCPT
+        with ESMTP id S1359048AbhLFPQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:42:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38826C08ED0A;
-        Mon,  6 Dec 2021 07:28:40 -0800 (PST)
+        Mon, 6 Dec 2021 10:16:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F93EC08ECA6;
+        Mon,  6 Dec 2021 07:09:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04230B810AC;
-        Mon,  6 Dec 2021 15:28:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D920C34902;
-        Mon,  6 Dec 2021 15:28:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F376861319;
+        Mon,  6 Dec 2021 15:09:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D67B0C341C2;
+        Mon,  6 Dec 2021 15:09:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804517;
-        bh=XI5BrHwe9w/7PkEuLy0WwGqBx5uT6yxz/J1aLatBouw=;
+        s=korg; t=1638803398;
+        bh=yaqR6/nvrnJNi5GZOWJIE6GmMSIINYrFiQ8tVQx2oXg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JunkZsZ92zmN6HawnKtMJLwl9H0I/uPumokdnKeUq/kvt20JrGGDJB5OaGS4rlNOP
-         ivEoAD9kKH98Kx04D+VU24s/im9hNv7994gWPX+xHBQDhT2uB7ho1em2a8t1I5RC3f
-         0IDHj3hson7xN7gn1UhG8xQbZvzAQcDHoLrtgWmI=
+        b=NDoArYETyEoHfnYiCfJwvEhVhnmGBLxqLMwhFreicMJ9ZOIDUygVnNRXL4tBEluKl
+         ByLl8iglfBR0Ss2e+xf0+CnI/4jeIbXob0/3LZeYgtXccEFphDiedtITDPbVVBMIQr
+         DXOJFxRUmbu9S58N+EkxX8Nmp8n49Mk+HGNd1laI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Jian-Hong Pan <jhp@endlessos.org>
-Subject: [PATCH 5.15 143/207] drm/vc4: kms: Dont duplicate pending commit
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 4.19 20/48] sata_fsl: fix UAF in sata_fsl_port_stop when rmmod sata_fsl
 Date:   Mon,  6 Dec 2021 15:56:37 +0100
-Message-Id: <20211206145615.185601826@linuxfoundation.org>
+Message-Id: <20211206145549.543472127@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+References: <20211206145548.859182340@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,45 +50,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Baokun Li <libaokun1@huawei.com>
 
-commit d354699e2292c60f25496d3c31ce4e7b1563b899 upstream.
+commit 6c8ad7e8cf29eb55836e7a0215f967746ab2b504 upstream.
 
-Our HVS global state, when duplicated, will also copy the pointer to the
-drm_crtc_commit (and increase the reference count) for each FIFO if the
-pointer is not NULL.
+When the `rmmod sata_fsl.ko` command is executed in the PPC64 GNU/Linux,
+a bug is reported:
+ ==================================================================
+ BUG: Unable to handle kernel data access on read at 0x80000800805b502c
+ Oops: Kernel access of bad area, sig: 11 [#1]
+ NIP [c0000000000388a4] .ioread32+0x4/0x20
+ LR [80000000000c6034] .sata_fsl_port_stop+0x44/0xe0 [sata_fsl]
+ Call Trace:
+  .free_irq+0x1c/0x4e0 (unreliable)
+  .ata_host_stop+0x74/0xd0 [libata]
+  .release_nodes+0x330/0x3f0
+  .device_release_driver_internal+0x178/0x2c0
+  .driver_detach+0x64/0xd0
+  .bus_remove_driver+0x70/0xf0
+  .driver_unregister+0x38/0x80
+  .platform_driver_unregister+0x14/0x30
+  .fsl_sata_driver_exit+0x18/0xa20 [sata_fsl]
+  .__se_sys_delete_module+0x1ec/0x2d0
+  .system_call_exception+0xfc/0x1f0
+  system_call_common+0xf8/0x200
+ ==================================================================
 
-However, our atomic_setup function will overwrite that pointer without
-putting the reference back leading to a memory leak.
+The triggering of the BUG is shown in the following stack:
 
-Since the commit is only relevant during the atomic commit process, it
-doesn't make sense to duplicate the reference to the commit anyway.
-Let's remove it.
+driver_detach
+  device_release_driver_internal
+    __device_release_driver
+      drv->remove(dev) --> platform_drv_remove/platform_remove
+        drv->remove(dev) --> sata_fsl_remove
+          iounmap(host_priv->hcr_base);			<---- unmap
+          kfree(host_priv);                             <---- free
+      devres_release_all
+        release_nodes
+          dr->node.release(dev, dr->data) --> ata_host_stop
+            ap->ops->port_stop(ap) --> sata_fsl_port_stop
+                ioread32(hcr_base + HCONTROL)           <---- UAF
+            host->ops->host_stop(host)
 
-Fixes: 9ec03d7f1ed3 ("drm/vc4: kms: Wait on previous FIFO users before a commit")
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Tested-by: Jian-Hong Pan <jhp@endlessos.org>
-Link: https://lore.kernel.org/r/20211117094527.146275-6-maxime@cerno.tech
+The iounmap(host_priv->hcr_base) and kfree(host_priv) functions should
+not be executed in drv->remove. These functions should be executed in
+host_stop after port_stop. Therefore, we move these functions to the
+new function sata_fsl_host_stop and bind the new function to host_stop.
+
+Fixes: faf0b2e5afe7 ("drivers/ata: add support to Freescale 3.0Gbps SATA Controller")
+Cc: stable@vger.kernel.org
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Reviewed-by: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/vc4/vc4_kms.c |    6 ------
- 1 file changed, 6 deletions(-)
+ drivers/ata/sata_fsl.c |   12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
---- a/drivers/gpu/drm/vc4/vc4_kms.c
-+++ b/drivers/gpu/drm/vc4/vc4_kms.c
-@@ -676,12 +676,6 @@ vc4_hvs_channels_duplicate_state(struct
+--- a/drivers/ata/sata_fsl.c
++++ b/drivers/ata/sata_fsl.c
+@@ -1399,6 +1399,14 @@ static int sata_fsl_init_controller(stru
+ 	return 0;
+ }
  
- 	for (i = 0; i < HVS_NUM_CHANNELS; i++) {
- 		state->fifo_state[i].in_use = old_state->fifo_state[i].in_use;
--
--		if (!old_state->fifo_state[i].pending_commit)
--			continue;
--
--		state->fifo_state[i].pending_commit =
--			drm_crtc_commit_get(old_state->fifo_state[i].pending_commit);
- 	}
++static void sata_fsl_host_stop(struct ata_host *host)
++{
++        struct sata_fsl_host_priv *host_priv = host->private_data;
++
++        iounmap(host_priv->hcr_base);
++        kfree(host_priv);
++}
++
+ /*
+  * scsi mid-layer and libata interface structures
+  */
+@@ -1431,6 +1439,8 @@ static struct ata_port_operations sata_f
+ 	.port_start = sata_fsl_port_start,
+ 	.port_stop = sata_fsl_port_stop,
  
- 	return &state->base;
++	.host_stop      = sata_fsl_host_stop,
++
+ 	.pmp_attach = sata_fsl_pmp_attach,
+ 	.pmp_detach = sata_fsl_pmp_detach,
+ };
+@@ -1563,8 +1573,6 @@ static int sata_fsl_remove(struct platfo
+ 	ata_host_detach(host);
+ 
+ 	irq_dispose_mapping(host_priv->irq);
+-	iounmap(host_priv->hcr_base);
+-	kfree(host_priv);
+ 
+ 	return 0;
+ }
 
 

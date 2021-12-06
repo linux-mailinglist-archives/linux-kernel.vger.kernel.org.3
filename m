@@ -2,278 +2,385 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3AA46A4D4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF51346A4D8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347296AbhLFSqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 13:46:42 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:54758 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238859AbhLFSqd (ORCPT
+        id S1347289AbhLFSr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 13:47:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346257AbhLFSr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 13:46:33 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B6HvtTb003048;
-        Mon, 6 Dec 2021 10:43:03 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : mime-version; s=facebook;
- bh=HL6HrgcNBvs0UlPx6XJwaFBGowJMDwcC8IbqbjXQj9U=;
- b=f+qBNNQgCvp2ugsmGHQy7P9WGOu9KqXX+YDrF3JcuEUGPHCPX0+t5p+U+KOLtHmfAoFd
- wsoDe1fNvNbo+C8xL6sQLvTCblHsrCi99HGrKZrfabdmFkariAmLJQv2syktUgDwtbsE
- gsI6/Dnz3TAghHKIqgRZQ2SnsY7PDSKS1ZA= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3csjxxtard-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 06 Dec 2021 10:43:03 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 6 Dec 2021 10:42:59 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JoTprzfVWz2QT2Xg8aVsFMOYU0597vL/rY1hoEM2UqKjdJShnH7/+b2hxHKGwHJADkcOFMC/XautL8RkcnwCuhUAxWhuTTlMHFHyQFerQnMECg4RCex/ZSeFUzu35GHmStfF7ZGYnOxoYQcAzy3BksEOCJv9XV67Jp0UH55tyB1ZyUOvvp/uJRblDtkaKwvAgm9uX7YlEn+tzR5SBnivL9P83k+0/bnx9phUO8Qfl+147PkRzZvdFBfNomEyr9QEl6Ea4SDhOq7UCw/SBHDpveLiNip1d11U05/+2Z+1TISfsnL5W0KQP+OVN87e9c0Y6O+C6JbITdD32cBroT5uKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HL6HrgcNBvs0UlPx6XJwaFBGowJMDwcC8IbqbjXQj9U=;
- b=a/udDzmFcPnvTKd0jOquSAKStafDxbbh7zPc3HrJuKRrFaAcDDiLQi6ZJa023EYvqkDAsAnUeDaDmVKoR217/c3MjkJYTlsRMaE+OmZ22s8q65OqaaqfuciNiVOjCxvOljIuLmt6JhvULQbDoNW14p2ajKraIXlqz0W7UPcgFQ5flRBu1gsWrfEuHgLuSIl/l3OEwr0do1XEczVnajZfs/VqKPLKhj+LjYCFWPmDAe/XXQQeQ05CytC9Uw5Het333FNRVXWYvWeXlYB3S8dk+cQWcu4PxA0T2cbzpgWXc/+PXuC0D+/ZVXbJFD3vzKMttSl8FJ5fg6rQO8H8RAvJ+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from BY5PR15MB3667.namprd15.prod.outlook.com (2603:10b6:a03:1f9::18)
- by BY5PR15MB3620.namprd15.prod.outlook.com (2603:10b6:a03:1f8::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16; Mon, 6 Dec
- 2021 18:42:58 +0000
-Received: from BY5PR15MB3667.namprd15.prod.outlook.com
- ([fe80::848a:51b3:982e:de87]) by BY5PR15MB3667.namprd15.prod.outlook.com
- ([fe80::848a:51b3:982e:de87%4]) with mapi id 15.20.4755.022; Mon, 6 Dec 2021
- 18:42:57 +0000
-From:   Nick Terrell <terrelln@fb.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-CC:     "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        Michael Forney <forney@google.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] kbuild: pass --stream-size --no-content-size to
- zstd
-Thread-Topic: [PATCH v2 2/2] kbuild: pass --stream-size --no-content-size to
- zstd
-Thread-Index: AQHX4UhKidKPr3kbgE2o2YP10PuuiKwkkw+AgAFMjIA=
-Date:   Mon, 6 Dec 2021 18:42:57 +0000
-Message-ID: <F49C6875-FFDD-4314-A202-0C428B525A6A@fb.com>
-References: <20211124153105.155739-1-alex_y_xu@yahoo.ca>
- <20211124153105.155739-2-alex_y_xu@yahoo.ca>
- <CAK7LNASO_EmCp2zR_sBq_YNiw83Px8pKhcW78HKv1My7eKB+2w@mail.gmail.com>
-In-Reply-To: <CAK7LNASO_EmCp2zR_sBq_YNiw83Px8pKhcW78HKv1My7eKB+2w@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 68d0ddbc-654e-4501-8f38-08d9b8e83919
-x-ms-traffictypediagnostic: BY5PR15MB3620:EE_
-x-microsoft-antispam-prvs: <BY5PR15MB362056A9E92EA0E81A41FF3EAB6D9@BY5PR15MB3620.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: FEdd2gvIlEnYhX4mh+IKTD8+95fTAdCKzjEAwZEQvBnE1Yhyu3oc5NC/PV171GR/3yh7Urgu9IjoWY7NWUfDwiatsmB+IjVMsiiGEAbSNpu7kUWqNGYQzcINeGEGDV82GwccEL1+CfOM0IWPQvcNYJerTkotsHlUXGgCG5N4iyEdCgbY9IlTy94I0xeCNmdUwVclbhxJIya6j6mRFWlolzzro5j3eLPKYA11TSQBep1EoQ++UXDrXGU9ZRraNfwLbvTOaKcQ01iHEP3zRnWd6vxtu+iZlttNAVm1xnX8ERKyuvjwxjWlrYQIzIbNYlZ6zy4790fIpG6f6vG4liiag1EGGG8WMwtU+IBn/XUhLkjojVFjjbjddRuT3YNZBjkIL7a0MedijLFHQGjIfN3VFIQiMXAXCT9VwqMXiX1UsZJjh6FbFJXXnkB8e5ptAHhoP3HGJ9C7GN8IZlDRngU8CbbMuTe5WGwdNmDMKOPvlbDiICoAxlpGr8xeOCHPiY2cEMyZIHhpIbjFP5xUSFHdXgkHVPX49BZT1SaKKYJbTC3U/dt1Tw/CidPBCMEZi2zhwlNfulWBoHnA/cGv8pbDaJnIM2s0bt/bD9lBesX5aSD72FfYRA/qFZuRlbDvyaLQaY86nBAd0P3G5D33YK8N2X3h02LHSgwvlvliTDOaJu2JZoWjGGzQ1rWQqDeP0Vv4NfKL5HSeLMbAX+LItmXx8Ncl3a+YIkYV0UoDCQEw9gpAqh2ybtj5L8tQ3UCRNP9zQnXcngVUIMUsohaDAxRuTQlPRTquUdiZAXEp0DJ9xZc8DmV4vpczlYJr0XNUCRWHUwexQyzaWu165eoiS1ZyUA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3667.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(122000001)(966005)(186003)(66556008)(64756008)(66446008)(38100700002)(8936002)(6506007)(6512007)(76116006)(53546011)(6916009)(66946007)(54906003)(33656002)(5660300002)(316002)(26005)(86362001)(66476007)(2616005)(71200400001)(508600001)(4326008)(8676002)(2906002)(6486002)(7416002)(36756003)(38070700005)(83380400001)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?IbZgJtL+SotSSm4NIigua96IL9+XU/QTw8cAaUspy1FtxtE+CpGEUASpdUb0?=
- =?us-ascii?Q?sJsgH1UpbFxzfzZdlm4XW1oIxj/c8Z/JpdRcRLtjPAKJtkV7fAg6ZUj8v9Pp?=
- =?us-ascii?Q?YyY4r9qo+Wz1tp4QCb9ja3JyzdudebLad1rTv25W02qgEVkBCK2bhDgqCJ3x?=
- =?us-ascii?Q?yVcYEmAmrtlSFwqJk0UkvpN78X49AkMoNqKwlpFLVS0Yqz2uOS0c0moeEMrX?=
- =?us-ascii?Q?AOrJB8JRTPHQAyqy9XlQPku3gdUHA+2C77QjYX+Ic7RrMWpui4e6t4eXbiu1?=
- =?us-ascii?Q?b46I3cEDqJr67WNQWC4k4I/821cblROBJXzNnEeAi3YxGwXIs/cE0tu3KmJP?=
- =?us-ascii?Q?Pj5cK3UUkoVN6PZoBtMDoYec8R/H3eli5NwSbjxiSJeamy96MGr/gzuR4ASb?=
- =?us-ascii?Q?WBLuGoHYCBMdrYbqkRz4Owwr84wfhkr55esMPCRbhCULrZp8O1h5RYGVc+PF?=
- =?us-ascii?Q?+0xpNcLJSl+fn7GeKlZIDw+0N+HJ0mlUgL8Sq5AF+N6pzKwMxHW+agW91Bfz?=
- =?us-ascii?Q?wCibrZBFDDkrus0iPKjNV4KR3tkZxc3glFbOD8WAQmAJ6NEmqEGIF86OSEr6?=
- =?us-ascii?Q?q2StmJ/x0EGT0X3tkf3EjGjd5JLd+1IlgVKpt1pXv6UF1n1nXg/xkzlecYWa?=
- =?us-ascii?Q?DK50P/ScoumYi2KMMIniTFX4CDpVbFebR03BW85E7KgQ+AIbH6Y7F5HFJDj4?=
- =?us-ascii?Q?HVZsz326e5N6IpZqoPF2Mw1/PSwpzraemStgLWY6345a0M0yzL1WpKGGxrq7?=
- =?us-ascii?Q?J/qX8SwsXw5mPHycrI5wf7po9KWl0WlyRYHae9/3Zmy9MXY5fJxxMKb3aGWy?=
- =?us-ascii?Q?bm+hqm0/qu0QgYaYWL9ck2j1mOB43E/lc7XZiqDMbXEZbJylglPOCBTD2Ypl?=
- =?us-ascii?Q?ZbpNZA2RvVKxgmfsjrZXCR/Sy17tJtfTMOE/iEU+PcnUgoy2hhT34jWE6xCJ?=
- =?us-ascii?Q?3opdN/DKMFhDS1FBtu53m/sYJzdjEkeOi06PQz0n95OItnkT4bukAmMZYMIk?=
- =?us-ascii?Q?U+ptBVlk6LMg1WHuZvBVFgOfOCNOWhm89u3i0TnPBpGBcA6hF9yfNlESp3h5?=
- =?us-ascii?Q?UOwtIg30bGwF9OVVMQIB79wbzYB680LzIDullfs7taeIXI4p9F0DbYkybZT7?=
- =?us-ascii?Q?jEqn8pQ4PgdPvncs595GqSqqLfE6U7kw3jHbvvzINt7RovYDyiDfxs4RSxO3?=
- =?us-ascii?Q?Ef02ElELdxAswrShwUP8UUMdSKEUo0Il1S79pMnLE7yWIo37BqBoxMu2vQLQ?=
- =?us-ascii?Q?dvzkF8R5ouZCgkEsdup8y0KZgj7fBmmPUcHXNIT2IYvSZoYZsZVyO1z3IetT?=
- =?us-ascii?Q?RNBeFTauf3UO3zjf/aauJFQfWY2O9/jK/SoqVOdnoeSxVylskvg7RVMvB+5g?=
- =?us-ascii?Q?i4WcxXcXcCkabVrkfS+8TkdBf7sAlI0058sJiU+fPcP8kqtH8WuWgVy7+P9G?=
- =?us-ascii?Q?27GKIOoTv3BwFw2BE80SPQ1WzVc5Fdv+oiL/I8mss3s30ioX9UA+Ps+fmG/t?=
- =?us-ascii?Q?iYB+6rlw11S0v2PZFNb6ZuPUzhHmZdb6aEdknfXqrQHVxEH5m7b14PZu5dRI?=
- =?us-ascii?Q?LlL4r26ZWiIoOhQQt2w=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <5C371F601D27E84B9FDB758ACFB85FF1@namprd15.prod.outlook.com>
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3667.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68d0ddbc-654e-4501-8f38-08d9b8e83919
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2021 18:42:57.8442
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nP9SLovl4uuhISZ14JkLYzEoX0DgiOgi4jYDRSJ8sRt5tfNxZHeidbgpyvxMNQ2Z
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR15MB3620
-X-OriginatorOrg: fb.com
-X-Proofpoint-ORIG-GUID: nWXTKUejND0PqCs0GWRKTEFOA2VlB3eE
-X-Proofpoint-GUID: nWXTKUejND0PqCs0GWRKTEFOA2VlB3eE
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 6 Dec 2021 13:47:28 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE695C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 10:43:58 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id l25so46705701eda.11
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 10:43:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Q0tqs06x18dIrlhQOCpAItB7M/XVYNieoVgk7uBb5Xc=;
+        b=dnjgq+HiFRByUsHLmd3KYtD/FBvjnSrAZRtFpG97qYOOu9mAbMCSirbhYUuxrkIH69
+         FeJJjXjy2WXL6ELT+uxGAcQm6JiK03ZIPiuhSj1LJj21TC28sJ3JdPYr1pnJzo/tNo4j
+         hUISH7fqPqfDU7EpfQZxmppoZTlpJt+Gm+CaIoGub6/zx6i4qEmerbMhYawip/Lewsb2
+         r7myH/rq06GgBtlM77eU9AbKseVyGuhVDcCPPKVBZ45FivvjNF2CkX6cl6pCrZE2HlrD
+         A2qGWEMLLPDLk3ddQxx0PvfavJf3TJLb+qPEPh1B+KMj/6GaV6FrJhQtWjFAgbZNb6Ct
+         /16w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Q0tqs06x18dIrlhQOCpAItB7M/XVYNieoVgk7uBb5Xc=;
+        b=j4xcV6K0mL2Au5AoqRwCO+jt9FER0+j06V6AMGKcTMOQp6p/IcFZdmEWsi5qgk62It
+         Ex0WkXtVHHP78dq73PxKsH0CTSWfzvJd0j+3R4AKyuz584DFOdWsJTj3lURJQBm8tDwa
+         ZrrehOi6pxogywfFKf08m8bsM4V9qKGR9vei+ae8NKUV4fi7hWbADSqjVdRfQTYdTN+Z
+         l01xsixMoa6VbTQAmpkRbc3YCcIWYarehzYQ/C3Q4HQpgnqJN13BMrGXacw6OrT5cJYz
+         LVk/eb0qCHqlpMrjgPvGDKg6kUBBxjlN9N8mCUVZnb+R7iqzPuH62dnF/9sl51A07Mai
+         MZlA==
+X-Gm-Message-State: AOAM533Ja/8/U9LI63BotaQizMTCsK2rv1u+JpL9WQR3Z8h36X7ttg48
+        QvlPl0exDgL8nZQWYDmO6XD62uEQaL6WJLog15I=
+X-Google-Smtp-Source: ABdhPJxhTrTjwLQgfslfO/XJGuM8UQohDgQ7tpbqXidsDJV6CdkTC4ve/DukHRiIjkaJup8UojgggsSHrn13N8+38/A=
+X-Received: by 2002:a05:6402:430e:: with SMTP id m14mr1171548edc.93.1638816237431;
+ Mon, 06 Dec 2021 10:43:57 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-06_07,2021-12-06_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 clxscore=1015
- priorityscore=1501 mlxscore=0 malwarescore=0 phishscore=0 bulkscore=0
- lowpriorityscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- spamscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112060112
-X-FB-Internal: deliver
+References: <20211206031227.3323097-1-ying.huang@intel.com>
+In-Reply-To: <20211206031227.3323097-1-ying.huang@intel.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Mon, 6 Dec 2021 10:43:46 -0800
+Message-ID: <CAHbLzkocNKTPFh54u3ZDOmPAd_OOG3yhHtj5nhLshjNVHTa5iQ@mail.gmail.com>
+Subject: Re: [PATCH] mm/migrate: move node demotion code to near its user
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Zi Yan <ziy@nvidia.com>, Oscar Salvador <osalvador@suse.de>,
+        Michal Hocko <mhocko@suse.com>, Wei Xu <weixugc@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Greg Thelen <gthelen@google.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Dec 5, 2021 at 7:12 PM Huang Ying <ying.huang@intel.com> wrote:
+>
+> Now, node_demotion and next_demtion_node() is placed between
+> __unmap_and_move() and unmap_and_move().  This hurts the code
+> readability.  So, move it to near its user in the file.  There's no
+> any functionality change in this patch.
 
+Reviewed-by: Yang Shi <shy828301@gmail.com>
 
-> On Dec 5, 2021, at 2:52 PM, Masahiro Yamada <masahiroy@kernel.org> wrote:
-> 
-> On Thu, Nov 25, 2021 at 12:30 AM Alex Xu (Hello71) <alex_y_xu@yahoo.ca> wrote:
->> 
->> Otherwise, it allocates 2 GB of memory at once. Even though the majority
->> of this memory is never touched, the default heuristic overcommit
->> refuses this request if less than 2 GB of RAM+swap is currently
->> available. This results in "zstd: error 11 : Allocation error : not
->> enough memory" and the kernel failing to build.
->> 
->> When the size is specified, zstd will reduce the memory request
->> appropriately. For typical kernel sizes of ~32 MB, the largest mmap
->> request will be reduced to 512 MB, which will succeed on all but the
->> smallest devices.
->> 
->> For inputs around this size, --stream-size --no-content-size may
->> slightly decrease the compressed size, or slightly increase it:
->> https://github.com/facebook/zstd/issues/2848.
->> 
->> Signed-off-by: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
-> 
-> 
-> 
-> 
-> The reason why we need this workaround is just because we do
-> "cat and compress".  zstd must allocate a huge memory beforehand
-> since it cannot predict how long the stream it will receive.
-> 
-> If zstd is given with a file name, it can fstat it to know its file size
-> and allocate the minimal amount of memory.
-> 
-> 
-> This is my test.
-> I used 'ulimit' to set the upper limit of the memory the zstd can use.
-> 
-> 
-> [test steps]
-> 
->  # Create a 1kB file
->  $ truncate --size=1k dummy
-> 
->  # Set the memory size limit to 10MB
->  $ ulimit -S -v 10240
-> 
->  # Pass the file as a argument; success
->  $ zstd -19 -o dummy.zst dummy
->  dummy                :  2.15%   (  1024 =>     22 bytes, dummy.zst)
-> 
->  # cat and zstd; fail
->  $ cat dummy | zstd -19 > dummy.zst
->  zstd: error 11 : Allocation error : not enough memory
-> 
->  # cat and zstd --stream-size; success
->  $ cat dummy | zstd -19 --stream-size=1024 > dummy.zst
-> 
-> 
-> 
-> 
-> scripts/Makefile.modinst was written in such a way
-> that zstd can know the file size by itself.
-> 
->      cmd_zstd = $(ZSTD) -T0 --rm -f -q $<
-> 
-> 
-> We cannot rewrite scripts/Makefile.lib in that way because
-> arch/x86/boot/compress/Makefile concatenates two files before
-> compression. And this is the only use-case of this feature.
-> 
-> So, I am seriously considering to revert this commit:
-> 
-> commit d3dd3b5a29bb9582957451531fed461628dfc834
-> Author: H. Peter Anvin <hpa@zytor.com>
-> Date:   Tue May 5 21:17:15 2009 -0700
-> 
->    kbuild: allow compressors (gzip, bzip2, lzma) to take multiple inputs
-> 
-> 
-> 
-> 
-> With that commit reverted, zstd will take a single input file,
-> and we can do "zstd -o <output> <input>".
-> 
-> 
-> So, I will take some time to investigate that approach.
-
-This will definitely work from a zstd perspective. All versions
-of zstd will downsize their memory usage to match the file size.
-
-Best,
-Nick Terrell
-
->> ---
->> scripts/Makefile.lib | 12 ++++++++++--
->> 1 file changed, 10 insertions(+), 2 deletions(-)
->> 
->> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
->> index ca901814986a..c98a82ca38e6 100644
->> --- a/scripts/Makefile.lib
->> +++ b/scripts/Makefile.lib
->> @@ -466,12 +466,20 @@ quiet_cmd_xzmisc = XZMISC  $@
->> # single pass, so zstd doesn't need to allocate a window buffer. When streaming
->> # decompression is used, like initramfs decompression, zstd22 should likely not
->> # be used because it would require zstd to allocate a 128 MB buffer.
->> +#
->> +# --stream-size to reduce zstd memory usage (otherwise zstd -22 --ultra
->> +# allocates, but does not use, 2 GB) and potentially improve compression.
->> +#
->> +# --no-content-size to save three bytes which we do not use (we use size_append).
->> +
->> +# zstd --stream-size is only supported since 1.4.4
->> +zstd_stream_size = $(shell $(ZSTD) -1c --stream-size=0 --no-content-size </dev/null >/dev/null 2>&1 && printf '%s' '--stream-size=$(total_size) --no-content-size')
->> 
->> quiet_cmd_zstd = ZSTD    $@
->> -      cmd_zstd = { cat $(real-prereqs) | $(ZSTD) -19; $(size_append); } > $@
->> +      cmd_zstd = { cat $(real-prereqs) | $(ZSTD) $(zstd_stream_size) -19; $(size_append); } > $@
->> 
->> quiet_cmd_zstd22 = ZSTD22  $@
->> -      cmd_zstd22 = { cat $(real-prereqs) | $(ZSTD) -22 --ultra; $(size_append); } > $@
->> +      cmd_zstd22 = { cat $(real-prereqs) | $(ZSTD) $(zstd_stream_size) -22 --ultra; $(size_append); } > $@
->> 
->> # ASM offsets
->> # ---------------------------------------------------------------------------
->> --
->> 2.34.0
->> 
-> 
-> 
-> -- 
-> Best Regards
-> Masahiro Yamada
-
+>
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Zi Yan <ziy@nvidia.com>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Wei Xu <weixugc@google.com>
+> Cc: David Rientjes <rientjes@google.com>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Greg Thelen <gthelen@google.com>
+> Cc: Keith Busch <kbusch@kernel.org>
+> Cc: Yang Shi <yang.shi@linux.alibaba.com>
+> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+> ---
+>  mm/migrate.c | 265 +++++++++++++++++++++++++--------------------------
+>  1 file changed, 132 insertions(+), 133 deletions(-)
+>
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index c503ef1f4360..d487a399253b 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1083,139 +1083,6 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
+>         return rc;
+>  }
+>
+> -
+> -/*
+> - * node_demotion[] example:
+> - *
+> - * Consider a system with two sockets.  Each socket has
+> - * three classes of memory attached: fast, medium and slow.
+> - * Each memory class is placed in its own NUMA node.  The
+> - * CPUs are placed in the node with the "fast" memory.  The
+> - * 6 NUMA nodes (0-5) might be split among the sockets like
+> - * this:
+> - *
+> - *     Socket A: 0, 1, 2
+> - *     Socket B: 3, 4, 5
+> - *
+> - * When Node 0 fills up, its memory should be migrated to
+> - * Node 1.  When Node 1 fills up, it should be migrated to
+> - * Node 2.  The migration path start on the nodes with the
+> - * processors (since allocations default to this node) and
+> - * fast memory, progress through medium and end with the
+> - * slow memory:
+> - *
+> - *     0 -> 1 -> 2 -> stop
+> - *     3 -> 4 -> 5 -> stop
+> - *
+> - * This is represented in the node_demotion[] like this:
+> - *
+> - *     {  nr=1, nodes[0]=1 }, // Node 0 migrates to 1
+> - *     {  nr=1, nodes[0]=2 }, // Node 1 migrates to 2
+> - *     {  nr=0, nodes[0]=-1 }, // Node 2 does not migrate
+> - *     {  nr=1, nodes[0]=4 }, // Node 3 migrates to 4
+> - *     {  nr=1, nodes[0]=5 }, // Node 4 migrates to 5
+> - *     {  nr=0, nodes[0]=-1 }, // Node 5 does not migrate
+> - *
+> - * Moreover some systems may have multiple slow memory nodes.
+> - * Suppose a system has one socket with 3 memory nodes, node 0
+> - * is fast memory type, and node 1/2 both are slow memory
+> - * type, and the distance between fast memory node and slow
+> - * memory node is same. So the migration path should be:
+> - *
+> - *     0 -> 1/2 -> stop
+> - *
+> - * This is represented in the node_demotion[] like this:
+> - *     { nr=2, {nodes[0]=1, nodes[1]=2} }, // Node 0 migrates to node 1 and node 2
+> - *     { nr=0, nodes[0]=-1, }, // Node 1 dose not migrate
+> - *     { nr=0, nodes[0]=-1, }, // Node 2 does not migrate
+> - */
+> -
+> -/*
+> - * Writes to this array occur without locking.  Cycles are
+> - * not allowed: Node X demotes to Y which demotes to X...
+> - *
+> - * If multiple reads are performed, a single rcu_read_lock()
+> - * must be held over all reads to ensure that no cycles are
+> - * observed.
+> - */
+> -#define DEFAULT_DEMOTION_TARGET_NODES 15
+> -
+> -#if MAX_NUMNODES < DEFAULT_DEMOTION_TARGET_NODES
+> -#define DEMOTION_TARGET_NODES  (MAX_NUMNODES - 1)
+> -#else
+> -#define DEMOTION_TARGET_NODES  DEFAULT_DEMOTION_TARGET_NODES
+> -#endif
+> -
+> -struct demotion_nodes {
+> -       unsigned short nr;
+> -       short nodes[DEMOTION_TARGET_NODES];
+> -};
+> -
+> -static struct demotion_nodes *node_demotion __read_mostly;
+> -
+> -/**
+> - * next_demotion_node() - Get the next node in the demotion path
+> - * @node: The starting node to lookup the next node
+> - *
+> - * Return: node id for next memory node in the demotion path hierarchy
+> - * from @node; NUMA_NO_NODE if @node is terminal.  This does not keep
+> - * @node online or guarantee that it *continues* to be the next demotion
+> - * target.
+> - */
+> -int next_demotion_node(int node)
+> -{
+> -       struct demotion_nodes *nd;
+> -       unsigned short target_nr, index;
+> -       int target;
+> -
+> -       if (!node_demotion)
+> -               return NUMA_NO_NODE;
+> -
+> -       nd = &node_demotion[node];
+> -
+> -       /*
+> -        * node_demotion[] is updated without excluding this
+> -        * function from running.  RCU doesn't provide any
+> -        * compiler barriers, so the READ_ONCE() is required
+> -        * to avoid compiler reordering or read merging.
+> -        *
+> -        * Make sure to use RCU over entire code blocks if
+> -        * node_demotion[] reads need to be consistent.
+> -        */
+> -       rcu_read_lock();
+> -       target_nr = READ_ONCE(nd->nr);
+> -
+> -       switch (target_nr) {
+> -       case 0:
+> -               target = NUMA_NO_NODE;
+> -               goto out;
+> -       case 1:
+> -               index = 0;
+> -               break;
+> -       default:
+> -               /*
+> -                * If there are multiple target nodes, just select one
+> -                * target node randomly.
+> -                *
+> -                * In addition, we can also use round-robin to select
+> -                * target node, but we should introduce another variable
+> -                * for node_demotion[] to record last selected target node,
+> -                * that may cause cache ping-pong due to the changing of
+> -                * last target node. Or introducing per-cpu data to avoid
+> -                * caching issue, which seems more complicated. So selecting
+> -                * target node randomly seems better until now.
+> -                */
+> -               index = get_random_int() % target_nr;
+> -               break;
+> -       }
+> -
+> -       target = READ_ONCE(nd->nodes[index]);
+> -
+> -out:
+> -       rcu_read_unlock();
+> -       return target;
+> -}
+> -
+>  /*
+>   * Obtain the lock on page, remove all ptes and migrate the page
+>   * to the newly allocated page in newpage.
+> @@ -3035,6 +2902,138 @@ void migrate_vma_finalize(struct migrate_vma *migrate)
+>  EXPORT_SYMBOL(migrate_vma_finalize);
+>  #endif /* CONFIG_DEVICE_PRIVATE */
+>
+> +/*
+> + * node_demotion[] example:
+> + *
+> + * Consider a system with two sockets.  Each socket has
+> + * three classes of memory attached: fast, medium and slow.
+> + * Each memory class is placed in its own NUMA node.  The
+> + * CPUs are placed in the node with the "fast" memory.  The
+> + * 6 NUMA nodes (0-5) might be split among the sockets like
+> + * this:
+> + *
+> + *     Socket A: 0, 1, 2
+> + *     Socket B: 3, 4, 5
+> + *
+> + * When Node 0 fills up, its memory should be migrated to
+> + * Node 1.  When Node 1 fills up, it should be migrated to
+> + * Node 2.  The migration path start on the nodes with the
+> + * processors (since allocations default to this node) and
+> + * fast memory, progress through medium and end with the
+> + * slow memory:
+> + *
+> + *     0 -> 1 -> 2 -> stop
+> + *     3 -> 4 -> 5 -> stop
+> + *
+> + * This is represented in the node_demotion[] like this:
+> + *
+> + *     {  nr=1, nodes[0]=1 }, // Node 0 migrates to 1
+> + *     {  nr=1, nodes[0]=2 }, // Node 1 migrates to 2
+> + *     {  nr=0, nodes[0]=-1 }, // Node 2 does not migrate
+> + *     {  nr=1, nodes[0]=4 }, // Node 3 migrates to 4
+> + *     {  nr=1, nodes[0]=5 }, // Node 4 migrates to 5
+> + *     {  nr=0, nodes[0]=-1 }, // Node 5 does not migrate
+> + *
+> + * Moreover some systems may have multiple slow memory nodes.
+> + * Suppose a system has one socket with 3 memory nodes, node 0
+> + * is fast memory type, and node 1/2 both are slow memory
+> + * type, and the distance between fast memory node and slow
+> + * memory node is same. So the migration path should be:
+> + *
+> + *     0 -> 1/2 -> stop
+> + *
+> + * This is represented in the node_demotion[] like this:
+> + *     { nr=2, {nodes[0]=1, nodes[1]=2} }, // Node 0 migrates to node 1 and node 2
+> + *     { nr=0, nodes[0]=-1, }, // Node 1 dose not migrate
+> + *     { nr=0, nodes[0]=-1, }, // Node 2 does not migrate
+> + */
+> +
+> +/*
+> + * Writes to this array occur without locking.  Cycles are
+> + * not allowed: Node X demotes to Y which demotes to X...
+> + *
+> + * If multiple reads are performed, a single rcu_read_lock()
+> + * must be held over all reads to ensure that no cycles are
+> + * observed.
+> + */
+> +#define DEFAULT_DEMOTION_TARGET_NODES 15
+> +
+> +#if MAX_NUMNODES < DEFAULT_DEMOTION_TARGET_NODES
+> +#define DEMOTION_TARGET_NODES  (MAX_NUMNODES - 1)
+> +#else
+> +#define DEMOTION_TARGET_NODES  DEFAULT_DEMOTION_TARGET_NODES
+> +#endif
+> +
+> +struct demotion_nodes {
+> +       unsigned short nr;
+> +       short nodes[DEMOTION_TARGET_NODES];
+> +};
+> +
+> +static struct demotion_nodes *node_demotion __read_mostly;
+> +
+> +/**
+> + * next_demotion_node() - Get the next node in the demotion path
+> + * @node: The starting node to lookup the next node
+> + *
+> + * Return: node id for next memory node in the demotion path hierarchy
+> + * from @node; NUMA_NO_NODE if @node is terminal.  This does not keep
+> + * @node online or guarantee that it *continues* to be the next demotion
+> + * target.
+> + */
+> +int next_demotion_node(int node)
+> +{
+> +       struct demotion_nodes *nd;
+> +       unsigned short target_nr, index;
+> +       int target;
+> +
+> +       if (!node_demotion)
+> +               return NUMA_NO_NODE;
+> +
+> +       nd = &node_demotion[node];
+> +
+> +       /*
+> +        * node_demotion[] is updated without excluding this
+> +        * function from running.  RCU doesn't provide any
+> +        * compiler barriers, so the READ_ONCE() is required
+> +        * to avoid compiler reordering or read merging.
+> +        *
+> +        * Make sure to use RCU over entire code blocks if
+> +        * node_demotion[] reads need to be consistent.
+> +        */
+> +       rcu_read_lock();
+> +       target_nr = READ_ONCE(nd->nr);
+> +
+> +       switch (target_nr) {
+> +       case 0:
+> +               target = NUMA_NO_NODE;
+> +               goto out;
+> +       case 1:
+> +               index = 0;
+> +               break;
+> +       default:
+> +               /*
+> +                * If there are multiple target nodes, just select one
+> +                * target node randomly.
+> +                *
+> +                * In addition, we can also use round-robin to select
+> +                * target node, but we should introduce another variable
+> +                * for node_demotion[] to record last selected target node,
+> +                * that may cause cache ping-pong due to the changing of
+> +                * last target node. Or introducing per-cpu data to avoid
+> +                * caching issue, which seems more complicated. So selecting
+> +                * target node randomly seems better until now.
+> +                */
+> +               index = get_random_int() % target_nr;
+> +               break;
+> +       }
+> +
+> +       target = READ_ONCE(nd->nodes[index]);
+> +
+> +out:
+> +       rcu_read_unlock();
+> +       return target;
+> +}
+> +
+>  #if defined(CONFIG_HOTPLUG_CPU)
+>  /* Disable reclaim-based migration. */
+>  static void __disable_all_migrate_targets(void)
+> --
+> 2.30.2
+>

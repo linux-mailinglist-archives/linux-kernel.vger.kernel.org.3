@@ -2,103 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AFE46A305
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:30:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFF346A309
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242740AbhLFReB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 12:34:01 -0500
-Received: from mga14.intel.com ([192.55.52.115]:29125 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242650AbhLFReB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 12:34:01 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237589443"
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="237589443"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 09:30:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="502211132"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 06 Dec 2021 09:30:13 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1muHob-000LWl-4B; Mon, 06 Dec 2021 17:30:13 +0000
-Date:   Tue, 7 Dec 2021 01:29:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [tglx-devel:msi 20/90] drivers/pci/probe.c:2312:32: error: 'struct
- pci_dev' has no member named 'msi_lock'
-Message-ID: <202112070134.V7oCHNbu-lkp@intel.com>
+        id S242884AbhLFRfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 12:35:08 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:45342 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236887AbhLFRfE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 12:35:04 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9A920CE1727;
+        Mon,  6 Dec 2021 17:31:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C500DC341C5;
+        Mon,  6 Dec 2021 17:31:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638811891;
+        bh=UExTbAcwtusBcjfrES6e0PL8FPZ22caLLzYUe0aM3AE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BFLjX6LwOpdOErKEJrXFFvD/2ymeaWM1QVz5hqmBCWY4XBp51C/UwyAd4ga/qOivn
+         ira00gu66SAzm8CURLuC68PeQIwZWGzYAl8MEYOHn6EjyS5aI3JLDX4eKhRzSVvL1V
+         fN+Ad7MKLFZPfvTWCXID9HMLsxJKo1XuXj5emrRZ9HmnwLypIz8Ti/iAPYCyL+bxKx
+         qsbHFaw2QHbKBvuogoK8I64XvDAslEkVh0jz8HbGFdSwiKX9qao3MNrn70QbVWVxo5
+         POdCTkA6HIQrr/dLiXxclNA96W2zVoMDAF+mOj6umu9aPjkwxD/WLz1EyXcze3H4dq
+         eIpDke6QmlTtA==
+Received: by mail-ed1-f49.google.com with SMTP id e3so46299889edu.4;
+        Mon, 06 Dec 2021 09:31:31 -0800 (PST)
+X-Gm-Message-State: AOAM532ox5rdOAYp5goam0gNZh8joX/WtACZa+Whq3KaloTJOOh+yrsl
+        /PAtlnaEon0zTL47Aq4bqLQDgUjv25TD1luLDQ==
+X-Google-Smtp-Source: ABdhPJwMJboY66dKuBsQJ0ILn9EJr6LBVdXqK48WrKrv8Idp93dxzB/pCTIBE4pdjUlIi8Lr1yV38S6zFwV0cpQCTRE=
+X-Received: by 2002:a05:6402:5c9:: with SMTP id n9mr638402edx.306.1638811890020;
+ Mon, 06 Dec 2021 09:31:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211206124306.14006-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211206124306.14006-1-krzysztof.kozlowski@canonical.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 6 Dec 2021 11:31:18 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKSm48Ts8faUo_T1_Bd0NhGdFbdMiaBrCSdAHRqUSLfaQ@mail.gmail.com>
+Message-ID: <CAL_JsqKSm48Ts8faUo_T1_Bd0NhGdFbdMiaBrCSdAHRqUSLfaQ@mail.gmail.com>
+Subject: Re: [PATCH] regulator: dt-bindings: samsung,s5m8767: add missing
+ op_mode to bucks
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi
-head:   36b5ae08d9cb4a60d6ea0f7ff6a3415223dbb289
-commit: 7ea486fb224a3869f662839f110b4c2f2be17fa3 [20/90] PCI/MSI: Move msi_lock to struct pci_dev
-config: xtensa-randconfig-r033-20211206 (https://download.01.org/0day-ci/archive/20211207/202112070134.V7oCHNbu-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git/commit/?id=7ea486fb224a3869f662839f110b4c2f2be17fa3
-        git remote add tglx-devel https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git
-        git fetch --no-tags tglx-devel msi
-        git checkout 7ea486fb224a3869f662839f110b4c2f2be17fa3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash drivers/pci/
+On Mon, Dec 6, 2021 at 6:43 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> While converting bindings to dtschema, the buck regulators lost
+> "op_mode" property.  The "op_mode" is a valid property for all
+> regulators (both LDOs and bucks), so add it.
+>
+> Reported-by: Rob Herring <robh@kernel.org>
+> Fixes: fab58debc137 ("regulator: dt-bindings: samsung,s5m8767: convert to dtschema")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  .../bindings/regulator/samsung,s5m8767.yaml   | 25 +++++++++++++++++++
+>  1 file changed, 25 insertions(+)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:6,
-                    from include/linux/radix-tree.h:12,
-                    from include/linux/idr.h:15,
-                    from include/linux/kernfs.h:13,
-                    from include/linux/sysfs.h:16,
-                    from include/linux/kobject.h:20,
-                    from include/linux/pci.h:35,
-                    from drivers/pci/probe.c:9:
-   drivers/pci/probe.c: In function 'pci_alloc_dev':
->> drivers/pci/probe.c:2312:32: error: 'struct pci_dev' has no member named 'msi_lock'
-    2312 |         raw_spin_lock_init(&dev->msi_lock);
-         |                                ^~
-   include/linux/spinlock.h:106:31: note: in definition of macro 'raw_spin_lock_init'
-     106 |         __raw_spin_lock_init((lock), #lock, &__key, LD_WAIT_SPIN);      \
-         |                               ^~~~
-
-
-vim +2312 drivers/pci/probe.c
-
-  2302	
-  2303	struct pci_dev *pci_alloc_dev(struct pci_bus *bus)
-  2304	{
-  2305		struct pci_dev *dev;
-  2306	
-  2307		dev = kzalloc(sizeof(struct pci_dev), GFP_KERNEL);
-  2308		if (!dev)
-  2309			return NULL;
-  2310	
-  2311		INIT_LIST_HEAD(&dev->bus_list);
-> 2312		raw_spin_lock_init(&dev->msi_lock);
-  2313		dev->dev.type = &pci_dev_type;
-  2314		dev->bus = pci_bus_get(bus);
-  2315	
-  2316		return dev;
-  2317	}
-  2318	EXPORT_SYMBOL(pci_alloc_dev);
-  2319	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Reviewed-by: Rob Herring <robh@kernel.org>

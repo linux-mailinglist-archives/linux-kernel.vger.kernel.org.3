@@ -2,162 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF58469071
+	by mail.lfdr.de (Postfix) with ESMTP id CA8FC469072
 	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 07:43:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237831AbhLFGqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 01:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
+        id S237849AbhLFGqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 01:46:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237187AbhLFGqm (ORCPT
+        with ESMTP id S237842AbhLFGqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 01:46:42 -0500
-Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8758C0613F8
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 22:43:13 -0800 (PST)
-Received: by mail-wr1-x449.google.com with SMTP id f3-20020a5d50c3000000b00183ce1379feso1699826wrt.5
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 22:43:13 -0800 (PST)
+        Mon, 6 Dec 2021 01:46:44 -0500
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77350C0613F8
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 22:43:16 -0800 (PST)
+Received: by mail-wm1-x34a.google.com with SMTP id j193-20020a1c23ca000000b003306ae8bfb7so5624761wmj.7
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 22:43:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Mof/wiYmoBGxtT831oqCwy9BE2boVy0/SSf3ri1WpLU=;
-        b=pu3nHfeEpZeG6yImoZEbAyqhUSpMZuQHBi1+1Ho42VxnDV1hZEZQHk+PV6dSrjeIvd
-         wRcfZeHje2p5Ms2GNMWu+/z1A9FrUt8ke9plSKySu/sNTbBN/5zQSdjnzl6eitM5+McO
-         nm9WDOaXmlWPgNd34WRoOEI5pydtMJT7SDFW9mHPaM54A086hNOguxh7RAO1SS7F2jVB
-         9LjqLqXADDKrPFg0XzYdR6rXPjCoY42u0L4/ItpZZhMy966bD9g46JeKchUVBQMjRkUP
-         A6or1trrqrET4qu8lWIw91eNSlxiDh+6tYawtkdvYJ344BPoJXhzCyFfh/hTRiHT2XEr
-         9ThQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=j1fyadDoDslylJdYYaDqOZyJVAR4yBe0dIXXRHGm4Os=;
+        b=a8sxZOfDGAV9hG1MvfW87Z2/4CfIH+2Kx3KFLTk5gz9B5IVfiv1y09CoTvlEGuRm/N
+         fxXZjt4RvD7aB7X7t/e7Y6A0zOjllBTk2wburiWaqfnmhLBj2qOcu1fvAWPDm686m71Z
+         0HZg8faKlh5Oz6ncHjROUdUPLOW8YhDFPgprTbLPcnPhjiDaFy1MtmomrBaoZLRhCtuU
+         EWKPrD1ZJ+B9ED20D8rkXtJSoJAejsQKlNQApFl2cmaD7mqKpvDgnVcmQoUg1G2a1D5S
+         byOn8fZlJDgxJTZwQCQc9A4QhJzUBauI4YeH/hPjSRto16sz3YqyetwbPlCmivay7awl
+         ZP4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Mof/wiYmoBGxtT831oqCwy9BE2boVy0/SSf3ri1WpLU=;
-        b=My6RRJpUTsUCuNjIU0eHqgoUtJpD0fm3TdAE4bRWth62h/Ku5Lbd1XBT8HAJyxrJc1
-         ORBIMpUmF7j6VNG9RFbG1i7ZspOefvwvY8IqoUrG4Kqh+xnmPyLSKZ6yIxv6qi/4fVN6
-         U04JdtCl3XFrBg7WG3VSPY0z6tcghhKcpBvv+PBsupTaDEj/pAADZd4l0wMbXZBap1Yp
-         t8UNEfbsAwQFkOgHEzZoQBiA5jKRCui/xtFTgkFIdeV4krDxlBWzLHsrXWrcwBXSsBqv
-         fOLS+PkSIr8KezKrGNF/RwX4BWpVTVAoaQECueG9CsimxLDw0oP660tgKSVFK65UD9nY
-         LxEQ==
-X-Gm-Message-State: AOAM533vBKCG9KynXDXbO9QdA7ULdRkdftSYd87PNmJUyQfAuOvySoxP
-        +AKgmd0Yd1WIAAysCawANWwPDMbo8g==
-X-Google-Smtp-Source: ABdhPJy8wYI4P3EaYgzSS6dU2eYg11EuxhUo4WY1tmrJ3wRj3VuR72ARQ6bdNLe62bo74juyCjykfPyA6g==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=j1fyadDoDslylJdYYaDqOZyJVAR4yBe0dIXXRHGm4Os=;
+        b=ojRASJyQ7kCbDqT77o8unfMjpzEkpl0zgpzduOZjBhf4LA7HVvobPy/FxkKiyy0+YW
+         sqRWb8wTOPkTKShaWFfD7HviSnkh9/I34jPok9+J7bfpJLLI9m5Va8J5dGAMtftN5PL5
+         D105Ne5penxoIxXdV20v9WEq+l5s2DPykRGsCjJhUbIwXDbtH3GdmxQUvHLAPgflCDzT
+         Y+cmkNrhXdvlKLjpkt/lf4OXx2KIPN7pRLmpwViqfiQC/M15wRosd61MgCIIL1gLCgj2
+         1wLJ3VFBj248741juX9eufQqiat0H+HRQp9FxTgonCnrobEZk77IUspUc60qLOkWZflo
+         ILnA==
+X-Gm-Message-State: AOAM531HL2fVE3OSUJBVW4ENRlnO5HYRX5Z5CF20ESNAAEdJQfuIRTmu
+        p+0sdpkSlfVYrAAyRJv3LJ4icTN3qA==
+X-Google-Smtp-Source: ABdhPJw94b3ZzPAWIM53aZDDPtEfJ0tvd2s5GzuDoYT8JyR+URqFuPENrkVrjD0egcEwFP3vmCHdik3N+A==
 X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:88f3:db53:e34:7bb0])
- (user=elver job=sendgmr) by 2002:a05:600c:3c91:: with SMTP id
- bg17mr37190024wmb.80.1638772992245; Sun, 05 Dec 2021 22:43:12 -0800 (PST)
-Date:   Mon,  6 Dec 2021 07:41:50 +0100
-Message-Id: <20211206064151.3337384-1-elver@google.com>
+ (user=elver job=sendgmr) by 2002:a05:600c:4f0b:: with SMTP id
+ l11mr3647218wmq.0.1638772994811; Sun, 05 Dec 2021 22:43:14 -0800 (PST)
+Date:   Mon,  6 Dec 2021 07:41:51 +0100
+In-Reply-To: <20211206064151.3337384-1-elver@google.com>
+Message-Id: <20211206064151.3337384-2-elver@google.com>
 Mime-Version: 1.0
+References: <20211206064151.3337384-1-elver@google.com>
 X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [PATCH -rcu 1/2] kcsan: Avoid nested contexts reading inconsistent reorder_access
+Subject: [PATCH -rcu 2/2] kcsan: Only test clear_bit_unlock_is_negative_byte
+ if arch defines it
 From:   Marco Elver <elver@google.com>
 To:     elver@google.com, "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Cc:     kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nested contexts, such as nested interrupts or scheduler code, share the
-same kcsan_ctx. When such a nested context reads an inconsistent
-reorder_access due to an interrupt during set_reorder_access(), we can
-observe the following warning:
+Some architectures do not define clear_bit_unlock_is_negative_byte().
+Only test it when it is actually defined (similar to other usage, such
+as in lib/test_kasan.c).
 
- | ------------[ cut here ]------------
- | Cannot find frame for torture_random kernel/torture.c:456 in stack trace
- | WARNING: CPU: 13 PID: 147 at kernel/kcsan/report.c:343 replace_stack_entry kernel/kcsan/report.c:343
- | ...
- | Call Trace:
- |  <TASK>
- |  sanitize_stack_entries kernel/kcsan/report.c:351 [inline]
- |  print_report kernel/kcsan/report.c:409
- |  kcsan_report_known_origin kernel/kcsan/report.c:693
- |  kcsan_setup_watchpoint kernel/kcsan/core.c:658
- |  rcutorture_one_extend kernel/rcu/rcutorture.c:1475
- |  rcutorture_loop_extend kernel/rcu/rcutorture.c:1558 [inline]
- |  ...
- |  </TASK>
- | ---[ end trace ee5299cb933115f5 ]---
- | ==================================================================
- | BUG: KCSAN: data-race in _raw_spin_lock_irqsave / rcutorture_one_extend
- |
- | write (reordered) to 0xffffffff8c93b300 of 8 bytes by task 154 on cpu 12:
- |  queued_spin_lock                include/asm-generic/qspinlock.h:80 [inline]
- |  do_raw_spin_lock                include/linux/spinlock.h:185 [inline]
- |  __raw_spin_lock_irqsave         include/linux/spinlock_api_smp.h:111 [inline]
- |  _raw_spin_lock_irqsave          kernel/locking/spinlock.c:162
- |  try_to_wake_up                  kernel/sched/core.c:4003
- |  sysvec_apic_timer_interrupt     arch/x86/kernel/apic/apic.c:1097
- |  asm_sysvec_apic_timer_interrupt arch/x86/include/asm/idtentry.h:638
- |  set_reorder_access              kernel/kcsan/core.c:416 [inline]    <-- inconsistent reorder_access
- |  kcsan_setup_watchpoint          kernel/kcsan/core.c:693
- |  rcutorture_one_extend           kernel/rcu/rcutorture.c:1475
- |  rcutorture_loop_extend          kernel/rcu/rcutorture.c:1558 [inline]
- |  rcu_torture_one_read            kernel/rcu/rcutorture.c:1600
- |  rcu_torture_reader              kernel/rcu/rcutorture.c:1692
- |  kthread                         kernel/kthread.c:327
- |  ret_from_fork                   arch/x86/entry/entry_64.S:295
- |
- | read to 0xffffffff8c93b300 of 8 bytes by task 147 on cpu 13:
- |  rcutorture_one_extend           kernel/rcu/rcutorture.c:1475
- |  rcutorture_loop_extend          kernel/rcu/rcutorture.c:1558 [inline]
- |  ...
-
-The warning is telling us that there was a data race which KCSAN wants
-to report, but the function where the original access (that is now
-reordered) happened cannot be found in the stack trace, which prevents
-KCSAN from generating the right stack trace. The stack trace of "write
-(reordered)" now only shows where the access was reordered to, but
-should instead show the stack trace of the original write, with a final
-line saying "reordered to".
-
-At the point where set_reorder_access() is interrupted, it just set
-reorder_access->ptr and size, at which point size is non-zero. This is
-sufficient (if ctx->disable_scoped is zero) for further accesses from
-nested contexts to perform checking of this reorder_access.
-
-That then happened in _raw_spin_lock_irqsave(), which is called by
-scheduler code. However, since reorder_access->ip is still stale (ptr
-and size belong to a different ip not yet set) this finally leads to
-replace_stack_entry() not finding the frame in reorder_access->ip and
-generating the above warning.
-
-Fix it by ensuring that a nested context cannot access reorder_access
-while we update it in set_reorder_access(): set ctx->disable_scoped for
-the duration that reorder_access is updated, which effectively locks
-reorder_access and prevents concurrent use by nested contexts. Note,
-set_reorder_access() can do the update only if disabled_scoped is zero
-on entry, and must therefore set disable_scoped back to non-zero after
-the initial check in set_reorder_access().
-
+Link: https://lkml.kernel.org/r/202112050757.x67rHnFU-lkp@intel.com
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- kernel/kcsan/core.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ kernel/kcsan/kcsan_test.c | 8 +++++---
+ kernel/kcsan/selftest.c   | 8 +++++---
+ 2 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
-index 916060913966..fe12dfe254ec 100644
---- a/kernel/kcsan/core.c
-+++ b/kernel/kcsan/core.c
-@@ -412,11 +412,20 @@ set_reorder_access(struct kcsan_ctx *ctx, const volatile void *ptr, size_t size,
- 	if (!reorder_access || !kcsan_weak_memory)
- 		return;
+diff --git a/kernel/kcsan/kcsan_test.c b/kernel/kcsan/kcsan_test.c
+index 2bad0820f73a..a36fca063a73 100644
+--- a/kernel/kcsan/kcsan_test.c
++++ b/kernel/kcsan/kcsan_test.c
+@@ -598,7 +598,6 @@ static void test_barrier_nothreads(struct kunit *test)
+ 	KCSAN_EXPECT_READ_BARRIER(test_and_change_bit(0, &test_var), true);
+ 	KCSAN_EXPECT_READ_BARRIER(clear_bit_unlock(0, &test_var), true);
+ 	KCSAN_EXPECT_READ_BARRIER(__clear_bit_unlock(0, &test_var), true);
+-	KCSAN_EXPECT_READ_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
+ 	KCSAN_EXPECT_READ_BARRIER(arch_spin_lock(&arch_spinlock), false);
+ 	KCSAN_EXPECT_READ_BARRIER(arch_spin_unlock(&arch_spinlock), true);
+ 	KCSAN_EXPECT_READ_BARRIER(spin_lock(&test_spinlock), false);
+@@ -644,7 +643,6 @@ static void test_barrier_nothreads(struct kunit *test)
+ 	KCSAN_EXPECT_WRITE_BARRIER(test_and_change_bit(0, &test_var), true);
+ 	KCSAN_EXPECT_WRITE_BARRIER(clear_bit_unlock(0, &test_var), true);
+ 	KCSAN_EXPECT_WRITE_BARRIER(__clear_bit_unlock(0, &test_var), true);
+-	KCSAN_EXPECT_WRITE_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
+ 	KCSAN_EXPECT_WRITE_BARRIER(arch_spin_lock(&arch_spinlock), false);
+ 	KCSAN_EXPECT_WRITE_BARRIER(arch_spin_unlock(&arch_spinlock), true);
+ 	KCSAN_EXPECT_WRITE_BARRIER(spin_lock(&test_spinlock), false);
+@@ -690,7 +688,6 @@ static void test_barrier_nothreads(struct kunit *test)
+ 	KCSAN_EXPECT_RW_BARRIER(test_and_change_bit(0, &test_var), true);
+ 	KCSAN_EXPECT_RW_BARRIER(clear_bit_unlock(0, &test_var), true);
+ 	KCSAN_EXPECT_RW_BARRIER(__clear_bit_unlock(0, &test_var), true);
+-	KCSAN_EXPECT_RW_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
+ 	KCSAN_EXPECT_RW_BARRIER(arch_spin_lock(&arch_spinlock), false);
+ 	KCSAN_EXPECT_RW_BARRIER(arch_spin_unlock(&arch_spinlock), true);
+ 	KCSAN_EXPECT_RW_BARRIER(spin_lock(&test_spinlock), false);
+@@ -698,6 +695,11 @@ static void test_barrier_nothreads(struct kunit *test)
+ 	KCSAN_EXPECT_RW_BARRIER(mutex_lock(&test_mutex), false);
+ 	KCSAN_EXPECT_RW_BARRIER(mutex_unlock(&test_mutex), true);
  
-+	/*
-+	 * To avoid nested interrupts or scheduler (which share kcsan_ctx)
-+	 * reading an inconsistent reorder_access, ensure that the below has
-+	 * exclusive access to reorder_access by disallowing concurrent use.
-+	 */
-+	ctx->disable_scoped++;
-+	barrier();
- 	reorder_access->ptr		= ptr;
- 	reorder_access->size		= size;
- 	reorder_access->type		= type | KCSAN_ACCESS_SCOPED;
- 	reorder_access->ip		= ip;
- 	reorder_access->stack_depth	= get_kcsan_stack_depth();
-+	barrier();
-+	ctx->disable_scoped--;
++#ifdef clear_bit_unlock_is_negative_byte
++	KCSAN_EXPECT_READ_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
++	KCSAN_EXPECT_WRITE_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
++	KCSAN_EXPECT_RW_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
++#endif
+ 	kcsan_nestable_atomic_end();
  }
  
- /*
+diff --git a/kernel/kcsan/selftest.c b/kernel/kcsan/selftest.c
+index b6d4da07d80a..75712959c84e 100644
+--- a/kernel/kcsan/selftest.c
++++ b/kernel/kcsan/selftest.c
+@@ -169,7 +169,6 @@ static bool __init test_barrier(void)
+ 	KCSAN_CHECK_READ_BARRIER(test_and_change_bit(0, &test_var));
+ 	KCSAN_CHECK_READ_BARRIER(clear_bit_unlock(0, &test_var));
+ 	KCSAN_CHECK_READ_BARRIER(__clear_bit_unlock(0, &test_var));
+-	KCSAN_CHECK_READ_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
+ 	arch_spin_lock(&arch_spinlock);
+ 	KCSAN_CHECK_READ_BARRIER(arch_spin_unlock(&arch_spinlock));
+ 	spin_lock(&test_spinlock);
+@@ -199,7 +198,6 @@ static bool __init test_barrier(void)
+ 	KCSAN_CHECK_WRITE_BARRIER(test_and_change_bit(0, &test_var));
+ 	KCSAN_CHECK_WRITE_BARRIER(clear_bit_unlock(0, &test_var));
+ 	KCSAN_CHECK_WRITE_BARRIER(__clear_bit_unlock(0, &test_var));
+-	KCSAN_CHECK_WRITE_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
+ 	arch_spin_lock(&arch_spinlock);
+ 	KCSAN_CHECK_WRITE_BARRIER(arch_spin_unlock(&arch_spinlock));
+ 	spin_lock(&test_spinlock);
+@@ -232,12 +230,16 @@ static bool __init test_barrier(void)
+ 	KCSAN_CHECK_RW_BARRIER(test_and_change_bit(0, &test_var));
+ 	KCSAN_CHECK_RW_BARRIER(clear_bit_unlock(0, &test_var));
+ 	KCSAN_CHECK_RW_BARRIER(__clear_bit_unlock(0, &test_var));
+-	KCSAN_CHECK_RW_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
+ 	arch_spin_lock(&arch_spinlock);
+ 	KCSAN_CHECK_RW_BARRIER(arch_spin_unlock(&arch_spinlock));
+ 	spin_lock(&test_spinlock);
+ 	KCSAN_CHECK_RW_BARRIER(spin_unlock(&test_spinlock));
+ 
++#ifdef clear_bit_unlock_is_negative_byte
++	KCSAN_CHECK_RW_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
++	KCSAN_CHECK_READ_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
++	KCSAN_CHECK_WRITE_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
++#endif
+ 	kcsan_nestable_atomic_end();
+ 
+ 	return ret;
 -- 
 2.34.1.400.ga245620fadb-goog
 

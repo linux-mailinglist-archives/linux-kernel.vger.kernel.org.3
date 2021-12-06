@@ -2,47 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E32FB469BF4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD952469A01
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357962AbhLFPTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:19:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54794 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346409AbhLFPNE (ORCPT
+        id S1344977AbhLFPEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:04:52 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53940 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345322AbhLFPDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:13:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE188C08EAF7;
-        Mon,  6 Dec 2021 07:06:01 -0800 (PST)
+        Mon, 6 Dec 2021 10:03:40 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DA566132E;
-        Mon,  6 Dec 2021 15:06:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF0CC341C2;
-        Mon,  6 Dec 2021 15:06:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0125612D3;
+        Mon,  6 Dec 2021 15:00:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D740C341C1;
+        Mon,  6 Dec 2021 15:00:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803160;
-        bh=x3zMfbuljULYDBpIGmbISV0EKKFYdb7wmRWQcXSTw+E=;
+        s=korg; t=1638802811;
+        bh=8Y4Dqsme2bLjb2uBztctE6YGAqdSg6AmZIGg/2f0Zoc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CIOYyJgzF4bde1LR9NQsTRVoC9rdfQnzPGC7xvAMTFJoNfPKX5geEkccosVKx0tZt
-         COAMWH2poUTCFUPyrKehZKaAMRqNFOSS4gTKS9JpoY1hgMoRye1GHr53RAvyMcbi8G
-         qzlkyxGehlAJoDN290D1KDkVu7JB6GUEb3FEK44o=
+        b=DajmbLRENUrSCMTVJwXd6Kld58p9CzSkW9mFZuTlvQ81Ao/2bWMLqQqebxUogrDFh
+         QljlwVTm5865W3ycp3dmYlq3AyADnIlu/x2th2ipGh2ccbVXyg75xGI+tDzXR1IG2x
+         i2pb4Xr2AoQNOBANp2oZS1HjzvC8xxTh5+9MOFwk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Remi Pommarel <repk@triplefau.lt>
-Subject: [PATCH 4.14 050/106] PCI: aardvark: Fix checking for link up via LTSSM state
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.4 14/52] NFSv42: Dont fail clone() unless the OP_CLONE operation failed
 Date:   Mon,  6 Dec 2021 15:55:58 +0100
-Message-Id: <20211206145557.157043898@linuxfoundation.org>
+Message-Id: <20211206145548.391306246@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
+References: <20211206145547.892668902@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,128 +46,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit 661c399a651c11aaf83c45cbfe0b4a1fb7bc3179 upstream.
+[ Upstream commit d3c45824ad65aebf765fcf51366d317a29538820 ]
 
-Current implementation of advk_pcie_link_up() is wrong as it marks also
-link disabled or hot reset states as link up.
+The failure to retrieve post-op attributes has no bearing on whether or
+not the clone operation itself was successful. We must therefore ignore
+the return value of decode_getfattr() when looking at the success or
+failure of nfs4_xdr_dec_clone().
 
-Fix it by marking link up only to those states which are defined in PCIe
-Base specification 3.0, Table 4-14: Link Status Mapped to the LTSSM.
-
-To simplify implementation, Define macros for every LTSSM state which
-aardvark hardware can return in CFG_REG register.
-
-Fix also checking for link training according to the same Table 4-14.
-Define a new function advk_pcie_link_training() for this purpose.
-
-Link: https://lore.kernel.org/r/20211005180952.6812-13-kabel@kernel.org
-Fixes: 8c39d710363c ("PCI: aardvark: Add Aardvark PCI host controller driver")
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Reviewed-by: Marek Behún <kabel@kernel.org>
-Cc: stable@vger.kernel.org
-Cc: Remi Pommarel <repk@triplefau.lt>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 36022770de6c ("nfs42: add CLONE xdr functions")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/host/pci-aardvark.c |   71 +++++++++++++++++++++++++++++++++++++---
- 1 file changed, 67 insertions(+), 4 deletions(-)
+ fs/nfs/nfs42xdr.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/pci/host/pci-aardvark.c
-+++ b/drivers/pci/host/pci-aardvark.c
-@@ -152,9 +152,50 @@
- #define CFG_REG					(LMI_BASE_ADDR + 0x0)
- #define     LTSSM_SHIFT				24
- #define     LTSSM_MASK				0x3f
--#define     LTSSM_L0				0x10
- #define     RC_BAR_CONFIG			0x300
- 
-+/* LTSSM values in CFG_REG */
-+enum {
-+	LTSSM_DETECT_QUIET			= 0x0,
-+	LTSSM_DETECT_ACTIVE			= 0x1,
-+	LTSSM_POLLING_ACTIVE			= 0x2,
-+	LTSSM_POLLING_COMPLIANCE		= 0x3,
-+	LTSSM_POLLING_CONFIGURATION		= 0x4,
-+	LTSSM_CONFIG_LINKWIDTH_START		= 0x5,
-+	LTSSM_CONFIG_LINKWIDTH_ACCEPT		= 0x6,
-+	LTSSM_CONFIG_LANENUM_ACCEPT		= 0x7,
-+	LTSSM_CONFIG_LANENUM_WAIT		= 0x8,
-+	LTSSM_CONFIG_COMPLETE			= 0x9,
-+	LTSSM_CONFIG_IDLE			= 0xa,
-+	LTSSM_RECOVERY_RCVR_LOCK		= 0xb,
-+	LTSSM_RECOVERY_SPEED			= 0xc,
-+	LTSSM_RECOVERY_RCVR_CFG			= 0xd,
-+	LTSSM_RECOVERY_IDLE			= 0xe,
-+	LTSSM_L0				= 0x10,
-+	LTSSM_RX_L0S_ENTRY			= 0x11,
-+	LTSSM_RX_L0S_IDLE			= 0x12,
-+	LTSSM_RX_L0S_FTS			= 0x13,
-+	LTSSM_TX_L0S_ENTRY			= 0x14,
-+	LTSSM_TX_L0S_IDLE			= 0x15,
-+	LTSSM_TX_L0S_FTS			= 0x16,
-+	LTSSM_L1_ENTRY				= 0x17,
-+	LTSSM_L1_IDLE				= 0x18,
-+	LTSSM_L2_IDLE				= 0x19,
-+	LTSSM_L2_TRANSMIT_WAKE			= 0x1a,
-+	LTSSM_DISABLED				= 0x20,
-+	LTSSM_LOOPBACK_ENTRY_MASTER		= 0x21,
-+	LTSSM_LOOPBACK_ACTIVE_MASTER		= 0x22,
-+	LTSSM_LOOPBACK_EXIT_MASTER		= 0x23,
-+	LTSSM_LOOPBACK_ENTRY_SLAVE		= 0x24,
-+	LTSSM_LOOPBACK_ACTIVE_SLAVE		= 0x25,
-+	LTSSM_LOOPBACK_EXIT_SLAVE		= 0x26,
-+	LTSSM_HOT_RESET				= 0x27,
-+	LTSSM_RECOVERY_EQUALIZATION_PHASE0	= 0x28,
-+	LTSSM_RECOVERY_EQUALIZATION_PHASE1	= 0x29,
-+	LTSSM_RECOVERY_EQUALIZATION_PHASE2	= 0x2a,
-+	LTSSM_RECOVERY_EQUALIZATION_PHASE3	= 0x2b,
-+};
-+
- /* PCIe core controller registers */
- #define CTRL_CORE_BASE_ADDR			0x18000
- #define CTRL_CONFIG_REG				(CTRL_CORE_BASE_ADDR + 0x0)
-@@ -248,13 +289,35 @@ static inline u32 advk_readl(struct advk
- 	return readl(pcie->base + reg);
- }
- 
--static int advk_pcie_link_up(struct advk_pcie *pcie)
-+static u8 advk_pcie_ltssm_state(struct advk_pcie *pcie)
- {
--	u32 val, ltssm_state;
-+	u32 val;
-+	u8 ltssm_state;
- 
- 	val = advk_readl(pcie, CFG_REG);
- 	ltssm_state = (val >> LTSSM_SHIFT) & LTSSM_MASK;
--	return ltssm_state >= LTSSM_L0;
-+	return ltssm_state;
-+}
-+
-+static inline bool advk_pcie_link_up(struct advk_pcie *pcie)
-+{
-+	/* check if LTSSM is in normal operation - some L* state */
-+	u8 ltssm_state = advk_pcie_ltssm_state(pcie);
-+	return ltssm_state >= LTSSM_L0 && ltssm_state < LTSSM_DISABLED;
-+}
-+
-+static inline bool advk_pcie_link_training(struct advk_pcie *pcie)
-+{
-+	/*
-+	  * According to PCIe Base specification 3.0, Table 4-14: Link
-+	  * Status Mapped to the LTSSM is Link Training mapped to LTSSM
-+	  * Configuration and Recovery states.
-+	  */
-+	u8 ltssm_state = advk_pcie_ltssm_state(pcie);
-+	return ((ltssm_state >= LTSSM_CONFIG_LINKWIDTH_START &&
-+		  ltssm_state < LTSSM_L0) ||
-+		(ltssm_state >= LTSSM_RECOVERY_EQUALIZATION_PHASE0 &&
-+		  ltssm_state <= LTSSM_RECOVERY_EQUALIZATION_PHASE3));
- }
- 
- static int advk_pcie_wait_for_link(struct advk_pcie *pcie)
+diff --git a/fs/nfs/nfs42xdr.c b/fs/nfs/nfs42xdr.c
+index 0ca482a51e532..988d262029580 100644
+--- a/fs/nfs/nfs42xdr.c
++++ b/fs/nfs/nfs42xdr.c
+@@ -439,8 +439,7 @@ static int nfs4_xdr_dec_clone(struct rpc_rqst *rqstp,
+ 	status = decode_clone(xdr);
+ 	if (status)
+ 		goto out;
+-	status = decode_getfattr(xdr, res->dst_fattr, res->server);
+-
++	decode_getfattr(xdr, res->dst_fattr, res->server);
+ out:
+ 	res->rpc_status = status;
+ 	return status;
+-- 
+2.33.0
+
 
 

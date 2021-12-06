@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B1A46AA8E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C53EB46AA91
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352055AbhLFVke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:40:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36366 "EHLO
+        id S1352097AbhLFVmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:42:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236606AbhLFVkd (ORCPT
+        with ESMTP id S236606AbhLFVmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:40:33 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04368C061746;
-        Mon,  6 Dec 2021 13:37:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 35B36CE1862;
-        Mon,  6 Dec 2021 21:37:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50800C341C6;
-        Mon,  6 Dec 2021 21:37:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638826620;
-        bh=f84xs3ZWRDRi5yCnS5uMKiSpraAqjxG5xApNM0KlV+M=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=rwJzyqjSjn+0tt76jOh96QKag8reoQ4QQlKYk8l22coi3ErZXW2bVShMEaXc88I/O
-         6nwFfz/0BEWv5Bk1JhdvEVTW8QxhGlsX+at1OBrrTl0X3nU8zyTUWqhh2xjOoj8na0
-         Jl2p2JEKtdw/tEbu8aOqsOwSMlBmT2Ret/VslgthhXcrZQaACF9YxjsqllLbIRpQdq
-         hvImLAgFS3xrr8ifDN0XDGMg05YL7UnEkHC5d+OYyYyNYfnoTSEHbfKwhJl/kxcnij
-         LDXZQydiehFCjBaa9iT/wimDjeaT1dnxgZhTxA5D/zPEXzXjErVzIR7l2Rld+iukqV
-         zWNgoNG0MmG3Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E83665C14E6; Mon,  6 Dec 2021 13:36:59 -0800 (PST)
-Date:   Mon, 6 Dec 2021 13:36:59 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        rcu@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        mtosatti <mtosatti@redhat.com>, frederic <frederic@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH v2] Documentation: Fill the gaps about entry/noinstr
- constraints
-Message-ID: <20211206213659.GI641268@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <878rx5b7i5.ffs@tglx>
- <YadU1aSE6/0yGWny@FVFF77S0Q05N>
- <87v9088a5q.ffs@tglx>
- <Yae9tbtZW5mjcBVt@FVFF77S0Q05N>
- <87ee6w83yw.ffs@tglx>
- <87bl2083mu.ffs@tglx>
- <1158239c-4e65-d3d9-41b3-4fedac856622@infradead.org>
- <Ya5KM05XaUBjlthn@FVFF77S0Q05N>
- <20211206175323.GB641268@paulmck-ThinkPad-P17-Gen-1>
- <9ff94a5f-bb7e-501a-65cf-f260ae75b506@infradead.org>
+        Mon, 6 Dec 2021 16:42:23 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D56C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 13:38:53 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id bj13so23974599oib.4
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 13:38:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Hp2wuf+GFIgPk2krY9oLPCwUDqecUtCiJ9IkJj6FAwY=;
+        b=mSaIlNfoBW/jt2OkD5XcCr12QDK1WvUAFurbspD0PgHjQqx6OQFGqu03SnfjTCN9aO
+         IRFLPSVoajjd5r0i/DMtHY2Miq/FP4PHZVyti0Ur7J0ADDv6b/hObU8OrsFLEjSUbNh6
+         mL3FarxoyProtsR36Ay88HrDJgnfwZSE4O+sCy/HM57FQDYN0v+JkxS6yb+rdwFcX2Gs
+         uEblW9Ef94bQEhtIElOn41KgxAMhYmLfN0yAiYQzB+g96LwvT/QpDEala1EKTkgWiWpH
+         zFweAh+9T+otLbklfH7FK/hSGefdTOH4Hnc6/e4exZI8Wgckcodz4rtGSYW6goGKQ96Z
+         e68g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=Hp2wuf+GFIgPk2krY9oLPCwUDqecUtCiJ9IkJj6FAwY=;
+        b=zAfn/Nzps0RzrkgsIZwmUWn12kZ+4TNRrZRgiH8yC3fG8/pKADB2ng+vVfp4cI40KT
+         vO/rJ57RBvzBQUZtpe6AdLuhk61yLx/qUlxXlaDPHF87tL+MFvfBagf2P6gFOczlfenx
+         fjFW5ZQT4mBAlT6wcCAvnD2YXKXP28i2zg/yxa7ARQeZfKY/XAQju/HgL9qf0Gk5knN+
+         53DO3FZGDhgnc70q1FNFM53/uWFL/g/p3VIvSM1nuJxPfujj4ATl1mROpBvos4ovO92v
+         EjqUCRV2SfHH3JBlyQbk50puvWb3EXGVXTqss3wBc+Gq+Eu6eoCl1yv6W8Za+SUc3Z8g
+         s3PQ==
+X-Gm-Message-State: AOAM5326wCUHHA806RZw9gSXUufbcSsaiSx6c/qLsRZTBHE5fGos0LAq
+        Dq9fSvt1Luos2UVM6pFegdjnq8gd4XYzNMRxj5g=
+X-Google-Smtp-Source: ABdhPJyVbTE5KaDjrAscHbVJd9mo9wt4r235WrCPKElvBgj57GFJ9hQyxQmHVU+CzDijny/Pi4djzIwEjJMvNxFPGs8=
+X-Received: by 2002:aca:b387:: with SMTP id c129mr1383950oif.6.1638826732923;
+ Mon, 06 Dec 2021 13:38:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9ff94a5f-bb7e-501a-65cf-f260ae75b506@infradead.org>
+Sender: ericgloriapaul@gmail.com
+Received: by 2002:a05:6830:231d:0:0:0:0 with HTTP; Mon, 6 Dec 2021 13:38:52
+ -0800 (PST)
+From:   DINA MCKENNA <dinamckennahowley@gmail.com>
+Date:   Mon, 6 Dec 2021 21:38:52 +0000
+X-Google-Sender-Auth: 40GR5Mg47o931llSZgVLk9eOsAE
+Message-ID: <CAApFGfRw-e7mjScLGKRdMtbfv0o7qABqOXxbvrNe9TcU-K3hoA@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 01:24:03PM -0800, Randy Dunlap wrote:
-> 
-> 
-> On 12/6/21 09:53, Paul E. McKenney wrote:
-> > On Mon, Dec 06, 2021 at 05:36:51PM +0000, Mark Rutland wrote:
-> >> On Fri, Dec 03, 2021 at 07:48:08PM -0800, Randy Dunlap wrote:
-> >>> On 12/1/21 12:35, Thomas Gleixner wrote:
-> >>>> +Aside of that many architectures have to save register state, e.g. debug or
-> >>>
-> >>>                                                           state (e.g. debug) or
-> >>>
-> >>>> +cause registers before another exception of the same type can happen. A
-> >>>
-> >>>    ^^^^^ cannot parse (with or without the change to the previous line)
-> >>
-> >> I think the difficulty here is with "cause register"? That' a register which
-> >> indicates the cause of an exception, e.g.
-> 
-> Oh. I see. Thanks.
-> 
-> >> * MIPS has `cause` (coprocessor 0 register 13)
-> >> * arm64 / AArch64 has `ESR_ELx` (Exception Syndrome Register, ELx)
-> >>
-> >> We could probably clarify this as "exception cause registers" or "exception
-> >> status registers", if that helps?
-> > 
-> > Or to make it word-by-word unambiguous, "exception-cause registers"
-> > and "exception-status registers".
-> 
-> Any of those works. Or even 'cause' registers.
+Hello my dear,
 
-Agreed, careful use of quotation marks can also do the trick.  That is the
-"wonderful" thing about English, so very many ways to say the same thing...
+ I sent this mail praying it will get to you in a good condition of
+health, since I myself are in a very critical health condition in
+which I sleep every night without knowing if I may be alive to see the
+next day. I bring peace and love to you. It is by the grace of God, I
+had no choice than to do what is lawful and right in the sight of God
+for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
+y
+and glory upon my life. I am Mrs. Dina Howley Mckenna, a widow. I am
+suffering from a long time brain tumor, It has defiled all forms of
+medical treatment, and right now I have about a few months to leave,
+according to medical experts. The situation has gotten complicated
+recently with my inability to hear proper, am communicating with you
+with the help of the chief nurse herein the hospital, from all
+indication my conditions is really deteriorating and it is quite
+obvious that, according to my doctors they have advised me that I may
+not live too long, Because this illness has gotten to a very bad
+stage. I plead that you will not expose or betray this trust and
+confidence that I am about to repose on you for the mutual benefit of
+the orphans and the less privilege. I have some funds I inherited from
+my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
+Having known my condition, I decided to donate this fund to you
+believing that you will utilize it the way i am going to instruct
+herein. I need you to assist me and reclaim this money and use it for
+Charity works therein your country  for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of God
+and the effort that the house of God is maintained. I do not want a
+situation where this money will be used in an ungodly manner. That's
+why I'm taking this decision. I'm not afraid of death, so I know where
+I'm going. I accept this decision because I do not have any child who
+will inherit this money after I die.. Please I want your sincerely and
+urgent answer to know if you will be able to execute this project for
+the glory of God, and I will give you more information on how the fund
+will be transferred to your bank account.. May the grace, peace, love
+and the truth in the Word of God be with you and all those that you
+love and care for.
 
-							Thanx, Paul
+I'm waiting for your immediate reply..
+
+May God Bless you,
+Mrs. Dina Howley Mckenna.

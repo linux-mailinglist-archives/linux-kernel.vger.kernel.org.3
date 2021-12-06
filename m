@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AAD846A056
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3FD469B28
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:09:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443615AbhLFQA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:00:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
+        id S1346700AbhLFPNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:13:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390589AbhLFPme (ORCPT
+        with ESMTP id S1346465AbhLFPIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:42:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE6BC08ED1E;
-        Mon,  6 Dec 2021 07:28:44 -0800 (PST)
+        Mon, 6 Dec 2021 10:08:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EA9C0698CF;
+        Mon,  6 Dec 2021 07:03:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 043C96130D;
-        Mon,  6 Dec 2021 15:28:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA2A5C34901;
-        Mon,  6 Dec 2021 15:28:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D1FDB81120;
+        Mon,  6 Dec 2021 15:03:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 449C5C341C1;
+        Mon,  6 Dec 2021 15:03:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804523;
-        bh=T729lqUbBFVLAGEbP2kGpTioLNrsM+4cHXoaTWVQ040=;
+        s=korg; t=1638803019;
+        bh=FrYRzC9RMzsN9T8M4PFLTdVZC58KrKh8sovKEllXWac=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DrjW2fSVT82iG92ZTIRYQXyGyz0nIF8cVwOm015pEUivx1sbM8IPlg9FDqHiCou1Q
-         j6IUHMgPZdmPAm71XlsFUAG+jWR2EldKWRDO3R8utSoAS9SMQcAnKA/nBUXcOV/IwH
-         UxRmFCwB6rzPPyPFgfHCyRuxlIcqLrUYe4oxqcDs=
+        b=uqtRZGcrVQifBjW83mZdYDqoHArDTvwesd82FLF3SHY+mXyQXXiap10sqG/iFxvmN
+         +cfIi8Mu88oRLkiBIl8qV6eD3crVoLeF5Efomt1CFNX9Ol4Bvi6B+c5LqsAaGoBmTY
+         raGLOUFHzS5pVMcULZ1oyP8C7l+j1HGQDe3HxLlc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        William Kucharski <william.kucharski@oracle.com>,
-        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 135/207] net/rds: correct socket tunable error in rds_tcp_tune()
+        stable@vger.kernel.org, zhangyue <zhangyue1@kylinos.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 46/62] net: tulip: de4x5: fix the problem that the array lp->phy[8] may be out of bound
 Date:   Mon,  6 Dec 2021 15:56:29 +0100
-Message-Id: <20211206145614.910240017@linuxfoundation.org>
+Message-Id: <20211206145550.803582704@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
+References: <20211206145549.155163074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,32 +49,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: William Kucharski <william.kucharski@oracle.com>
+From: zhangyue <zhangyue1@kylinos.cn>
 
-commit 19f36edf14bcdb783aef3af8217df96f76a8ce34 upstream.
+[ Upstream commit 61217be886b5f7402843677e4be7e7e83de9cb41 ]
 
-Correct an error where setting /proc/sys/net/rds/tcp/rds_tcp_rcvbuf would
-instead modify the socket's sk_sndbuf and would leave sk_rcvbuf untouched.
+In line 5001, if all id in the array 'lp->phy[8]' is not 0, when the
+'for' end, the 'k' is 8.
 
-Fixes: c6a58ffed536 ("RDS: TCP: Add sysctl tunables for sndbuf/rcvbuf on rds-tcp socket")
-Signed-off-by: William Kucharski <william.kucharski@oracle.com>
-Acked-by: Santosh Shilimkar <santosh.shilimkar@oracle.com>
+At this time, the array 'lp->phy[8]' may be out of bound.
+
+Signed-off-by: zhangyue <zhangyue1@kylinos.cn>
 Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/rds/tcp.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/dec/tulip/de4x5.c | 30 +++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
 
---- a/net/rds/tcp.c
-+++ b/net/rds/tcp.c
-@@ -500,7 +500,7 @@ void rds_tcp_tune(struct socket *sock)
- 		sk->sk_userlocks |= SOCK_SNDBUF_LOCK;
+diff --git a/drivers/net/ethernet/dec/tulip/de4x5.c b/drivers/net/ethernet/dec/tulip/de4x5.c
+index 005c79b5b3f01..b39e8315e4e27 100644
+--- a/drivers/net/ethernet/dec/tulip/de4x5.c
++++ b/drivers/net/ethernet/dec/tulip/de4x5.c
+@@ -4995,19 +4995,23 @@ mii_get_phy(struct net_device *dev)
  	}
- 	if (rtn->rcvbuf_size > 0) {
--		sk->sk_sndbuf = rtn->rcvbuf_size;
-+		sk->sk_rcvbuf = rtn->rcvbuf_size;
- 		sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
+ 	if ((j == limit) && (i < DE4X5_MAX_MII)) {
+ 	    for (k=0; k < DE4X5_MAX_PHY && lp->phy[k].id; k++);
+-	    lp->phy[k].addr = i;
+-	    lp->phy[k].id = id;
+-	    lp->phy[k].spd.reg = GENERIC_REG;      /* ANLPA register         */
+-	    lp->phy[k].spd.mask = GENERIC_MASK;    /* 100Mb/s technologies   */
+-	    lp->phy[k].spd.value = GENERIC_VALUE;  /* TX & T4, H/F Duplex    */
+-	    lp->mii_cnt++;
+-	    lp->active++;
+-	    printk("%s: Using generic MII device control. If the board doesn't operate,\nplease mail the following dump to the author:\n", dev->name);
+-	    j = de4x5_debug;
+-	    de4x5_debug |= DEBUG_MII;
+-	    de4x5_dbg_mii(dev, k);
+-	    de4x5_debug = j;
+-	    printk("\n");
++	    if (k < DE4X5_MAX_PHY) {
++		lp->phy[k].addr = i;
++		lp->phy[k].id = id;
++		lp->phy[k].spd.reg = GENERIC_REG;      /* ANLPA register         */
++		lp->phy[k].spd.mask = GENERIC_MASK;    /* 100Mb/s technologies   */
++		lp->phy[k].spd.value = GENERIC_VALUE;  /* TX & T4, H/F Duplex    */
++		lp->mii_cnt++;
++		lp->active++;
++		printk("%s: Using generic MII device control. If the board doesn't operate,\nplease mail the following dump to the author:\n", dev->name);
++		j = de4x5_debug;
++		de4x5_debug |= DEBUG_MII;
++		de4x5_dbg_mii(dev, k);
++		de4x5_debug = j;
++		printk("\n");
++	    } else {
++		goto purgatory;
++	    }
  	}
- 	release_sock(sk);
+     }
+   purgatory:
+-- 
+2.33.0
+
 
 

@@ -2,271 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04466469484
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 11:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 192C6469490
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 11:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238753AbhLFLAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 06:00:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241980AbhLFLAk (ORCPT
+        id S241994AbhLFLBT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 6 Dec 2021 06:01:19 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4201 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241972AbhLFLBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 06:00:40 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AF2C061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 02:57:11 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id p3-20020a05600c1d8300b003334fab53afso10068735wms.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 02:57:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Og4d+0J+D9XBip4Glln9SQpuxIVWP+20n5XjcghlMp8=;
-        b=IsAua1IAP1z5CUNMqn5XZ7vWJYX1PnAQWEJBOhPlNn6F9/q6+/oBam9orG+0r3Nnsj
-         8x+Av69kMJ1SMWC5ze/PMN2igdPbpRVzQyNQUdqYxRa+LThlLNvZ5V0uYwx5AxCE+G7e
-         0VWbXkf8Sf+KY/N498s9aAhPmM7hpylXroPp73xvKE1E9bBFR9Lc6R0wkD4Qj1VYhsRS
-         EaNKhTluSampSAOWFOdKbb3MzidzWGpAnqOFfnGs13r8btIXA5KMJYGrZjmsswinHq2B
-         kXiOt7E3ic+PIfRmN/tyqqxsi99e/pV+1Br3hgFnVKxd89XuYBwAgVL+XyVYmSFPk0sq
-         Ihww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=Og4d+0J+D9XBip4Glln9SQpuxIVWP+20n5XjcghlMp8=;
-        b=VBQXwvjfMJN+VA8hI6WTtcFEChxoEjq27u7Qm/m9gbvs2Etg2HgilG+fojayTdGHtg
-         8KhM8mBOmByeBIzAofo0bLoBzFR4I+bz9dS+MwPphj053z0Rkekx/vrnQnKNwKJeR+29
-         Vna5dXOZCBou5mw+T1Y2cetCcx3oWuCe6AltK5Mz7wx+HoqoZF2hpUI8YOwFD899pqyO
-         tCm+K02i0aQFVbACymNp1cOkBovAcFfsSVh5vn3NZ20daQ9Dq6l5zTLTQLaUHp+wYMMe
-         cktLMLpzGhQHUD9AGyiy/+rBE5MmNLG967m5ZC7QQCpfPnr6pA7eI6l4GpNYMIC8ZPdg
-         4b0g==
-X-Gm-Message-State: AOAM532rOgP6vtKzhOQzRm1TX5mkWSSNsgANcFKn6YAgMT8825rnechC
-        H9NgF3Uz0aNn2dz6kO5VO+SSbQ==
-X-Google-Smtp-Source: ABdhPJyNMlSeQmABbFLDeE9E3YkY/0bH/WkPssvqGe97C395cdU2wnYMEMKNauY/7YgLR+JCPW820w==
-X-Received: by 2002:a1c:23d4:: with SMTP id j203mr36956959wmj.35.1638788229940;
-        Mon, 06 Dec 2021 02:57:09 -0800 (PST)
-Received: from ?IPv6:2001:861:44c0:66c0:70c1:5ce3:e1aa:1275? ([2001:861:44c0:66c0:70c1:5ce3:e1aa:1275])
-        by smtp.gmail.com with ESMTPSA id e7sm13895884wrg.31.2021.12.06.02.57.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 02:57:09 -0800 (PST)
-Subject: Re: [PATCH] arm64: dts: add support for S4 based Amlogic AQ222
-To:     "xianwei.zhao" <xianwei.zhao@amlogic.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Rob Herring <robh+dt@kernel.org>
-References: <20211206100209.31971-1-xianwei.zhao@amlogic.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <f20968ff-667f-3fd9-3f8e-af8eced694f0@baylibre.com>
-Date:   Mon, 6 Dec 2021 11:57:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <20211206100209.31971-1-xianwei.zhao@amlogic.com>
-Content-Type: text/plain; charset=utf-8
+        Mon, 6 Dec 2021 06:01:13 -0500
+Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J70hy1Svhz67wK2;
+        Mon,  6 Dec 2021 18:56:02 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 6 Dec 2021 11:57:41 +0100
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.020;
+ Mon, 6 Dec 2021 11:57:41 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Christoph Hellwig <hch@infradead.org>
+CC:     "deven.desai@linux.microsoft.com" <deven.desai@linux.microsoft.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "agk@redhat.com" <agk@redhat.com>,
+        "snitzer@redhat.com" <snitzer@redhat.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "eparis@redhat.com" <eparis@redhat.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+        "linux-audit@redhat.com" <linux-audit@redhat.com>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "tusharsu@linux.microsoft.com" <tusharsu@linux.microsoft.com>
+Subject: RE: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
+Thread-Topic: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
+Thread-Index: AQHX5tHI6VSZDPA0J0GM0KIP7fuaeKweu+CAgAAaFvD///01gIAAEg9QgAFg9oCAAC4FMIAE3cYA
+Date:   Mon, 6 Dec 2021 10:57:41 +0000
+Message-ID: <e38392762299459890eee792a3a7cb09@huawei.com>
+References: <81d5e825-1ee2-8f6b-cd9d-07b0f8bd36d3@linux.microsoft.com>
+ <20211201163708.3578176-1-roberto.sassu@huawei.com>
+ <Yahz1SYRG1CQIh0z@infradead.org>
+ <e57d2d23ec7845febb79ca4476c73fcb@huawei.com>
+ <YaiHX+dWNUlmsNac@infradead.org>
+ <b4bf4a384b334cdab1522b3b082bd088@huawei.com>
+ <Yam+m9eiLxIamGXm@infradead.org>
+ <28208b7f142f4295ac5c857af5cffe07@huawei.com>
+In-Reply-To: <28208b7f142f4295ac5c857af5cffe07@huawei.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.204.63.33]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 06/12/2021 11:02, xianwei.zhao wrote:
-> Add basic support for the Amlogic S4 based Amlogic AQ222 board:
-> which describe components as follows: CPU, GIC, IRQ, Timer, UART.
-> It's capable of booting up into the serial console.
+> From: Roberto Sassu [mailto:roberto.sassu@huawei.com]
+> Sent: Friday, December 3, 2021 11:20 AM
+> > From: Christoph Hellwig [mailto:hch@infradead.org]
+> > Sent: Friday, December 3, 2021 7:52 AM
+> > On Thu, Dec 02, 2021 at 09:29:52AM +0000, Roberto Sassu wrote:
+> > > The problem being solved is how to grant access to files
+> > > which satisfy a property defined in the policy.
+> >
+> > If you have want to enforce access to files in the block layer using
+> > a specific stacking block driver you don't just have one layering
+> > violation but a bunch of them.  Please go back to the drawing board.
 > 
-> Signed-off-by: xianwei.zhao <xianwei.zhao@amlogic.com>
-> ---
->  arch/arm64/boot/dts/amlogic/Makefile          |  1 +
->  .../dts/amlogic/meson-s4-s805x2-aq222.dts     | 30 ++++++
->  arch/arm64/boot/dts/amlogic/meson-s4.dtsi     | 98 +++++++++++++++++++
->  3 files changed, 129 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
->  create mode 100644 arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+> Ok. I write my thoughts here, so that it is easier to align.
 > 
-> diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-> index 5148cd9e5146..faea74a45994 100644
-> --- a/arch/arm64/boot/dts/amlogic/Makefile
-> +++ b/arch/arm64/boot/dts/amlogic/Makefile
-> @@ -57,3 +57,4 @@ dtb-$(CONFIG_ARCH_MESON) += meson-sm1-odroid-c4.dtb
->  dtb-$(CONFIG_ARCH_MESON) += meson-sm1-odroid-hc4.dtb
->  dtb-$(CONFIG_ARCH_MESON) += meson-sm1-sei610.dtb
->  dtb-$(CONFIG_ARCH_MESON) += meson-a1-ad401.dtb
-> +dtb-$(CONFIG_ARCH_MESON) += meson-s4-s805x2-aq222.dtb
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts b/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
-> new file mode 100644
-> index 000000000000..6b6ecb40be4a
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dts
-> @@ -0,0 +1,30 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "meson-s4.dtsi"
-> +
-> +/ {
-> +	model = "Amlogic";
-
-Please change to something like "Amlogic Meson S4 AQ222 Development Board"
-
-> +	compatible = "amlogic, aq222";
-
-Drop the space after amlogic, and add "amlogic,aq222" to the Documentation/devicetree/bindings/arm/amlogic.yaml bindings.
-
-You will probably need to add a new "amlogic,s4" family compatibla aswell.
-
-> +	interrupt-parent = <&gic>;
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +
-> +	aliases {
-> +		serial0 = &uart_B;
-> +	};
-> +
-> +	memory@00000000 {
-> +		device_type = "memory";
-> +		linux,usable-memory = <0x0 0x0 0x0 0x40000000>;
-
-Drop linux,usable-memory in favor or reg
-
-> +	};
-> +
-> +};
-> +
-> +&uart_B {
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
-> new file mode 100644
-> index 000000000000..b66f62701063
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
-> @@ -0,0 +1,98 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
-> + */
-> +
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-
-Add blank line hiere
-
-> +/ {
-> +	cpus:cpus {
-> +		#address-cells = <2>;
-> +		#size-cells = <0>;
-> +
-> +		CPU0:cpu@0 {
-> +			device_type = "cpu";
-> +			compatible = "arm,cortex-a35","arm,armv8";
-> +			reg = <0x0 0x0>;
-> +			enable-method = "psci";
-> +		};
-> +
-> +		CPU1:cpu@1 {
-> +			device_type = "cpu";
-> +			compatible = "arm,cortex-a35","arm,armv8";
-> +			reg = <0x0 0x1>;
-> +			enable-method = "psci";
-> +		};
-> +
-> +		CPU2:cpu@2 {
-> +			device_type = "cpu";
-> +			compatible = "arm,cortex-a35","arm,armv8";
-> +			reg = <0x0 0x2>;
-> +			enable-method = "psci";
-> +		};
-> +
-> +		CPU3:cpu@3 {
-> +			device_type = "cpu";
-> +			compatible = "arm,cortex-a35","arm,armv8";
-> +			reg = <0x0 0x3>;
-> +			enable-method = "psci";
-> +		};
-> +	};
-> +
-> +	timer {
-> +		compatible = "arm,armv8-timer";
-> +		interrupts = <GIC_PPI 13 0xff08>,
-> +			     <GIC_PPI 14 0xff08>,
-> +			     <GIC_PPI 11 0xff08>,
-> +			     <GIC_PPI 10 0xff08>;
-> +	};
-> +
-> +	psci {
-> +		compatible = "arm,psci-1.0";
-> +		method = "smc";
-> +	};
-> +
-> +	xtal: xtal-clk {
-> +		compatible = "fixed-clock";
-> +		clock-frequency = <24000000>;
-> +		clock-output-names = "xtal";
-> +		#clock-cells = <0>;
-> +	};
-> +
-> +	soc {
-> +		compatible = "simple-bus";
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		gic: interrupt-controller@fff01000 {
-> +			compatible = "arm,cortex-a15-gic", "arm,cortex-a9-gic";
-> +			#interrupt-cells = <3>;
-> +			#address-cells = <0>;
-> +			interrupt-controller;
-> +			reg = <0x0 0xfff01000 0 0x1000>,
-> +			      <0x0 0xfff02000 0 0x0100>;
-> +			interrupts = <GIC_PPI 9 0xf04>;
-> +		};
-> +
-> +		apb4: apb4@fe000000 {
-> +			compatible = "simple-bus";
-> +			reg = <0x0 0xfe000000 0x0 0x480000>;
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges = <0x0 0x0 0x0 0xfe000000 0x0 0x480000>;
-> +
-> +			uart_B: serial@7a000 {
-> +				compatible = "amlogic,meson-gx-uart",
-> +					     "amlogic,meson-ao-uart";
-
-use the proper compatibles for s4
-
-
-> +				reg = <0x0 0x7a000 0x0 0x18>;
-> +				interrupts = <GIC_SPI 169 IRQ_TYPE_EDGE_RISING>;
-> +				status = "disabled";
-> +				clocks = <&xtal>, <&xtal>, <&xtal>;
-> +				clock-names = "xtal", "pclk", "baud";
-> +				xtal_tick_en = <1>;
-
-Drop this property
-
-> +				fifo-size = <64>;
-
-No need to specify if 64
-
-> +			};
-> +		};
-> +	};
-> +};
+> dm-verity provides block-level integrity, which means that
+> the block layer itself is responsible to not pass data to the
+> upper layer, the filesystem, if a block is found corrupted.
 > 
-> base-commit: c5468e3c930d4d2937d3a842a85df0f74e95e152
+> The dm-verity root digest represents the immutable state
+> of the block device. dm-verity is still responsible to enforce
+> accesses to the block device according to the root digest
+> passed at device setup time. Nothing changes, the block
+> layer still detects data corruption against the passed
+> reference value.
 > 
+> The task of the security layer is to decide whether or not
+> the root digest passed at device setup time is acceptable,
+> e.g. it represents a device containing genuine files coming
+> from a software vendor.
+> 
+> The mandatory policy can be enforced at different layers,
+> depending on whether the security controls are placed.
+> A possibility would be to deny mounting block devices that
+> don't satisfy the mandatory policy.
+> 
+> However, if the mandatory policy wants only to restrict
+> execution of approved files and allowing the rest, making
+> the decision at the block layer is too coarse and restrictive.
+> It would force the user to mount only approved block
+> devices. The security layer must operate on files to enforce
+> this policy.
+> 
+> Now probably there is the part where there is no agreement.
+> 
+> The integrity property of a block device applies also to the
+> files on the filesystem mounted from that device. User space
+> programs cannot access files in that filesystem coming from a
+> device with a different dm-verity root digest, or files stored
+> in a corrupted block device.
+> 
+> If what I wrote is correct, that the integrity property is preserved
+> across the layers, this would give enough flexibility to enforce
+> policies at a higher layer, although that property is guaranteed
+> by a lower layer.
 
-Thanks,
-Neil
+Hi Christoph
+
+did I address your concerns? If yes, I could send the new patch
+set, including the patch that uses the new functionality.
+
+Thanks
+
+Roberto
+
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Zhong Ronghua

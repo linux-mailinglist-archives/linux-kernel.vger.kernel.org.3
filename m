@@ -2,41 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F76469C16
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:17:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C89469FEC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359817AbhLFPU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:20:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48076 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346553AbhLFPOr (ORCPT
+        id S1391981AbhLFPzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:55:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390524AbhLFPm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:14:47 -0500
+        Mon, 6 Dec 2021 10:42:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC3DC0698C4;
+        Mon,  6 Dec 2021 07:27:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47E3CB810F1;
-        Mon,  6 Dec 2021 15:11:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68818C341C5;
-        Mon,  6 Dec 2021 15:11:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68BD96132E;
+        Mon,  6 Dec 2021 15:27:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50DA1C34900;
+        Mon,  6 Dec 2021 15:27:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803477;
-        bh=gUF7GguHnhbRLTf1DuebxuCdtuzPiyY+2pRiHYiyq14=;
+        s=korg; t=1638804450;
+        bh=F92RoRjc5c8LFesVoHxBgLj0x4NC3JyPefqptHqzUsw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QMRWFZ/bqJp/fnNaxsM+5bazc4dyk0BhrU+CZgSNMit+xajUZxX/Pe/bsfFi9Yb20
-         I9rSxkOz+abnTHtQHwTjB80QVO33u5dcODVIgBMa7t1h7QGI/B7Qm98CCIGzbbxBm6
-         Ei3y/f3PPeNWaDNrrDBa6yBNPrVdNfVg/JTQkyRM=
+        b=2vD/agkOrsJa9WhD8EnhMPRxsWjFfkC609zEv4MOUSbmdGW3y5mFEuhGjF+eY8o42
+         y3ocIofxOa4cWG6g5gp03mNFyPyBQEHHB05G+TPtaNZel15l+otxNGYyq1hjK85bqd
+         QHe9H/Oklfc77QwavpEMxNIFHIxXiOhIlGFzWows=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Benjamin Poirier <bpoirier@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 28/48] net: mpls: Fix notifications when deleting a device
-Date:   Mon,  6 Dec 2021 15:56:45 +0100
-Message-Id: <20211206145549.811228682@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Hou Wenlong <houwenlong93@linux.alibaba.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 152/207] KVM: x86/mmu: Skip tlb flush if it has been done in zap_gfn_range()
+Date:   Mon,  6 Dec 2021 15:56:46 +0100
+Message-Id: <20211206145615.505018008@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
-References: <20211206145548.859182340@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,157 +51,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Poirier <bpoirier@nvidia.com>
+From: Hou Wenlong <houwenlong93@linux.alibaba.com>
 
-commit 7d4741eacdefa5f0475431645b56baf00784df1f upstream.
+[ Upstream commit c7785d85b6c6cc9f3d0f1a8cab128f4062b30abb ]
 
-There are various problems related to netlink notifications for mpls route
-changes in response to interfaces being deleted:
-* delete interface of only nexthop
-	DELROUTE notification is missing RTA_OIF attribute
-* delete interface of non-last nexthop
-	NEWROUTE notification is missing entirely
-* delete interface of last nexthop
-	DELROUTE notification is missing nexthop
+If the parameter flush is set, zap_gfn_range() would flush remote tlb
+when yield, then tlb flush is not needed outside. So use the return
+value of zap_gfn_range() directly instead of OR on it in
+kvm_unmap_gfn_range() and kvm_tdp_mmu_unmap_gfn_range().
 
-All of these problems stem from the fact that existing routes are modified
-in-place before sending a notification. Restructure mpls_ifdown() to avoid
-changing the route in the DELROUTE cases and to create a copy in the
-NEWROUTE case.
-
-Fixes: f8efb73c97e2 ("mpls: multipath route support")
-Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 3039bcc744980 ("KVM: Move x86's MMU notifier memslot walkers to generic code")
+Signed-off-by: Hou Wenlong <houwenlong93@linux.alibaba.com>
+Message-Id: <5e16546e228877a4d974f8c0e448a93d52c7a5a9.1637140154.git.houwenlong93@linux.alibaba.com>
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mpls/af_mpls.c |   68 ++++++++++++++++++++++++++++++++++++++++-------------
- 1 file changed, 52 insertions(+), 16 deletions(-)
+ arch/x86/kvm/mmu/mmu.c     | 2 +-
+ arch/x86/kvm/mmu/tdp_mmu.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
---- a/net/mpls/af_mpls.c
-+++ b/net/mpls/af_mpls.c
-@@ -1438,22 +1438,52 @@ static void mpls_dev_destroy_rcu(struct
- 	kfree(mdev);
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 9fb69546e21b8..9d04474b00272 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -1592,7 +1592,7 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+ 		flush = kvm_handle_gfn_range(kvm, range, kvm_unmap_rmapp);
+ 
+ 	if (is_tdp_mmu_enabled(kvm))
+-		flush |= kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush);
++		flush = kvm_tdp_mmu_unmap_gfn_range(kvm, range, flush);
+ 
+ 	return flush;
  }
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index 838603a653b9a..aa75689a91b4c 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -1081,8 +1081,8 @@ bool kvm_tdp_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range,
+ 	struct kvm_mmu_page *root;
  
--static void mpls_ifdown(struct net_device *dev, int event)
-+static int mpls_ifdown(struct net_device *dev, int event)
- {
- 	struct mpls_route __rcu **platform_label;
- 	struct net *net = dev_net(dev);
--	u8 alive, deleted;
- 	unsigned index;
+ 	for_each_tdp_mmu_root(kvm, root, range->slot->as_id)
+-		flush |= zap_gfn_range(kvm, root, range->start, range->end,
+-				       range->may_block, flush, false);
++		flush = zap_gfn_range(kvm, root, range->start, range->end,
++				      range->may_block, flush, false);
  
- 	platform_label = rtnl_dereference(net->mpls.platform_label);
- 	for (index = 0; index < net->mpls.platform_labels; index++) {
- 		struct mpls_route *rt = rtnl_dereference(platform_label[index]);
-+		bool nh_del = false;
-+		u8 alive = 0;
- 
- 		if (!rt)
- 			continue;
- 
--		alive = 0;
--		deleted = 0;
-+		if (event == NETDEV_UNREGISTER) {
-+			u8 deleted = 0;
-+
-+			for_nexthops(rt) {
-+				struct net_device *nh_dev =
-+					rtnl_dereference(nh->nh_dev);
-+
-+				if (!nh_dev || nh_dev == dev)
-+					deleted++;
-+				if (nh_dev == dev)
-+					nh_del = true;
-+			} endfor_nexthops(rt);
-+
-+			/* if there are no more nexthops, delete the route */
-+			if (deleted == rt->rt_nhn) {
-+				mpls_route_update(net, index, NULL, NULL);
-+				continue;
-+			}
-+
-+			if (nh_del) {
-+				size_t size = sizeof(*rt) + rt->rt_nhn *
-+					rt->rt_nh_size;
-+				struct mpls_route *orig = rt;
-+
-+				rt = kmalloc(size, GFP_KERNEL);
-+				if (!rt)
-+					return -ENOMEM;
-+				memcpy(rt, orig, size);
-+			}
-+		}
-+
- 		change_nexthops(rt) {
- 			unsigned int nh_flags = nh->nh_flags;
- 
-@@ -1477,16 +1507,15 @@ static void mpls_ifdown(struct net_devic
- next:
- 			if (!(nh_flags & (RTNH_F_DEAD | RTNH_F_LINKDOWN)))
- 				alive++;
--			if (!rtnl_dereference(nh->nh_dev))
--				deleted++;
- 		} endfor_nexthops(rt);
- 
- 		WRITE_ONCE(rt->rt_nhn_alive, alive);
- 
--		/* if there are no more nexthops, delete the route */
--		if (event == NETDEV_UNREGISTER && deleted == rt->rt_nhn)
--			mpls_route_update(net, index, NULL, NULL);
-+		if (nh_del)
-+			mpls_route_update(net, index, rt, NULL);
- 	}
-+
-+	return 0;
+ 	return flush;
  }
- 
- static void mpls_ifup(struct net_device *dev, unsigned int flags)
-@@ -1554,8 +1583,12 @@ static int mpls_dev_notify(struct notifi
- 		return NOTIFY_OK;
- 
- 	switch (event) {
-+		int err;
-+
- 	case NETDEV_DOWN:
--		mpls_ifdown(dev, event);
-+		err = mpls_ifdown(dev, event);
-+		if (err)
-+			return notifier_from_errno(err);
- 		break;
- 	case NETDEV_UP:
- 		flags = dev_get_flags(dev);
-@@ -1566,13 +1599,18 @@ static int mpls_dev_notify(struct notifi
- 		break;
- 	case NETDEV_CHANGE:
- 		flags = dev_get_flags(dev);
--		if (flags & (IFF_RUNNING | IFF_LOWER_UP))
-+		if (flags & (IFF_RUNNING | IFF_LOWER_UP)) {
- 			mpls_ifup(dev, RTNH_F_DEAD | RTNH_F_LINKDOWN);
--		else
--			mpls_ifdown(dev, event);
-+		} else {
-+			err = mpls_ifdown(dev, event);
-+			if (err)
-+				return notifier_from_errno(err);
-+		}
- 		break;
- 	case NETDEV_UNREGISTER:
--		mpls_ifdown(dev, event);
-+		err = mpls_ifdown(dev, event);
-+		if (err)
-+			return notifier_from_errno(err);
- 		mdev = mpls_dev_get(dev);
- 		if (mdev) {
- 			mpls_dev_sysctl_unregister(dev, mdev);
-@@ -1583,8 +1621,6 @@ static int mpls_dev_notify(struct notifi
- 	case NETDEV_CHANGENAME:
- 		mdev = mpls_dev_get(dev);
- 		if (mdev) {
--			int err;
--
- 			mpls_dev_sysctl_unregister(dev, mdev);
- 			err = mpls_dev_sysctl_register(dev, mdev);
- 			if (err)
+-- 
+2.33.0
+
 
 

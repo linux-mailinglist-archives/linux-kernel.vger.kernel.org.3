@@ -2,166 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EED8546A29D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2AA646A2A4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:20:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236768AbhLFRWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 12:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
+        id S237675AbhLFRXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 12:23:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234757AbhLFRWJ (ORCPT
+        with ESMTP id S236836AbhLFRXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 12:22:09 -0500
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA59EC061746;
-        Mon,  6 Dec 2021 09:18:40 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id x1-20020a4aea01000000b002c296d82604so4551231ood.9;
-        Mon, 06 Dec 2021 09:18:40 -0800 (PST)
+        Mon, 6 Dec 2021 12:23:49 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAD3C0613F8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 09:20:20 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id e11so22220971ljo.13
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 09:20:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NqH7yr1I7QwoW5kKDKfii6Og16iXjUvJo6cV2H86U60=;
-        b=R/xtTXimPuCUAEaNfuf4WIyPHRXs+RYRNI9GdL5H9WKqBBqTMgYCyfwFrQOx+Q6b+d
-         uTSIjf862eQiqWfAVbWlVBCCGWMZvRuvj14Hsa5Bf27vCZI/ddNn0/VGBhbl+5WuvX3/
-         z9to+pydPI+i/eF6HLt/SSorNhOF3qwZ/yUj4iyDy6QrIe0HR4WFLLv++3Tb/5GsXm+2
-         cohittgSzV3HpduUBKtYOnTwEzaWcZt9Eo8U92AWjLcCXYfQilzP+lFq3398eNzU4HaK
-         FcUZllHNSh0DGJ5JbGhKnyF62Z/jFPJrJbx1XyoOfF28kUVCHwWFnPJDDf1rQC4RWRes
-         7Bnw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iXeiRDIeMgIJ3QlhrfyzJaMD9KCCg6J0jEvMuAkTCAg=;
+        b=n6yX3UhTRXg3b9lGwvVCVX4rn2Y6gvzc/AoDJs9+sgugPe/JXs4OpPp1GudS6nytij
+         fLoyqjh76fPUmbGUOkCJMRlTpFfgIDjFqPi7picSW4qdW82cvPggGlXv/KiaJAjlJrUX
+         LxhQaNhV5DRaK6se7Fsi0nYb2/PccqcjGSxZCGoJGQse01NiU8HfhB0gpPBgZP8SABIg
+         /RIK2uIhy0Dtcy/wP5D01hs0BdQSmlGABjOGQmYW/UbTwdQ5AquO2Ufi8PG9s225e0Gi
+         B7GhtOG01IVw6IUNsPcY71WSBOFBZSiYjMJV4L/mjgdLvb0ppAUd7pUhCjdQFe8tceRy
+         MUEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=NqH7yr1I7QwoW5kKDKfii6Og16iXjUvJo6cV2H86U60=;
-        b=p/8wMEarTwpGKN3lbFtsQHKj33b5NkUW/PZxVVT3cJ+j4vmv1FWrQIPXUHaNURj8sh
-         nHgqDR3xLA6xzNrS2hmxiXc+SuMzvMgidb17+oVVNKqonUQwRAXgY+jhlX34BKiGJIPr
-         NcAY0tyEqGKZI8Yojo1uIqYaAxukwmpdl7gxUMBAckR4b7jbXhi1QCRsBI/iDWLPH1s7
-         gJWl8leqpGFBFPhXDvFWadyMAyaZ/ycCT8tcBlGF1xFc82L4aDapuy1SeOs5/R9CUPnt
-         27wtgfbR5bCdEcYubYwT1e2Bx3+YvmuLJi67OOVQwiSyCnb6IWdRBkEHEK725qW/Cc7i
-         +kBQ==
-X-Gm-Message-State: AOAM532S5BoELlK/Pg52IEOFJoMPev0eWURAfb7CgIP9qezdOnSWKwCT
-        ceqLorica+AxOtaVrKtTUPqJz2P4+FU=
-X-Google-Smtp-Source: ABdhPJwSCSaLJgG6yUOyVhbjddbDY7Yv9gEm5XldDMLFkQxRs1k3gFsn54Ot57wpPWTxQuhp6OLTxw==
-X-Received: by 2002:a4a:a5cf:: with SMTP id k15mr22966949oom.70.1638811120277;
-        Mon, 06 Dec 2021 09:18:40 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w5sm2230477otk.70.2021.12.06.09.18.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 09:18:39 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 6 Dec 2021 09:18:38 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wei Ming Chen <jj251510319013@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        wim@linux-watchdog.org, vz@mleia.com
-Subject: Re: [PATCH] watchdog: Fix file path that does not exist
-Message-ID: <20211206171838.GA3423410@roeck-us.net>
-References: <20211206144224.2931-1-jj251510319013@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iXeiRDIeMgIJ3QlhrfyzJaMD9KCCg6J0jEvMuAkTCAg=;
+        b=XhU7C1ZBbBdHrf3WnwByD2g5naUWaQsGl8jE/TUvbdpUcmZaOw4JqqpYTULbQchamE
+         5whJAk1Y8ePTnnX0/s9uQ6B3yWxE8n8gNinrBaQchVoznjImQyEZOogV+Y/gpKFkjlh6
+         6r1O5WF/8KVtcV34dRXTvv7pyHRTydK2OyxG9nthSQOO5aPVXwlghVoVdftojyXmD5uH
+         r/jQe6MBBj12ZFGpctfSkxT7cuU/eJJnXuYv/uQK6Q0vN8UjlSB7E8RBzXCqApVgGeg6
+         gRAGsfmyLApNaOJbebxazOLv221tMGWT5UB7EahZyyWmb/3G9+RomjdxkNhqzrWypEra
+         APJQ==
+X-Gm-Message-State: AOAM532KZ/+muukYbWY6ryEUVa1yln805wck3NH7ouC48sr09gO0AsRO
+        jjpJj4M3085KnhUF1NK/f01mBym+EjdxPG5M1086CQ==
+X-Google-Smtp-Source: ABdhPJwr5SZss80JbNUaIvuyOAY6SnFRgmU3B+jxsFytYHzPF9bHy4+u8p0cy9CqbtwHcy6LSwVIIt3HFULJoDOtdPk=
+X-Received: by 2002:a2e:8895:: with SMTP id k21mr37790527lji.331.1638811218648;
+ Mon, 06 Dec 2021 09:20:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206144224.2931-1-jj251510319013@gmail.com>
+References: <20211205133039.GD33002@xsang-OptiPlex-9020> <56b9d000-8743-52cb-4f10-4d3fa2b30f29@redhat.com>
+In-Reply-To: <56b9d000-8743-52cb-4f10-4d3fa2b30f29@redhat.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Mon, 6 Dec 2021 09:19:52 -0800
+Message-ID: <CALzav=dn-Oe1v9qTp=ag92Kn96JOb3AX9JJA4P5VcLksV8-vLw@mail.gmail.com>
+Subject: Re: [KVM] d3750a0923: WARNING:possible_circular_locking_dependency_detected
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        0day robot <lkp@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        kvm@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Janis Schoetterl-Glausch <scgl@linux.vnet.ibm.com>,
+        Junaid Shahid <junaids@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Harish Barathvajasankar <hbarath@google.com>,
+        Peter Xu <peterx@redhat.com>, Peter Shier <pshier@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 10:42:24PM +0800, Wei Ming Chen wrote:
-> All the file path are now under drivers/watchdog/ instead of
-> drivers/char/watchdog/
-> 
+On Sun, Dec 5, 2021 at 10:55 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 12/5/21 14:30, kernel test robot wrote:
+> >
+> > Chain exists of:
+> >   fs_reclaim --> mmu_notifier_invalidate_range_start --> &(kvm)->mmu_lock
+> >
+> >  Possible unsafe locking scenario:
+> >
+> >        CPU0                    CPU1
+> >        ----                    ----
+> >   lock(&(kvm)->mmu_lock);
+> >                                lock(mmu_notifier_invalidate_range_start);
+> >                                lock(&(kvm)->mmu_lock);
+> >   lock(fs_reclaim);
+> >
+>
+> David, this is yours; basically, kvm_mmu_topup_memory_cache must be
+> called outside the mmu_lock.
 
-Having a file name in its source is pointless. If you want to make any
-changes, please drop those file names instead.
-
-Also, "Based on ..." is still correct, as it refers to where the code
-was located when the driver was written, not where it is today.
-That code may actually have been removed by now, and then what ?
-Please do not change those locations.
-
-Last but not least, the bcm63xx driver is about to be removed.
-Please do not touch it to avoid unnecessary conflicts.
-
-Thanks,
-Guenter
-
-> Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
-> ---
->  drivers/watchdog/davinci_wdt.c | 2 +-
->  drivers/watchdog/it8712f_wdt.c | 2 +-
->  drivers/watchdog/ixp4xx_wdt.c  | 2 +-
->  drivers/watchdog/max63xx_wdt.c | 2 +-
->  drivers/watchdog/pnx4008_wdt.c | 2 +-
->  drivers/watchdog/scx200_wdt.c  | 2 +-
->  6 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/watchdog/davinci_wdt.c b/drivers/watchdog/davinci_wdt.c
-> index e6eaba6bae5b..91e548ad046f 100644
-> --- a/drivers/watchdog/davinci_wdt.c
-> +++ b/drivers/watchdog/davinci_wdt.c
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*
-> - * drivers/char/watchdog/davinci_wdt.c
-> + * drivers/watchdog/davinci_wdt.c
->   *
->   * Watchdog driver for DaVinci DM644x/DM646x processors
->   *
-> diff --git a/drivers/watchdog/it8712f_wdt.c b/drivers/watchdog/it8712f_wdt.c
-> index 3ce6a58bd81e..cb60ed310ab6 100644
-> --- a/drivers/watchdog/it8712f_wdt.c
-> +++ b/drivers/watchdog/it8712f_wdt.c
-> @@ -6,7 +6,7 @@
->   *
->   *	Based on info and code taken from:
->   *
-> - *	drivers/char/watchdog/scx200_wdt.c
-> + *	drivers/watchdog/scx200_wdt.c
->   *	drivers/hwmon/it87.c
->   *	IT8712F EC-LPC I/O Preliminary Specification 0.8.2
->   *	IT8712F EC-LPC I/O Preliminary Specification 0.9.3
-> diff --git a/drivers/watchdog/ixp4xx_wdt.c b/drivers/watchdog/ixp4xx_wdt.c
-> index 31b03fa71341..59369cf7f082 100644
-> --- a/drivers/watchdog/ixp4xx_wdt.c
-> +++ b/drivers/watchdog/ixp4xx_wdt.c
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /*
-> - * drivers/char/watchdog/ixp4xx_wdt.c
-> + * drivers/watchdog/ixp4xx_wdt.c
->   *
->   * Watchdog driver for Intel IXP4xx network processors
->   *
-> diff --git a/drivers/watchdog/max63xx_wdt.c b/drivers/watchdog/max63xx_wdt.c
-> index 9e1541cfae0d..69349f1d0f34 100644
-> --- a/drivers/watchdog/max63xx_wdt.c
-> +++ b/drivers/watchdog/max63xx_wdt.c
-> @@ -1,5 +1,5 @@
->  /*
-> - * drivers/char/watchdog/max63xx_wdt.c
-> + * drivers/watchdog/max63xx_wdt.c
->   *
->   * Driver for max63{69,70,71,72,73,74} watchdog timers
->   *
-> diff --git a/drivers/watchdog/pnx4008_wdt.c b/drivers/watchdog/pnx4008_wdt.c
-> index e0ea133c1690..94d54247fcab 100644
-> --- a/drivers/watchdog/pnx4008_wdt.c
-> +++ b/drivers/watchdog/pnx4008_wdt.c
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*
-> - * drivers/char/watchdog/pnx4008_wdt.c
-> + * drivers/watchdog/pnx4008_wdt.c
->   *
->   * Watchdog driver for PNX4008 board
->   *
-> diff --git a/drivers/watchdog/scx200_wdt.c b/drivers/watchdog/scx200_wdt.c
-> index 7b5e18323f3f..77e630797572 100644
-> --- a/drivers/watchdog/scx200_wdt.c
-> +++ b/drivers/watchdog/scx200_wdt.c
-> @@ -1,5 +1,5 @@
->  // SPDX-License-Identifier: GPL-2.0-or-later
-> -/* drivers/char/watchdog/scx200_wdt.c
-> +/* drivers/watchdog/scx200_wdt.c
->  
->     National Semiconductor SCx200 Watchdog support
->  
+Ah, I see. kvm_arch_mmu_enable_log_dirty_pt_masked is called with
+mmu_lock already held. I'll make sure to address this in v1. In theory
+this should just go away when I switch away from using split_caches to
+Sean's suggestion of allocating under the mmu_lock with reclaim
+disabled.

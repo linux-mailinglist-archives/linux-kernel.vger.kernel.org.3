@@ -2,49 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2C7469A0C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 450D8469B10
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242378AbhLFPFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:05:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345270AbhLFPEI (ORCPT
+        id S1347825AbhLFPMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:12:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42454 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345885AbhLFPJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:04:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDF2C0698E5;
-        Mon,  6 Dec 2021 07:00:31 -0800 (PST)
+        Mon, 6 Dec 2021 10:09:40 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 244CB612C0;
-        Mon,  6 Dec 2021 15:00:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06AFCC341C1;
-        Mon,  6 Dec 2021 15:00:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D61AB8111A;
+        Mon,  6 Dec 2021 15:06:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA70CC341C2;
+        Mon,  6 Dec 2021 15:06:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802830;
-        bh=xexyGZS4u3UlzD8zCwsTvgRNjuZuYYNwR+M3eSREFCw=;
+        s=korg; t=1638803169;
+        bh=4DAPYaE3QzWVTGxK5BZ9VharGhkXbjbRKxIDupCGNeI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EebBL7leL56ymNZqMSpXktDieXxpoB1GyY7NZD5yr3tdFUEcTQxnsziCEwhyjOujr
-         h9kcp1++tpCvP1EPLKKfzuPubZ3xIEFMbrgMGkOiLPLJDhvzqE9OV/36bXszSfio7k
-         o2UPBvyDSi8asUahYtoAGISlBNpGQNvySLi8dKOU=
+        b=ZkVzP7mtFM1z3WLB0ko4Mi5uFSbe/kV+2F2t1vjXA8hIZ83oUgrAv+I8/ysaDv5nn
+         VyQ4txk7X11OvrwqvxGAOJPFwa+4/G7eX6DCR4AXK6H7j678l5Uq3QLBsd3hnnvoX5
+         XM8Zjy8sx6v0knlaZOJWjcQ2i0KXiZLD4me6kuno=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Neal Cardwell <ncardwell@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 17/52] tcp_cubic: fix spurious Hystart ACK train detections for not-cwnd-limited flows
+        stable@vger.kernel.org,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 4.14 053/106] pinctrl: armada-37xx: Correct PWM pins definitions
 Date:   Mon,  6 Dec 2021 15:56:01 +0100
-Message-Id: <20211206145548.487427069@linuxfoundation.org>
+Message-Id: <20211206145557.266387595@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
-References: <20211206145547.892668902@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,87 +47,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: "Marek Beh�n" <kabel@kernel.org>
 
-[ Upstream commit 4e1fddc98d2585ddd4792b5e44433dcee7ece001 ]
+commit baf8d6899b1e8906dc076ef26cc633e96a8bb0c3 upstream.
 
-While testing BIG TCP patch series, I was expecting that TCP_RR workloads
-with 80KB requests/answers would send one 80KB TSO packet,
-then being received as a single GRO packet.
+The PWM pins on North Bridge on Armada 37xx can be configured into PWM
+or GPIO functions. When in PWM function, each pin can also be configured
+to drive low on 0 and tri-state on 1 (LED mode).
 
-It turns out this was not happening, and the root cause was that
-cubic Hystart ACK train was triggering after a few (2 or 3) rounds of RPC.
+The current definitions handle this by declaring two pin groups for each
+pin:
+- group "pwmN" with functions "pwm" and "gpio"
+- group "ledN_od" ("od" for open drain) with functions "led" and "gpio"
 
-Hystart was wrongly setting CWND/SSTHRESH to 30, while my RPC
-needed a budget of ~20 segments.
+This is semantically incorrect. The correct definition for each pin
+should be one group with three functions: "pwm", "led" and "gpio".
 
-Ideally these TCP_RR flows should not exit slow start.
+Change the "pwmN" groups to support "led" function.
 
-Cubic Hystart should reset itself at each round, instead of assuming
-every TCP flow is a bulk one.
+Remove "ledN_od" groups. This cannot break backwards compatibility with
+older device trees: no device tree uses it since there is no PWM driver
+for this SOC yet. Also "ledN_od" groups are not even documented.
 
-Note that even after this patch, Hystart can still trigger, depending
-on scheduling artifacts, but at a higher CWND/SSTHRESH threshold,
-keeping optimal TSO packet sizes.
-
-Tested:
-
-ip link set dev eth0 gro_ipv6_max_size 131072 gso_ipv6_max_size 131072
-nstat -n; netperf -H ... -t TCP_RR  -l 5  -- -r 80000,80000 -K cubic; nstat|egrep "Ip6InReceives|Hystart|Ip6OutRequests"
-
-Before:
-
-   8605
-Ip6InReceives                   87541              0.0
-Ip6OutRequests                  129496             0.0
-TcpExtTCPHystartTrainDetect     1                  0.0
-TcpExtTCPHystartTrainCwnd       30                 0.0
-
-After:
-
-  8760
-Ip6InReceives                   88514              0.0
-Ip6OutRequests                  87975              0.0
-
-Fixes: ae27e98a5152 ("[TCP] CUBIC v2.3")
-Co-developed-by: Neal Cardwell <ncardwell@google.com>
-Signed-off-by: Neal Cardwell <ncardwell@google.com>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Stephen Hemminger <stephen@networkplumber.org>
-Cc: Yuchung Cheng <ycheng@google.com>
-Cc: Soheil Hassas Yeganeh <soheil@google.com>
-Link: https://lore.kernel.org/r/20211123202535.1843771-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: b835d6953009 ("pinctrl: armada-37xx: swap polarity on LED group")
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20210719112938.27594-1-kabel@kernel.org
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/tcp_cubic.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/pinctrl/marvell,armada-37xx-pinctrl.txt |    8 ++--
+ drivers/pinctrl/mvebu/pinctrl-armada-37xx.c                               |   17 ++++------
+ 2 files changed, 12 insertions(+), 13 deletions(-)
 
-diff --git a/net/ipv4/tcp_cubic.c b/net/ipv4/tcp_cubic.c
-index 9fb3a5e83a7c7..e0b3b194b6049 100644
---- a/net/ipv4/tcp_cubic.c
-+++ b/net/ipv4/tcp_cubic.c
-@@ -342,8 +342,6 @@ static void bictcp_cong_avoid(struct sock *sk, u32 ack, u32 acked)
- 		return;
+--- a/Documentation/devicetree/bindings/pinctrl/marvell,armada-37xx-pinctrl.txt
++++ b/Documentation/devicetree/bindings/pinctrl/marvell,armada-37xx-pinctrl.txt
+@@ -43,19 +43,19 @@ group emmc_nb
  
- 	if (tcp_in_slow_start(tp)) {
--		if (hystart && after(ack, ca->end_seq))
--			bictcp_hystart_reset(sk);
- 		acked = tcp_slow_start(tp, acked);
- 		if (!acked)
- 			return;
-@@ -394,6 +392,9 @@ static void hystart_update(struct sock *sk, u32 delay)
- 	if (ca->found & hystart_detect)
- 		return;
+ group pwm0
+  - pin 11 (GPIO1-11)
+- - functions pwm, gpio
++ - functions pwm, led, gpio
  
-+	if (after(tp->snd_una, ca->end_seq))
-+		bictcp_hystart_reset(sk);
-+
- 	if (hystart_detect & HYSTART_ACK_TRAIN) {
- 		u32 now = bictcp_clock();
+ group pwm1
+  - pin 12
+- - functions pwm, gpio
++ - functions pwm, led, gpio
  
--- 
-2.33.0
-
+ group pwm2
+  - pin 13
+- - functions pwm, gpio
++ - functions pwm, led, gpio
+ 
+ group pwm3
+  - pin 14
+- - functions pwm, gpio
++ - functions pwm, led, gpio
+ 
+ group pmic1
+  - pin 7
+--- a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
++++ b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
+@@ -153,10 +153,14 @@ static struct armada_37xx_pin_group arma
+ 	PIN_GRP_GPIO("jtag", 20, 5, BIT(0), "jtag"),
+ 	PIN_GRP_GPIO("sdio0", 8, 3, BIT(1), "sdio"),
+ 	PIN_GRP_GPIO("emmc_nb", 27, 9, BIT(2), "emmc"),
+-	PIN_GRP_GPIO("pwm0", 11, 1, BIT(3), "pwm"),
+-	PIN_GRP_GPIO("pwm1", 12, 1, BIT(4), "pwm"),
+-	PIN_GRP_GPIO("pwm2", 13, 1, BIT(5), "pwm"),
+-	PIN_GRP_GPIO("pwm3", 14, 1, BIT(6), "pwm"),
++	PIN_GRP_GPIO_3("pwm0", 11, 1, BIT(3) | BIT(20), 0, BIT(20), BIT(3),
++		       "pwm", "led"),
++	PIN_GRP_GPIO_3("pwm1", 12, 1, BIT(4) | BIT(21), 0, BIT(21), BIT(4),
++		       "pwm", "led"),
++	PIN_GRP_GPIO_3("pwm2", 13, 1, BIT(5) | BIT(22), 0, BIT(22), BIT(5),
++		       "pwm", "led"),
++	PIN_GRP_GPIO_3("pwm3", 14, 1, BIT(6) | BIT(23), 0, BIT(23), BIT(6),
++		       "pwm", "led"),
+ 	PIN_GRP_GPIO("pmic1", 7, 1, BIT(7), "pmic"),
+ 	PIN_GRP_GPIO("pmic0", 6, 1, BIT(8), "pmic"),
+ 	PIN_GRP_GPIO("i2c2", 2, 2, BIT(9), "i2c"),
+@@ -170,11 +174,6 @@ static struct armada_37xx_pin_group arma
+ 	PIN_GRP_EXTRA("uart2", 9, 2, BIT(1) | BIT(13) | BIT(14) | BIT(19),
+ 		      BIT(1) | BIT(13) | BIT(14), BIT(1) | BIT(19),
+ 		      18, 2, "gpio", "uart"),
+-	PIN_GRP_GPIO_2("led0_od", 11, 1, BIT(20), BIT(20), 0, "led"),
+-	PIN_GRP_GPIO_2("led1_od", 12, 1, BIT(21), BIT(21), 0, "led"),
+-	PIN_GRP_GPIO_2("led2_od", 13, 1, BIT(22), BIT(22), 0, "led"),
+-	PIN_GRP_GPIO_2("led3_od", 14, 1, BIT(23), BIT(23), 0, "led"),
+-
+ };
+ 
+ static struct armada_37xx_pin_group armada_37xx_sb_groups[] = {
 
 

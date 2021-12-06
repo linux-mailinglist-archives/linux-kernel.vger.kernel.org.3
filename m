@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F728469DE5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A108A469A79
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376867AbhLFPeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:34:00 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55546 "EHLO
+        id S1345889AbhLFPIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:08:11 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38960 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356936AbhLFPWb (ORCPT
+        with ESMTP id S1346338AbhLFPGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:22:31 -0500
+        Mon, 6 Dec 2021 10:06:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD5B6B8101C;
-        Mon,  6 Dec 2021 15:19:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FC42C341C5;
-        Mon,  6 Dec 2021 15:18:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62E08B81126;
+        Mon,  6 Dec 2021 15:02:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A246C341C7;
+        Mon,  6 Dec 2021 15:02:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803939;
-        bh=g5vzduTfSGynRVeX59VVaxoshbzTsTbElMLPzfqW/JI=;
+        s=korg; t=1638802969;
+        bh=N0rQCeL0XvL1EkFMKTp3WwvJePTceoLtNUNCB+7eYFY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TFSpHvkRgLAxMlIR42c3cFE+pjgfS6wzeUdKoeiS+BE8WLbQkTudE8Wv3kB3jxgbX
-         Lbh+T/lmvwjxu41zjo9ti1eH2gU+mKHfyJKkaRQZACvwDFWKq0KnsXfG4tyXUbTUuF
-         naJIkZnYfAcgRpI/lz0TUZp4rDR77cMtMSsCzVxU=
+        b=X4icI/vgb24P8UJgrGGn76d6sHNigrqULwtjmXJt293tJ95r9I7wc81F1iivYEWFa
+         q7Iw/HbH3bVs4RuApaL2y03rW5xl4GWP9Y6EZ2bfi6jx/eC540XpJUvvo5RL3KTTRO
+         jIX995vGgf5XTpo0BZOu5hTclsoTJq3scymS79U0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 069/130] siphash: use _unaligned version by default
+        stable@vger.kernel.org,
+        Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 43/62] thermal: core: Reset previous low and high trip during thermal zone init
 Date:   Mon,  6 Dec 2021 15:56:26 +0100
-Message-Id: <20211206145602.056239773@linuxfoundation.org>
+Message-Id: <20211206145550.693884879@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
+References: <20211206145549.155163074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,185 +48,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
 
-commit f7e5b9bfa6c8820407b64eabc1f29c9a87e8993d upstream.
+[ Upstream commit 99b63316c39988039965693f5f43d8b4ccb1c86c ]
 
-On ARM v6 and later, we define CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
-because the ordinary load/store instructions (ldr, ldrh, ldrb) can
-tolerate any misalignment of the memory address. However, load/store
-double and load/store multiple instructions (ldrd, ldm) may still only
-be used on memory addresses that are 32-bit aligned, and so we have to
-use the CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS macro with care, or we
-may end up with a severe performance hit due to alignment traps that
-require fixups by the kernel. Testing shows that this currently happens
-with clang-13 but not gcc-11. In theory, any compiler version can
-produce this bug or other problems, as we are dealing with undefined
-behavior in C99 even on architectures that support this in hardware,
-see also https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100363.
+During the suspend is in process, thermal_zone_device_update bails out
+thermal zone re-evaluation for any sensor trip violation without
+setting next valid trip to that sensor. It assumes during resume
+it will re-evaluate same thermal zone and update trip. But when it is
+in suspend temperature goes down and on resume path while updating
+thermal zone if temperature is less than previously violated trip,
+thermal zone set trip function evaluates the same previous high and
+previous low trip as new high and low trip. Since there is no change
+in high/low trip, it bails out from thermal zone set trip API without
+setting any trip. It leads to a case where sensor high trip or low
+trip is disabled forever even though thermal zone has a valid high
+or low trip.
 
-Fortunately, the get_unaligned() accessors do the right thing: when
-building for ARMv6 or later, the compiler will emit unaligned accesses
-using the ordinary load/store instructions (but avoid the ones that
-require 32-bit alignment). When building for older ARM, those accessors
-will emit the appropriate sequence of ldrb/mov/orr instructions. And on
-architectures that can truly tolerate any kind of misalignment, the
-get_unaligned() accessors resolve to the leXX_to_cpup accessors that
-operate on aligned addresses.
+During thermal zone device init, reset thermal zone previous high
+and low trip. It resolves above mentioned scenario.
 
-Since the compiler will in fact emit ldrd or ldm instructions when
-building this code for ARM v6 or later, the solution is to use the
-unaligned accessors unconditionally on architectures where this is
-known to be fast. The _aligned version of the hash function is
-however still needed to get the best performance on architectures
-that cannot do any unaligned access in hardware.
-
-This new version avoids the undefined behavior and should produce
-the fastest hash on all architectures we support.
-
-Link: https://lore.kernel.org/linux-arm-kernel/20181008211554.5355-4-ard.biesheuvel@linaro.org/
-Link: https://lore.kernel.org/linux-crypto/CAK8P3a2KfmmGDbVHULWevB0hv71P2oi2ZCHEAqT=8dQfa0=cqQ@mail.gmail.com/
-Reported-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Fixes: 2c956a60778c ("siphash: add cryptographically secure PRF")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
+Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/siphash.h |   14 ++++----------
- lib/siphash.c           |   12 ++++++------
- 2 files changed, 10 insertions(+), 16 deletions(-)
+ drivers/thermal/thermal_core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/include/linux/siphash.h
-+++ b/include/linux/siphash.h
-@@ -27,9 +27,7 @@ static inline bool siphash_key_is_zero(c
- }
- 
- u64 __siphash_aligned(const void *data, size_t len, const siphash_key_t *key);
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u64 __siphash_unaligned(const void *data, size_t len, const siphash_key_t *key);
--#endif
- 
- u64 siphash_1u64(const u64 a, const siphash_key_t *key);
- u64 siphash_2u64(const u64 a, const u64 b, const siphash_key_t *key);
-@@ -82,10 +80,9 @@ static inline u64 ___siphash_aligned(con
- static inline u64 siphash(const void *data, size_t len,
- 			  const siphash_key_t *key)
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 4c2dc3a59eb59..5ef30ba3b73a4 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -601,6 +601,8 @@ static void thermal_zone_device_init(struct thermal_zone_device *tz)
  {
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
--	if (!IS_ALIGNED((unsigned long)data, SIPHASH_ALIGNMENT))
-+	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
-+	    !IS_ALIGNED((unsigned long)data, SIPHASH_ALIGNMENT))
- 		return __siphash_unaligned(data, len, key);
--#endif
- 	return ___siphash_aligned(data, len, key);
+ 	struct thermal_instance *pos;
+ 	tz->temperature = THERMAL_TEMP_INVALID;
++	tz->prev_low_trip = -INT_MAX;
++	tz->prev_high_trip = INT_MAX;
+ 	list_for_each_entry(pos, &tz->thermal_instances, tz_node)
+ 		pos->initialized = false;
  }
- 
-@@ -96,10 +93,8 @@ typedef struct {
- 
- u32 __hsiphash_aligned(const void *data, size_t len,
- 		       const hsiphash_key_t *key);
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u32 __hsiphash_unaligned(const void *data, size_t len,
- 			 const hsiphash_key_t *key);
--#endif
- 
- u32 hsiphash_1u32(const u32 a, const hsiphash_key_t *key);
- u32 hsiphash_2u32(const u32 a, const u32 b, const hsiphash_key_t *key);
-@@ -135,10 +130,9 @@ static inline u32 ___hsiphash_aligned(co
- static inline u32 hsiphash(const void *data, size_t len,
- 			   const hsiphash_key_t *key)
- {
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
--	if (!IS_ALIGNED((unsigned long)data, HSIPHASH_ALIGNMENT))
-+	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
-+	    !IS_ALIGNED((unsigned long)data, HSIPHASH_ALIGNMENT))
- 		return __hsiphash_unaligned(data, len, key);
--#endif
- 	return ___hsiphash_aligned(data, len, key);
- }
- 
---- a/lib/siphash.c
-+++ b/lib/siphash.c
-@@ -49,6 +49,7 @@
- 	SIPROUND; \
- 	return (v0 ^ v1) ^ (v2 ^ v3);
- 
-+#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u64 __siphash_aligned(const void *data, size_t len, const siphash_key_t *key)
- {
- 	const u8 *end = data + len - (len % sizeof(u64));
-@@ -80,8 +81,8 @@ u64 __siphash_aligned(const void *data,
- 	POSTAMBLE
- }
- EXPORT_SYMBOL(__siphash_aligned);
-+#endif
- 
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u64 __siphash_unaligned(const void *data, size_t len, const siphash_key_t *key)
- {
- 	const u8 *end = data + len - (len % sizeof(u64));
-@@ -113,7 +114,6 @@ u64 __siphash_unaligned(const void *data
- 	POSTAMBLE
- }
- EXPORT_SYMBOL(__siphash_unaligned);
--#endif
- 
- /**
-  * siphash_1u64 - compute 64-bit siphash PRF value of a u64
-@@ -250,6 +250,7 @@ EXPORT_SYMBOL(siphash_3u32);
- 	HSIPROUND; \
- 	return (v0 ^ v1) ^ (v2 ^ v3);
- 
-+#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u32 __hsiphash_aligned(const void *data, size_t len, const hsiphash_key_t *key)
- {
- 	const u8 *end = data + len - (len % sizeof(u64));
-@@ -280,8 +281,8 @@ u32 __hsiphash_aligned(const void *data,
- 	HPOSTAMBLE
- }
- EXPORT_SYMBOL(__hsiphash_aligned);
-+#endif
- 
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u32 __hsiphash_unaligned(const void *data, size_t len,
- 			 const hsiphash_key_t *key)
- {
-@@ -313,7 +314,6 @@ u32 __hsiphash_unaligned(const void *dat
- 	HPOSTAMBLE
- }
- EXPORT_SYMBOL(__hsiphash_unaligned);
--#endif
- 
- /**
-  * hsiphash_1u32 - compute 64-bit hsiphash PRF value of a u32
-@@ -418,6 +418,7 @@ EXPORT_SYMBOL(hsiphash_4u32);
- 	HSIPROUND; \
- 	return v1 ^ v3;
- 
-+#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u32 __hsiphash_aligned(const void *data, size_t len, const hsiphash_key_t *key)
- {
- 	const u8 *end = data + len - (len % sizeof(u32));
-@@ -438,8 +439,8 @@ u32 __hsiphash_aligned(const void *data,
- 	HPOSTAMBLE
- }
- EXPORT_SYMBOL(__hsiphash_aligned);
-+#endif
- 
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u32 __hsiphash_unaligned(const void *data, size_t len,
- 			 const hsiphash_key_t *key)
- {
-@@ -461,7 +462,6 @@ u32 __hsiphash_unaligned(const void *dat
- 	HPOSTAMBLE
- }
- EXPORT_SYMBOL(__hsiphash_unaligned);
--#endif
- 
- /**
-  * hsiphash_1u32 - compute 32-bit hsiphash PRF value of a u32
+-- 
+2.33.0
+
 
 

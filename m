@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 256AF469AD9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:08:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20575469D96
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347201AbhLFPLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:11:31 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41516 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347271AbhLFPI3 (ORCPT
+        id S1387278AbhLFPa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:30:57 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37524 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357130AbhLFPSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:08:29 -0500
+        Mon, 6 Dec 2021 10:18:38 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 026D2B81129;
-        Mon,  6 Dec 2021 15:05:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48463C341C2;
-        Mon,  6 Dec 2021 15:04:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A27861310;
+        Mon,  6 Dec 2021 15:15:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C406C341C2;
+        Mon,  6 Dec 2021 15:15:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803098;
-        bh=7MZ9Bv9MvVG3gTRIxKErPbQxzIeTYp8Ao+kwyiGHnD8=;
+        s=korg; t=1638803708;
+        bh=GS9jBDXv4hv8mV0fPr8imW97TpER2Lo9bSrdDSoF28o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bUKFc8GTChyMAanQ+k0QpvIHE7gfoJ0//CcXPQE4UzY+j8i17SUyEu2TAAOKlgCE+
-         sRMv/2hk6wjlvRkvaL0VvhShrlPlgcAHGJywb5d0QxsnhP4hYnaqmArCtCh30iY37U
-         xlWfjTYhvG3tQBdsgLUtliKflFhSOQiUPKashrq0=
+        b=B43c7gjvo/u/5cDfqtxxRbToquF0/FrEGkuMApqxY4JJyJMo2QbNbS+7fTnbBhtAY
+         nRTn6KBhZV5CyPOKiPEfT0RPxZGlH8jKJPLrZjKT3/AhnNk/EDOemTbWPZeoDI0hWY
+         HelZVvpJ2TApgjaK6RE74ya/CPwF6yeepHjaJfrw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Huang Pei <huangpei@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, shaoyunl <shaoyun.liu@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 027/106] MIPS: use 3-level pgtable for 64KB page size on MIPS_VA_BITS_48
-Date:   Mon,  6 Dec 2021 15:55:35 +0100
-Message-Id: <20211206145556.302967838@linuxfoundation.org>
+Subject: [PATCH 5.10 019/130] drm/amd/amdkfd: Fix kernel panic when reset failed and been triggered again
+Date:   Mon,  6 Dec 2021 15:55:36 +0100
+Message-Id: <20211206145600.295816011@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,37 +47,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Huang Pei <huangpei@loongson.cn>
+From: shaoyunl <shaoyun.liu@amd.com>
 
-[ Upstream commit 41ce097f714401e6ad8f3f5eb30d7f91b0b5e495 ]
+[ Upstream commit 2cf49e00d40d5132e3d067b5aa6d84791929ab15 ]
 
-It hangup when booting Loongson 3A1000 with BOTH
-CONFIG_PAGE_SIZE_64KB and CONFIG_MIPS_VA_BITS_48, that it turn
-out to use 2-level pgtable instead of 3-level. 64KB page size
-with 2-level pgtable only cover 42 bits VA, use 3-level pgtable
-to cover all 48 bits VA(55 bits)
+In SRIOV configuration, the reset may failed to bring asic back to normal but stop cpsch
+already been called, the start_cpsch will not be called since there is no resume in this
+case.  When reset been triggered again, driver should avoid to do uninitialization again.
 
-Fixes: 1e321fa917fb ("MIPS64: Support of at least 48 bits of SEGBITS)
-Signed-off-by: Huang Pei <huangpei@loongson.cn>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: shaoyunl <shaoyun.liu@amd.com>
+Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 85afd6b4297b2..45a5801ff467b 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -2990,7 +2990,7 @@ config HAVE_LATENCYTOP_SUPPORT
- config PGTABLE_LEVELS
- 	int
- 	default 4 if PAGE_SIZE_4KB && MIPS_VA_BITS_48
--	default 3 if 64BIT && !PAGE_SIZE_64KB
-+	default 3 if 64BIT && (!PAGE_SIZE_64KB || MIPS_VA_BITS_48)
- 	default 2
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c b/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
+index 352a32dc609b2..2645ebc63a14d 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
+@@ -1207,6 +1207,11 @@ static int stop_cpsch(struct device_queue_manager *dqm)
+ 	bool hanging;
  
- source "init/Kconfig"
+ 	dqm_lock(dqm);
++	if (!dqm->sched_running) {
++		dqm_unlock(dqm);
++		return 0;
++	}
++
+ 	if (!dqm->is_hws_hang)
+ 		unmap_queues_cpsch(dqm, KFD_UNMAP_QUEUES_FILTER_ALL_QUEUES, 0);
+ 	hanging = dqm->is_hws_hang || dqm->is_resetting;
 -- 
 2.33.0
 

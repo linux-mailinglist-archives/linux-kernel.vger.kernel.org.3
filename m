@@ -2,91 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2838B46AA65
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C940B46AA6D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351564AbhLFV3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:29:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351544AbhLFV3O (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:29:14 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609A3C061746;
-        Mon,  6 Dec 2021 13:25:45 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id z5so48958511edd.3;
-        Mon, 06 Dec 2021 13:25:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wJhO0TD9FxyBOSAsMHBoS4DzEUUiCc19SpaaArCSlRg=;
-        b=TTK/sGlkC51XibKV283EHurB8uq4dFRC5lylJ+sSQgpvLZqv+YzfZOBRy2hjcRzRiu
-         mDTZaPr0opOjufNa7GousDDy5K2UGMlrU/V2qN7hg1+kAnurKRYBkZ2jhnuQRSfd7uUU
-         8N1ktZp695VJGlt2oR/Pj9eUB0rxT4oAm0ucZDv6Om2G2DKUqquYtotoXyuzSxDDlDxp
-         EDtzFWuG6pXVODCq0IUMh9rwDJtPkooSJux3APW3GaAY4OmQGvo8wOU8CvtUzHmlWOD+
-         GI/iA78s3VpnDMBwzegQFUSnvGTVMXNGJBqtLNzRrrVkYa8O9JeuGKVqti4i4owRkWU4
-         poFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wJhO0TD9FxyBOSAsMHBoS4DzEUUiCc19SpaaArCSlRg=;
-        b=bSmdHMKIH5JIT3vMvNzztDJt2C6X6u6iDPUhyVOxXtCdgEjkJtHlzI/94DR3oA1WJf
-         ZBjypcvb4c7V/riez6LMTYQXE1LCqSwUpOGKEf6IA8NGB3H6gnYXWWq3M7JknGWXI4ZK
-         xELSxqIcZ3LpQA8ZjUwMhQKdeU/KAcIcTPQM8xaUcEJIceJ80BQ9aG8PmZM8/q0eHeE8
-         0EU80HZGFJx4i2XKkap9Q5DaE68BsjawWD52ictyIwOrc2SB6COYdA1VgNq4BBTqp3p7
-         Oow/Taa6SC4VCK4eqPmp2nwCAgNKBn+x4eVOSd5QvGdr0Y04cajtAReBACxk9xjE57Av
-         rTTA==
-X-Gm-Message-State: AOAM531sk19glRvk4jYJMw9DGpo32jOjWgL2eftx7RJ7zUY3vYcx1cF5
-        qLFyk5jciF/gX7R09V4KNurzSAEHXX/kqSpqwRmczjmFr1U=
-X-Google-Smtp-Source: ABdhPJzivefsaNiHaYwi9GZZhlshDUGfhrq9aeaUOKokrbFHJu1tlchzrUkrmL29IdqO1rYgGzvnKv9CgqpwJxrTkyU=
-X-Received: by 2002:a05:6402:7d8:: with SMTP id u24mr2429113edy.215.1638825943964;
- Mon, 06 Dec 2021 13:25:43 -0800 (PST)
-MIME-Version: 1.0
-References: <20211206100209.31971-1-xianwei.zhao@amlogic.com> <f20968ff-667f-3fd9-3f8e-af8eced694f0@baylibre.com>
-In-Reply-To: <f20968ff-667f-3fd9-3f8e-af8eced694f0@baylibre.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 6 Dec 2021 22:25:33 +0100
-Message-ID: <CAFBinCC42vo0WydYeodgjiMH676J75kaPyVtURmmdoL0=Of=6w@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: add support for S4 based Amlogic AQ222
-To:     "xianwei.zhao" <xianwei.zhao@amlogic.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        id S1352691AbhLFVak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:30:40 -0500
+Received: from ixit.cz ([94.230.151.217]:56088 "EHLO ixit.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351886AbhLFVah (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 16:30:37 -0500
+Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id 42E2D21F5E;
+        Mon,  6 Dec 2021 22:27:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1638826025;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=cejD+Z+Uis35qCmOt4g8d6dAa9YqXc48AaYrm/qMK0U=;
+        b=nm5ETF0ydGoS2DObXzxQ0wG/yglaQvS8CvjR2bkDPRLz7fK6yV1/IRmktAvdBezWLjHyPg
+        W6NhLyYcnxqZEVd6iEygkJRdbxOvS/JwlGhajvza8MAphX5gUM7tCtzErrc6Khm2jVhwJB
+        UEeNE1EsL3eAkLOy5ZKkBwlIW1/JuIU=
+From:   David Heidelberg <david@ixit.cz>
+To:     Sandy Huang <hjc@rock-chips.com>,
+        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>, - <opensource@rock-chips.com>
+Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: convert power domain node for rockchip DW MIPI DSI
+Date:   Mon,  6 Dec 2021 22:26:50 +0100
+Message-Id: <20211206212651.126405-1-david@ixit.cz>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Convert into YAML format into format, which can be validated.
 
-On Mon, Dec 6, 2021 at 11:57 AM Neil Armstrong <narmstrong@baylibre.com> wrote:
-[...]
-> > +/ {
-> > +     model = "Amlogic";
->
-> Please change to something like "Amlogic Meson S4 AQ222 Development Board"
->
-> > +     compatible = "amlogic, aq222";
->
-> Drop the space after amlogic, and add "amlogic,aq222" to the Documentation/devicetree/bindings/arm/amlogic.yaml bindings.
-You can follow the approach from the Amlogic A1 SoC bringup, see
-patches [0] and [1]
+Changes:
+ - drop panel from example
 
-> You will probably need to add a new "amlogic,s4" family compatibla aswell.
-For this (and various other code-review comments) you can also follow
-the Amlogic A1 SoC (and AD401 board) bringup, see [2]
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ .../display/rockchip/dw_mipi_dsi_rockchip.txt |  93 --------
+ .../rockchip/rockchip,dw-mipi-dsi.yaml        | 200 ++++++++++++++++++
+ 2 files changed, 200 insertions(+), 93 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/rockchip/dw_mipi_dsi_rockchip.txt
+ create mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip,dw-mipi-dsi.yaml
 
+diff --git a/Documentation/devicetree/bindings/display/rockchip/dw_mipi_dsi_rockchip.txt b/Documentation/devicetree/bindings/display/rockchip/dw_mipi_dsi_rockchip.txt
+deleted file mode 100644
+index 39792f051d2d..000000000000
+--- a/Documentation/devicetree/bindings/display/rockchip/dw_mipi_dsi_rockchip.txt
++++ /dev/null
+@@ -1,93 +0,0 @@
+-Rockchip specific extensions to the Synopsys Designware MIPI DSI
+-================================
+-
+-Required properties:
+-- #address-cells: Should be <1>.
+-- #size-cells: Should be <0>.
+-- compatible: one of
+-	"rockchip,px30-mipi-dsi", "snps,dw-mipi-dsi"
+-	"rockchip,rk3288-mipi-dsi", "snps,dw-mipi-dsi"
+-	"rockchip,rk3399-mipi-dsi", "snps,dw-mipi-dsi"
+-- reg: Represent the physical address range of the controller.
+-- interrupts: Represent the controller's interrupt to the CPU(s).
+-- clocks, clock-names: Phandles to the controller's pll reference
+-  clock(ref) when using an internal dphy and APB clock(pclk).
+-  For RK3399, a phy config clock (phy_cfg) and a grf clock(grf)
+-  are required. As described in [1].
+-- rockchip,grf: this soc should set GRF regs to mux vopl/vopb.
+-- ports: contain a port node with endpoint definitions as defined in [2].
+-  For vopb,set the reg = <0> and set the reg = <1> for vopl.
+-- video port 0 for the VOP input, the remote endpoint maybe vopb or vopl
+-- video port 1 for either a panel or subsequent encoder
+-
+-Optional properties:
+-- phys: from general PHY binding: the phandle for the PHY device.
+-- phy-names: Should be "dphy" if phys references an external phy.
+-- #phy-cells: Defined when used as ISP phy, should be 0.
+-- power-domains: a phandle to mipi dsi power domain node.
+-- resets: list of phandle + reset specifier pairs, as described in [3].
+-- reset-names: string reset name, must be "apb".
+-
+-[1] Documentation/devicetree/bindings/clock/clock-bindings.txt
+-[2] Documentation/devicetree/bindings/media/video-interfaces.txt
+-[3] Documentation/devicetree/bindings/reset/reset.txt
+-
+-Example:
+-	mipi_dsi: mipi@ff960000 {
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		compatible = "rockchip,rk3288-mipi-dsi", "snps,dw-mipi-dsi";
+-		reg = <0xff960000 0x4000>;
+-		interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+-		clocks = <&cru SCLK_MIPI_24M>, <&cru PCLK_MIPI_DSI0>;
+-		clock-names = "ref", "pclk";
+-		resets = <&cru SRST_MIPIDSI0>;
+-		reset-names = "apb";
+-		rockchip,grf = <&grf>;
+-
+-		ports {
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			mipi_in: port@0 {
+-				reg = <0>;
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-
+-				mipi_in_vopb: endpoint@0 {
+-					reg = <0>;
+-					remote-endpoint = <&vopb_out_mipi>;
+-				};
+-				mipi_in_vopl: endpoint@1 {
+-					reg = <1>;
+-					remote-endpoint = <&vopl_out_mipi>;
+-				};
+-			};
+-
+-			mipi_out: port@1 {
+-				reg = <1>;
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-
+-				mipi_out_panel: endpoint {
+-					remote-endpoint = <&panel_in_mipi>;
+-				};
+-			};
+-		};
+-
+-		panel {
+-			compatible ="boe,tv080wum-nl0";
+-			reg = <0>;
+-
+-			enable-gpios = <&gpio7 3 GPIO_ACTIVE_HIGH>;
+-			pinctrl-names = "default";
+-			pinctrl-0 = <&lcd_en>;
+-			backlight = <&backlight>;
+-
+-			port {
+-				panel_in_mipi: endpoint {
+-					remote-endpoint = <&mipi_out_panel>;
+-				};
+-			};
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/display/rockchip/rockchip,dw-mipi-dsi.yaml b/Documentation/devicetree/bindings/display/rockchip/rockchip,dw-mipi-dsi.yaml
+new file mode 100644
+index 000000000000..7efa201e0e51
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/rockchip/rockchip,dw-mipi-dsi.yaml
+@@ -0,0 +1,200 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/rockchip/rockchip,dw-mipi-dsi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip specific extensions to the Synopsys Designware MIPI DSI
++
++maintainers:
++  - opensource@rock-chips.com
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: rockchip,px30-mipi-dsi
++      then:
++        properties:
++          clocks:
++            maxItems: 1
++          clock-names:
++            items:
++              - const: pclk
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: rockchip,rk3288-mipi-dsi
++      then:
++        properties:
++          clocks:
++            maxItems: 2
++          clock-names:
++            items:
++              - const: ref
++              - const: pclk
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: rockchip,rk3399-mipi-dsi
++      then:
++        properties:
++          clocks:
++            minItems: 4
++            maxItems: 4
++          clock-names:
++            items:
++              - const: ref
++              - const: pclk
++              - const: phy_cfg
++              - const: grf
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - rockchip,px30-mipi-dsi
++              - rockchip,rk3288-mipi-dsi
++              - rockchip,rk3399-mipi-dsi
++          - const: snps,dw-mipi-dsi
++      - items:
++          - const: rockchip,px30-mipi-dsi
++      - items:
++          - const: rockchip,rk3288-mipi-dsi
++      - items:
++          - const: rockchip,rk3399-mipi-dsi
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks: true
++
++  clock-names: true
++
++  phys:
++    maxItems: 1
++    description: The external PHY
++
++  phy-names:
++    const: dphy
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/$defs/port-base
++        unevaluatedProperties: false
++        description: >
++          Video port for the VOP input.
++
++        properties:
++          endpoint@0:
++            $ref: /schemas/graph.yaml#/properties/endpoint
++            description: Connection to the VOPB
++
++          endpoint@1:
++            $ref: /schemas/graph.yaml#/properties/endpoint
++            description: Connection to the VOPL
++
++        required:
++          - endpoint@0
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: >
++          Video port for panel or subsequent encoder
++
++    required:
++      - port@0
++      - port@1
++
++  resets:
++    maxItems: 1
++
++  reset-names:
++    items:
++      - const: apb
++
++  rockchip,grf:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      phandle to the GRF to mux vopl/vopb
++
++  power-domains: true
++
++  '#address-cells':
++    const: 1
++
++  '#phy-cells':
++    const: 0
++
++  '#size-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - rockchip,grf
++  - ports
++  - '#address-cells'
++  - '#size-cells'
++
++additionalProperties: true
++
++examples:
++  - |
++    #include <dt-bindings/clock/rk3288-cru.h>
++
++    mipi_dsi: mipi@ff960000 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        compatible = "rockchip,rk3288-mipi-dsi", "snps,dw-mipi-dsi";
++        reg = <0xff960000 0x4000>;
++        interrupts = <0 83 4>;
++        clocks = <&cru 148>, <&cru PCLK_MIPI_DSI0>;
++        clock-names = "ref", "pclk";
++        resets = <&cru SRST_MIPIDSI0>;
++        reset-names = "apb";
++        rockchip,grf = <&grf>;
++
++        ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            mipi_in: port@0 {
++                reg = <0>;
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                mipi_in_vopb: endpoint@0 {
++                    reg = <0>;
++                    remote-endpoint = <&vopb_out_mipi>;
++                };
++                mipi_in_vopl: endpoint@1 {
++                    reg = <1>;
++                    remote-endpoint = <&vopl_out_mipi>;
++                };
++            };
++
++            mipi_out: port@1 {
++                reg = <1>;
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                mipi_out_panel: endpoint {
++                    remote-endpoint = <&panel_in_mipi>;
++                };
++            };
++        };
++    };
+-- 
+2.33.0
 
-Best regards,
-Martin
-
-
-[0] https://patchwork.kernel.org/project/linux-amlogic/patch/1568276370-54181-3-git-send-email-jianxin.pan@amlogic.com/
-[1] https://patchwork.kernel.org/project/linux-amlogic/patch/1568276370-54181-4-git-send-email-jianxin.pan@amlogic.com/
-[2] https://patchwork.kernel.org/project/linux-amlogic/patch/1568276370-54181-5-git-send-email-jianxin.pan@amlogic.com/

@@ -2,130 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A846346A377
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:48:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B2E46A37A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344292AbhLFRvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 12:51:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38199 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344076AbhLFRvm (ORCPT
+        id S1344983AbhLFRys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 12:54:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242569AbhLFRyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 12:51:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638812892;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=O+SOZu/x4wYNS3jyF/hbCiBFxdbny6GuJLYUqh3CwZ4=;
-        b=LSS/J9iXMiSLj17/PHkC1K1YJ6ukGUIRbdLvH04ypuqbaziNUiUROqo4wBFD9BAprR0xLx
-        grec6AynZIzBjkx4oHTG99/hMH7dU08P/udK/O/VUXny8NxY8HVa95HkAeukGkFn9xmqK5
-        prgE5pM4GBuO257FANnr/wgI+QsVK/w=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-172-fazSDctgNNmvLdHkkz7u5g-1; Mon, 06 Dec 2021 12:48:11 -0500
-X-MC-Unique: fazSDctgNNmvLdHkkz7u5g-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 96A15100F950;
-        Mon,  6 Dec 2021 17:48:10 +0000 (UTC)
-Received: from x1.localdomain (unknown [10.39.192.105])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 292B15DAA5;
-        Mon,  6 Dec 2021 17:48:09 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Lee Jones <lee.jones@linaro.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH resend 1/1] mfd: intel_soc_pmic: Use CPU-id check instead of _HRV check to differentiate variants
-Date:   Mon,  6 Dec 2021 18:48:06 +0100
-Message-Id: <20211206174806.197772-2-hdegoede@redhat.com>
-In-Reply-To: <20211206174806.197772-1-hdegoede@redhat.com>
-References: <20211206174806.197772-1-hdegoede@redhat.com>
+        Mon, 6 Dec 2021 12:54:47 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DA0C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 09:51:18 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id x131so10831497pfc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 09:51:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+ESPc86/WR8zjQO6sLQzuGtCJWQp0GHtvc/0bwINti8=;
+        b=mEM23FJPPrJVfglUbFra6ClSwRonXW32XC/+wLGHpPDWAkmW/LDcwdzmrWez8wzm3G
+         6ATc9q2mngUTLLKpHZMh3ucS60Ih3vinZuo01DGvD6T4lp52V+llHU6AbL00S7fl40yb
+         Z20Bm2OdU4qocuGZ3CH1yEK0gbodUlNEE+qOFQ92Mtv78eGEguGPXrc+9cslWdk80C2S
+         212+rk+y66B8WqR/dH2IDQcb3Z+01jCxkRGQ9ZJsWnppyWAsFfk6qLyPanO458YJbxbn
+         hXdLcBOhFjYyRQD6uIuJ9ewh4rSht7lk6AguHfFzSMYHgSitep+herROVghcOmJg70E/
+         LI0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+ESPc86/WR8zjQO6sLQzuGtCJWQp0GHtvc/0bwINti8=;
+        b=UxO8Lt6rx73DeFONRBQ6qW2hJlVTNlm0GUiG2Mo+OJ2X+BzAKFdtHRUpXtcrmGFevX
+         7HAJGs9AveqNP8AjxGw6KqWGzWMpIHKnWIDaApF91Vt+4H5eS+pJEERElGBsrD6TVTZz
+         fvXBe1qHYvWIytCJnfPSH8efaCCxZmAuQlFYuMjfeycyuM5rg/WRf/HVNse8ejHUUeAa
+         BGJi2SGoSemln1LJrCppjyMo4G7LvlRMXau6MxDzUokCLnLWCQIB//+yPQlVoLHKSkxA
+         qlkAfCaG8RgCugqFM0DcCqqsH1fVGjE8eScAKVPlX8+x6pkhfl844pTvY37ZlodG7Nmr
+         q4tg==
+X-Gm-Message-State: AOAM530TmywwTEOa2v3rCUk9T5PYg4jOKoL/IUp02J9ELCp1CIFWwR93
+        2F8BWkIngYzlWvwn83DZ/2sCtG0zxq+/NTghv+mfuA==
+X-Google-Smtp-Source: ABdhPJypgCH8IfPe2R8TbHORE195DoPYN1vP/sOAAUnmOfh4uWrncbqrxnflmO2jZEe1R5GUySlwHpsMHR9I5pnaZAk=
+X-Received: by 2002:a62:7ec4:0:b0:4a3:219b:7008 with SMTP id
+ z187-20020a627ec4000000b004a3219b7008mr38300104pfc.3.1638813077797; Mon, 06
+ Dec 2021 09:51:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+References: <YZPbQVwWOJCrAH78@zn.tnic> <20211119040330.4013045-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <87pmqpjcef.ffs@tglx> <20211202222109.pcsgm2jska3obvmx@black.fi.intel.com>
+ <87lf126010.ffs@tglx> <20211203234915.jw6kdd2qnfrionch@black.fi.intel.com>
+ <2519e6b6-4f74-e2f8-c428-0fceb0e16472@intel.com> <20211204005427.ccinxlwwab3jsuct@black.fi.intel.com>
+ <5bc40889-445d-5cac-3396-d39d53ee92c7@intel.com> <CAPcyv4gHK=-gxxYexV8jtycPGE15yDWe7jYutbcqKc-1Zhmx8Q@mail.gmail.com>
+ <e84556f2-a724-5f90-d950-b4e017eee989@intel.com>
+In-Reply-To: <e84556f2-a724-5f90-d950-b4e017eee989@intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Mon, 6 Dec 2021 09:51:07 -0800
+Message-ID: <CAPcyv4gMaXeubx9pD18yKCZJHs60ULcMFrgsOhjBV+VFZgDy_Q@mail.gmail.com>
+Subject: Re: [PATCH v2] x86: Skip WBINVD instruction for VM guest
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Intel Crystal Cove PMIC has 2 different variants, one for use with
-Bay Trail (BYT) SoCs and one for use with Cherry Trail (CHT) SoCs.
+On Mon, Dec 6, 2021 at 8:54 AM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 12/6/21 8:39 AM, Dan Williams wrote:
+> >> But, the trick is that we need a contract.  A contract requires a
+> >> "meeting of the minds" first.
+> > The WBINVD requirement in sleep states is about getting cache contents
+> > out to to power preserved domain before the CPU turns off. The bare
+> > metal host handles that requirement. The conversation that needs to be
+> > had is with the ACPI specification committee to clarify that virtual
+> > machines have no responsibility to flush caches. We can do that as a
+> > Code First proposal to the ACPI Specification Working Group.
+>
+> Sounds sane to me.  So, we effectively go to the ACPI folks and say that
+> Linux isn't going to do WBINVD in virtualized environments any more.
+> That was effectively the approach that the first patch in this thread did:
+>
+> > https://lore.kernel.org/all/20211116005027.2929297-1-sathyanarayanan.kuppuswamy@linux.intel.com/
+>
+> Right?
 
-So far we have been using an ACPI _HRV check to differentiate between
-the 2, but at least on the Microsoft Surface 3, which is a CHT device,
-the wrong _HRV value is reported by ACPI.
-
-So instead switch to a CPU-ID check which avoids us relying on the
-possibly wrong ACPI _HRV value.
-
-Reported-by: Tsuchiya Yuto <kitakar@gmail.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/mfd/intel_soc_pmic_core.c | 28 +++-------------------------
- 1 file changed, 3 insertions(+), 25 deletions(-)
-
-diff --git a/drivers/mfd/intel_soc_pmic_core.c b/drivers/mfd/intel_soc_pmic_core.c
-index ddd64f9e3341..47cb7f00dfcf 100644
---- a/drivers/mfd/intel_soc_pmic_core.c
-+++ b/drivers/mfd/intel_soc_pmic_core.c
-@@ -14,15 +14,12 @@
- #include <linux/module.h>
- #include <linux/mfd/core.h>
- #include <linux/mfd/intel_soc_pmic.h>
-+#include <linux/platform_data/x86/soc.h>
- #include <linux/pwm.h>
- #include <linux/regmap.h>
- 
- #include "intel_soc_pmic_core.h"
- 
--/* Crystal Cove PMIC shares same ACPI ID between different platforms */
--#define BYT_CRC_HRV		2
--#define CHT_CRC_HRV		3
--
- /* PWM consumed by the Intel GFX */
- static struct pwm_lookup crc_pwm_lookup[] = {
- 	PWM_LOOKUP("crystal_cove_pwm", 0, "0000:00:02.0", "pwm_pmic_backlight", 0, PWM_POLARITY_NORMAL),
-@@ -34,31 +31,12 @@ static int intel_soc_pmic_i2c_probe(struct i2c_client *i2c,
- 	struct device *dev = &i2c->dev;
- 	struct intel_soc_pmic_config *config;
- 	struct intel_soc_pmic *pmic;
--	unsigned long long hrv;
--	acpi_status status;
- 	int ret;
- 
--	/*
--	 * There are 2 different Crystal Cove PMICs a Bay Trail and Cherry
--	 * Trail version, use _HRV to differentiate between the 2.
--	 */
--	status = acpi_evaluate_integer(ACPI_HANDLE(dev), "_HRV", NULL, &hrv);
--	if (ACPI_FAILURE(status)) {
--		dev_err(dev, "Failed to get PMIC hardware revision\n");
--		return -ENODEV;
--	}
--
--	switch (hrv) {
--	case BYT_CRC_HRV:
-+	if (soc_intel_is_byt())
- 		config = &intel_soc_pmic_config_byt_crc;
--		break;
--	case CHT_CRC_HRV:
-+	else
- 		config = &intel_soc_pmic_config_cht_crc;
--		break;
--	default:
--		dev_warn(dev, "Unknown hardware rev %llu, assuming BYT\n", hrv);
--		config = &intel_soc_pmic_config_byt_crc;
--	}
- 
- 	pmic = devm_kzalloc(dev, sizeof(*pmic), GFP_KERNEL);
- 	if (!pmic)
--- 
-2.33.1
-
+Correct, my reviewed-by was based on that observation, and now we can
+close the loop by proposing the specification change.

@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB98469DD0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0666C469FD4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358681AbhLFPdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:33:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
+        id S231770AbhLFPxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:53:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356186AbhLFPV5 (ORCPT
+        with ESMTP id S1389884AbhLFPlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:21:57 -0500
+        Mon, 6 Dec 2021 10:41:25 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30E1C08E9B3;
-        Mon,  6 Dec 2021 07:14:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A35C061D7F;
+        Mon,  6 Dec 2021 07:25:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC71EB8111B;
-        Mon,  6 Dec 2021 15:14:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07748C341C1;
-        Mon,  6 Dec 2021 15:14:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F0ABB8111C;
+        Mon,  6 Dec 2021 15:25:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C837C34900;
+        Mon,  6 Dec 2021 15:25:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803683;
-        bh=6QVG78zX7TohphJpQVKqzq6rsRPyZcAEn/GjEwF5P/E=;
+        s=korg; t=1638804325;
+        bh=Yqhpzb6SWwIY9NoHHa1efjNLEYdbawPk2KqyVpft0mU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RWTJNAXY3Q/tj+ILWx7DLYZOxJ2/6H4us0++eojHkryi4oNW4nFoWfNv2+wB8B3Mc
-         9fNywP6Hb6zGhQo50Bk8fbJCuiaxDXNnJMvMkWzix36z3o7pBI+oz1tFhC7Sc7RbDB
-         M92ho8gdHZG9M8Wc7PBAtDjCmBamYaE87Fg7q1+4=
+        b=l/HiSFM7l3HIwDtNFBcBkmYqDBqeCir4T9P+S2XJ/LQUlR4CrxJ9ReL4zFo12ycDL
+         SsEDq5WY0oH607KmduWjOmQZSBKcfGGX4H8V/e0wYYR5MES/elycpaUFnwXFiDQ1/O
+         a195EoHr6Dww8deJ3GJ57+ukNdzouhJ/W+VARLFU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wen Gu <guwen@linux.alibaba.com>,
-        Tony Lu <tonylu@linux.alibaba.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 010/130] net/smc: Transfer remaining wait queue entries during fallback
-Date:   Mon,  6 Dec 2021 15:55:27 +0100
-Message-Id: <20211206145559.976857332@linuxfoundation.org>
+        stable@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.15 074/207] KVM: x86: ignore APICv if LAPIC is not enabled
+Date:   Mon,  6 Dec 2021 15:55:28 +0100
+Message-Id: <20211206145612.794974254@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,84 +47,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wen Gu <guwen@linux.alibaba.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
 
-[ Upstream commit 2153bd1e3d3dbf6a3403572084ef6ed31c53c5f0 ]
+commit 78311a514099932cd8434d5d2194aa94e56ab67c upstream.
 
-The SMC fallback is incomplete currently. There may be some
-wait queue entries remaining in smc socket->wq, which should
-be removed to clcsocket->wq during the fallback.
+Synchronize the two calls to kvm_x86_sync_pir_to_irr.  The one
+in the reenter-guest fast path invoked the callback unconditionally
+even if LAPIC is present but disabled.  In this case, there are
+no interrupts to deliver, and therefore posted interrupts can
+be ignored.
 
-For example, in nginx/wrk benchmark, this issue causes an
-all-zeros test result:
-
-server: nginx -g 'daemon off;'
-client: smc_run wrk -c 1 -t 1 -d 5 http://11.200.15.93/index.html
-
-  Running 5s test @ http://11.200.15.93/index.html
-     1 threads and 1 connections
-     Thread Stats   Avg      Stdev     Max   ± Stdev
-     	Latency     0.00us    0.00us   0.00us    -nan%
-	Req/Sec     0.00      0.00     0.00      -nan%
-	0 requests in 5.00s, 0.00B read
-     Requests/sec:      0.00
-     Transfer/sec:       0.00B
-
-The reason for this all-zeros result is that when wrk used SMC
-to replace TCP, it added an eppoll_entry into smc socket->wq
-and expected to be notified if epoll events like EPOLL_IN/
-EPOLL_OUT occurred on the smc socket.
-
-However, once a fallback occurred, wrk switches to use clcsocket.
-Now it is clcsocket->wq instead of smc socket->wq which will
-be woken up. The eppoll_entry remaining in smc socket->wq does
-not work anymore and wrk stops the test.
-
-This patch fixes this issue by removing remaining wait queue
-entries from smc socket->wq to clcsocket->wq during the fallback.
-
-Link: https://www.spinics.net/lists/netdev/msg779769.html
-Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
-Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/smc/af_smc.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ arch/x86/kvm/x86.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index ac8265e35b2d2..04bf8088872a9 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -513,12 +513,26 @@ static void smc_link_save_peer_info(struct smc_link *link,
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -9723,7 +9723,7 @@ static int vcpu_enter_guest(struct kvm_v
+ 		if (likely(exit_fastpath != EXIT_FASTPATH_REENTER_GUEST))
+ 			break;
  
- static void smc_switch_to_fallback(struct smc_sock *smc)
- {
-+	wait_queue_head_t *smc_wait = sk_sleep(&smc->sk);
-+	wait_queue_head_t *clc_wait = sk_sleep(smc->clcsock->sk);
-+	unsigned long flags;
-+
- 	smc->use_fallback = true;
- 	if (smc->sk.sk_socket && smc->sk.sk_socket->file) {
- 		smc->clcsock->file = smc->sk.sk_socket->file;
- 		smc->clcsock->file->private_data = smc->clcsock;
- 		smc->clcsock->wq.fasync_list =
- 			smc->sk.sk_socket->wq.fasync_list;
-+
-+		/* There may be some entries remaining in
-+		 * smc socket->wq, which should be removed
-+		 * to clcsocket->wq during the fallback.
-+		 */
-+		spin_lock_irqsave(&smc_wait->lock, flags);
-+		spin_lock(&clc_wait->lock);
-+		list_splice_init(&smc_wait->head, &clc_wait->head);
-+		spin_unlock(&clc_wait->lock);
-+		spin_unlock_irqrestore(&smc_wait->lock, flags);
- 	}
- }
+-		if (vcpu->arch.apicv_active)
++		if (kvm_lapic_enabled(vcpu) && vcpu->arch.apicv_active)
+ 			static_call(kvm_x86_sync_pir_to_irr)(vcpu);
  
--- 
-2.33.0
-
+ 		if (unlikely(kvm_vcpu_exit_request(vcpu))) {
 
 

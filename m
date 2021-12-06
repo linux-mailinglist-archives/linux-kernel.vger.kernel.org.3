@@ -2,128 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5521A469322
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 11:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE7FA469326
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 11:01:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241710AbhLFKD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 05:03:27 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:53544 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235610AbhLFKD0 (ORCPT
+        id S241722AbhLFKEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 05:04:53 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:50547 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235610AbhLFKEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 05:03:26 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id C3FE91FD54;
-        Mon,  6 Dec 2021 09:59:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638784796; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=g+rBjrrMeHrk3S90LlHYvnkvKqRseUV/4f1UETmJm8I=;
-        b=cvxqwYynAEPWgkWrI95Y8T9D1d5RksttaMtTQkpDZvUky02/l+Fe2w/wceQehYiRPyTBSj
-        ZJrDqezjlpBRlQb5lwaq9VIbAGOjy7uxffmxPLhzJzkk3/yJtcdbkNDzAi9nwc6ovpH3Ex
-        RLlT4NSX6FnbONaljMiINXWyZ2FliXI=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D41CCA3B8B;
-        Mon,  6 Dec 2021 09:59:55 +0000 (UTC)
-Date:   Mon, 6 Dec 2021 10:59:55 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Alexey Avramov <hakavlad@inbox.lv>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        ValdikSS <iam@valdikss.org.ru>, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, corbet@lwn.net, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com,
-        oleksandr@natalenko.name, kernel@xanmod.org, aros@gmx.com,
-        hakavlad@gmail.com, Yu Zhao <yuzhao@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Subject: Re: [PATCH] mm/vmscan: add sysctl knobs for protecting the working
- set
-Message-ID: <Ya3fG2rp+860Yb+t@dhcp22.suse.cz>
-References: <20211130201652.2218636d@mail.inbox.lv>
- <2dc51fc8-f14e-17ed-a8c6-0ec70423bf54@valdikss.org.ru>
- <20211202135824.33d2421bf5116801cfa2040d@linux-foundation.org>
- <cca17e9f-0d4f-f23a-2bc4-b36e834f7ef8@suse.cz>
- <20211203222710.3f0ba239@mail.inbox.lv>
+        Mon, 6 Dec 2021 05:04:51 -0500
+Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MZCSt-1n72od0YvR-00V8cd; Mon, 06 Dec 2021 11:01:22 +0100
+Received: by mail-wr1-f49.google.com with SMTP id j3so21282981wrp.1;
+        Mon, 06 Dec 2021 02:01:22 -0800 (PST)
+X-Gm-Message-State: AOAM532nQUcXTPImaBBQS+fW/9NOn9CgL45ys395qdXVXeG7OXNXJ2uv
+        PZwcJ+Jsv6N6wY2zgNiLIeKOOtWKppWfxwd5k1Q=
+X-Google-Smtp-Source: ABdhPJzK344dYgqqfzp94G+JGpMAcIVesiyoKyE+J1TuWbu6tT5SKZ+BIEtzC2v8Q05uMleLTlgzpaYZiFmuZWtba64=
+X-Received: by 2002:adf:d091:: with SMTP id y17mr44249813wrh.418.1638784881789;
+ Mon, 06 Dec 2021 02:01:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211203222710.3f0ba239@mail.inbox.lv>
+References: <cover.1638275062.git.quic_saipraka@quicinc.com>
+ <99ecc64c6da3abb3ea2930082c40f1820655664c.1638275062.git.quic_saipraka@quicinc.com>
+ <CAK8P3a1k-1_m7r-u0uO1nW1m43bt_hR9u+UeW=SqK40+Ltb+iA@mail.gmail.com> <0cd0bc8c-e3db-b3fb-5be4-c619d1d5d633@quicinc.com>
+In-Reply-To: <0cd0bc8c-e3db-b3fb-5be4-c619d1d5d633@quicinc.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 6 Dec 2021 11:01:05 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0mxRshs=OrOK+NaMharykS0PffATq30wJTv4qe52_ecg@mail.gmail.com>
+Message-ID: <CAK8P3a0mxRshs=OrOK+NaMharykS0PffATq30wJTv4qe52_ecg@mail.gmail.com>
+Subject: Re: [PATCHv5 4/4] asm-generic/io: Add logging support for MMIO accessors
+To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Marc Zyngier <maz@kernel.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        quic_psodagud@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:J3TkbCg7aC1Iac3AU6TOXHijEJswfqbq8n6ZzKwhFN7LxzieaKL
+ MOXPJiiF3I0oZJEdLw+bbmAM/efQ0WN6hhPWHXscX8ilpCOs6VjEGUzySqBskfjCMxA3O2i
+ NOm4SBD7B50qIItjGRiYdGyhjBVnlOpcKyx0MjZ2+DpVvq10bBm0ZlhCCxvoebMMLfJQ5jT
+ 5eHnfHJsNWh0VdDdfCccA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:hSxWIA+lA5s=:fiozv8I+XydeTj9fGjcfSn
+ x3Stjuo4WziE1gOqDlx3hRcpFAapjPRBQ3XJ8kJXkAOTwxsdwGGCVdedpmLxkDUc4A2+F1HNM
+ pVaEn0OvtZGflGzyiR1j+W0vfKc1a6GtFByIC9rF1xZsnFnJZ7CBEcyMYEQDYJEBIdTgVQfXJ
+ wjIF6LydBvMg7AdtZKCoGqa8ryEZ3Vb527za17O7h/zX1NTk6luNdbMG2zQ1U7J4EuxBfvd2H
+ qY4hrzprrvz+XIXQkp87mwJDHjuEzLpUR++Cu2ByRn9TAYgfzZT1T2hkECOeF9em9EsrINDJN
+ PGT2xmxDgrJ2rTWZNa7fQpgeAXEpKS2DW6wXqLRAh+45fm2W4RPf3k31NqHxt/0MJyIiHD9gF
+ bwoeBbX4MVbUF5M0B9hrwnuZRD6LKbJBIudyDTfQOibEeOuH9QuV2O+yjHFK9mJB8wLZljkNn
+ tf1QQJUe+i5RsiVNPs7lVqRJXjhxmZ19GJlsn1x5U1NX+L1x752anmoDJ9E0FVLpn/ouAg560
+ 7ViH4HPvSYDmve7TB9kgtG9LD2ThANnZzSYjCQ1ehRL/9Elbk2qz8aCq3DWOr4QokzBFkqp42
+ SXgnubLRMKoyWIokC0SVnCqZtSRfRRmI53UOAAI8rxjPflrjL5xPNTwuIAZdbdBgvlTIEyp1Q
+ 4Wz/r7RHSBUfoerDtv8RnG8ZuJghzedvF6AgkueNGFmFnLcpH6NNIJML8ERqaqLgoUYc=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 03-12-21 22:27:10, Alexey Avramov wrote:
-> >I'd also like to know where that malfunction happens in this case.
-> 
-> User-space processes need to always access shared libraries to work.
-> It can be tens or hundreds of megabytes, depending on the type of workload. 
-> This is a hot cache, which is pushed out and then read leads to thrashing. 
-> There is no way in the kernel to forbid evicting the minimum file cache. 
-> This is the problem that the patch solves. And the malfunction is exactly
-> that - the inability of the kernel to hold the minimum amount of the
-> hottest cache in memory.
+On Mon, Dec 6, 2021 at 10:52 AM Sai Prakash Ranjan
+<quic_saipraka@quicinc.com> wrote:
+>
+> Yes just the trace after read/write won't serve our usecase where we
+> expect crashes/hangs on accessing
+> these registers but internally we did have a log_post_read_mmio() as
+> well, if it is useful then I can add it.
 
-Executable pages are a protected resource already page_check_references.
-Shared libraries have more page tables pointing to them so they are more
-likely to be referenced and thus kept around. What is the other memory
-demand to push those away and cause a trashing?
+Are there any downsides to tracing both before and after, besides another growth
+in binary size? Aside from the 'value', that would also allow
+measuring the time it
+takes to complete a readl(), which may be valuable for other users as these
+can be significant.
 
-I do agree with Vlastimil that we should be addressing these problems
-rather than papering them over by limits nobody will know how to set
-up properly and so we will have to deal all sorts of misconfigured
-systems. I have a first hand experience with that in a form of page
-cache limit that we used to have in older SLES kernels.
+Not sure how to best do that that, we could return a timestamp from the 'before'
+tracepoint and pass it into the 'after' tracepoint in order to log the
+difference, or just
+rely on calculating the differences in user space based on the log.
 
-[...]
-> > The problem with PSI sensing is that it works after the fact (after 
-> > the freeze has already occurred). It is not very different from issuing 
-> > SysRq-f manually on a frozen system, although it would still be a 
-> > handy feature for batched tasks and remote access. 
-> 
-> but Michal Hocko immediately criticized [7] the proposal unfairly. 
-> This patch just implements ndrw's suggestion.
+For the 'write' style accessors, the timing data would be less interesting, at
+least for posted PCI transactions, but it may be helpful to do the same for
+symmetry reasons.
 
-It would be more productive if you were more specific what you consider
-an unfair criticism. Thrashing is a real problem and we all recognize
-that. We have much better tools in our tool box these days (refault data
-for both page cache and swapped back memory). The kernel itself is
-rather conservative when using that data for OOM situations because
-historically users were more concerned about pre-mature oom killer
-invocations because that is a disruptive action.
-For those who prefer very agile oom policy there are userspace tools
-which can implement more advanced policies.
-I am open to any idea to improve the kernel side of things as well.
-
-As mentioned above I am against global knobs to special case the global
-memory reclaim because that leads to inconsistencies with the memcg
-reclaim, add future maintenance burden and most importantly it
-outsources reponsibility to admins who will have hard time to know the
-proper value for those knobs effectivelly pushing them towards all sorts
-of cargo cult.
-
-> [0] https://serverfault.com/a/319818
-> [1] https://github.com/hakavlad/prelockd
-> 
-> [2] https://www.youtube.com/watch?v=vykUrP1UvcI
->     On this video: running fast memory hog in a loop on Debian 10 GNOME, 
->     4 GiB MemTotal without swap space. FS is ext4 on *HDD*.
->     - 1. prelockd enabled: about 500 MiB mlocked. Starting 
->         `while true; do tail /dev/zero; done`: no freezes. 
->         The OOM killer comes quickly, the system recovers quickly.
->     - 2. prelockd disabled: system hangs.
-> 
-> [3] https://www.youtube.com/watch?v=g9GCmp-7WXw
-> [4] https://www.youtube.com/watch?v=iU3ikgNgp3M
-> [5] Let's talk about the elephant in the room - the Linux kernel's 
->     inability to gracefully handle low memory pressure
->     https://lore.kernel.org/all/d9802b6a-949b-b327-c4a6-3dbca485ec20@gmx.com/
-> [6] https://lore.kernel.org/all/806F5696-A8D6-481D-A82F-49DEC1F2B035@redhazel.co.uk/
-> [7] https://lore.kernel.org/all/20190808163228.GE18351@dhcp22.suse.cz/
-
--- 
-Michal Hocko
-SUSE Labs
+         Arnd

@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 302A1469DEA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:35:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6905469AA2
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:06:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240056AbhLFPeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:34:07 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55614 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349901AbhLFPWg (ORCPT
+        id S1345802AbhLFPJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:09:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345032AbhLFPHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:22:36 -0500
+        Mon, 6 Dec 2021 10:07:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FFFC08C5D1;
+        Mon,  6 Dec 2021 07:03:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 951F7B81133;
-        Mon,  6 Dec 2021 15:19:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5EBAC341C1;
-        Mon,  6 Dec 2021 15:19:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DBD561327;
+        Mon,  6 Dec 2021 15:03:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22F2CC341C1;
+        Mon,  6 Dec 2021 15:03:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803945;
-        bh=/LQ5KwQq2j2/j/Z6VSN24WgTwLuY5/MluZw3/SIkXm8=;
+        s=korg; t=1638802991;
+        bh=5SOFaKiPx/RxzRvgcrSjUTsv8ONihe1jO7rS2815JN4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DQ5IcOcAvFgIlqlVzr2dwjo2VhTfSYG7BUrBkJwEpePrlj34QeGg8e1Y1kdClJvzG
-         1PrXAJe7rfn18rqJdBHHMbBpZWc7MCmwNLRY+z5CGlQlxPKZylYZzV8ngYOpdWEza1
-         wMMFs4hWvv7+1Gh1b59HJ6IVUalQra3GkIag182E=
+        b=UqwhBcMEfvFPqbm0Dqvhi+ZCAM94LSMRIfWMpE6U+CrJ1GVPcnPs1p1vFvvZ0t3NU
+         E5PCdwPWcj+WWiDkZHmLfmH4fT4+trIoWOnc2WxD1l3sxXavzqHsThWpUYpvgmdtQ2
+         s4Zpv/LkAlA910f89aYMi4xXJW2gMxcWJFArDv9c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 071/130] net/mlx4_en: Fix an use-after-free bug in mlx4_en_try_alloc_resources()
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Teng Qi <starmiku1207184332@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 45/62] ethernet: hisilicon: hns: hns_dsaf_misc: fix a possible array overflow in hns_dsaf_ge_srst_by_port()
 Date:   Mon,  6 Dec 2021 15:56:28 +0100
-Message-Id: <20211206145602.124954352@linuxfoundation.org>
+Message-Id: <20211206145550.770503681@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
+References: <20211206145549.155163074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,59 +50,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Teng Qi <starmiku1207184332@gmail.com>
 
-commit addad7643142f500080417dd7272f49b7a185570 upstream.
+[ Upstream commit a66998e0fbf213d47d02813b9679426129d0d114 ]
 
-In mlx4_en_try_alloc_resources(), mlx4_en_copy_priv() is called and
-tmp->tx_cq will be freed on the error path of mlx4_en_copy_priv().
-After that mlx4_en_alloc_resources() is called and there is a dereference
-of &tmp->tx_cq[t][i] in mlx4_en_alloc_resources(), which could lead to
-a use after free problem on failure of mlx4_en_copy_priv().
+The if statement:
+  if (port >= DSAF_GE_NUM)
+        return;
 
-Fix this bug by adding a check of mlx4_en_copy_priv()
+limits the value of port less than DSAF_GE_NUM (i.e., 8).
+However, if the value of port is 6 or 7, an array overflow could occur:
+  port_rst_off = dsaf_dev->mac_cb[port]->port_rst_off;
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+because the length of dsaf_dev->mac_cb is DSAF_MAX_PORT_NUM (i.e., 6).
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
+To fix this possible array overflow, we first check port and if it is
+greater than or equal to DSAF_MAX_PORT_NUM, the function returns.
 
-Builds with CONFIG_MLX4_EN=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: ec25bc04ed8e ("net/mlx4_en: Add resilience in low memory systems")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Link: https://lore.kernel.org/r/20211130164438.190591-1-zhou1615@umn.edu
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Teng Qi <starmiku1207184332@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx4/en_netdev.c |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
-@@ -2276,9 +2276,14 @@ int mlx4_en_try_alloc_resources(struct m
- 				bool carry_xdp_prog)
- {
- 	struct bpf_prog *xdp_prog;
--	int i, t;
-+	int i, t, ret;
+diff --git a/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c b/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
+index 67accce1d33d0..e89a62c6f2301 100644
+--- a/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
++++ b/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
+@@ -312,6 +312,10 @@ static void hns_dsaf_ge_srst_by_port(struct dsaf_device *dsaf_dev, u32 port,
+ 		return;
  
--	mlx4_en_copy_priv(tmp, priv, prof);
-+	ret = mlx4_en_copy_priv(tmp, priv, prof);
-+	if (ret) {
-+		en_warn(priv, "%s: mlx4_en_copy_priv() failed, return\n",
-+			__func__);
-+		return ret;
-+	}
- 
- 	if (mlx4_en_alloc_resources(tmp)) {
- 		en_warn(priv,
+ 	if (!HNS_DSAF_IS_DEBUG(dsaf_dev)) {
++		/* DSAF_MAX_PORT_NUM is 6, but DSAF_GE_NUM is 8.
++		   We need check to prevent array overflow */
++		if (port >= DSAF_MAX_PORT_NUM)
++			return;
+ 		reg_val_1  = 0x1 << port;
+ 		port_rst_off = dsaf_dev->mac_cb[port]->port_rst_off;
+ 		/* there is difference between V1 and V2 in register.*/
+-- 
+2.33.0
+
 
 

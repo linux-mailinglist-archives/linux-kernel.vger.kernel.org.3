@@ -2,110 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F5D4690E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C37EA4690EB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238552AbhLFHst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 02:48:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33589 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238534AbhLFHsj (ORCPT
+        id S238569AbhLFHvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 02:51:18 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57328 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237150AbhLFHvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 02:48:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638776710;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0dKb0kOkklPwAp+HaAd/9ZIxbT61a1WHxt78m0N/Py0=;
-        b=RwgeZQzfeQZXfy2FFjTM+bElOHfJlV0pY1Gir7wDyMULCJkbXDECCN3m9FHrARZd9YoEOj
-        A85FDGuA1xmwPnec2lW1LUBT/94YYnhatNVE9ierkoRO29qnG2lFAK05j+iYGyF5iNthCp
-        4JKyQ/DIyZJP82/3hJmlDhK4BuMkXjg=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-553-Do_tGNhLP-Ks1ofobqJsLA-1; Mon, 06 Dec 2021 02:45:09 -0500
-X-MC-Unique: Do_tGNhLP-Ks1ofobqJsLA-1
-Received: by mail-pj1-f72.google.com with SMTP id iq9-20020a17090afb4900b001a54412feb0so4217684pjb.1
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 23:45:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0dKb0kOkklPwAp+HaAd/9ZIxbT61a1WHxt78m0N/Py0=;
-        b=mrb+78ViK9OYgrW5tEIolXIEYeo9XZ6tRSVlIHhybyvXUKHNvhwQvLmYUtV96nJctc
-         nv/VJrB7BJNlu9NIVeEaO1Gik013k78CY5LS1IKhyyp6MRWKiXejd8wgkURvR0eD/O+F
-         BCgvlQb2V/e42VnCXZ6myjQuoOl3J6dfTozoxBM5ZYox87hK59cd3RIZwSf31NZ/X3fT
-         ljGEbNdm+HllmSqcvYWHR5d4dXf2JgCaNGj3HoWVtr9Z+vYEDwB5X2JRaA5xgVke32Dq
-         CdUC6qP0k4qBWIL0xzT+WxpvZAybLLB/aahCPGVc3r2ioXKkksy4PdxPxvz4GAr+sCCc
-         zn8w==
-X-Gm-Message-State: AOAM5305Ly4hT3lrp+C7k2Zxpz4EF6WpFY7yHXx6VoMSGOh2JF8lpwQE
-        cXxPKgDVpC/Dd55mS9hD7n71rrOrb5uuiLuYNjU1djma9khzy3yL0mdJKhZC+d1MG7CY6P/N+co
-        /hw8zkrC2QWPFJM7LIwfy7NbjsPV3czc2mhN49bgE
-X-Received: by 2002:a17:90b:1648:: with SMTP id il8mr34293727pjb.246.1638776707414;
-        Sun, 05 Dec 2021 23:45:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzJoSPn8ntMUaQBKWCcmnF08/27uwMa/Y6ogSQsJsFjqRB4wjHAvDr/qkY3QTQPlwpjTlXweyOmbZHTkhBa9dA=
-X-Received: by 2002:a17:90b:1648:: with SMTP id il8mr34293706pjb.246.1638776707237;
- Sun, 05 Dec 2021 23:45:07 -0800 (PST)
+        Mon, 6 Dec 2021 02:51:17 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F51C6117B;
+        Mon,  6 Dec 2021 07:47:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EEDAC341C1;
+        Mon,  6 Dec 2021 07:47:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638776868;
+        bh=1tjNuHEY1D3f4gT+xgEa586VTk6XmE+eqdouKLZ1O7A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M7mLgCm6BrAps0JqDF3QLloUkkK/2qsSBCWVCOxZ3GuNCd1EK5Z7JD8JOD/YrDHEO
+         zfhq1z4IMOiEDXPitP7fwLwNJt6J93jcfW7BmDzXrOlGdnhsXQ1jOQkSrg23w2GR2y
+         aY/btjL6KDNuCy281Xi0bUPLDB7Jf9GoKEsaeSD4=
+Date:   Mon, 6 Dec 2021 08:47:43 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] Docs: usb: update usb_bulk_msg receiving example
+Message-ID: <Ya3AHxw48/T3XnPv@kroah.com>
+References: <cover.1638630342.git.philipp.g.hortmann@gmail.com>
+ <0bd9336e18abad338b4967664a4667b96dae6be6.1638630342.git.philipp.g.hortmann@gmail.com>
+ <Yayb6+SrQKUG4bDl@kroah.com>
+ <f3a1b2ba-85fe-e829-0d11-07a4bc4d8756@gmail.com>
 MIME-Version: 1.0
-References: <20211203185928.821497-1-arnd@kernel.org>
-In-Reply-To: <20211203185928.821497-1-arnd@kernel.org>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Mon, 6 Dec 2021 08:44:56 +0100
-Message-ID: <CAO-hwJLsijqibqARiWP0tPnmSDnrPsxSXDsvkgTV0=R7kQ1oOQ@mail.gmail.com>
-Subject: Re: [PATCH] HID: prodikeys: add USB_HID dependency
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Jiri Kosina <jikos@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        "Daniel J. Ogorchock" <djogorchock@gmail.com>,
-        =?UTF-8?B?QmFybmFiw6FzIFDFkWN6ZQ==?= <pobrn@protonmail.com>,
-        Roderick Colenbrander <roderick.colenbrander@sony.com>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f3a1b2ba-85fe-e829-0d11-07a4bc4d8756@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Sun, Dec 05, 2021 at 06:04:48PM +0100, Philipp Hortmann wrote:
+> On 12/5/21 12:00 PM, Greg KH wrote:
+> > On Sat, Dec 04, 2021 at 05:35:11PM +0100, Philipp Hortmann wrote:
+> > > Clarification that this example is not in the driver template anymore.
+> > > Update code example so that it fits best to usb-skeleton.c
+> > > Update format of function names
+> > > 
+> > > Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+> > > ---
+> > > V1 -> V2: Added "Update format of function names" to patch description
+> > >            Corrected format of function names like the following example:
+> > >            "`usb_bulk_msg` function" to "usb_bulk_msg()"
+> > > ---
+> > >   .../driver-api/usb/writing_usb_driver.rst     | 32 +++++++++----------
+> > >   1 file changed, 16 insertions(+), 16 deletions(-)
+> > > 
+> > > diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
+> > > index b43e1ce49f0e..ed11398837e5 100644
+> > > --- a/Documentation/driver-api/usb/writing_usb_driver.rst
+> > > +++ b/Documentation/driver-api/usb/writing_usb_driver.rst
+> > > @@ -218,36 +218,36 @@ do very much processing at that time. Our implementation of
+> > >   ``skel_write_bulk_callback`` merely reports if the urb was completed
+> > >   successfully or not and then returns.
+> > > -The read function works a bit differently from the write function in
+> > > +This read function works a bit differently from the write function in
+> > >   that we do not use an urb to transfer data from the device to the
+> > > -driver. Instead we call the :c:func:`usb_bulk_msg` function, which can be used
+> > > +driver. Instead we call usb_bulk_msg(), which can be used
+> > >   to send or receive data from a device without having to create urbs and
+> > > -handle urb completion callback functions. We call the :c:func:`usb_bulk_msg`
+> > > -function, giving it a buffer into which to place any data received from
+> > > +handle urb completion callback functions. We call usb_bulk_msg(),
+> > > +giving it a buffer into which to place any data received from
+> > >   the device and a timeout value. If the timeout period expires without
+> > >   receiving any data from the device, the function will fail and return an
+> > >   error message. This can be shown with the following code::
+> > >       /* do an immediate bulk read to get data from the device */
+> > > -    retval = usb_bulk_msg (skel->dev,
+> > > -			   usb_rcvbulkpipe (skel->dev,
+> > > -			   skel->bulk_in_endpointAddr),
+> > > -			   skel->bulk_in_buffer,
+> > > -			   skel->bulk_in_size,
+> > > -			   &count, 5000);
+> > > +    rv = usb_bulk_msg(dev->udev,
+> > 
+> > Why are you changing the varible name?  That seems unnecessary.
+> Reason is that retval does not exist in skel_read().
 
-On Fri, Dec 3, 2021 at 8:07 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> Like with the other drivers that recently got fixed, this one
-> fails to link if USB_HID is disabled or unreachable:
->
-> ERROR: modpost: "usb_hid_driver" [drivers/hid/hid-prodikeys.ko] undefined!
->
-> Fixes: f237d9028f84 ("HID: add USB_HID dependancy on some USB HID drivers")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
+Neither does any call to usb_bulk_msg().  So this is not code that is
+from that file at all.  "retval" is easier to understand than "rv".
 
-Looks like you already been beaten to it by Greg:
-https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git/commit/?h=for-5.16/upstream-fixes&id=30cb3c2ad24b66fb7639a6d1f4390c74d6e68f94
+> > Also, any reason you aren't cc:ing the USB maintainer on these changes?  :)
+> According to:
+> perl scripts/get_maintainer.pl --separator , --nokeywords --nogit
+> --nogit-fallback --norolestats -f
+> Documentation/driver-api/usb/writing_usb_driver.rst
+> Jonathan Corbet
+> <corbet@lwn.net>,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org
+> you are not in charge.
 
-But thanks!
+Ah, documentation isn't added to the maintainers entry for USB, I'll go
+fix that up...
 
-Cheers,
-Benjamin
+But note, my name is at the top of that file still, right?
 
->  drivers/hid/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-> index 74ce789f8636..48d18559670f 100644
-> --- a/drivers/hid/Kconfig
-> +++ b/drivers/hid/Kconfig
-> @@ -246,7 +246,7 @@ config HID_MACALLY
->
->  config HID_PRODIKEYS
->         tristate "Prodikeys PC-MIDI Keyboard support"
-> -       depends on HID && SND
-> +       depends on USB_HID && SND
->         select SND_RAWMIDI
->         help
->         Support for Prodikeys PC-MIDI Keyboard device support.
-> --
-> 2.29.2
->
+thanks,
 
+greg k-h

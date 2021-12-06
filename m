@@ -2,112 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49924468FC3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 04:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D18468FC5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 04:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236616AbhLFDnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 22:43:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34804 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236463AbhLFDnG (ORCPT
+        id S236757AbhLFDpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 22:45:39 -0500
+Received: from mswedge1.sunplus.com ([60.248.182.113]:41638 "EHLO
+        mg.sunplus.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S236725AbhLFDpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 22:43:06 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1418CB80EDC;
-        Mon,  6 Dec 2021 03:39:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03079C341C2;
-        Mon,  6 Dec 2021 03:39:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638761975;
-        bh=G8Er7UOQoTAf/H/O3gl71+y4wSaffr2EuuVEvSRewdI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K0FIcZA5rfeNKZ0OzkNcymRCpG1v5ULYXD+U1qXTtjVGgAtju5XGwltIT3v8S6hJY
-         YCi9tve1Z4kXFr6M4o5xjF4cPQhDo/4k0VTHzpFIiShkDGq+3R0PMoO5K1KMY1nutF
-         Ilzo8rdsCqZy7wvL1LNIOvJYW3Q7Lxsbb3qw4tkVRJDdTovBdLiLh96dZ42rfsTspg
-         YkfMWl0Rm/4jB3ORSu5vpAl5Z2cRsrMGA9k4qwwbs1vpLNEvY6/JVO9a3GVSS6b9cX
-         ou3JTxgJGfwGzuRGBybPw5DLSsP0UFaN+Txb63UVupWSBFR7IlzUyGNoBOsnuXBXZk
-         1yvKIhGgysFRg==
-Date:   Mon, 6 Dec 2021 11:39:29 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 0/7] Support for some TQMa8M* boards
-Message-ID: <20211206033921.GF4216@dragon>
-References: <20211201072949.53947-1-alexander.stein@ew.tq-group.com>
+        Sun, 5 Dec 2021 22:45:38 -0500
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.202
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(5119:0:AUTH_RELAY)
+        (envelope-from <tony.huang@sunplus.com>); Mon, 06 Dec 2021 11:42:07 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Mon, 6 Dec 2021 11:42:01 +0800
+Received: from sphcmbx02.sunplus.com.tw ([::1]) by sphcmbx02.sunplus.com.tw
+ ([fe80::f8bb:bd77:a854:5b9e%14]) with mapi id 15.00.1497.023; Mon, 6 Dec 2021
+ 11:42:02 +0800
+From:   =?utf-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Tony Huang <tonyhuang.sunplus@gmail.com>
+CC:     Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Subject: RE: [PATCH v2 2/2] misc: Add iop driver for Sunplus SP7021
+Thread-Topic: [PATCH v2 2/2] misc: Add iop driver for Sunplus SP7021
+Thread-Index: AQHX5/jPsCYr7BDcdE2zYDyk9FgNIqwgKW+AgASqFlA=
+Date:   Mon, 6 Dec 2021 03:42:02 +0000
+Message-ID: <9233c42fc4714122a3054a6c5bda0d3e@sphcmbx02.sunplus.com.tw>
+References: <cover.1638499659.git.tonyhuang.sunplus@gmail.com>
+ <9bb79f74ff1b08a5f9a1f6707b3b41484506468a.1638499659.git.tonyhuang.sunplus@gmail.com>
+ <CAK8P3a2XW=9ch58x7Shjd1ZeFka67sxEb5ZfJy-ZNtQe-j7xVg@mail.gmail.com>
+In-Reply-To: <CAK8P3a2XW=9ch58x7Shjd1ZeFka67sxEb5ZfJy-ZNtQe-j7xVg@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.54]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211201072949.53947-1-alexander.stein@ew.tq-group.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 08:29:41AM +0100, Alexander Stein wrote:
-> Thanks for the review on v2!
-> 
-> Changes in v3:
-> * Rebased to next-20211129
-> * Adjusted commit subjects (tree -> device tree)
-> * Use hyphen in node names instead of underscore
-> * Removed bootargs from DT
-> * Fixed audio-codec node name and handle name
-> * Property 'enet-phy-lane-no-swap' was already documented, but got accidently
->   removed during YAML conversion. Fix is pending at at [2]
-> * Use matrix instead of array for 'fsl,pins' as required by pinctrl bindings.
->   This reduces the lines in stderr from dtbs_check for these DT files from 475
->   down to 191
-> * Removed TODO regarding unsupported USB over-current polarity
-> 
-> Changes in v2:
-> * Rebased to next-20211101
-> * Added Rob's Acked-By on Patch for DT bindings
-> * for other changes please refer to individual patches
-> 
-> Note on TQMa8Mx:
-> Due to CPU errata cpuidle is broken and needs to be disabled, see [1] for
-> pending patch.
-> 
-> This patch set adds support for the following modules:
-> * TQMa8Mx
-> * TQMa8MxML
-> * TQMa8MxNL
-> 
-> Each of the modules is available with different i.MX8M variants, the
-> bootloader modifies the device tree and disabled paripherals which
-> are not available on the actual hardware.
-> 
-> All of them can be attached to the same mainboard MBa8Mx, although
-> TQMa8MxML & TQMa8MxNL need an adapter. For that reason there is a single
-> mainboard .dtsi file named mba8mx.dtsi.
-> 
-> There is a .dtsi file for each module named imx8m?-tmqa8m*.dts.
-> 
-> Finally there is the final .dts file which includes the mainboard and
-> the attached module and contains the missing connection, prominently clk
-> and pinctrl defines.
-> 
-> [1] https://patchwork.kernel.org/project/linux-arm-kernel/patch/20211105095535.3920998-1-alexander.stein@ew.tq-group.com/
-> [2] https://www.spinics.net/lists/devicetree/msg460023.html
-> 
-> Alexander Stein (7):
->   dt-bindings: arm: fsl: add TQMa8MxML boards
->   arm64: dts: freescale: add initial device tree for TQMa8MQML with
->     i.MX8MM
->   arm64: defconfig: enable drivers for TQ TQMa8MxML-MBa8Mx
->   dt-bindings: arm: fsl: add TQMa8MxNL boards
->   arm64: dts: freescale: add initial device tree for TQMa8MQNL with
->     i.MX8MN
->   dt-bindings: arm: fsl: add TQMa8Mx boards
->   arm64: dts: freescale: add initial device tree for TQMa8Mx with i.MX8M
-
-Applied all, thanks!
+RGVhciBBcm5kOg0KDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjIgMi8yXSBtaXNjOiBBZGQgaW9w
+IGRyaXZlciBmb3IgU3VucGx1cyBTUDcwMjENCj4gDQo+IE9uIEZyaSwgRGVjIDMsIDIwMjEgYXQg
+NDo0OCBBTSBUb255IEh1YW5nIDx0b255aHVhbmcuc3VucGx1c0BnbWFpbC5jb20+DQo+IHdyb3Rl
+Og0KPiA+DQo+ID4gSU9QIChJTyBQcm9jZXNzb3IpIGVtYmVkZGVkIGluc2lkZSBTUDcwMjEgd2hp
+Y2ggaXMgdXNlZCBhcyBQcm9jZXNzb3INCj4gPiBmb3IgSS9PIGNvbnRyb2wsIFJUQyB3YWtlLXVw
+IGFuZCBjb29wZXJhdGlvbiB3aXRoIENQVSAmIFBNQyBpbiBwb3dlcg0KPiA+IG1hbmFnZW1lbnQg
+cHVycG9zZS4NCj4gPiBUaGUgSU9QIGNvcmUgaXMgRFE4MDUxLCBzbyBhbHNvIG5hbWVkIElPUDgw
+NTEsIGl0IHN1cHBvcnRzIGRlZGljYXRlZA0KPiA+IEpUQUcgZGVidWcgcGlucyB3aGljaCBzaGFy
+ZSB3aXRoIFNQNzAyMS4NCj4gPiBJbiBzdGFuZGJ5IG1vZGUgb3BlcmF0aW9uLCB0aGUgcG93ZXIg
+c3BlYyByZWFjaCA0MDB1QS4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFRvbnkgSHVhbmcgPHRv
+bnlodWFuZy5zdW5wbHVzQGdtYWlsLmNvbT4NCj4gPiAtLS0NCj4gPiBDaGFuZ2VzIGluIHYyOg0K
+PiA+ICAtIEFkZHJlc3NlZCBjb21tZW50cyBmcm9tIEFybmQgQmVyZ21hbm4uDQo+ID4gIC0gQWRk
+cmVzc2VkIGNvbW1lbnRzIGZyb20gR3JlZyBLSC4NCj4gPiAgLSBBZGRyZXNzZWQgY29tbWVudHMg
+ZnJvbSBrZXJuZWwgdGVzdCByb2JvdC4NCj4gDQo+IFRoaXMgbG9va3MgbXVjaCBiZXR0ZXIgYWxy
+ZWFkeS4NCj4gDQo+ID4gKyNkZWZpbmUgTk9STUFMX0NPREVfTUFYX1NJWkUgMFgxMDAwDQo+ID4g
+KyNkZWZpbmUgU1RBTkRCWV9DT0RFX01BWF9TSVpFIDB4NDAwMA0KPiA+ICt1bnNpZ25lZCBjaGFy
+IGlvcF9ub3JtYWxfY29kZVtOT1JNQUxfQ09ERV9NQVhfU0laRV07DQo+ID4gK3Vuc2lnbmVkIGNo
+YXIgaW9wX3N0YW5kYnlfY29kZVtTVEFOREJZX0NPREVfTUFYX1NJWkVdOw0KPiANCj4gSSB0aGlu
+ayB0aGVzZSBzaG91bGQgYmUgcGFydCBvZiB0aGUgc3BfaW9wIHN0cnVjdHVyZSwgbm90IGdsb2Jh
+bCB2YXJpYWJsZXMuDQo+IA0KDQpJIHdpbGwgbW9kaWZ5IGl0Lg0KDQo+ID4gK3N0YXRpYyBzdHJ1
+Y3Qgc3BfaW9wICppb3A7DQo+ID4gKw0KPiA+ICt2b2lkIGlvcF9ub3JtYWxfbW9kZSh2b2lkKQ0K
+PiA+ICt7DQo+ID4gKyAgICAgICBzdHJ1Y3QgcmVnc19pb3AgKnBfaW9wX3JlZyA9IChzdHJ1Y3Qg
+cmVnc19pb3AgKilpb3AtPmlvcF9yZWdzOw0KPiANCj4gbG9jYWwgZnVuY3Rpb25zIHNob3VsZCBn
+ZW5lcmFsbHkgYmUgJ3N0YXRpYycgYW5kIHRha2UgdGhlICdzdHJ1Y3Qgc3BfaW9wJyBpbnN0YW5j
+ZQ0KPiBwb2ludGVyIGFzIHRoZSBmaXJzdCBhcmd1bWVudC4NCj4gDQo+IEZ1bmN0aW9ucyB0aGF0
+IG5lZWQgdG8gYmUgZ2xvYmFsIGJlY2F1c2UgdGhleSBhcmUgdXNlZCBieSBvdGhlciBkcml2ZXJz
+IChpZiBhbnkpDQo+IHNob3VsZCBwcm9iYWJseSBhbHNvIGJlIGV4cG9ydGVkIGFuZCBoYXZlIGRv
+Y3VtZW50YXRpb24gYWJvdmUgdGhlaXINCj4gZGVmaW5pdGlvbi4NCj4gDQoNCkkgd2lsbCBtb2Np
+ZnkgaXQuDQoNCj4gPiArc3RhdGljIGludCAgZ2V0X25vcm1hbF9jb2RlKHN0cnVjdCBkZXZpY2Ug
+KmRldikgew0KPiA+ICsgICAgICAgY29uc3Qgc3RydWN0IGZpcm13YXJlICpmdzsNCj4gPiArICAg
+ICAgIHN0YXRpYyBjb25zdCBjaGFyIGZpbGVbXSA9ICJub3JtYWwuYmluIjsNCj4gPiArICAgICAg
+IHVuc2lnbmVkIGludCBlcnIsIGk7DQo+ID4gKw0KPiA+ICsgICAgICAgZGV2X2luZm8oZGV2LCAi
+bm9ybWFsIGNvZGVcbiIpOw0KPiA+ICsgICAgICAgZXJyID0gcmVxdWVzdF9maXJtd2FyZSgmZncs
+IGZpbGUsIGRldik7DQo+IA0KPiBUaGUgZmlsZSBuYW1lIG5lZWRzIHRvIGNsZWFybHkgaWRlbnRp
+ZnkgdGhlIGRldmljZSB0byBhdm9pZCBjb25mbGljdHMgd2l0aCBvdGhlcg0KPiBkcml2ZXJzLg0K
+PiANCg0KSSB3aWxsIG1vaWRmeSBpdC4NCg0KPiA+ICtzdGF0aWMgaW50IHNwX2lvcF9vcGVuKHN0
+cnVjdCBpbm9kZSAqaW5vZGUsIHN0cnVjdCBmaWxlICpwZmlsZSkgew0KPiA+ICsgICAgICAgcmV0
+dXJuIDA7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBzc2l6ZV90IHNwX2lvcF9yZWFkKHN0
+cnVjdCBmaWxlICpwZmlsZSwgY2hhciBfX3VzZXIgKnVidWYsDQo+ID4gKyAgICAgICAgICAgICAg
+ICAgICAgICAgc2l6ZV90IGxlbmd0aCwgbG9mZl90ICpvZmZzZXQpIHsNCj4gPiArICAgICAgIHJl
+dHVybiAwOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgc3NpemVfdCBzcF9pb3Bfd3JpdGUo
+c3RydWN0IGZpbGUgKnBmaWxlLCBjb25zdCBjaGFyIF9fdXNlciAqdWJ1ZiwNCj4gPiArICAgICAg
+IHNpemVfdCBsZW5ndGgsIGxvZmZfdCAqb2Zmc2V0KSB7DQo+ID4gKyAgICAgICByZXR1cm4gMDsN
+Cj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGludCBzcF9pb3BfcmVsZWFzZShzdHJ1Y3QgaW5v
+ZGUgKmlub2RlLCBzdHJ1Y3QgZmlsZSAqcGZpbGUpIHsNCj4gPiArICAgICAgIC8vZGV2X2RiZyhp
+b3AtPmRldiwgIlN1bnBsdXMgSU9QIG1vZHVsZSByZWxlYXNlXG4iKTsNCj4gPiArICAgICAgIHJl
+dHVybiAwOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgY29uc3Qgc3RydWN0IGZpbGVfb3Bl
+cmF0aW9ucyBzcF9pb3BfZm9wcyA9IHsNCj4gPiArICAgICAgIC5vd25lciAgICAgICAgICAgICAg
+ICAgID0gVEhJU19NT0RVTEUsDQo+ID4gKyAgICAgICAub3BlbiAgICAgICAgICAgICAgICAgICA9
+IHNwX2lvcF9vcGVuLA0KPiA+ICsgICAgICAgLnJlYWQgICAgICAgICAgICAgICAgICAgPSBzcF9p
+b3BfcmVhZCwNCj4gPiArICAgICAgIC53cml0ZSAgICAgICAgICAgICAgICAgID0gc3BfaW9wX3dy
+aXRlLA0KPiA+ICsgICAgICAgLnJlbGVhc2UgICAgICAgICAgICAgICAgPSBzcF9pb3BfcmVsZWFz
+ZSwNCj4gPiArfTsNCj4gDQo+IFRoaXMgZG9lcyBub3RoaW5nIGJlY2F1c2UgYWxsIHRoZSBjYWxs
+YmFja3MgYXJlIGVtcHR5LiBZb3UgcmVtb3ZlZCB0aGUNCj4gaW5hcHByb3ByaWF0ZSB1c2VyIHNw
+YWNlIGludGVyZmFjZXMgYXMgSSBhc2tlZCB5b3UgdG8sIGJ1dCBpZiB0aGVyZSBpcyBubyB3YXkg
+Zm9yDQo+IGVpdGhlciBrZXJuZWwgb3IgdXNlciBzcGFjZSB0byBpbnRlcmFjdCB3aXRoIHRoZSBo
+YXJkd2FyZSwgSSBkb24ndCBzZWUgYSBwb2ludCBpbg0KPiBtZXJnaW5nIHRoZSBkcml2ZXIgdW50
+aWwgeW91IGFkZCBhIG5ldyBpbnRlcmZhY2UgdGhhdCBpcyB1c2FibGUuDQo+IA0KDQpJIHdpbGwg
+bW9kaWZ5IHNwX2lvcF9yZWFkKCkgdG8gbW9uaXRvciBJT1AgbWFpbGJveCBkYXRhLg0KDQo+ID4g
+K3N0YXRpYyBpbnQgc3BfaW9wX3BsYXRmb3JtX2RyaXZlcl9yZW1vdmUoc3RydWN0IHBsYXRmb3Jt
+X2RldmljZQ0KPiA+ICsqcGRldikgew0KPiA+ICsgICAgICAgcmV0dXJuIDA7DQo+ID4gK30NCj4g
+PiArDQo+ID4gK3N0YXRpYyBpbnQgc3BfaW9wX3BsYXRmb3JtX2RyaXZlcl9zdXNwZW5kKHN0cnVj
+dCBwbGF0Zm9ybV9kZXZpY2UNCj4gPiArKnBkZXYsIHBtX21lc3NhZ2VfdCBzdGF0ZSkgew0KPiA+
+ICsgICAgICAgcmV0dXJuIDA7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyB2b2lkIHNwX2lv
+cF9wbGF0Zm9ybV9kcml2ZXJfc2h1dGRvd24oc3RydWN0IHBsYXRmb3JtX2RldmljZQ0KPiA+ICsq
+cGRldikgew0KPiA+ICsNCj4gPiArfQ0KPiA+ICsNCj4gPiArdm9pZCBzcF9pb3BfcGxhdGZvcm1f
+ZHJpdmVyX3Bvd2Vyb2ZmKHZvaWQpDQo+ID4gK3sNCj4gPiArICAgICAgIGlvcF9zdGFuZGJ5X21v
+ZGUoKTsNCj4gPiArICAgICAgIGlvcF9zaHV0ZG93bigpOw0KPiA+ICt9DQo+IA0KPiBTb21ldGhp
+bmcgbG9va3Mgd3JvbmcgaGVyZSwgbWF5YmUgcmVyZWFkIHRoZSBkb2N1bWVudGF0aW9uIGZvciBy
+dW50aW1lDQo+IHBvd2VyIG1hbmFnZW1lbnQgdG8gZmluZCBhIHdheSBvZiBwdXR0aW5nIHRoZSBk
+ZXZpY2UgaW50byBsb3ctcG93ZXIgbW9kZQ0KPiB3aGVuIGl0IGlzIHVudXNlZC4NCj4gDQoNCldo
+ZW4gdGhlIHBvd2Vyb2ZmIGNvbW1hbmQgaXMgZXhlY3V0ZWQsIHRoZSBydW4gc3BfaW9wX3BsYXRm
+b3JtX2RyaXZlcl9wb3dlcm9mZih2b2lkKSBmdW5jdGlvbiB3aWxsIGVudGVyIHRoZSBzdGFuZGJ5
+IG1vZGUuIFRoZSBwb3dlciBvZmYgd2lsbCBiZSBleGVjdXRlZC4NCkluIHRoZSBzeXN0ZW0sIElP
+UCBjYW4gY29udGludWUgdG8gd29yayB3aGVuIG90aGVyIG1vZHVsZXMgaW4gdGhlIHN5c3RlbSBl
+bnRlciBzdGFuZGJ5IC8gcG93ZXIgZG93biBtb2RlcyB0byBtb25pdG9yIHdoZXRoZXIgdGhlIHN5
+c3RlbSB3YWtlcyB1cCB0aHJvdWdoIFJUQy4NCg0KMjYuNC4yIElPUCBNT0RVTEUgRVhFQ1VURVMg
+ODA1MSBDT0RFDQpTb3VyY2UgY29kZSBzaG91bGQgcmVzZXJ2ZSBTRFJBTSBtZW1vcnkgYXJlYSBm
+b3IgSU9QIG1vZHVsZSBjb2RlLiA4MDUxIGJpbiBmaWxlIG5vcm1hbCBjb2RlIGFuZCBzdGFuZGJ5
+IGNvZGUgY2FuIGJlIHBsYWNlZCBpbiB0aGlzIGFyZWEuIFRoZSBsb2NhdGlvbiBhcmVhIGNhbiBi
+ZSBzZWxlY3QgYnkgdXNlci4NCk5vcm1hbCBjb2RlOiBNb25pdG9yIENQVSBjb21tYW5kcy4NClN0
+YW5kYnkgY29kZTogRm9yIFJUQyB3YWtlIHVwLCBjb29wZXJhdGlvbiB3aXRoIENQVSZQTUMgaW4g
+cG93ZXIgbWFuYWdlbWVudA0KV2hlbiB0aGUgc3lzdGVtIGVudGVycyBzdGFuZGJ5IG1vZGUsIDgw
+NTEgYmluIGZpbGUgc2hvdWxkIGJlIG1vdmVkIHRvIElfQ2FjaGUuDQpJX0NhY2hlIGhhcyAxNksg
+b25seS4gU3RhbmRieSBjb2RlIGNhbm5vdCBleGNlZWQgMTZLLg0KV2hlbiB0aGUgSU9QIG1vZHVs
+ZSBpcyBtb3VudGVkLCBDUFUgbG9hZCA4MDUxIGNvZGVzIChub3JtYWwuYmluKSBpbnRvIG1lbW9y
+eS4NCklvcF9iYXNlX2FkZHJfbCBhbmQgaW9wX2Jhc2VfYWRkcl9oIHNwZWNpZnkgYWRkcmVzcy4N
+CkR1cmluZyBzeXN0ZW0gYm9vdCB1cCwgd2hlbiB0aGUgSU9QIGlzIG1vdW50ZWQsIGl0IHdpbGwg
+bG9hZCA4MDUxIG5vcm1hbCBjb2RlIGFuZCBzdGFydCBleGVjdXRlIDgwNTEgY29kZS4NCg0KSW4g
+dGhlIHN5c3RlbSwgSU9QIGNhbiBjb250aW51ZSB0byB3b3JrIHdoZW4gb3RoZXIgbW9kdWxlcyBp
+biB0aGUgc3lzdGVtIGVudGVyIHN0YW5kYnkgLyBwb3dlciBkb3duIG1vZGVzIHRvIG1vbml0b3Ig
+d2hldGhlciB0aGUgc3lzdGVtIHdha2VzIHVwIHRocm91Z2ggUlRDLiBJbiBzdWNoIGEgc2l0dWF0
+aW9uLCB0aGUgSU9QIHdpbGwgbm90IGJlIGFibGUgdG8gYWNjZXNzIHRoZSBzeXN0ZW0gbWVtb3J5
+Lg0KDQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWlzYy9pb3Avc3VucGx1c19pb3AuaA0KPiA+
+IGIvZHJpdmVycy9taXNjL2lvcC9zdW5wbHVzX2lvcC5oIG5ldyBmaWxlIG1vZGUgMTAwNjQ0IGlu
+ZGV4DQo+ID4gMDAwMDAwMC4uZmNiZmQyNg0KPiA+IC0tLSAvZGV2L251bGwNCj4gPiArKysgYi9k
+cml2ZXJzL21pc2MvaW9wL3N1bnBsdXNfaW9wLmgNCj4gPiBAQCAtMCwwICsxLDY0IEBADQo+ID4g
+Ky8qIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9yLWxhdGVyKi8NCj4gPiArDQo+
+ID4gKyNpZm5kZWYgX19TUF9JT1BfSF9fDQo+ID4gKyNkZWZpbmUgX19TUF9JT1BfSF9fDQo+ID4g
+KyNpbmNsdWRlIDxtYWNoL2lvX21hcC5oPg0KPiANCj4gbWFjaC9pb19tYXAuaCBkb2VzIG5vdCBl
+eGlzdCwgc28gdGhlIGRyaXZlciB3b24ndCBjb21waWxlLiBJIGRvbid0IHRoaW5rIHlvdQ0KPiBu
+ZWVkIGFueXRoaW5nIGVsc2UsIHNvIGl0IHNob3VsZCBiZSBmaW5lIHRvIHJlbW92ZSB0aGUgI2lu
+Y2x1ZGUNCj4gDQoNCkkgd2lsbCByZW1vdmUgaW9fbWFwLmggZmlsZS4NCg0KPiBUaGUgcmVzdCBv
+ZiB0aGUgaGVhZGVyIG9ubHkgZGVzY3JpYmVzIHRoZSBoYXJkd2FyZSBpdHNlbGYsIHNvIEknZCBz
+dWdnZXN0DQo+IG1lcmdpbmcgYWxsIG9mIGl0IGludG8gdGhlIC5jIGZpbGUuDQo+DQoNCkkgbmVl
+ZCB0byBrZWVwIHN1bnBsdXNfaW9wLmguIE90aGVyIGZpbGVzIHdpbGwgdXNlIHNwX2lvcF9wbGF0
+Zm9ybV9kcml2ZXJfcG93ZXJvZmYodm9pZCkgaW4gcG93ZXJvZmYgZmxvdy4NCldoZW4gdGhlIHBv
+d2Vyb2ZmIGNvbW1hbmQgaXMgZXhlY3V0ZWQsIHRoZSBydW4gc3BfaW9wX3BsYXRmb3JtX2RyaXZl
+cl9wb3dlcm9mZih2b2lkKSBmdW5jdGlvbiB3aWxsIGVudGVyIHRoZSBzdGFuZGJ5IG1vZGUuIFRo
+ZSBwb3dlciBvZmYgd2lsbCBiZSBleGVjdXRlZC4NCg0KDQo=

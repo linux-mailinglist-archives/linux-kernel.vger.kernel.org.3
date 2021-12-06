@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C49469C38
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A468E469CF6
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347821AbhLFPVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:21:16 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35368 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356431AbhLFPPa (ORCPT
+        id S1386274AbhLFP0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:26:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359007AbhLFPQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:15:30 -0500
+        Mon, 6 Dec 2021 10:16:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE35C08EC93;
+        Mon,  6 Dec 2021 07:09:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F230A61327;
-        Mon,  6 Dec 2021 15:12:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 133B0C341C1;
-        Mon,  6 Dec 2021 15:12:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37C34B81129;
+        Mon,  6 Dec 2021 15:09:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77ACCC341C1;
+        Mon,  6 Dec 2021 15:09:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803521;
-        bh=NxzRgyFnR3dc6cOCKeXO9Dht1Vb/nVABovmSyUNzP1Y=;
+        s=korg; t=1638803393;
+        bh=IHuPhORhy5lyDsyNHi26fNFthDwyWJqXSMrdnQdsMC8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ox4l1F/dYm+nEbqUGNwX6DQy5fx20gzIrCUeEGXfcdf6pUeufuAEkfgDppqcseGJH
-         UfcoZuhM4TeFwGISg5xisAjQJABlEaWfaoi173iYlXSy7bFYJysix7YLFbWfdYWrLf
-         tLdJCR4OX0a1BiM7lWPQJCwxpmo51V3KF/H2d5W8=
+        b=DSRh3WFrx6Epl+udPCdSrmq+PMdw5R9ctY00OwMhdiuC4j+t0beV0xnyQaAiUbNYD
+         PycT8NyJr39AzW/3/0xqDT9HFRwM27iDHuc8tWOYC5CBklaEt8KQJhk4C21288aatY
+         9DU1w9D5TtVStUGQhTHIvzk92ugdAkGl/1GbCjmc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+e979d3597f48262cb4ee@syzkaller.appspotmail.com,
-        Wen Gu <guwen@linux.alibaba.com>,
-        Tony Lu <tonylu@linux.alibaba.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Filipe Manana <fdmanana@gmail.com>,
+        Wang Yugui <wangyugui@e16-tech.com>,
+        David Sterba <dsterba@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 22/70] net/smc: Avoid warning of possible recursive locking
+Subject: [PATCH 4.19 09/48] btrfs: check-integrity: fix a warning on write caching disabled disk
 Date:   Mon,  6 Dec 2021 15:56:26 +0100
-Message-Id: <20211206145552.688510133@linuxfoundation.org>
+Message-Id: <20211206145549.177026467@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
-References: <20211206145551.909846023@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+References: <20211206145548.859182340@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,94 +50,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wen Gu <guwen@linux.alibaba.com>
+From: Wang Yugui <wangyugui@e16-tech.com>
 
-[ Upstream commit 7a61432dc81375be06b02f0061247d3efbdfce3a ]
+[ Upstream commit a91cf0ffbc244792e0b3ecf7d0fddb2f344b461f ]
 
-Possible recursive locking is detected by lockdep when SMC
-falls back to TCP. The corresponding warnings are as follows:
+When a disk has write caching disabled, we skip submission of a bio with
+flush and sync requests before writing the superblock, since it's not
+needed. However when the integrity checker is enabled, this results in
+reports that there are metadata blocks referred by a superblock that
+were not properly flushed. So don't skip the bio submission only when
+the integrity checker is enabled for the sake of simplicity, since this
+is a debug tool and not meant for use in non-debug builds.
 
- ============================================
- WARNING: possible recursive locking detected
- 5.16.0-rc1+ #18 Tainted: G            E
- --------------------------------------------
- wrk/1391 is trying to acquire lock:
- ffff975246c8e7d8 (&ei->socket.wq.wait){..-.}-{3:3}, at: smc_switch_to_fallback+0x109/0x250 [smc]
+fstests/btrfs/220 trigger a check-integrity warning like the following
+when CONFIG_BTRFS_FS_CHECK_INTEGRITY=y and the disk with WCE=0.
 
- but task is already holding lock:
- ffff975246c8f918 (&ei->socket.wq.wait){..-.}-{3:3}, at: smc_switch_to_fallback+0xfe/0x250 [smc]
+  btrfs: attempt to write superblock which references block M @5242880 (sdb2/5242880/0) which is not flushed out of disk's write cache (block flush_gen=1, dev->flush_gen=0)!
+  ------------[ cut here ]------------
+  WARNING: CPU: 28 PID: 843680 at fs/btrfs/check-integrity.c:2196 btrfsic_process_written_superblock+0x22a/0x2a0 [btrfs]
+  CPU: 28 PID: 843680 Comm: umount Not tainted 5.15.0-0.rc5.39.el8.x86_64 #1
+  Hardware name: Dell Inc. Precision T7610/0NK70N, BIOS A18 09/11/2019
+  RIP: 0010:btrfsic_process_written_superblock+0x22a/0x2a0 [btrfs]
+  RSP: 0018:ffffb642afb47940 EFLAGS: 00010246
+  RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+  RDX: 00000000ffffffff RSI: ffff8b722fc97d00 RDI: ffff8b722fc97d00
+  RBP: ffff8b5601c00000 R08: 0000000000000000 R09: c0000000ffff7fff
+  R10: 0000000000000001 R11: ffffb642afb476f8 R12: ffffffffffffffff
+  R13: ffffb642afb47974 R14: ffff8b5499254c00 R15: 0000000000000003
+  FS:  00007f00a06d4080(0000) GS:ffff8b722fc80000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: 00007fff5cff5ff0 CR3: 00000001c0c2a006 CR4: 00000000001706e0
+  Call Trace:
+   btrfsic_process_written_block+0x2f7/0x850 [btrfs]
+   __btrfsic_submit_bio.part.19+0x310/0x330 [btrfs]
+   ? bio_associate_blkg_from_css+0xa4/0x2c0
+   btrfsic_submit_bio+0x18/0x30 [btrfs]
+   write_dev_supers+0x81/0x2a0 [btrfs]
+   ? find_get_pages_range_tag+0x219/0x280
+   ? pagevec_lookup_range_tag+0x24/0x30
+   ? __filemap_fdatawait_range+0x6d/0xf0
+   ? __raw_callee_save___native_queued_spin_unlock+0x11/0x1e
+   ? find_first_extent_bit+0x9b/0x160 [btrfs]
+   ? __raw_callee_save___native_queued_spin_unlock+0x11/0x1e
+   write_all_supers+0x1b3/0xa70 [btrfs]
+   ? __raw_callee_save___native_queued_spin_unlock+0x11/0x1e
+   btrfs_commit_transaction+0x59d/0xac0 [btrfs]
+   close_ctree+0x11d/0x339 [btrfs]
+   generic_shutdown_super+0x71/0x110
+   kill_anon_super+0x14/0x30
+   btrfs_kill_super+0x12/0x20 [btrfs]
+   deactivate_locked_super+0x31/0x70
+   cleanup_mnt+0xb8/0x140
+   task_work_run+0x6d/0xb0
+   exit_to_user_mode_prepare+0x1f0/0x200
+   syscall_exit_to_user_mode+0x12/0x30
+   do_syscall_64+0x46/0x80
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+  RIP: 0033:0x7f009f711dfb
+  RSP: 002b:00007fff5cff7928 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+  RAX: 0000000000000000 RBX: 000055b68c6c9970 RCX: 00007f009f711dfb
+  RDX: 0000000000000001 RSI: 0000000000000000 RDI: 000055b68c6c9b50
+  RBP: 0000000000000000 R08: 000055b68c6ca900 R09: 00007f009f795580
+  R10: 0000000000000000 R11: 0000000000000246 R12: 000055b68c6c9b50
+  R13: 00007f00a04bf184 R14: 0000000000000000 R15: 00000000ffffffff
+  ---[ end trace 2c4b82abcef9eec4 ]---
+  S-65536(sdb2/65536/1)
+   -->
+  M-1064960(sdb2/1064960/1)
 
- other info that might help us debug this:
-  Possible unsafe locking scenario:
-
-        CPU0
-        ----
-   lock(&ei->socket.wq.wait);
-   lock(&ei->socket.wq.wait);
-
-  *** DEADLOCK ***
-
-  May be due to missing lock nesting notation
-
- 2 locks held by wrk/1391:
-  #0: ffff975246040130 (sk_lock-AF_SMC){+.+.}-{0:0}, at: smc_connect+0x43/0x150 [smc]
-  #1: ffff975246c8f918 (&ei->socket.wq.wait){..-.}-{3:3}, at: smc_switch_to_fallback+0xfe/0x250 [smc]
-
- stack backtrace:
- Call Trace:
-  <TASK>
-  dump_stack_lvl+0x56/0x7b
-  __lock_acquire+0x951/0x11f0
-  lock_acquire+0x27a/0x320
-  ? smc_switch_to_fallback+0x109/0x250 [smc]
-  ? smc_switch_to_fallback+0xfe/0x250 [smc]
-  _raw_spin_lock_irq+0x3b/0x80
-  ? smc_switch_to_fallback+0x109/0x250 [smc]
-  smc_switch_to_fallback+0x109/0x250 [smc]
-  smc_connect_fallback+0xe/0x30 [smc]
-  __smc_connect+0xcf/0x1090 [smc]
-  ? mark_held_locks+0x61/0x80
-  ? __local_bh_enable_ip+0x77/0xe0
-  ? lockdep_hardirqs_on+0xbf/0x130
-  ? smc_connect+0x12a/0x150 [smc]
-  smc_connect+0x12a/0x150 [smc]
-  __sys_connect+0x8a/0xc0
-  ? syscall_enter_from_user_mode+0x20/0x70
-  __x64_sys_connect+0x16/0x20
-  do_syscall_64+0x34/0x90
-  entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The nested locking in smc_switch_to_fallback() is considered to
-possibly cause a deadlock because smc_wait->lock and clc_wait->lock
-are the same type of lock. But actually it is safe so far since
-there is no other place trying to obtain smc_wait->lock when
-clc_wait->lock is held. So the patch replaces spin_lock() with
-spin_lock_nested() to avoid false report by lockdep.
-
-Link: https://lkml.org/lkml/2021/11/19/962
-Fixes: 2153bd1e3d3d ("Transfer remaining wait queue entries during fallback")
-Reported-by: syzbot+e979d3597f48262cb4ee@syzkaller.appspotmail.com
-Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
-Acked-by: Tony Lu <tonylu@linux.alibaba.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reviewed-by: Filipe Manana <fdmanana@gmail.com>
+Signed-off-by: Wang Yugui <wangyugui@e16-tech.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/smc/af_smc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/btrfs/disk-io.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index 00d3787387172..fa3b20e5f4608 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -483,7 +483,7 @@ static void smc_switch_to_fallback(struct smc_sock *smc)
- 		 * to clcsocket->wq during the fallback.
- 		 */
- 		spin_lock_irqsave(&smc_wait->lock, flags);
--		spin_lock(&clc_wait->lock);
-+		spin_lock_nested(&clc_wait->lock, SINGLE_DEPTH_NESTING);
- 		list_splice_init(&smc_wait->head, &clc_wait->head);
- 		spin_unlock(&clc_wait->lock);
- 		spin_unlock_irqrestore(&smc_wait->lock, flags);
+diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
+index c326535d5a80a..2ac920bdf4df5 100644
+--- a/fs/btrfs/disk-io.c
++++ b/fs/btrfs/disk-io.c
+@@ -3579,11 +3579,23 @@ static void btrfs_end_empty_barrier(struct bio *bio)
+  */
+ static void write_dev_flush(struct btrfs_device *device)
+ {
+-	struct request_queue *q = bdev_get_queue(device->bdev);
+ 	struct bio *bio = device->flush_bio;
+ 
++#ifndef CONFIG_BTRFS_FS_CHECK_INTEGRITY
++	/*
++	 * When a disk has write caching disabled, we skip submission of a bio
++	 * with flush and sync requests before writing the superblock, since
++	 * it's not needed. However when the integrity checker is enabled, this
++	 * results in reports that there are metadata blocks referred by a
++	 * superblock that were not properly flushed. So don't skip the bio
++	 * submission only when the integrity checker is enabled for the sake
++	 * of simplicity, since this is a debug tool and not meant for use in
++	 * non-debug builds.
++	 */
++	struct request_queue *q = bdev_get_queue(device->bdev);
+ 	if (!test_bit(QUEUE_FLAG_WC, &q->queue_flags))
+ 		return;
++#endif
+ 
+ 	bio_reset(bio);
+ 	bio->bi_end_io = btrfs_end_empty_barrier;
 -- 
 2.33.0
 

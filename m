@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE648469BC3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:15:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3E146A006
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244848AbhLFPSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:18:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
+        id S1442969AbhLFP42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:56:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349465AbhLFPM3 (ORCPT
+        with ESMTP id S1379680AbhLFPjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:12:29 -0500
+        Mon, 6 Dec 2021 10:39:25 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E1FC08C5CF;
-        Mon,  6 Dec 2021 07:05:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B31C08EBA9;
+        Mon,  6 Dec 2021 07:24:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A888DB81017;
-        Mon,  6 Dec 2021 15:05:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD993C341C2;
-        Mon,  6 Dec 2021 15:05:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77F17B8111C;
+        Mon,  6 Dec 2021 15:24:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CE9EC34901;
+        Mon,  6 Dec 2021 15:24:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803132;
-        bh=Za7w14I0BeP8sI25LDRatulLC0ftEkBOhS953bbtNFY=;
+        s=korg; t=1638804286;
+        bh=EjcFz6qOTfL7XRZQV2qa8K6VpXSHrW5FFEDptSCUrtQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yKuw7MvZkFn9jWrJhfSqX29Wk0XeG81j5+TmEnFztb476gQqeoUPi4WyvyjsbxffH
-         xGympvdRvVD0MGLwjiF1Ab76+hO+2UNO5As0zREy0Qd0+yAEUnUza+S5OxfBiS30b1
-         XorNVnvzu3CEHRHGvk1dIS8PsvdlcZrJHOPytaUQ=
+        b=Mecv4DO24gjWzWMYS0SFlPW70CfpyuX7FNbOXVKOufr/rS0/fL4IdaSbCc3DTfs3Q
+         lZOqI20zTdP+aLLDvOYaeCwk0FjZn6cMAgNt/Gql6rw/L1fg1l0ruhNhTpHtjNF44b
+         vlW7RFrffah7OjfI50Q7q88EoVTuENRIAJhcJ44M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tomasz Maciej Nowak <tmn505@gmail.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH 4.14 038/106] PCI: aardvark: Replace custom macros by standard linux/pci_regs.h macros
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 092/207] wireguard: allowedips: add missing __rcu annotation to satisfy sparse
 Date:   Mon,  6 Dec 2021 15:55:46 +0100
-Message-Id: <20211206145556.696984209@linuxfoundation.org>
+Message-Id: <20211206145613.414038221@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,101 +48,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit 96be36dbffacea0aa9e6ec4839583e79faa141a1 upstream.
+commit ae9287811ba75571cd69505d50ab0e612ace8572 upstream.
 
-PCI-E capability macros are already defined in linux/pci_regs.h.
-Remove their reimplementation in pcie-aardvark.
+A __rcu annotation got lost during refactoring, which caused sparse to
+become enraged.
 
-Link: https://lore.kernel.org/r/20200430080625.26070-9-pali@kernel.org
-Tested-by: Tomasz Maciej Nowak <tmn505@gmail.com>
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Marek Behún <kabel@kernel.org>
+Fixes: bf7b042dc62a ("wireguard: allowedips: free empty intermediate nodes when removing single node")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/host/pci-aardvark.c |   42 ++++++++++++++++++----------------------
- 1 file changed, 19 insertions(+), 23 deletions(-)
+ drivers/net/wireguard/allowedips.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/pci/host/pci-aardvark.c
-+++ b/drivers/pci/host/pci-aardvark.c
-@@ -29,17 +29,7 @@
- #define     PCIE_CORE_CMD_IO_ACCESS_EN				BIT(0)
- #define     PCIE_CORE_CMD_MEM_ACCESS_EN				BIT(1)
- #define     PCIE_CORE_CMD_MEM_IO_REQ_EN				BIT(2)
--#define PCIE_CORE_DEV_CTRL_STATS_REG				0xc8
--#define     PCIE_CORE_DEV_CTRL_STATS_RELAX_ORDER_DISABLE	(0 << 4)
--#define     PCIE_CORE_DEV_CTRL_STATS_MAX_PAYLOAD_SZ_SHIFT	5
--#define     PCIE_CORE_DEV_CTRL_STATS_SNOOP_DISABLE		(0 << 11)
--#define     PCIE_CORE_DEV_CTRL_STATS_MAX_RD_REQ_SIZE_SHIFT	12
--#define     PCIE_CORE_DEV_CTRL_STATS_MAX_RD_REQ_SZ		0x2
--#define PCIE_CORE_LINK_CTRL_STAT_REG				0xd0
--#define     PCIE_CORE_LINK_L0S_ENTRY				BIT(0)
--#define     PCIE_CORE_LINK_TRAINING				BIT(5)
--#define     PCIE_CORE_LINK_SPEED_SHIFT				16
--#define     PCIE_CORE_LINK_WIDTH_SHIFT				20
-+#define PCIE_CORE_PCIEXP_CAP					0xc0
- #define PCIE_CORE_ERR_CAPCTL_REG				0x118
- #define     PCIE_CORE_ERR_CAPCTL_ECRC_CHK_TX			BIT(5)
- #define     PCIE_CORE_ERR_CAPCTL_ECRC_CHK_TX_EN			BIT(6)
-@@ -229,6 +219,11 @@ static inline u32 advk_readl(struct advk
- 	return readl(pcie->base + reg);
+--- a/drivers/net/wireguard/allowedips.c
++++ b/drivers/net/wireguard/allowedips.c
+@@ -163,7 +163,7 @@ static bool node_placement(struct allowe
+ 	return exact;
  }
  
-+static inline u16 advk_read16(struct advk_pcie *pcie, u64 reg)
-+{
-+	return advk_readl(pcie, (reg & ~0x3)) >> ((reg & 0x3) * 8);
-+}
-+
- static int advk_pcie_link_up(struct advk_pcie *pcie)
+-static inline void connect_node(struct allowedips_node **parent, u8 bit, struct allowedips_node *node)
++static inline void connect_node(struct allowedips_node __rcu **parent, u8 bit, struct allowedips_node *node)
  {
- 	u32 val, ltssm_state;
-@@ -301,16 +296,16 @@ static int advk_pcie_train_at_gen(struct
- 	 * Start link training immediately after enabling it.
- 	 * This solves problems for some buggy cards.
- 	 */
--	reg = advk_readl(pcie, PCIE_CORE_LINK_CTRL_STAT_REG);
--	reg |= PCIE_CORE_LINK_TRAINING;
--	advk_writel(pcie, reg, PCIE_CORE_LINK_CTRL_STAT_REG);
-+	reg = advk_readl(pcie, PCIE_CORE_PCIEXP_CAP + PCI_EXP_LNKCTL);
-+	reg |= PCI_EXP_LNKCTL_RL;
-+	advk_writel(pcie, reg, PCIE_CORE_PCIEXP_CAP + PCI_EXP_LNKCTL);
- 
- 	ret = advk_pcie_wait_for_link(pcie);
- 	if (ret)
- 		return ret;
- 
--	reg = advk_readl(pcie, PCIE_CORE_LINK_CTRL_STAT_REG);
--	neg_gen = (reg >> PCIE_CORE_LINK_SPEED_SHIFT) & 0xf;
-+	reg = advk_read16(pcie, PCIE_CORE_PCIEXP_CAP + PCI_EXP_LNKSTA);
-+	neg_gen = reg & PCI_EXP_LNKSTA_CLS;
- 
- 	return neg_gen;
- }
-@@ -400,13 +395,14 @@ static void advk_pcie_setup_hw(struct ad
- 		PCIE_CORE_ERR_CAPCTL_ECRC_CHCK_RCV;
- 	advk_writel(pcie, reg, PCIE_CORE_ERR_CAPCTL_REG);
- 
--	/* Set PCIe Device Control and Status 1 PF0 register */
--	reg = PCIE_CORE_DEV_CTRL_STATS_RELAX_ORDER_DISABLE |
--		(7 << PCIE_CORE_DEV_CTRL_STATS_MAX_PAYLOAD_SZ_SHIFT) |
--		PCIE_CORE_DEV_CTRL_STATS_SNOOP_DISABLE |
--		(PCIE_CORE_DEV_CTRL_STATS_MAX_RD_REQ_SZ <<
--		 PCIE_CORE_DEV_CTRL_STATS_MAX_RD_REQ_SIZE_SHIFT);
--	advk_writel(pcie, reg, PCIE_CORE_DEV_CTRL_STATS_REG);
-+	/* Set PCIe Device Control register */
-+	reg = advk_readl(pcie, PCIE_CORE_PCIEXP_CAP + PCI_EXP_DEVCTL);
-+	reg &= ~PCI_EXP_DEVCTL_RELAX_EN;
-+	reg &= ~PCI_EXP_DEVCTL_NOSNOOP_EN;
-+	reg &= ~PCI_EXP_DEVCTL_READRQ;
-+	reg |= PCI_EXP_DEVCTL_PAYLOAD; /* Set max payload size */
-+	reg |= PCI_EXP_DEVCTL_READRQ_512B;
-+	advk_writel(pcie, reg, PCIE_CORE_PCIEXP_CAP + PCI_EXP_DEVCTL);
- 
- 	/* Program PCIe Control 2 to disable strict ordering */
- 	reg = PCIE_CORE_CTRL2_RESERVED |
+ 	node->parent_bit_packed = (unsigned long)parent | bit;
+ 	rcu_assign_pointer(*parent, node);
 
 

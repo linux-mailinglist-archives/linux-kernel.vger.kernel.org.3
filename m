@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCB0469B1B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F51A469F82
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348729AbhLFPMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:12:54 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42714 "EHLO
+        id S236913AbhLFPqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:46:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35080 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348138AbhLFPJ7 (ORCPT
+        with ESMTP id S1378286AbhLFP3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:09:59 -0500
+        Mon, 6 Dec 2021 10:29:14 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D5E2B81018;
-        Mon,  6 Dec 2021 15:06:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E729C341C5;
-        Mon,  6 Dec 2021 15:06:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1506B81120;
+        Mon,  6 Dec 2021 15:25:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2833CC34902;
+        Mon,  6 Dec 2021 15:25:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803188;
-        bh=PEGXhL5qfFKnVDDlay7Ex09mky0Suuspn5tDD76YoPE=;
+        s=korg; t=1638804341;
+        bh=7ChLCP/OKGry50Mf9RAvzQK8/j2BlcMeb4D9jk/YiVI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gBQhph88FjX+gWW4lrTjq+CXMo+KRp6qA6IESRJFpgms/TTq0RL6ZXF4XKUy4J8DS
-         uOrpaNomEpxRwFJ7hUTFh5cn/GYcgfl8BJg6fGYF4Nre3Oo8n7wCffX9H1xU9iGkEF
-         7ScFSRvMYyF2AiNr1HP6BhwwcktS/P303MuN/k20=
+        b=vFvjfohgHbuBwl08KLTjFBx3ucuYZhpmBpXg5oySXspiBMmeNqZ1c1y0kE0B1mJPV
+         YFBm4dEEZzvLfDSFQDtvvYfm9eqwVyXHlm3Mcm6l/hZLlFmmJiDFJk7ipcDWvg/Wv6
+         r48d5MNkOsBAjJouoOLYzWswP/okynqvF9LeFvF4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Justin Forbes <jmforbes@linuxtx.org>,
-        Miklos Szeredi <mszeredi@redhat.com>
-Subject: [PATCH 4.14 059/106] fuse: release pipe buf after last use
+        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 113/207] net: dsa: b53: Add SPI ID table
 Date:   Mon,  6 Dec 2021 15:56:07 +0100
-Message-Id: <20211206145557.470227027@linuxfoundation.org>
+Message-Id: <20211206145614.162641551@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,51 +45,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miklos Szeredi <mszeredi@redhat.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-commit 473441720c8616dfaf4451f9c7ea14f0eb5e5d65 upstream.
+commit 88362ebfd7fb569c78d5cb507aa9d3c8fc203839 upstream.
 
-Checking buf->flags should be done before the pipe_buf_release() is called
-on the pipe buffer, since releasing the buffer might modify the flags.
+Currently autoloading for SPI devices does not use the DT ID table, it
+uses SPI modalises. Supporting OF modalises is going to be difficult if
+not impractical, an attempt was made but has been reverted, so ensure
+that module autoloading works for this driver by adding an id_table
+listing the SPI IDs for everything.
 
-This is exactly what page_cache_pipe_buf_release() does, and which results
-in the same VM_BUG_ON_PAGE(PageLRU(page)) that the original patch was
-trying to fix.
-
-Reported-by: Justin Forbes <jmforbes@linuxtx.org>
-Fixes: 712a951025c0 ("fuse: fix page stealing")
-Cc: <stable@vger.kernel.org> # v2.6.35
-Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+Fixes: 96c8395e2166 ("spi: Revert modalias changes")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
 ---
- fs/fuse/dev.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/net/dsa/b53/b53_spi.c |   14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
---- a/fs/fuse/dev.c
-+++ b/fs/fuse/dev.c
-@@ -897,17 +897,17 @@ static int fuse_try_move_page(struct fus
- 		goto out_put_old;
- 	}
+--- a/drivers/net/dsa/b53/b53_spi.c
++++ b/drivers/net/dsa/b53/b53_spi.c
+@@ -349,6 +349,19 @@ static const struct of_device_id b53_spi
+ };
+ MODULE_DEVICE_TABLE(of, b53_spi_of_match);
  
-+	get_page(newpage);
++static const struct spi_device_id b53_spi_ids[] = {
++	{ .name = "bcm5325" },
++	{ .name = "bcm5365" },
++	{ .name = "bcm5395" },
++	{ .name = "bcm5397" },
++	{ .name = "bcm5398" },
++	{ .name = "bcm53115" },
++	{ .name = "bcm53125" },
++	{ .name = "bcm53128" },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(spi, b53_spi_ids);
 +
-+	if (!(buf->flags & PIPE_BUF_FLAG_LRU))
-+		lru_cache_add_file(newpage);
-+
- 	/*
- 	 * Release while we have extra ref on stolen page.  Otherwise
- 	 * anon_pipe_buf_release() might think the page can be reused.
- 	 */
- 	pipe_buf_release(cs->pipe, buf);
+ static struct spi_driver b53_spi_driver = {
+ 	.driver = {
+ 		.name	= "b53-switch",
+@@ -357,6 +370,7 @@ static struct spi_driver b53_spi_driver
+ 	.probe	= b53_spi_probe,
+ 	.remove	= b53_spi_remove,
+ 	.shutdown = b53_spi_shutdown,
++	.id_table = b53_spi_ids,
+ };
  
--	get_page(newpage);
--
--	if (!(buf->flags & PIPE_BUF_FLAG_LRU))
--		lru_cache_add_file(newpage);
--
- 	err = 0;
- 	spin_lock(&cs->req->waitq.lock);
- 	if (test_bit(FR_ABORTED, &cs->req->flags))
+ module_spi_driver(b53_spi_driver);
 
 

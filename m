@@ -2,109 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 581164695F6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 13:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF42C469606
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 13:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243410AbhLFMvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 07:51:51 -0500
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:48205 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243376AbhLFMvu (ORCPT
+        id S243482AbhLFM6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 07:58:33 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4203 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243410AbhLFM6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 07:51:50 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R431e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0UzdP5yc_1638794898;
-Received: from B-X3VXMD6M-2058.local(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0UzdP5yc_1638794898)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 06 Dec 2021 20:48:20 +0800
-From:   Xin Hao <xhao@linux.alibaba.com>
-Reply-To: xhao@linux.alibaba.com
-Subject: Re: [PATCH V1] mm/damon: Modify damon_rand() macro to static inline
- function
-To:     SeongJae Park <sj@kernel.org>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20211206124523.6259-1-sj@kernel.org>
-Message-ID: <08a13269-e3eb-219f-79bb-8d0153714c69@linux.alibaba.com>
-Date:   Mon, 6 Dec 2021 20:48:18 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        Mon, 6 Dec 2021 07:58:31 -0500
+Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J73FQ2mzLz6889p;
+        Mon,  6 Dec 2021 20:50:50 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Mon, 6 Dec 2021 13:55:00 +0100
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 6 Dec 2021 12:54:58 +0000
+From:   John Garry <john.garry@huawei.com>
+To:     <axboe@kernel.dk>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ming.lei@redhat.com>, <kashyap.desai@broadcom.com>,
+        <hare@suse.de>, "John Garry" <john.garry@huawei.com>
+Subject: [PATCH v2 0/3] blk-mq: Optimise blk_mq_queue_tag_busy_iter() for shared tags
+Date:   Mon, 6 Dec 2021 20:49:47 +0800
+Message-ID: <1638794990-137490-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-In-Reply-To: <20211206124523.6259-1-sj@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In [0] Kashyap reports high CPU usage for blk_mq_queue_tag_busy_iter()
+and callees for shared tags.
 
-On 12/6/21 8:45 PM, SeongJae Park wrote:
-> On Mon, 6 Dec 2021 20:41:29 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
->
->> The damon_rand() func can not be implemented as a macro.
->> Example:
->> 	damon_rand(a++, b);
->> The value of 'a' will be incremented twice, This is obviously
->> unreasonable, So there fix it.
->>
->> Fixes: b9a6ac4e4ede ("mm/damon: adaptively adjust regions")
->> Reported-by: Andrew Morton <akpm@linux-foundation.org>
->> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
->> ---
->>   include/linux/damon.h | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/include/linux/damon.h b/include/linux/damon.h
->> index c6df025d8704..bc9c8932b1e8 100644
->> --- a/include/linux/damon.h
->> +++ b/include/linux/damon.h
->> @@ -19,7 +19,10 @@
->>   #define DAMOS_MAX_SCORE		(99)
->>
->>   /* Get a random number in [l, r) */
->> -#define damon_rand(l, r) (l + prandom_u32_max(r - l))
->> +static inline unsigned long damon_rand(unsigned long l, unsigned long r)
->> +{
->> +	return l + (r - l);
-> Seems prandom_u32_max() is missed?
+Indeed blk_mq_queue_tag_busy_iter() would be less optimum for moving to
+shared tags, but it was not optimum previously.
 
-Sorry, my fault, i write a simple test case like this, but i forgot to 
-correct in patch, i will send a new one.
+This series optimises by having only a single iter (per regular and resv
+tags) for the shared tags, instead of an iter per HW queue.
 
-#include <stdio.h>
+[0] https://lore.kernel.org/linux-block/e4e92abbe9d52bcba6b8cc6c91c442cc@mail.gmail.com/
 
-#define damon_rand(l, r) (l + (r - l))
-static inline long damon_rand1(int l, int r)
-{
-         return l + (r - l);
-}
+Differences to v1:
+- Add tested-by and reviewed-by tags
+- Reformat 3/3 a bit to keep <= 80 char lines
+	- I kept the RB tags, so please check and let me know if not ok
+	  with the changes
 
-int main(void)
-{
+John Garry (3):
+  blk-mq: Drop busy_iter_fn blk_mq_hw_ctx argument
+  blk-mq: Delete busy_iter_fn
+  blk-mq: Optimise blk_mq_queue_tag_busy_iter() for shared tags
 
-         int a = 0;
-         int b = 0;
-         damon_rand(a++, 4);
-         damon_rand1(b++, 4);
-
-         printf("a is %d \n", a);
-         printf("b is %d \n", b);
-
-         return 0;
-}
-
->
->
-> Thanks,
-> SJ
->
->> +}
->>
->>   /**
->>    * struct damon_addr_range - Represents an address region of [@start, @end).
->> --
->> 2.31.0
+ block/blk-mq-tag.c     | 65 ++++++++++++++++++++++++++++--------------
+ block/blk-mq-tag.h     |  2 +-
+ block/blk-mq.c         | 17 ++++++-----
+ include/linux/blk-mq.h |  2 --
+ 4 files changed, 53 insertions(+), 33 deletions(-)
 
 -- 
-Best Regards!
-Xin Hao
+2.26.2
 

@@ -2,89 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 418E74698D6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 526E04698D8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344255AbhLFO3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 09:29:39 -0500
-Received: from foss.arm.com ([217.140.110.172]:58812 "EHLO foss.arm.com"
+        id S1344278AbhLFO3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 09:29:43 -0500
+Received: from uho.ysoft.cz ([81.19.3.130]:13946 "EHLO uho.ysoft.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343580AbhLFO3h (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 09:29:37 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C566F1FB;
-        Mon,  6 Dec 2021 06:26:08 -0800 (PST)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8FCFE3F5A1;
-        Mon,  6 Dec 2021 06:26:07 -0800 (PST)
-Date:   Mon, 6 Dec 2021 14:26:01 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh@kernel.org>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/6] PCI: pci-bridge-emul: Various fixes
-Message-ID: <20211206142601.GA20570@lpieralisi>
-References: <20211124155944.1290-1-pali@kernel.org>
- <163879317819.3988.9390653012838076482.b4-ty@arm.com>
- <20211206122451.v4pci63ox3hntsw6@pali>
+        id S1344259AbhLFO3k (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 09:29:40 -0500
+Received: from localhost.localdomain (unknown [10.0.30.84])
+        by uho.ysoft.cz (Postfix) with ESMTP id 9136EA22D9;
+        Mon,  6 Dec 2021 15:26:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
+        s=20160406-ysoft-com; t=1638800769;
+        bh=EwWBPVjwFWUEpxAXGfNoM0zA1YudXlRd/su3eJhTQA0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jug6j8+QHhumQGEgLs4N8AluV4gN7a/8iR91CZ7EU/8yiN7jy+FtggLMNG3gpMMHl
+         t6yT9lNNaiVpzWZHm5r+F2tAPxXMotz4Vjd4JCtQmb+3UMcOcu+kYoIZ8as8JdqzqU
+         Fx2ORqBU32uOE92UBWGtloSDpCJfIcs1EYOP/l3E=
+From:   =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
+To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>
+Cc:     Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] ARM: dts: imx6dl-yapp4: Remove not-yet added support for sound from Crux
+Date:   Mon,  6 Dec 2021 15:26:01 +0100
+Message-Id: <20211206142601.373807-1-michal.vokac@ysoft.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <202112061855.SidQyicE-lkp@intel.com>
+References: <202112061855.SidQyicE-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211206122451.v4pci63ox3hntsw6@pali>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 01:24:51PM +0100, Pali Roh·r wrote:
-> On Monday 06 December 2021 12:19:57 Lorenzo Pieralisi wrote:
-> > On Wed, 24 Nov 2021 16:59:38 +0100, Pali Roh·r wrote:
-> > > This patch series contains various fixes for pci-bridge-emul code.
-> > > This code is used only by pci-aardvark.c and pci-mvebu.c drivers.
-> > > 
-> > > Pali Roh·r (6):
-> > >   PCI: pci-bridge-emul: Make expansion ROM Base Address register
-> > >     read-only
-> > >   PCI: pci-bridge-emul: Properly mark reserved PCIe bits in PCI config
-> > >     space
-> > >   PCI: pci-bridge-emul: Add definitions for missing capabilities
-> > >     registers
-> > >   PCI: pci-bridge-emul: Fix definitions of reserved bits
-> > >   PCI: pci-bridge-emul: Correctly set PCIe capabilities
-> > >   PCI: pci-bridge-emul: Set PCI_STATUS_CAP_LIST for PCIe device
-> > > 
-> > > [...]
-> > 
-> > Applied to pci/bridge-emul, thanks!
-> > 
-> > [1/6] PCI: pci-bridge-emul: Make expansion ROM Base Address register read-only
-> >       https://git.kernel.org/lpieralisi/pci/c/1c1a3b4d3e
-> > [2/6] PCI: pci-bridge-emul: Properly mark reserved PCIe bits in PCI config space
-> >       https://git.kernel.org/lpieralisi/pci/c/7b067ac63a
-> > [3/6] PCI: pci-bridge-emul: Add definitions for missing capabilities registers
-> >       https://git.kernel.org/lpieralisi/pci/c/faa3e547f4
-> 
-> Hello Lorenzo! This patch "PCI: pci-bridge-emul: Add definitions for
-> missing capabilities registers" is now in your two different branches:
-> pci/bridge-emul and pci/aardvark. Not sure if you want to have this same
-> patch on two places... So please check.
+Remove mistakingly added support for audio codec. We support the coded
+by our downstream patches but the appropriate driver and bindings are not
+in mainline yet.
 
-Dropped, thanks.
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: a4d744ac2bab ("ARM: dts: imx6dl-yapp4: Add Y Soft IOTA Crux/Crux+ board")
+Signed-off-by: Michal Vok√°ƒç <michal.vokac@ysoft.com>
+---
+ arch/arm/boot/dts/imx6q-yapp4-crux.dts       | 22 --------------------
+ arch/arm/boot/dts/imx6qp-yapp4-crux-plus.dts | 22 --------------------
+ 2 files changed, 44 deletions(-)
 
-Lorenzo
+diff --git a/arch/arm/boot/dts/imx6q-yapp4-crux.dts b/arch/arm/boot/dts/imx6q-yapp4-crux.dts
+index deb18c57cf18..15f4824a5142 100644
+--- a/arch/arm/boot/dts/imx6q-yapp4-crux.dts
++++ b/arch/arm/boot/dts/imx6q-yapp4-crux.dts
+@@ -17,22 +17,10 @@ memory@10000000 {
+ 	};
+ };
+ 
+-&audmux {
+-	status = "okay";
+-};
+-
+-&codec {
+-	status = "okay";
+-};
+-
+ &gpio_oled {
+ 	status = "okay";
+ };
+ 
+-&i2c1 {
+-	status = "okay";
+-};
+-
+ &leds {
+ 	status = "okay";
+ };
+@@ -49,16 +37,6 @@ &reg_usb_h1_vbus {
+ 	status = "okay";
+ };
+ 
+-&sound {
+-	audio-routing =
+-		   "Ext Spk", "LSOUT";
+-	status = "okay";
+-};
+-
+-&ssi2 {
+-	status = "okay";
+-};
+-
+ &touchkeys {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/imx6qp-yapp4-crux-plus.dts b/arch/arm/boot/dts/imx6qp-yapp4-crux-plus.dts
+index a450a77f920f..cea165f2161a 100644
+--- a/arch/arm/boot/dts/imx6qp-yapp4-crux-plus.dts
++++ b/arch/arm/boot/dts/imx6qp-yapp4-crux-plus.dts
+@@ -17,22 +17,10 @@ memory@10000000 {
+ 	};
+ };
+ 
+-&audmux {
+-	status = "okay";
+-};
+-
+-&codec {
+-	status = "okay";
+-};
+-
+ &gpio_oled {
+ 	status = "okay";
+ };
+ 
+-&i2c1 {
+-	status = "okay";
+-};
+-
+ &leds {
+ 	status = "okay";
+ };
+@@ -49,16 +37,6 @@ &reg_usb_h1_vbus {
+ 	status = "okay";
+ };
+ 
+-&sound {
+-	audio-routing =
+-		   "Ext Spk", "LSOUT";
+-	status = "okay";
+-};
+-
+-&ssi2 {
+-	status = "okay";
+-};
+-
+ &touchkeys {
+ 	status = "okay";
+ };
+-- 
+2.25.1
 
-> > [4/6] PCI: pci-bridge-emul: Fix definitions of reserved bits
-> >       https://git.kernel.org/lpieralisi/pci/c/a3ab28a2e3
-> > [5/6] PCI: pci-bridge-emul: Correctly set PCIe capabilities
-> >       https://git.kernel.org/lpieralisi/pci/c/0f7ba81700
-> > [6/6] PCI: pci-bridge-emul: Set PCI_STATUS_CAP_LIST for PCIe device
-> >       https://git.kernel.org/lpieralisi/pci/c/32051099e8
-> > 
-> > Thanks,
-> > Lorenzo

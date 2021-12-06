@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A62469C87
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:20:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35CA4469CD5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbhLFPXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:23:23 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47532 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346591AbhLFPOO (ORCPT
+        id S1386356AbhLFP00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:26:26 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36188 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359329AbhLFPRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:14:14 -0500
+        Mon, 6 Dec 2021 10:17:09 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85EC4B8101C;
-        Mon,  6 Dec 2021 15:10:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63FAC341C2;
-        Mon,  6 Dec 2021 15:10:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFD7E61309;
+        Mon,  6 Dec 2021 15:13:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F86FC341C2;
+        Mon,  6 Dec 2021 15:13:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803443;
-        bh=1A0bqVUJo0WfG5Unqm6/yq/dOUDD5LqYsqjQ/WjxwJo=;
+        s=korg; t=1638803619;
+        bh=p6LYL8+1mm261afjJwqkm3hpF347y2q+hRVR1I3Inyg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CDGZEDuDYBnwTvWHnRTcCr+qOvHxzSbl03CkO/1qq6ICXT8V5aurgr02Spz6cXF5H
-         rg67gVrTYSIC9L37Ug6TJDzH6VzdBD8QJo8mGIFdttUroOp7u8kcz2UBuDJecMoavs
-         h/L82KAXvOL/skfkgo41PuYu/tjPabHc7n5j8JdU=
+        b=1soBUlMR4wBPfTq0XIh8btm37Nj4Yc17KksaXWjYg+qo6jZjReY6jp/03xjfzS3GR
+         nEPmV66U2UwSHtmbzdsLceE2oIgbE1OCc+ydo2ZA6MlQigKydIUDlEzMb7Gx6M2BPd
+         KLXueaWRE+jtMT5+zSOEZYGVhl5aImhpbsv557m0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joerg Roedel <jroedel@suse.de>,
-        Borislav Petkov <bp@suse.de>
-Subject: [PATCH 4.19 43/48] x86/64/mm: Map all kernel memory into trampoline_pgd
+        stable@vger.kernel.org,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 5.4 56/70] xhci: Fix commad ring abort, write all 64 bits to CRCR register.
 Date:   Mon,  6 Dec 2021 15:57:00 +0100
-Message-Id: <20211206145550.310092014@linuxfoundation.org>
+Message-Id: <20211206145553.857150613@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
-References: <20211206145548.859182340@linuxfoundation.org>
+In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
+References: <20211206145551.909846023@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,93 +46,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joerg Roedel <jroedel@suse.de>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-commit 51523ed1c26758de1af7e58730a656875f72f783 upstream.
+commit 09f736aa95476631227d2dc0e6b9aeee1ad7ed58 upstream.
 
-The trampoline_pgd only maps the 0xfffffff000000000-0xffffffffffffffff
-range of kernel memory (with 4-level paging). This range contains the
-kernel's text+data+bss mappings and the module mapping space but not the
-direct mapping and the vmalloc area.
+Turns out some xHC controllers require all 64 bits in the CRCR register
+to be written to execute a command abort.
 
-This is enough to get the application processors out of real-mode, but
-for code that switches back to real-mode the trampoline_pgd is missing
-important parts of the address space. For example, consider this code
-from arch/x86/kernel/reboot.c, function machine_real_restart() for a
-64-bit kernel:
+The lower 32 bits containing the command abort bit is written first.
+In case the command ring stops before we write the upper 32 bits then
+hardware may use these upper bits to set the commnd ring dequeue pointer.
 
-  #ifdef CONFIG_X86_32
-  	load_cr3(initial_page_table);
-  #else
-  	write_cr3(real_mode_header->trampoline_pgd);
+Solve this by making sure the upper 32 bits contain a valid command
+ring dequeue pointer.
 
-  	/* Exiting long mode will fail if CR4.PCIDE is set. */
-  	if (boot_cpu_has(X86_FEATURE_PCID))
-  		cr4_clear_bits(X86_CR4_PCIDE);
-  #endif
+The original patch that only wrote the first 32 to stop the ring went
+to stable, so this fix should go there as well.
 
-  	/* Jump to the identity-mapped low memory code */
-  #ifdef CONFIG_X86_32
-  	asm volatile("jmpl *%0" : :
-  		     "rm" (real_mode_header->machine_real_restart_asm),
-  		     "a" (type));
-  #else
-  	asm volatile("ljmpl *%0" : :
-  		     "m" (real_mode_header->machine_real_restart_asm),
-  		     "D" (type));
-  #endif
-
-The code switches to the trampoline_pgd, which unmaps the direct mapping
-and also the kernel stack. The call to cr4_clear_bits() will find no
-stack and crash the machine. The real_mode_header pointer below points
-into the direct mapping, and dereferencing it also causes a crash.
-
-The reason this does not crash always is only that kernel mappings are
-global and the CR3 switch does not flush those mappings. But if theses
-mappings are not in the TLB already, the above code will crash before it
-can jump to the real-mode stub.
-
-Extend the trampoline_pgd to contain all kernel mappings to prevent
-these crashes and to make code which runs on this page-table more
-robust.
-
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Signed-off-by: Borislav Petkov <bp@suse.de>
+Fixes: ff0e50d3564f ("xhci: Fix command ring pointer corruption while aborting a command")
 Cc: stable@vger.kernel.org
-Link: https://lkml.kernel.org/r/20211202153226.22946-5-joro@8bytes.org
+Tested-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20211126122340.1193239-2-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/realmode/init.c |   12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/usb/host/xhci-ring.c |   21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
---- a/arch/x86/realmode/init.c
-+++ b/arch/x86/realmode/init.c
-@@ -55,6 +55,7 @@ static void __init setup_real_mode(void)
- #ifdef CONFIG_X86_64
- 	u64 *trampoline_pgd;
- 	u64 efer;
-+	int i;
- #endif
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -339,7 +339,9 @@ static void xhci_handle_stopped_cmd_ring
+ /* Must be called with xhci->lock held, releases and aquires lock back */
+ static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
+ {
+-	u32 temp_32;
++	struct xhci_segment *new_seg	= xhci->cmd_ring->deq_seg;
++	union xhci_trb *new_deq		= xhci->cmd_ring->dequeue;
++	u64 crcr;
+ 	int ret;
  
- 	base = (unsigned char *)real_mode_header;
-@@ -113,8 +114,17 @@ static void __init setup_real_mode(void)
- 		trampoline_header->flags |= TH_FLAGS_SME_ACTIVE;
+ 	xhci_dbg(xhci, "Abort command ring\n");
+@@ -348,13 +350,18 @@ static int xhci_abort_cmd_ring(struct xh
  
- 	trampoline_pgd = (u64 *) __va(real_mode_header->trampoline_pgd);
+ 	/*
+ 	 * The control bits like command stop, abort are located in lower
+-	 * dword of the command ring control register. Limit the write
+-	 * to the lower dword to avoid corrupting the command ring pointer
+-	 * in case if the command ring is stopped by the time upper dword
+-	 * is written.
++	 * dword of the command ring control register.
++	 * Some controllers require all 64 bits to be written to abort the ring.
++	 * Make sure the upper dword is valid, pointing to the next command,
++	 * avoiding corrupting the command ring pointer in case the command ring
++	 * is stopped by the time the upper dword is written.
+ 	 */
+-	temp_32 = readl(&xhci->op_regs->cmd_ring);
+-	writel(temp_32 | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
++	next_trb(xhci, NULL, &new_seg, &new_deq);
++	if (trb_is_link(new_deq))
++		next_trb(xhci, NULL, &new_seg, &new_deq);
 +
-+	/* Map the real mode stub as virtual == physical */
- 	trampoline_pgd[0] = trampoline_pgd_entry.pgd;
--	trampoline_pgd[511] = init_top_pgt[511].pgd;
-+
-+	/*
-+	 * Include the entirety of the kernel mapping into the trampoline
-+	 * PGD.  This way, all mappings present in the normal kernel page
-+	 * tables are usable while running on trampoline_pgd.
-+	 */
-+	for (i = pgd_index(__PAGE_OFFSET); i < PTRS_PER_PGD; i++)
-+		trampoline_pgd[i] = init_top_pgt[i].pgd;
- #endif
- }
++	crcr = xhci_trb_virt_to_dma(new_seg, new_deq);
++	xhci_write_64(xhci, crcr | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
  
+ 	/* Section 4.6.1.2 of xHCI 1.0 spec says software should also time the
+ 	 * completion of the Command Abort operation. If CRR is not negated in 5
 
 

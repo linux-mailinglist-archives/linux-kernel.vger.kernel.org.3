@@ -2,167 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6FF34695A3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 13:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 802AD4695A0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 13:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243123AbhLFM2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 07:28:35 -0500
-Received: from mail-ua1-f53.google.com ([209.85.222.53]:44652 "EHLO
-        mail-ua1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243054AbhLFM2b (ORCPT
+        id S243104AbhLFM2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 07:28:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234735AbhLFM2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 07:28:31 -0500
-Received: by mail-ua1-f53.google.com with SMTP id p2so19064732uad.11;
-        Mon, 06 Dec 2021 04:25:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0pgLWD4rU3sbBIUNHmWzCgR9e6k+oT6xFT9MN28bnto=;
-        b=1Zuv1i5du31tjgd0ZJyxWv3sHJ5fPQS8hbqV58KO1VnSHEKzYlOZW8P/cNb/Q18dIE
-         J29wMjg8W0XfK+q9e8MDMQLmfGFNwyBDkpnojwckF3dYr9ncDBWmL7uZ67cl7Gmd21A3
-         jc1VXZb/penBKq4O6Hod/pWlzEepX8kLy1zbeQ/gUcch4qob1CQSK7A6GleE8Yj9PrsI
-         Yqq7bbqIDMJNC1QP8CzD0vKe87/rGlyBJbiVCXlNdQ+SLxa5qwVpkn8H+k0sgp2AtqUs
-         kYL2bCVSup3fLDlUFP8O4npkg0UVO+LsyJjuSgJaepcE21NTbHZeFSb8t+yXlJ/CCWY9
-         5W7A==
-X-Gm-Message-State: AOAM531+97+WHtuF8lCCJRV9xL8QMN1c4h6yQ8KlvULcjbqoPaOyBgnG
-        yuLyCB9PTtILae8PiTVRF7ckEjXY6pEWBw==
-X-Google-Smtp-Source: ABdhPJwoqFGcOkuQcX/pcvHiF8ydvpeA89sya2f5HnXY5SNJ6nxXV6O8WO8TYLpyDuRxDk5pciyp2Q==
-X-Received: by 2002:a05:6102:3053:: with SMTP id w19mr31242273vsa.60.1638793501684;
-        Mon, 06 Dec 2021 04:25:01 -0800 (PST)
-Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com. [209.85.221.177])
-        by smtp.gmail.com with ESMTPSA id g28sm3992429vkl.16.2021.12.06.04.25.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 04:25:00 -0800 (PST)
-Received: by mail-vk1-f177.google.com with SMTP id s1so6618187vks.9;
-        Mon, 06 Dec 2021 04:25:00 -0800 (PST)
-X-Received: by 2002:a1f:9f04:: with SMTP id i4mr39914732vke.33.1638793500250;
- Mon, 06 Dec 2021 04:25:00 -0800 (PST)
+        Mon, 6 Dec 2021 07:28:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F1EC061746;
+        Mon,  6 Dec 2021 04:24:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA2A361260;
+        Mon,  6 Dec 2021 12:24:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F037C341C2;
+        Mon,  6 Dec 2021 12:24:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638793494;
+        bh=uyixaSob4Wksy6mAI4HQO4bfeCI5HAdK8TB5r7VhL+U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J9Q0kAy0bcvE/fn2YaFSAu5uHyhcGXIWuiUUkia/tXj/dO6wDA/1KVW8bIZFCXQ3G
+         qbmDF+DT4IIBm0XSupRoTPzRBWSFbhR0FeSrpzLVGwTxhWM9xwEYY/iXqisfsyrUr+
+         y/KBihlDQYi6COhB7/oZWc6yZXLXj+1PnsRCkkFqUuHQsGuycaVniqi4lgFlF0SvOO
+         eNGVaScg5A0VrL1Hu+BjBq156Y8g2Og3Y6qTwhtA1Tcvty/eGoeVq4CND1GWO4uKZJ
+         KlRmKg82sYv/H6OC3Eu4I/syWDSnZEl5HFXq3wCQNRs/p0qsuaYO+QARxXthmD7xng
+         00pK6bIOEaE8w==
+Received: by pali.im (Postfix)
+        id 80E72F63; Mon,  6 Dec 2021 13:24:51 +0100 (CET)
+Date:   Mon, 6 Dec 2021 13:24:51 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh@kernel.org>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/6] PCI: pci-bridge-emul: Various fixes
+Message-ID: <20211206122451.v4pci63ox3hntsw6@pali>
+References: <20211124155944.1290-1-pali@kernel.org>
+ <163879317819.3988.9390653012838076482.b4-ty@arm.com>
 MIME-Version: 1.0
-References: <20211204204121.2367127-1-gsomlo@gmail.com> <20211204204121.2367127-4-gsomlo@gmail.com>
-In-Reply-To: <20211204204121.2367127-4-gsomlo@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 6 Dec 2021 13:24:49 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXkmJ8qxk48AaiC=o0x4manGrL2-J3W0v8GkTaoFoAXuw@mail.gmail.com>
-Message-ID: <CAMuHMdXkmJ8qxk48AaiC=o0x4manGrL2-J3W0v8GkTaoFoAXuw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] mmc: Add driver for LiteX's LiteSDCard interface
-To:     Gabriel Somlo <gsomlo@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Kamil Rakoczy <krakoczy@antmicro.com>,
-        mdudek@internships.antmicro.com, paulus@ozlabs.org,
-        Joel Stanley <joel@jms.id.au>,
-        Stafford Horne <shorne@gmail.com>,
-        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr,
-        Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <163879317819.3988.9390653012838076482.b4-ty@arm.com>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gabriel,
+On Monday 06 December 2021 12:19:57 Lorenzo Pieralisi wrote:
+> On Wed, 24 Nov 2021 16:59:38 +0100, Pali Rohár wrote:
+> > This patch series contains various fixes for pci-bridge-emul code.
+> > This code is used only by pci-aardvark.c and pci-mvebu.c drivers.
+> > 
+> > Pali Rohár (6):
+> >   PCI: pci-bridge-emul: Make expansion ROM Base Address register
+> >     read-only
+> >   PCI: pci-bridge-emul: Properly mark reserved PCIe bits in PCI config
+> >     space
+> >   PCI: pci-bridge-emul: Add definitions for missing capabilities
+> >     registers
+> >   PCI: pci-bridge-emul: Fix definitions of reserved bits
+> >   PCI: pci-bridge-emul: Correctly set PCIe capabilities
+> >   PCI: pci-bridge-emul: Set PCI_STATUS_CAP_LIST for PCIe device
+> > 
+> > [...]
+> 
+> Applied to pci/bridge-emul, thanks!
+> 
+> [1/6] PCI: pci-bridge-emul: Make expansion ROM Base Address register read-only
+>       https://git.kernel.org/lpieralisi/pci/c/1c1a3b4d3e
+> [2/6] PCI: pci-bridge-emul: Properly mark reserved PCIe bits in PCI config space
+>       https://git.kernel.org/lpieralisi/pci/c/7b067ac63a
+> [3/6] PCI: pci-bridge-emul: Add definitions for missing capabilities registers
+>       https://git.kernel.org/lpieralisi/pci/c/faa3e547f4
 
-On Sat, Dec 4, 2021 at 9:41 PM Gabriel Somlo <gsomlo@gmail.com> wrote:
-> LiteX (https://github.com/enjoy-digital/litex) is a SoC framework
-> that targets FPGAs. LiteSDCard is a small footprint, configurable
-> SDCard core commonly used in LiteX designs.
->
-> The driver was first written in May 2020 and has been maintained
-> cooperatively by the LiteX community. Thanks to all contributors!
->
-> Co-developed-by: Kamil Rakoczy <krakoczy@antmicro.com>
-> Signed-off-by: Kamil Rakoczy <krakoczy@antmicro.com>
-> Co-developed-by: Maciej Dudek <mdudek@internships.antmicro.com>
-> Signed-off-by: Maciej Dudek <mdudek@internships.antmicro.com>
-> Co-developed-by: Paul Mackerras <paulus@ozlabs.org>
-> Signed-off-by: Paul Mackerras <paulus@ozlabs.org>
-> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+Hello Lorenzo! This patch "PCI: pci-bridge-emul: Add definitions for
+missing capabilities registers" is now in your two different branches:
+pci/bridge-emul and pci/aardvark. Not sure if you want to have this same
+patch on two places... So please check.
 
-> --- /dev/null
-> +++ b/drivers/mmc/host/litex_mmc.c
-
-> +static void
-> +litex_set_clk(struct litex_mmc_host *host, unsigned int clk_freq)
-> +{
-> +       u32 div = clk_freq ? host->freq / clk_freq : 256;
-> +
-> +       div = roundup_pow_of_two(div);
-> +       div = min_t(u32, max_t(u32, div, 2), 256);
-> +       dev_info(&host->dev->dev, "sdclk_freq=%d: set to %d via div=%d\n",
-> +                clk_freq, host->freq / div, div);
-> +       litex_write16(host->sdphy + LITEX_PHY_CLOCKERDIV, div);
-> +}
-> +
-> +static void
-> +litex_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
-> +{
-> +       struct litex_mmc_host *host = mmc_priv(mmc);
-> +
-> +       /* NOTE: Ignore any ios->bus_width updates; they occur right after
-> +        * the mmc core sends its own acmd6 bus-width change notification,
-> +        * which is redundant since we snoop on the command flow and inject
-> +        * an early acmd6 before the first data transfer command is sent!
-> +        */
-> +
-> +       /* update sdcard clock */
-> +       if (ios->clock != host->clock) {
-> +               litex_set_clk(host, ios->clock);
-> +               host->clock = ios->clock;
-
-It might be better to move the assignment to host->clock into the callee,
-to avoid it becoming out-of-sync when a second caller is introduced.
-
-> +       }
-> +}
-
-> +static int
-> +litex_mmc_probe(struct platform_device *pdev)
-> +{
-> +       struct litex_mmc_host *host;
-> +       struct mmc_host *mmc;
-> +       struct device_node *cpu;
-> +       int ret;
-> +
-> +       mmc = mmc_alloc_host(sizeof(struct litex_mmc_host), &pdev->dev);
-> +       /* NOTE: defaults to max_[req,seg]_size=PAGE_SIZE, max_blk_size=512,
-> +        * and max_blk_count accordingly set to 8;
-> +        * If for some reason we need to modify max_blk_count, we must also
-> +        * re-calculate `max_[req,seg]_size = max_blk_size * max_blk_count;`
-> +        */
-> +       if (!mmc)
-> +               return -ENOMEM;
-> +
-> +       host = mmc_priv(mmc);
-> +       host->mmc = mmc;
-> +       host->dev = pdev;
-> +
-> +       host->clock = 0;
-> +       cpu = of_get_next_cpu_node(NULL);
-> +       ret = of_property_read_u32(cpu, "clock-frequency", &host->freq);
-> +       of_node_put(cpu);
-> +       if (ret) {
-> +               dev_err(&pdev->dev, "No \"clock-frequency\" property in DT\n");
-> +               goto err_free_host;
-> +       }
-
-This looks fragile.
-Shouldn't the clock be obtained from a clock property in the mmc
-device node, pointing to a clock provider?
-How does the real clock tree look like?
-
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> [4/6] PCI: pci-bridge-emul: Fix definitions of reserved bits
+>       https://git.kernel.org/lpieralisi/pci/c/a3ab28a2e3
+> [5/6] PCI: pci-bridge-emul: Correctly set PCIe capabilities
+>       https://git.kernel.org/lpieralisi/pci/c/0f7ba81700
+> [6/6] PCI: pci-bridge-emul: Set PCI_STATUS_CAP_LIST for PCIe device
+>       https://git.kernel.org/lpieralisi/pci/c/32051099e8
+> 
+> Thanks,
+> Lorenzo

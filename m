@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A75469F87
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4D8469D07
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357590AbhLFPsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:48:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388248AbhLFPca (ORCPT
+        id S1348270AbhLFP16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:27:58 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36936 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357590AbhLFPR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:32:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B63C09B06F;
-        Mon,  6 Dec 2021 07:19:33 -0800 (PST)
+        Mon, 6 Dec 2021 10:17:56 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE5D4B81118;
-        Mon,  6 Dec 2021 15:19:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D938C341C1;
-        Mon,  6 Dec 2021 15:19:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E88C6133D;
+        Mon,  6 Dec 2021 15:14:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26FBDC341C1;
+        Mon,  6 Dec 2021 15:14:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803970;
-        bh=jvzNmJK63+tjJYtDhzEY6ibaTayFSQtHZM1E31RcI/w=;
+        s=korg; t=1638803666;
+        bh=f5jn4Mw2tfC7qY0Ro02sm2n4qtXnx5isnSSf8JbTxII=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ojPA3SKQvuq3oKt9jP45mTe+kOu8TN5n4jfcVsPrBvAc8QmzRO2zcp+X1xj7nPIvk
-         WbvqZRffxMZE1GPsCiK7acmdrUM+4m4L+3craGh1uMGPzJXZT6idn3SCG5z3McXeNj
-         vM3z0xpp2yaySYKRv0c/cPu1kpVHkCwPVId/+Bow=
+        b=l6FR+xnJKPM2L+3wl9di2lehh2cRHEtLWHIv768Oy74rGOf8mF+Zp0Hr0MaTd/ZJu
+         uDRFpfjbxWhgZGA9SYbc4j3D/spFVaYmgeoeO07hj/QH3wBDLloBR7kmKf87XZ8v9f
+         WFWnzccQK7TEUMxFniNJC673+c2Wq1DGAL3IAQ8E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.10 112/130] parisc: Fix "make install" on newer debian releases
-Date:   Mon,  6 Dec 2021 15:57:09 +0100
-Message-Id: <20211206145603.510167968@linuxfoundation.org>
+        stable@vger.kernel.org, Jay Dolan <jay.dolan@accesio.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH 5.4 66/70] serial: 8250_pci: rewrite pericom_do_set_divisor()
+Date:   Mon,  6 Dec 2021 15:57:10 +0100
+Message-Id: <20211206145554.212061966@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
+References: <20211206145551.909846023@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,30 +45,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Jay Dolan <jay.dolan@accesio.com>
 
-commit 0f9fee4cdebfbe695c297e5b603a275e2557c1cc upstream.
+commit bb1201d4b38ec67bd9a871cf86b0cc10f28b15b5 upstream.
 
-On newer debian releases the debian-provided "installkernel" script is
-installed in /usr/sbin. Fix the kernel install.sh script to look for the
-script in this directory as well.
+Have pericom_do_set_divisor() use the uartclk instead of a hard coded
+value to work with different speed crystals. Tested with 14.7456 and 24
+MHz crystals.
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-Cc: <stable@vger.kernel.org> # v3.13+
+Have pericom_do_set_divisor() always calculate the divisor rather than
+call serial8250_do_set_divisor() for rates below baud_base.
+
+Do not write registers or call serial8250_do_set_divisor() if valid
+divisors could not be found.
+
+Fixes: 6bf4e42f1d19 ("serial: 8250: Add support for higher baud rates to Pericom chips")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Jay Dolan <jay.dolan@accesio.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Link: https://lore.kernel.org/r/20211122120604.3909-3-andriy.shevchenko@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/parisc/install.sh |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/serial/8250/8250_pci.c |   30 +++++++++++++++++-------------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
 
---- a/arch/parisc/install.sh
-+++ b/arch/parisc/install.sh
-@@ -39,6 +39,7 @@ verify "$3"
- if [ -n "${INSTALLKERNEL}" ]; then
-   if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
-   if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
-+  if [ -x /usr/sbin/${INSTALLKERNEL} ]; then exec /usr/sbin/${INSTALLKERNEL} "$@"; fi
- fi
+--- a/drivers/tty/serial/8250/8250_pci.c
++++ b/drivers/tty/serial/8250/8250_pci.c
+@@ -1351,29 +1351,33 @@ pericom_do_set_divisor(struct uart_port
+ {
+ 	int scr;
+ 	int lcr;
+-	int actual_baud;
+-	int tolerance;
  
- # Default install
+-	for (scr = 5 ; scr <= 15 ; scr++) {
+-		actual_baud = 921600 * 16 / scr;
+-		tolerance = actual_baud / 50;
++	for (scr = 16; scr > 4; scr--) {
++		unsigned int maxrate = port->uartclk / scr;
++		unsigned int divisor = max(maxrate / baud, 1U);
++		int delta = maxrate / divisor - baud;
+ 
+-		if ((baud < actual_baud + tolerance) &&
+-			(baud > actual_baud - tolerance)) {
++		if (baud > maxrate + baud / 50)
++			continue;
+ 
++		if (delta > baud / 50)
++			divisor++;
++
++		if (divisor > 0xffff)
++			continue;
++
++		/* Update delta due to possible divisor change */
++		delta = maxrate / divisor - baud;
++		if (abs(delta) < baud / 50) {
+ 			lcr = serial_port_in(port, UART_LCR);
+ 			serial_port_out(port, UART_LCR, lcr | 0x80);
+-
+-			serial_port_out(port, UART_DLL, 1);
+-			serial_port_out(port, UART_DLM, 0);
++			serial_port_out(port, UART_DLL, divisor & 0xff);
++			serial_port_out(port, UART_DLM, divisor >> 8 & 0xff);
+ 			serial_port_out(port, 2, 16 - scr);
+ 			serial_port_out(port, UART_LCR, lcr);
+ 			return;
+-		} else if (baud > actual_baud) {
+-			break;
+ 		}
+ 	}
+-	serial8250_do_set_divisor(port, baud, quot, quot_frac);
+ }
+ static int pci_pericom_setup(struct serial_private *priv,
+ 		  const struct pciserial_board *board,
 
 

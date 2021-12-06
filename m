@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BAE0469EFA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D726469DB9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391127AbhLFPpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:45:10 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34442 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348184AbhLFP2h (ORCPT
+        id S1388061AbhLFPcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:32:17 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39456 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346546AbhLFPVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:28:37 -0500
+        Mon, 6 Dec 2021 10:21:00 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA020B8101B;
-        Mon,  6 Dec 2021 15:25:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2664EC34901;
-        Mon,  6 Dec 2021 15:25:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBB096132F;
+        Mon,  6 Dec 2021 15:17:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFDFFC33AA1;
+        Mon,  6 Dec 2021 15:17:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804305;
-        bh=T0E7NFSIo4RFxI1+ieCaKPXXg6lhANU2MhXPz9uiX2M=;
+        s=korg; t=1638803849;
+        bh=lgazTf/KmclGBV+oVKueKG8F65kkA0ahysymL142Ne0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ekrv9QFdIHezLFjxE8gOU2E0/i0gW1PgZZaLLn9ayP+yrWYUXnf+QxRwzl/SY70Ro
-         z/QDAbdOWucS4lTR69PNBj1avHoCxSWISLQBcSC7WEfyY3MMRh4/aexrhG9iT1scAq
-         aA9OO49k6JLv199xSfeTVCkoIBAdS1Mdk5tdkaag=
+        b=huGVy0W+r0L4XU8KmZH8DSIHynz1oyD8fBZ26NfQHb6g0DiIaN9iShNxJ4Q/nXPMZ
+         1IGtbtggA1tWkmm8Yo0WyMyJ0BbC0VraqTPvp6n3G+4w6HRvEGRmbDLfLAWkD6BjFA
+         Sme8oA3llilDO4Riy7RaMtX82cq5fmxsI0uGSgCI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 098/207] wireguard: ratelimiter: use kvcalloc() instead of kvzalloc()
-Date:   Mon,  6 Dec 2021 15:55:52 +0100
-Message-Id: <20211206145613.630872008@linuxfoundation.org>
+        stable@vger.kernel.org, Pierre Morel <pmorel@linux.ibm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: [PATCH 5.10 036/130] s390/pci: move pseudo-MMIO to prevent MIO overlap
+Date:   Mon,  6 Dec 2021 15:55:53 +0100
+Message-Id: <20211206145600.921337525@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,41 +46,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gustavo A. R. Silva <gustavoars@kernel.org>
+From: Niklas Schnelle <schnelle@linux.ibm.com>
 
-commit 4e3fd721710553832460c179c2ee5ce67ef7f1e0 upstream.
+commit 52d04d408185b7aa47628d2339c28ec70074e0ae upstream.
 
-Use 2-factor argument form kvcalloc() instead of kvzalloc().
+When running without MIO support, with pci=nomio or for devices which
+are not MIO-capable the zPCI subsystem generates pseudo-MMIO addresses
+to allow access to PCI BARs via MMIO based Linux APIs even though the
+platform uses function handles and BAR numbers.
 
-Link: https://github.com/KSPP/linux/issues/162
-Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-[Jason: Gustavo's link above is for KSPP, but this isn't actually a
- security fix, as table_size is bounded to 8192 anyway, and gcc realizes
- this, so the codegen comes out to be about the same.]
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+This is done by stashing an index into our global IOMAP array which
+contains the function handle in the 16 most significant bits of the
+addresses returned by ioremap() always setting the most significant bit.
+
+On the other hand the MIO addresses assigned by the platform for use,
+while requiring special instructions, allow PCI access with virtually
+mapped physical addresses. Now the problem is that these MIO addresses
+and our own pseudo-MMIO addresses may overlap, while functionally this
+would not be a problem by itself this overlap is detected by common code
+as both address types are added as resources in the iomem_resource tree.
+This leads to the overlapping resource claim of either the MIO capable
+or non-MIO capable devices with being rejected.
+
+Since PCI is tightly coupled to the use of the iomem_resource tree, see
+for example the code for request_mem_region(), we can't reasonably get
+rid of the overlap being detected by keeping our pseudo-MMIO addresses
+out of the iomem_resource tree.
+
+Instead let's move the range used by our own pseudo-MMIO addresses by
+starting at (1UL << 62) and only using addresses below (1UL << 63) thus
+avoiding the range currently used for MIO addresses.
+
+Fixes: c7ff0e918a7c ("s390/pci: deal with devices that have no support for MIO instructions")
+Cc: stable@vger.kernel.org # 5.3+
+Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireguard/ratelimiter.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/s390/include/asm/pci_io.h |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/drivers/net/wireguard/ratelimiter.c
-+++ b/drivers/net/wireguard/ratelimiter.c
-@@ -176,12 +176,12 @@ int wg_ratelimiter_init(void)
- 			(1U << 14) / sizeof(struct hlist_head)));
- 	max_entries = table_size * 8;
+--- a/arch/s390/include/asm/pci_io.h
++++ b/arch/s390/include/asm/pci_io.h
+@@ -14,12 +14,13 @@
  
--	table_v4 = kvzalloc(table_size * sizeof(*table_v4), GFP_KERNEL);
-+	table_v4 = kvcalloc(table_size, sizeof(*table_v4), GFP_KERNEL);
- 	if (unlikely(!table_v4))
- 		goto err_kmemcache;
+ /* I/O Map */
+ #define ZPCI_IOMAP_SHIFT		48
+-#define ZPCI_IOMAP_ADDR_BASE		0x8000000000000000UL
++#define ZPCI_IOMAP_ADDR_SHIFT		62
++#define ZPCI_IOMAP_ADDR_BASE		(1UL << ZPCI_IOMAP_ADDR_SHIFT)
+ #define ZPCI_IOMAP_ADDR_OFF_MASK	((1UL << ZPCI_IOMAP_SHIFT) - 1)
+ #define ZPCI_IOMAP_MAX_ENTRIES							\
+-	((ULONG_MAX - ZPCI_IOMAP_ADDR_BASE + 1) / (1UL << ZPCI_IOMAP_SHIFT))
++	(1UL << (ZPCI_IOMAP_ADDR_SHIFT - ZPCI_IOMAP_SHIFT))
+ #define ZPCI_IOMAP_ADDR_IDX_MASK						\
+-	(~ZPCI_IOMAP_ADDR_OFF_MASK - ZPCI_IOMAP_ADDR_BASE)
++	((ZPCI_IOMAP_ADDR_BASE - 1) & ~ZPCI_IOMAP_ADDR_OFF_MASK)
  
- #if IS_ENABLED(CONFIG_IPV6)
--	table_v6 = kvzalloc(table_size * sizeof(*table_v6), GFP_KERNEL);
-+	table_v6 = kvcalloc(table_size, sizeof(*table_v6), GFP_KERNEL);
- 	if (unlikely(!table_v6)) {
- 		kvfree(table_v4);
- 		goto err_kmemcache;
+ struct zpci_iomap_entry {
+ 	u32 fh;
 
 

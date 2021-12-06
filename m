@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD39469CF4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3B6469A91
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:05:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386206AbhLFP0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:26:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359048AbhLFPQz (ORCPT
+        id S1347490AbhLFPIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:08:51 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39726 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346567AbhLFPGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:16:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F93EC08ECA6;
-        Mon,  6 Dec 2021 07:09:59 -0800 (PST)
+        Mon, 6 Dec 2021 10:06:45 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F376861319;
-        Mon,  6 Dec 2021 15:09:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D67B0C341C2;
-        Mon,  6 Dec 2021 15:09:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D676AB81018;
+        Mon,  6 Dec 2021 15:03:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFAB6C341C1;
+        Mon,  6 Dec 2021 15:03:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803398;
-        bh=yaqR6/nvrnJNi5GZOWJIE6GmMSIINYrFiQ8tVQx2oXg=;
+        s=korg; t=1638802994;
+        bh=IVFz8ntBdU8/HcdloqpQ2v/VxvPxVUhJLhYdA3vs6a4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NDoArYETyEoHfnYiCfJwvEhVhnmGBLxqLMwhFreicMJ9ZOIDUygVnNRXL4tBEluKl
-         ByLl8iglfBR0Ss2e+xf0+CnI/4jeIbXob0/3LZeYgtXccEFphDiedtITDPbVVBMIQr
-         DXOJFxRUmbu9S58N+EkxX8Nmp8n49Mk+HGNd1laI=
+        b=FnsmeEqsFe6K4W3PudrTyd/jEGREhTK2DAOtkPlm6znbANVNoIcHSvwFd7GqTIFiH
+         lApgO13JMxyTLqRmk+TqiQD/FdJiWPy8Ziy64bFiudZeKXRSi6vhuVsQ/RiiwI4xmb
+         Gcs9Dzil69b8VZXB4D4w1SIJhU3OYPPgs6FaM6AU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [PATCH 4.19 20/48] sata_fsl: fix UAF in sata_fsl_port_stop when rmmod sata_fsl
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Chris Zankel <chris@zankel.net>, linux-xtensa@linux-xtensa.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.9 54/62] natsemi: xtensa: fix section mismatch warnings
 Date:   Mon,  6 Dec 2021 15:56:37 +0100
-Message-Id: <20211206145549.543472127@linuxfoundation.org>
+Message-Id: <20211206145551.068257341@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
-References: <20211206145548.859182340@linuxfoundation.org>
+In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
+References: <20211206145549.155163074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,98 +51,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baokun Li <libaokun1@huawei.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 6c8ad7e8cf29eb55836e7a0215f967746ab2b504 upstream.
+commit b0f38e15979fa8851e88e8aa371367f264e7b6e9 upstream.
 
-When the `rmmod sata_fsl.ko` command is executed in the PPC64 GNU/Linux,
-a bug is reported:
- ==================================================================
- BUG: Unable to handle kernel data access on read at 0x80000800805b502c
- Oops: Kernel access of bad area, sig: 11 [#1]
- NIP [c0000000000388a4] .ioread32+0x4/0x20
- LR [80000000000c6034] .sata_fsl_port_stop+0x44/0xe0 [sata_fsl]
- Call Trace:
-  .free_irq+0x1c/0x4e0 (unreliable)
-  .ata_host_stop+0x74/0xd0 [libata]
-  .release_nodes+0x330/0x3f0
-  .device_release_driver_internal+0x178/0x2c0
-  .driver_detach+0x64/0xd0
-  .bus_remove_driver+0x70/0xf0
-  .driver_unregister+0x38/0x80
-  .platform_driver_unregister+0x14/0x30
-  .fsl_sata_driver_exit+0x18/0xa20 [sata_fsl]
-  .__se_sys_delete_module+0x1ec/0x2d0
-  .system_call_exception+0xfc/0x1f0
-  system_call_common+0xf8/0x200
- ==================================================================
+Fix section mismatch warnings in xtsonic. The first one appears to be
+bogus and after fixing the second one, the first one is gone.
 
-The triggering of the BUG is shown in the following stack:
+WARNING: modpost: vmlinux.o(.text+0x529adc): Section mismatch in reference from the function sonic_get_stats() to the function .init.text:set_reset_devices()
+The function sonic_get_stats() references
+the function __init set_reset_devices().
+This is often because sonic_get_stats lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
 
-driver_detach
-  device_release_driver_internal
-    __device_release_driver
-      drv->remove(dev) --> platform_drv_remove/platform_remove
-        drv->remove(dev) --> sata_fsl_remove
-          iounmap(host_priv->hcr_base);			<---- unmap
-          kfree(host_priv);                             <---- free
-      devres_release_all
-        release_nodes
-          dr->node.release(dev, dr->data) --> ata_host_stop
-            ap->ops->port_stop(ap) --> sata_fsl_port_stop
-                ioread32(hcr_base + HCONTROL)           <---- UAF
-            host->ops->host_stop(host)
+WARNING: modpost: vmlinux.o(.text+0x529b3b): Section mismatch in reference from the function xtsonic_probe() to the function .init.text:sonic_probe1()
+The function xtsonic_probe() references
+the function __init sonic_probe1().
+This is often because xtsonic_probe lacks a __init
+annotation or the annotation of sonic_probe1 is wrong.
 
-The iounmap(host_priv->hcr_base) and kfree(host_priv) functions should
-not be executed in drv->remove. These functions should be executed in
-host_stop after port_stop. Therefore, we move these functions to the
-new function sata_fsl_host_stop and bind the new function to host_stop.
-
-Fixes: faf0b2e5afe7 ("drivers/ata: add support to Freescale 3.0Gbps SATA Controller")
-Cc: stable@vger.kernel.org
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
-Reviewed-by: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Fixes: 74f2a5f0ef64 ("xtensa: Add support for the Sonic Ethernet device for the XT2000 board.")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Finn Thain <fthain@telegraphics.com.au>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: linux-xtensa@linux-xtensa.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Acked-by: Max Filippov <jcmvbkbc@gmail.com>
+Link: https://lore.kernel.org/r/20211130063947.7529-1-rdunlap@infradead.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ata/sata_fsl.c |   12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/natsemi/xtsonic.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/ata/sata_fsl.c
-+++ b/drivers/ata/sata_fsl.c
-@@ -1399,6 +1399,14 @@ static int sata_fsl_init_controller(stru
- 	return 0;
- }
- 
-+static void sata_fsl_host_stop(struct ata_host *host)
-+{
-+        struct sata_fsl_host_priv *host_priv = host->private_data;
-+
-+        iounmap(host_priv->hcr_base);
-+        kfree(host_priv);
-+}
-+
- /*
-  * scsi mid-layer and libata interface structures
-  */
-@@ -1431,6 +1439,8 @@ static struct ata_port_operations sata_f
- 	.port_start = sata_fsl_port_start,
- 	.port_stop = sata_fsl_port_stop,
- 
-+	.host_stop      = sata_fsl_host_stop,
-+
- 	.pmp_attach = sata_fsl_pmp_attach,
- 	.pmp_detach = sata_fsl_pmp_detach,
+--- a/drivers/net/ethernet/natsemi/xtsonic.c
++++ b/drivers/net/ethernet/natsemi/xtsonic.c
+@@ -128,7 +128,7 @@ static const struct net_device_ops xtson
+ 	.ndo_set_mac_address	= eth_mac_addr,
  };
-@@ -1563,8 +1573,6 @@ static int sata_fsl_remove(struct platfo
- 	ata_host_detach(host);
  
- 	irq_dispose_mapping(host_priv->irq);
--	iounmap(host_priv->hcr_base);
--	kfree(host_priv);
- 
- 	return 0;
- }
+-static int __init sonic_probe1(struct net_device *dev)
++static int sonic_probe1(struct net_device *dev)
+ {
+ 	static unsigned version_printed = 0;
+ 	unsigned int silicon_revision;
 
 

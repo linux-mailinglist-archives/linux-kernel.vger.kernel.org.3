@@ -2,145 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B444946A1B9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:46:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D8046A1BB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237724AbhLFQuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:50:21 -0500
-Received: from mail-am6eur05on2043.outbound.protection.outlook.com ([40.107.22.43]:43329
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S242793AbhLFQuH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:50:07 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ScWme5dzhs/sCLP+VNK9DR9m4pKAcGwGZfgtaWkq+KwJUu1sfK7NxhxtX4sx5vH/mpFCuUiybAstVaLnPjd8/FUL5fulJIaS5vJC+3qsxc/Ql3NJizOYggefvARk3DOGSfTv1jTpVRmgQ0GtBOQ1oV6GbJU9Ga6IFyaNTzWDY6IoqswuOGSC+nt+pJHO6IAH0lUqGVabuf70cO+w6tXCSu59Pm2HQURNysdnLFffXCy4Qg/wkDefx+qpE038WTPdOYs6QmzApaZzYF5ikTBwSquIVhNZtkTj0lsEHgFQTLyuD7xF/jBIODb1RgHZTrxbD6J9SsR7yztv+f/ZjR1cWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FhaVZACpmBx9rgnCwVOH3wSPKqPHlS6AXLx1MYDmv7s=;
- b=YWmObJwTzBFtjm3wB2T+kwAL6txYmcblQsdjZM/TB48FMEBA9nuBXW6SNURxz2+MsVSC2ZLhafgYc4MZOGgxXGRP0VboNG1v/Vo0OQxc/SD0QDrmQzgtOagzlGE3Lgab80BSh1F/bbnuAFnvo2TjbqejVfXRg0obh/0L6no0RgIlNLyPdWOVEtiehYIpEI/DIuCFlOpLyA85O0J25PW0uEAYLaNNM1AeKv++dICzYlzDiTl+p8C/S/Kz5RO/PL3j6KBjBMexFB0M7Fml7tJIJXqU90V29+krWNIFFCtLF89lfK6Q6Wz1RA6ricRQwbOCt0P3Z2lU9V/6LwJNm8moIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
- dkim=pass header.d=diasemi.com; arc=none
+        id S237959AbhLFQug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:50:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238407AbhLFQue (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 11:50:34 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A27C061D7F;
+        Mon,  6 Dec 2021 08:47:02 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso14411052otj.1;
+        Mon, 06 Dec 2021 08:47:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=dialogsemiconductor.onmicrosoft.com;
- s=selector1-dialogsemiconductor-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FhaVZACpmBx9rgnCwVOH3wSPKqPHlS6AXLx1MYDmv7s=;
- b=PUD0b3KuAY/ha8cOZP4Bt2kY/mPQ1UhS7Ktl+oabhwqcMrexyOuXGU0aKbut9AVOxzv6oLZ2mdekccYqxE2fQQWhx2aOvP5l9YN+D836Ts9PT6E5Fq5Dwi7gJDtyDV3g1JmuQM3WggcD0EthccCUCLai+CpmorxEkv6PMBrwzFY=
-Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:255::23)
- by DB8PR10MB2905.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:e9::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Mon, 6 Dec
- 2021 16:46:28 +0000
-Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::852d:c54f:8414:3276]) by DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::852d:c54f:8414:3276%4]) with mapi id 15.20.4755.021; Mon, 6 Dec 2021
- 16:46:28 +0000
-From:   Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-To:     Andrej Picej <andrej.picej@norik.com>,
-        Support Opensource <Support.Opensource@diasemi.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "cniedermaier@dh-electronics.com" <cniedermaier@dh-electronics.com>
-Subject: RE: [PATCH v5 1/5] mfd: da9062: make register CONFIG_I writable
-Thread-Topic: [PATCH v5 1/5] mfd: da9062: make register CONFIG_I writable
-Thread-Index: AQHX6m0sOxzGhIFJw0ykibdS1Aiua6wlrA1A
-Date:   Mon, 6 Dec 2021 16:46:27 +0000
-Message-ID: <DB9PR10MB4652F10355222D5DD1A65E50806D9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
-References: <20211206064732.280375-1-andrej.picej@norik.com>
-In-Reply-To: <20211206064732.280375-1-andrej.picej@norik.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=diasemi.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 11272bc0-2a5c-4c09-9784-08d9b8d7f2c7
-x-ms-traffictypediagnostic: DB8PR10MB2905:EE_
-x-ms-exchange-sharedmailbox-routingagent-processed: True
-x-microsoft-antispam-prvs: <DB8PR10MB290513AC6BB7CE2F4BC4E26BA76D9@DB8PR10MB2905.EURPRD10.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:497;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zTWMwFjyNYalcU8RBxQidWoQiLyM7BuVHrxUX6eoi6pq+pswyjJ2pmhAcS1xpal8u22SysOCMsYmFmshdlB9mii2i7izUZeJok0fse5gaCCdpJfLEWMx/DWVcHStoGY9JzZVuB88EHlmx9WhmmHEStgLUk5ZUlJCJg55vGi+nnxln6WXiiQnpU553hjFneMND4wxAKML7cadGQRK07CfbhlA8ofLPXZtDIAi+wA8s0UQNNic4fot5dMp43iBSx4EbhiU3ZsLpG9CO1Lc7jXj0UBbceyK7a1cja1EcbfOakBVJp8M8zgO/mFm3AA25xwrVEAQirACQ8MgFldJQLjYMxRAUTJt4Tiu5MpXPdIkUcI/4hIU9I3HVAz/j37Qmzlkd3daLOAljvYm7t/Ho7fy0dwRd7ZgSEEWM/OfsFcEzxu9LUSjRqcCLsmYoH8vLMVcD8CLCg0idsU5M0Uq40NBS0EFPLEH5x2PZSL9p0MJp82AIDy2KZOV+aYyu/rVatKJaWiyysvxuIvebWR+JnMglWaUhJafp4vrfDCbCVJK42DK6nMCa7feEWx56IksOKeZvJXlMZtu25JMtfwMQNT3ZUW4pBxukPOCaMwsyZjDbhpEsGCs8Un1aSfxrpFyAhItiC+/rtvImjOhwUlL7LcgYmTzeSjgfQRO4XKOnIynZ7E5CMt5EWipAf2an0SJpQk2QWvjI6jkxs4k+TRfoSOOUg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(55016003)(52536014)(4326008)(38100700002)(38070700005)(122000001)(66946007)(64756008)(66476007)(66446008)(86362001)(66556008)(71200400001)(33656002)(76116006)(8936002)(9686003)(186003)(7696005)(7416002)(8676002)(508600001)(5660300002)(316002)(110136005)(54906003)(55236004)(26005)(53546011)(6506007)(2906002)(4744005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?bfNYBMC/aM2D+rNs1Zpgql42WcegUvvrEn8PlZoMogw8Wrv+y/ZZ+6TaEqCc?=
- =?us-ascii?Q?95JTSYfqaqFXkDg+74YtolSqATu3aSYjjWDifqtZAF460YRxSwKxARycDoGZ?=
- =?us-ascii?Q?QwokyEKM1W0plbx/hsoJF71hbHAvirAhGyVi5fxmQg0ve66joCB6NKf4FE+s?=
- =?us-ascii?Q?W+XWaxWBsV/N4m4VCq/1nUbnOWO9Cli247y98qfIqxPSfFxPi0xsu36Ss452?=
- =?us-ascii?Q?54l7oMdOHuaRch8ZaXri+iqlBJ+Q0RNz9PyvMQPvOZY4txSwX0wXrKy26rLi?=
- =?us-ascii?Q?xuo+NGkMwPZjMRqV8aMNMCK0Jwk6LVz8IbmPdmHlOGzB0q8rRgz8lL7j11mu?=
- =?us-ascii?Q?vB7Zj8Y8Piad/IgQk3gZhaYJ4ryMiCEOh/xPayTsTGPkDFvHOWQsNLaictMk?=
- =?us-ascii?Q?CgbNQZp0m9nWXoWLL41AvX9jvAfOSaVS/HFLClS4rlWrz4JCDjndFSCeSliT?=
- =?us-ascii?Q?nRr5+O4mzs/uG98DPn45sGaLGYu9RR9c5fKo3saNTC0Ix7WTdylT4bVKn1AF?=
- =?us-ascii?Q?lT9Z8iqFvNMNgMw/soVBMaOwjmKi/ay901E/6rFAqCHYOAugLPCXHhm5lKaU?=
- =?us-ascii?Q?bKoLa0Nrfd1DmWkQAAV7tZUfjT5LJJe8cjk3Swc9XbGZBRIDyYfHDVv6lHWd?=
- =?us-ascii?Q?l0BSvq49MB12Xqecy5OPUCRdr8UaF0SfwPTTJpaq9Upykzq+CiHeo1eACiGd?=
- =?us-ascii?Q?6YYZWXgcGkhrqN+WLYqJEPOPFrgwEpG2hMoLdyaS9Eb0nNUn5kTb31N8gsXq?=
- =?us-ascii?Q?GjNUPYEFI+UCJH46Y7s+1vSIT1636t4JdN39OucSwf7dpS4XCIXS8Hx2xTRf?=
- =?us-ascii?Q?+AFdKyGqgxvxnIPl66O+OLYb5r1qjNolwaOEdxCzvU58fS9jPBmqlijX1+a1?=
- =?us-ascii?Q?MUcT8aymF9a4kHp6x71O72T/n6yVWmwVe1Cw9IHgzrUTAeH6A+wpRxZR5eka?=
- =?us-ascii?Q?X1hG7eilxRU0FInIZxfgwJlo/C550Vj/K8/yVymHRkrLoM/fJlfU9OKp46Ci?=
- =?us-ascii?Q?p1Lm2g3LTTjLYVisxmw01CeWlxG2JAeDp7S9PO3NTfVz5KDNWFGF/1E7OPHZ?=
- =?us-ascii?Q?ebOjljPO0kyov4MeK6dzKLuBVIzXU4TtuwSboRSHhgm+uaGO7d93eLiZTqyK?=
- =?us-ascii?Q?68HBvn+F5xsRXVidU+BehFY3EIW87VDuVENN3xuHuuWGDHE1ZpTeAkR9XQ0+?=
- =?us-ascii?Q?N+DCz5mpGaQvKWxTG6Ta496CZ9695TTxVEjWcH/qvSg4m4OWfXJOHlsRtJXm?=
- =?us-ascii?Q?kr5M+EB1HxwiD1zJIormL56RvN12iXrS/lq6jatN1yEQ8CNs25NjUlOe1wCZ?=
- =?us-ascii?Q?ytOo1HxlBGBh3e4epU9yz1d/EdqU4FnPKfJH2jZfbaXoB6/UWbqTki+WdvNk?=
- =?us-ascii?Q?I7/ftwTzS8v3NAlfTXWRd56aH70hn5+doY9kxp4BjJJgVicfHx1DtpjuO/Wq?=
- =?us-ascii?Q?hMjIKgs+GTde70M/l5MAWzSqylmeri/bIhTSXRzXKKWsH8cWaoEvMuT0w3rU?=
- =?us-ascii?Q?mHZEqnjT80XYc9uKEFIZIR5VZcYFlN9lQ4hNIXIpGdjVSEoBlkpBKWsk6L9y?=
- =?us-ascii?Q?vZXAWLxctXzg8GEin2qi2vwDwwF9EjRW8s9R1QEVmoMB6WmgVJCgfh8raVcM?=
- =?us-ascii?Q?3B2tUZxqFTnHvLcSBeKQCqEhMsL4lMPy4DMZxsRfD3nRMaPzhwb4Ac4sImtI?=
- =?us-ascii?Q?MsNPbA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20210112;
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=UfMvdtz7TetuUq58w7Z6QC2WTUyddtJHcjVCTWEKWuI=;
+        b=Hw9skppLMOky7VXGvOK9BNwNpBMi2pOHR1Tq4Hl1/Y093PHKAAIb8dSK3gEQy48xbS
+         5Nh0GhWkPbLF6sbOP55hkdWH8ecHdX7OS/ISyrAGF0xXHYxoHoDp5dbvNuw29Clz+yGs
+         VjewNKjYHIEb6Mr8Qk+5x8271iIwqq+N2JbCmFWXUpONdKbxOVvVeS+A2YQhStpN4qo2
+         q7bq85T2JJu4KMw0dWGfjwaMjaa0J+Pqt5oNaEh9SskJsGEEPn8e4egeMSB1FlO+DHde
+         Ay1FQfDupbWoVRl3d63J79IR9nW7EkCTGY2EMXjjeecUTl/LgQBcSwgTg6cRvYDHzFLi
+         n+Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=UfMvdtz7TetuUq58w7Z6QC2WTUyddtJHcjVCTWEKWuI=;
+        b=v0CCLMZTw1cOC1ENEty5Xt79vD6WwM7LAJRw79OAMVuWG7B53FEJnR1wD5fEJwC3V2
+         pUCq4bptJbNt3Jzt4Lt4olKiYYc/iETeoo71nCb3c/IaD93rpCaOsRlrT3c09cnw3fVV
+         m+DKUtl1NwvQ/aQqA1WNBC7eIbWnjf/Y77rIe/i89FTwNezh7vuabqnX5WQO5XmFZRkA
+         CcHtStxe5dIlavawy7BiIdl/AQO8aLpbIQJWonS0wfIH5Tn4lLQ6NQfViJqt2sR6rB5l
+         BhOmqW110FLGwDq2CvgJUc9XaBOoacPjLGLzyYlc1DJKG5Fi4SgL0BeuvgsjFAGTl5ay
+         dK7Q==
+X-Gm-Message-State: AOAM530ijItgJ1Egv5xtsA74/42nV00WXnCVMMeDfHEA+3xefNOCM9Vc
+        UuLHbHYKaDgCjFK90ggvhK3pB1lofJo=
+X-Google-Smtp-Source: ABdhPJw4A2p8Ik+52sJ93aDNnTLR1Y9iP+AK3OrrJlpsKy3aDgDarDw3HKXe1DNxJy8lN3E9SHUJ0Q==
+X-Received: by 2002:a9d:4a8:: with SMTP id 37mr31067133otm.83.1638809221868;
+        Mon, 06 Dec 2021 08:47:01 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m22sm2438251ooj.8.2021.12.06.08.46.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 08:47:00 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+References: <20211206145559.607158688@linuxfoundation.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 5.10 000/130] 5.10.84-rc1 review
+Message-ID: <4a881261-ba90-2095-58df-13dcffe6bcf2@roeck-us.net>
+Date:   Mon, 6 Dec 2021 08:46:58 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-OriginatorOrg: diasemi.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11272bc0-2a5c-4c09-9784-08d9b8d7f2c7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2021 16:46:27.9336
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: A6QuUVfjzPyWQzbAf/sb0xjGJwSwh1DFn2Qrw8tm6k7SOCgt/SlXYLyGMtaSYSTov16u2U6ZDD24Jjn03P7S5PGJrew90Jp7B2rC4xb2Bio=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB2905
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06 December 2021 06:47, Andrej Picej wrote:
+On 12/6/21 6:55 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.84 release.
+> There are 130 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 08 Dec 2021 14:55:37 +0000.
+> Anything received after that time might be too late.
+> 
 
-> From: Stefan Christ <s.christ@phytec.de>
->=20
-> Make the config register CONFIG_I writable to change the watchdog mode.
->=20
-> Signed-off-by: Stefan Christ <s.christ@phytec.de>
-> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+Building i386:allyesconfig ... failed
+--------------
+Error log:
+x86_64-linux-ld: drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.o: in function `amdgpu_amdkfd_resume_iommu':
+amdgpu_amdkfd.c:(.text+0x2b3): undefined reference to `kgd2kfd_resume_iommu'
 
-I've already provided 'Reviewed-by' tags for the other patches in this set.=
- In
-the future you can add any received tags on to patch re-submissions where
-nothing has changed since last review.
+Building i386:allmodconfig ... failed
+--------------
+Error log:
+ERROR: modpost: "kgd2kfd_resume_iommu" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
 
-Anyway, thanks for the work on this, and for the patch set:
+The same error is seen for alpha:allmodconfig, arm:allmodconfig,
+mips:allmodconfig, parisc:allmodconfig, riscv32:allmodconfig,
+riscv64:allmodconfig, s390:allmodconfig, sparc64:allmodconfig,
+and xtensa:allmodconfig.
 
-Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Guenter

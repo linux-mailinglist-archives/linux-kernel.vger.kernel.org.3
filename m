@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 994AB469F42
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D95469DBF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349495AbhLFPqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:46:45 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46686 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385597AbhLFP30 (ORCPT
+        id S1388222AbhLFPc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:32:28 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53734 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359758AbhLFPUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:29:26 -0500
+        Mon, 6 Dec 2021 10:20:24 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EE8F61348;
-        Mon,  6 Dec 2021 15:25:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31B84C34900;
-        Mon,  6 Dec 2021 15:25:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 571A3B81118;
+        Mon,  6 Dec 2021 15:16:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8654EC341C2;
+        Mon,  6 Dec 2021 15:16:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804355;
-        bh=HGJ4r0DMn362nLGtyubdq7Vjo+ARI5pMwZG3rn1LoBg=;
+        s=korg; t=1638803813;
+        bh=1MPCTGDcl+t5vgW4Q/TWQGoXeAXt1H6veDu/jdAksPo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ho0OBG7xB9maFnpbR4xu08G2Cf4gTeTvBTdTN0u8tEuwVsPfIPvARxtb4qlNhPGM/
-         XVaebO/u9ZQt5uOFu3vw+OSzet8CZVRRm4gfgD0/qM0L6rLm+uv5CxwpalQ4SH3Q3J
-         acHPo3R8OTyNtCyBZN295dHzUIrWvro2mGpkujco=
+        b=HlbixRUwkUCnIzLrX3YGsc+7zmkl9qLvRXximxubJr/jZL4rjBD+vW5K3KbyGQDtD
+         0M5QtVuy9OrHCIU4pJW9GHu5RPHYHb6vBlIcmPenk0Ig/1bgOHmSccRC5wc36XROwh
+         UUkuoox4KDEUgydrPDpBWhyy7PQAxVDDEKxp9J+Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Sameer Pujar <spujar@nvidia.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 118/207] ASoC: tegra: Fix wrong value type in DSPK
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 055/130] wireguard: selftests: actually test for routing loops
 Date:   Mon,  6 Dec 2021 15:56:12 +0100
-Message-Id: <20211206145614.330229481@linuxfoundation.org>
+Message-Id: <20211206145601.585810160@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,73 +45,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sameer Pujar <spujar@nvidia.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit 3aa0d5c8bb3f5ef622ec2764823f551a1f630711 upstream.
+commit 782c72af567fc2ef09bd7615d0307f24de72c7e0 upstream.
 
-The enum controls are expected to use enumerated value type.
-Update relevant references in control get/put callbacks.
+We previously removed the restriction on looping to self, and then added
+a test to make sure the kernel didn't blow up during a routing loop. The
+kernel didn't blow up, thankfully, but on certain architectures where
+skb fragmentation is easier, such as ppc64, the skbs weren't actually
+being discarded after a few rounds through. But the test wasn't catching
+this. So actually test explicitly for massive increases in tx to see if
+we have a routing loop. Note that the actual loop problem will need to
+be addressed in a different commit.
 
-Fixes: 327ef6470266 ("ASoC: tegra: Add Tegra186 based DSPK driver")
-Suggested-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Sameer Pujar <spujar@nvidia.com>
-Reviewed-by: Takashi Iwai <tiwai@suse.de>
-Link: https://lore.kernel.org/r/1637219231-406-5-git-send-email-spujar@nvidia.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: b673e24aad36 ("wireguard: socket: remove errant restriction on looping to self")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/tegra/tegra186_dspk.c |   23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+ tools/testing/selftests/wireguard/netns.sh |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/sound/soc/tegra/tegra186_dspk.c
-+++ b/sound/soc/tegra/tegra186_dspk.c
-@@ -35,15 +35,15 @@ static int tegra186_dspk_get_control(str
- 	if (strstr(kcontrol->id.name, "FIFO Threshold"))
- 		ucontrol->value.integer.value[0] = dspk->rx_fifo_th;
- 	else if (strstr(kcontrol->id.name, "OSR Value"))
--		ucontrol->value.integer.value[0] = dspk->osr_val;
-+		ucontrol->value.enumerated.item[0] = dspk->osr_val;
- 	else if (strstr(kcontrol->id.name, "LR Polarity Select"))
--		ucontrol->value.integer.value[0] = dspk->lrsel;
-+		ucontrol->value.enumerated.item[0] = dspk->lrsel;
- 	else if (strstr(kcontrol->id.name, "Channel Select"))
--		ucontrol->value.integer.value[0] = dspk->ch_sel;
-+		ucontrol->value.enumerated.item[0] = dspk->ch_sel;
- 	else if (strstr(kcontrol->id.name, "Mono To Stereo"))
--		ucontrol->value.integer.value[0] = dspk->mono_to_stereo;
-+		ucontrol->value.enumerated.item[0] = dspk->mono_to_stereo;
- 	else if (strstr(kcontrol->id.name, "Stereo To Mono"))
--		ucontrol->value.integer.value[0] = dspk->stereo_to_mono;
-+		ucontrol->value.enumerated.item[0] = dspk->stereo_to_mono;
+--- a/tools/testing/selftests/wireguard/netns.sh
++++ b/tools/testing/selftests/wireguard/netns.sh
+@@ -276,7 +276,11 @@ n0 ping -W 1 -c 1 192.168.241.2
+ n1 wg set wg0 peer "$pub2" endpoint 192.168.241.2:7
+ ip2 link del wg0
+ ip2 link del wg1
+-! n0 ping -W 1 -c 10 -f 192.168.241.2 || false # Should not crash kernel
++read _ _ tx_bytes_before < <(n0 wg show wg1 transfer)
++! n0 ping -W 1 -c 10 -f 192.168.241.2 || false
++sleep 1
++read _ _ tx_bytes_after < <(n0 wg show wg1 transfer)
++(( tx_bytes_after - tx_bytes_before < 70000 ))
  
- 	return 0;
- }
-@@ -53,20 +53,19 @@ static int tegra186_dspk_put_control(str
- {
- 	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
- 	struct tegra186_dspk *dspk = snd_soc_component_get_drvdata(codec);
--	int val = ucontrol->value.integer.value[0];
- 
- 	if (strstr(kcontrol->id.name, "FIFO Threshold"))
--		dspk->rx_fifo_th = val;
-+		dspk->rx_fifo_th = ucontrol->value.integer.value[0];
- 	else if (strstr(kcontrol->id.name, "OSR Value"))
--		dspk->osr_val = val;
-+		dspk->osr_val = ucontrol->value.enumerated.item[0];
- 	else if (strstr(kcontrol->id.name, "LR Polarity Select"))
--		dspk->lrsel = val;
-+		dspk->lrsel = ucontrol->value.enumerated.item[0];
- 	else if (strstr(kcontrol->id.name, "Channel Select"))
--		dspk->ch_sel = val;
-+		dspk->ch_sel = ucontrol->value.enumerated.item[0];
- 	else if (strstr(kcontrol->id.name, "Mono To Stereo"))
--		dspk->mono_to_stereo = val;
-+		dspk->mono_to_stereo = ucontrol->value.enumerated.item[0];
- 	else if (strstr(kcontrol->id.name, "Stereo To Mono"))
--		dspk->stereo_to_mono = val;
-+		dspk->stereo_to_mono = ucontrol->value.enumerated.item[0];
- 
- 	return 0;
- }
+ ip0 link del wg1
+ ip1 link del wg0
 
 

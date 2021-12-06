@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E746946A008
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B72A469DA3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357615AbhLFP4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:56:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386074AbhLFPjd (ORCPT
+        id S1387596AbhLFPbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:31:34 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38610 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347445AbhLFPTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:39:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7767BC08EC0A;
-        Mon,  6 Dec 2021 07:24:50 -0800 (PST)
+        Mon, 6 Dec 2021 10:19:35 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 220C3B8111F;
-        Mon,  6 Dec 2021 15:24:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C06BC34902;
-        Mon,  6 Dec 2021 15:24:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 237B561345;
+        Mon,  6 Dec 2021 15:16:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 066A9C341C2;
+        Mon,  6 Dec 2021 15:16:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804289;
-        bh=1MPCTGDcl+t5vgW4Q/TWQGoXeAXt1H6veDu/jdAksPo=;
+        s=korg; t=1638803764;
+        bh=58+9mBtUDyf/bQKjXDZfwgK+jBcyodiJKbjRhPj2Hnk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U23J9s2nbYQo9YklBGIbSAFwPMvGFtVyrW1u9zIIh4+SGDU72NEujEWLacAWrY78z
-         f3ceF9fhuYhYZMYm3VvBwg5kgXCGFHMI3NiHeZM6QE8W4yDwdurp9f8JWXpTnjT5UR
-         NWoMHjXQyzQc22FqZ1qZWBLW7Ml3o94KghhzFmfY=
+        b=iFualTV5Wcj2/7yXy1RoDDt/icLUxlp7Bs4vAnjrPrmEdnRB6jYg/ZyIGpKI0tfjs
+         Bo82z1byUUDibIRlL9Moocp34gPVgYcL+4gdFCUmjMQa4qb3wHINB2T7dM+sSi9PMF
+         8k3dNE8WbjavnEQasexpZKIV1On+kVweoFCXfsXk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        stable@vger.kernel.org, Stephen Suryaputra <ssuryaextr@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 093/207] wireguard: selftests: actually test for routing loops
-Date:   Mon,  6 Dec 2021 15:55:47 +0100
-Message-Id: <20211206145613.454810289@linuxfoundation.org>
+Subject: [PATCH 5.10 031/130] vrf: Reset IPCB/IP6CB when processing outbound pkts in vrf dev xmit
+Date:   Mon,  6 Dec 2021 15:55:48 +0100
+Message-Id: <20211206145600.718913283@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,41 +46,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Stephen Suryaputra <ssuryaextr@gmail.com>
 
-commit 782c72af567fc2ef09bd7615d0307f24de72c7e0 upstream.
+commit ee201011c1e1563c114a55c86eb164b236f18e84 upstream.
 
-We previously removed the restriction on looping to self, and then added
-a test to make sure the kernel didn't blow up during a routing loop. The
-kernel didn't blow up, thankfully, but on certain architectures where
-skb fragmentation is easier, such as ppc64, the skbs weren't actually
-being discarded after a few rounds through. But the test wasn't catching
-this. So actually test explicitly for massive increases in tx to see if
-we have a routing loop. Note that the actual loop problem will need to
-be addressed in a different commit.
+IPCB/IP6CB need to be initialized when processing outbound v4 or v6 pkts
+in the codepath of vrf device xmit function so that leftover garbage
+doesn't cause futher code that uses the CB to incorrectly process the
+pkt.
 
-Fixes: b673e24aad36 ("wireguard: socket: remove errant restriction on looping to self")
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+One occasion of the issue might occur when MPLS route uses the vrf
+device as the outgoing device such as when the route is added using "ip
+-f mpls route add <label> dev <vrf>" command.
+
+The problems seems to exist since day one. Hence I put the day one
+commits on the Fixes tags.
+
+Fixes: 193125dbd8eb ("net: Introduce VRF device driver")
+Fixes: 35402e313663 ("net: Add IPv6 support to VRF device")
+Cc: stable@vger.kernel.org
+Signed-off-by: Stephen Suryaputra <ssuryaextr@gmail.com>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Link: https://lore.kernel.org/r/20211130162637.3249-1-ssuryaextr@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/wireguard/netns.sh |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/net/vrf.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/tools/testing/selftests/wireguard/netns.sh
-+++ b/tools/testing/selftests/wireguard/netns.sh
-@@ -276,7 +276,11 @@ n0 ping -W 1 -c 1 192.168.241.2
- n1 wg set wg0 peer "$pub2" endpoint 192.168.241.2:7
- ip2 link del wg0
- ip2 link del wg1
--! n0 ping -W 1 -c 10 -f 192.168.241.2 || false # Should not crash kernel
-+read _ _ tx_bytes_before < <(n0 wg show wg1 transfer)
-+! n0 ping -W 1 -c 10 -f 192.168.241.2 || false
-+sleep 1
-+read _ _ tx_bytes_after < <(n0 wg show wg1 transfer)
-+(( tx_bytes_after - tx_bytes_before < 70000 ))
+--- a/drivers/net/vrf.c
++++ b/drivers/net/vrf.c
+@@ -497,6 +497,7 @@ static netdev_tx_t vrf_process_v6_outbou
+ 	/* strip the ethernet header added for pass through VRF device */
+ 	__skb_pull(skb, skb_network_offset(skb));
  
- ip0 link del wg1
- ip1 link del wg0
++	memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
+ 	ret = vrf_ip6_local_out(net, skb->sk, skb);
+ 	if (unlikely(net_xmit_eval(ret)))
+ 		dev->stats.tx_errors++;
+@@ -580,6 +581,7 @@ static netdev_tx_t vrf_process_v4_outbou
+ 					       RT_SCOPE_LINK);
+ 	}
+ 
++	memset(IPCB(skb), 0, sizeof(*IPCB(skb)));
+ 	ret = vrf_ip_local_out(dev_net(skb_dst(skb)->dev), skb->sk, skb);
+ 	if (unlikely(net_xmit_eval(ret)))
+ 		vrf_dev->stats.tx_errors++;
 
 

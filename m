@@ -2,38 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE884698A1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:23:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA994698A4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:23:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343935AbhLFO0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 09:26:37 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:50816 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242143AbhLFO0g (ORCPT
+        id S1343969AbhLFO0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 09:26:45 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:26750 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1343950AbhLFO0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 09:26:36 -0500
+        Mon, 6 Dec 2021 09:26:42 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1638800588; x=1670336588;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=oMjq8zFrglbyjH+zylWx61MB+80sU/3TxTg+wGA9w1M=;
-  b=cW8HkbTg2YCtY5nmH/h+NdaZaVdSd4+mLwrMjAhWNAD3AA/q32ipoJrf
-   eKqJdFwaR5/VxRFMABXUU+eNA2rbdhSkvM5kPltg78R1zJdHcGfCboBBF
-   dEXhkIDPgh9FefTK6VGELtsKOhjdZbkgOozikMP9xPHxuBeLrchkD/9o6
-   M=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 Dec 2021 06:23:08 -0800
+  t=1638800594; x=1670336594;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=cbw1AVaFHVJWIaZMMUuDfBEPDmbiHVsWgHOaljXesN0=;
+  b=Ha+uGFV/M3C/JAqqeF4xy8DtdyKL8/Lxj7Iofhy70z3cvc+G4ke4T4z5
+   5vEL+Y6PHZ9u4ZRAB8RlsqUnKO68r5zP9qtTJvh9852Nniun8NsVtcH6i
+   l9uzsY5DrT95hdVh1KSrzLmV8iEekRbbf/aPQB+BPa9CirT9u8qC7o8av
+   A=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Dec 2021 06:23:14 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 06:23:07 -0800
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 06:23:13 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 6 Dec 2021 06:23:07 -0800
+ 15.2.922.19; Mon, 6 Dec 2021 06:23:13 -0800
 Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 6 Dec 2021 06:23:01 -0800
+ 15.2.922.19; Mon, 6 Dec 2021 06:23:07 -0800
 From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
@@ -43,11 +44,14 @@ To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
         <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [RESEND, v9 00/10] Add support for audio on SC7280 based targets
-Date:   Mon, 6 Dec 2021 19:52:37 +0530
-Message-ID: <1638800567-27222-1-git-send-email-quic_srivasam@quicinc.com>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
+Subject: [RESEND, v9 01/10] ASoC: qcom: SC7280: Update config for building codec dma drivers
+Date:   Mon, 6 Dec 2021 19:52:38 +0530
+Message-ID: <1638800567-27222-2-git-send-email-quic_srivasam@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1638800567-27222-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1638800567-27222-1-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
@@ -57,69 +61,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch set is to add support for Audio over wcd codec,
-digital mics, through digital codecs and without ADSP.
+Add configuration for building SC7280 audio codec dma drivers.
 
-Changes Since V8:
-    -- Fix errors in sc7280 lpass cpu dt-bindings.
-    -- Move to quicinc domain email id's.
-Changes Since V7:
-    -- Fix indentation errors.
-    -- Bisect patches to avoid interdependency.
-Changes Since V6:
-    -- Split cdc dma regmap config macros.
-    -- Add write dma reg fields for i2s path.
-    -- Add helper function to distinguish rxtx and va dma ports.
-    -- Optimizing clock and reg name in cpu dt-bindings.
-    -- Update buffer management for cdc dma path.
-    -- Remove Kconfig fields of machine driver.
-Changes Since V5:
-    -- Include MI2S primary node to snd_soc_dai_driver in lpass-sc7280 platform driver.
-    -- Move dependency patch list to corresponding patch.
-    -- Add support for missing cdc-dma ports.
-    -- Change if/else conditional statements to switch cases.
-    -- Add missing error handlings.
-    -- Typo errors fix.
-Changes Since V4:
-    -- Remove unused variable in lpass-sc7280 platform driver.
-Changes Since V3:
-    -- Remove redundant power domain controls. As power domains can be configured from dtsi.
-Changes Since V2:
-    -- Split lpass sc7280 cpu driver patch and create regmap config patch.
-    -- Create patches based on latest kernel tip.
-    -- Add helper function to get dma control and lpaif handle.
-    -- Remove unused variables.
-Changes Since V1:
-    -- Typo errors fix
-    -- CPU driver readable/writable apis optimization.
-    -- Add Missing config patch
-    -- Add Common api for repeated dmactl initialization.
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+---
+This patch set depends on:
+    -- sc7280 machine driver patch
+       (https://patchwork.kernel.org/project/alsa-devel/list/?series=590035&state=%2A&archive=both)
 
-Srinivasa Rao Mandadapu (10):
-  ASoC: qcom: SC7280: Update config for building codec dma drivers
-  ASoC: qcom: Move lpass_pcm_data structure to lpass header
-  ASoC: qcom: lpass: Add dma fields for codec dma lpass interface
-  ASoC: qcom: Add helper function to get dma control and lpaif handle
-  ASoC: qcom: Add register definition for codec rddma and wrdma
-  ASoC: qcom: Add regmap config support for codec dma driver
-  ASoC: qcom: Add support for codec dma driver
-  ASoC: qcom: Add lpass CPU driver for codec dma control
-  ASoC: dt-bindings: Add SC7280 lpass cpu bindings
-  ASoC: qcom: lpass-sc7280: Add platform driver for lpass audio
+ sound/soc/qcom/Kconfig  | 11 +++++++++++
+ sound/soc/qcom/Makefile |  4 ++++
+ 2 files changed, 15 insertions(+)
 
- .../devicetree/bindings/sound/qcom,lpass-cpu.yaml  |  75 ++-
- sound/soc/qcom/Kconfig                             |  11 +
- sound/soc/qcom/Makefile                            |   4 +
- sound/soc/qcom/lpass-cdc-dma.c                     | 275 +++++++++
- sound/soc/qcom/lpass-cpu.c                         | 244 +++++++-
- sound/soc/qcom/lpass-lpaif-reg.h                   | 127 ++++-
- sound/soc/qcom/lpass-platform.c                    | 617 ++++++++++++++++++---
- sound/soc/qcom/lpass-sc7280.c                      | 441 +++++++++++++++
- sound/soc/qcom/lpass.h                             | 162 ++++++
- 9 files changed, 1869 insertions(+), 87 deletions(-)
- create mode 100644 sound/soc/qcom/lpass-cdc-dma.c
- create mode 100644 sound/soc/qcom/lpass-sc7280.c
-
+diff --git a/sound/soc/qcom/Kconfig b/sound/soc/qcom/Kconfig
+index 932b082..b46a2e7 100644
+--- a/sound/soc/qcom/Kconfig
++++ b/sound/soc/qcom/Kconfig
+@@ -20,6 +20,10 @@ config SND_SOC_LPASS_PLATFORM
+ 	tristate
+ 	select REGMAP_MMIO
+ 
++config SND_SOC_LPASS_CDC_DMA
++	tristate
++	select REGMAP_MMIO
++
+ config SND_SOC_LPASS_IPQ806X
+ 	tristate
+ 	select SND_SOC_LPASS_CPU
+@@ -36,6 +40,13 @@ config SND_SOC_LPASS_SC7180
+ 	select SND_SOC_LPASS_PLATFORM
+ 	select SND_SOC_LPASS_HDMI
+ 
++config SND_SOC_LPASS_SC7280
++	tristate
++	select SND_SOC_LPASS_CPU
++	select SND_SOC_LPASS_PLATFORM
++	select SND_SOC_LPASS_HDMI
++	select SND_SOC_LPASS_CDC_DMA
++
+ config SND_SOC_STORM
+ 	tristate "ASoC I2S support for Storm boards"
+ 	select SND_SOC_LPASS_IPQ806X
+diff --git a/sound/soc/qcom/Makefile b/sound/soc/qcom/Makefile
+index 625aec6..8b7b876 100644
+--- a/sound/soc/qcom/Makefile
++++ b/sound/soc/qcom/Makefile
+@@ -1,18 +1,22 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Platform
+ snd-soc-lpass-cpu-objs := lpass-cpu.o
++snd-soc-lpass-cdc-dma-objs := lpass-cdc-dma.o
+ snd-soc-lpass-hdmi-objs := lpass-hdmi.o
+ snd-soc-lpass-platform-objs := lpass-platform.o
+ snd-soc-lpass-ipq806x-objs := lpass-ipq806x.o
+ snd-soc-lpass-apq8016-objs := lpass-apq8016.o
+ snd-soc-lpass-sc7180-objs := lpass-sc7180.o
++snd-soc-lpass-sc7280-objs := lpass-sc7280.o
+ 
+ obj-$(CONFIG_SND_SOC_LPASS_CPU) += snd-soc-lpass-cpu.o
++obj-$(CONFIG_SND_SOC_LPASS_CDC_DMA) += snd-soc-lpass-cdc-dma.o
+ obj-$(CONFIG_SND_SOC_LPASS_HDMI) += snd-soc-lpass-hdmi.o
+ obj-$(CONFIG_SND_SOC_LPASS_PLATFORM) += snd-soc-lpass-platform.o
+ obj-$(CONFIG_SND_SOC_LPASS_IPQ806X) += snd-soc-lpass-ipq806x.o
+ obj-$(CONFIG_SND_SOC_LPASS_APQ8016) += snd-soc-lpass-apq8016.o
+ obj-$(CONFIG_SND_SOC_LPASS_SC7180) += snd-soc-lpass-sc7180.o
++obj-$(CONFIG_SND_SOC_LPASS_SC7280) += snd-soc-lpass-sc7280.o
+ 
+ # Machine
+ snd-soc-storm-objs := storm.o
 -- 
 2.7.4
 

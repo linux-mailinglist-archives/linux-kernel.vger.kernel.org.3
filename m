@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEFF469D80
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0673469D9F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350963AbhLFP37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:29:59 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:42978 "EHLO
+        id S1387522AbhLFPb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:31:26 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:42984 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244690AbhLFPTS (ORCPT
+        with ESMTP id S1357905AbhLFPTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:19:18 -0500
-Date:   Mon, 06 Dec 2021 15:15:46 -0000
+        Mon, 6 Dec 2021 10:19:20 -0500
+Date:   Mon, 06 Dec 2021 15:15:47 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638803747;
+        s=2020; t=1638803748;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tY/3BcngD87GBfij22uw4zmg58s1oiPnQ3wUX4epSuk=;
-        b=e/v1SVZ08YYj26hVYkqHWf8NFuViuCX1iNHgMF/h6iUMgL90xVeMWKWag80PhVBZwuCGRZ
-        as16S93465CPvuLRcTHzndQvJX/QPsYKg31mBL7dVLOf27nh+N0wAWpSfnoB+bB2Ap16ip
-        ZfVQ+7k7bo8ZGmvZmZ84g3tRVxIRZHEPkhs7b34wI63cNgOqryBWqEWFSWGy/Oe30rrDl6
-        acccqDRZZl2tyXD62tehGvZAAW5fhvVKr7FkKvR6tmbh25phsLw0qo2PwGgYJzhcgOF7CX
-        5Jr0+L1OnC9Du8NJFM6pqUdg2zu42Z7XeQb3rorBP5hkPL/3+P6RPa1A3WiHRQ==
+        bh=1nffRp43qW/3HIS11dRlZc3H/uUEMjbw6d/VF30+ov4=;
+        b=E6FrqWZ5IiFd/dRmJ+U++/9JiTk6VVF7pSf5zto6mjqPUXay3EQpZDcGdEev2wb2jG+Xvy
+        oaBWUWMIjLRslLqjSF5g6qCwjsvw54szwny20TpYhwTvlsv9yHy7asfpz/jubCiIOBEp7V
+        trVvbDteslJxt1VHRcxsE+W+mo/5ujCCbw5Nx8KYxfE0LudHe7ZkEqzBx5endFSA27R2ca
+        Yj4ZJLiID+LGJaOzYqLzt7oovbCmj0eKYRdLfTUgBYyhfFDInTKHv2KJf2Qnf1fCnrdNhm
+        l7/cRcaLE6TuAmc4xKkJa4S3a8Id8wzsIxlT1VNGoOX05dkJyauyW4kx7dk5rA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638803747;
+        s=2020e; t=1638803748;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tY/3BcngD87GBfij22uw4zmg58s1oiPnQ3wUX4epSuk=;
-        b=d7wOuD07A85Pw/rGhxsAB7cOn16tXwKtIQhV05PohP6FguLkqdCYBIBgKUjYVeyWbyKTZy
-        TC5DC2fPmy5jk3BA==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+        bh=1nffRp43qW/3HIS11dRlZc3H/uUEMjbw6d/VF30+ov4=;
+        b=ctFfReNmFhT+xlJkDpsvoOUSAtjG7KjzaK7OobnXkZZ/Fmc1w9WQae8cTweBxc0oJYWC2G
+        5G6bMwK/Lj7BS3DA==
+From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] lockdep: Remove softirq accounting on PREEMPT_RT.
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+Subject: [tip: locking/core] locking/rtmutex: Add rt_mutex_lock_nest_lock()
+ and rt_mutex_lock_killable().
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211129174654.668506-6-bigeasy@linutronix.de>
-References: <20211129174654.668506-6-bigeasy@linutronix.de>
+In-Reply-To: <20211129174654.668506-5-bigeasy@linutronix.de>
+References: <20211129174654.668506-5-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163880374685.11128.16947312483583939101.tip-bot2@tip-bot2>
+Message-ID: <163880374782.11128.1123821944123050508.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -58,95 +59,128 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     0c1d7a2c2d32fac7ff4a644724b2d52a64184645
-Gitweb:        https://git.kernel.org/tip/0c1d7a2c2d32fac7ff4a644724b2d52a64184645
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 29 Nov 2021 18:46:48 +01:00
+Commit-ID:     a3642021923b26d86bb27d88c826494827612c06
+Gitweb:        https://git.kernel.org/tip/a3642021923b26d86bb27d88c826494827612c06
+Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+AuthorDate:    Mon, 29 Nov 2021 18:46:47 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Sat, 04 Dec 2021 10:56:23 +01:00
 
-lockdep: Remove softirq accounting on PREEMPT_RT.
+locking/rtmutex: Add rt_mutex_lock_nest_lock() and rt_mutex_lock_killable().
 
-There is not really a softirq context on PREEMPT_RT.  Softirqs on
-PREEMPT_RT are always invoked within the context of a threaded
-interrupt handler or within ksoftirqd. The "in-softirq" context is
-preemptible and is protected by a per-CPU lock to ensure mutual
-exclusion.
+The locking selftest for ww-mutex expects to operate directly on the
+base-mutex which becomes a rtmutex on PREEMPT_RT.
 
-There is no difference on PREEMPT_RT between spin_lock_irq() and
-spin_lock() because the former does not disable interrupts. Therefore
-if a lock is used in_softirq() and locked once with spin_lock_irq()
-then lockdep will report this with "inconsistent {SOFTIRQ-ON-W} ->
-{IN-SOFTIRQ-W} usage".
+Add a rtmutex based implementation of mutex_lock_nest_lock() and
+mutex_lock_killable() named rt_mutex_lock_nest_lock() abd
+rt_mutex_lock_killable().
 
-Teach lockdep that we don't really do softirqs on -RT.
-
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20211129174654.668506-6-bigeasy@linutronix.de
+Link: https://lore.kernel.org/r/20211129174654.668506-5-bigeasy@linutronix.de
 ---
- include/linux/irqflags.h | 23 +++++++++++++++--------
- kernel/locking/lockdep.c |  2 ++
- 2 files changed, 17 insertions(+), 8 deletions(-)
+ include/linux/rtmutex.h      |  9 +++++++++
+ kernel/locking/rtmutex_api.c | 30 ++++++++++++++++++++++++++----
+ 2 files changed, 35 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/irqflags.h b/include/linux/irqflags.h
-index 600c10d..4b14093 100644
---- a/include/linux/irqflags.h
-+++ b/include/linux/irqflags.h
-@@ -71,14 +71,6 @@ do {						\
- do {						\
- 	__this_cpu_dec(hardirq_context);	\
- } while (0)
--# define lockdep_softirq_enter()		\
--do {						\
--	current->softirq_context++;		\
--} while (0)
--# define lockdep_softirq_exit()			\
--do {						\
--	current->softirq_context--;		\
--} while (0)
+diff --git a/include/linux/rtmutex.h b/include/linux/rtmutex.h
+index 9deedfe..7d04988 100644
+--- a/include/linux/rtmutex.h
++++ b/include/linux/rtmutex.h
+@@ -99,13 +99,22 @@ extern void __rt_mutex_init(struct rt_mutex *lock, const char *name, struct lock
  
- # define lockdep_hrtimer_enter(__hrtimer)		\
- ({							\
-@@ -140,6 +132,21 @@ do {						\
- # define lockdep_irq_work_exit(__work)		do { } while (0)
+ #ifdef CONFIG_DEBUG_LOCK_ALLOC
+ extern void rt_mutex_lock_nested(struct rt_mutex *lock, unsigned int subclass);
++extern void _rt_mutex_lock_nest_lock(struct rt_mutex *lock, struct lockdep_map *nest_lock);
+ #define rt_mutex_lock(lock) rt_mutex_lock_nested(lock, 0)
++#define rt_mutex_lock_nest_lock(lock, nest_lock)			\
++	do {								\
++		typecheck(struct lockdep_map *, &(nest_lock)->dep_map);	\
++		_rt_mutex_lock_nest_lock(lock, &(nest_lock)->dep_map);	\
++	} while (0)
++
+ #else
+ extern void rt_mutex_lock(struct rt_mutex *lock);
+ #define rt_mutex_lock_nested(lock, subclass) rt_mutex_lock(lock)
++#define rt_mutex_lock_nest_lock(lock, nest_lock) rt_mutex_lock(lock)
  #endif
  
-+#if defined(CONFIG_TRACE_IRQFLAGS) && !defined(CONFIG_PREEMPT_RT)
-+# define lockdep_softirq_enter()		\
-+do {						\
-+	current->softirq_context++;		\
-+} while (0)
-+# define lockdep_softirq_exit()			\
-+do {						\
-+	current->softirq_context--;		\
-+} while (0)
-+
-+#else
-+# define lockdep_softirq_enter()		do { } while (0)
-+# define lockdep_softirq_exit()			do { } while (0)
-+#endif
-+
- #if defined(CONFIG_IRQSOFF_TRACER) || \
- 	defined(CONFIG_PREEMPT_TRACER)
-  extern void stop_critical_timings(void);
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 2270ec6..4a882f8 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -5485,6 +5485,7 @@ static noinstr void check_flags(unsigned long flags)
- 		}
- 	}
+ extern int rt_mutex_lock_interruptible(struct rt_mutex *lock);
++extern int rt_mutex_lock_killable(struct rt_mutex *lock);
+ extern int rt_mutex_trylock(struct rt_mutex *lock);
  
-+#ifndef CONFIG_PREEMPT_RT
- 	/*
- 	 * We dont accurately track softirq state in e.g.
- 	 * hardirq contexts (such as on 4KSTACKS), so only
-@@ -5499,6 +5500,7 @@ static noinstr void check_flags(unsigned long flags)
- 			DEBUG_LOCKS_WARN_ON(!current->softirqs_enabled);
- 		}
- 	}
-+#endif
+ extern void rt_mutex_unlock(struct rt_mutex *lock);
+diff --git a/kernel/locking/rtmutex_api.c b/kernel/locking/rtmutex_api.c
+index 5c9299a..9002209 100644
+--- a/kernel/locking/rtmutex_api.c
++++ b/kernel/locking/rtmutex_api.c
+@@ -21,12 +21,13 @@ int max_lock_depth = 1024;
+  */
+ static __always_inline int __rt_mutex_lock_common(struct rt_mutex *lock,
+ 						  unsigned int state,
++						  struct lockdep_map *nest_lock,
+ 						  unsigned int subclass)
+ {
+ 	int ret;
  
- 	if (!debug_locks)
- 		print_irqtrace_events(current);
+ 	might_sleep();
+-	mutex_acquire(&lock->dep_map, subclass, 0, _RET_IP_);
++	mutex_acquire_nest(&lock->dep_map, subclass, 0, nest_lock, _RET_IP_);
+ 	ret = __rt_mutex_lock(&lock->rtmutex, state);
+ 	if (ret)
+ 		mutex_release(&lock->dep_map, _RET_IP_);
+@@ -48,10 +49,16 @@ EXPORT_SYMBOL(rt_mutex_base_init);
+  */
+ void __sched rt_mutex_lock_nested(struct rt_mutex *lock, unsigned int subclass)
+ {
+-	__rt_mutex_lock_common(lock, TASK_UNINTERRUPTIBLE, subclass);
++	__rt_mutex_lock_common(lock, TASK_UNINTERRUPTIBLE, NULL, subclass);
+ }
+ EXPORT_SYMBOL_GPL(rt_mutex_lock_nested);
+ 
++void __sched _rt_mutex_lock_nest_lock(struct rt_mutex *lock, struct lockdep_map *nest_lock)
++{
++	__rt_mutex_lock_common(lock, TASK_UNINTERRUPTIBLE, nest_lock, 0);
++}
++EXPORT_SYMBOL_GPL(_rt_mutex_lock_nest_lock);
++
+ #else /* !CONFIG_DEBUG_LOCK_ALLOC */
+ 
+ /**
+@@ -61,7 +68,7 @@ EXPORT_SYMBOL_GPL(rt_mutex_lock_nested);
+  */
+ void __sched rt_mutex_lock(struct rt_mutex *lock)
+ {
+-	__rt_mutex_lock_common(lock, TASK_UNINTERRUPTIBLE, 0);
++	__rt_mutex_lock_common(lock, TASK_UNINTERRUPTIBLE, NULL, 0);
+ }
+ EXPORT_SYMBOL_GPL(rt_mutex_lock);
+ #endif
+@@ -77,11 +84,26 @@ EXPORT_SYMBOL_GPL(rt_mutex_lock);
+  */
+ int __sched rt_mutex_lock_interruptible(struct rt_mutex *lock)
+ {
+-	return __rt_mutex_lock_common(lock, TASK_INTERRUPTIBLE, 0);
++	return __rt_mutex_lock_common(lock, TASK_INTERRUPTIBLE, NULL, 0);
+ }
+ EXPORT_SYMBOL_GPL(rt_mutex_lock_interruptible);
+ 
+ /**
++ * rt_mutex_lock_killable - lock a rt_mutex killable
++ *
++ * @lock:		the rt_mutex to be locked
++ *
++ * Returns:
++ *  0		on success
++ * -EINTR	when interrupted by a signal
++ */
++int __sched rt_mutex_lock_killable(struct rt_mutex *lock)
++{
++	return __rt_mutex_lock_common(lock, TASK_KILLABLE, NULL, 0);
++}
++EXPORT_SYMBOL_GPL(rt_mutex_lock_killable);
++
++/**
+  * rt_mutex_trylock - try to lock a rt_mutex
+  *
+  * @lock:	the rt_mutex to be locked

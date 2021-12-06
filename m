@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F248469B00
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:08:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A9D46A004
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356467AbhLFPMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:12:05 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58322 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346710AbhLFPI4 (ORCPT
+        id S1442947AbhLFP4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:56:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385561AbhLFPis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:08:56 -0500
+        Mon, 6 Dec 2021 10:38:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19C0C08EB48;
+        Mon,  6 Dec 2021 07:24:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 636D661309;
-        Mon,  6 Dec 2021 15:05:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 466F8C341C5;
-        Mon,  6 Dec 2021 15:05:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BA9861344;
+        Mon,  6 Dec 2021 15:24:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F9F6C34901;
+        Mon,  6 Dec 2021 15:24:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803126;
-        bh=Hb82Ltz7cxNDjP5SoEPLfIFR3RePfodY9ewej1llWFM=;
+        s=korg; t=1638804280;
+        bh=reN+dNueUHkFjlhNO9CMyFtMhrkiLSL/IAujyZSoScM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rwWs/R/BkwgnkKlRsyvg0wfT1RXH406npq3uIhhEOE9bS0l3/0PqiedGWaf/+G8dD
-         JW2lo8sCGFAYcNttoKxclZpxL0vabEZ3SC7vlAdk2EH9++JIjpy97toVcn+xAbZtYM
-         LsDhOX27Sz6+5wydKxwgnaaA8jI2iOkRINpcHl7g=
+        b=J20IIVCxJbSM3czQJ+hZ9GGGISl+TlgNXxqRJMPqPYnJdpwT3viH6OAmN0/0bS2+p
+         qgZ76+19qDDgmH/7KgakoKr1CFcOdfmPmANLpHw2wydp7GWyH9FfyvLtdPwSIhHJU7
+         3GnhRh2ccHij738au3dIh7Xh30lXurmDRtE554Bs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tomasz Maciej Nowak <tmn505@gmail.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <marek.behun@nic.cz>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH 4.14 036/106] PCI: aardvark: Improve link training
+        stable@vger.kernel.org,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 090/207] net: dsa: mv88e6xxx: Link in pcs_get_state() if AN is bypassed
 Date:   Mon,  6 Dec 2021 15:55:44 +0100
-Message-Id: <20211206145556.623676804@linuxfoundation.org>
+Message-Id: <20211206145613.347282418@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,211 +49,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Behún <marek.behun@nic.cz>
+From: Marek Behún <kabel@kernel.org>
 
-commit 43fc679ced18006b12d918d7a8a4af392b7fbfe7 upstream.
+commit ede359d8843a2779d232ed30bc36089d4b5962e4 upstream.
 
-Currently the aardvark driver trains link in PCIe gen2 mode. This may
-cause some buggy gen1 cards (such as Compex WLE900VX) to be unstable or
-even not detected. Moreover when ASPM code tries to retrain link second
-time, these cards may stop responding and link goes down. If gen1 is
-used this does not happen.
+Function mv88e6xxx_serdes_pcs_get_state() currently does not report link
+up if AN is enabled, Link bit is set, but Speed and Duplex Resolved bit
+is not set, which testing shows is the case for when auto-negotiation
+was bypassed (we have AN enabled but link partner does not).
 
-Unconditionally forcing gen1 is not a good solution since it may have
-performance impact on gen2 cards.
+An example of such link partner is Marvell 88X3310 PHY, when put into
+the mode where host interface changes between 10gbase-r, 5gbase-r,
+2500base-x and sgmii according to copper speed. The 88X3310 does not
+enable AN in 2500base-x, and so SerDes on mv88e6xxx currently does not
+link with it.
 
-To overcome this, read 'max-link-speed' property (as defined in PCI
-device tree bindings) and use this as max gen mode. Then iteratively try
-link training at this mode or lower until successful. After successful
-link training choose final controller gen based on Negotiated Link Speed
-from Link Status register, which should match card speed.
+Fix this.
 
-Link: https://lore.kernel.org/r/20200430080625.26070-5-pali@kernel.org
-Tested-by: Tomasz Maciej Nowak <tmn505@gmail.com>
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Marek Behún <marek.behun@nic.cz>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fixes: a5a6858b793f ("net: dsa: mv88e6xxx: extend phylink to Serdes PHYs")
 Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/host/pci-aardvark.c |  114 +++++++++++++++++++++++++++++++---------
- 1 file changed, 89 insertions(+), 25 deletions(-)
+ drivers/net/dsa/mv88e6xxx/serdes.c |   48 ++++++++++++++++++++++++++++++++-----
+ 1 file changed, 42 insertions(+), 6 deletions(-)
 
---- a/drivers/pci/host/pci-aardvark.c
-+++ b/drivers/pci/host/pci-aardvark.c
-@@ -36,6 +36,7 @@
- #define PCIE_CORE_LINK_CTRL_STAT_REG				0xd0
- #define     PCIE_CORE_LINK_L0S_ENTRY				BIT(0)
- #define     PCIE_CORE_LINK_TRAINING				BIT(5)
-+#define     PCIE_CORE_LINK_SPEED_SHIFT				16
- #define     PCIE_CORE_LINK_WIDTH_SHIFT				20
- #define PCIE_CORE_ERR_CAPCTL_REG				0x118
- #define     PCIE_CORE_ERR_CAPCTL_ECRC_CHK_TX			BIT(5)
-@@ -212,6 +213,7 @@ struct advk_pcie {
- 	struct mutex msi_used_lock;
- 	u16 msi_msg;
- 	int root_bus_nr;
-+	int link_gen;
- };
- 
- static inline void advk_writel(struct advk_pcie *pcie, u32 val, u64 reg)
-@@ -235,20 +237,16 @@ static int advk_pcie_link_up(struct advk
- 
- static int advk_pcie_wait_for_link(struct advk_pcie *pcie)
- {
--	struct device *dev = &pcie->pdev->dev;
- 	int retries;
- 
- 	/* check if the link is up or not */
- 	for (retries = 0; retries < LINK_WAIT_MAX_RETRIES; retries++) {
--		if (advk_pcie_link_up(pcie)) {
--			dev_info(dev, "link up\n");
-+		if (advk_pcie_link_up(pcie))
- 			return 0;
--		}
- 
- 		usleep_range(LINK_WAIT_USLEEP_MIN, LINK_WAIT_USLEEP_MAX);
- 	}
- 
--	dev_err(dev, "link never came up\n");
- 	return -ETIMEDOUT;
+--- a/drivers/net/dsa/mv88e6xxx/serdes.c
++++ b/drivers/net/dsa/mv88e6xxx/serdes.c
+@@ -50,11 +50,22 @@ static int mv88e6390_serdes_write(struct
  }
  
-@@ -272,6 +270,85 @@ static void advk_pcie_set_ob_win(struct
- 	advk_writel(pcie, match_ls | BIT(0), OB_WIN_MATCH_LS(win_num));
- }
- 
-+static int advk_pcie_train_at_gen(struct advk_pcie *pcie, int gen)
-+{
-+	int ret, neg_gen;
-+	u32 reg;
-+
-+	/* Setup link speed */
-+	reg = advk_readl(pcie, PCIE_CORE_CTRL0_REG);
-+	reg &= ~PCIE_GEN_SEL_MSK;
-+	if (gen == 3)
-+		reg |= SPEED_GEN_3;
-+	else if (gen == 2)
-+		reg |= SPEED_GEN_2;
-+	else
-+		reg |= SPEED_GEN_1;
-+	advk_writel(pcie, reg, PCIE_CORE_CTRL0_REG);
-+
-+	/*
-+	 * Enable link training. This is not needed in every call to this
-+	 * function, just once suffices, but it does not break anything either.
-+	 */
-+	reg = advk_readl(pcie, PCIE_CORE_CTRL0_REG);
-+	reg |= LINK_TRAINING_EN;
-+	advk_writel(pcie, reg, PCIE_CORE_CTRL0_REG);
-+
-+	/*
-+	 * Start link training immediately after enabling it.
-+	 * This solves problems for some buggy cards.
-+	 */
-+	reg = advk_readl(pcie, PCIE_CORE_LINK_CTRL_STAT_REG);
-+	reg |= PCIE_CORE_LINK_TRAINING;
-+	advk_writel(pcie, reg, PCIE_CORE_LINK_CTRL_STAT_REG);
-+
-+	ret = advk_pcie_wait_for_link(pcie);
-+	if (ret)
-+		return ret;
-+
-+	reg = advk_readl(pcie, PCIE_CORE_LINK_CTRL_STAT_REG);
-+	neg_gen = (reg >> PCIE_CORE_LINK_SPEED_SHIFT) & 0xf;
-+
-+	return neg_gen;
-+}
-+
-+static void advk_pcie_train_link(struct advk_pcie *pcie)
-+{
-+	struct device *dev = &pcie->pdev->dev;
-+	int neg_gen = -1, gen;
-+
-+	/*
-+	 * Try link training at link gen specified by device tree property
-+	 * 'max-link-speed'. If this fails, iteratively train at lower gen.
-+	 */
-+	for (gen = pcie->link_gen; gen > 0; --gen) {
-+		neg_gen = advk_pcie_train_at_gen(pcie, gen);
-+		if (neg_gen > 0)
-+			break;
-+	}
-+
-+	if (neg_gen < 0)
-+		goto err;
-+
-+	/*
-+	 * After successful training if negotiated gen is lower than requested,
-+	 * train again on negotiated gen. This solves some stability issues for
-+	 * some buggy gen1 cards.
-+	 */
-+	if (neg_gen < gen) {
-+		gen = neg_gen;
-+		neg_gen = advk_pcie_train_at_gen(pcie, gen);
-+	}
-+
-+	if (neg_gen == gen) {
-+		dev_info(dev, "link up at gen %i\n", gen);
-+		return;
-+	}
-+
-+err:
-+	dev_err(dev, "link never came up\n");
-+}
-+
- static void advk_pcie_setup_hw(struct advk_pcie *pcie)
+ static int mv88e6xxx_serdes_pcs_get_state(struct mv88e6xxx_chip *chip,
+-					  u16 status, u16 lpa,
++					  u16 ctrl, u16 status, u16 lpa,
+ 					  struct phylink_link_state *state)
  {
- 	u32 reg;
-@@ -312,12 +389,6 @@ static void advk_pcie_setup_hw(struct ad
- 		PCIE_CORE_CTRL2_TD_ENABLE;
- 	advk_writel(pcie, reg, PCIE_CORE_CTRL2_REG);
++	state->link = !!(status & MV88E6390_SGMII_PHY_STATUS_LINK);
++
+ 	if (status & MV88E6390_SGMII_PHY_STATUS_SPD_DPL_VALID) {
+-		state->link = !!(status & MV88E6390_SGMII_PHY_STATUS_LINK);
++		/* The Spped and Duplex Resolved register is 1 if AN is enabled
++		 * and complete, or if AN is disabled. So with disabled AN we
++		 * still get here on link up. But we want to set an_complete
++		 * only if AN was enabled, thus we look at BMCR_ANENABLE.
++		 * (According to 802.3-2008 section 22.2.4.2.10, we should be
++		 *  able to get this same value from BMSR_ANEGCAPABLE, but tests
++		 *  show that these Marvell PHYs don't conform to this part of
++		 *  the specificaion - BMSR_ANEGCAPABLE is simply always 1.)
++		 */
++		state->an_complete = !!(ctrl & BMCR_ANENABLE);
+ 		state->duplex = status &
+ 				MV88E6390_SGMII_PHY_STATUS_DUPLEX_FULL ?
+ 			                         DUPLEX_FULL : DUPLEX_HALF;
+@@ -81,6 +92,18 @@ static int mv88e6xxx_serdes_pcs_get_stat
+ 			dev_err(chip->dev, "invalid PHY speed\n");
+ 			return -EINVAL;
+ 		}
++	} else if (state->link &&
++		   state->interface != PHY_INTERFACE_MODE_SGMII) {
++		/* If Speed and Duplex Resolved register is 0 and link is up, it
++		 * means that AN was enabled, but link partner had it disabled
++		 * and the PHY invoked the Auto-Negotiation Bypass feature and
++		 * linked anyway.
++		 */
++		state->duplex = DUPLEX_FULL;
++		if (state->interface == PHY_INTERFACE_MODE_2500BASEX)
++			state->speed = SPEED_2500;
++		else
++			state->speed = SPEED_1000;
+ 	} else {
+ 		state->link = false;
+ 	}
+@@ -168,9 +191,15 @@ int mv88e6352_serdes_pcs_config(struct m
+ int mv88e6352_serdes_pcs_get_state(struct mv88e6xxx_chip *chip, int port,
+ 				   int lane, struct phylink_link_state *state)
+ {
+-	u16 lpa, status;
++	u16 lpa, status, ctrl;
+ 	int err;
  
--	/* Set GEN2 */
--	reg = advk_readl(pcie, PCIE_CORE_CTRL0_REG);
--	reg &= ~PCIE_GEN_SEL_MSK;
--	reg |= SPEED_GEN_2;
--	advk_writel(pcie, reg, PCIE_CORE_CTRL0_REG);
--
- 	/* Set lane X1 */
- 	reg = advk_readl(pcie, PCIE_CORE_CTRL0_REG);
- 	reg &= ~LANE_CNT_MSK;
-@@ -365,20 +436,7 @@ static void advk_pcie_setup_hw(struct ad
- 	 */
- 	msleep(PCI_PM_D3COLD_WAIT);
- 
--	/* Enable link training */
--	reg = advk_readl(pcie, PCIE_CORE_CTRL0_REG);
--	reg |= LINK_TRAINING_EN;
--	advk_writel(pcie, reg, PCIE_CORE_CTRL0_REG);
--
--	/*
--	 * Start link training immediately after enabling it.
--	 * This solves problems for some buggy cards.
--	 */
--	reg = advk_readl(pcie, PCIE_CORE_LINK_CTRL_STAT_REG);
--	reg |= PCIE_CORE_LINK_TRAINING;
--	advk_writel(pcie, reg, PCIE_CORE_LINK_CTRL_STAT_REG);
--
--	advk_pcie_wait_for_link(pcie);
-+	advk_pcie_train_link(pcie);
- 
- 	reg = advk_readl(pcie, PCIE_CORE_CMD_STATUS_REG);
- 	reg |= PCIE_CORE_CMD_MEM_ACCESS_EN |
-@@ -1017,6 +1075,12 @@ static int advk_pcie_probe(struct platfo
- 		return ret;
++	err = mv88e6352_serdes_read(chip, MII_BMCR, &ctrl);
++	if (err) {
++		dev_err(chip->dev, "can't read Serdes PHY control: %d\n", err);
++		return err;
++	}
++
+ 	err = mv88e6352_serdes_read(chip, 0x11, &status);
+ 	if (err) {
+ 		dev_err(chip->dev, "can't read Serdes PHY status: %d\n", err);
+@@ -183,7 +212,7 @@ int mv88e6352_serdes_pcs_get_state(struc
+ 		return err;
  	}
  
-+	ret = of_pci_get_max_link_speed(dev->of_node);
-+	if (ret <= 0 || ret > 3)
-+		pcie->link_gen = 3;
-+	else
-+		pcie->link_gen = ret;
-+
- 	advk_pcie_setup_hw(pcie);
+-	return mv88e6xxx_serdes_pcs_get_state(chip, status, lpa, state);
++	return mv88e6xxx_serdes_pcs_get_state(chip, ctrl, status, lpa, state);
+ }
  
- 	ret = advk_pcie_init_irq_domain(pcie);
+ int mv88e6352_serdes_pcs_an_restart(struct mv88e6xxx_chip *chip, int port,
+@@ -883,10 +912,17 @@ int mv88e6390_serdes_pcs_config(struct m
+ static int mv88e6390_serdes_pcs_get_state_sgmii(struct mv88e6xxx_chip *chip,
+ 	int port, int lane, struct phylink_link_state *state)
+ {
+-	u16 lpa, status;
++	u16 lpa, status, ctrl;
+ 	int err;
+ 
+ 	err = mv88e6390_serdes_read(chip, lane, MDIO_MMD_PHYXS,
++				    MV88E6390_SGMII_BMCR, &ctrl);
++	if (err) {
++		dev_err(chip->dev, "can't read Serdes PHY control: %d\n", err);
++		return err;
++	}
++
++	err = mv88e6390_serdes_read(chip, lane, MDIO_MMD_PHYXS,
+ 				    MV88E6390_SGMII_PHY_STATUS, &status);
+ 	if (err) {
+ 		dev_err(chip->dev, "can't read Serdes PHY status: %d\n", err);
+@@ -900,7 +936,7 @@ static int mv88e6390_serdes_pcs_get_stat
+ 		return err;
+ 	}
+ 
+-	return mv88e6xxx_serdes_pcs_get_state(chip, status, lpa, state);
++	return mv88e6xxx_serdes_pcs_get_state(chip, ctrl, status, lpa, state);
+ }
+ 
+ static int mv88e6390_serdes_pcs_get_state_10g(struct mv88e6xxx_chip *chip,
 
 

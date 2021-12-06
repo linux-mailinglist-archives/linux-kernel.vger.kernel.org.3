@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60EDF469CCF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7946469B58
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386089AbhLFP0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:26:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358800AbhLFPQr (ORCPT
+        id S1356125AbhLFPPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:15:02 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58226 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349943AbhLFPKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:16:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28907C0698C4;
-        Mon,  6 Dec 2021 07:09:37 -0800 (PST)
+        Mon, 6 Dec 2021 10:10:37 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B24DF61310;
-        Mon,  6 Dec 2021 15:09:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B7EEC341C5;
-        Mon,  6 Dec 2021 15:09:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C0B36131B;
+        Mon,  6 Dec 2021 15:07:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 616DEC341C2;
+        Mon,  6 Dec 2021 15:07:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803376;
-        bh=C3rkVKzteW0SpKk25N7VPYRyJsxtohM/s/8STn33ccc=;
+        s=korg; t=1638803227;
+        bh=TJZKzLWWzQzY4J9lP7NWOnUWXJWBljjiurwrpLMTq2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hpizyjUkP95TLerZmvq8W9+mXJqNZvoAxzV89bZgX4UjFTjSL8FPvhZgMMHXenk0V
-         RArAGgiUSDOjjFxJpvWxJXhisi4/knqp4lDTXpHVUP5yVFal/enullPgqbMJGNDIRW
-         Dh9hdx+EZeCoDyK+ZQqzze/ltfz5DBtJGd28hok4=
+        b=TPCz6eui9MLTqCPhar0IUoFqq0lj52pgxpKJKrrHmz1ncrqJWgNOLhZlZIgOu2c0u
+         Nvrv49CO/sTfDK0m0LlstR5G+EbR+NnQl5JfvftgeiCPahJwppmyTiVXa+Wm4F8ATj
+         a1WvrARMvP5+vdRJzWFgJTO2zQxEHnhEdlu8cx1I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH 4.19 03/48] of: clk: Make <linux/of_clk.h> self-contained
+        stable@vger.kernel.org, Mike Kravetz <mike.kravetz@oracle.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 4.14 072/106] hugetlb: take PMD sharing into account when flushing tlb/caches
 Date:   Mon,  6 Dec 2021 15:56:20 +0100
-Message-Id: <20211206145548.973239115@linuxfoundation.org>
+Message-Id: <20211206145557.963824995@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
-References: <20211206145548.859182340@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,44 +51,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Mike Kravetz <mike.kravetz@oracle.com>
 
-commit 5df867145f8adad9e5cdf9d67db1fbc0f71351e9 upstream.
+commit dff11abe280b47c21b804a8ace318e0638bb9a49 upstream.
 
-Depending on include order:
+When fixing an issue with PMD sharing and migration, it was discovered via
+code inspection that other callers of huge_pmd_unshare potentially have an
+issue with cache and tlb flushing.
 
-    include/linux/of_clk.h:11:45: warning: ‘struct device_node’ declared inside parameter list will not be visible outside of this definition or declaration
-     unsigned int of_clk_get_parent_count(struct device_node *np);
-						 ^~~~~~~~~~~
-    include/linux/of_clk.h:12:43: warning: ‘struct device_node’ declared inside parameter list will not be visible outside of this definition or declaration
-     const char *of_clk_get_parent_name(struct device_node *np, int index);
-					       ^~~~~~~~~~~
-    include/linux/of_clk.h:13:31: warning: ‘struct of_device_id’ declared inside parameter list will not be visible outside of this definition or declaration
-     void of_clk_init(const struct of_device_id *matches);
-				   ^~~~~~~~~~~~
+Use the routine adjust_range_if_pmd_sharing_possible() to calculate worst
+case ranges for mmu notifiers.  Ensure that this range is flushed if
+huge_pmd_unshare succeeds and unmaps a PUD_SUZE area.
 
-Fix this by adding forward declarations for struct device_node and
-struct of_device_id.
-
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lkml.kernel.org/r/20200205194649.31309-1-geert+renesas@glider.be
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Link: http://lkml.kernel.org/r/20180823205917.16297-3-mike.kravetz@oracle.com
+Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Reviewed-by: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Davidlohr Bueso <dave@stgolabs.net>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Jerome Glisse <jglisse@redhat.com>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/of_clk.h |    3 +++
- 1 file changed, 3 insertions(+)
+ mm/hugetlb.c |   53 +++++++++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 43 insertions(+), 10 deletions(-)
 
---- a/include/linux/of_clk.h
-+++ b/include/linux/of_clk.h
-@@ -6,6 +6,9 @@
- #ifndef __LINUX_OF_CLK_H
- #define __LINUX_OF_CLK_H
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -3384,8 +3384,8 @@ void __unmap_hugepage_range(struct mmu_g
+ 	struct page *page;
+ 	struct hstate *h = hstate_vma(vma);
+ 	unsigned long sz = huge_page_size(h);
+-	const unsigned long mmun_start = start;	/* For mmu_notifiers */
+-	const unsigned long mmun_end   = end;	/* For mmu_notifiers */
++	unsigned long mmun_start = start;	/* For mmu_notifiers */
++	unsigned long mmun_end   = end;		/* For mmu_notifiers */
+ 	bool force_flush = false;
  
-+struct device_node;
-+struct of_device_id;
+ 	WARN_ON(!is_vm_hugetlb_page(vma));
+@@ -3398,6 +3398,11 @@ void __unmap_hugepage_range(struct mmu_g
+ 	 */
+ 	tlb_remove_check_page_size_change(tlb, sz);
+ 	tlb_start_vma(tlb, vma);
 +
- #if defined(CONFIG_COMMON_CLK) && defined(CONFIG_OF)
++	/*
++	 * If sharing possible, alert mmu notifiers of worst case.
++	 */
++	adjust_range_if_pmd_sharing_possible(vma, &mmun_start, &mmun_end);
+ 	mmu_notifier_invalidate_range_start(mm, mmun_start, mmun_end);
+ 	address = start;
+ 	for (; address < end; address += sz) {
+@@ -3508,12 +3513,23 @@ void unmap_hugepage_range(struct vm_area
+ {
+ 	struct mm_struct *mm;
+ 	struct mmu_gather tlb;
++	unsigned long tlb_start = start;
++	unsigned long tlb_end = end;
++
++	/*
++	 * If shared PMDs were possibly used within this vma range, adjust
++	 * start/end for worst case tlb flushing.
++	 * Note that we can not be sure if PMDs are shared until we try to
++	 * unmap pages.  However, we want to make sure TLB flushing covers
++	 * the largest possible range.
++	 */
++	adjust_range_if_pmd_sharing_possible(vma, &tlb_start, &tlb_end);
  
- unsigned int of_clk_get_parent_count(struct device_node *np);
+ 	mm = vma->vm_mm;
+ 
+-	tlb_gather_mmu(&tlb, mm, start, end);
++	tlb_gather_mmu(&tlb, mm, tlb_start, tlb_end);
+ 	__unmap_hugepage_range(&tlb, vma, start, end, ref_page);
+-	tlb_finish_mmu(&tlb, start, end);
++	tlb_finish_mmu(&tlb, tlb_start, tlb_end);
+ }
+ 
+ /*
+@@ -4408,11 +4424,21 @@ unsigned long hugetlb_change_protection(
+ 	pte_t pte;
+ 	struct hstate *h = hstate_vma(vma);
+ 	unsigned long pages = 0;
++	unsigned long f_start = start;
++	unsigned long f_end = end;
++	bool shared_pmd = false;
++
++	/*
++	 * In the case of shared PMDs, the area to flush could be beyond
++	 * start/end.  Set f_start/f_end to cover the maximum possible
++	 * range if PMD sharing is possible.
++	 */
++	adjust_range_if_pmd_sharing_possible(vma, &f_start, &f_end);
+ 
+ 	BUG_ON(address >= end);
+-	flush_cache_range(vma, address, end);
++	flush_cache_range(vma, f_start, f_end);
+ 
+-	mmu_notifier_invalidate_range_start(mm, start, end);
++	mmu_notifier_invalidate_range_start(mm, f_start, f_end);
+ 	i_mmap_lock_write(vma->vm_file->f_mapping);
+ 	for (; address < end; address += huge_page_size(h)) {
+ 		spinlock_t *ptl;
+@@ -4423,6 +4449,7 @@ unsigned long hugetlb_change_protection(
+ 		if (huge_pmd_unshare(mm, &address, ptep)) {
+ 			pages++;
+ 			spin_unlock(ptl);
++			shared_pmd = true;
+ 			continue;
+ 		}
+ 		pte = huge_ptep_get(ptep);
+@@ -4458,12 +4485,18 @@ unsigned long hugetlb_change_protection(
+ 	 * Must flush TLB before releasing i_mmap_rwsem: x86's huge_pmd_unshare
+ 	 * may have cleared our pud entry and done put_page on the page table:
+ 	 * once we release i_mmap_rwsem, another task can do the final put_page
+-	 * and that page table be reused and filled with junk.
++	 * and that page table be reused and filled with junk.  If we actually
++	 * did unshare a page of pmds, flush the range corresponding to the pud.
+ 	 */
+-	flush_hugetlb_tlb_range(vma, start, end);
+-	mmu_notifier_invalidate_range(mm, start, end);
++	if (shared_pmd) {
++		flush_hugetlb_tlb_range(vma, f_start, f_end);
++		mmu_notifier_invalidate_range(mm, f_start, f_end);
++	} else {
++		flush_hugetlb_tlb_range(vma, start, end);
++		mmu_notifier_invalidate_range(mm, start, end);
++	}
+ 	i_mmap_unlock_write(vma->vm_file->f_mapping);
+-	mmu_notifier_invalidate_range_end(mm, start, end);
++	mmu_notifier_invalidate_range_end(mm, f_start, f_end);
+ 
+ 	return pages << h->order;
+ }
 
 

@@ -2,112 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6102546A070
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D99046A072
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348468AbhLFQEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:04:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
+        id S1388277AbhLFQEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:04:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242575AbhLFPyz (ORCPT
+        with ESMTP id S1442880AbhLFP4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:54:55 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B4BC07E5E7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:40:09 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id t9so23279379wrx.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 07:40:09 -0800 (PST)
+        Mon, 6 Dec 2021 10:56:20 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30141C08E847;
+        Mon,  6 Dec 2021 07:40:35 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id n33-20020a05600c502100b0032fb900951eso10707231wmr.4;
+        Mon, 06 Dec 2021 07:40:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2GJDE2PlAe1SK4CWIqaNsGRDv9Fy2sK0QymkxrkRl9Q=;
-        b=vqXtM8dac/0SlC/DS4sp1pnEAS2lR73/xsVfG2VZt9Om7gEpBQLNKXRK6eMb4nN0vw
-         LI3VSmH7pqLRbW2sGBQ7jTT7Te8C3KGvPp+lsXr/Ku5kE/KDhB6C8a7kQbcQJxEQ0yLP
-         763BrPSx/gYz+nVXLPX5yQ8xWZt7iQ5BxW7toKejEAFGFzHm7MHv3JAJ5rk6IZMNeXiw
-         kbeiYgcXRc5LLZi8MjzDjOcGsJfc7cScQ+ZdSNlJTdD1wfSY4DdiqrGEniQGNjJ+VhVq
-         v5aqIRzZ0qkoU55gyfWZIs8WZPTJ3UAdaN4CkxbUZPlWiuInsOGrHjM3ZEoZ3hTo9qLu
-         lYqA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IFFwKnk3cbAW8jNrxL+vFBZxoatRvN6SQuYnsDGyFVg=;
+        b=RPtBn2mfNXoGjx1ojHeBAnLO1qVUSVt60HBdLecCMRKrHAqjM9GVSFYjinL9lWiLaq
+         4rK1gjllQ07iaXREVS0oT3bUlViUpM8UTUlvjeeF7w/dlqhW6nfQS8q4i1HFNU8SScSf
+         i1a7+jP8rB7SiCAfyJLrvwHE7UfRCnaHZmVkGra3o9pUotIYfmaoS2SMwfvGgREGNbB0
+         /IKUC8NqxE9ayTwn6B8bsipozMJRhj1xdSpw1zd0UQgJReAE3jVskGDKXO5vNZLwmFXE
+         nkEY8Wfd4NT0CSGiQtA1NiIULZfrJKzAtODVwIwUsoZxSdsmHzIQqG7Z2iFQlZlFC7Jk
+         SpZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2GJDE2PlAe1SK4CWIqaNsGRDv9Fy2sK0QymkxrkRl9Q=;
-        b=auB8hQCkKeR6JmWiKbw+qoN8RoE7oy5dCMQe/wpOkXmVbbk4iXI86Q+V/sKC/qsNsc
-         uN8KcSZ+pFQxwmn50fdwy011OPxnyQ7UxUMV3h69kdzgtmQ9k9XChMSblKVRZ/T+UjTx
-         /7zzbLz39KLmL/fJddIIQm2Ph+4SbeVzZMIgQ3xnegS36p6iX/t7r7F04ikbV38z0BOc
-         iS3gVNkSko88SdJwkrMJ7EJeZOogmOb5/eXtDsXKUgIopXHHCau6h6U8i+0b00RtwV1O
-         7TcJ7KxhwsGMl2qdolN39N5BQ+wC0DbBaglZY3GLTww3BkQPrGOURCEqnVEEeZ4SV/9X
-         Yrrw==
-X-Gm-Message-State: AOAM533oTTTFcIYLIDlj8Pz3ez50o1B87+XOJEZKdOcMbuQMsApYbvEC
-        SBYhFNcaqcbT7F2W/80/Rw4n+Q==
-X-Google-Smtp-Source: ABdhPJyATexF8UtrBdaev8nChUE8RNqxgsjAWoeHGQnhc+vMpNPzXPUV3Ql+fETfplfbig6ujPTsbg==
-X-Received: by 2002:a05:6000:11c3:: with SMTP id i3mr43243273wrx.426.1638805208160;
-        Mon, 06 Dec 2021 07:40:08 -0800 (PST)
-Received: from xps7590.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
-        by smtp.gmail.com with ESMTPSA id g13sm15818962wrd.57.2021.12.06.07.40.07
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IFFwKnk3cbAW8jNrxL+vFBZxoatRvN6SQuYnsDGyFVg=;
+        b=WYdNW/Ar9nSdBZaef2NLNz5JYBi/885VbgjA6fKOsDAvL+9037+6rRj7KBtG9ZTMXw
+         XEmiRFfxCWBMYNeei2Ezmv/apLCZhtALDPNp6GwzenkNc35aBfkBzmfT43SJZQ/H4lsr
+         7GDAY0NQdfRtAun2dn2ZONj+qyYvbn8Cgw9YUdhsz+MGt1U9rp3NoRa0u/QOCPZRn9kE
+         FuWiYK95HslbjwH2Qsne2vjxuyF6VVBUYD4CByrwqGynCn4ydUVqaXG7JnJhZEd/f9Vf
+         7A/YtK7hK7wuxc62zmzbIOBBBVbIlSePXy9+2KeIMa2ZYyKf+SdY1UwiQbwsDwoBNMb6
+         4Rvw==
+X-Gm-Message-State: AOAM533yOZOB4X4Y8leWBE2iPPI0Ixzrzdtw/d6poP0hsiky5YibgwGJ
+        0UfPXn3cHQnrFHJNE1kGfGM=
+X-Google-Smtp-Source: ABdhPJwIK1sZU+XX7uJLcxtVSFOv7RHxMzHCbd/T22a1Vi+8Lo/paQlu7PYjqZSC8rSBYq+OerekTw==
+X-Received: by 2002:a05:600c:154f:: with SMTP id f15mr39332252wmg.86.1638805233630;
+        Mon, 06 Dec 2021 07:40:33 -0800 (PST)
+Received: from localhost (pd9e51d39.dip0.t-ipconnect.de. [217.229.29.57])
+        by smtp.gmail.com with ESMTPSA id u15sm10643561wmq.13.2021.12.06.07.40.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 07:40:07 -0800 (PST)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Mauro Carvalho <mchehab@kernel.org>
-Cc:     Robert Foss <robert.foss@linaro.org>
-Subject: [PATCH v4 2/2] arm64: dts: qcom: sdm845-db845c: Remove clock-lanes property from &camss node
-Date:   Mon,  6 Dec 2021 16:40:03 +0100
-Message-Id: <20211206154003.39892-3-robert.foss@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211206154003.39892-1-robert.foss@linaro.org>
-References: <20211206154003.39892-1-robert.foss@linaro.org>
+        Mon, 06 Dec 2021 07:40:33 -0800 (PST)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: regulators: Document Tegra regulator coupling in json-schema
+Date:   Mon,  6 Dec 2021 16:40:32 +0100
+Message-Id: <20211206154032.227938-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The clock-lanes property is no longer used as it is not programmable by
-the CSIPHY hardware block of Qcom ISPs and should be removed.
+From: Thierry Reding <treding@nvidia.com>
 
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Move the NVIDIA Tegra regulator coupling bindings from the free-form
+text format into the existing json-schema file for regulators.
+
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
- arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 3 ---
- 1 file changed, 3 deletions(-)
+ .../nvidia,tegra-regulators-coupling.txt      | 65 -------------------
+ .../bindings/regulator/regulator.yaml         | 22 +++++++
+ 2 files changed, 22 insertions(+), 65 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/regulator/nvidia,tegra-regulators-coupling.txt
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-index 13f80a0b6faa..2cf4b932aee2 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-@@ -1125,7 +1125,6 @@ ports {
- 		port@0 {
- 			reg = <0>;
- 			csiphy0_ep: endpoint {
--				clock-lanes = <7>;
- 				data-lanes = <0 1 2 3>;
- 				remote-endpoint = <&ov8856_ep>;
- 			};
-@@ -1166,7 +1165,6 @@ camera@10 {
+diff --git a/Documentation/devicetree/bindings/regulator/nvidia,tegra-regulators-coupling.txt b/Documentation/devicetree/bindings/regulator/nvidia,tegra-regulators-coupling.txt
+deleted file mode 100644
+index 4bf2dbf7c6cc..000000000000
+--- a/Documentation/devicetree/bindings/regulator/nvidia,tegra-regulators-coupling.txt
++++ /dev/null
+@@ -1,65 +0,0 @@
+-NVIDIA Tegra Regulators Coupling
+-================================
+-
+-NVIDIA Tegra SoC's have a mandatory voltage-coupling between regulators.
+-Thus on Tegra20 there are 3 coupled regulators and on NVIDIA Tegra30
+-there are 2.
+-
+-Tegra20 voltage coupling
+-------------------------
+-
+-On Tegra20 SoC's there are 3 coupled regulators: CORE, RTC and CPU.
+-The CORE and RTC voltages shall be in a range of 170mV from each other
+-and they both shall be higher than the CPU voltage by at least 120mV.
+-
+-Tegra30 voltage coupling
+-------------------------
+-
+-On Tegra30 SoC's there are 2 coupled regulators: CORE and CPU. The CORE
+-and CPU voltages shall be in a range of 300mV from each other and CORE
+-voltage shall be higher than the CPU by N mV, where N depends on the CPU
+-voltage.
+-
+-Required properties:
+-- nvidia,tegra-core-regulator: Boolean property that designates regulator
+-  as the "Core domain" voltage regulator.
+-- nvidia,tegra-rtc-regulator: Boolean property that designates regulator
+-  as the "RTC domain" voltage regulator.
+-- nvidia,tegra-cpu-regulator: Boolean property that designates regulator
+-  as the "CPU domain" voltage regulator.
+-
+-Example:
+-
+-	pmic {
+-		regulators {
+-			core_vdd_reg: core {
+-				regulator-name = "vdd_core";
+-				regulator-min-microvolt = <950000>;
+-				regulator-max-microvolt = <1300000>;
+-				regulator-coupled-with = <&rtc_vdd_reg &cpu_vdd_reg>;
+-				regulator-coupled-max-spread = <170000 550000>;
+-
+-				nvidia,tegra-core-regulator;
+-			};
+-
+-			rtc_vdd_reg: rtc {
+-				regulator-name = "vdd_rtc";
+-				regulator-min-microvolt = <950000>;
+-				regulator-max-microvolt = <1300000>;
+-				regulator-coupled-with = <&core_vdd_reg &cpu_vdd_reg>;
+-				regulator-coupled-max-spread = <170000 550000>;
+-
+-				nvidia,tegra-rtc-regulator;
+-			};
+-
+-			cpu_vdd_reg: cpu {
+-				regulator-name = "vdd_cpu";
+-				regulator-min-microvolt = <750000>;
+-				regulator-max-microvolt = <1125000>;
+-				regulator-coupled-with = <&core_vdd_reg &rtc_vdd_reg>;
+-				regulator-coupled-max-spread = <550000 550000>;
+-
+-				nvidia,tegra-cpu-regulator;
+-			};
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/regulator/regulator.yaml b/Documentation/devicetree/bindings/regulator/regulator.yaml
+index ed560ee8714e..14f269f1e877 100644
+--- a/Documentation/devicetree/bindings/regulator/regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/regulator.yaml
+@@ -224,6 +224,28 @@ properties:
+     description: Maximum difference between current and target voltages
+       that can be changed safely in a single step.
  
- 		port {
- 			ov8856_ep: endpoint {
--				clock-lanes = <1>;
- 				link-frequencies = /bits/ 64
- 					<360000000 180000000>;
- 				data-lanes = <1 2 3 4>;
-@@ -1211,7 +1209,6 @@ camera@60 {
- 
- 		port {
- 			ov7251_ep: endpoint {
--				clock-lanes = <1>;
- 				data-lanes = <0 1>;
- //				remote-endpoint = <&csiphy3_ep>;
- 			};
++  # NVIDIA Tegra SoC's have a mandatory voltage-coupling between regulators. Thus on Tegra20 there
++  # are 3 coupled regulators and on NVIDIA Tegra30 there are 2.
++  #
++  # The 3 coupled regulators on Tegra20 are: CORE, RTC and CPU. The CORE and RTC voltages shall be
++  # in a range of 170 mV of each other and they both shall be higher than the CPU voltage by at
++  # least 120 mV.
++  #
++  # The 2 coupled regulators on Tegra30 are: CORE and CPU. The CORE and CPU voltages shall be in
++  # a range of 300 mV of each other and CORE voltage shall be higher than the CPU by N mV, where
++  # N depends on the CPU voltage.
++  nvidia,tegra-core-regulator:
++    $ref: "/schemas/types.yaml#/definitions/flag"
++    description: if present, designates the regulator as the "CORE domain" voltage regulator
++
++  nvidia,tegra-rtc-regulator:
++    $ref: "/schemas/types.yaml#/definitions/flag"
++    description: if present, designates the regulator as the "RTC domain" voltage regulator
++
++  nvidia,tegra-cpu-regulator:
++    $ref: "/schemas/types.yaml#/definitions/flag"
++    description: if present, designates the regulator as the "CPU domain" voltage regulator
++
+ patternProperties:
+   ".*-supply$":
+     description: Input supply phandle(s) for this node
 -- 
-2.32.0
+2.33.1
 

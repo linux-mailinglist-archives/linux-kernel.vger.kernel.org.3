@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A2546A392
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F0346A393
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345665AbhLFSEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 13:04:05 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:52798 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345568AbhLFSED (ORCPT
+        id S1345766AbhLFSEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 13:04:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345568AbhLFSEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 13:04:03 -0500
+        Mon, 6 Dec 2021 13:04:06 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE43C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 10:00:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 80F4BCE1767;
-        Mon,  6 Dec 2021 18:00:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2940AC341C6;
-        Mon,  6 Dec 2021 18:00:28 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 33BB3CE1767
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 18:00:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40185C341CA;
+        Mon,  6 Dec 2021 18:00:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638813631;
-        bh=rm4lpoorN4GW0idvvHmReqqBpZmjcTOc1YuUVO0Ac2g=;
+        s=k20201202; t=1638813634;
+        bh=P/4KZcHyQBwdHWd9kJQOIqw/zF3r6oRodHZk4R4fOFk=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=jjRc2MYZzQIjUrOw+DzK8UGJnqGKL0Ip5yQ3sGBlCfirVCbHtuH2LDwOooZQOO/u8
-         GwYLoxXv33XLoRjiDt7tGJuoFH7JLJOjFT+q7SAbN5EN79RK6lIlN6SmI2jY5MGi/f
-         Qz5WKSO+j3PTvt7rYLfEqGD2cBVau4VGy3IxObW7ZKs5naIGxpXb6NGHSrmsKr35zA
-         phvlGHIzdQl9LGUXf/sAUQsGpwdzkjpJn8o5IwXJ8CdD0R1WiYK0z2ZHkD9tClBVZn
-         Ob2piYABpjZbSjuUNNaByxEtaXgO4cazAIEAfShSH7rjPpkbIgstdMVLKr1JHcPGx/
-         Y8BhLRBOd3IMg==
+        b=q4NPdFYsLfErSx+tyEJOQJolerVVKQvIvS8Z32g3CyoGHdf17pItgJIiI1PKD8Qhe
+         I3il1FtYhk2bJF4Nb9AQdmcjpu2yWdYBNqH1oKHoEPmZcvrzMvSek0GjV35ZpwTlFz
+         tMCcahI3VfxQAUdvPc40chf3oXqwhuJimxz2EzCq3xkIzUczMol1ZR9sPjuWChk5J0
+         ZDFdc2xZ1sNGDx9Q+/B3BQGWvtH4tj10HtuNnL8u3vZJyrwMdjboOOANlZtuEUZp7z
+         ZYvRKVz8hay/+hIwjhTQc/Mqo91gy6QMDcEPTgGbB8PcpArdmkPhTuU6bdqq0hWkfm
+         M1EF+unGma/bw==
 From:   Mark Brown <broonie@kernel.org>
-To:     robh+dt@kernel.org, matthias.bgg@gmail.com, tiwai@suse.com,
-        Trevor Wu <trevor.wu@mediatek.com>
-Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, yc.hung@mediatek.com
-In-Reply-To: <20211130053905.28470-1-trevor.wu@mediatek.com>
-References: <20211130053905.28470-1-trevor.wu@mediatek.com>
-Subject: Re: [PATCH 0/2] ASoC: mediatek: support memory-region assignment
-Message-Id: <163881362873.2769299.4647182629013116105.b4-ty@kernel.org>
-Date:   Mon, 06 Dec 2021 18:00:28 +0000
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        alsa-devel@alsa-project.org,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>
+In-Reply-To: <20211202205612.76216-1-andriy.shevchenko@linux.intel.com>
+References: <20211202205612.76216-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/2] ASoC: ti: davinci-mcasp: Get rid of duplicate of_node assignment
+Message-Id: <163881363192.2769299.4699480471274162450.b4-ty@kernel.org>
+Date:   Mon, 06 Dec 2021 18:00:31 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -47,14 +52,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 Nov 2021 13:39:03 +0800, Trevor Wu wrote:
-> This series of patches adds support for memory-region assignment, so the
-> access region of DMA engine could be restricted.
-> Patches are based on broonie tree "for-next" branch.
+On Thu, 2 Dec 2021 22:56:11 +0200, Andy Shevchenko wrote:
+> GPIO library does copy the of_node from the parent device of
+> the GPIO chip, there is no need to repeat this in the individual
+> drivers. Remove assignment here.
 > 
-> Trevor Wu (2):
->   ASoC: mediatek: mt8195: support reserved memory assignment
->   dt-bindings: mediatek: mt8195: add memory-region property
+> For the details one may look into the of_gpio_dev_init() implementation.
+> 
 > 
 > [...]
 
@@ -64,10 +68,10 @@ Applied to
 
 Thanks!
 
-[1/2] ASoC: mediatek: mt8195: support reserved memory assignment
-      commit: 4d408ea0282c374a304ce402866cb7b8a56c6b05
-[2/2] dt-bindings: mediatek: mt8195: add memory-region property
-      commit: 2da636247bb6f4fc3a9842ade04757790753fd2c
+[1/2] ASoC: ti: davinci-mcasp: Get rid of duplicate of_node assignment
+      commit: 4db32072b8ab18a8b90191c57c74f42d00bf9991
+[2/2] ASoC: ti: davinci-mcasp: Remove unnecessary conditional
+      commit: c1a77ba466c0dd0bdf1ec2bbebb8996d7cd7b8f7
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

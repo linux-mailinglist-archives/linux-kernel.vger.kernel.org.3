@@ -2,110 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EB646916A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 09:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D425D469174
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 09:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239179AbhLFIbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 03:31:06 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:37830
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239064AbhLFIbF (ORCPT
+        id S239302AbhLFIc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 03:32:56 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:3827 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239226AbhLFIcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 03:31:05 -0500
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E7A7C3F1F7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:27:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638779255;
-        bh=bKEJIZAQjQgq4md0kg/pxei579CQyZfJWJdDIldzueQ=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=ahNfux5CFlXfrQpZB9nkUXPBTDqABr99/HT6BMzbjbi7jrfG+m1szPOwBX5pd8Pi3
-         1+uARP05iop73KLGGZavLhj29mqRpbTBdCjxvl0sSkRhHHMdQtdbGE12okAPB0vklB
-         6ux1BhZjhZNLsj5iAQiTsIOrn+7ckuiuMIO0EmhTGDiSTJ4E/57q7S6qQ23+KQlzB3
-         Ab68PsOrbqSqbHHwIg+9EkOwD7gy59ftP9KFIDsEAV9OlXa2UNQCpfAzciuhlyRmQ/
-         +UwfHdvVeXK10HUoUWE+yYw/id8WlEXns1pgdjM8y0noMTyPS3E+AEpJnArT1FatUf
-         ztBXRuNLcrSwQ==
-Received: by mail-lj1-f199.google.com with SMTP id y11-20020a2e978b000000b00218df7f76feso3167808lji.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 00:27:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bKEJIZAQjQgq4md0kg/pxei579CQyZfJWJdDIldzueQ=;
-        b=CpJoEWCxBSLQDWtpNGlei2hfqFhmqb+jga9rkIxyqSFiJ82gIY8R7Cwmj2aAwgOFYs
-         bqcZWU2RK/HJW4H3GGoX8dxSY3RhZa1pXT46dKo+mUutTKo8CDdSGP79jA32yHhr72gT
-         WQEj6ZjRnEMXeoT7mZ/v8mr1HOyhK4Ar2YQZv4nmOBLMSAl22x4TyPCWXnX9ouIUh96N
-         FofSYFuAllnBbFd1LZ1j5CAxFS1BQtAY/I+gPfZsqY2srga8qCpkrSnb8G1Cd8uMVRS6
-         48eRR5o0iL6XRXKNA+1AVmRABzSP33dA/k+QOe0rUlJI/IKQwbSuGFiNBALxNhsWcsGF
-         ot+Q==
-X-Gm-Message-State: AOAM530oGbwSOuqFkam/wXcddy5i/ZBvzW0S5Gk6CTL/ctZFzGWAhFgo
-        MyEnktQ0U9vKL9FBJQR7F9/mBShue9ebdc+ba60jLGgpp6b/s/tsHTGK5yc2x4yYU/MY4RLCrq3
-        a0w16sa+gz7BFc68Wpe2VhlJ3raC5Dip03Uv4kDA4ew==
-X-Received: by 2002:a19:4312:: with SMTP id q18mr34592508lfa.299.1638779255275;
-        Mon, 06 Dec 2021 00:27:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzzjKn8LjK/5lmCMNpVPgrp0RN3Vobgp5kXibfWPy43zCCeGy55FntekQYEglNs6rllZXWBUw==
-X-Received: by 2002:a19:4312:: with SMTP id q18mr34592489lfa.299.1638779255102;
-        Mon, 06 Dec 2021 00:27:35 -0800 (PST)
-Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id f22sm1287181lfa.171.2021.12.06.00.27.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 00:27:34 -0800 (PST)
-Message-ID: <98414edc-18fa-c759-9c73-490078d8c93c@canonical.com>
-Date:   Mon, 6 Dec 2021 09:27:33 +0100
+        Mon, 6 Dec 2021 03:32:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638779366; x=1670315366;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sDxxks2ISanKCZutPVRC7KEeBXIXNr8hG9VHZXbESTI=;
+  b=BWR2MDrDOV+cTlrJIABb2eo4Hy+d00eZ0+7O6v0J49Nbo1GP5XF8WyYK
+   O/OPAY1tFXp/0ZN+L/EUc7gsVbfxwxIJaolCsPkePOmQqmJYeMwgk3qkl
+   WEz9BXNRlA2tIwNAxvHs4DwzYIyzs62VPS8qj2nhrTCld6sZsI9jd42NK
+   k=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 06 Dec 2021 00:29:25 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 00:29:09 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 6 Dec 2021 00:29:09 -0800
+Received: from blr-ubuntu-311.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 6 Dec 2021 00:29:05 -0800
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+To:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Marc Zyngier" <maz@kernel.org>
+CC:     gregkh <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <quic_psodagud@quicinc.com>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Subject: [PATCHv5 0/4] tracing/rwmmio/arm64: Add support to trace register reads/writes
+Date:   Mon, 6 Dec 2021 13:58:02 +0530
+Message-ID: <cover.1638275062.git.quic_saipraka@quicinc.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH v2 RESEND 3/8] dt-bindings: i2c: exynos5: Add bus clock
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Wolfram Sang <wsa@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20211204215820.17378-1-semen.protsenko@linaro.org>
- <20211204215820.17378-4-semen.protsenko@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211204215820.17378-4-semen.protsenko@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/12/2021 22:58, Sam Protsenko wrote:
-> In new Exynos SoCs (like Exynos850) where HSI2C is implemented as a
-> part of USIv2 block, there are two clocks provided to HSI2C controller:
->   - PCLK: bus clock (APB), provides access to register interface
->   - IPCLK: operating IP-core clock; SCL is derived from this one
-> 
-> Both clocks have to be asserted for HSI2C to be functional in that case.
-> 
-> Modify bindings doc to allow specifying bus clock in addition to
-> already described operating clock.
-> 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
-> Changes in v2:
->   - Added 'clock-names' property to 'required:' in case of ExynosAutoV9
->   - Added example for two clocks case
-> 
->  .../devicetree/bindings/i2c/i2c-exynos5.yaml  | 59 +++++++++++++++++--
->  1 file changed, 53 insertions(+), 6 deletions(-)
-> 
+Generic MMIO read/write i.e., __raw_{read,write}{b,l,w,q} accessors
+are typically used to read/write from/to memory mapped registers
+and can cause hangs or some undefined behaviour in following cases,
+
+* If the access to the register space is unclocked, for example: if
+  there is an access to multimedia(MM) block registers without MM
+  clocks.
+
+* If the register space is protected and not set to be accessible from
+  non-secure world, for example: only EL3 (EL: Exception level) access
+  is allowed and any EL2/EL1 access is forbidden.
+
+* If xPU(memory/register protection units) is controlling access to
+  certain memory/register space for specific clients.
+
+and more...
+
+Such cases usually results in instant reboot/SErrors/NOC or interconnect
+hangs and tracing these register accesses can be very helpful to debug
+such issues during initial development stages and also in later stages.
+
+So use ftrace trace events to log such MMIO register accesses which
+provides rich feature set such as early enablement of trace events,
+filtering capability, dumping ftrace logs on console and many more.
+
+Sample output:
+
+rwmmio_read: gic_peek_irq+0xd0/0xd8 readl addr=0xffff800010040104
+rwmmio_write: gic_poke_irq+0xe4/0xf0 writel addr=0xffff800010040184 
+rwmmio_read: gic_do_wait_for_rwp+0x54/0x90 readl addr=0xffff800010040000
+rwmmio_write: gic_set_affinity+0x1bc/0x1e8 writeq addr=0xffff800010046130
+
+This series is a follow-up for the series [1] and a recent series [2] making use
+of both.
+
+[1] https://lore.kernel.org/lkml/cover.1536430404.git.saiprakash.ranjan@codeaurora.org/
+[2] https://lore.kernel.org/lkml/1604631386-178312-1-git-send-email-psodagud@codeaurora.org/
+
+Note in previous version, Arnd suggested to benchmark and compare size with callback
+based implementation, please see [3] for more details on that with brief comparison below.
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+**Inline version with CONFIG_FTRACE=y and CONFIG_TRACE_MMIO_ACCESS=y**
+$ size vmlinux
+   text           data             bss     dec             hex         filename
+ 23884219        14284468         532568 38701255        24e88c7        vmlinux
 
+**Callback version with CONFIG_FTRACE=y and CONFIG_TRACE_MMIO_ACCESS=y**
+$ size vmlinux
+    text          data             bss     dec             hex        filename
+ 24108179        14279596         532568 38920343        251e097       vmlinux
 
-Best regards,
-Krzysztof
+$ ./scripts/bloat-o-meter inline-vmlinux callback-vmlinux
+add/remove: 8/3 grow/shrink: 4889/89 up/down: 242244/-11564 (230680)
+Total: Before=25812612, After=26043292, chg +0.89%
+
+[3] https://lore.kernel.org/lkml/466449a1-36da-aaa9-7e4f-477f36b52c9e@quicinc.com/
+
+Changes in v5:
+ * Move arm64 to use asm-generic provided high level MMIO accessors (Arnd).
+ * Add inline logging for MMIO relaxed and non-relaxed accessors.
+ * Move nVHE KVM comment to makefile (Marc).
+ * Fix overflow warning due to switch to inline accessors instead of macro.
+ * Modify trace event field to include caller and parent details for more detailed logs.
+
+Changes in v4:
+ * Drop dynamic debug based filter support since that will be developed later with
+   the help from Steven (Ftrace maintainer).
+ * Drop value passed to writel as it is causing hangs when tracing is enabled.
+ * Code cleanup for trace event as suggested by Steven for earlier version.
+ * Fixed some build errors reported by 0-day bot.
+
+Changes in v3:
+ * Create a generic mmio header for instrumented version (Earlier suggested in [1]
+   by Will Deacon and recently [2] by Greg to have a generic version first).
+ * Add dynamic debug support to filter out traces which can be very useful for targeted
+   debugging specific to subsystems or drivers.
+ * Few modifications to the rwmmio trace event fields to include the mmio width and print
+   addresses in hex.
+ * Rewrote commit msg to explain some more about usecases.
+
+Prasad Sodagudi (1):
+  tracing: Add register read/write tracing support
+
+Sai Prakash Ranjan (3):
+  arm64: io: Use asm-generic high level MMIO accessors
+  irqchip/tegra: Fix overflow implicit truncation warnings
+  asm-generic/io: Add logging support for MMIO accessors
+
+ arch/arm64/include/asm/io.h      | 33 ++-------------
+ arch/arm64/kvm/hyp/nvhe/Makefile |  7 +++-
+ drivers/irqchip/irq-tegra.c      | 10 ++---
+ include/asm-generic/io.h         | 49 +++++++++++++++++++++++
+ include/trace/events/rwmmio.h    | 69 ++++++++++++++++++++++++++++++++
+ kernel/trace/Kconfig             |  7 ++++
+ kernel/trace/Makefile            |  1 +
+ kernel/trace/trace_readwrite.c   | 29 ++++++++++++++
+ 8 files changed, 170 insertions(+), 35 deletions(-)
+ create mode 100644 include/trace/events/rwmmio.h
+ create mode 100644 kernel/trace/trace_readwrite.c
+
+-- 
+2.33.1
+

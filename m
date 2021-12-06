@@ -2,110 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4964E469357
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 11:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1680046938E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 11:24:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236406AbhLFKYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 05:24:02 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:42730 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236370AbhLFKX7 (ORCPT
+        id S236757AbhLFK2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 05:28:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233542AbhLFK17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 05:23:59 -0500
+        Mon, 6 Dec 2021 05:27:59 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF34C061746;
+        Mon,  6 Dec 2021 02:24:31 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so7250702wmc.2;
+        Mon, 06 Dec 2021 02:24:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1638786030; x=1670322030;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/BBlyPONAhSOL7obwvgzZzSGer12RlY8b5Kj0XHt0pI=;
-  b=jUEYNcWPtbU1mlWCsfpslyY7xmZAg58RprT5fJOGubUnVt89tMq5m3VO
-   pxv/QsXuUBKNedpWwZUjqbGP300Quo8A6AgWPPcAeSrupQqZMwh8JobH8
-   7w2h2VLPoY3omd66ozaGPIjuFk7nP1+9JrZzuBEGpEORZUhOsA5nlHlre
-   w=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Dec 2021 02:20:28 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 02:20:28 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 6 Dec 2021 02:20:28 -0800
-Received: from [10.50.43.186] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 6 Dec 2021
- 02:20:22 -0800
-Message-ID: <7e5dbbf5-2385-ddb3-bf88-66e347d7d5e9@quicinc.com>
-Date:   Mon, 6 Dec 2021 15:50:18 +0530
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=HP481SlKiuyCsHUCaP7DTefIxupA0tKqZe3YXN2SCGc=;
+        b=N824mFa9knOQsKJ7BGph0ZNiTjOsqnEniTBcLLOm8sqfYV0Y5P4u4G5EXnURa3Aym1
+         epEXa3y6NcCavJ22WbV36rnvhOm8n0vBhr17daw7JVgqCFa3xBXKnaygxxkMO51XTZfY
+         k+KC6fMVnpA75KPLc+G34u6bke62c+zjo4dZsRbx1qXWcUtqB1f9oJyfln1mZKX4l5eI
+         V4Z65B3h6wWrSQo4ReUFbmGX29lE/gbwNpE6h9eTqM5VKf8TfjcMdoRAJg9DsmjIeDbF
+         25jju52mZuRSO6/YnYEgJDWVjdt7xq6xiF/0ds6dVgGoxwYq5lAI0rYgHZaGzYLC7TSY
+         vB2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=HP481SlKiuyCsHUCaP7DTefIxupA0tKqZe3YXN2SCGc=;
+        b=cRYjp4p3z+4pvMM/zCIOw/TWWYCn7O1KM/e5FT6PAIYABtY/TWtJVYY/lrWU0Aa2OE
+         DWSLmd+MZXrN2+xt5IZr4IVn+9fbKZG7q7ZsC1eMPTE6ozfKGpMkjDz+Oti6loWkIH9u
+         /hTNn0gcOhrUV2QTHDnlQgVI4IWuqDee5ZRexD7KysuriMy6FXmIPxznjhYIkYYr2gpp
+         Wa1gJ5y2u4mS7rI2HrMok861y5s18yVU8qrDZTmOZmaFgqmLGMgmcq2v0Dn7JvEjNGKR
+         P+U2WuhAqQXC2U/xq6YJvNSKp7OAEuO77aHTBN96a5kLm3lTjYeBMNUoNSmwyjIwapa/
+         AOaA==
+X-Gm-Message-State: AOAM530ZJwm9ue/WeTL7wujWhSlaGsBcljiuepQn937nV/qestRRAyLl
+        KLyN2k+byGeVwqR47lOkF5bwZ53R2ZtP0vtp0sk=
+X-Google-Smtp-Source: ABdhPJwUQZu1A6BomNnUFeiwzM8v/bIWhse1eTBCFB3s5dsmleYqllvHm58BlHp3M1aEoir0M0HE2g==
+X-Received: by 2002:a1c:a301:: with SMTP id m1mr38299694wme.118.1638786269740;
+        Mon, 06 Dec 2021 02:24:29 -0800 (PST)
+Received: from localhost.localdomain ([39.48.147.147])
+        by smtp.gmail.com with ESMTPSA id g13sm10279386wmk.37.2021.12.06.02.24.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 02:24:29 -0800 (PST)
+From:   Ameer Hamza <amhamza.mgc@gmail.com>
+To:     vkuznets@redhat.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, seanjc@google.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, Ameer Hamza <amhamza.mgc@gmail.com>
+Subject: [PATCH v2] KVM: x86: fix for missing initialization of return status variable
+Date:   Mon,  6 Dec 2021 15:24:03 +0500
+Message-Id: <20211206102403.10797-1-amhamza.mgc@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <87ee6q6r1p.fsf@redhat.com>
+References: <87ee6q6r1p.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.2
-Subject: Re: [PATCHv5 4/4] asm-generic/io: Add logging support for MMIO
- accessors
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Marc Zyngier <maz@kernel.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        <quic_psodagud@quicinc.com>
-References: <cover.1638275062.git.quic_saipraka@quicinc.com>
- <99ecc64c6da3abb3ea2930082c40f1820655664c.1638275062.git.quic_saipraka@quicinc.com>
- <CAK8P3a1k-1_m7r-u0uO1nW1m43bt_hR9u+UeW=SqK40+Ltb+iA@mail.gmail.com>
- <0cd0bc8c-e3db-b3fb-5be4-c619d1d5d633@quicinc.com>
- <CAK8P3a0mxRshs=OrOK+NaMharykS0PffATq30wJTv4qe52_ecg@mail.gmail.com>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <CAK8P3a0mxRshs=OrOK+NaMharykS0PffATq30wJTv4qe52_ecg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/6/2021 3:31 PM, Arnd Bergmann wrote:
-> On Mon, Dec 6, 2021 at 10:52 AM Sai Prakash Ranjan
-> <quic_saipraka@quicinc.com> wrote:
->> Yes just the trace after read/write won't serve our usecase where we
->> expect crashes/hangs on accessing
->> these registers but internally we did have a log_post_read_mmio() as
->> well, if it is useful then I can add it.
-> Are there any downsides to tracing both before and after, besides another growth
-> in binary size? Aside from the 'value', that would also allow
-> measuring the time it
-> takes to complete a readl(), which may be valuable for other users as these
-> can be significant.
+If undefined ioctl number is passed to the kvm_vcpu_ioctl_device_attr
+function, it should return with error status.
 
-Ah yes, that would be useful. No downsides as far as I know other than 
-the size
-but that should be fine given this depends on ftrace.
+Addresses-Coverity: 1494124 ("Uninitialized scalar variable")
 
->
-> Not sure how to best do that that, we could return a timestamp from the 'before'
-> tracepoint and pass it into the 'after' tracepoint in order to log the
-> difference, or just
-> rely on calculating the differences in user space based on the log.
+Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
 
-For trace events, timing information is already logged by ftrace 
-infrastructure. Most of the users do
-use these for timing information based on post processing these logs 
-looking at these timestamps,
-so we should be good using that as well.
+---
+Added default case to return EINV for undefined ioctl number
+---
+ arch/x86/kvm/x86.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
-> For the 'write' style accessors, the timing data would be less interesting, at
-> least for posted PCI transactions, but it may be helpful to do the same for
-> symmetry reasons.
-
-Ok, I will add these post read/write logging in the next version.
-
-Thanks,
-Sai
-
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index e0aa4dd53c7f..e6e00f997b1f 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -5019,6 +5019,8 @@ static int kvm_vcpu_ioctl_device_attr(struct kvm_vcpu *vcpu,
+ 	case KVM_SET_DEVICE_ATTR:
+ 		r = kvm_arch_tsc_set_attr(vcpu, &attr);
+ 		break;
++	default:
++		r = -EINVAL;
+ 	}
+ 
+ 	return r;
+-- 
+2.25.1
 

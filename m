@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 799D2469EF0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E549469D9E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359179AbhLFPox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:44:53 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45790 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350129AbhLFP2Y (ORCPT
+        id S1387499AbhLFPbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:31:25 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52690 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357909AbhLFPTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:28:24 -0500
+        Mon, 6 Dec 2021 10:19:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 199236132E;
-        Mon,  6 Dec 2021 15:24:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F384BC34900;
-        Mon,  6 Dec 2021 15:24:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC570B810AC;
+        Mon,  6 Dec 2021 15:15:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28801C341D9;
+        Mon,  6 Dec 2021 15:15:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804294;
-        bh=RoFTdMDvCZNKdsef/NMYsmDS+YG+Znkd4xr9h+oIAq8=;
+        s=korg; t=1638803747;
+        bh=q8nOXiEsn2t8A6ekNr7cIY0OmtEJD6FLJWD55i/I3wA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VkwGt98oDQtXB8zubq+g5A1Bx/uej9smUHZ77i76sMi25G/srMT/XyRM6TjHwJ1cs
-         FaDas0iN4WfzfGLLc+OUEEbSdQF+dqaIe1b2uM/T1Brm0LXumR1USvc+3mKfspzQrW
-         7BdhlDA8KDODdpKoKC1Ert6ZeHDZujXBonwX26Qs=
+        b=pQ48gQoaa7evvumIyzFivC4/zuQkvfw9qwCCq2a92Rfxe79VLGinpL7uyxzENvVnJ
+         Vfm4Y8FrXWqyJOQJqeY/P3YHbEUOJRXPIf5afuLw/yJSNN+WFq6x0g9CixN1t7SPoZ
+         B4dRnzSTMEXa+wvhzZRh95AALugg8JoQ6fxHMJ20=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hersen Wu <hersenxs.wu@amd.com>,
-        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.15 068/207] drm/amd/display: Allow DSC on supported MST branch devices
+        stable@vger.kernel.org, Andreas Gruenbacher <agruenba@redhat.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Bob Peterson <rpeterso@redhat.com>
+Subject: [PATCH 5.10 005/130] gfs2: release iopen glock early in evict
 Date:   Mon,  6 Dec 2021 15:55:22 +0100
-Message-Id: <20211206145612.587017042@linuxfoundation.org>
+Message-Id: <20211206145559.794692286@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,83 +46,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+From: Bob Peterson <rpeterso@redhat.com>
 
-commit 94ebc035456a4ccacfbbef60c444079a256623ad upstream.
+[ Upstream commit 49462e2be119d38c5eb5759d0d1b712df3a41239 ]
 
-[Why]
-When trying to lightup two 4k60 non-DSC displays behind a branch device
-that supports DSC we can't lightup both at once due to bandwidth
-limitations - each requires 48 VCPI slots but we only have 63.
+Before this patch, evict would clear the iopen glock's gl_object after
+releasing the inode glock.  In the meantime, another process could reuse
+the same block and thus glocks for a new inode.  It would lock the inode
+glock (exclusively), and then the iopen glock (shared).  The shared
+locking mode doesn't provide any ordering against the evict, so by the
+time the iopen glock is reused, evict may not have gotten to setting
+gl_object to NULL.
 
-[How]
-The workaround already exists in the code but is guarded by a CONFIG
-that cannot be set by the user and shouldn't need to be.
+Fix that by releasing the iopen glock before the inode glock in
+gfs2_evict_inode.
 
-Check for specific branch device IDs to device whether to enable
-the workaround for multiple display scenarios.
-
-Reviewed-by: Hersen Wu <hersenxs.wu@amd.com>
-Acked-by: Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>
-Signed-off-by: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Bob Peterson <rpeterso@redhat.com>gl_object
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c |   20 +++++++++---
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ fs/gfs2/super.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-@@ -36,6 +36,8 @@
- #include "dm_helpers.h"
+diff --git a/fs/gfs2/super.c b/fs/gfs2/super.c
+index 6a355e1347d7f..d2b7ecbd1b150 100644
+--- a/fs/gfs2/super.c
++++ b/fs/gfs2/super.c
+@@ -1438,13 +1438,6 @@ static void gfs2_evict_inode(struct inode *inode)
+ 	gfs2_ordered_del_inode(ip);
+ 	clear_inode(inode);
+ 	gfs2_dir_hash_inval(ip);
+-	if (ip->i_gl) {
+-		glock_clear_object(ip->i_gl, ip);
+-		wait_on_bit_io(&ip->i_flags, GIF_GLOP_PENDING, TASK_UNINTERRUPTIBLE);
+-		gfs2_glock_add_to_lru(ip->i_gl);
+-		gfs2_glock_put_eventually(ip->i_gl);
+-		ip->i_gl = NULL;
+-	}
+ 	if (gfs2_holder_initialized(&ip->i_iopen_gh)) {
+ 		struct gfs2_glock *gl = ip->i_iopen_gh.gh_gl;
  
- #include "dc_link_ddc.h"
-+#include "ddc_service_types.h"
-+#include "dpcd_defs.h"
+@@ -1457,6 +1450,13 @@ static void gfs2_evict_inode(struct inode *inode)
+ 		gfs2_holder_uninit(&ip->i_iopen_gh);
+ 		gfs2_glock_put_eventually(gl);
+ 	}
++	if (ip->i_gl) {
++		glock_clear_object(ip->i_gl, ip);
++		wait_on_bit_io(&ip->i_flags, GIF_GLOP_PENDING, TASK_UNINTERRUPTIBLE);
++		gfs2_glock_add_to_lru(ip->i_gl);
++		gfs2_glock_put_eventually(ip->i_gl);
++		ip->i_gl = NULL;
++	}
+ }
  
- #include "i2caux_interface.h"
- #include "dmub_cmd.h"
-@@ -155,6 +157,16 @@ static const struct drm_connector_funcs
- };
- 
- #if defined(CONFIG_DRM_AMD_DC_DCN)
-+static bool needs_dsc_aux_workaround(struct dc_link *link)
-+{
-+	if (link->dpcd_caps.branch_dev_id == DP_BRANCH_DEVICE_ID_90CC24 &&
-+	    (link->dpcd_caps.dpcd_rev.raw == DPCD_REV_14 || link->dpcd_caps.dpcd_rev.raw == DPCD_REV_12) &&
-+	    link->dpcd_caps.sink_count.bits.SINK_COUNT >= 2)
-+		return true;
-+
-+	return false;
-+}
-+
- static bool validate_dsc_caps_on_connector(struct amdgpu_dm_connector *aconnector)
- {
- 	struct dc_sink *dc_sink = aconnector->dc_sink;
-@@ -164,7 +176,7 @@ static bool validate_dsc_caps_on_connect
- 	u8 *dsc_branch_dec_caps = NULL;
- 
- 	aconnector->dsc_aux = drm_dp_mst_dsc_aux_for_port(port);
--#if defined(CONFIG_HP_HOOK_WORKAROUND)
-+
- 	/*
- 	 * drm_dp_mst_dsc_aux_for_port() will return NULL for certain configs
- 	 * because it only check the dsc/fec caps of the "port variable" and not the dock
-@@ -174,10 +186,10 @@ static bool validate_dsc_caps_on_connect
- 	 * Workaround: explicitly check the use case above and use the mst dock's aux as dsc_aux
- 	 *
- 	 */
--
--	if (!aconnector->dsc_aux && !port->parent->port_parent)
-+	if (!aconnector->dsc_aux && !port->parent->port_parent &&
-+	    needs_dsc_aux_workaround(aconnector->dc_link))
- 		aconnector->dsc_aux = &aconnector->mst_port->dm_dp_aux.aux;
--#endif
-+
- 	if (!aconnector->dsc_aux)
- 		return false;
- 
+ static struct inode *gfs2_alloc_inode(struct super_block *sb)
+-- 
+2.33.0
+
 
 

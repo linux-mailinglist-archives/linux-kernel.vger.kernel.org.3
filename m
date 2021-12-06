@@ -2,189 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62CDF46AE97
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 00:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C0346AE9B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 00:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377525AbhLFXv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 18:51:57 -0500
-Received: from mga06.intel.com ([134.134.136.31]:63765 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1377492AbhLFXv4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 18:51:56 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="298234314"
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="298234314"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 15:48:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="611435632"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 06 Dec 2021 15:48:23 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1muNiZ-000LsT-28; Mon, 06 Dec 2021 23:48:23 +0000
-Date:   Tue, 7 Dec 2021 07:47:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alistair Francis <alistair@alistair23.me>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     kbuild-all@lists.01.org, robh+dt@kernel.org, andreas@kemnade.info,
-        alistair23@gmail.com, dmitry.torokhov@gmail.com,
-        linus.walleij@linaro.org, rydberg@bitmath.org
-Subject: Re: [PATCH v3 1/4] Input: Add driver for Cypress Generation 5
- touchscreen
-Message-ID: <202112070710.hut43Md3-lkp@intel.com>
-References: <20211202122021.43124-2-alistair@alistair23.me>
+        id S1376467AbhLFXx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 18:53:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238039AbhLFXx1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 18:53:27 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26C3C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 15:49:57 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id q3so25729929wru.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 15:49:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+YoZPnfaFJm1NVGIE6alXIS6Xkly4h3Gf7r5uJzp6qo=;
+        b=bdEZA77yoCy5jlDOF7fcFoNBfzO2ekyxfZSZzS01rgsPfbwtoWttmnP7JhjaOo4s5j
+         m99znndbP4+DVbcrdx+Hs81FutU+7lQw/McRotYEY24VAu4VQbfkFLaPEOAPQpHQwrEk
+         OmSarv1sg+3ZIrNtsJGVortqFr9zY1yRyq8REhSo87bst39hX24N4kt78+zFAgGBtqSI
+         obShZR4OlboBrP8bM4up+z79PZeefzPu4zGYk+2HUuecCX35B9agKMhHj4j5WpuKWWQ/
+         mBNHU+oaRGFaGAn8pz1mFgjxfxa2DWs+1j1ST5kXgQSLYYuYUq49M3RJCqecs9Mkp1oH
+         5DNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+YoZPnfaFJm1NVGIE6alXIS6Xkly4h3Gf7r5uJzp6qo=;
+        b=1kvlhgjIYicMugmnI/XUxl+T4PXuNOqK5nyXZ+fMgBWcqKDqZleWqM6YoNzSL6Sw0K
+         R40YqwFKruXDM2xyOShbMqzyWggMeKokAXNnHftGzRrZvT1dOQfnUEpYWlbD2mxu+tQ1
+         nipBmEu64OGBGMHRm5vn/d5Csh2Rupnv3lwMXS3nTQibnTkwxnF0dOFgC0f4hzWHK/Mw
+         3aL4edU17twNF/WNUKxapReOnqhSzT+gM8cpcgL1Wa2mcs0bELXDrjTegSgNEKz3aszw
+         6sxKXktm9Z1hzo0B7qhcIOf/5OhZOcqYUx3Nv6mSaFzWWwWzVAK940y6lr5pge5QQ/NG
+         UBqw==
+X-Gm-Message-State: AOAM532ZSLY5txTXQrUXJdbDz8/vI2x8QYyILiRGR9g7HojPnZTdwZqn
+        4/vKIcaqtf6HXYL/WAC6zlYXPw==
+X-Google-Smtp-Source: ABdhPJydKDNkKKzaBGXb16sp9mizC1P/QZ+E3EObbHbie7C01srEFFSWZCRnbfUxIu+HDuWA+cIYsg==
+X-Received: by 2002:adf:f489:: with SMTP id l9mr48233855wro.268.1638834596484;
+        Mon, 06 Dec 2021 15:49:56 -0800 (PST)
+Received: from localhost.localdomain (d.f.5.e.6.6.b.1.e.6.2.7.e.5.c.8.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0:8c5e:726e:1b66:e5fd])
+        by smtp.gmail.com with ESMTPSA id k187sm1241189wme.0.2021.12.06.15.49.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 15:49:55 -0800 (PST)
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, straube.linux@gmail.com,
+        martin@kaiser.cx, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] staging: r8188eu: some DBG_88E cleanups
+Date:   Mon,  6 Dec 2021 23:49:50 +0000
+Message-Id: <20211206234952.1238-1-phil@philpotter.co.uk>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211202122021.43124-2-alistair@alistair23.me>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alistair,
+This small patch set begins to convert/remove the 700+ DBG_88E calls
+still in the driver source, with a few files to begin with whilst I have
+time.
 
-Thank you for the patch! Yet something to improve:
+Phillip Potter (2):
+  staging: r8188eu: convert DBG_88E calls in core/rtw_security.c
+  staging: r8188eu: convert/remove DBG_88E calls in core/rtw_cmd.c
 
-[auto build test ERROR on linux/master]
-[also build test ERROR on robh/for-next linus/master v5.16-rc4 next-20211206]
-[cannot apply to dtor-input/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+ drivers/staging/r8188eu/core/rtw_cmd.c      | 12 ++++-------
+ drivers/staging/r8188eu/core/rtw_security.c | 22 +++++++++++++--------
+ 2 files changed, 18 insertions(+), 16 deletions(-)
 
-url:    https://github.com/0day-ci/linux/commits/Alistair-Francis/Add-support-for-the-Cypress-cyttsp5/20211202-202300
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 136057256686de39cc3a07c2e39ef6bc43003ff6
-config: microblaze-randconfig-m031-20211207 (https://download.01.org/0day-ci/archive/20211207/202112070710.hut43Md3-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/737a89fa2dc4a337dea6a131b8b94fcc49fdcec5
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Alistair-Francis/Add-support-for-the-Cypress-cyttsp5/20211202-202300
-        git checkout 737a89fa2dc4a337dea6a131b8b94fcc49fdcec5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/input/touchscreen/
+-- 
+2.33.1
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/input/touchscreen/cyttsp5.c: In function 'cyttsp5_probe':
->> drivers/input/touchscreen/cyttsp5.c:931:26: error: implicit declaration of function 'devm_gpiod_get_optional'; did you mean 'devm_regulator_get_optional'? [-Werror=implicit-function-declaration]
-     931 |         ts->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~
-         |                          devm_regulator_get_optional
->> drivers/input/touchscreen/cyttsp5.c:931:64: error: 'GPIOD_OUT_HIGH' undeclared (first use in this function); did you mean 'GPIOF_INIT_HIGH'?
-     931 |         ts->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
-         |                                                                ^~~~~~~~~~~~~~
-         |                                                                GPIOF_INIT_HIGH
-   drivers/input/touchscreen/cyttsp5.c:931:64: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/input/touchscreen/cyttsp5.c:937:9: error: implicit declaration of function 'gpiod_set_value'; did you mean 'gpio_set_value'? [-Werror=implicit-function-declaration]
-     937 |         gpiod_set_value(ts->reset_gpio, 0);
-         |         ^~~~~~~~~~~~~~~
-         |         gpio_set_value
-   cc1: some warnings being treated as errors
-
-
-vim +931 drivers/input/touchscreen/cyttsp5.c
-
-   881	
-   882	static int cyttsp5_probe(struct device *dev, struct regmap *regmap, int irq,
-   883				 const char *name)
-   884	{
-   885		struct cyttsp5 *ts;
-   886		struct cyttsp5_sysinfo *si;
-   887		int error, i;
-   888	
-   889		ts = devm_kzalloc(dev, sizeof(*ts), GFP_KERNEL);
-   890		if (!ts)
-   891			return -ENOMEM;
-   892	
-   893		/* Initialize device info */
-   894		ts->regmap = regmap;
-   895		ts->dev = dev;
-   896		si = &ts->sysinfo;
-   897		dev_set_drvdata(dev, ts);
-   898	
-   899		/* Initialize wait queue */
-   900		init_waitqueue_head(&ts->wait_q);
-   901	
-   902		/* Power up the device */
-   903		ts->vdd = regulator_get(dev, "vdd");
-   904		if (IS_ERR(ts->vdd)) {
-   905			error = PTR_ERR(ts->vdd);
-   906			dev_set_drvdata(dev, NULL);
-   907			kfree(ts);
-   908			return error;
-   909		}
-   910	
-   911		error = regulator_enable(ts->vdd);
-   912		if (error) {
-   913			regulator_put(ts->vdd);
-   914			dev_set_drvdata(dev, NULL);
-   915			kfree(ts);
-   916			return error;
-   917		}
-   918	
-   919		ts->input = devm_input_allocate_device(dev);
-   920		if (!ts->input) {
-   921			dev_err(dev, "Error, failed to allocate input device\n");
-   922			return -ENODEV;
-   923		}
-   924	
-   925		ts->input->name = "cyttsp5";
-   926		scnprintf(ts->phys, sizeof(ts->phys), "%s/input0", dev_name(dev));
-   927		ts->input->phys = ts->phys;
-   928		input_set_drvdata(ts->input, ts);
-   929	
-   930		/* Reset the gpio to be in a reset state */
- > 931		ts->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
-   932		if (IS_ERR(ts->reset_gpio)) {
-   933			error = PTR_ERR(ts->reset_gpio);
-   934			dev_err(dev, "Failed to request reset gpio, error %d\n", error);
-   935			return error;
-   936		}
- > 937		gpiod_set_value(ts->reset_gpio, 0);
-   938	
-   939		/* Need a delay to have device up */
-   940		msleep(20);
-   941	
-   942		error = devm_request_threaded_irq(dev, irq, NULL, cyttsp5_handle_irq,
-   943					       IRQF_ONESHOT, name, ts);
-   944		if (error) {
-   945			dev_err(dev, "unable to request IRQ\n");
-   946			return error;
-   947		}
-   948	
-   949		error = cyttsp5_startup(ts);
-   950		if (error) {
-   951			dev_err(ts->dev, "Fail initial startup r=%d\n", error);
-   952			return error;
-   953		}
-   954	
-   955		error = cyttsp5_parse_dt_key_code(dev);
-   956		if (error < 0) {
-   957			dev_err(ts->dev, "Error while parsing dts %d\n", error);
-   958			return error;
-   959		}
-   960	
-   961		touchscreen_parse_properties(ts->input, true, &ts->prop);
-   962	
-   963		__set_bit(EV_KEY, ts->input->evbit);
-   964		for (i = 0; i < si->num_btns; i++)
-   965			__set_bit(si->key_code[i], ts->input->keybit);
-   966	
-   967		return cyttsp5_setup_input_device(dev);
-   968	}
-   969	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

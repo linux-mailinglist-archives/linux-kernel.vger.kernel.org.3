@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BD2469A4B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9EC7469C14
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:17:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346762AbhLFPHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:07:02 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55724 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345749AbhLFPF4 (ORCPT
+        id S1359664AbhLFPUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:20:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346067AbhLFPOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:05:56 -0500
+        Mon, 6 Dec 2021 10:14:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14785C0698CF;
+        Mon,  6 Dec 2021 07:07:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B68961323;
-        Mon,  6 Dec 2021 15:02:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1398BC341C1;
-        Mon,  6 Dec 2021 15:02:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8492612C1;
+        Mon,  6 Dec 2021 15:07:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 941E2C341C2;
+        Mon,  6 Dec 2021 15:07:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802946;
-        bh=SYADHwegBHLHX2IqBrWF5EqWP6v8l1dzTJnhdpZVJMc=;
+        s=korg; t=1638803225;
+        bh=gbzRYUBbYOaODYkxGgyauROmv22qJ7DE9eiflKe/1Wk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2PpIdOWMdo596Td/fAwLVh9+bDjbbDnSoqozvepngyGeeg2BSKkOZc+oFfpru0HZC
-         Zy8JurFlP93cNezid1E3xhH2lZ/UvQC83uRGExQfwmHfv1ZEO1DucQkffOus10dVSg
-         Ntf9C4J/3HHmbiKb7UW2Th+VdxmlwdcAwHAf1HI4=
+        b=exGKNdUmLBnD8QQZCoGv3Ito/4Wk/p91Rve6Z6tfsgdfJq9UqLFIbiJPWp0jwBheO
+         TX1xEr8728H9LkMUJJGMLNVcZHiD4Pz+fouQihG/nbdaqrbN11P9IHbJATtzw8ayVe
+         lAo646wY5Stah/Aa6OD6uv4hGcnM/hwP5eha9qU0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Beulich <jbeulich@suse.com>,
-        Juergen Gross <jgross@suse.com>
-Subject: [PATCH 4.9 36/62] tty: hvc: replace BUG_ON() with negative return value
+        stable@vger.kernel.org, Benjamin Coddington <bcodding@redhat.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 4.14 071/106] NFSv42: Fix pagecache invalidation after COPY/CLONE
 Date:   Mon,  6 Dec 2021 15:56:19 +0100
-Message-Id: <20211206145550.435728695@linuxfoundation.org>
+Message-Id: <20211206145557.932353300@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,61 +48,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Benjamin Coddington <bcodding@redhat.com>
 
-commit e679004dec37566f658a255157d3aed9d762a2b7 upstream.
+commit 3f015d89a47cd8855cd92f71fff770095bd885a1 upstream.
 
-Xen frontends shouldn't BUG() in case of illegal data received from
-their backends. So replace the BUG_ON()s when reading illegal data from
-the ring page with negative return values.
+The mechanism in use to allow the client to see the results of COPY/CLONE
+is to drop those pages from the pagecache.  This forces the client to read
+those pages once more from the server.  However, truncate_pagecache_range()
+zeros out partial pages instead of dropping them.  Let us instead use
+invalidate_inode_pages2_range() with full-page offsets to ensure the client
+properly sees the results of COPY/CLONE operations.
 
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Link: https://lore.kernel.org/r/20210707091045.460-1-jgross@suse.com
+Cc: <stable@vger.kernel.org> # v4.7+
+Fixes: 2e72448b07dc ("NFS: Add COPY nfs operation")
+Signed-off-by: Benjamin Coddington <bcodding@redhat.com>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/hvc/hvc_xen.c |   17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ fs/nfs/nfs42proc.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/tty/hvc/hvc_xen.c
-+++ b/drivers/tty/hvc/hvc_xen.c
-@@ -99,7 +99,11 @@ static int __write_console(struct xencon
- 	cons = intf->out_cons;
- 	prod = intf->out_prod;
- 	mb();			/* update queue values before going on */
--	BUG_ON((prod - cons) > sizeof(intf->out));
-+
-+	if ((prod - cons) > sizeof(intf->out)) {
-+		pr_err_once("xencons: Illegal ring page indices");
-+		return -EINVAL;
-+	}
+--- a/fs/nfs/nfs42proc.c
++++ b/fs/nfs/nfs42proc.c
+@@ -186,8 +186,9 @@ static ssize_t _nfs42_proc_copy(struct f
+ 		goto out;
+ 	}
  
- 	while ((sent < len) && ((prod - cons) < sizeof(intf->out)))
- 		intf->out[MASK_XENCONS_IDX(prod++, intf->out)] = data[sent++];
-@@ -127,7 +131,10 @@ static int domU_write_console(uint32_t v
- 	 */
- 	while (len) {
- 		int sent = __write_console(cons, data, len);
--		
-+
-+		if (sent < 0)
-+			return sent;
-+
- 		data += sent;
- 		len -= sent;
+-	truncate_pagecache_range(dst_inode, pos_dst,
+-				 pos_dst + res->write_res.count);
++	WARN_ON_ONCE(invalidate_inode_pages2_range(dst_inode->i_mapping,
++					pos_dst >> PAGE_SHIFT,
++					(pos_dst + res->write_res.count - 1) >> PAGE_SHIFT));
  
-@@ -151,7 +158,11 @@ static int domU_read_console(uint32_t vt
- 	cons = intf->in_cons;
- 	prod = intf->in_prod;
- 	mb();			/* get pointers before reading ring */
--	BUG_ON((prod - cons) > sizeof(intf->in));
-+
-+	if ((prod - cons) > sizeof(intf->in)) {
-+		pr_err_once("xencons: Illegal ring page indices");
-+		return -EINVAL;
-+	}
- 
- 	while (cons != prod && recv < len)
- 		buf[recv++] = intf->in[MASK_XENCONS_IDX(cons++, intf->in)];
+ 	status = res->write_res.count;
+ out:
 
 

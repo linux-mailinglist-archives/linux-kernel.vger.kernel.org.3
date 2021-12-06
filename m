@@ -2,80 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C90DF46A66B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:58:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7BA46A66E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:58:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349555AbhLFUBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 15:01:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
+        id S1349402AbhLFUCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 15:02:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349432AbhLFUBe (ORCPT
+        with ESMTP id S1349432AbhLFUBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 15:01:34 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8D0C0698CA
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 11:58:05 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id z7so28026806lfi.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 11:58:04 -0800 (PST)
+        Mon, 6 Dec 2021 15:01:52 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A9DC0698C4;
+        Mon,  6 Dec 2021 11:58:23 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id e11so22992460ljo.13;
+        Mon, 06 Dec 2021 11:58:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=RakVHA40XV0td6vuKvKOBeRSXkQgpLs2vWPXW52wnlE=;
-        b=dLHQl2nH2VJWWDh1w4RL5sOK+ZBb7goh0gekH7I1w46z6iiKq1Xl0RjgqDaep1MAZR
-         GM/3M6T+8u4WXhUhu2Dj7IpcBlBdQpqfLTIrhKcfGBkaDUh9zN2rbla1XT6dTxC6Y3tU
-         RVfLW+xaRnI3zQYYcx6sLUtk5uK1VfAndzc21gO6zWHxPwrIon3UAmjPeAGOoHFuy8so
-         Ald4nwczuRAnLfnj7dnzOaG4BwiYGDFxwJdYPW3Ct0h30LSlPdHA+3RNXHSq3bTJuT+R
-         r4kAlWcbIKAtn0ZWd7X1fhbwtooQP900cQCg3Yk8xDztk6/JrjpPCwhLh53ZX4VI3bKg
-         gNoA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=929TJHPLe7zrcpURu9iZozZ6bK1ygfR21xqdGSD4xVI=;
+        b=IyMj2cBg2AyxR+mXDzovxRtpINquRfCzNVwnJ7LE6HSDkxQmeZAYrO2jqZ16qqghnl
+         zYHLQb6dpYoKYmH2nWlnTqsnTYIvqJxQ/xAej6pSH+gfY1640JiFaLDQkbCBixJLd1KD
+         8m2roTTC3CVZs879tP4Dy7LZr0hLJytSyRe63CM5KhPT4LVBVtZDuGsk+sXWuBy4EANM
+         s34cJmzCV5yHwPcv4kWSCfvMPmC1/Ix69c+fhOHztzASsQnAGvoxh9Fa/rtMfp+WH+Aw
+         tdQ+VxwkAqvLGDtY3NIy9stt4rP6/208zBe4mi4xw4hcREAhauiqpR90UizCO3o+hwPi
+         jV0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=RakVHA40XV0td6vuKvKOBeRSXkQgpLs2vWPXW52wnlE=;
-        b=cEeQhKtZOcfAqL6Y9lNQn8iRNLQoGo8JjlisI3+UxG2H3JtTCc3763inV3CRZAxwgZ
-         k4buZoagIPL67c2X801/TK7Wn4caYpXMUAyvCDV4y3IYx6XXWuYPrgPI1pkdIlwjBA1S
-         xWFBW9RWErhOM+vgPvbkQC5whufxkLOC7QfOl5sXSEPlho9GpZIdEvKzoumZY8dW8zIY
-         8AfbG0PSH9940uvVsypC3Y1bCTTOnBTttzVo4xb8pZHUh+0lTAhIP5FiNS1/jHanxGh7
-         HR6iP3/nZcZKQkw1rA5GCdmPNkGrTH5AYYt70WzHZ4Qn+IIhlGJHFWZt/osa1rG5TC7K
-         +Ahw==
-X-Gm-Message-State: AOAM532CMolF6GRTqdnxJM5TPvdJZ450DQ+YfGcu/7nMeUGe4FlZYWmL
-        mF8szW//bG8tq+avQ0iHOGpVrVeXM6MWOl7XquI=
-X-Google-Smtp-Source: ABdhPJwtEjpN7WBcqaSEYeeKYHKJ5twHw8PpFD4QcrB8868UY6lKmNSmnDODod7tUDhXbm3KKIBo9/VBIIOCxeZglD0=
-X-Received: by 2002:ac2:50cc:: with SMTP id h12mr36668662lfm.378.1638820683295;
- Mon, 06 Dec 2021 11:58:03 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=929TJHPLe7zrcpURu9iZozZ6bK1ygfR21xqdGSD4xVI=;
+        b=efy+pPmJyPbmxiqJ0/MvcEmpnhodHX4R8+FDTViIFUdmGmpW4TjxvlLFVXdIMsCtAf
+         lVfBIyVR0xjbhFY06OMbxstl+rHlCxCvV9qqQ6U+4zAeE+6kYDcLDT9RosiHnkmDT6vm
+         70bSPfffIFJmjh/IN3kxqlJFzGllKN0uvOelMzspf3NdiQKoGMj1mR9mEdhVGFnllVpF
+         4NZV+OAb2YxhjhC/qYTyv7Pqz9O9LZ+L+/Sl/diUFYCoTdYH1E7chqAdS0zG2UpMlwQI
+         VHl0OFWIPGSYXWLSB1+yNRaW0lMUYHVuy1S/3wX0rdlodFhvXc7/xImMbgyWmyr8QMP0
+         lYxA==
+X-Gm-Message-State: AOAM530RZQY0puHcft/rljU7nNIsA6Ypdr+HQjNw7Z4wipHMMpEEgKT5
+        rbWqhCfcrk1PFHots7JpU19RltmNQCcaZ3KxRZg=
+X-Google-Smtp-Source: ABdhPJwf5PhfnHS2ngP6FIZ0FSSe7aNXUXYludTyP8Vc79o9DP90Qk7gJ/FdfPeOFyYw5pCrvtpzA95yN5wiDl2fTHs=
+X-Received: by 2002:a2e:9e8e:: with SMTP id f14mr37901692ljk.366.1638820701509;
+ Mon, 06 Dec 2021 11:58:21 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6512:1082:0:0:0:0 with HTTP; Mon, 6 Dec 2021 11:58:02
- -0800 (PST)
-Reply-To: jennehkandeh@yahoo.com
-From:   Jenneh Kandeh <ec8894831@gmail.com>
-Date:   Mon, 6 Dec 2021 11:58:02 -0800
-Message-ID: <CAJT13=mdiWjR1wq8ANOiLyWggXapqY5s7p2OX0EaJQKjcTA_Uw@mail.gmail.com>
-Subject: Re: Regarding Of My Late Father's Fund $10,200,000
-To:     undisclosed-recipients:;
+References: <20211203192148.585399-1-martin.fernandez@eclypsium.com> <YaxWXACBguZxWmKS@kernel.org>
+In-Reply-To: <YaxWXACBguZxWmKS@kernel.org>
+From:   Richard Hughes <hughsient@gmail.com>
+Date:   Mon, 6 Dec 2021 19:58:10 +0000
+Message-ID: <CAD2FfiG9wfeW_2xxZqBi9vsjzEJBRjJUZw+AQy1Taos4fh2TLA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/5] x86: Show in sysfs if a memory node is able to do encryption
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Martin Fernandez <martin.fernandez@eclypsium.com>,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
+        alex.bazhaniuk@eclypsium.com, alison.schofield@intel.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dear,
+On Sun, 5 Dec 2021 at 06:04, Mike Rapoport <rppt@kernel.org> wrote:
+> On Fri, Dec 03, 2021 at 04:21:43PM -0300, Martin Fernandez wrote:
+> > fwupd project plans to use it as part of a check to see if the users
+> > have properly configured memory hardware encryption capabilities.
+> I'm missing a description about *how* the new APIs/ABIs are going to be
+> used.
 
-I am Jenneh Kandeh from FreeTown Sierra Leone, Time of opposed to the
-government of President Tejan Kebbah the ex-leader since 21st November
-2005 But am current residing in Calavi Benin because war of my
-country, my mother killed on 04/01/2002 for Sierra Leone civilian war
-and I am only child for my family sad that my father die on
-25/11/2018. During the war my father made a lot of money through the
-illegal sales of Diamonds to the tune of $10,200,000.
+We're planning to use this feature in the Host Security ID checks done
+at every boot. Please see
+https://fwupd.github.io/libfwupdplugin/hsi.html for details. I'm happy
+to answer questions or concerns. Thanks!
 
-This money is currently and secretly kept in ECOWAS company in Benin,
-due to political turmoil which exists in Africa, I cannot invest the
-money alone, hence am soliciting your help to help me take these funds
-into your custody for invest.
-
-I want to add here that if agreed 35% that's $3,570,000 of the total
-worth of the fund will be yours minus your total expenses incurred
-during the clearing of the fund in P/Novo Benin.
-
-I would like to invest on heavy duty agricultural equipment and earth
-moving machines to enable me go into a full scale mechanized farming.
-l wait to hear from you
+Richard

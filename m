@@ -2,41 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 047CC469CE8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F305469FED
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385641AbhLFPZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:25:32 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49024 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357392AbhLFPQF (ORCPT
+        id S1441936AbhLFPzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:55:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33142 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390514AbhLFPm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:16:05 -0500
+        Mon, 6 Dec 2021 10:42:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B902C0A888A;
+        Mon,  6 Dec 2021 07:27:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30421B8111D;
-        Mon,  6 Dec 2021 15:12:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BA12C341C1;
-        Mon,  6 Dec 2021 15:12:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBE3A61310;
+        Mon,  6 Dec 2021 15:27:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A17DBC34900;
+        Mon,  6 Dec 2021 15:27:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803554;
-        bh=Ext6ZqfE8sVnU9h6sFrHWioziDXc1kQDxZ145o/hI8Y=;
+        s=korg; t=1638804431;
+        bh=MxK77b//Mj/cYj0ZT2TpaodAuEGes9XeVHOxQvtpX94=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FpEuwiQruNr6qMjaQEcFUNOzW40NyJCgFktIVye6L9ItMk8d52Lu7B5IY1YLFoYqy
-         C3Dt6ZR88uBYy4A2gPS2TQCNo8YbGtFqn6EQJrUk7dcKkJCgl/IXov1I5Ea+zKEmDL
-         wX5eaS1Ot4/WMk7mxZLWGl0EWBM0QWC2Zp7fT/nY=
+        b=DRRW51Uzxtxsa2CPFoTqboUgJRHfwgVubNM6xwpikUscA9nWoWLfVIG3Fwvk7I7qZ
+         UMAXrasvEX6+uCiT1ZxrVSwyXNqVzjvsdmin5XwEBwhzELRUIj3unaf73gxGgPRink
+         DkhK+JJNNXwsMXj2VHNeeNiBr/XglTfx551zrgX8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH 5.4 35/70] i2c: cbus-gpio: set atomic transfer callback
+        stable@vger.kernel.org, Dmitry Bogdanov <dbezrukov@marvell.com>,
+        Sudarsana Reddy Kalluru <skalluru@marvell.com>,
+        Igor Russkikh <irusskikh@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 145/207] atlantic: Increase delay for fw transactions
 Date:   Mon,  6 Dec 2021 15:56:39 +0100
-Message-Id: <20211206145553.138731292@linuxfoundation.org>
+Message-Id: <20211206145615.256810685@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
-References: <20211206145551.909846023@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,43 +50,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aaro Koskinen <aaro.koskinen@iki.fi>
+From: Dmitry Bogdanov <dbezrukov@marvell.com>
 
-commit b12764695c3fcade145890b67f82f8b139174cc7 upstream.
+commit aa1dcb5646fdf34a15763facf4bf5e482a2814ca upstream.
 
-CBUS transfers have always been atomic, but after commit 63b96983a5dd
-("i2c: core: introduce callbacks for atomic transfers") we started to see
-warnings during e.g. poweroff as the atomic callback is not explicitly set.
-Fix that.
+The max waiting period (of 1 ms) while reading the data from FW shared
+buffer is too small for certain types of data (e.g., stats). There's a
+chance that FW could be updating buffer at the same time and driver
+would be unsuccessful in reading data. Firmware manual recommends to
+have 1 sec timeout to fix this issue.
 
-Fixes the following WARNING seen during Nokia N810 power down:
-
-[  786.570617] reboot: Power down
-[  786.573913] ------------[ cut here ]------------
-[  786.578826] WARNING: CPU: 0 PID: 672 at drivers/i2c/i2c-core.h:40 i2c_smbus_xfer+0x100/0x110
-[  786.587799] No atomic I2C transfer handler for 'i2c-2'
-
-Fixes: 63b96983a5dd ("i2c: core: introduce callbacks for atomic transfers")
-Signed-off-by: Aaro Koskinen <aaro.koskinen@iki.fi>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fixes: 5cfd54d7dc186 ("net: atlantic: minimal A2 fw_ops")
+Signed-off-by: Dmitry Bogdanov <dbezrukov@marvell.com>
+Signed-off-by: Sudarsana Reddy Kalluru <skalluru@marvell.com>
+Signed-off-by: Igor Russkikh <irusskikh@marvell.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/i2c-cbus-gpio.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/drivers/i2c/busses/i2c-cbus-gpio.c
-+++ b/drivers/i2c/busses/i2c-cbus-gpio.c
-@@ -195,8 +195,9 @@ static u32 cbus_i2c_func(struct i2c_adap
- }
+--- a/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c
++++ b/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c
+@@ -84,7 +84,7 @@ static int hw_atl2_shared_buffer_read_bl
+ 			if (cnt > AQ_A2_FW_READ_TRY_MAX)
+ 				return -ETIME;
+ 			if (tid1.transaction_cnt_a != tid1.transaction_cnt_b)
+-				udelay(1);
++				mdelay(1);
+ 		} while (tid1.transaction_cnt_a != tid1.transaction_cnt_b);
  
- static const struct i2c_algorithm cbus_i2c_algo = {
--	.smbus_xfer	= cbus_i2c_smbus_xfer,
--	.functionality	= cbus_i2c_func,
-+	.smbus_xfer		= cbus_i2c_smbus_xfer,
-+	.smbus_xfer_atomic	= cbus_i2c_smbus_xfer,
-+	.functionality		= cbus_i2c_func,
- };
+ 		hw_atl2_mif_shared_buf_read(self, offset, (u32 *)data, dwords);
+@@ -339,8 +339,11 @@ static int aq_a2_fw_update_stats(struct
+ {
+ 	struct hw_atl2_priv *priv = (struct hw_atl2_priv *)self->priv;
+ 	struct statistics_s stats;
++	int err;
  
- static int cbus_i2c_remove(struct platform_device *pdev)
+-	hw_atl2_shared_buffer_read_safe(self, stats, &stats);
++	err = hw_atl2_shared_buffer_read_safe(self, stats, &stats);
++	if (err)
++		return err;
+ 
+ #define AQ_SDELTA(_N_, _F_) (self->curr_stats._N_ += \
+ 			stats.msm._F_ - priv->last_stats.msm._F_)
 
 

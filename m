@@ -2,48 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 848CC469D8C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA36C469DB0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386952AbhLFPa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:30:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357364AbhLFPS6 (ORCPT
+        id S1387850AbhLFPb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:31:59 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38978 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359484AbhLFPUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:18:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3D7C061D7F;
-        Mon,  6 Dec 2021 07:12:12 -0800 (PST)
+        Mon, 6 Dec 2021 10:20:09 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF259B81118;
-        Mon,  6 Dec 2021 15:12:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F798C341C2;
-        Mon,  6 Dec 2021 15:12:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC5DB61321;
+        Mon,  6 Dec 2021 15:16:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB1EC341C1;
+        Mon,  6 Dec 2021 15:16:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803529;
-        bh=d55QDCACO6f0HAd5Yz7n414h9MPjDxif9jm1APCAPPM=;
+        s=korg; t=1638803799;
+        bh=kCfyxNu9J4nF9/ZaoXcd7fTh3FfDzEv7qOs0W5HMDY4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1EwZLT8+YKXUiZiKUtQGfSrfVwmDN1nSNBDfct2/UKhmAnD/+2UCmoM5XAtB9VN9Z
-         1z/6D9SsDF6yF+JZ/fkpwubzkdtp1TVv2CWLUSQtiaLu4Us6oKMlABc4rrUyKUFOuY
-         hhujdqtR9l2XUE4Yx10hbS2PBLw4usV3DT9iHRic=
+        b=0+erF2mzQNYReNsTRI4Yz7+CbPmNYrn+PFjPCi0c/wWpU4CVpKYq27XnQeNiHwD12
+         QQXYwlk/Z/I3AJ2KSzz03nX5C8HTWHF0zpS/2NGktZ/+kWwenb7U6UOJMw7uX4dpa/
+         BKEMSBxWgitnQKhQBU6ZMj8mZmPipdgmQupsaCpM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Russell King <rmk+kernel@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Christian Lamparter <chunkeey@gmail.com>,
-        =?UTF-8?q?=E7=85=A7=E5=B1=B1=E5=91=A8=E4=B8=80=E9=83=8E?= 
-        <teruyama@springboard-inc.jp>
-Subject: [PATCH 5.4 03/70] arm64: dts: mcbin: support 2W SFP modules
+        stable@vger.kernel.org, James Zhu <James.Zhu@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.10 050/130] drm/amdgpu: move iommu_resume before ip init/resume
 Date:   Mon,  6 Dec 2021 15:56:07 +0100
-Message-Id: <20211206145552.026559657@linuxfoundation.org>
+Message-Id: <20211206145601.413365434@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
-References: <20211206145551.909846023@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,47 +46,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Russell King <rmk+kernel@armlinux.org.uk>
+From: James Zhu <James.Zhu@amd.com>
 
-commit 05abc6a5dec2a8c123a50235ecd1ad8d75ffa7b4 upstream.
+commit f02abeb0779700c308e661a412451b38962b8a0b upstream.
 
-Allow the SFP cages to be used with 2W SFP modules.
+Separate iommu_resume from kfd_resume, and move it before
+other amdgpu ip init/resume.
 
-Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc: Christian Lamparter <chunkeey@gmail.com>
-Cc: 照山周一郎 <teruyama@springboard-inc.jp>
+Bug: https://bugzilla.kernel.org/show_bug.cgi?id=211277
+Signed-off-by: James Zhu <James.Zhu@amd.com>
+Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtsi |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |   12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
---- a/arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtsi
-+++ b/arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtsi
-@@ -71,6 +71,7 @@
- 		tx-fault-gpio  = <&cp1_gpio1 26 GPIO_ACTIVE_HIGH>;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&cp1_sfpp0_pins>;
-+		maximum-power-milliwatt = <2000>;
- 	};
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+@@ -2220,6 +2220,10 @@ static int amdgpu_device_ip_init(struct
+ 	if (r)
+ 		goto init_failed;
  
- 	sfp_eth1: sfp-eth1 {
-@@ -83,6 +84,7 @@
- 		tx-fault-gpio = <&cp0_gpio2 30 GPIO_ACTIVE_HIGH>;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&cp1_sfpp1_pins &cp0_sfpp1_pins>;
-+		maximum-power-milliwatt = <2000>;
- 	};
++	r = amdgpu_amdkfd_resume_iommu(adev);
++	if (r)
++		goto init_failed;
++
+ 	r = amdgpu_device_ip_hw_init_phase1(adev);
+ 	if (r)
+ 		goto init_failed;
+@@ -2913,6 +2917,10 @@ static int amdgpu_device_ip_resume(struc
+ {
+ 	int r;
  
- 	sfp_eth3: sfp-eth3 {
-@@ -95,6 +97,7 @@
- 		tx-fault-gpio = <&cp0_gpio2 19 GPIO_ACTIVE_HIGH>;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&cp0_sfp_1g_pins &cp1_sfp_1g_pins>;
-+		maximum-power-milliwatt = <2000>;
- 	};
- };
++	r = amdgpu_amdkfd_resume_iommu(adev);
++	if (r)
++		return r;
++
+ 	r = amdgpu_device_ip_resume_phase1(adev);
+ 	if (r)
+ 		return r;
+@@ -4296,6 +4304,10 @@ static int amdgpu_do_asic_reset(struct a
  
+ 			if (!r) {
+ 				dev_info(tmp_adev->dev, "GPU reset succeeded, trying to resume\n");
++				r = amdgpu_amdkfd_resume_iommu(tmp_adev);
++				if (r)
++					goto out;
++
+ 				r = amdgpu_device_ip_resume_phase1(tmp_adev);
+ 				if (r)
+ 					goto out;
 
 

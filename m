@@ -2,152 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1966468E6A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 02:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6159D468E77
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 02:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234046AbhLFBHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 20:07:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245505AbhLFBFM (ORCPT
+        id S229604AbhLFBJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 20:09:48 -0500
+Received: from conuserg-12.nifty.com ([210.131.2.79]:48716 "EHLO
+        conuserg-12.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229379AbhLFBJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 20:05:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9687C061751;
-        Sun,  5 Dec 2021 17:01:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6945B6115E;
-        Mon,  6 Dec 2021 01:01:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C18E1C00446;
-        Mon,  6 Dec 2021 01:01:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638752503;
-        bh=1Ax4bw/oFgEbYRmnNjGtyxdgvFdAShGvQFfBYM1dS08=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BQEDaomcnbagfGi3QeyaPWcJrRky02aArZQgoMdtvGVFAxHtkEi91nXFFboTdNO2V
-         zhnPKLY+H3s05CfPOGUhDVAQmd967xC3/gxChqZJJC67kaHiG8t8+xsiwVkCAuadke
-         bJLqb9fvU6YpcfWib3N6P+/kSukl/7Mg87DuP7IFRhb3sL6Hu2HquxlVnfbMMXAkO7
-         P7TwsN9rD8qWa8AhoIDmbmNKz2Mwej5HVAu8YE5Y7Snl5UNEsv29xDFUj+BSNbTZ4B
-         CVR2PVRAM5QKnAfMtVjBhmbmREhE4GtumQH5KEbLgJIV2G6fHrNvJmyh3Wal4vcdeR
-         3steiktJUrLww==
-Date:   Mon, 6 Dec 2021 09:01:37 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Robin van der Gracht <robin@protonic.nl>,
-        devicetree@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        David Jander <david@protonic.nl>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v1 2/4] ARM: dts: imx6dl-prtvt7: Add missing tvp5150
- video decoder node
-Message-ID: <20211206010137.GJ4216@dragon>
-References: <20211122124310.2796505-1-o.rempel@pengutronix.de>
- <20211122124310.2796505-2-o.rempel@pengutronix.de>
+        Sun, 5 Dec 2021 20:09:47 -0500
+Received: from grover.. (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
+        by conuserg-12.nifty.com with ESMTP id 1B615ljf028855;
+        Mon, 6 Dec 2021 10:05:47 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 1B615ljf028855
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1638752747;
+        bh=q1Op97abVoqIjR+56+86L5oiHgfExctj0V5BWNC95cs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=wRmKe0+swy6Vvxx97MuvqPJKmZza04Q8ozI2mTfVhv28XJvNNJas+t8JMhO9aO9pj
+         UDrTRkWQhv+kEaJ7agcOy37IP+ddU6ryRZErH6WMP5+Ups8o2L3jZuWulleQkfk8LV
+         syyNGUmwEHMDPhvg/ZSCynZG0Kmy9saWQoumTRe2IMeLS5MFfVWgOoyobLlCKCHzBH
+         q6c6zWJg1Qnmf/4EYj7f1+JRQzREyRBMsd98v0o0xucur04u4OKO73CSEQMU4lUxKA
+         aoWu/qoGfXFJyW/8nr7M+mtfPWSLoGYSXDVZnIDq68wFdBnHD289mmZiLsTvG7EU2S
+         555PEtNCECh+Q==
+X-Nifty-SrcIP: [133.32.232.101]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] kbuild: move headers_check.pl to usr/include/
+Date:   Mon,  6 Dec 2021 10:05:32 +0900
+Message-Id: <20211206010533.439981-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211122124310.2796505-2-o.rempel@pengutronix.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 22, 2021 at 01:43:08PM +0100, Oleksij Rempel wrote:
-> From: Robin van der Gracht <robin@protonic.nl>
-> 
-> Signed-off-by: Robin van der Gracht <robin@protonic.nl>
-> ---
->  arch/arm/boot/dts/imx6dl-prtvt7.dts | 40 +++++++++++++++++++++++++++++
->  1 file changed, 40 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/imx6dl-prtvt7.dts b/arch/arm/boot/dts/imx6dl-prtvt7.dts
-> index be7c4cb339e7..02b53df03e6f 100644
-> --- a/arch/arm/boot/dts/imx6dl-prtvt7.dts
-> +++ b/arch/arm/boot/dts/imx6dl-prtvt7.dts
-> @@ -6,6 +6,7 @@
->  /dts-v1/;
->  #include "imx6dl.dtsi"
->  #include "imx6qdl-prti6q.dtsi"
-> +#include <dt-bindings/display/sdtv-standards.h>
->  #include <dt-bindings/input/input.h>
->  #include <dt-bindings/leds/common.h>
->  #include <dt-bindings/sound/fsl-imx-audmux.h>
-> @@ -171,6 +172,18 @@ panel_in: endpoint {
->  		};
->  	};
->  
-> +	connector {
-> +		compatible = "composite-video-connector";
-> +		label = "Composite0";
-> +		sdtv-standards = <SDTV_STD_PAL_B>;
-> +
-> +		port {
-> +			comp0_out: endpoint {
-> +				remote-endpoint = <&tvp5150_comp0_in>;
-> +			};
-> +		};
-> +	};
-> +
->  	reg_bl_12v0: regulator-bl-12v0 {
->  		compatible = "regulator-fixed";
->  		pinctrl-names = "default";
-> @@ -295,6 +308,29 @@ sgtl5000: audio-codec@a {
->  		VDDIO-supply = <&reg_3v3>;
->  		VDDD-supply = <&reg_1v8>;
->  	};
-> +
-> +	video@5c {
-> +		compatible = "ti,tvp5150";
-> +		reg = <0x5c>;
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		port@0 {
-> +			reg = <0>;
+This script is only used by usr/include/Makefile. Make it local to
+the directory.
 
-Have a newline between property and child node.
+Update the comment in include/uapi/linux/soundcard.h because
+'make headers_check' is no longer functional.
 
-Shawn
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-> +			tvp5150_comp0_in: endpoint {
-> +				remote-endpoint = <&comp0_out>;
-> +			};
-> +		};
-> +
-> +		/* Output port 2 is video output pad */
-> +		port@2 {
-> +			reg = <2>;
-> +			tvp5151_to_ipu1_csi0_mux: endpoint {
-> +				remote-endpoint = <&ipu1_csi0_mux_from_parallel_sensor>;
-> +			};
-> +		};
-> +	};
->  };
->  
->  &i2c3 {
-> @@ -322,6 +358,10 @@ &ipu1_di0_disp0 {
->  	remote-endpoint = <&display_in>;
->  };
->  
-> +&ipu1_csi0_mux_from_parallel_sensor {
-> +	remote-endpoint = <&tvp5151_to_ipu1_csi0_mux>;
-> +};
-> +
->  &pwm1 {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&pinctrl_pwm1>;
-> -- 
-> 2.30.2
-> 
+ include/uapi/linux/soundcard.h            | 2 +-
+ usr/include/Makefile                      | 2 +-
+ {scripts => usr/include}/headers_check.pl | 0
+ 3 files changed, 2 insertions(+), 2 deletions(-)
+ rename {scripts => usr/include}/headers_check.pl (100%)
+
+diff --git a/include/uapi/linux/soundcard.h b/include/uapi/linux/soundcard.h
+index f3b21f989872..57d1841cc4ed 100644
+--- a/include/uapi/linux/soundcard.h
++++ b/include/uapi/linux/soundcard.h
+@@ -1051,7 +1051,7 @@ typedef struct mixer_vol_table {
+  *	the GPL version of OSS-4.x and build against that version
+  *	of the header.
+  *
+- *	We redefine the extern keyword so that make headers_check
++ *	We redefine the extern keyword so that scripts/headers_check.pl
+  *	does not complain about SEQ_USE_EXTBUF.
+  */
+ #define SEQ_DECLAREBUF()		SEQ_USE_EXTBUF()
+diff --git a/usr/include/Makefile b/usr/include/Makefile
+index 1c2ae1368079..0e9c3e72f43a 100644
+--- a/usr/include/Makefile
++++ b/usr/include/Makefile
+@@ -99,7 +99,7 @@ quiet_cmd_hdrtest = HDRTEST $<
+       cmd_hdrtest = \
+ 		$(CC) $(c_flags) -S -o /dev/null -x c /dev/null \
+ 			$(if $(filter-out $(no-header-test), $*.h), -include $< -include $<); \
+-		$(PERL) $(srctree)/scripts/headers_check.pl $(obj) $(SRCARCH) $<; \
++		$(PERL) $(srctree)/$(src)/headers_check.pl $(obj) $(SRCARCH) $<; \
+ 		touch $@
+ 
+ $(obj)/%.hdrtest: $(obj)/%.h FORCE
+diff --git a/scripts/headers_check.pl b/usr/include/headers_check.pl
+similarity index 100%
+rename from scripts/headers_check.pl
+rename to usr/include/headers_check.pl
+-- 
+2.32.0
+

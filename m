@@ -2,98 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E089469FA2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B461469FC5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391867AbhLFPug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:50:36 -0500
-Received: from foss.arm.com ([217.140.110.172]:32832 "EHLO foss.arm.com"
+        id S1441902AbhLFPvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:51:50 -0500
+Received: from mga17.intel.com ([192.55.52.151]:62060 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1389177AbhLFPfn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:35:43 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C64CED1;
-        Mon,  6 Dec 2021 07:32:14 -0800 (PST)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5B77A3F5A1;
-        Mon,  6 Dec 2021 07:32:13 -0800 (PST)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Pedro Batista <pedbap.g@gmail.com>,
-        Cristian Marussi <cristian.marussi@arm.com>
-Subject: [PATCH] firmware: arm_scpi: Fix string overflow in SCPI genpd driver
-Date:   Mon,  6 Dec 2021 15:31:50 +0000
-Message-Id: <20211206153150.565685-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.25.1
+        id S1356036AbhLFPix (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 10:38:53 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="218022776"
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="218022776"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 07:35:23 -0800
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="579403964"
+Received: from svelidan-mobl.amr.corp.intel.com (HELO [10.209.112.71]) ([10.209.112.71])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 07:35:21 -0800
+Subject: Re: [PATCH v2] x86: Skip WBINVD instruction for VM guest
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
+References: <YZPbQVwWOJCrAH78@zn.tnic>
+ <20211119040330.4013045-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <87pmqpjcef.ffs@tglx> <20211202222109.pcsgm2jska3obvmx@black.fi.intel.com>
+ <87lf126010.ffs@tglx> <20211203234915.jw6kdd2qnfrionch@black.fi.intel.com>
+ <2519e6b6-4f74-e2f8-c428-0fceb0e16472@intel.com>
+ <20211204005427.ccinxlwwab3jsuct@black.fi.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <5bc40889-445d-5cac-3396-d39d53ee92c7@intel.com>
+Date:   Mon, 6 Dec 2021 07:35:18 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20211204005427.ccinxlwwab3jsuct@black.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Without the bound checks for scpi_pd->name, it could result in the buffer
-overflow when copying the SCPI device name from the corresponding device
-tree node as the name string is set at maximum size of 30.
+On 12/3/21 4:54 PM, Kirill A. Shutemov wrote:
+> On Fri, Dec 03, 2021 at 04:20:34PM -0800, Dave Hansen wrote:
+>>> TDX doesn't support these S- and C-states. TDX is only supports S0 and S5.
+>>
+>> This makes me a bit nervous.  Is this "the first TDX implementation
+>> supports..." or "the TDX architecture *prohibits* supporting S1 (or
+>> whatever"?
+> 
+> TDX Virtual Firmware Design Guide only states that "ACPI S3 (not supported
+> by TDX guests)".
+> 
+> Kernel reports in dmesg "ACPI: PM: (supports S0 S5)".
 
-Let us fix it by using kasprintf and devm_kstrdup so that the string
-buffer is allocated dynamically.
+Those describe the current firmware implementation, not a guarantee
+provided by the TDX architecture forever.
 
-Fixes: 8bec4337ad40 ("firmware: scpi: add device power domain support using genpd")
-Reported-by: Pedro Batista <pedbap.g@gmail.com>
-Cc: Cristian Marussi <cristian.marussi@arm.com>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/firmware/scpi_pm_domain.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+> But I don't see how any state beyond S0 and S5 make sense in TDX context.
+> Do you?
 
-diff --git a/drivers/firmware/scpi_pm_domain.c b/drivers/firmware/scpi_pm_domain.c
-index 51201600d789..377272c06ac3 100644
---- a/drivers/firmware/scpi_pm_domain.c
-+++ b/drivers/firmware/scpi_pm_domain.c
-@@ -11,12 +11,12 @@
- #include <linux/of_platform.h>
- #include <linux/pm_domain.h>
- #include <linux/scpi_protocol.h>
-+#include <linux/slab.h>
+Do existing (non-TDX) VMs use anything other than S0 and S5?  If so, I'd
+say yes.
 
- struct scpi_pm_domain {
- 	struct generic_pm_domain genpd;
- 	struct scpi_ops *ops;
- 	u32 domain;
--	char name[30];
- };
+>> I really think we need some kind of architecture guarantee.  Without
+>> that, we risk breaking things if someone at our employer simply changes
+>> their mind.
+> 
+> Guarantees are hard.
+> 
+> If somebody change their mind we will get unexpected #VE and crash.
+> I think it is acceptable way to handle unexpected change in confidential
+> computing environment.
 
- /*
-@@ -106,12 +106,18 @@ static int scpi_pm_domain_probe(struct platform_device *pdev)
- 		return -ENOMEM;
+Architectural guarantees are quite easy, actually.  They're just a
+contract that two parties agree to.  In this case, the contract would be
+that TDX firmware *PROMISES* not to enumerate support for additional
+sleep states over what the implementation does today.  If future
+firmware breaks that promise (and the kernel crashes) we get to come
+after them with torches and pitchforks to fix the firmware.
 
- 	for (i = 0; i < num_domains; i++, scpi_pd++) {
-+		const char *name = kasprintf(GFP_KERNEL, "%pOFn%d", np, i);
-+
- 		domains[i] = &scpi_pd->genpd;
+The contract let's us do things in the OS like:
 
- 		scpi_pd->domain = i;
- 		scpi_pd->ops = scpi_ops;
--		sprintf(scpi_pd->name, "%pOFn.%d", np, i);
--		scpi_pd->genpd.name = scpi_pd->name;
-+		scpi_pd->genpd.name = devm_kstrdup(dev, name, GFP_KERNEL);
-+		if (!scpi_pd->genpd.name) {
-+			dev_err(dev, "Failed to allocate genpd name for %s\n",
-+				name);
-+			continue;
-+		}
- 		scpi_pd->genpd.power_off = scpi_pd_power_off;
- 		scpi_pd->genpd.power_on = scpi_pd_power_on;
+	WARN_ON(sleep_states[ACPI_STATE_S3]);
 
-@@ -122,6 +128,7 @@ static int scpi_pm_domain_probe(struct platform_device *pdev)
- 		 * but for reference counting purpose, keep it this way.
- 		 */
- 		pm_genpd_init(&scpi_pd->genpd, NULL, true);
-+		kfree(name);
- 	}
+We also don't need *formal* documentation of such things.  We really
+just need to have a chat.
 
- 	scpi_pd_data->domains = domains;
---
-2.25.1
+It would be perfectly sufficient if we go bug Intel's TDX architecture
+folks and say, "Hey, Linux is going to crash if you ever implement any
+actual sleep states.  The current implementation is fine here, but is it
+OK if future implementations are restricted from doing this?"
 
+But, the trick is that we need a contract.  A contract requires a
+"meeting of the minds" first.

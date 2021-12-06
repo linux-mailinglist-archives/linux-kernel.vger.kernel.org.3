@@ -2,722 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A91A546A16C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C35CF46A17D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:34:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346498AbhLFQg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:36:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345924AbhLFQgY (ORCPT
+        id S1345286AbhLFQhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:37:51 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:6350 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233853AbhLFQhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:36:24 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1233C0613F8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:32:55 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id be32so22333776oib.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 08:32:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sfgp+Fzu90J2ESrAc1hGMPt/IEv7tpIqe4sIvD/5olo=;
-        b=u79JgjLO4Q2q+oV14ehsEuy8wb/hXAWf2HVJcPGLMLOUuDvQJuYbWsTXDHW1k86epO
-         H9lZxkYmuJCfG3Y15HvETTbLUnVX01naqcgeP+8qGAZkorNfwZFBunXxLjsM81MrQ9xN
-         CEBJ93aR1ElHqj5i0gMcR+lq0r6LFCHji3RTNeKPPfvBPQOCpPFheE+wl1YdeuW/YE/A
-         JCs5IqGnmAkYvGfaMh4BK0C3yIib6dgjpXGcOzuAdDnA1PotHi6eOYhIzu3fTRGo/wKJ
-         5s3aOskoBkLcLeGVt4iLOKipxaI4nrfIXv+eKYhBINnuvwmPPP1KRJwW76y2n8cjMMhj
-         5s5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sfgp+Fzu90J2ESrAc1hGMPt/IEv7tpIqe4sIvD/5olo=;
-        b=b73vP9i7NcSZpAJsmLNpO3IwhLCs6yfW55gqEJMaTPMZXRjiSTfmh1zrQ0eiIlh1vl
-         IlHpQP/yctv0rVusMURBo+DNcRWDWXsW7U0ThTF5BHx3rMgKD3x+ImPI4TEYOCisgQ7i
-         mbdOy/zUPTH5JTSxj+1CXPNmj4NhxX22kO4dg4G/ryJiYXr6o47GJG+Gs+QWBigpKqro
-         EnGG8tPrsE7PSQIbbreqmKNgm/VUoqw2y9wAPGERLFbofRxzfVAIlseDN1/1GzvEeaGQ
-         Wj98abbtBU2uE5NyGM9jG9vxLeyYGnxxIUQQ5e+xFZSZiAxvfJcItf8KEBdH2jazqmkI
-         PQtg==
-X-Gm-Message-State: AOAM530PWM6JHiK1nMw2afZ6qpYwd5dZS/mKbg2RHexVn+5xuMP5DK/s
-        vXvK4IE+RN7qtXMuc/zj4Z+fYq/WgJpo7g==
-X-Google-Smtp-Source: ABdhPJy41rIthToUAplwHDMF6jccequ0wGZkA3e4IH6TrLpN1TX5o1+cp7+qpeOlb9rsP4x/FPSVlg==
-X-Received: by 2002:a05:6808:1185:: with SMTP id j5mr24520157oil.16.1638808375202;
-        Mon, 06 Dec 2021 08:32:55 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id h26sm2153764oor.17.2021.12.06.08.32.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 08:32:54 -0800 (PST)
-Date:   Mon, 6 Dec 2021 10:32:49 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Srinivasa Rao Mandadapu <srivasam@codeaurora.com>
-Cc:     agross@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, plai@codeaurora.org, bgoswami@codeaurora.org,
-        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
-        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org, Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org,
-        Srinivasa Rao Mandadapu <srivasam@codeaurora.org>,
-        Venkata Prasad Potturu <potturu@codeaurora.org>
-Subject: Re: [PATCH v4 3/5] pinctrl: qcom: Move chip specific functions to
- right files
-Message-ID: <Ya47MbYqG2mvQW7g@builder.lan>
-References: <1638531140-25899-1-git-send-email-srivasam@codeaurora.com>
- <1638531140-25899-4-git-send-email-srivasam@codeaurora.com>
+        Mon, 6 Dec 2021 11:37:34 -0500
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B6F61No016147;
+        Mon, 6 Dec 2021 11:33:50 -0500
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3csb20jtkr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 11:33:50 -0500
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 1B6GXnpm017140
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 6 Dec 2021 11:33:49 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Mon, 6 Dec 2021
+ 11:33:48 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 6 Dec 2021 11:33:48 -0500
+Received: from ubuntuservermchindri.ad.analog.com ([10.32.225.18])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 1B6GXinE009034;
+        Mon, 6 Dec 2021 11:33:44 -0500
+From:   Mihail Chindris <mihail.chindris@analog.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>
+CC:     <lars@metafoo.de>, <Michael.Hennerich@analog.com>,
+        <jic23@kernel.org>, <nuno.sa@analog.com>,
+        <dragos.bogdan@analog.com>, <alexandru.ardelean@analog.com>,
+        Mihail Chindris <mihail.chindris@analog.com>
+Subject: [RESEND, PATCH v6 0/2] drivers:iio:dac: Add AD3552R driver support
+Date:   Mon, 6 Dec 2021 16:33:32 +0000
+Message-ID: <20211206163332.3202-1-mihail.chindris@analog.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1638531140-25899-4-git-send-email-srivasam@codeaurora.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: ZTj_s0bHfFT56Spvd1e6pMsjK_2-YiUX
+X-Proofpoint-GUID: ZTj_s0bHfFT56Spvd1e6pMsjK_2-YiUX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-06_05,2021-12-06_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ spamscore=0 mlxlogscore=612 lowpriorityscore=0 priorityscore=1501
+ mlxscore=0 clxscore=1011 adultscore=0 phishscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112060101
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 03 Dec 05:32 CST 2021, Srinivasa Rao Mandadapu wrote:
+Changelog v5 -> v6:
+  - https://lore.kernel.org/all/20211108082447.116663-1-mihail.chindris@analog.com/
+  - Add dt maintainers (forgotten on previous emails)
+  - (1 << 7) -> BIT(7)
+  - Remove buf_data from ad3552r_desc to use spi_write_then_read and update lock comment
+  - Remove useless comments
+  - Remove unused mask from ad3552r_configure_custom_gain
+  - In ad3552r_configure_device refactor regulator code, add regulator_enable
+     and add ad3552r_reg_disable
+  - Remove unused code like: 
+      AD3552R_CH_TRIGGER_SOFTWARE_LDAC and AD3552R_CH_HW_LDAC_MASK
 
-I don't see anything _wrong_ with the current filename, so this patch
-isn't really moving chip function to the _right_ files.
+Changelog v4 -> v5:
+  - https://lore.kernel.org/all/20211022120427.99516-1-mihail.chindris@analog.com
+  - Add changelog for previous version
+  - Extend lock comment
+  - Remove unused variable is_custom
 
-May I suggest that you make $subject:
+Changelog v3 -> v4:
+  - https://lore.kernel.org/all/20211021070924.18626-1-mihail.chindris@analog.com
+  - Remove trigger.h
+  - Use dev_err_probe only where needed
+  - Add comment about buff size
+  - Fix mutex order
+  - Return from all switch cases
+  - Return int in ad3552r_read_reg_wrapper
+  - Add goto put_child where missing
+  - Restructure ad3552r_write_codes
+  - Move ad3552r_write_codes nex to ad3552r_trigger_handler
+  - Use memcpy and memcmp in ad3552r_write_codes
+  - Remove endieness functions in ad3552r_write_codes
 
-"pinctrl: qcom: Extract chip specific LPASS LPI code"
+Changelog v2 -> v3:
+  - https://lore.kernel.org/all/20211008123909.1901-1-mihail.chindris@analog.com
+  - Order compatilbe in alphabetic order
+  - Fix comments in yaml
+  - Grup struct by types
+  - Drop usless "if (err)"
+  - Handle error in ad3552r_read_reg_wrapper
+  - ad3552r_find_range: u32 -> s32
+  - Add fwnode_handle_put(custom_gain_child); in good path too
+  - Vals[0] -> val
+  - Fix: fwnode_handle_put in ad3552r_configure_device
+  - Fix indio_dev->name
+  - Rename custom_gain_child -> gain_child
+  - Remove intermediary functions and write code inline where possible
+  - Add ad3552r_field_prep helper function
+  - Dev_err -> dev_warn for vref supply check
+  - Replace dev_err with dev_err_probe
+  - Remove channel for simultaneous update and do update mask register if both
+    channels values are the same.
 
-> From: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-> 
-> Update lpass lpi pin control driver to accommodate new lpass variant
-> SoC specific drivers.
+Changelog v0 -> v2:
+  - Split https://lore.kernel.org/all/20210820165927.4524-1-mihail.chindris@analog.com
+    and move ad3552r driver to this serie.
+  - Remove precision_mode abi
+  - Remove adi,synch_channels dt property
+  - Use vref-supply instead of adi,vref-select
+  - Remove unimplemented spi modes
+  - Change output-range format and use enums
+  - Update description for custom-output-range-config to be more clear
+  - Add datasheet tag
+  - Use GENMASK for defines
+  - Remove tomicro define
+  - Use get_unaligned_be16 and put_unaligned_be16
+  - Remove unnecessary checks
+  - Add comment for AD3552R_CH_DAC_PAGE channel
+  - Fix indent
+  - Remove irq trigger
+  - Remove irelevant checks
+  - Rename ad3552r_read_reg_pool to ad3552r_read_reg_wrapper.
+  - Add support for ad3542r
 
-I also have a hard time parsing this sentence.
+V0:
+  * Add ad3552r example to https://lore.kernel.org/linux-iio/20210219124012.92897-1-alexandru.ardelean@analog.com
 
-> Move sm8250 SoC specific functions to pinctrl-sm8250-lpass-lpi.c file
-> and common declarations to pinctrl-lpass-lpi.h header file.
+Mihail Chindris (2):
+  dt-bindings: iio: dac: Add adi,ad3552r.yaml
+  drivers:iio:dac: Add AD3552R driver support
 
-How about simply:
+ .../bindings/iio/dac/adi,ad3552r.yaml         |  190 +++
+ drivers/iio/dac/Kconfig                       |   10 +
+ drivers/iio/dac/Makefile                      |    1 +
+ drivers/iio/dac/ad3552r.c                     | 1138 +++++++++++++++++
+ 4 files changed, 1339 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/dac/adi,ad3552r.yaml
+ create mode 100644 drivers/iio/dac/ad3552r.c
 
-Extract the chip specific SM8250 data from the LPASS LPI pinctrl driver
-to allow reusing the common code in the addition of subsequent
-platforms.
 
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-> Co-developed-by: Venkata Prasad Potturu <potturu@codeaurora.org>
-> Signed-off-by: Venkata Prasad Potturu <potturu@codeaurora.org>
-> ---
->  drivers/pinctrl/qcom/Kconfig                    |   8 +
->  drivers/pinctrl/qcom/Makefile                   |   1 +
->  drivers/pinctrl/qcom/pinctrl-lpass-lpi.c        | 250 +-----------------------
->  drivers/pinctrl/qcom/pinctrl-lpass-lpi.h        |  98 ++++++++++
->  drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c | 166 ++++++++++++++++
->  5 files changed, 280 insertions(+), 243 deletions(-)
->  create mode 100644 drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
->  create mode 100644 drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c
-> 
-> diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfig
-> index 5ff4207..e750e10 100644
-> --- a/drivers/pinctrl/qcom/Kconfig
-> +++ b/drivers/pinctrl/qcom/Kconfig
-> @@ -320,4 +320,12 @@ config PINCTRL_LPASS_LPI
->  	  Qualcomm Technologies Inc LPASS (Low Power Audio SubSystem) LPI
->  	  (Low Power Island) found on the Qualcomm Technologies Inc SoCs.
->  
-> +config PINCTRL_SM8250_LPASS_LPI
-> +	tristate "Qualcomm Technologies Inc SM8250 LPASS LPI pin controller driver"
-> +	depends on PINCTRL_LPASS_LPI
-> +	help
-> +	  This is the pinctrl, pinmux, pinconf and gpiolib driver for the
-> +	  Qualcomm Technologies Inc LPASS (Low Power Audio SubSystem) LPI
-> +	  (Low Power Island) found on the Qualcomm Technologies Inc SM8250 platform.
-> +
->  endif
-> diff --git a/drivers/pinctrl/qcom/Makefile b/drivers/pinctrl/qcom/Makefile
-> index 7a12e8c..8bc877e 100644
-> --- a/drivers/pinctrl/qcom/Makefile
-> +++ b/drivers/pinctrl/qcom/Makefile
-> @@ -37,3 +37,4 @@ obj-$(CONFIG_PINCTRL_SM8150) += pinctrl-sm8150.o
->  obj-$(CONFIG_PINCTRL_SM8250) += pinctrl-sm8250.o
->  obj-$(CONFIG_PINCTRL_SM8350) += pinctrl-sm8350.o
->  obj-$(CONFIG_PINCTRL_LPASS_LPI) += pinctrl-lpass-lpi.o
-> +obj-$(CONFIG_PINCTRL_SM8250_LPASS_LPI) += pinctrl-sm8250-lpass-lpi.o
-> diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
-> index 2f19ab4..bcc12f6 100644
-> --- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
-> +++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
-> @@ -4,237 +4,16 @@
->   * Copyright (c) 2020 Linaro Ltd.
->   */
->  
-> -#include <linux/bitops.h>
-> -#include <linux/bitfield.h>
->  #include <linux/clk.h>
->  #include <linux/gpio/driver.h>
-> -#include <linux/io.h>
->  #include <linux/module.h>
->  #include <linux/of_device.h>
-> -#include <linux/of.h>
->  #include <linux/pinctrl/pinconf-generic.h>
->  #include <linux/pinctrl/pinconf.h>
->  #include <linux/pinctrl/pinmux.h>
-> -#include <linux/platform_device.h>
-> -#include <linux/slab.h>
-> -#include <linux/types.h>
->  #include "../core.h"
->  #include "../pinctrl-utils.h"
-> -
-> -#define LPI_SLEW_RATE_CTL_REG		0xa000
-> -#define LPI_TLMM_REG_OFFSET		0x1000
-> -#define LPI_SLEW_RATE_MAX		0x03
-> -#define LPI_SLEW_BITS_SIZE		0x02
-> -#define LPI_SLEW_RATE_MASK		GENMASK(1, 0)
-> -#define LPI_GPIO_CFG_REG		0x00
-> -#define LPI_GPIO_PULL_MASK		GENMASK(1, 0)
-> -#define LPI_GPIO_FUNCTION_MASK		GENMASK(5, 2)
-> -#define LPI_GPIO_OUT_STRENGTH_MASK	GENMASK(8, 6)
-> -#define LPI_GPIO_OE_MASK		BIT(9)
-> -#define LPI_GPIO_VALUE_REG		0x04
-> -#define LPI_GPIO_VALUE_IN_MASK		BIT(0)
-> -#define LPI_GPIO_VALUE_OUT_MASK		BIT(1)
-> -
-> -#define LPI_GPIO_BIAS_DISABLE		0x0
-> -#define LPI_GPIO_PULL_DOWN		0x1
-> -#define LPI_GPIO_KEEPER			0x2
-> -#define LPI_GPIO_PULL_UP		0x3
-> -#define LPI_GPIO_DS_TO_VAL(v)		(v / 2 - 1)
-> -#define NO_SLEW				-1
-> -
-> -#define LPI_FUNCTION(fname)			                \
-> -	[LPI_MUX_##fname] = {		                \
-> -		.name = #fname,				\
-> -		.groups = fname##_groups,               \
-> -		.ngroups = ARRAY_SIZE(fname##_groups),	\
-> -	}
-> -
-> -#define LPI_PINGROUP(id, soff, f1, f2, f3, f4)		\
-> -	{						\
-> -		.name = "gpio" #id,			\
-> -		.pins = gpio##id##_pins,		\
-> -		.pin = id,				\
-> -		.slew_offset = soff,			\
-> -		.npins = ARRAY_SIZE(gpio##id##_pins),	\
-> -		.funcs = (int[]){			\
-> -			LPI_MUX_gpio,			\
-> -			LPI_MUX_##f1,			\
-> -			LPI_MUX_##f2,			\
-> -			LPI_MUX_##f3,			\
-> -			LPI_MUX_##f4,			\
-> -		},					\
-> -		.nfuncs = 5,				\
-> -	}
-> -
-> -struct lpi_pingroup {
-> -	const char *name;
-> -	const unsigned int *pins;
-> -	unsigned int npins;
-> -	unsigned int pin;
-> -	/* Bit offset in slew register for SoundWire pins only */
-> -	int slew_offset;
-> -	unsigned int *funcs;
-> -	unsigned int nfuncs;
-> -};
-> -
-> -struct lpi_function {
-> -	const char *name;
-> -	const char * const *groups;
-> -	unsigned int ngroups;
-> -};
-> -
-> -struct lpi_pinctrl_variant_data {
-> -	const struct pinctrl_pin_desc *pins;
-> -	int npins;
-> -	const struct lpi_pingroup *groups;
-> -	int ngroups;
-> -	const struct lpi_function *functions;
-> -	int nfunctions;
-> -};
-> -
-> -#define MAX_LPI_NUM_CLKS	2
-> -
-> -struct lpi_pinctrl {
-> -	struct device *dev;
-> -	struct pinctrl_dev *ctrl;
-> -	struct gpio_chip chip;
-> -	struct pinctrl_desc desc;
-> -	char __iomem *tlmm_base;
-> -	char __iomem *slew_base;
-> -	struct clk_bulk_data clks[MAX_LPI_NUM_CLKS];
-> -	struct mutex slew_access_lock;
-> -	const struct lpi_pinctrl_variant_data *data;
-> -};
-> -
-> -/* sm8250 variant specific data */
-> -static const struct pinctrl_pin_desc sm8250_lpi_pins[] = {
-> -	PINCTRL_PIN(0, "gpio0"),
-> -	PINCTRL_PIN(1, "gpio1"),
-> -	PINCTRL_PIN(2, "gpio2"),
-> -	PINCTRL_PIN(3, "gpio3"),
-> -	PINCTRL_PIN(4, "gpio4"),
-> -	PINCTRL_PIN(5, "gpio5"),
-> -	PINCTRL_PIN(6, "gpio6"),
-> -	PINCTRL_PIN(7, "gpio7"),
-> -	PINCTRL_PIN(8, "gpio8"),
-> -	PINCTRL_PIN(9, "gpio9"),
-> -	PINCTRL_PIN(10, "gpio10"),
-> -	PINCTRL_PIN(11, "gpio11"),
-> -	PINCTRL_PIN(12, "gpio12"),
-> -	PINCTRL_PIN(13, "gpio13"),
-> -};
-> -
-> -enum sm8250_lpi_functions {
-> -	LPI_MUX_dmic1_clk,
-> -	LPI_MUX_dmic1_data,
-> -	LPI_MUX_dmic2_clk,
-> -	LPI_MUX_dmic2_data,
-> -	LPI_MUX_dmic3_clk,
-> -	LPI_MUX_dmic3_data,
-> -	LPI_MUX_i2s1_clk,
-> -	LPI_MUX_i2s1_data,
-> -	LPI_MUX_i2s1_ws,
-> -	LPI_MUX_i2s2_clk,
-> -	LPI_MUX_i2s2_data,
-> -	LPI_MUX_i2s2_ws,
-> -	LPI_MUX_qua_mi2s_data,
-> -	LPI_MUX_qua_mi2s_sclk,
-> -	LPI_MUX_qua_mi2s_ws,
-> -	LPI_MUX_swr_rx_clk,
-> -	LPI_MUX_swr_rx_data,
-> -	LPI_MUX_swr_tx_clk,
-> -	LPI_MUX_swr_tx_data,
-> -	LPI_MUX_wsa_swr_clk,
-> -	LPI_MUX_wsa_swr_data,
-> -	LPI_MUX_gpio,
-> -	LPI_MUX__,
-> -};
-> -
-> -static const unsigned int gpio0_pins[] = { 0 };
-> -static const unsigned int gpio1_pins[] = { 1 };
-> -static const unsigned int gpio2_pins[] = { 2 };
-> -static const unsigned int gpio3_pins[] = { 3 };
-> -static const unsigned int gpio4_pins[] = { 4 };
-> -static const unsigned int gpio5_pins[] = { 5 };
-> -static const unsigned int gpio6_pins[] = { 6 };
-> -static const unsigned int gpio7_pins[] = { 7 };
-> -static const unsigned int gpio8_pins[] = { 8 };
-> -static const unsigned int gpio9_pins[] = { 9 };
-> -static const unsigned int gpio10_pins[] = { 10 };
-> -static const unsigned int gpio11_pins[] = { 11 };
-> -static const unsigned int gpio12_pins[] = { 12 };
-> -static const unsigned int gpio13_pins[] = { 13 };
-> -static const char * const swr_tx_clk_groups[] = { "gpio0" };
-> -static const char * const swr_tx_data_groups[] = { "gpio1", "gpio2", "gpio5" };
-> -static const char * const swr_rx_clk_groups[] = { "gpio3" };
-> -static const char * const swr_rx_data_groups[] = { "gpio4", "gpio5" };
-> -static const char * const dmic1_clk_groups[] = { "gpio6" };
-> -static const char * const dmic1_data_groups[] = { "gpio7" };
-> -static const char * const dmic2_clk_groups[] = { "gpio8" };
-> -static const char * const dmic2_data_groups[] = { "gpio9" };
-> -static const char * const i2s2_clk_groups[] = { "gpio10" };
-> -static const char * const i2s2_ws_groups[] = { "gpio11" };
-> -static const char * const dmic3_clk_groups[] = { "gpio12" };
-> -static const char * const dmic3_data_groups[] = { "gpio13" };
-> -static const char * const qua_mi2s_sclk_groups[] = { "gpio0" };
-> -static const char * const qua_mi2s_ws_groups[] = { "gpio1" };
-> -static const char * const qua_mi2s_data_groups[] = { "gpio2", "gpio3", "gpio4" };
-> -static const char * const i2s1_clk_groups[] = { "gpio6" };
-> -static const char * const i2s1_ws_groups[] = { "gpio7" };
-> -static const char * const i2s1_data_groups[] = { "gpio8", "gpio9" };
-> -static const char * const wsa_swr_clk_groups[] = { "gpio10" };
-> -static const char * const wsa_swr_data_groups[] = { "gpio11" };
-> -static const char * const i2s2_data_groups[] = { "gpio12", "gpio12" };
-> -
-> -static const struct lpi_pingroup sm8250_groups[] = {
-> -	LPI_PINGROUP(0, 0, swr_tx_clk, qua_mi2s_sclk, _, _),
-> -	LPI_PINGROUP(1, 2, swr_tx_data, qua_mi2s_ws, _, _),
-> -	LPI_PINGROUP(2, 4, swr_tx_data, qua_mi2s_data, _, _),
-> -	LPI_PINGROUP(3, 8, swr_rx_clk, qua_mi2s_data, _, _),
-> -	LPI_PINGROUP(4, 10, swr_rx_data, qua_mi2s_data, _, _),
-> -	LPI_PINGROUP(5, 12, swr_tx_data, swr_rx_data, _, _),
-> -	LPI_PINGROUP(6, NO_SLEW, dmic1_clk, i2s1_clk, _,  _),
-> -	LPI_PINGROUP(7, NO_SLEW, dmic1_data, i2s1_ws, _, _),
-> -	LPI_PINGROUP(8, NO_SLEW, dmic2_clk, i2s1_data, _, _),
-> -	LPI_PINGROUP(9, NO_SLEW, dmic2_data, i2s1_data, _, _),
-> -	LPI_PINGROUP(10, 16, i2s2_clk, wsa_swr_clk, _, _),
-> -	LPI_PINGROUP(11, 18, i2s2_ws, wsa_swr_data, _, _),
-> -	LPI_PINGROUP(12, NO_SLEW, dmic3_clk, i2s2_data, _, _),
-> -	LPI_PINGROUP(13, NO_SLEW, dmic3_data, i2s2_data, _, _),
-> -};
-> -
-> -static const struct lpi_function sm8250_functions[] = {
-> -	LPI_FUNCTION(dmic1_clk),
-> -	LPI_FUNCTION(dmic1_data),
-> -	LPI_FUNCTION(dmic2_clk),
-> -	LPI_FUNCTION(dmic2_data),
-> -	LPI_FUNCTION(dmic3_clk),
-> -	LPI_FUNCTION(dmic3_data),
-> -	LPI_FUNCTION(i2s1_clk),
-> -	LPI_FUNCTION(i2s1_data),
-> -	LPI_FUNCTION(i2s1_ws),
-> -	LPI_FUNCTION(i2s2_clk),
-> -	LPI_FUNCTION(i2s2_data),
-> -	LPI_FUNCTION(i2s2_ws),
-> -	LPI_FUNCTION(qua_mi2s_data),
-> -	LPI_FUNCTION(qua_mi2s_sclk),
-> -	LPI_FUNCTION(qua_mi2s_ws),
-> -	LPI_FUNCTION(swr_rx_clk),
-> -	LPI_FUNCTION(swr_rx_data),
-> -	LPI_FUNCTION(swr_tx_clk),
-> -	LPI_FUNCTION(swr_tx_data),
-> -	LPI_FUNCTION(wsa_swr_clk),
-> -	LPI_FUNCTION(wsa_swr_data),
-> -};
-> -
-> -static struct lpi_pinctrl_variant_data sm8250_lpi_data = {
-> -	.pins = sm8250_lpi_pins,
-> -	.npins = ARRAY_SIZE(sm8250_lpi_pins),
-> -	.groups = sm8250_groups,
-> -	.ngroups = ARRAY_SIZE(sm8250_groups),
-> -	.functions = sm8250_functions,
-> -	.nfunctions = ARRAY_SIZE(sm8250_functions),
-> -};
-> +#include "pinctrl-lpass-lpi.h"
->  
->  static int lpi_gpio_read(struct lpi_pinctrl *state, unsigned int pin,
->  			 unsigned int addr)
-> @@ -582,7 +361,7 @@ static const struct gpio_chip lpi_gpio_template = {
->  	.dbg_show		= lpi_gpio_dbg_show,
->  };
->  
-> -static int lpi_pinctrl_probe(struct platform_device *pdev)
-> +int lpi_pinctrl_probe(struct platform_device *pdev)
->  {
->  	const struct lpi_pinctrl_variant_data *data;
->  	struct device *dev = &pdev->dev;
-> @@ -661,8 +440,10 @@ static int lpi_pinctrl_probe(struct platform_device *pdev)
->  
->  	return ret;
->  }
-> +EXPORT_SYMBOL(lpi_pinctrl_probe);
->  
-> -static int lpi_pinctrl_remove(struct platform_device *pdev)
-> +
-> +int lpi_pinctrl_remove(struct platform_device *pdev)
->  {
->  	struct lpi_pinctrl *pctrl = platform_get_drvdata(pdev);
->  
-> @@ -671,25 +452,8 @@ static int lpi_pinctrl_remove(struct platform_device *pdev)
->  
->  	return 0;
->  }
-> +EXPORT_SYMBOL(lpi_pinctrl_remove);
->  
-> -static const struct of_device_id lpi_pinctrl_of_match[] = {
-> -	{
-> -	       .compatible = "qcom,sm8250-lpass-lpi-pinctrl",
-> -	       .data = &sm8250_lpi_data,
-> -	},
-> -	{ }
-> -};
-> -MODULE_DEVICE_TABLE(of, lpi_pinctrl_of_match);
-> -
-> -static struct platform_driver lpi_pinctrl_driver = {
-> -	.driver = {
-> -		   .name = "qcom-lpass-lpi-pinctrl",
-> -		   .of_match_table = lpi_pinctrl_of_match,
-> -	},
-> -	.probe = lpi_pinctrl_probe,
-> -	.remove = lpi_pinctrl_remove,
-> -};
-> -
-> -module_platform_driver(lpi_pinctrl_driver);
->  MODULE_DESCRIPTION("QTI LPI GPIO pin control driver");
->  MODULE_LICENSE("GPL");
-> +
-> diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
-> new file mode 100644
-> index 0000000..ad84565
-> --- /dev/null
-> +++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
-> @@ -0,0 +1,98 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2016-2019, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2020 Linaro Ltd.
-> + */
-> +#ifndef __PINCTRL_LPASS_LPI_H__
-> +#define __PINCTRL_LPASS_LPI_H__
-> +
-> +#define LPI_SLEW_RATE_CTL_REG	0xa000
-> +#define LPI_TLMM_REG_OFFSET		0x1000
-> +#define LPI_SLEW_RATE_MAX		0x03
-> +#define LPI_SLEW_BITS_SIZE		0x02
-> +#define LPI_SLEW_RATE_MASK		GENMASK(1, 0)
-> +#define LPI_GPIO_CFG_REG		0x00
-> +#define LPI_GPIO_PULL_MASK		GENMASK(1, 0)
-> +#define LPI_GPIO_FUNCTION_MASK		GENMASK(5, 2)
-> +#define LPI_GPIO_OUT_STRENGTH_MASK	GENMASK(8, 6)
-> +#define LPI_GPIO_OE_MASK		BIT(9)
-> +#define LPI_GPIO_VALUE_REG		0x04
-> +#define LPI_GPIO_VALUE_IN_MASK		BIT(0)
-> +#define LPI_GPIO_VALUE_OUT_MASK		BIT(1)
-> +
-> +#define LPI_GPIO_BIAS_DISABLE		0x0
-> +#define LPI_GPIO_PULL_DOWN		0x1
-> +#define LPI_GPIO_KEEPER			0x2
-> +#define LPI_GPIO_PULL_UP		0x3
-> +#define LPI_GPIO_DS_TO_VAL(v)		(v / 2 - 1)
-> +#define NO_SLEW				-1
-> +
-> +#define LPI_FUNCTION(fname)			                \
-> +	[LPI_MUX_##fname] = {		                \
-> +		.name = #fname,				\
-> +		.groups = fname##_groups,               \
-> +		.ngroups = ARRAY_SIZE(fname##_groups),	\
-> +	}
-> +
-> +#define LPI_PINGROUP(id, soff, f1, f2, f3, f4)		\
-> +	{						\
-> +		.name = "gpio" #id,			\
-> +		.pins = gpio##id##_pins,		\
-> +		.pin = id,				\
-> +		.slew_offset = soff,			\
-> +		.npins = ARRAY_SIZE(gpio##id##_pins),	\
-> +		.funcs = (int[]){			\
-> +			LPI_MUX_gpio,			\
-> +			LPI_MUX_##f1,			\
-> +			LPI_MUX_##f2,			\
-> +			LPI_MUX_##f3,			\
-> +			LPI_MUX_##f4,			\
-> +		},					\
-> +		.nfuncs = 5,				\
-> +	}
-> +
-> +struct lpi_pingroup {
-> +	const char *name;
-> +	const unsigned int *pins;
-> +	unsigned int npins;
-> +	unsigned int pin;
-> +	/* Bit offset in slew register for SoundWire pins only */
-> +	int slew_offset;
-> +	unsigned int *funcs;
-> +	unsigned int nfuncs;
-> +};
-> +
-> +struct lpi_function {
-> +	const char *name;
-> +	const char * const *groups;
-> +	unsigned int ngroups;
-> +};
-> +
-> +struct lpi_pinctrl_variant_data {
-> +	const struct pinctrl_pin_desc *pins;
-> +	int npins;
-> +	const struct lpi_pingroup *groups;
-> +	int ngroups;
-> +	const struct lpi_function *functions;
-> +	int nfunctions;
-> +};
-> +
-> +#define MAX_LPI_NUM_CLKS	2
-> +
-> +struct lpi_pinctrl {
+base-commit: ef226dcf3d88697a06335fbc55c4263ab164b135
+-- 
+2.27.0
 
-Afaict this is only used by the common code, if so there's no need to
-expose it in the header file.
-
-> +	struct device *dev;
-> +	struct pinctrl_dev *ctrl;
-> +	struct gpio_chip chip;
-> +	struct pinctrl_desc desc;
-> +	char __iomem *tlmm_base;
-> +	char __iomem *slew_base;
-> +	struct clk_bulk_data clks[MAX_LPI_NUM_CLKS];
-> +	struct mutex slew_access_lock;
-> +	const struct lpi_pinctrl_variant_data *data;
-> +};
-> +
-> +int lpi_pinctrl_probe(struct platform_device *pdev);
-> +int lpi_pinctrl_remove(struct platform_device *pdev);
-> +
-> +#endif /*__PINCTRL_LPASS_LPI_H__*/
-> +
-> diff --git a/drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c
-> new file mode 100644
-> index 0000000..9a5db15
-> --- /dev/null
-> +++ b/drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c
-> @@ -0,0 +1,166 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2016-2019, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2020 Linaro Ltd.
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/gpio/driver.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include "pinctrl-lpass-lpi.h"
-> +
-> +enum lpass_lpi_functions {
-> +	LPI_MUX_dmic1_clk,
-> +	LPI_MUX_dmic1_data,
-> +	LPI_MUX_dmic2_clk,
-> +	LPI_MUX_dmic2_data,
-> +	LPI_MUX_dmic3_clk,
-> +	LPI_MUX_dmic3_data,
-> +	LPI_MUX_i2s1_clk,
-> +	LPI_MUX_i2s1_data,
-> +	LPI_MUX_i2s1_ws,
-> +	LPI_MUX_i2s2_clk,
-> +	LPI_MUX_i2s2_data,
-> +	LPI_MUX_i2s2_ws,
-> +	LPI_MUX_qua_mi2s_data,
-> +	LPI_MUX_qua_mi2s_sclk,
-> +	LPI_MUX_qua_mi2s_ws,
-> +	LPI_MUX_swr_rx_clk,
-> +	LPI_MUX_swr_rx_data,
-> +	LPI_MUX_swr_tx_clk,
-> +	LPI_MUX_swr_tx_data,
-> +	LPI_MUX_wsa_swr_clk,
-> +	LPI_MUX_wsa_swr_data,
-> +	LPI_MUX_gpio,
-> +	LPI_MUX__,
-> +};
-> +
-> +static const unsigned int gpio0_pins[] = { 0 };
-> +static const unsigned int gpio1_pins[] = { 1 };
-> +static const unsigned int gpio2_pins[] = { 2 };
-> +static const unsigned int gpio3_pins[] = { 3 };
-> +static const unsigned int gpio4_pins[] = { 4 };
-> +static const unsigned int gpio5_pins[] = { 5 };
-> +static const unsigned int gpio6_pins[] = { 6 };
-> +static const unsigned int gpio7_pins[] = { 7 };
-> +static const unsigned int gpio8_pins[] = { 8 };
-> +static const unsigned int gpio9_pins[] = { 9 };
-> +static const unsigned int gpio10_pins[] = { 10 };
-> +static const unsigned int gpio11_pins[] = { 11 };
-> +static const unsigned int gpio12_pins[] = { 12 };
-> +static const unsigned int gpio13_pins[] = { 13 };
-> +
-> +/* sm8250 variant specific data */
-> +static const struct pinctrl_pin_desc sm8250_lpi_pins[] = {
-> +	PINCTRL_PIN(0, "gpio0"),
-> +	PINCTRL_PIN(1, "gpio1"),
-> +	PINCTRL_PIN(2, "gpio2"),
-> +	PINCTRL_PIN(3, "gpio3"),
-> +	PINCTRL_PIN(4, "gpio4"),
-> +	PINCTRL_PIN(5, "gpio5"),
-> +	PINCTRL_PIN(6, "gpio6"),
-> +	PINCTRL_PIN(7, "gpio7"),
-> +	PINCTRL_PIN(8, "gpio8"),
-> +	PINCTRL_PIN(9, "gpio9"),
-> +	PINCTRL_PIN(10, "gpio10"),
-> +	PINCTRL_PIN(11, "gpio11"),
-> +	PINCTRL_PIN(12, "gpio12"),
-> +	PINCTRL_PIN(13, "gpio13"),
-> +};
-> +
-> +static const char * const swr_tx_clk_groups[] = { "gpio0" };
-> +static const char * const swr_tx_data_groups[] = { "gpio1", "gpio2", "gpio5" };
-> +static const char * const swr_rx_clk_groups[] = { "gpio3" };
-> +static const char * const swr_rx_data_groups[] = { "gpio4", "gpio5" };
-> +static const char * const dmic1_clk_groups[] = { "gpio6" };
-> +static const char * const dmic1_data_groups[] = { "gpio7" };
-> +static const char * const dmic2_clk_groups[] = { "gpio8" };
-> +static const char * const dmic2_data_groups[] = { "gpio9" };
-> +static const char * const i2s2_clk_groups[] = { "gpio10" };
-> +static const char * const i2s2_ws_groups[] = { "gpio11" };
-> +static const char * const dmic3_clk_groups[] = { "gpio12" };
-> +static const char * const dmic3_data_groups[] = { "gpio13" };
-> +static const char * const qua_mi2s_sclk_groups[] = { "gpio0" };
-> +static const char * const qua_mi2s_ws_groups[] = { "gpio1" };
-> +static const char * const qua_mi2s_data_groups[] = { "gpio2", "gpio3", "gpio4" };
-> +static const char * const i2s1_clk_groups[] = { "gpio6" };
-> +static const char * const i2s1_ws_groups[] = { "gpio7" };
-> +static const char * const i2s1_data_groups[] = { "gpio8", "gpio9" };
-> +static const char * const wsa_swr_clk_groups[] = { "gpio10" };
-> +static const char * const wsa_swr_data_groups[] = { "gpio11" };
-> +static const char * const i2s2_data_groups[] = { "gpio12", "gpio12" };
-> +
-> +static const struct lpi_pingroup sm8250_groups[] = {
-> +	LPI_PINGROUP(0, 0, swr_tx_clk, qua_mi2s_sclk, _, _),
-> +	LPI_PINGROUP(1, 2, swr_tx_data, qua_mi2s_ws, _, _),
-> +	LPI_PINGROUP(2, 4, swr_tx_data, qua_mi2s_data, _, _),
-> +	LPI_PINGROUP(3, 8, swr_rx_clk, qua_mi2s_data, _, _),
-> +	LPI_PINGROUP(4, 10, swr_rx_data, qua_mi2s_data, _, _),
-> +	LPI_PINGROUP(5, 12, swr_tx_data, swr_rx_data, _, _),
-> +	LPI_PINGROUP(6, NO_SLEW, dmic1_clk, i2s1_clk, _,  _),
-> +	LPI_PINGROUP(7, NO_SLEW, dmic1_data, i2s1_ws, _, _),
-> +	LPI_PINGROUP(8, NO_SLEW, dmic2_clk, i2s1_data, _, _),
-> +	LPI_PINGROUP(9, NO_SLEW, dmic2_data, i2s1_data, _, _),
-> +	LPI_PINGROUP(10, 16, i2s2_clk, wsa_swr_clk, _, _),
-> +	LPI_PINGROUP(11, 18, i2s2_ws, wsa_swr_data, _, _),
-> +	LPI_PINGROUP(12, NO_SLEW, dmic3_clk, i2s2_data, _, _),
-> +	LPI_PINGROUP(13, NO_SLEW, dmic3_data, i2s2_data, _, _),
-> +};
-> +
-> +static const struct lpi_function sm8250_functions[] = {
-> +	LPI_FUNCTION(dmic1_clk),
-> +	LPI_FUNCTION(dmic1_data),
-> +	LPI_FUNCTION(dmic2_clk),
-> +	LPI_FUNCTION(dmic2_data),
-> +	LPI_FUNCTION(dmic3_clk),
-> +	LPI_FUNCTION(dmic3_data),
-> +	LPI_FUNCTION(i2s1_clk),
-> +	LPI_FUNCTION(i2s1_data),
-> +	LPI_FUNCTION(i2s1_ws),
-> +	LPI_FUNCTION(i2s2_clk),
-> +	LPI_FUNCTION(i2s2_data),
-> +	LPI_FUNCTION(i2s2_ws),
-> +	LPI_FUNCTION(qua_mi2s_data),
-> +	LPI_FUNCTION(qua_mi2s_sclk),
-> +	LPI_FUNCTION(qua_mi2s_ws),
-> +	LPI_FUNCTION(swr_rx_clk),
-> +	LPI_FUNCTION(swr_rx_data),
-> +	LPI_FUNCTION(swr_tx_clk),
-> +	LPI_FUNCTION(swr_tx_data),
-> +	LPI_FUNCTION(wsa_swr_clk),
-> +	LPI_FUNCTION(wsa_swr_data),
-> +};
-> +
-> +static struct lpi_pinctrl_variant_data sm8250_lpi_data = {
-> +	.pins = sm8250_lpi_pins,
-> +	.npins = ARRAY_SIZE(sm8250_lpi_pins),
-> +	.groups = sm8250_groups,
-> +	.ngroups = ARRAY_SIZE(sm8250_groups),
-> +	.functions = sm8250_functions,
-> +	.nfunctions = ARRAY_SIZE(sm8250_functions),
-> +};
-> +
-> +static const struct of_device_id lpi_pinctrl_of_match[] = {
-> +	{
-> +	       .compatible = "qcom,sm8250-lpass-lpi-pinctrl",
-> +	       .data = &sm8250_lpi_data,
-> +	},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, lpi_pinctrl_of_match);
-> +
-> +static struct platform_driver lpi_pinctrl_driver = {
-> +	.driver = {
-> +		   .name = "qcom-sm8250-lpass-lpi-pinctrl",
-> +		   .of_match_table = lpi_pinctrl_of_match,
-> +	},
-> +	.probe = lpi_pinctrl_probe,
-> +	.remove = lpi_pinctrl_remove,
-> +};
-> +
-> +module_platform_driver(lpi_pinctrl_driver);
-> +MODULE_DESCRIPTION("QTI SM8250 LPI GPIO pin control driver");
-> +MODULE_LICENSE("GPL");
-> +
-
-Unnecessary empty line.
-
-Thanks,
-Bjorn
-
-> -- 
-> Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
-> is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
-> 

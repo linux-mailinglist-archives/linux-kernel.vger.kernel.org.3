@@ -2,150 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0E346AA27
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:20:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E622246AA23
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351249AbhLFVXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:23:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
+        id S231593AbhLFVXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351290AbhLFVXe (ORCPT
+        with ESMTP id S1351197AbhLFVXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:23:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6ACC061D5E;
-        Mon,  6 Dec 2021 13:20:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 052A8B815A0;
-        Mon,  6 Dec 2021 21:20:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C67B4C341C7;
-        Mon,  6 Dec 2021 21:20:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638825601;
-        bh=67IQHyjtgvsS8cup5Ojt+DPWEsjdJNnKB4Pxob3ISXE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qrlQ3NxuS6IEHgtBuJByqaSs7yD2MQEkCf3MGmubcYW28X1pcVel8UE+UgGwHUkVd
-         JmRKDai7Omgiv7mRTiiIOUksqFVeVVaFAkNlyCOhjiPPDm468+fHfoCUSUlG6Nqlfg
-         3qtUe9NcBwSlUIJtkEjE3yv/Thhe6Xq1UNTxWJte76UT4ACzUAaLqyGYdQQs16mw+Z
-         fBatoxeMjdDSGQG6NzwX1XQh996ulPXXyO2GvpQzEsrCSX5BxRHnf2nveuH5c0YbAS
-         EtZFEGUOTMZXoHXfKmBgd/qFLT86JgLrCNsMhRrBiYGoPG2im853I01UbpMFsbHS5d
-         d6gMlAqWSH56g==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chen Jun <chenjun102@huawei.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sasha Levin <sashal@kernel.org>, mingo@redhat.com
-Subject: [PATCH AUTOSEL 4.19 7/7] tracing: Fix a kmemleak false positive in tracing_map
-Date:   Mon,  6 Dec 2021 16:19:27 -0500
-Message-Id: <20211206211934.1661294-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211206211934.1661294-1-sashal@kernel.org>
-References: <20211206211934.1661294-1-sashal@kernel.org>
+        Mon, 6 Dec 2021 16:23:25 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F15C061746;
+        Mon,  6 Dec 2021 13:19:56 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id t5so48444645edd.0;
+        Mon, 06 Dec 2021 13:19:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=npVIllIrzbanEnSWMWYv86vweK4sS4wEJk4Mwyduuyo=;
+        b=Pn4keIE7pu0NvrTG9cm2WG8BpLD9VfYMriDuW+LBng1Fo/8YfSzQtIfgbKV+yP6DP+
+         0pGx9agAGyWkdecELWKTMsuI2HKt/C3nOQdL9nfUmMgjTuiXaSfjKEyVx9es4lPdq3qh
+         QvYEckGJzBjJDfH74z3nQSmZwNkRsCCfoqrzoSDeF57OCWZfjTjhDCxbBH3gtLH7+CR4
+         vWckSMzRbY10P9wEyXEY46OpX4n+2jZUYwKTpWfiCyuLLgvMCb689QCJ/e/sqhdpWGra
+         oTvK13K0/WfUl4zUIkhquYp96GKzwsHevBs/YUMiOph2CbbbuHoMp128iWwDOpU1MIbE
+         NLuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=npVIllIrzbanEnSWMWYv86vweK4sS4wEJk4Mwyduuyo=;
+        b=dEo7p7tEa7PDaSlNFxFj+1MyeWYOErVDWnxSPznDcObCrbu2w11r2tzIx0YlRJYX6e
+         3vb4n2vd03EX2PY6wJwgj9c/rHdtVZHOS0QHosaeKSTtEcpWJXT8owUmeniPUKRzZow1
+         P6HyvQSPEaLDjpeKbUDKXJhwtvBCycAWqkzFvpyH9Xq00maVTK0AIMefgXVTMp/8CGEd
+         158a+8FamagBJXh7MrTm93O+T5hn3VEnsCBfezrlDFMklIxeCmS2fk+7cxz7VbwwSMzi
+         imp1bTWeoiL2Q9agloVow+V3s3KRpYiXDb5ryHql72SQVfL3hZlJUIpJlounMPIBAfmB
+         D7WQ==
+X-Gm-Message-State: AOAM533Jyhd0D18NisoTPr5Qn4w+vNcPQeM00LkIgfh1P9zOwD2aczTh
+        d5+m97mytB3lK64OcbV2i9X2hLbzUE7q2sG8E/U=
+X-Google-Smtp-Source: ABdhPJzg5usv5f0RaSqWg9mf7QzcFnAMff1LKR1fQBgsK2p4lTLH5w1ZlTVKL6A8Jz5Sj2CrhyAHKuW6LzqUDQ6MGIA=
+X-Received: by 2002:a17:906:229b:: with SMTP id p27mr48499254eja.264.1638825594626;
+ Mon, 06 Dec 2021 13:19:54 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20211205215846.153703-1-aouledameur@baylibre.com> <20211205215846.153703-2-aouledameur@baylibre.com>
+In-Reply-To: <20211205215846.153703-2-aouledameur@baylibre.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 6 Dec 2021 22:19:43 +0100
+Message-ID: <CAFBinCDZ2nTg2V_6qxok_y+wXHTVJ6XyyvON59TLJZ9B3fKY3Q@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] phy: amlogic: phy-meson-gxl-usb2: fix shared reset
+ controller use
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        p.zabel@pengutronix.de
+Cc:     khilman@baylibre.com, balbi@kernel.org, jbrunet@baylibre.com,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen Jun <chenjun102@huawei.com>
+Hi Amjad,
 
-[ Upstream commit f25667e5980a4333729cac3101e5de1bb851f71a ]
+On Sun, Dec 5, 2021 at 10:59 PM Amjad Ouled-Ameur
+<aouledameur@baylibre.com> wrote:
+>
+> Use reset_control_rearm() call if an error occurs in case
+> phy_meson_gxl_usb2_init() fails after reset() has been called ; or in case
+> phy_meson_gxl_usb2_exit() is called i.e the resource is no longer used
+> and the reset line may be triggered again by other devices.
+>
+> reset_control_rearm() keeps use of triggered_count sane in the reset
+> framework. Therefore, use of reset_control_reset() on shared reset line
+> should be balanced with reset_control_rearm().
+>
+> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> Reported-by: Jerome Brunet <jbrunet@baylibre.com>
+> ---
+> changes since v3:
+> - Remove unnecessary reset_control_rearm() after reset_control_reset()
+> failure.
+I double-checked your patch in v3 and Philipp was right:
+reset_control_rearm() should not be right after reset_control_reset().
+However, I think reset_control_rearm() is still needed
+phy_meson_gxl_usb2_init() whenever clk_prepare_enable() fails.
 
-Doing the command:
-  echo 'hist:key=common_pid.execname,common_timestamp' > /sys/kernel/debug/tracing/events/xxx/trigger
+So my suggestion is to add reset_control_rearm() in
+phy_meson_gxl_usb2_init() if clk_prepare_enable() fails so we are
+resetting the ref-count for the reset line (just like
+phy_meson_gxl_usb2_exit() does).
+The difference compared to the previous version is that the
+reset_control_rearm() call needs to be placed a few lines down.
 
-Triggers many kmemleak reports:
 
-unreferenced object 0xffff0000c7ea4980 (size 128):
-  comm "bash", pid 338, jiffies 4294912626 (age 9339.324s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000f3469921>] kmem_cache_alloc_trace+0x4c0/0x6f0
-    [<0000000054ca40c3>] hist_trigger_elt_data_alloc+0x140/0x178
-    [<00000000633bd154>] tracing_map_init+0x1f8/0x268
-    [<000000007e814ab9>] event_hist_trigger_func+0xca0/0x1ad0
-    [<00000000bf8520ed>] trigger_process_regex+0xd4/0x128
-    [<00000000f549355a>] event_trigger_write+0x7c/0x120
-    [<00000000b80f898d>] vfs_write+0xc4/0x380
-    [<00000000823e1055>] ksys_write+0x74/0xf8
-    [<000000008a9374aa>] __arm64_sys_write+0x24/0x30
-    [<0000000087124017>] do_el0_svc+0x88/0x1c0
-    [<00000000efd0dcd1>] el0_svc+0x1c/0x28
-    [<00000000dbfba9b3>] el0_sync_handler+0x88/0xc0
-    [<00000000e7399680>] el0_sync+0x148/0x180
-unreferenced object 0xffff0000c7ea4980 (size 128):
-  comm "bash", pid 338, jiffies 4294912626 (age 9339.324s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000f3469921>] kmem_cache_alloc_trace+0x4c0/0x6f0
-    [<0000000054ca40c3>] hist_trigger_elt_data_alloc+0x140/0x178
-    [<00000000633bd154>] tracing_map_init+0x1f8/0x268
-    [<000000007e814ab9>] event_hist_trigger_func+0xca0/0x1ad0
-    [<00000000bf8520ed>] trigger_process_regex+0xd4/0x128
-    [<00000000f549355a>] event_trigger_write+0x7c/0x120
-    [<00000000b80f898d>] vfs_write+0xc4/0x380
-    [<00000000823e1055>] ksys_write+0x74/0xf8
-    [<000000008a9374aa>] __arm64_sys_write+0x24/0x30
-    [<0000000087124017>] do_el0_svc+0x88/0x1c0
-    [<00000000efd0dcd1>] el0_svc+0x1c/0x28
-    [<00000000dbfba9b3>] el0_sync_handler+0x88/0xc0
-    [<00000000e7399680>] el0_sync+0x148/0x180
-
-The reason is elts->pages[i] is alloced by get_zeroed_page.
-and kmemleak will not scan the area alloced by get_zeroed_page.
-The address stored in elts->pages will be regarded as leaked.
-
-That is, the elts->pages[i] will have pointers loaded onto it as well, and
-without telling kmemleak about it, those pointers will look like memory
-without a reference.
-
-To fix this, call kmemleak_alloc to tell kmemleak to scan elts->pages[i]
-
-Link: https://lkml.kernel.org/r/20211124140801.87121-1-chenjun102@huawei.com
-
-Signed-off-by: Chen Jun <chenjun102@huawei.com>
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- kernel/trace/tracing_map.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/kernel/trace/tracing_map.c b/kernel/trace/tracing_map.c
-index 10657b8dc2c2d..83c2a0598c648 100644
---- a/kernel/trace/tracing_map.c
-+++ b/kernel/trace/tracing_map.c
-@@ -15,6 +15,7 @@
- #include <linux/jhash.h>
- #include <linux/slab.h>
- #include <linux/sort.h>
-+#include <linux/kmemleak.h>
- 
- #include "tracing_map.h"
- #include "trace.h"
-@@ -307,6 +308,7 @@ void tracing_map_array_free(struct tracing_map_array *a)
- 	for (i = 0; i < a->n_pages; i++) {
- 		if (!a->pages[i])
- 			break;
-+		kmemleak_free(a->pages[i]);
- 		free_page((unsigned long)a->pages[i]);
- 	}
- 
-@@ -342,6 +344,7 @@ struct tracing_map_array *tracing_map_array_alloc(unsigned int n_elts,
- 		a->pages[i] = (void *)get_zeroed_page(GFP_KERNEL);
- 		if (!a->pages[i])
- 			goto free;
-+		kmemleak_alloc(a->pages[i], PAGE_SIZE, 1, GFP_KERNEL);
- 	}
-  out:
- 	return a;
--- 
-2.33.0
-
+Thank you!
+Martin

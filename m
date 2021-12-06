@@ -2,328 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E0646A29B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EED8546A29D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235434AbhLFRVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 12:21:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
+        id S236768AbhLFRWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 12:22:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234757AbhLFRVQ (ORCPT
+        with ESMTP id S234757AbhLFRWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 12:21:16 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033C5C061746;
-        Mon,  6 Dec 2021 09:17:48 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id x6so13684611iol.13;
-        Mon, 06 Dec 2021 09:17:47 -0800 (PST)
+        Mon, 6 Dec 2021 12:22:09 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA59EC061746;
+        Mon,  6 Dec 2021 09:18:40 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id x1-20020a4aea01000000b002c296d82604so4551231ood.9;
+        Mon, 06 Dec 2021 09:18:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=aNz3Q2mlKF711FA8wRX14koPJl39WuNweWYokTQs3qU=;
-        b=AwTjbe4JskmjdVEHzHOR1FdY/bm5eSzHzio26QFOYCc4QTlRRzGcpZNWTOmwvHCWUv
-         DiqrMq/laf0baqEnExZnhGWJKVAglgQlB5NsUUWLKUwqb2iV/QKTGcmMGoD9vU/9feFA
-         quH5Q1HK3vDzFEBvRHE/9Eivv+9WOGhA8iHL3DvHJ9lDL8Jos11pIxhEIxw6WdgW0Yqg
-         QkFnXjVRfF7DHU4l7BLLaLBGCLmt4SfnIAXjFGMxZaXGDMH3CWALYiBYrk5Z64efPGYB
-         vFzg5dlqju1UrQ0pHToAb5NTDBE+tw9NU3sswbWCeRDeiQYpFCJz7YLYwDCnqA+0uVyA
-         xu8g==
+        bh=NqH7yr1I7QwoW5kKDKfii6Og16iXjUvJo6cV2H86U60=;
+        b=R/xtTXimPuCUAEaNfuf4WIyPHRXs+RYRNI9GdL5H9WKqBBqTMgYCyfwFrQOx+Q6b+d
+         uTSIjf862eQiqWfAVbWlVBCCGWMZvRuvj14Hsa5Bf27vCZI/ddNn0/VGBhbl+5WuvX3/
+         z9to+pydPI+i/eF6HLt/SSorNhOF3qwZ/yUj4iyDy6QrIe0HR4WFLLv++3Tb/5GsXm+2
+         cohittgSzV3HpduUBKtYOnTwEzaWcZt9Eo8U92AWjLcCXYfQilzP+lFq3398eNzU4HaK
+         FcUZllHNSh0DGJ5JbGhKnyF62Z/jFPJrJbx1XyoOfF28kUVCHwWFnPJDDf1rQC4RWRes
+         7Bnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aNz3Q2mlKF711FA8wRX14koPJl39WuNweWYokTQs3qU=;
-        b=PxA9jgZkpAOfz9/NCAXAmWxjwx2AYyVifF3vHUJZowrtqGgEneSDortWD1VHaAeiF7
-         NhKhuyRm+kmrkn1EpUAeryKueArtAedEM6M59SPB6Nrqu1q9RZ2B9Znk51DL20Fk2BZO
-         dmFwW3NmR4tc4iN4E8vsdY0xLK2sadQpyJpwzJXj0tM0o+3f6VLfIpZck9fot6WB6l4L
-         fCK1u/jNIOqe7k4EHcE26/pVinnQV9jpwuQoq1Ezha/ueZQ12Jl2Fw4fJASj6sqynMGy
-         3Tflvt8Nc71vdbOdkIPFL6/bFYxhxBoT4eGCz4A+y2OgtXPqGs084ONdeVuP0wfwT21J
-         /miQ==
-X-Gm-Message-State: AOAM530Ql49uDBeNvq1W8KflA/axEW2akoo1SxKooavuacUXAO3N0dKx
-        mFmIoXJwWHA90XWmXwBlDEg=
-X-Google-Smtp-Source: ABdhPJyv3jGlqSSJnIRJD424hIOvjpgEoXREUM7M0+VcqmqFV24bQgbl0uhMJAoKJXaUpVwvcHznpA==
-X-Received: by 2002:a05:6602:1609:: with SMTP id x9mr34726304iow.6.1638811067376;
-        Mon, 06 Dec 2021 09:17:47 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id r3sm7030982iob.0.2021.12.06.09.17.45
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=NqH7yr1I7QwoW5kKDKfii6Og16iXjUvJo6cV2H86U60=;
+        b=p/8wMEarTwpGKN3lbFtsQHKj33b5NkUW/PZxVVT3cJ+j4vmv1FWrQIPXUHaNURj8sh
+         nHgqDR3xLA6xzNrS2hmxiXc+SuMzvMgidb17+oVVNKqonUQwRAXgY+jhlX34BKiGJIPr
+         NcAY0tyEqGKZI8Yojo1uIqYaAxukwmpdl7gxUMBAckR4b7jbXhi1QCRsBI/iDWLPH1s7
+         gJWl8leqpGFBFPhXDvFWadyMAyaZ/ycCT8tcBlGF1xFc82L4aDapuy1SeOs5/R9CUPnt
+         27wtgfbR5bCdEcYubYwT1e2Bx3+YvmuLJi67OOVQwiSyCnb6IWdRBkEHEK725qW/Cc7i
+         +kBQ==
+X-Gm-Message-State: AOAM532S5BoELlK/Pg52IEOFJoMPev0eWURAfb7CgIP9qezdOnSWKwCT
+        ceqLorica+AxOtaVrKtTUPqJz2P4+FU=
+X-Google-Smtp-Source: ABdhPJwSCSaLJgG6yUOyVhbjddbDY7Yv9gEm5XldDMLFkQxRs1k3gFsn54Ot57wpPWTxQuhp6OLTxw==
+X-Received: by 2002:a4a:a5cf:: with SMTP id k15mr22966949oom.70.1638811120277;
+        Mon, 06 Dec 2021 09:18:40 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w5sm2230477otk.70.2021.12.06.09.18.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 09:17:46 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 25CDA27C0064;
-        Mon,  6 Dec 2021 12:17:45 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 06 Dec 2021 12:17:45 -0500
-X-ME-Sender: <xms:uEWuYRL6RqCVh9V3LkBudn5KYREbsDRCjuiN-cl8F70X7lyS0mr_rg>
-    <xme:uEWuYdLBcm8HMsTIZHEtW3eC5SLqY5ZixKc0iNd6yNf7oDRyfKBxpvc6_IQmuznM9
-    lK2wG3c54QHTKjPPg>
-X-ME-Received: <xmr:uEWuYZuK907atpfMNOGoJQhb2DJdLvggEQr5O0xJcD-wP4az-iZ1jntpGAg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjeefgdellecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
-    gvrhhnpedvleeigedugfegveejhfejveeuveeiteejieekvdfgjeefudehfefhgfegvdeg
-    jeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
-    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
-    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
-    gvrdhnrghmvg
-X-ME-Proxy: <xmx:uEWuYSaytHv6obCwpvVYsaka6TAVJfASY-_U-6UHW7fT8npY7zLJgw>
-    <xmx:uEWuYYbCSW8fc1jNaUS3QD9CpdcyfsjkGo05j9PrYu_W-wiiEgY8VQ>
-    <xmx:uEWuYWDTmq8SilnEKWAlXn5qYibumEtJumw0ZCN9X2wrVA_EuUkn5w>
-    <xmx:uEWuYVRqeVwd13UKriZ4Y4jbXM16FeexZmySUNfPq7czO1EXmpb6_uWshfo>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 6 Dec 2021 12:17:44 -0500 (EST)
-Date:   Tue, 7 Dec 2021 01:16:25 +0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Marco Elver <elver@google.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev, x86@kernel.org
-Subject: Re: [PATCH v3 08/25] kcsan: Show location access was reordered to
-Message-ID: <Ya5FaU9e6XY8vHJR@boqun-archlinux>
-References: <20211130114433.2580590-1-elver@google.com>
- <20211130114433.2580590-9-elver@google.com>
- <Ya2Zpf8qpgDYiGqM@boqun-archlinux>
- <CANpmjNMirKGSBW2m+bWRM9_FnjK3_HjnJC=dhyMktx50mwh1GQ@mail.gmail.com>
- <Ya4evHE7uQ9eXpax@boqun-archlinux>
- <Ya40hEQv5SEu7ZeL@elver.google.com>
+        Mon, 06 Dec 2021 09:18:39 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 6 Dec 2021 09:18:38 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Wei Ming Chen <jj251510319013@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        wim@linux-watchdog.org, vz@mleia.com
+Subject: Re: [PATCH] watchdog: Fix file path that does not exist
+Message-ID: <20211206171838.GA3423410@roeck-us.net>
+References: <20211206144224.2931-1-jj251510319013@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ya40hEQv5SEu7ZeL@elver.google.com>
+In-Reply-To: <20211206144224.2931-1-jj251510319013@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 05:04:20PM +0100, Marco Elver wrote:
-> On Mon, Dec 06, 2021 at 10:31PM +0800, Boqun Feng wrote:
-> [...]
-> > Thanks for the explanation, I was missing the swap here. However...
-> > 
-> > > So in your above example you need to swap "reordered to" and the top
-> > > frame of the stack trace.
-> > > 
-> 
-> Apologies, I wasn't entirely precise ... what you say below is correct.
-> 
-> > IIUC, the report for my above example will be:
-> > 
-> >          | write (reordered) to 0xaaaa of ...:
-> >          | foo+0x... // address of the write to A
-> >          | ...
-> >          |  |
-> >          |  +-> reordered to: foo+0x... // address of the callsite to bar() in foo()
-> > 
-> > , right? Because in replace_stack_entry(), it's not the top frame where
-> > the race occurred that gets swapped, it's the frame which belongs to the
-> > same function as the original access that gets swapped. In other words,
-> > when KCSAN finds the problem, top entries of the calling stack are:
-> > 
-> > 	[0] bar+0x.. // address of the write to B
-> > 	[1] foo+0x.. // address of the callsite to bar() in foo()
-> > 
-> > after replace_stack_entry(), they changes to:
-> > 
-> > 	[0] bar+0x.. // address of the write to B
-> > skip  ->[1] foo+0x.. // address of the write to A
-> > 
-> > , as a result the report won't mention bar() at all.
-> 
-> Correct.
-> 
-> > And I think a better report will be:
-> > 
-> >          | write (reordered) to 0xaaaa of ...:
-> >          | foo+0x... // address of the write to A
-> >          | ...
-> >          |  |
-> >          |  +-> reordered to: bar+0x... // address of the write to B in bar()
-> > 
-> > because it tells users the exact place the accesses get reordered. That
-> > means maybe we want something as below? Not completely tested, but I
-> > play with scope checking a bit, seems it gives what I want. Thoughts?
-> 
-> This is problematic because it makes it much harder to actually figure
-> out what's going on, given "reordered to" isn't a full stack trace. So
-> if you're deep in some call hierarchy, seeing a random "reordered to"
-> line is quite useless. What I want to see, at the very least, is the ip
-> to the same function where the original access happened.
-> 
-> We could of course try and generate a full stack trace at "reordered
-> to", but this would entail
-> 
-> 	a) allocating 2x unsigned long[64] on the stack (or moving to
-> 	   static storage),
-> 	b) further increasing the report length,
-> 	c) an even larger number of possibly distinct reports for the
-> 	   same issue; this makes deduplication even harder.
-> 
-> The reason I couldn't justify all that is that when I looked through
-> several dozen "reordered to" reports, I never found anything other than
-> the ip in the function frame of the original access useful. That, and in
-> most cases the "reordered to" location was in the same function or in an
-> inlined function.
-> 
-> The below patch would do what you'd want I think.
-> 
-> My opinion is to err on the side of simplicity until there is evidence
-> we need it. Of course, if you have a compelling reason that we need it
-> from the beginning, happy to send it as a separate patch on top.
-> 
-> What do you think?
+On Mon, Dec 06, 2021 at 10:42:24PM +0800, Wei Ming Chen wrote:
+> All the file path are now under drivers/watchdog/ instead of
+> drivers/char/watchdog/
 > 
 
-Totally agreed. It's better to keep it simple until people report that
-they want to see more information to resolve the issues. And thanks for
-looking into the "double stack traces", that looks good to me too.
+Having a file name in its source is pointless. If you want to make any
+changes, please drop those file names instead.
 
-For the original patch, feel free to add:
+Also, "Based on ..." is still correct, as it refers to where the code
+was located when the driver was written, not where it is today.
+That code may actually have been removed by now, and then what ?
+Please do not change those locations.
 
-Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+Last but not least, the bcm63xx driver is about to be removed.
+Please do not touch it to avoid unnecessary conflicts.
 
-Regards,
-Boqun
+Thanks,
+Guenter
 
-> Thanks,
-> -- Marco
-> 
-> ------ >8 ------
-> 
-> From: Marco Elver <elver@google.com>
-> Date: Mon, 6 Dec 2021 16:35:02 +0100
-> Subject: [PATCH] kcsan: Show full stack trace of reordered-to accesses
-> 
-> Change reports involving reordered accesses to show the full stack trace
-> of "reordered to" accesses. For example:
-> 
->  | ==================================================================
->  | BUG: KCSAN: data-race in test_kernel_wrong_memorder / test_kernel_wrong_memorder
->  |
->  | read-write to 0xffffffffc02d01e8 of 8 bytes by task 2481 on cpu 2:
->  |  test_kernel_wrong_memorder+0x57/0x90
->  |  access_thread+0xb7/0x100
->  |  kthread+0x2ed/0x320
->  |  ret_from_fork+0x22/0x30
->  |
->  | read-write (reordered) to 0xffffffffc02d01e8 of 8 bytes by task 2480 on cpu 0:
->  |  test_kernel_wrong_memorder+0x57/0x90
->  |  access_thread+0xb7/0x100
->  |  kthread+0x2ed/0x320
->  |  ret_from_fork+0x22/0x30
->  |   |
->  |   +-> reordered to: test_delay+0x31/0x110
->  |                     test_kernel_wrong_memorder+0x80/0x90
->  |
->  | Reported by Kernel Concurrency Sanitizer on:
->  | CPU: 0 PID: 2480 Comm: access_thread Not tainted 5.16.0-rc1+ #2
->  | Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
->  | ==================================================================
-> 
-> Signed-off-by: Marco Elver <elver@google.com>
+> Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
 > ---
->  kernel/kcsan/report.c | 33 +++++++++++++++++++++++----------
->  1 file changed, 23 insertions(+), 10 deletions(-)
+>  drivers/watchdog/davinci_wdt.c | 2 +-
+>  drivers/watchdog/it8712f_wdt.c | 2 +-
+>  drivers/watchdog/ixp4xx_wdt.c  | 2 +-
+>  drivers/watchdog/max63xx_wdt.c | 2 +-
+>  drivers/watchdog/pnx4008_wdt.c | 2 +-
+>  drivers/watchdog/scx200_wdt.c  | 2 +-
+>  6 files changed, 6 insertions(+), 6 deletions(-)
 > 
-> diff --git a/kernel/kcsan/report.c b/kernel/kcsan/report.c
-> index 67794404042a..a8317d5f5123 100644
-> --- a/kernel/kcsan/report.c
-> +++ b/kernel/kcsan/report.c
-> @@ -317,22 +317,29 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
->  {
->  	unsigned long symbolsize, offset;
->  	unsigned long target_func;
-> -	int skip;
-> +	int skip, i;
+> diff --git a/drivers/watchdog/davinci_wdt.c b/drivers/watchdog/davinci_wdt.c
+> index e6eaba6bae5b..91e548ad046f 100644
+> --- a/drivers/watchdog/davinci_wdt.c
+> +++ b/drivers/watchdog/davinci_wdt.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /*
+> - * drivers/char/watchdog/davinci_wdt.c
+> + * drivers/watchdog/davinci_wdt.c
+>   *
+>   * Watchdog driver for DaVinci DM644x/DM646x processors
+>   *
+> diff --git a/drivers/watchdog/it8712f_wdt.c b/drivers/watchdog/it8712f_wdt.c
+> index 3ce6a58bd81e..cb60ed310ab6 100644
+> --- a/drivers/watchdog/it8712f_wdt.c
+> +++ b/drivers/watchdog/it8712f_wdt.c
+> @@ -6,7 +6,7 @@
+>   *
+>   *	Based on info and code taken from:
+>   *
+> - *	drivers/char/watchdog/scx200_wdt.c
+> + *	drivers/watchdog/scx200_wdt.c
+>   *	drivers/hwmon/it87.c
+>   *	IT8712F EC-LPC I/O Preliminary Specification 0.8.2
+>   *	IT8712F EC-LPC I/O Preliminary Specification 0.9.3
+> diff --git a/drivers/watchdog/ixp4xx_wdt.c b/drivers/watchdog/ixp4xx_wdt.c
+> index 31b03fa71341..59369cf7f082 100644
+> --- a/drivers/watchdog/ixp4xx_wdt.c
+> +++ b/drivers/watchdog/ixp4xx_wdt.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * drivers/char/watchdog/ixp4xx_wdt.c
+> + * drivers/watchdog/ixp4xx_wdt.c
+>   *
+>   * Watchdog driver for Intel IXP4xx network processors
+>   *
+> diff --git a/drivers/watchdog/max63xx_wdt.c b/drivers/watchdog/max63xx_wdt.c
+> index 9e1541cfae0d..69349f1d0f34 100644
+> --- a/drivers/watchdog/max63xx_wdt.c
+> +++ b/drivers/watchdog/max63xx_wdt.c
+> @@ -1,5 +1,5 @@
+>  /*
+> - * drivers/char/watchdog/max63xx_wdt.c
+> + * drivers/watchdog/max63xx_wdt.c
+>   *
+>   * Driver for max63{69,70,71,72,73,74} watchdog timers
+>   *
+> diff --git a/drivers/watchdog/pnx4008_wdt.c b/drivers/watchdog/pnx4008_wdt.c
+> index e0ea133c1690..94d54247fcab 100644
+> --- a/drivers/watchdog/pnx4008_wdt.c
+> +++ b/drivers/watchdog/pnx4008_wdt.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /*
+> - * drivers/char/watchdog/pnx4008_wdt.c
+> + * drivers/watchdog/pnx4008_wdt.c
+>   *
+>   * Watchdog driver for PNX4008 board
+>   *
+> diff --git a/drivers/watchdog/scx200_wdt.c b/drivers/watchdog/scx200_wdt.c
+> index 7b5e18323f3f..77e630797572 100644
+> --- a/drivers/watchdog/scx200_wdt.c
+> +++ b/drivers/watchdog/scx200_wdt.c
+> @@ -1,5 +1,5 @@
+>  // SPDX-License-Identifier: GPL-2.0-or-later
+> -/* drivers/char/watchdog/scx200_wdt.c
+> +/* drivers/watchdog/scx200_wdt.c
 >  
->  	if (kallsyms_lookup_size_offset(ip, &symbolsize, &offset))
->  		target_func = ip - offset;
->  	else
->  		goto fallback;
+>     National Semiconductor SCx200 Watchdog support
 >  
-> -	for (skip = 0; skip < num_entries; ++skip) {
-> +	skip = get_stack_skipnr(stack_entries, num_entries);
-> +	for (i = 0; skip < num_entries; ++skip, ++i) {
->  		unsigned long func = stack_entries[skip];
->  
->  		if (!kallsyms_lookup_size_offset(func, &symbolsize, &offset))
->  			goto fallback;
->  		func -= offset;
->  
-> +		replaced[i] = stack_entries[skip];
->  		if (func == target_func) {
-> -			*replaced = stack_entries[skip];
-> +			/*
-> +			 * There must be at least 1 entry left in the original
-> +			 * @stack_entries, so we know that we will never occupy
-> +			 * more than @num_entries - 1 of @replaced.
-> +			 */
-> +			replaced[i + 1] = 0;
->  			stack_entries[skip] = ip;
->  			return skip;
->  		}
-> @@ -341,6 +348,7 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
->  fallback:
->  	/* Should not happen; the resulting stack trace is likely misleading. */
->  	WARN_ONCE(1, "Cannot find frame for %pS in stack trace", (void *)ip);
-> +	replaced[0] = 0;
->  	return get_stack_skipnr(stack_entries, num_entries);
->  }
->  
-> @@ -365,11 +373,16 @@ static int sym_strcmp(void *addr1, void *addr2)
->  }
->  
->  static void
-> -print_stack_trace(unsigned long stack_entries[], int num_entries, unsigned long reordered_to)
-> +print_stack_trace(unsigned long stack_entries[], int num_entries, unsigned long *reordered_to)
->  {
->  	stack_trace_print(stack_entries, num_entries, 0);
-> -	if (reordered_to)
-> -		pr_err("  |\n  +-> reordered to: %pS\n", (void *)reordered_to);
-> +	if (reordered_to[0]) {
-> +		int i;
-> +
-> +		pr_err("  |\n  +-> reordered to: %pS\n", (void *)reordered_to[0]);
-> +		for (i = 1; i < NUM_STACK_ENTRIES && reordered_to[i]; ++i)
-> +			pr_err("                    %pS\n", (void *)reordered_to[i]);
-> +	}
->  }
->  
->  static void print_verbose_info(struct task_struct *task)
-> @@ -390,12 +403,12 @@ static void print_report(enum kcsan_value_change value_change,
->  			 struct other_info *other_info,
->  			 u64 old, u64 new, u64 mask)
->  {
-> -	unsigned long reordered_to = 0;
-> +	unsigned long reordered_to[NUM_STACK_ENTRIES] = { 0 };
->  	unsigned long stack_entries[NUM_STACK_ENTRIES] = { 0 };
->  	int num_stack_entries = stack_trace_save(stack_entries, NUM_STACK_ENTRIES, 1);
-> -	int skipnr = sanitize_stack_entries(stack_entries, num_stack_entries, ai->ip, &reordered_to);
-> +	int skipnr = sanitize_stack_entries(stack_entries, num_stack_entries, ai->ip, reordered_to);
->  	unsigned long this_frame = stack_entries[skipnr];
-> -	unsigned long other_reordered_to = 0;
-> +	unsigned long other_reordered_to[NUM_STACK_ENTRIES] = { 0 };
->  	unsigned long other_frame = 0;
->  	int other_skipnr = 0; /* silence uninit warnings */
->  
-> @@ -408,7 +421,7 @@ static void print_report(enum kcsan_value_change value_change,
->  	if (other_info) {
->  		other_skipnr = sanitize_stack_entries(other_info->stack_entries,
->  						      other_info->num_stack_entries,
-> -						      other_info->ai.ip, &other_reordered_to);
-> +						      other_info->ai.ip, other_reordered_to);
->  		other_frame = other_info->stack_entries[other_skipnr];
->  
->  		/* @value_change is only known for the other thread */
-> -- 
-> 2.34.1.400.ga245620fadb-goog
-> 

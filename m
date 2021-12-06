@@ -2,77 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4D7468E79
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 02:06:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE76F468E7B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 02:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbhLFBJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 20:09:54 -0500
-Received: from conuserg-12.nifty.com ([210.131.2.79]:48848 "EHLO
-        conuserg-12.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbhLFBJw (ORCPT
+        id S229804AbhLFBKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 20:10:06 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51278 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229771AbhLFBKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 20:09:52 -0500
-Received: from grover.. (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 1B615ljg028855;
-        Mon, 6 Dec 2021 10:05:48 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 1B615ljg028855
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1638752748;
-        bh=QOyPEuKvb5np0rwpX9TXSpgTv+tj9cVX5wL1TcAKFXQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zHHETtrPqX7GQc+mST4sNhRW+PTsbkge83v6HI3OJ8/sXn+MWUo5dnhdV8H+UBEPC
-         ffcW7+DGzov52QPAwuibkJojamczIPgi9OZ5/PWf1siIpa36V6UgkIRtqg5shtGK8I
-         23HXwXDj4UcdqofO99ncrX33b4ZEY6PSg+SrIMg+dC9xaPlpXhDrMMVht8d0D8wPIC
-         g3B5dXoFesM64dTt32gEXRNiDHFobZAGAXtfA6s6CQfSYskxPz8HZHFTPBGhNbX03h
-         PnqM01ZOwqzyCJLyqeUJrckRqKqIIY4zcFpcreEd+agsYIZc3iE6bMyTSgiS0ZzQ7j
-         B8/Diy/bR1xbw==
-X-Nifty-SrcIP: [133.32.232.101]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] kbuild: remove headers_check stub
-Date:   Mon,  6 Dec 2021 10:05:33 +0900
-Message-Id: <20211206010533.439981-2-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211206010533.439981-1-masahiroy@kernel.org>
-References: <20211206010533.439981-1-masahiroy@kernel.org>
+        Sun, 5 Dec 2021 20:10:05 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA5DEB80EF4;
+        Mon,  6 Dec 2021 01:06:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 931FDC00446;
+        Mon,  6 Dec 2021 01:06:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638752795;
+        bh=ZnP+uv8sr4aux3SE5ct0uiDkE3xgo3eccOirZWONzA8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=deWdiGABrZbwG/VCJuGmBdd2Ocst7SrZ3CXxVRrnGo948b956XOqEXspGL1X84hhv
+         eZGraoKSMhNWu8/nTnnBNnYCdwV6i+FOF8A4zN/3IEYCVLXXAEC4jzvWqigF/CY4rT
+         8v+qWkF/eQ1s5e/iBOx4e3kf/v7kXrGGzbaxAEDgaXWIuk/bqtVrlIkP47eXgLV+cY
+         ePApOnkNU4QlcOZ9c0EPw73J+gRMVepMCuchodinIkGS55/yefMIR6thsVMbe2yHWC
+         Bni4tnamG7nBcpb/75MAEevi35Bsbg9/mmQAXKipgdWRfu+mZ3qwatT9FGaQqMogA9
+         X3LNyW6hnR/sg==
+Date:   Mon, 6 Dec 2021 09:06:28 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        David Jander <david@protonic.nl>,
+        Robin van der Gracht <robin@protonic.nl>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v1 4/4] ARM: dts: imx6dl: plym2m, prtvt7, victgo:  make
+ use of new resistive-adc-touch driver
+Message-ID: <20211206010627.GK4216@dragon>
+References: <20211122124310.2796505-1-o.rempel@pengutronix.de>
+ <20211122124310.2796505-4-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211122124310.2796505-4-o.rempel@pengutronix.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux 5.15 is out. Remove this stub now.
+On Mon, Nov 22, 2021 at 01:43:10PM +0100, Oleksij Rempel wrote:
+> The tsc2046 is an ADC used as touchscreen controller. To share as mach
+> code as possible, we should use it as actual ADC + virtual tochscreen
+> controller.
+> With this patch we make use of the new kernel IIO and HID infrastructure.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+One space is enough in subject "victgo:  make".
 
- Makefile | 9 ---------
- 1 file changed, 9 deletions(-)
+> ---
+>  arch/arm/boot/dts/imx6dl-plym2m.dts | 55 ++++++++++++++++++++---------
+>  arch/arm/boot/dts/imx6dl-prtvt7.dts | 53 ++++++++++++++++++++-------
+>  arch/arm/boot/dts/imx6dl-victgo.dts | 55 +++++++++++++++++++++--------
+>  3 files changed, 120 insertions(+), 43 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/imx6dl-plym2m.dts b/arch/arm/boot/dts/imx6dl-plym2m.dts
+> index 60fe5f14666e..e2afedae85cb 100644
+> --- a/arch/arm/boot/dts/imx6dl-plym2m.dts
+> +++ b/arch/arm/boot/dts/imx6dl-plym2m.dts
+> @@ -101,6 +101,17 @@ reg_12v0: regulator-12v0 {
+>  		regulator-min-microvolt = <12000000>;
+>  		regulator-max-microvolt = <12000000>;
+>  	};
+> +
+> +	touchscreen {
+> +		compatible = "resistive-adc-touch";
+> +		io-channels = <&adc 1>, <&adc 3>, <&adc 4>, <&adc 5>;
+> +		io-channel-names = "y", "z1", "z2", "x";
+> +		touchscreen-min-pressure = <64687>;
+> +		touchscreen-inverted-x;
+> +		touchscreen-inverted-y;
+> +		touchscreen-x-plate-ohms = <300>;
+> +		touchscreen-y-plate-ohms = <800>;
+> +	};
+>  };
+>  
+>  &can1 {
+> @@ -129,26 +140,38 @@ &ecspi2 {
+>  	pinctrl-0 = <&pinctrl_ecspi2>;
+>  	status = "okay";
+>  
+> -	touchscreen@0 {
+> -		compatible = "ti,tsc2046";
+> +	adc: adc@0 {
 
-diff --git a/Makefile b/Makefile
-index 0a6ecc8bb2d2..8d58f65e226b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1284,15 +1284,6 @@ headers: $(version_h) scripts_unifdef uapi-asm-generic archheaders archscripts
- 	$(Q)$(MAKE) $(hdr-inst)=include/uapi
- 	$(Q)$(MAKE) $(hdr-inst)=arch/$(SRCARCH)/include/uapi
- 
--# Deprecated. It is no-op now.
--PHONY += headers_check
--headers_check:
--	@echo >&2 "=================== WARNING ==================="
--	@echo >&2 "Since Linux 5.5, 'make headers_check' is no-op,"
--	@echo >&2 "and will be removed after Linux 5.15 release."
--	@echo >&2 "Please remove headers_check from your scripts."
--	@echo >&2 "==============================================="
--
- ifdef CONFIG_HEADERS_INSTALL
- prepare: headers
- endif
--- 
-2.32.0
+Isn't label name "adc" too generic?
 
+> +		compatible = "ti,tsc2046e-adc";
+>  		reg = <0>;
+>  		pinctrl-0 = <&pinctrl_tsc2046>;
+>  		pinctrl-names ="default";
+> -		spi-max-frequency = <100000>;
+> -		interrupts-extended = <&gpio3 20 IRQ_TYPE_EDGE_FALLING>;
+> -		pendown-gpio = <&gpio3 20 GPIO_ACTIVE_LOW>;
+> +		spi-max-frequency = <1000000>;
+> +		interrupts-extended = <&gpio3 20 IRQ_TYPE_LEVEL_LOW>;
+> +		#io-channel-cells = <1>;
+>  
+> -		touchscreen-inverted-x;
+> -		touchscreen-inverted-y;
+> -		touchscreen-max-pressure = <4095>;
+> -
+> -		ti,vref-delay-usecs = /bits/ 16 <100>;
+> -		ti,x-plate-ohms = /bits/ 16 <800>;
+> -		ti,y-plate-ohms = /bits/ 16 <300>;
+> -		ti,debounce-max = /bits/ 16 <3>;
+> -		ti,debounce-tol = /bits/ 16 <70>;
+> -		ti,debounce-rep = /bits/ 16 <3>;
+> -		wakeup-source;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		channel@1 {
+> +			reg = <1>;
+> +			settling-time-us = <700>;
+> +			oversampling-ratio = <5>;
+> +		};
+
+Have a newline between child nodes.
+
+Shawn
+
+> +		channel@3 {
+> +			reg = <3>;
+> +			settling-time-us = <700>;
+> +			oversampling-ratio = <5>;
+> +		};
+> +		channel@4 {
+> +			reg = <4>;
+> +			settling-time-us = <700>;
+> +			oversampling-ratio = <5>;
+> +		};
+> +		channel@5 {
+> +			reg = <5>;
+> +			settling-time-us = <700>;
+> +			oversampling-ratio = <5>;
+> +		};
+>  	};
+>  };
+>  
+> diff --git a/arch/arm/boot/dts/imx6dl-prtvt7.dts b/arch/arm/boot/dts/imx6dl-prtvt7.dts
+> index 02b53df03e6f..c361e0683973 100644
+> --- a/arch/arm/boot/dts/imx6dl-prtvt7.dts
+> +++ b/arch/arm/boot/dts/imx6dl-prtvt7.dts
+> @@ -235,6 +235,17 @@ simple-audio-card,codec {
+>  			frame-master;
+>  		};
+>  	};
+> +
+> +	touchscreen {
+> +		compatible = "resistive-adc-touch";
+> +		io-channels = <&adc 1>, <&adc 3>, <&adc 4>, <&adc 5>;
+> +		io-channel-names = "y", "z1", "z2", "x";
+> +		touchscreen-min-pressure = <64687>;
+> +		touchscreen-inverted-x;
+> +		touchscreen-inverted-y;
+> +		touchscreen-x-plate-ohms = <300>;
+> +		touchscreen-y-plate-ohms = <800>;
+> +	};
+>  };
+>  
+>  &audmux {
+> @@ -277,22 +288,38 @@ &ecspi2 {
+>  	pinctrl-0 = <&pinctrl_ecspi2>;
+>  	status = "okay";
+>  
+> -	touchscreen@0 {
+> -		compatible = "ti,tsc2046";
+> +	adc: adc@0 {
+> +		compatible = "ti,tsc2046e-adc";
+>  		reg = <0>;
+>  		pinctrl-0 = <&pinctrl_tsc>;
+>  		pinctrl-names ="default";
+> -		spi-max-frequency = <100000>;
+> -		interrupts-extended = <&gpio3 20 IRQ_TYPE_EDGE_FALLING>;
+> -		pendown-gpio = <&gpio3 20 GPIO_ACTIVE_LOW>;
+> -		touchscreen-max-pressure = <4095>;
+> -		ti,vref-delay-usecs = /bits/ 16 <100>;
+> -		ti,x-plate-ohms = /bits/ 16 <800>;
+> -		ti,y-plate-ohms = /bits/ 16 <300>;
+> -		ti,debounce-max = /bits/ 16 <3>;
+> -		ti,debounce-tol = /bits/ 16 <70>;
+> -		ti,debounce-rep = /bits/ 16 <3>;
+> -		wakeup-source;
+> +		spi-max-frequency = <1000000>;
+> +		interrupts-extended = <&gpio3 20 IRQ_TYPE_LEVEL_LOW>;
+> +		#io-channel-cells = <1>;
+> +
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		channel@1 {
+> +			reg = <1>;
+> +			settling-time-us = <700>;
+> +			oversampling-ratio = <5>;
+> +		};
+> +		channel@3 {
+> +			reg = <3>;
+> +			settling-time-us = <700>;
+> +			oversampling-ratio = <5>;
+> +		};
+> +		channel@4 {
+> +			reg = <4>;
+> +			settling-time-us = <700>;
+> +			oversampling-ratio = <5>;
+> +		};
+> +		channel@5 {
+> +			reg = <5>;
+> +			settling-time-us = <700>;
+> +			oversampling-ratio = <5>;
+> +		};
+>  	};
+>  };
+>  
+> diff --git a/arch/arm/boot/dts/imx6dl-victgo.dts b/arch/arm/boot/dts/imx6dl-victgo.dts
+> index d37ba4ed847d..b5004b322d44 100644
+> --- a/arch/arm/boot/dts/imx6dl-victgo.dts
+> +++ b/arch/arm/boot/dts/imx6dl-victgo.dts
+> @@ -181,6 +181,17 @@ simple-audio-card,codec {
+>  			frame-master;
+>  		};
+>  	};
+> +
+> +	touchscreen {
+> +		compatible = "resistive-adc-touch";
+> +		io-channels = <&adc 1>, <&adc 3>, <&adc 4>, <&adc 5>;
+> +		io-channel-names = "y", "z1", "z2", "x";
+> +		touchscreen-min-pressure = <64687>;
+> +		touchscreen-inverted-x;
+> +		touchscreen-inverted-y;
+> +		touchscreen-x-plate-ohms = <300>;
+> +		touchscreen-y-plate-ohms = <800>;
+> +	};
+>  };
+>  
+>  &audmux {
+> @@ -244,22 +255,38 @@ &ecspi2 {
+>  	pinctrl-0 = <&pinctrl_ecspi2>;
+>  	status = "okay";
+>  
+> -	touchscreen@0 {
+> -		compatible = "ti,tsc2046";
+> +	adc: adc@0 {
+> +		compatible = "ti,tsc2046e-adc";
+>  		reg = <0>;
+> -		pinctrl-names = "default";
+>  		pinctrl-0 = <&pinctrl_touchscreen>;
+> -		spi-max-frequency = <200000>;
+> -		interrupts-extended = <&gpio5 8 IRQ_TYPE_EDGE_FALLING>;
+> -		pendown-gpio = <&gpio5 8 GPIO_ACTIVE_LOW>;
+> -		touchscreen-size-x = <800>;
+> -		touchscreen-size-y = <480>;
+> -		touchscreen-inverted-y;
+> -		touchscreen-max-pressure = <4095>;
+> -		ti,vref-delay-usecs = /bits/ 16 <100>;
+> -		ti,x-plate-ohms = /bits/ 16 <800>;
+> -		ti,y-plate-ohms = /bits/ 16 <300>;
+> -		wakeup-source;
+> +		pinctrl-names ="default";
+> +		spi-max-frequency = <1000000>;
+> +		interrupts-extended = <&gpio5 8 IRQ_TYPE_LEVEL_LOW>;
+> +		#io-channel-cells = <1>;
+> +
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		channel@1 {
+> +			reg = <1>;
+> +			settling-time-us = <700>;
+> +			oversampling-ratio = <5>;
+> +		};
+> +		channel@3 {
+> +			reg = <3>;
+> +			settling-time-us = <700>;
+> +			oversampling-ratio = <5>;
+> +		};
+> +		channel@4 {
+> +			reg = <4>;
+> +			settling-time-us = <700>;
+> +			oversampling-ratio = <5>;
+> +		};
+> +		channel@5 {
+> +			reg = <5>;
+> +			settling-time-us = <700>;
+> +			oversampling-ratio = <5>;
+> +		};
+>  	};
+>  };
+>  
+> -- 
+> 2.30.2
+> 

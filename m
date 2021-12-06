@@ -2,73 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7903746A30F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A664B46A310
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243181AbhLFRhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 12:37:39 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:33438 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S243035AbhLFRhe (ORCPT
+        id S243243AbhLFRhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 12:37:46 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:60898 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243228AbhLFRho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 12:37:34 -0500
-X-UUID: c18ec835ccd54ce591a56ba04b5ad362-20211207
-X-UUID: c18ec835ccd54ce591a56ba04b5ad362-20211207
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <mark-yw.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1396821294; Tue, 07 Dec 2021 01:34:03 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 7 Dec 2021 01:34:02 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 7 Dec 2021 01:34:01 +0800
-From:   <mark-yw.chen@mediatek.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
-CC:     <sean.wang@mediatek.com>, <mark-yw.chen@mediatek.com>,
-        <aaron.hou@mediatek.com>, <kaichuan.hsieh@canonical.com>,
-        <pmenzel@molgen.mpg.de>, <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 2/2] Bluetooth: btusb: Return error code when getting patch status failed
-Date:   Tue, 7 Dec 2021 01:33:43 +0800
-Message-ID: <20211206173343.31380-2-mark-yw.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20211206173343.31380-1-mark-yw.chen@mediatek.com>
-References: <20211206173343.31380-1-mark-yw.chen@mediatek.com>
+        Mon, 6 Dec 2021 12:37:44 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id E937C21B45;
+        Mon,  6 Dec 2021 17:34:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638812054; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k/+W3ZUWSpO4LL+dq/AMKpuu0pHjQCviNvp3TIy81KM=;
+        b=VKdlQQ9G3ehllzT8jBDlnk4Ou6VKu4Chnk541RuFZHDwYEmaaH8GiXM9KGBsBKeCLWXN3o
+        9VsSpGpox9tlKWOI3uWaqveGY3rSvgp12NzViaTdXh460yjCyVAjB0SlvWVw89YyzGQgme
+        uGH+rOHTyRRKEOIoyAG7mJH2uMFRTPA=
+Received: from suse.cz (unknown [10.163.24.10])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 7005BA3B8C;
+        Mon,  6 Dec 2021 17:34:14 +0000 (UTC)
+Date:   Mon, 6 Dec 2021 18:34:14 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC] printk: More consistent loglevel for continuous lines
+Message-ID: <Ya5JlkdRDFjPj/1X@alley>
+References: <20211124154838.5415-1-pmladek@suse.com>
+ <YZ7enboRQprct49o@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YZ7enboRQprct49o@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Chen <mark-yw.chen@mediatek.com>
+On Thu 2021-11-25 09:53:49, Sergey Senozhatsky wrote:
+> On (21/11/24 16:48), Petr Mladek wrote:
+> > 
+> > Anyway, it looks a bit non-practical to update all existing pr_cont()
+> > callers:
+> > 
+> > 	$> git grep "pr_cont" | wc -l
+> > 	2054
+> 
+> Another question is how many pr_cont()-s are getting compiled with
+> the "average" production kernel config. A number of pr_cont() is in
+> debugging code - lockdep, kasan, etc. - which is not compiled for prod.
 
-If there are failure cases in getting patch status, it should return the
-error code (-EIO).
+It is still >500 for x86_64 default configuration as mentioned in
+the reply by Joe.
 
-Fixes: fc342c4dc4087 ("Bluetooth: btusb: Add protocol support for MediaTek MT7921U USB devices")
-Co-developed-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Mark Chen <mark-yw.chen@mediatek.com>
----
- drivers/bluetooth/btmtk.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/bluetooth/btmtk.c b/drivers/bluetooth/btmtk.c
-index c2ee5c4b975a..526dfdf1fe01 100644
---- a/drivers/bluetooth/btmtk.c
-+++ b/drivers/bluetooth/btmtk.c
-@@ -121,6 +121,7 @@ int btmtk_setup_firmware_79xx(struct hci_dev *hdev, const char *fwname,
- 				} else {
- 					bt_dev_err(hdev, "Failed wmt patch dwnld status (%d)",
- 						   status);
-+					err = -EIO;
- 					goto err_release_fw;
- 				}
- 			}
--- 
-2.18.0
+> Let's assume something like this
+> 
+> 	foo()
+> 	{
+> 		char *s;
+> 
+> 		pr_cont("Blah ");
+> 		s = arch_foo();
+> 		pr_cont("%s \n", s);
+> 	}
+> 
+> Suppose that arch_foo() errs and pr_warn()-s. Are we going to use WARN
+> level for trailing pr_cont()?
+> 
+> 	pr_cont("Blah ") -> printk_write_loglevel_ctx(default)
+> 	pr_warn() -> printk_write_loglevel_ctx(warn)
+> 	pr_cont("%s \n"") <- printk_read_loglevel_ctx(warn)
 
+
+Yes, the proposed solution will not work when there is a nested
+message in the same context. It was even mentioned in the commit
+message.
+
+But nested messages break the continuous lines completely. They
+primary break the text.
+
+pr_cont()/KERN_CONT approach could work reasonably only for
+self-contained code. Though even these lines might still get
+interleaved by messages from another context/CPU. But it has
+a solution. caller_id allows to connect the right pieces.
+The proposed patch allows to preserve the loglevel and
+actually see all the pieces.
+
+pr_cont()/KERN_CONT is bad API for situations where the pieces
+are printed by complicated and/or external code. Such code
+should use its own buffer or avoid continuous lines at all.
+
+
+By other words. The patch solves one fundamental problem when
+pr_cont() is used reasonably. It does not help in situations
+where pr_cont() should not be used at all.
+
+Best Regards,
+Petr

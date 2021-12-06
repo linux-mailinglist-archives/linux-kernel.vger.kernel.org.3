@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F083469B30
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:10:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9AC469F6E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345457AbhLFPN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:13:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347628AbhLFPJN (ORCPT
+        id S1345677AbhLFPsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:48:17 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47226 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1387922AbhLFPcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:09:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D1DC08E897;
-        Mon,  6 Dec 2021 07:04:01 -0800 (PST)
+        Mon, 6 Dec 2021 10:32:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B5A79B81125;
-        Mon,  6 Dec 2021 15:04:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F38B1C341C2;
-        Mon,  6 Dec 2021 15:03:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B12F612D7;
+        Mon,  6 Dec 2021 15:28:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B54FC34900;
+        Mon,  6 Dec 2021 15:28:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803039;
-        bh=c8PhzcmGKHbDf7AX/D/Q+/ZXvM2sns1Nys7dToprWgY=;
+        s=korg; t=1638804515;
+        bh=PKWJgkbCGU2eHYz/jSTBkmjt40ram+G/ndgtmiCYQSU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h2tfOkgyd8oNxX1GIIoRIFLcj9qIoTni5McyQO4MFnw/M0Uq+MI6e6+x1NWKlUNnS
-         Z0Y565IQqNijUorXXaJgf2QW3HafkhheC7oNdeHrq0jZ+Kvd6vc2mDikdsFgYSCHX7
-         NuszkYMOqoFVkibjAXHzufhG3JqAtX34BDHRFnBw=
+        b=o8n6XkDa5rSaAnpe6FUmtPCXIV4gTHLduA4Zvf8ht6O5a3RVRdST/4BTPy6P3YhrC
+         uYWHIcGXCob4Hfl5BxUaTmbAqgySB1gnIqDaKqySbAE84tVjYIVzX2hOiZbIjzANaI
+         77L975UHZA010+mxWzegRswHiqubznPAFnOFycBU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jann Horn <jannh@google.com>
-Subject: [PATCH 4.9 53/62] fget: check that the fd still exists after getting a ref to it
+        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Jian-Hong Pan <jhp@endlessos.org>
+Subject: [PATCH 5.15 142/207] drm/vc4: kms: Clear the HVS FIFO commit pointer once done
 Date:   Mon,  6 Dec 2021 15:56:36 +0100
-Message-Id: <20211206145551.036898616@linuxfoundation.org>
+Message-Id: <20211206145615.150183028@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,63 +46,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Maxime Ripard <maxime@cerno.tech>
 
-commit 054aa8d439b9185d4f5eb9a90282d1ce74772969 upstream.
+commit d134c5ff71c7f2320fc7997f2fbbdedf0c76889a upstream.
 
-Jann Horn points out that there is another possible race wrt Unix domain
-socket garbage collection, somewhat reminiscent of the one fixed in
-commit cbcf01128d0a ("af_unix: fix garbage collect vs MSG_PEEK").
+Commit 9ec03d7f1ed3 ("drm/vc4: kms: Wait on previous FIFO users before a
+commit") introduced a wait on the previous commit done on a given HVS
+FIFO.
 
-See the extended comment about the garbage collection requirements added
-to unix_peek_fds() by that commit for details.
+However, we never cleared that pointer once done. Since
+drm_crtc_commit_put can free the drm_crtc_commit structure directly if
+we were the last user, this means that it can lead to a use-after free
+if we were to duplicate the state, and that stale pointer would even be
+copied to the new state.
 
-The race comes from how we can locklessly look up a file descriptor just
-as it is in the process of being closed, and with the right artificial
-timing (Jann added a few strategic 'mdelay(500)' calls to do that), the
-Unix domain socket garbage collector could see the reference count
-decrement of the close() happen before fget() took its reference to the
-file and the file was attached onto a new file descriptor.
+Set the pointer to NULL once we're done with the wait so that we don't
+carry over a pointer to a free'd structure.
 
-This is all (intentionally) correct on the 'struct file *' side, with
-RCU lookups and lockless reference counting very much part of the
-design.  Getting that reference count out of order isn't a problem per
-se.
-
-But the garbage collector can get confused by seeing this situation of
-having seen a file not having any remaining external references and then
-seeing it being attached to an fd.
-
-In commit cbcf01128d0a ("af_unix: fix garbage collect vs MSG_PEEK") the
-fix was to serialize the file descriptor install with the garbage
-collector by taking and releasing the unix_gc_lock.
-
-That's not really an option here, but since this all happens when we are
-in the process of looking up a file descriptor, we can instead simply
-just re-check that the file hasn't been closed in the meantime, and just
-re-do the lookup if we raced with a concurrent close() of the same file
-descriptor.
-
-Reported-and-tested-by: Jann Horn <jannh@google.com>
-Acked-by: Miklos Szeredi <mszeredi@redhat.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 9ec03d7f1ed3 ("drm/vc4: kms: Wait on previous FIFO users before a commit")
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Tested-by: Jian-Hong Pan <jhp@endlessos.org>
+Link: https://lore.kernel.org/r/20211117094527.146275-5-maxime@cerno.tech
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/file.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/gpu/drm/vc4/vc4_kms.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -709,6 +709,10 @@ loop:
- 			file = NULL;
- 		else if (!get_file_rcu_many(file, refs))
- 			goto loop;
-+		else if (__fcheck_files(files, fd) != file) {
-+			fput_many(file, refs);
-+			goto loop;
-+		}
- 	}
- 	rcu_read_unlock();
+--- a/drivers/gpu/drm/vc4/vc4_kms.c
++++ b/drivers/gpu/drm/vc4/vc4_kms.c
+@@ -379,6 +379,7 @@ static void vc4_atomic_commit_tail(struc
+ 			drm_err(dev, "Timed out waiting for commit\n");
  
+ 		drm_crtc_commit_put(commit);
++		old_hvs_state->fifo_state[channel].pending_commit = NULL;
+ 	}
+ 
+ 	if (vc4->hvs->hvs5)
 
 

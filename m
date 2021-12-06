@@ -2,468 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 864D746984F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:12:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8329469851
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242492AbhLFOPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 09:15:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343517AbhLFOP0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 09:15:26 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6E7C061A83;
-        Mon,  6 Dec 2021 06:11:57 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id k4so7127077plx.8;
-        Mon, 06 Dec 2021 06:11:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1g0RnzssZkBnBKymEz0YZXD32oRDdHA8PZSX43vBfcQ=;
-        b=o/nhC8ERmdOQSwN/KuxhxXEVWEnFnHo6+dryj1NJwCmJEx7/DWFRI4M5YP7SUg3E8Y
-         PQwZMoe746IPQrC67b9WKbI98Hh5BYKybeZcNVRU/4RgR42BKRrDLkx+BB0wuiDPgGUd
-         nhjXnQnccvwQ3Ai0UV6ElGYnYIVsJJZaZgOsSB+o9S+8+du3vPzBpckMKzji/Sdycik1
-         wf8MLc1t5AsRmxsmtEij2TViWJYlAiSJ0LZD9LOuKoBahQSzDitW+nWPUPpICxr1fN0D
-         pBn5wRCn894KM+zrDTt2w2F+Ak8+tURFbVap7TUIDN3W2OgbnyZ7lyLllSotjcCB78mC
-         5VUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1g0RnzssZkBnBKymEz0YZXD32oRDdHA8PZSX43vBfcQ=;
-        b=fKHBQm4b4Ny1z7wna3x/SUOt8Cw+aVIgFnl2BDleUcd2EnLx+7fk7KJYWVt8QtFyup
-         UJScGg02t6tVxAOEgvqMycg4c4Izjw4ZR7A7xem8QHFvs/EdJkLul7MfGfKY+4Qvslw4
-         cc5mWNfLsmQ0mJaPa71OVWwkRX/guZuh/9Q2VHQAQI8BGNDSjwbe+TcvB25V2E16M6nR
-         T0ga+ljZ9ufC4s0kwtbOQH8rThkpDGVrJH/4rdLr8EyQzOFtAzdUZy6+NQ3qJ+46CAIt
-         ysvJV368tJGjtlGbXZ6Uqzl7v1WYIjlYfGE820nfAyWidjxc1KbHl4QMCAq7p9AdZxMz
-         X8wg==
-X-Gm-Message-State: AOAM530lngsOVWkyTaX7HwAttLEsGLrmLkbN1aYSUe95kvPc5RKHJoJ+
-        VmXFBKFU2LbzSlAV6sYDdp4=
-X-Google-Smtp-Source: ABdhPJwjStD1mSn11YaJAPQNGKRD/b2HklzATTCABDoy9ByQp9KiMH3wB7UuvNBJv92YP2FRogQ4kw==
-X-Received: by 2002:a17:903:246:b0:143:c007:7d41 with SMTP id j6-20020a170903024600b00143c0077d41mr43712517plh.59.1638799917307;
-        Mon, 06 Dec 2021 06:11:57 -0800 (PST)
-Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:8:b5b5:3f40:cec1:40a0])
-        by smtp.gmail.com with ESMTPSA id g19sm7717606pfc.145.2021.12.06.06.11.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 06:11:56 -0800 (PST)
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, davem@davemloft.net,
-        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        arnd@arndb.de, hch@infradead.org, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, thomas.lendacky@amd.com,
-        Tianyu.Lan@microsoft.com, michael.h.kelley@microsoft.com
-Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
-        hch@lst.de, joro@8bytes.org, parri.andrea@gmail.com,
-        dave.hansen@intel.com
-Subject: [PATCH V5 5/5] net: netvsc: Add Isolation VM support for netvsc driver
-Date:   Mon,  6 Dec 2021 09:11:45 -0500
-Message-Id: <20211206141145.447453-6-ltykernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211206141145.447453-1-ltykernel@gmail.com>
-References: <20211206141145.447453-1-ltykernel@gmail.com>
+        id S1343524AbhLFOQX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 6 Dec 2021 09:16:23 -0500
+Received: from mail-eopbgr120075.outbound.protection.outlook.com ([40.107.12.75]:35228
+        "EHLO FRA01-PR2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S242325AbhLFOQW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 09:16:22 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JqVxumo9o0NdXUOT60vFiCrpQUtvv0wG95SB7I9SP6cqrFo5FeCKeeclaOY4JZnaG2X+blxy8gMlXki7hB1QEOq+/qSMhHWQAAJp4j7p3ECM/az2PnhTOqJ9iThxWiPwKqK9TnkZ/vzTi6vVvMa5JwkVgXDr187FY148qrPyZG3Xf3VusH4o5pgZki2SiTA/UjeVWKY6MuCWLh9zVDsaBcYM+wlu/JQXA4ibhDq+4WNVQY6fG5PrXI8ygxebNgyym2rYMDallGdefYsYUBcsj/f5xy50T+ZyJbaAoLT0c0dyEsQ3CkauivYdbU0g8DNJAqtnJ7S3fKJuBGrgouAlDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=984RHHzw+YmTqJKX09uurr+BUVyONmjYuoecdJMjK0Y=;
+ b=m1f9K0ZX2KvTjKheb/gDb02CmwPuImhXyNmqhSPEen+3FZHxw/FDd/+SNfKy+EYbNDcHSXizCJAk//qWcxXuKcp2fvzMTMQ6LT4+FDc3x0oqNAuJH1Airiu7pK/M51VLK2NexkAt1nrhmaGQiJcjEAVGmRXf1nHPehoXuzGKyiksddEOjniI0jpwz4TURXll1fJ7FNgat0XzV0mjSAtwC8A/D7pa7nFH5qROBStfFKXZKPuqjBWg6BLYwtzY0DDHPGz0TBzg99ntt1WxwMho4b+iclvmxqOLW1zct6zh+sSrVmwPhYOq9Gi2hjELLyFsbC/s3uILUn435IRquIC4vw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR2P264MB0275.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:e::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Mon, 6 Dec
+ 2021 14:12:51 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::fc67:d895:7965:663f]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::fc67:d895:7965:663f%2]) with mapi id 15.20.4755.022; Mon, 6 Dec 2021
+ 14:12:51 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Maxime Bizon <mbizon@freebox.fr>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: [PATCH v2] powerpc/32s: Fix kasan_init_region() for KASAN
+Thread-Topic: [PATCH v2] powerpc/32s: Fix kasan_init_region() for KASAN
+Thread-Index: AQHX6qtaVhn+nTorakewpI8P3ssyQg==
+Date:   Mon, 6 Dec 2021 14:12:51 +0000
+Message-ID: <90826d123e3e28b840f284412b150a1e13ed62fb.1638799954.git.christophe.leroy@csgroup.eu>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2e3aa2ae-e669-439c-9a4e-08d9b8c27d4b
+x-ms-traffictypediagnostic: MR2P264MB0275:EE_
+x-microsoft-antispam-prvs: <MR2P264MB0275EFBBFFB8C99B7D9C13FEED6D9@MR2P264MB0275.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8WheWHxNLPYFcjVlDzzW/kzBY4LvOoOS6UepPv29uI44yghe/VFf3FQz48zCEB7GMx+inc3fOq86F6lBO3PR6nvIE1MPH5U6rknxRLyr32taFNvz3NoT43AppEou7wZR+Q0Bf875la5d6gl7Ele89Kfrs+zp/g4O1eJYvawXF+qam02NHWPQXqvD6ex7LlCCo8pena42I5rxQa5erukdhhRvL5O90iVbn82x0inn2ijiKXBbJWCcBTxcDcCiSEPAIOcB/DV+tK8wd1KIKa0OwKz7mY8RWP2FDt0psTW6Ho9k9CGBwxYj1qWXrgEXWvmiWhOlhp1nGuPzYFMN+tUjp6WcR1RQi2Ug5M/MdHQoTjWIsC2XNPclDsDcMc/vJs4j8JCzIOjs2XEKXNL35sOlDa/MYW7SIwfNdMya81gM5SzhnuLT1JWYUrlYYQI2WDJWOMkGS7pQlTZp0jiaJXNT6qrFj81GYET4z1KetmkJAywLm8RpF5bNBnmGvN2I/A91felxH59dcJfwTOAJQycPZdJuAhi9HkqZ3oLqnJMg9+l491nQ/GUDh86turlm1yZ0l0MUEt9T2LKCLNUTCO2ufDGTa2ybqnod03oLdKM5UZBrqIDZCU0tkCrptn9XhPczTumno7NZ4w5Wmxr9vSrEbVuph0Eo9reXFMgiuJiP45Zooyb7WnIllZgg+AYdYhDBVy9GzZrl2RWZCQrs/8q35Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(110136005)(6486002)(36756003)(26005)(508600001)(54906003)(6506007)(64756008)(5660300002)(86362001)(66946007)(66556008)(66476007)(66446008)(6512007)(91956017)(76116006)(71200400001)(38100700002)(8676002)(316002)(4326008)(83380400001)(2616005)(8936002)(122000001)(44832011)(186003)(38070700005)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?WEVLTaqEOAc1Kk58n/K8dzJ/MlCAlVunLOUyBdgqK4Y7nplvmC4s4byDta?=
+ =?iso-8859-1?Q?H61dX8L642AUVcY278+C7O3AjVrzjZ0xEof1r/aa0qLeLGjmpTt5dwwyoo?=
+ =?iso-8859-1?Q?9Oul6P7bFRfQiNOwoaUzMgM4D/CilhRnT2rG8xyNqbDCMwRci7GPjLX4fh?=
+ =?iso-8859-1?Q?PANaxdcMShIUE/mD4COGmEgEFiU65ee1VWeYixYzZMosbcTO/NSqf71Z4M?=
+ =?iso-8859-1?Q?gGld+YKoRRIL8ixKK/3s0g1Y45DdSAfSkLR5GCzetV4TWnxnv87x9YVY/D?=
+ =?iso-8859-1?Q?f4D4PG7NV8HMhA6FkBMrSLDxUvq+VLKORHFBUHvLaj7QTTshavxvSGnPFi?=
+ =?iso-8859-1?Q?ELP9PYV+nEHkaek0iWRvC5NjFj5eQJQVV3bWKPhv5aLAIRwe7SCNsEj3Bu?=
+ =?iso-8859-1?Q?8+8VgIXUL2kzrl3/vfRsCFufOkuhkyTNRR4mp9OL4RTjWHs2lq5AlVlJWm?=
+ =?iso-8859-1?Q?ryxYDqS60EuHhS37yT6VrHdV6NuKBf6hp+kKAxyeggZwetpnarKMtji3bM?=
+ =?iso-8859-1?Q?MhGDe/9ZwVZ94sKuntKnPM8xXTiwRnSh1hYmtggff4AhlY764WFNG+CdVP?=
+ =?iso-8859-1?Q?CA0fyH6v6nDPSOXuFiFdPJCTdEgZcoLnP8exSDrYTHn4JJjRUy570utVMK?=
+ =?iso-8859-1?Q?vJAGUayYiu3S0y7ohKWEJ27L2M8G/jR3T1EePW+dT0aOkfhDcO5RXNC0pD?=
+ =?iso-8859-1?Q?oJ7zbixdZ6Hjqly1RMv/Wkr4F5uyrJrXbcNoYSP+N9wuGl4ZTd8qGXXRya?=
+ =?iso-8859-1?Q?vLwN7yHxdU5tckhvp89lO7a0PQ8+ixeNxKujZTIr1OMsVboEkJER2FCBcb?=
+ =?iso-8859-1?Q?8qMOoJyCFgWYXeMJzm5NBs0wzai3EImygEjrm2P89x6FwKd8OEuLgOO48L?=
+ =?iso-8859-1?Q?jq01/cBlmpLV40D1vmd95vOg33Xo/1Go2nlLsb7+qsUTAHLeYfY54Wr6Hm?=
+ =?iso-8859-1?Q?V47t8Dz64QSiUxiDvUxUS+4Qr3bpVWa9FjxPphtXjwpNSCCErDzrre7qyE?=
+ =?iso-8859-1?Q?NrEkR01WdlJq7R6ra7Cvz5mW2Q9M7zW9tT3/qrta5SU1RCZSyzbBj5Rsd1?=
+ =?iso-8859-1?Q?SlpVYP3AvAORarJFN82yHAtXmD51G3dmDNN9k4MvX/y881Q1KoVGwQHg7Z?=
+ =?iso-8859-1?Q?URzPnsIjMPJe/C8C1EI3dOm1doWWGSuapO7b4ya9RHNimfwKl1gmifu3Cy?=
+ =?iso-8859-1?Q?sY8O2QZFWuDCkLOvLgKLzeloXg1BO04cyv2vIK748ClPT80B0IenRITSQU?=
+ =?iso-8859-1?Q?MkuIy3UGuATvSpyio3d0518BkDXfelbfjMeYmt8lmEPT7CtbKXl3gP9c5c?=
+ =?iso-8859-1?Q?1VbcQnqz2NzfrEwim0plQLYLgNbd1bbRv/QBN5tw3C5MHcFXXa0Mvsjkra?=
+ =?iso-8859-1?Q?RgueOOw+EhT2e7MN3cC8AjnM2Ol+x/qs2dM647Cs9c/iSnI8u7/xD/lgtK?=
+ =?iso-8859-1?Q?YbawJIvtAjiZ/jncu5TtlDhPS0pm6ECnR73e75ls9CQM9xqnTVivAqI99P?=
+ =?iso-8859-1?Q?+M+H4z/0qLtif3jxexUzL2zjT3F5/vQWsPvcs3AN1mNBcIIiPJytMSm3nN?=
+ =?iso-8859-1?Q?Bx5y5maHfWkGmBP+4OvFdhDZtbPnaM8AQHVcFO++p+BWoVQ6+ExxnFWzTb?=
+ =?iso-8859-1?Q?WdwTnLbNQFNqCKpiRyIy0Kiv40kujwGnKDyyhWrl3hhQ/7hcqzPVem4qzK?=
+ =?iso-8859-1?Q?YP2Pj/T2o3hKTnnTM02XM3yj9Dan1hQkHKC4s0ZMw2aKdWCXeo/ZmE0V9u?=
+ =?iso-8859-1?Q?EHASmydczi0nWNTUgeqe1K+y8=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e3aa2ae-e669-439c-9a4e-08d9b8c27d4b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2021 14:12:51.3972
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: h7yIkHF6xLBTc3tYHVp09xzOAlwJLtFBM9Ixs7NqcO35PXPmgwQpjIduXIo0Mw49ETC4IkzTggxd3VBQZRXkzJGmWot8dUk0eKtBOXXv4Y8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR2P264MB0275
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+It has been reported some configuration where the kernel doesn't
+boot with KASAN enabled.
 
-In Isolation VM, all shared memory with host needs to mark visible
-to host via hvcall. vmbus_establish_gpadl() has already done it for
-netvsc rx/tx ring buffer. The page buffer used by vmbus_sendpacket_
-pagebuffer() stills need to be handled. Use DMA API to map/umap
-these memory during sending/receiving packet and Hyper-V swiotlb
-bounce buffer dma address will be returned. The swiotlb bounce buffer
-has been masked to be visible to host during boot up.
+This is due to wrong BAT allocation for the KASAN area:
 
-rx/tx ring buffer is allocated via vzalloc() and they need to be
-mapped into unencrypted address space(above vTOM) before sharing
-with host and accessing. Add hv_map/unmap_memory() to map/umap rx
-/tx ring buffer.
+	---[ Data Block Address Translation ]---
+	0: 0xc0000000-0xcfffffff 0x00000000       256M Kernel rw      m
+	1: 0xd0000000-0xdfffffff 0x10000000       256M Kernel rw      m
+	2: 0xe0000000-0xefffffff 0x20000000       256M Kernel rw      m
+	3: 0xf8000000-0xf9ffffff 0x2a000000        32M Kernel rw      m
+	4: 0xfa000000-0xfdffffff 0x2c000000        64M Kernel rw      m
 
-Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+A BAT must have both virtual and physical addresses alignment matching
+the size of the BAT. This is not the case for BAT 4 above.
+
+Fix kasan_init_region() by using block_size() function that is in
+book3s32/mmu.c. To be able to reuse it here, make it non static and
+change its name to bat_block_size() in order to avoid name conflict
+with block_size() defined in <linux/blkdev.h>
+
+Also reuse find_free_bat() to avoid an error message from setbat()
+when no BAT is available.
+
+And allocate memory outside of linear memory mapping to avoid
+wasting that precious space.
+
+With this change we get correct alignment for BATs and KASAN shadow
+memory is allocated outside the linear memory space.
+
+	---[ Data Block Address Translation ]---
+	0: 0xc0000000-0xcfffffff 0x00000000       256M Kernel rw
+	1: 0xd0000000-0xdfffffff 0x10000000       256M Kernel rw
+	2: 0xe0000000-0xefffffff 0x20000000       256M Kernel rw
+	3: 0xf8000000-0xfbffffff 0x7c000000        64M Kernel rw
+	4: 0xfc000000-0xfdffffff 0x7a000000        32M Kernel rw
+
+Reported-by: Maxime Bizon <mbizon@freebox.fr>
+Fixes: 7974c4732642 ("powerpc/32s: Implement dedicated kasan_init_region()")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
-Change since v3:
-       * Replace HV_HYP_PAGE_SIZE with PAGE_SIZE and virt_to_hvpfn()
-         with vmalloc_to_pfn() in the hv_map_memory()
-
-Change since v2:
-       * Add hv_map/unmap_memory() to map/umap rx/tx ring buffer.
+v2:
+- Allocate kasan shadow memory outside precious kernel linear memory
+- Properly zeroise kasan shadow memory
 ---
- arch/x86/hyperv/ivm.c             |  28 ++++++
- drivers/hv/hv_common.c            |  11 +++
- drivers/net/hyperv/hyperv_net.h   |   5 ++
- drivers/net/hyperv/netvsc.c       | 136 +++++++++++++++++++++++++++++-
- drivers/net/hyperv/netvsc_drv.c   |   1 +
- drivers/net/hyperv/rndis_filter.c |   2 +
- include/asm-generic/mshyperv.h    |   2 +
- include/linux/hyperv.h            |   5 ++
- 8 files changed, 187 insertions(+), 3 deletions(-)
+ arch/powerpc/include/asm/book3s/32/mmu-hash.h |  2 +
+ arch/powerpc/mm/book3s32/mmu.c                | 10 ++--
+ arch/powerpc/mm/kasan/book3s_32.c             | 58 ++++++++++---------
+ 3 files changed, 38 insertions(+), 32 deletions(-)
 
-diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-index 69c7a57f3307..2b994117581e 100644
---- a/arch/x86/hyperv/ivm.c
-+++ b/arch/x86/hyperv/ivm.c
-@@ -287,3 +287,31 @@ int hv_set_mem_host_visibility(unsigned long kbuffer, int pagecount, bool visibl
- 	kfree(pfn_array);
- 	return ret;
- }
-+
-+/*
-+ * hv_map_memory - map memory to extra space in the AMD SEV-SNP Isolation VM.
-+ */
-+void *hv_map_memory(void *addr, unsigned long size)
-+{
-+	unsigned long *pfns = kcalloc(size / PAGE_SIZE,
-+				      sizeof(unsigned long), GFP_KERNEL);
-+	void *vaddr;
-+	int i;
-+
-+	if (!pfns)
-+		return NULL;
-+
-+	for (i = 0; i < size / PAGE_SIZE; i++)
-+		pfns[i] = vmalloc_to_pfn(addr + i * PAGE_SIZE) +
-+			(ms_hyperv.shared_gpa_boundary >> PAGE_SHIFT);
-+
-+	vaddr = vmap_pfn(pfns, size / PAGE_SIZE, PAGE_KERNEL_IO);
-+	kfree(pfns);
-+
-+	return vaddr;
-+}
-+
-+void hv_unmap_memory(void *addr)
-+{
-+	vunmap(addr);
-+}
-diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-index 7be173a99f27..3c5cb1f70319 100644
---- a/drivers/hv/hv_common.c
-+++ b/drivers/hv/hv_common.c
-@@ -295,3 +295,14 @@ u64 __weak hv_ghcb_hypercall(u64 control, void *input, void *output, u32 input_s
- 	return HV_STATUS_INVALID_PARAMETER;
- }
- EXPORT_SYMBOL_GPL(hv_ghcb_hypercall);
-+
-+void __weak *hv_map_memory(void *addr, unsigned long size)
-+{
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(hv_map_memory);
-+
-+void __weak hv_unmap_memory(void *addr)
-+{
-+}
-+EXPORT_SYMBOL_GPL(hv_unmap_memory);
-diff --git a/drivers/net/hyperv/hyperv_net.h b/drivers/net/hyperv/hyperv_net.h
-index 315278a7cf88..cf69da0e296c 100644
---- a/drivers/net/hyperv/hyperv_net.h
-+++ b/drivers/net/hyperv/hyperv_net.h
-@@ -164,6 +164,7 @@ struct hv_netvsc_packet {
- 	u32 total_bytes;
- 	u32 send_buf_index;
- 	u32 total_data_buflen;
-+	struct hv_dma_range *dma_range;
- };
- 
- #define NETVSC_HASH_KEYLEN 40
-@@ -1074,6 +1075,7 @@ struct netvsc_device {
- 
- 	/* Receive buffer allocated by us but manages by NetVSP */
- 	void *recv_buf;
-+	void *recv_original_buf;
- 	u32 recv_buf_size; /* allocated bytes */
- 	struct vmbus_gpadl recv_buf_gpadl_handle;
- 	u32 recv_section_cnt;
-@@ -1082,6 +1084,7 @@ struct netvsc_device {
- 
- 	/* Send buffer allocated by us */
- 	void *send_buf;
-+	void *send_original_buf;
- 	u32 send_buf_size;
- 	struct vmbus_gpadl send_buf_gpadl_handle;
- 	u32 send_section_cnt;
-@@ -1731,4 +1734,6 @@ struct rndis_message {
- #define RETRY_US_HI	10000
- #define RETRY_MAX	2000	/* >10 sec */
- 
-+void netvsc_dma_unmap(struct hv_device *hv_dev,
-+		      struct hv_netvsc_packet *packet);
- #endif /* _HYPERV_NET_H */
-diff --git a/drivers/net/hyperv/netvsc.c b/drivers/net/hyperv/netvsc.c
-index 396bc1c204e6..b7ade735a806 100644
---- a/drivers/net/hyperv/netvsc.c
-+++ b/drivers/net/hyperv/netvsc.c
-@@ -153,8 +153,21 @@ static void free_netvsc_device(struct rcu_head *head)
- 	int i;
- 
- 	kfree(nvdev->extension);
--	vfree(nvdev->recv_buf);
--	vfree(nvdev->send_buf);
-+
-+	if (nvdev->recv_original_buf) {
-+		hv_unmap_memory(nvdev->recv_buf);
-+		vfree(nvdev->recv_original_buf);
-+	} else {
-+		vfree(nvdev->recv_buf);
-+	}
-+
-+	if (nvdev->send_original_buf) {
-+		hv_unmap_memory(nvdev->send_buf);
-+		vfree(nvdev->send_original_buf);
-+	} else {
-+		vfree(nvdev->send_buf);
-+	}
-+
- 	kfree(nvdev->send_section_map);
- 
- 	for (i = 0; i < VRSS_CHANNEL_MAX; i++) {
-@@ -338,6 +351,7 @@ static int netvsc_init_buf(struct hv_device *device,
- 	unsigned int buf_size;
- 	size_t map_words;
- 	int i, ret = 0;
-+	void *vaddr;
- 
- 	/* Get receive buffer area. */
- 	buf_size = device_info->recv_sections * device_info->recv_section_size;
-@@ -373,6 +387,17 @@ static int netvsc_init_buf(struct hv_device *device,
- 		goto cleanup;
- 	}
- 
-+	if (hv_isolation_type_snp()) {
-+		vaddr = hv_map_memory(net_device->recv_buf, buf_size);
-+		if (!vaddr) {
-+			ret = -ENOMEM;
-+			goto cleanup;
-+		}
-+
-+		net_device->recv_original_buf = net_device->recv_buf;
-+		net_device->recv_buf = vaddr;
-+	}
-+
- 	/* Notify the NetVsp of the gpadl handle */
- 	init_packet = &net_device->channel_init_pkt;
- 	memset(init_packet, 0, sizeof(struct nvsp_message));
-@@ -476,6 +501,17 @@ static int netvsc_init_buf(struct hv_device *device,
- 		goto cleanup;
- 	}
- 
-+	if (hv_isolation_type_snp()) {
-+		vaddr = hv_map_memory(net_device->send_buf, buf_size);
-+		if (!vaddr) {
-+			ret = -ENOMEM;
-+			goto cleanup;
-+		}
-+
-+		net_device->send_original_buf = net_device->send_buf;
-+		net_device->send_buf = vaddr;
-+	}
-+
- 	/* Notify the NetVsp of the gpadl handle */
- 	init_packet = &net_device->channel_init_pkt;
- 	memset(init_packet, 0, sizeof(struct nvsp_message));
-@@ -766,7 +802,7 @@ static void netvsc_send_tx_complete(struct net_device *ndev,
- 
- 	/* Notify the layer above us */
- 	if (likely(skb)) {
--		const struct hv_netvsc_packet *packet
-+		struct hv_netvsc_packet *packet
- 			= (struct hv_netvsc_packet *)skb->cb;
- 		u32 send_index = packet->send_buf_index;
- 		struct netvsc_stats *tx_stats;
-@@ -782,6 +818,7 @@ static void netvsc_send_tx_complete(struct net_device *ndev,
- 		tx_stats->bytes += packet->total_bytes;
- 		u64_stats_update_end(&tx_stats->syncp);
- 
-+		netvsc_dma_unmap(ndev_ctx->device_ctx, packet);
- 		napi_consume_skb(skb, budget);
- 	}
- 
-@@ -946,6 +983,88 @@ static void netvsc_copy_to_send_buf(struct netvsc_device *net_device,
- 		memset(dest, 0, padding);
+diff --git a/arch/powerpc/include/asm/book3s/32/mmu-hash.h b/arch/powerpc/include/asm/book3s/32/mmu-hash.h
+index f5be185cbdf8..5b45c648a8d9 100644
+--- a/arch/powerpc/include/asm/book3s/32/mmu-hash.h
++++ b/arch/powerpc/include/asm/book3s/32/mmu-hash.h
+@@ -143,6 +143,8 @@ static __always_inline void update_user_segments(u32 val)
+ 	update_user_segment(15, val);
  }
  
-+void netvsc_dma_unmap(struct hv_device *hv_dev,
-+		      struct hv_netvsc_packet *packet)
-+{
-+	u32 page_count = packet->cp_partial ?
-+		packet->page_buf_cnt - packet->rmsg_pgcnt :
-+		packet->page_buf_cnt;
-+	int i;
++int find_free_bat(void);
++unsigned int bat_block_size(unsigned long base, unsigned long top);
+ #endif /* !__ASSEMBLY__ */
+ 
+ /* We happily ignore the smaller BATs on 601, we don't actually use
+diff --git a/arch/powerpc/mm/book3s32/mmu.c b/arch/powerpc/mm/book3s32/mmu.c
+index cb48e4a5106d..9e7714a861bf 100644
+--- a/arch/powerpc/mm/book3s32/mmu.c
++++ b/arch/powerpc/mm/book3s32/mmu.c
+@@ -76,7 +76,7 @@ unsigned long p_block_mapped(phys_addr_t pa)
+ 	return 0;
+ }
+ 
+-static int find_free_bat(void)
++int find_free_bat(void)
+ {
+ 	int b;
+ 	int n = mmu_has_feature(MMU_FTR_USE_HIGH_BATS) ? 8 : 4;
+@@ -100,7 +100,7 @@ static int find_free_bat(void)
+  * - block size has to be a power of two. This is calculated by finding the
+  *   highest bit set to 1.
+  */
+-static unsigned int block_size(unsigned long base, unsigned long top)
++unsigned int bat_block_size(unsigned long base, unsigned long top)
+ {
+ 	unsigned int max_size = SZ_256M;
+ 	unsigned int base_shift = (ffs(base) - 1) & 31;
+@@ -145,7 +145,7 @@ static unsigned long __init __mmu_mapin_ram(unsigned long base, unsigned long to
+ 	int idx;
+ 
+ 	while ((idx = find_free_bat()) != -1 && base != top) {
+-		unsigned int size = block_size(base, top);
++		unsigned int size = bat_block_size(base, top);
+ 
+ 		if (size < 128 << 10)
+ 			break;
+@@ -204,12 +204,12 @@ void mmu_mark_initmem_nx(void)
+ 	unsigned long size;
+ 
+ 	for (i = 0; i < nb - 1 && base < top && top - base > (128 << 10);) {
+-		size = block_size(base, top);
++		size = bat_block_size(base, top);
+ 		setibat(i++, PAGE_OFFSET + base, base, size, PAGE_KERNEL_TEXT);
+ 		base += size;
+ 	}
+ 	if (base < top) {
+-		size = block_size(base, top);
++		size = bat_block_size(base, top);
+ 		size = max(size, 128UL << 10);
+ 		if ((top - base) > size) {
+ 			size <<= 1;
+diff --git a/arch/powerpc/mm/kasan/book3s_32.c b/arch/powerpc/mm/kasan/book3s_32.c
+index 202bd260a009..450a67ef0bbe 100644
+--- a/arch/powerpc/mm/kasan/book3s_32.c
++++ b/arch/powerpc/mm/kasan/book3s_32.c
+@@ -10,47 +10,51 @@ int __init kasan_init_region(void *start, size_t size)
+ {
+ 	unsigned long k_start = (unsigned long)kasan_mem_to_shadow(start);
+ 	unsigned long k_end = (unsigned long)kasan_mem_to_shadow(start + size);
+-	unsigned long k_cur = k_start;
+-	int k_size = k_end - k_start;
+-	int k_size_base = 1 << (ffs(k_size) - 1);
++	unsigned long k_nobat = k_start;
++	unsigned long k_cur;
++	phys_addr_t phys;
+ 	int ret;
+-	void *block;
+ 
+-	block = memblock_alloc(k_size, k_size_base);
+-
+-	if (block && k_size_base >= SZ_128K && k_start == ALIGN(k_start, k_size_base)) {
+-		int k_size_more = 1 << (ffs(k_size - k_size_base) - 1);
+-
+-		setbat(-1, k_start, __pa(block), k_size_base, PAGE_KERNEL);
+-		if (k_size_more >= SZ_128K)
+-			setbat(-1, k_start + k_size_base, __pa(block) + k_size_base,
+-			       k_size_more, PAGE_KERNEL);
+-		if (v_block_mapped(k_start))
+-			k_cur = k_start + k_size_base;
+-		if (v_block_mapped(k_start + k_size_base))
+-			k_cur = k_start + k_size_base + k_size_more;
+-
+-		update_bats();
++	while (k_nobat < k_end) {
++		unsigned int k_size = bat_block_size(k_nobat, k_end);
++		int idx = find_free_bat();
 +
-+	if (!hv_is_isolation_supported())
-+		return;
++		if (idx == -1)
++			break;
++		if (k_size < SZ_128K)
++			break;
++		phys = memblock_phys_alloc_range(k_size, k_size, 0,
++						 MEMBLOCK_ALLOC_ANYWHERE);
++		if (!phys)
++			break;
 +
-+	if (!packet->dma_range)
-+		return;
-+
-+	for (i = 0; i < page_count; i++)
-+		dma_unmap_single(&hv_dev->device, packet->dma_range[i].dma,
-+				 packet->dma_range[i].mapping_size,
-+				 DMA_TO_DEVICE);
-+
-+	kfree(packet->dma_range);
-+}
-+
-+/* netvsc_dma_map - Map swiotlb bounce buffer with data page of
-+ * packet sent by vmbus_sendpacket_pagebuffer() in the Isolation
-+ * VM.
-+ *
-+ * In isolation VM, netvsc send buffer has been marked visible to
-+ * host and so the data copied to send buffer doesn't need to use
-+ * bounce buffer. The data pages handled by vmbus_sendpacket_pagebuffer()
-+ * may not be copied to send buffer and so these pages need to be
-+ * mapped with swiotlb bounce buffer. netvsc_dma_map() is to do
-+ * that. The pfns in the struct hv_page_buffer need to be converted
-+ * to bounce buffer's pfn. The loop here is necessary because the
-+ * entries in the page buffer array are not necessarily full
-+ * pages of data.  Each entry in the array has a separate offset and
-+ * len that may be non-zero, even for entries in the middle of the
-+ * array.  And the entries are not physically contiguous.  So each
-+ * entry must be individually mapped rather than as a contiguous unit.
-+ * So not use dma_map_sg() here.
-+ */
-+int netvsc_dma_map(struct hv_device *hv_dev,
-+		   struct hv_netvsc_packet *packet,
-+		   struct hv_page_buffer *pb)
-+{
-+	u32 page_count =  packet->cp_partial ?
-+		packet->page_buf_cnt - packet->rmsg_pgcnt :
-+		packet->page_buf_cnt;
-+	dma_addr_t dma;
-+	int i;
-+
-+	if (!hv_is_isolation_supported())
-+		return 0;
-+
-+	packet->dma_range = kcalloc(page_count,
-+				    sizeof(*packet->dma_range),
-+				    GFP_KERNEL);
-+	if (!packet->dma_range)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < page_count; i++) {
-+		char *src = phys_to_virt((pb[i].pfn << HV_HYP_PAGE_SHIFT)
-+					 + pb[i].offset);
-+		u32 len = pb[i].len;
-+
-+		dma = dma_map_single(&hv_dev->device, src, len,
-+				     DMA_TO_DEVICE);
-+		if (dma_mapping_error(&hv_dev->device, dma)) {
-+			kfree(packet->dma_range);
++		setbat(idx, k_nobat, phys, k_size, PAGE_KERNEL);
++		k_nobat += k_size;
+ 	}
++	if (k_nobat != k_start)
++		update_bats();
+ 
+-	if (!block)
+-		block = memblock_alloc(k_size, PAGE_SIZE);
+-	if (!block)
+-		return -ENOMEM;
++	if (k_nobat < k_end) {
++		phys = memblock_phys_alloc_range(k_end - k_nobat, PAGE_SIZE, 0,
++						 MEMBLOCK_ALLOC_ANYWHERE);
++		if (!phys)
 +			return -ENOMEM;
-+		}
-+
-+		/* pb[].offset and pb[].len are not changed during dma mapping
-+		 * and so not reassign.
-+		 */
-+		packet->dma_range[i].dma = dma;
-+		packet->dma_range[i].mapping_size = len;
-+		pb[i].pfn = dma >> HV_HYP_PAGE_SHIFT;
 +	}
-+
-+	return 0;
-+}
-+
- static inline int netvsc_send_pkt(
- 	struct hv_device *device,
- 	struct hv_netvsc_packet *packet,
-@@ -986,14 +1105,24 @@ static inline int netvsc_send_pkt(
  
- 	trace_nvsp_send_pkt(ndev, out_channel, rpkt);
+ 	ret = kasan_init_shadow_page_tables(k_start, k_end);
+ 	if (ret)
+ 		return ret;
  
-+	packet->dma_range = NULL;
- 	if (packet->page_buf_cnt) {
- 		if (packet->cp_partial)
- 			pb += packet->rmsg_pgcnt;
+-	kasan_update_early_region(k_start, k_cur, __pte(0));
++	kasan_update_early_region(k_start, k_nobat, __pte(0));
  
-+		ret = netvsc_dma_map(ndev_ctx->device_ctx, packet, pb);
-+		if (ret) {
-+			ret = -EAGAIN;
-+			goto exit;
-+		}
-+
- 		ret = vmbus_sendpacket_pagebuffer(out_channel,
- 						  pb, packet->page_buf_cnt,
- 						  &nvmsg, sizeof(nvmsg),
- 						  req_id);
-+
-+		if (ret)
-+			netvsc_dma_unmap(ndev_ctx->device_ctx, packet);
- 	} else {
- 		ret = vmbus_sendpacket(out_channel,
- 				       &nvmsg, sizeof(nvmsg),
-@@ -1001,6 +1130,7 @@ static inline int netvsc_send_pkt(
- 				       VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
+-	for (; k_cur < k_end; k_cur += PAGE_SIZE) {
++	for (k_cur = k_nobat; k_cur < k_end; k_cur += PAGE_SIZE) {
+ 		pmd_t *pmd = pmd_off_k(k_cur);
+-		void *va = block + k_cur - k_start;
+-		pte_t pte = pfn_pte(PHYS_PFN(__pa(va)), PAGE_KERNEL);
++		pte_t pte = pfn_pte(PHYS_PFN(phys + k_cur - k_nobat), PAGE_KERNEL);
+ 
+ 		__set_pte_at(&init_mm, k_cur, pte_offset_kernel(pmd, k_cur), pte, 0);
  	}
- 
-+exit:
- 	if (ret == 0) {
- 		atomic_inc_return(&nvchan->queue_sends);
- 
-diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_drv.c
-index 7e66ae1d2a59..17958533bf30 100644
---- a/drivers/net/hyperv/netvsc_drv.c
-+++ b/drivers/net/hyperv/netvsc_drv.c
-@@ -2512,6 +2512,7 @@ static int netvsc_probe(struct hv_device *dev,
- 	net->netdev_ops = &device_ops;
- 	net->ethtool_ops = &ethtool_ops;
- 	SET_NETDEV_DEV(net, &dev->device);
-+	dma_set_min_align_mask(&dev->device, HV_HYP_PAGE_SIZE - 1);
- 
- 	/* We always need headroom for rndis header */
- 	net->needed_headroom = RNDIS_AND_PPI_SIZE;
-diff --git a/drivers/net/hyperv/rndis_filter.c b/drivers/net/hyperv/rndis_filter.c
-index f6c9c2a670f9..448fcc325ed7 100644
---- a/drivers/net/hyperv/rndis_filter.c
-+++ b/drivers/net/hyperv/rndis_filter.c
-@@ -361,6 +361,8 @@ static void rndis_filter_receive_response(struct net_device *ndev,
- 			}
- 		}
- 
-+		netvsc_dma_unmap(((struct net_device_context *)
-+			netdev_priv(ndev))->device_ctx, &request->pkt);
- 		complete(&request->wait_event);
- 	} else {
- 		netdev_err(ndev,
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index 3e2248ac328e..94e73ba129c5 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -269,6 +269,8 @@ bool hv_isolation_type_snp(void);
- u64 hv_ghcb_hypercall(u64 control, void *input, void *output, u32 input_size);
- void hyperv_cleanup(void);
- bool hv_query_ext_cap(u64 cap_query);
-+void *hv_map_memory(void *addr, unsigned long size);
-+void hv_unmap_memory(void *addr);
- #else /* CONFIG_HYPERV */
- static inline bool hv_is_hyperv_initialized(void) { return false; }
- static inline bool hv_is_hibernation_supported(void) { return false; }
-diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
-index 74f5e92f91a0..b53cfc4163af 100644
---- a/include/linux/hyperv.h
-+++ b/include/linux/hyperv.h
-@@ -1584,6 +1584,11 @@ struct hyperv_service_callback {
- 	void (*callback)(void *context);
- };
- 
-+struct hv_dma_range {
-+	dma_addr_t dma;
-+	u32 mapping_size;
-+};
+ 	flush_tlb_kernel_range(k_start, k_end);
++	memset(kasan_mem_to_shadow(start), 0, k_end - k_start);
 +
- #define MAX_SRV_VER	0x7ffffff
- extern bool vmbus_prep_negotiate_resp(struct icmsg_hdr *icmsghdrp, u8 *buf, u32 buflen,
- 				const int *fw_version, int fw_vercnt,
+ 	return 0;
+ }
 -- 
-2.25.1
-
+2.33.1

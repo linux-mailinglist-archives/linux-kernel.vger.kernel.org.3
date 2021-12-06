@@ -2,183 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3E1469348
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 11:18:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 553FF46934F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 11:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235485AbhLFKWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 05:22:00 -0500
-Received: from mail-ua1-f52.google.com ([209.85.222.52]:45916 "EHLO
-        mail-ua1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbhLFKV7 (ORCPT
+        id S236144AbhLFKXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 05:23:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43518 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235864AbhLFKXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 05:21:59 -0500
-Received: by mail-ua1-f52.google.com with SMTP id ay21so18389258uab.12;
-        Mon, 06 Dec 2021 02:18:31 -0800 (PST)
+        Mon, 6 Dec 2021 05:23:16 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2501BC061746;
+        Mon,  6 Dec 2021 02:19:48 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id np3so7336729pjb.4;
+        Mon, 06 Dec 2021 02:19:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xHiQF5KcZbTv3Qqm535H5M3DFvNPj9KMau4f6OVUWv4=;
+        b=gQu1F9uRKL5U1u+WTSRGquMaxFwy0fYtJdWtXGRoQ2WXrdl+OgeoO4XJ1U5Q+QFNH3
+         vU7YuOoN02u2NV1t3sWCbC3z0GzCQBPKxwFgm9jbGo0nn2CKsyFwZINWmx7Uk1Vnkq0q
+         hpYnnRO5p1d4+vwIkG50k2/AQNZEj8zKG5osMvuoLcdIWU8QA1DOCe6MrSJnxNGs2V51
+         GP4Tg91eiZURpZDO5ilUjwfpwb3t/qc+XehR5eb+bzw9HSgNdsAqihYJKuuI54RNIJ+I
+         nbwCaKT7uZrFXbXrBI0DUGJE1omD1szZzMTHxzx2ofEHNtYn2W1wrCNnJeyiLC2K38jf
+         myjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kwAgXDu/myPtDCkFFbm/cuoauOx3eqHkpUmLfJ+J7Jc=;
-        b=McK2eajd1be2FIkzQ/kGImT1SZMIVRTCew6sPKeF/GBHrB0JVLHh+usUaa+WU3rO0P
-         x2olZfvueyczy3aspo05HvsX0GKOZJkne77v/uJAOf6iv4wuocO6nfmMkxdFSdkZDQKq
-         P8dCTPw2BBSr2j3MjCjB/6oIHVl7Gikzy+azqQoZfFLYapLc5dyChE4oo1LDC2RC3/jR
-         NdspxP9QoI7/0T2tiS9oQcSa8VMmPpeMkWWzREOaEMgdEWIFVYTJqHRd+i3xntaB4FpO
-         q1UPksrpOilRQt8J4WYf6j/nK8CrmLwkb90L05rOMHyEQ/vAKPWndnmi4TIWsgsfjU0v
-         zW5g==
-X-Gm-Message-State: AOAM531hOu9nQfo+GqHfdbZNsyj/aAVyZaDiIf51oB7dvmV4boYqwToo
-        cxvrnEL+lFF9ryZltnFUwRR3ymgxTZ1/yQ==
-X-Google-Smtp-Source: ABdhPJysQ0gJLLeyQpz9gEF3R/n6I/O5rrXlsDDc7gVoAUjhAbCnCClESWxNO/ZwyUvPXrx0XazCcg==
-X-Received: by 2002:ab0:70ce:: with SMTP id r14mr38517726ual.76.1638785910382;
-        Mon, 06 Dec 2021 02:18:30 -0800 (PST)
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
-        by smtp.gmail.com with ESMTPSA id b13sm3913524vkn.38.2021.12.06.02.18.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 02:18:30 -0800 (PST)
-Received: by mail-ua1-f48.google.com with SMTP id l24so18510231uak.2;
-        Mon, 06 Dec 2021 02:18:29 -0800 (PST)
-X-Received: by 2002:a05:6102:e10:: with SMTP id o16mr33884840vst.5.1638785909754;
- Mon, 06 Dec 2021 02:18:29 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xHiQF5KcZbTv3Qqm535H5M3DFvNPj9KMau4f6OVUWv4=;
+        b=1wxG781bnPWWfZ/M3GwUTj6WP8zuIYq6WhpogD4ZcleYOK1OjYCm5XUpw6f8j68EyH
+         n6dhagLtQiaCWwBV+038E4G+mPcN37bY2hOybB0WG9C+2UpzIXkrFIXraqEmJCtQNjkZ
+         OVqUqULba3Od/hpKUOuOxT67JTgKiPdbP8qmacIvXSDWPh8hsJGqYDYsT1ON5bDP0rzV
+         7gqa6ptAA7FohKr3vI9KFmu7CEnIdk578BmSDZzPqyKEvS/0oC+vK6Y2KxnI0+P3nblF
+         +9Nziqh8M6yxn0UBfQ+zSdcsCZKfwbc07XaxafiaG1ha3Z0k1WlrAr5yxZ9ozYWdwGqd
+         wzog==
+X-Gm-Message-State: AOAM531mm+HFeDwSzMCizbskC2pcyucyBWFpNjZe+nwRzkCajc0A6JB6
+        2/DTqgahhZkQZJ+hoNymJts=
+X-Google-Smtp-Source: ABdhPJzEHG3loiSWcOl+laN0WgxshO0veKOHiZhb5CFmx+qDYXu6qYWDGl8qiU11GvgPvyHyTXJPUA==
+X-Received: by 2002:a17:90a:6b44:: with SMTP id x4mr36109851pjl.27.1638785987545;
+        Mon, 06 Dec 2021 02:19:47 -0800 (PST)
+Received: from localhost.localdomain ([94.177.118.54])
+        by smtp.gmail.com with ESMTPSA id j17sm11559441pfe.174.2021.12.06.02.19.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 02:19:47 -0800 (PST)
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Romain Perier <romain.perier@free-electrons.com>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] driver:spi: change clk_disable_unprepare to clk_unprepare
+Date:   Mon,  6 Dec 2021 18:19:31 +0800
+Message-Id: <20211206101931.2816597-1-mudongliangabcd@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211204204121.2367127-1-gsomlo@gmail.com> <20211204204121.2367127-3-gsomlo@gmail.com>
-In-Reply-To: <20211204204121.2367127-3-gsomlo@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 6 Dec 2021 11:18:18 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVJZp+YuaDnXabOgeTajNo0JA9nwCmkiTg2=69L9-6-ew@mail.gmail.com>
-Message-ID: <CAMuHMdVJZp+YuaDnXabOgeTajNo0JA9nwCmkiTg2=69L9-6-ew@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] dt-bindings: mmc: Add bindings for LiteSDCard
-To:     Gabriel Somlo <gsomlo@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Kamil Rakoczy <krakoczy@antmicro.com>,
-        mdudek@internships.antmicro.com, paulus@ozlabs.org,
-        Joel Stanley <joel@jms.id.au>,
-        Stafford Horne <shorne@gmail.com>,
-        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr,
-        Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 4, 2021 at 9:41 PM Gabriel Somlo <gsomlo@gmail.com> wrote:
-> LiteSDCard is a small footprint, configurable SDCard core for FPGA
-> based system on chips.
->
-> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+The corresponding API for clk_prepare is clk_unprepare, other than
+clk_disable_unprepare.
 
-And after reviewing the driver...
+Fix this by changing clk_disable_unprepare to clk_unprepare.
 
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mmc/litex,mmc.yaml
-> @@ -0,0 +1,63 @@
-> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mmc/litex,mmc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: LiteX LiteSDCard device
-> +
-> +maintainers:
-> +  - Gabriel Somlo <gsomlo@gmail.com>
-> +
-> +description: |
-> +  LiteSDCard is a small footprint, configurable SDCard core for FPGA based
-> +  system on chips.
-> +
-> +  The hardware source is Open Source and can be found on at
-> +  https://github.com/enjoy-digital/litesdcard/.
-> +
-> +allOf:
-> +  - $ref: mmc-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: litex,mmc
-> +
-> +  reg:
-> +    items:
-> +      - description: PHY registers
-> +      - description: CORE registers
-> +      - description: DMA Reader buffer
-> +      - description: DMA Writer buffer
-> +      - description: IRQ registers
+Fixes: 5762ab71eb24 ("spi: Add support for Armada 3700 SPI Controller")
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+---
+ drivers/spi/spi-armada-3700.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The last one is optional...
-
-> +
-> +  reg-names:
-> +    items:
-> +      - const: phy
-> +      - const: core
-> +      - const: reader
-> +      - const: writer
-> +      - const: irq
-
-Likewise.
-
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-
-reg-names, as the driver needs it (and it's good practice anyway).
-
-> +  - interrupts
-
-Interrupts is optional.
-
-I tried to link it to reg{,-names}:
-
-    if:
-      not:
-        required:
-          - interrupts
-    then:
-      properties:
-        reg:
-          maxItems: 4
-        reg-names:
-          maxItems: 4
-
-but that doesn't seem to work. Anyone with a clue?
-
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    mmc: mmc@12005000 {
-> +        compatible = "litex,mmc";
-> +        reg = <0x12005000 0x100>,
-> +              <0x12003800 0x100>,
-> +              <0x12003000 0x100>,
-> +              <0x12004800 0x100>,
-> +              <0x12004000 0x100>;
-> +        reg-names = "phy", "core", "reader", "writer", "irq";
-> +        interrupts = <4>;
-> +    };
-> --
-> 2.31.1
->
-
-
+diff --git a/drivers/spi/spi-armada-3700.c b/drivers/spi/spi-armada-3700.c
+index 46feafe4e201..d8cc4b270644 100644
+--- a/drivers/spi/spi-armada-3700.c
++++ b/drivers/spi/spi-armada-3700.c
+@@ -901,7 +901,7 @@ static int a3700_spi_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ error_clk:
+-	clk_disable_unprepare(spi->clk);
++	clk_unprepare(spi->clk);
+ error:
+ 	spi_master_put(master);
+ out:
 -- 
-Gr{oetje,eeting}s,
+2.25.1
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

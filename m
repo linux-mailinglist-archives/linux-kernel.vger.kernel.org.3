@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15221469F41
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2823469C0A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:16:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379326AbhLFPqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:46:31 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46578 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349495AbhLFP3Q (ORCPT
+        id S1348797AbhLFPTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:19:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356011AbhLFPOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:29:16 -0500
+        Mon, 6 Dec 2021 10:14:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C908C0698CB;
+        Mon,  6 Dec 2021 07:06:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D25F361358;
-        Mon,  6 Dec 2021 15:25:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6AF4C34902;
-        Mon,  6 Dec 2021 15:25:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7E49B81125;
+        Mon,  6 Dec 2021 15:06:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A799C341C1;
+        Mon,  6 Dec 2021 15:06:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804347;
-        bh=9velEWGf7XRota4AW/ofgutwRM87Lj20P6uIf/1mCbM=;
+        s=korg; t=1638803194;
+        bh=gmfiOvAb/bdKVbgKjYKtYexC1gbwdgEpq3e9KS6IGQM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ya5k22QtVgH7gOTboI9mcm0ivTKNhEbS73KmDBMOgjYOq6yCftzd9A7venid+vC6V
-         eKf6l7Wj9XGEl/gE4sgxpEcNG01NsR8xAnoV9IOvj0REDkXv4cNoJP7XLjkQJMoQHw
-         M/mtG1WqxBBys6GCdWp+MIHj/uby+fzaHdWCX9xg=
+        b=KURnRfts7MYlE8wHBdxmQVCHliDDXc8SgsMi4w9DiXt/sY/Sg6Pf9+26Qj0EkUvgJ
+         ZaZbmu8xWGwVAum/kOIF0Nm2LzZRO0reSHD/QUpJwKFckwU0tbyvoGV8NHIvU0p5u7
+         C4h1V0UGScGzr9wOuZYMhDWtzgofg4Bl/TYmBft4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Sameer Pujar <spujar@nvidia.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.15 115/207] ASoC: tegra: Fix wrong value type in ADMAIF
+        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>
+Subject: [PATCH 4.14 061/106] xen/blkfront: read response from backend only once
 Date:   Mon,  6 Dec 2021 15:56:09 +0100
-Message-Id: <20211206145614.236014494@linuxfoundation.org>
+Message-Id: <20211206145557.551084458@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,43 +49,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sameer Pujar <spujar@nvidia.com>
+From: Juergen Gross <jgross@suse.com>
 
-commit 884c6cb3b7030f75c46e55b9e625d2372708c306 upstream.
+commit 71b66243f9898d0e54296b4e7035fb33cdcb0707 upstream.
 
-The enum controls are expected to use enumerated value type.
-Update relevant references in control get/put callbacks.
+In order to avoid problems in case the backend is modifying a response
+on the ring page while the frontend has already seen it, just read the
+response into a local buffer in one go and then operate on that buffer
+only.
 
-Fixes: f74028e159bb ("ASoC: tegra: Add Tegra210 based ADMAIF driver")
-Suggested-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Sameer Pujar <spujar@nvidia.com>
-Reviewed-by: Takashi Iwai <tiwai@suse.de>
-Link: https://lore.kernel.org/r/1637219231-406-2-git-send-email-spujar@nvidia.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Acked-by: Roger Pau Monné <roger.pau@citrix.com>
+Link: https://lore.kernel.org/r/20210730103854.12681-2-jgross@suse.com
+Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/tegra/tegra210_admaif.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/block/xen-blkfront.c |   35 ++++++++++++++++++-----------------
+ 1 file changed, 18 insertions(+), 17 deletions(-)
 
---- a/sound/soc/tegra/tegra210_admaif.c
-+++ b/sound/soc/tegra/tegra210_admaif.c
-@@ -430,7 +430,7 @@ static int tegra_admaif_get_control(stru
- 	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
- 	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
- 	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
--	long *uctl_val = &ucontrol->value.integer.value[0];
-+	unsigned int *uctl_val = &ucontrol->value.enumerated.item[0];
+--- a/drivers/block/xen-blkfront.c
++++ b/drivers/block/xen-blkfront.c
+@@ -1550,7 +1550,7 @@ static bool blkif_completion(unsigned lo
+ static irqreturn_t blkif_interrupt(int irq, void *dev_id)
+ {
+ 	struct request *req;
+-	struct blkif_response *bret;
++	struct blkif_response bret;
+ 	RING_IDX i, rp;
+ 	unsigned long flags;
+ 	struct blkfront_ring_info *rinfo = (struct blkfront_ring_info *)dev_id;
+@@ -1567,8 +1567,9 @@ static irqreturn_t blkif_interrupt(int i
+ 	for (i = rinfo->ring.rsp_cons; i != rp; i++) {
+ 		unsigned long id;
  
- 	if (strstr(kcontrol->id.name, "Playback Mono To Stereo"))
- 		*uctl_val = admaif->mono_to_stereo[ADMAIF_TX_PATH][ec->reg];
-@@ -450,7 +450,7 @@ static int tegra_admaif_put_control(stru
- 	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
- 	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
- 	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
--	int value = ucontrol->value.integer.value[0];
-+	unsigned int value = ucontrol->value.enumerated.item[0];
+-		bret = RING_GET_RESPONSE(&rinfo->ring, i);
+-		id   = bret->id;
++		RING_COPY_RESPONSE(&rinfo->ring, i, &bret);
++		id = bret.id;
++
+ 		/*
+ 		 * The backend has messed up and given us an id that we would
+ 		 * never have given to it (we stamp it up to BLK_RING_SIZE -
+@@ -1576,39 +1577,39 @@ static irqreturn_t blkif_interrupt(int i
+ 		 */
+ 		if (id >= BLK_RING_SIZE(info)) {
+ 			WARN(1, "%s: response to %s has incorrect id (%ld)\n",
+-			     info->gd->disk_name, op_name(bret->operation), id);
++			     info->gd->disk_name, op_name(bret.operation), id);
+ 			/* We can't safely get the 'struct request' as
+ 			 * the id is busted. */
+ 			continue;
+ 		}
+ 		req  = rinfo->shadow[id].request;
  
- 	if (strstr(kcontrol->id.name, "Playback Mono To Stereo"))
- 		admaif->mono_to_stereo[ADMAIF_TX_PATH][ec->reg] = value;
+-		if (bret->operation != BLKIF_OP_DISCARD) {
++		if (bret.operation != BLKIF_OP_DISCARD) {
+ 			/*
+ 			 * We may need to wait for an extra response if the
+ 			 * I/O request is split in 2
+ 			 */
+-			if (!blkif_completion(&id, rinfo, bret))
++			if (!blkif_completion(&id, rinfo, &bret))
+ 				continue;
+ 		}
+ 
+ 		if (add_id_to_freelist(rinfo, id)) {
+ 			WARN(1, "%s: response to %s (id %ld) couldn't be recycled!\n",
+-			     info->gd->disk_name, op_name(bret->operation), id);
++			     info->gd->disk_name, op_name(bret.operation), id);
+ 			continue;
+ 		}
+ 
+-		if (bret->status == BLKIF_RSP_OKAY)
++		if (bret.status == BLKIF_RSP_OKAY)
+ 			blkif_req(req)->error = BLK_STS_OK;
+ 		else
+ 			blkif_req(req)->error = BLK_STS_IOERR;
+ 
+-		switch (bret->operation) {
++		switch (bret.operation) {
+ 		case BLKIF_OP_DISCARD:
+-			if (unlikely(bret->status == BLKIF_RSP_EOPNOTSUPP)) {
++			if (unlikely(bret.status == BLKIF_RSP_EOPNOTSUPP)) {
+ 				struct request_queue *rq = info->rq;
+ 				printk(KERN_WARNING "blkfront: %s: %s op failed\n",
+-					   info->gd->disk_name, op_name(bret->operation));
++					   info->gd->disk_name, op_name(bret.operation));
+ 				blkif_req(req)->error = BLK_STS_NOTSUPP;
+ 				info->feature_discard = 0;
+ 				info->feature_secdiscard = 0;
+@@ -1618,15 +1619,15 @@ static irqreturn_t blkif_interrupt(int i
+ 			break;
+ 		case BLKIF_OP_FLUSH_DISKCACHE:
+ 		case BLKIF_OP_WRITE_BARRIER:
+-			if (unlikely(bret->status == BLKIF_RSP_EOPNOTSUPP)) {
++			if (unlikely(bret.status == BLKIF_RSP_EOPNOTSUPP)) {
+ 				printk(KERN_WARNING "blkfront: %s: %s op failed\n",
+-				       info->gd->disk_name, op_name(bret->operation));
++				       info->gd->disk_name, op_name(bret.operation));
+ 				blkif_req(req)->error = BLK_STS_NOTSUPP;
+ 			}
+-			if (unlikely(bret->status == BLKIF_RSP_ERROR &&
++			if (unlikely(bret.status == BLKIF_RSP_ERROR &&
+ 				     rinfo->shadow[id].req.u.rw.nr_segments == 0)) {
+ 				printk(KERN_WARNING "blkfront: %s: empty %s op failed\n",
+-				       info->gd->disk_name, op_name(bret->operation));
++				       info->gd->disk_name, op_name(bret.operation));
+ 				blkif_req(req)->error = BLK_STS_NOTSUPP;
+ 			}
+ 			if (unlikely(blkif_req(req)->error)) {
+@@ -1639,9 +1640,9 @@ static irqreturn_t blkif_interrupt(int i
+ 			/* fall through */
+ 		case BLKIF_OP_READ:
+ 		case BLKIF_OP_WRITE:
+-			if (unlikely(bret->status != BLKIF_RSP_OKAY))
++			if (unlikely(bret.status != BLKIF_RSP_OKAY))
+ 				dev_dbg(&info->xbdev->dev, "Bad return from blkdev data "
+-					"request: %x\n", bret->status);
++					"request: %x\n", bret.status);
+ 
+ 			break;
+ 		default:
 
 

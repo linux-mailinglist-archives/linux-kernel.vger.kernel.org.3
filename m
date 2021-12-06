@@ -2,245 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF54346A6E0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C299546A6E5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349705AbhLFUcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 15:32:21 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:44728 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbhLFUcS (ORCPT
+        id S1349719AbhLFUfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 15:35:44 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:37238 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229867AbhLFUfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 15:32:18 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638822528;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PjUH7Q3jnce45xFbv6Ml85eYeIz6Jg5Ro8bSCZZ8hQ4=;
-        b=F9MENSnbcrAIrw2trie4XxO4Idnck4Ve+cZwHmT/EygS5n2DDkmikE9xBxeD9s0sWo2qJm
-        CGGqi85xc6Ukh6t9Y3GlDXvuFUcSnA8mKiNQU1rr2T1H0NxvZrMVvY3hncH85obllkkj/1
-        +j+r/5KQIXittbe96XBWAd+PayRnuGs3P3h9j2h2r4htxUOm3vEVMESrqa2X3L5Gg9DWOO
-        BAAW7v4r201fq29CffjbHb+ju9BOWroU6g9qfPUpuUkeGzzH03uYn7ZW8bBe9Ba1YU9vQn
-        bPRXdMo3NGlNIbJUfco/nQEuygA7sxEO8ZRXE34ZJz0RpD76vel5187uDQhaCA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638822528;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PjUH7Q3jnce45xFbv6Ml85eYeIz6Jg5Ro8bSCZZ8hQ4=;
-        b=x2ifkMTraUj6uc8UnfCExsx31cknQRBYPY0/0XCFCRLeYB2nXzEoseLKnZI380Rk6pO4Ex
-        0jq/4vd3/sOt8CCQ==
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Logan Gunthorpe <logang@deltatee.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com,
-        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>, x86@kernel.org,
-        Joerg Roedel <jroedel@suse.de>,
-        iommu@lists.linux-foundation.org, Kalle Valo <kvalo@codeaurora.org>
-Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
-In-Reply-To: <20211206170035.GJ4670@nvidia.com>
-References: <87wnkm6c77.ffs@tglx> <20211202200017.GS4670@nvidia.com>
- <87o85y63m8.ffs@tglx> <20211203003749.GT4670@nvidia.com>
- <877dcl681d.ffs@tglx> <20211203164104.GX4670@nvidia.com>
- <87v9044fkb.ffs@tglx> <87o85v3znb.ffs@tglx>
- <20211206144344.GA4670@nvidia.com> <87fsr54tw1.ffs@tglx>
- <20211206170035.GJ4670@nvidia.com>
-Date:   Mon, 06 Dec 2021 21:28:47 +0100
-Message-ID: <875ys14gw0.ffs@tglx>
+        Mon, 6 Dec 2021 15:35:43 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6293CCE180B
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 20:32:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F6CFC341C6
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 20:32:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638822731;
+        bh=PpbneIl9UbCtnJCrGClHEOavMhFrhAMlJPtwupxH8ss=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Z9R6nTEvhCxJCyLShRLgQUGW9QTRQC/0pjE4wBdCppP8jzL0q3CjU1JHS2vvLrWX1
+         jtVLfYOfVePMWAcNDMODh8FZOTCfq9G82mzgiNUAeucvxzRUduPvK56PeD9Bovc2Qm
+         CSYcEIThHWkTn2LF+bTRZzGYNoLFenR7Y0bkadMdkT3At96OZMnJ6kOetQDzakSMGv
+         wbE0szS0Cc3u+Va/ubckZgd7/HdAWvJVe7YkGo2pRf+C2mylCPQcoNidWdfEy4gJQ2
+         5PMRBijj4HGPQit1CGrRbMW6fL64Gb89EWBVVb4CMMpgqQBSJ7E8LqWVQ42RWAvIEJ
+         VwivM01Cte6fw==
+Received: by mail-ed1-f44.google.com with SMTP id l25so47798122eda.11
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 12:32:11 -0800 (PST)
+X-Gm-Message-State: AOAM530hKJ/+AjoIKFo4F+CkQ07NInabTghi1tbbVSs71StuwrnaNrby
+        0K2MqhKEpmPjAiYVJkWqETjlf0R5/16L0ct9AA==
+X-Google-Smtp-Source: ABdhPJwHHjaGDe+Z5pMSCRWZlbAmPIhxTCvuANX+k49kHNk3+pxODqBMVcGuMcdtcqNWs13V/5izM69x62MHG6PS54Y=
+X-Received: by 2002:a05:6402:4251:: with SMTP id g17mr2007287edb.89.1638822729777;
+ Mon, 06 Dec 2021 12:32:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <202111280304.FL2314qf-lkp@intel.com>
+In-Reply-To: <202111280304.FL2314qf-lkp@intel.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 6 Dec 2021 14:31:58 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKzsCvS2QKUo7x4eJ2s6p4=3_d38hyMvsVt7RySjHoGgw@mail.gmail.com>
+Message-ID: <CAL_JsqKzsCvS2QKUo7x4eJ2s6p4=3_d38hyMvsVt7RySjHoGgw@mail.gmail.com>
+Subject: Re: arch/arm64/kernel/machine_kexec_file.c:152 load_other_segments()
+ warn: missing error code 'ret'
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     kbuild@lists.01.org, lkp@intel.com, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jason,
-
-On Mon, Dec 06 2021 at 13:00, Jason Gunthorpe wrote:
-> On Mon, Dec 06, 2021 at 04:47:58PM +0100, Thomas Gleixner wrote:
->> It will need some more than that, e.g. mask/unmask and as we discussed
->> quite some time ago something like the irq_buslock/unlock pair, so you
->> can handle updates to the state from thread context via a command queue
->> (IIRC).
+On Wed, Dec 1, 2021 at 5:47 AM Dan Carpenter <dan.carpenter@oracle.com> wro=
+te:
 >
-> pci_msi_create_irq_domain() hooks into the platforms irq_chip as an
-> alternative to hierarchical irq domains (?)
-
-It's based on hierarchical irqdomains. It's the outermost domain and irq
-chip. On X86:
-
-  [VECTOR chip=apic]->[PCI chip=PCI]
-or
-  [VECTOR chip=apic]->[IOMMU chip=IR]->[PCI chip=PCI-IR]
-
-The chips are different because of quirks. See below :)
-
->		chip->irq_write_msi_msg = pci_msi_domain_write_msg;
-> In almost all cases 'ops' will come along with a 'state', so lets
-> create one:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t master
+> head:   c5c17547b778975b3d83a73c8d84e8fb5ecf3ba5
+> commit: ac10be5cdbfa852139658d52c2f1c608782ce992 arm64: Use common of_kex=
+ec_alloc_and_setup_fdt()
+> config: arm64-randconfig-m031-20211127 (https://download.01.org/0day-ci/a=
+rchive/20211128/202111280304.FL2314qf-lkp@intel.com/config)
+> compiler: aarch64-linux-gcc (GCC) 11.2.0
 >
-> struct msi_storage {  // Look, I avoided the word table!
-
-I already made a note, that I need to smuggle a table in somewhere :)
-
-> And others for the different cases. Look no ifs!
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 >
-> OK?
+> smatch warnings:
+> arch/arm64/kernel/machine_kexec_file.c:152 load_other_segments() warn: mi=
+ssing error code 'ret'
 
-That's already the plan in some form, but there's a long way towards
-that. See below.
+Lakshmi, Can you please prepare a fix for this. It's been reported since Ju=
+ly.
 
-Also there will be a question of how many different callbacks we're
-going to create just to avoid one conditional. At some point this might
-become silly.
-
-> Now, we have some duplication between the struct msi_storage_ops and
-> the struct irq_chip. Let's see what that is about:
 >
-> arch/x86/kernel/apic/msi.c:     .irq_write_msi_msg      = dmar_msi_write_msg,
-> arch/x86/kernel/hpet.c: .irq_write_msi_msg = hpet_msi_write_msg,
+> vim +/ret +152 arch/arm64/kernel/machine_kexec_file.c
 >
-> Surprised! These are actually IMS. The HPET and DMAR devices both have
-> device-specific message storage! So these could use
-> msi_storage_ops. And WTF is IOMMU DMAR driver code doing in
-> apic/msi.c ???
-
-Historical reasons coming from the pre irqdomain aera. Also DMAR needs
-direct access to the x86 low level composer which we didn't want to
-expose. Plus DMAR is shared with ia64 to make it more interesting.
-
-Yes, they can be converted. But that's the least of my worries. Those
-are straight forward and not really relevant for the design.
-
-> arch/powerpc/platforms/pseries/msi.c:   .irq_write_msi_msg      = pseries_msi_write_msg,
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15   81  int load_other_se=
+gments(struct kimage *image,
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15   82                   =
+       unsigned long kernel_load_addr,
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15   83                   =
+       unsigned long kernel_size,
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15   84                   =
+       char *initrd, unsigned long initrd_len,
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15   85                   =
+       char *cmdline)
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15   86  {
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15   87          struct ke=
+xec_buf kbuf;
+> 3751e728cef290 AKASHI Takahiro         2019-12-16   88          void *hea=
+ders, *dtb =3D NULL;
+> 108aa503657ee2 Benjamin Gwin           2020-11-03   89          unsigned =
+long headers_sz, initrd_load_addr =3D 0, dtb_len,
+> 108aa503657ee2 Benjamin Gwin           2020-11-03   90                   =
+     orig_segments =3D image->nr_segments;
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15   91          int ret =
+=3D 0;
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15   92
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15   93          kbuf.imag=
+e =3D image;
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15   94          /* not al=
+locate anything below the kernel */
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15   95          kbuf.buf_=
+min =3D kernel_load_addr + kernel_size;
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15   96
+> 3751e728cef290 AKASHI Takahiro         2019-12-16   97          /* load e=
+lf core header */
+> 3751e728cef290 AKASHI Takahiro         2019-12-16   98          if (image=
+->type =3D=3D KEXEC_TYPE_CRASH) {
+> 3751e728cef290 AKASHI Takahiro         2019-12-16   99                  r=
+et =3D prepare_elf_headers(&headers, &headers_sz);
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  100                  i=
+f (ret) {
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  101                   =
+       pr_err("Preparing elf core header failed\n");
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  102                   =
+       goto out_err;
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  103                  }
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  104
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  105                  k=
+buf.buffer =3D headers;
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  106                  k=
+buf.bufsz =3D headers_sz;
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  107                  k=
+buf.mem =3D KEXEC_BUF_MEM_UNKNOWN;
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  108                  k=
+buf.memsz =3D headers_sz;
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  109                  k=
+buf.buf_align =3D SZ_64K; /* largest supported page size */
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  110                  k=
+buf.buf_max =3D ULONG_MAX;
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  111                  k=
+buf.top_down =3D true;
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  112
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  113                  r=
+et =3D kexec_add_buffer(&kbuf);
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  114                  i=
+f (ret) {
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  115                   =
+       vfree(headers);
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  116                   =
+       goto out_err;
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  117                  }
+> 7b558cc3564e6c Lakshmi Ramasubramanian 2021-02-21  118                  i=
+mage->elf_headers =3D headers;
+> 7b558cc3564e6c Lakshmi Ramasubramanian 2021-02-21  119                  i=
+mage->elf_load_addr =3D kbuf.mem;
+> 7b558cc3564e6c Lakshmi Ramasubramanian 2021-02-21  120                  i=
+mage->elf_headers_sz =3D headers_sz;
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  121
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  122                  p=
+r_debug("Loaded elf core header at 0x%lx bufsz=3D0x%lx memsz=3D0x%lx\n",
+> 7b558cc3564e6c Lakshmi Ramasubramanian 2021-02-21  123                   =
+        image->elf_load_addr, kbuf.bufsz, kbuf.memsz);
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  124          }
+> 3751e728cef290 AKASHI Takahiro         2019-12-16  125
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  126          /* load i=
+nitrd */
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  127          if (initr=
+d) {
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  128                  k=
+buf.buffer =3D initrd;
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  129                  k=
+buf.bufsz =3D initrd_len;
+> c19d050f808812 Bhupesh Sharma          2019-07-11  130                  k=
+buf.mem =3D KEXEC_BUF_MEM_UNKNOWN;
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  131                  k=
+buf.memsz =3D initrd_len;
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  132                  k=
+buf.buf_align =3D 0;
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  133                  /=
+* within 1GB-aligned window of up to 32GB in size */
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  134                  k=
+buf.buf_max =3D round_down(kernel_load_addr, SZ_1G)
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  135                   =
+                               + (unsigned long)SZ_1G * 32;
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  136                  k=
+buf.top_down =3D false;
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  137
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  138                  r=
+et =3D kexec_add_buffer(&kbuf);
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  139                  i=
+f (ret)
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  140                   =
+       goto out_err;
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  141                  i=
+nitrd_load_addr =3D kbuf.mem;
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  142
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  143                  p=
+r_debug("Loaded initrd at 0x%lx bufsz=3D0x%lx memsz=3D0x%lx\n",
+> 51075e0cb759a7 =C5=81ukasz Stelmach         2020-04-30  144              =
+                    initrd_load_addr, kbuf.bufsz, kbuf.memsz);
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  145          }
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  146
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  147          /* load d=
+tb */
+> ac10be5cdbfa85 Rob Herring             2021-02-21  148          dtb =3D o=
+f_kexec_alloc_and_setup_fdt(image, initrd_load_addr,
+> ac10be5cdbfa85 Rob Herring             2021-02-21  149                   =
+                          initrd_len, cmdline, 0);
+> ac10be5cdbfa85 Rob Herring             2021-02-21  150          if (!dtb)=
+ {
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15  151                  p=
+r_err("Preparing for new dtb failed\n");
+> 52b2a8af743604 AKASHI Takahiro         2018-11-15 @152                  g=
+oto out_err;
+>                                                                         ^=
+^^^^^^^^^^^^
+> This needs an error code.
 >
-> AFAICT this is really like virtualization? The hypervisor is
-> controlling the real MSI table and what the OS sees is faked out
-> somewhat.
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 >
-> This is more of quirk in the PCI MSI implementation (do not touch the
-> storage) and a block on non-PCI uses of MSI similar to what x86 needs?
-
-There is an underlying hypervisor of some sorts and that stuff needs to
-deal with it. I leave that to the powerpc wizards to sort out.
-
-> drivers/irqchip/irq-gic-v2m.c:  .irq_write_msi_msg      = pci_msi_domain_write_msg,
-> drivers/irqchip/irq-gic-v3-its-pci-msi.c:       .irq_write_msi_msg      = pci_msi_domain_write_msg,
-> drivers/irqchip/irq-gic-v3-mbi.c:       .irq_write_msi_msg      = pci_msi_domain_write_msg,
->
-> ARM seems to be replacing the 'mask at source' with 'mask at
-> destination' - I wonder why?
-
-Because the majority of PCI/MSI endpoint implementations do not provide
-masking...
-
-We're telling hardware people for 15+ years that this is a horrible
-idea, but it's as effective as talking to a wall. Sure the spec grants
-them to make my life miserable...
-
-> Should this really be hierarchical where we mask *both* the MSI
-> originating device (storage_ops->mask) and at the CPU IRQ controller?
-> (gicv2m_mask_msi_irq ?) if it can?
-
-I wish I could mask underneath for some stuff on x86. Though that would
-not help with the worst problem vs. affinity settings. See the horrible
-dance in:
-
-    x86/kernel/apic/msi.c::msi_set_affinity()
-
-So this will end up with a shim as the base domain for !IOMMU systems:
-
-		 			       |--[HPET]
-  [VECTOR chip=apic]-|--[x86-msi chip=x86-msi]-|--[PCI/MSI]
-		     |--[DMAR]		       |--[PCI/MSI-X]
-
-That nonsense can't move into the apic domain set_affinity() callback as
-this is not required when interrupt remapping is enabled.
-
-With IOMMU this looks then:
-
-		 		        |--[HPET]
-  [VECTOR chip=apic]-|--[IOMMU chip=IR]-|--[PCI/MSI]
-		     |--[DMAR]	        |--[PCI/MSI-X]
-		 		        |--[PCI/IMS]
-
-> drivers/base/platform-msi.c:            chip->irq_write_msi_msg = platform_msi_write_msg;
->
-> Oh! this is doing what I kind of just suggested, just non-generically
-> and hacked into platform bus drivers the same as PCI does:
-
-Correct. It's a hack and it's on the list of things which need to
-vanish. I was already discussing that with Marc on the side for quite a
-while.
-
-> PCI, HPET, DMAR move to msi_storage_ops instead of using irq_chip
-
-With different parent domains. DMAR hangs always directly off the vector
-domain. HPET has its own IOMMU zone.
-
-You forgot IO/APIC which is a MSI endpoint too, just more convoluted but
-it's not using MSI domains so it's not in the way. I'm not going to
-touch that with a ten foot pole. :)
-
-There's also VMD, HyperV and the XEN crime which is a horrible shim to
-make device->msi_domain consistent on x86. For fixing XEN properly I'm
-not masochistic enough.
-
-> For API compat every pci struct device will have to instantiate a
-> msi_storage someplace, but that seems easy enough.
-
-That's easy to hide in the existing driver interfaces for PCI/MSI and
-PCI/MSI-X.
-
-> Seems like a nice uniform solution?
-
-That's where I'm heading.
-
-I have a full inventory of the various horrors involved, so I have a
-pretty good picture what kind of oddities are involved, where a shim
-domain is required and which underlying platforms require the MSI irq
-chip to do:
-
-    irq_chip_mask()
-       msi_ops->mask()
-       parent->chip->mask()
-
-and so forth. I need to figure out how the parent irq chip / irqdomain
-transports that requirement.
-
-But that part is not where the real work is. I'll get there eventually
-once I sorted the underlying parts:
-
-   - Building up the infrastructure in kernel/irq/
-
-   - Decomposing pci/msi/* further
-
-   - Make use of the infrastructure for an alternate pci/msi
-     implemention.
-   
-   - Have a transition mechanism to convert one part at a time to keep
-     the patch sizes reviewable and the whole mess bisectable.
-
-Doing all this while keeping the full universe of legacy/arch, current
-PCI/MSI domains alive makes that interesting. I broke the world in the
-past, so I'm not afraid of doing it again. Though I try to avoid it to
-the extent possible. :)
-
-I have a pretty good picture in my head and notes already, which needs
-to be dumped into code. But let me post part 1-3 V2 first, so that pile
-gets out of the way. Not having to juggle 90 patches makes life easier.
-
-Thanks,
-
-        tglx

@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33180469250
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA17469253
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240625AbhLFJ3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 04:29:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
+        id S240650AbhLFJ3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 04:29:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240600AbhLFJ3U (ORCPT
+        with ESMTP id S240632AbhLFJ3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 04:29:20 -0500
+        Mon, 6 Dec 2021 04:29:23 -0500
 Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786D8C0613F8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 01:25:52 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id w33-20020a17090a6ba400b001a722a06212so8964798pjj.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 01:25:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06632C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 01:25:55 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso10363836pji.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 01:25:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=iP7gvGikKR2xNziNLZvK7Pmhk4stHCJztbT7jMgPSsQ=;
-        b=VNPA3EVzQ2jOWSSWd58JoLbb0q0u0DOtV4Ifm/uyE6dAoNY0SgWXwOVpslXPnRTKKT
-         1nfQEiG9o/X3b5lyDwrX4nDM1Lhgf/m1K10O7tTQHBim6ujidddXMP3ibDqO8HW98DBS
-         W2P/ON8NERyQbU0R6lkhHc+zNGfd+cFJ0mKCBfPJUsEIiOm4L+YfH93VuGYmBfjA2pai
-         uAOBHor1qdaP8f0jf+6X6346SElJQgf2Hr5LdVZm0X99VVHqsB/p8RvONvHa3lJJp21o
-         2Ux/ehaXtPyV/sQEmwr+mPjiFvEghUF9WSi/E9vAoGA/4tigh35Bg7Eaf9eFeo/RTh0I
-         uu8g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=RXntCnFaEu15rLId3/xepqIAwJ07mxfKidhEo2IC6sM=;
+        b=EHbZ1+EA3spWtN6fTXJBbaXwv8zGGBAJfOtE2wXTUeIF3/A8c680pjmjOxa/LFmIsl
+         IrtghjKTvO+nrpeuftwb+O+Q3DhfUIcRyVuBwU/mO2Ri6DqSiqYAqjeLGY04u4fUPlYN
+         qOXysCuebLQu1dilNo/y3U+V8i5qwfqUJOpeyQMuajlFHVmZR/v+aecbi+VVWEutXQtw
+         VOctsW+hxS4kzQcD0AO3vXcyfaqVENTk5J5ZT8hwz8t6h4e3Wl2EOCW+tOGNeRMJE4Ph
+         Pj2aD2X9l01wx5BuwbGIhpbR9ZZYJHQZ1sRbTbq4r2DRxt0a2KdT4QE13G9YI++dS6gd
+         RJ7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=iP7gvGikKR2xNziNLZvK7Pmhk4stHCJztbT7jMgPSsQ=;
-        b=uCnaYAHpVK14dKgHn7Or710pFAVs5lH6hD7WkgjN2su5dKDbsiJrWFil+iOPWfHtaY
-         90lsGBHsyMC4xJyU/6Vfzab5E4+JgMqwq8PZ5m3Y0gCGuovJJ45muIe4TFO4uQtGxhp1
-         S9osKL3W8DvThaluG9PXH5hte06v5Yj1/NlcqlVSkUKefnzyysMoAMXF5CYc+hxaorMK
-         w+45JQchw8BEl2kW/Tdl/wAcAeIqJsiXrmzJ2X3vc5VUg+6T9W6E5Yk5fehFK7YCrW4/
-         guIgagq0vZjUujZwpZbaEHNnNOytID3CU2DLK5g1u0aOzSNJwnPTn16mipatf/a7xK1X
-         bdCw==
-X-Gm-Message-State: AOAM530hIhMcP8P3GzaGFmuWimvrkwlbPx674O8t+xMz9cF/d8SJdBMc
-        VV9xU5j9odr3wHNN7CyFBS8CAA==
-X-Google-Smtp-Source: ABdhPJwZ17lZ39ARicFadsmI/8CBkSiwtkGXAQiyepTOjNrU3hooJYvsSvNyFegsSbwyLtRF1dW8oA==
-X-Received: by 2002:a17:903:2443:b0:142:1e92:1d19 with SMTP id l3-20020a170903244300b001421e921d19mr42477069pls.24.1638782751976;
-        Mon, 06 Dec 2021 01:25:51 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=RXntCnFaEu15rLId3/xepqIAwJ07mxfKidhEo2IC6sM=;
+        b=n6T3osgNN9FuzSKdw9ZWh4i3RqMmRulnv2gCd2kyHi58Nt8l2Vp9BngeuMuEYlMVpX
+         NdV2tz0WqRAg2RhpN20VLfAlgqa7dn2Ozoo95yEqhbP9h6VK2XCOy7yvgzIbMzJFtpm0
+         okvQjoyk2jn1mBfr7M7tlUGXJxSoHoj1gDq0EvlliDrFqNzVh/yvVNq6lc39JzqFBht8
+         VfvMwk3MUHePAn8nrG/wSxqB6f3hKK8QyYOzGYILzoUijXLq4F0a9sCauOLNzjcq78c5
+         qsBLiCzB/VAhaOryvbnF/WYj40fHdu9HPAo0SzpmjVgj7FDIOS26CZhjcOKFY7jUcRl5
+         +gGA==
+X-Gm-Message-State: AOAM531zqKAwO95tBMwEMnlNG7nIw1aJUvZzjGX83TOhnynQUiMjGOBt
+        tXozQbqG38aL//zFBhLzlw025A==
+X-Google-Smtp-Source: ABdhPJzWA5BAwx2xHVIIRvILBkwx+wV+nsgPlAdVCDWmVmbmuaY0F16M5gHy4cWPJ9Y1CF1EPTEF7A==
+X-Received: by 2002:a17:90a:bb03:: with SMTP id u3mr35924507pjr.85.1638782754582;
+        Mon, 06 Dec 2021 01:25:54 -0800 (PST)
 Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id 38sm9165890pgl.73.2021.12.06.01.25.49
+        by smtp.gmail.com with ESMTPSA id 38sm9165890pgl.73.2021.12.06.01.25.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 01:25:51 -0800 (PST)
+        Mon, 06 Dec 2021 01:25:54 -0800 (PST)
 From:   Shawn Guo <shawn.guo@linaro.org>
 To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
 Cc:     Maulik Shah <quic_mkshah@quicinc.com>,
@@ -53,57 +54,103 @@ Cc:     Maulik Shah <quic_mkshah@quicinc.com>,
         Loic Poulain <loic.poulain@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shawn Guo <shawn.guo@linaro.org>
-Subject: [PATCH v4 0/2] Add Qualcomm MPM irqchip driver support
-Date:   Mon,  6 Dec 2021 17:25:33 +0800
-Message-Id: <20211206092535.4476-1-shawn.guo@linaro.org>
+Subject: [PATCH v4 1/2] dt-bindings: interrupt-controller: Add Qualcomm MPM support
+Date:   Mon,  6 Dec 2021 17:25:34 +0800
+Message-Id: <20211206092535.4476-2-shawn.guo@linaro.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211206092535.4476-1-shawn.guo@linaro.org>
+References: <20211206092535.4476-1-shawn.guo@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It adds DT binding and driver support for Qualcomm MPM (MSM Power Manager)
-interrupt controller.
+It adds DT binding support for Qualcomm MPM interrupt controller.
 
-Changes for v4:
-- Add the missing include of <linux/interrupt.h> to fix build errors
-  on arm architecture.
-- Leave IRQCHIP_PLATFORM_DRIVER infrastructural unchanged, and use
-  of_find_device_by_node() to get platform_device pointer.
-
-Changes for v3:
-- Support module build
-- Use relaxed accessors
-- Add barrier call to ensure MMIO write completes
-- Use d->chip_data to pass driver private data
-- Use raw spinlock
-- USe BIT() for bit shift
-- Create a single irq domain to cover both types of MPM pins
-- Call irq_resolve_mapping() to find out Linux irq number
-- Save the use of ternary conditional operator and use switch/case for
-  .irq_set_type call
-- Drop unnecessary .irq_disable hook
-- Align qcom_mpm_chip and qcom_mpm_ops members vertically
-- Use helper irq_domain_translate_twocell()
-- Move mailbox requesting forward in probe function
-- Improve the documentation on qcm2290_gic_pins[]
-- Use IRQCHIP_PLATFORM_DRIVER infrastructural
-- Use cpu_pm notifier instead of .suspend_late hook to write MPM for
-  sleep, so that MPM can be set up for both suspend and idle context.
-  The TIMER0/1 setup is currently omitted for idle use case though,
-  as I haven't been able to successfully test the idle context.
-
-Shawn Guo (2):
-  dt-bindings: interrupt-controller: Add Qualcomm MPM support
-  irqchip: Add Qualcomm MPM controller driver
-
- .../interrupt-controller/qcom,mpm.yaml        |  72 +++
- drivers/irqchip/Kconfig                       |   8 +
- drivers/irqchip/Makefile                      |   1 +
- drivers/irqchip/qcom-mpm.c                    | 480 ++++++++++++++++++
- 4 files changed, 561 insertions(+)
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+---
+ .../interrupt-controller/qcom,mpm.yaml        | 72 +++++++++++++++++++
+ 1 file changed, 72 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
- create mode 100644 drivers/irqchip/qcom-mpm.c
 
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml b/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
+new file mode 100644
+index 000000000000..22e87fe2eb8e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
+@@ -0,0 +1,72 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interrupt-controller/qcom,mpm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcom MPM Interrupt Controller
++
++maintainers:
++  - Shawn Guo <shawn.guo@linaro.org>
++
++description:
++  Qualcomm Technologies Inc. SoCs based on the RPM architecture have a
++  MSM Power Manager (MPM) that is in always-on domain. In addition to managing
++  resources during sleep, the hardware also has an interrupt controller that
++  monitors the interrupts when the system is asleep, wakes up the APSS when
++  one of these interrupts occur and replays it to GIC interrupt controller
++  after GIC becomes operational.
++
++allOf:
++  - $ref: /schemas/interrupt-controller.yaml#
++
++properties:
++  compatible:
++    items:
++      - const: qcom,qcm2290-mpm
++
++  reg:
++    maxItems: 1
++    description:
++      Specifies the base address and size of vMPM registers in RPM MSG RAM.
++
++  interrupts:
++    maxItems: 1
++    description:
++      Specify the IRQ used by RPM to wakeup APSS.
++
++  mboxes:
++    maxItems: 1
++    description:
++      Specify the mailbox used to notify RPM for writing vMPM registers.
++
++  interrupt-controller: true
++
++  '#interrupt-cells':
++    const: 2
++    description:
++      The first cell is the MPM pin number for the interrupt, and the second
++      is the trigger type.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - mboxes
++  - interrupt-controller
++  - '#interrupt-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    mpm: interrupt-controller@45f01b8 {
++        compatible = "qcom,qcm2290-mpm";
++        interrupts = <GIC_SPI 197 IRQ_TYPE_EDGE_RISING>;
++        reg = <0x45f01b8 0x1000>;
++        mboxes = <&apcs_glb 1>;
++        interrupt-controller;
++        #interrupt-cells = <2>;
++        interrupt-parent = <&intc>;
++    };
 -- 
 2.17.1
 

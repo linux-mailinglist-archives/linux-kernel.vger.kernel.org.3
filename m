@@ -2,72 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA8B468FA3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 04:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB2D468FA4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 04:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235982AbhLFDOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 22:14:48 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50748 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235660AbhLFDOr (ORCPT
+        id S236023AbhLFDPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 22:15:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53371 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235788AbhLFDPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 22:14:47 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5733FB80EDC;
-        Mon,  6 Dec 2021 03:11:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42535C00446;
-        Mon,  6 Dec 2021 03:11:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638760277;
-        bh=qZ5ctq25tgpUTFTLFO5yqSLmLDWPG/7d+CfZf1haYJU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a2ERqpCwH7ovJ7V2WOkblq8+RCWZzE/L1/XXsLW+9H+1LIBHnaiQCpaSSBY3hTzwO
-         xlHk7fgDocZPu/65c3K8l8N/CQmXxsrbwQ2zrqRSIf57pRJpV+lWiNMi5O+FiPLeFJ
-         UI9ZCinTiddu+mqtITZL3CfjiR09dllL9RGzgeCB+rxKuPjRuyoVjAyao5IrbRfvv/
-         Sy3nt1hbNs7l6rOYb5lbisS3ol5+rk8WvAJqseSUeIXQowRkx+ZsRo8sovOOYLn65I
-         8LS2wu0H58nMrjARdiHHylabF88yYQWC43yMqVI+bS1rXJ8bqfnu0RxOgmwLFw3ZCl
-         ycschvohl5+vA==
-Date:   Mon, 6 Dec 2021 11:11:09 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, aisheng.dong@nxp.com, s.hauer@pengutronix.de,
-        ulf.hansson@linaro.org, broonie@kernel.org, linux@roeck-us.net,
-        wim@linux-watchdog.org, linux@rempel-privat.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Jacky Bai <ping.bai@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V6 7/7] arm64: dts: imx8ulp: Add the basic dts for
- imx8ulp evk board
-Message-ID: <20211206031108.GE4216@dragon>
-References: <20211126074002.1535696-1-peng.fan@oss.nxp.com>
- <20211126074002.1535696-8-peng.fan@oss.nxp.com>
+        Sun, 5 Dec 2021 22:15:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638760337;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NUwMELfoN5sdz4QIGxURvLcCWplqvHofYeoKR0bfVRk=;
+        b=ABkARrz+WuEJFZqaV5dtMdpfWNR+EYSJp4btCNZgDfjpZld80+9szgWc283yDBlLOIEYOG
+        F8nQOYmHupYMDlLxZDF1CSyaYPlc/tmXPyGNyPmpOLilvxfr18w0vJSnOoLg7ohJAIvth2
+        xHh54SBgyGreMSlG5wGww5KEB4g3kxQ=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-407--P4EyFqQOUSsW2H8yBHVfQ-1; Sun, 05 Dec 2021 22:12:16 -0500
+X-MC-Unique: -P4EyFqQOUSsW2H8yBHVfQ-1
+Received: by mail-lf1-f69.google.com with SMTP id q26-20020ac2515a000000b0040adfeb8132so3234691lfd.9
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 19:12:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NUwMELfoN5sdz4QIGxURvLcCWplqvHofYeoKR0bfVRk=;
+        b=HVwiukP6VbRK9ReSqyZvE7ABkVSnbSJRH/rMgZH7BVoJpO3yl8zocMtPhqlfCyNNVB
+         koly+Oh60LsVUXGDRwDCiCEsbTldwCxPPoIy4wKRb4EqIwdERKR24g3DKYU8cDVqmDqt
+         ZdP/7f/HxtEuCnfUcgGx+q2aeQQ8um3ianGzG6sggIsFIm1xj4btKgLnIaTd9KVcD2bq
+         TaUDQ97LfLIBZLnFAHT9sU87SLuhln8I1jUF393GiCfokSzHM2vF159tfyPNPFOxp0TO
+         EiPtCS/BM5hq/KrAwdWPQLqTmY1Ju0clr+v8/3bLzOW40E1JOSirvFWkLcJbo47zwcrh
+         LPhw==
+X-Gm-Message-State: AOAM532gYhM86s9tjkTHB9slhEexl1xGZFGu+ZUbsbxYWYZFKzpB5R7y
+        m6Ze8MYTb/eB47T627WWpcSaupq+JYilHpXbS3YofAOVAlpWpyyyHCn+MNFXp+48uQfHTmk7BRm
+        QnrThtOQbZ1aoAkHtJ2LPxUH+kmEafX+gt/yB9JdJ
+X-Received: by 2002:a2e:b169:: with SMTP id a9mr34411874ljm.369.1638760334648;
+        Sun, 05 Dec 2021 19:12:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxu4rPiY8eBrUgt2lLw3I3dthDt2zXcE5AbclsSH3qgPuVmutwQVyiDFVxWdCAwAF5lOseVaPhk79/aBFCs+08=
+X-Received: by 2002:a2e:b169:: with SMTP id a9mr34411854ljm.369.1638760334455;
+ Sun, 05 Dec 2021 19:12:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211126074002.1535696-8-peng.fan@oss.nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20211203185522.692489-1-arnd@kernel.org>
+In-Reply-To: <20211203185522.692489-1-arnd@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 6 Dec 2021 11:12:03 +0800
+Message-ID: <CACGkMEuv2HQxUyxL8hsAXGOKxhTFED5_AcnZ1dOALh2QsL7ZKQ@mail.gmail.com>
+Subject: Re: [PATCH] eni_vdpa: alibaba: select VIRTIO_PCI_LIB
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 26, 2021 at 03:40:02PM +0800, Peng Fan (OSS) wrote:
-> From: Jacky Bai <ping.bai@nxp.com>
-> 
-> Add the basic dts file for i.MX8ULP EVK board.
-> Only the necessary devices for minimal system boot up are enabled:
-> enet, emmc, usb, console uart.
-> 
-> some of the devices' pin status may lost during low power mode,
-> so additional sleep pinctrl properties are included by default.
-> 
-> Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
-> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+On Sat, Dec 4, 2021 at 2:55 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> When VIRTIO_PCI_LIB is not built-in but the alibaba driver is, the
+> kernel runs into a link error:
+>
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_features':
+> eni_vdpa.c:(.text+0x23f): undefined reference to `vp_legacy_set_features'
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_state':
+> eni_vdpa.c:(.text+0x2fe): undefined reference to `vp_legacy_get_queue_enable'
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_address':
+> eni_vdpa.c:(.text+0x376): undefined reference to `vp_legacy_set_queue_address'
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_ready':
+> eni_vdpa.c:(.text+0x3b4): undefined reference to `vp_legacy_set_queue_address'
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_free_irq':
+> eni_vdpa.c:(.text+0x460): undefined reference to `vp_legacy_queue_vector'
+> x86_64-linux-ld: eni_vdpa.c:(.text+0x4b7): undefined reference to `vp_legacy_config_vector'
+> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_reset':
 
-Applied, thanks!
+Intersting, all those belongs to the legacy library.
+
+And I just have a try and I can complie alibaba eni without
+VIRTIO_PCI_LIB is set.
+
+Can you share your config file?
+
+Thanks
+
+>
+> Selecting VIRTIO_PCI_LIB_LEGACY is not sufficient here since that is
+> only part of the VIRTIO_PCI_LIB support.
+>
+> Fixes: e85087beedca ("eni_vdpa: add vDPA driver for Alibaba ENI")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/vdpa/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/vdpa/Kconfig b/drivers/vdpa/Kconfig
+> index 50f45d037611..04466603021f 100644
+> --- a/drivers/vdpa/Kconfig
+> +++ b/drivers/vdpa/Kconfig
+> @@ -80,6 +80,7 @@ config VP_VDPA
+>
+>  config ALIBABA_ENI_VDPA
+>         tristate "vDPA driver for Alibaba ENI"
+> +       select VIRTIO_PCI_LIB
+>         select VIRTIO_PCI_LIB_LEGACY
+>         depends on PCI_MSI && X86
+>         help
+> --
+> 2.29.2
+>
+

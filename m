@@ -2,92 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F7B46974D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6404E46975A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244617AbhLFNoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 08:44:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240974AbhLFNoR (ORCPT
+        id S244673AbhLFNqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 08:46:38 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:38300 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240974AbhLFNqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 08:44:17 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCDFC0613F8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 05:40:48 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id z5so43472610edd.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 05:40:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZEajfoaUMgQO3wUjsr0AKFBgOxwqqtWRlNRhrN4EWLc=;
-        b=rsfpOa7jUnPYmhMXjrmKvAKDasq15WtsVsUZm+qry6uyWbRWV+ExmAmUBpsmXCWzJV
-         xZryMpANmJu3fX36FKoW5FKO1lODQq+QUi3BW63FBBPF1cmJHduVjLjkjcvods4zC58C
-         APZ2aLAOYq1/lPQd6a49c/7eC6++FrD46747VH9ByKSFrYkP3/NZi77k2k0edvQT8GBT
-         hIHp6272hRrk1bHBniIL7wIsrdeljRSlMdbLxb8NeZumZReV9k2zimk8D3YH8fIfuNF7
-         srclbdtyOuLgKT8o34xNGFQF0cB8JBH68FxtSLwVF5xXGWpJmCNLCsex9zVBzIGokTrO
-         ZmrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZEajfoaUMgQO3wUjsr0AKFBgOxwqqtWRlNRhrN4EWLc=;
-        b=y6zEO329VSdo0aHMF0Ft8D4Bcm4grDwPDBEWWN1KANKbbgOOQ8KEyqFR9YHOvzM5AA
-         8iSIw+zCokikzWm9DaeC92lr5eiuDj4KzNevUm1Wegz/Yo+ncbxb95HwhP6ZCyn8tV90
-         BLqlNurOVIYDTUqr1zteSiUBZDdc4Z/pxI2O5RTbosnTfwDQw66gjZ0CWGatMgOKHwMK
-         3cwLsoDfoC2ot2+Mwy53u0ilBz8qVKN27haQSGv9+8GLTJSjFqGwXVAMfih8Z/gu0fNm
-         cbFXYLBLo3TqMNs/4h5KnkP8JtaR1j2CCcxoBnPtnq2LqDBzM896YgAMB6rBF2M5MSSU
-         IJ3w==
-X-Gm-Message-State: AOAM533NWamzabhAxcHHWFwnx4kKBKjC0UTCjwP4FHZJ2Knq0mScVGSo
-        M1o50OSXRkfRqUZIGpUhJfBUcbk3FNhqqdGjCrA9cA==
-X-Google-Smtp-Source: ABdhPJxazH7u1GuRD1TegRa6qncPcoWD07O91rH2xUDjtvi4KfXf7FTGEgPokhCJs5K+iW7F3RABvxremYNKMSnjkE8=
-X-Received: by 2002:a05:6402:354e:: with SMTP id f14mr53829427edd.245.1638798046711;
- Mon, 06 Dec 2021 05:40:46 -0800 (PST)
+        Mon, 6 Dec 2021 08:46:37 -0500
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B6BTNV5004649;
+        Mon, 6 Dec 2021 14:42:55 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=F6W+F1Vf7fYffkjJdPpsISKp/C9lL7UUAM9B4MeGe9M=;
+ b=h9Izmgr4eMqce9mCmp48j0IWXnASaiBlCb2qCT3AcvaKj8NI4VLMuI1Zk1JZ7D8o5DRl
+ 8yuUowYCW8BDL4U6tYcUqdAChpi7+hHTu/LBPKLkGCdRV+ZNGGNqzXuI7IKK5msVPDwg
+ yAIeWBcB9araYy4lwmn8fyzrLKlwPflU4t7rRPbjoT+pLGyL/kvip8Tx9aW0sVprX7Uw
+ +qrtY7kw1Som+ZslVdJWnYMRR00IQeSwS2lPeqpbK8cj7WqOyIquGC/yFw8ApjnqQL88
+ HjJ0G8FZWav6UrKFgQBvCSJxm/N981Hngpp1JUwBduf3U9+iPt+vOLYPucUOOaVb4u87 Qw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cryhqvsm5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 14:42:55 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9F82310002A;
+        Mon,  6 Dec 2021 14:42:53 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DBF3C2A4D7F;
+        Mon,  6 Dec 2021 14:42:50 +0100 (CET)
+Received: from lmecxl0951.lme.st.com (10.75.127.47) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 6 Dec
+ 2021 14:42:50 +0100
+Subject: Re: [PATCH] drm/stm: remove conflicting framebuffers
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211203085512.11127-1-yannick.fertre@foss.st.com>
+ <7469e918-b2bf-00a9-1bbc-2f3514ec0816@suse.de>
+From:   yannick Fertre <yannick.fertre@foss.st.com>
+Message-ID: <169ba08b-fdaa-866e-91bf-7a353c1d713d@foss.st.com>
+Date:   Mon, 6 Dec 2021 14:42:49 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211203133003.31786-1-brgl@bgdev.pl> <20211203133003.31786-4-brgl@bgdev.pl>
- <YapnTHQZyNCZXrgp@smile.fi.intel.com> <YapoW+DL4jPo69u8@smile.fi.intel.com>
- <Yapp4vakFxH7JV5B@smile.fi.intel.com> <CAMRc=MeWfKHWFKwRjaqczrfwhAodpDLgrWKF-zqXCsjd=gMv3g@mail.gmail.com>
- <Yap5ctmlw6NeNM+7@smile.fi.intel.com> <CAMRc=MffmFgCZFRziw-QJ+Y3WobJZzUh1Nbp2oym6JLqfnZCdQ@mail.gmail.com>
- <Ya4RHA91Ow9frP8t@smile.fi.intel.com>
-In-Reply-To: <Ya4RHA91Ow9frP8t@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 6 Dec 2021 14:40:36 +0100
-Message-ID: <CAMRc=MeqGuVsydk4ZKiEKPUv32FdaOUHg7Ee3efUda==RhjXdg@mail.gmail.com>
-Subject: Re: [PATCH v12 3/7] gpiolib: of: make fwnode take precedence in
- struct gpio_chip
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <7469e918-b2bf-00a9-1bbc-2f3514ec0816@suse.de>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-06_04,2021-12-06_02,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 2:34 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Mon, Dec 06, 2021 at 09:41:33AM +0100, Bartosz Golaszewski wrote:
-> > On Fri, Dec 3, 2021 at 9:10 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
->
-> ...
->
-> > This series concerns the gpio-sim driver and it only uses configfs
-> > (with manually created platform devices) or device-tree. I would
-> > prefer to do ACPI separately and I'd like you to lead that because I
-> > neither have any HW to test nor claim to understand it. :)
->
-> Please, mention this in the commit message that ACPI is not covered (yet).
->
+Hi Thomas,
 
-But the commit message says: "gpiolib: of: make fwnode take precedence
-in struct gpio_chip" - it says OF right here. :)
 
-Bart
+On 12/3/21 10:35 AM, Thomas Zimmermann wrote:
+> Hi
+> 
+> Am 03.12.21 um 09:55 schrieb Yannick Fertre:
+>> In case of using simplefb or another conflicting framebuffer,
+>> call drm_aperture_remove_framebuffers() to remove memory allocated.
+>>
+>> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+>> ---
+>>   drivers/gpu/drm/stm/drv.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
+>> index 222869b232ae..5ba46f70f081 100644
+>> --- a/drivers/gpu/drm/stm/drv.c
+>> +++ b/drivers/gpu/drm/stm/drv.c
+>> @@ -14,6 +14,7 @@
+>>   #include <linux/of_platform.h>
+>>   #include <linux/pm_runtime.h>
+>> +#include <drm/drm_aperture.h>
+>>   #include <drm/drm_atomic.h>
+>>   #include <drm/drm_atomic_helper.h>
+>>   #include <drm/drm_drv.h>
+>> @@ -193,6 +194,10 @@ static int stm_drm_platform_probe(struct 
+>> platform_device *pdev)
+>>       if (ret)
+>>           goto err_put;
+>> +    ret = drm_aperture_remove_framebuffers(false, &drv_driver);
+>> +    if (ret)
+>> +        goto err_put;
+>> +
+> 
+> This has to be done at the very top of the probe function, before 
+> anything that touches the device. Otherwise both drivers interfere with 
+> each other while probing and setup's going on.
+> 
+> Best regards
+> Thomas
+> 
+>>       ret = drm_dev_register(ddev, 0);
+>>       if (ret)
+>>           goto err_put;
+>>
+> 
+Thanks for reviewing the patch.
+I will follow your advice and push a new patch.
+
+Yannick

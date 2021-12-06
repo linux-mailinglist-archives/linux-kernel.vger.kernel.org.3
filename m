@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83FDE469C83
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4479469C6D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358243AbhLFPXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:23:14 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60304 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347592AbhLFPNd (ORCPT
+        id S1356535AbhLFPWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:22:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357147AbhLFPQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:13:33 -0500
+        Mon, 6 Dec 2021 10:16:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2B5C08EA38;
+        Mon,  6 Dec 2021 07:08:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BECA36130A;
-        Mon,  6 Dec 2021 15:10:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A029DC341C2;
-        Mon,  6 Dec 2021 15:10:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98EA0B81017;
+        Mon,  6 Dec 2021 15:08:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDE19C341C1;
+        Mon,  6 Dec 2021 15:08:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803404;
-        bh=mQKPksjqlwZDy7SxgGbNL65WV5ycQfse3DpNWB2bJ6k=;
+        s=korg; t=1638803303;
+        bh=fgRs/SPUy0Bpyu/WgVq4XJhEGeeZSPcabjKpE2dMomw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EDt20oO7ICjdcPu9WfYQyprkr/JuvQ4mEODVfDIWYCecSh2vJaVcWtYCiMqxn8RVr
-         C1XMSc+h+Jnokm6U7aGzCoBCqdDWdRvUEjw80+w0NsJq/e1SG0MdN021Jvb0R7blW4
-         DgpwrBhK/A4PvBxb9IsjZy9f1O++vpPv3PpvPiFQ=
+        b=ENTJVSmk5hxTwQSvV4ab1SUXFW3TJ+6aYYlInISEYYB5W7X1j2XhSeM2MA+kHdwSQ
+         ijgsvbmf7Y+Sa0JLDExoKy+FNLwYq/WcXtCWLfXGBisE8EZx5FWu+FjB6i55sRJMDN
+         nwA3rQ09J/hE+CogqgmZNYtJrCIxKWr4vx9aI/UU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.19 30/48] net/mlx4_en: Fix an use-after-free bug in mlx4_en_try_alloc_resources()
-Date:   Mon,  6 Dec 2021 15:56:47 +0100
-Message-Id: <20211206145549.872803291@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 4.14 100/106] xhci: Fix commad ring abort, write all 64 bits to CRCR register.
+Date:   Mon,  6 Dec 2021 15:56:48 +0100
+Message-Id: <20211206145559.002198838@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
-References: <20211206145548.859182340@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,59 +49,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-commit addad7643142f500080417dd7272f49b7a185570 upstream.
+commit 09f736aa95476631227d2dc0e6b9aeee1ad7ed58 upstream.
 
-In mlx4_en_try_alloc_resources(), mlx4_en_copy_priv() is called and
-tmp->tx_cq will be freed on the error path of mlx4_en_copy_priv().
-After that mlx4_en_alloc_resources() is called and there is a dereference
-of &tmp->tx_cq[t][i] in mlx4_en_alloc_resources(), which could lead to
-a use after free problem on failure of mlx4_en_copy_priv().
+Turns out some xHC controllers require all 64 bits in the CRCR register
+to be written to execute a command abort.
 
-Fix this bug by adding a check of mlx4_en_copy_priv()
+The lower 32 bits containing the command abort bit is written first.
+In case the command ring stops before we write the upper 32 bits then
+hardware may use these upper bits to set the commnd ring dequeue pointer.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+Solve this by making sure the upper 32 bits contain a valid command
+ring dequeue pointer.
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
+The original patch that only wrote the first 32 to stop the ring went
+to stable, so this fix should go there as well.
 
-Builds with CONFIG_MLX4_EN=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: ec25bc04ed8e ("net/mlx4_en: Add resilience in low memory systems")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Link: https://lore.kernel.org/r/20211130164438.190591-1-zhou1615@umn.edu
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: ff0e50d3564f ("xhci: Fix command ring pointer corruption while aborting a command")
+Cc: stable@vger.kernel.org
+Tested-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20211126122340.1193239-2-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx4/en_netdev.c |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/usb/host/xhci-ring.c |   21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
---- a/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
-@@ -2282,9 +2282,14 @@ int mlx4_en_try_alloc_resources(struct m
- 				bool carry_xdp_prog)
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -350,7 +350,9 @@ static void xhci_handle_stopped_cmd_ring
+ /* Must be called with xhci->lock held, releases and aquires lock back */
+ static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
  {
- 	struct bpf_prog *xdp_prog;
--	int i, t;
-+	int i, t, ret;
+-	u32 temp_32;
++	struct xhci_segment *new_seg	= xhci->cmd_ring->deq_seg;
++	union xhci_trb *new_deq		= xhci->cmd_ring->dequeue;
++	u64 crcr;
+ 	int ret;
  
--	mlx4_en_copy_priv(tmp, priv, prof);
-+	ret = mlx4_en_copy_priv(tmp, priv, prof);
-+	if (ret) {
-+		en_warn(priv, "%s: mlx4_en_copy_priv() failed, return\n",
-+			__func__);
-+		return ret;
-+	}
+ 	xhci_dbg(xhci, "Abort command ring\n");
+@@ -359,13 +361,18 @@ static int xhci_abort_cmd_ring(struct xh
  
- 	if (mlx4_en_alloc_resources(tmp)) {
- 		en_warn(priv,
+ 	/*
+ 	 * The control bits like command stop, abort are located in lower
+-	 * dword of the command ring control register. Limit the write
+-	 * to the lower dword to avoid corrupting the command ring pointer
+-	 * in case if the command ring is stopped by the time upper dword
+-	 * is written.
++	 * dword of the command ring control register.
++	 * Some controllers require all 64 bits to be written to abort the ring.
++	 * Make sure the upper dword is valid, pointing to the next command,
++	 * avoiding corrupting the command ring pointer in case the command ring
++	 * is stopped by the time the upper dword is written.
+ 	 */
+-	temp_32 = readl(&xhci->op_regs->cmd_ring);
+-	writel(temp_32 | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
++	next_trb(xhci, NULL, &new_seg, &new_deq);
++	if (trb_is_link(new_deq))
++		next_trb(xhci, NULL, &new_seg, &new_deq);
++
++	crcr = xhci_trb_virt_to_dma(new_seg, new_deq);
++	xhci_write_64(xhci, crcr | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
+ 
+ 	/* Section 4.6.1.2 of xHCI 1.0 spec says software should also time the
+ 	 * completion of the Command Abort operation. If CRR is not negated in 5
 
 

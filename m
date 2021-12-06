@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF35469DDC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F83F469CC7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350731AbhLFPde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:33:34 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38978 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356501AbhLFPWM (ORCPT
+        id S1385659AbhLFPZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:25:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357451AbhLFPQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:22:12 -0500
+        Mon, 6 Dec 2021 10:16:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3448AC08EA74;
+        Mon,  6 Dec 2021 07:08:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 422AD61309;
-        Mon,  6 Dec 2021 15:18:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2051AC341C2;
-        Mon,  6 Dec 2021 15:18:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F094CB8111A;
+        Mon,  6 Dec 2021 15:08:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B7F9C341CA;
+        Mon,  6 Dec 2021 15:08:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803922;
-        bh=WcScSF7kddzukuf+3Gs4FU1f4IK0BYp1yQDTQh7CJ/o=;
+        s=korg; t=1638803314;
+        bh=fzhFtjV0JZA5MKmOFmqC9SL+v6z0pKoJd1YZyse+dYU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XAIPJ+CHVz4mCnK7zViqLNYPA1+o6JFZIMge2M4NOVcT8hAt7rjoWawhM+FGHOa9M
-         Hl5ok5I0/iJwXg6YCmg66DtvELImWOK7TRA3B438+N7O70Mk/9ba04TSXdwZZBvOpU
-         Sk0r3/wlj3ODuUPfKaFlEXE+DUhY1g8gmPZjViGY=
+        b=uZOuVUXlUv2FbT4yYiyhAVuUz8PaNynRB5mC5Ehq5jFAvGpy3w5Ze0ZBHBDoEsis1
+         UpXxL1RaiuBtWW/ryVRjmV6/oKDzXsCrsWudRGMlBcANsQDjT5y5OOir+YzYJR4qif
+         8ymg7pyNLWNN1FTmO9AMrfUcKpjQfsummra88u7s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@chromium.org>
-Subject: [PATCH 5.10 094/130] drm/msm/a6xx: Allocate enough space for GMU registers
+        stable@vger.kernel.org, Sven Eckelmann <sven@narfation.org>
+Subject: [PATCH 4.14 103/106] tty: serial: msm_serial: Deactivate RX DMA for polling support
 Date:   Mon,  6 Dec 2021 15:56:51 +0100
-Message-Id: <20211206145602.900466601@linuxfoundation.org>
+Message-Id: <20211206145559.115046810@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,72 +47,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Douglas Anderson <dianders@chromium.org>
+From: Sven Eckelmann <sven@narfation.org>
 
-commit b4d25abf9720b69a03465b09d0d62d1998ed6708 upstream.
+commit 7492ffc90fa126afb67d4392d56cb4134780194a upstream.
 
-In commit 142639a52a01 ("drm/msm/a6xx: fix crashstate capture for
-A650") we changed a6xx_get_gmu_registers() to read 3 sets of
-registers. Unfortunately, we didn't change the memory allocation for
-the array. That leads to a KASAN warning (this was on the chromeos-5.4
-kernel, which has the problematic commit backported to it):
+The CONSOLE_POLLING mode is used for tools like k(g)db. In this kind of
+setup, it is often sharing a serial device with the normal system console.
+This is usually no problem because the polling helpers can consume input
+values directly (when in kgdb context) and the normal Linux handlers can
+only consume new input values after kgdb switched back.
 
-  BUG: KASAN: slab-out-of-bounds in _a6xx_get_gmu_registers+0x144/0x430
-  Write of size 8 at addr ffffff80c89432b0 by task A618-worker/209
-  CPU: 5 PID: 209 Comm: A618-worker Tainted: G        W         5.4.156-lockdep #22
-  Hardware name: Google Lazor Limozeen without Touchscreen (rev5 - rev8) (DT)
-  Call trace:
-   dump_backtrace+0x0/0x248
-   show_stack+0x20/0x2c
-   dump_stack+0x128/0x1ec
-   print_address_description+0x88/0x4a0
-   __kasan_report+0xfc/0x120
-   kasan_report+0x10/0x18
-   __asan_report_store8_noabort+0x1c/0x24
-   _a6xx_get_gmu_registers+0x144/0x430
-   a6xx_gpu_state_get+0x330/0x25d4
-   msm_gpu_crashstate_capture+0xa0/0x84c
-   recover_worker+0x328/0x838
-   kthread_worker_fn+0x32c/0x574
-   kthread+0x2dc/0x39c
-   ret_from_fork+0x10/0x18
+This is not true anymore when RX DMA is enabled for UARTDM controllers.
+Single input values can no longer be received correctly. Instead following
+seems to happen:
 
-  Allocated by task 209:
-   __kasan_kmalloc+0xfc/0x1c4
-   kasan_kmalloc+0xc/0x14
-   kmem_cache_alloc_trace+0x1f0/0x2a0
-   a6xx_gpu_state_get+0x164/0x25d4
-   msm_gpu_crashstate_capture+0xa0/0x84c
-   recover_worker+0x328/0x838
-   kthread_worker_fn+0x32c/0x574
-   kthread+0x2dc/0x39c
-   ret_from_fork+0x10/0x18
+* on 1. input, some old input is read (continuously)
+* on 2. input, two old inputs are read (continuously)
+* on 3. input, three old input values are read (continuously)
+* on 4. input, 4 previous inputs are received
 
-Fixes: 142639a52a01 ("drm/msm/a6xx: fix crashstate capture for A650")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Link: https://lore.kernel.org/r/20211103153049.1.Idfa574ccb529d17b69db3a1852e49b580132035c@changeid
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+This repeats then for each group of 4 input values.
+
+This behavior changes slightly depending on what state the controller was
+when the first input was received. But this makes working with kgdb
+basically impossible because control messages are always corrupted when
+kgdboc tries to parse them.
+
+RX DMA should therefore be off when CONSOLE_POLLING is enabled to avoid
+these kind of problems. No such problem was noticed for TX DMA.
+
+Fixes: 99693945013a ("tty: serial: msm: Add RX DMA support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+Link: https://lore.kernel.org/r/20211113121050.7266-1-sven@narfation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/tty/serial/msm_serial.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
-@@ -777,12 +777,12 @@ static void a6xx_get_gmu_registers(struc
- 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+--- a/drivers/tty/serial/msm_serial.c
++++ b/drivers/tty/serial/msm_serial.c
+@@ -611,6 +611,9 @@ static void msm_start_rx_dma(struct msm_
+ 	u32 val;
+ 	int ret;
  
- 	a6xx_state->gmu_registers = state_kcalloc(a6xx_state,
--		2, sizeof(*a6xx_state->gmu_registers));
-+		3, sizeof(*a6xx_state->gmu_registers));
- 
- 	if (!a6xx_state->gmu_registers)
++	if (IS_ENABLED(CONFIG_CONSOLE_POLL))
++		return;
++
+ 	if (!dma->chan)
  		return;
  
--	a6xx_state->nr_gmu_registers = 2;
-+	a6xx_state->nr_gmu_registers = 3;
- 
- 	/* Get the CX GMU registers from AHB */
- 	_a6xx_get_gmu_registers(gpu, a6xx_state, &a6xx_gmu_reglist[0],
 
 

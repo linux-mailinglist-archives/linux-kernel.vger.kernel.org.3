@@ -2,167 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D13F846A54C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3B646A54F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348166AbhLFTFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:05:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59090 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1348199AbhLFTFJ (ORCPT
+        id S1348180AbhLFTGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:06:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232972AbhLFTGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:05:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638817298;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7IWUJMUWQMHUT4vP/gLfw34vbVD3xfR2eTEDAHfsLnA=;
-        b=CxkIGJCwVTYJToN9e+jnqEkvEstOmvS9E7/6OOMT5L87IHaLTcDKun3t+w3hsygsErPj5V
-        lywI1vYq03nnCpGDm/ebj+S1pRlmJjTjaz2k9fXGaMS2AueX/437U5+DNgG1VhqolxMe1i
-        ufdHBwd2vliet4RUEDEamk+0rrBZ5No=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-557-GgAccjx9N--Z0lj-zrTAZg-1; Mon, 06 Dec 2021 14:01:37 -0500
-X-MC-Unique: GgAccjx9N--Z0lj-zrTAZg-1
-Received: by mail-wm1-f71.google.com with SMTP id j25-20020a05600c1c1900b00332372c252dso316282wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 11:01:37 -0800 (PST)
+        Mon, 6 Dec 2021 14:06:20 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7170C061746;
+        Mon,  6 Dec 2021 11:02:51 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id t8so11274171ilu.8;
+        Mon, 06 Dec 2021 11:02:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:message-id:in-reply-to:references:subject:mime-version
+         :content-transfer-encoding;
+        bh=DGKaEcXL8IOy/SVzbuQAC3UpZ4Q1Y1ENlH6uq7i+0Hw=;
+        b=JdkupEYh9uGJbqMf0WCdukWqjLlIqPy3WUA3x8qfq0Jl3Dd2Q05Gsy0hAS5HhjbiLl
+         xHNpVRYYclUMPrcFDuFQKYAWoqxfrfMp1GLI+MxjrhFjGQuSMEkNmiU8ISvIvM2SGVCD
+         kSRqi0c6EZWSt0vAvbGjfDL1ouQHT8J92jw2n8nRb5h4LHxqXJA6qgIcZEsXnutZjpA7
+         HruZUMb+CWIv5qGMZDBBEJ0B9SqtmsLkdZYUhL9G6ngMKYY6O6cP/KhfrXtDcCwC1ndL
+         r6RUUqRMmyeSzq/1GHSgZvoJx5NyuI83y1TZV0VNE1Q5hbFSNsERiSYUWeMfMeGo6Nlo
+         yONQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=7IWUJMUWQMHUT4vP/gLfw34vbVD3xfR2eTEDAHfsLnA=;
-        b=GpcV4UdR4Lailfypf62LMz2YE/4U1Bu0VJguJmtOrCAf1hLov9Rwz3mwdNtfxkkusm
-         6EwzY4o3ERs3pO6cxiVg9b+owVgBpLvuu2H6Dnoj4x52eEBgNWwd2zje/ezvUaDru3Ai
-         OGpIFi8TmOJEiO8ZG6EoI7nBhccVqyXQHIOF0sz2W6EmrZ/YKQBlTGzRbRXg0DG7rYpM
-         WyDsBansqF8mQSxVHEk/Y6PS/X2BqKU7b93xwMYTTzxv/LplN/SQhvAnaKQCiWBPxE4R
-         RGisr2QO5H630TFmzHqp7S1kdrm20KxSEf5VTYK9pk4//ggLrx0Ar2uS+56Yn2eOUrOW
-         BVxA==
-X-Gm-Message-State: AOAM531pG5bo+7qkHCdNKUb8X25FEhou/PsJNZzzTiZdcC4QpqfTriv/
-        6rJHzFflo8gL5H5s8P+zE2lQeSJTaRpggeUs+aZoJwLXonyWzPH/YaIrIcTH8QcK0zZ2qYABJVw
-        Jq7ko1wI7lxqyKXmyUjqA5+Z0
-X-Received: by 2002:a05:600c:4e45:: with SMTP id e5mr478589wmq.43.1638817295836;
-        Mon, 06 Dec 2021 11:01:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJylaw/aehMSK9MAUfw8JuRc4KextNeRWB5cyQ7lL73zqtRhto8ItUBZ3FB0hhdVunM/j0K3nw==
-X-Received: by 2002:a05:600c:4e45:: with SMTP id e5mr478527wmq.43.1638817295484;
-        Mon, 06 Dec 2021 11:01:35 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c62c6.dip0.t-ipconnect.de. [91.12.98.198])
-        by smtp.gmail.com with ESMTPSA id n15sm197711wmq.38.2021.12.06.11.01.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 11:01:35 -0800 (PST)
-Message-ID: <a48c16d6-07df-ff44-67e6-f0942672ec28@redhat.com>
-Date:   Mon, 6 Dec 2021 20:01:34 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-US
-To:     Yang Shi <shy828301@gmail.com>, Kirill Tkhai <ktkhai@virtuozzo.com>
-Cc:     Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <guro@fb.com>, Vlastimil Babka <vbabka@suse.cz>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>, raquini@redhat.com
-References: <20211206033338.743270-1-npache@redhat.com>
- <20211206033338.743270-3-npache@redhat.com> <Ya3WcYKcej8XEI0W@dhcp22.suse.cz>
- <d9d14beb-ee20-7ebb-e007-fbf58fb28535@redhat.com>
- <24b4455c-aff9-ca9f-e29f-350833e7a0d1@virtuozzo.com>
- <CAHbLzko0UeNadswXEnwr6EtuKAZT4T-fnC5F7xnFcH4RbjhAiA@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [RFC PATCH 2/2] mm/vmscan.c: Prevent allocating shrinker_info on
- offlined nodes
-In-Reply-To: <CAHbLzko0UeNadswXEnwr6EtuKAZT4T-fnC5F7xnFcH4RbjhAiA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        h=x-gm-message-state:date:from:to:message-id:in-reply-to:references
+         :subject:mime-version:content-transfer-encoding;
+        bh=DGKaEcXL8IOy/SVzbuQAC3UpZ4Q1Y1ENlH6uq7i+0Hw=;
+        b=tuDoN1TJ/haPEzioeLCZSrvpLsspd3L/VO79dtHBcJj0nzYKUhzHoMik2h3/K8AopB
+         4UYNag88x9kjjZTXr+D1nH4yTNBGyZcq+baLU3paZRWVUw13BSgFw4AOJYXdsbmxWfOc
+         rkutxNH2MaztFUH8n5VARtQzdT/7+d1DvTyAU2VPm8qhpHGC6fKo2oI0iDDSFDXy4Uwh
+         vyXOjpR1YX8uFcw4lbOYAVlGK3aap1cY8xXKm8UCZdDoM8RCNknUltyBtLnZXqpmluVN
+         K8ehJ1OKzR+EA1V931aKxw8hxVffKmdDCRQZglHfnaGUQKqC+YkwkiQ7Hv/bVKvpGsyi
+         elZQ==
+X-Gm-Message-State: AOAM533PPwqUWcLfkGCYaxYHGKcQRjX7IO455I827dWH388qY8z2ocfV
+        eQmndMvOVwcuO9kHaF5ho5EaEqZ6tUZ3Lw==
+X-Google-Smtp-Source: ABdhPJzW8cN3NemLiQ02j3NaTMiMGE75FnmsuoXR5qLQCsVp0c1Y6d5j2G3ltIgD6TAWzL3Xr1G2EA==
+X-Received: by 2002:a05:6e02:12cb:: with SMTP id i11mr32239553ilm.12.1638817371156;
+        Mon, 06 Dec 2021 11:02:51 -0800 (PST)
+Received: from localhost ([172.243.151.11])
+        by smtp.gmail.com with ESMTPSA id r1sm4434540ilo.38.2021.12.06.11.02.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 11:02:50 -0800 (PST)
+Date:   Mon, 06 Dec 2021 11:02:42 -0800
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     syzbot <syzbot+5027de09e0964fd78ce1@syzkaller.appspotmail.com>,
+        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Message-ID: <61ae5e52b9712_c5bd2082e@john.notmuch>
+In-Reply-To: <000000000000367c2205d2549cb9@google.com>
+References: <000000000000367c2205d2549cb9@google.com>
+Subject: RE: [syzbot] KASAN: vmalloc-out-of-bounds Read in __bpf_prog_put
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.12.21 19:42, Yang Shi wrote:
-> On Mon, Dec 6, 2021 at 5:19 AM Kirill Tkhai <ktkhai@virtuozzo.com> wrote:
->>
->> On 06.12.2021 13:45, David Hildenbrand wrote:
->>>> This doesn't seen complete. Slab shrinkers are used in the reclaim
->>>> context. Previously offline nodes could be onlined later and this would
->>>> lead to NULL ptr because there is no hook to allocate new shrinker
->>>> infos. This would be also really impractical because this would have to
->>>> update all existing memcgs...
->>>
->>> Instead of going through the trouble of updating...
->>>
->>> ...  maybe just keep for_each_node() and check if the target node is
->>> offline. If it's offline, just allocate from the first online node.
->>> After all, we're not using __GFP_THISNODE, so there are no guarantees
->>> either way ...
->>
->> Hm, can't we add shrinker maps allocation to __try_online_node() in addition
->> to this patch?
+syzbot wrote:
+> Hello,
 > 
-> I think the below fix (an example, doesn't cover all affected
-> callsites) should be good enough for now? It doesn't touch the hot
-> path of the page allocator.
+> syzbot found the following issue on:
 > 
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index fb9584641ac7..1252a33f7c28 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -222,13 +222,15 @@ static int expand_one_shrinker_info(struct
-> mem_cgroup *memcg,
->         int size = map_size + defer_size;
+> HEAD commit:    ce83278f313c Merge branch 'qed-enhancements'
+> git tree:       net-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11c8ce3ab00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=b5949d4891208a1b
+> dashboard link: https://syzkaller.appspot.com/bug?extid=5027de09e0964fd78ce1
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 > 
->         for_each_node(nid) {
-> +               int tmp = nid;
->                 pn = memcg->nodeinfo[nid];
->                 old = shrinker_info_protected(memcg, nid);
->                 /* Not yet online memcg */
->                 if (!old)
->                         return 0;
-> -
-> -               new = kvmalloc_node(sizeof(*new) + size, GFP_KERNEL, nid);
-> +               if (!node_online(nid))
-> +                       tmp = -1;
-> +               new = kvmalloc_node(sizeof(*new) + size, GFP_KERNEL, tmp);
->                 if (!new)
->                         return -ENOMEM;
+> Unfortunately, I don't have any reproducer for this issue yet.
 > 
-> It used to use kvmalloc instead of kvmalloc_node(). The commit
-> 86daf94efb11d7319fbef5e480018c4807add6ef ("mm/memcontrol.c: allocate
-> shrinker_map on appropriate NUMA node") changed to use *_node()
-> version. The justification was that "kswapd is always bound to
-> specific node. So allocate shrinker_map from the related NUMA node to
-> respect its NUMA locality." There is no kswapd for offlined node, so
-> just allocate shrinker info on node 0. This is also what
-> alloc_mem_cgroup_per_node_info() does.
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+5027de09e0964fd78ce1@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put.constprop.0+0x1dd/0x220 kernel/bpf/syscall.c:1812
+> Read of size 8 at addr ffffc90000cf2038 by task kworker/0:24/16179
+> 
+> CPU: 0 PID: 16179 Comm: kworker/0:24 Not tainted 5.16.0-rc3-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Workqueue: events sk_psock_destroy
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_address_description.constprop.0.cold+0xf/0x320 mm/kasan/report.c:247
+>  __kasan_report mm/kasan/report.c:433 [inline]
+>  kasan_report.cold+0x83/0xdf mm/kasan/report.c:450
+>  __bpf_prog_put.constprop.0+0x1dd/0x220 kernel/bpf/syscall.c:1812
+>  psock_set_prog include/linux/skmsg.h:477 [inline]
+>  psock_progs_drop include/linux/skmsg.h:495 [inline]
+>  sk_psock_destroy+0xad/0x620 net/core/skmsg.c:804
+>  process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
+>  worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
+>  kthread+0x405/0x4f0 kernel/kthread.c:327
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+>  </TASK>
+> 
+> 
+> Memory state around the buggy address:
+>  ffffc90000cf1f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>  ffffc90000cf1f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+> >ffffc90000cf2000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>                                         ^
+>  ffffc90000cf2080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>  ffffc90000cf2100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+> ==================================================================
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Yes, that's what I refer to as fixing it in the caller -- similar to
-[1]. Michals point is to not require such node_online() checks at all,
-neither in the caller nor in the buddy.
-
-I see 2 options short-term
-
-1) What we have in [1].
-2) What I proposed in [2], fixing it for all such instances until we
-have something better.
-
-Long term I tend to agree that what Michal proposes is better.
-
-Short term I tend to like [2], because it avoids having to mess with all
-such instances to eventually get it right and the temporary overhead
-until we have the code reworked should be really negligible ...
-
-
-
-[1] https://lkml.kernel.org/r/20211108202325.20304-1-amakhalov@vmware.com
-[2]
-https://lkml.kernel.org/r/51c65635-1dae-6ba4-daf9-db9df0ec35d8@redhat.com
-
--- 
-Thanks,
-
-David / dhildenb
-
+I'll take look some psock issue here.

@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D65D469CF7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C20469A76
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386297AbhLFP0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:26:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358975AbhLFPQx (ORCPT
+        id S1347100AbhLFPIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:08:04 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38854 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346274AbhLFPGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:16:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09D7C08EC91;
-        Mon,  6 Dec 2021 07:09:49 -0800 (PST)
+        Mon, 6 Dec 2021 10:06:14 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9C09B81125;
-        Mon,  6 Dec 2021 15:09:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E846DC341C2;
-        Mon,  6 Dec 2021 15:09:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB424B8111D;
+        Mon,  6 Dec 2021 15:02:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFA35C341C2;
+        Mon,  6 Dec 2021 15:02:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803387;
-        bh=iUlbNDrhOEDro64p7Xq2N7codrJPdeoCeLQRCGjUGFY=;
+        s=korg; t=1638802963;
+        bh=gvjWPLtzM3BXopeM8WkgcMjOOkskZuLJnSwZKgC41kk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rel5WJ/24hdJ7ClSf1dDfBAct1W2n/8VlhcCb5uCxZDJRt1UJHL83D7+dgihtUcyP
-         RkGEt+nk2vcoO3nSoyk93Gz6ouBvs+JbzbBUqV2KEcKMlLSlS4ofGx2BDpgI4PvRqF
-         GeIFagES+SDBWJiDSXd6U7G8AuiyuJS4bRSimabw=
+        b=ghD/41mff83i3DrcvZIDWEHgUqopol7R1mJ2H+ACF2j+FW6T5xYawBKSv3Vkt9scR
+         t5Kj4zm/VQ+3h9OCoaCr+p2H1f2eEqTJa1+wrnXkkVqI/HzZuIOorozJBWXK0HhdzS
+         BjUd9JpYyq5yAFGZ5OAhFDAi6S2Zdl2sbNiL1D/Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Slark Xiao <slark_xiao@163.com>,
         Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 07/48] platform/x86: thinkpad_acpi: Fix WWAN device disabled issue after S3 deep
+Subject: [PATCH 4.9 41/62] platform/x86: thinkpad_acpi: Fix WWAN device disabled issue after S3 deep
 Date:   Mon,  6 Dec 2021 15:56:24 +0100
-Message-Id: <20211206145549.105939206@linuxfoundation.org>
+Message-Id: <20211206145550.627448934@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
-References: <20211206145548.859182340@linuxfoundation.org>
+In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
+References: <20211206145549.155163074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -81,10 +78,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 12 deletions(-)
 
 diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
-index fa8bcbe3d2762..912ce5cb2f084 100644
+index 9c929b5ce58e2..b19a51d12651d 100644
 --- a/drivers/platform/x86/thinkpad_acpi.c
 +++ b/drivers/platform/x86/thinkpad_acpi.c
-@@ -1198,15 +1198,6 @@ static int tpacpi_rfk_update_swstate(const struct tpacpi_rfk *tp_rfk)
+@@ -1169,15 +1169,6 @@ static int tpacpi_rfk_update_swstate(const struct tpacpi_rfk *tp_rfk)
  	return status;
  }
  
@@ -100,7 +97,7 @@ index fa8bcbe3d2762..912ce5cb2f084 100644
  /*
   * Sync the HW-blocking state of all rfkill switches,
   * do notice it causes the rfkill core to schedule uevents
-@@ -3145,9 +3136,6 @@ static void tpacpi_send_radiosw_update(void)
+@@ -3029,9 +3020,6 @@ static void tpacpi_send_radiosw_update(void)
  	if (wlsw == TPACPI_RFK_RADIO_OFF)
  		tpacpi_rfk_update_hwblock_state(true);
  

@@ -2,127 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4518546A235
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F14DC46A234
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:06:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237919AbhLFRJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 12:09:22 -0500
-Received: from mga18.intel.com ([134.134.136.126]:17089 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350011AbhLFRFz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 12:05:55 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="224225605"
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="224225605"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 09:02:04 -0800
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="679057383"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 09:01:59 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1muHMI-002rA7-Am;
-        Mon, 06 Dec 2021 19:00:58 +0200
-Date:   Mon, 6 Dec 2021 19:00:58 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v12 4/7] gpio: sim: new testing module
-Message-ID: <Ya5BytiTv7+RpYph@smile.fi.intel.com>
-References: <20211203133003.31786-1-brgl@bgdev.pl>
- <20211203133003.31786-5-brgl@bgdev.pl>
- <Yap4/VshDPNxLfOt@smile.fi.intel.com>
- <CAMRc=MegnF-VZswJym7np4sBMyFf0=gqeFGdKS0xytnmQOhUpw@mail.gmail.com>
- <Ya4Q7s9sbk2UHNA3@smile.fi.intel.com>
- <CAMRc=Md9S20JBYYVTkkpgOTgBofDrt3QrbPK94zP4jGw30bq3g@mail.gmail.com>
+        id S229714AbhLFRJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 12:09:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349850AbhLFRFf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 12:05:35 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6463DC061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 09:02:06 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id z6so10721049pfe.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 09:02:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IDr+xC7Hxg1cElvQGV3Z7CgphH2JwHEXV2UO5AQdC08=;
+        b=fwuKH/tQko9yQe3Pkuyix3eSRhkCkES82tEdJ/DjimVKfubp8G4FVAyIj+tQUR1Xbe
+         U7P+S2oUI5qJ5yCFy7QSz/IuPiffv0ya9N7Aisqn6tb6UPDNpVyr3uL4RRWV5P9/tVbt
+         jsQnwm2BLuzlC0qBWSzZY6/5+mhL1LL+ZlUElenZ++B1mGTYnHenZfsI17vXkBMCiQE9
+         +yxG4GS7WEDzNt6mLd6qNuEA4YNRP5C/+gn6mcyvSSgWKNuNSh9r6wN/8PI2EsqOxPbq
+         +b3LmMF70bt4ne/z00zjpwCytwdO0ui7CE2dL1Zr35TCsPOicAuneY62cJSVFgqhnAtp
+         YYAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IDr+xC7Hxg1cElvQGV3Z7CgphH2JwHEXV2UO5AQdC08=;
+        b=uIGCt3JUu5SqxjQVraZYCpuNWGoBWdbTfYc837JidOG6MihJbSr32GxIvx7Rgx0a57
+         +dvP88y6mAG9qh0NXCnOq334PnOM9o5Ij4JTN/Uz7n/uQvk3lvVsg4ETMRxxuDOSW0ot
+         elooSLRey5srNHL8fqJD6GpuXI/vSynCFk5Knd+YXJYcGqJiAX3FVN+Z6X5B2PsvJMKw
+         s2Wy2rP/MIDpqKqKc5xH6hwRIjCigpfsSZZkIefjq2WRkbhdmdm5OoedBKoLqjWzwdoO
+         8IZm0Ythp5kl+ZYL2Q5Nw5Rgqyp9WZto2qGqFCpb1EDJPnkA0lcmI8gsrSQkoTdD/YHJ
+         36pg==
+X-Gm-Message-State: AOAM533OiFSvkhMVhQEZMF0naeT1sJqrfB32IQ6VD66rp8eSAgUIWgeo
+        S/bZuTC79rCr+if9yXGKG+QjuA==
+X-Google-Smtp-Source: ABdhPJy75Ia/PuA9TG+KDKmlgjT4JcIiwA2FpkVyXmKyf9mPcIl728/gC4B1UAkcOIeTotazwIEIUQ==
+X-Received: by 2002:aa7:9903:0:b0:49f:e368:4fc3 with SMTP id z3-20020aa79903000000b0049fe3684fc3mr38258039pff.1.1638810125718;
+        Mon, 06 Dec 2021 09:02:05 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id l2sm13021794pfc.42.2021.12.06.09.02.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 09:02:05 -0800 (PST)
+Date:   Mon, 6 Dec 2021 17:02:01 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ameer Hamza <amhamza.mgc@gmail.com>
+Cc:     vkuznets@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
+Subject: Re: [PATCH v3] KVM: x86: fix for missing initialization of return
+ status variable
+Message-ID: <Ya5CCU0zf+MzMwcX@google.com>
+References: <20211206160813.GA37599@hamza-OptiPlex-7040>
+ <20211206164503.135917-1-amhamza.mgc@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMRc=Md9S20JBYYVTkkpgOTgBofDrt3QrbPK94zP4jGw30bq3g@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20211206164503.135917-1-amhamza.mgc@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 04:38:44PM +0100, Bartosz Golaszewski wrote:
-> On Mon, Dec 6, 2021 at 2:33 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Mon, Dec 06, 2021 at 10:48:00AM +0100, Bartosz Golaszewski wrote:
-> > > On Fri, Dec 3, 2021 at 9:08 PM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
-
-...
-
-> > > Nah, the lines are broken just fine. Let's not overuse the limit.
-> >
-> > Yes, but I would consider to join back those which are up to ~83 characters
-> > (I already pointed out at least to one example like this).
+On Mon, Dec 06, 2021, Ameer Hamza wrote:
+> If undefined ioctl number is passed to the kvm_vcpu_ioctl_device_attr
+> ioctl, we should trigger KVM_BUG_ON() and return with EIO to silent
+> coverity warning.
 > 
-> I like the old-style limit TBH.
-
-And it's fine. It has remark about overlapping in case of readability and 81
-characters on one line is fine as some cases when it is up to ~83 (for old
-style).
-
-Anyways, it doesn't worth of spending more time on this. Your choice then.
-
-...
-
-> > > > > +     /* Default to input mode. */
-> > > > > +     bitmap_fill(chip->direction_map, num_lines);
-> > > >
-> > > > More accurate is to use bitmap_set(). If we ever debug this it also helpful.
-> > >
-> > > I'm not sure what you mean, this sets all bits to 1.
-> >
-> > Nope, it may set _more_ than all bits. That's why bitmap_set() is more
-> > accurate, because it will do exact setting.
+> Addresses-Coverity: 1494124 ("Uninitialized scalar variable")
+> Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+> ---
+> Changes in v3:
+> Added KVM_BUG_ON() as default case and returned -EIO
+> ---
+>  arch/x86/kvm/x86.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> Can this in any way affect any of the code? If the driver is correct,
-> it will never use anything beyond the last line bit. If it does, it
-> needs fixing. It's as if we cared about what happens to padding added
-> to structures by the compiler (as long as we're not passing it to
-> user-space of course).
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index e0aa4dd53c7f..b37068f847ff 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -5019,6 +5019,9 @@ static int kvm_vcpu_ioctl_device_attr(struct kvm_vcpu *vcpu,
+>  	case KVM_SET_DEVICE_ATTR:
+>  		r = kvm_arch_tsc_set_attr(vcpu, &attr);
+>  		break;
+> +	default:
+> +		KVM_BUG_ON(1, vcpu->kvm);
+> +		r = -EIO;
 
-I haven't checked if it affects current code. Consider this as heads up,
-because developers often forget about this nuance of bitmap_fill() /
-bitmap_clear().
+At least have a
 
-...
+		break;
 
-> > > > > +     if (strcmp(trimmed, "input") == 0)
-> > > > > +             dir = GPIOD_IN;
-> > > > > +     else if (strcmp(trimmed, "output-high") == 0)
-> > > > > +             dir = GPIOD_OUT_HIGH;
-> > > > > +     else if (strcmp(trimmed, "output-low") == 0)
-> > > > > +             dir = GPIOD_OUT_LOW;
-> > > > > +     else
-> > > > > +             dir = -EINVAL;
-> > > >
-> > > > Same idea, i.e. static string array and use it above and here with help
-> > > > of match_string().
-> > >
-> > > It would be great but GPIOD_IN etc. are bit flags and not sequence enums.
-> >
-> > Ah, okay, it will make rather sparse array.
+if we're going to be pedantic about things.
+
+>  	}
+>  
+>  	return r;
+> -- 
+> 2.25.1
 > 
-> Idea for the future: introduce match_string_ext() with flags one of
-> which would allow sparse string arrays?
-
-I thought about that, but since it's a mix of the bits, it might not be so
-universal anyway, I would rather think of something which uses 1-bit bit
-fields unified under a bit mask, and not a mix of 2 or more bits.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-

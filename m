@@ -2,102 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA59469160
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 09:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0491E469166
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 09:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239162AbhLFI1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 03:27:15 -0500
-Received: from mswedge1.sunplus.com ([60.248.182.113]:48298 "EHLO
-        mg.sunplus.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S239064AbhLFI1O (ORCPT
+        id S239246AbhLFIaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 03:30:09 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:37790
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239231AbhLFIaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 03:27:14 -0500
-X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
-        ,3)
-Received: from 172.17.9.202
-        by mg01.sunplus.com with MailGates ESMTP Server V5.0(5125:0:AUTH_RELAY)
-        (envelope-from <tony.huang@sunplus.com>); Mon, 06 Dec 2021 16:23:46 +0800 (CST)
-Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
- sphcmbx01.sunplus.com.tw (172.17.9.202) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Mon, 6 Dec 2021 16:23:41 +0800
-Received: from sphcmbx02.sunplus.com.tw ([::1]) by sphcmbx02.sunplus.com.tw
- ([fe80::f8bb:bd77:a854:5b9e%14]) with mapi id 15.00.1497.023; Mon, 6 Dec 2021
- 16:23:42 +0800
-From:   =?utf-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Tony Huang <tonyhuang.sunplus@gmail.com>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Subject: RE: [PATCH v2 2/2] misc: Add iop driver for Sunplus SP7021
-Thread-Topic: [PATCH v2 2/2] misc: Add iop driver for Sunplus SP7021
-Thread-Index: AQHX5/jPsCYr7BDcdE2zYDyk9FgNIqwgKW+AgASqFlD//8YkAIAAizsw
-Date:   Mon, 6 Dec 2021 08:23:41 +0000
-Message-ID: <7e53f347462143669242f9937330fbde@sphcmbx02.sunplus.com.tw>
-References: <cover.1638499659.git.tonyhuang.sunplus@gmail.com>
- <9bb79f74ff1b08a5f9a1f6707b3b41484506468a.1638499659.git.tonyhuang.sunplus@gmail.com>
- <CAK8P3a2XW=9ch58x7Shjd1ZeFka67sxEb5ZfJy-ZNtQe-j7xVg@mail.gmail.com>
- <9233c42fc4714122a3054a6c5bda0d3e@sphcmbx02.sunplus.com.tw>
- <CAK8P3a2AgO2R-yQsT6nkiVU0J6pXa-bMnckrShey2EUZjAq3Uw@mail.gmail.com>
-In-Reply-To: <CAK8P3a2AgO2R-yQsT6nkiVU0J6pXa-bMnckrShey2EUZjAq3Uw@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.25.108.54]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 6 Dec 2021 03:30:08 -0500
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 399923F316
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:26:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1638779199;
+        bh=I2YDk0JOf4YFbZyBoWvQAoknXKPERCVo9tXi68CgMpY=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=RpOF7i37XbOuskO6HE8DM0eB3mVQEMY3YXboXl3VHmuxibVZEEvINto88z7rs/6Pp
+         22leEeNz7HyX4inh1/3rU03Nyf5vAdqTewJ2XDRJ/zmC5UjOn5WK1dZ4mwr4SRsdgD
+         ed9tKxInpvgvtA7zCPOHVbX/bz3bsBCdU1sX8x7BKkjU6OLmRHuUI0GCEVP0iJYS8z
+         39YWd8gp5M9rvh+Syuw7Gc2N8V0rvWhDbQWPLQr5ch2kW0g3YnIulZB8rsd6wEQuYG
+         oJOqBU0NxEcAm/zImbZcn8oU56Jx/+H5ge19IroKgqnuaBK+Y8fLCFwLaiLav5Wrda
+         lvTAFdCznvgRw==
+Received: by mail-lj1-f198.google.com with SMTP id b14-20020a05651c0b0e00b0021a1a39c481so3168879ljr.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 00:26:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=I2YDk0JOf4YFbZyBoWvQAoknXKPERCVo9tXi68CgMpY=;
+        b=vEtWFuaelF+990SiNHzMQ5m36lNosgPfbgErwrIXvhKwXPaMFgqGzVJfPD86sHrRiA
+         92JlMGTSEAQ3frljpZnY7T2tqi+/Vl54/pKhvik2qE9l26I2LM/QQuIg5gV1IPbCru7t
+         OaHBTrTQNm8fPlvCLI4rquh4TKHrQfJBTyqBtjk+M3MAnmx2/OVQA7vyqYqOErps+Jz0
+         tmTUpa0ryBZMDN/aWW+y9ds8jaXjC1g2LTFUipoT8Y4S2+9O9GufXAnKhCv8Mp/YEtNI
+         C4MGvGfDBeP8jYKu24eQLb4v9IBCu3FdtWWzk98+FOwzFvHIFQU2ARCHrKZs4gJmdtJ9
+         6hwQ==
+X-Gm-Message-State: AOAM531yJv6iN5GBHn78gY88JNsbGwX3FyhXAuoK3IO4VDCqPOnnpssw
+        HHktiymkLtJ511MFLb7dc0lNAwIPfhmd9nbI1sM6OZQr4V2VxdQpLRGcwzYEQ39ExPWYtxXuAhv
+        m6p74MF2yQ7tXRpeJSCuYYp6gqIF75MCwISKnug8fkw==
+X-Received: by 2002:a2e:9510:: with SMTP id f16mr34952309ljh.409.1638779198521;
+        Mon, 06 Dec 2021 00:26:38 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyNPrUMZzOnnm8zdAwzMDd+aJHk6yZF25LQGSg+8qkRDFotnn5BIFf+o11O8VA5y3oY+fctIg==
+X-Received: by 2002:a2e:9510:: with SMTP id f16mr34952248ljh.409.1638779197628;
+        Mon, 06 Dec 2021 00:26:37 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id k15sm1298650lfe.15.2021.12.06.00.26.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 00:26:37 -0800 (PST)
+Message-ID: <e9a07956-86d4-ae96-a641-020b3d85c51c@canonical.com>
+Date:   Mon, 6 Dec 2021 09:26:36 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 6/6] arm64: dts: exynos: Add initial device tree support
+ for Exynos7885 SoC
+Content-Language: en-US
+To:     David Virag <virag.david003@gmail.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20211205153302.76418-1-virag.david003@gmail.com>
+ <20211205153302.76418-7-virag.david003@gmail.com>
+ <de24b968-f359-25bf-76d7-69328401f83d@canonical.com>
+ <60f5c2e98e3a2048f86a79c3aa1ed945dc0cb4aa.camel@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <60f5c2e98e3a2048f86a79c3aa1ed945dc0cb4aa.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhciBBcm5kOg0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEFybmQg
-QmVyZ21hbm4gPGFybmRAYXJuZGIuZGU+DQo+IFNlbnQ6IE1vbmRheSwgRGVjZW1iZXIgNiwgMjAy
-MSA0OjA0IFBNDQo+IFRvOiBUb255IEh1YW5nIOm7g+aHt+WOmiA8dG9ueS5odWFuZ0BzdW5wbHVz
-LmNvbT4NCj4gQ2M6IEFybmQgQmVyZ21hbm4gPGFybmRAYXJuZGIuZGU+OyBUb255IEh1YW5nDQo+
-IDx0b255aHVhbmcuc3VucGx1c0BnbWFpbC5jb20+OyBEZXJlayBLaWVybmFuIDxkZXJlay5raWVy
-bmFuQHhpbGlueC5jb20+Ow0KPiBEcmFnYW4gQ3ZldGljIDxkcmFnYW4uY3ZldGljQHhpbGlueC5j
-b20+OyBncmVna2gNCj4gPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPjsgTGludXggS2VybmVs
-IE1haWxpbmcgTGlzdA0KPiA8bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZz47IFJvYiBIZXJy
-aW5nIDxyb2JoK2R0QGtlcm5lbC5vcmc+OyBEVE1MDQo+IDxkZXZpY2V0cmVlQHZnZXIua2VybmVs
-Lm9yZz47IFdlbGxzIEx1IOWRguiKs+mosCA8d2VsbHMubHVAc3VucGx1cy5jb20+DQo+IFN1Ympl
-Y3Q6IFJlOiBbUEFUQ0ggdjIgMi8yXSBtaXNjOiBBZGQgaW9wIGRyaXZlciBmb3IgU3VucGx1cyBT
-UDcwMjENCj4gDQo+IE9uIE1vbiwgRGVjIDYsIDIwMjEgYXQgNDo0MiBBTSBUb255IEh1YW5nIOm7
-g+aHt+WOmg0KPiA8dG9ueS5odWFuZ0BzdW5wbHVzLmNvbT4gd3JvdGU6DQo+ID4gPiBTdWJqZWN0
-OiBSZTogW1BBVENIIHYyIDIvMl0gbWlzYzogQWRkIGlvcCBkcml2ZXIgZm9yIFN1bnBsdXMgU1A3
-MDIxDQo+ID4gPiBPbiBGcmksIERlYyAzLCAyMDIxIGF0IDQ6NDggQU0gVG9ueSBIdWFuZw0KPiA8
-dG9ueWh1YW5nLnN1bnBsdXNAZ21haWwuY29tPiB3cm90ZToNCj4gPiA+ID4gKw0KPiA+ID4gPiAr
-c3RhdGljIGNvbnN0IHN0cnVjdCBmaWxlX29wZXJhdGlvbnMgc3BfaW9wX2ZvcHMgPSB7DQo+ID4g
-PiA+ICsgICAgICAgLm93bmVyICAgICAgICAgICAgICAgICAgPSBUSElTX01PRFVMRSwNCj4gPiA+
-ID4gKyAgICAgICAub3BlbiAgICAgICAgICAgICAgICAgICA9IHNwX2lvcF9vcGVuLA0KPiA+ID4g
-PiArICAgICAgIC5yZWFkICAgICAgICAgICAgICAgICAgID0gc3BfaW9wX3JlYWQsDQo+ID4gPiA+
-ICsgICAgICAgLndyaXRlICAgICAgICAgICAgICAgICAgPSBzcF9pb3Bfd3JpdGUsDQo+ID4gPiA+
-ICsgICAgICAgLnJlbGVhc2UgICAgICAgICAgICAgICAgPSBzcF9pb3BfcmVsZWFzZSwNCj4gPiA+
-ID4gK307DQo+ID4gPg0KPiA+ID4gVGhpcyBkb2VzIG5vdGhpbmcgYmVjYXVzZSBhbGwgdGhlIGNh
-bGxiYWNrcyBhcmUgZW1wdHkuIFlvdSByZW1vdmVkDQo+ID4gPiB0aGUgaW5hcHByb3ByaWF0ZSB1
-c2VyIHNwYWNlIGludGVyZmFjZXMgYXMgSSBhc2tlZCB5b3UgdG8sIGJ1dCBpZg0KPiA+ID4gdGhl
-cmUgaXMgbm8gd2F5IGZvciBlaXRoZXIga2VybmVsIG9yIHVzZXIgc3BhY2UgdG8gaW50ZXJhY3Qg
-d2l0aCB0aGUNCj4gPiA+IGhhcmR3YXJlLCBJIGRvbid0IHNlZSBhIHBvaW50IGluIG1lcmdpbmcg
-dGhlIGRyaXZlciB1bnRpbCB5b3UgYWRkIGEgbmV3DQo+IGludGVyZmFjZSB0aGF0IGlzIHVzYWJs
-ZS4NCj4gPiA+DQo+ID4NCj4gPiBJIHdpbGwgbW9kaWZ5IHNwX2lvcF9yZWFkKCkgdG8gbW9uaXRv
-ciBJT1AgbWFpbGJveCBkYXRhLg0KPiANCj4gV2h5IGlzIHRoaXMgYSB1c2VmdWwgaW50ZXJmYWNl
-IHRvIGhhdmU/IElmIHRoaXMgaXMgb25seSBmb3IgZGVidWdnaW5nLCBhIHRyYWNlcG9pbnQNCj4g
-bWF5IGJlIG1vcmUgdXNlZnVsIHRoYW4gYSBmdWxsIGNoYXJhY3RlciBkZXZpY2UuDQo+IA0KDQpZ
-ZXMsIGl0IGlzIGZvciBkZWJ1Z2dpbmcuDQoNCj4gPiA+IFNvbWV0aGluZyBsb29rcyB3cm9uZyBo
-ZXJlLCBtYXliZSByZXJlYWQgdGhlIGRvY3VtZW50YXRpb24gZm9yDQo+ID4gPiBydW50aW1lIHBv
-d2VyIG1hbmFnZW1lbnQgdG8gZmluZCBhIHdheSBvZiBwdXR0aW5nIHRoZSBkZXZpY2UgaW50bw0K
-PiA+ID4gbG93LXBvd2VyIG1vZGUgd2hlbiBpdCBpcyB1bnVzZWQuDQo+ID4gPg0KPiA+DQo+ID4g
-V2hlbiB0aGUgcG93ZXJvZmYgY29tbWFuZCBpcyBleGVjdXRlZCwgdGhlIHJ1bg0KPiA+IHNwX2lv
-cF9wbGF0Zm9ybV9kcml2ZXJfcG93ZXJvZmYodm9pZCkNCj4gPiBmdW5jdGlvbiB3aWxsIGVudGVy
-IHRoZSBzdGFuZGJ5IG1vZGUuIFRoZSBwb3dlciBvZmYgd2lsbCBiZSBleGVjdXRlZC4NCj4gPiBJ
-biB0aGUgc3lzdGVtLCBJT1AgY2FuIGNvbnRpbnVlIHRvIHdvcmsgd2hlbiBvdGhlciBtb2R1bGVz
-IGluIHRoZQ0KPiA+IHN5c3RlbSBlbnRlciBzdGFuZGJ5IC8gcG93ZXIgZG93biBtb2RlcyB0byBt
-b25pdG9yIHdoZXRoZXIgdGhlIHN5c3RlbQ0KPiB3YWtlcyB1cCB0aHJvdWdoIFJUQy4NCj4gDQo+
-IE9rLCBpbiB0aGF0IGNhc2UgeW91IGNhbiBwcm9iYWJseSBqdXN0IHJlbW92ZSB0aGUgZW1wdHkg
-Y2FsbGJhY2sgZnVuY3Rpb25zLg0KPiANCj4gICAgICAgICAgQXJuZA0K
+On 05/12/2021 19:14, David Virag wrote:
+> On Sun, 2021-12-05 at 18:31 +0100, Krzysztof Kozlowski wrote:
+> 
+> [...]
+> 
+>>> +       fimc_is_mclk0_in: fimc_is_mclk0_in {
+>>> +               samsung,pins = "gpc0-0";
+>>> +               samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
+>>> +               samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+>>> +               samsung,pin-drv = <2>;
+>>> +       };
+>>> +
+>>> +       fimc_is_mclk0_out: fimc_is_mclk0_out {
+>>> +               samsung,pins = "gpc0-0";
+>>> +               samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+>>> +               samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+>>> +               samsung,pin-drv = <2>;
+>>> +       };
+>>> +
+>>> +       fimc_is_mclk0_fn: fimc_is_mclk0_fn {
+>>
+>> I cannot get the point of these pin configurations - three groups
+>> with
+>> only function difference. How this would be used by the driver? Maybe
+>> just keep the one really used. Same for others below.
+>>
+> 
+> They seem to be changed in some cases by the FIMC-IS and/or Camera
+> module drivers in the downstream kernel. I'm not exactly sure about why
+> and how are they needed, as the code for FIMC-IS is quite large and
+> it's not my priority to work on it right now. I can remove these
+> configurations for now if that's okay, maybe I, or someone else will
+> re-add it later if it's needed.
+> 
+>>
+>>> +               samsung,pins = "gpc0-0";
+>>> +               samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+>>> +               samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+>>> +               samsung,pin-drv = <2>;
+>>> +       };
+>>> +
+> 
+> [...]
+> 
+>>> +
+>>> +       arm-pmu {
+>>> +               compatible = "arm,armv8-pmuv3";
+>>
+>> Wrong compatible. Please use specific, although I don't know which
+>> one
+>> you have - 53 or 73... since you have two clusters, I would expect
+>> two
+>> PMUs, hmm....
+> 
+> I was thinking the same, but there's a problem: As I'm also guessing we
+> have two PMUs for the a53 and a73 cores, we'd need to seperate it but I
+> have no access to the documentation that would let me know which
+> interrupts we would need for both of these PMUs. The downstream dts
+> doesn't tell us anything specific in this case, and I have no idea how
+> else am I supposed to know which interrupts are right without a TRM.
+> 
+> I'd be guessing either the 82, 83 or the 218, 219 interrupts would be
+> the right one for the a73 cores, and I suspect that it should be 82 and
+> 83, but I can't really confirm this.
+> 
+> Do you have any idea how to proceed in this case? Maybe there is a way
+> to test which ones would be right?
+> 
+>>
+>>> +               interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                            <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>,
+
+These are for cpu6 and cpu7, because they match the index in
+"interrupt-affinity". cpu6 and cpu7 are a73 cores in your DTSI.
+
+>>> +                            <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                            <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                            <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                            <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                            <GIC_SPI 218 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                            <GIC_SPI 219 IRQ_TYPE_LEVEL_HIGH>;
+
+These are for a53, judging by affinity.
+
+>>> +               interrupt-affinity = <&cpu6>,
+>>> +                                    <&cpu7>,
+>>> +                                    <&cpu0>,
+>>> +                                    <&cpu1>,
+>>> +                                    <&cpu2>,
+>>> +                                    <&cpu3>,
+>>> +                                    <&cpu4>,
+>>> +                                    <&cpu5>;
+>>> +       };
+>>> +
+> 
+> [...]
+
+Best regards,
+Krzysztof

@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6443C46A014
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD5A46A011
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381436AbhLFP50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:57:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388170AbhLFPcX (ORCPT
+        id S1387437AbhLFP5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:57:18 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48900 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233869AbhLFPdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:32:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872D2C08E856;
-        Mon,  6 Dec 2021 07:19:27 -0800 (PST)
+        Mon, 6 Dec 2021 10:33:19 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50471B81135;
-        Mon,  6 Dec 2021 15:19:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C7F3C341C1;
-        Mon,  6 Dec 2021 15:19:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FF5361320;
+        Mon,  6 Dec 2021 15:29:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1955FC34900;
+        Mon,  6 Dec 2021 15:29:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803965;
-        bh=rhQ6gw2N4GendxGyO6hG8ndGQ19HAKkm+QVk7bFiWG4=;
+        s=korg; t=1638804587;
+        bh=Hsds4PJTBlHXcK+rjBQuTccAnfhlCVvsnIcJZHAGLNc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l5DPpk9RX95DJpmynOdqDLExYCGEMTL2B0eLGRI3g5HoeRVpjhRrAhp4UoJ23CObh
-         V+VLdDwZpFwThehRgLdgfviE4xv5jZxprBoQGXNaOBP0xSuhHiWhi4vaCNOZoDfJvm
-         2dQELSnRyiBHP9V1hI5rJd75N0otaVZ0wCBnhZpM=
+        b=JuIMkmfZJhYZRSeXm/F+dwsbHyIWhBrLzxfiwAPUKk2rHWfd/f4SLE/N5E99dR7e0
+         Mx9GA7W3PgBMEDZEE/hvedF0DkeKa9ML2YEnc6Djq24MDNuRj2qp8st9S0hqRI20JM
+         IdL7MItGjK0gKYJnsxsyAkaKOd/N1Wrrhbqp3Tr8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Lai Jiangshan <laijs@linux.alibaba.com>,
         Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 110/130] x86/entry: Add a fence for kernel entry SWAPGS in paranoid_entry()
+Subject: [PATCH 5.15 173/207] x86/entry: Add a fence for kernel entry SWAPGS in paranoid_entry()
 Date:   Mon,  6 Dec 2021 15:57:07 +0100
-Message-Id: <20211206145603.437518528@linuxfoundation.org>
+Message-Id: <20211206145616.255750412@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -83,10 +80,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+), 11 deletions(-)
 
 diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index 166554a109aeb..a24ce5905ab82 100644
+index e38a4cf795d96..f1a8b5b2af964 100644
 --- a/arch/x86/entry/entry_64.S
 +++ b/arch/x86/entry/entry_64.S
-@@ -936,6 +936,7 @@ SYM_CODE_START_LOCAL(paranoid_entry)
+@@ -890,6 +890,7 @@ SYM_CODE_START_LOCAL(paranoid_entry)
  .Lparanoid_entry_checkgs:
  	/* EBX = 1 -> kernel GSBASE active, no restore required */
  	movl	$1, %ebx
@@ -94,7 +91,7 @@ index 166554a109aeb..a24ce5905ab82 100644
  	/*
  	 * The kernel-enforced convention is a negative GSBASE indicates
  	 * a kernel value. No SWAPGS needed on entry and exit.
-@@ -943,21 +944,14 @@ SYM_CODE_START_LOCAL(paranoid_entry)
+@@ -897,21 +898,14 @@ SYM_CODE_START_LOCAL(paranoid_entry)
  	movl	$MSR_GS_BASE, %ecx
  	rdmsr
  	testl	%edx, %edx

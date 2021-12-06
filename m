@@ -2,158 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1370469B45
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1898469C54
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355694AbhLFPOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:14:15 -0500
-Received: from mail-dm3nam07on2062.outbound.protection.outlook.com ([40.107.95.62]:18040
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1348875AbhLFPKU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:10:20 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G+1BFR+YMvuuYZPmZmZUvFvQGajWllsOJipmLsNjdTMem6/W+DmJQmYfPru1LcXWjBEfP/9GaaqPGSdIzzFd90uCpu4ZwES4mlOoWGvA7430UKBjVkfx/dDRzIzcUYAxXd2bxizbT7BqEoyKRa+/8YMpUpsIcsKArTL45nWT1CFgp1uC0T9djU9EwtjV3PN0KCGc14S3TmiXBAb1rb/i0ECltes3R5VmYAf41z9fSS4AkLn0dfMYIPOvAwPnxTInWHBddgqywuZq+EoJX9WnoI48epbhHGKxAibCTybbJz+z/DzN2atVIK8xyvBc4rSjtKWkS8EnZsoCBsNDKx+ckA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zBo+prTEmOeUe+HBHFkHZadQUGrNMtQgjg7nuOv+dZU=;
- b=NkPa0aGrrqC7zGQCT+OK0eot6/RFkTGkwqDx6dkSkel08NVPC0XwCKSYxXsTMf2wq66UEfjTyh0Ibbe9U0Leu9dNTCDle7PTf2RKOmh6zpFp+gi2CDJVCWNrr3vueNefKOzaHU8W+Ib4N7WwBwAghlo0xZpbttiQ/ev9SVK1vpHSzkvznKDMuGDjsb//gHaWRBC9xg6Al9Aij2H+rSjKXgZUx0jw3NKn8LbulgvchUKNWOXyklkw5ahMe8IWBQpgVUOK+AFE551vPxaCh6aVRIXpDXXTH7GGqk9Ro5j6FNDze4s2aRBwEski9Pv20RqqZeX+78TA1XXFHahm1IrAgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zBo+prTEmOeUe+HBHFkHZadQUGrNMtQgjg7nuOv+dZU=;
- b=OLLyeUxDXVWANamxsyHvdRrv5iCZwT5crD+e+FwNKO8UYGxlMNbSIOPvtIs6UcHA5z/iWBrAFoKGs/Lu6dCxf8ck359GnyQIhza6f7oMJBedKNXQiauN2gFC0ZqyN3HZ00MU9z4hSZwLzNqJfqvNE3ub5k3RUjKkUNal5AYCx5opr+sNHitT/miGqo/O5N6C2d52EeA4FW/QaVIS+rB/iL6M2+LODLwLvciWweUjbLtdQeInJyTnBZb0MbNU68xPRIn+wYCPA19WaG8Xgsvmlmo5Ym3bCuuqlcK9LirYwRtlm3FqTysiom/tVQZzBlqixVqA9B8C6HP/wIN1wQ4A8A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL1PR12MB5237.namprd12.prod.outlook.com (2603:10b6:208:30b::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Mon, 6 Dec
- 2021 15:06:49 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::d8be:e4e4:ce53:6d11%5]) with mapi id 15.20.4755.021; Mon, 6 Dec 2021
- 15:06:49 +0000
-Date:   Mon, 6 Dec 2021 11:06:47 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 04/18] driver core: platform: Add driver dma ownership
- management
-Message-ID: <20211206150647.GE4670@nvidia.com>
-References: <20211206015903.88687-1-baolu.lu@linux.intel.com>
- <20211206015903.88687-5-baolu.lu@linux.intel.com>
- <Ya4f662Af+8kE2F/@infradead.org>
+        id S1356083AbhLFPVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:21:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345126AbhLFPMQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 10:12:16 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC0DC08EAEE
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:05:30 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id t19so21992773oij.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 07:05:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NzBTIPMU59EZgqGZc7kI+1hmj8xwF/+2qvo6SeSV63w=;
+        b=ybsp0UrHMN1tAqw3d8QzvyBjjt7wPJWheRGiAXFO8n9bBcvsnt1GdAg1wEsATnrFIV
+         bKmQZ62MwJAy3dJrLjxeTjBKziF8anyvWTouri7yMmRiFL6pBx+ANMLPJV1gho+LpyyZ
+         Ve/0IZnxQRUf1FCw6+B/WDgVK3malxxNhR/6vB/WlQJ6y/RGcPkl5iCJtFZgYHfu4cZI
+         t6GQKcD401XmUei+FcsGiELt803cSeUQYpHUzW7JTl8OiRSO/NZ2kSovd9Y3tREqpdjK
+         IOE0pUVx8ty8NF53RxpRBDEzwNj1FQb/I9jhWsMHl4o0nVEu3RT44mBUN958tl03uhxH
+         W4BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NzBTIPMU59EZgqGZc7kI+1hmj8xwF/+2qvo6SeSV63w=;
+        b=TwmFA8ljrcxJsM8zFFqTIL8svTjup4K7JBsKmR1VbCIaj30atJgOhN4R5P32bEAID7
+         ZMj5tf7oM9SWCBXKz2/CQpwtFpnC4AAZNJRxW22fse5dpC988vmsO93/20/4BzOcadNO
+         LSxei7k42/A9UjSyG4LSfzj3gLRQpP6c5uOEvTHg2/J4r/JjH02fFGPfoudVsMbJe8xx
+         fwtVBbdWgR1yo4RezVTX5QTru6LIvsKNBjGzL4czw00RlwTDrU/47Yu1musGtJKk94/N
+         6Qz3OMzdx8RcjIOPtW9yDiiREP9c7iqDsc50S5CNo8hxKcg2mHbGsZPpgmx7mPt3CyZL
+         dj7w==
+X-Gm-Message-State: AOAM530LAe4jzMe1TOsU+eSBPYe9ohNcJWODn8jvTcyeSZhIYsD/knUI
+        DK1UlE9H+LilTlC28FHO8DzNtQ==
+X-Google-Smtp-Source: ABdhPJxdED1QhAb6n/Cc1u7AxaJDhHC0LS6eu1C5jAtVtZ1y1gZE2O9U5YOipf3H5+Hys+0AzdhB6w==
+X-Received: by 2002:a54:4418:: with SMTP id k24mr24350398oiw.23.1638803130087;
+        Mon, 06 Dec 2021 07:05:30 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id t14sm2263055otr.23.2021.12.06.07.05.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 07:05:29 -0800 (PST)
+Date:   Mon, 6 Dec 2021 07:06:56 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     agross@kernel.org, todor.too@gmail.com, mchehab@kernel.org,
+        robh+dt@kernel.org, angelogioacchino.delregno@somainline.org,
+        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+Subject: Re: [PATCH v3 3/4] arm64: dts: qcom: apq8016-sbc: Remove clock-lanes
+ property from &camss node
+Message-ID: <Ya4nEMnZ3zQiXbaR@ripper>
+References: <20211118124819.1902427-1-robert.foss@linaro.org>
+ <20211118124819.1902427-4-robert.foss@linaro.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ya4f662Af+8kE2F/@infradead.org>
-X-ClientProxiedBy: BL1P222CA0018.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:208:2c7::23) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
-MIME-Version: 1.0
-Received: from mlx.ziepe.ca (142.162.113.129) by BL1P222CA0018.NAMP222.PROD.OUTLOOK.COM (2603:10b6:208:2c7::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21 via Frontend Transport; Mon, 6 Dec 2021 15:06:48 +0000
-Received: from jgg by mlx with local (Exim 4.94)        (envelope-from <jgg@nvidia.com>)        id 1muFZn-008x7J-OV; Mon, 06 Dec 2021 11:06:47 -0400
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cfba5c46-e1ad-454c-a5ad-08d9b8ca06c0
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5237:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB5237776EF367EE6F72BC7E04C26D9@BL1PR12MB5237.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0DsQw1CgA0Cgiko0WaqUfRcJIm9kklXhFa8vMHNHZluTMFQC4OKIkNigyWKg24jf6dSx6YC/YNnb6DNX0meaZBOXedTn/vny1StllM1Jdntt5LcvEyb8LbZw45yaE+8EAxHNW9Oh3y/3TUQp4ZqNBFamwH+sWkJL+PifdoQviwtR73GKc/+/UpmLPaixjNJ0iEsT5+LZseB4okIhl7InRxFz13iNFg/j2HiSksHhq+qVD7DMCQ45zYaEediv8tBcacqUZ4e6GeIMFAjBYac+hKwI0/JegRDe9ue2BlE98C3hPZiPOHXpm9BJU6g42Lsca4pWa7CfESAHWl1CK9XHR0k+ms4zCzDVKvkfu0cU4/cV472k0XdJEpCvvubCZw7mMF1bSYnWeVUm9TLkfToWl6H3Dmn15OdDQqNl1qlJitRJyOFl9WJcQKOwTr9pLLPfRDySBPOyjEfH/BL0WGFjskQzwB6d9TgKYQ91xvUQWZFEA21CZJzqD0jhSshXKph+aGuP0OF2aIbmxmqVPUHY3Rh1n14BWPjKgOQnEiyCZVcD5zIUxbcBLNLO/R/Q6a6ZObNdWaf8tH29/8qH1H3QBHhCPJrgoIixNyZDRDwl7hfUOn1pKiNsbYIrIJV2XlQHcKV8qK/uzVRFFlni1IDDfg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(54906003)(8936002)(426003)(66946007)(66556008)(1076003)(4744005)(2906002)(38100700002)(36756003)(66476007)(6916009)(186003)(86362001)(9746002)(7416002)(26005)(8676002)(9786002)(316002)(5660300002)(33656002)(2616005)(508600001)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rFBCOmDC9Xk7KxqnGPh0ccDa7pLqkktG2NSwSRn/Fz8GHYeSus91M/2TvS96?=
- =?us-ascii?Q?OJ+dEotJgFgM5S9ub2YsudhQGQDlLBDLDJ8Gt4blAW/Ur3A2IBdyWO2DknRt?=
- =?us-ascii?Q?CA56U2lsK/jOE4jmcGVT0/1qD2iuY/WoXw3yUrZN0/slbbzlgZFmd9Itw/am?=
- =?us-ascii?Q?DFo6fW37aPCFmE8xt7BUYxxllXeJN7fQvYFE7ULg/cDBQUF8Xa43N+haLeSv?=
- =?us-ascii?Q?D9m5f5wBggv8QQofhHCLz5Cf8Xrug8u6syFPBPEYCZBYbLtQVvuQbMCzyYle?=
- =?us-ascii?Q?2Uc8U9KhygS2HgXP7DZc+6UjmEPvJdYSji+QPbpW01B3oACPeW0L4eXRTm57?=
- =?us-ascii?Q?KA7/M8Y1oTYtcpiMdY/yShHX9pUisXLCBllXjty/HdTaqn0bPDtDzBlwwdXb?=
- =?us-ascii?Q?U1wUgusFSrWFgKyKoSd6YmhkyavvGKx50mCXyvRiSlgkRWYvCCtagX7YywRl?=
- =?us-ascii?Q?JdLQdhu5HFSdwA3IJea9vO1F2Kb798xCyjLaXxkLPMA+n2GLEJmNDx045/7v?=
- =?us-ascii?Q?kRNp1B31jfkV1bhNcvF6d/KSgU9xW2Ep63nNbPgLMys3MBH86FDNcZARgl3F?=
- =?us-ascii?Q?orZwOqS88P4MLQPXN0n8iaq3madBd5kDBum3eoVJXANpP90Jq757t59GgJ2H?=
- =?us-ascii?Q?+bHoOy9fUrciNRk/z17MCkHIO/IVRv2KyoOSvlYR2dEmjbdAPXZ3cSOlqeza?=
- =?us-ascii?Q?SZaqgCPDavwNcr7YjsGwXANSmU2LOEoBOGA/Rr+itBj+DFFbszC1kN/1QBMY?=
- =?us-ascii?Q?YnaEj4nMz1t1zI1MES/VlfMRC6gRjJvlERL4ZldeQOvoABZKQaCMFyUb4efG?=
- =?us-ascii?Q?PACHnpOY6MhvpC23ALadS9x7GOu9qzR/xIasDMIf4J1MazMiCYTCuu4J0adK?=
- =?us-ascii?Q?4ngSJwiRTnK4n/ub/htflPR1tRw0MUVhA+5KHMRF3vnYuoj/RgGqxAEqmvSU?=
- =?us-ascii?Q?4UwPT2iq/gSSE05B6bTp+Q0wY6PQBSMu2hMLIJmVFVdAyzXbE4nwIBLxUa2W?=
- =?us-ascii?Q?eCKriAaUluL/ldzPAs6/I5ix6nH8+NC2cuVK9uTgACdtTK/FUj7wocTtr23Z?=
- =?us-ascii?Q?3eG6NIqgYXh8fRltGEikuEouWCyX395GhSTBYaegUhvCcaFtvg7hVaudzobl?=
- =?us-ascii?Q?GKm2mXl73uKZZMF2SpZlmuzBLeOliE7z7TLP78YSsG7hYJl9jK+OAMW+lOuH?=
- =?us-ascii?Q?vwXn4xwBUfgx5iwxQUHCyMGGkY3j7tsWq7Jw+CHBLrUiaUdUGtUMetu29suq?=
- =?us-ascii?Q?ILz5VY14eAWN12XSCV+uXMU5uz9x++DgXfDOmWQ5I6KlWhub9AxzbN6NJZqz?=
- =?us-ascii?Q?AzhqUhBC7KRUB3evyGbx1+904Py96t03cuDkWbVAYcMvplzmnUGPXLh6Nw3y?=
- =?us-ascii?Q?gpCnlMZVbEe047+ijwefVe55Y88hd+NPrUiHoXT8ScTOSyV119+0n5+lwjlY?=
- =?us-ascii?Q?C4darY2nsMkGPeaIfpr3z8BRTCHoQdO7HeV0oUXNivgc/3FQ1GRgSyu00rPt?=
- =?us-ascii?Q?RsKtGR/OIKlUgEDYCdVniiOpzBU6NoasExY8YmGOMSo0NQfK0xI3XtdacbLh?=
- =?us-ascii?Q?rcbr84zHXhxlz60psuk=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cfba5c46-e1ad-454c-a5ad-08d9b8ca06c0
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2021 15:06:48.8341
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: g85Z5i4QYonz2nVRKPWrBPZbgVzIJARtEwySs4vhM9OPX6Om2do66c7bHwGqBJp4
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5237
+In-Reply-To: <20211118124819.1902427-4-robert.foss@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 06:36:27AM -0800, Christoph Hellwig wrote:
-> I really hate the amount of boilerplate code that having this in each
-> bus type causes.
+On Thu 18 Nov 04:48 PST 2021, Robert Foss wrote:
 
-+1 
-
-I liked the first version of this series better with the code near
-really_probe().
-
-Can we go back to that with some device_configure_dma() wrapper
-condtionally called by really_probe as we discussed?
-
-> Between that and the suggestion from Joerg I wonder if we could do the
-> following again:
+> The clock-lanes property is no longer used as it is not programmable by
+> the CSIPHY hardware block of Qcom ISPs and should be removed.
 > 
->  - add new no_kernel_dma flag to struct device_driver
->  - set this flag for the various vfio drivers
->  - skip claiming the kernel dma ownership for those (or rather release
->    it if the suggestion from Joerg works out)
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
 
-v1 did exactly this.
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Jason
+Although I'd be happy to take the two dts patches through the Qualcomm
+tree, once the driver changes has landed.
+
+Regards,
+Bjorn
+
+> ---
+>  arch/arm64/boot/dts/qcom/apq8016-sbc.dts | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
+> index a5320d6d30e7..b7a578aafcbb 100644
+> --- a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
+> +++ b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
+> @@ -253,7 +253,6 @@ ports {
+>  		port@0 {
+>  			reg = <0>;
+>  			csiphy0_ep: endpoint {
+> -				clock-lanes = <1>;
+>  				data-lanes = <0 2>;
+>  				remote-endpoint = <&ov5640_ep>;
+>  				status = "okay";
+> @@ -289,7 +288,6 @@ camera_rear@3b {
+>  
+>  		port {
+>  			ov5640_ep: endpoint {
+> -				clock-lanes = <1>;
+>  				data-lanes = <0 2>;
+>  				remote-endpoint = <&csiphy0_ep>;
+>  			};
+> -- 
+> 2.32.0
+> 

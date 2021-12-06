@@ -2,36 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A0E4697F3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E415C4697FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245577AbhLFOKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 09:10:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245400AbhLFOJn (ORCPT
+        id S245649AbhLFOK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 09:10:29 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60022 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245501AbhLFOJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 09:09:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6123C061746;
-        Mon,  6 Dec 2021 06:06:14 -0800 (PST)
+        Mon, 6 Dec 2021 09:09:47 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63A45612D5;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 539B6612D5;
+        Mon,  6 Dec 2021 14:06:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55326C341C6;
         Mon,  6 Dec 2021 14:06:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49AAFC341C1;
-        Mon,  6 Dec 2021 14:06:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638799573;
-        bh=f82N35ahrXRzcXV21SSWtIzedCYveFLfS6QIdAe0N6k=;
+        s=k20201202; t=1638799577;
+        bh=vbo400VvG70VmVO0c1fHxdYCTThG7ymXdDT5Rxgnj/s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UJD+pQ7XD9fTddugdyX/ayFjlBKbNlgnlFr/KYoJe7HPg1glW0uLgf2TU3zx4Hauw
-         IZMSOZh5/EkUKRKa3COcNn5P4Vpx6G/8lS5sWb25954i/48eU7me4JCu8e3mN+0sdz
-         OeZCKGOZXxtvMh13sp/zgEBVQx31Lei4MUk0zN7D7UuOvNDyx9jKPmpCBzRYWdy1Iw
-         mg7FVRxBSC4k1Pd+xZxE4GzmqKdsAOrryWXFc2x02cf+jzRnYNDN7TJyq+3M++VuLK
-         okB18t5hPtxGoNaSgr7OlQpZnoJ2ah/bWTErDXr+wKgS3vW2OXM4vnLkwlyKVtegGS
-         h194naAu8a7Iw==
+        b=jglx2R2W3TPsM8w3YF3aN3tL9E2D8JjYM5DsnL4586y47/IYDCz8PjuusksiQxygP
+         KqnOM2pSjug3XlAosiVGtRF9SaQ8wqV9lOmga/lzYgRRjPHm9jZx/TF2bDROlJYbBQ
+         H4leyjzNDtwh7Z/DkRaWWC4CF87RHSc63UrT7fN6WuuC3BerXytnlm3vllQ3u/06NJ
+         RYdDGBOheyQRMzvDEHLH2MBBP02cX8fhB6MHs+H72zh2tLGSWX6m4cR83UnY/xr9nN
+         WAAQJVscPw8C0rw+ObE4M/CYYKqE6qF+d2LI9kpecPRjSW99rg0kfEKDGzP8WCZHuH
+         TIwOupCI9gMxg==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -40,20 +37,15 @@ Cc:     rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
         Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Finn Behrens <me@kloenk.de>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
         Wedson Almeida Filho <wedsonaf@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
         Sven Van Asbroeck <thesven73@gmail.com>,
         Gary Guo <gary@garyguo.net>,
         Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Douglas Su <d0u9.su@outlook.com>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Daniel Xu <dxu@dxuuu.xyz>
-Subject: [PATCH 15/19] Kbuild: add Rust support
-Date:   Mon,  6 Dec 2021 15:03:09 +0100
-Message-Id: <20211206140313.5653-16-ojeda@kernel.org>
+        Ayaan Zaidi <zaidi.ayaan@gmail.com>,
+        Milan Landaverde <milan@mdaverde.com>
+Subject: [PATCH 16/19] samples: add Rust examples
+Date:   Mon,  6 Dec 2021 15:03:10 +0100
+Message-Id: <20211206140313.5653-17-ojeda@kernel.org>
 In-Reply-To: <20211206140313.5653-1-ojeda@kernel.org>
 References: <20211206140313.5653-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -62,1659 +54,1214 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Having all the new files in place, we now enable Rust support
-in the build system, including `Kconfig` entries related to Rust,
-the Rust configuration printer, the target definition files,
-the version detection script and a few other bits.
+A set of Rust modules that showcase how Rust modules look like
+and how to use the abstracted kernel features.
 
-In the future, we will likely want to generate the target files
-on the fly via a script.
+These samples also double as tests in the CI.
+
+The semaphore sample comes with a C version for comparison.
 
 Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
 Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
 Co-developed-by: Finn Behrens <me@kloenk.de>
 Signed-off-by: Finn Behrens <me@kloenk.de>
-Co-developed-by: Adam Bratschi-Kaye <ark.email@gmail.com>
-Signed-off-by: Adam Bratschi-Kaye <ark.email@gmail.com>
 Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
 Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-Co-developed-by: Michael Ellerman <mpe@ellerman.id.au>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Co-developed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Co-developed-by: Sven Van Asbroeck <thesven73@gmail.com>
 Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
 Co-developed-by: Gary Guo <gary@garyguo.net>
 Signed-off-by: Gary Guo <gary@garyguo.net>
 Co-developed-by: Boris-Chengbiao Zhou <bobo1239@web.de>
 Signed-off-by: Boris-Chengbiao Zhou <bobo1239@web.de>
-Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-Co-developed-by: Douglas Su <d0u9.su@outlook.com>
-Signed-off-by: Douglas Su <d0u9.su@outlook.com>
-Co-developed-by: Dariusz Sosnowski <dsosnowski@dsosnowski.pl>
-Signed-off-by: Dariusz Sosnowski <dsosnowski@dsosnowski.pl>
-Co-developed-by: Antonio Terceiro <antonio.terceiro@linaro.org>
-Signed-off-by: Antonio Terceiro <antonio.terceiro@linaro.org>
-Co-developed-by: Daniel Xu <dxu@dxuuu.xyz>
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+Co-developed-by: Ayaan Zaidi <zaidi.ayaan@gmail.com>
+Signed-off-by: Ayaan Zaidi <zaidi.ayaan@gmail.com>
+Co-developed-by: Milan Landaverde <milan@mdaverde.com>
+Signed-off-by: Milan Landaverde <milan@mdaverde.com>
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- .gitignore                    |   5 +
- .rustfmt.toml                 |  12 ++
- Makefile                      | 146 +++++++++++++-
- arch/arm/rust/target.json     |  27 +++
- arch/arm64/rust/target.json   |  34 ++++
- arch/powerpc/rust/target.json |  29 +++
- arch/riscv/Makefile           |   1 +
- arch/riscv/rust/rv32ima.json  |  36 ++++
- arch/riscv/rust/rv32imac.json |  36 ++++
- arch/riscv/rust/rv64ima.json  |  36 ++++
- arch/riscv/rust/rv64imac.json |  36 ++++
- arch/x86/rust/target.json     |  36 ++++
- init/Kconfig                  |  31 ++-
- lib/Kconfig.debug             | 144 ++++++++++++++
- rust/.gitignore               |   7 +
- rust/Makefile                 | 353 ++++++++++++++++++++++++++++++++++
- rust/bindgen_parameters       |  13 ++
- scripts/Makefile.build        |  22 +++
- scripts/Makefile.debug        |  10 +
- scripts/Makefile.lib          |  12 ++
- scripts/Makefile.modfinal     |   8 +-
- scripts/is_rust_module.sh     |  19 ++
- scripts/kconfig/confdata.c    |  75 ++++++++
- scripts/rust-version.sh       |  31 +++
- 24 files changed, 1147 insertions(+), 12 deletions(-)
- create mode 100644 .rustfmt.toml
- create mode 100644 arch/arm/rust/target.json
- create mode 100644 arch/arm64/rust/target.json
- create mode 100644 arch/powerpc/rust/target.json
- create mode 100644 arch/riscv/rust/rv32ima.json
- create mode 100644 arch/riscv/rust/rv32imac.json
- create mode 100644 arch/riscv/rust/rv64ima.json
- create mode 100644 arch/riscv/rust/rv64imac.json
- create mode 100644 arch/x86/rust/target.json
- create mode 100644 rust/.gitignore
- create mode 100644 rust/Makefile
- create mode 100644 rust/bindgen_parameters
- create mode 100755 scripts/is_rust_module.sh
- create mode 100755 scripts/rust-version.sh
+ samples/Kconfig                        |   2 +
+ samples/Makefile                       |   1 +
+ samples/rust/Kconfig                   | 113 +++++++++++++
+ samples/rust/Makefile                  |  12 ++
+ samples/rust/rust_chrdev.rs            |  50 ++++++
+ samples/rust/rust_minimal.rs           |  38 +++++
+ samples/rust/rust_miscdev.rs           | 149 +++++++++++++++++
+ samples/rust/rust_module_parameters.rs |  72 +++++++++
+ samples/rust/rust_print.rs             |  57 +++++++
+ samples/rust/rust_random.rs            |  61 +++++++
+ samples/rust/rust_semaphore.rs         | 174 ++++++++++++++++++++
+ samples/rust/rust_semaphore_c.c        | 212 +++++++++++++++++++++++++
+ samples/rust/rust_stack_probing.rs     |  40 +++++
+ samples/rust/rust_sync.rs              |  81 ++++++++++
+ 14 files changed, 1062 insertions(+)
+ create mode 100644 samples/rust/Kconfig
+ create mode 100644 samples/rust/Makefile
+ create mode 100644 samples/rust/rust_chrdev.rs
+ create mode 100644 samples/rust/rust_minimal.rs
+ create mode 100644 samples/rust/rust_miscdev.rs
+ create mode 100644 samples/rust/rust_module_parameters.rs
+ create mode 100644 samples/rust/rust_print.rs
+ create mode 100644 samples/rust/rust_random.rs
+ create mode 100644 samples/rust/rust_semaphore.rs
+ create mode 100644 samples/rust/rust_semaphore_c.c
+ create mode 100644 samples/rust/rust_stack_probing.rs
+ create mode 100644 samples/rust/rust_sync.rs
 
-diff --git a/.gitignore b/.gitignore
-index 7afd412dadd2..48c68948f476 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -37,6 +37,7 @@
- *.o
- *.o.*
- *.patch
-+*.rmeta
- *.s
- *.so
- *.so.dbg
-@@ -96,6 +97,7 @@ modules.order
- !.gitattributes
- !.gitignore
- !.mailmap
-+!.rustfmt.toml
+diff --git a/samples/Kconfig b/samples/Kconfig
+index 43d2e9aa557f..a3a5166837b1 100644
+--- a/samples/Kconfig
++++ b/samples/Kconfig
+@@ -241,6 +241,8 @@ config SAMPLE_WATCH_QUEUE
+ 	  Build example userspace program to use the new mount_notify(),
+ 	  sb_notify() syscalls and the KEYCTL_WATCH_KEY keyctl() function.
  
- #
- # Generated include files
-@@ -161,3 +163,6 @@ x509.genkey
- 
- # Documentation toolchain
- sphinx_*/
++source "samples/rust/Kconfig"
 +
-+# Rust analyzer configuration
-+/rust-project.json
-diff --git a/.rustfmt.toml b/.rustfmt.toml
+ endif # SAMPLES
+ 
+ config HAVE_SAMPLE_FTRACE_DIRECT
+diff --git a/samples/Makefile b/samples/Makefile
+index 4bcd6b93bffa..d66f49a9f080 100644
+--- a/samples/Makefile
++++ b/samples/Makefile
+@@ -32,3 +32,4 @@ obj-$(CONFIG_SAMPLE_INTEL_MEI)		+= mei/
+ subdir-$(CONFIG_SAMPLE_WATCHDOG)	+= watchdog
+ subdir-$(CONFIG_SAMPLE_WATCH_QUEUE)	+= watch_queue
+ obj-$(CONFIG_DEBUG_KMEMLEAK_TEST)	+= kmemleak/
++obj-$(CONFIG_SAMPLES_RUST)		+= rust/
+diff --git a/samples/rust/Kconfig b/samples/rust/Kconfig
 new file mode 100644
-index 000000000000..3de5cc497465
+index 000000000000..183a3c4dc80c
 --- /dev/null
-+++ b/.rustfmt.toml
++++ b/samples/rust/Kconfig
+@@ -0,0 +1,113 @@
++# SPDX-License-Identifier: GPL-2.0
++
++menuconfig SAMPLES_RUST
++	bool "Rust samples"
++	depends on RUST
++	help
++	  You can build sample Rust kernel code here.
++
++	  If unsure, say N.
++
++if SAMPLES_RUST
++
++config SAMPLE_RUST_MINIMAL
++	tristate "Minimal"
++	help
++	  This option builds the Rust minimal module sample.
++
++	  To compile this as a module, choose M here:
++	  the module will be called rust_minimal.
++
++	  If unsure, say N.
++
++config SAMPLE_RUST_PRINT
++	tristate "Printing macros"
++	help
++	  This option builds the Rust printing macros sample.
++
++	  To compile this as a module, choose M here:
++	  the module will be called rust_print.
++
++	  If unsure, say N.
++
++config SAMPLE_RUST_MODULE_PARAMETERS
++	tristate "Module parameters"
++	help
++	  This option builds the Rust module parameters sample.
++
++	  To compile this as a module, choose M here:
++	  the module will be called rust_module_parameters.
++
++	  If unsure, say N.
++
++config SAMPLE_RUST_SYNC
++	tristate "Synchronisation primitives"
++	help
++	  This option builds the Rust synchronisation primitives sample.
++
++	  To compile this as a module, choose M here:
++	  the module will be called rust_sync.
++
++	  If unsure, say N.
++
++config SAMPLE_RUST_CHRDEV
++	tristate "Character device"
++	help
++	  This option builds the Rust character device sample.
++
++	  To compile this as a module, choose M here:
++	  the module will be called rust_chrdev.
++
++	  If unsure, say N.
++
++config SAMPLE_RUST_MISCDEV
++	tristate "Miscellaneous device"
++	help
++	  This option builds the Rust miscellaneous device sample.
++
++	  To compile this as a module, choose M here:
++	  the module will be called rust_miscdev.
++
++	  If unsure, say N.
++
++config SAMPLE_RUST_STACK_PROBING
++	tristate "Stack probing"
++	help
++	  This option builds the Rust stack probing sample.
++
++	  To compile this as a module, choose M here:
++	  the module will be called rust_stack_probing.
++
++	  If unsure, say N.
++
++config SAMPLE_RUST_SEMAPHORE
++	tristate "Semaphore"
++	help
++	  This option builds the Rust semaphore sample.
++
++	  To compile this as a module, choose M here:
++	  the module will be called rust_semaphore.
++
++	  If unsure, say N.
++
++config SAMPLE_RUST_SEMAPHORE_C
++	tristate "Semaphore (in C, for comparison)"
++	help
++	  This option builds the Rust semaphore sample (in C, for comparison).
++
++	  To compile this as a module, choose M here:
++	  the module will be called rust_semaphore_c.
++
++	  If unsure, say N.
++
++config SAMPLE_RUST_RANDOM
++	tristate "Random"
++	help
++	  This option builds the Rust random sample.
++
++	  To compile this as a module, choose M here:
++	  the module will be called rust_random.
++
++	  If unsure, say N.
++
++endif # SAMPLES_RUST
+diff --git a/samples/rust/Makefile b/samples/rust/Makefile
+new file mode 100644
+index 000000000000..48bc871ea1f8
+--- /dev/null
++++ b/samples/rust/Makefile
 @@ -0,0 +1,12 @@
-+edition = "2021"
-+newline_style = "Unix"
-+
-+# Unstable options that help catching some mistakes in formatting and that we may want to enable
-+# when they become stable.
-+#
-+# They are kept here since they are useful to run from time to time.
-+#format_code_in_doc_comments = true
-+#reorder_impl_items = true
-+#comment_width = 100
-+#wrap_comments = true
-+#normalize_comments = true
-diff --git a/Makefile b/Makefile
-index 0a6ecc8bb2d2..0f20ca9bd723 100644
---- a/Makefile
-+++ b/Makefile
-@@ -120,6 +120,13 @@ endif
- 
- export KBUILD_CHECKSRC
- 
-+# Enable "clippy" (a linter) as part of the Rust compilation.
-+#
-+# Use 'make CLIPPY=1' to enable it.
-+ifeq ("$(origin CLIPPY)", "command line")
-+  KBUILD_CLIPPY := $(CLIPPY)
-+endif
-+
- # Use make M=dir or set the environment variable KBUILD_EXTMOD to specify the
- # directory of external module to build. Setting M= takes precedence.
- ifeq ("$(origin M)", "command line")
-@@ -267,7 +274,7 @@ no-dot-config-targets := $(clean-targets) \
- 			 cscope gtags TAGS tags help% %docs check% coccicheck \
- 			 $(version_h) headers headers_% archheaders archscripts \
- 			 %asm-generic kernelversion %src-pkg dt_binding_check \
--			 outputmakefile
-+			 outputmakefile rustfmt rustfmtcheck
- # Installation targets should not require compiler. Unfortunately, vdso_install
- # is an exception where build artifacts may be updated. This must be fixed.
- no-compiler-targets := $(no-dot-config-targets) install dtbs_install \
-@@ -461,6 +468,12 @@ OBJDUMP		= $(CROSS_COMPILE)objdump
- READELF		= $(CROSS_COMPILE)readelf
- STRIP		= $(CROSS_COMPILE)strip
- endif
-+RUSTC		= rustc
-+RUSTDOC		= rustdoc
-+RUSTFMT		= rustfmt
-+CLIPPY_DRIVER	= clippy-driver
-+BINDGEN		= bindgen
-+CARGO		= cargo
- PAHOLE		= pahole
- RESOLVE_BTFIDS	= $(objtree)/tools/bpf/resolve_btfids/resolve_btfids
- LEX		= flex
-@@ -486,9 +499,11 @@ CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
- 		  -Wbitwise -Wno-return-void -Wno-unknown-attribute $(CF)
- NOSTDINC_FLAGS :=
- CFLAGS_MODULE   =
-+RUSTFLAGS_MODULE =
- AFLAGS_MODULE   =
- LDFLAGS_MODULE  =
- CFLAGS_KERNEL	=
-+RUSTFLAGS_KERNEL =
- AFLAGS_KERNEL	=
- LDFLAGS_vmlinux =
- 
-@@ -517,15 +532,46 @@ KBUILD_CFLAGS   := -Wall -Wundef -Werror=strict-prototypes -Wno-trigraphs \
- 		   -Werror=return-type -Wno-format-security \
- 		   -std=gnu89
- KBUILD_CPPFLAGS := -D__KERNEL__
-+KBUILD_RUST_TARGET := $(srctree)/arch/$(SRCARCH)/rust/target.json
-+KBUILD_RUSTFLAGS := --emit=dep-info,obj,metadata --edition=2021 \
-+		     -Cpanic=abort -Cembed-bitcode=n -Clto=n -Crpath=n \
-+		     -Cforce-unwind-tables=n -Ccodegen-units=1 \
-+		     -Zbinary_dep_depinfo=y -Zsymbol-mangling-version=v0 \
-+		     -Dunsafe_op_in_unsafe_fn -Drust_2018_idioms \
-+		     -Dunreachable_pub -Dnon_ascii_idents \
-+		     -Wmissing_docs \
-+		     -Drustdoc::missing_crate_level_docs \
-+		     -Dclippy::correctness -Dclippy::style -Dclippy::suspicious \
-+		     -Dclippy::complexity -Dclippy::perf -Dclippy::float_arithmetic \
-+		     -Dclippy::let_unit_value -Dclippy::mut_mut \
-+		     -Dclippy::needless_bitwise_bool -Dclippy::needless_continue \
-+		     -Wclippy::dbg_macro
- KBUILD_AFLAGS_KERNEL :=
- KBUILD_CFLAGS_KERNEL :=
-+KBUILD_RUSTFLAGS_KERNEL :=
- KBUILD_AFLAGS_MODULE  := -DMODULE
- KBUILD_CFLAGS_MODULE  := -DMODULE
-+KBUILD_RUSTFLAGS_MODULE := --cfg MODULE
- KBUILD_LDFLAGS_MODULE :=
- KBUILD_LDFLAGS :=
- CLANG_FLAGS :=
- 
-+ifeq ($(KBUILD_CLIPPY),1)
-+	RUSTC_OR_CLIPPY_QUIET := CLIPPY
-+	RUSTC_OR_CLIPPY = $(CLIPPY_DRIVER)
-+else
-+	RUSTC_OR_CLIPPY_QUIET := RUSTC
-+	RUSTC_OR_CLIPPY = $(RUSTC)
-+endif
-+
-+ifdef RUST_LIB_SRC
-+	export RUST_LIB_SRC
-+endif
-+
-+export RUSTC_BOOTSTRAP := 1
-+
- export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMPILE LD CC
-+export RUSTC RUSTDOC RUSTFMT RUSTC_OR_CLIPPY_QUIET RUSTC_OR_CLIPPY BINDGEN CARGO
- export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX YACC AWK INSTALLKERNEL
- export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
- export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
-@@ -533,9 +579,10 @@ export KBUILD_HOSTCXXFLAGS KBUILD_HOSTLDFLAGS KBUILD_HOSTLDLIBS LDFLAGS_MODULE
- 
- export KBUILD_CPPFLAGS NOSTDINC_FLAGS LINUXINCLUDE OBJCOPYFLAGS KBUILD_LDFLAGS
- export KBUILD_CFLAGS CFLAGS_KERNEL CFLAGS_MODULE
-+export KBUILD_RUST_TARGET KBUILD_RUSTFLAGS RUSTFLAGS_KERNEL RUSTFLAGS_MODULE
- export KBUILD_AFLAGS AFLAGS_KERNEL AFLAGS_MODULE
--export KBUILD_AFLAGS_MODULE KBUILD_CFLAGS_MODULE KBUILD_LDFLAGS_MODULE
--export KBUILD_AFLAGS_KERNEL KBUILD_CFLAGS_KERNEL
-+export KBUILD_AFLAGS_MODULE KBUILD_CFLAGS_MODULE KBUILD_RUSTFLAGS_MODULE KBUILD_LDFLAGS_MODULE
-+export KBUILD_AFLAGS_KERNEL KBUILD_CFLAGS_KERNEL KBUILD_RUSTFLAGS_KERNEL
- export PAHOLE_FLAGS
- 
- # Files to ignore in find ... statements
-@@ -727,7 +774,7 @@ $(KCONFIG_CONFIG):
- #
- # Do not use $(call cmd,...) here. That would suppress prompts from syncconfig,
- # so you cannot notice that Kconfig is waiting for the user input.
--%/config/auto.conf %/config/auto.conf.cmd %/generated/autoconf.h: $(KCONFIG_CONFIG)
-+%/config/auto.conf %/config/auto.conf.cmd %/generated/autoconf.h %/generated/rustc_cfg: $(KCONFIG_CONFIG)
- 	$(Q)$(kecho) "  SYNC    $@"
- 	$(Q)$(MAKE) -f $(srctree)/Makefile syncconfig
- else # !may-sync-config
-@@ -756,11 +803,27 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, address-of-packed-member)
- 
- ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
- KBUILD_CFLAGS += -O2
-+KBUILD_RUSTFLAGS_OPT_LEVEL_MAP := 2
- else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3
- KBUILD_CFLAGS += -O3
-+KBUILD_RUSTFLAGS_OPT_LEVEL_MAP := 3
- else ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
- KBUILD_CFLAGS += -Os
--endif
-+KBUILD_RUSTFLAGS_OPT_LEVEL_MAP := z
-+endif
-+
-+# Always set `debug-assertions` and `overflow-checks` because their default
-+# depends on `opt-level` and `debug-assertions`, respectively.
-+KBUILD_RUSTFLAGS += -Cdebug-assertions=$(if $(CONFIG_RUST_DEBUG_ASSERTIONS),y,n)
-+KBUILD_RUSTFLAGS += -Coverflow-checks=$(if $(CONFIG_RUST_OVERFLOW_CHECKS),y,n)
-+KBUILD_RUSTFLAGS += -Copt-level=$\
-+	$(if $(CONFIG_RUST_OPT_LEVEL_SIMILAR_AS_CHOSEN_FOR_C),$(KBUILD_RUSTFLAGS_OPT_LEVEL_MAP))$\
-+	$(if $(CONFIG_RUST_OPT_LEVEL_0),0)$\
-+	$(if $(CONFIG_RUST_OPT_LEVEL_1),1)$\
-+	$(if $(CONFIG_RUST_OPT_LEVEL_2),2)$\
-+	$(if $(CONFIG_RUST_OPT_LEVEL_3),3)$\
-+	$(if $(CONFIG_RUST_OPT_LEVEL_S),s)$\
-+	$(if $(CONFIG_RUST_OPT_LEVEL_Z),z)
- 
- # Tell gcc to never replace conditional load with a non-conditional one
- ifdef CONFIG_CC_IS_GCC
-@@ -791,6 +854,9 @@ KBUILD_CFLAGS += $(stackp-flags-y)
- KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
- KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
- 
-+KBUILD_RUSTFLAGS-$(CONFIG_WERROR) += -Dwarnings
-+KBUILD_RUSTFLAGS += $(KBUILD_RUSTFLAGS-y)
-+
- ifdef CONFIG_CC_IS_CLANG
- KBUILD_CPPFLAGS += -Qunused-arguments
- # The kernel builds with '-std=gnu89' so use of GNU extensions is acceptable.
-@@ -812,6 +878,7 @@ KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
- 
- ifdef CONFIG_FRAME_POINTER
- KBUILD_CFLAGS	+= -fno-omit-frame-pointer -fno-optimize-sibling-calls
-+KBUILD_RUSTFLAGS += -Cforce-frame-pointers=y
- else
- # Some targets (ARM with Thumb2, for example), can't be built with frame
- # pointers.  For those, we don't have FUNCTION_TRACER automatically
-@@ -1022,10 +1089,11 @@ include $(addprefix $(srctree)/, $(include-y))
- # Do not add $(call cc-option,...) below this line. When you build the kernel
- # from the clean source tree, the GCC plugins do not exist at this point.
- 
--# Add user supplied CPPFLAGS, AFLAGS and CFLAGS as the last assignments
-+# Add user supplied CPPFLAGS, AFLAGS, CFLAGS and RUSTFLAGS as the last assignments
- KBUILD_CPPFLAGS += $(KCPPFLAGS)
- KBUILD_AFLAGS   += $(KAFLAGS)
- KBUILD_CFLAGS   += $(KCFLAGS)
-+KBUILD_RUSTFLAGS += $(KRUSTFLAGS)
- 
- KBUILD_LDFLAGS_MODULE += --build-id=sha1
- LDFLAGS_vmlinux += --build-id=sha1
-@@ -1095,6 +1163,11 @@ ifeq ($(KBUILD_EXTMOD),)
- core-y			+= kernel/ certs/ mm/ fs/ ipc/ security/ crypto/
- core-$(CONFIG_BLOCK)	+= block/
- 
-+# Keep this one as an `ifdef` block since its `Makefile` runs `rustc`.
-+ifdef CONFIG_RUST
-+core-y			+= rust/
-+endif
-+
- vmlinux-dirs	:= $(patsubst %/,%,$(filter %/, \
- 		     $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
- 		     $(libs-y) $(libs-m)))
-@@ -1195,6 +1268,9 @@ archprepare: outputmakefile archheaders archscripts scripts include/config/kerne
- prepare0: archprepare
- 	$(Q)$(MAKE) $(build)=scripts/mod
- 	$(Q)$(MAKE) $(build)=.
-+ifdef CONFIG_RUST
-+	$(Q)$(MAKE) $(build)=rust
-+endif
- 
- # All the preparing..
- prepare: prepare0
-@@ -1495,7 +1571,7 @@ endif # CONFIG_MODULES
- # Directories & files removed with 'make clean'
- CLEAN_FILES += include/ksym vmlinux.symvers modules-only.symvers \
- 	       modules.builtin modules.builtin.modinfo modules.nsdeps \
--	       compile_commands.json .thinlto-cache
-+	       compile_commands.json .thinlto-cache rust/test rust/doc
- 
- # Directories & files removed with 'make mrproper'
- MRPROPER_FILES += include/config include/generated          \
-@@ -1506,7 +1582,8 @@ MRPROPER_FILES += include/config include/generated          \
- 		  certs/signing_key.pem certs/signing_key.x509 \
- 		  certs/x509.genkey \
- 		  vmlinux-gdb.py \
--		  *.spec
-+		  *.spec \
-+		  rust/*_generated.h rust/*_generated.rs rust/libmacros.so
- 
- # clean - Delete most, but leave enough to build external modules
- #
-@@ -1618,6 +1695,17 @@ help:
- 	@echo  '  kselftest-merge   - Merge all the config dependencies of'
- 	@echo  '		      kselftest to existing .config.'
- 	@echo  ''
-+	@echo  'Rust targets:'
-+	@echo  '  rustfmt	  - Reformat all the Rust code in the kernel'
-+	@echo  '  rustfmtcheck	  - Checks if all the Rust code in the kernel'
-+	@echo  '		    is formatted, printing a diff otherwise.'
-+	@echo  '  rustdoc	  - Generate Rust documentation'
-+	@echo  '		    (requires kernel .config)'
-+	@echo  '  rusttest        - Runs the Rust tests'
-+	@echo  '                    (requires kernel .config; downloads external repos)'
-+	@echo  '  rust-analyzer	  - Generate rust-project.json rust-analyzer support file'
-+	@echo  '		    (requires kernel .config)'
-+	@echo  ''
- 	@$(if $(dtstree), \
- 		echo 'Devicetree:'; \
- 		echo '* dtbs             - Build device tree blobs for enabled boards'; \
-@@ -1689,6 +1777,47 @@ PHONY += $(DOC_TARGETS)
- $(DOC_TARGETS):
- 	$(Q)$(MAKE) $(build)=Documentation $@
- 
-+
-+# Rust targets
-+# ---------------------------------------------------------------------------
-+
-+# Documentation target
-+#
-+# Using the singular to avoid running afoul of `no-dot-config-targets`.
-+PHONY += rustdoc
-+rustdoc: prepare0
-+	$(Q)$(MAKE) $(build)=rust $@
-+
-+# Testing target
-+PHONY += rusttest
-+rusttest: prepare0
-+	$(Q)$(MAKE) $(build)=rust $@
-+
-+# Formatting targets
-+PHONY += rustfmt rustfmtcheck
-+
-+# We skip `rust/alloc` since we want to minimize the diff w.r.t. upstream.
-+#
-+# We match using absolute paths since `find` does not resolve them
-+# when matching, which is a problem when e.g. `srctree` is `..`.
-+# We `grep` afterwards in order to remove the directory entry itself.
-+rustfmt:
-+	$(Q)find $(abs_srctree) -type f -name '*.rs' \
-+		-o -path $(abs_srctree)/rust/alloc -prune \
-+		-o -path $(abs_objtree)/rust/test -prune \
-+		| grep -Fv $(abs_srctree)/rust/alloc \
-+		| grep -Fv $(abs_objtree)/rust/test \
-+		| grep -Fv generated \
-+		| xargs $(RUSTFMT) $(rustfmt_flags)
-+
-+rustfmtcheck: rustfmt_flags = --check
-+rustfmtcheck: rustfmt
-+
-+# IDE support targets
-+PHONY += rust-analyzer
-+rust-analyzer: prepare0
-+	$(Q)$(MAKE) $(build)=rust $@
-+
- # Misc
- # ---------------------------------------------------------------------------
- 
-@@ -1856,6 +1985,7 @@ clean: $(clean-dirs)
- 	$(call cmd,rmfiles)
- 	@find $(if $(KBUILD_EXTMOD), $(KBUILD_EXTMOD), .) $(RCS_FIND_IGNORE) \
- 		\( -name '*.[aios]' -o -name '*.ko' -o -name '.*.cmd' \
-+		-o -name '*.rmeta' \
- 		-o -name '*.ko.*' \
- 		-o -name '*.dtb' -o -name '*.dtbo' -o -name '*.dtb.S' -o -name '*.dt.yaml' \
- 		-o -name '*.dwo' -o -name '*.lst' \
-diff --git a/arch/arm/rust/target.json b/arch/arm/rust/target.json
-new file mode 100644
-index 000000000000..3f845b8221dc
---- /dev/null
-+++ b/arch/arm/rust/target.json
-@@ -0,0 +1,27 @@
-+{
-+  "arch": "arm",
-+  "crt-static-respected": true,
-+  "data-layout": "e-m:e-p:32:32-Fi8-i64:64-v128:64:128-a:0:32-n32-S64",
-+  "dynamic-linking": true,
-+  "env": "gnu",
-+  "executables": true,
-+  "features": "+strict-align,+v6",
-+  "function-sections": false,
-+  "has-elf-tls": true,
-+  "has-rpath": true,
-+  "linker-is-gnu": true,
-+  "llvm-target": "arm-unknown-linux-gnueabi",
-+  "max-atomic-width": 64,
-+  "os": "linux",
-+  "position-independent-executables": true,
-+  "pre-link-args": {
-+    "gcc": [
-+      "-Wl,--as-needed",
-+      "-Wl,-z,noexecstack"
-+    ]
-+  },
-+  "relocation-model": "static",
-+  "target-family": "unix",
-+  "target-mcount": "\u0001__gnu_mcount_nc",
-+  "target-pointer-width": "32"
-+}
-diff --git a/arch/arm64/rust/target.json b/arch/arm64/rust/target.json
-new file mode 100644
-index 000000000000..09a264df26c7
---- /dev/null
-+++ b/arch/arm64/rust/target.json
-@@ -0,0 +1,34 @@
-+{
-+  "arch": "aarch64",
-+  "data-layout": "e-m:e-i8:8:32-i16:16:32-i64:64-i128:128-n32:64-S128",
-+  "disable-redzone": true,
-+  "emit-debug-gdb-scripts": false,
-+  "env": "gnu",
-+  "features": "+strict-align,+neon,+fp-armv8",
-+  "frame-pointer": "always",
-+  "function-sections": false,
-+  "linker-flavor": "gcc",
-+  "linker-is-gnu": true,
-+  "llvm-target": "aarch64-unknown-none",
-+  "max-atomic-width": 128,
-+  "needs-plt": true,
-+  "os": "none",
-+  "panic-strategy": "abort",
-+  "position-independent-executables": true,
-+  "pre-link-args": {
-+    "gcc": [
-+      "-Wl,--as-needed",
-+      "-Wl,-z,noexecstack",
-+      "-m64"
-+    ]
-+  },
-+  "relocation-model": "static",
-+  "relro-level": "full",
-+  "stack-probes": {
-+    "kind": "none"
-+  },
-+  "target-c-int-width": "32",
-+  "target-endian": "little",
-+  "target-pointer-width": "64",
-+  "vendor": ""
-+}
-diff --git a/arch/powerpc/rust/target.json b/arch/powerpc/rust/target.json
-new file mode 100644
-index 000000000000..2420c8e6a520
---- /dev/null
-+++ b/arch/powerpc/rust/target.json
-@@ -0,0 +1,29 @@
-+{
-+  "arch": "powerpc64",
-+  "code-model": "large",
-+  "cpu": "ppc64le",
-+  "data-layout": "e-m:e-i64:64-n32:64",
-+  "env": "gnu",
-+  "features": "-altivec,-vsx,-hard-float",
-+  "function-sections": false,
-+  "linker-flavor": "gcc",
-+  "linker-is-gnu": true,
-+  "llvm-target": "powerpc64le-elf",
-+  "max-atomic-width": 64,
-+  "os": "none",
-+  "panic-strategy": "abort",
-+  "position-independent-executables": true,
-+  "pre-link-args": {
-+    "gcc": [
-+      "-Wl,--as-needed",
-+      "-Wl,-z,noexecstack",
-+      "-m64"
-+    ]
-+  },
-+  "relocation-model": "static",
-+  "relro-level": "full",
-+  "target-family": "unix",
-+  "target-mcount": "_mcount",
-+  "target-endian": "little",
-+  "target-pointer-width": "64"
-+}
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 8a107ed18b0d..0487db1e54c6 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -52,6 +52,7 @@ riscv-march-$(CONFIG_FPU)		:= $(riscv-march-y)fd
- riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
- KBUILD_CFLAGS += -march=$(subst fd,,$(riscv-march-y))
- KBUILD_AFLAGS += -march=$(riscv-march-y)
-+KBUILD_RUST_TARGET := $(srctree)/arch/riscv/rust/$(subst fd,,$(riscv-march-y)).json
- 
- KBUILD_CFLAGS += -mno-save-restore
- KBUILD_CFLAGS += -DCONFIG_PAGE_OFFSET=$(CONFIG_PAGE_OFFSET)
-diff --git a/arch/riscv/rust/rv32ima.json b/arch/riscv/rust/rv32ima.json
-new file mode 100644
-index 000000000000..bcdda88c1604
---- /dev/null
-+++ b/arch/riscv/rust/rv32ima.json
-@@ -0,0 +1,36 @@
-+{
-+  "arch": "riscv32",
-+  "code-model": "medium",
-+  "cpu": "generic-rv32",
-+  "data-layout": "e-m:e-p:32:32-i64:64-n32-S128",
-+  "disable-redzone": true,
-+  "emit-debug-gdb-scripts": false,
-+  "env": "gnu",
-+  "features": "+m,+a",
-+  "frame-pointer": "always",
-+  "function-sections": false,
-+  "linker-flavor": "gcc",
-+  "linker-is-gnu": true,
-+  "llvm-target": "riscv32",
-+  "max-atomic-width": 32,
-+  "needs-plt": true,
-+  "os": "none",
-+  "panic-strategy": "abort",
-+  "position-independent-executables": true,
-+  "pre-link-args": {
-+    "gcc": [
-+      "-Wl,--as-needed",
-+      "-Wl,-z,noexecstack",
-+      "-m32"
-+    ]
-+  },
-+  "relocation-model": "static",
-+  "relro-level": "full",
-+  "stack-probes": {
-+    "kind": "none"
-+  },
-+  "target-c-int-width": "32",
-+  "target-endian": "little",
-+  "target-pointer-width": "32",
-+  "vendor": ""
-+}
-diff --git a/arch/riscv/rust/rv32imac.json b/arch/riscv/rust/rv32imac.json
-new file mode 100644
-index 000000000000..45873c10a5c3
---- /dev/null
-+++ b/arch/riscv/rust/rv32imac.json
-@@ -0,0 +1,36 @@
-+{
-+  "arch": "riscv32",
-+  "code-model": "medium",
-+  "cpu": "generic-rv32",
-+  "data-layout": "e-m:e-p:32:32-i64:64-n32-S128",
-+  "disable-redzone": true,
-+  "emit-debug-gdb-scripts": false,
-+  "env": "gnu",
-+  "features": "+m,+a,+c",
-+  "frame-pointer": "always",
-+  "function-sections": false,
-+  "linker-flavor": "gcc",
-+  "linker-is-gnu": true,
-+  "llvm-target": "riscv32",
-+  "max-atomic-width": 32,
-+  "needs-plt": true,
-+  "os": "none",
-+  "panic-strategy": "abort",
-+  "position-independent-executables": true,
-+  "pre-link-args": {
-+    "gcc": [
-+      "-Wl,--as-needed",
-+      "-Wl,-z,noexecstack",
-+      "-m32"
-+    ]
-+  },
-+  "relocation-model": "static",
-+  "relro-level": "full",
-+  "stack-probes": {
-+    "kind": "none"
-+  },
-+  "target-c-int-width": "32",
-+  "target-endian": "little",
-+  "target-pointer-width": "32",
-+  "vendor": ""
-+}
-diff --git a/arch/riscv/rust/rv64ima.json b/arch/riscv/rust/rv64ima.json
-new file mode 100644
-index 000000000000..853d758c5461
---- /dev/null
-+++ b/arch/riscv/rust/rv64ima.json
-@@ -0,0 +1,36 @@
-+{
-+  "arch": "riscv64",
-+  "code-model": "medium",
-+  "cpu": "generic-rv64",
-+  "data-layout": "e-m:e-p:64:64-i64:64-i128:128-n64-S128",
-+  "disable-redzone": true,
-+  "emit-debug-gdb-scripts": false,
-+  "env": "gnu",
-+  "features": "+m,+a",
-+  "frame-pointer": "always",
-+  "function-sections": false,
-+  "linker-flavor": "gcc",
-+  "linker-is-gnu": true,
-+  "llvm-target": "riscv64",
-+  "max-atomic-width": 64,
-+  "needs-plt": true,
-+  "os": "none",
-+  "panic-strategy": "abort",
-+  "position-independent-executables": true,
-+  "pre-link-args": {
-+    "gcc": [
-+      "-Wl,--as-needed",
-+      "-Wl,-z,noexecstack",
-+      "-m64"
-+    ]
-+  },
-+  "relocation-model": "static",
-+  "relro-level": "full",
-+  "stack-probes": {
-+    "kind": "none"
-+  },
-+  "target-c-int-width": "32",
-+  "target-endian": "little",
-+  "target-pointer-width": "64",
-+  "vendor": ""
-+}
-diff --git a/arch/riscv/rust/rv64imac.json b/arch/riscv/rust/rv64imac.json
-new file mode 100644
-index 000000000000..ce50ee8e8c93
---- /dev/null
-+++ b/arch/riscv/rust/rv64imac.json
-@@ -0,0 +1,36 @@
-+{
-+  "arch": "riscv64",
-+  "code-model": "medium",
-+  "cpu": "generic-rv64",
-+  "data-layout": "e-m:e-p:64:64-i64:64-i128:128-n64-S128",
-+  "disable-redzone": true,
-+  "emit-debug-gdb-scripts": false,
-+  "env": "gnu",
-+  "features": "+m,+a,+c",
-+  "frame-pointer": "always",
-+  "function-sections": false,
-+  "linker-flavor": "gcc",
-+  "linker-is-gnu": true,
-+  "llvm-target": "riscv64",
-+  "max-atomic-width": 64,
-+  "needs-plt": true,
-+  "os": "none",
-+  "panic-strategy": "abort",
-+  "position-independent-executables": true,
-+  "pre-link-args": {
-+    "gcc": [
-+      "-Wl,--as-needed",
-+      "-Wl,-z,noexecstack",
-+      "-m64"
-+    ]
-+  },
-+  "relocation-model": "static",
-+  "relro-level": "full",
-+  "stack-probes": {
-+    "kind": "none"
-+  },
-+  "target-c-int-width": "32",
-+  "target-endian": "little",
-+  "target-pointer-width": "64",
-+  "vendor": ""
-+}
-diff --git a/arch/x86/rust/target.json b/arch/x86/rust/target.json
-new file mode 100644
-index 000000000000..379cf39e8941
---- /dev/null
-+++ b/arch/x86/rust/target.json
-@@ -0,0 +1,36 @@
-+{
-+  "arch": "x86_64",
-+  "code-model": "kernel",
-+  "cpu": "x86-64",
-+  "data-layout": "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128",
-+  "disable-redzone": true,
-+  "emit-debug-gdb-scripts": false,
-+  "env": "gnu",
-+  "features": "-mmx,-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-3dnow,-3dnowa,-avx,-avx2,+soft-float",
-+  "frame-pointer": "always",
-+  "function-sections": false,
-+  "linker-flavor": "gcc",
-+  "linker-is-gnu": true,
-+  "llvm-target": "x86_64-elf",
-+  "max-atomic-width": 64,
-+  "needs-plt": true,
-+  "os": "none",
-+  "panic-strategy": "abort",
-+  "position-independent-executables": true,
-+  "pre-link-args": {
-+    "gcc": [
-+      "-Wl,--as-needed",
-+      "-Wl,-z,noexecstack",
-+      "-m64"
-+    ]
-+  },
-+  "relocation-model": "static",
-+  "relro-level": "full",
-+  "stack-probes": {
-+    "kind": "none"
-+  },
-+  "target-c-int-width": "32",
-+  "target-endian": "little",
-+  "target-pointer-width": "64",
-+  "vendor": "unknown"
-+}
-diff --git a/init/Kconfig b/init/Kconfig
-index 4b7bac10c72d..03d3c21e28a3 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -60,6 +60,15 @@ config LLD_VERSION
- 	default $(ld-version) if LD_IS_LLD
- 	default 0
- 
-+config HAS_RUST
-+	depends on ARM64 || CPU_32v6 || CPU_32v6K || (PPC64 && CPU_LITTLE_ENDIAN) || X86_64 || RISCV
-+	def_bool $(success,$(RUSTC) --version)
-+
-+config RUSTC_VERSION
-+	depends on HAS_RUST
-+	int
-+	default $(shell,$(srctree)/scripts/rust-version.sh $(RUSTC))
-+
- config CC_CAN_LINK
- 	bool
- 	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m64-flag)) if 64BIT
-@@ -142,7 +151,8 @@ config WERROR
- 	default COMPILE_TEST
- 	help
- 	  A kernel build should not cause any compiler warnings, and this
--	  enables the '-Werror' flag to enforce that rule by default.
-+	  enables the '-Werror' (for C) and '-Dwarnings' (for Rust) flags
-+	  to enforce that rule by default.
- 
- 	  However, if you have a new (or very old) compiler with odd and
- 	  unusual warnings, or you have some architecture with problems,
-@@ -2044,6 +2054,25 @@ config PROFILING
- 	  Say Y here to enable the extended profiling support mechanisms used
- 	  by profilers.
- 
-+config RUST
-+	bool "Rust support"
-+	depends on HAS_RUST
-+	depends on !COMPILE_TEST
-+	depends on !MODVERSIONS
-+	default n
-+	help
-+	  Enables Rust support in the kernel.
-+
-+	  This allows other Rust-related options, like drivers written in Rust,
-+	  to be selected.
-+
-+	  It is also required to be able to load external kernel modules
-+	  written in Rust.
-+
-+	  See Documentation/rust/ for more information.
-+
-+	  If unsure, say N.
-+
- #
- # Place an empty function call at each tracepoint site. Can be
- # dynamically changed for a probe function.
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 5c12bde10996..361379695f18 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2650,6 +2650,150 @@ config HYPERV_TESTING
- 
- endmenu # "Kernel Testing and Coverage"
- 
-+menu "Rust hacking"
-+
-+config RUST_DEBUG_ASSERTIONS
-+	bool "Debug assertions"
-+	default n
-+	depends on RUST
-+	help
-+	  Enables rustc's `-Cdebug-assertions` codegen option.
-+
-+	  This flag lets you turn `cfg(debug_assertions)` conditional
-+	  compilation on or off. This can be used to enable extra debugging
-+	  code in development but not in production. For example, it controls
-+	  the behavior of the standard library's `debug_assert!` macro.
-+
-+	  Note that this will apply to all Rust code, including `core`.
-+
-+	  If unsure, say N.
-+
-+config RUST_OVERFLOW_CHECKS
-+	bool "Overflow checks"
-+	default y
-+	depends on RUST
-+	help
-+	  Enables rustc's `-Coverflow-checks` codegen option.
-+
-+	  This flag allows you to control the behavior of runtime integer
-+	  overflow. When overflow-checks are enabled, a panic will occur
-+	  on overflow.
-+
-+	  Note that this will apply to all Rust code, including `core`.
-+
-+	  If unsure, say Y.
-+
-+choice
-+	prompt "Optimization level"
-+	default RUST_OPT_LEVEL_SIMILAR_AS_CHOSEN_FOR_C
-+	depends on RUST
-+	help
-+	  Controls rustc's `-Copt-level` codegen option.
-+
-+	  This flag controls the optimization level.
-+
-+	  If unsure, say "Similar as chosen for C".
-+
-+config RUST_OPT_LEVEL_SIMILAR_AS_CHOSEN_FOR_C
-+	bool "Similar as chosen for C"
-+	help
-+	  This choice will pick a similar optimization level as chosen in
-+	  the "Compiler optimization level" for C:
-+
-+	      -O2 is currently mapped to -Copt-level=2
-+	      -O3 is currently mapped to -Copt-level=3
-+	      -Os is currently mapped to -Copt-level=z
-+
-+	  The mapping may change over time to follow the intended semantics
-+	  of the choice for C as sensibly as possible.
-+
-+	  This is the default.
-+
-+config RUST_OPT_LEVEL_0
-+	bool "No optimizations (-Copt-level=0)"
-+	help
-+	  Not recommended for most purposes. It may come in handy for debugging
-+	  suspected optimizer bugs, unexpected undefined behavior, etc.
-+
-+	  Note that this level will *not* enable debug assertions nor overflow
-+	  checks on its own (like it happens when interacting with rustc
-+	  directly). Use the corresponding configuration options to control
-+	  that instead, orthogonally.
-+
-+	  Note this level may cause excessive stack usage, which can lead to stack
-+	  overflow and subsequent crashes.
-+
-+config RUST_OPT_LEVEL_1
-+	bool "Basic optimizations (-Copt-level=1)"
-+	help
-+	  Useful for debugging without getting too lost, but without
-+	  the overhead and boilerplate of no optimizations at all.
-+
-+	  Note this level may cause excessive stack usage, which can lead to stack
-+	  overflow and subsequent crashes.
-+
-+config RUST_OPT_LEVEL_2
-+	bool "Some optimizations (-Copt-level=2)"
-+	help
-+	  The sensible choice in most cases.
-+
-+config RUST_OPT_LEVEL_3
-+	bool "All optimizations (-Copt-level=3)"
-+	help
-+	  Yet more performance (hopefully).
-+
-+config RUST_OPT_LEVEL_S
-+	bool "Optimize for size (-Copt-level=s)"
-+	help
-+	  Smaller kernel, ideally without too much performance loss.
-+
-+config RUST_OPT_LEVEL_Z
-+	bool "Optimize for size, no loop vectorization (-Copt-level=z)"
-+	help
-+	  Like the previous level, but also turn off loop vectorization.
-+
-+endchoice
-+
-+choice
-+	prompt "Build-time assertions"
-+	default RUST_BUILD_ASSERT_ALLOW if RUST_OPT_LEVEL_0
-+	default RUST_BUILD_ASSERT_DENY if !RUST_OPT_LEVEL_0
-+	depends on RUST
-+	help
-+	  Controls how are `build_error!` and `build_assert!` handled during build.
-+
-+	  If calls to them exist in the binary, it may indicate a violated invariant
-+	  or that the optimizer failed to verify the invariant during compilation.
-+	  You can choose to abort compilation or ignore them during build and let the
-+	  check be carried to runtime.
-+
-+	  If optimizations are turned off, you cannot select "Deny".
-+
-+	  If unsure, say "Deny".
-+
-+config RUST_BUILD_ASSERT_ALLOW
-+	bool "Allow"
-+	help
-+	  Unoptimized calls to `build_error!` will be converted to `panic!`
-+	  and checked at runtime.
-+
-+config RUST_BUILD_ASSERT_WARN
-+	bool "Warn"
-+	help
-+	  Unoptimized calls to `build_error!` will be converted to `panic!`
-+	  and checked at runtime, but warnings will be generated when building.
-+
-+config RUST_BUILD_ASSERT_DENY
-+	bool "Deny"
-+	depends on !RUST_OPT_LEVEL_0
-+	help
-+	  Unoptimized calls to `build_error!` will abort compilation.
-+
-+endchoice
-+
-+
-+endmenu # "Rust"
-+
- source "Documentation/Kconfig"
- 
- endmenu # Kernel hacking
-diff --git a/rust/.gitignore b/rust/.gitignore
-new file mode 100644
-index 000000000000..168cb26a31b9
---- /dev/null
-+++ b/rust/.gitignore
-@@ -0,0 +1,7 @@
 +# SPDX-License-Identifier: GPL-2.0
 +
-+bindings_generated.rs
-+bindings_helpers_generated.rs
-+exports_*_generated.h
-+doc/
-+test/
-diff --git a/rust/Makefile b/rust/Makefile
++obj-$(CONFIG_SAMPLE_RUST_MINIMAL)		+= rust_minimal.o
++obj-$(CONFIG_SAMPLE_RUST_PRINT)			+= rust_print.o
++obj-$(CONFIG_SAMPLE_RUST_MODULE_PARAMETERS)	+= rust_module_parameters.o
++obj-$(CONFIG_SAMPLE_RUST_SYNC)			+= rust_sync.o
++obj-$(CONFIG_SAMPLE_RUST_CHRDEV)		+= rust_chrdev.o
++obj-$(CONFIG_SAMPLE_RUST_MISCDEV)		+= rust_miscdev.o
++obj-$(CONFIG_SAMPLE_RUST_STACK_PROBING)		+= rust_stack_probing.o
++obj-$(CONFIG_SAMPLE_RUST_SEMAPHORE)		+= rust_semaphore.o
++obj-$(CONFIG_SAMPLE_RUST_SEMAPHORE_C)		+= rust_semaphore_c.o
++obj-$(CONFIG_SAMPLE_RUST_RANDOM)		+= rust_random.o
+diff --git a/samples/rust/rust_chrdev.rs b/samples/rust/rust_chrdev.rs
 new file mode 100644
-index 000000000000..2d08314e7031
+index 000000000000..5a37c59019d7
 --- /dev/null
-+++ b/rust/Makefile
-@@ -0,0 +1,353 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-$(CONFIG_RUST) += core.o compiler_builtins.o helpers.o
-+extra-$(CONFIG_RUST) += exports_core_generated.h
-+
-+extra-$(CONFIG_RUST) += libmacros.so
-+
-+extra-$(CONFIG_RUST) += bindings_generated.rs bindings_helpers_generated.rs
-+obj-$(CONFIG_RUST) += alloc.o kernel.o
-+extra-$(CONFIG_RUST) += exports_alloc_generated.h exports_kernel_generated.h
-+
-+ifdef CONFIG_RUST_BUILD_ASSERT_DENY
-+extra-$(CONFIG_RUST) += build_error.o
-+else
-+obj-$(CONFIG_RUST) += build_error.o
-+endif
-+
-+obj-$(CONFIG_RUST) += exports.o
-+
-+ifeq ($(quiet),silent_)
-+cargo_quiet=-q
-+rust_test_quiet=-q
-+rustdoc_test_quiet=--test-args -q
-+else ifeq ($(quiet),quiet_)
-+rust_test_quiet=-q
-+rustdoc_test_quiet=--test-args -q
-+else
-+cargo_quiet=--verbose
-+endif
-+
-+core-cfgs = \
-+    --cfg no_fp_fmt_parse
-+
-+alloc-cfgs = \
-+    --cfg no_global_oom_handling \
-+    --cfg no_rc \
-+    --cfg no_sync
-+
-+quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
-+      cmd_rustdoc = \
-+	OBJTREE=$(abspath $(objtree)) \
-+	$(RUSTDOC) $(if $(rustdoc_host),,$(rust_cross_flags)) \
-+		$(filter-out -Cpanic=abort, $(filter-out --emit=%, $(rust_flags))) \
-+		$(rustc_target_flags) -L $(objtree)/rust \
-+		--output $(objtree)/rust/doc --crate-name $(subst rustdoc-,,$@) \
-+		@$(objtree)/include/generated/rustc_cfg $<
-+
-+rustdoc: rustdoc-core rustdoc-macros rustdoc-compiler_builtins rustdoc-alloc rustdoc-kernel
-+	$(Q)cp $(srctree)/Documentation/rust/assets/* $(objtree)/rust/doc
-+
-+rustdoc-macros: private rustdoc_host = yes
-+rustdoc-macros: private rustc_target_flags = --crate-type proc-macro \
-+    --extern proc_macro
-+rustdoc-macros: $(srctree)/rust/macros/lib.rs FORCE
-+	$(call if_changed,rustdoc)
-+
-+rustdoc-compiler_builtins: $(srctree)/rust/compiler_builtins.rs rustdoc-core FORCE
-+	$(call if_changed,rustdoc)
-+
-+# We need to allow `rustdoc::broken_intra_doc_links` because some
-+# `no_global_oom_handling` functions refer to non-`no_global_oom_handling`
-+# functions. Ideally `rustdoc` would have a way to distinguish broken links
-+# due to things that are "configured out" vs. entirely non-existing ones.
-+rustdoc-alloc: private rustc_target_flags = $(alloc-cfgs) \
-+    -Arustdoc::broken_intra_doc_links
-+rustdoc-alloc: $(srctree)/rust/alloc/lib.rs rustdoc-core \
-+    rustdoc-compiler_builtins FORCE
-+	$(call if_changed,rustdoc)
-+
-+rustdoc-kernel: private rustc_target_flags = --extern alloc \
-+    --extern build_error \
-+    --extern macros=$(objtree)/rust/libmacros.so
-+rustdoc-kernel: $(srctree)/rust/kernel/lib.rs rustdoc-core \
-+    rustdoc-macros rustdoc-compiler_builtins rustdoc-alloc \
-+    $(objtree)/rust/libmacros.so $(objtree)/rust/bindings_generated.rs \
-+    $(objtree)/rust/bindings_helpers_generated.rs FORCE
-+	$(call if_changed,rustdoc)
-+
-+quiet_cmd_rustc_test_library = RUSTC TL $<
-+      cmd_rustc_test_library = \
-+	OBJTREE=$(abspath $(objtree)) \
-+	$(RUSTC) $(filter-out --sysroot=%, $(filter-out -Cpanic=abort, $(filter-out --emit=%, $(rust_flags)))) \
-+		$(rustc_target_flags) --crate-type $(if $(rustc_test_library_proc),proc-macro,rlib) \
-+		--out-dir $(objtree)/rust/test/ --cfg testlib \
-+		--sysroot $(objtree)/rust/test/sysroot \
-+		-L $(objtree)/rust/test/ --crate-name $(subst rusttest-,,$(subst rusttestlib-,,$@)) $<
-+
-+rusttestlib-build_error: $(srctree)/rust/build_error.rs rusttest-prepare FORCE
-+	$(call if_changed,rustc_test_library)
-+
-+rusttestlib-macros: private rustc_target_flags = --extern proc_macro
-+rusttestlib-macros: private rustc_test_library_proc = yes
-+rusttestlib-macros: $(srctree)/rust/macros/lib.rs rusttest-prepare FORCE
-+	$(call if_changed,rustc_test_library)
-+
-+quiet_cmd_rustdoc_test = RUSTDOC T $<
-+      cmd_rustdoc_test = \
-+	OBJTREE=$(abspath $(objtree)) \
-+	$(RUSTDOC) --test $(filter-out --sysroot=%, $(filter-out -Cpanic=abort, $(filter-out --emit=%, $(rust_flags)))) \
-+		$(rustc_target_flags) $(rustdoc_test_target_flags) \
-+		--sysroot $(objtree)/rust/test/sysroot $(rustdoc_test_quiet) \
-+		-L $(objtree)/rust/test \
-+		--output $(objtree)/rust/doc --crate-name $(subst rusttest-,,$@) \
-+		@$(objtree)/include/generated/rustc_cfg $<
-+
-+# We cannot use `-Zpanic-abort-tests` because some tests are dynamic,
-+# so for the moment we skip `-Cpanic=abort`.
-+quiet_cmd_rustc_test = RUSTC T  $<
-+      cmd_rustc_test = \
-+	OBJTREE=$(abspath $(objtree)) \
-+	$(RUSTC) --test $(filter-out --sysroot=%, $(filter-out -Cpanic=abort, $(filter-out --emit=%, $(rust_flags)))) \
-+		$(rustc_target_flags) --out-dir $(objtree)/rust/test \
-+		--sysroot $(objtree)/rust/test/sysroot \
-+		-L $(objtree)/rust/test/ --crate-name $(subst rusttest-,,$@) $<; \
-+	$(objtree)/rust/test/$(subst rusttest-,,$@) $(rust_test_quiet) \
-+		$(rustc_test_run_flags)
-+
-+rusttest: rusttest-macros rusttest-kernel
-+
-+# This prepares a custom sysroot with our custom `alloc` instead of
-+# the standard one.
-+#
-+# This requires several hacks:
-+#   - Unlike `core` and `alloc`, `std` depends on more than a dozen crates,
-+#     including third-party crates that need to be downloaded, plus custom
-+#     `build.rs` steps. Thus hardcoding things here is not maintainable.
-+#   - `cargo` knows how to build the standard library, but it is an unstable
-+#     feature so far (`-Zbuild-std`).
-+#   - `cargo` only considers the use case of building the standard library
-+#     to use it in a given package. Thus we need to create a dummy package
-+#     and pick the generated libraries from there.
-+#   - Since we only keep a subset of upstream `alloc` in-tree, we need
-+#     to recreate it on the fly by putting our sources on top.
-+#   - The usual ways of modifying the dependency graph in `cargo` do not seem
-+#     to apply for the `-Zbuild-std` steps, thus we have to mislead it
-+#     by modifying the sources in the sysroot.
-+#   - To avoid messing with the user's Rust installation, we create a clone
-+#     of the sysroot. However, `cargo` ignores `RUSTFLAGS` in the `-Zbuild-std`
-+#     steps, thus we use a wrapper binary passed via `RUSTC` to pass the flag.
-+#
-+# In the future, we hope to avoid the whole ordeal by either:
-+#   - Making the `test` crate not depend on `std` (either improving upstream
-+#     or having our own custom crate).
-+#   - Making the tests run in kernel space (requires the previous point).
-+#   - Making `std` and friends be more like a "normal" crate, so that
-+#     `-Zbuild-std` and related hacks are not needed.
-+quiet_cmd_rustsysroot = RUSTSYSROOT
-+      cmd_rustsysroot = \
-+	rm -rf $(objtree)/rust/test; \
-+	mkdir -p $(objtree)/rust/test; \
-+	cp -a $(rustc_sysroot) $(objtree)/rust/test/sysroot; \
-+	cp -r $(srctree)/rust/alloc/* \
-+		$(objtree)/rust/test/sysroot/lib/rustlib/src/rust/library/alloc/src; \
-+	echo '\#!/bin/sh' > $(objtree)/rust/test/rustc_sysroot; \
-+	echo "$(RUSTC) --sysroot=$(abspath $(objtree)/rust/test/sysroot) \"\$$@\"" \
-+		>> $(objtree)/rust/test/rustc_sysroot; \
-+	chmod u+x $(objtree)/rust/test/rustc_sysroot; \
-+	$(CARGO) -q new $(objtree)/rust/test/dummy; \
-+	RUSTC=$(objtree)/rust/test/rustc_sysroot $(CARGO) $(cargo_quiet) \
-+		test -Zbuild-std --target $(rustc_host_target) \
-+		--manifest-path $(objtree)/rust/test/dummy/Cargo.toml; \
-+	rm $(objtree)/rust/test/sysroot/lib/rustlib/$(rustc_host_target)/lib/*; \
-+	cp $(objtree)/rust/test/dummy/target/$(rustc_host_target)/debug/deps/* \
-+		$(objtree)/rust/test/sysroot/lib/rustlib/$(rustc_host_target)/lib
-+
-+rusttest-prepare: FORCE
-+	$(call if_changed,rustsysroot)
-+
-+rusttest-macros: private rustc_target_flags = --extern proc_macro
-+rusttest-macros: private rustdoc_test_target_flags = --crate-type proc-macro
-+rusttest-macros: $(srctree)/rust/macros/lib.rs rusttest-prepare FORCE
-+	$(call if_changed,rustc_test)
-+	$(call if_changed,rustdoc_test)
-+
-+rusttest-kernel: private rustc_target_flags = --extern alloc \
-+    --extern build_error --extern macros
-+rusttest-kernel: private rustc_test_run_flags = \
-+    --skip bindgen_test_layout_
-+rusttest-kernel: $(srctree)/rust/kernel/lib.rs rusttest-prepare \
-+    rusttestlib-build_error rusttestlib-macros FORCE
-+	$(call if_changed,rustc_test)
-+	$(call if_changed,rustc_test_library)
-+	$(call if_changed,rustdoc_test)
-+
-+ifdef CONFIG_CC_IS_CLANG
-+bindgen_c_flags = $(c_flags)
-+else
-+# bindgen relies on libclang to parse C. Ideally, bindgen would support a GCC
-+# plugin backend and/or the Clang driver would be perfectly compatible with GCC.
-+#
-+# For the moment, here we are tweaking the flags on the fly. Some config
-+# options may not work (e.g. `GCC_PLUGIN_RANDSTRUCT` if we end up using one
-+# of those structs).
-+bindgen_skip_c_flags := -mno-fp-ret-in-387 -mpreferred-stack-boundary=% \
-+	-mskip-rax-setup -mgeneral-regs-only -msign-return-address=% \
-+	-mindirect-branch=thunk-extern -mindirect-branch-register -mrecord-mcount \
-+	-mabi=lp64 -mstack-protector-guard% -fconserve-stack -falign-jumps=% \
-+	-falign-loops=% -femit-struct-debug-baseonly \
-+	-fno-ipa-cp-clone -fno-ipa-sra -fno-partial-inlining \
-+	-fplugin-arg-arm_ssp_per_task_plugin-% \
-+	-fno-reorder-blocks -fno-allow-store-data-races -fasan-shadow-offset=% \
-+	-Wno-packed-not-aligned -Wno-format-truncation -Wno-format-overflow \
-+	-Wno-stringop-truncation -Wno-unused-but-set-variable \
-+	-Wno-stringop-overflow -Wno-restrict -Wno-maybe-uninitialized \
-+	-Werror=designated-init -Wno-zero-length-bounds \
-+	-Wno-alloc-size-larger-than --param=% --param asan-%
-+
-+# We need to keep the quotes for this one -- it comes from a `Kconfig`
-+bindgen_skip_c_flags += "-Wimplicit-fallthrough=%"
-+
-+# PowerPC
-+bindgen_skip_c_flags += -mtraceback=no -mno-pointers-to-nested-functions \
-+	-mno-string -mno-strict-align
-+
-+# Derived from `scripts/Makefile.clang`
-+BINDGEN_TARGET_arm	:= arm-linux-gnueabi
-+BINDGEN_TARGET_arm64	:= aarch64-linux-gnu
-+BINDGEN_TARGET_powerpc	:= powerpc64le-linux-gnu
-+BINDGEN_TARGET_riscv	:= riscv64-linux-gnu
-+BINDGEN_TARGET_x86	:= x86_64-linux-gnu
-+BINDGEN_TARGET		:= $(BINDGEN_TARGET_$(SRCARCH))
-+
-+bindgen_extra_c_flags = --target=$(BINDGEN_TARGET) \
-+	-Wno-address-of-packed-member \
-+	-Wno-gnu-variable-sized-type-not-at-end
-+bindgen_c_flags = $(filter-out $(bindgen_skip_c_flags), $(c_flags)) \
-+	$(bindgen_extra_c_flags)
-+endif
-+
-+ifdef CONFIG_LTO
-+bindgen_c_flags_lto = $(filter-out $(CC_FLAGS_LTO), $(bindgen_c_flags))
-+else
-+bindgen_c_flags_lto = $(bindgen_c_flags)
-+endif
-+
-+# To avoid several recompilations in PowerPC, which inserts `-D_TASK_CPU`
-+bindgen_c_flags_final = $(filter-out -D_TASK_CPU=%, $(bindgen_c_flags_lto))
-+
-+quiet_cmd_bindgen = BINDGEN $@
-+      cmd_bindgen = \
-+	$(BINDGEN) $< $(shell grep -v '^\#\|^$$' $(srctree)/rust/bindgen_parameters) \
-+		--use-core --with-derive-default --ctypes-prefix c_types \
-+		--no-debug '.*' \
-+		--size_t-is-usize -o $@ -- $(bindgen_c_flags_final) -DMODULE
-+
-+$(objtree)/rust/bindings_generated.rs: $(srctree)/rust/kernel/bindings_helper.h \
-+	$(srctree)/rust/bindgen_parameters FORCE
-+	$(call if_changed_dep,bindgen)
-+
-+quiet_cmd_bindgen_helper = BINDGEN $@
-+      cmd_bindgen_helper = \
-+	$(BINDGEN) $< --blacklist-type '.*' --whitelist-var '' \
-+		--whitelist-function 'rust_helper_.*' \
-+		--use-core --with-derive-default --ctypes-prefix c_types \
-+		--no-debug '.*' \
-+		--size_t-is-usize -o $@ -- $(bindgen_c_flags_final) \
-+		-I$(objtree)/rust/ -DMODULE; \
-+	sed -Ei 's/pub fn rust_helper_([a-zA-Z0-9_]*)/\#[link_name="rust_helper_\1"]\n    pub fn \1/g' $@
-+
-+$(objtree)/rust/bindings_helpers_generated.rs: $(srctree)/rust/helpers.c FORCE
-+	$(call if_changed_dep,bindgen_helper)
-+
-+quiet_cmd_exports = EXPORTS $@
-+      cmd_exports = \
-+	$(NM) -p --defined-only $< \
-+		| grep -E ' (T|R|D) ' | cut -d ' ' -f 3 \
-+		| xargs -Isymbol \
-+		echo 'EXPORT_SYMBOL_RUST_GPL(symbol);' > $@
-+
-+$(objtree)/rust/exports_core_generated.h: $(objtree)/rust/core.o FORCE
-+	$(call if_changed,exports)
-+
-+$(objtree)/rust/exports_alloc_generated.h: $(objtree)/rust/alloc.o FORCE
-+	$(call if_changed,exports)
-+
-+$(objtree)/rust/exports_kernel_generated.h: $(objtree)/rust/kernel.o FORCE
-+	$(call if_changed,exports)
-+
-+# `-Cpanic=unwind -Cforce-unwind-tables=y` overrides `rust_flags` in order to
-+# avoid the https://github.com/rust-lang/rust/issues/82320 rustc crash.
-+quiet_cmd_rustc_procmacro = $(RUSTC_OR_CLIPPY_QUIET) P $@
-+      cmd_rustc_procmacro = \
-+	$(RUSTC_OR_CLIPPY) $(rust_flags) \
-+		--emit=dep-info,link --extern proc_macro \
-+		-Cpanic=unwind -Cforce-unwind-tables=y \
-+		--crate-type proc-macro --out-dir $(objtree)/rust/ \
-+		--crate-name $(patsubst lib%.so,%,$(notdir $@)) $<; \
-+	mv $(objtree)/rust/$(patsubst lib%.so,%,$(notdir $@)).d $(depfile); \
-+	sed -i '/^\#/d' $(depfile)
-+
-+# Procedural macros can only be used with the `rustc` that compiled it.
-+# Therefore, to get `libmacros.so` automatically recompiled when the compiler
-+# version changes, we add `core.o` as a dependency (even if it is not needed).
-+$(objtree)/rust/libmacros.so: $(srctree)/rust/macros/lib.rs \
-+	$(objtree)/rust/core.o FORCE
-+	$(call if_changed_dep,rustc_procmacro)
-+
-+quiet_cmd_rustc_library = $(if $(skip_clippy),RUSTC,$(RUSTC_OR_CLIPPY_QUIET)) L $@
-+      cmd_rustc_library = \
-+	OBJTREE=$(abspath $(objtree)) \
-+	$(if $(skip_clippy),$(RUSTC),$(RUSTC_OR_CLIPPY)) \
-+		$(filter-out $(skip_flags),$(rust_flags) $(rust_cross_flags) $(rustc_target_flags)) \
-+		--crate-type rlib --out-dir $(objtree)/rust/ -L $(objtree)/rust/ \
-+		--crate-name $(patsubst %.o,%,$(notdir $@)) $<; \
-+	mv $(objtree)/rust/$(patsubst %.o,%,$(notdir $@)).d $(depfile); \
-+	sed -i '/^\#/d' $(depfile) \
-+	$(if $(rustc_objcopy),;$(OBJCOPY) $(rustc_objcopy) $@)
-+
-+# `$(rust_flags)` is passed in case the user added `--sysroot`.
-+rustc_sysroot = $(shell $(RUSTC) $(rust_flags) --print sysroot)
-+rustc_host_target = $(shell $(RUSTC) --version --verbose | grep -F 'host: ' | cut -d' ' -f2)
-+RUST_LIB_SRC ?= $(rustc_sysroot)/lib/rustlib/src/rust/library
-+
-+rust-analyzer:
-+	$(Q)$(srctree)/scripts/generate_rust_analyzer.py $(srctree) $(objtree) $(RUST_LIB_SRC) > $(objtree)/rust-project.json
-+
-+$(objtree)/rust/compiler_builtins.o: private rustc_objcopy = -w -W '__*'
-+$(objtree)/rust/compiler_builtins.o: $(srctree)/rust/compiler_builtins.rs \
-+    $(objtree)/rust/core.o FORCE
-+	$(call if_changed_dep,rustc_library)
-+
-+$(objtree)/rust/alloc.o: private skip_clippy = 1
-+$(objtree)/rust/alloc.o: private skip_flags = -Dunreachable_pub
-+$(objtree)/rust/alloc.o: private rustc_target_flags = $(alloc-cfgs)
-+$(objtree)/rust/alloc.o: $(srctree)/rust/alloc/lib.rs \
-+    $(objtree)/rust/compiler_builtins.o FORCE
-+	$(call if_changed_dep,rustc_library)
-+
-+$(objtree)/rust/build_error.o: $(srctree)/rust/build_error.rs \
-+    $(objtree)/rust/compiler_builtins.o FORCE
-+	$(call if_changed_dep,rustc_library)
-+
-+# ICE on `--extern macros`: https://github.com/rust-lang/rust/issues/56935
-+$(objtree)/rust/kernel.o: private rustc_target_flags = --extern alloc \
-+    --extern build_error \
-+    --extern macros=$(objtree)/rust/libmacros.so
-+$(objtree)/rust/kernel.o: $(srctree)/rust/kernel/lib.rs $(objtree)/rust/alloc.o \
-+    $(objtree)/rust/build_error.o \
-+    $(objtree)/rust/libmacros.so $(objtree)/rust/bindings_generated.rs \
-+    $(objtree)/rust/bindings_helpers_generated.rs FORCE
-+	$(call if_changed_dep,rustc_library)
-+
-+# Targets that need to expand twice
-+.SECONDEXPANSION:
-+$(objtree)/rust/core.o: private skip_clippy = 1
-+$(objtree)/rust/core.o: private skip_flags = -Dunreachable_pub
-+$(objtree)/rust/core.o: private rustc_target_flags = $(core-cfgs)
-+$(objtree)/rust/core.o: $$(RUST_LIB_SRC)/core/src/lib.rs FORCE
-+	$(call if_changed_dep,rustc_library)
-+
-+rustdoc-core: private rustc_target_flags = $(core-cfgs)
-+rustdoc-core: $$(RUST_LIB_SRC)/core/src/lib.rs FORCE
-+	$(call if_changed,rustdoc)
-diff --git a/rust/bindgen_parameters b/rust/bindgen_parameters
-new file mode 100644
-index 000000000000..c2cc4a88234e
---- /dev/null
-+++ b/rust/bindgen_parameters
-@@ -0,0 +1,13 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+--opaque-type xregs_state
-+--opaque-type desc_struct
-+--opaque-type arch_lbr_state
-+--opaque-type local_apic
-+
-+# If SMP is disabled, `arch_spinlock_t` is defined as a ZST which triggers a Rust
-+# warning. We don't need to peek into it anyway.
-+--opaque-type spinlock
-+
-+# `seccomp`'s comment gets understood as a doctest
-+--no-doc-comments
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 78656b527fe5..7adac231fafd 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -26,6 +26,7 @@ EXTRA_CPPFLAGS :=
- EXTRA_LDFLAGS  :=
- asflags-y  :=
- ccflags-y  :=
-+rustflags-y :=
- cppflags-y :=
- ldflags-y  :=
- 
-@@ -323,6 +324,27 @@ quiet_cmd_cc_lst_c = MKLST   $@
- $(obj)/%.lst: $(src)/%.c FORCE
- 	$(call if_changed_dep,cc_lst_c)
- 
-+# Compile Rust sources (.rs)
-+# ---------------------------------------------------------------------------
-+
-+# Need to use absolute path here and have symbolic links resolved;
-+# otherwise rustdoc and rustc compute different hashes for the target.
-+rust_cross_flags := --target=$(realpath $(KBUILD_RUST_TARGET))
-+
-+quiet_cmd_rustc_o_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
-+      cmd_rustc_o_rs = \
-+	RUST_MODFILE=$(modfile) \
-+	$(RUSTC_OR_CLIPPY) $(rust_flags) $(rust_cross_flags) \
-+		-Zallow-features=allocator_api,bench_black_box,concat_idents,generic_associated_types,global_asm \
-+		--extern alloc --extern kernel \
-+		--crate-type rlib --out-dir $(obj) -L $(objtree)/rust/ \
-+		--crate-name $(patsubst %.o,%,$(notdir $@)) $<; \
-+	mv $(obj)/$(subst .o,,$(notdir $@)).d $(depfile); \
-+	sed -i '/^\#/d' $(depfile)
-+
-+$(obj)/%.o: $(src)/%.rs FORCE
-+	$(call if_changed_dep,rustc_o_rs)
-+
- # Compile assembler sources (.S)
- # ---------------------------------------------------------------------------
- 
-diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
-index 9f39b0130551..fe87389d52c0 100644
---- a/scripts/Makefile.debug
-+++ b/scripts/Makefile.debug
-@@ -1,4 +1,5 @@
- DEBUG_CFLAGS	:=
-+DEBUG_RUSTFLAGS	:=
- 
- ifdef CONFIG_DEBUG_INFO_SPLIT
- DEBUG_CFLAGS	+= -gsplit-dwarf
-@@ -10,6 +11,12 @@ ifndef CONFIG_AS_IS_LLVM
- KBUILD_AFLAGS	+= -Wa,-gdwarf-2
- endif
- 
-+ifdef CONFIG_DEBUG_INFO_REDUCED
-+DEBUG_RUSTFLAGS += -Cdebuginfo=1
-+else
-+DEBUG_RUSTFLAGS += -Cdebuginfo=2
-+endif
-+
- ifndef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
- dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
- dwarf-version-$(CONFIG_DEBUG_INFO_DWARF5) := 5
-@@ -31,3 +38,6 @@ endif
- 
- KBUILD_CFLAGS += $(DEBUG_CFLAGS)
- export DEBUG_CFLAGS
-+
-+KBUILD_RUSTFLAGS += $(DEBUG_RUSTFLAGS)
-+export DEBUG_RUSTFLAGS
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index d1f865b8c0cb..ce6142238835 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -8,6 +8,7 @@ ldflags-y  += $(EXTRA_LDFLAGS)
- # flags that take effect in current and sub directories
- KBUILD_AFLAGS += $(subdir-asflags-y)
- KBUILD_CFLAGS += $(subdir-ccflags-y)
-+KBUILD_RUSTFLAGS += $(subdir-rustflags-y)
- 
- # Figure out what we need to build from the various variables
- # ===========================================================================
-@@ -133,6 +134,10 @@ _c_flags       = $(filter-out $(CFLAGS_REMOVE_$(target-stem).o), \
-                      $(filter-out $(ccflags-remove-y), \
-                          $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) $(ccflags-y)) \
-                      $(CFLAGS_$(target-stem).o))
-+_rust_flags    = $(filter-out $(RUSTFLAGS_REMOVE_$(target-stem).o), \
-+                     $(filter-out $(rustflags-remove-y), \
-+                         $(KBUILD_RUSTFLAGS) $(rustflags-y)) \
-+                     $(RUSTFLAGS_$(target-stem).o))
- _a_flags       = $(filter-out $(AFLAGS_REMOVE_$(target-stem).o), \
-                      $(filter-out $(asflags-remove-y), \
-                          $(KBUILD_CPPFLAGS) $(KBUILD_AFLAGS) $(asflags-y)) \
-@@ -202,6 +207,11 @@ modkern_cflags =                                          \
- 		$(KBUILD_CFLAGS_MODULE) $(CFLAGS_MODULE), \
- 		$(KBUILD_CFLAGS_KERNEL) $(CFLAGS_KERNEL) $(modfile_flags))
- 
-+modkern_rustflags =                                              \
-+	$(if $(part-of-module),                                   \
-+		$(KBUILD_RUSTFLAGS_MODULE) $(RUSTFLAGS_MODULE), \
-+		$(KBUILD_RUSTFLAGS_KERNEL) $(RUSTFLAGS_KERNEL))
-+
- modkern_aflags = $(if $(part-of-module),				\
- 			$(KBUILD_AFLAGS_MODULE) $(AFLAGS_MODULE),	\
- 			$(KBUILD_AFLAGS_KERNEL) $(AFLAGS_KERNEL))
-@@ -211,6 +221,8 @@ c_flags        = -Wp,-MMD,$(depfile) $(NOSTDINC_FLAGS) $(LINUXINCLUDE)     \
- 		 $(_c_flags) $(modkern_cflags)                           \
- 		 $(basename_flags) $(modname_flags)
- 
-+rust_flags     = $(_rust_flags) $(modkern_rustflags) @$(objtree)/include/generated/rustc_cfg
-+
- a_flags        = -Wp,-MMD,$(depfile) $(NOSTDINC_FLAGS) $(LINUXINCLUDE)     \
- 		 $(_a_flags) $(modkern_aflags)
- 
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 7f39599e9fae..0518b6d3e620 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -39,11 +39,13 @@ quiet_cmd_ld_ko_o = LD [M]  $@
- 
- quiet_cmd_btf_ko = BTF [M] $@
-       cmd_btf_ko = 							\
--	if [ -f vmlinux ]; then						\
-+	if [ ! -f vmlinux ]; then					\
-+		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
-+	elif $(srctree)/scripts/is_rust_module.sh $@; then 		\
-+		printf "Skipping BTF generation for %s because it's a Rust module\n" $@ 1>&2; \
-+	else								\
- 		LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) --btf_base vmlinux $@; \
- 		$(RESOLVE_BTFIDS) -b vmlinux $@; 			\
--	else								\
--		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
- 	fi;
- 
- # Same as newer-prereqs, but allows to exclude specified extra dependencies
-diff --git a/scripts/is_rust_module.sh b/scripts/is_rust_module.sh
-new file mode 100755
-index 000000000000..ff24d9c16f09
---- /dev/null
-+++ b/scripts/is_rust_module.sh
-@@ -0,0 +1,19 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# is_rust_module.sh MOD.ko
-+#
-+# Returns 0 if MOD.ko is a rust module, 1 otherwise.
-+
-+set -e
-+module="$*"
-+
-+while IFS= read -r line
-+do
-+  # Any symbol beginning with "_R" is a v0 mangled rust symbol
-+  if [[ $line =~ ^[0-9a-fA-F]+[[:space:]]+[uUtTrR][[:space:]]+_R[^[:space:]]+$ ]]; then
-+    exit 0
-+  fi
-+done < <(nm "$module")
-+
-+exit 1
-diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
-index 42bc56ee238c..9225234f0e4c 100644
---- a/scripts/kconfig/confdata.c
-+++ b/scripts/kconfig/confdata.c
-@@ -216,6 +216,13 @@ static const char *conf_get_autoheader_name(void)
- 	return name ? name : "include/generated/autoconf.h";
- }
- 
-+static const char *conf_get_rustccfg_name(void)
-+{
-+	char *name = getenv("KCONFIG_RUSTCCFG");
-+
-+	return name ? name : "include/generated/rustc_cfg";
++++ b/samples/rust/rust_chrdev.rs
+@@ -0,0 +1,50 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! Rust character device sample
++
++#![no_std]
++#![feature(allocator_api, global_asm)]
++
++use kernel::prelude::*;
++use kernel::{chrdev, file_operations::FileOperations};
++
++module! {
++    type: RustChrdev,
++    name: b"rust_chrdev",
++    author: b"Rust for Linux Contributors",
++    description: b"Rust character device sample",
++    license: b"GPL v2",
 +}
 +
- static int conf_set_sym_val(struct symbol *sym, int def, int def_flags, char *p)
- {
- 	char *p2;
-@@ -603,6 +610,9 @@ static const struct comment_style comment_style_c = {
- 
- static void conf_write_heading(FILE *fp, const struct comment_style *cs)
- {
-+	if (!cs)
-+		return;
++#[derive(Default)]
++struct RustFile;
 +
- 	fprintf(fp, "%s\n", cs->prefix);
- 
- 	fprintf(fp, "%s Automatically generated file; DO NOT EDIT.\n",
-@@ -750,6 +760,65 @@ static void print_symbol_for_c(FILE *fp, struct symbol *sym)
- 	free(escaped);
- }
- 
-+static void print_symbol_for_rustccfg(FILE *fp, struct symbol *sym)
++impl FileOperations for RustFile {
++    kernel::declare_file_operations!();
++}
++
++struct RustChrdev {
++    _dev: Pin<Box<chrdev::Registration<2>>>,
++}
++
++impl KernelModule for RustChrdev {
++    fn init(name: &'static CStr, module: &'static ThisModule) -> Result<Self> {
++        pr_info!("Rust character device sample (init)\n");
++
++        let mut chrdev_reg = chrdev::Registration::new_pinned(name, 0, module)?;
++
++        // Register the same kind of device twice, we're just demonstrating
++        // that you can use multiple minors. There are two minors in this case
++        // because its type is `chrdev::Registration<2>`
++        chrdev_reg.as_mut().register::<RustFile>()?;
++        chrdev_reg.as_mut().register::<RustFile>()?;
++
++        Ok(RustChrdev { _dev: chrdev_reg })
++    }
++}
++
++impl Drop for RustChrdev {
++    fn drop(&mut self) {
++        pr_info!("Rust character device sample (exit)\n");
++    }
++}
+diff --git a/samples/rust/rust_minimal.rs b/samples/rust/rust_minimal.rs
+new file mode 100644
+index 000000000000..3276dbe8ae94
+--- /dev/null
++++ b/samples/rust/rust_minimal.rs
+@@ -0,0 +1,38 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! Rust minimal sample
++
++#![no_std]
++#![feature(allocator_api, global_asm)]
++
++use kernel::prelude::*;
++
++module! {
++    type: RustMinimal,
++    name: b"rust_minimal",
++    author: b"Rust for Linux Contributors",
++    description: b"Rust minimal sample",
++    license: b"GPL v2",
++}
++
++struct RustMinimal {
++    message: String,
++}
++
++impl KernelModule for RustMinimal {
++    fn init(_name: &'static CStr, _module: &'static ThisModule) -> Result<Self> {
++        pr_info!("Rust minimal sample (init)\n");
++        pr_info!("Am I built-in? {}\n", !cfg!(MODULE));
++
++        Ok(RustMinimal {
++            message: "on the heap!".try_to_owned()?,
++        })
++    }
++}
++
++impl Drop for RustMinimal {
++    fn drop(&mut self) {
++        pr_info!("My message is {}\n", self.message);
++        pr_info!("Rust minimal sample (exit)\n");
++    }
++}
+diff --git a/samples/rust/rust_miscdev.rs b/samples/rust/rust_miscdev.rs
+new file mode 100644
+index 000000000000..65dd40027524
+--- /dev/null
++++ b/samples/rust/rust_miscdev.rs
+@@ -0,0 +1,149 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! Rust miscellaneous device sample
++
++#![no_std]
++#![feature(allocator_api, global_asm)]
++
++use kernel::prelude::*;
++use kernel::{
++    file::File,
++    file_operations::{FileOpener, FileOperations},
++    io_buffer::{IoBufferReader, IoBufferWriter},
++    miscdev,
++    sync::{CondVar, Mutex, Ref, RefBorrow, UniqueRef},
++};
++
++module! {
++    type: RustMiscdev,
++    name: b"rust_miscdev",
++    author: b"Rust for Linux Contributors",
++    description: b"Rust miscellaneous device sample",
++    license: b"GPL v2",
++}
++
++const MAX_TOKENS: usize = 3;
++
++struct SharedStateInner {
++    token_count: usize,
++}
++
++struct SharedState {
++    state_changed: CondVar,
++    inner: Mutex<SharedStateInner>,
++}
++
++impl SharedState {
++    fn try_new() -> Result<Ref<Self>> {
++        let mut state = Pin::from(UniqueRef::try_new(Self {
++            // SAFETY: `condvar_init!` is called below.
++            state_changed: unsafe { CondVar::new() },
++            // SAFETY: `mutex_init!` is called below.
++            inner: unsafe { Mutex::new(SharedStateInner { token_count: 0 }) },
++        })?);
++
++        // SAFETY: `state_changed` is pinned when `state` is.
++        let pinned = unsafe { state.as_mut().map_unchecked_mut(|s| &mut s.state_changed) };
++        kernel::condvar_init!(pinned, "SharedState::state_changed");
++
++        // SAFETY: `inner` is pinned when `state` is.
++        let pinned = unsafe { state.as_mut().map_unchecked_mut(|s| &mut s.inner) };
++        kernel::mutex_init!(pinned, "SharedState::inner");
++
++        Ok(state.into())
++    }
++}
++
++struct Token;
++
++impl FileOpener<Ref<SharedState>> for Token {
++    fn open(shared: &Ref<SharedState>, _file: &File) -> Result<Self::Wrapper> {
++        Ok(shared.clone())
++    }
++}
++
++impl FileOperations for Token {
++    type Wrapper = Ref<SharedState>;
++
++    kernel::declare_file_operations!(read, write);
++
++    fn read(
++        shared: RefBorrow<'_, SharedState>,
++        _: &File,
++        data: &mut impl IoBufferWriter,
++        offset: u64,
++    ) -> Result<usize> {
++        // Succeed if the caller doesn't provide a buffer or if not at the start.
++        if data.is_empty() || offset != 0 {
++            return Ok(0);
++        }
++
++        {
++            let mut inner = shared.inner.lock();
++
++            // Wait until we are allowed to decrement the token count or a signal arrives.
++            while inner.token_count == 0 {
++                if shared.state_changed.wait(&mut inner) {
++                    return Err(Error::EINTR);
++                }
++            }
++
++            // Consume a token.
++            inner.token_count -= 1;
++        }
++
++        // Notify a possible writer waiting.
++        shared.state_changed.notify_all();
++
++        // Write a one-byte 1 to the reader.
++        data.write_slice(&[1u8; 1])?;
++        Ok(1)
++    }
++
++    fn write(
++        shared: RefBorrow<'_, SharedState>,
++        _: &File,
++        data: &mut impl IoBufferReader,
++        _offset: u64,
++    ) -> Result<usize> {
++        {
++            let mut inner = shared.inner.lock();
++
++            // Wait until we are allowed to increment the token count or a signal arrives.
++            while inner.token_count == MAX_TOKENS {
++                if shared.state_changed.wait(&mut inner) {
++                    return Err(Error::EINTR);
++                }
++            }
++
++            // Increment the number of token so that a reader can be released.
++            inner.token_count += 1;
++        }
++
++        // Notify a possible reader waiting.
++        shared.state_changed.notify_all();
++        Ok(data.len())
++    }
++}
++
++struct RustMiscdev {
++    _dev: Pin<Box<miscdev::Registration<Ref<SharedState>>>>,
++}
++
++impl KernelModule for RustMiscdev {
++    fn init(name: &'static CStr, _module: &'static ThisModule) -> Result<Self> {
++        pr_info!("Rust miscellaneous device sample (init)\n");
++
++        let state = SharedState::try_new()?;
++
++        Ok(RustMiscdev {
++            _dev: miscdev::Registration::new_pinned::<Token>(name, None, state)?,
++        })
++    }
++}
++
++impl Drop for RustMiscdev {
++    fn drop(&mut self) {
++        pr_info!("Rust miscellaneous device sample (exit)\n");
++    }
++}
+diff --git a/samples/rust/rust_module_parameters.rs b/samples/rust/rust_module_parameters.rs
+new file mode 100644
+index 000000000000..5e4c39648010
+--- /dev/null
++++ b/samples/rust/rust_module_parameters.rs
+@@ -0,0 +1,72 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! Rust module parameters sample
++
++#![no_std]
++#![feature(allocator_api, global_asm)]
++
++use kernel::prelude::*;
++
++module! {
++    type: RustModuleParameters,
++    name: b"rust_module_parameters",
++    author: b"Rust for Linux Contributors",
++    description: b"Rust module parameters sample",
++    license: b"GPL v2",
++    params: {
++        my_bool: bool {
++            default: true,
++            permissions: 0,
++            description: b"Example of bool",
++        },
++        my_i32: i32 {
++            default: 42,
++            permissions: 0o644,
++            description: b"Example of i32",
++        },
++        my_str: str {
++            default: b"default str val",
++            permissions: 0o644,
++            description: b"Example of a string param",
++        },
++        my_usize: usize {
++            default: 42,
++            permissions: 0o644,
++            description: b"Example of usize",
++        },
++        my_array: ArrayParam<i32, 3> {
++            default: [0, 1],
++            permissions: 0,
++            description: b"Example of array",
++        },
++    },
++}
++
++struct RustModuleParameters;
++
++impl KernelModule for RustModuleParameters {
++    fn init(_name: &'static CStr, module: &'static ThisModule) -> Result<Self> {
++        pr_info!("Rust module parameters sample (init)\n");
++
++        {
++            let lock = module.kernel_param_lock();
++            pr_info!("Parameters:\n");
++            pr_info!("  my_bool:    {}\n", my_bool.read());
++            pr_info!("  my_i32:     {}\n", my_i32.read(&lock));
++            pr_info!(
++                "  my_str:     {}\n",
++                core::str::from_utf8(my_str.read(&lock))?
++            );
++            pr_info!("  my_usize:   {}\n", my_usize.read(&lock));
++            pr_info!("  my_array:   {:?}\n", my_array.read());
++        }
++
++        Ok(RustModuleParameters)
++    }
++}
++
++impl Drop for RustModuleParameters {
++    fn drop(&mut self) {
++        pr_info!("Rust module parameters sample (exit)\n");
++    }
++}
+diff --git a/samples/rust/rust_print.rs b/samples/rust/rust_print.rs
+new file mode 100644
+index 000000000000..1b4d14a2d9cc
+--- /dev/null
++++ b/samples/rust/rust_print.rs
+@@ -0,0 +1,57 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! Rust printing macros sample
++
++#![no_std]
++#![feature(allocator_api, global_asm)]
++
++use kernel::prelude::*;
++use kernel::{pr_cont, str::CStr, ThisModule};
++
++module! {
++    type: RustPrint,
++    name: b"rust_print",
++    author: b"Rust for Linux Contributors",
++    description: b"Rust printing macros sample",
++    license: b"GPL v2",
++}
++
++struct RustPrint;
++
++impl KernelModule for RustPrint {
++    fn init(_name: &'static CStr, _module: &'static ThisModule) -> Result<Self> {
++        pr_info!("Rust printing macros sample (init)\n");
++
++        pr_emerg!("Emergency message (level 0) without args\n");
++        pr_alert!("Alert message (level 1) without args\n");
++        pr_crit!("Critical message (level 2) without args\n");
++        pr_err!("Error message (level 3) without args\n");
++        pr_warn!("Warning message (level 4) without args\n");
++        pr_notice!("Notice message (level 5) without args\n");
++        pr_info!("Info message (level 6) without args\n");
++
++        pr_info!("A line that");
++        pr_cont!(" is continued");
++        pr_cont!(" without args\n");
++
++        pr_emerg!("{} message (level {}) with args\n", "Emergency", 0);
++        pr_alert!("{} message (level {}) with args\n", "Alert", 1);
++        pr_crit!("{} message (level {}) with args\n", "Critical", 2);
++        pr_err!("{} message (level {}) with args\n", "Error", 3);
++        pr_warn!("{} message (level {}) with args\n", "Warning", 4);
++        pr_notice!("{} message (level {}) with args\n", "Notice", 5);
++        pr_info!("{} message (level {}) with args\n", "Info", 6);
++
++        pr_info!("A {} that", "line");
++        pr_cont!(" is {}", "continued");
++        pr_cont!(" with {}\n", "args");
++
++        Ok(RustPrint)
++    }
++}
++
++impl Drop for RustPrint {
++    fn drop(&mut self) {
++        pr_info!("Rust printing macros sample (exit)\n");
++    }
++}
+diff --git a/samples/rust/rust_random.rs b/samples/rust/rust_random.rs
+new file mode 100644
+index 000000000000..ef28c5f84f71
+--- /dev/null
++++ b/samples/rust/rust_random.rs
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! Rust random device
++//!
++//! Adapted from Alex Gaynor's original available at
++//! <https://github.com/alex/just-use/blob/master/src/lib.rs>.
++
++#![no_std]
++#![feature(allocator_api, global_asm)]
++
++use kernel::{
++    file::File,
++    file_operations::FileOperations,
++    io_buffer::{IoBufferReader, IoBufferWriter},
++    prelude::*,
++};
++
++#[derive(Default)]
++struct RandomFile;
++
++impl FileOperations for RandomFile {
++    kernel::declare_file_operations!(read, write, read_iter, write_iter);
++
++    fn read(_this: &Self, file: &File, buf: &mut impl IoBufferWriter, _: u64) -> Result<usize> {
++        let total_len = buf.len();
++        let mut chunkbuf = [0; 256];
++
++        while !buf.is_empty() {
++            let len = chunkbuf.len().min(buf.len());
++            let chunk = &mut chunkbuf[0..len];
++
++            if file.is_blocking() {
++                kernel::random::getrandom(chunk)?;
++            } else {
++                kernel::random::getrandom_nonblock(chunk)?;
++            }
++            buf.write_slice(chunk)?;
++        }
++        Ok(total_len)
++    }
++
++    fn write(_this: &Self, _file: &File, buf: &mut impl IoBufferReader, _: u64) -> Result<usize> {
++        let total_len = buf.len();
++        let mut chunkbuf = [0; 256];
++        while !buf.is_empty() {
++            let len = chunkbuf.len().min(buf.len());
++            let chunk = &mut chunkbuf[0..len];
++            buf.read_slice(chunk)?;
++            kernel::random::add_randomness(chunk);
++        }
++        Ok(total_len)
++    }
++}
++
++module_misc_device! {
++    type: RandomFile,
++    name: b"rust_random",
++    author: b"Rust for Linux Contributors",
++    description: b"Just use /dev/urandom: Now with early-boot safety",
++    license: b"GPL v2",
++}
+diff --git a/samples/rust/rust_semaphore.rs b/samples/rust/rust_semaphore.rs
+new file mode 100644
+index 000000000000..28f7a34d2942
+--- /dev/null
++++ b/samples/rust/rust_semaphore.rs
+@@ -0,0 +1,174 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! Rust semaphore sample
++//!
++//! A counting semaphore that can be used by userspace.
++//!
++//! The count is incremented by writes to the device. A write of `n` bytes results in an increment
++//! of `n`. It is decremented by reads; each read results in the count being decremented by 1. If
++//! the count is already zero, a read will block until another write increments it.
++//!
++//! This can be used in user space from the shell for example  as follows (assuming a node called
++//! `semaphore`): `cat semaphore` decrements the count by 1 (waiting for it to become non-zero
++//! before decrementing); `echo -n 123 > semaphore` increments the semaphore by 3, potentially
++//! unblocking up to 3 blocked readers.
++
++#![no_std]
++#![feature(allocator_api, global_asm, generic_associated_types)]
++
++use core::sync::atomic::{AtomicU64, Ordering};
++use kernel::{
++    condvar_init, declare_file_operations,
++    file::File,
++    file_operations::{FileOpener, FileOperations, IoctlCommand, IoctlHandler},
++    io_buffer::{IoBufferReader, IoBufferWriter},
++    miscdev::Registration,
++    mutex_init,
++    prelude::*,
++    sync::{CondVar, Mutex, Ref, UniqueRef},
++    user_ptr::{UserSlicePtrReader, UserSlicePtrWriter},
++};
++
++module! {
++    type: RustSemaphore,
++    name: b"rust_semaphore",
++    author: b"Rust for Linux Contributors",
++    description: b"Rust semaphore sample",
++    license: b"GPL v2",
++}
++
++struct SemaphoreInner {
++    count: usize,
++    max_seen: usize,
++}
++
++struct Semaphore {
++    changed: CondVar,
++    inner: Mutex<SemaphoreInner>,
++}
++
++struct FileState {
++    read_count: AtomicU64,
++    shared: Ref<Semaphore>,
++}
++
++impl FileState {
++    fn consume(&self) -> Result {
++        let mut inner = self.shared.inner.lock();
++        while inner.count == 0 {
++            if self.shared.changed.wait(&mut inner) {
++                return Err(Error::EINTR);
++            }
++        }
++        inner.count -= 1;
++        Ok(())
++    }
++}
++
++impl FileOpener<Ref<Semaphore>> for FileState {
++    fn open(shared: &Ref<Semaphore>, _file: &File) -> Result<Box<Self>> {
++        Ok(Box::try_new(Self {
++            read_count: AtomicU64::new(0),
++            shared: shared.clone(),
++        })?)
++    }
++}
++
++impl FileOperations for FileState {
++    declare_file_operations!(read, write, ioctl);
++
++    fn read(this: &Self, _: &File, data: &mut impl IoBufferWriter, offset: u64) -> Result<usize> {
++        if data.is_empty() || offset > 0 {
++            return Ok(0);
++        }
++        this.consume()?;
++        data.write_slice(&[0u8; 1])?;
++        this.read_count.fetch_add(1, Ordering::Relaxed);
++        Ok(1)
++    }
++
++    fn write(this: &Self, _: &File, data: &mut impl IoBufferReader, _offs: u64) -> Result<usize> {
++        {
++            let mut inner = this.shared.inner.lock();
++            inner.count = inner.count.saturating_add(data.len());
++            if inner.count > inner.max_seen {
++                inner.max_seen = inner.count;
++            }
++        }
++
++        this.shared.changed.notify_all();
++        Ok(data.len())
++    }
++
++    fn ioctl(this: &Self, file: &File, cmd: &mut IoctlCommand) -> Result<i32> {
++        cmd.dispatch::<Self>(this, file)
++    }
++}
++
++struct RustSemaphore {
++    _dev: Pin<Box<Registration<Ref<Semaphore>>>>,
++}
++
++impl KernelModule for RustSemaphore {
++    fn init(name: &'static CStr, _module: &'static ThisModule) -> Result<Self> {
++        pr_info!("Rust semaphore sample (init)\n");
++
++        let mut sema = Pin::from(UniqueRef::try_new(Semaphore {
++            // SAFETY: `condvar_init!` is called below.
++            changed: unsafe { CondVar::new() },
++
++            // SAFETY: `mutex_init!` is called below.
++            inner: unsafe {
++                Mutex::new(SemaphoreInner {
++                    count: 0,
++                    max_seen: 0,
++                })
++            },
++        })?);
++
++        // SAFETY: `changed` is pinned when `sema` is.
++        let pinned = unsafe { sema.as_mut().map_unchecked_mut(|s| &mut s.changed) };
++        condvar_init!(pinned, "Semaphore::changed");
++
++        // SAFETY: `inner` is pinned when `sema` is.
++        let pinned = unsafe { sema.as_mut().map_unchecked_mut(|s| &mut s.inner) };
++        mutex_init!(pinned, "Semaphore::inner");
++
++        Ok(Self {
++            _dev: Registration::new_pinned::<FileState>(name, None, sema.into())?,
++        })
++    }
++}
++
++impl Drop for RustSemaphore {
++    fn drop(&mut self) {
++        pr_info!("Rust semaphore sample (exit)\n");
++    }
++}
++
++const IOCTL_GET_READ_COUNT: u32 = 0x80086301;
++const IOCTL_SET_READ_COUNT: u32 = 0x40086301;
++
++impl IoctlHandler for FileState {
++    type Target<'a> = &'a Self;
++
++    fn read(this: &Self, _: &File, cmd: u32, writer: &mut UserSlicePtrWriter) -> Result<i32> {
++        match cmd {
++            IOCTL_GET_READ_COUNT => {
++                writer.write(&this.read_count.load(Ordering::Relaxed))?;
++                Ok(0)
++            }
++            _ => Err(Error::EINVAL),
++        }
++    }
++
++    fn write(this: &Self, _: &File, cmd: u32, reader: &mut UserSlicePtrReader) -> Result<i32> {
++        match cmd {
++            IOCTL_SET_READ_COUNT => {
++                this.read_count.store(reader.read()?, Ordering::Relaxed);
++                Ok(0)
++            }
++            _ => Err(Error::EINVAL),
++        }
++    }
++}
+diff --git a/samples/rust/rust_semaphore_c.c b/samples/rust/rust_semaphore_c.c
+new file mode 100644
+index 000000000000..cdc121d4030d
+--- /dev/null
++++ b/samples/rust/rust_semaphore_c.c
+@@ -0,0 +1,212 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Rust semaphore sample (in C, for comparison)
++ *
++ * This is a C implementation of `rust_semaphore.rs`. Refer to the description
++ * in that file for details on the device.
++ */
++
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/miscdevice.h>
++#include <linux/module.h>
++#include <linux/fs.h>
++#include <linux/slab.h>
++#include <linux/refcount.h>
++#include <linux/wait.h>
++
++#define IOCTL_GET_READ_COUNT _IOR('c', 1, u64)
++#define IOCTL_SET_READ_COUNT _IOW('c', 1, u64)
++
++struct semaphore_state {
++	struct kref ref;
++	struct miscdevice miscdev;
++	wait_queue_head_t changed;
++	struct mutex mutex;
++	size_t count;
++	size_t max_seen;
++};
++
++struct file_state {
++	atomic64_t read_count;
++	struct semaphore_state *shared;
++};
++
++static int semaphore_consume(struct semaphore_state *state)
 +{
-+	const char *val;
-+	const char *val_prefix = "";
-+	char *val_prefixed = NULL;
-+	size_t val_prefixed_len;
-+	char *escaped = NULL;
++	DEFINE_WAIT(wait);
 +
-+	if (sym->type == S_UNKNOWN)
-+		return;
-+
-+	val = sym_get_string_value(sym);
-+
-+	switch (sym->type) {
-+	case S_BOOLEAN:
-+	case S_TRISTATE:
-+		/*
-+		 * We do not care about disabled ones, i.e. no need for
-+		 * what otherwise are "comments" in other printers.
-+		 */
-+		if (*val == 'n')
-+			return;
-+
-+		/*
-+		 * To have similar functionality to the C macro `IS_ENABLED()`
-+		 * we provide an empty `--cfg CONFIG_X` here in both `y`
-+		 * and `m` cases.
-+		 *
-+		 * Then, the common `fprintf()` below will also give us
-+		 * a `--cfg CONFIG_X="y"` or `--cfg CONFIG_X="m"`, which can
-+		 * be used as the equivalent of `IS_BUILTIN()`/`IS_MODULE()`.
-+		 */
-+		fprintf(fp, "--cfg=%s%s\n", CONFIG_, sym->name);
-+		break;
-+	case S_HEX:
-+		if (val[0] != '0' || (val[1] != 'x' && val[1] != 'X'))
-+			val_prefix = "0x";
-+		break;
-+	default:
-+		break;
++	mutex_lock(&state->mutex);
++	while (state->count == 0) {
++		prepare_to_wait(&state->changed, &wait, TASK_INTERRUPTIBLE);
++		mutex_unlock(&state->mutex);
++		schedule();
++		finish_wait(&state->changed, &wait);
++		if (signal_pending(current))
++			return -EINTR;
++		mutex_lock(&state->mutex);
 +	}
 +
-+	if (strlen(val_prefix) > 0) {
-+		val_prefixed_len = strlen(val) + strlen(val_prefix) + 1;
-+		val_prefixed = xmalloc(val_prefixed_len);
-+		snprintf(val_prefixed, val_prefixed_len, "%s%s", val_prefix, val);
-+		val = val_prefixed;
-+	}
++	state->count--;
++	mutex_unlock(&state->mutex);
 +
-+	/* All values get escaped: the `--cfg` option only takes strings */
-+	escaped = escape_string_value(val);
-+	val = escaped;
-+
-+	fprintf(fp, "--cfg=%s%s=%s\n", CONFIG_, sym->name, val);
-+
-+	free(escaped);
-+	free(val_prefixed);
++	return 0;
 +}
 +
- /*
-  * Write out a minimal config.
-  * All values that has default values are skipped as this is redundant.
-@@ -1129,6 +1198,12 @@ int conf_write_autoconf(int overwrite)
- 	if (ret)
- 		return ret;
- 
-+	ret = __conf_write_autoconf(conf_get_rustccfg_name(),
-+				    print_symbol_for_rustccfg,
-+				    NULL);
++static int semaphore_open(struct inode *nodp, struct file *filp)
++{
++	struct semaphore_state *shared =
++		container_of(filp->private_data, struct semaphore_state, miscdev);
++	struct file_state *state;
++
++	state = kzalloc(sizeof(*state), GFP_KERNEL);
++	if (!state)
++		return -ENOMEM;
++
++	kref_get(&shared->ref);
++	state->shared = shared;
++	atomic64_set(&state->read_count, 0);
++
++	filp->private_data = state;
++
++	return 0;
++}
++
++static ssize_t semaphore_write(struct file *filp, const char __user *buffer, size_t count,
++			       loff_t *ppos)
++{
++	struct file_state *state = filp->private_data;
++	struct semaphore_state *shared = state->shared;
++
++	mutex_lock(&shared->mutex);
++
++	shared->count += count;
++	if (shared->count < count)
++		shared->count = SIZE_MAX;
++
++	if (shared->count > shared->max_seen)
++		shared->max_seen = shared->count;
++
++	mutex_unlock(&shared->mutex);
++
++	wake_up_all(&shared->changed);
++
++	return count;
++}
++
++static ssize_t semaphore_read(struct file *filp, char __user *buffer,
++			      size_t count, loff_t *ppos)
++{
++	struct file_state *state = filp->private_data;
++	char c = 0;
++	int ret;
++
++	if (count == 0 || *ppos > 0)
++		return 0;
++
++	ret = semaphore_consume(state->shared);
 +	if (ret)
 +		return ret;
 +
- 	/*
- 	 * Create include/config/auto.conf. This must be the last step because
- 	 * Kbuild has a dependency on auto.conf and this marks the successful
-diff --git a/scripts/rust-version.sh b/scripts/rust-version.sh
-new file mode 100755
-index 000000000000..67b6d31688e2
++	if (copy_to_user(buffer, &c, sizeof(c)))
++		return -EFAULT;
++
++	atomic64_add(1, &state->read_count);
++	*ppos += 1;
++	return 1;
++}
++
++static long semaphore_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
++{
++	struct file_state *state = filp->private_data;
++	void __user *buffer = (void __user *)arg;
++	u64 value;
++
++	switch (cmd) {
++	case IOCTL_GET_READ_COUNT:
++		value = atomic64_read(&state->read_count);
++		if (copy_to_user(buffer, &value, sizeof(value)))
++			return -EFAULT;
++		return 0;
++	case IOCTL_SET_READ_COUNT:
++		if (copy_from_user(&value, buffer, sizeof(value)))
++			return -EFAULT;
++		atomic64_set(&state->read_count, value);
++		return 0;
++	default:
++		return -EINVAL;
++	}
++}
++
++static void semaphore_free(struct kref *kref)
++{
++	struct semaphore_state *device;
++
++	device = container_of(kref, struct semaphore_state, ref);
++	kfree(device);
++}
++
++static int semaphore_release(struct inode *nodp, struct file *filp)
++{
++	struct file_state *state = filp->private_data;
++
++	kref_put(&state->shared->ref, semaphore_free);
++	kfree(state);
++	return 0;
++}
++
++static const struct file_operations semaphore_fops = {
++	.owner = THIS_MODULE,
++	.open = semaphore_open,
++	.read = semaphore_read,
++	.write = semaphore_write,
++	.compat_ioctl = semaphore_ioctl,
++	.release = semaphore_release,
++};
++
++static struct semaphore_state *device;
++
++static int __init semaphore_init(void)
++{
++	int ret;
++	struct semaphore_state *state;
++
++	pr_info("Rust semaphore sample (in C, for comparison) (init)\n");
++
++	state = kzalloc(sizeof(*state), GFP_KERNEL);
++	if (!state)
++		return -ENOMEM;
++
++	mutex_init(&state->mutex);
++	kref_init(&state->ref);
++	init_waitqueue_head(&state->changed);
++
++	state->miscdev.fops = &semaphore_fops;
++	state->miscdev.minor = MISC_DYNAMIC_MINOR;
++	state->miscdev.name = "semaphore";
++
++	ret = misc_register(&state->miscdev);
++	if (ret < 0) {
++		kfree(state);
++		return ret;
++	}
++
++	device = state;
++
++	return 0;
++}
++
++static void __exit semaphore_exit(void)
++{
++	pr_info("Rust semaphore sample (in C, for comparison) (exit)\n");
++
++	misc_deregister(&device->miscdev);
++	kref_put(&device->ref, semaphore_free);
++}
++
++module_init(semaphore_init);
++module_exit(semaphore_exit);
++
++MODULE_LICENSE("GPL v2");
++MODULE_AUTHOR("Rust for Linux Contributors");
++MODULE_DESCRIPTION("Rust semaphore sample (in C, for comparison)");
+diff --git a/samples/rust/rust_stack_probing.rs b/samples/rust/rust_stack_probing.rs
+new file mode 100644
+index 000000000000..4f44fade96aa
 --- /dev/null
-+++ b/scripts/rust-version.sh
-@@ -0,0 +1,31 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# rust-version rust-command
-+#
-+# Print the compiler version of `rust-command' in a 5 or 6-digit form
-+# such as `14502' for rustc-1.45.2 etc.
-+#
-+# Returns 0 if not found (so that Kconfig does not complain)
-+compiler="$*"
++++ b/samples/rust/rust_stack_probing.rs
+@@ -0,0 +1,40 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+if [ ${#compiler} -eq 0 ]; then
-+	echo "Error: No compiler specified." >&2
-+	printf "Usage:\n\t$0 <rust-command>\n" >&2
-+	exit 1
-+fi
++//! Rust stack probing sample
 +
-+if ! command -v $compiler >/dev/null 2>&1; then
-+	echo 0
-+	exit 0
-+fi
++#![no_std]
++#![feature(allocator_api, global_asm)]
++#![feature(bench_black_box)]
 +
-+VERSION=$($compiler --version | cut -f2 -d' ')
++use kernel::prelude::*;
 +
-+# Cut suffix if any (e.g. `-dev`)
-+VERSION=$(echo $VERSION | cut -f1 -d'-')
++module! {
++    type: RustStackProbing,
++    name: b"rust_stack_probing",
++    author: b"Rust for Linux Contributors",
++    description: b"Rust stack probing sample",
++    license: b"GPL v2",
++}
 +
-+MAJOR=$(echo $VERSION | cut -f1 -d'.')
-+MINOR=$(echo $VERSION | cut -f2 -d'.')
-+PATCHLEVEL=$(echo $VERSION | cut -f3 -d'.')
-+printf "%d%02d%02d\\n" $MAJOR $MINOR $PATCHLEVEL
++struct RustStackProbing;
++
++impl KernelModule for RustStackProbing {
++    fn init(_name: &'static CStr, _module: &'static ThisModule) -> Result<Self> {
++        pr_info!("Rust stack probing sample (init)\n");
++
++        // Including this large variable on the stack will trigger
++        // stack probing on the supported archs.
++        // This will verify that stack probing does not lead to
++        // any errors if we need to link `__rust_probestack`.
++        let x: [u64; 514] = core::hint::black_box([5; 514]);
++        pr_info!("Large array has length: {}\n", x.len());
++
++        Ok(RustStackProbing)
++    }
++}
++
++impl Drop for RustStackProbing {
++    fn drop(&mut self) {
++        pr_info!("Rust stack probing sample (exit)\n");
++    }
++}
+diff --git a/samples/rust/rust_sync.rs b/samples/rust/rust_sync.rs
+new file mode 100644
+index 000000000000..f71f8928d16e
+--- /dev/null
++++ b/samples/rust/rust_sync.rs
+@@ -0,0 +1,81 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! Rust synchronisation primitives sample
++
++#![no_std]
++#![feature(allocator_api, global_asm)]
++
++use kernel::prelude::*;
++use kernel::{
++    condvar_init, mutex_init, spinlock_init,
++    sync::{CondVar, Mutex, SpinLock},
++};
++
++module! {
++    type: RustSync,
++    name: b"rust_sync",
++    author: b"Rust for Linux Contributors",
++    description: b"Rust synchronisation primitives sample",
++    license: b"GPL v2",
++}
++
++struct RustSync;
++
++impl KernelModule for RustSync {
++    fn init(_name: &'static CStr, _module: &'static ThisModule) -> Result<Self> {
++        pr_info!("Rust synchronisation primitives sample (init)\n");
++
++        // Test mutexes.
++        {
++            // SAFETY: `init` is called below.
++            let mut data = Pin::from(Box::try_new(unsafe { Mutex::new(0) })?);
++            mutex_init!(data.as_mut(), "RustSync::init::data1");
++            *data.lock() = 10;
++            pr_info!("Value: {}\n", *data.lock());
++
++            // SAFETY: `init` is called below.
++            let mut cv = Pin::from(Box::try_new(unsafe { CondVar::new() })?);
++            condvar_init!(cv.as_mut(), "RustSync::init::cv1");
++
++            {
++                let mut guard = data.lock();
++                while *guard != 10 {
++                    let _ = cv.wait(&mut guard);
++                }
++            }
++            cv.notify_one();
++            cv.notify_all();
++            cv.free_waiters();
++        }
++
++        // Test spinlocks.
++        {
++            // SAFETY: `init` is called below.
++            let mut data = Pin::from(Box::try_new(unsafe { SpinLock::new(0) })?);
++            spinlock_init!(data.as_mut(), "RustSync::init::data2");
++            *data.lock() = 10;
++            pr_info!("Value: {}\n", *data.lock());
++
++            // SAFETY: `init` is called below.
++            let mut cv = Pin::from(Box::try_new(unsafe { CondVar::new() })?);
++            condvar_init!(cv.as_mut(), "RustSync::init::cv2");
++            {
++                let mut guard = data.lock();
++                while *guard != 10 {
++                    let _ = cv.wait(&mut guard);
++                }
++            }
++            cv.notify_one();
++            cv.notify_all();
++            cv.free_waiters();
++        }
++
++        Ok(RustSync)
++    }
++}
++
++impl Drop for RustSync {
++    fn drop(&mut self) {
++        pr_info!("Rust synchronisation primitives sample (exit)\n");
++    }
++}
 -- 
 2.34.0
 

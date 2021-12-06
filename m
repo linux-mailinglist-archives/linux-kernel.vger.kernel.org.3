@@ -2,84 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C84469DA1
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFA7469DA0
 	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387566AbhLFPbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:31:31 -0500
-Received: from mout.kundenserver.de ([212.227.17.10]:35059 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346677AbhLFPTb (ORCPT
+        id S1387540AbhLFPb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:31:28 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:42974 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357849AbhLFPTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:19:31 -0500
-Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mzhax-1mhYFk0F2P-00vdcC; Mon, 06 Dec 2021 16:16:01 +0100
-Received: by mail-wr1-f51.google.com with SMTP id j3so23209474wrp.1;
-        Mon, 06 Dec 2021 07:16:00 -0800 (PST)
-X-Gm-Message-State: AOAM533Ki0OwtYOTWv1JV4700fjNSV1YhpZ/US+6siWVDUs4ZAFPipKD
-        1948UK22GrH5QVr5fUbOEYgMfN9y3NN2eQyTiYk=
-X-Google-Smtp-Source: ABdhPJw/ZXYF+K/CJn1HXgPjlPbQr4ytrnThyfQ8C9mdA4sndqRRwQaKMfw+ZhUv1DSh/BoBzDsj/99pArMtUx8ZXSs=
-X-Received: by 2002:a05:6000:110b:: with SMTP id z11mr43984765wrw.32.1638803760643;
- Mon, 06 Dec 2021 07:16:00 -0800 (PST)
+        Mon, 6 Dec 2021 10:19:17 -0500
+Date:   Mon, 06 Dec 2021 15:15:45 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638803747;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e+uW1Cga0RiD6Y1VOJLmIas/qAaIB454K+5a7GdGvFk=;
+        b=sGGVAJIglGn7RN/HGnJuFKyW3xmNLek29eRXmH+YXFA8lnO/XNbTBUkiM5Q0K0WKxVasn9
+        d1L5Ef/XNAHR/FQZnvog+BeqkDIEevlnuOcFptITtmAFSBjYSxF0KiCzscOY495PFgH0H/
+        eYg+Uy/u37cG58oeR1rtL7uXvzjxKZBu7v/yvx1wyP/PSaRBg7BSqmjYbMwGEERckouVgP
+        ag2jzuxW5UJDPGWAv2aTwe6iE5hQ81mnxdbaVrviRRW15EHLWgVRnN2JTb7NQumNEJU6e4
+        F8a+02+ur0zgO4C2CR1aH5rHxLagwsh+Lf3knJfIKnVCtTkq+MQrSagT0yh/MA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638803747;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e+uW1Cga0RiD6Y1VOJLmIas/qAaIB454K+5a7GdGvFk=;
+        b=gWVpxDfJvMQZHCsgG40ClSEC6YgMRB5F28lGJyCpoiLiEtJBpDHLta6UETqsYbPO9KM+Xk
+        014ADx79P40veDBQ==
+From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: locking/core] lockdep/selftests: Avoid using
+ local_lock_{acquire|release}().
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211129174654.668506-7-bigeasy@linutronix.de>
+References: <20211129174654.668506-7-bigeasy@linutronix.de>
 MIME-Version: 1.0
-References: <cover.1638275062.git.quic_saipraka@quicinc.com>
- <cc649faf144fce439b7a341303b6cc73ac285949.1638275062.git.quic_saipraka@quicinc.com>
- <CAK8P3a2JSSJxs92uEiJQAa0iQOvA6NDuww3+Br5cAxYvXVOOAQ@mail.gmail.com>
- <7b2b5888-c2ca-2ca0-8c0c-32128fcb37d2@quicinc.com> <CAK8P3a0TZp349d7xFvpa6rzGSa4Wj2cAhqOg9-BAewA-d+yvJA@mail.gmail.com>
- <2efe933e-de1e-0dfc-959a-c0003e28f830@quicinc.com>
-In-Reply-To: <2efe933e-de1e-0dfc-959a-c0003e28f830@quicinc.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 6 Dec 2021 16:15:44 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0L2tLeF1Q0+0ijUxhGNaw+Z0fyPC1oW6_ELQfn0=i4iw@mail.gmail.com>
-Message-ID: <CAK8P3a0L2tLeF1Q0+0ijUxhGNaw+Z0fyPC1oW6_ELQfn0=i4iw@mail.gmail.com>
-Subject: Re: [PATCHv5 1/4] arm64: io: Use asm-generic high level MMIO accessors
-To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Marc Zyngier <maz@kernel.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        quic_psodagud@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Wjrf/T3f5sUEsHPW/Ia8K03tSVda3MNopEC8jhYmXuEeo2L1uin
- E4y80EPFSRu5qnUmBp5y3KJBp6Phm82gefMwn3cYekIVQ/WrU0S0gTsZpPXng7fR2q0luyj
- OVFIPicdvi5JRwNPBe1wt0xpZi8CJ282sgmhRYlfK4LXhE+aDH3kfJKxBbJ6zQKAb8RYzoq
- az6uJ+RepbWuEMAAyEZlg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:06KoaJJmiVM=:drZuR5Ja2h+TKyGMwaASIY
- B9O2gT3GfCzTNNJ68hJOp/5QjimHR3N3U8Xv+Ejin559Z7bxEOrOUAOWgtVo4+XaoCOWwHBcZ
- PAFOS3t/iSqhhfEETwFk+c9jCcm1RQwX87LS1DkSsfWON0bJK2XBNXakNRspx83xSSTUuxl8N
- ih5bI/bivTOJ5MkRXqkeGqNUW+qcC6/HOv1XQkPKn0GeVBRYddLCxpQAZPRqqG+XCjqJeGqbz
- uv8JRqkszm58/9mym+7FN0PW4otdoDsdcizuXDn7YNAQJ8bMNRsfCbK4SUjJKhdeEk3ZrUd1+
- T+J2UMg2Pgz5D5u/eRFSUj2Z5tdouY+cs5CxZ7aVOh/KjGZJdAwJ6WjVNigzv2wGkFfxaXbJx
- Ln59eK3E81nR1AdF1bDWC9bD+4oXvUS3MCMQH4MnMckILT6cj4QTXy2uXKlb69Vrv88Hx0g6h
- Dj/1uYutCXTTS1Urm0I9uzdsYrxHXj9BJNHS/PcqsurZag5zDzuhwshtTUfA6QlP9GWx9tn/S
- uYvZK8watBdn+Icn40qf0SwMBvIXlV/s5v840joKmLPn+SwJ8DQMU2HZfPGHbvkzOOSA0/HXz
- KboY/M2i5WQpTdn9RjyRIkn0xSlJgNpv7Qllydyx4P+D4qqKdFlv8k9l7ohOJbrt7FAn3NLNb
- Rqtxj4Ws1eG5+uvRRM9CZU2LLDhgbHSH8KjdnvFPzcnXUlAMJrlgIuQZJkzrZGkgBAQz7tCBW
- fJY0wpXVawQEFRyu4F04igUOs8NXHzmt6RxF+zln9kz521KN8fG/3r+R2f1ebFBKq0O5wri1i
- u8kZpAqOgCbveYx4/JzO4REhWRGDp3PP9qdgC2/iOARoufQ9+4=
+Message-ID: <163880374530.11128.14099889591098475504.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 2:52 PM Sai Prakash Ranjan
-<quic_saipraka@quicinc.com> wrote:
->
-> Sorry, what I meant was the literal name of these macros, i.e.,
-> __iormb() has more explicit naming as
-> IO read memory barrier and __io_ar() is IO after read? So doesn't it
-> make more sense that __iormb()
-> should be the primary definition which is already the case and ar/bw
-> should be based on them.
+The following commit has been merged into the locking/core branch of tip:
 
-My reasoning was that we should ideally only have one set, and that
-__io_ar()/__io_bw() are the ones used in architecture-independent code,
-so I'd rather use those and deprecate the arm64 specific ones, eventually
-moving all the arm64 specific code to use those directly where needed.
+Commit-ID:     fc78dd08e64011865799764d5b641bf823f84c66
+Gitweb:        https://git.kernel.org/tip/fc78dd08e64011865799764d5b641bf823f84c66
+Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+AuthorDate:    Mon, 29 Nov 2021 18:46:49 +01:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Sat, 04 Dec 2021 10:56:24 +01:00
 
-        Arnd
+lockdep/selftests: Avoid using local_lock_{acquire|release}().
+
+The local_lock related functions
+  local_lock_acquire()
+  local_lock_release()
+
+are part of the internal implementation and should be avoided.
+Define the lock as DEFINE_PER_CPU so the normal local_lock() function
+can be used.
+
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20211129174654.668506-7-bigeasy@linutronix.de
+---
+ lib/locking-selftest.c | 32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/lib/locking-selftest.c b/lib/locking-selftest.c
+index 71652e1..4d614c7 100644
+--- a/lib/locking-selftest.c
++++ b/lib/locking-selftest.c
+@@ -139,7 +139,7 @@ static DEFINE_RT_MUTEX(rtmutex_Z2);
+ 
+ #endif
+ 
+-static local_lock_t local_A = INIT_LOCAL_LOCK(local_A);
++static DEFINE_PER_CPU(local_lock_t, local_A);
+ 
+ /*
+  * non-inlined runtime initializers, to let separate locks share
+@@ -1320,7 +1320,7 @@ GENERATE_PERMUTATIONS_3_EVENTS(irq_read_recursion3_soft_wlock)
+ # define I_MUTEX(x)	lockdep_reset_lock(&mutex_##x.dep_map)
+ # define I_RWSEM(x)	lockdep_reset_lock(&rwsem_##x.dep_map)
+ # define I_WW(x)	lockdep_reset_lock(&x.dep_map)
+-# define I_LOCAL_LOCK(x) lockdep_reset_lock(&local_##x.dep_map)
++# define I_LOCAL_LOCK(x) lockdep_reset_lock(this_cpu_ptr(&local_##x.dep_map))
+ #ifdef CONFIG_RT_MUTEXES
+ # define I_RTMUTEX(x)	lockdep_reset_lock(&rtmutex_##x.dep_map)
+ #endif
+@@ -1380,7 +1380,7 @@ static void reset_locks(void)
+ 	init_shared_classes();
+ 	raw_spin_lock_init(&raw_lock_A);
+ 	raw_spin_lock_init(&raw_lock_B);
+-	local_lock_init(&local_A);
++	local_lock_init(this_cpu_ptr(&local_A));
+ 
+ 	ww_mutex_init(&o, &ww_lockdep); ww_mutex_init(&o2, &ww_lockdep); ww_mutex_init(&o3, &ww_lockdep);
+ 	memset(&t, 0, sizeof(t)); memset(&t2, 0, sizeof(t2));
+@@ -2646,8 +2646,8 @@ static void wait_context_tests(void)
+ 
+ static void local_lock_2(void)
+ {
+-	local_lock_acquire(&local_A);	/* IRQ-ON */
+-	local_lock_release(&local_A);
++	local_lock(&local_A);	/* IRQ-ON */
++	local_unlock(&local_A);
+ 
+ 	HARDIRQ_ENTER();
+ 	spin_lock(&lock_A);		/* IN-IRQ */
+@@ -2656,18 +2656,18 @@ static void local_lock_2(void)
+ 
+ 	HARDIRQ_DISABLE();
+ 	spin_lock(&lock_A);
+-	local_lock_acquire(&local_A);	/* IN-IRQ <-> IRQ-ON cycle, false */
+-	local_lock_release(&local_A);
++	local_lock(&local_A);	/* IN-IRQ <-> IRQ-ON cycle, false */
++	local_unlock(&local_A);
+ 	spin_unlock(&lock_A);
+ 	HARDIRQ_ENABLE();
+ }
+ 
+ static void local_lock_3A(void)
+ {
+-	local_lock_acquire(&local_A);	/* IRQ-ON */
++	local_lock(&local_A);	/* IRQ-ON */
+ 	spin_lock(&lock_B);		/* IRQ-ON */
+ 	spin_unlock(&lock_B);
+-	local_lock_release(&local_A);
++	local_unlock(&local_A);
+ 
+ 	HARDIRQ_ENTER();
+ 	spin_lock(&lock_A);		/* IN-IRQ */
+@@ -2676,18 +2676,18 @@ static void local_lock_3A(void)
+ 
+ 	HARDIRQ_DISABLE();
+ 	spin_lock(&lock_A);
+-	local_lock_acquire(&local_A);	/* IN-IRQ <-> IRQ-ON cycle only if we count local_lock(), false */
+-	local_lock_release(&local_A);
++	local_lock(&local_A);	/* IN-IRQ <-> IRQ-ON cycle only if we count local_lock(), false */
++	local_unlock(&local_A);
+ 	spin_unlock(&lock_A);
+ 	HARDIRQ_ENABLE();
+ }
+ 
+ static void local_lock_3B(void)
+ {
+-	local_lock_acquire(&local_A);	/* IRQ-ON */
++	local_lock(&local_A);	/* IRQ-ON */
+ 	spin_lock(&lock_B);		/* IRQ-ON */
+ 	spin_unlock(&lock_B);
+-	local_lock_release(&local_A);
++	local_unlock(&local_A);
+ 
+ 	HARDIRQ_ENTER();
+ 	spin_lock(&lock_A);		/* IN-IRQ */
+@@ -2696,8 +2696,8 @@ static void local_lock_3B(void)
+ 
+ 	HARDIRQ_DISABLE();
+ 	spin_lock(&lock_A);
+-	local_lock_acquire(&local_A);	/* IN-IRQ <-> IRQ-ON cycle only if we count local_lock(), false */
+-	local_lock_release(&local_A);
++	local_lock(&local_A);	/* IN-IRQ <-> IRQ-ON cycle only if we count local_lock(), false */
++	local_unlock(&local_A);
+ 	spin_unlock(&lock_A);
+ 	HARDIRQ_ENABLE();
+ 
+@@ -2812,7 +2812,7 @@ void locking_selftest(void)
+ 	printk("------------------------\n");
+ 	printk("| Locking API testsuite:\n");
+ 	printk("----------------------------------------------------------------------------\n");
+-	printk("                                 | spin |wlock |rlock |mutex | wsem | rsem |\n");
++	printk("                                 | spin |wlock |rlock |mutex | wsem | rsem |rtmutex\n");
+ 	printk("  --------------------------------------------------------------------------\n");
+ 
+ 	init_shared_classes();

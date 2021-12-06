@@ -2,91 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A4E46A354
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EC646A358
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245546AbhLFRq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 12:46:29 -0500
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:40945 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245015AbhLFRqI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 12:46:08 -0500
-Received: by mail-ot1-f51.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so14593688otj.7;
-        Mon, 06 Dec 2021 09:42:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AbndXfdUqpyPQteYDfKjE1VIDsx2qwSU9ZClP6riQdE=;
-        b=TiQCCe1cLB5jtzfRpSFSbokw1GgX35Es3FE85sMF7bWcwOTgCgvbm5SB0NvZUDS3Q1
-         Gt+sXM1XtTWNJRQMuMUNujBtXARJXOd6XgRzYa+8Mu+xIquPJeBPL4JvshfSxSS0Oz/b
-         UPdyjVjQYXjEdvZHP//KlSvgDJDsrLAhgiVeyj7w9P/MuFiuUXlJOoc1dTkfnFUTbKIG
-         XxT/WdbmGTER+7a1nQKbzf9hTv0xMk00jm5ZV5YuFjKTQhLgiyRLrPBatugu/siJdlXu
-         NMB8s1MhyTTvXibkzNIWDnCtA02iAErO4yq8rhBrsaYWuIRQStvB6mMpfGga9V3+lBbb
-         G2/g==
-X-Gm-Message-State: AOAM533mYl8F3rAUUFhvo7pAkGRukk//5W0/VDU6iWlK2hB98iepxCAy
-        RFP83TY5Yr+i0TUapUkDgQ==
-X-Google-Smtp-Source: ABdhPJzRIALyGrYVn7vIW3KpfiJT2LlB6/qH5jyCFoTtpMhgKtFla0ts7XKqa5lxJaRE1k7QLXD+DA==
-X-Received: by 2002:a05:6830:1bc3:: with SMTP id v3mr30400158ota.276.1638812559197;
-        Mon, 06 Dec 2021 09:42:39 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id b17sm2494489ots.66.2021.12.06.09.42.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 09:42:38 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Rayn Chen <rayn_chen@aspeedtech.com>
-Cc:     devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: i2c: aspeed: Drop stray '#interrupt-cells'
-Date:   Mon,  6 Dec 2021 11:42:37 -0600
-Message-Id: <20211206174237.2298580-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        id S244193AbhLFRql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 12:46:41 -0500
+Received: from aposti.net ([89.234.176.197]:59566 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245340AbhLFRqi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 12:46:38 -0500
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     list@opendingux.net, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v2 0/6] dmaengine: jz4780: Driver updates v2
+Date:   Mon,  6 Dec 2021 17:42:53 +0000
+Message-Id: <20211206174259.68133-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'#interrupt-cells' is not documented which causes a warning when
-'unevaluatedProperties' is implemented. Unless the I2C controller is
-also an interrupt controller, '#interrupt-cells' is not valid. This
-doesn't appear to be the case from the driver, so just remove it from
-the example.
+Hi Vinod,
 
-Cc: Brendan Higgins <brendanhiggins@google.com>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Joel Stanley <joel@jms.id.au>
-Cc: Andrew Jeffery <andrew@aj.id.au>
-Cc: Rayn Chen <rayn_chen@aspeedtech.com>
-Cc: linux-i2c@vger.kernel.org
-Cc: openbmc@lists.ozlabs.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-aspeed@lists.ozlabs.org
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml | 1 -
- 1 file changed, 1 deletion(-)
+A small set of updates to the dma-jz4780 driver.
 
-diff --git a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-index ea643e6c3ef5..f597f73ccd87 100644
---- a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-@@ -63,7 +63,6 @@ examples:
-     i2c0: i2c-bus@40 {
-       #address-cells = <1>;
-       #size-cells = <0>;
--      #interrupt-cells = <1>;
-       compatible = "aspeed,ast2500-i2c-bus";
-       reg = <0x40 0x40>;
-       clocks = <&syscon ASPEED_CLK_APB>;
+It adds support for the MDMA/BDMA engines in the JZ4760(B) and JZ4770
+SoCs, which are just regular cores with less channels.
+
+It also adds support for bidirectional channels, so that devices that
+only do half-duplex transfers can request a single DMA channel for both
+directions.
+
+Changes since V1 include:
+- indentation fixes in patch [1/6],
+- a better worded documentation in patch [2/6],
+- a new patch [5/6] to convert all uses of uint32_t to u32.
+
+You mentioned the fact that it would be great to have an exemple in the
+documentation file that uses #dma-cells = <3>. I will add one in a
+future patchset to the SD controller's binding documentation, when its
+driver will be updated to support bidirectional DMA channels.
+
+Cheers,
+-Paul
+
+Paul Cercueil (6):
+  dt-bindings: dma: ingenic: Add compatible strings for MDMA and BDMA
+  dt-bindings: dma: ingenic: Support #dma-cells = <3>
+  dmaengine: jz4780: Work around hardware bug on JZ4760 SoCs
+  dmaengine: jz4780: Add support for the MDMA and BDMA in the JZ4760(B)
+  dmaengine: jz4780: Replace uint32_t with u32
+  dmaengine: jz4780: Support bidirectional I/O on one channel
+
+ .../devicetree/bindings/dma/ingenic,dma.yaml  |  42 ++++---
+ drivers/dma/dma-jz4780.c                      | 118 +++++++++++++-----
+ 2 files changed, 113 insertions(+), 47 deletions(-)
+
 -- 
-2.32.0
+2.33.0
 

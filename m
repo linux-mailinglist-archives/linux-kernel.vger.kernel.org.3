@@ -2,196 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C584690D9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 801194690DF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238474AbhLFHhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 02:37:38 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4852 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229652AbhLFHhc (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 02:37:32 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B67HUr0025383;
-        Mon, 6 Dec 2021 07:33:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=HkMSZMMkGG7qs/M6ldHGjZwCT5FBRbh/Mu0JItmT4HU=;
- b=fuY7zAZS3YT9yFCz/+QlCqrR1JL3u1EAw0y1XAEG4kBfJew0D8VGyLXYLplIZT7e7/90
- 3kbwcSaRvsjtOertzdaDPg4qlG7zsfC1iggg1ZkkKR6K+WC3ckDgvu1d0sunbtKC6Nsf
- j0iQ2Dy6NelyxkdgKYBOxiHmlSAIiCDuKrD/R+2Z6UEqrJGNfnrsguhDePT0nszWzWDr
- Yn0eA/yrIPu8IEN9D6FOsf5pvd4AP5av5Qw40iCvAHSXczLPi8+2SimoKrVNjqr3Qki7
- 4fXk/x6hKsXru3Gz3AIZ2KBfujp413qm4oZpZiTxmD5qrWvsn/5V8o4YSR6Zw946MvDq eQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cse0j07wj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Dec 2021 07:33:43 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B67M9SL008384;
-        Mon, 6 Dec 2021 07:33:42 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cse0j07vj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Dec 2021 07:33:42 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B67WbHH018385;
-        Mon, 6 Dec 2021 07:33:40 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06ams.nl.ibm.com with ESMTP id 3cqykhsc2y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Dec 2021 07:33:40 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B67XaOP29360562
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Dec 2021 07:33:36 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 02E784C04E;
-        Mon,  6 Dec 2021 07:33:36 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D24F14C058;
-        Mon,  6 Dec 2021 07:33:29 +0000 (GMT)
-Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com.com (unknown [9.43.39.249])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Dec 2021 07:33:29 +0000 (GMT)
-From:   Kajol Jain <kjain@linux.ibm.com>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     acme@kernel.org, peterz@infradead.org, songliubraving@fb.com,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, davem@davemloft.net, kpsingh@kernel.org,
-        hawk@kernel.org, kuba@kernel.org, maddy@linux.ibm.com,
-        atrajeev@linux.vnet.ibm.com, linux-perf-users@vger.kernel.org,
-        rnsastry@linux.ibm.com, kjain@linux.ibm.com,
-        andrii.nakryiko@gmail.com
-Subject: [PATCH v4] bpf: Remove config check to enable bpf support for branch records
-Date:   Mon,  6 Dec 2021 13:03:15 +0530
-Message-Id: <20211206073315.77432-1-kjain@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ddqZnyNPzA3d_H6YK0T9qAXKQhnrCgL5
-X-Proofpoint-ORIG-GUID: 5VHbnfruROeutJ8Bs9NzMU1-zunweXEV
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S238485AbhLFHlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 02:41:32 -0500
+Received: from mga06.intel.com ([134.134.136.31]:50248 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229652AbhLFHlb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 02:41:31 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="298063540"
+X-IronPort-AV: E=Sophos;i="5.87,290,1631602800"; 
+   d="scan'208";a="298063540"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2021 23:38:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,290,1631602800"; 
+   d="scan'208";a="611156814"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 05 Dec 2021 23:37:59 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mu8ZS-000Kxe-Q0; Mon, 06 Dec 2021 07:37:58 +0000
+Date:   Mon, 6 Dec 2021 15:37:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yajun Deng <yajun.deng@linux.dev>, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org
+Cc:     kbuild-all@lists.01.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] completion: introduce complete_put() helper function
+Message-ID: <202112061552.NaaSG9xz-lkp@intel.com>
+References: <20211206040319.7063-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-06_02,2021-12-06_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- spamscore=0 clxscore=1015 lowpriorityscore=0 phishscore=0 mlxscore=0
- mlxlogscore=999 priorityscore=1501 adultscore=0 impostorscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112060045
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206040319.7063-1-yajun.deng@linux.dev>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Branch data available to bpf programs can be very useful to get
-stack traces out of userspace application.
+Hi Yajun,
 
-Commit fff7b64355ea ("bpf: Add bpf_read_branch_records() helper")
-added bpf support to capture branch records in x86. Enable this feature
-for other architectures as well by removing check specific to x86.
+Thank you for the patch! Perhaps something to improve:
 
-Incase any architecture doesn't support branch records,
-bpf_read_branch_records still have appropriate checks and it
-will return error number -EINVAL in that scenario. But based on
-documentation there in include/uapi/linux/bpf.h file, incase of
-unsupported archs, this function should return -ENOENT. Hence update
-the appropriate checks to return -ENOENT instead.
+[auto build test WARNING on tip/sched/core]
+[also build test WARNING on v5.16-rc4 next-20211203]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Selftest 'perf_branches' result on power9 machine which has branch stacks
-support.
+url:    https://github.com/0day-ci/linux/commits/Yajun-Deng/completion-introduce-complete_put-helper-function/20211206-120632
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 8c92606ab81086db00cbb73347d124b4eb169b7e
+config: arm-randconfig-r033-20211206 (https://download.01.org/0day-ci/archive/20211206/202112061552.NaaSG9xz-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/6d181628873250fd66a8f2da19182fec95973b6e
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Yajun-Deng/completion-introduce-complete_put-helper-function/20211206-120632
+        git checkout 6d181628873250fd66a8f2da19182fec95973b6e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash kernel/sched/
 
-Before this patch changes:
-[command]# ./test_progs -t perf_branches
- #88/1 perf_branches/perf_branches_hw:FAIL
- #88/2 perf_branches/perf_branches_no_hw:OK
- #88 perf_branches:FAIL
-Summary: 0/1 PASSED, 0 SKIPPED, 1 FAILED
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-After this patch changes:
-[command]# ./test_progs -t perf_branches
- #88/1 perf_branches/perf_branches_hw:OK
- #88/2 perf_branches/perf_branches_no_hw:OK
- #88 perf_branches:OK
-Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+All warnings (new ones prefixed by >>):
 
-Selftest 'perf_branches' result on power9 machine which doesn't
-have branch stack report.
+>> kernel/sched/completion.c:41:6: warning: no previous prototype for 'complete_put' [-Wmissing-prototypes]
+      41 | void complete_put(refcount_t *r, struct completion *x)
+         |      ^~~~~~~~~~~~
 
-After this patch changes:
-[command]# ./test_progs -t perf_branches
- #88/1 perf_branches/perf_branches_hw:SKIP
- #88/2 perf_branches/perf_branches_no_hw:OK
- #88 perf_branches:OK
-Summary: 1/1 PASSED, 1 SKIPPED, 0 FAILED
 
-Fixes: fff7b64355eac ("bpf: Add bpf_read_branch_records() helper")
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+vim +/complete_put +41 kernel/sched/completion.c
+
+    40	
+  > 41	void complete_put(refcount_t *r, struct completion *x)
+    42	{
+    43		if (refcount_dec_and_test(r))
+    44			complete(x);
+    45	}
+    46	EXPORT_SYMBOL(complete_put);
+    47	
+
 ---
-
-
-Tested this patch changes on power9 machine using selftest
-'perf branches' which is added in commit 67306f84ca78 ("selftests/bpf:
-Add bpf_read_branch_records()")
-
-Changelog:
-v3 -> v4
-- Make return type again as -EINVAL for invalid/unsupported
-  flags case as suggested by Daniel Borkmann.
-
-- Link to the v3 patch: https://lkml.org/lkml/2021/11/23/248
-
-v2 -> v3
-- Change the return error number for bpf_read_branch_records
-  function from -EINVAL to -ENOENT for appropriate checks
-  as suggested by Daniel Borkmann.
-
-- Link to the v2 patch: https://lkml.org/lkml/2021/11/18/510
-
-v1 -> v2
-- Inorder to add bpf support to capture branch record in
-  powerpc, rather then adding config for powerpc, entirely
-  remove config check from bpf_read_branch_records function
-  as suggested by Peter Zijlstra
-
-- Link to the v1 patch: https://lkml.org/lkml/2021/11/14/434
-
- kernel/trace/bpf_trace.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index ae9755037b7e..e36d184615fb 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1400,9 +1400,6 @@ static const struct bpf_func_proto bpf_perf_prog_read_value_proto = {
- BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, ctx,
- 	   void *, buf, u32, size, u64, flags)
- {
--#ifndef CONFIG_X86
--	return -ENOENT;
--#else
- 	static const u32 br_entry_size = sizeof(struct perf_branch_entry);
- 	struct perf_branch_stack *br_stack = ctx->data->br_stack;
- 	u32 to_copy;
-@@ -1411,7 +1408,7 @@ BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, ctx,
- 		return -EINVAL;
- 
- 	if (unlikely(!br_stack))
--		return -EINVAL;
-+		return -ENOENT;
- 
- 	if (flags & BPF_F_GET_BRANCH_RECORDS_SIZE)
- 		return br_stack->nr * br_entry_size;
-@@ -1423,7 +1420,6 @@ BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, ctx,
- 	memcpy(buf, br_stack->entries, to_copy);
- 
- 	return to_copy;
--#endif
- }
- 
- static const struct bpf_func_proto bpf_read_branch_records_proto = {
--- 
-2.27.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

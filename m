@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9C34699E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDC6469B56
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345438AbhLFPE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:04:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344997AbhLFPDq (ORCPT
+        id S1349270AbhLFPO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:14:56 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:41684 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349553AbhLFPKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:03:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8997C0698D9;
-        Mon,  6 Dec 2021 06:59:53 -0800 (PST)
+        Mon, 6 Dec 2021 10:10:33 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F9B3B81017;
-        Mon,  6 Dec 2021 14:59:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4663C341C1;
-        Mon,  6 Dec 2021 14:59:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3B4EB8111D;
+        Mon,  6 Dec 2021 15:07:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3DA6C341C1;
+        Mon,  6 Dec 2021 15:07:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802791;
-        bh=i6mk2cb0j5CfxIBorCVhnBTjAaFjzpNUCdJwXN8jegY=;
+        s=korg; t=1638803222;
+        bh=Nz5x3CNvJrDMmGccIO7MLkb+HlnI23f8k6I4an/h5C4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m/Chje6emewVW+7tklHo2pOuLTMelzsFiEil2m7OwYJcrwzobofGgFfzSRzwQj1AC
-         g53b4YeewTizBFAMTymKhsCUC4J/5VAv9ZRREDUYN4oKBEwqrRzmuvfff480omp6bi
-         GpbM2mxPebH29V3alPDIKpv2BonvO3/PRbXM0VYY=
+        b=E5loxONNyGzjWWqHZ9Q81s0yAWK+0Wtnsem5M6iZ9gQFbBUOgLEKm2rA4DN6p5O5A
+         jsczx35+NpScCQFBS2lrqglCnXSEcYLxEGBMZDKNUYh4/9WMjqfsFjO4LleP9kein3
+         0BtsqdQdLSnv9qeHFMtE0qIrBzoAeYZxjdNoRfzg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mike Kravetz <mike.kravetz@oracle.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
+        stable@vger.kernel.org, Manfred Spraul <manfred@colorfullife.com>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
         Davidlohr Bueso <dave@stgolabs.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4.4 34/52] hugetlb: take PMD sharing into account when flushing tlb/caches
+        Andrei Vagin <avagin@gmail.com>,
+        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 4.14 070/106] ipc: WARN if trying to remove ipc object which is absent
 Date:   Mon,  6 Dec 2021 15:56:18 +0100
-Message-Id: <20211206145549.058512955@linuxfoundation.org>
+Message-Id: <20211206145557.891701591@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
-References: <20211206145547.892668902@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,138 +52,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Kravetz <mike.kravetz@oracle.com>
+From: Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>
 
-commit dff11abe280b47c21b804a8ace318e0638bb9a49 upstream.
+commit 126e8bee943e9926238c891e2df5b5573aee76bc upstream.
 
-When fixing an issue with PMD sharing and migration, it was discovered via
-code inspection that other callers of huge_pmd_unshare potentially have an
-issue with cache and tlb flushing.
+Patch series "shm: shm_rmid_forced feature fixes".
 
-Use the routine adjust_range_if_pmd_sharing_possible() to calculate worst
-case ranges for mmu notifiers.  Ensure that this range is flushed if
-huge_pmd_unshare succeeds and unmaps a PUD_SUZE area.
+Some time ago I met kernel crash after CRIU restore procedure,
+fortunately, it was CRIU restore, so, I had dump files and could do
+restore many times and crash reproduced easily.  After some
+investigation I've constructed the minimal reproducer.  It was found
+that it's use-after-free and it happens only if sysctl
+kernel.shm_rmid_forced = 1.
 
-Link: http://lkml.kernel.org/r/20180823205917.16297-3-mike.kravetz@oracle.com
-Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Reviewed-by: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>
+The key of the problem is that the exit_shm() function not handles shp's
+object destroy when task->sysvshm.shm_clist contains items from
+different IPC namespaces.  In most cases this list will contain only
+items from one IPC namespace.
+
+How can this list contain object from different namespaces? The
+exit_shm() function is designed to clean up this list always when
+process leaves IPC namespace.  But we made a mistake a long time ago and
+did not add a exit_shm() call into the setns() syscall procedures.
+
+The first idea was just to add this call to setns() syscall but it
+obviously changes semantics of setns() syscall and that's
+userspace-visible change.  So, I gave up on this idea.
+
+The first real attempt to address the issue was just to omit forced
+destroy if we meet shp object not from current task IPC namespace [1].
+But that was not the best idea because task->sysvshm.shm_clist was
+protected by rwsem which belongs to current task IPC namespace.  It
+means that list corruption may occur.
+
+Second approach is just extend exit_shm() to properly handle shp's from
+different IPC namespaces [2].  This is really non-trivial thing, I've
+put a lot of effort into that but not believed that it's possible to
+make it fully safe, clean and clear.
+
+Thanks to the efforts of Manfred Spraul working an elegant solution was
+designed.  Thanks a lot, Manfred!
+
+Eric also suggested the way to address the issue in ("[RFC][PATCH] shm:
+In shm_exit destroy all created and never attached segments") Eric's
+idea was to maintain a list of shm_clists one per IPC namespace, use
+lock-less lists.  But there is some extra memory consumption-related
+concerns.
+
+An alternative solution which was suggested by me was implemented in
+("shm: reset shm_clist on setns but omit forced shm destroy").  The idea
+is pretty simple, we add exit_shm() syscall to setns() but DO NOT
+destroy shm segments even if sysctl kernel.shm_rmid_forced = 1, we just
+clean up the task->sysvshm.shm_clist list.
+
+This chages semantics of setns() syscall a little bit but in comparision
+to the "naive" solution when we just add exit_shm() without any special
+exclusions this looks like a safer option.
+
+[1] https://lkml.org/lkml/2021/7/6/1108
+[2] https://lkml.org/lkml/2021/7/14/736
+
+This patch (of 2):
+
+Let's produce a warning if we trying to remove non-existing IPC object
+from IPC namespace kht/idr structures.
+
+This allows us to catch possible bugs when the ipc_rmid() function was
+called with inconsistent struct ipc_ids*, struct kern_ipc_perm*
+arguments.
+
+Link: https://lkml.kernel.org/r/20211027224348.611025-1-alexander.mikhalitsyn@virtuozzo.com
+Link: https://lkml.kernel.org/r/20211027224348.611025-2-alexander.mikhalitsyn@virtuozzo.com
+Co-developed-by: Manfred Spraul <manfred@colorfullife.com>
+Signed-off-by: Manfred Spraul <manfred@colorfullife.com>
+Signed-off-by: Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>
+Cc: "Eric W. Biederman" <ebiederm@xmission.com>
 Cc: Davidlohr Bueso <dave@stgolabs.net>
-Cc: Michal Hocko <mhocko@kernel.org>
-Cc: Jerome Glisse <jglisse@redhat.com>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>
+Cc: Andrei Vagin <avagin@gmail.com>
+Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc: Vasily Averin <vvs@virtuozzo.com>
+Cc: <stable@vger.kernel.org>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- mm/hugetlb.c |   53 +++++++++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 43 insertions(+), 10 deletions(-)
 
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -3273,14 +3273,19 @@ void __unmap_hugepage_range(struct mmu_g
- 	struct page *page;
- 	struct hstate *h = hstate_vma(vma);
- 	unsigned long sz = huge_page_size(h);
--	const unsigned long mmun_start = start;	/* For mmu_notifiers */
--	const unsigned long mmun_end   = end;	/* For mmu_notifiers */
-+	unsigned long mmun_start = start;	/* For mmu_notifiers */
-+	unsigned long mmun_end   = end;		/* For mmu_notifiers */
- 
- 	WARN_ON(!is_vm_hugetlb_page(vma));
- 	BUG_ON(start & ~huge_page_mask(h));
- 	BUG_ON(end & ~huge_page_mask(h));
- 
- 	tlb_start_vma(tlb, vma);
-+
-+	/*
-+	 * If sharing possible, alert mmu notifiers of worst case.
-+	 */
-+	adjust_range_if_pmd_sharing_possible(vma, &mmun_start, &mmun_end);
- 	mmu_notifier_invalidate_range_start(mm, mmun_start, mmun_end);
- 	address = start;
- again:
-@@ -3387,12 +3392,23 @@ void unmap_hugepage_range(struct vm_area
+---
+ ipc/util.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+--- a/ipc/util.c
++++ b/ipc/util.c
+@@ -409,8 +409,8 @@ static int ipcget_public(struct ipc_name
+ static void ipc_kht_remove(struct ipc_ids *ids, struct kern_ipc_perm *ipcp)
  {
- 	struct mm_struct *mm;
- 	struct mmu_gather tlb;
-+	unsigned long tlb_start = start;
-+	unsigned long tlb_end = end;
-+
-+	/*
-+	 * If shared PMDs were possibly used within this vma range, adjust
-+	 * start/end for worst case tlb flushing.
-+	 * Note that we can not be sure if PMDs are shared until we try to
-+	 * unmap pages.  However, we want to make sure TLB flushing covers
-+	 * the largest possible range.
-+	 */
-+	adjust_range_if_pmd_sharing_possible(vma, &tlb_start, &tlb_end);
- 
- 	mm = vma->vm_mm;
- 
--	tlb_gather_mmu(&tlb, mm, start, end);
-+	tlb_gather_mmu(&tlb, mm, tlb_start, tlb_end);
- 	__unmap_hugepage_range(&tlb, vma, start, end, ref_page);
--	tlb_finish_mmu(&tlb, start, end);
-+	tlb_finish_mmu(&tlb, tlb_start, tlb_end);
+ 	if (ipcp->key != IPC_PRIVATE)
+-		rhashtable_remove_fast(&ids->key_ht, &ipcp->khtnode,
+-				       ipc_kht_params);
++		WARN_ON_ONCE(rhashtable_remove_fast(&ids->key_ht, &ipcp->khtnode,
++				       ipc_kht_params));
  }
  
- /*
-@@ -4068,11 +4084,21 @@ unsigned long hugetlb_change_protection(
- 	pte_t pte;
- 	struct hstate *h = hstate_vma(vma);
- 	unsigned long pages = 0;
-+	unsigned long f_start = start;
-+	unsigned long f_end = end;
-+	bool shared_pmd = false;
-+
-+	/*
-+	 * In the case of shared PMDs, the area to flush could be beyond
-+	 * start/end.  Set f_start/f_end to cover the maximum possible
-+	 * range if PMD sharing is possible.
-+	 */
-+	adjust_range_if_pmd_sharing_possible(vma, &f_start, &f_end);
+ /**
+@@ -425,7 +425,7 @@ void ipc_rmid(struct ipc_ids *ids, struc
+ {
+ 	int lid = ipcid_to_idx(ipcp->id);
  
- 	BUG_ON(address >= end);
--	flush_cache_range(vma, address, end);
-+	flush_cache_range(vma, f_start, f_end);
- 
--	mmu_notifier_invalidate_range_start(mm, start, end);
-+	mmu_notifier_invalidate_range_start(mm, f_start, f_end);
- 	i_mmap_lock_write(vma->vm_file->f_mapping);
- 	for (; address < end; address += huge_page_size(h)) {
- 		spinlock_t *ptl;
-@@ -4083,6 +4109,7 @@ unsigned long hugetlb_change_protection(
- 		if (huge_pmd_unshare(mm, &address, ptep)) {
- 			pages++;
- 			spin_unlock(ptl);
-+			shared_pmd = true;
- 			continue;
- 		}
- 		pte = huge_ptep_get(ptep);
-@@ -4117,12 +4144,18 @@ unsigned long hugetlb_change_protection(
- 	 * Must flush TLB before releasing i_mmap_rwsem: x86's huge_pmd_unshare
- 	 * may have cleared our pud entry and done put_page on the page table:
- 	 * once we release i_mmap_rwsem, another task can do the final put_page
--	 * and that page table be reused and filled with junk.
-+	 * and that page table be reused and filled with junk.  If we actually
-+	 * did unshare a page of pmds, flush the range corresponding to the pud.
- 	 */
--	flush_tlb_range(vma, start, end);
--	mmu_notifier_invalidate_range(mm, start, end);
-+	if (shared_pmd) {
-+		flush_tlb_range(vma, f_start, f_end);
-+		mmu_notifier_invalidate_range(mm, f_start, f_end);
-+	} else {
-+		flush_tlb_range(vma, start, end);
-+		mmu_notifier_invalidate_range(mm, start, end);
-+	}
- 	i_mmap_unlock_write(vma->vm_file->f_mapping);
--	mmu_notifier_invalidate_range_end(mm, start, end);
-+	mmu_notifier_invalidate_range_end(mm, f_start, f_end);
- 
- 	return pages << h->order;
- }
+-	idr_remove(&ids->ipcs_idr, lid);
++	WARN_ON_ONCE(idr_remove(&ids->ipcs_idr, lid) != ipcp);
+ 	ipc_kht_remove(ids, ipcp);
+ 	ids->in_use--;
+ 	ipcp->deleted = true;
 
 

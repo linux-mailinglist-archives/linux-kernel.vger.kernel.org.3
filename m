@@ -2,66 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC7246985C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1873146981B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:09:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343709AbhLFORb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 09:17:31 -0500
-Received: from mga18.intel.com ([134.134.136.126]:64720 "EHLO mga18.intel.com"
+        id S245601AbhLFOM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 09:12:58 -0500
+Received: from verein.lst.de ([213.95.11.211]:50705 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343688AbhLFOR3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 09:17:29 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="224187581"
-X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="224187581"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 06:09:53 -0800
-X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="678996576"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 06:09:50 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1muEfh-002nnF-Mu;
-        Mon, 06 Dec 2021 16:08:49 +0200
-Date:   Mon, 6 Dec 2021 16:08:49 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v12 3/7] gpiolib: of: make fwnode take precedence in
- struct gpio_chip
-Message-ID: <Ya4ZcdszZszor0b4@smile.fi.intel.com>
-References: <20211203133003.31786-1-brgl@bgdev.pl>
- <20211203133003.31786-4-brgl@bgdev.pl>
- <Ya4WASlzYGOFWORk@smile.fi.intel.com>
+        id S237344AbhLFOM4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 09:12:56 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 6C59868B05; Mon,  6 Dec 2021 15:09:17 +0100 (CET)
+Date:   Mon, 6 Dec 2021 15:09:16 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, jgross@suse.com,
+        sstabellini@kernel.org, boris.ostrovsky@oracle.com,
+        joro@8bytes.org, will@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        arnd@arndb.de, hch@infradead.org, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, thomas.lendacky@amd.com,
+        Tianyu.Lan@microsoft.com, xen-devel@lists.xenproject.org,
+        michael.h.kelley@microsoft.com, iommu@lists.linux-foundation.org,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, vkuznets@redhat.com, brijesh.singh@amd.com,
+        konrad.wilk@oracle.com, hch@lst.de, parri.andrea@gmail.com,
+        dave.hansen@intel.com
+Subject: Re: [PATCH V4 1/5] Swiotlb: Add Swiotlb bounce buffer remap
+ function for HV IVM
+Message-ID: <20211206140916.GB5100@lst.de>
+References: <20211205081815.129276-1-ltykernel@gmail.com> <20211205081815.129276-2-ltykernel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ya4WASlzYGOFWORk@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20211205081815.129276-2-ltykernel@gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 03:54:09PM +0200, Andy Shevchenko wrote:
-> On Fri, Dec 03, 2021 at 02:29:59PM +0100, Bartosz Golaszewski wrote:
-> > If the driver sets the fwnode in struct gpio_chip, let it take
-> > precedence over the of_node.
-> 
-> By the way, have you tried this on pure DT-less/ACPI-less platform
-> (CONFIG_OF=n, CONFIG_ACPI=n)? I believe gpio-sim in that case won't work,
-> because this doesn't affect swnode case, right?
+Please spell swiotlb with a lower case s.  Otherwise this look good
 
-Okay, swnode will work (*) due to previous patch.
+Acked-by: Christoph Hellwig <hch@lst.de>
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Feel free to carry this in whatever tree is suitable for the rest of the
+patches.

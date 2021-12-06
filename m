@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA36C469DB0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCB0469B1B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387850AbhLFPb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:31:59 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38978 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359484AbhLFPUJ (ORCPT
+        id S1348729AbhLFPMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:12:54 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42714 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348138AbhLFPJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:20:09 -0500
+        Mon, 6 Dec 2021 10:09:59 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC5DB61321;
-        Mon,  6 Dec 2021 15:16:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB1EC341C1;
-        Mon,  6 Dec 2021 15:16:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D5E2B81018;
+        Mon,  6 Dec 2021 15:06:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E729C341C5;
+        Mon,  6 Dec 2021 15:06:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803799;
-        bh=kCfyxNu9J4nF9/ZaoXcd7fTh3FfDzEv7qOs0W5HMDY4=;
+        s=korg; t=1638803188;
+        bh=PEGXhL5qfFKnVDDlay7Ex09mky0Suuspn5tDD76YoPE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0+erF2mzQNYReNsTRI4Yz7+CbPmNYrn+PFjPCi0c/wWpU4CVpKYq27XnQeNiHwD12
-         QQXYwlk/Z/I3AJ2KSzz03nX5C8HTWHF0zpS/2NGktZ/+kWwenb7U6UOJMw7uX4dpa/
-         BKEMSBxWgitnQKhQBU6ZMj8mZmPipdgmQupsaCpM=
+        b=gBQhph88FjX+gWW4lrTjq+CXMo+KRp6qA6IESRJFpgms/TTq0RL6ZXF4XKUy4J8DS
+         uOrpaNomEpxRwFJ7hUTFh5cn/GYcgfl8BJg6fGYF4Nre3Oo8n7wCffX9H1xU9iGkEF
+         7ScFSRvMYyF2AiNr1HP6BhwwcktS/P303MuN/k20=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, James Zhu <James.Zhu@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.10 050/130] drm/amdgpu: move iommu_resume before ip init/resume
+        stable@vger.kernel.org, Justin Forbes <jmforbes@linuxtx.org>,
+        Miklos Szeredi <mszeredi@redhat.com>
+Subject: [PATCH 4.14 059/106] fuse: release pipe buf after last use
 Date:   Mon,  6 Dec 2021 15:56:07 +0100
-Message-Id: <20211206145601.413365434@linuxfoundation.org>
+Message-Id: <20211206145557.470227027@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,57 +45,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Zhu <James.Zhu@amd.com>
+From: Miklos Szeredi <mszeredi@redhat.com>
 
-commit f02abeb0779700c308e661a412451b38962b8a0b upstream.
+commit 473441720c8616dfaf4451f9c7ea14f0eb5e5d65 upstream.
 
-Separate iommu_resume from kfd_resume, and move it before
-other amdgpu ip init/resume.
+Checking buf->flags should be done before the pipe_buf_release() is called
+on the pipe buffer, since releasing the buffer might modify the flags.
 
-Bug: https://bugzilla.kernel.org/show_bug.cgi?id=211277
-Signed-off-by: James Zhu <James.Zhu@amd.com>
-Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+This is exactly what page_cache_pipe_buf_release() does, and which results
+in the same VM_BUG_ON_PAGE(PageLRU(page)) that the original patch was
+trying to fix.
+
+Reported-by: Justin Forbes <jmforbes@linuxtx.org>
+Fixes: 712a951025c0 ("fuse: fix page stealing")
+Cc: <stable@vger.kernel.org> # v2.6.35
+Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
 
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -2220,6 +2220,10 @@ static int amdgpu_device_ip_init(struct
- 	if (r)
- 		goto init_failed;
+---
+ fs/fuse/dev.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+--- a/fs/fuse/dev.c
++++ b/fs/fuse/dev.c
+@@ -897,17 +897,17 @@ static int fuse_try_move_page(struct fus
+ 		goto out_put_old;
+ 	}
  
-+	r = amdgpu_amdkfd_resume_iommu(adev);
-+	if (r)
-+		goto init_failed;
++	get_page(newpage);
 +
- 	r = amdgpu_device_ip_hw_init_phase1(adev);
- 	if (r)
- 		goto init_failed;
-@@ -2913,6 +2917,10 @@ static int amdgpu_device_ip_resume(struc
- {
- 	int r;
++	if (!(buf->flags & PIPE_BUF_FLAG_LRU))
++		lru_cache_add_file(newpage);
++
+ 	/*
+ 	 * Release while we have extra ref on stolen page.  Otherwise
+ 	 * anon_pipe_buf_release() might think the page can be reused.
+ 	 */
+ 	pipe_buf_release(cs->pipe, buf);
  
-+	r = amdgpu_amdkfd_resume_iommu(adev);
-+	if (r)
-+		return r;
-+
- 	r = amdgpu_device_ip_resume_phase1(adev);
- 	if (r)
- 		return r;
-@@ -4296,6 +4304,10 @@ static int amdgpu_do_asic_reset(struct a
- 
- 			if (!r) {
- 				dev_info(tmp_adev->dev, "GPU reset succeeded, trying to resume\n");
-+				r = amdgpu_amdkfd_resume_iommu(tmp_adev);
-+				if (r)
-+					goto out;
-+
- 				r = amdgpu_device_ip_resume_phase1(tmp_adev);
- 				if (r)
- 					goto out;
+-	get_page(newpage);
+-
+-	if (!(buf->flags & PIPE_BUF_FLAG_LRU))
+-		lru_cache_add_file(newpage);
+-
+ 	err = 0;
+ 	spin_lock(&cs->req->waitq.lock);
+ 	if (test_bit(FR_ABORTED, &cs->req->flags))
 
 

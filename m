@@ -2,104 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0824469058
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 07:13:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 631F2469064
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 07:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237679AbhLFGQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 01:16:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
+        id S237702AbhLFGcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 01:32:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbhLFGQ3 (ORCPT
+        with ESMTP id S236571AbhLFGcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 01:16:29 -0500
+        Mon, 6 Dec 2021 01:32:10 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A17C0613F8;
-        Sun,  5 Dec 2021 22:13:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BAEC0613F8
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 22:28:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D3A261179;
-        Mon,  6 Dec 2021 06:13:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1B86C341C2;
-        Mon,  6 Dec 2021 06:12:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 332B661160
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 06:28:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CFC2C341C2;
+        Mon,  6 Dec 2021 06:28:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638771179;
-        bh=+4qlYgaMA0MihnPdhm4aqX/UJW902OE0TQ6SXWfLXqY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GmqnVsRtw3km0kxrYv10PAfcLLasB+AuglLYKUtgsa+YGygxd1WCekjyWW3CDJMmd
-         yKrIx6M9QGfPYhgocEe9qvAnQszb7MJumovYYUDakCsrCvbyFpwZ5EX5AmrwCEnkvV
-         XL6j8018leuR+EcT1YXy5lMG9PtHbWhRXhW726SYr6pHmRBta1VsMJaOrQFCVi2J7a
-         lWcXDiYqXXHW29GMBRFhxdZ3MvJbWAUf8+skDQUKUJXNwN2vFnX/Hdfyeo9VDE7L7d
-         p6bJPGOy5NNROgiyq2Fx+CWyTe1DZHyxy/MZ0Gph55UJbGC2VwGWDTEDNePvlziZOa
-         ODIqeajQn9AFg==
-Date:   Mon, 6 Dec 2021 11:42:55 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/15] arm64: dts: qcom: sm8450: add interconnect nodes
-Message-ID: <Ya2p55S4J6odMvGK@matsya>
-References: <20211201072915.3969178-1-vkoul@kernel.org>
- <20211201072915.3969178-11-vkoul@kernel.org>
- <99e88947-177c-2f39-7f88-de16c24c3e42@somainline.org>
+        s=k20201202; t=1638772120;
+        bh=qnDbwA/2TIM12cv9RoIY2yw8Nptbxe+VufGW5sVZO4s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:From;
+        b=Z9I5WPrK7kSd9WXO+Bte5q6zD5oa8wxT9Tl+vI+yNJBqQ07zLQygnKqWWCEJxsgIS
+         w5ipHogYHTT5LsbUu+qyJSEu1cNhHKz2yT7rMUqCtSqPHOk4AcBapK9igMFQnA70Sr
+         QSsCb062FwrPXhv9ZkoTM6NArQWNjT85njFiL3GbANe7kxWkGrrgrEkobJVn0797aQ
+         vkhnhkxLeFAZ19YnckLVDtHU6MQImhGXxLeHsKbTBtcbdLRXOgP0aSaVlt154jBxqj
+         vdIum74tlcLAAi8FtlSTqgzaiGfepXdtu3CiMIoHpHwxCp9dKRLYZwEpDap9jmxWpm
+         msEmNkat9d/5Q==
+From:   SeongJae Park <sj@kernel.org>
+To:     Xin Hao <xhao@linux.alibaba.com>
+Cc:     sj@kernel.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH RESEND MERGE REQUEST] mm/damon: move damon_rand() definition into damon.h
+Date:   Mon,  6 Dec 2021 06:28:36 +0000
+Message-Id: <20211206062836.4497-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <99e88947-177c-2f39-7f88-de16c24c3e42@somainline.org>
+In-Reply-To: <9a887fbb-ab0f-8297-9516-1e7bef508249@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01-12-21, 16:20, Konrad Dybcio wrote:
-> 
-> On 01.12.2021 08:29, Vinod Koul wrote:
-> > And the various interconnect nodes found in SM8450 SoC and use it for
-> > UFS controller.
-> >
-> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sm8450.dtsi | 80 ++++++++++++++++++++++++++++
-> >  1 file changed, 80 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> > index 75827bbfb3ad..4c7cdcea33fa 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> > @@ -6,6 +6,7 @@
-> >  #include <dt-bindings/interrupt-controller/arm-gic.h>
-> >  #include <dt-bindings/clock/qcom,gcc-sm8450.h>
-> >  #include <dt-bindings/clock/qcom,rpmh.h>
-> > +#include <dt-bindings/interconnect/qcom,sm8450.h>
-> >  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
-> >  
-> >  / {
-> > @@ -573,6 +574,61 @@ uart7: serial@99c000 {
-> >  			};
-> >  		};
-> >  
-> > +		config_noc: interconnect@1500000 {
-> > +			compatible = "qcom,sm8450-config-noc";
-> > +			reg = <0 0x01500000 0 0x1c000>;
-> > +			#interconnect-cells = <1>;
-> > +			qcom,bcm-voters = <&apps_bcm_voter>;
-> > +		};
-> > +
-> > +		mc_virt: interconnect@1580000 {
-> > +			compatible = "qcom,sm8450-mc-virt";
-> > +			reg = <0 0x01580000 0 0x1000>;
-> > +			#interconnect-cells = <1>;
-> > +			qcom,bcm-voters = <&apps_bcm_voter>;
-> > +		};
-> > +
-> > +		system_noc: interconnect@1680000 {
-> > +			reg = <0 0x01680000 0 0x1e200>;
-> > +			compatible = "qcom,sm8450-system-noc";
-> 
-> Compatible first, please
+Hi Xin,
 
-will fix here and everywhere...
+On Mon, 6 Dec 2021 13:20:02 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
 
--- 
-~Vinod
+> Hi park:
+> 
+>      Are you fixing this potential bug? If not, I am willing to modify, 
+> i will send a fixed patch ？
+
+I couldn't find a time slot for this yet.  It would be great if you could send
+a patch.
+
+
+Thanks,
+SJ
+
+> 
+> -- 
+> Best Regards!
+> Xin Hao
+> 

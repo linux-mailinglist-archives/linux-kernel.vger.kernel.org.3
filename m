@@ -2,124 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4B44694A8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 12:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4394694B0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 12:02:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242134AbhLFLEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 06:04:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52635 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242087AbhLFLEX (ORCPT
+        id S242146AbhLFLFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 06:05:35 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:59339 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242138AbhLFLFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 06:04:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638788453;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Dwcq98RgVgHt3sPXfv+5EmMidd2mYMpzpPhJTxKj+Pg=;
-        b=i/vmDjS5Io80DhudHKNuPrGvoHP7bKRIp0QRzJ5yi+kpznlwiBrZdPKQ3qUyOIfyIyLzgr
-        8jWD0BqeS9D8VA9r4N7IuKYravXwoK+mNPyNN0+OZxyQQoHMds5jPqWQ7TSoSWY0Ed4nXe
-        qyPhi8jpMz+5lJAa+RoFUBIfActgQw8=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-431--Q4AcKG8MteFqt_El6FwpQ-1; Mon, 06 Dec 2021 06:00:52 -0500
-X-MC-Unique: -Q4AcKG8MteFqt_El6FwpQ-1
-Received: by mail-wr1-f72.google.com with SMTP id q5-20020a5d5745000000b00178abb72486so1902488wrw.9
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 03:00:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=Dwcq98RgVgHt3sPXfv+5EmMidd2mYMpzpPhJTxKj+Pg=;
-        b=gS0LA2ZFGRJHbaJ0JVsOeKVHbUMoOvDYmyCQ33Pyftu0mb3AHu7gihyvgmzNVWOvVY
-         BKiSIvBZNqtj8Rc4MP+PCldHwh+nYOqDOvOsfhmXC9z8reug8Ahuc64AUaEW7r5k2Ws4
-         Ztd9ucuLG7AMkY8cprBDwggfjQlmNdOA9f5LYdxxWVz8Bg9N1WRkeGXkly8M5va988AJ
-         s4N+Xs2UZkG5xodHjIHg5lAf320MOCLeT4fEwnSPf21L2a/BYS+1FMcUxN8rXJsxFQHT
-         HJrTmP7WHYu3hycHxYiRTOWalu9r/kLblHks89ArmCX+nhbZMv/GztAjkbsfDT6H/P93
-         YadQ==
-X-Gm-Message-State: AOAM533IqyG+tBeYVDi0Wc1zPHP/9IiCQnSVNhlKwYIv2Xh1HM4oH37E
-        Uzyj7hK1OPIZLeuXazz1L4FfFGW36DO33S8qE4gk0M8Ji+89lB1Tm6h5neDjU7JUEc5u/1sDl6x
-        r0gdhPdG6DA0HhS17fxrWisT6
-X-Received: by 2002:a5d:66c5:: with SMTP id k5mr42576574wrw.621.1638788451322;
-        Mon, 06 Dec 2021 03:00:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwsD+3h0MN8m0YP1di4DxA55EhaG9gGCvg9uplghrSeU3XnPWpeO4392iymq3y9VcgNqgQxrA==
-X-Received: by 2002:a5d:66c5:: with SMTP id k5mr42576548wrw.621.1638788451146;
-        Mon, 06 Dec 2021 03:00:51 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c62c6.dip0.t-ipconnect.de. [91.12.98.198])
-        by smtp.gmail.com with ESMTPSA id 138sm13519081wma.17.2021.12.06.03.00.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 03:00:50 -0800 (PST)
-Message-ID: <840cb3d0-61fe-b6cb-9918-69146ba06cf7@redhat.com>
-Date:   Mon, 6 Dec 2021 12:00:50 +0100
+        Mon, 6 Dec 2021 06:05:34 -0500
+Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MAflI-1mj97s1F84-00B2wa; Mon, 06 Dec 2021 12:02:04 +0100
+Received: by mail-wr1-f49.google.com with SMTP id u17so14221254wrt.3;
+        Mon, 06 Dec 2021 03:02:03 -0800 (PST)
+X-Gm-Message-State: AOAM532hvAxzs5RJeA+zDFzFBAxEQ7L+IXbwGXf+Fnh9lwP07R8EMI/r
+        xdZEppRzO8yOYdc7xekYjC22W+OwKf5Ml7oOqGg=
+X-Google-Smtp-Source: ABdhPJxij9pHL6GCrc+5tN6y1Ofw1k9UkkfiqxtBlBPZU0XC/yyTS444cMrSSQAnh0TTwApceQCGYi84YXzBmAR63d4=
+X-Received: by 2002:a5d:6886:: with SMTP id h6mr43602115wru.287.1638788523694;
+ Mon, 06 Dec 2021 03:02:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Nico Pache <npache@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, shakeelb@google.com,
-        ktkhai@virtuozzo.com, shy828301@gmail.com, guro@fb.com,
-        vbabka@suse.cz, vdavydov.dev@gmail.com, raquini@redhat.com
-References: <20211206033338.743270-1-npache@redhat.com>
- <20211206033338.743270-3-npache@redhat.com> <Ya3WcYKcej8XEI0W@dhcp22.suse.cz>
- <d9d14beb-ee20-7ebb-e007-fbf58fb28535@redhat.com>
- <Ya3r3C/OpnK7OBPt@dhcp22.suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [RFC PATCH 2/2] mm/vmscan.c: Prevent allocating shrinker_info on
- offlined nodes
-In-Reply-To: <Ya3r3C/OpnK7OBPt@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <202112061844.RuSQXzxk-lkp@intel.com>
+In-Reply-To: <202112061844.RuSQXzxk-lkp@intel.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 6 Dec 2021 12:01:47 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0wboR0evmNGL_VEsNNdLd9x_v8k3APH70t5gfu9D=A6w@mail.gmail.com>
+Message-ID: <CAK8P3a0wboR0evmNGL_VEsNNdLd9x_v8k3APH70t5gfu9D=A6w@mail.gmail.com>
+Subject: Re: ERROR: modpost: "__divsi3_table" [lib/lz4/lz4_compress.ko] undefined!
+To:     kernel test robot <lkp@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:0+vHEvUgSzc7ExAhFFRrGaoFH6AXyFEk5MNZz6vET8xF+Ixxt2Q
+ wcgTMTgTbq8As0Uv6zMh+cTTslJMb69zfgsGdMonOyJ2rDY8664vOvuXZJSe9oC6rdhttSU
+ OArtbgYkiBtPIZx/3mmahmZW0tXQ7rVYXl4DzVrhlJmmVT3S4wegfcevTp0YHuEwc/U5EZB
+ HXD0BQUNY9lWDFeCk1+wQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DVIC12MCnCQ=:08QAqHXBaY+IEJta+lXeL+
+ hdsdlYxazWaUfSyms9dkNWLpMJoSUnqS/rTFtIyYZd490Z9s7h29sxALHA9kQHOal4FywQNqY
+ 639/IDzqoDt2u7ow0eL71r2iYWB8ks3zvdpw2shm28V7phsFQF3xzJmnGDVoxnDEP1/h4ZqVw
+ JJzSjw0z9cU08+v/h3BxxEf3ozlmJYS8VyDuMWbymj0/UFzME+atM8VYqwwiES7ZIkZSz4+Nx
+ qDTCN3WE6vaCKglU/BrU9cBhbE0JX0yuuRV5a+PtJTdtujKYP/bXlQedHG5RfsQpVEexSaQ+o
+ YKI1KOg7LObyBsrF5DtovxwwGG0JZW7KmVkCawd1aryD7I8gzM693s2TMwo2GWC+rWO6bWh3n
+ dizotXIPM60PiJ3ttMiC1uPT7VvIRdqhLC5YQ3vh4JQXiipEFOUO+ixJv9V+UqD0JTQoJMUxB
+ 1ob0gf7JK2cosCWsaoGt3OTzmY0dewj30A7EP0bTbnqoqKg6/0R+bPbzZk/VFdI4kzLYngU+b
+ 6cRIhBGcrlkx/AlKeXmy7IKEFKSTDMVvS+Sl396A8YzRioxhc6D5IEhONDrIawnJTQLx4qddy
+ Vff+FKFjxmjoDSRvgCHmJlfVaqWHrUOZq8dCXnLP7bzKq7YgiOioPvy2nSFQBK0zhKwRhpouK
+ aPPcyLrgE7KMripM+sowXaa6zAp+mYfFNNev2j4pXInCCdXun1gUuC5z+R23F2/ClT6OKqjDH
+ 2eHndq1XDw2Od+dSYpQME3MrNfW0S004TEPcfZCAM3kgMQCvtWYXTd0PAurse9chPwxYIAjQA
+ 9UJ54fQpxNqF8u7GDCzF2H1Cm5PkIOtARE3cEDG8TZVTzjRnqs=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.12.21 11:54, Michal Hocko wrote:
-> On Mon 06-12-21 11:45:54, David Hildenbrand wrote:
->>> This doesn't seen complete. Slab shrinkers are used in the reclaim
->>> context. Previously offline nodes could be onlined later and this would
->>> lead to NULL ptr because there is no hook to allocate new shrinker
->>> infos. This would be also really impractical because this would have to
->>> update all existing memcgs...
->>
->> Instead of going through the trouble of updating...
->>
->> ...  maybe just keep for_each_node() and check if the target node is
->> offline. If it's offline, just allocate from the first online node.
->> After all, we're not using __GFP_THISNODE, so there are no guarantees
->> either way ...
-> 
-> This looks like another way to paper over a deeper underlying problem
-> IMHO. Fundamentally we have a problem that some pgdata are not allocated
-> and that causes a lot of headache. Not to mention that node_online
-> is just adding to a confusion because it doesn't really tell anything
-> about the logical state of the node.
-> 
-> I think we really should get rid of this approach rather than play a
-> whack-a-mole. We should really drop all notion of node_online and
-> instead allocate pgdat for each possible node. Arch specific code should
-> make sure that zone lists are properly initialized.
-> 
+On Mon, Dec 6, 2021 at 11:30 AM kernel test robot <lkp@intel.com> wrote:
+> First bad commit (maybe != root cause):
+> commit: 570a82b9c36f76a5959b5e47900629b0d413931d media: i2c: select V4L2_ASYNC where needed
 
-I'm not sure if it's rally whack-a-mole really applies. It's just the
-for_each_node_* calls that need love. In other cases, we shouldn't
-really stumble over an offline node.
+Right, that is clearly unrelated.
 
-Someone deliberately decided to use "for_each_node()" instead of
-for_each_online_node() without taking care of online vs. offline
-semantics. That's just a BUG and needs fixing IMHO.
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
+>
+> >> ERROR: modpost: "__divsi3_table" [lib/lz4/lz4_compress.ko] undefined!
 
-After all, we do need patches to backport, reworking pgdat init isn't
-really something feasible for that I think. And I heard of PPC that can
-hotplug thousands of nodes ...
+lz4 was recently updated, and apparently now does a 32-bit division. I
+assume this
+is the decompressor, as arch/mips had similar problems.
 
--- 
-Thanks,
+The possible fixes are:
 
-David / dhildenb
+- disable lz4 compressed kernels on xtensa
+- change lz4 to not perform any division
+- change the xtensa decompressor to include the divsi3 helper code from the
+  main kernel, see fbf3bce45821 ("MIPS: boot/compressed/: add __ashldi3 to
+  target for ZSTD compression")
 
+        Arnd

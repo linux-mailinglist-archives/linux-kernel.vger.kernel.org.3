@@ -2,113 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2340B46A2F6
+	by mail.lfdr.de (Postfix) with ESMTP id 8F84E46A2F7
 	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242054AbhLFRbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 12:31:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33312 "EHLO
+        id S241452AbhLFRbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 12:31:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242650AbhLFRbj (ORCPT
+        with ESMTP id S242884AbhLFRbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Dec 2021 12:31:39 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EB4C0698C0;
-        Mon,  6 Dec 2021 09:27:53 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id q3so23978850wru.5;
-        Mon, 06 Dec 2021 09:27:53 -0800 (PST)
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A04C061A83
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 09:28:09 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id m9so13933034iop.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 09:28:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yjr0+LLOtRYKZIcmyJPSLxbVouLvWeiwMzFfrSoScsc=;
-        b=mPxz2dugNRDvMULWeyAbLHMImMUBsVjTvSexDQ/t2hs9rH6TyliuHVPNBtqJJQwnkz
-         16Uslu/T396k4INAJf3vRLO/6X7glSDv4oOtjSgUoHH9UZYMrnvXwiO74MhQn8C4l4Tn
-         8qJYQDUzCPLowvvwHxFhBY2RnTAE0Shiyy3+DWUwjd4FIDqp+9cFZ/aEQ5Cru2tKZ3la
-         ixo3yZBIA069Z2Rp0xo3nwTu3CAllfRKWXVODwTgsvx0qtkTc9pqzcczPFT9Nma15VH5
-         tHXVqsZtG1gkTLqqCdukQhOUj8B1znJxPH1Sd2knkGmEtytStanURmvPflXNtgOJN2kc
-         7E0w==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=kv5Kmq6bDRAJBmG1SVlRDoAoHxJBOtT9kYYIeRZ+OOM=;
+        b=144+E2pznZKUc/Tgs4vIgh9ELBH7Endl2jpKG2ujF1Kbk6OtrkfBZ+DV8crzH4Pe0M
+         64xVy1EYCpbFY3AkIyNv87MtxgkzeSMyTtWjJ3TEWq2CpCp/la3f/PbFvWN6MSdRz0ne
+         KtWoL8aK2NEO0BYrZg4cZ4pm/BG4dSFdFHpBFrRU7s8J9FvA2PRtvES0J+dwu72R4AOo
+         gPb6c0zluf5096A8UHhwUAW+KsJFMLuzhOaHxIz710S9gGQATbRcTWalipHOs0s6ABgP
+         u9mX/P9StaKl18xe+rNXs/DmmpYN9YYa68UB7Tt1IPUWOaH80OFx8N4daAPRdYY3gV8Q
+         2MhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yjr0+LLOtRYKZIcmyJPSLxbVouLvWeiwMzFfrSoScsc=;
-        b=OLi3TQKOlxG//QvBFqGJBLLLZ8OWYzU7lIm3uv6hwZGeWJq4VS7d/inPzEbCjEnFnh
-         D11c5wtgT1YMRvb3ESglr+LVJW4MoOqHq55XVGuhShlw+RlPqa3hVDdlV9sYL/7+7vdF
-         jDoJqIJhWlYG/ZL2UPRR5MYyMRr8S6lRjhJkJhrusBn57BU4v8/pdeba+g4uOHnkk/mD
-         jsCDdG9i//kfBTMVYr/G8GxcsL71uJeF/dD+H2D2C5b7OXJE4NWfet49mVjPL07KI6tT
-         IAZbQoQLz7xICJpIZBtfJxno6Gim6ebsPQVGr3dUGm1KsYLyYXuSzNBd5+uKCWinzDoC
-         sFJw==
-X-Gm-Message-State: AOAM530YP18K0sNyu4C0IW6jJygd+LjVfyvQCBNJeJ4nknFrT6nVn7MY
-        RWsxp4zhxGkorfPR5X1Ye+g=
-X-Google-Smtp-Source: ABdhPJxu9Q2wvB/5ZUFTAzRhvP09Nf7rnGzVLcifYypW8VvFBL4Cmjxp7zqxKUWVIwssO7e94Rn4GA==
-X-Received: by 2002:a5d:6d86:: with SMTP id l6mr44159550wrs.304.1638811672539;
-        Mon, 06 Dec 2021 09:27:52 -0800 (PST)
-Received: from hamza-OptiPlex-7040 ([39.48.147.147])
-        by smtp.gmail.com with ESMTPSA id u13sm4153wmq.14.2021.12.06.09.27.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 09:27:51 -0800 (PST)
-Date:   Mon, 6 Dec 2021 22:27:46 +0500
-From:   Ameer Hamza <amhamza.mgc@gmail.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     vkuznets@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
-Subject: Re: [PATCH v3] KVM: x86: fix for missing initialization of return
- status variable
-Message-ID: <20211206172746.GA141396@hamza-OptiPlex-7040>
-References: <20211206160813.GA37599@hamza-OptiPlex-7040>
- <20211206164503.135917-1-amhamza.mgc@gmail.com>
- <Ya5CCU0zf+MzMwcX@google.com>
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=kv5Kmq6bDRAJBmG1SVlRDoAoHxJBOtT9kYYIeRZ+OOM=;
+        b=ne9NxZM2wUPsA50GhQtCgjKBFtYHLMYksQaYxhqlb2K5DrtqVtErYAFI7VyyoG7Sc7
+         NmVuNS+gZzBZjG6OFBt+I/L4gOJ3Tm+oQvk7EVHj9OZlQVsfByneUsde+012u8X1role
+         GBU1RfHsz0Jng91YN3OtLPk9COltSnqWG7+wShE9XGY23cEcVpx2aDiiz33YpvEB5T4y
+         YMbvr6IMp3aNQkE0BSdQ2vOROPlFpswgS6+fZetUukH/EazY10jztP/4N0fqBS6ymZgZ
+         5Oa5xBhqZhAiX14cya3NPMB09qvY2T6NQwN1Ljosttkwa/5AMcyJzXItijLZ49rOnJLU
+         +oig==
+X-Gm-Message-State: AOAM5330LA2/I7KDqsKA7qHCEB/iVEByXyJPivtYwrTn9s7jXqO/y0CI
+        +0BaUVmB5vLi4WoqFU6BA0ug6g==
+X-Google-Smtp-Source: ABdhPJzPd3O6+vYBQXcTdotzPmwCZbuwh8F7tVT76LsvKsov4u6iBYJGF80F1r/z9Zxw3WYXmizBuQ==
+X-Received: by 2002:a5e:9b07:: with SMTP id j7mr33966034iok.136.1638811689340;
+        Mon, 06 Dec 2021 09:28:09 -0800 (PST)
+Received: from [192.168.1.30] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id f11sm8877446ila.17.2021.12.06.09.28.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 09:28:08 -0800 (PST)
+Subject: Re: [syzbot] KASAN: use-after-free Write in io_queue_worker_create
+To:     syzbot <syzbot+b60c982cb0efc5e05a47@syzkaller.appspotmail.com>,
+        asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000a9162005d27492b0@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <abb6e52f-327e-7846-4bc6-b0be7ea03514@kernel.dk>
+Date:   Mon, 6 Dec 2021 10:28:08 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ya5CCU0zf+MzMwcX@google.com>
+In-Reply-To: <000000000000a9162005d27492b0@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 05:02:01PM +0000, Sean Christopherson wrote:
-> On Mon, Dec 06, 2021, Ameer Hamza wrote:
-> > If undefined ioctl number is passed to the kvm_vcpu_ioctl_device_attr
-> > ioctl, we should trigger KVM_BUG_ON() and return with EIO to silent
-> > coverity warning.
-> > 
-> > Addresses-Coverity: 1494124 ("Uninitialized scalar variable")
-> > Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
-> > ---
-> > Changes in v3:
-> > Added KVM_BUG_ON() as default case and returned -EIO
-> > ---
-> >  arch/x86/kvm/x86.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index e0aa4dd53c7f..b37068f847ff 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -5019,6 +5019,9 @@ static int kvm_vcpu_ioctl_device_attr(struct kvm_vcpu *vcpu,
-> >  	case KVM_SET_DEVICE_ATTR:
-> >  		r = kvm_arch_tsc_set_attr(vcpu, &attr);
-> >  		break;
-> > +	default:
-> > +		KVM_BUG_ON(1, vcpu->kvm);
-> > +		r = -EIO;
+On 12/5/21 11:43 PM, syzbot wrote:
+> Hello,
 > 
-> At least have a
+> syzbot found the following issue on:
 > 
-> 		break;
+> HEAD commit:    944207047ca4 Merge tag 'usb-5.16-rc4' of git://git.kernel...
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13ebd129b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=171728a464c05f2b
+> dashboard link: https://syzkaller.appspot.com/bug?extid=b60c982cb0efc5e05a47
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 > 
-> if we're going to be pedantic about things.
-I just started as a contributer in this community and trying
-to fix issues found by static analyzer tools. If you think that's
-not necessary, its totally fine :)
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+b60c982cb0efc5e05a47@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: use-after-free in instrument_atomic_write include/linux/instrumented.h:86 [inline]
+> BUG: KASAN: use-after-free in clear_bit_unlock include/asm-generic/bitops/instrumented-lock.h:25 [inline]
+> BUG: KASAN: use-after-free in io_queue_worker_create+0x453/0x4e0 fs/io-wq.c:363
+> Write of size 8 at addr ffff888023e068d8 by task kworker/3:4/13798
 
-> >  	}
-> >  
-> >  	return r;
-> > -- 
-> > 2.25.1
-> > 
+Looks like a spurious clear that can race with the task_work already ran and
+the worker got dropped. Both handlers do clear it, so I think we just need:
+
+diff --git a/fs/io-wq.c b/fs/io-wq.c
+index 50cf9f92da36..35da9d90df76 100644
+--- a/fs/io-wq.c
++++ b/fs/io-wq.c
+@@ -359,10 +359,8 @@ static bool io_queue_worker_create(struct io_worker *worker,
+ 
+ 	init_task_work(&worker->create_work, func);
+ 	worker->create_index = acct->index;
+-	if (!task_work_add(wq->task, &worker->create_work, TWA_SIGNAL)) {
+-		clear_bit_unlock(0, &worker->create_state);
++	if (!task_work_add(wq->task, &worker->create_work, TWA_SIGNAL))
+ 		return true;
+-	}
+ 	clear_bit_unlock(0, &worker->create_state);
+ fail_release:
+ 	io_worker_release(worker);
+
+-- 
+Jens Axboe
+

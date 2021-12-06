@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED2C469F9D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1409B469FA1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391696AbhLFPuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:50:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
+        id S1391826AbhLFPue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:50:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388618AbhLFPeZ (ORCPT
+        with ESMTP id S1388956AbhLFPfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:34:25 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A2EC08E884
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:20:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CoK7AfSqkQue2iVIdMm3Ujn5V1JuX1+w5yvbIOBf/T8=; b=AOjfBIZmfJcwym+inOTj9a9qlf
-        7UfjBIcyaToBVTcEDg1Wwpq0QukNYZC+K/EbRJligBVXJU8JJm4ULlMgcF4njSvNajalkVPGtX69Z
-        kErFWv5VvPaw+9kHVdB24Y/kXqzQLZwPHmZXmNF0XA1vvyPfYyAh7iJgDyIwXUHkEkguw1/F0BxZl
-        zxLqrmOd7iNzm3HNQ0nObGRm6pFnyWx14uRlK5Ua/JbVlDPJoMc4eh2gkW+5yUalQr5je3OFilM+B
-        IkFd/PxS9uG/EQMqLRo5gIhzq/wxLmISKly3hgGuJ4IVuwgCCd0V2ymGktKgi6MVZ0A1EECrk+gjv
-        LsdcbdrQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1muFme-002aFh-Lt; Mon, 06 Dec 2021 15:20:04 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 507A6300362;
-        Mon,  6 Dec 2021 16:20:04 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 33741202420BC; Mon,  6 Dec 2021 16:20:04 +0100 (CET)
-Date:   Mon, 6 Dec 2021 16:20:04 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Vincent Donnefort <vincent.donnefort@arm.com>
-Cc:     mingo@redhat.com, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        valentin.schneider@arm.com
-Subject: Re: [PATCH v2 1/2] sched/fair: Fix asym_fits_capacity() task_util
- type
-Message-ID: <Ya4qJHxUbKMzl04d@hirez.programming.kicks-ass.net>
-References: <20211118141411.2623521-1-vincent.donnefort@arm.com>
+        Mon, 6 Dec 2021 10:35:22 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A382C09B18F
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:20:50 -0800 (PST)
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638804048;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eBUTJfSYTohYJrigB87qpawZTrkhnOrjrQMyd+1Fhwk=;
+        b=eZhwLxSP0xjHaMsmjzLmKUFhWGkGcU+lY49u+slmdMBVa+B0yQeSb0014cmr+9hLtaYxW0
+        LITXrzJUUAolVmD0pv6AunfmcFoB6/h5I9tYVNgMUzYyFFUDI3AVfMF9n53HXYCS58ovlj
+        HBeuhzlOx/59V1aUzWeEGcArXrZyHafIH1BEASzggpKSMKI6GyHZnHVid8Tnd9aidotcaZ
+        nUiTVJByJwlV6FPuPPkjkD0yBQr1siMsmnEobJHOCt9o70Amkq43iDz7+v8bmdu51IlxCL
+        ATYKYRa9JqOJXMUwMwbDyxtmzJw0ZVVn+K2ayBGtNZ51tEvg6tsNwmaZO5PMhg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638804048;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eBUTJfSYTohYJrigB87qpawZTrkhnOrjrQMyd+1Fhwk=;
+        b=puPYMI4UmCOWYPLU0RULgaRZC/m0aDW6qv/I9YVdjynxikd2Cgh4EdqYAy0l1xOJHZ0zmi
+        Obr7NxW+CZS4qpCw==
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Longpeng <longpeng2@huawei.com>,
+        Gonglei <arei.gonglei@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH 0/2 v2] cpu/hotplug: Allow the CPU in CPU_UP_PREPARE state to be brought up again.
+Date:   Mon,  6 Dec 2021 16:20:32 +0100
+Message-Id: <20211206152034.2150770-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211118141411.2623521-1-vincent.donnefort@arm.com>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 18, 2021 at 02:14:10PM +0000, Vincent Donnefort wrote:
-> task_util is an unsigned long value, compared with a CPU capacity which is
-> unsigned long as well. There's no need for an intermediate implicit int
-> cast.
-> 
-> Fixes: b4c9c9f15649 ("sched/fair: Prefer prev cpu in asymmetric wakeup path")
+This is a repost of the previous patch (#2) and adding Boris
+(Ostrovsky)'s suggestion regarding the XEN bits.
+The previous post can be found at
+   https://lore.kernel.org/all/20211122154714.xaoxok3fpk5bgznz@linutronix.d=
+e/
 
-Do either of these patches actually *fix* anything? Afaict they're an
-absolute no-op, even in terms of code-gen due to the promotion rules.
+Sebastian
 
-Yes, its arguably nicer to not rely on those implicit promotions etc..
-but I don't think this warrants a Fixes tag or even being split in two
-patches.
 
-Hmm?

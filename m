@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6905469AA2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F659469C80
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345802AbhLFPJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:09:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
+        id S1358085AbhLFPXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:23:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345032AbhLFPHF (ORCPT
+        with ESMTP id S1358055AbhLFPQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:07:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FFFC08C5D1;
-        Mon,  6 Dec 2021 07:03:12 -0800 (PST)
+        Mon, 6 Dec 2021 10:16:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E351C08EC38;
+        Mon,  6 Dec 2021 07:08:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DBD561327;
-        Mon,  6 Dec 2021 15:03:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22F2CC341C1;
-        Mon,  6 Dec 2021 15:03:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56765B81126;
+        Mon,  6 Dec 2021 15:08:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DD3EC341C5;
+        Mon,  6 Dec 2021 15:08:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802991;
-        bh=5SOFaKiPx/RxzRvgcrSjUTsv8ONihe1jO7rS2815JN4=;
+        s=korg; t=1638803334;
+        bh=rLs9+i102tfl+rMpfib+Hclr2z2BuKojHu4qAKcEj/0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UqwhBcMEfvFPqbm0Dqvhi+ZCAM94LSMRIfWMpE6U+CrJ1GVPcnPs1p1vFvvZ0t3NU
-         E5PCdwPWcj+WWiDkZHmLfmH4fT4+trIoWOnc2WxD1l3sxXavzqHsThWpUYpvgmdtQ2
-         s4Zpv/LkAlA910f89aYMi4xXJW2gMxcWJFArDv9c=
+        b=mCKsHP6X+yTpjlcFwEpeoZXcuIt9yRNJvahl0d+mFjdpt/wySXulaO0We7N/QJ7Fx
+         HIgZ5hy8mmFJV3DBwoLNsSEX99JpwkHYNgv2p0bAP585uRiefRg8hh1AJpAO26W/EE
+         +/L4QQznZ/9hlxWI1Ti6oR1EnbHPIksx/cdIqJLQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Teng Qi <starmiku1207184332@gmail.com>,
+        stable@vger.kernel.org, zhangyue <zhangyue1@kylinos.cn>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 45/62] ethernet: hisilicon: hns: hns_dsaf_misc: fix a possible array overflow in hns_dsaf_ge_srst_by_port()
+Subject: [PATCH 4.14 080/106] net: tulip: de4x5: fix the problem that the array lp->phy[8] may be out of bound
 Date:   Mon,  6 Dec 2021 15:56:28 +0100
-Message-Id: <20211206145550.770503681@linuxfoundation.org>
+Message-Id: <20211206145558.263254704@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,46 +49,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Teng Qi <starmiku1207184332@gmail.com>
+From: zhangyue <zhangyue1@kylinos.cn>
 
-[ Upstream commit a66998e0fbf213d47d02813b9679426129d0d114 ]
+[ Upstream commit 61217be886b5f7402843677e4be7e7e83de9cb41 ]
 
-The if statement:
-  if (port >= DSAF_GE_NUM)
-        return;
+In line 5001, if all id in the array 'lp->phy[8]' is not 0, when the
+'for' end, the 'k' is 8.
 
-limits the value of port less than DSAF_GE_NUM (i.e., 8).
-However, if the value of port is 6 or 7, an array overflow could occur:
-  port_rst_off = dsaf_dev->mac_cb[port]->port_rst_off;
+At this time, the array 'lp->phy[8]' may be out of bound.
 
-because the length of dsaf_dev->mac_cb is DSAF_MAX_PORT_NUM (i.e., 6).
-
-To fix this possible array overflow, we first check port and if it is
-greater than or equal to DSAF_MAX_PORT_NUM, the function returns.
-
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Teng Qi <starmiku1207184332@gmail.com>
+Signed-off-by: zhangyue <zhangyue1@kylinos.cn>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/ethernet/dec/tulip/de4x5.c | 30 +++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c b/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
-index 67accce1d33d0..e89a62c6f2301 100644
---- a/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
-+++ b/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
-@@ -312,6 +312,10 @@ static void hns_dsaf_ge_srst_by_port(struct dsaf_device *dsaf_dev, u32 port,
- 		return;
- 
- 	if (!HNS_DSAF_IS_DEBUG(dsaf_dev)) {
-+		/* DSAF_MAX_PORT_NUM is 6, but DSAF_GE_NUM is 8.
-+		   We need check to prevent array overflow */
-+		if (port >= DSAF_MAX_PORT_NUM)
-+			return;
- 		reg_val_1  = 0x1 << port;
- 		port_rst_off = dsaf_dev->mac_cb[port]->port_rst_off;
- 		/* there is difference between V1 and V2 in register.*/
+diff --git a/drivers/net/ethernet/dec/tulip/de4x5.c b/drivers/net/ethernet/dec/tulip/de4x5.c
+index 8f108a30cba66..84cf7b4582f3e 100644
+--- a/drivers/net/ethernet/dec/tulip/de4x5.c
++++ b/drivers/net/ethernet/dec/tulip/de4x5.c
+@@ -4994,19 +4994,23 @@ mii_get_phy(struct net_device *dev)
+ 	}
+ 	if ((j == limit) && (i < DE4X5_MAX_MII)) {
+ 	    for (k=0; k < DE4X5_MAX_PHY && lp->phy[k].id; k++);
+-	    lp->phy[k].addr = i;
+-	    lp->phy[k].id = id;
+-	    lp->phy[k].spd.reg = GENERIC_REG;      /* ANLPA register         */
+-	    lp->phy[k].spd.mask = GENERIC_MASK;    /* 100Mb/s technologies   */
+-	    lp->phy[k].spd.value = GENERIC_VALUE;  /* TX & T4, H/F Duplex    */
+-	    lp->mii_cnt++;
+-	    lp->active++;
+-	    printk("%s: Using generic MII device control. If the board doesn't operate,\nplease mail the following dump to the author:\n", dev->name);
+-	    j = de4x5_debug;
+-	    de4x5_debug |= DEBUG_MII;
+-	    de4x5_dbg_mii(dev, k);
+-	    de4x5_debug = j;
+-	    printk("\n");
++	    if (k < DE4X5_MAX_PHY) {
++		lp->phy[k].addr = i;
++		lp->phy[k].id = id;
++		lp->phy[k].spd.reg = GENERIC_REG;      /* ANLPA register         */
++		lp->phy[k].spd.mask = GENERIC_MASK;    /* 100Mb/s technologies   */
++		lp->phy[k].spd.value = GENERIC_VALUE;  /* TX & T4, H/F Duplex    */
++		lp->mii_cnt++;
++		lp->active++;
++		printk("%s: Using generic MII device control. If the board doesn't operate,\nplease mail the following dump to the author:\n", dev->name);
++		j = de4x5_debug;
++		de4x5_debug |= DEBUG_MII;
++		de4x5_dbg_mii(dev, k);
++		de4x5_debug = j;
++		printk("\n");
++	    } else {
++		goto purgatory;
++	    }
+ 	}
+     }
+   purgatory:
 -- 
 2.33.0
 

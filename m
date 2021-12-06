@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4917469CF2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 969E3469FEB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386048AbhLFP0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:26:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S1391606AbhLFPzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:55:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358704AbhLFPQp (ORCPT
+        with ESMTP id S1390431AbhLFPmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:16:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58AE6C08EC8B;
-        Mon,  6 Dec 2021 07:09:34 -0800 (PST)
+        Mon, 6 Dec 2021 10:42:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91659C0A885C;
+        Mon,  6 Dec 2021 07:26:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E988961328;
-        Mon,  6 Dec 2021 15:09:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBBD3C341C2;
-        Mon,  6 Dec 2021 15:09:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F465B81138;
+        Mon,  6 Dec 2021 15:26:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A44B1C34902;
+        Mon,  6 Dec 2021 15:26:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803373;
-        bh=GCTKWypXTdlnMDCefqNAmhunxgQiu/ZvnAzpYcz5+Xs=;
+        s=korg; t=1638804378;
+        bh=2IqzMPuwz65FUzblmUGeYgOYGVyBQvH/aDNHAgMUgLc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EsJIvK3L6RKX0kbQeohA4lkSD274ggBPfvC1KX55ILNfP7X2OaeMMsVCUiQ3CXVfu
-         w8XpejGMNo9cPxAL/cxbv7BtNOvfEI3DPteOFay/gz/InHWUg+FVTsSH7aswBvFAv0
-         W54eqZq/o9FCk8jesEqz9n2noy0Vov8IclwXvur8=
+        b=XNiOEt0UWW8Wjtj3xSx6ht1AH7PXc+aaFzdCAcnk76JSN7SudB5A1wGXt5xNVJlMo
+         iqZpxyAti1kmh0nrTe6GmK/JhXEGrI5QTslaa3RvSb/+ljktVQ7Ct84fdbraE5GRtM
+         LzcLSH4Yz5JTOQigYHEGzmvmjUOhx5VUzZx7+3Hc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Benjamin Coddington <bcodding@redhat.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 4.19 02/48] NFSv42: Fix pagecache invalidation after COPY/CLONE
+        stable@vger.kernel.org,
+        Eiichi Tsukata <eiichi.tsukata@nutanix.com>,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org
+Subject: [PATCH 5.15 125/207] rxrpc: Fix rxrpc_local leak in rxrpc_lookup_peer()
 Date:   Mon,  6 Dec 2021 15:56:19 +0100
-Message-Id: <20211206145548.941941299@linuxfoundation.org>
+Message-Id: <20211206145614.570394070@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
-References: <20211206145548.859182340@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,39 +51,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Coddington <bcodding@redhat.com>
+From: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
 
-commit 3f015d89a47cd8855cd92f71fff770095bd885a1 upstream.
+commit beacff50edbd6c9659a6f15fc7f6126909fade29 upstream.
 
-The mechanism in use to allow the client to see the results of COPY/CLONE
-is to drop those pages from the pagecache.  This forces the client to read
-those pages once more from the server.  However, truncate_pagecache_range()
-zeros out partial pages instead of dropping them.  Let us instead use
-invalidate_inode_pages2_range() with full-page offsets to ensure the client
-properly sees the results of COPY/CLONE operations.
+Need to call rxrpc_put_local() for peer candidate before kfree() as it
+holds a ref to rxrpc_local.
 
-Cc: <stable@vger.kernel.org> # v4.7+
-Fixes: 2e72448b07dc ("NFS: Add COPY nfs operation")
-Signed-off-by: Benjamin Coddington <bcodding@redhat.com>
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+[DH: v2: Changed to abstract the peer freeing code out into a function]
+
+Fixes: 9ebeddef58c4 ("rxrpc: rxrpc_peer needs to hold a ref on the rxrpc_local record")
+Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Link: https://lore.kernel.org/all/20211121041608.133740-2-eiichi.tsukata@nutanix.com/ # v1
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/nfs42proc.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ net/rxrpc/peer_object.c |   14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
---- a/fs/nfs/nfs42proc.c
-+++ b/fs/nfs/nfs42proc.c
-@@ -295,8 +295,9 @@ static ssize_t _nfs42_proc_copy(struct f
- 			goto out;
+--- a/net/rxrpc/peer_object.c
++++ b/net/rxrpc/peer_object.c
+@@ -299,6 +299,12 @@ static struct rxrpc_peer *rxrpc_create_p
+ 	return peer;
+ }
+ 
++static void rxrpc_free_peer(struct rxrpc_peer *peer)
++{
++	rxrpc_put_local(peer->local);
++	kfree_rcu(peer, rcu);
++}
++
+ /*
+  * Set up a new incoming peer.  There shouldn't be any other matching peers
+  * since we've already done a search in the list from the non-reentrant context
+@@ -365,7 +371,7 @@ struct rxrpc_peer *rxrpc_lookup_peer(str
+ 		spin_unlock_bh(&rxnet->peer_hash_lock);
+ 
+ 		if (peer)
+-			kfree(candidate);
++			rxrpc_free_peer(candidate);
+ 		else
+ 			peer = candidate;
  	}
+@@ -420,8 +426,7 @@ static void __rxrpc_put_peer(struct rxrp
+ 	list_del_init(&peer->keepalive_link);
+ 	spin_unlock_bh(&rxnet->peer_hash_lock);
  
--	truncate_pagecache_range(dst_inode, pos_dst,
--				 pos_dst + res->write_res.count);
-+	WARN_ON_ONCE(invalidate_inode_pages2_range(dst_inode->i_mapping,
-+					pos_dst >> PAGE_SHIFT,
-+					(pos_dst + res->write_res.count - 1) >> PAGE_SHIFT));
+-	rxrpc_put_local(peer->local);
+-	kfree_rcu(peer, rcu);
++	rxrpc_free_peer(peer);
+ }
  
- 	status = res->write_res.count;
- out:
+ /*
+@@ -457,8 +462,7 @@ void rxrpc_put_peer_locked(struct rxrpc_
+ 	if (n == 0) {
+ 		hash_del_rcu(&peer->hash_link);
+ 		list_del_init(&peer->keepalive_link);
+-		rxrpc_put_local(peer->local);
+-		kfree_rcu(peer, rcu);
++		rxrpc_free_peer(peer);
+ 	}
+ }
+ 
 
 

@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5143A469FC7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4481469B21
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378945AbhLFPwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:52:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357969AbhLFPiA (ORCPT
+        id S1347004AbhLFPND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:13:03 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57680 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345905AbhLFPIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:38:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3E1C08EAED;
-        Mon,  6 Dec 2021 07:23:55 -0800 (PST)
+        Mon, 6 Dec 2021 10:08:11 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6345AB81132;
-        Mon,  6 Dec 2021 15:23:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95A01C341C2;
-        Mon,  6 Dec 2021 15:23:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D92B6131E;
+        Mon,  6 Dec 2021 15:04:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EF49C341C1;
+        Mon,  6 Dec 2021 15:04:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804234;
-        bh=Bz8+jptFDIVkaOdFpM2e9rnrZqCplYpTPOZtBsUKvUQ=;
+        s=korg; t=1638803081;
+        bh=89T/aWMFFo819cbJS8Ltacm7NbHHWJyXu/6/HZMDL90=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E0l6gaEyGx8AWjn/+IGcqaKTn4THBnFSchXGbLbZrxjr0wSZ+C24pRrKwthfsFXr+
-         Z4sFL2Ma22D8NME+/ZY2Zqr40LTSo9p9qyLDHzebUOTemfkZ2wPjFZ1NlxVrKb7hyV
-         SQ1BLnC9N5waFZrJL7Tujoi/qgWPkmfKX7+9GyfI=
+        b=dRA/x9bb8+ytm+kLttCGCz4ztWqFC/cdwMfTB9JUgKPRc77UbM29i4RVe1kqZg3y3
+         2D+Dc1WWejSOKFZqW8xbB8JU0+QZ1Rm39ycIAlyA9uDl09Pglz18/q+c4Eg0EQd4TK
+         3drIMPDH1+PS61QVRReWKUckbYDDP0pFUiA/va0E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai+lkml@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 075/207] KVM: nVMX: Emulate guest TLB flush on nested VM-Enter with new vpid12
-Date:   Mon,  6 Dec 2021 15:55:29 +0100
-Message-Id: <20211206145612.828569863@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 022/106] drm/vc4: fix error code in vc4_create_object()
+Date:   Mon,  6 Dec 2021 15:55:30 +0100
+Message-Id: <20211206145556.133678428@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,82 +46,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 712494de96f35f3e146b36b752c2afe0fdc0f0cc upstream.
+[ Upstream commit 96c5f82ef0a145d3e56e5b26f2bf6dcd2ffeae1c ]
 
-Fully emulate a guest TLB flush on nested VM-Enter which changes vpid12,
-i.e. L2's VPID, instead of simply doing INVVPID to flush real hardware's
-TLB entries for vpid02.  From L1's perspective, changing L2's VPID is
-effectively a TLB flush unless "hardware" has previously cached entries
-for the new vpid12.  Because KVM tracks only a single vpid12, KVM doesn't
-know if the new vpid12 has been used in the past and so must treat it as
-a brand new, never been used VPID, i.e. must assume that the new vpid12
-represents a TLB flush from L1's perspective.
+The ->gem_create_object() functions are supposed to return NULL if there
+is an error.  None of the callers expect error pointers so returing one
+will lead to an Oops.  See drm_gem_vram_create(), for example.
 
-For example, if L1 and L2 share a CR3, the first VM-Enter to L2 (with a
-VPID) is effectively a TLB flush as hardware/KVM has never seen vpid12
-and thus can't have cached entries in the TLB for vpid12.
-
-Reported-by: Lai Jiangshan <jiangshanlai+lkml@gmail.com>
-Fixes: 5c614b3583e7 ("KVM: nVMX: nested VPID emulation")
-Cc: stable@vger.kernel.org
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20211125014944.536398-3-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: c826a6e10644 ("drm/vc4: Add a BO cache.")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211118111416.GC1147@kili
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/vmx/nested.c |   37 +++++++++++++++++--------------------
- 1 file changed, 17 insertions(+), 20 deletions(-)
+ drivers/gpu/drm/vc4/vc4_bo.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -1180,29 +1180,26 @@ static void nested_vmx_transition_tlb_fl
- 	WARN_ON(!enable_vpid);
+diff --git a/drivers/gpu/drm/vc4/vc4_bo.c b/drivers/gpu/drm/vc4/vc4_bo.c
+index eff0a8ece8bcf..85abba74ed981 100644
+--- a/drivers/gpu/drm/vc4/vc4_bo.c
++++ b/drivers/gpu/drm/vc4/vc4_bo.c
+@@ -292,7 +292,7 @@ struct drm_gem_object *vc4_create_object(struct drm_device *dev, size_t size)
  
- 	/*
--	 * If VPID is enabled and used by vmc12, but L2 does not have a unique
--	 * TLB tag (ASID), i.e. EPT is disabled and KVM was unable to allocate
--	 * a VPID for L2, flush the current context as the effective ASID is
--	 * common to both L1 and L2.
--	 *
--	 * Defer the flush so that it runs after vmcs02.EPTP has been set by
--	 * KVM_REQ_LOAD_MMU_PGD (if nested EPT is enabled) and to avoid
--	 * redundant flushes further down the nested pipeline.
--	 *
--	 * If a TLB flush isn't required due to any of the above, and vpid12 is
--	 * changing then the new "virtual" VPID (vpid12) will reuse the same
--	 * "real" VPID (vpid02), and so needs to be flushed.  There's no direct
--	 * mapping between vpid02 and vpid12, vpid02 is per-vCPU and reused for
--	 * all nested vCPUs.  Remember, a flush on VM-Enter does not invalidate
--	 * guest-physical mappings, so there is no need to sync the nEPT MMU.
-+	 * VPID is enabled and in use by vmcs12.  If vpid12 is changing, then
-+	 * emulate a guest TLB flush as KVM does not track vpid12 history nor
-+	 * is the VPID incorporated into the MMU context.  I.e. KVM must assume
-+	 * that the new vpid12 has never been used and thus represents a new
-+	 * guest ASID that cannot have entries in the TLB.
- 	 */
--	if (!nested_has_guest_tlb_tag(vcpu)) {
--		kvm_make_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu);
--	} else if (is_vmenter &&
--		   vmcs12->virtual_processor_id != vmx->nested.last_vpid) {
-+	if (is_vmenter && vmcs12->virtual_processor_id != vmx->nested.last_vpid) {
- 		vmx->nested.last_vpid = vmcs12->virtual_processor_id;
--		vpid_sync_context(nested_get_vpid02(vcpu));
-+		kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
-+		return;
- 	}
-+
-+	/*
-+	 * If VPID is enabled, used by vmc12, and vpid12 is not changing but
-+	 * does not have a unique TLB tag (ASID), i.e. EPT is disabled and
-+	 * KVM was unable to allocate a VPID for L2, flush the current context
-+	 * as the effective ASID is common to both L1 and L2.
-+	 */
-+	if (!nested_has_guest_tlb_tag(vcpu))
-+		kvm_make_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu);
- }
+ 	bo = kzalloc(sizeof(*bo), GFP_KERNEL);
+ 	if (!bo)
+-		return ERR_PTR(-ENOMEM);
++		return NULL;
  
- static bool is_bitwise_subset(u64 superset, u64 subset, u64 mask)
+ 	mutex_lock(&vc4->bo_lock);
+ 	bo->label = VC4_BO_TYPE_KERNEL;
+-- 
+2.33.0
+
 
 

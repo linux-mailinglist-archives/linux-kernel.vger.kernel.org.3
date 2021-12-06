@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC6D469CB9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C594C4699EF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345966AbhLFPYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:24:45 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33764 "EHLO
+        id S1345592AbhLFPEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:04:33 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54000 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349803AbhLFPNU (ORCPT
+        with ESMTP id S1344993AbhLFPDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:13:20 -0500
+        Mon, 6 Dec 2021 10:03:46 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCD9E6131E;
-        Mon,  6 Dec 2021 15:09:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD1DFC341C1;
-        Mon,  6 Dec 2021 15:09:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49D4461325;
+        Mon,  6 Dec 2021 15:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA46C341C1;
+        Mon,  6 Dec 2021 15:00:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803390;
-        bh=NPyiNdSls0xvC2dIMXhp1fPbJk3Za+5YMISEGyNyKw8=;
+        s=korg; t=1638802816;
+        bh=M8HEae/UF5ZV1fSaVZ5VZW210U26HTBby91n/IkM/kk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KqUDwojMZp+z7Mqby0Dr8fAOH16OWPbRDrNFJs16Esdl5QJuaDtvecMygSTCRvO20
-         a8Vi7rveX1m6U6n4gK1xN6mCGXt1RF6Rycua0pocCG/OnZ/JjPnbZ0O+G8uaRSPL7Q
-         0nI3Q5UqOS8lBIRTDeYhR4zcWOKOwseA/JmmvP9Y=
+        b=fjsHMbA9b72FfVJV0fqkC9NvFk28sz+TGkeRdi2ATwu1sWeQQnTpMYB5e+ei54zrQ
+         oYLA89o/5yZAfdeQGEn0D+MToOmJ8i6TY3Z7P/IjBNIHl7Kh79ToqajoN8ptgWM3yx
+         4Xs4pQ0i5aspyHFFc1fm2JsboSnY0iuOBT9F0+l4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 08/48] s390/setup: avoid using memblock_enforce_memory_limit
-Date:   Mon,  6 Dec 2021 15:56:25 +0100
-Message-Id: <20211206145549.142705533@linuxfoundation.org>
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 4.4 42/52] sata_fsl: fix UAF in sata_fsl_port_stop when rmmod sata_fsl
+Date:   Mon,  6 Dec 2021 15:56:26 +0100
+Message-Id: <20211206145549.345920919@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
-References: <20211206145548.859182340@linuxfoundation.org>
+In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
+References: <20211206145547.892668902@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,56 +47,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vasily Gorbik <gor@linux.ibm.com>
+From: Baokun Li <libaokun1@huawei.com>
 
-[ Upstream commit 5dbc4cb4667457b0c53bcd7bff11500b3c362975 ]
+commit 6c8ad7e8cf29eb55836e7a0215f967746ab2b504 upstream.
 
-There is a difference in how architectures treat "mem=" option. For some
-that is an amount of online memory, for s390 and x86 this is the limiting
-max address. Some memblock api like memblock_enforce_memory_limit()
-take limit argument and explicitly treat it as the size of online memory,
-and use __find_max_addr to convert it to an actual max address. Current
-s390 usage:
+When the `rmmod sata_fsl.ko` command is executed in the PPC64 GNU/Linux,
+a bug is reported:
+ ==================================================================
+ BUG: Unable to handle kernel data access on read at 0x80000800805b502c
+ Oops: Kernel access of bad area, sig: 11 [#1]
+ NIP [c0000000000388a4] .ioread32+0x4/0x20
+ LR [80000000000c6034] .sata_fsl_port_stop+0x44/0xe0 [sata_fsl]
+ Call Trace:
+  .free_irq+0x1c/0x4e0 (unreliable)
+  .ata_host_stop+0x74/0xd0 [libata]
+  .release_nodes+0x330/0x3f0
+  .device_release_driver_internal+0x178/0x2c0
+  .driver_detach+0x64/0xd0
+  .bus_remove_driver+0x70/0xf0
+  .driver_unregister+0x38/0x80
+  .platform_driver_unregister+0x14/0x30
+  .fsl_sata_driver_exit+0x18/0xa20 [sata_fsl]
+  .__se_sys_delete_module+0x1ec/0x2d0
+  .system_call_exception+0xfc/0x1f0
+  system_call_common+0xf8/0x200
+ ==================================================================
 
-memblock_enforce_memory_limit(memblock_end_of_DRAM());
+The triggering of the BUG is shown in the following stack:
 
-yields different results depending on presence of memory holes (offline
-memory blocks in between online memory). If there are no memory holes
-limit == max_addr in memblock_enforce_memory_limit() and it does trim
-online memory and reserved memory regions. With memory holes present it
-actually does nothing.
+driver_detach
+  device_release_driver_internal
+    __device_release_driver
+      drv->remove(dev) --> platform_drv_remove/platform_remove
+        drv->remove(dev) --> sata_fsl_remove
+          iounmap(host_priv->hcr_base);			<---- unmap
+          kfree(host_priv);                             <---- free
+      devres_release_all
+        release_nodes
+          dr->node.release(dev, dr->data) --> ata_host_stop
+            ap->ops->port_stop(ap) --> sata_fsl_port_stop
+                ioread32(hcr_base + HCONTROL)           <---- UAF
+            host->ops->host_stop(host)
 
-Since we already use memblock_remove() explicitly to trim online memory
-regions to potential limit (think mem=, kdump, addressing limits, etc.)
-drop the usage of memblock_enforce_memory_limit() altogether. Trimming
-reserved regions should not be required, since we now use
-memblock_set_current_limit() to limit allocations and any explicit memory
-reservations above the limit is an actual problem we should not hide.
+The iounmap(host_priv->hcr_base) and kfree(host_priv) functions should
+not be executed in drv->remove. These functions should be executed in
+host_stop after port_stop. Therefore, we move these functions to the
+new function sata_fsl_host_stop and bind the new function to host_stop.
 
-Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: faf0b2e5afe7 ("drivers/ata: add support to Freescale 3.0Gbps SATA Controller")
+Cc: stable@vger.kernel.org
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Reviewed-by: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/s390/kernel/setup.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/ata/sata_fsl.c |   12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/arch/s390/kernel/setup.c b/arch/s390/kernel/setup.c
-index e8bfd29bb1f9f..098794fc5dc81 100644
---- a/arch/s390/kernel/setup.c
-+++ b/arch/s390/kernel/setup.c
-@@ -703,9 +703,6 @@ static void __init setup_memory(void)
- 		storage_key_init_range(reg->base, reg->base + reg->size);
- 	}
- 	psw_set_key(PAGE_DEFAULT_KEY);
--
--	/* Only cosmetics */
--	memblock_enforce_memory_limit(memblock_end_of_DRAM());
+--- a/drivers/ata/sata_fsl.c
++++ b/drivers/ata/sata_fsl.c
+@@ -1406,6 +1406,14 @@ static int sata_fsl_init_controller(stru
+ 	return 0;
  }
  
++static void sata_fsl_host_stop(struct ata_host *host)
++{
++        struct sata_fsl_host_priv *host_priv = host->private_data;
++
++        iounmap(host_priv->hcr_base);
++        kfree(host_priv);
++}
++
  /*
--- 
-2.33.0
-
+  * scsi mid-layer and libata interface structures
+  */
+@@ -1438,6 +1446,8 @@ static struct ata_port_operations sata_f
+ 	.port_start = sata_fsl_port_start,
+ 	.port_stop = sata_fsl_port_stop,
+ 
++	.host_stop      = sata_fsl_host_stop,
++
+ 	.pmp_attach = sata_fsl_pmp_attach,
+ 	.pmp_detach = sata_fsl_pmp_detach,
+ };
+@@ -1572,8 +1582,6 @@ static int sata_fsl_remove(struct platfo
+ 	ata_host_detach(host);
+ 
+ 	irq_dispose_mapping(host_priv->irq);
+-	iounmap(host_priv->hcr_base);
+-	kfree(host_priv);
+ 
+ 	return 0;
+ }
 
 

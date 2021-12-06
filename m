@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6BE46A8ED
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F9946A8FF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:01:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349994AbhLFVBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:01:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54742 "EHLO
+        id S1350088AbhLFVBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349944AbhLFVBa (ORCPT
+        with ESMTP id S1350024AbhLFVBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:01:30 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D056C0613F8;
-        Mon,  6 Dec 2021 12:58:01 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id i12so9141126wmq.4;
-        Mon, 06 Dec 2021 12:58:01 -0800 (PST)
+        Mon, 6 Dec 2021 16:01:36 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE21C061359;
+        Mon,  6 Dec 2021 12:58:06 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id 133so9203877wme.0;
+        Mon, 06 Dec 2021 12:58:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=n1BPb/xYNq5uaSEPzD+4FghbzJv0Q/8If9Mqaicr6qI=;
-        b=WZjBMyXZESGunyh9UbdimRNbU77++G6ojMueTs+jjMbXTl9bdOfuDRT2rXwFI4DBxC
-         od0HjK2ICjreVMEu1LsL7xFOk4aE4V2mmOfnt3u0Fu1pHLpAkc3g0hUkmQBujsYEdTjq
-         vzawGH2eCZhUm7Rwcne7LUWlWr1SbY/bMiX/Ax7FKjMF6RTb9EOqoE8wDjmqfIvbYouj
-         cM6MUpvdmHqLIPxXrzCB9pfStlRcLfeLuGo/x0QbTqSHjz4l2DXCDZSvYBDdiqujhCSB
-         xCycVui+MxZxOZyBtbTSF1LHbNsqb2/4cy7vwvpTOgvu04UY8FzXC8Im0B6tpFq646kc
-         3oag==
+        bh=/6TXMCjmZMjMTXVDAGqRENQL5FuXlJEx6FcJui0lUVI=;
+        b=nrax9v2Tf28pHs4A+QcLepaXnYTnUIjOzRA8KmSXbjCYQRRqNDDugbbzeKKfT6vh2h
+         oPoW8D1XnxZi0c+CHt8KWiNCwanM126NPz/pDLkhAo9oEnSjueDAoIWQuhZxZaR1cnw/
+         gQeNuQUL/M9BK47V6oCDQtFbGZKbcaawdx5O+W1jCNXHKVsGDgjQHdUc92JyHgMBlOUS
+         DuSbN0KA9gdqM71iVVXC6hAzLcf1GUOwLXiEs4bhzFQGuyiWEBwstn7haPy70rHT9tGu
+         3mQfJrh3BJbDPbQSymzv8A/8TDBMhvyOPGIg2khpEvSSf12tHpxcuq82RPmR5bLAVbPw
+         i/IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=n1BPb/xYNq5uaSEPzD+4FghbzJv0Q/8If9Mqaicr6qI=;
-        b=XlV3Xg5WyN0VL7dl8tK19+fKcp24Yw/upEeruwmOxJcG71GKc22wBUbIhMRBcJBnSw
-         TOjM+QA8HM82fqqR2cnGTiULjxw9cAf47niV9WUlYoklyLB2qIFEe3Zu3KpMQUrLCepL
-         DVL8UHVx0Rbyhmg5KnB9zjR8nJFudfkH1TYujiHbmeIwbf51t58zdsdJoEQZQeSxT/7D
-         1i0YVJHDx5bGOKqo0AFLBIy6PkX0hHXgYTGYVUUn2rj4Tk6S1310DWK7DDQbSolWnVvq
-         QH82RhTQJFu5PwMhkPgTZuZe5M3rOtGCYeoFdWg4wnc3UZp0XySxBXtJYIy4pWEC4ToM
-         nuAA==
-X-Gm-Message-State: AOAM532AKyDrzESy13GT+r/cuMQ3V2tWka9tUh1UV4pDdCUiJAyQP5Il
-        dZaI+RuSmnsf7f6wf+iq0CAaM7NtqwNLhA==
-X-Google-Smtp-Source: ABdhPJwIwVkZi4QOIq6rIMRFZMYenWd2/mDUnEveInUHh+/OYBkw2bSkdY86H9qUkQTSFN80wvsWTQ==
-X-Received: by 2002:a05:600c:1d91:: with SMTP id p17mr1196223wms.193.1638824280148;
-        Mon, 06 Dec 2021 12:58:00 -0800 (PST)
+        bh=/6TXMCjmZMjMTXVDAGqRENQL5FuXlJEx6FcJui0lUVI=;
+        b=B8uo3QmiZ4AABEUx+SWQTuLsRqso4VHSDK2GjG5e6ka3rKc+1gHE7y/I3nZXwtkiBL
+         UFmcH32B/VRn/opB2lJTBIHf0iW0/LDelg+eKvkJieq6fhq6Gppa6G2ycCdl9L7BrlZS
+         1TgGb0Ck2LpbG0+8yngZsvo+Z0u56Ydp5HO4wHHD3M7R4cdlWnp93r/AMoRm+tnOZGO1
+         vLeSXF1WmbuO5H3Foy/bI1tIHwQRUuqx+x7Ve+JyD1id8pLZQFHk5EXsk3TM/Rl3TQtN
+         BZVqvMjF/20OUaY+Ubope+Mq1kGZRf3i2QxAXKdUjsFGEtYIejT3SLHccaJRg34+k7sb
+         oF/A==
+X-Gm-Message-State: AOAM531ksQFSo614ga7WW9cObIwnhDKcyxbedjdvZFd0uRXgvkqXNpLy
+        A23Ndwbg9kfrA3/JkmL0WYk=
+X-Google-Smtp-Source: ABdhPJyaB0FMJEEgxGGhPArvXaTPcwiHc1ly+78X900aejXIq13cB1WjtUvs2NxK1zXwF2xw1z4IzQ==
+X-Received: by 2002:a7b:cc94:: with SMTP id p20mr816726wma.162.1638824285171;
+        Mon, 06 Dec 2021 12:58:05 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p200300c78f4e06972f325cc5fe1c0146.dip0.t-ipconnect.de. [2003:c7:8f4e:697:2f32:5cc5:fe1c:146])
-        by smtp.gmail.com with ESMTPSA id j40sm469413wms.19.2021.12.06.12.57.59
+        by smtp.gmail.com with ESMTPSA id u15sm490981wmq.13.2021.12.06.12.58.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 12:57:59 -0800 (PST)
-Date:   Mon, 6 Dec 2021 21:57:58 +0100
+        Mon, 06 Dec 2021 12:58:04 -0800 (PST)
+Date:   Mon, 6 Dec 2021 21:58:03 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     corbet@lwn.net, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
-Subject: [PATCH v3 2/5] Docs: usb: update comment and code near decrement our
- usage count for the device
-Message-ID: <ca8fd26ccff6521c7477a2035e703e099da56214.1638771720.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH v3 3/5] Docs: usb: update comment and code of function
+ skel_delete
+Message-ID: <f1a52071a29fbd6fa983392e7864eb5819ffc258.1638771720.git.philipp.g.hortmann@gmail.com>
 References: <cover.1638771720.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -65,33 +65,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update comment: decrement our usage count ..
-and code according to usb-skeleton.c
+Update code according to usb-skeleton.c
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
-V1 -> V2: Corrected format of function name to skel_release()
+V1 -> V2: Corrected format of function name to skel_delete()
 V2 -> V3: Moved correction of the function name to an own patch in this
           patch series
 ---
- Documentation/driver-api/usb/writing_usb_driver.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../driver-api/usb/writing_usb_driver.rst        | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
-index 1fd7bf1dbdb0..c336dfd82426 100644
+index c336dfd82426..6c487ac5eab2 100644
 --- a/Documentation/driver-api/usb/writing_usb_driver.rst
 +++ b/Documentation/driver-api/usb/writing_usb_driver.rst
-@@ -254,8 +254,8 @@ talk to the device, the release function in the driver is called. In
- this function we decrement our private usage count and wait for possible
- pending writes::
+@@ -266,15 +266,15 @@ notify the user-space programs that the device is no longer there. The
+ following code (function ``skel_delete``) is an example of how to do
+ this::
  
--    /* decrement our usage count for the device */
--    --skel->open_count;
-+    /* decrement the count on our device */
-+    kref_put(&dev->kref, skel_delete);
+-    static inline void skel_delete (struct usb_skel *dev)
++    static void skel_delete(struct kref *kref)
+     {
+-	kfree (dev->bulk_in_buffer);
+-	if (dev->bulk_out_buffer != NULL)
+-	    usb_free_coherent (dev->udev, dev->bulk_out_size,
+-		dev->bulk_out_buffer,
+-		dev->write_urb->transfer_dma);
+-	usb_free_urb (dev->write_urb);
+-	kfree (dev);
++	struct usb_skel *dev = to_skel_dev(kref);
++
++	usb_free_urb(dev->bulk_in_urb);
++	usb_put_intf(dev->interface);
++	usb_put_dev(dev->udev);
++	kfree(dev->bulk_in_buffer);
++	kfree(dev);
+     }
  
  
- One of the more difficult problems that USB drivers must be able to
 -- 
 2.25.1
 

@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15FE5469CF9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1214D469F43
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:43:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386588AbhLFP0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:26:46 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36542 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355545AbhLFPRb (ORCPT
+        id S1379990AbhLFPqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:46:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376273AbhLFP2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:17:31 -0500
+        Mon, 6 Dec 2021 10:28:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC50C08ED39;
+        Mon,  6 Dec 2021 07:18:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E8322612DB;
-        Mon,  6 Dec 2021 15:14:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE85FC341C1;
-        Mon,  6 Dec 2021 15:14:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78DF6B81134;
+        Mon,  6 Dec 2021 15:18:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7E55C341C1;
+        Mon,  6 Dec 2021 15:17:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803641;
-        bh=4swXAHPNH3ixCiAkPEkLiNJphU7HfP5WIaum3C0ECFg=;
+        s=korg; t=1638803880;
+        bh=ctAN86+aLtUg4P4YugcH9097oNHEOyVGq7zN1p44ofQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ghaEr7halG4lFsmW2cGoahmuGGbn/Y+Ri3IUPLh7Rg81rDgefb8aTYvRGb74/hnFU
-         UOmK4DVkUuWrcrdi4ZvWSb1E6rVk6ulKULaD0hAXOZA8l2M6LSjp2mdP7PAOvoY1zD
-         QmHJkpVx8wh7DGahwWOJRzaefW8WVtbXBGG7nMnE=
+        b=LEHCC29zkrQHahjfGjfsSvOsUBz8qNoiXNLGea2lhURcxNUki34QV2obqzQMEgYP5
+         2fGBbNrlGNtSWFqIHowOsVGsXBcMJKODZh/X+pDpXPIa9anuizkecV1670Ro8Wzexg
+         Ykzj8nUx9zZquVqzQBUmK9tzMVA9fDKVm6g4w1/Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alain Volmat <alain.volmat@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH 5.4 33/70] i2c: stm32f7: recover the bus on access timeout
+        stable@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        Mark Brown <broonie@kernel.org>,
+        Sameer Pujar <spujar@nvidia.com>, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 080/130] ASoC: tegra: Fix kcontrol put callback in DMIC
 Date:   Mon,  6 Dec 2021 15:56:37 +0100
-Message-Id: <20211206145553.069768237@linuxfoundation.org>
+Message-Id: <20211206145602.434604446@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
-References: <20211206145551.909846023@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,39 +49,248 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alain Volmat <alain.volmat@foss.st.com>
+From: Sameer Pujar <spujar@nvidia.com>
 
-commit b933d1faf8fa30d16171bcff404e39c41b2a7c84 upstream.
+commit a347dfa10262fa0a10e2b1970ea0194e3d4a3251 upstream.
 
-When getting an access timeout, ensure that the bus is in a proper
-state prior to returning the error.
+The kcontrol put callback is expected to return 1 when there is change
+in HW or when the update is acknowledged by driver. This would ensure
+that change notifications are sent to subscribed applications. Update
+the DMIC driver accordingly.
 
-Fixes: aeb068c57214 ("i2c: i2c-stm32f7: add driver")
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fixes: 8c8ff982e9e2 ("ASoC: tegra: Add Tegra210 based DMIC driver")
+Suggested-by: Jaroslav Kysela <perex@perex.cz>
+Suggested-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sameer Pujar <spujar@nvidia.com>
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
+Link: https://lore.kernel.org/r/1637219231-406-10-git-send-email-spujar@nvidia.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/i2c-stm32f7.c |    2 ++
- 1 file changed, 2 insertions(+)
+ sound/soc/tegra/tegra210_dmic.c |  183 ++++++++++++++++++++++++++++++++--------
+ 1 file changed, 149 insertions(+), 34 deletions(-)
 
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1602,6 +1602,7 @@ static int stm32f7_i2c_xfer(struct i2c_a
- 			i2c_dev->msg->addr);
- 		if (i2c_dev->use_dma)
- 			dmaengine_terminate_all(dma->chan_using);
-+		stm32f7_i2c_wait_free_bus(i2c_dev);
- 		ret = -ETIMEDOUT;
- 	}
+--- a/sound/soc/tegra/tegra210_dmic.c
++++ b/sound/soc/tegra/tegra210_dmic.c
+@@ -156,50 +156,162 @@ static int tegra210_dmic_hw_params(struc
+ 	return 0;
+ }
  
-@@ -1659,6 +1660,7 @@ static int stm32f7_i2c_smbus_xfer(struct
- 		dev_dbg(dev, "Access to slave 0x%x timed out\n", f7_msg->addr);
- 		if (i2c_dev->use_dma)
- 			dmaengine_terminate_all(dma->chan_using);
-+		stm32f7_i2c_wait_free_bus(i2c_dev);
- 		ret = -ETIMEDOUT;
- 		goto pm_free;
- 	}
+-static int tegra210_dmic_get_control(struct snd_kcontrol *kcontrol,
++static int tegra210_dmic_get_boost_gain(struct snd_kcontrol *kcontrol,
++					struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
++	struct tegra210_dmic *dmic = snd_soc_component_get_drvdata(comp);
++
++	ucontrol->value.integer.value[0] = dmic->boost_gain;
++
++	return 0;
++}
++
++static int tegra210_dmic_put_boost_gain(struct snd_kcontrol *kcontrol,
++					struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
++	struct tegra210_dmic *dmic = snd_soc_component_get_drvdata(comp);
++	int value = ucontrol->value.integer.value[0];
++
++	if (value == dmic->boost_gain)
++		return 0;
++
++	dmic->boost_gain = value;
++
++	return 1;
++}
++
++static int tegra210_dmic_get_ch_select(struct snd_kcontrol *kcontrol,
++				       struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
++	struct tegra210_dmic *dmic = snd_soc_component_get_drvdata(comp);
++
++	ucontrol->value.enumerated.item[0] = dmic->ch_select;
++
++	return 0;
++}
++
++static int tegra210_dmic_put_ch_select(struct snd_kcontrol *kcontrol,
++				       struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
++	struct tegra210_dmic *dmic = snd_soc_component_get_drvdata(comp);
++	unsigned int value = ucontrol->value.enumerated.item[0];
++
++	if (value == dmic->ch_select)
++		return 0;
++
++	dmic->ch_select = value;
++
++	return 1;
++}
++
++static int tegra210_dmic_get_mono_to_stereo(struct snd_kcontrol *kcontrol,
++					    struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
++	struct tegra210_dmic *dmic = snd_soc_component_get_drvdata(comp);
++
++	ucontrol->value.enumerated.item[0] = dmic->mono_to_stereo;
++
++	return 0;
++}
++
++static int tegra210_dmic_put_mono_to_stereo(struct snd_kcontrol *kcontrol,
++					    struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
++	struct tegra210_dmic *dmic = snd_soc_component_get_drvdata(comp);
++	unsigned int value = ucontrol->value.enumerated.item[0];
++
++	if (value == dmic->mono_to_stereo)
++		return 0;
++
++	dmic->mono_to_stereo = value;
++
++	return 1;
++}
++
++static int tegra210_dmic_get_stereo_to_mono(struct snd_kcontrol *kcontrol,
++					    struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
++	struct tegra210_dmic *dmic = snd_soc_component_get_drvdata(comp);
++
++	ucontrol->value.enumerated.item[0] = dmic->stereo_to_mono;
++
++	return 0;
++}
++
++static int tegra210_dmic_put_stereo_to_mono(struct snd_kcontrol *kcontrol,
++					    struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
++	struct tegra210_dmic *dmic = snd_soc_component_get_drvdata(comp);
++	unsigned int value = ucontrol->value.enumerated.item[0];
++
++	if (value == dmic->stereo_to_mono)
++		return 0;
++
++	dmic->stereo_to_mono = value;
++
++	return 1;
++}
++
++static int tegra210_dmic_get_osr_val(struct snd_kcontrol *kcontrol,
+ 				     struct snd_ctl_elem_value *ucontrol)
+ {
+ 	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
+ 	struct tegra210_dmic *dmic = snd_soc_component_get_drvdata(comp);
+ 
+-	if (strstr(kcontrol->id.name, "Boost Gain Volume"))
+-		ucontrol->value.integer.value[0] = dmic->boost_gain;
+-	else if (strstr(kcontrol->id.name, "Channel Select"))
+-		ucontrol->value.enumerated.item[0] = dmic->ch_select;
+-	else if (strstr(kcontrol->id.name, "Mono To Stereo"))
+-		ucontrol->value.enumerated.item[0] = dmic->mono_to_stereo;
+-	else if (strstr(kcontrol->id.name, "Stereo To Mono"))
+-		ucontrol->value.enumerated.item[0] = dmic->stereo_to_mono;
+-	else if (strstr(kcontrol->id.name, "OSR Value"))
+-		ucontrol->value.enumerated.item[0] = dmic->osr_val;
+-	else if (strstr(kcontrol->id.name, "LR Polarity Select"))
+-		ucontrol->value.enumerated.item[0] = dmic->lrsel;
++	ucontrol->value.enumerated.item[0] = dmic->osr_val;
+ 
+ 	return 0;
+ }
+ 
+-static int tegra210_dmic_put_control(struct snd_kcontrol *kcontrol,
++static int tegra210_dmic_put_osr_val(struct snd_kcontrol *kcontrol,
++				     struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
++	struct tegra210_dmic *dmic = snd_soc_component_get_drvdata(comp);
++	unsigned int value = ucontrol->value.enumerated.item[0];
++
++	if (value == dmic->osr_val)
++		return 0;
++
++	dmic->osr_val = value;
++
++	return 1;
++}
++
++static int tegra210_dmic_get_pol_sel(struct snd_kcontrol *kcontrol,
+ 				     struct snd_ctl_elem_value *ucontrol)
+ {
+ 	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
+ 	struct tegra210_dmic *dmic = snd_soc_component_get_drvdata(comp);
+ 
+-	if (strstr(kcontrol->id.name, "Boost Gain Volume"))
+-		dmic->boost_gain = ucontrol->value.integer.value[0];
+-	else if (strstr(kcontrol->id.name, "Channel Select"))
+-		dmic->ch_select = ucontrol->value.enumerated.item[0];
+-	else if (strstr(kcontrol->id.name, "Mono To Stereo"))
+-		dmic->mono_to_stereo = ucontrol->value.enumerated.item[0];
+-	else if (strstr(kcontrol->id.name, "Stereo To Mono"))
+-		dmic->stereo_to_mono = ucontrol->value.enumerated.item[0];
+-	else if (strstr(kcontrol->id.name, "OSR Value"))
+-		dmic->osr_val = ucontrol->value.enumerated.item[0];
+-	else if (strstr(kcontrol->id.name, "LR Polarity Select"))
+-		dmic->lrsel = ucontrol->value.enumerated.item[0];
++	ucontrol->value.enumerated.item[0] = dmic->lrsel;
+ 
+ 	return 0;
+ }
+ 
++static int tegra210_dmic_put_pol_sel(struct snd_kcontrol *kcontrol,
++				     struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
++	struct tegra210_dmic *dmic = snd_soc_component_get_drvdata(comp);
++	unsigned int value = ucontrol->value.enumerated.item[0];
++
++	if (value == dmic->lrsel)
++		return 0;
++
++	dmic->lrsel = value;
++
++	return 1;
++}
++
+ static const struct snd_soc_dai_ops tegra210_dmic_dai_ops = {
+ 	.hw_params	= tegra210_dmic_hw_params,
+ };
+@@ -286,19 +398,22 @@ static const struct soc_enum tegra210_dm
+ 
+ static const struct snd_kcontrol_new tegra210_dmic_controls[] = {
+ 	SOC_SINGLE_EXT("Boost Gain Volume", 0, 0, MAX_BOOST_GAIN, 0,
+-		       tegra210_dmic_get_control, tegra210_dmic_put_control),
++		       tegra210_dmic_get_boost_gain,
++		       tegra210_dmic_put_boost_gain),
+ 	SOC_ENUM_EXT("Channel Select", tegra210_dmic_ch_enum,
+-		     tegra210_dmic_get_control, tegra210_dmic_put_control),
++		     tegra210_dmic_get_ch_select, tegra210_dmic_put_ch_select),
+ 	SOC_ENUM_EXT("Mono To Stereo",
+-		     tegra210_dmic_mono_conv_enum, tegra210_dmic_get_control,
+-		     tegra210_dmic_put_control),
++		     tegra210_dmic_mono_conv_enum,
++		     tegra210_dmic_get_mono_to_stereo,
++		     tegra210_dmic_put_mono_to_stereo),
+ 	SOC_ENUM_EXT("Stereo To Mono",
+-		     tegra210_dmic_stereo_conv_enum, tegra210_dmic_get_control,
+-		     tegra210_dmic_put_control),
++		     tegra210_dmic_stereo_conv_enum,
++		     tegra210_dmic_get_stereo_to_mono,
++		     tegra210_dmic_put_stereo_to_mono),
+ 	SOC_ENUM_EXT("OSR Value", tegra210_dmic_osr_enum,
+-		     tegra210_dmic_get_control, tegra210_dmic_put_control),
++		     tegra210_dmic_get_osr_val, tegra210_dmic_put_osr_val),
+ 	SOC_ENUM_EXT("LR Polarity Select", tegra210_dmic_lrsel_enum,
+-		     tegra210_dmic_get_control, tegra210_dmic_put_control),
++		     tegra210_dmic_get_pol_sel, tegra210_dmic_put_pol_sel),
+ };
+ 
+ static const struct snd_soc_component_driver tegra210_dmic_compnt = {
 
 

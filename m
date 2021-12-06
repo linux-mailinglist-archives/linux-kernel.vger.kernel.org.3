@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97706469F3C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:43:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A9B469CEA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346573AbhLFPqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:46:21 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35196 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387470AbhLFPbY (ORCPT
+        id S1385712AbhLFPZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:25:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357548AbhLFPQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:31:24 -0500
+        Mon, 6 Dec 2021 10:16:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4C2C08EB4B;
+        Mon,  6 Dec 2021 07:08:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70484B8101C;
-        Mon,  6 Dec 2021 15:27:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5947C34900;
-        Mon,  6 Dec 2021 15:27:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67CB6B81123;
+        Mon,  6 Dec 2021 15:08:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEDFAC341C5;
+        Mon,  6 Dec 2021 15:08:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804473;
-        bh=VIzf9OTZg8VPybStcPS96y153x5xZpKSYgAif9kO37Q=;
+        s=korg; t=1638803320;
+        bh=mAa+5cdwVx9hYizsUhbAAx0ouJVvHKhRwkbRnC8wLoc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DgGZWbWBl2J4LuP2rWSBm7FePF+iICHpoIGpRyMRMiPXC+e+02tVrLKDPZJ6+TM1t
-         XAuhYE2lX96xqTRitoQuVpUDpCklTUS8bLsx2eTRd87qrqzriBKa0R23MTRpNLKV/w
-         UC8zFfwVl3J9wzBAHZDo0mW32ZXnodotkrrp+cvg=
+        b=fjXKOg+OQhWqXn3OaGg/teAHlcFLjISGPTa09LrZtOWThmBXbjG7uYy3Bypj1e1lh
+         5Ga0/+p6915uwuKjjqTlm4FLxcMl+/7w+HctgaoczTATcComFHYG9R7tfmDkOTCM9L
+         nkjBAbK5CA5l+zu+bcTnJqrPulSRzRd0TNRayQis=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 159/207] iwlwifi: Fix memory leaks in error handling path
+        stable@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.14 105/106] serial: core: fix transmit-buffer reset and memleak
 Date:   Mon,  6 Dec 2021 15:56:53 +0100
-Message-Id: <20211206145615.778268351@linuxfoundation.org>
+Message-Id: <20211206145559.200333479@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,56 +49,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Johan Hovold <johan@kernel.org>
 
-[ Upstream commit a571bc28326d9f3e13f5f2d9cda2883e0631b0ce ]
+commit 00de977f9e0aa9760d9a79d1e41ff780f74e3424 upstream.
 
-Should an error occur (invalid TLV len or memory allocation failure), the
-memory already allocated in 'reduce_power_data' should be freed before
-returning, otherwise it is leaking.
+Commit 761ed4a94582 ("tty: serial_core: convert uart_close to use
+tty_port_close") converted serial core to use tty_port_close() but
+failed to notice that the transmit buffer still needs to be freed on
+final close.
 
-Fixes: 9dad325f9d57 ("iwlwifi: support loading the reduced power table from UEFI")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
-Link: https://lore.kernel.org/r/1504cd7d842d13ddb8244e18004523128d5c9523.1636615284.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Not freeing the transmit buffer means that the buffer is no longer
+cleared on next open so that any ioctl() waiting for the buffer to drain
+might wait indefinitely (e.g. on termios changes) or that stale data can
+end up being transmitted in case tx is restarted.
+
+Furthermore, the buffer of any port that has been opened would leak on
+driver unbind.
+
+Note that the port lock is held when clearing the buffer pointer due to
+the ldisc race worked around by commit a5ba1d95e46e ("uart: fix race
+between uart_put_char() and uart_shutdown()").
+
+Also note that the tty-port shutdown() callback is not called for
+console ports so it is not strictly necessary to free the buffer page
+after releasing the lock (cf. d72402145ace ("tty/serial: do not free
+trasnmit buffer page under port lock")).
+
+Link: https://lore.kernel.org/r/319321886d97c456203d5c6a576a5480d07c3478.1635781688.git.baruch@tkos.co.il
+Fixes: 761ed4a94582 ("tty: serial_core: convert uart_close to use tty_port_close")
+Cc: stable@vger.kernel.org      # 4.9
+Cc: Rob Herring <robh@kernel.org>
+Reported-by: Baruch Siach <baruch@tkos.co.il>
+Tested-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Link: https://lore.kernel.org/r/20211108085431.12637-1-johan@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/intel/iwlwifi/fw/uefi.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/tty/serial/serial_core.c |   13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/fw/uefi.c b/drivers/net/wireless/intel/iwlwifi/fw/uefi.c
-index c875bf35533ce..009dd4be597b0 100644
---- a/drivers/net/wireless/intel/iwlwifi/fw/uefi.c
-+++ b/drivers/net/wireless/intel/iwlwifi/fw/uefi.c
-@@ -86,6 +86,7 @@ static void *iwl_uefi_reduce_power_section(struct iwl_trans *trans,
- 		if (len < tlv_len) {
- 			IWL_ERR(trans, "invalid TLV len: %zd/%u\n",
- 				len, tlv_len);
-+			kfree(reduce_power_data);
- 			reduce_power_data = ERR_PTR(-EINVAL);
- 			goto out;
- 		}
-@@ -105,6 +106,7 @@ static void *iwl_uefi_reduce_power_section(struct iwl_trans *trans,
- 				IWL_DEBUG_FW(trans,
- 					     "Couldn't allocate (more) reduce_power_data\n");
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -1541,6 +1541,7 @@ static void uart_tty_port_shutdown(struc
+ {
+ 	struct uart_state *state = container_of(port, struct uart_state, port);
+ 	struct uart_port *uport = uart_port_check(state);
++	char *buf;
  
-+				kfree(reduce_power_data);
- 				reduce_power_data = ERR_PTR(-ENOMEM);
- 				goto out;
- 			}
-@@ -134,6 +136,10 @@ static void *iwl_uefi_reduce_power_section(struct iwl_trans *trans,
- done:
- 	if (!size) {
- 		IWL_DEBUG_FW(trans, "Empty REDUCE_POWER, skipping.\n");
-+		/* Better safe than sorry, but 'reduce_power_data' should
-+		 * always be NULL if !size.
-+		 */
-+		kfree(reduce_power_data);
- 		reduce_power_data = ERR_PTR(-ENOENT);
- 		goto out;
- 	}
--- 
-2.33.0
-
+ 	/*
+ 	 * At this point, we stop accepting input.  To do this, we
+@@ -1562,8 +1563,18 @@ static void uart_tty_port_shutdown(struc
+ 	 */
+ 	tty_port_set_suspended(port, 0);
+ 
+-	uart_change_pm(state, UART_PM_STATE_OFF);
++	/*
++	 * Free the transmit buffer.
++	 */
++	spin_lock_irq(&uport->lock);
++	buf = state->xmit.buf;
++	state->xmit.buf = NULL;
++	spin_unlock_irq(&uport->lock);
++
++	if (buf)
++		free_page((unsigned long)buf);
+ 
++	uart_change_pm(state, UART_PM_STATE_OFF);
+ }
+ 
+ static void uart_wait_until_sent(struct tty_struct *tty, int timeout)
 
 

@@ -2,98 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 235EC469181
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 09:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7DCD46917B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 09:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239487AbhLFIdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 03:33:31 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:43618 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S239430AbhLFIdU (ORCPT
+        id S239316AbhLFIdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 03:33:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239361AbhLFIdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 03:33:20 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B641GlM010420;
-        Mon, 6 Dec 2021 09:29:31 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=7dw5R5/FK9LuNdO5hgpabaKMusyc01qO1lYQBujU+TM=;
- b=FnMw9A7tSgCl3z59RZaPD3wp5cQcGGcg+WromuhUTmwRcomG+0M7vrXNO+2aFPOmFTh+
- HbcNYxd617kUOFO3At+3+6qPG55LHxAyzUq7cvf5M09dC+gV1sed0DPMsbY5eoWrKabd
- rgOn2B54dxH0Ldf820aVlAMEyAjfKSTmLJo7RrBgJwKskzbJnYmM21UWH1iQUpX+xd9V
- /S50NrAhY9SZ5JC+cAUfyBiWWqy7akQ186qSkIdjz1+WWetaGuIl3Ap6yeOJxUVcHPtN
- tSc1Yk1YfuLsYLWCTZg5BTQ8eEoIQttJKZSLvnffEiv5i1bfxhbuk+ev9MHfqSXuL3Tp zQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3csb4j12uq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Dec 2021 09:29:31 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7F80910002A;
-        Mon,  6 Dec 2021 09:29:30 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 776942239B2;
-        Mon,  6 Dec 2021 09:29:30 +0100 (CET)
-Received: from lmecxl0995.lme.st.com (10.75.127.44) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 6 Dec
- 2021 09:29:29 +0100
-Subject: Re: [Linux-stm32] [PATCH] dmaengine: stm32-mdma: Remove redundant
- initialization of pointer hwdesc
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <dmaengine@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20211204140032.548066-1-colin.i.king@gmail.com>
-From:   Amelie DELAUNAY <amelie.delaunay@foss.st.com>
-Message-ID: <6ddc679f-c6d4-c0b7-5e1c-ef156a392488@foss.st.com>
-Date:   Mon, 6 Dec 2021 09:29:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 6 Dec 2021 03:33:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E43BC061359;
+        Mon,  6 Dec 2021 00:29:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0992EB80EFA;
+        Mon,  6 Dec 2021 08:29:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52477C341C4;
+        Mon,  6 Dec 2021 08:29:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638779375;
+        bh=Qpk06R2m9n8EzDlZnPqkeXf0kQJLMZ7QcJIUjhYiQe0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kFa9V1dRNeWM8rerUSgJUZ425RnogekENZT8h2AP8/6kPIR+ohiGTkddnoPlooCMq
+         Xg6pGLFkTh5CUmqGSZsidkn0n8CmFsB+aZ56tbUfo7ESYZTrsdDwYV4Qk0vAOvFX3m
+         A1OVjokBlGxmybM39bXpEdd+V8PmuEsIoRa2rBHg=
+Date:   Mon, 6 Dec 2021 09:29:33 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tony Huang =?utf-8?B?6buD5oe35Y6a?= <tony.huang@sunplus.com>
+Cc:     Tony Huang <tonyhuang.sunplus@gmail.com>,
+        "derek.kiernan@xilinx.com" <derek.kiernan@xilinx.com>,
+        "dragan.cvetic@xilinx.com" <dragan.cvetic@xilinx.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Wells Lu =?utf-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Subject: Re: [PATCH v2 2/2] misc: Add iop driver for Sunplus SP7021
+Message-ID: <Ya3J7fy+DqwkUNu9@kroah.com>
+References: <cover.1638499659.git.tonyhuang.sunplus@gmail.com>
+ <9bb79f74ff1b08a5f9a1f6707b3b41484506468a.1638499659.git.tonyhuang.sunplus@gmail.com>
+ <Yanz1xpZamJVZ0LE@kroah.com>
+ <5ab2710b37784d51a3f4f90f625ae907@sphcmbx02.sunplus.com.tw>
+ <Ya3EjykU5RMaRbkt@kroah.com>
+ <2e7d5df0cbe74f2697709ed3e8c94b0b@sphcmbx02.sunplus.com.tw>
 MIME-Version: 1.0
-In-Reply-To: <20211204140032.548066-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-06_03,2021-12-06_01,2021-12-02_01
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2e7d5df0cbe74f2697709ed3e8c94b0b@sphcmbx02.sunplus.com.tw>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 12/4/21 3:00 PM, Colin Ian King wrote:
-> The pointer hwdesc is being initialized with a value that is never
-> read, it is being updated later in a for-loop. The assignment is
-> redundant and can be removed.
+On Mon, Dec 06, 2021 at 08:22:01AM +0000, Tony Huang 黃懷厚 wrote:
+> Dear Greg KH:
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-
-Reviewed-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-
-> ---
->   drivers/dma/stm32-mdma.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> > -----Original Message-----
+> > From: Greg KH <gregkh@linuxfoundation.org>
+> > Sent: Monday, December 6, 2021 4:07 PM
+> > To: Tony Huang 黃懷厚 <tony.huang@sunplus.com>
+> > Cc: Tony Huang <tonyhuang.sunplus@gmail.com>; derek.kiernan@xilinx.com;
+> > dragan.cvetic@xilinx.com; arnd@arndb.de; linux-kernel@vger.kernel.org;
+> > robh+dt@kernel.org; devicetree@vger.kernel.org; Wells Lu 呂芳騰
+> > <wells.lu@sunplus.com>
+> > Subject: Re: [PATCH v2 2/2] misc: Add iop driver for Sunplus SP7021
+> > 
+> > On Mon, Dec 06, 2021 at 06:48:46AM +0000, Tony Huang 黃懷厚 wrote:
+> > > Dear Greg KH, Arnd:
+> > >
+> > > > -----Original Message-----
+> > > > From: Greg KH <gregkh@linuxfoundation.org>
+> > > > Sent: Friday, December 3, 2021 6:39 PM
+> > > > To: Tony Huang <tonyhuang.sunplus@gmail.com>
+> > > > Cc: derek.kiernan@xilinx.com; dragan.cvetic@xilinx.com;
+> > > > arnd@arndb.de; linux-kernel@vger.kernel.org; robh+dt@kernel.org;
+> > > > devicetree@vger.kernel.org; Wells Lu 呂芳騰 <wells.lu@sunplus.com>;
+> > > > Tony Huang 黃懷厚
+> > > > <tony.huang@sunplus.com>
+> > > > Subject: Re: [PATCH v2 2/2] misc: Add iop driver for Sunplus SP7021
+> > > >
+> > > > On Fri, Dec 03, 2021 at 11:48:45AM +0800, Tony Huang wrote:
+> > > > > IOP (IO Processor) embedded inside SP7021 which is used as
+> > > > > Processor for I/O control, RTC wake-up and cooperation with CPU &
+> > > > > PMC in power management purpose.
+> > > > > The IOP core is DQ8051, so also named IOP8051, it supports
+> > > > > dedicated JTAG debug pins which share with SP7021.
+> > > > > In standby mode operation, the power spec reach 400uA.
+> > > > >
+> > > > > Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
+> > > > > ---
+> > > > > Changes in v2:
+> > > > >  - Addressed comments from Arnd Bergmann.
+> > > > >  - Addressed comments from Greg KH.
+> > > > >  - Addressed comments from kernel test robot.
+> > > > >
+> > > > >  MAINTAINERS                    |   1 +
+> > > > >  drivers/misc/Kconfig           |   1 +
+> > > > >  drivers/misc/Makefile          |   1 +
+> > > > >  drivers/misc/iop/Kconfig       |  13 ++
+> > > > >  drivers/misc/iop/Makefile      |   6 +
+> > > >
+> > > > Why do you need a subdirectory for a single .c file?
+> > > >
+> > >
+> > > 1. Currently my bin file is placed in the root file system. I need to
+> > > wait for the kernel booting to succeed before loading the bin code.
+> > 
+> > What "bin file"?
+> > 
 > 
-> diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
-> index d30a4a28d3bf..805a449ff301 100644
-> --- a/drivers/dma/stm32-mdma.c
-> +++ b/drivers/dma/stm32-mdma.c
-> @@ -1279,7 +1279,7 @@ static size_t stm32_mdma_desc_residue(struct stm32_mdma_chan *chan,
->   				      u32 curr_hwdesc)
->   {
->   	struct stm32_mdma_device *dmadev = stm32_mdma_get_dev(chan);
-> -	struct stm32_mdma_hwdesc *hwdesc = desc->node[0].hwdesc;
-> +	struct stm32_mdma_hwdesc *hwdesc;
->   	u32 cbndtr, residue, modulo, burst_size;
->   	int i;
->   
-> 
+> IOP MODULE EXECUTES 8051 CODE
+> Source code should reserve SDRAM memory area for IOP module code. 8051 bin file normal code and standby code can be placed in this area. The location area can be select by user.
+> Normal code: Monitor CPU commands.
+> Standby code: For RTC wake up, cooperation with CPU&PMC in power management When the system enters standby mode, 8051 bin file should be moved to I_Cache.
+> I_Cache has 16K only. Standby code cannot exceed 16K.
+> When the IOP module is mounted, CPU load 8051 codes (normal.bin) into memory.
+> Iop_base_addr_l and iop_base_addr_h specify address.
+> During system boot up, when the IOP is mounted, it will load 8051 normal code and start execute 8051 code.
+
+So this is firmware, just put it in the normal firmware location.
+
+thanks,
+
+greg k-h

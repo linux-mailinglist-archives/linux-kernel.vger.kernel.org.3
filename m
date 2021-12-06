@@ -2,126 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0585646993E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE4D469941
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:43:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343776AbhLFOqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 09:46:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
+        id S1344470AbhLFOqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 09:46:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233437AbhLFOqR (ORCPT
+        with ESMTP id S233437AbhLFOqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 09:46:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6854C061746;
-        Mon,  6 Dec 2021 06:42:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5A356B80FAC;
-        Mon,  6 Dec 2021 14:42:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4074C341C1;
-        Mon,  6 Dec 2021 14:42:39 +0000 (UTC)
-Date:   Mon, 6 Dec 2021 15:42:36 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Subject: Re: [RFC v2 19/19] ima: Setup securityfs for IMA namespace
-Message-ID: <20211206144236.r3pml6bwswmnjlfo@wittgenstein>
-References: <20211203023118.1447229-1-stefanb@linux.ibm.com>
- <20211203023118.1447229-20-stefanb@linux.ibm.com>
- <df433bc52ca1e0408d48bbace4c34a573991f5ba.camel@linux.ibm.com>
- <6306b4e5-f26d-1704-6344-354eb5387abf@linux.ibm.com>
- <20211206141108.evjrqsmmgpjp3ias@wittgenstein>
- <5650aa13ef875e70d8a87696c4e871f8a4d574a1.camel@linux.ibm.com>
+        Mon, 6 Dec 2021 09:46:33 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD91AC061746;
+        Mon,  6 Dec 2021 06:43:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=H8O7gae/7jKTz6Pv+1iSjZYd7Qd7DnxmUXyM+8U+dIM=; b=UNJCb1d7mOdEesOfDstSorj96+
+        eBSt8144FW19qOfV0eRnw6x25GJKhEy01pd3mRMnPOhRVvVgyLk+mqGG6ZgiO1Qb7I0XWTQ9I1sns
+        wodeLbuHIIUokLEV3L35RPmoDIbi6IOWhYHsHWM9ONtBS7hBE7Z8Cx3xKEeKjRzoIEgXtt5/YBAEE
+        8tAHZ4ckORHs4DGF5sYlT/lg2Xkx7R2WodloBj/P8xJn+uapjI2gvS/oGONMDXP07XwTLllhDq2jY
+        xtLatAIcqi3JSEstEBoABHkDO5WwKzLoFtsTXHMtxnpmQEEPQIC7gLG/UCjE85+uCvjbc0t3uTutg
+        q8XggXog==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1muFCZ-004GDJ-Ri; Mon, 06 Dec 2021 14:42:47 +0000
+Date:   Mon, 6 Dec 2021 06:42:47 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 01/18] iommu: Add device dma ownership set/release
+ interfaces
+Message-ID: <Ya4hZ2F7MYusgmSB@infradead.org>
+References: <20211206015903.88687-1-baolu.lu@linux.intel.com>
+ <20211206015903.88687-2-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5650aa13ef875e70d8a87696c4e871f8a4d574a1.camel@linux.ibm.com>
+In-Reply-To: <20211206015903.88687-2-baolu.lu@linux.intel.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 09:21:15AM -0500, James Bottomley wrote:
-> On Mon, 2021-12-06 at 15:11 +0100, Christian Brauner wrote:
-> > On Fri, Dec 03, 2021 at 01:06:13PM -0500, Stefan Berger wrote:
-> > > On 12/3/21 12:03, James Bottomley wrote:
-> [...]
-> > > > > +int ima_fs_ns_init(struct ima_namespace *ns)
-> > > > > +{
-> > > > > +	ns->mount = securityfs_ns_create_mount(ns->user_ns);
-> > > >  
-> > > > This actually triggers on the call to securityfs_init_fs_context,
-> > > > but nothing happens because the callback is null.  Every
-> > > > subsequent use of fscontext will trigger this.  The point of a
-> > > > keyed supeblock is that fill_super is only called once per key,
-> > > > that's the place we should be doing this.   It should also
-> > > > probably be a blocking notifier so any consumer of securityfs can
-> > > > be namespaced by registering for this notifier.
-> > > 
-> > > What I don't like about the fill_super is that it gets called too
-> > > early:
-> > > 
-> > > [   67.058611] securityfs_ns_create_mount @ 102 target user_ns:
-> > > ffff95c010698c80; nr_extents: 0
-> > > [   67.059836] securityfs_fill_super @ 47  user_ns:
-> > > ffff95c010698c80;
-> > > nr_extents: 0
-> > > 
-> > > We are switching to the target user namespace in
-> > > securityfs_ns_create_mount.  The expected nr_extents at this point
-> > > is 0, since user_ns hasn't been configured, yet. But then
-> > > security_fill_super is also called with nr_extents 0. We cannot use
-> > > that, it's too early!
-> > 
-> > So the problem is that someone could mount securityfs before any
-> > idmappings are setup or what?
+On Mon, Dec 06, 2021 at 09:58:46AM +0800, Lu Baolu wrote:
+> >From the perspective of who is initiating the device to do DMA, device
+> DMA could be divided into the following types:
 > 
-> Yes, not exactly: we put a call to initialize IMA in create_user_ns()
-> but it's too early to have the mappings, so we can't create the
-> securityfs entries in that call.  We need the inode to pick up the root
-> owner from the s_user_ns mappings, so we can't create the dentries for
-> the IMA securityfs entries until those mappings exist.
+>         DMA_OWNER_DMA_API: Device DMAs are initiated by a kernel driver
+> 			through the kernel DMA API.
+>         DMA_OWNER_PRIVATE_DOMAIN: Device DMAs are initiated by a kernel
+> 			driver with its own PRIVATE domain.
+> 	DMA_OWNER_PRIVATE_DOMAIN_USER: Device DMAs are initiated by
+> 			userspace.
 > 
-> I'm assuming that by the time someone tries to mount securityfs inside
-> the namespace, the mappings are set up, which is why triggering the
-> notifier to add the files on first mount seems like the best place to
-> put it.
+> Different DMA ownerships are exclusive for all devices in the same iommu
+> group as an iommu group is the smallest granularity of device isolation
+> and protection that the IOMMU subsystem can guarantee. This extends the
+> iommu core to enforce this exclusion.
 > 
-> >  How does moving the setup to a later stage help at all? I'm
-> > struggling to make sense of this.
+> Basically two new interfaces are provided:
 > 
-> It's not moving all the setup, just the creation of the securityfs
-> entries.
+>         int iommu_device_set_dma_owner(struct device *dev,
+>                 enum iommu_dma_owner type, void *owner_cookie);
+>         void iommu_device_release_dma_owner(struct device *dev,
+>                 enum iommu_dma_owner type);
 > 
-> >  When or even if idmappings are written isn't under imas control.
-> > Someone could mount securityfs without any idmappings setup. In that
-> > case they should get what they deserve, everything owner by
-> > overflowuid/overflowgid, no?
+> Although above interfaces are per-device, DMA owner is tracked per group
+> under the hood. An iommu group cannot have different dma ownership set
+> at the same time. Violation of this assumption fails
+> iommu_device_set_dma_owner().
 > 
-> Right, in the current scheme of doing things, if they still haven't
-> written the mappings by the time they do the mount, they're just going
-> to get nobody/nogroup as uid/gid, but that's their own fault.
+> Kernel driver which does DMA have DMA_OWNER_DMA_API automatically set/
+> released in the driver binding/unbinding process (see next patch).
 > 
-> > Or you can require in fill_super that kuid 0 and kgid 0 are mapped
-> > and fail if they aren't.
+> Kernel driver which doesn't do DMA could avoid setting the owner type.
+> Device bound to such driver is considered same as a driver-less device
+> which is compatible to all owner types.
 > 
-> We can't create the securityfs entries in fill_super ... I already
-> tried and the locking just won't allow it.  And if we create them ahead
+> Userspace driver framework (e.g. vfio) should set
+> DMA_OWNER_PRIVATE_DOMAIN_USER for a device before the userspace is allowed
+> to access it, plus a owner cookie pointer to mark the user identity so a
+> single group cannot be operated by multiple users simultaneously. Vice
+> versa, the owner type should be released after the user access permission
+> is withdrawn.
+> 
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Kevin Tian <kevin.tian@intel.com>
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>  include/linux/iommu.h | 36 +++++++++++++++++
+>  drivers/iommu/iommu.c | 93 +++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 129 insertions(+)
+> 
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index d2f3435e7d17..24676b498f38 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -162,6 +162,23 @@ enum iommu_dev_features {
+>  	IOMMU_DEV_FEAT_IOPF,
+>  };
+>  
+> +/**
+> + * enum iommu_dma_owner - IOMMU DMA ownership
+> + * @DMA_OWNER_NONE: No DMA ownership.
+> + * @DMA_OWNER_DMA_API: Device DMAs are initiated by a kernel driver through
+> + *			the kernel DMA API.
+> + * @DMA_OWNER_PRIVATE_DOMAIN: Device DMAs are initiated by a kernel driver
+> + *			which provides an UNMANAGED domain.
+> + * @DMA_OWNER_PRIVATE_DOMAIN_USER: Device DMAs are initiated by userspace,
+> + *			kernel ensures that DMAs never go to kernel memory.
+> + */
+> +enum iommu_dma_owner {
+> +	DMA_OWNER_NONE,
+> +	DMA_OWNER_DMA_API,
+> +	DMA_OWNER_PRIVATE_DOMAIN,
+> +	DMA_OWNER_PRIVATE_DOMAIN_USER,
+> +};
+> +
+>  #define IOMMU_PASID_INVALID	(-1U)
+>  
+>  #ifdef CONFIG_IOMMU_API
+> @@ -681,6 +698,10 @@ struct iommu_sva *iommu_sva_bind_device(struct device *dev,
+>  void iommu_sva_unbind_device(struct iommu_sva *handle);
+>  u32 iommu_sva_get_pasid(struct iommu_sva *handle);
+>  
+> +int iommu_device_set_dma_owner(struct device *dev, enum iommu_dma_owner owner,
+> +			       void *owner_cookie);
+> +void iommu_device_release_dma_owner(struct device *dev, enum iommu_dma_owner owner);
+> +
+>  #else /* CONFIG_IOMMU_API */
+>  
+>  struct iommu_ops {};
+> @@ -1081,6 +1102,21 @@ static inline struct iommu_fwspec *dev_iommu_fwspec_get(struct device *dev)
+>  {
+>  	return NULL;
+>  }
+> +
+> +static inline int iommu_device_set_dma_owner(struct device *dev,
+> +					     enum iommu_dma_owner owner,
+> +					     void *owner_cookie)
+> +{
+> +	if (owner != DMA_OWNER_DMA_API)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static inline void iommu_device_release_dma_owner(struct device *dev,
+> +						  enum iommu_dma_owner owner)
+> +{
+> +}
+>  #endif /* CONFIG_IOMMU_API */
+>  
+>  /**
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 8b86406b7162..1de520a07518 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -48,6 +48,9 @@ struct iommu_group {
+>  	struct iommu_domain *default_domain;
+>  	struct iommu_domain *domain;
+>  	struct list_head entry;
+> +	enum iommu_dma_owner dma_owner;
+> +	refcount_t owner_cnt;
 
-What is the locking issue there exactly?
+owner_cnt is only manipulated under group->mutex, not need for a
+refcount_t here, a plain unsigned int while do it and will also
+simplify a fair bit of code as it avoid the need for atomic add/sub
+and test operations.
 
-I'm looking at ima_fs_ns_late_init() and there's nothing there that
-would cause obvious issues. You might not be able to use
-securityfs_create_*() in there for some reason but that just means you
-need to add a simple helper. Nearly every filesystem that needs to
-pre-create files does it in fill_super. So I really fail to see what the
-issue is currently. I mist just miss something obvious.
+> +static int __iommu_group_set_dma_owner(struct iommu_group *group,
+> +				       enum iommu_dma_owner owner,
+> +				       void *owner_cookie)
+> +{
+
+As pointed out last time, please move the group->mutex locking into
+this helper, which makes it identical to the later added public
+function.
+
+> +static void __iommu_group_release_dma_owner(struct iommu_group *group,
+> +					    enum iommu_dma_owner owner)
+> +{
+
+Same here.

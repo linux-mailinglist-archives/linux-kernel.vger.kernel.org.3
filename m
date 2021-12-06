@@ -2,97 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 854E9469150
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 09:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 139E646914E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 09:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239085AbhLFISX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 03:18:23 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:39442 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239072AbhLFISV (ORCPT
+        id S239063AbhLFISS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 03:18:18 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:37362
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239037AbhLFISR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 03:18:21 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 6 Dec 2021 03:18:17 -0500
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A606DB8100F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:14:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E643C341D1
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:14:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638778491;
-        bh=THfRn7a2JovhIntYuiPXT6Vgso3P5wCsDJLMba8ppNA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pLSZ3cBGS2wEKnXgau9/aMQ3TTHvktdv0t5uMHtWSuN56CRkCeYJmUdEN04VtIDoc
-         Ogz+ME3k4rXUrOVShkEVvkdHSBIC3p4AFXCKUOKL15yxIZufF+RqFHycJSBNz2q2nB
-         JsdCDgkAEE1OxEm7zrqRwlhIuYsnMnTT9CA7ERgwkBWPRvc7kiBOyXBIpFuvkMGkhr
-         ZiwdlcyQcKWpDcrbBntk3T3obAgJOwXHXyPBlsc4NLNBemFOud8NrrenGFqHpHuyAJ
-         rRigvWSUIA0EIH1Y1S5ZJ8dnJstkFnPVfFIGHV5yWqc7Z1rDpZcJuHzGaS4OcYc4Ze
-         Npe9LMK8i21PA==
-Received: by mail-wm1-f44.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so9802514wme.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 00:14:51 -0800 (PST)
-X-Gm-Message-State: AOAM5339pC4KIMq9kHrO47oKLDM8oOKvR5M1Op0EmTSMZ5A/wKVuaCcW
-        HgXp+ihL4bL+aO2Air52LRO9/rO2N+MEX2ZzQIw=
-X-Google-Smtp-Source: ABdhPJwtmtOxIj+u87zU1ovigcp0t9aQlHc+oBK9rG8VfMe6Ea7m4Bg2CKOZ6IXtLmjBmDFjJACWQQ8QmdSi4ovavGk=
-X-Received: by 2002:a1c:1c1:: with SMTP id 184mr37071464wmb.1.1638778489682;
- Mon, 06 Dec 2021 00:14:49 -0800 (PST)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4055B3F1BF
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:14:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1638778488;
+        bh=pebEk52luhXLxxTpaPgvP+uRufHrkPklQ9wpre0mi+M=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=nydmt4/uaXJc+VwDDwjKB8YypX4n/9pnCNpWSE/jpYa+fJjicxN/h2GnLq0RT8d4M
+         ktndhs8CWaIuPwKaG1YfzAf0laP2pQ57fd95986zQNDNOYc3v2RWo6NuQS2+CvZHBR
+         HClcZb3rD8k2SWliYuknpfCWESOvFwhm6hneENIOJIOP8F1k7vQlL1BfcYIC+/QdxX
+         iHaCZOzqfWDGtlSG9raeFFoHEgPlOpjQ+fp5wCh9fkzRwh6LtXvAwuAFnu99yK8Row
+         94Vz5zbcbZ3EIsyA+G1gCdHRS1LTDwFSkjQNwd8cqeWRRw5LNmKUd5tUPEs+4RZFik
+         WaWLZFJQYTsFw==
+Received: by mail-lj1-f199.google.com with SMTP id q64-20020a2e2a43000000b00218c94eab9bso3144725ljq.18
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 00:14:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pebEk52luhXLxxTpaPgvP+uRufHrkPklQ9wpre0mi+M=;
+        b=A200vX0IPEwKbcpdZdige88vJ/Fhwli1I/GHbVJ+LQAzr4hWBdXQeWTSLKXLTdo3rB
+         eWTu71BDtEjo5osYzkFgUD+3YtFl8ZL1mDH6o0vMbljr2bmKcLeJYCb5rJKbBF6msUWX
+         KAGMIwqQmcWAjwy8q6xVW20Hcku9bbpp607HG8gSQza3o7J0JymKBstQbrM96XUojqV8
+         qIbkJ3p/ZnAuZ/hMJKxBBJ1ejvEifUNKfVFvwY1Ye7EAJAZOJ78Xsmi4IzYWPpoIE751
+         O2ajOrXw0CpAgcbzEwT2/Cd1vxIYkcCURV7jzlAgNLf/qwO4nGacTwXWvuunpetcnuwY
+         lzgQ==
+X-Gm-Message-State: AOAM530HpiXlE397s7DloU1sPw30GCGVfurumaYSeC02tecFKd1+bdpM
+        /km64xB6tWuMRJlGV1e8YKDOBC1ftAMQUkPcDzg2Y24JLLG0gqEPy+960WpIFtL1fMstSxRuF+L
+        Z3justVZo7sCXYBIp4s2HxB6BbrkQVY0GxLBRFBOzCA==
+X-Received: by 2002:a2e:a588:: with SMTP id m8mr35295096ljp.23.1638778487776;
+        Mon, 06 Dec 2021 00:14:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxkjdsS8wT/1ZgOCaXlM/8RKnbGXhyADVHCYLU0NDvaCjZdFze4Gc4WES2nff3DeILprgXWeg==
+X-Received: by 2002:a2e:a588:: with SMTP id m8mr35295075ljp.23.1638778487585;
+        Mon, 06 Dec 2021 00:14:47 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id bd28sm1253823ljb.134.2021.12.06.00.14.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 00:14:47 -0800 (PST)
+Message-ID: <c7d6f119-55b5-cda7-13dc-f6f61a7fdb59@canonical.com>
+Date:   Mon, 6 Dec 2021 09:14:46 +0100
 MIME-Version: 1.0
-References: <20211203185522.692489-1-arnd@kernel.org> <CACGkMEuv2HQxUyxL8hsAXGOKxhTFED5_AcnZ1dOALh2QsL7ZKQ@mail.gmail.com>
-In-Reply-To: <CACGkMEuv2HQxUyxL8hsAXGOKxhTFED5_AcnZ1dOALh2QsL7ZKQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Mon, 6 Dec 2021 09:14:33 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1mRu=CRSShyx1UKwR+nPOOM2kN0ZjZBzKTu6Hw5wLF4Q@mail.gmail.com>
-Message-ID: <CAK8P3a1mRu=CRSShyx1UKwR+nPOOM2kN0ZjZBzKTu6Hw5wLF4Q@mail.gmail.com>
-Subject: Re: [PATCH] eni_vdpa: alibaba: select VIRTIO_PCI_LIB
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v3 6/7] clk: samsung: Add initial Exynos7885 clock driver
+Content-Language: en-US
+To:     David Virag <virag.david003@gmail.com>
+Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20211205230804.202292-1-virag.david003@gmail.com>
+ <20211205230804.202292-7-virag.david003@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211205230804.202292-7-virag.david003@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 4:12 AM Jason Wang <jasowang@redhat.com> wrote:
->
-> On Sat, Dec 4, 2021 at 2:55 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> >
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > When VIRTIO_PCI_LIB is not built-in but the alibaba driver is, the
-> > kernel runs into a link error:
-> >
-> > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_features':
-> > eni_vdpa.c:(.text+0x23f): undefined reference to `vp_legacy_set_features'
-> > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_state':
-> > eni_vdpa.c:(.text+0x2fe): undefined reference to `vp_legacy_get_queue_enable'
-> > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_address':
-> > eni_vdpa.c:(.text+0x376): undefined reference to `vp_legacy_set_queue_address'
-> > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_ready':
-> > eni_vdpa.c:(.text+0x3b4): undefined reference to `vp_legacy_set_queue_address'
-> > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_free_irq':
-> > eni_vdpa.c:(.text+0x460): undefined reference to `vp_legacy_queue_vector'
-> > x86_64-linux-ld: eni_vdpa.c:(.text+0x4b7): undefined reference to `vp_legacy_config_vector'
-> > x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_reset':
->
-> Intersting, all those belongs to the legacy library.
->
-> And I just have a try and I can complie alibaba eni without
-> VIRTIO_PCI_LIB is set.
+On 06/12/2021 00:08, David Virag wrote:
+> This is an initial implementation adding basic clocks, such as UART,
+> USI, I2C, WDT, ect. and their parent clocks. It is heavily based on the
+> Exynos850 clock driver at 'drivers/clk/samsung/clk-exynos850.c' which
+> was made by Sam Protsenko, thus the copyright and author lines were
+> kept.
+> 
+> Bus clocks are enabled by default as well to avoid hangs while trying to
+> access CMU registers.
+> 
+> Only the parts of CMU_TOP needed for CMU_CORE and CMU_PERI, a bit of
+> CMU_CORE, and most of CMU_PERI is implemented as of now.
+> 
+> Signed-off-by: David Virag <virag.david003@gmail.com>
+> ---
+> Changes in v2:
+>   - Use shared code between Exynos850 and 7885 clock drivers
+>   - As the code that was from the Exynos850 clock driver was moved to
+>     clk-exynos-arm64.c and what remains is mostly SoC specific data,
+>     move the Linaro copyright and Sam Protsenko author lines there.
+> 
+> Changes in v3:
+>   - Nothing
+> 
+>  drivers/clk/samsung/Makefile         |   1 +
+>  drivers/clk/samsung/clk-exynos7885.c | 593 +++++++++++++++++++++++++++
+>  2 files changed, 594 insertions(+)
+>  create mode 100644 drivers/clk/samsung/clk-exynos7885.c
+> 
+> diff --git a/drivers/clk/samsung/Makefile b/drivers/clk/samsung/Makefile
+> index 901e6333c5f0..0df74916a895 100644
+> --- a/drivers/clk/samsung/Makefile
+> +++ b/drivers/clk/samsung/Makefile
+> @@ -18,6 +18,7 @@ obj-$(CONFIG_EXYNOS_AUDSS_CLK_CON) += clk-exynos-audss.o
+>  obj-$(CONFIG_EXYNOS_CLKOUT)	+= clk-exynos-clkout.o
+>  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynos-arm64.o
+>  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynos7.o
+> +obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynos7885.o
+>  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynos850.o
+>  obj-$(CONFIG_S3C2410_COMMON_CLK)+= clk-s3c2410.o
+>  obj-$(CONFIG_S3C2410_COMMON_DCLK)+= clk-s3c2410-dclk.o
+> diff --git a/drivers/clk/samsung/clk-exynos7885.c b/drivers/clk/samsung/clk-exynos7885.c
+> new file mode 100644
+> index 000000000000..0b3a28800e76
+> --- /dev/null
+> +++ b/drivers/clk/samsung/clk-exynos7885.c
+> @@ -0,0 +1,591 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2021 Dávid Virág <virag.david003@gmail.com>
+> + * Author: Dávid Virág <virag.david003@gmail.com>
+> + *
+> + * Common Clock Framework support for Exynos7885 SoC.
+> + */
+> +
+> +#include <linux/of_device.h>
+> +#include <dt-bindings/clock/exynos7885.h>
+> +
+> +#include "clk-exynos-arm64.h"
 
-Ah, so the problem is in drivers/Makefile:
+Similarly to your previous patch - you need headers for every explicitly
+used symbol/function etc.
 
-obj-$(CONFIG_VIRTIO)            += virtio/
-obj-$(CONFIG_VIRTIO_PCI_LIB)    += virtio/
-
-We only enter this directory when one of these two symbols is set, but
-in my randconfig
-build, neither one is. I'll send a new patch.
-
-         Arnd
+Best regards,
+Krzysztof

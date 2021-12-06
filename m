@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B415B469A40
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC17A469FD7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346609AbhLFPGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:06:52 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38150 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346029AbhLFPFl (ORCPT
+        id S1359570AbhLFPyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:54:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390245AbhLFPmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:05:41 -0500
+        Mon, 6 Dec 2021 10:42:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E025C08ECB8;
+        Mon,  6 Dec 2021 07:25:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 024D9B8110B;
-        Mon,  6 Dec 2021 15:02:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35B2AC341C2;
-        Mon,  6 Dec 2021 15:02:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C08361309;
+        Mon,  6 Dec 2021 15:25:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 053E6C34900;
+        Mon,  6 Dec 2021 15:25:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802929;
-        bh=4VdDmKEfQkTjxQ25zmlzzACpXovCF9ZXg8FIygv5DNQ=;
+        s=korg; t=1638804358;
+        bh=B1tPb4Y81YUEFcjknVtv2dgfbxahQigJmXfHtEaZks4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eQJ+c7PSurNrLLRZLEd7kvYYg5BK2/vLWli9pO4iJbXHSEeZ7BVzlNrBbnSWsN65P
-         M1Lda2cNM5+ibck9/iDpGyuI5KvC3N3FD2UwPXi6lyalvhFtGjwdTx6IHUhBh7GJ+R
-         FHDcMidSjn8c3qv+mSCrMq5RRMSZ1rupc2H7iDuA=
+        b=vx5mFeY1CXya3od5fjwer2H5o7zrvYk8IHKwsSTdB2NHSAzbyhvmPOoZngdwvEg0O
+         rsm5IpjGWxMn035LN5aScbaeU1Yn4hYtkWnQLpq6B/cfkd/7QUEwjSv58ELM5ehGPm
+         XVO5brytqCurGJNpTmJ6LQ3OHryTMs6yzFzgRhRY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>
-Subject: [PATCH 4.9 30/62] xen/blkfront: dont take local copy of a request from the ring page
+        stable@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        Mark Brown <broonie@kernel.org>,
+        Sameer Pujar <spujar@nvidia.com>, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 119/207] ASoC: tegra: Fix kcontrol put callback in ADMAIF
 Date:   Mon,  6 Dec 2021 15:56:13 +0100
-Message-Id: <20211206145550.214191680@linuxfoundation.org>
+Message-Id: <20211206145614.364492195@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,103 +49,202 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Sameer Pujar <spujar@nvidia.com>
 
-commit 8f5a695d99000fc3aa73934d7ced33cfc64dcdab upstream.
+commit e2b87a18a60c02d0dcd1de801d669587e516cc4d upstream.
 
-In order to avoid a malicious backend being able to influence the local
-copy of a request build the request locally first and then copy it to
-the ring page instead of doing it the other way round as today.
+The kcontrol put callback is expected to return 1 when there is change
+in HW or when the update is acknowledged by driver. This would ensure
+that change notifications are sent to subscribed applications. Update
+the ADMAIF driver accordingly.
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
-Acked-by: Roger Pau Monné <roger.pau@citrix.com>
-Link: https://lore.kernel.org/r/20210730103854.12681-3-jgross@suse.com
-Signed-off-by: Juergen Gross <jgross@suse.com>
+Fixes: f74028e159bb ("ASoC: tegra: Add Tegra210 based ADMAIF driver")
+Suggested-by: Jaroslav Kysela <perex@perex.cz>
+Suggested-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sameer Pujar <spujar@nvidia.com>
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
+Link: https://lore.kernel.org/r/1637219231-406-8-git-send-email-spujar@nvidia.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/block/xen-blkfront.c |   25 +++++++++++++++----------
- 1 file changed, 15 insertions(+), 10 deletions(-)
+ sound/soc/tegra/tegra210_admaif.c |  138 ++++++++++++++++++++++++++++++--------
+ 1 file changed, 109 insertions(+), 29 deletions(-)
 
---- a/drivers/block/xen-blkfront.c
-+++ b/drivers/block/xen-blkfront.c
-@@ -532,7 +532,7 @@ static unsigned long blkif_ring_get_requ
- 	rinfo->shadow[id].status = REQ_WAITING;
- 	rinfo->shadow[id].associated_id = NO_ASSOCIATED_ID;
+--- a/sound/soc/tegra/tegra210_admaif.c
++++ b/sound/soc/tegra/tegra210_admaif.c
+@@ -424,46 +424,122 @@ static const struct snd_soc_dai_ops tegr
+ 	.trigger	= tegra_admaif_trigger,
+ };
  
--	(*ring_req)->u.rw.id = id;
-+	rinfo->shadow[id].req.u.rw.id = id;
- 
- 	return id;
- }
-@@ -540,11 +540,12 @@ static unsigned long blkif_ring_get_requ
- static int blkif_queue_discard_req(struct request *req, struct blkfront_ring_info *rinfo)
+-static int tegra_admaif_get_control(struct snd_kcontrol *kcontrol,
+-				    struct snd_ctl_elem_value *ucontrol)
++static int tegra210_admaif_pget_mono_to_stereo(struct snd_kcontrol *kcontrol,
++	struct snd_ctl_elem_value *ucontrol)
  {
- 	struct blkfront_info *info = rinfo->dev_info;
--	struct blkif_request *ring_req;
-+	struct blkif_request *ring_req, *final_ring_req;
- 	unsigned long id;
+ 	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
++	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
+ 	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
++
++	ucontrol->value.enumerated.item[0] =
++		admaif->mono_to_stereo[ADMAIF_TX_PATH][ec->reg];
++
++	return 0;
++}
++
++static int tegra210_admaif_pput_mono_to_stereo(struct snd_kcontrol *kcontrol,
++	struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
+ 	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
+-	unsigned int *uctl_val = &ucontrol->value.enumerated.item[0];
++	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
++	unsigned int value = ucontrol->value.enumerated.item[0];
  
- 	/* Fill out a communications ring structure. */
--	id = blkif_ring_get_request(rinfo, req, &ring_req);
-+	id = blkif_ring_get_request(rinfo, req, &final_ring_req);
-+	ring_req = &rinfo->shadow[id].req;
- 
- 	ring_req->operation = BLKIF_OP_DISCARD;
- 	ring_req->u.discard.nr_sectors = blk_rq_sectors(req);
-@@ -555,8 +556,8 @@ static int blkif_queue_discard_req(struc
- 	else
- 		ring_req->u.discard.flag = 0;
- 
--	/* Keep a private copy so we can reissue requests when recovering. */
--	rinfo->shadow[id].req = *ring_req;
-+	/* Copy the request to the ring page. */
-+	*final_ring_req = *ring_req;
+-	if (strstr(kcontrol->id.name, "Playback Mono To Stereo"))
+-		*uctl_val = admaif->mono_to_stereo[ADMAIF_TX_PATH][ec->reg];
+-	else if (strstr(kcontrol->id.name, "Capture Mono To Stereo"))
+-		*uctl_val = admaif->mono_to_stereo[ADMAIF_RX_PATH][ec->reg];
+-	else if (strstr(kcontrol->id.name, "Playback Stereo To Mono"))
+-		*uctl_val = admaif->stereo_to_mono[ADMAIF_TX_PATH][ec->reg];
+-	else if (strstr(kcontrol->id.name, "Capture Stereo To Mono"))
+-		*uctl_val = admaif->stereo_to_mono[ADMAIF_RX_PATH][ec->reg];
++	if (value == admaif->mono_to_stereo[ADMAIF_TX_PATH][ec->reg])
++		return 0;
++
++	admaif->mono_to_stereo[ADMAIF_TX_PATH][ec->reg] = value;
++
++	return 1;
++}
++
++static int tegra210_admaif_cget_mono_to_stereo(struct snd_kcontrol *kcontrol,
++	struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
++	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
++	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
++
++	ucontrol->value.enumerated.item[0] =
++		admaif->mono_to_stereo[ADMAIF_RX_PATH][ec->reg];
  
  	return 0;
  }
-@@ -689,6 +690,7 @@ static int blkif_queue_rw_req(struct req
+ 
+-static int tegra_admaif_put_control(struct snd_kcontrol *kcontrol,
+-				    struct snd_ctl_elem_value *ucontrol)
++static int tegra210_admaif_cput_mono_to_stereo(struct snd_kcontrol *kcontrol,
++	struct snd_ctl_elem_value *ucontrol)
  {
- 	struct blkfront_info *info = rinfo->dev_info;
- 	struct blkif_request *ring_req, *extra_ring_req = NULL;
-+	struct blkif_request *final_ring_req, *final_extra_ring_req = NULL;
- 	unsigned long id, extra_id = NO_ASSOCIATED_ID;
- 	bool require_extra_req = false;
- 	int i;
-@@ -730,7 +732,8 @@ static int blkif_queue_rw_req(struct req
- 		}
- 
- 	/* Fill out a communications ring structure. */
--	id = blkif_ring_get_request(rinfo, req, &ring_req);
-+	id = blkif_ring_get_request(rinfo, req, &final_ring_req);
-+	ring_req = &rinfo->shadow[id].req;
- 
- 	num_sg = blk_rq_map_sg(req->q, req, rinfo->shadow[id].sg);
- 	num_grant = 0;
-@@ -781,7 +784,9 @@ static int blkif_queue_rw_req(struct req
- 		ring_req->u.rw.nr_segments = num_grant;
- 		if (unlikely(require_extra_req)) {
- 			extra_id = blkif_ring_get_request(rinfo, req,
--							  &extra_ring_req);
-+							  &final_extra_ring_req);
-+			extra_ring_req = &rinfo->shadow[extra_id].req;
+ 	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
++	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
+ 	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
++	unsigned int value = ucontrol->value.enumerated.item[0];
 +
- 			/*
- 			 * Only the first request contains the scatter-gather
- 			 * list.
-@@ -823,10 +828,10 @@ static int blkif_queue_rw_req(struct req
- 	if (setup.segments)
- 		kunmap_atomic(setup.segments);
++	if (value == admaif->mono_to_stereo[ADMAIF_RX_PATH][ec->reg])
++		return 0;
++
++	admaif->mono_to_stereo[ADMAIF_RX_PATH][ec->reg] = value;
++
++	return 1;
++}
++
++static int tegra210_admaif_pget_stereo_to_mono(struct snd_kcontrol *kcontrol,
++	struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
+ 	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
++	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
++
++	ucontrol->value.enumerated.item[0] =
++		admaif->stereo_to_mono[ADMAIF_TX_PATH][ec->reg];
++
++	return 0;
++}
++
++static int tegra210_admaif_pput_stereo_to_mono(struct snd_kcontrol *kcontrol,
++	struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
++	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
++	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
+ 	unsigned int value = ucontrol->value.enumerated.item[0];
  
--	/* Keep a private copy so we can reissue requests when recovering. */
--	rinfo->shadow[id].req = *ring_req;
-+	/* Copy request(s) to the ring page. */
-+	*final_ring_req = *ring_req;
- 	if (unlikely(require_extra_req))
--		rinfo->shadow[extra_id].req = *extra_ring_req;
-+		*final_extra_ring_req = *extra_ring_req;
+-	if (strstr(kcontrol->id.name, "Playback Mono To Stereo"))
+-		admaif->mono_to_stereo[ADMAIF_TX_PATH][ec->reg] = value;
+-	else if (strstr(kcontrol->id.name, "Capture Mono To Stereo"))
+-		admaif->mono_to_stereo[ADMAIF_RX_PATH][ec->reg] = value;
+-	else if (strstr(kcontrol->id.name, "Playback Stereo To Mono"))
+-		admaif->stereo_to_mono[ADMAIF_TX_PATH][ec->reg] = value;
+-	else if (strstr(kcontrol->id.name, "Capture Stereo To Mono"))
+-		admaif->stereo_to_mono[ADMAIF_RX_PATH][ec->reg] = value;
++	if (value == admaif->stereo_to_mono[ADMAIF_TX_PATH][ec->reg])
++		return 0;
++
++	admaif->stereo_to_mono[ADMAIF_TX_PATH][ec->reg] = value;
++
++	return 1;
++}
++
++static int tegra210_admaif_cget_stereo_to_mono(struct snd_kcontrol *kcontrol,
++	struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
++	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
++	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
++
++	ucontrol->value.enumerated.item[0] =
++		admaif->stereo_to_mono[ADMAIF_RX_PATH][ec->reg];
  
- 	if (max_grefs > 0)
- 		gnttab_free_grant_references(setup.gref_head);
+ 	return 0;
+ }
+ 
++static int tegra210_admaif_cput_stereo_to_mono(struct snd_kcontrol *kcontrol,
++	struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
++	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
++	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
++	unsigned int value = ucontrol->value.enumerated.item[0];
++
++	if (value == admaif->stereo_to_mono[ADMAIF_RX_PATH][ec->reg])
++		return 0;
++
++	admaif->stereo_to_mono[ADMAIF_RX_PATH][ec->reg] = value;
++
++	return 1;
++}
++
+ static int tegra_admaif_dai_probe(struct snd_soc_dai *dai)
+ {
+ 	struct tegra_admaif *admaif = snd_soc_dai_get_drvdata(dai);
+@@ -559,17 +635,21 @@ static const char * const tegra_admaif_m
+ }
+ 
+ #define TEGRA_ADMAIF_CIF_CTRL(reg)					       \
+-	NV_SOC_ENUM_EXT("ADMAIF" #reg " Playback Mono To Stereo", reg - 1,\
+-			tegra_admaif_get_control, tegra_admaif_put_control,    \
++	NV_SOC_ENUM_EXT("ADMAIF" #reg " Playback Mono To Stereo", reg - 1,     \
++			tegra210_admaif_pget_mono_to_stereo,		       \
++			tegra210_admaif_pput_mono_to_stereo,		       \
+ 			tegra_admaif_mono_conv_text),			       \
+-	NV_SOC_ENUM_EXT("ADMAIF" #reg " Playback Stereo To Mono", reg - 1,\
+-			tegra_admaif_get_control, tegra_admaif_put_control,    \
++	NV_SOC_ENUM_EXT("ADMAIF" #reg " Playback Stereo To Mono", reg - 1,     \
++			tegra210_admaif_pget_stereo_to_mono,		       \
++			tegra210_admaif_pput_stereo_to_mono,		       \
+ 			tegra_admaif_stereo_conv_text),			       \
+-	NV_SOC_ENUM_EXT("ADMAIF" #reg " Capture Mono To Stereo", reg - 1, \
+-			tegra_admaif_get_control, tegra_admaif_put_control,    \
++	NV_SOC_ENUM_EXT("ADMAIF" #reg " Capture Mono To Stereo", reg - 1,      \
++			tegra210_admaif_cget_mono_to_stereo,		       \
++			tegra210_admaif_cput_mono_to_stereo,		       \
+ 			tegra_admaif_mono_conv_text),			       \
+-	NV_SOC_ENUM_EXT("ADMAIF" #reg " Capture Stereo To Mono", reg - 1, \
+-			tegra_admaif_get_control, tegra_admaif_put_control,    \
++	NV_SOC_ENUM_EXT("ADMAIF" #reg " Capture Stereo To Mono", reg - 1,      \
++			tegra210_admaif_cget_stereo_to_mono,		       \
++			tegra210_admaif_cput_stereo_to_mono,		       \
+ 			tegra_admaif_stereo_conv_text)
+ 
+ static struct snd_kcontrol_new tegra210_admaif_controls[] = {
 
 

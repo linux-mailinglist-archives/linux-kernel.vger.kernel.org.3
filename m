@@ -2,119 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9214F46A0BB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB1B469A75
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359086AbhLFQMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:12:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389316AbhLFQJ1 (ORCPT
+        id S1347054AbhLFPIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:08:01 -0500
+Received: from mswedge1.sunplus.com ([60.248.182.113]:37026 "EHLO
+        mg.sunplus.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1346248AbhLFPGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:09:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB49C0A891A;
-        Mon,  6 Dec 2021 07:46:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2FBC0B810C3;
-        Mon,  6 Dec 2021 15:46:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72D9CC34901;
-        Mon,  6 Dec 2021 15:46:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638805604;
-        bh=SvLC2Iy302oq1vi6bndP0HPPCYQNXQZPoUVtePvfZtg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XrRlyOInIKDtL00bUWMq51WSFFkGpCPSLOfpd1QTxPmKajT4ktJFzW2bksV9mA+lb
-         c9NNhBtXBW9U9Qmf/jzL7xTBsJWS+zzQk8k6/Z1URKNmO7xFUZx4bIndk9M6ssNPg5
-         fYpsiARJ04JIB1xw0kZaL939ziyczNvquavzTAKc=
-Date:   Mon, 6 Dec 2021 16:02:26 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Gary Guo <gary@garyguo.net>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: Re: [PATCH 11/19] vsprintf: add new `%pA` format specifier
-Message-ID: <Ya4mAqoOa8zIeZGZ@kroah.com>
-References: <20211206140313.5653-1-ojeda@kernel.org>
- <20211206140313.5653-12-ojeda@kernel.org>
+        Mon, 6 Dec 2021 10:06:12 -0500
+X-MailGates: (flag:3,DYNAMIC,RELAY,NOHOST:PASS)(compute_score:DELIVER,40
+        ,3)
+Received: from 172.17.9.112
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(5126:0:AUTH_RELAY)
+        (envelope-from <tony.huang@sunplus.com>); Mon, 06 Dec 2021 23:02:38 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx02.sunplus.com.tw (172.17.9.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Mon, 6 Dec 2021 23:02:39 +0800
+Received: from sphcmbx02.sunplus.com.tw ([::1]) by sphcmbx02.sunplus.com.tw
+ ([fe80::f8bb:bd77:a854:5b9e%14]) with mapi id 15.00.1497.023; Mon, 6 Dec 2021
+ 23:02:39 +0800
+From:   =?utf-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     Tony Huang <tonyhuang.sunplus@gmail.com>,
+        "derek.kiernan@xilinx.com" <derek.kiernan@xilinx.com>,
+        "dragan.cvetic@xilinx.com" <dragan.cvetic@xilinx.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Subject: RE: [PATCH v2 2/2] misc: Add iop driver for Sunplus SP7021
+Thread-Topic: [PATCH v2 2/2] misc: Add iop driver for Sunplus SP7021
+Thread-Index: AQHX5/jPsCYr7BDcdE2zYDyk9FgNIqwgDd6AgATJzeD//7FbgIAAnEbw
+Date:   Mon, 6 Dec 2021 15:02:38 +0000
+Message-ID: <b16c466e2ce04687a5f0634c5294d226@sphcmbx02.sunplus.com.tw>
+References: <cover.1638499659.git.tonyhuang.sunplus@gmail.com>
+ <9bb79f74ff1b08a5f9a1f6707b3b41484506468a.1638499659.git.tonyhuang.sunplus@gmail.com>
+ <Yanzu7/J75n/OCUY@kroah.com>
+ <4bd765590e3e4a5da2cf79be921bac5b@sphcmbx02.sunplus.com.tw>
+ <Ya22CT1pRO6NCYrC@kroah.com>
+In-Reply-To: <Ya22CT1pRO6NCYrC@kroah.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.54]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206140313.5653-12-ojeda@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 03:03:05PM +0100, Miguel Ojeda wrote:
-> From: Gary Guo <gary@garyguo.net>
-> 
-> This patch adds a format specifier `%pA` to `vsprintf` which formats
-> a pointer as `core::fmt::Arguments`. Doing so allows us to directly
-> format to the internal buffer of `printf`, so we do not have to use
-> a temporary buffer on the stack to pre-assemble the message on
-> the Rust side.
-> 
-> This specifier is intended only to be used from Rust and not for C, so
-> `checkpatch.pl` is intentionally unchanged to catch any misuse.
-> 
-> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  lib/vsprintf.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-> index 58d5e567f836..bc9c05427d9a 100644
-> --- a/lib/vsprintf.c
-> +++ b/lib/vsprintf.c
-> @@ -2233,6 +2233,10 @@ char *fwnode_string(char *buf, char *end, struct fwnode_handle *fwnode,
->  	return widen_string(buf, buf - buf_start, end, spec);
->  }
->  
-> +#ifdef CONFIG_RUST
-> +char *rust_fmt_argument(char* buf, char* end, void *ptr);
-> +#endif
-
-That should be in a .h file somewhere.  Remember, don't put #ifdef in .c
-files please.
-
-> +
->  /* Disable pointer hashing if requested */
->  bool no_hash_pointers __ro_after_init;
->  EXPORT_SYMBOL_GPL(no_hash_pointers);
-> @@ -2388,6 +2392,10 @@ early_param("no_hash_pointers", no_hash_pointers_enable);
->   *
->   * Note: The default behaviour (unadorned %p) is to hash the address,
->   * rendering it useful as a unique identifier.
-> + *
-> + * There is also a '%pA' format specifier, but it is only intended to be used
-> + * from Rust code to format core::fmt::Arguments. Do *not* use it from C.
-> + * See rust/kernel/print.rs for details.
->   */
->  static noinline_for_stack
->  char *pointer(const char *fmt, char *buf, char *end, void *ptr,
-> @@ -2460,6 +2468,10 @@ char *pointer(const char *fmt, char *buf, char *end, void *ptr,
->  		return device_node_string(buf, end, ptr, spec, fmt + 1);
->  	case 'f':
->  		return fwnode_string(buf, end, ptr, spec, fmt + 1);
-> +#ifdef CONFIG_RUST
-> +	case 'A':
-> +		return rust_fmt_argument(buf, end, ptr);
-> +#endif
-
-Same here, this should not be needed if you put it in a .h file
-correctly.
-
-thanks,
-
-greg k-h
+RGVhciBHcmVnIEtIOg0KDQo+ID4gPiBBbHNvLCBubyBuZWVkIGZvciBhIC5oIGZpbGUgZm9yIGEg
+ZHJpdmVyIHRoYXQgb25seSBoYXMgb25lIC5jIGZpbGUuDQo+ID4gPg0KPiA+DQo+ID4gSSBuZWVk
+IHRvIGtlZXAgc3VuZ2x1c19pb3AuaC4gT3RoZXIgZmlsZXMgd2lsbCB1c2UNCj4gPiBzcF9pb3Bf
+cGxhdGZvcm1fZHJpdmVyX3Bvd2Vyb2ZmKHZvaWQpIGluIHBvd2Vyb2ZmIGZsb3cuDQo+IA0KPiBX
+aGF0IG90aGVyIGZpbGVzPyAgVGhhdCBpcyBub3QgaW5jbHVkZWQgaGVyZSwgbm9yIHNob3VsZCBv
+dGhlciBkcml2ZXJzIGJlDQo+IG1ha2luZyB0aGF0IGNhbGwsIHVzZSB0aGUgbm9ybWFsIHBvd2Vy
+b2ZmIGxvZ2ljLg0KPiANCg0KT2theSwgSSB3aWxsIGNhbGwgdGhlIHNwX2lvcF9wbGF0Zm9ybV9k
+cml2ZXJfcG93ZXJvZmYodm9pZCkgdGhyb3VnaCBub3JtYWwgcG93ZXJvZmYgbG9naWMuDQoNCg==

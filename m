@@ -2,176 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71FE346A3FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:26:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63FDC46A40D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346922AbhLFS33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 13:29:29 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:57400 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346873AbhLFS31 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 13:29:27 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 93E411EC04EC;
-        Mon,  6 Dec 2021 19:25:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1638815152;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=IQf1Aykvr0b9qh7v/aw8uwWh6TGGRbXZxaugyfZJEIU=;
-        b=jQJDfprBX9STJpmWLtePKc1tSSDwspxyBah1ghZ3nAe8tJ5k0wXElkUD+W6a30r7AWnl27
-        FGffroW/b0INl0Z1xMkePlp5g2X1IjvYEFFUVDpjwqiR8fVJZVyky8QAhUNlgw8/ddhPU2
-        6ByUvko7IcMgRj9+XIxxvhr6IaIm47k=
-Date:   Mon, 6 Dec 2021 19:25:54 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        id S1347052AbhLFS3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 13:29:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346999AbhLFS3u (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 13:29:50 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1AF3C061354;
+        Mon,  6 Dec 2021 10:26:20 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id z6so7632033plk.6;
+        Mon, 06 Dec 2021 10:26:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hE2WN/DCm9N6dOZUu7hJVv+yyUkTDtyJAizkqbQOmeM=;
+        b=ipaMazgxgTpkYikqGl6f7YCz3dX0DH+kDEHQf9IPrXn8Ty2anNzxe5KfYlV9DKm45W
+         6LcK8K52jRcL5K9k/42alehFViSE1QSnRhzjLtXd3eN7VBi5wToe9wdkyXDAGEJgDygg
+         XhSMYxgkyh8wjxjdMyVsvXhk1aE0DQvfO4C5pZBMPZlsUk4V+e2QgcgAzEU0j3AFiSx4
+         h7n9OXSRpGq6ztUgfpDLuXGOVbcSB+Vf/goU2C53KQnpyGTGHsRhf9cwPPeUSkfFFgiA
+         5PBTFLrA8M+fmqv5jj4nU15Nh1TPtq61NJxqjPcus1YOURkR8gu7zepJsCz61vYuF6E4
+         1ikw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hE2WN/DCm9N6dOZUu7hJVv+yyUkTDtyJAizkqbQOmeM=;
+        b=7odm4aRBpSoh/ebdkrGXB3ba3PnSfCw6W2aKzwZYvX6d/s7L7iqSfZVeDYPCVpJf2T
+         uRhIRo+ljNpVAq0Z8mtNXfx4ECPKdp+d2WRWMTdC6PBLhZ0mjp/iksEwHBolIxCoalVg
+         k3ZNGSSfqAa+b17msqH3P+HLhL64qPqr8Hb2zCdJkVT605rb5KW59bBMnzGxd8X9cCun
+         6E63j6GHOoD0Lhz6PUF2FJjo1Fui7oO1+ZokuwHHIMfpLqYXSSIYirOhwzz3D7fzf6pn
+         jSK6dqO3SSv8M3KPpjvxEha/5jC0/cIJiPmxeVQ2HrOWiOCqBD07sAS1OwnQTYmpvTRY
+         DH/w==
+X-Gm-Message-State: AOAM530FLKYcriURdysHPBtcWPD5eI0z+lRPdlZTZHIUCeR2FHMbJHfq
+        w+IOU/1/oBhI+ltGf4mvN09DZIWHpPM=
+X-Google-Smtp-Source: ABdhPJzHrXUEulYgTnv8rmP1N2EktMiXwXTNQXI/qz7ddNDdC9RmNahV0Zhzd5IDB4MUonyGD9AseQ==
+X-Received: by 2002:a17:90b:1892:: with SMTP id mn18mr250556pjb.178.1638815179928;
+        Mon, 06 Dec 2021 10:26:19 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id a22sm12773097pfh.111.2021.12.06.10.26.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 10:26:19 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     devicetree@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM BCM7XXX ARM
+        ARCHITECTURE), Gregory Fong <gregory.0xf0@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v7 13/45] x86/sev: Check the vmpl level
-Message-ID: <Ya5VsraetesqEkRi@zn.tnic>
-References: <20211110220731.2396491-1-brijesh.singh@amd.com>
- <20211110220731.2396491-14-brijesh.singh@amd.com>
+        Marc Zyngier <maz@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        linux-ide@vger.kernel.org (open list:LIBATA SUBSYSTEM (Serial and
+        Parallel ATA drivers)), linux-kernel@vger.kernel.org (open list),
+        linux-gpio@vger.kernel.org (open list:GPIO SUBSYSTEM),
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
+        ARM ARCHITECTURE),
+        linux-mmc@vger.kernel.org (open list:MULTIMEDIA CARD (MMC), SECURE
+        DIGITAL (SD) AND...),
+        linux-pwm@vger.kernel.org (open list:PWM SUBSYSTEM),
+        linux-crypto@vger.kernel.org (open list:HARDWARE RANDOM NUMBER
+        GENERATOR CORE),
+        linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
+        linux-pm@vger.kernel.org (open list:THERMAL),
+        linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
+Subject: [PATCH v2 00/14] Broadcom DT bindings updates to YAML
+Date:   Mon,  6 Dec 2021 10:26:02 -0800
+Message-Id: <20211206182616.2089677-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211110220731.2396491-14-brijesh.singh@amd.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 04:06:59PM -0600, Brijesh Singh wrote:
-> Virtual Machine Privilege Level (VMPL) is an optional feature in the
-> SEV-SNP architecture, which allows a guest VM to divide its address space
-> into four levels. The level can be used to provide the hardware isolated
-> abstraction layers with a VM.
+Hi Rob,
 
-That sentence needs improving.
+This patch series contains a number of device tree bindings being
+converted to YAML to help with validation.
 
-> The VMPL0 is the highest privilege, and
-> VMPL3 is the least privilege. Certain operations must be done by the VMPL0
-> software, such as:
-> 
-> * Validate or invalidate memory range (PVALIDATE instruction)
-> * Allocate VMSA page (RMPADJUST instruction when VMSA=1)
-> 
-> The initial SEV-SNP support assumes that the guest kernel is running on
+There will be second, and possibly third rounds later on after those
+land in.
 
-assumes? I think it is "requires".
+Thanks!
 
-> VMPL0. Let's add a check to make sure that kernel is running at VMPL0
+Changes in v2:
 
-s/Let's //
+- rebased against dt/next
+- addressed Gregory's feedback on the GPIO binding change
+- added Damien's Acked-by to the ATA binding patch
 
-> before continuing the boot. There is no easy method to query the current
-> VMPL level, so use the RMPADJUST instruction to determine whether its
+Florian Fainelli (14):
+  dt-bindings: mmc: Convert Broadcom STB SDHCI binding to YAML
+  dt-bindings: reset: Convert Broadcom STB reset to YAML
+  dt-bindings: pwm: Convert BCM7038 PWM binding to YAML
+  dt-bindings: rtc: Convert Broadcom STB waketimer to YAML
+  dt-bindings: gpio: Convert Broadcom STB GPIO to YAML
+  dt-binding: interrupt-controller: Convert BCM7038 L1 intc to YAML
+  dt-bindings: interrupt-controller: Convert BCM7120 L2 to YAML
+  dt-bindings: interrupt-controller: Merge BCM3380 with BCM7120
+  dt-bindings: interrupt-controller: Convert Broadcom STB L2 to YAML
+  dt-bindings: rng: Convert iProc RNG200 to YAML
+  dt-bindings: thermal: Convert Broadcom TMON to YAML
+  dt-bindings: ata: Convert Broadcom SATA to YAML
+  dt-bindings: bus: Convert GISB arbiter to YAML
+  dt-bindings: usb: Convert BDC to YAML
 
-"... whether the guest is running at VMPL0."
-
-> booted at the VMPL0.
-> 
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> ---
->  arch/x86/boot/compressed/sev.c    | 34 ++++++++++++++++++++++++++++---
->  arch/x86/include/asm/sev-common.h |  1 +
->  arch/x86/include/asm/sev.h        | 16 +++++++++++++++
->  3 files changed, 48 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-> index e525fa74a551..21feb7f4f76f 100644
-> --- a/arch/x86/boot/compressed/sev.c
-> +++ b/arch/x86/boot/compressed/sev.c
-> @@ -124,6 +124,29 @@ static inline bool sev_snp_enabled(void)
->  	return sev_status & MSR_AMD64_SEV_SNP_ENABLED;
->  }
->  
-> +static bool is_vmpl0(void)
-> +{
-> +	u64 attrs;
-> +	int err;
-> +
-> +	/*
-> +	 * There is no straightforward way to query the current VMPL level. The
-> +	 * simplest method is to use the RMPADJUST instruction to change a page
-> +	 * permission to a VMPL level-1, and if the guest kernel is launched at
-> +	 * a level <= 1, then RMPADJUST instruction will return an error.
-> +	 */
-
-So I was wondering what this is changing because if the change you do is
-relevant, you'd have to undo it.
-
-But looking at RMPADJUST, TARGET_PERM_MASK is 0 for target VMPL1 so
-you're basically clearing all permissions for boot_ghcb_page on VMPL1.
-Which is fine currently as we do only VMPL0 but pls write that out
-explicitly what you're doing here and why it is ok to use RMPADJUST
-without having to restore any changes it has done to the RMP table.
-
-> +	attrs = 1;
-> +
-> +	/*
-> +	 * Any page-aligned virtual address is sufficient to test the VMPL level.
-> +	 * The boot_ghcb_page is page aligned memory, so lets use for the test.
-> +	 */
-> +	if (rmpadjust((unsigned long)&boot_ghcb_page, RMP_PG_SIZE_4K, attrs))
-> +		return false;
-> +
-> +	return true;
-> +}
-> +
->  static bool do_early_sev_setup(void)
->  {
->  	if (!sev_es_negotiate_protocol())
-> @@ -132,10 +155,15 @@ static bool do_early_sev_setup(void)
->  	/*
->  	 * SNP is supported in v2 of the GHCB spec which mandates support for HV
->  	 * features. If SEV-SNP is enabled, then check if the hypervisor supports
-> -	 * the SEV-SNP features.
-> +	 * the SEV-SNP features and is launched at VMPL-0 level.
-
-"VMPL0" - no hyphen - like in the APM. Below too.
-
->  	 */
-> -	if (sev_snp_enabled() && !(sev_hv_features & GHCB_HV_FT_SNP))
-> -		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
-> +	if (sev_snp_enabled()) {
-> +		if (!(sev_hv_features & GHCB_HV_FT_SNP))
-> +			sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
-> +
-> +		if (!is_vmpl0())
-> +			sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_NOT_VMPL0);
-> +	}
->  
->  	if (set_page_decrypted((unsigned long)&boot_ghcb_page))
->  		return false;
+ .../bindings/ata/brcm,sata-brcm.txt           |  45 ------
+ .../bindings/ata/brcm,sata-brcm.yaml          |  91 +++++++++++
+ .../devicetree/bindings/bus/brcm,gisb-arb.txt |  34 ----
+ .../bindings/bus/brcm,gisb-arb.yaml           |  66 ++++++++
+ .../bindings/gpio/brcm,brcmstb-gpio.txt       |  83 ----------
+ .../bindings/gpio/brcm,brcmstb-gpio.yaml      | 105 ++++++++++++
+ .../brcm,bcm3380-l2-intc.txt                  |  39 -----
+ .../brcm,bcm7038-l1-intc.txt                  |  61 -------
+ .../brcm,bcm7038-l1-intc.yaml                 |  91 +++++++++++
+ .../brcm,bcm7120-l2-intc.txt                  |  88 -----------
+ .../brcm,bcm7120-l2-intc.yaml                 | 149 ++++++++++++++++++
+ .../interrupt-controller/brcm,l2-intc.txt     |  31 ----
+ .../interrupt-controller/brcm,l2-intc.yaml    |  64 ++++++++
+ .../bindings/mmc/brcm,sdhci-brcmstb.txt       |  53 -------
+ .../bindings/mmc/brcm,sdhci-brcmstb.yaml      | 100 ++++++++++++
+ .../bindings/pwm/brcm,bcm7038-pwm.txt         |  20 ---
+ .../bindings/pwm/brcm,bcm7038-pwm.yaml        |  43 +++++
+ .../bindings/reset/brcm,brcmstb-reset.txt     |  27 ----
+ .../bindings/reset/brcm,brcmstb-reset.yaml    |  48 ++++++
+ .../bindings/rng/brcm,iproc-rng200.txt        |  16 --
+ .../bindings/rng/brcm,iproc-rng200.yaml       |  29 ++++
+ .../bindings/rtc/brcm,brcmstb-waketimer.txt   |  20 ---
+ .../bindings/rtc/brcm,brcmstb-waketimer.yaml  |  44 ++++++
+ .../bindings/thermal/brcm,avs-tmon.txt        |  23 ---
+ .../bindings/thermal/brcm,avs-tmon.yaml       |  57 +++++++
+ .../devicetree/bindings/usb/brcm,bdc.txt      |  29 ----
+ .../devicetree/bindings/usb/brcm,bdc.yaml     |  46 ++++++
+ MAINTAINERS                                   |   6 +-
+ 28 files changed, 936 insertions(+), 572 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
+ create mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
+ delete mode 100644 Documentation/devicetree/bindings/bus/brcm,gisb-arb.txt
+ create mode 100644 Documentation/devicetree/bindings/bus/brcm,gisb-arb.yaml
+ delete mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
+ create mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm3380-l2-intc.txt
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7038-l1-intc.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7038-l1-intc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.txt
+ create mode 100644 Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.txt
+ create mode 100644 Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.yaml
+ delete mode 100644 Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.txt
+ create mode 100644 Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rng/brcm,iproc-rng200.txt
+ create mode 100644 Documentation/devicetree/bindings/rng/brcm,iproc-rng200.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.yaml
+ delete mode 100644 Documentation/devicetree/bindings/thermal/brcm,avs-tmon.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/brcm,avs-tmon.yaml
+ delete mode 100644 Documentation/devicetree/bindings/usb/brcm,bdc.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/brcm,bdc.yaml
 
 -- 
-Regards/Gruss,
-    Boris.
+2.25.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

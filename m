@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77919469B63
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B77469F35
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345097AbhLFPRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:17:13 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59228 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356007AbhLFPLC (ORCPT
+        id S1391619AbhLFPqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:46:05 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34978 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1387384AbhLFPbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:11:02 -0500
+        Mon, 6 Dec 2021 10:31:10 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB0BA61310;
-        Mon,  6 Dec 2021 15:07:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 911E2C341C2;
-        Mon,  6 Dec 2021 15:07:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98A2CB81018;
+        Mon,  6 Dec 2021 15:27:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57E2C34901;
+        Mon,  6 Dec 2021 15:27:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803253;
-        bh=tYx1idAeozzcmY7Kw0bjUj3yMgAFvUZZbWLeviEOONY=;
+        s=korg; t=1638804459;
+        bh=WcScSF7kddzukuf+3Gs4FU1f4IK0BYp1yQDTQh7CJ/o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mEcJ+VSkcENlMxJWagPDvZa8pZz/ezyq7F+tp9GvHas1jDU44CB0bfDYe3QUNkY5i
-         NrdbhxSqZDkjEuAXsWS6EpYyG0JwIs2GX98EhwwNHfJig2vMKW3pRXAyDU0obBculn
-         g6jHj84sfKY/sIDedcjHLXAX61eZh/Pug/ahzU8E=
+        b=iai2LMeVovbi+nF0AK/W6LzDnDmZ4doUXeMKpSAyWRVrC779YlBedWQijZRjiBzoX
+         9Oqp1LU6XXn7RMXOca7qjyCHpXgSyRuMWsntUNwb7r8ML9PgmiDN1DMc6Anz8rsk44
+         JEr3gda6o9StjIVjmBdTj40ZIWnvr0LFlR7IF3hQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Suryaputra <ssuryaextr@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.14 083/106] vrf: Reset IPCB/IP6CB when processing outbound pkts in vrf dev xmit
+        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+        Rob Clark <robdclark@chromium.org>
+Subject: [PATCH 5.15 137/207] drm/msm/a6xx: Allocate enough space for GMU registers
 Date:   Mon,  6 Dec 2021 15:56:31 +0100
-Message-Id: <20211206145558.372838230@linuxfoundation.org>
+Message-Id: <20211206145614.970389346@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,51 +45,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephen Suryaputra <ssuryaextr@gmail.com>
+From: Douglas Anderson <dianders@chromium.org>
 
-commit ee201011c1e1563c114a55c86eb164b236f18e84 upstream.
+commit b4d25abf9720b69a03465b09d0d62d1998ed6708 upstream.
 
-IPCB/IP6CB need to be initialized when processing outbound v4 or v6 pkts
-in the codepath of vrf device xmit function so that leftover garbage
-doesn't cause futher code that uses the CB to incorrectly process the
-pkt.
+In commit 142639a52a01 ("drm/msm/a6xx: fix crashstate capture for
+A650") we changed a6xx_get_gmu_registers() to read 3 sets of
+registers. Unfortunately, we didn't change the memory allocation for
+the array. That leads to a KASAN warning (this was on the chromeos-5.4
+kernel, which has the problematic commit backported to it):
 
-One occasion of the issue might occur when MPLS route uses the vrf
-device as the outgoing device such as when the route is added using "ip
--f mpls route add <label> dev <vrf>" command.
+  BUG: KASAN: slab-out-of-bounds in _a6xx_get_gmu_registers+0x144/0x430
+  Write of size 8 at addr ffffff80c89432b0 by task A618-worker/209
+  CPU: 5 PID: 209 Comm: A618-worker Tainted: G        W         5.4.156-lockdep #22
+  Hardware name: Google Lazor Limozeen without Touchscreen (rev5 - rev8) (DT)
+  Call trace:
+   dump_backtrace+0x0/0x248
+   show_stack+0x20/0x2c
+   dump_stack+0x128/0x1ec
+   print_address_description+0x88/0x4a0
+   __kasan_report+0xfc/0x120
+   kasan_report+0x10/0x18
+   __asan_report_store8_noabort+0x1c/0x24
+   _a6xx_get_gmu_registers+0x144/0x430
+   a6xx_gpu_state_get+0x330/0x25d4
+   msm_gpu_crashstate_capture+0xa0/0x84c
+   recover_worker+0x328/0x838
+   kthread_worker_fn+0x32c/0x574
+   kthread+0x2dc/0x39c
+   ret_from_fork+0x10/0x18
 
-The problems seems to exist since day one. Hence I put the day one
-commits on the Fixes tags.
+  Allocated by task 209:
+   __kasan_kmalloc+0xfc/0x1c4
+   kasan_kmalloc+0xc/0x14
+   kmem_cache_alloc_trace+0x1f0/0x2a0
+   a6xx_gpu_state_get+0x164/0x25d4
+   msm_gpu_crashstate_capture+0xa0/0x84c
+   recover_worker+0x328/0x838
+   kthread_worker_fn+0x32c/0x574
+   kthread+0x2dc/0x39c
+   ret_from_fork+0x10/0x18
 
-Fixes: 193125dbd8eb ("net: Introduce VRF device driver")
-Fixes: 35402e313663 ("net: Add IPv6 support to VRF device")
-Cc: stable@vger.kernel.org
-Signed-off-by: Stephen Suryaputra <ssuryaextr@gmail.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Link: https://lore.kernel.org/r/20211130162637.3249-1-ssuryaextr@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 142639a52a01 ("drm/msm/a6xx: fix crashstate capture for A650")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Link: https://lore.kernel.org/r/20211103153049.1.Idfa574ccb529d17b69db3a1852e49b580132035c@changeid
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/vrf.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/vrf.c
-+++ b/drivers/net/vrf.c
-@@ -208,6 +208,7 @@ static netdev_tx_t vrf_process_v6_outbou
- 	/* strip the ethernet header added for pass through VRF device */
- 	__skb_pull(skb, skb_network_offset(skb));
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
+@@ -777,12 +777,12 @@ static void a6xx_get_gmu_registers(struc
+ 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
  
-+	memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
- 	ret = vrf_ip6_local_out(net, skb->sk, skb);
- 	if (unlikely(net_xmit_eval(ret)))
- 		dev->stats.tx_errors++;
-@@ -289,6 +290,7 @@ static netdev_tx_t vrf_process_v4_outbou
- 					       RT_SCOPE_LINK);
- 	}
+ 	a6xx_state->gmu_registers = state_kcalloc(a6xx_state,
+-		2, sizeof(*a6xx_state->gmu_registers));
++		3, sizeof(*a6xx_state->gmu_registers));
  
-+	memset(IPCB(skb), 0, sizeof(*IPCB(skb)));
- 	ret = vrf_ip_local_out(dev_net(skb_dst(skb)->dev), skb->sk, skb);
- 	if (unlikely(net_xmit_eval(ret)))
- 		vrf_dev->stats.tx_errors++;
+ 	if (!a6xx_state->gmu_registers)
+ 		return;
+ 
+-	a6xx_state->nr_gmu_registers = 2;
++	a6xx_state->nr_gmu_registers = 3;
+ 
+ 	/* Get the CX GMU registers from AHB */
+ 	_a6xx_get_gmu_registers(gpu, a6xx_state, &a6xx_gmu_reglist[0],
 
 

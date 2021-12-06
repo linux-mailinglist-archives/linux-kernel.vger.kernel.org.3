@@ -2,111 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D4246A4EF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 511AC46A4F3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347593AbhLFS4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 13:56:04 -0500
-Received: from mail.efficios.com ([167.114.26.124]:46230 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347579AbhLFS4D (ORCPT
+        id S1347693AbhLFS4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 13:56:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347658AbhLFS4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 13:56:03 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id C6E8838C720;
-        Mon,  6 Dec 2021 13:52:33 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id OQ0tPzPYJ2w6; Mon,  6 Dec 2021 13:52:33 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 2219B38C642;
-        Mon,  6 Dec 2021 13:52:33 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 2219B38C642
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1638816753;
-        bh=xXF4bUstm3HBUcQ+ZBSSuG91QvQbgtEGQvkNdowKo9s=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=cLRjmVaAChXYWszcxKowzAG5huHtOAYTdFEKo0fUZRmRPI6DPlYjfIaBiMYGBFMaW
-         a+9/UO5+S5OVkyAaa/DI8NSMHXcMzx9hvAsR3tehChUa1rCPlMiSqJiyzliziDdFvx
-         Ar9MNR8PK0qriceDTL43lD8uarBE4cxJQDNgiXKs08DuJNCp4fcVobSCwjUG3p1/Du
-         k5EHLMuvR8MMZXFMRreKepq0QefE6LY2mMpkVxonj/7PCYXGbvDxzq4ayq2ryDFVwZ
-         N0fv86VxJTXnl65CucXRzQ7ZCsaQevVzAfnUynC7B/5qt5nuyaZRkPUO9mAl6TAWLE
-         pOfoaN3MBuefQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 5yxAwpGLvtvR; Mon,  6 Dec 2021 13:52:33 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 139B338C2FC;
-        Mon,  6 Dec 2021 13:52:33 -0500 (EST)
-Date:   Mon, 6 Dec 2021 13:52:33 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Florian Weimer <fweimer@redhat.com>, paulmck <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     libc-alpha <libc-alpha@sourceware.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <1614144911.15213.1638816753026.JavaMail.zimbra@efficios.com>
-In-Reply-To: <871r2podt9.fsf@oldenburg.str.redhat.com>
-References: <cover.1638798186.git.fweimer@redhat.com> <9c58724d604e160ebda5f667331fa41416c0d12b.1638798186.git.fweimer@redhat.com> <1780152866.15126.1638809966443.JavaMail.zimbra@efficios.com> <871r2podt9.fsf@oldenburg.str.redhat.com>
-Subject: Re: [PATCH 2/5] nptl: Add rseq registration
+        Mon, 6 Dec 2021 13:56:15 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2590CC061746;
+        Mon,  6 Dec 2021 10:52:46 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id g19so11023167pfb.8;
+        Mon, 06 Dec 2021 10:52:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6Qa7MjIYGVQpWiCqHFjWcTV+J2/Hu0PKJOfB6Hd0D3Q=;
+        b=AUeJx8ofDmZpvsP1SYYvUcXgeWM2kCypJAZI72ITYveeAKnI+BEdhyCNHHw4wS/WT8
+         +U0rwxeRZCiUXn0hbM/9YtnTcZwZOXCdUqDw4Fg8jkxRHp+ZqY0DL7g1Iy5wUkaLr+hW
+         MBGAm1ahWZn1k7emFAuE736YcjO922VHTFcwKwSnBwbIr1GCJQXnPpPxuijv0yzCPOB5
+         v9fDwVN531oRUNMJgZkoVGwkzmzJMLKJQVAi9U1FIOXS2NL0p43pekGN1L28kbi9q8jU
+         ICqWsChcRPChxYZ2nw3Zlnoxn1txE5s0uQ6soqje72DjFoDYjx+7kDDHsH0B4MATjyv8
+         9GiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6Qa7MjIYGVQpWiCqHFjWcTV+J2/Hu0PKJOfB6Hd0D3Q=;
+        b=szodvc7WruxvIoXqTHsVqyGV4CBioay/8Q75obKOE1T7DwaWA1JFSQbqYJQW3Ipztk
+         xSPWU52egVptUjs+x+sITnonVZEdjiaSr1qmoLnu5rpuKwsi4xxcM8MPDmjZLeAzE9EK
+         f79cLP5KNnDcjVfWeiumOeJSkcfbY0pQ/4ath7LFri30+dGPT4d9s7QrrrKltv/rR8An
+         RGwhGeuFzxmCygPstB0tVBxVi974H1RDb2wixeJZteIUnr79D8NMFA3aNuxrXYLsp30B
+         uGFV3aIvGsS995nmsYFxVxlQkgQfwNV69JSljaw/YNfdNwypHeZQCLyC4YEb2hQDuiEe
+         6sTA==
+X-Gm-Message-State: AOAM533oYW6xdku3c+iVYa+rZuEuk9UlZ5babU4OHDYutDmS4fqq0UCd
+        yL7/ojzXE7gD3rBwP2oBY6xZIRMMbIg=
+X-Google-Smtp-Source: ABdhPJzCJi1Qp6CulNzfKNnb8tfwGft75nGwuIOHxHJ+31/NmA0nacnf1eQfTKl5VPd/dnMkwY9aYw==
+X-Received: by 2002:a63:8141:: with SMTP id t62mr19919599pgd.5.1638816765256;
+        Mon, 06 Dec 2021 10:52:45 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id u22sm14323432pfk.148.2021.12.06.10.52.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 10:52:44 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     devicetree@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM IPROC ARM
+        ARCHITECTURE),
+        linux-pci@vger.kernel.org (open list:PCI SUBSYSTEM),
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM IPROC ARM
+        ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2 0/5] Convert iProc PCIe binding to YAML
+Date:   Mon,  6 Dec 2021 10:52:37 -0800
+Message-Id: <20211206185242.2098683-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4173 (ZimbraWebClient - FF94 (Linux)/8.8.15_GA_4177)
-Thread-Topic: nptl: Add rseq registration
-Thread-Index: 9IjY+JUUfOpDSXj8/pfTcfUohvCcbQ==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Adding other kernel rseq maintainers in CC. ]
+This patch series converts the iProc PCIe binding to YAML. Given there
+is a majority of DTS changes, it would make sense for me to pull this
+via the Broadcom ARM SoC git tree.
 
------ On Dec 6, 2021, at 12:14 PM, Florian Weimer fweimer@redhat.com wrote:
+Thanks!
 
-> * Mathieu Desnoyers:
-> 
->> ----- On Dec 6, 2021, at 8:46 AM, Florian Weimer fweimer@redhat.com wrote:
->> [...]
->>> @@ -406,6 +407,9 @@ struct pthread
->>>   /* Used on strsignal.  */
->>>   struct tls_internal_t tls_state;
->>> 
->>> +  /* rseq area registered with the kernel.  */
->>> +  struct rseq rseq_area;
->>
->> The rseq UAPI requires that the fields within the rseq_area
->> are read-written with single-copy atomicity semantics.
->>
->> So either we define a "volatile struct rseq" here, or we'll need
->> to wrap all accesses with the proper volatile casts, or use the
->> relaxed_mo atomic accesses.
-> 
-> Under the C memory model, neither volatile nor relaxed MO result in
-> single-copy atomicity semantics.  So I'm not sure what to make of this.
-> Surely switching to inline assembly on all targets is over the top.
-> 
-> I think we can rely on a plain read doing the right thing for us.
+Changes in v2:
 
-AFAIU, the plain read does not prevent the compiler from re-loading the
-value in case of high register pressure.
+- document msi sub-node compatible string
 
-Accesses to rseq fields such as cpu_id need to be done as if those were
-concurrently modified by a signal handler nesting on top of the user-space
-code, with the particular twist that blocking signals has no effect on
-concurrent updates.
+Florian Fainelli (5):
+  ARM: dts: Cygnus: Fixed iProc PCIe controller properties
+  ARM: dts: HR2: Fixed iProc PCIe controller properties
+  ARM: dts: NSP: Fixed iProc PCIe controller properties
+  arm64: dts: ns2: Add missing interrupt-controller property
+  dt-bindings: pci: Convert iProc PCIe to YAML
 
-I do not think we need to do the load in assembly. I was under the impression
-that both volatile load and relaxed MO result in single-copy atomicity
-semantics for an aligned pointer. Perhaps Paul, Peter, Boqun have something
-to add here ?
-
-Thanks,
-
-Mathieu
+ .../bindings/pci/brcm,iproc-pcie.txt          | 133 -------------
+ .../bindings/pci/brcm,iproc-pcie.yaml         | 179 ++++++++++++++++++
+ arch/arm/boot/dts/bcm-cygnus.dtsi             |  14 +-
+ arch/arm/boot/dts/bcm-hr2.dtsi                |   6 +-
+ arch/arm/boot/dts/bcm-nsp.dtsi                |   9 +-
+ .../boot/dts/broadcom/northstar2/ns2.dtsi     |   2 +
+ 6 files changed, 199 insertions(+), 144 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.txt
+ create mode 100644 Documentation/devicetree/bindings/pci/brcm,iproc-pcie.yaml
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.25.1
+

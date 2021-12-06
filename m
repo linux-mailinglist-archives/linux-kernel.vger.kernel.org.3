@@ -2,102 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E884F46A3B5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E6E46A390
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:00:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346242AbhLFSFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 13:05:23 -0500
-Received: from mga17.intel.com ([192.55.52.151]:12523 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240373AbhLFSFP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 13:05:15 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="218055149"
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="218055149"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 10:01:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="461928374"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 06 Dec 2021 10:01:14 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1muIIb-000LYj-Mb; Mon, 06 Dec 2021 18:01:13 +0000
-Date:   Tue, 7 Dec 2021 02:00:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [chenxing:msc313_mainlining 40/73]
- drivers/pinctrl/mstar/pinctrl-msc313-pm.c:35:27: warning: unused variable
- 'pm_uart_groups'
-Message-ID: <202112070109.hEWDj0ar-lkp@intel.com>
+        id S1345543AbhLFSEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 13:04:00 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52438 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229714AbhLFSD7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 13:03:59 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B81F8B811DC;
+        Mon,  6 Dec 2021 18:00:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1AEBC341C1;
+        Mon,  6 Dec 2021 18:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638813628;
+        bh=zHUTDXXfzWnxTHaFvSpW2L0XNbOVdHY/sxh/MV0nomI=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Tnx+LyrFNU/9Vvi5FBG2FmEFVQZunIyrA7BceY33+nYpWIxa+o6MqazpOp3xQY6ut
+         +4LDzpPx2FXoJG3xN8c3svkItB7ogm2e/JvrN4IIs4dIm8/O+t856zmk4xGYS2Ajl5
+         inhSKEjGfld+8p01/pQ9Zpk9nLonB3CwuVresSTw5WocLmlEJchvnNxAJyYtCF2KN1
+         xYC5BOiJ3fFSKHKgC8ywjQzOf3vszFM+MfbIQPTf8ADLiwkDhdp8dqotCDNn33B6OZ
+         Zfg/nfW9If9WjmVnGwlrLHTxk9W5CcI6Iy8qYl8g5PfWEGIosqozSWo6HUTRlRFDju
+         xpLjmq68/rEiA==
+From:   Mark Brown <broonie@kernel.org>
+To:     robh+dt@kernel.org, matthias.bgg@gmail.com, tiwai@suse.com,
+        Trevor Wu <trevor.wu@mediatek.com>
+Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, daniel.baluta@nxp.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        yc.hung@mediatek.com, pierre-louis.bossart@linux.intel.com
+In-Reply-To: <20211129141057.12422-1-trevor.wu@mediatek.com>
+References: <20211129141057.12422-1-trevor.wu@mediatek.com>
+Subject: Re: [PATCH v2 0/4] ASoC: mediatek: Update MT8195 machine driver
+Message-Id: <163881362422.2769299.13576953689584169746.b4-ty@kernel.org>
+Date:   Mon, 06 Dec 2021 18:00:24 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
-head:   4c9fe2eaf0fcfd50fbd5abafd740731257f5a8d6
-commit: 321b224e4ea050bdf9043a0ee577448ed3233bc7 [40/73] pinctrl: mstar: msc313 pinctrl driver
-config: arm-randconfig-r005-20211205 (https://download.01.org/0day-ci/archive/20211207/202112070109.hEWDj0ar-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5f1d1854eb1450d352663ee732235893c5782237)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/linux-chenxing/linux/commit/321b224e4ea050bdf9043a0ee577448ed3233bc7
-        git remote add chenxing git://github.com/linux-chenxing/linux.git
-        git fetch --no-tags chenxing msc313_mainlining
-        git checkout 321b224e4ea050bdf9043a0ee577448ed3233bc7
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/pinctrl/mstar/
+On Mon, 29 Nov 2021 22:10:53 +0800, Trevor Wu wrote:
+> This series of patches adds support for RT5682s headset codec in mt8195
+> machine drivers, and SOF support on card mt8195-mt6359-rt1019-rt5682 is
+> also included.
+> Patches are based on broonie tree "for-next" branch.
+> 
+> Changes since v1:
+>   - remove patch3 and patch4 in v1
+>   - add SOF support on card mt8195-mt6359-rt1012-rt5682
+>   - add new propertes to dt-bindings for mt8195-mt6359-rt1019-rt5682
+> 
+> [...]
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Applied to
 
-All warnings (new ones prefixed by >>):
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
->> drivers/pinctrl/mstar/pinctrl-msc313-pm.c:35:27: warning: unused variable 'pm_uart_groups' [-Wunused-const-variable]
-   static const char * const pm_uart_groups[] = {
-                             ^
->> drivers/pinctrl/mstar/pinctrl-msc313-pm.c:39:27: warning: unused variable 'pm_spi_groups' [-Wunused-const-variable]
-   static const char * const pm_spi_groups[] = {
-                             ^
->> drivers/pinctrl/mstar/pinctrl-msc313-pm.c:43:27: warning: unused variable 'pm_irin_groups' [-Wunused-const-variable]
-   static const char * const pm_irin_groups[] = {
-                             ^
-   3 warnings generated.
+Thanks!
 
+[1/4] ASoC: mediatek: mt8195: add headset codec rt5682s support
+      commit: c9d57a25de53800e54969f4bf2b672b3a58cdaf5
+[2/4] dt-bindings: mediatek: mt8195: add model property
+      commit: 629e442761bae0c62b2fb14061d66bbd08b4155e
+[3/4] ASoC: mediatek: mt8195: add sof support on mt8195-mt6359-rt1019-rt5682
+      commit: 3d00d2c07f04f47aa4228700b440ac47abf13853
+[4/4] dt-bindings: mediatek: mt8195: add adsp and dai-link property
+      commit: 6182ec4616d6ffc046bea798c683a0dee11ded67
 
-vim +/pm_uart_groups +35 drivers/pinctrl/mstar/pinctrl-msc313-pm.c
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-acfcb56b8544d2 Daniel Palmer 2021-01-10  34  
-acfcb56b8544d2 Daniel Palmer 2021-01-10 @35  static const char * const pm_uart_groups[] = {
-acfcb56b8544d2 Daniel Palmer 2021-01-10  36  	GROUPNAME_PM_UART,
-acfcb56b8544d2 Daniel Palmer 2021-01-10  37  };
-acfcb56b8544d2 Daniel Palmer 2021-01-10  38  
-acfcb56b8544d2 Daniel Palmer 2021-01-10 @39  static const char * const pm_spi_groups[] = {
-acfcb56b8544d2 Daniel Palmer 2021-01-10  40  	GROUPNAME_PM_SPI,
-acfcb56b8544d2 Daniel Palmer 2021-01-10  41  };
-acfcb56b8544d2 Daniel Palmer 2021-01-10  42  
-acfcb56b8544d2 Daniel Palmer 2021-01-10 @43  static const char * const pm_irin_groups[] = {
-acfcb56b8544d2 Daniel Palmer 2021-01-10  44  	GROUPNAME_PM_IRIN,
-acfcb56b8544d2 Daniel Palmer 2021-01-10  45  };
-acfcb56b8544d2 Daniel Palmer 2021-01-10  46  
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-:::::: The code at line 35 was first introduced by commit
-:::::: acfcb56b8544d28d329b493d3c74542f857f60b3 pinctrl: mstar: msc313 pm pinctrl driver
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-:::::: TO: Daniel Palmer <daniel@0x0f.com>
-:::::: CC: Daniel Palmer <daniel@0x0f.com>
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Mark

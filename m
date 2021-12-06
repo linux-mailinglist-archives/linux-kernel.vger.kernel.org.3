@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7C9469D90
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCBA46A033
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387057AbhLFPag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
+        id S1387542AbhLFP7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:59:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357242AbhLFPSx (ORCPT
+        with ESMTP id S1390465AbhLFPmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:18:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D80C08E848;
-        Mon,  6 Dec 2021 07:11:45 -0800 (PST)
+        Mon, 6 Dec 2021 10:42:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B488C0A8868;
+        Mon,  6 Dec 2021 07:26:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84F1861316;
-        Mon,  6 Dec 2021 15:11:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AD4AC341C2;
-        Mon,  6 Dec 2021 15:11:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06187B8111C;
+        Mon,  6 Dec 2021 15:26:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D416C34901;
+        Mon,  6 Dec 2021 15:26:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803505;
-        bh=jQPu9rhvGIraQsQ6jlWHUTdOCeN+CBV12qqiq1oMJNk=;
+        s=korg; t=1638804383;
+        bh=iUq+OvZtEOq6qJ1FxHqpjzhSggg3oRz2LDjl4wcWOk4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2GeVnAqbR6Qm8+2gSOA959xoCqMegrEjR2Rr0U2kVvvDL0lpGTehxUzvmHsIRaBct
-         8CIaBoGXEhhV4KNA0vrZ9Dtk6azog1jMtZW5eQYA37DNXjZkvKaM3yPXTab6b9bcxq
-         ZH5S1Ds0u8X3x0YtJ2TCeSMHnjVV/BrYc54j+J4Y=
+        b=qL9dn4T8mTxP1Me9AOsc3xgqsYiQ9qSl76Nw0es1+hRocyqyj5w2P0inSN1DLnQPe
+         ROOVzDaeoU/BIm5/UjxzhSlCHe+rQW7zbWGIP12aVuprU/apvvVpYMybGse6Kby2YD
+         wd0TT6qs2LS597nIF9BhCNnqAWjs6QKmbwelz/YQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Teng Qi <starmiku1207184332@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 17/70] ethernet: hisilicon: hns: hns_dsaf_misc: fix a possible array overflow in hns_dsaf_ge_srst_by_port()
+        stable@vger.kernel.org,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 127/207] net: stmmac: Avoid DMA_CHAN_CONTROL write if no Split Header support
 Date:   Mon,  6 Dec 2021 15:56:21 +0100
-Message-Id: <20211206145552.509763912@linuxfoundation.org>
+Message-Id: <20211206145614.637847627@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
-References: <20211206145551.909846023@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,48 +49,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Teng Qi <starmiku1207184332@gmail.com>
+From: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-[ Upstream commit a66998e0fbf213d47d02813b9679426129d0d114 ]
+commit f8e7dfd6fdabb831846ab1970a875746559d491b upstream.
 
-The if statement:
-  if (port >= DSAF_GE_NUM)
-        return;
+The driver assumes that split headers can be enabled/disabled without
+stopping/starting the device, so it writes DMA_CHAN_CONTROL from
+stmmac_set_features().  However, on my system (IP v5.10a without Split
+Header support), simply writing DMA_CHAN_CONTROL when DMA is running
+(for example, with the commands below) leads to a TX watchdog timeout.
 
-limits the value of port less than DSAF_GE_NUM (i.e., 8).
-However, if the value of port is 6 or 7, an array overflow could occur:
-  port_rst_off = dsaf_dev->mac_cb[port]->port_rst_off;
+ host$ socat TCP-LISTEN:1024,fork,reuseaddr - &
+ device$ ethtool -K eth0 tso off
+ device$ ethtool -K eth0 tso on
+ device$ dd if=/dev/zero bs=1M count=10 | socat - TCP4:host:1024
+ <tx watchdog timeout>
 
-because the length of dsaf_dev->mac_cb is DSAF_MAX_PORT_NUM (i.e., 6).
+Note that since my IP is configured without Split Header support, the
+driver always just reads and writes the same value to the
+DMA_CHAN_CONTROL register.
 
-To fix this possible array overflow, we first check port and if it is
-greater than or equal to DSAF_MAX_PORT_NUM, the function returns.
+I don't have access to any platforms with Split Header support so I
+don't know if these writes to the DMA_CHAN_CONTROL while DMA is running
+actually work properly on such systems.  I could not find anything in
+the databook that says that DMA_CHAN_CONTROL should not be written when
+the DMA is running.
 
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Teng Qi <starmiku1207184332@gmail.com>
+But on systems without Split Header support, there is in any case no
+need to call enable_sph() in stmmac_set_features() at all since SPH can
+never be toggled, so we can avoid the watchdog timeout there by skipping
+this call.
+
+Fixes: 8c6fc097a2f4acf ("net: stmmac: gmac4+: Add Split Header support")
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |   11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c b/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
-index ed3829ae4ef1b..580199fdd0c22 100644
---- a/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
-+++ b/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
-@@ -398,6 +398,10 @@ static void hns_dsaf_ge_srst_by_port(struct dsaf_device *dsaf_dev, u32 port,
- 		return;
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -5531,8 +5531,6 @@ static int stmmac_set_features(struct ne
+ 			       netdev_features_t features)
+ {
+ 	struct stmmac_priv *priv = netdev_priv(netdev);
+-	bool sph_en;
+-	u32 chan;
  
- 	if (!HNS_DSAF_IS_DEBUG(dsaf_dev)) {
-+		/* DSAF_MAX_PORT_NUM is 6, but DSAF_GE_NUM is 8.
-+		   We need check to prevent array overflow */
-+		if (port >= DSAF_MAX_PORT_NUM)
-+			return;
- 		reg_val_1  = 0x1 << port;
- 		port_rst_off = dsaf_dev->mac_cb[port]->port_rst_off;
- 		/* there is difference between V1 and V2 in register.*/
--- 
-2.33.0
-
+ 	/* Keep the COE Type in case of csum is supporting */
+ 	if (features & NETIF_F_RXCSUM)
+@@ -5544,10 +5542,13 @@ static int stmmac_set_features(struct ne
+ 	 */
+ 	stmmac_rx_ipc(priv, priv->hw);
+ 
+-	sph_en = (priv->hw->rx_csum > 0) && priv->sph;
++	if (priv->sph_cap) {
++		bool sph_en = (priv->hw->rx_csum > 0) && priv->sph;
++		u32 chan;
+ 
+-	for (chan = 0; chan < priv->plat->rx_queues_to_use; chan++)
+-		stmmac_enable_sph(priv, priv->ioaddr, sph_en, chan);
++		for (chan = 0; chan < priv->plat->rx_queues_to_use; chan++)
++			stmmac_enable_sph(priv, priv->ioaddr, sph_en, chan);
++	}
+ 
+ 	return 0;
+ }
 
 

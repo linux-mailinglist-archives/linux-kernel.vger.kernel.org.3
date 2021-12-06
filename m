@@ -2,81 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 892754697A7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:01:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BFC54697A8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:01:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245026AbhLFOEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S245044AbhLFOEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 09:04:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38084 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231828AbhLFOEu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Dec 2021 09:04:50 -0500
-Received: from mga17.intel.com ([192.55.52.151]:54034 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231828AbhLFOEt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 09:04:49 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="218002531"
-X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="218002531"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 06:01:17 -0800
-X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="460835880"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 06:01:14 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1muEXN-002ng4-Pb;
-        Mon, 06 Dec 2021 16:00:13 +0200
-Date:   Mon, 6 Dec 2021 16:00:13 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dongliang Mu <mudongliangabcd@gmail.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        Irina Tirdea <irina.tirdea@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] driver: pmc_atom: free pmc->regmap when
- pmc_setup_clks fails
-Message-ID: <Ya4XbbVnK/0Getmt@smile.fi.intel.com>
-References: <20211205084419.2382395-1-mudongliangabcd@gmail.com>
+Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB32C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 06:01:22 -0800 (PST)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id 8775F396; Mon,  6 Dec 2021 15:01:20 +0100 (CET)
+Date:   Mon, 6 Dec 2021 15:01:19 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, David Woodhouse <dwmw@amazon.co.uk>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "open list:AMD IOMMU (AMD-VI)" <iommu@lists.linux-foundation.org>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 0/5] iommu/amd: fixes for suspend/resume
+Message-ID: <Ya4XrxbcXvdQv0kp@8bytes.org>
+References: <20211123161038.48009-1-mlevitsk@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211205084419.2382395-1-mudongliangabcd@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20211123161038.48009-1-mlevitsk@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 05, 2021 at 04:44:19PM +0800, Dongliang Mu wrote:
-> Smatch reports:
+On Tue, Nov 23, 2021 at 06:10:33PM +0200, Maxim Levitsky wrote:
+> Best regards,
+>    Maxim Levitsky
 > 
-> drivers/platform/x86/pmc_atom.c:496
-> pmc_setup_dev() warn: 'pmc->regmap' not released on lines: 496.
+> Maxim Levitsky (5):
+>   iommu/amd: restore GA log/tail pointer on host resume
+>   iommu/amd: x2apic mode: re-enable after resume
+>   iommu/amd: x2apic mode: setup the INTX registers on mask/unmask
+>   iommu/amd: x2apic mode: mask/unmask interrupts on suspend/resume
+>   iommu/amd: remove useless irq affinity notifier
 > 
-> Fix this by deallocating pm->regmap when pmc_setup_clks fails.
-> 
-> Fixes: 282a4e4ce5f9("platform/x86: Enable Atom PMC platform clocks")
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> ---
+>  drivers/iommu/amd/amd_iommu_types.h |   2 -
+>  drivers/iommu/amd/init.c            | 107 +++++++++++++++-------------
+>  2 files changed, 58 insertions(+), 51 deletions(-)
 
-It says v2 in the subject, what is in v2 exactly in comparison to v1?
+Suravee, can you please have a look? These look like v5.16 material.
 
-...
+Thanks,
 
->  	ret = pmc_setup_clks(pdev, pmc->regmap, data);
-> -	if (ret)
-> +	if (ret) {
-> +		iounmap(pmc->regmap);
->  		dev_warn(&pdev->dev, "platform clocks register failed: %d\n",
->  			 ret);
-
-In this case it makes sense to move to
-
-		dev_err(&pdev->dev, "platform clocks register failed: %d\n", ret);
-
-> +	}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+	Joerg

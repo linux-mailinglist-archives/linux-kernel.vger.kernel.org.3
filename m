@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F305469FED
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A14D469C77
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:19:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441936AbhLFPzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:55:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33142 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390514AbhLFPm2 (ORCPT
+        id S1357114AbhLFPWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:22:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35714 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357457AbhLFPQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:42:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B902C0A888A;
-        Mon,  6 Dec 2021 07:27:12 -0800 (PST)
+        Mon, 6 Dec 2021 10:16:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BBE3A61310;
-        Mon,  6 Dec 2021 15:27:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A17DBC34900;
-        Mon,  6 Dec 2021 15:27:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 475CF6131B;
+        Mon,  6 Dec 2021 15:12:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 046D2C341C2;
+        Mon,  6 Dec 2021 15:12:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804431;
-        bh=MxK77b//Mj/cYj0ZT2TpaodAuEGes9XeVHOxQvtpX94=;
+        s=korg; t=1638803557;
+        bh=CiE/4Ttw5KIIcCrcTqEyj/nNNXNiF2tG8uZD5vyOeSs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DRRW51Uzxtxsa2CPFoTqboUgJRHfwgVubNM6xwpikUscA9nWoWLfVIG3Fwvk7I7qZ
-         UMAXrasvEX6+uCiT1ZxrVSwyXNqVzjvsdmin5XwEBwhzELRUIj3unaf73gxGgPRink
-         DkhK+JJNNXwsMXj2VHNeeNiBr/XglTfx551zrgX8=
+        b=VQzEO5abrlk7/Lf0IS8hevfHfjpjd62viGJX8jVpPQ1BkAdr5ZjYkbMGax97Y9ZdK
+         lzltBdS+0Gm/c4QbgeVX3rdKS5MIo/vu11sdUIvpbmewZylys3BjSZ0qID3OHEh1F8
+         8TKhU0R6kSynPOsIv5ALiSDTFXowXLZWwvqREAQE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmitry Bogdanov <dbezrukov@marvell.com>,
-        Sudarsana Reddy Kalluru <skalluru@marvell.com>,
-        Igor Russkikh <irusskikh@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 145/207] atlantic: Increase delay for fw transactions
-Date:   Mon,  6 Dec 2021 15:56:39 +0100
-Message-Id: <20211206145615.256810685@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Chris Zankel <chris@zankel.net>, linux-xtensa@linux-xtensa.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 36/70] natsemi: xtensa: fix section mismatch warnings
+Date:   Mon,  6 Dec 2021 15:56:40 +0100
+Message-Id: <20211206145553.169884040@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
+References: <20211206145551.909846023@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,49 +51,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Bogdanov <dbezrukov@marvell.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit aa1dcb5646fdf34a15763facf4bf5e482a2814ca upstream.
+commit b0f38e15979fa8851e88e8aa371367f264e7b6e9 upstream.
 
-The max waiting period (of 1 ms) while reading the data from FW shared
-buffer is too small for certain types of data (e.g., stats). There's a
-chance that FW could be updating buffer at the same time and driver
-would be unsuccessful in reading data. Firmware manual recommends to
-have 1 sec timeout to fix this issue.
+Fix section mismatch warnings in xtsonic. The first one appears to be
+bogus and after fixing the second one, the first one is gone.
 
-Fixes: 5cfd54d7dc186 ("net: atlantic: minimal A2 fw_ops")
-Signed-off-by: Dmitry Bogdanov <dbezrukov@marvell.com>
-Signed-off-by: Sudarsana Reddy Kalluru <skalluru@marvell.com>
-Signed-off-by: Igor Russkikh <irusskikh@marvell.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+WARNING: modpost: vmlinux.o(.text+0x529adc): Section mismatch in reference from the function sonic_get_stats() to the function .init.text:set_reset_devices()
+The function sonic_get_stats() references
+the function __init set_reset_devices().
+This is often because sonic_get_stats lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+
+WARNING: modpost: vmlinux.o(.text+0x529b3b): Section mismatch in reference from the function xtsonic_probe() to the function .init.text:sonic_probe1()
+The function xtsonic_probe() references
+the function __init sonic_probe1().
+This is often because xtsonic_probe lacks a __init
+annotation or the annotation of sonic_probe1 is wrong.
+
+Fixes: 74f2a5f0ef64 ("xtensa: Add support for the Sonic Ethernet device for the XT2000 board.")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Finn Thain <fthain@telegraphics.com.au>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: linux-xtensa@linux-xtensa.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Acked-by: Max Filippov <jcmvbkbc@gmail.com>
+Link: https://lore.kernel.org/r/20211130063947.7529-1-rdunlap@infradead.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/natsemi/xtsonic.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/hw_atl2/hw_atl2_utils_fw.c
-@@ -84,7 +84,7 @@ static int hw_atl2_shared_buffer_read_bl
- 			if (cnt > AQ_A2_FW_READ_TRY_MAX)
- 				return -ETIME;
- 			if (tid1.transaction_cnt_a != tid1.transaction_cnt_b)
--				udelay(1);
-+				mdelay(1);
- 		} while (tid1.transaction_cnt_a != tid1.transaction_cnt_b);
+--- a/drivers/net/ethernet/natsemi/xtsonic.c
++++ b/drivers/net/ethernet/natsemi/xtsonic.c
+@@ -120,7 +120,7 @@ static const struct net_device_ops xtson
+ 	.ndo_set_mac_address	= eth_mac_addr,
+ };
  
- 		hw_atl2_mif_shared_buf_read(self, offset, (u32 *)data, dwords);
-@@ -339,8 +339,11 @@ static int aq_a2_fw_update_stats(struct
+-static int __init sonic_probe1(struct net_device *dev)
++static int sonic_probe1(struct net_device *dev)
  {
- 	struct hw_atl2_priv *priv = (struct hw_atl2_priv *)self->priv;
- 	struct statistics_s stats;
-+	int err;
- 
--	hw_atl2_shared_buffer_read_safe(self, stats, &stats);
-+	err = hw_atl2_shared_buffer_read_safe(self, stats, &stats);
-+	if (err)
-+		return err;
- 
- #define AQ_SDELTA(_N_, _F_) (self->curr_stats._N_ += \
- 			stats.msm._F_ - priv->last_stats.msm._F_)
+ 	unsigned int silicon_revision;
+ 	struct sonic_local *lp = netdev_priv(dev);
 
 

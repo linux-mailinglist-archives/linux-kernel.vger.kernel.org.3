@@ -2,93 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 801194690DF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C104690E4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:44:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238485AbhLFHlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 02:41:32 -0500
-Received: from mga06.intel.com ([134.134.136.31]:50248 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229652AbhLFHlb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 02:41:31 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="298063540"
-X-IronPort-AV: E=Sophos;i="5.87,290,1631602800"; 
-   d="scan'208";a="298063540"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2021 23:38:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,290,1631602800"; 
-   d="scan'208";a="611156814"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 05 Dec 2021 23:37:59 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mu8ZS-000Kxe-Q0; Mon, 06 Dec 2021 07:37:58 +0000
-Date:   Mon, 6 Dec 2021 15:37:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yajun Deng <yajun.deng@linux.dev>, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org
-Cc:     kbuild-all@lists.01.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] completion: introduce complete_put() helper function
-Message-ID: <202112061552.NaaSG9xz-lkp@intel.com>
-References: <20211206040319.7063-1-yajun.deng@linux.dev>
+        id S238529AbhLFHrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 02:47:52 -0500
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:39879 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238503AbhLFHrv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 02:47:51 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0UzX-p6Q_1638776660;
+Received: from B-X3VXMD6M-2058.local(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0UzX-p6Q_1638776660)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 06 Dec 2021 15:44:21 +0800
+From:   Xin Hao <xhao@linux.alibaba.com>
+Reply-To: xhao@linux.alibaba.com
+Subject: Re: [PATCH RESEND MERGE REQUEST] mm/damon: move damon_rand()
+ definition into damon.h
+To:     SeongJae Park <sj@kernel.org>
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20211206062836.4497-1-sj@kernel.org>
+Message-ID: <8d27d836-4d45-9d52-1407-04c54b7a3dff@linux.alibaba.com>
+Date:   Mon, 6 Dec 2021 15:44:16 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206040319.7063-1-yajun.deng@linux.dev>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211206062836.4497-1-sj@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yajun,
 
-Thank you for the patch! Perhaps something to improve:
+On 12/6/21 2:28 PM, SeongJae Park wrote:
+> Hi Xin,
+>
+> On Mon, 6 Dec 2021 13:20:02 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
+>
+>> Hi park:
+>>
+>>       Are you fixing this potential bug? If not, I am willing to modify,
+>> i will send a fixed patch ？
+> I couldn't find a time slot for this yet.  It would be great if you could send
+> a patch.
+Ok, i will do, thanks!
+>
+>
+> Thanks,
+> SJ
+>
+>> -- 
+>> Best Regards!
+>> Xin Hao
+>>
+-- 
+Best Regards!
+Xin Hao
 
-[auto build test WARNING on tip/sched/core]
-[also build test WARNING on v5.16-rc4 next-20211203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Yajun-Deng/completion-introduce-complete_put-helper-function/20211206-120632
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 8c92606ab81086db00cbb73347d124b4eb169b7e
-config: arm-randconfig-r033-20211206 (https://download.01.org/0day-ci/archive/20211206/202112061552.NaaSG9xz-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/6d181628873250fd66a8f2da19182fec95973b6e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Yajun-Deng/completion-introduce-complete_put-helper-function/20211206-120632
-        git checkout 6d181628873250fd66a8f2da19182fec95973b6e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash kernel/sched/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/sched/completion.c:41:6: warning: no previous prototype for 'complete_put' [-Wmissing-prototypes]
-      41 | void complete_put(refcount_t *r, struct completion *x)
-         |      ^~~~~~~~~~~~
-
-
-vim +/complete_put +41 kernel/sched/completion.c
-
-    40	
-  > 41	void complete_put(refcount_t *r, struct completion *x)
-    42	{
-    43		if (refcount_dec_and_test(r))
-    44			complete(x);
-    45	}
-    46	EXPORT_SYMBOL(complete_put);
-    47	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

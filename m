@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD511469CD1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F4B469A68
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386159AbhLFP0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:26:13 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49766 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359196AbhLFPRE (ORCPT
+        id S1346312AbhLFPHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:07:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345534AbhLFPEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:17:04 -0500
+        Mon, 6 Dec 2021 10:04:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69ACAC0698CE;
+        Mon,  6 Dec 2021 07:00:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7589B8101C;
-        Mon,  6 Dec 2021 15:13:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 030A5C341C2;
-        Mon,  6 Dec 2021 15:13:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A3CE61316;
+        Mon,  6 Dec 2021 15:00:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E21CFC341C1;
+        Mon,  6 Dec 2021 15:00:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803613;
-        bh=lgazTf/KmclGBV+oVKueKG8F65kkA0ahysymL142Ne0=;
+        s=korg; t=1638802850;
+        bh=g5vzduTfSGynRVeX59VVaxoshbzTsTbElMLPzfqW/JI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MIUC8g9BUG1zbYvuaGzICkJKF0f4/Gz8+LL7M4V+jmLi4gPArDcoPfsr8I5eM/L1b
-         maNzMjMwyik1ZL2PBiJsRzNwf2jqPHkNIjtjRnH2D6/zF6jb3Shf8dKeFDVb0Dv5Df
-         COhZVPImevdfb99fGOOJYmKQPY9a1dmF9PrHOjD8=
+        b=kdGPE3iTQYTIK2Gja87B3HDx7tyTuqeUT7/j74hKrZKPXrRAPmLxpsPHP3Otpr5F8
+         HKHZJg5S6hvM2FmR97DfZPmSGOQImuQ3oLijiGWxtriCB+u9i3rpna4jHAAj0q+i4O
+         jvZezyQyZDZIv+U/if4f0jZ/SgpmIMvyWVeO7CSg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pierre Morel <pmorel@linux.ibm.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: [PATCH 5.4 28/70] s390/pci: move pseudo-MMIO to prevent MIO overlap
+        stable@vger.kernel.org, Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.4 48/52] siphash: use _unaligned version by default
 Date:   Mon,  6 Dec 2021 15:56:32 +0100
-Message-Id: <20211206145552.886764405@linuxfoundation.org>
+Message-Id: <20211206145549.536627765@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
-References: <20211206145551.909846023@linuxfoundation.org>
+In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
+References: <20211206145547.892668902@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,65 +51,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niklas Schnelle <schnelle@linux.ibm.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-commit 52d04d408185b7aa47628d2339c28ec70074e0ae upstream.
+commit f7e5b9bfa6c8820407b64eabc1f29c9a87e8993d upstream.
 
-When running without MIO support, with pci=nomio or for devices which
-are not MIO-capable the zPCI subsystem generates pseudo-MMIO addresses
-to allow access to PCI BARs via MMIO based Linux APIs even though the
-platform uses function handles and BAR numbers.
+On ARM v6 and later, we define CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+because the ordinary load/store instructions (ldr, ldrh, ldrb) can
+tolerate any misalignment of the memory address. However, load/store
+double and load/store multiple instructions (ldrd, ldm) may still only
+be used on memory addresses that are 32-bit aligned, and so we have to
+use the CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS macro with care, or we
+may end up with a severe performance hit due to alignment traps that
+require fixups by the kernel. Testing shows that this currently happens
+with clang-13 but not gcc-11. In theory, any compiler version can
+produce this bug or other problems, as we are dealing with undefined
+behavior in C99 even on architectures that support this in hardware,
+see also https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100363.
 
-This is done by stashing an index into our global IOMAP array which
-contains the function handle in the 16 most significant bits of the
-addresses returned by ioremap() always setting the most significant bit.
+Fortunately, the get_unaligned() accessors do the right thing: when
+building for ARMv6 or later, the compiler will emit unaligned accesses
+using the ordinary load/store instructions (but avoid the ones that
+require 32-bit alignment). When building for older ARM, those accessors
+will emit the appropriate sequence of ldrb/mov/orr instructions. And on
+architectures that can truly tolerate any kind of misalignment, the
+get_unaligned() accessors resolve to the leXX_to_cpup accessors that
+operate on aligned addresses.
 
-On the other hand the MIO addresses assigned by the platform for use,
-while requiring special instructions, allow PCI access with virtually
-mapped physical addresses. Now the problem is that these MIO addresses
-and our own pseudo-MMIO addresses may overlap, while functionally this
-would not be a problem by itself this overlap is detected by common code
-as both address types are added as resources in the iomem_resource tree.
-This leads to the overlapping resource claim of either the MIO capable
-or non-MIO capable devices with being rejected.
+Since the compiler will in fact emit ldrd or ldm instructions when
+building this code for ARM v6 or later, the solution is to use the
+unaligned accessors unconditionally on architectures where this is
+known to be fast. The _aligned version of the hash function is
+however still needed to get the best performance on architectures
+that cannot do any unaligned access in hardware.
 
-Since PCI is tightly coupled to the use of the iomem_resource tree, see
-for example the code for request_mem_region(), we can't reasonably get
-rid of the overlap being detected by keeping our pseudo-MMIO addresses
-out of the iomem_resource tree.
+This new version avoids the undefined behavior and should produce
+the fastest hash on all architectures we support.
 
-Instead let's move the range used by our own pseudo-MMIO addresses by
-starting at (1UL << 62) and only using addresses below (1UL << 63) thus
-avoiding the range currently used for MIO addresses.
-
-Fixes: c7ff0e918a7c ("s390/pci: deal with devices that have no support for MIO instructions")
-Cc: stable@vger.kernel.org # 5.3+
-Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Link: https://lore.kernel.org/linux-arm-kernel/20181008211554.5355-4-ard.biesheuvel@linaro.org/
+Link: https://lore.kernel.org/linux-crypto/CAK8P3a2KfmmGDbVHULWevB0hv71P2oi2ZCHEAqT=8dQfa0=cqQ@mail.gmail.com/
+Reported-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Fixes: 2c956a60778c ("siphash: add cryptographically secure PRF")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/s390/include/asm/pci_io.h |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ include/linux/siphash.h |   14 ++++----------
+ lib/siphash.c           |   12 ++++++------
+ 2 files changed, 10 insertions(+), 16 deletions(-)
 
---- a/arch/s390/include/asm/pci_io.h
-+++ b/arch/s390/include/asm/pci_io.h
-@@ -14,12 +14,13 @@
+--- a/include/linux/siphash.h
++++ b/include/linux/siphash.h
+@@ -27,9 +27,7 @@ static inline bool siphash_key_is_zero(c
+ }
  
- /* I/O Map */
- #define ZPCI_IOMAP_SHIFT		48
--#define ZPCI_IOMAP_ADDR_BASE		0x8000000000000000UL
-+#define ZPCI_IOMAP_ADDR_SHIFT		62
-+#define ZPCI_IOMAP_ADDR_BASE		(1UL << ZPCI_IOMAP_ADDR_SHIFT)
- #define ZPCI_IOMAP_ADDR_OFF_MASK	((1UL << ZPCI_IOMAP_SHIFT) - 1)
- #define ZPCI_IOMAP_MAX_ENTRIES							\
--	((ULONG_MAX - ZPCI_IOMAP_ADDR_BASE + 1) / (1UL << ZPCI_IOMAP_SHIFT))
-+	(1UL << (ZPCI_IOMAP_ADDR_SHIFT - ZPCI_IOMAP_SHIFT))
- #define ZPCI_IOMAP_ADDR_IDX_MASK						\
--	(~ZPCI_IOMAP_ADDR_OFF_MASK - ZPCI_IOMAP_ADDR_BASE)
-+	((ZPCI_IOMAP_ADDR_BASE - 1) & ~ZPCI_IOMAP_ADDR_OFF_MASK)
+ u64 __siphash_aligned(const void *data, size_t len, const siphash_key_t *key);
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u64 __siphash_unaligned(const void *data, size_t len, const siphash_key_t *key);
+-#endif
  
- struct zpci_iomap_entry {
- 	u32 fh;
+ u64 siphash_1u64(const u64 a, const siphash_key_t *key);
+ u64 siphash_2u64(const u64 a, const u64 b, const siphash_key_t *key);
+@@ -82,10 +80,9 @@ static inline u64 ___siphash_aligned(con
+ static inline u64 siphash(const void *data, size_t len,
+ 			  const siphash_key_t *key)
+ {
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+-	if (!IS_ALIGNED((unsigned long)data, SIPHASH_ALIGNMENT))
++	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
++	    !IS_ALIGNED((unsigned long)data, SIPHASH_ALIGNMENT))
+ 		return __siphash_unaligned(data, len, key);
+-#endif
+ 	return ___siphash_aligned(data, len, key);
+ }
+ 
+@@ -96,10 +93,8 @@ typedef struct {
+ 
+ u32 __hsiphash_aligned(const void *data, size_t len,
+ 		       const hsiphash_key_t *key);
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u32 __hsiphash_unaligned(const void *data, size_t len,
+ 			 const hsiphash_key_t *key);
+-#endif
+ 
+ u32 hsiphash_1u32(const u32 a, const hsiphash_key_t *key);
+ u32 hsiphash_2u32(const u32 a, const u32 b, const hsiphash_key_t *key);
+@@ -135,10 +130,9 @@ static inline u32 ___hsiphash_aligned(co
+ static inline u32 hsiphash(const void *data, size_t len,
+ 			   const hsiphash_key_t *key)
+ {
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+-	if (!IS_ALIGNED((unsigned long)data, HSIPHASH_ALIGNMENT))
++	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
++	    !IS_ALIGNED((unsigned long)data, HSIPHASH_ALIGNMENT))
+ 		return __hsiphash_unaligned(data, len, key);
+-#endif
+ 	return ___hsiphash_aligned(data, len, key);
+ }
+ 
+--- a/lib/siphash.c
++++ b/lib/siphash.c
+@@ -49,6 +49,7 @@
+ 	SIPROUND; \
+ 	return (v0 ^ v1) ^ (v2 ^ v3);
+ 
++#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u64 __siphash_aligned(const void *data, size_t len, const siphash_key_t *key)
+ {
+ 	const u8 *end = data + len - (len % sizeof(u64));
+@@ -80,8 +81,8 @@ u64 __siphash_aligned(const void *data,
+ 	POSTAMBLE
+ }
+ EXPORT_SYMBOL(__siphash_aligned);
++#endif
+ 
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u64 __siphash_unaligned(const void *data, size_t len, const siphash_key_t *key)
+ {
+ 	const u8 *end = data + len - (len % sizeof(u64));
+@@ -113,7 +114,6 @@ u64 __siphash_unaligned(const void *data
+ 	POSTAMBLE
+ }
+ EXPORT_SYMBOL(__siphash_unaligned);
+-#endif
+ 
+ /**
+  * siphash_1u64 - compute 64-bit siphash PRF value of a u64
+@@ -250,6 +250,7 @@ EXPORT_SYMBOL(siphash_3u32);
+ 	HSIPROUND; \
+ 	return (v0 ^ v1) ^ (v2 ^ v3);
+ 
++#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u32 __hsiphash_aligned(const void *data, size_t len, const hsiphash_key_t *key)
+ {
+ 	const u8 *end = data + len - (len % sizeof(u64));
+@@ -280,8 +281,8 @@ u32 __hsiphash_aligned(const void *data,
+ 	HPOSTAMBLE
+ }
+ EXPORT_SYMBOL(__hsiphash_aligned);
++#endif
+ 
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u32 __hsiphash_unaligned(const void *data, size_t len,
+ 			 const hsiphash_key_t *key)
+ {
+@@ -313,7 +314,6 @@ u32 __hsiphash_unaligned(const void *dat
+ 	HPOSTAMBLE
+ }
+ EXPORT_SYMBOL(__hsiphash_unaligned);
+-#endif
+ 
+ /**
+  * hsiphash_1u32 - compute 64-bit hsiphash PRF value of a u32
+@@ -418,6 +418,7 @@ EXPORT_SYMBOL(hsiphash_4u32);
+ 	HSIPROUND; \
+ 	return v1 ^ v3;
+ 
++#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u32 __hsiphash_aligned(const void *data, size_t len, const hsiphash_key_t *key)
+ {
+ 	const u8 *end = data + len - (len % sizeof(u32));
+@@ -438,8 +439,8 @@ u32 __hsiphash_aligned(const void *data,
+ 	HPOSTAMBLE
+ }
+ EXPORT_SYMBOL(__hsiphash_aligned);
++#endif
+ 
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u32 __hsiphash_unaligned(const void *data, size_t len,
+ 			 const hsiphash_key_t *key)
+ {
+@@ -461,7 +462,6 @@ u32 __hsiphash_unaligned(const void *dat
+ 	HPOSTAMBLE
+ }
+ EXPORT_SYMBOL(__hsiphash_unaligned);
+-#endif
+ 
+ /**
+  * hsiphash_1u32 - compute 32-bit hsiphash PRF value of a u32
 
 

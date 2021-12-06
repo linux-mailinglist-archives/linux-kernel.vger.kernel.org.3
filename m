@@ -2,115 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF3546A3D7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:17:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B23046A3E5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:20:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244276AbhLFSV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 13:21:26 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:55242 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234928AbhLFSVZ (ORCPT
+        id S245752AbhLFSYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 13:24:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:23980 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244449AbhLFSYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 13:21:25 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B6IHnAo090891;
-        Mon, 6 Dec 2021 12:17:49 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638814669;
-        bh=mTMJwe0tDsfW2xllsLH81/Xe/KQyO5THAtqhZ+17910=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=DJDfhl0KIF0JwZZlwB7htFyHC7hQbLQd3mq1g3LgCpQpZxfL/5pZUMvyvJ6h3pvd3
-         eDqyZocL6C257NpDPbPgxWiUb6XAyJmcP79XTfc61Cc90/xTUalNA8rXn7WA5cjEmI
-         t9es9R41GAvV4FvG2nkH/Qb4DefFU0NP07B+5NeQ=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B6IHnWP011493
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 6 Dec 2021 12:17:49 -0600
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 6
- Dec 2021 12:17:49 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 6 Dec 2021 12:17:49 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B6IHmZN105718;
-        Mon, 6 Dec 2021 12:17:48 -0600
-Date:   Mon, 6 Dec 2021 23:47:47 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-CC:     <Alexander.Stein@tq-group.com>, <michael@walle.cc>,
-        <vigneshr@ti.com>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] mtd: spi-nor: Skip erase logic when SPI_NOR_NO_ERASE
- is set
-Message-ID: <20211206181745.kcro3sgwacrh22iw@ti.com>
-References: <20211106075616.95401-1-tudor.ambarus@microchip.com>
- <20211106075616.95401-3-tudor.ambarus@microchip.com>
+        Mon, 6 Dec 2021 13:24:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638814836;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=euSBJV6H7AIayYsx/jymKT22o7jdD83Te73E5T3p9qg=;
+        b=UDJfCI84cFsKO3daNj4Y0qBD6sU1s1+6OaUghMn7rzuiqQqxAFpx9xz3apDn4gkorAJHqs
+        GMNOMWHWfYyx44OpmkhDUVYMe+9wEB+20oE/vaLhV1Unl121KokH86CN2eZkW63OxlKL5O
+        qIkV7GtTupR0OTqYTMOYeWAfbbVCD4A=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-399-WOnjW-EZOYeMrrL_Jn9S6w-1; Mon, 06 Dec 2021 13:20:34 -0500
+X-MC-Unique: WOnjW-EZOYeMrrL_Jn9S6w-1
+Received: by mail-wm1-f71.google.com with SMTP id 144-20020a1c0496000000b003305ac0e03aso8257244wme.8
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 10:20:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=euSBJV6H7AIayYsx/jymKT22o7jdD83Te73E5T3p9qg=;
+        b=5ZbHVAe4ZdRJvl4Of8L+dZsB//mpUHnGOmS9QyXqlfaokVFV9wS/8FmxAvqjGfWRRJ
+         FxPWaWrDf6Kx4hFatizm+8y5OIVXtubkvZv6H6FNmGhEjCLGJcFtnr/owE/ygCGw1SZx
+         czgYmrV9HI+i4awTZs4vjI3Z9vocCPQOafse3HSZUt5Vr/RofH8TrjOX8cbmuJVKYKBO
+         mjh6W3mwPtFsA709+5i8tiuqgDAgIxgp+IH7vo4+XRMkqiAoTIKUVNY/KAEfgPDQPfXi
+         wilr8oDr4wgdt+eIJ5ZScMTkMBN7hLRx5vCwcl3KrSc+a40pRumQv5iKx95XOqmfC/P2
+         AjyQ==
+X-Gm-Message-State: AOAM53388dpmdXqgdYWrvC4+0jJ7AK/JlWbMUMTSaQnR+ZCXZRFoF25A
+        E5LoXued3h5CojMxlobriAQ0OwFmwOKJb/mV2GOE/KvbKA7yL7FgjapkBdZiLeqpPx7cMZZHuAE
+        QWQa2diTMMxA2jJD2R3VXWNNk
+X-Received: by 2002:a7b:c155:: with SMTP id z21mr186881wmi.107.1638814833557;
+        Mon, 06 Dec 2021 10:20:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyNGUuAeiZEBQ0uQXmueMFz5HGti1shlWq4mMAIfp1iMpGdogEvGrBWREXa04OkWVSqhplTxw==
+X-Received: by 2002:a7b:c155:: with SMTP id z21mr186854wmi.107.1638814833361;
+        Mon, 06 Dec 2021 10:20:33 -0800 (PST)
+Received: from krava.redhat.com (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id b13sm12459543wrh.32.2021.12.06.10.20.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 10:20:33 -0800 (PST)
+From:   Jiri Olsa <jolsa@redhat.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: [PATCHv2 0/3] ftrace: Add ftrace-direct-multi-modify sample module
+Date:   Mon,  6 Dec 2021 19:20:29 +0100
+Message-Id: <20211206182032.87248-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20211106075616.95401-3-tudor.ambarus@microchip.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/11/21 09:56AM, Tudor Ambarus wrote:
-> SPI_NOR_NO_ERASE is used either by F-RAMs, or MRAMs, or EEPROMs,
-> neither of which supports SFDP, so once SPI_NOR_NO_ERASE is set,
-> SFDP can not undo it. These type of flashes should be moved out of
-> the SPI NOR core anyway, so don't complicate things and just skip
-> the erase logic when SPI_NOR_NO_ERASE is set. Normally SPI NOR core
-> should operate just on SNOR_F flags, but since SPI_NOR_NO_ERASE
-> should be removed, don't bother with extra code.
-> 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-> ---
->  drivers/mtd/spi-nor/core.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> index a1b5d5432f41..52c82d943499 100644
-> --- a/drivers/mtd/spi-nor/core.c
-> +++ b/drivers/mtd/spi-nor/core.c
-> @@ -2680,6 +2680,9 @@ static void spi_nor_skip_sfdp_init_params(struct spi_nor *nor)
->  					SPINOR_OP_PP, SNOR_PROTO_8_8_8_DTR);
->  	}
->  
-> +	if (info_flags & SPI_NOR_NO_ERASE)
-> +		return;
-> +
->  	/*
->  	 * Sector Erase settings. Sort Erase Types in ascending order, with the
->  	 * smallest erase size starting at BIT(0).
-> @@ -3195,12 +3198,13 @@ static void spi_nor_set_mtd_info(struct spi_nor *nor)
->  		mtd->name = dev_name(dev);
->  	mtd->type = MTD_NORFLASH;
->  	mtd->flags = MTD_CAP_NORFLASH;
-> -	if (nor->info->flags & SPI_NOR_NO_ERASE)
-> +	if (nor->info->flags & SPI_NOR_NO_ERASE) {
-> +		mtd->_erase = spi_nor_erase;
+hi,
+this patchset adds ftrace-direct-multi-modify.ko kernel module
+that shows the usage of modify_ftrace_direct_multi API. Plus
+two additional small fixes for ftrace direct code.
 
-You only set mtd->_erase when SPI_NOR_NO_ERASE is set? That does not 
-make any sense to me. It should be the opposite.
+v2 changes:
+  - rebased on top of v5.16-rc4
+  - added s390x trampolines
 
->  		mtd->flags |= MTD_NO_ERASE;
-> +	}
->  	mtd->writesize = nor->params->writesize;
->  	mtd->writebufsize = nor->params->page_size;
->  	mtd->size = nor->params->size;
-> -	mtd->_erase = spi_nor_erase;
->  	mtd->_read = spi_nor_read;
->  	/* Might be already set by some SST flashes. */
->  	if (!mtd->_write)
-> -- 
-> 2.25.1
-> 
+thanks,
+jirka
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+
+---
+Jiri Olsa (3):
+      ftrace: Use direct_ops hash in unregister_ftrace_direct
+      ftrace: Add cleanup to unregister_ftrace_direct_multi
+      ftrace/samples: Add module to test multi direct modify interface
+
+ kernel/trace/ftrace.c                       |   8 +++++-
+ samples/ftrace/Makefile                     |   1 +
+ samples/ftrace/ftrace-direct-multi-modify.c | 152 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 160 insertions(+), 1 deletion(-)
+ create mode 100644 samples/ftrace/ftrace-direct-multi-modify.c
+

@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5733B469A78
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC6D469CB9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345862AbhLFPIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346322AbhLFPGR (ORCPT
+        id S1345966AbhLFPYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:24:45 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33764 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349803AbhLFPNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:06:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363FEC0698E4;
-        Mon,  6 Dec 2021 07:02:47 -0800 (PST)
+        Mon, 6 Dec 2021 10:13:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7E0661316;
-        Mon,  6 Dec 2021 15:02:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEE7DC341C1;
-        Mon,  6 Dec 2021 15:02:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCD9E6131E;
+        Mon,  6 Dec 2021 15:09:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD1DFC341C1;
+        Mon,  6 Dec 2021 15:09:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802966;
-        bh=j1J/Be+AtqWEmIy3RZBDchghsQ1lLnJrU1m/FQSV4oc=;
+        s=korg; t=1638803390;
+        bh=NPyiNdSls0xvC2dIMXhp1fPbJk3Za+5YMISEGyNyKw8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VSn9XyjvcBhLBsnF+PLF698holbJCN9xBg+n7CAAuEx9UcNj7SxU5uCA0PGJeQ7x+
-         cmXnE4x6Qx9AyKy5ndGZDNkhVl4QKXq3M1yuyXujJsVAh8OgAYqNPI4eVaPcGrYJuy
-         dupzbb7a+QBFAe2dObAPUSZ/dQ0U1rTCcyTZN/fM=
+        b=KqUDwojMZp+z7Mqby0Dr8fAOH16OWPbRDrNFJs16Esdl5QJuaDtvecMygSTCRvO20
+         a8Vi7rveX1m6U6n4gK1xN6mCGXt1RF6Rycua0pocCG/OnZ/JjPnbZ0O+G8uaRSPL7Q
+         0nI3Q5UqOS8lBIRTDeYhR4zcWOKOwseA/JmmvP9Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 42/62] s390/setup: avoid using memblock_enforce_memory_limit
+Subject: [PATCH 4.19 08/48] s390/setup: avoid using memblock_enforce_memory_limit
 Date:   Mon,  6 Dec 2021 15:56:25 +0100
-Message-Id: <20211206145550.660609848@linuxfoundation.org>
+Message-Id: <20211206145549.142705533@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+References: <20211206145548.859182340@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -84,10 +81,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 deletions(-)
 
 diff --git a/arch/s390/kernel/setup.c b/arch/s390/kernel/setup.c
-index 9939879f5f253..2f3b7802d8b87 100644
+index e8bfd29bb1f9f..098794fc5dc81 100644
 --- a/arch/s390/kernel/setup.c
 +++ b/arch/s390/kernel/setup.c
-@@ -693,9 +693,6 @@ static void __init setup_memory(void)
+@@ -703,9 +703,6 @@ static void __init setup_memory(void)
  		storage_key_init_range(reg->base, reg->base + reg->size);
  	}
  	psw_set_key(PAGE_DEFAULT_KEY);

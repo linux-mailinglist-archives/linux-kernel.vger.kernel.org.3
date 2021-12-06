@@ -2,90 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D32E746A132
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:23:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2704D46A133
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:23:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376963AbhLFQ1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:27:02 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:51680 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356635AbhLFQ0y (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:26:54 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6821261373
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 16:23:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F51EC341C1;
-        Mon,  6 Dec 2021 16:23:23 +0000 (UTC)
-Date:   Mon, 6 Dec 2021 16:23:20 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Yunfeng Ye <yeyunfeng@huawei.com>
-Cc:     will@kernel.org, wangkefeng.wang@huawei.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wuxu.wu@huawei.com, Hewenliang <hewenliang4@huawei.com>
-Subject: Re: [PATCH] arm64: mm: Use asid2idx() and asid feature macro for
- cleanup
-Message-ID: <Ya44+GAmeGBFVAad@arm.com>
-References: <4aaabf1b-00c3-3365-e371-9d97dc0c06ab@huawei.com>
+        id S1378906AbhLFQ1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:27:04 -0500
+Received: from mga09.intel.com ([134.134.136.24]:44750 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1376747AbhLFQ1A (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 11:27:00 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="237160181"
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="237160181"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 08:23:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="605082770"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Dec 2021 08:23:27 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 14B38B8; Mon,  6 Dec 2021 18:23:33 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH v1 2/4] can: hi311x: try to get crystal clock rate from property
+Date:   Mon,  6 Dec 2021 18:23:21 +0200
+Message-Id: <20211206162323.29281-2-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211206162323.29281-1-andriy.shevchenko@linux.intel.com>
+References: <20211206162323.29281-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4aaabf1b-00c3-3365-e371-9d97dc0c06ab@huawei.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 28, 2021 at 08:27:23PM +0800, Yunfeng Ye wrote:
-> Use asid2idx() and asid feature macro for cleanup.
-> 
-> No functional change.
-> 
-> Signed-off-by: Yunfeng Ye <yeyunfeng@huawei.com>
-> ---
->  arch/arm64/mm/context.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/mm/context.c b/arch/arm64/mm/context.c
-> index cd72576ae2b7..076f14a75bd5 100644
-> --- a/arch/arm64/mm/context.c
-> +++ b/arch/arm64/mm/context.c
-> @@ -50,10 +50,10 @@ static u32 get_cpu_asid_bits(void)
->  		pr_warn("CPU%d: Unknown ASID size (%d); assuming 8-bit\n",
->  					smp_processor_id(),  fld);
->  		fallthrough;
-> -	case 0:
-> +	case ID_AA64MMFR0_ASID_8:
->  		asid = 8;
->  		break;
-> -	case 2:
-> +	case ID_AA64MMFR0_ASID_16:
->  		asid = 16;
->  	}
+In some configurations, mainly ACPI-based, the clock frequency of the
+device is supplied by very well established 'clock-frequency'
+property. Hence, try to get it from the property at last if no other
+providers are available.
 
-I think this change is fine.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/net/can/spi/hi311x.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-> @@ -162,7 +162,7 @@ static u64 new_context(struct mm_struct *mm)
->  	u64 generation = atomic64_read(&asid_generation);
-> 
->  	if (asid != 0) {
-> -		u64 newasid = generation | (asid & ~ASID_MASK);
-> +		u64 newasid = generation | asid2idx(asid);
-> 
->  		/*
->  		 * If our current ASID was active during a rollover, we
-> @@ -306,7 +306,7 @@ unsigned long arm64_mm_context_get(struct mm_struct *mm)
->  out_unlock:
->  	raw_spin_unlock_irqrestore(&cpu_asid_lock, flags);
-> 
-> -	asid &= ~ASID_MASK;
-> +	asid = asid2idx(asid);
-
-While functionally the code is the same, I don't think this was the
-intention of asid2idx(). It's meant to provide an index into asid_map,
-while the ASID_MASK lines isolate the asid number and add a new
-generation to it.
-
+diff --git a/drivers/net/can/spi/hi311x.c b/drivers/net/can/spi/hi311x.c
+index 13fb979645cf..1e4ff904be0f 100644
+--- a/drivers/net/can/spi/hi311x.c
++++ b/drivers/net/can/spi/hi311x.c
+@@ -828,19 +828,26 @@ MODULE_DEVICE_TABLE(spi, hi3110_id_table);
+ 
+ static int hi3110_can_probe(struct spi_device *spi)
+ {
+-	const struct of_device_id *of_id = of_match_device(hi3110_of_match,
+-							   &spi->dev);
++	struct device *dev = &spi->dev;
+ 	struct net_device *net;
+ 	struct hi3110_priv *priv;
+ 	struct clk *clk;
+-	int freq, ret;
++	u32 freq;
++	int ret;
+ 
+ 	clk = devm_clk_get_optional(&spi->dev, NULL);
+ 	if (IS_ERR(clk)) {
+ 		dev_err(&spi->dev, "no CAN clock source defined\n");
+ 		return PTR_ERR(clk);
+ 	}
+-	freq = clk_get_rate(clk);
++
++	if (clk) {
++		freq = clk_get_rate(clk);
++	} else {
++		ret = device_property_read_u32(dev, "clock-frequency", &freq);
++		if (ret)
++			return dev_err_probe(dev, ret, "Failed to get clock-frequency!\n");
++	}
+ 
+ 	/* Sanity check */
+ 	if (freq > 40000000)
 -- 
-Catalin
+2.33.0
+

@@ -2,100 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 802AD4695A0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 13:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED33A4695A9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 13:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243104AbhLFM2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 07:28:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43790 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234735AbhLFM2Y (ORCPT
+        id S243054AbhLFMcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 07:32:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36863 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232833AbhLFMcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 07:28:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F1EC061746;
-        Mon,  6 Dec 2021 04:24:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA2A361260;
-        Mon,  6 Dec 2021 12:24:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F037C341C2;
-        Mon,  6 Dec 2021 12:24:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638793494;
-        bh=uyixaSob4Wksy6mAI4HQO4bfeCI5HAdK8TB5r7VhL+U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J9Q0kAy0bcvE/fn2YaFSAu5uHyhcGXIWuiUUkia/tXj/dO6wDA/1KVW8bIZFCXQ3G
-         qbmDF+DT4IIBm0XSupRoTPzRBWSFbhR0FeSrpzLVGwTxhWM9xwEYY/iXqisfsyrUr+
-         y/KBihlDQYi6COhB7/oZWc6yZXLXj+1PnsRCkkFqUuHQsGuycaVniqi4lgFlF0SvOO
-         eNGVaScg5A0VrL1Hu+BjBq156Y8g2Og3Y6qTwhtA1Tcvty/eGoeVq4CND1GWO4uKZJ
-         KlRmKg82sYv/H6OC3Eu4I/syWDSnZEl5HFXq3wCQNRs/p0qsuaYO+QARxXthmD7xng
-         00pK6bIOEaE8w==
-Received: by pali.im (Postfix)
-        id 80E72F63; Mon,  6 Dec 2021 13:24:51 +0100 (CET)
-Date:   Mon, 6 Dec 2021 13:24:51 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh@kernel.org>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/6] PCI: pci-bridge-emul: Various fixes
-Message-ID: <20211206122451.v4pci63ox3hntsw6@pali>
-References: <20211124155944.1290-1-pali@kernel.org>
- <163879317819.3988.9390653012838076482.b4-ty@arm.com>
+        Mon, 6 Dec 2021 07:32:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638793734;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GwJR9gZ9PzNf1CDN94rO/0aNcwLQX7/tXDK1ztedUis=;
+        b=coeRnbU0gEGya1W+zQVTSVVwvN/bPSeWQlpT8sVeXEd3nWpm9WppoqwjQIQMRuBKpXk5XA
+        WTUAFHKxG3ZEtq57cZJ6IGxOrYBxjSXCi4o0xYQhD4b4EmxssN3P2fhFgJrX0NVJFx5HYn
+        9NxxM+jqrrIw+giDhL+XXvS5wK0ZpGk=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-147-kUkTAwhmOSuKhck5MHx2WA-1; Mon, 06 Dec 2021 07:28:53 -0500
+X-MC-Unique: kUkTAwhmOSuKhck5MHx2WA-1
+Received: by mail-ed1-f71.google.com with SMTP id w5-20020a05640234c500b003f1b9ab06d2so8218963edc.13
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 04:28:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GwJR9gZ9PzNf1CDN94rO/0aNcwLQX7/tXDK1ztedUis=;
+        b=BxW8QwXxLa+oXgEtYa1unqyDewQlqo7UFxe7a4tqyW6j1OJQ4QUhYZe+GRxq21aQjI
+         yfgknNwIIXPc/zX3EdQoduNxky2XjBUYYu0YqPDyAG7yojwu9iLpEwlgGd8zS1jz9xdC
+         GvwkHsfOlWbqxr8mLq0rJhiIKhXEj7b6g4rAVfI7Ryrj1zUvmgMKarJt0l627QtXZ8Ij
+         y15dqnciww67Bxjsn3sYCFYvT07WF2jI/4lrBWNFlGnyG5YsaoZBlsmGD3g/qvpVtKGr
+         SKihuBIm651XCK36E755F3+ieQKEtZohBFOWwOnm1jUDYdHxzX9tjpT1JHsfDmx9kbdA
+         LZOg==
+X-Gm-Message-State: AOAM531M6LGGA5ITfwa9pOtzvLsOSYDVOixUz1243UUz819aQc1W1bTW
+        MyvSP2zIqwazWOIFxn6iCX6ZnXo3u5G5DtlTSnGe0C20PKPTQGaC+WO8rV6R/I5vKO2ESwUQSkp
+        tuyk6HcJr7ZO35zQbHd0PxYra
+X-Received: by 2002:a17:907:8a12:: with SMTP id sc18mr45924509ejc.274.1638793731838;
+        Mon, 06 Dec 2021 04:28:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwUTZ6NbFn0CF2OqrMKw4KtVY2lwzJTDH1VcjDi0WxS2ikl+V+VsRId2MZLJCNqPnY+LpkBAQ==
+X-Received: by 2002:a17:907:8a12:: with SMTP id sc18mr45924495ejc.274.1638793731656;
+        Mon, 06 Dec 2021 04:28:51 -0800 (PST)
+Received: from krava ([83.240.60.218])
+        by smtp.gmail.com with ESMTPSA id co10sm7821898edb.83.2021.12.06.04.28.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 04:28:51 -0800 (PST)
+Date:   Mon, 6 Dec 2021 13:28:50 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/3] ftrace/samples: Add module to test multi direct
+ modify interface
+Message-ID: <Ya4CAt3WRoLra2DJ@krava>
+References: <20211205232036.51996-1-jolsa@kernel.org>
+ <20211205232036.51996-4-jolsa@kernel.org>
+ <Ya3zMZPcrnSc0Szm@osiris>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <163879317819.3988.9390653012838076482.b4-ty@arm.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <Ya3zMZPcrnSc0Szm@osiris>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 06 December 2021 12:19:57 Lorenzo Pieralisi wrote:
-> On Wed, 24 Nov 2021 16:59:38 +0100, Pali Rohár wrote:
-> > This patch series contains various fixes for pci-bridge-emul code.
-> > This code is used only by pci-aardvark.c and pci-mvebu.c drivers.
+On Mon, Dec 06, 2021 at 12:25:37PM +0100, Heiko Carstens wrote:
+> On Mon, Dec 06, 2021 at 12:20:36AM +0100, Jiri Olsa wrote:
+> > Adding ftrace-direct-multi-modify.ko kernel module that uses
+> > modify_ftrace_direct_multi API. The core functionality is taken
+> > from ftrace-direct-modify.ko kernel module and changed to fit
+> > multi direct interface.
 > > 
-> > Pali Rohár (6):
-> >   PCI: pci-bridge-emul: Make expansion ROM Base Address register
-> >     read-only
-> >   PCI: pci-bridge-emul: Properly mark reserved PCIe bits in PCI config
-> >     space
-> >   PCI: pci-bridge-emul: Add definitions for missing capabilities
-> >     registers
-> >   PCI: pci-bridge-emul: Fix definitions of reserved bits
-> >   PCI: pci-bridge-emul: Correctly set PCIe capabilities
-> >   PCI: pci-bridge-emul: Set PCI_STATUS_CAP_LIST for PCIe device
+> > The init function creates kthread that periodically calls
+> > modify_ftrace_direct_multi to change the trampoline address
+> > for the direct ftrace_ops. The ftrace trace_pipe then shows
+> > trace from both trampolines.
 > > 
-> > [...]
+> > Also adding SAMPLE_FTRACE_MULTI_DIRECT to enable build of
+> > direct multi interface sample modules. It's used in Makefile,
+> > but not defined at the moment.
+> > 
+> > Same as for ftrace-direct-multi.ko, the new module is enabled
+> > only for x86_64, so there's no need to ifdef the inlined assembly.
+> > 
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  samples/Kconfig                             |   8 ++
+> >  samples/ftrace/Makefile                     |   1 +
+> >  samples/ftrace/ftrace-direct-multi-modify.c | 105 ++++++++++++++++++++
+> >  3 files changed, 114 insertions(+)
+> >  create mode 100644 samples/ftrace/ftrace-direct-multi-modify.c
 > 
-> Applied to pci/bridge-emul, thanks!
+> I think your series is based on something before 5.16-rc2?
 > 
-> [1/6] PCI: pci-bridge-emul: Make expansion ROM Base Address register read-only
->       https://git.kernel.org/lpieralisi/pci/c/1c1a3b4d3e
-> [2/6] PCI: pci-bridge-emul: Properly mark reserved PCIe bits in PCI config space
->       https://git.kernel.org/lpieralisi/pci/c/7b067ac63a
-> [3/6] PCI: pci-bridge-emul: Add definitions for missing capabilities registers
->       https://git.kernel.org/lpieralisi/pci/c/faa3e547f4
+> Because there are:
+> 503e45108451 ("ftrace/samples: add missing Kconfig option for ftrace direct multi sample")
+> 890e3dc8bb6e ("ftrace/samples: add s390 support for ftrace direct multi sample")
+> 
+> Which would conflict with your patches.
 
-Hello Lorenzo! This patch "PCI: pci-bridge-emul: Add definitions for
-missing capabilities registers" is now in your two different branches:
-pci/bridge-emul and pci/aardvark. Not sure if you want to have this same
-patch on two places... So please check.
+ah so we have some of the changes already.. I'll pick it up,
+rebase and resend
 
-> [4/6] PCI: pci-bridge-emul: Fix definitions of reserved bits
->       https://git.kernel.org/lpieralisi/pci/c/a3ab28a2e3
-> [5/6] PCI: pci-bridge-emul: Correctly set PCIe capabilities
->       https://git.kernel.org/lpieralisi/pci/c/0f7ba81700
-> [6/6] PCI: pci-bridge-emul: Set PCI_STATUS_CAP_LIST for PCIe device
->       https://git.kernel.org/lpieralisi/pci/c/32051099e8
-> 
-> Thanks,
-> Lorenzo
+thanks,
+jirka
+

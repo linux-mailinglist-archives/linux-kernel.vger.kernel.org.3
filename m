@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB3D469F95
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA90469CDF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359520AbhLFPts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:49:48 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49218 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348085AbhLFPdv (ORCPT
+        id S1386708AbhLFP0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:26:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346512AbhLFPRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:33:51 -0500
+        Mon, 6 Dec 2021 10:17:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81472C08ED3E;
+        Mon,  6 Dec 2021 07:10:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98F8A61316;
-        Mon,  6 Dec 2021 15:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C7C1C34900;
-        Mon,  6 Dec 2021 15:30:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E8856132C;
+        Mon,  6 Dec 2021 15:10:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01E0FC341C6;
+        Mon,  6 Dec 2021 15:10:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804621;
-        bh=WEDwQ3wOC3GAroyf5zaiy5t5xDgGyXYmS6IHrZYp6XU=;
+        s=korg; t=1638803454;
+        bh=pC166YA6n24amnNkQtGTNNSNnR3GI8K7nn0VAxxRJGo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wfXHO4x5Og/8zxAp4B33UVaUT6eZ3xGJFtWkms87UXeXFwCkjbpndmNtQlpfGoaOk
-         r0l1E/Gy8O795Rr0CGzJAGE7/bdzTrRutqrwszaKR8K4V2EaWsdS4DeRQidnPdthsT
-         TwTXNm3i3k9WCrvv952GC7jolEbFFyYJ20fAzytI=
+        b=cr1wD3xrEz2mwM3KsxsYvyIfE4xZHxLRA7hH6oRnTqzPXS+3QCtpXui9mhfD3Lecu
+         Nz3ho8wBpVvMk5VV5PQG4mAajeza9kIeHar1xS24AT3WpGCmwEJ9NTUfAfACQ46XBG
+         c4WoXRpQV2Q0ZmKi08g3Zd4wNTV7rydth6zRS/Ik=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
-        Matt Atwood <matthew.s.atwood@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 170/207] Revert "drm/i915: Implement Wa_1508744258"
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
+Subject: [PATCH 4.19 47/48] parisc: Mark cr16 CPU clocksource unstable on all SMP machines
 Date:   Mon,  6 Dec 2021 15:57:04 +0100
-Message-Id: <20211206145616.154001280@linuxfoundation.org>
+Message-Id: <20211206145550.469616314@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+References: <20211206145548.859182340@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,51 +47,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: José Roberto de Souza <jose.souza@intel.com>
+From: Helge Deller <deller@gmx.de>
 
-[ Upstream commit 72641d8d60401a5f1e1a0431ceaf928680d34418 ]
+commit afdb4a5b1d340e4afffc65daa21cc71890d7d589 upstream.
 
-This workarounds are causing hangs, because I missed the fact that it
-needs to be enabled for all cases and disabled when doing a resolve
-pass.
+In commit c8c3735997a3 ("parisc: Enhance detection of synchronous cr16
+clocksources") I assumed that CPUs on the same physical core are syncronous.
+While booting up the kernel on two different C8000 machines, one with a
+dual-core PA8800 and one with a dual-core PA8900 CPU, this turned out to be
+wrong. The symptom was that I saw a jump in the internal clocks printed to the
+syslog and strange overall behaviour.  On machines which have 4 cores (2
+dual-cores) the problem isn't visible, because the current logic already marked
+the cr16 clocksource unstable in this case.
 
-So KMD only needs to whitelist it and UMD will be the one setting it
-on per case.
+This patch now marks the cr16 interval timers unstable if we have more than one
+CPU in the system, and it fixes this issue.
 
-This reverts commit 28ec02c9cbebf3feeaf21a59df9dfbc02bda3362.
-
-Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/4145
-Signed-off-by: José Roberto de Souza <jose.souza@intel.com>
-Fixes: 28ec02c9cbeb ("drm/i915: Implement Wa_1508744258")
-Reviewed-by: Matt Atwood <matthew.s.atwood@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211119140931.32791-1-jose.souza@intel.com
-(cherry picked from commit f3799ff16fcfacd44aee55db162830df461b631f)
-Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: c8c3735997a3 ("parisc: Enhance detection of synchronous cr16 clocksources")
+Signed-off-by: Helge Deller <deller@gmx.de>
+Cc: <stable@vger.kernel.org> # v5.15+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/gt/intel_workarounds.c | 7 -------
- 1 file changed, 7 deletions(-)
+ arch/parisc/kernel/time.c |   24 +++++-------------------
+ 1 file changed, 5 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_workarounds.c b/drivers/gpu/drm/i915/gt/intel_workarounds.c
-index aae609d7d85dd..6b5ab19a2ada9 100644
---- a/drivers/gpu/drm/i915/gt/intel_workarounds.c
-+++ b/drivers/gpu/drm/i915/gt/intel_workarounds.c
-@@ -621,13 +621,6 @@ static void gen12_ctx_workarounds_init(struct intel_engine_cs *engine,
- 	       FF_MODE2_GS_TIMER_MASK,
- 	       FF_MODE2_GS_TIMER_224,
- 	       0, false);
+--- a/arch/parisc/kernel/time.c
++++ b/arch/parisc/kernel/time.c
+@@ -245,27 +245,13 @@ void __init time_init(void)
+ static int __init init_cr16_clocksource(void)
+ {
+ 	/*
+-	 * The cr16 interval timers are not syncronized across CPUs on
+-	 * different sockets, so mark them unstable and lower rating on
+-	 * multi-socket SMP systems.
++	 * The cr16 interval timers are not syncronized across CPUs, even if
++	 * they share the same socket.
+ 	 */
+ 	if (num_online_cpus() > 1 && !running_on_qemu) {
+-		int cpu;
+-		unsigned long cpu0_loc;
+-		cpu0_loc = per_cpu(cpu_data, 0).cpu_loc;
 -
--	/*
--	 * Wa_14012131227:dg1
--	 * Wa_1508744258:tgl,rkl,dg1,adl-s,adl-p
--	 */
--	wa_masked_en(wal, GEN7_COMMON_SLICE_CHICKEN1,
--		     GEN9_RHWO_OPTIMIZATION_DISABLE);
- }
+-		for_each_online_cpu(cpu) {
+-			if (cpu == 0)
+-				continue;
+-			if ((cpu0_loc != 0) &&
+-			    (cpu0_loc == per_cpu(cpu_data, cpu).cpu_loc))
+-				continue;
+-
+-			clocksource_cr16.name = "cr16_unstable";
+-			clocksource_cr16.flags = CLOCK_SOURCE_UNSTABLE;
+-			clocksource_cr16.rating = 0;
+-			break;
+-		}
++		clocksource_cr16.name = "cr16_unstable";
++		clocksource_cr16.flags = CLOCK_SOURCE_UNSTABLE;
++		clocksource_cr16.rating = 0;
+ 	}
  
- static void dg1_ctx_workarounds_init(struct intel_engine_cs *engine,
--- 
-2.33.0
-
+ 	/* XXX: We may want to mark sched_clock stable here if cr16 clocks are
 
 

@@ -2,123 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4600D46A5A2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:26:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C21D046A5A9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348482AbhLFTaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:30:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
+        id S244157AbhLFTcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:32:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348473AbhLFTaE (ORCPT
+        with ESMTP id S1348235AbhLFTcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:30:04 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E7DC061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 11:26:35 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso14924356otf.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 11:26:35 -0800 (PST)
+        Mon, 6 Dec 2021 14:32:01 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AE3C0613F8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 11:28:32 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id v1so47423718edx.2
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 11:28:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dwqTA7sQYf8xpac6AilPkHwdcgSbiu32CvJYi480RsI=;
-        b=FYHtHc5UGLNmKp1G5mrPrFMktid2lyzAT2kpnDND1Zwvg6Z0zoylL7mzLrYceoFnyH
-         on+lGWMozyPcEHjGpe2uTdUGBlivfATLnNV2RphCFvRtv1k0xwXi2uDoVtHgv5Da2Lt2
-         S/bpK0u1xNcsSzVLn4Xxf+3m0NU2b/um74rpkYBXhSSPJANBrQY0UsFtfTLaLui2ylr6
-         DzBvKbrdg9UcvxbGXm7pEm/XMRMQC3e5+3xnWcR+CUp2L1by60biCF54HYNgibEd+Btr
-         ZkxwmJclf02PuSngswN/bj8S+hqDpAfF+d8dTwDILCukgCxiPpxb2vhMguWADDtTZE9b
-         LzlA==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l9ZiLxDRvox/7+7uT5B6r8fj/Ckn8ePdbtP5hmNbGJY=;
+        b=HJjTDHc3UjaUNTPIVOOVnUbpGgCogNDQooWwZ9O/V57A+tP75Hab+RYDHGRpjPTuXn
+         hajCT1NJYhzXYGt78yI9LAiXfGE2dXqqjXIsBJ/vkyvWYhzi218EJ0XKmLXc/5UzttOx
+         eWqFDZgPYDpwRoqIwBy8A+mpsZeMMbhzxrCBk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dwqTA7sQYf8xpac6AilPkHwdcgSbiu32CvJYi480RsI=;
-        b=R5nRTwTosNdS33I1P/I4Y0xS1eAD2JoDVLOW+7P/FvQG/1X3BerYOZriHZQtSf8ki8
-         mnUtpWCIUaOhuP16GiT0M7GTSj1vKpO8BkR6hunjnWyz6/MGWNL0LOvMMuvZpn5ofMCc
-         AIwkH1N3EQOJah/uDStwZdXGXf9KviARZtEltVVyX7eKQ1ftPq/jVsByhziy/Bz42lry
-         pbmPuj8NlLSdqUcnRvoJ1f3LzpLxqA1nCxXxmiQrokQVDITcTcRynlcZmMc03Zis44Xu
-         61+3JaRLAJa35LZzdtXhs+2wNIdjfqfYDfw4b4RnIho12bI5siyTqi5l+WZnOdbQmUIP
-         Vz9Q==
-X-Gm-Message-State: AOAM531Q3jgS4/rEvXGBkH4yflPmBZ6ufe7qwMPWN5MnHud712A0m9Te
-        LdmdvcJokvR6TMAxbpBSkGyfjg==
-X-Google-Smtp-Source: ABdhPJwJL6uhitz9DTb0wdVgXt9MqFimGDKfjzroarL7wqEJVMshws/SxADnwXdThrKiosCkI/kpGg==
-X-Received: by 2002:a9d:6f0e:: with SMTP id n14mr31292882otq.173.1638818794435;
-        Mon, 06 Dec 2021 11:26:34 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id g2sm2677566oic.35.2021.12.06.11.26.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 11:26:33 -0800 (PST)
-Date:   Mon, 6 Dec 2021 13:26:31 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH] rpmsg: core: Clean up resources on announce_create
- failure.
-Message-ID: <Ya5j55sgDNr/sdJW@builder.lan>
-References: <20211206190758.10004-1-arnaud.pouliquen@foss.st.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l9ZiLxDRvox/7+7uT5B6r8fj/Ckn8ePdbtP5hmNbGJY=;
+        b=J8p4dH+G3xCV8uknXrI7CfsiQmYVj+byZE1QTLrArxAQKIl8xYtz8dHKcqvixvBepz
+         fcRPUo8LBpO7VIGYXJ7OOAQ6cn3lMod8c6M2jBZT9UgRYdmo0ryN//KPAhE1rRLp7GCH
+         LdZ6NCyh3X+nkEE5KW+zKxDC6VAFcrzGDzFmcLMMli81uLtKi7nX14KDYu0HXTbMJ7UG
+         7Qt7UlWDexqGZZ+C0RwDerPRgJSgLDIIm1CToKW0DPj0sVnbCENmYcXp/DcOskklnXEU
+         0YvGV0tyE2lbiD27Xne45I8J1TyNkRN5nmXIY4pgTDrLMZUsC4ceG0yn08H9WyYyKtkO
+         sGsg==
+X-Gm-Message-State: AOAM5333/LSECuTMaAzYPGS+oB4ywZYKAKyBxAHQAgjv2RlP2jdN5kTt
+        2aGpPFZs88E9YlzdSp9rFbTP/UnRgQfjoiZR
+X-Google-Smtp-Source: ABdhPJwjT/HjVUcb4yW6QVjlpJ758WjKPbg/E1cwHG1fq09CGBT7BuHKtmbIZz/QTvGZSgfaNJ3zMQ==
+X-Received: by 2002:a17:906:c156:: with SMTP id dp22mr17143166ejc.36.1638818910883;
+        Mon, 06 Dec 2021 11:28:30 -0800 (PST)
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
+        by smtp.gmail.com with ESMTPSA id m6sm8972342edc.36.2021.12.06.11.28.30
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 11:28:30 -0800 (PST)
+Received: by mail-wm1-f45.google.com with SMTP id p27-20020a05600c1d9b00b0033bf8532855so594851wms.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 11:28:30 -0800 (PST)
+X-Received: by 2002:a05:600c:1914:: with SMTP id j20mr730190wmq.26.1638818909838;
+ Mon, 06 Dec 2021 11:28:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206190758.10004-1-arnaud.pouliquen@foss.st.com>
+References: <20211204002301.116139-1-ebiggers@kernel.org> <20211204002301.116139-3-ebiggers@kernel.org>
+In-Reply-To: <20211204002301.116139-3-ebiggers@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 6 Dec 2021 11:28:13 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgJ+6qgbB+WCDosxOgDp34ybncUwPJ5Evo8gcXptfzF+Q@mail.gmail.com>
+Message-ID: <CAHk-=wgJ+6qgbB+WCDosxOgDp34ybncUwPJ5Evo8gcXptfzF+Q@mail.gmail.com>
+Subject: Re: [PATCH 2/2] aio: fix use-after-free due to missing POLLFREE handling
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Benjamin LaHaise <bcrl@kvack.org>, linux-aio@kvack.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ramji Jiyani <ramjiyani@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 06 Dec 13:07 CST 2021, Arnaud Pouliquen wrote:
+On Fri, Dec 3, 2021 at 4:23 PM Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> require another solution.  This solution is for the queue to be cleared
+> before it is freed, using 'wake_up_poll(wq, EPOLLHUP | POLLFREE);'.
 
-> During the rpmsg_dev_probe, if rpdev->ops->announce_create returns an
-> error, the rpmsg device and default endpoint should be freed before
-> exiting the function.
-> 
-> Fixes: 5e619b48677c ("rpmsg: Split rpmsg core and virtio backend")
-> Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Ugh.
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+I hate POLLFREE, and the more I look at this, the more I think it's broken.
 
-Thanks,
-Bjorn
+And that
 
-> ---
->  drivers/rpmsg/rpmsg_core.c | 20 ++++++++++++++++----
->  1 file changed, 16 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-> index 27aad6baf7c5..12d7b7c6e5f9 100644
-> --- a/drivers/rpmsg/rpmsg_core.c
-> +++ b/drivers/rpmsg/rpmsg_core.c
-> @@ -612,13 +612,25 @@ static int rpmsg_dev_probe(struct device *dev)
->  	err = rpdrv->probe(rpdev);
->  	if (err) {
->  		dev_err(dev, "%s: failed: %d\n", __func__, err);
-> -		if (ept)
-> -			rpmsg_destroy_ept(ept);
-> -		goto out;
-> +		goto destroy_ept;
->  	}
->  
-> -	if (ept && rpdev->ops->announce_create)
-> +	if (ept && rpdev->ops->announce_create) {
->  		err = rpdev->ops->announce_create(rpdev);
-> +		if (err) {
-> +			dev_err(dev, "failed to announce creation\n");
-> +			goto remove_rpdev;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +
-> +remove_rpdev:
-> +	if (rpdrv->remove)
-> +		rpdrv->remove(rpdev);
-> +destroy_ept:
-> +	if (ept)
-> +		rpmsg_destroy_ept(ept);
->  out:
->  	return err;
->  }
-> -- 
-> 2.17.1
-> 
+        wake_up_poll(wq, EPOLLHUP | POLLFREE);
+
+in particular looks broken - the intent is that it should remove all
+the wait queue entries (because the wait queue head is going away),
+but wake_up_poll() iself actually does
+
+        __wake_up(x, TASK_NORMAL, 1, poll_to_key(m))
+
+where that '1' is the number of exclusive entries it will wake up.
+
+So if there are two exclusive waiters, wake_up_poll() will simply stop
+waking things up after the first one.
+
+Which defeats the whole POLLFREE thing too.
+
+Maybe I'm missing something, but POLLFREE really is broken.
+
+I'd argue that all of epoll() is broken, but I guess we're stuck with it.
+
+Now, it's very possible that nobody actually uses exclusive waits for
+those wait queues, and my "nr_exclusive" argument is about something
+that isn't actually a bug in reality. But I think it's a sign of
+confusion, and it's just another issue with POLLFREE.
+
+I really wish we could have some way to not have epoll and aio mess
+with the wait-queue lists and cache the wait queue head pointers that
+they don't own.
+
+In the meantime, I don't think these patches make things worse, and
+they may fix things. But see above about "nr_exclusive" and how I
+think wait queue entries might end up avoiding POLLFREE handling..
+
+                  Linus

@@ -2,47 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B56469AAA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:06:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9BE469B7E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:14:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345871AbhLFPJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:09:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346788AbhLFPHe (ORCPT
+        id S1356553AbhLFPRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:17:41 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43734 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347167AbhLFPL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:07:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7E5C08E845;
-        Mon,  6 Dec 2021 07:03:21 -0800 (PST)
+        Mon, 6 Dec 2021 10:11:28 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE8086131F;
-        Mon,  6 Dec 2021 15:03:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF6EFC341C1;
-        Mon,  6 Dec 2021 15:03:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E32EFB810AC;
+        Mon,  6 Dec 2021 15:07:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E277C341C6;
+        Mon,  6 Dec 2021 15:07:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803000;
-        bh=g5vzduTfSGynRVeX59VVaxoshbzTsTbElMLPzfqW/JI=;
+        s=korg; t=1638803275;
+        bh=F8ScSE/g0ifcwkrTXQw+13vvRCUtp4sF93kcFMa8mDA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fNoZ3fpeNtS52QQILd9qZF2R+hSKeTxgU86f7cyD1v/vDewfhHm1DYjNGAAchIsao
-         OF7gD9xR9lGfNQ9E3t0bSuYxP4dBxplG/cH978CDgKXHOSg2VeV0KzH3tgC01i97zO
-         FsYQae7f9qR8dbbWNy1qQxriXQaTNsxGcj0Bixb8=
+        b=HeAVfuHH5Jo8JR0yMb0iPMcBynLRb1BeMm0rrRp9wh8sOdbstD3VY4uk9X1w5cuWz
+         WpPTdq+yNUESmigzw6+dAxTlnSHQ/96Wa6aRqNC4CNyAgTIeqhJzhowP/zfmUM8s7d
+         nrdQCHxzE7wL2Fujy2Zrim72Vm8XV+2RNgErnpR0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.9 56/62] siphash: use _unaligned version by default
+        stable@vger.kernel.org, Benjamin Poirier <bpoirier@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.14 091/106] net: mpls: Fix notifications when deleting a device
 Date:   Mon,  6 Dec 2021 15:56:39 +0100
-Message-Id: <20211206145551.140729163@linuxfoundation.org>
+Message-Id: <20211206145558.667394843@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,185 +45,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Benjamin Poirier <bpoirier@nvidia.com>
 
-commit f7e5b9bfa6c8820407b64eabc1f29c9a87e8993d upstream.
+commit 7d4741eacdefa5f0475431645b56baf00784df1f upstream.
 
-On ARM v6 and later, we define CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
-because the ordinary load/store instructions (ldr, ldrh, ldrb) can
-tolerate any misalignment of the memory address. However, load/store
-double and load/store multiple instructions (ldrd, ldm) may still only
-be used on memory addresses that are 32-bit aligned, and so we have to
-use the CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS macro with care, or we
-may end up with a severe performance hit due to alignment traps that
-require fixups by the kernel. Testing shows that this currently happens
-with clang-13 but not gcc-11. In theory, any compiler version can
-produce this bug or other problems, as we are dealing with undefined
-behavior in C99 even on architectures that support this in hardware,
-see also https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100363.
+There are various problems related to netlink notifications for mpls route
+changes in response to interfaces being deleted:
+* delete interface of only nexthop
+	DELROUTE notification is missing RTA_OIF attribute
+* delete interface of non-last nexthop
+	NEWROUTE notification is missing entirely
+* delete interface of last nexthop
+	DELROUTE notification is missing nexthop
 
-Fortunately, the get_unaligned() accessors do the right thing: when
-building for ARMv6 or later, the compiler will emit unaligned accesses
-using the ordinary load/store instructions (but avoid the ones that
-require 32-bit alignment). When building for older ARM, those accessors
-will emit the appropriate sequence of ldrb/mov/orr instructions. And on
-architectures that can truly tolerate any kind of misalignment, the
-get_unaligned() accessors resolve to the leXX_to_cpup accessors that
-operate on aligned addresses.
+All of these problems stem from the fact that existing routes are modified
+in-place before sending a notification. Restructure mpls_ifdown() to avoid
+changing the route in the DELROUTE cases and to create a copy in the
+NEWROUTE case.
 
-Since the compiler will in fact emit ldrd or ldm instructions when
-building this code for ARM v6 or later, the solution is to use the
-unaligned accessors unconditionally on architectures where this is
-known to be fast. The _aligned version of the hash function is
-however still needed to get the best performance on architectures
-that cannot do any unaligned access in hardware.
-
-This new version avoids the undefined behavior and should produce
-the fastest hash on all architectures we support.
-
-Link: https://lore.kernel.org/linux-arm-kernel/20181008211554.5355-4-ard.biesheuvel@linaro.org/
-Link: https://lore.kernel.org/linux-crypto/CAK8P3a2KfmmGDbVHULWevB0hv71P2oi2ZCHEAqT=8dQfa0=cqQ@mail.gmail.com/
-Reported-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Fixes: 2c956a60778c ("siphash: add cryptographically secure PRF")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: f8efb73c97e2 ("mpls: multipath route support")
+Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/siphash.h |   14 ++++----------
- lib/siphash.c           |   12 ++++++------
- 2 files changed, 10 insertions(+), 16 deletions(-)
+ net/mpls/af_mpls.c |   68 ++++++++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 52 insertions(+), 16 deletions(-)
 
---- a/include/linux/siphash.h
-+++ b/include/linux/siphash.h
-@@ -27,9 +27,7 @@ static inline bool siphash_key_is_zero(c
+--- a/net/mpls/af_mpls.c
++++ b/net/mpls/af_mpls.c
+@@ -1407,22 +1407,52 @@ static void mpls_dev_destroy_rcu(struct
+ 	kfree(mdev);
  }
  
- u64 __siphash_aligned(const void *data, size_t len, const siphash_key_t *key);
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u64 __siphash_unaligned(const void *data, size_t len, const siphash_key_t *key);
--#endif
- 
- u64 siphash_1u64(const u64 a, const siphash_key_t *key);
- u64 siphash_2u64(const u64 a, const u64 b, const siphash_key_t *key);
-@@ -82,10 +80,9 @@ static inline u64 ___siphash_aligned(con
- static inline u64 siphash(const void *data, size_t len,
- 			  const siphash_key_t *key)
+-static void mpls_ifdown(struct net_device *dev, int event)
++static int mpls_ifdown(struct net_device *dev, int event)
  {
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
--	if (!IS_ALIGNED((unsigned long)data, SIPHASH_ALIGNMENT))
-+	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
-+	    !IS_ALIGNED((unsigned long)data, SIPHASH_ALIGNMENT))
- 		return __siphash_unaligned(data, len, key);
--#endif
- 	return ___siphash_aligned(data, len, key);
+ 	struct mpls_route __rcu **platform_label;
+ 	struct net *net = dev_net(dev);
+-	u8 alive, deleted;
+ 	unsigned index;
+ 
+ 	platform_label = rtnl_dereference(net->mpls.platform_label);
+ 	for (index = 0; index < net->mpls.platform_labels; index++) {
+ 		struct mpls_route *rt = rtnl_dereference(platform_label[index]);
++		bool nh_del = false;
++		u8 alive = 0;
+ 
+ 		if (!rt)
+ 			continue;
+ 
+-		alive = 0;
+-		deleted = 0;
++		if (event == NETDEV_UNREGISTER) {
++			u8 deleted = 0;
++
++			for_nexthops(rt) {
++				struct net_device *nh_dev =
++					rtnl_dereference(nh->nh_dev);
++
++				if (!nh_dev || nh_dev == dev)
++					deleted++;
++				if (nh_dev == dev)
++					nh_del = true;
++			} endfor_nexthops(rt);
++
++			/* if there are no more nexthops, delete the route */
++			if (deleted == rt->rt_nhn) {
++				mpls_route_update(net, index, NULL, NULL);
++				continue;
++			}
++
++			if (nh_del) {
++				size_t size = sizeof(*rt) + rt->rt_nhn *
++					rt->rt_nh_size;
++				struct mpls_route *orig = rt;
++
++				rt = kmalloc(size, GFP_KERNEL);
++				if (!rt)
++					return -ENOMEM;
++				memcpy(rt, orig, size);
++			}
++		}
++
+ 		change_nexthops(rt) {
+ 			unsigned int nh_flags = nh->nh_flags;
+ 
+@@ -1446,16 +1476,15 @@ static void mpls_ifdown(struct net_devic
+ next:
+ 			if (!(nh_flags & (RTNH_F_DEAD | RTNH_F_LINKDOWN)))
+ 				alive++;
+-			if (!rtnl_dereference(nh->nh_dev))
+-				deleted++;
+ 		} endfor_nexthops(rt);
+ 
+ 		WRITE_ONCE(rt->rt_nhn_alive, alive);
+ 
+-		/* if there are no more nexthops, delete the route */
+-		if (event == NETDEV_UNREGISTER && deleted == rt->rt_nhn)
+-			mpls_route_update(net, index, NULL, NULL);
++		if (nh_del)
++			mpls_route_update(net, index, rt, NULL);
+ 	}
++
++	return 0;
  }
  
-@@ -96,10 +93,8 @@ typedef struct {
+ static void mpls_ifup(struct net_device *dev, unsigned int flags)
+@@ -1519,8 +1548,12 @@ static int mpls_dev_notify(struct notifi
+ 		return NOTIFY_OK;
  
- u32 __hsiphash_aligned(const void *data, size_t len,
- 		       const hsiphash_key_t *key);
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u32 __hsiphash_unaligned(const void *data, size_t len,
- 			 const hsiphash_key_t *key);
--#endif
- 
- u32 hsiphash_1u32(const u32 a, const hsiphash_key_t *key);
- u32 hsiphash_2u32(const u32 a, const u32 b, const hsiphash_key_t *key);
-@@ -135,10 +130,9 @@ static inline u32 ___hsiphash_aligned(co
- static inline u32 hsiphash(const void *data, size_t len,
- 			   const hsiphash_key_t *key)
- {
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
--	if (!IS_ALIGNED((unsigned long)data, HSIPHASH_ALIGNMENT))
-+	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
-+	    !IS_ALIGNED((unsigned long)data, HSIPHASH_ALIGNMENT))
- 		return __hsiphash_unaligned(data, len, key);
--#endif
- 	return ___hsiphash_aligned(data, len, key);
- }
- 
---- a/lib/siphash.c
-+++ b/lib/siphash.c
-@@ -49,6 +49,7 @@
- 	SIPROUND; \
- 	return (v0 ^ v1) ^ (v2 ^ v3);
- 
-+#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u64 __siphash_aligned(const void *data, size_t len, const siphash_key_t *key)
- {
- 	const u8 *end = data + len - (len % sizeof(u64));
-@@ -80,8 +81,8 @@ u64 __siphash_aligned(const void *data,
- 	POSTAMBLE
- }
- EXPORT_SYMBOL(__siphash_aligned);
-+#endif
- 
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u64 __siphash_unaligned(const void *data, size_t len, const siphash_key_t *key)
- {
- 	const u8 *end = data + len - (len % sizeof(u64));
-@@ -113,7 +114,6 @@ u64 __siphash_unaligned(const void *data
- 	POSTAMBLE
- }
- EXPORT_SYMBOL(__siphash_unaligned);
--#endif
- 
- /**
-  * siphash_1u64 - compute 64-bit siphash PRF value of a u64
-@@ -250,6 +250,7 @@ EXPORT_SYMBOL(siphash_3u32);
- 	HSIPROUND; \
- 	return (v0 ^ v1) ^ (v2 ^ v3);
- 
-+#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u32 __hsiphash_aligned(const void *data, size_t len, const hsiphash_key_t *key)
- {
- 	const u8 *end = data + len - (len % sizeof(u64));
-@@ -280,8 +281,8 @@ u32 __hsiphash_aligned(const void *data,
- 	HPOSTAMBLE
- }
- EXPORT_SYMBOL(__hsiphash_aligned);
-+#endif
- 
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u32 __hsiphash_unaligned(const void *data, size_t len,
- 			 const hsiphash_key_t *key)
- {
-@@ -313,7 +314,6 @@ u32 __hsiphash_unaligned(const void *dat
- 	HPOSTAMBLE
- }
- EXPORT_SYMBOL(__hsiphash_unaligned);
--#endif
- 
- /**
-  * hsiphash_1u32 - compute 64-bit hsiphash PRF value of a u32
-@@ -418,6 +418,7 @@ EXPORT_SYMBOL(hsiphash_4u32);
- 	HSIPROUND; \
- 	return v1 ^ v3;
- 
-+#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u32 __hsiphash_aligned(const void *data, size_t len, const hsiphash_key_t *key)
- {
- 	const u8 *end = data + len - (len % sizeof(u32));
-@@ -438,8 +439,8 @@ u32 __hsiphash_aligned(const void *data,
- 	HPOSTAMBLE
- }
- EXPORT_SYMBOL(__hsiphash_aligned);
-+#endif
- 
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u32 __hsiphash_unaligned(const void *data, size_t len,
- 			 const hsiphash_key_t *key)
- {
-@@ -461,7 +462,6 @@ u32 __hsiphash_unaligned(const void *dat
- 	HPOSTAMBLE
- }
- EXPORT_SYMBOL(__hsiphash_unaligned);
--#endif
- 
- /**
-  * hsiphash_1u32 - compute 32-bit hsiphash PRF value of a u32
+ 	switch (event) {
++		int err;
++
+ 	case NETDEV_DOWN:
+-		mpls_ifdown(dev, event);
++		err = mpls_ifdown(dev, event);
++		if (err)
++			return notifier_from_errno(err);
+ 		break;
+ 	case NETDEV_UP:
+ 		flags = dev_get_flags(dev);
+@@ -1531,13 +1564,18 @@ static int mpls_dev_notify(struct notifi
+ 		break;
+ 	case NETDEV_CHANGE:
+ 		flags = dev_get_flags(dev);
+-		if (flags & (IFF_RUNNING | IFF_LOWER_UP))
++		if (flags & (IFF_RUNNING | IFF_LOWER_UP)) {
+ 			mpls_ifup(dev, RTNH_F_DEAD | RTNH_F_LINKDOWN);
+-		else
+-			mpls_ifdown(dev, event);
++		} else {
++			err = mpls_ifdown(dev, event);
++			if (err)
++				return notifier_from_errno(err);
++		}
+ 		break;
+ 	case NETDEV_UNREGISTER:
+-		mpls_ifdown(dev, event);
++		err = mpls_ifdown(dev, event);
++		if (err)
++			return notifier_from_errno(err);
+ 		mdev = mpls_dev_get(dev);
+ 		if (mdev) {
+ 			mpls_dev_sysctl_unregister(dev, mdev);
+@@ -1548,8 +1586,6 @@ static int mpls_dev_notify(struct notifi
+ 	case NETDEV_CHANGENAME:
+ 		mdev = mpls_dev_get(dev);
+ 		if (mdev) {
+-			int err;
+-
+ 			mpls_dev_sysctl_unregister(dev, mdev);
+ 			err = mpls_dev_sysctl_register(dev, mdev);
+ 			if (err)
 
 

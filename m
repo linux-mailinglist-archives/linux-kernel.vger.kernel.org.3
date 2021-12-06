@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D56CD469DA9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB7C469BF2
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387686AbhLFPbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:31:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358684AbhLFPTk (ORCPT
+        id S1357363AbhLFPS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:18:57 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33414 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345903AbhLFPMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:19:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A3CC0698D1;
-        Mon,  6 Dec 2021 07:13:51 -0800 (PST)
+        Mon, 6 Dec 2021 10:12:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4CC2612DB;
-        Mon,  6 Dec 2021 15:13:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADD4CC341C1;
-        Mon,  6 Dec 2021 15:13:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73BB06130D;
+        Mon,  6 Dec 2021 15:09:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F7CCC341C2;
+        Mon,  6 Dec 2021 15:09:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803630;
-        bh=Deu1GMJmchFX9Y13+caJe0ysu1S53HHLqp6oMvQG3zY=;
+        s=korg; t=1638803364;
+        bh=SeSMkjyRDpZNWnCMn+xyOsw1I7EY6CpDakkWDcHl04Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z9zA1bZe/46rGSlGMWI3ufQrApUonuQ+ZOtrLPMLq2ksn1q66XZ9cU5MvsdbZlQvk
-         g/D1TO24AJcimI9eOvgvEsLuDR8XHVYF2TihdFgF4JIj04R7oLJVMkwbAVEnB8wXvQ
-         4WpXK/rU93zpVR2vv2fUOll2Mj6DtrT11HXpD+po=
+        b=YSuCX/9f7eA+zGy4EsZpfJmoYnBxWMAbORIM4c/xHuoQu39Of4yFMa/InpNdKv2Ps
+         XoHb9HzWrfIh4x3+3cSzWTFIwR1uw7foVcDG4wDlDKuSEBawHzwBkMGwxuiO8zYTu9
+         QmRQC7omD29M69oFP946nOpbZEVV1QKyM/nZNlEI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jann Horn <jannh@google.com>
-Subject: [PATCH 5.4 29/70] fget: check that the fd still exists after getting a ref to it
+        stable@vger.kernel.org, Ian Rogers <irogers@google.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Stephane Eranian <eranian@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 16/48] perf hist: Fix memory leak of a perf_hpp_fmt
 Date:   Mon,  6 Dec 2021 15:56:33 +0100
-Message-Id: <20211206145552.929775417@linuxfoundation.org>
+Message-Id: <20211206145549.406267278@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
-References: <20211206145551.909846023@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+References: <20211206145548.859182340@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,63 +53,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Ian Rogers <irogers@google.com>
 
-commit 054aa8d439b9185d4f5eb9a90282d1ce74772969 upstream.
+[ Upstream commit 0ca1f534a776cc7d42f2c33da4732b74ec2790cd ]
 
-Jann Horn points out that there is another possible race wrt Unix domain
-socket garbage collection, somewhat reminiscent of the one fixed in
-commit cbcf01128d0a ("af_unix: fix garbage collect vs MSG_PEEK").
+perf_hpp__column_unregister() removes an entry from a list but doesn't
+free the memory causing a memory leak spotted by leak sanitizer.
 
-See the extended comment about the garbage collection requirements added
-to unix_peek_fds() by that commit for details.
+Add the free while at the same time reducing the scope of the function
+to static.
 
-The race comes from how we can locklessly look up a file descriptor just
-as it is in the process of being closed, and with the right artificial
-timing (Jann added a few strategic 'mdelay(500)' calls to do that), the
-Unix domain socket garbage collector could see the reference count
-decrement of the close() happen before fget() took its reference to the
-file and the file was attached onto a new file descriptor.
-
-This is all (intentionally) correct on the 'struct file *' side, with
-RCU lookups and lockless reference counting very much part of the
-design.  Getting that reference count out of order isn't a problem per
-se.
-
-But the garbage collector can get confused by seeing this situation of
-having seen a file not having any remaining external references and then
-seeing it being attached to an fd.
-
-In commit cbcf01128d0a ("af_unix: fix garbage collect vs MSG_PEEK") the
-fix was to serialize the file descriptor install with the garbage
-collector by taking and releasing the unix_gc_lock.
-
-That's not really an option here, but since this all happens when we are
-in the process of looking up a file descriptor, we can instead simply
-just re-check that the file hasn't been closed in the meantime, and just
-re-do the lookup if we raced with a concurrent close() of the same file
-descriptor.
-
-Reported-and-tested-by: Jann Horn <jannh@google.com>
-Acked-by: Miklos Szeredi <mszeredi@redhat.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Ian Rogers <irogers@google.com>
+Reviewed-by: Kajol Jain <kjain@linux.ibm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Stephane Eranian <eranian@google.com>
+Link: http://lore.kernel.org/lkml/20211118071247.2140392-1-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/file.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ tools/perf/ui/hist.c   | 28 ++++++++++++++--------------
+ tools/perf/util/hist.h |  1 -
+ 2 files changed, 14 insertions(+), 15 deletions(-)
 
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -723,6 +723,10 @@ loop:
- 			file = NULL;
- 		else if (!get_file_rcu_many(file, refs))
- 			goto loop;
-+		else if (__fcheck_files(files, fd) != file) {
-+			fput_many(file, refs);
-+			goto loop;
-+		}
- 	}
- 	rcu_read_unlock();
+diff --git a/tools/perf/ui/hist.c b/tools/perf/ui/hist.c
+index fe3dfaa64a916..4afb63cea41b9 100644
+--- a/tools/perf/ui/hist.c
++++ b/tools/perf/ui/hist.c
+@@ -468,6 +468,18 @@ struct perf_hpp_list perf_hpp_list = {
+ #undef __HPP_SORT_ACC_FN
+ #undef __HPP_SORT_RAW_FN
  
++static void fmt_free(struct perf_hpp_fmt *fmt)
++{
++	/*
++	 * At this point fmt should be completely
++	 * unhooked, if not it's a bug.
++	 */
++	BUG_ON(!list_empty(&fmt->list));
++	BUG_ON(!list_empty(&fmt->sort_list));
++
++	if (fmt->free)
++		fmt->free(fmt);
++}
+ 
+ void perf_hpp__init(void)
+ {
+@@ -531,9 +543,10 @@ void perf_hpp_list__prepend_sort_field(struct perf_hpp_list *list,
+ 	list_add(&format->sort_list, &list->sorts);
+ }
+ 
+-void perf_hpp__column_unregister(struct perf_hpp_fmt *format)
++static void perf_hpp__column_unregister(struct perf_hpp_fmt *format)
+ {
+ 	list_del_init(&format->list);
++	fmt_free(format);
+ }
+ 
+ void perf_hpp__cancel_cumulate(void)
+@@ -605,19 +618,6 @@ void perf_hpp__append_sort_keys(struct perf_hpp_list *list)
+ }
+ 
+ 
+-static void fmt_free(struct perf_hpp_fmt *fmt)
+-{
+-	/*
+-	 * At this point fmt should be completely
+-	 * unhooked, if not it's a bug.
+-	 */
+-	BUG_ON(!list_empty(&fmt->list));
+-	BUG_ON(!list_empty(&fmt->sort_list));
+-
+-	if (fmt->free)
+-		fmt->free(fmt);
+-}
+-
+ void perf_hpp__reset_output_field(struct perf_hpp_list *list)
+ {
+ 	struct perf_hpp_fmt *fmt, *tmp;
+diff --git a/tools/perf/util/hist.h b/tools/perf/util/hist.h
+index 7173e1f410930..899c1ca5e7dce 100644
+--- a/tools/perf/util/hist.h
++++ b/tools/perf/util/hist.h
+@@ -346,7 +346,6 @@ enum {
+ };
+ 
+ void perf_hpp__init(void);
+-void perf_hpp__column_unregister(struct perf_hpp_fmt *format);
+ void perf_hpp__cancel_cumulate(void);
+ void perf_hpp__setup_output_field(struct perf_hpp_list *list);
+ void perf_hpp__reset_output_field(struct perf_hpp_list *list);
+-- 
+2.33.0
+
 
 

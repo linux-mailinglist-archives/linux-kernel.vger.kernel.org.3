@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99EBB469CFA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2FB2469A5D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386617AbhLFP0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:26:48 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36460 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347767AbhLFPRZ (ORCPT
+        id S1346168AbhLFPHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:07:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344956AbhLFPE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:17:25 -0500
+        Mon, 6 Dec 2021 10:04:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9F7C0698D3;
+        Mon,  6 Dec 2021 07:01:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60DC06134B;
-        Mon,  6 Dec 2021 15:13:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 440F0C341C5;
-        Mon,  6 Dec 2021 15:13:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B12E061322;
+        Mon,  6 Dec 2021 15:00:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99F54C341C2;
+        Mon,  6 Dec 2021 15:00:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803635;
-        bh=ohFr6CkPRRj1nsr4hi0r+BAAWbERw9tYTaXjFmTPq4E=;
+        s=korg; t=1638802859;
+        bh=tzrRvf/+l3VoRpurkwVSnZigQa5kJGOJkaBpcQq8KpQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gmit5fxxWKoUOEcmXfZWRFObTcSkfy/w5kAiUczHypRWhXT15TaR7bVJPZfBQ1900
-         DzYfLv1E8OBBfrdhgWovRHsjtMGRWSQKFJ0g2geYNG9EVgl4oA7pjtMnoi3ppNDaxa
-         WJI7oyHyGJfOovcfM4IbaOuRyU4ANwcFjgsDE0io=
+        b=DZgrcwjQ3S2W+JFbYWrwMW4YiZxPy2WgnFVHh3CenQlkyoN3Kwch2fKLh3uy4boCR
+         9eO3kUOSHRDB2RnHEppi3cIGUqkhVRQQndFrP86D2E9QjB2xP9Rw59dNAukRZgeFK5
+         dXQ1GH1/S4HNwgONx8tkUdja0Kfdg60KzDfgZ0MU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [PATCH 5.4 31/70] sata_fsl: fix warning in remove_proc_entry when rmmod sata_fsl
+        stable@vger.kernel.org, Sven Eckelmann <sven@narfation.org>
+Subject: [PATCH 4.4 51/52] tty: serial: msm_serial: Deactivate RX DMA for polling support
 Date:   Mon,  6 Dec 2021 15:56:35 +0100
-Message-Id: <20211206145552.997662162@linuxfoundation.org>
+Message-Id: <20211206145549.633835750@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
-References: <20211206145551.909846023@linuxfoundation.org>
+In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
+References: <20211206145547.892668902@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,78 +47,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baokun Li <libaokun1@huawei.com>
+From: Sven Eckelmann <sven@narfation.org>
 
-commit 6f48394cf1f3e8486591ad98c11cdadb8f1ef2ad upstream.
+commit 7492ffc90fa126afb67d4392d56cb4134780194a upstream.
 
-Trying to remove the fsl-sata module in the PPC64 GNU/Linux
-leads to the following warning:
- ------------[ cut here ]------------
- remove_proc_entry: removing non-empty directory 'irq/69',
-   leaking at least 'fsl-sata[ff0221000.sata]'
- WARNING: CPU: 3 PID: 1048 at fs/proc/generic.c:722
-   .remove_proc_entry+0x20c/0x220
- IRQMASK: 0
- NIP [c00000000033826c] .remove_proc_entry+0x20c/0x220
- LR [c000000000338268] .remove_proc_entry+0x208/0x220
- Call Trace:
-  .remove_proc_entry+0x208/0x220 (unreliable)
-  .unregister_irq_proc+0x104/0x140
-  .free_desc+0x44/0xb0
-  .irq_free_descs+0x9c/0xf0
-  .irq_dispose_mapping+0x64/0xa0
-  .sata_fsl_remove+0x58/0xa0 [sata_fsl]
-  .platform_drv_remove+0x40/0x90
-  .device_release_driver_internal+0x160/0x2c0
-  .driver_detach+0x64/0xd0
-  .bus_remove_driver+0x70/0xf0
-  .driver_unregister+0x38/0x80
-  .platform_driver_unregister+0x14/0x30
-  .fsl_sata_driver_exit+0x18/0xa20 [sata_fsl]
- ---[ end trace 0ea876d4076908f5 ]---
+The CONSOLE_POLLING mode is used for tools like k(g)db. In this kind of
+setup, it is often sharing a serial device with the normal system console.
+This is usually no problem because the polling helpers can consume input
+values directly (when in kgdb context) and the normal Linux handlers can
+only consume new input values after kgdb switched back.
 
-The driver creates the mapping by calling irq_of_parse_and_map(),
-so it also has to dispose the mapping. But the easy way out is to
-simply use platform_get_irq() instead of irq_of_parse_map(). Also
-we should adapt return value checking and propagate error values.
+This is not true anymore when RX DMA is enabled for UARTDM controllers.
+Single input values can no longer be received correctly. Instead following
+seems to happen:
 
-In this case the mapping is not managed by the device but by
-the of core, so the device has not to dispose the mapping.
+* on 1. input, some old input is read (continuously)
+* on 2. input, two old inputs are read (continuously)
+* on 3. input, three old input values are read (continuously)
+* on 4. input, 4 previous inputs are received
 
-Fixes: faf0b2e5afe7 ("drivers/ata: add support to Freescale 3.0Gbps SATA Controller")
+This repeats then for each group of 4 input values.
+
+This behavior changes slightly depending on what state the controller was
+when the first input was received. But this makes working with kgdb
+basically impossible because control messages are always corrupted when
+kgdboc tries to parse them.
+
+RX DMA should therefore be off when CONSOLE_POLLING is enabled to avoid
+these kind of problems. No such problem was noticed for TX DMA.
+
+Fixes: 99693945013a ("tty: serial: msm: Add RX DMA support")
 Cc: stable@vger.kernel.org
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
-Reviewed-by: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+Link: https://lore.kernel.org/r/20211113121050.7266-1-sven@narfation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ata/sata_fsl.c |    8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/tty/serial/msm_serial.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/ata/sata_fsl.c
-+++ b/drivers/ata/sata_fsl.c
-@@ -1490,9 +1490,9 @@ static int sata_fsl_probe(struct platfor
- 	host_priv->ssr_base = ssr_base;
- 	host_priv->csr_base = csr_base;
+--- a/drivers/tty/serial/msm_serial.c
++++ b/drivers/tty/serial/msm_serial.c
+@@ -446,6 +446,9 @@ static void msm_start_rx_dma(struct msm_
+ 	u32 val;
+ 	int ret;
  
--	irq = irq_of_parse_and_map(ofdev->dev.of_node, 0);
--	if (!irq) {
--		dev_err(&ofdev->dev, "invalid irq from platform\n");
-+	irq = platform_get_irq(ofdev, 0);
-+	if (irq < 0) {
-+		retval = irq;
- 		goto error_exit_with_cleanup;
- 	}
- 	host_priv->irq = irq;
-@@ -1567,8 +1567,6 @@ static int sata_fsl_remove(struct platfo
- 
- 	ata_host_detach(host);
- 
--	irq_dispose_mapping(host_priv->irq);
--
- 	return 0;
- }
++	if (IS_ENABLED(CONFIG_CONSOLE_POLL))
++		return;
++
+ 	if (!dma->chan)
+ 		return;
  
 
 

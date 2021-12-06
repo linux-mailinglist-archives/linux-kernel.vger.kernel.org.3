@@ -2,178 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C3E146AADD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:46:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBF946AAEE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353057AbhLFVuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:50:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53664 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1353447AbhLFVuP (ORCPT
+        id S1352983AbhLFVvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:51:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39242 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352779AbhLFVvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:50:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638827205;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XD7Nb7Clb95GARwOtJlUClbhUySnCjxtvaRAf+MfT8g=;
-        b=eeHNXCS5U012FeAbEIT6fKQLYgBI76AZkKF0GIEwXwvtD4huTC6w2ZruAhSMKt4KhOgUX+
-        iA6K2Vt3+i85RIqtDBj8uIC+L6WeWHXUWYdk6XT7i8lK+jU/5qezqRazXLCN0ve5Cbni6b
-        RAgN2iRsEm20b71JX/tq/rCJwv5A6L4=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-335-0fSRCGZiPGS0iMntzUQQiA-1; Mon, 06 Dec 2021 16:46:44 -0500
-X-MC-Unique: 0fSRCGZiPGS0iMntzUQQiA-1
-Received: by mail-ed1-f70.google.com with SMTP id y9-20020aa7c249000000b003e7bf7a1579so9500160edo.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 13:46:44 -0800 (PST)
+        Mon, 6 Dec 2021 16:51:52 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934A4C0613F8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 13:48:23 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id x6so48552021edr.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 13:48:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6Eip2d/hVRGSLRlvh3UtzxqF3/zCUzzqztI5oHT+KdI=;
+        b=EvMTxmIsfoaSzvFvf70bWgCu1ARC+fwDYdQj+lqJZ4N07cj76CSqLJjaGNO12txDXp
+         j6FhDV5fNm0g3TyHS8kLuH03PC5FU4DT0JuLNC1qxdJuQnoGrNKGDEDPhHLKwutb/RJm
+         bgB4KLujTRxMH5a9X/em6adrlxpsOgxMiornk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XD7Nb7Clb95GARwOtJlUClbhUySnCjxtvaRAf+MfT8g=;
-        b=2XYmVKe8b71Jtjy6alfiMnrYEgpJudnhrqwKnFLMB+xE44LRle3IBe377DpYJD6JCv
-         sffmPbMDAUfIc1ms3sZxcDfsgR7RtAW/vIlAEtyJrn74DYCg3QvKJGskq9v3jiUhJgq5
-         W0avun+9cpNP9NQDN27UakzUFL9MZuDRy1NiiJadpHlDkC8EmLkiMEIoFLhusUL+60sq
-         unOv7ZNHCCuXWXGD2R30exk0G2Ft+fWTXOBVyVHQqrvRHea1C+XMjt5kUQPDdDWQOaPK
-         +ZGVeNQUjCiu985yW9j77v8E5AIgtolW2z6ymSEpjjQm4KX48ohaEAdihS5tzMsV/lDF
-         FDFQ==
-X-Gm-Message-State: AOAM531mBCfpioTMebsWymePp2wtOu3FN7nE3XiEfT+7hFUu9xd3gchQ
-        h8lJ0zhQyJ36X92GlvPJcCBEVUsIN7sNojmEw66HepI+iesP5pmI80OoG3IUViRXcT+cXY7WSAB
-        pc45ogZs76f/3javlICCsBgVO
-X-Received: by 2002:a17:906:4787:: with SMTP id cw7mr51624549ejc.311.1638827203294;
-        Mon, 06 Dec 2021 13:46:43 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw4f2WW8YPhyWFg5/uoyC3KUk6k0aakXD8ww8CSE0oZjb95JLyqnZj9joGInxQhM8NA1Ex+gQ==
-X-Received: by 2002:a17:906:4787:: with SMTP id cw7mr51624512ejc.311.1638827202988;
-        Mon, 06 Dec 2021 13:46:42 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id j14sm9301207edw.96.2021.12.06.13.46.41
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6Eip2d/hVRGSLRlvh3UtzxqF3/zCUzzqztI5oHT+KdI=;
+        b=gSLbv8rnC+cmibk3dT1ZaiYrZ/l20wpcNWug5vlXBHpEFZrzfc8QqgayIFNgHil5Ev
+         QIqxIHNjXruTNovH/ACQSbKHAGssSfii0QvkO+6zSEvX4wTaO24F2qSklNVthobR4skw
+         06/M2OSjDx9clRQaxCIzUdsbyfCH2aitkwezrc+Vd9SeoGnt9lX+B12h6MxjuKLaZ+oT
+         EGaqE6yoajvZuACj0e2tXhbjEByqAVUW5Xz3Qt7RcXLK1y1NUrY6p82gVMlWBYTYID+d
+         cyMhRtLd7LvQDSrDZ5do5WTDc6mCI71TBDarTYXf49cpVFCs84n5K3X+FrXzTdfg//Ta
+         xQig==
+X-Gm-Message-State: AOAM531o+gfPuzFcMRBK21FNevu/GAFNJbJk8wOhkYrmdxmA8f9nLIWX
+        gIUhS4O9WL8ovuTW4aE7J5JHILsbCrOJr1nT
+X-Google-Smtp-Source: ABdhPJwUlF3RnUVhhQd9dUq9gvwd73d1FKArjhLqxu03nlTIms5takbZhT8Z3wUfnY0UOlDMb0nKPg==
+X-Received: by 2002:a05:6402:d0b:: with SMTP id eb11mr2586624edb.67.1638827301530;
+        Mon, 06 Dec 2021 13:48:21 -0800 (PST)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id hx14sm7128484ejc.92.2021.12.06.13.48.20
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 13:46:42 -0800 (PST)
-Message-ID: <94738e2d-8b8d-08a0-be39-343ac275fa5f@redhat.com>
-Date:   Mon, 6 Dec 2021 22:46:41 +0100
+        Mon, 06 Dec 2021 13:48:20 -0800 (PST)
+Received: by mail-wr1-f47.google.com with SMTP id a18so25298857wrn.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 13:48:20 -0800 (PST)
+X-Received: by 2002:adf:9d88:: with SMTP id p8mr48026383wre.140.1638827300398;
+ Mon, 06 Dec 2021 13:48:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v4 14/20] mfd: intel_soc_pmic_chtwc: Add cht_wc_model data
- to struct intel_soc_pmic
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Yauhen Kharuzhy <jekhor@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
+References: <20211204002301.116139-1-ebiggers@kernel.org> <20211204002301.116139-3-ebiggers@kernel.org>
+ <CAHk-=wgJ+6qgbB+WCDosxOgDp34ybncUwPJ5Evo8gcXptfzF+Q@mail.gmail.com> <Ya5qWLLv3i4szS4N@gmail.com>
+In-Reply-To: <Ya5qWLLv3i4szS4N@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 6 Dec 2021 13:48:04 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgvt7PH+AU_29H95tJQZ9FnhS8vVmymbhpZ6NZ7yaAigw@mail.gmail.com>
+Message-ID: <CAHk-=wgvt7PH+AU_29H95tJQZ9FnhS8vVmymbhpZ6NZ7yaAigw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] aio: fix use-after-free due to missing POLLFREE handling
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Benjamin LaHaise <bcrl@kvack.org>, linux-aio@kvack.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
-References: <20211206093318.45214-1-hdegoede@redhat.com>
- <20211206093318.45214-15-hdegoede@redhat.com>
- <CAHp75Vc+z0nqUXbqrX9YXi2+rzz4BKT7maFipyB8QgOEKQ9SPw@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75Vc+z0nqUXbqrX9YXi2+rzz4BKT7maFipyB8QgOEKQ9SPw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Ramji Jiyani <ramjiyani@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Dec 6, 2021 at 11:54 AM Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> It could be fixed by converting signalfd and binder to use something like this,
+> right?
+>
+>         #define wake_up_pollfree(x)  \
+>                __wake_up(x, TASK_NORMAL, 0, poll_to_key(EPOLLHUP | POLLFREE))
 
-On 12/6/21 20:55, Andy Shevchenko wrote:
-> On Mon, Dec 6, 2021 at 11:35 AM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Tablet / laptop designs using an Intel Cherry Trail x86 main SoC with
->> an Intel Whiskey Cove PMIC do not use a single standard setup for
->> the charger, fuel-gauge and other chips surrounding the PMIC /
->> charging+data USB port.
->>
->> Unlike what is normal on x86 this diversity in designs is not handled
->> by the ACPI tables. On 2 of the 3 known designs there are no standard
->> (PNP0C0A) ACPI battery devices and on the 3th design the ACPI battery
->> device does not work under Linux due to it requiring non-standard
->> and undocumented ACPI behavior.
->>
->> So to make things work under Linux we use native charger and fuel-gauge
->> drivers on these devices, re-using the native drivers used on ARM boards
->> with the same charger / fuel-gauge ICs.
->>
->> This requires various MFD-cell drivers for the CHT-WC PMIC cells to
->> know which model they are exactly running on so that they can e.g.
->> instantiate an I2C-client for the right model charger-IC (the charger
->> is connected to an I2C-controller which is part of the PMIC).
->>
->> Rather then duplicating DMI-id matching to check which model we are
->> running on in each MFD-cell driver, add a check for this to the
->> shared drivers/mfd/intel_soc_pmic_chtwc.c code by using a
->> DMI table for all 3 known models:
->>
->> 1. The GPD Win and GPD Pocket mini-laptops, these are really 2 models
->> but the Pocket re-uses the GPD Win's design in a different housing:
->>
->> The WC PMIC is connected to a TI BQ24292i charger, paired with
->> a Maxim MAX17047 fuelgauge + a FUSB302 USB Type-C Controller +
->> a PI3USB30532 USB switch, for a fully functional Type-C port.
->>
->> 2. The Xiaomi Mi Pad 2:
->>
->> The WC PMIC is connected to a TI BQ25890 charger, paired with
->> a TI BQ27520 fuelgauge, using the TI BQ25890 for BC1.2 charger type
->> detection, for a USB-2 only Type-C port without PD.
->>
->> 3. The Lenovo Yoga Book YB1-X90 / Lenovo Yoga Book YB1-X91 series:
->>
->> The WC PMIC is connected to a TI BQ25892 charger, paired with
->> a TI BQ27542 fuelgauge, using the WC PMIC for BC1.2 charger type
->> detection and using the BQ25892's Mediatek Pump Express+ (1.0)
->> support to enable charging with up to 12V through a micro-USB port.
-> 
-> ...
-> 
->> +enum intel_cht_wc_models {
->> +       INTEL_CHT_WC_UNKNOWN,
->> +       INTEL_CHT_WC_GPD_WIN_POCKET,
->> +       INTEL_CHT_WC_XIAOMI_MIPAD2,
->> +       INTEL_CHT_WC_LENOVO_YOGABOOK1,
->> +};
-> 
-> ...
-> 
->> +       enum intel_cht_wc_models cht_wc_model;
-> 
-> I'm wondering what will you do when something similar will be needed
-> for another PMIC?
-> 
-> I see possible solutions to eliminate additional churn:
-> - make just one enum for all models (can be done now, can be renamed later)
-> - make a union if we have such situation
-> 
-> because I wouldn't like to have another field for each possible
-> variant of PMIC in the generic structure.
-> 
-> Hence the question, does it make sense to just name it (enum and
-> member) less cht_wc oriented?
+Yeah, that looks better to me.
 
-I agree that renaming these to make them generic makes sense if we get a
-second user (which I doubt, but you never know). For now I would like to
-keep this as is though, this is a big series and I would like to avoid
-to respin it just for this and we can always rename this later.
+That said, maybe it would be even better to then make it more explicit
+about what it does, and not make it look like just another wakeup with
+an odd parameter.
 
-If I need to do a v5 anyways though, then I'll do the rename for v5.
+IOW, maybe that "pollfree()" function itself could very much do the
+waitqueue entry removal on each entry using list_del_init(), and not
+expect the wakeup code for the entry to do so.
 
-Regards,
+I think that kind of explicit "this removes all entries from the wait
+list head" is better than "let's do a wakeup and expect all entries to
+magically implicitly remove themselves".
 
-Hans
+After all, that "implicitly remove themselves" was what didn't happen,
+and caused the bug in the first place.
 
+And all the normal cases, that don't care about POLLFREE at all,
+because their waitqueues don't go away from under them, wouldn't care,
+because "list_del_init()" still  leaves a valid self-pointing list in
+place, so if they do list_del() afterwards, nothing happens.
+
+I dunno. But yes, that wake_up_pollfree() of yours certainly looks
+better than what we have now.
+
+> As for eliminating POLLFREE entirely, that would require that the waitqueue
+> heads be moved to a location which has a longer lifetime.
+
+Yeah, the problem with aio and epoll is exactly that they end up using
+waitqueue heads without knowing what they are.
+
+I'm not at all convinced that there aren't other situations where the
+thing the waitqueue head is embedded might not have other lifetimes.
+
+The *common* situation is obviously that it's associated with a file,
+and the file pointer ends up holding the reference to whatever device
+or something (global list in a loadable module, or whatever) it is.
+
+Hmm. The poll_wait() callback function actually does get the 'struct
+file *' that the wait is associated with. I wonder if epoll queueing
+could actually increment the file ref when it creates its own wait
+entry, and release it at ep_remove_wait_queue()?
+
+Maybe epoll could avoid having to remove entries entirely that way -
+simply by virtue of having a ref to the files - and remove the need
+for having the ->whead pointer entirely (and remove the need for
+POLLFREE handling)?
+
+And maybe the signalfd case can do the same - instead of expecting
+exit() to clean up the list when sighand->count goes to zero, maybe
+the signalfd filp can just hold a ref to that 'struct sighand_struct',
+and it gets free'd whenever there are no signalfd users left?
+
+That would involve making signalfd_ctx actually tied to one particular
+'struct signal', but that might be the right thing to do regardless
+(instead of making it always act on 'current' like it does now).
+
+So maybe with some re-organization, we could get rid of the need for
+POLLFREE entirely.. Anybody?
+
+But your patches are certainly simpler in that they just fix the status quo.
+
+             Linus

@@ -2,246 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A2646990D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE77469917
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344529AbhLFOgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 09:36:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
+        id S1344090AbhLFOja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 09:39:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343717AbhLFOgR (ORCPT
+        with ESMTP id S242092AbhLFOj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 09:36:17 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE61C061746;
-        Mon,  6 Dec 2021 06:32:48 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id c3so13146168iob.6;
-        Mon, 06 Dec 2021 06:32:48 -0800 (PST)
+        Mon, 6 Dec 2021 09:39:29 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37113C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 06:36:01 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id p18-20020a17090ad31200b001a78bb52876so10959282pju.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 06:36:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FHezbGrYlKxA1aTrkxNXSkuk1RduKCiWsmFP87kNHNY=;
-        b=GXfZLWErwVXNUIWTHzJ3JSvvaZ1ekUxwLx/RO6eG2oqG8RKwA83QEHyf6Lgu2pvH2e
-         6EAZXpfRzfvbjY71KDHAzWFUD1D5xnfkxDwd1DAzcCl83aTQm6Ne32mTBtwoQgT1CHUV
-         2W8cDfYJZTbjYPvaVlm+oBaInxz7hnYHaJtrKCW3ZUfFjBzMZQu8pSL7cZgSKpwByPwK
-         gdOYhET5KSaY7yVXH/pmeLnQFr/R51Qxn+A8CxvMJ/5bQhb/CoYCURhE7gJQplzFUgS0
-         HnBwT1uFanfIiFq2JoHW276Mrtt8WTSgmVf7U/BsIzKfQ9A9GkpI3mSaOpkBHdDcbQTZ
-         Mhyg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=YBSobSiT3nkdJ4idcuxqZnR6uE8EhyHtyTzHAMWypJ4=;
+        b=YUpXQhS9h80OLUkTpinObfHNbUVOxrp/gX8032EJMmkWxepMNXtESfhq7pWjcGcpoM
+         eCvMHHaKCx8vTd0l+fF9XX13fY4auLHKpgsuQ/v2N2abhg5lG0AIx2gqGvbxzPRHHS89
+         77cTiJzSnh510AjJ49A0sjizu0irs8FDYqa6VqB0OmmXyg00K1x9wuLQsxTqeuSQn4/N
+         bFIxP6ShxnViwnvOpnZI2Yrhl4JyILJEtYC8Abf7tX9wBrKeqYk560BiikMEb5jncPIt
+         T4qVELOsLPZybBRbOJtKhgvxkDL84Pk2thynvRrsxc47kzYEKhIWAiYeZlzf/M8BKtg7
+         M49w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FHezbGrYlKxA1aTrkxNXSkuk1RduKCiWsmFP87kNHNY=;
-        b=ENhmfjl4NnLq3ESXjO7YkZN38/qBXQO/ZCKTaOckHdABTUan9C4DUmbSOZ6y0pPCZy
-         +Rqtxbn8WTvmzvqhJS9YR9e+AM65ewGFZNClcISC6I7xyVO/06tJOs2kQeiqTxozH52M
-         XKU4HyFBfUt19IT78u2wGiK8g++kgrft1fPXmU+Nf/wREBHRES3HGg3ITWlZyGvhTUFv
-         SlUpFUBHHREI1KyCA6oXjS3UzNs2SrfuH5aEss9hq6oRXhRiVTFtY4MASdM//7OheSpw
-         e63o1tOScnlHAL08DjdN1arbCoKc9VGdoccx1zv3iKhzOrPvaSQGiHkk6fHCOZ6YaDBF
-         i/4A==
-X-Gm-Message-State: AOAM533ppt6gZ0q2zFOHb9iKHPxfXwZmvgYTEmVbP8l+5d58zJrGqvX2
-        oOlsQbnkrZSCNoIiy/2hPF8=
-X-Google-Smtp-Source: ABdhPJx2s79y4UV6UfCELoWwjsBXrn2U9Tro1XMfsLGc7m27xn/DOl5d0HW/E8jg1uMWElErsFJE7A==
-X-Received: by 2002:a02:a708:: with SMTP id k8mr42965751jam.26.1638801167426;
-        Mon, 06 Dec 2021 06:32:47 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id y8sm6337176iox.32.2021.12.06.06.32.44
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=YBSobSiT3nkdJ4idcuxqZnR6uE8EhyHtyTzHAMWypJ4=;
+        b=vOhnp/9jutqT01XFTE3Y1zMi7eDwl6CSxkjvj5+aJIgPQzNK90G1cswVHI5uZrn9Ym
+         BfAu6eyvCKB3J3vgvvGgKOLB3DCYzME8pRpEhMeFnko4k/vCpOd+2rF1aR1As1gvtzCj
+         PVSsVhw5qjDf/WIJKTh5fpqKSIV2QMm3NyHganKfdumNNF4PmkMGUBVLLZCNxL0Hne9O
+         bE+eAx1CurWLchfaqvdpK6c6Hzi7xPKs7+jrv/s4qckVOSiVRlQN4nlc4NLbmh2gabVD
+         p20vUlVDpo8N28BGlDdLaTAQm/9gb2q4ew1NV8JUCdI8m0751V0ESQ1Tx3dzt7pbHLcc
+         iLiA==
+X-Gm-Message-State: AOAM531Eu/09Re9yH1Z+u+qV3jkdUumP3bpUyvdQFT0mz0mnv78gBg6U
+        wtV/TYrAUaGJp4fN/9RTki0=
+X-Google-Smtp-Source: ABdhPJzr+NkVGhYGf85kWBNdrRsEqHDR5fVdtGhRGlgCHeyfRDFOYbkWQvdx2bHLfe8Y0WoLhyqJOw==
+X-Received: by 2002:a17:90b:388f:: with SMTP id mu15mr37417540pjb.30.1638801360639;
+        Mon, 06 Dec 2021 06:36:00 -0800 (PST)
+Received: from hjn-PC.localdomain (li1080-207.members.linode.com. [45.33.61.207])
+        by smtp.gmail.com with ESMTPSA id c3sm13458458pfv.67.2021.12.06.06.35.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 06:32:46 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 8E52D27C0054;
-        Mon,  6 Dec 2021 09:32:44 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 06 Dec 2021 09:32:44 -0500
-X-ME-Sender: <xms:Cx-uYQs85A1MMXJYGuWqEJ7Z5H0fYWyIBMsroi5ZcJYhDA_0sXEVKw>
-    <xme:Cx-uYdeOOSQTLomCC91P6fvNfLUaBzynTvS8S1IJqe42v_kaQOsPATPLrlpxDh5K-
-    VsJpX9OMQqwUGTEww>
-X-ME-Received: <xmr:Cx-uYbxTazrQNhAmwOJDGcwBcZKt0G6ftpVDE7070sHyD2fzk1MP_1dE6sw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjeefgdeihecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
-    gvrhhnpeevieejtdfhieejfeduheehvdevgedugeethefggfdtvdeutdevgeetvddvfeeg
-    tdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgv
-    rhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfh
-    gvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:Cx-uYTP7IMvllYtCuW-96zpzDKmquPq_Oc0AMq8B6-3JLGB89W1FVQ>
-    <xmx:Cx-uYQ-LAihlYOGwm6Zoiy1lOqxm_kftsSxg_LPN5by606Y0o4ftaA>
-    <xmx:Cx-uYbVLvwYrqkFwFZoM7PbDfKREKDylKP9K-SP5OD6QDsGQMr7wcg>
-    <xmx:DB-uYT3XFpOMXfNRE9xfxrXZdDXokmbhrddzAfQotajWX2sPWXYz3F-Xqns>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 6 Dec 2021 09:32:43 -0500 (EST)
-Date:   Mon, 6 Dec 2021 22:31:24 +0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Marco Elver <elver@google.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev, x86@kernel.org
-Subject: Re: [PATCH v3 08/25] kcsan: Show location access was reordered to
-Message-ID: <Ya4evHE7uQ9eXpax@boqun-archlinux>
-References: <20211130114433.2580590-1-elver@google.com>
- <20211130114433.2580590-9-elver@google.com>
- <Ya2Zpf8qpgDYiGqM@boqun-archlinux>
- <CANpmjNMirKGSBW2m+bWRM9_FnjK3_HjnJC=dhyMktx50mwh1GQ@mail.gmail.com>
+        Mon, 06 Dec 2021 06:36:00 -0800 (PST)
+From:   Huang Jianan <jnhuang95@gmail.com>
+X-Google-Original-From: Huang Jianan <huangjianan@oppo.com>
+To:     linux-erofs@lists.ozlabs.org, xiang@kernel.org
+Cc:     chao@kernel.org, linux-kernel@vger.kernel.org, guoweichao@oppo.com,
+        guanyuwei@oppo.com, yh@oppo.com, zhangshiming@oppo.com,
+        Huang Jianan <huangjianan@oppo.com>
+Subject: [PATCH v7 3/3] erofs: add sysfs node to control sync decompression strategy
+Date:   Mon,  6 Dec 2021 22:35:52 +0800
+Message-Id: <20211206143552.8384-1-huangjianan@oppo.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <Ya37jpMvLXVMSncO@B-P7TQMD6M-0146.local>
+References: <Ya37jpMvLXVMSncO@B-P7TQMD6M-0146.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNMirKGSBW2m+bWRM9_FnjK3_HjnJC=dhyMktx50mwh1GQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 08:16:11AM +0100, Marco Elver wrote:
-> On Mon, 6 Dec 2021 at 06:04, Boqun Feng <boqun.feng@gmail.com> wrote:
-> >
-> > Hi,
-> >
-> > On Tue, Nov 30, 2021 at 12:44:16PM +0100, Marco Elver wrote:
-> > > Also show the location the access was reordered to. An example report:
-> > >
-> > > | ==================================================================
-> > > | BUG: KCSAN: data-race in test_kernel_wrong_memorder / test_kernel_wrong_memorder
-> > > |
-> > > | read-write to 0xffffffffc01e61a8 of 8 bytes by task 2311 on cpu 5:
-> > > |  test_kernel_wrong_memorder+0x57/0x90
-> > > |  access_thread+0x99/0xe0
-> > > |  kthread+0x2ba/0x2f0
-> > > |  ret_from_fork+0x22/0x30
-> > > |
-> > > | read-write (reordered) to 0xffffffffc01e61a8 of 8 bytes by task 2310 on cpu 7:
-> > > |  test_kernel_wrong_memorder+0x57/0x90
-> > > |  access_thread+0x99/0xe0
-> > > |  kthread+0x2ba/0x2f0
-> > > |  ret_from_fork+0x22/0x30
-> > > |   |
-> > > |   +-> reordered to: test_kernel_wrong_memorder+0x80/0x90
-> > > |
-> >
-> > Should this be "reordered from" instead of "reordered to"? For example,
-> > if the following case needs a smp_mb() between write to A and write to
-> > B, I think currently it will report as follow:
-> >
-> >         foo() {
-> >                 WRITE_ONCE(A, 1); // let's say A's address is 0xaaaa
-> >                 bar() {
-> >                         WRITE_ONCE(B, 1); // Assume B's address is 0xbbbb
-> >                                           // KCSAN find the problem here
-> >                 }
-> >         }
-> >
-> >         <report>
-> >         | write (reordered) to 0xaaaa of ...:
-> >         | bar+0x... // address of the write to B
-> >         | foo+0x... // address of the callsite to bar()
-> >         | ...
-> >         |  |
-> >         |  +-> reordered to: foo+0x... // address of the write to A
-> >
-> > But since the access reported here is the write to A, so it's a
-> > "reordered from" instead of "reordered to"?
-> 
-> Perhaps I could have commented on this in the commit message to avoid
-> the confusion, but per its updated comment replace_stack_entry()
-> "skips to the first entry that matches the function of @ip, and then
-> replaces that entry with @ip, returning the entries to skip with
-> @replaced containing the replaced entry."
-> 
-> When a reorder_access is set up, the ip to it is stored, which is
-> what's passed to @ip of replace_stack_entry(). It effectively swaps
-> the top frame where the race occurred with where the original access
-> happened. This all works because the runtime is careful to only keep
-> reorder_accesses valid until the original function where it occurred
-> is left.
-> 
+Although readpage is a synchronous path, there will be no additional
+kworker scheduling overhead in non-atomic contexts together with
+dm-verity.
 
-Thanks for the explanation, I was missing the swap here. However...
+Let's add a sysfs node to disable sync decompression as an option.
 
-> So in your above example you need to swap "reordered to" and the top
-> frame of the stack trace.
-> 
+Signed-off-by: Huang Jianan <huangjianan@oppo.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+---
+since v6:
+- Clean up code.
 
-IIUC, the report for my above example will be:
+since v4:
+- Resend in a clean chain.
 
-         | write (reordered) to 0xaaaa of ...:
-         | foo+0x... // address of the write to A
-         | ...
-         |  |
-         |  +-> reordered to: foo+0x... // address of the callsite to bar() in foo()
+since v3:
+- Clean up the sync decompressstrategy into a separate function.
 
-, right? Because in replace_stack_entry(), it's not the top frame where
-the race occurred that gets swapped, it's the frame which belongs to the
-same function as the original access that gets swapped. In other words,
-when KCSAN finds the problem, top entries of the calling stack are:
+since v2:
+- Use enum to indicate sync decompression strategy.
+- Add missing CONFIG_EROFS_FS_ZIP ifdef.
 
-	[0] bar+0x.. // address of the write to B
-	[1] foo+0x.. // address of the callsite to bar() in foo()
+since v1:
+- Leave auto default.
+- Add a disable strategy for sync_decompress.
 
-after replace_stack_entry(), they changes to:
+ Documentation/ABI/testing/sysfs-fs-erofs |  9 ++++++++
+ fs/erofs/internal.h                      | 10 +++++++--
+ fs/erofs/super.c                         |  2 +-
+ fs/erofs/sysfs.c                         | 15 ++++++++++++++
+ fs/erofs/zdata.c                         | 26 ++++++++++++++++++++----
+ 5 files changed, 55 insertions(+), 7 deletions(-)
 
-	[0] bar+0x.. // address of the write to B
-skip  ->[1] foo+0x.. // address of the write to A
-
-, as a result the report won't mention bar() at all.
-
-And I think a better report will be:
-
-         | write (reordered) to 0xaaaa of ...:
-         | foo+0x... // address of the write to A
-         | ...
-         |  |
-         |  +-> reordered to: bar+0x... // address of the write to B in bar()
-
-because it tells users the exact place the accesses get reordered. That
-means maybe we want something as below? Not completely tested, but I
-play with scope checking a bit, seems it gives what I want. Thoughts?
-
-Regards,
-Boqun
-
-diff --git a/kernel/kcsan/report.c b/kernel/kcsan/report.c
-index 67794404042a..b495ed3aa637 100644
---- a/kernel/kcsan/report.c
-+++ b/kernel/kcsan/report.c
-@@ -324,7 +324,10 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
-        else
-                goto fallback;
-
--       for (skip = 0; skip < num_entries; ++skip) {
-+       skip = get_stack_skipnr(stack_entries, num_entries);
-+       *replaced = stack_entries[skip];
+diff --git a/Documentation/ABI/testing/sysfs-fs-erofs b/Documentation/ABI/testing/sysfs-fs-erofs
+index a9512594dc4c..05482374a741 100644
+--- a/Documentation/ABI/testing/sysfs-fs-erofs
++++ b/Documentation/ABI/testing/sysfs-fs-erofs
+@@ -5,3 +5,12 @@ Description:	Shows all enabled kernel features.
+ 		Supported features:
+ 		zero_padding, compr_cfgs, big_pcluster, chunked_file,
+ 		device_table, compr_head2, sb_chksum.
 +
-+       for (;skip < num_entries; ++skip) {
-                unsigned long func = stack_entries[skip];
++What:		/sys/fs/erofs/<disk>/sync_decompress
++Date:		November 2021
++Contact:	"Huang Jianan" <huangjianan@oppo.com>
++Description:	Control strategy of sync decompression
++		- 0 (default, auto): enable for readpage, and enable for
++				     readahead on atomic contexts only,
++		- 1 (force on): enable for readpage and readahead.
++		- 2 (force off): disable for all situations.
+diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+index 43f0332fa489..8e70435629e5 100644
+--- a/fs/erofs/internal.h
++++ b/fs/erofs/internal.h
+@@ -56,12 +56,18 @@ struct erofs_device_info {
+ 	u32 mapped_blkaddr;
+ };
+ 
++enum {
++	EROFS_SYNC_DECOMPRESS_AUTO,
++	EROFS_SYNC_DECOMPRESS_FORCE_ON,
++	EROFS_SYNC_DECOMPRESS_FORCE_OFF
++};
++
+ struct erofs_mount_opts {
+ #ifdef CONFIG_EROFS_FS_ZIP
+ 	/* current strategy of how to use managed cache */
+ 	unsigned char cache_strategy;
+-	/* strategy of sync decompression (false - auto, true - force on) */
+-	bool readahead_sync_decompress;
++	/* strategy of sync decompression (0 - auto, 1 - force on, 2 - force off) */
++	unsigned int sync_decompress;
+ 
+ 	/* threshold for decompression synchronously */
+ 	unsigned int max_sync_decompress_pages;
+diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+index abc1da5d1719..58f381f80205 100644
+--- a/fs/erofs/super.c
++++ b/fs/erofs/super.c
+@@ -423,7 +423,7 @@ static void erofs_default_options(struct erofs_fs_context *ctx)
+ #ifdef CONFIG_EROFS_FS_ZIP
+ 	ctx->opt.cache_strategy = EROFS_ZIP_CACHE_READAROUND;
+ 	ctx->opt.max_sync_decompress_pages = 3;
+-	ctx->opt.readahead_sync_decompress = false;
++	ctx->opt.sync_decompress = EROFS_SYNC_DECOMPRESS_AUTO;
+ #endif
+ #ifdef CONFIG_EROFS_FS_XATTR
+ 	set_opt(&ctx->opt, XATTR_USER);
+diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
+index ca18c5dce493..5d999015eead 100644
+--- a/fs/erofs/sysfs.c
++++ b/fs/erofs/sysfs.c
+@@ -16,6 +16,7 @@ enum {
+ 
+ enum {
+ 	struct_erofs_sb_info,
++	struct_erofs_mount_opts,
+ };
+ 
+ struct erofs_attr {
+@@ -55,7 +56,14 @@ static struct erofs_attr erofs_attr_##_name = {			\
+ 
+ #define ATTR_LIST(name) (&erofs_attr_##name.attr)
+ 
++#ifdef CONFIG_EROFS_FS_ZIP
++EROFS_ATTR_RW_UI(sync_decompress, erofs_mount_opts);
++#endif
++
+ static struct attribute *erofs_attrs[] = {
++#ifdef CONFIG_EROFS_FS_ZIP
++	ATTR_LIST(sync_decompress),
++#endif
+ 	NULL,
+ };
+ ATTRIBUTE_GROUPS(erofs);
+@@ -86,6 +94,8 @@ static unsigned char *__struct_ptr(struct erofs_sb_info *sbi,
+ {
+ 	if (struct_type == struct_erofs_sb_info)
+ 		return (unsigned char *)sbi + offset;
++	if (struct_type == struct_erofs_mount_opts)
++		return (unsigned char *)&sbi->opt + offset;
+ 	return NULL;
+ }
+ 
+@@ -132,6 +142,11 @@ static ssize_t erofs_attr_store(struct kobject *kobj, struct attribute *attr,
+ 			return ret;
+ 		if (t > UINT_MAX)
+ 			return -EINVAL;
++#ifdef CONFIG_EROFS_FS_ZIP
++		if (!strcmp(a->attr.name, "sync_decompress") &&
++		    (t > EROFS_SYNC_DECOMPRESS_FORCE_OFF))
++			return -EINVAL;
++#endif
+ 		*(unsigned int *)ptr = t;
+ 		return len;
+ 	case attr_pointer_bool:
+diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+index 9a249bfc2770..bc765d8a6dc2 100644
+--- a/fs/erofs/zdata.c
++++ b/fs/erofs/zdata.c
+@@ -762,6 +762,21 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
+ 	goto out;
+ }
+ 
++static bool z_erofs_get_sync_decompress_policy(struct erofs_sb_info *sbi,
++				       unsigned int readahead_pages)
++{
++	/* auto: enable for readpage, disable for readahead */
++	if ((sbi->opt.sync_decompress == EROFS_SYNC_DECOMPRESS_AUTO) &&
++	    !readahead_pages)
++		return true;
++
++	if ((sbi->opt.sync_decompress == EROFS_SYNC_DECOMPRESS_FORCE_ON) &&
++	    (readahead_pages <= sbi->opt.max_sync_decompress_pages))
++		return true;
++
++	return false;
++}
++
+ static void z_erofs_decompressqueue_work(struct work_struct *work);
+ static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
+ 				       bool sync, int bios)
+@@ -784,7 +799,9 @@ static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
+ 	/* Use workqueue and sync decompression for atomic contexts only */
+ 	if (in_atomic() || irqs_disabled()) {
+ 		queue_work(z_erofs_workqueue, &io->u.work);
+-		sbi->opt.readahead_sync_decompress = true;
++		/* enable sync decompression for readahead */
++		if (sbi->opt.sync_decompress == EROFS_SYNC_DECOMPRESS_AUTO)
++			sbi->opt.sync_decompress = EROFS_SYNC_DECOMPRESS_FORCE_ON;
+ 		return;
+ 	}
+ 	z_erofs_decompressqueue_work(&io->u.work);
+@@ -1435,6 +1452,7 @@ static void z_erofs_pcluster_readmore(struct z_erofs_decompress_frontend *f,
+ static int z_erofs_readpage(struct file *file, struct page *page)
+ {
+ 	struct inode *const inode = page->mapping->host;
++	struct erofs_sb_info *const sbi = EROFS_I_SB(inode);
+ 	struct z_erofs_decompress_frontend f = DECOMPRESS_FRONTEND_INIT(inode);
+ 	struct page *pagepool = NULL;
+ 	int err;
+@@ -1450,7 +1468,8 @@ static int z_erofs_readpage(struct file *file, struct page *page)
+ 	(void)z_erofs_collector_end(&f.clt);
+ 
+ 	/* if some compressed cluster ready, need submit them anyway */
+-	z_erofs_runqueue(inode->i_sb, &f, &pagepool, true);
++	z_erofs_runqueue(inode->i_sb, &f, &pagepool,
++			 z_erofs_get_sync_decompress_policy(sbi, 0));
+ 
+ 	if (err)
+ 		erofs_err(inode->i_sb, "failed to read, err [%d]", err);
+@@ -1501,8 +1520,7 @@ static void z_erofs_readahead(struct readahead_control *rac)
+ 	(void)z_erofs_collector_end(&f.clt);
+ 
+ 	z_erofs_runqueue(inode->i_sb, &f, &pagepool,
+-			 sbi->opt.readahead_sync_decompress &&
+-			 nr_pages <= sbi->opt.max_sync_decompress_pages);
++			 z_erofs_get_sync_decompress_policy(sbi, nr_pages));
+ 	if (f.map.mpage)
+ 		put_page(f.map.mpage);
+ 	erofs_release_pages(&pagepool);
+-- 
+2.25.1
 
-                if (!kallsyms_lookup_size_offset(func, &symbolsize, &offset))
-@@ -332,7 +335,6 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
-                func -= offset;
-
-                if (func == target_func) {
--                       *replaced = stack_entries[skip];
-                        stack_entries[skip] = ip;
-                        return skip;
-                }
-
-> The implementation is a little trickier of course, but I really wanted
-> the main stack trace to look like any other non-reordered access,
-> which starts from the original access, and only have the "reordered
-> to" location be secondary information.
-> 
-> The foundation for doing this this was put in place here:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6c65eb75686f
-> 
-> Thanks,
-> -- Marco

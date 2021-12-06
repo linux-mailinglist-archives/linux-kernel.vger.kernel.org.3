@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82637469FF3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD299469AA6
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442529AbhLFPzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:55:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390545AbhLFPma (ORCPT
+        id S1347775AbhLFPJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:09:29 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40458 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346773AbhLFPHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:42:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932D2C0698D5;
-        Mon,  6 Dec 2021 07:28:11 -0800 (PST)
+        Mon, 6 Dec 2021 10:07:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A99EB81116;
-        Mon,  6 Dec 2021 15:28:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E859C34901;
-        Mon,  6 Dec 2021 15:28:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B78BB8111A;
+        Mon,  6 Dec 2021 15:03:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF81C341C1;
+        Mon,  6 Dec 2021 15:03:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804490;
-        bh=LBiaArAi+dUPbDDMDgK0e4u4wpKzk8/elD9OeB/XVsU=;
+        s=korg; t=1638803028;
+        bh=8i0G+mKv+8hK5jKrWdU1ehMSo8gzobZK8Hcj50uckMk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YQesZQ6H+RaNtphVLBdi2iBUr4UlIVlmIIFIR1tX1wTw2UeU9ew1/mzKgUEK/I7pJ
-         SQdAi63jcYhqx+QQNzlRziBXJt6x4U9kab3qcCNiT2AvssT0ny98M15dXB7wNMpX3W
-         yKoKYkkX+jpSzHk3aFzfq0nWYftOlBnwPKVIwyC4=
+        b=MCT2Uq01F9DFZJpKArU6WcYD2qLRzyupAA9F2BcuCVrzpsCiyPmDvypPP4JwLE5il
+         Q9FftcDZrCXBKjV0Re3xfOzii8igtinX78p9XLhkRJdN6Bx9vXMVD25z9svql+ajHY
+         lvyg4fDwwKLUedgPeLufgBuWm5zZ45D8szQT+vT0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>
-Subject: [PATCH 5.15 138/207] drm/msm: Do hw_init() before capturing GPU state
+        stable@vger.kernel.org, zhangyue <zhangyue1@kylinos.cn>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Subject: [PATCH 4.9 49/62] kprobes: Limit max data_size of the kretprobe instances
 Date:   Mon,  6 Dec 2021 15:56:32 +0100
-Message-Id: <20211206145615.004679060@linuxfoundation.org>
+Message-Id: <20211206145550.902607157@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
+References: <20211206145549.155163074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,35 +46,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+From: Masami Hiramatsu <mhiramat@kernel.org>
 
-commit e4840d537c2c6b1189d4de16ee0f4820e069dcea upstream.
+commit 6bbfa44116689469267f1a6e3d233b52114139d2 upstream.
 
-In particular, we need to ensure all the necessary blocks are switched
-to 64b mode (a5xx+) otherwise the high bits of the address of the BO to
-snapshot state into will be ignored, resulting in:
+The 'kprobe::data_size' is unsigned, thus it can not be negative.  But if
+user sets it enough big number (e.g. (size_t)-8), the result of 'data_size
++ sizeof(struct kretprobe_instance)' becomes smaller than sizeof(struct
+kretprobe_instance) or zero. In result, the kretprobe_instance are
+allocated without enough memory, and kretprobe accesses outside of
+allocated memory.
 
-  *** gpu fault: ttbr0=0000000000000000 iova=0000000000012000 dir=READ type=TRANSLATION source=CP (0,0,0,0)
-  platform 506a000.gmu: [drm:a6xx_gmu_set_oob] *ERROR* Timeout waiting for GMU OOB set BOOT_SLUMBER: 0x0
+To avoid this issue, introduce a max limitation of the
+kretprobe::data_size. 4KB per instance should be OK.
 
-Fixes: 4f776f4511c7 ("drm/msm/gpu: Convert the GPU show function to use the GPU state")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Link: https://lore.kernel.org/r/20211108180122.487859-1-robdclark@gmail.com
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+Link: https://lkml.kernel.org/r/163836995040.432120.10322772773821182925.stgit@devnote2
+
+Cc: stable@vger.kernel.org
+Fixes: f47cd9b553aa ("kprobes: kretprobe user entry-handler")
+Reported-by: zhangyue <zhangyue1@kylinos.cn>
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/msm/msm_debugfs.c |    1 +
- 1 file changed, 1 insertion(+)
+ include/linux/kprobes.h |    2 ++
+ kernel/kprobes.c        |    3 +++
+ 2 files changed, 5 insertions(+)
 
---- a/drivers/gpu/drm/msm/msm_debugfs.c
-+++ b/drivers/gpu/drm/msm/msm_debugfs.c
-@@ -77,6 +77,7 @@ static int msm_gpu_open(struct inode *in
- 		goto free_priv;
+--- a/include/linux/kprobes.h
++++ b/include/linux/kprobes.h
+@@ -192,6 +192,8 @@ struct kretprobe {
+ 	raw_spinlock_t lock;
+ };
  
- 	pm_runtime_get_sync(&gpu->pdev->dev);
-+	msm_gpu_hw_init(gpu);
- 	show_priv->state = gpu->funcs->gpu_state_get(gpu);
- 	pm_runtime_put_sync(&gpu->pdev->dev);
++#define KRETPROBE_MAX_DATA_SIZE	4096
++
+ struct kretprobe_instance {
+ 	struct hlist_node hlist;
+ 	struct kretprobe *rp;
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1899,6 +1899,9 @@ int register_kretprobe(struct kretprobe
+ 		}
+ 	}
  
++	if (rp->data_size > KRETPROBE_MAX_DATA_SIZE)
++		return -E2BIG;
++
+ 	rp->kp.pre_handler = pre_handler_kretprobe;
+ 	rp->kp.post_handler = NULL;
+ 	rp->kp.fault_handler = NULL;
 
 

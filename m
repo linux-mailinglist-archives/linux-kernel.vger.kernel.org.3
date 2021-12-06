@@ -2,84 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 212A0469254
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A08F46925E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240672AbhLFJ30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 04:29:26 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:44262 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S240600AbhLFJ3X (ORCPT
+        id S240686AbhLFJbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 04:31:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240658AbhLFJbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 04:29:23 -0500
-X-UUID: 345462dc4d974bffab457c69e00633ea-20211206
-X-UUID: 345462dc4d974bffab457c69e00633ea-20211206
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <mark-yw.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1631942379; Mon, 06 Dec 2021 17:25:53 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 6 Dec 2021 17:25:51 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 6 Dec 2021 17:25:51 +0800
-From:   <mark-yw.chen@mediatek.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
-CC:     <mark-yw.chen@mediatek.com>, <aaron.hou@mediatek.com>,
-        <kaichuan.hsieh@canonical.com>, <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] Bluetooth: btusb: Handle download_firmware failure cases.
-Date:   Mon, 6 Dec 2021 17:25:46 +0800
-Message-ID: <20211206092546.27216-1-mark-yw.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Mon, 6 Dec 2021 04:31:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090CAC061746;
+        Mon,  6 Dec 2021 01:27:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C53B611C3;
+        Mon,  6 Dec 2021 09:27:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A92C1C341C1;
+        Mon,  6 Dec 2021 09:27:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638782866;
+        bh=+KEH1wyCTVQV8yYlRLefpheJ5q0/Kh2n/Ai79tQXaW4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=a2lc2BOU6NKqfzUGKCy4Mjr96l6xPg6Nt2qTZsyliv7rrHouWQgq5sdXqv5MRDynh
+         Jk/SyZ+ePSUg7i/cCv7K8k4ICdBaHdr8kZkCWX075IsHPMC7jjlKmerS7B3nVSykGg
+         Falvkn7scIl2ykEeu6HS/n2/7yEg5UNdWXkQPyr7XFpdi/wbJAq+RzEObYjS0QfNR1
+         394blKn414PL7DrwunsXpF7hEz+qyVA7ZEbnKtREzyOFyN5frS7NiCeSTQLKga4WmX
+         PtwGkgRvfmGc0PqPHuaSaJN43C9fF/msEeg51EUcHxo4wX6DMaOA+t0WxWlkb1SFDB
+         9QW+9ETp884AA==
+Date:   Mon, 6 Dec 2021 10:27:41 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     James Hilliard <james.hilliard1@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the v4l-dvb-next tree
+Message-ID: <20211206102741.209d1e94@coco.lan>
+In-Reply-To: <20211206200639.203bcea3@canb.auug.org.au>
+References: <20211206200639.203bcea3@canb.auug.org.au>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: mark-yw.chen <mark-yw.chen@mediatek.com>
+Em Mon, 6 Dec 2021 20:06:39 +1100
+Stephen Rothwell <sfr@canb.auug.org.au> escreveu:
 
-For Mediatek chipset, if there are no firmware bin or command_timeout,
-the process should be terminated in btusb_mtk_setup().
+> Hi all,
+> 
+> In commit
+> 
+>   c1c95d709941 ("media: uvcvideo: Increase UVC_CTRL_CONTROL_TIMEOUT to 5 seconds.")
+> 
+> Fixes tag
+> 
+>   Fixes:
+> 
+> has these problem(s):
+> 
+>   - No SHA1 recognised
+> 
+Thanks! This is not actually a fixes tag, just a text to tell what
+runtime errors were addressed. 
 
-Signed-off-by: mark-yw.chen <mark-yw.chen@mediatek.com>
-Change-Id: I99f1d7b72fa70643d9123e7e6cdc8d0b4369ce52
----
- drivers/bluetooth/btmtk.c | 1 +
- drivers/bluetooth/btusb.c | 4 ++++
- 2 files changed, 5 insertions(+)
+So, I'm changing the description to:
 
-diff --git a/drivers/bluetooth/btmtk.c b/drivers/bluetooth/btmtk.c
-index c2ee5c4b975a..526dfdf1fe01 100644
---- a/drivers/bluetooth/btmtk.c
-+++ b/drivers/bluetooth/btmtk.c
-@@ -121,6 +121,7 @@ int btmtk_setup_firmware_79xx(struct hci_dev *hdev, const char *fwname,
- 				} else {
- 					bt_dev_err(hdev, "Failed wmt patch dwnld status (%d)",
- 						   status);
-+					err = -EIO;
- 					goto err_release_fw;
- 				}
- 			}
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index ab169fc673ea..3ea04b1d0750 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -2554,6 +2554,10 @@ static int btusb_mtk_setup(struct hci_dev *hdev)
- 			 dev_id & 0xffff, (fw_version & 0xff) + 1);
- 		err = btmtk_setup_firmware_79xx(hdev, fw_bin_name,
- 						btusb_mtk_hci_wmt_sync);
-+		if (err < 0) {
-+			bt_dev_err(hdev, "Failed to setup firmware (%d)", err);
-+			return err;
-+		}
- 
- 		/* It's Device EndPoint Reset Option Register */
- 		btusb_mtk_uhw_reg_write(data, MTK_EP_RST_OPT, MTK_EP_RST_IN_OUT_OPT);
--- 
-2.18.0
+    media: uvcvideo: Increase UVC_CTRL_CONTROL_TIMEOUT to 5 seconds.
+    
+    Some uvc devices appear to require the maximum allowed USB timeout
+    for GET_CUR/SET_CUR requests.
+    
+    So lets just bump the UVC control timeout to 5 seconds which is the
+    same as the usb ctrl get/set defaults:
+    USB_CTRL_GET_TIMEOUT 5000
+    USB_CTRL_SET_TIMEOUT 5000
+    
+    It fixes the following runtime warnings:
+       Failed to query (GET_CUR) UVC control 11 on unit 2: -110 (exp. 1).
+       Failed to query (SET_CUR) UVC control 3 on unit 2: -110 (exp. 2).
 
+
+in order to make it clearer.
+
+Thanks,
+Mauro

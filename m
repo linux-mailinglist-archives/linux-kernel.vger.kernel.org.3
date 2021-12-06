@@ -2,179 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF843469CC8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A14469BF3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385742AbhLFPZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:25:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357793AbhLFPQP (ORCPT
+        id S1357721AbhLFPTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:19:00 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59228 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345843AbhLFPMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:16:15 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719F1C08EB55;
-        Mon,  6 Dec 2021 07:08:48 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 3EA2A1F4487E
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638803327; bh=GD5jS7X5MjRddXaASD9ovBpWNoicoY2OOGjVAS/Fkj0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=QmP9p/Xwn1DTDiTckK3f6PgxBAGeY1jfb3zUdAdtQ4HX70clXe1dHJl4ACRNYJMTw
-         ufL5NI0KUbX79T48BORKnDJIcqB/hVvvk2ZE+77/+LmCctOasRbPaOqt92dqro/Tbw
-         4Kn0b2XXytIRKaB+UhpCecMReNcm4M6aZ+Q4c7J78IJ0T8tjhCIvz83uy04OIDEK3/
-         rMS4dwOVFThMJ8C8YJDqdmdSYqT517aYtIkMEupKIBOIlOdLsIrsSCXjiHVwenRslH
-         3jjGKxEg/4qZ4b5rMbUruztYedI9xeS+tHs4u+ETj9ZJDhGLENR4ZsLJY1iBFUeHCk
-         vSH3nnqDpp8BQ==
-Subject: Re: [PATCH 3/4] memory: mtk-smi: Add sleep ctrl function
-To:     Yong Wu <yong.wu@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Mon, 6 Dec 2021 10:12:55 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10F5B61331;
+        Mon,  6 Dec 2021 15:09:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5BEDC341C5;
+        Mon,  6 Dec 2021 15:09:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638803365;
+        bh=dw9XxwMU7Td04mZbDOSAvoqc7QfnAD/1a1RCoKpziy4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nji2GU1IHM4eYGvBFkSGnE7BzaMtdiEJBDL4bMPpAKPyodvXf2tijBvVijiSOOblb
+         8MGQXk94GUdVqTwjVsRCBdoAsEI0wyDhWI/b7bKr4vQZ7NkcL0KNwhkZwaZdQO4LTs
+         QTHTfqyKGGAv0J+DprafJPZdt6/kTkFpZhFU+Q8MItAYUe+PIwxlYa3BUhOcEw5P9n
+         mxdzpHELW+1VNgwdbZHCW8Y/EvM1c2FqJRXkI9Cr3K7X0Z3DVdl5VRDk0RjZUQkvbo
+         /2a6VLmyIvlU5RCJrZAhhR0NUdaa98lCck5xLCmj5zjsUGDioPDf/sWsa5NQEwUlsH
+         AVw6o/pLPUfJg==
+Date:   Mon, 6 Dec 2021 15:09:19 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com,
-        anan.sun@mediatek.com, lc.kan@mediatek.com, yi.kuo@mediatek.com,
-        anthony.huang@mediatek.com
-References: <20211203064027.14993-1-yong.wu@mediatek.com>
- <20211203064027.14993-4-yong.wu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <f2ffd08a-44c3-9458-1bd8-68e3c0755611@collabora.com>
-Date:   Mon, 6 Dec 2021 16:08:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Liam Girdwood <lgirdwood@gmail.com>, swboyd@chromium.org,
+        collinsd@codeaurora.org, subbaram@codeaurora.org,
+        Das Srinagesh <gurus@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 4/6] regulator: Add a regulator driver for the PM8008
+ PMIC
+Message-ID: <Ya4nn0/qp5El8P0L@sirena.org.uk>
+References: <1637314953-4215-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1637314953-4215-5-git-send-email-quic_c_skakit@quicinc.com>
+ <YZ+vnV12gDCtia5S@sirena.org.uk>
+ <d86e1a33-e7cf-58f7-d75b-23a0313ebde5@quicinc.com>
 MIME-Version: 1.0
-In-Reply-To: <20211203064027.14993-4-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Iup9tc3xCjeDkBkE"
+Content-Disposition: inline
+In-Reply-To: <d86e1a33-e7cf-58f7-d75b-23a0313ebde5@quicinc.com>
+X-Cookie: You will soon forget this.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/12/21 07:40, Yong Wu ha scritto:
-> sleep control means that when the larb go to sleep, we should wait a bit
-> until all the current commands are finished. thus, when the larb runtime
-> suspend, we need enable this function to wait until all the existed
-> command are finished. when the larb resume, just disable this function.
-> This function only improve the safe of bus. Add a new flag for this
-> function. Prepare for mt8186.
-> 
-> Signed-off-by: Anan Sun <anan.sun@mediatek.com>
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> ---
->   drivers/memory/mtk-smi.c | 39 +++++++++++++++++++++++++++++++++++----
->   1 file changed, 35 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
-> index b883dcc0bbfa..4b59b28e4d73 100644
-> --- a/drivers/memory/mtk-smi.c
-> +++ b/drivers/memory/mtk-smi.c
-> @@ -8,6 +8,7 @@
->   #include <linux/device.h>
->   #include <linux/err.h>
->   #include <linux/io.h>
-> +#include <linux/iopoll.h>
->   #include <linux/module.h>
->   #include <linux/of.h>
->   #include <linux/of_platform.h>
-> @@ -32,6 +33,10 @@
->   #define SMI_DUMMY			0x444
->   
->   /* SMI LARB */
-> +#define SMI_LARB_SLP_CON                0x00c
-> +#define SLP_PROT_EN                     BIT(0)
-> +#define SLP_PROT_RDY                    BIT(16)
-> +
->   #define SMI_LARB_CMD_THRT_CON		0x24
->   #define SMI_LARB_THRT_RD_NU_LMT_MSK	GENMASK(7, 4)
->   #define SMI_LARB_THRT_RD_NU_LMT		(5 << 4)
-> @@ -81,6 +86,7 @@
->   
->   #define MTK_SMI_FLAG_THRT_UPDATE	BIT(0)
->   #define MTK_SMI_FLAG_SW_FLAG		BIT(1)
-> +#define MTK_SMI_FLAG_SLEEP_CTL		BIT(2)
->   #define MTK_SMI_CAPS(flags, _x)		(!!((flags) & (_x)))
->   
->   struct mtk_smi_reg_pair {
-> @@ -371,6 +377,24 @@ static const struct of_device_id mtk_smi_larb_of_ids[] = {
->   	{}
->   };
->   
-> +static int mtk_smi_larb_sleep_ctrl(struct device *dev, bool to_sleep)
-> +{
-> +	struct mtk_smi_larb *larb = dev_get_drvdata(dev);
-> +	int ret = 0;
-> +	u32 tmp;
-> +
-> +	if (to_sleep) {
-> +		writel_relaxed(SLP_PROT_EN, larb->base + SMI_LARB_SLP_CON);
-> +		ret = readl_poll_timeout_atomic(larb->base + SMI_LARB_SLP_CON,
-> +						tmp, !!(tmp & SLP_PROT_RDY), 10, 1000);
-> +		if (ret)
-> +			dev_warn(dev, "sleep ctrl is not ready(0x%x).\n", tmp);
-> +	} else {
-> +		writel_relaxed(0, larb->base + SMI_LARB_SLP_CON);
-> +	}
-> +	return ret;
-> +}
-> +
->   static int mtk_smi_device_link_common(struct device *dev, struct device **com_dev)
->   {
->   	struct platform_device *smi_com_pdev;
-> @@ -477,24 +501,31 @@ static int __maybe_unused mtk_smi_larb_resume(struct device *dev)
->   {
->   	struct mtk_smi_larb *larb = dev_get_drvdata(dev);
->   	const struct mtk_smi_larb_gen *larb_gen = larb->larb_gen;
-> -	int ret;
-> +	int ret = 0;
->   
->   	ret = clk_bulk_prepare_enable(larb->smi.clk_num, larb->smi.clks);
-> -	if (ret < 0)
-> +	if (ret)
->   		return ret;
->   
-> +	if (MTK_SMI_CAPS(larb->larb_gen->flags_general, MTK_SMI_FLAG_SLEEP_CTL))
-> +		ret = mtk_smi_larb_sleep_ctrl(dev, false);
-> +
->   	/* Configure the basic setting for this larb */
->   	larb_gen->config_port(dev);
->   
-> -	return 0;
-> +	return ret;
->   }
->   
->   static int __maybe_unused mtk_smi_larb_suspend(struct device *dev)
->   {
->   	struct mtk_smi_larb *larb = dev_get_drvdata(dev);
-> +	int ret = 0;
-> +
-> +	if (MTK_SMI_CAPS(larb->larb_gen->flags_general, MTK_SMI_FLAG_SLEEP_CTL))
-> +		ret = mtk_smi_larb_sleep_ctrl(dev, true);
 
-Sorry but what happens if SLP_PROT_RDY is not getting set properly?
- From what I can understand in the commit description that you wrote, if we reach
-the timeout, then the LARB transactions are not over....
+--Iup9tc3xCjeDkBkE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I see that you are indeed returning a failure here, but you are also turning off
-the clocks regardless of whether we get a failure or a success; I'm not sure that
-this is right, as this may leave the hardware in an unpredictable state (since
-there were some more LARB transactions that didn't go through), leading to crashes
-at system resume (or when retyring to suspend).
+On Mon, Dec 06, 2021 at 08:13:57PM +0530, Satya Priya Kakitapalli (Temp) wrote:
+> On 11/25/2021 9:15 PM, Mark Brown wrote:
+> > On Fri, Nov 19, 2021 at 03:12:31PM +0530, Satya Priya wrote:
 
->   
->   	clk_bulk_disable_unprepare(larb->smi.clk_num, larb->smi.clks);
-> -	return 0;
-> +	return ret;
->   }
->   
->   static const struct dev_pm_ops smi_larb_pm_ops = {
-> 
+> > > +		child_node = of_get_child_by_name(parent_node, reg->name);
+> > > +		if (!child_node) {
+> > > +			dev_err(dev, "child node %s not found\n", reg->name);
+> > > +			return -ENODEV;
+> > > +		}
 
+> > This could be pulled out of the array.
+
+> Not sure what you meant here. could you elaborate a bit?
+
+Why is this in every iteration of the loop?
+
+--Iup9tc3xCjeDkBkE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGuJ54ACgkQJNaLcl1U
+h9BoCwf7B0e5FaSpbT2g+oY0Sk9qtf9WbFJ/Q0KFdvOUFoZMbUJFU696VOd5Y7PM
+E3Lv6SM02b2YHpyvMhc7ThkY76kH85jy4k2grAFyUf0g0BaUo+lqBJEZqdOftghL
+13IBaJ3EYEyELFG4+pRgnipVFvWGxbwbPdKSiti0UuutznglOo5UOsSeJUZcYlF8
+tkWuoKBHqHS4jwrEO0IT+HU5SOPuU7UkiJYKdD/L42vlPuBUqEKP0hYF0rirvbM+
+VJ8u16+Hs6teUB8V3Iu6x0kPSQRXy4s1uEBvdFrrXLY2Glnh1OaxH53Sp9p0vc0w
+XDoo1A+3CfAc4DBh3CqX6NxdKDVmZQ==
+=pBk6
+-----END PGP SIGNATURE-----
+
+--Iup9tc3xCjeDkBkE--

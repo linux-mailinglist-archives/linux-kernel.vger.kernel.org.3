@@ -2,171 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE98469249
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33180469250
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240607AbhLFJ1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 04:27:48 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:53152 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240600AbhLFJ1r (ORCPT
+        id S240625AbhLFJ3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 04:29:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240600AbhLFJ3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 04:27:47 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 0D0AE21954;
-        Mon,  6 Dec 2021 09:24:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638782658; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7Vco9glFS3Y9+9ZSujsdpiQ0a6mrpn0Ss9aIC/hu5Ks=;
-        b=nr5KoukFy51O3QE1ZPAsEgpN+QXM49LBB8HAFnsb3VMVJzqqOT9sqfFulJ39DJvsYxiMz7
-        9EMibbwf/8LjLzeOO1hVuD4hM7YP51TUgDpOGzmg1I2y2aXhYASsM70+YQvzX9bEhV0A4i
-        nNyZumEldFyk7BFwDcvdP98PWJZdFaA=
-Received: from suse.cz (unknown [10.163.30.174])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id CC778A3B88;
-        Mon,  6 Dec 2021 09:24:17 +0000 (UTC)
-Date:   Mon, 6 Dec 2021 10:24:14 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Nico Pache <npache@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, shakeelb@google.com,
-        ktkhai@virtuozzo.com, shy828301@gmail.com, guro@fb.com,
-        vbabka@suse.cz, vdavydov.dev@gmail.com, raquini@redhat.com,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [RFC PATCH 2/2] mm/vmscan.c: Prevent allocating shrinker_info on
- offlined nodes
-Message-ID: <Ya3WvmwzrKfnZsy/@dhcp22.suse.cz>
-References: <20211206033338.743270-1-npache@redhat.com>
- <20211206033338.743270-3-npache@redhat.com>
- <Ya3WcYKcej8XEI0W@dhcp22.suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ya3WcYKcej8XEI0W@dhcp22.suse.cz>
+        Mon, 6 Dec 2021 04:29:20 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786D8C0613F8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 01:25:52 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id w33-20020a17090a6ba400b001a722a06212so8964798pjj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 01:25:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=iP7gvGikKR2xNziNLZvK7Pmhk4stHCJztbT7jMgPSsQ=;
+        b=VNPA3EVzQ2jOWSSWd58JoLbb0q0u0DOtV4Ifm/uyE6dAoNY0SgWXwOVpslXPnRTKKT
+         1nfQEiG9o/X3b5lyDwrX4nDM1Lhgf/m1K10O7tTQHBim6ujidddXMP3ibDqO8HW98DBS
+         W2P/ON8NERyQbU0R6lkhHc+zNGfd+cFJ0mKCBfPJUsEIiOm4L+YfH93VuGYmBfjA2pai
+         uAOBHor1qdaP8f0jf+6X6346SElJQgf2Hr5LdVZm0X99VVHqsB/p8RvONvHa3lJJp21o
+         2Ux/ehaXtPyV/sQEmwr+mPjiFvEghUF9WSi/E9vAoGA/4tigh35Bg7Eaf9eFeo/RTh0I
+         uu8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=iP7gvGikKR2xNziNLZvK7Pmhk4stHCJztbT7jMgPSsQ=;
+        b=uCnaYAHpVK14dKgHn7Or710pFAVs5lH6hD7WkgjN2su5dKDbsiJrWFil+iOPWfHtaY
+         90lsGBHsyMC4xJyU/6Vfzab5E4+JgMqwq8PZ5m3Y0gCGuovJJ45muIe4TFO4uQtGxhp1
+         S9osKL3W8DvThaluG9PXH5hte06v5Yj1/NlcqlVSkUKefnzyysMoAMXF5CYc+hxaorMK
+         w+45JQchw8BEl2kW/Tdl/wAcAeIqJsiXrmzJ2X3vc5VUg+6T9W6E5Yk5fehFK7YCrW4/
+         guIgagq0vZjUujZwpZbaEHNnNOytID3CU2DLK5g1u0aOzSNJwnPTn16mipatf/a7xK1X
+         bdCw==
+X-Gm-Message-State: AOAM530hIhMcP8P3GzaGFmuWimvrkwlbPx674O8t+xMz9cF/d8SJdBMc
+        VV9xU5j9odr3wHNN7CyFBS8CAA==
+X-Google-Smtp-Source: ABdhPJwZ17lZ39ARicFadsmI/8CBkSiwtkGXAQiyepTOjNrU3hooJYvsSvNyFegsSbwyLtRF1dW8oA==
+X-Received: by 2002:a17:903:2443:b0:142:1e92:1d19 with SMTP id l3-20020a170903244300b001421e921d19mr42477069pls.24.1638782751976;
+        Mon, 06 Dec 2021 01:25:51 -0800 (PST)
+Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id 38sm9165890pgl.73.2021.12.06.01.25.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 01:25:51 -0800 (PST)
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
+Cc:     Maulik Shah <quic_mkshah@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shawn Guo <shawn.guo@linaro.org>
+Subject: [PATCH v4 0/2] Add Qualcomm MPM irqchip driver support
+Date:   Mon,  6 Dec 2021 17:25:33 +0800
+Message-Id: <20211206092535.4476-1-shawn.guo@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Cc David. I have only now noticed he has replied to this thread already
- pointing out the offline->online case]
+It adds DT binding and driver support for Qualcomm MPM (MSM Power Manager)
+interrupt controller.
 
-On Mon 06-12-21 10:23:00, Michal Hocko wrote:
-> On Sun 05-12-21 22:33:38, Nico Pache wrote:
-> > We have run into a panic caused by a shrinker allocation being attempted
-> > on an offlined node.
-> > 
-> > Our crash analysis has determined that the issue originates from trying
-> > to allocate pages on an offlined node in expand_one_shrinker_info. This
-> > function makes the incorrect assumption that we can allocate on any node.
-> > To correct this we make sure we only itterate over online nodes.
-> > 
-> > This assumption can lead to an incorrect address being assigned to ac->zonelist
-> > in the following callchain:
-> > 	__alloc_pages
-> > 	-> prepare_alloc_pages
-> > 	 -> node_zonelist
-> > 
-> > static inline struct zonelist *node_zonelist(int nid, gfp_t flags)
-> > {
-> >         return NODE_DATA(nid)->node_zonelists + gfp_zonelist(flags);
-> > }
-> > if the node is not online the return of node_zonelist will evaluate to a
-> > invalid pointer of 0x00000 + offset_of(node_zonelists) + (1|0)
-> > 
-> > This address is then dereferenced further down the callchain in:
-> > 	prepare_alloc_pages
-> > 	-> first_zones_zonelist
-> >   	 -> next_zones_zonelist
-> > 	  -> zonelist_zone_idx
-> > 
-> > static inline int zonelist_zone_idx(struct zoneref *zoneref)
-> > {
-> >         return zoneref->zone_idx;
-> > }
-> > 
-> > Leading the system to panic.
-> 
-> Thanks for the analysis! Please also add an oops report so that this is
-> easier to search for. It would be also interesting to see specifics
-> about the issue. Why was the specific node !online in the first place?
-> What architecture was this on?
-> 
-> > We also correct this behavior in alloc_shrinker_info, free_shrinker_info,
-> > and reparent_shrinker_deferred.
-> > 
-> > Fixes: 2bfd36374edd ("mm: vmscan: consolidate shrinker_maps handling code")
-> > Fixes: 0a4465d34028 ("mm, memcg: assign memcg-aware shrinkers bitmap to memcg")
-> 
-> Normally I would split the fix as it is fixing two issues one introduced
-> in 4.19 the other in 5.13.
-> 
-> > Signed-off-by: Nico Pache <npache@redhat.com>
-> > ---
-> >  mm/vmscan.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > index fb9584641ac7..731564b61e3f 100644
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -221,7 +221,7 @@ static int expand_one_shrinker_info(struct mem_cgroup *memcg,
-> >  	int nid;
-> >  	int size = map_size + defer_size;
-> >  
-> > -	for_each_node(nid) {
-> > +	for_each_online_node(nid) {
-> >  		pn = memcg->nodeinfo[nid];
-> >  		old = shrinker_info_protected(memcg, nid);
-> >  		/* Not yet online memcg */
-> > @@ -256,7 +256,7 @@ void free_shrinker_info(struct mem_cgroup *memcg)
-> >  	struct shrinker_info *info;
-> >  	int nid;
-> >  
-> > -	for_each_node(nid) {
-> > +	for_each_online_node(nid) {
-> >  		pn = memcg->nodeinfo[nid];
-> >  		info = rcu_dereference_protected(pn->shrinker_info, true);
-> >  		kvfree(info);
-> > @@ -274,7 +274,7 @@ int alloc_shrinker_info(struct mem_cgroup *memcg)
-> >  	map_size = shrinker_map_size(shrinker_nr_max);
-> >  	defer_size = shrinker_defer_size(shrinker_nr_max);
-> >  	size = map_size + defer_size;
-> > -	for_each_node(nid) {
-> > +	for_each_online_node(nid) {
-> >  		info = kvzalloc_node(sizeof(*info) + size, GFP_KERNEL, nid);
-> >  		if (!info) {
-> >  			free_shrinker_info(memcg);
-> > @@ -417,7 +417,7 @@ void reparent_shrinker_deferred(struct mem_cgroup *memcg)
-> >  
-> >  	/* Prevent from concurrent shrinker_info expand */
-> >  	down_read(&shrinker_rwsem);
-> > -	for_each_node(nid) {
-> > +	for_each_online_node(nid) {
-> >  		child_info = shrinker_info_protected(memcg, nid);
-> >  		parent_info = shrinker_info_protected(parent, nid);
-> >  		for (i = 0; i < shrinker_nr_max; i++) {
-> > -- 
-> > 2.33.1
-> 
-> This doesn't seen complete. Slab shrinkers are used in the reclaim
-> context. Previously offline nodes could be onlined later and this would
-> lead to NULL ptr because there is no hook to allocate new shrinker
-> infos. This would be also really impractical because this would have to
-> update all existing memcgs...
-> 
-> To be completely honest I am not really sure this is a practical problem
-> because some architectures allocate (aka make online) all possible nodes
-> reported by the platform. There are major inconsistencies there. Maybe
-> that should be unified, so that problems like this one do not really
-> have to add a complexity to the code.
-> 
-> -- 
-> Michal Hocko
-> SUSE Labs
+Changes for v4:
+- Add the missing include of <linux/interrupt.h> to fix build errors
+  on arm architecture.
+- Leave IRQCHIP_PLATFORM_DRIVER infrastructural unchanged, and use
+  of_find_device_by_node() to get platform_device pointer.
+
+Changes for v3:
+- Support module build
+- Use relaxed accessors
+- Add barrier call to ensure MMIO write completes
+- Use d->chip_data to pass driver private data
+- Use raw spinlock
+- USe BIT() for bit shift
+- Create a single irq domain to cover both types of MPM pins
+- Call irq_resolve_mapping() to find out Linux irq number
+- Save the use of ternary conditional operator and use switch/case for
+  .irq_set_type call
+- Drop unnecessary .irq_disable hook
+- Align qcom_mpm_chip and qcom_mpm_ops members vertically
+- Use helper irq_domain_translate_twocell()
+- Move mailbox requesting forward in probe function
+- Improve the documentation on qcm2290_gic_pins[]
+- Use IRQCHIP_PLATFORM_DRIVER infrastructural
+- Use cpu_pm notifier instead of .suspend_late hook to write MPM for
+  sleep, so that MPM can be set up for both suspend and idle context.
+  The TIMER0/1 setup is currently omitted for idle use case though,
+  as I haven't been able to successfully test the idle context.
+
+Shawn Guo (2):
+  dt-bindings: interrupt-controller: Add Qualcomm MPM support
+  irqchip: Add Qualcomm MPM controller driver
+
+ .../interrupt-controller/qcom,mpm.yaml        |  72 +++
+ drivers/irqchip/Kconfig                       |   8 +
+ drivers/irqchip/Makefile                      |   1 +
+ drivers/irqchip/qcom-mpm.c                    | 480 ++++++++++++++++++
+ 4 files changed, 561 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
+ create mode 100644 drivers/irqchip/qcom-mpm.c
 
 -- 
-Michal Hocko
-SUSE Labs
+2.17.1
+

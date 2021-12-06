@@ -2,104 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 470D246A921
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE4146A91E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350156AbhLFVL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:11:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57122 "EHLO
+        id S1350071AbhLFVLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:11:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350111AbhLFVLw (ORCPT
+        with ESMTP id S229979AbhLFVLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:11:52 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93503C0613F8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 13:08:23 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id d9so25103784wrw.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 13:08:23 -0800 (PST)
+        Mon, 6 Dec 2021 16:11:45 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C27C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 13:08:16 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id z8so11621068ilu.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 13:08:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wVbLQURO0Z9+ByAGWQaOmsfWDUK6bDVmhiIqKeEs0aE=;
-        b=JJI/H5a668Mbw7an8DN7K5GFo+wMZtRO8iMv7j/qlsQGYFUIRN6UN8UO4pRQj4kE4Q
-         3E+w1ZmIpJu3OuLUHoI9LMIe8ZBkG26ekEFAwXwIv2KDBvqWUqcgTuKHLPykX3Ai3Jm/
-         e/lrTmT3Y4YmHzwAg4UvD7yr+Zw7wBUhk2EHakWmhWg36/pTFpm0yypEDi/g4CEjIiaZ
-         0CdFL2GDfoNavQdQNPbIw64cGgxlrrYI0bIc03PrjA048vcvDH8SY1jLtta3PEblBI2j
-         XvAdE7zk/vz8Ryvo7GHx+FCqS5wosrdXIsgXuIBBh5MaU09HaDgeLkAFqHFgrwn2i4Zb
-         0aFA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MIBC6uZiK3qw8zipA5+LmK5bPUNLM9r4EQ+nUCy7/lw=;
+        b=INmG1BwTmj3+cLahz2Xuw59SFmU2O7hk4q8DxKCvFawc/lbK2rXo6XlOH03eaPjJ4r
+         BkDoSUJcr+fAOGsor2ZV2CbxjFT3X26JcoCou1+1uSpvNOQEQ1e9KooYEIyeKSD2XVgA
+         /DlU+Uz1n/6XV5VuQ7ZHCzAtjDtYyuiyQQDVnPKbEYxP2rgLtMFPbjnu/j7LPlk/OG1D
+         etunBOsfbZvM5gNAGTw7RasfrrC1MgYuR9BGvNrAoE6DqXpY9QGxYzamtjR/gWj6g9bM
+         FY/UaLBaBdKlmP1HU9jx4XOn9nCuSoaguRiF23ow+qany12dOU7p+osWvOTIcqxNz3vc
+         fboQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wVbLQURO0Z9+ByAGWQaOmsfWDUK6bDVmhiIqKeEs0aE=;
-        b=YIQZ0O0dp9SyxD9FxARJ9r4gR3aWMj8yqs2wCwuzwPoBmn6P73tkZ5YRMkYQaymFDF
-         FnGpm3GKAS/jN7NSYi5bSr45fCkcFQVcF1QIyCNuKjiGSi+niabfVUeOYfG7MwKZzGEW
-         ZZDpwh0RfPvJtyFOLRgZxmZJDvUcQEffH9Thlh9SYUmUKPd1DX9viAj724gEz9W9HSKy
-         qJm1yonNq1viJCngHvvAgaAslAygXzfDzegPMTWO6mlavontO7MQyHsCvIVuDkvUr3kE
-         Ev2q/KDvV5Zzk+gYSkCU4yDZvgVZpuSGJTuZiJn9xW2Fgj2b/nctZv6i4OkzbEa6xRMI
-         C/WA==
-X-Gm-Message-State: AOAM532/6Q5BZ/Lr9g2yPxPTIzEQZVRJ32T8wvcY8TaxPefz9DqGGvDL
-        QN3Ud/9TboSdxp9lr1DO9mWfhg4EzJw=
-X-Google-Smtp-Source: ABdhPJzEwhqm3P3YmM/t7Y0RuKivCcAhGdMYzJbPK7Wpsp6pnDkQCJuVYBBJQWzsPjGC43hmFI+h+Q==
-X-Received: by 2002:adf:cd09:: with SMTP id w9mr44802888wrm.619.1638824902076;
-        Mon, 06 Dec 2021 13:08:22 -0800 (PST)
-Received: from localhost.localdomain (dynamic-2a01-0c23-c0cf-f800-f22f-74ff-fe21-0725.c23.pool.telefonica.de. [2a01:c23:c0cf:f800:f22f:74ff:fe21:725])
-        by smtp.googlemail.com with ESMTPSA id p13sm511195wmi.0.2021.12.06.13.08.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 13:08:20 -0800 (PST)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     linux-amlogic@lists.infradead.org, alsa-devel@alsa-project.org
-Cc:     jbrunet@baylibre.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, broonie@kernel.org,
-        lgirdwood@gmail.com,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v2 1/2] ASoC: meson: aiu: fifo: Add missing dma_coerce_mask_and_coherent()
-Date:   Mon,  6 Dec 2021 22:08:03 +0100
-Message-Id: <20211206210804.2512999-2-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206210804.2512999-1-martin.blumenstingl@googlemail.com>
-References: <20211206210804.2512999-1-martin.blumenstingl@googlemail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MIBC6uZiK3qw8zipA5+LmK5bPUNLM9r4EQ+nUCy7/lw=;
+        b=CPFojPSYz5LtxdG3UzWjHJ8BfTV/qQOJMPNuw/mwHxiE1nVFyoJWuyAot5kOHyC3aA
+         9RUUIGdQsvsE3Ag6a9IO/osfIjwx6UH4VtxiGRgQvqMOK8DYfOSC7YnzR7QnrTA/d6hA
+         SgEoPyxpHfisJSXD7Qf/TDnwNqWY32PUySVuJ8AebvDtiPV91d2ahycQcj0L20996KZt
+         5rfz7Fl2VNwVaH8mEzHRFTfrQJYoplypy6de0/e2ZDjk5o9sEutD8iZPLQg2i8+SOlp9
+         mb0aQKWMcSTxczwFF9gEunN3WogZMZl3FcIFA2HbgCCcMxwWSYAyV7L66rXpjeWQ6ExC
+         EQhw==
+X-Gm-Message-State: AOAM532c9LFZJburVgdbgl4hM9RmF209IcwyNCjlqub6cnaMy9zN9Ig5
+        uIZBV46QSY5vKZHN8IvgYOveL++uj6C3j9Z1r4C30007zIY=
+X-Google-Smtp-Source: ABdhPJxQCtZ33FUXaFDtaku5StVr7BWXLnYl6zjud+9nZ/VlZL4qwxyr7DiBkwVXyvwGbAcwzOLBk6e4yGawn8E9nBM=
+X-Received: by 2002:a05:6e02:1605:: with SMTP id t5mr38923380ilu.233.1638824895522;
+ Mon, 06 Dec 2021 13:08:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1638308023.git.andreyknvl@google.com> <f405e36b20bd5d79dffef3f70b523885dcc6b163.1638308023.git.andreyknvl@google.com>
+ <YajVYNBDOyI3hTx1@elver.google.com>
+In-Reply-To: <YajVYNBDOyI3hTx1@elver.google.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Mon, 6 Dec 2021 22:08:04 +0100
+Message-ID: <CA+fCnZfuH6GNRQ7m-HU=MSrroe9BMounEuoFTSGJUGGk8=vKzQ@mail.gmail.com>
+Subject: Re: [PATCH 20/31] kasan, vmalloc: reset tags in vmalloc functions
+To:     Marco Elver <elver@google.com>
+Cc:     andrey.konovalov@linux.dev,
+        Alexander Potapenko <glider@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Evgenii Stepanov <eugenis@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The FIFO registers which take an DMA-able address are only 32-bit wide
-on AIU. Add dma_coerce_mask_and_coherent() to make the DMA core aware of
-this limitation.
+On Thu, Dec 2, 2021 at 3:17 PM Marco Elver <elver@google.com> wrote:
+>
+> On Tue, Nov 30, 2021 at 11:07PM +0100, andrey.konovalov@linux.dev wrote:
+> > From: Andrey Konovalov <andreyknvl@google.com>
+> >
+> > In preparation for adding vmalloc support to SW/HW_TAGS KASAN,
+> > reset pointer tags in functions that use pointer values in
+> > range checks.
+> >
+> > vread() is a special case here. Resetting the pointer tag in its
+> > prologue could technically lead to missing bad accesses to virtual
+> > mappings in its implementation. However, vread() doesn't access the
+> > virtual mappings cirectly. Instead, it recovers the physical address
+>
+> s/cirectly/directly/
+>
+> But this paragraph is a little confusing, because first you point out
+> that vread() might miss bad accesses, but then say that it does checked
+> accesses. I think to avoid confusing the reader, maybe just say that
+> vread() is checked, but hypothetically, should its implementation change
+> to directly access addr, invalid accesses might be missed.
+>
+> Did I get this right? Or am I still confused?
 
-Fixes: 6ae9ca9ce986bf ("ASoC: meson: aiu: add i2s and spdif support")
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
- sound/soc/meson/aiu-fifo.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+No, you got it right. Will reword in v2.
 
-diff --git a/sound/soc/meson/aiu-fifo.c b/sound/soc/meson/aiu-fifo.c
-index 4ad23267cace..d67ff4cdabd5 100644
---- a/sound/soc/meson/aiu-fifo.c
-+++ b/sound/soc/meson/aiu-fifo.c
-@@ -5,6 +5,7 @@
- 
- #include <linux/bitfield.h>
- #include <linux/clk.h>
-+#include <linux/dma-mapping.h>
- #include <sound/pcm_params.h>
- #include <sound/soc.h>
- #include <sound/soc-dai.h>
-@@ -179,6 +180,11 @@ int aiu_fifo_pcm_new(struct snd_soc_pcm_runtime *rtd,
- 	struct snd_card *card = rtd->card->snd_card;
- 	struct aiu_fifo *fifo = dai->playback_dma_data;
- 	size_t size = fifo->pcm->buffer_bytes_max;
-+	int ret;
-+
-+	ret = dma_coerce_mask_and_coherent(card->dev, DMA_BIT_MASK(32));
-+	if (ret)
-+		return ret;
- 
- 	snd_pcm_set_managed_buffer_all(rtd->pcm, SNDRV_DMA_TYPE_DEV,
- 				       card->dev, size, size);
--- 
-2.34.1
-
+Thanks!

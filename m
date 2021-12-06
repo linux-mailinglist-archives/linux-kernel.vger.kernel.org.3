@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1233C46A025
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B0E469BD7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358703AbhLFP6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:58:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389602AbhLFPkj (ORCPT
+        id S1359147AbhLFPRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:17:02 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59790 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354300AbhLFPKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:40:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE562C08EC98;
-        Mon,  6 Dec 2021 07:25:10 -0800 (PST)
+        Mon, 6 Dec 2021 10:10:48 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98DE2B810E7;
-        Mon,  6 Dec 2021 15:25:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0C38C34901;
-        Mon,  6 Dec 2021 15:25:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5D50612D3;
+        Mon,  6 Dec 2021 15:07:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F704C341C1;
+        Mon,  6 Dec 2021 15:07:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804308;
-        bh=FVcsG/vdlndGr9XaEoecGs7oK7bHRHkwJE4+ab7k1FQ=;
+        s=korg; t=1638803239;
+        bh=jBQC+ukkcxnuPQMINwIJ5J+YyZzRTGA9qFiupNwJos8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vcd+0rLDNYZ+MatBB+L3sVxyLJtcs4j0t2Wmsl4MusOhb020T+5MVOiGBzQe3THOq
-         lHT1hePxikydZSPuYfzZhuKgNw8JdUl47mEptnZ51q3kQKLbTb3TWdtgBgCGpy4gJO
-         3anv5QbSzaGilW4njLeBdyw41m75tErmAdWB+E1I=
+        b=Hhr5skNdu5mmBY2CABcFDRDW9+MDrFBwnIm6Z7tjmz8NB/PGrStlvgze2dXnpbLO8
+         pd3Ccmte/7YVbmgJXrZLlfbcqtfmtQFS+2enS+ARSC1ta5RQgv7bVazLgj62eQD7tq
+         LUcclsHFvFT841t+Q3q8kaLFdSyWYY62UpjQYvg8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alain Volmat <alain.volmat@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH 5.15 099/207] i2c: stm32f7: flush TX FIFO upon transfer errors
-Date:   Mon,  6 Dec 2021 15:55:53 +0100
-Message-Id: <20211206145613.664766095@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH 4.14 046/106] PCI: aardvark: Configure PCIe resources from ranges DT property
+Date:   Mon,  6 Dec 2021 15:55:54 +0100
+Message-Id: <20211206145556.996666974@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,61 +47,294 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alain Volmat <alain.volmat@foss.st.com>
+From: Pali Rohár <pali@kernel.org>
 
-commit 0c21d02ca469574d2082379db52d1a27b99eed0c upstream.
+commit 64f160e19e9264a7f6d89c516baae1473b6f8359 upstream.
 
-While handling an error during transfer (ex: NACK), it could
-happen that the driver has already written data into TXDR
-before the transfer get stopped.
-This commit add TXDR Flush after end of transfer in case of error to
-avoid sending a wrong data on any other slave upon next transfer.
+In commit 6df6ba974a55 ("PCI: aardvark: Remove PCIe outbound window
+configuration") was removed aardvark PCIe outbound window configuration and
+commit description said that was recommended solution by HW designers.
 
-Fixes: aeb068c57214 ("i2c: i2c-stm32f7: add driver")
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+But that commit completely removed support for configuring PCIe IO
+resources without removing PCIe IO 'ranges' from DTS files. After that
+commit PCIe IO space started to be treated as PCIe MEM space and accessing
+it just caused kernel crash.
+
+Moreover implementation of PCIe outbound windows prior that commit was
+incorrect. It completely ignored offset between CPU address and PCIe bus
+address and expected that in DTS is CPU address always same as PCIe bus
+address without doing any checks. Also it completely ignored size of every
+PCIe resource specified in 'ranges' DTS property and expected that every
+PCIe resource has size 128 MB (also for PCIe IO range). Again without any
+check. Apparently none of PCIe resource has in DTS specified size of 128
+MB. So it was completely broken and thanks to how aardvark mask works,
+configuration was completely ignored.
+
+This patch reverts back support for PCIe outbound window configuration but
+implementation is a new without issues mentioned above. PCIe outbound
+window is required when DTS specify in 'ranges' property non-zero offset
+between CPU and PCIe address space. To address recommendation by HW
+designers as specified in commit description of 6df6ba974a55, set default
+outbound parameters as PCIe MEM access without translation and therefore
+for this PCIe 'ranges' it is not needed to configure PCIe outbound window.
+For PCIe IO space is needed to configure aardvark PCIe outbound window.
+
+This patch fixes kernel crash when trying to access PCIe IO space.
+
+Link: https://lore.kernel.org/r/20210624215546.4015-2-pali@kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc: stable@vger.kernel.org # 6df6ba974a55 ("PCI: aardvark: Remove PCIe outbound window configuration")
+Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/i2c-stm32f7.c |   20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+ drivers/pci/host/pci-aardvark.c |  190 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 189 insertions(+), 1 deletion(-)
 
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1696,6 +1696,16 @@ static int stm32f7_i2c_xfer(struct i2c_a
- 	time_left = wait_for_completion_timeout(&i2c_dev->complete,
- 						i2c_dev->adap.timeout);
- 	ret = f7_msg->result;
-+	if (ret) {
-+		/*
-+		 * It is possible that some unsent data have already been
-+		 * written into TXDR. To avoid sending old data in a
-+		 * further transfer, flush TXDR in case of any error
-+		 */
-+		writel_relaxed(STM32F7_I2C_ISR_TXE,
-+			       i2c_dev->base + STM32F7_I2C_ISR);
-+		goto pm_free;
-+	}
+--- a/drivers/pci/host/pci-aardvark.c
++++ b/drivers/pci/host/pci-aardvark.c
+@@ -107,6 +107,46 @@
+ #define PCIE_MSI_PAYLOAD_REG			(CONTROL_BASE_ADDR + 0x9C)
+ #define     PCIE_MSI_DATA_MASK			GENMASK(15, 0)
  
- 	if (!time_left) {
- 		dev_dbg(i2c_dev->dev, "Access to slave 0x%x timed out\n",
-@@ -1744,8 +1754,16 @@ static int stm32f7_i2c_smbus_xfer(struct
- 	timeout = wait_for_completion_timeout(&i2c_dev->complete,
- 					      i2c_dev->adap.timeout);
- 	ret = f7_msg->result;
--	if (ret)
-+	if (ret) {
-+		/*
-+		 * It is possible that some unsent data have already been
-+		 * written into TXDR. To avoid sending old data in a
-+		 * further transfer, flush TXDR in case of any error
-+		 */
-+		writel_relaxed(STM32F7_I2C_ISR_TXE,
-+			       i2c_dev->base + STM32F7_I2C_ISR);
- 		goto pm_free;
-+	}
++/* PCIe window configuration */
++#define OB_WIN_BASE_ADDR			0x4c00
++#define OB_WIN_BLOCK_SIZE			0x20
++#define OB_WIN_COUNT				8
++#define OB_WIN_REG_ADDR(win, offset)		(OB_WIN_BASE_ADDR + \
++						 OB_WIN_BLOCK_SIZE * (win) + \
++						 (offset))
++#define OB_WIN_MATCH_LS(win)			OB_WIN_REG_ADDR(win, 0x00)
++#define     OB_WIN_ENABLE			BIT(0)
++#define OB_WIN_MATCH_MS(win)			OB_WIN_REG_ADDR(win, 0x04)
++#define OB_WIN_REMAP_LS(win)			OB_WIN_REG_ADDR(win, 0x08)
++#define OB_WIN_REMAP_MS(win)			OB_WIN_REG_ADDR(win, 0x0c)
++#define OB_WIN_MASK_LS(win)			OB_WIN_REG_ADDR(win, 0x10)
++#define OB_WIN_MASK_MS(win)			OB_WIN_REG_ADDR(win, 0x14)
++#define OB_WIN_ACTIONS(win)			OB_WIN_REG_ADDR(win, 0x18)
++#define OB_WIN_DEFAULT_ACTIONS			(OB_WIN_ACTIONS(OB_WIN_COUNT-1) + 0x4)
++#define     OB_WIN_FUNC_NUM_MASK		GENMASK(31, 24)
++#define     OB_WIN_FUNC_NUM_SHIFT		24
++#define     OB_WIN_FUNC_NUM_ENABLE		BIT(23)
++#define     OB_WIN_BUS_NUM_BITS_MASK		GENMASK(22, 20)
++#define     OB_WIN_BUS_NUM_BITS_SHIFT		20
++#define     OB_WIN_MSG_CODE_ENABLE		BIT(22)
++#define     OB_WIN_MSG_CODE_MASK		GENMASK(21, 14)
++#define     OB_WIN_MSG_CODE_SHIFT		14
++#define     OB_WIN_MSG_PAYLOAD_LEN		BIT(12)
++#define     OB_WIN_ATTR_ENABLE			BIT(11)
++#define     OB_WIN_ATTR_TC_MASK			GENMASK(10, 8)
++#define     OB_WIN_ATTR_TC_SHIFT		8
++#define     OB_WIN_ATTR_RELAXED			BIT(7)
++#define     OB_WIN_ATTR_NOSNOOP			BIT(6)
++#define     OB_WIN_ATTR_POISON			BIT(5)
++#define     OB_WIN_ATTR_IDO			BIT(4)
++#define     OB_WIN_TYPE_MASK			GENMASK(3, 0)
++#define     OB_WIN_TYPE_SHIFT			0
++#define     OB_WIN_TYPE_MEM			0x0
++#define     OB_WIN_TYPE_IO			0x4
++#define     OB_WIN_TYPE_CONFIG_TYPE0		0x8
++#define     OB_WIN_TYPE_CONFIG_TYPE1		0x9
++#define     OB_WIN_TYPE_MSG			0xc
++
+ /* LMI registers base address and register offsets */
+ #define LMI_BASE_ADDR				0x6000
+ #define CFG_REG					(LMI_BASE_ADDR + 0x0)
+@@ -175,6 +215,13 @@ struct advk_pcie {
+ 	struct platform_device *pdev;
+ 	void __iomem *base;
+ 	struct list_head resources;
++	struct {
++		phys_addr_t match;
++		phys_addr_t remap;
++		phys_addr_t mask;
++		u32 actions;
++	} wins[OB_WIN_COUNT];
++	u8 wins_count;
+ 	struct irq_domain *irq_domain;
+ 	struct irq_chip irq_chip;
+ 	raw_spinlock_t irq_lock;
+@@ -350,9 +397,39 @@ err:
+ 	dev_err(dev, "link never came up\n");
+ }
  
- 	if (!timeout) {
- 		dev_dbg(dev, "Access to slave 0x%x timed out\n", f7_msg->addr);
++/*
++ * Set PCIe address window register which could be used for memory
++ * mapping.
++ */
++static void advk_pcie_set_ob_win(struct advk_pcie *pcie, u8 win_num,
++				 phys_addr_t match, phys_addr_t remap,
++				 phys_addr_t mask, u32 actions)
++{
++	advk_writel(pcie, OB_WIN_ENABLE |
++			  lower_32_bits(match), OB_WIN_MATCH_LS(win_num));
++	advk_writel(pcie, upper_32_bits(match), OB_WIN_MATCH_MS(win_num));
++	advk_writel(pcie, lower_32_bits(remap), OB_WIN_REMAP_LS(win_num));
++	advk_writel(pcie, upper_32_bits(remap), OB_WIN_REMAP_MS(win_num));
++	advk_writel(pcie, lower_32_bits(mask), OB_WIN_MASK_LS(win_num));
++	advk_writel(pcie, upper_32_bits(mask), OB_WIN_MASK_MS(win_num));
++	advk_writel(pcie, actions, OB_WIN_ACTIONS(win_num));
++}
++
++static void advk_pcie_disable_ob_win(struct advk_pcie *pcie, u8 win_num)
++{
++	advk_writel(pcie, 0, OB_WIN_MATCH_LS(win_num));
++	advk_writel(pcie, 0, OB_WIN_MATCH_MS(win_num));
++	advk_writel(pcie, 0, OB_WIN_REMAP_LS(win_num));
++	advk_writel(pcie, 0, OB_WIN_REMAP_MS(win_num));
++	advk_writel(pcie, 0, OB_WIN_MASK_LS(win_num));
++	advk_writel(pcie, 0, OB_WIN_MASK_MS(win_num));
++	advk_writel(pcie, 0, OB_WIN_ACTIONS(win_num));
++}
++
+ static void advk_pcie_setup_hw(struct advk_pcie *pcie)
+ {
+ 	u32 reg;
++	int i;
+ 
+ 	/* Set to Direct mode */
+ 	reg = advk_readl(pcie, CTRL_CONFIG_REG);
+@@ -416,15 +493,51 @@ static void advk_pcie_setup_hw(struct ad
+ 	reg = PCIE_IRQ_ALL_MASK & (~PCIE_IRQ_ENABLE_INTS_MASK);
+ 	advk_writel(pcie, reg, HOST_CTRL_INT_MASK_REG);
+ 
++	/*
++	 * Enable AXI address window location generation:
++	 * When it is enabled, the default outbound window
++	 * configurations (Default User Field: 0xD0074CFC)
++	 * are used to transparent address translation for
++	 * the outbound transactions. Thus, PCIe address
++	 * windows are not required for transparent memory
++	 * access when default outbound window configuration
++	 * is set for memory access.
++	 */
+ 	reg = advk_readl(pcie, PCIE_CORE_CTRL2_REG);
+ 	reg |= PCIE_CORE_CTRL2_OB_WIN_ENABLE;
+ 	advk_writel(pcie, reg, PCIE_CORE_CTRL2_REG);
+ 
+-	/* Bypass the address window mapping for PIO */
++	/*
++	 * Set memory access in Default User Field so it
++	 * is not required to configure PCIe address for
++	 * transparent memory access.
++	 */
++	advk_writel(pcie, OB_WIN_TYPE_MEM, OB_WIN_DEFAULT_ACTIONS);
++
++	/*
++	 * Bypass the address window mapping for PIO:
++	 * Since PIO access already contains all required
++	 * info over AXI interface by PIO registers, the
++	 * address window is not required.
++	 */
+ 	reg = advk_readl(pcie, PIO_CTRL);
+ 	reg |= PIO_CTRL_ADDR_WIN_DISABLE;
+ 	advk_writel(pcie, reg, PIO_CTRL);
+ 
++	/*
++	 * Configure PCIe address windows for non-memory or
++	 * non-transparent access as by default PCIe uses
++	 * transparent memory access.
++	 */
++	for (i = 0; i < pcie->wins_count; i++)
++		advk_pcie_set_ob_win(pcie, i,
++				     pcie->wins[i].match, pcie->wins[i].remap,
++				     pcie->wins[i].mask, pcie->wins[i].actions);
++
++	/* Disable remaining PCIe outbound windows */
++	for (i = pcie->wins_count; i < OB_WIN_COUNT; i++)
++		advk_pcie_disable_ob_win(pcie, i);
++
+ 	advk_pcie_train_link(pcie);
+ 
+ 	reg = advk_readl(pcie, PCIE_CORE_CMD_STATUS_REG);
+@@ -1041,6 +1154,7 @@ static int advk_pcie_probe(struct platfo
+ 	struct resource *res;
+ 	struct pci_bus *bus, *child;
+ 	struct pci_host_bridge *bridge;
++	struct resource_entry *entry;
+ 	int ret, irq;
+ 
+ 	bridge = devm_pci_alloc_host_bridge(dev, sizeof(struct advk_pcie));
+@@ -1070,6 +1184,80 @@ static int advk_pcie_probe(struct platfo
+ 		return ret;
+ 	}
+ 
++	resource_list_for_each_entry(entry, &pcie->resources) {
++		resource_size_t start = entry->res->start;
++		resource_size_t size = resource_size(entry->res);
++		unsigned long type = resource_type(entry->res);
++		u64 win_size;
++
++		/*
++		 * Aardvark hardware allows to configure also PCIe window
++		 * for config type 0 and type 1 mapping, but driver uses
++		 * only PIO for issuing configuration transfers which does
++		 * not use PCIe window configuration.
++		 */
++		if (type != IORESOURCE_MEM && type != IORESOURCE_MEM_64 &&
++		    type != IORESOURCE_IO)
++			continue;
++
++		/*
++		 * Skip transparent memory resources. Default outbound access
++		 * configuration is set to transparent memory access so it
++		 * does not need window configuration.
++		 */
++		if ((type == IORESOURCE_MEM || type == IORESOURCE_MEM_64) &&
++		    entry->offset == 0)
++			continue;
++
++		/*
++		 * The n-th PCIe window is configured by tuple (match, remap, mask)
++		 * and an access to address A uses this window if A matches the
++		 * match with given mask.
++		 * So every PCIe window size must be a power of two and every start
++		 * address must be aligned to window size. Minimal size is 64 KiB
++		 * because lower 16 bits of mask must be zero. Remapped address
++		 * may have set only bits from the mask.
++		 */
++		while (pcie->wins_count < OB_WIN_COUNT && size > 0) {
++			/* Calculate the largest aligned window size */
++			win_size = (1ULL << (fls64(size)-1)) |
++				   (start ? (1ULL << __ffs64(start)) : 0);
++			win_size = 1ULL << __ffs64(win_size);
++			if (win_size < 0x10000)
++				break;
++
++			dev_dbg(dev,
++				"Configuring PCIe window %d: [0x%llx-0x%llx] as %lu\n",
++				pcie->wins_count, (unsigned long long)start,
++				(unsigned long long)start + win_size, type);
++
++			if (type == IORESOURCE_IO) {
++				pcie->wins[pcie->wins_count].actions = OB_WIN_TYPE_IO;
++				pcie->wins[pcie->wins_count].match = pci_pio_to_address(start);
++			} else {
++				pcie->wins[pcie->wins_count].actions = OB_WIN_TYPE_MEM;
++				pcie->wins[pcie->wins_count].match = start;
++			}
++			pcie->wins[pcie->wins_count].remap = start - entry->offset;
++			pcie->wins[pcie->wins_count].mask = ~(win_size - 1);
++
++			if (pcie->wins[pcie->wins_count].remap & (win_size - 1))
++				break;
++
++			start += win_size;
++			size -= win_size;
++			pcie->wins_count++;
++		}
++
++		if (size > 0) {
++			dev_err(&pcie->pdev->dev,
++				"Invalid PCIe region [0x%llx-0x%llx]\n",
++				(unsigned long long)entry->res->start,
++				(unsigned long long)entry->res->end + 1);
++			return -EINVAL;
++		}
++	}
++
+ 	pcie->reset_gpio = devm_fwnode_get_index_gpiod_from_child(dev, "reset",
+ 								  0,
+ 								  dev_fwnode(dev),
 
 

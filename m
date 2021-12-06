@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF20469A1F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C425469A6D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345383AbhLFPFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:05:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
+        id S1346912AbhLFPHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:07:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345081AbhLFPEe (ORCPT
+        with ESMTP id S1345496AbhLFPEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:04:34 -0500
+        Mon, 6 Dec 2021 10:04:14 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CABC0698D6;
-        Mon,  6 Dec 2021 07:01:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E76C0611F7;
+        Mon,  6 Dec 2021 07:00:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53CD4612C0;
-        Mon,  6 Dec 2021 15:01:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 356D8C341C2;
-        Mon,  6 Dec 2021 15:01:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C1E561311;
+        Mon,  6 Dec 2021 15:00:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9206C341C2;
+        Mon,  6 Dec 2021 15:00:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802864;
-        bh=NiMgmZapyvAJxXSAyJ1CzEO4e1p2ngj4A/3ZvHAp5YA=;
+        s=korg; t=1638802844;
+        bh=IVFz8ntBdU8/HcdloqpQ2v/VxvPxVUhJLhYdA3vs6a4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LfT7NSxZ98OvLayw1SME+j1sqJj8vVabEJCC3555dyOJ0JHqxgM/YMJvkLvoxDOyS
-         cYFT94y0eK4xpMJJgqbOwaWg5+Fccl+aht2pQC6O+4ZQSBtyQ/yLygXZc9MkTMYqrl
-         DTa7c4/MF5hAyGQIIWHhkSOGifxXLdlPSyZstp48=
+        b=aCSf+nvZddUcchCRSPRwi7p+YaexZEtWxlOvzYAw0pOw5YB7IyB1w3MALlbammSXC
+         fImzgAdXu8bgDP235tod90nqBhSxhMk4jiZc8jVI3DTB2VtztB2DmxFBMEHTf9TgoE
+         MNphENNL3pvKIFQv0tBbblS9KcOtPAIejkgRfHxo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jann Horn <jannh@google.com>
-Subject: [PATCH 4.4 45/52] fget: check that the fd still exists after getting a ref to it
-Date:   Mon,  6 Dec 2021 15:56:29 +0100
-Message-Id: <20211206145549.440144845@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Chris Zankel <chris@zankel.net>, linux-xtensa@linux-xtensa.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.4 46/52] natsemi: xtensa: fix section mismatch warnings
+Date:   Mon,  6 Dec 2021 15:56:30 +0100
+Message-Id: <20211206145549.473124570@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
 References: <20211206145547.892668902@linuxfoundation.org>
@@ -49,63 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 054aa8d439b9185d4f5eb9a90282d1ce74772969 upstream.
+commit b0f38e15979fa8851e88e8aa371367f264e7b6e9 upstream.
 
-Jann Horn points out that there is another possible race wrt Unix domain
-socket garbage collection, somewhat reminiscent of the one fixed in
-commit cbcf01128d0a ("af_unix: fix garbage collect vs MSG_PEEK").
+Fix section mismatch warnings in xtsonic. The first one appears to be
+bogus and after fixing the second one, the first one is gone.
 
-See the extended comment about the garbage collection requirements added
-to unix_peek_fds() by that commit for details.
+WARNING: modpost: vmlinux.o(.text+0x529adc): Section mismatch in reference from the function sonic_get_stats() to the function .init.text:set_reset_devices()
+The function sonic_get_stats() references
+the function __init set_reset_devices().
+This is often because sonic_get_stats lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
 
-The race comes from how we can locklessly look up a file descriptor just
-as it is in the process of being closed, and with the right artificial
-timing (Jann added a few strategic 'mdelay(500)' calls to do that), the
-Unix domain socket garbage collector could see the reference count
-decrement of the close() happen before fget() took its reference to the
-file and the file was attached onto a new file descriptor.
+WARNING: modpost: vmlinux.o(.text+0x529b3b): Section mismatch in reference from the function xtsonic_probe() to the function .init.text:sonic_probe1()
+The function xtsonic_probe() references
+the function __init sonic_probe1().
+This is often because xtsonic_probe lacks a __init
+annotation or the annotation of sonic_probe1 is wrong.
 
-This is all (intentionally) correct on the 'struct file *' side, with
-RCU lookups and lockless reference counting very much part of the
-design.  Getting that reference count out of order isn't a problem per
-se.
-
-But the garbage collector can get confused by seeing this situation of
-having seen a file not having any remaining external references and then
-seeing it being attached to an fd.
-
-In commit cbcf01128d0a ("af_unix: fix garbage collect vs MSG_PEEK") the
-fix was to serialize the file descriptor install with the garbage
-collector by taking and releasing the unix_gc_lock.
-
-That's not really an option here, but since this all happens when we are
-in the process of looking up a file descriptor, we can instead simply
-just re-check that the file hasn't been closed in the meantime, and just
-re-do the lookup if we raced with a concurrent close() of the same file
-descriptor.
-
-Reported-and-tested-by: Jann Horn <jannh@google.com>
-Acked-by: Miklos Szeredi <mszeredi@redhat.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 74f2a5f0ef64 ("xtensa: Add support for the Sonic Ethernet device for the XT2000 board.")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Finn Thain <fthain@telegraphics.com.au>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: linux-xtensa@linux-xtensa.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Acked-by: Max Filippov <jcmvbkbc@gmail.com>
+Link: https://lore.kernel.org/r/20211130063947.7529-1-rdunlap@infradead.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/file.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/ethernet/natsemi/xtsonic.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -708,6 +708,10 @@ loop:
- 			file = NULL;
- 		else if (!get_file_rcu_many(file, refs))
- 			goto loop;
-+		else if (__fcheck_files(files, fd) != file) {
-+			fput_many(file, refs);
-+			goto loop;
-+		}
- 	}
- 	rcu_read_unlock();
+--- a/drivers/net/ethernet/natsemi/xtsonic.c
++++ b/drivers/net/ethernet/natsemi/xtsonic.c
+@@ -128,7 +128,7 @@ static const struct net_device_ops xtson
+ 	.ndo_set_mac_address	= eth_mac_addr,
+ };
  
+-static int __init sonic_probe1(struct net_device *dev)
++static int sonic_probe1(struct net_device *dev)
+ {
+ 	static unsigned version_printed = 0;
+ 	unsigned int silicon_revision;
 
 

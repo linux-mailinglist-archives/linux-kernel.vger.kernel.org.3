@@ -2,108 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 844F146A584
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:19:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C70946A58A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348362AbhLFTWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:22:52 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:58154 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1347799AbhLFTWv (ORCPT
+        id S1348381AbhLFTXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:23:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348367AbhLFTXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:22:51 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B6DBMxU016569;
-        Mon, 6 Dec 2021 20:19:17 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=selector1;
- bh=LswolZltv4wHUvra42xDx0HudOGvUKO0BcGRhPhum3k=;
- b=jsIY4KfZfmh3+mpWNx2m+OwWDXN0ykRDJUZPs71GYxpEcudm+weah5mOopNfn65mAFLH
- ag5yXOVs+413FsE8zX8DyhaelRR4cIy6v0N2oHEfQ59QOPSsFNU+MmRzKChDbAnePAq8
- oJl4oEWdUz+ee1fhl+O10H+KYXQuwbDROI+omsV6kCNc4X5ny5eb/HbYtw2qVEi8d4GS
- TzF/HTG7p3gUhdvDUpdQsuhk+wzpTomAeCwbh9rC3D61G/+K0zeHq1/0cXWvpqsOLbvP
- qPngjKAiA5exMvPf0b2MUqWrG3fvsaTvnlVgGu8XVd6ZCXQZGIW9GRLIpA0huh45LSi1 4w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cseqrk9re-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Dec 2021 20:19:17 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E594810002A;
-        Mon,  6 Dec 2021 20:19:16 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DD2C22138CC;
-        Mon,  6 Dec 2021 20:19:16 +0100 (CET)
-Received: from localhost (10.75.127.50) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 6 Dec 2021 20:19:16
- +0100
-From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <arnaud.pouliquen@foss.st.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [PATCH] remoteproc: Fix remaining wrong return formatting in documentation
-Date:   Mon, 6 Dec 2021 20:18:58 +0100
-Message-ID: <20211206191858.10741-1-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 6 Dec 2021 14:23:52 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFB5C061746;
+        Mon,  6 Dec 2021 11:20:23 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id j5-20020a17090a318500b001a6c749e697so451002pjb.1;
+        Mon, 06 Dec 2021 11:20:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=x3N2412fzQ8zw/DhmHNSvTfe3uqJUP4r2Qcfq1jFijE=;
+        b=GN7zo7F8y0xfl6SWfQ4RwZkD+9Ns3XF1UnvyN2UsH2ZKtvDyQqbQy/DgwBkHBOJSz+
+         /DAsADFXYnpx6kgCCNyZDr2CzdGUiYrqumVOt39SIZXD1BsOjDBvsTq+2TIiUA4hFAIL
+         U7A7NCtfq1vcHQk/kZte9OkaC/gcQgHr6Sowftn5wtOiqO3Rya9JuY1nEUn4//J7iQvd
+         aVrdEiwL3gFVZWG9PVuN8HjDv6xJJP3+VFJGF1Ni4HC/n1UBr3T66NF4fzFJsGCOV+Ah
+         L0tatESrIG2gDgBEsVxkqWLbqEGvYxU4subqf12GUtjNBUMeXxnHWg9TvaNrSBClebvE
+         BMjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=x3N2412fzQ8zw/DhmHNSvTfe3uqJUP4r2Qcfq1jFijE=;
+        b=Ln4Ww5YNxTKyXy1VpS76N3tNXxR/S2yA3nPGFdYWcA/Lz4fM2TtbBo2VhO1hGJa2PR
+         U4AX7JaO1ZR8okvyBWO/duOc2HSNlsxHiXYatFQW3hf1VoF7fSRIwBj6Zlq0IZHqdEaP
+         QFXpvd61PqsEXl2a6eFamQxqYwo79iNWALmqn+AorY0chDOjBtemXXLBtlVvbYXdNUCq
+         BIFZHdA6+Yzxl1sd7e6Vw9yx3g3dm/u/YHm0M/8+2mUGix7J9S0jmgW0gw4UzWskGQ2X
+         ym2OMpY/h3cbx30h6khlY8X+LHb3XE7dnKPYXB/Oy6HgPj6hjhQL9RBefYSe4c+9Dx1Q
+         YHvQ==
+X-Gm-Message-State: AOAM5306KmuUlj0QaiSkZy6I/ElFV7vuip/zZVjYetL/inrpIKsQ/+Bu
+        I7NtbayaxTdJJXthxTh+vheoDJsuB5A=
+X-Google-Smtp-Source: ABdhPJyxR4blC7/F8hVf8KFbg36PnXDyoBMMQiVwm3Mo1h1VWWAAXdHanmiqlnxEuGATjYxeGQug5A==
+X-Received: by 2002:a17:902:ce8f:b0:141:f85a:e0de with SMTP id f15-20020a170902ce8f00b00141f85ae0demr45569830plg.69.1638818422623;
+        Mon, 06 Dec 2021 11:20:22 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id y10sm12373934pfl.21.2021.12.06.11.20.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 11:20:21 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 5.10 000/130] 5.10.84-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        stable@vger.kernel.org
+References: <20211206145559.607158688@linuxfoundation.org>
+Message-ID: <ef62c484-b842-65e8-94bc-6b30bdf39525@gmail.com>
+Date:   Mon, 6 Dec 2021 11:20:20 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-06_07,2021-12-06_02,2021-12-02_01
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel documentation specification:
-"The return value, if any, should be described in a dedicated section
-named Return."
+On 12/6/21 6:55 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.84 release.
+> There are 130 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 08 Dec 2021 14:55:37 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.84-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
- drivers/remoteproc/mtk_scp_ipi.c   | 4 ++--
- drivers/remoteproc/st_slim_rproc.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-diff --git a/drivers/remoteproc/mtk_scp_ipi.c b/drivers/remoteproc/mtk_scp_ipi.c
-index 6dc955ecab80..00f041ebcde6 100644
---- a/drivers/remoteproc/mtk_scp_ipi.c
-+++ b/drivers/remoteproc/mtk_scp_ipi.c
-@@ -23,7 +23,7 @@
-  *
-  * Register an ipi function to receive ipi interrupt from SCP.
-  *
-- * Returns 0 if ipi registers successfully, -error on error.
-+ * Return: 0 if ipi registers successfully, -error on error.
-  */
- int scp_ipi_register(struct mtk_scp *scp,
- 		     u32 id,
-@@ -150,7 +150,7 @@ EXPORT_SYMBOL_GPL(scp_ipi_unlock);
-  * When the processing completes, IPI handler registered
-  * by scp_ipi_register will be called in interrupt context.
-  *
-- * Returns 0 if sending data successfully, -error on error.
-+ * Return: 0 if sending data successfully, -error on error.
-  **/
- int scp_ipi_send(struct mtk_scp *scp, u32 id, void *buf, unsigned int len,
- 		 unsigned int wait)
-diff --git a/drivers/remoteproc/st_slim_rproc.c b/drivers/remoteproc/st_slim_rproc.c
-index 22096adc1ad3..4ed9467897e5 100644
---- a/drivers/remoteproc/st_slim_rproc.c
-+++ b/drivers/remoteproc/st_slim_rproc.c
-@@ -216,7 +216,7 @@ static const struct rproc_ops slim_rproc_ops = {
-  * obtains and enables any clocks required by the SLIM core and also
-  * ioremaps the various IO.
-  *
-- * Returns st_slim_rproc pointer or PTR_ERR() on error.
-+ * Return: st_slim_rproc pointer or PTR_ERR() on error.
-  */
- 
- struct st_slim_rproc *st_slim_rproc_alloc(struct platform_device *pdev,
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.17.1
-
+Florian

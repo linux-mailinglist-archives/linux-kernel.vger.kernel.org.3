@@ -2,200 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D615C468FC7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 04:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0EC3468FC8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 04:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236636AbhLFDun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 22:50:43 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:17834 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233069AbhLFDum (ORCPT
+        id S236666AbhLFDvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 22:51:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:22536 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236642AbhLFDvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 22:50:42 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B5Ho64e010201;
-        Sun, 5 Dec 2021 19:47:13 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : mime-version; s=facebook;
- bh=KwtBA2B1Er/UFNlu1S+54jzcRBwwsSqPqW+ouSJusgA=;
- b=XziB39w3LWSuOfRLi7ZsW8xjIeeYZU7YYMw3C+FaeZeYwAxWidJzl/tWuHACWqu9HO4F
- HHuu2SvEAHmeums7KXoFQ7P3cCGCd5ktq4gwMOC13EhNEZ2g0WKaMUCZy10IfVLbdQtg
- g827HLn+JTZJYX1cLinmmJvfhVfQcQ0P2WU= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3crs873nd3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Sun, 05 Dec 2021 19:47:13 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sun, 5 Dec 2021 19:47:10 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ozx1igFyQt1PrmQkWzWMQxzQVV/svBBEMKRcCb6gd2tbkSdM+EtMJBvcFZ93lgNGZxqrhq3lhM5i78CroaAVBog6WmCbeu9iKVWJpcwZTaOl+nLVDsDZZRfC95hXO9IszRvQ45stqNbvGI2iUlxGT5t4W+4299eThbb07R1fhkz+CtX+nSotLJoTnng0nmPBhsyjTYRM3sro5NMLjD2t4OTP1rHx8gsTqOkXuOwJPuLK4T3s5zrJQKji5BYY195ITSFckBRjkyUUYp3CyjyY1hbGicilY0pIZ17m8uwP4NL868A+WCfCCEgKUuV1NtKTx6UUqXL9crdDBjnTVNTfng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KwtBA2B1Er/UFNlu1S+54jzcRBwwsSqPqW+ouSJusgA=;
- b=lJGbTDY4MvE7jL/fUOPTwptDM7eEYLWzqhHdQLFXzGiqbIR3tTuoJSBFAA3pNe7NZihC6hSny9i84fqm3vfmQAFuVMFKAMc7jbcE6tRbl+flNGXugEQMC3WmDN2WKMm+UUdaEsyGkxLIOC6u/EhlxCW7nO4rU0BhJ0OFf4HkxMgvJY4Sf6qpj3vSs3VTRxhLWzZSF0vDOy1sCci2hNGFdHl1VkhPuo0lMTtULjaDMkIhA9jhJPz6o39YVYR7lADCYT6hyNnizlaQ3KFt0S8lDtfL3R97cIyOuF/6Ce5IQJ+P+SzeMjEm6PStN4AmlYw9Cip29wW8waobGB8OSTAo2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from PH0PR15MB5117.namprd15.prod.outlook.com (2603:10b6:510:c4::8)
- by PH0PR15MB5166.namprd15.prod.outlook.com (2603:10b6:510:14b::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Mon, 6 Dec
- 2021 03:47:09 +0000
-Received: from PH0PR15MB5117.namprd15.prod.outlook.com
- ([fe80::3102:269:96e6:379c]) by PH0PR15MB5117.namprd15.prod.outlook.com
- ([fe80::3102:269:96e6:379c%9]) with mapi id 15.20.4755.019; Mon, 6 Dec 2021
- 03:47:08 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-CC:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>
-Subject: Re: Building perf with BUILD_BPF_SKEL=1 by default
-Thread-Topic: Building perf with BUILD_BPF_SKEL=1 by default
-Thread-Index: AQHX6EczClIG2E5d9UOz/2n0HlwT/KwhKHqAgAK43ACAAPX7AA==
-Date:   Mon, 6 Dec 2021 03:47:08 +0000
-Message-ID: <A8AD990A-BFC3-4194-ADDF-35BED3DF1219@fb.com>
-References: <YaoXUrLUZt1scVb0@kernel.org>
- <CF175681-8101-43D1-ABDB-449E644BE986@fb.com> <Yay5Yjnj7LUodupy@kernel.org>
-In-Reply-To: <Yay5Yjnj7LUodupy@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3693.20.0.1.32)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8079282e-74a7-4f74-4792-08d9b86b1420
-x-ms-traffictypediagnostic: PH0PR15MB5166:
-x-microsoft-antispam-prvs: <PH0PR15MB5166B97B95289E1443A042DAB36D9@PH0PR15MB5166.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wy+YMXkqGf9Dk16Li+4+a2IXRbMg4QfT6vSOq/SSAlylsD7y1UHNUZXHSib3/PHlsSnM3zHGbZf6XEsErA2NUYS4abRZfjUV9V/xq5MN0/P6am0kRTUbT5bHawtzZyuzna6TQtmvnYyIY2NvkfyvoJci84d1r0ebqS+Bzg1EGeaAIWi6SD60NjHcBBhhOegx2phusleUwzGJUzpI2NwBahK6ZSzEt5EIlkGUWJ8euabUzbPDlAOUlNkY6th2jEg+yU3agKMhd261EcHXc3uwMx6+60OyDhVubnzkj612uGWOXb6gUatri8144zWKNLB5ob5DvgKqpM1tE+Ixl+UovOGty8HQR/SGHkT7AYsijN8iguU9BxunL3pxGlwiX0D/8ni3JpqY6XsI+ucREdOiYvFNBJCh1/3j0eg6GDojC8Oic4LlT4FMwapgzwi9BZcTZBAMzyiH+il0NOQx0hksfgUzEbmfi+CcET7gH1r/JmLA5GZHtHv1lZshaLVi5c+9JdKHZ7PrSSlvArJSlreiP1E4lVfY05jvIOd2GDb/oqDIGWjInQ8FECIXPyVdvfd4QLeaO+MTFh6I3w/5ULLd5zwuOwZvnmVjACJdBW2TjU4jM5rwFhsXB1Mi3Si0ge3Iv3e4CN7SgRqe6QQzO2y0lXepLGmQ/jxy9Ua/M0ykw5MpaqHBg21bEG8CRAAGQPS6V0tNkMxPxAstNG0ene05kenz9Xm+OSDF5pN172PtUU6NHFIcuO3FnLDqLdmTAM+K
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR15MB5117.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66946007)(6916009)(186003)(122000001)(38100700002)(2906002)(6506007)(4326008)(36756003)(76116006)(33656002)(54906003)(71200400001)(53546011)(8676002)(6512007)(5660300002)(2616005)(38070700005)(8936002)(83380400001)(66446008)(86362001)(64756008)(66556008)(66476007)(316002)(26005)(6486002)(508600001)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8dEMFf/NFktc+M6tqB0x3Rf2TM4Bezbo3kjDddTa+UwLUgIiCbegjfLCpgVW?=
- =?us-ascii?Q?4mmrh3cgyT5RmEqsvmCHdgGHJqo1rf3kgIa8RyektJ9SXq/ta/gnhm97BGsl?=
- =?us-ascii?Q?S1+AvRUlygGhWHRReCQ4scMUZCXTBoqnj49PWt4KdZCSH0WR4d8VhOHfZA2G?=
- =?us-ascii?Q?LcZninb4m81npHgbTPX6uTsdSDx31Ce2buKgJ+LzkIiX85VewRYRsEsLArSx?=
- =?us-ascii?Q?ErPjW5GVQfw7Sos4f49dhijTmgETCtUIgtcPRuuSFNAwFW15FYXKIrM0cbT1?=
- =?us-ascii?Q?2+dQKTiBzCuIDx/AdaSiH3zvim4JkwJHuq8p9TuA8aFyb3osoUJH26GEhqNZ?=
- =?us-ascii?Q?8whusueWmP2YR5BP+aRwUnyISXGwWH6eTqF8ohzL0ojwmFhsgXgQJYlLaO5d?=
- =?us-ascii?Q?+1fV2aGsuBNO4yLI16Zhmjv+16IxJWf1n4ESt0fN4B+eKzX6nBotdYyiXVvB?=
- =?us-ascii?Q?8O2MtDbuUAKNynyWrxFCAdCv07wwZNJm65crwE/oVYYIv5Uiz0rgZvTF0kpJ?=
- =?us-ascii?Q?KpsuuhicDv4RdZtLpFkA+D/XzJZ34McxKwNtD0tKRI+56KNIuGLn5KpbBJ7i?=
- =?us-ascii?Q?EZv3jdd0KwtjpQC80lAAgw+jE0dcgfpZv9ZXNmGtZt7i95wv7wpeJRdjFtXh?=
- =?us-ascii?Q?FeeOc3jZ4KhsqOzIBL4hsrWlDM9gF5JArkPwoAWmxelkukfrsnm5ib0qHU1+?=
- =?us-ascii?Q?Cw5VNZOu2ysOMoEwrI9NvF9rBBCjq6M16FVlpX4E032HPU/matQmrzyaX2aG?=
- =?us-ascii?Q?KRodd/iJaTTTshq8NAJfvcmP1keIgPVffiZCt1887KVe+LfVYKkJdTltVT8S?=
- =?us-ascii?Q?WJu16WsJRLh/5do/mpmQMNgS4LdrUqbMIER07xJ0lhniyP94rHKyoykJkEda?=
- =?us-ascii?Q?zzoXlUjYMk+Szlbese2hVHiZxo49rHz8/96tF61b9R+9FruUJhMJdnpIgqi0?=
- =?us-ascii?Q?WPmzajdblk/+3PHlun6hMlX5ywWUUT4Lrv2lpadJwZPi/SDxyfJYP21uUKSR?=
- =?us-ascii?Q?OGDjojbyKSgbD3wcbMO6g3K+89m1zugTC7KEnEvethEAOz5ZQP90ltJg58Us?=
- =?us-ascii?Q?6sMLpkSjNM2ry/xpzG1q2EBIw5lm3tW/2Cu7GZUVj/yz+UXa5Vl9yh78ZBHS?=
- =?us-ascii?Q?8O3ciG5vgCy98GXbw46RFrZXs/ztuCTdA+U9pXjOCh21SLpNMIV96TP8uF/r?=
- =?us-ascii?Q?CJwd2xQgPrfK1uE86B3ra2I7gQmeCBBx17gDn8BRrjD2rkl1/Bgc2shWJW+Y?=
- =?us-ascii?Q?nOlkxNW2TM+JU7Frj4wZqqStAFY3e9QKfzpvOU6i9x2W5HwTV2uJ+MYHXI+/?=
- =?us-ascii?Q?g7+OapooOUxLXJE/MYONm2/t4yeQYpG6fUMYQdoDWS597q4/Cc/X+VRSQPGs?=
- =?us-ascii?Q?1Wsyl3vWt+7XdmRsi550HC/ewdSV4lr5ejjyhbS80NVByxK6HAC2d9lV1At/?=
- =?us-ascii?Q?ZU8zZTiy7Zpk/PDieaMfKi/54iz2wYoPPSx3sw3BhdaimYHltwe+zhNEqqui?=
- =?us-ascii?Q?+R180rxSgYeZHdf2KJWbVMJMXPy5InRvJcRqi8h2SBypUoS5zKLN8zsifqLR?=
- =?us-ascii?Q?3Nk1iFDuyZgvEXb4sUZZ8Aj2H3SJEybjErJxRdtezFk+pIYdhOsqIvlo9pu/?=
- =?us-ascii?Q?gdDljOiMI3yVPHiM8sNOsuw=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <5ABA5479EA21C845A359D9A731219684@namprd15.prod.outlook.com>
+        Sun, 5 Dec 2021 22:51:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638762459;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jpYoRQheDiMAZvFfnFVOrL2zVbbsGFQnPDsTymriXd0=;
+        b=AGC11TqI20F7RNGUgpxXHKvJSuqVddhIrFEGs9vdqMbE4MWjeD+z3oujs6nz9c0obQVsAV
+        zJXJY/bZYdWuC0M9NkUQsJm6NWcSAm/yACwpewNbAjLmxT7hJKwJIP9ZNQqaZei+E4NFpc
+        OCG80Ru9ybPyncplfVLfHj8m+2AEARw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-593-NpCrmGPGNzKE8VQu-FmUsQ-1; Sun, 05 Dec 2021 22:47:34 -0500
+X-MC-Unique: NpCrmGPGNzKE8VQu-FmUsQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B02522F26;
+        Mon,  6 Dec 2021 03:47:32 +0000 (UTC)
+Received: from [10.22.16.32] (unknown [10.22.16.32])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4C17C45D67;
+        Mon,  6 Dec 2021 03:47:31 +0000 (UTC)
+Message-ID: <7cf33254-f9b8-8d82-21eb-dfeeeb2d5079@redhat.com>
+Date:   Sun, 5 Dec 2021 22:47:30 -0500
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR15MB5117.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8079282e-74a7-4f74-4792-08d9b86b1420
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2021 03:47:08.7769
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Rr2lZd9BG3p7b6Qkoe4QNCBlSD+kUXjmUvd36fABTfMgMfmmQB0TG+CGluo9J9DctMQiM4o3Lu1Hn2U+G8wfzQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR15MB5166
-X-OriginatorOrg: fb.com
-X-Proofpoint-ORIG-GUID: JvbayEsnvLgl9cCTIdhGBmD-FcXgADZ2
-X-Proofpoint-GUID: JvbayEsnvLgl9cCTIdhGBmD-FcXgADZ2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-06_01,2021-12-02_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- bulkscore=0 phishscore=0 spamscore=0 impostorscore=0 mlxlogscore=862
- priorityscore=1501 mlxscore=0 clxscore=1015 adultscore=0 malwarescore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112060020
-X-FB-Internal: deliver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v3 1/4] clocksource: Avoid accidental unstable marking of
+ clocksources
+Content-Language: en-US
+To:     paulmck@kernel.org, Feng Tang <feng.tang@intel.com>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Cassio Neri <cassio.neri@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Frederic Weisbecker <frederic@kernel.org>
+References: <20211118191439.1000012-1-longman@redhat.com>
+ <20211118191439.1000012-2-longman@redhat.com>
+ <20211122030223.GG34844@shbuild999.sh.intel.com>
+ <20211125041550.GA1659740@paulmck-ThinkPad-P17-Gen-1>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20211125041550.GA1659740@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/24/21 23:15, Paul E. McKenney wrote:
+> On Mon, Nov 22, 2021 at 11:02:23AM +0800, Feng Tang wrote:
+>> On Thu, Nov 18, 2021 at 02:14:36PM -0500, Waiman Long wrote:
+>>> Since commit db3a34e17433 ("clocksource: Retry clock read if long delays
+>>> detected") and commit 2e27e793e280 ("clocksource: Reduce clocksource-skew
+>>> threshold"), it is found that tsc clocksource fallback to hpet can
+>>> sometimes happen on both Intel and AMD systems especially when they are
+>>> running stressful benchmarking workloads. Of the 23 systems tested with
+>>> a v5.14 kernel, 10 of them have switched to hpet clock source during
+>>> the test run.
+>>>
+>>> The result of falling back to hpet is a drastic reduction of performance
+>>> when running benchmarks. For example, the fio performance tests can
+>>> drop up to 70% whereas the iperf3 performance can drop up to 80%.
+>>>
+>>> 4 hpet fallbacks happened during bootup. They were:
+>>>
+>>>    [    8.749399] clocksource: timekeeping watchdog on CPU13: hpet read-back delay of 263750ns, attempt 4, marking unstable
+>>>    [   12.044610] clocksource: timekeeping watchdog on CPU19: hpet read-back delay of 186166ns, attempt 4, marking unstable
+>>>    [   17.336941] clocksource: timekeeping watchdog on CPU28: hpet read-back delay of 182291ns, attempt 4, marking unstable
+>>>    [   17.518565] clocksource: timekeeping watchdog on CPU34: hpet read-back delay of 252196ns, attempt 4, marking unstable
+>>>
+>>> Other fallbacks happen when the systems were running stressful
+>>> benchmarks. For example:
+>>>
+>>>    [ 2685.867873] clocksource: timekeeping watchdog on CPU117: hpet read-back delay of 57269ns, attempt 4, marking unstable
+>>>    [46215.471228] clocksource: timekeeping watchdog on CPU8: hpet read-back delay of 61460ns, attempt 4, marking unstable
+>>>
+>>> Commit 2e27e793e280 ("clocksource: Reduce clocksource-skew threshold"),
+>>> changed the skew margin from 100us to 50us. I think this is too small
+>>> and can easily be exceeded when running some stressful workloads on a
+>>> thermally stressed system.  So it is switched back to 100us.
+>>>
+>>> Even a maximum skew margin of 100us may be too small in for some systems
+>>> when booting up especially if those systems are under thermal stress. To
+>>> eliminate the case that the large skew is due to the system being too
+>>> busy slowing down the reading of both the watchdog and the clocksource,
+>>> an extra consecutive read of watchdog clock is being done to check this.
+>>>
+>>> The consecutive watchdog read delay is compared against
+>>> WATCHDOG_MAX_SKEW/2. If the delay exceeds the limit, we assume that
+>>> the system is just too busy. A warning will be printed to the console
+>>> and the clock skew check is skipped for this round.
+>>   
+>> Reviewed-by: Feng Tang <feng.tang@intel.com>
+> I applied #1 and #2 with Feng Tang's Reviewed-by, thank you both!
+>
+> It turns out that #4 depends on #3, so rather than risk injecting errors
+> by sorting that out manually, I will await either an updated #3 and #4
+> or a rebased #4, at your option.
 
+I just send out a updated patch 4 that applies on top of the current 
+rcu/next branch of linux-rcu git tree. I would still like to see a 
+Kconfig option be available.
 
-> On Dec 5, 2021, at 5:06 AM, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> 
-> Em Fri, Dec 03, 2021 at 07:32:34PM +0000, Song Liu escreveu:
->> 
->> 
->>> On Dec 3, 2021, at 5:10 AM, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
->>> 
->>> Hi Song,
->>> 
->>> 	So I'm changing all my containers to build with BUILD_BPF_SKEL=1
->>> to then make this the default, so far older containers fail either
->>> because the clang available is too old, so I've added a NO_BUILD_BPF_SKEL=1
->>> env var to disable that in those containers and then there is this other
->>> case where clang is recent enough but:
->>> 
->>>   util/bpf_skel/bperf_leader.bpf.c:13:20: error: use of undeclared identifier 'BPF_F_PRESERVE_ELEMS'
->>>           __uint(map_flags, BPF_F_PRESERVE_ELEMS);
->>> 
->>> Because the system's /usr/include/linux/bpf.h doesn't have that
->>> BPF_F_PRESERVE_ELEMS enum entry.
->>> 
->>> These are enums to make them available via BTF, but then I can't use
->>> the:
->>> 
->>> #ifdef BPF_F_PRESERVE_ELEMS
->>> #define BPF_F_PRESERVE_ELEMS (1U << 11)
->>> #endif
->>> 
->>> approach.
->>> 
->>> But then we _have_ it in the tools/include/uapi/linux/bpf.h we ship:
->>> 
->>> $ grep BPF_F_PRESERVE_ELEMS tools/include/uapi/linux/bpf.h
->>> 	BPF_F_PRESERVE_ELEMS	= (1U << 11),
->>> $
->>> 
->>> so we need to switch to using it somehow, this way we can build in more
->>> systems and make bperf and other BPF enabled features.
->>> 
->>> From a quick look I couldn't find where to add
->>> $(sourcedir)/tools/include/uapi/ to the include path used to build
->>> util/bpf_skel/bperf_leader.bpf.c, should be easy, can you take a look?
->>> 
->>> Thanks,
->>> 
->>> - Arnaldo
->> 
->> I think the following should fix it
-> 
-> I'm trying this now and tentatively sticking a Signed-off-by: you to it,
-> ok?
+Feng, if you have any further suggestion on patch 3, please let me know. 
+This one is just handling some rare cases that shouldn't happen at all. 
+So it is not that important.
 
-Thanks for verifying this! I should learn to do these container tests myself. 
-Yes, you can include 
+Cheers,
+Longman
 
-Signed-off-by: Song Liu <song@kernel.org>
-
-(or my fb email, either one works. )
-
-Thanks,
-Song

@@ -2,114 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C37EA4690EB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:47:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F2A4690F2
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238569AbhLFHvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 02:51:18 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57328 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237150AbhLFHvR (ORCPT
+        id S238607AbhLFHwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 02:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237150AbhLFHwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 02:51:17 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F51C6117B;
-        Mon,  6 Dec 2021 07:47:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EEDAC341C1;
-        Mon,  6 Dec 2021 07:47:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638776868;
-        bh=1tjNuHEY1D3f4gT+xgEa586VTk6XmE+eqdouKLZ1O7A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M7mLgCm6BrAps0JqDF3QLloUkkK/2qsSBCWVCOxZ3GuNCd1EK5Z7JD8JOD/YrDHEO
-         zfhq1z4IMOiEDXPitP7fwLwNJt6J93jcfW7BmDzXrOlGdnhsXQ1jOQkSrg23w2GR2y
-         aY/btjL6KDNuCy281Xi0bUPLDB7Jf9GoKEsaeSD4=
-Date:   Mon, 6 Dec 2021 08:47:43 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] Docs: usb: update usb_bulk_msg receiving example
-Message-ID: <Ya3AHxw48/T3XnPv@kroah.com>
-References: <cover.1638630342.git.philipp.g.hortmann@gmail.com>
- <0bd9336e18abad338b4967664a4667b96dae6be6.1638630342.git.philipp.g.hortmann@gmail.com>
- <Yayb6+SrQKUG4bDl@kroah.com>
- <f3a1b2ba-85fe-e829-0d11-07a4bc4d8756@gmail.com>
+        Mon, 6 Dec 2021 02:52:17 -0500
+Received: from mx3.securetransport.de (mx3.securetransport.de [IPv6:2a01:4f8:c0c:92be::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F041C0613F8;
+        Sun,  5 Dec 2021 23:48:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
+        s=dhelectronicscom; t=1638776880;
+        bh=9LjNAMfbHqPPYqfOd0H/bcQt7NiEEMGw6nLCEydrLY8=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=LBqpNm924/sExE8twPWKn1jD74Eg9zFlUHLKoKaMV1vIUKBy1rV5+s1kwoDWLWQQA
+         IO6MGdGuApYNwsHMZDaA5FX6DLq6TDxBZaWHEwp2/3ksGXCGnZj5i5GHsT+tbfmwnj
+         P8qdpnDr51SQypF7wATZGDAbOn+9xJsxrj1TI5vrMxpoCXLCTGaL+DrzptMB+6K3hz
+         vCMj7s5SZmElU4KCRBZDRMN7JrGI2AtYRyzHaleZDCFHXREIYU450OhCCMFT9ZU6zJ
+         Tv4r/OndW4cwR5pKApCQy48NYfSRKXAB9lPbzWt/fykludKxTGS3+f9M199Dmedfbz
+         aDdK/a2UtEHiw==
+X-secureTransport-forwarded: yes
+From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Complaints-To: abuse@cubewerk.de
+To:     Andrej Picej <andrej.picej@norik.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+CC:     Support Opensource <support.opensource@diasemi.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: RE: [RFC PATCH] watchdog: da9062: Correct the timeout values
+Thread-Topic: [RFC PATCH] watchdog: da9062: Correct the timeout values
+Thread-Index: AQHX6GQONgXT05Iq6ke/N4Kseos6o6wg6rAAgAATvjCABAXqAIAAE0gQ
+Date:   Mon, 6 Dec 2021 07:47:51 +0000
+Message-ID: <46136729bb564aa6b9f332fa584b2575@dh-electronics.com>
+References: <20211203163539.91870-1-cniedermaier@dh-electronics.com>
+ <dc6a432c-79a3-881c-eac4-32620040d11b@roeck-us.net>
+ <4bfb6ab512cd45ee81c55361525987b7@dh-electronics.com>
+ <a0b6a801-f911-3371-1067-479b66240bdc@norik.com>
+In-Reply-To: <a0b6a801-f911-3371-1067-479b66240bdc@norik.com>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f3a1b2ba-85fe-e829-0d11-07a4bc4d8756@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 05, 2021 at 06:04:48PM +0100, Philipp Hortmann wrote:
-> On 12/5/21 12:00 PM, Greg KH wrote:
-> > On Sat, Dec 04, 2021 at 05:35:11PM +0100, Philipp Hortmann wrote:
-> > > Clarification that this example is not in the driver template anymore.
-> > > Update code example so that it fits best to usb-skeleton.c
-> > > Update format of function names
-> > > 
-> > > Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
-> > > ---
-> > > V1 -> V2: Added "Update format of function names" to patch description
-> > >            Corrected format of function names like the following example:
-> > >            "`usb_bulk_msg` function" to "usb_bulk_msg()"
-> > > ---
-> > >   .../driver-api/usb/writing_usb_driver.rst     | 32 +++++++++----------
-> > >   1 file changed, 16 insertions(+), 16 deletions(-)
-> > > 
-> > > diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
-> > > index b43e1ce49f0e..ed11398837e5 100644
-> > > --- a/Documentation/driver-api/usb/writing_usb_driver.rst
-> > > +++ b/Documentation/driver-api/usb/writing_usb_driver.rst
-> > > @@ -218,36 +218,36 @@ do very much processing at that time. Our implementation of
-> > >   ``skel_write_bulk_callback`` merely reports if the urb was completed
-> > >   successfully or not and then returns.
-> > > -The read function works a bit differently from the write function in
-> > > +This read function works a bit differently from the write function in
-> > >   that we do not use an urb to transfer data from the device to the
-> > > -driver. Instead we call the :c:func:`usb_bulk_msg` function, which can be used
-> > > +driver. Instead we call usb_bulk_msg(), which can be used
-> > >   to send or receive data from a device without having to create urbs and
-> > > -handle urb completion callback functions. We call the :c:func:`usb_bulk_msg`
-> > > -function, giving it a buffer into which to place any data received from
-> > > +handle urb completion callback functions. We call usb_bulk_msg(),
-> > > +giving it a buffer into which to place any data received from
-> > >   the device and a timeout value. If the timeout period expires without
-> > >   receiving any data from the device, the function will fail and return an
-> > >   error message. This can be shown with the following code::
-> > >       /* do an immediate bulk read to get data from the device */
-> > > -    retval = usb_bulk_msg (skel->dev,
-> > > -			   usb_rcvbulkpipe (skel->dev,
-> > > -			   skel->bulk_in_endpointAddr),
-> > > -			   skel->bulk_in_buffer,
-> > > -			   skel->bulk_in_size,
-> > > -			   &count, 5000);
-> > > +    rv = usb_bulk_msg(dev->udev,
-> > 
-> > Why are you changing the varible name?  That seems unnecessary.
-> Reason is that retval does not exist in skel_read().
-
-Neither does any call to usb_bulk_msg().  So this is not code that is
-from that file at all.  "retval" is easier to understand than "rv".
-
-> > Also, any reason you aren't cc:ing the USB maintainer on these changes?  :)
-> According to:
-> perl scripts/get_maintainer.pl --separator , --nokeywords --nogit
-> --nogit-fallback --norolestats -f
-> Documentation/driver-api/usb/writing_usb_driver.rst
-> Jonathan Corbet
-> <corbet@lwn.net>,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org
-> you are not in charge.
-
-Ah, documentation isn't added to the maintainers entry for USB, I'll go
-fix that up...
-
-But note, my name is at the top of that file still, right?
-
-thanks,
-
-greg k-h
+RnJvbTogQW5kcmVqIFBpY2VqDQpTZW50OiBNb25kYXksIERlY2VtYmVyIDYsIDIwMjEgODoyOSBB
+TQ0KPj4+PiBJIG1lYXN1cmVkIHRoZSB0aW1lb3V0IHZhbHVlcyBvZiBteSBEQTkwNjEgY2hpcC4g
+QWNjb3JkaW5nIHRvIHRoZQ0KPj4+PiBpbmZvcm1hdGlvbiBpbiB0aGUgZGF0YSBzaGVldCB0aGUg
+Zm9ybXVsYSBzaG91bGQgYmU6DQo+Pj4+DQo+Pj4+IHRpbWVvdXQgPSAyLjA0OCAqIDJeKHJlZ3Zh
+bCAtIDEpDQo+Pj4+DQo+Pj4+IEJ1dCBteSBtZWFzdXJlZCB2YWx1ZXMgZGlmZmVyIGZyb20gdGhh
+dC4NCj4+Pj4gQWNjb3JpbmcgdG8gbXkgbWVhc3VyZWQgdmFsdWVzIHRoZSBmb3JtdWxhIG11c3Qg
+YmU6DQo+Pj4+DQo+Pj4+IHRpbWVvdXQgPSAzLjIgKiAyXihyZWd2YWwgLSAxKQ0KPj4+Pg0KPj4+
+PiBJcyB0aGVyZSBzb21ldGhpbmcgd3Jvbmcgd2l0aCBteSBjaGlwLCBvciBoYXMgYW55b25lIGVs
+c2Ugbm90aWNlZCB0aGlzIGFzIHdlbGw/DQo+Pj4NCj4+PiBUaGUgZHJpdmVyIGFzc3VtZXMgYSBz
+dGF0aWMgYW5kIHdlbGwgZGVmaW5lZCBjbG9jayByYXRlLiBNYXliZSB0aGF0IHJhdGUNCj4+PiBp
+cyBkaWZmZXJlbnQgaW4geW91ciBzeXN0ZW0gKGlmIHRoYXQgaXMgcG9zc2libGUpID8NCj4+Pg0K
+Pj4+IEd1ZW50ZXINCj4+DQo+PiBAQW5kcmVqDQo+PiBEbyB0aGUgdmFsdWVzIGluIHRoZSBkcml2
+ZXIgbWF0Y2ggd2hhdCB5b3VyIGNoaXAgZG9lcz8NCj4+DQo+IA0KPiBKdXN0IGRpZCBhIHF1aWNr
+IHRlc3QuIFRoZSB2YWx1ZXMgaW4gdGhlIGRyaXZlciBtYXRjaCB3aGF0IHRoZSBjaGlwDQo+IGRv
+ZXMuIEkgY2hlY2tlZCBtdWx0aXBsZSB0aW1lb3V0cyAxNiwgMzIsIDY1IGFuZCAxMzEgc2Vjb25k
+cy4gVGhlDQo+IHRpbWVvdXQgdHJpZ2dlcnMgcXVpdGUgYWNjdXJhdGVseS4NCj4gDQo+PiBJIGhh
+dmUgbm90IGNoYW5nZWQgYW55dGhpbmcuIEFmdGVyIHBvd2VyIG9uLCB0aGUgY2hpcCBiZWhhdmVz
+IGxpa2UgdGhpcy4NCj4+IFNvIEkgZ3Vlc3MgaXQgZWl0aGVyIGNvbWUgZnJvbSBhbiBPVFAgdmFs
+dWUgb3IgdGhlIHdpcmluZyBvdXRzaWRlIHRoZSBjaGlwLg0KPj4gRG9lcyBhbnlvbmUga25vdyB3
+aGF0IG5lZWRzIHRvIGJlIGNoZWNrZWQ/DQo+IA0KPiBDYW4ndCBoZWxwIHlvdSBoZXJlLCBzb3Jy
+eS4NCj4gDQoNClRoYW5rcyBhbnl3YXksIHNvIG5vdyBJIGtub3cgaXQgbXVzdCBiZQ0KcHJvYmxl
+bSB3aXRoIG15IERBOTA2MSBjaGlwLg0KDQpAQWRhbQ0KV2hlcmUgY2FuIGl0IGNvbWUgZnJvbT8N
+CkNhbiB5b3UgZ2l2ZSB3ZSBhIGhpbnQgd2hhdCB0byBjaGVjaz8NCg0KDQpUaGFua3MgYW5kIGJl
+c3QgcmVnYXJkcw0KQ2hyaXN0b3BoDQo=

@@ -2,92 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 198A246A628
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DF646A665
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348996AbhLFT7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:59:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39984 "EHLO
+        id S232229AbhLFUB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 15:01:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347815AbhLFT67 (ORCPT
+        with ESMTP id S1349551AbhLFUBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:58:59 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FBFC0613F8;
-        Mon,  6 Dec 2021 11:55:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gIbS5FSar7i12DL1+IR2L/XBznRwEatqcC55spZYsY4=; b=ffnY2ArLJpjKnZ/NSlwIltn10n
-        ytryU03hef2WwP1gz4IaV93YkzAeymGtTxZqRfjF2+9CkvPq0LWJ90Dy8Yfsqp06o+XMZ/EBSlKI3
-        gW9F5VBqVXBF9YteU/ECWwHNJzjvgkqJyXT4slqA0SNyX5QZb1vX0eFG23JqOsQpMl+oZzYLSAKIV
-        fpJl+i39LIjSuimJ4174GjqsNsuS54z8jRgrRhu0o/G70TiGyQKne/1ik+3Ji/3PiqDqxoxV8Ta6E
-        De5kEsFvtv+rKY+Nfb9v7Mp7uQx+/SgLN6MV1ilNFjqvz+Y1dwGCl5GMw52koab4G5BEn4A3taTDl
-        r/YHQMEw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1muK58-005zH6-J2; Mon, 06 Dec 2021 19:55:26 +0000
-Date:   Mon, 6 Dec 2021 19:55:26 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Gary Guo <gary@garyguo.net>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: Re: [PATCH 11/19] vsprintf: add new `%pA` format specifier
-Message-ID: <Ya5qrjabKMM6sPr+@casper.infradead.org>
-References: <20211206140313.5653-1-ojeda@kernel.org>
- <20211206140313.5653-12-ojeda@kernel.org>
- <Ya4mAqoOa8zIeZGZ@kroah.com>
- <CANiq72kCmLgrv++mFygR6dt0xOhfv04o9j6jYLQ1N+zLNvqohQ@mail.gmail.com>
- <Ya40Bcv+eFkqc9jv@kroah.com>
- <CAKwvOdkLF_DPP1FF60720q3zxZG2qaSNTthxJPxLb4Bj=AFE=Q@mail.gmail.com>
+        Mon, 6 Dec 2021 15:01:02 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674A6C0698C3;
+        Mon,  6 Dec 2021 11:57:32 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id z5so48110916edd.3;
+        Mon, 06 Dec 2021 11:57:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MDbD429x7EGhGMhsVDh9494mFqKE/H+dYpI7efBswy4=;
+        b=qyHAG2uEzGWAT0b3t0AT1UWTaT7NTaH8qGdIPfOphRXY0HMHmVtRT9PMuxqeZU4i7t
+         vDUVGwg+8WtDOjZ2/hghyXXhffb6oVw184AaM/Ib4u3T3hPhXJAaS/0cdsWUI3xGT3hX
+         BfZ0/qeiHd3FOLdK4PIe3izOUqYYK2W+bnY1/FKdscbcvQ9gt/vXZay3kbkZwuRArqPD
+         upUx6fnXzcThe1hfrh+04gD60srBXbRI5Xt4MERGIvIlYxKLC3lXPac+Tw7Wg6WrrjJj
+         e1cRzJcTYVtillCjhTHiFqHhs+fehdvFPxUtI6qbT7Naf1Ph9v0PCawauveywl8bfngc
+         F/Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MDbD429x7EGhGMhsVDh9494mFqKE/H+dYpI7efBswy4=;
+        b=AP9qe8mARfaLgXHIeGMyyastGGGZS/R+llUvtlBAW3OLyIPLV8l9GLyMgSqkxeg4CQ
+         OeSmKYNDzRw4T9LEN3zxCcEJ/Un3/Ei/7LGurhr6G/zeORiwVVM29SKAzV+IPDL16nI1
+         tTmSaJRK35F9AlWbN2SUIQt4uD4lhFlgSGEuTLiJ5xYPofwzFFW9DMPxOVjoq7Okb4AD
+         jwMAi1KHuAuN02fcAKRlbcXUDvHXGe34PsS+HVSaubyNxew7R41+51fTifpTvUcbZ2Cp
+         7vopiLZC+tv42YCVLc0fpPiqAADdP28FSp9Z+WtDKx72u97TPwAN811MaYXDJ3agPPxp
+         ifEA==
+X-Gm-Message-State: AOAM532HDfRr2DV8ZlArgJvF9H4NYxLjUY8CNp3ycr2vDgZCXDux3Ee8
+        TdlGbdk6+gLBOu14PSKdUjilEsmSO48nb5EqBas=
+X-Google-Smtp-Source: ABdhPJzWAtk+egcPYv+YJzS0Q5UW6JXgWqCbk4YgT7bZZlKPZAsHB+shis4xeMBPhZKqn9hbkv+BiK/vOUsqe4ZlBEg=
+X-Received: by 2002:a17:907:869e:: with SMTP id qa30mr45495850ejc.356.1638820650915;
+ Mon, 06 Dec 2021 11:57:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdkLF_DPP1FF60720q3zxZG2qaSNTthxJPxLb4Bj=AFE=Q@mail.gmail.com>
+References: <20211206093318.45214-1-hdegoede@redhat.com> <20211206093318.45214-15-hdegoede@redhat.com>
+In-Reply-To: <20211206093318.45214-15-hdegoede@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 6 Dec 2021 21:55:56 +0200
+Message-ID: <CAHp75Vc+z0nqUXbqrX9YXi2+rzz4BKT7maFipyB8QgOEKQ9SPw@mail.gmail.com>
+Subject: Re: [PATCH v4 14/20] mfd: intel_soc_pmic_chtwc: Add cht_wc_model data
+ to struct intel_soc_pmic
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 11:52:09AM -0800, Nick Desaulniers wrote:
-> On Mon, Dec 6, 2021 at 8:14 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, Dec 06, 2021 at 04:56:32PM +0100, Miguel Ojeda wrote:
-> > > On Mon, Dec 6, 2021 at 4:46 PM Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > That should be in a .h file somewhere.  Remember, don't put #ifdef in .c
-> > > > files please.
-> 
-> Why not put #ifdef in .c files?
-> 
-> > > Will do, thanks for reviewing!
-> > >
-> > > > Same here, this should not be needed if you put it in a .h file
-> > > > correctly.
-> 
-> I guess IS_ENABLED could be used in the .c code, but I don't see how
-> they could move the dispatch to rust_fmt_argument to a header without
-> moving the definition of pointer() to a header, which they probably
-> _cant_ do because it's noinline_for_stack.
+On Mon, Dec 6, 2021 at 11:35 AM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Tablet / laptop designs using an Intel Cherry Trail x86 main SoC with
+> an Intel Whiskey Cove PMIC do not use a single standard setup for
+> the charger, fuel-gauge and other chips surrounding the PMIC /
+> charging+data USB port.
+>
+> Unlike what is normal on x86 this diversity in designs is not handled
+> by the ACPI tables. On 2 of the 3 known designs there are no standard
+> (PNP0C0A) ACPI battery devices and on the 3th design the ACPI battery
+> device does not work under Linux due to it requiring non-standard
+> and undocumented ACPI behavior.
+>
+> So to make things work under Linux we use native charger and fuel-gauge
+> drivers on these devices, re-using the native drivers used on ARM boards
+> with the same charger / fuel-gauge ICs.
+>
+> This requires various MFD-cell drivers for the CHT-WC PMIC cells to
+> know which model they are exactly running on so that they can e.g.
+> instantiate an I2C-client for the right model charger-IC (the charger
+> is connected to an I2C-controller which is part of the PMIC).
+>
+> Rather then duplicating DMI-id matching to check which model we are
+> running on in each MFD-cell driver, add a check for this to the
+> shared drivers/mfd/intel_soc_pmic_chtwc.c code by using a
+> DMI table for all 3 known models:
+>
+> 1. The GPD Win and GPD Pocket mini-laptops, these are really 2 models
+> but the Pocket re-uses the GPD Win's design in a different housing:
+>
+> The WC PMIC is connected to a TI BQ24292i charger, paired with
+> a Maxim MAX17047 fuelgauge + a FUSB302 USB Type-C Controller +
+> a PI3USB30532 USB switch, for a fully functional Type-C port.
+>
+> 2. The Xiaomi Mi Pad 2:
+>
+> The WC PMIC is connected to a TI BQ25890 charger, paired with
+> a TI BQ27520 fuelgauge, using the TI BQ25890 for BC1.2 charger type
+> detection, for a USB-2 only Type-C port without PD.
+>
+> 3. The Lenovo Yoga Book YB1-X90 / Lenovo Yoga Book YB1-X91 series:
+>
+> The WC PMIC is connected to a TI BQ25892 charger, paired with
+> a TI BQ27542 fuelgauge, using the WC PMIC for BC1.2 charger type
+> detection and using the BQ25892's Mediatek Pump Express+ (1.0)
+> support to enable charging with up to 12V through a micro-USB port.
 
-In the header file, you put:
+...
 
-#ifdef CONFIG_FOO
-int foo(void);
-#else
-static inline int foo(void) { }
-#endif
+> +enum intel_cht_wc_models {
+> +       INTEL_CHT_WC_UNKNOWN,
+> +       INTEL_CHT_WC_GPD_WIN_POCKET,
+> +       INTEL_CHT_WC_XIAOMI_MIPAD2,
+> +       INTEL_CHT_WC_LENOVO_YOGABOOK1,
+> +};
 
-and then in your .c file, you call foo() unconditionally, and everything
-works beautifully.
+...
 
+> +       enum intel_cht_wc_models cht_wc_model;
+
+I'm wondering what will you do when something similar will be needed
+for another PMIC?
+
+I see possible solutions to eliminate additional churn:
+- make just one enum for all models (can be done now, can be renamed later)
+- make a union if we have such situation
+
+because I wouldn't like to have another field for each possible
+variant of PMIC in the generic structure.
+
+Hence the question, does it make sense to just name it (enum and
+member) less cht_wc oriented?
+
+-- 
+With Best Regards,
+Andy Shevchenko

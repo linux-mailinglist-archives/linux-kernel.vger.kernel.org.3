@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 916FC469A73
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DD24699F5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347016AbhLFPH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:07:58 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55916 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345865AbhLFPGK (ORCPT
+        id S1345604AbhLFPEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:04:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345090AbhLFPDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:06:10 -0500
+        Mon, 6 Dec 2021 10:03:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF58C0698DB;
+        Mon,  6 Dec 2021 07:00:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3223B612A5;
-        Mon,  6 Dec 2021 15:02:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F35C341C1;
-        Mon,  6 Dec 2021 15:02:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C809AB81018;
+        Mon,  6 Dec 2021 15:00:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F37FCC341C1;
+        Mon,  6 Dec 2021 15:00:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802960;
-        bh=qM6HluBn4RVpT6QWxpRerYmfyBR4ghdWX2iaEal5fb0=;
+        s=korg; t=1638802805;
+        bh=Yp3aTiRbFD0i59Zgh7OndLs7xoZGCTgvfoXKC8kppMw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AMlv7jrOOksJh3v5Ezemp8khHbSNweDOubZjALWn+MFJhS3qEEZ5TXX+S6q0Ae6rB
-         UinGJua6Zqj/LH3ZqKeUvJE5vWv0e5KCvLaQVUiPE2GORZdHXxsX+VV6RVaWWPjCm/
-         X2yThRpPmZeZqC0AW/0Lk9und3cRn9omuwKx3e74=
+        b=2FVagHWQumYSarcOzoEk6KrqDtRUlc2ZaTL9o2Vr22hC3gbC4MVeIQCmxkRhClqwl
+         V+d4I8BSQ6v3KARPFpX0TN6hcBjNcR6zeFbRqMribegPry+3vmP6VIZikWaCNGYEzF
+         INyDZF+gO3KVTYeY2E5aLxsWIY7+kmzlK504mx0M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, liuguoqiang <liuguoqiang@uniontech.com>,
+        stable@vger.kernel.org, zhangyue <zhangyue1@kylinos.cn>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 40/62] net: return correct error code
+Subject: [PATCH 4.4 39/52] net: tulip: de4x5: fix the problem that the array lp->phy[8] may be out of bound
 Date:   Mon,  6 Dec 2021 15:56:23 +0100
-Message-Id: <20211206145550.579080400@linuxfoundation.org>
+Message-Id: <20211206145549.234202219@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
+References: <20211206145547.892668902@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,33 +49,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: liuguoqiang <liuguoqiang@uniontech.com>
+From: zhangyue <zhangyue1@kylinos.cn>
 
-[ Upstream commit 6def480181f15f6d9ec812bca8cbc62451ba314c ]
+[ Upstream commit 61217be886b5f7402843677e4be7e7e83de9cb41 ]
 
-When kmemdup called failed and register_net_sysctl return NULL, should
-return ENOMEM instead of ENOBUFS
+In line 5001, if all id in the array 'lp->phy[8]' is not 0, when the
+'for' end, the 'k' is 8.
 
-Signed-off-by: liuguoqiang <liuguoqiang@uniontech.com>
+At this time, the array 'lp->phy[8]' may be out of bound.
+
+Signed-off-by: zhangyue <zhangyue1@kylinos.cn>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/devinet.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/dec/tulip/de4x5.c | 30 +++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
 
-diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
-index 6f3c529431865..7a2442623d6a6 100644
---- a/net/ipv4/devinet.c
-+++ b/net/ipv4/devinet.c
-@@ -2271,7 +2271,7 @@ static int __devinet_sysctl_register(struct net *net, char *dev_name,
- free:
- 	kfree(t);
- out:
--	return -ENOBUFS;
-+	return -ENOMEM;
- }
- 
- static void __devinet_sysctl_unregister(struct ipv4_devconf *cnf)
+diff --git a/drivers/net/ethernet/dec/tulip/de4x5.c b/drivers/net/ethernet/dec/tulip/de4x5.c
+index 7799cf33cc6e2..7c4150a83a082 100644
+--- a/drivers/net/ethernet/dec/tulip/de4x5.c
++++ b/drivers/net/ethernet/dec/tulip/de4x5.c
+@@ -4992,19 +4992,23 @@ mii_get_phy(struct net_device *dev)
+ 	}
+ 	if ((j == limit) && (i < DE4X5_MAX_MII)) {
+ 	    for (k=0; k < DE4X5_MAX_PHY && lp->phy[k].id; k++);
+-	    lp->phy[k].addr = i;
+-	    lp->phy[k].id = id;
+-	    lp->phy[k].spd.reg = GENERIC_REG;      /* ANLPA register         */
+-	    lp->phy[k].spd.mask = GENERIC_MASK;    /* 100Mb/s technologies   */
+-	    lp->phy[k].spd.value = GENERIC_VALUE;  /* TX & T4, H/F Duplex    */
+-	    lp->mii_cnt++;
+-	    lp->active++;
+-	    printk("%s: Using generic MII device control. If the board doesn't operate,\nplease mail the following dump to the author:\n", dev->name);
+-	    j = de4x5_debug;
+-	    de4x5_debug |= DEBUG_MII;
+-	    de4x5_dbg_mii(dev, k);
+-	    de4x5_debug = j;
+-	    printk("\n");
++	    if (k < DE4X5_MAX_PHY) {
++		lp->phy[k].addr = i;
++		lp->phy[k].id = id;
++		lp->phy[k].spd.reg = GENERIC_REG;      /* ANLPA register         */
++		lp->phy[k].spd.mask = GENERIC_MASK;    /* 100Mb/s technologies   */
++		lp->phy[k].spd.value = GENERIC_VALUE;  /* TX & T4, H/F Duplex    */
++		lp->mii_cnt++;
++		lp->active++;
++		printk("%s: Using generic MII device control. If the board doesn't operate,\nplease mail the following dump to the author:\n", dev->name);
++		j = de4x5_debug;
++		de4x5_debug |= DEBUG_MII;
++		de4x5_dbg_mii(dev, k);
++		de4x5_debug = j;
++		printk("\n");
++	    } else {
++		goto purgatory;
++	    }
+ 	}
+     }
+   purgatory:
 -- 
 2.33.0
 

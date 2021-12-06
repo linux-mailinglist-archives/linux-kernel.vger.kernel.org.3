@@ -2,88 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 078A946A062
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F68469A00
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443887AbhLFQBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:01:31 -0500
-Received: from unknown-3-146.windriver.com ([147.11.3.146]:10400 "EHLO
-        mail1.wrs.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1390730AbhLFPoH (ORCPT
+        id S1345302AbhLFPEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:04:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345381AbhLFPDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:44:07 -0500
-X-Greylist: delayed 2388 seconds by postgrey-1.27 at vger.kernel.org; Mon, 06 Dec 2021 10:43:49 EST
-Received: from mail.windriver.com (mail.wrs.com [147.11.1.11])
-        by mail1.wrs.com (8.15.2/8.15.2) with ESMTPS id 1B6F0Ioe024972
-        (version=TLSv1.1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Mon, 6 Dec 2021 07:00:18 -0800
-Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.corp.ad.wrs.com [147.11.82.252])
-        by mail.windriver.com (8.15.2/8.15.2) with ESMTPS id 1B6F05A3020397
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 6 Dec 2021 07:00:05 -0800 (PST)
-Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Mon, 6 Dec 2021 07:00:04 -0800
-Received: from hackbox.wrs.com (128.224.56.205) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
- 15.1.2242.12 via Frontend Transport; Mon, 6 Dec 2021 07:00:04 -0800
-From:   Paul Gortmaker <paul.gortmaker@windriver.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: [PATCH 2/2] tick/nohz: WARN_ON --> WARN_ON_ONCE to prevent console saturation
-Date:   Mon, 6 Dec 2021 09:59:50 -0500
-Message-ID: <20211206145950.10927-3-paul.gortmaker@windriver.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211206145950.10927-1-paul.gortmaker@windriver.com>
-References: <20211206145950.10927-1-paul.gortmaker@windriver.com>
+        Mon, 6 Dec 2021 10:03:47 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECF9C0698DD;
+        Mon,  6 Dec 2021 07:00:10 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 4FBD11F44803
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638802808; bh=GdCGPmly0UuQ6WjSsNws2p+iDG85TsB+eBdXAeJYWKo=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=K0fNGcFVKt7O287APEpkAIFNWACJowOJtubES7YzU18wZK9tNnX6ZS0kbADSNKC+Y
+         am0NkVRHfnoQTQJlzPZjKnz30qgm4Whf1fMoJ36ZW7tuuwUON8yNfV5KB1fLGF4qLz
+         wRT4fRML+iDArFocVdBPGhXWssHAcEDtuY3zEl7XnqGMC9g8Nu3Z34O6qjezjYx2+p
+         Jm3G8SkDOksXBYgZgWNmR8ZXro02agCanHvdBQG3jB7N6mGf3ioJSxk1lPrjf/msEu
+         rhasgGlGOHR52V1irMnWJcut59XIHV0ggwnbxyB9JXfc+GJvqg6CTW6oYAXy015cKw
+         WjK2fAddW3VRw==
+Subject: Re: [PATCH 4/4] memory: mtk-smi: mt8186: Add smi support
+To:     Yong Wu <yong.wu@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com,
+        anan.sun@mediatek.com, lc.kan@mediatek.com, yi.kuo@mediatek.com,
+        anthony.huang@mediatek.com
+References: <20211203064027.14993-1-yong.wu@mediatek.com>
+ <20211203064027.14993-5-yong.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <417ec223-b49a-c8dc-c53a-7831cca4d2d1@collabora.com>
+Date:   Mon, 6 Dec 2021 16:00:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20211203064027.14993-5-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While running some testing on code that happened to allow the variable
-tick_nohz_full_running to get set but with no "possible" NOHZ cores to
-back up that setting, I tripped this WARN:
+Il 03/12/21 07:40, Yong Wu ha scritto:
+> Add mt8186 SMI support.
+> 
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 
-        if (unlikely(tick_do_timer_cpu == TICK_DO_TIMER_NONE))
-                WARN_ON(tick_nohz_full_running);
 
-The console was overwhemled with an endless stream of one WARN per tick
-per core and there was no way to even see what was going on w/o using a
-serial console to capture it and then trace it back to this guy.
-
-Changing it to ONCE reveals that we get the message we need in a
-civilized fashion, and the system can limp along until rebooted.
-
-Fixes: 08ae95f4fd3b ("nohz_full: Allow the boot CPU to be nohz_full")
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Cc: Frederic Weisbecker <fweisbec@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@kernel.org>
-Signed-off-by: Paul Gortmaker <paul.gortmaker@windriver.com>
----
- kernel/time/tick-sched.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index 6bffe5af8cb1..19e6b861de97 100644
---- a/kernel/time/tick-sched.c
-+++ b/kernel/time/tick-sched.c
-@@ -186,7 +186,7 @@ static void tick_sched_do_timer(struct tick_sched *ts, ktime_t now)
- 	 */
- 	if (unlikely(tick_do_timer_cpu == TICK_DO_TIMER_NONE)) {
- #ifdef CONFIG_NO_HZ_FULL
--		WARN_ON(tick_nohz_full_running);
-+		WARN_ON_ONCE(tick_nohz_full_running);
- #endif
- 		tick_do_timer_cpu = cpu;
- 	}
--- 
-2.17.1
-
+Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>

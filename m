@@ -2,244 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9064694F4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 12:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E234694FB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 12:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242394AbhLFL1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 06:27:11 -0500
-Received: from foss.arm.com ([217.140.110.172]:54554 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236397AbhLFL1L (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 06:27:11 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 429AE152F;
-        Mon,  6 Dec 2021 03:23:42 -0800 (PST)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ADA943F73D;
-        Mon,  6 Dec 2021 03:23:40 -0800 (PST)
-Date:   Mon, 6 Dec 2021 11:23:35 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Xiaowei Bao <xiaowei.bao@nxp.com>,
-        Om Prakash Singh <omp@nvidia.com>,
-        Vidya Sagar <vidyas@nvidia.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] PCI: designware-ep: Fix the access to DBI/iATU
- registers before enabling controller
-Message-ID: <20211206112335.GA18520@lpieralisi>
-References: <1630473361-27198-1-git-send-email-hayashi.kunihiko@socionext.com>
- <1630473361-27198-3-git-send-email-hayashi.kunihiko@socionext.com>
- <576457dd-3e66-a3b9-f51c-ea94bc267fdb@ti.com>
+        id S242444AbhLFL3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 06:29:31 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:35382 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242441AbhLFL3a (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 06:29:30 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B6ALWCe009626;
+        Mon, 6 Dec 2021 11:25:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=cvUzpbX3kTppx+sVhx8haj5rk4twt2f/H8ifqy3CTIo=;
+ b=pImmdcAsOALnbIYNWxwyPT6OAxxBrdpx/ilFZg2E+VnhctzUlCSnpwaWyrlT+UxcJ2pn
+ 7FfLQiNK9LykqJFp2vGuINN8pp/x5VtgCcM4ofOuslzGwbd0ie25JyhwNmoUOBVayRxD
+ CB76BWPReIdBbFyr3w89t1f6K0LcR2tTppW4eMf7XWzmb+Sq96OpMZ2W9633ORaNzVHj
+ TPFw0S54NEhXJtnXmwELUzzL/C5N/5Bgx7Bu5QkZUL0fz3XRP4JYoB7B1BgtZEe40Sjc
+ hi1owjlODSlW3YwezTPilX9ECl0RUS58vgFKHgnWNzgaEEBQ4WyT4GT//jnrAZMOB1/o hQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3csgpsh62f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 11:25:45 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B6Am9pY027389;
+        Mon, 6 Dec 2021 11:25:44 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3csgpsh61u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 11:25:44 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B6BMM6u002912;
+        Mon, 6 Dec 2021 11:25:42 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma01fra.de.ibm.com with ESMTP id 3cqyy936yn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 11:25:41 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B6BPdpj31195618
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Dec 2021 11:25:39 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E0B06A4073;
+        Mon,  6 Dec 2021 11:25:38 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B0517A4081;
+        Mon,  6 Dec 2021 11:25:38 +0000 (GMT)
+Received: from osiris (unknown [9.145.12.237])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon,  6 Dec 2021 11:25:38 +0000 (GMT)
+Date:   Mon, 6 Dec 2021 12:25:37 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/3] ftrace/samples: Add module to test multi direct
+ modify interface
+Message-ID: <Ya3zMZPcrnSc0Szm@osiris>
+References: <20211205232036.51996-1-jolsa@kernel.org>
+ <20211205232036.51996-4-jolsa@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <576457dd-3e66-a3b9-f51c-ea94bc267fdb@ti.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20211205232036.51996-4-jolsa@kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: AHLM9jJtMcDMG4Pa9p9iM58ppP2heGVj
+X-Proofpoint-ORIG-GUID: KO-6AdaeTs53qBUJvvjpcSNFLru_61xZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-06_04,2021-12-06_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 spamscore=0
+ clxscore=1015 malwarescore=0 mlxlogscore=999 mlxscore=0 adultscore=0
+ phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2112060066
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 10:36:00AM +0530, Kishon Vijay Abraham I wrote:
-> Hi Kunihiko,
+On Mon, Dec 06, 2021 at 12:20:36AM +0100, Jiri Olsa wrote:
+> Adding ftrace-direct-multi-modify.ko kernel module that uses
+> modify_ftrace_direct_multi API. The core functionality is taken
+> from ftrace-direct-modify.ko kernel module and changed to fit
+> multi direct interface.
 > 
-> On 01/09/21 10:46 am, Kunihiko Hayashi wrote:
-> > The driver using core_init_notifier, e.g. pcie-tegra194.c, runs according
-> > to the following sequence:
-> > 
-> >     probe()
-> >         dw_pcie_ep_init()
-> > 
-> >     bind()
-> >         dw_pcie_ep_start()
-> >             enable_irq()
-> > 
-> >     (interrupt occurred)
-> >     handler()
-> >         [enable controller]
-> >         dw_pcie_ep_init_complete()
-> >         dw_pcie_ep_init_notify()
-> > 
-> > After receiving an interrupt from RC, the handler enables the controller
-> > and the controller registers can be accessed.
-> > So accessing the registers should do in dw_pcie_ep_init_complete().
-> > 
-> > Currently dw_pcie_ep_init() has functions dw_iatu_detect() and
-> > dw_pcie_ep_find_capability() that include accesses to DWC registers.
-> > As a result, accessing the registers before enabling the controller,
-> > the access will fail.
-> > 
-> > The function dw_pcie_ep_init() shouldn't have any access to DWC registers
-> > if the controller is enabled after calling bind(). This moves access codes
-> > to DBI/iATU registers and depending variables from dw_pcie_ep_init() to
-> > dw_pcie_ep_init_complete().
+> The init function creates kthread that periodically calls
+> modify_ftrace_direct_multi to change the trampoline address
+> for the direct ftrace_ops. The ftrace trace_pipe then shows
+> trace from both trampolines.
 > 
-> Ideally pci_epc_create() should be the last step by the controller
-> driver before handing the control to the core EPC framework. Since
-> after this step the EPC framework can start invoking the epc_ops.
+> Also adding SAMPLE_FTRACE_MULTI_DIRECT to enable build of
+> direct multi interface sample modules. It's used in Makefile,
+> but not defined at the moment.
 > 
-> Here more stuff is being added to dw_pcie_ep_init_complete() which is
-> required for epc_ops and this could result in aborts for platforms
-> which does not add core_init_notifier.
+> Same as for ftrace-direct-multi.ko, the new module is enabled
+> only for x86_64, so there's no need to ifdef the inlined assembly.
+> 
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  samples/Kconfig                             |   8 ++
+>  samples/ftrace/Makefile                     |   1 +
+>  samples/ftrace/ftrace-direct-multi-modify.c | 105 ++++++++++++++++++++
+>  3 files changed, 114 insertions(+)
+>  create mode 100644 samples/ftrace/ftrace-direct-multi-modify.c
 
-This patch needs rework, I will mark the series as "Changes requested".
+I think your series is based on something before 5.16-rc2?
 
-Lorenzo
+Because there are:
+503e45108451 ("ftrace/samples: add missing Kconfig option for ftrace direct multi sample")
+890e3dc8bb6e ("ftrace/samples: add s390 support for ftrace direct multi sample")
 
-> 
-> Thanks,
-> Kishon
-> 
-> > 
-> > Cc: Xiaowei Bao <xiaowei.bao@nxp.com>
-> > Cc: Vidya Sagar <vidyas@nvidia.com>
-> > Fixes: 6bfc9c3a2c70 ("PCI: designware-ep: Move the function of getting MSI capability forward")
-> > Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> > Acked-by: Om Prakash Singh <omp@nvidia.com>
-> > Reviewed-by: Vidya Sagar <vidyas@nvidia.com>
-> > ---
-> >  drivers/pci/controller/dwc/pcie-designware-ep.c | 81 +++++++++++++------------
-> >  1 file changed, 41 insertions(+), 40 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > index 998b698..00ce83c 100644
-> > --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > @@ -636,16 +636,56 @@ static unsigned int dw_pcie_ep_find_ext_capability(struct dw_pcie *pci, int cap)
-> >  int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
-> >  {
-> >  	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
-> > +	struct dw_pcie_ep_func *ep_func;
-> > +	struct device *dev = pci->dev;
-> >  	unsigned int offset;
-> >  	unsigned int nbars;
-> >  	u8 hdr_type;
-> > +	u8 func_no;
-> > +	void *addr;
-> >  	u32 reg;
-> >  	int i;
-> >  
-> > +	dw_pcie_iatu_detect(pci);
-> > +
-> > +	ep->ib_window_map = devm_kcalloc(dev,
-> > +					 BITS_TO_LONGS(pci->num_ib_windows),
-> > +					 sizeof(long),
-> > +					 GFP_KERNEL);
-> > +	if (!ep->ib_window_map)
-> > +		return -ENOMEM;
-> > +
-> > +	ep->ob_window_map = devm_kcalloc(dev,
-> > +					 BITS_TO_LONGS(pci->num_ob_windows),
-> > +					 sizeof(long),
-> > +					 GFP_KERNEL);
-> > +	if (!ep->ob_window_map)
-> > +		return -ENOMEM;
-> > +
-> > +	addr = devm_kcalloc(dev, pci->num_ob_windows, sizeof(phys_addr_t),
-> > +			    GFP_KERNEL);
-> > +	if (!addr)
-> > +		return -ENOMEM;
-> > +	ep->outbound_addr = addr;
-> > +
-> > +	for (func_no = 0; func_no < ep->epc->max_functions; func_no++) {
-> > +		ep_func = devm_kzalloc(dev, sizeof(*ep_func), GFP_KERNEL);
-> > +		if (!ep_func)
-> > +			return -ENOMEM;
-> > +
-> > +		ep_func->func_no = func_no;
-> > +		ep_func->msi_cap = dw_pcie_ep_find_capability(ep, func_no,
-> > +							      PCI_CAP_ID_MSI);
-> > +		ep_func->msix_cap = dw_pcie_ep_find_capability(ep, func_no,
-> > +							       PCI_CAP_ID_MSIX);
-> > +
-> > +		list_add_tail(&ep_func->list, &ep->func_list);
-> > +	}
-> > +
-> >  	hdr_type = dw_pcie_readb_dbi(pci, PCI_HEADER_TYPE) &
-> >  		   PCI_HEADER_TYPE_MASK;
-> >  	if (hdr_type != PCI_HEADER_TYPE_NORMAL) {
-> > -		dev_err(pci->dev,
-> > +		dev_err(dev,
-> >  			"PCIe controller is not set to EP mode (hdr_type:0x%x)!\n",
-> >  			hdr_type);
-> >  		return -EIO;
-> > @@ -674,8 +714,6 @@ EXPORT_SYMBOL_GPL(dw_pcie_ep_init_complete);
-> >  int dw_pcie_ep_init(struct dw_pcie_ep *ep)
-> >  {
-> >  	int ret;
-> > -	void *addr;
-> > -	u8 func_no;
-> >  	struct resource *res;
-> >  	struct pci_epc *epc;
-> >  	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
-> > @@ -683,7 +721,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
-> >  	struct platform_device *pdev = to_platform_device(dev);
-> >  	struct device_node *np = dev->of_node;
-> >  	const struct pci_epc_features *epc_features;
-> > -	struct dw_pcie_ep_func *ep_func;
-> >  
-> >  	INIT_LIST_HEAD(&ep->func_list);
-> >  
-> > @@ -705,8 +742,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
-> >  		}
-> >  	}
-> >  
-> > -	dw_pcie_iatu_detect(pci);
-> > -
-> >  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "addr_space");
-> >  	if (!res)
-> >  		return -EINVAL;
-> > @@ -714,26 +749,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
-> >  	ep->phys_base = res->start;
-> >  	ep->addr_size = resource_size(res);
-> >  
-> > -	ep->ib_window_map = devm_kcalloc(dev,
-> > -					 BITS_TO_LONGS(pci->num_ib_windows),
-> > -					 sizeof(long),
-> > -					 GFP_KERNEL);
-> > -	if (!ep->ib_window_map)
-> > -		return -ENOMEM;
-> > -
-> > -	ep->ob_window_map = devm_kcalloc(dev,
-> > -					 BITS_TO_LONGS(pci->num_ob_windows),
-> > -					 sizeof(long),
-> > -					 GFP_KERNEL);
-> > -	if (!ep->ob_window_map)
-> > -		return -ENOMEM;
-> > -
-> > -	addr = devm_kcalloc(dev, pci->num_ob_windows, sizeof(phys_addr_t),
-> > -			    GFP_KERNEL);
-> > -	if (!addr)
-> > -		return -ENOMEM;
-> > -	ep->outbound_addr = addr;
-> > -
-> >  	if (pci->link_gen < 1)
-> >  		pci->link_gen = of_pci_get_max_link_speed(np);
-> >  
-> > @@ -750,20 +765,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
-> >  	if (ret < 0)
-> >  		epc->max_functions = 1;
-> >  
-> > -	for (func_no = 0; func_no < epc->max_functions; func_no++) {
-> > -		ep_func = devm_kzalloc(dev, sizeof(*ep_func), GFP_KERNEL);
-> > -		if (!ep_func)
-> > -			return -ENOMEM;
-> > -
-> > -		ep_func->func_no = func_no;
-> > -		ep_func->msi_cap = dw_pcie_ep_find_capability(ep, func_no,
-> > -							      PCI_CAP_ID_MSI);
-> > -		ep_func->msix_cap = dw_pcie_ep_find_capability(ep, func_no,
-> > -							       PCI_CAP_ID_MSIX);
-> > -
-> > -		list_add_tail(&ep_func->list, &ep->func_list);
-> > -	}
-> > -
-> >  	if (ep->ops->ep_init)
-> >  		ep->ops->ep_init(ep);
-> >  
-> > 
+Which would conflict with your patches.

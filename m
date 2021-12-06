@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B30468E67
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC8D468E68
 	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 02:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232051AbhLFBHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 20:07:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
+        id S232588AbhLFBHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 20:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235736AbhLFAxn (ORCPT
+        with ESMTP id S242853AbhLFA6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 19:53:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4212DC061751;
-        Sun,  5 Dec 2021 16:50:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C83C36116B;
-        Mon,  6 Dec 2021 00:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A06AC00446;
-        Mon,  6 Dec 2021 00:50:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638751815;
-        bh=ZIrJ8Sj6l0vGlRpq0iuVAk7FNpEBRKPDC12cLJZxv0U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RwdTAs0FVZwpw72JBwblqtwyCyURRux5BMC1sCY1HoFnFpK6iVh1bZve2ktP7foJn
-         UheDQkPFceFz2JJACm79mpRiic8Xf88lrIiSc9TR1XAiV2AIpzR0UsnWDd7Fgotc9a
-         4KYOU7+qZOo5wpLzziFo4qMyungH6k+Ju1a70r3Ggd8l3cfqsAnOeN2FbW9DtHQgBB
-         s4XveuAKAGWszLRYm9ew4vU5m2YR0bmANx9G/KhN0/IvqH/YGI3OH/Myde2ktmJSmJ
-         kAziVpoz4RtDB3QjmFzRNVYoqMtZF9hKYRLkIDLnZWBQhTTMhv/BWtKEef1cpR4qF3
-         v4XWdbQgTRRWg==
-Date:   Mon, 6 Dec 2021 08:50:09 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        David Jander <david@protonic.nl>
-Subject: Re: [PATCH v2 1/3] dt-bindings: vendor-prefixes: Add an entry for
- JOZ BV
-Message-ID: <20211206005008.GH4216@dragon>
-References: <20211122101917.1643563-1-o.rempel@pengutronix.de>
+        Sun, 5 Dec 2021 19:58:18 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B881FC061354
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 16:54:50 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id t13so16466915uad.9
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 16:54:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=5AsGrA4DlL+PCBChvj92hqjB0hfn92LRQaKu0Z47lw0=;
+        b=WWR5BJbyDNcnl97P/L8mRAjeMZ35ktlBaUQccwas39vc7rvmkTcrErWYaAwYN2mFsx
+         DX8/+w1p9XPodK+WzjGaVGwC4tiN23p1XPTeNNyx9rFpzGY3sAgmvDhYDM45Rd5mIXYC
+         9SG/zT8uynTp95FnN2Wt6turdwsmI0ufKxbDNeiW2J90b916KF5PUB5oHTaZXjc8Gy0W
+         YJJzOi6Od9hSOn7sKespvIr+sef44NjZ5tCudOm3PNCfz9Oi+ynNj1HlGJihY8Mmv/+J
+         6oWgOecpMm6AG75X75IJnMGLW8YOOzditpOosl1LaKOkQrDydgnPf0Y5fNvLsXlPt0u2
+         Vnhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=5AsGrA4DlL+PCBChvj92hqjB0hfn92LRQaKu0Z47lw0=;
+        b=Fua0g+0Q8gsySAoHOeAMW2HAgSNq2T2zoce3IxPnoi5fkmi408uKaSM1vsn0vkF1f0
+         vN6y3djChTrHq6yJAfj7SxaprHAGt6Yzgbd+4KOjLq5NlBaLl13yZxc5zpjGQ4cPBhxA
+         TADZuk8TMeB4iNjG9StZfDp5WvPUbjP2O9DLOWAueMMSkGFj53iL8KpvSHGzAN7SSsjf
+         12OTHEYgakTQwrNgHHlIvmGOQuMSBMEQFsH5k0h7+y1jqkDvaEIvgnrzmnWIwRI/IXyp
+         1M3536OzdhPD9jJ5FdS7/r2GR0j4aq9Th/syqQCfAmj2033q6qIYyK0A4f6mCDC3U6Up
+         3yNg==
+X-Gm-Message-State: AOAM530rLXw+4o3skhFLsrAOI3FnOvGTMbf0xKJHdGp3Rkrj3p+ya0VZ
+        5Q+2aOOL3msFKwOUbWuirX2zCoQn1UoLP9NflM0=
+X-Google-Smtp-Source: ABdhPJz745Up+31EXZdlxxaeu2kQUKGjCtUnTC5t8M9Jg7kyfeyXE8+1C3o0XrpfcviFHh3WweoYhZYgw5/tHo4VDqU=
+X-Received: by 2002:ab0:3349:: with SMTP id h9mr37668042uap.111.1638752089778;
+ Sun, 05 Dec 2021 16:54:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211122101917.1643563-1-o.rempel@pengutronix.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Received: by 2002:a59:9e8c:0:b0:23d:e092:9ade with HTTP; Sun, 5 Dec 2021
+ 16:54:49 -0800 (PST)
+Reply-To: mrsbillchantallawrence2@gmail.com
+From:   MRS BILL CHANTAL LAWRANCE <emmanuellaclever32@gmail.com>
+Date:   Sun, 5 Dec 2021 16:54:49 -0800
+Message-ID: <CALWpAgGYP2gcyt9xezGbDyE1L4+73h2AkgNYsJYLEirhPEVY7A@mail.gmail.com>
+Subject: DEAR FRIEND
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 22, 2021 at 11:19:15AM +0100, Oleksij Rempel wrote:
-> Add "joz" entry for JOZ BV: https://joz.nl/en/about-joz/
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> Acked-by: Rob Herring <robh@kernel.org>
+dear
 
-Applied all, thanks!
+You have been compensated with the sum of 5.1 million dollars in this
+united nation the payment will be Issue into ATM visa card and send to
+you from the Santander bank of Spain we need your address passport and
+your whatsapp number.
+Thanks
+
+Mrs. bill Chantal

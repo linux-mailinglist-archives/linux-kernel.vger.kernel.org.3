@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8873C469F03
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A5F469D94
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391203AbhLFPpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:45:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
+        id S1387205AbhLFPav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:30:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376933AbhLFP2v (ORCPT
+        with ESMTP id S1357778AbhLFPTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:28:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E42BC08ED6B;
-        Mon,  6 Dec 2021 07:18:12 -0800 (PST)
+        Mon, 6 Dec 2021 10:19:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9B8C0698C1;
+        Mon,  6 Dec 2021 07:12:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AB5161327;
-        Mon,  6 Dec 2021 15:18:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13EB6C341C1;
-        Mon,  6 Dec 2021 15:18:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B92F2B810F1;
+        Mon,  6 Dec 2021 15:12:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 081F9C341C2;
+        Mon,  6 Dec 2021 15:12:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803891;
-        bh=2IqzMPuwz65FUzblmUGeYgOYGVyBQvH/aDNHAgMUgLc=;
+        s=korg; t=1638803560;
+        bh=sQdt5IE+cU4xQgsFcYb+l9qO3gdvUeoE1AbldgNi2/M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B/bQrJ+803pIiRS3z2K1KaUq+b84dfUrnlx1sWJpOsQUfL/fbnU/3E3QyX6MBrDBg
-         Y1Awy3Y2idMPtHIMGtIv0zt+Tif82FwJjd7Ux6xVvChzABB+sZYakL5reovHmk3ce4
-         FTjQmPyfi/SWPC1pI08mcoop8lu6rg2SMK/8Xd48=
+        b=CEvMhd/rZpN4Zuhm+sgQ9srQA096CH8VRx5QOiunZPq4bDaP5cgaIBd2moIWq1dTA
+         fy/x5ei4Sg59VsH7JoQVEoE1v1qBASzCl9CURhPFXZUx/YGxgN+eiWgx4e556eDQbI
+         RzFk57IlYiU9FNBNPJ5cfTfuBaFXdQXKbIxAOeGI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Eiichi Tsukata <eiichi.tsukata@nutanix.com>,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org
-Subject: [PATCH 5.10 084/130] rxrpc: Fix rxrpc_local leak in rxrpc_lookup_peer()
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 37/70] net: qlogic: qlcnic: Fix a NULL pointer dereference in qlcnic_83xx_add_rings()
 Date:   Mon,  6 Dec 2021 15:56:41 +0100
-Message-Id: <20211206145602.565491138@linuxfoundation.org>
+Message-Id: <20211206145553.204629711@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
+References: <20211206145551.909846023@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,69 +48,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-commit beacff50edbd6c9659a6f15fc7f6126909fade29 upstream.
+commit e2dabc4f7e7b60299c20a36d6a7b24ed9bf8e572 upstream.
 
-Need to call rxrpc_put_local() for peer candidate before kfree() as it
-holds a ref to rxrpc_local.
+In qlcnic_83xx_add_rings(), the indirect function of
+ahw->hw_ops->alloc_mbx_args will be called to allocate memory for
+cmd.req.arg, and there is a dereference of it in qlcnic_83xx_add_rings(),
+which could lead to a NULL pointer dereference on failure of the
+indirect function like qlcnic_83xx_alloc_mbx_args().
 
-[DH: v2: Changed to abstract the peer freeing code out into a function]
+Fix this bug by adding a check of alloc_mbx_args(), this patch
+imitates the logic of mbx_cmd()'s failure handling.
 
-Fixes: 9ebeddef58c4 ("rxrpc: rxrpc_peer needs to hold a ref on the rxrpc_local record")
-Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
-Link: https://lore.kernel.org/all/20211121041608.133740-2-eiichi.tsukata@nutanix.com/ # v1
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_QLCNIC=m show no new warnings, and our
+static analyzer no longer warns about this code.
+
+Fixes: 7f9664525f9c ("qlcnic: 83xx memory map and HW access routine")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Link: https://lore.kernel.org/r/20211130110848.109026-1-zhou1615@umn.edu
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/rxrpc/peer_object.c |   14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
---- a/net/rxrpc/peer_object.c
-+++ b/net/rxrpc/peer_object.c
-@@ -299,6 +299,12 @@ static struct rxrpc_peer *rxrpc_create_p
- 	return peer;
- }
- 
-+static void rxrpc_free_peer(struct rxrpc_peer *peer)
-+{
-+	rxrpc_put_local(peer->local);
-+	kfree_rcu(peer, rcu);
-+}
+--- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c
++++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c
+@@ -1079,8 +1079,14 @@ static int qlcnic_83xx_add_rings(struct
+ 	sds_mbx_size = sizeof(struct qlcnic_sds_mbx);
+ 	context_id = recv_ctx->context_id;
+ 	num_sds = adapter->drv_sds_rings - QLCNIC_MAX_SDS_RINGS;
+-	ahw->hw_ops->alloc_mbx_args(&cmd, adapter,
+-				    QLCNIC_CMD_ADD_RCV_RINGS);
++	err = ahw->hw_ops->alloc_mbx_args(&cmd, adapter,
++					QLCNIC_CMD_ADD_RCV_RINGS);
++	if (err) {
++		dev_err(&adapter->pdev->dev,
++			"Failed to alloc mbx args %d\n", err);
++		return err;
++	}
 +
- /*
-  * Set up a new incoming peer.  There shouldn't be any other matching peers
-  * since we've already done a search in the list from the non-reentrant context
-@@ -365,7 +371,7 @@ struct rxrpc_peer *rxrpc_lookup_peer(str
- 		spin_unlock_bh(&rxnet->peer_hash_lock);
+ 	cmd.req.arg[1] = 0 | (num_sds << 8) | (context_id << 16);
  
- 		if (peer)
--			kfree(candidate);
-+			rxrpc_free_peer(candidate);
- 		else
- 			peer = candidate;
- 	}
-@@ -420,8 +426,7 @@ static void __rxrpc_put_peer(struct rxrp
- 	list_del_init(&peer->keepalive_link);
- 	spin_unlock_bh(&rxnet->peer_hash_lock);
- 
--	rxrpc_put_local(peer->local);
--	kfree_rcu(peer, rcu);
-+	rxrpc_free_peer(peer);
- }
- 
- /*
-@@ -457,8 +462,7 @@ void rxrpc_put_peer_locked(struct rxrpc_
- 	if (n == 0) {
- 		hash_del_rcu(&peer->hash_link);
- 		list_del_init(&peer->keepalive_link);
--		rxrpc_put_local(peer->local);
--		kfree_rcu(peer, rcu);
-+		rxrpc_free_peer(peer);
- 	}
- }
- 
+ 	/* set up status rings, mbx 2-81 */
 
 

@@ -2,82 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C820646A0A3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDF846A0EC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:14:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385821AbhLFQIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:08:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38730 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388867AbhLFQG2 (ORCPT
+        id S1385987AbhLFQR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:17:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385933AbhLFQQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:06:28 -0500
+        Mon, 6 Dec 2021 11:16:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87766C09B130;
+        Mon,  6 Dec 2021 08:03:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87AC6B81085;
-        Mon,  6 Dec 2021 16:02:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5FBFC341C1;
-        Mon,  6 Dec 2021 16:02:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638806575;
-        bh=uVeYzty1HG19livy6ELAjstEtph8/Hc5u5Bi9nTH8kw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vAYDrWm9W8KJgUkQoumuvor614pQUlcQ8Dc4x8o90uekejGpdm9+i3ys4C7fw4wRu
-         0dWc9S3PYl7JsdHvnnUbFjAKVHSBInmUt6JSB7tyXWAZ+RSRZrZgnu8tRJ8ouC9Nlk
-         SUxchdNZAOWm6kWyy6A5nIKKk+gERMLVqEHZ7Mtw=
-Date:   Mon, 6 Dec 2021 17:02:32 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Wedson Almeida Filho <wedsonaf@google.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Finn Behrens <me@kloenk.de>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        Wayne Campbell <wcampbell1995@gmail.com>
-Subject: Re: [RFC PATCH 19/19] drivers: android: Binder IPC in Rust
-Message-ID: <Ya40GOSIrWVC2ZSq@kroah.com>
-References: <20211206140313.5653-1-ojeda@kernel.org>
- <20211206140313.5653-20-ojeda@kernel.org>
- <Ya4lu3k9HxLRe1Tv@kroah.com>
- <Ya4zco0QFG0K5kO+@google.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id D762FB81018;
+        Mon,  6 Dec 2021 16:03:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BD70C341C2;
+        Mon,  6 Dec 2021 16:03:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638806617;
+        bh=0hIMxUiKaxfvgogyudivj6aZ0CmABcuX/qtX3tWTxI0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qUJFfeWzPWhRDMoZff20CrLQgcnCfziWN+toVPZp3km3h3sgM2GN5jgjHSGKmjZ84
+         i+zraFxKmtDBSMonqNfLCGbYHsSdY/XRktPsww8p+7hZik4r+zfeJzcbvpmnVrxMrp
+         rzFjUB0a0FnQv3n8snNVTjtav+iHl9PuSNVX2z5uWCGPwSDVDqxWHEHFU9sJMfZ1AE
+         /6sx4O0f5D/1r7XpcaN/T+1U2923ytgvktav+1UXUGB476ynUpIwxp6R601y7aIfbC
+         dftx15eMOpGF1qIv3DMSdMaQ+1wI+uxGrNeVL3HK5Xq1jDCz15+BTbhKpZGG0oTk1v
+         ZWSQ7LvRn/2GQ==
+Date:   Mon, 6 Dec 2021 08:03:37 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Emmanuel Deloget <emmanuel.deloget@eho.link>,
+        Louis Amas <louis.amas@eho.link>, andrii@kernel.org,
+        ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
+        kafai@fb.com, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        mw@semihalf.com, netdev@vger.kernel.org, songliubraving@fb.com,
+        yhs@fb.com
+Subject: Re: [PATCH 1/1] net: mvpp2: fix XDP rx queues registering
+Message-ID: <20211206080337.13fc9ae7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <Ya4vd9+pBbVJML+K@shell.armlinux.org.uk>
+References: <DB9PR06MB8058D71218633CD7024976CAFA929@DB9PR06MB8058.eurprd06.prod.outlook.com>
+        <20211110144104.241589-1-louis.amas@eho.link>
+        <bdc1f03c-036f-ee29-e2a1-a80f640adcc4@eho.link>
+        <Ya4vd9+pBbVJML+K@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ya4zco0QFG0K5kO+@google.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 03:59:46PM +0000, Wedson Almeida Filho wrote:
-> On Mon, Dec 06, 2021 at 04:01:15PM +0100, Greg Kroah-Hartman wrote:
-> > On Mon, Dec 06, 2021 at 03:03:13PM +0100, Miguel Ojeda wrote:
-> > > From: Wedson Almeida Filho <wedsonaf@google.com>
+On Mon, 6 Dec 2021 15:42:47 +0000 Russell King (Oracle) wrote:
+> On Mon, Dec 06, 2021 at 04:37:20PM +0100, Emmanuel Deloget wrote:
+> > On 10/11/2021 15:41, Louis Amas wrote:  
+> > > The registration of XDP queue information is incorrect because the
+> > > RX queue id we use is invalid. When port->id == 0 it appears to works
+> > > as expected yet it's no longer the case when port->id != 0.
 > > > 
-> > > A port to Rust of the Android Binder IPC mechanism.
+> > > When we register the XDP rx queue information (using
+> > > xdp_rxq_info_reg() in function mvpp2_rxq_init()) we tell them to use
+> > > rxq->id as the queue id. This value iscomputed as:
+> > > rxq->id = port->id * max_rxq_count + queue_id
 > > > 
-> > > This module is a work in progress and will be sent for review later
-> > > on, as well as separately from the Rust support.
+> > > where max_rxq_count depends on the device version. In the MB case,
+> > > this value is 32, meaning that rx queues on eth2 are numbered from
+> > > 32 to 35 - there are four of them.
 > > > 
-> > > However, it is included to show how an actual working module
-> > > written in Rust may look like.
-> > 
-> > Have you all tested this against the userspace binder tests?  And is it
-> > up to date with the features of the in-kernel binder driver?
+> > > Clearly, this is not the per-port queue id that XDP is expecting:
+> > > it wants a value in the range [0..3]. It shall directly use queue_id
+> > > which is stored in rxq->logic_rxq -- so let's use that value instead.
+> > > 
+> > > This is consistent with the remaining part of the code in
+> > > mvpp2_rxq_init().
+
+> > Is there any update on this patch ? Without it, XDP only partially work on a
+> > MACCHIATOBin (read: it works on some ports, not on others, as described in
+> > our analysis sent together with the original patch).  
 > 
-> Very little has changed here since the last submission, namely: using
-> credentials for security callbacks, and replacing `Arc` with `Ref` (i.e., using
-> refcount_t to manage ref-counted allocations).
-> 
-> As the message tries to indicate, this is submitted as an example and WIP, it
-> doesn't have feature parity with the C version yet.
+> I suspect if you *didn't* thread your updated patch to your previous
+> submission, then it would end up with a separate entry in
+> patchwork.kernel.org,
 
-You might want to say that in the changelog text so I don't keep asking
-every time it gets posted :)
+Indeed, it's easier to keep track of patches which weren't posted 
+as a reply in a thread, at least for me.
 
-thanks,
+> and the netdev maintainers will notice that the
+> patch is ready for inclusion, having been reviewed by Marcin.
 
-greg k-h
+In this case I _think_ it was dropped because it didn't apply.
+
+Please rebase on top of net/master and repost if the changes is still
+needed.

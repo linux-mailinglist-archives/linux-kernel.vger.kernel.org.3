@@ -2,102 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FAD46A615
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C8F46A618
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:54:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348800AbhLFT50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:57:26 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:33413 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348599AbhLFT5V (ORCPT
+        id S1348820AbhLFT5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:57:36 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:55828 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238223AbhLFT5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:57:21 -0500
-Received: by mail-ot1-f42.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso15157433otf.0;
-        Mon, 06 Dec 2021 11:53:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=FEXfkV7DzfDOJwDiaMHFm7upzA8Sh7nLlaXOwLGj1BE=;
-        b=VedFdf0VhLZWwtlF9+GyktKViRKs7uoBop5BDlwjKHvA5Exifb+tw+8EkBaoo59ead
-         jhY6hStCWlIokNklvuowFHQzRMJKFUSUpbNtRBlpidCddwklO9ix361M1QXEOZIZ3doF
-         Zurrrj1moiXGoyejG+eWgo8oc1bCwN3KcD9oG3EegxyfD76ZDO9Hz+Z6i5CUrlIfmr7q
-         uQ+f+h4MyTSuEdNOFKbXQPKI9n4/0s7HNF4x7B8i1VHTj/kWXttYpF45SxzV5ZhRI0In
-         NUgYg6YB3BQcOOk+jeFFIVsNxQ8lHrJeOMkT416qzF8LSrz1UUn6oQ+IUj4Kl519e12Y
-         xNoA==
-X-Gm-Message-State: AOAM533b36oi2syD1kzWBXZcLW8kG0ZNfsuVdajvCZU3b0wI07DbGhXr
-        +dfuaRVkwPVBDsQJLXZOgXBTSzSuvQ==
-X-Google-Smtp-Source: ABdhPJxqPcwZqRSvz/gvJxol+w0vc9LVGdjC/iJystk++DcVt34euIEQfUOhOsHSNlSNtMeenxx9rw==
-X-Received: by 2002:a9d:67d5:: with SMTP id c21mr31326344otn.128.1638820432263;
-        Mon, 06 Dec 2021 11:53:52 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id e28sm2894339oiy.10.2021.12.06.11.53.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 11:53:51 -0800 (PST)
-Received: (nullmailer pid 2482589 invoked by uid 1000);
-        Mon, 06 Dec 2021 19:53:49 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Mihail Chindris <mihail.chindris@analog.com>
-Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
-        alexandru.ardelean@analog.com, broonie@kernel.org,
-        Michael.Hennerich@analog.com, nuno.sa@analog.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, jic23@kernel.org, dragos.bogdan@analog.com
-In-Reply-To: <20211206163529.3528-1-mihail.chindris@analog.com>
-References: <20211206163529.3528-1-mihail.chindris@analog.com>
-Subject: Re: [RESEND, PATCH v6 1/2] dt-bindings: iio: dac: Add adi,ad3552r.yaml
-Date:   Mon, 06 Dec 2021 13:53:49 -0600
-Message-Id: <1638820429.528698.2482588.nullmailer@robh.at.kernel.org>
+        Mon, 6 Dec 2021 14:57:34 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 30781CE1808;
+        Mon,  6 Dec 2021 19:54:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E40BC341C1;
+        Mon,  6 Dec 2021 19:54:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638820442;
+        bh=mSNNrHFW06kVUlsvvOG0PrM6HIBh5L6fNgoeMiBszOY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pyHduUTekqrW8AtMOaAdyVSavHNViK+V6os9x01PUTrpsJFSnqaIRBcfo2HHIZkeV
+         Hh6nzljlLROtFXCxVvNHTnyvYjMn0Pg5IwDvZUors9R65fXovIqWNiB2a4r2UhfQ6H
+         0kxiZ9p4/DBgE7J4OgXxyK5vZS4d6SJG2fBHsUBQft0mCGD70mLeuoBHQUKlKHhByP
+         m2dPhHXShRfF4PH4SrBdbp1qzsyc+4JEFNw9KpQc/1PPedyXw15jdkYll+1bf9yXGu
+         4w3Vc63oxEgtwvN9zziCM/nNbW8qEs2gHdQIniVwZbAktn29zzJbchEdGUseSv/b77
+         sIMDRSayqC/Fw==
+Date:   Mon, 6 Dec 2021 11:54:00 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Benjamin LaHaise <bcrl@kvack.org>, linux-aio@kvack.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ramji Jiyani <ramjiyani@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH 2/2] aio: fix use-after-free due to missing POLLFREE
+ handling
+Message-ID: <Ya5qWLLv3i4szS4N@gmail.com>
+References: <20211204002301.116139-1-ebiggers@kernel.org>
+ <20211204002301.116139-3-ebiggers@kernel.org>
+ <CAHk-=wgJ+6qgbB+WCDosxOgDp34ybncUwPJ5Evo8gcXptfzF+Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgJ+6qgbB+WCDosxOgDp34ybncUwPJ5Evo8gcXptfzF+Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Dec 2021 16:35:29 +0000, Mihail Chindris wrote:
-> Add documentation for ad3552r
+On Mon, Dec 06, 2021 at 11:28:13AM -0800, Linus Torvalds wrote:
+> On Fri, Dec 3, 2021 at 4:23 PM Eric Biggers <ebiggers@kernel.org> wrote:
+> >
+> > require another solution.  This solution is for the queue to be cleared
+> > before it is freed, using 'wake_up_poll(wq, EPOLLHUP | POLLFREE);'.
 > 
-> Signed-off-by: Mihail Chindris <mihail.chindris@analog.com>
-> ---
->  .../bindings/iio/dac/adi,ad3552r.yaml         | 190 ++++++++++++++++++
->  1 file changed, 190 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/dac/adi,ad3552r.yaml
+> Ugh.
 > 
+> I hate POLLFREE, and the more I look at this, the more I think it's broken.
+> 
+> And that
+> 
+>         wake_up_poll(wq, EPOLLHUP | POLLFREE);
+> 
+> in particular looks broken - the intent is that it should remove all
+> the wait queue entries (because the wait queue head is going away),
+> but wake_up_poll() iself actually does
+> 
+>         __wake_up(x, TASK_NORMAL, 1, poll_to_key(m))
+> 
+> where that '1' is the number of exclusive entries it will wake up.
+> 
+> So if there are two exclusive waiters, wake_up_poll() will simply stop
+> waking things up after the first one.
+> 
+> Which defeats the whole POLLFREE thing too.
+> 
+> Maybe I'm missing something, but POLLFREE really is broken.
+> 
+> I'd argue that all of epoll() is broken, but I guess we're stuck with it.
+> 
+> Now, it's very possible that nobody actually uses exclusive waits for
+> those wait queues, and my "nr_exclusive" argument is about something
+> that isn't actually a bug in reality. But I think it's a sign of
+> confusion, and it's just another issue with POLLFREE.
+> 
+> I really wish we could have some way to not have epoll and aio mess
+> with the wait-queue lists and cache the wait queue head pointers that
+> they don't own.
+> 
+> In the meantime, I don't think these patches make things worse, and
+> they may fix things. But see above about "nr_exclusive" and how I
+> think wait queue entries might end up avoiding POLLFREE handling..
+> 
+>                   Linus
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+epoll supports exclusive waits, via the EPOLLEXCLUSIVE flag.  So this looks like
+a real problem.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/iio/dac/adi,ad3552r.yaml:64:11: [warning] wrong indentation: expected 8 but found 10 (indentation)
-./Documentation/devicetree/bindings/iio/dac/adi,ad3552r.yaml:102:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-./Documentation/devicetree/bindings/iio/dac/adi,ad3552r.yaml:104:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+It could be fixed by converting signalfd and binder to use something like this,
+right?
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/iio/dac/adi,ad3552r.example.dts:21.17-27: Warning (reg_format): /example-0/ad3552r:reg: property has invalid length (4 bytes) (#address-cells == 1, #size-cells == 1)
-Documentation/devicetree/bindings/iio/dac/adi,ad3552r.example.dts:24.25-35: Warning (reg_format): /example-0/ad3552r/channel@0:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-Documentation/devicetree/bindings/iio/dac/adi,ad3552r.example.dts:28.25-35: Warning (reg_format): /example-0/ad3552r/channel@1:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-Documentation/devicetree/bindings/iio/dac/adi,ad3552r.example.dts:19.17-36.13: Warning (unit_address_vs_reg): /example-0/ad3552r: node has a reg or ranges property, but no unit name
-Documentation/devicetree/bindings/iio/dac/adi,ad3552r.example.dt.yaml: Warning (pci_device_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/iio/dac/adi,ad3552r.example.dt.yaml: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/iio/dac/adi,ad3552r.example.dt.yaml: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/iio/dac/adi,ad3552r.example.dt.yaml: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/iio/dac/adi,ad3552r.example.dt.yaml: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/iio/dac/adi,ad3552r.example.dts:23.27-26.19: Warning (avoid_default_addr_size): /example-0/ad3552r/channel@0: Relying on default #address-cells value
-Documentation/devicetree/bindings/iio/dac/adi,ad3552r.example.dts:23.27-26.19: Warning (avoid_default_addr_size): /example-0/ad3552r/channel@0: Relying on default #size-cells value
-Documentation/devicetree/bindings/iio/dac/adi,ad3552r.example.dts:27.27-35.17: Warning (avoid_default_addr_size): /example-0/ad3552r/channel@1: Relying on default #address-cells value
-Documentation/devicetree/bindings/iio/dac/adi,ad3552r.example.dts:27.27-35.17: Warning (avoid_default_addr_size): /example-0/ad3552r/channel@1: Relying on default #size-cells value
-Documentation/devicetree/bindings/iio/dac/adi,ad3552r.example.dt.yaml: Warning (unique_unit_address): Failed prerequisite 'avoid_default_addr_size'
+	#define wake_up_pollfree(x)  \
+	       __wake_up(x, TASK_NORMAL, 0, poll_to_key(EPOLLHUP | POLLFREE))
 
-doc reference errors (make refcheckdocs):
+As for eliminating POLLFREE entirely, that would require that the waitqueue
+heads be moved to a location which has a longer lifetime.  I'm not sure if
+that's possible.  In the case of signalfd, maybe the waitqueue head could be
+moved to the file private data (signalfd_ctx), and then sighand_struct would
+contain a list of signalfd_ctx's which are receiving signals directed to that
+sighand_struct, rather than the waitqueue head itself.  I'm not sure how well
+that would work.  This would probably change user-visible behavior; if a
+signalfd is inherited by fork(), the child process would be notified about
+signals sent to the parent process, rather than itself as is currently the case.
 
-See https://patchwork.ozlabs.org/patch/1564044
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+- Eric

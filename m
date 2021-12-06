@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6B7469A98
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:05:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA60469F97
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:53:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345561AbhLFPJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:09:04 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:39846 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346588AbhLFPGs (ORCPT
+        id S238272AbhLFPt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:49:58 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48216 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1387971AbhLFPcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:06:48 -0500
+        Mon, 6 Dec 2021 10:32:10 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A26BDB810F1;
-        Mon,  6 Dec 2021 15:03:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBE0EC341C5;
-        Mon,  6 Dec 2021 15:03:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BE5B612C1;
+        Mon,  6 Dec 2021 15:28:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CD6FC34900;
+        Mon,  6 Dec 2021 15:28:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802997;
-        bh=uYXDFSPFZbtjpC4Y373rOWrzdQGl0i1UsKHhx8qDUrM=;
+        s=korg; t=1638804520;
+        bh=eDw+q1W7elfw+uagleAtMvIxaWH/dJdNE6bytLKJtZE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i0mKRKld5IZoPs3mOEgEIH6U5PYKgKS9uts5dH8y4Jq4p3/9XdaIqFi9qVgeaDyyg
-         zejLZFezuBe08Aaebj9Jg+UZnhaadvO235ElLamXgmm+oTWRt+4+ujrg28VFh7qc8v
-         isd/t66bZRlBACR31lXLUI28uAY6CjNX5p+uRIVE=
+        b=p0eynON1T1eCx2BdCjfL7a0FEjmcZU3vTDS56bpYPRg2vorMBXsrctfJ9JupSdQnC
+         mBFDAVN36krKHQqENwVwmuL1CNCtAnBHHKtLnwgTRpSmSVJCeZ1VaLF8gTIXYOFe9e
+         JoeqntaNshsKTq/PHHI3CKmb/yHIiL8zOHMfBHBg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.9 55/62] net: qlogic: qlcnic: Fix a NULL pointer dereference in qlcnic_83xx_add_rings()
+        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Jian-Hong Pan <jhp@endlessos.org>
+Subject: [PATCH 5.15 144/207] drm/vc4: kms: Fix previous HVS commit wait
 Date:   Mon,  6 Dec 2021 15:56:38 +0100
-Message-Id: <20211206145551.108279336@linuxfoundation.org>
+Message-Id: <20211206145615.224712715@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,59 +46,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Maxime Ripard <maxime@cerno.tech>
 
-commit e2dabc4f7e7b60299c20a36d6a7b24ed9bf8e572 upstream.
+commit 6052a3110be208e547a4a8aeb184446199a16e8a upstream.
 
-In qlcnic_83xx_add_rings(), the indirect function of
-ahw->hw_ops->alloc_mbx_args will be called to allocate memory for
-cmd.req.arg, and there is a dereference of it in qlcnic_83xx_add_rings(),
-which could lead to a NULL pointer dereference on failure of the
-indirect function like qlcnic_83xx_alloc_mbx_args().
+Our current code is supposed to serialise the commits by waiting for all
+the drm_crtc_commits associated to the previous HVS state.
 
-Fix this bug by adding a check of alloc_mbx_args(), this patch
-imitates the logic of mbx_cmd()'s failure handling.
+However, assuming we have two CRTCs running and being configured and we
+configure each one alternately, we end up in a situation where we're
+not waiting at all.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+Indeed, starting with a state (state 0) where both CRTCs are running,
+and doing a commit (state 1) on the first CRTC (CRTC 0), we'll associate
+its commit to its assigned FIFO in vc4_hvs_state.
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
+If we get a new commit (state 2), this time affecting the second CRTC
+(CRTC 1), the DRM core will allow both commits to execute in parallel
+(assuming they don't have any share resources).
 
-Builds with CONFIG_QLCNIC=m show no new warnings, and our
-static analyzer no longer warns about this code.
+Our code in vc4_atomic_commit_tail is supposed to make sure we only get
+one commit at a time and serialised by order of submission. It does so
+by using for_each_old_crtc_in_state, making sure that the CRTC has a
+FIFO assigned, is used, and has a commit pending. If it does, then we'll
+wait for the commit before going forward.
 
-Fixes: 7f9664525f9c ("qlcnic: 83xx memory map and HW access routine")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Link: https://lore.kernel.org/r/20211130110848.109026-1-zhou1615@umn.edu
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+During the transition from state 0 to state 1, as our old CRTC state we
+get the CRTC 0 state 0, its commit, we wait for it, everything works fine.
+
+During the transition from state 1 to state 2 though, the use of
+for_each_old_crtc_in_state is wrong. Indeed, while the code assumes it's
+returning the state of the CRTC in the old state (so CRTC 0 state 1), it
+actually returns the old state of the CRTC affected by the current
+commit, so CRTC 0 state 0 since it wasn't part of state 1.
+
+Due to this, if we alternate between the configuration of CRTC 0 and
+CRTC 1, we never actually wait for anything since we should be waiting
+on the other every time, but it never is affected by the previous
+commit.
+
+Change the logic to, at every commit, look at every FIFO in the previous
+HVS state, and if it's in use and has a commit associated to it, wait
+for that commit.
+
+Fixes: 9ec03d7f1ed3 ("drm/vc4: kms: Wait on previous FIFO users before a commit")
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Reviewed-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Tested-by: Jian-Hong Pan <jhp@endlessos.org>
+Link: https://lore.kernel.org/r/20211117094527.146275-7-maxime@cerno.tech
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c |   10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/vc4/vc4_kms.c |   10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c
-@@ -1078,8 +1078,14 @@ static int qlcnic_83xx_add_rings(struct
- 	sds_mbx_size = sizeof(struct qlcnic_sds_mbx);
- 	context_id = recv_ctx->context_id;
- 	num_sds = adapter->drv_sds_rings - QLCNIC_MAX_SDS_RINGS;
--	ahw->hw_ops->alloc_mbx_args(&cmd, adapter,
--				    QLCNIC_CMD_ADD_RCV_RINGS);
-+	err = ahw->hw_ops->alloc_mbx_args(&cmd, adapter,
-+					QLCNIC_CMD_ADD_RCV_RINGS);
-+	if (err) {
-+		dev_err(&adapter->pdev->dev,
-+			"Failed to alloc mbx args %d\n", err);
-+		return err;
-+	}
-+
- 	cmd.req.arg[1] = 0 | (num_sds << 8) | (context_id << 16);
+--- a/drivers/gpu/drm/vc4/vc4_kms.c
++++ b/drivers/gpu/drm/vc4/vc4_kms.c
+@@ -337,10 +337,10 @@ static void vc4_atomic_commit_tail(struc
+ 	struct drm_device *dev = state->dev;
+ 	struct vc4_dev *vc4 = to_vc4_dev(dev);
+ 	struct vc4_hvs *hvs = vc4->hvs;
+-	struct drm_crtc_state *old_crtc_state;
+ 	struct drm_crtc_state *new_crtc_state;
+ 	struct drm_crtc *crtc;
+ 	struct vc4_hvs_state *old_hvs_state;
++	unsigned int channel;
+ 	int i;
  
- 	/* set up status rings, mbx 2-81 */
+ 	for_each_new_crtc_in_state(state, crtc, new_crtc_state, i) {
+@@ -357,16 +357,10 @@ static void vc4_atomic_commit_tail(struc
+ 	if (IS_ERR(old_hvs_state))
+ 		return;
+ 
+-	for_each_old_crtc_in_state(state, crtc, old_crtc_state, i) {
+-		struct vc4_crtc_state *vc4_crtc_state =
+-			to_vc4_crtc_state(old_crtc_state);
+-		unsigned int channel = vc4_crtc_state->assigned_channel;
++	for (channel = 0; channel < HVS_NUM_CHANNELS; channel++) {
+ 		struct drm_crtc_commit *commit;
+ 		int ret;
+ 
+-		if (channel == VC4_HVS_CHANNEL_DISABLED)
+-			continue;
+-
+ 		if (!old_hvs_state->fifo_state[channel].in_use)
+ 			continue;
+ 
 
 

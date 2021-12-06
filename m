@@ -2,85 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0701469855
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 183CF469862
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343622AbhLFOQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 09:16:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S1343676AbhLFORj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 09:17:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245673AbhLFOQz (ORCPT
+        with ESMTP id S1343688AbhLFORi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 09:16:55 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743B0C0613F8;
-        Mon,  6 Dec 2021 06:13:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mC4snFvmVQItGI2siC8cGfUb3byxoiOnKLgqdbmyMcQ=; b=dm7wjbftIMFsPJba8CxJwPYFy6
-        uS4LcWXMZyawxLsDstv//jKrvkkHN+K8djaQ9PmBo+FuSeobcozb4MOeufoogygP0+rlwIkwY2/Lb
-        YztWWXYFwjNwhu7BSLU7so/EDmhQJy5DJ4roZQzwr7AF355d551CeeJebeRRvGZYkQuhCs5bDRjFz
-        iPECqpnqCnVu4wob3boG1SDiKIKEfKgCdXaDM7Jj/r+naHsJxe/6Kf/dg/9NIs5u7zEj8eQ7TLKDJ
-        00rvqUZ+3bx4d5MXtYgjsLNW7Kc4fFN1xevpOCSdinVsUvjOlriMW9vHzk7xfP83Aud2bNDDIOiI8
-        qjWDRv6g==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1muEjl-004ADO-Gv; Mon, 06 Dec 2021 14:13:01 +0000
-Date:   Mon, 6 Dec 2021 06:13:01 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 03/18] driver core: platform: Rename
- platform_dma_configure()
-Message-ID: <Ya4abbx5M31LYd3N@infradead.org>
-References: <20211206015903.88687-1-baolu.lu@linux.intel.com>
- <20211206015903.88687-4-baolu.lu@linux.intel.com>
- <Ya3BYxrgkNK3kbGI@kroah.com>
+        Mon, 6 Dec 2021 09:17:38 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5AEC0613F8;
+        Mon,  6 Dec 2021 06:14:09 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id f125so10642170pgc.0;
+        Mon, 06 Dec 2021 06:14:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LG+zF8eXNnqFsGFKA2ZTnXSPUueJWK5YxbpbucSufXI=;
+        b=mQqUkA3xIsQY4XmQYBzGNmYRws6Q0JrMJpuTq/VEAZ58elCNocHbrP8QMV+4phw9Ut
+         vWKeJdfRRl2H6A3/U0ZfFrg46WCHuxCz5sAlIyGUXSN9dXWnqcoQP+R/jmprw5bfpFHj
+         fKOmzAhbS2g+OM1Z5BI3nXKStQ11a7SSrQ5tFd6125uR6KPjsGJebIfx224pdX+EvGle
+         FqorCYj7anmbSaX4e41EWyvuvtjfgov84k+oRDD0xrawuDr2dYvzxxLjG9dUVswmsHTE
+         elai+rbP43KznXg+HMIMYpPzORZYpPi24LOHZHh8JFVSoiDVYRN7mdHXVcauIlegBAj5
+         mHBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LG+zF8eXNnqFsGFKA2ZTnXSPUueJWK5YxbpbucSufXI=;
+        b=a/a6H3WXUQOc4RaM7MjJoynXjSlcbcd9Yu0dTzizVhzGcmw0SE2WnNEw2ggS7rTUxz
+         l6YR0WejXUMO6myj40TFebIuLWBsuobLSd6WVJJA3lKQBPsVnvfmvdodAO25s9Y+e5in
+         ySDQbEb65xcUFsG641MqU5dXvLRO1hRxCAFMUnfWzISRtaVROCOjb4yFbhfUS26VNe3i
+         SUtgfu0u5plvrmXU80U3G33ZWRYVfrxVrxVXEn2353eASEUwPB/7PlZQOaD/GKqtqXJr
+         CNHqxg9sql30CUncmMjc7B2LR2O7d64XnvsudowfSChoUAykyz4XTlg0XjOz0v5bwl6Y
+         33BQ==
+X-Gm-Message-State: AOAM5329jm21pOA/9nlt5UAbFCIgkmAOyfhk71dbT2P+spgg70P4Wg1V
+        hVBRaMzMEozSkWL/C4gsfdA=
+X-Google-Smtp-Source: ABdhPJySAj+QT4OHzaoYLk1cSWHqCc54qgRjOngjnxP5g2RiZmDR4g0TxiHn1EhVWrwC669mfsgWOQ==
+X-Received: by 2002:a62:7e4c:0:b0:4a2:678e:8793 with SMTP id z73-20020a627e4c000000b004a2678e8793mr36890086pfc.75.1638800049309;
+        Mon, 06 Dec 2021 06:14:09 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::50b? ([2404:f801:9000:18:efec::50b])
+        by smtp.gmail.com with ESMTPSA id pi17sm14658528pjb.34.2021.12.06.06.13.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 06:14:08 -0800 (PST)
+Message-ID: <4d9049eb-d3a8-3872-c4c3-4ad41d93b58c@gmail.com>
+Date:   Mon, 6 Dec 2021 22:13:57 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ya3BYxrgkNK3kbGI@kroah.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH V4 2/5] x86/hyper-v: Add hyperv Isolation VM check in the
+ cc_platform_has()
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, jgross@suse.com,
+        sstabellini@kernel.org, boris.ostrovsky@oracle.com,
+        joro@8bytes.org, will@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        arnd@arndb.de, hch@infradead.org, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, thomas.lendacky@amd.com,
+        Tianyu.Lan@microsoft.com, xen-devel@lists.xenproject.org,
+        michael.h.kelley@microsoft.com, iommu@lists.linux-foundation.org,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, vkuznets@redhat.com, brijesh.singh@amd.com,
+        konrad.wilk@oracle.com, parri.andrea@gmail.com,
+        dave.hansen@intel.com
+References: <20211205081815.129276-1-ltykernel@gmail.com>
+ <20211205081815.129276-3-ltykernel@gmail.com> <20211206140651.GA5100@lst.de>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <20211206140651.GA5100@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 08:53:07AM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Dec 06, 2021 at 09:58:48AM +0800, Lu Baolu wrote:
-> > The platform_dma_configure() is shared between platform and amba bus
-> > drivers. Rename the common helper to firmware_dma_configure() so that
-> > both platform and amba bus drivers could customize their dma_configure
-> > callbacks.
-> 
-> Please, if you are going to call these functions "firmware_" then move
-> them to the drivers/firmware/ location, they do not belong in
-> drivers/base/platform.c anymore, right?
+Hi Christoph:
+	Thanks for your review.
 
-firmware seems rather misnamed anyway, amba doesn't reall have anything
-to do with "firmware".
+On 12/6/2021 10:06 PM, Christoph Hellwig wrote:
+> On Sun, Dec 05, 2021 at 03:18:10AM -0500, Tianyu Lan wrote:
+>> +static bool hyperv_cc_platform_has(enum cc_attr attr)
+>> +{
+>> +#ifdef CONFIG_HYPERV
+>> +	return attr == CC_ATTR_GUEST_MEM_ENCRYPT;
+>> +#else
+>> +	return false;
+>> +#endif
+>> +}
+> 
+> Can we even end up here without CONFIG_HYPERV?
+> 
+
+Yes, I will update in the next version.
+
+Thanks.

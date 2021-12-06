@@ -2,102 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 254A146968A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1CAE46968D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243985AbhLFNQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 08:16:58 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:39690 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244135AbhLFNQz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 08:16:55 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B6DDC7l007221;
-        Mon, 6 Dec 2021 07:13:12 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638796392;
-        bh=pYddrYXJDPAFBh5ZxgKQltpBvrTtJhPxeuFlwIUqGrQ=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=lbUorVoQfhLEQEPl0kRruM+/uehG1lEJZO0ZMQk6c/RV5/+YwhP0wsO8mib34Oo3v
-         OdPosVu3L9ImLn1GcobeQrfbhT8toAps6XpVhF497aoc72/ih9ux7YvkiFwblo1MhE
-         3I9FJXqWUbkwf4Xd5qEIQ7N5dIie+COQo3j/TGyg=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B6DDCQN050638
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 6 Dec 2021 07:13:12 -0600
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 6
- Dec 2021 07:13:12 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 6 Dec 2021 07:13:12 -0600
-Received: from uda0132425.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B6DD9BU115824;
-        Mon, 6 Dec 2021 07:13:09 -0600
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Rob Herring <robh+dt@kernel.org>, Tero Kristo <kristo@kernel.org>,
-        Nishanth Menon <nm@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-omap@vger.kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH] arm64: dts: ti: k3-j721e: Fix the L2 cache sets
-Date:   Mon, 6 Dec 2021 18:43:06 +0530
-Message-ID: <163879570036.16658.15551378280556472124.b4-ty@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211113043639.4413-1-nm@ti.com>
-References: <20211113043639.4413-1-nm@ti.com>
+        id S244074AbhLFNRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 08:17:15 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:40422 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243988AbhLFNRN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 08:17:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=9uO4KL5pTTCIDm+2vC0BTtiLZ3XiNiMgVQSPhd/4Zmo=; b=t1d2mR18EGquGIuoO4KVbL3tWb
+        vwncLUqPAW+GDfaiufQL/cNWIpUQsL3koghuHWzRShGiQalyg2xXFS4RRO1xMoUfacYSfeEPRjQLE
+        LikUhEAXSOKoE8ASs+/OjzQIyXlPZB1z+nDTfjpMNNJ6q2WHXxm/kJe/KPDwHYCBLSYs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1muDoH-00Ff6Z-DF; Mon, 06 Dec 2021 14:13:37 +0100
+Date:   Mon, 6 Dec 2021 14:13:37 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Philippe Schenker <philippe.schenker@toradex.com>
+Cc:     netdev@vger.kernel.org, Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Fugang Duan <fugang.duan@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/2] net: fec: make fec_reset_phy not only usable once
+Message-ID: <Ya4MgQA7lqiSrWoX@lunn.ch>
+References: <20211206101326.1022527-1-philippe.schenker@toradex.com>
+ <20211206101326.1022527-2-philippe.schenker@toradex.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206101326.1022527-2-philippe.schenker@toradex.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nishanth Menon,
- 
-On Fri, 12 Nov 2021 22:36:39 -0600, Nishanth Menon wrote:
-> A72's L2 cache[1] on J721e[2] is 1MB. A53's L2 is fixed line length of
-> 64 bytes and 16-way set-associative cache structure.
-> 
+>  #ifdef CONFIG_OF
+> -static int fec_reset_phy(struct platform_device *pdev)
+> +static int fec_reset_phy_probe(struct platform_device *pdev,
+> +			       struct net_device *ndev)
+>  {
+> -	int err, phy_reset;
+> -	bool active_high = false;
+> -	int msec = 1, phy_post_delay = 0;
+>  	struct device_node *np = pdev->dev.of_node;
+> +	struct fec_enet_private *fep = netdev_priv(ndev);
+> +	int tmp, ret;
+>  
+>  	if (!np)
+>  		return 0;
+>  
+> -	err = of_property_read_u32(np, "phy-reset-duration", &msec);
+> +	tmp = 1;
+> +	ret = of_property_read_u32(np, "phy-reset-duration", &tmp);
+>  	/* A sane reset duration should not be longer than 1s */
+> -	if (!err && msec > 1000)
+> -		msec = 1;
+> +	if (!ret && tmp > 1000)
+> +		tmp = 1;
+> +
+> +	fep->phy_reset_duration = tmp;
 
-Replaced A53 reference with A72 locally and applied.
+If you don't change the names msec and ret, this code would be
+unchanged. It then becomes a lot easier to see you have not changed,
+the code, only moved it around.
 
-
-> 1MB of L2 / 64 (line length) = 16384 ways
-> 16384 ways / 16 = 1024 sets
-> 
-> Fix the l2 cache-sets.
-> 
-> [...]
- 
-I have applied the following to branch ti-k3-dts-next on [1].
-Thank you!
- 
-[1/1] arm64: dts: ti: k3-j721e: Fix the L2 cache sets
-      commit: e9ba3a5bc6fdc2c796c69fdaf5ed6c9957cf9f9d
- 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
- 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
- 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
- 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
- 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
---
-Vignesh
-
+    Andrew

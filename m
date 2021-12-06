@@ -2,100 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3AB46A064
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF69846A08F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443927AbhLFQBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:01:36 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:42622 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379377AbhLFPqe (ORCPT
+        id S1445182AbhLFQFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:05:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37374 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1443299AbhLFQAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:46:34 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Mon, 6 Dec 2021 11:00:24 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D9BC08EC6A
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:43:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+4uYiAUVHEZBdlClpRpv7Z6qgkbEzjWTpwlkwL/Pd+0=; b=P7TOtAW5C3377rW5iY31hbeaNn
+        seELf8txe8z0BmT6cMx9qnPDGa3sYr6UKVA2MkCLOHV2XbVm6ngsLNu4d2SGpTAWLbdJ5Wyvh15h6
+        ZBd5FCsUtScMA7R6cTQs7EwqPOaQOsb0YH1XcZtxc2GxSYIpcTEpdVENVK0+r5qm8etIHTPsSib9c
+        fCluo43Odox3kZMxb6gUOmB5CW6RUyCfIGbvqy5V5U6xJ7z42mxS/SrLUc4XKg5sqk+qJuBxs5jR4
+        ZJjKHTgpM/wxvqkH6BD7y6BQMun2RS74ozO1T64q/aM2MD4T7g2ZyZ15Qdwy8PrbWK40OAUmJcn3s
+        U3+3PB+w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1muG94-0058J7-Or; Mon, 06 Dec 2021 15:43:15 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8F5881FD34;
-        Mon,  6 Dec 2021 15:43:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638805382; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/uP9SPjURf9HFURwZMv6YyO0EUqdpWSbn3GJwO2TAZ4=;
-        b=p5M6xJcqWuVRb4DSC/shUnJyVMqkf+k8ZzasFRPZ4LknAfvc7Y7pxwNEkZephU/942yefd
-        nOhV7p+RIKZgSgUy4fq2jCfeMQLIowYlJJM671UkrMWA2766khdos+rzvf07QaUN+gDV2v
-        0+NiPoHbSInzwYmQv1XNF58sjzdGuYI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7090C13C4C;
-        Mon,  6 Dec 2021 15:43:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Aei+GoYvrmEaXQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 06 Dec 2021 15:43:02 +0000
-Date:   Mon, 6 Dec 2021 16:43:01 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     "yukuai (C)" <yukuai3@huawei.com>
-Cc:     hch@infradead.org, tj@kernel.org, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-Subject: Re: [PATCH v4 2/2] block: cancel all throttled bios in del_gendisk()
-Message-ID: <20211206154301.GD45344@blackbody.suse.cz>
-References: <20211202130440.1943847-1-yukuai3@huawei.com>
- <20211202130440.1943847-3-yukuai3@huawei.com>
- <20211202144818.GB16798@blackbody.suse.cz>
- <95825098-a532-a0e4-9ed0-0b5f2a0e5f04@huawei.com>
- <20211203102739.GB64349@blackbody.suse.cz>
- <c8a16fe9-4ad2-682d-0d34-1049dc217d62@huawei.com>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8BABD3002DB;
+        Mon,  6 Dec 2021 16:43:14 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4ED5B2023D0F9; Mon,  6 Dec 2021 16:43:14 +0100 (CET)
+Date:   Mon, 6 Dec 2021 16:43:14 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 00/11] lockdep: Unbreak lockdep's selftest work on
+ PREEMPT_RT.
+Message-ID: <Ya4vkmFek71v88+t@hirez.programming.kicks-ass.net>
+References: <20211129174654.668506-1-bigeasy@linutronix.de>
+ <20211202211253.GC16608@worktop.programming.kicks-ass.net>
+ <20211206152618.avqghqegykwjnxm5@linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="tEFtbjk+mNEviIIX"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c8a16fe9-4ad2-682d-0d34-1049dc217d62@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211206152618.avqghqegykwjnxm5@linutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 06, 2021 at 04:26:18PM +0100, Sebastian Andrzej Siewior wrote:
+> On 2021-12-02 22:12:53 [+0100], Peter Zijlstra wrote:
+> > Thanks! (fixed up that first thiny), lemme feed it to the robots.
+> 
+> Thank you. I see bots' commit mail for 1-9. I don't see them for 10+11
+> but then I also don't see those two in your tree.
+> What should I do with them?
 
---tEFtbjk+mNEviIIX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Sat, Dec 04, 2021 at 04:03:53PM +0800, "yukuai (C)" <yukuai3@huawei.com> wrote:
-> I was thinking that if there are active blkgs, holding queue_lock will
-> ensure blkcg won't be freed.
-
-My take is that the function traverses the whole blkcg tree (from global
-root) and nothing prevents concurrent blkcg_css_free() in a possibly
-unrelated branch (or queue).
-
-> By the way, does spin_lock can guarantee this since it disables preempt
-> like what rcu_read_lock() does?
-
-Yes (but don't quoRTe me on that :-).
-
-(It even isn't issue with a non-preemptible kernel neither but the code
-IMO should be generic to allow for different configs -- or as I
-mentioned initially, make a comment why the tree traversal is not
-affected by concurrent frees.)
-
-Thanks,
-Michal
-
---tEFtbjk+mNEviIIX
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQTiq06H1IhXbF2mqzsiXqxkP0JkRwUCYa4vgQAKCRAiXqxkP0Jk
-R37hAPkBlhUea4e+RY45MvG7rbiOlzMuuNw1T7b6FsVs+XbTUwEA6TPNgcddtJl4
-zeg0w3Fvz/XJjRDhQv9Oa1fyXlv04wQ=
-=Hf9G
------END PGP SIGNATURE-----
-
---tEFtbjk+mNEviIIX--
+I've no idea wth happened there, let me go fix that.

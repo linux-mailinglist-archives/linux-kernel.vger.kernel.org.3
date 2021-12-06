@@ -2,97 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD9B46A6C6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:19:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE9D46A6C7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349705AbhLFUXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 15:23:05 -0500
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:39853 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349642AbhLFUWu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 15:22:50 -0500
-Received: by mail-oi1-f172.google.com with SMTP id bf8so23598108oib.6;
-        Mon, 06 Dec 2021 12:19:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1Tqf0IF8fIl+oxxxaQiInxDbNA4xfQa3nl9Y2AxI8zY=;
-        b=ZjE3YPQJG0NrlVxIc4G9L+BIXQlgEDChqUNmrCuiqBNqnIDcmlRl+UM+MXvmNbBDIX
-         yCZZDw63AYEeWEhVyCXd/Hnq+i5IxheNWPPhvTOD8Do+dTWw07iRkzChcbnU7v2Crihm
-         yMxrlCIO6UsLzxZmbHF4MZNeNo2ZF7IRtZWpbqCTQTeTXvG1RRTeQAg5FOD8oMGcFL7m
-         gP3GBNuuIYZNa3NwfI2cu0QYz9VK+KYrHjhnyg0XUaYaip41JpcKsiIiLPdd+YtCSVsB
-         f1gKvAIJxE+WJGkKN9mxv9OQXCVbBtbEIcKfpcsd8j9CnAL6Eb/etIc7Yyz6QxVuu9C6
-         Q9Hg==
-X-Gm-Message-State: AOAM531dyYpH32Y+3AZfEoFSJnZx6habsVQoa6EIz6QOafKScAuimY8J
-        G9nB03qu+DmDc2r+qgyyTA==
-X-Google-Smtp-Source: ABdhPJzWMpEnHhfr7zGyJytVxG58jTwg3k0MPNXP2xd8f6+1bXYrIBj6//1jpgCs7lCTA6RcnkXJ5Q==
-X-Received: by 2002:a05:6808:bc3:: with SMTP id o3mr828054oik.151.1638821960508;
-        Mon, 06 Dec 2021 12:19:20 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id a12sm2409235otk.35.2021.12.06.12.19.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 12:19:19 -0800 (PST)
-Received: (nullmailer pid 2516937 invoked by uid 1000);
-        Mon, 06 Dec 2021 20:19:19 -0000
-Date:   Mon, 6 Dec 2021 14:19:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        David Virag <virag.david003@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        devicetree@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Only show unique unit address warning for
- enabled nodes
-Message-ID: <Ya5wRwx9xZX9pQBV@robh.at.kernel.org>
-References: <20211203183517.11390-1-semen.protsenko@linaro.org>
+        id S1349674AbhLFUXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 15:23:08 -0500
+Received: from mga12.intel.com ([192.55.52.136]:41100 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349521AbhLFUW7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 15:22:59 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="217422204"
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="217422204"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 12:19:27 -0800
+X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
+   d="scan'208";a="579508011"
+Received: from svelidan-mobl.amr.corp.intel.com (HELO [10.209.112.71]) ([10.209.112.71])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 12:19:25 -0800
+Subject: Re: [PATCH 10/25] x86/sgx: Support enclave page permission changes
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
+        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
+        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
+        cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+References: <cover.1638381245.git.reinette.chatre@intel.com>
+ <44fe170cfd855760857660b9f56cae8c4747cc15.1638381245.git.reinette.chatre@intel.com>
+ <Yav0/3jeJsuT3yEq@iki.fi>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <925629af-8cb3-c3c7-35ca-52d30beb984d@intel.com>
+Date:   Mon, 6 Dec 2021 12:19:23 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211203183517.11390-1-semen.protsenko@linaro.org>
+In-Reply-To: <Yav0/3jeJsuT3yEq@iki.fi>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 03 Dec 2021 20:35:17 +0200, Sam Protsenko wrote:
-> There are valid cases when two nodes can have the same address. For
-> example, in Exynos SoCs there is USI IP-core, which might be configured
-> to provide UART, SPI or I2C block, all of which having the same base
-> register address. But only one can be enabled at a time. That looks like
-> this:
-> 
->     usi@138200c0 {
->         serial@13820000 {
->             status = "okay";
->         };
-> 
->         i2c@13820000 {
->             status = "disabled";
->         };
->     };
-> 
-> When running "make dt_binding_check", it reports next warning:
-> 
->     Warning (unique_unit_address):
->     /example-0/usi@138200c0/serial@13820000:
->     duplicate unit-address (also used in node
->     /example-0/usi@138200c0/i2c@13820000)
-> 
-> Disable "unique_unit_address" in DTC_FLAGS to suppress warnings like
-> that, but enable "unique_unit_address_if_enabled" warning, so that dtc
-> still reports a warning when two enabled nodes are having the same
-> address.
-> 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Reported-by: Rob Herring <robh@kernel.org>
-> Suggested-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/Makefile | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
+On 12/4/21 3:08 PM, Jarkko Sakkinen wrote:
+>> Enclave page permission changes need to be approached with care and
+>> for this reason this initial support is to allow enclave page
+>> permission changes _only_ if the new permissions are the same or
+>> more restrictive that the permissions originally vetted at the time the
+>> pages were added to the enclave. Support for extending enclave page
+>> permissions beyond what was originally vetted is deferred.
+> This paragraph is out-of-scope for a commit message. You could have
+> this in the cover letter but not here. I would just remove it.
 
-Applied, thanks!
+This does convey valuable information, though.  It tells the reader that
+this is a sub-optimal implementation.  It also acknowledges that there
+is further work to do.  Maybe saying that it is "deferred" is not quite
+the verbiage I would use, but the concept is fine.
+

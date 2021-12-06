@@ -2,172 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 688D9469582
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 13:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF17469586
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 13:17:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242980AbhLFMTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 07:19:41 -0500
-Received: from mail-dm6nam10on2050.outbound.protection.outlook.com ([40.107.93.50]:17504
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S242106AbhLFMTk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 07:19:40 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QrvTnkmLE/9asncpQ3LE0fpDz79s7OWp/3iXdJi9k02ZVvYn60OT0kGsn2Ia9O+2Al92eEywVYdTFkk7qhhnva0c9STY3+WMDMK83zbm+DFGtaqQZEYFKzXotYvzCXMLi4mw2S5z0u3XS2AoMg72qNmK0QvDaa/LeqOrgIcse1wHOLjJo6QDAYDXY3XIJkO4MYn5lOF6lH0q4u5BTtgP7kTzJ0PTAp182vaLmrH+nKByG6uVSn7chvemhfxe2VHF4/023DrKSe5GY0WIovVYMp5ne6ZnsJwKuN82z8MDyAeVLEI0GXn0U/skS0AiIipvkHtUNQi2ZP7J4p+yXAH11g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iaoULu0uA+efOoFEoEoD12zUtd9mDiQS0wwxfEa5jYE=;
- b=etnGWa9I7mwAOzKlzVh/fxsTLW8KrsvCnmFhpfoGVy+nh/7xWz4GXW4P+Lhf7ngyxXDpB9DQ9/+cwWNKMDga5UZa/fHlKbvgU7KTHSrE6vGELnatsh/rR/m/14E72X7KN9POt0/63vN0xaZRHzOPLIukmiZzgaibZh1uJZJbl17AstIA9Yaa0kwx5pJLJvYYc3A3KV04xwrqpjG3Yr9U0GxD8p0eDppKvWHttvSucap0QtCiYj02hQPTJDhOyEJUSkpHDZmiOTLZC3R1s1tS94Tt8zqdvo0eYlLaDczNlzvYq5X0X3F+KHaDdNvCoVh4CJA1B9UeIOtrxEwVwIe4AQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iaoULu0uA+efOoFEoEoD12zUtd9mDiQS0wwxfEa5jYE=;
- b=WCAvQ1luR2fztzcUw/TwIQEilyi8hSmj3Olaf6jTnQMuqH1Db5kQoWg/2G1cSp1sa3swqkoWQmtdpOrMJKYlS5p2bPKkliooQ0ORSQJLaWBeztjes89Wvsd/5lgTIdxaZXbuikP6Ipg4VifSEQIisV4wizRQvvGeojasflA7feA=
-Received: from SN4PR0701CA0006.namprd07.prod.outlook.com
- (2603:10b6:803:28::16) by PH0PR02MB7704.namprd02.prod.outlook.com
- (2603:10b6:510:53::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Mon, 6 Dec
- 2021 12:16:08 +0000
-Received: from SN1NAM02FT0054.eop-nam02.prod.protection.outlook.com
- (2603:10b6:803:28:cafe::c4) by SN4PR0701CA0006.outlook.office365.com
- (2603:10b6:803:28::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16 via Frontend
- Transport; Mon, 6 Dec 2021 12:16:08 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0054.mail.protection.outlook.com (10.97.4.242) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4755.13 via Frontend Transport; Mon, 6 Dec 2021 12:16:08 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 6 Dec 2021 04:16:08 -0800
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Mon, 6 Dec 2021 04:16:08 -0800
-Envelope-to: robh@kernel.org,
- geert@linux-m68k.org,
- davem@davemloft.net,
- kuba@kernel.org,
- nicolas.ferre@microchip.com,
- claudiu.beznea@microchip.com,
- palmer@dabbelt.com,
- paul.walmsley@sifive.com,
- netdev@vger.kernel.org,
- devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Received: from [10.254.241.49] (port=41474)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1muCud-0008CS-UO; Mon, 06 Dec 2021 04:16:08 -0800
-Message-ID: <37b26b32-5828-df7f-3f73-6b9a4ef9d4e4@xilinx.com>
-Date:   Mon, 6 Dec 2021 13:16:04 +0100
+        id S243008AbhLFMU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 07:20:28 -0500
+Received: from mail-ua1-f42.google.com ([209.85.222.42]:39499 "EHLO
+        mail-ua1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242106AbhLFMU1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 07:20:27 -0500
+Received: by mail-ua1-f42.google.com with SMTP id i6so19026765uae.6;
+        Mon, 06 Dec 2021 04:16:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Srd3grpzyUdIJ0E+3EKXjRD/brJ/Q2nJ/VLii3fnOLY=;
+        b=AUbgqZvdUIdwMKzKHTs6U4lsRraRt44Cw4J1J5U1Cn6Sv0SxZR5eGzutOMz7llMR+m
+         30HcWyTyabIb4vl78Eekq2e5Apr6OSh8sz+sxIH8teoJzGaCNS4NB7e6uUalQvjdcCnA
+         2KzPedC9utK2ZfImAR4Kb7ml4nNGMwR0PONd+PKzw4J6HD2+DVa9+fR5writQ/tdLGEK
+         24Py5XExh4y4TK/wiywtaTKLmJHnLykoMK7JlgHVml+4hdV0iM5UNckGtPXefGob9yRM
+         MZ0cu5RfXarGrKfbcakrZ4vZOJ4X9lm3YhIWJUebO4nN9+cb3fDsmG7nNbF3vPnIw2v2
+         hCjw==
+X-Gm-Message-State: AOAM531YVF0HogVeFdkfyvddyKnf3GpSkflyYzKodsC9xRqSc2dca9eW
+        PSFiEvd4Uz8td3NkGAg5Hs8y/p+PLENu8Q==
+X-Google-Smtp-Source: ABdhPJwRXdyEkS2Yqv3ENDo/UZef/nujrSH39Br+EY5GLQULX/inCPumwGj3enaswMwfn5NrVqpfdQ==
+X-Received: by 2002:a05:6102:e88:: with SMTP id l8mr35465943vst.55.1638793012861;
+        Mon, 06 Dec 2021 04:16:52 -0800 (PST)
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com. [209.85.222.42])
+        by smtp.gmail.com with ESMTPSA id h7sm4069346vkk.2.2021.12.06.04.16.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 04:16:52 -0800 (PST)
+Received: by mail-ua1-f42.google.com with SMTP id ay21so18996254uab.12;
+        Mon, 06 Dec 2021 04:16:52 -0800 (PST)
+X-Received: by 2002:a05:6102:c89:: with SMTP id f9mr35536042vst.68.1638793011850;
+ Mon, 06 Dec 2021 04:16:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] dt-bindings: net: cdns,macb: Convert to json-schema
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Stefano Stabellini <stefanos@xilinx.com>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+References: <20211203234155.2319803-1-gsomlo@gmail.com> <20211203234155.2319803-4-gsomlo@gmail.com>
+ <CACPK8XfO_8=vgedmZddz1YmWbyxiM1-azF_j88wEBHzXnP6y_g@mail.gmail.com>
+In-Reply-To: <CACPK8XfO_8=vgedmZddz1YmWbyxiM1-azF_j88wEBHzXnP6y_g@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 6 Dec 2021 13:16:40 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXxO-CP0Ao8q8r4Gw5e5FzCznhSxt2JWz13zbnt2tnzVQ@mail.gmail.com>
+Message-ID: <CAMuHMdXxO-CP0Ao8q8r4Gw5e5FzCznhSxt2JWz13zbnt2tnzVQ@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] mmc: Add driver for LiteX's LiteSDCard interface
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Gabriel Somlo <gsomlo@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
-References: <104dcbfd22f95fc77de9fe15e8abd83869603ea5.1637927673.git.geert@linux-m68k.org>
- <YagEai+VPAnjAq4X@robh.at.kernel.org>
- <CAMuHMdW5Ng9225a6XK0VKd0kj=m8a1xr_oKeazQYxdpvn4Db=g@mail.gmail.com>
- <CAL_JsqJHkL_Asqd5WPc7rfqXkbz1dpYfR0zxp5erVCyLiHaJNQ@mail.gmail.com>
-From:   Michal Simek <michal.simek@xilinx.com>
-In-Reply-To: <CAL_JsqJHkL_Asqd5WPc7rfqXkbz1dpYfR0zxp5erVCyLiHaJNQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6f38daf2-77c9-43a5-ef48-08d9b8b22f5b
-X-MS-TrafficTypeDiagnostic: PH0PR02MB7704:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR02MB7704228C093EC94EC5892988C66D9@PH0PR02MB7704.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:2331;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pEhab+IXpqFxN9CEpR9oVc6Rqhl3TCK6ve7PIRKoNyvNjy9/uvdmpU2qXzDI1xaHynrfHPuPiD3bxEQjrc3HNMAel1c0aVfbkZp8GMAtz6AiseAHja5oPaGJ0OJyPwLJ7S97zaDI9GN9BDsPR9ou2TA+ifGyDfLIfouZNt5kzGmbH1j6coiB5tpOs7sLBGt9TsVJLtxZ7Z3MwNcvcpMyAZvQargxfZbxxT+7QMGD48n78nMAWfwj5pk5Ya4kN0SldYPIVKoSMqKjKL4z2VAYbkfxv+5PpJbpMJsHjrNoCFOfEXbUvUtJH7XskVnBykWWEURZ+enOo551WunkCLos/Q6IxDTwvFWx9xmxgcNJx0sg/pm8h0sGwN4oHtC6IqLYxtnYMXm00o0mnCUgETKVgc0Ji+TnTAnCFP+HuaQWv/DzDO2O/8wVthTMn8WAB+RA6bo8bvaWM2TwuBoywCS0ASDzPjFQzCMxV1spHvCRCwnSdEaoV29K2vYqlBM5h5vU9nSZ9AcJVXAl0ecEEOVwnNwF4dMy1giXf8huneRk6ENds1BvdeAgSC6f1B05w1ZEDyyn5Vq7h9d1V/rbQKIuPAsMOgNcB0GxE8W0z8wJTi6sCHruN6V3kAsw8z3eoQqozVvhdqZH/k+DuoJKEBsqTSwFWlO2DU0DiqQgF8c+Adu/yUJUZd2gUP30sligYE6+Y0HDQzX2OBAnjAWa2nZEj77Y1tr/Dt/3tQsDngHgq57jqB4Jv7f1axV8aWASm6LbHiqmtBd44S+VDtmSZePXSg==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(36840700001)(46966006)(53546011)(2616005)(4326008)(70206006)(70586007)(316002)(508600001)(82310400004)(6636002)(110136005)(54906003)(2906002)(36860700001)(44832011)(7416002)(356005)(6666004)(7636003)(9786002)(186003)(8676002)(26005)(336012)(5660300002)(31686004)(8936002)(47076005)(36756003)(83380400001)(426003)(31696002)(107886003)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2021 12:16:08.7098
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f38daf2-77c9-43a5-ef48-08d9b8b22f5b
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0054.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB7704
+        Rob Herring <robh+dt@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Kamil Rakoczy <krakoczy@antmicro.com>,
+        mdudek@internships.antmicro.com,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Stafford Horne <shorne@gmail.com>,
+        david.abdurachmanov@sifive.com,
+        Florent Kermarrec <florent@enjoy-digital.fr>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Joel,
 
-On 12/2/21 16:53, Rob Herring wrote:
-> On Thu, Dec 2, 2021 at 4:10 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->>
->> Hi Rob,
->>
->> CC Michal
->>
->> On Thu, Dec 2, 2021 at 12:25 AM Rob Herring <robh@kernel.org> wrote:
->>> On Fri, Nov 26, 2021 at 12:57:00PM +0100, Geert Uytterhoeven wrote:
->>>> Convert the Cadence MACB/GEM Ethernet controller Device Tree binding
->>>> documentation to json-schema.
->>>>
->>>> Re-add "cdns,gem" (removed in commit a217d8711da5c87f ("dt-bindings:
->>>> Remove PicoXcell bindings")) as there are active users on non-PicoXcell
->>>> platforms.
->>>> Add missing "ether_clk" clock.
->>>> Add missing properties.
->>>>
->>>> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
->>
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/net/cdns,macb.yaml
->>
->>>> +  '#stream-id-cells':
->>>> +    const: 1
->>>
->>> I can't figure out why you have this here. I'll drop it while applying.
->>
->> See arch/arm64/boot/dts/xilinx/zynqmp.dtsi and
->> drivers/iommu/arm/arm-smmu/arm-smmu.c.
->>
->> It wasn't clear to me if this is still needed, or legacy. Michal?
-> 
-> They should update to the iommu binding instead of the legacy smmu
-> one. It's been around for years now.
+On Mon, Dec 6, 2021 at 11:53 AM Joel Stanley <joel@jms.id.au> wrote:
+>  On Fri, 3 Dec 2021 at 23:42, Gabriel Somlo <gsomlo@gmail.com> wrote:
+> > LiteX (https://github.com/enjoy-digital/litex) is a SoC framework
+> > that targets FPGAs. LiteSDCard is a small footprint, configurable
+> > SDCard core commonly used in LiteX designs.
+> >
+> > The driver was first written in May 2020 and has been maintained
+> > cooperatively by the LiteX community. Thanks to all contributors!
+> >
+> > Co-developed-by: Kamil Rakoczy <krakoczy@antmicro.com>
+> > Signed-off-by: Kamil Rakoczy <krakoczy@antmicro.com>
+> > Co-developed-by: Maciej Dudek <mdudek@internships.antmicro.com>
+> > Signed-off-by: Maciej Dudek <mdudek@internships.antmicro.com>
+> > Co-developed-by: Paul Mackerras <paulus@ozlabs.org>
+> > Signed-off-by: Paul Mackerras <paulus@ozlabs.org>
+> > Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
 
-At the beginning it was there for XEN usage which was using this legacy 
-binding.
-Stefano: Please confirm that it is not needed anymore that we can remove 
-it for zynqmp and versal.
+> > --- a/drivers/mmc/host/Kconfig
+> > +++ b/drivers/mmc/host/Kconfig
 
-Thanks,
-Michal
+> Did you test using this as a module?
+>
+> > +       depends on OF && LITEX
+>
+> I don't like having litex drivers depend on the LITEX kconfig. The
+> symbol is not user visible, and to enable it we need to build in the
+> litex controller driver, which platforms may or may not have.
+>
+> The microwatt platform is an example of a SoC that embeds some LITEX
+> IP, but may or may not be a litex SoC.
 
+I do like the LITEX dependency, as it allows us to gate off a bunch of
+related drivers, and avoid annoying users with questions about them,
+using a single symbol.
+
+Originally, people told me the system controller is always present,
+hence the current logic to have LITEX_SOC_CONTROLLER visible, and
+an invisible LITEX (which is shorter to type) for individual drivers
+to depend on.
+
+Perhaps the logic should be reworked, now the old assumptions are no
+longer true?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

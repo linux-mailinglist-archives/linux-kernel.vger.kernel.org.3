@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34BAC469C2D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81402469D54
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347829AbhLFPVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:21:11 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42844 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349426AbhLFPNN (ORCPT
+        id S230445AbhLFP3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:29:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357245AbhLFPSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:13:13 -0500
+        Mon, 6 Dec 2021 10:18:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FBFC08EAFC;
+        Mon,  6 Dec 2021 07:11:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1ECF6B81118;
-        Mon,  6 Dec 2021 15:09:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4020AC341C2;
-        Mon,  6 Dec 2021 15:09:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B827BB8111C;
+        Mon,  6 Dec 2021 15:11:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0504BC341C1;
+        Mon,  6 Dec 2021 15:11:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803381;
-        bh=4NavWYfLGsaGv+WsbTZvoOoMo1/BulMyJdNUq5Jgrzg=;
+        s=korg; t=1638803510;
+        bh=Ax+mzh3O/LR+EVqEKIJkihsoy88c801hBicX0PEHIjQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eRJsZxvZboLq9ySF6UeguPOXuuwUjBcHRoBNNupkuRxI8Ted9jdFatJ4RvuVzSEtu
-         WgQu7ug8nEsMp+rUNCKPnIZBtGViG64dMIEs6Oy6GLHLA30p+xENC4quraXA+4T6F6
-         hxkqSTa7onhjKHIwKB8ebXW+Sr2YF/9mnTAEZFTE=
+        b=Edi7fJdIxq/C6LLmSi09jF4S0zwJs9S94dHWpFHHwVeYsd5nLb4A4UuhtNiKdHcz5
+         U8H1tKvKUldmCwIeXDrsRLVDBJ071wG6Q7rvym//X/IGZ8ogbJe2E0luAygVz0Pz3g
+         yvsrh3vyB5G/QqpZMGKznGd4hPM0c037sZXXVTZA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brendan Dolan-Gavitt <brendandg@nyu.edu>,
-        Zekun Shen <bruceshenzk@gmail.com>,
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Teng Qi <starmiku1207184332@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 05/48] atlantic: Fix OOB read and write in hw_atl_utils_fw_rpc_wait
-Date:   Mon,  6 Dec 2021 15:56:22 +0100
-Message-Id: <20211206145549.037175568@linuxfoundation.org>
+Subject: [PATCH 5.4 19/70] net: ethernet: dec: tulip: de4x5: fix possible array overflows in type3_infoblock()
+Date:   Mon,  6 Dec 2021 15:56:23 +0100
+Message-Id: <20211206145552.575337903@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
-References: <20211206145548.859182340@linuxfoundation.org>
+In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
+References: <20211206145551.909846023@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,90 +51,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zekun Shen <bruceshenzk@gmail.com>
+From: Teng Qi <starmiku1207184332@gmail.com>
 
-[ Upstream commit b922f622592af76b57cbc566eaeccda0b31a3496 ]
+[ Upstream commit 0fa68da72c3be09e06dd833258ee89c33374195f ]
 
-This bug report shows up when running our research tools. The
-reports is SOOB read, but it seems SOOB write is also possible
-a few lines below.
+The definition of macro MOTO_SROM_BUG is:
+  #define MOTO_SROM_BUG    (lp->active == 8 && (get_unaligned_le32(
+  dev->dev_addr) & 0x00ffffff) == 0x3e0008)
 
-In details, fw.len and sw.len are inputs coming from io. A len
-over the size of self->rpc triggers SOOB. The patch fixes the
-bugs by adding sanity checks.
+and the if statement
+  if (MOTO_SROM_BUG) lp->active = 0;
 
-The bugs are triggerable with compromised/malfunctioning devices.
-They are potentially exploitable given they first leak up to
-0xffff bytes and able to overwrite the region later.
+using this macro indicates lp->active could be 8. If lp->active is 8 and
+the second comparison of this macro is false. lp->active will remain 8 in:
+  lp->phy[lp->active].gep = (*p ? p : NULL); p += (2 * (*p) + 1);
+  lp->phy[lp->active].rst = (*p ? p : NULL); p += (2 * (*p) + 1);
+  lp->phy[lp->active].mc  = get_unaligned_le16(p); p += 2;
+  lp->phy[lp->active].ana = get_unaligned_le16(p); p += 2;
+  lp->phy[lp->active].fdx = get_unaligned_le16(p); p += 2;
+  lp->phy[lp->active].ttm = get_unaligned_le16(p); p += 2;
+  lp->phy[lp->active].mci = *p;
 
-The patch is tested with QEMU emulater.
-This is NOT tested with a real device.
+However, the length of array lp->phy is 8, so array overflows can occur.
+To fix these possible array overflows, we first check lp->active and then
+return -EINVAL if it is greater or equal to ARRAY_SIZE(lp->phy) (i.e. 8).
 
-Attached is the log we found by fuzzing.
-
-BUG: KASAN: slab-out-of-bounds in
-	hw_atl_utils_fw_upload_dwords+0x393/0x3c0 [atlantic]
-Read of size 4 at addr ffff888016260b08 by task modprobe/213
-CPU: 0 PID: 213 Comm: modprobe Not tainted 5.6.0 #1
-Call Trace:
- dump_stack+0x76/0xa0
- print_address_description.constprop.0+0x16/0x200
- ? hw_atl_utils_fw_upload_dwords+0x393/0x3c0 [atlantic]
- ? hw_atl_utils_fw_upload_dwords+0x393/0x3c0 [atlantic]
- __kasan_report.cold+0x37/0x7c
- ? aq_hw_read_reg_bit+0x60/0x70 [atlantic]
- ? hw_atl_utils_fw_upload_dwords+0x393/0x3c0 [atlantic]
- kasan_report+0xe/0x20
- hw_atl_utils_fw_upload_dwords+0x393/0x3c0 [atlantic]
- hw_atl_utils_fw_rpc_call+0x95/0x130 [atlantic]
- hw_atl_utils_fw_rpc_wait+0x176/0x210 [atlantic]
- hw_atl_utils_mpi_create+0x229/0x2e0 [atlantic]
- ? hw_atl_utils_fw_rpc_wait+0x210/0x210 [atlantic]
- ? hw_atl_utils_initfw+0x9f/0x1c8 [atlantic]
- hw_atl_utils_initfw+0x12a/0x1c8 [atlantic]
- aq_nic_ndev_register+0x88/0x650 [atlantic]
- ? aq_nic_ndev_init+0x235/0x3c0 [atlantic]
- aq_pci_probe+0x731/0x9b0 [atlantic]
- ? aq_pci_func_init+0xc0/0xc0 [atlantic]
- local_pci_probe+0xd3/0x160
- pci_device_probe+0x23f/0x3e0
-
-Reported-by: Brendan Dolan-Gavitt <brendandg@nyu.edu>
-Signed-off-by: Zekun Shen <bruceshenzk@gmail.com>
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Teng Qi <starmiku1207184332@gmail.com>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../ethernet/aquantia/atlantic/hw_atl/hw_atl_utils.c   | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/net/ethernet/dec/tulip/de4x5.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_utils.c b/drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_utils.c
-index 096ec18e8f15a..49c80bac9ce28 100644
---- a/drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_utils.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_utils.c
-@@ -459,6 +459,11 @@ int hw_atl_utils_fw_rpc_wait(struct aq_hw_s *self,
- 			goto err_exit;
- 
- 		if (fw.len == 0xFFFFU) {
-+			if (sw.len > sizeof(self->rpc)) {
-+				printk(KERN_INFO "Invalid sw len: %x\n", sw.len);
-+				err = -EINVAL;
-+				goto err_exit;
-+			}
- 			err = hw_atl_utils_fw_rpc_call(self, sw.len);
- 			if (err < 0)
- 				goto err_exit;
-@@ -469,6 +474,11 @@ int hw_atl_utils_fw_rpc_wait(struct aq_hw_s *self,
- 
- 	if (rpc) {
- 		if (fw.len) {
-+			if (fw.len > sizeof(self->rpc)) {
-+				printk(KERN_INFO "Invalid fw len: %x\n", fw.len);
-+				err = -EINVAL;
-+				goto err_exit;
-+			}
- 			err =
- 			hw_atl_utils_fw_downld_dwords(self,
- 						      self->rpc_addr,
+diff --git a/drivers/net/ethernet/dec/tulip/de4x5.c b/drivers/net/ethernet/dec/tulip/de4x5.c
+index a80252973171f..c97fc0e384ca6 100644
+--- a/drivers/net/ethernet/dec/tulip/de4x5.c
++++ b/drivers/net/ethernet/dec/tulip/de4x5.c
+@@ -4708,6 +4708,10 @@ type3_infoblock(struct net_device *dev, u_char count, u_char *p)
+         lp->ibn = 3;
+         lp->active = *p++;
+ 	if (MOTO_SROM_BUG) lp->active = 0;
++	/* if (MOTO_SROM_BUG) statement indicates lp->active could
++	 * be 8 (i.e. the size of array lp->phy) */
++	if (WARN_ON(lp->active >= ARRAY_SIZE(lp->phy)))
++		return -EINVAL;
+ 	lp->phy[lp->active].gep = (*p ? p : NULL); p += (2 * (*p) + 1);
+ 	lp->phy[lp->active].rst = (*p ? p : NULL); p += (2 * (*p) + 1);
+ 	lp->phy[lp->active].mc  = get_unaligned_le16(p); p += 2;
 -- 
 2.33.0
 

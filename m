@@ -2,192 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A72E46A448
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F80446A3FF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347224AbhLFSbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 13:31:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347112AbhLFS34 (ORCPT
+        id S1346937AbhLFS3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 13:29:41 -0500
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:28986 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1346472AbhLFS3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 13:29:56 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40FDC061D5E;
-        Mon,  6 Dec 2021 10:26:26 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id q17so7614770plr.11;
-        Mon, 06 Dec 2021 10:26:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IlWOtQhuKoAbExjB9TTANbBFdCEDUkxd3U6sjKMMDBU=;
-        b=pzFYLXw+dgQQZ9vnU/aMWUbAlvWMVysoWrco4Ie804B20gDncofnLHx6qA19V9onoz
-         5dhtA3wI7KqTNL0icF2mNs8dmvtldxC82f4ugzSHHYOzn1LhCNGmtl20zrn+aq2oli0b
-         uUiwiQC5u0GFJPLoWCMCEHAWynShCwLnS947U67OM4wrpuifUS7mJF1wZt5p8pfkaATO
-         xVGKFIxgBEN3wrHDB7HWRVrXRBeivh5IU6SuBnYQdNdG8gZn9Ldsx6yUHAcunG/8YDWe
-         ZDLQncVbUuhbggTqkZ4T76sDaXASkGeM759fweoKI7QlRSwBYza2StEUwcd6CymvtHx0
-         1p/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IlWOtQhuKoAbExjB9TTANbBFdCEDUkxd3U6sjKMMDBU=;
-        b=Gp3k1wyPL7FkYEcAAxmGQxo8WXeumrWDN03XJglKQhw5wuCtBHYDpqZTOZTajal55C
-         HvxVQrbSoHmfmqeXXoad2PDPT8QTGVOOIXIRQXgyHdnfCw+cVTGoaX2DQre/vYudzPE6
-         3gu82JLwFpGausHENxhuxTmiJs5kuZSrQyQvXFZyM/SJOPbFui2/0n5uV1fHZEJN3rp2
-         rGL479yPMN2QDbzPoSqi4w6JNSRrnJQ+oVOwI8d13ojipNmLIsnKHqSi5Xgc26BnnPyS
-         x8uU33spqCQxfPKpdlEqN/Fp7RH7QG7iVdASNPskTzzaeBh80/QJX/GPQ8jiPecz2m0R
-         hktQ==
-X-Gm-Message-State: AOAM532n1wYuKc+orPOTeUtjX2tDb3ZyjaaMiFhDF/TWn46WOeFFOpcI
-        +nlEtXC/AgAfSo9QrlBBMNgp8ZViJZg=
-X-Google-Smtp-Source: ABdhPJwxLXZuEFBB8yWKy6KJpxvhIK8eLJgeHKt7kxDuT1bsOthhCiGJYW4+SyHyuycD0ow42bQWgA==
-X-Received: by 2002:a17:90a:fe85:: with SMTP id co5mr261347pjb.110.1638815185903;
-        Mon, 06 Dec 2021 10:26:25 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id a22sm12773097pfh.111.2021.12.06.10.26.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 10:26:25 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     devicetree@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM BCM7XXX ARM
-        ARCHITECTURE), Gregory Fong <gregory.0xf0@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        linux-ide@vger.kernel.org (open list:LIBATA SUBSYSTEM (Serial and
-        Parallel ATA drivers)), linux-kernel@vger.kernel.org (open list),
-        linux-gpio@vger.kernel.org (open list:GPIO SUBSYSTEM),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
-        ARM ARCHITECTURE),
-        linux-mmc@vger.kernel.org (open list:MULTIMEDIA CARD (MMC), SECURE
-        DIGITAL (SD) AND...),
-        linux-pwm@vger.kernel.org (open list:PWM SUBSYSTEM),
-        linux-crypto@vger.kernel.org (open list:HARDWARE RANDOM NUMBER
-        GENERATOR CORE),
-        linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
-        linux-pm@vger.kernel.org (open list:THERMAL),
-        linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-Subject: [PATCH v2 03/14] dt-bindings: pwm: Convert BCM7038 PWM binding to YAML
-Date:   Mon,  6 Dec 2021 10:26:05 -0800
-Message-Id: <20211206182616.2089677-4-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211206182616.2089677-1-f.fainelli@gmail.com>
-References: <20211206182616.2089677-1-f.fainelli@gmail.com>
+        Mon, 6 Dec 2021 13:29:40 -0500
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B6DvPWJ005343;
+        Mon, 6 Dec 2021 10:26:09 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=UakAwtcz7R2phh9Pl0OdaEaQ9u8B5/R5NQCJauwyXPg=;
+ b=H156CHb5tmvWxtARJXmYfn5GYekYHUUHtETS3zTL3rvl4sX4YyYfPUrwU2URfWbzGiEw
+ AkvIN/JXsE9ijkTkZZsYNib6rlSGvhutwzKjg+9QT/AqFM9CEEdv+LVHrP2mwMu9dA60
+ XFozipt1zqY5Pg9zdHpIw1IzmvR88PlaWcwSYZrpKhPO9EOyJBKMvom+Yy025rmRGD5L
+ 2lTz//iVJkkfOI70C/eOX+rfQSswfK+T7rYTc7EmuuO/1yZAFleS4pQwoigfAeaxsmOs
+ NEXR2DrAaWsCzhi7/mKYzL+12DTb2UATcTnWOW52KKbbHbe/8jVhQ1TD8dFIGWdwTJsY 5A== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3cskuw94ej-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 10:26:09 -0800
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 6 Dec
+ 2021 10:26:07 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Mon, 6 Dec 2021 10:26:07 -0800
+Received: from rchintakuntla-lnx3.caveonetworks.com (unknown [10.111.140.81])
+        by maili.marvell.com (Postfix) with ESMTP id 9FD6B3F704A;
+        Mon,  6 Dec 2021 10:26:07 -0800 (PST)
+From:   Radha Mohan Chintakuntla <radhac@marvell.com>
+To:     <netdev@vger.kernel.org>, <davem@davemloft.net>,
+        <sgoutham@marvell.com>, <linux-kernel@vger.kernel.org>
+CC:     Radha Mohan Chintakuntla <radhac@marvell.com>
+Subject: [PATCH v2] octeontx2-nicvf: Add netdev interface support for SDP VF devices
+Date:   Mon, 6 Dec 2021 10:26:05 -0800
+Message-ID: <20211206182605.31087-1-radhac@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: hCQCQtwY3INSPNAs2UD_DCYGXEIGfFN8
+X-Proofpoint-ORIG-GUID: hCQCQtwY3INSPNAs2UD_DCYGXEIGfFN8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-06_07,2021-12-06_02,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Broadcom STB BCM7038 PWM Device Tree binding to YAML to help
-with validation.
+This patch adds netdev interface for SDP VFs. This interface can be used
+to communicate with a host over PCIe when OcteonTx is in PCIe Endpoint
+mode.
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Radha Mohan Chintakuntla <radhac@marvell.com>
 ---
- .../bindings/pwm/brcm,bcm7038-pwm.txt         | 20 ---------
- .../bindings/pwm/brcm,bcm7038-pwm.yaml        | 43 +++++++++++++++++++
- 2 files changed, 43 insertions(+), 20 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.txt
- create mode 100644 Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.yaml
+Changes from v1:
+- fixed formatting issues happened due to email client
 
-diff --git a/Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.txt b/Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.txt
-deleted file mode 100644
-index 0e662d7f6bd1..000000000000
---- a/Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.txt
-+++ /dev/null
-@@ -1,20 +0,0 @@
--Broadcom BCM7038 PWM controller (BCM7xxx Set Top Box PWM controller)
+ .../ethernet/marvell/octeontx2/nic/cn10k.c    |  4 +--
+ .../ethernet/marvell/octeontx2/nic/cn10k.h    |  2 +-
+ .../marvell/octeontx2/nic/otx2_common.c       | 32 +++++++++++++------
+ .../marvell/octeontx2/nic/otx2_common.h       | 14 ++++++--
+ .../ethernet/marvell/octeontx2/nic/otx2_reg.h |  1 +
+ .../ethernet/marvell/octeontx2/nic/otx2_vf.c  | 16 ++++++++--
+ 6 files changed, 51 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k.c b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k.c
+index fd4f083c699e..2262d33a7f23 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k.c
+@@ -72,7 +72,7 @@ int cn10k_lmtst_init(struct otx2_nic *pfvf)
+ }
+ EXPORT_SYMBOL(cn10k_lmtst_init);
+ 
+-int cn10k_sq_aq_init(void *dev, u16 qidx, u16 sqb_aura)
++int cn10k_sq_aq_init(void *dev, u16 qidx, u8 chan_offset, u16 sqb_aura)
+ {
+ 	struct nix_cn10k_aq_enq_req *aq;
+ 	struct otx2_nic *pfvf = dev;
+@@ -89,7 +89,7 @@ int cn10k_sq_aq_init(void *dev, u16 qidx, u16 sqb_aura)
+ 	/* Only one SMQ is allocated, map all SQ's to that SMQ  */
+ 	aq->sq.smq = pfvf->hw.txschq_list[NIX_TXSCH_LVL_SMQ][0];
+ 	aq->sq.smq_rr_weight = mtu_to_dwrr_weight(pfvf, pfvf->tx_max_pktlen);
+-	aq->sq.default_chan = pfvf->hw.tx_chan_base;
++	aq->sq.default_chan = pfvf->hw.tx_chan_base + chan_offset;
+ 	aq->sq.sqe_stype = NIX_STYPE_STF; /* Cache SQB */
+ 	aq->sq.sqb_aura = sqb_aura;
+ 	aq->sq.sq_int_ena = NIX_SQINT_BITS;
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k.h b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k.h
+index 8ae96815865e..28b3b3275fe6 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k.h
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k.h
+@@ -26,7 +26,7 @@ static inline int mtu_to_dwrr_weight(struct otx2_nic *pfvf, int mtu)
+ 
+ void cn10k_refill_pool_ptrs(void *dev, struct otx2_cq_queue *cq);
+ void cn10k_sqe_flush(void *dev, struct otx2_snd_queue *sq, int size, int qidx);
+-int cn10k_sq_aq_init(void *dev, u16 qidx, u16 sqb_aura);
++int cn10k_sq_aq_init(void *dev, u16 qidx, u8 chan_offset, u16 sqb_aura);
+ int cn10k_lmtst_init(struct otx2_nic *pfvf);
+ int cn10k_free_all_ipolicers(struct otx2_nic *pfvf);
+ int cn10k_alloc_matchall_ipolicer(struct otx2_nic *pfvf);
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+index 66da31f30d3e..e46c24171597 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+@@ -233,6 +233,9 @@ int otx2_hw_set_mtu(struct otx2_nic *pfvf, int mtu)
+ 
+ 	req->maxlen = pfvf->netdev->mtu + OTX2_ETH_HLEN + OTX2_HW_TIMESTAMP_LEN;
+ 
++	if (is_otx2_sdpvf(pfvf->pdev))
++		req->sdp_link = true;
++
+ 	err = otx2_sync_mbox_msg(&pfvf->mbox);
+ 	mutex_unlock(&pfvf->mbox.lock);
+ 	return err;
+@@ -243,7 +246,7 @@ int otx2_config_pause_frm(struct otx2_nic *pfvf)
+ 	struct cgx_pause_frm_cfg *req;
+ 	int err;
+ 
+-	if (is_otx2_lbkvf(pfvf->pdev))
++	if (is_otx2_lbkvf(pfvf->pdev) || is_otx2_sdpvf(pfvf->pdev))
+ 		return 0;
+ 
+ 	mutex_lock(&pfvf->mbox.lock);
+@@ -622,6 +625,11 @@ int otx2_txschq_config(struct otx2_nic *pfvf, int lvl)
+ 		req->num_regs++;
+ 		req->reg[1] = NIX_AF_TL4X_SCHEDULE(schq);
+ 		req->regval[1] = dwrr_val;
++		if (is_otx2_sdpvf(pfvf->pdev)) {
++			req->num_regs++;
++			req->reg[2] = NIX_AF_TL4X_SDP_LINK_CFG(schq);
++			req->regval[2] = BIT_ULL(12);
++		}
+ 	} else if (lvl == NIX_TXSCH_LVL_TL3) {
+ 		parent = hw->txschq_list[NIX_TXSCH_LVL_TL2][0];
+ 		req->reg[0] = NIX_AF_TL3X_PARENT(schq);
+@@ -638,11 +646,12 @@ int otx2_txschq_config(struct otx2_nic *pfvf, int lvl)
+ 		req->reg[1] = NIX_AF_TL2X_SCHEDULE(schq);
+ 		req->regval[1] = TXSCH_TL1_DFLT_RR_PRIO << 24 | dwrr_val;
+ 
+-		req->num_regs++;
+-		req->reg[2] = NIX_AF_TL3_TL2X_LINKX_CFG(schq, hw->tx_link);
+-		/* Enable this queue and backpressure */
+-		req->regval[2] = BIT_ULL(13) | BIT_ULL(12);
 -
--Required properties:
++		if (!is_otx2_sdpvf(pfvf->pdev)) {
++			req->num_regs++;
++			req->reg[2] = NIX_AF_TL3_TL2X_LINKX_CFG(schq, hw->tx_link);
++			/* Enable this queue and backpressure */
++			req->regval[2] = BIT_ULL(13) | BIT_ULL(12);
++		}
+ 	} else if (lvl == NIX_TXSCH_LVL_TL1) {
+ 		/* Default config for TL1.
+ 		 * For VF this is always ignored.
+@@ -779,7 +788,7 @@ static int otx2_rq_init(struct otx2_nic *pfvf, u16 qidx, u16 lpb_aura)
+ 	return otx2_sync_mbox_msg(&pfvf->mbox);
+ }
+ 
+-int otx2_sq_aq_init(void *dev, u16 qidx, u16 sqb_aura)
++int otx2_sq_aq_init(void *dev, u16 qidx, u8 chan_offset, u16 sqb_aura)
+ {
+ 	struct otx2_nic *pfvf = dev;
+ 	struct otx2_snd_queue *sq;
+@@ -799,7 +808,7 @@ int otx2_sq_aq_init(void *dev, u16 qidx, u16 sqb_aura)
+ 	/* Only one SMQ is allocated, map all SQ's to that SMQ  */
+ 	aq->sq.smq = pfvf->hw.txschq_list[NIX_TXSCH_LVL_SMQ][0];
+ 	aq->sq.smq_rr_quantum = mtu_to_dwrr_weight(pfvf, pfvf->tx_max_pktlen);
+-	aq->sq.default_chan = pfvf->hw.tx_chan_base;
++	aq->sq.default_chan = pfvf->hw.tx_chan_base + chan_offset;
+ 	aq->sq.sqe_stype = NIX_STYPE_STF; /* Cache SQB */
+ 	aq->sq.sqb_aura = sqb_aura;
+ 	aq->sq.sq_int_ena = NIX_SQINT_BITS;
+@@ -822,6 +831,7 @@ static int otx2_sq_init(struct otx2_nic *pfvf, u16 qidx, u16 sqb_aura)
+ 	struct otx2_qset *qset = &pfvf->qset;
+ 	struct otx2_snd_queue *sq;
+ 	struct otx2_pool *pool;
++	u8 chan_offset;
+ 	int err;
+ 
+ 	pool = &pfvf->qset.pool[sqb_aura];
+@@ -864,8 +874,8 @@ static int otx2_sq_init(struct otx2_nic *pfvf, u16 qidx, u16 sqb_aura)
+ 	sq->stats.bytes = 0;
+ 	sq->stats.pkts = 0;
+ 
+-	return pfvf->hw_ops->sq_aq_init(pfvf, qidx, sqb_aura);
 -
--- compatible: must be "brcm,bcm7038-pwm"
--- reg: physical base address and length for this controller
--- #pwm-cells: should be 2. See pwm.yaml in this directory for a description
--  of the cells format
--- clocks: a phandle to the reference clock for this block which is fed through
--  its internal variable clock frequency generator
--
--
--Example:
--
--	pwm: pwm@f0408000 {
--		compatible = "brcm,bcm7038-pwm";
--		reg = <0xf0408000 0x28>;
--		#pwm-cells = <2>;
--		clocks = <&upg_fixed>;
--	};
-diff --git a/Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.yaml b/Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.yaml
-new file mode 100644
-index 000000000000..4080e098f746
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.yaml
-@@ -0,0 +1,43 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pwm/brcm,bcm7038-pwm.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++	chan_offset = qidx % pfvf->hw.tx_chan_cnt;
++	return pfvf->hw_ops->sq_aq_init(pfvf, qidx, chan_offset, sqb_aura);
+ }
+ 
+ static int otx2_cq_init(struct otx2_nic *pfvf, u16 qidx)
+@@ -1590,6 +1600,8 @@ void mbox_handler_nix_lf_alloc(struct otx2_nic *pfvf,
+ 	pfvf->hw.sqb_size = rsp->sqb_size;
+ 	pfvf->hw.rx_chan_base = rsp->rx_chan_base;
+ 	pfvf->hw.tx_chan_base = rsp->tx_chan_base;
++	pfvf->hw.rx_chan_cnt = rsp->rx_chan_cnt;
++	pfvf->hw.tx_chan_cnt = rsp->tx_chan_cnt;
+ 	pfvf->hw.lso_tsov4_idx = rsp->lso_tsov4_idx;
+ 	pfvf->hw.lso_tsov6_idx = rsp->lso_tsov6_idx;
+ 	pfvf->hw.cgx_links = rsp->cgx_links;
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+index 61e52812983f..386fd7f95944 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+@@ -28,6 +28,7 @@
+ /* PCI device IDs */
+ #define PCI_DEVID_OCTEONTX2_RVU_PF              0xA063
+ #define PCI_DEVID_OCTEONTX2_RVU_VF		0xA064
++#define PCI_DEVID_OCTEONTX2_SDP_VF		0xA0F7
+ #define PCI_DEVID_OCTEONTX2_RVU_AFVF		0xA0F8
+ 
+ #define PCI_SUBSYS_DEVID_96XX_RVU_PFVF		0xB200
+@@ -191,6 +192,8 @@ struct otx2_hw {
+ 	/* HW settings, coalescing etc */
+ 	u16			rx_chan_base;
+ 	u16			tx_chan_base;
++	u8			rx_chan_cnt;
++	u8			tx_chan_cnt;
+ 	u16			cq_qcount_wait;
+ 	u16			cq_ecount_wait;
+ 	u16			rq_skid;
+@@ -314,7 +317,7 @@ struct otx2_tc_info {
+ };
+ 
+ struct dev_hw_ops {
+-	int	(*sq_aq_init)(void *dev, u16 qidx, u16 sqb_aura);
++	int	(*sq_aq_init)(void *dev, u16 qidx, u8 chan_offset, u16 sqb_aura);
+ 	void	(*sqe_flush)(void *dev, struct otx2_snd_queue *sq,
+ 			     int size, int qidx);
+ 	void	(*refill_pool_ptrs)(void *dev, struct otx2_cq_queue *cq);
+@@ -403,6 +406,11 @@ static inline bool is_otx2_lbkvf(struct pci_dev *pdev)
+ 	return pdev->device == PCI_DEVID_OCTEONTX2_RVU_AFVF;
+ }
+ 
++static inline bool is_otx2_sdpvf(struct pci_dev *pdev)
++{
++	return pdev->device == PCI_DEVID_OCTEONTX2_SDP_VF;
++}
 +
-+title: Broadcom BCM7038 PWM controller (BCM7xxx Set Top Box PWM controller)
+ static inline bool is_96xx_A0(struct pci_dev *pdev)
+ {
+ 	return (pdev->revision == 0x00) &&
+@@ -794,8 +802,8 @@ void otx2_ctx_disable(struct mbox *mbox, int type, bool npa);
+ int otx2_nix_config_bp(struct otx2_nic *pfvf, bool enable);
+ void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq);
+ void otx2_cleanup_tx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq);
+-int otx2_sq_aq_init(void *dev, u16 qidx, u16 sqb_aura);
+-int cn10k_sq_aq_init(void *dev, u16 qidx, u16 sqb_aura);
++int otx2_sq_aq_init(void *dev, u16 qidx, u8 chan_offset, u16 sqb_aura);
++int cn10k_sq_aq_init(void *dev, u16 qidx, u8 chan_offset, u16 sqb_aura);
+ int otx2_alloc_buffer(struct otx2_nic *pfvf, struct otx2_cq_queue *cq,
+ 		      dma_addr_t *dma);
+ 
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_reg.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_reg.h
+index 1b967eaf948b..6ef52051ab09 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_reg.h
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_reg.h
+@@ -140,6 +140,7 @@
+ 
+ /* NIX AF transmit scheduler registers */
+ #define NIX_AF_SMQX_CFG(a)		(0x700 | (a) << 16)
++#define NIX_AF_TL4X_SDP_LINK_CFG(a)	(0xB10 | (a) << 16)
+ #define NIX_AF_TL1X_SCHEDULE(a)		(0xC00 | (a) << 16)
+ #define NIX_AF_TL1X_CIR(a)		(0xC20 | (a) << 16)
+ #define NIX_AF_TL1X_TOPOLOGY(a)		(0xC80 | (a) << 16)
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
+index 254bebffe8c1..bc2566cb2ec1 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
+@@ -21,6 +21,7 @@
+ static const struct pci_device_id otx2_vf_id_table[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_CAVIUM, PCI_DEVID_OCTEONTX2_RVU_AFVF) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_CAVIUM, PCI_DEVID_OCTEONTX2_RVU_VF) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_CAVIUM, PCI_DEVID_OCTEONTX2_SDP_VF) },
+ 	{ }
+ };
+ 
+@@ -361,7 +362,7 @@ static int otx2vf_open(struct net_device *netdev)
+ 
+ 	/* LBKs do not receive link events so tell everyone we are up here */
+ 	vf = netdev_priv(netdev);
+-	if (is_otx2_lbkvf(vf->pdev)) {
++	if (is_otx2_lbkvf(vf->pdev) || is_otx2_sdpvf(vf->pdev)) {
+ 		pr_info("%s NIC Link is UP\n", netdev->name);
+ 		netif_carrier_on(netdev);
+ 		netif_tx_start_all_queues(netdev);
+@@ -681,6 +682,16 @@ static int otx2vf_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		snprintf(netdev->name, sizeof(netdev->name), "lbk%d", n);
+ 	}
+ 
++	/* To distinguish, for SDP VFs set netdev name explicitly */
++	if (is_otx2_sdpvf(vf->pdev)) {
++		int n;
 +
-+maintainers:
-+  - Florian Fainelli <f.fainelli@gmail.com>
++		n = (vf->pcifunc >> RVU_PFVF_FUNC_SHIFT) & RVU_PFVF_FUNC_MASK;
++		/* Need to subtract 1 to get proper VF number */
++		n -= 1;
++		snprintf(netdev->name, sizeof(netdev->name), "sdp%d-%d", pdev->bus->number, n);
++	}
 +
-+allOf:
-+  - $ref: pwm.yaml#
-+
-+properties:
-+  compatible:
-+    const: brcm,bcm7038-pwm
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#pwm-cells":
-+    const: 2
-+
-+  clocks:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#pwm-cells"
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    pwm: pwm@f0408000 {
-+       compatible = "brcm,bcm7038-pwm";
-+       reg = <0xf0408000 0x28>;
-+       #pwm-cells = <2>;
-+       clocks = <&upg_fixed>;
-+    };
+ 	err = register_netdev(netdev);
+ 	if (err) {
+ 		dev_err(dev, "Failed to register netdevice\n");
+@@ -691,7 +702,8 @@ static int otx2vf_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	if (err)
+ 		goto err_unreg_netdev;
+ 
+-	otx2vf_set_ethtool_ops(netdev);
++	if (!is_otx2_sdpvf(vf->pdev))
++		otx2vf_set_ethtool_ops(netdev);
+ 
+ 	err = otx2vf_mcam_flow_init(vf);
+ 	if (err)
 -- 
-2.25.1
+2.17.1
 

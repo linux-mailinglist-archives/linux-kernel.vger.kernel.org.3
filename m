@@ -2,98 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B32894690B7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4532E4690BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:19:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238396AbhLFHVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 02:21:31 -0500
-Received: from mga09.intel.com ([134.134.136.24]:4606 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238367AbhLFHVa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 02:21:30 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="237075242"
-X-IronPort-AV: E=Sophos;i="5.87,290,1631602800"; 
-   d="scan'208";a="237075242"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2021 23:18:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,290,1631602800"; 
-   d="scan'208";a="611151161"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 05 Dec 2021 23:17:59 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mu8G6-000Kwi-CU; Mon, 06 Dec 2021 07:17:58 +0000
-Date:   Mon, 6 Dec 2021 15:17:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yajun Deng <yajun.deng@linux.dev>, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] completion: introduce complete_put() helper function
-Message-ID: <202112061502.0pJtOzSU-lkp@intel.com>
-References: <20211206040319.7063-1-yajun.deng@linux.dev>
+        id S238430AbhLFHW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 02:22:59 -0500
+Received: from smtprelay0038.hostedemail.com ([216.40.44.38]:47970 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S238367AbhLFHW6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 02:22:58 -0500
+Received: from omf10.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 3AD031812E207;
+        Mon,  6 Dec 2021 07:19:29 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id 14FC136;
+        Mon,  6 Dec 2021 07:18:27 +0000 (UTC)
+Message-ID: <c9e11594e7edbbf8ee0a01a5009457a2c4a79ffc.camel@perches.com>
+Subject: Re: [PATCH v2] uacce: use sysfs_emit instead of sprintf
+From:   Joe Perches <joe@perches.com>
+To:     Kai Ye <yekai13@huawei.com>, gregkh@linuxfoundation.org,
+        linux-accelerators@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com, zhangfei.gao@linaro.org,
+        wangzhou1@hisilicon.com
+Date:   Sun, 05 Dec 2021 23:18:27 -0800
+In-Reply-To: <20211206070943.45971-1-yekai13@huawei.com>
+References: <20211206070943.45971-1-yekai13@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206040319.7063-1-yajun.deng@linux.dev>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.51
+X-Stat-Signature: 6jgz9zig8ybgcwhjzm93p4hihmuq9spj
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 14FC136
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX185Y5inXYrUxkzkZxWYJPHp1Xne4MA8TpY=
+X-HE-Tag: 1638775107-18119
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yajun,
+On Mon, 2021-12-06 at 15:09 +0800, Kai Ye wrote:
+> Use the sysfs_emit to replace sprintf. sprintf may cause
+> output defect in sysfs content, it is better to use new
+> added sysfs_emit function which knows the size of the
+> temporary buffer.
+[]
+> diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
+[]
+> @@ -309,7 +309,7 @@ static ssize_t available_instances_show(struct device *dev,
+>  	if (!uacce->ops->get_available_instances)
+>  		return -ENODEV;
+>  
+> -	return sprintf(buf, "%d\n",
+> +	return sysfs_emit(buf, "%d\n",
+>  		       uacce->ops->get_available_instances(uacce));
 
-Thank you for the patch! Perhaps something to improve:
+It's generally good form to rewrap the multiple line statements
+to the open parenthesis so the below would be better:
 
-[auto build test WARNING on tip/sched/core]
-[also build test WARNING on v5.16-rc4 next-20211203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+	return sysfs_emit(buf, "%d\n",
+			  uacce->ops->get_available_instances(uacce));
 
-url:    https://github.com/0day-ci/linux/commits/Yajun-Deng/completion-introduce-complete_put-helper-function/20211206-120632
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 8c92606ab81086db00cbb73347d124b4eb169b7e
-config: hexagon-randconfig-r031-20211206 (https://download.01.org/0day-ci/archive/20211206/202112061502.0pJtOzSU-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f50be8eb0a12a61d23db6cda452c693001d76898)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/6d181628873250fd66a8f2da19182fec95973b6e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Yajun-Deng/completion-introduce-complete_put-helper-function/20211206-120632
-        git checkout 6d181628873250fd66a8f2da19182fec95973b6e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/sched/
+> @@ -326,7 +326,7 @@ static ssize_t region_mmio_size_show(struct device *dev,
+>  {
+>  	struct uacce_device *uacce = to_uacce_device(dev);
+>  
+> -	return sprintf(buf, "%lu\n",
+> +	return sysfs_emit(buf, "%lu\n",
+>  		       uacce->qf_pg_num[UACCE_QFRT_MMIO] << PAGE_SHIFT);
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/sched/completion.c:41:6: warning: no previous prototype for function 'complete_put' [-Wmissing-prototypes]
-   void complete_put(refcount_t *r, struct completion *x)
-        ^
-   kernel/sched/completion.c:41:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void complete_put(refcount_t *r, struct completion *x)
-   ^
-   static 
-   1 warning generated.
+etc...
 
 
-vim +/complete_put +41 kernel/sched/completion.c
-
-    40	
-  > 41	void complete_put(refcount_t *r, struct completion *x)
-    42	{
-    43		if (refcount_dec_and_test(r))
-    44			complete(x);
-    45	}
-    46	EXPORT_SYMBOL(complete_put);
-    47	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

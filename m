@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB64469E0E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7811B469FFB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351127AbhLFPez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:34:55 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41412 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345567AbhLFPXG (ORCPT
+        id S1442745AbhLFP4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:56:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390745AbhLFPmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:23:06 -0500
+        Mon, 6 Dec 2021 10:42:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E296C07E5E0;
+        Mon,  6 Dec 2021 07:30:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F213F61322;
-        Mon,  6 Dec 2021 15:19:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D87C8C341C2;
-        Mon,  6 Dec 2021 15:19:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B6786132E;
+        Mon,  6 Dec 2021 15:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0FD4C34900;
+        Mon,  6 Dec 2021 15:30:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803976;
-        bh=wGJm4T3sZ7pyGcgI6geMZTXBsGtyIi+Ki/1p3s5geho=;
+        s=korg; t=1638804615;
+        bh=3y7uuz14VXplgQt6IuUT9qYCliUFKj9GEnkdjndRIVU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XJfQ4GXF2CAU+ve1+iVzU/PSqoPRE/oDMtbK/Ac2K97UQVsQXkgyY8wf7eN9+zQoJ
-         v2uYzRn0N/racNHcJ53ILx+JV4i0czBeARSftM6860l+cgznbLY976ttjRt/CSUsUk
-         SGkQy2kRyuCLuDNgHyH9x8+ZRTeGKOebDYXX1k2c=
+        b=BpbghS5NhNzzLcaeQUS6WHkH86bBYTQ1OTKm9THNTNzW2EnEx6GQdUpLODtQZ6wIK
+         CFxC/RxSUMABT3lT7PNzI3uC0YgDevCqNYKNBrHVHYfGcq+YxhT1nxV3QNsI3jzNI7
+         AocTnQl/3nDBf5JLep8NPgbiTlzUpyFxjy4hX2WU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 5.10 114/130] xhci: Fix commad ring abort, write all 64 bits to CRCR register.
-Date:   Mon,  6 Dec 2021 15:57:11 +0100
-Message-Id: <20211206145603.592333300@linuxfoundation.org>
+        stable@vger.kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 178/207] KVM: SEV: Return appropriate error codes if SEV-ES scratch setup fails
+Date:   Mon,  6 Dec 2021 15:57:12 +0100
+Message-Id: <20211206145616.436869514@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,70 +50,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Sean Christopherson <seanjc@google.com>
 
-commit 09f736aa95476631227d2dc0e6b9aeee1ad7ed58 upstream.
+[ Upstream commit 75236f5f2299b502e4b9b267c1ce3bc14a222ceb ]
 
-Turns out some xHC controllers require all 64 bits in the CRCR register
-to be written to execute a command abort.
+Return appropriate error codes if setting up the GHCB scratch area for an
+SEV-ES guest fails.  In particular, returning -EINVAL instead of -ENOMEM
+when allocating the kernel buffer could be confusing as userspace would
+likely suspect a guest issue.
 
-The lower 32 bits containing the command abort bit is written first.
-In case the command ring stops before we write the upper 32 bits then
-hardware may use these upper bits to set the commnd ring dequeue pointer.
-
-Solve this by making sure the upper 32 bits contain a valid command
-ring dequeue pointer.
-
-The original patch that only wrote the first 32 to stop the ring went
-to stable, so this fix should go there as well.
-
-Fixes: ff0e50d3564f ("xhci: Fix command ring pointer corruption while aborting a command")
-Cc: stable@vger.kernel.org
-Tested-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20211126122340.1193239-2-mathias.nyman@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 8f423a80d299 ("KVM: SVM: Support MMIO for an SEV-ES guest")
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20211109222350.2266045-2-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-ring.c |   21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ arch/x86/kvm/svm/sev.c | 30 +++++++++++++++++-------------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
 
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -342,7 +342,9 @@ static void xhci_handle_stopped_cmd_ring
- /* Must be called with xhci->lock held, releases and aquires lock back */
- static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index ca0effb79eab9..134c4ea5e6ad8 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -2317,7 +2317,7 @@ void pre_sev_run(struct vcpu_svm *svm, int cpu)
+ }
+ 
+ #define GHCB_SCRATCH_AREA_LIMIT		(16ULL * PAGE_SIZE)
+-static bool setup_vmgexit_scratch(struct vcpu_svm *svm, bool sync, u64 len)
++static int setup_vmgexit_scratch(struct vcpu_svm *svm, bool sync, u64 len)
  {
--	u32 temp_32;
-+	struct xhci_segment *new_seg	= xhci->cmd_ring->deq_seg;
-+	union xhci_trb *new_deq		= xhci->cmd_ring->dequeue;
-+	u64 crcr;
- 	int ret;
+ 	struct vmcb_control_area *control = &svm->vmcb->control;
+ 	struct ghcb *ghcb = svm->ghcb;
+@@ -2328,14 +2328,14 @@ static bool setup_vmgexit_scratch(struct vcpu_svm *svm, bool sync, u64 len)
+ 	scratch_gpa_beg = ghcb_get_sw_scratch(ghcb);
+ 	if (!scratch_gpa_beg) {
+ 		pr_err("vmgexit: scratch gpa not provided\n");
+-		return false;
++		return -EINVAL;
+ 	}
  
- 	xhci_dbg(xhci, "Abort command ring\n");
-@@ -351,13 +353,18 @@ static int xhci_abort_cmd_ring(struct xh
+ 	scratch_gpa_end = scratch_gpa_beg + len;
+ 	if (scratch_gpa_end < scratch_gpa_beg) {
+ 		pr_err("vmgexit: scratch length (%#llx) not valid for scratch address (%#llx)\n",
+ 		       len, scratch_gpa_beg);
+-		return false;
++		return -EINVAL;
+ 	}
  
- 	/*
- 	 * The control bits like command stop, abort are located in lower
--	 * dword of the command ring control register. Limit the write
--	 * to the lower dword to avoid corrupting the command ring pointer
--	 * in case if the command ring is stopped by the time upper dword
--	 * is written.
-+	 * dword of the command ring control register.
-+	 * Some controllers require all 64 bits to be written to abort the ring.
-+	 * Make sure the upper dword is valid, pointing to the next command,
-+	 * avoiding corrupting the command ring pointer in case the command ring
-+	 * is stopped by the time the upper dword is written.
- 	 */
--	temp_32 = readl(&xhci->op_regs->cmd_ring);
--	writel(temp_32 | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
-+	next_trb(xhci, NULL, &new_seg, &new_deq);
-+	if (trb_is_link(new_deq))
-+		next_trb(xhci, NULL, &new_seg, &new_deq);
-+
-+	crcr = xhci_trb_virt_to_dma(new_seg, new_deq);
-+	xhci_write_64(xhci, crcr | CMD_RING_ABORT, &xhci->op_regs->cmd_ring);
+ 	if ((scratch_gpa_beg & PAGE_MASK) == control->ghcb_gpa) {
+@@ -2353,7 +2353,7 @@ static bool setup_vmgexit_scratch(struct vcpu_svm *svm, bool sync, u64 len)
+ 		    scratch_gpa_end > ghcb_scratch_end) {
+ 			pr_err("vmgexit: scratch area is outside of GHCB shared buffer area (%#llx - %#llx)\n",
+ 			       scratch_gpa_beg, scratch_gpa_end);
+-			return false;
++			return -EINVAL;
+ 		}
  
- 	/* Section 4.6.1.2 of xHCI 1.0 spec says software should also time the
- 	 * completion of the Command Abort operation. If CRR is not negated in 5
+ 		scratch_va = (void *)svm->ghcb;
+@@ -2366,18 +2366,18 @@ static bool setup_vmgexit_scratch(struct vcpu_svm *svm, bool sync, u64 len)
+ 		if (len > GHCB_SCRATCH_AREA_LIMIT) {
+ 			pr_err("vmgexit: scratch area exceeds KVM limits (%#llx requested, %#llx limit)\n",
+ 			       len, GHCB_SCRATCH_AREA_LIMIT);
+-			return false;
++			return -EINVAL;
+ 		}
+ 		scratch_va = kzalloc(len, GFP_KERNEL_ACCOUNT);
+ 		if (!scratch_va)
+-			return false;
++			return -ENOMEM;
+ 
+ 		if (kvm_read_guest(svm->vcpu.kvm, scratch_gpa_beg, scratch_va, len)) {
+ 			/* Unable to copy scratch area from guest */
+ 			pr_err("vmgexit: kvm_read_guest for scratch area failed\n");
+ 
+ 			kfree(scratch_va);
+-			return false;
++			return -EFAULT;
+ 		}
+ 
+ 		/*
+@@ -2393,7 +2393,7 @@ static bool setup_vmgexit_scratch(struct vcpu_svm *svm, bool sync, u64 len)
+ 	svm->ghcb_sa = scratch_va;
+ 	svm->ghcb_sa_len = len;
+ 
+-	return true;
++	return 0;
+ }
+ 
+ static void set_ghcb_msr_bits(struct vcpu_svm *svm, u64 value, u64 mask,
+@@ -2532,10 +2532,10 @@ int sev_handle_vmgexit(struct kvm_vcpu *vcpu)
+ 	ghcb_set_sw_exit_info_1(ghcb, 0);
+ 	ghcb_set_sw_exit_info_2(ghcb, 0);
+ 
+-	ret = -EINVAL;
+ 	switch (exit_code) {
+ 	case SVM_VMGEXIT_MMIO_READ:
+-		if (!setup_vmgexit_scratch(svm, true, control->exit_info_2))
++		ret = setup_vmgexit_scratch(svm, true, control->exit_info_2);
++		if (ret)
+ 			break;
+ 
+ 		ret = kvm_sev_es_mmio_read(vcpu,
+@@ -2544,7 +2544,8 @@ int sev_handle_vmgexit(struct kvm_vcpu *vcpu)
+ 					   svm->ghcb_sa);
+ 		break;
+ 	case SVM_VMGEXIT_MMIO_WRITE:
+-		if (!setup_vmgexit_scratch(svm, false, control->exit_info_2))
++		ret = setup_vmgexit_scratch(svm, false, control->exit_info_2);
++		if (ret)
+ 			break;
+ 
+ 		ret = kvm_sev_es_mmio_write(vcpu,
+@@ -2587,6 +2588,7 @@ int sev_handle_vmgexit(struct kvm_vcpu *vcpu)
+ 		vcpu_unimpl(vcpu,
+ 			    "vmgexit: unsupported event - exit_info_1=%#llx, exit_info_2=%#llx\n",
+ 			    control->exit_info_1, control->exit_info_2);
++		ret = -EINVAL;
+ 		break;
+ 	default:
+ 		ret = svm_invoke_exit_handler(vcpu, exit_code);
+@@ -2599,6 +2601,7 @@ int sev_es_string_io(struct vcpu_svm *svm, int size, unsigned int port, int in)
+ {
+ 	int count;
+ 	int bytes;
++	int r;
+ 
+ 	if (svm->vmcb->control.exit_info_2 > INT_MAX)
+ 		return -EINVAL;
+@@ -2607,8 +2610,9 @@ int sev_es_string_io(struct vcpu_svm *svm, int size, unsigned int port, int in)
+ 	if (unlikely(check_mul_overflow(count, size, &bytes)))
+ 		return -EINVAL;
+ 
+-	if (!setup_vmgexit_scratch(svm, in, bytes))
+-		return -EINVAL;
++	r = setup_vmgexit_scratch(svm, in, bytes);
++	if (r)
++		return r;
+ 
+ 	return kvm_sev_es_string_io(&svm->vcpu, size, port, svm->ghcb_sa, count, in);
+ }
+-- 
+2.33.0
+
 
 

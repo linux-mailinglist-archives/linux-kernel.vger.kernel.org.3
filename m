@@ -2,69 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A84A9468E69
+	by mail.lfdr.de (Postfix) with ESMTP id F1966468E6A
 	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 02:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232881AbhLFBHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 20:07:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59512 "EHLO
+        id S234046AbhLFBHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 20:07:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244142AbhLFBCP (ORCPT
+        with ESMTP id S245505AbhLFBFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 20:02:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B75CC061751;
-        Sun,  5 Dec 2021 16:58:47 -0800 (PST)
+        Sun, 5 Dec 2021 20:05:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9687C061751;
+        Sun,  5 Dec 2021 17:01:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61E47B80EEE;
-        Mon,  6 Dec 2021 00:58:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD08C00446;
-        Mon,  6 Dec 2021 00:58:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6945B6115E;
+        Mon,  6 Dec 2021 01:01:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C18E1C00446;
+        Mon,  6 Dec 2021 01:01:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638752325;
-        bh=MDhBLLuYmMDTTSezpWr9qft1BlQ/oH22cO1owWQ3d6w=;
+        s=k20201202; t=1638752503;
+        bh=1Ax4bw/oFgEbYRmnNjGtyxdgvFdAShGvQFfBYM1dS08=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iO6jgHgs+gC3vK/yX+sbOnqKSW5kmZ6TELHtDbeZwnKhgHEhqbHlth6AOWj4witBm
-         5ZfRVigcMZ7HAhB+gK6GOsJdxt6JPzvAR1KmyZmMdqUE3SkT9PHzslwawzrn2YLhkL
-         e0psbOThaLZpKVK//zT2aHqri40CbnkTbhixnWyobaoLBDy24BQ6al+gRVTfsvDKRh
-         bGylQa5nwkfGzllQ9Q3+W5k/9ryHfLofY9Ip1ge/nMx9qn3JUP7Ew6278h3zSJGDcM
-         1ade0eGO+RnmS2VMyC75SlyNm8voUY/v12wSUJNx5u6gK5O/A3yi5NsLlvUYV4LuMD
-         PKOlq0i99Ugtw==
-Date:   Mon, 6 Dec 2021 08:58:38 +0800
+        b=BQEDaomcnbagfGi3QeyaPWcJrRky02aArZQgoMdtvGVFAxHtkEi91nXFFboTdNO2V
+         zhnPKLY+H3s05CfPOGUhDVAQmd967xC3/gxChqZJJC67kaHiG8t8+xsiwVkCAuadke
+         bJLqb9fvU6YpcfWib3N6P+/kSukl/7Mg87DuP7IFRhb3sL6Hu2HquxlVnfbMMXAkO7
+         P7TwsN9rD8qWa8AhoIDmbmNKz2Mwej5HVAu8YE5Y7Snl5UNEsv29xDFUj+BSNbTZ4B
+         CVR2PVRAM5QKnAfMtVjBhmbmREhE4GtumQH5KEbLgJIV2G6fHrNvJmyh3Wal4vcdeR
+         3steiktJUrLww==
+Date:   Mon, 6 Dec 2021 09:01:37 +0800
 From:   Shawn Guo <shawnguo@kernel.org>
-To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Robin van der Gracht <robin@protonic.nl>,
+        devicetree@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Markus Niebel <Markus.Niebel@ew.tq-group.com>
-Subject: Re: [PATCH v3 1/3] dt-bindings: arm: fsl: add TQ-Systems boards
- based on i.MX6Q/QP/DL
-Message-ID: <20211206005838.GI4216@dragon>
-References: <20211122113740.2348-1-matthias.schiffer@ew.tq-group.com>
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        David Jander <david@protonic.nl>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v1 2/4] ARM: dts: imx6dl-prtvt7: Add missing tvp5150
+ video decoder node
+Message-ID: <20211206010137.GJ4216@dragon>
+References: <20211122124310.2796505-1-o.rempel@pengutronix.de>
+ <20211122124310.2796505-2-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211122113740.2348-1-matthias.schiffer@ew.tq-group.com>
+In-Reply-To: <20211122124310.2796505-2-o.rempel@pengutronix.de>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 22, 2021 at 12:37:38PM +0100, Matthias Schiffer wrote:
-> The TQ-Systems MBa6x mainboard can be used with TQMa6 variants with
-> i.MX6Q/QP/DL SoCs (TQMa6Q/QP/DL). The TQMa6Q and DL exist in two variants:
-> The newer variants "A" have a hardware workaround for Erratum ERR006687,
-> while variants "B" are missing such a workaround, so it needs to be
-> handled in software. The erratum was fixed in i.MX6QP, so no "A" variant
-> of the TQMa6QP exists.
+On Mon, Nov 22, 2021 at 01:43:08PM +0100, Oleksij Rempel wrote:
+> From: Robin van der Gracht <robin@protonic.nl>
 > 
-> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Robin van der Gracht <robin@protonic.nl>
+> ---
+>  arch/arm/boot/dts/imx6dl-prtvt7.dts | 40 +++++++++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/imx6dl-prtvt7.dts b/arch/arm/boot/dts/imx6dl-prtvt7.dts
+> index be7c4cb339e7..02b53df03e6f 100644
+> --- a/arch/arm/boot/dts/imx6dl-prtvt7.dts
+> +++ b/arch/arm/boot/dts/imx6dl-prtvt7.dts
+> @@ -6,6 +6,7 @@
+>  /dts-v1/;
+>  #include "imx6dl.dtsi"
+>  #include "imx6qdl-prti6q.dtsi"
+> +#include <dt-bindings/display/sdtv-standards.h>
+>  #include <dt-bindings/input/input.h>
+>  #include <dt-bindings/leds/common.h>
+>  #include <dt-bindings/sound/fsl-imx-audmux.h>
+> @@ -171,6 +172,18 @@ panel_in: endpoint {
+>  		};
+>  	};
+>  
+> +	connector {
+> +		compatible = "composite-video-connector";
+> +		label = "Composite0";
+> +		sdtv-standards = <SDTV_STD_PAL_B>;
+> +
+> +		port {
+> +			comp0_out: endpoint {
+> +				remote-endpoint = <&tvp5150_comp0_in>;
+> +			};
+> +		};
+> +	};
+> +
+>  	reg_bl_12v0: regulator-bl-12v0 {
+>  		compatible = "regulator-fixed";
+>  		pinctrl-names = "default";
+> @@ -295,6 +308,29 @@ sgtl5000: audio-codec@a {
+>  		VDDIO-supply = <&reg_3v3>;
+>  		VDDD-supply = <&reg_1v8>;
+>  	};
+> +
+> +	video@5c {
+> +		compatible = "ti,tvp5150";
+> +		reg = <0x5c>;
+> +
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		port@0 {
+> +			reg = <0>;
 
-Applied all, thanks!
+Have a newline between property and child node.
+
+Shawn
+
+> +			tvp5150_comp0_in: endpoint {
+> +				remote-endpoint = <&comp0_out>;
+> +			};
+> +		};
+> +
+> +		/* Output port 2 is video output pad */
+> +		port@2 {
+> +			reg = <2>;
+> +			tvp5151_to_ipu1_csi0_mux: endpoint {
+> +				remote-endpoint = <&ipu1_csi0_mux_from_parallel_sensor>;
+> +			};
+> +		};
+> +	};
+>  };
+>  
+>  &i2c3 {
+> @@ -322,6 +358,10 @@ &ipu1_di0_disp0 {
+>  	remote-endpoint = <&display_in>;
+>  };
+>  
+> +&ipu1_csi0_mux_from_parallel_sensor {
+> +	remote-endpoint = <&tvp5151_to_ipu1_csi0_mux>;
+> +};
+> +
+>  &pwm1 {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&pinctrl_pwm1>;
+> -- 
+> 2.30.2
+> 

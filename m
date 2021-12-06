@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACF8469E9A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F42846A01D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389746AbhLFPk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:40:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
+        id S1443075AbhLFP5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:57:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386608AbhLFP0r (ORCPT
+        with ESMTP id S1386648AbhLFP0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:26:47 -0500
+        Mon, 6 Dec 2021 10:26:50 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5442C08E6E1;
-        Mon,  6 Dec 2021 07:16:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB8BC08E845;
+        Mon,  6 Dec 2021 07:17:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54C8D61321;
-        Mon,  6 Dec 2021 15:16:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D6CC341C1;
-        Mon,  6 Dec 2021 15:16:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57B0F612C1;
+        Mon,  6 Dec 2021 15:17:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C369C341C2;
+        Mon,  6 Dec 2021 15:17:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803796;
-        bh=s0sczKJCjhCa2PC1m4yI3VM2DXbgGwBfPUX35AF0CPQ=;
+        s=korg; t=1638803826;
+        bh=YB9GqF06IpmSyCG7Faw9WpOdPVo8RXr05d3IdS4a6qg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=asPJTIeP8hT4ynPvZ06ve3OGSdGUWGKFCQl5loEC+qdDRGr85SzzaTATFW6za+TUV
-         071Aqvn3qSQobRlbRDIF3T3SfszuiLYJMca+zhT9uzmNbNakSI0edDiSlIRSNsk5Y0
-         rJhZBER58FZBdGdg41mEpKh2mFmG2MI/7KsOoOSQ=
+        b=ZKsCSKPlzV5Ffprytpa7i5vSMbQG2lLH/JztbO8A4dZfCxf3I1KVjtY1v5NpUX/jV
+         tpBIVcQk/XEl34+4/V4xHW0qJUjKjhV25I7K8tz0IFaBCsYfE8rlCZcd34ZgdxyvB0
+         bP6cIr1aUr5x0LcFPxB4K22f1eRWnPAL7giKf8vk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, zhangyue <zhangyue1@kylinos.cn>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Subject: [PATCH 5.10 032/130] kprobes: Limit max data_size of the kretprobe instances
-Date:   Mon,  6 Dec 2021 15:55:49 +0100
-Message-Id: <20211206145600.758364220@linuxfoundation.org>
+        stable@vger.kernel.org, Stanislaw Gruszka <stf_xl@wp.pl>,
+        Kalle Valo <kvalo@codeaurora.org>, Exuvo <exuvo@exuvo.se>
+Subject: [PATCH 5.10 033/130] rt2x00: do not mark device gone on EPROTO errors during start
+Date:   Mon,  6 Dec 2021 15:55:50 +0100
+Message-Id: <20211206145600.800483109@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
 References: <20211206145559.607158688@linuxfoundation.org>
@@ -49,55 +48,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu <mhiramat@kernel.org>
+From: Stanislaw Gruszka <stf_xl@wp.pl>
 
-commit 6bbfa44116689469267f1a6e3d233b52114139d2 upstream.
+commit ed53ae75693096f1c10b4561edd31a07b631bd72 upstream.
 
-The 'kprobe::data_size' is unsigned, thus it can not be negative.  But if
-user sets it enough big number (e.g. (size_t)-8), the result of 'data_size
-+ sizeof(struct kretprobe_instance)' becomes smaller than sizeof(struct
-kretprobe_instance) or zero. In result, the kretprobe_instance are
-allocated without enough memory, and kretprobe accesses outside of
-allocated memory.
+As reported by Exuvo is possible that we have lot's of EPROTO errors
+during device start i.e. firmware load. But after that device works
+correctly. Hence marking device gone by few EPROTO errors done by
+commit e383c70474db ("rt2x00: check number of EPROTO errors") caused
+regression - Exuvo device stop working after kernel update. To fix
+disable the check during device start.
 
-To avoid this issue, introduce a max limitation of the
-kretprobe::data_size. 4KB per instance should be OK.
-
-Link: https://lkml.kernel.org/r/163836995040.432120.10322772773821182925.stgit@devnote2
-
+Link: https://lore.kernel.org/linux-wireless/bff7d309-a816-6a75-51b6-5928ef4f7a8c@exuvo.se/
+Reported-and-tested-by: Exuvo <exuvo@exuvo.se>
+Fixes: e383c70474db ("rt2x00: check number of EPROTO errors")
 Cc: stable@vger.kernel.org
-Fixes: f47cd9b553aa ("kprobes: kretprobe user entry-handler")
-Reported-by: zhangyue <zhangyue1@kylinos.cn>
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Signed-off-by: Stanislaw Gruszka <stf_xl@wp.pl>
+Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+Link: https://lore.kernel.org/r/20211111141003.GA134627@wp.pl
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/kprobes.h |    2 ++
- kernel/kprobes.c        |    3 +++
- 2 files changed, 5 insertions(+)
+ drivers/net/wireless/ralink/rt2x00/rt2x00usb.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -155,6 +155,8 @@ struct kretprobe {
- 	raw_spinlock_t lock;
- };
+--- a/drivers/net/wireless/ralink/rt2x00/rt2x00usb.c
++++ b/drivers/net/wireless/ralink/rt2x00/rt2x00usb.c
+@@ -25,6 +25,9 @@ static bool rt2x00usb_check_usb_error(st
+ 	if (status == -ENODEV || status == -ENOENT)
+ 		return true;
  
-+#define KRETPROBE_MAX_DATA_SIZE	4096
++	if (!test_bit(DEVICE_STATE_STARTED, &rt2x00dev->flags))
++		return false;
 +
- struct kretprobe_instance {
- 	union {
- 		struct hlist_node hlist;
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -2137,6 +2137,9 @@ int register_kretprobe(struct kretprobe
- 		}
- 	}
- 
-+	if (rp->data_size > KRETPROBE_MAX_DATA_SIZE)
-+		return -E2BIG;
-+
- 	rp->kp.pre_handler = pre_handler_kretprobe;
- 	rp->kp.post_handler = NULL;
- 	rp->kp.fault_handler = NULL;
+ 	if (status == -EPROTO || status == -ETIMEDOUT)
+ 		rt2x00dev->num_proto_errs++;
+ 	else
 
 

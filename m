@@ -2,144 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED61546ABFC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 23:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33ACA46AC06
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 23:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356949AbhLFWdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 17:33:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358032AbhLFWcA (ORCPT
+        id S1357615AbhLFWdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 17:33:50 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45182 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350813AbhLFWdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 17:32:00 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A50C0698C2;
-        Mon,  6 Dec 2021 14:28:02 -0800 (PST)
-Message-ID: <20211206210225.101336873@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638829681;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=DA21nVmLDiBI7abTCMjgj20KY6xV+oZ7nL3Tb95GpzU=;
-        b=tUgqDZDZ/EiCdKplAETvDx9zP2J7lXVbAOyLOoBuYDH6TGhvuPG60E8xxxj2easlDQNPkn
-        zTUdmJbnIRjdW2jZn22BV2YC4f0v6JUg4B85PNY0gmnqpQ/sN1zmKIaFOZKwqGTNC8Cwta
-        Zuzg0fNd26HEMDHArMjtG0lzJFq888jFDvle1JTBYdcc+inM3sPjBJytAfcyCtrn23O2UA
-        KEo+a2AtJrT7M4ZyZw3GWFzmCrk8w7SJ8if/eriSWmpCeXjmWpgB3652GOnCNeZesHt7bK
-        srYzZDxpjI6VQFY1vaT/mjtrbyNnxnAjKtFj8+UQL1Hs+wIUbfpLlFZD9d5QMQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638829681;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=DA21nVmLDiBI7abTCMjgj20KY6xV+oZ7nL3Tb95GpzU=;
-        b=MCrfZbg73639x4t4CYmepEMeEst8qlRnGzxNB/5IvDcEPSsvluAaurSvCLQW1KB8HRZ02F
-        1dXwMChHv9TjP5Cw==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        Juergen Gross <jgross@suse.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        sparclinux@vger.kernel.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
-        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: [patch V2 23/23] PCI/MSI: Move descriptor counting on allocation fail
- to the legacy code
-References: <20211206210147.872865823@linutronix.de>
+        Mon, 6 Dec 2021 17:33:31 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62C89B815B0;
+        Mon,  6 Dec 2021 22:30:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11B0DC341C6;
+        Mon,  6 Dec 2021 22:29:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638829799;
+        bh=vgWk4/IR5H2ScItocBPuRHtKGHNWxclK7Sm5296+FVE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lpdEZswt+IEtrtDsgPcif0et8Ynxv3t+T7Uwy+41RPp+v3sdYGlT4Rculvi67tmPM
+         mEXiyKuXHDxg3cW8jSC8A3FWE2cpCRNsumMONIYuZDXlNeKzrSCtDNabgdSXygAFAG
+         axVerldOSWz7fyvJRLP4D071ZOtIlut5onz0ybqqRr6MBhAMXTNTJbJ9ro8L4fAfNc
+         2DD1Jm5LwxJxfCVsZwmrmMpFnDksAhJt70MJs9TZs9KIgbPngNdmlTXqA+a7LhMNXH
+         rJMg0LOxLaWClh4OAygqTB3i5qmhc1P5ayitkRNGhCpLYW5Gv+eMb7uTCKLeBl1ys8
+         TMliW57jI3IEw==
+Date:   Mon, 6 Dec 2021 23:29:53 +0100
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Ameer Hamza <amhamza.mgc@gmail.com>, vivien.didelot@gmail.com,
+        f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: dsa: mv88e6xxx: initialize return variable on
+ declaration
+Message-ID: <20211206232953.065c0dc9@thinkpad>
+In-Reply-To: <Ya4OP+jQYd/UwiQK@lunn.ch>
+References: <20211206113219.17640-1-amhamza.mgc@gmail.com>
+        <Ya4OP+jQYd/UwiQK@lunn.ch>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon,  6 Dec 2021 23:28:00 +0100 (CET)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The irqdomain code already returns the information. Move the loop to the
-legacy code.
+On Mon, 6 Dec 2021 14:21:03 +0100
+Andrew Lunn <andrew@lunn.ch> wrote:
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
----
- drivers/pci/msi/legacy.c |   20 +++++++++++++++++++-
- drivers/pci/msi/msi.c    |   19 +------------------
- 2 files changed, 20 insertions(+), 19 deletions(-)
+> On Mon, Dec 06, 2021 at 04:32:19PM +0500, Ameer Hamza wrote:
+> > Uninitialized err variable defined in mv88e6393x_serdes_power
+> > function may cause undefined behaviour if it is called from
+> > mv88e6xxx_serdes_power_down context.
+> > 
+> > Addresses-Coverity: 1494644 ("Uninitialized scalar variable")
+> > 
+> > Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+> > ---
+> >  drivers/net/dsa/mv88e6xxx/serdes.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/net/dsa/mv88e6xxx/serdes.c b/drivers/net/dsa/mv88e6xxx/serdes.c
+> > index 55273013bfb5..33727439724a 100644
+> > --- a/drivers/net/dsa/mv88e6xxx/serdes.c
+> > +++ b/drivers/net/dsa/mv88e6xxx/serdes.c
+> > @@ -1507,7 +1507,7 @@ int mv88e6393x_serdes_power(struct mv88e6xxx_chip *chip, int port, int lane,
+> >  			    bool on)
+> >  {
+> >  	u8 cmode = chip->ports[port].cmode;
+> > -	int err;
+> > +	int err = 0;
+> >  
+> >  	if (port != 0 && port != 9 && port != 10)
+> >  		return -EOPNOTSUPP;  
+> 
+> Hi Marek
+> 
+> This warning likely comes from cmode not being a SERDES mode, and that
+> is not handles in the switch statementing. Do we want an
+> 
+> default:
+> 	err = EINVAL;
+> 
+> ?
+> 
+> 	Andrew
 
---- a/drivers/pci/msi/legacy.c
-+++ b/drivers/pci/msi/legacy.c
-@@ -50,9 +50,27 @@ void __weak arch_teardown_msi_irqs(struc
- 	}
- }
- 
-+static int pci_msi_setup_check_result(struct pci_dev *dev, int type, int ret)
-+{
-+	struct msi_desc *entry;
-+	int avail = 0;
-+
-+	if (type != PCI_CAP_ID_MSIX || ret >= 0)
-+		return ret;
-+
-+	/* Scan the MSI descriptors for successfully allocated ones. */
-+	for_each_pci_msi_entry(entry, dev) {
-+		if (entry->irq != 0)
-+			avail++;
-+	}
-+	return avail ? avail : ret;
-+}
-+
- int pci_msi_legacy_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
- {
--	return arch_setup_msi_irqs(dev, nvec, type);
-+	int ret = arch_setup_msi_irqs(dev, nvec, type);
-+
-+	return pci_msi_setup_check_result(dev, type, ret);
- }
- 
- void pci_msi_legacy_teardown_msi_irqs(struct pci_dev *dev)
---- a/drivers/pci/msi/msi.c
-+++ b/drivers/pci/msi/msi.c
-@@ -609,7 +609,7 @@ static int msix_capability_init(struct p
- 
- 	ret = pci_msi_setup_msi_irqs(dev, nvec, PCI_CAP_ID_MSIX);
- 	if (ret)
--		goto out_avail;
-+		goto out_free;
- 
- 	/* Check if all MSI entries honor device restrictions */
- 	ret = msi_verify_entries(dev);
-@@ -634,23 +634,6 @@ static int msix_capability_init(struct p
- 	pcibios_free_irq(dev);
- 	return 0;
- 
--out_avail:
--	if (ret < 0) {
--		/*
--		 * If we had some success, report the number of IRQs
--		 * we succeeded in setting up.
--		 */
--		struct msi_desc *entry;
--		int avail = 0;
--
--		for_each_pci_msi_entry(entry, dev) {
--			if (entry->irq != 0)
--				avail++;
--		}
--		if (avail != 0)
--			ret = avail;
--	}
--
- out_free:
- 	free_msi_irqs(dev);
- 
+Hi Andrew,
 
+currently all the .serdes_power() methods return 0 for non-serdes ports.
+This is because the way it is written, these methods are not called if
+there is not a serdes lane for a given port.
+
+For this issue with err variable undefined, to fix it we should simply
+set int err=0 at the beginning of mv88e6393x_serdes_power(), to make it
+behave like other serdes_power() methods do in serdes.c.
+
+
+
+But a refactor may be needed for serdes_power() methods, at least
+because they are a little weird. But it should be unrelated to this fix.
+
+In serdes.h we have static inline functions
+  mv88e6xxx_serdes_power_up(chip, port, lane)
+  mv88e6xxx_serdes_power_down(chip, port, lane)
+
+  (These simply call the serdes_power() method of chip ops, with
+   additional boolean argument to specify powerup/powerdown.
+   Also for these we first need to determine lane for a port. If lane
+   does not exists, these should not be called.)
+
+In chip.c we have function
+  mv88e6xxx_serdes_power(chip, port, on)
+  
+  (This finds if the port has a lane, and if so, calls, if on=true
+   mv88e6xxx_serdes_power_up()
+     from serdes.h, and then
+   mv88e6xxx_serdes_irq_request()
+     also from serdes.h
+
+   and if on=false, calls _irq_free() & _serdes_power_down()
+  )
+
+So if I call
+  mv88e6xxx_serdes_power(chip, port, true)
+it goes
+    mv88e6xxx_serdes_power_up(chip, port, lane)
+      chip->info->ops->serdes_power(chip, port, lane, true)
+so the `on` argument is used in some places, but in other places there
+are two functions instead.
+
+Which I find a little weird.
+
+Marek

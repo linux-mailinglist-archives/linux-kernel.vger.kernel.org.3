@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCEE6469C74
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A28469CD3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357017AbhLFPWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:22:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55504 "EHLO
+        id S1386233AbhLFP0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:26:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357351AbhLFPQE (ORCPT
+        with ESMTP id S1359277AbhLFPRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:16:04 -0500
+        Mon, 6 Dec 2021 10:17:05 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706F0C08EA6F;
-        Mon,  6 Dec 2021 07:08:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D0BC08ECAF;
+        Mon,  6 Dec 2021 07:10:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 382ADB8111A;
-        Mon,  6 Dec 2021 15:08:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90714C341C6;
-        Mon,  6 Dec 2021 15:08:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD927B81018;
+        Mon,  6 Dec 2021 15:10:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D0A9C341C1;
+        Mon,  6 Dec 2021 15:10:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803309;
-        bh=434e/ZxPGuSeDs72kU1ycrzQwAILHH9wzZC+DTBt+wY=;
+        s=korg; t=1638803412;
+        bh=LhjLAzekzI9R70w0vdH9GGudTohp+gWgHmaeGmOke8k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=reVWBj4dilAZWYqEmbJcbtCKTRnrgIrbJflpD0EcRjo1xb6tXte9UnnRszcNARjFZ
-         I+jeHB3yepoig82Xzax6/ojAdtsWdQamhCb3qRgREc9lGoOD2lGo//BKZewZHCwwWS
-         k4G3CiEL4zP4rGTEKFC1namQyoa1EcSUUuwcdg1o=
+        b=z3pPTsNLTKq1l0n6grYGWND3nVJ4nb4W/VoW9yCLuKkLvqRNL3HrPFGLHu9bziCFp
+         QUXG55lcmFUtY+LgWgwykbOa0EvUj6OWAFSgv5dvikFYw+GBquUwHpth0+OqibXkpg
+         ev34FZkU+Q7rin3CYnhGvxxZjT5LeKCfTKwHfxlQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joerg Roedel <jroedel@suse.de>,
-        Borislav Petkov <bp@suse.de>
-Subject: [PATCH 4.14 102/106] x86/64/mm: Map all kernel memory into trampoline_pgd
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.19 33/48] net: annotate data-races on txq->xmit_lock_owner
 Date:   Mon,  6 Dec 2021 15:56:50 +0100
-Message-Id: <20211206145559.082609642@linuxfoundation.org>
+Message-Id: <20211206145549.971119688@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+References: <20211206145548.859182340@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,93 +49,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joerg Roedel <jroedel@suse.de>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 51523ed1c26758de1af7e58730a656875f72f783 upstream.
+commit 7a10d8c810cfad3e79372d7d1c77899d86cd6662 upstream.
 
-The trampoline_pgd only maps the 0xfffffff000000000-0xffffffffffffffff
-range of kernel memory (with 4-level paging). This range contains the
-kernel's text+data+bss mappings and the module mapping space but not the
-direct mapping and the vmalloc area.
+syzbot found that __dev_queue_xmit() is reading txq->xmit_lock_owner
+without annotations.
 
-This is enough to get the application processors out of real-mode, but
-for code that switches back to real-mode the trampoline_pgd is missing
-important parts of the address space. For example, consider this code
-from arch/x86/kernel/reboot.c, function machine_real_restart() for a
-64-bit kernel:
+No serious issue there, let's document what is happening there.
 
-  #ifdef CONFIG_X86_32
-  	load_cr3(initial_page_table);
-  #else
-  	write_cr3(real_mode_header->trampoline_pgd);
+BUG: KCSAN: data-race in __dev_queue_xmit / __dev_queue_xmit
 
-  	/* Exiting long mode will fail if CR4.PCIDE is set. */
-  	if (boot_cpu_has(X86_FEATURE_PCID))
-  		cr4_clear_bits(X86_CR4_PCIDE);
-  #endif
+write to 0xffff888139d09484 of 4 bytes by interrupt on cpu 0:
+ __netif_tx_unlock include/linux/netdevice.h:4437 [inline]
+ __dev_queue_xmit+0x948/0xf70 net/core/dev.c:4229
+ dev_queue_xmit_accel+0x19/0x20 net/core/dev.c:4265
+ macvlan_queue_xmit drivers/net/macvlan.c:543 [inline]
+ macvlan_start_xmit+0x2b3/0x3d0 drivers/net/macvlan.c:567
+ __netdev_start_xmit include/linux/netdevice.h:4987 [inline]
+ netdev_start_xmit include/linux/netdevice.h:5001 [inline]
+ xmit_one+0x105/0x2f0 net/core/dev.c:3590
+ dev_hard_start_xmit+0x72/0x120 net/core/dev.c:3606
+ sch_direct_xmit+0x1b2/0x7c0 net/sched/sch_generic.c:342
+ __dev_xmit_skb+0x83d/0x1370 net/core/dev.c:3817
+ __dev_queue_xmit+0x590/0xf70 net/core/dev.c:4194
+ dev_queue_xmit+0x13/0x20 net/core/dev.c:4259
+ neigh_hh_output include/net/neighbour.h:511 [inline]
+ neigh_output include/net/neighbour.h:525 [inline]
+ ip6_finish_output2+0x995/0xbb0 net/ipv6/ip6_output.c:126
+ __ip6_finish_output net/ipv6/ip6_output.c:191 [inline]
+ ip6_finish_output+0x444/0x4c0 net/ipv6/ip6_output.c:201
+ NF_HOOK_COND include/linux/netfilter.h:296 [inline]
+ ip6_output+0x10e/0x210 net/ipv6/ip6_output.c:224
+ dst_output include/net/dst.h:450 [inline]
+ NF_HOOK include/linux/netfilter.h:307 [inline]
+ ndisc_send_skb+0x486/0x610 net/ipv6/ndisc.c:508
+ ndisc_send_rs+0x3b0/0x3e0 net/ipv6/ndisc.c:702
+ addrconf_rs_timer+0x370/0x540 net/ipv6/addrconf.c:3898
+ call_timer_fn+0x2e/0x240 kernel/time/timer.c:1421
+ expire_timers+0x116/0x240 kernel/time/timer.c:1466
+ __run_timers+0x368/0x410 kernel/time/timer.c:1734
+ run_timer_softirq+0x2e/0x60 kernel/time/timer.c:1747
+ __do_softirq+0x158/0x2de kernel/softirq.c:558
+ __irq_exit_rcu kernel/softirq.c:636 [inline]
+ irq_exit_rcu+0x37/0x70 kernel/softirq.c:648
+ sysvec_apic_timer_interrupt+0x3e/0xb0 arch/x86/kernel/apic/apic.c:1097
+ asm_sysvec_apic_timer_interrupt+0x12/0x20
 
-  	/* Jump to the identity-mapped low memory code */
-  #ifdef CONFIG_X86_32
-  	asm volatile("jmpl *%0" : :
-  		     "rm" (real_mode_header->machine_real_restart_asm),
-  		     "a" (type));
-  #else
-  	asm volatile("ljmpl *%0" : :
-  		     "m" (real_mode_header->machine_real_restart_asm),
-  		     "D" (type));
-  #endif
+read to 0xffff888139d09484 of 4 bytes by interrupt on cpu 1:
+ __dev_queue_xmit+0x5e3/0xf70 net/core/dev.c:4213
+ dev_queue_xmit_accel+0x19/0x20 net/core/dev.c:4265
+ macvlan_queue_xmit drivers/net/macvlan.c:543 [inline]
+ macvlan_start_xmit+0x2b3/0x3d0 drivers/net/macvlan.c:567
+ __netdev_start_xmit include/linux/netdevice.h:4987 [inline]
+ netdev_start_xmit include/linux/netdevice.h:5001 [inline]
+ xmit_one+0x105/0x2f0 net/core/dev.c:3590
+ dev_hard_start_xmit+0x72/0x120 net/core/dev.c:3606
+ sch_direct_xmit+0x1b2/0x7c0 net/sched/sch_generic.c:342
+ __dev_xmit_skb+0x83d/0x1370 net/core/dev.c:3817
+ __dev_queue_xmit+0x590/0xf70 net/core/dev.c:4194
+ dev_queue_xmit+0x13/0x20 net/core/dev.c:4259
+ neigh_resolve_output+0x3db/0x410 net/core/neighbour.c:1523
+ neigh_output include/net/neighbour.h:527 [inline]
+ ip6_finish_output2+0x9be/0xbb0 net/ipv6/ip6_output.c:126
+ __ip6_finish_output net/ipv6/ip6_output.c:191 [inline]
+ ip6_finish_output+0x444/0x4c0 net/ipv6/ip6_output.c:201
+ NF_HOOK_COND include/linux/netfilter.h:296 [inline]
+ ip6_output+0x10e/0x210 net/ipv6/ip6_output.c:224
+ dst_output include/net/dst.h:450 [inline]
+ NF_HOOK include/linux/netfilter.h:307 [inline]
+ ndisc_send_skb+0x486/0x610 net/ipv6/ndisc.c:508
+ ndisc_send_rs+0x3b0/0x3e0 net/ipv6/ndisc.c:702
+ addrconf_rs_timer+0x370/0x540 net/ipv6/addrconf.c:3898
+ call_timer_fn+0x2e/0x240 kernel/time/timer.c:1421
+ expire_timers+0x116/0x240 kernel/time/timer.c:1466
+ __run_timers+0x368/0x410 kernel/time/timer.c:1734
+ run_timer_softirq+0x2e/0x60 kernel/time/timer.c:1747
+ __do_softirq+0x158/0x2de kernel/softirq.c:558
+ __irq_exit_rcu kernel/softirq.c:636 [inline]
+ irq_exit_rcu+0x37/0x70 kernel/softirq.c:648
+ sysvec_apic_timer_interrupt+0x8d/0xb0 arch/x86/kernel/apic/apic.c:1097
+ asm_sysvec_apic_timer_interrupt+0x12/0x20
+ kcsan_setup_watchpoint+0x94/0x420 kernel/kcsan/core.c:443
+ folio_test_anon include/linux/page-flags.h:581 [inline]
+ PageAnon include/linux/page-flags.h:586 [inline]
+ zap_pte_range+0x5ac/0x10e0 mm/memory.c:1347
+ zap_pmd_range mm/memory.c:1467 [inline]
+ zap_pud_range mm/memory.c:1496 [inline]
+ zap_p4d_range mm/memory.c:1517 [inline]
+ unmap_page_range+0x2dc/0x3d0 mm/memory.c:1538
+ unmap_single_vma+0x157/0x210 mm/memory.c:1583
+ unmap_vmas+0xd0/0x180 mm/memory.c:1615
+ exit_mmap+0x23d/0x470 mm/mmap.c:3170
+ __mmput+0x27/0x1b0 kernel/fork.c:1113
+ mmput+0x3d/0x50 kernel/fork.c:1134
+ exit_mm+0xdb/0x170 kernel/exit.c:507
+ do_exit+0x608/0x17a0 kernel/exit.c:819
+ do_group_exit+0xce/0x180 kernel/exit.c:929
+ get_signal+0xfc3/0x1550 kernel/signal.c:2852
+ arch_do_signal_or_restart+0x8c/0x2e0 arch/x86/kernel/signal.c:868
+ handle_signal_work kernel/entry/common.c:148 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+ exit_to_user_mode_prepare+0x113/0x190 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x20/0x40 kernel/entry/common.c:300
+ do_syscall_64+0x50/0xd0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-The code switches to the trampoline_pgd, which unmaps the direct mapping
-and also the kernel stack. The call to cr4_clear_bits() will find no
-stack and crash the machine. The real_mode_header pointer below points
-into the direct mapping, and dereferencing it also causes a crash.
+value changed: 0x00000000 -> 0xffffffff
 
-The reason this does not crash always is only that kernel mappings are
-global and the CR3 switch does not flush those mappings. But if theses
-mappings are not in the TLB already, the above code will crash before it
-can jump to the real-mode stub.
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 PID: 28712 Comm: syz-executor.0 Tainted: G        W         5.16.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
 
-Extend the trampoline_pgd to contain all kernel mappings to prevent
-these crashes and to make code which runs on this page-table more
-robust.
-
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: stable@vger.kernel.org
-Link: https://lkml.kernel.org/r/20211202153226.22946-5-joro@8bytes.org
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Link: https://lore.kernel.org/r/20211130170155.2331929-1-eric.dumazet@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/realmode/init.c |   12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ include/linux/netdevice.h |   19 +++++++++++++------
+ net/core/dev.c            |    5 ++++-
+ 2 files changed, 17 insertions(+), 7 deletions(-)
 
---- a/arch/x86/realmode/init.c
-+++ b/arch/x86/realmode/init.c
-@@ -57,6 +57,7 @@ static void __init setup_real_mode(void)
- #ifdef CONFIG_X86_64
- 	u64 *trampoline_pgd;
- 	u64 efer;
-+	int i;
- #endif
- 
- 	base = (unsigned char *)real_mode_header;
-@@ -114,8 +115,17 @@ static void __init setup_real_mode(void)
- 		trampoline_header->flags |= TH_FLAGS_SME_ACTIVE;
- 
- 	trampoline_pgd = (u64 *) __va(real_mode_header->trampoline_pgd);
-+
-+	/* Map the real mode stub as virtual == physical */
- 	trampoline_pgd[0] = trampoline_pgd_entry.pgd;
--	trampoline_pgd[511] = init_top_pgt[511].pgd;
-+
-+	/*
-+	 * Include the entirety of the kernel mapping into the trampoline
-+	 * PGD.  This way, all mappings present in the normal kernel page
-+	 * tables are usable while running on trampoline_pgd.
-+	 */
-+	for (i = pgd_index(__PAGE_OFFSET); i < PTRS_PER_PGD; i++)
-+		trampoline_pgd[i] = init_top_pgt[i].pgd;
- #endif
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3840,7 +3840,8 @@ static inline u32 netif_msg_init(int deb
+ static inline void __netif_tx_lock(struct netdev_queue *txq, int cpu)
+ {
+ 	spin_lock(&txq->_xmit_lock);
+-	txq->xmit_lock_owner = cpu;
++	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++	WRITE_ONCE(txq->xmit_lock_owner, cpu);
  }
+ 
+ static inline bool __netif_tx_acquire(struct netdev_queue *txq)
+@@ -3857,26 +3858,32 @@ static inline void __netif_tx_release(st
+ static inline void __netif_tx_lock_bh(struct netdev_queue *txq)
+ {
+ 	spin_lock_bh(&txq->_xmit_lock);
+-	txq->xmit_lock_owner = smp_processor_id();
++	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++	WRITE_ONCE(txq->xmit_lock_owner, smp_processor_id());
+ }
+ 
+ static inline bool __netif_tx_trylock(struct netdev_queue *txq)
+ {
+ 	bool ok = spin_trylock(&txq->_xmit_lock);
+-	if (likely(ok))
+-		txq->xmit_lock_owner = smp_processor_id();
++
++	if (likely(ok)) {
++		/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++		WRITE_ONCE(txq->xmit_lock_owner, smp_processor_id());
++	}
+ 	return ok;
+ }
+ 
+ static inline void __netif_tx_unlock(struct netdev_queue *txq)
+ {
+-	txq->xmit_lock_owner = -1;
++	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++	WRITE_ONCE(txq->xmit_lock_owner, -1);
+ 	spin_unlock(&txq->_xmit_lock);
+ }
+ 
+ static inline void __netif_tx_unlock_bh(struct netdev_queue *txq)
+ {
+-	txq->xmit_lock_owner = -1;
++	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++	WRITE_ONCE(txq->xmit_lock_owner, -1);
+ 	spin_unlock_bh(&txq->_xmit_lock);
+ }
+ 
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -3831,7 +3831,10 @@ static int __dev_queue_xmit(struct sk_bu
+ 	if (dev->flags & IFF_UP) {
+ 		int cpu = smp_processor_id(); /* ok because BHs are off */
+ 
+-		if (txq->xmit_lock_owner != cpu) {
++		/* Other cpus might concurrently change txq->xmit_lock_owner
++		 * to -1 or to their cpu id, but not to our id.
++		 */
++		if (READ_ONCE(txq->xmit_lock_owner) != cpu) {
+ 			if (dev_xmit_recursion())
+ 				goto recursion_alert;
  
 
 

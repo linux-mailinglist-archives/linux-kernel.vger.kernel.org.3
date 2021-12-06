@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D057469A9A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CB8469EA5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345568AbhLFPJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:09:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
+        id S1385726AbhLFPnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346692AbhLFPG6 (ORCPT
+        with ESMTP id S1386702AbhLFP0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:06:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47892C07E5F7;
-        Mon,  6 Dec 2021 07:03:11 -0800 (PST)
+        Mon, 6 Dec 2021 10:26:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5A7C0698C1;
+        Mon,  6 Dec 2021 07:17:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08E88B81018;
-        Mon,  6 Dec 2021 15:03:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47590C341C5;
-        Mon,  6 Dec 2021 15:03:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B77261357;
+        Mon,  6 Dec 2021 15:17:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C88C53FD5;
+        Mon,  6 Dec 2021 15:17:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802988;
-        bh=hKuToEGQdkelpbyquX+wm/ISvQPDg6rdgOlJly+IrOY=;
+        s=korg; t=1638803846;
+        bh=XOa1sU5GhdZPGlaJVdpQfoEu2SMilBqMZDq/aGQ1vRM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sih2tVmx17ohEuTXw/FBXJ4S0TWnpjKMv+2yiM6q6qfXPCOTCiXEvW9pr6HYKKT6c
-         YVDzgXs/idg/++NEzAATVqQKqXvaIGOKSoYOxc0c7cUoxiNPfDqKqd/R/jc8KdaFmj
-         pp9G5UVJuG3toHV1PDa32cc6EeEEL0XsQYd8SsKU=
+        b=tDIkxtU9tGx4hoL2GiGhzM8HpohghlfRo29nR6iCLcvk9MGlPj3j+S4Iq/OzfvYYC
+         5M002H8tawqrY6DQF/1mfR6qqOwCPfe5SDCgpXWUt1h7RqVGxHCf+WMZdhII9xi81x
+         g/9bQwQTDj7/uANPL5kOGlCT1eWQGa4dHGazLtMk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Frank Dinoff <fdinoff@google.com>,
-        Miklos Szeredi <mszeredi@redhat.com>
-Subject: [PATCH 4.9 09/62] fuse: fix page stealing
+        stable@vger.kernel.org, Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 5.10 035/130] cpufreq: Fix get_cpu_device() failure in add_cpu_dev_symlink()
 Date:   Mon,  6 Dec 2021 15:55:52 +0100
-Message-Id: <20211206145549.480110780@linuxfoundation.org>
+Message-Id: <20211206145600.881311151@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,64 +49,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miklos Szeredi <mszeredi@redhat.com>
+From: Xiongfeng Wang <wangxiongfeng2@huawei.com>
 
-commit 712a951025c0667ff00b25afc360f74e639dfabe upstream.
+commit 2c1b5a84669d2477d8fffe9136e86a2cff591729 upstream.
 
-It is possible to trigger a crash by splicing anon pipe bufs to the fuse
-device.
+When I hot added a CPU, I found 'cpufreq' directory was not created
+below /sys/devices/system/cpu/cpuX/.
 
-The reason for this is that anon_pipe_buf_release() will reuse buf->page if
-the refcount is 1, but that page might have already been stolen and its
-flags modified (e.g. PG_lru added).
+It is because get_cpu_device() failed in add_cpu_dev_symlink().
 
-This happens in the unlikely case of fuse_dev_splice_write() getting around
-to calling pipe_buf_release() after a page has been stolen, added to the
-page cache and removed from the page cache.
+cpufreq_add_dev() is the .add_dev callback of a CPU subsys interface.
+It will be called when the CPU device registered into the system.
+The call chain is as follows:
 
-Fix by calling pipe_buf_release() right after the page was inserted into
-the page cache.  In this case the page has an elevated refcount so any
-release function will know that the page isn't reusable.
+  register_cpu()
+  ->device_register()
+   ->device_add()
+    ->bus_probe_device()
+     ->cpufreq_add_dev()
 
-Reported-by: Frank Dinoff <fdinoff@google.com>
-Link: https://lore.kernel.org/r/CAAmZXrsGg2xsP1CK+cbuEMumtrqdvD-NKnWzhNcvn71RV3c1yw@mail.gmail.com/
-Fixes: dd3bb14f44a6 ("fuse: support splice() writing to fuse device")
-Cc: <stable@vger.kernel.org> # v2.6.35
-Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+But only after the CPU device has been registered, we can get the
+CPU device by get_cpu_device(), otherwise it will return NULL.
+
+Since we already have the CPU device in cpufreq_add_dev(), pass
+it to add_cpu_dev_symlink().
+
+I noticed that the 'kobj' of the CPU device has been added into
+the system before cpufreq_add_dev().
+
+Fixes: 2f0ba790df51 ("cpufreq: Fix creation of symbolic links to policy directories")
+Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: All applicable <stable@vger.kernel.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/fuse/dev.c |   14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ drivers/cpufreq/cpufreq.c |    9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
---- a/fs/fuse/dev.c
-+++ b/fs/fuse/dev.c
-@@ -898,6 +898,12 @@ static int fuse_try_move_page(struct fus
- 		goto out_put_old;
- 	}
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1004,10 +1004,9 @@ static struct kobj_type ktype_cpufreq =
+ 	.release	= cpufreq_sysfs_release,
+ };
  
-+	/*
-+	 * Release while we have extra ref on stolen page.  Otherwise
-+	 * anon_pipe_buf_release() might think the page can be reused.
-+	 */
-+	pipe_buf_release(cs->pipe, buf);
-+
- 	get_page(newpage);
+-static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu)
++static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu,
++				struct device *dev)
+ {
+-	struct device *dev = get_cpu_device(cpu);
+-
+ 	if (unlikely(!dev))
+ 		return;
  
- 	if (!(buf->flags & PIPE_BUF_FLAG_LRU))
-@@ -2040,8 +2046,12 @@ static ssize_t fuse_dev_splice_write(str
+@@ -1391,7 +1390,7 @@ static int cpufreq_online(unsigned int c
+ 	if (new_policy) {
+ 		for_each_cpu(j, policy->related_cpus) {
+ 			per_cpu(cpufreq_cpu_data, j) = policy;
+-			add_cpu_dev_symlink(policy, j);
++			add_cpu_dev_symlink(policy, j, get_cpu_device(j));
+ 		}
  
- 	pipe_lock(pipe);
- out_free:
--	for (idx = 0; idx < nbuf; idx++)
--		pipe_buf_release(pipe, &bufs[idx]);
-+	for (idx = 0; idx < nbuf; idx++) {
-+		struct pipe_buffer *buf = &bufs[idx];
-+
-+		if (buf->ops)
-+			pipe_buf_release(pipe, buf);
-+	}
- 	pipe_unlock(pipe);
+ 		policy->min_freq_req = kzalloc(2 * sizeof(*policy->min_freq_req),
+@@ -1553,7 +1552,7 @@ static int cpufreq_add_dev(struct device
+ 	/* Create sysfs link on CPU registration */
+ 	policy = per_cpu(cpufreq_cpu_data, cpu);
+ 	if (policy)
+-		add_cpu_dev_symlink(policy, cpu);
++		add_cpu_dev_symlink(policy, cpu, dev);
  
- 	kfree(bufs);
+ 	return 0;
+ }
 
 

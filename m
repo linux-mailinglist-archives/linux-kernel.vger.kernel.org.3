@@ -2,98 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 113184699DA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA0846999B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:58:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345078AbhLFPEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:04:11 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36402 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345306AbhLFPDd (ORCPT
+        id S245310AbhLFPBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:01:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239060AbhLFPBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:03:33 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3661B81112;
-        Mon,  6 Dec 2021 15:00:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BF3BC341C1;
-        Mon,  6 Dec 2021 15:00:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802802;
-        bh=Ug+TWSLq1mJYFr8I3bm6JpeLTyEOeY2Ps6JFuc9N3sE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l/3kRVHo4IfORaHB1tFwXlZcbrNRPePCW9XDtlGA7ba+m1lC8SruHcjcMftebvQWM
-         PAvt+Usaeuy5RpWrBXxw3+cY2Wsvv/Sinw0NbiHCFvHhZMlmUelZWAgSaUpqiA4nIl
-         VtxdtqEQqYHjxG5b4HzA9kKj3rrE7ycJBruzirUw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lee Duncan <lduncan@suse.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 38/52] scsi: iscsi: Unblock session then wake up error handler
-Date:   Mon,  6 Dec 2021 15:56:22 +0100
-Message-Id: <20211206145549.203714597@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
-References: <20211206145547.892668902@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 6 Dec 2021 10:01:42 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8747C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 06:58:13 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id p8so21515839ljo.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 06:58:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=WA3cO3ZM0T/iyzItru076b6maX8n+6FYA8TVbo91N+I=;
+        b=YuRCjflE9nYhUiuwfRHHni8vH2RXJmlB2rK2J9WoIpyMqHiljAbJ9yD8k1ZxTfTNe3
+         D5p8Il2le0mfd25bewXDOzplN2yBIOgvL7hjFHUCaZlE6tccakFitgfg92nE2FGM5UAn
+         XlaaiH+lIgVLAXUJSnFl9aeXV4E3+e+HIbNviol9HNbO68yXPfo/Tf2U1+vjrFPs4Y77
+         uDwfziDMHNKOUTHghV2UjW27vbEDVsXO251sVyUWhZhJ+9BRUTvg5T3f+dGxrjX1tDcv
+         +dE5ZwLtBQZe6GGlpKHfiOL3wNle3Xf/3xfKaWo04LabvA+iAq0Gn1nceFBbMfJYQCkD
+         zcOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=WA3cO3ZM0T/iyzItru076b6maX8n+6FYA8TVbo91N+I=;
+        b=iSObxFpHtyYE7Z9dSWouzCKVXiQS3gurOAGpelnxhLiJKcSE7zGZg4GQ1YtkppW7m2
+         ctjMLx5l6dKZbW5xlBiq+lQTHJ7itigp/iZiOXW2yIERb0vpDWCYrLwcWIdOvsVTp0Wq
+         zJjgClG2NLPvXyD5guA5KRbJpHNyTb74OvqCaWouHk/qNGuoK7YYpivE60hQDlMWwRE9
+         dkTOI5sMkeoQSTBjekPYAqfpWq2hxthnsP3b4KuvLocev1pSKeqDvR/hFTn0dIXOpg3y
+         TB7HBFTT0K0k6YwoOaIQk9yfLEfqqdhhkKzjZoBf2oQFx/R+aHxzj39lAlODnLgygZt+
+         38Gg==
+X-Gm-Message-State: AOAM530wD19rdSM4GPBXc4UoJrAVpdZLhsE4KyUM4TQoW7yqRVlqUxsD
+        uS59ERXFFKBzMQPSR1pFzNuLm3Xr7Ix9o5zZ7uA=
+X-Google-Smtp-Source: ABdhPJzeXWyjTK0G4K7gGd++Fz0kVX4E5VzOZbydRgypaOBQtQ8oklXeAJCgfyC9hdCHQNAFbaCCESktOQgDTyljijs=
+X-Received: by 2002:a2e:95cb:: with SMTP id y11mr35945695ljh.461.1638802692152;
+ Mon, 06 Dec 2021 06:58:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6512:3b5:0:0:0:0 with HTTP; Mon, 6 Dec 2021 06:58:10
+ -0800 (PST)
+Reply-To: mahamedaru016@gmail.com
+From:   "MESSAGE  From Mr. Mohamed Aru" <mohaabudu3@gmail.com>
+Date:   Mon, 6 Dec 2021 15:58:10 +0100
+Message-ID: <CA+NGW+fxKwBcRUuDjf3XZV6SKKxd08E0DfOkeOVPU2mQun=Jsw@mail.gmail.com>
+Subject: CONTACT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Christie <michael.christie@oracle.com>
+Dear Friend,
 
-[ Upstream commit a0c2f8b6709a9a4af175497ca65f93804f57b248 ]
+I am Mr. Mohamed Aru. I am working with one of the prime banks in
+Burkina Faso. I have a business proposal which concerns the transfer
+of. $25,500,000.00 (Twenty Five Million Five Hundred Thousand US
+Dollars). into a foreign account. Everything about this transaction
+shall be legally done without any problem.Further details of the
+transfer will be forwarded to you as soon as i receive your response.
+Please Reply me in my privet E-mail. (mahamedaru016@gmail.com) If you
+are willing to work with me, send me immediately the information
+listed below.
 
-We can race where iscsi_session_recovery_timedout() has woken up the error
-handler thread and it's now setting the devices to offline, and
-session_recovery_timedout()'s call to scsi_target_unblock() is also trying
-to set the device's state to transport-offline. We can then get a mix of
-states.
-
-For the case where we can't relogin we want the devices to be in
-transport-offline so when we have repaired the connection
-__iscsi_unblock_session() can set the state back to running.
-
-Set the device state then call into libiscsi to wake up the error handler.
-
-Link: https://lore.kernel.org/r/20211105221048.6541-2-michael.christie@oracle.com
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/scsi_transport_iscsi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index 9906a3b562e93..269277c1d9dcc 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -1896,12 +1896,12 @@ static void session_recovery_timedout(struct work_struct *work)
- 	}
- 	spin_unlock_irqrestore(&session->lock, flags);
- 
--	if (session->transport->session_recovery_timedout)
--		session->transport->session_recovery_timedout(session);
--
- 	ISCSI_DBG_TRANS_SESSION(session, "Unblocking SCSI target\n");
- 	scsi_target_unblock(&session->dev, SDEV_TRANSPORT_OFFLINE);
- 	ISCSI_DBG_TRANS_SESSION(session, "Completed unblocking SCSI target\n");
-+
-+	if (session->transport->session_recovery_timedout)
-+		session->transport->session_recovery_timedout(session);
- }
- 
- static void __iscsi_unblock_session(struct work_struct *work)
--- 
-2.33.0
-
-
-
+Your   Name=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
+Your   Nationality=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
+Your  Age=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=
+=80=A6
+Your  Occupation=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
+Your Mobile Telephone Line=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
+Your Address=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=
+=E2=80=A6=E2=80=A6=E2=80=A6
+Thanks
+Mr. Mohamed Aru

@@ -2,229 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1A84693A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 11:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7409C4693EF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 11:29:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237702AbhLFKaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 05:30:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
+        id S237524AbhLFKdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 05:33:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbhLFKaK (ORCPT
+        with ESMTP id S236616AbhLFKdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 05:30:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E20AC061746;
-        Mon,  6 Dec 2021 02:26:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB46DB81059;
-        Mon,  6 Dec 2021 10:26:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CA32C341C2;
-        Mon,  6 Dec 2021 10:26:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638786399;
-        bh=vchL0exgypXeLVmbDjGhhC/0ASb7p1CByasQVsC649g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aqZuPg3VTYKEMfFlWFO80TQHKYaJtAEyqoNq64R155H4xfExmfaJnZwx9ff0Udc+6
-         MpqXfWIsKGGWHUhOZOmip3HHBgff2gKTlSqwwWx1lpczjkapo2gsavlJNjl9oQdMzB
-         qjYHlcJZ5G55krvyE0uvP8XG5F3Q+EJ2NKwParUl/9S6JOSdg4tIS58qvMKqKID+Ap
-         ypLupHJJVSVDAD85NLxRfcERdx9XR7X3NT+mDUTATQPKVTW4QpAbqer7UNEROXwic0
-         0pBjJ4FCGkbelA1xkehb727x91SeRJB+309xvnp+L1Prfth206gSo07vWYkeQPZBQR
-         KasMdXycl6zAQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1muBCf-00A94d-BG; Mon, 06 Dec 2021 10:26:37 +0000
-Date:   Mon, 06 Dec 2021 10:26:37 +0000
-Message-ID: <87y24y112a.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        John Crispin <john@phrozen.org>, Biwen Li <biwen.li@nxp.com>,
-        Chris Brandt <Chris.Brandt@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH] of/irq: Add a quirk for controllers with their own definition of interrupt-map
-In-Reply-To: <CA+V-a8uc0vHVRJ5_Zycw-qiZVbyNBw4HO2XVPbKba3ybooqFtQ@mail.gmail.com>
-References: <20211122103032.517923-1-maz@kernel.org>
-        <CAMuHMdX2ZRvDYA3idmw3nBcP6CO=2od6ZU-UeJo9vYsuB=fQNQ@mail.gmail.com>
-        <8735no70tt.wl-maz@kernel.org>
-        <CAMuHMdVS67BLP2XEdD6ZvVBVE2x11gKnQa1TqG659HXPM5scqQ@mail.gmail.com>
-        <CAMuHMdWJhnXabKGpW7k944dzQHtwQtxw-yb2bRBsoaMw6N6nuA@mail.gmail.com>
-        <87tug3clvc.wl-maz@kernel.org>
-        <CAMuHMdWGb2xik+94RVwtq8E6+9eN=HfQLX3a4sTjKQXR96Udkw@mail.gmail.com>
-        <87r1b7ck40.wl-maz@kernel.org>
-        <OSZPR01MB7019E7DD7119EFF9C994AA62AA649@OSZPR01MB7019.jpnprd01.prod.outlook.com>
-        <87tufvmes9.wl-maz@kernel.org>
-        <CA+V-a8siHRjF+bJu88QFwz0a_MZ+kiJEwmER58_feyr8O+WNGA@mail.gmail.com>
-        <CAL_JsqK+GcnChx3i9fsYnw+FzZgON4PtKB=CzYLUj6sXtxX6fQ@mail.gmail.com>
-        <CA+V-a8sVS_1hUWJ3uM+VffGyMtdnctBOJTyHTQAoJZGOh0a1Tw@mail.gmail.com>
-        <87bl21mqwk.wl-maz@kernel.org>
-        <CA+V-a8vA0P-yhm2SHJmVh+cuUw7qodQLQBqzNPTz31x5q18xaA@mail.gmail.com>
-        <CAL_JsqJ1Dw9C_GQjto-E2ch7fdN=3f4Qz9qYuf2iYwMRLkdroA@mail.gmail.com>
-        <CA+V-a8uOkkG8_mz-PjL2q22hfSXuKSpwuQ-E2_pvCc1sKCJ+zw@mail.gmail.com>
-        <CA+V-a8uc0vHVRJ5_Zycw-qiZVbyNBw4HO2XVPbKba3ybooqFtQ@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: prabhakar.csengg@gmail.com, robh@kernel.org, geert@linux-m68k.org, prabhakar.mahadev-lad.rj@bp.renesas.com, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, kernel-team@android.com, john@phrozen.org, biwen.li@nxp.com, Chris.Brandt@renesas.com, linux-renesas-soc@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+        Mon, 6 Dec 2021 05:33:14 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94427C0613F8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 02:29:44 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id c32so24138887lfv.4
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 02:29:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y/aEdQXaORv8l8iP33+Ms57TgKkJAnc4HC3EItYSgUw=;
+        b=mxmcxFnHOjLMmFokTw2XUgQVR5hYlqz7gpK5NdCwDT/Og37kuC7I8sAI31JDQ4pxNP
+         wQEgf6Veq4K9bGEMtvMAQL7SJlqnUV2c8cRbzdHZ1lNgL381nat2ZFeczfI+zivOp0wE
+         U6VqFkBSisSVzWDDRWaIWZ3mKjBEr1MI9G3DozJCfis93f1zNo1krQEel5b7gakSafr9
+         a0AIaKcLDtzEbKLxNP7B9bSIv+Pwet0ymg8owabic3CcS7bGL21hTEqaf1pGKcsx0+Up
+         hgmnDd7Zab7HCPTg0ptNg3ldIogFkKC3ZAj62yCaMHd/wizDTAWXMlV9MyHeHXBrWRGs
+         UU7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y/aEdQXaORv8l8iP33+Ms57TgKkJAnc4HC3EItYSgUw=;
+        b=NK4d63AjlNYBghn9InLA7WbCB7kpxDWCPNw/v6AqagSsIANQvXZlnETWn5PEPM6C98
+         W99TwzVkGwueGdo38Tgcq8GBv5b++7wxZat+ggJ3eBsE94BmXdB91rd5RwpSFwBkurBU
+         k0rkCfS+nK5a/t/yaAEbS86+H8Tv7Pwm+D4sSAzJ97hkb+BifHgud/Ll2PzFAEnx73eJ
+         esbrdECDQRpuTqojjf/mww1Q5z7Of1GFqX83ZReWaXIKFBmV4b/WMQu9lOz/RRGvm5Zi
+         TxHxMdeMBSvRtK2wulVLOEsCqUbgn7RE7SmIq8ELYJyLc2eYBJfdZm71AyC7eFdYHxPX
+         FJOQ==
+X-Gm-Message-State: AOAM532aROrOQt62nuqNDj3Z/KlitgIcWQLyVa4L24KgsJdmbE6p17Ud
+        LzuiSJo65brvbkAgt4Hfr7NGzw==
+X-Google-Smtp-Source: ABdhPJz//+sU+FT9yaz5d8hL56MAE1by66Yalv6F4erw1ZQq4HM1mGHiw3GIRqhqoT71z6aied+vLg==
+X-Received: by 2002:a05:6512:693:: with SMTP id t19mr34292201lfe.647.1638786583113;
+        Mon, 06 Dec 2021 02:29:43 -0800 (PST)
+Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
+        by smtp.gmail.com with ESMTPSA id u10sm1312802lfb.209.2021.12.06.02.29.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 02:29:42 -0800 (PST)
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     shuah@kernel.org
+Cc:     nathan@kernel.org, ndesaulniers@google.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH v2] selftests: vDSO: parse: warning: fix assignment as a condition
+Date:   Mon,  6 Dec 2021 11:29:31 +0100
+Message-Id: <20211206102931.1433871-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 05 Dec 2021 22:27:35 +0000,
-"Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
-> 
-> On Wed, Dec 1, 2021 at 4:16 PM Lad, Prabhakar
-> <prabhakar.csengg@gmail.com> wrote:
-> >
-> > On Wed, Dec 1, 2021 at 2:36 PM Rob Herring <robh@kernel.org> wrote:
-> > >
-> > > On Wed, Dec 1, 2021 at 7:37 AM Lad, Prabhakar
-> > > <prabhakar.csengg@gmail.com> wrote:
-> > > >
-> > > > Hi Marc/Rob,
-> > > >
-> > > > On Tue, Nov 30, 2021 at 6:37 PM Marc Zyngier <maz@kernel.org> wrote:
-> > > > >
-> > > > > On Tue, 30 Nov 2021 12:52:21 +0000,
-> > > > > "Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
-> > > > > >
-> > > > > > On Mon, Nov 29, 2021 at 6:33 PM Rob Herring <robh@kernel.org> wrote:
-> > > > > > >
-> > > > > > > interrupts would work just fine here:
-> > > > > > >
-> > > > > > > interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-> > > > > > >   <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
-> > > > > > >   <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
-> > > > > > >   <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-> > > > > > >   <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-> > > > > > >   <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
-> > > > > > >   <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
-> > > > > > >   <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
-> > > > > > >
-> > > > > > > We don't need a different solution for N:1 interrupts from N:M. Sure,
-> > > > > > > that could become unweldy if there are a lot of interrupts (just like
-> > > > > > > interrupt-map), but is that an immediate problem?
-> > > > > > >
-> > > > > > It's just that with this approach the driver will have to index the
-> > > > > > interrupts instead of reading from DT.
-> > > > > >
-> > > > > > Marc - is it OK with the above approach?
-> > > > >
-> > > > > Anything that uses standard properties in a standard way works for me.
-> > > > >
-> > > > I added interrupts property now instead of interrupt-map as below:
-> > > >
-> > > > irqc: interrupt-controller@110a0000 {
-> > > >       compatible = "renesas,r9a07g044-irqc", "renesas,rzg2l-irqc";
-> > > >        #address-cells = <0>;
-> > > >        interrupt-parent = <&gic>;
-> > > >        interrupt-controller;
-> > > >        reg = <0 0x110a0000 0 0x10000>;
-> > > >        interrupts =
-> > > >                       <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 444 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 445 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 448 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 449 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 450 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 451 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 453 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 454 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 455 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 456 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 457 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 459 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 460 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 461 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 464 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 465 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 466 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 467 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 468 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 469 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 470 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 471 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 472 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 473 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                       <GIC_SPI 474 IRQ_TYPE_LEVEL_HIGH>,
-> > > >                      <GIC_SPI 475 IRQ_TYPE_LEVEL_HIGH>;
-> > > >          clocks = <&cpg CPG_MOD R9A07G044_IA55_CLK>,
-> > > >                        <&cpg CPG_MOD R9A07G044_IA55_PCLK>;
-> > > >           clock-names = "clk", "pclk";
-> > > >           power-domains = <&cpg>;
-> > > >           resets = <&cpg R9A07G044_IA55_RESETN>;
-> > > > };
-> > > >
-> > > >
-> > > > In the hierarchal interrupt code its parsed as below:
-> > > > on probe fetch the details:
-> > > > range = of_get_property(np, "interrupts", &len);
-> > > > if (!range)
-> > > >       return -EINVAL;
-> > > >
-> > > > for (len /= sizeof(*range), j = 0; len >= 3; len -= 3) {
-> > > >       if (j >= IRQC_NUM_IRQ)
-> > > >             return -EINVAL;
-> > > >
-> > > >       priv->map[j].args[0] = be32_to_cpu(*range++);
-> > > >       priv->map[j].args[1] = be32_to_cpu(*range++);
-> > > >       priv->map[j].args[2] = be32_to_cpu(*range++);
-> > > >       priv->map[j].args_count = 3;
-> > > >       j++;
-> > >
-> > > Not sure what's wrong, but you shouldn't be doing your own parsing.
-> > > The setup shouldn't look much different than a GPIO controller
-> > > interrupts except you have multiple parent interrupts.
-> > >
-> > Sorry does that mean the IRQ domain should be chained handler and not
-> > hierarchical? Or is it I have miss-understood.
+When building selftests/vDSO with clang the following warning shows up:
 
-I guess the core DT code allocates the interrupts itself, as if the
-interrupt controller was the interrupt producer itself (which isn't
-the case here), bypassing the hierarchical setup altogether.
+clang -std=gnu99 -Wno-pointer-sign vdso_test_gettimeofday.c parse_vdso.c \
+      -o /tmp/kselftest/vDSO/vdso_test_gettimeofday
+parse_vdso.c:65:9: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+                if (g = h & 0xf0000000)
+                    ~~^~~~~~~~~~~~~~~~
 
-We solved it on the MSI side by not using 'interrupts'. Either we
-adopt a similar solution for wired interrupts, or we fix the core DT
-code.
+Rework to a parentheses before doing the check.
 
-> >
-> > If the IRQ domain has to be hierarchical how do we map to the parent?
-> > (based on the previous reviews Marc had suggested to implement as
-> > hierarchical  [1])
-> >
-> Gentle ping.
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+---
 
-Please move this discussion to the relevant thread.
+v1 -> v2: fixed checkpatch warnings
 
-	M.
+ tools/testing/selftests/vDSO/parse_vdso.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
+index 413f75620a35..fdd38f7e0e43 100644
+--- a/tools/testing/selftests/vDSO/parse_vdso.c
++++ b/tools/testing/selftests/vDSO/parse_vdso.c
+@@ -62,7 +62,8 @@ static unsigned long elf_hash(const unsigned char *name)
+ 	while (*name)
+ 	{
+ 		h = (h << 4) + *name++;
+-		if (g = h & 0xf0000000)
++		g = h & 0xf0000000;
++		if (g)
+ 			h ^= g >> 24;
+ 		h &= ~g;
+ 	}
 -- 
-Without deviation from the norm, progress is not possible.
+2.33.0
+

@@ -2,163 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BCB468E41
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 01:22:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08412468E47
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 01:23:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241568AbhLFAZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 19:25:38 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35396 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbhLFAZh (ORCPT
+        id S241634AbhLFA07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 19:26:59 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:33005 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229567AbhLFA07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 19:25:37 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 541D461122
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 00:22:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A551BC00446;
-        Mon,  6 Dec 2021 00:22:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638750128;
-        bh=u6QvygQbDqsAWPW8I4rZic6C3XxTDgQWyFXspcApdRQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cfellLSiZ2Mqn7qbFmDHNnYnZQCZ1phPSaQMTF+S7Uc4KPAhqhgzyg+1I9JPicBPN
-         BYBBTVvllzaPGOSbh9m05esAtnZJqCIf9g6zNz8uVSFjHwa8jL10uZDHPibvd4Vbdf
-         EKnjq+MvGBL+/cGvKbWk4MCLIMR0dXe6tTUTy0+FbPgPlEkT4Iyjy8WuDigMTbi5Px
-         6h5IRFZWIRqsrxy/PY/nmZp+hYPDzOarebDOn09Qk5E10yR6kxgFrnk0snPx9D9TZH
-         TVmVSSjY4ukw7tlpWfqK909+Hc1QmOURifqkqsoGWfdA527JKa/Y3AfgpF5LQaGZuc
-         mk9hPktLxiQdQ==
-Date:   Mon, 6 Dec 2021 09:22:04 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     zhangyue <zhangyue1@kylinos.cn>, naveen.n.rao@linux.ibm.com,
-        anil.s.keshavamurthy@intel.com, davem@davemloft.net,
-        mhiramat@kernel.org, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kprobes: fix out-of-bounds in register_kretprobe
-Message-Id: <20211206092204.71fc11568168bf848a8e78b1@kernel.org>
-In-Reply-To: <202112051255.NQeIOpp8-lkp@intel.com>
-References: <20211201054855.5449-1-zhangyue1@kylinos.cn>
-        <202112051255.NQeIOpp8-lkp@intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Sun, 5 Dec 2021 19:26:59 -0500
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 1B5NvL4l019924;
+        Mon, 6 Dec 2021 07:57:21 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 6 Dec
+ 2021 08:22:11 +0800
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+To:     <hverkuil-cisco@xs4all.nl>, <sakari.ailus@linux.intel.com>,
+        <gregkh@linuxfoundation.org>, <laurent.pinchart@ideasonboard.com>,
+        <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
+        <andrew@aj.id.au>, <linux-media@vger.kernel.org>,
+        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] media: aspeed: move err-handling together to the bottom
+Date:   Mon, 6 Dec 2021 08:22:09 +0800
+Message-ID: <20211206002209.412-1-jammy_huang@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 1B5NvL4l019924
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steve,
+refine aspeed_video_setup_video() flow.
 
-Can you revert this patch, because as kernel-test bot says that
-this does not change anything. (rp::data_size is unsigned.)
+Change-Id: Icc7bcec800d5a9d478ead1b283fdb3aa15a86b80
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+---
+ drivers/media/platform/aspeed-video.c | 24 +++++++++++-------------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
 
-At least it should check the result of
-"sizeof(struct kretprobe_instance) + rp->data_size". Moreover,
-as I sent before as "kprobes: Limit max data_size of the kretprobe instances"
-the data_size must be limited to avoid overflow.
-
-Thank you,
-
-On Sun, 5 Dec 2021 12:26:26 +0800
-kernel test robot <lkp@intel.com> wrote:
-
-> Hi zhangyue,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on rostedt-trace/for-next]
-> [also build test WARNING on v5.16-rc3 next-20211203]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/0day-ci/linux/commits/zhangyue/kprobes-fix-out-of-bounds-in-register_kretprobe/20211201-135046
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-> config: i386-randconfig-m021-20211203 (https://download.01.org/0day-ci/archive/20211205/202112051255.NQeIOpp8-lkp@intel.com/config)
-> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> smatch warnings:
-> kernel/kprobes.c:2107 register_kretprobe() warn: always true condition '(rp->data_size >= 0) => (0-u32max >= 0)'
-> 
-> vim +2107 kernel/kprobes.c
-> 
->   2062	
->   2063	int register_kretprobe(struct kretprobe *rp)
->   2064	{
->   2065		int ret;
->   2066		struct kretprobe_instance *inst = NULL;
->   2067		int i;
->   2068		void *addr;
->   2069	
->   2070		ret = kprobe_on_func_entry(rp->kp.addr, rp->kp.symbol_name, rp->kp.offset);
->   2071		if (ret)
->   2072			return ret;
->   2073	
->   2074		/* If only 'rp->kp.addr' is specified, check reregistering kprobes */
->   2075		if (rp->kp.addr && warn_kprobe_rereg(&rp->kp))
->   2076			return -EINVAL;
->   2077	
->   2078		if (kretprobe_blacklist_size) {
->   2079			addr = kprobe_addr(&rp->kp);
->   2080			if (IS_ERR(addr))
->   2081				return PTR_ERR(addr);
->   2082	
->   2083			for (i = 0; kretprobe_blacklist[i].name != NULL; i++) {
->   2084				if (kretprobe_blacklist[i].addr == addr)
->   2085					return -EINVAL;
->   2086			}
->   2087		}
->   2088	
->   2089		rp->kp.pre_handler = pre_handler_kretprobe;
->   2090		rp->kp.post_handler = NULL;
->   2091	
->   2092		/* Pre-allocate memory for max kretprobe instances */
->   2093		if (rp->maxactive <= 0) {
->   2094	#ifdef CONFIG_PREEMPTION
->   2095			rp->maxactive = max_t(unsigned int, 10, 2*num_possible_cpus());
->   2096	#else
->   2097			rp->maxactive = num_possible_cpus();
->   2098	#endif
->   2099		}
->   2100		rp->freelist.head = NULL;
->   2101		rp->rph = kzalloc(sizeof(struct kretprobe_holder), GFP_KERNEL);
->   2102		if (!rp->rph)
->   2103			return -ENOMEM;
->   2104	
->   2105		rp->rph->rp = rp;
->   2106		for (i = 0; i < rp->maxactive; i++) {
-> > 2107			if (rp->data_size >= 0)
->   2108				inst = kzalloc(sizeof(struct kretprobe_instance) +
->   2109				       rp->data_size, GFP_KERNEL);
->   2110			if (inst == NULL) {
->   2111				refcount_set(&rp->rph->ref, i);
->   2112				free_rp_inst(rp);
->   2113				return -ENOMEM;
->   2114			}
->   2115			inst->rph = rp->rph;
->   2116			freelist_add(&inst->freelist, &rp->freelist);
->   2117		}
->   2118		refcount_set(&rp->rph->ref, i);
->   2119	
->   2120		rp->nmissed = 0;
->   2121		/* Establish function entry probe point */
->   2122		ret = register_kprobe(&rp->kp);
->   2123		if (ret != 0)
->   2124			free_rp_inst(rp);
->   2125		return ret;
->   2126	}
->   2127	EXPORT_SYMBOL_GPL(register_kretprobe);
->   2128	
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-
-
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+index fea5e4d0927e..f5c40d6b4ece 100644
+--- a/drivers/media/platform/aspeed-video.c
++++ b/drivers/media/platform/aspeed-video.c
+@@ -1641,11 +1641,8 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
+ 
+ 	rc = video->ctrl_handler.error;
+ 	if (rc) {
+-		v4l2_ctrl_handler_free(&video->ctrl_handler);
+-		v4l2_device_unregister(v4l2_dev);
+-
+ 		dev_err(video->dev, "Failed to init controls: %d\n", rc);
+-		return rc;
++		goto err_ctrl_init;
+ 	}
+ 
+ 	v4l2_dev->ctrl_handler = &video->ctrl_handler;
+@@ -1663,11 +1660,8 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
+ 
+ 	rc = vb2_queue_init(vbq);
+ 	if (rc) {
+-		v4l2_ctrl_handler_free(&video->ctrl_handler);
+-		v4l2_device_unregister(v4l2_dev);
+-
+ 		dev_err(video->dev, "Failed to init vb2 queue\n");
+-		return rc;
++		goto err_vb2_init;
+ 	}
+ 
+ 	vdev->queue = vbq;
+@@ -1685,15 +1679,19 @@ static int aspeed_video_setup_video(struct aspeed_video *video)
+ 	video_set_drvdata(vdev, video);
+ 	rc = video_register_device(vdev, VFL_TYPE_GRABBER, 0);
+ 	if (rc) {
+-		vb2_queue_release(vbq);
+-		v4l2_ctrl_handler_free(&video->ctrl_handler);
+-		v4l2_device_unregister(v4l2_dev);
+-
+ 		dev_err(video->dev, "Failed to register video device\n");
+-		return rc;
++		goto err_video_reg;
+ 	}
+ 
+ 	return 0;
++
++err_video_reg:
++	vb2_queue_release(vbq);
++err_vb2_init:
++err_ctrl_init:
++	v4l2_ctrl_handler_free(&video->ctrl_handler);
++	v4l2_device_unregister(v4l2_dev);
++	return rc;
+ }
+ 
+ static int aspeed_video_init(struct aspeed_video *video)
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.25.1
+

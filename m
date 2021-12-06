@@ -2,138 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B845469C85
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 098D0469C8F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358458AbhLFPXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:23:19 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4214 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345322AbhLFPNd (ORCPT
+        id S1358772AbhLFPXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:23:31 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34522 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355787AbhLFPOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:13:33 -0500
-Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J76Jn5y48z67MmS;
-        Mon,  6 Dec 2021 23:08:57 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.20; Mon, 6 Dec 2021 16:10:01 +0100
-Received: from [10.47.82.161] (10.47.82.161) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 6 Dec
- 2021 15:10:00 +0000
-Subject: Re: [PATCH] scsi: libsas: Fix a NULL pointer dereference in
- sas_ex_discover_expander()
-To:     Zhou Qingyang <zhou1615@umn.edu>
-CC:     <kjlu@umn.edu>, "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jason Yan <yanaijie@huawei.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Luo Jiaxing <luojiaxing@huawei.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        James Bottomley <James.Bottomley@SteelEye.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20211130171629.201026-1-zhou1615@umn.edu>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <b757aabe-5231-64bc-8ad5-cedac79b0f43@huawei.com>
-Date:   Mon, 6 Dec 2021 15:09:47 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Mon, 6 Dec 2021 10:14:16 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44CFA61349
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 15:10:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 988C0C341C5;
+        Mon,  6 Dec 2021 15:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638803446;
+        bh=IKiCrwkAdFuuSfbngsgxUNZnen9NhInnh4oYmhBKl68=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RiFHDFRz6ASjbJtqFRqzL0raAgcVkb1UFoquDcKAsjGnHCmZ2YRSxanhe9p7Cyix3
+         OcfgPdZQcnX0CxRUb2R6YUUKRwUoVM/dMNX82NccZgCzUbgy8MW0fsmg0M4ffAeJuQ
+         lqYrSrlgFHqDe7lXcdcYB2PpPvgaqMFZmhg28sNWRM5Qx7A369cPgO6u3I+JkNe6AY
+         vkdcpsdYzD254UG4IAXetwkI6jiufAePtySRuhS2dvZAZBHT0XywTzD7mH+IgkpUUA
+         BwxNVOlEV9jnos2LZel76qnnjWVzjceGmi6nRG/wr67OmrLt6vDXI+6D+GRy1McESb
+         xJOTchbiTWT6A==
+Date:   Mon, 6 Dec 2021 15:10:40 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Jiri Slaby <jslaby@suse.cz>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Marc Zyngier <maz@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Fuad Tabba <tabba@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [RFC PATCH 0/6] linkage: better symbol aliasing
+Message-ID: <Ya4n8IDXVqSKKFIL@sirena.org.uk>
+References: <20211206124715.4101571-1-mark.rutland@arm.com>
+ <CAMj1kXHUtyn9K91jkqdU69-acvGkYsPZ-yeb7dALOeztDpfDvg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20211130171629.201026-1-zhou1615@umn.edu>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.82.161]
-X-ClientProxiedBy: lhreml721-chm.china.huawei.com (10.201.108.72) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5TuEFK4aIq+uk2Un"
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHUtyn9K91jkqdU69-acvGkYsPZ-yeb7dALOeztDpfDvg@mail.gmail.com>
+X-Cookie: You will soon forget this.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/11/2021 17:16, Zhou Qingyang wrote:
 
-I'd have "scsi: libsas: Improve error handling in 
-sas_ex_discover_expander()"
+--5TuEFK4aIq+uk2Un
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> In sas_ex_discover_expander(), sas_port_alloc() is assigned to phy->port
+On Mon, Dec 06, 2021 at 03:06:44PM +0100, Ard Biesheuvel wrote:
 
-"sas_port_alloc() is assigned to phy->port" - the function is not assigned
+> I never understood why we had these start/end markers in the first
+> place for alias definitions, so good riddance.
 
-> and used in sas_port_add(). sas_port_add() further passes phy->port to
-> list_empty(), and there is a dereference of it in list_empty(), which
-> could lead to a NULL pointer dereference on failure of
-> sas_port_alloc().
-> 
-> This patch imitates the same error-handling logic in
-> sas_ex_discover_end_dev().
+> Acked-by: Ard Biesheuvel <ardb@kernel.org>
 
-git grep 'This patch' Documentation/process/submitting-patches.rst
+What Ard said:
 
-> 
-> Fix this bug by adding checks for phy->port and sas_port_add().
-> 
-> This bug was found by a static analyzer. The analysis employs
-> differential checking to identify inconsistent security operations
-> (e.g., checks or kfrees) between two code paths and confirms that the
-> inconsistent operations are not recovered in the current function or
-> the callers, so they constitute bugs.
-> 
-> Note that, as a bug found by static analysis, it can be a false
-> positive or hard to trigger. Multiple researchers have cross-reviewed
-> the bug.
+Acked-by: Mark Brown <broonie@kernel.org>
 
-Who are these researchers?
+--5TuEFK4aIq+uk2Un
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
-> Builds with CONFIG_SCSI_SAS_LIBSAS=m show no new warnings,
-> and our static analyzer no longer warns about this code.
+-----BEGIN PGP SIGNATURE-----
 
-This is all implied by sending the patch in the first place
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGuJ+8ACgkQJNaLcl1U
+h9CB2wf9GiwHi9nQmSSBARizu2DEGe0cEqdEYmebea2KBT1g+DXvaECdoW4wO+ZC
+Bg7XIfCbLg9J+K8kGXKEBI5df/p8heEMueL4c0bvVp/AWKisRgkx9XVdrOP/HGVW
+s4/vPD8TOK0eJQeYoWTr2TAzkAsOPTw8EYhQyCVgEGhyyMlomlEKgHI/Wq+ZpRpY
+vv/coIGS0Ov0GRI/pQey6CgiQukYvfZrDRlRmu0T8+9zhxVDiIlfm+/Rhjrl0vc2
+kGp8FthxrUiBAvIEBX3Wam7ft17350twX4NHMPHs7VjhLhN8lNNTha+dQSdDOoif
+990xktLlnm+76bwB+LYyAl21XaY3pQ==
+=EfQx
+-----END PGP SIGNATURE-----
 
-> 
-> Fixes:  2908d778ab3e ("[SCSI] aic94xx: new driver")
-
-personally I don't think that this is a fix - the code is old and 
-already had BUG_ON()
-
-> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-> ---
->   drivers/scsi/libsas/sas_expander.c | 11 +++++++++--
->   1 file changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-> index c2150a818423..7530b1773d6b 100644
-> --- a/drivers/scsi/libsas/sas_expander.c
-> +++ b/drivers/scsi/libsas/sas_expander.c
-> @@ -957,9 +957,16 @@ static struct domain_device *sas_ex_discover_expander(
->   		return NULL;
->   
->   	phy->port = sas_port_alloc(&parent->rphy->dev, phy_id);
-> -	/* FIXME: better error handling */
-> -	BUG_ON(sas_port_add(phy->port) != 0);
-> +	if (unlikely(!phy->port)) {
-
-no need for unlikely() - this is not fastpath
-
-> +		sas_put_device(child);
-> +		return NULL;
-> +	}
->   
-> +	if (sas_port_add(phy->port) != 0) {
-> +		sas_port_free(phy->port);
-> +		sas_put_device(child);
-
-better have a goto error now as we're replicting code, including what is 
-already there for the sas_discover_expander() failure error path
-
-> +		return NULL;
-> +	}
->   
->   	switch (phy->attached_dev_type) {
->   	case SAS_EDGE_EXPANDER_DEVICE:
-> 
-
+--5TuEFK4aIq+uk2Un--

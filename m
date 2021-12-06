@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69916469C6F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59904469CDA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346166AbhLFPWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:22:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357162AbhLFPQA (ORCPT
+        id S1386466AbhLFP0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:26:35 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35952 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358426AbhLFPQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:16:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE0BC08EA3F;
-        Mon,  6 Dec 2021 07:08:27 -0800 (PST)
+        Mon, 6 Dec 2021 10:16:37 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75E65B81017;
-        Mon,  6 Dec 2021 15:08:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD85EC341C7;
-        Mon,  6 Dec 2021 15:08:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1066261310;
+        Mon,  6 Dec 2021 15:13:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9008C341C2;
+        Mon,  6 Dec 2021 15:13:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803306;
-        bh=lJvkTLhpdRawHqedkpKKgeuidKyevnZfYjt5jHO7mFI=;
+        s=korg; t=1638803588;
+        bh=ZYaMDF2+hl1TIq9QXVtsLdiBoSPAj7KMFe0MRRfbsH4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NhdMkt/ZK2OlU3FT+8MTsooFyEp0Zazl+FAEicHKtL2N9d1DfJmmteWc9amjPjxnC
-         dL2AVTIPffISCkrswuWx9IVnrxqt9VDt8nW67Yg8xpo0yxhTIMgfPHIZbHYXsVKmWK
-         v1H7THzM+eJwlm9VonrucH9NOLBcCHAjtrxLGbIg=
+        b=k9/HKMzYprJ7L+OG/J4FcPthT5jF4w5AGEAYJwpoMh3h6fEpbx9IA1O3KQgVNAwgS
+         5dGQiiDPKHl1phYxfSPbWcNdwuFkknQdIkJHLrh66c3TnZkdInBbd470HeClbOcQ3V
+         bcfbjY/Ymtmi1ZJc3VfF7GjN9SRwYlz9z1yxJnI8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Badhri Jagan Sridharan <badhri@google.com>
-Subject: [PATCH 4.14 101/106] usb: typec: tcpm: Wait in SNK_DEBOUNCED until disconnect
-Date:   Mon,  6 Dec 2021 15:56:49 +0100
-Message-Id: <20211206145559.040562842@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.4 46/70] ipv4: convert fib_num_tclassid_users to atomic_t
+Date:   Mon,  6 Dec 2021 15:56:50 +0100
+Message-Id: <20211206145553.515740967@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
+References: <20211206145551.909846023@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,82 +46,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Badhri Jagan Sridharan <badhri@google.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit fbcd13df1e78eb2ba83a3c160eefe2d6f574beaf upstream.
+commit 213f5f8f31f10aa1e83187ae20fb7fa4e626b724 upstream.
 
-Stub from the spec:
-"4.5.2.2.4.2 Exiting from AttachWait.SNK State
-A Sink shall transition to Unattached.SNK when the state of both
-the CC1 and CC2 pins is SNK.Open for at least tPDDebounce.
-A DRP shall transition to Unattached.SRC when the state of both
-the CC1 and CC2 pins is SNK.Open for at least tPDDebounce."
+Before commit faa041a40b9f ("ipv4: Create cleanup helper for fib_nh")
+changes to net->ipv4.fib_num_tclassid_users were protected by RTNL.
 
-This change makes TCPM to wait in SNK_DEBOUNCED state until
-CC1 and CC2 pins is SNK.Open for at least tPDDebounce. Previously,
-TCPM resets the port if vbus is not present in PD_T_PS_SOURCE_ON.
-This causes TCPM to loop continuously when connected to a
-faulty power source that does not present vbus. Waiting in
-SNK_DEBOUNCED also ensures that TCPM is adherant to
-"4.5.2.2.4.2 Exiting from AttachWait.SNK State" requirements.
+After the change, this is no longer the case, as free_fib_info_rcu()
+runs after rcu grace period, without rtnl being held.
 
-[ 6169.280751] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
-[ 6169.280759] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
-[ 6169.280771] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
-[ 6169.282427] CC1: 0 -> 0, CC2: 5 -> 5 [state SNK_ATTACH_WAIT, polarity 0, connected]
-[ 6169.450825] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
-[ 6169.450834] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
-[ 6169.930892] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
-[ 6169.931296] disable vbus discharge ret:0
-[ 6169.931301] Setting usb_comm capable false
-[ 6169.932783] Setting voltage/current limit 0 mV 0 mA
-[ 6169.932802] polarity 0
-[ 6169.933706] Requesting mux state 0, usb-role 0, orientation 0
-[ 6169.936689] cc:=0
-[ 6169.936812] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
-[ 6169.937157] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
-[ 6170.036880] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
-[ 6170.036890] state change PORT_RESET_WAIT_OFF -> SNK_UNATTACHED [rev2 NONE_AMS]
-[ 6170.036896] Start toggling
-[ 6170.041412] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
-[ 6170.042973] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
-[ 6170.042976] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
-[ 6170.042981] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
-[ 6170.213014] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
-[ 6170.213019] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
-[ 6170.693068] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
-[ 6170.693304] disable vbus discharge ret:0
-[ 6170.693308] Setting usb_comm capable false
-[ 6170.695193] Setting voltage/current limit 0 mV 0 mA
-[ 6170.695210] polarity 0
-[ 6170.695990] Requesting mux state 0, usb-role 0, orientation 0
-[ 6170.701896] cc:=0
-[ 6170.702181] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
-[ 6170.703343] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
-
-Fixes: f0690a25a140b8 ("staging: typec: USB Type-C Port Manager (tcpm)")
-Cc: stable@vger.kernel.org
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-Link: https://lore.kernel.org/r/20211130001825.3142830-1-badhri@google.com
+Fixes: faa041a40b9f ("ipv4: Create cleanup helper for fib_nh")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: David Ahern <dsahern@kernel.org>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/staging/typec/tcpm.c |    4 ----
- 1 file changed, 4 deletions(-)
+ include/net/ip_fib.h     |    2 +-
+ include/net/netns/ipv4.h |    2 +-
+ net/ipv4/fib_frontend.c  |    2 +-
+ net/ipv4/fib_rules.c     |    4 ++--
+ net/ipv4/fib_semantics.c |    4 ++--
+ 5 files changed, 7 insertions(+), 7 deletions(-)
 
---- a/drivers/staging/typec/tcpm.c
-+++ b/drivers/staging/typec/tcpm.c
-@@ -2386,11 +2386,7 @@ static void run_state_machine(struct tcp
- 				       tcpm_try_src(port) ? SRC_TRY
- 							  : SNK_ATTACHED,
- 				       0);
--		else
--			/* Wait for VBUS, but not forever */
--			tcpm_set_state(port, PORT_RESET, PD_T_PS_SOURCE_ON);
- 		break;
--
- 	case SRC_TRY:
- 		port->try_src_count++;
- 		tcpm_set_cc(port, tcpm_rp_cc(port));
+--- a/include/net/ip_fib.h
++++ b/include/net/ip_fib.h
+@@ -412,7 +412,7 @@ int fib_validate_source(struct sk_buff *
+ #ifdef CONFIG_IP_ROUTE_CLASSID
+ static inline int fib_num_tclassid_users(struct net *net)
+ {
+-	return net->ipv4.fib_num_tclassid_users;
++	return atomic_read(&net->ipv4.fib_num_tclassid_users);
+ }
+ #else
+ static inline int fib_num_tclassid_users(struct net *net)
+--- a/include/net/netns/ipv4.h
++++ b/include/net/netns/ipv4.h
+@@ -61,7 +61,7 @@ struct netns_ipv4 {
+ #endif
+ 	bool			fib_has_custom_local_routes;
+ #ifdef CONFIG_IP_ROUTE_CLASSID
+-	int			fib_num_tclassid_users;
++	atomic_t		fib_num_tclassid_users;
+ #endif
+ 	struct hlist_head	*fib_table_hash;
+ 	bool			fib_offload_disabled;
+--- a/net/ipv4/fib_frontend.c
++++ b/net/ipv4/fib_frontend.c
+@@ -1588,7 +1588,7 @@ static int __net_init fib_net_init(struc
+ 	int error;
+ 
+ #ifdef CONFIG_IP_ROUTE_CLASSID
+-	net->ipv4.fib_num_tclassid_users = 0;
++	atomic_set(&net->ipv4.fib_num_tclassid_users, 0);
+ #endif
+ 	error = ip_fib_net_init(net);
+ 	if (error < 0)
+--- a/net/ipv4/fib_rules.c
++++ b/net/ipv4/fib_rules.c
+@@ -258,7 +258,7 @@ static int fib4_rule_configure(struct fi
+ 	if (tb[FRA_FLOW]) {
+ 		rule4->tclassid = nla_get_u32(tb[FRA_FLOW]);
+ 		if (rule4->tclassid)
+-			net->ipv4.fib_num_tclassid_users++;
++			atomic_inc(&net->ipv4.fib_num_tclassid_users);
+ 	}
+ #endif
+ 
+@@ -290,7 +290,7 @@ static int fib4_rule_delete(struct fib_r
+ 
+ #ifdef CONFIG_IP_ROUTE_CLASSID
+ 	if (((struct fib4_rule *)rule)->tclassid)
+-		net->ipv4.fib_num_tclassid_users--;
++		atomic_dec(&net->ipv4.fib_num_tclassid_users);
+ #endif
+ 	net->ipv4.fib_has_custom_rules = true;
+ 
+--- a/net/ipv4/fib_semantics.c
++++ b/net/ipv4/fib_semantics.c
+@@ -222,7 +222,7 @@ void fib_nh_release(struct net *net, str
+ {
+ #ifdef CONFIG_IP_ROUTE_CLASSID
+ 	if (fib_nh->nh_tclassid)
+-		net->ipv4.fib_num_tclassid_users--;
++		atomic_dec(&net->ipv4.fib_num_tclassid_users);
+ #endif
+ 	fib_nh_common_release(&fib_nh->nh_common);
+ }
+@@ -624,7 +624,7 @@ int fib_nh_init(struct net *net, struct
+ #ifdef CONFIG_IP_ROUTE_CLASSID
+ 	nh->nh_tclassid = cfg->fc_flow;
+ 	if (nh->nh_tclassid)
+-		net->ipv4.fib_num_tclassid_users++;
++		atomic_inc(&net->ipv4.fib_num_tclassid_users);
+ #endif
+ #ifdef CONFIG_IP_ROUTE_MULTIPATH
+ 	nh->fib_nh_weight = nh_weight;
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B04D1469B4F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D87469E3D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:36:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346520AbhLFPOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:14:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        id S1357000AbhLFPhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:37:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349345AbhLFPK3 (ORCPT
+        with ESMTP id S1385810AbhLFPZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:10:29 -0500
+        Mon, 6 Dec 2021 10:25:51 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8F7C08EA4D;
-        Mon,  6 Dec 2021 07:04:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7EBC08EC5F;
+        Mon,  6 Dec 2021 07:16:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22EA8B8111F;
-        Mon,  6 Dec 2021 15:04:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AF35C341C1;
-        Mon,  6 Dec 2021 15:04:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 365D9B81135;
+        Mon,  6 Dec 2021 15:16:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 607C1C341C1;
+        Mon,  6 Dec 2021 15:15:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803067;
-        bh=ZBAq8rhoouFJbG4qfRMRUuXRjBSasQnndDjFnrF/CJw=;
+        s=korg; t=1638803758;
+        bh=XcuOgcUdbTwCSa9SaaIdRMs1PJjFve2WsNdd9Ot6f5o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mcTfT85ixNzU7E4aosIbhDECU7KM6RS2Ddb1Y9Lg3ObXrKwIrrigTSkwqLEvlfKYL
-         fkVocQKHDNLtp8D8i4NrnqIOIhp8UUIeGO0a0R2A3jnCqejkvJfgATl6gKLKQ6TuHj
-         rG+BgD9/uZB1ya4/qoc5XX50s7IKaJbz5LAiC31k=
+        b=irY3EDahC5w4LxyVscQ8r06/YWPKQi4SjO0wtokL/NqC9zM/OVCZijRszIki4DLBg
+         c36K42uW4QwleXF5mUL7gCrliZxBAWnadLIs/je9Ac9Wxb/a7cdJphCElj99U7n3kB
+         z/NADdaLXBFfqen0BacO4L2jEv1VnR5Rz/vqgNIs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Xing Song <xing.song@mediatek.com>,
+        Johannes Berg <johannes.berg@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 017/106] ASoC: topology: Add missing rwsem around snd_ctl_remove() calls
-Date:   Mon,  6 Dec 2021 15:55:25 +0100
-Message-Id: <20211206145555.974928234@linuxfoundation.org>
+Subject: [PATCH 5.10 009/130] mac80211: do not access the IV when it was stripped
+Date:   Mon,  6 Dec 2021 15:55:26 +0100
+Message-Id: <20211206145559.934800664@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,50 +49,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Xing Song <xing.song@mediatek.com>
 
-[ Upstream commit 7e567b5ae06315ef2d70666b149962e2bb4b97af ]
+[ Upstream commit 77dfc2bc0bb4b8376ecd7a430f27a4a8fff6a5a0 ]
 
-snd_ctl_remove() has to be called with card->controls_rwsem held (when
-called after the card instantiation).  This patch add the missing
-rwsem calls around it.
+ieee80211_get_keyid() will return false value if IV has been stripped,
+such as return 0 for IP/ARP frames due to LLC header, and return -EINVAL
+for disassociation frames due to its length... etc. Don't try to access
+it if it's not present.
 
-Fixes: 8a9782346dcc ("ASoC: topology: Add topology core")
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Link: https://lore.kernel.org/r/20211116071812.18109-1-tiwai@suse.de
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Xing Song <xing.song@mediatek.com>
+Link: https://lore.kernel.org/r/20211101024657.143026-1-xing.song@mediatek.com
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/soc-topology.c | 3 +++
- 1 file changed, 3 insertions(+)
+ net/mac80211/rx.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/soc-topology.c b/sound/soc/soc-topology.c
-index 50aa45525be5a..0fbe505026997 100644
---- a/sound/soc/soc-topology.c
-+++ b/sound/soc/soc-topology.c
-@@ -2585,6 +2585,7 @@ EXPORT_SYMBOL_GPL(snd_soc_tplg_widget_remove_all);
- /* remove dynamic controls from the component driver */
- int snd_soc_tplg_component_remove(struct snd_soc_component *comp, u32 index)
- {
-+	struct snd_card *card = comp->card->snd_card;
- 	struct snd_soc_dobj *dobj, *next_dobj;
- 	int pass = SOC_TPLG_PASS_END;
+diff --git a/net/mac80211/rx.c b/net/mac80211/rx.c
+index b7979c0bffd0f..6a24431b90095 100644
+--- a/net/mac80211/rx.c
++++ b/net/mac80211/rx.c
+@@ -1945,7 +1945,8 @@ ieee80211_rx_h_decrypt(struct ieee80211_rx_data *rx)
+ 		int keyid = rx->sta->ptk_idx;
+ 		sta_ptk = rcu_dereference(rx->sta->ptk[keyid]);
  
-@@ -2592,6 +2593,7 @@ int snd_soc_tplg_component_remove(struct snd_soc_component *comp, u32 index)
- 	while (pass >= SOC_TPLG_PASS_START) {
- 
- 		/* remove mixer controls */
-+		down_write(&card->controls_rwsem);
- 		list_for_each_entry_safe(dobj, next_dobj, &comp->dobj_list,
- 			list) {
- 
-@@ -2625,6 +2627,7 @@ int snd_soc_tplg_component_remove(struct snd_soc_component *comp, u32 index)
- 				break;
- 			}
- 		}
-+		up_write(&card->controls_rwsem);
- 		pass--;
- 	}
+-		if (ieee80211_has_protected(fc)) {
++		if (ieee80211_has_protected(fc) &&
++		    !(status->flag & RX_FLAG_IV_STRIPPED)) {
+ 			cs = rx->sta->cipher_scheme;
+ 			keyid = ieee80211_get_keyid(rx->skb, cs);
  
 -- 
 2.33.0

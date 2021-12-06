@@ -2,20 +2,17 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8F146AB26
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6265846AB23
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356161AbhLFWB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 17:01:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344091AbhLFWBR (ORCPT
+        id S1350385AbhLFWBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 17:01:19 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:45128 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239718AbhLFWBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 17:01:17 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAA6C0613FE;
-        Mon,  6 Dec 2021 13:57:48 -0800 (PST)
-Date:   Mon, 06 Dec 2021 21:57:44 -0000
+        Mon, 6 Dec 2021 17:01:16 -0500
+Date:   Mon, 06 Dec 2021 21:57:45 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1638827866;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +20,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QjvAolElgLN2UoVLE0ULBn6BXUMiVW9SOvU/uPesDJI=;
-        b=0E3V9D/2SkCZsdLTFUOWt8gCFPIpKgS8v+cU4FDAjosVtPb1fi8G1sA9DhyYwOq5O0OfEA
-        tl69ugnrUsi1ARmKtfUNyU5fHy1W3SeDAYN9xCDWksxC2HLZxaKDCuoFuqwUbbJfGGolPa
-        Y5rRRPD+/ONAb5kkwTPD4/6YWqQbgpTBbgGkK7amhnNvj5Q1yNB/yBbgOKaPepIdzD5XA9
-        bVEm18Jk3TcrgF0BZAdH5MQ2YC1KrGASGL/ua+4iI5nR8awtu3A9I3nOGu/9BZGwDLJ6V3
-        2L6/P3O093J6YGFQMD+fZOK6JyBav/yG2qhdqPq1fHC+q4+7V9ZjqmELHo9z2Q==
+        bh=kTPdGZMD5UY1gbykrIkEd6xleaxmGhFRK/RKg3HBqJY=;
+        b=FaWPlNSaxVLGFX1zt17yehuBzL4wd+4XNMyc6sckpZmA1OUz+f5sK3JY5ZL89N6vbgEZBX
+        AZAP8C7sniuuF2uUSh8XbWAFO4K7guYkV5dVR8ORNLOmFZPvuNhSc2meR19zCwSQRvUZrp
+        05xaHshwEP6PRoz/O04S1QkvsCWxnSz7GpEkNpOErDnih9/MppIv+Dg5HwTw3hmRhT7hV3
+        /10yPjpjBLEaq/IedM2HOKQ9bwnlL4ttYisT5T3nIKGfYU48jZoytSSkxtoLr3H7R2kj7F
+        WhWZt7uDheOvGIX0niDm5ztFkiKuTxMtm2FZ7AMxeZsHmknm3QrbPZBh2TPmrg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1638827866;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +33,20 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QjvAolElgLN2UoVLE0ULBn6BXUMiVW9SOvU/uPesDJI=;
-        b=HunI7Q+7ol9ZCFddjEZboVAwvRo7SzC/yqSbEeMQK0pAV6A1MV/B+rpAAGUgCkkgvo4aVD
-        ibnSxxVzXU2iJlBA==
+        bh=kTPdGZMD5UY1gbykrIkEd6xleaxmGhFRK/RKg3HBqJY=;
+        b=C2STX/Fp5JoCyJq44sVNg7mREe7W9bWx01mpB8N2ZXIM4bYDBrSFxBCcefkAVUpD3O8/gn
+        d3ldyDzGB8JeF8Dg==
 From:   "tip-bot2 for Joerg Roedel" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm: Flush global TLB when switching to trampoline
- page-table
+Subject: [tip: x86/mm] x86/mm/64: Flush global TLB on boot and AP bringup
 Cc:     Joerg Roedel <jroedel@suse.de>, Borislav Petkov <bp@suse.de>,
         x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20211202153226.22946-4-joro@8bytes.org>
-References: <20211202153226.22946-4-joro@8bytes.org>
+In-Reply-To: <20211202153226.22946-3-joro@8bytes.org>
+References: <20211202153226.22946-3-joro@8bytes.org>
 MIME-Version: 1.0
-Message-ID: <163882786459.11128.3328128025586592058.tip-bot2@tip-bot2>
+Message-ID: <163882786538.11128.12165263540150571899.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -61,102 +57,112 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     71d5049b053876afbde6c3273250b76935494ab2
-Gitweb:        https://git.kernel.org/tip/71d5049b053876afbde6c3273250b76935494ab2
+Commit-ID:     f154f290855b070cc94dd44ad253c0ef8a9337bb
+Gitweb:        https://git.kernel.org/tip/f154f290855b070cc94dd44ad253c0ef8a9337bb
 Author:        Joerg Roedel <jroedel@suse.de>
-AuthorDate:    Thu, 02 Dec 2021 16:32:25 +01:00
+AuthorDate:    Thu, 02 Dec 2021 16:32:24 +01:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Mon, 06 Dec 2021 09:54:10 +01:00
+CommitterDate: Mon, 06 Dec 2021 09:38:48 +01:00
 
-x86/mm: Flush global TLB when switching to trampoline page-table
+x86/mm/64: Flush global TLB on boot and AP bringup
 
-Move the switching code into a function so that it can be re-used and
-add a global TLB flush. This makes sure that usage of memory which is
-not mapped in the trampoline page-table is reliably caught.
-
-Also move the clearing of CR4.PCIDE before the CR3 switch because the
-cr4_clear_bits() function will access data not mapped into the
-trampoline page-table.
+The AP bringup code uses the trampoline_pgd page-table which
+establishes global mappings in the user range of the address space.
+Flush the global TLB entries after the indentity mappings are removed so
+no stale entries remain in the TLB.
 
 Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20211202153226.22946-4-joro@8bytes.org
+Link: https://lore.kernel.org/r/20211202153226.22946-3-joro@8bytes.org
 ---
- arch/x86/include/asm/realmode.h |  1 +
- arch/x86/kernel/reboot.c        | 12 ++----------
- arch/x86/realmode/init.c        | 26 ++++++++++++++++++++++++++
- 3 files changed, 29 insertions(+), 10 deletions(-)
+ arch/x86/include/asm/tlbflush.h |  5 +++++
+ arch/x86/kernel/head64.c        |  2 ++
+ arch/x86/kernel/head_64.S       | 19 ++++++++++++++++++-
+ arch/x86/mm/tlb.c               |  8 ++------
+ 4 files changed, 27 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/include/asm/realmode.h b/arch/x86/include/asm/realmode.h
-index 5db5d08..331474b 100644
---- a/arch/x86/include/asm/realmode.h
-+++ b/arch/x86/include/asm/realmode.h
-@@ -89,6 +89,7 @@ static inline void set_real_mode_mem(phys_addr_t mem)
- }
+diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
+index b587a9e..98fa0a1 100644
+--- a/arch/x86/include/asm/tlbflush.h
++++ b/arch/x86/include/asm/tlbflush.h
+@@ -261,4 +261,9 @@ extern void arch_tlbbatch_flush(struct arch_tlbflush_unmap_batch *batch);
  
- void reserve_real_mode(void);
-+void load_trampoline_pgtable(void);
+ #endif /* !MODULE */
  
- #endif /* __ASSEMBLY__ */
- 
-diff --git a/arch/x86/kernel/reboot.c b/arch/x86/kernel/reboot.c
-index 0a40df6..fa700b4 100644
---- a/arch/x86/kernel/reboot.c
-+++ b/arch/x86/kernel/reboot.c
-@@ -113,17 +113,9 @@ void __noreturn machine_real_restart(unsigned int type)
- 	spin_unlock(&rtc_lock);
- 
- 	/*
--	 * Switch back to the initial page table.
-+	 * Switch to the trampoline page table.
- 	 */
--#ifdef CONFIG_X86_32
--	load_cr3(initial_page_table);
--#else
--	write_cr3(real_mode_header->trampoline_pgd);
--
--	/* Exiting long mode will fail if CR4.PCIDE is set. */
--	if (boot_cpu_has(X86_FEATURE_PCID))
--		cr4_clear_bits(X86_CR4_PCIDE);
--#endif
-+	load_trampoline_pgtable();
- 
- 	/* Jump to the identity-mapped low memory code */
- #ifdef CONFIG_X86_32
-diff --git a/arch/x86/realmode/init.c b/arch/x86/realmode/init.c
-index 4a3da75..6d98609 100644
---- a/arch/x86/realmode/init.c
-+++ b/arch/x86/realmode/init.c
-@@ -17,6 +17,32 @@ u32 *trampoline_cr4_features;
- /* Hold the pgd entry used on booting additional CPUs */
- pgd_t trampoline_pgd_entry;
- 
-+void load_trampoline_pgtable(void)
++static inline void __native_tlb_flush_global(unsigned long cr4)
 +{
-+#ifdef CONFIG_X86_32
-+	load_cr3(initial_page_table);
-+#else
-+	/*
-+	 * This function is called before exiting to real-mode and that will
-+	 * fail with CR4.PCIDE still set.
-+	 */
-+	if (boot_cpu_has(X86_FEATURE_PCID))
-+		cr4_clear_bits(X86_CR4_PCIDE);
-+
-+	write_cr3(real_mode_header->trampoline_pgd);
-+#endif
-+
-+	/*
-+	 * The CR3 write above will not flush global TLB entries.
-+	 * Stale, global entries from previous page tables may still be
-+	 * present.  Flush those stale entries.
-+	 *
-+	 * This ensures that memory accessed while running with
-+	 * trampoline_pgd is *actually* mapped into trampoline_pgd.
-+	 */
-+	__flush_tlb_all();
++	native_write_cr4(cr4 ^ X86_CR4_PGE);
++	native_write_cr4(cr4);
 +}
+ #endif /* _ASM_X86_TLBFLUSH_H */
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index fc5371a..75acb60 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -483,6 +483,8 @@ asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data)
+ 	/* Kill off the identity-map trampoline */
+ 	reset_early_page_tables();
+ 
++	__native_tlb_flush_global(native_read_cr4());
 +
- void __init reserve_real_mode(void)
+ 	clear_bss();
+ 
+ 	clear_page(init_top_pgt);
+diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+index d8b3ebd..9c63fc5 100644
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -166,9 +166,26 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	call	sev_verify_cbit
+ 	popq	%rsi
+ 
+-	/* Switch to new page-table */
++	/*
++	 * Switch to new page-table
++	 *
++	 * For the boot CPU this switches to early_top_pgt which still has the
++	 * indentity mappings present. The secondary CPUs will switch to the
++	 * init_top_pgt here, away from the trampoline_pgd and unmap the
++	 * indentity mapped ranges.
++	 */
+ 	movq	%rax, %cr3
+ 
++	/*
++	 * Do a global TLB flush after the CR3 switch to make sure the TLB
++	 * entries from the identity mapping are flushed.
++	 */
++	movq	%cr4, %rcx
++	movq	%rcx, %rax
++	xorq	$X86_CR4_PGE, %rcx
++	movq	%rcx, %cr4
++	movq	%rax, %cr4
++
+ 	/* Ensure I am executing from virtual addresses */
+ 	movq	$1f, %rax
+ 	ANNOTATE_RETPOLINE_SAFE
+diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+index 59ba296..1e6513f 100644
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -1148,7 +1148,7 @@ void flush_tlb_one_user(unsigned long addr)
+  */
+ STATIC_NOPV void native_flush_tlb_global(void)
  {
- 	phys_addr_t mem;
+-	unsigned long cr4, flags;
++	unsigned long flags;
+ 
+ 	if (static_cpu_has(X86_FEATURE_INVPCID)) {
+ 		/*
+@@ -1168,11 +1168,7 @@ STATIC_NOPV void native_flush_tlb_global(void)
+ 	 */
+ 	raw_local_irq_save(flags);
+ 
+-	cr4 = this_cpu_read(cpu_tlbstate.cr4);
+-	/* toggle PGE */
+-	native_write_cr4(cr4 ^ X86_CR4_PGE);
+-	/* write old PGE again and flush TLBs */
+-	native_write_cr4(cr4);
++	__native_tlb_flush_global(this_cpu_read(cpu_tlbstate.cr4));
+ 
+ 	raw_local_irq_restore(flags);
+ }

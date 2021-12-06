@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D726469DB9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 346CE469A26
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388061AbhLFPcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:32:17 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39456 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346546AbhLFPVA (ORCPT
+        id S1346145AbhLFPF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:05:57 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37698 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345789AbhLFPFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:21:00 -0500
+        Mon, 6 Dec 2021 10:05:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBB096132F;
-        Mon,  6 Dec 2021 15:17:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFDFFC33AA1;
-        Mon,  6 Dec 2021 15:17:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60CB3B8101B;
+        Mon,  6 Dec 2021 15:01:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88F6CC341C1;
+        Mon,  6 Dec 2021 15:01:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803849;
-        bh=lgazTf/KmclGBV+oVKueKG8F65kkA0ahysymL142Ne0=;
+        s=korg; t=1638802893;
+        bh=+MlNDKvthONigKyd5y4e/FDJvLA5Mq0vGAt+tqLzkB4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=huGVy0W+r0L4XU8KmZH8DSIHynz1oyD8fBZ26NfQHb6g0DiIaN9iShNxJ4Q/nXPMZ
-         1IGtbtggA1tWkmm8Yo0WyMyJ0BbC0VraqTPvp6n3G+4w6HRvEGRmbDLfLAWkD6BjFA
-         Sme8oA3llilDO4Riy7RaMtX82cq5fmxsI0uGSgCI=
+        b=OUZXrjeGPt2oOA8FnsaFfs29/o5/KhjzJkFhgXgq2uzVJkNHubq85UiQPmn55R28E
+         CMV78Z43v+4D5dyBlKpBqqlK0ANzsHN204GR6wIyYinID5IGu2Vj9aisQ/ZW5MzOPW
+         szo9PBLYK+qkSZuywttkJCPhcsGWPMBg7m5GLVkw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pierre Morel <pmorel@linux.ibm.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: [PATCH 5.10 036/130] s390/pci: move pseudo-MMIO to prevent MIO overlap
+        stable@vger.kernel.org, Stable@vger.kernel.org, jbeulich@suse.com,
+        Stefano Stabellini <stefano.stabellini@xilinx.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Subject: [PATCH 4.9 10/62] xen: dont continue xenstore initialization in case of errors
 Date:   Mon,  6 Dec 2021 15:55:53 +0100
-Message-Id: <20211206145600.921337525@linuxfoundation.org>
+Message-Id: <20211206145549.513244843@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
+References: <20211206145549.155163074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,65 +46,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niklas Schnelle <schnelle@linux.ibm.com>
+From: Stefano Stabellini <stefano.stabellini@xilinx.com>
 
-commit 52d04d408185b7aa47628d2339c28ec70074e0ae upstream.
+commit 08f6c2b09ebd4b326dbe96d13f94fee8f9814c78 upstream.
 
-When running without MIO support, with pci=nomio or for devices which
-are not MIO-capable the zPCI subsystem generates pseudo-MMIO addresses
-to allow access to PCI BARs via MMIO based Linux APIs even though the
-platform uses function handles and BAR numbers.
+In case of errors in xenbus_init (e.g. missing xen_store_gfn parameter),
+we goto out_error but we forget to reset xen_store_domain_type to
+XS_UNKNOWN. As a consequence xenbus_probe_initcall and other initcalls
+will still try to initialize xenstore resulting into a crash at boot.
 
-This is done by stashing an index into our global IOMAP array which
-contains the function handle in the 16 most significant bits of the
-addresses returned by ioremap() always setting the most significant bit.
+[    2.479830] Call trace:
+[    2.482314]  xb_init_comms+0x18/0x150
+[    2.486354]  xs_init+0x34/0x138
+[    2.489786]  xenbus_probe+0x4c/0x70
+[    2.498432]  xenbus_probe_initcall+0x2c/0x7c
+[    2.503944]  do_one_initcall+0x54/0x1b8
+[    2.507358]  kernel_init_freeable+0x1ac/0x210
+[    2.511617]  kernel_init+0x28/0x130
+[    2.516112]  ret_from_fork+0x10/0x20
 
-On the other hand the MIO addresses assigned by the platform for use,
-while requiring special instructions, allow PCI access with virtually
-mapped physical addresses. Now the problem is that these MIO addresses
-and our own pseudo-MMIO addresses may overlap, while functionally this
-would not be a problem by itself this overlap is detected by common code
-as both address types are added as resources in the iomem_resource tree.
-This leads to the overlapping resource claim of either the MIO capable
-or non-MIO capable devices with being rejected.
-
-Since PCI is tightly coupled to the use of the iomem_resource tree, see
-for example the code for request_mem_region(), we can't reasonably get
-rid of the overlap being detected by keeping our pseudo-MMIO addresses
-out of the iomem_resource tree.
-
-Instead let's move the range used by our own pseudo-MMIO addresses by
-starting at (1UL << 62) and only using addresses below (1UL << 63) thus
-avoiding the range currently used for MIO addresses.
-
-Fixes: c7ff0e918a7c ("s390/pci: deal with devices that have no support for MIO instructions")
-Cc: stable@vger.kernel.org # 5.3+
-Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Cc: <Stable@vger.kernel.org>
+Cc: jbeulich@suse.com
+Signed-off-by: Stefano Stabellini <stefano.stabellini@xilinx.com>
+Link: https://lore.kernel.org/r/20211115222719.2558207-1-sstabellini@kernel.org
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Signed-off-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/s390/include/asm/pci_io.h |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/xen/xenbus/xenbus_probe.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/arch/s390/include/asm/pci_io.h
-+++ b/arch/s390/include/asm/pci_io.h
-@@ -14,12 +14,13 @@
+--- a/drivers/xen/xenbus/xenbus_probe.c
++++ b/drivers/xen/xenbus/xenbus_probe.c
+@@ -764,7 +764,7 @@ static struct notifier_block xenbus_resu
  
- /* I/O Map */
- #define ZPCI_IOMAP_SHIFT		48
--#define ZPCI_IOMAP_ADDR_BASE		0x8000000000000000UL
-+#define ZPCI_IOMAP_ADDR_SHIFT		62
-+#define ZPCI_IOMAP_ADDR_BASE		(1UL << ZPCI_IOMAP_ADDR_SHIFT)
- #define ZPCI_IOMAP_ADDR_OFF_MASK	((1UL << ZPCI_IOMAP_SHIFT) - 1)
- #define ZPCI_IOMAP_MAX_ENTRIES							\
--	((ULONG_MAX - ZPCI_IOMAP_ADDR_BASE + 1) / (1UL << ZPCI_IOMAP_SHIFT))
-+	(1UL << (ZPCI_IOMAP_ADDR_SHIFT - ZPCI_IOMAP_SHIFT))
- #define ZPCI_IOMAP_ADDR_IDX_MASK						\
--	(~ZPCI_IOMAP_ADDR_OFF_MASK - ZPCI_IOMAP_ADDR_BASE)
-+	((ZPCI_IOMAP_ADDR_BASE - 1) & ~ZPCI_IOMAP_ADDR_OFF_MASK)
+ static int __init xenbus_init(void)
+ {
+-	int err = 0;
++	int err;
+ 	uint64_t v = 0;
+ 	xen_store_domain_type = XS_UNKNOWN;
  
- struct zpci_iomap_entry {
- 	u32 fh;
+@@ -832,8 +832,10 @@ static int __init xenbus_init(void)
+ 	 */
+ 	proc_mkdir("xen", NULL);
+ #endif
++	return 0;
+ 
+ out_error:
++	xen_store_domain_type = XS_UNKNOWN;
+ 	return err;
+ }
+ 
 
 

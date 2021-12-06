@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC165469B41
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:10:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C10DA46A028
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:56:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351185AbhLFPOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:14:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
+        id S1387684AbhLFP6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:58:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348732AbhLFPKL (ORCPT
+        with ESMTP id S1389681AbhLFPkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:10:11 -0500
+        Mon, 6 Dec 2021 10:40:51 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC4DC08E9BD;
-        Mon,  6 Dec 2021 07:04:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C35DC08ECA6;
+        Mon,  6 Dec 2021 07:25:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85DCEB8110B;
-        Mon,  6 Dec 2021 15:04:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C67FFC341C2;
-        Mon,  6 Dec 2021 15:04:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79ABEB810AC;
+        Mon,  6 Dec 2021 15:25:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4D24C34901;
+        Mon,  6 Dec 2021 15:25:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803059;
-        bh=bdZqv2j7jhTCK+kuGvTA7dukuubaOQROgRQRacc59RU=;
+        s=korg; t=1638804311;
+        bh=AUgOMdO7WsBgOFypjqkdhpdThsanA11OKIcJOJ8SDKM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qwB0RmrmsBnujQLA8H0nAlLfpkSdTf5oUj+4GTlZr5iOuFMbjYmvcYOslumt7CG3m
-         Ge2cIPzJLScvJuRa6JzKRG8diAWUra2EJqsnwQu1rdKWz+y/z1W7eqV+UCCfyqcwFy
-         F6x00ad0zCuX1DewGSY7BlLvjvia1gFLZ+qLoGQs=
+        b=hD/BOXPBXLQPK05ztvRs6VeVvA8KQuJ80EUkEQbJ7QqskpdLutuEmPkPdKO1mEZEK
+         gcIyvr7JnYN3IclUxtQv9C6kJfE7Llz4c6YcQdsNQJfEGR8Y9axMedV9PMVZxw45qL
+         8iFWb5MNAvmupUxPL/9MeMRQlOF6NteYJSoKJ/Zs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chuanqi Liu <legend050709@qq.com>,
-        yangxingwu <xingwu.yang@gmail.com>,
-        Simon Horman <horms@verge.net.au>,
-        Julian Anastasov <ja@ssi.bg>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 014/106] netfilter: ipvs: Fix reuse connection if RS weight is 0
-Date:   Mon,  6 Dec 2021 15:55:22 +0100
-Message-Id: <20211206145555.878057197@linuxfoundation.org>
+        stable@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Subject: [PATCH 5.15 069/207] drm/i915/dp: Perform 30ms delay after source OUI write
+Date:   Mon,  6 Dec 2021 15:55:23 +0100
+Message-Id: <20211206145612.622414478@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,78 +51,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: yangxingwu <xingwu.yang@gmail.com>
+From: Lyude Paul <lyude@redhat.com>
 
-[ Upstream commit c95c07836fa4c1767ed11d8eca0769c652760e32 ]
+commit a44f42ba7f1ad7d3c17bc7d91013fe814a53c5dc upstream.
 
-We are changing expire_nodest_conn to work even for reused connections when
-conn_reuse_mode=0, just as what was done with commit dc7b3eb900aa ("ipvs:
-Fix reuse connection if real server is dead").
+While working on supporting the Intel HDR backlight interface, I noticed
+that there's a couple of laptops that will very rarely manage to boot up
+without detecting Intel HDR backlight support - even though it's supported
+on the system. One example of such a laptop is the Lenovo P17 1st
+generation.
 
-For controlled and persistent connections, the new connection will get the
-needed real server depending on the rules in ip_vs_check_template().
+Following some investigation Ville Syrjälä did through the docs they have
+available to them, they discovered that there's actually supposed to be a
+30ms wait after writing the source OUI before we begin setting up the rest
+of the backlight interface.
 
-Fixes: d752c3645717 ("ipvs: allow rescheduling of new connections when port reuse is detected")
-Co-developed-by: Chuanqi Liu <legend050709@qq.com>
-Signed-off-by: Chuanqi Liu <legend050709@qq.com>
-Signed-off-by: yangxingwu <xingwu.yang@gmail.com>
-Acked-by: Simon Horman <horms@verge.net.au>
-Acked-by: Julian Anastasov <ja@ssi.bg>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This seems to be correct, as adding this 30ms delay seems to have
+completely fixed the probing issues I was previously seeing. So - let's
+start performing a 30ms wait after writing the OUI, which we do in a manner
+similar to how we keep track of PPS delays (e.g. record the timestamp of
+the OUI write, and then wait for however many ms are left since that
+timestamp right before we interact with the backlight) in order to avoid
+waiting any longer then we need to. As well, this also avoids us performing
+this delay on systems where we don't end up using the HDR backlight
+interface.
+
+V3:
+* Move last_oui_write into intel_dp
+V2:
+* Move panel delays into intel_pps
+
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+Fixes: 4a8d79901d5b ("drm/i915/dp: Enable Intel's HDR backlight interface (only SDR for now)")
+Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Cc: <stable@vger.kernel.org> # v5.12+
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211130212912.212044-1-lyude@redhat.com
+(cherry picked from commit c7c90b0b8418a97d3aa8b39aae1992908948efad)
+Signed-off-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/networking/ipvs-sysctl.txt | 3 +--
- net/netfilter/ipvs/ip_vs_core.c          | 8 ++++----
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/i915/display/intel_display_types.h    |    3 +++
+ drivers/gpu/drm/i915/display/intel_dp.c               |   11 +++++++++++
+ drivers/gpu/drm/i915/display/intel_dp.h               |    2 ++
+ drivers/gpu/drm/i915/display/intel_dp_aux_backlight.c |    5 +++++
+ 4 files changed, 21 insertions(+)
 
-diff --git a/Documentation/networking/ipvs-sysctl.txt b/Documentation/networking/ipvs-sysctl.txt
-index 056898685d408..fc531c29a2e83 100644
---- a/Documentation/networking/ipvs-sysctl.txt
-+++ b/Documentation/networking/ipvs-sysctl.txt
-@@ -30,8 +30,7 @@ conn_reuse_mode - INTEGER
+--- a/drivers/gpu/drm/i915/display/intel_display_types.h
++++ b/drivers/gpu/drm/i915/display/intel_display_types.h
+@@ -1639,6 +1639,9 @@ struct intel_dp {
+ 	struct intel_dp_pcon_frl frl;
  
- 	0: disable any special handling on port reuse. The new
- 	connection will be delivered to the same real server that was
--	servicing the previous connection. This will effectively
--	disable expire_nodest_conn.
-+	servicing the previous connection.
+ 	struct intel_psr psr;
++
++	/* When we last wrote the OUI for eDP */
++	unsigned long last_oui_write;
+ };
  
- 	bit 1: enable rescheduling of new connections when it is safe.
- 	That is, whenever expire_nodest_conn and for TCP sockets, when
-diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
-index a95fe5fe9f046..4b9cd1c1c9987 100644
---- a/net/netfilter/ipvs/ip_vs_core.c
-+++ b/net/netfilter/ipvs/ip_vs_core.c
-@@ -1838,7 +1838,6 @@ ip_vs_in(struct netns_ipvs *ipvs, unsigned int hooknum, struct sk_buff *skb, int
- 	struct ip_vs_proto_data *pd;
- 	struct ip_vs_conn *cp;
- 	int ret, pkts;
--	int conn_reuse_mode;
- 	struct sock *sk;
+ enum lspcon_vendor {
+--- a/drivers/gpu/drm/i915/display/intel_dp.c
++++ b/drivers/gpu/drm/i915/display/intel_dp.c
+@@ -29,6 +29,7 @@
+ #include <linux/i2c.h>
+ #include <linux/notifier.h>
+ #include <linux/slab.h>
++#include <linux/timekeeping.h>
+ #include <linux/types.h>
  
- 	/* Already marked as IPVS request or reply? */
-@@ -1914,15 +1913,16 @@ ip_vs_in(struct netns_ipvs *ipvs, unsigned int hooknum, struct sk_buff *skb, int
- 	 */
- 	cp = pp->conn_in_get(ipvs, af, skb, &iph);
+ #include <asm/byteorder.h>
+@@ -1864,6 +1865,16 @@ intel_edp_init_source_oui(struct intel_d
  
--	conn_reuse_mode = sysctl_conn_reuse_mode(ipvs);
--	if (conn_reuse_mode && !iph.fragoffs && is_new_conn(skb, &iph) && cp) {
-+	if (!iph.fragoffs && is_new_conn(skb, &iph) && cp) {
-+		int conn_reuse_mode = sysctl_conn_reuse_mode(ipvs);
- 		bool old_ct = false, resched = false;
+ 	if (drm_dp_dpcd_write(&intel_dp->aux, DP_SOURCE_OUI, oui, sizeof(oui)) < 0)
+ 		drm_err(&i915->drm, "Failed to write source OUI\n");
++
++	intel_dp->last_oui_write = jiffies;
++}
++
++void intel_dp_wait_source_oui(struct intel_dp *intel_dp)
++{
++	struct drm_i915_private *i915 = dp_to_i915(intel_dp);
++
++	drm_dbg_kms(&i915->drm, "Performing OUI wait\n");
++	wait_remaining_ms_from_jiffies(intel_dp->last_oui_write, 30);
+ }
  
- 		if (unlikely(sysctl_expire_nodest_conn(ipvs)) && cp->dest &&
- 		    unlikely(!atomic_read(&cp->dest->weight))) {
- 			resched = true;
- 			old_ct = ip_vs_conn_uses_old_conntrack(cp, skb);
--		} else if (is_new_conn_expected(cp, conn_reuse_mode)) {
-+		} else if (conn_reuse_mode &&
-+			   is_new_conn_expected(cp, conn_reuse_mode)) {
- 			old_ct = ip_vs_conn_uses_old_conntrack(cp, skb);
- 			if (!atomic_read(&cp->n_control)) {
- 				resched = true;
--- 
-2.33.0
-
+ /* If the device supports it, try to set the power state appropriately */
+--- a/drivers/gpu/drm/i915/display/intel_dp.h
++++ b/drivers/gpu/drm/i915/display/intel_dp.h
+@@ -129,4 +129,6 @@ void intel_dp_pcon_dsc_configure(struct
+ 				 const struct intel_crtc_state *crtc_state);
+ void intel_dp_phy_test(struct intel_encoder *encoder);
+ 
++void intel_dp_wait_source_oui(struct intel_dp *intel_dp);
++
+ #endif /* __INTEL_DP_H__ */
+--- a/drivers/gpu/drm/i915/display/intel_dp_aux_backlight.c
++++ b/drivers/gpu/drm/i915/display/intel_dp_aux_backlight.c
+@@ -35,6 +35,7 @@
+  */
+ 
+ #include "intel_display_types.h"
++#include "intel_dp.h"
+ #include "intel_dp_aux_backlight.h"
+ #include "intel_panel.h"
+ 
+@@ -106,6 +107,8 @@ intel_dp_aux_supports_hdr_backlight(stru
+ 	int ret;
+ 	u8 tcon_cap[4];
+ 
++	intel_dp_wait_source_oui(intel_dp);
++
+ 	ret = drm_dp_dpcd_read(aux, INTEL_EDP_HDR_TCON_CAP0, tcon_cap, sizeof(tcon_cap));
+ 	if (ret != sizeof(tcon_cap))
+ 		return false;
+@@ -204,6 +207,8 @@ intel_dp_aux_hdr_enable_backlight(const
+ 	int ret;
+ 	u8 old_ctrl, ctrl;
+ 
++	intel_dp_wait_source_oui(intel_dp);
++
+ 	ret = drm_dp_dpcd_readb(&intel_dp->aux, INTEL_EDP_HDR_GETSET_CTRL_PARAMS, &old_ctrl);
+ 	if (ret != 1) {
+ 		drm_err(&i915->drm, "Failed to read current backlight control mode: %d\n", ret);
 
 

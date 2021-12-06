@@ -2,163 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3337646A61A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:54:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F64646A61F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:55:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348833AbhLFT5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:57:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238223AbhLFT5i (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:57:38 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C388C061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 11:54:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8708BCE17E3
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 19:54:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7519C341C2;
-        Mon,  6 Dec 2021 19:54:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638820445;
-        bh=fgHu0kEcoocmCUVYAYj+vbWZyCoZTlqZW/u+AtKnBgI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=iBLGGzEftwuPvr/vVMtQP8KWT5tb2HFqAiG3xsmrMEeyff6XrcX+XwzOMHooy8cZC
-         pj9DyxurHy48DG9eCVtvLURhICM5I8kJfWyhImK1ZuEur6rvHdejo+206Ca+WVNRPH
-         jXieErR8nVPXUkqWCuWPpvob+JMP7jBf2Y8sbuMxye6ThGFYBrNWmC31m81drHVp0O
-         JhLtjM0cR0abw414XLZoQ/NUSrz6Rr7PUcVU8eQFH5TnRo9y4h1MUyebRJ2qoaPkM8
-         98o6FzLZ8xqPKEIb8udVYtk2X/Fb66fK5EHvWBxao+TdatIor9c7SGxskkOv0exAYA
-         CVFfCP/VGQ2pQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 81FBD5C1461; Mon,  6 Dec 2021 11:54:05 -0800 (PST)
-Date:   Mon, 6 Dec 2021 11:54:05 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Marco Elver <elver@google.com>
-Cc:     kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -rcu 1/2] kcsan: Avoid nested contexts reading
- inconsistent reorder_access
-Message-ID: <20211206195405.GD641268@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20211206064151.3337384-1-elver@google.com>
+        id S1348839AbhLFT6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:58:52 -0500
+Received: from vps-vb.mhejs.net ([37.28.154.113]:49748 "EHLO vps-vb.mhejs.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234586AbhLFT6u (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 14:58:50 -0500
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1muK4P-0000kW-CR; Mon, 06 Dec 2021 20:54:41 +0100
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Igor Mammedov <imammedo@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v7 00/29] KVM: Scalable memslots implementation
+Date:   Mon,  6 Dec 2021 20:54:06 +0100
+Message-Id: <cover.1638817637.git.maciej.szmigiero@oracle.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206064151.3337384-1-elver@google.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 07:41:50AM +0100, Marco Elver wrote:
-> Nested contexts, such as nested interrupts or scheduler code, share the
-> same kcsan_ctx. When such a nested context reads an inconsistent
-> reorder_access due to an interrupt during set_reorder_access(), we can
-> observe the following warning:
-> 
->  | ------------[ cut here ]------------
->  | Cannot find frame for torture_random kernel/torture.c:456 in stack trace
->  | WARNING: CPU: 13 PID: 147 at kernel/kcsan/report.c:343 replace_stack_entry kernel/kcsan/report.c:343
->  | ...
->  | Call Trace:
->  |  <TASK>
->  |  sanitize_stack_entries kernel/kcsan/report.c:351 [inline]
->  |  print_report kernel/kcsan/report.c:409
->  |  kcsan_report_known_origin kernel/kcsan/report.c:693
->  |  kcsan_setup_watchpoint kernel/kcsan/core.c:658
->  |  rcutorture_one_extend kernel/rcu/rcutorture.c:1475
->  |  rcutorture_loop_extend kernel/rcu/rcutorture.c:1558 [inline]
->  |  ...
->  |  </TASK>
->  | ---[ end trace ee5299cb933115f5 ]---
->  | ==================================================================
->  | BUG: KCSAN: data-race in _raw_spin_lock_irqsave / rcutorture_one_extend
->  |
->  | write (reordered) to 0xffffffff8c93b300 of 8 bytes by task 154 on cpu 12:
->  |  queued_spin_lock                include/asm-generic/qspinlock.h:80 [inline]
->  |  do_raw_spin_lock                include/linux/spinlock.h:185 [inline]
->  |  __raw_spin_lock_irqsave         include/linux/spinlock_api_smp.h:111 [inline]
->  |  _raw_spin_lock_irqsave          kernel/locking/spinlock.c:162
->  |  try_to_wake_up                  kernel/sched/core.c:4003
->  |  sysvec_apic_timer_interrupt     arch/x86/kernel/apic/apic.c:1097
->  |  asm_sysvec_apic_timer_interrupt arch/x86/include/asm/idtentry.h:638
->  |  set_reorder_access              kernel/kcsan/core.c:416 [inline]    <-- inconsistent reorder_access
->  |  kcsan_setup_watchpoint          kernel/kcsan/core.c:693
->  |  rcutorture_one_extend           kernel/rcu/rcutorture.c:1475
->  |  rcutorture_loop_extend          kernel/rcu/rcutorture.c:1558 [inline]
->  |  rcu_torture_one_read            kernel/rcu/rcutorture.c:1600
->  |  rcu_torture_reader              kernel/rcu/rcutorture.c:1692
->  |  kthread                         kernel/kthread.c:327
->  |  ret_from_fork                   arch/x86/entry/entry_64.S:295
->  |
->  | read to 0xffffffff8c93b300 of 8 bytes by task 147 on cpu 13:
->  |  rcutorture_one_extend           kernel/rcu/rcutorture.c:1475
->  |  rcutorture_loop_extend          kernel/rcu/rcutorture.c:1558 [inline]
->  |  ...
-> 
-> The warning is telling us that there was a data race which KCSAN wants
-> to report, but the function where the original access (that is now
-> reordered) happened cannot be found in the stack trace, which prevents
-> KCSAN from generating the right stack trace. The stack trace of "write
-> (reordered)" now only shows where the access was reordered to, but
-> should instead show the stack trace of the original write, with a final
-> line saying "reordered to".
-> 
-> At the point where set_reorder_access() is interrupted, it just set
-> reorder_access->ptr and size, at which point size is non-zero. This is
-> sufficient (if ctx->disable_scoped is zero) for further accesses from
-> nested contexts to perform checking of this reorder_access.
-> 
-> That then happened in _raw_spin_lock_irqsave(), which is called by
-> scheduler code. However, since reorder_access->ip is still stale (ptr
-> and size belong to a different ip not yet set) this finally leads to
-> replace_stack_entry() not finding the frame in reorder_access->ip and
-> generating the above warning.
-> 
-> Fix it by ensuring that a nested context cannot access reorder_access
-> while we update it in set_reorder_access(): set ctx->disable_scoped for
-> the duration that reorder_access is updated, which effectively locks
-> reorder_access and prevents concurrent use by nested contexts. Note,
-> set_reorder_access() can do the update only if disabled_scoped is zero
-> on entry, and must therefore set disable_scoped back to non-zero after
-> the initial check in set_reorder_access().
-> 
-> Signed-off-by: Marco Elver <elver@google.com>
+From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
 
-I pulled both of these in, thank you!
+This series is the seventh iteration of the scalable memslots patch set.
+It contains a few minor changes that were pointed out during the review
+of the previous version.
 
-							Thanx, Paul
+The series was tested on x86 with KASAN on and booted various guests
+successfully (including nested ones; with TDP MMU both enabled and disabled).
 
-> ---
->  kernel/kcsan/core.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/kernel/kcsan/core.c b/kernel/kcsan/core.c
-> index 916060913966..fe12dfe254ec 100644
-> --- a/kernel/kcsan/core.c
-> +++ b/kernel/kcsan/core.c
-> @@ -412,11 +412,20 @@ set_reorder_access(struct kcsan_ctx *ctx, const volatile void *ptr, size_t size,
->  	if (!reorder_access || !kcsan_weak_memory)
->  		return;
->  
-> +	/*
-> +	 * To avoid nested interrupts or scheduler (which share kcsan_ctx)
-> +	 * reading an inconsistent reorder_access, ensure that the below has
-> +	 * exclusive access to reorder_access by disallowing concurrent use.
-> +	 */
-> +	ctx->disable_scoped++;
-> +	barrier();
->  	reorder_access->ptr		= ptr;
->  	reorder_access->size		= size;
->  	reorder_access->type		= type | KCSAN_ACCESS_SCOPED;
->  	reorder_access->ip		= ip;
->  	reorder_access->stack_depth	= get_kcsan_stack_depth();
-> +	barrier();
-> +	ctx->disable_scoped--;
->  }
->  
->  /*
-> -- 
-> 2.34.1.400.ga245620fadb-goog
-> 
+The previous version (6) is available here:
+https://lore.kernel.org/kvm/cover.1638304315.git.maciej.szmigiero@oracle.com/
+
+
+Changes from v6:
+* Add braces around a "for" loop in kvm_check_memslot_overlap(),
+
+* Add a note to commit 25 that kvm_arch_flush_shadow_memslot() might now
+  receive a memslot with stale data in the "arch" field,	       
+
+* Keep "slot" in kvm_for_each_memslot_in_gfn_range() iterator and remove
+  the "end" field there,
+
+* Reorder my SoB on patches so it's always the last SoB on a patch,
+
+* Convert some of Sean's SoBs to "Reviewed-by:",
+  keeping his SoB on patches that are either from him or co-developed by
+  him while removing this tag on the remaining ones.
+
+
+Maciej S. Szmigiero (12):
+  KVM: Resync only arch fields when slots_arch_lock gets reacquired
+  KVM: x86: Don't call kvm_mmu_change_mmu_pages() if the count hasn't
+    changed
+  KVM: x86: Use nr_memslot_pages to avoid traversing the memslots array
+  KVM: Integrate gfn_to_memslot_approx() into search_memslots()
+  KVM: Move WARN on invalid memslot index to update_memslots()
+  KVM: Resolve memslot ID via a hash table instead of via a static array
+  KVM: Use interval tree to do fast hva lookup in memslots
+  KVM: s390: Introduce kvm_s390_get_gfn_end()
+  KVM: Keep memslots in tree-based structures instead of array-based
+    ones
+  KVM: Call kvm_arch_flush_shadow_memslot() on the old slot in
+    kvm_invalidate_memslot()
+  KVM: Optimize gfn lookup in kvm_zap_gfn_range()
+  KVM: Optimize overlapping memslots check
+
+Sean Christopherson (17):
+  KVM: Require total number of memslot pages to fit in an unsigned long
+  KVM: Open code kvm_delete_memslot() into its only caller
+  KVM: Use "new" memslot's address space ID instead of dedicated param
+  KVM: Let/force architectures to deal with arch specific memslot data
+  KVM: arm64: Use "new" memslot instead of userspace memory region
+  KVM: MIPS: Drop pr_debug from memslot commit to avoid using "mem"
+  KVM: PPC: Avoid referencing userspace memory region in memslot updates
+  KVM: s390: Use "new" memslot instead of userspace memory region
+  KVM: x86: Use "new" memslot instead of userspace memory region
+  KVM: RISC-V: Use "new" memslot instead of userspace memory region
+  KVM: Stop passing kvm_userspace_memory_region to arch memslot hooks
+  KVM: Use prepare/commit hooks to handle generic memslot metadata
+    updates
+  KVM: x86: Don't assume old/new memslots are non-NULL at memslot commit
+  KVM: s390: Skip gfn/size sanity checks on memslot DELETE or FLAGS_ONLY
+  KVM: Don't make a full copy of the old memslot in
+    __kvm_set_memory_region()
+  KVM: Wait 'til the bitter end to initialize the "new" memslot
+  KVM: Dynamically allocate "new" memslots from the get-go
+
+ arch/arm64/kvm/Kconfig              |   1 +
+ arch/arm64/kvm/mmu.c                |  27 +-
+ arch/mips/kvm/Kconfig               |   1 +
+ arch/mips/kvm/mips.c                |   9 +-
+ arch/powerpc/include/asm/kvm_ppc.h  |  14 +-
+ arch/powerpc/kvm/Kconfig            |   1 +
+ arch/powerpc/kvm/book3s.c           |  14 +-
+ arch/powerpc/kvm/book3s_64_mmu_hv.c |   4 +-
+ arch/powerpc/kvm/book3s_hv.c        |  28 +-
+ arch/powerpc/kvm/book3s_hv_nested.c |   4 +-
+ arch/powerpc/kvm/book3s_hv_uvmem.c  |  14 +-
+ arch/powerpc/kvm/book3s_pr.c        |   9 +-
+ arch/powerpc/kvm/booke.c            |   7 +-
+ arch/powerpc/kvm/powerpc.c          |   9 +-
+ arch/riscv/kvm/mmu.c                |  31 +-
+ arch/s390/kvm/Kconfig               |   1 +
+ arch/s390/kvm/kvm-s390.c            |  98 ++--
+ arch/s390/kvm/kvm-s390.h            |  14 +
+ arch/s390/kvm/pv.c                  |   4 +-
+ arch/x86/include/asm/kvm_host.h     |   3 +-
+ arch/x86/kvm/Kconfig                |   1 +
+ arch/x86/kvm/debugfs.c              |   6 +-
+ arch/x86/kvm/mmu/mmu.c              |  38 +-
+ arch/x86/kvm/x86.c                  |  41 +-
+ include/linux/kvm_host.h            | 272 ++++++---
+ virt/kvm/kvm_main.c                 | 836 ++++++++++++++++------------
+ 26 files changed, 850 insertions(+), 637 deletions(-)
+

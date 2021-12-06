@@ -2,100 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D8046A1BB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6177546A1BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237959AbhLFQug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:50:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
+        id S238407AbhLFQuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:50:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238407AbhLFQue (ORCPT
+        with ESMTP id S238218AbhLFQun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:50:34 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A27C061D7F;
-        Mon,  6 Dec 2021 08:47:02 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso14411052otj.1;
-        Mon, 06 Dec 2021 08:47:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=UfMvdtz7TetuUq58w7Z6QC2WTUyddtJHcjVCTWEKWuI=;
-        b=Hw9skppLMOky7VXGvOK9BNwNpBMi2pOHR1Tq4Hl1/Y093PHKAAIb8dSK3gEQy48xbS
-         5Nh0GhWkPbLF6sbOP55hkdWH8ecHdX7OS/ISyrAGF0xXHYxoHoDp5dbvNuw29Clz+yGs
-         VjewNKjYHIEb6Mr8Qk+5x8271iIwqq+N2JbCmFWXUpONdKbxOVvVeS+A2YQhStpN4qo2
-         q7bq85T2JJu4KMw0dWGfjwaMjaa0J+Pqt5oNaEh9SskJsGEEPn8e4egeMSB1FlO+DHde
-         Ay1FQfDupbWoVRl3d63J79IR9nW7EkCTGY2EMXjjeecUTl/LgQBcSwgTg6cRvYDHzFLi
-         n+Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=UfMvdtz7TetuUq58w7Z6QC2WTUyddtJHcjVCTWEKWuI=;
-        b=v0CCLMZTw1cOC1ENEty5Xt79vD6WwM7LAJRw79OAMVuWG7B53FEJnR1wD5fEJwC3V2
-         pUCq4bptJbNt3Jzt4Lt4olKiYYc/iETeoo71nCb3c/IaD93rpCaOsRlrT3c09cnw3fVV
-         m+DKUtl1NwvQ/aQqA1WNBC7eIbWnjf/Y77rIe/i89FTwNezh7vuabqnX5WQO5XmFZRkA
-         CcHtStxe5dIlavawy7BiIdl/AQO8aLpbIQJWonS0wfIH5Tn4lLQ6NQfViJqt2sR6rB5l
-         BhOmqW110FLGwDq2CvgJUc9XaBOoacPjLGLzyYlc1DJKG5Fi4SgL0BeuvgsjFAGTl5ay
-         dK7Q==
-X-Gm-Message-State: AOAM530ijItgJ1Egv5xtsA74/42nV00WXnCVMMeDfHEA+3xefNOCM9Vc
-        UuLHbHYKaDgCjFK90ggvhK3pB1lofJo=
-X-Google-Smtp-Source: ABdhPJw4A2p8Ik+52sJ93aDNnTLR1Y9iP+AK3OrrJlpsKy3aDgDarDw3HKXe1DNxJy8lN3E9SHUJ0Q==
-X-Received: by 2002:a9d:4a8:: with SMTP id 37mr31067133otm.83.1638809221868;
-        Mon, 06 Dec 2021 08:47:01 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m22sm2438251ooj.8.2021.12.06.08.46.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 08:47:00 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org
-References: <20211206145559.607158688@linuxfoundation.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 5.10 000/130] 5.10.84-rc1 review
-Message-ID: <4a881261-ba90-2095-58df-13dcffe6bcf2@roeck-us.net>
-Date:   Mon, 6 Dec 2021 08:46:58 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 6 Dec 2021 11:50:43 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8715CC0613F8;
+        Mon,  6 Dec 2021 08:47:14 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 021921F44A9A
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638809233; bh=eySRGQLbNOqYcJFdEtWXKNpdKPAAJqJEFoPWxe6NFEs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kG/aqFPaO9FXOBd8S0OrROFiszjPbRsX1/TYXZNyydzGLG4cvxiiMOsApvgabBCuZ
+         QotqXTxOCWu1rm4Cuajuqc+iuyy0asath5Trthuh1xyJkfRpxORht3fYUeS/krMXSP
+         4IX066p3EI9sLfAD6WsmFQ4HO7X9cWHniJYwYkzxZ4efo4pbmo9h7bcKEMTPD6QIj/
+         QC4RA6LUvv1Qpc3mP4WGtaOeewXB4lNT+INj+6iSfyL8Z8PRnRQdwUz+1cXWLjQKEV
+         8NW7JfTAPh24h4zOu5bNtWiOjGW+ZGyF8i2aIda/1pbQXmARrX4raSfDsjsbkHzGJ5
+         K2SP+BePr2YIg==
+Date:   Mon, 6 Dec 2021 11:47:07 -0500
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Chun-Jie Chen <chun-jie.chen@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        srv_heupstream@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [v1 3/5] arm64: dts: mediatek: Correct SPI clock of MT8192
+Message-ID: <20211206164707.u4tvsmr7fnkzs5tu@notapiano>
+References: <20210825011120.30481-1-chun-jie.chen@mediatek.com>
+ <20210825011120.30481-4-chun-jie.chen@mediatek.com>
 MIME-Version: 1.0
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210825011120.30481-4-chun-jie.chen@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/6/21 6:55 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.84 release.
-> There are 130 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Hi,
+
+On Wed, Aug 25, 2021 at 09:11:18AM +0800, Chun-Jie Chen wrote:
+> update uart0 ~ 7 clocks to the real ones.
+
+Same comment from patch 1. But also here you had a typo: should be spi instead
+of uart.
+
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
+Thanks,
+Nícolas
+
 > 
-> Responses should be made by Wed, 08 Dec 2021 14:55:37 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 48 ++++++++++++------------
+>  1 file changed, 24 insertions(+), 24 deletions(-)
 > 
-
-Building i386:allyesconfig ... failed
---------------
-Error log:
-x86_64-linux-ld: drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd.o: in function `amdgpu_amdkfd_resume_iommu':
-amdgpu_amdkfd.c:(.text+0x2b3): undefined reference to `kgd2kfd_resume_iommu'
-
-Building i386:allmodconfig ... failed
---------------
-Error log:
-ERROR: modpost: "kgd2kfd_resume_iommu" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
-
-The same error is seen for alpha:allmodconfig, arm:allmodconfig,
-mips:allmodconfig, parisc:allmodconfig, riscv32:allmodconfig,
-riscv64:allmodconfig, s390:allmodconfig, sparc64:allmodconfig,
-and xtensa:allmodconfig.
-
-Guenter
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> index 31d135e18784..d1c85d3e152b 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> @@ -355,9 +355,9 @@
+>  			#size-cells = <0>;
+>  			reg = <0 0x1100a000 0 0x1000>;
+>  			interrupts = <GIC_SPI 159 IRQ_TYPE_LEVEL_HIGH 0>;
+> -			clocks = <&clk26m>,
+> -				 <&clk26m>,
+> -				 <&clk26m>;
+> +			clocks = <&topckgen CLK_TOP_MAINPLL_D5_D4>,
+> +				 <&topckgen CLK_TOP_SPI_SEL>,
+> +				 <&infracfg CLK_INFRA_SPI0>;
+>  			clock-names = "parent-clk", "sel-clk", "spi-clk";
+>  			status = "disabled";
+>  		};
+> @@ -369,9 +369,9 @@
+>  			#size-cells = <0>;
+>  			reg = <0 0x11010000 0 0x1000>;
+>  			interrupts = <GIC_SPI 160 IRQ_TYPE_LEVEL_HIGH 0>;
+> -			clocks = <&clk26m>,
+> -				 <&clk26m>,
+> -				 <&clk26m>;
+> +			clocks = <&topckgen CLK_TOP_MAINPLL_D5_D4>,
+> +				 <&topckgen CLK_TOP_SPI_SEL>,
+> +				 <&infracfg CLK_INFRA_SPI1>;
+>  			clock-names = "parent-clk", "sel-clk", "spi-clk";
+>  			status = "disabled";
+>  		};
+> @@ -383,9 +383,9 @@
+>  			#size-cells = <0>;
+>  			reg = <0 0x11012000 0 0x1000>;
+>  			interrupts = <GIC_SPI 161 IRQ_TYPE_LEVEL_HIGH 0>;
+> -			clocks = <&clk26m>,
+> -				 <&clk26m>,
+> -				 <&clk26m>;
+> +			clocks = <&topckgen CLK_TOP_MAINPLL_D5_D4>,
+> +				 <&topckgen CLK_TOP_SPI_SEL>,
+> +				 <&infracfg CLK_INFRA_SPI2>;
+>  			clock-names = "parent-clk", "sel-clk", "spi-clk";
+>  			status = "disabled";
+>  		};
+> @@ -397,9 +397,9 @@
+>  			#size-cells = <0>;
+>  			reg = <0 0x11013000 0 0x1000>;
+>  			interrupts = <GIC_SPI 162 IRQ_TYPE_LEVEL_HIGH 0>;
+> -			clocks = <&clk26m>,
+> -				 <&clk26m>,
+> -				 <&clk26m>;
+> +			clocks = <&topckgen CLK_TOP_MAINPLL_D5_D4>,
+> +				 <&topckgen CLK_TOP_SPI_SEL>,
+> +				 <&infracfg CLK_INFRA_SPI3>;
+>  			clock-names = "parent-clk", "sel-clk", "spi-clk";
+>  			status = "disabled";
+>  		};
+> @@ -411,9 +411,9 @@
+>  			#size-cells = <0>;
+>  			reg = <0 0x11018000 0 0x1000>;
+>  			interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH 0>;
+> -			clocks = <&clk26m>,
+> -				 <&clk26m>,
+> -				 <&clk26m>;
+> +			clocks = <&topckgen CLK_TOP_MAINPLL_D5_D4>,
+> +				 <&topckgen CLK_TOP_SPI_SEL>,
+> +				 <&infracfg CLK_INFRA_SPI4>;
+>  			clock-names = "parent-clk", "sel-clk", "spi-clk";
+>  			status = "disabled";
+>  		};
+> @@ -425,9 +425,9 @@
+>  			#size-cells = <0>;
+>  			reg = <0 0x11019000 0 0x1000>;
+>  			interrupts = <GIC_SPI 164 IRQ_TYPE_LEVEL_HIGH 0>;
+> -			clocks = <&clk26m>,
+> -				 <&clk26m>,
+> -				 <&clk26m>;
+> +			clocks = <&topckgen CLK_TOP_MAINPLL_D5_D4>,
+> +				 <&topckgen CLK_TOP_SPI_SEL>,
+> +				 <&infracfg CLK_INFRA_SPI5>;
+>  			clock-names = "parent-clk", "sel-clk", "spi-clk";
+>  			status = "disabled";
+>  		};
+> @@ -439,9 +439,9 @@
+>  			#size-cells = <0>;
+>  			reg = <0 0x1101d000 0 0x1000>;
+>  			interrupts = <GIC_SPI 165 IRQ_TYPE_LEVEL_HIGH 0>;
+> -			clocks = <&clk26m>,
+> -				 <&clk26m>,
+> -				 <&clk26m>;
+> +			clocks = <&topckgen CLK_TOP_MAINPLL_D5_D4>,
+> +				 <&topckgen CLK_TOP_SPI_SEL>,
+> +				 <&infracfg CLK_INFRA_SPI6>;
+>  			clock-names = "parent-clk", "sel-clk", "spi-clk";
+>  			status = "disabled";
+>  		};
+> @@ -453,9 +453,9 @@
+>  			#size-cells = <0>;
+>  			reg = <0 0x1101e000 0 0x1000>;
+>  			interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_HIGH 0>;
+> -			clocks = <&clk26m>,
+> -				 <&clk26m>,
+> -				 <&clk26m>;
+> +			clocks = <&topckgen CLK_TOP_MAINPLL_D5_D4>,
+> +				 <&topckgen CLK_TOP_SPI_SEL>,
+> +				 <&infracfg CLK_INFRA_SPI7>;
+>  			clock-names = "parent-clk", "sel-clk", "spi-clk";
+>  			status = "disabled";
+>  		};
+> -- 
+> 2.18.0
+> 
+> 

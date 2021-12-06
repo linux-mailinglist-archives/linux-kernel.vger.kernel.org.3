@@ -2,304 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4AA046A146
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7287B46A14A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:25:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240062AbhLFQ2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:28:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245546AbhLFQ2j (ORCPT
+        id S1345674AbhLFQ3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:29:00 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:63222 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S239044AbhLFQ26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:28:39 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA83C061359
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:25:10 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso14237255otf.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 08:25:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oxjEfTWOmaP7pZiU/lsiM3HBFWw8g2ciGnA41bmg1W4=;
-        b=Su0TIZSIS2211s1e9/4DNfZ9QdbllmaHoRHcVCCZ9jyW7UxvZa1wCK53vfymIdUszn
-         89pg0kJRVK61ZBQTxRTxXBHkWDC2T4SeEtcUeIXHuaJrEkmgSVwBrp/Tvxhi14nwh/m1
-         BFtUgO744XQdRJlejLJWqE9AVLuVOqvx+BQQXAhBPFOp0RwBkcqvqescgf0V67URRz11
-         SevGG79T6AbZUW3JXcJaAgo4ysorw4iSos/4RO8PfAS4vokL6dRZ+3NnMTO68IN2DY/C
-         3T8RB/1K6TKNe5wF0zDtiA4G22Vod4Sb9E5r0JE0PyvOvY2ZT6LdMfjvF2ngTN/QXzLa
-         i07Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oxjEfTWOmaP7pZiU/lsiM3HBFWw8g2ciGnA41bmg1W4=;
-        b=BJUh0sqNqRJbyZIunWPlIpjlTagxky1SzAUlZBemfT/s9A9myI8FLN5ZgtJsAflzUu
-         VqKdpj1QY2GU0hFgipUKW68skvaonzAMnpLiRFqLEFpaK5RAEPNoIjC92aGSIogKY5b1
-         P2oFf40+vL58o+KkR15QSgNIOzYBgG1tUWN7HYX20qwdWhT2ahQR6IIqtN3al+UXW57W
-         yLZ4rVntFVb62/W9VcBwN2/vGP4Htadlj1S1pPE3dQ47hWxqj2Qh/LrPnGqbaWnjVSvx
-         QIEMW5JpfRSeJQroTbFSQC8D3G06BTh+LdHmkswCYleYYVxfXmHJGxkZfSTBoK7Q+att
-         lWJQ==
-X-Gm-Message-State: AOAM533veZsg/xBi9akldXujfisfsPBCnBmDXsWsyzf0AMfSUpkfv5Wx
-        F7ORf0S6Waz2Llvpq30XdUViqQ==
-X-Google-Smtp-Source: ABdhPJwEa0lxr4O/X502RfLfqHwoH3oj9UIuY7xIL8wEUyBkouiZ73MniMtOownAxVsYRQpcLzdcDg==
-X-Received: by 2002:a9d:6348:: with SMTP id y8mr30396341otk.243.1638807909676;
-        Mon, 06 Dec 2021 08:25:09 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id z7sm2694067oib.0.2021.12.06.08.25.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 08:25:09 -0800 (PST)
-Date:   Mon, 6 Dec 2021 10:25:04 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Srinivasa Rao Mandadapu <srivasam@codeaurora.com>
-Cc:     agross@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, plai@codeaurora.org, bgoswami@codeaurora.org,
-        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
-        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org, Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org,
-        Srinivasa Rao Mandadapu <srivasam@codeaurora.org>,
-        Venkata Prasad Potturu <potturu@codeaurora.org>
-Subject: Re: [PATCH v4 5/5] pinctrl: qcom: Add SC7280 lpass pin configuration
-Message-ID: <Ya45YKsdloY8l8do@builder.lan>
-References: <1638531140-25899-1-git-send-email-srivasam@codeaurora.com>
- <1638531140-25899-6-git-send-email-srivasam@codeaurora.com>
+        Mon, 6 Dec 2021 11:28:58 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B6GHnv9005940;
+        Mon, 6 Dec 2021 16:25:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=DLKyHiV+KNG9V2QveWolt+N9E6nDAcq+PbrP/y1TqsY=;
+ b=YymX0+0rEP1n7w1PmZWE90N5IG3H+mOSOtj5oe5de85hORa/vB8SfBrp6XhK/OjSHAlE
+ CTiOPDobPlsQ0Xui9NWLRLeaZOFJBbriY35XIdY/056iyVuNsrQyCbdB12e64PdudvDg
+ qbVnBkifO2RO2vQ91OriXN9ZcaHsWi12H8Pl6ko0lwmiGSnLQ4aMGfRyZGpGYAtiGMLR
+ zZqQeFHaYvv7HjsSwFNPTjIyN5Sl0FGVwTx+8XFyMrrVg0wji1/5ksULPuDXDvLt+UiO
+ P5RlPZsL09SGR5I0xQ96xtM83fBQoNhnyFUOuTrpbOcBjOcAifVHO3wdbAEvi3pxlHY5 JA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3csnwqr42w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 16:25:14 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B6GJXwg013265;
+        Mon, 6 Dec 2021 16:25:14 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3csnwqr42f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 16:25:14 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B6GIGCP006172;
+        Mon, 6 Dec 2021 16:25:13 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma03wdc.us.ibm.com with ESMTP id 3cqyy719m2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 16:25:13 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B6GPCiw32244074
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Dec 2021 16:25:12 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F403778083;
+        Mon,  6 Dec 2021 16:25:11 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 98995780B2;
+        Mon,  6 Dec 2021 16:25:09 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.211.77.2])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Dec 2021 16:25:09 +0000 (GMT)
+Message-ID: <7cc68f5519a218da54560bffe76d2d88c3573def.camel@linux.ibm.com>
+Subject: Re: [RFC v2 19/19] ima: Setup securityfs for IMA namespace
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Date:   Mon, 06 Dec 2021 11:25:08 -0500
+In-Reply-To: <20211206154430.jet2xysbtvtrjqgr@wittgenstein>
+References: <20211203023118.1447229-1-stefanb@linux.ibm.com>
+         <20211203023118.1447229-20-stefanb@linux.ibm.com>
+         <df433bc52ca1e0408d48bbace4c34a573991f5ba.camel@linux.ibm.com>
+         <6306b4e5-f26d-1704-6344-354eb5387abf@linux.ibm.com>
+         <11b557b58de74828b1c16334a5fb52c4d3f6ad0f.camel@linux.ibm.com>
+         <ed654d0f-6194-ce29-a854-3d9128d81b7a@schaufler-ca.com>
+         <20211206120847.ayr3zycigld6rf4j@wittgenstein>
+         <36c97ac9821dfc03aa7b370648c8be423979cc5a.camel@linux.ibm.com>
+         <20211206154430.jet2xysbtvtrjqgr@wittgenstein>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1638531140-25899-6-git-send-email-srivasam@codeaurora.com>
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: HrpS5lOeN59Am9S21NtG9U122lTUPG7F
+X-Proofpoint-ORIG-GUID: zD3zOk7j41n_2U7oUE8RAtRz-pGEdGSj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-06_05,2021-12-06_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ impostorscore=0 bulkscore=0 suspectscore=0 clxscore=1015
+ priorityscore=1501 adultscore=0 mlxlogscore=999 phishscore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112060100
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 03 Dec 05:32 CST 2021, Srinivasa Rao Mandadapu wrote:
-
-> From: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
+On Mon, 2021-12-06 at 16:44 +0100, Christian Brauner wrote:
+> On Mon, Dec 06, 2021 at 08:38:29AM -0500, James Bottomley wrote:
+> > On Mon, 2021-12-06 at 13:08 +0100, Christian Brauner wrote:
+[...]
+> > >  Instead subsequents mounts resurface the same superblock. There
+> > > might be an inherent design reason why this needs to be this way
+> > > but I would advise against these semantics for anything that
+> > > wants to be namespaced. Probably the first securityfs mount in
+> > > init_user_ns can follow these semantics but ones tied to a non-
+> > > initial user namespace should not as the userns can go away. In
+> > > that case the pinning logic seems strange as conceptually the
+> > > userns pins the securityfs mount as evidenced by the fact that we
+> > > key by it in get_tree_keyed().
+> > 
+> > Yes, that's basically what I did: pin if ns == &init_user_ns but
+> > don't pin if not.  However, I'm still not sure I got the triggers
+> > right.  We have to trigger the notifier call (which adds the
+> > namespaced file entries) from context free, because that's the
+> > first place the superblock mount is fully set up ... I can't do it
+> > in fill_super because the mount isn't fully initialized (and the
+> > locking prevents it).  I did manage to get the notifier for
+> > teardown triggered from kill_super, though.
 > 
-> Add pin control support for SC7280 LPASS LPI.
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-> Co-developed-by: Venkata Prasad Potturu <potturu@codeaurora.org>
-> Signed-off-by: Venkata Prasad Potturu <potturu@codeaurora.org>
-> ---
->  drivers/pinctrl/qcom/Kconfig                    |   8 ++
->  drivers/pinctrl/qcom/Makefile                   |   1 +
->  drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c | 169 ++++++++++++++++++++++++
->  3 files changed, 178 insertions(+)
->  create mode 100644 drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c
-> 
-> diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfig
-> index e750e10..37fe868 100644
-> --- a/drivers/pinctrl/qcom/Kconfig
-> +++ b/drivers/pinctrl/qcom/Kconfig
-> @@ -328,4 +328,12 @@ config PINCTRL_SM8250_LPASS_LPI
->  	  Qualcomm Technologies Inc LPASS (Low Power Audio SubSystem) LPI
->  	  (Low Power Island) found on the Qualcomm Technologies Inc SM8250 platform.
->  
-> +config PINCTRL_SC7280_LPASS_LPI
-> +	tristate "Qualcomm Technologies Inc SM8250 LPASS LPI pin controller driver"
+> I don't think you need a vfsmount at all to be honest. I think this
+> can all be done without much ceremony. Here's a brutalist completely
+> untested patch outlining one approach:
 
-You misspelled SC7280 here.
+This is what I did (incremental to Stefan's series + my previous
+patch): it avoids superblock threading by switching to a root dentry in
+the securityfs user namespace area ... or am I being too simple again
+... ?
 
-> +	depends on PINCTRL_LPASS_LPI
-> +	help
-> +	  This is the pinctrl, pinmux, pinconf and gpiolib driver for the
-> +	  Qualcomm Technologies Inc LPASS (Low Power Audio SubSystem) LPI
-> +	  (Low Power Island) found on the Qualcomm Technologies Inc SC7280 platform.
-> +
->  endif
-> diff --git a/drivers/pinctrl/qcom/Makefile b/drivers/pinctrl/qcom/Makefile
-> index 8bc877e..6c3ddaf 100644
-> --- a/drivers/pinctrl/qcom/Makefile
-> +++ b/drivers/pinctrl/qcom/Makefile
-> @@ -38,3 +38,4 @@ obj-$(CONFIG_PINCTRL_SM8250) += pinctrl-sm8250.o
->  obj-$(CONFIG_PINCTRL_SM8350) += pinctrl-sm8350.o
->  obj-$(CONFIG_PINCTRL_LPASS_LPI) += pinctrl-lpass-lpi.o
->  obj-$(CONFIG_PINCTRL_SM8250_LPASS_LPI) += pinctrl-sm8250-lpass-lpi.o
-> +obj-$(CONFIG_PINCTRL_SC7280_LPASS_LPI) += pinctrl-sc7280-lpass-lpi.o
+I'm still a bit unhappy about triggering a blocking notifier under the
+umount semaphore ...
 
-Please keep these entries sorted alphabetically, same with Kconfig.
+James
 
-Regards,
-Bjorn
+---
+diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
+index 6b8bd060d8c4..03a0879376a0 100644
+--- a/include/linux/user_namespace.h
++++ b/include/linux/user_namespace.h
+@@ -104,8 +104,7 @@ struct user_namespace {
+ 	struct ima_namespace	*ima_ns;
+ #endif
+ #ifdef CONFIG_SECURITYFS
+-	struct vfsmount		*securityfs_mount;
+-	bool			securityfs_notifier_sent;
++	struct dentry		*securityfs_root;
+ #endif
+ } __randomize_layout;
+ 
+diff --git a/security/inode.c b/security/inode.c
+index 62ab4630dc31..863fccfd3687 100644
+--- a/security/inode.c
++++ b/security/inode.c
+@@ -25,6 +25,7 @@
+ #include <linux/user_namespace.h>
+ #include <linux/ima.h>
+ 
++static struct vfsmount *securityfs_mount;
+ static int securityfs_mount_count;
+ 
+ static BLOCKING_NOTIFIER_HEAD(securityfs_ns_notifier);
+@@ -41,42 +42,22 @@ static const struct super_operations securityfs_super_operations = {
+ 	.free_inode	= securityfs_free_inode,
+ };
+ 
+-static struct file_system_type fs_type;
+-
+-static void securityfs_free_context(struct fs_context *fc)
+-{
+-	struct user_namespace *ns = fc->user_ns;
+-	if (ns == &init_user_ns ||
+-	    ns->securityfs_notifier_sent)
+-		return;
+-
+-	ns->securityfs_notifier_sent = true;
+-
+-	ns->securityfs_mount = vfs_kern_mount(&fs_type, SB_KERNMOUNT,
+-					      fs_type.name, NULL);
+-	if (IS_ERR(ns->securityfs_mount)) {
+-		printk(KERN_ERR "kern mount on securityfs ERROR: %ld\n",
+-		       PTR_ERR(ns->securityfs_mount));
+-		ns->securityfs_mount = NULL;
+-		return;
+-	}
+-
+-	blocking_notifier_call_chain(&securityfs_ns_notifier,
+-				     SECURITYFS_NS_ADD, fc->user_ns);
+-	mntput(ns->securityfs_mount);
+-}
+-
+ static int securityfs_fill_super(struct super_block *sb, struct fs_context *fc)
+ {
+ 	static const struct tree_descr files[] = {{""}};
+ 	int error;
++	struct user_namespace *ns = fc->user_ns;
+ 
+ 	error = simple_fill_super(sb, SECURITYFS_MAGIC, files);
+ 	if (error)
+ 		return error;
+ 
++	ns->securityfs_root = sb->s_root;
++
+ 	sb->s_op = &securityfs_super_operations;
+ 
++	blocking_notifier_call_chain(&securityfs_ns_notifier,
++				     SECURITYFS_NS_ADD, ns);
+ 	return 0;
+ }
+ 
+@@ -87,7 +68,6 @@ static int securityfs_get_tree(struct fs_context *fc)
+ 
+ static const struct fs_context_operations securityfs_context_ops = {
+ 	.get_tree	= securityfs_get_tree,
+-	.free		= securityfs_free_context,
+ };
+ 
+ static int securityfs_init_fs_context(struct fs_context *fc)
+@@ -104,8 +84,7 @@ static void securityfs_kill_super(struct super_block *sb)
+ 		blocking_notifier_call_chain(&securityfs_ns_notifier,
+ 					     SECURITYFS_NS_REMOVE,
+ 					     sb->s_fs_info);
+-	ns->securityfs_notifier_sent = false;
+-	ns->securityfs_mount = NULL;
++	ns->securityfs_root = NULL;
+ 	kill_litter_super(sb);
+ }
+ 
+@@ -179,14 +158,18 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+ 	pr_debug("securityfs: creating file '%s', ns=%u\n",name, ns->ns.inum);
+ 
+ 	if (ns == &init_user_ns) {
+-		error = simple_pin_fs(&fs_type, &ns->securityfs_mount,
++		error = simple_pin_fs(&fs_type, &securityfs_mount,
+ 				      &securityfs_mount_count);
+ 		if (error)
+ 			return ERR_PTR(error);
+ 	}
+ 
+-	if (!parent)
+-		parent = ns->securityfs_mount->mnt_root;
++	if (!parent) {
++		if (ns == &init_user_ns)
++			parent = securityfs_mount->mnt_root;
++		else
++			parent = ns->securityfs_root;
++	}
+ 
+ 	dir = d_inode(parent);
+ 
+@@ -232,7 +215,7 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+ out:
+ 	inode_unlock(dir);
+ 	if (ns == &init_user_ns)
+-		simple_release_fs(&ns->securityfs_mount,
++		simple_release_fs(&securityfs_mount,
+ 				  &securityfs_mount_count);
+ 	return dentry;
+ }
+@@ -376,7 +359,7 @@ void securityfs_remove(struct dentry *dentry)
+ 	}
+ 	inode_unlock(dir);
+ 	if (ns == &init_user_ns)
+-		simple_release_fs(&ns->securityfs_mount,
++		simple_release_fs(&securityfs_mount,
+ 				  &securityfs_mount_count);
+ }
+ EXPORT_SYMBOL(securityfs_remove);
+@@ -405,8 +388,6 @@ static int __init securityfs_init(void)
+ 	if (retval)
+ 		return retval;
+ 
+-	init_user_ns.securityfs_mount = NULL;
+-
+ 	retval = register_filesystem(&fs_type);
+ 	if (retval) {
+ 		sysfs_remove_mount_point(kernel_kobj, "security");
 
-> diff --git a/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c
-> new file mode 100644
-> index 0000000..94bec15
-> --- /dev/null
-> +++ b/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c
-> @@ -0,0 +1,169 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-> + * ALSA SoC platform-machine driver for QTi LPASS
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/gpio/driver.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include "pinctrl-lpass-lpi.h"
-> +
-> +enum lpass_lpi_functions {
-> +	LPI_MUX_dmic1_clk,
-> +	LPI_MUX_dmic1_data,
-> +	LPI_MUX_dmic2_clk,
-> +	LPI_MUX_dmic2_data,
-> +	LPI_MUX_dmic3_clk,
-> +	LPI_MUX_dmic3_data,
-> +	LPI_MUX_i2s1_clk,
-> +	LPI_MUX_i2s1_data,
-> +	LPI_MUX_i2s1_ws,
-> +	LPI_MUX_i2s2_clk,
-> +	LPI_MUX_i2s2_data,
-> +	LPI_MUX_i2s2_ws,
-> +	LPI_MUX_qua_mi2s_data,
-> +	LPI_MUX_qua_mi2s_sclk,
-> +	LPI_MUX_qua_mi2s_ws,
-> +	LPI_MUX_swr_rx_clk,
-> +	LPI_MUX_swr_rx_data,
-> +	LPI_MUX_swr_tx_clk,
-> +	LPI_MUX_swr_tx_data,
-> +	LPI_MUX_wsa_swr_clk,
-> +	LPI_MUX_wsa_swr_data,
-> +	LPI_MUX_gpio,
-> +	LPI_MUX__,
-> +};
-> +
-> +static const unsigned int gpio0_pins[] = { 0 };
-> +static const unsigned int gpio1_pins[] = { 1 };
-> +static const unsigned int gpio2_pins[] = { 2 };
-> +static const unsigned int gpio3_pins[] = { 3 };
-> +static const unsigned int gpio4_pins[] = { 4 };
-> +static const unsigned int gpio5_pins[] = { 5 };
-> +static const unsigned int gpio6_pins[] = { 6 };
-> +static const unsigned int gpio7_pins[] = { 7 };
-> +static const unsigned int gpio8_pins[] = { 8 };
-> +static const unsigned int gpio9_pins[] = { 9 };
-> +static const unsigned int gpio10_pins[] = { 10 };
-> +static const unsigned int gpio11_pins[] = { 11 };
-> +static const unsigned int gpio12_pins[] = { 12 };
-> +static const unsigned int gpio13_pins[] = { 13 };
-> +static const unsigned int gpio14_pins[] = { 14 };
-> +
-> +/* sc7280 variant specific data */
-> +static const struct pinctrl_pin_desc sc7280_lpi_pins[] = {
-> +	PINCTRL_PIN(0, "gpio0"),
-> +	PINCTRL_PIN(1, "gpio1"),
-> +	PINCTRL_PIN(2, "gpio2"),
-> +	PINCTRL_PIN(3, "gpio3"),
-> +	PINCTRL_PIN(4, "gpio4"),
-> +	PINCTRL_PIN(5, "gpio5"),
-> +	PINCTRL_PIN(6, "gpio6"),
-> +	PINCTRL_PIN(7, "gpio7"),
-> +	PINCTRL_PIN(8, "gpio8"),
-> +	PINCTRL_PIN(9, "gpio9"),
-> +	PINCTRL_PIN(10, "gpio10"),
-> +	PINCTRL_PIN(11, "gpio11"),
-> +	PINCTRL_PIN(12, "gpio12"),
-> +	PINCTRL_PIN(13, "gpio13"),
-> +	PINCTRL_PIN(14, "gpio14"),
-> +};
-> +
-> +static const char * const swr_tx_clk_groups[] = { "gpio0" };
-> +static const char * const swr_tx_data_groups[] = { "gpio1", "gpio2", "gpio14" };
-> +static const char * const swr_rx_clk_groups[] = { "gpio3" };
-> +static const char * const swr_rx_data_groups[] = { "gpio4", "gpio5" };
-> +static const char * const dmic1_clk_groups[] = { "gpio6" };
-> +static const char * const dmic1_data_groups[] = { "gpio7" };
-> +static const char * const dmic2_clk_groups[] = { "gpio8" };
-> +static const char * const dmic2_data_groups[] = { "gpio9" };
-> +static const char * const i2s2_clk_groups[] = { "gpio10" };
-> +static const char * const i2s2_ws_groups[] = { "gpio11" };
-> +static const char * const dmic3_clk_groups[] = { "gpio12" };
-> +static const char * const dmic3_data_groups[] = { "gpio13" };
-> +static const char * const qua_mi2s_sclk_groups[] = { "gpio0" };
-> +static const char * const qua_mi2s_ws_groups[] = { "gpio1" };
-> +static const char * const qua_mi2s_data_groups[] = { "gpio2", "gpio3", "gpio4" };
-> +static const char * const i2s1_clk_groups[] = { "gpio6" };
-> +static const char * const i2s1_ws_groups[] = { "gpio7" };
-> +static const char * const i2s1_data_groups[] = { "gpio8", "gpio9" };
-> +static const char * const wsa_swr_clk_groups[] = { "gpio10" };
-> +static const char * const wsa_swr_data_groups[] = { "gpio11" };
-> +static const char * const i2s2_data_groups[] = { "gpio12", "gpio13" };
-> +
-> +static const struct lpi_pingroup sc7280_groups[] = {
-> +	LPI_PINGROUP(0, 0, swr_tx_clk, qua_mi2s_sclk, _, _),
-> +	LPI_PINGROUP(1, 2, swr_tx_data, qua_mi2s_ws, _, _),
-> +	LPI_PINGROUP(2, 4, swr_tx_data, qua_mi2s_data, _, _),
-> +	LPI_PINGROUP(3, 8, swr_rx_clk, qua_mi2s_data, _, _),
-> +	LPI_PINGROUP(4, 10, swr_rx_data, qua_mi2s_data, _, _),
-> +	LPI_PINGROUP(5, 12, swr_rx_data, _, _, _),
-> +	LPI_PINGROUP(6, NO_SLEW, dmic1_clk, i2s1_clk, _,  _),
-> +	LPI_PINGROUP(7, NO_SLEW, dmic1_data, i2s1_ws, _, _),
-> +	LPI_PINGROUP(8, NO_SLEW, dmic2_clk, i2s1_data, _, _),
-> +	LPI_PINGROUP(9, NO_SLEW, dmic2_data, i2s1_data, _, _),
-> +	LPI_PINGROUP(10, 16, i2s2_clk, wsa_swr_clk, _, _),
-> +	LPI_PINGROUP(11, 18, i2s2_ws, wsa_swr_data, _, _),
-> +	LPI_PINGROUP(12, NO_SLEW, dmic3_clk, i2s2_data, _, _),
-> +	LPI_PINGROUP(13, NO_SLEW, dmic3_data, i2s2_data, _, _),
-> +	LPI_PINGROUP(14, 6, swr_tx_data, _, _, _),
-> +};
-> +
-> +static const struct lpi_function sc7280_functions[] = {
-> +	LPI_FUNCTION(dmic1_clk),
-> +	LPI_FUNCTION(dmic1_data),
-> +	LPI_FUNCTION(dmic2_clk),
-> +	LPI_FUNCTION(dmic2_data),
-> +	LPI_FUNCTION(dmic3_clk),
-> +	LPI_FUNCTION(dmic3_data),
-> +	LPI_FUNCTION(i2s1_clk),
-> +	LPI_FUNCTION(i2s1_data),
-> +	LPI_FUNCTION(i2s1_ws),
-> +	LPI_FUNCTION(i2s2_clk),
-> +	LPI_FUNCTION(i2s2_data),
-> +	LPI_FUNCTION(i2s2_ws),
-> +	LPI_FUNCTION(qua_mi2s_data),
-> +	LPI_FUNCTION(qua_mi2s_sclk),
-> +	LPI_FUNCTION(qua_mi2s_ws),
-> +	LPI_FUNCTION(swr_rx_clk),
-> +	LPI_FUNCTION(swr_rx_data),
-> +	LPI_FUNCTION(swr_tx_clk),
-> +	LPI_FUNCTION(swr_tx_data),
-> +	LPI_FUNCTION(wsa_swr_clk),
-> +	LPI_FUNCTION(wsa_swr_data),
-> +};
-> +
-> +static const struct lpi_pinctrl_variant_data sc7280_lpi_data = {
-> +	.pins = sc7280_lpi_pins,
-> +	.npins = ARRAY_SIZE(sc7280_lpi_pins),
-> +	.groups = sc7280_groups,
-> +	.ngroups = ARRAY_SIZE(sc7280_groups),
-> +	.functions = sc7280_functions,
-> +	.nfunctions = ARRAY_SIZE(sc7280_functions),
-> +};
-> +
-> +static const struct of_device_id lpi_pinctrl_of_match[] = {
-> +	{
-> +	       .compatible = "qcom,sc7280-lpass-lpi-pinctrl",
-> +	       .data = &sc7280_lpi_data,
-> +	},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, lpi_pinctrl_of_match);
-> +
-> +static struct platform_driver lpi_pinctrl_driver = {
-> +	.driver = {
-> +		   .name = "qcom-sc7280-lpass-lpi-pinctrl",
-> +		   .of_match_table = lpi_pinctrl_of_match,
-> +	},
-> +	.probe = lpi_pinctrl_probe,
-> +	.remove = lpi_pinctrl_remove,
-> +};
-> +
-> +module_platform_driver(lpi_pinctrl_driver);
-> +MODULE_DESCRIPTION("QTI SC7280 LPI GPIO pin control driver");
-> +MODULE_LICENSE("GPL");
-> +
-> -- 
-> Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
-> is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
-> 

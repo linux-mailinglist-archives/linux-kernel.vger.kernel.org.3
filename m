@@ -2,170 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B822546AC7B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 23:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAAEB46AC9B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 23:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358742AbhLFWmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 17:42:55 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:46598 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358099AbhLFWmh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 17:42:37 -0500
-Message-ID: <20211206210438.038137622@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638830347;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=SYbFcr5c7KUWSHju+5I0IZIliBz6/Q8qUXyaiieHdzI=;
-        b=QvCNlsxjJjFZJgdde3bGSosu1Zdk5YzAknkSMOft0kqiy9khbJfX0meWwgcleEXmkDpA6Q
-        pG/Gt8h3frgjkaLd3ivOghbKjLxFmVn7ZXBj/mBWPosAprC3e9ZHf2CQd0vU4uQ0IX2bE3
-        DIcgOht4L7EcSFUc1y8KcKQOXCGCoLvR8+gBUOfdkCyyDoD2dk/RibJIph/TJLoLZ7f837
-        ZaxpD6IoMjaAa3AZwL6mF/gFVnlia7coMdHC/mzGWQ3H+AQZsfBC4WUoKRYdhOXhOCt3so
-        5Zuawua4YMWcs7mWRz8XfmGZQAu6rLWJuZkYFq9LaGCnoqpDI0WCTFWoz6TTeA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638830347;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=SYbFcr5c7KUWSHju+5I0IZIliBz6/Q8qUXyaiieHdzI=;
-        b=PCtebedJJL6H3PzvHb4O9yvA3iLADUQUECYtjroor4l+G6aeGCknrkbTtlePQLRiYJQoK7
-        PSwmm0rD4obkidBw==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        xen-devel@lists.xenproject.org, Juergen Gross <jgross@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        iommu@lists.linux-foundation.org, dmaengine@vger.kernel.org,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Sinan Kaya <okaya@kernel.org>
-Subject: [patch V2 07/36] genirq/msi: Provide msi_device_populate/destroy_sysfs()
-References: <20211206210307.625116253@linutronix.de>
+        id S231593AbhLFWn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 17:43:28 -0500
+Received: from mx3.wp.pl ([212.77.101.10]:11669 "EHLO mx3.wp.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1358132AbhLFWmp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 17:42:45 -0500
+Received: (wp-smtpd smtp.wp.pl 5899 invoked from network); 6 Dec 2021 23:39:13 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1638830353; bh=mU+1mb3rzb5nAuwm/PGXGncmn4G4PnOQh60E92j8DDs=;
+          h=From:To:Subject;
+          b=XfZbebjXcfcKaSzVE3SLMUtGHBZaHUpqrB4BnE96fZACGBY/7VV4qYWL70B+A/6LR
+           28jZKusVtYXxbRkx8h4QN9c5G/4zxyR/t7BHT5tL9Vmbf7GG4oItYmRkqOxO2OH4WH
+           arKU0xkEXnjoMIn+wC3j3vB3wSuDsuNoQ0BK3FPk=
+Received: from riviera.nat.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.1])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <hauke@hauke-m.de>; 6 Dec 2021 23:39:13 +0100
+From:   Aleksander Jan Bajkowski <olek2@wp.pl>
+To:     hauke@hauke-m.de, davem@davemloft.net, kuba@kernel.org,
+        olek2@wp.pl, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net v2] net: lantiq_xrx200: increase buffer reservation
+Date:   Mon,  6 Dec 2021 23:39:09 +0100
+Message-Id: <20211206223909.749043-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon,  6 Dec 2021 23:39:07 +0100 (CET)
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: 17398f0e9898bb00f8c513e1fe3b6b9d
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [geM0]                               
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add new allocation functions which can be activated by domain info
-flags. They store the groups pointer in struct msi_device_data.
+If the user sets a smaller mtu on the CPU port than on the switch,
+then DMA inserts a few more bytes than expected. In the worst case,
+it may exceed the size of the buffer. The experiments showed that
+the buffer should be a multiple of the burst length value. This patch
+rounds the length of the rx buffer upwards and fixes this bug.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Fixes: 998ac358019e ("net: lantiq: add support for jumbo frames")
+Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
 ---
- include/linux/msi.h |    4 ++++
- kernel/irq/msi.c    |   42 ++++++++++++++++++++++++++++++++++++++++--
- 2 files changed, 44 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/lantiq_xrx200.c | 38 ++++++++++++++++++++--------
+ 1 file changed, 28 insertions(+), 10 deletions(-)
 
---- a/include/linux/msi.h
-+++ b/include/linux/msi.h
-@@ -56,6 +56,8 @@ struct irq_data;
- struct msi_desc;
- struct pci_dev;
- struct platform_msi_priv_data;
-+struct attribute_group;
-+
- void __get_cached_msi_msg(struct msi_desc *entry, struct msi_msg *msg);
- #ifdef CONFIG_GENERIC_MSI_IRQ
- void get_cached_msi_msg(unsigned int irq, struct msi_msg *msg);
-@@ -174,9 +176,11 @@ struct msi_desc {
- /**
-  * msi_device_data - MSI per device data
-  * @properties:		MSI properties which are interesting to drivers
-+ * @attrs:		Pointer to the sysfs attribute group
-  */
- struct msi_device_data {
- 	unsigned long			properties;
-+	const struct attribute_group    **attrs;
- };
+diff --git a/drivers/net/ethernet/lantiq_xrx200.c b/drivers/net/ethernet/lantiq_xrx200.c
+index 0da09ea81980..d3423764da75 100644
+--- a/drivers/net/ethernet/lantiq_xrx200.c
++++ b/drivers/net/ethernet/lantiq_xrx200.c
+@@ -71,6 +71,9 @@ struct xrx200_priv {
+ 	struct xrx200_chan chan_tx;
+ 	struct xrx200_chan chan_rx;
  
- int msi_setup_device_data(struct device *dev);
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -213,6 +213,20 @@ const struct attribute_group **msi_popul
++	u16 max_frame_len;
++	u16 rx_buf_size;
++
+ 	struct net_device *net_dev;
+ 	struct device *dev;
+ 
+@@ -97,6 +100,16 @@ static void xrx200_pmac_mask(struct xrx200_priv *priv, u32 clear, u32 set,
+ 	xrx200_pmac_w32(priv, val, offset);
  }
  
- /**
-+ * msi_device_populate_sysfs - Populate msi_irqs sysfs entries for a device
-+ * @dev:	The device (PCI, platform etc) which will get sysfs entries
-+ */
-+int msi_device_populate_sysfs(struct device *dev)
++static int xrx200_max_frame_len(int mtu)
 +{
-+	const struct attribute_group **group = msi_populate_sysfs(dev);
-+
-+	if (IS_ERR(group))
-+		return PTR_ERR(group);
-+	dev->msi.data->attrs = group;
-+	return 0;
++	return VLAN_ETH_HLEN + mtu + ETH_FCS_LEN;
 +}
 +
-+/**
-  * msi_destroy_sysfs - Destroy msi_irqs sysfs entries for devices
-  * @dev:		The device(PCI, platform etc) who will remove sysfs entries
-  * @msi_irq_groups:	attribute_group for device msi_irqs entries
-@@ -238,6 +252,17 @@ void msi_destroy_sysfs(struct device *de
- 		kfree(msi_irq_groups);
- 	}
- }
-+
-+/**
-+ * msi_device_destroy_sysfs - Destroy msi_irqs sysfs entries for a device
-+ * @dev:		The device (PCI, platform etc) for which to remove
-+ *			sysfs entries
-+ */
-+void msi_device_destroy_sysfs(struct device *dev)
++static int xrx200_buffer_size(int mtu)
 +{
-+	msi_destroy_sysfs(dev, dev->msi.data->attrs);
-+	dev->msi.data->attrs = NULL;
++	return round_up(xrx200_max_frame_len(mtu) - 1, 4 * XRX200_DMA_BURST_LEN);
 +}
- #endif
- 
- #ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
-@@ -685,8 +710,19 @@ int msi_domain_alloc_irqs(struct irq_dom
++
+ /* drop all the packets from the DMA ring */
+ static void xrx200_flush_dma(struct xrx200_chan *ch)
  {
- 	struct msi_domain_info *info = domain->host_data;
- 	struct msi_domain_ops *ops = info->ops;
-+	int ret;
+@@ -109,8 +122,7 @@ static void xrx200_flush_dma(struct xrx200_chan *ch)
+ 			break;
  
--	return ops->domain_alloc_irqs(domain, dev, nvec);
-+	ret = ops->domain_alloc_irqs(domain, dev, nvec);
-+	if (ret)
-+		return ret;
-+
-+	if (!(info->flags & MSI_FLAG_DEV_SYSFS))
-+		return 0;
-+
-+	ret = msi_device_populate_sysfs(dev);
-+	if (ret)
-+		msi_domain_free_irqs(domain, dev);
-+	return ret;
+ 		desc->ctl = LTQ_DMA_OWN | LTQ_DMA_RX_OFFSET(NET_IP_ALIGN) |
+-			    (ch->priv->net_dev->mtu + VLAN_ETH_HLEN +
+-			     ETH_FCS_LEN);
++			    ch->priv->max_frame_len;
+ 		ch->dma.desc++;
+ 		ch->dma.desc %= LTQ_DESC_NUM;
+ 	}
+@@ -158,21 +170,21 @@ static int xrx200_close(struct net_device *net_dev)
+ 
+ static int xrx200_alloc_skb(struct xrx200_chan *ch)
+ {
+-	int len = ch->priv->net_dev->mtu + VLAN_ETH_HLEN + ETH_FCS_LEN;
+ 	struct sk_buff *skb = ch->skb[ch->dma.desc];
++	struct xrx200_priv *priv = ch->priv;
+ 	dma_addr_t mapping;
+ 	int ret = 0;
+ 
+-	ch->skb[ch->dma.desc] = netdev_alloc_skb_ip_align(ch->priv->net_dev,
+-							  len);
++	ch->skb[ch->dma.desc] = netdev_alloc_skb_ip_align(priv->net_dev,
++							  priv->rx_buf_size);
+ 	if (!ch->skb[ch->dma.desc]) {
+ 		ret = -ENOMEM;
+ 		goto skip;
+ 	}
+ 
+-	mapping = dma_map_single(ch->priv->dev, ch->skb[ch->dma.desc]->data,
+-				 len, DMA_FROM_DEVICE);
+-	if (unlikely(dma_mapping_error(ch->priv->dev, mapping))) {
++	mapping = dma_map_single(priv->dev, ch->skb[ch->dma.desc]->data,
++				 priv->rx_buf_size, DMA_FROM_DEVICE);
++	if (unlikely(dma_mapping_error(priv->dev, mapping))) {
+ 		dev_kfree_skb_any(ch->skb[ch->dma.desc]);
+ 		ch->skb[ch->dma.desc] = skb;
+ 		ret = -ENOMEM;
+@@ -184,7 +196,7 @@ static int xrx200_alloc_skb(struct xrx200_chan *ch)
+ 	wmb();
+ skip:
+ 	ch->dma.desc_base[ch->dma.desc].ctl =
+-		LTQ_DMA_OWN | LTQ_DMA_RX_OFFSET(NET_IP_ALIGN) | len;
++		LTQ_DMA_OWN | LTQ_DMA_RX_OFFSET(NET_IP_ALIGN) | priv->max_frame_len;
+ 
+ 	return ret;
  }
+@@ -356,6 +368,8 @@ xrx200_change_mtu(struct net_device *net_dev, int new_mtu)
+ 	int ret = 0;
  
- void __msi_domain_free_irqs(struct irq_domain *domain, struct device *dev)
-@@ -725,7 +761,9 @@ void msi_domain_free_irqs(struct irq_dom
- 	struct msi_domain_info *info = domain->host_data;
- 	struct msi_domain_ops *ops = info->ops;
+ 	net_dev->mtu = new_mtu;
++	priv->rx_buf_size = xrx200_buffer_size(new_mtu);
++	priv->max_frame_len = xrx200_max_frame_len(new_mtu);
  
--	return ops->domain_free_irqs(domain, dev);
-+	if (info->flags & MSI_FLAG_DEV_SYSFS)
-+		msi_device_destroy_sysfs(dev);
-+	ops->domain_free_irqs(domain, dev);
- }
+ 	if (new_mtu <= old_mtu)
+ 		return ret;
+@@ -375,6 +389,8 @@ xrx200_change_mtu(struct net_device *net_dev, int new_mtu)
+ 		ret = xrx200_alloc_skb(ch_rx);
+ 		if (ret) {
+ 			net_dev->mtu = old_mtu;
++			priv->rx_buf_size = xrx200_buffer_size(old_mtu);
++			priv->max_frame_len = xrx200_max_frame_len(old_mtu);
+ 			break;
+ 		}
+ 		dev_kfree_skb_any(skb);
+@@ -505,7 +521,9 @@ static int xrx200_probe(struct platform_device *pdev)
+ 	net_dev->netdev_ops = &xrx200_netdev_ops;
+ 	SET_NETDEV_DEV(net_dev, dev);
+ 	net_dev->min_mtu = ETH_ZLEN;
+-	net_dev->max_mtu = XRX200_DMA_DATA_LEN - VLAN_ETH_HLEN - ETH_FCS_LEN;
++	net_dev->max_mtu = XRX200_DMA_DATA_LEN - xrx200_max_frame_len(0);
++	priv->rx_buf_size = xrx200_buffer_size(ETH_DATA_LEN);
++	priv->max_frame_len = xrx200_max_frame_len(ETH_DATA_LEN);
  
- /**
+ 	/* load the memory ranges */
+ 	priv->pmac_reg = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+-- 
+2.30.2
 

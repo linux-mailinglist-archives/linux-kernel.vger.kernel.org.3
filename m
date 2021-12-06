@@ -2,100 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E80469F40
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1D5469FE9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377900AbhLFPqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:46:30 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46586 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349576AbhLFP3Q (ORCPT
+        id S1376886AbhLFPy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:54:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390423AbhLFPmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:29:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 102AB6135B
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 15:25:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0E1AC34903;
-        Mon,  6 Dec 2021 15:25:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638804347;
-        bh=j6brKLboQ/wgtzHsjbDmKRhp2zj7CRoOITlVrkDb0lo=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=jY29HRhVcGHVKiLrX2Dq2tK63fXfJYNqDnh6BlwtwJAB2KBXPA1d5DfJ9sAee5/7r
-         5j+hhsy1/yUwdWmBsR8to1bz8TW6fQxz/hv6o3fUgPeyAVyGHTa37ud0MxskjW9tGj
-         R2nx3uIUTdG/MBTEV+SlSiDSzcZXj2ZlM+6nVgmPijXSCfUznpNIFqdzNTlrhdl85N
-         HzUej891Rs+64KJIdFG5R+jNunfw4yqEsOWHreslJsBZ8wt5rpWZfK+zbVYoGNSGMK
-         0d1DKJNGw0VIS2rb9xAOYibBEquE9ptmOkKO+UxgIWlkZw4EAJT7YonTExu68Wq4vB
-         6lxedrE+FAydQ==
-Subject: Re: [PATCH] drivers/clocksource/dw_apb_timer_of: fixed probe failure
-To:     Alexey Sheplyakov <asheplyakov@basealt.ru>,
-        linux-kernel@vger.kernel.org
-Cc:     "Vadim V . Vlasov" <vadim.vlasov@elpitech.ru>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20211109153401.157491-1-asheplyakov@basealt.ru>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-Message-ID: <b6ac9148-81cf-a1e7-3c18-c9ff9ca3694e@kernel.org>
-Date:   Mon, 6 Dec 2021 09:25:45 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 6 Dec 2021 10:42:24 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB35C0A885D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:26:21 -0800 (PST)
+Date:   Mon, 6 Dec 2021 16:26:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638804379;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G79sw6/0z/0eODfTOvxtYkj/vnuVGjvdh1Kx9RSIc3g=;
+        b=A30NItyk6DCAGtHoyWNHltXT66ie8O6LRiAGq288j5FqCA+RrXXaUJUwEa3ZVrKxQK44jt
+        wVYaI+G7mwCBte3q2Xa48m/IxgCPqOgwUpJTqIMxDqb04+2fcj44JrmdoScUqTRBhO7VrA
+        eKdmdCdyEEuMiPTVOS0pXzublm2Sg0fg3U9DfV2CmzzwJ6qS9BhUvlAZ0bi0jO4dSdKCDk
+        eOOcG1wdlq+rWlkT4Vr4JaV9hH5OS7/HXHeYbgKoWY+604x0QGDw9f73iQX/JXrX3s82JO
+        yiKQReowghtYiyyD2n3A8DUfJEryb9CXygoudT3a8qt9yZYlSDyGuYy7F9dD7A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638804379;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G79sw6/0z/0eODfTOvxtYkj/vnuVGjvdh1Kx9RSIc3g=;
+        b=QVNn/Q73anjzIpJR/0TqLBSV3a8VdMUxd2MRhC3NKXfHz0v3DJFfWz+3WXKBOjPRl2cW1O
+        J2ZIkCjXl8ROrBDg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 00/11] lockdep: Unbreak lockdep's selftest work on
+ PREEMPT_RT.
+Message-ID: <20211206152618.avqghqegykwjnxm5@linutronix.de>
+References: <20211129174654.668506-1-bigeasy@linutronix.de>
+ <20211202211253.GC16608@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <20211109153401.157491-1-asheplyakov@basealt.ru>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211202211253.GC16608@worktop.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2021-12-02 22:12:53 [+0100], Peter Zijlstra wrote:
+> Thanks! (fixed up that first thiny), lemme feed it to the robots.
 
+Thank you. I see bots' commit mail for 1-9. I don't see them for 10+11
+but then I also don't see those two in your tree.
+What should I do with them?
 
-On 11/9/21 9:34 AM, Alexey Sheplyakov wrote:
-> The driver refuses to probe with -EINVAL since the commit
-> 5d9814df0aec ("clocksource/drivers/dw_apb_timer_of: Add error handling if no clock available").
-> 
-> Before the driver used to probe successfully if either
-> "clock-freq" or "clock-frequency" properties has been specified
-> in the device tree.
-> 
-> That commit changed
-> 
-> if (A && B)
-> 	panic("No clock nor clock-frequency property");
-> 
-> into
-> 
-> if (!A && !B)
-> 	return 0;
-> 
-> That's a bug: the reverse of `A && B` is '!A || !B', not '!A && !B'
-> 
-> Signed-off-by: Vadim V. Vlasov <vadim.vlasov@elpitech.ru>
-> Signed-off-by: Alexey Sheplyakov <asheplyakov@basealt.ru>
-> Fixes: 5d9814df0aec56a6 ("clocksource/drivers/dw_apb_timer_of: Add error handling if no clock available").
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Vadim V. Vlasov <vadim.vlasov@elpitech.ru>
-> ---
->   drivers/clocksource/dw_apb_timer_of.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clocksource/dw_apb_timer_of.c b/drivers/clocksource/dw_apb_timer_of.c
-> index 3819ef5b7098..3245eb0c602d 100644
-> --- a/drivers/clocksource/dw_apb_timer_of.c
-> +++ b/drivers/clocksource/dw_apb_timer_of.c
-> @@ -47,7 +47,7 @@ static int __init timer_get_base_and_rate(struct device_node *np,
->   			pr_warn("pclk for %pOFn is present, but could not be activated\n",
->   				np);
->   
-> -	if (!of_property_read_u32(np, "clock-freq", rate) &&
-> +	if (!of_property_read_u32(np, "clock-freq", rate) ||
->   	    !of_property_read_u32(np, "clock-frequency", rate))
->   		return 0;
->   
-> 
-
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+Sebastian

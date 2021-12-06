@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D19469ADD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D49469D8A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347209AbhLFPLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:11:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41554 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347302AbhLFPIc (ORCPT
+        id S1386932AbhLFPaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:30:23 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37622 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357615AbhLFPSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:08:32 -0500
+        Mon, 6 Dec 2021 10:18:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A277AB81118;
-        Mon,  6 Dec 2021 15:05:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21B93C341C1;
-        Mon,  6 Dec 2021 15:05:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 056296132F;
+        Mon,  6 Dec 2021 15:15:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0A4AC341C1;
+        Mon,  6 Dec 2021 15:15:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803101;
-        bh=EXKLhvfR9Ql7HrtC+mWWvLl6/hAlaJv4sBSH74F1lGQ=;
+        s=korg; t=1638803714;
+        bh=/U9FxitpadGD+gXB9HlW7Ev7z2e8KTHdVeMPb3pDD9I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C51VzEA/8vrqL38XeYBvgecVJoop2XxinR/XeD9U04G9quKvZJa8HJCeKPQnKyUxa
-         j8ZN7gBo8saocyieMWXh9FB9oMnWodeNWHedMjJiq2YSUDGWnmWamS+viOd1D10IFU
-         eYXZi2k0XsH7nX2k4cEi9b1CwIUUSjyOfcUnL89Q=
+        b=WNVy9HmoMpN2Hy6dFvAmUc90lGjOQfn6DBtlpTsqx/atZVz4Y3kAAdBo2UlGKw0Ji
+         Vl4lCFRQAm/94/Dw6XlZpoTYN7daPGMp+pEK2qw+uBP1+BgR0F1rOW2ZZnkPAAk4cu
+         lT15vAmo7TNnJriB6TGO0EGB8L8ezvgy8fmj64dU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tony Lu <tonylu@linux.alibaba.com>,
-        Wen Gu <guwen@linux.alibaba.com>,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Felix Kuehling <Felix.Kuehling@amd.com>,
+        Bernard Zhao <bernard@vivo.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 028/106] net/smc: Dont call clcsock shutdown twice when smc shutdown
-Date:   Mon,  6 Dec 2021 15:55:36 +0100
-Message-Id: <20211206145556.336450898@linuxfoundation.org>
+Subject: [PATCH 5.10 020/130] drm/amd/amdgpu: fix potential memleak
+Date:   Mon,  6 Dec 2021 15:55:37 +0100
+Message-Id: <20211206145600.332924515@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,65 +47,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Lu <tonylu@linux.alibaba.com>
+From: Bernard Zhao <bernard@vivo.com>
 
-[ Upstream commit bacb6c1e47691cda4a95056c21b5487fb7199fcc ]
+[ Upstream commit 27dfaedc0d321b4ea4e10c53e4679d6911ab17aa ]
 
-When applications call shutdown() with SHUT_RDWR in userspace,
-smc_close_active() calls kernel_sock_shutdown(), and it is called
-twice in smc_shutdown().
+In function amdgpu_get_xgmi_hive, when kobject_init_and_add failed
+There is a potential memleak if not call kobject_put.
 
-This fixes this by checking sk_state before do clcsock shutdown, and
-avoids missing the application's call of smc_shutdown().
-
-Link: https://lore.kernel.org/linux-s390/1f67548e-cbf6-0dce-82b5-10288a4583bd@linux.ibm.com/
-Fixes: 606a63c9783a ("net/smc: Ensure the active closing peer first closes clcsock")
-Signed-off-by: Tony Lu <tonylu@linux.alibaba.com>
-Reviewed-by: Wen Gu <guwen@linux.alibaba.com>
-Acked-by: Karsten Graul <kgraul@linux.ibm.com>
-Link: https://lore.kernel.org/r/20211126024134.45693-1-tonylu@linux.alibaba.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Signed-off-by: Bernard Zhao <bernard@vivo.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/smc/af_smc.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index 8c71f0929fbb7..f2c907d52812b 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -1178,8 +1178,10 @@ static unsigned int smc_poll(struct file *file, struct socket *sock,
- static int smc_shutdown(struct socket *sock, int how)
- {
- 	struct sock *sk = sock->sk;
-+	bool do_shutdown = true;
- 	struct smc_sock *smc;
- 	int rc = -EINVAL;
-+	int old_state;
- 	int rc1 = 0;
- 
- 	smc = smc_sk(sk);
-@@ -1206,7 +1208,11 @@ static int smc_shutdown(struct socket *sock, int how)
- 	}
- 	switch (how) {
- 	case SHUT_RDWR:		/* shutdown in both directions */
-+		old_state = sk->sk_state;
- 		rc = smc_close_active(smc);
-+		if (old_state == SMC_ACTIVE &&
-+		    sk->sk_state == SMC_PEERCLOSEWAIT1)
-+			do_shutdown = false;
- 		break;
- 	case SHUT_WR:
- 		rc = smc_close_shutdown_write(smc);
-@@ -1216,7 +1222,7 @@ static int smc_shutdown(struct socket *sock, int how)
- 		/* nothing more to do because peer is not involved */
- 		break;
- 	}
--	if (smc->clcsock)
-+	if (do_shutdown && smc->clcsock)
- 		rc1 = kernel_sock_shutdown(smc->clcsock, how);
- 	/* map sock_shutdown_cmd constants to sk_shutdown value range */
- 	sk->sk_shutdown |= how + 1;
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
+index 0526dec1d736e..042c85fc528bb 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
+@@ -358,6 +358,7 @@ struct amdgpu_hive_info *amdgpu_get_xgmi_hive(struct amdgpu_device *adev)
+ 			"%s", "xgmi_hive_info");
+ 	if (ret) {
+ 		dev_err(adev->dev, "XGMI: failed initializing kobject for xgmi hive\n");
++		kobject_put(&hive->kobj);
+ 		kfree(hive);
+ 		hive = NULL;
+ 		goto pro_end;
 -- 
 2.33.0
 

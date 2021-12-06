@@ -2,89 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2092B46953C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 12:47:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D48469542
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 12:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242106AbhLFLvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 06:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237397AbhLFLvR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 06:51:17 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B73CC0613F8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 03:47:49 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id n8so6890556plf.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 03:47:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=eSkZ4nMizlCpYvq6kX4bxUOExmWLGfHM/8gziDsXAhI=;
-        b=SDY3uMwEOpQq9mG6dMqA56ALZO8xsDGJfkMzx4JGUaQ7AxBExlyVpkp8u99q366Hj+
-         rQwkdh28+s8eLoOmOIZ68pl5jMrx6eDbzSo6frRC3p1+4wqF6G8gTBlZSNuvnK99L6yh
-         yTZfZdvW/TdyUiJdzbRcVsQUUahxNXx6uZJPvIRT7PUavgkLmEh+I2Ofb/yhxP/uNd4t
-         jZaOB3TvxA9kP0dGo2tWJijm4CYrINAROgjq6m9Hz9zjLTDrKNSeXzgvsYm+DiFDRujI
-         0UxkKRA5FFnznGXgmH1P2d5qzQIJr0zet4BDo2CrG7JJYrQxBffjU3gxSZ96D2j7z4Zz
-         RFug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=eSkZ4nMizlCpYvq6kX4bxUOExmWLGfHM/8gziDsXAhI=;
-        b=ecPqUUaBnbqNCcu2pMxRqwfaw29kq6cARRy2wFqhilsHsAFz42faFUBAujXolLu1AO
-         pIsiBX3d5x8qKOEsWPIH44ssXSVwrnWAaCTSrca9HSKNq0GwNyXeP5NgJyjE+fXb4jfT
-         wLstt+ZEKeY2XOLVDPA4KYt8yxz9PiXGLLUMeo+Hdjh1n4A3zamRlPj5ePd/8/DxSy3g
-         Y+pzQWO82Huz6qbo3Z0JqtBc5gxA7V2ZrOsxg4hO4UNQcLWK+qMRdjo4rH4qAF9mKHR2
-         zbsLTeKtwuHx+QIxfS/qmtsMhMDoUZfVXeNA31LH1YnXnwW4KdPw6v4W3PUj1USOYmaW
-         Mt/A==
-X-Gm-Message-State: AOAM530FuTQbDI+UD2zuuOzCxSZtA+K9O7pALQqcJm8aVMfYPo2mhzpn
-        tKKQPA+2xJzb29F/qfPQS+6BGQ==
-X-Google-Smtp-Source: ABdhPJxhavqWGKxjUCVfrQBoYUUj+MsBE3Mx3QeZDIj/krHAScb24Z3ioi2SNvg89LZWfgvqpMPLDg==
-X-Received: by 2002:a17:902:d2c7:b0:142:f06:e5fa with SMTP id n7-20020a170902d2c700b001420f06e5famr42869844plc.87.1638791268764;
-        Mon, 06 Dec 2021 03:47:48 -0800 (PST)
-Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id oj11sm13622116pjb.46.2021.12.06.03.47.47
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 06 Dec 2021 03:47:48 -0800 (PST)
-Date:   Mon, 6 Dec 2021 19:47:42 +0800
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] Add Qualcomm MPM irqchip driver support
-Message-ID: <20211206114742.GM10105@dragon>
-References: <20211206092535.4476-1-shawn.guo@linaro.org>
- <87v902kqae.wl-maz@kernel.org>
+        id S242726AbhLFLzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 06:55:54 -0500
+Received: from mga05.intel.com ([192.55.52.43]:57951 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237397AbhLFLzx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 06:55:53 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="323553406"
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="323553406"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 03:52:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="579348504"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 06 Dec 2021 03:52:23 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 09169144; Mon,  6 Dec 2021 13:52:28 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH v1 1/2] mmc: mmc_spi: Convert 'multiple' to be boolean in mmc_spi_data_do()
+Date:   Mon,  6 Dec 2021 13:52:17 +0200
+Message-Id: <20211206115218.73874-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87v902kqae.wl-maz@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 09:59:05AM +0000, Marc Zyngier wrote:
-> On Mon, 06 Dec 2021 09:25:33 +0000,
-> Shawn Guo <shawn.guo@linaro.org> wrote:
-> > 
-> > It adds DT binding and driver support for Qualcomm MPM (MSM Power Manager)
-> > interrupt controller.
-> 
-> That's the 4th version in exactly two weeks, and that still has all
-> the problems I commented on in v3.
+Convert 'multiple' to be boolean in mmc_spi_data_do() since
+it's initially being used as boolean.
 
-I mistakenly thought you had looked at v3, and v4 was sent out before I
-receive your reviewing on v3.  I will slow down the posting.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/mmc/host/mmc_spi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> 
-> I won't review a new version this week.
+diff --git a/drivers/mmc/host/mmc_spi.c b/drivers/mmc/host/mmc_spi.c
+index b431cdd27353..4b0f9035ad29 100644
+--- a/drivers/mmc/host/mmc_spi.c
++++ b/drivers/mmc/host/mmc_spi.c
+@@ -547,7 +547,7 @@ mmc_spi_command_send(struct mmc_spi_host *host,
+ static void
+ mmc_spi_setup_data_message(
+ 	struct mmc_spi_host	*host,
+-	int			multiple,
++	bool			multiple,
+ 	enum dma_data_direction	direction)
+ {
+ 	struct spi_transfer	*t;
+@@ -862,7 +862,7 @@ mmc_spi_data_do(struct mmc_spi_host *host, struct mmc_command *cmd,
+ 	enum dma_data_direction	direction;
+ 	struct scatterlist	*sg;
+ 	unsigned		n_sg;
+-	int			multiple = (data->blocks > 1);
++	bool			multiple = (data->blocks > 1);
+ 	u32			clock_rate;
+ 	unsigned long		timeout;
+ 
+-- 
+2.33.0
 
-Sure.  This is not anything urgent.
-
-Shawn

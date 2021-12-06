@@ -2,96 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39AD446941C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 11:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 540F246941F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 11:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239262AbhLFKt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 05:49:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44634 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238305AbhLFKt1 (ORCPT
+        id S239446AbhLFKuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 05:50:11 -0500
+Received: from mout.kundenserver.de ([212.227.17.10]:38835 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239216AbhLFKuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 05:49:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638787558;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LtzfPpymSCQWXehN2vtnTLU+MArjUhcxuJehlXC6fbA=;
-        b=Mwi+5wcl8wVkLCeFXph6Fc4M98TvEGLfq9xJ7JEQ6RlV+eO7Czz+8TuAqtoksj9IpO3oLa
-        dkz5bO2rD/N2TTR/E/2E60UKUcvA4S/VkA8MPBSy5dP6xvodxmYXG4n5LqFZ/euX02T2+9
-        V31NOQSTc5zCb3721rlj9XoXzCSvSbg=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-248-DJ8ZNRG8Nxil1mOLmoIGnQ-1; Mon, 06 Dec 2021 05:45:57 -0500
-X-MC-Unique: DJ8ZNRG8Nxil1mOLmoIGnQ-1
-Received: by mail-wr1-f72.google.com with SMTP id h13-20020adfa4cd000000b001883fd029e8so1896022wrb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 02:45:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=LtzfPpymSCQWXehN2vtnTLU+MArjUhcxuJehlXC6fbA=;
-        b=bFgydPO3kSNi5YPpUIcnGjBTRPgPJZx5Qi77VhD/GmTd+ar4hhoDkCjo6EwIWGiG28
-         IE4P+FqtKw6C2gmjTuQ2b7bYp5dB3+cp6uFvTbDo7tKeZAPhVeBh1T1fAyjcIjpmd8Fk
-         6I0QGiEDzDCNY7LeYFq9vKE7VRUKoUK3T7XcaM3uDQiU0Dx6sLl5JkroFf396wwrs7IO
-         GAegmx+XJOk1xrKnm4rXyPJczApLX/tb8sfgVsXyqGnPzQ5b0OwuspNV1+04NiwVpl+j
-         7XmtEe2xbC8AlVoNUH3cqzJLwaikWEZemgnPFniNP8GeMhyTaKH9xpKt/4GTwX0U3fa8
-         uH9g==
-X-Gm-Message-State: AOAM532UJTgenku7JPKVA4OVLybH2HuGSZ7/2FJjKhItZXHgxzZCII6t
-        KRtqOXNs/biHECZoh2ogc1ULaXfv8OOTptazCbp0/CW/FbAA0LILDUjKFp4HrSGdOmZMnpKg9Kx
-        tOlc36huE4sVZxgR7D2A5YLgc
-X-Received: by 2002:a05:6000:154b:: with SMTP id 11mr42522314wry.394.1638787556354;
-        Mon, 06 Dec 2021 02:45:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyeXwVfpMNW8O5ouM93loc/taBC/yCmnBTDM6EtSSPMu493y3sUM/DepN1wokzVCSG08yKVkg==
-X-Received: by 2002:a05:6000:154b:: with SMTP id 11mr42522291wry.394.1638787556156;
-        Mon, 06 Dec 2021 02:45:56 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c62c6.dip0.t-ipconnect.de. [91.12.98.198])
-        by smtp.gmail.com with ESMTPSA id l15sm10591158wme.47.2021.12.06.02.45.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 02:45:55 -0800 (PST)
-Message-ID: <d9d14beb-ee20-7ebb-e007-fbf58fb28535@redhat.com>
-Date:   Mon, 6 Dec 2021 11:45:54 +0100
+        Mon, 6 Dec 2021 05:50:10 -0500
+Received: from mail-wm1-f46.google.com ([209.85.128.46]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mzhax-1mgWVk0E2T-00vdg1; Mon, 06 Dec 2021 11:46:41 +0100
+Received: by mail-wm1-f46.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so10099771wme.0;
+        Mon, 06 Dec 2021 02:46:40 -0800 (PST)
+X-Gm-Message-State: AOAM532B8hsKo/WYJk9/TOZWbkeleb9tgQcFrcgGomKW7sIR5TLcg2fZ
+        vBR/OqsPXM0uKdbejqqVeDDH2ROWDp9GiCLiG50=
+X-Google-Smtp-Source: ABdhPJzYUKIlrOfYm3GCVv91696ljxy2eEsPNm2UtKuqsw0J5k50ncwMkGn48XY4inudDYZdG3bD6FhSOPufbM/s+t4=
+X-Received: by 2002:a1c:1c1:: with SMTP id 184mr37915721wmb.1.1638787600454;
+ Mon, 06 Dec 2021 02:46:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC PATCH 2/2] mm/vmscan.c: Prevent allocating shrinker_info on
- offlined nodes
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, shakeelb@google.com,
-        ktkhai@virtuozzo.com, shy828301@gmail.com, guro@fb.com,
-        vbabka@suse.cz, vdavydov.dev@gmail.com, raquini@redhat.com
-References: <20211206033338.743270-1-npache@redhat.com>
- <20211206033338.743270-3-npache@redhat.com> <Ya3WcYKcej8XEI0W@dhcp22.suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Ya3WcYKcej8XEI0W@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <cover.1638275062.git.quic_saipraka@quicinc.com>
+ <e088f4b4021f2e56093c7f73e77f556059e114b7.1638275062.git.quic_saipraka@quicinc.com>
+ <CAK8P3a1wOEkoteJRu+qpE0k3gJ0fRnwfn1Zrtcnmgn5wT4yQdw@mail.gmail.com> <09a477b7-4219-756d-ed72-96fcdeb6a77b@quicinc.com>
+In-Reply-To: <09a477b7-4219-756d-ed72-96fcdeb6a77b@quicinc.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 6 Dec 2021 11:46:24 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2hoQHTDUs5YNWwrAk2GfD7bFh6ipvgqSttDxNdUX6jyg@mail.gmail.com>
+Message-ID: <CAK8P3a2hoQHTDUs5YNWwrAk2GfD7bFh6ipvgqSttDxNdUX6jyg@mail.gmail.com>
+Subject: Re: [PATCHv5 3/4] tracing: Add register read/write tracing support
+To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Marc Zyngier <maz@kernel.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        quic_psodagud@quicinc.com,
+        Prasad Sodagudi <psodagud@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:gyGyoNmukxw+VtiPFtXDgfIR4YZ4lYtED6+kr1bepxVRLZSFspO
+ 1TFd19+tb+lS/cDX2C0fyPaRYDkL7dkt2/BrjetSX0xLNYPfGJURYlR+h7pGYyLL8D3mHl6
+ nuvgJXcTHoT6gmT8vhBqKeZD7DxrFTou3A7bidOhaze7nAb+lDTklSoBPt0lNxzAy1S7GD2
+ 6NMUIhfWsDEFR+FDwQlpA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8p2zCe4N+Oo=:f3TraTMPMTvrqrPNJtkrjD
+ 5QrkI1eaefni6zwU1ocJvBxMUQTmCrnVIKMacXrw71jPgHGmd84yO2QyyTjMG7jHlbzRtlMMk
+ Ub7rNNI+EoJ/iSnikIYYw+twjyhlL0wgAHPGd1d5d+6uTfLdHgSK2vW5uf5fbSwZ7TH7xHwoV
+ kpE+tEtPqzwfZv5QScoJJYDu9WZBvDkj6nxdxWRIR75V5E0OjMJOVH+YqWp+Aw4xFsNnLEDdM
+ 7w+p9ZJsduae8Uhpj3Sc8Xbvu7MZ1IjASf6TnOlfOSHmTmhixkPUg5tzPpXKveH8tfur46t02
+ A5Z+irtv7icksX78L8EL1lqIpcIJpwUzSFjIIe2z6CP+wWAy8EdEYWl6zL0bAqHepYHAY2jPg
+ D0zCn7VfQMvJJO3TnVJO8j+i3MRm8J+oFfcrVs/hjN5cExxuuN9h2dS9Lks3wHTfLc549DYzr
+ C7vbbhOc4olHgJ1bH3FCn7KjBFHDjiu70PPApk3mrxf+j7wFmAxM8JnSNePS/PByyvrhlO2s0
+ 3LPVQO8ohctT0eZrqDogequpkrOEenqEfdl6a6WSpcblswu0r18fXsTMvFazo1KLRrtFcmf0a
+ +boxkB/DODxAoowl4bjag8wbcps5iad3kIqEfx9U7qpLTdP4wBQxoBPewgAb/bwEggKPZNO9k
+ 09OVg+Gonm+AHiLe1X6bC0eW5na15sjp3O/Y8lrzQOScFyarj9CBBmzT/sqi/lkxtMn+cceBC
+ 3klrZyawhzqiqViSvKvXOjUlGZ/tGE9SHEG+6yAIqCHaxrWXzQsz3vDQXI5wBf3UAZKP2LD1a
+ jEev1+ea7oORhm/eyNVPPiSPDsGhwoK2C/VEDcVvTG6T1KoZ+Y=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This doesn't seen complete. Slab shrinkers are used in the reclaim
-> context. Previously offline nodes could be onlined later and this would
-> lead to NULL ptr because there is no hook to allocate new shrinker
-> infos. This would be also really impractical because this would have to
-> update all existing memcgs...
+On Mon, Dec 6, 2021 at 11:11 AM Sai Prakash Ranjan
+<quic_saipraka@quicinc.com> wrote:
+> On 12/6/2021 2:29 PM, Arnd Bergmann wrote:
+> > On Mon, Dec 6, 2021 at 9:28 AM Sai Prakash Ranjan
+> >> +void log_read_mmio(u8 width, const volatile void __iomem *addr)
+> >> +{
+> >> +       trace_rwmmio_read(CALLER_ADDR0, CALLER_ADDR1, width, addr);
+> >> +}
+> > Here, it may be better to pass the caller address as an argument, I think
+> > CALLER_ADDR1 is not always reliable, though it's possible that it is
+> > in the configurations when this file gets enabled.
+> >
+> >
+>
+> Do you mean that we use __builtin_return_address(0,1) directly here or
+> that I pass __func__ as the argument to log_read/write_mmio or is there
+> some other way to pass the caller address?
 
-Instead of going through the trouble of updating...
+I meant passing CALLER_ADDR0 from readl() down to
+log_read_mmio().
 
-...  maybe just keep for_each_node() and check if the target node is
-offline. If it's offline, just allocate from the first online node.
-After all, we're not using __GFP_THISNODE, so there are no guarantees
-either way ...
-
--- 
-Thanks,
-
-David / dhildenb
-
+       Arnd

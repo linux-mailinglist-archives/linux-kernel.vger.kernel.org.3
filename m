@@ -2,95 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 825DF46A217
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7C446A226
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:05:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237788AbhLFRId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 12:08:33 -0500
-Received: from mga12.intel.com ([192.55.52.136]:21821 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347476AbhLFQ7I (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:59:08 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="217381108"
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="217381108"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 08:55:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="514829909"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 06 Dec 2021 08:55:37 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 3751415C; Mon,  6 Dec 2021 18:55:43 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH v2 4/4] can: hi311x: Convert to use dev_err_probe()
-Date:   Mon,  6 Dec 2021 18:55:42 +0200
-Message-Id: <20211206165542.69887-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211206165542.69887-1-andriy.shevchenko@linux.intel.com>
-References: <20211206165542.69887-1-andriy.shevchenko@linux.intel.com>
+        id S235355AbhLFRI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 12:08:56 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:5831 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348248AbhLFRBF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 12:01:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638809856; x=1670345856;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=V7rTUqojNdaNsDSKb6IQlmWwFfl/NXbnE5+C4ogte7Y=;
+  b=Wmc5eN0DzsJWRitHf4E3F6bOgtage04w36Z7RJ978A5GFCukUiWWcNi5
+   Ai2kvheRXNBo9SyG8MPZLgYJjCkpksu1tYnizaKRpjzwAgn6xOayVxqFV
+   BxO1u2g+0aUEI1EtZ1pS3W+TBSvK510I2nuTW3NBkBHfuHqfjXj/9p+Lo
+   w=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 Dec 2021 08:57:36 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 08:57:35 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 6 Dec 2021 08:57:35 -0800
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 6 Dec 2021 08:57:34 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] drm/msm/dp: Add "qcom,sc7280-dp" to support display port.
+Date:   Mon, 6 Dec 2021 08:57:26 -0800
+Message-ID: <1638809846-31950-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When deferred the reason is saved for further debugging. Besides that,
-it's fine to call dev_err_probe() in ->probe() when error code is known.
-Convert the driver to use dev_err_probe().
+Changes in v2:
+-- move "qcom,sc7280-dp" before "qcom,sc7280-edp"
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
-v2: no changes
- drivers/net/can/spi/hi311x.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+ drivers/gpu/drm/msm/dp/dp_display.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/can/spi/hi311x.c b/drivers/net/can/spi/hi311x.c
-index 78044ec24575..a17641d36468 100644
---- a/drivers/net/can/spi/hi311x.c
-+++ b/drivers/net/can/spi/hi311x.c
-@@ -837,10 +837,8 @@ static int hi3110_can_probe(struct spi_device *spi)
- 	int ret;
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index d44f18b..505114a 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -145,6 +145,7 @@ static const struct msm_dp_config sc7280_dp_cfg = {
  
- 	clk = devm_clk_get_optional(&spi->dev, NULL);
--	if (IS_ERR(clk)) {
--		dev_err(&spi->dev, "no CAN clock source defined\n");
--		return PTR_ERR(clk);
--	}
-+	if (IS_ERR(clk))
-+		return dev_err_probe(dev, PTR_ERR(clk), "no CAN clock source defined\n");
- 
- 	if (clk) {
- 		freq = clk_get_rate(clk);
-@@ -925,9 +923,7 @@ static int hi3110_can_probe(struct spi_device *spi)
- 
- 	ret = hi3110_hw_probe(spi);
- 	if (ret) {
--		if (ret == -ENODEV)
--			dev_err(&spi->dev, "Cannot initialize %x. Wrong wiring?\n",
--				priv->model);
-+		dev_err_probe(dev, ret, "Cannot initialize %x. Wrong wiring?\n", priv->model);
- 		goto error_probe;
- 	}
- 	hi3110_hw_sleep(spi);
-@@ -950,8 +946,7 @@ static int hi3110_can_probe(struct spi_device *spi)
-  out_free:
- 	free_candev(net);
- 
--	dev_err(&spi->dev, "Probe failed, err=%d\n", -ret);
--	return ret;
-+	return dev_err_probe(dev, ret, "Probe failed\n");
- }
- 
- static int hi3110_can_remove(struct spi_device *spi)
+ static const struct of_device_id dp_dt_match[] = {
+ 	{ .compatible = "qcom,sc7180-dp", .data = &sc7180_dp_cfg },
++	{ .compatible = "qcom,sc7280-dp", .data = &sc7280_dp_cfg },
+ 	{ .compatible = "qcom,sc7280-edp", .data = &sc7280_dp_cfg },
+ 	{}
+ };
 -- 
-2.33.0
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 

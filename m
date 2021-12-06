@@ -2,62 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7569469791
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A0846978B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244928AbhLFN6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 08:58:47 -0500
-Received: from mga03.intel.com ([134.134.136.65]:62317 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244880AbhLFN6m (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 08:58:42 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="237255036"
-X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="237255036"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 05:55:12 -0800
-X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="579378088"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 05:55:10 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1muERV-002naO-HY;
-        Mon, 06 Dec 2021 15:54:09 +0200
-Date:   Mon, 6 Dec 2021 15:54:09 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v12 3/7] gpiolib: of: make fwnode take precedence in
- struct gpio_chip
-Message-ID: <Ya4WASlzYGOFWORk@smile.fi.intel.com>
-References: <20211203133003.31786-1-brgl@bgdev.pl>
- <20211203133003.31786-4-brgl@bgdev.pl>
+        id S244907AbhLFN6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 08:58:05 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:60350 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244880AbhLFN6E (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 08:58:04 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 0826E2114D;
+        Mon,  6 Dec 2021 13:54:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638798874; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=b0PP/ew4eD5JtQTB1B/GJfuv0NkZ4eoY7t2JZ/8CzHQ=;
+        b=id+NWxwLWxMQbAg76PUn+9nRVVLEyM08l9UFr2nuyOb++LTVJuXYF5WCpl1O+VOvtWSS4G
+        pNlB7ddZ/K7W0aZ6TVWHIP+zmW1PZmbTm1Hoy9Jrtky86fcpEFnySwEIen1VARQJifKzTz
+        yvjeb/nyLMcPHkKyXA7TwE4Aoi4ImTg=
+Received: from suse.cz (unknown [10.163.24.10])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id ADC56A3B81;
+        Mon,  6 Dec 2021 13:54:33 +0000 (UTC)
+Date:   Mon, 6 Dec 2021 14:54:33 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] printk/console: Registration code cleanup - part 1
+Message-ID: <Ya4WGZT0emR96h0B@alley>
+References: <20211122132649.12737-1-pmladek@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211203133003.31786-4-brgl@bgdev.pl>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20211122132649.12737-1-pmladek@suse.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 02:29:59PM +0100, Bartosz Golaszewski wrote:
-> If the driver sets the fwnode in struct gpio_chip, let it take
-> precedence over the of_node.
+On Mon 2021-11-22 14:26:44, Petr Mladek wrote:
+> The console registration code has several twists that are hard to follow.
+> It is result of various features added over the last few decades.
+> 
+> I have already spent many days to understand all the effects and
+> the desired behavior. I am always scared to touch the console registration
+> code even after years working as printk maintainer.
+> 
+> There were several changes in the code that had to be reverted because
+> they caused regression, for example:
+> 
+>    + commit dac8bbbae1d0ccba96402 ("Revert "printk: fix double printing
+>      with earlycon")
+> 
+>    + commit c6c7d83b9c9e6a8b3e6d ("Revert "console: don't prefer first
+>      registered if DT specifies stdout-path")
+> 
+> 
+> This patchset removes the most tricky twists from my POV. I have worked
+> on it when time permitted since January. I have spent most of the time
+> writing the commit message, understanding, and explaining the effects.
+> I am not sure if I succeeded but it is time to send this.
+> 
+> 
+> Behavior change:
+> 
+> There is one behavior change caused by 4th patch. I consider it bug fix.
+> It should be acceptable. See the commit message for more details.
 
-By the way, have you tried this on pure DT-less/ACPI-less platform
-(CONFIG_OF=n, CONFIG_ACPI=n)? I believe gpio-sim in that case won't work,
-because this doesn't affect swnode case, right?
+I am afraid that the patchset is not easy to review. I decided to help
+a bit and give it a spin in linux-next.
 
--- 
-With Best Regards,
-Andy Shevchenko
+The patchset has been committed into printk/linux.git, branch
+console-registration-cleanup. It should appear in linux-next
+during the next respin.
 
+I am going to take it back when anyone reports any problem that
+can't be fixed easily.
 
+Any feedback is still appreciated.
+
+Best Regards,
+Petr

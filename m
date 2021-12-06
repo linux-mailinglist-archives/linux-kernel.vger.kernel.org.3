@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58041469DB5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4917469CF2
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387962AbhLFPcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:32:08 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:39212 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376787AbhLFPUl (ORCPT
+        id S1386048AbhLFP0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:26:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358704AbhLFPQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:20:41 -0500
+        Mon, 6 Dec 2021 10:16:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58AE6C08EC8B;
+        Mon,  6 Dec 2021 07:09:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1F30612EB;
-        Mon,  6 Dec 2021 15:17:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C827FC341C1;
-        Mon,  6 Dec 2021 15:17:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E988961328;
+        Mon,  6 Dec 2021 15:09:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBBD3C341C2;
+        Mon,  6 Dec 2021 15:09:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803832;
-        bh=iQX78CzGyVlGuYsNylYKpCNrV0si5YsJStZbm/GsH+A=;
+        s=korg; t=1638803373;
+        bh=GCTKWypXTdlnMDCefqNAmhunxgQiu/ZvnAzpYcz5+Xs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JBuJ/t+r42YrH9xp+En8/oKPEZTv2E6Yk406TJeqPN37lvrhN2Cplai2Xg6BCcZyE
-         CODGupwXiRMgomkjF3WgBgdarfPnHSwpryZ3oD14VcISDyXmbNqzDTN7NtzPbQh615
-         lYQJrmPIhcsVHVJIeskynhmvZsWu62G43d0x7KPU=
+        b=EsJIvK3L6RKX0kbQeohA4lkSD274ggBPfvC1KX55ILNfP7X2OaeMMsVCUiQ3CXVfu
+         w8XpejGMNo9cPxAL/cxbv7BtNOvfEI3DPteOFay/gz/InHWUg+FVTsSH7aswBvFAv0
+         W54eqZq/o9FCk8jesEqz9n2noy0Vov8IclwXvur8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alain Volmat <alain.volmat@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH 5.10 061/130] i2c: stm32f7: flush TX FIFO upon transfer errors
-Date:   Mon,  6 Dec 2021 15:56:18 +0100
-Message-Id: <20211206145601.784402439@linuxfoundation.org>
+        stable@vger.kernel.org, Benjamin Coddington <bcodding@redhat.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 4.19 02/48] NFSv42: Fix pagecache invalidation after COPY/CLONE
+Date:   Mon,  6 Dec 2021 15:56:19 +0100
+Message-Id: <20211206145548.941941299@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+References: <20211206145548.859182340@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,61 +48,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alain Volmat <alain.volmat@foss.st.com>
+From: Benjamin Coddington <bcodding@redhat.com>
 
-commit 0c21d02ca469574d2082379db52d1a27b99eed0c upstream.
+commit 3f015d89a47cd8855cd92f71fff770095bd885a1 upstream.
 
-While handling an error during transfer (ex: NACK), it could
-happen that the driver has already written data into TXDR
-before the transfer get stopped.
-This commit add TXDR Flush after end of transfer in case of error to
-avoid sending a wrong data on any other slave upon next transfer.
+The mechanism in use to allow the client to see the results of COPY/CLONE
+is to drop those pages from the pagecache.  This forces the client to read
+those pages once more from the server.  However, truncate_pagecache_range()
+zeros out partial pages instead of dropping them.  Let us instead use
+invalidate_inode_pages2_range() with full-page offsets to ensure the client
+properly sees the results of COPY/CLONE operations.
 
-Fixes: aeb068c57214 ("i2c: i2c-stm32f7: add driver")
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Cc: <stable@vger.kernel.org> # v4.7+
+Fixes: 2e72448b07dc ("NFS: Add COPY nfs operation")
+Signed-off-by: Benjamin Coddington <bcodding@redhat.com>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/i2c-stm32f7.c |   20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+ fs/nfs/nfs42proc.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -1665,6 +1665,16 @@ static int stm32f7_i2c_xfer(struct i2c_a
- 	time_left = wait_for_completion_timeout(&i2c_dev->complete,
- 						i2c_dev->adap.timeout);
- 	ret = f7_msg->result;
-+	if (ret) {
-+		/*
-+		 * It is possible that some unsent data have already been
-+		 * written into TXDR. To avoid sending old data in a
-+		 * further transfer, flush TXDR in case of any error
-+		 */
-+		writel_relaxed(STM32F7_I2C_ISR_TXE,
-+			       i2c_dev->base + STM32F7_I2C_ISR);
-+		goto pm_free;
-+	}
+--- a/fs/nfs/nfs42proc.c
++++ b/fs/nfs/nfs42proc.c
+@@ -295,8 +295,9 @@ static ssize_t _nfs42_proc_copy(struct f
+ 			goto out;
+ 	}
  
- 	if (!time_left) {
- 		dev_dbg(i2c_dev->dev, "Access to slave 0x%x timed out\n",
-@@ -1713,8 +1723,16 @@ static int stm32f7_i2c_smbus_xfer(struct
- 	timeout = wait_for_completion_timeout(&i2c_dev->complete,
- 					      i2c_dev->adap.timeout);
- 	ret = f7_msg->result;
--	if (ret)
-+	if (ret) {
-+		/*
-+		 * It is possible that some unsent data have already been
-+		 * written into TXDR. To avoid sending old data in a
-+		 * further transfer, flush TXDR in case of any error
-+		 */
-+		writel_relaxed(STM32F7_I2C_ISR_TXE,
-+			       i2c_dev->base + STM32F7_I2C_ISR);
- 		goto pm_free;
-+	}
+-	truncate_pagecache_range(dst_inode, pos_dst,
+-				 pos_dst + res->write_res.count);
++	WARN_ON_ONCE(invalidate_inode_pages2_range(dst_inode->i_mapping,
++					pos_dst >> PAGE_SHIFT,
++					(pos_dst + res->write_res.count - 1) >> PAGE_SHIFT));
  
- 	if (!timeout) {
- 		dev_dbg(dev, "Access to slave 0x%x timed out\n", f7_msg->addr);
+ 	status = res->write_res.count;
+ out:
 
 

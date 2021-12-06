@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B59469AC8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8AC5469F05
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:42:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349095AbhLFPLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:11:11 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38960 "EHLO
+        id S1391235AbhLFPpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:45:18 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34702 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347033AbhLFPIC (ORCPT
+        with ESMTP id S1377440AbhLFP2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:08:02 -0500
+        Mon, 6 Dec 2021 10:28:55 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BFA70B81126;
-        Mon,  6 Dec 2021 15:04:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E4FC341C1;
-        Mon,  6 Dec 2021 15:04:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66C12B81139;
+        Mon,  6 Dec 2021 15:25:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFC12C34901;
+        Mon,  6 Dec 2021 15:25:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803070;
-        bh=Sn8tndyMRnu26tV783OUTcsuI7UKqTEhnAAgF7tTOSA=;
+        s=korg; t=1638804322;
+        bh=lZaopSE4MOHJhCbeois7StknvQvQN2F4ASvxIU0Wjzw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k377CSfS1CYYct/c3sXfFp3kMnKWwwpuAHloHDh0D3FCov6vSUevEyzIi7L78M8eq
-         N08sTjh5WS8aDaKs/7tn5sNXkOvG5fbXeADoQ9H9kfi2NbFkbGQfvk9OZktLLbOBA+
-         aK0s94+EM7CkHlhPol2KvxU1yyj3aToYJ/hXO1KQ=
+        b=bjdAQie4pJsbaGY2EU6WpjtNc/vcZSzAML+dlO85yThVNceBPXIpse4AhPHt/dQ22
+         sqvNNiCpUgV1Q9IXPnnq9z5Y8u7ieW1LGK1ATgSeP21ul/GDpX5+gcjMCAyN+NaLBN
+         gYpIKyhCbD9RKQkANX3DaSv+lZp9+1u1AEYWZP6c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Aring <aahringo@redhat.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 018/106] net: ieee802154: handle iftypes as u32
-Date:   Mon,  6 Dec 2021 15:55:26 +0100
-Message-Id: <20211206145556.007221323@linuxfoundation.org>
+        stable@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.15 073/207] KVM: Ensure local memslot copies operate on up-to-date arch-specific data
+Date:   Mon,  6 Dec 2021 15:55:27 +0100
+Message-Id: <20211206145612.761947819@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,56 +46,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Aring <aahringo@redhat.com>
+From: Sean Christopherson <seanjc@google.com>
 
-[ Upstream commit 451dc48c806a7ce9fbec5e7a24ccf4b2c936e834 ]
+commit bda44d844758c70c8dc1478e6fc9c25efa90c5a7 upstream.
 
-This patch fixes an issue that an u32 netlink value is handled as a
-signed enum value which doesn't fit into the range of u32 netlink type.
-If it's handled as -1 value some BIT() evaluation ends in a
-shift-out-of-bounds issue. To solve the issue we set the to u32 max which
-is s32 "-1" value to keep backwards compatibility and let the followed enum
-values start counting at 0. This brings the compiler to never handle the
-enum as signed and a check if the value is above NL802154_IFTYPE_MAX should
-filter -1 out.
+When modifying memslots, snapshot the "old" memslot and copy it to the
+"new" memslot's arch data after (re)acquiring slots_arch_lock.  x86 can
+change a memslot's arch data while memslot updates are in-progress so
+long as it holds slots_arch_lock, thus snapshotting a memslot without
+holding the lock can result in the consumption of stale data.
 
-Fixes: f3ea5e44231a ("ieee802154: add new interface command")
-Signed-off-by: Alexander Aring <aahringo@redhat.com>
-Link: https://lore.kernel.org/r/20211112030916.685793-1-aahringo@redhat.com
-Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: b10a038e84d1 ("KVM: mmu: Add slots_arch_lock for memslot arch fields")
+Cc: stable@vger.kernel.org
+Cc: Ben Gardon <bgardon@google.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20211104002531.1176691-2-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/nl802154.h | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ virt/kvm/kvm_main.c |   47 +++++++++++++++++++++++++++++++----------------
+ 1 file changed, 31 insertions(+), 16 deletions(-)
 
-diff --git a/include/net/nl802154.h b/include/net/nl802154.h
-index ddcee128f5d9a..145acb8f25095 100644
---- a/include/net/nl802154.h
-+++ b/include/net/nl802154.h
-@@ -19,6 +19,8 @@
-  *
-  */
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -1523,11 +1523,10 @@ static struct kvm_memslots *kvm_dup_mems
  
-+#include <linux/types.h>
+ static int kvm_set_memslot(struct kvm *kvm,
+ 			   const struct kvm_userspace_memory_region *mem,
+-			   struct kvm_memory_slot *old,
+ 			   struct kvm_memory_slot *new, int as_id,
+ 			   enum kvm_mr_change change)
+ {
+-	struct kvm_memory_slot *slot;
++	struct kvm_memory_slot *slot, old;
+ 	struct kvm_memslots *slots;
+ 	int r;
+ 
+@@ -1558,7 +1557,7 @@ static int kvm_set_memslot(struct kvm *k
+ 		 * Note, the INVALID flag needs to be in the appropriate entry
+ 		 * in the freshly allocated memslots, not in @old or @new.
+ 		 */
+-		slot = id_to_memslot(slots, old->id);
++		slot = id_to_memslot(slots, new->id);
+ 		slot->flags |= KVM_MEMSLOT_INVALID;
+ 
+ 		/*
+@@ -1589,6 +1588,26 @@ static int kvm_set_memslot(struct kvm *k
+ 		kvm_copy_memslots(slots, __kvm_memslots(kvm, as_id));
+ 	}
+ 
++	/*
++	 * Make a full copy of the old memslot, the pointer will become stale
++	 * when the memslots are re-sorted by update_memslots(), and the old
++	 * memslot needs to be referenced after calling update_memslots(), e.g.
++	 * to free its resources and for arch specific behavior.  This needs to
++	 * happen *after* (re)acquiring slots_arch_lock.
++	 */
++	slot = id_to_memslot(slots, new->id);
++	if (slot) {
++		old = *slot;
++	} else {
++		WARN_ON_ONCE(change != KVM_MR_CREATE);
++		memset(&old, 0, sizeof(old));
++		old.id = new->id;
++		old.as_id = as_id;
++	}
 +
- #define NL802154_GENL_NAME "nl802154"
++	/* Copy the arch-specific data, again after (re)acquiring slots_arch_lock. */
++	memcpy(&new->arch, &old.arch, sizeof(old.arch));
++
+ 	r = kvm_arch_prepare_memory_region(kvm, new, mem, change);
+ 	if (r)
+ 		goto out_slots;
+@@ -1596,14 +1615,18 @@ static int kvm_set_memslot(struct kvm *k
+ 	update_memslots(slots, new, change);
+ 	slots = install_new_memslots(kvm, as_id, slots);
  
- enum nl802154_commands {
-@@ -150,10 +152,9 @@ enum nl802154_attrs {
- };
+-	kvm_arch_commit_memory_region(kvm, mem, old, new, change);
++	kvm_arch_commit_memory_region(kvm, mem, &old, new, change);
++
++	/* Free the old memslot's metadata.  Note, this is the full copy!!! */
++	if (change == KVM_MR_DELETE)
++		kvm_free_memslot(kvm, &old);
  
- enum nl802154_iftype {
--	/* for backwards compatibility TODO */
--	NL802154_IFTYPE_UNSPEC = -1,
-+	NL802154_IFTYPE_UNSPEC = (~(__u32)0),
+ 	kvfree(slots);
+ 	return 0;
  
--	NL802154_IFTYPE_NODE,
-+	NL802154_IFTYPE_NODE = 0,
- 	NL802154_IFTYPE_MONITOR,
- 	NL802154_IFTYPE_COORD,
+ out_slots:
+ 	if (change == KVM_MR_DELETE || change == KVM_MR_MOVE) {
+-		slot = id_to_memslot(slots, old->id);
++		slot = id_to_memslot(slots, new->id);
+ 		slot->flags &= ~KVM_MEMSLOT_INVALID;
+ 		slots = install_new_memslots(kvm, as_id, slots);
+ 	} else {
+@@ -1618,7 +1641,6 @@ static int kvm_delete_memslot(struct kvm
+ 			      struct kvm_memory_slot *old, int as_id)
+ {
+ 	struct kvm_memory_slot new;
+-	int r;
  
--- 
-2.33.0
-
+ 	if (!old->npages)
+ 		return -EINVAL;
+@@ -1631,12 +1653,7 @@ static int kvm_delete_memslot(struct kvm
+ 	 */
+ 	new.as_id = as_id;
+ 
+-	r = kvm_set_memslot(kvm, mem, old, &new, as_id, KVM_MR_DELETE);
+-	if (r)
+-		return r;
+-
+-	kvm_free_memslot(kvm, old);
+-	return 0;
++	return kvm_set_memslot(kvm, mem, &new, as_id, KVM_MR_DELETE);
+ }
+ 
+ /*
+@@ -1711,7 +1728,6 @@ int __kvm_set_memory_region(struct kvm *
+ 	if (!old.npages) {
+ 		change = KVM_MR_CREATE;
+ 		new.dirty_bitmap = NULL;
+-		memset(&new.arch, 0, sizeof(new.arch));
+ 	} else { /* Modify an existing slot. */
+ 		if ((new.userspace_addr != old.userspace_addr) ||
+ 		    (new.npages != old.npages) ||
+@@ -1725,9 +1741,8 @@ int __kvm_set_memory_region(struct kvm *
+ 		else /* Nothing to change. */
+ 			return 0;
+ 
+-		/* Copy dirty_bitmap and arch from the current memslot. */
++		/* Copy dirty_bitmap from the current memslot. */
+ 		new.dirty_bitmap = old.dirty_bitmap;
+-		memcpy(&new.arch, &old.arch, sizeof(new.arch));
+ 	}
+ 
+ 	if ((change == KVM_MR_CREATE) || (change == KVM_MR_MOVE)) {
+@@ -1753,7 +1768,7 @@ int __kvm_set_memory_region(struct kvm *
+ 			bitmap_set(new.dirty_bitmap, 0, new.npages);
+ 	}
+ 
+-	r = kvm_set_memslot(kvm, mem, &old, &new, as_id, change);
++	r = kvm_set_memslot(kvm, mem, &new, as_id, change);
+ 	if (r)
+ 		goto out_bitmap;
+ 
 
 

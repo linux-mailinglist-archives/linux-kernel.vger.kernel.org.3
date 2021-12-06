@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81044469F3B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF35469DDC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391679AbhLFPqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:46:14 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36516 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387446AbhLFPbS (ORCPT
+        id S1350731AbhLFPde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:33:34 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38978 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356501AbhLFPWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:31:18 -0500
+        Mon, 6 Dec 2021 10:22:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D587FB8101B;
-        Mon,  6 Dec 2021 15:27:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28F42C34901;
-        Mon,  6 Dec 2021 15:27:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 422AD61309;
+        Mon,  6 Dec 2021 15:18:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2051AC341C2;
+        Mon,  6 Dec 2021 15:18:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804467;
-        bh=YrzbCQyjZ5TKrKKzKGNLB+/saZKPFu+EUhagqJZ5/4Q=;
+        s=korg; t=1638803922;
+        bh=WcScSF7kddzukuf+3Gs4FU1f4IK0BYp1yQDTQh7CJ/o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WHFzBwgm8BXpfGdL8QucfIu9tRLu38xgss6mTURLSquJdV4xFibtjMsuYhE7ATaV9
-         GZ3RlZJRrwRNbpL7fBX96ETcDeic8JWel0W4vm70k73CnFdeHRKEOVyVlGfFWd6W7Y
-         oqHxaBGPDl7Y+vdzz/E0XK9FMXLEPsDu8qRPwzGw=
+        b=XAIPJ+CHVz4mCnK7zViqLNYPA1+o6JFZIMge2M4NOVcT8hAt7rjoWawhM+FGHOa9M
+         Hl5ok5I0/iJwXg6YCmg66DtvELImWOK7TRA3B438+N7O70Mk/9ba04TSXdwZZBvOpU
+         Sk0r3/wlj3ODuUPfKaFlEXE+DUhY1g8gmPZjViGY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Akhil P Oommen <akhilpo@codeaurora.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 157/207] drm/msm: Restore error return on invalid fence
+        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+        Rob Clark <robdclark@chromium.org>
+Subject: [PATCH 5.10 094/130] drm/msm/a6xx: Allocate enough space for GMU registers
 Date:   Mon,  6 Dec 2021 15:56:51 +0100
-Message-Id: <20211206145615.700419538@linuxfoundation.org>
+Message-Id: <20211206145602.900466601@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,79 +45,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+From: Douglas Anderson <dianders@chromium.org>
 
-[ Upstream commit 067ecab9eef620d41040715669e5fcdc2f8ff963 ]
+commit b4d25abf9720b69a03465b09d0d62d1998ed6708 upstream.
 
-When converting to use an idr to map userspace fence seqno values back
-to a dma_fence, we lost the error return when userspace passes seqno
-that is larger than the last submitted fence.  Restore this check.
+In commit 142639a52a01 ("drm/msm/a6xx: fix crashstate capture for
+A650") we changed a6xx_get_gmu_registers() to read 3 sets of
+registers. Unfortunately, we didn't change the memory allocation for
+the array. That leads to a KASAN warning (this was on the chromeos-5.4
+kernel, which has the problematic commit backported to it):
 
-Reported-by: Akhil P Oommen <akhilpo@codeaurora.org>
-Fixes: a61acbbe9cf8 ("drm/msm: Track "seqno" fences by idr")
+  BUG: KASAN: slab-out-of-bounds in _a6xx_get_gmu_registers+0x144/0x430
+  Write of size 8 at addr ffffff80c89432b0 by task A618-worker/209
+  CPU: 5 PID: 209 Comm: A618-worker Tainted: G        W         5.4.156-lockdep #22
+  Hardware name: Google Lazor Limozeen without Touchscreen (rev5 - rev8) (DT)
+  Call trace:
+   dump_backtrace+0x0/0x248
+   show_stack+0x20/0x2c
+   dump_stack+0x128/0x1ec
+   print_address_description+0x88/0x4a0
+   __kasan_report+0xfc/0x120
+   kasan_report+0x10/0x18
+   __asan_report_store8_noabort+0x1c/0x24
+   _a6xx_get_gmu_registers+0x144/0x430
+   a6xx_gpu_state_get+0x330/0x25d4
+   msm_gpu_crashstate_capture+0xa0/0x84c
+   recover_worker+0x328/0x838
+   kthread_worker_fn+0x32c/0x574
+   kthread+0x2dc/0x39c
+   ret_from_fork+0x10/0x18
+
+  Allocated by task 209:
+   __kasan_kmalloc+0xfc/0x1c4
+   kasan_kmalloc+0xc/0x14
+   kmem_cache_alloc_trace+0x1f0/0x2a0
+   a6xx_gpu_state_get+0x164/0x25d4
+   msm_gpu_crashstate_capture+0xa0/0x84c
+   recover_worker+0x328/0x838
+   kthread_worker_fn+0x32c/0x574
+   kthread+0x2dc/0x39c
+   ret_from_fork+0x10/0x18
+
+Fixes: 142639a52a01 ("drm/msm/a6xx: fix crashstate capture for A650")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Link: https://lore.kernel.org/r/20211103153049.1.Idfa574ccb529d17b69db3a1852e49b580132035c@changeid
 Signed-off-by: Rob Clark <robdclark@chromium.org>
-Reviewed-by: Akhil P Oommen <akhilpo@codeaurora.org>
-Link: https://lore.kernel.org/r/20211111192457.747899-3-robdclark@gmail.com
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/msm/msm_drv.c        | 6 ++++++
- drivers/gpu/drm/msm/msm_gem_submit.c | 1 +
- drivers/gpu/drm/msm/msm_gpu.h        | 3 +++
- 3 files changed, 10 insertions(+)
+ drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index 4c5661f38dd26..27f737a253c77 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -944,6 +944,12 @@ static int wait_fence(struct msm_gpu_submitqueue *queue, uint32_t fence_id,
- 	struct dma_fence *fence;
- 	int ret;
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
+@@ -777,12 +777,12 @@ static void a6xx_get_gmu_registers(struc
+ 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
  
-+	if (fence_id > queue->last_fence) {
-+		DRM_ERROR_RATELIMITED("waiting on invalid fence: %u (of %u)\n",
-+				      fence_id, queue->last_fence);
-+		return -EINVAL;
-+	}
-+
- 	/*
- 	 * Map submitqueue scoped "seqno" (which is actually an idr key)
- 	 * back to underlying dma-fence
-diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
-index 151d19e4453cd..a38f23be497d8 100644
---- a/drivers/gpu/drm/msm/msm_gem_submit.c
-+++ b/drivers/gpu/drm/msm/msm_gem_submit.c
-@@ -911,6 +911,7 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
- 	drm_sched_entity_push_job(&submit->base, queue->entity);
+ 	a6xx_state->gmu_registers = state_kcalloc(a6xx_state,
+-		2, sizeof(*a6xx_state->gmu_registers));
++		3, sizeof(*a6xx_state->gmu_registers));
  
- 	args->fence = submit->fence_id;
-+	queue->last_fence = submit->fence_id;
+ 	if (!a6xx_state->gmu_registers)
+ 		return;
  
- 	msm_reset_syncobjs(syncobjs_to_reset, args->nr_in_syncobjs);
- 	msm_process_post_deps(post_deps, args->nr_out_syncobjs,
-diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-index ee25d556c8a10..2e2424066e701 100644
---- a/drivers/gpu/drm/msm/msm_gpu.h
-+++ b/drivers/gpu/drm/msm/msm_gpu.h
-@@ -352,6 +352,8 @@ static inline int msm_gpu_convert_priority(struct msm_gpu *gpu, int prio,
-  * @ring_nr:   the ringbuffer used by this submitqueue, which is determined
-  *             by the submitqueue's priority
-  * @faults:    the number of GPU hangs associated with this submitqueue
-+ * @last_fence: the sequence number of the last allocated fence (for error
-+ *             checking)
-  * @ctx:       the per-drm_file context associated with the submitqueue (ie.
-  *             which set of pgtables do submits jobs associated with the
-  *             submitqueue use)
-@@ -367,6 +369,7 @@ struct msm_gpu_submitqueue {
- 	u32 flags;
- 	u32 ring_nr;
- 	int faults;
-+	uint32_t last_fence;
- 	struct msm_file_private *ctx;
- 	struct list_head node;
- 	struct idr fence_idr;
--- 
-2.33.0
-
+-	a6xx_state->nr_gmu_registers = 2;
++	a6xx_state->nr_gmu_registers = 3;
+ 
+ 	/* Get the CX GMU registers from AHB */
+ 	_a6xx_get_gmu_registers(gpu, a6xx_state, &a6xx_gmu_reglist[0],
 
 

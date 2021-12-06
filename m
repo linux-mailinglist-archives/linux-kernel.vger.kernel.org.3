@@ -2,91 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DAC469508
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 12:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED2946950F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 12:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242460AbhLFLed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 06:34:33 -0500
-Received: from mout.kundenserver.de ([212.227.17.10]:34195 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231332AbhLFLeb (ORCPT
+        id S242535AbhLFLgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 06:36:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242511AbhLFLgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 06:34:31 -0500
-Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MStKq-1n09Ga101u-00UJXC; Mon, 06 Dec 2021 12:31:02 +0100
-Received: by mail-wr1-f50.google.com with SMTP id i5so21783240wrb.2;
-        Mon, 06 Dec 2021 03:31:02 -0800 (PST)
-X-Gm-Message-State: AOAM533KHtartIlMC6DVp1SLZb5kjydBUT95KhJMb7sHertR7WtaQxGw
-        Z5Io3Duy0WJ8ombemZxmbYPL7Agr1kPDy4o1gCQ=
-X-Google-Smtp-Source: ABdhPJw16WAm7wgvwNNb9nTOQaZy5OVqt+aN1W6z8NVgK3jqrVKeeh7oCCksIsCkQd3pen14ghmmMCL95nhGoAj6w3M=
-X-Received: by 2002:adf:d091:: with SMTP id y17mr44777548wrh.418.1638790261818;
- Mon, 06 Dec 2021 03:31:01 -0800 (PST)
+        Mon, 6 Dec 2021 06:36:04 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77062C0613F8;
+        Mon,  6 Dec 2021 03:32:35 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id o13so21657311wrs.12;
+        Mon, 06 Dec 2021 03:32:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aW1glWeSnLOJ6iHIw1/VSJXZ8zrzxkwYtnu3Xdlg+Oc=;
+        b=WVO5P+eQWPU4+X6CehpqgY9445E2+3og75x9WfYJSc1Y0PN3UeGpl/JwVzIkznLEnk
+         ZaY5L2xIMF52fO3oJ5wudIeuXJ9McFhpDujiIuDfhraEUKZFEv8b/9wQc8Uwj1KrRWX+
+         gvEjWc9+ySuH3R9ItZpus/fNCtLh1i0MWoeods+6gPPzVZjcu34MvvanugG6FzHRFoiJ
+         hX16H4dkhogyzbQwpovEyYLsIKbu5fjQ0NOybaNK3QKd6kZS85LW+r9bITL8CwATvhDy
+         2Und7SBFZq1kJdDB6p67WZg/f1dus7dSl1hnCRrBDyYIZGCFRumClY41oMwRT8IHBjiZ
+         fwEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aW1glWeSnLOJ6iHIw1/VSJXZ8zrzxkwYtnu3Xdlg+Oc=;
+        b=M7UwOPGnqexbemmzMq1W9jgDblhP1GxMvJ9NqRiv8TW+/ehAxgpI+02bpqdEMLpgOD
+         U1rmB2rUA12qiYRHHynT3OZWKGgiFpTahUU0FhMNs6RtDEPY0c4GXZylntYw7YSzxxom
+         54qgI2KY/f+XVsevBzlg2RAMYOkvPXwk1YPxCqbPmgOiHrEs7XcS9uIyaaClOvOP86HC
+         t3jrtDff79ktU6GAFxY78tr+2cnnGmWNPkUi2NMxkRgFz0Yic1Wqr8rCQo7VMXbPEa4e
+         lrz9rm6frFG4ntjya2SdzsRM9kCGe4XzQ/93oB7Ms1/AhlsNY3nny6LcDD39CXkSzLbv
+         yDYg==
+X-Gm-Message-State: AOAM533zZAG3OXblXB3H6CGVd8QXknYPvvnBc15RmqjkLXn8JywIJDgS
+        niJVeuSw5NUoDcENHmtQuCs=
+X-Google-Smtp-Source: ABdhPJyHTJrDUlcp32XuRcvIEZsm0kmF3F5hwaN3rYdWZX5n9N6PCkO3dVPWLvnvaCCj2qvocGn8mg==
+X-Received: by 2002:a5d:6c63:: with SMTP id r3mr42078963wrz.213.1638790354051;
+        Mon, 06 Dec 2021 03:32:34 -0800 (PST)
+Received: from localhost.localdomain ([39.48.147.147])
+        by smtp.gmail.com with ESMTPSA id g5sm14248481wri.45.2021.12.06.03.32.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 03:32:33 -0800 (PST)
+From:   Ameer Hamza <amhamza.mgc@gmail.com>
+To:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        amhamza.mgc@gmail.com
+Subject: [PATCH] net: dsa: mv88e6xxx: initialize return variable on declaration
+Date:   Mon,  6 Dec 2021 16:32:19 +0500
+Message-Id: <20211206113219.17640-1-amhamza.mgc@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <cover.1638275062.git.quic_saipraka@quicinc.com>
- <cc649faf144fce439b7a341303b6cc73ac285949.1638275062.git.quic_saipraka@quicinc.com>
- <CAK8P3a2JSSJxs92uEiJQAa0iQOvA6NDuww3+Br5cAxYvXVOOAQ@mail.gmail.com> <7b2b5888-c2ca-2ca0-8c0c-32128fcb37d2@quicinc.com>
-In-Reply-To: <7b2b5888-c2ca-2ca0-8c0c-32128fcb37d2@quicinc.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 6 Dec 2021 12:30:45 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0TZp349d7xFvpa6rzGSa4Wj2cAhqOg9-BAewA-d+yvJA@mail.gmail.com>
-Message-ID: <CAK8P3a0TZp349d7xFvpa6rzGSa4Wj2cAhqOg9-BAewA-d+yvJA@mail.gmail.com>
-Subject: Re: [PATCHv5 1/4] arm64: io: Use asm-generic high level MMIO accessors
-To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Marc Zyngier <maz@kernel.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        quic_psodagud@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:3/j8d64qhzDw/fq9QUxhzyzgN1ZRYs/kcsRiMSRU5EiMPehgiej
- Gj8ZHjoLZCz9e79CCX7t3v25tv4RCuLOCsq06YvRfbjMIY4uz951aPiq2V9HvayFTOC8uCB
- 2VGxC7hfxFpeXynYPWMbIb1KV4VDUf016kd3mSUP2KKs9N7TtcvfJihrDDyUCqTRUQhxZUg
- xooslz2eD7W2qg4+s4wFw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:XDv8maYSOO8=:23cgFAt5pFIGZDYs2u6jVJ
- Dwok92b2XfQANW3gq3jTvf6gkmKATlx7bpzSq4vQqzpR7jbwoln3AXQ7niJVgMBcucW3xukxz
- 6NhwMa00jmNm1Bf/wsBQ5o1doCHXZcK/zoLh8C7AoIUqc6rkjsZbvleTYxlor3FHVTKe6RTcp
- Ebfk9dbx73wKlZ+A6jdpk5ru2mWpE6lqpWZRGDk4rQCobr7ez4dROQTnE6wyWZT2VFWSCuJAu
- vALvEFFSu2ZyOcGH7TXWGs8uCJ9qln/G3ZWXrIQGWzAUlAPzxVfwqRQUv8w7lMjcok0tuPh+u
- uqBdmUa0uZ2ZGKCuXzGeZ6eNRd+sIKSf/bKuMruJqDZz3Ip57KW95o1RNkH9cHAFCPWv7ZkOX
- MmYkTJkLIavxp4cODyJeA4hHAJaQYk68UXNI5y8Qmqx2WjFcIN6inLxwGcxcYeoddl1ilLc1P
- iTGDaYYbYUh+UJa2+70botEb9Pe86QDBYVrwOH0bKMLgPyEQ1nty+FeukqbU6R0HiftOCyhqE
- QGcYr/5UGtMctqbe6kAzylWCTUqvaQVAWdFU8+fg+Hy0X+vKGMsDgI2gnfyoQmxzmeo8Cbajm
- oY3ZpzfSOzsthQJwrQtO609knT1vjEqqoYqGeCG3SFO3n9SGppbEziIdyXwcceBJX2P6lAjAN
- zsSJI4AiT66ogoTWKsi06R8zYl3ocUGQZFMpBFyLtkyhXgDrc4BFRpf0vdC/dO2Yrl8XpsipS
- qDm9CXdySDkBvIQR8zyvDqzBHMlxn6IAKkL4xI0xxRADO5iLUeLN7+x6lPl88X8Z30+3nuEvb
- 7mhPc4mW3bRnZA19SLwMzTXVWDoJ57nyCssN+adlUj7cHBTMc0=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 12:12 PM Sai Prakash Ranjan
-<quic_saipraka@quicinc.com> wrote:
-> On 12/6/2021 2:20 PM, Arnd Bergmann wrote:
-> > I think it would be even better to flip these around and make the low-level
-> > definitions __io_ar() and __io_bw(), and then defining the arm64 specific
-> > macros based on those:
-> >
-> > /* arm64-specific, don't use in portable drivers */
-> > #define __iormb(v)     __io_ar(v)
-> > #define __iowmb()      __io_bw()
-> > #define __iomb()        dma_mb()
-> >
-> >
->
-> So __iormb on arm64 has some dummy control dependency stuff as well based on
-> ("arm64: io: Ensure calls to delay routines are ordered against prior
-> readX()") and then we would need to change __iormb definition to __io_ar which
-> doesn't seem like __iormb definition to be exact right?
+Uninitialized err variable defined in mv88e6393x_serdes_power
+function may cause undefined behaviour if it is called from
+mv88e6xxx_serdes_power_down context.
 
-I'm not sure what you are asking here. As far as I can tell, __io_ar()
-and __iormb() have the same calling conventions and the same barrier
-requirements, so they should be interchangeable, we just need to decide
-which one is the primary definition.
+Addresses-Coverity: 1494644 ("Uninitialized scalar variable")
 
-       Arnd
+Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+---
+ drivers/net/dsa/mv88e6xxx/serdes.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/dsa/mv88e6xxx/serdes.c b/drivers/net/dsa/mv88e6xxx/serdes.c
+index 55273013bfb5..33727439724a 100644
+--- a/drivers/net/dsa/mv88e6xxx/serdes.c
++++ b/drivers/net/dsa/mv88e6xxx/serdes.c
+@@ -1507,7 +1507,7 @@ int mv88e6393x_serdes_power(struct mv88e6xxx_chip *chip, int port, int lane,
+ 			    bool on)
+ {
+ 	u8 cmode = chip->ports[port].cmode;
+-	int err;
++	int err = 0;
+ 
+ 	if (port != 0 && port != 9 && port != 10)
+ 		return -EOPNOTSUPP;
+-- 
+2.25.1
+

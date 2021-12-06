@@ -2,75 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 817A146958E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 13:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA9D469591
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 13:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243025AbhLFMXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 07:23:34 -0500
-Received: from foss.arm.com ([217.140.110.172]:55736 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242984AbhLFMXc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 07:23:32 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D3AFF1042;
-        Mon,  6 Dec 2021 04:20:03 -0800 (PST)
-Received: from e123427-lin.arm.com (unknown [10.57.33.247])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 61E313F73D;
-        Mon,  6 Dec 2021 04:20:02 -0800 (PST)
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/6] PCI: pci-bridge-emul: Various fixes
-Date:   Mon,  6 Dec 2021 12:19:57 +0000
-Message-Id: <163879317819.3988.9390653012838076482.b4-ty@arm.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20211124155944.1290-1-pali@kernel.org>
-References: <20211124155944.1290-1-pali@kernel.org>
+        id S243041AbhLFMXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 07:23:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242984AbhLFMXp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 07:23:45 -0500
+Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070A4C061746;
+        Mon,  6 Dec 2021 04:20:17 -0800 (PST)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id D790C396; Mon,  6 Dec 2021 13:20:13 +0100 (CET)
+Date:   Mon, 6 Dec 2021 13:20:02 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        linux-kernel@vger.kernel.org, willy@infradead.org,
+        iommu@lists.linux-foundation.org, dri-devel@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, will@kernel.org
+Subject: Re: [PATCH 1/9] gpu: host1x: Add missing DMA API include
+Message-ID: <Ya3/8mlWkBZiGi7m@8bytes.org>
+References: <cover.1637671820.git.robin.murphy@arm.com>
+ <d7bc49bfda25a7ea19dc574f8e212cd9e42bf2e2.1637671820.git.robin.murphy@arm.com>
+ <0dfb2ee7-e6ec-f085-ed16-650e646d24d7@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0dfb2ee7-e6ec-f085-ed16-650e646d24d7@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 Nov 2021 16:59:38 +0100, Pali Rohár wrote:
-> This patch series contains various fixes for pci-bridge-emul code.
-> This code is used only by pci-aardvark.c and pci-mvebu.c drivers.
-> 
-> Pali Rohár (6):
->   PCI: pci-bridge-emul: Make expansion ROM Base Address register
->     read-only
->   PCI: pci-bridge-emul: Properly mark reserved PCIe bits in PCI config
->     space
->   PCI: pci-bridge-emul: Add definitions for missing capabilities
->     registers
->   PCI: pci-bridge-emul: Fix definitions of reserved bits
->   PCI: pci-bridge-emul: Correctly set PCIe capabilities
->   PCI: pci-bridge-emul: Set PCI_STATUS_CAP_LIST for PCIe device
-> 
-> [...]
+Hi Robin,
 
-Applied to pci/bridge-emul, thanks!
+On Wed, Nov 24, 2021 at 02:05:15PM +0000, Robin Murphy wrote:
+> Bah, seems like tegra-vic needs the same treatment too, but wasn't in my
+> local config. Should I squash that into a respin of this patch on the
+> grounds of being vaguely related, or would you prefer it separate?
 
-[1/6] PCI: pci-bridge-emul: Make expansion ROM Base Address register read-only
-      https://git.kernel.org/lpieralisi/pci/c/1c1a3b4d3e
-[2/6] PCI: pci-bridge-emul: Properly mark reserved PCIe bits in PCI config space
-      https://git.kernel.org/lpieralisi/pci/c/7b067ac63a
-[3/6] PCI: pci-bridge-emul: Add definitions for missing capabilities registers
-      https://git.kernel.org/lpieralisi/pci/c/faa3e547f4
-[4/6] PCI: pci-bridge-emul: Fix definitions of reserved bits
-      https://git.kernel.org/lpieralisi/pci/c/a3ab28a2e3
-[5/6] PCI: pci-bridge-emul: Correctly set PCIe capabilities
-      https://git.kernel.org/lpieralisi/pci/c/0f7ba81700
-[6/6] PCI: pci-bridge-emul: Set PCI_STATUS_CAP_LIST for PCIe device
-      https://git.kernel.org/lpieralisi/pci/c/32051099e8
+In case this fix gets queued in the iommu-tree too, please put it all in
+one patch.
 
 Thanks,
-Lorenzo
+
+	Joerg

@@ -2,82 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C7146A569
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:12:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C7446A56E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348310AbhLFTPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:15:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58146 "EHLO
+        id S1348327AbhLFTQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:16:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242520AbhLFTPm (ORCPT
+        with ESMTP id S1348323AbhLFTQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:15:42 -0500
+        Mon, 6 Dec 2021 14:16:56 -0500
 Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5624C061746;
-        Mon,  6 Dec 2021 11:12:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD6EC061354;
+        Mon,  6 Dec 2021 11:13:27 -0800 (PST)
 Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 751CF4E5;
-        Mon,  6 Dec 2021 19:12:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 751CF4E5
+        by ms.lwn.net (Postfix) with ESMTPSA id BC7E0385;
+        Mon,  6 Dec 2021 19:13:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net BC7E0385
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1638817933; bh=PH4s1a0/Y7y7NcCim60akyERAMn7F0Mb3gN/DfC8FsA=;
+        t=1638818006; bh=vtJqhT8wWEpKGJqC2oyVtUUevlM5VRcgxZba4H+q3Xk=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=OB9UJulp3Ds9tqGj9IWBphc8QN4UA3qoisY2wENPBcQbHO1pPJvmVLuqocJUulqy1
-         c/bNXbevG+fYGO5MIgqD4Aqg+Te+ZUzXFn1KiMIrXus2IgzQpzzkcZ3V42rwgfKhlY
-         wXEMrDktdqfQ3/D1g1HCS/TuXPfIxkx3xCR3/B8SJpeTNjdx4oa/wi7wIc/l2ElySg
-         P9vx3x6umK5mcVdMQiOZQI2SArSBmjE2HB39P7iHTSJXuuN1gRjGmDKjo3pBYEHIml
-         cPk2RXYnd84uLE7dcORK6Dl5foczrhxFTyLg/sKltB6/S9UwkRcjP1DlevZhEAV/wi
-         LqqUlRorm9p1A==
+        b=pI2l69LHcSzzoB5cSXtOXVU4R/b2CowKOeO7Ie+OSTihDPKBc8yLDMrMSe0YLbHIy
+         vzRHuwrjKr3rYN+9+XGk7kDCVb+REKzA0cBgC7zayRgAjGYY8ra5fwGoQ9c7sTQ/NP
+         U3fxRHLZYO1UYS8f4tBppbWJCSOdKocDq1mogawDei94vQjpG0Zw0hvoZxZYFrztnI
+         5MDsfhg08FwjunEE5O0JCpLcGd0Zz3jmVqK6hDKYkWFO0pm+0Sktij2dGhjKAeWQqF
+         CQm+GF4PqPaYy/wXTTYFrJEVONSSfw0gptt1J+1veDDNI1qFkHZCECF33MTHZbn4LG
+         cckRGNT4Hz0Sw==
 From:   Jonathan Corbet <corbet@lwn.net>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        =?utf-8?Q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= 
-        <nfraprado@protonmail.com>, Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Klychkov <andrew.a.klychkov@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] docs: allow selecting a Sphinx theme
-In-Reply-To: <eb4e49b9a701643b07a56f1863005ba8216ef694.1638369365.git.mchehab+huawei@kernel.org>
-References: <cover.1638369365.git.mchehab+huawei@kernel.org>
- <eb4e49b9a701643b07a56f1863005ba8216ef694.1638369365.git.mchehab+huawei@kernel.org>
-Date:   Mon, 06 Dec 2021 12:12:12 -0700
-Message-ID: <878rwx35v7.fsf@meer.lwn.net>
+To:     Linus Torvalds <torvalds@linuxfoundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-doc@vger.kernel.org
+Subject: Re: [GIT PULL] Documentation fixes for 5.16
+In-Reply-To: <87y24x39wi.fsf@meer.lwn.net>
+References: <87y24x39wi.fsf@meer.lwn.net>
+Date:   Mon, 06 Dec 2021 12:13:26 -0700
+Message-ID: <874k7l35t5.fsf@meer.lwn.net>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
+Somehow I managed to not CC the usual lists on this one, so, for the
+record...  
 
-> Instead of having RTD as an almost mandatory theme, allow the
-> user to select other themes via a THEMES environment var.
->
-> There's a catch, though: as the current theme override logic is
-> dependent of the RTD theme, we need to move the code which
-> adds the CSS overrides to be inside the RTD theme logic.
->
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->
-> See [PATCH v3 0/4] at: https://lore.kernel.org/all/cover.1638369365.git.mchehab+huawei@kernel.org/
->
->  Documentation/Makefile             |  3 ++
->  Documentation/conf.py              | 52 +++++++++++++++++-------------
->  Documentation/doc-guide/sphinx.rst |  8 +++++
->  3 files changed, 41 insertions(+), 22 deletions(-)
+Jonathan Corbet <corbet@lwn.net> writes:
 
-So I'm playing with this now, and definitely want to apply it.  I do
-have one little worry, though...  THEME seems like an overly general
-name to use here, and seems relatively likely to conflict with other
-uses.  THEME= on the command line is fine, but what do you think about
-something like DOCS_THEME for the environment variable?  Or even
-HTML_THEME as Sphinx uses?
-
-Thanks,
-
-jon
+> The following changes since commit b96ff02ab2be1791248237b1bf318aaf62e8b701:
+>
+>   Documentation/process: fix a cross reference (2021-11-17 06:12:14 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.lwn.net/linux.git tags/docs-5.16-3
+>
+> for you to fetch changes up to 333b11e541feeb79e7cce31dd5b280ceded388e4:
+>
+>   Documentation: Add minimum pahole version (2021-11-29 14:48:00 -0700)
+>
+> ----------------------------------------------------------------
+> A few important documentation fixes, including breakage that comes with
+> v1.0 of the ReadTheDocs theme.
+>
+> ----------------------------------------------------------------
+> Akira Yokosawa (1):
+>       docs: admin-guide/blockdev: Remove digraph of node-states
+>
+> Arnaldo Carvalho de Melo (1):
+>       Documentation: Add minimum pahole version
+>
+> Erik Ekman (1):
+>       Documentation/process: fix self reference
+>
+> Mauro Carvalho Chehab (1):
+>       docs: conf.py: fix support for Readthedocs v 1.0.0
+>
+>  Documentation/admin-guide/blockdev/drbd/figures.rst       |  4 ++--
+>  .../drbd/{node-states-8.dot => peer-states-8.dot}         |  5 -----
+>  Documentation/conf.py                                     | 15 ++++++++++-----
+>  Documentation/process/changes.rst                         | 11 +++++++++++
+>  Documentation/process/submitting-patches.rst              |  3 ++-
+>  5 files changed, 25 insertions(+), 13 deletions(-)
+>  rename Documentation/admin-guide/blockdev/drbd/{node-states-8.dot => peer-states-8.dot} (71%)

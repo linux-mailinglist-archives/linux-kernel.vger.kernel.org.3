@@ -2,88 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52136468F3A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 03:36:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D7E468F3C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 03:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234597AbhLFCkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 21:40:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53460 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234509AbhLFCkB (ORCPT
+        id S234778AbhLFCkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 21:40:32 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34966 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234509AbhLFCkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 21:40:01 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91F0C0613F8
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 18:36:33 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id be32so18783942oib.11
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 18:36:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZJF/0KXMnSNVIf5/ZsBXY5+vlIl59+Y1SrGZ6vKlpyk=;
-        b=Y6sXzruSfZr9M93iX35pRopd1MgqXToZ0jn27izgNweaAib+JEZm1wAmXvrvyWro9X
-         pZc7vJemGHhucn71FZxB1lNKO4mMxNXAxMK+sF6hlAJ0BFJUCnf2SeRJMfhPsAa1e1S8
-         HCI9Coq7nJMNDJTnvXIvhtxR6UdIIf08rf/x23OHenLyt7JbbWScxvHTlfdATeQIiPxi
-         om7BC3wcXBYNHbQIYUDRkLJPeaI/kQQT5u42I2NZe8sWDDYILnKOFLR0yPdlvKU/27FL
-         6FSC/bSgkhQherNypwPJIlI6Kx1gMToO2ZrEgCZLd70kn4A+ssrdw5k8CtS17ub6Nh8j
-         ITQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=ZJF/0KXMnSNVIf5/ZsBXY5+vlIl59+Y1SrGZ6vKlpyk=;
-        b=PD2JlThwiHQUdoR0BCQQeLX+jwp/4ZtLPP3lKU7WfVGBdi4sOIOyPCyjxl+F5vBrgp
-         4SdmXzTBoFi2UxLdV8E4gqPR9Uv2uWdySe3Bfj8hdF9JeM0USLRAQHWeBirZcx6XKfBV
-         EKCbnS/2ITx4ovn+Hddk3Nj2prFEk5G3p+A8THDg2Yu1IaYMrJVI1U6sOQLt7BxMOypz
-         kK5pEeOL3NdjyHvM6z1j4jWFQ+w/+rflwY2ctSmEeIwOv4FCoy70FZvQwSY3TOUBx0rc
-         ajA5ZRqoeFDc497ImTZTtgRTBMyp49BWoao6pQbZo6UYcp0dZ+qFYK1h1+YrR8nE8MGW
-         /XhA==
-X-Gm-Message-State: AOAM531Jj6anganVCDbLJbCFOn818ZMYTEjqtyA08reSulasftia7zwU
-        B2Xl5csfrTWYa41ZB0niMyQF7+OQctY=
-X-Google-Smtp-Source: ABdhPJw/yaBXD9O3vojvBTdVtNiTFoWGb2qqXFDd1+wl36wAb64DwxI6iOupuwe7r7rKk32Snv3gJA==
-X-Received: by 2002:a05:6808:114a:: with SMTP id u10mr4464782oiu.159.1638758193250;
-        Sun, 05 Dec 2021 18:36:33 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n19sm1984124otq.11.2021.12.05.18.36.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 18:36:32 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 5 Dec 2021 18:36:31 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux 5.16-rc4
-Message-ID: <20211206023631.GA63932@roeck-us.net>
-References: <CAHk-=wguTgfhqftuf6FnW-KZ7zhQGDNktr_POKUkJ6SuMeQuWQ@mail.gmail.com>
+        Sun, 5 Dec 2021 21:40:31 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2AEF4B80EDA;
+        Mon,  6 Dec 2021 02:37:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DE40C00446;
+        Mon,  6 Dec 2021 02:36:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638758221;
+        bh=uh+ev6MS8/oi5tL+V6gOiL502llJGKSw6NHvNHqBqEc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Di9uC+hRAoF3vbyM6obFSFqxhB6gtiAWCrCS5bUI1H7/egzf0nmnKJ25O840IXXTT
+         EhchcvjzE9BN6vK5K7LK983i6gGiP+FtlwtnnzM1gZLRNDy8u87njGUp6jL2wtao2/
+         d7AMx6ByVlG2aH/i18Z7YSGs73D5QAvWVyjKGg/pldsOmGgoQZqphYvuFa5fNybVcZ
+         DcCUA3a/tpLLmMiXQYh9MoNTAxHHXU0s9fFxL4nW0m5xIXOVUJBeySulKJneN8U0gu
+         hgpEIz7rhHVVmxQJQWbdhSQmnZTkgPYICz0neTssrlsTzfAcMYA8wmqoU3IsaFIkjx
+         Mc3PdRdmtS4ng==
+Date:   Mon, 6 Dec 2021 10:36:53 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        laurent.pinchart@ideasonboard.com, tharvey@gateworks.com,
+        aford@beaconembedded.com, Fabio Estevam <festevam@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V3 1/5] soc: imx: imx8m-blk-ctrl: Fix imx8mm mipi reset
+Message-ID: <20211206023650.GV4216@dragon>
+References: <20211128125011.12817-1-aford173@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wguTgfhqftuf6FnW-KZ7zhQGDNktr_POKUkJ6SuMeQuWQ@mail.gmail.com>
+In-Reply-To: <20211128125011.12817-1-aford173@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 05, 2021 at 02:18:58PM -0800, Linus Torvalds wrote:
-> Fairly small rc4 this week. Three areas stand out in the diff: some
-> kvm fixes (and tests), network driver fixes, and the tegra SoC sound
-> fixes.
+On Sun, Nov 28, 2021 at 06:50:07AM -0600, Adam Ford wrote:
+> Most of the blk-ctrl reset bits are found in one register, however
+> there are two bits in offset 8 for pulling the MIPI DPHY out of reset
+> and one of them needs to be set when IMX8MM_DISPBLK_PD_MIPI_CSI is brought
+> out of reset or the MIPI_CSI hangs.
 > 
-> The rest is fairly spread out: drm fixes, some filesystem stuff,
-> various arch updates, and some smattering of random driver fixes.
+> Since MIPI_DSI is impacted, add the additional one for MIPI_DSI too.
 > 
-> Nothing looks all that scary, although I certainly hope the kvm side
-> will calm down.
-> 
+> Fixes: 926e57c065df ("soc: imx: imx8m-blk-ctrl: add DISP blk-ctrl")
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+> Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
 
-Build results:
-	total: 153 pass: 152 fail: 1
-Failed builds:
-	mips:allmodconfig
-Qemu test results:
-	total: 482 pass: 482 fail: 0
-
-A fix for the mips build problem was submitted at
-https://lore.kernel.org/all/20211203192454.32624-1-sergio.paracuellos@gmail.com/
-
-Guenter
+Applied all, thanks!

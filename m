@@ -2,134 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F4846A9AE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE3246A940
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350918AbhLFVTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:19:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58808 "EHLO
+        id S1350282AbhLFVQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:16:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350638AbhLFVSl (ORCPT
+        with ESMTP id S1350274AbhLFVQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:18:41 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E749C0698C1;
-        Mon,  6 Dec 2021 13:15:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id ABCEECE1861;
-        Mon,  6 Dec 2021 21:15:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 367DEC341CA;
-        Mon,  6 Dec 2021 21:15:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638825307;
-        bh=p4q2jJiqmTvTg/BQqSl9uEEFfH48wa23OnPgltutTCs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Sjq6bhJkYgaJiGUUlD6f/4ZAXvRmuXOyySS+h8UVep0p00DWfp1KXd9pLFnbVoP3D
-         V4+pjSOsNIVK6Jw0lC3jVtUJLT6BsWb1fyqDcB13oeWHLd0A0mfA9/rdYZUBhzlPbC
-         JjRgEhYKJ9YgpT0m0zhVH5gajOneDejVCAB17vdEOLfxzZmqbvG4162v9zt2AFcOG7
-         xfIdCZ22GkVMaGR0rUz/hE7BJPYsxVuZ0RWirUHePKKjqtyK3YsiUjMAb1EFQXlUB2
-         b4m+QxEhlmW7maNQXBoNp8Iyjnwo3M8fZEE4Yu4oIN/+HYQ6W7P80lgvvdGc9ktEAP
-         PCA9EFeovmOmQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Philip Yang <Philip.Yang@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 5.15 22/24] drm/amdkfd: process_info lock not needed for svm
-Date:   Mon,  6 Dec 2021 16:12:27 -0500
-Message-Id: <20211206211230.1660072-22-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211206211230.1660072-1-sashal@kernel.org>
-References: <20211206211230.1660072-1-sashal@kernel.org>
+        Mon, 6 Dec 2021 16:16:08 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDFCC061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 13:12:39 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id j21so11639629ila.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 13:12:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WX4eafM7XhN/ysEQz94cWOqdqAJNO4s4yHfaCN6LFrM=;
+        b=a7s44yX/G/AazNfR6mMKB05zFGA+bvHIBBmyalE+/MFrGhfLosJWrCOtebUpxYqqlb
+         5TaPh1SfZZOidPIvbPa0iljl+pLyN9A1AML3++tPDK6Z3sIPNcReIa0dvxdRdZpupvCw
+         kVN6OQ7akCjS1F8593fMAM0RDEgObW1EYH+DJ6LyCaU9Jt2vKPVjFgCOAIrvXjqyoJbr
+         BwwLzOs4wqlQJNoOMTsJrOEJgXnZ1vGIoUGxTMmHDHY6X16yhmILJkJwdB4mw3M609gv
+         gtM2xOpNtxeOUiWsW9fa04S5tJDZPAttnW0vYTjBEQ44i/6n6m+oFmAY8isgVPr+lHDd
+         1VqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WX4eafM7XhN/ysEQz94cWOqdqAJNO4s4yHfaCN6LFrM=;
+        b=qe528Sn3XV3TWm/AH6qq39caU8qS+v+3vt/w2OwX2XQPXYQieJSGddLlomY1ovsLJm
+         yqrZxUUJqdSln8vGOYhLPM8ONet13UzheevJ8PCpIJOL2zUZ0Hh4hSdw+HnxwgmkMrK8
+         eLOEboXOphLW1LDUNV/ii1WF6W3cCA9eWkHRyQ/O7sVkIJ9bFK2yLMKX/SlLdIy4U6S2
+         u1C3BNvtgZAO1cfPNZvLgBpVlR+S13HhPkOEp5rwC3A06P9NjKq3UPD6FYl1XgrHK26t
+         tLqISSGH1VfMFGac/XjKfUuZxHf+uYIV+rDu/dTXoY+9F4z6i8+Dz4QvYmsIdFsGC5g+
+         ySYw==
+X-Gm-Message-State: AOAM530gDQYWeoGefUMxIpvwFbbuaTp1LGdGZWA1HJ3tb44w1GPL5uIg
+        C4HbQ1CVwK6UyuFB8+MAM8+U+FmM/znaWjsRNKW9P9PBEyI=
+X-Google-Smtp-Source: ABdhPJyg921Y+M9sfYj+3RNZXwJKhGfiGimgdocguthZUeHI+TeBhlANZ0rmC91vuJj3ytkOWhNo/7oTfCXUC6UbVFs=
+X-Received: by 2002:a05:6e02:1d1b:: with SMTP id i27mr37229873ila.248.1638825159053;
+ Mon, 06 Dec 2021 13:12:39 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <cover.1638308023.git.andreyknvl@google.com> <8557e32739e38d3cdf409789c2b3e1b405c743f4.1638308023.git.andreyknvl@google.com>
+ <YaoQos9Fevz32h6+@elver.google.com>
+In-Reply-To: <YaoQos9Fevz32h6+@elver.google.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Mon, 6 Dec 2021 22:12:28 +0100
+Message-ID: <CA+fCnZdOuQCCTphqnfUP3Us+fgXpA-arS+z3avHAtNVybhxMSA@mail.gmail.com>
+Subject: Re: [PATCH 24/31] kasan, vmalloc, arm64: mark vmalloc mappings as pgprot_tagged
+To:     Marco Elver <elver@google.com>
+Cc:     andrey.konovalov@linux.dev,
+        Alexander Potapenko <glider@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Evgenii Stepanov <eugenis@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philip Yang <Philip.Yang@amd.com>
+On Fri, Dec 3, 2021 at 1:42 PM Marco Elver <elver@google.com> wrote:
+>
+> On Tue, Nov 30, 2021 at 11:07PM +0100, andrey.konovalov@linux.dev wrote:
+> > From: Andrey Konovalov <andreyknvl@google.com>
+> >
+> > HW_TAGS KASAN relies on ARM Memory Tagging Extension (MTE). With MTE,
+> > a memory region must be mapped as MT_NORMAL_TAGGED to allow setting
+> > memory tags via MTE-specific instructions.
+> >
+> > This change adds proper protection bits to vmalloc() allocations.
+> > These allocations are always backed by page_alloc pages, so the tags
+> > will actually be getting set on the corresponding physical memory.
+> >
+> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > Co-developed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>
+> This is also missing Signed-off-by from Vincenzo.
 
-[ Upstream commit 3abfe30d803e62cc75dec254eefab3b04d69219b ]
-
-process_info->lock is used to protect kfd_bo_list, vm_list_head, n_vms
-and userptr valid/inval list, svm_range_restore_work and
-svm_range_set_attr don't access those, so do not need to take
-process_info lock. This will avoid potential circular locking issue.
-
-Signed-off-by: Philip Yang <Philip.Yang@amd.com>
-Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 9 ---------
- 1 file changed, 9 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-index 179080329af89..5a674235ae41a 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-@@ -1565,7 +1565,6 @@ svm_range_list_lock_and_flush_work(struct svm_range_list *svms,
- static void svm_range_restore_work(struct work_struct *work)
- {
- 	struct delayed_work *dwork = to_delayed_work(work);
--	struct amdkfd_process_info *process_info;
- 	struct svm_range_list *svms;
- 	struct svm_range *prange;
- 	struct kfd_process *p;
-@@ -1585,12 +1584,10 @@ static void svm_range_restore_work(struct work_struct *work)
- 	 * the lifetime of this thread, kfd_process and mm will be valid.
- 	 */
- 	p = container_of(svms, struct kfd_process, svms);
--	process_info = p->kgd_process_info;
- 	mm = p->mm;
- 	if (!mm)
- 		return;
- 
--	mutex_lock(&process_info->lock);
- 	svm_range_list_lock_and_flush_work(svms, mm);
- 	mutex_lock(&svms->lock);
- 
-@@ -1643,7 +1640,6 @@ static void svm_range_restore_work(struct work_struct *work)
- out_reschedule:
- 	mutex_unlock(&svms->lock);
- 	mmap_write_unlock(mm);
--	mutex_unlock(&process_info->lock);
- 
- 	/* If validation failed, reschedule another attempt */
- 	if (evicted_ranges) {
-@@ -2974,7 +2970,6 @@ static int
- svm_range_set_attr(struct kfd_process *p, uint64_t start, uint64_t size,
- 		   uint32_t nattr, struct kfd_ioctl_svm_attribute *attrs)
- {
--	struct amdkfd_process_info *process_info = p->kgd_process_info;
- 	struct mm_struct *mm = current->mm;
- 	struct list_head update_list;
- 	struct list_head insert_list;
-@@ -2993,8 +2988,6 @@ svm_range_set_attr(struct kfd_process *p, uint64_t start, uint64_t size,
- 
- 	svms = &p->svms;
- 
--	mutex_lock(&process_info->lock);
--
- 	svm_range_list_lock_and_flush_work(svms, mm);
- 
- 	if (!svm_range_is_valid(mm, start, size)) {
-@@ -3070,8 +3063,6 @@ svm_range_set_attr(struct kfd_process *p, uint64_t start, uint64_t size,
- 	mutex_unlock(&svms->lock);
- 	mmap_read_unlock(mm);
- out:
--	mutex_unlock(&process_info->lock);
--
- 	pr_debug("pasid 0x%x svms 0x%p [0x%llx 0x%llx] done, r=%d\n", p->pasid,
- 		 &p->svms, start, start + size - 1, r);
- 
--- 
-2.33.0
-
+Same here. Thanks!

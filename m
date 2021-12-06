@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9684469D47
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:32:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B5A469D97
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345983AbhLFP2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:28:55 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51242 "EHLO
+        id S1387314AbhLFPbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:31:00 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51288 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356975AbhLFPSh (ORCPT
+        with ESMTP id S1356350AbhLFPSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:18:37 -0500
+        Mon, 6 Dec 2021 10:18:38 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6EC42B8111E;
-        Mon,  6 Dec 2021 15:15:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96C40C341C1;
-        Mon,  6 Dec 2021 15:15:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3EAEDB81134;
+        Mon,  6 Dec 2021 15:15:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6932BC341C1;
+        Mon,  6 Dec 2021 15:15:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803703;
-        bh=06hdsoMWR+nlY7xtQxV2IWooLhbGfGJIcGNAqt4e7aE=;
+        s=korg; t=1638803706;
+        bh=Fv9fpWLNEQLgjpl9mzaffZEKLRmOtc1MC2/U0es4LuI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v1WHETSlI6bvObMoYU7fRth41fY+Cs/kPX6m193f3fHa1wDdrW6seokRNz/wTwLLM
-         E3cLd2A0+m7GWJNlEJJZBZNVTHRb+DTXllWoOqBCksjocreRgoaJRfgszmoRDqfA32
-         qtZwneOO9k9DxCdl9SXVyDdHMYWQtmWwk1l3tYF8=
+        b=IrYNt7ig8vTChJDOOZ9jiEU5vCh8SyrJ6Yx8D6iZADIv514v+FdoOFYV8qOcudnJ/
+         VyXjAhug9EFa72TwF79B9ij0rqS3lKCSEtWCrEld9vwxpcj+E8ZoQW7PjcYycsnWPS
+         /0P8hhT9BSUaaxQ7aswfFRPlDLnPF4n8iUoa75Uc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Lee Duncan <lduncan@suse.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 017/130] thermal: core: Reset previous low and high trip during thermal zone init
-Date:   Mon,  6 Dec 2021 15:55:34 +0100
-Message-Id: <20211206145600.221351354@linuxfoundation.org>
+Subject: [PATCH 5.10 018/130] scsi: iscsi: Unblock session then wake up error handler
+Date:   Mon,  6 Dec 2021 15:55:35 +0100
+Message-Id: <20211206145600.262282700@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
 References: <20211206145559.607158688@linuxfoundation.org>
@@ -48,47 +47,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
+From: Mike Christie <michael.christie@oracle.com>
 
-[ Upstream commit 99b63316c39988039965693f5f43d8b4ccb1c86c ]
+[ Upstream commit a0c2f8b6709a9a4af175497ca65f93804f57b248 ]
 
-During the suspend is in process, thermal_zone_device_update bails out
-thermal zone re-evaluation for any sensor trip violation without
-setting next valid trip to that sensor. It assumes during resume
-it will re-evaluate same thermal zone and update trip. But when it is
-in suspend temperature goes down and on resume path while updating
-thermal zone if temperature is less than previously violated trip,
-thermal zone set trip function evaluates the same previous high and
-previous low trip as new high and low trip. Since there is no change
-in high/low trip, it bails out from thermal zone set trip API without
-setting any trip. It leads to a case where sensor high trip or low
-trip is disabled forever even though thermal zone has a valid high
-or low trip.
+We can race where iscsi_session_recovery_timedout() has woken up the error
+handler thread and it's now setting the devices to offline, and
+session_recovery_timedout()'s call to scsi_target_unblock() is also trying
+to set the device's state to transport-offline. We can then get a mix of
+states.
 
-During thermal zone device init, reset thermal zone previous high
-and low trip. It resolves above mentioned scenario.
+For the case where we can't relogin we want the devices to be in
+transport-offline so when we have repaired the connection
+__iscsi_unblock_session() can set the state back to running.
 
-Signed-off-by: Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
-Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Set the device state then call into libiscsi to wake up the error handler.
+
+Link: https://lore.kernel.org/r/20211105221048.6541-2-michael.christie@oracle.com
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/thermal/thermal_core.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/scsi_transport_iscsi.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 17de8a9b991e9..d9e34ac376626 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -474,6 +474,8 @@ static void thermal_zone_device_init(struct thermal_zone_device *tz)
- {
- 	struct thermal_instance *pos;
- 	tz->temperature = THERMAL_TEMP_INVALID;
-+	tz->prev_low_trip = -INT_MAX;
-+	tz->prev_high_trip = INT_MAX;
- 	list_for_each_entry(pos, &tz->thermal_instances, tz_node)
- 		pos->initialized = false;
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index 3f7fa8de36427..a5759d0e388a8 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -1909,12 +1909,12 @@ static void session_recovery_timedout(struct work_struct *work)
+ 	}
+ 	spin_unlock_irqrestore(&session->lock, flags);
+ 
+-	if (session->transport->session_recovery_timedout)
+-		session->transport->session_recovery_timedout(session);
+-
+ 	ISCSI_DBG_TRANS_SESSION(session, "Unblocking SCSI target\n");
+ 	scsi_target_unblock(&session->dev, SDEV_TRANSPORT_OFFLINE);
+ 	ISCSI_DBG_TRANS_SESSION(session, "Completed unblocking SCSI target\n");
++
++	if (session->transport->session_recovery_timedout)
++		session->transport->session_recovery_timedout(session);
  }
+ 
+ static void __iscsi_unblock_session(struct work_struct *work)
 -- 
 2.33.0
 

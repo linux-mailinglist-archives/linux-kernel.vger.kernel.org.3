@@ -2,265 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3465B46AA98
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9130446AA9C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352216AbhLFVoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:44:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44745 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1352173AbhLFVoQ (ORCPT
+        id S1352296AbhLFVo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:44:57 -0500
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:38734 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352173AbhLFVo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:44:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638826847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=veukaapGBdz2yq7cvoWrlyqpvVVcueT7D3xH6m4YqRY=;
-        b=AB84DB2/q9qehiFa3kPpC5KS/yGJvr43SXjC+uXy11wG7JPipSosVayNy2ag0fI5kyuJjZ
-        78QsFJM83knLfKabxvhm8y94q9mMYg2WAhtZjHYQvRzmI8kUKH2qyGVDHlFzeh+si6drRA
-        /as63jd9QC6G5kuaLEXUST7b3uMFT6U=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-10-HziiXBEnM9qRmCEzIKAc0w-1; Mon, 06 Dec 2021 16:40:44 -0500
-X-MC-Unique: HziiXBEnM9qRmCEzIKAc0w-1
-Received: by mail-ed1-f69.google.com with SMTP id w5-20020a05640234c500b003f1b9ab06d2so9517431edc.13
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 13:40:43 -0800 (PST)
+        Mon, 6 Dec 2021 16:44:56 -0500
+Received: by mail-oi1-f172.google.com with SMTP id r26so23992018oiw.5;
+        Mon, 06 Dec 2021 13:41:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=veukaapGBdz2yq7cvoWrlyqpvVVcueT7D3xH6m4YqRY=;
-        b=wwyAEZy7E9n8SeLLkj++Yve+G9UiQ+uOmapzfrWBdA9eHcRC0r9yHvwqsvMhGMDg8M
-         8W5sWNJ83Xd5oVQziKrT+aBr/xeyBJ78cr3iHJfuZck6eb46ZcYzyTaT+JExe4hNmG/K
-         FduIsXVgrAH1xawGffU45PECp9fuBmTcdBd9ETwHnLyoh6skr0vGWTqby2BzWb3Vd/63
-         9VB25d8/zfUeN9WSmbneTZaoJgRMJfaJYm/zOuRWNW+JcNV7SKGggjt6Fd/Zypw6AYMg
-         PzqDnhV3lcKqB79vxqyKxEEx8vTrG4U2sMW+r7uJqBmV6fUAJxLd0IEXBpMx0Oc+3iR5
-         kwTg==
-X-Gm-Message-State: AOAM5321DqqrwXV3Zjz8GFJZ8dk8i/uDSTvrjA8ETh4AOAoNgLtRNXNr
-        a/FMf9wVTTnLGqdgG3tJf/XW4Q+3RwpMykHo4BUdTgzu5sXfBlHLReDvkoglRs27oaObXaolJuR
-        avr/ys60Rx/2lcpgeTd8aF5/I
-X-Received: by 2002:a05:6402:348b:: with SMTP id v11mr2597936edc.276.1638826842508;
-        Mon, 06 Dec 2021 13:40:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwKc5sLVaRUlJAvnik7YO6sicX6i5fywo2lsr7E1JoY3p6ePADfa2FkOmTTHz54PEMiMunTqg==
-X-Received: by 2002:a05:6402:348b:: with SMTP id v11mr2597904edc.276.1638826842297;
-        Mon, 06 Dec 2021 13:40:42 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id qk40sm7232823ejc.2.2021.12.06.13.40.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 13:40:41 -0800 (PST)
-Message-ID: <e0c42dca-9500-d4c8-ab93-c958a3b23348@redhat.com>
-Date:   Mon, 6 Dec 2021 22:40:41 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PSEAprzbxWEX6ZnLhf+RfrQjdLumt52lDHoYRDbg8BQ=;
+        b=kMCELL7k0vAZql72vssI+w7WsGJ4pyKjt7U2FpywhA+ATPxrnX24qzbgpZnLSZlZHh
+         Y+DJ2m6WAEyi5bGjzCb8hVxNaAO9Cf1gR1GtHTDl8doFOtGPEIaBlu955s8V/3qMdBZR
+         pZEE1NnrGXhzohOWrsLx8CwYY78eUgf/kCVAOUIiTriWWExtGhoAemK2QuH9UiAXnONG
+         Su1ieXezCcH2ziOKwL3VABhvtVlFPF/p8OktJ2L3CmB9Bo0h3ooc1pUkQnoZjmQ2tm54
+         dqG5kL+DVtpNw4xe9n82LsWZBb2sgrlW4EdOt7tHVwRXAuXaNFGGd2mThdCI7AnmPnxF
+         JdLg==
+X-Gm-Message-State: AOAM533feKTlxZmQ3bNgLo5ks1vJjHoUExoejK/3Xg8U27Eb/fVkjSL1
+        mnNFEcPVFMWtNSQLgGmG18oFqgCpdA==
+X-Google-Smtp-Source: ABdhPJycag/rxulur9/+jx8M2cK2HT4WPv9mH4MMvVgRHg9VRwTcOLQomqKtoQDAieap/x0JByTbKQ==
+X-Received: by 2002:aca:1001:: with SMTP id 1mr1317253oiq.55.1638826886705;
+        Mon, 06 Dec 2021 13:41:26 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id s17sm2473579otp.20.2021.12.06.13.41.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 13:41:25 -0800 (PST)
+Received: (nullmailer pid 2632893 invoked by uid 1000);
+        Mon, 06 Dec 2021 21:41:25 -0000
+Date:   Mon, 6 Dec 2021 15:41:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mihail Chindris <mihail.chindris@analog.com>
+Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        broonie@kernel.org, devicetree@vger.kernel.org, lars@metafoo.de,
+        Michael.Hennerich@analog.com, jic23@kernel.org, nuno.sa@analog.com,
+        dragos.bogdan@analog.com, alexandru.ardelean@analog.com
+Subject: Re: [RESEND, PATCH v6 1/2] dt-bindings: iio: dac: Add
+ adi,ad3552r.yaml
+Message-ID: <Ya6DhTiU23k839M0@robh.at.kernel.org>
+References: <20211206163529.3528-1-mihail.chindris@analog.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [EXTERNAL] Re: [PATCH 2/5] platform: surface: Propagate ACPI
- Dependency
-Content-Language: en-US
-To:     Jarrett Schultz <jaschultz@microsoft.com>,
-        Jarrett Schultz <jaschultzms@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Gross <markgross@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>
-References: <20211202191630.12450-1-jaschultz@microsoft.com>
- <20211202191630.12450-3-jaschultz@microsoft.com>
- <639583df-a54a-eb9b-91ad-a60612a930b0@redhat.com>
- <BL0PR2101MB1316DFA13C3AB1A6620A6CA3A56A9@BL0PR2101MB1316.namprd21.prod.outlook.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <BL0PR2101MB1316DFA13C3AB1A6620A6CA3A56A9@BL0PR2101MB1316.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206163529.3528-1-mihail.chindris@analog.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Dec 06, 2021 at 04:35:29PM +0000, Mihail Chindris wrote:
+> Add documentation for ad3552r
+> 
+> Signed-off-by: Mihail Chindris <mihail.chindris@analog.com>
+> ---
+>  .../bindings/iio/dac/adi,ad3552r.yaml         | 190 ++++++++++++++++++
+>  1 file changed, 190 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/dac/adi,ad3552r.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/dac/adi,ad3552r.yaml b/Documentation/devicetree/bindings/iio/dac/adi,ad3552r.yaml
+> new file mode 100644
+> index 000000000000..c6999bb4c7a4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/dac/adi,ad3552r.yaml
+> @@ -0,0 +1,190 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2020 Analog Devices Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/dac/adi,ad3552r.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices AD2552R DAC device driver
+> +
+> +maintainers:
+> +  - Mihail Chindris <mihail.chindris@analog.com>
+> +
+> +description: |
+> +  Bindings for the Analog Devices AD3552R DAC device and similar.
+> +  Datasheet can be found here:
+> +    https://www.analog.com/media/en/technical-documentation/data-sheets/ad3542r.pdf
+> +    https://www.analog.com/media/en/technical-documentation/data-sheets/ad3552r.pdf
 
-On 12/3/21 18:34, Jarrett Schultz wrote:
+blank line
+
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,ad3542r
+> +      - adi,ad3552r
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  spi-max-frequency:
+> +    maximum: 30000000
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +
+> +  ldac-gpios:
+> +    description: |
+> +      LDAC pin to be used as a hardware trigger to update the DAC channels.
+> +    maxItems: 1
+> +
+> +  vref-supply:
+> +    description:
+> +      The regulator to use as an external reference. If it does not exists the
+> +      internal reference will be used. External reference must be 2.5V
+> +
+> +  adi,vref-out-en:
+> +    description: Vref I/O driven by internal vref to 2.5V. If not set, Vref pin
+> +      will be floating.
+> +    type: boolean
+> +
+> +  adi,sdo-drive-strength:
+> +    description: |
+> +      Configure SDIO0 and SDIO1 strength levels:
+> +        - 0: low SDO drive strength.
+> +        - 1: medium low SDO drive strength.
+> +        - 2: medium high SDO drive strength.
+> +        - 3: high SDO drive strength
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [0, 1, 2, 3]
+> +
+> +patternProperties:
+> +  "^channel@([0-1])$":
+> +    type: object
+> +    description: Configurations of the DAC Channels
+
+       additionalProperties: false
+
+> +    properties:
+> +      reg:
+> +          description: Channel number
+> +          enum: [0, 1]
+
+With that, you will need:
+
+         adi,output-range-microvolt: true
+
+> +
+> +      custom-output-range-config:
+> +        type: object
+
+Why does this need to be in a child node?
+
+> +        description: Configuration of custom range when
+> +          adi,output-range-microvolt is not present.
+> +          The formulas for calculation the output voltages are
+> +            Vout_fs = 2.5 + [(GainN + Offset/1024) * 2.5 * Rfbx * 1.03]
+> +            Vout_zs = 2.5 - [(GainP + Offset/1024) * 2.5 * Rfbx * 1.03]
+
+blank line
+
+> +        properties:
+> +          adi,gain-offset:
+> +            description: Gain offset used in the above formula
+> +            $ref: /schemas/types.yaml#/definitions/int32
+> +            maximum: 511
+> +            minimum: -511
+
+blank line, and so on...
+
+> +          adi,gain-scaling-p-inv-log2:
+> +            description: GainP = 1 / ( 2 ^ adi,gain-scaling-p-inv-log2)
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+> +            enum: [0, 1, 2, 3]
+> +          adi,gain-scaling-n-inv-log2:
+> +            description: GainN = 1 / ( 2 ^ adi,gain-scaling-n-inv-log2)
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+> +            enum: [0, 1, 2, 3]
+> +          adi,rfb-ohms:
+> +            description: Feedback Resistor
+> +        required:
+> +          - adi,gain-offset
+> +          - adi,gain-scaling-p-inv-log2
+> +          - adi,gain-scaling-n-inv-log2
+> +          - adi,rfb-ohms
+> +    required:
+> +      - reg
+> +
+> +    oneOf:
+> +      # If adi,output-range-microvolt is missing,
+> +      # custom-output-range-config must be used
+> +      - required:
+> +        - adi,output-range-microvolt
+> +      - required:
+> +        - custom-output-range-config
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: adi,ad3542r
+> +    then:
+> +      patternProperties:
+> +        "^channel@([0-1])$":
+> +          type: object
+> +          properties:
+> +            adi,output-range-microvolt:
+> +              description: |
+> +                Voltage output range of the channel as <minimum, maximum>
+> +                Required connections:
+> +                  Rfb1x for: 0 to 2.5 V; 0 to 3V; 0 to 5 V;
+> +                  Rfb2x for: 0 to 10 V; 2.5 to 7.5V; -5 to 5 V;
+> +              oneOf:
+> +                - items:
+> +                    - const: 0
+> +                    - enum: [2500000, 3000000, 5000000, 10000000]
+> +                - items:
+> +                    - const: -2500000
+> +                    - const: 7500000
+> +                - items:
+> +                    - const: -5000000
+> +                    - const: 5000000
+> +          required:
+> +            - adi,output-range-microvolt
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: adi,ad3552r
+> +    then:
+> +      patternProperties:
+> +        "^channel@([0-1])$":
+> +          type: object
+> +          properties:
+> +            adi,output-range-microvolt:
+> +              description: |
+> +                Voltage output range of the channel as <minimum, maximum>
+> +                Required connections:
+> +                  Rfb1x for: 0 to 2.5 V; 0 to 5 V;
+> +                  Rfb2x for: 0 to 10 V; -5 to 5 V;
+> +                  Rfb4x for: -10 to 10V
+> +              oneOf:
+> +                - items:
+> +                    - const: 0
+> +                    - enum: [2500000, 5000000, 10000000]
+> +                - items:
+> +                    - const: -5000000
+> +                    - const: 5000000
+> +                - items:
+> +                    - const: -10000000
+> +                    - const: 10000000
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - spi-max-frequency
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    ad3552r {
+> +            compatible = "adi,ad3552r";
+> +            reg = <0>;
+> +            spi-max-frequency = <20000000>;
+> +            channel@0 {
+> +                    reg = <0>;
+> +                    adi,output-range-microvolt = <0 10000000>;
+> +            };
+> +            channel@1 {
+> +                    reg = <1>;
+> +                    custom-output-range-config {
+> +                            adi,gain-offset = <5>;
+> +                            adi,gain-scaling-p-inv-log2 = <1>;
+> +                            adi,gain-scaling-n-inv-log2 = <2>;
+> +                            adi,rfb-ohms = <1>;
+> +                    };
+> +          };
+> +      };
+> +...
+> -- 
+> 2.27.0
 > 
 > 
->> -----Original Message-----
->> From: Hans de Goede <hdegoede@redhat.com>
->> Sent: Friday, December 3, 2021 1:59 AM
->> To: Jarrett Schultz <jaschultzms@gmail.com>; Rob Herring
->> <robh+dt@kernel.org>; Andy Gross <agross@kernel.org>; Bjorn Andersson
->> <bjorn.andersson@linaro.org>; Mark Gross <markgross@kernel.org>;
->> Maximilian Luz <luzmaximilian@gmail.com>
->> Cc: linux-arm-msm@vger.kernel.org; platform-driver-x86@vger.kernel.org;
->> linux-kernel@vger.kernel.org; devicetree@vger.kernel.org; Felipe Balbi
->> <balbi@kernel.org>; Jarrett Schultz <jaschultz@microsoft.com>
->> Subject: [EXTERNAL] Re: [PATCH 2/5] platform: surface: Propagate ACPI
->> Dependency
->>
->> Hi Jarett,
->>
->> On 12/2/21 20:16, Jarrett Schultz wrote:
->>> Since the Surface XBL Driver does not depend on ACPI, the
->>> platform/surface directory as a whole no longer depends on ACPI. With
->>> respect to this, the ACPI dependency is moved into each config that
->>> depends on ACPI individually.
->>>
->>> Signed-off-by: Jarrett Schultz <jaschultz@microsoft.com>
->>
->> I think I will already merge this patch into the pdx86 tree:
->>
->> https://nam06.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.k
->> ernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fpdx86%2Fplatform-
->> drivers-
->> x86.git%2F&amp;data=04%7C01%7Cjaschultz%40microsoft.com%7C0ab6fcc6
->> 4a5c4fd8657308d9b64391dd%7C72f988bf86f141af91ab2d7cd011db47%7C0
->> %7C0%7C637741223627024908%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC
->> 4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&
->> amp;sdata=fEszuAgBLL3g2Z9Lh3DPQ%2BlzrWZR3o6aUst6fDmLOrE%3D&amp
->> ;reserved=0
->>
->> While we are waiting for the rest of the series to get hashed out.
->>
->> But as already pointed out by Trilok Soni your From: and Signed-off-by email
->> addresses don't match.
->>
->> I can fix up the From to match the Signed-off-by while I apply this, but before
->> I do that I wanted to check with you that setting both to "Jarrett Schultz
->> <jaschultz@microsoft.com>" is the right thing to do ?
->>
->> Regards,
->>
->> Hans
->>
->>
-> 
-> Hans,
-> 
-> Yes, that is the correct email. Still trying to get all the kinks worked out, I appreciate your patience.
-
-Ok, I've merged this patch now, so you can drop it from the next version of
-the series.
-
-
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-
-
-
->>> ---
->>>
->>> Changes in v3:
->>>  - Further propagated ACPI dependecy to SURFACE_AGGREGATOR
->>>
->>> ---
->>>
->>> Changes in v2:
->>>  - Created to propagate ACPI dependency
->>> ---
->>>  drivers/platform/surface/Kconfig            | 7 ++++++-
->>>  drivers/platform/surface/aggregator/Kconfig | 1 +
->>>  2 files changed, 7 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/platform/surface/Kconfig
->>> b/drivers/platform/surface/Kconfig
->>> index 3105f651614f..5f0578e25f71 100644
->>> --- a/drivers/platform/surface/Kconfig
->>> +++ b/drivers/platform/surface/Kconfig
->>> @@ -5,7 +5,6 @@
->>>
->>>  menuconfig SURFACE_PLATFORMS
->>>  	bool "Microsoft Surface Platform-Specific Device Drivers"
->>> -	depends on ACPI
->>>  	default y
->>>  	help
->>>  	  Say Y here to get to see options for platform-specific device
->>> drivers @@ -30,12 +29,14 @@ config SURFACE3_WMI
->>>
->>>  config SURFACE_3_BUTTON
->>>  	tristate "Power/home/volume buttons driver for Microsoft Surface 3
->> tablet"
->>> +	depends on ACPI
->>>  	depends on KEYBOARD_GPIO && I2C
->>>  	help
->>>  	  This driver handles the power/home/volume buttons on the
->> Microsoft Surface 3 tablet.
->>>
->>>  config SURFACE_3_POWER_OPREGION
->>>  	tristate "Surface 3 battery platform operation region support"
->>> +	depends on ACPI
->>>  	depends on I2C
->>>  	help
->>>  	  This driver provides support for ACPI operation @@ -126,6 +127,7
->>> @@ config SURFACE_DTX
->>>
->>>  config SURFACE_GPE
->>>  	tristate "Surface GPE/Lid Support Driver"
->>> +	depends on ACPI
->>>  	depends on DMI
->>>  	help
->>>  	  This driver marks the GPEs related to the ACPI lid device found on
->>> @@ -135,6 +137,7 @@ config SURFACE_GPE
->>>
->>>  config SURFACE_HOTPLUG
->>>  	tristate "Surface Hot-Plug Driver"
->>> +	depends on ACPI
->>>  	depends on GPIOLIB
->>>  	help
->>>  	  Driver for out-of-band hot-plug event signaling on Microsoft
->>> Surface @@ -154,6 +157,7 @@ config SURFACE_HOTPLUG
->>>
->>>  config SURFACE_PLATFORM_PROFILE
->>>  	tristate "Surface Platform Profile Driver"
->>> +	depends on ACPI
->>>  	depends on SURFACE_AGGREGATOR_REGISTRY
->>>  	select ACPI_PLATFORM_PROFILE
->>>  	help
->>> @@ -176,6 +180,7 @@ config SURFACE_PLATFORM_PROFILE
->>>
->>>  config SURFACE_PRO3_BUTTON
->>>  	tristate "Power/home/volume buttons driver for Microsoft Surface
->> Pro 3/4 tablet"
->>> +	depends on ACPI
->>>  	depends on INPUT
->>>  	help
->>>  	  This driver handles the power/home/volume buttons on the
->> Microsoft Surface Pro 3/4 tablet.
->>> diff --git a/drivers/platform/surface/aggregator/Kconfig
->>> b/drivers/platform/surface/aggregator/Kconfig
->>> index fd6dc452f3e8..cab020324256 100644
->>> --- a/drivers/platform/surface/aggregator/Kconfig
->>> +++ b/drivers/platform/surface/aggregator/Kconfig
->>> @@ -4,6 +4,7 @@
->>>  menuconfig SURFACE_AGGREGATOR
->>>  	tristate "Microsoft Surface System Aggregator Module Subsystem
->> and Drivers"
->>>  	depends on SERIAL_DEV_BUS
->>> +	depends on ACPI
->>>  	select CRC_CCITT
->>>  	help
->>>  	  The Surface System Aggregator Module (Surface SAM or SSAM) is an
->>>
-> 
-

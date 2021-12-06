@@ -2,33 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD8546A00B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85287469F69
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352369AbhLFP4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388714AbhLFPei (ORCPT
+        id S1359696AbhLFPr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:47:56 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35518 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1387719AbhLFPbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:34:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DBFC07E5F3;
-        Mon,  6 Dec 2021 07:20:32 -0800 (PST)
+        Mon, 6 Dec 2021 10:31:48 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3EBB0B810AC;
-        Mon,  6 Dec 2021 15:20:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65792C341C2;
-        Mon,  6 Dec 2021 15:20:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A539B8111E;
+        Mon,  6 Dec 2021 15:28:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1834C34901;
+        Mon,  6 Dec 2021 15:28:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804029;
-        bh=kuNp9ksckLFnCMGd4ARqguiLs+L5cN445axbRFPQAqU=;
+        s=korg; t=1638804498;
+        bh=D9BneoZ5pKUabNYLDWhUTzNUJl51i27LH35N2pk8NFk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vElZc2BnvN0cohfJymNPQ6GETOZo7WhwTpeJ8oYf3HH62dpZjbK3ff+VDCO2ULmDM
-         rTc4l1XkMRUZn3QhWZHewtOm728nOB58Xr3rXaxEfMc10lT6FrBW0WZ0RpH+CKOcrW
-         DqKsSyg+mCm3bdZe+nD9CtGRJvT9oxgY/fyFQPUY=
+        b=FKmVARFqpo/Bz9V1Q0QcPKfHSHnpRLJFls0nHe021Zzpi/lJ5NJk7U2IHDqO1geAn
+         5nh6+mhGfkh92eue4ARPpJBEamaCmTSUucRHIdk+GIEWr+mVFlIimtZfSUDnTWyaQz
+         d6Ira7ViG/AvN1+8sQ6KI9Me19zfT4rbT9AqRlfM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +33,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Like Xu <likexu@tencent.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 103/130] KVM: x86/pmu: Fix reserved bits for AMD PerfEvtSeln register
-Date:   Mon,  6 Dec 2021 15:57:00 +0100
-Message-Id: <20211206145603.200409455@linuxfoundation.org>
+Subject: [PATCH 5.15 167/207] KVM: x86/pmu: Fix reserved bits for AMD PerfEvtSeln register
+Date:   Mon,  6 Dec 2021 15:57:01 +0100
+Message-Id: <20211206145616.057749160@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -85,10 +82,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-index 035da07500e8b..5a5c165a30ed1 100644
+index fdf587f19c5fb..e152241d1d709 100644
 --- a/arch/x86/kvm/svm/pmu.c
 +++ b/arch/x86/kvm/svm/pmu.c
-@@ -274,7 +274,7 @@ static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
+@@ -282,7 +282,7 @@ static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
  		pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERS;
  
  	pmu->counter_bitmask[KVM_PMC_GP] = ((u64)1 << 48) - 1;

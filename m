@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71455469F36
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C264E46A044
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391643AbhLFPqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:46:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
+        id S1388301AbhLFP74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:59:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387173AbhLFPat (ORCPT
+        with ESMTP id S1390526AbhLFPm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:30:49 -0500
+        Mon, 6 Dec 2021 10:42:29 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A26C0698E5;
-        Mon,  6 Dec 2021 07:18:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2AAC0698C5;
+        Mon,  6 Dec 2021 07:27:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E770161322;
-        Mon,  6 Dec 2021 15:18:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD6A0C341C1;
-        Mon,  6 Dec 2021 15:18:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38E686132C;
+        Mon,  6 Dec 2021 15:27:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20C68C34901;
+        Mon,  6 Dec 2021 15:27:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803911;
-        bh=P8T9G6uehFe2A8S3SaDZ33FIidEeWMHmQDD9C6ITSUI=;
+        s=korg; t=1638804453;
+        bh=WGWU8nZsA+FoZdJ3LJaj93pnvdygE+IWrELk2dHaOkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kAclEnPH5woIDVYLrA/HSj0nGeXRfQg+EYdpAxkOv0c5YdLTeNFWdSK/IXmY05ARR
-         kdejr3l6l13sCbny1wsY7Fo7DsFL3GSey8LTfaP3mT0P5llVXGgDcfIo42mNmIhOHb
-         aEMB/lFm6zGKdNVo83Zl+TjdNdFwkGJg9snyleic=
+        b=xDoEXnXvLXDCdOMFCkUAqgVQ/sDPRyt8H5QQikZqEmYGRJHTBHT18fG3NCQiK34Wg
+         7LKbsnmlltldPFIbvIiAotkEJn5nh/zbHf6YW6f4EkFwd3xC1wGFoMAssr13epv7Z/
+         7bmHyYJ8gTqQzZYstgIfhhWtiPxmt/mha8sX3+f0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 090/130] ipv4: convert fib_num_tclassid_users to atomic_t
+        stable@vger.kernel.org,
+        Hou Wenlong <houwenlong93@linux.alibaba.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 153/207] KVM: x86/mmu: Pass parameter flush as false in kvm_tdp_mmu_zap_collapsible_sptes()
 Date:   Mon,  6 Dec 2021 15:56:47 +0100
-Message-Id: <20211206145602.762865707@linuxfoundation.org>
+Message-Id: <20211206145615.543680231@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,102 +50,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Hou Wenlong <houwenlong93@linux.alibaba.com>
 
-commit 213f5f8f31f10aa1e83187ae20fb7fa4e626b724 upstream.
+[ Upstream commit 8ed716ca7dc91f058be0ba644a3048667a20db13 ]
 
-Before commit faa041a40b9f ("ipv4: Create cleanup helper for fib_nh")
-changes to net->ipv4.fib_num_tclassid_users were protected by RTNL.
+Since tlb flush has been done for legacy MMU before
+kvm_tdp_mmu_zap_collapsible_sptes(), so the parameter flush
+should be false for kvm_tdp_mmu_zap_collapsible_sptes().
 
-After the change, this is no longer the case, as free_fib_info_rcu()
-runs after rcu grace period, without rtnl being held.
-
-Fixes: faa041a40b9f ("ipv4: Create cleanup helper for fib_nh")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: David Ahern <dsahern@kernel.org>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e2209710ccc5d ("KVM: x86/mmu: Skip rmap operations if rmaps not allocated")
+Signed-off-by: Hou Wenlong <houwenlong93@linux.alibaba.com>
+Message-Id: <21453a1d2533afb6e59fb6c729af89e771ff2e76.1637140154.git.houwenlong93@linux.alibaba.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/ip_fib.h     |    2 +-
- include/net/netns/ipv4.h |    2 +-
- net/ipv4/fib_frontend.c  |    2 +-
- net/ipv4/fib_rules.c     |    4 ++--
- net/ipv4/fib_semantics.c |    4 ++--
- 5 files changed, 7 insertions(+), 7 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/include/net/ip_fib.h
-+++ b/include/net/ip_fib.h
-@@ -437,7 +437,7 @@ int fib_validate_source(struct sk_buff *
- #ifdef CONFIG_IP_ROUTE_CLASSID
- static inline int fib_num_tclassid_users(struct net *net)
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 9d04474b00272..c9b1d63d3cfba 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -5855,7 +5855,7 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
+ void kvm_mmu_zap_collapsible_sptes(struct kvm *kvm,
+ 				   const struct kvm_memory_slot *slot)
  {
--	return net->ipv4.fib_num_tclassid_users;
-+	return atomic_read(&net->ipv4.fib_num_tclassid_users);
- }
- #else
- static inline int fib_num_tclassid_users(struct net *net)
---- a/include/net/netns/ipv4.h
-+++ b/include/net/netns/ipv4.h
-@@ -61,7 +61,7 @@ struct netns_ipv4 {
- #endif
- 	bool			fib_has_custom_local_routes;
- #ifdef CONFIG_IP_ROUTE_CLASSID
--	int			fib_num_tclassid_users;
-+	atomic_t		fib_num_tclassid_users;
- #endif
- 	struct hlist_head	*fib_table_hash;
- 	bool			fib_offload_disabled;
---- a/net/ipv4/fib_frontend.c
-+++ b/net/ipv4/fib_frontend.c
-@@ -1578,7 +1578,7 @@ static int __net_init fib_net_init(struc
- 	int error;
+-	bool flush = false;
++	bool flush;
  
- #ifdef CONFIG_IP_ROUTE_CLASSID
--	net->ipv4.fib_num_tclassid_users = 0;
-+	atomic_set(&net->ipv4.fib_num_tclassid_users, 0);
- #endif
- 	error = ip_fib_net_init(net);
- 	if (error < 0)
---- a/net/ipv4/fib_rules.c
-+++ b/net/ipv4/fib_rules.c
-@@ -264,7 +264,7 @@ static int fib4_rule_configure(struct fi
- 	if (tb[FRA_FLOW]) {
- 		rule4->tclassid = nla_get_u32(tb[FRA_FLOW]);
- 		if (rule4->tclassid)
--			net->ipv4.fib_num_tclassid_users++;
-+			atomic_inc(&net->ipv4.fib_num_tclassid_users);
- 	}
- #endif
+ 	if (kvm_memslots_have_rmaps(kvm)) {
+ 		write_lock(&kvm->mmu_lock);
+@@ -5867,7 +5867,7 @@ void kvm_mmu_zap_collapsible_sptes(struct kvm *kvm,
  
-@@ -296,7 +296,7 @@ static int fib4_rule_delete(struct fib_r
- 
- #ifdef CONFIG_IP_ROUTE_CLASSID
- 	if (((struct fib4_rule *)rule)->tclassid)
--		net->ipv4.fib_num_tclassid_users--;
-+		atomic_dec(&net->ipv4.fib_num_tclassid_users);
- #endif
- 	net->ipv4.fib_has_custom_rules = true;
- 
---- a/net/ipv4/fib_semantics.c
-+++ b/net/ipv4/fib_semantics.c
-@@ -222,7 +222,7 @@ void fib_nh_release(struct net *net, str
- {
- #ifdef CONFIG_IP_ROUTE_CLASSID
- 	if (fib_nh->nh_tclassid)
--		net->ipv4.fib_num_tclassid_users--;
-+		atomic_dec(&net->ipv4.fib_num_tclassid_users);
- #endif
- 	fib_nh_common_release(&fib_nh->nh_common);
- }
-@@ -633,7 +633,7 @@ int fib_nh_init(struct net *net, struct
- #ifdef CONFIG_IP_ROUTE_CLASSID
- 	nh->nh_tclassid = cfg->fc_flow;
- 	if (nh->nh_tclassid)
--		net->ipv4.fib_num_tclassid_users++;
-+		atomic_inc(&net->ipv4.fib_num_tclassid_users);
- #endif
- #ifdef CONFIG_IP_ROUTE_MULTIPATH
- 	nh->fib_nh_weight = nh_weight;
+ 	if (is_tdp_mmu_enabled(kvm)) {
+ 		read_lock(&kvm->mmu_lock);
+-		flush = kvm_tdp_mmu_zap_collapsible_sptes(kvm, slot, flush);
++		flush = kvm_tdp_mmu_zap_collapsible_sptes(kvm, slot, false);
+ 		if (flush)
+ 			kvm_arch_flush_remote_tlbs_memslot(kvm, slot);
+ 		read_unlock(&kvm->mmu_lock);
+-- 
+2.33.0
+
 
 

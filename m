@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0371A469CCA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B854699FE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385805AbhLFPZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:25:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54654 "EHLO
+        id S1345248AbhLFPEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:04:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357994AbhLFPQX (ORCPT
+        with ESMTP id S1345435AbhLFPDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:16:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D180C08EC0A;
-        Mon,  6 Dec 2021 07:08:52 -0800 (PST)
+        Mon, 6 Dec 2021 10:03:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BDDC061D7E;
+        Mon,  6 Dec 2021 07:00:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF2786132B;
-        Mon,  6 Dec 2021 15:08:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A36E9C341C5;
-        Mon,  6 Dec 2021 15:08:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82B25B8110B;
+        Mon,  6 Dec 2021 15:00:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04B4CC341C1;
+        Mon,  6 Dec 2021 15:00:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803331;
-        bh=Yibu21T4UbpkU3YOXbQDC588MDn3gZHuhxgP5kuPwHI=;
+        s=korg; t=1638802819;
+        bh=/Wb6m5v5fmBpipAr4UQHcfMhU2vYSv9T7Gi+eLxGnho=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BFUX8h7trOjTor+QdFYLc5JiwqR26/xOn6ERqvasAHAbyQCeTZU+a8Nhu8yIG10eu
-         VYbYQWCiH9HKWQslfSyvuOR0WgIsNsdfX0+nTsYrD/1Jl/MOLP6ltiRkJczH+SpXuJ
-         9oJWJ0mo3PTLlSMFym95nUIYZNnyiRRWOvwTTjHE=
+        b=DV5kHRS2Y7o9DaNPZ5C+Ql/FDXM3RobE4/5EoMca9+Y1QErBVnJCXbzKbhTXiOMuQ
+         jB0Y1ngvKpZooyynEjjl6/qPvvnopgwLCA+T2QHJrUN8v97mQyTxtMXsiIhoua5drN
+         +Dw+kS4awEljcXsqkuXrPvUatXoXn6Y+hAbDQFEg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Teng Qi <starmiku1207184332@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 079/106] ethernet: hisilicon: hns: hns_dsaf_misc: fix a possible array overflow in hns_dsaf_ge_srst_by_port()
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 4.4 43/52] sata_fsl: fix warning in remove_proc_entry when rmmod sata_fsl
 Date:   Mon,  6 Dec 2021 15:56:27 +0100
-Message-Id: <20211206145558.221643930@linuxfoundation.org>
+Message-Id: <20211206145549.379554239@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
+References: <20211206145547.892668902@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,48 +50,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Teng Qi <starmiku1207184332@gmail.com>
+From: Baokun Li <libaokun1@huawei.com>
 
-[ Upstream commit a66998e0fbf213d47d02813b9679426129d0d114 ]
+commit 6f48394cf1f3e8486591ad98c11cdadb8f1ef2ad upstream.
 
-The if statement:
-  if (port >= DSAF_GE_NUM)
-        return;
+Trying to remove the fsl-sata module in the PPC64 GNU/Linux
+leads to the following warning:
+ ------------[ cut here ]------------
+ remove_proc_entry: removing non-empty directory 'irq/69',
+   leaking at least 'fsl-sata[ff0221000.sata]'
+ WARNING: CPU: 3 PID: 1048 at fs/proc/generic.c:722
+   .remove_proc_entry+0x20c/0x220
+ IRQMASK: 0
+ NIP [c00000000033826c] .remove_proc_entry+0x20c/0x220
+ LR [c000000000338268] .remove_proc_entry+0x208/0x220
+ Call Trace:
+  .remove_proc_entry+0x208/0x220 (unreliable)
+  .unregister_irq_proc+0x104/0x140
+  .free_desc+0x44/0xb0
+  .irq_free_descs+0x9c/0xf0
+  .irq_dispose_mapping+0x64/0xa0
+  .sata_fsl_remove+0x58/0xa0 [sata_fsl]
+  .platform_drv_remove+0x40/0x90
+  .device_release_driver_internal+0x160/0x2c0
+  .driver_detach+0x64/0xd0
+  .bus_remove_driver+0x70/0xf0
+  .driver_unregister+0x38/0x80
+  .platform_driver_unregister+0x14/0x30
+  .fsl_sata_driver_exit+0x18/0xa20 [sata_fsl]
+ ---[ end trace 0ea876d4076908f5 ]---
 
-limits the value of port less than DSAF_GE_NUM (i.e., 8).
-However, if the value of port is 6 or 7, an array overflow could occur:
-  port_rst_off = dsaf_dev->mac_cb[port]->port_rst_off;
+The driver creates the mapping by calling irq_of_parse_and_map(),
+so it also has to dispose the mapping. But the easy way out is to
+simply use platform_get_irq() instead of irq_of_parse_map(). Also
+we should adapt return value checking and propagate error values.
 
-because the length of dsaf_dev->mac_cb is DSAF_MAX_PORT_NUM (i.e., 6).
+In this case the mapping is not managed by the device but by
+the of core, so the device has not to dispose the mapping.
 
-To fix this possible array overflow, we first check port and if it is
-greater than or equal to DSAF_MAX_PORT_NUM, the function returns.
-
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Teng Qi <starmiku1207184332@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: faf0b2e5afe7 ("drivers/ata: add support to Freescale 3.0Gbps SATA Controller")
+Cc: stable@vger.kernel.org
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Reviewed-by: Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/ata/sata_fsl.c |    8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c b/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
-index 408b63faf9a81..c4e56784ed1b8 100644
---- a/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
-+++ b/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
-@@ -336,6 +336,10 @@ static void hns_dsaf_ge_srst_by_port(struct dsaf_device *dsaf_dev, u32 port,
- 		return;
+--- a/drivers/ata/sata_fsl.c
++++ b/drivers/ata/sata_fsl.c
+@@ -1502,9 +1502,9 @@ static int sata_fsl_probe(struct platfor
+ 	host_priv->ssr_base = ssr_base;
+ 	host_priv->csr_base = csr_base;
  
- 	if (!HNS_DSAF_IS_DEBUG(dsaf_dev)) {
-+		/* DSAF_MAX_PORT_NUM is 6, but DSAF_GE_NUM is 8.
-+		   We need check to prevent array overflow */
-+		if (port >= DSAF_MAX_PORT_NUM)
-+			return;
- 		reg_val_1  = 0x1 << port;
- 		port_rst_off = dsaf_dev->mac_cb[port]->port_rst_off;
- 		/* there is difference between V1 and V2 in register.*/
--- 
-2.33.0
-
+-	irq = irq_of_parse_and_map(ofdev->dev.of_node, 0);
+-	if (!irq) {
+-		dev_err(&ofdev->dev, "invalid irq from platform\n");
++	irq = platform_get_irq(ofdev, 0);
++	if (irq < 0) {
++		retval = irq;
+ 		goto error_exit_with_cleanup;
+ 	}
+ 	host_priv->irq = irq;
+@@ -1581,8 +1581,6 @@ static int sata_fsl_remove(struct platfo
+ 
+ 	ata_host_detach(host);
+ 
+-	irq_dispose_mapping(host_priv->irq);
+-
+ 	return 0;
+ }
+ 
 
 

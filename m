@@ -2,86 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C7446A56E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3586746A578
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348327AbhLFTQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:16:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
+        id S1348347AbhLFTTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:19:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348323AbhLFTQ4 (ORCPT
+        with ESMTP id S243589AbhLFTTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:16:56 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD6EC061354;
-        Mon,  6 Dec 2021 11:13:27 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id BC7E0385;
-        Mon,  6 Dec 2021 19:13:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net BC7E0385
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1638818006; bh=vtJqhT8wWEpKGJqC2oyVtUUevlM5VRcgxZba4H+q3Xk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=pI2l69LHcSzzoB5cSXtOXVU4R/b2CowKOeO7Ie+OSTihDPKBc8yLDMrMSe0YLbHIy
-         vzRHuwrjKr3rYN+9+XGk7kDCVb+REKzA0cBgC7zayRgAjGYY8ra5fwGoQ9c7sTQ/NP
-         U3fxRHLZYO1UYS8f4tBppbWJCSOdKocDq1mogawDei94vQjpG0Zw0hvoZxZYFrztnI
-         5MDsfhg08FwjunEE5O0JCpLcGd0Zz3jmVqK6hDKYkWFO0pm+0Sktij2dGhjKAeWQqF
-         CQm+GF4PqPaYy/wXTTYFrJEVONSSfw0gptt1J+1veDDNI1qFkHZCECF33MTHZbn4LG
-         cckRGNT4Hz0Sw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Linus Torvalds <torvalds@linuxfoundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-doc@vger.kernel.org
-Subject: Re: [GIT PULL] Documentation fixes for 5.16
-In-Reply-To: <87y24x39wi.fsf@meer.lwn.net>
-References: <87y24x39wi.fsf@meer.lwn.net>
-Date:   Mon, 06 Dec 2021 12:13:26 -0700
-Message-ID: <874k7l35t5.fsf@meer.lwn.net>
+        Mon, 6 Dec 2021 14:19:49 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F43C061746;
+        Mon,  6 Dec 2021 11:16:19 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AC23EEE;
+        Mon,  6 Dec 2021 20:16:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1638818177;
+        bh=zFdavL06ulBt0zjQ7jeYKdKdKljFjx0ZhG2E2ii+PXA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wBh8jXa753hMgT9b6/K+PVJpkzBq8qkAtu1hjEuzg1JN6hQ9DNIWPX7/WMianAta7
+         p+bub5JrrQTtcINp2vfzGJO8q5sDjXHNCWLg8xf2HqcPw12e0M6gOyUako1DB5JB/X
+         xjk1m+fgJVqB8YkfWmNvpaBiPMn9hfauO4DgoqKk=
+Date:   Mon, 6 Dec 2021 21:15:50 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tfiga@chromium.org, stable <stable@vger.kernel.org>
+Subject: Re: [REGRESSION] Re: [PATCH v10 11/21] media: uvcvideo: Set unique
+ vdev name based in type
+Message-ID: <Ya5hZtwcfBU/19CU@pendragon.ideasonboard.com>
+References: <20210618122923.385938-1-ribalda@chromium.org>
+ <20210618122923.385938-12-ribalda@chromium.org>
+ <b4bfa8b8f3d8f25c48a3b0b81a0e87dc90f111af.camel@ndufresne.ca>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b4bfa8b8f3d8f25c48a3b0b81a0e87dc90f111af.camel@ndufresne.ca>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Somehow I managed to not CC the usual lists on this one, so, for the
-record...  
+Hi Nicolas,
 
-Jonathan Corbet <corbet@lwn.net> writes:
+On Mon, Dec 06, 2021 at 02:05:06PM -0500, Nicolas Dufresne wrote:
+> Le vendredi 18 juin 2021 à 14:29 +0200, Ricardo Ribalda a écrit :
+> > All the entities must have a unique name. We can have a descriptive and
+> > unique name by appending the function and the entity->id.
+> 
+> Thanks for your work. The only issue is that unfortunately this change cause an
+> important regression for users. All UVC cameras in all UIs seems to no longer
+> include any information about the camera. As an example, I have two cameras on
+> my system and Firefox, Chrome, Cheese, Zoom and MS Team all agree that my camera
+> are now:
+> 
+>   Video Capture 4
+>   Video Capture 5
+> 
+> Previously they would be shown as something like:
+> 
+>   StreamCam
+>   Integrated
+> 
+> We should probably revert this change quickly before it get deployed more
+> widely, I have notice the backport being sent for 5.4, 5.10 and 5.14. I'm using
+> 5.15 shipped by Fedora team.
 
-> The following changes since commit b96ff02ab2be1791248237b1bf318aaf62e8b701:
->
->   Documentation/process: fix a cross reference (2021-11-17 06:12:14 -0700)
->
-> are available in the Git repository at:
->
->   git://git.lwn.net/linux.git tags/docs-5.16-3
->
-> for you to fetch changes up to 333b11e541feeb79e7cce31dd5b280ceded388e4:
->
->   Documentation: Add minimum pahole version (2021-11-29 14:48:00 -0700)
->
-> ----------------------------------------------------------------
-> A few important documentation fixes, including breakage that comes with
-> v1.0 of the ReadTheDocs theme.
->
-> ----------------------------------------------------------------
-> Akira Yokosawa (1):
->       docs: admin-guide/blockdev: Remove digraph of node-states
->
-> Arnaldo Carvalho de Melo (1):
->       Documentation: Add minimum pahole version
->
-> Erik Ekman (1):
->       Documentation/process: fix self reference
->
-> Mauro Carvalho Chehab (1):
->       docs: conf.py: fix support for Readthedocs v 1.0.0
->
->  Documentation/admin-guide/blockdev/drbd/figures.rst       |  4 ++--
->  .../drbd/{node-states-8.dot => peer-states-8.dot}         |  5 -----
->  Documentation/conf.py                                     | 15 ++++++++++-----
->  Documentation/process/changes.rst                         | 11 +++++++++++
->  Documentation/process/submitting-patches.rst              |  3 ++-
->  5 files changed, 25 insertions(+), 13 deletions(-)
->  rename Documentation/admin-guide/blockdev/drbd/{node-states-8.dot => peer-states-8.dot} (71%)
+Ack.
+
+> As a proper solution, maybe I could suggest to keep using dev->name, but trim it
+> enough to fit the " N" string to guaranty that you have enough space in this
+> limited 32 char string and use that instead ? This should fit the uniqueness
+> requirement without the sacrifice of the only possibly useful information we had
+> in that limited string.
+
+That would polute the device name a bit, which isn't very nice for
+users. I wonder if we could instead decouple the entity name from the
+video device name.
+
+> > This is even resilent to multi chain devices.
+> > 
+> > Fixes v4l2-compliance:
+> > Media Controller ioctls:
+> >                 fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
+> >         test MEDIA_IOC_G_TOPOLOGY: FAIL
+> >                 fail: v4l2-test-media.cpp(394): num_data_links != num_links
+> > 	test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
+> > 
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> > ---
+> >  drivers/media/usb/uvc/uvc_driver.c | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> > index 14b60792ffab..037bf80d1100 100644
+> > --- a/drivers/media/usb/uvc/uvc_driver.c
+> > +++ b/drivers/media/usb/uvc/uvc_driver.c
+> > @@ -2194,6 +2194,7 @@ int uvc_register_video_device(struct uvc_device *dev,
+> >  			      const struct v4l2_file_operations *fops,
+> >  			      const struct v4l2_ioctl_ops *ioctl_ops)
+> >  {
+> > +	const char *name;
+> >  	int ret;
+> >  
+> >  	/* Initialize the video buffers queue. */
+> > @@ -2222,16 +2223,20 @@ int uvc_register_video_device(struct uvc_device *dev,
+> >  	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
+> >  	default:
+> >  		vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
+> > +		name = "Video Capture";
+> >  		break;
+> >  	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
+> >  		vdev->device_caps = V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_STREAMING;
+> > +		name = "Video Output";
+> >  		break;
+> >  	case V4L2_BUF_TYPE_META_CAPTURE:
+> >  		vdev->device_caps = V4L2_CAP_META_CAPTURE | V4L2_CAP_STREAMING;
+> > +		name = "Metadata";
+> >  		break;
+> >  	}
+> >  
+> > -	strscpy(vdev->name, dev->name, sizeof(vdev->name));
+> > +	snprintf(vdev->name, sizeof(vdev->name), "%s %u", name,
+> > +		 stream->header.bTerminalLink);
+> >  
+> >  	/*
+> >  	 * Set the driver data before calling video_register_device, otherwise
+
+-- 
+Regards,
+
+Laurent Pinchart

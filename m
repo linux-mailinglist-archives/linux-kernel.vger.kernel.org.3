@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCB6469F80
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDDF9469C7C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391557AbhLFPp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:45:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58488 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387156AbhLFPas (ORCPT
+        id S1357853AbhLFPW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:22:59 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47452 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357956AbhLFPQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:30:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CC3C08EE1B;
-        Mon,  6 Dec 2021 07:18:28 -0800 (PST)
+        Mon, 6 Dec 2021 10:16:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B88BB8101B;
-        Mon,  6 Dec 2021 15:18:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A602C341C1;
-        Mon,  6 Dec 2021 15:18:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3EF8B810E7;
+        Mon,  6 Dec 2021 15:12:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24552C341C2;
+        Mon,  6 Dec 2021 15:12:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803905;
-        bh=k4TnQy9WT+XjXoUhNAoZFOz2DcHOWdK4HcA31fdqCOM=;
+        s=korg; t=1638803571;
+        bh=GD3/rPmxSQKdnMFtYDYc5S1YQcsfgwwjZqXkIBHwTWo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uk4NR0p91ndRJqLXTBo8Ex4faVR69P1ycu6jbP4UWVW5r0+PpIPk/Q0VtMH3GI1ao
-         dkGxtFXf/4Po/GOzbievuWIm8PNBqtwGAGWK9Hc8vl43PdqEJERvWuY6HRv2A/meZb
-         P9WfXXfjvhMyo3qtOqas1Sr/1KyNfsRC9ZMnYWWA=
+        b=IDFGnv2XAAc28AhxweMrNZK6Msqb+lwx32ZUZQUzi4Qalxz9hLnS23DazFHNMHK8b
+         NAE9hmZIJg+QpAGT/kixH3kc1X9LuOkGG9jwEWOCo6weUj64XE9xjCrK7HJBtPixKr
+         ZhOIukxiPfa0wY3IcE1HpGAzZUl3WoUhkr7ui7U0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dongliang Mu <mudongliangabcd@gmail.com>,
+        stable@vger.kernel.org, Li Zhijian <lizhijian@cn.fujitsu.com>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 088/130] dpaa2-eth: destroy workqueue at the end of remove function
+Subject: [PATCH 5.4 41/70] selftests: net: Correct case name
 Date:   Mon,  6 Dec 2021 15:56:45 +0100
-Message-Id: <20211206145602.702777267@linuxfoundation.org>
+Message-Id: <20211206145553.357765896@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
+References: <20211206145551.909846023@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,35 +45,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Li Zhijian <lizhijian@cn.fujitsu.com>
 
-commit f4a8adbfe4841491b60c14fe610571e1422359f9 upstream.
+commit a05431b22be819d75db72ca3d44381d18a37b092 upstream.
 
-The commit c55211892f46 ("dpaa2-eth: support PTP Sync packet one-step
-timestamping") forgets to destroy workqueue at the end of remove
-function.
+ipv6_addr_bind/ipv4_addr_bind are function names. Previously, bind test
+would not be run by default due to the wrong case names
 
-Fix this by adding destroy_workqueue before fsl_mc_portal_free and
-free_netdev.
-
-Fixes: c55211892f46 ("dpaa2-eth: support PTP Sync packet one-step timestamping")
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Fixes: 34d0302ab861 ("selftests: Add ipv6 address bind tests to fcnal-test")
+Fixes: 75b2b2b3db4c ("selftests: Add ipv4 address bind tests to fcnal-test")
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c |    2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/net/fcnal-test.sh |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-+++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-@@ -4432,6 +4432,8 @@ static int dpaa2_eth_remove(struct fsl_m
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -3450,8 +3450,8 @@ EOF
+ ################################################################################
+ # main
  
- 	fsl_mc_portal_free(priv->mc_io);
+-TESTS_IPV4="ipv4_ping ipv4_tcp ipv4_udp ipv4_addr_bind ipv4_runtime ipv4_netfilter"
+-TESTS_IPV6="ipv6_ping ipv6_tcp ipv6_udp ipv6_addr_bind ipv6_runtime ipv6_netfilter"
++TESTS_IPV4="ipv4_ping ipv4_tcp ipv4_udp ipv4_bind ipv4_runtime ipv4_netfilter"
++TESTS_IPV6="ipv6_ping ipv6_tcp ipv6_udp ipv6_bind ipv6_runtime ipv6_netfilter"
+ TESTS_OTHER="use_cases"
  
-+	destroy_workqueue(priv->dpaa2_ptp_wq);
-+
- 	dev_dbg(net_dev->dev.parent, "Removed interface %s\n", net_dev->name);
- 
- 	free_netdev(net_dev);
+ PAUSE_ON_FAIL=no
 
 

@@ -2,70 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C9B46977E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD7146978A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244850AbhLFNwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 08:52:38 -0500
-Received: from 8bytes.org ([81.169.241.247]:40344 "EHLO theia.8bytes.org"
+        id S244891AbhLFN4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 08:56:36 -0500
+Received: from mga07.intel.com ([134.134.136.100]:26467 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244804AbhLFNwV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 08:52:21 -0500
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id ED55F396; Mon,  6 Dec 2021 14:48:50 +0100 (CET)
-Date:   Mon, 6 Dec 2021 14:48:49 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Yong Wu <yong.wu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        David Airlie <airlied@linux.ie>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Will Deacon <will.deacon@arm.com>,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, youlin.pei@mediatek.com,
-        Matthias Kaehlcke <mka@chromium.org>, anan.sun@mediatek.com,
-        yi.kuo@mediatek.com, acourbot@chromium.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Eizan Miyamoto <eizan@chromium.org>,
-        anthony.huang@mediatek.com,
-        Frank Wunderlich <frank-w@public-files.de>,
-        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
-        libo.kang@mediatek.com
-Subject: Re: [PATCH v9 00/15] Clean up "mediatek,larb"
-Message-ID: <Ya4UwQ6QhjLA+OiS@8bytes.org>
-References: <20211112105509.12010-1-yong.wu@mediatek.com>
- <Ya35hNY0iAR/JPmI@8bytes.org>
- <657ad1fc-0a90-bfc5-d4f1-9ff007f9f672@xs4all.nl>
+        id S244880AbhLFN4e (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 08:56:34 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="300699644"
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="300699644"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 05:53:05 -0800
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="460834085"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 05:53:03 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1muEPS-002nYw-NM;
+        Mon, 06 Dec 2021 15:52:02 +0200
+Date:   Mon, 6 Dec 2021 15:52:02 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v12 3/7] gpiolib: of: make fwnode take precedence in
+ struct gpio_chip
+Message-ID: <Ya4VgtR5QIEn9WP2@smile.fi.intel.com>
+References: <20211203133003.31786-4-brgl@bgdev.pl>
+ <YapnTHQZyNCZXrgp@smile.fi.intel.com>
+ <YapoW+DL4jPo69u8@smile.fi.intel.com>
+ <Yapp4vakFxH7JV5B@smile.fi.intel.com>
+ <CAMRc=MeWfKHWFKwRjaqczrfwhAodpDLgrWKF-zqXCsjd=gMv3g@mail.gmail.com>
+ <Yap5ctmlw6NeNM+7@smile.fi.intel.com>
+ <CAMRc=MffmFgCZFRziw-QJ+Y3WobJZzUh1Nbp2oym6JLqfnZCdQ@mail.gmail.com>
+ <Ya4RHA91Ow9frP8t@smile.fi.intel.com>
+ <CAMRc=MeqGuVsydk4ZKiEKPUv32FdaOUHg7Ee3efUda==RhjXdg@mail.gmail.com>
+ <Ya4Ut9ECbYhBkke5@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <657ad1fc-0a90-bfc5-d4f1-9ff007f9f672@xs4all.nl>
+In-Reply-To: <Ya4Ut9ECbYhBkke5@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 01:33:36PM +0100, Hans Verkuil wrote:
-> I think it might be easiest if it is all going through the media subsystem
-> (except for the dts patches, we don't handle those unless specifically
-> requested to do so). I need a resend for jpeg bindings txt to yaml
-> conversion series first, though. This time with the linux-media mailinglist
-> included :-)
+On Mon, Dec 06, 2021 at 03:48:39PM +0200, Andy Shevchenko wrote:
+> On Mon, Dec 06, 2021 at 02:40:36PM +0100, Bartosz Golaszewski wrote:
+> > On Mon, Dec 6, 2021 at 2:34 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > >
+> > > On Mon, Dec 06, 2021 at 09:41:33AM +0100, Bartosz Golaszewski wrote:
+> > > > On Fri, Dec 3, 2021 at 9:10 PM Andy Shevchenko
+> > > > <andriy.shevchenko@linux.intel.com> wrote:
+> > >
+> > > ...
+> > >
+> > > > This series concerns the gpio-sim driver and it only uses configfs
+> > > > (with manually created platform devices) or device-tree. I would
+> > > > prefer to do ACPI separately and I'd like you to lead that because I
+> > > > neither have any HW to test nor claim to understand it. :)
+> > >
+> > > Please, mention this in the commit message that ACPI is not covered (yet).
+> > 
+> > But the commit message says: "gpiolib: of: make fwnode take precedence
+> > in struct gpio_chip" - it says OF right here. :)
 > 
-> I would need your Ack for the iommu patches as well, of course.
+> It implies that reader should have a 6th sense to know about ACPI and what
+> else? Please, be explicit over implicit.
 
-Okay, makes sense. IOMMU parts are 
+The problem here is that you change one case and haven't touched the rest which
+brings inconsistency in the behaviour on different resource providers.
 
-Acked-by: Joerg Roedel <jroedel@suse.de>
+We need a record to be sure what disbalance this patch brought. That's why
+I asked to mention ACPI branch.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

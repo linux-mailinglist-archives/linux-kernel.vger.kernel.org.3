@@ -2,104 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A21A46A5F8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24DA246A604
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348702AbhLFTwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:52:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
+        id S1348741AbhLFTzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348036AbhLFTwP (ORCPT
+        with ESMTP id S1348725AbhLFTzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:52:15 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AEEC0613F8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 11:48:46 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id w4so11369714ilv.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 11:48:45 -0800 (PST)
+        Mon, 6 Dec 2021 14:55:51 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6D1C061354
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 11:52:22 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id b1so27955528lfs.13
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 11:52:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ywinYb56QHh87QcHVGWwF3m7yXk5Dis0ajMhWVoqPOs=;
-        b=4wzrpr3l2kbKa7j3eM0hMiY07XZRSyQV3PR8RrWCQPGw0Z8ACFAMIGanIyMpGtehdX
-         O/2JhPOZtur8S/10yRSZ1MOIpisaB3ULalbsI9xJMd0BglXD5e1eJnCosPmRQGNGgPcT
-         vuITjDa9daUiaVxAS77y4dxpZ1fcpy6ESbdGZb13SSoM6jmjMj9LtPUIa6wTpMeMgukK
-         ZwcRxUSXvb7ysbo2kkl6QkYnRwZksiAdrwzH+0UlM0RUORlLV/lGQ9QTYEQnS8esbFFc
-         pyCQsVC9vtrvQPyDMu8QhcsvEofEzTVzCj2PSwubRoXM3pFNMgWxWWhr466JmBJ9Y5Xb
-         JykA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qCi545GbK80p7g1dOndZmxZ1t+GhgtzglTvcr5pYytw=;
+        b=BeOKbti2cLjxynXRhm3uVU/EUMQvrRDofJNFCXD70PoFjKCjIkViJzExWINqSM41cT
+         M3tsA3XXX728I+CF7b3WuTC0hZCo4DzYk8wCuxW+yfH1IbsWDO6KfXuxH856xk/DZp20
+         M/2ExrQz6BX6H1dHggEaZL0QsDljVu9i6MJ7TyyNCkY1DmLrISnlMjca/mU3gdYAx8JE
+         szTRQLeSZHqYxNJnAXaAufrUUJaMbKSAGtqmRgl/MhABVM+32IMpOkIoPswXlcRGDxTJ
+         /Y3Qj26Hg4ihT90ZPGsVrFNHbEEs9VKWfvpu4BBLkMgCmwB5zY+fyhgq1R/3NqABjo2C
+         bE+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ywinYb56QHh87QcHVGWwF3m7yXk5Dis0ajMhWVoqPOs=;
-        b=ykb+vhFFSoNwKw3k2ZEsFdex7c1i30NhFaKxOhcLZhHFUlwAPF+rYfHXuCNk4l7bNV
-         hT4ejNevBXlsJ7Gvs9lIv2f+6gMmmH2+IW1R03Bn/HxqwDEwHhmDMwjZ+tUQZ/Kq7pRy
-         afH1exrp259eTv7G7tmeUJnuO1sTF/mEatf1WmlKazsKKk23PSd2m7oqdBSzoHi8R4eA
-         i8mE2Q6rjlve/p+f4mRZSft6LibtdzO20dH9s94CPL3GJ2ZJ3PSN11eiQdY9VCwiHS6s
-         5wFblwsgKE3uEgJGtmM6yLyEwi5nW7ohF7PqVksFqOCGdINhoO+PVlV03BVZdepjunwP
-         d7nw==
-X-Gm-Message-State: AOAM531w4Wq50eqVfzSGNjjhaTK58xArHLH+S2h12jh5JMEThlXCzcMD
-        sm8/ZhGUO3XDyhZud6jDFYlY0g==
-X-Google-Smtp-Source: ABdhPJwGK1xF8N9yJ3v2/8CP+QCO89vFFWnVpXn+1CrsnlWq21GnkenP55mvb+5cxLf+GccJNuqvSQ==
-X-Received: by 2002:a05:6e02:1845:: with SMTP id b5mr32363264ilv.168.1638820125399;
-        Mon, 06 Dec 2021 11:48:45 -0800 (PST)
-Received: from [192.168.1.30] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id s8sm7079486ilt.49.2021.12.06.11.48.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 11:48:45 -0800 (PST)
-Subject: Re: [PATCH v2 0/3] blk-mq: Optimise blk_mq_queue_tag_busy_iter() for
- shared tags
-To:     John Garry <john.garry@huawei.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ming.lei@redhat.com, kashyap.desai@broadcom.com, hare@suse.de
-References: <1638794990-137490-1-git-send-email-john.garry@huawei.com>
- <67feacc8-3da7-90de-cc0c-f8b529f84297@kernel.dk>
- <544f60f5-a367-a1a0-5a21-9708a7e8d2e1@huawei.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <930e8d6b-1e5a-fc06-47de-9ea9fee9fcc0@kernel.dk>
-Date:   Mon, 6 Dec 2021 12:48:44 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qCi545GbK80p7g1dOndZmxZ1t+GhgtzglTvcr5pYytw=;
+        b=IfdnVnHhtrbOns+bzu9vr67XrVcS1jysQMdlwzxHDv5dU3StWznDYAeqvvkbz7KpLm
+         nYRLc/xQM8ETVNJGrVmWVWCdbTomnpdSmcM0tjqjXzspNeWiyZvrE2Ff70jHCqsOyV1C
+         ODL4HTErqBh5yARTHxybKGvi+vNQj3xvYwNkWul4W4mgglTBt5QeaE8p7k1kqxIUE98M
+         VIm4rhBy/DDb24ttPG4J8R/RJ17OG71A556F4Nb+xzvHbo372xFCnnlEc+hL0zP38ftk
+         E5M4g29kkG7LzbUU74wr8fZ+USy56j1Xw0Tq2FRIWZt/aFLw8viff5vsQ8JIoQTP3XzK
+         bTEg==
+X-Gm-Message-State: AOAM533KBsh9cTxBXPWHx5sTpiaarbD87zI+QwfjMe+hqK5ymsD8yt3F
+        D0wceGGIBTjH1BuvylWlJXdYMo+BSrQa1G0qsHHsyw==
+X-Google-Smtp-Source: ABdhPJzxQx0rWjWRUrzzOUFgjYLY+vk8jRMLZ9DjSV/X+VNkcdE4K2MaupeR9XFTfer1Qnc8G4Woge338nytB1DpSxE=
+X-Received: by 2002:a05:6512:1506:: with SMTP id bq6mr37711959lfb.444.1638820340271;
+ Mon, 06 Dec 2021 11:52:20 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <544f60f5-a367-a1a0-5a21-9708a7e8d2e1@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211206140313.5653-1-ojeda@kernel.org> <20211206140313.5653-12-ojeda@kernel.org>
+ <Ya4mAqoOa8zIeZGZ@kroah.com> <CANiq72kCmLgrv++mFygR6dt0xOhfv04o9j6jYLQ1N+zLNvqohQ@mail.gmail.com>
+ <Ya40Bcv+eFkqc9jv@kroah.com>
+In-Reply-To: <Ya40Bcv+eFkqc9jv@kroah.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 6 Dec 2021 11:52:09 -0800
+Message-ID: <CAKwvOdkLF_DPP1FF60720q3zxZG2qaSNTthxJPxLb4Bj=AFE=Q@mail.gmail.com>
+Subject: Re: [PATCH 11/19] vsprintf: add new `%pA` format specifier
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Gary Guo <gary@garyguo.net>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/6/21 12:34 PM, John Garry wrote:
-> On 06/12/2021 19:07, Jens Axboe wrote:
->> On 12/6/21 5:49 AM, John Garry wrote:
->>> In [0] Kashyap reports high CPU usage for blk_mq_queue_tag_busy_iter()
->>> and callees for shared tags.
->>>
->>> Indeed blk_mq_queue_tag_busy_iter() would be less optimum for moving to
->>> shared tags, but it was not optimum previously.
->>>
->>> This series optimises by having only a single iter (per regular and resv
->>> tags) for the shared tags, instead of an iter per HW queue.
->>>
->>> [0]https://lore.kernel.org/linux-block/e4e92abbe9d52bcba6b8cc6c91c442cc@mail.gmail.com/
-> 
-> Hi Jens,
-> 
->> The patch(es) are missing Fixes tags.
-> 
-> The first two patches aren't fixes, but are general dev. As for the 
-> last, it prob should go as a fix for 5.16, but I was not sure how you 
-> would feel about that - it's not a trivial change, we're late in the 
-> cycle, and Kashyap was happy for 5.17 .
-> 
-> Let me know if the last could be accepted as a fix and I'll re-send 
-> separately with a fixes tag.
+On Mon, Dec 6, 2021 at 8:14 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Dec 06, 2021 at 04:56:32PM +0100, Miguel Ojeda wrote:
+> > On Mon, Dec 6, 2021 at 4:46 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > That should be in a .h file somewhere.  Remember, don't put #ifdef in .c
+> > > files please.
 
-Regardless of whether it's going into 5.16 or 5.17 it should have a
-fixes tag.
+Why not put #ifdef in .c files?
+
+> > Will do, thanks for reviewing!
+> >
+> > > Same here, this should not be needed if you put it in a .h file
+> > > correctly.
+
+I guess IS_ENABLED could be used in the .c code, but I don't see how
+they could move the dispatch to rust_fmt_argument to a header without
+moving the definition of pointer() to a header, which they probably
+_cant_ do because it's noinline_for_stack.
+
+> >
+> > This one is mimicking the `CONFIG_BLOCK` one (`case 'g'` a bit above)
+> > -- but we can change it, of course.
+>
+> That should be changed as well :)
+
+Isn't the point to minimize code that's unused for certain configurations?
 
 -- 
-Jens Axboe
-
+Thanks,
+~Nick Desaulniers

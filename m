@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD0A469C24
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:18:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 916FC469A73
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347275AbhLFPVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:21:07 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33684 "EHLO
+        id S1347016AbhLFPH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:07:58 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55916 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355905AbhLFPNO (ORCPT
+        with ESMTP id S1345865AbhLFPGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:13:14 -0500
+        Mon, 6 Dec 2021 10:06:10 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CFEA61328;
-        Mon,  6 Dec 2021 15:09:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10ADEC341C2;
-        Mon,  6 Dec 2021 15:09:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3223B612A5;
+        Mon,  6 Dec 2021 15:02:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F35C341C1;
+        Mon,  6 Dec 2021 15:02:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803384;
-        bh=N2hQwQrj8/ZltlL4+WHRDjcfhcttg2gMAZKuvKrGMY4=;
+        s=korg; t=1638802960;
+        bh=qM6HluBn4RVpT6QWxpRerYmfyBR4ghdWX2iaEal5fb0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KNpGO6Z98AZR2vAImRvPx1fX7XunZE8FYup3+SD2ROo5HXmjaa1ZYiIkmW+dfi3hu
-         3/qBhrQxBJKp3AfShYdr+ZIB046nikUtewjJUDooGbmII1UoOeC1jmZmqAEYr4HZbB
-         Xr49/2SWX9j9UVAVxncihKi6nX7DCBHKMXnNcRIA=
+        b=AMlv7jrOOksJh3v5Ezemp8khHbSNweDOubZjALWn+MFJhS3qEEZ5TXX+S6q0Ae6rB
+         UinGJua6Zqj/LH3ZqKeUvJE5vWv0e5KCvLaQVUiPE2GORZdHXxsX+VV6RVaWWPjCm/
+         X2yThRpPmZeZqC0AW/0Lk9und3cRn9omuwKx3e74=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, liuguoqiang <liuguoqiang@uniontech.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 06/48] net: return correct error code
+Subject: [PATCH 4.9 40/62] net: return correct error code
 Date:   Mon,  6 Dec 2021 15:56:23 +0100
-Message-Id: <20211206145549.072699933@linuxfoundation.org>
+Message-Id: <20211206145550.579080400@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
-References: <20211206145548.859182340@linuxfoundation.org>
+In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
+References: <20211206145549.155163074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,10 +61,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
-index 12a2cea9d606a..e2ab8cdb71347 100644
+index 6f3c529431865..7a2442623d6a6 100644
 --- a/net/ipv4/devinet.c
 +++ b/net/ipv4/devinet.c
-@@ -2354,7 +2354,7 @@ static int __devinet_sysctl_register(struct net *net, char *dev_name,
+@@ -2271,7 +2271,7 @@ static int __devinet_sysctl_register(struct net *net, char *dev_name,
  free:
  	kfree(t);
  out:
@@ -72,7 +72,7 @@ index 12a2cea9d606a..e2ab8cdb71347 100644
 +	return -ENOMEM;
  }
  
- static void __devinet_sysctl_unregister(struct net *net,
+ static void __devinet_sysctl_unregister(struct ipv4_devconf *cnf)
 -- 
 2.33.0
 

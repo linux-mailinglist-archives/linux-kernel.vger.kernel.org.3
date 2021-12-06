@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC17A469FD7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5755A469C90
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:20:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359570AbhLFPyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:54:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        id S1347991AbhLFPXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:23:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390245AbhLFPmP (ORCPT
+        with ESMTP id S1356079AbhLFPOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:42:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E025C08ECB8;
-        Mon,  6 Dec 2021 07:25:59 -0800 (PST)
+        Mon, 6 Dec 2021 10:14:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CC2C08EB3C;
+        Mon,  6 Dec 2021 07:06:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C08361309;
-        Mon,  6 Dec 2021 15:25:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 053E6C34900;
-        Mon,  6 Dec 2021 15:25:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0B36B81123;
+        Mon,  6 Dec 2021 15:06:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0AD8C341C2;
+        Mon,  6 Dec 2021 15:06:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804358;
-        bh=B1tPb4Y81YUEFcjknVtv2dgfbxahQigJmXfHtEaZks4=;
+        s=korg; t=1638803208;
+        bh=aR6lhfnzKnTH+Vnhyq+7MpBtl7xMzvV4ESB0akcOWYE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vx5mFeY1CXya3od5fjwer2H5o7zrvYk8IHKwsSTdB2NHSAzbyhvmPOoZngdwvEg0O
-         rsm5IpjGWxMn035LN5aScbaeU1Yn4hYtkWnQLpq6B/cfkd/7QUEwjSv58ELM5ehGPm
-         XVO5brytqCurGJNpTmJ6LQ3OHryTMs6yzFzgRhRY=
+        b=CR7uD+6/BWa37kq5ATVei17z5FJsLsFb+s646PGmRWMACMy3TYX67S5oFPSyPN2B4
+         azrq1SeaZIdP1g89TuKHJaiw9Oe3eNh4FCXTxwkZxjvfLaHa0GrZ6JlU5m6jGt0o9Z
+         ovwAivZEr/my6q+E/JAUv1KAehe3EYrBMC25U0p8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
-        Mark Brown <broonie@kernel.org>,
-        Sameer Pujar <spujar@nvidia.com>, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 119/207] ASoC: tegra: Fix kcontrol put callback in ADMAIF
-Date:   Mon,  6 Dec 2021 15:56:13 +0100
-Message-Id: <20211206145614.364492195@linuxfoundation.org>
+        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.14 066/106] xen/netfront: disentangle tx_skb_freelist
+Date:   Mon,  6 Dec 2021 15:56:14 +0100
+Message-Id: <20211206145557.741055949@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,202 +48,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sameer Pujar <spujar@nvidia.com>
+From: Juergen Gross <jgross@suse.com>
 
-commit e2b87a18a60c02d0dcd1de801d669587e516cc4d upstream.
+commit 21631d2d741a64a073e167c27769e73bc7844a2f upstream.
 
-The kcontrol put callback is expected to return 1 when there is change
-in HW or when the update is acknowledged by driver. This would ensure
-that change notifications are sent to subscribed applications. Update
-the ADMAIF driver accordingly.
+The tx_skb_freelist elements are in a single linked list with the
+request id used as link reference. The per element link field is in a
+union with the skb pointer of an in use request.
 
-Fixes: f74028e159bb ("ASoC: tegra: Add Tegra210 based ADMAIF driver")
-Suggested-by: Jaroslav Kysela <perex@perex.cz>
-Suggested-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sameer Pujar <spujar@nvidia.com>
-Reviewed-by: Takashi Iwai <tiwai@suse.de>
-Link: https://lore.kernel.org/r/1637219231-406-8-git-send-email-spujar@nvidia.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Move the link reference out of the union in order to enable a later
+reuse of it for requests which need a populated skb pointer.
+
+Rename add_id_to_freelist() and get_id_from_freelist() to
+add_id_to_list() and get_id_from_list() in order to prepare using
+those for other lists as well. Define ~0 as value to indicate the end
+of a list and place that value into the link for a request not being
+on the list.
+
+When freeing a skb zero the skb pointer in the request. Use a NULL
+value of the skb pointer instead of skb_entry_is_link() for deciding
+whether a request has a skb linked to it.
+
+Remove skb_entry_set_link() and open code it instead as it is really
+trivial now.
+
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/tegra/tegra210_admaif.c |  138 ++++++++++++++++++++++++++++++--------
- 1 file changed, 109 insertions(+), 29 deletions(-)
+ drivers/net/xen-netfront.c |   61 ++++++++++++++++++---------------------------
+ 1 file changed, 25 insertions(+), 36 deletions(-)
 
---- a/sound/soc/tegra/tegra210_admaif.c
-+++ b/sound/soc/tegra/tegra210_admaif.c
-@@ -424,46 +424,122 @@ static const struct snd_soc_dai_ops tegr
- 	.trigger	= tegra_admaif_trigger,
+--- a/drivers/net/xen-netfront.c
++++ b/drivers/net/xen-netfront.c
+@@ -121,17 +121,11 @@ struct netfront_queue {
+ 
+ 	/*
+ 	 * {tx,rx}_skbs store outstanding skbuffs. Free tx_skb entries
+-	 * are linked from tx_skb_freelist through skb_entry.link.
+-	 *
+-	 *  NB. Freelist index entries are always going to be less than
+-	 *  PAGE_OFFSET, whereas pointers to skbs will always be equal or
+-	 *  greater than PAGE_OFFSET: we use this property to distinguish
+-	 *  them.
++	 * are linked from tx_skb_freelist through tx_link.
+ 	 */
+-	union skb_entry {
+-		struct sk_buff *skb;
+-		unsigned long link;
+-	} tx_skbs[NET_TX_RING_SIZE];
++	struct sk_buff *tx_skbs[NET_TX_RING_SIZE];
++	unsigned short tx_link[NET_TX_RING_SIZE];
++#define TX_LINK_NONE 0xffff
+ 	grant_ref_t gref_tx_head;
+ 	grant_ref_t grant_tx_ref[NET_TX_RING_SIZE];
+ 	struct page *grant_tx_page[NET_TX_RING_SIZE];
+@@ -169,33 +163,25 @@ struct netfront_rx_info {
+ 	struct xen_netif_extra_info extras[XEN_NETIF_EXTRA_TYPE_MAX - 1];
  };
  
--static int tegra_admaif_get_control(struct snd_kcontrol *kcontrol,
--				    struct snd_ctl_elem_value *ucontrol)
-+static int tegra210_admaif_pget_mono_to_stereo(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
+-static void skb_entry_set_link(union skb_entry *list, unsigned short id)
+-{
+-	list->link = id;
+-}
+-
+-static int skb_entry_is_link(const union skb_entry *list)
+-{
+-	BUILD_BUG_ON(sizeof(list->skb) != sizeof(list->link));
+-	return (unsigned long)list->skb < PAGE_OFFSET;
+-}
+-
+ /*
+  * Access macros for acquiring freeing slots in tx_skbs[].
+  */
+ 
+-static void add_id_to_freelist(unsigned *head, union skb_entry *list,
+-			       unsigned short id)
++static void add_id_to_list(unsigned *head, unsigned short *list,
++			   unsigned short id)
  {
- 	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
-+	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
- 	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
-+
-+	ucontrol->value.enumerated.item[0] =
-+		admaif->mono_to_stereo[ADMAIF_TX_PATH][ec->reg];
-+
-+	return 0;
-+}
-+
-+static int tegra210_admaif_pput_mono_to_stereo(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
- 	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
--	unsigned int *uctl_val = &ucontrol->value.enumerated.item[0];
-+	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
-+	unsigned int value = ucontrol->value.enumerated.item[0];
- 
--	if (strstr(kcontrol->id.name, "Playback Mono To Stereo"))
--		*uctl_val = admaif->mono_to_stereo[ADMAIF_TX_PATH][ec->reg];
--	else if (strstr(kcontrol->id.name, "Capture Mono To Stereo"))
--		*uctl_val = admaif->mono_to_stereo[ADMAIF_RX_PATH][ec->reg];
--	else if (strstr(kcontrol->id.name, "Playback Stereo To Mono"))
--		*uctl_val = admaif->stereo_to_mono[ADMAIF_TX_PATH][ec->reg];
--	else if (strstr(kcontrol->id.name, "Capture Stereo To Mono"))
--		*uctl_val = admaif->stereo_to_mono[ADMAIF_RX_PATH][ec->reg];
-+	if (value == admaif->mono_to_stereo[ADMAIF_TX_PATH][ec->reg])
-+		return 0;
-+
-+	admaif->mono_to_stereo[ADMAIF_TX_PATH][ec->reg] = value;
-+
-+	return 1;
-+}
-+
-+static int tegra210_admaif_cget_mono_to_stereo(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
-+	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
-+	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
-+
-+	ucontrol->value.enumerated.item[0] =
-+		admaif->mono_to_stereo[ADMAIF_RX_PATH][ec->reg];
- 
- 	return 0;
+-	skb_entry_set_link(&list[id], *head);
++	list[id] = *head;
+ 	*head = id;
  }
  
--static int tegra_admaif_put_control(struct snd_kcontrol *kcontrol,
--				    struct snd_ctl_elem_value *ucontrol)
-+static int tegra210_admaif_cput_mono_to_stereo(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
+-static unsigned short get_id_from_freelist(unsigned *head,
+-					   union skb_entry *list)
++static unsigned short get_id_from_list(unsigned *head, unsigned short *list)
  {
- 	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
-+	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
- 	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
-+	unsigned int value = ucontrol->value.enumerated.item[0];
+ 	unsigned int id = *head;
+-	*head = list[id].link;
 +
-+	if (value == admaif->mono_to_stereo[ADMAIF_RX_PATH][ec->reg])
-+		return 0;
-+
-+	admaif->mono_to_stereo[ADMAIF_RX_PATH][ec->reg] = value;
-+
-+	return 1;
-+}
-+
-+static int tegra210_admaif_pget_stereo_to_mono(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
- 	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
-+	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
-+
-+	ucontrol->value.enumerated.item[0] =
-+		admaif->stereo_to_mono[ADMAIF_TX_PATH][ec->reg];
-+
-+	return 0;
-+}
-+
-+static int tegra210_admaif_pput_stereo_to_mono(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
-+	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
-+	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
- 	unsigned int value = ucontrol->value.enumerated.item[0];
- 
--	if (strstr(kcontrol->id.name, "Playback Mono To Stereo"))
--		admaif->mono_to_stereo[ADMAIF_TX_PATH][ec->reg] = value;
--	else if (strstr(kcontrol->id.name, "Capture Mono To Stereo"))
--		admaif->mono_to_stereo[ADMAIF_RX_PATH][ec->reg] = value;
--	else if (strstr(kcontrol->id.name, "Playback Stereo To Mono"))
--		admaif->stereo_to_mono[ADMAIF_TX_PATH][ec->reg] = value;
--	else if (strstr(kcontrol->id.name, "Capture Stereo To Mono"))
--		admaif->stereo_to_mono[ADMAIF_RX_PATH][ec->reg] = value;
-+	if (value == admaif->stereo_to_mono[ADMAIF_TX_PATH][ec->reg])
-+		return 0;
-+
-+	admaif->stereo_to_mono[ADMAIF_TX_PATH][ec->reg] = value;
-+
-+	return 1;
-+}
-+
-+static int tegra210_admaif_cget_stereo_to_mono(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
-+	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
-+	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
-+
-+	ucontrol->value.enumerated.item[0] =
-+		admaif->stereo_to_mono[ADMAIF_RX_PATH][ec->reg];
- 
- 	return 0;
++	if (id != TX_LINK_NONE) {
++		*head = list[id];
++		list[id] = TX_LINK_NONE;
++	}
+ 	return id;
  }
  
-+static int tegra210_admaif_cput_stereo_to_mono(struct snd_kcontrol *kcontrol,
-+	struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *cmpnt = snd_soc_kcontrol_component(kcontrol);
-+	struct tegra_admaif *admaif = snd_soc_component_get_drvdata(cmpnt);
-+	struct soc_enum *ec = (struct soc_enum *)kcontrol->private_value;
-+	unsigned int value = ucontrol->value.enumerated.item[0];
-+
-+	if (value == admaif->stereo_to_mono[ADMAIF_RX_PATH][ec->reg])
-+		return 0;
-+
-+	admaif->stereo_to_mono[ADMAIF_RX_PATH][ec->reg] = value;
-+
-+	return 1;
-+}
-+
- static int tegra_admaif_dai_probe(struct snd_soc_dai *dai)
- {
- 	struct tegra_admaif *admaif = snd_soc_dai_get_drvdata(dai);
-@@ -559,17 +635,21 @@ static const char * const tegra_admaif_m
+@@ -396,7 +382,8 @@ static void xennet_tx_buf_gc(struct netf
+ 				continue;
+ 
+ 			id  = txrsp.id;
+-			skb = queue->tx_skbs[id].skb;
++			skb = queue->tx_skbs[id];
++			queue->tx_skbs[id] = NULL;
+ 			if (unlikely(gnttab_query_foreign_access(
+ 				queue->grant_tx_ref[id]) != 0)) {
+ 				pr_alert("%s: warning -- grant still in use by backend domain\n",
+@@ -409,7 +396,7 @@ static void xennet_tx_buf_gc(struct netf
+ 				&queue->gref_tx_head, queue->grant_tx_ref[id]);
+ 			queue->grant_tx_ref[id] = GRANT_INVALID_REF;
+ 			queue->grant_tx_page[id] = NULL;
+-			add_id_to_freelist(&queue->tx_skb_freelist, queue->tx_skbs, id);
++			add_id_to_list(&queue->tx_skb_freelist, queue->tx_link, id);
+ 			dev_kfree_skb_irq(skb);
+ 		}
+ 
+@@ -442,7 +429,7 @@ static void xennet_tx_setup_grant(unsign
+ 	struct netfront_queue *queue = info->queue;
+ 	struct sk_buff *skb = info->skb;
+ 
+-	id = get_id_from_freelist(&queue->tx_skb_freelist, queue->tx_skbs);
++	id = get_id_from_list(&queue->tx_skb_freelist, queue->tx_link);
+ 	tx = RING_GET_REQUEST(&queue->tx, queue->tx.req_prod_pvt++);
+ 	ref = gnttab_claim_grant_reference(&queue->gref_tx_head);
+ 	WARN_ON_ONCE(IS_ERR_VALUE((unsigned long)(int)ref));
+@@ -450,7 +437,7 @@ static void xennet_tx_setup_grant(unsign
+ 	gnttab_grant_foreign_access_ref(ref, queue->info->xbdev->otherend_id,
+ 					gfn, GNTMAP_readonly);
+ 
+-	queue->tx_skbs[id].skb = skb;
++	queue->tx_skbs[id] = skb;
+ 	queue->grant_tx_page[id] = page;
+ 	queue->grant_tx_ref[id] = ref;
+ 
+@@ -1131,17 +1118,18 @@ static void xennet_release_tx_bufs(struc
+ 
+ 	for (i = 0; i < NET_TX_RING_SIZE; i++) {
+ 		/* Skip over entries which are actually freelist references */
+-		if (skb_entry_is_link(&queue->tx_skbs[i]))
++		if (!queue->tx_skbs[i])
+ 			continue;
+ 
+-		skb = queue->tx_skbs[i].skb;
++		skb = queue->tx_skbs[i];
++		queue->tx_skbs[i] = NULL;
+ 		get_page(queue->grant_tx_page[i]);
+ 		gnttab_end_foreign_access(queue->grant_tx_ref[i],
+ 					  GNTMAP_readonly,
+ 					  (unsigned long)page_address(queue->grant_tx_page[i]));
+ 		queue->grant_tx_page[i] = NULL;
+ 		queue->grant_tx_ref[i] = GRANT_INVALID_REF;
+-		add_id_to_freelist(&queue->tx_skb_freelist, queue->tx_skbs, i);
++		add_id_to_list(&queue->tx_skb_freelist, queue->tx_link, i);
+ 		dev_kfree_skb_irq(skb);
+ 	}
  }
+@@ -1624,13 +1612,14 @@ static int xennet_init_queue(struct netf
+ 	snprintf(queue->name, sizeof(queue->name), "vif%s-q%u",
+ 		 devid, queue->id);
  
- #define TEGRA_ADMAIF_CIF_CTRL(reg)					       \
--	NV_SOC_ENUM_EXT("ADMAIF" #reg " Playback Mono To Stereo", reg - 1,\
--			tegra_admaif_get_control, tegra_admaif_put_control,    \
-+	NV_SOC_ENUM_EXT("ADMAIF" #reg " Playback Mono To Stereo", reg - 1,     \
-+			tegra210_admaif_pget_mono_to_stereo,		       \
-+			tegra210_admaif_pput_mono_to_stereo,		       \
- 			tegra_admaif_mono_conv_text),			       \
--	NV_SOC_ENUM_EXT("ADMAIF" #reg " Playback Stereo To Mono", reg - 1,\
--			tegra_admaif_get_control, tegra_admaif_put_control,    \
-+	NV_SOC_ENUM_EXT("ADMAIF" #reg " Playback Stereo To Mono", reg - 1,     \
-+			tegra210_admaif_pget_stereo_to_mono,		       \
-+			tegra210_admaif_pput_stereo_to_mono,		       \
- 			tegra_admaif_stereo_conv_text),			       \
--	NV_SOC_ENUM_EXT("ADMAIF" #reg " Capture Mono To Stereo", reg - 1, \
--			tegra_admaif_get_control, tegra_admaif_put_control,    \
-+	NV_SOC_ENUM_EXT("ADMAIF" #reg " Capture Mono To Stereo", reg - 1,      \
-+			tegra210_admaif_cget_mono_to_stereo,		       \
-+			tegra210_admaif_cput_mono_to_stereo,		       \
- 			tegra_admaif_mono_conv_text),			       \
--	NV_SOC_ENUM_EXT("ADMAIF" #reg " Capture Stereo To Mono", reg - 1, \
--			tegra_admaif_get_control, tegra_admaif_put_control,    \
-+	NV_SOC_ENUM_EXT("ADMAIF" #reg " Capture Stereo To Mono", reg - 1,      \
-+			tegra210_admaif_cget_stereo_to_mono,		       \
-+			tegra210_admaif_cput_stereo_to_mono,		       \
- 			tegra_admaif_stereo_conv_text)
+-	/* Initialise tx_skbs as a free chain containing every entry. */
++	/* Initialise tx_skb_freelist as a free chain containing every entry. */
+ 	queue->tx_skb_freelist = 0;
+ 	for (i = 0; i < NET_TX_RING_SIZE; i++) {
+-		skb_entry_set_link(&queue->tx_skbs[i], i+1);
++		queue->tx_link[i] = i + 1;
+ 		queue->grant_tx_ref[i] = GRANT_INVALID_REF;
+ 		queue->grant_tx_page[i] = NULL;
+ 	}
++	queue->tx_link[NET_TX_RING_SIZE - 1] = TX_LINK_NONE;
  
- static struct snd_kcontrol_new tegra210_admaif_controls[] = {
+ 	/* Clear out rx_skbs */
+ 	for (i = 0; i < NET_RX_RING_SIZE; i++) {
 
 

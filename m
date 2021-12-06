@@ -2,119 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2684690A7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 013184690AC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238305AbhLFHMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 02:12:21 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:28275 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238261AbhLFHMU (ORCPT
+        id S238329AbhLFHQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 02:16:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238261AbhLFHQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 02:12:20 -0500
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J6vfc2QM7zbjCQ;
-        Mon,  6 Dec 2021 15:08:40 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 6 Dec 2021 15:08:51 +0800
-Received: from huawei.com (10.69.192.56) by dggpeml100012.china.huawei.com
- (7.185.36.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 6 Dec
- 2021 15:08:51 +0800
-From:   Kai Ye <yekai13@huawei.com>
-To:     <gregkh@linuxfoundation.org>,
-        <linux-accelerators@lists.ozlabs.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-        <zhangfei.gao@linaro.org>, <wangzhou1@hisilicon.com>,
-        <yekai13@huawei.com>
-Subject: [PATCH v2] uacce: use sysfs_emit instead of sprintf
-Date:   Mon, 6 Dec 2021 15:09:43 +0800
-Message-ID: <20211206070943.45971-1-yekai13@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        Mon, 6 Dec 2021 02:16:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A80C0613F8;
+        Sun,  5 Dec 2021 23:13:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09BA561170;
+        Mon,  6 Dec 2021 07:13:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2F96C341C4;
+        Mon,  6 Dec 2021 07:13:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638774790;
+        bh=RSgUA+v+bp+L38dAAFB/hBDb/dXcbT2mhCOpspbaGnY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JQBKdVhg15n7HyItHcM093NDs+sQSHY/dxi+0pQy6yJ1VADqQCLwYNAh08nkjNbVH
+         N458Hf/XOKeT83zefnavdTzLG0c/07Ouy4F8YBjGUS45JvJSB6p27i36O+6wrZy5nu
+         JO43hauKfKbVspsI0ER5f4zA9uTD8ympqLnSqM9RlhT61R9gbCQCwIkhlCRT2EFfRG
+         UgWyQsdr0c2xAx4+I1dx8rf8NOO7x/vV6knAuzZ8ms02ZSqtyZDOwZ+vZR+S4f8KRt
+         eM0E78APA9fRMf1Brk+jYifnTF2YnRZzYHPQ6VWpxykCJrp1f0vCyuYqBrmh2BmatQ
+         mwwkOdu5ID3nA==
+Date:   Mon, 6 Dec 2021 09:13:06 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@redhat.com>,
+        Balbir Singh <bsingharora@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, codalist@coda.cs.cmu.edu,
+        linux-audit@redhat.com
+Subject: Re: [PATCH v1 1/7] pid: Introduce helper task_is_in_root_ns()
+Message-ID: <Ya24AjNDpO+uuLMT@unreal>
+References: <20211205145105.57824-1-leo.yan@linaro.org>
+ <20211205145105.57824-2-leo.yan@linaro.org>
+ <Ya2yXZAn+36yhfdU@unreal>
+ <20211206070358.GC42658@leoy-ThinkPad-X240s>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206070358.GC42658@leoy-ThinkPad-X240s>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the sysfs_emit to replace sprintf. sprintf may cause
-output defect in sysfs content, it is better to use new
-added sysfs_emit function which knows the size of the
-temporary buffer.
+On Mon, Dec 06, 2021 at 03:03:58PM +0800, Leo Yan wrote:
+> Hi Leon,
+> 
+> On Mon, Dec 06, 2021 at 08:49:01AM +0200, Leon Romanovsky wrote:
+> > On Sun, Dec 05, 2021 at 10:50:59PM +0800, Leo Yan wrote:
+> 
+> [...]
+> 
+> > > +static inline bool task_is_in_root_ns(struct task_struct *tsk)
+> > 
+> > It is bad that this name doesn't reflect PID nature of this namespace.
+> > Won't it better to name it task_is_in_init_pid_ns()?
+> 
+> Yes, task_is_in_init_pid_ns() is more clear.
+> 
+> Will respin for this.  Thank you for suggestion!
 
-Signed-off-by: Kai Ye <yekai13@huawei.com>
+Thanks
 
-changes v1->v2:
-	modfiy the comments.
----
- drivers/misc/uacce/uacce.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
-index 488eeb2811ae..281c54003edc 100644
---- a/drivers/misc/uacce/uacce.c
-+++ b/drivers/misc/uacce/uacce.c
-@@ -289,7 +289,7 @@ static ssize_t api_show(struct device *dev,
- {
- 	struct uacce_device *uacce = to_uacce_device(dev);
- 
--	return sprintf(buf, "%s\n", uacce->api_ver);
-+	return sysfs_emit(buf, "%s\n", uacce->api_ver);
- }
- 
- static ssize_t flags_show(struct device *dev,
-@@ -297,7 +297,7 @@ static ssize_t flags_show(struct device *dev,
- {
- 	struct uacce_device *uacce = to_uacce_device(dev);
- 
--	return sprintf(buf, "%u\n", uacce->flags);
-+	return sysfs_emit(buf, "%u\n", uacce->flags);
- }
- 
- static ssize_t available_instances_show(struct device *dev,
-@@ -309,7 +309,7 @@ static ssize_t available_instances_show(struct device *dev,
- 	if (!uacce->ops->get_available_instances)
- 		return -ENODEV;
- 
--	return sprintf(buf, "%d\n",
-+	return sysfs_emit(buf, "%d\n",
- 		       uacce->ops->get_available_instances(uacce));
- }
- 
-@@ -318,7 +318,7 @@ static ssize_t algorithms_show(struct device *dev,
- {
- 	struct uacce_device *uacce = to_uacce_device(dev);
- 
--	return sprintf(buf, "%s\n", uacce->algs);
-+	return sysfs_emit(buf, "%s\n", uacce->algs);
- }
- 
- static ssize_t region_mmio_size_show(struct device *dev,
-@@ -326,7 +326,7 @@ static ssize_t region_mmio_size_show(struct device *dev,
- {
- 	struct uacce_device *uacce = to_uacce_device(dev);
- 
--	return sprintf(buf, "%lu\n",
-+	return sysfs_emit(buf, "%lu\n",
- 		       uacce->qf_pg_num[UACCE_QFRT_MMIO] << PAGE_SHIFT);
- }
- 
-@@ -335,7 +335,7 @@ static ssize_t region_dus_size_show(struct device *dev,
- {
- 	struct uacce_device *uacce = to_uacce_device(dev);
- 
--	return sprintf(buf, "%lu\n",
-+	return sysfs_emit(buf, "%lu\n",
- 		       uacce->qf_pg_num[UACCE_QFRT_DUS] << PAGE_SHIFT);
- }
- 
--- 
-2.33.0
-
+> 
+> Leo

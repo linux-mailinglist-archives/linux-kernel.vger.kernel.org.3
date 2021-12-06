@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76715469AC0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0060469D92
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348040AbhLFPJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:09:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
+        id S1387113AbhLFPao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346852AbhLFPHn (ORCPT
+        with ESMTP id S1357784AbhLFPTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:07:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A25DC0698C1;
-        Mon,  6 Dec 2021 07:03:29 -0800 (PST)
+        Mon, 6 Dec 2021 10:19:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF76AC0698C2;
+        Mon,  6 Dec 2021 07:12:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 189F861328;
-        Mon,  6 Dec 2021 15:03:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27CCDC341C1;
-        Mon,  6 Dec 2021 15:03:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89D3FB810AC;
+        Mon,  6 Dec 2021 15:12:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD0D1C341C2;
+        Mon,  6 Dec 2021 15:12:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803008;
-        bh=quLcwD9J0IlG2HeU4DC2+l105oa5NQ5fbKXiSPrWDKM=;
+        s=korg; t=1638803563;
+        bh=IYDdAmvGqExe/oltYIRZBf2Au7i0g4nuxL6WGc/Nr4c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fFfnpA7yNrMvQM3AkcavW1NLjPi9f8PHOl6jG6gSFxyhx7L6Q+uO/pLC3hu4W5JvX
-         zn3Xtn9fbL5iAfqCqiZCDAVLMFeXMsIKEHStySfLsx6RqjMfDyibz/YWFptSO6bW3u
-         bBMmqDImis6Gs1VNsMPMoHXK41G3NWNl5hM1F4/s=
+        b=bSini7M7aLB2eGkA6FN5f8UTWAgNRwy/zYW3PHwNdDrAwwc1A+HLkugwAgv+gKbKl
+         +QclKm7of5pTBvM05UP193WjsxsnchIrHMBCWzwfkoXtcCbVogK7bYZdeeKxVgudTO
+         LtxSxCD7mY4e/XFjk3oiZvjBHK/wq/XswbouJbNQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wim Osterholt <wim@djo.tudelft.nl>,
-        "Pavel V. Panteleev" <panteleev_p@mcst.ru>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>
-Subject: [PATCH 4.9 59/62] vgacon: Propagate console boot parameters before calling `vc_resize
+        stable@vger.kernel.org, Benjamin Poirier <bpoirier@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.4 38/70] net: mpls: Fix notifications when deleting a device
 Date:   Mon,  6 Dec 2021 15:56:42 +0100
-Message-Id: <20211206145551.252381755@linuxfoundation.org>
+Message-Id: <20211206145553.243712432@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
+References: <20211206145551.909846023@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,94 +48,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej W. Rozycki <macro@orcam.me.uk>
+From: Benjamin Poirier <bpoirier@nvidia.com>
 
-commit 3dfac26e2ef29ff2abc2a75aa4cd48fce25a2c4b upstream.
+commit 7d4741eacdefa5f0475431645b56baf00784df1f upstream.
 
-Fix a division by zero in `vgacon_resize' with a backtrace like:
+There are various problems related to netlink notifications for mpls route
+changes in response to interfaces being deleted:
+* delete interface of only nexthop
+	DELROUTE notification is missing RTA_OIF attribute
+* delete interface of non-last nexthop
+	NEWROUTE notification is missing entirely
+* delete interface of last nexthop
+	DELROUTE notification is missing nexthop
 
-vgacon_resize
-vc_do_resize
-vgacon_init
-do_bind_con_driver
-do_unbind_con_driver
-fbcon_fb_unbind
-do_unregister_framebuffer
-do_register_framebuffer
-register_framebuffer
-__drm_fb_helper_initial_config_and_unlock
-drm_helper_hpd_irq_event
-dw_hdmi_irq
-irq_thread
-kthread
+All of these problems stem from the fact that existing routes are modified
+in-place before sending a notification. Restructure mpls_ifdown() to avoid
+changing the route in the DELROUTE cases and to create a copy in the
+NEWROUTE case.
 
-caused by `c->vc_cell_height' not having been initialized.  This has
-only started to trigger with commit 860dafa90259 ("vt: Fix character
-height handling with VT_RESIZEX"), however the ultimate offender is
-commit 50ec42edd978 ("[PATCH] Detaching fbcon: fix vgacon to allow
-retaking of the console").
-
-Said commit has added a call to `vc_resize' whenever `vgacon_init' is
-called with the `init' argument set to 0, which did not happen before.
-And the call is made before a key vgacon boot parameter retrieved in
-`vgacon_startup' has been propagated in `vgacon_init' for `vc_resize' to
-use to the console structure being worked on.  Previously the parameter
-was `c->vc_font.height' and now it is `c->vc_cell_height'.
-
-In this particular scenario the registration of fbcon has failed and vt
-resorts to vgacon.  Now fbcon does have initialized `c->vc_font.height'
-somehow, unlike `c->vc_cell_height', which is why this code did not
-crash before, but either way the boot parameters should have been copied
-to the console structure ahead of the call to `vc_resize' rather than
-afterwards, so that first the call has a chance to use them and second
-they do not change the console structure to something possibly different
-from what was used by `vc_resize'.
-
-Move the propagation of the vgacon boot parameters ahead of the call to
-`vc_resize' then.  Adjust the comment accordingly.
-
-Fixes: 50ec42edd978 ("[PATCH] Detaching fbcon: fix vgacon to allow retaking of the console")
-Cc: stable@vger.kernel.org # v2.6.18+
-Reported-by: Wim Osterholt <wim@djo.tudelft.nl>
-Reported-by: Pavel V. Panteleev <panteleev_p@mcst.ru>
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2110252317110.58149@angie.orcam.me.uk
+Fixes: f8efb73c97e2 ("mpls: multipath route support")
+Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/console/vgacon.c |   14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ net/mpls/af_mpls.c |   68 ++++++++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 52 insertions(+), 16 deletions(-)
 
---- a/drivers/video/console/vgacon.c
-+++ b/drivers/video/console/vgacon.c
-@@ -420,11 +420,17 @@ static void vgacon_init(struct vc_data *
- 	struct uni_pagedir *p;
+--- a/net/mpls/af_mpls.c
++++ b/net/mpls/af_mpls.c
+@@ -1491,22 +1491,52 @@ static void mpls_dev_destroy_rcu(struct
+ 	kfree(mdev);
+ }
  
- 	/*
--	 * We cannot be loaded as a module, therefore init is always 1,
--	 * but vgacon_init can be called more than once, and init will
--	 * not be 1.
-+	 * We cannot be loaded as a module, therefore init will be 1
-+	 * if we are the default console, however if we are a fallback
-+	 * console, for example if fbcon has failed registration, then
-+	 * init will be 0, so we need to make sure our boot parameters
-+	 * have been copied to the console structure for vgacon_resize
-+	 * ultimately called by vc_resize.  Any subsequent calls to
-+	 * vgacon_init init will have init set to 0 too.
- 	 */
- 	c->vc_can_do_color = vga_can_do_color;
-+	c->vc_scan_lines = vga_scan_lines;
-+	c->vc_font.height = c->vc_cell_height = vga_video_font_height;
+-static void mpls_ifdown(struct net_device *dev, int event)
++static int mpls_ifdown(struct net_device *dev, int event)
+ {
+ 	struct mpls_route __rcu **platform_label;
+ 	struct net *net = dev_net(dev);
+-	u8 alive, deleted;
+ 	unsigned index;
  
- 	/* set dimensions manually if init != 0 since vc_resize() will fail */
- 	if (init) {
-@@ -433,8 +439,6 @@ static void vgacon_init(struct vc_data *
- 	} else
- 		vc_resize(c, vga_video_num_columns, vga_video_num_lines);
+ 	platform_label = rtnl_dereference(net->mpls.platform_label);
+ 	for (index = 0; index < net->mpls.platform_labels; index++) {
+ 		struct mpls_route *rt = rtnl_dereference(platform_label[index]);
++		bool nh_del = false;
++		u8 alive = 0;
  
--	c->vc_scan_lines = vga_scan_lines;
--	c->vc_font.height = c->vc_cell_height = vga_video_font_height;
- 	c->vc_complement_mask = 0x7700;
- 	if (vga_512_chars)
- 		c->vc_hi_font_mask = 0x0800;
+ 		if (!rt)
+ 			continue;
+ 
+-		alive = 0;
+-		deleted = 0;
++		if (event == NETDEV_UNREGISTER) {
++			u8 deleted = 0;
++
++			for_nexthops(rt) {
++				struct net_device *nh_dev =
++					rtnl_dereference(nh->nh_dev);
++
++				if (!nh_dev || nh_dev == dev)
++					deleted++;
++				if (nh_dev == dev)
++					nh_del = true;
++			} endfor_nexthops(rt);
++
++			/* if there are no more nexthops, delete the route */
++			if (deleted == rt->rt_nhn) {
++				mpls_route_update(net, index, NULL, NULL);
++				continue;
++			}
++
++			if (nh_del) {
++				size_t size = sizeof(*rt) + rt->rt_nhn *
++					rt->rt_nh_size;
++				struct mpls_route *orig = rt;
++
++				rt = kmalloc(size, GFP_KERNEL);
++				if (!rt)
++					return -ENOMEM;
++				memcpy(rt, orig, size);
++			}
++		}
++
+ 		change_nexthops(rt) {
+ 			unsigned int nh_flags = nh->nh_flags;
+ 
+@@ -1530,16 +1560,15 @@ static void mpls_ifdown(struct net_devic
+ next:
+ 			if (!(nh_flags & (RTNH_F_DEAD | RTNH_F_LINKDOWN)))
+ 				alive++;
+-			if (!rtnl_dereference(nh->nh_dev))
+-				deleted++;
+ 		} endfor_nexthops(rt);
+ 
+ 		WRITE_ONCE(rt->rt_nhn_alive, alive);
+ 
+-		/* if there are no more nexthops, delete the route */
+-		if (event == NETDEV_UNREGISTER && deleted == rt->rt_nhn)
+-			mpls_route_update(net, index, NULL, NULL);
++		if (nh_del)
++			mpls_route_update(net, index, rt, NULL);
+ 	}
++
++	return 0;
+ }
+ 
+ static void mpls_ifup(struct net_device *dev, unsigned int flags)
+@@ -1607,8 +1636,12 @@ static int mpls_dev_notify(struct notifi
+ 		return NOTIFY_OK;
+ 
+ 	switch (event) {
++		int err;
++
+ 	case NETDEV_DOWN:
+-		mpls_ifdown(dev, event);
++		err = mpls_ifdown(dev, event);
++		if (err)
++			return notifier_from_errno(err);
+ 		break;
+ 	case NETDEV_UP:
+ 		flags = dev_get_flags(dev);
+@@ -1619,13 +1652,18 @@ static int mpls_dev_notify(struct notifi
+ 		break;
+ 	case NETDEV_CHANGE:
+ 		flags = dev_get_flags(dev);
+-		if (flags & (IFF_RUNNING | IFF_LOWER_UP))
++		if (flags & (IFF_RUNNING | IFF_LOWER_UP)) {
+ 			mpls_ifup(dev, RTNH_F_DEAD | RTNH_F_LINKDOWN);
+-		else
+-			mpls_ifdown(dev, event);
++		} else {
++			err = mpls_ifdown(dev, event);
++			if (err)
++				return notifier_from_errno(err);
++		}
+ 		break;
+ 	case NETDEV_UNREGISTER:
+-		mpls_ifdown(dev, event);
++		err = mpls_ifdown(dev, event);
++		if (err)
++			return notifier_from_errno(err);
+ 		mdev = mpls_dev_get(dev);
+ 		if (mdev) {
+ 			mpls_dev_sysctl_unregister(dev, mdev);
+@@ -1636,8 +1674,6 @@ static int mpls_dev_notify(struct notifi
+ 	case NETDEV_CHANGENAME:
+ 		mdev = mpls_dev_get(dev);
+ 		if (mdev) {
+-			int err;
+-
+ 			mpls_dev_sysctl_unregister(dev, mdev);
+ 			err = mpls_dev_sysctl_register(dev, mdev);
+ 			if (err)
 
 

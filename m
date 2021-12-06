@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87904469DBA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 470A4469F33
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:43:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388082AbhLFPcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:32:18 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54136 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244321AbhLFPVF (ORCPT
+        id S1391536AbhLFPpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:45:54 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47442 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1387049AbhLFPaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:21:05 -0500
+        Mon, 6 Dec 2021 10:30:35 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39B07B810AC;
-        Mon,  6 Dec 2021 15:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A6FAC341C2;
-        Mon,  6 Dec 2021 15:17:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D63C612EB;
+        Mon,  6 Dec 2021 15:27:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2933C34900;
+        Mon,  6 Dec 2021 15:27:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803852;
-        bh=2EnuHbpwEdNdoBrFkfdLNPESzeoOC8kASvGtg8RUx0s=;
+        s=korg; t=1638804425;
+        bh=D5DeeOBW35ZP2lTUhkmmE156g38q29eIftaRf60xowM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K2189ND67vWxu2IxXz6vw7GShRs5rip95cJ+2lgRWR/MtQY993uJYcRLvaIv9K0mH
-         X4x2vI9q6U7etf2C/cKWdwC1UwEyQtvUDrPgKDZGR7A6ATkZefBfcaeqWU/FzfWlXx
-         iOD2mmayyh8Aub/iF2NbkU6CfotmOi/HILUPbGrY=
+        b=hSd2or9TuYwlKvwfsXIk7Az0SLj4W/RXXyRd9XCNNQs3PeeL+1YINO8zvHAGMJvPe
+         SzrVsLO+xLYjaJLjUvDhRQLaf43ArLKHCBbGybOhEdssiisMR3JcoaM+GqIyuhNdok
+         kpIFCMziF6okcUs0GuSEBWmwe2XgjVqzutectxAo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jann Horn <jannh@google.com>
-Subject: [PATCH 5.10 037/130] fget: check that the fd still exists after getting a ref to it
+        stable@vger.kernel.org, Alain Volmat <alain.volmat@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH 5.15 100/207] i2c: stm32f7: recover the bus on access timeout
 Date:   Mon,  6 Dec 2021 15:55:54 +0100
-Message-Id: <20211206145600.955089153@linuxfoundation.org>
+Message-Id: <20211206145613.705375185@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,63 +46,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Alain Volmat <alain.volmat@foss.st.com>
 
-commit 054aa8d439b9185d4f5eb9a90282d1ce74772969 upstream.
+commit b933d1faf8fa30d16171bcff404e39c41b2a7c84 upstream.
 
-Jann Horn points out that there is another possible race wrt Unix domain
-socket garbage collection, somewhat reminiscent of the one fixed in
-commit cbcf01128d0a ("af_unix: fix garbage collect vs MSG_PEEK").
+When getting an access timeout, ensure that the bus is in a proper
+state prior to returning the error.
 
-See the extended comment about the garbage collection requirements added
-to unix_peek_fds() by that commit for details.
-
-The race comes from how we can locklessly look up a file descriptor just
-as it is in the process of being closed, and with the right artificial
-timing (Jann added a few strategic 'mdelay(500)' calls to do that), the
-Unix domain socket garbage collector could see the reference count
-decrement of the close() happen before fget() took its reference to the
-file and the file was attached onto a new file descriptor.
-
-This is all (intentionally) correct on the 'struct file *' side, with
-RCU lookups and lockless reference counting very much part of the
-design.  Getting that reference count out of order isn't a problem per
-se.
-
-But the garbage collector can get confused by seeing this situation of
-having seen a file not having any remaining external references and then
-seeing it being attached to an fd.
-
-In commit cbcf01128d0a ("af_unix: fix garbage collect vs MSG_PEEK") the
-fix was to serialize the file descriptor install with the garbage
-collector by taking and releasing the unix_gc_lock.
-
-That's not really an option here, but since this all happens when we are
-in the process of looking up a file descriptor, we can instead simply
-just re-check that the file hasn't been closed in the meantime, and just
-re-do the lookup if we raced with a concurrent close() of the same file
-descriptor.
-
-Reported-and-tested-by: Jann Horn <jannh@google.com>
-Acked-by: Miklos Szeredi <mszeredi@redhat.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: aeb068c57214 ("i2c: i2c-stm32f7: add driver")
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+Reviewed-by: Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/file.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/i2c/busses/i2c-stm32f7.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -834,6 +834,10 @@ loop:
- 			file = NULL;
- 		else if (!get_file_rcu_many(file, refs))
- 			goto loop;
-+		else if (__fcheck_files(files, fd) != file) {
-+			fput_many(file, refs);
-+			goto loop;
-+		}
+--- a/drivers/i2c/busses/i2c-stm32f7.c
++++ b/drivers/i2c/busses/i2c-stm32f7.c
+@@ -1712,6 +1712,7 @@ static int stm32f7_i2c_xfer(struct i2c_a
+ 			i2c_dev->msg->addr);
+ 		if (i2c_dev->use_dma)
+ 			dmaengine_terminate_all(dma->chan_using);
++		stm32f7_i2c_wait_free_bus(i2c_dev);
+ 		ret = -ETIMEDOUT;
  	}
- 	rcu_read_unlock();
  
+@@ -1769,6 +1770,7 @@ static int stm32f7_i2c_smbus_xfer(struct
+ 		dev_dbg(dev, "Access to slave 0x%x timed out\n", f7_msg->addr);
+ 		if (i2c_dev->use_dma)
+ 			dmaengine_terminate_all(dma->chan_using);
++		stm32f7_i2c_wait_free_bus(i2c_dev);
+ 		ret = -ETIMEDOUT;
+ 		goto pm_free;
+ 	}
 
 

@@ -2,108 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCB246A88F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE2746A893
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:38:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349738AbhLFUlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 15:41:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245082AbhLFUlF (ORCPT
+        id S1349749AbhLFUmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 15:42:21 -0500
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:36681 "EHLO
+        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349735AbhLFUmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 15:41:05 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5CDC061746;
-        Mon,  6 Dec 2021 12:37:36 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id v1so48107038edx.2;
-        Mon, 06 Dec 2021 12:37:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zBLblKeg8CrULqFWVj7RAzFZmXmOvswPlK8gAVXpGvQ=;
-        b=j4VEo5eVw1TtR0YsSabgZhAtbGEv6dWXafQlQs99qr1BPHoPLjjZ1fdWfnPVndnpii
-         ebdq0ugWlyjmCQ4o27jqzmg/n5UUixZsG/vb4lH6DsoQoZXkAESKIwBiNjSLnAdeRtuc
-         NvemIycmd820mZDlWH6BYGMkNj4KMVa78s+SbEyK/f8TVFuLi5G6WK1G9lTzPk0ZUt4U
-         4fpbHdGd7AaqHwgOIa/NsNydocrNsPaVByELqK8k71S7/mVwZK/hzVfe1zyA76WQ2DMQ
-         X1Hds3ZACRDogFxy6vi3gNA3YPjFJ+dA7UzfSyGgSumgCPdexmsKJjcZhlEvxkSvCeop
-         YBFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=zBLblKeg8CrULqFWVj7RAzFZmXmOvswPlK8gAVXpGvQ=;
-        b=hGG1raoYIyt3bURn6KOBnLqU/HouNyWV3tnHlPtt/VK87vyiHkradG4D6kFeJXOj/F
-         keyoirBk7scGF/mFWH3BvV4MpeZLFYULxoMhPVk4e5BWSR5UPev8HV1CCT6di1yFSpW9
-         mIWv6XGshyn8azbkpYDRXr5RNTY2jQcH1UL7AypxR/xUhZ0jOQjKeA0lWIrBrXj+PPyy
-         /iEWJiCGVwo7KveIZhsmht1NXUmLB8WyEqiK+Vz6/ASnaz7QQm9JxNHIOgiKDx7pC3J1
-         e5/0XJwGnH4BpVnkFpLlxUUEebsEJnI3/QZCLM1sFkHAHAaOEyeVy1cSBFVBSCKXWrXF
-         lYEA==
-X-Gm-Message-State: AOAM533GtCr2ddDZrAC5Qz3o4i7qvQO2kd3ybJBlt1t+ofMRrE3K4xWL
-        /oriFa0oipPZ/FyMrn45VUw=
-X-Google-Smtp-Source: ABdhPJzrgo0Xi3nmEuzmb1ho2OIxbrUIKWnzhLf3x7/W+hp+MPI/n3GrzxQc508pMJcPgQlhyuhEbg==
-X-Received: by 2002:a17:906:1396:: with SMTP id f22mr48685989ejc.228.1638823054885;
-        Mon, 06 Dec 2021 12:37:34 -0800 (PST)
-Received: from stitch.. (80.71.140.73.ipv4.parknet.dk. [80.71.140.73])
-        by smtp.gmail.com with ESMTPSA id x22sm7091350ejc.97.2021.12.06.12.37.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 12:37:34 -0800 (PST)
-Sender: Emil Renner Berthing <emil.renner.berthing@gmail.com>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-To:     Ley Foon Tan <lftan.linux@gmail.com>,
-        Matteo Croce <mcroce@linux.microsoft.com>
-Cc:     Emil Renner Berthing <kernel@esmil.dk>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Bin Meng <bmeng.cn@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Guo Ren <guoren@kernel.org>, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v5 3/3] riscv: optimized memset
-Date:   Mon,  6 Dec 2021 21:37:03 +0100
-Message-Id: <20211206203703.67597-1-kernel@esmil.dk>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CAFiDJ5-OJzWWR0hSZDsuAmxzxTE7cRR9Bsetpfh5vvrTxzkKPw@mail.gmail.com>
-References: <CAFiDJ5-OJzWWR0hSZDsuAmxzxTE7cRR9Bsetpfh5vvrTxzkKPw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 6 Dec 2021 15:42:19 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 0F3953201591;
+        Mon,  6 Dec 2021 15:38:47 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute3.internal (MEProxy); Mon, 06 Dec 2021 15:38:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=mime-version:message-id:in-reply-to:references:date:from:to
+        :cc:subject:content-type; s=fm3; bh=3TNr3PJ/3oYhzRdj6fOfCCqXaq6X
+        S1SzYqe8FZFLhCI=; b=Ef/McVGo8XcpFbF4OBT1d+iVk2aqJQc6D488HYEPU66r
+        EgTR/nCkqaRUb56SKQigc29jia4AI33+HGLczy3lvMRqvDdUg0JW/b2fv21OeGci
+        wS2uNnV7ghWsDhHzpD++Y/PDo0XffPW9eidRPsjmkpOj+JqF2poEwSxyR2291ezU
+        KmkKTMHiWiQ/ImkLNY0mIgEuyW3mSPoth9mSZ46xjpk4SenAoTgNEM/+aogWDosc
+        +/b6Z6kqElar1SmwnL9JM+SroLI8ZTqmz0n+4OnC6yaIyhPV8ZvgnnnZFOVhc+dQ
+        /IlBoYzkZFdREwvIWei5CkR7oavmSPuneYicuJX7/A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=3TNr3P
+        J/3oYhzRdj6fOfCCqXaq6XS1SzYqe8FZFLhCI=; b=KvjWiQ/Ip6oeAbSFVYurm3
+        85fcx5gis5aFWfoipd1jGeCPYpMLQYkmBSLfyyC5tCtLdCGjQdRFyhjz/DXlyZEg
+        FaLzwfWr91TVKALzPZylBy7hfP6j2UBrotBet4sVveG314ecHgfjIu1s2jhEaf+m
+        D25hItKVr+AXQmpE7yorL0KD8MCDwMp8AjYG2hrw2VvJ8lyFHOMgGDGFUfiOuQ3H
+        ZgAalfZpEKu3iERPYORNxAmJ+P/bZZtU8DDFlEAOTe30U9Mhc39QOqqGopmcZK29
+        /2eLh41L4v+DZYqtiiBthSQm7KAT8dkVZ8bLyaQIkmoMZCDBuo+6vbFPSwWH43Dw
+        ==
+X-ME-Sender: <xms:1nSuYYn81-224JPAlNWWa8xGnFQyY2p82Ob0ymV-qlS1SlKH1A8bnA>
+    <xme:1nSuYX24GzacOulsy1W9uzT-SX_aN3vyR5PKGRelNIE3wr2PHlkA16vLXs25nH8p3
+    gxej3Wmddag8O7wtIw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjeefgddugedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
+    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
+    htthgvrhhnpefgieegieffuefhtedtjefgteejteefleefgfefgfdvvddtgffhffduhedv
+    feekffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:1nSuYWozKmKkZVG4Zx0DUNfKLGzkUAOm5jRu_B7eCgRifemF-X640w>
+    <xmx:1nSuYUmMxEy6JSZSv89-SDcZ9CI3j3J4V8mBWu9khWnx0CzYybiM6w>
+    <xmx:1nSuYW0VSSMOWg3z8C3seEuZZStgNW1epuyJbo0We_43FiVO8dXMog>
+    <xmx:13SuYS-bKQVszMBBVIzDq8eCkQ0vXySecc-gI1RGuDxCKoGkzGSYvg>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 97BD327406DA; Mon,  6 Dec 2021 15:38:46 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4458-g51a91c06b2-fm-20211130.004-g51a91c06
+Mime-Version: 1.0
+Message-Id: <3538e879-8548-4727-b397-c385295316c4@www.fastmail.com>
+In-Reply-To: <CAK8P3a2Ag60Dw1mbTsj7XVanT6u8kQW5vqK3hAD-yon1G8qKXw@mail.gmail.com>
+References: <202112061809.XT99aPrf-lkp@intel.com>
+ <32ba635c-4588-4ea3-bd95-c55a33804e99@www.fastmail.com>
+ <CAK8P3a2Ag60Dw1mbTsj7XVanT6u8kQW5vqK3hAD-yon1G8qKXw@mail.gmail.com>
+Date:   Mon, 06 Dec 2021 21:38:25 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Arnd Bergmann" <arnd@arndb.de>
+Cc:     "kernel test robot" <lkp@intel.com>,
+        "Linux I2C" <linux-i2c@vger.kernel.org>, kbuild-all@lists.01.org,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Wolfram Sang" <wsa-dev@sang-engineering.com>,
+        "Hector Martin" <marcan@marcan.st>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>
+Subject: Re: powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-core.o:undefined
+ reference to `__this_module'
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ley Foon,
 
-You're right it doesn't boot for me either when building with
 
-  make ARCH=riscv LLVM=1
+On Mon, Dec 6, 2021, at 20:47, Arnd Bergmann wrote:
+> On Mon, Dec 6, 2021 at 6:02 PM Sven Peter <sven@svenpeter.dev> wrote:
+>> On Mon, Dec 6, 2021, at 11:10, kernel test robot wrote:
+>
+>> > If you fix the issue, kindly add following tag as appropriate
+>> > Reported-by: kernel test robot <lkp@intel.com>
+>> >
+>> > All error/warnings (new ones prefixed by >>):
+>> >
+>> >>> powerpc64-linux-ld: warning: orphan section `.stubs' from `drivers/i2c/busses/i2c-pasemi-core.o' being placed in section `.stubs'
+>> >>> powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-core.o:(.toc+0x0): undefined reference to `__this_module'
+>>
+>> This seems to be triggered by compiling one of {pci,platform} as a module and the
+>> other one as built-in. That setup can only happen with COMPILE_TEST since -pci
+>> is otherwise only compiled for powerpc and -platform for arm64.
+>>
+>> -core.c is only built once with THIS_MODULE expanding to __this_module. That will
+>> fail when linking the built-in driver where THIS_MODULE should've been NULL instead.
+>>
+>> The most simple fix (that also has no chance of breaking anything) is probably to
+>> just move
+>>
+>>   smbus->adapter.owner = THIS_MODULE;
+>>
+>> from core to both apple.c and pci.c. I'll prepare a patch later this week.
+>
+> I'd prefer fixing this in a better way, linking an object file into
+> both vmlinux and a loadable
+> module is not supported at all. 
 
-The following patch fixes it for me though. In hindsigt it's perhaps a
-bit surprising it works without -ffreestanding in GCC.
+Make sense, I didn't know that.
 
-/Emil
+> Other options are:
+>
+> - #include the common .c file from the individual drivers (not great)
+> - use Kconfig logic to prevent the broken configuration
+> - use Makefile tricks to make both drivers built-in when this happens
+> - make the common part a separate loadable module, exporting all the
+>   global symbols.
+>
+> Out of these, I would prefer the last option.
 
----
- arch/riscv/lib/Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
+Sure, I'll see when I can spare some time to do that since testing that
+is going to be a bit more annoying with my current setup.
 
-diff --git a/arch/riscv/lib/Makefile b/arch/riscv/lib/Makefile
-index e33263cc622a..6dfa919d4cd6 100644
---- a/arch/riscv/lib/Makefile
-+++ b/arch/riscv/lib/Makefile
-@@ -4,4 +4,9 @@ lib-$(CONFIG_MMU)	+= uaccess.o
- lib-$(CONFIG_64BIT)	+= tishift.o
- lib-$(CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE) += string.o
- 
-+# string.o implements standard library functions like memset/memcpy etc.
-+# Use -ffreestanding to ensure that the compiler does not try to "optimize"
-+# them into calls to themselves.
-+CFLAGS_string.o := -ffreestanding
-+
- obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
--- 
-2.34.1
+Fwiw, I2C_OCTEON and I2C_THUNDERX might have the same issue as well
+with i2c-octeon-core.o. It just won't result in the same compile error
+because i2c-octeon-core.c doesn't use THIS_MODULE.
+It's also nothing that is likely to ever happen since those two drivers
+are also never used on the same arch and it should only be possible to
+create a broken configuration with COMPILE_TEST as well.
 
+
+
+Sven

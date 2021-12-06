@@ -2,124 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7449469D86
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B79D469A77
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386858AbhLFPaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:30:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
+        id S242432AbhLFPIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:08:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356251AbhLFPSI (ORCPT
+        with ESMTP id S1346313AbhLFPGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:18:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13A2C08E840
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:11:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FFDA6133C
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 15:11:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 489E6C341C1;
-        Mon,  6 Dec 2021 15:11:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638803477;
-        bh=cID293rOgxjQk8NRLMzApK7etdJF34/NNMH4sm9IXMs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fWu8/JMImZoyUJs6SiSezgHt3fJjx8j+QwkTcrH+qv5XYo1Tp1aRa2ow/SGdQ1G26
-         g+jHZ/q6QQjZPvvWbCUlBXjZ60egZbb4Yb2aXl3afUegX/qC7f7FNIFkn1M+KlHgIc
-         I3ATyqm/DcCf0Y7ix4xEP8RvCZ0+SC+3MEMDwau2l9wuWrnWs7onUDHOGnhwv2r3GG
-         Rj4qKGwov368I4/KNuAEeMHyfT+VnoPU4BRsRNFNW4IasebXlje/xdWOCxmoBj2f0T
-         oHViHwfTSQ8KbBX8LtnbRG9H5uDrsAPHaOOKTSWUsyacvfh8zX+p95RzUHd/OfcdMT
-         wCZpJ3H52p7UQ==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Ghiti <alex@ghiti.fr>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] riscv: mm: init: try best to remove #ifdef CONFIG_XIP_KERNEL usage
-Date:   Mon,  6 Dec 2021 23:03:53 +0800
-Message-Id: <20211206150353.731-6-jszhang@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206150353.731-1-jszhang@kernel.org>
-References: <20211206150353.731-1-jszhang@kernel.org>
+        Mon, 6 Dec 2021 10:06:17 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F0DC0698E1
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:02:47 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso13978726ota.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 07:02:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jffNvrh7KQsV2nR/TwXkXfJqfnZhPwCdmIY7tlegLXQ=;
+        b=lqaAsIV/0K44MV7AaYubisMSw+XsLTslk45oy1fg99IDA3L2jpOJ7SX6SHQ49Ift+b
+         /szlOsgVjf41hObQH1YGQyJR+7omrLeGLNhfYsz9TbWnnODO9m+QO0Ofg6CLNwyHJ5Ty
+         jBNup7fggUqDEGWgvH4FoWHkFT70ML7iOnwJgWuB5HDSI40CDhJDBXejJdPpmU4uWB8B
+         B18CnYjz7MRLYZzz0udeB1Q8JyC5uNy1e2d3mnrJR42L0eMVYdMopD8wKsfSkSJQGJ0+
+         Y/cK6x/6XoK3UBpzJAzJ998VjhcwwwmZJWiJ8SGWI+5pDKpoBaNnsQBwRZFzE7cO/wsj
+         xd4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jffNvrh7KQsV2nR/TwXkXfJqfnZhPwCdmIY7tlegLXQ=;
+        b=G2LNs/O9Vjw97nBWkEnleFx4KuXfxM+TWXvFNucL+2Tb6aDBL/AgCmVckQQXOTllCw
+         amB3C5LNbw27eSCiTP/5P3F9hMMst58DpYyj/RJOwFXYT4pQRNCagwZk0g2Lseo2lBP8
+         21KpaWPNOsmo2329TpXflkWx9UP49UEQy59JndWaTCIhxD72aoBxnJI5UrawT6qgILK1
+         70NW66GyVhuTZzqLWli+TtSoJh/S7mBJk6JplLedcWUIsjrQXqEeLuP8wVabWGCIOSXv
+         QO5ELwEZ2/EqpXZA4k+uIi/Mf6NDHPqcJXYt0Rl5plJa03t4H3kpcTK9SkXfqd0rlZIW
+         AUJQ==
+X-Gm-Message-State: AOAM530rCE8tWcBLafuxI4hzteqVd2X0tJpWp1elOoeo9sWJiJRFFCEt
+        BojakABfjMTEgxj9QIZzJmj17g==
+X-Google-Smtp-Source: ABdhPJyLHuBI7aVghHaBJpmi/eC8baOPqavY3ZKjA4TBh5PttyLk/PEdK3VnsjTr9BuxL0i+MZbl9w==
+X-Received: by 2002:a05:6830:453:: with SMTP id d19mr30242988otc.72.1638802966195;
+        Mon, 06 Dec 2021 07:02:46 -0800 (PST)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id c9sm2264926oog.43.2021.12.06.07.02.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 07:02:45 -0800 (PST)
+Date:   Mon, 6 Dec 2021 07:04:12 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     agross@kernel.org, todor.too@gmail.com, mchehab@kernel.org,
+        robh+dt@kernel.org, angelogioacchino.delregno@somainline.org,
+        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+Subject: Re: [PATCH v3 1/4] media: camss: csiphy: Move to hardcode CSI Clock
+ Lane number
+Message-ID: <Ya4mbMinkgDkjj+H@ripper>
+References: <20211118124819.1902427-1-robert.foss@linaro.org>
+ <20211118124819.1902427-2-robert.foss@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211118124819.1902427-2-robert.foss@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the #ifdef CONFIG_XIP_KERNEL usage can be divided into the
-following three types:
+On Thu 18 Nov 04:48 PST 2021, Robert Foss wrote:
 
-The first one is for functions/declarations only used in XIP case.
+> QCOM ISPs do not support having a programmable CSI Clock Lane number.
+> 
+> In order to accurately reflect this, the different CSIPHY HW versions
+> need to have their own register layer for computing lane masks.
+> 
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
 
-The second one is for XIP_FIXUP case. Something as below:
-|foo_type foo;
-|#ifdef CONFIG_XIP_KERNEL
-|#define foo    (*(foo_type *)XIP_FIXUP(&foo))
-|#endif
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Usually, it's better to let the foo macro sit with the foo var
-together. But if various foos are defined adjacently, we can
-save some #ifdef CONFIG_XIP_KERNEL usage by grouping them together.
+Regards,
+Bjorn
 
-The third one is for different implementations for XIP, usually, this
-is a #ifdef...#else...#endif case.
-
-This patch moves the pt_ops macro to adjacent #ifdef CONFIG_XIP_KERNEL
-and group first type usage cases into one.
-
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Reviewed-by: Alexandre Ghiti <alex@ghiti.fr>
----
- arch/riscv/mm/init.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
-
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 5e979fe06054..a15640eeb334 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -40,10 +40,6 @@ EXPORT_SYMBOL(kernel_map);
- phys_addr_t phys_ram_base __ro_after_init;
- EXPORT_SYMBOL(phys_ram_base);
- 
--#ifdef CONFIG_XIP_KERNEL
--extern char _xiprom[], _exiprom[], __data_loc;
--#endif
--
- unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)]
- 							__page_aligned_bss;
- EXPORT_SYMBOL(empty_zero_page);
-@@ -227,10 +223,6 @@ static void __init setup_bootmem(void)
- #ifdef CONFIG_MMU
- static struct pt_alloc_ops pt_ops __initdata;
- 
--#ifdef CONFIG_XIP_KERNEL
--#define pt_ops (*(struct pt_alloc_ops *)XIP_FIXUP(&pt_ops))
--#endif
--
- unsigned long riscv_pfn_base __ro_after_init;
- EXPORT_SYMBOL(riscv_pfn_base);
- 
-@@ -242,6 +234,7 @@ pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
- static pmd_t __maybe_unused early_dtb_pmd[PTRS_PER_PMD] __initdata __aligned(PAGE_SIZE);
- 
- #ifdef CONFIG_XIP_KERNEL
-+#define pt_ops			(*(struct pt_alloc_ops *)XIP_FIXUP(&pt_ops))
- #define trampoline_pg_dir      ((pgd_t *)XIP_FIXUP(trampoline_pg_dir))
- #define fixmap_pte             ((pte_t *)XIP_FIXUP(fixmap_pte))
- #define early_pg_dir           ((pgd_t *)XIP_FIXUP(early_pg_dir))
-@@ -445,6 +438,8 @@ static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
- }
- 
- #ifdef CONFIG_XIP_KERNEL
-+extern char _xiprom[], _exiprom[], __data_loc;
-+
- /* called from head.S with MMU off */
- asmlinkage void __init __copy_data(void)
- {
--- 
-2.34.1
-
+> ---
+>  .../qcom/camss/camss-csiphy-2ph-1-0.c         | 19 +++++++++++++++--
+>  .../qcom/camss/camss-csiphy-3ph-1-0.c         | 17 ++++++++++++++-
+>  .../media/platform/qcom/camss/camss-csiphy.c  | 21 +------------------
+>  .../media/platform/qcom/camss/camss-csiphy.h  |  7 +++++++
+>  4 files changed, 41 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-2ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-2ph-1-0.c
+> index 30b454c369ab..cd4a8c369234 100644
+> --- a/drivers/media/platform/qcom/camss/camss-csiphy-2ph-1-0.c
+> +++ b/drivers/media/platform/qcom/camss/camss-csiphy-2ph-1-0.c
+> @@ -16,6 +16,7 @@
+>  
+>  #define CAMSS_CSI_PHY_LNn_CFG2(n)		(0x004 + 0x40 * (n))
+>  #define CAMSS_CSI_PHY_LNn_CFG3(n)		(0x008 + 0x40 * (n))
+> +#define		CAMSS_CSI_PHY_LN_CLK		1
+>  #define CAMSS_CSI_PHY_GLBL_RESET		0x140
+>  #define CAMSS_CSI_PHY_GLBL_PWR_CFG		0x144
+>  #define CAMSS_CSI_PHY_GLBL_IRQ_CMD		0x164
+> @@ -26,6 +27,19 @@
+>  #define CAMSS_CSI_PHY_GLBL_T_INIT_CFG0		0x1ec
+>  #define CAMSS_CSI_PHY_T_WAKEUP_CFG0		0x1f4
+>  
+> +static u8 csiphy_get_lane_mask(struct csiphy_lanes_cfg *lane_cfg)
+> +{
+> +	u8 lane_mask;
+> +	int i;
+> +
+> +	lane_mask = 1 << CAMSS_CSI_PHY_LN_CLK;
+> +
+> +	for (i = 0; i < lane_cfg->num_data; i++)
+> +		lane_mask |= 1 << lane_cfg->data[i].pos;
+> +
+> +	return lane_mask;
+> +}
+> +
+>  static void csiphy_hw_version_read(struct csiphy_device *csiphy,
+>  				   struct device *dev)
+>  {
+> @@ -105,7 +119,7 @@ static void csiphy_lanes_enable(struct csiphy_device *csiphy,
+>  
+>  	for (i = 0; i <= c->num_data; i++) {
+>  		if (i == c->num_data)
+> -			l = c->clk.pos;
+> +			l = CAMSS_CSI_PHY_LN_CLK;
+>  		else
+>  			l = c->data[i].pos;
+>  
+> @@ -129,7 +143,7 @@ static void csiphy_lanes_disable(struct csiphy_device *csiphy,
+>  
+>  	for (i = 0; i <= c->num_data; i++) {
+>  		if (i == c->num_data)
+> -			l = c->clk.pos;
+> +			l = CAMSS_CSI_PHY_LN_CLK;
+>  		else
+>  			l = c->data[i].pos;
+>  
+> @@ -167,6 +181,7 @@ static irqreturn_t csiphy_isr(int irq, void *dev)
+>  }
+>  
+>  const struct csiphy_hw_ops csiphy_ops_2ph_1_0 = {
+> +	.get_lane_mask = csiphy_get_lane_mask,
+>  	.hw_version_read = csiphy_hw_version_read,
+>  	.reset = csiphy_reset,
+>  	.lanes_enable = csiphy_lanes_enable,
+> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+> index e318c822ab04..cde6b3a10b9e 100644
+> --- a/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+> +++ b/drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.c
+> @@ -43,6 +43,7 @@
+>  #define CSIPHY_3PH_LNn_CSI_LANE_CTRL15_SWI_SOT_SYMBOL	0xb8
+>  
+>  #define CSIPHY_3PH_CMN_CSI_COMMON_CTRLn(n)	(0x800 + 0x4 * (n))
+> +#define CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE	BIT(7)
+>  #define CSIPHY_3PH_CMN_CSI_COMMON_CTRL6_COMMON_PWRDN_B	BIT(0)
+>  #define CSIPHY_3PH_CMN_CSI_COMMON_CTRL6_SHOW_REV_ID	BIT(1)
+>  #define CSIPHY_3PH_CMN_CSI_COMMON_STATUSn(n)	(0x8b0 + 0x4 * (n))
+> @@ -320,6 +321,19 @@ static void csiphy_gen2_config_lanes(struct csiphy_device *csiphy,
+>  	}
+>  }
+>  
+> +static u8 csiphy_get_lane_mask(struct csiphy_lanes_cfg *lane_cfg)
+> +{
+> +	u8 lane_mask;
+> +	int i;
+> +
+> +	lane_mask = CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE;
+> +
+> +	for (i = 0; i < lane_cfg->num_data; i++)
+> +		lane_mask |= 1 << lane_cfg->data[i].pos;
+> +
+> +	return lane_mask;
+> +}
+> +
+>  static void csiphy_lanes_enable(struct csiphy_device *csiphy,
+>  				struct csiphy_config *cfg,
+>  				s64 link_freq, u8 lane_mask)
+> @@ -331,7 +345,7 @@ static void csiphy_lanes_enable(struct csiphy_device *csiphy,
+>  
+>  	settle_cnt = csiphy_settle_cnt_calc(link_freq, csiphy->timer_clk_rate);
+>  
+> -	val = BIT(c->clk.pos);
+> +	val = CSIPHY_3PH_CMN_CSI_COMMON_CTRL5_CLK_ENABLE;
+>  	for (i = 0; i < c->num_data; i++)
+>  		val |= BIT(c->data[i].pos * 2);
+>  
+> @@ -397,6 +411,7 @@ static void csiphy_lanes_disable(struct csiphy_device *csiphy,
+>  }
+>  
+>  const struct csiphy_hw_ops csiphy_ops_3ph_1_0 = {
+> +	.get_lane_mask = csiphy_get_lane_mask,
+>  	.hw_version_read = csiphy_hw_version_read,
+>  	.reset = csiphy_reset,
+>  	.lanes_enable = csiphy_lanes_enable,
+> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.c b/drivers/media/platform/qcom/camss/camss-csiphy.c
+> index 24eec16197e7..ac7e96e6b7cd 100644
+> --- a/drivers/media/platform/qcom/camss/camss-csiphy.c
+> +++ b/drivers/media/platform/qcom/camss/camss-csiphy.c
+> @@ -229,25 +229,6 @@ static int csiphy_set_power(struct v4l2_subdev *sd, int on)
+>  	return 0;
+>  }
+>  
+> -/*
+> - * csiphy_get_lane_mask - Calculate CSI2 lane mask configuration parameter
+> - * @lane_cfg - CSI2 lane configuration
+> - *
+> - * Return lane mask
+> - */
+> -static u8 csiphy_get_lane_mask(struct csiphy_lanes_cfg *lane_cfg)
+> -{
+> -	u8 lane_mask;
+> -	int i;
+> -
+> -	lane_mask = 1 << lane_cfg->clk.pos;
+> -
+> -	for (i = 0; i < lane_cfg->num_data; i++)
+> -		lane_mask |= 1 << lane_cfg->data[i].pos;
+> -
+> -	return lane_mask;
+> -}
+> -
+>  /*
+>   * csiphy_stream_on - Enable streaming on CSIPHY module
+>   * @csiphy: CSIPHY device
+> @@ -261,7 +242,7 @@ static int csiphy_stream_on(struct csiphy_device *csiphy)
+>  {
+>  	struct csiphy_config *cfg = &csiphy->cfg;
+>  	s64 link_freq;
+> -	u8 lane_mask = csiphy_get_lane_mask(&cfg->csi2->lane_cfg);
+> +	u8 lane_mask = csiphy->ops->get_lane_mask(&cfg->csi2->lane_cfg);
+>  	u8 bpp = csiphy_get_bpp(csiphy->formats, csiphy->nformats,
+>  				csiphy->fmt[MSM_CSIPHY_PAD_SINK].code);
+>  	u8 num_lanes = csiphy->cfg.csi2->lane_cfg.num_data;
+> diff --git a/drivers/media/platform/qcom/camss/camss-csiphy.h b/drivers/media/platform/qcom/camss/camss-csiphy.h
+> index d71b8bc6ec00..1c14947f92d3 100644
+> --- a/drivers/media/platform/qcom/camss/camss-csiphy.h
+> +++ b/drivers/media/platform/qcom/camss/camss-csiphy.h
+> @@ -45,6 +45,13 @@ struct csiphy_config {
+>  struct csiphy_device;
+>  
+>  struct csiphy_hw_ops {
+> +	/*
+> +	 * csiphy_get_lane_mask - Calculate CSI2 lane mask configuration parameter
+> +	 * @lane_cfg - CSI2 lane configuration
+> +	 *
+> +	 * Return lane mask
+> +	 */
+> +	u8 (*get_lane_mask)(struct csiphy_lanes_cfg *lane_cfg);
+>  	void (*hw_version_read)(struct csiphy_device *csiphy,
+>  				struct device *dev);
+>  	void (*reset)(struct csiphy_device *csiphy);
+> -- 
+> 2.32.0
+> 

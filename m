@@ -2,49 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB7C469BF2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A891A469DBC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357363AbhLFPS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:18:57 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33414 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345903AbhLFPMy (ORCPT
+        id S1388141AbhLFPcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:32:21 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54424 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347104AbhLFPVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:12:54 -0500
+        Mon, 6 Dec 2021 10:21:19 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73BB06130D;
-        Mon,  6 Dec 2021 15:09:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F7CCC341C2;
-        Mon,  6 Dec 2021 15:09:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F18FB810E7;
+        Mon,  6 Dec 2021 15:17:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 635F0C341C2;
+        Mon,  6 Dec 2021 15:17:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803364;
-        bh=SeSMkjyRDpZNWnCMn+xyOsw1I7EY6CpDakkWDcHl04Y=;
+        s=korg; t=1638803868;
+        bh=i+jgwPIrm0lnwRxNLGX7q2jp31+Kqd9MHs7MUO9ZOfk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YSuCX/9f7eA+zGy4EsZpfJmoYnBxWMAbORIM4c/xHuoQu39Of4yFMa/InpNdKv2Ps
-         XoHb9HzWrfIh4x3+3cSzWTFIwR1uw7foVcDG4wDlDKuSEBawHzwBkMGwxuiO8zYTu9
-         QmRQC7omD29M69oFP946nOpbZEVV1QKyM/nZNlEI=
+        b=LpRo4IhaqBrxHRwuUiiOrpLhtl7GKWXXu0tuLgaejOE48T+6sn4xDrA8hCx9Tc20y
+         gXUqupnQtEPaJvOnukhnAYGxbWpPImAqo14ZsRFo5b3k6QN7WlPMpPriuuj7Bp8Wob
+         TlaVdSBymc0/oKl2V2YR+GALLCpohncKuTtGprXM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ian Rogers <irogers@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stephane Eranian <eranian@google.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 16/48] perf hist: Fix memory leak of a perf_hpp_fmt
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Sameer Pujar <spujar@nvidia.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.10 076/130] ASoC: tegra: Fix wrong value type in DMIC
 Date:   Mon,  6 Dec 2021 15:56:33 +0100
-Message-Id: <20211206145549.406267278@linuxfoundation.org>
+Message-Id: <20211206145602.296631883@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
-References: <20211206145548.859182340@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,101 +46,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ian Rogers <irogers@google.com>
+From: Sameer Pujar <spujar@nvidia.com>
 
-[ Upstream commit 0ca1f534a776cc7d42f2c33da4732b74ec2790cd ]
+commit 559d234569a998a4004de1bd1f12da5487fb826e upstream.
 
-perf_hpp__column_unregister() removes an entry from a list but doesn't
-free the memory causing a memory leak spotted by leak sanitizer.
+The enum controls are expected to use enumerated value type.
+Update relevant references in control get/put callbacks.
 
-Add the free while at the same time reducing the scope of the function
-to static.
-
-Signed-off-by: Ian Rogers <irogers@google.com>
-Reviewed-by: Kajol Jain <kjain@linux.ibm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Stephane Eranian <eranian@google.com>
-Link: http://lore.kernel.org/lkml/20211118071247.2140392-1-irogers@google.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 8c8ff982e9e2 ("ASoC: tegra: Add Tegra210 based DMIC driver")
+Suggested-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Sameer Pujar <spujar@nvidia.com>
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
+Link: https://lore.kernel.org/r/1637219231-406-4-git-send-email-spujar@nvidia.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/ui/hist.c   | 28 ++++++++++++++--------------
- tools/perf/util/hist.h |  1 -
- 2 files changed, 14 insertions(+), 15 deletions(-)
+ sound/soc/tegra/tegra210_dmic.c |   23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
-diff --git a/tools/perf/ui/hist.c b/tools/perf/ui/hist.c
-index fe3dfaa64a916..4afb63cea41b9 100644
---- a/tools/perf/ui/hist.c
-+++ b/tools/perf/ui/hist.c
-@@ -468,6 +468,18 @@ struct perf_hpp_list perf_hpp_list = {
- #undef __HPP_SORT_ACC_FN
- #undef __HPP_SORT_RAW_FN
+--- a/sound/soc/tegra/tegra210_dmic.c
++++ b/sound/soc/tegra/tegra210_dmic.c
+@@ -165,15 +165,15 @@ static int tegra210_dmic_get_control(str
+ 	if (strstr(kcontrol->id.name, "Boost Gain Volume"))
+ 		ucontrol->value.integer.value[0] = dmic->boost_gain;
+ 	else if (strstr(kcontrol->id.name, "Channel Select"))
+-		ucontrol->value.integer.value[0] = dmic->ch_select;
++		ucontrol->value.enumerated.item[0] = dmic->ch_select;
+ 	else if (strstr(kcontrol->id.name, "Mono To Stereo"))
+-		ucontrol->value.integer.value[0] = dmic->mono_to_stereo;
++		ucontrol->value.enumerated.item[0] = dmic->mono_to_stereo;
+ 	else if (strstr(kcontrol->id.name, "Stereo To Mono"))
+-		ucontrol->value.integer.value[0] = dmic->stereo_to_mono;
++		ucontrol->value.enumerated.item[0] = dmic->stereo_to_mono;
+ 	else if (strstr(kcontrol->id.name, "OSR Value"))
+-		ucontrol->value.integer.value[0] = dmic->osr_val;
++		ucontrol->value.enumerated.item[0] = dmic->osr_val;
+ 	else if (strstr(kcontrol->id.name, "LR Polarity Select"))
+-		ucontrol->value.integer.value[0] = dmic->lrsel;
++		ucontrol->value.enumerated.item[0] = dmic->lrsel;
  
-+static void fmt_free(struct perf_hpp_fmt *fmt)
-+{
-+	/*
-+	 * At this point fmt should be completely
-+	 * unhooked, if not it's a bug.
-+	 */
-+	BUG_ON(!list_empty(&fmt->list));
-+	BUG_ON(!list_empty(&fmt->sort_list));
-+
-+	if (fmt->free)
-+		fmt->free(fmt);
-+}
- 
- void perf_hpp__init(void)
- {
-@@ -531,9 +543,10 @@ void perf_hpp_list__prepend_sort_field(struct perf_hpp_list *list,
- 	list_add(&format->sort_list, &list->sorts);
+ 	return 0;
  }
- 
--void perf_hpp__column_unregister(struct perf_hpp_fmt *format)
-+static void perf_hpp__column_unregister(struct perf_hpp_fmt *format)
+@@ -183,20 +183,19 @@ static int tegra210_dmic_put_control(str
  {
- 	list_del_init(&format->list);
-+	fmt_free(format);
+ 	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
+ 	struct tegra210_dmic *dmic = snd_soc_component_get_drvdata(comp);
+-	int value = ucontrol->value.integer.value[0];
+ 
+ 	if (strstr(kcontrol->id.name, "Boost Gain Volume"))
+-		dmic->boost_gain = value;
++		dmic->boost_gain = ucontrol->value.integer.value[0];
+ 	else if (strstr(kcontrol->id.name, "Channel Select"))
+-		dmic->ch_select = ucontrol->value.integer.value[0];
++		dmic->ch_select = ucontrol->value.enumerated.item[0];
+ 	else if (strstr(kcontrol->id.name, "Mono To Stereo"))
+-		dmic->mono_to_stereo = value;
++		dmic->mono_to_stereo = ucontrol->value.enumerated.item[0];
+ 	else if (strstr(kcontrol->id.name, "Stereo To Mono"))
+-		dmic->stereo_to_mono = value;
++		dmic->stereo_to_mono = ucontrol->value.enumerated.item[0];
+ 	else if (strstr(kcontrol->id.name, "OSR Value"))
+-		dmic->osr_val = value;
++		dmic->osr_val = ucontrol->value.enumerated.item[0];
+ 	else if (strstr(kcontrol->id.name, "LR Polarity Select"))
+-		dmic->lrsel = value;
++		dmic->lrsel = ucontrol->value.enumerated.item[0];
+ 
+ 	return 0;
  }
- 
- void perf_hpp__cancel_cumulate(void)
-@@ -605,19 +618,6 @@ void perf_hpp__append_sort_keys(struct perf_hpp_list *list)
- }
- 
- 
--static void fmt_free(struct perf_hpp_fmt *fmt)
--{
--	/*
--	 * At this point fmt should be completely
--	 * unhooked, if not it's a bug.
--	 */
--	BUG_ON(!list_empty(&fmt->list));
--	BUG_ON(!list_empty(&fmt->sort_list));
--
--	if (fmt->free)
--		fmt->free(fmt);
--}
--
- void perf_hpp__reset_output_field(struct perf_hpp_list *list)
- {
- 	struct perf_hpp_fmt *fmt, *tmp;
-diff --git a/tools/perf/util/hist.h b/tools/perf/util/hist.h
-index 7173e1f410930..899c1ca5e7dce 100644
---- a/tools/perf/util/hist.h
-+++ b/tools/perf/util/hist.h
-@@ -346,7 +346,6 @@ enum {
- };
- 
- void perf_hpp__init(void);
--void perf_hpp__column_unregister(struct perf_hpp_fmt *format);
- void perf_hpp__cancel_cumulate(void);
- void perf_hpp__setup_output_field(struct perf_hpp_list *list);
- void perf_hpp__reset_output_field(struct perf_hpp_list *list);
--- 
-2.33.0
-
 
 

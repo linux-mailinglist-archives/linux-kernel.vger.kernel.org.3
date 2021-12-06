@@ -2,40 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 971FD469F52
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AAD846A056
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385790AbhLFPrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:47:04 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45642 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386890AbhLFPaP (ORCPT
+        id S1443615AbhLFQA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:00:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390589AbhLFPme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:30:15 -0500
+        Mon, 6 Dec 2021 10:42:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE6BC08ED1E;
+        Mon,  6 Dec 2021 07:28:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C78C5612D7;
-        Mon,  6 Dec 2021 15:26:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9A4AC34900;
-        Mon,  6 Dec 2021 15:26:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 043C96130D;
+        Mon,  6 Dec 2021 15:28:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA2A5C34901;
+        Mon,  6 Dec 2021 15:28:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804406;
-        bh=XKvYX0H11SmBZNnOVKV1+t8NKlH1t9c6kY4DkEVc270=;
+        s=korg; t=1638804523;
+        bh=T729lqUbBFVLAGEbP2kGpTioLNrsM+4cHXoaTWVQ040=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xTyHE7FLv3hvmNycPBl2JxT+L8VY6ZSCAS8Q8AnhUNxwxCIYTHj8Y7yZ2i0MQcWUR
-         XVqzAadUl13rOyg3BRK0r6JrPydbyVLOHfNbTIqmA9oz9NIGtu6Nj/S89kGrq2g1ff
-         pyhSiwY9i6GZRk7c9lvnmf6W8WQGMfVn+BzvDyPg=
+        b=DrjW2fSVT82iG92ZTIRYQXyGyz0nIF8cVwOm015pEUivx1sbM8IPlg9FDqHiCou1Q
+         j6IUHMgPZdmPAm71XlsFUAG+jWR2EldKWRDO3R8utSoAS9SMQcAnKA/nBUXcOV/IwH
+         UxRmFCwB6rzPPyPFgfHCyRuxlIcqLrUYe4oxqcDs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dust Li <dust.li@linux.alibaba.com>,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Tony Lu <tonylu@linux.alibaba.com>,
+        stable@vger.kernel.org,
+        William Kucharski <william.kucharski@oracle.com>,
+        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 134/207] net/smc: fix wrong list_del in smc_lgr_cleanup_early
-Date:   Mon,  6 Dec 2021 15:56:28 +0100
-Message-Id: <20211206145614.867160905@linuxfoundation.org>
+Subject: [PATCH 5.15 135/207] net/rds: correct socket tunable error in rds_tcp_tune()
+Date:   Mon,  6 Dec 2021 15:56:29 +0100
+Message-Id: <20211206145614.910240017@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
 References: <20211206145610.172203682@linuxfoundation.org>
@@ -47,86 +50,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dust Li <dust.li@linux.alibaba.com>
+From: William Kucharski <william.kucharski@oracle.com>
 
-commit 789b6cc2a5f9123b9c549b886fdc47c865cfe0ba upstream.
+commit 19f36edf14bcdb783aef3af8217df96f76a8ce34 upstream.
 
-smc_lgr_cleanup_early() meant to delete the link
-group from the link group list, but it deleted
-the list head by mistake.
+Correct an error where setting /proc/sys/net/rds/tcp/rds_tcp_rcvbuf would
+instead modify the socket's sk_sndbuf and would leave sk_rcvbuf untouched.
 
-This may cause memory corruption since we didn't
-remove the real link group from the list and later
-memseted the link group structure.
-We got a list corruption panic when testing:
-
-[  231.277259] list_del corruption. prev->next should be ffff8881398a8000, but was 0000000000000000
-[  231.278222] ------------[ cut here ]------------
-[  231.278726] kernel BUG at lib/list_debug.c:53!
-[  231.279326] invalid opcode: 0000 [#1] SMP NOPTI
-[  231.279803] CPU: 0 PID: 5 Comm: kworker/0:0 Not tainted 5.10.46+ #435
-[  231.280466] Hardware name: Alibaba Cloud ECS, BIOS 8c24b4c 04/01/2014
-[  231.281248] Workqueue: events smc_link_down_work
-[  231.281732] RIP: 0010:__list_del_entry_valid+0x70/0x90
-[  231.282258] Code: 4c 60 82 e8 7d cc 6a 00 0f 0b 48 89 fe 48 c7 c7 88 4c
-60 82 e8 6c cc 6a 00 0f 0b 48 89 fe 48 c7 c7 c0 4c 60 82 e8 5b cc 6a 00 <0f>
-0b 48 89 fe 48 c7 c7 00 4d 60 82 e8 4a cc 6a 00 0f 0b cc cc cc
-[  231.284146] RSP: 0018:ffffc90000033d58 EFLAGS: 00010292
-[  231.284685] RAX: 0000000000000054 RBX: ffff8881398a8000 RCX: 0000000000000000
-[  231.285415] RDX: 0000000000000001 RSI: ffff88813bc18040 RDI: ffff88813bc18040
-[  231.286141] RBP: ffffffff8305ad40 R08: 0000000000000003 R09: 0000000000000001
-[  231.286873] R10: ffffffff82803da0 R11: ffffc90000033b90 R12: 0000000000000001
-[  231.287606] R13: 0000000000000000 R14: ffff8881398a8000 R15: 0000000000000003
-[  231.288337] FS:  0000000000000000(0000) GS:ffff88813bc00000(0000) knlGS:0000000000000000
-[  231.289160] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  231.289754] CR2: 0000000000e72058 CR3: 000000010fa96006 CR4: 00000000003706f0
-[  231.290485] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  231.291211] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  231.291940] Call Trace:
-[  231.292211]  smc_lgr_terminate_sched+0x53/0xa0
-[  231.292677]  smc_switch_conns+0x75/0x6b0
-[  231.293085]  ? update_load_avg+0x1a6/0x590
-[  231.293517]  ? ttwu_do_wakeup+0x17/0x150
-[  231.293907]  ? update_load_avg+0x1a6/0x590
-[  231.294317]  ? newidle_balance+0xca/0x3d0
-[  231.294716]  smcr_link_down+0x50/0x1a0
-[  231.295090]  ? __wake_up_common_lock+0x77/0x90
-[  231.295534]  smc_link_down_work+0x46/0x60
-[  231.295933]  process_one_work+0x18b/0x350
-
-Fixes: a0a62ee15a829 ("net/smc: separate locks for SMCD and SMCR link group lists")
-Signed-off-by: Dust Li <dust.li@linux.alibaba.com>
-Acked-by: Karsten Graul <kgraul@linux.ibm.com>
-Reviewed-by: Tony Lu <tonylu@linux.alibaba.com>
+Fixes: c6a58ffed536 ("RDS: TCP: Add sysctl tunables for sndbuf/rcvbuf on rds-tcp socket")
+Signed-off-by: William Kucharski <william.kucharski@oracle.com>
+Acked-by: Santosh Shilimkar <santosh.shilimkar@oracle.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/smc/smc_core.c |    7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ net/rds/tcp.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/smc/smc_core.c
-+++ b/net/smc/smc_core.c
-@@ -582,18 +582,17 @@ int smcd_nl_get_lgr(struct sk_buff *skb,
- void smc_lgr_cleanup_early(struct smc_connection *conn)
- {
- 	struct smc_link_group *lgr = conn->lgr;
--	struct list_head *lgr_list;
- 	spinlock_t *lgr_lock;
- 
- 	if (!lgr)
- 		return;
- 
- 	smc_conn_free(conn);
--	lgr_list = smc_lgr_list_head(lgr, &lgr_lock);
-+	smc_lgr_list_head(lgr, &lgr_lock);
- 	spin_lock_bh(lgr_lock);
- 	/* do not use this link group for new connections */
--	if (!list_empty(lgr_list))
--		list_del_init(lgr_list);
-+	if (!list_empty(&lgr->list))
-+		list_del_init(&lgr->list);
- 	spin_unlock_bh(lgr_lock);
- 	__smc_lgr_terminate(lgr, true);
- }
+--- a/net/rds/tcp.c
++++ b/net/rds/tcp.c
+@@ -500,7 +500,7 @@ void rds_tcp_tune(struct socket *sock)
+ 		sk->sk_userlocks |= SOCK_SNDBUF_LOCK;
+ 	}
+ 	if (rtn->rcvbuf_size > 0) {
+-		sk->sk_sndbuf = rtn->rcvbuf_size;
++		sk->sk_rcvbuf = rtn->rcvbuf_size;
+ 		sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
+ 	}
+ 	release_sock(sk);
 
 

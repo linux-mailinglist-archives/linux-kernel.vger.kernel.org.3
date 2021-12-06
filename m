@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3076469F37
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D44A8469A7C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391652AbhLFPqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:46:09 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47144 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386784AbhLFPaB (ORCPT
+        id S1347149AbhLFPIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:08:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346397AbhLFPGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:30:01 -0500
+        Mon, 6 Dec 2021 10:06:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2237FC07E5C2;
+        Mon,  6 Dec 2021 07:02:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF03B612C1;
-        Mon,  6 Dec 2021 15:26:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5228C34900;
-        Mon,  6 Dec 2021 15:26:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC432B81122;
+        Mon,  6 Dec 2021 15:02:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25BCCC341C1;
+        Mon,  6 Dec 2021 15:02:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804392;
-        bh=CiE/4Ttw5KIIcCrcTqEyj/nNNXNiF2tG8uZD5vyOeSs=;
+        s=korg; t=1638802974;
+        bh=ag6fvrOw167bYCJKymu52Wo5Vcz8sHVpDmhgbU3uMSM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t/DzX2jkFBC970NrBjx2PLRu7LkPnKL4PVdK/8Gg3cNqGmXZHVO++D3gTcGmotVBm
-         B8tFTljaRxfvugiNhqG02H2FGRM3wjKl7T5tXbZiolDhwgUKfOXSb72ImSSNe4342K
-         UbGosUTBoxZaTBonsBHf54OCbwuLG0GCAN+hJ9VQ=
+        b=nYSPKkFZ/yx9p57LUq+FG5VrDgifEi9cOO59SLLnzP5n3/IYBDnegjdJcvKhNX5So
+         TTaF9G+kYwWlvL7wZreg/OZ/xa2Fvxy2VEWJ5Ji5S3J1ydNi0GgD0XMea7vDrxQASk
+         W4DzHoK4QkRl4Ky58uUBSmuIsu4DdNDdkZT7YniQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Chris Zankel <chris@zankel.net>, linux-xtensa@linux-xtensa.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 103/207] natsemi: xtensa: fix section mismatch warnings
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 14/62] ASoC: topology: Add missing rwsem around snd_ctl_remove() calls
 Date:   Mon,  6 Dec 2021 15:55:57 +0100
-Message-Id: <20211206145613.810028185@linuxfoundation.org>
+Message-Id: <20211206145549.655157398@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
+References: <20211206145549.155163074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,51 +49,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit b0f38e15979fa8851e88e8aa371367f264e7b6e9 upstream.
+[ Upstream commit 7e567b5ae06315ef2d70666b149962e2bb4b97af ]
 
-Fix section mismatch warnings in xtsonic. The first one appears to be
-bogus and after fixing the second one, the first one is gone.
+snd_ctl_remove() has to be called with card->controls_rwsem held (when
+called after the card instantiation).  This patch add the missing
+rwsem calls around it.
 
-WARNING: modpost: vmlinux.o(.text+0x529adc): Section mismatch in reference from the function sonic_get_stats() to the function .init.text:set_reset_devices()
-The function sonic_get_stats() references
-the function __init set_reset_devices().
-This is often because sonic_get_stats lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
-
-WARNING: modpost: vmlinux.o(.text+0x529b3b): Section mismatch in reference from the function xtsonic_probe() to the function .init.text:sonic_probe1()
-The function xtsonic_probe() references
-the function __init sonic_probe1().
-This is often because xtsonic_probe lacks a __init
-annotation or the annotation of sonic_probe1 is wrong.
-
-Fixes: 74f2a5f0ef64 ("xtensa: Add support for the Sonic Ethernet device for the XT2000 board.")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Finn Thain <fthain@telegraphics.com.au>
-Cc: Chris Zankel <chris@zankel.net>
-Cc: linux-xtensa@linux-xtensa.org
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Acked-by: Max Filippov <jcmvbkbc@gmail.com>
-Link: https://lore.kernel.org/r/20211130063947.7529-1-rdunlap@infradead.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 8a9782346dcc ("ASoC: topology: Add topology core")
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Link: https://lore.kernel.org/r/20211116071812.18109-1-tiwai@suse.de
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/natsemi/xtsonic.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/soc-topology.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/net/ethernet/natsemi/xtsonic.c
-+++ b/drivers/net/ethernet/natsemi/xtsonic.c
-@@ -120,7 +120,7 @@ static const struct net_device_ops xtson
- 	.ndo_set_mac_address	= eth_mac_addr,
- };
- 
--static int __init sonic_probe1(struct net_device *dev)
-+static int sonic_probe1(struct net_device *dev)
+diff --git a/sound/soc/soc-topology.c b/sound/soc/soc-topology.c
+index e9c57bd3c02bf..6274a50026473 100644
+--- a/sound/soc/soc-topology.c
++++ b/sound/soc/soc-topology.c
+@@ -2050,6 +2050,7 @@ EXPORT_SYMBOL_GPL(snd_soc_tplg_widget_remove_all);
+ /* remove dynamic controls from the component driver */
+ int snd_soc_tplg_component_remove(struct snd_soc_component *comp, u32 index)
  {
- 	unsigned int silicon_revision;
- 	struct sonic_local *lp = netdev_priv(dev);
++	struct snd_card *card = comp->card->snd_card;
+ 	struct snd_soc_dobj *dobj, *next_dobj;
+ 	int pass = SOC_TPLG_PASS_END;
+ 
+@@ -2057,6 +2058,7 @@ int snd_soc_tplg_component_remove(struct snd_soc_component *comp, u32 index)
+ 	while (pass >= SOC_TPLG_PASS_START) {
+ 
+ 		/* remove mixer controls */
++		down_write(&card->controls_rwsem);
+ 		list_for_each_entry_safe(dobj, next_dobj, &comp->dobj_list,
+ 			list) {
+ 
+@@ -2090,6 +2092,7 @@ int snd_soc_tplg_component_remove(struct snd_soc_component *comp, u32 index)
+ 				break;
+ 			}
+ 		}
++		up_write(&card->controls_rwsem);
+ 		pass--;
+ 	}
+ 
+-- 
+2.33.0
+
 
 

@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DFC469EFE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF5F469D5E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391160AbhLFPpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:45:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45424 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350411AbhLFP2B (ORCPT
+        id S1385671AbhLFP30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:29:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52098 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357385AbhLFPS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:28:01 -0500
+        Mon, 6 Dec 2021 10:18:59 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE90B61459;
-        Mon,  6 Dec 2021 15:24:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8F9BC34914;
-        Mon,  6 Dec 2021 15:24:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB479B8111D;
+        Mon,  6 Dec 2021 15:15:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F38D6C341C2;
+        Mon,  6 Dec 2021 15:15:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804272;
-        bh=Xu6XgOBcLtjlZepRtd9DqU9VQdJkez3CAEHgXN0+CgA=;
+        s=korg; t=1638803728;
+        bh=1kqdhOluEWtrRbIzXXDi+UZkBE3XgsycI2GlIXBpo/I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sUKEBAza9ZtMb13VxENoNR/APFH79wDBQaMZ0YHb4CaLjH6dHbpBeqM61F48eY6a7
-         mBhbzYmNTR+pHlrGEGtACubdFQSo+k2I+07Uv0pWbVJBc6JqIQY8H5VQ/i/4BpcWJt
-         hEsCExNmBvh7u5R1wpz4Xq4GTWd5fsR8LkdOsrn4=
+        b=AJjerQ0IWj2arB1ScvnZPx9j+gfQJHkegUT5Dkw0hE3SFg0IpyzNzjtpks98GkSVe
+         Oo3reJh4rS1/LvbSEeK9JB3ftYJgI5m+2bxTxsgcZZwfinl0FJpXJ7HeBH9h9zOzWO
+         48sJt1VIl/UKPf5oZN2jRLupqjGjlbavUuNtoSt0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 087/207] net: dsa: mv88e6xxx: Save power by disabling SerDes trasmitter and receiver
-Date:   Mon,  6 Dec 2021 15:55:41 +0100
-Message-Id: <20211206145613.249959346@linuxfoundation.org>
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Teng Qi <starmiku1207184332@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 025/130] net: ethernet: dec: tulip: de4x5: fix possible array overflows in type3_infoblock()
+Date:   Mon,  6 Dec 2021 15:55:42 +0100
+Message-Id: <20211206145600.515071202@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,110 +48,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Behún <kabel@kernel.org>
+From: Teng Qi <starmiku1207184332@gmail.com>
 
-commit 7527d66260ac0c603c6baca5146748061fcddbd6 upstream.
+[ Upstream commit 0fa68da72c3be09e06dd833258ee89c33374195f ]
 
-Save power on 88E6393X by disabling SerDes receiver and transmitter
-after SerDes is SerDes is disabled.
+The definition of macro MOTO_SROM_BUG is:
+  #define MOTO_SROM_BUG    (lp->active == 8 && (get_unaligned_le32(
+  dev->dev_addr) & 0x00ffffff) == 0x3e0008)
 
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Cc: stable@vger.kernel.org # de776d0d316f ("net: dsa: mv88e6xxx: add support for mv88e6393x family")
+and the if statement
+  if (MOTO_SROM_BUG) lp->active = 0;
+
+using this macro indicates lp->active could be 8. If lp->active is 8 and
+the second comparison of this macro is false. lp->active will remain 8 in:
+  lp->phy[lp->active].gep = (*p ? p : NULL); p += (2 * (*p) + 1);
+  lp->phy[lp->active].rst = (*p ? p : NULL); p += (2 * (*p) + 1);
+  lp->phy[lp->active].mc  = get_unaligned_le16(p); p += 2;
+  lp->phy[lp->active].ana = get_unaligned_le16(p); p += 2;
+  lp->phy[lp->active].fdx = get_unaligned_le16(p); p += 2;
+  lp->phy[lp->active].ttm = get_unaligned_le16(p); p += 2;
+  lp->phy[lp->active].mci = *p;
+
+However, the length of array lp->phy is 8, so array overflows can occur.
+To fix these possible array overflows, we first check lp->active and then
+return -EINVAL if it is greater or equal to ARRAY_SIZE(lp->phy) (i.e. 8).
+
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Teng Qi <starmiku1207184332@gmail.com>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/mv88e6xxx/serdes.c |   46 +++++++++++++++++++++++++++++++++----
- drivers/net/dsa/mv88e6xxx/serdes.h |    3 ++
- 2 files changed, 45 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/dec/tulip/de4x5.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/net/dsa/mv88e6xxx/serdes.c
-+++ b/drivers/net/dsa/mv88e6xxx/serdes.c
-@@ -1271,6 +1271,28 @@ void mv88e6390_serdes_get_regs(struct mv
- 	}
- }
- 
-+static int mv88e6393x_serdes_power_lane(struct mv88e6xxx_chip *chip, int lane,
-+					bool on)
-+{
-+	u16 reg;
-+	int err;
-+
-+	err = mv88e6390_serdes_read(chip, lane, MDIO_MMD_PHYXS,
-+				    MV88E6393X_SERDES_CTRL1, &reg);
-+	if (err)
-+		return err;
-+
-+	if (on)
-+		reg &= ~(MV88E6393X_SERDES_CTRL1_TX_PDOWN |
-+			 MV88E6393X_SERDES_CTRL1_RX_PDOWN);
-+	else
-+		reg |= MV88E6393X_SERDES_CTRL1_TX_PDOWN |
-+		       MV88E6393X_SERDES_CTRL1_RX_PDOWN;
-+
-+	return mv88e6390_serdes_write(chip, lane, MDIO_MMD_PHYXS,
-+				      MV88E6393X_SERDES_CTRL1, reg);
-+}
-+
- static int mv88e6393x_serdes_erratum_4_6(struct mv88e6xxx_chip *chip, int lane)
- {
- 	u16 reg;
-@@ -1297,7 +1319,11 @@ static int mv88e6393x_serdes_erratum_4_6
- 	if (err)
- 		return err;
- 
--	return mv88e6390_serdes_power_sgmii(chip, lane, false);
-+	err = mv88e6390_serdes_power_sgmii(chip, lane, false);
-+	if (err)
-+		return err;
-+
-+	return mv88e6393x_serdes_power_lane(chip, lane, false);
- }
- 
- int mv88e6393x_serdes_setup_errata(struct mv88e6xxx_chip *chip)
-@@ -1362,17 +1388,29 @@ int mv88e6393x_serdes_power(struct mv88e
- 		err = mv88e6393x_serdes_erratum_4_8(chip, lane);
- 		if (err)
- 			return err;
-+
-+		err = mv88e6393x_serdes_power_lane(chip, lane, true);
-+		if (err)
-+			return err;
- 	}
- 
- 	switch (cmode) {
- 	case MV88E6XXX_PORT_STS_CMODE_SGMII:
- 	case MV88E6XXX_PORT_STS_CMODE_1000BASEX:
- 	case MV88E6XXX_PORT_STS_CMODE_2500BASEX:
--		return mv88e6390_serdes_power_sgmii(chip, lane, on);
-+		err = mv88e6390_serdes_power_sgmii(chip, lane, on);
-+		break;
- 	case MV88E6393X_PORT_STS_CMODE_5GBASER:
- 	case MV88E6393X_PORT_STS_CMODE_10GBASER:
--		return mv88e6390_serdes_power_10g(chip, lane, on);
-+		err = mv88e6390_serdes_power_10g(chip, lane, on);
-+		break;
- 	}
- 
--	return 0;
-+	if (err)
-+		return err;
-+
-+	if (!on)
-+		err = mv88e6393x_serdes_power_lane(chip, lane, false);
-+
-+	return err;
- }
---- a/drivers/net/dsa/mv88e6xxx/serdes.h
-+++ b/drivers/net/dsa/mv88e6xxx/serdes.h
-@@ -93,6 +93,9 @@
- #define MV88E6393X_SERDES_POC_PCS_MASK		0x0007
- #define MV88E6393X_SERDES_POC_RESET		BIT(15)
- #define MV88E6393X_SERDES_POC_PDOWN		BIT(5)
-+#define MV88E6393X_SERDES_CTRL1			0xf003
-+#define MV88E6393X_SERDES_CTRL1_TX_PDOWN	BIT(9)
-+#define MV88E6393X_SERDES_CTRL1_RX_PDOWN	BIT(8)
- 
- #define MV88E6393X_ERRATA_4_8_REG		0xF074
- #define MV88E6393X_ERRATA_4_8_BIT		BIT(14)
+diff --git a/drivers/net/ethernet/dec/tulip/de4x5.c b/drivers/net/ethernet/dec/tulip/de4x5.c
+index ffc25ecfa8d6a..8edd394bc3358 100644
+--- a/drivers/net/ethernet/dec/tulip/de4x5.c
++++ b/drivers/net/ethernet/dec/tulip/de4x5.c
+@@ -4706,6 +4706,10 @@ type3_infoblock(struct net_device *dev, u_char count, u_char *p)
+         lp->ibn = 3;
+         lp->active = *p++;
+ 	if (MOTO_SROM_BUG) lp->active = 0;
++	/* if (MOTO_SROM_BUG) statement indicates lp->active could
++	 * be 8 (i.e. the size of array lp->phy) */
++	if (WARN_ON(lp->active >= ARRAY_SIZE(lp->phy)))
++		return -EINVAL;
+ 	lp->phy[lp->active].gep = (*p ? p : NULL); p += (2 * (*p) + 1);
+ 	lp->phy[lp->active].rst = (*p ? p : NULL); p += (2 * (*p) + 1);
+ 	lp->phy[lp->active].mc  = get_unaligned_le16(p); p += 2;
+-- 
+2.33.0
+
 
 

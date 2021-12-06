@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06CB7469CC6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B96469AE5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385521AbhLFPZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:25:20 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44704 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349598AbhLFPMc (ORCPT
+        id S1347366AbhLFPLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:11:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236980AbhLFPIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:12:32 -0500
+        Mon, 6 Dec 2021 10:08:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DACC08E855;
+        Mon,  6 Dec 2021 07:03:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7CA8B8114A;
-        Mon,  6 Dec 2021 15:09:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCDAAC341D5;
-        Mon,  6 Dec 2021 15:08:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0600B81120;
+        Mon,  6 Dec 2021 15:03:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B2AC341C1;
+        Mon,  6 Dec 2021 15:03:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803339;
-        bh=y+8q+hLdttGkz44v+lZ2Nla17jSAKFdBohakvYvY5rU=;
+        s=korg; t=1638803022;
+        bh=mrB9ZfL/6zJKt4/Rk1cwFKErBGwvAzza/sx7TBu4Nas=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FsSyg2jaGcwCj+FSaTv609K1KeVSsJPLeAlXbAlWVfr9u4MojJJh3ekunjn/I+i7p
-         c5AS0VLAoy4fSZWsvys30qyPqHwvbilR3BX+MfTnNgEtvLZvLdnlOhVnkpsIzj8nCL
-         jYpxxIlQsHobOl2RRdEOWqsY2hFCriLeZqHnTXPw=
+        b=VV5QKrWXBiVZ7hXekfo1KJEygEEvoLoj5nipMOLPGMF5nl1Lx49fGDadOPKPZk2p8
+         uDNn18Tk/Wfi/n6LXm4BcJtK1Y1ui7gPUOuMlKO6Z/T5AFGBB7T5DbCe5idHsAhQcK
+         LswQLCGlMhaaSjkX0D2ibcT2vTguisSkmPFOewTI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ian Rogers <irogers@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stephane Eranian <eranian@google.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Teng Qi <starmiku1207184332@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 082/106] perf hist: Fix memory leak of a perf_hpp_fmt
+Subject: [PATCH 4.9 47/62] net: ethernet: dec: tulip: de4x5: fix possible array overflows in type3_infoblock()
 Date:   Mon,  6 Dec 2021 15:56:30 +0100
-Message-Id: <20211206145558.335974494@linuxfoundation.org>
+Message-Id: <20211206145550.835900654@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
+References: <20211206145549.155163074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,99 +51,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ian Rogers <irogers@google.com>
+From: Teng Qi <starmiku1207184332@gmail.com>
 
-[ Upstream commit 0ca1f534a776cc7d42f2c33da4732b74ec2790cd ]
+[ Upstream commit 0fa68da72c3be09e06dd833258ee89c33374195f ]
 
-perf_hpp__column_unregister() removes an entry from a list but doesn't
-free the memory causing a memory leak spotted by leak sanitizer.
+The definition of macro MOTO_SROM_BUG is:
+  #define MOTO_SROM_BUG    (lp->active == 8 && (get_unaligned_le32(
+  dev->dev_addr) & 0x00ffffff) == 0x3e0008)
 
-Add the free while at the same time reducing the scope of the function
-to static.
+and the if statement
+  if (MOTO_SROM_BUG) lp->active = 0;
 
-Signed-off-by: Ian Rogers <irogers@google.com>
-Reviewed-by: Kajol Jain <kjain@linux.ibm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Stephane Eranian <eranian@google.com>
-Link: http://lore.kernel.org/lkml/20211118071247.2140392-1-irogers@google.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+using this macro indicates lp->active could be 8. If lp->active is 8 and
+the second comparison of this macro is false. lp->active will remain 8 in:
+  lp->phy[lp->active].gep = (*p ? p : NULL); p += (2 * (*p) + 1);
+  lp->phy[lp->active].rst = (*p ? p : NULL); p += (2 * (*p) + 1);
+  lp->phy[lp->active].mc  = get_unaligned_le16(p); p += 2;
+  lp->phy[lp->active].ana = get_unaligned_le16(p); p += 2;
+  lp->phy[lp->active].fdx = get_unaligned_le16(p); p += 2;
+  lp->phy[lp->active].ttm = get_unaligned_le16(p); p += 2;
+  lp->phy[lp->active].mci = *p;
+
+However, the length of array lp->phy is 8, so array overflows can occur.
+To fix these possible array overflows, we first check lp->active and then
+return -EINVAL if it is greater or equal to ARRAY_SIZE(lp->phy) (i.e. 8).
+
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Teng Qi <starmiku1207184332@gmail.com>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/ui/hist.c   | 28 ++++++++++++++--------------
- tools/perf/util/hist.h |  1 -
- 2 files changed, 14 insertions(+), 15 deletions(-)
+ drivers/net/ethernet/dec/tulip/de4x5.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/perf/ui/hist.c b/tools/perf/ui/hist.c
-index 706f6f1e9c7d6..445a7012b1179 100644
---- a/tools/perf/ui/hist.c
-+++ b/tools/perf/ui/hist.c
-@@ -468,6 +468,18 @@ struct perf_hpp_list perf_hpp_list = {
- #undef __HPP_SORT_ACC_FN
- #undef __HPP_SORT_RAW_FN
- 
-+static void fmt_free(struct perf_hpp_fmt *fmt)
-+{
-+	/*
-+	 * At this point fmt should be completely
-+	 * unhooked, if not it's a bug.
-+	 */
-+	BUG_ON(!list_empty(&fmt->list));
-+	BUG_ON(!list_empty(&fmt->sort_list));
-+
-+	if (fmt->free)
-+		fmt->free(fmt);
-+}
- 
- void perf_hpp__init(void)
- {
-@@ -531,9 +543,10 @@ void perf_hpp_list__prepend_sort_field(struct perf_hpp_list *list,
- 	list_add(&format->sort_list, &list->sorts);
- }
- 
--void perf_hpp__column_unregister(struct perf_hpp_fmt *format)
-+static void perf_hpp__column_unregister(struct perf_hpp_fmt *format)
- {
- 	list_del_init(&format->list);
-+	fmt_free(format);
- }
- 
- void perf_hpp__cancel_cumulate(void)
-@@ -605,19 +618,6 @@ void perf_hpp__append_sort_keys(struct perf_hpp_list *list)
- }
- 
- 
--static void fmt_free(struct perf_hpp_fmt *fmt)
--{
--	/*
--	 * At this point fmt should be completely
--	 * unhooked, if not it's a bug.
--	 */
--	BUG_ON(!list_empty(&fmt->list));
--	BUG_ON(!list_empty(&fmt->sort_list));
--
--	if (fmt->free)
--		fmt->free(fmt);
--}
--
- void perf_hpp__reset_output_field(struct perf_hpp_list *list)
- {
- 	struct perf_hpp_fmt *fmt, *tmp;
-diff --git a/tools/perf/util/hist.h b/tools/perf/util/hist.h
-index 595f91f46811f..2eb71eeec4858 100644
---- a/tools/perf/util/hist.h
-+++ b/tools/perf/util/hist.h
-@@ -339,7 +339,6 @@ enum {
- };
- 
- void perf_hpp__init(void);
--void perf_hpp__column_unregister(struct perf_hpp_fmt *format);
- void perf_hpp__cancel_cumulate(void);
- void perf_hpp__setup_output_field(struct perf_hpp_list *list);
- void perf_hpp__reset_output_field(struct perf_hpp_list *list);
+diff --git a/drivers/net/ethernet/dec/tulip/de4x5.c b/drivers/net/ethernet/dec/tulip/de4x5.c
+index b39e8315e4e27..a5a291b848b06 100644
+--- a/drivers/net/ethernet/dec/tulip/de4x5.c
++++ b/drivers/net/ethernet/dec/tulip/de4x5.c
+@@ -4704,6 +4704,10 @@ type3_infoblock(struct net_device *dev, u_char count, u_char *p)
+         lp->ibn = 3;
+         lp->active = *p++;
+ 	if (MOTO_SROM_BUG) lp->active = 0;
++	/* if (MOTO_SROM_BUG) statement indicates lp->active could
++	 * be 8 (i.e. the size of array lp->phy) */
++	if (WARN_ON(lp->active >= ARRAY_SIZE(lp->phy)))
++		return -EINVAL;
+ 	lp->phy[lp->active].gep = (*p ? p : NULL); p += (2 * (*p) + 1);
+ 	lp->phy[lp->active].rst = (*p ? p : NULL); p += (2 * (*p) + 1);
+ 	lp->phy[lp->active].mc  = get_unaligned_le16(p); p += 2;
 -- 
 2.33.0
 

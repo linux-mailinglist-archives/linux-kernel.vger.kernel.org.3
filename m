@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 930FB469C9F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39E6A469FD2
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358996AbhLFPYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:24:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54280 "EHLO
+        id S1386826AbhLFPxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:53:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347455AbhLFPOp (ORCPT
+        with ESMTP id S1388109AbhLFPcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:14:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2358C0698D4;
-        Mon,  6 Dec 2021 07:07:31 -0800 (PST)
+        Mon, 6 Dec 2021 10:32:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8C0C08E84C;
+        Mon,  6 Dec 2021 07:19:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89CDBB81118;
-        Mon,  6 Dec 2021 15:07:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9C7DC341C5;
-        Mon,  6 Dec 2021 15:07:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E14A6132E;
+        Mon,  6 Dec 2021 15:19:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA6DCC341C2;
+        Mon,  6 Dec 2021 15:19:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803250;
-        bh=3sGi25Tks5bKBG7TFlNDAZAhN9Mrjx5yeaWyey6eIOo=;
+        s=korg; t=1638803956;
+        bh=CiE/4Ttw5KIIcCrcTqEyj/nNNXNiF2tG8uZD5vyOeSs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZyCc8XzvNh22l0csJV5wdzF9iCn56+1uGIueOS5BZighqcENXmEzgQFGKnfvEIKqe
-         xQ9OVevk+EKiLWxW1N0lMz7KQlPEEMS0jPw2zggsqvEBS5CTX+5KWRnl9rTvATr73D
-         7vkfT0jaulsLlMeVV0iWwP4z940YmV4Q6FZc/XAk=
+        b=PoGbhZFy+wQr3MsUbfKljGyqktDNMeFjqBh+8ialylMG70MPrQDvtlqqXUJesCPPK
+         wDaF/IQd5g2YOvIQ+1pFOlGCW5/hkF4AccwfNRkZLPH9Fzgys7Q/kzVAF2ugBVjlly
+         joNV7mCN3c5sVNEd2hAaXXm/lEakqy5TreRBSm4M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Slark Xiao <slark_xiao@163.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 074/106] platform/x86: thinkpad_acpi: Fix WWAN device disabled issue after S3 deep
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Chris Zankel <chris@zankel.net>, linux-xtensa@linux-xtensa.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 065/130] natsemi: xtensa: fix section mismatch warnings
 Date:   Mon,  6 Dec 2021 15:56:22 +0100
-Message-Id: <20211206145558.050232688@linuxfoundation.org>
+Message-Id: <20211206145601.922972307@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,69 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Slark Xiao <slark_xiao@163.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 39f53292181081d35174a581a98441de5da22bc9 ]
+commit b0f38e15979fa8851e88e8aa371367f264e7b6e9 upstream.
 
-When WWAN device wake from S3 deep, under thinkpad platform,
-WWAN would be disabled. This disable status could be checked
-by command 'nmcli r wwan' or 'rfkill list'.
+Fix section mismatch warnings in xtsonic. The first one appears to be
+bogus and after fixing the second one, the first one is gone.
 
-Issue analysis as below:
-  When host resume from S3 deep, thinkpad_acpi driver would
-call hotkey_resume() function. Finnaly, it will use
-wan_get_status to check the current status of WWAN device.
-During this resume progress, wan_get_status would always
-return off even WWAN boot up completely.
-  In patch V2, Hans said 'sw_state should be unchanged
-after a suspend/resume. It's better to drop the
-tpacpi_rfk_update_swstate call all together from the
-resume path'.
-  And it's confimed by Lenovo that GWAN is no longer
- available from WHL generation because the design does not
- match with current pin control.
+WARNING: modpost: vmlinux.o(.text+0x529adc): Section mismatch in reference from the function sonic_get_stats() to the function .init.text:set_reset_devices()
+The function sonic_get_stats() references
+the function __init set_reset_devices().
+This is often because sonic_get_stats lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
-Link: https://lore.kernel.org/r/20211108060648.8212-1-slark_xiao@163.com
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+WARNING: modpost: vmlinux.o(.text+0x529b3b): Section mismatch in reference from the function xtsonic_probe() to the function .init.text:sonic_probe1()
+The function xtsonic_probe() references
+the function __init sonic_probe1().
+This is often because xtsonic_probe lacks a __init
+annotation or the annotation of sonic_probe1 is wrong.
+
+Fixes: 74f2a5f0ef64 ("xtensa: Add support for the Sonic Ethernet device for the XT2000 board.")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Finn Thain <fthain@telegraphics.com.au>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: linux-xtensa@linux-xtensa.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Acked-by: Max Filippov <jcmvbkbc@gmail.com>
+Link: https://lore.kernel.org/r/20211130063947.7529-1-rdunlap@infradead.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/platform/x86/thinkpad_acpi.c | 12 ------------
- 1 file changed, 12 deletions(-)
+ drivers/net/ethernet/natsemi/xtsonic.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
-index 9d836d779d475..05b3e0f724fcf 100644
---- a/drivers/platform/x86/thinkpad_acpi.c
-+++ b/drivers/platform/x86/thinkpad_acpi.c
-@@ -1180,15 +1180,6 @@ static int tpacpi_rfk_update_swstate(const struct tpacpi_rfk *tp_rfk)
- 	return status;
- }
+--- a/drivers/net/ethernet/natsemi/xtsonic.c
++++ b/drivers/net/ethernet/natsemi/xtsonic.c
+@@ -120,7 +120,7 @@ static const struct net_device_ops xtson
+ 	.ndo_set_mac_address	= eth_mac_addr,
+ };
  
--/* Query FW and update rfkill sw state for all rfkill switches */
--static void tpacpi_rfk_update_swstate_all(void)
--{
--	unsigned int i;
--
--	for (i = 0; i < TPACPI_RFK_SW_MAX; i++)
--		tpacpi_rfk_update_swstate(tpacpi_rfkill_switches[i]);
--}
--
- /*
-  * Sync the HW-blocking state of all rfkill switches,
-  * do notice it causes the rfkill core to schedule uevents
-@@ -3025,9 +3016,6 @@ static void tpacpi_send_radiosw_update(void)
- 	if (wlsw == TPACPI_RFK_RADIO_OFF)
- 		tpacpi_rfk_update_hwblock_state(true);
- 
--	/* Sync sw blocking state */
--	tpacpi_rfk_update_swstate_all();
--
- 	/* Sync hw blocking state last if it is hw-unblocked */
- 	if (wlsw == TPACPI_RFK_RADIO_ON)
- 		tpacpi_rfk_update_hwblock_state(false);
--- 
-2.33.0
-
+-static int __init sonic_probe1(struct net_device *dev)
++static int sonic_probe1(struct net_device *dev)
+ {
+ 	unsigned int silicon_revision;
+ 	struct sonic_local *lp = netdev_priv(dev);
 
 

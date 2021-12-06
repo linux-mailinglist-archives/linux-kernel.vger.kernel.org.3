@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0410469FC2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 000EE469E51
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:36:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441820AbhLFPvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:51:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
+        id S1358010AbhLFPiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:38:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358741AbhLFPi3 (ORCPT
+        with ESMTP id S1376832AbhLFPXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:38:29 -0500
+        Mon, 6 Dec 2021 10:23:55 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CDEC08EB27;
-        Mon,  6 Dec 2021 07:24:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11764C08EB1E;
+        Mon,  6 Dec 2021 07:15:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 248FC61349;
-        Mon,  6 Dec 2021 15:24:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 080A7C341DB;
-        Mon,  6 Dec 2021 15:24:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5FA961328;
+        Mon,  6 Dec 2021 15:15:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F262C341C1;
+        Mon,  6 Dec 2021 15:15:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804266;
-        bh=J5vOW0Nxlhi9TBHGN0OaFt8EO4L42AqRKq7rW2X0ssc=;
+        s=korg; t=1638803720;
+        bh=EgrS4pubz4LuPdnjybQq5Kip6l5qYfdPOzl59f3I0kI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=djoLqRsW8IM9yKdfNtSiL4UfuZt6ifv4VxRSl5osDrl1AmaJDnL7Irj1lB2GEApVp
-         chMh6KbyAq5OhY+VzZeVCCMACS9YXDSNe6kzWtN+8GsZXZ4Wlb/ihGXqLfX75wE5QN
-         YxHCViO0p1wmNWeOS6nKOLuIyLHAeNUmytM/jHII=
+        b=DOEb3VB1FMhFVf6+GKOP0LRr8U4B+IctJ5Ti01N9Og/8JcxES46228qlDFDW6PEBJ
+         H8FA+YOoeP9WA4hFlsM+RcZ8Nhlf3UPkd5JDErEmtqyLRVRtc8AP5TxxnVS5h9NSRb
+         8ZcJfBpD7X1bKUoYIuxLbcr1Za13tvCNskjc/Vwc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 085/207] net: dsa: mv88e6xxx: Fix application of erratum 4.8 for 88E6393X
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Teng Qi <starmiku1207184332@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 022/130] ethernet: hisilicon: hns: hns_dsaf_misc: fix a possible array overflow in hns_dsaf_ge_srst_by_port()
 Date:   Mon,  6 Dec 2021 15:55:39 +0100
-Message-Id: <20211206145613.181028359@linuxfoundation.org>
+Message-Id: <20211206145600.395794326@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,110 +50,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Behún <kabel@kernel.org>
+From: Teng Qi <starmiku1207184332@gmail.com>
 
-commit 21635d9203e1cf2b73b67e9a86059a62f62a3563 upstream.
+[ Upstream commit a66998e0fbf213d47d02813b9679426129d0d114 ]
 
-According to SERDES scripts for 88E6393X, erratum 4.8 has to be applied
-every time before SerDes is powered on.
+The if statement:
+  if (port >= DSAF_GE_NUM)
+        return;
 
-Split the code for erratum 4.8 into separate function and call it in
-mv88e6393x_serdes_power().
+limits the value of port less than DSAF_GE_NUM (i.e., 8).
+However, if the value of port is 6 or 7, an array overflow could occur:
+  port_rst_off = dsaf_dev->mac_cb[port]->port_rst_off;
 
-Fixes: de776d0d316f ("net: dsa: mv88e6xxx: add support for mv88e6393x family")
-Signed-off-by: Marek Behún <kabel@kernel.org>
+because the length of dsaf_dev->mac_cb is DSAF_MAX_PORT_NUM (i.e., 6).
+
+To fix this possible array overflow, we first check port and if it is
+greater than or equal to DSAF_MAX_PORT_NUM, the function returns.
+
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Teng Qi <starmiku1207184332@gmail.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/mv88e6xxx/serdes.c |   53 +++++++++++++++++++++++--------------
- 1 file changed, 33 insertions(+), 20 deletions(-)
+ drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/net/dsa/mv88e6xxx/serdes.c
-+++ b/drivers/net/dsa/mv88e6xxx/serdes.c
-@@ -1271,9 +1271,9 @@ void mv88e6390_serdes_get_regs(struct mv
- 	}
- }
+diff --git a/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c b/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
+index a9aca8c24e90d..aa87e4d121532 100644
+--- a/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
++++ b/drivers/net/ethernet/hisilicon/hns/hns_dsaf_misc.c
+@@ -400,6 +400,10 @@ static void hns_dsaf_ge_srst_by_port(struct dsaf_device *dsaf_dev, u32 port,
+ 		return;
  
--static int mv88e6393x_serdes_port_errata(struct mv88e6xxx_chip *chip, int lane)
-+static int mv88e6393x_serdes_erratum_4_6(struct mv88e6xxx_chip *chip, int lane)
- {
--	u16 reg, pcs;
-+	u16 reg;
- 	int err;
- 
- 	/* mv88e6393x family errata 4.6:
-@@ -1300,11 +1300,32 @@ static int mv88e6393x_serdes_port_errata
- 		if (err)
- 			return err;
- 
--		err = mv88e6390_serdes_power_sgmii(chip, lane, false);
--		if (err)
--			return err;
-+		return mv88e6390_serdes_power_sgmii(chip, lane, false);
- 	}
- 
-+	return 0;
-+}
-+
-+int mv88e6393x_serdes_setup_errata(struct mv88e6xxx_chip *chip)
-+{
-+	int err;
-+
-+	err = mv88e6393x_serdes_erratum_4_6(chip, MV88E6393X_PORT0_LANE);
-+	if (err)
-+		return err;
-+
-+	err = mv88e6393x_serdes_erratum_4_6(chip, MV88E6393X_PORT9_LANE);
-+	if (err)
-+		return err;
-+
-+	return mv88e6393x_serdes_erratum_4_6(chip, MV88E6393X_PORT10_LANE);
-+}
-+
-+static int mv88e6393x_serdes_erratum_4_8(struct mv88e6xxx_chip *chip, int lane)
-+{
-+	u16 reg, pcs;
-+	int err;
-+
- 	/* mv88e6393x family errata 4.8:
- 	 * When a SERDES port is operating in 1000BASE-X or SGMII mode link may
- 	 * not come up after hardware reset or software reset of SERDES core.
-@@ -1334,29 +1355,21 @@ static int mv88e6393x_serdes_port_errata
- 				      MV88E6393X_ERRATA_4_8_REG, reg);
- }
- 
--int mv88e6393x_serdes_setup_errata(struct mv88e6xxx_chip *chip)
--{
--	int err;
--
--	err = mv88e6393x_serdes_port_errata(chip, MV88E6393X_PORT0_LANE);
--	if (err)
--		return err;
--
--	err = mv88e6393x_serdes_port_errata(chip, MV88E6393X_PORT9_LANE);
--	if (err)
--		return err;
--
--	return mv88e6393x_serdes_port_errata(chip, MV88E6393X_PORT10_LANE);
--}
--
- int mv88e6393x_serdes_power(struct mv88e6xxx_chip *chip, int port, int lane,
- 			    bool on)
- {
- 	u8 cmode = chip->ports[port].cmode;
-+	int err;
- 
- 	if (port != 0 && port != 9 && port != 10)
- 		return -EOPNOTSUPP;
- 
-+	if (on) {
-+		err = mv88e6393x_serdes_erratum_4_8(chip, lane);
-+		if (err)
-+			return err;
-+	}
-+
- 	switch (cmode) {
- 	case MV88E6XXX_PORT_STS_CMODE_SGMII:
- 	case MV88E6XXX_PORT_STS_CMODE_1000BASEX:
+ 	if (!HNS_DSAF_IS_DEBUG(dsaf_dev)) {
++		/* DSAF_MAX_PORT_NUM is 6, but DSAF_GE_NUM is 8.
++		   We need check to prevent array overflow */
++		if (port >= DSAF_MAX_PORT_NUM)
++			return;
+ 		reg_val_1  = 0x1 << port;
+ 		port_rst_off = dsaf_dev->mac_cb[port]->port_rst_off;
+ 		/* there is difference between V1 and V2 in register.*/
+-- 
+2.33.0
+
 
 

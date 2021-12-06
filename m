@@ -2,125 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3750D46A325
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 838B246A328
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:40:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243704AbhLFRm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 12:42:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243631AbhLFRmy (ORCPT
+        id S243755AbhLFRoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 12:44:03 -0500
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:43844 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243512AbhLFRoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 12:42:54 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A957C061746;
-        Mon,  6 Dec 2021 09:39:24 -0800 (PST)
-Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1muHxR-0004bW-B6; Mon, 06 Dec 2021 18:39:21 +0100
-Message-ID: <2a181fd4-9248-d68d-7eee-43b19db96461@leemhuis.info>
-Date:   Mon, 6 Dec 2021 18:39:19 +0100
+        Mon, 6 Dec 2021 12:44:01 -0500
+Received: by mail-oi1-f177.google.com with SMTP id o4so22757937oia.10;
+        Mon, 06 Dec 2021 09:40:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=koRW6az6+degourkxOP1GokVvT7gydbgTTyBLpfrkw0=;
+        b=uSeOMMwmlU2nw6t3DV+q+kSyQ+dq1BXy7RFMUBqOnchg+GvLc5OSX0paAM86u+r+cz
+         pB/9srRFBjn/w2ZHOVGwIoegWIKDjRSqcATtb/zg+QJG/37BiEa2Ki0P/a6xO6k1LUP6
+         iEmB/+49apN+iBvHrwJSsjQ9/zkaJ5dbTh+W0erLG4vTz+Q0T8e0DwV8ppi68EdzSfPV
+         B7feBgBEdM2Er08B+nnksjsRhLnUb0GDCSjLB3m/SOI0u062UEgdoWm8la3PjIj3pJf6
+         Q8cARVVrDazKa5fw4kW6JkRBVehd//JyIt3lqqiaS9Yx/V6teqzKCsyK4LSIjwS4GD7X
+         AOJA==
+X-Gm-Message-State: AOAM5323zMr/KcHOkPaao5s06Es5Ds71Dg8sBouT2NwH0Wpa3KlwilLN
+        QVFK8u9YGJT5KWKjP/s94g==
+X-Google-Smtp-Source: ABdhPJz/jMkga0NqEh2zCLWJPjrBKT2u/B/vshshAuxBAhhj1IcGRKBDlhoencuokUNhK5KLxJR9ug==
+X-Received: by 2002:aca:3945:: with SMTP id g66mr47oia.2.1638812430317;
+        Mon, 06 Dec 2021 09:40:30 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id k8sm1748347oon.2.2021.12.06.09.40.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 09:40:29 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Tero Kristo <t-kristo@ti.com>
+Cc:     devicetree@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: watchdog: ti,rti-wdt: Fix assigned-clock-parents
+Date:   Mon,  6 Dec 2021 11:40:28 -0600
+Message-Id: <20211206174028.2294330-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] bus: mhi: core: Add support for forced PM resume
-Content-Language: en-BS
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        mhi@lists.linux.dev
-Cc:     hemantk@codeaurora.org, bbhatt@codeaurora.org,
-        loic.poulain@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, kvalo@codeaurora.org,
-        stable@vger.kernel.org, Pengyu Ma <mapengyu@gmail.com>
-References: <20211206161059.107007-1-manivannan.sadhasivam@linaro.org>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <20211206161059.107007-1-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1638812365;83c3bb91;
-X-HE-SMSGID: 1muHxR-0004bW-B6
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+With 'unevaluatedProperties' support implemented, the ti,rti-wdt example
+has the following warning:
 
-Hi, this is your Linux kernel regression tracker speaking.
+/home/rob/proj/git/linux-dt/.build-arm64/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.example.dt.yaml: watchdog@2200000: Unevaluated properties are not allowed ('assigned-clock-parents' was unexpected)
 
-On 06.12.21 17:10, Manivannan Sadhasivam wrote:
-> From: Loic Poulain <loic.poulain@linaro.org>
-> 
-> For whatever reason, some devices like QCA6390, WCN6855 using ath11k
-> are not in M3 state during PM resume, but still functional. The
-> mhi_pm_resume should then not fail in those cases, and let the higher
-> level device specific stack continue resuming process.
-> 
-> Add a new parameter to mhi_pm_resume, to force resuming, whatever the
-> current MHI state is. This fixes a regression with non functional
-> ath11k WiFi after suspend/resume cycle on some machines.
-> 
-> Bug report: https://bugzilla.kernel.org/show_bug.cgi?id=214179
-> 
-> Cc: stable@vger.kernel.org #5.13
-> Fixes: 020d3b26c07a ("bus: mhi: Early MHI resume failure in non M3 state")
-> Reported-by: Kalle Valo <kvalo@codeaurora.org>
-> Reported-by: Pengyu Ma <mapengyu@gmail.com>
+The problem is the schema has a typo in 'assigned-clocks-parents'. As
+it is not required to list assigned clocks in bindings, just drop the
+property definitions to fix this.
 
-FWIW: In case you need to send an improved patch, could you please add
-this before the 'Reported-by:' (see (¹) below for the reasoning):
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Tero Kristo <t-kristo@ti.com>
+Cc: linux-watchdog@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Link: https://lore.kernel.org/regressions/871r5p0x2u.fsf@codeaurora.org/
+diff --git a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
+index 054584d7543a..2f33635876ff 100644
+--- a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
+@@ -34,12 +34,6 @@ properties:
+   power-domains:
+     maxItems: 1
+ 
+-  assigned-clocks:
+-    maxItems: 1
+-
+-  assigned-clocks-parents:
+-    maxItems: 1
+-
+ required:
+   - compatible
+   - reg
+-- 
+2.32.0
 
-And if the patch is already good to go: could the subsystem maintainer
-please add it when applying? See(¹) for the reasoning.
-
-Thx.
-
-Ciao, Thorsten, your Linux kernel regression tracker.
-
-(¹) Long story: The commit message would benefit from a link to the
-regression report on the mailing list, for reasons explained in
-Documentation/process/submitting-patches.rst. To quote:
-
-```
-If related discussions or any other background information behind the
-change can be found on the web, add 'Link:' tags pointing to it. In case
-your patch fixes a bug, for example, add a tag with a URL referencing
-the report in the mailing list archives or a bug tracker;
-```
-
-This concept is old, but the text was reworked recently to make this use
-case for the Link: tag clearer. For details see:
-https://git.kernel.org/linus/1f57bd42b77c
-
-Yes, that "Link:" is not really crucial; but it's good to have if
-someone needs to look into the backstory of this change sometime in the
-future. But I care for a different reason. I'm tracking this regression
-(and others) with regzbot, my Linux kernel regression tracking bot. This
-bot will notice if a patch with a Link: tag to a tracked regression gets
-posted and record that, which allowed anyone looking into the regression
-to quickly gasp the current status from regzbot's webui
-(https://linux-regtracking.leemhuis.info/regzbot ) or its reports. The
-bot will also notice if a commit with a Link: tag to a regression report
-is applied by Linus and then automatically mark the regression as
-resolved then.
-
-IOW: this tag makes my life a regression tracker a lot easier, as I
-otherwise have to tell regzbot manually when the fix lands. :-/
-
-P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
-on my table. I can only look briefly into most of them. Unfortunately
-therefore I sometimes will get things wrong or miss something important.
-I hope that's not the case here; if you think it is, don't hesitate to
-tell me about it in a public reply. That's in everyone's interest, as
-what I wrote above might be misleading to everyone reading this; any
-suggestion I gave they thus might sent someone reading this down the
-wrong rabbit hole, which none of us wants.
-
-BTW, I have no personal interest in this issue, which is tracked using
-regzbot, my Linux kernel regression tracking bot
-(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
-this mail to get things rolling again and hence don't need to be CC on
-all further activities wrt to this regression.
-
-#regzbot ^backmonitor:
-https://lore.kernel.org/regressions/871r5p0x2u.fsf@codeaurora.org/

@@ -2,94 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE56F469514
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 12:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0701469516
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 12:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242497AbhLFLiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 06:38:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241484AbhLFLiT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 06:38:19 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45447C061746;
-        Mon,  6 Dec 2021 03:34:51 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id np6-20020a17090b4c4600b001a90b011e06so8060804pjb.5;
-        Mon, 06 Dec 2021 03:34:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4fGtVCG1i/w+nUv5JtEvYC7FJa62VZy/NwCwniaoRXs=;
-        b=cLxXvW7kSC05B8tj7ofVyaOHPEjCb4V1fhQzRO2i2Za88XoZV0t6FIVePHMWkjVmFZ
-         HA/4BLfwKr9/mpj2K0GM7eXeC8Ppp3Ffaw+NIzDlxjKlZe6yaWVSd3ywaaw5R3WQBBky
-         +omFWP6stZBDH5sFTRhLlyLQmpVdao8jhyNFTPzhVplkcsgxTdBJOKhwfUsUc+KIIvL4
-         G69o45s+ckGNOObX0tKvEVjiXOp2t6yBm3XPAZ100kGATdZZ44PVewPgRz+r0vzN+BLg
-         KJy22mREvR6FMs3O5Ud8atBghAZlnem4sI67oBALtRanCA/VoPSz1XLIcLcLR7iQzRpF
-         WVZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4fGtVCG1i/w+nUv5JtEvYC7FJa62VZy/NwCwniaoRXs=;
-        b=XguK57yEo4Opt4uIETxWlMN0dFx7IKXaaqx6kZhNxl+2b2TQdNoFpmR6Xnp01D8pWV
-         Ren0NhKhXLMIF+fYNO9FXyW4Toa/kEU46ghY1rZFGS5dWO9RYvic6jCLpAES/0LoloIc
-         FBSeELKHdn3bRRGmnzFAizi9hwuo+Dl5JrBl5lN77VK/ECqx77V9MRpCqmd6aFGuNzHe
-         u2kY/lHRcf2bmidFthPFW7i6CvaiajShC7zJaxRDrigmN5tdINwGCZ9zcc2PJP7RsdTO
-         JKF7GRu3Us21PbdXfQ20uUAQ/FMtCxu3v+72rDVbskX0i2kOlAOKBiH2/jFAq4Uq8VmY
-         qoQw==
-X-Gm-Message-State: AOAM5337Q3Pyh3VyULP4akqOpkeZ90VTnXp87b+bJm23u2Wvwl4it8cl
-        tlVPfs6jEMH/wuzFR+UdMIE=
-X-Google-Smtp-Source: ABdhPJz1WHY9AJpTcmS81D6jUO0/nQS1w65gB/0RlRaDyztERcBTYUP8VK8vvZuZanFwCccNlInM9w==
-X-Received: by 2002:a17:90a:8049:: with SMTP id e9mr36339793pjw.229.1638790490741;
-        Mon, 06 Dec 2021 03:34:50 -0800 (PST)
-Received: from localhost.localdomain ([94.177.118.54])
-        by smtp.gmail.com with ESMTPSA id s19sm12256594pfu.104.2021.12.06.03.34.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 03:34:50 -0800 (PST)
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-To:     Vinod Koul <vkoul@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>
-Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
-        Baolin Wang <baolin.wang@spreadtrum.com>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dmaengine: sprd: move pm_runtime_disable to err_rpm
-Date:   Mon,  6 Dec 2021 19:34:37 +0800
-Message-Id: <20211206113437.2820889-1-mudongliangabcd@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S242550AbhLFLjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 06:39:21 -0500
+Received: from foss.arm.com ([217.140.110.172]:54808 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242519AbhLFLjU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 06:39:20 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 89CE21042;
+        Mon,  6 Dec 2021 03:35:51 -0800 (PST)
+Received: from e123427-lin.arm.com (unknown [10.57.33.247])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C4F2E3F73D;
+        Mon,  6 Dec 2021 03:35:48 -0800 (PST)
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     =?UTF-8?q?Krzysztof=20Wilczyi=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        qizhong cheng <qizhong.cheng@mediatek.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-pci@vger.kernel.org,
+        Chuanjia Liu <chuanjia.liu@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Jiey Yang <ot_jiey.yang@mediatek.com>
+Subject: Re: [PATCH] PCI: mediatek: Delay 100ms to wait power and clock to become stable
+Date:   Mon,  6 Dec 2021 11:35:42 +0000
+Message-Id: <163879053288.15266.2451470623160398574.b4-ty@arm.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20211104062144.31453-1-qizhong.cheng@mediatek.com>
+References: <20211104062144.31453-1-qizhong.cheng@mediatek.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When pm_runtime_get_sync fails, it forgets to invoke pm_runtime_disable
-in the label err_rpm.
+On Thu, 4 Nov 2021 14:21:44 +0800, qizhong cheng wrote:
+> Described in PCIe CEM specification setctions 2.2 (PERST# Signal) and
+> 2.2.1 (Initial Power-Up (G3 to S0)). The deassertion of PERST# should
+> be delayed 100ms (TPVPERL) for the power and clock to become stable.
+> 
+> 
 
-Fix this by moving pm_runtime_disable to label err_rpm.
+Applied to pci/mediatek, thanks!
 
-Fixes: 9b3b8171f7f4 ("dmaengine: sprd: Add Spreadtrum DMA driver")
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
----
- drivers/dma/sprd-dma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[1/1] PCI: mediatek: Delay 100ms to wait power and clock to become stable
+      https://git.kernel.org/lpieralisi/pci/c/1fa610f217
 
-diff --git a/drivers/dma/sprd-dma.c b/drivers/dma/sprd-dma.c
-index 4357d2395e6b..ae8b2cfebfee 100644
---- a/drivers/dma/sprd-dma.c
-+++ b/drivers/dma/sprd-dma.c
-@@ -1226,8 +1226,8 @@ static int sprd_dma_probe(struct platform_device *pdev)
- 	dma_async_device_unregister(&sdev->dma_dev);
- err_register:
- 	pm_runtime_put_noidle(&pdev->dev);
--	pm_runtime_disable(&pdev->dev);
- err_rpm:
-+	pm_runtime_disable(&pdev->dev);
- 	sprd_dma_disable(sdev);
- 	return ret;
- }
--- 
-2.25.1
-
+Thanks,
+Lorenzo

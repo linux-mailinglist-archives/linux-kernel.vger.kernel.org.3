@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2897F46A466
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:28:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BFDD46A495
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347851AbhLFSbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 13:31:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47374 "EHLO
+        id S1347705AbhLFSbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 13:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347278AbhLFSaG (ORCPT
+        with ESMTP id S1347282AbhLFSaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Dec 2021 13:30:06 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140C5C0698C0;
-        Mon,  6 Dec 2021 10:26:31 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id j5-20020a17090a318500b001a6c749e697so369300pjb.1;
-        Mon, 06 Dec 2021 10:26:31 -0800 (PST)
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DE7C0698C2;
+        Mon,  6 Dec 2021 10:26:33 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id b11so7602903pld.12;
+        Mon, 06 Dec 2021 10:26:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fEHmtnBmv7jOA8xbBwMk+/p1lp/o/+UqjyoV8bzclQ0=;
-        b=Dt7PElBrejLQorB8gg+mCqmyrGmxyrSzUdN4liR5GhswF1Tq8oT9bIvFMwPsjxzCAX
-         8bSbOjKEGtHj6oXLxn9ExAC0NMv0jEMQfpLzvXBA3T3t+3ib+vAuvONSOxTud8hKjdgi
-         9XjJoKWJ0bRTpM0mjLoBLFoI7ceEmuMbyoEsZeNMCA73/hRQYT132bbAGhzRoMKOw8BF
-         rmtvTUlLQ5xjltblpLDQk0TfchSiluM9kPbdkZaO74ltNHXino/A3Dhqg2hr1HYt+jEL
-         J4FL6dAxq64peNEYXs94xrTSOEeBJR11k+TnRpFcBtOwQE7szTbZZOrNV/obURfzc60k
-         QUKA==
+        bh=MyqPfy+ha7iGIoQvE1EgZWcwITDPm37FB0rLdMo+0Ks=;
+        b=SMTSxUg8d8DzL4FYgXPZTkhteCTQvQKCidQBmxRu16o3iT3qf7eiTduAPFIxq7mUWJ
+         IV5EIglUIrwHF5pKaWbzoHUq6cNHuYifY91o+NhGYp+D/HFxQ5Y7nTaTZ2o9OMgFpA95
+         yMHPR1kqXGftglrxih0pFHmXYC3gF1TtdKYyPMeGotlXScZStjhUv93beBo0PyNZDghv
+         Wx0NZQ17KDEd92+kqskZU5DVsDVx8J63UcsJmDOK+8V84RqdYPHTsv8LrfgVcPNQvlj8
+         A93eAG/klm64SOO3KH3ItakXKs903MV1TXPOAoDeu++zzKmLAGtNrUX26r93Cm1/VYf7
+         49Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fEHmtnBmv7jOA8xbBwMk+/p1lp/o/+UqjyoV8bzclQ0=;
-        b=mNvsG1KpCZA/SAtrlHd0jsCF+6YB5KMD2S0hh9LSAIglbQWNVe+4IHKHD9br1S4FgS
-         Wnl7W8PL/EG+T0QOfknH9oOhKuno2JW8KoccK0oeti0wv2B3dVyBIsLvFp27sGFM7L2L
-         JDWBNSgUJD7YD9BO71Gd4dLWQnkZSeZhoqfVAhihzjmkIBtobRo/efeECKGBNcBs9CxZ
-         Tdntmf3qV/uVVcrN0fA9Ws+jTt5ZZqv3N7qKklAIEWBYw8N4pjfQMVQeyDlyAYxO/MDj
-         msQjzDOXuyCff0jjHXPPeSfY0o9SFPZoh10uVaLqlE5IqxiIzmaxyW5eDNFnlZ7ARDUq
-         4eeQ==
-X-Gm-Message-State: AOAM530yh238M2dnaB7s7yD2uYmANt5HSz7e783nN5im5FYoIYjFa/Wa
-        8+5Sa9TSI/X8n77Iko+40tis3fY1+yI=
-X-Google-Smtp-Source: ABdhPJxRoNVg+5pWwvG4jcCSWuIicHxKyg+vaBWc7iivBM/rQhv97QUDFZVpxflLD2YLTikBuCpcHg==
-X-Received: by 2002:a17:90b:1b07:: with SMTP id nu7mr262769pjb.140.1638815190071;
-        Mon, 06 Dec 2021 10:26:30 -0800 (PST)
+        bh=MyqPfy+ha7iGIoQvE1EgZWcwITDPm37FB0rLdMo+0Ks=;
+        b=CrDexRmr2IHS7j0eFC3uEyutoXfk/UMa1AXAqWJQ7Byp3/5cQyxmzK/YRZM0YXOzDl
+         fESQuP0lVahRYepKAoRqdEu1oqMk5qXVzWTnYT0hEUhoIcwA5YkFwz2ozzMU3O+TlXkZ
+         gUAgDx7qHO8ZbHUYOrPLG8oDF55WeVU9W7b2J1I+Fc8DOa1yuS2aU0psbcrwIzsE3L3w
+         paT5mz96ceWfLGibUkcJZE4PALeHzReGtxt1Z3nu5wZRv8t4DW297IxKNpuBhyv3eviC
+         VRWxSMtE2yMhPEWibtLAdqXigw8h9ExBj68CsC4j4kHwgUifuGenOX3tGM1HtntmMOHs
+         VMwA==
+X-Gm-Message-State: AOAM531ebpUdq+GlVA12wTSiE3X4KlCDXytCqGc5zmq81EBicfWZ4XtR
+        5l+IF4Y17dwKsrJ3x3sNDmWgGatn7i0=
+X-Google-Smtp-Source: ABdhPJwbKOBF7+j3CLTDkVQjMa0Ebj04v8Ow4YgqR4cemNds4RoNcksyLLkyhs7HlrdW4hLfwMRfmA==
+X-Received: by 2002:a17:90b:3a89:: with SMTP id om9mr220577pjb.99.1638815192139;
+        Mon, 06 Dec 2021 10:26:32 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id a22sm12773097pfh.111.2021.12.06.10.26.28
+        by smtp.gmail.com with ESMTPSA id a22sm12773097pfh.111.2021.12.06.10.26.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 10:26:29 -0800 (PST)
+        Mon, 06 Dec 2021 10:26:31 -0800 (PST)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     devicetree@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -90,9 +90,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
         linux-pm@vger.kernel.org (open list:THERMAL),
         linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-Subject: [PATCH v2 05/14] dt-bindings: gpio: Convert Broadcom STB GPIO to YAML
-Date:   Mon,  6 Dec 2021 10:26:07 -0800
-Message-Id: <20211206182616.2089677-6-f.fainelli@gmail.com>
+Subject: [PATCH v2 06/14] dt-binding: interrupt-controller: Convert BCM7038 L1 intc to YAML
+Date:   Mon,  6 Dec 2021 10:26:08 -0800
+Message-Id: <20211206182616.2089677-7-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211206182616.2089677-1-f.fainelli@gmail.com>
 References: <20211206182616.2089677-1-f.fainelli@gmail.com>
@@ -102,231 +102,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Broadcom STB GPIO Device Tree binding to YAML to help with
-validation.
+Convert the Broadcom STB BCM7038 Level 1 interrupt controller Device
+Tree binding to YAML to help with validation.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- .../bindings/gpio/brcm,brcmstb-gpio.txt       |  83 --------------
- .../bindings/gpio/brcm,brcmstb-gpio.yaml      | 105 ++++++++++++++++++
- MAINTAINERS                                   |   2 +-
- 3 files changed, 106 insertions(+), 84 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
- create mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
+ .../brcm,bcm7038-l1-intc.txt                  | 61 -------------
+ .../brcm,bcm7038-l1-intc.yaml                 | 91 +++++++++++++++++++
+ 2 files changed, 91 insertions(+), 61 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7038-l1-intc.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7038-l1-intc.yaml
 
-diff --git a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7038-l1-intc.txt b/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7038-l1-intc.txt
 deleted file mode 100644
-index 5d468ecd1809..000000000000
---- a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
+index 5ddef1dc0c1a..000000000000
+--- a/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7038-l1-intc.txt
 +++ /dev/null
-@@ -1,83 +0,0 @@
--Broadcom STB "UPG GIO" GPIO controller
+@@ -1,61 +0,0 @@
+-Broadcom BCM7038-style Level 1 interrupt controller
 -
--The controller's registers are organized as sets of eight 32-bit
--registers with each set controlling a bank of up to 32 pins.  A single
--interrupt is shared for all of the banks handled by the controller.
+-This block is a first level interrupt controller that is typically connected
+-directly to one of the HW INT lines on each CPU.  Every BCM7xxx set-top chip
+-since BCM7038 has contained this hardware.
+-
+-Key elements of the hardware design include:
+-
+-- 64, 96, 128, or 160 incoming level IRQ lines
+-
+-- Most onchip peripherals are wired directly to an L1 input
+-
+-- A separate instance of the register set for each CPU, allowing individual
+-  peripheral IRQs to be routed to any CPU
+-
+-- Atomic mask/unmask operations
+-
+-- No polarity/level/edge settings
+-
+-- No FIFO or priority encoder logic; software is expected to read all
+-  2-5 status words to determine which IRQs are pending
 -
 -Required properties:
 -
--- compatible:
--    Must be "brcm,brcmstb-gpio"
--
--- reg:
--    Define the base and range of the I/O address space containing
--    the brcmstb GPIO controller registers
--
--- #gpio-cells:
--    Should be <2>.  The first cell is the pin number (within the controller's
--    pin space), and the second is used for the following:
--    bit[0]: polarity (0 for active-high, 1 for active-low)
--
--- gpio-controller:
--    Specifies that the node is a GPIO controller.
--
--- brcm,gpio-bank-widths:
--    Number of GPIO lines for each bank.  Number of elements must
--    correspond to number of banks suggested by the 'reg' property.
+-- compatible: should be "brcm,bcm7038-l1-intc"
+-- reg: specifies the base physical address and size of the registers;
+-  the number of supported IRQs is inferred from the size argument
+-- interrupt-controller: identifies the node as an interrupt controller
+-- #interrupt-cells: specifies the number of cells needed to encode an interrupt
+-  source, should be 1.
+-- interrupts: specifies the interrupt line(s) in the interrupt-parent controller
+-  node; valid values depend on the type of parent interrupt controller
 -
 -Optional properties:
 -
--- interrupts:
--    The interrupt shared by all GPIO lines for this controller.
+-- brcm,irq-can-wake: If present, this means the L1 controller can be used as a
+-  wakeup source for system suspend/resume.
 -
--- interrupts-extended:
--    Alternate form of specifying interrupts and parents that allows for
--    multiple parents.  This takes precedence over 'interrupts' and
--    'interrupt-parent'.  Wakeup-capable GPIO controllers often route their
--    wakeup interrupt lines through a different interrupt controller than the
--    primary interrupt line, making this property necessary.
+-Optional properties:
 -
--- #interrupt-cells:
--    Should be <2>.  The first cell is the GPIO number, the second should specify
--    flags.  The following subset of flags is supported:
--    - bits[3:0] trigger type and level flags
--        1 = low-to-high edge triggered
--        2 = high-to-low edge triggered
--        4 = active high level-sensitive
--        8 = active low level-sensitive
--      Valid combinations are 1, 2, 3, 4, 8.
--    See also Documentation/devicetree/bindings/interrupt-controller/interrupts.txt
+-- brcm,int-fwd-mask: if present, a bit mask to indicate which interrupts
+-  have already been configured by the firmware and should be left unmanaged.
+-  This should have one 32-bit word per status/set/clear/mask group.
 -
--- interrupt-controller:
--    Marks the device node as an interrupt controller
--
--- wakeup-source:
--    GPIOs for this controller can be used as a wakeup source
+-If multiple reg ranges and interrupt-parent entries are present on an SMP
+-system, the driver will allow IRQ SMP affinity to be set up through the
+-/proc/irq/ interface.  In the simplest possible configuration, only one
+-reg range and one interrupt-parent is needed.
 -
 -Example:
--	upg_gio: gpio@f040a700 {
--		#gpio-cells = <2>;
--		#interrupt-cells = <2>;
--		compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
--		gpio-controller;
--		interrupt-controller;
--		reg = <0xf040a700 0x80>;
--		interrupt-parent = <&irq0_intc>;
--		interrupts = <0x6>;
--		brcm,gpio-bank-widths = <32 32 32 24>;
--	};
 -
--	upg_gio_aon: gpio@f04172c0 {
--		#gpio-cells = <2>;
--		#interrupt-cells = <2>;
--		compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
--		gpio-controller;
--		interrupt-controller;
--		reg = <0xf04172c0 0x40>;
--		interrupt-parent = <&irq0_aon_intc>;
--		interrupts = <0x6>;
--		interrupts-extended = <&irq0_aon_intc 0x6>,
--			<&aon_pm_l2_intc 0x5>;
--		wakeup-source;
--		brcm,gpio-bank-widths = <18 4>;
--	};
-diff --git a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
+-periph_intc: periph_intc@1041a400 {
+-        compatible = "brcm,bcm7038-l1-intc";
+-        reg = <0x1041a400 0x30 0x1041a600 0x30>;
+-
+-        interrupt-controller;
+-        #interrupt-cells = <1>;
+-
+-        interrupt-parent = <&cpu_intc>;
+-        interrupts = <2>, <3>;
+-};
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7038-l1-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7038-l1-intc.yaml
 new file mode 100644
-index 000000000000..8c27932df2c5
+index 000000000000..5ecb6faa70dc
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
-@@ -0,0 +1,105 @@
++++ b/Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7038-l1-intc.yaml
+@@ -0,0 +1,91 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/gpio/brcm,brcmstb-gpio.yaml#
++$id: http://devicetree.org/schemas/interrupt-controller/brcm,bcm7038-l1-intc.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Broadcom STB "UPG GIO" GPIO controller
++title: Broadcom BCM7038-style Level 1 interrupt controller
 +
 +description: >
-+  The controller's registers are organized as sets of eight 32-bit
-+  registers with each set controlling a bank of up to 32 pins.  A single
-+  interrupt is shared for all of the banks handled by the controller.
++  This block is a first level interrupt controller that is typically connected
++  directly to one of the HW INT lines on each CPU.  Every BCM7xxx set-top chip
++  since BCM7038 has contained this hardware.
++
++  Key elements of the hardware design include:
++
++   - 64, 96, 128, or 160 incoming level IRQ lines
++
++   - Most onchip peripherals are wired directly to an L1 input
++
++   - A separate instance of the register set for each CPU, allowing individual
++     peripheral IRQs to be routed to any CPU
++
++   - Atomic mask/unmask operations
++
++   - No polarity/level/edge settings
++
++   - No FIFO or priority encoder logic; software is expected to read all
++     2-5 status words to determine which IRQs are pending
++
++   If multiple reg ranges and interrupt-parent entries are present on an SMP
++   system, the driver will allow IRQ SMP affinity to be set up through the
++   /proc/irq/ interface.  In the simplest possible configuration, only one
++   reg range and one interrupt-parent is needed.
 +
 +maintainers:
-+  - Doug Berger <opendmb@gmail.com>
 +  - Florian Fainelli <f.fainelli@gmail.com>
++
++allOf:
++  - $ref: /schemas/interrupt-controller.yaml#
 +
 +properties:
 +  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - brcm,bcm7445-gpio
-+          - const: brcm,brcmstb-gpio
++    const: brcm,bcm7038-l1-intc
 +
 +  reg:
-+    maxItems: 1
 +    description: >
-+      Define the base and range of the I/O address space containing
-+      the brcmstb GPIO controller registers
-+
-+  "#gpio-cells":
-+    const: 2
-+    description: >
-+      The first cell is the pin number (within the controller's
-+      pin space), and the second is used for the following:
-+      bit[0]: polarity (0 for active-high, 1 for active-low)
-+
-+  gpio-controller: true
-+
-+  "brcm,gpio-bank-widths":
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    description: >
-+      Number of GPIO lines for each bank.  Number of elements must
-+      correspond to number of banks suggested by the 'reg' property.
-+
-+  interrupts:
-+    maxItems: 1
-+    description: >
-+      The interrupt shared by all GPIO lines for this controller.
-+
-+  "#interrupt-cells":
-+    const: 2
-+    description: |
-+      The first cell is the GPIO number, the second should specify
-+      flags.  The following subset of flags is supported:
-+      - bits[3:0] trigger type and level flags
-+        1 = low-to-high edge triggered
-+        2 = high-to-low edge triggered
-+        4 = active high level-sensitive
-+        8 = active low level-sensitive
-+      Valid combinations are 1, 2, 3, 4, 8.
++      Specifies the base physical address and size of the registers
++      the number of supported IRQs is inferred from the size argument
 +
 +  interrupt-controller: true
 +
-+  wakeup-source:
++  "#interrupt-cells":
++    const: 1
++
++  interrupts:
++    description: >
++     Specifies the interrupt line(s) in the interrupt-parent controller node;
++     valid values depend on the type of parent interrupt controller
++
++  brcm,irq-can-wake:
 +    type: boolean
 +    description: >
-+      GPIOs for this controller can be used as a wakeup source
++      If present, this means the L1 controller can be used as a
++      wakeup source for system suspend/resume.
++
++  brcm,int-fwd-mask:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    description:
++      If present, a bit mask to indicate which interrupts have already been
++      configured by the firmware and should be left unmanaged. This should
++      have one 32-bit word per status/set/clear/mask group.
 +
 +required:
 +  - compatible
 +  - reg
-+  - gpio-controller
-+  - "#gpio-cells"
-+  - "brcm,gpio-bank-widths"
++  - interrupt-controller
++  - "#interrupt-cells"
++  - interrupts
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    upg_gio: gpio@f040a700 {
-+        #gpio-cells = <2>;
-+        #interrupt-cells = <2>;
-+        compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
-+        gpio-controller;
-+        interrupt-controller;
-+        reg = <0xf040a700 0x80>;
-+        interrupt-parent = <&irq0_intc>;
-+        interrupts = <0x6>;
-+        brcm,gpio-bank-widths = <32 32 32 24>;
++    periph_intc: interrupt-controller@1041a400 {
++      compatible = "brcm,bcm7038-l1-intc";
++      reg = <0x1041a400 0x30>, <0x1041a600 0x30>;
++      interrupt-controller;
++      #interrupt-cells = <1>;
++      interrupt-parent = <&cpu_intc>;
++      interrupts = <2>, <3>;
 +    };
-+
-+    upg_gio_aon: gpio@f04172c0 {
-+        #gpio-cells = <2>;
-+        #interrupt-cells = <2>;
-+        compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
-+        gpio-controller;
-+        interrupt-controller;
-+        reg = <0xf04172c0 0x40>;
-+        interrupt-parent = <&irq0_aon_intc>;
-+        interrupts = <0x6>;
-+        wakeup-source;
-+        brcm,gpio-bank-widths = <18 4>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7a2345ce8521..9ac67c885159 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3761,7 +3761,7 @@ BROADCOM BRCMSTB GPIO DRIVER
- M:	Gregory Fong <gregory.0xf0@gmail.com>
- L:	bcm-kernel-feedback-list@broadcom.com
- S:	Supported
--F:	Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
-+F:	Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
- F:	drivers/gpio/gpio-brcmstb.c
- 
- BROADCOM BRCMSTB I2C DRIVER
 -- 
 2.25.1
 

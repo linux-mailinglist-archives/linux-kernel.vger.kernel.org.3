@@ -2,166 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DE846A1AC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:45:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B72746A1B4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234610AbhLFQsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:48:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234180AbhLFQsk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:48:40 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6EEC061359
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:45:11 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id g18so10692758pfk.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 08:45:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Kr+JaHE4rxPgEMAj4CiYvS9ERF4arFyvma7ueUhBYKQ=;
-        b=gp1JhwgXzLgzzsvJYuHH+5gZ60Z0lGc33kEEo4Srx2QzhbK0d/egjaJILZuVUc2x6h
-         eI3w0ISWsJ1ZOgCfhBr/zzYhEyfc5K3GK08BZOFT9fBBNOXSkaAv9LtDgkHf0VEB+Zxk
-         orfRVtW9sM/K2OJgMZWySKx2YlCE0givkDwAWf/fCthh00hGDJpc5mOtzhXVVyFYoeS7
-         jbGK7bxVTvpsyOkBTDKSx41y5sy2TG/wcr3m7CyxA37/f2h7FY/3k9FmRC4DczsYSlj2
-         6SDrYGJf9QxTtUiMlX4fbnHo7NntnwjI4LCE7CJgZh2bGvqtNqbnAynZBa1GbpmdTEcM
-         0K7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Kr+JaHE4rxPgEMAj4CiYvS9ERF4arFyvma7ueUhBYKQ=;
-        b=b42qbOndxRO2dv6q6H5t2ZIJliiTHqPWXXvFEIV3nOglz1EXofu5kijCaT3ne/e/A9
-         AtE8R3YmpUY3VelzNhXfDdYz8dvGLs24mxsTnIcXJeEuaL0RrNsqvl+bh4b5yY0Bqhr1
-         hm6UMp49drNjXvDcE007fqFm6azRXzc7sjay0SeHpG7WDiHE+mbInrmkWLZbKmcWbKRX
-         fgZFf9BGzMMHDF97vbXAWk/p13FpvJ6XiQjSKRdGd2GhQejXnBjD3gG3kjxMqUS+yfd7
-         K0XlklmCDUgKisfMFULzCzSd0E0RsCEo4c8IFdx9NW1d7HHHsdndRGgAdnS0eSfp3ZsG
-         2MFA==
-X-Gm-Message-State: AOAM532+yJ9hmftqc9JkNlO23Cba99Nc7dOH0Pjl6rynWSBMLNHZSCmz
-        Us7CCzuOKpY64Co21vl9wIp+aA==
-X-Google-Smtp-Source: ABdhPJxf1a3uQAsmHxOlirkjOASik+f994ErP9f1daMIYHEzC9KZQoMcgpiOqeNvdFzZaVJ3QzcmCQ==
-X-Received: by 2002:a62:640c:0:b0:4a2:e5af:d2a9 with SMTP id y12-20020a62640c000000b004a2e5afd2a9mr36887446pfb.43.1638809110964;
-        Mon, 06 Dec 2021 08:45:10 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id ot7sm14713658pjb.21.2021.12.06.08.45.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 08:45:10 -0800 (PST)
-Date:   Mon, 6 Dec 2021 16:45:06 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        jmattson@google.com,
-        syzbot <syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com>,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        joro@8bytes.org, linux-kernel@vger.kernel.org, mingo@redhat.com,
-        pbonzini@redhat.com, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, wanpengli@tencent.com, x86@kernel.org
-Subject: Re: [syzbot] WARNING in nested_vmx_vmexit
-Message-ID: <Ya4+EprYtyvj5J5U@google.com>
-References: <00000000000051f90e05d2664f1d@google.com>
- <87bl1u6qku.fsf@redhat.com>
- <Ya40sXNcLzBUlpdW@google.com>
- <87k0gh675j.fsf@redhat.com>
+        id S237498AbhLFQta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:49:30 -0500
+Received: from mail-eopbgr60112.outbound.protection.outlook.com ([40.107.6.112]:61479
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236400AbhLFQtT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 11:49:19 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XBIPA2CWvG8AvDOtlSGBYlOn3s+TEd//0a3307d3cR5WpwyrJvTIXhWSC2GaF/+sLIHn7v8+DJwViF5DCD7WU0IJiyqBqQjG+OZkUIs7aTwBTkxYsMUYl8j/IXtZh0q5TxZatpuxQcwezN/sxHmqTdhRj9xRx45h3hgDFAkjD+yp1y5KhOfR4LC3R1wk2aH9RkjGyp8RfyYddL3vJDzZGQmr8WHV+2l9arWXqFEorogUBLHERdvObDfUOc80nTzTpsmWDuKf19hOblUx5Drra5mxWl1OfN+OreY9eGxL9kO5ftKHfQnltf/HGJ8AXBMk39ZaJKKrUaIYSIFr7iuSXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bNhs/DbT6igdY2B7zuIMHHhkukV1zn9A6TiKIlaDpKU=;
+ b=cwvrvum3eGHB+4cTu5xpbHDH896lcafxfquLnNWdmrNbQLityiSNt5frXLEInRGNVhagEfC4PPZS3/qMM0ADNsO2xMg30CV9K3SvO1i+M1MjWwG5duhOxqiAKiCgkmGBEL1v2hDQlc2uoGIf8yFwIO0R3UDMDRwQfnXlBPLvTHnZ/VyTkT+xjcq9gDBiwz9Q6mpxOgmWDYMZGJnLH7trUG32kD4SPo3+UPVNaj9Y/zT4LUb3D6yY8CC2lPtvHN9WMfB70JgJxrjoyJ8kg2+4ktlv1HEw8FnPnDD1I1sxVOoVTNkydA/o7TEsz8vVJr4dWuKDwsa8SsIq9peOFcEJtA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=eho.link; dmarc=pass action=none header.from=eho.link;
+ dkim=pass header.d=eho.link; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=eho.link; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bNhs/DbT6igdY2B7zuIMHHhkukV1zn9A6TiKIlaDpKU=;
+ b=aDPblChOfggfrb0SpGZwu8QGiC3bC7GsRyqZUY9sPVt89kYICy1z7Uo2+1KsogaPZHhlJa7WBJ6mzwV2GWLu84+BX4tvH2YeavnMWFE04naEUzsSfnJcs109LIiWI2/SQSu/+r9aZMSHh3nAj1jnRQbPnCmdCUgAsPSew0OE9QXm2ZlIJUNJoh/oVsTDcoXEeuoarBaWhCSBVnCBzR0VXOP5JpmrUbYEWr+Zq0gPFUZiT80CE/4NYx5eSclacubO2A++O+QN3x/RUSryCHDkBjqAH7IgyfLQJ3rWRCe5lxHaDs3Y1vYoLO5cSGaJf3RrwRcQzapWYs6eQmPw/ZAvPw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=eho.link;
+Received: from DB9PR06MB8058.eurprd06.prod.outlook.com (2603:10a6:10:26b::20)
+ by DB7PR06MB5403.eurprd06.prod.outlook.com (2603:10a6:10:76::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Mon, 6 Dec
+ 2021 16:45:48 +0000
+Received: from DB9PR06MB8058.eurprd06.prod.outlook.com
+ ([fe80::4cbd:de68:6d34:9f5a]) by DB9PR06MB8058.eurprd06.prod.outlook.com
+ ([fe80::4cbd:de68:6d34:9f5a%9]) with mapi id 15.20.4755.021; Mon, 6 Dec 2021
+ 16:45:48 +0000
+Message-ID: <a636a5a0-237b-2500-a37e-c9f77b030c06@eho.link>
+Date:   Mon, 6 Dec 2021 17:45:46 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 1/1] net: mvpp2: fix XDP rx queues registering
+Content-Language: en-US
+To:     John Fastabend <john.fastabend@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Louis Amas <louis.amas@eho.link>, andrii@kernel.org,
+        ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, hawk@kernel.org, kafai@fb.com,
+        kpsingh@kernel.org, linux-kernel@vger.kernel.org, mw@semihalf.com,
+        netdev@vger.kernel.org, songliubraving@fb.com, yhs@fb.com
+References: <DB9PR06MB8058D71218633CD7024976CAFA929@DB9PR06MB8058.eurprd06.prod.outlook.com>
+ <20211110144104.241589-1-louis.amas@eho.link>
+ <bdc1f03c-036f-ee29-e2a1-a80f640adcc4@eho.link>
+ <Ya4vd9+pBbVJML+K@shell.armlinux.org.uk>
+ <20211206080337.13fc9ae7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <61ae3746df2f9_88182085b@john.notmuch>
+From:   Emmanuel Deloget <emmanuel.deloget@eho.link>
+In-Reply-To: <61ae3746df2f9_88182085b@john.notmuch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MR1P264CA0110.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:501:50::19) To DB9PR06MB8058.eurprd06.prod.outlook.com
+ (2603:10a6:10:26b::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87k0gh675j.fsf@redhat.com>
+Received: from [IPV6:2a10:d780:2:103:dc7:bd76:843f:31d7] (2a10:d780:2:103:dc7:bd76:843f:31d7) by MR1P264CA0110.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:50::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16 via Frontend Transport; Mon, 6 Dec 2021 16:45:47 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 007d83dc-141d-43c8-849e-08d9b8d7db1e
+X-MS-TrafficTypeDiagnostic: DB7PR06MB5403:EE_
+X-Microsoft-Antispam-PRVS: <DB7PR06MB54030AC089FF65023B2EB717FA6D9@DB7PR06MB5403.eurprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fTzchCij9LhwOYcKo/y3unR2sIqEpVtddXP1od3xXSgp4SQakZHOhW3YUw/kjwMCotKiU2IzLpwEMD/iyoX40LfSJYmUKC2tqbq7BIUy3jfOgIrT864p5T4/kIFWf1qFY6UaC92g23At9l8JVnd5UlWUp3fQOKD5f65+1h8IsDV8B7V5y7lRQ9TDYvMYsGAtT7hobQ0kZidxJI2X6oXZupWyMeA3L58zpNkfU/gcdDQ4x2p/PjY+MghOpBb8ASAMmZND7lFeI5nVRBWlDoaJWbJmYEgujiIb5zJvbC/eTRDfnuTOuYZf54CMQwArJzzk4KHZYrUNorQFMCHlLvXmvI4K5mQrRHiZiIGj7N+9rtJKv6UoEqCAiTZ2EC3TS8xFxaCgKsyPQkZCh0K6yF9n9IcsN97BB96RcspGHrVoPv8gNjpTmp+ZNXwx/601M1BeWp1FREtVrfeVWeaafP/gfUb+Z/mfYL917s/Dc1U7q/BCbi5YCiqZWURXz+d/PW6FAGH9eDZmfI1kxvPsaxI8duWSP8VbiNNrv80QtzGc3jSvjmODy4pKj2dWYmJR86AzHm7puDbnWnDnk5ex2w3HeAG/LlDamYhzbOpj3Q7pQy2+1KJlVsVgQLPUEFo4pf6MJbBAeDqFuAakJqHO6F1vUbwPcnw+5+fAHIsGQddLmuJhTR6D5/NmBk+BSHp4m+zjPFhQM+kBfnx8nkEV1kLx6EOv4pixzlgnIuDFGpdS+K8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR06MB8058.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(396003)(366004)(136003)(376002)(39830400003)(44832011)(86362001)(38100700002)(66946007)(66476007)(5660300002)(186003)(53546011)(8676002)(66556008)(36756003)(31686004)(2616005)(508600001)(4326008)(2906002)(110136005)(6486002)(316002)(8936002)(83380400001)(31696002)(52116002)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eWU0VkRZTFBTVHI0TDZ4OWY5YUlqa010NHljdENia0cwTDJDSnkxSTVBcjVG?=
+ =?utf-8?B?dVVlemw4L0pBbk1KcGVtc3liejVISVQwK1Vadmt4dVNia0YrWUFSS2RjVUd2?=
+ =?utf-8?B?ZGg0NzYyaVRhdjFROWpSUVhOL3ExY2JNNW0rSnhOYzlIUzkyTkNRZ2x2WUZi?=
+ =?utf-8?B?aXNBMzB3cTRvSHFsMUxWT3ZRQWt4bGs4b1U0d0xwRzJlOHlwYTMxYWtDMVBk?=
+ =?utf-8?B?Sk9mUTRtZklFam1sVm1aakQxN1lrNEQ4bkFUV1U1UVVyQWlhWVRrTjBoTG52?=
+ =?utf-8?B?akJrTUY4RUhBOVoxUTNJNXhXelRMY0hiQnBMd1pVbTFxMUpIR2xkNjV4TGFo?=
+ =?utf-8?B?R0xjMVFSWnRjTHczQWtPYndLMTJ3RlNFV2ZsakVhYndOTitRd1FPZEgvRDJJ?=
+ =?utf-8?B?OHZzenV0ajhtbUhYWHBFQzU5NXVickw2YkFuY3Z4RkJnWEFveE85TEtoVWZH?=
+ =?utf-8?B?eU1lMFMzK2tzN1lyQ0dNNU1pRlpoL1RZbTI4VFBacktYU0xZUUxHOU8zUm9B?=
+ =?utf-8?B?UEVZYkVQZXFJcEdTbVVzTXR1TElOTnp3OHlldzVUMW5JL2NZV2Q1QnF5MkFv?=
+ =?utf-8?B?YWJwV2RwZ3BLSC9kcDUycURjbExCOUtQdGNCbWp0L2RFLytBS09ab3IraTNa?=
+ =?utf-8?B?cEp0eGQ1QWtmb0JsK0NCSkd4djJIQTR3Q0pWVDFNSUN6M1l6ZmlPOTVtSVh1?=
+ =?utf-8?B?QVdId0VFa2lhNUt3UkRCVnF0Tk5OWHVWc003YXBkRDQ2aU9MOVRaWm1nWGdX?=
+ =?utf-8?B?c3lBTXVnYzg2eGt6MENrTHEwNVBuZ0V0ajkyRG5pcFZheWtBWUtZSFJIVnh6?=
+ =?utf-8?B?RTYyY1VuVk5Cc1k2OHRVNERHZ0FSbGhMMFJvQk14bDVTNk1mT0xTVVN5Uzc5?=
+ =?utf-8?B?REFidlFkOUZoM3FCZWo2cHFhWnhIR0NZVEF6cHdza0JqbWwvcHJMUmZtcFA1?=
+ =?utf-8?B?Q012T2F5UkhVdVUwL1NQWm05Mm1ab1VUNE95NkFIVVBRdTNGRXErS3kxTjRS?=
+ =?utf-8?B?bFJBMGoxZG9vYVIzSk4ySkpoRTE4SnlCU2FIZEkxSkZuMzdrRXBrTS9WQkRG?=
+ =?utf-8?B?cCtKbm1Vc0k5UUk1NEpCbDhTQXpVcTFrc1ltMUxRc1lxVWxHa09rSE9iMGFx?=
+ =?utf-8?B?M1k2TlZXck9CYmRjNzVoMDI5WTc1RzVNWFJvQVV2OGNPaEFMdDl2OVlDSGVJ?=
+ =?utf-8?B?a254ZDE0MlhiR05KNjhaSlA1NUVnbk1MQmlQWXprb2VHYm9SN0NsS0tRcTVV?=
+ =?utf-8?B?ekk4aDVvSG9rTXM5KzFqM2o4QzJyN2t4cnIxTkR6L1dJNEdiKzFNOXlCOXFn?=
+ =?utf-8?B?clBzRDB4Y004RlF1a0VKS2tXeS9xZVZVbHJkc1E0YnBJYzhRcGVGSFAzMk1r?=
+ =?utf-8?B?ZnpVWlRkNFVSVXVlUHpBTWY5d0F2UElwTVk1UDRMRER5aldKMFZFdFlKYVgy?=
+ =?utf-8?B?UTN4VWFqb2IvYXlxRUtseEVJL0g4Z2ZmN0tsZlFaSlhwS1pPZjZVWk1WdVJr?=
+ =?utf-8?B?dm9PcmVXd2FCVjl1SldZcUNrUGExSzYwQTdVZ2hTN0F2RHBpa1FGajRYVktE?=
+ =?utf-8?B?U1VNdWpWN0FremsvMDEzZVcwRGNJVWh4RzlPSlFlZ0tSTW00MnIxc1BUSHQ0?=
+ =?utf-8?B?cjNKbGhWcEJXZGh1Z21DbnRZUEY5VWZBd05FazJVQlQ4WDhoczQ2czRORXV6?=
+ =?utf-8?B?a0tCT25RSkZIZk1raHdqdm5xMGxpQlg0ZitLbHpzNFl1cDFvbFBZelVOTHE2?=
+ =?utf-8?B?cUt0TVlhOUpFU1ZUYjRLZE51UUowT09kSkRKZUM1aGhwK2dCd0lvd0U2cnZr?=
+ =?utf-8?B?K1c4am9WUGRSL3A3OWZmWXRQZXVIZEprNmozSzhQSkV3b3BDU3pkMS9vRjBv?=
+ =?utf-8?B?SUtlYUNIeTIyR2VvSVJ6WmFiSTlwNWlkcU1iWlI0L3FoOVg5S2VoZlNPQngw?=
+ =?utf-8?B?ZER1R1dObTIxTTNrLzJ4cjRva3NLeCs0KzlxQkQxWjNtbStHRWJ1encwb1lQ?=
+ =?utf-8?B?NDN0T2ZjSm5STEZOSEw1NGZUZ0Y3Nmk5TUFGM0VCUHd4c2ROTFVieENNcW9J?=
+ =?utf-8?B?eTFYVzlLWWM1b3pUZDRxUHFhb3A3T25WVUtkRTJWMkw5Mm9jbE9MbUdyN2V5?=
+ =?utf-8?B?REhhSmI5aFpvRXcwSjl1djAreWt2YUt0QXZnZTFvbHFWWUVzZFAzWTlXdW1P?=
+ =?utf-8?B?OWxuRkxINDFIeTl4UHNHaFBLeTRvbmJ6RWZNeHFDSW9HSGlpYkpJelFKdFQw?=
+ =?utf-8?B?eUorc1BqTkVxYUFsOS9CcnIrY093YTl2c2xWRDBodVNUTUE2UE5GcHM1UzUv?=
+ =?utf-8?B?anpTYjU1TkI4K1Q1ZCtLK0w3MTdnT2R1L0YvK2ZNanM1UXJzcHo3Zz09?=
+X-OriginatorOrg: eho.link
+X-MS-Exchange-CrossTenant-Network-Message-Id: 007d83dc-141d-43c8-849e-08d9b8d7db1e
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR06MB8058.eurprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2021 16:45:48.5008
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 924d502f-ff7e-4272-8fa5-f920518a3f4c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: f85Hv0kBntYvAN5Yz8c/GnWvQfshoyuX36HWRqcD0wxhwf6E3E3WqyGxpt/zVyPRnH9TrLzRmahiRWt9VOQC7a1lsygdbNi00QdDmKDHa7o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR06MB5403
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021, Vitaly Kuznetsov wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> > I objected to the patch[*], but looking back at the dates, it appears that I did
-> > so after the patch was queued and my comments were never addressed.  
-> > I'll see if I can reproduce this with a selftest.  The fix is likely just:
-> >
-> > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> > index dc4909b67c5c..927a7c43b73b 100644
-> > --- a/arch/x86/kvm/vmx/vmx.c
-> > +++ b/arch/x86/kvm/vmx/vmx.c
-> > @@ -6665,10 +6665,6 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
-> >          * consistency check VM-Exit due to invalid guest state and bail.
-> >          */
-> >         if (unlikely(vmx->emulation_required)) {
-> > -
-> > -               /* We don't emulate invalid state of a nested guest */
-> > -               vmx->fail = is_guest_mode(vcpu);
-> > -
-> >                 vmx->exit_reason.full = EXIT_REASON_INVALID_STATE;
-> >                 vmx->exit_reason.failed_vmentry = 1;
-> >                 kvm_register_mark_available(vcpu, VCPU_EXREG_EXIT_INFO_1);
-> >
-> > [*] https://lore.kernel.org/all/YWDWPbgJik5spT1D@google.com/
+John,
 
-Boom.  VCPU_RUN exits with KVM_EXIT_INTERNAL_ERROR.
+On 06/12/2021 17:16, John Fastabend wrote:
+> Jakub Kicinski wrote:
+>> On Mon, 6 Dec 2021 15:42:47 +0000 Russell King (Oracle) wrote:
+>>> On Mon, Dec 06, 2021 at 04:37:20PM +0100, Emmanuel Deloget wrote:
+>>>> On 10/11/2021 15:41, Louis Amas wrote:
+>>>>> The registration of XDP queue information is incorrect because the
+>>>>> RX queue id we use is invalid. When port->id == 0 it appears to works
+>>>>> as expected yet it's no longer the case when port->id != 0.
+>>>>>
+>>>>> When we register the XDP rx queue information (using
+>>>>> xdp_rxq_info_reg() in function mvpp2_rxq_init()) we tell them to use
+>>>>> rxq->id as the queue id. This value iscomputed as:
+>>>>> rxq->id = port->id * max_rxq_count + queue_id
+>>>>>
+>>>>> where max_rxq_count depends on the device version. In the MB case,
+>>>>> this value is 32, meaning that rx queues on eth2 are numbered from
+>>>>> 32 to 35 - there are four of them.
+>>>>>
+>>>>> Clearly, this is not the per-port queue id that XDP is expecting:
+>>>>> it wants a value in the range [0..3]. It shall directly use queue_id
+>>>>> which is stored in rxq->logic_rxq -- so let's use that value instead.
+>>>>>
+>>>>> This is consistent with the remaining part of the code in
+>>>>> mvpp2_rxq_init().
+>>
+>>>> Is there any update on this patch ? Without it, XDP only partially work on a
+>>>> MACCHIATOBin (read: it works on some ports, not on others, as described in
+>>>> our analysis sent together with the original patch).
+>>>
+>>> I suspect if you *didn't* thread your updated patch to your previous
+>>> submission, then it would end up with a separate entry in
+>>> patchwork.kernel.org,
+>>
+>> Indeed, it's easier to keep track of patches which weren't posted
+>> as a reply in a thread, at least for me.
+>>
+>>> and the netdev maintainers will notice that the
+>>> patch is ready for inclusion, having been reviewed by Marcin.
+>>
+>> In this case I _think_ it was dropped because it didn't apply.
+>>
+>> Please rebase on top of net/master and repost if the changes is still
+>> needed.
+> 
+> Also I would add the detailed description to the actual commit not below
+> the "--" lines. Capturing that in the log will be useful for future
+> reference if we ever hit similar issue here or elsewhere.
+> 
+> Otherwise for patch,
+> 
+> Acked-by: John Fastabend <john.fastabend@gmail.com>
+> 
 
-diff --git a/tools/testing/selftests/kvm/x86_64/vmx_close_while_nested_test.c b/tools/testing/selftests/kvm/x86_64/vmx_close_while_nested_test.c
-index 2835a17f1b7a..4f77c5d7c7b9 100644
---- a/tools/testing/selftests/kvm/x86_64/vmx_close_while_nested_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/vmx_close_while_nested_test.c
-@@ -27,6 +27,11 @@ enum {
- /* The virtual machine object. */
- static struct kvm_vm *vm;
- 
-+static void l2_guest_infinite_loop(void)
-+{
-+       while (1);
-+}
-+
- static void l2_guest_code(void)
- {
-        /* Exit to L0 */
-@@ -53,6 +58,9 @@ static void l1_guest_code(struct vmx_pages *vmx_pages)
- int main(int argc, char *argv[])
- {
-        vm_vaddr_t vmx_pages_gva;
-+       struct kvm_sregs sregs;
-+       struct kvm_regs regs;
-+       int r;
- 
-        nested_vmx_check_supported();
- 
-@@ -83,4 +91,17 @@ int main(int argc, char *argv[])
-                        TEST_FAIL("Unknown ucall %lu", uc.cmd);
-                }
-        }
-+
-+       memset(&regs, 0, sizeof(regs));
-+       vcpu_regs_get(vm, VCPU_ID, &regs);
-+       regs.rip = (u64)l2_guest_infinite_loop;
-+       vcpu_regs_set(vm, VCPU_ID, &regs);
-+
-+       memset(&sregs, 0, sizeof(sregs));
-+       vcpu_sregs_get(vm, VCPU_ID, &sregs);
-+       sregs.tr.unusable = 1;
-+       vcpu_sregs_set(vm, VCPU_ID, &sregs);
-+
-+       r = _vcpu_run(vm, VCPU_ID);
-+       TEST_ASSERT(0, "Unexpected return from L2, r = %d, exit_reason = %d", r, vcpu_state(vm, VCPU_ID)->exit_reason);
- }
+Ouch. We failed to get this email before resending the patch.
 
-  ------------[ cut here ]------------
-  WARNING: CPU: 6 PID: 273926 at arch/x86/kvm/vmx/nested.c:4565 nested_vmx_vmexit+0xd59/0xdb0 [kvm_intel]
-  CPU: 6 PID: 273926 Comm: vmx_close_while Not tainted 5.15.2-7cc36c3e14ae-pop #279
-  Hardware name: ASUS Q87M-E/Q87M-E, BIOS 1102 03/03/2014
-  RIP: 0010:nested_vmx_vmexit+0xd59/0xdb0 [kvm_intel]
-  Call Trace:
-   vmx_leave_nested+0x30/0x40 [kvm_intel]
-   nested_vmx_free_vcpu+0x16/0x20 [kvm_intel]
-   vmx_free_vcpu+0x4b/0x60 [kvm_intel]
-   kvm_arch_vcpu_destroy+0x40/0x160 [kvm]
-   kvm_vcpu_destroy+0x1d/0x50 [kvm]
-   kvm_arch_destroy_vm+0xc1/0x1c0 [kvm]
-   kvm_put_kvm+0x187/0x2a0 [kvm]
-   kvm_vm_release+0x1d/0x30 [kvm]
-   __fput+0x95/0x250
-   task_work_run+0x5f/0x90
-   do_exit+0x3c8/0xab0
-   do_group_exit+0x47/0xb0
-   __x64_sys_exit_group+0x14/0x20
-   do_syscall_64+0x3b/0xc0
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
+My bad - and sorry for the inconvenience.
 
+I'll see with Louis to change again the commit message and add your 
+Acked-by.
+
+Best regards,
+
+-- Emmanuel Deloget

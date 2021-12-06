@@ -2,156 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F31F146945E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 11:53:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E05469427
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 11:47:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241870AbhLFK4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 05:56:54 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:45848
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231256AbhLFK4x (ORCPT
+        id S239746AbhLFKus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 05:50:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49598 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239526AbhLFKuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 05:56:53 -0500
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 439CC3F1F0
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 10:53:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638788004;
-        bh=gG/WhBjtCMK9Juy/cpLoUS+Fz+e97sYPeCnLmIYCPu8=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=asObokCf90fsDpuNacvxsmD3GYtI4o5fXM55ZEVyMDeuG/xOqyVthKEWW5zjckipm
-         VYJDqA6wvXGUzJK+dGgGIbTOpaDdAvokMp/6BKUi/k9ZvIxgYVUoH4x+LdADG6RGRy
-         H2+irsG6iFi/NBB6pEKrq7Yw3JO5GplVLMOL9Zs9z28LYSCyB9epzyYnfTQ07KFzWP
-         KyIN6Av+rZJvXhSFao8PAKM3HLOz2mPGXvBjh+rMOzemWfrK91e71SKu7ZgpI/oHjB
-         0OhFb2QvayQi8vbsGoUCh+7MTOW4et3CGzKEqmKWMpmZkoZpg91c2szktNZoDv87IY
-         edHfF20/x6rKA==
-Received: by mail-wr1-f72.google.com with SMTP id v17-20020adfedd1000000b0017c5e737b02so1885386wro.18
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 02:53:24 -0800 (PST)
+        Mon, 6 Dec 2021 05:50:46 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8D6C061746;
+        Mon,  6 Dec 2021 02:47:17 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id a11so9721810ilj.6;
+        Mon, 06 Dec 2021 02:47:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Um61Hr3jidIBFZSxFnTK93vDCH499LbCZV9DwbMfXng=;
+        b=WLJgtSv+9cZ4KsNSDg/qz7ADMMWthNnKPcJTlClkuzTW8W51Z00OEGzB/VTimXR8Wn
+         aFXa045HUfYtWdeJ9JHw2mMKbEXWKe+O8jszXQ4cEu9tssgOeR3SwrWVLmtrhdUDIYnS
+         Z9DIbsGqAn2SZbvkgXgps20UDdMkzR0H7GQjAFfgJIEs7kYNEvBCVmyB7l6TA43VUU8p
+         lkjKw2jRg9P1IPBQeGY4USGVg4cTCTW0GDoQ4t/WBIlj2KvRrGV384/ZlT6j6x+0n67D
+         oam5ncSKZJxc7L3Se+tIu/YnwhGh1tAsE7pAvHqz5vXqHwrztaApWD4Il51+Wh/qaApb
+         rluA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gG/WhBjtCMK9Juy/cpLoUS+Fz+e97sYPeCnLmIYCPu8=;
-        b=zbd4GaBILcuoBj9LKL76iAMr55C7Omj4oz2t+AWe1Q2qM0MDZ8kNRZYkQrHc6gEd6k
-         tCGS4s8eqxlWJjvAR4941gDEoGSIlwX2YNfGFwjlzK6hFtAIwpCh7+a4WHbEAtYSuHCh
-         cKHF5/Q7yQaOyrNAVW35TgJTM5IMC96WCdce9CquZuDfDmHJY+hBa2tiygQ/XlG6hHyC
-         5iJ7yng4iOLPg+ajP283ehpMwNO5AJ8HJ7JW3GPh/vxpIqOov0Hq4u+jw/9AN5UIc2md
-         J+uMGASHHOapalsPUqtKYq9CW2ZxlFb90HyWyJ7NttJI5vE9arebEukSm8YrkkzKSOFm
-         kWZg==
-X-Gm-Message-State: AOAM533BW2VrU991dXdamuIHhV7dxhI7NEORnMONcDgf5jr3PmzY0sqy
-        dhUwS8F+prpxO4RE+ncl+vzEbruxRHTIbkhxGyZh8+vV74K4mgUC6Ne9XXj6t5AtbU9Dx6F1LmG
-        tpOZCXeEnm+4ST2xzd0VH7k4fsjMuA0LiVJ+bmqMWbQ==
-X-Received: by 2002:a7b:c102:: with SMTP id w2mr37750652wmi.151.1638788003992;
-        Mon, 06 Dec 2021 02:53:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxopdWj9u1iMI/f8aQI95EBYjbHFU9+o6qbVXkckCCLscAAHiW0VAZVryb3dDIQkey6IRVgJg==
-X-Received: by 2002:a7b:c102:: with SMTP id w2mr37750632wmi.151.1638788003798;
-        Mon, 06 Dec 2021 02:53:23 -0800 (PST)
-Received: from localhost.localdomain (lfbn-lyo-1-470-249.w2-7.abo.wanadoo.fr. [2.7.60.249])
-        by smtp.gmail.com with ESMTPSA id p5sm11021231wrd.13.2021.12.06.02.53.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 02:53:23 -0800 (PST)
-From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Zong Li <zong.li@sifive.com>, Anup Patel <anup@brainfault.org>,
-        Atish Patra <Atish.Patra@rivosinc.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        panqinglin2020@iscas.ac.cn, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Subject: [PATCH v3 06/13] asm-generic: Prepare for riscv use of pud_alloc_one and pud_free
-Date:   Mon,  6 Dec 2021 11:46:50 +0100
-Message-Id: <20211206104657.433304-7-alexandre.ghiti@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
-References: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Um61Hr3jidIBFZSxFnTK93vDCH499LbCZV9DwbMfXng=;
+        b=JaPj+bsFMpT6qSsrrslscx9PqTB+ROISXyb19bmXpIPvnb5UNkivWgOPQWrHO1b8wi
+         JcqKyqaGRL7wbHLtPOie/AidnVSB+IC0vUv11HXRnJv+BjR1Bw6tLCb3l284+pM3Tlos
+         F79U3qtAsng3fYgZHbf+63aVhzh395cUaQhdGSzFb2bJmnGN3xnD+evf21cZCQRQQ5jO
+         Iw12zrcit+xpjbowOapImQA3SdnofSWbc14md/c5yVYCShWrBjsdgF0jW/8eIBQYMYFJ
+         koyhqOKXP3sQrrgBn0WF7yDlMYF+XnDyQvUbS5WPE/jW06+FzvjSb8bedNDIbKF9BLz/
+         TPWQ==
+X-Gm-Message-State: AOAM5339d5sYm1EZpLpWYWILIdaZjGXicQZREIK9RNQJU2jQ6dZk4jlZ
+        xySf2Zgq1YWncqSG//ucO8qcRx6+VQs/xy2NJB8=
+X-Google-Smtp-Source: ABdhPJzS8MaGOfxEKT8Wz+Oz+dyTmUiCjIopWOmUAkZATpwgn3INJ5OZmxv0t1dTyYDZUh0IeE2t6BgKq8PHHIao9c4=
+X-Received: by 2002:a05:6e02:1b08:: with SMTP id i8mr26502232ilv.74.1638787637173;
+ Mon, 06 Dec 2021 02:47:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211202122021.43124-1-alistair@alistair23.me>
+ <20211202122021.43124-2-alistair@alistair23.me> <20211204233233.6c55875c@aktux>
+In-Reply-To: <20211204233233.6c55875c@aktux>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Mon, 6 Dec 2021 20:46:50 +1000
+Message-ID: <CAKmqyKPDROFkAFgSjSDeTfhtZsArn4BbON9tyb1qTb_QcV5=xg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] Input: Add driver for Cypress Generation 5 touchscreen
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     Alistair Francis <alistair@alistair23.me>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        =?UTF-8?Q?Myl=C3=A8ne_Josserand?= <mylene.josserand@bootlin.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the following commits, riscv will almost use the generic versions of
-pud_alloc_one and pud_free but an additional check is required since those
-functions are only relevant when using at least a 4-level page table, which
-will be determined at runtime on riscv.
+On Sun, Dec 5, 2021 at 8:32 AM Andreas Kemnade <andreas@kemnade.info> wrote=
+:
+>
+> Hi,
+>
+>
+> On Thu,  2 Dec 2021 22:20:18 +1000
+> Alistair Francis <alistair@alistair23.me> wrote:
+>
+> > From: Myl=C3=A8ne Josserand <mylene.josserand@bootlin.com>
+> >
+> > This is the basic driver for the Cypress TrueTouch Gen5 touchscreen
+> > controllers. This driver supports only the I2C bus but it uses regmap
+> > so SPI support could be added later.
+> > The touchscreen can retrieve some defined zone that are handled as
+> > buttons (according to the hardware). That is why it handles
+> > button and multitouch events.
+> >
+> > Reviewed-by: Maxime Ripard <maxime.ripard@bootlin.com>
+> > Signed-off-by: Myl=C3=A8ne Josserand <mylene.josserand@bootlin.com>
+> > Message-Id: <20180703094309.18514-2-mylene.josserand@bootlin.com>
+> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+>
+> I finally got it working. The order of initialisation is important.
+> Params are copied on input_mt_init_slots() from ABS_MT* to ABS_*, so you
+> have to set params first.
+>
+> Here is the patch i need on top of this one to make it actually work
+> with X (evdev and libinput is tested):
+>
+> diff --git a/drivers/input/touchscreen/cyttsp5.c b/drivers/input/touchscr=
+een/cyttsp5.c
+> index b5d96eb71e46..3894ec85a732 100644
+> --- a/drivers/input/touchscreen/cyttsp5.c
+> +++ b/drivers/input/touchscreen/cyttsp5.c
+> @@ -415,19 +415,12 @@ static int cyttsp5_setup_input_device(struct device=
+ *dev)
+>         int max_x_tmp, max_y_tmp;
+>         int error;
+>
+> -       __set_bit(EV_REL, ts->input->evbit);
 
-So move the content of those functions into other functions that riscv
-can use without duplicating code.
+Does it work with this still included? I need this for my userspace program=
+.
 
-Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
----
- include/asm-generic/pgalloc.h | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+Alistair
 
-diff --git a/include/asm-generic/pgalloc.h b/include/asm-generic/pgalloc.h
-index 02932efad3ab..977bea16cf1b 100644
---- a/include/asm-generic/pgalloc.h
-+++ b/include/asm-generic/pgalloc.h
-@@ -147,6 +147,15 @@ static inline void pmd_free(struct mm_struct *mm, pmd_t *pmd)
- 
- #if CONFIG_PGTABLE_LEVELS > 3
- 
-+static inline pud_t *__pud_alloc_one(struct mm_struct *mm, unsigned long addr)
-+{
-+	gfp_t gfp = GFP_PGTABLE_USER;
-+
-+	if (mm == &init_mm)
-+		gfp = GFP_PGTABLE_KERNEL;
-+	return (pud_t *)get_zeroed_page(gfp);
-+}
-+
- #ifndef __HAVE_ARCH_PUD_ALLOC_ONE
- /**
-  * pud_alloc_one - allocate a page for PUD-level page table
-@@ -159,20 +168,23 @@ static inline void pmd_free(struct mm_struct *mm, pmd_t *pmd)
-  */
- static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long addr)
- {
--	gfp_t gfp = GFP_PGTABLE_USER;
--
--	if (mm == &init_mm)
--		gfp = GFP_PGTABLE_KERNEL;
--	return (pud_t *)get_zeroed_page(gfp);
-+	return __pud_alloc_one(mm, addr);
- }
- #endif
- 
--static inline void pud_free(struct mm_struct *mm, pud_t *pud)
-+static inline void __pud_free(struct mm_struct *mm, pud_t *pud)
- {
- 	BUG_ON((unsigned long)pud & (PAGE_SIZE-1));
- 	free_page((unsigned long)pud);
- }
- 
-+#ifndef __HAVE_ARCH_PUD_FREE
-+static inline void pud_free(struct mm_struct *mm, pud_t *pud)
-+{
-+	__pud_free(mm, pud);
-+}
-+#endif
-+
- #endif /* CONFIG_PGTABLE_LEVELS > 3 */
- 
- #ifndef __HAVE_ARCH_PGD_FREE
--- 
-2.32.0
-
+> -
+>         max_x_tmp =3D si->sensing_conf_data.res_x;
+>         max_y_tmp =3D si->sensing_conf_data.res_y;
+>         max_x =3D max_x_tmp - 1;
+>         max_y =3D max_y_tmp - 1;
+>         max_p =3D si->sensing_conf_data.max_z;
+>
+> -       error =3D input_mt_init_slots(ts->input, si->tch_abs[CY_TCH_T].ma=
+x,
+> -               INPUT_MT_DROP_UNUSED | INPUT_MT_POINTER);
+> -       if (error < 0)
+> -               return error;
+> -
+>         input_set_abs_params(ts->input, ABS_MT_POSITION_X, 0, max_x, 0, 0=
+);
+>         input_set_abs_params(ts->input, ABS_MT_POSITION_Y, 0, max_y, 0, 0=
+);
+>         input_set_abs_params(ts->input, ABS_MT_PRESSURE, 0, max_p, 0, 0);
+> @@ -435,6 +428,11 @@ static int cyttsp5_setup_input_device(struct device =
+*dev)
+>         input_set_abs_params(ts->input, ABS_MT_TOUCH_MAJOR, 0, MAX_AREA, =
+0, 0);
+>         input_set_abs_params(ts->input, ABS_MT_TOUCH_MINOR, 0, MAX_AREA, =
+0, 0);
+>
+> +       error =3D input_mt_init_slots(ts->input, si->tch_abs[CY_TCH_T].ma=
+x,
+> +               INPUT_MT_DROP_UNUSED | INPUT_MT_DIRECT);
+> +       if (error < 0)
+> +               return error;
+> +
+>         error =3D input_register_device(ts->input);
+>         if (error < 0)
+>                 dev_err(dev, "Error, failed register input device r=3D%d\=
+n", error);
+>

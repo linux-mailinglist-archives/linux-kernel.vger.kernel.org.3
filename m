@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D24469EAF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F823469C99
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:20:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346014AbhLFPne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:43:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
+        id S1376332AbhLFPXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:23:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358426AbhLFP1I (ORCPT
+        with ESMTP id S1348556AbhLFPOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:27:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4DBC08EAFA;
-        Mon,  6 Dec 2021 07:17:41 -0800 (PST)
+        Mon, 6 Dec 2021 10:14:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB066C0698D3;
+        Mon,  6 Dec 2021 07:07:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BBE361370;
-        Mon,  6 Dec 2021 15:17:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00A5DC341C1;
-        Mon,  6 Dec 2021 15:17:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6EBBB810AC;
+        Mon,  6 Dec 2021 15:07:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8A77C341C2;
+        Mon,  6 Dec 2021 15:07:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803860;
-        bh=npZnKvU/5nR7hogz3rwlhMBpti5q4HTa3KMsKQ8fejI=;
+        s=korg; t=1638803247;
+        bh=psyYCgaz3mYIq74qUOngbwEXYOO0DXwDhAb5gbjl8ow=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DKcly99fQSLVX8gMODmMRUb/i+6tyhEmOj1nNFY4D8p2MIdyhGAtVjG2SMnVtSH1S
-         yp2w5HOnJfb7K0jCj3Jf2VjDUe80JckMWi4157CzQadEussDe2djvlWB4V3FkJkiIJ
-         wEpv56nmilb2EVy1Xj90a7hXdo7PCOIUU2ZO5HlM=
+        b=ANvZWJ2c3++lww1Bmnvp1jpGMlW68Z3mqArIhVsSRgzC1gHFF0oTqHC1faJoS3XyK
+         FoYQFJqyCTrJ08YEjLv25i+1iCy+EdRAK0EEV7ZN7OH1pXGXQcMa+5B+uqU2pUxLrf
+         AtIQQ1oGKJ9pYqc7mF8UA+rZXhTbZxNghd1RU0y8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 030/130] ACPI: Add stubs for wakeup handler functions
+        stable@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH 4.14 039/106] PCI: aardvark: Indicate error in val when config read fails
 Date:   Mon,  6 Dec 2021 15:55:47 +0100
-Message-Id: <20211206145600.678216964@linuxfoundation.org>
+Message-Id: <20211206145556.732430125@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,48 +50,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit e9380df851878cee71df5a1c7611584421527f7e ]
+commit b1bd5714472cc72e14409f5659b154c765a76c65 upstream.
 
-The commit ddfd9dcf270c ("ACPI: PM: Add acpi_[un]register_wakeup_handler()")
-added new functions for drivers to use during the s2idle wakeup path, but
-didn't add stubs for when CONFIG_ACPI wasn't set.
+Most callers of config read do not check for return value. But most of the
+ones that do, checks for error indication in 'val' variable.
 
-Add those stubs in for other drivers to be able to use.
+This patch updates error handling in advk_pcie_rd_conf() function. If PIO
+transfer fails then 'val' variable is set to 0xffffffff which indicates
+failture.
 
-Fixes: ddfd9dcf270c ("ACPI: PM: Add acpi_[un]register_wakeup_handler()")
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Link: https://lore.kernel.org/r/20211101014853.6177-1-mario.limonciello@amd.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20200528162604.GA323482@bjorn-Precision-5520
+Link: https://lore.kernel.org/r/20200601130315.18895-1-pali@kernel.org
+Reported-by: Bjorn Helgaas <helgaas@kernel.org>
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/acpi.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/pci/host/pci-aardvark.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index fdb1d5262ce84..96d69404a54ff 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -953,6 +953,15 @@ static inline struct acpi_device *acpi_resource_consumer(struct resource *res)
- 	return NULL;
- }
+--- a/drivers/pci/host/pci-aardvark.c
++++ b/drivers/pci/host/pci-aardvark.c
+@@ -631,8 +631,10 @@ static int advk_pcie_rd_conf(struct pci_
+ 	advk_writel(pcie, 1, PIO_START);
  
-+static inline int acpi_register_wakeup_handler(int wake_irq,
-+	bool (*wakeup)(void *context), void *context)
-+{
-+	return -ENXIO;
-+}
-+
-+static inline void acpi_unregister_wakeup_handler(
-+	bool (*wakeup)(void *context), void *context) { }
-+
- #endif	/* !CONFIG_ACPI */
+ 	ret = advk_pcie_wait_pio(pcie);
+-	if (ret < 0)
++	if (ret < 0) {
++		*val = 0xffffffff;
+ 		return PCIBIOS_SET_FAILED;
++	}
  
- #ifdef CONFIG_ACPI_HOTPLUG_IOAPIC
--- 
-2.33.0
-
+ 	/* Check PIO status and get the read result */
+ 	ret = advk_pcie_check_pio_status(pcie, val);
 
 

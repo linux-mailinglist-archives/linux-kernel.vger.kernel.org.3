@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08820469D7B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D16C469D9B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386583AbhLFP34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:29:56 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:42950 "EHLO
+        id S1387433AbhLFPbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:31:17 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:42962 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357826AbhLFPTN (ORCPT
+        with ESMTP id S1357746AbhLFPTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:19:13 -0500
-Date:   Mon, 06 Dec 2021 15:15:42 -0000
+        Mon, 6 Dec 2021 10:19:14 -0500
+Date:   Mon, 06 Dec 2021 15:15:43 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638803743;
+        s=2020; t=1638803744;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=j3JVTMca/k1nDDpzsFRV3vwUWptGyDY0wAwOhtbI4+g=;
-        b=OtWmjedSNsP11aH40Q2b6kz/ma7yc4EnmZjI/kSW9jwSP2HQJZ+Z9h/EhOBpFRlBaOpcRx
-        KGoRgRx2PDFJ7VmWGeRc3YeSiyxTUYN8sw3fhbAknGNNervhfEPzd9Db3F6ufiEkW6cIrB
-        IwhOYP3n5nVuuU0n/y14py+7D+dzxxGEnL7jWz8/rxgFVmqYT+chMseZ9km36lD+LdrsOI
-        6NZHHkvHXuL5c36J2OCXXiuY4yEk/Fpuvsd3D0Vu43QompTIDZFglVr24UEEuoa9RJd/Kf
-        Hp22HpNSh121QoLmoptZiYyiTzRNalOuqAL4vFRm7k8YBlr+c+LeQFthuIZmgw==
+        bh=8+9F5EsGytKdgZU4XV76nqkNnzRQxT/NwLmTBaXbKK0=;
+        b=UPmu4/nlqWQl3+YBlv4bCS0bV5Ka/19mAbdONyDb/DVql2BbRbvtpLMspHf6QDJcJP3peV
+        ubPyxuGNl+haG+i5bFP3FFXduj7Mg2vzfITG6lv3JRg7TZBr5fHrSVtAHD9LpmJ9D5CCel
+        PuRSwZkkE3i733Av4JA+QTPR+5rCaS2+MMydJSUIRteZw3S6QFCaqv+KHYpSAVNubWd1mY
+        PgDZs5rw03XeYAMa0jdPdWScicsADi44meXun3xI9FbN7nWUChqn6FLVbS0aF6B5+U9ksC
+        CbBy+kaDHodZ+tzuXxfY46tkKq+HPo/JIBs83DnUpYmJpsrpE2KBHEqnafQSEQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638803743;
+        s=2020e; t=1638803744;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=j3JVTMca/k1nDDpzsFRV3vwUWptGyDY0wAwOhtbI4+g=;
-        b=fxBbE+LW3oYXAfaAIAMR2ShRwhFGniWeiRiXU3WtdaBj/sQIX1tul1PFmQl37sEjVu5h6s
-        OPVpAWAwX6r4UvAQ==
+        bh=8+9F5EsGytKdgZU4XV76nqkNnzRQxT/NwLmTBaXbKK0=;
+        b=u66w6dS2w5SsJQrcm1+MyWOPkxjvo4ssX1yapsUAL92rOaF1g5+Zt+U9S1VgiPyTKNqSl8
+        4fK2Tu0Gl2B9XKAg==
 From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] lockdep/selftests: Adapt ww-tests for PREEMPT_RT
+Subject: [tip: locking/core] lockdep/selftests: Skip the softirq related tests
+ on PREEMPT_RT
 Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211129174654.668506-10-bigeasy@linutronix.de>
-References: <20211129174654.668506-10-bigeasy@linutronix.de>
+In-Reply-To: <20211129174654.668506-9-bigeasy@linutronix.de>
+References: <20211129174654.668506-9-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163880374273.11128.11714453177859720428.tip-bot2@tip-bot2>
+Message-ID: <163880374357.11128.11136600066709598926.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -58,265 +59,228 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     9a75bd0c52df6cff44735f73dfb9d00e67969fc5
-Gitweb:        https://git.kernel.org/tip/9a75bd0c52df6cff44735f73dfb9d00e67969fc5
+Commit-ID:     a529f8db897625859b640b565325463e5d5ff01e
+Gitweb:        https://git.kernel.org/tip/a529f8db897625859b640b565325463e5d5ff01e
 Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-AuthorDate:    Mon, 29 Nov 2021 18:46:52 +01:00
+AuthorDate:    Mon, 29 Nov 2021 18:46:51 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Sat, 04 Dec 2021 10:56:24 +01:00
 
-lockdep/selftests: Adapt ww-tests for PREEMPT_RT
+lockdep/selftests: Skip the softirq related tests on PREEMPT_RT
 
-The ww-mutex selftest operates directly on ww_mutex::base and assumes
-its type is struct mutex. This isn't true on PREEMPT_RT which turns the
-mutex into a rtmutex.
+The softirq context on PREEMPT_RT is different compared to !PREEMPT_RT.
+As such lockdep_softirq_enter() is a nop and the all the "softirq safe"
+tests fail on PREEMPT_RT because there is no difference.
 
-Add a ww_mutex_base_ abstraction which maps to the relevant mutex_ or
-rt_mutex_ function.
-Change the CONFIG_DEBUG_MUTEXES ifdef to DEBUG_WW_MUTEXES. The latter is
-true for the MUTEX and RTMUTEX implementation of WW-MUTEX. The
-assignment is required in order to pass the tests.
+Skip the softirq context tests on PREEMPT_RT.
 
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20211129174654.668506-10-bigeasy@linutronix.de
+Link: https://lore.kernel.org/r/20211129174654.668506-9-bigeasy@linutronix.de
 ---
- lib/locking-selftest.c | 76 ++++++++++++++++++++++++-----------------
- 1 file changed, 46 insertions(+), 30 deletions(-)
+ lib/locking-selftest.c | 38 +++++++++++++++++++++++++++++++-------
+ 1 file changed, 31 insertions(+), 7 deletions(-)
 
 diff --git a/lib/locking-selftest.c b/lib/locking-selftest.c
-index 9031f50..8d24279 100644
+index 417056b..9031f50 100644
 --- a/lib/locking-selftest.c
 +++ b/lib/locking-selftest.c
-@@ -1700,6 +1700,22 @@ static void ww_test_fail_acquire(void)
- #endif
- }
+@@ -26,6 +26,12 @@
+ #include <linux/rtmutex.h>
+ #include <linux/local_lock.h>
  
 +#ifdef CONFIG_PREEMPT_RT
-+#define ww_mutex_base_lock(b)			rt_mutex_lock(b)
-+#define ww_mutex_base_trylock(b)		rt_mutex_trylock(b)
-+#define ww_mutex_base_lock_nest_lock(b, b2)	rt_mutex_lock_nest_lock(b, b2)
-+#define ww_mutex_base_lock_interruptible(b)	rt_mutex_lock_interruptible(b)
-+#define ww_mutex_base_lock_killable(b)		rt_mutex_lock_killable(b)
-+#define ww_mutex_base_unlock(b)			rt_mutex_unlock(b)
++# define NON_RT(...)
 +#else
-+#define ww_mutex_base_lock(b)			mutex_lock(b)
-+#define ww_mutex_base_trylock(b)		mutex_trylock(b)
-+#define ww_mutex_base_lock_nest_lock(b, b2)	mutex_lock_nest_lock(b, b2)
-+#define ww_mutex_base_lock_interruptible(b)	mutex_lock_interruptible(b)
-+#define ww_mutex_base_lock_killable(b)		mutex_lock_killable(b)
-+#define ww_mutex_base_unlock(b)			mutex_unlock(b)
++# define NON_RT(...)	__VA_ARGS__
 +#endif
 +
- static void ww_test_normal(void)
- {
- 	int ret;
-@@ -1714,50 +1730,50 @@ static void ww_test_normal(void)
+ /*
+  * Change this to 1 if you want to see the failure printouts:
+  */
+@@ -808,6 +814,7 @@ GENERATE_PERMUTATIONS_2_EVENTS(irqsafe1_hard_rlock)
+ #include "locking-selftest-wlock-hardirq.h"
+ GENERATE_PERMUTATIONS_2_EVENTS(irqsafe1_hard_wlock)
  
- 	/* mutex_lock (and indirectly, mutex_lock_nested) */
- 	o.ctx = (void *)~0UL;
--	mutex_lock(&o.base);
--	mutex_unlock(&o.base);
-+	ww_mutex_base_lock(&o.base);
-+	ww_mutex_base_unlock(&o.base);
- 	WARN_ON(o.ctx != (void *)~0UL);
++#ifndef CONFIG_PREEMPT_RT
+ #include "locking-selftest-spin-softirq.h"
+ GENERATE_PERMUTATIONS_2_EVENTS(irqsafe1_soft_spin)
  
- 	/* mutex_lock_interruptible (and *_nested) */
- 	o.ctx = (void *)~0UL;
--	ret = mutex_lock_interruptible(&o.base);
-+	ret = ww_mutex_base_lock_interruptible(&o.base);
- 	if (!ret)
--		mutex_unlock(&o.base);
-+		ww_mutex_base_unlock(&o.base);
- 	else
- 		WARN_ON(1);
- 	WARN_ON(o.ctx != (void *)~0UL);
+@@ -816,10 +823,12 @@ GENERATE_PERMUTATIONS_2_EVENTS(irqsafe1_soft_rlock)
  
- 	/* mutex_lock_killable (and *_nested) */
- 	o.ctx = (void *)~0UL;
--	ret = mutex_lock_killable(&o.base);
-+	ret = ww_mutex_base_lock_killable(&o.base);
- 	if (!ret)
--		mutex_unlock(&o.base);
-+		ww_mutex_base_unlock(&o.base);
- 	else
- 		WARN_ON(1);
- 	WARN_ON(o.ctx != (void *)~0UL);
+ #include "locking-selftest-wlock-softirq.h"
+ GENERATE_PERMUTATIONS_2_EVENTS(irqsafe1_soft_wlock)
++#endif
  
- 	/* trylock, succeeding */
- 	o.ctx = (void *)~0UL;
--	ret = mutex_trylock(&o.base);
-+	ret = ww_mutex_base_trylock(&o.base);
- 	WARN_ON(!ret);
- 	if (ret)
--		mutex_unlock(&o.base);
-+		ww_mutex_base_unlock(&o.base);
- 	else
- 		WARN_ON(1);
- 	WARN_ON(o.ctx != (void *)~0UL);
+ #undef E1
+ #undef E2
  
- 	/* trylock, failing */
- 	o.ctx = (void *)~0UL;
--	mutex_lock(&o.base);
--	ret = mutex_trylock(&o.base);
-+	ww_mutex_base_lock(&o.base);
-+	ret = ww_mutex_base_trylock(&o.base);
- 	WARN_ON(ret);
--	mutex_unlock(&o.base);
-+	ww_mutex_base_unlock(&o.base);
- 	WARN_ON(o.ctx != (void *)~0UL);
++#ifndef CONFIG_PREEMPT_RT
+ /*
+  * Enabling hardirqs with a softirq-safe lock held:
+  */
+@@ -852,6 +861,8 @@ GENERATE_PERMUTATIONS_2_EVENTS(irqsafe2A_rlock)
+ #undef E1
+ #undef E2
  
- 	/* nest_lock */
- 	o.ctx = (void *)~0UL;
--	mutex_lock_nest_lock(&o.base, &t);
--	mutex_unlock(&o.base);
-+	ww_mutex_base_lock_nest_lock(&o.base, &t);
-+	ww_mutex_base_unlock(&o.base);
- 	WARN_ON(o.ctx != (void *)~0UL);
- }
++#endif
++
+ /*
+  * Enabling irqs with an irq-safe lock held:
+  */
+@@ -881,6 +892,7 @@ GENERATE_PERMUTATIONS_2_EVENTS(irqsafe2B_hard_rlock)
+ #include "locking-selftest-wlock-hardirq.h"
+ GENERATE_PERMUTATIONS_2_EVENTS(irqsafe2B_hard_wlock)
  
-@@ -1770,7 +1786,7 @@ static void ww_test_two_contexts(void)
- static void ww_test_diff_class(void)
- {
- 	WWAI(&t);
--#ifdef CONFIG_DEBUG_MUTEXES
-+#ifdef DEBUG_WW_MUTEXES
- 	t.ww_class = NULL;
- #endif
- 	WWL(&o, &t);
-@@ -1834,7 +1850,7 @@ static void ww_test_edeadlk_normal(void)
- {
- 	int ret;
++#ifndef CONFIG_PREEMPT_RT
+ #include "locking-selftest-spin-softirq.h"
+ GENERATE_PERMUTATIONS_2_EVENTS(irqsafe2B_soft_spin)
  
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	o2.ctx = &t2;
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
+@@ -889,6 +901,7 @@ GENERATE_PERMUTATIONS_2_EVENTS(irqsafe2B_soft_rlock)
  
-@@ -1850,7 +1866,7 @@ static void ww_test_edeadlk_normal(void)
+ #include "locking-selftest-wlock-softirq.h"
+ GENERATE_PERMUTATIONS_2_EVENTS(irqsafe2B_soft_wlock)
++#endif
  
- 	o2.ctx = NULL;
- 	mutex_acquire(&o2.base.dep_map, 0, 1, _THIS_IP_);
--	mutex_unlock(&o2.base);
-+	ww_mutex_base_unlock(&o2.base);
- 	WWU(&o);
+ #undef E1
+ #undef E2
+@@ -927,6 +940,7 @@ GENERATE_PERMUTATIONS_3_EVENTS(irqsafe3_hard_rlock)
+ #include "locking-selftest-wlock-hardirq.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irqsafe3_hard_wlock)
  
- 	WWL(&o2, &t);
-@@ -1860,7 +1876,7 @@ static void ww_test_edeadlk_normal_slow(void)
- {
- 	int ret;
++#ifndef CONFIG_PREEMPT_RT
+ #include "locking-selftest-spin-softirq.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irqsafe3_soft_spin)
  
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
- 	o2.ctx = &t2;
+@@ -935,6 +949,7 @@ GENERATE_PERMUTATIONS_3_EVENTS(irqsafe3_soft_rlock)
  
-@@ -1876,7 +1892,7 @@ static void ww_test_edeadlk_normal_slow(void)
+ #include "locking-selftest-wlock-softirq.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irqsafe3_soft_wlock)
++#endif
  
- 	o2.ctx = NULL;
- 	mutex_acquire(&o2.base.dep_map, 0, 1, _THIS_IP_);
--	mutex_unlock(&o2.base);
-+	ww_mutex_base_unlock(&o2.base);
- 	WWU(&o);
+ #undef E1
+ #undef E2
+@@ -975,6 +990,7 @@ GENERATE_PERMUTATIONS_3_EVENTS(irqsafe4_hard_rlock)
+ #include "locking-selftest-wlock-hardirq.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irqsafe4_hard_wlock)
  
- 	ww_mutex_lock_slow(&o2, &t);
-@@ -1886,7 +1902,7 @@ static void ww_test_edeadlk_no_unlock(void)
- {
- 	int ret;
++#ifndef CONFIG_PREEMPT_RT
+ #include "locking-selftest-spin-softirq.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irqsafe4_soft_spin)
  
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	o2.ctx = &t2;
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
+@@ -983,6 +999,7 @@ GENERATE_PERMUTATIONS_3_EVENTS(irqsafe4_soft_rlock)
  
-@@ -1902,7 +1918,7 @@ static void ww_test_edeadlk_no_unlock(void)
+ #include "locking-selftest-wlock-softirq.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irqsafe4_soft_wlock)
++#endif
  
- 	o2.ctx = NULL;
- 	mutex_acquire(&o2.base.dep_map, 0, 1, _THIS_IP_);
--	mutex_unlock(&o2.base);
-+	ww_mutex_base_unlock(&o2.base);
+ #undef E1
+ #undef E2
+@@ -1037,6 +1054,7 @@ GENERATE_PERMUTATIONS_3_EVENTS(irq_inversion_hard_rlock)
+ #include "locking-selftest-wlock-hardirq.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irq_inversion_hard_wlock)
  
- 	WWL(&o2, &t);
- }
-@@ -1911,7 +1927,7 @@ static void ww_test_edeadlk_no_unlock_slow(void)
- {
- 	int ret;
++#ifndef CONFIG_PREEMPT_RT
+ #include "locking-selftest-spin-softirq.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irq_inversion_soft_spin)
  
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
- 	o2.ctx = &t2;
+@@ -1045,6 +1063,7 @@ GENERATE_PERMUTATIONS_3_EVENTS(irq_inversion_soft_rlock)
  
-@@ -1927,7 +1943,7 @@ static void ww_test_edeadlk_no_unlock_slow(void)
+ #include "locking-selftest-wlock-softirq.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irq_inversion_soft_wlock)
++#endif
  
- 	o2.ctx = NULL;
- 	mutex_acquire(&o2.base.dep_map, 0, 1, _THIS_IP_);
--	mutex_unlock(&o2.base);
-+	ww_mutex_base_unlock(&o2.base);
+ #undef E1
+ #undef E2
+@@ -1212,12 +1231,14 @@ GENERATE_PERMUTATIONS_3_EVENTS(irq_read_recursion_hard_rlock)
+ #include "locking-selftest-wlock.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irq_read_recursion_hard_wlock)
  
- 	ww_mutex_lock_slow(&o2, &t);
- }
-@@ -1936,7 +1952,7 @@ static void ww_test_edeadlk_acquire_more(void)
- {
- 	int ret;
++#ifndef CONFIG_PREEMPT_RT
+ #include "locking-selftest-softirq.h"
+ #include "locking-selftest-rlock.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irq_read_recursion_soft_rlock)
  
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
- 	o2.ctx = &t2;
+ #include "locking-selftest-wlock.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irq_read_recursion_soft_wlock)
++#endif
  
-@@ -1957,7 +1973,7 @@ static void ww_test_edeadlk_acquire_more_slow(void)
- {
- 	int ret;
+ #undef E1
+ #undef E2
+@@ -1258,12 +1279,14 @@ GENERATE_PERMUTATIONS_3_EVENTS(irq_read_recursion2_hard_rlock)
+ #include "locking-selftest-wlock.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irq_read_recursion2_hard_wlock)
  
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
- 	o2.ctx = &t2;
++#ifndef CONFIG_PREEMPT_RT
+ #include "locking-selftest-softirq.h"
+ #include "locking-selftest-rlock.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irq_read_recursion2_soft_rlock)
  
-@@ -1978,11 +1994,11 @@ static void ww_test_edeadlk_acquire_more_edeadlk(void)
- {
- 	int ret;
+ #include "locking-selftest-wlock.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irq_read_recursion2_soft_wlock)
++#endif
  
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
- 	o2.ctx = &t2;
+ #undef E1
+ #undef E2
+@@ -1312,12 +1335,14 @@ GENERATE_PERMUTATIONS_3_EVENTS(irq_read_recursion3_hard_rlock)
+ #include "locking-selftest-wlock.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irq_read_recursion3_hard_wlock)
  
--	mutex_lock(&o3.base);
-+	ww_mutex_base_lock(&o3.base);
- 	mutex_release(&o3.base.dep_map, _THIS_IP_);
- 	o3.ctx = &t2;
++#ifndef CONFIG_PREEMPT_RT
+ #include "locking-selftest-softirq.h"
+ #include "locking-selftest-rlock.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irq_read_recursion3_soft_rlock)
  
-@@ -2004,11 +2020,11 @@ static void ww_test_edeadlk_acquire_more_edeadlk_slow(void)
- {
- 	int ret;
+ #include "locking-selftest-wlock.h"
+ GENERATE_PERMUTATIONS_3_EVENTS(irq_read_recursion3_soft_wlock)
++#endif
  
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
- 	o2.ctx = &t2;
+ #ifdef CONFIG_DEBUG_LOCK_ALLOC
+ # define I_SPINLOCK(x)	lockdep_reset_lock(&lock_##x.dep_map)
+@@ -1523,7 +1548,7 @@ static inline void print_testname(const char *testname)
  
--	mutex_lock(&o3.base);
-+	ww_mutex_base_lock(&o3.base);
- 	mutex_release(&o3.base.dep_map, _THIS_IP_);
- 	o3.ctx = &t2;
+ #define DO_TESTCASE_2x2RW(desc, name, nr)			\
+ 	DO_TESTCASE_2RW("hard-"desc, name##_hard, nr)		\
+-	DO_TESTCASE_2RW("soft-"desc, name##_soft, nr)		\
++	NON_RT(DO_TESTCASE_2RW("soft-"desc, name##_soft, nr))	\
  
-@@ -2029,7 +2045,7 @@ static void ww_test_edeadlk_acquire_wrong(void)
- {
- 	int ret;
+ #define DO_TESTCASE_6x2x2RW(desc, name)				\
+ 	DO_TESTCASE_2x2RW(desc, name, 123);			\
+@@ -1571,19 +1596,19 @@ static inline void print_testname(const char *testname)
  
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
- 	o2.ctx = &t2;
+ #define DO_TESTCASE_2I(desc, name, nr)				\
+ 	DO_TESTCASE_1("hard-"desc, name##_hard, nr);		\
+-	DO_TESTCASE_1("soft-"desc, name##_soft, nr);
++	NON_RT(DO_TESTCASE_1("soft-"desc, name##_soft, nr));
  
-@@ -2054,7 +2070,7 @@ static void ww_test_edeadlk_acquire_wrong_slow(void)
- {
- 	int ret;
+ #define DO_TESTCASE_2IB(desc, name, nr)				\
+ 	DO_TESTCASE_1B("hard-"desc, name##_hard, nr);		\
+-	DO_TESTCASE_1B("soft-"desc, name##_soft, nr);
++	NON_RT(DO_TESTCASE_1B("soft-"desc, name##_soft, nr));
  
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
- 	o2.ctx = &t2;
+ #define DO_TESTCASE_6I(desc, name, nr)				\
+ 	DO_TESTCASE_3("hard-"desc, name##_hard, nr);		\
+-	DO_TESTCASE_3("soft-"desc, name##_soft, nr);
++	NON_RT(DO_TESTCASE_3("soft-"desc, name##_soft, nr));
  
+ #define DO_TESTCASE_6IRW(desc, name, nr)			\
+ 	DO_TESTCASE_3RW("hard-"desc, name##_hard, nr);		\
+-	DO_TESTCASE_3RW("soft-"desc, name##_soft, nr);
++	NON_RT(DO_TESTCASE_3RW("soft-"desc, name##_soft, nr));
+ 
+ #define DO_TESTCASE_2x3(desc, name)				\
+ 	DO_TESTCASE_3(desc, name, 12);				\
+@@ -2909,12 +2934,11 @@ void locking_selftest(void)
+ 	DO_TESTCASE_6x1RR("rlock W1R2/R2R3/W3W1", W1R2_R2R3_W3W1);
+ 
+ 	printk("  --------------------------------------------------------------------------\n");
+-
+ 	/*
+ 	 * irq-context testcases:
+ 	 */
+ 	DO_TESTCASE_2x6("irqs-on + irq-safe-A", irqsafe1);
+-	DO_TESTCASE_2x3("sirq-safe-A => hirqs-on", irqsafe2A);
++	NON_RT(DO_TESTCASE_2x3("sirq-safe-A => hirqs-on", irqsafe2A));
+ 	DO_TESTCASE_2x6("safe-A + irqs-on", irqsafe2B);
+ 	DO_TESTCASE_6x6("safe-A + unsafe-B #1", irqsafe3);
+ 	DO_TESTCASE_6x6("safe-A + unsafe-B #2", irqsafe4);

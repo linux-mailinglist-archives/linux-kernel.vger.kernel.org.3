@@ -2,91 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE2846A3A3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2736D46A3B3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:01:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346768AbhLFSEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 13:04:38 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:52970 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345881AbhLFSEY (ORCPT
+        id S1346639AbhLFSFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 13:05:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346722AbhLFSEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 13:04:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1A339CE177C;
-        Mon,  6 Dec 2021 18:00:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B90F3C341C2;
-        Mon,  6 Dec 2021 18:00:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638813652;
-        bh=qOyUKJ/q4tpHts63eyHa7j3yANk+RknprGHSSCDq6dQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=AJUiWkk4/dvF/Mxl/SYYahxRDSzTN/YisNZjONLfZcJmOuPoUZQXKDhkqL1aJPIS0
-         AsT+MJRn9wCUp5sbiXYGPoZNgPYIYNPL+IyRETeM867t4H5PL9X/CDk5n7z4Uk+gVr
-         t2Ai+kfM7zjporxfkGjlldR1X2q+DI1kFEvdeXM9sH9JLI3eKfhCpGFAkf/TF8hT96
-         ubl+ajkWmBhf5x3Y8NultoU/HuqqqsRKOT4Fyd5f85PMIP8+ad2kY18g71DkaXFN3I
-         96xERwQpPWTwRoASaQWUraPK9y5y7EKHMl43Z3caoSEz7hxAUSM2fdwAxXDtdWO+tR
-         yr3pybWl7j5Cg==
-From:   Mark Brown <broonie@kernel.org>
-To:     alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
-        devicetree@vger.kernel.org
-Cc:     michael@amarulasolutions.com, shengjiu.wang@gmail.com,
-        bcousson@baylibre.com, robh+dt@kernel.org, Xiubo.Lee@gmail.com,
-        nicoleotsuka@gmail.com, festevam@gmail.com, perex@perex.cz,
-        kuninori.morimoto.gx@renesas.com, lgirdwood@gmail.com,
-        tiwai@suse.com, tony@atomide.com
-In-Reply-To: <20211203175018.252641-1-ariel.dalessandro@collabora.com>
-References: <20211203175018.252641-1-ariel.dalessandro@collabora.com>
-Subject: Re: [PATCH 1/1] ASoC: fsl-asoc-card: Add missing Kconfig option for tlv320aic31xx
-Message-Id: <163881364846.2769299.4416026362989007354.b4-ty@kernel.org>
-Date:   Mon, 06 Dec 2021 18:00:48 +0000
+        Mon, 6 Dec 2021 13:04:55 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C174C0698CD;
+        Mon,  6 Dec 2021 10:01:04 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id y14-20020a17090a2b4e00b001a5824f4918so11411087pjc.4;
+        Mon, 06 Dec 2021 10:01:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=a22elMeKMuvw9kAaeC7xqXjpamRaXXRHV5cJtgBXnMI=;
+        b=FNuLLY+2QfkUYYdnHtv03ga/tmbb/WnbRqvODT34TbvpQz79NTmgr2/ROaxi1KvJiZ
+         qonBJ/pxCvk2g0IPUd6Qpj7sabtCux2WfcYJyghukcUmsUKFoXGNQBd9A0OnYJOttTpx
+         UIdl3MStDRxZsVsDZiX6hKX3+Xf4hhKpQQ8NWpFeS5HZyX6HxKpq76L25dbl/vWYLiNz
+         uqzh+mwcTJ+AkK4uG67QuWo9VRAWujUhAVWThnL38skDly9DrMhLJ0Gh0bcADhdLSleA
+         5Iv6EqE9Gdii24EzG0q3nm7+KdSW8SoHMsIYrEVp1pzKzPnVP5a7WlBssIkHOB5yKGlL
+         Zu5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=a22elMeKMuvw9kAaeC7xqXjpamRaXXRHV5cJtgBXnMI=;
+        b=SeqVkaBN+pOzDNZZ5kQ7tpl8gbqXLi9Gcv9VUP3I0jzDnBoYugyaZNbdNUAd0jAh1D
+         puPl865GbGA4We+0HmK+Wi0rfZAgmIPiB7uXO+DP3bM7KQTE5Fc8hy/tbNjXx0Z23BVo
+         9CfhizrJtaF+srFUvb3CzBm85Jh1/6KYzg9p1ybBM2K1HxHpORGNbBkD7TnaJcO/qkgq
+         5KOvOIUUU2ByGNcbkcM+vj82hs71lYvfpdqNwwrUUVXmARcV28/Uv9bzsz3V4ShLcVbk
+         y0IXQhPt5Gv+3ZZ5/wnWwYPCsip9kMl0H4Lu/YdCgjoi0LAnQtlfrHNiqPbFrhJkaybA
+         4eEg==
+X-Gm-Message-State: AOAM530GsqUArbhuKfHMFbxWa77SDvAXw8oSPq4b/Z42unHJ8ZNfuuES
+        WvR4h2aqyX7AawX7uSP3fihaerJ5NGk=
+X-Google-Smtp-Source: ABdhPJwT0/hSqTiWhbGXegTiFL+l5hd6q19jJHrHzsa1pAOaawNuH4ZZtQfWAqoe9uuW9xXye0+Agg==
+X-Received: by 2002:a17:902:b28b:b0:142:4abc:ac20 with SMTP id u11-20020a170902b28b00b001424abcac20mr45718472plr.88.1638813663456;
+        Mon, 06 Dec 2021 10:01:03 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id u11sm5444070pfg.120.2021.12.06.10.01.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 10:01:03 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     devicetree@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM IPROC GBIT
+        ETHERNET DRIVER), Doug Berger <opendmb@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
+        linux-kernel@vger.kernel.org (open list),
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM IPROC ARM
+        ARCHITECTURE),
+        linux-phy@lists.infradead.org (open list:GENERIC PHY FRAMEWORK)
+Subject: [PATCH v3 8/8] dt-bindings: net: Convert iProc MDIO mux to YAML
+Date:   Mon,  6 Dec 2021 10:00:49 -0800
+Message-Id: <20211206180049.2086907-9-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211206180049.2086907-1-f.fainelli@gmail.com>
+References: <20211206180049.2086907-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Dec 2021 14:50:17 -0300, Ariel D'Alessandro wrote:
-> This is a follow up of patchsets:
-> 
->   [RFC patch 0/5] Support BCLK input clock in tlv320aic31xx
->   [PATCH 0/4] fsl-asoc-card: Add optional dt property for setting mclk-id
-> 
-> Patch "ASoC: fsl-asoc-card: Support fsl,imx-audio-tlv320aic31xx codec"
-> in "[RFC patch 0/5] Support BCLK input clock in tlv320aic31xx" missed a
-> Kconfig option. Sending incremental patch fix.
-> 
-> [...]
+Conver the Broadcom iProc MDIO mux Device Tree binding to YAML.
 
-Applied to
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ .../bindings/net/brcm,mdio-mux-iproc.txt      | 62 --------------
+ .../bindings/net/brcm,mdio-mux-iproc.yaml     | 80 +++++++++++++++++++
+ 2 files changed, 80 insertions(+), 62 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt
+ create mode 100644 Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+diff --git a/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt b/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt
+deleted file mode 100644
+index deb9e852ea27..000000000000
+--- a/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt
++++ /dev/null
+@@ -1,62 +0,0 @@
+-Properties for an MDIO bus multiplexer found in Broadcom iProc based SoCs.
+-
+-This MDIO bus multiplexer defines buses that could be internal as well as
+-external to SoCs and could accept MDIO transaction compatible to C-22 or
+-C-45 Clause. When child bus is selected, one needs to select these two
+-properties as well to generate desired MDIO transaction on appropriate bus.
+-
+-Required properties in addition to the generic multiplexer properties:
+-
+-MDIO multiplexer node:
+-- compatible: brcm,mdio-mux-iproc.
+-
+-Every non-ethernet PHY requires a compatible so that it could be probed based
+-on this compatible string.
+-
+-Optional properties:
+-- clocks: phandle of the core clock which drives the mdio block.
+-
+-Additional information regarding generic multiplexer properties can be found
+-at- Documentation/devicetree/bindings/net/mdio-mux.yaml
+-
+-
+-for example:
+-		mdio_mux_iproc: mdio-mux@66020000 {
+-			compatible = "brcm,mdio-mux-iproc";
+-			reg = <0x66020000 0x250>;
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			mdio@0 {
+-				reg = <0x0>;
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-
+-				pci_phy0: pci-phy@0 {
+-					compatible = "brcm,ns2-pcie-phy";
+-					reg = <0x0>;
+-					#phy-cells = <0>;
+-				};
+-			};
+-
+-			mdio@7 {
+-				reg = <0x7>;
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-
+-				pci_phy1: pci-phy@0 {
+-					compatible = "brcm,ns2-pcie-phy";
+-					reg = <0x0>;
+-					#phy-cells = <0>;
+-				};
+-			};
+-			mdio@10 {
+-				reg = <0x10>;
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-
+-				gphy0: eth-phy@10 {
+-					reg = <0x10>;
+-				};
+-			};
+-		};
+diff --git a/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml b/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml
+new file mode 100644
+index 000000000000..af96b4fd89d5
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml
+@@ -0,0 +1,80 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/brcm,mdio-mux-iproc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MDIO bus multiplexer found in Broadcom iProc based SoCs.
++
++maintainers:
++  - Florian Fainelli <f.fainelli@gmail.com>
++
++description:
++  This MDIO bus multiplexer defines buses that could be internal as well as
++  external to SoCs and could accept MDIO transaction compatible to C-22 or
++  C-45 Clause. When child bus is selected, one needs to select these two
++  properties as well to generate desired MDIO transaction on appropriate bus.
++
++allOf:
++  - $ref: /schemas/net/mdio-mux.yaml#
++
++properties:
++  compatible:
++    const: brcm,mdio-mux-iproc
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++    description: core clock driving the MDIO block
++
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    mdio_mux_iproc: mdio-mux@66020000 {
++        compatible = "brcm,mdio-mux-iproc";
++        reg = <0x66020000 0x250>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        mdio@0 {
++           reg = <0x0>;
++           #address-cells = <1>;
++           #size-cells = <0>;
++
++           pci_phy0: pci-phy@0 {
++              compatible = "brcm,ns2-pcie-phy";
++              reg = <0x0>;
++              #phy-cells = <0>;
++           };
++        };
++
++        mdio@7 {
++           reg = <0x7>;
++           #address-cells = <1>;
++           #size-cells = <0>;
++
++           pci_phy1: pci-phy@0 {
++              compatible = "brcm,ns2-pcie-phy";
++              reg = <0x0>;
++              #phy-cells = <0>;
++           };
++        };
++
++        mdio@10 {
++           reg = <0x10>;
++           #address-cells = <1>;
++           #size-cells = <0>;
++
++           gphy0: eth-phy@10 {
++              reg = <0x10>;
++           };
++        };
++    };
+-- 
+2.25.1
 
-Thanks!
-
-[1/1] ASoC: fsl-asoc-card: Add missing Kconfig option for tlv320aic31xx
-      commit: b6ce5d85b1425d3a1211f85835ab152c9bf3803a
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

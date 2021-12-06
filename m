@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4E14699F9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 302A1469DEA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345671AbhLFPEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:04:44 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54046 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345384AbhLFPDv (ORCPT
+        id S240056AbhLFPeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:34:07 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55614 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349901AbhLFPWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:03:51 -0500
+        Mon, 6 Dec 2021 10:22:36 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9630861316;
-        Mon,  6 Dec 2021 15:00:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A819FC341C1;
-        Mon,  6 Dec 2021 15:00:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 951F7B81133;
+        Mon,  6 Dec 2021 15:19:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5EBAC341C1;
+        Mon,  6 Dec 2021 15:19:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802822;
-        bh=3BKyn+NGRlJHZTQLbWw7t3YNkqx7ASLTDFR79FF3Ahs=;
+        s=korg; t=1638803945;
+        bh=/LQ5KwQq2j2/j/Z6VSN24WgTwLuY5/MluZw3/SIkXm8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c3oChcZX7n05hKQMXF4eBbMdjFv9DAdngL07qtvb/kXVTGNHxeR3nHYG7IjaypUVZ
-         5WvI1R+v+DP6HFMxQMufOu6rfUovs1/DR55SsYzgtGQ3O9F08dDXSA+WBvoqfDh5+t
-         DcQNpNLjdyBzUA4IlvJBHpPTHfwNsp4M44MDuAGo=
+        b=DQ5IcOcAvFgIlqlVzr2dwjo2VhTfSYG7BUrBkJwEpePrlj34QeGg8e1Y1kdClJvzG
+         1PrXAJe7rfn18rqJdBHHMbBpZWc7MCmwNLRY+z5CGlQlxPKZylYZzV8ngYOpdWEza1
+         wMMFs4hWvv7+1Gh1b59HJ6IVUalQra3GkIag182E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 4.4 44/52] fs: add fget_many() and fput_many()
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 071/130] net/mlx4_en: Fix an use-after-free bug in mlx4_en_try_alloc_resources()
 Date:   Mon,  6 Dec 2021 15:56:28 +0100
-Message-Id: <20211206145549.409594804@linuxfoundation.org>
+Message-Id: <20211206145602.124954352@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
-References: <20211206145547.892668902@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,138 +46,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-commit 091141a42e15fe47ada737f3996b317072afcefb upstream.
+commit addad7643142f500080417dd7272f49b7a185570 upstream.
 
-Some uses cases repeatedly get and put references to the same file, but
-the only exposed interface is doing these one at the time. As each of
-these entail an atomic inc or dec on a shared structure, that cost can
-add up.
+In mlx4_en_try_alloc_resources(), mlx4_en_copy_priv() is called and
+tmp->tx_cq will be freed on the error path of mlx4_en_copy_priv().
+After that mlx4_en_alloc_resources() is called and there is a dereference
+of &tmp->tx_cq[t][i] in mlx4_en_alloc_resources(), which could lead to
+a use after free problem on failure of mlx4_en_copy_priv().
 
-Add fget_many(), which works just like fget(), except it takes an
-argument for how many references to get on the file. Ditto fput_many(),
-which can drop an arbitrary number of references to a file.
+Fix this bug by adding a check of mlx4_en_copy_priv()
 
-Reviewed-by: Hannes Reinecke <hare@suse.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_MLX4_EN=m show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: ec25bc04ed8e ("net/mlx4_en: Add resilience in low memory systems")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Link: https://lore.kernel.org/r/20211130164438.190591-1-zhou1615@umn.edu
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/file.c            |   15 ++++++++++-----
- fs/file_table.c      |    9 +++++++--
- include/linux/file.h |    2 ++
- include/linux/fs.h   |    4 +++-
- 4 files changed, 22 insertions(+), 8 deletions(-)
+ drivers/net/ethernet/mellanox/mlx4/en_netdev.c |    9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -691,7 +691,7 @@ void do_close_on_exec(struct files_struc
- 	spin_unlock(&files->file_lock);
- }
- 
--static struct file *__fget(unsigned int fd, fmode_t mask)
-+static struct file *__fget(unsigned int fd, fmode_t mask, unsigned int refs)
+--- a/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
++++ b/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
+@@ -2276,9 +2276,14 @@ int mlx4_en_try_alloc_resources(struct m
+ 				bool carry_xdp_prog)
  {
- 	struct files_struct *files = current->files;
- 	struct file *file;
-@@ -706,7 +706,7 @@ loop:
- 		 */
- 		if (file->f_mode & mask)
- 			file = NULL;
--		else if (!get_file_rcu(file))
-+		else if (!get_file_rcu_many(file, refs))
- 			goto loop;
- 	}
- 	rcu_read_unlock();
-@@ -714,15 +714,20 @@ loop:
- 	return file;
- }
+ 	struct bpf_prog *xdp_prog;
+-	int i, t;
++	int i, t, ret;
  
-+struct file *fget_many(unsigned int fd, unsigned int refs)
-+{
-+	return __fget(fd, FMODE_PATH, refs);
-+}
-+
- struct file *fget(unsigned int fd)
- {
--	return __fget(fd, FMODE_PATH);
-+	return __fget(fd, FMODE_PATH, 1);
- }
- EXPORT_SYMBOL(fget);
+-	mlx4_en_copy_priv(tmp, priv, prof);
++	ret = mlx4_en_copy_priv(tmp, priv, prof);
++	if (ret) {
++		en_warn(priv, "%s: mlx4_en_copy_priv() failed, return\n",
++			__func__);
++		return ret;
++	}
  
- struct file *fget_raw(unsigned int fd)
- {
--	return __fget(fd, 0);
-+	return __fget(fd, 0, 1);
- }
- EXPORT_SYMBOL(fget_raw);
- 
-@@ -753,7 +758,7 @@ static unsigned long __fget_light(unsign
- 			return 0;
- 		return (unsigned long)file;
- 	} else {
--		file = __fget(fd, mask);
-+		file = __fget(fd, mask, 1);
- 		if (!file)
- 			return 0;
- 		return FDPUT_FPUT | (unsigned long)file;
---- a/fs/file_table.c
-+++ b/fs/file_table.c
-@@ -261,9 +261,9 @@ void flush_delayed_fput(void)
- 
- static DECLARE_DELAYED_WORK(delayed_fput_work, delayed_fput);
- 
--void fput(struct file *file)
-+void fput_many(struct file *file, unsigned int refs)
- {
--	if (atomic_long_dec_and_test(&file->f_count)) {
-+	if (atomic_long_sub_and_test(refs, &file->f_count)) {
- 		struct task_struct *task = current;
- 
- 		if (likely(!in_interrupt() && !(task->flags & PF_KTHREAD))) {
-@@ -282,6 +282,11 @@ void fput(struct file *file)
- 	}
- }
- 
-+void fput(struct file *file)
-+{
-+	fput_many(file, 1);
-+}
-+
- /*
-  * synchronous analog of fput(); for kernel threads that might be needed
-  * in some umount() (and thus can't use flush_delayed_fput() without
---- a/include/linux/file.h
-+++ b/include/linux/file.h
-@@ -12,6 +12,7 @@
- struct file;
- 
- extern void fput(struct file *);
-+extern void fput_many(struct file *, unsigned int);
- 
- struct file_operations;
- struct vfsmount;
-@@ -40,6 +41,7 @@ static inline void fdput(struct fd fd)
- }
- 
- extern struct file *fget(unsigned int fd);
-+extern struct file *fget_many(unsigned int fd, unsigned int refs);
- extern struct file *fget_raw(unsigned int fd);
- extern unsigned long __fdget(unsigned int fd);
- extern unsigned long __fdget_raw(unsigned int fd);
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -923,7 +923,9 @@ static inline struct file *get_file(stru
- 	atomic_long_inc(&f->f_count);
- 	return f;
- }
--#define get_file_rcu(x) atomic_long_inc_not_zero(&(x)->f_count)
-+#define get_file_rcu_many(x, cnt)	\
-+	atomic_long_add_unless(&(x)->f_count, (cnt), 0)
-+#define get_file_rcu(x) get_file_rcu_many((x), 1)
- #define fput_atomic(x)	atomic_long_add_unless(&(x)->f_count, -1, 1)
- #define file_count(x)	atomic_long_read(&(x)->f_count)
- 
+ 	if (mlx4_en_alloc_resources(tmp)) {
+ 		en_warn(priv,
 
 

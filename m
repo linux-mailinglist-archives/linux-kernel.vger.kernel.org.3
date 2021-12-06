@@ -2,67 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6B746904D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 07:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F248469051
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 07:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237604AbhLFGGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 01:06:46 -0500
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:60886 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235803AbhLFGGp (ORCPT
+        id S237623AbhLFGH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 01:07:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58497 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237612AbhLFGH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 01:06:45 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0UzX-aeR_1638770593;
-Received: from 30.225.24.27(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0UzX-aeR_1638770593)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 06 Dec 2021 14:03:14 +0800
-Message-ID: <1e9cb07e-aef7-1461-25c4-1e9cfbe41c12@linux.alibaba.com>
-Date:   Mon, 6 Dec 2021 14:03:13 +0800
+        Mon, 6 Dec 2021 01:07:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638770639;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wo70tjI7q1UAqboatbwLl0h/uu/FTe3Affu+qnLiGkQ=;
+        b=UGcZpCZDojgTEw8MOtaor7QeIdaHHeQlsEVZpk7JrAqyerZ8aTHoxb0ZHU+/3ptGXn8Ijw
+        9veK8HQ8MDJfbhgZ2F+U9QLKhgL98XboojjWtspNksU1vLrKIvhgp/1pLrbLQntdUkT7Jq
+        ha2WaGvNrcd8LWT2vgaA7H4KW50ibaE=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-145-qkS1-S2_O6Kvn23C6olsAg-1; Mon, 06 Dec 2021 01:03:58 -0500
+X-MC-Unique: qkS1-S2_O6Kvn23C6olsAg-1
+Received: by mail-qv1-f71.google.com with SMTP id kd7-20020a056214400700b003b54713452cso10693611qvb.13
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 22:03:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Wo70tjI7q1UAqboatbwLl0h/uu/FTe3Affu+qnLiGkQ=;
+        b=zLvQxhnHlfy2tBRimNImh+yz8waJDne2yvUbOVTWLW5IBV+gqgUGb9nrPLSUi9EgAs
+         vDbegtaQozF1XaJWUOuly8R8XjHMnpK0Ll06QcMrIhFZYTMsqMIKFyn7Fg2RxRaYuwxb
+         u+JfyX1JPu+tc1sLIhxzruni8qA5dluxBhXytFXJ/x2YGEoISgzFcNw2ww/DqPecIQA6
+         6YBssXem74MtjLA+2cdjq5R0GDbSlrivye5iIQ6oSkpKMtScBS7bQE3ls8GLjdzMIddI
+         y0rr/pMv8UZIs1U5YjZDQ1MHdI5tCxo7dq8cl9iWBKZBN8H4JcX7fQkxGvwSUQuADTiF
+         Elxg==
+X-Gm-Message-State: AOAM531cIAUtjHvl99j2AgYp1/OzBuLGHGp9AB1BUg8j+ovW+Ns+0jUB
+        CGVkXYZeEkaoTza3IOrAerk9zPyNVaOLGC6xtho/VvYXPn560CCBhjQDK4M2UjkdnmmVMX5OxrT
+        BXJZkM3xIL8yajZTegE4BJ7ED
+X-Received: by 2002:ac8:5bcf:: with SMTP id b15mr37503557qtb.474.1638770637758;
+        Sun, 05 Dec 2021 22:03:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwBlcOgv7DcKhfVmXiMUiPn6jj3Lbd0IoNd3WtPjyxukoKwU1wdw7FB6qmJfkTYOfo/DTS8HA==
+X-Received: by 2002:ac8:5bcf:: with SMTP id b15mr37503536qtb.474.1638770637542;
+        Sun, 05 Dec 2021 22:03:57 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id y20sm6176312qkj.24.2021.12.05.22.03.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Dec 2021 22:03:56 -0800 (PST)
+Date:   Sun, 5 Dec 2021 22:03:50 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v8 08/14] livepatch: only match unique symbols when using
+ FG-KASLR
+Message-ID: <20211206060350.f4hqug2jhgjlaw3c@treble>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+ <20211202223214.72888-9-alexandr.lobakin@intel.com>
+ <YansAlTr0/MfNxWc@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.0
-Subject: Re: [PATCH] ocfs2: fix uninitialized variable in
- ocfs2_dio_wr_get_block()
-Content-Language: en-US
-From:   Joseph Qi <joseph.qi@linux.alibaba.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Wengang Wang <wen.gang.wang@oracle.com>, ryan.ding@oracle.com,
-        Junxiao Bi <junxiao.bi@oracle.com>
-Cc:     Joel Becker <jlbec@evilplan.org>,
-        Sunil Mushran <sunil.mushran@oracle.com>,
-        ocfs2-devel@oss.oracle.com, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, Mark Fasheh <mark@fasheh.com>
-References: <20211130104043.GB5827@kili>
- <92d4d393-9734-9f7e-4440-20429bdac14f@linux.alibaba.com>
-In-Reply-To: <92d4d393-9734-9f7e-4440-20429bdac14f@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YansAlTr0/MfNxWc@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 03, 2021 at 11:05:54AM +0100, Peter Zijlstra wrote:
+> On Thu, Dec 02, 2021 at 11:32:08PM +0100, Alexander Lobakin wrote:
+> > If any type of function granular randomization is enabled, the sympos
+> > algorithm will fail, as it will be impossible to resolve symbols when
+> > there are duplicates using the previous symbol position.
+> > 
+> > We could override sympos to 0, but make it more clear to the user
+> > and bail out if the symbol is not unique.
+> 
+> Since we're going lots of horrendous things already, why can't we fix
+> this duplicate nonsense too?
 
+I assume you mean using this new linker flag: "-z unique-symbol"
 
-On 12/1/21 10:24 AM, Joseph Qi wrote:
-> 
-> 
-> On 11/30/21 6:40 PM, Dan Carpenter wrote:
->> The callers assume that "*fsdata" is set on the success path, but
->> that's not necessarily true on this path.
->>
-> 
-> In ocfs2_page_mkwrite(), since in this case no target page locked, it
-> will finally return VM_FAULT_NOPAGE (better VM_FAULT_RETRY?) and throw 
-> to handle_mm_fault(). So no problem as comments described.
-> 
-> But things seems changed since append direct io path started to use
-> write_[begin/end]. In this path, the target page is expected as NULL.
-> This needs more discussion.
-> 
+https://sourceware.org/bugzilla/show_bug.cgi?id=26391
 
-ocfs2_grab_pages_for_write() returns EAGAIN only in case of mmap. So
-current code won't have any issue.
-I'll send a cleanup to make the code more clearly.
+-- 
+Josh
 
-Thanks,
-Joseph

@@ -2,50 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE95468E8E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 02:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC96E468E92
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 02:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbhLFBZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 20:25:41 -0500
-Received: from mail-il1-f200.google.com ([209.85.166.200]:42880 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbhLFBZk (ORCPT
+        id S230509AbhLFBaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 20:30:08 -0500
+Received: from conssluserg-04.nifty.com ([210.131.2.83]:31625 "EHLO
+        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230495AbhLFBaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 20:25:40 -0500
-Received: by mail-il1-f200.google.com with SMTP id l3-20020a056e021c0300b0029fcec8f2ccso5923599ilh.9
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 17:22:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=fHKEKHdPjoZhYVJRZoCAKKckDq3mCm+7VXF61UEPMbE=;
-        b=G9/xKSRxtk5QZSJ/XYNtOO5L0g94YZRp0/LVH9WHm5j/M+aPxu3cKkRkJSeIwSqpvN
-         4ltO9Vbcm58w04LdgiFfYS4JZ1fTUY4CzbIbxd8soHCLQu5YtttTwpMdH2V7grvE+hGN
-         N+o3BHzWmP3KpHlvypJSNREKwWATn8GS8ugNlcoa7so8sKHKNA8ln+Psqno8wvR07L5O
-         s6IQbXyX3dZr5PLzWWIijHA5Q0CW7adcyxskweVeIFf2tNYW+7qULDhMWqNa0tHep2qd
-         omey7sGIsAbqjIH1Rrqe/CbE3qQTDdjXz3dpg2Gia3POw+VKYJ6X4DMQwjC63qElfCaa
-         QMEQ==
-X-Gm-Message-State: AOAM532m2xNknqjNHJWvF7HPhyOTqJhAdefp2+1T7IqdMoXJLSw/bhH5
-        0zbmNbc2odnmmpMxgwIcFSLBVccG0FxuQqilMrpIv/wx/f9C
-X-Google-Smtp-Source: ABdhPJy/LFie2vec2wVfvdbXF6LNvp20a0txNPQ2lsWp0Aoj+RwONdCz82+R9QNxfomVLUkwUx0wglERxX6iV6T3k8z+9P4CSiY/
+        Sun, 5 Dec 2021 20:30:05 -0500
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 1B61QJSB014961;
+        Mon, 6 Dec 2021 10:26:20 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 1B61QJSB014961
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1638753980;
+        bh=bTLJ/FhfjJFuHBBQBmsFdBVETare2IBx5K2SgNpA/3U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=eScM6k3EqZmv85kztqfJNj6eQPpK0z/fQv2h8unfpDXoYAVUiHGEP+MmK75l1TzBo
+         yjTsgXru6P/BEJTCZaU5cZAEqhBJzMsSG/9p7s5dL2dy6Jx9GnNu66m4dBH5zdrJAp
+         iHPTAf4d61wR0Ess2MIQaOEJeWvw4PPMcCPYyWJJT+RddXTqLUJh/cj/zrPlgpBfgD
+         m7Wj8aLcLbzU/dj9xQ7qkLortGcPj/ziY4sG6c1nB1GX5iE6NODh3rJG+ODdFGqS5m
+         QXEiggIOgpIOCl0nlSN+9RT6K744+KVhTrw+oqHWgSsgv42oJFw9KSShI7gs4ZlMCy
+         VrXfz6VPwVOeA==
+X-Nifty-SrcIP: [209.85.215.169]
+Received: by mail-pg1-f169.google.com with SMTP id l190so8930657pge.7;
+        Sun, 05 Dec 2021 17:26:20 -0800 (PST)
+X-Gm-Message-State: AOAM53043wm/19KKraqmOqoblN5z7DYRyNyLb+35wcGkCe1dmPLk35O/
+        x0+j9pKaZx9rlMXjz8Ea7Lr62gfmr0dQErT2AIE=
+X-Google-Smtp-Source: ABdhPJwmfa5PGfTsywA5yHzN+wuZBOkVcnUgZcDaj3keg45Gtfw/CFNE4EgL9M5PP2ztW1p1j1HMBljROs0XKWoKL0g=
+X-Received: by 2002:a62:a21b:0:b0:4ad:57c9:c7d1 with SMTP id
+ m27-20020a62a21b000000b004ad57c9c7d1mr6576445pff.68.1638753979510; Sun, 05
+ Dec 2021 17:26:19 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:d08:: with SMTP id q8mr38383669jaj.38.1638753732571;
- Sun, 05 Dec 2021 17:22:12 -0800 (PST)
-Date:   Sun, 05 Dec 2021 17:22:12 -0800
-In-Reply-To: <0000000000004c10220598f8a1d0@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001ab61405d2701689@google.com>
-Subject: Re: KCSAN: data-race in blk_mq_dispatch_rq_list / blk_mq_dispatch_rq_list
- (2)
-From:   syzbot <syzbot+2c308b859c8c103aae53@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, elver@google.com, kasan-dev@googlegroups.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-upstream-moderation@googlegroups.com
+References: <20211206010533.439981-1-masahiroy@kernel.org> <046c27a3937b27c26ece93f835e692c75c7bd1a0.camel@perches.com>
+In-Reply-To: <046c27a3937b27c26ece93f835e692c75c7bd1a0.camel@perches.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 6 Dec 2021 10:25:43 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARYvpFB-8gurgokFGMLiV6iQWwqdu=MtvGjhTdEv9StvA@mail.gmail.com>
+Message-ID: <CAK7LNARYvpFB-8gurgokFGMLiV6iQWwqdu=MtvGjhTdEv9StvA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kbuild: move headers_check.pl to usr/include/
+To:     Joe Perches <joe@perches.com>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Auto-closing this bug as obsolete.
-Crashes did not happen for a while, no reproducer and no activity.
+On Mon, Dec 6, 2021 at 10:16 AM Joe Perches <joe@perches.com> wrote:
+>
+> On Mon, 2021-12-06 at 10:05 +0900, Masahiro Yamada wrote:
+> > This script is only used by usr/include/Makefile. Make it local to
+> > the directory.
+> >
+> > Update the comment in include/uapi/linux/soundcard.h because
+> > 'make headers_check' is no longer functional.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  include/uapi/linux/soundcard.h            | 2 +-
+> >  usr/include/Makefile                      | 2 +-
+> >  {scripts => usr/include}/headers_check.pl | 0
+> >  3 files changed, 2 insertions(+), 2 deletions(-)
+> >  rename {scripts => usr/include}/headers_check.pl (100%)
+> >
+> > diff --git a/include/uapi/linux/soundcard.h b/include/uapi/linux/soundcard.h
+> []
+> > @@ -1051,7 +1051,7 @@ typedef struct mixer_vol_table {
+> >   *   the GPL version of OSS-4.x and build against that version
+> >   *   of the header.
+> >   *
+> > - *   We redefine the extern keyword so that make headers_check
+> > + *   We redefine the extern keyword so that scripts/headers_check.pl
+>
+> Didn't you just move/rename this file?
+
+My bad - it is the old file path.
+
+Thanks, I will fix it.
+
+
+
+
+
+> > diff --git a/scripts/headers_check.pl b/usr/include/headers_check.pl
+> > similarity index 100%
+> > rename from scripts/headers_check.pl
+> > rename to usr/include/headers_check.pl
+>
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada

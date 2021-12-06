@@ -2,121 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41117469D88
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:33:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 818EA469DFA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:35:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386876AbhLFPaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:30:13 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37210 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348351AbhLFPSS (ORCPT
+        id S1388996AbhLFPf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:35:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56998 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345674AbhLFPWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:18:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E57E61333
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 15:14:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06363C341C6;
-        Mon,  6 Dec 2021 15:14:46 +0000 (UTC)
-Date:   Mon, 6 Dec 2021 15:14:43 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Jianyong Wu <Jianyong.Wu@arm.com>,
-        Anshuman Khandual <Anshuman.Khandual@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "gshan@redhat.com" <gshan@redhat.com>,
-        Justin He <Justin.He@arm.com>, nd <nd@arm.com>
-Subject: Re: [PATCH v1] arm64/mm: avoid race condition of update page table
- when kernel init
-Message-ID: <Ya4o4xa53YZ0SXls@arm.com>
-References: <20211027094828.7629-1-jianyong.wu@arm.com>
- <1cd8e875-24b1-2904-4e9f-2a4eb13674dc@arm.com>
- <AM9PR08MB72767A6DFA5A7ED8117E7C44F4869@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <YapXa8JWPNhkePwO@arm.com>
- <3c971e70-f8c7-4406-d098-74e92f3c7dc4@redhat.com>
+        Mon, 6 Dec 2021 10:22:24 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24909C08EA47;
+        Mon,  6 Dec 2021 07:14:49 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 265421F4488A
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638803687; bh=0wYI5HLADYAd4xSANRFLZ/t5SGL4HjQoUDDbtVZMntw=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=F3i+qP58ek+QIKjw1gTAd6rIjXU196UrMqKi+DJqxtwKT9teAAAKYDKlz5oFjx46y
+         FPqYUOo3CrAC3nuDPAyR2f16fDPcNAwAenlgSg0xB58532r5z07c3PBmgezyJ6ti6L
+         KebBY0RT6kj0OndKhn9btJ7CLlBQznplhoMfPx+oIn44P4Yp4uw0SnnewMaBvZ7IeD
+         KxkWDS4nJRLje/JEm0LgJyq17nuMAIFq11UWBpXnIAKA8FrW2f2CGgYXRyyVob+1Mx
+         FVg68HlMTJE1lQAItxtheu4WVmAArwN9qGVH7ibsCT2t5b0jghIuqZzlmT9nYhBXVH
+         FiDZ12bt+YGDw==
+Subject: Re: [PATCH v4 1/7] net-next: stmmac: dwmac-mediatek: add platform
+ level clocks management
+To:     Biao Huang <biao.huang@mediatek.com>, davem@davemloft.net,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        srv_heupstream@mediatek.com, macpaul.lin@mediatek.com,
+        dkirjanov@suse.de
+References: <20211203063418.14892-1-biao.huang@mediatek.com>
+ <20211203063418.14892-2-biao.huang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <9dc0cbc3-8de0-f1ed-cfc9-852b7e69ab3c@collabora.com>
+Date:   Mon, 6 Dec 2021 16:14:44 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c971e70-f8c7-4406-d098-74e92f3c7dc4@redhat.com>
+In-Reply-To: <20211203063418.14892-2-biao.huang@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 07:13:31PM +0100, David Hildenbrand wrote:
-> On 03.12.21 18:44, Catalin Marinas wrote:
-> > On Thu, Oct 28, 2021 at 08:36:07AM +0100, Jianyong Wu wrote:
-> >> From Anshuman Khandual <anshuman.khandual@arm.com>:
-> >>> On 10/27/21 3:18 PM, Jianyong Wu wrote:
-> >>>> Race condition of page table update can happen in kernel boot period
-> >>>> as both of memory hotplug action when kernel init and the
-> >>>> mark_rodata_ro can update page table. For virtio-mem, the function excute flow chart is:
-> >>>>
-> >>>> -------------------------
-> >>>> kernel_init
-> >>>>   kernel_init_freeable
-> >>>>     ...
-> >>>>       do_initcall
-> >>>>         ...
-> >>>>           module_init [A]
-> >>>>
-> >>>>   ...
-> >>>>   mark_readonly
-> >>>>     mark_rodata_ro [B]
-> >>>> -------------------------
-> > [...]
-> >>>> We can see that the error derived from the l3 translation as the pte
-> >>>> value is *0*. That is because the fixmap has been clear when access.
-> >>>>
-> >>>> Signed-off-by: Jianyong Wu <jianyong.wu@arm.com>
-> >>>> ---
-> >>>>  arch/arm64/mm/mmu.c | 2 ++
-> >>>>  1 file changed, 2 insertions(+)
-> >>>>
-> >>>> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c index
-> >>>> cfd9deb347c3..567dfba8f08a 100644
-> >>>> --- a/arch/arm64/mm/mmu.c
-> >>>> +++ b/arch/arm64/mm/mmu.c
-> >>>> @@ -564,8 +564,10 @@ void mark_rodata_ro(void)
-> >>>>      * to cover NOTES and EXCEPTION_TABLE.
-> >>>>      */
-> >>>>     section_size = (unsigned long)__init_begin - (unsigned long)__start_rodata;
-> >>>> +   get_online_mems();
-> >>>>     update_mapping_prot(__pa_symbol(__start_rodata), (unsigned long)__start_rodata,
-> >>>>                         section_size, PAGE_KERNEL_RO);
-> >>>> +   put_online_mems();
-> >>>>
-> >>>>     debug_checkwx();
-> >>>>  }
-> >>>
-> >>> While this should solve the current problem i.e race between concurrent
-> >>> memory hotplug operation and mark_rodata_ro(), but I am still wondering
-> >>> whether this is the fix at the right place and granularity. Basically a hotplug
-> >>> operation queued in an work queue at [A] can execute during [B] is the root
-> >>> cause of this problem.
-> >>
-> >> Not exactly, this issue doesn't only happen at the the *pure* kernel
-> >> boot. For example, hotplug memory through VM monitor when VM boot. We
-> >> can't foresee when that happen. Thus, this issue can affect all kinds
-> >> of memory hotplug mechanism, including ACPI based memory hotplug and
-> >> virtio-mem. I'm not sure that fix it here is the best way. If the race
-> >> only happens between kernel init and memory hotplug, I think it's fine
-> >> to fix it here. IMO, this issue results from the race for "fixmap"
-> >> resource. I wonder why this global resource is not protected by a
-> >> lock. Maybe we can add one and fix it there.
-> > 
-> > IIUC the race is caused by multiple attempts to use the fixmap at the
-> > same time. We can add a fixmap_lock and hold it during
-> > __create_pgd_mapping().
+Il 03/12/21 07:34, Biao Huang ha scritto:
+> This patch implements clks_config callback for dwmac-mediatek platform,
+> which could support platform level clocks management.
 > 
-> IIRC that's something along the lines I suggested, so, yes :)
+> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
+> ---
+>   .../ethernet/stmicro/stmmac/dwmac-mediatek.c  | 24 ++++++++++++++-----
+>   1 file changed, 18 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> index 58c0feaa8131..157ff655c85e 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-mediatek.c
+> @@ -359,9 +359,6 @@ static int mediatek_dwmac_init(struct platform_device *pdev, void *priv)
+>   		return ret;
+>   	}
+>   
+> -	pm_runtime_enable(&pdev->dev);
+> -	pm_runtime_get_sync(&pdev->dev);
+> -
+>   	return 0;
+>   }
+>   
+> @@ -370,11 +367,25 @@ static void mediatek_dwmac_exit(struct platform_device *pdev, void *priv)
+>   	struct mediatek_dwmac_plat_data *plat = priv;
+>   
+>   	clk_bulk_disable_unprepare(plat->num_clks_to_config, plat->clks);
+> -
+> -	pm_runtime_put_sync(&pdev->dev);
+> -	pm_runtime_disable(&pdev->dev);
+>   }
+>   
+> +static int mediatek_dwmac_clks_config(void *priv, bool enabled)
+> +{
+> +	struct mediatek_dwmac_plat_data *plat = priv;
+> +	int ret = 0;
+> +
+> +	if (enabled) {
+> +		ret = clk_bulk_prepare_enable(plat->num_clks_to_config, plat->clks);
+> +		if (ret) {
+> +			dev_err(plat->dev, "failed to enable clks, err = %d\n", ret);
+> +			return ret;
+> +		}
+> +	} else {
+> +		clk_bulk_disable_unprepare(plat->num_clks_to_config, plat->clks);
+> +	}
+> +
+> +	return ret;
+> +}
+>   static int mediatek_dwmac_probe(struct platform_device *pdev)
+>   {
+>   	struct mediatek_dwmac_plat_data *priv_plat;
+> @@ -420,6 +431,7 @@ static int mediatek_dwmac_probe(struct platform_device *pdev)
+>   	plat_dat->bsp_priv = priv_plat;
+>   	plat_dat->init = mediatek_dwmac_init;
+>   	plat_dat->exit = mediatek_dwmac_exit;
+> +	plat_dat->clks_config = mediatek_dwmac_clks_config;
+>   	mediatek_dwmac_init(pdev, priv_plat);
+>   
+>   	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
+> 
 
-Yeah, I just echoed what you and Anshuman said ;).
+Hello Biao,
 
--- 
-Catalin
+you're removing all calls to pm_runtime_* functions, so there is no more reason
+to include linux/pm_runtime.h in this file: please also remove the inclusion.
+
+Thanks!

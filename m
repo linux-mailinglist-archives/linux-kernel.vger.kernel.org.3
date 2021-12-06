@@ -2,84 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1BEF46A0D2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3697646A086
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:03:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385581AbhLFQO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:14:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356113AbhLFQOc (ORCPT
+        id S1444173AbhLFQFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:05:06 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:48600 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1444071AbhLFQCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:14:32 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BB0C21A26B;
-        Mon,  6 Dec 2021 07:56:43 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id z18so13475036iof.5;
-        Mon, 06 Dec 2021 07:56:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/B+O/WLoYXrsrc0/uuALBJe9vwwa1HcCwSBxBiKBwRQ=;
-        b=XDjn7zFyOLX4YKe0pRtXSzcpVmHH8BCKubpnnYYNmRsD2NBxdkT89tHFqHwO213/zT
-         Eo8fj6G3xNtjlKq08VOWXbeT33MmvoUTnE0Q+jBPQO4fXsQRUePR4//SWzR1siZ4UyX9
-         Pc/+bj+BFy6DbKjLBu+d8tYKnGkcCZ6qibYFZ0pTVocuvyS0vdLFSkgUOabTTskqg2Lf
-         WX7rga7nY7pUFXUeWizyayVNgLjvYheZy1Wx+LYC0eQhtRz2cAFZpcUuaBKIjBaNoGHR
-         TaIOiJf7RJ86Wipd61Co+rPsMaMTjLk+Kt31Irq4l6dXcW8XJGnhPZDl4WhWQqxYYrp9
-         4JwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/B+O/WLoYXrsrc0/uuALBJe9vwwa1HcCwSBxBiKBwRQ=;
-        b=KeJ0ZwsJAPDZQEMmzopZikdd4Y4yc3Ts72eNthr86uUCzuV2I9MYWaosHgFWWYgiDU
-         9kcRwjo/3WBOPXCuiIWtTEthG3Eh4U/gvw0Q8/tiFdZvEpEYXkYYv1HUqm1UvEqKW120
-         CCvXePHdA5oRAkMd95nyf4b4CFwt0ql0wviQ2/84CR376yxLAiOXVM5Ps3/ZOUQU23DE
-         6Gmn+jujR79vqZBDY8wkXvlpx2kNHYVVHny8GVlTJ0x19GzViyyU67ky9CG80YWkaxw5
-         Rg+lLPJyIORDbnWVZQG/QR5ttlMMPKnhKcD8XGqvJUcELhjckytplureQ6fEVUjoi2NX
-         /R5w==
-X-Gm-Message-State: AOAM533T3Of5CAkGaGup6s6iA2gd9kyCEUcYy1O9VBObZqlTmA1YJCYy
-        MGWB+OMTdk7NH3rq7BJXxmbMns+5eSdFxdUR5nrlGrm6bng=
-X-Google-Smtp-Source: ABdhPJy5lnIolLJAuQyxllhbDHoEy96j9+0RJW+gR/oW2NKf7JcXvGjjMR8nTAB744p+sbWn5ftRhugnfmCByL5y9tE=
-X-Received: by 2002:a05:6602:1581:: with SMTP id e1mr34067837iow.64.1638806202927;
- Mon, 06 Dec 2021 07:56:42 -0800 (PST)
+        Mon, 6 Dec 2021 11:02:02 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B6AQR5W010379;
+        Mon, 6 Dec 2021 16:58:22 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=6j4JfF7PbNsMncG3LrQqk6YgpvQ6hOU4ElFAtx3ffEM=;
+ b=ZM9ZGLVdYE0/DUA5HJ3p9ahKRAbDyOel66t2LdNl1YNPuCcewhYtfNI4SLBXBZD5SyEB
+ p/M5p7cOE8qadKdsur5r389hh/m0as+etEIVgkQjSvjIqVRciYXsvJQDsT1x4bwbzU5l
+ YWhognaGjW22khtobrFlzCw83i5U9xcgB8pZG01Yyg3MUveK3DetQTnEEDE6PWVgMlcB
+ Acpasp71la5dl8R2ZYJrGpB8gta4AnIFJ/041lvvNL0kkzpY+zynQbiKn2tvU/xxUKag
+ FYon4hJx05n5GtaVL3Qfy7J3JT7VA9pnQtg2n4s7UzLnX11hcjs3l2mNeNVE2Zi4a43S 7w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3csb4j3dx1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 16:58:22 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2FA1510002A;
+        Mon,  6 Dec 2021 16:58:21 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 23E6820930D;
+        Mon,  6 Dec 2021 16:58:21 +0100 (CET)
+Received: from localhost (10.75.127.49) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 6 Dec 2021 16:58:20
+ +0100
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+To:     <hminas@synopsys.com>, <gregkh@linuxfoundation.org>,
+        <robh+dt@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <devicetree@vger.kernel.org>, <amelie.delaunay@foss.st.com>,
+        <fabrice.gasnier@foss.st.com>, <alexandre.torgue@foss.st.com>
+Subject: [PATCH 0/3] usb: dwc2: drd: add support for role-switch-default-mode
+Date:   Mon, 6 Dec 2021 16:56:40 +0100
+Message-ID: <1638806203-6624-1-git-send-email-fabrice.gasnier@foss.st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20211206140313.5653-1-ojeda@kernel.org> <20211206140313.5653-12-ojeda@kernel.org>
- <Ya4mAqoOa8zIeZGZ@kroah.com>
-In-Reply-To: <Ya4mAqoOa8zIeZGZ@kroah.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 6 Dec 2021 16:56:32 +0100
-Message-ID: <CANiq72kCmLgrv++mFygR6dt0xOhfv04o9j6jYLQ1N+zLNvqohQ@mail.gmail.com>
-Subject: Re: [PATCH 11/19] vsprintf: add new `%pA` format specifier
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Gary Guo <gary@garyguo.net>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-06_05,2021-12-06_02,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 4:46 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> That should be in a .h file somewhere.  Remember, don't put #ifdef in .c
-> files please.
+This series adds support for the role-switch-default-mode binding, to configure
+the controller default mode, when the role is USB_ROLE_NONE.
 
-Will do, thanks for reviewing!
+This has been tested on STM32MP15 DK2 board, with:
+ &usbotg_hs {
+ 	phys = <&usbphyc_port1 0>;
+ 	phy-names = "usb2-phy";
+ 	usb-role-switch;
+ 	dr_mode = "peripheral";
+ 	role-switch-default-mode = "peripheral";
+ 	status = "okay";
+ }
 
-> Same here, this should not be needed if you put it in a .h file
-> correctly.
+Fabrice Gasnier (3):
+  dt-bindings: usb: document role-switch-default-mode property in dwc2
+  usb: dwc2: drd: add role-switch-default-node support
+  usb: dwc2: drd: restore role and overrides upon resume
 
-This one is mimicking the `CONFIG_BLOCK` one (`case 'g'` a bit above)
--- but we can change it, of course.
+ Documentation/devicetree/bindings/usb/dwc2.yaml |  3 ++
+ drivers/usb/dwc2/core.h                         |  3 ++
+ drivers/usb/dwc2/drd.c                          | 51 ++++++++++++++++++++++++-
+ drivers/usb/dwc2/platform.c                     | 10 +++--
+ 4 files changed, 61 insertions(+), 6 deletions(-)
 
-Cheers,
-Miguel
+-- 
+2.7.4
+

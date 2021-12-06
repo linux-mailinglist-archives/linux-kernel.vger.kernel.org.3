@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EAEB469A8C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E4E46A048
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346526AbhLFPIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:08:44 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38150 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346478AbhLFPGe (ORCPT
+        id S1443189AbhLFQAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:00:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390507AbhLFPm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:06:34 -0500
+        Mon, 6 Dec 2021 10:42:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BE5C0A8887;
+        Mon,  6 Dec 2021 07:26:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CFD2B8111B;
-        Mon,  6 Dec 2021 15:03:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5480C341C1;
-        Mon,  6 Dec 2021 15:03:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A3CBB81126;
+        Mon,  6 Dec 2021 15:26:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B04C34900;
+        Mon,  6 Dec 2021 15:26:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802983;
-        bh=vpalSeWJqTqSu3JIAMiqWfYVsu/bWmJrcPhYVOf+oyU=;
+        s=korg; t=1638804414;
+        bh=CnKad2KUeEF6EYBGmfXHutwjSQIaiXQ+nm3oakBq6mU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OtHzS9zKMflxeITsBxnvAQ8lEVGGbrGOSKwVWIsHEJAbH/9su0GrrqXdFYeOORyk4
-         N2M4tJVTlkWD1JOUdVPbjN5EB+M5izdGPuMJ1Ad9rybJ4u7gbb+7NH3cnRZtzFK/p+
-         Bjnjj1C7kO7h5xeIjpeiJ6SA4K6w8aBVcNUFCA60=
+        b=uFr8oD6fmalpk8PDaFGqnh4WVrHf1B2OZ7skK3OLUt9z2D8PWm5X/tF1yO9lgHd3a
+         sI294HBPgqsB7tmrBI4ll1kztF2whxX1wgpvt0DoqOnxflb7z4RUIdQPlhX1QW9dQn
+         Vo3GN0FevlRUJwbtR2iu3zG17DGlJ4I/xmsxwl6I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 17/62] ARM: socfpga: Fix crash with CONFIG_FORTIRY_SOURCE
+        stable@vger.kernel.org, Benjamin Poirier <bpoirier@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 106/207] net: mpls: Fix notifications when deleting a device
 Date:   Mon,  6 Dec 2021 15:56:00 +0100
-Message-Id: <20211206145549.759809280@linuxfoundation.org>
+Message-Id: <20211206145613.915776828@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,81 +48,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Benjamin Poirier <bpoirier@nvidia.com>
 
-[ Upstream commit 187bea472600dcc8d2eb714335053264dd437172 ]
+commit 7d4741eacdefa5f0475431645b56baf00784df1f upstream.
 
-When CONFIG_FORTIFY_SOURCE is set, memcpy() checks the potential
-buffer overflow and panics.  The code in sofcpga bootstrapping
-contains the memcpy() calls are mistakenly translated as the shorter
-size, hence it triggers a panic as if it were overflowing.
+There are various problems related to netlink notifications for mpls route
+changes in response to interfaces being deleted:
+* delete interface of only nexthop
+	DELROUTE notification is missing RTA_OIF attribute
+* delete interface of non-last nexthop
+	NEWROUTE notification is missing entirely
+* delete interface of last nexthop
+	DELROUTE notification is missing nexthop
 
-This patch changes the secondary_trampoline and *_end definitions
-to arrays for avoiding the false-positive crash above.
+All of these problems stem from the fact that existing routes are modified
+in-place before sending a notification. Restructure mpls_ifdown() to avoid
+changing the route in the DELROUTE cases and to create a copy in the
+NEWROUTE case.
 
-Fixes: 9c4566a117a6 ("ARM: socfpga: Enable SMP for socfpga")
-Suggested-by: Kees Cook <keescook@chromium.org>
-Buglink: https://bugzilla.suse.com/show_bug.cgi?id=1192473
-Link: https://lore.kernel.org/r/20211117193244.31162-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: f8efb73c97e2 ("mpls: multipath route support")
+Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/mach-socfpga/core.h    | 2 +-
- arch/arm/mach-socfpga/platsmp.c | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ net/mpls/af_mpls.c |   68 ++++++++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 52 insertions(+), 16 deletions(-)
 
-diff --git a/arch/arm/mach-socfpga/core.h b/arch/arm/mach-socfpga/core.h
-index 65e1817d8afe6..692a287a8712d 100644
---- a/arch/arm/mach-socfpga/core.h
-+++ b/arch/arm/mach-socfpga/core.h
-@@ -48,7 +48,7 @@ extern void __iomem *sdr_ctl_base_addr;
- u32 socfpga_sdram_self_refresh(u32 sdr_base);
- extern unsigned int socfpga_sdram_self_refresh_sz;
+--- a/net/mpls/af_mpls.c
++++ b/net/mpls/af_mpls.c
+@@ -1491,22 +1491,52 @@ static void mpls_dev_destroy_rcu(struct
+ 	kfree(mdev);
+ }
  
--extern char secondary_trampoline, secondary_trampoline_end;
-+extern char secondary_trampoline[], secondary_trampoline_end[];
- 
- extern unsigned long socfpga_cpu1start_addr;
- 
-diff --git a/arch/arm/mach-socfpga/platsmp.c b/arch/arm/mach-socfpga/platsmp.c
-index 07945748b5714..1dfc9e7389a74 100644
---- a/arch/arm/mach-socfpga/platsmp.c
-+++ b/arch/arm/mach-socfpga/platsmp.c
-@@ -31,14 +31,14 @@
- 
- static int socfpga_boot_secondary(unsigned int cpu, struct task_struct *idle)
+-static void mpls_ifdown(struct net_device *dev, int event)
++static int mpls_ifdown(struct net_device *dev, int event)
  {
--	int trampoline_size = &secondary_trampoline_end - &secondary_trampoline;
-+	int trampoline_size = secondary_trampoline_end - secondary_trampoline;
+ 	struct mpls_route __rcu **platform_label;
+ 	struct net *net = dev_net(dev);
+-	u8 alive, deleted;
+ 	unsigned index;
  
- 	if (socfpga_cpu1start_addr) {
- 		/* This will put CPU #1 into reset. */
- 		writel(RSTMGR_MPUMODRST_CPU1,
- 		       rst_manager_base_addr + SOCFPGA_RSTMGR_MODMPURST);
+ 	platform_label = rtnl_dereference(net->mpls.platform_label);
+ 	for (index = 0; index < net->mpls.platform_labels; index++) {
+ 		struct mpls_route *rt = rtnl_dereference(platform_label[index]);
++		bool nh_del = false;
++		u8 alive = 0;
  
--		memcpy(phys_to_virt(0), &secondary_trampoline, trampoline_size);
-+		memcpy(phys_to_virt(0), secondary_trampoline, trampoline_size);
+ 		if (!rt)
+ 			continue;
  
- 		writel(virt_to_phys(secondary_startup),
- 		       sys_manager_base_addr + (socfpga_cpu1start_addr & 0x000000ff));
-@@ -56,12 +56,12 @@ static int socfpga_boot_secondary(unsigned int cpu, struct task_struct *idle)
+-		alive = 0;
+-		deleted = 0;
++		if (event == NETDEV_UNREGISTER) {
++			u8 deleted = 0;
++
++			for_nexthops(rt) {
++				struct net_device *nh_dev =
++					rtnl_dereference(nh->nh_dev);
++
++				if (!nh_dev || nh_dev == dev)
++					deleted++;
++				if (nh_dev == dev)
++					nh_del = true;
++			} endfor_nexthops(rt);
++
++			/* if there are no more nexthops, delete the route */
++			if (deleted == rt->rt_nhn) {
++				mpls_route_update(net, index, NULL, NULL);
++				continue;
++			}
++
++			if (nh_del) {
++				size_t size = sizeof(*rt) + rt->rt_nhn *
++					rt->rt_nh_size;
++				struct mpls_route *orig = rt;
++
++				rt = kmalloc(size, GFP_KERNEL);
++				if (!rt)
++					return -ENOMEM;
++				memcpy(rt, orig, size);
++			}
++		}
++
+ 		change_nexthops(rt) {
+ 			unsigned int nh_flags = nh->nh_flags;
  
- static int socfpga_a10_boot_secondary(unsigned int cpu, struct task_struct *idle)
- {
--	int trampoline_size = &secondary_trampoline_end - &secondary_trampoline;
-+	int trampoline_size = secondary_trampoline_end - secondary_trampoline;
+@@ -1530,16 +1560,15 @@ static void mpls_ifdown(struct net_devic
+ next:
+ 			if (!(nh_flags & (RTNH_F_DEAD | RTNH_F_LINKDOWN)))
+ 				alive++;
+-			if (!rtnl_dereference(nh->nh_dev))
+-				deleted++;
+ 		} endfor_nexthops(rt);
  
- 	if (socfpga_cpu1start_addr) {
- 		writel(RSTMGR_MPUMODRST_CPU1, rst_manager_base_addr +
- 		       SOCFPGA_A10_RSTMGR_MODMPURST);
--		memcpy(phys_to_virt(0), &secondary_trampoline, trampoline_size);
-+		memcpy(phys_to_virt(0), secondary_trampoline, trampoline_size);
+ 		WRITE_ONCE(rt->rt_nhn_alive, alive);
  
- 		writel(virt_to_phys(secondary_startup),
- 		       sys_manager_base_addr + (socfpga_cpu1start_addr & 0x00000fff));
--- 
-2.33.0
-
+-		/* if there are no more nexthops, delete the route */
+-		if (event == NETDEV_UNREGISTER && deleted == rt->rt_nhn)
+-			mpls_route_update(net, index, NULL, NULL);
++		if (nh_del)
++			mpls_route_update(net, index, rt, NULL);
+ 	}
++
++	return 0;
+ }
+ 
+ static void mpls_ifup(struct net_device *dev, unsigned int flags)
+@@ -1597,8 +1626,12 @@ static int mpls_dev_notify(struct notifi
+ 		return NOTIFY_OK;
+ 
+ 	switch (event) {
++		int err;
++
+ 	case NETDEV_DOWN:
+-		mpls_ifdown(dev, event);
++		err = mpls_ifdown(dev, event);
++		if (err)
++			return notifier_from_errno(err);
+ 		break;
+ 	case NETDEV_UP:
+ 		flags = dev_get_flags(dev);
+@@ -1609,13 +1642,18 @@ static int mpls_dev_notify(struct notifi
+ 		break;
+ 	case NETDEV_CHANGE:
+ 		flags = dev_get_flags(dev);
+-		if (flags & (IFF_RUNNING | IFF_LOWER_UP))
++		if (flags & (IFF_RUNNING | IFF_LOWER_UP)) {
+ 			mpls_ifup(dev, RTNH_F_DEAD | RTNH_F_LINKDOWN);
+-		else
+-			mpls_ifdown(dev, event);
++		} else {
++			err = mpls_ifdown(dev, event);
++			if (err)
++				return notifier_from_errno(err);
++		}
+ 		break;
+ 	case NETDEV_UNREGISTER:
+-		mpls_ifdown(dev, event);
++		err = mpls_ifdown(dev, event);
++		if (err)
++			return notifier_from_errno(err);
+ 		mdev = mpls_dev_get(dev);
+ 		if (mdev) {
+ 			mpls_dev_sysctl_unregister(dev, mdev);
+@@ -1626,8 +1664,6 @@ static int mpls_dev_notify(struct notifi
+ 	case NETDEV_CHANGENAME:
+ 		mdev = mpls_dev_get(dev);
+ 		if (mdev) {
+-			int err;
+-
+ 			mpls_dev_sysctl_unregister(dev, mdev);
+ 			err = mpls_dev_sysctl_register(dev, mdev);
+ 			if (err)
 
 

@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5288469FEE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8989B469DAB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442165AbhLFPzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:55:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390511AbhLFPm2 (ORCPT
+        id S1387748AbhLFPbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:31:50 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38822 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356533AbhLFPTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:42:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A07C0A8889;
-        Mon,  6 Dec 2021 07:26:58 -0800 (PST)
+        Mon, 6 Dec 2021 10:19:48 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C3B5B81123;
-        Mon,  6 Dec 2021 15:26:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A495C34900;
-        Mon,  6 Dec 2021 15:26:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32E196131B;
+        Mon,  6 Dec 2021 15:16:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14534C341C1;
+        Mon,  6 Dec 2021 15:16:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804417;
-        bh=g5vzduTfSGynRVeX59VVaxoshbzTsTbElMLPzfqW/JI=;
+        s=korg; t=1638803778;
+        bh=zPRGrHeN9UusWfqbPc/BfXjaBey6xO+sOuu6Dqb8wDU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e+9WcYR7aUBFsSxIpBipFd7l/jjVZNCNoFWHRDEmT9F614+G7UUlXvam29GX4CtWS
-         pijx/2XNXqQf/zB6DAknEn71iGTkrib6kHfzpPWLBcPb2mtD+/d7w60MXaIQwdu7/T
-         15TmAxyxJ967FXSwMTd0T+Uyg/AoRCopkAnu3evM=
+        b=tAe9kLWzLdyukoSz2qyxL1v3eG3oTS1131jEnSf6aspACTVAgkAKF/h0fdY2ZHOxm
+         tfxY5KgGdVF+ANocFjxqQro/4HmKZGu+aHk4Rf0s8aSNsBgd77eXrVz5nnHi/VC7fz
+         hQi76eLOYmoId0SNkkq4+VpW8eCIBJXYb291/sAw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 107/207] siphash: use _unaligned version by default
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.10 044/130] KVM: x86: Use a stable condition around all VT-d PI paths
 Date:   Mon,  6 Dec 2021 15:56:01 +0100
-Message-Id: <20211206145613.947954187@linuxfoundation.org>
+Message-Id: <20211206145601.198656060@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,185 +47,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Paolo Bonzini <pbonzini@redhat.com>
 
-commit f7e5b9bfa6c8820407b64eabc1f29c9a87e8993d upstream.
+commit 53b7ca1a359389276c76fbc9e1009d8626a17e40 upstream.
 
-On ARM v6 and later, we define CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
-because the ordinary load/store instructions (ldr, ldrh, ldrb) can
-tolerate any misalignment of the memory address. However, load/store
-double and load/store multiple instructions (ldrd, ldm) may still only
-be used on memory addresses that are 32-bit aligned, and so we have to
-use the CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS macro with care, or we
-may end up with a severe performance hit due to alignment traps that
-require fixups by the kernel. Testing shows that this currently happens
-with clang-13 but not gcc-11. In theory, any compiler version can
-produce this bug or other problems, as we are dealing with undefined
-behavior in C99 even on architectures that support this in hardware,
-see also https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100363.
+Currently, checks for whether VT-d PI can be used refer to the current
+status of the feature in the current vCPU; or they more or less pick
+vCPU 0 in case a specific vCPU is not available.
 
-Fortunately, the get_unaligned() accessors do the right thing: when
-building for ARMv6 or later, the compiler will emit unaligned accesses
-using the ordinary load/store instructions (but avoid the ones that
-require 32-bit alignment). When building for older ARM, those accessors
-will emit the appropriate sequence of ldrb/mov/orr instructions. And on
-architectures that can truly tolerate any kind of misalignment, the
-get_unaligned() accessors resolve to the leXX_to_cpup accessors that
-operate on aligned addresses.
+However, these checks do not attempt to synchronize with changes to
+the IRTE.  In particular, there is no path that updates the IRTE when
+APICv is re-activated on vCPU 0; and there is no path to wakeup a CPU
+that has APICv disabled, if the wakeup occurs because of an IRTE
+that points to a posted interrupt.
 
-Since the compiler will in fact emit ldrd or ldm instructions when
-building this code for ARM v6 or later, the solution is to use the
-unaligned accessors unconditionally on architectures where this is
-known to be fast. The _aligned version of the hash function is
-however still needed to get the best performance on architectures
-that cannot do any unaligned access in hardware.
+To fix this, always go through the VT-d PI path as long as there are
+assigned devices and APICv is available on both the host and the VM side.
+Since the relevant condition was copied over three times, take the hint
+and factor it into a separate function.
 
-This new version avoids the undefined behavior and should produce
-the fastest hash on all architectures we support.
-
-Link: https://lore.kernel.org/linux-arm-kernel/20181008211554.5355-4-ard.biesheuvel@linaro.org/
-Link: https://lore.kernel.org/linux-crypto/CAK8P3a2KfmmGDbVHULWevB0hv71P2oi2ZCHEAqT=8dQfa0=cqQ@mail.gmail.com/
-Reported-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Fixes: 2c956a60778c ("siphash: add cryptographically secure PRF")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Cc: stable@vger.kernel.org
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Reviewed-by: David Matlack <dmatlack@google.com>
+Message-Id: <20211123004311.2954158-5-pbonzini@redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/siphash.h |   14 ++++----------
- lib/siphash.c           |   12 ++++++------
- 2 files changed, 10 insertions(+), 16 deletions(-)
+ arch/x86/kvm/vmx/posted_intr.c |   20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
---- a/include/linux/siphash.h
-+++ b/include/linux/siphash.h
-@@ -27,9 +27,7 @@ static inline bool siphash_key_is_zero(c
+--- a/arch/x86/kvm/vmx/posted_intr.c
++++ b/arch/x86/kvm/vmx/posted_intr.c
+@@ -5,6 +5,7 @@
+ #include <asm/cpu.h>
+ 
+ #include "lapic.h"
++#include "irq.h"
+ #include "posted_intr.h"
+ #include "trace.h"
+ #include "vmx.h"
+@@ -77,13 +78,18 @@ after_clear_sn:
+ 		pi_set_on(pi_desc);
  }
  
- u64 __siphash_aligned(const void *data, size_t len, const siphash_key_t *key);
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u64 __siphash_unaligned(const void *data, size_t len, const siphash_key_t *key);
--#endif
- 
- u64 siphash_1u64(const u64 a, const siphash_key_t *key);
- u64 siphash_2u64(const u64 a, const u64 b, const siphash_key_t *key);
-@@ -82,10 +80,9 @@ static inline u64 ___siphash_aligned(con
- static inline u64 siphash(const void *data, size_t len,
- 			  const siphash_key_t *key)
++static bool vmx_can_use_vtd_pi(struct kvm *kvm)
++{
++	return irqchip_in_kernel(kvm) && enable_apicv &&
++		kvm_arch_has_assigned_device(kvm) &&
++		irq_remapping_cap(IRQ_POSTING_CAP);
++}
++
+ void vmx_vcpu_pi_put(struct kvm_vcpu *vcpu)
  {
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
--	if (!IS_ALIGNED((unsigned long)data, SIPHASH_ALIGNMENT))
-+	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
-+	    !IS_ALIGNED((unsigned long)data, SIPHASH_ALIGNMENT))
- 		return __siphash_unaligned(data, len, key);
--#endif
- 	return ___siphash_aligned(data, len, key);
- }
+ 	struct pi_desc *pi_desc = vcpu_to_pi_desc(vcpu);
  
-@@ -96,10 +93,8 @@ typedef struct {
+-	if (!kvm_arch_has_assigned_device(vcpu->kvm) ||
+-		!irq_remapping_cap(IRQ_POSTING_CAP)  ||
+-		!kvm_vcpu_apicv_active(vcpu))
++	if (!vmx_can_use_vtd_pi(vcpu->kvm))
+ 		return;
  
- u32 __hsiphash_aligned(const void *data, size_t len,
- 		       const hsiphash_key_t *key);
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u32 __hsiphash_unaligned(const void *data, size_t len,
- 			 const hsiphash_key_t *key);
--#endif
+ 	/* Set SN when the vCPU is preempted */
+@@ -141,9 +147,7 @@ int pi_pre_block(struct kvm_vcpu *vcpu)
+ 	struct pi_desc old, new;
+ 	struct pi_desc *pi_desc = vcpu_to_pi_desc(vcpu);
  
- u32 hsiphash_1u32(const u32 a, const hsiphash_key_t *key);
- u32 hsiphash_2u32(const u32 a, const u32 b, const hsiphash_key_t *key);
-@@ -135,10 +130,9 @@ static inline u32 ___hsiphash_aligned(co
- static inline u32 hsiphash(const void *data, size_t len,
- 			   const hsiphash_key_t *key)
- {
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
--	if (!IS_ALIGNED((unsigned long)data, HSIPHASH_ALIGNMENT))
-+	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
-+	    !IS_ALIGNED((unsigned long)data, HSIPHASH_ALIGNMENT))
- 		return __hsiphash_unaligned(data, len, key);
--#endif
- 	return ___hsiphash_aligned(data, len, key);
- }
+-	if (!kvm_arch_has_assigned_device(vcpu->kvm) ||
+-		!irq_remapping_cap(IRQ_POSTING_CAP)  ||
+-		!kvm_vcpu_apicv_active(vcpu))
++	if (!vmx_can_use_vtd_pi(vcpu->kvm))
+ 		return 0;
  
---- a/lib/siphash.c
-+++ b/lib/siphash.c
-@@ -49,6 +49,7 @@
- 	SIPROUND; \
- 	return (v0 ^ v1) ^ (v2 ^ v3);
+ 	WARN_ON(irqs_disabled());
+@@ -256,9 +260,7 @@ int pi_update_irte(struct kvm *kvm, unsi
+ 	struct vcpu_data vcpu_info;
+ 	int idx, ret = 0;
  
-+#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u64 __siphash_aligned(const void *data, size_t len, const siphash_key_t *key)
- {
- 	const u8 *end = data + len - (len % sizeof(u64));
-@@ -80,8 +81,8 @@ u64 __siphash_aligned(const void *data,
- 	POSTAMBLE
- }
- EXPORT_SYMBOL(__siphash_aligned);
-+#endif
+-	if (!kvm_arch_has_assigned_device(kvm) ||
+-	    !irq_remapping_cap(IRQ_POSTING_CAP) ||
+-	    !kvm_vcpu_apicv_active(kvm->vcpus[0]))
++	if (!vmx_can_use_vtd_pi(kvm))
+ 		return 0;
  
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u64 __siphash_unaligned(const void *data, size_t len, const siphash_key_t *key)
- {
- 	const u8 *end = data + len - (len % sizeof(u64));
-@@ -113,7 +114,6 @@ u64 __siphash_unaligned(const void *data
- 	POSTAMBLE
- }
- EXPORT_SYMBOL(__siphash_unaligned);
--#endif
- 
- /**
-  * siphash_1u64 - compute 64-bit siphash PRF value of a u64
-@@ -250,6 +250,7 @@ EXPORT_SYMBOL(siphash_3u32);
- 	HSIPROUND; \
- 	return (v0 ^ v1) ^ (v2 ^ v3);
- 
-+#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u32 __hsiphash_aligned(const void *data, size_t len, const hsiphash_key_t *key)
- {
- 	const u8 *end = data + len - (len % sizeof(u64));
-@@ -280,8 +281,8 @@ u32 __hsiphash_aligned(const void *data,
- 	HPOSTAMBLE
- }
- EXPORT_SYMBOL(__hsiphash_aligned);
-+#endif
- 
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u32 __hsiphash_unaligned(const void *data, size_t len,
- 			 const hsiphash_key_t *key)
- {
-@@ -313,7 +314,6 @@ u32 __hsiphash_unaligned(const void *dat
- 	HPOSTAMBLE
- }
- EXPORT_SYMBOL(__hsiphash_unaligned);
--#endif
- 
- /**
-  * hsiphash_1u32 - compute 64-bit hsiphash PRF value of a u32
-@@ -418,6 +418,7 @@ EXPORT_SYMBOL(hsiphash_4u32);
- 	HSIPROUND; \
- 	return v1 ^ v3;
- 
-+#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u32 __hsiphash_aligned(const void *data, size_t len, const hsiphash_key_t *key)
- {
- 	const u8 *end = data + len - (len % sizeof(u32));
-@@ -438,8 +439,8 @@ u32 __hsiphash_aligned(const void *data,
- 	HPOSTAMBLE
- }
- EXPORT_SYMBOL(__hsiphash_aligned);
-+#endif
- 
--#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
- u32 __hsiphash_unaligned(const void *data, size_t len,
- 			 const hsiphash_key_t *key)
- {
-@@ -461,7 +462,6 @@ u32 __hsiphash_unaligned(const void *dat
- 	HPOSTAMBLE
- }
- EXPORT_SYMBOL(__hsiphash_unaligned);
--#endif
- 
- /**
-  * hsiphash_1u32 - compute 32-bit hsiphash PRF value of a u32
+ 	idx = srcu_read_lock(&kvm->irq_srcu);
 
 

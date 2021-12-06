@@ -2,187 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 582D246A370
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3E146A371
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234616AbhLFRr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 12:47:27 -0500
-Received: from aposti.net ([89.234.176.197]:59760 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239205AbhLFRrZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 12:47:25 -0500
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
-Cc:     list@opendingux.net, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 6/6] dmaengine: jz4780: Support bidirectional I/O on one channel
-Date:   Mon,  6 Dec 2021 17:42:59 +0000
-Message-Id: <20211206174259.68133-7-paul@crapouillou.net>
-In-Reply-To: <20211206174259.68133-1-paul@crapouillou.net>
-References: <20211206174259.68133-1-paul@crapouillou.net>
+        id S240539AbhLFRsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 12:48:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232142AbhLFRsQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 12:48:16 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D17C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 09:44:47 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id i9so11059912ilu.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 09:44:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0awCCs680xscQQTdgkJbUPAtLqPotiTRb/qZpNCKBbs=;
+        b=V20h/AqDaIPIgjacUjBehJoKrkz1ug+dPRNi9A4mRcrCr5bFmQ5J1XCKYnhNti54pr
+         kwhb1NB61Lp8esNLp0/qmt0UocrqqUoNvKiAWgQq7lKChohzSgNRYhUEYQCYXCG0Th3s
+         5b3MdFLkAWg8xUU0d7Jl36ltQWfqX5SRasj5fQJtso8sLhM3yVIxbXkJJ6YUrkhWoKpH
+         09n2g1JnFGqnpnTMMC8nWO/pejR78V+Q7UbF27jEf676eanf+xG+fw3QgijQLr7+Oh90
+         cXnSpwxkktP58uKJ0hzXfDvmOuC/+Ge7qjWzhnjToXun68B3nPsz+ZV3u7HwYIQ/oaA6
+         eYrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0awCCs680xscQQTdgkJbUPAtLqPotiTRb/qZpNCKBbs=;
+        b=47rjTvtPv5yxR6wa6OZPcL3s1JpruS7H7V8QP+tKm+M+XvaPMLHfteLETrNfMc4fZ1
+         BLkjcxAbPFpE+r8Rs/sZR35RHOjWZxxjCF9fuhisMTKuJV/H+lSNtNdJJW1VP5Tld87D
+         y5gzE7DudXef5V5XWtvARz8dmzx40OwhR/9W3TXZEhKDW9Oq2v8fEPGX6WUMMb4faTlm
+         e5iTCRNpE0j3RkGuDLAMdvCrs8Jo7qU4mS1SNszrlRcHN2ONJqh8pjmeTisg90A34H/b
+         oCUqDWDH/9alDN4CkwO2gEiGgt8MjfzKzaIn1oNoOeZ5Ys3dus0TDsBCT0Z4JTx+K7Ag
+         WehQ==
+X-Gm-Message-State: AOAM5330jdMMci19k/uRywRCoWfKWXmYxpBTqgBOgAhsTNPoM6O8uMdS
+        U77FMuZsE0e6iVw8P0PKq4ZHa6jgGa7xHviYbTk=
+X-Google-Smtp-Source: ABdhPJzMMuY+hv1M6ecs2AD0miT00TwORSRigakuQzBvf4gLeX8yGxQ1L5xFRexYq8jVSrtzAmmxXKy5WQbogUZpzoE=
+X-Received: by 2002:a05:6e02:180d:: with SMTP id a13mr33279428ilv.1.1638812686852;
+ Mon, 06 Dec 2021 09:44:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211204181458.10076-1-6812skiii@gmail.com> <f7d9194b-6681-48f0-b5e9-11f43d2849bd@collabora.com>
+In-Reply-To: <f7d9194b-6681-48f0-b5e9-11f43d2849bd@collabora.com>
+From:   Jangwoong Kim <6812skiii@gmail.com>
+Date:   Tue, 7 Dec 2021 02:44:36 +0900
+Message-ID: <CAF=mnpi65WtnK_mF1f8GfMEczS1ruj8q4YbA18R5KvWcpkxLxw@mail.gmail.com>
+Subject: Re: [PATCH] futex: Fix a faulty comment.
+To:     =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, tglx@linutronix.de,
+        dvhart@infradead.org, dave@stgolabs.net,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For some devices with only half-duplex capabilities, it doesn't make
-much sense to use one DMA channel per direction, as both channels will
-never be active at the same time.
+Hi Andr=C3=A9.
 
-Add support for bidirectional I/O on DMA channels. The client drivers
-can then request a "tx-rx" DMA channel which will be used for both
-directions.
+That patch was definitely wrong, I apologize.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/dma/dma-jz4780.c | 48 ++++++++++++++++++++++++++--------------
- 1 file changed, 32 insertions(+), 16 deletions(-)
+However, since futex_wait_multiple_setup() sets the last index of
+futex that was woken up,
+shouldn't the comment be modified as below?
 
-diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
-index c8c4bbd57d14..fc513eb2b289 100644
---- a/drivers/dma/dma-jz4780.c
-+++ b/drivers/dma/dma-jz4780.c
-@@ -122,6 +122,7 @@ struct jz4780_dma_desc {
- 	dma_addr_t desc_phys;
- 	unsigned int count;
- 	enum dma_transaction_type type;
-+	u32 transfer_type;
- 	u32 status;
- };
- 
-@@ -130,7 +131,7 @@ struct jz4780_dma_chan {
- 	unsigned int id;
- 	struct dma_pool *desc_pool;
- 
--	u32 transfer_type;
-+	u32 transfer_type_tx, transfer_type_rx;
- 	u32 transfer_shift;
- 	struct dma_slave_config	config;
- 
-@@ -157,7 +158,7 @@ struct jz4780_dma_dev {
- };
- 
- struct jz4780_dma_filter_data {
--	u32 transfer_type;
-+	u32 transfer_type_tx, transfer_type_rx;
- 	int channel;
- };
- 
-@@ -226,9 +227,10 @@ static inline void jz4780_dma_chan_disable(struct jz4780_dma_dev *jzdma,
- 		jz4780_dma_ctrl_writel(jzdma, JZ_DMA_REG_DCKEC, BIT(chn));
- }
- 
--static struct jz4780_dma_desc *jz4780_dma_desc_alloc(
--	struct jz4780_dma_chan *jzchan, unsigned int count,
--	enum dma_transaction_type type)
-+static struct jz4780_dma_desc *
-+jz4780_dma_desc_alloc(struct jz4780_dma_chan *jzchan, unsigned int count,
-+		      enum dma_transaction_type type,
-+		      enum dma_transfer_direction direction)
- {
- 	struct jz4780_dma_desc *desc;
- 
-@@ -248,6 +250,12 @@ static struct jz4780_dma_desc *jz4780_dma_desc_alloc(
- 
- 	desc->count = count;
- 	desc->type = type;
-+
-+	if (direction == DMA_DEV_TO_MEM)
-+		desc->transfer_type = jzchan->transfer_type_rx;
-+	else
-+		desc->transfer_type = jzchan->transfer_type_tx;
-+
- 	return desc;
- }
- 
-@@ -361,7 +369,7 @@ static struct dma_async_tx_descriptor *jz4780_dma_prep_slave_sg(
- 	unsigned int i;
- 	int err;
- 
--	desc = jz4780_dma_desc_alloc(jzchan, sg_len, DMA_SLAVE);
-+	desc = jz4780_dma_desc_alloc(jzchan, sg_len, DMA_SLAVE, direction);
- 	if (!desc)
- 		return NULL;
- 
-@@ -410,7 +418,7 @@ static struct dma_async_tx_descriptor *jz4780_dma_prep_dma_cyclic(
- 
- 	periods = buf_len / period_len;
- 
--	desc = jz4780_dma_desc_alloc(jzchan, periods, DMA_CYCLIC);
-+	desc = jz4780_dma_desc_alloc(jzchan, periods, DMA_CYCLIC, direction);
- 	if (!desc)
- 		return NULL;
- 
-@@ -455,14 +463,14 @@ static struct dma_async_tx_descriptor *jz4780_dma_prep_dma_memcpy(
- 	struct jz4780_dma_desc *desc;
- 	u32 tsz;
- 
--	desc = jz4780_dma_desc_alloc(jzchan, 1, DMA_MEMCPY);
-+	desc = jz4780_dma_desc_alloc(jzchan, 1, DMA_MEMCPY, 0);
- 	if (!desc)
- 		return NULL;
- 
- 	tsz = jz4780_dma_transfer_size(jzchan, dest | src | len,
- 				       &jzchan->transfer_shift);
- 
--	jzchan->transfer_type = JZ_DMA_DRT_AUTO;
-+	desc->transfer_type = JZ_DMA_DRT_AUTO;
- 
- 	desc->desc[0].dsa = src;
- 	desc->desc[0].dta = dest;
-@@ -528,7 +536,7 @@ static void jz4780_dma_begin(struct jz4780_dma_chan *jzchan)
- 
- 	/* Set transfer type. */
- 	jz4780_dma_chn_writel(jzdma, jzchan->id, JZ_DMA_REG_DRT,
--			      jzchan->transfer_type);
-+			      jzchan->desc->transfer_type);
- 
- 	/*
- 	 * Set the transfer count. This is redundant for a descriptor-driven
-@@ -788,7 +796,8 @@ static bool jz4780_dma_filter_fn(struct dma_chan *chan, void *param)
- 		return false;
- 	}
- 
--	jzchan->transfer_type = data->transfer_type;
-+	jzchan->transfer_type_tx = data->transfer_type_tx;
-+	jzchan->transfer_type_rx = data->transfer_type_rx;
- 
- 	return true;
- }
-@@ -800,11 +809,17 @@ static struct dma_chan *jz4780_of_dma_xlate(struct of_phandle_args *dma_spec,
- 	dma_cap_mask_t mask = jzdma->dma_device.cap_mask;
- 	struct jz4780_dma_filter_data data;
- 
--	if (dma_spec->args_count != 2)
-+	if (dma_spec->args_count == 2) {
-+		data.transfer_type_tx = dma_spec->args[0];
-+		data.transfer_type_rx = dma_spec->args[0];
-+		data.channel = dma_spec->args[1];
-+	} else if (dma_spec->args_count == 3) {
-+		data.transfer_type_tx = dma_spec->args[0];
-+		data.transfer_type_rx = dma_spec->args[1];
-+		data.channel = dma_spec->args[2];
-+	} else {
- 		return NULL;
--
--	data.transfer_type = dma_spec->args[0];
--	data.channel = dma_spec->args[1];
-+	}
- 
- 	if (data.channel > -1) {
- 		if (data.channel >= jzdma->soc_data->nb_channels) {
-@@ -822,7 +837,8 @@ static struct dma_chan *jz4780_of_dma_xlate(struct of_phandle_args *dma_spec,
- 			return NULL;
- 		}
- 
--		jzdma->chan[data.channel].transfer_type = data.transfer_type;
-+		jzdma->chan[data.channel].transfer_type_tx = data.transfer_type_tx;
-+		jzdma->chan[data.channel].transfer_type_rx = data.transfer_type_rx;
- 
- 		return dma_get_slave_channel(
- 			&jzdma->chan[data.channel].vchan.chan);
--- 
-2.33.0
+If so, I will resend a patch.
 
+                /*
+-                * Even if something went wrong, if we find out that a fute=
+x
+-                * was woken, we don't return error and return this index t=
+o
+-                * userspace
++                * Even if something went wrong, if we find out that any fu=
+tex
++                * was woken, we don't return error and return the last ind=
+ex
++                * awoken to userspace
+                 */
+                *woken =3D unqueue_multiple(vs, i);
+                if (*woken >=3D 0)
+
+I sent the patch because I thought this was important enough to be correcte=
+d.
+
+Let me know If this is not crucial enough to be patched, so I won't
+keep sending comment-fixing patches.
+
+Thank you.
+Jangwoong Kim.
+
+2021=EB=85=84 12=EC=9B=94 6=EC=9D=BC (=EC=9B=94) =EC=98=A4=ED=9B=84 9:12, A=
+ndr=C3=A9 Almeida <andrealmeid@collabora.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=
+=EC=84=B1:
+>
+> Hi Jangwoong,
+>
+> Thanks for your patch! However...
+>
+> =C3=80s 15:14 de 04/12/21, 6812skiii@gmail.com escreveu:
+> > From: Jangwoong Kim <6812skiii@gmail.com>
+> >
+> > We return 1, not the index of futex woken up.
+> >
+> > Signed-off-by: Jangwoong Kim <6812skiii@gmail.com>
+> > ---
+> >  kernel/futex/waitwake.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/kernel/futex/waitwake.c b/kernel/futex/waitwake.c
+> > index 4ce0923f1ce3..d148e5d4956b 100644
+> > --- a/kernel/futex/waitwake.c
+> > +++ b/kernel/futex/waitwake.c
+> > @@ -455,8 +455,8 @@ static int futex_wait_multiple_setup(struct futex_v=
+ector *vs, int count, int *wo
+> >
+> >               /*
+> >                * Even if something went wrong, if we find out that a fu=
+tex
+> > -              * was woken, we don't return error and return this index=
+ to
+> > -              * userspace
+> > +              * was woken, we don't return error and make userspace aw=
+are
+> > +              * of this by returning 1.
+>
+> We return to userspace the value at *woken, so your fix is wrong. Have a
+> look at futex_wait_multiple():
+>
+>                 ret =3D futex_wait_multiple_setup(vs, count, &hint);
+>                 if (ret) {
+>                         if (ret > 0) {
+>                                 /* A futex was woken during setup */
+>                                 ret =3D hint;
+>                         }
+>                         return ret;
+>                 }
+>
+> When we return 1 at futex_wait_multiple_setup(), we end up returning the
+> hint/woken value to userspace.
+>
+> Let me know if you have questions.
+>
+>         Andr=C3=A9

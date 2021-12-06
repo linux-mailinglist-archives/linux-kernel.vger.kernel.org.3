@@ -2,290 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6470C46A0F1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A647C46A0F7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386340AbhLFQRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:17:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40984 "EHLO
+        id S1358489AbhLFQR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:17:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345862AbhLFQRG (ORCPT
+        with ESMTP id S1358325AbhLFQRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:17:06 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24ECDC09B19A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:04:28 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id o13so23384145wrs.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 08:04:28 -0800 (PST)
+        Mon, 6 Dec 2021 11:17:16 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B6AC041285
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:05:10 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id l190so10895947pge.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 08:05:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=nMw+1lOhPz92ldC1eztxTws1Eot0vmOAhw9KFEmlatA=;
-        b=CXhtCLa0Jq4SL6nVdLuPURxfHR0k4qK1Rww+3X6KrpuMJjurBmpAffkEldJfeQ39yq
-         WZih5woy8XlEsxOHdJDUqODoADNOGf4LSfvGducTV0O91KRnxvQRXdz84uLb5EmqUZr1
-         9bixA2+IivaTlPw62TXacStZ3QRAeVoCdCNJqTCKKwZKYl4NMCZmmTyIhBJ7f0jWmr83
-         IgMBXuElFxUtuBns4W3bkLR6duw8u56rcVHDv7Do7hd6Bvyf9SjJ3eePrRSESt5M6/U7
-         Hjv19pO72SUYCehbREtrEPLcFqBLluLQswPdK7+kMmTt4iFO4pD/pQR2GMRCGZt1l8p5
-         9bbA==
+         :content-disposition:in-reply-to;
+        bh=R8uom+3RoLvLSEJ+X9yx8e3KNCgSngI5SQFrHTZn8eY=;
+        b=ZwZoHWfVJ2wXVbMRRgjSfLeBveuW2h1kmvTahA8j7QjLMxysxWJOxw7WGRXH5MNz6y
+         iWFwqsNZ4txYOUbvPqlnDN5hnf+xjsn1WvxUd5hyFHKHJ7S5MDaNXteAVpoWPWJceAGF
+         gajLbXT/p2WPhtiYT0iChRQ7Wp4zBwY54ojdQW+Sbt72tRNHI9nGTK3Hk1hu3vQ5sGsz
+         oiFYu+cS4EOBijLPCn2l5jnjTXCKd6RyrFtwspl29sZks8s4BOreANfDAmR9TlHbBXFN
+         Bl8d4satBq5bi/JejCQ6xVyepFNpSm7CksssX+CYkFeh/TnJEwjgNgEgcErsrv5XzTrc
+         Qb2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nMw+1lOhPz92ldC1eztxTws1Eot0vmOAhw9KFEmlatA=;
-        b=G9O1mAVyONGveDqY0NdIadhzqQ7i+QP29HQTOPf4m0+L/il3vK7l00rk/k8PcqMp5V
-         qiSjzc/ASwvWUj4GaekWvxa8nnSwXdqB59ZDnVqtf2UZVyjryYEoY1+37yOhc5oiXKfW
-         FfUIl+1NebmovnHfUO+Rwenkt8uLPVfT/uaU7wA4jQIYWPJBVFqtnPwDMonNtKib6sNv
-         eNS60hC3Z24X3lKptECql9vTjN75hIkoRMvMoNqHRPEq4b2Bm4g6G6VFR3LRikCxi1k/
-         wWFokSajVCD/BIq/FaYdQ0PYlEBbyJc2fEbr8x+ys7ta3CC8MWCuX+SlvjnqeSPIoAPx
-         KpjQ==
-X-Gm-Message-State: AOAM53383dnRAwyvF6li0+kEnWNtB5bwNTFkNnyiorc6trcFYSlq5AA1
-        XLtJ90Rt1VAU+4B1CUVtPdbBrA==
-X-Google-Smtp-Source: ABdhPJz0YemwuDBQz7Ry7eX34+eYyc0zBI0JawB1/jHvbuzSW780auup+99/7WHLWV533VaaBi8uMg==
-X-Received: by 2002:adf:d1c2:: with SMTP id b2mr44013090wrd.114.1638806666388;
-        Mon, 06 Dec 2021 08:04:26 -0800 (PST)
-Received: from elver.google.com ([2a00:79e0:15:13:88f3:db53:e34:7bb0])
-        by smtp.gmail.com with ESMTPSA id o3sm14929749wms.10.2021.12.06.08.04.25
+         :mime-version:content-disposition:in-reply-to;
+        bh=R8uom+3RoLvLSEJ+X9yx8e3KNCgSngI5SQFrHTZn8eY=;
+        b=TcbE8Dqqv4X4hW+vVeL377UIeomHTaDNkRWxZUE+WS3fo1dzXrKT1wsE8wAGrQVWVq
+         SJvbEFPcmUQ0dHoeQzPUm0dD9a3hoh7wsNZzWFmD4YbstNcsUS4rWJ5fE22ogsqxtEA3
+         log8NYfi01QzAmKtP0TMrNJUK1UzvsEKOJHyrJqklmLQqNDnwagJI9UTsZd6USboLUJR
+         qzzZgyAHhDn+QrN2+gdy0XqsBA8vRrclnukUuqYqs8p4WlMkL4WsbfUokaYfFQTOGvgl
+         jhfBybXJsgTCknOKxpoV+8hgouzok7X3dKT67dwG1h7otK1TGBpp4agschB50j07Ak8v
+         4S0A==
+X-Gm-Message-State: AOAM530yS0g4RTdr6m5b2+YzXW2g2oypiGisCNXC9nOysaI8k0cpeqkD
+        AupNzpfYUNHSMD/LOWXa0W3CbA==
+X-Google-Smtp-Source: ABdhPJzVc5FhdO0zg2jaRnYlkgMwRbsI7kVUMYmJxAsf6y5NqdUOMYcSqibf/hMMca/n1AzBktxdEA==
+X-Received: by 2002:a63:dd15:: with SMTP id t21mr1161111pgg.228.1638806709869;
+        Mon, 06 Dec 2021 08:05:09 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id v1sm12284053pfg.169.2021.12.06.08.05.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 08:04:25 -0800 (PST)
-Date:   Mon, 6 Dec 2021 17:04:20 +0100
-From:   Marco Elver <elver@google.com>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev, x86@kernel.org
-Subject: Re: [PATCH v3 08/25] kcsan: Show location access was reordered to
-Message-ID: <Ya40hEQv5SEu7ZeL@elver.google.com>
-References: <20211130114433.2580590-1-elver@google.com>
- <20211130114433.2580590-9-elver@google.com>
- <Ya2Zpf8qpgDYiGqM@boqun-archlinux>
- <CANpmjNMirKGSBW2m+bWRM9_FnjK3_HjnJC=dhyMktx50mwh1GQ@mail.gmail.com>
- <Ya4evHE7uQ9eXpax@boqun-archlinux>
+        Mon, 06 Dec 2021 08:05:09 -0800 (PST)
+Date:   Mon, 6 Dec 2021 16:05:05 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, jmattson@google.com,
+        syzbot <syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com>,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        joro@8bytes.org, linux-kernel@vger.kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, wanpengli@tencent.com, x86@kernel.org
+Subject: Re: [syzbot] WARNING in nested_vmx_vmexit
+Message-ID: <Ya40sXNcLzBUlpdW@google.com>
+References: <00000000000051f90e05d2664f1d@google.com>
+ <87bl1u6qku.fsf@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ya4evHE7uQ9eXpax@boqun-archlinux>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+In-Reply-To: <87bl1u6qku.fsf@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 10:31PM +0800, Boqun Feng wrote:
-[...]
-> Thanks for the explanation, I was missing the swap here. However...
+On Mon, Dec 06, 2021, Vitaly Kuznetsov wrote:
+> syzbot <syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com> writes:
 > 
-> > So in your above example you need to swap "reordered to" and the top
-> > frame of the stack trace.
-> > 
-
-Apologies, I wasn't entirely precise ... what you say below is correct.
-
-> IIUC, the report for my above example will be:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    5f58da2befa5 Merge tag 'drm-fixes-2021-12-03-1' of git://a..
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=14927309b00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=e9ea28d2c3c2c389
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=f1d2136db9c80d4733e8
+> > compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+> >
+> > Unfortunately, I don't have any reproducer for this issue yet.
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com
+> >
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 0 PID: 21158 at arch/x86/kvm/vmx/nested.c:4548 nested_vmx_vmexit+0x16bd/0x17e0 arch/x86/kvm/vmx/nested.c:4547
+> > Modules linked in:
+> > CPU: 0 PID: 21158 Comm: syz-executor.1 Not tainted 5.16.0-rc3-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > RIP: 0010:nested_vmx_vmexit+0x16bd/0x17e0 arch/x86/kvm/vmx/nested.c:4547
 > 
->          | write (reordered) to 0xaaaa of ...:
->          | foo+0x... // address of the write to A
->          | ...
->          |  |
->          |  +-> reordered to: foo+0x... // address of the callsite to bar() in foo()
+> The comment above this WARN_ON_ONCE() says:
 > 
-> , right? Because in replace_stack_entry(), it's not the top frame where
-> the race occurred that gets swapped, it's the frame which belongs to the
-> same function as the original access that gets swapped. In other words,
-> when KCSAN finds the problem, top entries of the calling stack are:
+> 4541)              /*
+> 4542)               * The only expected VM-instruction error is "VM entry with
+> 4543)               * invalid control field(s)." Anything else indicates a
+> 4544)               * problem with L0.  And we should never get here with a
+> 4545)               * VMFail of any type if early consistency checks are enabled.
+> 4546)               */
+> 4547)              WARN_ON_ONCE(vmcs_read32(VM_INSTRUCTION_ERROR) !=
+> 4548)                           VMXERR_ENTRY_INVALID_CONTROL_FIELD);
 > 
-> 	[0] bar+0x.. // address of the write to B
-> 	[1] foo+0x.. // address of the callsite to bar() in foo()
-> 
-> after replace_stack_entry(), they changes to:
-> 
-> 	[0] bar+0x.. // address of the write to B
-> skip  ->[1] foo+0x.. // address of the write to A
-> 
-> , as a result the report won't mention bar() at all.
+> which I think should still be valid and so the problem needs to be
+> looked at L0 (GCE infrastructure). Sean, Jim, your call :-)
 
-Correct.
+The assertion itself is still valid, but look at the call stack.  This is firing
+when KVM tears down the VM, i.e. vmx->fail is likely stale.  I'll bet dollars to
+donuts that commit c8607e4a086f ("KVM: x86: nVMX: don't fail nested VM entry on
+invalid guest state if !from_vmentry") is to blame.  L1 is running with
+unrestricted_guest=Y, so the only way vmx->emulation_required should become true
+is if L2 is active and is not an unrestricted guest.
 
-> And I think a better report will be:
-> 
->          | write (reordered) to 0xaaaa of ...:
->          | foo+0x... // address of the write to A
->          | ...
->          |  |
->          |  +-> reordered to: bar+0x... // address of the write to B in bar()
-> 
-> because it tells users the exact place the accesses get reordered. That
-> means maybe we want something as below? Not completely tested, but I
-> play with scope checking a bit, seems it gives what I want. Thoughts?
+I objected to the patch[*], but looking back at the dates, it appears that I did
+so after the patch was queued and my comments were never addressed.  
+I'll see if I can reproduce this with a selftest.  The fix is likely just:
 
-This is problematic because it makes it much harder to actually figure
-out what's going on, given "reordered to" isn't a full stack trace. So
-if you're deep in some call hierarchy, seeing a random "reordered to"
-line is quite useless. What I want to see, at the very least, is the ip
-to the same function where the original access happened.
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index dc4909b67c5c..927a7c43b73b 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -6665,10 +6665,6 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
+         * consistency check VM-Exit due to invalid guest state and bail.
+         */
+        if (unlikely(vmx->emulation_required)) {
+-
+-               /* We don't emulate invalid state of a nested guest */
+-               vmx->fail = is_guest_mode(vcpu);
+-
+                vmx->exit_reason.full = EXIT_REASON_INVALID_STATE;
+                vmx->exit_reason.failed_vmentry = 1;
+                kvm_register_mark_available(vcpu, VCPU_EXREG_EXIT_INFO_1);
 
-We could of course try and generate a full stack trace at "reordered
-to", but this would entail
+[*] https://lore.kernel.org/all/YWDWPbgJik5spT1D@google.com/
 
-	a) allocating 2x unsigned long[64] on the stack (or moving to
-	   static storage),
-	b) further increasing the report length,
-	c) an even larger number of possibly distinct reports for the
-	   same issue; this makes deduplication even harder.
-
-The reason I couldn't justify all that is that when I looked through
-several dozen "reordered to" reports, I never found anything other than
-the ip in the function frame of the original access useful. That, and in
-most cases the "reordered to" location was in the same function or in an
-inlined function.
-
-The below patch would do what you'd want I think.
-
-My opinion is to err on the side of simplicity until there is evidence
-we need it. Of course, if you have a compelling reason that we need it
-from the beginning, happy to send it as a separate patch on top.
-
-What do you think?
-
-Thanks,
--- Marco
-
------- >8 ------
-
-From: Marco Elver <elver@google.com>
-Date: Mon, 6 Dec 2021 16:35:02 +0100
-Subject: [PATCH] kcsan: Show full stack trace of reordered-to accesses
-
-Change reports involving reordered accesses to show the full stack trace
-of "reordered to" accesses. For example:
-
- | ==================================================================
- | BUG: KCSAN: data-race in test_kernel_wrong_memorder / test_kernel_wrong_memorder
- |
- | read-write to 0xffffffffc02d01e8 of 8 bytes by task 2481 on cpu 2:
- |  test_kernel_wrong_memorder+0x57/0x90
- |  access_thread+0xb7/0x100
- |  kthread+0x2ed/0x320
- |  ret_from_fork+0x22/0x30
- |
- | read-write (reordered) to 0xffffffffc02d01e8 of 8 bytes by task 2480 on cpu 0:
- |  test_kernel_wrong_memorder+0x57/0x90
- |  access_thread+0xb7/0x100
- |  kthread+0x2ed/0x320
- |  ret_from_fork+0x22/0x30
- |   |
- |   +-> reordered to: test_delay+0x31/0x110
- |                     test_kernel_wrong_memorder+0x80/0x90
- |
- | Reported by Kernel Concurrency Sanitizer on:
- | CPU: 0 PID: 2480 Comm: access_thread Not tainted 5.16.0-rc1+ #2
- | Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
- | ==================================================================
-
-Signed-off-by: Marco Elver <elver@google.com>
----
- kernel/kcsan/report.c | 33 +++++++++++++++++++++++----------
- 1 file changed, 23 insertions(+), 10 deletions(-)
-
-diff --git a/kernel/kcsan/report.c b/kernel/kcsan/report.c
-index 67794404042a..a8317d5f5123 100644
---- a/kernel/kcsan/report.c
-+++ b/kernel/kcsan/report.c
-@@ -317,22 +317,29 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
- {
- 	unsigned long symbolsize, offset;
- 	unsigned long target_func;
--	int skip;
-+	int skip, i;
- 
- 	if (kallsyms_lookup_size_offset(ip, &symbolsize, &offset))
- 		target_func = ip - offset;
- 	else
- 		goto fallback;
- 
--	for (skip = 0; skip < num_entries; ++skip) {
-+	skip = get_stack_skipnr(stack_entries, num_entries);
-+	for (i = 0; skip < num_entries; ++skip, ++i) {
- 		unsigned long func = stack_entries[skip];
- 
- 		if (!kallsyms_lookup_size_offset(func, &symbolsize, &offset))
- 			goto fallback;
- 		func -= offset;
- 
-+		replaced[i] = stack_entries[skip];
- 		if (func == target_func) {
--			*replaced = stack_entries[skip];
-+			/*
-+			 * There must be at least 1 entry left in the original
-+			 * @stack_entries, so we know that we will never occupy
-+			 * more than @num_entries - 1 of @replaced.
-+			 */
-+			replaced[i + 1] = 0;
- 			stack_entries[skip] = ip;
- 			return skip;
- 		}
-@@ -341,6 +348,7 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
- fallback:
- 	/* Should not happen; the resulting stack trace is likely misleading. */
- 	WARN_ONCE(1, "Cannot find frame for %pS in stack trace", (void *)ip);
-+	replaced[0] = 0;
- 	return get_stack_skipnr(stack_entries, num_entries);
- }
- 
-@@ -365,11 +373,16 @@ static int sym_strcmp(void *addr1, void *addr2)
- }
- 
- static void
--print_stack_trace(unsigned long stack_entries[], int num_entries, unsigned long reordered_to)
-+print_stack_trace(unsigned long stack_entries[], int num_entries, unsigned long *reordered_to)
- {
- 	stack_trace_print(stack_entries, num_entries, 0);
--	if (reordered_to)
--		pr_err("  |\n  +-> reordered to: %pS\n", (void *)reordered_to);
-+	if (reordered_to[0]) {
-+		int i;
-+
-+		pr_err("  |\n  +-> reordered to: %pS\n", (void *)reordered_to[0]);
-+		for (i = 1; i < NUM_STACK_ENTRIES && reordered_to[i]; ++i)
-+			pr_err("                    %pS\n", (void *)reordered_to[i]);
-+	}
- }
- 
- static void print_verbose_info(struct task_struct *task)
-@@ -390,12 +403,12 @@ static void print_report(enum kcsan_value_change value_change,
- 			 struct other_info *other_info,
- 			 u64 old, u64 new, u64 mask)
- {
--	unsigned long reordered_to = 0;
-+	unsigned long reordered_to[NUM_STACK_ENTRIES] = { 0 };
- 	unsigned long stack_entries[NUM_STACK_ENTRIES] = { 0 };
- 	int num_stack_entries = stack_trace_save(stack_entries, NUM_STACK_ENTRIES, 1);
--	int skipnr = sanitize_stack_entries(stack_entries, num_stack_entries, ai->ip, &reordered_to);
-+	int skipnr = sanitize_stack_entries(stack_entries, num_stack_entries, ai->ip, reordered_to);
- 	unsigned long this_frame = stack_entries[skipnr];
--	unsigned long other_reordered_to = 0;
-+	unsigned long other_reordered_to[NUM_STACK_ENTRIES] = { 0 };
- 	unsigned long other_frame = 0;
- 	int other_skipnr = 0; /* silence uninit warnings */
- 
-@@ -408,7 +421,7 @@ static void print_report(enum kcsan_value_change value_change,
- 	if (other_info) {
- 		other_skipnr = sanitize_stack_entries(other_info->stack_entries,
- 						      other_info->num_stack_entries,
--						      other_info->ai.ip, &other_reordered_to);
-+						      other_info->ai.ip, other_reordered_to);
- 		other_frame = other_info->stack_entries[other_skipnr];
- 
- 		/* @value_change is only known for the other thread */
--- 
-2.34.1.400.ga245620fadb-goog
-
+> >  <TASK>
+> >  vmx_leave_nested arch/x86/kvm/vmx/nested.c:6220 [inline]
+> >  nested_vmx_free_vcpu+0x83/0xc0 arch/x86/kvm/vmx/nested.c:330
+> >  vmx_free_vcpu+0x11f/0x2a0 arch/x86/kvm/vmx/vmx.c:6799
+> >  kvm_arch_vcpu_destroy+0x6b/0x240 arch/x86/kvm/x86.c:10989
+> >  kvm_vcpu_destroy+0x29/0x90 arch/x86/kvm/../../../virt/kvm/kvm_main.c:441
+> >  kvm_free_vcpus arch/x86/kvm/x86.c:11426 [inline]
+> >  kvm_arch_destroy_vm+0x3ef/0x6b0 arch/x86/kvm/x86.c:11545
+> >  kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1189 [inline]
+> >  kvm_put_kvm+0x751/0xe40 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1220
+> >  kvm_vcpu_release+0x53/0x60 arch/x86/kvm/../../../virt/kvm/kvm_main.c:3489
+> >  __fput+0x3fc/0x870 fs/file_table.c:280
+> >  task_work_run+0x146/0x1c0 kernel/task_work.c:164
+> >  exit_task_work include/linux/task_work.h:32 [inline]
+> >  do_exit+0x705/0x24f0 kernel/exit.c:832
+> >  do_group_exit+0x168/0x2d0 kernel/exit.c:929
+> >  get_signal+0x1740/0x2120 kernel/signal.c:2852
+> >  arch_do_signal_or_restart+0x9c/0x730 arch/x86/kernel/signal.c:868
+> >  handle_signal_work kernel/entry/common.c:148 [inline]
+> >  exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+> >  exit_to_user_mode_prepare+0x191/0x220 kernel/entry/common.c:207
+> >  __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+> >  syscall_exit_to_user_mode+0x2e/0x70 kernel/entry/common.c:300
+> >  do_syscall_64+0x53/0xd0 arch/x86/entry/common.c:86
+> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > RIP: 0033:0x7f3388806b19
+> > Code: Unable to access opcode bytes at RIP 0x7f3388806aef.
+> > RSP: 002b:00007f338773a218 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+> > RAX: fffffffffffffe00 RBX: 00007f338891a0e8 RCX: 00007f3388806b19
+> > RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007f338891a0e8
+> > RBP: 00007f338891a0e0 R08: 0000000000000000 R09: 0000000000000000
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 00007f338891a0ec
+> > R13: 00007fffbe0e838f R14: 00007f338773a300 R15: 0000000000022000
+> >  </TASK>

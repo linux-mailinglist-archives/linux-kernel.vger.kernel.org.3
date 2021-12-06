@@ -2,70 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 698EE469331
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 11:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E759469345
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 11:17:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbhLFKOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 05:14:41 -0500
-Received: from mga05.intel.com ([192.55.52.43]:56255 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229561AbhLFKOl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 05:14:41 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="323541443"
-X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="323541443"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 02:11:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="461753594"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 06 Dec 2021 02:11:03 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1muAxa-000L9L-PK; Mon, 06 Dec 2021 10:11:02 +0000
-Date:   Mon, 6 Dec 2021 18:10:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-core.o:undefined
- reference to `__this_module'
-Message-ID: <202112061809.XT99aPrf-lkp@intel.com>
+        id S235188AbhLFKVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 05:21:22 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:28463 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229561AbhLFKVV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 05:21:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638785873; x=1670321873;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PVV29sV4We6F1jIZFYY+8jqv0ousRDeLGhpOB6Yv/TY=;
+  b=yLtslN6/a0eEDaS4+3/+9Hu433XGnpvG0Kdfc4TD/Q7memr1SVtlMKLs
+   SsN/Q9VUsNtEgSJSv5xkBNfMFIemMvUmLZrLjU7HCBuA+3JJ8HFA3HQMe
+   WsCOJ/Y2hzpLtOl3durBMhlrwrklO4HnKryBUwB9mGIsezRUk0h0sxw8B
+   c=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 Dec 2021 02:17:52 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 02:17:52 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 6 Dec 2021 02:17:48 -0800
+Received: from [10.50.43.186] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 6 Dec 2021
+ 02:12:42 -0800
+Message-ID: <09a477b7-4219-756d-ed72-96fcdeb6a77b@quicinc.com>
+Date:   Mon, 6 Dec 2021 15:41:05 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.2
+Subject: Re: [PATCHv5 3/4] tracing: Add register read/write tracing support
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Marc Zyngier <maz@kernel.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        <quic_psodagud@quicinc.com>,
+        Prasad Sodagudi <psodagud@codeaurora.org>
+References: <cover.1638275062.git.quic_saipraka@quicinc.com>
+ <e088f4b4021f2e56093c7f73e77f556059e114b7.1638275062.git.quic_saipraka@quicinc.com>
+ <CAK8P3a1wOEkoteJRu+qpE0k3gJ0fRnwfn1Zrtcnmgn5wT4yQdw@mail.gmail.com>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <CAK8P3a1wOEkoteJRu+qpE0k3gJ0fRnwfn1Zrtcnmgn5wT4yQdw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
-commit: d88ae2932df0e670610cb741fec442ad12466c03 i2c: pasemi: Add Apple platform driver
-date:   8 weeks ago
-config: powerpc64-randconfig-r023-20211206 (https://download.01.org/0day-ci/archive/20211206/202112061809.XT99aPrf-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d88ae2932df0e670610cb741fec442ad12466c03
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d88ae2932df0e670610cb741fec442ad12466c03
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
+On 12/6/2021 2:29 PM, Arnd Bergmann wrote:
+> On Mon, Dec 6, 2021 at 9:28 AM Sai Prakash Ranjan
+> <quic_saipraka@quicinc.com> wrote:
+>> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+>> index 420ff4bc67fd..9f55bcc51de1 100644
+>> --- a/kernel/trace/Kconfig
+>> +++ b/kernel/trace/Kconfig
+>> @@ -95,6 +95,13 @@ config RING_BUFFER_ALLOW_SWAP
+>>           Allow the use of ring_buffer_swap_cpu.
+>>           Adds a very slight overhead to tracing when enabled.
+>>
+>> +config TRACE_MMIO_ACCESS
+>> +       bool "Register read/write tracing"
+>> +       depends on TRACING
+>> +       help
+>> +         Create tracepoints for MMIO read/write operations. These trace events
+>> +         can be used for logging all MMIO read/write operations.
+> I think this needs a 'depends on ARCH_HAVE_TRACE_MMIO_ACCESS'
+> or similar.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Sure, will add it.
 
-All error/warnings (new ones prefixed by >>):
+>> +void log_read_mmio(u8 width, const volatile void __iomem *addr)
+>> +{
+>> +       trace_rwmmio_read(CALLER_ADDR0, CALLER_ADDR1, width, addr);
+>> +}
+> Here, it may be better to pass the caller address as an argument, I think
+> CALLER_ADDR1 is not always reliable, though it's possible that it is
+> in the configurations when this file gets enabled.
+>
+>
 
->> powerpc64-linux-ld: warning: orphan section `.stubs' from `drivers/i2c/busses/i2c-pasemi-core.o' being placed in section `.stubs'
->> powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-core.o:(.toc+0x0): undefined reference to `__this_module'
+Do you mean that we use __builtin_return_address(0,1) directly here or 
+that I pass
+__func__ as the argument to log_read/write_mmio or is there some other 
+way to
+pass the caller address?
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Sai

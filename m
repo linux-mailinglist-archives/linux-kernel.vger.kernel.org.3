@@ -2,124 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6810B46A697
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FF746A69E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244480AbhLFUPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 15:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
+        id S1349342AbhLFURH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 15:17:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349384AbhLFUPC (ORCPT
+        with ESMTP id S236134AbhLFURG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 15:15:02 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C2DC0611F7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 12:11:33 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so15110355otu.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 12:11:33 -0800 (PST)
+        Mon, 6 Dec 2021 15:17:06 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418D8C061746;
+        Mon,  6 Dec 2021 12:13:37 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id m15so11505039pgu.11;
+        Mon, 06 Dec 2021 12:13:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ypDUIho7eWHCZJ7Rm8us7oavNNmEtNxG3tY05fvu+RY=;
-        b=XyUZEWbAbyTD3x8dQ0p4NuyJAKpyRvj+HcEOYnANI8nHWL+EDMYBkNOYd8KkvNo7rr
-         H7aODQqhN0WeBX86PxnV6HGVSJQ8tugnbzyQYFmtDECQgYqjhF3Oxoh25iq+Jt2LBjJd
-         S1c1GUR6Z/a+4ww8MN0HudJG+cJfdlrC/yydAMmDrxz057uJxYXNVHnigGxiMOqih+ql
-         YWgsgm9xIDs/jeZ/snxT8AOdXJXIjk5cvgaTfpBX92Pt8p74dNz1WkiSgKKJIy6JYm/a
-         0Qv8Kjx3FlVasKJ2TpLwvfHxWo7Vu16ubsK9o+AsZzuCcUtriZbw79MyZ8Ovhzbk/qjr
-         ZILw==
+        d=gmail.com; s=20210112;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Jz2JvRf9I6ml4as+7X9eW0RqKxewFk1AokBgn/81pZ8=;
+        b=hRg3F60H01IupVj2WihRG0DJcAvMeLN98TThyo2P3RSaZ7kFFZ+Ydqfb8x47ju21FN
+         7cI2CUwZ4boDzAyOvb/9mmOC2SF/XL7PBqvgkrZJy+ny0z6vBgXC1VlgInPdX+SdZYyF
+         uaGSJ/FVfzOa9zDLRXHtu7FX/XUI6mXLqNqnydtL+E0m8tvFiWtokQn3x/QQbi6ph7ul
+         RNMkfxSfWB9jW0eymppAsoT7Mp25RruHxBhE+OWT7v52G8rYY+is8U/XA7SYnyyd43P0
+         O6w+u+PwQ8KV9HenR1DttcmF71RAC72pdXTMwqO/YdQSQw3XyCLcDROBe9eShvCZZJmi
+         hq9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ypDUIho7eWHCZJ7Rm8us7oavNNmEtNxG3tY05fvu+RY=;
-        b=MEiO7a/l+0KDEA1egr1e1gyVaGwj+1WOl8vyeC37rGklDQpUYGW381UjwM82HvUV9y
-         7RHD1mxBI6gPC6V45g9tURH83JIGhLuzMcoH1th5avbuTxWZb+ff8Bx0m30r2JWJcK9N
-         NfmAIxhzU+IIwFGMQRvBG3918dPOBK4WHrxPri3kjnmhTJUxyll60g5Y/OZeh38IT+TC
-         H0ZMek7HaK5XR6S0PDsOWSMpR6dQtraeA25JhNauLasLYpHZ32pfB3WUPAPnkvKcT9DK
-         rmFAZ6PJUcZnSfUtGAhwK8U3wGHEUH8kI708U//rdAkN6+izDN6dE626xVOvc95qJBOd
-         OFTw==
-X-Gm-Message-State: AOAM532hA4Xy9ujN4rTBzdCOYMeJNp8P1nV6+0k/QsGqrYObcoRkBz4v
-        UUkZjmEGmeKcUZovdAVRqr6h/w==
-X-Google-Smtp-Source: ABdhPJxquBRAhZlmEi8XL4TUa6etjEftnBL+pcRWhwWyPPZUItxs0BtS0PUQYihYDzhMNEPZEIkxBw==
-X-Received: by 2002:a9d:7f91:: with SMTP id t17mr30910146otp.197.1638821492818;
-        Mon, 06 Dec 2021 12:11:32 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id q2sm2478175otg.64.2021.12.06.12.11.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 12:11:32 -0800 (PST)
-Date:   Mon, 6 Dec 2021 14:11:29 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH] remoteproc: Fix remaining wrong return formatting in
- documentation
-Message-ID: <Ya5ucVAGf/qFpVbx@builder.lan>
-References: <20211206191858.10741-1-arnaud.pouliquen@foss.st.com>
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Jz2JvRf9I6ml4as+7X9eW0RqKxewFk1AokBgn/81pZ8=;
+        b=71DF/4vVWnCWN/ekB7/RVVtWDa4rBydstM0aKvcsddx9pnAWBBTVXzfem+0N+fN2Vo
+         04e3WVZGXSXPIMHoCHnvljeFyQHLFpC0Cjrd2AKrT3bTgnffEi0wOjs3s4vcXe1m0BUQ
+         mjvrl2TAxK3hgXyIWfldax67Ij+sGkappyMIPsRyXMXDzKF2T1qu0B6dPl970jpZPMQB
+         LLq8kiuLcrQXw1kaK8IGaDbKGmxnHBXZPl/jJFFDEu2wWcJklRUyfnqtlhnFfaU67JwN
+         QK0wZpPbEqsmR5YMAX17ClvoNd5DUroaJotW7dNGpmy6zVMrbz1m4HHHqqmA+atSUo/P
+         iyFA==
+X-Gm-Message-State: AOAM530JhjaBFool0w0FV8gkGPO4AQPCxUFfiJkrg7CYNnLuAAuSJqbU
+        JSM+GUa2SCickmq27l3uWa87oe1GYDE=
+X-Google-Smtp-Source: ABdhPJzIwPbcaBZyKPEA9HUhm6UQg7JtrdJjETdxaIDHPPxzpEgpcDS/yl5o7WJxAs0cI/2IoW569Q==
+X-Received: by 2002:a05:6a00:b4c:b0:4a4:ef57:fd72 with SMTP id p12-20020a056a000b4c00b004a4ef57fd72mr7648290pfo.2.1638821616402;
+        Mon, 06 Dec 2021 12:13:36 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id k6sm202203pjt.14.2021.12.06.12.13.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 12:13:35 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 5.15 000/207] 5.15.7-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        stable@vger.kernel.org
+References: <20211206145610.172203682@linuxfoundation.org>
+Message-ID: <b6a6b54d-90c1-cee6-cafc-9fa28354916e@gmail.com>
+Date:   Mon, 6 Dec 2021 12:13:34 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206191858.10741-1-arnaud.pouliquen@foss.st.com>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 06 Dec 13:18 CST 2021, Arnaud Pouliquen wrote:
-
-> kernel documentation specification:
-> "The return value, if any, should be described in a dedicated section
-> named Return."
+On 12/6/21 6:54 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.7 release.
+> There are 207 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Thanks,
-Bjorn
-
-> ---
->  drivers/remoteproc/mtk_scp_ipi.c   | 4 ++--
->  drivers/remoteproc/st_slim_rproc.c | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> Responses should be made by Wed, 08 Dec 2021 14:55:37 +0000.
+> Anything received after that time might be too late.
 > 
-> diff --git a/drivers/remoteproc/mtk_scp_ipi.c b/drivers/remoteproc/mtk_scp_ipi.c
-> index 6dc955ecab80..00f041ebcde6 100644
-> --- a/drivers/remoteproc/mtk_scp_ipi.c
-> +++ b/drivers/remoteproc/mtk_scp_ipi.c
-> @@ -23,7 +23,7 @@
->   *
->   * Register an ipi function to receive ipi interrupt from SCP.
->   *
-> - * Returns 0 if ipi registers successfully, -error on error.
-> + * Return: 0 if ipi registers successfully, -error on error.
->   */
->  int scp_ipi_register(struct mtk_scp *scp,
->  		     u32 id,
-> @@ -150,7 +150,7 @@ EXPORT_SYMBOL_GPL(scp_ipi_unlock);
->   * When the processing completes, IPI handler registered
->   * by scp_ipi_register will be called in interrupt context.
->   *
-> - * Returns 0 if sending data successfully, -error on error.
-> + * Return: 0 if sending data successfully, -error on error.
->   **/
->  int scp_ipi_send(struct mtk_scp *scp, u32 id, void *buf, unsigned int len,
->  		 unsigned int wait)
-> diff --git a/drivers/remoteproc/st_slim_rproc.c b/drivers/remoteproc/st_slim_rproc.c
-> index 22096adc1ad3..4ed9467897e5 100644
-> --- a/drivers/remoteproc/st_slim_rproc.c
-> +++ b/drivers/remoteproc/st_slim_rproc.c
-> @@ -216,7 +216,7 @@ static const struct rproc_ops slim_rproc_ops = {
->   * obtains and enables any clocks required by the SLIM core and also
->   * ioremaps the various IO.
->   *
-> - * Returns st_slim_rproc pointer or PTR_ERR() on error.
-> + * Return: st_slim_rproc pointer or PTR_ERR() on error.
->   */
->  
->  struct st_slim_rproc *st_slim_rproc_alloc(struct platform_device *pdev,
-> -- 
-> 2.17.1
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.7-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
 > 
+> thanks,
+> 
+> greg k-h
+
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

@@ -2,117 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C21D046A5A9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A0446A5B1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244157AbhLFTcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:32:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
+        id S1348469AbhLFTd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:33:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348235AbhLFTcB (ORCPT
+        with ESMTP id S1348416AbhLFTd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:32:01 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AE3C0613F8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 11:28:32 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id v1so47423718edx.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 11:28:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=l9ZiLxDRvox/7+7uT5B6r8fj/Ckn8ePdbtP5hmNbGJY=;
-        b=HJjTDHc3UjaUNTPIVOOVnUbpGgCogNDQooWwZ9O/V57A+tP75Hab+RYDHGRpjPTuXn
-         hajCT1NJYhzXYGt78yI9LAiXfGE2dXqqjXIsBJ/vkyvWYhzi218EJ0XKmLXc/5UzttOx
-         eWqFDZgPYDpwRoqIwBy8A+mpsZeMMbhzxrCBk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=l9ZiLxDRvox/7+7uT5B6r8fj/Ckn8ePdbtP5hmNbGJY=;
-        b=J8p4dH+G3xCV8uknXrI7CfsiQmYVj+byZE1QTLrArxAQKIl8xYtz8dHKcqvixvBepz
-         fcRPUo8LBpO7VIGYXJ7OOAQ6cn3lMod8c6M2jBZT9UgRYdmo0ryN//KPAhE1rRLp7GCH
-         LdZ6NCyh3X+nkEE5KW+zKxDC6VAFcrzGDzFmcLMMli81uLtKi7nX14KDYu0HXTbMJ7UG
-         7Qt7UlWDexqGZZ+C0RwDerPRgJSgLDIIm1CToKW0DPj0sVnbCENmYcXp/DcOskklnXEU
-         0YvGV0tyE2lbiD27Xne45I8J1TyNkRN5nmXIY4pgTDrLMZUsC4ceG0yn08H9WyYyKtkO
-         sGsg==
-X-Gm-Message-State: AOAM5333/LSECuTMaAzYPGS+oB4ywZYKAKyBxAHQAgjv2RlP2jdN5kTt
-        2aGpPFZs88E9YlzdSp9rFbTP/UnRgQfjoiZR
-X-Google-Smtp-Source: ABdhPJwjT/HjVUcb4yW6QVjlpJ758WjKPbg/E1cwHG1fq09CGBT7BuHKtmbIZz/QTvGZSgfaNJ3zMQ==
-X-Received: by 2002:a17:906:c156:: with SMTP id dp22mr17143166ejc.36.1638818910883;
-        Mon, 06 Dec 2021 11:28:30 -0800 (PST)
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
-        by smtp.gmail.com with ESMTPSA id m6sm8972342edc.36.2021.12.06.11.28.30
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 11:28:30 -0800 (PST)
-Received: by mail-wm1-f45.google.com with SMTP id p27-20020a05600c1d9b00b0033bf8532855so594851wms.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 11:28:30 -0800 (PST)
-X-Received: by 2002:a05:600c:1914:: with SMTP id j20mr730190wmq.26.1638818909838;
- Mon, 06 Dec 2021 11:28:29 -0800 (PST)
+        Mon, 6 Dec 2021 14:33:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0FEC061746;
+        Mon,  6 Dec 2021 11:29:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDF2FB81208;
+        Mon,  6 Dec 2021 19:29:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EF31C341C1;
+        Mon,  6 Dec 2021 19:29:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638818995;
+        bh=cfme0EXJt4xUtU6xUHbW7A5qSAq/bwtXhJkqUeEe9+w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BBdXDWzny5s26e1L+B8Z4WeCVf8TvxdthnP+bKU1i7hQsM5KiAg+26BYMdBXcRtUP
+         5N9ZEP7grhqg+gvoTDzR9U+akIO67JjSDvNDxsfsLN2w3Jxr5LVqDVqC61rKA075dE
+         tzTseYpBAG1q05MBj1fSe9EQcuVRTNJ70roHYuA2k0wxfKafyO3YOzMZAcbjowS+eK
+         8MOxZikPiQTQLSn9U/xk8WgvXL5C3qLFhnUj2zCuk/IflW6X1eYizhCig3FC4MdYAH
+         vH1s+NTNeI3GCI2mNOVi0uObBtx+ewWnRcHOg6kmBXjpFfLcbHPk3KBiK8owL3sBPM
+         nZV2pPmtT89Iw==
+Date:   Mon, 6 Dec 2021 11:29:55 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Michael Heimpold <michael.heimpold@in-tech.com>,
+        jimmy.shen@vertexcom.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH RFC V2 3/4] net: introduce media selection
+ IF_PORT_HOMEPLUG
+Message-ID: <20211206112955.285b26b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <1638623871-21805-4-git-send-email-stefan.wahren@i2se.com>
+References: <1638623871-21805-1-git-send-email-stefan.wahren@i2se.com>
+        <1638623871-21805-4-git-send-email-stefan.wahren@i2se.com>
 MIME-Version: 1.0
-References: <20211204002301.116139-1-ebiggers@kernel.org> <20211204002301.116139-3-ebiggers@kernel.org>
-In-Reply-To: <20211204002301.116139-3-ebiggers@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 6 Dec 2021 11:28:13 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgJ+6qgbB+WCDosxOgDp34ybncUwPJ5Evo8gcXptfzF+Q@mail.gmail.com>
-Message-ID: <CAHk-=wgJ+6qgbB+WCDosxOgDp34ybncUwPJ5Evo8gcXptfzF+Q@mail.gmail.com>
-Subject: Re: [PATCH 2/2] aio: fix use-after-free due to missing POLLFREE handling
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Benjamin LaHaise <bcrl@kvack.org>, linux-aio@kvack.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ramji Jiyani <ramjiyani@google.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 4:23 PM Eric Biggers <ebiggers@kernel.org> wrote:
->
-> require another solution.  This solution is for the queue to be cleared
-> before it is freed, using 'wake_up_poll(wq, EPOLLHUP | POLLFREE);'.
+On Sat,  4 Dec 2021 14:17:50 +0100 Stefan Wahren wrote:
+> Introduce a new media selection dedicated for HomePlug powerline
+> communication. This allows us to use the proper if_port setting in
+> HomePlug drivers.
+> 
+> Suggested-by: Andrew Lunn <andrew@lunn.ch>
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 
-Ugh.
+I _think_ the IF_PORT API is an very ancient (Linux 2.2) way of
+switching ports on early Ethernet cards. Isn't it? It predates
+ethtool and all the modern interfaces. Quick grep seems to indicate
+it's accessed only for old HW as well.
 
-I hate POLLFREE, and the more I look at this, the more I think it's broken.
+Do you have a use case for setting it?
 
-And that
+> diff --git a/include/uapi/linux/netdevice.h b/include/uapi/linux/netdevice.h
+> index f3770c5..0f1f536 100644
+> --- a/include/uapi/linux/netdevice.h
+> +++ b/include/uapi/linux/netdevice.h
+> @@ -53,7 +53,8 @@ enum {
+>          IF_PORT_AUI,
+>          IF_PORT_100BASET,
+>          IF_PORT_100BASETX,
+> -        IF_PORT_100BASEFX
+> +        IF_PORT_100BASEFX,
+> +        IF_PORT_HOMEPLUG
+>  };
+>  
+>  /* hardware address assignment types */
 
-        wake_up_poll(wq, EPOLLHUP | POLLFREE);
-
-in particular looks broken - the intent is that it should remove all
-the wait queue entries (because the wait queue head is going away),
-but wake_up_poll() iself actually does
-
-        __wake_up(x, TASK_NORMAL, 1, poll_to_key(m))
-
-where that '1' is the number of exclusive entries it will wake up.
-
-So if there are two exclusive waiters, wake_up_poll() will simply stop
-waking things up after the first one.
-
-Which defeats the whole POLLFREE thing too.
-
-Maybe I'm missing something, but POLLFREE really is broken.
-
-I'd argue that all of epoll() is broken, but I guess we're stuck with it.
-
-Now, it's very possible that nobody actually uses exclusive waits for
-those wait queues, and my "nr_exclusive" argument is about something
-that isn't actually a bug in reality. But I think it's a sign of
-confusion, and it's just another issue with POLLFREE.
-
-I really wish we could have some way to not have epoll and aio mess
-with the wait-queue lists and cache the wait queue head pointers that
-they don't own.
-
-In the meantime, I don't think these patches make things worse, and
-they may fix things. But see above about "nr_exclusive" and how I
-think wait queue entries might end up avoiding POLLFREE handling..
-
-                  Linus

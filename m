@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CADF9469D9C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2091246A051
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387449AbhLFPbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:31:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S1443496AbhLFQAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:00:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357696AbhLFPTM (ORCPT
+        with ESMTP id S1390543AbhLFPma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:19:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53A3C0698C9;
-        Mon,  6 Dec 2021 07:13:31 -0800 (PST)
+        Mon, 6 Dec 2021 10:42:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8DFC0698D4;
+        Mon,  6 Dec 2021 07:28:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55B82612EB;
-        Mon,  6 Dec 2021 15:13:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D2A4C341C2;
-        Mon,  6 Dec 2021 15:13:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 827B3B81116;
+        Mon,  6 Dec 2021 15:28:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8E56C34902;
+        Mon,  6 Dec 2021 15:28:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803610;
-        bh=jvzNmJK63+tjJYtDhzEY6ibaTayFSQtHZM1E31RcI/w=;
+        s=korg; t=1638804487;
+        bh=96yIe4GIZ3JcXOCSey31u2M+MGmqJRBIdthTgp/tzxs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tw1K5NpkRWlPrBNvx/jhkflwAWJ7SvHMRbSs+OT8EZifqqQO1JyRPPaxe8qvtAqPK
-         ItfpKieOUe3wjd8+B6nM8B9vUOJMBlhIxARhW0pP7C8fdpsFPnkabowOkThdUmNNiq
-         2G/rStAlELUwXOADSjDoAfaYl+yjjP5qMC1l6IMA=
+        b=hh2xo+nMTZWRRc+4C1h0gIEhH048tiGjq3QBs3QY5dWbAjAl8VRCkY+qBluthaLmh
+         q5LvdwPpfM+MplvjMfLzp7tZMcNZGM6IEZIoNEygwQbTXC7hGSwTwLGVp0vMqzP4Jc
+         pz33yEpaS7JjUcQl9hkCshGQoSSqSeSWFkzBQJds=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.4 54/70] parisc: Fix "make install" on newer debian releases
+        stable@vger.kernel.org, Dmytro Linkin <dlinkin@nvidia.com>,
+        Roi Dayan <roid@nvidia.com>, Parav Pandit <parav@nvidia.com>,
+        Mark Bloch <mbloch@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 164/207] net/mlx5: E-switch, Respect BW share of the new group
 Date:   Mon,  6 Dec 2021 15:56:58 +0100
-Message-Id: <20211206145553.789647797@linuxfoundation.org>
+Message-Id: <20211206145615.941996709@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
-References: <20211206145551.909846023@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,30 +51,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Dmytro Linkin <dlinkin@nvidia.com>
 
-commit 0f9fee4cdebfbe695c297e5b603a275e2557c1cc upstream.
+[ Upstream commit 1e59b32e45e47c8ea5455182286ba010bfa87813 ]
 
-On newer debian releases the debian-provided "installkernel" script is
-installed in /usr/sbin. Fix the kernel install.sh script to look for the
-script in this directory as well.
+To enable transmit schduler on vport FW require non-zero configuration
+for vport's TSAR. If vport added to the group which has configured BW
+share value and TX rate values of the vport are zero, then scheduler
+wouldn't be enabled on this vport.
+Fix that by calling BW normalization if BW share of the new group is
+configured.
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-Cc: <stable@vger.kernel.org> # v3.13+
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 0fe132eac38c ("net/mlx5: E-switch, Allow to add vports to rate groups")
+Signed-off-by: Dmytro Linkin <dlinkin@nvidia.com>
+Reviewed-by: Roi Dayan <roid@nvidia.com>
+Reviewed-by: Parav Pandit <parav@nvidia.com>
+Reviewed-by: Mark Bloch <mbloch@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/parisc/install.sh |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/mellanox/mlx5/core/esw/qos.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/parisc/install.sh
-+++ b/arch/parisc/install.sh
-@@ -39,6 +39,7 @@ verify "$3"
- if [ -n "${INSTALLKERNEL}" ]; then
-   if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
-   if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
-+  if [ -x /usr/sbin/${INSTALLKERNEL} ]; then exec /usr/sbin/${INSTALLKERNEL} "$@"; fi
- fi
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/esw/qos.c b/drivers/net/ethernet/mellanox/mlx5/core/esw/qos.c
+index c6cc67cb4f6ad..4501e3d737f80 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/esw/qos.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/esw/qos.c
+@@ -423,7 +423,7 @@ static int esw_qos_vport_update_group(struct mlx5_eswitch *esw,
+ 		return err;
  
- # Default install
+ 	/* Recalculate bw share weights of old and new groups */
+-	if (vport->qos.bw_share) {
++	if (vport->qos.bw_share || new_group->bw_share) {
+ 		esw_qos_normalize_vports_min_rate(esw, curr_group, extack);
+ 		esw_qos_normalize_vports_min_rate(esw, new_group, extack);
+ 	}
+-- 
+2.33.0
+
 
 

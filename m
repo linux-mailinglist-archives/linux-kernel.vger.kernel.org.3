@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFCBA46A033
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 930FB469C9F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387542AbhLFP7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:59:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
+        id S1358996AbhLFPYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:24:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390465AbhLFPmZ (ORCPT
+        with ESMTP id S1347455AbhLFPOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:42:25 -0500
+        Mon, 6 Dec 2021 10:14:45 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B488C0A8868;
-        Mon,  6 Dec 2021 07:26:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2358C0698D4;
+        Mon,  6 Dec 2021 07:07:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06187B8111C;
-        Mon,  6 Dec 2021 15:26:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D416C34901;
-        Mon,  6 Dec 2021 15:26:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89CDBB81118;
+        Mon,  6 Dec 2021 15:07:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9C7DC341C5;
+        Mon,  6 Dec 2021 15:07:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804383;
-        bh=iUq+OvZtEOq6qJ1FxHqpjzhSggg3oRz2LDjl4wcWOk4=;
+        s=korg; t=1638803250;
+        bh=3sGi25Tks5bKBG7TFlNDAZAhN9Mrjx5yeaWyey6eIOo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qL9dn4T8mTxP1Me9AOsc3xgqsYiQ9qSl76Nw0es1+hRocyqyj5w2P0inSN1DLnQPe
-         ROOVzDaeoU/BIm5/UjxzhSlCHe+rQW7zbWGIP12aVuprU/apvvVpYMybGse6Kby2YD
-         wd0TT6qs2LS597nIF9BhCNnqAWjs6QKmbwelz/YQ=
+        b=ZyCc8XzvNh22l0csJV5wdzF9iCn56+1uGIueOS5BZighqcENXmEzgQFGKnfvEIKqe
+         xQ9OVevk+EKiLWxW1N0lMz7KQlPEEMS0jPw2zggsqvEBS5CTX+5KWRnl9rTvATr73D
+         7vkfT0jaulsLlMeVV0iWwP4z940YmV4Q6FZc/XAk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 127/207] net: stmmac: Avoid DMA_CHAN_CONTROL write if no Split Header support
-Date:   Mon,  6 Dec 2021 15:56:21 +0100
-Message-Id: <20211206145614.637847627@linuxfoundation.org>
+        stable@vger.kernel.org, Slark Xiao <slark_xiao@163.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 074/106] platform/x86: thinkpad_acpi: Fix WWAN device disabled issue after S3 deep
+Date:   Mon,  6 Dec 2021 15:56:22 +0100
+Message-Id: <20211206145558.050232688@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,72 +49,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Whitchurch <vincent.whitchurch@axis.com>
+From: Slark Xiao <slark_xiao@163.com>
 
-commit f8e7dfd6fdabb831846ab1970a875746559d491b upstream.
+[ Upstream commit 39f53292181081d35174a581a98441de5da22bc9 ]
 
-The driver assumes that split headers can be enabled/disabled without
-stopping/starting the device, so it writes DMA_CHAN_CONTROL from
-stmmac_set_features().  However, on my system (IP v5.10a without Split
-Header support), simply writing DMA_CHAN_CONTROL when DMA is running
-(for example, with the commands below) leads to a TX watchdog timeout.
+When WWAN device wake from S3 deep, under thinkpad platform,
+WWAN would be disabled. This disable status could be checked
+by command 'nmcli r wwan' or 'rfkill list'.
 
- host$ socat TCP-LISTEN:1024,fork,reuseaddr - &
- device$ ethtool -K eth0 tso off
- device$ ethtool -K eth0 tso on
- device$ dd if=/dev/zero bs=1M count=10 | socat - TCP4:host:1024
- <tx watchdog timeout>
+Issue analysis as below:
+  When host resume from S3 deep, thinkpad_acpi driver would
+call hotkey_resume() function. Finnaly, it will use
+wan_get_status to check the current status of WWAN device.
+During this resume progress, wan_get_status would always
+return off even WWAN boot up completely.
+  In patch V2, Hans said 'sw_state should be unchanged
+after a suspend/resume. It's better to drop the
+tpacpi_rfk_update_swstate call all together from the
+resume path'.
+  And it's confimed by Lenovo that GWAN is no longer
+ available from WHL generation because the design does not
+ match with current pin control.
 
-Note that since my IP is configured without Split Header support, the
-driver always just reads and writes the same value to the
-DMA_CHAN_CONTROL register.
-
-I don't have access to any platforms with Split Header support so I
-don't know if these writes to the DMA_CHAN_CONTROL while DMA is running
-actually work properly on such systems.  I could not find anything in
-the databook that says that DMA_CHAN_CONTROL should not be written when
-the DMA is running.
-
-But on systems without Split Header support, there is in any case no
-need to call enable_sph() in stmmac_set_features() at all since SPH can
-never be toggled, so we can avoid the watchdog timeout there by skipping
-this call.
-
-Fixes: 8c6fc097a2f4acf ("net: stmmac: gmac4+: Add Split Header support")
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+Link: https://lore.kernel.org/r/20211108060648.8212-1-slark_xiao@163.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |   11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/platform/x86/thinkpad_acpi.c | 12 ------------
+ 1 file changed, 12 deletions(-)
 
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -5531,8 +5531,6 @@ static int stmmac_set_features(struct ne
- 			       netdev_features_t features)
- {
- 	struct stmmac_priv *priv = netdev_priv(netdev);
--	bool sph_en;
--	u32 chan;
- 
- 	/* Keep the COE Type in case of csum is supporting */
- 	if (features & NETIF_F_RXCSUM)
-@@ -5544,10 +5542,13 @@ static int stmmac_set_features(struct ne
- 	 */
- 	stmmac_rx_ipc(priv, priv->hw);
- 
--	sph_en = (priv->hw->rx_csum > 0) && priv->sph;
-+	if (priv->sph_cap) {
-+		bool sph_en = (priv->hw->rx_csum > 0) && priv->sph;
-+		u32 chan;
- 
--	for (chan = 0; chan < priv->plat->rx_queues_to_use; chan++)
--		stmmac_enable_sph(priv, priv->ioaddr, sph_en, chan);
-+		for (chan = 0; chan < priv->plat->rx_queues_to_use; chan++)
-+			stmmac_enable_sph(priv, priv->ioaddr, sph_en, chan);
-+	}
- 
- 	return 0;
+diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+index 9d836d779d475..05b3e0f724fcf 100644
+--- a/drivers/platform/x86/thinkpad_acpi.c
++++ b/drivers/platform/x86/thinkpad_acpi.c
+@@ -1180,15 +1180,6 @@ static int tpacpi_rfk_update_swstate(const struct tpacpi_rfk *tp_rfk)
+ 	return status;
  }
+ 
+-/* Query FW and update rfkill sw state for all rfkill switches */
+-static void tpacpi_rfk_update_swstate_all(void)
+-{
+-	unsigned int i;
+-
+-	for (i = 0; i < TPACPI_RFK_SW_MAX; i++)
+-		tpacpi_rfk_update_swstate(tpacpi_rfkill_switches[i]);
+-}
+-
+ /*
+  * Sync the HW-blocking state of all rfkill switches,
+  * do notice it causes the rfkill core to schedule uevents
+@@ -3025,9 +3016,6 @@ static void tpacpi_send_radiosw_update(void)
+ 	if (wlsw == TPACPI_RFK_RADIO_OFF)
+ 		tpacpi_rfk_update_hwblock_state(true);
+ 
+-	/* Sync sw blocking state */
+-	tpacpi_rfk_update_swstate_all();
+-
+ 	/* Sync hw blocking state last if it is hw-unblocked */
+ 	if (wlsw == TPACPI_RFK_RADIO_ON)
+ 		tpacpi_rfk_update_hwblock_state(false);
+-- 
+2.33.0
+
 
 

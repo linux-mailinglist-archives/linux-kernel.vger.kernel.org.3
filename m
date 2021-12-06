@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82CF9469CB1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B49F469DC5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358484AbhLFPYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:24:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346773AbhLFPNf (ORCPT
+        id S1388377AbhLFPcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:32:39 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53322 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346729AbhLFPTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:13:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6165CC08EB1F;
-        Mon,  6 Dec 2021 07:06:07 -0800 (PST)
+        Mon, 6 Dec 2021 10:19:47 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F281261310;
-        Mon,  6 Dec 2021 15:06:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4FA7C341C1;
-        Mon,  6 Dec 2021 15:06:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECB4EB8101C;
+        Mon,  6 Dec 2021 15:16:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C26C341C2;
+        Mon,  6 Dec 2021 15:16:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803166;
-        bh=4ve9A+5uIirQqqDHs00S2YT9mzjSLeHcEE6IEQxlRwU=;
+        s=korg; t=1638803775;
+        bh=TzrBPBsGzAXOiSwJk2H2Hk2ZG6Ep75URO8rI4RVLqcs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O8pz1U8aZg+RnHTbT+tdTZ6eURgr+u4ZQnvWbp89tpvhad5mKNT/AuggdJvFO0Z/p
-         fAsd2bjS6UwM/UjEia1azzcnUM6EipVfg9KkjL6h1/HpWHUIQUgN1rltl6AqkQgSYF
-         1Zg/XDS33y8/GmEJRkVvkJnhsrqT7z3j08yeF3Ek=
+        b=S5v1sQ9ETMMNfQ6Z02Mi2HPz4HrnXmZqFMTt32aUTJdAf8bpTuI82T8vpohDiYx+U
+         HAoCfcAozhvDmy2IcTtoSksDkSZCON9KGV5fLYqdYvZCI/oFfIGg57xDCn8+7M4GM8
+         6qHHmpOEg5pnFka23OSDiX+bLaEUZ/BFWDN7QUF8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH 4.14 052/106] pinctrl: armada-37xx: add missing pin: PCIe1 Wakeup
+        Lai Jiangshan <jiangshanlai+lkml@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.10 043/130] KVM: nVMX: Flush current VPID (L1 vs. L2) for KVM_REQ_TLB_FLUSH_GUEST
 Date:   Mon,  6 Dec 2021 15:56:00 +0100
-Message-Id: <20211206145557.231607944@linuxfoundation.org>
+Message-Id: <20211206145601.168519126@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,30 +47,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
+From: Sean Christopherson <seanjc@google.com>
 
-commit 4d98fbaacd79a82f408febb66a9c42fe42361b16 upstream.
+commit 2b4a5a5d56881ece3c66b9a9a8943a6f41bd7349 upstream.
 
-Declare the PCIe1 Wakeup which was initially missing.
+Flush the current VPID when handling KVM_REQ_TLB_FLUSH_GUEST instead of
+always flushing vpid01.  Any TLB flush that is triggered when L2 is
+active is scoped to L2's VPID (if it has one), e.g. if L2 toggles CR4.PGE
+and L1 doesn't intercept PGE writes, then KVM's emulation of the TLB
+flush needs to be applied to L2's VPID.
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Tested-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Marek Behún <kabel@kernel.org>
+Reported-by: Lai Jiangshan <jiangshanlai+lkml@gmail.com>
+Fixes: 07ffaf343e34 ("KVM: nVMX: Sync all PGDs on nested transition with shadow paging")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20211125014944.536398-2-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/mvebu/pinctrl-armada-37xx.c |    1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/kvm/vmx/vmx.c |   23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
 
---- a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
-+++ b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
-@@ -185,6 +185,7 @@ static struct armada_37xx_pin_group arma
- 	PIN_GRP_GPIO("smi", 18, 2, BIT(4), "smi"),
- 	PIN_GRP_GPIO("pcie1", 3, 1, BIT(5), "pcie"),
- 	PIN_GRP_GPIO("pcie1_clkreq", 4, 1, BIT(9), "pcie"),
-+	PIN_GRP_GPIO("pcie1_wakeup", 5, 1, BIT(10), "pcie"),
- 	PIN_GRP_GPIO("ptp", 20, 3, BIT(11) | BIT(12) | BIT(13), "ptp"),
- 	PIN_GRP("ptp_clk", 21, 1, BIT(6), "ptp", "mii"),
- 	PIN_GRP("ptp_trig", 22, 1, BIT(7), "ptp", "mii"),
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -2908,6 +2908,13 @@ static void vmx_flush_tlb_all(struct kvm
+ 	}
+ }
+ 
++static inline int vmx_get_current_vpid(struct kvm_vcpu *vcpu)
++{
++	if (is_guest_mode(vcpu))
++		return nested_get_vpid02(vcpu);
++	return to_vmx(vcpu)->vpid;
++}
++
+ static void vmx_flush_tlb_current(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_mmu *mmu = vcpu->arch.mmu;
+@@ -2920,31 +2927,29 @@ static void vmx_flush_tlb_current(struct
+ 	if (enable_ept)
+ 		ept_sync_context(construct_eptp(vcpu, root_hpa,
+ 						mmu->shadow_root_level));
+-	else if (!is_guest_mode(vcpu))
+-		vpid_sync_context(to_vmx(vcpu)->vpid);
+ 	else
+-		vpid_sync_context(nested_get_vpid02(vcpu));
++		vpid_sync_context(vmx_get_current_vpid(vcpu));
+ }
+ 
+ static void vmx_flush_tlb_gva(struct kvm_vcpu *vcpu, gva_t addr)
+ {
+ 	/*
+-	 * vpid_sync_vcpu_addr() is a nop if vmx->vpid==0, see the comment in
++	 * vpid_sync_vcpu_addr() is a nop if vpid==0, see the comment in
+ 	 * vmx_flush_tlb_guest() for an explanation of why this is ok.
+ 	 */
+-	vpid_sync_vcpu_addr(to_vmx(vcpu)->vpid, addr);
++	vpid_sync_vcpu_addr(vmx_get_current_vpid(vcpu), addr);
+ }
+ 
+ static void vmx_flush_tlb_guest(struct kvm_vcpu *vcpu)
+ {
+ 	/*
+-	 * vpid_sync_context() is a nop if vmx->vpid==0, e.g. if enable_vpid==0
+-	 * or a vpid couldn't be allocated for this vCPU.  VM-Enter and VM-Exit
+-	 * are required to flush GVA->{G,H}PA mappings from the TLB if vpid is
++	 * vpid_sync_context() is a nop if vpid==0, e.g. if enable_vpid==0 or a
++	 * vpid couldn't be allocated for this vCPU.  VM-Enter and VM-Exit are
++	 * required to flush GVA->{G,H}PA mappings from the TLB if vpid is
+ 	 * disabled (VM-Enter with vpid enabled and vpid==0 is disallowed),
+ 	 * i.e. no explicit INVVPID is necessary.
+ 	 */
+-	vpid_sync_context(to_vmx(vcpu)->vpid);
++	vpid_sync_context(vmx_get_current_vpid(vcpu));
+ }
+ 
+ void vmx_ept_load_pdptrs(struct kvm_vcpu *vcpu)
 
 

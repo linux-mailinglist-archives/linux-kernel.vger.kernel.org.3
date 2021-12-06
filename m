@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DDD146A055
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4CC469CFC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443582AbhLFQAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:00:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390591AbhLFPme (ORCPT
+        id S242552AbhLFP05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:26:57 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50284 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347271AbhLFPRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:42:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FCDC0698DA;
-        Mon,  6 Dec 2021 07:28:51 -0800 (PST)
+        Mon, 6 Dec 2021 10:17:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36B65B81126;
-        Mon,  6 Dec 2021 15:28:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FF95C34900;
-        Mon,  6 Dec 2021 15:28:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF1DBB8111A;
+        Mon,  6 Dec 2021 15:14:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1992FC341C8;
+        Mon,  6 Dec 2021 15:14:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804528;
-        bh=imDWMiwWigWsxOyupcs1CjIlUc8FG5gGODOXbYZNBDA=;
+        s=korg; t=1638803652;
+        bh=jvjWixcVkJ2vK90vb80viwfW97CW8IUTnqu8H25Orzc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JCgWKVqTe+XEQ8HgfaoNAFOCBa7FHE9uITxcnDjARDcO3jACbOvkBgsDFAfLSPY7J
-         Pw8ZEiLOH5Lbg2AkqinHpzt+Q/W2qPduPVE9fdwIjMO1cfiqHJkzA8Iv9pcaelBqKK
-         h07prGFp44pouPrYVHholHPfpfNx6EX97cmMf/o8=
+        b=qhFtY5VW3lXdpEby3YLH5Avtt7GGg0sqgHx/ekQg2Y4FOBhl2KfWFaVOzVppDgSvk
+         81j9+90ZuM1szjcvVm37zltiIU40Y4fFA2GWcrc2ERy6i/NxKmDhIOCnWjucZz55dT
+         97lrABsPzrtVFXOcRZthvZWy/gF1kBvKS/GXKCMw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 180/207] KVM: x86/mmu: Remove spurious TLB flushes in TDP MMU zap collapsible path
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Corey Minyard <cminyard@mvista.com>
+Subject: [PATCH 5.4 70/70] ipmi: msghandler: Make symbol remove_work_wq static
 Date:   Mon,  6 Dec 2021 15:57:14 +0100
-Message-Id: <20211206145616.505438193@linuxfoundation.org>
+Message-Id: <20211206145554.371708383@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
+References: <20211206145551.909846023@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,153 +46,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-[ Upstream commit 4b85c921cd393764d22c0cdab6d7d5d120aa0980 ]
+commit 5a3ba99b62d8486de0316334e72ac620d4b94fdd upstream.
 
-Drop the "flush" param and return values to/from the TDP MMU's helper for
-zapping collapsible SPTEs.  Because the helper runs with mmu_lock held
-for read, not write, it uses tdp_mmu_zap_spte_atomic(), and the atomic
-zap handles the necessary remote TLB flush.
+The sparse tool complains as follows:
 
-Similarly, because mmu_lock is dropped and re-acquired between zapping
-legacy MMUs and zapping TDP MMUs, kvm_mmu_zap_collapsible_sptes() must
-handle remote TLB flushes from the legacy MMU before calling into the TDP
-MMU.
+drivers/char/ipmi/ipmi_msghandler.c:194:25: warning:
+ symbol 'remove_work_wq' was not declared. Should it be static?
 
-Fixes: e2209710ccc5d ("KVM: x86/mmu: Skip rmap operations if rmaps not allocated")
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20211120045046.3940942-4-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This symbol is not used outside of ipmi_msghandler.c, so
+marks it static.
+
+Fixes: 1d49eb91e86e ("ipmi: Move remove_work to dedicated workqueue")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Message-Id: <20211123083618.2366808-1-weiyongjun1@huawei.com>
+Signed-off-by: Corey Minyard <cminyard@mvista.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/mmu/mmu.c     |  9 ++-------
- arch/x86/kvm/mmu/tdp_mmu.c | 22 +++++++---------------
- arch/x86/kvm/mmu/tdp_mmu.h |  5 ++---
- 3 files changed, 11 insertions(+), 25 deletions(-)
+ drivers/char/ipmi/ipmi_msghandler.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index f2e74e8c1651a..0a88cb4f731f4 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -5855,8 +5855,6 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
- void kvm_mmu_zap_collapsible_sptes(struct kvm *kvm,
- 				   const struct kvm_memory_slot *slot)
- {
--	bool flush;
--
- 	if (kvm_memslots_have_rmaps(kvm)) {
- 		write_lock(&kvm->mmu_lock);
- 		/*
-@@ -5864,17 +5862,14 @@ void kvm_mmu_zap_collapsible_sptes(struct kvm *kvm,
- 		 * logging at a 4k granularity and never creates collapsible
- 		 * 2m SPTEs during dirty logging.
- 		 */
--		flush = slot_handle_level_4k(kvm, slot, kvm_mmu_zap_collapsible_spte, true);
--		if (flush)
-+		if (slot_handle_level_4k(kvm, slot, kvm_mmu_zap_collapsible_spte, true))
- 			kvm_arch_flush_remote_tlbs_memslot(kvm, slot);
- 		write_unlock(&kvm->mmu_lock);
- 	}
+--- a/drivers/char/ipmi/ipmi_msghandler.c
++++ b/drivers/char/ipmi/ipmi_msghandler.c
+@@ -220,7 +220,7 @@ struct ipmi_user {
+ 	struct work_struct remove_work;
+ };
  
- 	if (is_tdp_mmu_enabled(kvm)) {
- 		read_lock(&kvm->mmu_lock);
--		flush = kvm_tdp_mmu_zap_collapsible_sptes(kvm, slot, false);
--		if (flush)
--			kvm_arch_flush_remote_tlbs_memslot(kvm, slot);
-+		kvm_tdp_mmu_zap_collapsible_sptes(kvm, slot);
- 		read_unlock(&kvm->mmu_lock);
- 	}
- }
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index aa75689a91b4c..0e4227b59d7bb 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -1413,10 +1413,9 @@ void kvm_tdp_mmu_clear_dirty_pt_masked(struct kvm *kvm,
-  * Clear leaf entries which could be replaced by large mappings, for
-  * GFNs within the slot.
-  */
--static bool zap_collapsible_spte_range(struct kvm *kvm,
-+static void zap_collapsible_spte_range(struct kvm *kvm,
- 				       struct kvm_mmu_page *root,
--				       const struct kvm_memory_slot *slot,
--				       bool flush)
-+				       const struct kvm_memory_slot *slot)
- {
- 	gfn_t start = slot->base_gfn;
- 	gfn_t end = start + slot->npages;
-@@ -1427,10 +1426,8 @@ static bool zap_collapsible_spte_range(struct kvm *kvm,
+-struct workqueue_struct *remove_work_wq;
++static struct workqueue_struct *remove_work_wq;
  
- 	tdp_root_for_each_pte(iter, root, start, end) {
- retry:
--		if (tdp_mmu_iter_cond_resched(kvm, &iter, flush, true)) {
--			flush = false;
-+		if (tdp_mmu_iter_cond_resched(kvm, &iter, false, true))
- 			continue;
--		}
- 
- 		if (!is_shadow_present_pte(iter.old_spte) ||
- 		    !is_last_spte(iter.old_spte, iter.level))
-@@ -1442,6 +1439,7 @@ static bool zap_collapsible_spte_range(struct kvm *kvm,
- 							    pfn, PG_LEVEL_NUM))
- 			continue;
- 
-+		/* Note, a successful atomic zap also does a remote TLB flush. */
- 		if (!tdp_mmu_zap_spte_atomic(kvm, &iter)) {
- 			/*
- 			 * The iter must explicitly re-read the SPTE because
-@@ -1450,30 +1448,24 @@ static bool zap_collapsible_spte_range(struct kvm *kvm,
- 			iter.old_spte = READ_ONCE(*rcu_dereference(iter.sptep));
- 			goto retry;
- 		}
--		flush = true;
- 	}
- 
- 	rcu_read_unlock();
--
--	return flush;
- }
- 
- /*
-  * Clear non-leaf entries (and free associated page tables) which could
-  * be replaced by large mappings, for GFNs within the slot.
-  */
--bool kvm_tdp_mmu_zap_collapsible_sptes(struct kvm *kvm,
--				       const struct kvm_memory_slot *slot,
--				       bool flush)
-+void kvm_tdp_mmu_zap_collapsible_sptes(struct kvm *kvm,
-+				       const struct kvm_memory_slot *slot)
- {
- 	struct kvm_mmu_page *root;
- 
- 	lockdep_assert_held_read(&kvm->mmu_lock);
- 
- 	for_each_tdp_mmu_root_yield_safe(kvm, root, slot->as_id, true)
--		flush = zap_collapsible_spte_range(kvm, root, slot, flush);
--
--	return flush;
-+		zap_collapsible_spte_range(kvm, root, slot);
- }
- 
- /*
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.h b/arch/x86/kvm/mmu/tdp_mmu.h
-index 358f447d40120..ba3681cd38ab4 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.h
-+++ b/arch/x86/kvm/mmu/tdp_mmu.h
-@@ -66,9 +66,8 @@ void kvm_tdp_mmu_clear_dirty_pt_masked(struct kvm *kvm,
- 				       struct kvm_memory_slot *slot,
- 				       gfn_t gfn, unsigned long mask,
- 				       bool wrprot);
--bool kvm_tdp_mmu_zap_collapsible_sptes(struct kvm *kvm,
--				       const struct kvm_memory_slot *slot,
--				       bool flush);
-+void kvm_tdp_mmu_zap_collapsible_sptes(struct kvm *kvm,
-+				       const struct kvm_memory_slot *slot);
- 
- bool kvm_tdp_mmu_write_protect_gfn(struct kvm *kvm,
- 				   struct kvm_memory_slot *slot, gfn_t gfn,
--- 
-2.33.0
-
+ static struct ipmi_user *acquire_ipmi_user(struct ipmi_user *user, int *index)
+ 	__acquires(user->release_barrier)
 
 

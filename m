@@ -2,156 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8FC469072
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 07:43:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94644469074
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 07:43:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237849AbhLFGqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 01:46:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50680 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237842AbhLFGqo (ORCPT
+        id S237905AbhLFGqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 01:46:52 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:41472 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237866AbhLFGqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 01:46:44 -0500
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77350C0613F8
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 22:43:16 -0800 (PST)
-Received: by mail-wm1-x34a.google.com with SMTP id j193-20020a1c23ca000000b003306ae8bfb7so5624761wmj.7
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 22:43:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=j1fyadDoDslylJdYYaDqOZyJVAR4yBe0dIXXRHGm4Os=;
-        b=a8sxZOfDGAV9hG1MvfW87Z2/4CfIH+2Kx3KFLTk5gz9B5IVfiv1y09CoTvlEGuRm/N
-         fxXZjt4RvD7aB7X7t/e7Y6A0zOjllBTk2wburiWaqfnmhLBj2qOcu1fvAWPDm686m71Z
-         0HZg8faKlh5Oz6ncHjROUdUPLOW8YhDFPgprTbLPcnPhjiDaFy1MtmomrBaoZLRhCtuU
-         EWKPrD1ZJ+B9ED20D8rkXtJSoJAejsQKlNQApFl2cmaD7mqKpvDgnVcmQoUg1G2a1D5S
-         byOn8fZlJDgxJTZwQCQc9A4QhJzUBauI4YeH/hPjSRto16sz3YqyetwbPlCmivay7awl
-         ZP4Q==
+        Mon, 6 Dec 2021 01:46:51 -0500
+Received: by mail-il1-f199.google.com with SMTP id r1-20020a92cd81000000b002a3ae5f6ad9so6331152ilb.8
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 22:43:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=j1fyadDoDslylJdYYaDqOZyJVAR4yBe0dIXXRHGm4Os=;
-        b=ojRASJyQ7kCbDqT77o8unfMjpzEkpl0zgpzduOZjBhf4LA7HVvobPy/FxkKiyy0+YW
-         sqRWb8wTOPkTKShaWFfD7HviSnkh9/I34jPok9+J7bfpJLLI9m5Va8J5dGAMtftN5PL5
-         D105Ne5penxoIxXdV20v9WEq+l5s2DPykRGsCjJhUbIwXDbtH3GdmxQUvHLAPgflCDzT
-         Y+cmkNrhXdvlKLjpkt/lf4OXx2KIPN7pRLmpwViqfiQC/M15wRosd61MgCIIL1gLCgj2
-         1wLJ3VFBj248741juX9eufQqiat0H+HRQp9FxTgonCnrobEZk77IUspUc60qLOkWZflo
-         ILnA==
-X-Gm-Message-State: AOAM531HL2fVE3OSUJBVW4ENRlnO5HYRX5Z5CF20ESNAAEdJQfuIRTmu
-        p+0sdpkSlfVYrAAyRJv3LJ4icTN3qA==
-X-Google-Smtp-Source: ABdhPJw94b3ZzPAWIM53aZDDPtEfJ0tvd2s5GzuDoYT8JyR+URqFuPENrkVrjD0egcEwFP3vmCHdik3N+A==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:88f3:db53:e34:7bb0])
- (user=elver job=sendgmr) by 2002:a05:600c:4f0b:: with SMTP id
- l11mr3647218wmq.0.1638772994811; Sun, 05 Dec 2021 22:43:14 -0800 (PST)
-Date:   Mon,  6 Dec 2021 07:41:51 +0100
-In-Reply-To: <20211206064151.3337384-1-elver@google.com>
-Message-Id: <20211206064151.3337384-2-elver@google.com>
-Mime-Version: 1.0
-References: <20211206064151.3337384-1-elver@google.com>
-X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [PATCH -rcu 2/2] kcsan: Only test clear_bit_unlock_is_negative_byte
- if arch defines it
-From:   Marco Elver <elver@google.com>
-To:     elver@google.com, "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=RiE0z6Vt+AIoyysumKyHCiuT5kT4lX6ulAvpG3vHcfs=;
+        b=IdUah/klJOqatMfb2T1tb3rJKHLM1wQIf2yQNO6tW9ys5fUDycdEZ4cD3ujaS1nr+R
+         lP3P7T2Za8prjbCk+VcObJY7EFT1eKm2YkayWuY9bO+XzN83h2GmAlj4rwkMwpUgY3Re
+         QnHy0blJlZo0FJzP2dB7y7gCQqTZicW9eOBZAtSa/iXCB5GWlYj+DiVUMAf/8KGUhzOm
+         zFhnXsVaVkYkY0vXvBrEULX8CkZPgFBtKx8EqpzD9wuEtNv0qAe92oLBQ2SkVXr2TCnF
+         iwumcGo5TBHLQyNbk6NZyQ3th265x7fZVGDgC2467BPVr1/qH/meW02YI2daz/wQzIes
+         X9Fg==
+X-Gm-Message-State: AOAM533gx+U3+/MSTcNasMHIBipkhs2PUtNbIxxNERcH6AsXvX3FOunw
+        pagR/C5dGOok29D4h7B5oF22UaUmdOpKUgH5YP3NHUacKMva
+X-Google-Smtp-Source: ABdhPJxxQr1F5YLs+k77CEJSXYD9yvuKglzfj1w6rIx8HJMtMKf350w7zYbb2JG11PTn4gJGeekbunZYlqGHKwOmknXYQSbf5CRg
+MIME-Version: 1.0
+X-Received: by 2002:a05:6602:5d9:: with SMTP id w25mr32120398iox.10.1638773002144;
+ Sun, 05 Dec 2021 22:43:22 -0800 (PST)
+Date:   Sun, 05 Dec 2021 22:43:22 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a9162005d27492b0@google.com>
+Subject: [syzbot] KASAN: use-after-free Write in io_queue_worker_create
+From:   syzbot <syzbot+b60c982cb0efc5e05a47@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some architectures do not define clear_bit_unlock_is_negative_byte().
-Only test it when it is actually defined (similar to other usage, such
-as in lib/test_kasan.c).
+Hello,
 
-Link: https://lkml.kernel.org/r/202112050757.x67rHnFU-lkp@intel.com
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Marco Elver <elver@google.com>
+syzbot found the following issue on:
+
+HEAD commit:    944207047ca4 Merge tag 'usb-5.16-rc4' of git://git.kernel...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13ebd129b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=171728a464c05f2b
+dashboard link: https://syzkaller.appspot.com/bug?extid=b60c982cb0efc5e05a47
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b60c982cb0efc5e05a47@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: use-after-free in instrument_atomic_write include/linux/instrumented.h:86 [inline]
+BUG: KASAN: use-after-free in clear_bit_unlock include/asm-generic/bitops/instrumented-lock.h:25 [inline]
+BUG: KASAN: use-after-free in io_queue_worker_create+0x453/0x4e0 fs/io-wq.c:363
+Write of size 8 at addr ffff888023e068d8 by task kworker/3:4/13798
+
+CPU: 3 PID: 13798 Comm: kworker/3:4 Not tainted 5.16.0-rc3-syzkaller #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Workqueue: events io_workqueue_create
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0x8d/0x2ed mm/kasan/report.c:247
+ __kasan_report mm/kasan/report.c:433 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:450
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_write include/linux/instrumented.h:86 [inline]
+ clear_bit_unlock include/asm-generic/bitops/instrumented-lock.h:25 [inline]
+ io_queue_worker_create+0x453/0x4e0 fs/io-wq.c:363
+ io_workqueue_create+0x9e/0xe0 fs/io-wq.c:780
+ process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
+ worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+
+Allocated by task 5554:
+ kasan_save_stack+0x1e/0x50 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:46 [inline]
+ set_alloc_info mm/kasan/common.c:434 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:513 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:472 [inline]
+ __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:522
+ kasan_kmalloc include/linux/kasan.h:269 [inline]
+ kmem_cache_alloc_node_trace+0x208/0x5b0 mm/slab.c:3619
+ kmalloc_node include/linux/slab.h:608 [inline]
+ kzalloc_node include/linux/slab.h:735 [inline]
+ create_io_worker+0x108/0x630 fs/io-wq.c:792
+ io_wqe_create_worker fs/io-wq.c:300 [inline]
+ io_wqe_enqueue+0x692/0xbc0 fs/io-wq.c:924
+ io_queue_async_work+0x28b/0x5d0 fs/io_uring.c:1585
+ io_queue_sqe_arm_apoll+0xcf/0x1a0 fs/io_uring.c:7004
+ __io_queue_sqe fs/io_uring.c:7033 [inline]
+ io_queue_sqe fs/io_uring.c:7060 [inline]
+ io_submit_sqe fs/io_uring.c:7263 [inline]
+ io_submit_sqes+0x796a/0x8a20 fs/io_uring.c:7369
+ __do_sys_io_uring_enter+0xf6e/0x1f50 fs/io_uring.c:10070
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Freed by task 5554:
+ kasan_save_stack+0x1e/0x50 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:46
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free mm/kasan/common.c:328 [inline]
+ __kasan_slab_free+0xd1/0x110 mm/kasan/common.c:374
+ kasan_slab_free include/linux/kasan.h:235 [inline]
+ __cache_free mm/slab.c:3445 [inline]
+ kfree+0x10d/0x2c0 mm/slab.c:3802
+ create_worker_cont+0x3fb/0x550 fs/io-wq.c:766
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ tracehook_notify_signal include/linux/tracehook.h:214 [inline]
+ handle_signal_work kernel/entry/common.c:146 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+ exit_to_user_mode_prepare+0x256/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Last potentially related work creation:
+ kasan_save_stack+0x1e/0x50 mm/kasan/common.c:38
+ __kasan_record_aux_stack+0xb5/0xe0 mm/kasan/generic.c:348
+ task_work_add+0x3a/0x190 kernel/task_work.c:38
+ io_queue_worker_create+0x3ee/0x4e0 fs/io-wq.c:362
+ io_workqueue_create+0x9e/0xe0 fs/io-wq.c:780
+ process_one_work+0x9b2/0x1690 kernel/workqueue.c:2298
+ worker_thread+0x658/0x11f0 kernel/workqueue.c:2445
+ kthread+0x405/0x4f0 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+
+Second to last potentially related work creation:
+ kasan_save_stack+0x1e/0x50 mm/kasan/common.c:38
+ __kasan_record_aux_stack+0xb5/0xe0 mm/kasan/generic.c:348
+ insert_work+0x48/0x370 kernel/workqueue.c:1354
+ __queue_work+0x5ca/0xee0 kernel/workqueue.c:1520
+ queue_work_on+0xee/0x110 kernel/workqueue.c:1547
+ queue_work include/linux/workqueue.h:502 [inline]
+ schedule_work include/linux/workqueue.h:563 [inline]
+ create_worker_cont+0x44b/0x550 fs/io-wq.c:772
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ tracehook_notify_signal include/linux/tracehook.h:214 [inline]
+ handle_signal_work kernel/entry/common.c:146 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+ exit_to_user_mode_prepare+0x256/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+The buggy address belongs to the object at ffff888023e06800
+ which belongs to the cache kmalloc-512 of size 512
+The buggy address is located 216 bytes inside of
+ 512-byte region [ffff888023e06800, ffff888023e06a00)
+The buggy address belongs to the page:
+page:ffffea00008f8180 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x23e06
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffffea00004f9bc8 ffffea000072de48 ffff888010c40600
+raw: 0000000000000000 ffff888023e06000 0000000100000004 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2c2220(__GFP_HIGH|__GFP_ATOMIC|__GFP_NOWARN|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_THISNODE), pid 10854, ts 2474866807743, free_ts 2469053292495
+ prep_new_page mm/page_alloc.c:2418 [inline]
+ get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4149
+ __alloc_pages_slowpath.constprop.0+0x2eb/0x20d0 mm/page_alloc.c:4914
+ __alloc_pages+0x412/0x500 mm/page_alloc.c:5382
+ __alloc_pages_node include/linux/gfp.h:570 [inline]
+ kmem_getpages mm/slab.c:1377 [inline]
+ cache_grow_begin+0x75/0x470 mm/slab.c:2593
+ cache_alloc_refill+0x27f/0x380 mm/slab.c:2965
+ ____cache_alloc mm/slab.c:3048 [inline]
+ ____cache_alloc mm/slab.c:3031 [inline]
+ slab_alloc_node mm/slab.c:3249 [inline]
+ kmem_cache_alloc_node_trace+0x49c/0x5b0 mm/slab.c:3617
+ __do_kmalloc_node mm/slab.c:3639 [inline]
+ __kmalloc_node_track_caller+0x38/0x60 mm/slab.c:3654
+ kmalloc_reserve net/core/skbuff.c:354 [inline]
+ __alloc_skb+0xde/0x340 net/core/skbuff.c:426
+ skb_copy+0x137/0x2f0 net/core/skbuff.c:1586
+ mac80211_hwsim_tx_frame_no_nl.isra.0+0xb17/0x1330 drivers/net/wireless/mac80211_hwsim.c:1565
+ mac80211_hwsim_tx+0x574/0x12e0 drivers/net/wireless/mac80211_hwsim.c:1669
+ drv_tx net/mac80211/driver-ops.h:35 [inline]
+ ieee80211_tx_frags+0x552/0x970 net/mac80211/tx.c:1714
+ __ieee80211_tx+0x145/0x4c0 net/mac80211/tx.c:1768
+ ieee80211_tx+0x325/0x420 net/mac80211/tx.c:1948
+ ieee80211_xmit+0x339/0x420 net/mac80211/tx.c:2040
+ __ieee80211_subif_start_xmit+0x7ce/0xdc0 net/mac80211/tx.c:4248
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1338 [inline]
+ free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1389
+ free_unref_page_prepare mm/page_alloc.c:3309 [inline]
+ free_unref_page+0x19/0x690 mm/page_alloc.c:3388
+ slab_destroy mm/slab.c:1627 [inline]
+ slabs_destroy+0x89/0xc0 mm/slab.c:1647
+ cache_flusharray mm/slab.c:3418 [inline]
+ ___cache_free+0x4cc/0x610 mm/slab.c:3480
+ qlink_free mm/kasan/quarantine.c:146 [inline]
+ qlist_free_all+0x4e/0x110 mm/kasan/quarantine.c:165
+ kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:272
+ __kasan_slab_alloc+0x97/0xb0 mm/kasan/common.c:444
+ kasan_slab_alloc include/linux/kasan.h:259 [inline]
+ slab_post_alloc_hook mm/slab.h:519 [inline]
+ slab_alloc mm/slab.c:3323 [inline]
+ kmem_cache_alloc+0x1bc/0x560 mm/slab.c:3507
+ sock_alloc_inode+0x18/0x1c0 net/socket.c:303
+ alloc_inode+0x61/0x230 fs/inode.c:235
+ new_inode_pseudo+0x14/0xe0 fs/inode.c:944
+ sock_alloc+0x3c/0x260 net/socket.c:626
+ __sock_create+0xb9/0x790 net/socket.c:1428
+ sock_create net/socket.c:1515 [inline]
+ __sys_socket+0xef/0x200 net/socket.c:1557
+ __do_sys_socket net/socket.c:1566 [inline]
+ __se_sys_socket net/socket.c:1564 [inline]
+ __x64_sys_socket+0x6f/0xb0 net/socket.c:1564
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+
+Memory state around the buggy address:
+ ffff888023e06780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff888023e06800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff888023e06880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                    ^
+ ffff888023e06900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888023e06980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
 ---
- kernel/kcsan/kcsan_test.c | 8 +++++---
- kernel/kcsan/selftest.c   | 8 +++++---
- 2 files changed, 10 insertions(+), 6 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/kernel/kcsan/kcsan_test.c b/kernel/kcsan/kcsan_test.c
-index 2bad0820f73a..a36fca063a73 100644
---- a/kernel/kcsan/kcsan_test.c
-+++ b/kernel/kcsan/kcsan_test.c
-@@ -598,7 +598,6 @@ static void test_barrier_nothreads(struct kunit *test)
- 	KCSAN_EXPECT_READ_BARRIER(test_and_change_bit(0, &test_var), true);
- 	KCSAN_EXPECT_READ_BARRIER(clear_bit_unlock(0, &test_var), true);
- 	KCSAN_EXPECT_READ_BARRIER(__clear_bit_unlock(0, &test_var), true);
--	KCSAN_EXPECT_READ_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
- 	KCSAN_EXPECT_READ_BARRIER(arch_spin_lock(&arch_spinlock), false);
- 	KCSAN_EXPECT_READ_BARRIER(arch_spin_unlock(&arch_spinlock), true);
- 	KCSAN_EXPECT_READ_BARRIER(spin_lock(&test_spinlock), false);
-@@ -644,7 +643,6 @@ static void test_barrier_nothreads(struct kunit *test)
- 	KCSAN_EXPECT_WRITE_BARRIER(test_and_change_bit(0, &test_var), true);
- 	KCSAN_EXPECT_WRITE_BARRIER(clear_bit_unlock(0, &test_var), true);
- 	KCSAN_EXPECT_WRITE_BARRIER(__clear_bit_unlock(0, &test_var), true);
--	KCSAN_EXPECT_WRITE_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
- 	KCSAN_EXPECT_WRITE_BARRIER(arch_spin_lock(&arch_spinlock), false);
- 	KCSAN_EXPECT_WRITE_BARRIER(arch_spin_unlock(&arch_spinlock), true);
- 	KCSAN_EXPECT_WRITE_BARRIER(spin_lock(&test_spinlock), false);
-@@ -690,7 +688,6 @@ static void test_barrier_nothreads(struct kunit *test)
- 	KCSAN_EXPECT_RW_BARRIER(test_and_change_bit(0, &test_var), true);
- 	KCSAN_EXPECT_RW_BARRIER(clear_bit_unlock(0, &test_var), true);
- 	KCSAN_EXPECT_RW_BARRIER(__clear_bit_unlock(0, &test_var), true);
--	KCSAN_EXPECT_RW_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
- 	KCSAN_EXPECT_RW_BARRIER(arch_spin_lock(&arch_spinlock), false);
- 	KCSAN_EXPECT_RW_BARRIER(arch_spin_unlock(&arch_spinlock), true);
- 	KCSAN_EXPECT_RW_BARRIER(spin_lock(&test_spinlock), false);
-@@ -698,6 +695,11 @@ static void test_barrier_nothreads(struct kunit *test)
- 	KCSAN_EXPECT_RW_BARRIER(mutex_lock(&test_mutex), false);
- 	KCSAN_EXPECT_RW_BARRIER(mutex_unlock(&test_mutex), true);
- 
-+#ifdef clear_bit_unlock_is_negative_byte
-+	KCSAN_EXPECT_READ_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
-+	KCSAN_EXPECT_WRITE_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
-+	KCSAN_EXPECT_RW_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var), true);
-+#endif
- 	kcsan_nestable_atomic_end();
- }
- 
-diff --git a/kernel/kcsan/selftest.c b/kernel/kcsan/selftest.c
-index b6d4da07d80a..75712959c84e 100644
---- a/kernel/kcsan/selftest.c
-+++ b/kernel/kcsan/selftest.c
-@@ -169,7 +169,6 @@ static bool __init test_barrier(void)
- 	KCSAN_CHECK_READ_BARRIER(test_and_change_bit(0, &test_var));
- 	KCSAN_CHECK_READ_BARRIER(clear_bit_unlock(0, &test_var));
- 	KCSAN_CHECK_READ_BARRIER(__clear_bit_unlock(0, &test_var));
--	KCSAN_CHECK_READ_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
- 	arch_spin_lock(&arch_spinlock);
- 	KCSAN_CHECK_READ_BARRIER(arch_spin_unlock(&arch_spinlock));
- 	spin_lock(&test_spinlock);
-@@ -199,7 +198,6 @@ static bool __init test_barrier(void)
- 	KCSAN_CHECK_WRITE_BARRIER(test_and_change_bit(0, &test_var));
- 	KCSAN_CHECK_WRITE_BARRIER(clear_bit_unlock(0, &test_var));
- 	KCSAN_CHECK_WRITE_BARRIER(__clear_bit_unlock(0, &test_var));
--	KCSAN_CHECK_WRITE_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
- 	arch_spin_lock(&arch_spinlock);
- 	KCSAN_CHECK_WRITE_BARRIER(arch_spin_unlock(&arch_spinlock));
- 	spin_lock(&test_spinlock);
-@@ -232,12 +230,16 @@ static bool __init test_barrier(void)
- 	KCSAN_CHECK_RW_BARRIER(test_and_change_bit(0, &test_var));
- 	KCSAN_CHECK_RW_BARRIER(clear_bit_unlock(0, &test_var));
- 	KCSAN_CHECK_RW_BARRIER(__clear_bit_unlock(0, &test_var));
--	KCSAN_CHECK_RW_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
- 	arch_spin_lock(&arch_spinlock);
- 	KCSAN_CHECK_RW_BARRIER(arch_spin_unlock(&arch_spinlock));
- 	spin_lock(&test_spinlock);
- 	KCSAN_CHECK_RW_BARRIER(spin_unlock(&test_spinlock));
- 
-+#ifdef clear_bit_unlock_is_negative_byte
-+	KCSAN_CHECK_RW_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
-+	KCSAN_CHECK_READ_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
-+	KCSAN_CHECK_WRITE_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
-+#endif
- 	kcsan_nestable_atomic_end();
- 
- 	return ret;
--- 
-2.34.1.400.ga245620fadb-goog
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

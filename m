@@ -2,135 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE5346A6E8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCB246A88F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349735AbhLFUie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 15:38:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49560 "EHLO
+        id S1349738AbhLFUlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 15:41:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243449AbhLFUie (ORCPT
+        with ESMTP id S245082AbhLFUlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 15:38:34 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C92C061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 12:35:04 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id 75AA21F43911
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638822903; bh=Tywh5Z25K4ZKXNz67giESzYOoPVDIKEPK6wkKKydDo0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ouWKTS1qAmjUH3n1Ecs3mywaxj0VBgL8eiKl5MlH8fzNgkyF5hfFLvru4sOerEwnR
-         SquQDBOQXCRBGdDzGRC3SdC4Y9HBzZLYclkcl+2RYvN6355X7fJZ+xwTlYQFiUKEuv
-         YCKkr9ApRwiw6E67IWXwRENXrSkYUlqMB2jOZog/436ljU51WCwZV34m6MuFpw6f4J
-         q5g6RyjkBbigfVMvF2bPs5yTzr0Dia88QoV/m7X5cSnRscIYUqHijupxDpWhiNSi/W
-         hWitmcPBFHhvldP8XPwKIAzXA0hAF4x84WK+Vnetp5+LoWUEkJuuaagEeLpI44N7LW
-         2PH+M24MZhSXQ==
-Message-ID: <8a7cc760-b1e2-0da6-f3cc-4e7baa3d956c@collabora.com>
-Date:   Mon, 6 Dec 2021 17:34:56 -0300
+        Mon, 6 Dec 2021 15:41:05 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5CDC061746;
+        Mon,  6 Dec 2021 12:37:36 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id v1so48107038edx.2;
+        Mon, 06 Dec 2021 12:37:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=zBLblKeg8CrULqFWVj7RAzFZmXmOvswPlK8gAVXpGvQ=;
+        b=j4VEo5eVw1TtR0YsSabgZhAtbGEv6dWXafQlQs99qr1BPHoPLjjZ1fdWfnPVndnpii
+         ebdq0ugWlyjmCQ4o27jqzmg/n5UUixZsG/vb4lH6DsoQoZXkAESKIwBiNjSLnAdeRtuc
+         NvemIycmd820mZDlWH6BYGMkNj4KMVa78s+SbEyK/f8TVFuLi5G6WK1G9lTzPk0ZUt4U
+         4fpbHdGd7AaqHwgOIa/NsNydocrNsPaVByELqK8k71S7/mVwZK/hzVfe1zyA76WQ2DMQ
+         X1Hds3ZACRDogFxy6vi3gNA3YPjFJ+dA7UzfSyGgSumgCPdexmsKJjcZhlEvxkSvCeop
+         YBFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=zBLblKeg8CrULqFWVj7RAzFZmXmOvswPlK8gAVXpGvQ=;
+        b=hGG1raoYIyt3bURn6KOBnLqU/HouNyWV3tnHlPtt/VK87vyiHkradG4D6kFeJXOj/F
+         keyoirBk7scGF/mFWH3BvV4MpeZLFYULxoMhPVk4e5BWSR5UPev8HV1CCT6di1yFSpW9
+         mIWv6XGshyn8azbkpYDRXr5RNTY2jQcH1UL7AypxR/xUhZ0jOQjKeA0lWIrBrXj+PPyy
+         /iEWJiCGVwo7KveIZhsmht1NXUmLB8WyEqiK+Vz6/ASnaz7QQm9JxNHIOgiKDx7pC3J1
+         e5/0XJwGnH4BpVnkFpLlxUUEebsEJnI3/QZCLM1sFkHAHAaOEyeVy1cSBFVBSCKXWrXF
+         lYEA==
+X-Gm-Message-State: AOAM533GtCr2ddDZrAC5Qz3o4i7qvQO2kd3ybJBlt1t+ofMRrE3K4xWL
+        /oriFa0oipPZ/FyMrn45VUw=
+X-Google-Smtp-Source: ABdhPJzrgo0Xi3nmEuzmb1ho2OIxbrUIKWnzhLf3x7/W+hp+MPI/n3GrzxQc508pMJcPgQlhyuhEbg==
+X-Received: by 2002:a17:906:1396:: with SMTP id f22mr48685989ejc.228.1638823054885;
+        Mon, 06 Dec 2021 12:37:34 -0800 (PST)
+Received: from stitch.. (80.71.140.73.ipv4.parknet.dk. [80.71.140.73])
+        by smtp.gmail.com with ESMTPSA id x22sm7091350ejc.97.2021.12.06.12.37.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 12:37:34 -0800 (PST)
+Sender: Emil Renner Berthing <emil.renner.berthing@gmail.com>
+From:   Emil Renner Berthing <kernel@esmil.dk>
+To:     Ley Foon Tan <lftan.linux@gmail.com>,
+        Matteo Croce <mcroce@linux.microsoft.com>
+Cc:     Emil Renner Berthing <kernel@esmil.dk>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Bin Meng <bmeng.cn@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Guo Ren <guoren@kernel.org>, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v5 3/3] riscv: optimized memset
+Date:   Mon,  6 Dec 2021 21:37:03 +0100
+Message-Id: <20211206203703.67597-1-kernel@esmil.dk>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CAFiDJ5-OJzWWR0hSZDsuAmxzxTE7cRR9Bsetpfh5vvrTxzkKPw@mail.gmail.com>
+References: <CAFiDJ5-OJzWWR0hSZDsuAmxzxTE7cRR9Bsetpfh5vvrTxzkKPw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] futex: Fix a faulty comment.
-Content-Language: en-US
-To:     Jangwoong Kim <6812skiii@gmail.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, tglx@linutronix.de,
-        dvhart@infradead.org, dave@stgolabs.net,
-        linux-kernel@vger.kernel.org
-References: <20211204181458.10076-1-6812skiii@gmail.com>
- <f7d9194b-6681-48f0-b5e9-11f43d2849bd@collabora.com>
- <CAF=mnpi65WtnK_mF1f8GfMEczS1ruj8q4YbA18R5KvWcpkxLxw@mail.gmail.com>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
-In-Reply-To: <CAF=mnpi65WtnK_mF1f8GfMEczS1ruj8q4YbA18R5KvWcpkxLxw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jangwoong,
+Hi Ley Foon,
 
-Please don't top post when replying to emails in this list (read more
-here: https://www.mediawiki.org/wiki/Mailing_list_etiquette)
+You're right it doesn't boot for me either when building with
 
-Às 14:44 de 06/12/21, Jangwoong Kim escreveu:
-> Hi André.
-> 
-> That patch was definitely wrong, I apologize.
-> 
-> However, since futex_wait_multiple_setup() sets the last index of
-> futex that was woken up,
-> shouldn't the comment be modified as below?
-> 
-> If so, I will resend a patch.
-> 
->                 /*
-> -                * Even if something went wrong, if we find out that a futex
-> -                * was woken, we don't return error and return this index to
-> -                * userspace
-> +                * Even if something went wrong, if we find out that any futex
-> +                * was woken, we don't return error and return the last index
-> +                * awoken to userspace
+  make ARCH=riscv LLVM=1
 
-Indeed, this is more correct. You can send a patch to clarify this comment.
+The following patch fixes it for me though. In hindsigt it's perhaps a
+bit surprising it works without -ffreestanding in GCC.
 
->                  */
->                 *woken = unqueue_multiple(vs, i);
->                 if (*woken >= 0)
-> 
-> I sent the patch because I thought this was important enough to be corrected.
-> 
-> Let me know If this is not crucial enough to be patched, so I won't
-> keep sending comment-fixing patches.
-> 
-> Thank you.
-> Jangwoong Kim.
-> 
-> 2021년 12월 6일 (월) 오후 9:12, André Almeida <andrealmeid@collabora.com>님이 작성:
->>
->> Hi Jangwoong,
->>
->> Thanks for your patch! However...
->>
->> Às 15:14 de 04/12/21, 6812skiii@gmail.com escreveu:
->>> From: Jangwoong Kim <6812skiii@gmail.com>
->>>
->>> We return 1, not the index of futex woken up.
->>>
->>> Signed-off-by: Jangwoong Kim <6812skiii@gmail.com>
->>> ---
->>>  kernel/futex/waitwake.c | 4 ++--
->>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/kernel/futex/waitwake.c b/kernel/futex/waitwake.c
->>> index 4ce0923f1ce3..d148e5d4956b 100644
->>> --- a/kernel/futex/waitwake.c
->>> +++ b/kernel/futex/waitwake.c
->>> @@ -455,8 +455,8 @@ static int futex_wait_multiple_setup(struct futex_vector *vs, int count, int *wo
->>>
->>>               /*
->>>                * Even if something went wrong, if we find out that a futex
->>> -              * was woken, we don't return error and return this index to
->>> -              * userspace
->>> +              * was woken, we don't return error and make userspace aware
->>> +              * of this by returning 1.
->>
->> We return to userspace the value at *woken, so your fix is wrong. Have a
->> look at futex_wait_multiple():
->>
->>                 ret = futex_wait_multiple_setup(vs, count, &hint);
->>                 if (ret) {
->>                         if (ret > 0) {
->>                                 /* A futex was woken during setup */
->>                                 ret = hint;
->>                         }
->>                         return ret;
->>                 }
->>
->> When we return 1 at futex_wait_multiple_setup(), we end up returning the
->> hint/woken value to userspace.
->>
->> Let me know if you have questions.
->>
->>         André
+/Emil
+
+---
+ arch/riscv/lib/Makefile | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/riscv/lib/Makefile b/arch/riscv/lib/Makefile
+index e33263cc622a..6dfa919d4cd6 100644
+--- a/arch/riscv/lib/Makefile
++++ b/arch/riscv/lib/Makefile
+@@ -4,4 +4,9 @@ lib-$(CONFIG_MMU)	+= uaccess.o
+ lib-$(CONFIG_64BIT)	+= tishift.o
+ lib-$(CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE) += string.o
+ 
++# string.o implements standard library functions like memset/memcpy etc.
++# Use -ffreestanding to ensure that the compiler does not try to "optimize"
++# them into calls to themselves.
++CFLAGS_string.o := -ffreestanding
++
+ obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
+-- 
+2.34.1
+

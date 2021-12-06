@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CAF0469A8E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 317D1469A29
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346555AbhLFPIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:08:46 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56258 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346498AbhLFPGf (ORCPT
+        id S1345790AbhLFPGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:06:00 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37716 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345840AbhLFPFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:06:35 -0500
+        Mon, 6 Dec 2021 10:05:06 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9561C61309;
-        Mon,  6 Dec 2021 15:03:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A4F7C341C1;
-        Mon,  6 Dec 2021 15:03:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 291A1B81018;
+        Mon,  6 Dec 2021 15:01:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DCB0C341C2;
+        Mon,  6 Dec 2021 15:01:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802986;
-        bh=ndOXS9KXsxvEwuKPKH64yIMrAtFzTbeJd27fUhEFgO0=;
+        s=korg; t=1638802896;
+        bh=jKU58qYBU1NkFuvldMOvizh0Knkf91UgxaZbbVpWYDc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SbqZMuukuO74R47ZKQcl8rFxOUGNn2eZyCcSbB8PyffqNUyIPW0kQe7tyh1JMtYSl
-         6CLFwyfZ4QQsPnqPtQP8V04XbIPvJsf7m7noapGB7oO9Bsw8IGvkav4QCGaXAeJQy3
-         LJo5Hy2vjUXqZBZSTyhH9VoQjqGoqOcRGkDBVSUY=
+        b=ozA6xNfszoSJiOQOBpvJQFv57dfmtBTecC98/+W0SWgMEYWvVZ9YhLV9K7DzNUt9O
+         HcLlcjo4buBGLYPSu4dbAPRldWSA9U4Dj04vlT0atQGxyJnwnvrW9RSeiQ9sVLS07u
+         5wWU2D3l6OocRBZbD2E/KTtX7C8CYyVJGPntep2g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Maxime Ripard <maxime@cerno.tech>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 18/62] scsi: mpt3sas: Fix kernel panic during drive powercycle test
-Date:   Mon,  6 Dec 2021 15:56:01 +0100
-Message-Id: <20211206145549.802086417@linuxfoundation.org>
+Subject: [PATCH 4.9 19/62] drm/vc4: fix error code in vc4_create_object()
+Date:   Mon,  6 Dec 2021 15:56:02 +0100
+Message-Id: <20211206145549.838509537@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
 References: <20211206145549.155163074@linuxfoundation.org>
@@ -47,40 +46,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 0ee4ba13e09c9d9c1cb6abb59da8295d9952328b ]
+[ Upstream commit 96c5f82ef0a145d3e56e5b26f2bf6dcd2ffeae1c ]
 
-While looping over shost's sdev list it is possible that one
-of the drives is getting removed and its sas_target object is
-freed but its sdev object remains intact.
+The ->gem_create_object() functions are supposed to return NULL if there
+is an error.  None of the callers expect error pointers so returing one
+will lead to an Oops.  See drm_gem_vram_create(), for example.
 
-Consequently, a kernel panic can occur while the driver is trying to access
-the sas_address field of sas_target object without also checking the
-sas_target object for NULL.
-
-Link: https://lore.kernel.org/r/20211117104909.2069-1-sreekanth.reddy@broadcom.com
-Fixes: f92363d12359 ("[SCSI] mpt3sas: add new driver supporting 12GB SAS")
-Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: c826a6e10644 ("drm/vc4: Add a BO cache.")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211118111416.GC1147@kili
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/mpt3sas/mpt3sas_scsih.c | 2 +-
+ drivers/gpu/drm/vc4/vc4_bo.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-index 58876b8a2e9f8..8063b97bf2e9b 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-@@ -2927,7 +2927,7 @@ _scsih_ublock_io_device(struct MPT3SAS_ADAPTER *ioc, u64 sas_address)
+diff --git a/drivers/gpu/drm/vc4/vc4_bo.c b/drivers/gpu/drm/vc4/vc4_bo.c
+index d53e805d392f9..64fc99cf54d5b 100644
+--- a/drivers/gpu/drm/vc4/vc4_bo.c
++++ b/drivers/gpu/drm/vc4/vc4_bo.c
+@@ -198,7 +198,7 @@ struct drm_gem_object *vc4_create_object(struct drm_device *dev, size_t size)
  
- 	shost_for_each_device(sdev, ioc->shost) {
- 		sas_device_priv_data = sdev->hostdata;
--		if (!sas_device_priv_data)
-+		if (!sas_device_priv_data || !sas_device_priv_data->sas_target)
- 			continue;
- 		if (sas_device_priv_data->sas_target->sas_address
- 		    != sas_address)
+ 	bo = kzalloc(sizeof(*bo), GFP_KERNEL);
+ 	if (!bo)
+-		return ERR_PTR(-ENOMEM);
++		return NULL;
+ 
+ 	mutex_lock(&vc4->bo_lock);
+ 	vc4->bo_stats.num_allocated++;
 -- 
 2.33.0
 

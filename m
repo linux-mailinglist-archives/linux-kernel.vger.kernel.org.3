@@ -2,102 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 748D946A93A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:12:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6193146A941
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350259AbhLFVPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:15:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57990 "EHLO
+        id S1350208AbhLFVQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:16:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346639AbhLFVPa (ORCPT
+        with ESMTP id S1350300AbhLFVQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:15:30 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C602AC061746;
-        Mon,  6 Dec 2021 13:12:00 -0800 (PST)
+        Mon, 6 Dec 2021 16:16:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40847C0611F7;
+        Mon,  6 Dec 2021 13:12:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 751A2CE1410;
-        Mon,  6 Dec 2021 21:11:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F8F1C341C1;
-        Mon,  6 Dec 2021 21:11:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EFD0AB81197;
+        Mon,  6 Dec 2021 21:12:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78741C341C1;
+        Mon,  6 Dec 2021 21:12:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638825116;
-        bh=3+mh5XMGmu3VxF7wKK2q9cEzMYrDXlkMauvHqb0Gfbg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dRRVPhDr6H+kRWQFYcNx9bkXAUzTmSHB+aFoEBsiJ8Y8u/l4COWhOm3l7Pa69sg8U
-         0xzcDRN7GqI2cOHcXjzrYn/5Fk9vul12o9m58ZHsX4AobktbuGFJv3eC7OX4ZYDBhb
-         vadaLid+mK4D55E5awutAMQF1YWyKHkSHDRxsOo3uIa1X/UwWa2SJutLLUgBSNe17T
-         AwgYDPo2meF7Gs9YxUMOwpcVLqwwzO2mKUfTkReG7n+JDw2z3CVZfeGbRozQDv+Lh8
-         IvY/vUzzBUbCCv7rl4W4bOwh+M6uFqDHBcUVGpRlop/P9+J4wBEiSWCLb8SQg3Pg1S
-         F1ahRSCcJdH6w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id F058B40002; Mon,  6 Dec 2021 18:11:53 -0300 (-03)
-Date:   Mon, 6 Dec 2021 18:11:53 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     Luca Boccassi <bluca@debian.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Matteo Croce <mcroce@linux.microsoft.com>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        keyrings@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Subject: Re: [PATCH bpf-next 0/3] bpf: add signature
-Message-ID: <Ya58mWyqlVzgQc9F@kernel.org>
-References: <CAADnVQLDEPxOvGn8CxwcG7phy26BKuOqpSQ5j7yZhZeEVoCC4w@mail.gmail.com>
- <CAFnufp1_p8XCUf-RdHpByKnR9MfXQoDWw6Pvm_dtuH4nD6dZnQ@mail.gmail.com>
- <CAADnVQ+DSGoF2YoTrp2kTLoFBNAgdU8KbcCupicrVGCWvdxZ7w@mail.gmail.com>
- <86e70da74cb34b59c53b1e5e4d94375c1ef30aa1.camel@debian.org>
- <CAADnVQLCmbUJD29y2ovD+SV93r8jon2-f+fJzJFp6qZOUTWA4w@mail.gmail.com>
- <CAFnufp2S7fPt7CKSjH+MBBvvFu9F9Yop_RAkX_3ZtgtZhRqrHw@mail.gmail.com>
- <CAADnVQ+WLGiQvaoTPwu_oRj54h4oMwh-z5RV0WAMFRA9Wco_iA@mail.gmail.com>
- <61aae2da8c7b0_68de0208dd@john.notmuch>
- <0079fd757676e62f45f28510a5fd13a9996870be.camel@debian.org>
- <61ae75487d445_c5bd20827@john.notmuch>
+        s=k20201202; t=1638825160;
+        bh=T3yRgLCp/9PEM/7fq9iom2T9g59mfQVQIxFhlGFfXrk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kMQEt491P7M15oVAYo3wvGtQ6dZh9gMLu0+smRayXJj6KUvwpbG7E1FqTyOgKqYO5
+         IQzub8eN5COg6bNdmp/03UUPl6TOCBKenMzsXqVSpYHI92Caxxelw0yqfgqzU43xGq
+         jffiGpyTVPZK1D7cpC8PiZa3t/oHcMk6YflGw7lQWbrHS0atzX7+MRwqv5g/4h78Q4
+         NqkaaZZqQYXFkwvsJNfFEuj6RId2W/1bZRqQitGBiEDowEA+1DsJ2BinQgVwYBzbkc
+         q/GYriYoTsp2dvWUwtq3i2kTIw41luhofh4PMib08y0q7WUVcHxUzE26pP64zG99bM
+         c/9p1Xd48/CeA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Akhil P Oommen <akhilpo@codeaurora.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Sasha Levin <sashal@kernel.org>, robdclark@gmail.com,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 5.15 01/24] drm/msm: Fix null ptr access msm_ioctl_gem_submit()
+Date:   Mon,  6 Dec 2021 16:12:06 -0500
+Message-Id: <20211206211230.1660072-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61ae75487d445_c5bd20827@john.notmuch>
-X-Url:  http://acmel.wordpress.com
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Dec 06, 2021 at 12:40:40PM -0800, John Fastabend escreveu:
-> I'll just reiterate (I think you get it though) that simply signing
-> enforcement doesn't mean now BPF is safe. Further these programs
+From: Akhil P Oommen <akhilpo@codeaurora.org>
 
-I think this was clear from the get go, at most this would help with
-fingerpointing :-) I.e. BPF signing is not about making things safer,
-its just an attempt to know who messed up.
+[ Upstream commit 26d776fd0f79f093a5d0ce1a4c7c7a992bc3264c ]
 
-> have very high privileges and can do all sorts of things to the
-> system. But, sure sig enforcement locks down one avenue of loading
-> bogus program.
- 
-> > the capability of calling bpf(). Trying to define heuristics is also
-> > not good enough for us - creative malicious actors have a tendency to
-> > come up with ways to chain things that individually are allowed and
-> > benign, but combined in a way that you just couldn't foresee. It would
- 
-> Sure, but I would argue some things can be very restrictive and
-> generally useful. For example, never allow kernel memory read could be
-> enforced from BPF side directly. Never allow pkt redirect, etc.
+Fix the below null pointer dereference in msm_ioctl_gem_submit():
 
-But this is something unrelated to BPF signing, right? Its something
-desirable, I'd say this will be at some point required, i.e. one more
-step in having BPF programs to be more like userspace apps, where you
-can limit all sorts of things it can do, programmatically, a BPF ulimit,
-hey, blimit?
+ 26545.260705:   Call trace:
+ 26545.263223:    kref_put+0x1c/0x60
+ 26545.266452:    msm_ioctl_gem_submit+0x254/0x744
+ 26545.270937:    drm_ioctl_kernel+0xa8/0x124
+ 26545.274976:    drm_ioctl+0x21c/0x33c
+ 26545.278478:    drm_compat_ioctl+0xdc/0xf0
+ 26545.282428:    __arm64_compat_sys_ioctl+0xc8/0x100
+ 26545.287169:    el0_svc_common+0xf8/0x250
+ 26545.291025:    do_el0_svc_compat+0x28/0x54
+ 26545.295066:    el0_svc_compat+0x10/0x1c
+ 26545.298838:    el0_sync_compat_handler+0xa8/0xcc
+ 26545.303403:    el0_sync_compat+0x188/0x1c0
+ 26545.307445:   Code: d503201f d503201f 52800028 4b0803e8 (b8680008)
+ 26545.318799:   Kernel panic - not syncing: Oops: Fatal exception
+
+Signed-off-by: Akhil P Oommen <akhilpo@codeaurora.org>
+Link: https://lore.kernel.org/r/20211118154903.2.I3ae019673a0cc45d83a193a7858748dd03dbb820@changeid
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/gpu/drm/msm/msm_gem_submit.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
+index 151d19e4453cd..bf95b81bf35b5 100644
+--- a/drivers/gpu/drm/msm/msm_gem_submit.c
++++ b/drivers/gpu/drm/msm/msm_gem_submit.c
+@@ -780,6 +780,7 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
+ 		args->nr_cmds);
+ 	if (IS_ERR(submit)) {
+ 		ret = PTR_ERR(submit);
++		submit = NULL;
+ 		goto out_unlock;
+ 	}
  
-- Arnaldo
+-- 
+2.33.0
+

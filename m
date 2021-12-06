@@ -2,87 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2782A46A08C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6735446A08E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445103AbhLFQFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37012 "EHLO
+        id S1445159AbhLFQFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:05:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388073AbhLFP7C (ORCPT
+        with ESMTP id S1381602AbhLFP7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:59:02 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC63C08EB3D
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:42:02 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id de30so11583347qkb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 07:42:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tv30VS8SeKlLP5GRLFT6OKvsf2r+6PIvjSUcqekajik=;
-        b=ideCG96xgNqked4pgV6jazA+7DiryfKsZEADsB50dAmAVoQWQ4q2pulV7OagAlM8SQ
-         6phVT+EG+Hp4unV7lOISRD0QAojl3NXKQhZh56HGo3Qvce3nSBnzaQ5Evov2KGCMWzyW
-         PF9wp7D5SaIhcxVR5jXomZ4VTfCin+W8shzA85ab73pCx479nJaDzJP1WTngj3RU3FVO
-         KjUwmnkL6NwBn9rWVhTfvpIDgGXeyRyzwygHgoebHNNbA0Oc228naVW7eQ/7v1E0s32p
-         ZL42Eh/1KgCVtQ2e2Hv9nn/V68GyKo0abJRtDL+XtYZr524pDxNKLmo5BlYEmHrtgiMq
-         lBSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tv30VS8SeKlLP5GRLFT6OKvsf2r+6PIvjSUcqekajik=;
-        b=p2UUT99MHZwPMdOm/47rVCiV6dkX7l2fWDT+SJYUeP61MXTDEI7v+tbFw9SJu1wZmM
-         MLOrCyGCO+jHSMdPI9DwqpKRfZEekSmCDv4lxeiD7qCBlKKfsn1Fzi1Pnx6Vk+oE6vfb
-         Wrt7WtcDQ5xG2i+q2dqD1orX5s1gGpMnqAT2gz2We5HmQq3TQsnqzJZ3YultdedocP/M
-         dQbhWka/U0op6i1Kvd84JvUhoO84YsEl1fuaprqWv2aZfMuGMLNvtUx+prdC/mI4zZLs
-         K/fR+ZvSL8FwFAWcOL9KbGAQeeHj/e21gYTOFWPye8GLHGJ71uGfjkIwTDAku8mnWjhS
-         8Xzw==
-X-Gm-Message-State: AOAM532iVznFkTolVaGmEqhLtfg4Vq863AadE7xyB+pEzteiEIbfQWA7
-        sLyy7/iMQfJG0seDLe6y8dLj6g==
-X-Google-Smtp-Source: ABdhPJw+NV2Qe6hp/inCJIC+GhFU4fEbYd9SO3EFcw0nOYD9MI9icSOOAhJ6rOWIykGB0U3g02NFxA==
-X-Received: by 2002:a37:3c4:: with SMTP id 187mr33417527qkd.755.1638805321335;
-        Mon, 06 Dec 2021 07:42:01 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id e20sm7744887qty.14.2021.12.06.07.42.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 07:42:00 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1muG7r-008xwn-TM; Mon, 06 Dec 2021 11:41:59 -0400
-Date:   Mon, 6 Dec 2021 11:41:59 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     syzbot <syzbot+c94a3675a626f6333d74@syzkaller.appspotmail.com>
-Cc:     avihaih@nvidia.com, dledford@redhat.com, haakon.bugge@oracle.com,
-        leon@kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] BUG: corrupted list in rdma_listen (2)
-Message-ID: <20211206154159.GP5112@ziepe.ca>
-References: <000000000000c3eace05d24f0189@google.com>
+        Mon, 6 Dec 2021 10:59:40 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9F8C08EB55;
+        Mon,  6 Dec 2021 07:43:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=MPeuvTxNc7e1r/s1dzAjdNjQbaM0LQOJRmSAdCiN7I4=; b=q07BlVPXYmGLZU+dKgzZJ0hiKT
+        JUrhQDg+pP5lG9oLUYCnZCHWrZnLfKLbg1+7hElhB9qbRGIylmzLvVKhVkVOSE114gPp7O+Kgn6qM
+        XQ35qg/+aEcMjank6MvVfYSt5tE2l364UAZI0FuGnqcS8+3vcnx2+ToMBXcm0nCDX15XTaUECX7F/
+        nr28FgBQeQYlLsfZZFxb4ivohfTzLrQEHYU2yg8OuixSDDOIJfSgyF/lMOrQfhOvIJcFHC0JPITjE
+        cD+3VG1/sIEG49N+bjV2sBSarVlBGseg6pmFkd6+gxAPZPk17OYN6JyvJlq6beuOTj0Fz1VXvz2G/
+        0UVjV9/Q==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56100)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1muG8j-0004w7-OQ; Mon, 06 Dec 2021 15:42:53 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1muG8d-0004Sj-CM; Mon, 06 Dec 2021 15:42:47 +0000
+Date:   Mon, 6 Dec 2021 15:42:47 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Emmanuel Deloget <emmanuel.deloget@eho.link>
+Cc:     Louis Amas <louis.amas@eho.link>, andrii@kernel.org,
+        ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
+        kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, mw@semihalf.com,
+        netdev@vger.kernel.org, songliubraving@fb.com, yhs@fb.com
+Subject: Re: [PATCH 1/1] net: mvpp2: fix XDP rx queues registering
+Message-ID: <Ya4vd9+pBbVJML+K@shell.armlinux.org.uk>
+References: <DB9PR06MB8058D71218633CD7024976CAFA929@DB9PR06MB8058.eurprd06.prod.outlook.com>
+ <20211110144104.241589-1-louis.amas@eho.link>
+ <bdc1f03c-036f-ee29-e2a1-a80f640adcc4@eho.link>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000000000000c3eace05d24f0189@google.com>
+In-Reply-To: <bdc1f03c-036f-ee29-e2a1-a80f640adcc4@eho.link>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 04, 2021 at 01:54:17AM -0800, syzbot wrote:
+On Mon, Dec 06, 2021 at 04:37:20PM +0100, Emmanuel Deloget wrote:
 > Hello,
 > 
-> syzbot found the following issue on:
+> On 10/11/2021 15:41, Louis Amas wrote:
+> > The registration of XDP queue information is incorrect because the
+> > RX queue id we use is invalid. When port->id == 0 it appears to works
+> > as expected yet it's no longer the case when port->id != 0.
+> > 
+> > When we register the XDP rx queue information (using
+> > xdp_rxq_info_reg() in function mvpp2_rxq_init()) we tell them to use
+> > rxq->id as the queue id. This value iscomputed as:
+> > rxq->id = port->id * max_rxq_count + queue_id
+> > 
+> > where max_rxq_count depends on the device version. In the MB case,
+> > this value is 32, meaning that rx queues on eth2 are numbered from
+> > 32 to 35 - there are four of them.
+> > 
+> > Clearly, this is not the per-port queue id that XDP is expecting:
+> > it wants a value in the range [0..3]. It shall directly use queue_id
+> > which is stored in rxq->logic_rxq -- so let's use that value instead.
+> > 
+> > This is consistent with the remaining part of the code in
+> > mvpp2_rxq_init().
+> > 
+> > Fixes: b27db2274ba8 ("mvpp2: use page_pool allocator")
+> > Signed-off-by: Louis Amas <louis.amas@eho.link>
+> > Signed-off-by: Emmanuel Deloget <emmanuel.deloget@eho.link>
+> > Reviewed-by: Marcin Wojtas <mw@semihalf.com>
+> > ---
+> > This is a repost of [1]. The patch itself is not changed, but the
+> > commit message has been enhanced using part of the explaination in
+> > order to make it clearer (hopefully) and to incorporate the
+> > reviewed-by tag from Marcin.
+> > 
+> > v1: original patch
+> > v2: revamped commit description (no change in the patch itself)
+> > 
+> > [1] https://lore.kernel.org/bpf/20211109103101.92382-1-louis.amas@eho.link/
+> > 
+> >   drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> > index 587def69a6f7..f0ea377341c6 100644
+> > --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> > +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> > @@ -2959,11 +2959,11 @@ static int mvpp2_rxq_init(struct mvpp2_port *port,
+> >   	mvpp2_rxq_status_update(port, rxq->id, 0, rxq->size);
+> >   	if (priv->percpu_pools) {
+> > -		err = xdp_rxq_info_reg(&rxq->xdp_rxq_short, port->dev, rxq->id, 0);
+> > +		err = xdp_rxq_info_reg(&rxq->xdp_rxq_short, port->dev, rxq->logic_rxq, 0);
+> >   		if (err < 0)
+> >   			goto err_free_dma;
+> > -		err = xdp_rxq_info_reg(&rxq->xdp_rxq_long, port->dev, rxq->id, 0);
+> > +		err = xdp_rxq_info_reg(&rxq->xdp_rxq_long, port->dev, rxq->logic_rxq, 0);
+> >   		if (err < 0)
+> >   			goto err_unregister_rxq_short;
+> > 
 > 
-> HEAD commit:    bf152b0b41dc Merge tag 'for_linus' of git://git.kernel.org..
+> Is there any update on this patch ? Without it, XDP only partially work on a
+> MACCHIATOBin (read: it works on some ports, not on others, as described in
+> our analysis sent together with the original patch).
 
-??
+Hi,
 
-This commit is nearly a year old?
+I suspect if you *didn't* thread your updated patch to your previous
+submission, then it would end up with a separate entry in
+patchwork.kernel.org, and the netdev maintainers will notice that the
+patch is ready for inclusion, having been reviewed by Marcin.
 
-$ git describe --contains bf152b0b41dc
-v5.12-rc4~28
+Thanks.
 
-I think this has probably been fixed since, why did a report for such
-an old kernel get sent?
-
-Jason
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

@@ -2,131 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF42B4691AC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 09:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 071664691AE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 09:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239641AbhLFIpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 03:45:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239568AbhLFIpP (ORCPT
+        id S239676AbhLFIp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 03:45:27 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:49190 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239672AbhLFIp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 03:45:15 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E874C061354
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 00:41:46 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id x15so39942058edv.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 00:41:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kYsv0I6A6o5uFK+UPY8fyAiz1zz4uJD9KLB+ITvNrnU=;
-        b=Na9oLGTjiwHYKrfq7A9Qz4LGmlnRJjcpjIOYPpDh/3BPi9g5o1X8rpVW4mP/sxLFWM
-         hAuDGpKChArD8g+AXlU3xZp/f/CHbnKk1crqS++1O4gK3JoooqAizE3HZFSUN9B+eaqK
-         3CZjCwIC5WElGg5rbsUrL1k4xBeKlcgQZLyMBwKuYvrHfsbaL1C8bahRh0XklvAoVPZF
-         VQN9nFEdammFsIlCeEssLeM5W9x/+5bmPw/SKWrmpagzgxdh6Q8E3taxBMV46/WvALY1
-         E6lPsbdWc7CDV7BKSnBtiGSzkK0b0Sk7YbTI4crokMt+UXLf3a/071HEN/2Woe91yaGy
-         O2nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kYsv0I6A6o5uFK+UPY8fyAiz1zz4uJD9KLB+ITvNrnU=;
-        b=YXnj8KKXpf/FETGSJJ34q9CAoSECKOZPsxhT50b1SClVDNDBZiUhMYugge57EnbYd8
-         gwzynhktRuOUdo7yP4Fx3fiV9VkFGFAuojhRLI/izaqaVpwF+ebR2SFz3B0DQVR3wC1J
-         QxBh3UqBCVuhtEXcRMY65ZPuw8Qxx0lzFpHjJ3z5UlIgJfGuXrmLbV99mtL5e/L4SxQq
-         kqzgT2plmhiI6tWOuDv5t9/IsZPCySUppeurEocOW2cTRGRG3q16eXJCzrsb95w31JUd
-         OKIqi0vFFrAD5N2nKGuglo4BTq8OCvWi4CxKFj6vN/bOrMC2dZFqbP0tYjoI4s3fFg5a
-         l3ag==
-X-Gm-Message-State: AOAM533Y8+0lS/9YNe/HbaNRm0RW0T6aUQWEQh0e5vYzaXTjLK83bM16
-        eynsWGguPvMksJv7djJgtvSNEQGXuC3KeZfDWR/hBg==
-X-Google-Smtp-Source: ABdhPJwaXHvLPRG0pSMIzqzjXufeL6J34ZTE554GDIxU4BWMdqMOHmcM0b1i3AQuocmn3XKeV23g6rGKxx5cN6iGC/8=
-X-Received: by 2002:a17:907:c15:: with SMTP id ga21mr43076617ejc.349.1638780104294;
- Mon, 06 Dec 2021 00:41:44 -0800 (PST)
+        Mon, 6 Dec 2021 03:45:26 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9A92611F1
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:41:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56370C341C1;
+        Mon,  6 Dec 2021 08:41:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638780117;
+        bh=4wWOVe2lwPaaXoppKsoOmUrakURNFayKUJcMUbva6IU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=E505Cjk/H9JyXpn8eSTt0M7VxC9n2ELL9SuTlBogzn7URcEyR2MmwrOz42w09QquA
+         tQlTtLyH2/0D79pdvuwpep4oIjcgzBMz/x+nM89DHtCWXNkxPlMWw17clnKlVxv6/1
+         BHd04Whjmp1YMA4wEP36ocwSkB7dYEhrJ8jax875Sp3jrrjcDDSQnWvoRFlS3iVMTi
+         NwfHyBU4QFPeU2tpSz20ogc7P0X4QRxZ7r/Kx12hHJn8GvLRcTCD6zGwCj0prMBpbv
+         9JNfwsFydYUFJwOkMNda02byobWWsth3LQoRl6/jTW7pj7qjEzTp1kdnaQy0g8WjqS
+         dSJPixHPhpRwg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=hot-poop.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mu9ZL-00A7wb-Am; Mon, 06 Dec 2021 08:41:55 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>
+Cc:     Eric Auger <eric.auger@redhat.com>, Will Deacon <will@kernel.org>,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [PATCH] KVM: arm64: Constify kvm_io_gic_ops
+Date:   Mon,  6 Dec 2021 08:41:52 +0000
+Message-Id: <163878010586.1389753.7080973991720885525.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211204213518.83642-1-rikard.falkeborn@gmail.com>
+References: <20211204213518.83642-1-rikard.falkeborn@gmail.com>
 MIME-Version: 1.0
-References: <20211203133003.31786-1-brgl@bgdev.pl> <20211203133003.31786-4-brgl@bgdev.pl>
- <YapnTHQZyNCZXrgp@smile.fi.intel.com> <YapoW+DL4jPo69u8@smile.fi.intel.com>
- <Yapp4vakFxH7JV5B@smile.fi.intel.com> <CAMRc=MeWfKHWFKwRjaqczrfwhAodpDLgrWKF-zqXCsjd=gMv3g@mail.gmail.com>
- <Yap5ctmlw6NeNM+7@smile.fi.intel.com>
-In-Reply-To: <Yap5ctmlw6NeNM+7@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 6 Dec 2021 09:41:33 +0100
-Message-ID: <CAMRc=MffmFgCZFRziw-QJ+Y3WobJZzUh1Nbp2oym6JLqfnZCdQ@mail.gmail.com>
-Subject: Re: [PATCH v12 3/7] gpiolib: of: make fwnode take precedence in
- struct gpio_chip
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rikard.falkeborn@gmail.com, suzuki.poulose@arm.com, james.morse@arm.com, alexandru.elisei@arm.com, eric.auger@redhat.com, will@kernel.org, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, catalin.marinas@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 9:10 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Fri, Dec 03, 2021 at 08:28:34PM +0100, Bartosz Golaszewski wrote:
-> > On Fri, Dec 3, 2021 at 8:04 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > > On Fri, Dec 03, 2021 at 08:56:27PM +0200, Andy Shevchenko wrote:
-> > > > On Fri, Dec 03, 2021 at 08:51:56PM +0200, Andy Shevchenko wrote:
-> > > > > On Fri, Dec 03, 2021 at 02:29:59PM +0100, Bartosz Golaszewski wrote:
->
-> ...
->
-> > > > > >   if (gc->parent)
-> > > > > >           gdev->dev.of_node = gc->parent->of_node;
-> > > > > >
-> > > > > > + if (gc->fwnode)
-> > > > > > +         gc->of_node = to_of_node(gc->fwnode);
-> > > > > > +
-> > > > > >   /* If the gpiochip has an assigned OF node this takes precedence */
-> > > > > >   if (gc->of_node)
-> > > > > >           gdev->dev.of_node = gc->of_node;
-> > > > >
-> > > > > Similar should be done in acpi_gpio_dev_init():
->
->
-> ^^^^^^ (1)
->
-> ...
->
-> > > If we have parent device for several GPIO devices, this won't work right now
-> > > due to limitations of fwnode regarding to the sturct device.
-> > >
-> > > So, it means we may not have shared primary with different secondary fwnodes.
-> > >
-> > > So, come back to the initial suggestion (overwrite it for now):
-> > >
-> > >         /*
-> > >          * If custom fwnode provided, use it. Currently we may not
-> > >          * handle the case where shared primary node has different
-> > >          * secondary ones. Ideally we have to use
-> > >          * set_secondary_fwnode() here.
-> > >          */
-> > >         if (gc->fwnode)
-> > >                 device_set_node(&gdev->dev, gc->fwnode);
-> > >
-> >
-> > Other parts of gpiolib-of depend on the of_node being there.
-> > Converting it to fwnode is a whole other task so for now I suggest we
-> > just convert the fwnode to of_node in struct gpio_chip as per my
-> > patch.
->
-> But this is about ACPI counterpart. If you do this, do this in both cases.
-> Above code for ACPI (1).
->
+On Sat, 4 Dec 2021 22:35:18 +0100, Rikard Falkeborn wrote:
+> The only usage of kvm_io_gic_ops is to make a comparison with its
+> address and to pass its address to kvm_iodevice_init() which takes a
+> pointer to const kvm_io_device_ops as input. Make it const to allow the
+> compiler to put it in read-only memory.
 
-This series concerns the gpio-sim driver and it only uses configfs
-(with manually created platform devices) or device-tree. I would
-prefer to do ACPI separately and I'd like you to lead that because I
-neither have any HW to test nor claim to understand it. :)
+Applied to next, thanks!
 
-Bart
+[1/1] KVM: arm64: Constify kvm_io_gic_ops
+      commit: 636dcd0204599f94680f8f87b46cef7c66034ac0
+
+Cheers,
+
+	M.
+-- 
+Without deviation from the norm, progress is not possible.
+
+

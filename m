@@ -2,246 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2736D46A3B3
+	by mail.lfdr.de (Postfix) with ESMTP id 9F76F46A3B4
 	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 19:01:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346639AbhLFSFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 13:05:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41590 "EHLO
+        id S1347047AbhLFSFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 13:05:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346722AbhLFSEz (ORCPT
+        with ESMTP id S1347002AbhLFSE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 13:04:55 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C174C0698CD;
-        Mon,  6 Dec 2021 10:01:04 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id y14-20020a17090a2b4e00b001a5824f4918so11411087pjc.4;
-        Mon, 06 Dec 2021 10:01:04 -0800 (PST)
+        Mon, 6 Dec 2021 13:04:56 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE204C061354
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 10:01:10 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id l64so5679808pgl.9
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 10:01:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=a22elMeKMuvw9kAaeC7xqXjpamRaXXRHV5cJtgBXnMI=;
-        b=FNuLLY+2QfkUYYdnHtv03ga/tmbb/WnbRqvODT34TbvpQz79NTmgr2/ROaxi1KvJiZ
-         qonBJ/pxCvk2g0IPUd6Qpj7sabtCux2WfcYJyghukcUmsUKFoXGNQBd9A0OnYJOttTpx
-         UIdl3MStDRxZsVsDZiX6hKX3+Xf4hhKpQQ8NWpFeS5HZyX6HxKpq76L25dbl/vWYLiNz
-         uqzh+mwcTJ+AkK4uG67QuWo9VRAWujUhAVWThnL38skDly9DrMhLJ0Gh0bcADhdLSleA
-         5Iv6EqE9Gdii24EzG0q3nm7+KdSW8SoHMsIYrEVp1pzKzPnVP5a7WlBssIkHOB5yKGlL
-         Zu5w==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZS1r0CcS7ggO1DDxQXYjV5u2RzqWZvKX9IDzXi7hKWY=;
+        b=SxhVCSj0l3Pq2RVNEnaIUsIpbm8lrDpxXQEmiYVVb6T8STgsyZvnO0Yk6shHxSXxH7
+         nntO1QbDiE31p0fzfIvTR3sXrSKcAUohetClCWpHgtbNuYsztOM71z81dLKNrME4FOJR
+         1lg5PQ8uwDruWykG1DVvzWvFwyGbhDoyGn2aC4QoonSijfKSTunskc+TO32S+/azuAeU
+         dJvf96l7RItKP2VLTslVZBhQ1iUO215O4Gt7c1tWJTGChoZIQEQBC2mNCovMIdNgVmwy
+         LcGcpmXUmthuKt4cbdjk7uy5hxn0driAYe95t5HtQUdXeDmlWfUzQ1xhqTqaqIdlcYD0
+         EceQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=a22elMeKMuvw9kAaeC7xqXjpamRaXXRHV5cJtgBXnMI=;
-        b=SeqVkaBN+pOzDNZZ5kQ7tpl8gbqXLi9Gcv9VUP3I0jzDnBoYugyaZNbdNUAd0jAh1D
-         puPl865GbGA4We+0HmK+Wi0rfZAgmIPiB7uXO+DP3bM7KQTE5Fc8hy/tbNjXx0Z23BVo
-         9CfhizrJtaF+srFUvb3CzBm85Jh1/6KYzg9p1ybBM2K1HxHpORGNbBkD7TnaJcO/qkgq
-         5KOvOIUUU2ByGNcbkcM+vj82hs71lYvfpdqNwwrUUVXmARcV28/Uv9bzsz3V4ShLcVbk
-         y0IXQhPt5Gv+3ZZ5/wnWwYPCsip9kMl0H4Lu/YdCgjoi0LAnQtlfrHNiqPbFrhJkaybA
-         4eEg==
-X-Gm-Message-State: AOAM530GsqUArbhuKfHMFbxWa77SDvAXw8oSPq4b/Z42unHJ8ZNfuuES
-        WvR4h2aqyX7AawX7uSP3fihaerJ5NGk=
-X-Google-Smtp-Source: ABdhPJwT0/hSqTiWhbGXegTiFL+l5hd6q19jJHrHzsa1pAOaawNuH4ZZtQfWAqoe9uuW9xXye0+Agg==
-X-Received: by 2002:a17:902:b28b:b0:142:4abc:ac20 with SMTP id u11-20020a170902b28b00b001424abcac20mr45718472plr.88.1638813663456;
-        Mon, 06 Dec 2021 10:01:03 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id u11sm5444070pfg.120.2021.12.06.10.01.02
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZS1r0CcS7ggO1DDxQXYjV5u2RzqWZvKX9IDzXi7hKWY=;
+        b=u9AA9xH3hXYWTl3GXmPOpniWfwdopUi8xp/pzCYTNrznslsP5wCEmrXtZ4oWLRECQK
+         rizQF2Xf/rwNkhT+J51cGiwfrnD5NLf4KvToaMHi6kMml5lrGcB220Tl4OLhNtpmJtFt
+         5sPsgtqb47Gh0qNujmKiZqeKqpFsmAaYlWYM5gZN0XTQzAWbOfG1ITfZ0s1R401CCC38
+         4byXDaQv0JHRKUXLJtTnzccGuFggHHcOM9zhc+/K+RtP3GiMbVM+0p1pXrCjkmFcm7yc
+         h2sHVdAUy3n8aafFtpaweiPul2jmvV8XqPomA4kzXJF8nrScg4wvQV5msr0C2X/K2B7F
+         7qnw==
+X-Gm-Message-State: AOAM530cPAwxyQtJAdZSjyu20Iq0EbstjMENyfNRPkjXp49XJ6nPpcnu
+        LIGUHr5GX3nsLR/5BIMTKFTqNw==
+X-Google-Smtp-Source: ABdhPJxL8xkWl2TyC1yBw7chLKkCO37arya0zRV57H32iA8SZePNvtJjHQcKe7LByy96i2zLQSrY3g==
+X-Received: by 2002:a63:1950:: with SMTP id 16mr20714540pgz.422.1638813670112;
+        Mon, 06 Dec 2021 10:01:10 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id n7sm4181992pgt.6.2021.12.06.10.01.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 10:01:03 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     devicetree@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM IPROC GBIT
-        ETHERNET DRIVER), Doug Berger <opendmb@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
-        linux-kernel@vger.kernel.org (open list),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM IPROC ARM
-        ARCHITECTURE),
-        linux-phy@lists.infradead.org (open list:GENERIC PHY FRAMEWORK)
-Subject: [PATCH v3 8/8] dt-bindings: net: Convert iProc MDIO mux to YAML
-Date:   Mon,  6 Dec 2021 10:00:49 -0800
-Message-Id: <20211206180049.2086907-9-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211206180049.2086907-1-f.fainelli@gmail.com>
-References: <20211206180049.2086907-1-f.fainelli@gmail.com>
+        Mon, 06 Dec 2021 10:01:09 -0800 (PST)
+Date:   Mon, 6 Dec 2021 18:01:05 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ameer Hamza <amhamza.mgc@gmail.com>
+Cc:     vkuznets@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
+Subject: Re: [PATCH v3] KVM: x86: fix for missing initialization of return
+ status variable
+Message-ID: <Ya5P4WWsgCyQZvBH@google.com>
+References: <20211206160813.GA37599@hamza-OptiPlex-7040>
+ <20211206164503.135917-1-amhamza.mgc@gmail.com>
+ <Ya5CCU0zf+MzMwcX@google.com>
+ <20211206172746.GA141396@hamza-OptiPlex-7040>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206172746.GA141396@hamza-OptiPlex-7040>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Conver the Broadcom iProc MDIO mux Device Tree binding to YAML.
+On Mon, Dec 06, 2021, Ameer Hamza wrote:
+> On Mon, Dec 06, 2021 at 05:02:01PM +0000, Sean Christopherson wrote:
+> > On Mon, Dec 06, 2021, Ameer Hamza wrote:
+> > > If undefined ioctl number is passed to the kvm_vcpu_ioctl_device_attr
+> > > ioctl, we should trigger KVM_BUG_ON() and return with EIO to silent
+> > > coverity warning.
+> > > 
+> > > Addresses-Coverity: 1494124 ("Uninitialized scalar variable")
+> > > Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+> > > ---
+> > > Changes in v3:
+> > > Added KVM_BUG_ON() as default case and returned -EIO
+> > > ---
+> > >  arch/x86/kvm/x86.c | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > > 
+> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > > index e0aa4dd53c7f..b37068f847ff 100644
+> > > --- a/arch/x86/kvm/x86.c
+> > > +++ b/arch/x86/kvm/x86.c
+> > > @@ -5019,6 +5019,9 @@ static int kvm_vcpu_ioctl_device_attr(struct kvm_vcpu *vcpu,
+> > >  	case KVM_SET_DEVICE_ATTR:
+> > >  		r = kvm_arch_tsc_set_attr(vcpu, &attr);
+> > >  		break;
+> > > +	default:
+> > > +		KVM_BUG_ON(1, vcpu->kvm);
+> > > +		r = -EIO;
+> > 
+> > At least have a
+> > 
+> > 		break;
+> > 
+> > if we're going to be pedantic about things.
+> I just started as a contributer in this community and trying
+> to fix issues found by static analyzer tools. If you think that's
+> not necessary, its totally fine :)
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- .../bindings/net/brcm,mdio-mux-iproc.txt      | 62 --------------
- .../bindings/net/brcm,mdio-mux-iproc.yaml     | 80 +++++++++++++++++++
- 2 files changed, 80 insertions(+), 62 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt
- create mode 100644 Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml
+(Most) Static analyzers are great, they definitely find real bugs.  But they also
+have a fair number of false positives, e.g. this is a firmly a false positive, so
+the results of any static analyzer needs to thought about critically, not blindly
+followed.  It's completely understandable that Coverity got tripped up in this
+case, but that's exactly why having a human vet the bug report is necessary.
 
-diff --git a/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt b/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt
-deleted file mode 100644
-index deb9e852ea27..000000000000
---- a/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt
-+++ /dev/null
-@@ -1,62 +0,0 @@
--Properties for an MDIO bus multiplexer found in Broadcom iProc based SoCs.
--
--This MDIO bus multiplexer defines buses that could be internal as well as
--external to SoCs and could accept MDIO transaction compatible to C-22 or
--C-45 Clause. When child bus is selected, one needs to select these two
--properties as well to generate desired MDIO transaction on appropriate bus.
--
--Required properties in addition to the generic multiplexer properties:
--
--MDIO multiplexer node:
--- compatible: brcm,mdio-mux-iproc.
--
--Every non-ethernet PHY requires a compatible so that it could be probed based
--on this compatible string.
--
--Optional properties:
--- clocks: phandle of the core clock which drives the mdio block.
--
--Additional information regarding generic multiplexer properties can be found
--at- Documentation/devicetree/bindings/net/mdio-mux.yaml
--
--
--for example:
--		mdio_mux_iproc: mdio-mux@66020000 {
--			compatible = "brcm,mdio-mux-iproc";
--			reg = <0x66020000 0x250>;
--			#address-cells = <1>;
--			#size-cells = <0>;
--
--			mdio@0 {
--				reg = <0x0>;
--				#address-cells = <1>;
--				#size-cells = <0>;
--
--				pci_phy0: pci-phy@0 {
--					compatible = "brcm,ns2-pcie-phy";
--					reg = <0x0>;
--					#phy-cells = <0>;
--				};
--			};
--
--			mdio@7 {
--				reg = <0x7>;
--				#address-cells = <1>;
--				#size-cells = <0>;
--
--				pci_phy1: pci-phy@0 {
--					compatible = "brcm,ns2-pcie-phy";
--					reg = <0x0>;
--					#phy-cells = <0>;
--				};
--			};
--			mdio@10 {
--				reg = <0x10>;
--				#address-cells = <1>;
--				#size-cells = <0>;
--
--				gphy0: eth-phy@10 {
--					reg = <0x10>;
--				};
--			};
--		};
-diff --git a/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml b/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml
-new file mode 100644
-index 000000000000..af96b4fd89d5
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml
-@@ -0,0 +1,80 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/brcm,mdio-mux-iproc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MDIO bus multiplexer found in Broadcom iProc based SoCs.
-+
-+maintainers:
-+  - Florian Fainelli <f.fainelli@gmail.com>
-+
-+description:
-+  This MDIO bus multiplexer defines buses that could be internal as well as
-+  external to SoCs and could accept MDIO transaction compatible to C-22 or
-+  C-45 Clause. When child bus is selected, one needs to select these two
-+  properties as well to generate desired MDIO transaction on appropriate bus.
-+
-+allOf:
-+  - $ref: /schemas/net/mdio-mux.yaml#
-+
-+properties:
-+  compatible:
-+    const: brcm,mdio-mux-iproc
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+    description: core clock driving the MDIO block
-+
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    mdio_mux_iproc: mdio-mux@66020000 {
-+        compatible = "brcm,mdio-mux-iproc";
-+        reg = <0x66020000 0x250>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        mdio@0 {
-+           reg = <0x0>;
-+           #address-cells = <1>;
-+           #size-cells = <0>;
-+
-+           pci_phy0: pci-phy@0 {
-+              compatible = "brcm,ns2-pcie-phy";
-+              reg = <0x0>;
-+              #phy-cells = <0>;
-+           };
-+        };
-+
-+        mdio@7 {
-+           reg = <0x7>;
-+           #address-cells = <1>;
-+           #size-cells = <0>;
-+
-+           pci_phy1: pci-phy@0 {
-+              compatible = "brcm,ns2-pcie-phy";
-+              reg = <0x0>;
-+              #phy-cells = <0>;
-+           };
-+        };
-+
-+        mdio@10 {
-+           reg = <0x10>;
-+           #address-cells = <1>;
-+           #size-cells = <0>;
-+
-+           gphy0: eth-phy@10 {
-+              reg = <0x10>;
-+           };
-+        };
-+    };
--- 
-2.25.1
+There is arguably value in having a default statement to ensure future KVM code
+doesn't end up adding a bad call, which is why I'm not completely opposed to the
+above addition.
 
+Where folks, myself included, get a bit grumpy is when patches are sent to "fix"
+bug reports from static analyzers without evidence that the submitter has done
+their due dilegence to understand the code they are changing, e.g. even without
+any understanding of KVM, a search of kvm_vcpu_ioctl_device_attr() in the code
+base and reading of the function would have shown that the report was a false
+positive, albeit a somewhat odd one, and that returning -EINVAL was likely the
+wrong thing to do.  If you're unsure if something is a real bug, please ask a
+question.
+
+Rapid firing patches at the list also makes reviewers grumpy as it again suggests
+a lack of due dilegence, especially when the patches have typos ("EINV" in v2)
+and/or have obvious shortcomings (missing "break" in v3).
+
+TL;DR: I have no objection whatsover to fixing (potential) bugs found by static
+analyzers, but please slow down and (a) make sure that it's actually a bug, (b)
+ask if you're unsure, and (c) do your best to ensure that what you're sending is
+an overall improvement.

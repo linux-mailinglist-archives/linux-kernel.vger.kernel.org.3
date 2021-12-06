@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B07469CF0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77919469B63
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385998AbhLFP0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:26:01 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35902 "EHLO
+        id S1345097AbhLFPRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:17:13 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59228 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358297AbhLFPQc (ORCPT
+        with ESMTP id S1356007AbhLFPLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:16:32 -0500
+        Mon, 6 Dec 2021 10:11:02 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 757A761309;
-        Mon,  6 Dec 2021 15:13:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D7D9C341C2;
-        Mon,  6 Dec 2021 15:13:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB0BA61310;
+        Mon,  6 Dec 2021 15:07:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 911E2C341C2;
+        Mon,  6 Dec 2021 15:07:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803582;
-        bh=1XE0mcc/tmYyynTxn2n0wMzyC4wO2YrdfxfsU9Cv+C8=;
+        s=korg; t=1638803253;
+        bh=tYx1idAeozzcmY7Kw0bjUj3yMgAFvUZZbWLeviEOONY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d54ys2G5jnMXRCLMLFT1Z8QNLTPHd6IFGWqMN2pWhURQ9T+Ygfljz2uZxZNtwig6I
-         /aRNTj3hTMmEDEfIxxV0Dhm9xaLdcyP89kTV/52ir/MarjpEy23wMRzjBFD9VA37+c
-         qzcGtxE5jYkiF/ZoIAJQzKpz2T1xxNAMxnsLIu0c=
+        b=mEcJ+VSkcENlMxJWagPDvZa8pZz/ezyq7F+tp9GvHas1jDU44CB0bfDYe3QUNkY5i
+         NrdbhxSqZDkjEuAXsWS6EpYyG0JwIs2GX98EhwwNHfJig2vMKW3pRXAyDU0obBculn
+         g6jHj84sfKY/sIDedcjHLXAX61eZh/Pug/ahzU8E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.4 27/70] cpufreq: Fix get_cpu_device() failure in add_cpu_dev_symlink()
+        stable@vger.kernel.org, Stephen Suryaputra <ssuryaextr@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.14 083/106] vrf: Reset IPCB/IP6CB when processing outbound pkts in vrf dev xmit
 Date:   Mon,  6 Dec 2021 15:56:31 +0100
-Message-Id: <20211206145552.855681307@linuxfoundation.org>
+Message-Id: <20211206145558.372838230@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
-References: <20211206145551.909846023@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,76 +46,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+From: Stephen Suryaputra <ssuryaextr@gmail.com>
 
-commit 2c1b5a84669d2477d8fffe9136e86a2cff591729 upstream.
+commit ee201011c1e1563c114a55c86eb164b236f18e84 upstream.
 
-When I hot added a CPU, I found 'cpufreq' directory was not created
-below /sys/devices/system/cpu/cpuX/.
+IPCB/IP6CB need to be initialized when processing outbound v4 or v6 pkts
+in the codepath of vrf device xmit function so that leftover garbage
+doesn't cause futher code that uses the CB to incorrectly process the
+pkt.
 
-It is because get_cpu_device() failed in add_cpu_dev_symlink().
+One occasion of the issue might occur when MPLS route uses the vrf
+device as the outgoing device such as when the route is added using "ip
+-f mpls route add <label> dev <vrf>" command.
 
-cpufreq_add_dev() is the .add_dev callback of a CPU subsys interface.
-It will be called when the CPU device registered into the system.
-The call chain is as follows:
+The problems seems to exist since day one. Hence I put the day one
+commits on the Fixes tags.
 
-  register_cpu()
-  ->device_register()
-   ->device_add()
-    ->bus_probe_device()
-     ->cpufreq_add_dev()
-
-But only after the CPU device has been registered, we can get the
-CPU device by get_cpu_device(), otherwise it will return NULL.
-
-Since we already have the CPU device in cpufreq_add_dev(), pass
-it to add_cpu_dev_symlink().
-
-I noticed that the 'kobj' of the CPU device has been added into
-the system before cpufreq_add_dev().
-
-Fixes: 2f0ba790df51 ("cpufreq: Fix creation of symbolic links to policy directories")
-Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: All applicable <stable@vger.kernel.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: 193125dbd8eb ("net: Introduce VRF device driver")
+Fixes: 35402e313663 ("net: Add IPv6 support to VRF device")
+Cc: stable@vger.kernel.org
+Signed-off-by: Stephen Suryaputra <ssuryaextr@gmail.com>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Link: https://lore.kernel.org/r/20211130162637.3249-1-ssuryaextr@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/cpufreq/cpufreq.c |    9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/net/vrf.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -995,10 +995,9 @@ static struct kobj_type ktype_cpufreq =
- 	.release	= cpufreq_sysfs_release,
- };
+--- a/drivers/net/vrf.c
++++ b/drivers/net/vrf.c
+@@ -208,6 +208,7 @@ static netdev_tx_t vrf_process_v6_outbou
+ 	/* strip the ethernet header added for pass through VRF device */
+ 	__skb_pull(skb, skb_network_offset(skb));
  
--static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu)
-+static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu,
-+				struct device *dev)
- {
--	struct device *dev = get_cpu_device(cpu);
--
- 	if (unlikely(!dev))
- 		return;
++	memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
+ 	ret = vrf_ip6_local_out(net, skb->sk, skb);
+ 	if (unlikely(net_xmit_eval(ret)))
+ 		dev->stats.tx_errors++;
+@@ -289,6 +290,7 @@ static netdev_tx_t vrf_process_v4_outbou
+ 					       RT_SCOPE_LINK);
+ 	}
  
-@@ -1384,7 +1383,7 @@ static int cpufreq_online(unsigned int c
- 	if (new_policy) {
- 		for_each_cpu(j, policy->related_cpus) {
- 			per_cpu(cpufreq_cpu_data, j) = policy;
--			add_cpu_dev_symlink(policy, j);
-+			add_cpu_dev_symlink(policy, j, get_cpu_device(j));
- 		}
- 
- 		policy->min_freq_req = kzalloc(2 * sizeof(*policy->min_freq_req),
-@@ -1547,7 +1546,7 @@ static int cpufreq_add_dev(struct device
- 	/* Create sysfs link on CPU registration */
- 	policy = per_cpu(cpufreq_cpu_data, cpu);
- 	if (policy)
--		add_cpu_dev_symlink(policy, cpu);
-+		add_cpu_dev_symlink(policy, cpu, dev);
- 
- 	return 0;
- }
++	memset(IPCB(skb), 0, sizeof(*IPCB(skb)));
+ 	ret = vrf_ip_local_out(dev_net(skb_dst(skb)->dev), skb->sk, skb);
+ 	if (unlikely(net_xmit_eval(ret)))
+ 		vrf_dev->stats.tx_errors++;
 
 

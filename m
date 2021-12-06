@@ -2,98 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A059A468F02
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 03:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9A5468F05
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 03:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233542AbhLFCLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 21:11:21 -0500
-Received: from mga04.intel.com ([192.55.52.120]:63381 "EHLO mga04.intel.com"
+        id S233534AbhLFCNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 21:13:52 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:39944 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231177AbhLFCLU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 21:11:20 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="235967418"
-X-IronPort-AV: E=Sophos;i="5.87,290,1631602800"; 
-   d="scan'208";a="235967418"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2021 18:07:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,290,1631602800"; 
-   d="scan'208";a="514544132"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 05 Dec 2021 18:07:45 -0800
-Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>, iommu@lists.linux-foundation.org,
-        linux-pci@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/17] Fix BUG_ON in vfio_iommu_group_notifier()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>
-References: <20211128025051.355578-1-baolu.lu@linux.intel.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <62de1866-f30b-84b2-6942-1d49e30eba0e@linux.intel.com>
-Date:   Mon, 6 Dec 2021 10:07:39 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S231177AbhLFCNu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Dec 2021 21:13:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Swo208tOljQuvZEYwEz9ixKgro94zaxzLnCN0z69dtU=; b=s0fSFgDNRkQf4hNcRG4u+c4+CM
+        xRieDwmir/vcUNXRNKnfQz3vN5QDh8WDPdwVDO4I5RhWISLwnwARdmFffwssnMbw+szZrrSP0JmFr
+        hgTuFCxT35IZTH3d1SYqh9tnv0cVta39/JJWzuSgEeRF1PFVLLdpv/aaJxI+6SU36oUo=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1mu3SC-00Fd4e-Pt; Mon, 06 Dec 2021 03:10:08 +0100
+Date:   Mon, 6 Dec 2021 03:10:08 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Aleksander Jan Bajkowski <olek2@wp.pl>
+Cc:     hauke@hauke-m.de, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net: lantiq_xrx200: increase buffer reservation
+Message-ID: <Ya1xAHpTH72VUj35@lunn.ch>
+References: <20211205222359.42913-1-olek2@wp.pl>
 MIME-Version: 1.0
-In-Reply-To: <20211128025051.355578-1-baolu.lu@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211205222359.42913-1-olek2@wp.pl>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/28/21 10:50 AM, Lu Baolu wrote:
-> The original post and intent of this series is here.
-> https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/
-> 
-> Change log:
-> v1: initial post
->    - https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/
-> 
-> v2:
->    - Move kernel dma ownership auto-claiming from driver core to bus
->      callback. [Greg/Christoph/Robin/Jason]
->      https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/T/#m153706912b770682cb12e3c28f57e171aa1f9d0c
-> 
->    - Code and interface refactoring for iommu_set/release_dma_owner()
->      interfaces. [Jason]
->      https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/T/#mea70ed8e4e3665aedf32a5a0a7db095bf680325e
-> 
->    - [NEW]Add new iommu_attach/detach_device_shared() interfaces for
->      multiple devices group. [Robin/Jason]
->      https://lore.kernel.org/linux-iommu/20211115020552.2378167-1-baolu.lu@linux.intel.com/T/#mea70ed8e4e3665aedf32a5a0a7db095bf680325e
->    
->    - [NEW]Use iommu_attach/detach_device_shared() in drm/tegra drivers.
-> 
->    - Refactoring and description refinement.
-> 
-> This is based on v5.16-rc2 and available on github:
-> https://github.com/LuBaolu/intel-iommu/commits/iommu-dma-ownership-v2
+> +static inline int xrx200_max_frame_len(int mtu)
+> +{
+> +	return VLAN_ETH_HLEN + mtu + ETH_FCS_LEN;
+> +}
+> +
+> +static inline int xrx200_buffer_size(int mtu)
+> +{
+> +	return round_up(xrx200_max_frame_len(mtu) - 1, 4 * XRX200_DMA_BURST_LEN);
+> +}
 
-The v3 of this series has been posted here:
+Please don't use inline in .c files. Let the compiler decide.
 
-https://lore.kernel.org/linux-iommu/20211206015903.88687-1-baolu.lu@linux.intel.com/
-
-Best regards,
-baolu
+       Andrew

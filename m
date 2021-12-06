@@ -2,100 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE4146A91E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:08:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F07F646A923
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350071AbhLFVLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:11:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
+        id S229979AbhLFVL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:11:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbhLFVLp (ORCPT
+        with ESMTP id S1350126AbhLFVLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:11:45 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C27C061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 13:08:16 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id z8so11621068ilu.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 13:08:16 -0800 (PST)
+        Mon, 6 Dec 2021 16:11:54 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFDFC061746;
+        Mon,  6 Dec 2021 13:08:25 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id o13so24999429wrs.12;
+        Mon, 06 Dec 2021 13:08:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MIBC6uZiK3qw8zipA5+LmK5bPUNLM9r4EQ+nUCy7/lw=;
-        b=INmG1BwTmj3+cLahz2Xuw59SFmU2O7hk4q8DxKCvFawc/lbK2rXo6XlOH03eaPjJ4r
-         BkDoSUJcr+fAOGsor2ZV2CbxjFT3X26JcoCou1+1uSpvNOQEQ1e9KooYEIyeKSD2XVgA
-         /DlU+Uz1n/6XV5VuQ7ZHCzAtjDtYyuiyQQDVnPKbEYxP2rgLtMFPbjnu/j7LPlk/OG1D
-         etunBOsfbZvM5gNAGTw7RasfrrC1MgYuR9BGvNrAoE6DqXpY9QGxYzamtjR/gWj6g9bM
-         FY/UaLBaBdKlmP1HU9jx4XOn9nCuSoaguRiF23ow+qany12dOU7p+osWvOTIcqxNz3vc
-         fboQ==
+        d=googlemail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=yVwInqdQPwWX4Qe3BGSaiec8LwEwiHTiRzv+V8FUPV4=;
+        b=j/hARFT0fWHGsb2iMVFhbY7TsVKDd1pdb4bE1pVTXogyrwclHKw+GhxGq/bC+1tTi5
+         t9xIENPR7ITnICu04uR5Rrm8dRZv8xuJQmGEiHzmv7ZkTPlMaCxZayjqLHTyQTtx9emH
+         9JqL1/wtG6l5pdB0NihNnaU9M4bvo8wOqhl6OwyEwqR92BNJ4CfoUL99lBhLpxmSGbo4
+         ZLgWu4OC2YNRvUwZut44zkVv8UWYVN4YjJfNmgJuRS6QAu0mRjESmWV4CucMMXNyYtXh
+         owvRtsX1jd7NamruYtA6O5nJqdvVWJ4zAKeJef2LIJpl7jXh4J76EjxWEkj75UpvKtqg
+         dr7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MIBC6uZiK3qw8zipA5+LmK5bPUNLM9r4EQ+nUCy7/lw=;
-        b=CPFojPSYz5LtxdG3UzWjHJ8BfTV/qQOJMPNuw/mwHxiE1nVFyoJWuyAot5kOHyC3aA
-         9RUUIGdQsvsE3Ag6a9IO/osfIjwx6UH4VtxiGRgQvqMOK8DYfOSC7YnzR7QnrTA/d6hA
-         SgEoPyxpHfisJSXD7Qf/TDnwNqWY32PUySVuJ8AebvDtiPV91d2ahycQcj0L20996KZt
-         5rfz7Fl2VNwVaH8mEzHRFTfrQJYoplypy6de0/e2ZDjk5o9sEutD8iZPLQg2i8+SOlp9
-         mb0aQKWMcSTxczwFF9gEunN3WogZMZl3FcIFA2HbgCCcMxwWSYAyV7L66rXpjeWQ6ExC
-         EQhw==
-X-Gm-Message-State: AOAM532c9LFZJburVgdbgl4hM9RmF209IcwyNCjlqub6cnaMy9zN9Ig5
-        uIZBV46QSY5vKZHN8IvgYOveL++uj6C3j9Z1r4C30007zIY=
-X-Google-Smtp-Source: ABdhPJxQCtZ33FUXaFDtaku5StVr7BWXLnYl6zjud+9nZ/VlZL4qwxyr7DiBkwVXyvwGbAcwzOLBk6e4yGawn8E9nBM=
-X-Received: by 2002:a05:6e02:1605:: with SMTP id t5mr38923380ilu.233.1638824895522;
- Mon, 06 Dec 2021 13:08:15 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yVwInqdQPwWX4Qe3BGSaiec8LwEwiHTiRzv+V8FUPV4=;
+        b=ed216V2un5ToUvO7TIPFWTPF2x8kQ7695YIGsnlDFtnydoqKXMC9CL7MDw9MWP6iYr
+         8oro+YqkctcQMMmReXcAk/cpafnDS2jvHFk4RHXlZEPd/ZLwYA0kxdg+x8zL19Ehf2l2
+         6tShj0I+gzHcRL5sTVgSE1j091fG8gqztm1pvfHP9MWXGNvtWeDueMRkQoGbpRIeSKQF
+         C+7dLcajnqkp4W21xCqzYtkcnpcHp5NZYDzoXJ60olo9lT6nNUg/8HZVY8XWTbOy3zM5
+         Q1km8XviDX5vD8IlLffGsO5Qw8ojZK3AKs/S5/8jFjenuEGA/5d7l7Bda7jzd2A1RnmV
+         m+fg==
+X-Gm-Message-State: AOAM531Yo6T4WtfgnF+CEXmqMPSU/8zExvqeW5Wtmj2DXWwsAdJqaZrL
+        FljDkG3DMOE2Zvp5gb8cjNv9QdAHk1s=
+X-Google-Smtp-Source: ABdhPJxpVXCa7Lm3mSav7+NYGzpVO2VRSAiqRDHaow5+eq/DIiRSpnNldOwc2JisEfWYZf2SKdBj/g==
+X-Received: by 2002:adf:f708:: with SMTP id r8mr46149102wrp.198.1638824903916;
+        Mon, 06 Dec 2021 13:08:23 -0800 (PST)
+Received: from localhost.localdomain (dynamic-2a01-0c23-c0cf-f800-f22f-74ff-fe21-0725.c23.pool.telefonica.de. [2a01:c23:c0cf:f800:f22f:74ff:fe21:725])
+        by smtp.googlemail.com with ESMTPSA id p13sm511195wmi.0.2021.12.06.13.08.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 13:08:22 -0800 (PST)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux-amlogic@lists.infradead.org, alsa-devel@alsa-project.org
+Cc:     jbrunet@baylibre.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, broonie@kernel.org,
+        lgirdwood@gmail.com,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Geraldo Nascimento <geraldogabriel@gmail.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v2 2/2] ASoC: meson: aiu: Move AIU_I2S_MISC hold setting to aiu-fifo-i2s
+Date:   Mon,  6 Dec 2021 22:08:04 +0100
+Message-Id: <20211206210804.2512999-3-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211206210804.2512999-1-martin.blumenstingl@googlemail.com>
+References: <20211206210804.2512999-1-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
-References: <cover.1638308023.git.andreyknvl@google.com> <f405e36b20bd5d79dffef3f70b523885dcc6b163.1638308023.git.andreyknvl@google.com>
- <YajVYNBDOyI3hTx1@elver.google.com>
-In-Reply-To: <YajVYNBDOyI3hTx1@elver.google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Mon, 6 Dec 2021 22:08:04 +0100
-Message-ID: <CA+fCnZfuH6GNRQ7m-HU=MSrroe9BMounEuoFTSGJUGGk8=vKzQ@mail.gmail.com>
-Subject: Re: [PATCH 20/31] kasan, vmalloc: reset tags in vmalloc functions
-To:     Marco Elver <elver@google.com>
-Cc:     andrey.konovalov@linux.dev,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 3:17 PM Marco Elver <elver@google.com> wrote:
->
-> On Tue, Nov 30, 2021 at 11:07PM +0100, andrey.konovalov@linux.dev wrote:
-> > From: Andrey Konovalov <andreyknvl@google.com>
-> >
-> > In preparation for adding vmalloc support to SW/HW_TAGS KASAN,
-> > reset pointer tags in functions that use pointer values in
-> > range checks.
-> >
-> > vread() is a special case here. Resetting the pointer tag in its
-> > prologue could technically lead to missing bad accesses to virtual
-> > mappings in its implementation. However, vread() doesn't access the
-> > virtual mappings cirectly. Instead, it recovers the physical address
->
-> s/cirectly/directly/
->
-> But this paragraph is a little confusing, because first you point out
-> that vread() might miss bad accesses, but then say that it does checked
-> accesses. I think to avoid confusing the reader, maybe just say that
-> vread() is checked, but hypothetically, should its implementation change
-> to directly access addr, invalid accesses might be missed.
->
-> Did I get this right? Or am I still confused?
+The out-of-tree vendor driver uses the following approach to set the
+AIU_I2S_MISC register:
+1) write AIU_MEM_I2S_START_PTR and AIU_MEM_I2S_RD_PTR
+2) configure AIU_I2S_MUTE_SWAP[15:0]
+3) write AIU_MEM_I2S_END_PTR
+4) set AIU_I2S_MISC[2] to 1 (documented as: "put I2S interface in hold
+   mode")
+5) set AIU_I2S_MISC[4] to 1 (depending on the driver revision it always
+   stays at 1 while for older drivers this bit is unset in step 4)
+6) set AIU_I2S_MISC[2] to 0
+7) write AIU_MEM_I2S_MASKS
+8) toggle AIU_MEM_I2S_CONTROL[0]
+9) toggle AIU_MEM_I2S_BUF_CNTL[0]
 
-No, you got it right. Will reword in v2.
+Move setting the AIU_I2S_MISC[2] bit to aiu_fifo_i2s_hw_params() so it
+resembles the flow in the vendor kernel more closely. While here also
+configure AIU_I2S_MISC[4] (documented as: "force each audio data to
+left or right according to the bit attached with the audio data")
+similar to how the vendor driver does this. This fixes the infamous and
+long-standing "machine gun noise" issue (a buffer underrun issue).
 
-Thanks!
+Fixes: 6ae9ca9ce986bf ("ASoC: meson: aiu: add i2s and spdif support")
+Reported-by: Christian Hewitt <christianshewitt@gmail.com>
+Reported-by: Geraldo Nascimento <geraldogabriel@gmail.com>
+Tested-by: Christian Hewitt <christianshewitt@gmail.com>
+Tested-by: Geraldo Nascimento <geraldogabriel@gmail.com>
+Acked-by: Jerome Brunet <jbrunet@baylibre.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+---
+ sound/soc/meson/aiu-encoder-i2s.c | 33 -------------------------------
+ sound/soc/meson/aiu-fifo-i2s.c    | 19 ++++++++++++++++++
+ 2 files changed, 19 insertions(+), 33 deletions(-)
+
+diff --git a/sound/soc/meson/aiu-encoder-i2s.c b/sound/soc/meson/aiu-encoder-i2s.c
+index 932224552146..67729de41a73 100644
+--- a/sound/soc/meson/aiu-encoder-i2s.c
++++ b/sound/soc/meson/aiu-encoder-i2s.c
+@@ -18,7 +18,6 @@
+ #define AIU_RST_SOFT_I2S_FAST		BIT(0)
+ 
+ #define AIU_I2S_DAC_CFG_MSB_FIRST	BIT(2)
+-#define AIU_I2S_MISC_HOLD_EN		BIT(2)
+ #define AIU_CLK_CTRL_I2S_DIV_EN		BIT(0)
+ #define AIU_CLK_CTRL_I2S_DIV		GENMASK(3, 2)
+ #define AIU_CLK_CTRL_AOCLK_INVERT	BIT(6)
+@@ -36,37 +35,6 @@ static void aiu_encoder_i2s_divider_enable(struct snd_soc_component *component,
+ 				      enable ? AIU_CLK_CTRL_I2S_DIV_EN : 0);
+ }
+ 
+-static void aiu_encoder_i2s_hold(struct snd_soc_component *component,
+-				 bool enable)
+-{
+-	snd_soc_component_update_bits(component, AIU_I2S_MISC,
+-				      AIU_I2S_MISC_HOLD_EN,
+-				      enable ? AIU_I2S_MISC_HOLD_EN : 0);
+-}
+-
+-static int aiu_encoder_i2s_trigger(struct snd_pcm_substream *substream, int cmd,
+-				   struct snd_soc_dai *dai)
+-{
+-	struct snd_soc_component *component = dai->component;
+-
+-	switch (cmd) {
+-	case SNDRV_PCM_TRIGGER_START:
+-	case SNDRV_PCM_TRIGGER_RESUME:
+-	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+-		aiu_encoder_i2s_hold(component, false);
+-		return 0;
+-
+-	case SNDRV_PCM_TRIGGER_STOP:
+-	case SNDRV_PCM_TRIGGER_SUSPEND:
+-	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+-		aiu_encoder_i2s_hold(component, true);
+-		return 0;
+-
+-	default:
+-		return -EINVAL;
+-	}
+-}
+-
+ static int aiu_encoder_i2s_setup_desc(struct snd_soc_component *component,
+ 				      struct snd_pcm_hw_params *params)
+ {
+@@ -353,7 +321,6 @@ static void aiu_encoder_i2s_shutdown(struct snd_pcm_substream *substream,
+ }
+ 
+ const struct snd_soc_dai_ops aiu_encoder_i2s_dai_ops = {
+-	.trigger	= aiu_encoder_i2s_trigger,
+ 	.hw_params	= aiu_encoder_i2s_hw_params,
+ 	.hw_free	= aiu_encoder_i2s_hw_free,
+ 	.set_fmt	= aiu_encoder_i2s_set_fmt,
+diff --git a/sound/soc/meson/aiu-fifo-i2s.c b/sound/soc/meson/aiu-fifo-i2s.c
+index 2388a2d0b3a6..57e6e7160d2f 100644
+--- a/sound/soc/meson/aiu-fifo-i2s.c
++++ b/sound/soc/meson/aiu-fifo-i2s.c
+@@ -20,6 +20,8 @@
+ #define AIU_MEM_I2S_CONTROL_MODE_16BIT	BIT(6)
+ #define AIU_MEM_I2S_BUF_CNTL_INIT	BIT(0)
+ #define AIU_RST_SOFT_I2S_FAST		BIT(0)
++#define AIU_I2S_MISC_HOLD_EN		BIT(2)
++#define AIU_I2S_MISC_FORCE_LEFT_RIGHT	BIT(4)
+ 
+ #define AIU_FIFO_I2S_BLOCK		256
+ 
+@@ -90,6 +92,10 @@ static int aiu_fifo_i2s_hw_params(struct snd_pcm_substream *substream,
+ 	unsigned int val;
+ 	int ret;
+ 
++	snd_soc_component_update_bits(component, AIU_I2S_MISC,
++				      AIU_I2S_MISC_HOLD_EN,
++				      AIU_I2S_MISC_HOLD_EN);
++
+ 	ret = aiu_fifo_hw_params(substream, params, dai);
+ 	if (ret)
+ 		return ret;
+@@ -117,6 +123,19 @@ static int aiu_fifo_i2s_hw_params(struct snd_pcm_substream *substream,
+ 	snd_soc_component_update_bits(component, AIU_MEM_I2S_MASKS,
+ 				      AIU_MEM_I2S_MASKS_IRQ_BLOCK, val);
+ 
++	/*
++	 * Most (all?) supported SoCs have this bit set by default. The vendor
++	 * driver however sets it manually (depending on the version either
++	 * while un-setting AIU_I2S_MISC_HOLD_EN or right before that). Follow
++	 * the same approach for consistency with the vendor driver.
++	 */
++	snd_soc_component_update_bits(component, AIU_I2S_MISC,
++				      AIU_I2S_MISC_FORCE_LEFT_RIGHT,
++				      AIU_I2S_MISC_FORCE_LEFT_RIGHT);
++
++	snd_soc_component_update_bits(component, AIU_I2S_MISC,
++				      AIU_I2S_MISC_HOLD_EN, 0);
++
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
+

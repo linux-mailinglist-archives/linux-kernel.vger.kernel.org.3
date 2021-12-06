@@ -2,43 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D3F469FCF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDB8469DF2
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244358AbhLFPxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:53:23 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49066 "EHLO
+        id S1379008AbhLFPet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:34:49 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41336 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388469AbhLFPdf (ORCPT
+        with ESMTP id S1357730AbhLFPW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:33:35 -0500
+        Mon, 6 Dec 2021 10:22:57 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0987361322;
-        Mon,  6 Dec 2021 15:30:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5DD2C34900;
-        Mon,  6 Dec 2021 15:30:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 813C861331;
+        Mon,  6 Dec 2021 15:19:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C15C341C1;
+        Mon,  6 Dec 2021 15:19:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804604;
-        bh=wL4tWySXBrPzJT5fG9ckppc3JBbRbiWt60uRzrLiJp8=;
+        s=korg; t=1638803967;
+        bh=JY+Wv0SOirE7UpuK3AObj9lwLRWcwiAQicAXkAAJmrg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DDRfTYoQdPhO5x6/mhuh1r+ltWx9rV2OOpu/kSrVGLwepYv5fWxZ8v8rTsgoG9bpI
-         GPWXguR47fM6J/6KhXH6vkLUYhFtHiINyk0W3H1XhD1dFGuJTACpoUHHYoN8SszLLy
-         J7ukdK5XGGyKPi7U0GkC6cTHECS0nMzYmB6a2MHs=
+        b=eM8WycTkSPZDdBSDWzHWV7UYg6JAOJDb3sJU1xDMOkczHtLA+J9VYVjI0/mdebNSR
+         nCUq9cWR7I92Te7ieRaJd0mVp1Vm3ENdBeAppU4kw/XAucjPerSLTgXByjPEExL3pl
+         kx/5EvEirWsbjTJv7Lvq5N8crOl9gZdILLfYkxS0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lai Jiangshan <laijs@linux.alibaba.com>,
-        Borislav Petkov <bp@suse.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 174/207] x86/entry: Use the correct fence macro after swapgs in kernel CR3
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.10 111/130] parisc: Fix KBUILD_IMAGE for self-extracting kernel
 Date:   Mon,  6 Dec 2021 15:57:08 +0100
-Message-Id: <20211206145616.287986461@linuxfoundation.org>
+Message-Id: <20211206145603.476618109@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,70 +44,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lai Jiangshan <laijs@linux.alibaba.com>
+From: Helge Deller <deller@gmx.de>
 
-[ Upstream commit 1367afaa2ee90d1c956dfc224e199fcb3ff3f8cc ]
+commit 1d7c29b77725d05faff6754d2f5e7c147aedcf93 upstream.
 
-The commit
+Default KBUILD_IMAGE to $(boot)/bzImage if a self-extracting
+(CONFIG_PARISC_SELF_EXTRACT=y) kernel is to be built.
+This fixes the bindeb-pkg make target.
 
-  c75890700455 ("x86/entry/64: Remove unneeded kernel CR3 switching")
-
-removed a CR3 write in the faulting path of load_gs_index().
-
-But the path's FENCE_SWAPGS_USER_ENTRY has no fence operation if PTI is
-enabled, see spectre_v1_select_mitigation().
-
-Rather, it depended on the serializing CR3 write of SWITCH_TO_KERNEL_CR3
-and since it got removed, add a FENCE_SWAPGS_KERNEL_ENTRY call to make
-sure speculation is blocked.
-
- [ bp: Massage commit message and comment. ]
-
-Fixes: c75890700455 ("x86/entry/64: Remove unneeded kernel CR3 switching")
-Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20211126101209.8613-3-jiangshanlai@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Cc: <stable@vger.kernel.org> # v4.14+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/entry/entry_64.S | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ arch/parisc/Makefile |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index f1a8b5b2af964..f9e1c06a1c329 100644
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -987,11 +987,6 @@ SYM_CODE_START_LOCAL(error_entry)
- 	pushq	%r12
- 	ret
+--- a/arch/parisc/Makefile
++++ b/arch/parisc/Makefile
+@@ -17,7 +17,12 @@
+ # Mike Shaver, Helge Deller and Martin K. Petersen
+ #
  
--.Lerror_entry_done_lfence:
--	FENCE_SWAPGS_KERNEL_ENTRY
--.Lerror_entry_done:
--	ret
--
- 	/*
- 	 * There are two places in the kernel that can potentially fault with
- 	 * usergs. Handle them here.  B stepping K8s sometimes report a
-@@ -1014,8 +1009,14 @@ SYM_CODE_START_LOCAL(error_entry)
- 	 * .Lgs_change's error handler with kernel gsbase.
- 	 */
- 	SWAPGS
--	FENCE_SWAPGS_USER_ENTRY
--	jmp .Lerror_entry_done
-+
-+	/*
-+	 * Issue an LFENCE to prevent GS speculation, regardless of whether it is a
-+	 * kernel or user gsbase.
-+	 */
-+.Lerror_entry_done_lfence:
-+	FENCE_SWAPGS_KERNEL_ENTRY
-+	ret
++ifdef CONFIG_PARISC_SELF_EXTRACT
++boot := arch/parisc/boot
++KBUILD_IMAGE := $(boot)/bzImage
++else
+ KBUILD_IMAGE := vmlinuz
++endif
  
- .Lbstep_iret:
- 	/* Fix truncated RIP */
--- 
-2.33.0
-
+ NM		= sh $(srctree)/arch/parisc/nm
+ CHECKFLAGS	+= -D__hppa__=1
 
 

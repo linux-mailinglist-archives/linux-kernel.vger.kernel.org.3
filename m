@@ -2,114 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0031D468F33
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 03:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52136468F3A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 03:36:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234467AbhLFChx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 21:37:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
+        id S234597AbhLFCkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 21:40:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234394AbhLFChw (ORCPT
+        with ESMTP id S234509AbhLFCkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 21:37:52 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E869C061354
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 18:34:24 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id t23so18897409oiw.3
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 18:34:24 -0800 (PST)
+        Sun, 5 Dec 2021 21:40:01 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91F0C0613F8
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 18:36:33 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id be32so18783942oib.11
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 18:36:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=TTlnq7Wgzp2iX6Ls4tQK0iYVNHZC93S+jeurCSfQZQg=;
-        b=VfAmdIa7950nGp7sfvUgTx/o5m/K2ugSiyqUnlGAt7y3DjfeFETtbKV4biPq7ywvei
-         xF4wi6g4qFXI2OGXFs1/jxnOMurxZ+YBy851oBsN4o/F8EANSHG7iCh38gtbS24QjbZy
-         Nzy2IYEprxBE6EDy5RkFY7NkXf+ktsvCpSka8E93IYlrqc9Rk1O1d0Scua7R+cKL4AqY
-         QLG8ZS6bn8aiYGObLtMn9siD6l92rWqVUTKb4yaMWSdUaf1sNiUGIEbvlwxiZBvT8gm9
-         bGq3Wl2YdJ5eHYeelFhH9VBArjRCByGjzlSxboWtFb5QqYMgvSncbVsbVHvUMa1Aw+wS
-         rV/A==
+        bh=ZJF/0KXMnSNVIf5/ZsBXY5+vlIl59+Y1SrGZ6vKlpyk=;
+        b=Y6sXzruSfZr9M93iX35pRopd1MgqXToZ0jn27izgNweaAib+JEZm1wAmXvrvyWro9X
+         pZc7vJemGHhucn71FZxB1lNKO4mMxNXAxMK+sF6hlAJ0BFJUCnf2SeRJMfhPsAa1e1S8
+         HCI9Coq7nJMNDJTnvXIvhtxR6UdIIf08rf/x23OHenLyt7JbbWScxvHTlfdATeQIiPxi
+         om7BC3wcXBYNHbQIYUDRkLJPeaI/kQQT5u42I2NZe8sWDDYILnKOFLR0yPdlvKU/27FL
+         6FSC/bSgkhQherNypwPJIlI6Kx1gMToO2ZrEgCZLd70kn4A+ssrdw5k8CtS17ub6Nh8j
+         ITQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TTlnq7Wgzp2iX6Ls4tQK0iYVNHZC93S+jeurCSfQZQg=;
-        b=nXczBjOPDHI9x6KciJLlJ33S1LIWEYQmmR2xbGQOk0RF5QRvQV+6s3lEWLTiv/PYyu
-         s/dq6VV1EQWYSuXZJCwFc4jolDWVh6/uNwBn5V8S1T9LHjP9SPO7vAPgtxOs13cL+cwm
-         44mCsUtF4MjmKndx+ebHbE3e5DHt9u0ljfmzkVLUdx9N6pqzJKNqQOQUILn4BSHXnaEF
-         P1bAwIjOiXO091znXz3SWI8WeX8xytBWZ5R6lCTTuBvQu5nMebwrj0a3/T1G1JEQbp06
-         M9HVrV3+83yyDoQYe0xZu2s2sJ4Rj+7ecyZgakQNxn3QxmXTPxLloPbI6tTVlbaquw5J
-         pBhQ==
-X-Gm-Message-State: AOAM532cCMwgxtSUyQ1U1N4IpotQgkV1JTJGQwDOEAjIVxji9TGJ2alo
-        xS/8kst0DEV0r+GvJwVcp4CtzQ==
-X-Google-Smtp-Source: ABdhPJw574NkW6bD77DqAw/lwQOC13BsjPT9cNCMD5G/pLKoQYLZV9vtlJVZ+99bghWUwhxrwg+WbA==
-X-Received: by 2002:a05:6808:1116:: with SMTP id e22mr21315983oih.45.1638758063412;
-        Sun, 05 Dec 2021 18:34:23 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id p6sm1952823oof.0.2021.12.05.18.34.22
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=ZJF/0KXMnSNVIf5/ZsBXY5+vlIl59+Y1SrGZ6vKlpyk=;
+        b=PD2JlThwiHQUdoR0BCQQeLX+jwp/4ZtLPP3lKU7WfVGBdi4sOIOyPCyjxl+F5vBrgp
+         4SdmXzTBoFi2UxLdV8E4gqPR9Uv2uWdySe3Bfj8hdF9JeM0USLRAQHWeBirZcx6XKfBV
+         EKCbnS/2ITx4ovn+Hddk3Nj2prFEk5G3p+A8THDg2Yu1IaYMrJVI1U6sOQLt7BxMOypz
+         kK5pEeOL3NdjyHvM6z1j4jWFQ+w/+rflwY2ctSmEeIwOv4FCoy70FZvQwSY3TOUBx0rc
+         ajA5ZRqoeFDc497ImTZTtgRTBMyp49BWoao6pQbZo6UYcp0dZ+qFYK1h1+YrR8nE8MGW
+         /XhA==
+X-Gm-Message-State: AOAM531Jj6anganVCDbLJbCFOn818ZMYTEjqtyA08reSulasftia7zwU
+        B2Xl5csfrTWYa41ZB0niMyQF7+OQctY=
+X-Google-Smtp-Source: ABdhPJw/yaBXD9O3vojvBTdVtNiTFoWGb2qqXFDd1+wl36wAb64DwxI6iOupuwe7r7rKk32Snv3gJA==
+X-Received: by 2002:a05:6808:114a:: with SMTP id u10mr4464782oiu.159.1638758193250;
+        Sun, 05 Dec 2021 18:36:33 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n19sm1984124otq.11.2021.12.05.18.36.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Dec 2021 18:34:23 -0800 (PST)
-Date:   Sun, 5 Dec 2021 18:35:50 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Srinivasa Rao Mandadapu <srivasam@codeaurora.com>
-Cc:     agross@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, plai@codeaurora.org, bgoswami@codeaurora.org,
-        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
-        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org, Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org,
-        Srinivasa Rao Mandadapu <srivasam@codeaurora.org>,
-        Venkata Prasad Potturu <potturu@codeaurora.org>
-Subject: Re: [PATCH v4 4/5] pinctrl: qcom: Update clock voting as optional
-Message-ID: <Ya13Bl66oS1hgHFd@ripper>
-References: <1638531140-25899-1-git-send-email-srivasam@codeaurora.com>
- <1638531140-25899-5-git-send-email-srivasam@codeaurora.com>
+        Sun, 05 Dec 2021 18:36:32 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 5 Dec 2021 18:36:31 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux 5.16-rc4
+Message-ID: <20211206023631.GA63932@roeck-us.net>
+References: <CAHk-=wguTgfhqftuf6FnW-KZ7zhQGDNktr_POKUkJ6SuMeQuWQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1638531140-25899-5-git-send-email-srivasam@codeaurora.com>
+In-Reply-To: <CAHk-=wguTgfhqftuf6FnW-KZ7zhQGDNktr_POKUkJ6SuMeQuWQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 03 Dec 03:32 PST 2021, Srinivasa Rao Mandadapu wrote:
-
-> From: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
+On Sun, Dec 05, 2021 at 02:18:58PM -0800, Linus Torvalds wrote:
+> Fairly small rc4 this week. Three areas stand out in the diff: some
+> kvm fixes (and tests), network driver fixes, and the tegra SoC sound
+> fixes.
 > 
-> Update bulk clock voting to optional voting as ADSP bypass platform doesn't
-> need macro and decodec clocks, these are maintained as power domains and
-> operated from lpass audio core cc.
+> The rest is fairly spread out: drm fixes, some filesystem stuff,
+> various arch updates, and some smattering of random driver fixes.
 > 
-> Signed-off-by: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-> Co-developed-by: Venkata Prasad Potturu <potturu@codeaurora.org>
-> Signed-off-by: Venkata Prasad Potturu <potturu@codeaurora.org>
-> ---
->  drivers/pinctrl/qcom/pinctrl-lpass-lpi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Nothing looks all that scary, although I certainly hope the kvm side
+> will calm down.
 > 
-> diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
-> index bcc12f6..c2a1110 100644
-> --- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
-> +++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
-> @@ -394,7 +394,7 @@ int lpi_pinctrl_probe(struct platform_device *pdev)
->  		return dev_err_probe(dev, PTR_ERR(pctrl->slew_base),
->  				     "Slew resource not provided\n");
->  
-> -	ret = devm_clk_bulk_get(dev, MAX_LPI_NUM_CLKS, pctrl->clks);
-> +	ret = devm_clk_bulk_get_optional(dev, MAX_LPI_NUM_CLKS, pctrl->clks);
 
-If some platforms requires this clock and others doesn't have one, then
-please make this statement conditional on the compatible, rather than
-making it optional on both.
+Build results:
+	total: 153 pass: 152 fail: 1
+Failed builds:
+	mips:allmodconfig
+Qemu test results:
+	total: 482 pass: 482 fail: 0
 
-Thanks,
-Bjorn
+A fix for the mips build problem was submitted at
+https://lore.kernel.org/all/20211203192454.32624-1-sergio.paracuellos@gmail.com/
 
->  	if (ret)
->  		return dev_err_probe(dev, ret, "Can't get clocks\n");
->  
-> -- 
-> Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
-> is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
-> 
+Guenter

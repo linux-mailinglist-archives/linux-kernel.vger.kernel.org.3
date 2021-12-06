@@ -2,106 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CACB546930A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85978469310
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241627AbhLFJ71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 04:59:27 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:51312 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241537AbhLFJ70 (ORCPT
+        id S241653AbhLFKBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 05:01:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56514 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241631AbhLFKBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 04:59:26 -0500
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A231AEE;
-        Mon,  6 Dec 2021 10:55:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638784556;
-        bh=2r2GbxKPhAXxZ+3+KQwXXGF+wPCJfkbsKIZdCqfP92s=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=jJk0GK7FHXCO6ICbi9MU00/GN5O9WqEm/xEaSgXHQD8qDzLHLcUE0s4IGD9Obv9+j
-         8F6bkzoTcayk7sOLiC9NC9lDW/1oXB+I/jLzMWNFJR66Y0RUAgwalqmjES2VBNkxBH
-         756RKU5JdlvejPdEu25vyLA0WvX+aEEwxfCN0XPc=
-Content-Type: text/plain; charset="utf-8"
+        Mon, 6 Dec 2021 05:01:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638784662;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PnvAnVPJKE7LfWzQLfAFgVcDbTSvkeVJoOpSZgUcg5U=;
+        b=OuAhHpZ2mi8fTuB3i3g6Qoyk4IIdS9rv0BCMcZRhvIfd7sKIBXEC5h+2tH42RYcBpLjaDX
+        XOGuv3JxtThfh/XRz9PrK1ElLCQox6ND98OYad6iithzjrSWglAmPO7lPE6hkhU7YOPAY7
+        XqYL8CPE/DSitDnN4lGIMPiJKNRMvxg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-498-wzW486haOTS23zgk5ChRgQ-1; Mon, 06 Dec 2021 04:57:39 -0500
+X-MC-Unique: wzW486haOTS23zgk5ChRgQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 68DC010144ED;
+        Mon,  6 Dec 2021 09:57:38 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3429F60BF1;
+        Mon,  6 Dec 2021 09:57:27 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20211129162907.149445-2-jlayton@kernel.org>
+References: <20211129162907.149445-2-jlayton@kernel.org> <20211129162907.149445-1-jlayton@kernel.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     dhowells@redhat.com, ceph-devel@vger.kernel.org,
+        idryomov@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-cachefs@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] ceph: conversion to new fscache API
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211204205504.6550-1-amhamza.mgc@gmail.com>
-References: <163864977875.3153335.18099399866051099554@Monstersaurus> <20211204205504.6550-1-amhamza.mgc@gmail.com>
-Subject: Re: [PATCH v2] media: venus: vdec: fixed possible memory leak issue
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, amhamza.mgc@gmail.com
-To:     Ameer Hamza <amhamza.mgc@gmail.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, mchehab@kernel.org,
-        stanimir.varbanov@linaro.org
-Date:   Mon, 06 Dec 2021 09:55:54 +0000
-Message-ID: <163878455464.147210.11589283989656931183@Monstersaurus>
-User-Agent: alot/0.10
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1219680.1638784646.1@warthog.procyon.org.uk>
+Date:   Mon, 06 Dec 2021 09:57:26 +0000
+Message-ID: <1219681.1638784646@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ameer,
+Jeff Layton <jlayton@kernel.org> wrote:
 
-Thank you for investigating the alternative suggestion I made.
+>  		if (!(gfp & __GFP_DIRECT_RECLAIM) || !(gfp & __GFP_FS))
 
-Quoting Ameer Hamza (2021-12-04 20:55:04)
-> Fixed coverity warning by freeing the allocated memory before return
+There's a function for the first part of this:
 
-We could probably say that fixing the coverity warning isn't so much the
-target of the patch as fixing the memory leak. It's just helpful that
-coverity spotted it for us.
+		if (!gfpflags_allow_blocking(gfp) || !(gfp & __GFP_FS))
 
+> +	fsc->fscache = fscache_acquire_volume(name, NULL, 0);
+>  
+>  	if (fsc->fscache) {
+>  		ent->fscache = fsc->fscache;
+>  		list_add_tail(&ent->list, &ceph_fscache_list);
 
-I'd write:
+It shouldn't really be necessary to have ceph_fscache_list since
+fscache_acquire_volume() will do it's own duplicate check.  I wonder if I
+should make fscache_acquire_volume() return -EEXIST or -EBUSY rather than NULL
+in such a case and not print an error, but rather leave that to the filesystem
+to display.
 
-The venus_helper_alloc_dpb_bufs() implementation allows an early return
-on an error path when checking the id from ida_alloc_min() which would
-not release the earlier buffer allocation.
+That would allow you to get rid of the ceph_fscache_entry struct also, I
+think.
 
-Move the direct kfree() from the error checking of dma_alloc_attrs() to
-the common fail path to ensure that allocations are released on all
-error paths in this function.
+> +#define FSCACHE_USE_NEW_IO_API
 
-> Addresses-Coverity: 1494120 ("Resource leak")
->=20
-> Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+That doesn't exist anymore.
 
-Of course having suggested it, I believe this is the right fix so:
+> +		/*
+> +		 * If we're truncating up, then we should be able to just update
+> +		 * the existing cookie.
+> +		 */
+> +		if (size > isize)
+> +			ceph_fscache_update(inode);
 
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Might look better to say "expanding" rather than "truncating up".
 
-> ---
-> Changes in v2:
-> move kfree() immediately after kfree() as suggested by Kieran Bingham
-> ---
->  drivers/media/platform/qcom/venus/helpers.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/=
-platform/qcom/venus/helpers.c
-> index 84c3a511ec31..0bca95d01650 100644
-> --- a/drivers/media/platform/qcom/venus/helpers.c
-> +++ b/drivers/media/platform/qcom/venus/helpers.c
-> @@ -189,7 +189,6 @@ int venus_helper_alloc_dpb_bufs(struct venus_inst *in=
-st)
->                 buf->va =3D dma_alloc_attrs(dev, buf->size, &buf->da, GFP=
-_KERNEL,
->                                           buf->attrs);
->                 if (!buf->va) {
-> -                       kfree(buf);
->                         ret =3D -ENOMEM;
->                         goto fail;
->                 }
-> @@ -209,6 +208,7 @@ int venus_helper_alloc_dpb_bufs(struct venus_inst *in=
-st)
->         return 0;
-> =20
->  fail:
-> +       kfree(buf);
->         venus_helper_free_dpb_bufs(inst);
->         return ret;
->  }
-> --=20
-> 2.25.1
->
+David
+

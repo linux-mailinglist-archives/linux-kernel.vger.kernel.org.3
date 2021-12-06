@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A86A0469D3C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88931469D42
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354713AbhLFP2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:28:41 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37340 "EHLO
+        id S1349643AbhLFP2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:28:48 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37388 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345335AbhLFPS1 (ORCPT
+        with ESMTP id S1356824AbhLFPS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:18:27 -0500
+        Mon, 6 Dec 2021 10:18:29 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 192B26131E;
-        Mon,  6 Dec 2021 15:14:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF89DC341C1;
-        Mon,  6 Dec 2021 15:14:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA75161327;
+        Mon,  6 Dec 2021 15:15:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF23AC341C2;
+        Mon,  6 Dec 2021 15:14:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803697;
-        bh=BFHRSje9ntwxJqvj3kYeZH7UQI4aYGjXMn0BI5V6/Pc=;
+        s=korg; t=1638803700;
+        bh=LKzfK6qcf++6J2W3DiTvuhrxGi9dt3LsI3HbJxluOTQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=itcmrjA2DfoFSohlgdxsocuihS7+m3KM4zDRry9mvvqP2Fgz7AKziPnW2PUkiBHRo
-         l9EqDc+qlNsFRTcf6GfZ1JAPFHTQFL5xw+JwxNgXXM/+MliZSjhE4AYKPz34rFUjHz
-         ijveM/4dNCiV1m/OfmVYccRIJRw4TYiHt0au7Ffw=
+        b=iQTHEnhGYHExFjwR6sp+wrzrlBGXeD6Y6Lo0Rc80DQE7FxsKF/ScTispjkndM1unj
+         o9qwKbRuZf2zwvUcexx63XHuSBeiorslX6yipyQuJu5e4QVwvqtIYjzhyt/ys9oeu4
+         FaDOQuWyPY7orCls7dycXTs6Z75JkTMZOhj7GOkw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
+        stable@vger.kernel.org, Filipe Manana <fdmanana@gmail.com>,
+        Wang Yugui <wangyugui@e16-tech.com>,
+        David Sterba <dsterba@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 015/130] s390/setup: avoid using memblock_enforce_memory_limit
-Date:   Mon,  6 Dec 2021 15:55:32 +0100
-Message-Id: <20211206145600.157609819@linuxfoundation.org>
+Subject: [PATCH 5.10 016/130] btrfs: check-integrity: fix a warning on write caching disabled disk
+Date:   Mon,  6 Dec 2021 15:55:33 +0100
+Message-Id: <20211206145600.190155267@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
 References: <20211206145559.607158688@linuxfoundation.org>
@@ -46,54 +47,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vasily Gorbik <gor@linux.ibm.com>
+From: Wang Yugui <wangyugui@e16-tech.com>
 
-[ Upstream commit 5dbc4cb4667457b0c53bcd7bff11500b3c362975 ]
+[ Upstream commit a91cf0ffbc244792e0b3ecf7d0fddb2f344b461f ]
 
-There is a difference in how architectures treat "mem=" option. For some
-that is an amount of online memory, for s390 and x86 this is the limiting
-max address. Some memblock api like memblock_enforce_memory_limit()
-take limit argument and explicitly treat it as the size of online memory,
-and use __find_max_addr to convert it to an actual max address. Current
-s390 usage:
+When a disk has write caching disabled, we skip submission of a bio with
+flush and sync requests before writing the superblock, since it's not
+needed. However when the integrity checker is enabled, this results in
+reports that there are metadata blocks referred by a superblock that
+were not properly flushed. So don't skip the bio submission only when
+the integrity checker is enabled for the sake of simplicity, since this
+is a debug tool and not meant for use in non-debug builds.
 
-memblock_enforce_memory_limit(memblock_end_of_DRAM());
+fstests/btrfs/220 trigger a check-integrity warning like the following
+when CONFIG_BTRFS_FS_CHECK_INTEGRITY=y and the disk with WCE=0.
 
-yields different results depending on presence of memory holes (offline
-memory blocks in between online memory). If there are no memory holes
-limit == max_addr in memblock_enforce_memory_limit() and it does trim
-online memory and reserved memory regions. With memory holes present it
-actually does nothing.
+  btrfs: attempt to write superblock which references block M @5242880 (sdb2/5242880/0) which is not flushed out of disk's write cache (block flush_gen=1, dev->flush_gen=0)!
+  ------------[ cut here ]------------
+  WARNING: CPU: 28 PID: 843680 at fs/btrfs/check-integrity.c:2196 btrfsic_process_written_superblock+0x22a/0x2a0 [btrfs]
+  CPU: 28 PID: 843680 Comm: umount Not tainted 5.15.0-0.rc5.39.el8.x86_64 #1
+  Hardware name: Dell Inc. Precision T7610/0NK70N, BIOS A18 09/11/2019
+  RIP: 0010:btrfsic_process_written_superblock+0x22a/0x2a0 [btrfs]
+  RSP: 0018:ffffb642afb47940 EFLAGS: 00010246
+  RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+  RDX: 00000000ffffffff RSI: ffff8b722fc97d00 RDI: ffff8b722fc97d00
+  RBP: ffff8b5601c00000 R08: 0000000000000000 R09: c0000000ffff7fff
+  R10: 0000000000000001 R11: ffffb642afb476f8 R12: ffffffffffffffff
+  R13: ffffb642afb47974 R14: ffff8b5499254c00 R15: 0000000000000003
+  FS:  00007f00a06d4080(0000) GS:ffff8b722fc80000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: 00007fff5cff5ff0 CR3: 00000001c0c2a006 CR4: 00000000001706e0
+  Call Trace:
+   btrfsic_process_written_block+0x2f7/0x850 [btrfs]
+   __btrfsic_submit_bio.part.19+0x310/0x330 [btrfs]
+   ? bio_associate_blkg_from_css+0xa4/0x2c0
+   btrfsic_submit_bio+0x18/0x30 [btrfs]
+   write_dev_supers+0x81/0x2a0 [btrfs]
+   ? find_get_pages_range_tag+0x219/0x280
+   ? pagevec_lookup_range_tag+0x24/0x30
+   ? __filemap_fdatawait_range+0x6d/0xf0
+   ? __raw_callee_save___native_queued_spin_unlock+0x11/0x1e
+   ? find_first_extent_bit+0x9b/0x160 [btrfs]
+   ? __raw_callee_save___native_queued_spin_unlock+0x11/0x1e
+   write_all_supers+0x1b3/0xa70 [btrfs]
+   ? __raw_callee_save___native_queued_spin_unlock+0x11/0x1e
+   btrfs_commit_transaction+0x59d/0xac0 [btrfs]
+   close_ctree+0x11d/0x339 [btrfs]
+   generic_shutdown_super+0x71/0x110
+   kill_anon_super+0x14/0x30
+   btrfs_kill_super+0x12/0x20 [btrfs]
+   deactivate_locked_super+0x31/0x70
+   cleanup_mnt+0xb8/0x140
+   task_work_run+0x6d/0xb0
+   exit_to_user_mode_prepare+0x1f0/0x200
+   syscall_exit_to_user_mode+0x12/0x30
+   do_syscall_64+0x46/0x80
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+  RIP: 0033:0x7f009f711dfb
+  RSP: 002b:00007fff5cff7928 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+  RAX: 0000000000000000 RBX: 000055b68c6c9970 RCX: 00007f009f711dfb
+  RDX: 0000000000000001 RSI: 0000000000000000 RDI: 000055b68c6c9b50
+  RBP: 0000000000000000 R08: 000055b68c6ca900 R09: 00007f009f795580
+  R10: 0000000000000000 R11: 0000000000000246 R12: 000055b68c6c9b50
+  R13: 00007f00a04bf184 R14: 0000000000000000 R15: 00000000ffffffff
+  ---[ end trace 2c4b82abcef9eec4 ]---
+  S-65536(sdb2/65536/1)
+   -->
+  M-1064960(sdb2/1064960/1)
 
-Since we already use memblock_remove() explicitly to trim online memory
-regions to potential limit (think mem=, kdump, addressing limits, etc.)
-drop the usage of memblock_enforce_memory_limit() altogether. Trimming
-reserved regions should not be required, since we now use
-memblock_set_current_limit() to limit allocations and any explicit memory
-reservations above the limit is an actual problem we should not hide.
-
-Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Reviewed-by: Filipe Manana <fdmanana@gmail.com>
+Signed-off-by: Wang Yugui <wangyugui@e16-tech.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/s390/kernel/setup.c | 3 ---
- 1 file changed, 3 deletions(-)
+ fs/btrfs/disk-io.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/arch/s390/kernel/setup.c b/arch/s390/kernel/setup.c
-index 5cd9d20af31e9..f9f8721dc5321 100644
---- a/arch/s390/kernel/setup.c
-+++ b/arch/s390/kernel/setup.c
-@@ -845,9 +845,6 @@ static void __init setup_memory(void)
- 		storage_key_init_range(start, end);
+diff --git a/fs/btrfs/disk-io.c b/fs/btrfs/disk-io.c
+index 9051bb47cbdd9..bab2091c81683 100644
+--- a/fs/btrfs/disk-io.c
++++ b/fs/btrfs/disk-io.c
+@@ -3692,11 +3692,23 @@ static void btrfs_end_empty_barrier(struct bio *bio)
+  */
+ static void write_dev_flush(struct btrfs_device *device)
+ {
+-	struct request_queue *q = bdev_get_queue(device->bdev);
+ 	struct bio *bio = device->flush_bio;
  
- 	psw_set_key(PAGE_DEFAULT_KEY);
--
--	/* Only cosmetics */
--	memblock_enforce_memory_limit(memblock_end_of_DRAM());
- }
++#ifndef CONFIG_BTRFS_FS_CHECK_INTEGRITY
++	/*
++	 * When a disk has write caching disabled, we skip submission of a bio
++	 * with flush and sync requests before writing the superblock, since
++	 * it's not needed. However when the integrity checker is enabled, this
++	 * results in reports that there are metadata blocks referred by a
++	 * superblock that were not properly flushed. So don't skip the bio
++	 * submission only when the integrity checker is enabled for the sake
++	 * of simplicity, since this is a debug tool and not meant for use in
++	 * non-debug builds.
++	 */
++	struct request_queue *q = bdev_get_queue(device->bdev);
+ 	if (!test_bit(QUEUE_FLAG_WC, &q->queue_flags))
+ 		return;
++#endif
  
- /*
+ 	bio_reset(bio);
+ 	bio->bi_end_io = btrfs_end_empty_barrier;
 -- 
 2.33.0
 

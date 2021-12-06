@@ -2,142 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3586746A578
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 844F146A584
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348347AbhLFTTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:19:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243589AbhLFTTt (ORCPT
+        id S1348362AbhLFTWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:22:52 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:58154 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1347799AbhLFTWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:19:49 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F43C061746;
-        Mon,  6 Dec 2021 11:16:19 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AC23EEE;
-        Mon,  6 Dec 2021 20:16:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638818177;
-        bh=zFdavL06ulBt0zjQ7jeYKdKdKljFjx0ZhG2E2ii+PXA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wBh8jXa753hMgT9b6/K+PVJpkzBq8qkAtu1hjEuzg1JN6hQ9DNIWPX7/WMianAta7
-         p+bub5JrrQTtcINp2vfzGJO8q5sDjXHNCWLg8xf2HqcPw12e0M6gOyUako1DB5JB/X
-         xjk1m+fgJVqB8YkfWmNvpaBiPMn9hfauO4DgoqKk=
-Date:   Mon, 6 Dec 2021 21:15:50 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tfiga@chromium.org, stable <stable@vger.kernel.org>
-Subject: Re: [REGRESSION] Re: [PATCH v10 11/21] media: uvcvideo: Set unique
- vdev name based in type
-Message-ID: <Ya5hZtwcfBU/19CU@pendragon.ideasonboard.com>
-References: <20210618122923.385938-1-ribalda@chromium.org>
- <20210618122923.385938-12-ribalda@chromium.org>
- <b4bfa8b8f3d8f25c48a3b0b81a0e87dc90f111af.camel@ndufresne.ca>
+        Mon, 6 Dec 2021 14:22:51 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B6DBMxU016569;
+        Mon, 6 Dec 2021 20:19:17 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=LswolZltv4wHUvra42xDx0HudOGvUKO0BcGRhPhum3k=;
+ b=jsIY4KfZfmh3+mpWNx2m+OwWDXN0ykRDJUZPs71GYxpEcudm+weah5mOopNfn65mAFLH
+ ag5yXOVs+413FsE8zX8DyhaelRR4cIy6v0N2oHEfQ59QOPSsFNU+MmRzKChDbAnePAq8
+ oJl4oEWdUz+ee1fhl+O10H+KYXQuwbDROI+omsV6kCNc4X5ny5eb/HbYtw2qVEi8d4GS
+ TzF/HTG7p3gUhdvDUpdQsuhk+wzpTomAeCwbh9rC3D61G/+K0zeHq1/0cXWvpqsOLbvP
+ qPngjKAiA5exMvPf0b2MUqWrG3fvsaTvnlVgGu8XVd6ZCXQZGIW9GRLIpA0huh45LSi1 4w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cseqrk9re-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 20:19:17 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E594810002A;
+        Mon,  6 Dec 2021 20:19:16 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DD2C22138CC;
+        Mon,  6 Dec 2021 20:19:16 +0100 (CET)
+Received: from localhost (10.75.127.50) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 6 Dec 2021 20:19:16
+ +0100
+From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <arnaud.pouliquen@foss.st.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: [PATCH] remoteproc: Fix remaining wrong return formatting in documentation
+Date:   Mon, 6 Dec 2021 20:18:58 +0100
+Message-ID: <20211206191858.10741-1-arnaud.pouliquen@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b4bfa8b8f3d8f25c48a3b0b81a0e87dc90f111af.camel@ndufresne.ca>
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-06_07,2021-12-06_02,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nicolas,
+kernel documentation specification:
+"The return value, if any, should be described in a dedicated section
+named Return."
 
-On Mon, Dec 06, 2021 at 02:05:06PM -0500, Nicolas Dufresne wrote:
-> Le vendredi 18 juin 2021 à 14:29 +0200, Ricardo Ribalda a écrit :
-> > All the entities must have a unique name. We can have a descriptive and
-> > unique name by appending the function and the entity->id.
-> 
-> Thanks for your work. The only issue is that unfortunately this change cause an
-> important regression for users. All UVC cameras in all UIs seems to no longer
-> include any information about the camera. As an example, I have two cameras on
-> my system and Firefox, Chrome, Cheese, Zoom and MS Team all agree that my camera
-> are now:
-> 
->   Video Capture 4
->   Video Capture 5
-> 
-> Previously they would be shown as something like:
-> 
->   StreamCam
->   Integrated
-> 
-> We should probably revert this change quickly before it get deployed more
-> widely, I have notice the backport being sent for 5.4, 5.10 and 5.14. I'm using
-> 5.15 shipped by Fedora team.
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+---
+ drivers/remoteproc/mtk_scp_ipi.c   | 4 ++--
+ drivers/remoteproc/st_slim_rproc.c | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Ack.
-
-> As a proper solution, maybe I could suggest to keep using dev->name, but trim it
-> enough to fit the " N" string to guaranty that you have enough space in this
-> limited 32 char string and use that instead ? This should fit the uniqueness
-> requirement without the sacrifice of the only possibly useful information we had
-> in that limited string.
-
-That would polute the device name a bit, which isn't very nice for
-users. I wonder if we could instead decouple the entity name from the
-video device name.
-
-> > This is even resilent to multi chain devices.
-> > 
-> > Fixes v4l2-compliance:
-> > Media Controller ioctls:
-> >                 fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
-> >         test MEDIA_IOC_G_TOPOLOGY: FAIL
-> >                 fail: v4l2-test-media.cpp(394): num_data_links != num_links
-> > 	test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
-> > 
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> > ---
-> >  drivers/media/usb/uvc/uvc_driver.c | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > index 14b60792ffab..037bf80d1100 100644
-> > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > @@ -2194,6 +2194,7 @@ int uvc_register_video_device(struct uvc_device *dev,
-> >  			      const struct v4l2_file_operations *fops,
-> >  			      const struct v4l2_ioctl_ops *ioctl_ops)
-> >  {
-> > +	const char *name;
-> >  	int ret;
-> >  
-> >  	/* Initialize the video buffers queue. */
-> > @@ -2222,16 +2223,20 @@ int uvc_register_video_device(struct uvc_device *dev,
-> >  	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
-> >  	default:
-> >  		vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
-> > +		name = "Video Capture";
-> >  		break;
-> >  	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
-> >  		vdev->device_caps = V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_STREAMING;
-> > +		name = "Video Output";
-> >  		break;
-> >  	case V4L2_BUF_TYPE_META_CAPTURE:
-> >  		vdev->device_caps = V4L2_CAP_META_CAPTURE | V4L2_CAP_STREAMING;
-> > +		name = "Metadata";
-> >  		break;
-> >  	}
-> >  
-> > -	strscpy(vdev->name, dev->name, sizeof(vdev->name));
-> > +	snprintf(vdev->name, sizeof(vdev->name), "%s %u", name,
-> > +		 stream->header.bTerminalLink);
-> >  
-> >  	/*
-> >  	 * Set the driver data before calling video_register_device, otherwise
-
+diff --git a/drivers/remoteproc/mtk_scp_ipi.c b/drivers/remoteproc/mtk_scp_ipi.c
+index 6dc955ecab80..00f041ebcde6 100644
+--- a/drivers/remoteproc/mtk_scp_ipi.c
++++ b/drivers/remoteproc/mtk_scp_ipi.c
+@@ -23,7 +23,7 @@
+  *
+  * Register an ipi function to receive ipi interrupt from SCP.
+  *
+- * Returns 0 if ipi registers successfully, -error on error.
++ * Return: 0 if ipi registers successfully, -error on error.
+  */
+ int scp_ipi_register(struct mtk_scp *scp,
+ 		     u32 id,
+@@ -150,7 +150,7 @@ EXPORT_SYMBOL_GPL(scp_ipi_unlock);
+  * When the processing completes, IPI handler registered
+  * by scp_ipi_register will be called in interrupt context.
+  *
+- * Returns 0 if sending data successfully, -error on error.
++ * Return: 0 if sending data successfully, -error on error.
+  **/
+ int scp_ipi_send(struct mtk_scp *scp, u32 id, void *buf, unsigned int len,
+ 		 unsigned int wait)
+diff --git a/drivers/remoteproc/st_slim_rproc.c b/drivers/remoteproc/st_slim_rproc.c
+index 22096adc1ad3..4ed9467897e5 100644
+--- a/drivers/remoteproc/st_slim_rproc.c
++++ b/drivers/remoteproc/st_slim_rproc.c
+@@ -216,7 +216,7 @@ static const struct rproc_ops slim_rproc_ops = {
+  * obtains and enables any clocks required by the SLIM core and also
+  * ioremaps the various IO.
+  *
+- * Returns st_slim_rproc pointer or PTR_ERR() on error.
++ * Return: st_slim_rproc pointer or PTR_ERR() on error.
+  */
+ 
+ struct st_slim_rproc *st_slim_rproc_alloc(struct platform_device *pdev,
 -- 
-Regards,
+2.17.1
 
-Laurent Pinchart

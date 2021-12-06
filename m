@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A33469DA7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9A3469CDE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387661AbhLFPbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:31:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55882 "EHLO
+        id S1386682AbhLFP0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:26:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358228AbhLFPTk (ORCPT
+        with ESMTP id S1356707AbhLFPRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:19:40 -0500
+        Mon, 6 Dec 2021 10:17:42 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDDFC061A83;
-        Mon,  6 Dec 2021 07:13:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20039C08ED3D;
+        Mon,  6 Dec 2021 07:10:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB18DB810F1;
-        Mon,  6 Dec 2021 15:13:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9904C341C2;
-        Mon,  6 Dec 2021 15:13:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0489B81129;
+        Mon,  6 Dec 2021 15:10:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58DB9C341C1;
+        Mon,  6 Dec 2021 15:10:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803627;
-        bh=cwI1ZwbZE7VKKji52lZh54wwQGyBEHxScIYPIyWCq94=;
+        s=korg; t=1638803451;
+        bh=TszRsrTYXZHqJvxv3mmouyRPoMeejjv77zaWwI9RLoM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WWaPqbZ79wR4HIxncR3Vgb16M2jVlveMaj56joCJiG2o90syPjrYV+HecqJH+3o7A
-         dJZqfwQlhW5W5OBnrY08QkGUds7eBX/a5Wr2r7P8mk9BA/aDAHVm4Sl6EaGKhnQL5w
-         2mfReG7f22qydg3vl0FAwaRr1yuX/1YPFBi7SG/k=
+        b=uyK0EhkLQhLBYguv8yLdhfClkYTvkdqXLciyOUpH1e/FyRW3JmGloRzNwoKQp0knL
+         l3BGh7C9yweTVfyA0ZKHGZP+fIpU30pdBLZsN06+ahBEtDuYjsMqvz7pACTDectFr8
+         V0A+EoWI96LmEQo9nIVGExzDKyrV0XZk+5nIU4dU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Feng Tang <feng.tang@intel.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH 5.4 59/70] x86/tsc: Add a timer to make sure TSC_adjust is always checked
+        stable@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4.19 46/48] serial: core: fix transmit-buffer reset and memleak
 Date:   Mon,  6 Dec 2021 15:57:03 +0100
-Message-Id: <20211206145553.963479164@linuxfoundation.org>
+Message-Id: <20211206145550.435033460@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
-References: <20211206145551.909846023@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+References: <20211206145548.859182340@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,88 +49,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Tang <feng.tang@intel.com>
+From: Johan Hovold <johan@kernel.org>
 
-commit c7719e79347803b8e3b6b50da8c6db410a3012b5 upstream.
+commit 00de977f9e0aa9760d9a79d1e41ff780f74e3424 upstream.
 
-The TSC_ADJUST register is checked every time a CPU enters idle state, but
-Thomas Gleixner mentioned there is still a caveat that a system won't enter
-idle [1], either because it's too busy or configured purposely to not enter
-idle.
+Commit 761ed4a94582 ("tty: serial_core: convert uart_close to use
+tty_port_close") converted serial core to use tty_port_close() but
+failed to notice that the transmit buffer still needs to be freed on
+final close.
 
-Setup a periodic timer (every 10 minutes) to make sure the check is
-happening on a regular base.
+Not freeing the transmit buffer means that the buffer is no longer
+cleared on next open so that any ioctl() waiting for the buffer to drain
+might wait indefinitely (e.g. on termios changes) or that stale data can
+end up being transmitted in case tx is restarted.
 
-[1] https://lore.kernel.org/lkml/875z286xtk.fsf@nanos.tec.linutronix.de/
+Furthermore, the buffer of any port that has been opened would leak on
+driver unbind.
 
-Fixes: 6e3cd95234dc ("x86/hpet: Use another crystalball to evaluate HPET usability")
-Requested-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Feng Tang <feng.tang@intel.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20211117023751.24190-1-feng.tang@intel.com
+Note that the port lock is held when clearing the buffer pointer due to
+the ldisc race worked around by commit a5ba1d95e46e ("uart: fix race
+between uart_put_char() and uart_shutdown()").
+
+Also note that the tty-port shutdown() callback is not called for
+console ports so it is not strictly necessary to free the buffer page
+after releasing the lock (cf. d72402145ace ("tty/serial: do not free
+trasnmit buffer page under port lock")).
+
+Link: https://lore.kernel.org/r/319321886d97c456203d5c6a576a5480d07c3478.1635781688.git.baruch@tkos.co.il
+Fixes: 761ed4a94582 ("tty: serial_core: convert uart_close to use tty_port_close")
+Cc: stable@vger.kernel.org      # 4.9
+Cc: Rob Herring <robh@kernel.org>
+Reported-by: Baruch Siach <baruch@tkos.co.il>
+Tested-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Link: https://lore.kernel.org/r/20211108085431.12637-1-johan@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/tsc_sync.c |   41 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ drivers/tty/serial/serial_core.c |   13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
---- a/arch/x86/kernel/tsc_sync.c
-+++ b/arch/x86/kernel/tsc_sync.c
-@@ -30,6 +30,7 @@ struct tsc_adjust {
- };
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -1527,6 +1527,7 @@ static void uart_tty_port_shutdown(struc
+ {
+ 	struct uart_state *state = container_of(port, struct uart_state, port);
+ 	struct uart_port *uport = uart_port_check(state);
++	char *buf;
  
- static DEFINE_PER_CPU(struct tsc_adjust, tsc_adjust);
-+static struct timer_list tsc_sync_check_timer;
+ 	/*
+ 	 * At this point, we stop accepting input.  To do this, we
+@@ -1548,8 +1549,18 @@ static void uart_tty_port_shutdown(struc
+ 	 */
+ 	tty_port_set_suspended(port, 0);
  
- /*
-  * TSC's on different sockets may be reset asynchronously.
-@@ -77,6 +78,46 @@ void tsc_verify_tsc_adjust(bool resume)
- 	}
+-	uart_change_pm(state, UART_PM_STATE_OFF);
++	/*
++	 * Free the transmit buffer.
++	 */
++	spin_lock_irq(&uport->lock);
++	buf = state->xmit.buf;
++	state->xmit.buf = NULL;
++	spin_unlock_irq(&uport->lock);
++
++	if (buf)
++		free_page((unsigned long)buf);
+ 
++	uart_change_pm(state, UART_PM_STATE_OFF);
  }
  
-+/*
-+ * Normally the tsc_sync will be checked every time system enters idle
-+ * state, but there is still caveat that a system won't enter idle,
-+ * either because it's too busy or configured purposely to not enter
-+ * idle.
-+ *
-+ * So setup a periodic timer (every 10 minutes) to make sure the check
-+ * is always on.
-+ */
-+
-+#define SYNC_CHECK_INTERVAL		(HZ * 600)
-+
-+static void tsc_sync_check_timer_fn(struct timer_list *unused)
-+{
-+	int next_cpu;
-+
-+	tsc_verify_tsc_adjust(false);
-+
-+	/* Run the check for all onlined CPUs in turn */
-+	next_cpu = cpumask_next(raw_smp_processor_id(), cpu_online_mask);
-+	if (next_cpu >= nr_cpu_ids)
-+		next_cpu = cpumask_first(cpu_online_mask);
-+
-+	tsc_sync_check_timer.expires += SYNC_CHECK_INTERVAL;
-+	add_timer_on(&tsc_sync_check_timer, next_cpu);
-+}
-+
-+static int __init start_sync_check_timer(void)
-+{
-+	if (!cpu_feature_enabled(X86_FEATURE_TSC_ADJUST) || tsc_clocksource_reliable)
-+		return 0;
-+
-+	timer_setup(&tsc_sync_check_timer, tsc_sync_check_timer_fn, 0);
-+	tsc_sync_check_timer.expires = jiffies + SYNC_CHECK_INTERVAL;
-+	add_timer(&tsc_sync_check_timer);
-+
-+	return 0;
-+}
-+late_initcall(start_sync_check_timer);
-+
- static void tsc_sanitize_first_cpu(struct tsc_adjust *cur, s64 bootval,
- 				   unsigned int cpu, bool bootcpu)
- {
+ static void uart_wait_until_sent(struct tty_struct *tty, int timeout)
 
 

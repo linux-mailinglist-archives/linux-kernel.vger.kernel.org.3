@@ -2,129 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 515BE46A28E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5782346A291
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:15:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231672AbhLFRRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 12:17:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
+        id S233033AbhLFRTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 12:19:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232464AbhLFRPF (ORCPT
+        with ESMTP id S232177AbhLFRTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 12:15:05 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EAA7C0613F8;
-        Mon,  6 Dec 2021 09:11:37 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id bk14so22610109oib.7;
-        Mon, 06 Dec 2021 09:11:37 -0800 (PST)
+        Mon, 6 Dec 2021 12:19:06 -0500
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BD1C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 09:15:37 -0800 (PST)
+Received: by mail-lj1-x243.google.com with SMTP id j18so22227770ljc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 09:15:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jR+IG2U4mkMhx5akXz2gzfXjHYaCWbKYf+pbbhKTCu8=;
-        b=VVrq5X6DYvJX02JLRTN+QLoLQpPqSC4maDQwr1T/CdEC/dR8CLDIWjMwJfOgM9q3GB
-         PxwnYsDnDLw60SUtJpxj7jMEsvwUiFqees9twfHS2Awprrbw8XO7VfpsU9yFkZ+rGKlQ
-         WDur/NM7pUzHaaWgLaID+i8KTwK9TjYfQTyWSdIs3c4uWN78oxU1SPnMdpS6KZ5Z/8fM
-         946G91GmczWmU7oahx0+gWL19fmbEpDH+Nt/ZJY/6dJ1x5AvionlT22IXPKpovHw28nL
-         yGItb3WPv89oiwzXRk7SabSm+wjBcYPMudvvwE5PZBYTXsTvVPk0b3FxntpVd66ZeAID
-         NVew==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=c9beUEHlGFHL3yKVogSG4LUZuo06mJSmcXZb+MUSDD0=;
+        b=o+XdBW9cxcxj4XpNUbWEFdGwWY/HKhXjkeyr/vux/zXbfmbSYzy89CKO8VXofkY+Dp
+         W7XUbftOUzrOQLbffHGSUgrGOgnLgc5PwJLUl1mujYWNN61tTVDFMZCbRUvzRtjds1Q7
+         ItyMurR8SHRP8QHLckeUfVQjHhuZfQHTcHzTBzVEAVlWeO39JqzUdY/cmLw8T9HRgh8Y
+         vniH8HLeCJVl1VHyUdd0i7qFaLIeLXlw5ivNtMvqV8OCMY0YkKG3HiFyaxsorEKm5boK
+         3t3Y1rSk9lYAM4Bsc2yW0UJHwzxDF60XJagLcfrNid2CSwgMwAdszICJEzgi5xXTGlS7
+         0lvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jR+IG2U4mkMhx5akXz2gzfXjHYaCWbKYf+pbbhKTCu8=;
-        b=FGTaYL1xitL1FGXAlrOLnItwqhPsnd9ONBrUc0wekMtnAsp4Yo4TP1MQkdhIreTknp
-         bcWoKwsegBFt3dbdyA3PpaHooL/gpZyKydqPOWvXBz72bUhBXUzPQGuygiUIePX7d4f0
-         uV71sJBCoC1ajbfnsp4ZIUwTV+MG0W+DDHFv0QCy1AgJHhZlSR5zHrrNo7dfsvwAXgGf
-         4r/bff1fkbPSYoOEIbpCpDH3jz8gVy6yRzClMPkq3qhp8gfIoJAL2iExwXC7yx+M4ZyH
-         HnrLiYFg1b4/d7oKt3GRKVB2r0XVJpTUIu7YtNdlQMfL97YMqTf5K3f/ICWdK3et7zI8
-         b/cw==
-X-Gm-Message-State: AOAM53388Q2l1Vk5uH3eivul7KBEUAt/h7Tfe35HwsSqofVK2GL3HKBR
-        W1zIRHy+zkq3+ZMN4CYPams=
-X-Google-Smtp-Source: ABdhPJxeg1Y1eg6p6YeFfy/FXfQbSCdboIVwbGEJ9GwE/0243+TQ0FQKvqnc54B3l0dWsj10I3D4PQ==
-X-Received: by 2002:a05:6808:e8e:: with SMTP id k14mr25359749oil.25.1638810696168;
-        Mon, 06 Dec 2021 09:11:36 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b22sm2672604oib.41.2021.12.06.09.11.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 09:11:35 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Andrej Picej <andrej.picej@norik.com>,
-        Support Opensource <Support.Opensource@diasemi.com>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "cniedermaier@dh-electronics.com" <cniedermaier@dh-electronics.com>
-References: <20211206064732.280375-1-andrej.picej@norik.com>
- <DB9PR10MB4652F10355222D5DD1A65E50806D9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v5 1/5] mfd: da9062: make register CONFIG_I writable
-Message-ID: <83fad886-541c-987c-1f38-7029aca41892@roeck-us.net>
-Date:   Mon, 6 Dec 2021 09:11:33 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=c9beUEHlGFHL3yKVogSG4LUZuo06mJSmcXZb+MUSDD0=;
+        b=I9itCsWWfVMFpDUrfEcklP1WPf5qYQ9F378RHOBUr9DILrqGD2StNrmihGvXM3eXcX
+         6NHvihEpMi1B9vjx3Q+WN/sgO6gDGsNE1nQIXyBFgDnf+4pdmddE7K6dJ2xJ9MVbvt4u
+         DQqywsiIsa1q1JeD1z06BqDyBrArg5Ld0HIJynY6Hi2z9cMbqR2rx6Ans2tsIKvnONOA
+         6mCyXyZ6O5Ni1sejewklyI9uCC2nRjhIom3mKGP9cfpH4lCjC6TKEQtsG/FzFsfgNJTz
+         crWGlrgwSLa5AaMqnbhuOxZvyLRFrxvx1i3qYxSArU+MjtMnCkgBIeYB3MFACCZI2GBo
+         GuKA==
+X-Gm-Message-State: AOAM5301ZAMBh0+EM+VH0SAN96i+ngL18IQjG2dpjWnkyoYR4vyMgEgJ
+        aSQ8JmeldpZIFmdOD25MD6DNlNHiN1wiPGRjbd4=
+X-Google-Smtp-Source: ABdhPJxfE7cjrRnhaQ5uHoKjtrKWfWqrDqYmt4kLkp+MBcBsaPL/vJzbRae+pxVtuHz0TWmptN9jnmMcDXK3OHHZmDc=
+X-Received: by 2002:a05:651c:168a:: with SMTP id bd10mr36176262ljb.115.1638810935718;
+ Mon, 06 Dec 2021 09:15:35 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <DB9PR10MB4652F10355222D5DD1A65E50806D9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:aa6:d904:0:b0:14d:18fc:afa with HTTP; Mon, 6 Dec 2021
+ 09:15:35 -0800 (PST)
+Reply-To: mr.adamakafando2016@gmail.com
+From:   Mr Adama Kafando <mrs.suzaramalingwan1808@gmail.com>
+Date:   Mon, 6 Dec 2021 09:15:35 -0800
+Message-ID: <CAAyWcVjAQuDXZmOp8QioX-yJ0sVQHnSqvDcafQ_UX+u1DjuY+g@mail.gmail.com>
+Subject: Your assistance is needed.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/6/21 8:46 AM, Adam Thomson wrote:
-> On 06 December 2021 06:47, Andrej Picej wrote:
-> 
->> From: Stefan Christ <s.christ@phytec.de>
->>
->> Make the config register CONFIG_I writable to change the watchdog mode.
->>
->> Signed-off-by: Stefan Christ <s.christ@phytec.de>
->> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
-> 
-> I've already provided 'Reviewed-by' tags for the other patches in this set. In
-> the future you can add any received tags on to patch re-submissions where
-> nothing has changed since last review.
-> 
-> Anyway, thanks for the work on this, and for the patch set:
-> 
-> Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-> 
+My Dear Friend.
 
-In this context:
+How are you and your family today? I hope all is well, I'm happy to
+share this transaction with you. I have a very lucrative business
+transaction which requires your utmost discretion. Please understand
+that you and I are to work as one team to inherit this fund, hence I
+am your insider in the bank as the transaction commences. I will
+direct you how to claim and get the fund without any problem. I also
+advise you to feel free because it's 100% legal and risk free.
 
-I expect that tags are present in patchwork. If a submitter drops tags
-in a new revision of a patch series, those will get lost. The underlying
-assumption is that the submitter had a reason to drop tags, such as
-substantial changes in an affected patch. I can not assume that the
-submitter dropped a tag accidentally and re-apply it, unless the reason
-was explicitly provided (obviously that is typically not the case since
-people don't usually add "accidentally dropped Reviewed-by: tags" to
-change logs).
+Though, I know it would come to you at uttermost surprise and unbelief
+because its internet contact and it's virtually impossible to know who
+is trustworthy and who to believed but don't be afraid you will not
+regret of dealing with me, I want you to help me to claim and receive
+the fund to your account in your country where it will share between
+me and you for our own benefit.
 
-Also, I do not look into one patch of a series and apply tags to other
-patches of that series. Similar reason, only here it is worse because Wim
-may pull a patch from patchwork, from an e-mail, or from my watchdog-next
-branch. We can't have all of them have different tags, so I take what is
-in patchwork and nothing else (and your updated Reviewed-by: tag will
-not apply to other patches of the series because it isn't in patchwork
-for those).
+I am aware of the unsafe nature of the internet and was compelled to
+use this medium due to the nature of this project. I have access to
+every vital information that can be used to transfer the fund, which
+may culminate into the investment of the said funds into your account
+or any lucrative company in your country.
 
-I also see that my own Reviewed-by: tag (or tags, I didn't check all
-of them) was/were dropped in v5 of this series. That means I'll have to
-re-review the series to see what changed, which will take time and means
-that the series will end up at the bottom of my review queue.
-Please keep that in mind when dropping tags.
+If you would like to assist me as a partner then kindly indicate your
+interest, after which we shall both discuss the modalities and the
+sharing percentage. Upon receipt of your reply on your expression of
+interest, I will give you full details on how the business will be
+executed. I am open for negotiation,
 
-Guenter
+Thanks for your anticipated cooperation. Note you might receive this
+message in your inbox or spam folder, depending on your web host or
+server network. Contact me through this
+email(mr.adamakafando2016@gmail.com)
+
+Name....
+Age.......
+Country......
+Telephone Number......
+
+Compliment of the day,
+Regards,
+Mr Adama.

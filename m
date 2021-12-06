@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6287D468F59
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 03:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DA7468F5D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 03:45:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234997AbhLFCso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 21:48:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55478 "EHLO
+        id S235032AbhLFCtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 21:49:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234940AbhLFCsn (ORCPT
+        with ESMTP id S234998AbhLFCtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 21:48:43 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CA5C061354
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 18:45:15 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id g14so36429870edb.8
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 18:45:15 -0800 (PST)
+        Sun, 5 Dec 2021 21:49:03 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635C8C061359
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 18:45:35 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id l25so36808986eda.11
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 18:45:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wAqLEhawabMbQV194y5YFmZq2jiOl3Yl5uRuU1ILn/c=;
-        b=E5qnU4tVTah85BsdBfEOSw8FvPnK0S2mHV4cqaySt2ugRRQ9RJz0RjTQ3jtsXRcg0T
-         B8oE0Be0HDi65rxNyEsGA7fGY93pmUuaptb4LnK/oanKBGiOj+PZbdR4kAfvDSn+ACnD
-         qjLAruh1qWxbXQ5aRfd2XeXmlaXJ8Ea8yJxCJ5Hd97wa0cWLEN+xUCTThKLbqArl2XTc
-         3nje08+L8SZ25fCoIn7hjFIsBko6pXGK0IBrjRFMZki8ePUfD2Vxjw7XBpACYvFxgZoc
-         exWY6w1wHXQqDwcHsNqf7MXGEoQCZoXhL79TqjipWv7zT/1+JaTG7TAA6LrloVtwJnXJ
-         tm6Q==
+        bh=gpFcj1uUZYTNq0+KmLnzmL35K736w79jGUcUQG+j0+4=;
+        b=TEFlHWEQTHdyXsexdSs/rCzUwNtGbKZys0hfRMniE+H1e+0lKMTxgggMB1oTe9OUCv
+         DcenEaj6jut/2kjLO+mgIa0fQ5zYF+dmvyrhxp7ecuPeSq8kkJyEA6pgjvDhzmHCGtqE
+         bG8ZWxbwbtYpAtUkyz2txFgXoX0M4BLxnyAeHb2rg2lLTADwtVbOGn2AIUnSVSOvKZ3l
+         TjP6/Hzni7Xpl9C9sv6eixR5+po55Xy8O2TkADnUREkVYBgeGKIwixPcgZyh+PO5INLk
+         RHYmvEpIAZK4tls7VMKzUaazrEz+2OvFYwBAyb57LIAX6sHYK2Dr3J0uiZZoxupUPUoS
+         o5eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wAqLEhawabMbQV194y5YFmZq2jiOl3Yl5uRuU1ILn/c=;
-        b=4CYRug3B36X14U5UzLECC1AlxiBF8c/Ko1Uui6Sf7CUU4sbngN9fIpZ6TRHct4w0PC
-         DWxKD9tF4IYWNl3xKQtKJ93IV+PBQXO8E0fM3bd66xl0FyWy+8a7QPcpgf/J15f23fe3
-         IiMYOoc6y+0XTrc/PtKKc57OoZfTTQOAurCr2Mb4OJAOmgh9AtHM4brBULpgC2Sk5i7z
-         53SytpsOqQf+Qs9zm1dZ+hSeD5DNYv9rY5MEaNuVVu6ex7RMVx4WnWwFbYvVg922r4pl
-         IlMiAODjvs5QkGIYJiiwXZ3q/1IW2YCY+aU04qjU5g75oPG8Y37Q94thhDUl8ziWv5Fh
-         wzsw==
-X-Gm-Message-State: AOAM5320IeBGy5jWijCOSzlBpwrcpIhoGy1tExLXyw/sSnpFP+4uZhKd
-        8hcm/oJ04VT0or4TCEnqfTUxa5WT8+1ujQ+L8xon
-X-Google-Smtp-Source: ABdhPJzUhTmcpWp+XkxysnbAKVRGWDWT+G+5mAL1GAUbzyGljvtUoDC5K0rY89HkFvjdEPc1fkJ2KYEXpZ73b/o9pKw=
-X-Received: by 2002:a05:6402:4311:: with SMTP id m17mr50512266edc.103.1638758714336;
- Sun, 05 Dec 2021 18:45:14 -0800 (PST)
+        bh=gpFcj1uUZYTNq0+KmLnzmL35K736w79jGUcUQG+j0+4=;
+        b=xmUu5xUIqyjtR7OUUOWZfFDgLq78s8jBI2u8ipomy1zrZ+ftJqqA2RBRxMvbHCXWfs
+         vbR0x9VRbG6kH12jadbhrMeQwH++aFpH4AC+d9NH7Lj/4FCIc7Q7UPvh+hdWuYj6Xh95
+         lzDEx9fG22kZg6baUPtm7m+0i5hRXOw2+BUnOv1PxjKVeZxamKlQnqsbGGncHsuPBuVj
+         1QIfk8sQx+a7XP9qcGKIYN3Vsmj2z/fHCdgGwDUfh3p/l/jlIZ0lxfGIgmnCfsFQAe41
+         raW/l+qYLg2XdXhnGy5cIUEV17OAoIz3jCHVAl/uwxCdBpcc8O+s0D6ZPMnYBxgCeGZI
+         olXw==
+X-Gm-Message-State: AOAM532iQeXdmB/i88zLLesJw3uRDavmT2cgxNkmrctGXCdv8xNLITWK
+        Ik5+qggKN5R8ENOUECZ64dM7hUhr3edbCmhcZuHGqcQeCw==
+X-Google-Smtp-Source: ABdhPJyiHNaMyVS5PZYMibcIrBXPL0EeazoGYH7BTBz49n1/LTfHIDjvW+a3ZvHguWuXDXri2ZZVdc+BfdO+UUfzUTs=
+X-Received: by 2002:a05:6402:34cd:: with SMTP id w13mr49333749edc.112.1638758733909;
+ Sun, 05 Dec 2021 18:45:33 -0800 (PST)
 MIME-Version: 1.0
-References: <20211124014332.36128-1-casey@schaufler-ca.com> <20211124014332.36128-25-casey@schaufler-ca.com>
-In-Reply-To: <20211124014332.36128-25-casey@schaufler-ca.com>
+References: <20211124014332.36128-1-casey@schaufler-ca.com> <20211124014332.36128-26-casey@schaufler-ca.com>
+In-Reply-To: <20211124014332.36128-26-casey@schaufler-ca.com>
 From:   Paul Moore <paul@paul-moore.com>
-Date:   Sun, 5 Dec 2021 21:45:03 -0500
-Message-ID: <CAHC9VhS+jaTFbca7OFxoZ6uoUyaRoxjtm0m-K92px=61XUja5Q@mail.gmail.com>
-Subject: Re: [PATCH v30 24/28] Audit: Add framework for auxiliary records
+Date:   Sun, 5 Dec 2021 21:45:23 -0500
+Message-ID: <CAHC9VhTYudezmRyZxEGRL=ivwSDBmeh4nZ_qBkBZR9+LJxC8xg@mail.gmail.com>
+Subject: Re: [PATCH v30 25/28] Audit: Add record for multiple task security contexts
 To:     Casey Schaufler <casey@schaufler-ca.com>
 Cc:     casey.schaufler@intel.com, jmorris@namei.org,
         linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
@@ -62,86 +62,220 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 9:10 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+On Tue, Nov 23, 2021 at 9:11 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
 >
-> Add a list for auxiliary record data to the audit_buffer structure.
-> Add the audit_stamp information to the audit_buffer as there's no
-> guarantee that there will be an audit_context containing the stamp
-> associated with the event. At audit_log_end() time create auxiliary
-> records (none are currently defined) as have been added to the list.
+> Create a new audit record AUDIT_MAC_TASK_CONTEXTS.
+> An example of the MAC_TASK_CONTEXTS (1420) record is:
+>
+>     type=UNKNOWN[1420]
+>     msg=audit(1600880931.832:113)
+>     subj_apparmor="=unconfined"
+>     subj_smack="_"
+>
+> When an audit event includes a AUDIT_MAC_TASK_CONTEXTS record
+> the "subj=" field in other records in the event will be "subj=?".
+> A AUDIT_MAC_TASK_CONTEXTS record is supplied when the system has
+> multiple security modules that may make access decisions based
+> on a subject security context.
 >
 > Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 > ---
->  kernel/audit.c   | 85 ++++++++++++++++++++++++++++++++++++++++++------
->  kernel/audit.h   |  1 +
->  kernel/auditsc.c |  2 ++
->  3 files changed, 78 insertions(+), 10 deletions(-)
-
-...
-
-> diff --git a/kernel/audit.c b/kernel/audit.c
-> index 069cd4c81a61..2b22498d3532 100644
-> --- a/kernel/audit.c
-> +++ b/kernel/audit.c
-> @@ -2393,6 +2403,61 @@ void audit_log_end(struct audit_buffer *ab)
->                 wake_up_interruptible(&kauditd_wait);
->         } else
->                 audit_log_lost("rate limit exceeded");
+>  include/linux/security.h   |  9 ++++++
+>  include/uapi/linux/audit.h |  1 +
+>  kernel/audit.c             | 66 ++++++++++++++++++++++++++++++++------
+>  3 files changed, 67 insertions(+), 9 deletions(-)
+>
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 763dca314c00..b98545d2ae04 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -231,6 +231,15 @@ static inline bool lsmblob_equal(struct lsmblob *bloba, struct lsmblob *blobb)
+>  extern int lsm_name_to_slot(char *name);
+>  extern const char *lsm_slot_to_name(int slot);
+>
+> +static inline bool lsm_multiple_contexts(void)
+> +{
+> +#ifdef CONFIG_SECURITY
+> +       return lsm_slot_to_name(1) != NULL;
+> +#else
+> +       return false;
+> +#endif
 > +}
 > +
-> +/**
-> + * audit_log_end - end one audit record
-> + * @ab: the audit_buffer
-> + *
-> + * Let __audit_log_end() handle the message while the buffer housekeeping
-> + * is done here.
-> + * If there are other records that have been deferred for the event
-> + * create them here.
-> + */
-> +void audit_log_end(struct audit_buffer *ab)
+>  /**
+>   * lsmblob_value - find the first non-zero value in an lsmblob structure.
+>   * @blob: Pointer to the data
+> diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
+> index 9176a095fefc..86ad3da4f0d4 100644
+> --- a/include/uapi/linux/audit.h
+> +++ b/include/uapi/linux/audit.h
+> @@ -143,6 +143,7 @@
+>  #define AUDIT_MAC_UNLBL_STCDEL 1417    /* NetLabel: del a static label */
+>  #define AUDIT_MAC_CALIPSO_ADD  1418    /* NetLabel: add CALIPSO DOI entry */
+>  #define AUDIT_MAC_CALIPSO_DEL  1419    /* NetLabel: del CALIPSO DOI entry */
+> +#define AUDIT_MAC_TASK_CONTEXTS        1420    /* Multiple LSM task contexts */
+>
+>  #define AUDIT_FIRST_KERN_ANOM_MSG   1700
+>  #define AUDIT_LAST_KERN_ANOM_MSG    1799
+> diff --git a/kernel/audit.c b/kernel/audit.c
+> index 2b22498d3532..6c93545a14f3 100644
+> --- a/kernel/audit.c
+> +++ b/kernel/audit.c
+> @@ -197,6 +197,9 @@ static struct audit_ctl_mutex {
+>  struct audit_context_entry {
+>         struct list_head        list;
+>         int                     type;   /* Audit record type */
+> +       union {
+> +               struct lsmblob  mac_task_context;
+
+The name "mac_task_context" is awfully long, why not something like
+"lsm_subjs" or similar?
+
+> +       };
+>  };
+>
+>  /* The audit_buffer is used when formatting an audit record.  The caller
+> @@ -2139,6 +2142,21 @@ void audit_log_key(struct audit_buffer *ab, char *key)
+>                 audit_log_format(ab, "(null)");
+>  }
+>
+> +static int audit_add_aux_task(struct audit_buffer *ab, struct lsmblob *blob)
 > +{
-> +       struct audit_context_entry *entry;
-> +       struct audit_context mcontext;
-> +       struct audit_context *mctx;
-> +       struct audit_buffer *mab;
-> +       struct list_head *l;
-> +       struct list_head *n;
+> +       struct audit_context_entry *ace;
 > +
-> +       if (!ab)
-> +               return;
+> +       ace = kzalloc(sizeof(*ace), GFP_KERNEL);
+
+Instead of using GFP_KERNEL I would recommend using ab->gfp_mask to
+ensure we don't run into allocation problems depending on the calling
+context.
+
+> +       if (!ace)
+> +               return -ENOMEM;
 > +
-> +       __audit_log_end(ab);
+> +       INIT_LIST_HEAD(&ace->list);
+> +       ace->type = AUDIT_MAC_TASK_CONTEXTS;
+
+I would suggest one of the following:
+
+A) Add a "type" parameter to the function and use it here so that this
+function truly generic.
+B) Leave the ace->type assignment alone and change the function name
+to audit_add_mac_task_contexts().
+C) Fold this entire function into audit_log_task_context().
+
+Of the three, I think choice B makes the least amount of sense; if
+this is a dedicated AUDIT_MAC_TASK_CONTEXTS function then it should
+probably just live inside audit_log_task_context() (choice C).
+Choosing between A and C is really a matter of deciding if you are
+going to use this function elsewhere, and it doesn't appear that you
+do so in this patchset.  Sure, other patchsets might make use of this
+someday (or not), but if they do they can also extract it back out
+into a separate function (if needed).
+
+> +       ace->mac_task_context = *blob;
+> +       list_add(&ace->list, &ab->aux_records);
+> +       return 0;
+> +}
 > +
-> +       if (list_empty(&ab->aux_records)) {
-> +               audit_buffer_free(ab);
-> +               return;
-> +       }
-> +
-> +       if (ab->ctx == NULL) {
-> +               mcontext.context = AUDIT_CTX_AUXRECORD;
+>  int audit_log_task_context(struct audit_buffer *ab)
+>  {
+>         int error;
+> @@ -2149,16 +2167,22 @@ int audit_log_task_context(struct audit_buffer *ab)
+>         if (!lsmblob_is_set(&blob))
+>                 return 0;
+>
+> -       error = security_secid_to_secctx(&blob, &context, LSMBLOB_FIRST);
+> -       if (error) {
+> -               if (error != -EINVAL)
+> -                       goto error_path;
+> +       if (!lsm_multiple_contexts()) {
+> +               error = security_secid_to_secctx(&blob, &context,
+> +                                                LSMBLOB_FIRST);
+> +               if (error) {
+> +                       if (error != -EINVAL)
+> +                               goto error_path;
+> +                       return 0;
+> +               }
+> +               audit_log_format(ab, " subj=%s", context.context);
+> +               security_release_secctx(&context);
+>                 return 0;
+>         }
+> -
+> -       audit_log_format(ab, " subj=%s", context.context);
+> -       security_release_secctx(&context);
+> -       return 0;
+> +       audit_log_format(ab, " subj=?");
+> +       error = audit_add_aux_task(ab, &blob);
+> +       if (!error)
+> +               return 0;
 
-More on this below, but I don't think we need, or want, the line above.
+This is very bikeshed-y, but from a style perspective I would prefer
+to see something like this:
 
-> diff --git a/kernel/audit.h b/kernel/audit.h
-> index 56560846f3b0..f87da8e0a5a4 100644
-> --- a/kernel/audit.h
-> +++ b/kernel/audit.h
-> @@ -112,6 +112,7 @@ struct audit_context {
->                 AUDIT_CTX_UNUSED,       /* audit_context is currently unused */
->                 AUDIT_CTX_SYSCALL,      /* in use by syscall */
->                 AUDIT_CTX_URING,        /* in use by io_uring */
-> +               AUDIT_CTX_AUXRECORD,    /* in use for auxiliary records */
->         } context;
+  if (!lsm_multiple_contexts()) {
+    /* existing, single LSM code */
+  } else {
+    /* new, multiple LSM code */
+  }
+  return error;
 
-We shouldn't need to do this here, and I wouldn't recommend this as a
-solution even if we were running into problems in audit_log_exit().
-The "context" field in the audit_context struct is to identify the
-execution context of the task which is generating the audit record(s).
+IMO it makes it a bit more clear that each code path is equally likely
+and neither is an exception.
 
-I'm trying to think of a case in this patchset where you would find
-"audit_context->context == AUDIT_CTX_AUXRECORD" and I keep coming up
-blank, are you certain you hit that case with the code you posted
-here?  If so, could you help me understand that situation?
+>  error_path:
+>         audit_panic("error in audit_log_task_context");
+> @@ -2419,9 +2443,12 @@ void audit_log_end(struct audit_buffer *ab)
+>         struct audit_context_entry *entry;
+>         struct audit_context mcontext;
+>         struct audit_context *mctx;
+> +       struct lsmcontext lcontext;
+>         struct audit_buffer *mab;
+>         struct list_head *l;
+>         struct list_head *n;
+> +       int rc;
+> +       int i;
+>
+>         if (!ab)
+>                 return;
+> @@ -2448,7 +2475,28 @@ void audit_log_end(struct audit_buffer *ab)
+>                         continue;
+>                 }
+>                 switch (entry->type) {
+> -               /* Don't know of any quite yet. */
+> +               case AUDIT_MAC_TASK_CONTEXTS:
+> +                       for (i = 0; i < LSMBLOB_ENTRIES; i++) {
+> +                               if (entry->mac_task_context.secid[i] == 0)
+> +                                       continue;
+> +                               rc = security_secid_to_secctx(
+> +                                               &entry->mac_task_context,
+> +                                               &lcontext, i);
+> +                               if (rc) {
+> +                                       if (rc != -EINVAL)
+> +                                               audit_panic("error in audit_log_end");
+> +                                       audit_log_format(mab, "%ssubj_%s=\"?\"",
+
+I don't believe you need the quotes around the question mark here, you
+should be able to treat it just like it was "subj=?".
+
+> +                                                        i ? " " : "",
+> +                                                        lsm_slot_to_name(i));
+> +                               } else {
+> +                                       audit_log_format(mab, "%ssubj_%s=\"%s\"",
+
+Same as above.
+
+> +                                                        i ? " " : "",
+> +                                                        lsm_slot_to_name(i),
+> +                                                        lcontext.context);
+> +                                       security_release_secctx(&lcontext);
+> +                               }
+> +                       }
+> +                       break;
+>                 default:
+>                         audit_panic("Unknown type in audit_log_end");
+>                         break;
+> --
+> 2.31.1
 
 --
 paul moore

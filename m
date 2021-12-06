@@ -2,91 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D837469224
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEDFA46921E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240217AbhLFJRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 04:17:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240354AbhLFJPi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 04:15:38 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5F6C0613F8;
-        Mon,  6 Dec 2021 01:12:09 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id u1so20872731wru.13;
-        Mon, 06 Dec 2021 01:12:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FGtulihe7ZbaEpsl9OFIbutBqE5uxxN+RlUqevniGGc=;
-        b=DbbFihlmvXc6TyE+X9Wrmn6Sr/drJkmcKW4d5y5EerCQmJdPZ2suF6Ex8CF5NX6OF3
-         uPnYpcBIz+kEOwbJNqN6GWAULeJGkVhhMbRFwdOXMWlu6fk73A+/W6zCawhxLK6ZBjCC
-         cNCqmRqI4/17gU7SMHeu3DvLVgeLVzjcO0IFeAiuTxdCrpjJ51C3PtNKPC6oMr/oFSVI
-         lJbfn75nalX9pn/peJ4eiUJCYEDWoeqfXzyz+ziztnUzTzv+qZNpCh7S/brpHmAQHcM2
-         EXK7WaPTQWHBGhbxC1e2EFeg9K2xQ4IsIFS4IXEvfZXTz5lLwbSLRcBGQtE4Zxsu9elQ
-         5LIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FGtulihe7ZbaEpsl9OFIbutBqE5uxxN+RlUqevniGGc=;
-        b=13z1yHj3EWUdJ1ixw8AHqHgbRVy/vCPILjsjqQ47Pc/gUANvRy4VqSUhIrodwqYm+H
-         lXXDpzsLxgARjjvWgttbRvPezkbTuqRz6Y/Y8/bnEUJGoNexBqw2QcvzdWSI+dRo9v46
-         h5j/WSpSnONiMub+ph9e6qPbswNpIWT2TzT9vdeebQRl6MOKWWJx/LpiPr9BlfEao0mc
-         sB3lpd6QFLFeJFZuihRwU5imiCwVywvhBN1ZD1pOOQhB4OHpe7Wnf0/pFxs6cwzPyNac
-         rfk653ObHlPL6lRbvGg/woSRT0Dcsl4+ko+XPZmLFAJB//rIiHoGl1XYUUX/jY0r6a3L
-         khMg==
-X-Gm-Message-State: AOAM532GEGvF+I+1wJ2uvVa4AMgcmV3TLQTXnvn2ANfB8kZf+OT3PoHl
-        kSXg5aItFtDGqK3ypwxAykZ75N1r/oNXKbnj
-X-Google-Smtp-Source: ABdhPJxFt/TJQBps8M+Vvod/JSl2PWMHsPrHLQtL5cNl1tVXXHphlF0EQ5Dz3rbTSGnnql423+gbcA==
-X-Received: by 2002:adf:fa0b:: with SMTP id m11mr40977623wrr.152.1638781928492;
-        Mon, 06 Dec 2021 01:12:08 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id p2sm12866223wmq.23.2021.12.06.01.12.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 01:12:07 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] net: hns3: Fix spelling mistake "faile" -> "failed"
-Date:   Mon,  6 Dec 2021 09:12:07 +0000
-Message-Id: <20211206091207.113648-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        id S240136AbhLFJQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 04:16:57 -0500
+Received: from out0.migadu.com ([94.23.1.103]:49821 "EHLO out0.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240118AbhLFJQ5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 04:16:57 -0500
 MIME-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1638782007;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xTcIvTRl3PV4xNRIqhyup0Qxe07AZpLNGYobYj8/W9k=;
+        b=RenzKR/IeaLC+GFvxdEspGUm+KLNjej2BPqcRbTvd39An7t9mqHNVUQd3d30rL4lkHOoZ7
+        WsS2L9sMPSGKmPVGG4Uv40cQXxwBK3cxOakqgVHzodSFk9Wojnpt8QyMXUmFtMxs2dLCky
+        eC5PP6BtpjFfwPELBIF6oKyxlhtlAsc=
+Date:   Mon, 06 Dec 2021 09:13:27 +0000
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   yajun.deng@linux.dev
+Message-ID: <0a2496c3503ba85205a5da0d8e61ea78@linux.dev>
+Subject: Re: [PATCH] completion: introduce complete_put() helper function
+To:     "Peter Zijlstra" <peterz@infradead.org>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org
+In-Reply-To: <Ya3LFV2W05TZzMnC@hirez.programming.kicks-ass.net>
+References: <Ya3LFV2W05TZzMnC@hirez.programming.kicks-ass.net>
+ <20211206040319.7063-1-yajun.deng@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a dev_err message. Fix it.
-
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-index 3edea321e31a..1d1c4514aac2 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-@@ -8070,7 +8070,7 @@ static int hclge_cfg_common_loopback_wait(struct hclge_dev *hdev)
- 		dev_err(&hdev->pdev->dev, "wait loopback timeout\n");
- 		return -EBUSY;
- 	} else if (!(req->result & HCLGE_CMD_COMMON_LB_SUCCESS_B)) {
--		dev_err(&hdev->pdev->dev, "faile to do loopback test\n");
-+		dev_err(&hdev->pdev->dev, "failed to do loopback test\n");
- 		return -EIO;
- 	}
- 
--- 
-2.33.1
-
+December 6, 2021 4:34 PM, "Peter Zijlstra" <peterz@infradead.org> wrote:=
+=0A=0A> On Mon, Dec 06, 2021 at 12:03:19PM +0800, Yajun Deng wrote:=0A> =
+=0A>> There are many cases where it is necessary to decrease refcount and=
+ test,=0A>> then called complete(). So introduce complete_put() helper fu=
+nction.=0A>> =0A>> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>=0A>> =
+---=0A>> kernel/sched/completion.c | 7 +++++++=0A>> 1 file changed, 7 ins=
+ertions(+)=0A>> =0A>> diff --git a/kernel/sched/completion.c b/kernel/sch=
+ed/completion.c=0A>> index a778554f9dad..dcb737f1edc2 100644=0A>> --- a/k=
+ernel/sched/completion.c=0A>> +++ b/kernel/sched/completion.c=0A>> @@ -38=
+,6 +38,13 @@ void complete(struct completion *x)=0A>> }=0A>> EXPORT_SYMBO=
+L(complete);=0A>> =0A>> +void complete_put(refcount_t *r, struct completi=
+on *x)=0A>> +{=0A>> + if (refcount_dec_and_test(r))=0A>> + complete(x);=
+=0A>> +}=0A>> +EXPORT_SYMBOL(complete_put);=0A> =0A> Please submit such t=
+hings as part of the series that makes use of them.=0A=0AHere is a typica=
+l use case=EF=BC=9A       vim drivers/infiniband/core/device.c +101=0Asta=
+tic void ib_client_put(struct ib_client *client)=0A{=0A        if (refcou=
+nt_dec_and_test(&client->uses))=0A                complete(&client->uses_=
+zero);=0A}=0A=0AEach driver needs to define a xxx_put() function if they =
+want to use it, we can add this helper function for them.

@@ -2,202 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C1046960C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 13:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6C64695FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 13:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243564AbhLFM6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 07:58:44 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4206 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243531AbhLFM6h (ORCPT
+        id S243421AbhLFMzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 07:55:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232664AbhLFMzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 07:58:37 -0500
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J73K72bFNz689QL;
-        Mon,  6 Dec 2021 20:54:03 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.20; Mon, 6 Dec 2021 13:55:07 +0100
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 6 Dec 2021 12:55:04 +0000
-From:   John Garry <john.garry@huawei.com>
-To:     <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <ming.lei@redhat.com>, <kashyap.desai@broadcom.com>,
-        <hare@suse.de>, "John Garry" <john.garry@huawei.com>
-Subject: [PATCH v2 3/3] blk-mq: Optimise blk_mq_queue_tag_busy_iter() for shared tags
-Date:   Mon, 6 Dec 2021 20:49:50 +0800
-Message-ID: <1638794990-137490-4-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1638794990-137490-1-git-send-email-john.garry@huawei.com>
-References: <1638794990-137490-1-git-send-email-john.garry@huawei.com>
+        Mon, 6 Dec 2021 07:55:47 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755B1C061746;
+        Mon,  6 Dec 2021 04:52:18 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id z18so12721566iof.5;
+        Mon, 06 Dec 2021 04:52:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kWJMdo59yTSqgJcYQGuTdjoYwCvGkhFPo9VMwlZW8Wc=;
+        b=poA4Fh2eLuxpzHYdkWnPujX6m/BcXB3qWs3e/llhbBL1groISYuSuPm59BCl7UU7DG
+         dBDenGke/eNaiyVOAG3VEeif1lnxPrdNoDt61HEjR8508yyw3GZCsmRYxI9c/gRWFZxm
+         3FnirNabC4Lx/J8Gw33Y2T9trHssa80s4v0stAR1nGkDfOkQWaJeolnArKQkKJUd96jY
+         CZ+uD0zOJpJILfdqHqcu9gzh9kPasSeKLC02KbgQ7Yh5pZLQ4dlTS217MKyKsmyVEbDL
+         x5pc81JOSTVXItRYok887CdqvVUsOGOHOiUSdLzhD/4JldW00jLDWG26j3utAA5VFX2b
+         vyLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kWJMdo59yTSqgJcYQGuTdjoYwCvGkhFPo9VMwlZW8Wc=;
+        b=I5vGZGgl+whNH91kR3kTQroK49tCgdawkklMC4yBBwWS4D+/qhZQ51bWCTjniFeMA6
+         JCOR64XLYlEW3+XPXJxFBFMjbQEk+PEFLDxQWYwXNlBBzFzZ14rhus2jxH62PEh1NvoC
+         qDzVidppx6FmA/4Z2ndKtv4f9YKrOr+qUh4OLDcCh9/Hse9PYswWqat/c/wceLWFqY0t
+         aau/vn4OniwQXCBBcKaxIasUxsydhQkHJobALJheNbepAuKeiPOvXtkPUL/aK2Nc7Iec
+         CV9KnyCgEwITCY2WuAPYgkGAR8WO6Z/98bARWv39NCi7xcHgaEoUsYoUIrAba+fFHfzS
+         /XIA==
+X-Gm-Message-State: AOAM531+vB5bY6XpdCYXaGnVpeeej/mFhBbPWWuGNPAbPSEH+jtQ9su6
+        TAm64K0QDzKGPckqWHMaFR0Bws5ZYcyW6XyeTcg=
+X-Google-Smtp-Source: ABdhPJwt3qZlkLSpxVG/nChwiA3yPio+t4NQvFW9uo5vaNbMypcBavzm9Rc8k9CZTHIPe0VQ8b3hrpeDhkr+ufQv6Sw=
+X-Received: by 2002:a05:6602:1487:: with SMTP id a7mr32334878iow.57.1638795137663;
+ Mon, 06 Dec 2021 04:52:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+References: <20211202120758.41478-1-alistair@alistair23.me>
+ <20211202120758.41478-9-alistair@alistair23.me> <20211205220744.18534b50@aktux>
+In-Reply-To: <20211205220744.18534b50@aktux>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Mon, 6 Dec 2021 22:51:51 +1000
+Message-ID: <CAKmqyKPCt0a5_6=Ezc87SK4jLWrh=-D1a2bXnyLjgd9OH3A-bg@mail.gmail.com>
+Subject: Re: [PATCH v16 8/8] ARM: dts: imx7d: remarkable2: Enable lcdif
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     Alistair Francis <alistair@alistair23.me>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>, lgirdwood@gmail.com,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org, rui.zhang@intel.com,
+        dl-linux-imx <linux-imx@nxp.com>,
+        devicetree <devicetree@vger.kernel.org>, amitk@kernel.org,
+        Shawn Guo <shawnguo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kashyap reports high CPU usage in blk_mq_queue_tag_busy_iter() and callees
-using megaraid SAS RAID card since moving to shared tags [0].
+On Mon, Dec 6, 2021 at 7:07 AM Andreas Kemnade <andreas@kemnade.info> wrote:
+>
+> On Thu,  2 Dec 2021 22:07:58 +1000
+> Alistair Francis <alistair@alistair23.me> wrote:
+>
+> > Connect the dispaly on the reMarkable2.
+> >
+> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> > ---
+> >  arch/arm/boot/dts/imx7d-remarkable2.dts | 73 +++++++++++++++++++++++++
+> >  1 file changed, 73 insertions(+)
+> >
+> > diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> > index b66d28b30d75..bb0c68d24583 100644
+> > --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
+> > +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
+> [...]
+>
+> > @@ -187,6 +221,45 @@ MX7D_PAD_I2C4_SCL__I2C4_SCL              0x4000007f
+> >               >;
+> >       };
+> >
+> > +     pinctrl_lcdif: lcdifgrp {
+> > +             fsl,pins = <
+> > +                     MX7D_PAD_LCD_DATA00__LCD_DATA0          0x79
+> > +                     MX7D_PAD_LCD_DATA01__LCD_DATA1          0x79
+> > +                     MX7D_PAD_LCD_DATA02__LCD_DATA2          0x79
+> > +                     MX7D_PAD_LCD_DATA03__LCD_DATA3          0x79
+> > +                     MX7D_PAD_LCD_DATA04__LCD_DATA4          0x79
+> > +                     MX7D_PAD_LCD_DATA05__LCD_DATA5          0x79
+> > +                     MX7D_PAD_LCD_DATA06__LCD_DATA6          0x79
+> > +                     MX7D_PAD_LCD_DATA07__LCD_DATA7          0x79
+> > +                     MX7D_PAD_LCD_DATA08__LCD_DATA8          0x79
+> > +                     MX7D_PAD_LCD_DATA09__LCD_DATA9          0x79
+> > +                     MX7D_PAD_LCD_DATA10__LCD_DATA10         0x79
+> > +                     MX7D_PAD_LCD_DATA11__LCD_DATA11         0x79
+> > +                     MX7D_PAD_LCD_DATA12__LCD_DATA12         0x79
+> > +                     MX7D_PAD_LCD_DATA13__LCD_DATA13         0x79
+> > +                     MX7D_PAD_LCD_DATA14__LCD_DATA14         0x79
+> > +                     MX7D_PAD_LCD_DATA15__LCD_DATA15         0x79
+> > +
+> > +                     MX7D_PAD_LCD_DATA17__LCD_DATA17         0x79
+> > +                     MX7D_PAD_LCD_DATA18__LCD_DATA18         0x79
+> > +                     MX7D_PAD_LCD_DATA19__LCD_DATA19         0x79
+> > +                     MX7D_PAD_LCD_DATA20__LCD_DATA20         0x79
+> > +                     MX7D_PAD_LCD_DATA21__LCD_DATA21         0x79
+> > +
+> > +                     MX7D_PAD_LCD_DATA23__LCD_DATA23         0x79
+> > +                     MX7D_PAD_LCD_CLK__LCD_CLK               0x79
+> > +                     MX7D_PAD_LCD_ENABLE__LCD_ENABLE         0x79
+> > +                     MX7D_PAD_LCD_VSYNC__LCD_VSYNC           0x79
+> > +                     MX7D_PAD_LCD_HSYNC__LCD_HSYNC           0x79
+> > +                     MX7D_PAD_LCD_RESET__LCD_RESET           0x79
+> > +             >;
+> > +     };
+>
+> shouldn't this belong into the upper list:
+> > +
+> > +             fsl,pins = <
+> > +                     MX7D_PAD_LCD_DATA22__GPIO3_IO27         0x74
+> > +             >;
+> > +     };
+> > +
+>
+> probably some rebase or merge accident. If I submit non-trivial things,
+> I usually apply my patches to a separate git tree and do a final
+> compile, that might help to reduce some trouble.
 
-Previously, when shared tags was shared sbitmap, this function was less
-than optimum since we would iter through all tags for all hctx's,
-yet only ever match upto tagset depth number of rqs.
+Yeah, it was a rebase error. I split these patches out from my working tree.
 
-Since the change to shared tags, things are even less efficient if we have
-parallel callers of blk_mq_queue_tag_busy_iter(). This is because in
-bt_iter() -> blk_mq_find_and_get_req() there would be more contention on
-accessing each request ref and tags->lock since they are now shared among
-all HW queues.
+Alistair
 
-Optimise by having separate calls to bt_for_each() for when we're using
-shared tags. In this case no longer pass a hctx, as it is no longer
-relevant, and teach bt_iter() about this.
-
-Ming suggested something along the lines of this change, apart from a
-different implementation.
-
-[0] https://lore.kernel.org/linux-block/e4e92abbe9d52bcba6b8cc6c91c442cc@mail.gmail.com/
-
-Signed-off-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-Reported-and-tested-by: Kashyap Desai <kashyap.desai@broadcom.com>
----
- block/blk-mq-tag.c | 59 ++++++++++++++++++++++++++++++++--------------
- 1 file changed, 41 insertions(+), 18 deletions(-)
-
-diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
-index 58b80d4b7a07..e55a6834c9a6 100644
---- a/block/blk-mq-tag.c
-+++ b/block/blk-mq-tag.c
-@@ -215,6 +215,7 @@ void blk_mq_put_tags(struct blk_mq_tags *tags, int *tag_array, int nr_tags)
- 
- struct bt_iter_data {
- 	struct blk_mq_hw_ctx *hctx;
-+	struct request_queue *q;
- 	busy_tag_iter_fn *fn;
- 	void *data;
- 	bool reserved;
-@@ -238,11 +239,18 @@ static bool bt_iter(struct sbitmap *bitmap, unsigned int bitnr, void *data)
- {
- 	struct bt_iter_data *iter_data = data;
- 	struct blk_mq_hw_ctx *hctx = iter_data->hctx;
--	struct blk_mq_tags *tags = hctx->tags;
-+	struct request_queue *q = iter_data->q;
-+	struct blk_mq_tag_set *set = q->tag_set;
- 	bool reserved = iter_data->reserved;
-+	struct blk_mq_tags *tags;
- 	struct request *rq;
- 	bool ret = true;
- 
-+	if (blk_mq_is_shared_tags(set->flags))
-+		tags = set->shared_tags;
-+	else
-+		tags = hctx->tags;
-+
- 	if (!reserved)
- 		bitnr += tags->nr_reserved_tags;
- 	/*
-@@ -253,7 +261,7 @@ static bool bt_iter(struct sbitmap *bitmap, unsigned int bitnr, void *data)
- 	if (!rq)
- 		return true;
- 
--	if (rq->q == hctx->queue && rq->mq_hctx == hctx)
-+	if (rq->q == q && (!hctx || rq->mq_hctx == hctx))
- 		ret = iter_data->fn(rq, iter_data->data, reserved);
- 	blk_mq_put_rq_ref(rq);
- 	return ret;
-@@ -262,6 +270,7 @@ static bool bt_iter(struct sbitmap *bitmap, unsigned int bitnr, void *data)
- /**
-  * bt_for_each - iterate over the requests associated with a hardware queue
-  * @hctx:	Hardware queue to examine.
-+ * @q:		Request queue to examine.
-  * @bt:		sbitmap to examine. This is either the breserved_tags member
-  *		or the bitmap_tags member of struct blk_mq_tags.
-  * @fn:		Pointer to the function that will be called for each request
-@@ -273,14 +282,16 @@ static bool bt_iter(struct sbitmap *bitmap, unsigned int bitnr, void *data)
-  * @reserved:	Indicates whether @bt is the breserved_tags member or the
-  *		bitmap_tags member of struct blk_mq_tags.
-  */
--static void bt_for_each(struct blk_mq_hw_ctx *hctx, struct sbitmap_queue *bt,
--			busy_tag_iter_fn *fn, void *data, bool reserved)
-+static void bt_for_each(struct blk_mq_hw_ctx *hctx, struct request_queue *q,
-+			struct sbitmap_queue *bt, busy_tag_iter_fn *fn,
-+			void *data, bool reserved)
- {
- 	struct bt_iter_data iter_data = {
- 		.hctx = hctx,
- 		.fn = fn,
- 		.data = data,
- 		.reserved = reserved,
-+		.q = q,
- 	};
- 
- 	sbitmap_for_each_set(&bt->sb, bt_iter, &iter_data);
-@@ -460,9 +471,6 @@ EXPORT_SYMBOL(blk_mq_tagset_wait_completed_request);
- void blk_mq_queue_tag_busy_iter(struct request_queue *q, busy_tag_iter_fn *fn,
- 		void *priv)
- {
--	struct blk_mq_hw_ctx *hctx;
--	int i;
--
- 	/*
- 	 * __blk_mq_update_nr_hw_queues() updates nr_hw_queues and queue_hw_ctx
- 	 * while the queue is frozen. So we can use q_usage_counter to avoid
-@@ -471,19 +479,34 @@ void blk_mq_queue_tag_busy_iter(struct request_queue *q, busy_tag_iter_fn *fn,
- 	if (!percpu_ref_tryget(&q->q_usage_counter))
- 		return;
- 
--	queue_for_each_hw_ctx(q, hctx, i) {
--		struct blk_mq_tags *tags = hctx->tags;
--
--		/*
--		 * If no software queues are currently mapped to this
--		 * hardware queue, there's nothing to check
--		 */
--		if (!blk_mq_hw_queue_mapped(hctx))
--			continue;
-+	if (blk_mq_is_shared_tags(q->tag_set->flags)) {
-+		struct blk_mq_tags *tags = q->tag_set->shared_tags;
-+		struct sbitmap_queue *bresv = &tags->breserved_tags;
-+		struct sbitmap_queue *btags = &tags->bitmap_tags;
- 
- 		if (tags->nr_reserved_tags)
--			bt_for_each(hctx, &tags->breserved_tags, fn, priv, true);
--		bt_for_each(hctx, &tags->bitmap_tags, fn, priv, false);
-+			bt_for_each(NULL, q, bresv, fn, priv, true);
-+		bt_for_each(NULL, q, btags, fn, priv, false);
-+	} else {
-+		struct blk_mq_hw_ctx *hctx;
-+		int i;
-+
-+		queue_for_each_hw_ctx(q, hctx, i) {
-+			struct blk_mq_tags *tags = hctx->tags;
-+			struct sbitmap_queue *bresv = &tags->breserved_tags;
-+			struct sbitmap_queue *btags = &tags->bitmap_tags;
-+
-+			/*
-+			 * If no software queues are currently mapped to this
-+			 * hardware queue, there's nothing to check
-+			 */
-+			if (!blk_mq_hw_queue_mapped(hctx))
-+				continue;
-+
-+			if (tags->nr_reserved_tags)
-+				bt_for_each(hctx, q, bresv, fn, priv, true);
-+			bt_for_each(hctx, q, btags, fn, priv, false);
-+		}
- 	}
- 	blk_queue_exit(q);
- }
--- 
-2.26.2
-
+>
+> Regards,
+> Andreas

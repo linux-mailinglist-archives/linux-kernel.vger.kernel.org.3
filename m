@@ -2,129 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E38084690D3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C584690D9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235762AbhLFHcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 02:32:46 -0500
-Received: from so254-9.mailgun.net ([198.61.254.9]:48197 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234654AbhLFHcn (ORCPT
+        id S238474AbhLFHhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 02:37:38 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4852 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229652AbhLFHhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 02:32:43 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1638775755; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=kpfkrbWxq3M3VkqCiFgC+HQj86saJq/Wq6k82Z/2x2s=; b=nuItm06XGIlMGhDW14Krbu5yMA2qukshn1z1jTPc+qt58SJuXoMbgWUl7ngIoCb2nWZxGeFr
- H7zAcbtmAAuh2l0S8Lo1UV95+ybPxqoCATAyNHKkYnu2CsrX8VaUvixKfLrJyCKHA2Km5O3O
- akdVNi8tT8zG418dCrUUFFguiG4=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n08.prod.us-east-1.postgun.com with SMTP id
- 61adbbcae7d68470af8234c6 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 06 Dec 2021 07:29:14
- GMT
-Sender: charante=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id C1353C4361A; Mon,  6 Dec 2021 07:29:13 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.29.110] (unknown [49.37.157.144])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: charante)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 247D1C4338F;
-        Mon,  6 Dec 2021 07:29:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 247D1C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [PATCH v2] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for
- shmem
-To:     Shakeel Butt <shakeelb@google.com>,
-        Charan Teja Reddy <quic_charante@quicinc.com>
-Cc:     hughd@google.com, akpm@linux-foundation.org, vbabka@suse.cz,
-        rientjes@google.com, david@redhat.com, mhocko@suse.com,
-        surenb@google.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <1638442253-1591-1-git-send-email-quic_charante@quicinc.com>
- <CALvZod6fSkdV6oSyxsv0+gcRfZ=H9Uaw=7=t902U85fWJStuzA@mail.gmail.com>
-From:   Charan Teja Kalla <charante@codeaurora.org>
-Message-ID: <4a5cde83-c673-6af0-702f-f8b59e05a397@codeaurora.org>
-Date:   Mon, 6 Dec 2021 12:59:06 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 6 Dec 2021 02:37:32 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B67HUr0025383;
+        Mon, 6 Dec 2021 07:33:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=HkMSZMMkGG7qs/M6ldHGjZwCT5FBRbh/Mu0JItmT4HU=;
+ b=fuY7zAZS3YT9yFCz/+QlCqrR1JL3u1EAw0y1XAEG4kBfJew0D8VGyLXYLplIZT7e7/90
+ 3kbwcSaRvsjtOertzdaDPg4qlG7zsfC1iggg1ZkkKR6K+WC3ckDgvu1d0sunbtKC6Nsf
+ j0iQ2Dy6NelyxkdgKYBOxiHmlSAIiCDuKrD/R+2Z6UEqrJGNfnrsguhDePT0nszWzWDr
+ Yn0eA/yrIPu8IEN9D6FOsf5pvd4AP5av5Qw40iCvAHSXczLPi8+2SimoKrVNjqr3Qki7
+ 4fXk/x6hKsXru3Gz3AIZ2KBfujp413qm4oZpZiTxmD5qrWvsn/5V8o4YSR6Zw946MvDq eQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cse0j07wj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 07:33:43 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B67M9SL008384;
+        Mon, 6 Dec 2021 07:33:42 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cse0j07vj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 07:33:42 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B67WbHH018385;
+        Mon, 6 Dec 2021 07:33:40 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3cqykhsc2y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Dec 2021 07:33:40 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B67XaOP29360562
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Dec 2021 07:33:36 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 02E784C04E;
+        Mon,  6 Dec 2021 07:33:36 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D24F14C058;
+        Mon,  6 Dec 2021 07:33:29 +0000 (GMT)
+Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com.com (unknown [9.43.39.249])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Dec 2021 07:33:29 +0000 (GMT)
+From:   Kajol Jain <kjain@linux.ibm.com>
+To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     acme@kernel.org, peterz@infradead.org, songliubraving@fb.com,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, davem@davemloft.net, kpsingh@kernel.org,
+        hawk@kernel.org, kuba@kernel.org, maddy@linux.ibm.com,
+        atrajeev@linux.vnet.ibm.com, linux-perf-users@vger.kernel.org,
+        rnsastry@linux.ibm.com, kjain@linux.ibm.com,
+        andrii.nakryiko@gmail.com
+Subject: [PATCH v4] bpf: Remove config check to enable bpf support for branch records
+Date:   Mon,  6 Dec 2021 13:03:15 +0530
+Message-Id: <20211206073315.77432-1-kjain@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ddqZnyNPzA3d_H6YK0T9qAXKQhnrCgL5
+X-Proofpoint-ORIG-GUID: 5VHbnfruROeutJ8Bs9NzMU1-zunweXEV
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-In-Reply-To: <CALvZod6fSkdV6oSyxsv0+gcRfZ=H9Uaw=7=t902U85fWJStuzA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-06_02,2021-12-06_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ spamscore=0 clxscore=1015 lowpriorityscore=0 phishscore=0 mlxscore=0
+ mlxlogscore=999 priorityscore=1501 adultscore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112060045
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Shakeel for your valuable inputs!!
+Branch data available to bpf programs can be very useful to get
+stack traces out of userspace application.
 
-On 12/2/2021 11:24 PM, Shakeel Butt wrote:
-> On Thu, Dec 2, 2021 at 2:51 AM Charan Teja Reddy
-> <quic_charante@quicinc.com> wrote:
->>
->> From: Charan Teja Reddy <charante@codeaurora.org>
->>
->> Currently fadvise(2) is supported only for the files that doesn't
->> associated with noop_backing_dev_info thus for the files, like shmem,
->> fadvise results into NOP. But then there is file_operations->fadvise()
->> that lets the file systems to implement their own fadvise
->> implementation. Use this support to implement some of the POSIX_FADV_XXX
->> functionality for shmem files.
->>
->> This patch aims to implement POSIX_FADV_WILLNEED and POSIX_FADV_DONTNEED
->> advices to shmem files which can be helpful for the drivers who may want
->> to manage the shmem pages of the files that are created through
->> shmem_file_setup[_with_mnt]().  An example usecase may be like, driver
->> can create the shmem file of the size equal to its requirements and
->> map the pages for DMA and then pass the fd to user. The user who knows
->> well about the usage of these pages can now decide when these pages are
->> not required push them to swap through DONTNEED thus free up memory well
->> in advance rather than relying on the reclaim and use WILLNEED when it
->> decide that they are useful in the near future. IOW, it lets the clients
->> to free up/read the memory when it wants to. Another usecase is that GEM
->> objets which are currenlty allocated and managed through shmem files can
->> use vfs_fadvise(DONT|WILLNEED) on shmem fd when the driver comes to
->> know(like through some hints from user space) that GEM objects are not
->> going to use/will need in the near future.
-> 
-> The proposed semantics of POSIX_FADV_DONTNEED is actually similar to
-> MADV_PAGEOUT and different from MADV_DONTNEED. This is a user facing
-> API and this difference will cause confusion.
+Commit fff7b64355ea ("bpf: Add bpf_read_branch_records() helper")
+added bpf support to capture branch records in x86. Enable this feature
+for other architectures as well by removing check specific to x86.
 
-man pages [1] says that "POSIX_FADV_DONTNEED attempts to free cached
-pages associated with the specified region." This statement, IIUC,  on
-issuing this FADV, it is expected to free the file cache pages. And it
-is implementation defined If the dirty pages may be attempted to
-writeback. And the unwritten dirty pages will not be freed.  And thus
-for Shmem files this is being done by dirtying the page and pushing out
-to swap.
+Incase any architecture doesn't support branch records,
+bpf_read_branch_records still have appropriate checks and it
+will return error number -EINVAL in that scenario. But based on
+documentation there in include/uapi/linux/bpf.h file, incase of
+unsupported archs, this function should return -ENOENT. Hence update
+the appropriate checks to return -ENOENT instead.
 
-So, Isn't the FADV_DONTNEED also covers the semantics of MADV_PAGEOUT
-for file pages? IOW, what is the purpose of PAGEOUT for the file pages.
-Or I am missing some trivial logic in your comment here?
+Selftest 'perf_branches' result on power9 machine which has branch stacks
+support.
 
-Coming to MADV_DONTNEED[2], on the mapped shmem files doesn't have any
-effect as the pages of those shmem files can still be in RAM. Subsequent
-accesses of pages in the range will succeed from the up-to-date contents
-of the underlying mapped file. IOW, the pages are still be present in
-the cache. Am I wrong here?
+Before this patch changes:
+[command]# ./test_progs -t perf_branches
+ #88/1 perf_branches/perf_branches_hw:FAIL
+ #88/2 perf_branches/perf_branches_no_hw:OK
+ #88 perf_branches:FAIL
+Summary: 0/1 PASSED, 0 SKIPPED, 1 FAILED
 
-[1] https://man7.org/linux/man-pages/man2/posix_fadvise.2.html
-[2] https://man7.org/linux/man-pages/man2/madvise.2.html
+After this patch changes:
+[command]# ./test_progs -t perf_branches
+ #88/1 perf_branches/perf_branches_hw:OK
+ #88/2 perf_branches/perf_branches_no_hw:OK
+ #88 perf_branches:OK
+Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+
+Selftest 'perf_branches' result on power9 machine which doesn't
+have branch stack report.
+
+After this patch changes:
+[command]# ./test_progs -t perf_branches
+ #88/1 perf_branches/perf_branches_hw:SKIP
+ #88/2 perf_branches/perf_branches_no_hw:OK
+ #88 perf_branches:OK
+Summary: 1/1 PASSED, 1 SKIPPED, 0 FAILED
+
+Fixes: fff7b64355eac ("bpf: Add bpf_read_branch_records() helper")
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+---
 
 
-> 
+Tested this patch changes on power9 machine using selftest
+'perf branches' which is added in commit 67306f84ca78 ("selftests/bpf:
+Add bpf_read_branch_records()")
 
+Changelog:
+v3 -> v4
+- Make return type again as -EINVAL for invalid/unsupported
+  flags case as suggested by Daniel Borkmann.
+
+- Link to the v3 patch: https://lkml.org/lkml/2021/11/23/248
+
+v2 -> v3
+- Change the return error number for bpf_read_branch_records
+  function from -EINVAL to -ENOENT for appropriate checks
+  as suggested by Daniel Borkmann.
+
+- Link to the v2 patch: https://lkml.org/lkml/2021/11/18/510
+
+v1 -> v2
+- Inorder to add bpf support to capture branch record in
+  powerpc, rather then adding config for powerpc, entirely
+  remove config check from bpf_read_branch_records function
+  as suggested by Peter Zijlstra
+
+- Link to the v1 patch: https://lkml.org/lkml/2021/11/14/434
+
+ kernel/trace/bpf_trace.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index ae9755037b7e..e36d184615fb 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1400,9 +1400,6 @@ static const struct bpf_func_proto bpf_perf_prog_read_value_proto = {
+ BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, ctx,
+ 	   void *, buf, u32, size, u64, flags)
+ {
+-#ifndef CONFIG_X86
+-	return -ENOENT;
+-#else
+ 	static const u32 br_entry_size = sizeof(struct perf_branch_entry);
+ 	struct perf_branch_stack *br_stack = ctx->data->br_stack;
+ 	u32 to_copy;
+@@ -1411,7 +1408,7 @@ BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, ctx,
+ 		return -EINVAL;
+ 
+ 	if (unlikely(!br_stack))
+-		return -EINVAL;
++		return -ENOENT;
+ 
+ 	if (flags & BPF_F_GET_BRANCH_RECORDS_SIZE)
+ 		return br_stack->nr * br_entry_size;
+@@ -1423,7 +1420,6 @@ BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, ctx,
+ 	memcpy(buf, br_stack->entries, to_copy);
+ 
+ 	return to_copy;
+-#endif
+ }
+ 
+ static const struct bpf_func_proto bpf_read_branch_records_proto = {
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora
-Forum, a Linux Foundation Collaborative Project
+2.27.0
+

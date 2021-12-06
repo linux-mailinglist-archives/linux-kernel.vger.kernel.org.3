@@ -2,150 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B461469FC5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 093A346A026
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:56:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441902AbhLFPvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:51:50 -0500
-Received: from mga17.intel.com ([192.55.52.151]:62060 "EHLO mga17.intel.com"
+        id S1386973AbhLFP6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:58:39 -0500
+Received: from mga03.intel.com ([134.134.136.65]:6476 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356036AbhLFPix (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:38:53 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="218022776"
+        id S1389662AbhLFPkr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 10:40:47 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="237279939"
 X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="218022776"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 07:35:23 -0800
+   d="scan'208";a="237279939"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 07:37:14 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="579403964"
-Received: from svelidan-mobl.amr.corp.intel.com (HELO [10.209.112.71]) ([10.209.112.71])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 07:35:21 -0800
-Subject: Re: [PATCH v2] x86: Skip WBINVD instruction for VM guest
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
-References: <YZPbQVwWOJCrAH78@zn.tnic>
- <20211119040330.4013045-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <87pmqpjcef.ffs@tglx> <20211202222109.pcsgm2jska3obvmx@black.fi.intel.com>
- <87lf126010.ffs@tglx> <20211203234915.jw6kdd2qnfrionch@black.fi.intel.com>
- <2519e6b6-4f74-e2f8-c428-0fceb0e16472@intel.com>
- <20211204005427.ccinxlwwab3jsuct@black.fi.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <5bc40889-445d-5cac-3396-d39d53ee92c7@intel.com>
-Date:   Mon, 6 Dec 2021 07:35:18 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+   d="scan'208";a="611276566"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 06 Dec 2021 07:37:11 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1muG3C-000LPW-8u; Mon, 06 Dec 2021 15:37:10 +0000
+Date:   Mon, 6 Dec 2021 23:36:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     kbuild-all@lists.01.org, gregkh <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, quic_psodagud@quicinc.com
+Subject: Re: [PATCHv5 1/4] arm64: io: Use asm-generic high level MMIO
+ accessors
+Message-ID: <202112062304.8qIQUQyF-lkp@intel.com>
+References: <cc649faf144fce439b7a341303b6cc73ac285949.1638275062.git.quic_saipraka@quicinc.com>
 MIME-Version: 1.0
-In-Reply-To: <20211204005427.ccinxlwwab3jsuct@black.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cc649faf144fce439b7a341303b6cc73ac285949.1638275062.git.quic_saipraka@quicinc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/3/21 4:54 PM, Kirill A. Shutemov wrote:
-> On Fri, Dec 03, 2021 at 04:20:34PM -0800, Dave Hansen wrote:
->>> TDX doesn't support these S- and C-states. TDX is only supports S0 and S5.
->>
->> This makes me a bit nervous.  Is this "the first TDX implementation
->> supports..." or "the TDX architecture *prohibits* supporting S1 (or
->> whatever"?
-> 
-> TDX Virtual Firmware Design Guide only states that "ACPI S3 (not supported
-> by TDX guests)".
-> 
-> Kernel reports in dmesg "ACPI: PM: (supports S0 S5)".
+Hi Sai,
 
-Those describe the current firmware implementation, not a guarantee
-provided by the TDX architecture forever.
+Thank you for the patch! Perhaps something to improve:
 
-> But I don't see how any state beyond S0 and S5 make sense in TDX context.
-> Do you?
+[auto build test WARNING on arm64/for-next/core]
+[also build test WARNING on rostedt-trace/for-next arnd-asm-generic/master arm-perf/for-next/perf v5.16-rc4 next-20211206]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Do existing (non-TDX) VMs use anything other than S0 and S5?  If so, I'd
-say yes.
+url:    https://github.com/0day-ci/linux/commits/Sai-Prakash-Ranjan/tracing-rwmmio-arm64-Add-support-to-trace-register-reads-writes/20211206-163212
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+config: arm64-randconfig-r014-20211206 (https://download.01.org/0day-ci/archive/20211206/202112062304.8qIQUQyF-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/0775ecf0f452d6b76b161d009dab52c90270755a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Sai-Prakash-Ranjan/tracing-rwmmio-arm64-Add-support-to-trace-register-reads-writes/20211206-163212
+        git checkout 0775ecf0f452d6b76b161d009dab52c90270755a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/
 
->> I really think we need some kind of architecture guarantee.  Without
->> that, we risk breaking things if someone at our employer simply changes
->> their mind.
-> 
-> Guarantees are hard.
-> 
-> If somebody change their mind we will get unexpected #VE and crash.
-> I think it is acceptable way to handle unexpected change in confidential
-> computing environment.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Architectural guarantees are quite easy, actually.  They're just a
-contract that two parties agree to.  In this case, the contract would be
-that TDX firmware *PROMISES* not to enumerate support for additional
-sleep states over what the implementation does today.  If future
-firmware breaks that promise (and the kernel crashes) we get to come
-after them with torches and pitchforks to fix the firmware.
+All warnings (new ones prefixed by >>):
 
-The contract let's us do things in the OS like:
+   In file included from drivers/gpu/drm/meson/meson_viu.c:16:
+   drivers/gpu/drm/meson/meson_viu.c: In function 'meson_viu_init':
+>> drivers/gpu/drm/meson/meson_registers.h:1826:55: warning: conversion from 'long unsigned int' to 'u32' {aka 'unsigned int'} changes value from '18446744071814774785' to '2400190465' [-Woverflow]
+    1826 | #define         VIU_OSD_BLEND_REORDER(dest, src)      ((src) << (dest * 4))
+         |                                                       ^
+   drivers/gpu/drm/meson/meson_viu.c:472:32: note: in expansion of macro 'VIU_OSD_BLEND_REORDER'
+     472 |                 writel_relaxed(VIU_OSD_BLEND_REORDER(0, 1) |
+         |                                ^~~~~~~~~~~~~~~~~~~~~
 
-	WARN_ON(sleep_states[ACPI_STATE_S3]);
 
-We also don't need *formal* documentation of such things.  We really
-just need to have a chat.
+vim +1826 drivers/gpu/drm/meson/meson_registers.h
 
-It would be perfectly sufficient if we go bug Intel's TDX architecture
-folks and say, "Hey, Linux is going to crash if you ever implement any
-actual sleep states.  The current implementation is fine here, but is it
-OK if future implementations are restricted from doing this?"
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1824  
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1825  #define VIU_OSD_BLEND_CTRL 0x39b0
+147ae1cbaa18429 Julien Masson  2019-06-24 @1826  #define		VIU_OSD_BLEND_REORDER(dest, src)      ((src) << (dest * 4))
+147ae1cbaa18429 Julien Masson  2019-06-24  1827  #define		VIU_OSD_BLEND_DIN_EN(bits)            ((bits & 0xf) << 20)
+147ae1cbaa18429 Julien Masson  2019-06-24  1828  #define		VIU_OSD_BLEND1_DIN3_BYPASS_TO_DOUT1   BIT(24)
+147ae1cbaa18429 Julien Masson  2019-06-24  1829  #define		VIU_OSD_BLEND1_DOUT_BYPASS_TO_BLEND2  BIT(25)
+147ae1cbaa18429 Julien Masson  2019-06-24  1830  #define		VIU_OSD_BLEND_DIN0_BYPASS_TO_DOUT0    BIT(26)
+147ae1cbaa18429 Julien Masson  2019-06-24  1831  #define		VIU_OSD_BLEND_BLEN2_PREMULT_EN(input) ((input & 0x3) << 27)
+147ae1cbaa18429 Julien Masson  2019-06-24  1832  #define		VIU_OSD_BLEND_HOLD_LINES(lines)       ((lines & 0x7) << 29)
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1833  #define VIU_OSD_BLEND_CTRL1 0x39c0
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1834  #define VIU_OSD_BLEND_DIN0_SCOPE_H 0x39b1
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1835  #define VIU_OSD_BLEND_DIN0_SCOPE_V 0x39b2
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1836  #define VIU_OSD_BLEND_DIN1_SCOPE_H 0x39b3
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1837  #define VIU_OSD_BLEND_DIN1_SCOPE_V 0x39b4
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1838  #define VIU_OSD_BLEND_DIN2_SCOPE_H 0x39b5
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1839  #define VIU_OSD_BLEND_DIN2_SCOPE_V 0x39b6
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1840  #define VIU_OSD_BLEND_DIN3_SCOPE_H 0x39b7
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1841  #define VIU_OSD_BLEND_DIN3_SCOPE_V 0x39b8
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1842  #define VIU_OSD_BLEND_DUMMY_DATA0 0x39b9
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1843  #define VIU_OSD_BLEND_DUMMY_ALPHA 0x39ba
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1844  #define VIU_OSD_BLEND_BLEND0_SIZE 0x39bb
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1845  #define VIU_OSD_BLEND_BLEND1_SIZE 0x39bc
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1846  #define VIU_OSD_BLEND_RO_CURRENT_XY 0x39bf
+b93a66faeea9ddf Neil Armstrong 2019-03-25  1847  
 
-But, the trick is that we need a contract.  A contract requires a
-"meeting of the minds" first.
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

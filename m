@@ -2,114 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E6A46A9B0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AED1646A966
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350476AbhLFVTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:19:11 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:47644 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350771AbhLFVSo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:18:44 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BBF86CE1847;
-        Mon,  6 Dec 2021 21:15:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D78A9C341C1;
-        Mon,  6 Dec 2021 21:15:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638825312;
-        bh=OFVZkVdi1U58Sy2A1lkOM3n5NH/11bZ3bGHBsyzhAFk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EDmTwzSfodxz8zkgJNIwC9XK7/80kDgWTWc0w/PZxGC2GQEjmcjGnUMPJEQGtgZSg
-         vQ9wWQYYLA8o2r6dmQ4u0HfikiOBW/NtNBMwPZsAdz3K+q4IG38Ck2VyQvNVvVPOt+
-         9n9HdtKtxCaTTSt6WOSs8DHbmUlNeTQTyZBkTeQkf+fr3BCFXP5IySyBJKbpUWeiOW
-         8cPdxq/maYucj4uqQNBfXiNvfjFMpfJNrER1oac8tTkx979fK/oX6cvo3rZVYZQb/5
-         Ueqe4Yw7k0nNFHBAvZ/e1qzoQwWgSySZ5tAStAMeYjBDsj1WIjGKi4py0hbfBhnPEG
-         0rljRP2rvlgcg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jann Horn <jannh@google.com>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 24/24] fget: check that the fd still exists after getting a ref to it
-Date:   Mon,  6 Dec 2021 16:12:29 -0500
-Message-Id: <20211206211230.1660072-24-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211206211230.1660072-1-sashal@kernel.org>
-References: <20211206211230.1660072-1-sashal@kernel.org>
+        id S1350535AbhLFVRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:17:38 -0500
+Received: from mout.gmx.net ([212.227.15.18]:43815 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350451AbhLFVRR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 16:17:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1638825227;
+        bh=V0fUI45FiryQycNH/5CW5LYGUI3v4pzRgZyF9sz1Mqc=;
+        h=X-UI-Sender-Class:Date:From:Subject:To;
+        b=kg9sGV6X5Jlaeqb2IzV9w9EuRq9hFKY1nzDAPU2cJjJZ61w8WJACfGM8ECx4HKggj
+         xxtg2ddWXRbNUTHSb4ucm9fxyXWla9cceDKI5Zwh9q7HREGNU6yLj0nD2Fs1mTjYz4
+         cFePKxobsn3JWC5EMC0orDQXnLAVZzS/vJg8EnEc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.35.26]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1My32L-1mdbq13s0V-00zSeg for
+ <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 22:13:46 +0100
+Message-ID: <48190f69-169c-8e1f-cfdd-f8fe57dde084@gmx.de>
+Date:   Mon, 6 Dec 2021 22:13:46 +0100
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+Subject: Re: [PATCH 5.15 000/207] 5.15.7-rc1 review
+Content-Language: de-DE
+To:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:INRUZmbNbJXwCgBM3n8KO7ec/bsmIeVUQfE/BYziTRPnPxMArNe
+ lk8TYgmJ5E/BXIGQwsS1tw5On+jIjbUfcpAriBTYODPUQC1VVGoP8sNUrnaFv3HPGdR93ts
+ ncW0u02pP12A/Lc9hgy7p7p+CPF8wF+Hr98ROmDVV5o2yVbngIVT4smA9cxTeTFKrmYqyIX
+ oZ87uEgMv+j7bQkR5qJrQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LfbuRZMlybc=:PSpB6R2SRdSed3oE2SGPMT
+ 7eSNTe7G5fioKTbukd1w64Yw8mSIuI8St/BZLdC5ffmm1t9VwBc/TajLCTFohih/ZpIcjWiuf
+ GpGaXM+prxphBx5rMDROz6tzm4tuhdDHZp0WCsT5Syo8f2OneS1Kw4gAKmjh9Bc2VCmKsY/IA
+ LIwBisU07AVykoC7JBYX1OJYg+lWwXA9Af0hyuwUO1wyFFwCfXbOqVccOXBASL4lvf3JpvD3h
+ azlrxUl9CsZZfoTK0/WyYIZ8quHbFyo8Xcu9SW+pXFZXT9/2MJ01P/VB3e9iqqgTKOnxcvPLY
+ qUbFYxrD9XbmFdViTph3LZ2GZR2EZ4barGOwJQT0vp1gqOuhKSC7EX8AXZhSsZ+Nwp4Vu0KaC
+ 4GiwZq0AbRUmJfcN+JelN3thZaCBXxdX93HPIBqH7U44SmIUaye1232SkYV83fgMaiARn+xbz
+ aFf+m1h/yGQbjSg/U9C8eMBEumRPmQhi0IzlEUaVNGzz4p8WsTwwjORb0rt9e34zO39cs5+j6
+ FWoqktlgOaBoNLhYY2BPh7o7gcE1e3ltqqOIgczg+mmqcop2vKYImnOUY+5Sb/wOEMaYlDsKS
+ 6bxnVzTVAnzlMhBD4QKzWb1sKxHb87SBWC1gVxvY/Z2PzRfEm3roGuIxp/v8d2jmFDRV6+p1h
+ mYc7/dqTh0yHMn2ESX2bBP/XgdJu+DwwTS6Fja4XNEkx6qJfjaUhMhaS4U1uVs56DG5Qc5ICp
+ vu24MzRaUhHn112wdR5p0mgOrD2DqpNHIp8hFbf+09HYMviYKIJO4PnRugOC6TscuTSYmh/6u
+ i4uI30dne2VFIeOdjDlKx/D3NMMdFsV7dFJCrs3S8OTvYiCk3leGOrGlfHrNBk1QySb7LyHXB
+ fBqA2v3c/+4L0m3AQ+EU9Bu6xuBhW6PTwX3FP8Wa5mUCMwSWQywFjdnFrZiF4MJzqBwiEpJxi
+ DVAw5XUV6KrwSKXNsiNnuzMAdiwXda1Mss1I0+WyWYXffOm0C39pNjeenBZRXJvM4fLhWZ1ro
+ rOIm1K7kpkhA3BRRlm2WkeDP5UZvUTsGn5a6BXssdVPgKxlqQb3bP/cgZgw2f3J/zKJOGtAam
+ NotBctUCZ7iu7g=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+...
+5.15.7-rc1 successfully compiled, booted and suspended on an x86_64
+(Intel i5-11400, Fedora 35)
 
-[ Upstream commit 054aa8d439b9185d4f5eb9a90282d1ce74772969 ]
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 
-Jann Horn points out that there is another possible race wrt Unix domain
-socket garbage collection, somewhat reminiscent of the one fixed in
-commit cbcf01128d0a ("af_unix: fix garbage collect vs MSG_PEEK").
-
-See the extended comment about the garbage collection requirements added
-to unix_peek_fds() by that commit for details.
-
-The race comes from how we can locklessly look up a file descriptor just
-as it is in the process of being closed, and with the right artificial
-timing (Jann added a few strategic 'mdelay(500)' calls to do that), the
-Unix domain socket garbage collector could see the reference count
-decrement of the close() happen before fget() took its reference to the
-file and the file was attached onto a new file descriptor.
-
-This is all (intentionally) correct on the 'struct file *' side, with
-RCU lookups and lockless reference counting very much part of the
-design.  Getting that reference count out of order isn't a problem per
-se.
-
-But the garbage collector can get confused by seeing this situation of
-having seen a file not having any remaining external references and then
-seeing it being attached to an fd.
-
-In commit cbcf01128d0a ("af_unix: fix garbage collect vs MSG_PEEK") the
-fix was to serialize the file descriptor install with the garbage
-collector by taking and releasing the unix_gc_lock.
-
-That's not really an option here, but since this all happens when we are
-in the process of looking up a file descriptor, we can instead simply
-just re-check that the file hasn't been closed in the meantime, and just
-re-do the lookup if we raced with a concurrent close() of the same file
-descriptor.
-
-Reported-and-tested-by: Jann Horn <jannh@google.com>
-Acked-by: Miklos Szeredi <mszeredi@redhat.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+thanks
 ---
- fs/file.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/fs/file.c b/fs/file.c
-index 8627dacfc4246..ad4a8bf3cf109 100644
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -858,6 +858,10 @@ static struct file *__fget_files(struct files_struct *files, unsigned int fd,
- 			file = NULL;
- 		else if (!get_file_rcu_many(file, refs))
- 			goto loop;
-+		else if (files_lookup_fd_raw(files, fd) != file) {
-+			fput_many(file, refs);
-+			goto loop;
-+		}
- 	}
- 	rcu_read_unlock();
- 
--- 
-2.33.0
-
+Ronald

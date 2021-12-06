@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD58469BCB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF210469A49
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357120AbhLFPSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:18:40 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59790 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349914AbhLFPMe (ORCPT
+        id S1345840AbhLFPHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:07:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346131AbhLFPFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:12:34 -0500
+        Mon, 6 Dec 2021 10:05:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B5EC07E5E8;
+        Mon,  6 Dec 2021 07:02:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5085612D3;
-        Mon,  6 Dec 2021 15:09:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C4BFC341C2;
-        Mon,  6 Dec 2021 15:09:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 665196131A;
+        Mon,  6 Dec 2021 15:02:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DB13C341C1;
+        Mon,  6 Dec 2021 15:02:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803345;
-        bh=LeXdkI8vu3E+9+7xwZO5HdPJUqC98URJNjGe+M8PCsk=;
+        s=korg; t=1638802943;
+        bh=JmHN/ViByUhV6sELxRZDoLVSdKPdsBnNZ0nZcecUuII=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZAjlcaXKmpiJjuXsgY0Serg1r60G3xredjJAuCQr3Eed7lggnOjcJebqSSFTSLS9U
-         YF20zyXtJgdSwOi9jF5gYqB2FQ1mC2QeYQvzF3FicjK9EC19jkSaSVS7pOcaDyjCAU
-         z4fcqzdxrvvWSkbRq0yQKuz5tMwMYfPrxqzfCueU=
+        b=DR7siznqy9FMi3EYBX7MXz9NyNk9gp0wYTWtXKxfWNlXmMuw5KC5gWoDWW1kABvOg
+         xJN9nPGNUK31ibpC+cyYePp5RJQFRdg4+e2kIcT0vu0xEFGYwuGp24vY8/eWVtkAtO
+         7sD8FtFxWWPuBMDAp0bLImAMs08wLeRJ/74Xr7RQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Manfred Spraul <manfred@colorfullife.com>,
-        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Andrei Vagin <avagin@gmail.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.19 01/48] shm: extend forced shm destroy to support objects from several IPC nses
+        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.9 35/62] xen/netfront: dont trust the backend response data blindly
 Date:   Mon,  6 Dec 2021 15:56:18 +0100
-Message-Id: <20211206145548.910217985@linuxfoundation.org>
+Message-Id: <20211206145550.402416464@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
-References: <20211206145548.859182340@linuxfoundation.org>
+In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
+References: <20211206145549.155163074@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -54,388 +49,236 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>
+From: Juergen Gross <jgross@suse.com>
 
-commit 85b6d24646e4125c591639841169baa98a2da503 upstream.
+commit a884daa61a7d91650987e855464526aef219590f upstream.
 
-Currently, the exit_shm() function not designed to work properly when
-task->sysvshm.shm_clist holds shm objects from different IPC namespaces.
+Today netfront will trust the backend to send only sane response data.
+In order to avoid privilege escalations or crashes in case of malicious
+backends verify the data to be within expected limits. Especially make
+sure that the response always references an outstanding request.
 
-This is a real pain when sysctl kernel.shm_rmid_forced = 1, because it
-leads to use-after-free (reproducer exists).
+Note that only the tx queue needs special id handling, as for the rx
+queue the id is equal to the index in the ring page.
 
-This is an attempt to fix the problem by extending exit_shm mechanism to
-handle shm's destroy from several IPC ns'es.
+Introduce a new indicator for the device whether it is broken and let
+the device stop working when it is set. Set this indicator in case the
+backend sets any weird data.
 
-To achieve that we do several things:
-
-1. add a namespace (non-refcounted) pointer to the struct shmid_kernel
-
-2. during new shm object creation (newseg()/shmget syscall) we
-   initialize this pointer by current task IPC ns
-
-3. exit_shm() fully reworked such that it traverses over all shp's in
-   task->sysvshm.shm_clist and gets IPC namespace not from current task
-   as it was before but from shp's object itself, then call
-   shm_destroy(shp, ns).
-
-Note: We need to be really careful here, because as it was said before
-(1), our pointer to IPC ns non-refcnt'ed.  To be on the safe side we
-using special helper get_ipc_ns_not_zero() which allows to get IPC ns
-refcounter only if IPC ns not in the "state of destruction".
-
-Q/A
-
-Q: Why can we access shp->ns memory using non-refcounted pointer?
-A: Because shp object lifetime is always shorther than IPC namespace
-   lifetime, so, if we get shp object from the task->sysvshm.shm_clist
-   while holding task_lock(task) nobody can steal our namespace.
-
-Q: Does this patch change semantics of unshare/setns/clone syscalls?
-A: No. It's just fixes non-covered case when process may leave IPC
-   namespace without getting task->sysvshm.shm_clist list cleaned up.
-
-Link: https://lkml.kernel.org/r/67bb03e5-f79c-1815-e2bf-949c67047418@colorfullife.com
-Link: https://lkml.kernel.org/r/20211109151501.4921-1-manfred@colorfullife.com
-Fixes: ab602f79915 ("shm: make exit_shm work proportional to task activity")
-Co-developed-by: Manfred Spraul <manfred@colorfullife.com>
-Signed-off-by: Manfred Spraul <manfred@colorfullife.com>
-Signed-off-by: Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>
-Cc: "Eric W. Biederman" <ebiederm@xmission.com>
-Cc: Davidlohr Bueso <dave@stgolabs.net>
-Cc: Greg KH <gregkh@linuxfoundation.org>
-Cc: Andrei Vagin <avagin@gmail.com>
-Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-Cc: Vasily Averin <vvs@virtuozzo.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-
 ---
- include/linux/ipc_namespace.h |   15 +++
- include/linux/sched/task.h    |    2 
- ipc/shm.c                     |  189 +++++++++++++++++++++++++++++++-----------
- 3 files changed, 159 insertions(+), 47 deletions(-)
+ drivers/net/xen-netfront.c |   80 ++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 75 insertions(+), 5 deletions(-)
 
---- a/include/linux/ipc_namespace.h
-+++ b/include/linux/ipc_namespace.h
-@@ -129,6 +129,16 @@ static inline struct ipc_namespace *get_
- 	return ns;
- }
+--- a/drivers/net/xen-netfront.c
++++ b/drivers/net/xen-netfront.c
+@@ -125,10 +125,12 @@ struct netfront_queue {
+ 	struct sk_buff *tx_skbs[NET_TX_RING_SIZE];
+ 	unsigned short tx_link[NET_TX_RING_SIZE];
+ #define TX_LINK_NONE 0xffff
++#define TX_PENDING   0xfffe
+ 	grant_ref_t gref_tx_head;
+ 	grant_ref_t grant_tx_ref[NET_TX_RING_SIZE];
+ 	struct page *grant_tx_page[NET_TX_RING_SIZE];
+ 	unsigned tx_skb_freelist;
++	unsigned int tx_pend_queue;
  
-+static inline struct ipc_namespace *get_ipc_ns_not_zero(struct ipc_namespace *ns)
-+{
-+	if (ns) {
-+		if (refcount_inc_not_zero(&ns->count))
-+			return ns;
-+	}
+ 	spinlock_t   rx_lock ____cacheline_aligned_in_smp;
+ 	struct xen_netif_rx_front_ring rx;
+@@ -154,6 +156,9 @@ struct netfront_info {
+ 	struct netfront_stats __percpu *rx_stats;
+ 	struct netfront_stats __percpu *tx_stats;
+ 
++	/* Is device behaving sane? */
++	bool broken;
 +
-+	return NULL;
-+}
-+
- extern void put_ipc_ns(struct ipc_namespace *ns);
- #else
- static inline struct ipc_namespace *copy_ipcs(unsigned long flags,
-@@ -144,6 +154,11 @@ static inline struct ipc_namespace *get_
- {
- 	return ns;
- }
-+
-+static inline struct ipc_namespace *get_ipc_ns_not_zero(struct ipc_namespace *ns)
-+{
-+	return ns;
-+}
+ 	atomic_t rx_gso_checksum_fixup;
+ };
  
- static inline void put_ipc_ns(struct ipc_namespace *ns)
- {
---- a/include/linux/sched/task.h
-+++ b/include/linux/sched/task.h
-@@ -136,7 +136,7 @@ static inline struct vm_struct *task_sta
-  * Protects ->fs, ->files, ->mm, ->group_info, ->comm, keyring
-  * subscriptions and synchronises with wait4().  Also used in procfs.  Also
-  * pins the final release of task.io_context.  Also protects ->cpuset and
-- * ->cgroup.subsys[]. And ->vfork_done.
-+ * ->cgroup.subsys[]. And ->vfork_done. And ->sysvshm.shm_clist.
-  *
-  * Nests both inside and outside of read_lock(&tasklist_lock).
-  * It must not be nested with write_lock_irq(&tasklist_lock),
---- a/ipc/shm.c
-+++ b/ipc/shm.c
-@@ -62,9 +62,18 @@ struct shmid_kernel /* private to the ke
- 	struct pid		*shm_lprid;
- 	struct user_struct	*mlock_user;
+@@ -338,7 +343,7 @@ static int xennet_open(struct net_device
+ 	unsigned int i = 0;
+ 	struct netfront_queue *queue = NULL;
  
--	/* The task created the shm object.  NULL if the task is dead. */
-+	/*
-+	 * The task created the shm object, for
-+	 * task_lock(shp->shm_creator)
-+	 */
- 	struct task_struct	*shm_creator;
--	struct list_head	shm_clist;	/* list by creator */
-+
-+	/*
-+	 * List by creator. task_lock(->shm_creator) required for read/write.
-+	 * If list_empty(), then the creator is dead already.
-+	 */
-+	struct list_head	shm_clist;
-+	struct ipc_namespace	*ns;
- } __randomize_layout;
+-	if (!np->queues)
++	if (!np->queues || np->broken)
+ 		return -ENODEV;
  
- /* shm_mode upper byte flags */
-@@ -115,6 +124,7 @@ static void do_shm_rmid(struct ipc_names
- 	struct shmid_kernel *shp;
+ 	for (i = 0; i < num_queues; ++i) {
+@@ -366,11 +371,17 @@ static void xennet_tx_buf_gc(struct netf
+ 	unsigned short id;
+ 	struct sk_buff *skb;
+ 	bool more_to_do;
++	const struct device *dev = &queue->info->netdev->dev;
  
- 	shp = container_of(ipcp, struct shmid_kernel, shm_perm);
-+	WARN_ON(ns != shp->ns);
+ 	BUG_ON(!netif_carrier_ok(queue->info->netdev));
  
- 	if (shp->shm_nattch) {
- 		shp->shm_perm.mode |= SHM_DEST;
-@@ -225,10 +235,43 @@ static void shm_rcu_free(struct rcu_head
- 	kvfree(shp);
- }
- 
--static inline void shm_rmid(struct ipc_namespace *ns, struct shmid_kernel *s)
-+/*
-+ * It has to be called with shp locked.
-+ * It must be called before ipc_rmid()
-+ */
-+static inline void shm_clist_rm(struct shmid_kernel *shp)
-+{
-+	struct task_struct *creator;
-+
-+	/* ensure that shm_creator does not disappear */
-+	rcu_read_lock();
-+
-+	/*
-+	 * A concurrent exit_shm may do a list_del_init() as well.
-+	 * Just do nothing if exit_shm already did the work
-+	 */
-+	if (!list_empty(&shp->shm_clist)) {
-+		/*
-+		 * shp->shm_creator is guaranteed to be valid *only*
-+		 * if shp->shm_clist is not empty.
-+		 */
-+		creator = shp->shm_creator;
-+
-+		task_lock(creator);
-+		/*
-+		 * list_del_init() is a nop if the entry was already removed
-+		 * from the list.
-+		 */
-+		list_del_init(&shp->shm_clist);
-+		task_unlock(creator);
-+	}
-+	rcu_read_unlock();
-+}
-+
-+static inline void shm_rmid(struct shmid_kernel *s)
- {
--	list_del(&s->shm_clist);
--	ipc_rmid(&shm_ids(ns), &s->shm_perm);
-+	shm_clist_rm(s);
-+	ipc_rmid(&shm_ids(s->ns), &s->shm_perm);
- }
- 
- 
-@@ -283,7 +326,7 @@ static void shm_destroy(struct ipc_names
- 	shm_file = shp->shm_file;
- 	shp->shm_file = NULL;
- 	ns->shm_tot -= (shp->shm_segsz + PAGE_SIZE - 1) >> PAGE_SHIFT;
--	shm_rmid(ns, shp);
-+	shm_rmid(shp);
- 	shm_unlock(shp);
- 	if (!is_file_hugepages(shm_file))
- 		shmem_lock(shm_file, 0, shp->mlock_user);
-@@ -306,10 +349,10 @@ static void shm_destroy(struct ipc_names
-  *
-  * 2) sysctl kernel.shm_rmid_forced is set to 1.
-  */
--static bool shm_may_destroy(struct ipc_namespace *ns, struct shmid_kernel *shp)
-+static bool shm_may_destroy(struct shmid_kernel *shp)
- {
- 	return (shp->shm_nattch == 0) &&
--	       (ns->shm_rmid_forced ||
-+	       (shp->ns->shm_rmid_forced ||
- 		(shp->shm_perm.mode & SHM_DEST));
- }
- 
-@@ -340,7 +383,7 @@ static void shm_close(struct vm_area_str
- 	ipc_update_pid(&shp->shm_lprid, task_tgid(current));
- 	shp->shm_dtim = ktime_get_real_seconds();
- 	shp->shm_nattch--;
--	if (shm_may_destroy(ns, shp))
-+	if (shm_may_destroy(shp))
- 		shm_destroy(ns, shp);
- 	else
- 		shm_unlock(shp);
-@@ -361,10 +404,10 @@ static int shm_try_destroy_orphaned(int
- 	 *
- 	 * As shp->* are changed under rwsem, it's safe to skip shp locking.
- 	 */
--	if (shp->shm_creator != NULL)
-+	if (!list_empty(&shp->shm_clist))
- 		return 0;
- 
--	if (shm_may_destroy(ns, shp)) {
-+	if (shm_may_destroy(shp)) {
- 		shm_lock_by_ptr(shp);
- 		shm_destroy(ns, shp);
- 	}
-@@ -382,48 +425,97 @@ void shm_destroy_orphaned(struct ipc_nam
- /* Locking assumes this will only be called with task == current */
- void exit_shm(struct task_struct *task)
- {
--	struct ipc_namespace *ns = task->nsproxy->ipc_ns;
--	struct shmid_kernel *shp, *n;
-+	for (;;) {
-+		struct shmid_kernel *shp;
-+		struct ipc_namespace *ns;
- 
--	if (list_empty(&task->sysvshm.shm_clist))
--		return;
-+		task_lock(task);
-+
-+		if (list_empty(&task->sysvshm.shm_clist)) {
-+			task_unlock(task);
-+			break;
+ 	do {
+ 		prod = queue->tx.sring->rsp_prod;
++		if (RING_RESPONSE_PROD_OVERFLOW(&queue->tx, prod)) {
++			dev_alert(dev, "Illegal number of responses %u\n",
++				  prod - queue->tx.rsp_cons);
++			goto err;
 +		}
-+
-+		shp = list_first_entry(&task->sysvshm.shm_clist, struct shmid_kernel,
-+				shm_clist);
+ 		rmb(); /* Ensure we see responses up to 'rp'. */
  
--	/*
--	 * If kernel.shm_rmid_forced is not set then only keep track of
--	 * which shmids are orphaned, so that a later set of the sysctl
--	 * can clean them up.
--	 */
--	if (!ns->shm_rmid_forced) {
--		down_read(&shm_ids(ns).rwsem);
--		list_for_each_entry(shp, &task->sysvshm.shm_clist, shm_clist)
--			shp->shm_creator = NULL;
- 		/*
--		 * Only under read lock but we are only called on current
--		 * so no entry on the list will be shared.
-+		 * 1) Get pointer to the ipc namespace. It is worth to say
-+		 * that this pointer is guaranteed to be valid because
-+		 * shp lifetime is always shorter than namespace lifetime
-+		 * in which shp lives.
-+		 * We taken task_lock it means that shp won't be freed.
- 		 */
--		list_del(&task->sysvshm.shm_clist);
--		up_read(&shm_ids(ns).rwsem);
--		return;
--	}
-+		ns = shp->ns;
+ 		for (cons = queue->tx.rsp_cons; cons != prod; cons++) {
+@@ -380,14 +391,27 @@ static void xennet_tx_buf_gc(struct netf
+ 			if (txrsp.status == XEN_NETIF_RSP_NULL)
+ 				continue;
  
--	/*
--	 * Destroy all already created segments, that were not yet mapped,
--	 * and mark any mapped as orphan to cover the sysctl toggling.
--	 * Destroy is skipped if shm_may_destroy() returns false.
--	 */
--	down_write(&shm_ids(ns).rwsem);
--	list_for_each_entry_safe(shp, n, &task->sysvshm.shm_clist, shm_clist) {
--		shp->shm_creator = NULL;
-+		/*
-+		 * 2) If kernel.shm_rmid_forced is not set then only keep track of
-+		 * which shmids are orphaned, so that a later set of the sysctl
-+		 * can clean them up.
-+		 */
-+		if (!ns->shm_rmid_forced)
-+			goto unlink_continue;
+-			id  = txrsp.id;
++			id = txrsp.id;
++			if (id >= RING_SIZE(&queue->tx)) {
++				dev_alert(dev,
++					  "Response has incorrect id (%u)\n",
++					  id);
++				goto err;
++			}
++			if (queue->tx_link[id] != TX_PENDING) {
++				dev_alert(dev,
++					  "Response for inactive request\n");
++				goto err;
++			}
++
++			queue->tx_link[id] = TX_LINK_NONE;
+ 			skb = queue->tx_skbs[id];
+ 			queue->tx_skbs[id] = NULL;
+ 			if (unlikely(gnttab_query_foreign_access(
+ 				queue->grant_tx_ref[id]) != 0)) {
+-				pr_alert("%s: warning -- grant still in use by backend domain\n",
+-					 __func__);
+-				BUG();
++				dev_alert(dev,
++					  "Grant still in use by backend domain\n");
++				goto err;
+ 			}
+ 			gnttab_end_foreign_access_ref(
+ 				queue->grant_tx_ref[id], GNTMAP_readonly);
+@@ -405,6 +429,12 @@ static void xennet_tx_buf_gc(struct netf
+ 	} while (more_to_do);
  
--		if (shm_may_destroy(ns, shp)) {
--			shm_lock_by_ptr(shp);
--			shm_destroy(ns, shp);
-+		/*
-+		 * 3) get a reference to the namespace.
-+		 *    The refcount could be already 0. If it is 0, then
-+		 *    the shm objects will be free by free_ipc_work().
-+		 */
-+		ns = get_ipc_ns_not_zero(ns);
-+		if (!ns) {
-+unlink_continue:
-+			list_del_init(&shp->shm_clist);
-+			task_unlock(task);
-+			continue;
- 		}
--	}
- 
--	/* Remove the list head from any segments still attached. */
--	list_del(&task->sysvshm.shm_clist);
--	up_write(&shm_ids(ns).rwsem);
-+		/*
-+		 * 4) get a reference to shp.
-+		 *   This cannot fail: shm_clist_rm() is called before
-+		 *   ipc_rmid(), thus the refcount cannot be 0.
-+		 */
-+		WARN_ON(!ipc_rcu_getref(&shp->shm_perm));
+ 	xennet_maybe_wake_tx(queue);
 +
-+		/*
-+		 * 5) unlink the shm segment from the list of segments
-+		 *    created by current.
-+		 *    This must be done last. After unlinking,
-+		 *    only the refcounts obtained above prevent IPC_RMID
-+		 *    from destroying the segment or the namespace.
-+		 */
-+		list_del_init(&shp->shm_clist);
++	return;
 +
-+		task_unlock(task);
-+
-+		/*
-+		 * 6) we have all references
-+		 *    Thus lock & if needed destroy shp.
-+		 */
-+		down_write(&shm_ids(ns).rwsem);
-+		shm_lock_by_ptr(shp);
-+		/*
-+		 * rcu_read_lock was implicitly taken in shm_lock_by_ptr, it's
-+		 * safe to call ipc_rcu_putref here
-+		 */
-+		ipc_rcu_putref(&shp->shm_perm, shm_rcu_free);
-+
-+		if (ipc_valid_object(&shp->shm_perm)) {
-+			if (shm_may_destroy(shp))
-+				shm_destroy(ns, shp);
-+			else
-+				shm_unlock(shp);
-+		} else {
-+			/*
-+			 * Someone else deleted the shp from namespace
-+			 * idr/kht while we have waited.
-+			 * Just unlock and continue.
-+			 */
-+			shm_unlock(shp);
-+		}
-+
-+		up_write(&shm_ids(ns).rwsem);
-+		put_ipc_ns(ns); /* paired with get_ipc_ns_not_zero */
-+	}
++ err:
++	queue->info->broken = true;
++	dev_alert(dev, "Disabled for further use\n");
  }
  
- static vm_fault_t shm_fault(struct vm_fault *vmf)
-@@ -680,7 +772,11 @@ static int newseg(struct ipc_namespace *
- 	if (error < 0)
- 		goto no_id;
+ struct xennet_gnttab_make_txreq {
+@@ -448,6 +478,12 @@ static void xennet_tx_setup_grant(unsign
  
-+	shp->ns = ns;
-+
-+	task_lock(current);
- 	list_add(&shp->shm_clist, &current->sysvshm.shm_clist);
-+	task_unlock(current);
+ 	*tx = info->tx_local;
  
- 	/*
- 	 * shmid gets reported as "inode#" in /proc/pid/maps.
-@@ -1549,7 +1645,8 @@ out_nattch:
- 	down_write(&shm_ids(ns).rwsem);
- 	shp = shm_lock(ns, shmid);
- 	shp->shm_nattch--;
--	if (shm_may_destroy(ns, shp))
++	/*
++	 * Put the request in the pending queue, it will be set to be pending
++	 * when the producer index is about to be raised.
++	 */
++	add_id_to_list(&queue->tx_pend_queue, queue->tx_link, id);
 +
-+	if (shm_may_destroy(shp))
- 		shm_destroy(ns, shp);
- 	else
- 		shm_unlock(shp);
+ 	info->tx = tx;
+ 	info->size += info->tx_local.size;
+ }
+@@ -540,6 +576,15 @@ static u16 xennet_select_queue(struct ne
+ 	return queue_idx;
+ }
+ 
++static void xennet_mark_tx_pending(struct netfront_queue *queue)
++{
++	unsigned int i;
++
++	while ((i = get_id_from_list(&queue->tx_pend_queue, queue->tx_link)) !=
++		TX_LINK_NONE)
++		queue->tx_link[i] = TX_PENDING;
++}
++
+ #define MAX_XEN_SKB_FRAGS (65536 / XEN_PAGE_SIZE + 1)
+ 
+ static int xennet_start_xmit(struct sk_buff *skb, struct net_device *dev)
+@@ -563,6 +608,8 @@ static int xennet_start_xmit(struct sk_b
+ 	/* Drop the packet if no queues are set up */
+ 	if (num_queues < 1)
+ 		goto drop;
++	if (unlikely(np->broken))
++		goto drop;
+ 	/* Determine which queue to transmit this SKB on */
+ 	queue_index = skb_get_queue_mapping(skb);
+ 	queue = &np->queues[queue_index];
+@@ -666,6 +713,8 @@ static int xennet_start_xmit(struct sk_b
+ 	/* First request has the packet length. */
+ 	first_tx->size = skb->len;
+ 
++	xennet_mark_tx_pending(queue);
++
+ 	RING_PUSH_REQUESTS_AND_CHECK_NOTIFY(&queue->tx, notify);
+ 	if (notify)
+ 		notify_remote_via_irq(queue->tx_irq);
+@@ -990,6 +1039,13 @@ static int xennet_poll(struct napi_struc
+ 	skb_queue_head_init(&tmpq);
+ 
+ 	rp = queue->rx.sring->rsp_prod;
++	if (RING_RESPONSE_PROD_OVERFLOW(&queue->rx, rp)) {
++		dev_alert(&dev->dev, "Illegal number of responses %u\n",
++			  rp - queue->rx.rsp_cons);
++		queue->info->broken = true;
++		spin_unlock(&queue->rx_lock);
++		return 0;
++	}
+ 	rmb(); /* Ensure we see queued responses up to 'rp'. */
+ 
+ 	i = queue->rx.rsp_cons;
+@@ -1230,6 +1286,9 @@ static irqreturn_t xennet_tx_interrupt(i
+ 	struct netfront_queue *queue = dev_id;
+ 	unsigned long flags;
+ 
++	if (queue->info->broken)
++		return IRQ_HANDLED;
++
+ 	spin_lock_irqsave(&queue->tx_lock, flags);
+ 	xennet_tx_buf_gc(queue);
+ 	spin_unlock_irqrestore(&queue->tx_lock, flags);
+@@ -1242,6 +1301,9 @@ static irqreturn_t xennet_rx_interrupt(i
+ 	struct netfront_queue *queue = dev_id;
+ 	struct net_device *dev = queue->info->netdev;
+ 
++	if (queue->info->broken)
++		return IRQ_HANDLED;
++
+ 	if (likely(netif_carrier_ok(dev) &&
+ 		   RING_HAS_UNCONSUMED_RESPONSES(&queue->rx)))
+ 		napi_schedule(&queue->napi);
+@@ -1263,6 +1325,10 @@ static void xennet_poll_controller(struc
+ 	struct netfront_info *info = netdev_priv(dev);
+ 	unsigned int num_queues = dev->real_num_tx_queues;
+ 	unsigned int i;
++
++	if (info->broken)
++		return;
++
+ 	for (i = 0; i < num_queues; ++i)
+ 		xennet_interrupt(0, &info->queues[i]);
+ }
+@@ -1633,6 +1699,7 @@ static int xennet_init_queue(struct netf
+ 
+ 	/* Initialise tx_skb_freelist as a free chain containing every entry. */
+ 	queue->tx_skb_freelist = 0;
++	queue->tx_pend_queue = TX_LINK_NONE;
+ 	for (i = 0; i < NET_TX_RING_SIZE; i++) {
+ 		queue->tx_link[i] = i + 1;
+ 		queue->grant_tx_ref[i] = GRANT_INVALID_REF;
+@@ -1848,6 +1915,9 @@ static int talk_to_netback(struct xenbus
+ 	if (info->queues)
+ 		xennet_destroy_queues(info);
+ 
++	/* For the case of a reconnect reset the "broken" indicator. */
++	info->broken = false;
++
+ 	err = xennet_create_queues(info, &num_queues);
+ 	if (err < 0) {
+ 		xenbus_dev_fatal(dev, err, "creating queues");
 
 

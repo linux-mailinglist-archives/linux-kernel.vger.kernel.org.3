@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1A8469C42
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:18:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C49469C38
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352148AbhLFPVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:21:43 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44496 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345552AbhLFPMT (ORCPT
+        id S1347821AbhLFPVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:21:16 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35368 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356431AbhLFPPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:12:19 -0500
+        Mon, 6 Dec 2021 10:15:30 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A907AB81120;
-        Mon,  6 Dec 2021 15:08:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D35E0C341C2;
-        Mon,  6 Dec 2021 15:08:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F230A61327;
+        Mon,  6 Dec 2021 15:12:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 133B0C341C1;
+        Mon,  6 Dec 2021 15:12:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803328;
-        bh=hkYVPCOtRSDvrOSVFXJeMhIBMG20cVaYecaZdJJwkG4=;
+        s=korg; t=1638803521;
+        bh=NxzRgyFnR3dc6cOCKeXO9Dht1Vb/nVABovmSyUNzP1Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SQwQjk6C8vInX5wsr0hJ/XMu4O3aa4Ad882CLWZGQVay2cBh3HCmSUCx8Bswy14Gd
-         ctI6ln5YdgXNUL0n9e1IdRZ0fmRint1ZC45rC0qJMk8K4+uwYADofNgK7trwQW2BtG
-         d2vqzp4X/lofI/AsrrYB60S0h7zrwVsMhLO7IRpw=
+        b=Ox4l1F/dYm+nEbqUGNwX6DQy5fx20gzIrCUeEGXfcdf6pUeufuAEkfgDppqcseGJH
+         UfcoZuhM4TeFwGISg5xisAjQJABlEaWfaoi173iYlXSy7bFYJysix7YLFbWfdYWrLf
+         tLdJCR4OX0a1BiM7lWPQJCwxpmo51V3KF/H2d5W8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lee Duncan <lduncan@suse.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org,
+        syzbot+e979d3597f48262cb4ee@syzkaller.appspotmail.com,
+        Wen Gu <guwen@linux.alibaba.com>,
+        Tony Lu <tonylu@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 078/106] scsi: iscsi: Unblock session then wake up error handler
+Subject: [PATCH 5.4 22/70] net/smc: Avoid warning of possible recursive locking
 Date:   Mon,  6 Dec 2021 15:56:26 +0100
-Message-Id: <20211206145558.188010981@linuxfoundation.org>
+Message-Id: <20211206145552.688510133@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
+References: <20211206145551.909846023@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,51 +49,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Christie <michael.christie@oracle.com>
+From: Wen Gu <guwen@linux.alibaba.com>
 
-[ Upstream commit a0c2f8b6709a9a4af175497ca65f93804f57b248 ]
+[ Upstream commit 7a61432dc81375be06b02f0061247d3efbdfce3a ]
 
-We can race where iscsi_session_recovery_timedout() has woken up the error
-handler thread and it's now setting the devices to offline, and
-session_recovery_timedout()'s call to scsi_target_unblock() is also trying
-to set the device's state to transport-offline. We can then get a mix of
-states.
+Possible recursive locking is detected by lockdep when SMC
+falls back to TCP. The corresponding warnings are as follows:
 
-For the case where we can't relogin we want the devices to be in
-transport-offline so when we have repaired the connection
-__iscsi_unblock_session() can set the state back to running.
+ ============================================
+ WARNING: possible recursive locking detected
+ 5.16.0-rc1+ #18 Tainted: G            E
+ --------------------------------------------
+ wrk/1391 is trying to acquire lock:
+ ffff975246c8e7d8 (&ei->socket.wq.wait){..-.}-{3:3}, at: smc_switch_to_fallback+0x109/0x250 [smc]
 
-Set the device state then call into libiscsi to wake up the error handler.
+ but task is already holding lock:
+ ffff975246c8f918 (&ei->socket.wq.wait){..-.}-{3:3}, at: smc_switch_to_fallback+0xfe/0x250 [smc]
 
-Link: https://lore.kernel.org/r/20211105221048.6541-2-michael.christie@oracle.com
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+ other info that might help us debug this:
+  Possible unsafe locking scenario:
+
+        CPU0
+        ----
+   lock(&ei->socket.wq.wait);
+   lock(&ei->socket.wq.wait);
+
+  *** DEADLOCK ***
+
+  May be due to missing lock nesting notation
+
+ 2 locks held by wrk/1391:
+  #0: ffff975246040130 (sk_lock-AF_SMC){+.+.}-{0:0}, at: smc_connect+0x43/0x150 [smc]
+  #1: ffff975246c8f918 (&ei->socket.wq.wait){..-.}-{3:3}, at: smc_switch_to_fallback+0xfe/0x250 [smc]
+
+ stack backtrace:
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x56/0x7b
+  __lock_acquire+0x951/0x11f0
+  lock_acquire+0x27a/0x320
+  ? smc_switch_to_fallback+0x109/0x250 [smc]
+  ? smc_switch_to_fallback+0xfe/0x250 [smc]
+  _raw_spin_lock_irq+0x3b/0x80
+  ? smc_switch_to_fallback+0x109/0x250 [smc]
+  smc_switch_to_fallback+0x109/0x250 [smc]
+  smc_connect_fallback+0xe/0x30 [smc]
+  __smc_connect+0xcf/0x1090 [smc]
+  ? mark_held_locks+0x61/0x80
+  ? __local_bh_enable_ip+0x77/0xe0
+  ? lockdep_hardirqs_on+0xbf/0x130
+  ? smc_connect+0x12a/0x150 [smc]
+  smc_connect+0x12a/0x150 [smc]
+  __sys_connect+0x8a/0xc0
+  ? syscall_enter_from_user_mode+0x20/0x70
+  __x64_sys_connect+0x16/0x20
+  do_syscall_64+0x34/0x90
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+The nested locking in smc_switch_to_fallback() is considered to
+possibly cause a deadlock because smc_wait->lock and clc_wait->lock
+are the same type of lock. But actually it is safe so far since
+there is no other place trying to obtain smc_wait->lock when
+clc_wait->lock is held. So the patch replaces spin_lock() with
+spin_lock_nested() to avoid false report by lockdep.
+
+Link: https://lkml.org/lkml/2021/11/19/962
+Fixes: 2153bd1e3d3d ("Transfer remaining wait queue entries during fallback")
+Reported-by: syzbot+e979d3597f48262cb4ee@syzkaller.appspotmail.com
+Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+Acked-by: Tony Lu <tonylu@linux.alibaba.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/scsi_transport_iscsi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/smc/af_smc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index d276d84c0f7a2..26c6f1b288013 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -1892,12 +1892,12 @@ static void session_recovery_timedout(struct work_struct *work)
- 	}
- 	spin_unlock_irqrestore(&session->lock, flags);
- 
--	if (session->transport->session_recovery_timedout)
--		session->transport->session_recovery_timedout(session);
--
- 	ISCSI_DBG_TRANS_SESSION(session, "Unblocking SCSI target\n");
- 	scsi_target_unblock(&session->dev, SDEV_TRANSPORT_OFFLINE);
- 	ISCSI_DBG_TRANS_SESSION(session, "Completed unblocking SCSI target\n");
-+
-+	if (session->transport->session_recovery_timedout)
-+		session->transport->session_recovery_timedout(session);
- }
- 
- static void __iscsi_unblock_session(struct work_struct *work)
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index 00d3787387172..fa3b20e5f4608 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -483,7 +483,7 @@ static void smc_switch_to_fallback(struct smc_sock *smc)
+ 		 * to clcsocket->wq during the fallback.
+ 		 */
+ 		spin_lock_irqsave(&smc_wait->lock, flags);
+-		spin_lock(&clc_wait->lock);
++		spin_lock_nested(&clc_wait->lock, SINGLE_DEPTH_NESTING);
+ 		list_splice_init(&smc_wait->head, &clc_wait->head);
+ 		spin_unlock(&clc_wait->lock);
+ 		spin_unlock_irqrestore(&smc_wait->lock, flags);
 -- 
 2.33.0
 

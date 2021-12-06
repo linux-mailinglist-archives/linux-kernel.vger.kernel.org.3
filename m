@@ -2,170 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D085746922A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0347046922E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240198AbhLFJTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 04:19:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44902 "EHLO
+        id S240307AbhLFJUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 04:20:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48895 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239396AbhLFJTY (ORCPT
+        by vger.kernel.org with ESMTP id S240231AbhLFJUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 04:19:24 -0500
+        Mon, 6 Dec 2021 04:20:06 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638782155;
+        s=mimecast20190719; t=1638782197;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=T9q7LeQhf5AWVhUvL8JVu2PpakFvFX7rnL+ohMu0p0I=;
-        b=XzNr5UnNfK2z3hN66mPsOjjE5YKrdQOjw7SBEpkW5nYf5IVeaA60lpXjfC8X5lDzmUGNmG
-        smff1jixDi5RHiXkIcbDZhO9BY8fhJnCj/1INi2Qu/JV7EVFvAWZWHILGSE8DePlSHv4Nc
-        QdPMu06Rj8lADAvCYxqLB3pEGeTO16s=
-Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
- [209.85.219.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=omnvk4amirR6snS+3OVKaK4TSRh28kc5RrA2CTCtYNY=;
+        b=ifalrbVMN4HBiBLjF1BJBEj0mnmejkIGRnt8jAO93/k3XpPNwOhS1ZzZND/FZ59aifsu+Z
+        JJePzXA9xn/QTFbZVrUVRABy0EuoWyAZB4KEGGGaAk2caHOp6ZQOWKxb35GODEY60kanlp
+        JQovguIBL/ZzlJcGoXO6wk1LSBWUQ4c=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-592-ZaWOt2IYMJqjdZVXygfc_w-1; Mon, 06 Dec 2021 04:15:52 -0500
-X-MC-Unique: ZaWOt2IYMJqjdZVXygfc_w-1
-Received: by mail-yb1-f197.google.com with SMTP id t1-20020a5b03c1000000b005f6ee3e97easo18476139ybp.16
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 01:15:52 -0800 (PST)
+ us-mta-100-ADQ3B0gQObKVj49wQmjgFQ-1; Mon, 06 Dec 2021 04:16:36 -0500
+X-MC-Unique: ADQ3B0gQObKVj49wQmjgFQ-1
+Received: by mail-ed1-f70.google.com with SMTP id c1-20020aa7c741000000b003e7bf1da4bcso7728754eds.21
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 01:16:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T9q7LeQhf5AWVhUvL8JVu2PpakFvFX7rnL+ohMu0p0I=;
-        b=e/6/7x8JKgcHodTVussfpxE+AdhIowlzWUyO0mRQfwo516rYU0Y/L5DbUhZbWLygTb
-         uEi+sLXXy0ocf1GCo1RRIvpgFC5ZBDrWPv38gWIv/VfAvrL/u4Zqn7b9rnqB6t4u9duG
-         QXEdYORL+dlR1dnUC67VaZFmTxWVFf8XUfO/ZTLOduZNfS9kT1LuekWsVH7k09ntydly
-         jiE+I4by8j2rbuH9ZIF1qiflBwXU/mkGviw0UpwA/LN1Fpj1a8XEMd1q2vN+13VtVdx/
-         1P2rGqg7dSbr8GHx+8hFqoa1Q9ef8UquzCrY/pWigDPeuqAdHOjpla7oAYAUdfnOIkoM
-         6fPw==
-X-Gm-Message-State: AOAM533fiqYUSn8fehAoMSNrjPBWcmVmaUqc6a/J6GIcFgqQlq85hC5p
-        rWKQ/7hgt++F2xcmYloURFpQjOWxcDeHWgNS2IIFe3F0a/BJ8SVxEdKoub55GGlMMu0xlmn/qUX
-        13SrI9X0hJnyVx9RnLaRlXkgrX2at32JG62ETzTcp
-X-Received: by 2002:a25:3b04:: with SMTP id i4mr39004986yba.767.1638782151904;
-        Mon, 06 Dec 2021 01:15:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJygOXN5DwxETcg+8zbuZINwEZOW6aA//EFeTffc5Z0ZA70SNru1sXcy/iQRJW6bMBWX+q1r447ibczC/XIWykY=
-X-Received: by 2002:a25:3b04:: with SMTP id i4mr39004938yba.767.1638782151340;
- Mon, 06 Dec 2021 01:15:51 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=omnvk4amirR6snS+3OVKaK4TSRh28kc5RrA2CTCtYNY=;
+        b=6EE4mgcYr+oBU6ZjhLB3+RPC6SzaH9B/8M63g2lZE0sjp8+ykLslMn1twzyEkLqsW8
+         de5LmGqcKTX8OJMtO1oGdSwrwz2Nu8oapaANyiiIwy6evLByKP17GGhHSt/rV3EDOC4t
+         1BsN62U1Ui7FB2On36Dj+f2tcDFTBk6IK8zQKsBBV4hq6leJ2s2JUNw+6Y9XeLtEQiem
+         iPbb+VToa12xpRekU/QBY86MPW3zhMtQCAuOZ1maJXfZQGIYcjiIqjcr1tseG1IZGePf
+         hayfJlmUPMTqLZEh7viFZr591nhrvvWUlK1K+uis2WSMC7iuRFaezM49UYuVk+keZYtn
+         ifiA==
+X-Gm-Message-State: AOAM530bw0Ntl5FNm8AwXo9qCwOpCMrfK+XFkAiM0lZfYg8ArftbNB67
+        dCc9AjhSqqbqWKSrGCeP800LsqGje3YfH5PwLcaexoL9H0VAyjPsBf0brZBQbr3is5SqMCjVHTZ
+        wVuCRIv8no4k3WsfsUd/Zzluw
+X-Received: by 2002:a17:906:1396:: with SMTP id f22mr44691651ejc.228.1638782195215;
+        Mon, 06 Dec 2021 01:16:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxpkbkgxEjWZu6PwmrAlS8vVtpyagyJw6++aX+jC3O0MpSgxXbB2soaoIOYF1YVg4TCkhz9nQ==
+X-Received: by 2002:a17:906:1396:: with SMTP id f22mr44691626ejc.228.1638782195019;
+        Mon, 06 Dec 2021 01:16:35 -0800 (PST)
+Received: from fedora (g-server-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id hq37sm6625546ejc.116.2021.12.06.01.16.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 01:16:34 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, jmattson@google.com,
+        Sean Christopherson <seanjc@google.com>
+Cc:     syzbot <syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com>,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        joro@8bytes.org, linux-kernel@vger.kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, seanjc@google.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        wanpengli@tencent.com, x86@kernel.org
+Subject: Re: [syzbot] WARNING in nested_vmx_vmexit
+In-Reply-To: <00000000000051f90e05d2664f1d@google.com>
+References: <00000000000051f90e05d2664f1d@google.com>
+Date:   Mon, 06 Dec 2021 10:16:33 +0100
+Message-ID: <87bl1u6qku.fsf@redhat.com>
 MIME-Version: 1.0
-References: <20211202033447.253596-1-bernard@vivo.com> <CAHC9VhR0bu-D2yjGkACMNxg34qA4Y75MjVbJpr8FQc=rfLu=pg@mail.gmail.com>
-In-Reply-To: <CAHC9VhR0bu-D2yjGkACMNxg34qA4Y75MjVbJpr8FQc=rfLu=pg@mail.gmail.com>
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-Date:   Mon, 6 Dec 2021 10:15:41 +0100
-Message-ID: <CAFqZXNvScVVconffdqAue-m5Ub119Pw+rdSZ2TXHt-BFeVa-GQ@mail.gmail.com>
-Subject: Re: [PATCH] security/selinux: fix potential memleak
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Bernard Zhao <bernard@vivo.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        SElinux list <selinux@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 4:12 AM Paul Moore <paul@paul-moore.com> wrote:
-> On Wed, Dec 1, 2021 at 10:35 PM Bernard Zhao <bernard@vivo.com> wrote:
-> >
-> > This patch try to fix potential memleak in function
-> > selinux_fs_context_dup`s error branch.
-> >
-> > Signed-off-by: Bernard Zhao <bernard@vivo.com>
-> > ---
-> >  security/selinux/hooks.c | 22 ++++++++++++++++++----
-> >  1 file changed, 18 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> > index 62d30c0a30c2..36d7fc373839 100644
-> > --- a/security/selinux/hooks.c
-> > +++ b/security/selinux/hooks.c
-> > @@ -2856,24 +2856,38 @@ static int selinux_fs_context_dup(struct fs_context *fc,
-> >         if (src->fscontext) {
-> >                 opts->fscontext = kstrdup(src->fscontext, GFP_KERNEL);
-> >                 if (!opts->fscontext)
-> > -                       return -ENOMEM;
-> > +                       goto err_fscontext;
-> >         }
-> >         if (src->context) {
-> >                 opts->context = kstrdup(src->context, GFP_KERNEL);
-> >                 if (!opts->context)
-> > -                       return -ENOMEM;
-> > +                       goto err_context;
-> >         }
-> >         if (src->rootcontext) {
-> >                 opts->rootcontext = kstrdup(src->rootcontext, GFP_KERNEL);
-> >                 if (!opts->rootcontext)
-> > -                       return -ENOMEM;
-> > +                       goto err_rootcontext;
-> >         }
-> >         if (src->defcontext) {
-> >                 opts->defcontext = kstrdup(src->defcontext, GFP_KERNEL);
-> >                 if (!opts->defcontext)
-> > -                       return -ENOMEM;
-> > +                       goto err_defcontext;
-> >         }
-> >         return 0;
-> > +
-> > +err_defcontext:
-> > +       if (src->rootcontext)
-> > +               kfree(opts->rootcontext);
-> > +err_rootcontext:
-> > +       if (src->context)
-> > +               kfree(opts->context);
-> > +err_context:
-> > +       if (src->fscontext)
-> > +               kfree(opts->fscontext);
-> > +err_fscontext:
-> > +       kfree(fc->security);
+syzbot <syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com> writes:
 
-Also here you need to be careful to not double-free fc->security.
-(Paul's pseudocode below already correctly resets it to NULL after
-freeing.)
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    5f58da2befa5 Merge tag 'drm-fixes-2021-12-03-1' of git://a..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14927309b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=e9ea28d2c3c2c389
+> dashboard link: https://syzkaller.appspot.com/bug?extid=f1d2136db9c80d4733e8
+> compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+>
+> Unfortunately, I don't have any reproducer for this issue yet.
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com
+>
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 21158 at arch/x86/kvm/vmx/nested.c:4548 nested_vmx_vmexit+0x16bd/0x17e0 arch/x86/kvm/vmx/nested.c:4547
+> Modules linked in:
+> CPU: 0 PID: 21158 Comm: syz-executor.1 Not tainted 5.16.0-rc3-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:nested_vmx_vmexit+0x16bd/0x17e0 arch/x86/kvm/vmx/nested.c:4547
 
-> > +
-> > +       return -ENOMEM;
-> >  }
+The comment above this WARN_ON_ONCE() says:
+
+4541)              /*
+4542)               * The only expected VM-instruction error is "VM entry with
+4543)               * invalid control field(s)." Anything else indicates a
+4544)               * problem with L0.  And we should never get here with a
+4545)               * VMFail of any type if early consistency checks are enabled.
+4546)               */
+4547)              WARN_ON_ONCE(vmcs_read32(VM_INSTRUCTION_ERROR) !=
+4548)                           VMXERR_ENTRY_INVALID_CONTROL_FIELD);
+
+which I think should still be valid and so the problem needs to be
+looked at L0 (GCE infrastructure). Sean, Jim, your call :-)
+
+> Code: df e8 17 88 a9 00 e9 b1 f7 ff ff 89 d9 80 e1 07 38 c1 0f 8c 51 eb ff ff 48 89 df e8 4d 87 a9 00 e9 44 eb ff ff e8 63 b3 5d 00 <0f> 0b e9 2e f8 ff ff e8 57 b3 5d 00 0f 0b e9 00 f1 ff ff 89 e9 80
+> RSP: 0018:ffffc9000439f6e8 EFLAGS: 00010293
+> RAX: ffffffff8126d4cd RBX: 0000000000000000 RCX: ffff888032290000
+> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000007
+> RBP: 0000000000000001 R08: ffffffff8126ccf0 R09: ffffed1003cd9808
+> R10: ffffed1003cd9808 R11: 0000000000000000 R12: ffff88801e6cc000
+> R13: ffff88802f96e000 R14: dffffc0000000000 R15: 1ffff11005f2dc5d
+> FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fb73aecedd8 CR3: 00000000143a4000 CR4: 00000000003526e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  vmx_leave_nested arch/x86/kvm/vmx/nested.c:6220 [inline]
+>  nested_vmx_free_vcpu+0x83/0xc0 arch/x86/kvm/vmx/nested.c:330
+>  vmx_free_vcpu+0x11f/0x2a0 arch/x86/kvm/vmx/vmx.c:6799
+>  kvm_arch_vcpu_destroy+0x6b/0x240 arch/x86/kvm/x86.c:10989
+>  kvm_vcpu_destroy+0x29/0x90 arch/x86/kvm/../../../virt/kvm/kvm_main.c:441
+>  kvm_free_vcpus arch/x86/kvm/x86.c:11426 [inline]
+>  kvm_arch_destroy_vm+0x3ef/0x6b0 arch/x86/kvm/x86.c:11545
+>  kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1189 [inline]
+>  kvm_put_kvm+0x751/0xe40 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1220
+>  kvm_vcpu_release+0x53/0x60 arch/x86/kvm/../../../virt/kvm/kvm_main.c:3489
+>  __fput+0x3fc/0x870 fs/file_table.c:280
+>  task_work_run+0x146/0x1c0 kernel/task_work.c:164
+>  exit_task_work include/linux/task_work.h:32 [inline]
+>  do_exit+0x705/0x24f0 kernel/exit.c:832
+>  do_group_exit+0x168/0x2d0 kernel/exit.c:929
+>  get_signal+0x1740/0x2120 kernel/signal.c:2852
+>  arch_do_signal_or_restart+0x9c/0x730 arch/x86/kernel/signal.c:868
+>  handle_signal_work kernel/entry/common.c:148 [inline]
+>  exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+>  exit_to_user_mode_prepare+0x191/0x220 kernel/entry/common.c:207
+>  __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+>  syscall_exit_to_user_mode+0x2e/0x70 kernel/entry/common.c:300
+>  do_syscall_64+0x53/0xd0 arch/x86/entry/common.c:86
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7f3388806b19
+> Code: Unable to access opcode bytes at RIP 0x7f3388806aef.
+> RSP: 002b:00007f338773a218 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+> RAX: fffffffffffffe00 RBX: 00007f338891a0e8 RCX: 00007f3388806b19
+> RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007f338891a0e8
+> RBP: 00007f338891a0e0 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f338891a0ec
+> R13: 00007fffbe0e838f R14: 00007f338773a300 R15: 0000000000022000
+>  </TASK>
 >
-> Thanks for catching this a providing a patch, however I think the
-> memory cleanup can be made simpler, see the pseudo code below:
 >
-> static int selinux_fs_context_dup(...)
-> {
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
 >
->   fc->security = kzalloc(...);
->   if (!fc->security)
->     return -ENOMEM;
->
->   opts = fc->security;
->
->   if (src->fscontext) {
->     opts->fscontext = kstrdup(...);
->     if (!opts->fscontext)
->       goto err;
->   }
->
->   /* ... */
->
->   return 0;
->
->   err:
->     kfree(opts->fscontext);
->     kfree(opts->context);
->     kfree(opts->rootcontext);
->     kfree(opts->defcontext);
->     kfree(opts);
->     fc->security = NULL;
->     return -ENOMEM;
-> }
->
-> --
-> paul moore
-> www.paul-moore.com
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 >
 
---
-Ondrej Mosnacek
-Software Engineer, Linux Security - SELinux kernel
-Red Hat, Inc.
+-- 
+Vitaly
 

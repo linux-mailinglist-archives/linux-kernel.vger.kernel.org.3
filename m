@@ -2,206 +2,435 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 371EE4696B1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C114696BB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244249AbhLFNW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 08:22:26 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:54938 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244226AbhLFNWN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 08:22:13 -0500
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B6DDmFA030765;
-        Mon, 6 Dec 2021 13:18:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : content-transfer-encoding :
- mime-version; s=corp-2021-07-09;
- bh=C9ZlUJuuZgcHwp7RtnIjHY0bxAcdxg+kIu+v5B4uzmE=;
- b=Wm5vwRpBeQMsAv5uHWhytozBFNgJfiWD7vBbJRMqeLyZJHHGzs4HvDlbab11j0djtXHQ
- UcDZtK+wx4/Vcg7KfLwmlwswJqEykMMcq57KxtHQsKF1VCKsYIUqRNx00PhwH9BVKg7O
- zx25NqMYpjgoPhH7T452FsSBABMHVKpxn5m0l/hjYx/FlhpYeh/njJIL3SPBdiIEcX3C
- sqGoUiueD09Eo8Zh6smS+7/iSyO0LdgxkB59hhvA7XgRfgmvA/uLB3Jvvi2u6LnGpoH5
- iBYWl8x/uwiHTrnE9ouBCafAjLqD9tgiCElbn8/WQK9fbCXLZvnzT6hz3JFcSQaYaNQ9 Hw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cscwc9wf8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 06 Dec 2021 13:18:33 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B6DGcxk009200;
-        Mon, 6 Dec 2021 13:18:31 GMT
-Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2040.outbound.protection.outlook.com [104.47.73.40])
-        by userp3020.oracle.com with ESMTP id 3cr1sm166u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 06 Dec 2021 13:18:31 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mpaiZhpu0KYFvgkdy7zpkL+f3ayK73egA9uvYbY8xLadmpnbbn0AA7UIAGviYvjtqkW+mkoe/Zi8lnSm7k+9M74dy/WeRBSPEFCahAJAfHShA6qma448JrCO/DJBOl7mQOryBq7oZKtG2b8BZKkTBmSSiQm44sx4XrVuqRDOe7rzObeqyeZ1F0i3QdAeGqcjpeqSLkuYhlGtE3GdeHzQMZZUlAC7yHcCN06Js+H5RCWVs8oZCvdISIpjBjK6Vi7db/9KF9HZmaXVQI8aUszMO0Looc7qwh0uzryZQqXGU+1m37GLKkogsbwJdzzunePQiwjFIbZwoE76DVj1pplPqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C9ZlUJuuZgcHwp7RtnIjHY0bxAcdxg+kIu+v5B4uzmE=;
- b=lZDfOUuYFL/636mbEdeQYRA0uVCMBFxH4e7Vxjvkv3SVzXVq+iniXA46Gl3PiYLQbUWEu8VCKz1tVEmLZ9VWaZf2xWHlQpj84BY2VgFOOhRaet58xJBpD0QCX0AK3lpc4DQiOWuBNof+RyEKHHU2HKFmEN29R4o+j9GxkH4Q9WCAMB3GFH5w12hDUmKIYm7PYZ8B/0n0wQ3Z/L4TPfGmCksV95288TJdsjfhlsYpV4wU2HA8MRkNeg+Ygq0CpV6vhJiBV8Xr2XpwLoyu0griOq+RnWYDJbfkX9LkOfEp3edFG+L4YdJGd098qbpVEO6K2lS5251J0eQ7XS/6juViRA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C9ZlUJuuZgcHwp7RtnIjHY0bxAcdxg+kIu+v5B4uzmE=;
- b=pGwtL2WJ80kqEwgI0CI33zjN4QUy/g+ZRmOZdFv1uJCayLYicVobAdtuGIzjc2Qr+FrDDbkO3V0gfFCmMDpI8JA4+fF3Ntgw3qSsBeXcJxj38d5v5MVPJ9bHtk2pzWk23IQn4730ez9PCjST6aFWZRIcKhWZiylAVKZiSdQBMpE=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by MWHPR1001MB2159.namprd10.prod.outlook.com
- (2603:10b6:301:2c::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Mon, 6 Dec
- 2021 13:18:29 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::7194:c377:36cc:d9f0]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::7194:c377:36cc:d9f0%6]) with mapi id 15.20.4755.022; Mon, 6 Dec 2021
- 13:18:29 +0000
-Date:   Mon, 6 Dec 2021 16:18:10 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     kbuild@lists.01.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     lkp@intel.com, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: drivers/mtd/parsers/ofpart_bcm4908.c:41
- bcm4908_partitions_fw_offset() warn: should 'offset << 10' be a 64 bit type?
-Message-ID: <202112040342.AvFc4SDJ-lkp@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0033.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4d::14)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        id S244252AbhLFNWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 08:22:38 -0500
+Received: from mga01.intel.com ([192.55.52.88]:41880 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244270AbhLFNWe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 08:22:34 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="261344034"
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="261344034"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 05:19:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
+   d="scan'208";a="579370408"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 06 Dec 2021 05:18:54 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 138A5144; Mon,  6 Dec 2021 15:18:59 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Baruch Siach <baruch@tkos.co.il>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Tony Lindgren <tony@atomide.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        Thierry Reding <treding@nvidia.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-power@fi.rohmeurope.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-pwm@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-unisoc@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-tegra@vger.kernel.org
+Cc:     Ray Jui <rjui@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Keerthy <j-keerthy@ti.com>, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Subject: [PATCH v2 1/3] gpio: Get rid of duplicate of_node assignment in the drivers
+Date:   Mon,  6 Dec 2021 15:18:50 +0200
+Message-Id: <20211206131852.74746-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Received: from kadam (102.222.70.114) by JNAP275CA0033.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4d::14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.17 via Frontend Transport; Mon, 6 Dec 2021 13:18:24 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2da991f6-1d62-440e-becf-08d9b8bae507
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2159:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR1001MB2159AA9CF22CA9368B08A3F18E6D9@MWHPR1001MB2159.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:37;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: H/qq7BAI5BAPzV09Keu1H9fjgFXV7jQVIKy6icLJ6rt0ORNTVv05LwWFFJhNoOP4KOOLdoIypoXVQQglcJh44h9F4cBQUpbshCTXw4ifLHy8zHOfG52Bt3irIwVpiZPkOdE1LxAai9SManAy485i6yjO0KHokDp+/ywqEQvFYmwiI2zLDBGfEq8PIe8lfcb3Caww7G5FXqugMXVWs0sC/C5Iz6crwuov/mBuoirUzPIc2Zmjk2qVJyvqUoneEWTcawGkH6fmJQzc1GsACxMBW5Peq9mIAk0KbPuU860UvSCsw6rPkiWVPddgKxVW2SfnJRaM4XQLWcuOMmjM7G2Vv+ph/0d1qKpVSfolRL1+Sd0CL8wrlUZQM+mMsd/PLOGTDpxB6MLJVmuyxJdgF3oPaq7q/xr+4FQRk4+yFq4K+pI5m9Sgy7dB9yGGBd/VTRKaAnup6M+qNoZ1eGdkegJH7Ow4lVGE1UmLnTSZYgYi2bDHTayE5Wc2V12j+dlPzImOZavv5gPEYt5DxIUj6lDV3j5YigrKP5DO8zeOmgzRvXtq4L5k8WkEL9OWXPEs0jrUUOvSoxr83ESE9onLlUaCFCya4kuh1TOtipmGwYrMMvNnAZqEVcZ8uA1hsCdB1BGiBoNRxh4C1/eccrgHuvVZ8pyZwjgc2hmTcvLRKfeTXOitrCG9N3HBdXeszRewDxPARDcJR+Az9LR+hrPMZnCijftVcBt08L2rEuKFRrwucQoguG9jDHLsuoeh/6gyXivDj0VMTL8I05xAeV2XChxfPzrq+UGFvMfDiVWmW0fpx5UaywgcJCwhPmsUKYpRKvIp2Ehymxma8YtamZGXSIYkaw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(5660300002)(6486002)(83380400001)(966005)(508600001)(66574015)(316002)(6916009)(956004)(4326008)(6496006)(66556008)(9686003)(36756003)(2906002)(186003)(8936002)(86362001)(26005)(8676002)(44832011)(38350700002)(52116002)(6666004)(66476007)(1076003)(66946007)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eUVmd2lzak96alNZeHI4Wm8yM3ZpclF3WWxFLzlZeU1TRjIxcER2R1VFNVpF?=
- =?utf-8?B?dVhDazJWeENKRytLVElQUXBHTEhyc2VwaTNDNXRVRERzcjhDZWFJNGZGbmU3?=
- =?utf-8?B?Y2lMN1hPQmFITWo3ZlBPTWY1bFJIZzgyV1RnQlp2Zk51NUhOMVdTNlBzRFlO?=
- =?utf-8?B?d1N0dlhHbzR5RGpqT1FVUElnQ1k4cmdvVG95N3p0RElDVFVHOHpzdTFwcUlD?=
- =?utf-8?B?OHVCb1doVUdaRWtycmluU2ovMng2ZndFcUhRc0hUVms4SWpTMkJVdXNFVlhQ?=
- =?utf-8?B?TnF6STZuSmx4ejRzRzJuVm9KUm9vRmN3NDlpRkFsYVhuSnlqbGl2d1M5aFM0?=
- =?utf-8?B?WHZyODVPam56UnM4MFQ4VWNVYTZIVVlGOVhRakU1RVR4RHd5QjdXZ1NxbWds?=
- =?utf-8?B?VEFWdnRBZFEwcG4rZExCRzFKdis3YVB2RS96eUNUU2txLzZWekhxRnRjZ3Qw?=
- =?utf-8?B?M3FPdDZicng0QlIzb3FiVzJrZHlCRm5oZ2NhSmRGZkZjSlRxRkUyYTBIOVRm?=
- =?utf-8?B?eVBPVUZVZGRwcFZaclFVbkVpZGNpdWExWTZTNWMxbUZHMENnNHFnc055dXZZ?=
- =?utf-8?B?T20wRHErNmVWUUV4VjlKMHFhZkwvRXRUQmhrNjR6RjZoRkdFRWwydklyZEJS?=
- =?utf-8?B?bHVxemcwM3BCRzR6b0pZNjJCek82UVdhRGZUSm5kR2JWeDBLWmZmNzhzdlZr?=
- =?utf-8?B?dmV4cy9qYmlDZ1lHZHFZVnl3N2l3c3F3cHMvcE54U01nTEM5M2NoUU9UWEd0?=
- =?utf-8?B?WTdZMUw0cHdCSFlKUHR2dWYrTzZ3M0NFRlJCMmQwaUNWM28rMHgya1RpOTk5?=
- =?utf-8?B?cUdRUGlOeHAzV3NBMWZOWUdvblZiYkM3UTFVQ0FIdTYrWmR5bjNwakpVTnBY?=
- =?utf-8?B?SXhWRWQwVlo0Z3JpQ3RoZUUxdDhxbWIxNC9CNTFJNjBHb0dpUGVjdWdWZDFV?=
- =?utf-8?B?amZ1WHhNeWJ6VGlBVCswenA4andTNG00U0t3M0dNR09LaVZJNXVTTm5vM0tx?=
- =?utf-8?B?SjdXT2poVVdjQlFxTUZoSjBoZ3lMNHhmcEVtZE1ZZ2dlZHAzMWh2djVteEMx?=
- =?utf-8?B?N2ZUcnNUamdIUkU3ZWp0bi8xbFlINkQ4cnQvZVFmcjdrNGJaN05aTXUzMW9O?=
- =?utf-8?B?UXRrU1RHejdZbFh6QjdoSEllTi80V2VCYW8vNmRiS3U0eWdDQmF3TVIzdEdO?=
- =?utf-8?B?ZUZxaVI3Nm9UN1ZMaWN1NGVzbmMzM2pvSzdnYXE3QzNCdk9pTmtBNXJWZlNC?=
- =?utf-8?B?UE1YSnU2MWdhLzR1N2VYR1h3cmowUktucDluT0VmNzRUMmlhUUJVZ0k3RThO?=
- =?utf-8?B?ei9BNFBmUEtoVTJtOFp3bHZaNHkvUm5XVFJUcFZDWFpxRnpDdEUrczR6OUZ0?=
- =?utf-8?B?MmJ3VnNheHNwZFhWcU5LZTYzaFhVcjlReksrc1RYUW41SXM1NTdzdmlKSDVs?=
- =?utf-8?B?WFgrL2JxRG1iZkMxUFVKQWE2ZlprNDllcWY0TXhEaFYwL2dyRE02K3VzNitu?=
- =?utf-8?B?M09wa3hLNGxBa3ViUXl3UzVZdC8rOWloNjhZb1lvN2ZTb1ZjYkZ2TVRWcDhm?=
- =?utf-8?B?aVYvdkpVbUJMZXJlZTFOYlNkK2xLK1pmYk0vN3FqU3drcHZYa0FyZVRmWGJl?=
- =?utf-8?B?ck94d0xWMWI1TkNHeDkrRTA3azMvU2cyaVZWMURjVUI5R1FGdjRRd2dwVzFX?=
- =?utf-8?B?VG8vRVlhck81SG0yNTM0b3BEckdvWkNWdC81bEo3b3QzeVo4bGliU0Z6bkFi?=
- =?utf-8?B?QUttM2hVd0F2QjVnOUtZMTBidk1XTWttK2VuZi85Nm13ZTZzNlUzcGR1OHRP?=
- =?utf-8?B?cXM0OUdkT0dJVlVTYmNoOUI2Zmx1bTJvOXJIcndZNldjVVlvKy9LdWhNK1JI?=
- =?utf-8?B?UGFUQjhMMmJKM3Nla3owaDhsQ01LS3dtempxendkR2JEYk1OSlNLaGNLdG14?=
- =?utf-8?B?aUR4Zm5HQmJUZGNvYWx0QTc5WDQwbzRBU0ZBNk1kMjl5MVQ1S1hqaFRoV2hE?=
- =?utf-8?B?Qmc5MXBrNzA1ZFlmYzRKcm1Obm04OTRIa2k2eTRIbkl3ZzFPNWxmT3FFZGxI?=
- =?utf-8?B?TUFJZ0ExazdiakwyRTdRUUkyQS8xK2d6dldhTHdkSlBrYmhkYnR2Q0dzenRD?=
- =?utf-8?B?M1laMjYyZVpYZHI3TDg3NjcyenVHSUpVQ1JlTUlzQVBrT0IwVzFlbWVsVGFJ?=
- =?utf-8?B?YVU3UjIzbUkvMmVka3BRQndLVitGZm9CNExXQlVPREVsMDZaTEFHRDNiaUl0?=
- =?utf-8?B?bEQ3L0ZGQTIxcjBaK1VYN0RXdFZBPT0=?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2da991f6-1d62-440e-becf-08d9b8bae507
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2021 13:18:29.7032
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qEw3b7mm77Bu51FX6aTv+NXZ/MNM/ypn0bTlWm++U5fxAFpj4VUjVTpsLnIhz0aiwXdvZ8nVpz05cTyGGwuBMwOBlEwXQbGTZX55Ym8ht7U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2159
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10189 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 spamscore=0
- phishscore=0 bulkscore=0 suspectscore=0 malwarescore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112060082
-X-Proofpoint-ORIG-GUID: IGSDf8gVWHLWXR1ZgXhFy2Qb7BxNzYc1
-X-Proofpoint-GUID: IGSDf8gVWHLWXR1ZgXhFy2Qb7BxNzYc1
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5f58da2befa58edf3a70b91ed87ed9bf77f1e70e
-commit: bb17230c61a6424b622e92006ec52ba23aa5a967 mtd: parsers: ofpart: support BCM4908 fixed partitions
-date:   9 months ago
-config: nios2-randconfig-m031-20211202 (https://download.01.org/0day-ci/archive/20211204/202112040342.AvFc4SDJ-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.2.0
+GPIO library does copy the of_node from the parent device of
+the GPIO chip, there is no need to repeat this in the individual
+drivers. Remove these assignment all at once.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+For the details one may look into the of_gpio_dev_init() implementation.
 
-smatch warnings:
-drivers/mtd/parsers/ofpart_bcm4908.c:41 bcm4908_partitions_fw_offset() warn: should 'offset << 10' be a 64 bit type?
+While at it, remove duplicate parent device assignment where it is the case.
 
-vim +41 drivers/mtd/parsers/ofpart_bcm4908.c
-
-bb17230c61a642 Rafał Miłecki 2021-03-01  17  static long long bcm4908_partitions_fw_offset(void)
-                                                    ^^^^^^^^^
-This is long long.
-
-bb17230c61a642 Rafał Miłecki 2021-03-01  18  {
-bb17230c61a642 Rafał Miłecki 2021-03-01  19  	struct device_node *root;
-bb17230c61a642 Rafał Miłecki 2021-03-01  20  	struct property *prop;
-bb17230c61a642 Rafał Miłecki 2021-03-01  21  	const char *s;
-bb17230c61a642 Rafał Miłecki 2021-03-01  22  
-bb17230c61a642 Rafał Miłecki 2021-03-01  23  	root = of_find_node_by_path("/");
-bb17230c61a642 Rafał Miłecki 2021-03-01  24  	if (!root)
-bb17230c61a642 Rafał Miłecki 2021-03-01  25  		return -ENOENT;
-bb17230c61a642 Rafał Miłecki 2021-03-01  26  
-bb17230c61a642 Rafał Miłecki 2021-03-01  27  	of_property_for_each_string(root, "brcm_blparms", prop, s) {
-bb17230c61a642 Rafał Miłecki 2021-03-01  28  		size_t len = strlen(BLPARAMS_FW_OFFSET);
-bb17230c61a642 Rafał Miłecki 2021-03-01  29  		unsigned long offset;
-bb17230c61a642 Rafał Miłecki 2021-03-01  30  		int err;
-bb17230c61a642 Rafał Miłecki 2021-03-01  31  
-bb17230c61a642 Rafał Miłecki 2021-03-01  32  		if (strncmp(s, BLPARAMS_FW_OFFSET, len) || s[len] != '=')
-bb17230c61a642 Rafał Miłecki 2021-03-01  33  			continue;
-bb17230c61a642 Rafał Miłecki 2021-03-01  34  
-bb17230c61a642 Rafał Miłecki 2021-03-01  35  		err = kstrtoul(s + len + 1, 0, &offset);
-bb17230c61a642 Rafał Miłecki 2021-03-01  36  		if (err) {
-bb17230c61a642 Rafał Miłecki 2021-03-01  37  			pr_err("failed to parse %s\n", s + len + 1);
-bb17230c61a642 Rafał Miłecki 2021-03-01  38  			return err;
-bb17230c61a642 Rafał Miłecki 2021-03-01  39  		}
-bb17230c61a642 Rafał Miłecki 2021-03-01  40  
-bb17230c61a642 Rafał Miłecki 2021-03-01 @41  		return offset << 10;
-                                                               ^^^^^^^^^^^^
-So this should be long long.  Although 32bit systems are not really
-common in real life any more...
-
-bb17230c61a642 Rafał Miłecki 2021-03-01  42  	}
-bb17230c61a642 Rafał Miłecki 2021-03-01  43  
-bb17230c61a642 Rafał Miłecki 2021-03-01  44  	return -ENOENT;
-bb17230c61a642 Rafał Miłecki 2021-03-01  45  }
-
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+v2: mentioned parent removal (Linus), dropped change of the removed code
+ drivers/gpio/gpio-adnp.c            | 1 -
+ drivers/gpio/gpio-amdpt.c           | 4 +---
+ drivers/gpio/gpio-bd71828.c         | 1 -
+ drivers/gpio/gpio-brcmstb.c         | 1 -
+ drivers/gpio/gpio-davinci.c         | 1 -
+ drivers/gpio/gpio-eic-sprd.c        | 1 -
+ drivers/gpio/gpio-em.c              | 1 -
+ drivers/gpio/gpio-ge.c              | 1 -
+ drivers/gpio/gpio-grgpio.c          | 1 -
+ drivers/gpio/gpio-gw-pld.c          | 1 -
+ drivers/gpio/gpio-mt7621.c          | 1 -
+ drivers/gpio/gpio-mvebu.c           | 1 -
+ drivers/gpio/gpio-omap.c            | 3 ---
+ drivers/gpio/gpio-palmas.c          | 4 +---
+ drivers/gpio/gpio-pmic-eic-sprd.c   | 1 -
+ drivers/gpio/gpio-raspberrypi-exp.c | 1 -
+ drivers/gpio/gpio-rda.c             | 2 --
+ drivers/gpio/gpio-rockchip.c        | 3 ---
+ drivers/gpio/gpio-sama5d2-piobu.c   | 1 -
+ drivers/gpio/gpio-sprd.c            | 1 -
+ drivers/gpio/gpio-stmpe.c           | 1 -
+ drivers/gpio/gpio-tc3589x.c         | 1 -
+ drivers/gpio/gpio-tegra186.c        | 1 -
+ drivers/gpio/gpio-tps65218.c        | 3 ---
+ drivers/gpio/gpio-vf610.c           | 1 -
+ 25 files changed, 2 insertions(+), 36 deletions(-)
+
+diff --git a/drivers/gpio/gpio-adnp.c b/drivers/gpio/gpio-adnp.c
+index 8eedfc6451df..cc349d4e4973 100644
+--- a/drivers/gpio/gpio-adnp.c
++++ b/drivers/gpio/gpio-adnp.c
+@@ -458,7 +458,6 @@ static int adnp_gpio_setup(struct adnp *adnp, unsigned int num_gpios,
+ 	chip->ngpio = num_gpios;
+ 	chip->label = adnp->client->name;
+ 	chip->parent = &adnp->client->dev;
+-	chip->of_node = chip->parent->of_node;
+ 	chip->owner = THIS_MODULE;
+ 
+ 	if (is_irq_controller) {
+diff --git a/drivers/gpio/gpio-amdpt.c b/drivers/gpio/gpio-amdpt.c
+index bbf53e289141..afe59fb79821 100644
+--- a/drivers/gpio/gpio-amdpt.c
++++ b/drivers/gpio/gpio-amdpt.c
+@@ -104,9 +104,7 @@ static int pt_gpio_probe(struct platform_device *pdev)
+ 	pt_gpio->gc.request          = pt_gpio_request;
+ 	pt_gpio->gc.free             = pt_gpio_free;
+ 	pt_gpio->gc.ngpio            = PT_TOTAL_GPIO;
+-#if defined(CONFIG_OF_GPIO)
+-	pt_gpio->gc.of_node          = dev->of_node;
+-#endif
++
+ 	ret = gpiochip_add_data(&pt_gpio->gc, pt_gpio);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to register GPIO lib\n");
+diff --git a/drivers/gpio/gpio-bd71828.c b/drivers/gpio/gpio-bd71828.c
+index c8e382b53f2f..b2ccc320c7b5 100644
+--- a/drivers/gpio/gpio-bd71828.c
++++ b/drivers/gpio/gpio-bd71828.c
+@@ -121,7 +121,6 @@ static int bd71828_probe(struct platform_device *pdev)
+ 	 * "gpio-reserved-ranges" and exclude them from control
+ 	 */
+ 	bdgpio->gpio.ngpio = 4;
+-	bdgpio->gpio.of_node = dev->parent->of_node;
+ 	bdgpio->regmap = dev_get_regmap(dev->parent, NULL);
+ 	if (!bdgpio->regmap)
+ 		return -ENODEV;
+diff --git a/drivers/gpio/gpio-brcmstb.c b/drivers/gpio/gpio-brcmstb.c
+index 895a79936248..176c264bb959 100644
+--- a/drivers/gpio/gpio-brcmstb.c
++++ b/drivers/gpio/gpio-brcmstb.c
+@@ -703,7 +703,6 @@ static int brcmstb_gpio_probe(struct platform_device *pdev)
+ 			goto fail;
+ 		}
+ 
+-		gc->of_node = np;
+ 		gc->owner = THIS_MODULE;
+ 		gc->label = devm_kasprintf(dev, GFP_KERNEL, "%pOF", dev->of_node);
+ 		if (!gc->label) {
+diff --git a/drivers/gpio/gpio-davinci.c b/drivers/gpio/gpio-davinci.c
+index cb5afaa7ed48..f960587f86a3 100644
+--- a/drivers/gpio/gpio-davinci.c
++++ b/drivers/gpio/gpio-davinci.c
+@@ -254,7 +254,6 @@ static int davinci_gpio_probe(struct platform_device *pdev)
+ #ifdef CONFIG_OF_GPIO
+ 	chips->chip.of_gpio_n_cells = 2;
+ 	chips->chip.parent = dev;
+-	chips->chip.of_node = dev->of_node;
+ 	chips->chip.request = gpiochip_generic_request;
+ 	chips->chip.free = gpiochip_generic_free;
+ #endif
+diff --git a/drivers/gpio/gpio-eic-sprd.c b/drivers/gpio/gpio-eic-sprd.c
+index 865ab2b34fdd..8d722e026e9c 100644
+--- a/drivers/gpio/gpio-eic-sprd.c
++++ b/drivers/gpio/gpio-eic-sprd.c
+@@ -609,7 +609,6 @@ static int sprd_eic_probe(struct platform_device *pdev)
+ 	sprd_eic->chip.ngpio = pdata->num_eics;
+ 	sprd_eic->chip.base = -1;
+ 	sprd_eic->chip.parent = &pdev->dev;
+-	sprd_eic->chip.of_node = pdev->dev.of_node;
+ 	sprd_eic->chip.direction_input = sprd_eic_direction_input;
+ 	switch (sprd_eic->type) {
+ 	case SPRD_EIC_DEBOUNCE:
+diff --git a/drivers/gpio/gpio-em.c b/drivers/gpio/gpio-em.c
+index 90b336e6ee27..858e6ebbb584 100644
+--- a/drivers/gpio/gpio-em.c
++++ b/drivers/gpio/gpio-em.c
+@@ -306,7 +306,6 @@ static int em_gio_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	gpio_chip = &p->gpio_chip;
+-	gpio_chip->of_node = dev->of_node;
+ 	gpio_chip->direction_input = em_gio_direction_input;
+ 	gpio_chip->get = em_gio_get;
+ 	gpio_chip->direction_output = em_gio_direction_output;
+diff --git a/drivers/gpio/gpio-ge.c b/drivers/gpio/gpio-ge.c
+index 636952769bc8..f6a3de99f7db 100644
+--- a/drivers/gpio/gpio-ge.c
++++ b/drivers/gpio/gpio-ge.c
+@@ -82,7 +82,6 @@ static int __init gef_gpio_probe(struct platform_device *pdev)
+ 	gc->base = -1;
+ 	gc->ngpio = (u16)(uintptr_t)of_device_get_match_data(&pdev->dev);
+ 	gc->of_gpio_n_cells = 2;
+-	gc->of_node = pdev->dev.of_node;
+ 
+ 	/* This function adds a memory mapped GPIO chip */
+ 	ret = devm_gpiochip_add_data(&pdev->dev, gc, NULL);
+diff --git a/drivers/gpio/gpio-grgpio.c b/drivers/gpio/gpio-grgpio.c
+index f954359c9544..23d447e17a67 100644
+--- a/drivers/gpio/gpio-grgpio.c
++++ b/drivers/gpio/gpio-grgpio.c
+@@ -358,7 +358,6 @@ static int grgpio_probe(struct platform_device *ofdev)
+ 	priv->imask = gc->read_reg(regs + GRGPIO_IMASK);
+ 	priv->dev = &ofdev->dev;
+ 
+-	gc->of_node = np;
+ 	gc->owner = THIS_MODULE;
+ 	gc->to_irq = grgpio_to_irq;
+ 	gc->label = devm_kasprintf(&ofdev->dev, GFP_KERNEL, "%pOF", np);
+diff --git a/drivers/gpio/gpio-gw-pld.c b/drivers/gpio/gpio-gw-pld.c
+index 242112ff60ee..77a3fbd46111 100644
+--- a/drivers/gpio/gpio-gw-pld.c
++++ b/drivers/gpio/gpio-gw-pld.c
+@@ -82,7 +82,6 @@ static int gw_pld_probe(struct i2c_client *client,
+ 	gw->chip.base = -1;
+ 	gw->chip.can_sleep = true;
+ 	gw->chip.parent = dev;
+-	gw->chip.of_node = np;
+ 	gw->chip.owner = THIS_MODULE;
+ 	gw->chip.label = dev_name(dev);
+ 	gw->chip.ngpio = 8;
+diff --git a/drivers/gpio/gpio-mt7621.c b/drivers/gpio/gpio-mt7621.c
+index c3658a597a80..52b49e7a0a80 100644
+--- a/drivers/gpio/gpio-mt7621.c
++++ b/drivers/gpio/gpio-mt7621.c
+@@ -217,7 +217,6 @@ mediatek_gpio_bank_probe(struct device *dev,
+ 	memset(rg, 0, sizeof(*rg));
+ 
+ 	spin_lock_init(&rg->lock);
+-	rg->chip.of_node = node;
+ 	rg->bank = bank;
+ 
+ 	dat = mtk->base + GPIO_REG_DATA + (rg->bank * GPIO_BANK_STRIDE);
+diff --git a/drivers/gpio/gpio-mvebu.c b/drivers/gpio/gpio-mvebu.c
+index 8f429d9f3661..4c1f9e1091b7 100644
+--- a/drivers/gpio/gpio-mvebu.c
++++ b/drivers/gpio/gpio-mvebu.c
+@@ -1183,7 +1183,6 @@ static int mvebu_gpio_probe(struct platform_device *pdev)
+ 	mvchip->chip.base = id * MVEBU_MAX_GPIO_PER_BANK;
+ 	mvchip->chip.ngpio = ngpios;
+ 	mvchip->chip.can_sleep = false;
+-	mvchip->chip.of_node = np;
+ 	mvchip->chip.dbg_show = mvebu_gpio_dbg_show;
+ 
+ 	if (soc_variant == MVEBU_GPIO_SOC_VARIANT_A8K)
+diff --git a/drivers/gpio/gpio-omap.c b/drivers/gpio/gpio-omap.c
+index 415e8df89d6f..e099c39e0355 100644
+--- a/drivers/gpio/gpio-omap.c
++++ b/drivers/gpio/gpio-omap.c
+@@ -1419,9 +1419,6 @@ static int omap_gpio_probe(struct platform_device *pdev)
+ 	bank->is_mpuio = pdata->is_mpuio;
+ 	bank->non_wakeup_gpios = pdata->non_wakeup_gpios;
+ 	bank->regs = pdata->regs;
+-#ifdef CONFIG_OF_GPIO
+-	bank->chip.of_node = of_node_get(node);
+-#endif
+ 
+ 	if (node) {
+ 		if (!of_property_read_bool(node, "ti,gpio-always-on"))
+diff --git a/drivers/gpio/gpio-palmas.c b/drivers/gpio/gpio-palmas.c
+index e8e9029ba5bd..bac10c2faf56 100644
+--- a/drivers/gpio/gpio-palmas.c
++++ b/drivers/gpio/gpio-palmas.c
+@@ -170,9 +170,7 @@ static int palmas_gpio_probe(struct platform_device *pdev)
+ 	palmas_gpio->gpio_chip.set	= palmas_gpio_set;
+ 	palmas_gpio->gpio_chip.get	= palmas_gpio_get;
+ 	palmas_gpio->gpio_chip.parent = &pdev->dev;
+-#ifdef CONFIG_OF_GPIO
+-	palmas_gpio->gpio_chip.of_node = pdev->dev.of_node;
+-#endif
++
+ 	palmas_pdata = dev_get_platdata(palmas->dev);
+ 	if (palmas_pdata && palmas_pdata->gpio_base)
+ 		palmas_gpio->gpio_chip.base = palmas_pdata->gpio_base;
+diff --git a/drivers/gpio/gpio-pmic-eic-sprd.c b/drivers/gpio/gpio-pmic-eic-sprd.c
+index 938285190566..e518490c4b68 100644
+--- a/drivers/gpio/gpio-pmic-eic-sprd.c
++++ b/drivers/gpio/gpio-pmic-eic-sprd.c
+@@ -331,7 +331,6 @@ static int sprd_pmic_eic_probe(struct platform_device *pdev)
+ 	pmic_eic->chip.ngpio = SPRD_PMIC_EIC_NR;
+ 	pmic_eic->chip.base = -1;
+ 	pmic_eic->chip.parent = &pdev->dev;
+-	pmic_eic->chip.of_node = pdev->dev.of_node;
+ 	pmic_eic->chip.direction_input = sprd_pmic_eic_direction_input;
+ 	pmic_eic->chip.request = sprd_pmic_eic_request;
+ 	pmic_eic->chip.free = sprd_pmic_eic_free;
+diff --git a/drivers/gpio/gpio-raspberrypi-exp.c b/drivers/gpio/gpio-raspberrypi-exp.c
+index 64a552ecc2ad..3c414e0005fc 100644
+--- a/drivers/gpio/gpio-raspberrypi-exp.c
++++ b/drivers/gpio/gpio-raspberrypi-exp.c
+@@ -221,7 +221,6 @@ static int rpi_exp_gpio_probe(struct platform_device *pdev)
+ 	rpi_gpio->gc.parent = dev;
+ 	rpi_gpio->gc.label = MODULE_NAME;
+ 	rpi_gpio->gc.owner = THIS_MODULE;
+-	rpi_gpio->gc.of_node = np;
+ 	rpi_gpio->gc.base = -1;
+ 	rpi_gpio->gc.ngpio = NUM_GPIO;
+ 
+diff --git a/drivers/gpio/gpio-rda.c b/drivers/gpio/gpio-rda.c
+index 463846431183..0d03f525dcd3 100644
+--- a/drivers/gpio/gpio-rda.c
++++ b/drivers/gpio/gpio-rda.c
+@@ -240,8 +240,6 @@ static int rda_gpio_probe(struct platform_device *pdev)
+ 	rda_gpio->chip.label = dev_name(dev);
+ 	rda_gpio->chip.ngpio = ngpios;
+ 	rda_gpio->chip.base = -1;
+-	rda_gpio->chip.parent = dev;
+-	rda_gpio->chip.of_node = np;
+ 
+ 	if (rda_gpio->irq >= 0) {
+ 		rda_gpio->irq_chip.name = "rda-gpio",
+diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
+index c1b8e5dbbcc4..a4c4e4584f5b 100644
+--- a/drivers/gpio/gpio-rockchip.c
++++ b/drivers/gpio/gpio-rockchip.c
+@@ -584,9 +584,6 @@ static int rockchip_gpiolib_register(struct rockchip_pin_bank *bank)
+ 	gc->ngpio = bank->nr_pins;
+ 	gc->label = bank->name;
+ 	gc->parent = bank->dev;
+-#ifdef CONFIG_OF_GPIO
+-	gc->of_node = of_node_get(bank->of_node);
+-#endif
+ 
+ 	ret = gpiochip_add_data(gc, bank);
+ 	if (ret) {
+diff --git a/drivers/gpio/gpio-sama5d2-piobu.c b/drivers/gpio/gpio-sama5d2-piobu.c
+index b7c950658170..3e95da717fc9 100644
+--- a/drivers/gpio/gpio-sama5d2-piobu.c
++++ b/drivers/gpio/gpio-sama5d2-piobu.c
+@@ -192,7 +192,6 @@ static int sama5d2_piobu_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, piobu);
+ 	piobu->chip.label = pdev->name;
+ 	piobu->chip.parent = &pdev->dev;
+-	piobu->chip.of_node = pdev->dev.of_node;
+ 	piobu->chip.owner = THIS_MODULE,
+ 	piobu->chip.get_direction = sama5d2_piobu_get_direction,
+ 	piobu->chip.direction_input = sama5d2_piobu_direction_input,
+diff --git a/drivers/gpio/gpio-sprd.c b/drivers/gpio/gpio-sprd.c
+index 9dd9dabb579e..9bff63990eee 100644
+--- a/drivers/gpio/gpio-sprd.c
++++ b/drivers/gpio/gpio-sprd.c
+@@ -237,7 +237,6 @@ static int sprd_gpio_probe(struct platform_device *pdev)
+ 	sprd_gpio->chip.ngpio = SPRD_GPIO_NR;
+ 	sprd_gpio->chip.base = -1;
+ 	sprd_gpio->chip.parent = &pdev->dev;
+-	sprd_gpio->chip.of_node = pdev->dev.of_node;
+ 	sprd_gpio->chip.request = sprd_gpio_request;
+ 	sprd_gpio->chip.free = sprd_gpio_free;
+ 	sprd_gpio->chip.get = sprd_gpio_get;
+diff --git a/drivers/gpio/gpio-stmpe.c b/drivers/gpio/gpio-stmpe.c
+index dd4d58b4ae49..0fa4f0a93378 100644
+--- a/drivers/gpio/gpio-stmpe.c
++++ b/drivers/gpio/gpio-stmpe.c
+@@ -477,7 +477,6 @@ static int stmpe_gpio_probe(struct platform_device *pdev)
+ 	stmpe_gpio->chip = template_chip;
+ 	stmpe_gpio->chip.ngpio = stmpe->num_gpios;
+ 	stmpe_gpio->chip.parent = &pdev->dev;
+-	stmpe_gpio->chip.of_node = np;
+ 	stmpe_gpio->chip.base = -1;
+ 
+ 	if (IS_ENABLED(CONFIG_DEBUG_FS))
+diff --git a/drivers/gpio/gpio-tc3589x.c b/drivers/gpio/gpio-tc3589x.c
+index 8d158492488f..443fe975bf13 100644
+--- a/drivers/gpio/gpio-tc3589x.c
++++ b/drivers/gpio/gpio-tc3589x.c
+@@ -319,7 +319,6 @@ static int tc3589x_gpio_probe(struct platform_device *pdev)
+ 	tc3589x_gpio->chip.ngpio = tc3589x->num_gpio;
+ 	tc3589x_gpio->chip.parent = &pdev->dev;
+ 	tc3589x_gpio->chip.base = -1;
+-	tc3589x_gpio->chip.of_node = np;
+ 
+ 	girq = &tc3589x_gpio->chip.irq;
+ 	girq->chip = &tc3589x_gpio_irq_chip;
+diff --git a/drivers/gpio/gpio-tegra186.c b/drivers/gpio/gpio-tegra186.c
+index c026e7141e4e..7d90df8c097e 100644
+--- a/drivers/gpio/gpio-tegra186.c
++++ b/drivers/gpio/gpio-tegra186.c
+@@ -748,7 +748,6 @@ static int tegra186_gpio_probe(struct platform_device *pdev)
+ 	gpio->gpio.names = (const char * const *)names;
+ 
+ #if defined(CONFIG_OF_GPIO)
+-	gpio->gpio.of_node = pdev->dev.of_node;
+ 	gpio->gpio.of_gpio_n_cells = 2;
+ 	gpio->gpio.of_xlate = tegra186_gpio_of_xlate;
+ #endif /* CONFIG_OF_GPIO */
+diff --git a/drivers/gpio/gpio-tps65218.c b/drivers/gpio/gpio-tps65218.c
+index 912382be48e1..e1d425a18854 100644
+--- a/drivers/gpio/gpio-tps65218.c
++++ b/drivers/gpio/gpio-tps65218.c
+@@ -196,9 +196,6 @@ static int tps65218_gpio_probe(struct platform_device *pdev)
+ 	tps65218_gpio->tps65218 = tps65218;
+ 	tps65218_gpio->gpio_chip = template_chip;
+ 	tps65218_gpio->gpio_chip.parent = &pdev->dev;
+-#ifdef CONFIG_OF_GPIO
+-	tps65218_gpio->gpio_chip.of_node = pdev->dev.of_node;
+-#endif
+ 
+ 	return devm_gpiochip_add_data(&pdev->dev, &tps65218_gpio->gpio_chip,
+ 				      tps65218_gpio);
+diff --git a/drivers/gpio/gpio-vf610.c b/drivers/gpio/gpio-vf610.c
+index e0f2b67558e7..20780c35da1b 100644
+--- a/drivers/gpio/gpio-vf610.c
++++ b/drivers/gpio/gpio-vf610.c
+@@ -298,7 +298,6 @@ static int vf610_gpio_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	gc = &port->gc;
+-	gc->of_node = np;
+ 	gc->parent = dev;
+ 	gc->label = "vf610-gpio";
+ 	gc->ngpio = VF610_GPIO_PER_PORT;
+-- 
+2.33.0
 

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C594C4699EF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7612B46A043
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345592AbhLFPEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:04:33 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54000 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344993AbhLFPDq (ORCPT
+        id S1388332AbhLFP7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:59:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390487AbhLFPm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:03:46 -0500
+        Mon, 6 Dec 2021 10:42:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84822C0A886F;
+        Mon,  6 Dec 2021 07:26:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 49D4461325;
-        Mon,  6 Dec 2021 15:00:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA46C341C1;
-        Mon,  6 Dec 2021 15:00:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22AB76132A;
+        Mon,  6 Dec 2021 15:26:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03C75C34901;
+        Mon,  6 Dec 2021 15:26:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802816;
-        bh=M8HEae/UF5ZV1fSaVZ5VZW210U26HTBby91n/IkM/kk=;
+        s=korg; t=1638804400;
+        bh=YYQBfgG88Y2e9/dDLh/4nH28Q0+7Cu0+GSkhzYSdzOE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fjsHMbA9b72FfVJV0fqkC9NvFk28sz+TGkeRdi2ATwu1sWeQQnTpMYB5e+ei54zrQ
-         oYLA89o/5yZAfdeQGEn0D+MToOmJ8i6TY3Z7P/IjBNIHl7Kh79ToqajoN8ptgWM3yx
-         4Xs4pQ0i5aspyHFFc1fm2JsboSnY0iuOBT9F0+l4=
+        b=xvOuGeyd4PP0VKjxUOmpXIgf8BP01YjAat6H7hl6oOf5YZLmPyqkEJh4KO+Bu2HsR
+         1MjUM4U93QadydR3lxdSA3/qqYJCwuVrHZfLaK1tqXHdngnLzQr1NcdLRCTHFREeaR
+         KXEQD+sxM+mHDbrNWn88GQ++AMPXenPh1XFBdzW4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [PATCH 4.4 42/52] sata_fsl: fix UAF in sata_fsl_port_stop when rmmod sata_fsl
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 132/207] net: annotate data-races on txq->xmit_lock_owner
 Date:   Mon,  6 Dec 2021 15:56:26 +0100
-Message-Id: <20211206145549.345920919@linuxfoundation.org>
+Message-Id: <20211206145614.800421023@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
-References: <20211206145547.892668902@linuxfoundation.org>
+In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
+References: <20211206145610.172203682@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,98 +49,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baokun Li <libaokun1@huawei.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 6c8ad7e8cf29eb55836e7a0215f967746ab2b504 upstream.
+commit 7a10d8c810cfad3e79372d7d1c77899d86cd6662 upstream.
 
-When the `rmmod sata_fsl.ko` command is executed in the PPC64 GNU/Linux,
-a bug is reported:
- ==================================================================
- BUG: Unable to handle kernel data access on read at 0x80000800805b502c
- Oops: Kernel access of bad area, sig: 11 [#1]
- NIP [c0000000000388a4] .ioread32+0x4/0x20
- LR [80000000000c6034] .sata_fsl_port_stop+0x44/0xe0 [sata_fsl]
- Call Trace:
-  .free_irq+0x1c/0x4e0 (unreliable)
-  .ata_host_stop+0x74/0xd0 [libata]
-  .release_nodes+0x330/0x3f0
-  .device_release_driver_internal+0x178/0x2c0
-  .driver_detach+0x64/0xd0
-  .bus_remove_driver+0x70/0xf0
-  .driver_unregister+0x38/0x80
-  .platform_driver_unregister+0x14/0x30
-  .fsl_sata_driver_exit+0x18/0xa20 [sata_fsl]
-  .__se_sys_delete_module+0x1ec/0x2d0
-  .system_call_exception+0xfc/0x1f0
-  system_call_common+0xf8/0x200
- ==================================================================
+syzbot found that __dev_queue_xmit() is reading txq->xmit_lock_owner
+without annotations.
 
-The triggering of the BUG is shown in the following stack:
+No serious issue there, let's document what is happening there.
 
-driver_detach
-  device_release_driver_internal
-    __device_release_driver
-      drv->remove(dev) --> platform_drv_remove/platform_remove
-        drv->remove(dev) --> sata_fsl_remove
-          iounmap(host_priv->hcr_base);			<---- unmap
-          kfree(host_priv);                             <---- free
-      devres_release_all
-        release_nodes
-          dr->node.release(dev, dr->data) --> ata_host_stop
-            ap->ops->port_stop(ap) --> sata_fsl_port_stop
-                ioread32(hcr_base + HCONTROL)           <---- UAF
-            host->ops->host_stop(host)
+BUG: KCSAN: data-race in __dev_queue_xmit / __dev_queue_xmit
 
-The iounmap(host_priv->hcr_base) and kfree(host_priv) functions should
-not be executed in drv->remove. These functions should be executed in
-host_stop after port_stop. Therefore, we move these functions to the
-new function sata_fsl_host_stop and bind the new function to host_stop.
+write to 0xffff888139d09484 of 4 bytes by interrupt on cpu 0:
+ __netif_tx_unlock include/linux/netdevice.h:4437 [inline]
+ __dev_queue_xmit+0x948/0xf70 net/core/dev.c:4229
+ dev_queue_xmit_accel+0x19/0x20 net/core/dev.c:4265
+ macvlan_queue_xmit drivers/net/macvlan.c:543 [inline]
+ macvlan_start_xmit+0x2b3/0x3d0 drivers/net/macvlan.c:567
+ __netdev_start_xmit include/linux/netdevice.h:4987 [inline]
+ netdev_start_xmit include/linux/netdevice.h:5001 [inline]
+ xmit_one+0x105/0x2f0 net/core/dev.c:3590
+ dev_hard_start_xmit+0x72/0x120 net/core/dev.c:3606
+ sch_direct_xmit+0x1b2/0x7c0 net/sched/sch_generic.c:342
+ __dev_xmit_skb+0x83d/0x1370 net/core/dev.c:3817
+ __dev_queue_xmit+0x590/0xf70 net/core/dev.c:4194
+ dev_queue_xmit+0x13/0x20 net/core/dev.c:4259
+ neigh_hh_output include/net/neighbour.h:511 [inline]
+ neigh_output include/net/neighbour.h:525 [inline]
+ ip6_finish_output2+0x995/0xbb0 net/ipv6/ip6_output.c:126
+ __ip6_finish_output net/ipv6/ip6_output.c:191 [inline]
+ ip6_finish_output+0x444/0x4c0 net/ipv6/ip6_output.c:201
+ NF_HOOK_COND include/linux/netfilter.h:296 [inline]
+ ip6_output+0x10e/0x210 net/ipv6/ip6_output.c:224
+ dst_output include/net/dst.h:450 [inline]
+ NF_HOOK include/linux/netfilter.h:307 [inline]
+ ndisc_send_skb+0x486/0x610 net/ipv6/ndisc.c:508
+ ndisc_send_rs+0x3b0/0x3e0 net/ipv6/ndisc.c:702
+ addrconf_rs_timer+0x370/0x540 net/ipv6/addrconf.c:3898
+ call_timer_fn+0x2e/0x240 kernel/time/timer.c:1421
+ expire_timers+0x116/0x240 kernel/time/timer.c:1466
+ __run_timers+0x368/0x410 kernel/time/timer.c:1734
+ run_timer_softirq+0x2e/0x60 kernel/time/timer.c:1747
+ __do_softirq+0x158/0x2de kernel/softirq.c:558
+ __irq_exit_rcu kernel/softirq.c:636 [inline]
+ irq_exit_rcu+0x37/0x70 kernel/softirq.c:648
+ sysvec_apic_timer_interrupt+0x3e/0xb0 arch/x86/kernel/apic/apic.c:1097
+ asm_sysvec_apic_timer_interrupt+0x12/0x20
 
-Fixes: faf0b2e5afe7 ("drivers/ata: add support to Freescale 3.0Gbps SATA Controller")
-Cc: stable@vger.kernel.org
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
-Reviewed-by: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+read to 0xffff888139d09484 of 4 bytes by interrupt on cpu 1:
+ __dev_queue_xmit+0x5e3/0xf70 net/core/dev.c:4213
+ dev_queue_xmit_accel+0x19/0x20 net/core/dev.c:4265
+ macvlan_queue_xmit drivers/net/macvlan.c:543 [inline]
+ macvlan_start_xmit+0x2b3/0x3d0 drivers/net/macvlan.c:567
+ __netdev_start_xmit include/linux/netdevice.h:4987 [inline]
+ netdev_start_xmit include/linux/netdevice.h:5001 [inline]
+ xmit_one+0x105/0x2f0 net/core/dev.c:3590
+ dev_hard_start_xmit+0x72/0x120 net/core/dev.c:3606
+ sch_direct_xmit+0x1b2/0x7c0 net/sched/sch_generic.c:342
+ __dev_xmit_skb+0x83d/0x1370 net/core/dev.c:3817
+ __dev_queue_xmit+0x590/0xf70 net/core/dev.c:4194
+ dev_queue_xmit+0x13/0x20 net/core/dev.c:4259
+ neigh_resolve_output+0x3db/0x410 net/core/neighbour.c:1523
+ neigh_output include/net/neighbour.h:527 [inline]
+ ip6_finish_output2+0x9be/0xbb0 net/ipv6/ip6_output.c:126
+ __ip6_finish_output net/ipv6/ip6_output.c:191 [inline]
+ ip6_finish_output+0x444/0x4c0 net/ipv6/ip6_output.c:201
+ NF_HOOK_COND include/linux/netfilter.h:296 [inline]
+ ip6_output+0x10e/0x210 net/ipv6/ip6_output.c:224
+ dst_output include/net/dst.h:450 [inline]
+ NF_HOOK include/linux/netfilter.h:307 [inline]
+ ndisc_send_skb+0x486/0x610 net/ipv6/ndisc.c:508
+ ndisc_send_rs+0x3b0/0x3e0 net/ipv6/ndisc.c:702
+ addrconf_rs_timer+0x370/0x540 net/ipv6/addrconf.c:3898
+ call_timer_fn+0x2e/0x240 kernel/time/timer.c:1421
+ expire_timers+0x116/0x240 kernel/time/timer.c:1466
+ __run_timers+0x368/0x410 kernel/time/timer.c:1734
+ run_timer_softirq+0x2e/0x60 kernel/time/timer.c:1747
+ __do_softirq+0x158/0x2de kernel/softirq.c:558
+ __irq_exit_rcu kernel/softirq.c:636 [inline]
+ irq_exit_rcu+0x37/0x70 kernel/softirq.c:648
+ sysvec_apic_timer_interrupt+0x8d/0xb0 arch/x86/kernel/apic/apic.c:1097
+ asm_sysvec_apic_timer_interrupt+0x12/0x20
+ kcsan_setup_watchpoint+0x94/0x420 kernel/kcsan/core.c:443
+ folio_test_anon include/linux/page-flags.h:581 [inline]
+ PageAnon include/linux/page-flags.h:586 [inline]
+ zap_pte_range+0x5ac/0x10e0 mm/memory.c:1347
+ zap_pmd_range mm/memory.c:1467 [inline]
+ zap_pud_range mm/memory.c:1496 [inline]
+ zap_p4d_range mm/memory.c:1517 [inline]
+ unmap_page_range+0x2dc/0x3d0 mm/memory.c:1538
+ unmap_single_vma+0x157/0x210 mm/memory.c:1583
+ unmap_vmas+0xd0/0x180 mm/memory.c:1615
+ exit_mmap+0x23d/0x470 mm/mmap.c:3170
+ __mmput+0x27/0x1b0 kernel/fork.c:1113
+ mmput+0x3d/0x50 kernel/fork.c:1134
+ exit_mm+0xdb/0x170 kernel/exit.c:507
+ do_exit+0x608/0x17a0 kernel/exit.c:819
+ do_group_exit+0xce/0x180 kernel/exit.c:929
+ get_signal+0xfc3/0x1550 kernel/signal.c:2852
+ arch_do_signal_or_restart+0x8c/0x2e0 arch/x86/kernel/signal.c:868
+ handle_signal_work kernel/entry/common.c:148 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+ exit_to_user_mode_prepare+0x113/0x190 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x20/0x40 kernel/entry/common.c:300
+ do_syscall_64+0x50/0xd0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+value changed: 0x00000000 -> 0xffffffff
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 PID: 28712 Comm: syz-executor.0 Tainted: G        W         5.16.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Link: https://lore.kernel.org/r/20211130170155.2331929-1-eric.dumazet@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ata/sata_fsl.c |   12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ include/linux/netdevice.h |   19 +++++++++++++------
+ net/core/dev.c            |    5 ++++-
+ 2 files changed, 17 insertions(+), 7 deletions(-)
 
---- a/drivers/ata/sata_fsl.c
-+++ b/drivers/ata/sata_fsl.c
-@@ -1406,6 +1406,14 @@ static int sata_fsl_init_controller(stru
- 	return 0;
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -4403,7 +4403,8 @@ static inline u32 netif_msg_init(int deb
+ static inline void __netif_tx_lock(struct netdev_queue *txq, int cpu)
+ {
+ 	spin_lock(&txq->_xmit_lock);
+-	txq->xmit_lock_owner = cpu;
++	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++	WRITE_ONCE(txq->xmit_lock_owner, cpu);
  }
  
-+static void sata_fsl_host_stop(struct ata_host *host)
-+{
-+        struct sata_fsl_host_priv *host_priv = host->private_data;
-+
-+        iounmap(host_priv->hcr_base);
-+        kfree(host_priv);
-+}
-+
- /*
-  * scsi mid-layer and libata interface structures
-  */
-@@ -1438,6 +1446,8 @@ static struct ata_port_operations sata_f
- 	.port_start = sata_fsl_port_start,
- 	.port_stop = sata_fsl_port_stop,
- 
-+	.host_stop      = sata_fsl_host_stop,
-+
- 	.pmp_attach = sata_fsl_pmp_attach,
- 	.pmp_detach = sata_fsl_pmp_detach,
- };
-@@ -1572,8 +1582,6 @@ static int sata_fsl_remove(struct platfo
- 	ata_host_detach(host);
- 
- 	irq_dispose_mapping(host_priv->irq);
--	iounmap(host_priv->hcr_base);
--	kfree(host_priv);
- 
- 	return 0;
+ static inline bool __netif_tx_acquire(struct netdev_queue *txq)
+@@ -4420,26 +4421,32 @@ static inline void __netif_tx_release(st
+ static inline void __netif_tx_lock_bh(struct netdev_queue *txq)
+ {
+ 	spin_lock_bh(&txq->_xmit_lock);
+-	txq->xmit_lock_owner = smp_processor_id();
++	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++	WRITE_ONCE(txq->xmit_lock_owner, smp_processor_id());
  }
+ 
+ static inline bool __netif_tx_trylock(struct netdev_queue *txq)
+ {
+ 	bool ok = spin_trylock(&txq->_xmit_lock);
+-	if (likely(ok))
+-		txq->xmit_lock_owner = smp_processor_id();
++
++	if (likely(ok)) {
++		/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++		WRITE_ONCE(txq->xmit_lock_owner, smp_processor_id());
++	}
+ 	return ok;
+ }
+ 
+ static inline void __netif_tx_unlock(struct netdev_queue *txq)
+ {
+-	txq->xmit_lock_owner = -1;
++	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++	WRITE_ONCE(txq->xmit_lock_owner, -1);
+ 	spin_unlock(&txq->_xmit_lock);
+ }
+ 
+ static inline void __netif_tx_unlock_bh(struct netdev_queue *txq)
+ {
+-	txq->xmit_lock_owner = -1;
++	/* Pairs with READ_ONCE() in __dev_queue_xmit() */
++	WRITE_ONCE(txq->xmit_lock_owner, -1);
+ 	spin_unlock_bh(&txq->_xmit_lock);
+ }
+ 
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4195,7 +4195,10 @@ static int __dev_queue_xmit(struct sk_bu
+ 	if (dev->flags & IFF_UP) {
+ 		int cpu = smp_processor_id(); /* ok because BHs are off */
+ 
+-		if (txq->xmit_lock_owner != cpu) {
++		/* Other cpus might concurrently change txq->xmit_lock_owner
++		 * to -1 or to their cpu id, but not to our id.
++		 */
++		if (READ_ONCE(txq->xmit_lock_owner) != cpu) {
+ 			if (dev_xmit_recursion())
+ 				goto recursion_alert;
+ 
 
 

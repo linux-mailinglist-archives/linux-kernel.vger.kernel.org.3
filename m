@@ -2,42 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8322C469FBB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E158469E98
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:40:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392503AbhLFPvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:51:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356888AbhLFPhY (ORCPT
+        id S1389639AbhLFPkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:40:42 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41576 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1386501AbhLFP0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:37:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4ADC08EADA;
-        Mon,  6 Dec 2021 07:23:07 -0800 (PST)
+        Mon, 6 Dec 2021 10:26:38 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96F48B81018;
-        Mon,  6 Dec 2021 15:23:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D74F7C341C2;
-        Mon,  6 Dec 2021 15:23:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0CA7612D3;
+        Mon,  6 Dec 2021 15:23:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B667CC341C2;
+        Mon,  6 Dec 2021 15:23:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804186;
-        bh=S1xBnX5Tx88/7igqbjpZBl6CtaptVXTYJ6VPb7nJLC0=;
+        s=korg; t=1638804189;
+        bh=XgUzlZHa/ibMS9h95rahf3HPkzBolmgsYvirHATlK80=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=toIKyT8cS22Dyf+ytwUnQThof6jzxzWJB9c00GxrDLziT2wXX+qWqIVDpllhiyIrR
-         UdIBrsle5rlUp68C7Hjj7RfTkfWraaj+Nd7EwFAcceWj3TAJzytPDiQKh3NWVkCsDI
-         6WPWhNvgf5cTGp7lYE0aZqwKYggds5ULwadPajHc=
+        b=Wrl/rqQeOZyNiy8Dvh3VdUdWF7c57K7YCPzFkrdqMwwy1E5JKcDs9vZhK5PAgFo3d
+         RikEDNm04ZP8hSPA80Hn6J8EogdpOFkHLBZmtAA+A6osIY7hBPVse9tijAy2nb5ks8
+         vwkle2uYH8/dhVySC0jva46CvFURE4GlmYzuxRyc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>,
-        Corey Minyard <cminyard@mvista.com>
-Subject: [PATCH 5.15 057/207] ipmi: Move remove_work to dedicated workqueue
-Date:   Mon,  6 Dec 2021 15:55:11 +0100
-Message-Id: <20211206145612.211859559@linuxfoundation.org>
+        stable@vger.kernel.org, Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 5.15 058/207] cpufreq: Fix get_cpu_device() failure in add_cpu_dev_symlink()
+Date:   Mon,  6 Dec 2021 15:55:12 +0100
+Message-Id: <20211206145612.252156529@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
 References: <20211206145610.172203682@linuxfoundation.org>
@@ -49,80 +46,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
+From: Xiongfeng Wang <wangxiongfeng2@huawei.com>
 
-commit 1d49eb91e86e8c1c1614c72e3e958b6b7e2472a9 upstream.
+commit 2c1b5a84669d2477d8fffe9136e86a2cff591729 upstream.
 
-Currently when removing an ipmi_user the removal is deferred as a work on
-the system's workqueue. Although this guarantees the free operation will
-occur in non atomic context, it can race with the ipmi_msghandler module
-removal (see [1]) . In case a remove_user work is scheduled for removal
-and shortly after ipmi_msghandler module is removed we can end up in a
-situation where the module is removed fist and when the work is executed
-the system crashes with :
-BUG: unable to handle page fault for address: ffffffffc05c3450
-PF: supervisor instruction fetch in kernel mode
-PF: error_code(0x0010) - not-present page
-because the pages of the module are gone. In cleanup_ipmi() there is no
-easy way to detect if there are any pending works to flush them before
-removing the module. This patch creates a separate workqueue and schedules
-the remove_work works on it. When removing the module the workqueue is
-drained when destroyed to avoid the race.
+When I hot added a CPU, I found 'cpufreq' directory was not created
+below /sys/devices/system/cpu/cpuX/.
 
-[1] https://bugs.launchpad.net/bugs/1950666
+It is because get_cpu_device() failed in add_cpu_dev_symlink().
 
-Cc: stable@vger.kernel.org # 5.1
-Fixes: 3b9a907223d7 (ipmi: fix sleep-in-atomic in free_user at cleanup SRCU user->release_barrier)
-Signed-off-by: Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
-Message-Id: <20211115131645.25116-1-ioanna-maria.alifieraki@canonical.com>
-Signed-off-by: Corey Minyard <cminyard@mvista.com>
+cpufreq_add_dev() is the .add_dev callback of a CPU subsys interface.
+It will be called when the CPU device registered into the system.
+The call chain is as follows:
+
+  register_cpu()
+  ->device_register()
+   ->device_add()
+    ->bus_probe_device()
+     ->cpufreq_add_dev()
+
+But only after the CPU device has been registered, we can get the
+CPU device by get_cpu_device(), otherwise it will return NULL.
+
+Since we already have the CPU device in cpufreq_add_dev(), pass
+it to add_cpu_dev_symlink().
+
+I noticed that the 'kobj' of the CPU device has been added into
+the system before cpufreq_add_dev().
+
+Fixes: 2f0ba790df51 ("cpufreq: Fix creation of symbolic links to policy directories")
+Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: All applicable <stable@vger.kernel.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/ipmi/ipmi_msghandler.c |   13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ drivers/cpufreq/cpufreq.c |    9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
---- a/drivers/char/ipmi/ipmi_msghandler.c
-+++ b/drivers/char/ipmi/ipmi_msghandler.c
-@@ -191,6 +191,8 @@ struct ipmi_user {
- 	struct work_struct remove_work;
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1004,10 +1004,9 @@ static struct kobj_type ktype_cpufreq =
+ 	.release	= cpufreq_sysfs_release,
  };
  
-+struct workqueue_struct *remove_work_wq;
-+
- static struct ipmi_user *acquire_ipmi_user(struct ipmi_user *user, int *index)
- 	__acquires(user->release_barrier)
+-static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu)
++static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu,
++				struct device *dev)
  {
-@@ -1261,7 +1263,7 @@ static void free_user(struct kref *ref)
- 	struct ipmi_user *user = container_of(ref, struct ipmi_user, refcount);
+-	struct device *dev = get_cpu_device(cpu);
+-
+ 	if (unlikely(!dev))
+ 		return;
  
- 	/* SRCU cleanup must happen in task context. */
--	schedule_work(&user->remove_work);
-+	queue_work(remove_work_wq, &user->remove_work);
+@@ -1391,7 +1390,7 @@ static int cpufreq_online(unsigned int c
+ 	if (new_policy) {
+ 		for_each_cpu(j, policy->related_cpus) {
+ 			per_cpu(cpufreq_cpu_data, j) = policy;
+-			add_cpu_dev_symlink(policy, j);
++			add_cpu_dev_symlink(policy, j, get_cpu_device(j));
+ 		}
+ 
+ 		policy->min_freq_req = kzalloc(2 * sizeof(*policy->min_freq_req),
+@@ -1565,7 +1564,7 @@ static int cpufreq_add_dev(struct device
+ 	/* Create sysfs link on CPU registration */
+ 	policy = per_cpu(cpufreq_cpu_data, cpu);
+ 	if (policy)
+-		add_cpu_dev_symlink(policy, cpu);
++		add_cpu_dev_symlink(policy, cpu, dev);
+ 
+ 	return 0;
  }
- 
- static void _ipmi_destroy_user(struct ipmi_user *user)
-@@ -5153,6 +5155,13 @@ static int ipmi_init_msghandler(void)
- 
- 	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
- 
-+	remove_work_wq = create_singlethread_workqueue("ipmi-msghandler-remove-wq");
-+	if (!remove_work_wq) {
-+		pr_err("unable to create ipmi-msghandler-remove-wq workqueue");
-+		rv = -ENOMEM;
-+		goto out;
-+	}
-+
- 	initialized = true;
- 
- out:
-@@ -5178,6 +5187,8 @@ static void __exit cleanup_ipmi(void)
- 	int count;
- 
- 	if (initialized) {
-+		destroy_workqueue(remove_work_wq);
-+
- 		atomic_notifier_chain_unregister(&panic_notifier_list,
- 						 &panic_block);
- 
 
 

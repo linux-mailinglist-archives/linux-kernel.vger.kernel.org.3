@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3E0469FF1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FDE3469A17
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442466AbhLFPza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:55:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
+        id S1345838AbhLFPF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:05:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390513AbhLFPm2 (ORCPT
+        with ESMTP id S1345289AbhLFPEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:42:28 -0500
+        Mon, 6 Dec 2021 10:04:09 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A66C0A8888;
-        Mon,  6 Dec 2021 07:27:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23CDC07E5C2;
+        Mon,  6 Dec 2021 07:00:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A3D6B8111C;
-        Mon,  6 Dec 2021 15:27:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E199C34902;
-        Mon,  6 Dec 2021 15:26:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B63FEB81117;
+        Mon,  6 Dec 2021 15:00:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF86CC341C5;
+        Mon,  6 Dec 2021 15:00:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804420;
-        bh=OL7TRCzk6Huu7qm2gjwwIZOhQJizv2+oO065KTxFCQA=;
+        s=korg; t=1638802833;
+        bh=R2JGykS1RIS7289ldnylxGNnEb+fjAf5YiI2f1xWxGg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SMDJz6wRkHeoTRThKHP7Z8oB4VW6OgHy6U1g0LqHH1zARO8664zgUU4w9xI1km27E
-         19O0FxOj0ZL8ELhIKFR311kPCw/sR+gDd8lrFRptDRwjB3sE/vuKPsggDs2Rji74WI
-         +RkQsoGP6aBWZDcYBDQv+G8j2in6bDQRqwC/vU20=
+        b=2XUgtqRp6ZBDHqbL4UG2QSJ9/39ZlKyLTQp0zRJkxvzdtUEKZmkTS+GDOT9f6AzmX
+         M6iHing370VVXAj/qcdQnuO88BKE7NKh0tV2OGVXe2VT0qgR6tCClYESotrOv8JWF/
+         doXbubPgp+e4tBMyCyD+Mk0h5+RvaGqK89B1H5is=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>
-Subject: [PATCH 5.15 108/207] arm64: ftrace: add missing BTIs
+        stable@vger.kernel.org,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Subject: [PATCH 4.4 18/52] tracing: Check pid filtering when creating events
 Date:   Mon,  6 Dec 2021 15:56:02 +0100
-Message-Id: <20211206145613.979180943@linuxfoundation.org>
+Message-Id: <20211206145548.517976380@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
+References: <20211206145547.892668902@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,116 +48,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Rutland <mark.rutland@arm.com>
+From: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
-commit 35b6b28e69985eafb20b3b2c7bd6eca452b56b53 upstream.
+commit 6cb206508b621a9a0a2c35b60540e399225c8243 upstream.
 
-When branch target identifiers are in use, code reachable via an
-indirect branch requires a BTI landing pad at the branch target site.
+When pid filtering is activated in an instance, all of the events trace
+files for that instance has the PID_FILTER flag set. This determines
+whether or not pid filtering needs to be done on the event, otherwise the
+event is executed as normal.
 
-When building FTRACE_WITH_REGS atop patchable-function-entry, we miss
-BTIs at the start start of the `ftrace_caller` and `ftrace_regs_caller`
-trampolines, and when these are called from a module via a PLT (which
-will use a `BR X16`), we will encounter a BTI failure, e.g.
+If pid filtering is enabled when an event is created (via a dynamic event
+or modules), its flag is not updated to reflect the current state, and the
+events are not filtered properly.
 
-| # insmod lkdtm.ko
-| lkdtm: No crash points registered, enable through debugfs
-| # echo function_graph > /sys/kernel/debug/tracing/current_tracer
-| # cat /sys/kernel/debug/provoke-crash/DIRECT
-| Unhandled 64-bit el1h sync exception on CPU0, ESR 0x34000001 -- BTI
-| CPU: 0 PID: 174 Comm: cat Not tainted 5.16.0-rc2-dirty #3
-| Hardware name: linux,dummy-virt (DT)
-| pstate: 60400405 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=jc)
-| pc : ftrace_caller+0x0/0x3c
-| lr : lkdtm_debugfs_open+0xc/0x20 [lkdtm]
-| sp : ffff800012e43b00
-| x29: ffff800012e43b00 x28: 0000000000000000 x27: ffff800012e43c88
-| x26: 0000000000000000 x25: 0000000000000000 x24: ffff0000c171f200
-| x23: ffff0000c27b1e00 x22: ffff0000c2265240 x21: ffff0000c23c8c30
-| x20: ffff8000090ba380 x19: 0000000000000000 x18: 0000000000000000
-| x17: 0000000000000000 x16: ffff80001002bb4c x15: 0000000000000000
-| x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000900ff0
-| x11: ffff0000c4166310 x10: ffff800012e43b00 x9 : ffff8000104f2384
-| x8 : 0000000000000001 x7 : 0000000000000000 x6 : 000000000000003f
-| x5 : 0000000000000040 x4 : ffff800012e43af0 x3 : 0000000000000001
-| x2 : ffff8000090b0000 x1 : ffff0000c171f200 x0 : ffff0000c23c8c30
-| Kernel panic - not syncing: Unhandled exception
-| CPU: 0 PID: 174 Comm: cat Not tainted 5.16.0-rc2-dirty #3
-| Hardware name: linux,dummy-virt (DT)
-| Call trace:
-|  dump_backtrace+0x0/0x1a4
-|  show_stack+0x24/0x30
-|  dump_stack_lvl+0x68/0x84
-|  dump_stack+0x1c/0x38
-|  panic+0x168/0x360
-|  arm64_exit_nmi.isra.0+0x0/0x80
-|  el1h_64_sync_handler+0x68/0xd4
-|  el1h_64_sync+0x78/0x7c
-|  ftrace_caller+0x0/0x3c
-|  do_dentry_open+0x134/0x3b0
-|  vfs_open+0x38/0x44
-|  path_openat+0x89c/0xe40
-|  do_filp_open+0x8c/0x13c
-|  do_sys_openat2+0xbc/0x174
-|  __arm64_sys_openat+0x6c/0xbc
-|  invoke_syscall+0x50/0x120
-|  el0_svc_common.constprop.0+0xdc/0x100
-|  do_el0_svc+0x84/0xa0
-|  el0_svc+0x28/0x80
-|  el0t_64_sync_handler+0xa8/0x130
-|  el0t_64_sync+0x1a0/0x1a4
-| SMP: stopping secondary CPUs
-| Kernel Offset: disabled
-| CPU features: 0x0,00000f42,da660c5f
-| Memory Limit: none
-| ---[ end Kernel panic - not syncing: Unhandled exception ]---
-
-Fix this by adding the required `BTI C`, as we only require these to be
-reachable via BL for direct calls or BR X16/X17 for PLTs. For now, these
-are open-coded in the function prologue, matching the style of the
-`__hwasan_tag_mismatch` trampoline.
-
-In future we may wish to consider adding a new SYM_CODE_START_*()
-variant which has an implicit BTI.
-
-When ftrace is built atop mcount, the trampolines are marked with
-SYM_FUNC_START(), and so get an implicit BTI. We may need to change
-these over to SYM_CODE_START() in future for RELIABLE_STACKTRACE, in
-case we need to apply special care aroud the return address being
-rewritten.
-
-Fixes: 97fed779f2a6 ("arm64: bti: Provide Kconfig for kernel mode BTI")
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Will Deacon <will@kernel.org>
-Reviewed-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20211129135709.2274019-1-mark.rutland@arm.com
-Signed-off-by: Will Deacon <will@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: 3fdaf80f4a836 ("tracing: Implement event pid filtering")
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/kernel/entry-ftrace.S |    6 ++++++
- 1 file changed, 6 insertions(+)
+ kernel/trace/trace_events.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/arch/arm64/kernel/entry-ftrace.S
-+++ b/arch/arm64/kernel/entry-ftrace.S
-@@ -77,11 +77,17 @@
- 	.endm
+--- a/kernel/trace/trace_events.c
++++ b/kernel/trace/trace_events.c
+@@ -2341,12 +2341,19 @@ static struct trace_event_file *
+ trace_create_new_event(struct trace_event_call *call,
+ 		       struct trace_array *tr)
+ {
++	struct trace_pid_list *pid_list;
+ 	struct trace_event_file *file;
  
- SYM_CODE_START(ftrace_regs_caller)
-+#ifdef BTI_C
-+	BTI_C
-+#endif
- 	ftrace_regs_entry	1
- 	b	ftrace_common
- SYM_CODE_END(ftrace_regs_caller)
+ 	file = kmem_cache_alloc(file_cachep, GFP_TRACE);
+ 	if (!file)
+ 		return NULL;
  
- SYM_CODE_START(ftrace_caller)
-+#ifdef BTI_C
-+	BTI_C
-+#endif
- 	ftrace_regs_entry	0
- 	b	ftrace_common
- SYM_CODE_END(ftrace_caller)
++	pid_list = rcu_dereference_protected(tr->filtered_pids,
++					     lockdep_is_held(&event_mutex));
++
++	if (pid_list)
++		file->flags |= EVENT_FILE_FL_PID_FILTER;
++
+ 	file->event_call = call;
+ 	file->tr = tr;
+ 	atomic_set(&file->sm_ref, 0);
 
 

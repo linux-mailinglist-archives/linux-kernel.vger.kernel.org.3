@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D40469D9D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80944469EA0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387463AbhLFPbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:31:21 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:42988 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357928AbhLFPTU (ORCPT
+        id S1378303AbhLFPnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:43:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1386666AbhLFP0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:19:20 -0500
-Date:   Mon, 06 Dec 2021 15:15:48 -0000
+        Mon, 6 Dec 2021 10:26:50 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB9AC061359;
+        Mon,  6 Dec 2021 07:17:22 -0800 (PST)
+Date:   Mon, 06 Dec 2021 15:15:49 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638803749;
+        s=2020; t=1638803750;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/ThdUljxXIA7BAF+Uc3PyH3RzP3VEVIqiwe0bN7bsWE=;
-        b=2f3fuPLtPMxvL/QaJpbEkJ//sHgYP3IFfNYr9g/NIhQKsQG91H+tcXYKp/LdFWOqWujjuM
-        05rfw0jYgU+3jDrDQ5LaiEBHo5KfLvTnrFI++rh4E/9zRpCAS7haBRpzEwhC5o1V8Llisb
-        8lgO+PIPMJiY6gZNCob1PrTVOXf8iLT15ZyebqxjD7cAmWY++1itZgipI09LyPnnQtvAJh
-        KIXRABu0x2Bq8/+TkujlDxSwqYsROOxH6XdC/26B8JajXP2234/1J6JG2KLS3Hb7YCdoz9
-        9KDEAHIXFVLhdS8XTevV3wIkJ4SaKst7hqPRXIKQbjYEFU5ExS/mBbFJyUmy1w==
+        bh=NlwSy0KTkW8egjU4s3md9aosjgWu+klQvZ9SqaZM1lw=;
+        b=R1qObF1U7LeZKTFOGqKFJGUQvnAcA/undZpJd5zO7mwangMz2EZgPjAGL0wwiImtnhfHQW
+        Lejpbeop0BVErvTiA0VoYmA6MudGRusESgWG3F9jGTzUzOqZn1vOBtly7D5dLy4mzUMWDV
+        6PYtWK4eI0rqOdmYWgsGs81EuNYm0OadnpIWo3LZwdnunMxJnAFfOrIbSs7Pc8oum9acW3
+        TKrqhzXWRDsXN5N6eCoA50/QwAdEI3Gu5SroCvDIQqbcTXDGZKDO+qDPbavAN2RItwZfJv
+        y9dOvI+EZT2b32prfg6EgBRlmkNAqEiCdmBL5EYTTYVlBMgQ5JQnimX5mnnAiA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638803749;
+        s=2020e; t=1638803750;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/ThdUljxXIA7BAF+Uc3PyH3RzP3VEVIqiwe0bN7bsWE=;
-        b=0CORFqXCVuObQBl2V+cRRbGQ+rcs/yCbcy5ShTijuxF/oXMIxJFppcNgcFbuOc4iKN9BDz
-        gZ3AlGGqw5kdIwBg==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+        bh=NlwSy0KTkW8egjU4s3md9aosjgWu+klQvZ9SqaZM1lw=;
+        b=EZ97xfmDWyzmOiuFM7XvK2p1PO+Gy9pJ2+TPDYPdWoAfCLDbeFVpR4JCgGuxvUbXtj5lA4
+        4/cUuk+CWOhtHiCg==
+From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] locking/rtmutex: Squash self-deadlock check for
- ww_rt_mutex.
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+Subject: [tip: locking/core] locking: Remove rt_rwlock_is_contended().
+Cc:     kernel test robot <lkp@intel.com>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20211129174654.668506-4-bigeasy@linutronix.de>
-References: <20211129174654.668506-4-bigeasy@linutronix.de>
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211129174654.668506-3-bigeasy@linutronix.de>
+References: <20211129174654.668506-3-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163880374854.11128.16404759465745609173.tip-bot2@tip-bot2>
+Message-ID: <163880374939.11128.7605699076003373474.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -59,50 +62,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     02ea9fc96fe976e7f7e067f38b12202f126e3f2f
-Gitweb:        https://git.kernel.org/tip/02ea9fc96fe976e7f7e067f38b12202f126e3f2f
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Mon, 29 Nov 2021 18:46:46 +01:00
+Commit-ID:     e08f343be00c3fe8f9f6ac58085c81bcdd231fab
+Gitweb:        https://git.kernel.org/tip/e08f343be00c3fe8f9f6ac58085c81bcdd231fab
+Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+AuthorDate:    Mon, 29 Nov 2021 18:46:45 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Sat, 04 Dec 2021 10:56:23 +01:00
 
-locking/rtmutex: Squash self-deadlock check for ww_rt_mutex.
+locking: Remove rt_rwlock_is_contended().
 
-Similar to the issues in commits:
+rt_rwlock_is_contended() has no users. It makes no sense to use it as
+rwlock_is_contended() because it is a sleeping lock on RT and
+preemption is possible. It reports always != 0 if used by a writer and
+even if there is a waiter then the lock might not be handed over if
+the current owner has the highest priority.
 
-  6467822b8cc9 ("locking/rtmutex: Prevent spurious EDEADLK return caused by ww_mutexes")
-  a055fcc132d4 ("locking/rtmutex: Return success on deadlock for ww_mutex waiters")
+Remove rt_rwlock_is_contended().
 
-ww_rt_mutex_lock() should not return EDEADLK without first going through
-the __ww_mutex logic to set the required state. In fact, the chain-walk
-can deal with the spurious cycles (per the above commits) this check
-warns about and is trying to avoid.
-
-Therefore ignore this test for ww_rt_mutex and simply let things fall
-in place.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20211129174654.668506-4-bigeasy@linutronix.de
+Link: https://lore.kernel.org/r/20211129174654.668506-3-bigeasy@linutronix.de
 ---
- kernel/locking/rtmutex.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ kernel/locking/spinlock_rt.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-index 0c6a48d..f896208 100644
---- a/kernel/locking/rtmutex.c
-+++ b/kernel/locking/rtmutex.c
-@@ -1103,8 +1103,11 @@ static int __sched task_blocks_on_rt_mutex(struct rt_mutex_base *lock,
- 	 * the other will detect the deadlock and return -EDEADLOCK,
- 	 * which is wrong, as the other waiter is not in a deadlock
- 	 * situation.
-+	 *
-+	 * Except for ww_mutex, in that case the chain walk must already deal
-+	 * with spurious cycles, see the comments at [3] and [6].
- 	 */
--	if (owner == task)
-+	if (owner == task && !(build_ww_mutex() && ww_ctx))
- 		return -EDEADLK;
+diff --git a/kernel/locking/spinlock_rt.c b/kernel/locking/spinlock_rt.c
+index b2e553f..9e396a0 100644
+--- a/kernel/locking/spinlock_rt.c
++++ b/kernel/locking/spinlock_rt.c
+@@ -257,12 +257,6 @@ void __sched rt_write_unlock(rwlock_t *rwlock)
+ }
+ EXPORT_SYMBOL(rt_write_unlock);
  
- 	raw_spin_lock(&task->pi_lock);
+-int __sched rt_rwlock_is_contended(rwlock_t *rwlock)
+-{
+-	return rw_base_is_contended(&rwlock->rwbase);
+-}
+-EXPORT_SYMBOL(rt_rwlock_is_contended);
+-
+ #ifdef CONFIG_DEBUG_LOCK_ALLOC
+ void __rt_rwlock_init(rwlock_t *rwlock, const char *name,
+ 		      struct lock_class_key *key)

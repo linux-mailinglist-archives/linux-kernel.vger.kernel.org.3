@@ -2,88 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E77246ABBD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 23:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF6246ABC3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 23:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357831AbhLFWbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 17:31:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357412AbhLFWbV (ORCPT
+        id S1358010AbhLFWbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 17:31:48 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:45684 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357321AbhLFWbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 17:31:21 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB38C061746;
-        Mon,  6 Dec 2021 14:27:52 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id g16so3407090pgi.1;
-        Mon, 06 Dec 2021 14:27:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZJ9W19F9BVtFlFnJBI6M88XF4BCu/CVE632l0mNkIIQ=;
-        b=Y3xPtXcFAlydwm4j3JE2Uyb0fc1dC6VOqUmI2NEQReFtcqSW7ySiMc5FhgoFJNTLHI
-         jyKDd/kyvGUneg62yT4DIquASKBOthjxnu2R5G/52wqIfwv/K1dFwkS4Jad+RhYAZba/
-         sPBTwZHz/yE0Dyr9D9tlB9qIXIYbWuuJLZY0hYihOtod9T1zptaCBw7nDDMK9kxRL9+C
-         D15x9hro9t3EPMZC7FbSPWA7MnISH/m80E/xTWgcYNU5RbwpTuxct8y7pk5bXVogAJeg
-         BsETK7ugE+iNwYnLxGKZGNIHDDX32m5tS4vZ08E0w3QJBpWHvxyrT2wxSurdjInGcsSH
-         wOBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ZJ9W19F9BVtFlFnJBI6M88XF4BCu/CVE632l0mNkIIQ=;
-        b=G399SJbkYdAUjZL0Pi4L6xrldSk2TRzoKHibYrpTFsrPy+BUMHXzjM8l8exz07lKSN
-         5VVPLpGw6tW1JDLmLvY1KOQaWkZ//FhPKdnSavtlW8mXTDFnwDNJIGsMIMgHUTpAjVnx
-         /AYnKIt0XeHmkjDX9papimyDP5xM9/KURm4mFaQT9wFjDvdKiteE8ndU5RwZrg1Jnkpm
-         J8T0pQ71c+v6DzMdFBwcPXaket+QNGKj+fNKmUk9wBlQ4gI1C+9UO4j0yzGqDyFpWZRa
-         GhBySkwCg23UIm7qM3E62jgTxs3gJHg6rCZbG0KytLyVTkqQoMXd8he36IBu52t+x6+U
-         GaZw==
-X-Gm-Message-State: AOAM531la9r4Rj3F0dY2r5pLC+n8Oe3efJCw+I8S9ycVDeMXFpO6aOWl
-        BAlNt0Zps+rM1sSvvF4EW3vxcp7MTkY=
-X-Google-Smtp-Source: ABdhPJwtp2Spm/FITxeUSHHC6FaMEGtczgkWuSeK7WtAXvD4RyiWpvbxMlNKdUu0lggbf4qXzG/EyA==
-X-Received: by 2002:aa7:970e:0:b0:4a2:655f:7a12 with SMTP id a14-20020aa7970e000000b004a2655f7a12mr39360359pfg.65.1638829671878;
-        Mon, 06 Dec 2021 14:27:51 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id oj11sm337484pjb.46.2021.12.06.14.27.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 14:27:51 -0800 (PST)
-Subject: Re: [PATCH] dt-bindings: i2c: brcm,bcm2835-i2c: convert to YAML
- schema
-To:     David Heidelberg <david@ixit.cz>, Rob Herring <robh+dt@kernel.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Stephen Warren <swarren@wwwdotorg.org>
-Cc:     ~okias/devicetree@lists.sr.ht, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211206184613.100809-1-david@ixit.cz>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <d337e0e9-7013-b10f-f696-5133da3490e5@gmail.com>
-Date:   Mon, 6 Dec 2021 14:27:49 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 6 Dec 2021 17:31:20 -0500
+Message-ID: <20211206210224.710137730@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638829670;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         references:references; bh=ib3yuqujnroRqi+hLldSTb0C/KdcxiKhDFhBeAeajh8=;
+        b=YKghtY03bcoLP8OvEUv6g9Jjx1TFo+pzmg+zViZrV9C1Zqdyd+udciNW1BVKPTuIL8Z+sh
+        VkfSoebHJBGRLhECku0Xcu/1wA6jahAvvipQ9NOJi7sfSqnslLIaiWdUsi6UumMv8Ii0JT
+        2DbzczPuytoquIUE4qI7a+Rs+3SZz2k8vJC78RhGv6O3a0yi2pFj1Gt6yYNlPg+9HE8EhD
+        OMVLu3Q5kecJhaNaLyTGpaijaksYWeRdazPJXewvgHnUCQUGdmFPOc2DkNnsaNSCejEPc7
+        IQlwWECz6/FR1cQY3Dggy4ASx4++0pFep56S/3oZez+mph5GyIICQFrfOQSrhQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638829670;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         references:references; bh=ib3yuqujnroRqi+hLldSTb0C/KdcxiKhDFhBeAeajh8=;
+        b=A1eH8lsrzvvUb+UOPZHwegNVeviEvBxF3n2PgKLDm1Kz3CElL95PW6TVkRlKmYp31F7use
+        sr1vtn736Uy7EoCw==
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Cedric Le Goater <clg@kaod.org>,
+        Juergen Gross <jgross@suse.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        sparclinux@vger.kernel.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
+        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: [patch V2 16/23] PCI/MSI: Split out CONFIG_PCI_MSI independent part
+References: <20211206210147.872865823@linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20211206184613.100809-1-david@ixit.cz>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon,  6 Dec 2021 23:27:49 +0100 (CET)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/6/21 10:46 AM, David Heidelberg wrote:
-> Switch the DT binding to a YAML schema to enable the DT validation.
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
+These functions are required even when CONFIG_PCI_MSI is not set. Move them
+to their own file.
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+---
+ drivers/pci/msi/Makefile     |    3 ++-
+ drivers/pci/msi/msi.c        |   39 ---------------------------------------
+ drivers/pci/msi/pcidev_msi.c |   43 +++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 45 insertions(+), 40 deletions(-)
 
-Let me know if you are planning on converting more of the bcm2835
-binding so we don't overlap. Thanks!
--- 
-Florian
+--- a/drivers/pci/msi/Makefile
++++ b/drivers/pci/msi/Makefile
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+ #
+ # Makefile for the PCI/MSI
+-obj-$(CONFIG_PCI)		+= msi.o
++obj-$(CONFIG_PCI)		+= pcidev_msi.o
++obj-$(CONFIG_PCI_MSI)		+= msi.o
+--- a/drivers/pci/msi/msi.c
++++ b/drivers/pci/msi/msi.c
+@@ -18,8 +18,6 @@
+ 
+ #include "../pci.h"
+ 
+-#ifdef CONFIG_PCI_MSI
+-
+ static int pci_msi_enable = 1;
+ int pci_msi_ignore_mask;
+ 
+@@ -1493,40 +1491,3 @@ bool pci_dev_has_special_msi_domain(stru
+ }
+ 
+ #endif /* CONFIG_PCI_MSI_IRQ_DOMAIN */
+-#endif /* CONFIG_PCI_MSI */
+-
+-void pci_msi_init(struct pci_dev *dev)
+-{
+-	u16 ctrl;
+-
+-	/*
+-	 * Disable the MSI hardware to avoid screaming interrupts
+-	 * during boot.  This is the power on reset default so
+-	 * usually this should be a noop.
+-	 */
+-	dev->msi_cap = pci_find_capability(dev, PCI_CAP_ID_MSI);
+-	if (!dev->msi_cap)
+-		return;
+-
+-	pci_read_config_word(dev, dev->msi_cap + PCI_MSI_FLAGS, &ctrl);
+-	if (ctrl & PCI_MSI_FLAGS_ENABLE)
+-		pci_write_config_word(dev, dev->msi_cap + PCI_MSI_FLAGS,
+-				      ctrl & ~PCI_MSI_FLAGS_ENABLE);
+-
+-	if (!(ctrl & PCI_MSI_FLAGS_64BIT))
+-		dev->no_64bit_msi = 1;
+-}
+-
+-void pci_msix_init(struct pci_dev *dev)
+-{
+-	u16 ctrl;
+-
+-	dev->msix_cap = pci_find_capability(dev, PCI_CAP_ID_MSIX);
+-	if (!dev->msix_cap)
+-		return;
+-
+-	pci_read_config_word(dev, dev->msix_cap + PCI_MSIX_FLAGS, &ctrl);
+-	if (ctrl & PCI_MSIX_FLAGS_ENABLE)
+-		pci_write_config_word(dev, dev->msix_cap + PCI_MSIX_FLAGS,
+-				      ctrl & ~PCI_MSIX_FLAGS_ENABLE);
+-}
+--- /dev/null
++++ b/drivers/pci/msi/pcidev_msi.c
+@@ -0,0 +1,43 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * MSI[X} related functions which are available unconditionally.
++ */
++#include "../pci.h"
++
++/*
++ * Disable the MSI[X] hardware to avoid screaming interrupts during boot.
++ * This is the power on reset default so usually this should be a noop.
++ */
++
++void pci_msi_init(struct pci_dev *dev)
++{
++	u16 ctrl;
++
++	dev->msi_cap = pci_find_capability(dev, PCI_CAP_ID_MSI);
++	if (!dev->msi_cap)
++		return;
++
++	pci_read_config_word(dev, dev->msi_cap + PCI_MSI_FLAGS, &ctrl);
++	if (ctrl & PCI_MSI_FLAGS_ENABLE) {
++		pci_write_config_word(dev, dev->msi_cap + PCI_MSI_FLAGS,
++				      ctrl & ~PCI_MSI_FLAGS_ENABLE);
++	}
++
++	if (!(ctrl & PCI_MSI_FLAGS_64BIT))
++		dev->no_64bit_msi = 1;
++}
++
++void pci_msix_init(struct pci_dev *dev)
++{
++	u16 ctrl;
++
++	dev->msix_cap = pci_find_capability(dev, PCI_CAP_ID_MSIX);
++	if (!dev->msix_cap)
++		return;
++
++	pci_read_config_word(dev, dev->msix_cap + PCI_MSIX_FLAGS, &ctrl);
++	if (ctrl & PCI_MSIX_FLAGS_ENABLE) {
++		pci_write_config_word(dev, dev->msix_cap + PCI_MSIX_FLAGS,
++				      ctrl & ~PCI_MSIX_FLAGS_ENABLE);
++	}
++}
+

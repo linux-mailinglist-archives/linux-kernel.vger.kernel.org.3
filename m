@@ -2,212 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5107D46A8CE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86FC046A8D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349842AbhLFUyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 15:54:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
+        id S1349854AbhLFUyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 15:54:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238973AbhLFUyl (ORCPT
+        with ESMTP id S1349840AbhLFUyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 15:54:41 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832B6C061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 12:51:12 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id p4so12504144qkm.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 12:51:12 -0800 (PST)
+        Mon, 6 Dec 2021 15:54:51 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A60C0613F8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 12:51:22 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id np6-20020a17090b4c4600b001a90b011e06so842646pjb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 12:51:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=GRaAwXK2rSzM3Lp9oMiYyXb3xjjCWbcFm8UXB1aGFXg=;
-        b=IgCiPPgf6cAcBl8evExqjZpZyZkUljOdEjcAQ1qlxo9kgYTgNJUF2CvuRpfWAhDLY+
-         3ylzpEiMUVSssnlEBPpvEnCX55SpYmtBqO25yJilivDfDBtxI+PqtsAMJ9SAfEeKVJKU
-         lHLAbadtcxJnSVOjIVUSYzXRETj2Y1Vd2pNWdORdY2bo1HIcud1+p9gWXZ2KHsQy30ii
-         U5+yEhiCvimw/jx7FcMDiDJCw+VVeqIThIZr6z9xMHiMFEVeFwvL1VY4iD6RXfPr7PAc
-         5x/B90Z1ozEB4DghEGQjZ5vi6ULI52TZSB5yStKxltcVasX+wwi96QDRCjMMAOeM/UcP
-         ux2Q==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mCJ4nBf6Lo40Ydhx+IIYyWq/GXNaQKH4uw6Hx68amJM=;
+        b=QceAsGJixEdXIWVajZC5pj9oUyYkkA0rPKztynGXnWuxeFiY0GJd+OQq9CK2s1yJ3p
+         EbXNWRJrSEFMK3AEUhNiBSDkAESrXDEQHGYA+aKlcYeMWdAx4UYED5QzvVP7v54+hMir
+         2sE2cxDNiWuV1nJxEy0i7mZpkdfCeSVN0PM1I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=GRaAwXK2rSzM3Lp9oMiYyXb3xjjCWbcFm8UXB1aGFXg=;
-        b=33Wy7Qg9UTKs3BZvRhSlpefRTi1iDrC0MeGaOlYD9ImW8/tlxAoz4jfhankFDtdGW8
-         yy2E/FDJoknZ4p5zuXc4djkSR7yRgfxuyWauHK5BEUPgbSZjXqbIv9J74h0MVjP65As6
-         cMP+g8GRJmtfa8BQ47tVuyOmPWb02bliCSZLJ9mkbAJGxjDL1pMicT1+RMTc1Pxi0NCL
-         o5iFF6hn0Ki5LJefPj+yeg1SvUbEoZ+fj8G5vnJZnr1gyMXZhwFBg7WL/J52mXlbjFyr
-         h4NZLoAyqQJyVxEzxjnDjWJdq5OrxOPbKdxjjXDfiSYy5tg45XXp4vaANpE1LabL8UMT
-         j6QQ==
-X-Gm-Message-State: AOAM5305P3spWwTq8UCEJ7EooIEkUYJtCbASwnXycE4CGwjxh6JBh0kg
-        o1SUd7M/7wUwGiNnx6rxoHvs9g==
-X-Google-Smtp-Source: ABdhPJztSx9XHqWzMQjln614SKGQowAKOpctDFZUB6VnU0E80ndRg9LQhOP1cBDd6pBfwMJ3FDLSyQ==
-X-Received: by 2002:a05:620a:4307:: with SMTP id u7mr33471597qko.15.1638823871635;
-        Mon, 06 Dec 2021 12:51:11 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (mtl.collabora.ca. [66.171.169.34])
-        by smtp.gmail.com with ESMTPSA id h3sm7374741qko.78.2021.12.06.12.51.10
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mCJ4nBf6Lo40Ydhx+IIYyWq/GXNaQKH4uw6Hx68amJM=;
+        b=uf7b5hImSezgNuzu1Wx5aERc9SNbozfC2LmNj0zNcCjlwkRWBrJXVfY1ZvvP0+qwjQ
+         vXe2tb4X1WOvwSRifkcAuaX492btiGqmNNHKAQZhvDaXfUjS4fusUiapyYt2a6tiwaXQ
+         OuvYdEGfQV7UOR3u2jlJnJkLL5N2zSFTFP+LfRMUuetR+qQbob0qMhk6ynHfPIPlVQv5
+         2sUwd8JRdzZ6XJTREFvV5CSwJpy3hnf9jPN3SqDPMxpnHVBdCq9RiA8D/Pl7zmmZyPZn
+         b0hvLq9DUap92NBidU0nWATrltFZervHRiZn5EDjWXcYPDvc7tqUQ0QyCu0gYAyoeV8e
+         hnEw==
+X-Gm-Message-State: AOAM533kNwRjDei9C782A96PdvqNsqGqsMw1KwlY166x3QHSwLW4y7cR
+        sOQZZcW1zDrjxhUHu2Qip0YjGlkR1Ufm6A==
+X-Google-Smtp-Source: ABdhPJwd0z0OTzz0qvWpgQZFBgki7hiRllcp5VHVPHHFHjy1Xg4vtrktWWvpzaosTDvFAvoPlVV+Vw==
+X-Received: by 2002:a17:90a:5883:: with SMTP id j3mr1117921pji.13.1638823881893;
+        Mon, 06 Dec 2021 12:51:21 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h5sm13750950pfi.46.2021.12.06.12.51.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 12:51:11 -0800 (PST)
-Message-ID: <3b81a33d9bbadd10bc61c3daedecc5b73b99a435.camel@ndufresne.ca>
-Subject: Re: [RFC 0/5] Split iMX8MQ Hantro VPU into G1 and G2 with blk-ctrl
- support
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Adam Ford <aford173@gmail.com>, linux-media@vger.kernel.org
-Cc:     benjamin.gaignard@collabora.com, cphealy@gmail.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev
-Date:   Mon, 06 Dec 2021 15:51:09 -0500
-In-Reply-To: <CAHCN7xL3PSbHKZK_4NKRwhNGOZYM+i54CoKCq01a6kdbCLc2KA@mail.gmail.com>
-References: <20211205181618.1041699-1-aford173@gmail.com>
-         <CAHCN7xL3PSbHKZK_4NKRwhNGOZYM+i54CoKCq01a6kdbCLc2KA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.1 (3.42.1-1.fc35) 
+        Mon, 06 Dec 2021 12:51:21 -0800 (PST)
+Date:   Mon, 6 Dec 2021 12:51:21 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] block: switch to atomic_t for request references
+Message-ID: <202112061247.C5CD07E3C@keescook>
+References: <9f2ad6f1-c1bb-dfac-95c8-7d9eaa7110cc@kernel.dk>
+ <Ya2zfVAwh4aQ7KVd@infradead.org>
+ <Ya3KZiLg5lYjsGcQ@hirez.programming.kicks-ass.net>
+ <CAHk-=wjXmGt9-JQp-wvup4y2tFNUCVjvx2W7MHzuAaxpryP4mg@mail.gmail.com>
+ <282666e2-93d4-0302-b2d0-47d03395a6d4@kernel.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <282666e2-93d4-0302-b2d0-47d03395a6d4@kernel.dk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le dimanche 05 décembre 2021 à 13:51 -0600, Adam Ford a écrit :
-> On Sun, Dec 5, 2021 at 12:16 PM Adam Ford <aford173@gmail.com> wrote:
+On Mon, Dec 06, 2021 at 11:13:20AM -0700, Jens Axboe wrote:
+> On 12/6/21 10:35 AM, Linus Torvalds wrote:
+> > On Mon, Dec 6, 2021 at 12:31 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >>
+> >> Quite; and for something that pretends to be about performance, it also
+> >> lacks any actual numbers to back that claim.
+> >>
+> >> The proposed implementation also doesn't do nearly as much as the
+> >> refcount_t one does.
 > > 
-> > Currently, the VPU in the i.MQ8MQ is appearing as one codec, but in reality, it's
-> > two IP blocks called G1 and G2.  There is initialization code in VPU code to
-> > pull some clocks, resets and other features which has been integrated into
-> > the vpu-blk-ctrl for the i.MX8M Mini and a similar method can be used to make
-> > the VPU codec's operate as stand-alone cores without having to know the details
-> > of each other or the quirks unique to the i.MX8MQ, so the remaining code can be
-> > left more generic.
+> > Stop pretending refcoutn_t is that great.
 > > 
-> > This series was started by Lucas Stach, and picked up by me so some patches have
-> > his s-o-b and mine where I might have changed a few minor items.  It's in an RFC state
-> > because the G2 VP9 operations appear to hang, but the parent code from which I started doesn't
-> > appear to show VP9 support, and it looks like it should.
+> > It's horrid. The code it generators is disgusting. It should never
+> > have been inlines in the first place, and the design decsisions were
+> > questionable to begin with.
 > > 
-> > since the g-streamer and media trees are in a constant state of change, this series is based on
-> > git://linuxtv.org/hverkuil/media_tree.git for-v5.17e
+> > There's a reason core stuff (like the page counters) DO NOT USE REFCOUNT_T.
 > > 
-> 
-> I forgot to post Fluster results.
-> 
-> Before the patches to this branch:
-> 
-> 2gst-main] root@localhost:~/gstreamer/fluster# ./fluster.py list -c |grep -i v4l
-> 
->     GStreamer-H.264-V4L2-Gst1.0: GStreamer H.264 V4L2 decoder for
-> GStreamer 1.0... ❌
->     GStreamer-H.264-V4L2SL-Gst1.0: GStreamer H.264 V4L2SL decoder for
-> GStreamer 1.0... ✔️
->     GStreamer-H.265-V4L2-Gst1.0: GStreamer H.265 V4L2 decoder for
-> GStreamer 1.0... ❌
->     GStreamer-H.265-V4L2SL-Gst1.0: GStreamer H.265 V4L2SL decoder for
-> GStreamer 1.0... ❌
->     GStreamer-VP8-V4L2-Gst1.0: GStreamer VP8 V4L2 decoder for GStreamer 1.0... ❌
->     GStreamer-VP8-V4L2SL-Gst1.0: GStreamer VP8 V4L2SL decoder for
-> GStreamer 1.0... ✔️
->     GStreamer-VP9-V4L2SL-Gst1.0: GStreamer VP9 V4L2SL decoder for
-> GStreamer 1.0... ❌
->     GStreamer-AV1-V4L2SL-Gst1.0: GStreamer AV1 V4L2SL decoder for
-> GStreamer 1.0... ❌
-> [gst-main] root@localhost:~/gstreamer/fluster#
-> 
-> There was no VP9 support.
-> 
-> ./fluster.py run -dGStreamer-H.264-V4L2SL-Gst1.0
-> GStreamer-H.264-V4L2SL-Gst1.0
-> Ran 90/135 tests successfully               in 58.787 secs
-> 
-> AFTER this series, two decoders appear:
-> 
-> [   15.919137] hantro-vpu 38300000.video-codec: registered
-> nxp,imx8mq-vpu-g1-dec as /dev/video0
-> [   15.983579] hantro-vpu 38310000.video-codec: registered
-> nxp,imx8mq-vpu-g2-dec as /dev/video1
-> 
-> VP9 was listed:
-> 
->     GStreamer-H.264-V4L2-Gst1.0: GStreamer H.264 V4L2 decoder for
-> GStreamer 1.0... ❌
->     GStreamer-H.264-V4L2SL-Gst1.0: GStreamer H.264 V4L2SL decoder for
-> GStreamer 1.0... ✔️
->     GStreamer-H.265-V4L2-Gst1.0: GStreamer H.265 V4L2 decoder for
-> GStreamer 1.0... ❌
->     GStreamer-H.265-V4L2SL-Gst1.0: GStreamer H.265 V4L2SL decoder for
-> GStreamer 1.0... ❌
->     GStreamer-VP8-V4L2-Gst1.0: GStreamer VP8 V4L2 decoder for GStreamer 1.0... ❌
->     GStreamer-VP8-V4L2SL-Gst1.0: GStreamer VP8 V4L2SL decoder for
-> GStreamer 1.0... ✔️
->     GStreamer-VP9-V4L2SL-Gst1.0: GStreamer VP9 V4L2SL decoder for
-> GStreamer 1.0... ✔️
->     GStreamer-AV1-V4L2SL-Gst1.0: GStreamer AV1 V4L2SL decoder for
-> GStreamer 1.0... ❌
-> 
-> ./fluster.py run -d GStreamer-VP8-V4L2SL-Gst1.0
-> Ran 55/61 tests successfully               in 8.565 secs
-> 
-> 
-> ./fluster.py run -dGStreamer-H.264-V4L2SL-Gst1.0
-> Ran 90/135 tests successfully               in 60.269 secs
-> 
-> Same results for H.264
-> 
-> VP9 Hangs, where it didn't even appear as available before:
-> 
-> ./fluster.py run -d GStreamer-VP9-V4L2SL-Gst1.0
-> ****************************************************************************************************
-> Running test suite VP9-TEST-VECTORS with decoder GStreamer-VP9-V4L2SL-Gst1.0
-> Using 4 parallel job(s)
-> ****************************************************************************************************
-> 
-> [TEST SUITE      ] (DECODER                    ) TEST VECTOR
->                           ... RESULT
-> ----------------------------------------------------------------------
-> [VP9-TEST-VECTORS] (GStreamer-VP9-V4L2SL-Gst1.0)
-> vp90-2-00-quantizer-00.webm                     ... Success
-> [VP9-TEST-VECTORS] (GStreamer-VP9-V4L2SL-Gst1.0)
-> vp90-2-00-quantizer-01.webm                     ... Success
-> [VP9-TEST-VECTORS] (GStreamer-VP9-V4L2SL-Gst1.0)
-> vp90-2-00-quantizer-02.webm                     ... Succes
-> 
-> <hang > - and yes, 'Success' didnt' finish writing to the serial port.
+> > I seriously believe that refcount_t should be used for things like
+> > device reference counting or similar issues, and not for _any_ truly
+> > core code.
 
-Looks like hope to me ! Do you get further with -j 1 (one concurrent decode) ?
+I'd like core code to be safe too, though. :)
 
-> 
-> 
-> 
-> > Adam Ford (2):
-> >   media: hantro: split i.MX8MQ G1 and G2 code
-> >   arm64: dts: imx8mq: Split i.MX8MQ G1 and G2 with vpu-blk-ctrl
-> > 
-> > Lucas Stach (3):
-> >   dt-bindings: power: imx8mq: add defines for VPU blk-ctrl domains
-> >   dt-bindings: soc: add binding for i.MX8MQ VPU blk-ctrl
-> >   soc: imx: imx8m-blk-ctrl: add i.MX8MQ VPU blk-ctrl
-> > 
-> >  .../soc/imx/fsl,imx8mq-vpu-blk-ctrl.yaml      |  71 +++++++++++
-> >  arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  69 ++++++----
-> >  drivers/soc/imx/imx8m-blk-ctrl.c              |  67 ++++++++++
-> >  drivers/staging/media/hantro/hantro_drv.c     |   4 +-
-> >  drivers/staging/media/hantro/hantro_hw.h      |   2 +-
-> >  drivers/staging/media/hantro/imx8m_vpu_hw.c   | 119 +++---------------
-> >  include/dt-bindings/power/imx8mq-power.h      |   3 +
-> >  7 files changed, 205 insertions(+), 130 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/soc/imx/fsl,imx8mq-vpu-blk-ctrl.yaml
-> > 
-> > --
-> > 2.32.0
-> > 
+> Maybe we just need to embrace it generically, took a quick stab at it
+> which is attached. Totally untested...
 
+As long as we have an API that can't end up in a pathological state, I'm
+happy. The problem with prior atomic_t use was that it never noticed
+when it was entering a condition that could be used to confuse system
+state (use-after-free, etc). Depending on people to "use it correctly"
+or never make mistakes is not sufficient: we need an API that protects
+itself. We have to assume there are, and will continue to be, bugs with
+refcounting.
+
+-- 
+Kees Cook

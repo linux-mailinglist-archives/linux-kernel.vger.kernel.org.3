@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8AC5469F05
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7502E469B20
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391235AbhLFPpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:45:18 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34702 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377440AbhLFP2z (ORCPT
+        id S1347021AbhLFPM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:12:59 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57558 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347070AbhLFPID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:28:55 -0500
+        Mon, 6 Dec 2021 10:08:03 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66C12B81139;
-        Mon,  6 Dec 2021 15:25:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFC12C34901;
-        Mon,  6 Dec 2021 15:25:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEF4D612D3;
+        Mon,  6 Dec 2021 15:04:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE4D4C341C1;
+        Mon,  6 Dec 2021 15:04:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804322;
-        bh=lZaopSE4MOHJhCbeois7StknvQvQN2F4ASvxIU0Wjzw=;
+        s=korg; t=1638803073;
+        bh=vGKg4XJnlC2rLqxy6AMLtQpcsXf2Ig9OjiDXLA84ljk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bjdAQie4pJsbaGY2EU6WpjtNc/vcZSzAML+dlO85yThVNceBPXIpse4AhPHt/dQ22
-         sqvNNiCpUgV1Q9IXPnnq9z5Y8u7ieW1LGK1ATgSeP21ul/GDpX5+gcjMCAyN+NaLBN
-         gYpIKyhCbD9RKQkANX3DaSv+lZp9+1u1AEYWZP6c=
+        b=JcrcMmNghK4NboJRkiB4nVkuE08YwSukJCcUazgDTmQvuh9pPQgne9ugaUR7JVEYY
+         a7AQt3xxbrzB1XfjSBUMmBk7QPX4C2MYzpYM2Z7NRQ5Qr1IfiDXQnEabR9lcZ1OhP8
+         x1ckkEmNeSgwvpYmi154X9ND6UWtm7Py/57/EfSw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 073/207] KVM: Ensure local memslot copies operate on up-to-date arch-specific data
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 019/106] NFSv42: Dont fail clone() unless the OP_CLONE operation failed
 Date:   Mon,  6 Dec 2021 15:55:27 +0100
-Message-Id: <20211206145612.761947819@linuxfoundation.org>
+Message-Id: <20211206145556.038875706@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,148 +46,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit bda44d844758c70c8dc1478e6fc9c25efa90c5a7 upstream.
+[ Upstream commit d3c45824ad65aebf765fcf51366d317a29538820 ]
 
-When modifying memslots, snapshot the "old" memslot and copy it to the
-"new" memslot's arch data after (re)acquiring slots_arch_lock.  x86 can
-change a memslot's arch data while memslot updates are in-progress so
-long as it holds slots_arch_lock, thus snapshotting a memslot without
-holding the lock can result in the consumption of stale data.
+The failure to retrieve post-op attributes has no bearing on whether or
+not the clone operation itself was successful. We must therefore ignore
+the return value of decode_getfattr() when looking at the success or
+failure of nfs4_xdr_dec_clone().
 
-Fixes: b10a038e84d1 ("KVM: mmu: Add slots_arch_lock for memslot arch fields")
-Cc: stable@vger.kernel.org
-Cc: Ben Gardon <bgardon@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20211104002531.1176691-2-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 36022770de6c ("nfs42: add CLONE xdr functions")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- virt/kvm/kvm_main.c |   47 +++++++++++++++++++++++++++++++----------------
- 1 file changed, 31 insertions(+), 16 deletions(-)
+ fs/nfs/nfs42xdr.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -1523,11 +1523,10 @@ static struct kvm_memslots *kvm_dup_mems
- 
- static int kvm_set_memslot(struct kvm *kvm,
- 			   const struct kvm_userspace_memory_region *mem,
--			   struct kvm_memory_slot *old,
- 			   struct kvm_memory_slot *new, int as_id,
- 			   enum kvm_mr_change change)
- {
--	struct kvm_memory_slot *slot;
-+	struct kvm_memory_slot *slot, old;
- 	struct kvm_memslots *slots;
- 	int r;
- 
-@@ -1558,7 +1557,7 @@ static int kvm_set_memslot(struct kvm *k
- 		 * Note, the INVALID flag needs to be in the appropriate entry
- 		 * in the freshly allocated memslots, not in @old or @new.
- 		 */
--		slot = id_to_memslot(slots, old->id);
-+		slot = id_to_memslot(slots, new->id);
- 		slot->flags |= KVM_MEMSLOT_INVALID;
- 
- 		/*
-@@ -1589,6 +1588,26 @@ static int kvm_set_memslot(struct kvm *k
- 		kvm_copy_memslots(slots, __kvm_memslots(kvm, as_id));
- 	}
- 
-+	/*
-+	 * Make a full copy of the old memslot, the pointer will become stale
-+	 * when the memslots are re-sorted by update_memslots(), and the old
-+	 * memslot needs to be referenced after calling update_memslots(), e.g.
-+	 * to free its resources and for arch specific behavior.  This needs to
-+	 * happen *after* (re)acquiring slots_arch_lock.
-+	 */
-+	slot = id_to_memslot(slots, new->id);
-+	if (slot) {
-+		old = *slot;
-+	} else {
-+		WARN_ON_ONCE(change != KVM_MR_CREATE);
-+		memset(&old, 0, sizeof(old));
-+		old.id = new->id;
-+		old.as_id = as_id;
-+	}
-+
-+	/* Copy the arch-specific data, again after (re)acquiring slots_arch_lock. */
-+	memcpy(&new->arch, &old.arch, sizeof(old.arch));
-+
- 	r = kvm_arch_prepare_memory_region(kvm, new, mem, change);
- 	if (r)
- 		goto out_slots;
-@@ -1596,14 +1615,18 @@ static int kvm_set_memslot(struct kvm *k
- 	update_memslots(slots, new, change);
- 	slots = install_new_memslots(kvm, as_id, slots);
- 
--	kvm_arch_commit_memory_region(kvm, mem, old, new, change);
-+	kvm_arch_commit_memory_region(kvm, mem, &old, new, change);
-+
-+	/* Free the old memslot's metadata.  Note, this is the full copy!!! */
-+	if (change == KVM_MR_DELETE)
-+		kvm_free_memslot(kvm, &old);
- 
- 	kvfree(slots);
- 	return 0;
- 
- out_slots:
- 	if (change == KVM_MR_DELETE || change == KVM_MR_MOVE) {
--		slot = id_to_memslot(slots, old->id);
-+		slot = id_to_memslot(slots, new->id);
- 		slot->flags &= ~KVM_MEMSLOT_INVALID;
- 		slots = install_new_memslots(kvm, as_id, slots);
- 	} else {
-@@ -1618,7 +1641,6 @@ static int kvm_delete_memslot(struct kvm
- 			      struct kvm_memory_slot *old, int as_id)
- {
- 	struct kvm_memory_slot new;
--	int r;
- 
- 	if (!old->npages)
- 		return -EINVAL;
-@@ -1631,12 +1653,7 @@ static int kvm_delete_memslot(struct kvm
- 	 */
- 	new.as_id = as_id;
- 
--	r = kvm_set_memslot(kvm, mem, old, &new, as_id, KVM_MR_DELETE);
--	if (r)
--		return r;
+diff --git a/fs/nfs/nfs42xdr.c b/fs/nfs/nfs42xdr.c
+index 5966e1e7b1f51..09c683402f950 100644
+--- a/fs/nfs/nfs42xdr.c
++++ b/fs/nfs/nfs42xdr.c
+@@ -625,8 +625,7 @@ static int nfs4_xdr_dec_clone(struct rpc_rqst *rqstp,
+ 	status = decode_clone(xdr);
+ 	if (status)
+ 		goto out;
+-	status = decode_getfattr(xdr, res->dst_fattr, res->server);
 -
--	kvm_free_memslot(kvm, old);
--	return 0;
-+	return kvm_set_memslot(kvm, mem, &new, as_id, KVM_MR_DELETE);
- }
- 
- /*
-@@ -1711,7 +1728,6 @@ int __kvm_set_memory_region(struct kvm *
- 	if (!old.npages) {
- 		change = KVM_MR_CREATE;
- 		new.dirty_bitmap = NULL;
--		memset(&new.arch, 0, sizeof(new.arch));
- 	} else { /* Modify an existing slot. */
- 		if ((new.userspace_addr != old.userspace_addr) ||
- 		    (new.npages != old.npages) ||
-@@ -1725,9 +1741,8 @@ int __kvm_set_memory_region(struct kvm *
- 		else /* Nothing to change. */
- 			return 0;
- 
--		/* Copy dirty_bitmap and arch from the current memslot. */
-+		/* Copy dirty_bitmap from the current memslot. */
- 		new.dirty_bitmap = old.dirty_bitmap;
--		memcpy(&new.arch, &old.arch, sizeof(new.arch));
- 	}
- 
- 	if ((change == KVM_MR_CREATE) || (change == KVM_MR_MOVE)) {
-@@ -1753,7 +1768,7 @@ int __kvm_set_memory_region(struct kvm *
- 			bitmap_set(new.dirty_bitmap, 0, new.npages);
- 	}
- 
--	r = kvm_set_memslot(kvm, mem, &old, &new, as_id, change);
-+	r = kvm_set_memslot(kvm, mem, &new, as_id, change);
- 	if (r)
- 		goto out_bitmap;
- 
++	decode_getfattr(xdr, res->dst_fattr, res->server);
+ out:
+ 	res->rpc_status = status;
+ 	return status;
+-- 
+2.33.0
+
 
 

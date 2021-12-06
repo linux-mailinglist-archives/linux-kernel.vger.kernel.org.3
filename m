@@ -2,82 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE2C469762
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6604446975F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 14:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244722AbhLFNrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 08:47:45 -0500
-Received: from mga12.intel.com ([192.55.52.136]:3659 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244642AbhLFNro (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 08:47:44 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="217338493"
-X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="217338493"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 05:44:14 -0800
-X-IronPort-AV: E=Sophos;i="5.87,291,1631602800"; 
-   d="scan'208";a="611240840"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 05:44:12 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1muEGt-002nQb-8m;
-        Mon, 06 Dec 2021 15:43:11 +0200
-Date:   Mon, 6 Dec 2021 15:43:11 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Ralph Siemsen <ralph.siemsen@linaro.org>
-Subject: Re: linux-next: manual merge of the char-misc tree with the
- char-misc.current tree
-Message-ID: <Ya4Tb9NUj33UdxmI@smile.fi.intel.com>
-References: <20211206144901.63529ac9@canb.auug.org.au>
+        id S244695AbhLFNr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 08:47:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244642AbhLFNrZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 08:47:25 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3668C0613F8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 05:43:56 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id 207so20998760ljf.10
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 05:43:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=7Z4bIWUJcNwasnOvZT//wASf4/xDxe1Cc4BxfIfuhGs=;
+        b=Zm4K5rAkSdBzHfoNYuE8LV/fJbsU2mJi6Af6KlVKPW1F1QmdWVuSitegQz1IfOMs6r
+         QV7I3YPPQ+MItShMcLrLtzHC4nFOZTbMl5QFm+Sy6OctQ3IJhpz9q07UY7AQIDQby55Q
+         mwxMX5BmpCZBINPw+craorfMX/lNue9BM6iY6KWBNp4jUadrmv4E3f3Td9bvYNNrzEoK
+         KiwQnhFltU7t+mmBni8ZtTbr+jPfRa3bA57zJrBLJigMIr0x19ttD/3M7/Kct3B+zXzK
+         c7xybpgJX5oQRokyhari6LN00X+KmTryO1W3J8T4u8R8joeJV8MmV8wDpmP9RGYrkdBF
+         Xq2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=7Z4bIWUJcNwasnOvZT//wASf4/xDxe1Cc4BxfIfuhGs=;
+        b=lOxe1pIZMBCLW+BPyD1FB4K6bhJXN6ey6kxKyfr5+gfFp6JnJo9nI73rB5oz43yRLh
+         tHUdnr6qTyXxCiaeBtUTlJnEh3mXk/GbJu+QgG0FmvRIawEFAAVzyeU74R6hOv9ETsIS
+         oxqSeLKpbgLjqaue4OFDPUQ++di3dkNaIsUvGt+YXCaHURuj8Lm1TJD06t2VAS9xD2Ao
+         Wowv58jITAGUU1Mfosg6uW3+K/+iZPzEQ6Bac6f3XLsTYrirFnDLmSN9jSqjuPUbJjhm
+         aVnsW6uEv2Y47JFjjf1S+G+1VapZsm7TAP3Y34FGMjcWi/eNtd0ccFgqgt+Zg6ZsCDG2
+         6XGQ==
+X-Gm-Message-State: AOAM533RoimrPt8I3Mv6UpUu1HWDCRgsgyQzQMaH6FYxkVOqNERBx9og
+        m8eqfqfSt9xPclYNXja0UQb0WlBrDZHsPywjJmo=
+X-Google-Smtp-Source: ABdhPJy3LOpoTIu64013sqW0dHRRlXaAEBAtEtSzFkizWWdAskZOmNXhjX/UH5ypxTlqkQaxjjjECut93LqLN9L79Ho=
+X-Received: by 2002:a05:651c:a0f:: with SMTP id k15mr37383407ljq.298.1638798234767;
+ Mon, 06 Dec 2021 05:43:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206144901.63529ac9@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Received: by 2002:ab3:7f47:0:0:0:0:0 with HTTP; Mon, 6 Dec 2021 05:43:53 -0800 (PST)
+Reply-To: mohammedshamekh24@gmail.com
+From:   Mr mohammed shamekh <nasserkhalilaljaidah90@gmail.com>
+Date:   Mon, 6 Dec 2021 05:43:53 -0800
+Message-ID: <CAERPTfHc8wGewE_pqsqrXw6L4pscwYEtXPe49K5c3y9+Mnbfqw@mail.gmail.com>
+Subject: THE AMOUNT IS 27.5 MILLIOMS USD
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 02:49:01PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the char-misc tree got a conflict in:
-> 
->   drivers/misc/eeprom/at25.c
-> 
-> between commit:
-> 
->   9a626577398c ("nvmem: eeprom: at25: fix FRAM byte_len")
-> 
-> from the char-misc.current tree and commits:
-> 
->   5b557298d7d0 ("misc: at25: Make driver OF independent again")
->   a692fc39bf90 ("misc: at25: Don't copy garbage to the at25->chip in FRAM case")
->   58589a75bba9 ("misc: at25: Check proper value of chip length in FRAM case")
->   51902c1212fe ("misc: at25: Use at25->chip instead of local chip everywhere in ->probe()")
-> (and probably more)
-> 
-> from the char-misc tree.
-> 
-> I fixed it up (I just used the latter version) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
-
-The result from char-misc.current should be used as is and I guess it's
-what you have done, thanks!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+RGVhcsKgRnJpZW5kLA0KDQpHcmVldGluZ3MuDQoNCkhvd8KgYXJlwqB5b3XCoGRvaW5nwqB0b2Rh
+ecKgacKgaG9wZcKgZmluZT8NCg0KScKgY2FtZcKgYWNyb3NzwqB5b3VywqBlLW1haWzCoGNvbnRh
+Y3TCoHByaW9ywqBhwqBwcml2YXRlwqBzZWFyY2jCoHdoaWxlwqBpbsKgbmVlZA0Kb2bCoHlvdXLC
+oGFzc2lzdGFuY2UuwqBNecKgbmFtZcKgIE1yICBtb2hhbW1lZCAgIHNoYW1la2ggIOKAmcKgScKg
+d29ya8Kgd2l0aMKgdGhlDQpkZXBhcnRtZW50wqBvZsKgQXVkaXTCoGFuZMKgYWNjb3VudGluZ8Kg
+bWFuYWdlcsKgaGVyZcKgaW7CoFVCQcKgQmFua8Kgb2bCoEFmcmljYSwNClRoZXJlwqBpc8KgdGhp
+c8KgZnVuZMKgdGhhdMKgd2FzwqBrZWVwwqBpbsKgbXnCoGN1c3RvZHnCoHllYXJzwqBhZ2/CoGFu
+ZMKgScKgbmVlZA0KeW91csKgYXNzaXN0YW5jZcKgZm9ywqB0aGXCoHRyYW5zZmVycmluZ8Kgb2bC
+oHRoaXPCoGZ1bmTCoHRvwqB5b3VywqBiYW5rwqBhY2NvdW50DQpmb3LCoGJvdGjCoG9mwqB1c8Kg
+YmVuZWZpdMKgZm9ywqBsaWZlwqB0aW1lwqBpbnZlc3RtZW50wqBhbmTCoHRoZcKgYW1vdW50wqBp
+c8KgKFVTDQokMjcsNTAwLsKgTWlsbGlvbsKgRG9sbGFycykuDQoNCknCoGhhdmXCoGV2ZXJ5wqBp
+bnF1aXJ5wqBkZXRhaWxzwqB0b8KgbWFrZcKgdGhlwqBiYW5rwqBiZWxpZXZlwqB5b3XCoGFuZMKg
+cmVsZWFzZQ0KdGhlwqBmdW5kwqB0b8KgeW91csKgYmFua8KgYWNjb3VudMKgaW7CoHdpdGhpbsKg
+N8KgYmFua2luZ8Kgd29ya2luZ8KgZGF5c8Kgd2l0aA0KeW91csKgZnVsbMKgY28tb3BlcmF0aW9u
+wqB3aXRowqBtZcKgYWZ0ZXLCoHN1Y2Nlc3PCoE5vdGXCoDUwJcKgZm9ywqB5b3XCoHdoaWxlDQo1
+MCXCoGZvcsKgbWXCoGFmdGVywqBzdWNjZXNzwqBvZsKgdGhlwqB0cmFuc2ZlcsKgb2bCoHRoZcKg
+ZnVuZHPCoHRvwqB5b3VywqBiYW5rDQphY2NvdW50wqBva2F5Lg0KDQpXQUlUSU5HwqBUT8KgSEVB
+UsKgRlJPTcKgWU9VLg0KVEhBTktTLg0KDQogTXIgIG1vaGFtbWVkICAgc2hhbWVraCAsDQo=

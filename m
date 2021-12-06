@@ -2,200 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB5046A5E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6EF46A5F2
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:47:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245486AbhLFTr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:47:58 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:45639 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245093AbhLFTr5 (ORCPT
+        id S1348677AbhLFTvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:51:00 -0500
+Received: from mout.kundenserver.de ([217.72.192.74]:34811 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348667AbhLFTu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:47:57 -0500
-Received: by mail-ot1-f41.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso14988003otf.12;
-        Mon, 06 Dec 2021 11:44:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pOQ79x7j60T/Aoxgzg7Q/WKtgZBCeGXzkMDE3RqKJOo=;
-        b=3QmNFG4nFCwHFK6G4lTDvKegPj4zwBJcSM1hEKvUamJ7PeAvlCe3G8Uan4BjTLgsKy
-         TGNRDHO0ubulixJq7F1X+UOY6cmlL28/Kje4LxDKlAhT3B2UAXKLaEiLhCRvsPuC/tze
-         L+TuUewqUDjauW0N0/AReitQS6SS19wU/vzcItnAYHa8EvgB2cwezSsoRNxl/kDuTfIy
-         MG2dyXZ/IOD9vaXK1oKVeHUKp6K0IiHXkXC5tyX5ylOvIgSLem8hZe9PE3Z2uiRVcWeT
-         aG04K0qSM8KzOKX0JbvNDVr31D9BMww6U5usbEjedh8tJ0Avm0ddESjBiQZkH9DMFPPQ
-         2DMg==
-X-Gm-Message-State: AOAM532gBskUq39NztkagaknjFju48m3qycKy6NUIAkFTFTpfgzsNmeT
-        5RQ+PQLP8RxizAIprB4vJmyK5bK5XA==
-X-Google-Smtp-Source: ABdhPJz52nzCgw/hwbjYAAgjDYBEG+KdXK5nF3jLcZY0sCOmKJpTkCzBrNtc47G1zyZLA2GWcVNmwg==
-X-Received: by 2002:a9d:77d1:: with SMTP id w17mr30919009otl.329.1638819867943;
-        Mon, 06 Dec 2021 11:44:27 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id o6sm2291382oou.41.2021.12.06.11.44.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 11:44:27 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Xiaowei Song <songxiaowei@hisilicon.com>,
-        Binghui Wang <wangbinghui@hisilicon.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] dt-bindings: PCI: designware: Fix 'unevaluatedProperties' warnings
-Date:   Mon,  6 Dec 2021 13:44:25 -0600
-Message-Id: <20211206194426.2470080-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Mon, 6 Dec 2021 14:50:57 -0500
+Received: from mail-wm1-f42.google.com ([209.85.128.42]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MAxLT-1mjYSV2OvB-00BMFO; Mon, 06 Dec 2021 20:47:26 +0100
+Received: by mail-wm1-f42.google.com with SMTP id c6-20020a05600c0ac600b0033c3aedd30aso623911wmr.5;
+        Mon, 06 Dec 2021 11:47:26 -0800 (PST)
+X-Gm-Message-State: AOAM533hENI+IVP8xGk8xsR8SVxt7gNAajkdk2xPQjrUzND5R87OEvZD
+        hFNrgjGrZ6QoDxUEn8MQlbEASWGCdZJ8gdTHUho=
+X-Google-Smtp-Source: ABdhPJztNu6678Mht2pSIA0DSQ8/VKNXlr9p6a5Ci1Nw/hY77mcfRR9vOrextclxIuD5gy0eWQd4ShVxESDBOjc+AU8=
+X-Received: by 2002:a1c:23d4:: with SMTP id j203mr758752wmj.35.1638820046033;
+ Mon, 06 Dec 2021 11:47:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <202112061809.XT99aPrf-lkp@intel.com> <32ba635c-4588-4ea3-bd95-c55a33804e99@www.fastmail.com>
+In-Reply-To: <32ba635c-4588-4ea3-bd95-c55a33804e99@www.fastmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 6 Dec 2021 20:47:09 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2Ag60Dw1mbTsj7XVanT6u8kQW5vqK3hAD-yon1G8qKXw@mail.gmail.com>
+Message-ID: <CAK8P3a2Ag60Dw1mbTsj7XVanT6u8kQW5vqK3hAD-yon1G8qKXw@mail.gmail.com>
+Subject: Re: powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-core.o:undefined
+ reference to `__this_module'
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     kernel test robot <lkp@intel.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wolfram Sang <wsa-dev@sang-engineering.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:ofRCIMufLGSWtyz00T9mhugK8hDFg4OLq8o3AtCzCwGOlMGkPWE
+ 9zpidGz67XX6w16u0mVIuiLku73WKUblsTrIn3LsijCJ8DwOMBe4yUsboRAjC8sLtC1/KAb
+ iPa6+yM/qXdgCNJlA6YcNzWJZhGId0IRcs2sgTcGJknUBdteA+VRFFUv3tt0WvId6h6yD3k
+ byfrcL4x+Ea1pjhLNQQIA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:QAswPbuXZQE=:2a4tBEesdPqqSE27EUuoyf
+ oaHVCBjunEFqKoYz7JptPBH7+OoGuSpNxTrnMEDo0+aUAHNDUKsXoXBAoss6qaxxXSoEJ00zI
+ Fyw7y1MRMS/wZDUTcdLaAMPCCCBMKPVuKtfItZfLHAlfTaSFS2WGOIvojCFOFKpaZ2Bosrg3Z
+ WRQTlAaBVqZ1r394sb8aen/PwbvN+9EhsVhsKM3hyokYorSXd9gk05eIDc+f9jmNSUJAYc1hm
+ rOwuBnLgjrz7jrvpMaGoj8SE7HcwZ8Qf9jzt1WFsF78ksO1NkJY43xJ36JfZpCXO79BuISMtQ
+ xqEY+kKbxemv5Suja05CW76bAk2ao8VlS8Eb1CTK3JJ3EH1zGAHBQuh1SKoGPtS+WkzMd1qSi
+ X7EunRYUE6MqN6D0EWq2KFAN+YUWESHg4wWoJglu4dlYv9ahpG4LioBEruQgQStlx0zB5Hz28
+ /5u25+2seiPoSRdXNgYM09t4Lc2jIhjjrYRn6wO7UQ0kNFRclpJv6wwICf+1C0jqtLqwAQCDU
+ C1vz5Pz/Du/XfH/aj96HESra6HUe6qxcLN+EoYsfSJJ05WQQMCGqyuuYn/7daH3XPitm67zNJ
+ FZ49NhYAsw0l6XhKnFLiXnu3QOnEqM73a/s2hTdH6FPqEcR5nR/F/HmgnbOog/zeuVw0vY9Iz
+ qYOzcF0KZcL942/iYS5DohwqKS4fb6niadvrqpf/iOvi4/MiJnbs7o716H6LAYNFGdB5boVAV
+ x+47jzGDQVr9Q6EMgEurb2FCfG0Akno3DRe9tlvbBeDJTSgo9MXbynyT4azVglk9BUYO04Jtc
+ MhJ0b2OC5g4/OucjVJo2d0BaEUZSs5wBYJeDg9zgeFdxgJLabo=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With 'unevaluatedProperties' support implemented, there's a number of
-warnings from the Designware PCIe based bindings:
+On Mon, Dec 6, 2021 at 6:02 PM Sven Peter <sven@svenpeter.dev> wrote:
+> On Mon, Dec 6, 2021, at 11:10, kernel test robot wrote:
 
-Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.example.dt.yaml: pcie@1ffc000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'device_type', 'bus-range', 'ranges', '#interrupt-cells', 'interrupt-map-mask', 'interrupt-map' were unexpected)
-Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.example.dt.yaml: pcie@1ffc000: Unevaluated properties are not allowed ('clock-names' was unexpected)
-Documentation/devicetree/bindings/pci/hisilicon,kirin-pcie.example.dt.yaml: pcie@f4000000: Unevaluated properties are not allowed ('bus-range', '#address-cells', '#size-cells', 'device_type', 'ranges', 'num-lanes', '#interrupt-cells', 'interrupts', 'interrupt-names', 'interrupt-map-mask', 'interrupt-map', 'clocks', 'clock-names' were unexpected)
-Documentation/devicetree/bindings/pci/hisilicon,kirin-pcie.example.dt.yaml: pcie@f4000000: Unevaluated properties are not allowed ('clock-names' was unexpected)
-Documentation/devicetree/bindings/pci/hisilicon,kirin-pcie.example.dt.yaml: pcie@f5000000: Unevaluated properties are not allowed ('bus-range', '#address-cells', '#size-cells', 'device_type', 'phys', 'ranges', 'num-lanes', '#interrupt-cells', 'interrupts', 'interrupt-names', 'interrupt-map-mask', 'interrupt-map', 'reset-gpios', 'pcie@0,0' were unexpected)
-Documentation/devicetree/bindings/pci/hisilicon,kirin-pcie.example.dt.yaml: pcie@f5000000: Unevaluated properties are not allowed ('phys', 'hisilicon,clken-gpios' were unexpected)
-Documentation/devicetree/bindings/pci/intel-gw-pcie.example.dt.yaml: pcie@d0e00000: Unevaluated properties are not allowed ('device_type', '#address-cells', '#size-cells', 'linux,pci-domain', 'bus-range', '#interrupt-cells', 'interrupt-map-mask', 'interrupt-map' were unexpected)
-Documentation/devicetree/bindings/pci/intel-gw-pcie.example.dt.yaml: pcie@d0e00000: Unevaluated properties are not allowed ('resets', 'phys', 'phy-names', 'reset-assert-ms' were unexpected)
-Documentation/devicetree/bindings/pci/rockchip-dw-pcie.example.dt.yaml: pcie@fe280000: Unevaluated properties are not allowed ('clock-names', 'msi-map', 'phys', 'phy-names', 'power-domains', 'resets', 'reset-names' were unexpected)
-Documentation/devicetree/bindings/pci/samsung,exynos-pcie.example.dt.yaml: pcie@15700000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', '#interrupt-cells', 'device_type', 'bus-range', 'ranges', 'interrupt-map-mask', 'interrupt-map' were unexpected)
-Documentation/devicetree/bindings/pci/samsung,exynos-pcie.example.dt.yaml: pcie@15700000: Unevaluated properties are not allowed ('clock-names', 'phys', 'vdd10-supply', 'vdd18-supply' were unexpected)
-Documentation/devicetree/bindings/pci/sifive,fu740-pcie.example.dt.yaml: pcie@e00000000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', '#interrupt-cells', 'device_type', 'dma-coherent', 'bus-range', 'ranges', 'interrupts', 'interrupt-parent', 'interrupt-map-mask', 'interrupt-map', 'clock-names', 'clocks' were unexpected)
-Documentation/devicetree/bindings/pci/sifive,fu740-pcie.example.dt.yaml: pcie@e00000000: Unevaluated properties are not allowed ('dma-coherent', 'clock-names', 'resets', 'pwren-gpios' were unexpected)
-Documentation/devicetree/bindings/pci/socionext,uniphier-pcie-ep.example.dt.yaml: pcie-ep@66000000: Unevaluated properties are not allowed ('clock-names', 'clocks', 'reset-names', 'resets', 'phy-names', 'phys' were unexpected)
-Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.example.dt.yaml: pcie@28400000: Unevaluated properties are not allowed ('clock-names' was unexpected)
-Documentation/devicetree/bindings/pci/toshiba,visconti-pcie.example.dt.yaml: pcie@28400000: Unevaluated properties are not allowed ('device_type', 'bus-range', 'num-viewport', '#address-cells', '#size-cells', '#interrupt-cells', 'ranges', 'interrupt-names', 'interrupt-map-mask', 'interrupt-map', 'max-link-speed' were unexpected)
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All error/warnings (new ones prefixed by >>):
+> >
+> >>> powerpc64-linux-ld: warning: orphan section `.stubs' from `drivers/i2c/busses/i2c-pasemi-core.o' being placed in section `.stubs'
+> >>> powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-core.o:(.toc+0x0): undefined reference to `__this_module'
+>
+> This seems to be triggered by compiling one of {pci,platform} as a module and the
+> other one as built-in. That setup can only happen with COMPILE_TEST since -pci
+> is otherwise only compiled for powerpc and -platform for arm64.
+>
+> -core.c is only built once with THIS_MODULE expanding to __this_module. That will
+> fail when linking the built-in driver where THIS_MODULE should've been NULL instead.
+>
+> The most simple fix (that also has no chance of breaking anything) is probably to
+> just move
+>
+>   smbus->adapter.owner = THIS_MODULE;
+>
+> from core to both apple.c and pci.c. I'll prepare a patch later this week.
 
-The main problem is that snps,dw-pcie.yaml and snps,dw-pcie-ep.yaml
-shouldn't set 'unevaluatedProperties: false'. Otherwise, bindings that
-reference them cannot add additional properties. With that addressed,
-there's a handful of other undocumented properties to add.
+I'd prefer fixing this in a better way, linking an object file into
+both vmlinux and a loadable
+module is not supported at all. Other options are:
 
-Cc: Xiaowei Song <songxiaowei@hisilicon.com>
-Cc: Binghui Wang <wangbinghui@hisilicon.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Greentime Hu <greentime.hu@sifive.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Jingoo Han <jingoohan1@gmail.com>
-Cc: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-Cc: linux-pci@vger.kernel.org
-Cc: linux-riscv@lists.infradead.org
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../bindings/pci/hisilicon,kirin-pcie.yaml          | 13 +++++++++++++
- .../devicetree/bindings/pci/sifive,fu740-pcie.yaml  |  4 ++--
- .../devicetree/bindings/pci/snps,dw-pcie-ep.yaml    |  2 +-
- .../devicetree/bindings/pci/snps,dw-pcie.yaml       |  2 +-
- .../bindings/pci/socionext,uniphier-pcie-ep.yaml    |  2 +-
- 5 files changed, 18 insertions(+), 5 deletions(-)
+- #include the common .c file from the individual drivers (not great)
+- use Kconfig logic to prevent the broken configuration
+- use Makefile tricks to make both drivers built-in when this happens
+- make the common part a separate loadable module, exporting all the
+  global symbols.
 
-diff --git a/Documentation/devicetree/bindings/pci/hisilicon,kirin-pcie.yaml b/Documentation/devicetree/bindings/pci/hisilicon,kirin-pcie.yaml
-index cbee87802559..c9f04999c9cf 100644
---- a/Documentation/devicetree/bindings/pci/hisilicon,kirin-pcie.yaml
-+++ b/Documentation/devicetree/bindings/pci/hisilicon,kirin-pcie.yaml
-@@ -37,6 +37,19 @@ properties:
-     minItems: 3
-     maxItems: 4
- 
-+  clocks: true
-+
-+  clock-names:
-+    items:
-+      - const: pcie_phy_ref
-+      - const: pcie_aux
-+      - const: pcie_apb_phy
-+      - const: pcie_apb_sys
-+      - const: pcie_aclk
-+
-+  phys:
-+    maxItems: 1
-+
-   hisilicon,clken-gpios:
-     description: |
-       Clock input enablement GPIOs from PCI devices like Ethernet, M.2 and
-diff --git a/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml b/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
-index 2b9d1d6fc661..9215c6ee24a0 100644
---- a/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
-+++ b/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
-@@ -32,6 +32,8 @@ properties:
-       - const: config
-       - const: mgmt
- 
-+  dma-coherent: true
-+
-   num-lanes:
-     const: 8
- 
-@@ -64,7 +66,6 @@ required:
-   - interrupt-parent
-   - interrupt-map-mask
-   - interrupt-map
--  - clock-names
-   - clocks
-   - resets
-   - pwren-gpios
-@@ -104,7 +105,6 @@ examples:
-                             <0x0 0x0 0x0 0x2 &plic0 58>,
-                             <0x0 0x0 0x0 0x3 &plic0 59>,
-                             <0x0 0x0 0x0 0x4 &plic0 60>;
--            clock-names = "pcie_aux";
-             clocks = <&prci PRCI_CLK_PCIE_AUX>;
-             resets = <&prci 4>;
-             pwren-gpios = <&gpio 5 0>;
-diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
-index b5935b1b153f..b3b544eaf5aa 100644
---- a/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
-+++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
-@@ -73,7 +73,7 @@ required:
-   - reg-names
-   - compatible
- 
--unevaluatedProperties: false
-+additionalProperties: true
- 
- examples:
-   - |
-diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
-index 9ed0dfba7f89..a5345c494744 100644
---- a/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
-+++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
-@@ -73,7 +73,7 @@ properties:
-       does not specify it, the driver autodetects it.
-     deprecated: true
- 
--unevaluatedProperties: false
-+additionalProperties: true
- 
- required:
-   - reg
-diff --git a/Documentation/devicetree/bindings/pci/socionext,uniphier-pcie-ep.yaml b/Documentation/devicetree/bindings/pci/socionext,uniphier-pcie-ep.yaml
-index 144cbcd60a1c..179ab0858482 100644
---- a/Documentation/devicetree/bindings/pci/socionext,uniphier-pcie-ep.yaml
-+++ b/Documentation/devicetree/bindings/pci/socionext,uniphier-pcie-ep.yaml
-@@ -79,7 +79,7 @@ required:
-   - resets
-   - reset-names
- 
--additionalProperties: false
-+unevaluatedProperties: false
- 
- examples:
-   - |
--- 
-2.32.0
+Out of these, I would prefer the last option.
 
+       Arnd

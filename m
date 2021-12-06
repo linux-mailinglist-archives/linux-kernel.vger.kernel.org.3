@@ -2,43 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85287469F69
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DAF1469C04
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359696AbhLFPr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:47:56 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35518 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387719AbhLFPbs (ORCPT
+        id S1347596AbhLFPTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:19:33 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34488 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355756AbhLFPOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:31:48 -0500
+        Mon, 6 Dec 2021 10:14:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A539B8111E;
-        Mon,  6 Dec 2021 15:28:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1834C34901;
-        Mon,  6 Dec 2021 15:28:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B17166132F;
+        Mon,  6 Dec 2021 15:10:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A58C341C1;
+        Mon,  6 Dec 2021 15:10:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804498;
-        bh=D9BneoZ5pKUabNYLDWhUTzNUJl51i27LH35N2pk8NFk=;
+        s=korg; t=1638803446;
+        bh=v5OnXFIzNoHpTxFbEu11cJ1Cmar+jDZkPLdfGLe9UHc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FKmVARFqpo/Bz9V1Q0QcPKfHSHnpRLJFls0nHe021Zzpi/lJ5NJk7U2IHDqO1geAn
-         5nh6+mhGfkh92eue4ARPpJBEamaCmTSUucRHIdk+GIEWr+mVFlIimtZfSUDnTWyaQz
-         d6Ira7ViG/AvN1+8sQ6KI9Me19zfT4rbT9AqRlfM=
+        b=VhlnOJIC09MjiJBVJULqkkJS7dlEKp86pH6gsVXdlp6uXrCnlGeCk/0nkRttRAcWv
+         IgOIfdx30CNup3+Hz3pxA4tH0L/1cBCv/iHFoMzhh48vQiYY71x1dOO19o37w01NO3
+         YVuI5OeZlPpO21FVqtCN3XUj2BssBkpdC3wV/+Ls=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Like Xu <likexu@tencent.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 167/207] KVM: x86/pmu: Fix reserved bits for AMD PerfEvtSeln register
+        stable@vger.kernel.org, Sven Eckelmann <sven@narfation.org>
+Subject: [PATCH 4.19 44/48] tty: serial: msm_serial: Deactivate RX DMA for polling support
 Date:   Mon,  6 Dec 2021 15:57:01 +0100
-Message-Id: <20211206145616.057749160@linuxfoundation.org>
+Message-Id: <20211206145550.356021665@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+References: <20211206145548.859182340@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,55 +44,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+From: Sven Eckelmann <sven@narfation.org>
 
-[ Upstream commit cb1d220da0faa5ca0deb93449aff953f0c2cce6d ]
+commit 7492ffc90fa126afb67d4392d56cb4134780194a upstream.
 
-If we run the following perf command in an AMD Milan guest:
+The CONSOLE_POLLING mode is used for tools like k(g)db. In this kind of
+setup, it is often sharing a serial device with the normal system console.
+This is usually no problem because the polling helpers can consume input
+values directly (when in kgdb context) and the normal Linux handlers can
+only consume new input values after kgdb switched back.
 
-  perf stat \
-  -e cpu/event=0x1d0/ \
-  -e cpu/event=0x1c7/ \
-  -e cpu/umask=0x1f,event=0x18e/ \
-  -e cpu/umask=0x7,event=0x18e/ \
-  -e cpu/umask=0x18,event=0x18e/ \
-  ./workload
+This is not true anymore when RX DMA is enabled for UARTDM controllers.
+Single input values can no longer be received correctly. Instead following
+seems to happen:
 
-dmesg will report a #GP warning from an unchecked MSR access
-error on MSR_F15H_PERF_CTLx.
+* on 1. input, some old input is read (continuously)
+* on 2. input, two old inputs are read (continuously)
+* on 3. input, three old input values are read (continuously)
+* on 4. input, 4 previous inputs are received
 
-This is because according to APM (Revision: 4.03) Figure 13-7,
-the bits [35:32] of AMD PerfEvtSeln register is a part of the
-event select encoding, which extends the EVENT_SELECT field
-from 8 bits to 12 bits.
+This repeats then for each group of 4 input values.
 
-Opportunistically update pmu->reserved_bits for reserved bit 19.
+This behavior changes slightly depending on what state the controller was
+when the first input was received. But this makes working with kgdb
+basically impossible because control messages are always corrupted when
+kgdboc tries to parse them.
 
-Reported-by: Jim Mattson <jmattson@google.com>
-Fixes: ca724305a2b0 ("KVM: x86/vPMU: Implement AMD vPMU code for KVM")
-Signed-off-by: Like Xu <likexu@tencent.com>
-Message-Id: <20211118130320.95997-1-likexu@tencent.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+RX DMA should therefore be off when CONSOLE_POLLING is enabled to avoid
+these kind of problems. No such problem was noticed for TX DMA.
+
+Fixes: 99693945013a ("tty: serial: msm: Add RX DMA support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+Link: https://lore.kernel.org/r/20211113121050.7266-1-sven@narfation.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/svm/pmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/msm_serial.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-index fdf587f19c5fb..e152241d1d709 100644
---- a/arch/x86/kvm/svm/pmu.c
-+++ b/arch/x86/kvm/svm/pmu.c
-@@ -282,7 +282,7 @@ static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
- 		pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERS;
+--- a/drivers/tty/serial/msm_serial.c
++++ b/drivers/tty/serial/msm_serial.c
+@@ -603,6 +603,9 @@ static void msm_start_rx_dma(struct msm_
+ 	u32 val;
+ 	int ret;
  
- 	pmu->counter_bitmask[KVM_PMC_GP] = ((u64)1 << 48) - 1;
--	pmu->reserved_bits = 0xffffffff00200000ull;
-+	pmu->reserved_bits = 0xfffffff000280000ull;
- 	pmu->version = 1;
- 	/* not applicable to AMD; but clean them to prevent any fall out */
- 	pmu->counter_bitmask[KVM_PMC_FIXED] = 0;
--- 
-2.33.0
-
++	if (IS_ENABLED(CONFIG_CONSOLE_POLL))
++		return;
++
+ 	if (!dma->chan)
+ 		return;
+ 
 
 

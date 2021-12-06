@@ -2,260 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F15646AE90
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 00:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E26646AE94
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 00:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377450AbhLFXuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 18:50:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbhLFXt6 (ORCPT
+        id S1377486AbhLFXvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 18:51:51 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:30384 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230043AbhLFXvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 18:49:58 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00088C061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 15:46:28 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id p18-20020a17090ad31200b001a78bb52876so520682pju.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 15:46:28 -0800 (PST)
+        Mon, 6 Dec 2021 18:51:50 -0500
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B6M5V5K007611;
+        Mon, 6 Dec 2021 23:47:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=mztlyswdHRx/H55FD54IoTVHuxVGGbVaQ4S2o2VcPsI=;
+ b=KkBF88nW68/PsH3F6mWdKmygVq5cu0ojOGpwRdjxIlzArAP4e+S5VQZwcpx2gYDSd6Kh
+ 7fx6Xa7F4azBSRcFN/iuRy04awrFEhP5NgIt8EWipUEDTHfM2GnwkcPC7hJsTK2FLCYc
+ di2ZoClD6LVTKh9/LUAThfgkyAKecMFdYoXzs9dHMczWisuWNUj1cg8S8i4ZCI5e9G9V
+ sveG64LhMUwvNeXv8YgYZ298gRg5+ToMf+Q3tlOePOv2Yl5PF3IocPle2lU/n36X99cW
+ kAk4b9VoCbfHOwmzYFl1Gx2MN/uILga40QQhjGkwtZlDwYl9CQIC70oxXDvQrtLO9BEp 5g== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3csd2ybmcv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 06 Dec 2021 23:47:42 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B6Nl9mJ140742;
+        Mon, 6 Dec 2021 23:47:41 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2043.outbound.protection.outlook.com [104.47.73.43])
+        by userp3030.oracle.com with ESMTP id 3cqwewswce-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 06 Dec 2021 23:47:41 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QTi6Lu4MghDGtQv2IgSgC02yq17wvELnk3POO19vovnMdgtSP9MVxtOf+xHcqXm6tVNUYOKNBf+YHrMBcmD6tjOp95PllhBtc9t5oDl+C0bgcH2k4ixliS/xaW6MICidiYe9xcNeNQy/sNaCGo60fqyOp8ebfJNO76qhTU7jjwetjnWE7J1+TzNCwHEqtFX68toD1P8LEKfwekU6HZ/Nwty2ycLs9TqvJTp2UY7QAH9f/tf8SjPhAeaQ/eTWzLlcMUROlCQKeu/uKCAEuSRSyQSy91oOqnzhSx1muYUFP5UqR3WAc0MLoGqIC7cgJn15Rzd1mwZSiv3KgAcxjTaNdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mztlyswdHRx/H55FD54IoTVHuxVGGbVaQ4S2o2VcPsI=;
+ b=QqwBgUR1kpxSFIboB2K2enDDZdt4VuANrygTkdtgafK5usJHpOU+sDJTQW4SA+7oCjRFaxB0EtriFtuLMZncqp+E+WBGCWJH8PQkhnr0aDrIIzw1UDk9eYsITBHGEKYVgQRAzewkXWDoBQUe827kq2TvZkDMRRCU8DnjBXE0MKnveJs7XY9z+Qgv4HOtiMGevHoNfTd7gVjCMpm6us2wpPKQgDaGZQmzK21U+A6EGh33Ac65MpUjKYu7HMFzXLBxRYaxCHt0qAWFPHzcmvMJwclbL9mseIeXZQKeDcGABzSFEiJhu9gIMfgLqrsr3W+seLOSF0iTfsoHkN3+VQwGLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=i0F2FLnWLyXFIQOQxbg+dJ8oEFxhyhI4xZI+2RG9pJY=;
-        b=YYZq8k4QD5vnldS1VtfoRsK8GdM2mrJTX3qTaxuk6UZiqzUqsgRWNj+SHjGAnINO60
-         wOrUeUHbi/n27b5jlPR+vttREynShA2HjS6Vqm/w1Fw8Ix6vjaX2hr2l3UIadK6Ii6dR
-         wWWgonelpWl/JEMrqcc+sHzmovsbM7nVC+h6NSKLIl0u95mii0pefNeXm+UqZmgwUm5O
-         JHpepVe/nqh0OlPfNqmwY4ZsCRxewU5XYOa5aZcf2BRdEt88GIwbD5Jimv1DO1Ltl2aL
-         1tLm5M8g90vuh85p2ook2+L62RoRrpHbJIHVXRCqDS7nt+FCwJx/dXnnGDIQ9cuUKYft
-         1/xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=i0F2FLnWLyXFIQOQxbg+dJ8oEFxhyhI4xZI+2RG9pJY=;
-        b=pmhlKM3+Q8+EiWUXIiGJVI+nBpnGhIFCIzC0lUgwLQiBu6BO5DIphNp9xUodXv5TQO
-         nYo73vAfbM/Q6rpp5PyeLiMYfXV71JonW7dFLSV4JagYXLoKv8mTqOQdEfylXI77fy66
-         lBGKrfE8SWCQBIDPhPDjB+yxmSO23RqkNyIScSPmWKy4kQMO7pgxQOWpkfkBkIRqpxfq
-         SUDAaY5LrcjXnNMAbU4hRaq/wBkLnOKUqBVpkWeXFvMJMGE6B1hp2NjwQg1Vr0MpwoB2
-         TAJc1/AWXGb6tRUzBEETKDnJPC4lXKiqitKUb1Y3V9NzsxrRrrksEYDNd9Xyp4z3GblA
-         5ieA==
-X-Gm-Message-State: AOAM530+Ivb3s93zr2JOOAx66RJud40bkdea5FhizSGiWLjGScvUFeJu
-        soQvYPT3a4DTL7JvcNmyhPc=
-X-Google-Smtp-Source: ABdhPJwNd77TQHw+jVWvKgD6/APaHAP8GIgo3LnqFlBufLt1NOx4SogaZwa8PCrKuRxQCIVDj7WTVQ==
-X-Received: by 2002:a17:90b:30c4:: with SMTP id hi4mr2257506pjb.12.1638834388484;
-        Mon, 06 Dec 2021 15:46:28 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:2d37:bc7d:9c01:7721])
-        by smtp.gmail.com with ESMTPSA id s16sm13496069pfu.109.2021.12.06.15.46.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 15:46:27 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Mon, 6 Dec 2021 15:46:26 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        David Hildenbrand <david@redhat.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        John Dias <joaodias@google.com>
-Subject: Re: [PATCH] mm: don't call lru draining in the nested
- lru_cache_disable
-Message-ID: <Ya6g0uXYlR/MRLDD@google.com>
-References: <20211206221006.946661-1-minchan@kernel.org>
- <20211206150421.fc06972fac949a5f6bc8b725@linux-foundation.org>
- <Ya6d+zC/CsYAp0Gf@google.com>
-MIME-Version: 1.0
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mztlyswdHRx/H55FD54IoTVHuxVGGbVaQ4S2o2VcPsI=;
+ b=Oso9C+SNqtrlR3wAtNG2QX2YQ29CZLiRypWGvKcRXIwUVE8FUff67PPbT0kh9oSx96ziloSwSrEwRwpb4KxUT0X7M1J+TxM8bBju9LIMy+BX46WAnDL+YMuYNXc8rpRawwW+WuAoIOpZjy+X0aCE7BDX3E5mwvkJwFpslPYhc1c=
+Received: from SN6PR10MB2576.namprd10.prod.outlook.com (2603:10b6:805:44::15)
+ by SA2PR10MB4426.namprd10.prod.outlook.com (2603:10b6:806:117::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Mon, 6 Dec
+ 2021 23:47:38 +0000
+Received: from SN6PR10MB2576.namprd10.prod.outlook.com
+ ([fe80::4c8c:47df:f81e:f412]) by SN6PR10MB2576.namprd10.prod.outlook.com
+ ([fe80::4c8c:47df:f81e:f412%5]) with mapi id 15.20.4755.022; Mon, 6 Dec 2021
+ 23:47:38 +0000
+Date:   Mon, 6 Dec 2021 17:47:28 -0600
+From:   Venu Busireddy <venu.busireddy@oracle.com>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v7 02/45] x86/sev: detect/setup SEV/SME features earlier
+ in boot
+Message-ID: <Ya6hEPTkuUqhBn+z@dt>
+References: <20211110220731.2396491-1-brijesh.singh@amd.com>
+ <20211110220731.2396491-3-brijesh.singh@amd.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ya6d+zC/CsYAp0Gf@google.com>
+In-Reply-To: <20211110220731.2396491-3-brijesh.singh@amd.com>
+X-ClientProxiedBy: SN6PR04CA0102.namprd04.prod.outlook.com
+ (2603:10b6:805:f2::43) To SN6PR10MB2576.namprd10.prod.outlook.com
+ (2603:10b6:805:44::15)
+MIME-Version: 1.0
+Received: from dt (138.3.200.51) by SN6PR04CA0102.namprd04.prod.outlook.com (2603:10b6:805:f2::43) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.16 via Frontend Transport; Mon, 6 Dec 2021 23:47:32 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 22073b67-c4c9-4137-dc77-08d9b912c906
+X-MS-TrafficTypeDiagnostic: SA2PR10MB4426:EE_
+X-Microsoft-Antispam-PRVS: <SA2PR10MB4426A6AA0C6A2482AFDA1BE6E66D9@SA2PR10MB4426.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5mH/V9ku71Q6tqdXSRoB2DkT1F2Aar1W7CLOA17lPBH5bHe1dPSWIw1RExVNGuxr9BhdGvpPBD04xDz3uSJzpTCuoF3PN08+apG4hwyowFAj+UupjCUm8riRQDYTh9FHI0JoWrz791HizBd5XGOh0szyjKIpa03WAvPtOTSQv8YEwiJH5DCwaqv42zWlf2LfHXlB3+L3sHEylYG6fBbHfxw7xDRPodPozsgxRiQhhW+kOvPVzNiF9NpwIDTEOfqeuO9xXotUJL3Egh/8Oa0UZA/tprkqKVrFacX3k6P34UhYUHqlpf1B+BA05MxxN9kTWhJQS5Xy3N59cX6Gwu/4seFnSmAAM2b6EidTXFosnIAgzKCb0ASW9gUK3PJ9fFsvhHkf1Dogd/FbDaKJ0AAOmXZcB5P0iiTuabPRDVDEeB+iPWuPFxkcjMNvH2S189XigVzewc9wEYYCH7B6KbLAuoZLyMYAi1Fehx2zGiZIlm2Urq7xupY30UAKr3rFcToJGWckiYk+X8DBKwjdCBbpQVvWCS1jvoMULMAIQBhz/7oIG7HrI8XmVweeLg0dlLrMFaf7sHIZKDJtbLQzok0KCnXhfkwx/SoipFZtwDy906gsD6VtPCwEdUDAeq8sdhdO8ajYEw5Sli7p6dsnEnyh4d144F/QhkPactEA/gmEw249/9f//103Lf+zkOtTueI0
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB2576.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(53546011)(8676002)(4001150100001)(6496006)(44832011)(8936002)(4326008)(6666004)(6916009)(26005)(2906002)(86362001)(9686003)(66556008)(956004)(66476007)(66946007)(508600001)(9576002)(186003)(38100700002)(316002)(54906003)(7406005)(83380400001)(55016003)(33716001)(5660300002)(7416002)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?r077alq/ws0xfvuXCVNOcXMfZNRv8MfLhiuHh5tNgHOF59OlMSSo9oxIJ7d1?=
+ =?us-ascii?Q?Ku4iz7xURJW5X4LzXT81UV+C/N+2UvOjppNj9USB4dtF+NJIGt7eWL/Cfxuw?=
+ =?us-ascii?Q?Nb/rwR4q01miAYwQYqHhqVDjLyoSyibnwSfw0O4hpyHTQjLsH5z5UDfmCzrO?=
+ =?us-ascii?Q?yBdVwtN33I/dscktqCU+pEdAAkMzryFtIRqs6r190FndIARkQVHa6axbeke5?=
+ =?us-ascii?Q?mpH3yYBLB2s9FvMpeA257kDuVNtdVLJGsFUfy5WsDvRq0VFnSzQa5L/BZPZx?=
+ =?us-ascii?Q?JsMIdXsaVgZe+wQpVp9lcjsDjXgK4giAb3tS5sTlTWOABZmAQ763hvBtaOeo?=
+ =?us-ascii?Q?dKoWGTvxRIcowMGBZTDyvKf7IFxRaRSCuTnwz7A38VfPeF5a9wtZXMkk9vIS?=
+ =?us-ascii?Q?ZTcA1NIT0TNtGZGeHToGH5IXp3VCaivcfkx9fHBTp516dfgvNVVa7fZg8cxi?=
+ =?us-ascii?Q?1v2/5TkNJc5EvDY+81wjV2Z4641eG8+oLg/k/4jdCq36M0kxF4IqMyxVawMo?=
+ =?us-ascii?Q?nQ5EQPZsf/H9+DVA+ixHBR8rSrnuVsRAAc1VK45YYgEhBMCkUF5DaSh9sY6z?=
+ =?us-ascii?Q?9F4rYQZy56zTbho7FsGNYfE1hJDCJnNJTOQYLpfFGJ7znrv1o2Yacq54W0Fh?=
+ =?us-ascii?Q?Cc8bfCxJxXEVJmOxmWTtvRhKZ9Z0qtue4oOGYEPXfMxzC6eoUJXe5poqhrqq?=
+ =?us-ascii?Q?fFg/ELmxpyIn6+6HGIOlT4x/n8lReRZsH9T03ybwJkrTdR8dOLLobosv2p+L?=
+ =?us-ascii?Q?1qpexGiROD8PTWrXsyw8SNtOcaghqI0hp4eZdggLrfvhnF8wJHU8GuszA1Ts?=
+ =?us-ascii?Q?RSXdSrRy9ZDlYvKOGsesbu++abxkSvSwThpTVsbx+6eBg9x688UOh/bxE84U?=
+ =?us-ascii?Q?j3ItjT4k40ILU64Uwqtc2/ZE3YA28HFvIC11yGDh8xyynyjQgVBdhG59SVH3?=
+ =?us-ascii?Q?lnIb6vIBOOvXqr92dqOI2pZZmLGuMuQ4HZV4HjETJahtNnJF+MWMCO+0PgDF?=
+ =?us-ascii?Q?y3nm2ki2l32NiD9P9oWl4w9CsF4UGlZXcL91llm/lHTpmPMKzwaqYswLJDFd?=
+ =?us-ascii?Q?Mg4Ldo7Sblwyd6g4XfpISv4VtiMFl7eS/jy49jbgURO2jiUKQuZL0RyuOuV8?=
+ =?us-ascii?Q?u4JXDEqZhWc+teGwvcngmjYa+b5NDeAjxfU9+IWJuEaN6sQcjM8RRY3bF3EA?=
+ =?us-ascii?Q?YmLCEatF1RXLfCAtdHWuQcN8fe3vVDqKF6bPtBEN91JOHEQqhi2xgBB6Z54G?=
+ =?us-ascii?Q?hdvS8wS8AHCxcfQEwUiGgTztK6hfM3blL+E5qojslmw2MJraXaBZ4x0f0bPp?=
+ =?us-ascii?Q?Cj7kgHqtfYBZ96LLAztxM4FJR+/6W2kIe4Q7lwsfPItccns0V/PQLQhS3KsI?=
+ =?us-ascii?Q?n99DIx9fOlXRehMRvqbOw3dvkaecB1C2a9KtCYFx64My64DOqhkuhVqO4Be9?=
+ =?us-ascii?Q?4YfeFqNXWKyYoUlOOsYdAkKxf1TTe1vyEQJru5DddJ7ffM95jREs4ADeSS+o?=
+ =?us-ascii?Q?9+8sAAGs3PDOzTtMZExSFKaO94NgnPLtPND6bL5UUT5vB3Nnd+6L0wHGNFTe?=
+ =?us-ascii?Q?XBXzIQxaFEFsOYPdB5PO4a4/TeIdtMqy7QLKHl6eznMhFxB8fw6OkfoFl4bo?=
+ =?us-ascii?Q?E8iVI76lOFP1FwV7mqor8YlYtHrbEp57v6aAe++t+2rR0Z92PTt+Na7xpW5m?=
+ =?us-ascii?Q?lTvhSQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 22073b67-c4c9-4137-dc77-08d9b912c906
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB2576.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2021 23:47:38.4434
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DedSPMjnMBa1qjNUHKcjYTpWqVrcrUJ9HBj0R+ysTY/3LXgEXmQhsb4p1qY0xL7oM0F6UeQBBAnGEAVlmyt+AP9LSFePiC2nGFZOzFy40wA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4426
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10190 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0
+ adultscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112060143
+X-Proofpoint-GUID: pMAQ2LG1MEj8fz9kNfMTwXwx1TSBvxKm
+X-Proofpoint-ORIG-GUID: pMAQ2LG1MEj8fz9kNfMTwXwx1TSBvxKm
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 03:34:19PM -0800, Minchan Kim wrote:
-> On Mon, Dec 06, 2021 at 03:04:21PM -0800, Andrew Morton wrote:
-> > On Mon,  6 Dec 2021 14:10:06 -0800 Minchan Kim <minchan@kernel.org> wrote:
-> > 
-> > > lru_cache_disable involves IPIs to drain pagevec of each core,
-> > > which sometimes takes quite long time to complete depending
-> > > on cpu's business, which makes allocation too slow up to
-> > > sveral hundredth milliseconds. Furthermore, the repeated draining
-> > > in the alloc_contig_range makes thing worse considering caller
-> > > of alloc_contig_range usually tries multiple times in the loop.
-> > > 
-> > > This patch makes the lru_cache_disable aware of the fact the
-> > > pagevec was already disabled. With that, user of alloc_contig_range
-> > > can disable the lru cache in advance in their context during the
-> > > repeated trial so they can avoid the multiple costly draining
-> > > in cma allocation.
-> > 
-> > Isn't this racy?
-> >  
-> > > ...
-> > >
-> > > @@ -859,7 +869,12 @@ atomic_t lru_disable_count = ATOMIC_INIT(0);
-> > >   */
-> > >  void lru_cache_disable(void)
-> > >  {
-> > > -	atomic_inc(&lru_disable_count);
-> > > +	/*
-> > > +	 * If someone is already disabled lru_cache, just return with
-> > > +	 * increasing the lru_disable_count.
-> > > +	 */
-> > > +	if (atomic_inc_not_zero(&lru_disable_count))
-> > > +		return;
-> > >  #ifdef CONFIG_SMP
-> > >  	/*
-> > >  	 * lru_add_drain_all in the force mode will schedule draining on
-> > > @@ -873,6 +888,7 @@ void lru_cache_disable(void)
-> > >  #else
-> > >  	lru_add_and_bh_lrus_drain();
-> > >  #endif
-> > 
-> > There's a window here where lru_disable_count==0 and new pages can get
-> > added to lru?
+On 2021-11-10 16:06:48 -0600, Brijesh Singh wrote:
+> From: Michael Roth <michael.roth@amd.com>
 > 
-> Indeed. If __lru_add_drain_all in core A didn't run yet but increased
-> the disable count already, lru_cache_disable in core B will not see
-> those pages in the LRU. Need to be fixed it.
+> sme_enable() handles feature detection for both SEV and SME. Future
+> patches will also use it for SEV-SNP feature detection/setup, which
+> will need to be done immediately after the first #VC handler is set up.
+> Move it now in preparation.
+
+The previous patch added the function sev_enable(), which has most of its
+code duplicated in sme_enable(). Can sme_enable() be changed (and maybe
+sev_enable() a bit) to call sev_enable() and avoid all the duplicate code?
+
+Venu
+
 > 
-> Thanks, Andrew.
-
-From 0874e108b4708355d703927716a49670b989e960 Mon Sep 17 00:00:00 2001
-From: Minchan Kim <minchan@kernel.org>
-Date: Mon, 6 Dec 2021 11:59:36 -0800
-Subject: [PATCH v2] mm: don't call lru draining in the nested lru_cache_disable
-
-lru_cache_disable involves IPIs to drain pagevec of each core,
-which sometimes takes quite long time to complete depending
-on cpu's business, which makes allocation too slow up to
-sveral hundredth milliseconds. Furthermore, the repeated draining
-in the alloc_contig_range makes thing worse considering caller
-of alloc_contig_range usually tries multiple times in the loop.
-
-This patch makes the lru_cache_disable aware of the fact the
-pagevec was already disabled. With that, user of alloc_contig_range
-can disable the lru cache in advance in their context during the
-repeated trial so they can avoid the multiple costly draining
-in cma allocation.
-
-Signed-off-by: Minchan Kim <minchan@kernel.org>
----
- * from v1 - https://lore.kernel.org/lkml/20211206221006.946661-1-minchan@kernel.org/
-   * fix lru_cache_disable race - akpm
-
- include/linux/swap.h | 14 ++------------
- mm/cma.c             |  5 +++++
- mm/swap.c            | 26 ++++++++++++++++++++++++--
- 3 files changed, 31 insertions(+), 14 deletions(-)
-
-diff --git a/include/linux/swap.h b/include/linux/swap.h
-index ba52f3a3478e..fe18e86a4f13 100644
---- a/include/linux/swap.h
-+++ b/include/linux/swap.h
-@@ -348,19 +348,9 @@ extern void lru_note_cost_page(struct page *);
- extern void lru_cache_add(struct page *);
- extern void mark_page_accessed(struct page *);
- 
--extern atomic_t lru_disable_count;
--
--static inline bool lru_cache_disabled(void)
--{
--	return atomic_read(&lru_disable_count);
--}
--
--static inline void lru_cache_enable(void)
--{
--	atomic_dec(&lru_disable_count);
--}
--
-+extern bool lru_cache_disabled(void);
- extern void lru_cache_disable(void);
-+extern void lru_cache_enable(void);
- extern void lru_add_drain(void);
- extern void lru_add_drain_cpu(int cpu);
- extern void lru_add_drain_cpu_zone(struct zone *zone);
-diff --git a/mm/cma.c b/mm/cma.c
-index 995e15480937..60be555c5b95 100644
---- a/mm/cma.c
-+++ b/mm/cma.c
-@@ -30,6 +30,7 @@
- #include <linux/cma.h>
- #include <linux/highmem.h>
- #include <linux/io.h>
-+#include <linux/swap.h>
- #include <linux/kmemleak.h>
- #include <trace/events/cma.h>
- 
-@@ -453,6 +454,8 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
- 	if (bitmap_count > bitmap_maxno)
- 		goto out;
- 
-+	lru_cache_disable();
-+
- 	for (;;) {
- 		spin_lock_irq(&cma->lock);
- 		bitmap_no = bitmap_find_next_zero_area_off(cma->bitmap,
-@@ -492,6 +495,8 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
- 		start = bitmap_no + mask + 1;
- 	}
- 
-+	lru_cache_enable();
-+
- 	trace_cma_alloc_finish(cma->name, pfn, page, count, align);
- 
- 	/*
-diff --git a/mm/swap.c b/mm/swap.c
-index af3cad4e5378..edcfcd6cf38e 100644
---- a/mm/swap.c
-+++ b/mm/swap.c
-@@ -847,7 +847,17 @@ void lru_add_drain_all(void)
- }
- #endif /* CONFIG_SMP */
- 
--atomic_t lru_disable_count = ATOMIC_INIT(0);
-+static atomic_t lru_disable_count = ATOMIC_INIT(0);
-+
-+bool lru_cache_disabled(void)
-+{
-+	return atomic_read(&lru_disable_count) != 0;
-+}
-+
-+void lru_cache_enable(void)
-+{
-+	atomic_dec(&lru_disable_count);
-+}
- 
- /*
-  * lru_cache_disable() needs to be called before we start compiling
-@@ -859,7 +869,17 @@ atomic_t lru_disable_count = ATOMIC_INIT(0);
-  */
- void lru_cache_disable(void)
- {
--	atomic_inc(&lru_disable_count);
-+	static DEFINE_MUTEX(lock);
-+
-+	mutex_lock(&lock);
-+	/*
-+	 * If someone is already disabled lru_cache, just return with
-+	 * increasing the lru_disable_count.
-+	 */
-+	if (atomic_inc_not_zero(&lru_disable_count)) {
-+		mutex_unlock(&lock);
-+		return;
-+	}
- #ifdef CONFIG_SMP
- 	/*
- 	 * lru_add_drain_all in the force mode will schedule draining on
-@@ -873,6 +893,8 @@ void lru_cache_disable(void)
- #else
- 	lru_add_and_bh_lrus_drain();
- #endif
-+	atomic_inc(&lru_disable_count);
-+	mutex_unlock(&lock);
- }
- 
- /**
--- 
-2.34.1.400.ga245620fadb-goog
-
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  arch/x86/include/asm/setup.h | 2 +-
+>  arch/x86/kernel/head64.c     | 8 ++++----
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/setup.h b/arch/x86/include/asm/setup.h
+> index a12458a7a8d4..cee1e816fdcd 100644
+> --- a/arch/x86/include/asm/setup.h
+> +++ b/arch/x86/include/asm/setup.h
+> @@ -50,7 +50,7 @@ extern void reserve_standard_io_resources(void);
+>  extern void i386_reserve_resources(void);
+>  extern unsigned long __startup_64(unsigned long physaddr, struct boot_params *bp);
+>  extern unsigned long __startup_secondary_64(void);
+> -extern void startup_64_setup_env(unsigned long physbase);
+> +extern void startup_64_setup_env(unsigned long physbase, struct boot_params *bp);
+>  extern void early_setup_idt(void);
+>  extern void __init do_early_exception(struct pt_regs *regs, int trapnr);
+>  
+> diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+> index fc5371a7e9d1..4eb83ae7ceb8 100644
+> --- a/arch/x86/kernel/head64.c
+> +++ b/arch/x86/kernel/head64.c
+> @@ -163,9 +163,6 @@ unsigned long __head __startup_64(unsigned long physaddr,
+>  	if (load_delta & ~PMD_PAGE_MASK)
+>  		for (;;);
+>  
+> -	/* Activate Secure Memory Encryption (SME) if supported and enabled */
+> -	sme_enable(bp);
+> -
+>  	/* Include the SME encryption mask in the fixup value */
+>  	load_delta += sme_get_me_mask();
+>  
+> @@ -594,7 +591,7 @@ void early_setup_idt(void)
+>  /*
+>   * Setup boot CPU state needed before kernel switches to virtual addresses.
+>   */
+> -void __head startup_64_setup_env(unsigned long physbase)
+> +void __head startup_64_setup_env(unsigned long physbase, struct boot_params *bp)
+>  {
+>  	/* Load GDT */
+>  	startup_gdt_descr.address = (unsigned long)fixup_pointer(startup_gdt, physbase);
+> @@ -606,4 +603,7 @@ void __head startup_64_setup_env(unsigned long physbase)
+>  		     "movl %%eax, %%es\n" : : "a"(__KERNEL_DS) : "memory");
+>  
+>  	startup_64_load_idt(physbase);
+> +
+> +	/* Activate SEV/SME memory encryption if supported/enabled. */
+> +	sme_enable(bp);
+>  }
+> -- 
+> 2.25.1
+> 

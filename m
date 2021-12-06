@@ -2,42 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B75469ED9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83958469B9A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385858AbhLFPod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:44:33 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33260 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240145AbhLFP2F (ORCPT
+        id S233656AbhLFPSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:18:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347317AbhLFPLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:28:05 -0500
+        Mon, 6 Dec 2021 10:11:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AC1C07E5F4;
+        Mon,  6 Dec 2021 07:05:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 335C5B81180;
-        Mon,  6 Dec 2021 15:24:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2D2C33B22;
-        Mon,  6 Dec 2021 15:24:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91B9161309;
+        Mon,  6 Dec 2021 15:05:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76945C341C2;
+        Mon,  6 Dec 2021 15:05:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804275;
-        bh=0qoLfgMGBJ7fX0eHSL7m8jqpsVcGzkT9kEGvCT095fI=;
+        s=korg; t=1638803124;
+        bh=rOly0lQ/0qyVSEfD9MR6tC+hi+9gy1rE1kGujxvHnOs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TRblQLU2YLtP5vRsxm3YO2JGRcDFmh982izlpwfbQtHrpuBzQsTKCvPS9CMx8oiuR
-         SIcxEJUyd0V8VWOIN/6lSBGdsbqGQmHV9ydP1yE6ul81KdavSjLJTNRcg15wwFp9fb
-         yRl4Z+ItkGUGdlZnp1g/WEbylxsGgDpS3E5qlx+Q=
+        b=WHUnJ1i/4gQ0mJA8ew0DBlD245YW4CJZYvo/Rmu5wVrqCHMZ4FO6g21ZScAx8SJe0
+         commDDRwNp/OkRPkKW/cvURgBLfCiU2nX8DX6Hp33sU5neT23/DOaS3/UTBYJqg0TB
+         99bPrR1he82I0AVA+xRk6nZOqf6r0oCMlSoWcYwM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 088/207] net: dsa: mv88e6xxx: Add fix for erratum 5.2 of 88E6393X family
-Date:   Mon,  6 Dec 2021 15:55:42 +0100
-Message-Id: <20211206145613.283193518@linuxfoundation.org>
+        stable@vger.kernel.org, Tomasz Maciej Nowak <tmn505@gmail.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH 4.14 035/106] PCI: aardvark: Train link immediately after enabling training
+Date:   Mon,  6 Dec 2021 15:55:43 +0100
+Message-Id: <20211206145556.583403461@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,85 +52,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Behún <kabel@kernel.org>
+From: Pali Rohár <pali@kernel.org>
 
-commit 93fd8207bed80ce19aaf59932cbe1c03d418a37d upstream.
+commit 6964494582f56a3882c2c53b0edbfe99eb32b2e1 upstream.
 
-Add fix for erratum 5.2 of the 88E6393X (Amethyst) family: for 10gbase-r
-mode, some undocumented registers need to be written some special
-values.
+Adding even 100ms (PCI_PM_D3COLD_WAIT) delay between enabling link
+training and starting link training causes detection issues with some
+buggy cards (such as Compex WLE900VX).
 
-Fixes: de776d0d316f ("net: dsa: mv88e6xxx: add support for mv88e6393x family")
+Move the code which enables link training immediately before the one
+which starts link traning.
+
+This fixes detection issues of Compex WLE900VX card on Turris MOX after
+cold boot.
+
+Link: https://lore.kernel.org/r/20200430080625.26070-2-pali@kernel.org
+Fixes: f4c7d053d7f7 ("PCI: aardvark: Wait for endpoint to be ready...")
+Tested-by: Tomasz Maciej Nowak <tmn505@gmail.com>
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/dsa/mv88e6xxx/serdes.c |   48 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ drivers/pci/host/pci-aardvark.c |   15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
---- a/drivers/net/dsa/mv88e6xxx/serdes.c
-+++ b/drivers/net/dsa/mv88e6xxx/serdes.c
-@@ -1375,6 +1375,50 @@ static int mv88e6393x_serdes_erratum_4_8
- 				      MV88E6393X_ERRATA_4_8_REG, reg);
- }
+--- a/drivers/pci/host/pci-aardvark.c
++++ b/drivers/pci/host/pci-aardvark.c
+@@ -324,11 +324,6 @@ static void advk_pcie_setup_hw(struct ad
+ 	reg |= LANE_COUNT_1;
+ 	advk_writel(pcie, reg, PCIE_CORE_CTRL0_REG);
  
-+static int mv88e6393x_serdes_erratum_5_2(struct mv88e6xxx_chip *chip, int lane,
-+					 u8 cmode)
-+{
-+	static const struct {
-+		u16 dev, reg, val, mask;
-+	} fixes[] = {
-+		{ MDIO_MMD_VEND1, 0x8093, 0xcb5a, 0xffff },
-+		{ MDIO_MMD_VEND1, 0x8171, 0x7088, 0xffff },
-+		{ MDIO_MMD_VEND1, 0x80c9, 0x311a, 0xffff },
-+		{ MDIO_MMD_VEND1, 0x80a2, 0x8000, 0xff7f },
-+		{ MDIO_MMD_VEND1, 0x80a9, 0x0000, 0xfff0 },
-+		{ MDIO_MMD_VEND1, 0x80a3, 0x0000, 0xf8ff },
-+		{ MDIO_MMD_PHYXS, MV88E6393X_SERDES_POC,
-+		  MV88E6393X_SERDES_POC_RESET, MV88E6393X_SERDES_POC_RESET },
-+	};
-+	int err, i;
-+	u16 reg;
+-	/* Enable link training */
+-	reg = advk_readl(pcie, PCIE_CORE_CTRL0_REG);
+-	reg |= LINK_TRAINING_EN;
+-	advk_writel(pcie, reg, PCIE_CORE_CTRL0_REG);
+-
+ 	/* Enable MSI */
+ 	reg = advk_readl(pcie, PCIE_CORE_CTRL2_REG);
+ 	reg |= PCIE_CORE_CTRL2_MSI_ENABLE;
+@@ -370,7 +365,15 @@ static void advk_pcie_setup_hw(struct ad
+ 	 */
+ 	msleep(PCI_PM_D3COLD_WAIT);
+ 
+-	/* Start link training */
++	/* Enable link training */
++	reg = advk_readl(pcie, PCIE_CORE_CTRL0_REG);
++	reg |= LINK_TRAINING_EN;
++	advk_writel(pcie, reg, PCIE_CORE_CTRL0_REG);
 +
-+	/* mv88e6393x family errata 5.2:
-+	 * For optimal signal integrity the following sequence should be applied
-+	 * to SERDES operating in 10G mode. These registers only apply to 10G
-+	 * operation and have no effect on other speeds.
++	/*
++	 * Start link training immediately after enabling it.
++	 * This solves problems for some buggy cards.
 +	 */
-+	if (cmode != MV88E6393X_PORT_STS_CMODE_10GBASER)
-+		return 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(fixes); ++i) {
-+		err = mv88e6390_serdes_read(chip, lane, fixes[i].dev,
-+					    fixes[i].reg, &reg);
-+		if (err)
-+			return err;
-+
-+		reg &= ~fixes[i].mask;
-+		reg |= fixes[i].val;
-+
-+		err = mv88e6390_serdes_write(chip, lane, fixes[i].dev,
-+					     fixes[i].reg, reg);
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
- int mv88e6393x_serdes_power(struct mv88e6xxx_chip *chip, int port, int lane,
- 			    bool on)
- {
-@@ -1389,6 +1433,10 @@ int mv88e6393x_serdes_power(struct mv88e
- 		if (err)
- 			return err;
- 
-+		err = mv88e6393x_serdes_erratum_5_2(chip, lane, cmode);
-+		if (err)
-+			return err;
-+
- 		err = mv88e6393x_serdes_power_lane(chip, lane, true);
- 		if (err)
- 			return err;
+ 	reg = advk_readl(pcie, PCIE_CORE_LINK_CTRL_STAT_REG);
+ 	reg |= PCIE_CORE_LINK_TRAINING;
+ 	advk_writel(pcie, reg, PCIE_CORE_LINK_CTRL_STAT_REG);
 
 

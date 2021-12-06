@@ -2,126 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A44C046A114
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:17:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 202E946A10F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350745AbhLFQVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:21:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352515AbhLFQTu (ORCPT
+        id S1356734AbhLFQVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:21:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37170 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1387200AbhLFQTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:19:50 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B66C0698D6;
-        Mon,  6 Dec 2021 08:16:16 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id y16so13565198ioc.8;
-        Mon, 06 Dec 2021 08:16:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=i/ZDF2XFTR41zF12EPAoQs5EFKTLrwQvmyNIdqJ10Ng=;
-        b=jjy6vu7x1/SheTJYzmrl2TkWwT8135gXiiNmNpL6SSWtaMgBsrfgqfK2i9gQfaulX2
-         650TXJmRKRrdbvPS3436wSCqai0iIlP58bwOatJ663z0E0gFcqc895ncXk03uKBTJyKd
-         a1vwlBzMpCb5pfx8Qo0w9UCfopaq1pIBowWEoRYuPQ5lHSAQoWJlTtpQFzcbC2hn2ahQ
-         od0URcHDKVEHUoLhFcdlP36IhTR8qsmSWobbxOUsSqhDvAA8CGWQq25kZykxbQVG8HIt
-         xACctvolBFQCQL22XYwhEK1ZmwydWIIXlDHq7h5N5BnTrY7G5IcQn1NNDXjqPlrQbuqH
-         3v+w==
+        Mon, 6 Dec 2021 11:19:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638807373;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rVq4wI05ULrRWwudu/uQs40sGTMilndmyEIF//RAT6g=;
+        b=dhUPF20nf2RPcTSoz3T0/o0mjUaR05OH0TfHdBHTZsN1Rz+IdUZoNLt9ZHLSQAuyHOb9tX
+        4/s1ep2jpIXYT2hdyW7sf/pNIIifkl7FL7u5vwje1yKCClyVmD4oWd5348Dnxns2doyc35
+        HyPGNoeAPT8Mtlaml/2ksuvoQaHFErI=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-78-zhLa-nkqOCmeYsoj54S8OA-1; Mon, 06 Dec 2021 11:16:10 -0500
+X-MC-Unique: zhLa-nkqOCmeYsoj54S8OA-1
+Received: by mail-wr1-f72.google.com with SMTP id d18-20020adfe852000000b001985d36817cso2183019wrn.13
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 08:16:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=i/ZDF2XFTR41zF12EPAoQs5EFKTLrwQvmyNIdqJ10Ng=;
-        b=Auo/ghqgD/Ki46S+NcIj7pQ/cO412pGo1X5a6ekKuDA+F8+QHFwv0YeqUhAsLiNLp/
-         tsJB5bmQ1ATa+QBzGacKM2VIfCgTwi3JEvBERDbhesThwicX+PlimXUzX/I8bdwRhuZl
-         HO57UUseHLLZ16uldxTSfoYxnPBZw8lHupuSwo6mfT5fmcVqKNSaOb9xA7ittJhCciEp
-         00YujSprf8z9uJvkCFSJ3bWsOpU4W4RBk1BBMS+XxxfXxCwOqx+SiWatDcfs+/qYEykj
-         WqPPN3AwM1yIQToXuNwzGmRXArfplOR+7C4/goxSvYbZ0U7IxXsIKaSC4KbpkTdJlAlh
-         Sv/g==
-X-Gm-Message-State: AOAM530yHW/sOXB62t8D/63tKeet4jetB0TnJkZshGCUhJsZkcbiri2o
-        aZSZMDZ2Fim7sdob3ZVcL18=
-X-Google-Smtp-Source: ABdhPJyNBjMvn2kT2R1mnC2z+6+U/NB1fwZilTOwBHu7tzgJD0W6yGja2MoQcni8CJixnQxBg4GY6w==
-X-Received: by 2002:a05:6638:2608:: with SMTP id m8mr43881290jat.57.1638807374571;
-        Mon, 06 Dec 2021 08:16:14 -0800 (PST)
-Received: from localhost ([172.243.151.11])
-        by smtp.gmail.com with ESMTPSA id x13sm6948578ilp.43.2021.12.06.08.16.13
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=rVq4wI05ULrRWwudu/uQs40sGTMilndmyEIF//RAT6g=;
+        b=MOR4JYi/FnumxKLpHgK44RqVNeeUDW83Rbr4JzpBWz7bpYEFPyWgQvwezM/wX/5GIB
+         CBurQ/VEpeVn+xVoqFC2I2innuS1fx2gtxCfBR35RPZ0FO4uduKB2Yv5tKu2bI5hi2M6
+         QFaiQhBXlth/IGyleyysU6tDwhv8pmS11J1jCGOee1S22SKNrmgzPCq182b6pG8nkeis
+         ww/pCPz9FkriZfwi+hK9J0hwEje8jyMncI1BldC8QVwD0hYLBI4DaGC10c0f7tVfTZwg
+         QdQZUBm4feOUUfR08DTmDM5fbF6w7FdsudwDLaJMP39vZpi/EXlUwRaPlv9l1IhA9AsN
+         +kcA==
+X-Gm-Message-State: AOAM532e0jpLljFbsfM5cTnNeV8Oury8CQa38M8hC2wQwg88RPlKAS4l
+        3ol/npF5+zc2QAW6h/j1if+CzYTyh/1SDozpYZejyv55/SBoaq4ylCdANxVJbP0pd5Uf9FX8j2P
+        zdPZuq6qIPRYZjUW//uqf6Z6Z
+X-Received: by 2002:a1c:448b:: with SMTP id r133mr40455548wma.85.1638807369595;
+        Mon, 06 Dec 2021 08:16:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzRoY6c6D6rgdESLfO3/+LzTBXPFZhoV0hAVYlsPSzvfyyRhNw/2jk9UhC+5ysncd3fX6xpig==
+X-Received: by 2002:a1c:448b:: with SMTP id r133mr40455517wma.85.1638807369387;
+        Mon, 06 Dec 2021 08:16:09 -0800 (PST)
+Received: from fedora (g-server-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id d188sm231333wmd.3.2021.12.06.08.16.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 08:16:14 -0800 (PST)
-Date:   Mon, 06 Dec 2021 08:16:06 -0800
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Emmanuel Deloget <emmanuel.deloget@eho.link>,
-        Louis Amas <louis.amas@eho.link>, andrii@kernel.org,
-        ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
-        kafai@fb.com, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        mw@semihalf.com, netdev@vger.kernel.org, songliubraving@fb.com,
-        yhs@fb.com
-Message-ID: <61ae3746df2f9_88182085b@john.notmuch>
-In-Reply-To: <20211206080337.13fc9ae7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <DB9PR06MB8058D71218633CD7024976CAFA929@DB9PR06MB8058.eurprd06.prod.outlook.com>
- <20211110144104.241589-1-louis.amas@eho.link>
- <bdc1f03c-036f-ee29-e2a1-a80f640adcc4@eho.link>
- <Ya4vd9+pBbVJML+K@shell.armlinux.org.uk>
- <20211206080337.13fc9ae7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Subject: Re: [PATCH 1/1] net: mvpp2: fix XDP rx queues registering
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        Mon, 06 Dec 2021 08:16:08 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, jmattson@google.com,
+        syzbot <syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com>,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        joro@8bytes.org, linux-kernel@vger.kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, wanpengli@tencent.com, x86@kernel.org
+Subject: Re: [syzbot] WARNING in nested_vmx_vmexit
+In-Reply-To: <Ya40sXNcLzBUlpdW@google.com>
+References: <00000000000051f90e05d2664f1d@google.com>
+ <87bl1u6qku.fsf@redhat.com> <Ya40sXNcLzBUlpdW@google.com>
+Date:   Mon, 06 Dec 2021 17:16:08 +0100
+Message-ID: <87k0gh675j.fsf@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jakub Kicinski wrote:
-> On Mon, 6 Dec 2021 15:42:47 +0000 Russell King (Oracle) wrote:
-> > On Mon, Dec 06, 2021 at 04:37:20PM +0100, Emmanuel Deloget wrote:
-> > > On 10/11/2021 15:41, Louis Amas wrote:  
-> > > > The registration of XDP queue information is incorrect because the
-> > > > RX queue id we use is invalid. When port->id == 0 it appears to works
-> > > > as expected yet it's no longer the case when port->id != 0.
-> > > > 
-> > > > When we register the XDP rx queue information (using
-> > > > xdp_rxq_info_reg() in function mvpp2_rxq_init()) we tell them to use
-> > > > rxq->id as the queue id. This value iscomputed as:
-> > > > rxq->id = port->id * max_rxq_count + queue_id
-> > > > 
-> > > > where max_rxq_count depends on the device version. In the MB case,
-> > > > this value is 32, meaning that rx queues on eth2 are numbered from
-> > > > 32 to 35 - there are four of them.
-> > > > 
-> > > > Clearly, this is not the per-port queue id that XDP is expecting:
-> > > > it wants a value in the range [0..3]. It shall directly use queue_id
-> > > > which is stored in rxq->logic_rxq -- so let's use that value instead.
-> > > > 
-> > > > This is consistent with the remaining part of the code in
-> > > > mvpp2_rxq_init().
-> 
-> > > Is there any update on this patch ? Without it, XDP only partially work on a
-> > > MACCHIATOBin (read: it works on some ports, not on others, as described in
-> > > our analysis sent together with the original patch).  
-> > 
-> > I suspect if you *didn't* thread your updated patch to your previous
-> > submission, then it would end up with a separate entry in
-> > patchwork.kernel.org,
-> 
-> Indeed, it's easier to keep track of patches which weren't posted 
-> as a reply in a thread, at least for me.
-> 
-> > and the netdev maintainers will notice that the
-> > patch is ready for inclusion, having been reviewed by Marcin.
-> 
-> In this case I _think_ it was dropped because it didn't apply.
-> 
-> Please rebase on top of net/master and repost if the changes is still
-> needed.
+Sean Christopherson <seanjc@google.com> writes:
 
-Also I would add the detailed description to the actual commit not below
-the "--" lines. Capturing that in the log will be useful for future
-reference if we ever hit similar issue here or elsewhere.
+> On Mon, Dec 06, 2021, Vitaly Kuznetsov wrote:
+>> syzbot <syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com> writes:
+>> 
+>> > Hello,
+>> >
+>> > syzbot found the following issue on:
+>> >
+>> > HEAD commit:    5f58da2befa5 Merge tag 'drm-fixes-2021-12-03-1' of git://a..
+>> > git tree:       upstream
+>> > console output: https://syzkaller.appspot.com/x/log.txt?x=14927309b00000
+>> > kernel config:  https://syzkaller.appspot.com/x/.config?x=e9ea28d2c3c2c389
+>> > dashboard link: https://syzkaller.appspot.com/bug?extid=f1d2136db9c80d4733e8
+>> > compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+>> >
+>> > Unfortunately, I don't have any reproducer for this issue yet.
+>> >
+>> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> > Reported-by: syzbot+f1d2136db9c80d4733e8@syzkaller.appspotmail.com
+>> >
+>> > ------------[ cut here ]------------
+>> > WARNING: CPU: 0 PID: 21158 at arch/x86/kvm/vmx/nested.c:4548 nested_vmx_vmexit+0x16bd/0x17e0 arch/x86/kvm/vmx/nested.c:4547
+>> > Modules linked in:
+>> > CPU: 0 PID: 21158 Comm: syz-executor.1 Not tainted 5.16.0-rc3-syzkaller #0
+>> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+>> > RIP: 0010:nested_vmx_vmexit+0x16bd/0x17e0 arch/x86/kvm/vmx/nested.c:4547
+>> 
+>> The comment above this WARN_ON_ONCE() says:
+>> 
+>> 4541)              /*
+>> 4542)               * The only expected VM-instruction error is "VM entry with
+>> 4543)               * invalid control field(s)." Anything else indicates a
+>> 4544)               * problem with L0.  And we should never get here with a
+>> 4545)               * VMFail of any type if early consistency checks are enabled.
+>> 4546)               */
+>> 4547)              WARN_ON_ONCE(vmcs_read32(VM_INSTRUCTION_ERROR) !=
+>> 4548)                           VMXERR_ENTRY_INVALID_CONTROL_FIELD);
+>> 
+>> which I think should still be valid and so the problem needs to be
+>> looked at L0 (GCE infrastructure). Sean, Jim, your call :-)
+>
+> The assertion itself is still valid, but look at the call stack.  This is firing
+> when KVM tears down the VM, i.e. vmx->fail is likely stale.
 
-Otherwise for patch,
+Oh, I see, true that!
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+>  I'll bet dollars to
+> donuts that commit c8607e4a086f ("KVM: x86: nVMX: don't fail nested VM entry on
+> invalid guest state if !from_vmentry") is to blame.  L1 is running with
+> unrestricted_guest=Y, so the only way vmx->emulation_required should become true
+> is if L2 is active and is not an unrestricted guest.
+>
+> I objected to the patch[*], but looking back at the dates, it appears that I did
+> so after the patch was queued and my comments were never addressed.  
+> I'll see if I can reproduce this with a selftest.  The fix is likely just:
+>
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index dc4909b67c5c..927a7c43b73b 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -6665,10 +6665,6 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
+>          * consistency check VM-Exit due to invalid guest state and bail.
+>          */
+>         if (unlikely(vmx->emulation_required)) {
+> -
+> -               /* We don't emulate invalid state of a nested guest */
+> -               vmx->fail = is_guest_mode(vcpu);
+> -
+>                 vmx->exit_reason.full = EXIT_REASON_INVALID_STATE;
+>                 vmx->exit_reason.failed_vmentry = 1;
+>                 kvm_register_mark_available(vcpu, VCPU_EXREG_EXIT_INFO_1);
+>
+> [*] https://lore.kernel.org/all/YWDWPbgJik5spT1D@google.com/
+>
+
+Let's also summon Max to the discussion to get his thoughts.
+
+>> >  <TASK>
+>> >  vmx_leave_nested arch/x86/kvm/vmx/nested.c:6220 [inline]
+>> >  nested_vmx_free_vcpu+0x83/0xc0 arch/x86/kvm/vmx/nested.c:330
+>> >  vmx_free_vcpu+0x11f/0x2a0 arch/x86/kvm/vmx/vmx.c:6799
+>> >  kvm_arch_vcpu_destroy+0x6b/0x240 arch/x86/kvm/x86.c:10989
+>> >  kvm_vcpu_destroy+0x29/0x90 arch/x86/kvm/../../../virt/kvm/kvm_main.c:441
+>> >  kvm_free_vcpus arch/x86/kvm/x86.c:11426 [inline]
+>> >  kvm_arch_destroy_vm+0x3ef/0x6b0 arch/x86/kvm/x86.c:11545
+>> >  kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1189 [inline]
+>> >  kvm_put_kvm+0x751/0xe40 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1220
+>> >  kvm_vcpu_release+0x53/0x60 arch/x86/kvm/../../../virt/kvm/kvm_main.c:3489
+>> >  __fput+0x3fc/0x870 fs/file_table.c:280
+>> >  task_work_run+0x146/0x1c0 kernel/task_work.c:164
+>> >  exit_task_work include/linux/task_work.h:32 [inline]
+>> >  do_exit+0x705/0x24f0 kernel/exit.c:832
+>> >  do_group_exit+0x168/0x2d0 kernel/exit.c:929
+>> >  get_signal+0x1740/0x2120 kernel/signal.c:2852
+>> >  arch_do_signal_or_restart+0x9c/0x730 arch/x86/kernel/signal.c:868
+>> >  handle_signal_work kernel/entry/common.c:148 [inline]
+>> >  exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
+>> >  exit_to_user_mode_prepare+0x191/0x220 kernel/entry/common.c:207
+>> >  __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+>> >  syscall_exit_to_user_mode+0x2e/0x70 kernel/entry/common.c:300
+>> >  do_syscall_64+0x53/0xd0 arch/x86/entry/common.c:86
+>> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>> > RIP: 0033:0x7f3388806b19
+>> > Code: Unable to access opcode bytes at RIP 0x7f3388806aef.
+>> > RSP: 002b:00007f338773a218 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+>> > RAX: fffffffffffffe00 RBX: 00007f338891a0e8 RCX: 00007f3388806b19
+>> > RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007f338891a0e8
+>> > RBP: 00007f338891a0e0 R08: 0000000000000000 R09: 0000000000000000
+>> > R10: 0000000000000000 R11: 0000000000000246 R12: 00007f338891a0ec
+>> > R13: 00007fffbe0e838f R14: 00007f338773a300 R15: 0000000000022000
+>> >  </TASK>
+>
+
+-- 
+Vitaly
+

@@ -2,66 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8E14692DF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F764692E2
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 10:44:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241338AbhLFJqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 04:46:09 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4196 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241285AbhLFJqI (ORCPT
+        id S241380AbhLFJrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 04:47:39 -0500
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:41287 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236288AbhLFJri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 04:46:08 -0500
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J6yzQ4Bqwz67vnQ;
-        Mon,  6 Dec 2021 17:38:26 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 6 Dec 2021 10:42:37 +0100
-Received: from [10.47.82.161] (10.47.82.161) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 6 Dec
- 2021 09:42:36 +0000
-Subject: Re: [PATCH] scsi: pm8001: Fix phys_to_virt() usage on dma_addr_t
-To:     <Ajish.Koshy@microchip.com>, <jinpu.wang@cloud.ionos.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <Viswas.G@microchip.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1637940933-107862-1-git-send-email-john.garry@huawei.com>
- <PH0PR11MB51123148E4932FE1C64F8052EC669@PH0PR11MB5112.namprd11.prod.outlook.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <a60318ef-dc19-a146-5ac3-16eae38b8c37@huawei.com>
-Date:   Mon, 6 Dec 2021 09:42:23 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Mon, 6 Dec 2021 04:47:38 -0500
+Received: (Authenticated sender: alex@ghiti.fr)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 2AF174000C;
+        Mon,  6 Dec 2021 09:44:04 +0000 (UTC)
+Message-ID: <c6da1d52-380a-715a-8432-87e6a79bf7be@ghiti.fr>
+Date:   Mon, 6 Dec 2021 10:44:04 +0100
 MIME-Version: 1.0
-In-Reply-To: <PH0PR11MB51123148E4932FE1C64F8052EC669@PH0PR11MB5112.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v7 1/3] riscv: Introduce CONFIG_RELOCATABLE
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.82.161]
-X-ClientProxiedBy: lhreml721-chm.china.huawei.com (10.201.108.72) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+From:   Alexandre ghiti <alex@ghiti.fr>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     alexandre.ghiti@canonical.com, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <mhng-4d503326-d18d-4155-a595-91dc15cfb4f1@palmerdabbelt-glaptop>
+ <5846825d-cd7e-5085-569e-17cfaf36630f@ghiti.fr>
+In-Reply-To: <5846825d-cd7e-5085-569e-17cfaf36630f@ghiti.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/11/2021 10:46, Ajish.Koshy@microchip.com wrote:
-> Thanks John for the update. Based on the given issue,
-> we never tested on arm server.
-> 
-> Further arm testing will depend on the availability of
-> the server.
-> 
-> Meanwhile will do further test on x86 and update
-> on the observations.
-
-Have you tested on x86 with the IOMMU enabled? From my limited 
-experience, out of the box the IOMMU is disabled in the BIOS on x86 
-machines - that is a very general statement. But this is not just an 
-issue specific to arm64.
+@Palmer, can I do anything for that to be pulled in 5.17?
 
 Thanks,
-John
+
+Alex
+
+On 10/27/21 07:04, Alexandre ghiti wrote:
+> Hi Palmer,
+>
+> On 10/26/21 11:29 PM, Palmer Dabbelt wrote:
+>> On Sat, 09 Oct 2021 10:20:20 PDT (-0700), alex@ghiti.fr wrote:
+>>> Arf, I have sent this patchset with the wrong email address. @Palmer
+>>> tell me if you want me to resend it correctly.
+>> Sorry for being kind of slow here.  It's fine: there's a "From:" in
+>> the patch, and git picks those up so it'll match the signed-off-by
+>> line.  I send pretty much all my patches that way, as I never managed
+>> to get my Google address working correctly.
+>>
+>>> Thanks,
+>>>
+>>> Alex
+>>>
+>>> On 10/9/21 7:12 PM, Alexandre Ghiti wrote:
+>>>> From: Alexandre Ghiti <alex@ghiti.fr>
+>>>>
+>>>> This config allows to compile 64b kernel as PIE and to relocate it at
+>>>> any virtual address at runtime: this paves the way to KASLR.
+>>>> Runtime relocation is possible since relocation metadata are
+>>>> embedded into
+>>>> the kernel.
+>> IMO this should really be user selectable, at a bare minimum so it's
+>> testable.
+>> I just sent along a patch to do that (my power's off at home, so email
+>> is a bit
+>> wacky right now).
+>>
+>> I haven't put this on for-next yet as I'm not sure if you had a fix
+>> for the
+>> kasan issue (which IIUC would conflict with this).
+>
+> The kasan issue only revealed that I need to move the kasan shadow
+> memory around with sv48 support, that's not related to the relocatable
+> kernel.
+>
+> Thanks,
+>
+> Alex
+>
+>
+>>>> Note that relocating at runtime introduces an overhead even if the
+>>>> kernel is loaded at the same address it was linked at and that the
+>>>> compiler
+>>>> options are those used in arm64 which uses the same RELA relocation
+>>>> format.
+>>>>
+>>>> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
+>>>> ---
+>>>>   arch/riscv/Kconfig              | 12 ++++++++
+>>>>   arch/riscv/Makefile             |  7 +++--
+>>>>   arch/riscv/kernel/vmlinux.lds.S |  6 ++++
+>>>>   arch/riscv/mm/Makefile          |  4 +++
+>>>>   arch/riscv/mm/init.c            | 54 ++++++++++++++++++++++++++++++++-
+>>>>   5 files changed, 80 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>>>> index ea16fa2dd768..043ba92559fa 100644
+>>>> --- a/arch/riscv/Kconfig
+>>>> +++ b/arch/riscv/Kconfig
+>>>> @@ -213,6 +213,18 @@ config PGTABLE_LEVELS
+>>>>   config LOCKDEP_SUPPORT
+>>>>       def_bool y
+>>>>
+>>>> +config RELOCATABLE
+>>>> +    bool
+>>>> +    depends on MMU && 64BIT && !XIP_KERNEL
+>>>> +    help
+>>>> +          This builds a kernel as a Position Independent Executable
+>>>> (PIE),
+>>>> +          which retains all relocation metadata required to
+>>>> relocate the
+>>>> +          kernel binary at runtime to a different virtual address
+>>>> than the
+>>>> +          address it was linked at.
+>>>> +          Since RISCV uses the RELA relocation format, this requires a
+>>>> +          relocation pass at runtime even if the kernel is loaded
+>>>> at the
+>>>> +          same address it was linked at.
+>>>> +
+>>>>   source "arch/riscv/Kconfig.socs"
+>>>>   source "arch/riscv/Kconfig.erratas"
+>>>>
+>>>> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+>>>> index 0eb4568fbd29..2f509915f246 100644
+>>>> --- a/arch/riscv/Makefile
+>>>> +++ b/arch/riscv/Makefile
+>>>> @@ -9,9 +9,12 @@
+>>>>   #
+>>>>
+>>>>   OBJCOPYFLAGS    := -O binary
+>>>> -LDFLAGS_vmlinux :=
+>>>> +ifeq ($(CONFIG_RELOCATABLE),y)
+>>>> +    LDFLAGS_vmlinux += -shared -Bsymbolic -z notext -z norelro
+>>>> +    KBUILD_CFLAGS += -fPIE
+>>>> +endif
+>>>>   ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
+>>>> -    LDFLAGS_vmlinux := --no-relax
+>>>> +    LDFLAGS_vmlinux += --no-relax
+>>>>       KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+>>>>       CC_FLAGS_FTRACE := -fpatchable-function-entry=8
+>>>>   endif
+>>>> diff --git a/arch/riscv/kernel/vmlinux.lds.S
+>>>> b/arch/riscv/kernel/vmlinux.lds.S
+>>>> index 5104f3a871e3..862a8c09723c 100644
+>>>> --- a/arch/riscv/kernel/vmlinux.lds.S
+>>>> +++ b/arch/riscv/kernel/vmlinux.lds.S
+>>>> @@ -133,6 +133,12 @@ SECTIONS
+>>>>
+>>>>       BSS_SECTION(PAGE_SIZE, PAGE_SIZE, 0)
+>>>>
+>>>> +    .rela.dyn : ALIGN(8) {
+>>>> +        __rela_dyn_start = .;
+>>>> +        *(.rela .rela*)
+>>>> +        __rela_dyn_end = .;
+>>>> +    }
+>>>> +
+>>>>   #ifdef CONFIG_EFI
+>>>>       . = ALIGN(PECOFF_SECTION_ALIGNMENT);
+>>>>       __pecoff_data_virt_size = ABSOLUTE(. - __pecoff_text_end);
+>>>> diff --git a/arch/riscv/mm/Makefile b/arch/riscv/mm/Makefile
+>>>> index 7ebaef10ea1b..2d33ec574bbb 100644
+>>>> --- a/arch/riscv/mm/Makefile
+>>>> +++ b/arch/riscv/mm/Makefile
+>>>> @@ -1,6 +1,10 @@
+>>>>   # SPDX-License-Identifier: GPL-2.0-only
+>>>>
+>>>>   CFLAGS_init.o := -mcmodel=medany
+>>>> +ifdef CONFIG_RELOCATABLE
+>>>> +CFLAGS_init.o += -fno-pie
+>>>> +endif
+>>>> +
+>>>>   ifdef CONFIG_FTRACE
+>>>>   CFLAGS_REMOVE_init.o = $(CC_FLAGS_FTRACE)
+>>>>   CFLAGS_REMOVE_cacheflush.o = $(CC_FLAGS_FTRACE)
+>>>> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+>>>> index c0cddf0fc22d..42041c12d496 100644
+>>>> --- a/arch/riscv/mm/init.c
+>>>> +++ b/arch/riscv/mm/init.c
+>>>> @@ -20,6 +20,9 @@
+>>>>   #include <linux/dma-map-ops.h>
+>>>>   #include <linux/crash_dump.h>
+>>>>   #include <linux/hugetlb.h>
+>>>> +#ifdef CONFIG_RELOCATABLE
+>>>> +#include <linux/elf.h>
+>>>> +#endif
+>>>>
+>>>>   #include <asm/fixmap.h>
+>>>>   #include <asm/tlbflush.h>
+>>>> @@ -103,7 +106,7 @@ static void __init print_vm_layout(void)
+>>>>       print_mlm("lowmem", (unsigned long)PAGE_OFFSET,
+>>>>             (unsigned long)high_memory);
+>>>>   #ifdef CONFIG_64BIT
+>>>> -    print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
+>>>> +    print_mlm("kernel", (unsigned long)kernel_map.virt_addr,
+>>>>             (unsigned long)ADDRESS_SPACE_END);
+>>>>   #endif
+>>>>   }
+>>>> @@ -518,6 +521,44 @@ static __init pgprot_t pgprot_from_va(uintptr_t
+>>>> va)
+>>>>   #error "setup_vm() is called from head.S before relocate so it
+>>>> should not use absolute addressing."
+>>>>   #endif
+>>>>
+>>>> +#ifdef CONFIG_RELOCATABLE
+>>>> +extern unsigned long __rela_dyn_start, __rela_dyn_end;
+>>>> +
+>>>> +static void __init relocate_kernel(void)
+>>>> +{
+>>>> +    Elf64_Rela *rela = (Elf64_Rela *)&__rela_dyn_start;
+>>>> +    /*
+>>>> +     * This holds the offset between the linked virtual address and
+>>>> the
+>>>> +     * relocated virtual address.
+>>>> +     */
+>>>> +    uintptr_t reloc_offset = kernel_map.virt_addr - KERNEL_LINK_ADDR;
+>>>> +    /*
+>>>> +     * This holds the offset between kernel linked virtual address and
+>>>> +     * physical address.
+>>>> +     */
+>>>> +    uintptr_t va_kernel_link_pa_offset = KERNEL_LINK_ADDR -
+>>>> kernel_map.phys_addr;
+>>>> +
+>>>> +    for ( ; rela < (Elf64_Rela *)&__rela_dyn_end; rela++) {
+>>>> +        Elf64_Addr addr = (rela->r_offset - va_kernel_link_pa_offset);
+>>>> +        Elf64_Addr relocated_addr = rela->r_addend;
+>>>> +
+>>>> +        if (rela->r_info != R_RISCV_RELATIVE)
+>>>> +            continue;
+>>>> +
+>>>> +        /*
+>>>> +         * Make sure to not relocate vdso symbols like rt_sigreturn
+>>>> +         * which are linked from the address 0 in vmlinux since
+>>>> +         * vdso symbol addresses are actually used as an offset from
+>>>> +         * mm->context.vdso in VDSO_OFFSET macro.
+>>>> +         */
+>>>> +        if (relocated_addr >= KERNEL_LINK_ADDR)
+>>>> +            relocated_addr += reloc_offset;
+>>>> +
+>>>> +        *(Elf64_Addr *)addr = relocated_addr;
+>>>> +    }
+>>>> +}
+>>>> +#endif /* CONFIG_RELOCATABLE */
+>>>> +
+>>>>   #ifdef CONFIG_XIP_KERNEL
+>>>>   static void __init create_kernel_page_table(pgd_t *pgdir,
+>>>>                           __always_unused bool early)
+>>>> @@ -625,6 +666,17 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>>>>       BUG_ON((kernel_map.virt_addr + kernel_map.size) >
+>>>> ADDRESS_SPACE_END - SZ_4K);
+>>>>   #endif
+>>>>
+>>>> +#ifdef CONFIG_RELOCATABLE
+>>>> +    /*
+>>>> +     * Early page table uses only one PGDIR, which makes it possible
+>>>> +     * to map PGDIR_SIZE aligned on PGDIR_SIZE: if the relocation
+>>>> offset
+>>>> +     * makes the kernel cross over a PGDIR_SIZE boundary, raise a bug
+>>>> +     * since a part of the kernel would not get mapped.
+>>>> +     */
+>>>> +    BUG_ON(PGDIR_SIZE - (kernel_map.virt_addr & (PGDIR_SIZE - 1)) <
+>>>> kernel_map.size);
+>>>> +    relocate_kernel();
+>>>> +#endif
+>>>> +
+>>>>       pt_ops.alloc_pte = alloc_pte_early;
+>>>>       pt_ops.get_pte_virt = get_pte_virt_early;
+>>>>   #ifndef __PAGETABLE_PMD_FOLDED

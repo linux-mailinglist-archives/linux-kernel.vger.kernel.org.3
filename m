@@ -2,101 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6EF46A5F2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B50A646A5EF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:47:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348677AbhLFTvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:51:00 -0500
-Received: from mout.kundenserver.de ([217.72.192.74]:34811 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348667AbhLFTu5 (ORCPT
+        id S1348660AbhLFTus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:50:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245093AbhLFTuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:50:57 -0500
-Received: from mail-wm1-f42.google.com ([209.85.128.42]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MAxLT-1mjYSV2OvB-00BMFO; Mon, 06 Dec 2021 20:47:26 +0100
-Received: by mail-wm1-f42.google.com with SMTP id c6-20020a05600c0ac600b0033c3aedd30aso623911wmr.5;
-        Mon, 06 Dec 2021 11:47:26 -0800 (PST)
-X-Gm-Message-State: AOAM533hENI+IVP8xGk8xsR8SVxt7gNAajkdk2xPQjrUzND5R87OEvZD
-        hFNrgjGrZ6QoDxUEn8MQlbEASWGCdZJ8gdTHUho=
-X-Google-Smtp-Source: ABdhPJztNu6678Mht2pSIA0DSQ8/VKNXlr9p6a5Ci1Nw/hY77mcfRR9vOrextclxIuD5gy0eWQd4ShVxESDBOjc+AU8=
-X-Received: by 2002:a1c:23d4:: with SMTP id j203mr758752wmj.35.1638820046033;
- Mon, 06 Dec 2021 11:47:26 -0800 (PST)
+        Mon, 6 Dec 2021 14:50:46 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3ACFC061746;
+        Mon,  6 Dec 2021 11:47:17 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so15022283otl.8;
+        Mon, 06 Dec 2021 11:47:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZjMX59TZl+IZdSPIF13WgBTxn1jh0xqEwJKqI52GXbs=;
+        b=Zu+amLxtSQRw6oTxIou7Qt08C6PLYYSQBz0iDwv5xQQ9FRia/6bhtu+gtHE/zwt+jG
+         K4jVHBy/aHDrbmkf46sjC8QvtVgzj2IcedhRmQ3RGbUhKOYt1GVA+tirQkpZSrE7inU6
+         Jl4vQkr+xBwbt1r4i4lVxeqRQhWq/JuWu8DEGXqccQNC5NXpRP+3u1DbfMJBSyeRLMG0
+         YYI+cqVagq8aXKoRqJz9v0zfGMiPUNyUroEFNnT3PBwBCNiwJrXhFDzUm7FF5R+0OTyg
+         a9fzewNKP4pU1uoYzBbrsJmv1ytCyl0ONm9BU+M383RPAMZJf6pYR9scUYTE7kE47EZ7
+         7WkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=ZjMX59TZl+IZdSPIF13WgBTxn1jh0xqEwJKqI52GXbs=;
+        b=wHcc6wcfadubITn7JHx+NgLQ7RHdvjiUtJTsg0WglDPriKqxHGmNS4TdSIYGe8N+Tu
+         rQqkljOXKearoF3nCMknFABR8uSgmo+e8w0eXzBdiklBBk//kBLYWnCRdj7WUSFibmtj
+         GiC8FqZYHxAvoJvtiHRNDV9IbS8z1vM9Bhem63UamqXrGw+YCO9Tzm9imzvAWCR8TGN2
+         XHByXiSMEjlKZ/omQsc/15013G7tVgtXRz9W3Phgz62uaS7dm7NJaRtUQJ8vcZKcsfAE
+         hkNaFhX6J/ZZEnsbHcPDTne3jyJMyRZzWZbbZU3Sl6hSf5y2pXvh3TkGIZQeEI++nLMj
+         C6Ow==
+X-Gm-Message-State: AOAM532G3OcgOy9+96H7Mu+aO4IEXJGCf52YtJCpXrCt5jUrS11P91M+
+        e/HctYKL0lb7IxBxFv/pUJI=
+X-Google-Smtp-Source: ABdhPJz7gzlopL79PfntoWQuiNa+c1A/Yin3bo8Av4Xlda/EZ0dm8aohXFx8817kx7sZUnM7hrRi6A==
+X-Received: by 2002:a05:6830:3155:: with SMTP id c21mr31066592ots.7.1638820037271;
+        Mon, 06 Dec 2021 11:47:17 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a16sm2363306otj.79.2021.12.06.11.47.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 11:47:16 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 6 Dec 2021 11:47:15 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Tero Kristo <t-kristo@ti.com>, devicetree@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: watchdog: ti,rti-wdt: Fix
+ assigned-clock-parents
+Message-ID: <20211206194715.GA3759192@roeck-us.net>
+References: <20211206174028.2294330-1-robh@kernel.org>
 MIME-Version: 1.0
-References: <202112061809.XT99aPrf-lkp@intel.com> <32ba635c-4588-4ea3-bd95-c55a33804e99@www.fastmail.com>
-In-Reply-To: <32ba635c-4588-4ea3-bd95-c55a33804e99@www.fastmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 6 Dec 2021 20:47:09 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2Ag60Dw1mbTsj7XVanT6u8kQW5vqK3hAD-yon1G8qKXw@mail.gmail.com>
-Message-ID: <CAK8P3a2Ag60Dw1mbTsj7XVanT6u8kQW5vqK3hAD-yon1G8qKXw@mail.gmail.com>
-Subject: Re: powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-core.o:undefined
- reference to `__this_module'
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     kernel test robot <lkp@intel.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:ofRCIMufLGSWtyz00T9mhugK8hDFg4OLq8o3AtCzCwGOlMGkPWE
- 9zpidGz67XX6w16u0mVIuiLku73WKUblsTrIn3LsijCJ8DwOMBe4yUsboRAjC8sLtC1/KAb
- iPa6+yM/qXdgCNJlA6YcNzWJZhGId0IRcs2sgTcGJknUBdteA+VRFFUv3tt0WvId6h6yD3k
- byfrcL4x+Ea1pjhLNQQIA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:QAswPbuXZQE=:2a4tBEesdPqqSE27EUuoyf
- oaHVCBjunEFqKoYz7JptPBH7+OoGuSpNxTrnMEDo0+aUAHNDUKsXoXBAoss6qaxxXSoEJ00zI
- Fyw7y1MRMS/wZDUTcdLaAMPCCCBMKPVuKtfItZfLHAlfTaSFS2WGOIvojCFOFKpaZ2Bosrg3Z
- WRQTlAaBVqZ1r394sb8aen/PwbvN+9EhsVhsKM3hyokYorSXd9gk05eIDc+f9jmNSUJAYc1hm
- rOwuBnLgjrz7jrvpMaGoj8SE7HcwZ8Qf9jzt1WFsF78ksO1NkJY43xJ36JfZpCXO79BuISMtQ
- xqEY+kKbxemv5Suja05CW76bAk2ao8VlS8Eb1CTK3JJ3EH1zGAHBQuh1SKoGPtS+WkzMd1qSi
- X7EunRYUE6MqN6D0EWq2KFAN+YUWESHg4wWoJglu4dlYv9ahpG4LioBEruQgQStlx0zB5Hz28
- /5u25+2seiPoSRdXNgYM09t4Lc2jIhjjrYRn6wO7UQ0kNFRclpJv6wwICf+1C0jqtLqwAQCDU
- C1vz5Pz/Du/XfH/aj96HESra6HUe6qxcLN+EoYsfSJJ05WQQMCGqyuuYn/7daH3XPitm67zNJ
- FZ49NhYAsw0l6XhKnFLiXnu3QOnEqM73a/s2hTdH6FPqEcR5nR/F/HmgnbOog/zeuVw0vY9Iz
- qYOzcF0KZcL942/iYS5DohwqKS4fb6niadvrqpf/iOvi4/MiJnbs7o716H6LAYNFGdB5boVAV
- x+47jzGDQVr9Q6EMgEurb2FCfG0Akno3DRe9tlvbBeDJTSgo9MXbynyT4azVglk9BUYO04Jtc
- MhJ0b2OC5g4/OucjVJo2d0BaEUZSs5wBYJeDg9zgeFdxgJLabo=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206174028.2294330-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 6:02 PM Sven Peter <sven@svenpeter.dev> wrote:
-> On Mon, Dec 6, 2021, at 11:10, kernel test robot wrote:
+On Mon, Dec 06, 2021 at 11:40:28AM -0600, Rob Herring wrote:
+> With 'unevaluatedProperties' support implemented, the ti,rti-wdt example
+> has the following warning:
+> 
+> /home/rob/proj/git/linux-dt/.build-arm64/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.example.dt.yaml: watchdog@2200000: Unevaluated properties are not allowed ('assigned-clock-parents' was unexpected)
+> 
+> The problem is the schema has a typo in 'assigned-clocks-parents'. As
+> it is not required to list assigned clocks in bindings, just drop the
+> property definitions to fix this.
+> 
+> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Tero Kristo <t-kristo@ti.com>
+> Cc: linux-watchdog@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All error/warnings (new ones prefixed by >>):
-> >
-> >>> powerpc64-linux-ld: warning: orphan section `.stubs' from `drivers/i2c/busses/i2c-pasemi-core.o' being placed in section `.stubs'
-> >>> powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-core.o:(.toc+0x0): undefined reference to `__this_module'
->
-> This seems to be triggered by compiling one of {pci,platform} as a module and the
-> other one as built-in. That setup can only happen with COMPILE_TEST since -pci
-> is otherwise only compiled for powerpc and -platform for arm64.
->
-> -core.c is only built once with THIS_MODULE expanding to __this_module. That will
-> fail when linking the built-in driver where THIS_MODULE should've been NULL instead.
->
-> The most simple fix (that also has no chance of breaking anything) is probably to
-> just move
->
->   smbus->adapter.owner = THIS_MODULE;
->
-> from core to both apple.c and pci.c. I'll prepare a patch later this week.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-I'd prefer fixing this in a better way, linking an object file into
-both vmlinux and a loadable
-module is not supported at all. Other options are:
+... assuming you want to carry this and the following patch through
+your tree. If not, please let me know.
 
-- #include the common .c file from the individual drivers (not great)
-- use Kconfig logic to prevent the broken configuration
-- use Makefile tricks to make both drivers built-in when this happens
-- make the common part a separate loadable module, exporting all the
-  global symbols.
+Thanks,
+Guenter
 
-Out of these, I would prefer the last option.
-
-       Arnd
+> ---
+>  Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
+> index 054584d7543a..2f33635876ff 100644
+> --- a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
+> @@ -34,12 +34,6 @@ properties:
+>    power-domains:
+>      maxItems: 1
+>  
+> -  assigned-clocks:
+> -    maxItems: 1
+> -
+> -  assigned-clocks-parents:
+> -    maxItems: 1
+> -
+>  required:
+>    - compatible
+>    - reg
+> -- 
+> 2.32.0
+> 

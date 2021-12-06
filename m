@@ -2,95 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2835469502
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 12:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0DAC469508
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 12:31:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242398AbhLFLbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 06:31:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238753AbhLFLa6 (ORCPT
+        id S242460AbhLFLed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 06:34:33 -0500
+Received: from mout.kundenserver.de ([212.227.17.10]:34195 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231332AbhLFLeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 06:30:58 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A8CC0613F8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 03:27:29 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id z7so24439360lfi.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 03:27:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c9l63LtAsEZ6fYHmNhW8V7RRUrW8tCaNYojj6Fpbnsc=;
-        b=uhNWdOyxLAH1Gc7+kfxaRvlBBxUi+OUvBxT5uZ0MOKxizvOmvT318NzaXaxpgw/j12
-         7lRwLYKdcc5KUs9Fc50Fq8DKy/A7KKAeq8cff7oh8663DfqPnV2vwd4HJV2xgc85tANm
-         J2BclrLK3nrm+2VdoUwNv+J9IfzZ9sBQpnaagZJ7SDnMJqTOQBFLVuLc0qihXmhluHPf
-         Ty1PfL08Bau65qVKyF/4HKxHZgtOeH0/EXHXFObc9F0SvFeSEFerQLHFdTm4wp+ULNww
-         VsVL16KfxarQ+zyZ4j+WJjHKFlA8res7tCsbIob1g/eJkCUTNHAKc2oJUIN1JAcNRgcw
-         cc3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c9l63LtAsEZ6fYHmNhW8V7RRUrW8tCaNYojj6Fpbnsc=;
-        b=yQW/ZNE0KhYQMG9XH2ttwHetB9wLbJlqN82SdGpssyeVOJNsgKr1p7tZHn6RzPca0E
-         yJ4yD8dPSR6+yPyaGfz1pVxa697V+4f+n6ADEdYm14vdeVA8gOyCq7GmgzmK4G6H/JCL
-         Ra4Xrs7A5W8ex+tWMQTKrGPxar08NEEIPZHUkCcs+/C1YC9w0SE9Y/EvjvFFzvtqlQ/1
-         VLhaKO5aYuwRt15HglfWsuQ3IQ1hXPh7xwKTHmLgdJ66bAAouXOJuwYrRgR8l3whf2Cm
-         r6ezctr2EX9G7V1epTfoIA8WlLyR3d1cGNffhh7r6DbF0uExG8apK6SY4p4AFclV3E4C
-         OtVg==
-X-Gm-Message-State: AOAM530bj3ULEDWukTZcOF9qOEPSyXckKyZR7WlnxMH3QZLl9GMUXgMU
-        OX62PO4MhiMFBRnzu2gHn0tNZKhEeN6fMxR0RAUue0jx3w8=
-X-Google-Smtp-Source: ABdhPJwdIQ1dnfeDSo3UmRCh16RMfUAdPKZVinqmUpBJqmAuCFq6pTZ0DBJ+jHVBxeOd5eeEcWhJfajHk8NyYduX3rE=
-X-Received: by 2002:a05:6512:3d07:: with SMTP id d7mr35870671lfv.233.1638790048200;
- Mon, 06 Dec 2021 03:27:28 -0800 (PST)
+        Mon, 6 Dec 2021 06:34:31 -0500
+Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MStKq-1n09Ga101u-00UJXC; Mon, 06 Dec 2021 12:31:02 +0100
+Received: by mail-wr1-f50.google.com with SMTP id i5so21783240wrb.2;
+        Mon, 06 Dec 2021 03:31:02 -0800 (PST)
+X-Gm-Message-State: AOAM533KHtartIlMC6DVp1SLZb5kjydBUT95KhJMb7sHertR7WtaQxGw
+        Z5Io3Duy0WJ8ombemZxmbYPL7Agr1kPDy4o1gCQ=
+X-Google-Smtp-Source: ABdhPJw16WAm7wgvwNNb9nTOQaZy5OVqt+aN1W6z8NVgK3jqrVKeeh7oCCksIsCkQd3pen14ghmmMCL95nhGoAj6w3M=
+X-Received: by 2002:adf:d091:: with SMTP id y17mr44777548wrh.418.1638790261818;
+ Mon, 06 Dec 2021 03:31:01 -0800 (PST)
 MIME-Version: 1.0
-References: <2633024.mvXUDI8C0e@kreacher>
-In-Reply-To: <2633024.mvXUDI8C0e@kreacher>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 6 Dec 2021 12:26:52 +0100
-Message-ID: <CAPDyKFq4KPbrQM7B79NsE1MjiOJ-3rRNt8ZEN+JvW=_pS-1JbQ@mail.gmail.com>
-Subject: Re: [PATCH] PM: runtime: Fix pm_runtime_active() kerneldoc comment
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
+References: <cover.1638275062.git.quic_saipraka@quicinc.com>
+ <cc649faf144fce439b7a341303b6cc73ac285949.1638275062.git.quic_saipraka@quicinc.com>
+ <CAK8P3a2JSSJxs92uEiJQAa0iQOvA6NDuww3+Br5cAxYvXVOOAQ@mail.gmail.com> <7b2b5888-c2ca-2ca0-8c0c-32128fcb37d2@quicinc.com>
+In-Reply-To: <7b2b5888-c2ca-2ca0-8c0c-32128fcb37d2@quicinc.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 6 Dec 2021 12:30:45 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0TZp349d7xFvpa6rzGSa4Wj2cAhqOg9-BAewA-d+yvJA@mail.gmail.com>
+Message-ID: <CAK8P3a0TZp349d7xFvpa6rzGSa4Wj2cAhqOg9-BAewA-d+yvJA@mail.gmail.com>
+Subject: Re: [PATCHv5 1/4] arm64: io: Use asm-generic high level MMIO accessors
+To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Marc Zyngier <maz@kernel.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        quic_psodagud@quicinc.com
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:3/j8d64qhzDw/fq9QUxhzyzgN1ZRYs/kcsRiMSRU5EiMPehgiej
+ Gj8ZHjoLZCz9e79CCX7t3v25tv4RCuLOCsq06YvRfbjMIY4uz951aPiq2V9HvayFTOC8uCB
+ 2VGxC7hfxFpeXynYPWMbIb1KV4VDUf016kd3mSUP2KKs9N7TtcvfJihrDDyUCqTRUQhxZUg
+ xooslz2eD7W2qg4+s4wFw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:XDv8maYSOO8=:23cgFAt5pFIGZDYs2u6jVJ
+ Dwok92b2XfQANW3gq3jTvf6gkmKATlx7bpzSq4vQqzpR7jbwoln3AXQ7niJVgMBcucW3xukxz
+ 6NhwMa00jmNm1Bf/wsBQ5o1doCHXZcK/zoLh8C7AoIUqc6rkjsZbvleTYxlor3FHVTKe6RTcp
+ Ebfk9dbx73wKlZ+A6jdpk5ru2mWpE6lqpWZRGDk4rQCobr7ez4dROQTnE6wyWZT2VFWSCuJAu
+ vALvEFFSu2ZyOcGH7TXWGs8uCJ9qln/G3ZWXrIQGWzAUlAPzxVfwqRQUv8w7lMjcok0tuPh+u
+ uqBdmUa0uZ2ZGKCuXzGeZ6eNRd+sIKSf/bKuMruJqDZz3Ip57KW95o1RNkH9cHAFCPWv7ZkOX
+ MmYkTJkLIavxp4cODyJeA4hHAJaQYk68UXNI5y8Qmqx2WjFcIN6inLxwGcxcYeoddl1ilLc1P
+ iTGDaYYbYUh+UJa2+70botEb9Pe86QDBYVrwOH0bKMLgPyEQ1nty+FeukqbU6R0HiftOCyhqE
+ QGcYr/5UGtMctqbe6kAzylWCTUqvaQVAWdFU8+fg+Hy0X+vKGMsDgI2gnfyoQmxzmeo8Cbajm
+ oY3ZpzfSOzsthQJwrQtO609knT1vjEqqoYqGeCG3SFO3n9SGppbEziIdyXwcceBJX2P6lAjAN
+ zsSJI4AiT66ogoTWKsi06R8zYl3ocUGQZFMpBFyLtkyhXgDrc4BFRpf0vdC/dO2Yrl8XpsipS
+ qDm9CXdySDkBvIQR8zyvDqzBHMlxn6IAKkL4xI0xxRADO5iLUeLN7+x6lPl88X8Z30+3nuEvb
+ 7mhPc4mW3bRnZA19SLwMzTXVWDoJ57nyCssN+adlUj7cHBTMc0=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Dec 2021 at 17:19, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+On Mon, Dec 6, 2021 at 12:12 PM Sai Prakash Ranjan
+<quic_saipraka@quicinc.com> wrote:
+> On 12/6/2021 2:20 PM, Arnd Bergmann wrote:
+> > I think it would be even better to flip these around and make the low-level
+> > definitions __io_ar() and __io_bw(), and then defining the arm64 specific
+> > macros based on those:
+> >
+> > /* arm64-specific, don't use in portable drivers */
+> > #define __iormb(v)     __io_ar(v)
+> > #define __iowmb()      __io_bw()
+> > #define __iomb()        dma_mb()
+> >
+> >
 >
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> The kerneldoc comment of pm_runtime_active() does not reflect the
-> behavior of the function, so update it accordingly.
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> So __iormb on arm64 has some dummy control dependency stuff as well based on
+> ("arm64: io: Ensure calls to delay routines are ordered against prior
+> readX()") and then we would need to change __iormb definition to __io_ar which
+> doesn't seem like __iormb definition to be exact right?
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+I'm not sure what you are asking here. As far as I can tell, __io_ar()
+and __iormb() have the same calling conventions and the same barrier
+requirements, so they should be interchangeable, we just need to decide
+which one is the primary definition.
 
-Kind regards
-Uffe
-
-> ---
->  include/linux/pm_runtime.h |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> Index: linux-pm/include/linux/pm_runtime.h
-> ===================================================================
-> --- linux-pm.orig/include/linux/pm_runtime.h
-> +++ linux-pm/include/linux/pm_runtime.h
-> @@ -129,7 +129,7 @@ static inline bool pm_runtime_suspended(
->   * pm_runtime_active - Check whether or not a device is runtime-active.
->   * @dev: Target device.
->   *
-> - * Return %true if runtime PM is enabled for @dev and its runtime PM status is
-> + * Return %true if runtime PM is disabled for @dev or its runtime PM status is
->   * %RPM_ACTIVE, or %false otherwise.
->   *
->   * Note that the return value of this function can only be trusted if it is
->
->
->
+       Arnd

@@ -2,92 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BDF46A34D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E1A46A349
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:42:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245444AbhLFRqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 12:46:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37166 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245024AbhLFRp5 (ORCPT
+        id S245331AbhLFRqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 12:46:13 -0500
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:36495 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244986AbhLFRp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Dec 2021 12:45:57 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B91CC0613F8;
-        Mon,  6 Dec 2021 09:42:27 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id w33-20020a17090a6ba400b001a722a06212so326954pjj.0;
-        Mon, 06 Dec 2021 09:42:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8nQCp/z9eDYnVUffQDauJk3NwnYVgoTr+iBwZrAMECA=;
-        b=HshJzRjEO1F5P5W3s4l8EHwdNEBpyn/6SDmBuVfXfdj+8vg4k3Xk4Kw6+JtCWVtxtm
-         wBnjwJW+ny7OZXBUOgh0/+dY0J9UAGzhhNZQ8FV5gRzT4WQGAa7S2rXPt2CTAmK9730G
-         1QKnkHrqC/BVLCTgp7POvx0wkzEEYOpp7UnyH/DT1VB7nf4JrTPfmbTdHJFyAlQ3F5bY
-         jYhj3W8/1/rHvr2pFTkRP+blTAaCqMZpjTb9X+qYWMGQULlpPAAN/VVbdQBrBAuV7ViJ
-         i0q2h1o243aUvIUVQkzu5rn0REIoZ5YSMHVsABk32KZRQ/zufyLrKUplSPkheLudzfXQ
-         OUdg==
+Received: by mail-ot1-f47.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so14610834otl.3;
+        Mon, 06 Dec 2021 09:42:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=8nQCp/z9eDYnVUffQDauJk3NwnYVgoTr+iBwZrAMECA=;
-        b=fShjdr5N6PfvIHNUMgGTpZzdPcodQmWFNVbZq9r1ng44oIH30iXvMfU7bzgQ7XwOwg
-         nCs5uABfAKMOSgmW/PeJhURUr0Kgv562NckavOxoxm4FXS+LXiDdz/TSUaazhzEmtX5L
-         AecWo3rMG1vVyWUNIYwbii51kc3htbnnpsZA9eThuZE8MQDSxI99uW5elxkbU6wvH/LV
-         bR5DU4Yo/uDEMQvmu7q4DLlY42rfeaRZLsbzlXqhCRLJQoW4DG6GDzJr0qC02pMG+IDk
-         9v8LluXiaFPLFasVAv5cajP1CKltNiiEIddIRAFWuhNDKeostDTskzmia2PC1c5lL/Bn
-         x/jQ==
-X-Gm-Message-State: AOAM532E1BTakc6ME5GY5xDP+UlxdgEkTKCA6YFpUYAzQ4lMHYT1rGup
-        wtOLPfjbtw/3YUSKbDG7c+3TGV0RvgE=
-X-Google-Smtp-Source: ABdhPJxyVcV0LVUgIsV3Sh/y9Q6cBheraRYgIB3WupUdsgSHhQbs4CZi9+kFf67RGzVsykM+i8Tg9A==
-X-Received: by 2002:a17:90b:1b4d:: with SMTP id nv13mr39770356pjb.234.1638812546646;
-        Mon, 06 Dec 2021 09:42:26 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id q10sm310413pjd.0.2021.12.06.09.42.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 09:42:26 -0800 (PST)
-Subject: Re: [PATCH] dt-bindings: net: mdio: Allow any child node name
-To:     Rob Herring <robh@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
+        bh=wMEGpXkQSMg6zAnWALCmMXVNDdUfut/AU6uq1HnIcdY=;
+        b=G8GC0HXO8pJe5ozFNsVv9BvCHK4UslZVRVDUmQsBNejuBig5/girMJIQKCTjfMj5Vl
+         EIhDcXznNnd6gXbkwu2V17X1Hus0Gosis3GvuZ/Sbc5hgxFzGtBcBwupGOkCRd5LIpfG
+         LVrYCYpm3IKaQ84sd571X8m/HLAqJP2EU5IUzKK3HpwZpmHxqq5Pao2DBuRa/F2fFrE4
+         IZu7mcERy3piaBi7/gWrIiXM5c7nXqnLj7UR6//8DL5QTKE7s9uuMKhVQZih5aWw+uYo
+         2iC4wcROJD41yiYbiGMAQmw6BLZK92OD+dKeaMVKRICpTXtw7pQEtnqHqMriK0kIn280
+         d79g==
+X-Gm-Message-State: AOAM5301CyDsaiYbpaOrAWr/ZfpFJVjaruexiRdLBywLcezBBbhyhgjA
+        zlG9PFz5EyLDqoIx5NVQHw==
+X-Google-Smtp-Source: ABdhPJw2vf51doQd/DZxL3pSrPArXIu9al2TunD0DuuEk9HbirzwvZYvs9z+pRumhFooLuAMX0GcBg==
+X-Received: by 2002:a05:6830:601:: with SMTP id w1mr29894635oti.267.1638812548258;
+        Mon, 06 Dec 2021 09:42:28 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id w80sm2732252oif.2.2021.12.06.09.42.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 09:42:27 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>
 Cc:     devicetree@vger.kernel.org,
         Thierry Reding <thierry.reding@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211206174139.2296497-1-robh@kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <dc9160a4-d52c-4358-423f-02fc96559acc@gmail.com>
-Date:   Mon, 6 Dec 2021 09:42:24 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        dmaengine@vger.kernel.org, Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: dma: ti: Add missing ti,k3-sci-common.yaml reference
+Date:   Mon,  6 Dec 2021 11:42:26 -0600
+Message-Id: <20211206174226.2298135-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20211206174139.2296497-1-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/6/21 9:41 AM, Rob Herring wrote:
-> An MDIO bus can have devices other than ethernet PHYs on it, so it
-> should allow for any node name rather than just 'ethernet-phy'.
-> 
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Cc: Heiner Kallweit <hkallweit1@gmail.com>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+The TI k3-bcdma and k3-pktdma both use 'ti,sci' and 'ti,sci-dev-id'
+properties defined in ti,k3-sci-common.yaml. When 'unevaluatedProperties'
+support is enabled, a the follow warning is generated:
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Documentation/devicetree/bindings/dma/ti/k3-bcdma.example.dt.yaml: dma-controller@485c0100: Unevaluated properties are not allowed ('ti,sci', 'ti,sci-dev-id' were unexpected)
+Documentation/devicetree/bindings/dma/ti/k3-pktdma.example.dt.yaml: dma-controller@485c0000: Unevaluated properties are not allowed ('ti,sci', 'ti,sci-dev-id' were unexpected)
 
-Thanks!
+Add a reference to ti,k3-sci-common.yaml to fix this.
+
+Cc: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: dmaengine@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml  | 1 +
+ Documentation/devicetree/bindings/dma/ti/k3-pktdma.yaml | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml b/Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml
+index df29d59d13a8..08627d91e607 100644
+--- a/Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml
++++ b/Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml
+@@ -30,6 +30,7 @@ description: |
+ 
+ allOf:
+   - $ref: /schemas/dma/dma-controller.yaml#
++  - $ref: /schemas/arm/keystone/ti,k3-sci-common.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/dma/ti/k3-pktdma.yaml b/Documentation/devicetree/bindings/dma/ti/k3-pktdma.yaml
+index ea19d12a9337..507d16d84ade 100644
+--- a/Documentation/devicetree/bindings/dma/ti/k3-pktdma.yaml
++++ b/Documentation/devicetree/bindings/dma/ti/k3-pktdma.yaml
+@@ -25,6 +25,7 @@ description: |
+ 
+ allOf:
+   - $ref: /schemas/dma/dma-controller.yaml#
++  - $ref: /schemas/arm/keystone/ti,k3-sci-common.yaml#
+ 
+ properties:
+   compatible:
 -- 
-Florian
+2.32.0
+

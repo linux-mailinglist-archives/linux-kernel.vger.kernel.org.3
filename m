@@ -2,212 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB9946A2F2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2340B46A2F6
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 18:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242500AbhLFRbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 12:31:01 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28140 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240150AbhLFR34 (ORCPT
+        id S242054AbhLFRbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 12:31:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242650AbhLFRbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 12:29:56 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B6HI46n004515;
-        Mon, 6 Dec 2021 17:26:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=hUFcvaWByJjpmi9wzWxytILgPSMVKkio1o87qlBWiwg=;
- b=Bu7cEvO7WdVoyQlozJMlO3QC2gr1Wzffpabixo0Qs0K58MGPMgzIM/0HkJicHcRsAh7t
- 5sIXskvKZvblT5Ns/WbXvL43vWevz94pZJonuLmrDdKPlb42Fi+rJaEGq4ZzqIXw2+lO
- oLg2GqMJ05o6O+sulCFhvNlO7Gi/EqXg0BcTa9UZBFFjk0oqZH0s/8GxfWJmGvbXxe05
- i6/Q8Ow83C0Da0opy+XDdA0JXPZzTj9A5XB0W3C9sWAVKd7F+xOrKg68FKM95ZmYyKC6
- 6CzwRqQ2M1yHH6+s38rfMGF7bgfTcAXyRYGq6arSBhW9zc9HDHvSL8+mSg0jiIwN5GXN Xg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cspsur4ar-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Dec 2021 17:26:12 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B6HJiUX011398;
-        Mon, 6 Dec 2021 17:26:12 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cspsur4a6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Dec 2021 17:26:12 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B6HDjU0029433;
-        Mon, 6 Dec 2021 17:26:11 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma03dal.us.ibm.com with ESMTP id 3cqyya2myr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Dec 2021 17:26:11 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B6HQ9xB33161498
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Dec 2021 17:26:09 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6E4572805C;
-        Mon,  6 Dec 2021 17:26:09 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5059E28066;
-        Mon,  6 Dec 2021 17:26:09 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Dec 2021 17:26:09 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, serge@hallyn.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Subject: [PATCH v3 16/16] ima: Setup securityfs for IMA namespace
-Date:   Mon,  6 Dec 2021 12:26:00 -0500
-Message-Id: <20211206172600.1495968-17-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211206172600.1495968-1-stefanb@linux.ibm.com>
-References: <20211206172600.1495968-1-stefanb@linux.ibm.com>
+        Mon, 6 Dec 2021 12:31:39 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EB4C0698C0;
+        Mon,  6 Dec 2021 09:27:53 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id q3so23978850wru.5;
+        Mon, 06 Dec 2021 09:27:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yjr0+LLOtRYKZIcmyJPSLxbVouLvWeiwMzFfrSoScsc=;
+        b=mPxz2dugNRDvMULWeyAbLHMImMUBsVjTvSexDQ/t2hs9rH6TyliuHVPNBtqJJQwnkz
+         16Uslu/T396k4INAJf3vRLO/6X7glSDv4oOtjSgUoHH9UZYMrnvXwiO74MhQn8C4l4Tn
+         8qJYQDUzCPLowvvwHxFhBY2RnTAE0Shiyy3+DWUwjd4FIDqp+9cFZ/aEQ5Cru2tKZ3la
+         ixo3yZBIA069Z2Rp0xo3nwTu3CAllfRKWXVODwTgsvx0qtkTc9pqzcczPFT9Nma15VH5
+         tHXVqsZtG1gkTLqqCdukQhOUj8B1znJxPH1Sd2knkGmEtytStanURmvPflXNtgOJN2kc
+         7E0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yjr0+LLOtRYKZIcmyJPSLxbVouLvWeiwMzFfrSoScsc=;
+        b=OLi3TQKOlxG//QvBFqGJBLLLZ8OWYzU7lIm3uv6hwZGeWJq4VS7d/inPzEbCjEnFnh
+         D11c5wtgT1YMRvb3ESglr+LVJW4MoOqHq55XVGuhShlw+RlPqa3hVDdlV9sYL/7+7vdF
+         jDoJqIJhWlYG/ZL2UPRR5MYyMRr8S6lRjhJkJhrusBn57BU4v8/pdeba+g4uOHnkk/mD
+         jsCDdG9i//kfBTMVYr/G8GxcsL71uJeF/dD+H2D2C5b7OXJE4NWfet49mVjPL07KI6tT
+         IAZbQoQLz7xICJpIZBtfJxno6Gim6ebsPQVGr3dUGm1KsYLyYXuSzNBd5+uKCWinzDoC
+         sFJw==
+X-Gm-Message-State: AOAM530YP18K0sNyu4C0IW6jJygd+LjVfyvQCBNJeJ4nknFrT6nVn7MY
+        RWsxp4zhxGkorfPR5X1Ye+g=
+X-Google-Smtp-Source: ABdhPJxu9Q2wvB/5ZUFTAzRhvP09Nf7rnGzVLcifYypW8VvFBL4Cmjxp7zqxKUWVIwssO7e94Rn4GA==
+X-Received: by 2002:a5d:6d86:: with SMTP id l6mr44159550wrs.304.1638811672539;
+        Mon, 06 Dec 2021 09:27:52 -0800 (PST)
+Received: from hamza-OptiPlex-7040 ([39.48.147.147])
+        by smtp.gmail.com with ESMTPSA id u13sm4153wmq.14.2021.12.06.09.27.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 09:27:51 -0800 (PST)
+Date:   Mon, 6 Dec 2021 22:27:46 +0500
+From:   Ameer Hamza <amhamza.mgc@gmail.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     vkuznets@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
+Subject: Re: [PATCH v3] KVM: x86: fix for missing initialization of return
+ status variable
+Message-ID: <20211206172746.GA141396@hamza-OptiPlex-7040>
+References: <20211206160813.GA37599@hamza-OptiPlex-7040>
+ <20211206164503.135917-1-amhamza.mgc@gmail.com>
+ <Ya5CCU0zf+MzMwcX@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: WQF4-a-BpyO5hdFJWtBH_ByznmN1DGmL
-X-Proofpoint-ORIG-GUID: wtya9TdK3wZsbyxMBJAdCeIJuB3CQkEk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-06_06,2021-12-06_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- lowpriorityscore=0 malwarescore=0 suspectscore=0 spamscore=0 clxscore=1015
- priorityscore=1501 adultscore=0 mlxlogscore=999 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112060101
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ya5CCU0zf+MzMwcX@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Setup securityfs with symlinks, directories, and files for IMA
-namespacing support. The same directory structure that IMA uses on the
-host is also created for the namespacing case.
+On Mon, Dec 06, 2021 at 05:02:01PM +0000, Sean Christopherson wrote:
+> On Mon, Dec 06, 2021, Ameer Hamza wrote:
+> > If undefined ioctl number is passed to the kvm_vcpu_ioctl_device_attr
+> > ioctl, we should trigger KVM_BUG_ON() and return with EIO to silent
+> > coverity warning.
+> > 
+> > Addresses-Coverity: 1494124 ("Uninitialized scalar variable")
+> > Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
+> > ---
+> > Changes in v3:
+> > Added KVM_BUG_ON() as default case and returned -EIO
+> > ---
+> >  arch/x86/kvm/x86.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index e0aa4dd53c7f..b37068f847ff 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -5019,6 +5019,9 @@ static int kvm_vcpu_ioctl_device_attr(struct kvm_vcpu *vcpu,
+> >  	case KVM_SET_DEVICE_ATTR:
+> >  		r = kvm_arch_tsc_set_attr(vcpu, &attr);
+> >  		break;
+> > +	default:
+> > +		KVM_BUG_ON(1, vcpu->kvm);
+> > +		r = -EIO;
+> 
+> At least have a
+> 
+> 		break;
+> 
+> if we're going to be pedantic about things.
+I just started as a contributer in this community and trying
+to fix issues found by static analyzer tools. If you think that's
+not necessary, its totally fine :)
 
-The securityfs file and directory ownerships cannot be set when the
-IMA namespace is initialized. Therefore, delay the setup of the file
-system to a later point when securityfs initializes the fs_context.
-Use securityfs_register_ns_notifier() to register a notifier for
-populating the filsystem late.
-
-This filesystem can now be mounted as follows:
-
-mount -t securityfs /sys/kernel/security/ /sys/kernel/security/
-
-The following directories, symlinks, and files are then available.
-
-$ ls -l sys/kernel/security/
-total 0
-lr--r--r--. 1 root root 0 Dec  2 00:18 ima -> integrity/ima
-drwxr-xr-x. 3 root root 0 Dec  2 00:18 integrity
-
-$ ls -l sys/kernel/security/ima/
-total 0
--r--r-----. 1 root root 0 Dec  2 00:18 ascii_runtime_measurements
--r--r-----. 1 root root 0 Dec  2 00:18 binary_runtime_measurements
--rw-------. 1 root root 0 Dec  2 00:18 policy
--r--r-----. 1 root root 0 Dec  2 00:18 runtime_measurements_count
--r--r-----. 1 root root 0 Dec  2 00:18 violations
-
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
----
- include/linux/ima.h             |  3 ++-
- security/integrity/ima/ima_fs.c | 46 ++++++++++++++++++++++++++++++---
- 2 files changed, 45 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index bfb978a7f8d5..cab5fc6caeb3 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -221,7 +221,8 @@ struct ima_h_table {
- };
- 
- enum {
--	IMAFS_DENTRY_DIR = 0,
-+	IMAFS_DENTRY_INTEGRITY_DIR = 0,
-+	IMAFS_DENTRY_DIR,
- 	IMAFS_DENTRY_SYMLINK,
- 	IMAFS_DENTRY_BINARY_RUNTIME_MEASUREMENTS,
- 	IMAFS_DENTRY_ASCII_RUNTIME_MEASUREMENTS,
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index c2a886c00ac2..c17a6b7eeb95 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -456,12 +456,25 @@ static void ima_fs_ns_free_dentries(struct ima_namespace *ns)
- 	memset(ns->dentry, 0, sizeof(ns->dentry));
- }
- 
--static int __init ima_fs_ns_init(struct user_namespace *user_ns)
-+static int ima_fs_ns_init(struct user_namespace *user_ns)
- {
- 	struct ima_namespace *ns = user_ns->ima_ns;
- 	struct dentry *ima_dir;
- 
--	ns->dentry[IMAFS_DENTRY_DIR] = securityfs_create_dir("ima", integrity_dir);
-+	/* already initialized? */
-+	if (ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR])
-+		return 0;
-+
-+	/* FIXME: update when evm and integrity are namespaced */
-+	if (user_ns != &init_user_ns)
-+		ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR] =
-+			securityfs_create_dir("integrity", NULL);
-+	else
-+		ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR] = integrity_dir;
-+
-+	ns->dentry[IMAFS_DENTRY_DIR] =
-+	    securityfs_create_dir("ima",
-+				  ns->dentry[IMAFS_DENTRY_INTEGRITY_DIR]);
- 	if (IS_ERR(ns->dentry[IMAFS_DENTRY_DIR]))
- 		return -1;
- 	ima_dir = ns->dentry[IMAFS_DENTRY_DIR];
-@@ -511,7 +524,34 @@ static int __init ima_fs_ns_init(struct user_namespace *user_ns)
- 	return -1;
- }
- 
--int __init ima_fs_init(void)
-+static int ima_ns_notify(struct notifier_block *this, unsigned long msg,
-+			    void *data)
- {
-+	int rc = 0;
-+	struct user_namespace *user_ns = data;
-+
-+	switch (msg) {
-+	case SECURITYFS_NS_ADD:
-+		rc = ima_fs_ns_init(user_ns);
-+		break;
-+	case SECURITYFS_NS_REMOVE:
-+		ima_fs_ns_free_dentries(user_ns->ima_ns);
-+		break;
-+	}
-+	return rc;
-+}
-+
-+static struct notifier_block ima_ns_notifier = {
-+	.notifier_call = ima_ns_notify,
-+};
-+
-+int ima_fs_init()
-+{
-+	int rc;
-+
-+	rc = securityfs_register_ns_notifier(&ima_ns_notifier);
-+	if (rc)
-+		return rc;
-+
- 	return ima_fs_ns_init(&init_user_ns);
- }
--- 
-2.31.1
-
+> >  	}
+> >  
+> >  	return r;
+> > -- 
+> > 2.25.1
+> > 

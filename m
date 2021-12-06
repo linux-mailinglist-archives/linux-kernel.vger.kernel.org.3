@@ -2,92 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 661B246AA5E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:24:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA7146AA5F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:24:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245334AbhLFV15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:27:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238216AbhLFV14 (ORCPT
+        id S1351197AbhLFV2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:28:14 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35178 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348660AbhLFV2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:27:56 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B16C061746;
-        Mon,  6 Dec 2021 13:24:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=oa9RaeVT6AmVJMqbBJ1807zuZU72iNi/1iFGFmnEt5o=; b=dfwmZgNVdo5L2ErolDkr0O/kGd
-        qaUMDkrUzVvPmITP29Xf7Qp8oAeXY11tyaSZGWqdSOSpYYB7N94HkbNqF/Bn87p0Ig9Vxszvncdpn
-        1HWmbgXqxvVN/2OyAUPwXAsxbyU0yLSKe0bzNOeYk9NYfV2ouZV/LsQX3LgH5gHXWkeHD59QLYm7U
-        HeKUzwH6Qxt6kEg+eqk/SJ1MOxRsGo6Fe/ikAIjxPsK+igUI6r9nj0fZnlhvzyY1nzvAvqT9K/Bkp
-        umAFu6osANK8seYM+ZW0htIpmY8yo648Hj4KUH93T5EpXCrffsjaIdFQwjYJLoXtHPVOMPbbL1q6b
-        WE1gv3WA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1muLSz-002dmD-Vg; Mon, 06 Dec 2021 21:24:10 +0000
-Message-ID: <9ff94a5f-bb7e-501a-65cf-f260ae75b506@infradead.org>
-Date:   Mon, 6 Dec 2021 13:24:03 -0800
+        Mon, 6 Dec 2021 16:28:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B742EB810D5
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 21:24:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E15B4C341C6;
+        Mon,  6 Dec 2021 21:24:41 +0000 (UTC)
+Date:   Mon, 6 Dec 2021 16:24:40 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH v2] tracing/uprobes: Use trace_event_buffer_reserve() helper
+Message-ID: <20211206162440.69fbf96c@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v2] Documentation: Fill the gaps about entry/noinstr
- constraints
-Content-Language: en-US
-To:     paulmck@kernel.org, Mark Rutland <mark.rutland@arm.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        rcu@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        mtosatti <mtosatti@redhat.com>, frederic <frederic@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-References: <875ys9dacq.ffs@tglx> <20211130091356.7336e277@gandalf.local.home>
- <878rx5b7i5.ffs@tglx> <YadU1aSE6/0yGWny@FVFF77S0Q05N> <87v9088a5q.ffs@tglx>
- <Yae9tbtZW5mjcBVt@FVFF77S0Q05N> <87ee6w83yw.ffs@tglx> <87bl2083mu.ffs@tglx>
- <1158239c-4e65-d3d9-41b3-4fedac856622@infradead.org>
- <Ya5KM05XaUBjlthn@FVFF77S0Q05N>
- <20211206175323.GB641268@paulmck-ThinkPad-P17-Gen-1>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20211206175323.GB641268@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
+To be consistent with kprobes and eprobes, use
+trace_event_buffer_reserver() and trace_event_buffer_commit(). This will
+ensure that any updates to trace events will also be implemented on uprobe
+events.
 
-On 12/6/21 09:53, Paul E. McKenney wrote:
-> On Mon, Dec 06, 2021 at 05:36:51PM +0000, Mark Rutland wrote:
->> On Fri, Dec 03, 2021 at 07:48:08PM -0800, Randy Dunlap wrote:
->>> On 12/1/21 12:35, Thomas Gleixner wrote:
->>>> +Aside of that many architectures have to save register state, e.g. debug or
->>>
->>>                                                           state (e.g. debug) or
->>>
->>>> +cause registers before another exception of the same type can happen. A
->>>
->>>    ^^^^^ cannot parse (with or without the change to the previous line)
->>
->> I think the difficulty here is with "cause register"? That' a register which
->> indicates the cause of an exception, e.g.
+Link: https://lkml.kernel.org/r/20211130024319.439953082@goodmis.org
 
-Oh. I see. Thanks.
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+---
+Changes since v1:
+  - removed unused 'buffer' variable that is no longer used.
 
->> * MIPS has `cause` (coprocessor 0 register 13)
->> * arm64 / AArch64 has `ESR_ELx` (Exception Syndrome Register, ELx)
->>
->> We could probably clarify this as "exception cause registers" or "exception
->> status registers", if that helps?
-> 
-> Or to make it word-by-word unambiguous, "exception-cause registers"
-> and "exception-status registers".
+ kernel/trace/trace_uprobe.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-Any of those works. Or even 'cause' registers.
-
+diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
+index f5f0039d31e5..a4d5c624fe79 100644
+--- a/kernel/trace/trace_uprobe.c
++++ b/kernel/trace/trace_uprobe.c
+@@ -949,8 +949,7 @@ static void __uprobe_trace_func(struct trace_uprobe *tu,
+ 				struct trace_event_file *trace_file)
+ {
+ 	struct uprobe_trace_entry_head *entry;
+-	struct trace_buffer *buffer;
+-	struct ring_buffer_event *event;
++	struct trace_event_buffer fbuffer;
+ 	void *data;
+ 	int size, esize;
+ 	struct trace_event_call *call = trace_probe_event_call(&tu->tp);
+@@ -965,12 +964,10 @@ static void __uprobe_trace_func(struct trace_uprobe *tu,
+ 
+ 	esize = SIZEOF_TRACE_ENTRY(is_ret_probe(tu));
+ 	size = esize + tu->tp.size + dsize;
+-	event = trace_event_buffer_lock_reserve(&buffer, trace_file,
+-						call->event.type, size, 0);
+-	if (!event)
++	entry = trace_event_buffer_reserve(&fbuffer, trace_file, size);
++	if (!entry)
+ 		return;
+ 
+-	entry = ring_buffer_event_data(event);
+ 	if (is_ret_probe(tu)) {
+ 		entry->vaddr[0] = func;
+ 		entry->vaddr[1] = instruction_pointer(regs);
+@@ -982,7 +979,7 @@ static void __uprobe_trace_func(struct trace_uprobe *tu,
+ 
+ 	memcpy(data, ucb->buf, tu->tp.size + dsize);
+ 
+-	event_trigger_unlock_commit(trace_file, buffer, event, entry, 0);
++	trace_event_buffer_commit(&fbuffer);
+ }
+ 
+ /* uprobe handler */
 -- 
-~Randy
+2.31.1
+

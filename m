@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B77469F35
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71890469CCD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391619AbhLFPqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:46:05 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34978 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387384AbhLFPbK (ORCPT
+        id S1385941AbhLFPZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358529AbhLFPQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:31:10 -0500
+        Mon, 6 Dec 2021 10:16:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98497C08EC67;
+        Mon,  6 Dec 2021 07:09:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98A2CB81018;
-        Mon,  6 Dec 2021 15:27:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57E2C34901;
-        Mon,  6 Dec 2021 15:27:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 625C1B81126;
+        Mon,  6 Dec 2021 15:09:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A670EC341C5;
+        Mon,  6 Dec 2021 15:09:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804459;
-        bh=WcScSF7kddzukuf+3Gs4FU1f4IK0BYp1yQDTQh7CJ/o=;
+        s=korg; t=1638803359;
+        bh=NAQYj6k14BTvbarLpERBFjTCDkSvdLI44DIIKOd4jKo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iai2LMeVovbi+nF0AK/W6LzDnDmZ4doUXeMKpSAyWRVrC779YlBedWQijZRjiBzoX
-         9Oqp1LU6XXn7RMXOca7qjyCHpXgSyRuMWsntUNwb7r8ML9PgmiDN1DMc6Anz8rsk44
-         JEr3gda6o9StjIVjmBdTj40ZIWnvr0LFlR7IF3hQ=
+        b=d/kQHfqPcnfyQEtxzIhrAOwws2cPV3W8q9bc8bOY2KiLahmSpI0jGyoETIy4VTDlX
+         pGAEHnsb4ksl/p536Z4WMypVWELQBEr49iBQ3o+Rv1xgWNW/L1ZEiUg/IyQZOMfY+j
+         nQTqGdZf5vUq3Ref/1jcbzK4oeINBXNLVJAx6YcQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@chromium.org>
-Subject: [PATCH 5.15 137/207] drm/msm/a6xx: Allocate enough space for GMU registers
+        stable@vger.kernel.org, zhangyue <zhangyue1@kylinos.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 14/48] net: tulip: de4x5: fix the problem that the array lp->phy[8] may be out of bound
 Date:   Mon,  6 Dec 2021 15:56:31 +0100
-Message-Id: <20211206145614.970389346@linuxfoundation.org>
+Message-Id: <20211206145549.344338370@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+References: <20211206145548.859182340@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,72 +49,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Douglas Anderson <dianders@chromium.org>
+From: zhangyue <zhangyue1@kylinos.cn>
 
-commit b4d25abf9720b69a03465b09d0d62d1998ed6708 upstream.
+[ Upstream commit 61217be886b5f7402843677e4be7e7e83de9cb41 ]
 
-In commit 142639a52a01 ("drm/msm/a6xx: fix crashstate capture for
-A650") we changed a6xx_get_gmu_registers() to read 3 sets of
-registers. Unfortunately, we didn't change the memory allocation for
-the array. That leads to a KASAN warning (this was on the chromeos-5.4
-kernel, which has the problematic commit backported to it):
+In line 5001, if all id in the array 'lp->phy[8]' is not 0, when the
+'for' end, the 'k' is 8.
 
-  BUG: KASAN: slab-out-of-bounds in _a6xx_get_gmu_registers+0x144/0x430
-  Write of size 8 at addr ffffff80c89432b0 by task A618-worker/209
-  CPU: 5 PID: 209 Comm: A618-worker Tainted: G        W         5.4.156-lockdep #22
-  Hardware name: Google Lazor Limozeen without Touchscreen (rev5 - rev8) (DT)
-  Call trace:
-   dump_backtrace+0x0/0x248
-   show_stack+0x20/0x2c
-   dump_stack+0x128/0x1ec
-   print_address_description+0x88/0x4a0
-   __kasan_report+0xfc/0x120
-   kasan_report+0x10/0x18
-   __asan_report_store8_noabort+0x1c/0x24
-   _a6xx_get_gmu_registers+0x144/0x430
-   a6xx_gpu_state_get+0x330/0x25d4
-   msm_gpu_crashstate_capture+0xa0/0x84c
-   recover_worker+0x328/0x838
-   kthread_worker_fn+0x32c/0x574
-   kthread+0x2dc/0x39c
-   ret_from_fork+0x10/0x18
+At this time, the array 'lp->phy[8]' may be out of bound.
 
-  Allocated by task 209:
-   __kasan_kmalloc+0xfc/0x1c4
-   kasan_kmalloc+0xc/0x14
-   kmem_cache_alloc_trace+0x1f0/0x2a0
-   a6xx_gpu_state_get+0x164/0x25d4
-   msm_gpu_crashstate_capture+0xa0/0x84c
-   recover_worker+0x328/0x838
-   kthread_worker_fn+0x32c/0x574
-   kthread+0x2dc/0x39c
-   ret_from_fork+0x10/0x18
-
-Fixes: 142639a52a01 ("drm/msm/a6xx: fix crashstate capture for A650")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Link: https://lore.kernel.org/r/20211103153049.1.Idfa574ccb529d17b69db3a1852e49b580132035c@changeid
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: zhangyue <zhangyue1@kylinos.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/dec/tulip/de4x5.c | 30 +++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
 
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
-@@ -777,12 +777,12 @@ static void a6xx_get_gmu_registers(struc
- 	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
- 
- 	a6xx_state->gmu_registers = state_kcalloc(a6xx_state,
--		2, sizeof(*a6xx_state->gmu_registers));
-+		3, sizeof(*a6xx_state->gmu_registers));
- 
- 	if (!a6xx_state->gmu_registers)
- 		return;
- 
--	a6xx_state->nr_gmu_registers = 2;
-+	a6xx_state->nr_gmu_registers = 3;
- 
- 	/* Get the CX GMU registers from AHB */
- 	_a6xx_get_gmu_registers(gpu, a6xx_state, &a6xx_gmu_reglist[0],
+diff --git a/drivers/net/ethernet/dec/tulip/de4x5.c b/drivers/net/ethernet/dec/tulip/de4x5.c
+index c813e6f2b371e..a80252973171f 100644
+--- a/drivers/net/ethernet/dec/tulip/de4x5.c
++++ b/drivers/net/ethernet/dec/tulip/de4x5.c
+@@ -4999,19 +4999,23 @@ mii_get_phy(struct net_device *dev)
+ 	}
+ 	if ((j == limit) && (i < DE4X5_MAX_MII)) {
+ 	    for (k=0; k < DE4X5_MAX_PHY && lp->phy[k].id; k++);
+-	    lp->phy[k].addr = i;
+-	    lp->phy[k].id = id;
+-	    lp->phy[k].spd.reg = GENERIC_REG;      /* ANLPA register         */
+-	    lp->phy[k].spd.mask = GENERIC_MASK;    /* 100Mb/s technologies   */
+-	    lp->phy[k].spd.value = GENERIC_VALUE;  /* TX & T4, H/F Duplex    */
+-	    lp->mii_cnt++;
+-	    lp->active++;
+-	    printk("%s: Using generic MII device control. If the board doesn't operate,\nplease mail the following dump to the author:\n", dev->name);
+-	    j = de4x5_debug;
+-	    de4x5_debug |= DEBUG_MII;
+-	    de4x5_dbg_mii(dev, k);
+-	    de4x5_debug = j;
+-	    printk("\n");
++	    if (k < DE4X5_MAX_PHY) {
++		lp->phy[k].addr = i;
++		lp->phy[k].id = id;
++		lp->phy[k].spd.reg = GENERIC_REG;      /* ANLPA register         */
++		lp->phy[k].spd.mask = GENERIC_MASK;    /* 100Mb/s technologies   */
++		lp->phy[k].spd.value = GENERIC_VALUE;  /* TX & T4, H/F Duplex    */
++		lp->mii_cnt++;
++		lp->active++;
++		printk("%s: Using generic MII device control. If the board doesn't operate,\nplease mail the following dump to the author:\n", dev->name);
++		j = de4x5_debug;
++		de4x5_debug |= DEBUG_MII;
++		de4x5_dbg_mii(dev, k);
++		de4x5_debug = j;
++		printk("\n");
++	    } else {
++		goto purgatory;
++	    }
+ 	}
+     }
+   purgatory:
+-- 
+2.33.0
+
 
 

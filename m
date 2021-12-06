@@ -2,147 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC024698B7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F02FD4698D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344136AbhLFO1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 09:27:13 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:35392 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344109AbhLFO1I (ORCPT
+        id S1344251AbhLFO27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 09:28:59 -0500
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:35646 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344236AbhLFO25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 09:27:08 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4D87C212C5;
-        Mon,  6 Dec 2021 14:23:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638800619; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IrA03xuvj5eZKlIPpBlqD1YRCJ4f68IN5DTrfD0Ats0=;
-        b=WtzU0zlen7O6OKnHbMT0XwF4NRnWjbkHHAjitMfPAGmf9PXX/2dcabK+lgA1mUDkGpeKRE
-        sQnvA4qCSLRj0SGyb02a2Xxf5spn1cGAbikvTxCzPK8LC9qZT7pQiHqgAdpwabmV+1DLHf
-        rYV+W3LdONL9X4+I7pOBNtObCdsP8k8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638800619;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IrA03xuvj5eZKlIPpBlqD1YRCJ4f68IN5DTrfD0Ats0=;
-        b=GUoQhCxHx4VbILrKF/vjjCtCqWDrMMhDTdxBnPYWjX0cG+kkSepiycalDfx/nAPW+y/gQ6
-        EgKTSbTmD116fvCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0EB3D13C32;
-        Mon,  6 Dec 2021 14:23:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id EOCWAuscrmHXOAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 06 Dec 2021 14:23:39 +0000
-Message-ID: <10c5672d-a228-ed9e-2f32-1ce9ae86dbcc@suse.de>
-Date:   Mon, 6 Dec 2021 15:23:38 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] drm/stm: remove conflicting framebuffers
-Content-Language: en-US
-To:     Yannick Fertre <yannick.fertre@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211206134735.13537-1-yannick.fertre@foss.st.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20211206134735.13537-1-yannick.fertre@foss.st.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------5HB1VTZQOufR3yv5KS39ptL0"
+        Mon, 6 Dec 2021 09:28:57 -0500
+Received: by mail-ot1-f46.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso13837178otr.2;
+        Mon, 06 Dec 2021 06:25:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=CWGHOhMZUfniE+Y2ng6wuO7zGULF9CPIy3yGJ1kJWX0=;
+        b=DgwFIAmc9k2dWMF6EQVDHIiNE35cuKEvoa+pjnuDeEpoU1T9GbQbFPHDX0ItXFnlwY
+         ddRE4uy8P1xniuAKAitMKdSo4lZwJ3GJNZWMq4J+hQndcEwYphV6FuJysgne/pqPSfcw
+         uKKRU+YgChofbHOQCk0QhwL6P97XQiQBgIav/9/UTfZr9De6WGWtkblnH9e6AxfPlhbm
+         uTQbWHRjacuypQvvrFtke+Ns08YssWEPkGzTiuoNtc949z5Nmq37UvnmHKXZCKB69UZb
+         A6BJMbFvASPBGFL59M+GF6AiW7RI4VTr5x1V/IaEfEKM3wnDijThouPnBSfokHFORpX5
+         viQw==
+X-Gm-Message-State: AOAM533JlCKddPbz3MaK9BV/OnSMpny5CgEvxXy3hMcpEA4kDTlFMhdk
+        R+VvpghYxn4GoSlytayN6Q==
+X-Google-Smtp-Source: ABdhPJyfp+sRZSmmxcQQNS5FVwHTA4gbp/9HMnapB0bZgOO+3eG1BRDTnxJZIBTFqjfhvJMpWKKcbg==
+X-Received: by 2002:a9d:12c:: with SMTP id 41mr30003581otu.322.1638800727961;
+        Mon, 06 Dec 2021 06:25:27 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id s2sm2197803otr.69.2021.12.06.06.25.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 06:25:27 -0800 (PST)
+Received: (nullmailer pid 1976294 invoked by uid 1000);
+        Mon, 06 Dec 2021 14:25:22 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     David Virag <virag.david003@gmail.com>
+Cc:     linux-samsung-soc@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20211205230804.202292-3-virag.david003@gmail.com>
+References: <20211205230804.202292-1-virag.david003@gmail.com> <20211205230804.202292-3-virag.david003@gmail.com>
+Subject: Re: [PATCH v3 2/7] dt-bindings: clock: Document Exynos7885 CMU bindings
+Date:   Mon, 06 Dec 2021 08:25:22 -0600
+Message-Id: <1638800722.490043.1976293.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------5HB1VTZQOufR3yv5KS39ptL0
-Content-Type: multipart/mixed; boundary="------------MJaflynH9FQdfRXU3HGqo6l7";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Yannick Fertre <yannick.fertre@foss.st.com>,
- Philippe Cornu <philippe.cornu@foss.st.com>,
- Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
- David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- dri-devel@lists.freedesktop.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Message-ID: <10c5672d-a228-ed9e-2f32-1ce9ae86dbcc@suse.de>
-Subject: Re: [PATCH] drm/stm: remove conflicting framebuffers
-References: <20211206134735.13537-1-yannick.fertre@foss.st.com>
-In-Reply-To: <20211206134735.13537-1-yannick.fertre@foss.st.com>
+On Mon, 06 Dec 2021 00:07:56 +0100, David Virag wrote:
+> Provide dt-schema documentation for Exynos7885 SoC clock controller.
+> Description is modified from Exynos850 clock controller documentation as
+> I couldn't describe it any better, that was written by Sam Protsenko.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Signed-off-by: David Virag <virag.david003@gmail.com>
+> ---
+> Changes in v2:
+>   - Fixed double : in description
+>   - Added R-b tag by Krzysztof Kozlowski
+> 
+> Changes in v3:
+>   - Nothing
+> 
+>  .../clock/samsung,exynos7885-clock.yaml       | 166 ++++++++++++++++++
+>  1 file changed, 166 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.yaml
+> 
 
---------------MJaflynH9FQdfRXU3HGqo6l7
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-SGkNCg0KQW0gMDYuMTIuMjEgdW0gMTQ6NDcgc2NocmllYiBZYW5uaWNrIEZlcnRyZToNCj4g
-SW4gY2FzZSBvZiB1c2luZyBzaW1wbGVmYiBvciBhbm90aGVyIGNvbmZsaWN0aW5nIGZyYW1l
-YnVmZmVyLA0KPiBjYWxsIGRybV9hcGVydHVyZV9yZW1vdmVfZnJhbWVidWZmZXJzKCkgdG8g
-cmVtb3ZlIG1lbW9yeSBhbGxvY2F0ZWQuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBZYW5uaWNr
-IEZlcnRyZSA8eWFubmljay5mZXJ0cmVAZm9zcy5zdC5jb20+DQoNClRoZSBwYXRjaCBzaG91
-bGQgaGF2ZSBjb250YWluZWQgYSBub3RlIHRoYXQgdGhpcyBpcyB2ZXJzaW9uIDIgb2YgdGhl
-IA0KY2hhbmdlIHdpdGggYSBzaG9ydCBjaGFuZ2Vsb2cuIEFueXdheQ0KDQpSZXZpZXdlZC1i
-eTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQoNCkJlc3QgcmVn
-YXJkcw0KVGhvbWFzDQoNCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL3N0bS9kcnYuYyB8
-IDUgKysrKysNCj4gICAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspDQo+IA0KPiBk
-aWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3N0bS9kcnYuYyBiL2RyaXZlcnMvZ3B1L2Ry
-bS9zdG0vZHJ2LmMNCj4gaW5kZXggMjIyODY5YjIzMmFlLi45ZjQ0MWFhZGYyZDUgMTAwNjQ0
-DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9zdG0vZHJ2LmMNCj4gKysrIGIvZHJpdmVycy9n
-cHUvZHJtL3N0bS9kcnYuYw0KPiBAQCAtMTQsNiArMTQsNyBAQA0KPiAgICNpbmNsdWRlIDxs
-aW51eC9vZl9wbGF0Zm9ybS5oPg0KPiAgICNpbmNsdWRlIDxsaW51eC9wbV9ydW50aW1lLmg+
-DQo+ICAgDQo+ICsjaW5jbHVkZSA8ZHJtL2RybV9hcGVydHVyZS5oPg0KPiAgICNpbmNsdWRl
-IDxkcm0vZHJtX2F0b21pYy5oPg0KPiAgICNpbmNsdWRlIDxkcm0vZHJtX2F0b21pY19oZWxw
-ZXIuaD4NCj4gICAjaW5jbHVkZSA8ZHJtL2RybV9kcnYuaD4NCj4gQEAgLTE4Myw2ICsxODQs
-MTAgQEAgc3RhdGljIGludCBzdG1fZHJtX3BsYXRmb3JtX3Byb2JlKHN0cnVjdCBwbGF0Zm9y
-bV9kZXZpY2UgKnBkZXYpDQo+ICAgDQo+ICAgCURSTV9ERUJVRygiJXNcbiIsIF9fZnVuY19f
-KTsNCj4gICANCj4gKwlyZXQgPSBkcm1fYXBlcnR1cmVfcmVtb3ZlX2ZyYW1lYnVmZmVycyhm
-YWxzZSwgJmRydl9kcml2ZXIpOw0KPiArCWlmIChyZXQpDQo+ICsJCXJldHVybiByZXQ7DQo+
-ICsNCj4gICAJZG1hX3NldF9jb2hlcmVudF9tYXNrKGRldiwgRE1BX0JJVF9NQVNLKDMyKSk7
-DQo+ICAgDQo+ICAgCWRkZXYgPSBkcm1fZGV2X2FsbG9jKCZkcnZfZHJpdmVyLCBkZXYpOw0K
-PiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Bl
-cg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1
-LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykN
-Ckdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+yamllint warnings/errors:
 
---------------MJaflynH9FQdfRXU3HGqo6l7--
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.example.dts:21.47-46.11: Warning (unit_address_format): /example-0/clock-controller@0x10010000: unit name should not have leading "0x"
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.example.dt.yaml: example-0: 'clock-controller@0x10010000' does not match any of the regexes: '.*-names$', '.*-supply$', '^#.*-cells$', '^#[a-zA-Z0-9,+\\-._]{0,63}$', '^[a-zA-Z][a-zA-Z0-9,+\\-._]{0,63}$', '^[a-zA-Z][a-zA-Z0-9,+\\-._]{0,63}@[0-9a-fA-F]+(,[0-9a-fA-F]+)*$', '^__.*__$', 'pinctrl-[0-9]+'
+	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/dt-core.yaml
 
---------------5HB1VTZQOufR3yv5KS39ptL0
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+doc reference errors (make refcheckdocs):
 
------BEGIN PGP SIGNATURE-----
+See https://patchwork.ozlabs.org/patch/1563783
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGuHOoFAwAAAAAACgkQlh/E3EQov+Dc
-fhAAu7DYQ55dKkr7yDfEvwSHUUIXfI2AuxIj/wGo4zsRFQAIRM0iBjOFYfm9x5zuROzPgm+Teucd
-NkGa4gogckccKaMXUvCQp6P80wnqbUJ1c2ahbLNDd1CmIXicaB/hhdgjpr7YiQHLuOQKkDeGBIP1
-Wbh0TyC67hNkqLho7qabdsuFzsLydG6c0Eboepr5ylQr1FSeBZM772XYcZfoMipI8VO2I87MvQja
-ofAq8F5711xStcixu8A2BTNfXqTQnvhapnYZr5ExQF/E0UvLKyvXkkyQatoaQc/YZKY0b4AcZk9B
-0CA8OOput1zhhHrXvVPFcb9oUGRvBmMixOBCtc/GIgGpn2Dg6mHbDdCqoN1JfgN96cmv+tdg74UE
-4z3JcAgdmJl5Nf4LdNksPWFfBxnGf4HUZT5mw678Va4uf/ZDzO/AE2dzW6bumPJqd3VhahQwMlCO
-utjryjLM++yP3bE+rat7iKmZ8I8N+yFg8VNwfLTNd1y7ilUW5SPWV+LTxO/NGWBiE+tbSOJ67+3x
-szz1oavvGY7qP9e2nfFsQKQuNjoaxt9tG5UHAsjr1Hm+BSAZmM0zhBDCeOtX4F9c3ktpHHk02aZ7
-sox4onD8BUZV2/3Y2iTabB4Bj0CdLRCY0CCl9FZzkeKmgXLrFpFDXNbDRkWpCmeq3NqRpkGe5JlM
-Z9s=
-=6JHv
------END PGP SIGNATURE-----
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
---------------5HB1VTZQOufR3yv5KS39ptL0--
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

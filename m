@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C81E469A23
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BCA469B37
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346104AbhLFPFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:05:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344364AbhLFPEu (ORCPT
+        id S1353666AbhLFPNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:13:42 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58790 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346259AbhLFPJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:04:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B884C0698C5;
-        Mon,  6 Dec 2021 07:01:21 -0800 (PST)
+        Mon, 6 Dec 2021 10:09:24 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28FC1B81125;
-        Mon,  6 Dec 2021 15:01:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ACC6C341C2;
-        Mon,  6 Dec 2021 15:01:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A09C361319;
+        Mon,  6 Dec 2021 15:05:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A70C341C2;
+        Mon,  6 Dec 2021 15:05:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802879;
-        bh=ZZ1+XS0q6JWAbqpOfJwgun9gVY07Kq7gRXICCNC0Jwc=;
+        s=korg; t=1638803155;
+        bh=B4aVEs97PJ/ebdv8HLDrNrMEw/5l8CAoAnLcDD81yfA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dsFeHRVZ1+E6qML123Xsaa9e/ZBkX+DqTNeeHAda4m3rM0Q+ZZqbTPEkMa4X8q74H
-         n08AG6PMMDyUMVfuep5uDuWYHn7hiiWrG4aAzP0LJlrKSy/c79titTybQM+XQvaaol
-         MQF/kKmbtFd3Z5nt8NLpKNJEbRp2UTrmGLnLDqd0=
+        b=CoZvoDg5E5mDq/73nnWex5s3Ln72b5RSB3b5nUTtzJuSeKzqOTEPBL3xcAg3anq8V
+         2ao/BV475WbhL7wFmRMAm0D48pz4HR7oXVu3T91/UkinQlD5pPGiJbUxRRg4XyAsdW
+         MPBEg0F5qXAkjIftwhlSz7YBsXd8GxAzIxpDgzv8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 4.9 05/62] usb: hub: Fix locking issues with address0_mutex
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH 4.14 040/106] PCI: aardvark: Introduce an advk_pcie_valid_device() helper
 Date:   Mon,  6 Dec 2021 15:55:48 +0100
-Message-Id: <20211206145549.345781230@linuxfoundation.org>
+Message-Id: <20211206145556.766850379@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,103 +47,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-commit 6cca13de26eea6d32a98d96d916a048d16a12822 upstream.
+commit 248d4e59616c632f37f04c233eec6d5008384926 upstream.
 
-Fix the circular lock dependency and unbalanced unlock of addess0_mutex
-introduced when fixing an address0_mutex enumeration retry race in commit
-ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0 race")
+In other to mimic other PCIe host controller drivers, introduce an
+advk_pcie_valid_device() helper, used in the configuration read/write
+functions.
 
-Make sure locking order between port_dev->status_lock and address0_mutex
-is correct, and that address0_mutex is not unlocked in hub_port_connect
-"done:" codepath which may be reached without locking address0_mutex
-
-Fixes: 6ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0 race")
-Cc: <stable@vger.kernel.org>
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Tested-by: Hans de Goede <hdegoede@redhat.com>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Acked-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20211123101656.1113518-1-mathias.nyman@linux.intel.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[lorenzo.pieralisi@arm.com: updated host->controller dir move]
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/core/hub.c |   19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ drivers/pci/host/pci-aardvark.c |   13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -4835,6 +4835,7 @@ static void hub_port_connect(struct usb_
- 	struct usb_port *port_dev = hub->ports[port1 - 1];
- 	struct usb_device *udev = port_dev->child;
- 	static int unreliable_port = -1;
-+	bool retry_locked;
+--- a/drivers/pci/host/pci-aardvark.c
++++ b/drivers/pci/host/pci-aardvark.c
+@@ -592,6 +592,15 @@ static bool advk_pcie_pio_is_running(str
+ 	return false;
+ }
  
- 	/* Disconnect any existing devices under this port */
- 	if (udev) {
-@@ -4891,9 +4892,10 @@ static void hub_port_connect(struct usb_
++static bool advk_pcie_valid_device(struct advk_pcie *pcie, struct pci_bus *bus,
++				  int devfn)
++{
++	if ((bus->number == pcie->root_bus_nr) && PCI_SLOT(devfn) != 0)
++		return false;
++
++	return true;
++}
++
+ static int advk_pcie_rd_conf(struct pci_bus *bus, u32 devfn,
+ 			     int where, int size, u32 *val)
+ {
+@@ -599,7 +608,7 @@ static int advk_pcie_rd_conf(struct pci_
+ 	u32 reg;
+ 	int ret;
  
- 	status = 0;
- 
--	mutex_lock(hcd->address0_mutex);
--
- 	for (i = 0; i < SET_CONFIG_TRIES; i++) {
-+		usb_lock_port(port_dev);
-+		mutex_lock(hcd->address0_mutex);
-+		retry_locked = true;
- 
- 		/* reallocate for each attempt, since references
- 		 * to the previous one can escape in various ways
-@@ -4902,6 +4904,8 @@ static void hub_port_connect(struct usb_
- 		if (!udev) {
- 			dev_err(&port_dev->dev,
- 					"couldn't allocate usb_device\n");
-+			mutex_unlock(hcd->address0_mutex);
-+			usb_unlock_port(port_dev);
- 			goto done;
- 		}
- 
-@@ -4923,13 +4927,13 @@ static void hub_port_connect(struct usb_
- 		}
- 
- 		/* reset (non-USB 3.0 devices) and get descriptor */
--		usb_lock_port(port_dev);
- 		status = hub_port_init(hub, udev, port1, i);
--		usb_unlock_port(port_dev);
- 		if (status < 0)
- 			goto loop;
- 
- 		mutex_unlock(hcd->address0_mutex);
-+		usb_unlock_port(port_dev);
-+		retry_locked = false;
- 
- 		if (udev->quirks & USB_QUIRK_DELAY_INIT)
- 			msleep(2000);
-@@ -5019,11 +5023,14 @@ static void hub_port_connect(struct usb_
- 
- loop_disable:
- 		hub_port_disable(hub, port1, 1);
--		mutex_lock(hcd->address0_mutex);
- loop:
- 		usb_ep0_reinit(udev);
- 		release_devnum(udev);
- 		hub_free_dev(udev);
-+		if (retry_locked) {
-+			mutex_unlock(hcd->address0_mutex);
-+			usb_unlock_port(port_dev);
-+		}
- 		usb_put_dev(udev);
- 		if ((status == -ENOTCONN) || (status == -ENOTSUPP))
- 			break;
-@@ -5046,8 +5053,6 @@ loop:
+-	if ((bus->number == pcie->root_bus_nr) && PCI_SLOT(devfn) != 0) {
++	if (!advk_pcie_valid_device(pcie, bus, devfn)) {
+ 		*val = 0xffffffff;
+ 		return PCIBIOS_DEVICE_NOT_FOUND;
  	}
+@@ -660,7 +669,7 @@ static int advk_pcie_wr_conf(struct pci_
+ 	int offset;
+ 	int ret;
  
- done:
--	mutex_unlock(hcd->address0_mutex);
--
- 	hub_port_disable(hub, port1, 1);
- 	if (hcd->driver->relinquish_port && !hub->hdev->parent) {
- 		if (status != -ENOTCONN && status != -ENODEV)
+-	if ((bus->number == pcie->root_bus_nr) && PCI_SLOT(devfn) != 0)
++	if (!advk_pcie_valid_device(pcie, bus, devfn))
+ 		return PCIBIOS_DEVICE_NOT_FOUND;
+ 
+ 	if (where % size)
 
 

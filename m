@@ -2,98 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0B046A12D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8AC46A154
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356045AbhLFQ0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:26:05 -0500
-Received: from mga01.intel.com ([192.55.52.88]:58761 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351189AbhLFQ0B (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:26:01 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10189"; a="261402490"
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="261402490"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 08:18:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="579417337"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Dec 2021 08:18:20 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B6GIJ0W021925;
-        Mon, 6 Dec 2021 16:18:19 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        id S1376311AbhLFQa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:30:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385471AbhLFQaD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 11:30:03 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD289C0613F8;
+        Mon,  6 Dec 2021 08:26:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 24060CE16C7;
+        Mon,  6 Dec 2021 16:26:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1EF4C341C2;
+        Mon,  6 Dec 2021 16:26:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638807991;
+        bh=Wz98IlyL9Yn420RHC9S01jFGy4sD8P9IQ4KMEc4hBnE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sckZAMuU60EwH/eL09QBh97evFipQvaEK2vdD+cy3Lc6rdQAIVOVWWzQDEDKZgP8v
+         4X7Ns9yeBid7mgmKpBT5K4Q3DSkTcD5knRd7qzUN0nRmhJ6EkrkGipxhj7htcOZnEF
+         Ga4Kavqt3K8yQqgpA2o8x6NwS2P8ZHZ9WWNgLe23sIPvF6dt3jvy1RcfG8uIwq90K1
+         cE7aPNgS6bkn28zD9csV6o1ASEmKwfuTNetYxcQ68VAjOKvb4Rpyf3Ia1Q2vLLD2P+
+         f/f7mz/19NF333JJ2TnSSRXOawk9AjaDQz+Yq14eSA607a48o/A2WaAnbp4RVDX+jo
+         VF51jKfuPHJjQ==
+Date:   Tue, 7 Dec 2021 00:18:54 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Zong Li <zong.li@sifive.com>, Anup Patel <anup@brainfault.org>,
+        Atish Patra <Atish.Patra@rivosinc.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH] numa: mark __next_node() as __always_inline to fix section mismatch
-Date:   Mon,  6 Dec 2021 17:17:45 +0100
-Message-Id: <20211206161745.39028-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
+        Kees Cook <keescook@chromium.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        panqinglin2020@iscas.ac.cn, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH v3 01/13] riscv: Move KASAN mapping next to the kernel
+ mapping
+In-Reply-To: <20211206104657.433304-2-alexandre.ghiti@canonical.com>
+References: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
+        <20211206104657.433304-2-alexandre.ghiti@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Message-Id: <20211206162624.F1EF4C341C2@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang (13) uninlines __next_node() which emits the following warning
-due to that this function is used in init code (amd_numa_init(),
-sched_init_numa() etc.):
+On Mon,  6 Dec 2021 11:46:45 +0100
+Alexandre Ghiti <alexandre.ghiti@canonical.com> wrote:
 
-WARNING: modpost: vmlinux.o(.text+0x927ee): Section mismatch
-in reference from the function __next_node() to the variable
-.init.data:numa_nodes_parsed
-The function __next_node() references
-the variable __initdata numa_nodes_parsed.
-This is often because __next_node lacks a __initdata
-annotation or the annotation of numa_nodes_parsed is wrong.
+> Now that KASAN_SHADOW_OFFSET is defined at compile time as a config,
+> this value must remain constant whatever the size of the virtual address
+> space, which is only possible by pushing this region at the end of the
+> address space next to the kernel mapping.
+> 
+> Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+> ---
+>  Documentation/riscv/vm-layout.rst | 12 ++++++------
+>  arch/riscv/Kconfig                |  4 ++--
+>  arch/riscv/include/asm/kasan.h    |  4 ++--
+>  arch/riscv/include/asm/page.h     |  6 +++++-
+>  arch/riscv/include/asm/pgtable.h  |  6 ++++--
+>  arch/riscv/mm/init.c              | 25 +++++++++++++------------
+>  6 files changed, 32 insertions(+), 25 deletions(-)
+> 
+> diff --git a/Documentation/riscv/vm-layout.rst b/Documentation/riscv/vm-layout.rst
+> index b7f98930d38d..1bd687b97104 100644
+> --- a/Documentation/riscv/vm-layout.rst
+> +++ b/Documentation/riscv/vm-layout.rst
+> @@ -47,12 +47,12 @@ RISC-V Linux Kernel SV39
+>                                                                | Kernel-space virtual memory, shared between all processes:
+>    ____________________________________________________________|___________________________________________________________
+>                      |            |                  |         |
+> -   ffffffc000000000 | -256    GB | ffffffc7ffffffff |   32 GB | kasan
+> -   ffffffcefee00000 | -196    GB | ffffffcefeffffff |    2 MB | fixmap
+> -   ffffffceff000000 | -196    GB | ffffffceffffffff |   16 MB | PCI io
+> -   ffffffcf00000000 | -196    GB | ffffffcfffffffff |    4 GB | vmemmap
+> -   ffffffd000000000 | -192    GB | ffffffdfffffffff |   64 GB | vmalloc/ioremap space
+> -   ffffffe000000000 | -128    GB | ffffffff7fffffff |  124 GB | direct mapping of all physical memory
+> +   ffffffc6fee00000 | -228    GB | ffffffc6feffffff |    2 MB | fixmap
+> +   ffffffc6ff000000 | -228    GB | ffffffc6ffffffff |   16 MB | PCI io
+> +   ffffffc700000000 | -228    GB | ffffffc7ffffffff |    4 GB | vmemmap
+> +   ffffffc800000000 | -224    GB | ffffffd7ffffffff |   64 GB | vmalloc/ioremap space
+> +   ffffffd800000000 | -160    GB | fffffff6ffffffff |  124 GB | direct mapping of all physical memory
+> +   fffffff700000000 |  -36    GB | fffffffeffffffff |   32 GB | kasan
+>    __________________|____________|__________________|_________|____________________________________________________________
+>                                                                |
+>                                                                |
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 6d5b63bd4bd9..6cd98ade5ebc 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -161,12 +161,12 @@ config PAGE_OFFSET
+>  	default 0xC0000000 if 32BIT && MAXPHYSMEM_1GB
+>  	default 0x80000000 if 64BIT && !MMU
+>  	default 0xffffffff80000000 if 64BIT && MAXPHYSMEM_2GB
+> -	default 0xffffffe000000000 if 64BIT && MAXPHYSMEM_128GB
+> +	default 0xffffffd800000000 if 64BIT && MAXPHYSMEM_128GB
+>  
+>  config KASAN_SHADOW_OFFSET
+>  	hex
+>  	depends on KASAN_GENERIC
+> -	default 0xdfffffc800000000 if 64BIT
+> +	default 0xdfffffff00000000 if 64BIT
+>  	default 0xffffffff if 32BIT
+>  
+>  config ARCH_FLATMEM_ENABLE
+> diff --git a/arch/riscv/include/asm/kasan.h b/arch/riscv/include/asm/kasan.h
+> index b00f503ec124..257a2495145a 100644
+> --- a/arch/riscv/include/asm/kasan.h
+> +++ b/arch/riscv/include/asm/kasan.h
+> @@ -28,8 +28,8 @@
+>  #define KASAN_SHADOW_SCALE_SHIFT	3
+>  
+>  #define KASAN_SHADOW_SIZE	(UL(1) << ((CONFIG_VA_BITS - 1) - KASAN_SHADOW_SCALE_SHIFT))
+> -#define KASAN_SHADOW_START	KERN_VIRT_START
+> -#define KASAN_SHADOW_END	(KASAN_SHADOW_START + KASAN_SHADOW_SIZE)
+> +#define KASAN_SHADOW_START	(KASAN_SHADOW_END - KASAN_SHADOW_SIZE)
+> +#define KASAN_SHADOW_END	MODULES_LOWEST_VADDR
+>  #define KASAN_SHADOW_OFFSET	_AC(CONFIG_KASAN_SHADOW_OFFSET, UL)
+>  
+>  void kasan_init(void);
+> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
+> index 109c97e991a6..e03559f9b35e 100644
+> --- a/arch/riscv/include/asm/page.h
+> +++ b/arch/riscv/include/asm/page.h
+> @@ -33,7 +33,11 @@
+>   */
+>  #define PAGE_OFFSET		_AC(CONFIG_PAGE_OFFSET, UL)
+>  
+> -#define KERN_VIRT_SIZE (-PAGE_OFFSET)
+> +/*
+> + * Half of the kernel address space (half of the entries of the page global
+> + * directory) is for the direct mapping.
+> + */
+> +#define KERN_VIRT_SIZE		((PTRS_PER_PGD / 2 * PGDIR_SIZE) / 2)
+>  
+>  #ifndef __ASSEMBLY__
+>  
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index 39b550310ec6..d34f3a7a9701 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -39,8 +39,10 @@
+>  
+>  /* Modules always live before the kernel */
+>  #ifdef CONFIG_64BIT
+> -#define MODULES_VADDR	(PFN_ALIGN((unsigned long)&_end) - SZ_2G)
+> -#define MODULES_END	(PFN_ALIGN((unsigned long)&_start))
+> +/* This is used to define the end of the KASAN shadow region */
+> +#define MODULES_LOWEST_VADDR	(KERNEL_LINK_ADDR - SZ_2G)
+> +#define MODULES_VADDR		(PFN_ALIGN((unsigned long)&_end) - SZ_2G)
+> +#define MODULES_END		(PFN_ALIGN((unsigned long)&_start))
+>  #endif
+>  
+>  /*
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index c0cddf0fc22d..4224e9d0ecf5 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -103,6 +103,9 @@ static void __init print_vm_layout(void)
+>  	print_mlm("lowmem", (unsigned long)PAGE_OFFSET,
+>  		  (unsigned long)high_memory);
+>  #ifdef CONFIG_64BIT
+> +#ifdef CONFIG_KASAN
+> +	print_mlm("kasan", KASAN_SHADOW_START, KASAN_SHADOW_END);
+> +#endif
 
-Mark __next_node() as __always_inline() so it won't get uninlined.
-bloat-o-meter over x86_64 binaries says this:
+I think we'd better avoid #ifdef usage as much as possible.
+For this KASAN case, we can make both KASAN_SHADOW_START and KASAN_SHADOW_END
+always visible as x86 does, then above code can be
+if (IS_ENABLED(CONFIG_KASAN))
+	print_mlm("kasan", KASAN_SHADOW_START, KASAN_SHADOW_END);
 
-scripts/bloat-o-meter -c vmlinux.baseline vmlinux
-add/remove: 1/1 grow/shrink: 2/7 up/down: 446/-2166 (-1720)
-Function                                     old     new   delta
-apply_wqattrs_cleanup                          -     410    +410
-amd_numa_init                                814     842     +28
-sched_init_numa                             1338    1346      +8
-find_next_bit                                 38      19     -19
-__next_node                                   45       -     -45
-apply_wqattrs_prepare                       1069     799    -270
-wq_nice_store                                688     414    -274
-wq_numa_store                                805     433    -372
-wq_cpumask_store                             789     402    -387
-apply_workqueue_attrs                        538     147    -391
-workqueue_set_unbound_cpumask                947     539    -408
-Total: Before=14422603, After=14420883, chg -0.01%
-
-So it's both win-win in terms of resolving section mismatch and
-saving some text size (-1.7 Kb is quite nice).
-
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
----
- include/linux/nodemask.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-index 567c3ddba2c4..55ba2c56f39b 100644
---- a/include/linux/nodemask.h
-+++ b/include/linux/nodemask.h
-@@ -266,7 +266,7 @@ static inline int __first_node(const nodemask_t *srcp)
- }
- 
- #define next_node(n, src) __next_node((n), &(src))
--static inline int __next_node(int n, const nodemask_t *srcp)
-+static __always_inline int __next_node(int n, const nodemask_t *srcp)
- {
- 	return min_t(int,MAX_NUMNODES,find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
- }
--- 
-2.33.1
-
+Thanks

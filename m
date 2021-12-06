@@ -2,125 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB2D468FA4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 04:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B159468FA7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 04:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236023AbhLFDPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Dec 2021 22:15:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53371 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235788AbhLFDPq (ORCPT
+        id S236056AbhLFDQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Dec 2021 22:16:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236075AbhLFDPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Dec 2021 22:15:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638760337;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NUwMELfoN5sdz4QIGxURvLcCWplqvHofYeoKR0bfVRk=;
-        b=ABkARrz+WuEJFZqaV5dtMdpfWNR+EYSJp4btCNZgDfjpZld80+9szgWc283yDBlLOIEYOG
-        F8nQOYmHupYMDlLxZDF1CSyaYPlc/tmXPyGNyPmpOLilvxfr18w0vJSnOoLg7ohJAIvth2
-        xHh54SBgyGreMSlG5wGww5KEB4g3kxQ=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-407--P4EyFqQOUSsW2H8yBHVfQ-1; Sun, 05 Dec 2021 22:12:16 -0500
-X-MC-Unique: -P4EyFqQOUSsW2H8yBHVfQ-1
-Received: by mail-lf1-f69.google.com with SMTP id q26-20020ac2515a000000b0040adfeb8132so3234691lfd.9
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 19:12:16 -0800 (PST)
+        Sun, 5 Dec 2021 22:15:54 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4807EC0613F8
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Dec 2021 19:12:26 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id v1so37171247edx.2
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Dec 2021 19:12:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2IyolONNkDbR7sT7twDhZs7xy7XX9+UpOdA7FHMqNRI=;
+        b=iNdrtK2U9atJVlQKeX5jhr+4CBLjOdm83gqc9Ehrf2a89bTiCPn/+MeMauOGbg+Coz
+         RqJTe/cjMpiLh0YGhaT3DXqlwnM39G1N2UhzvVZpTf+y3PqkYq/go/OJtxegp/0PPRmt
+         zc3p9vMMk7rNA9HRgYmu/jJqbkYbMU4WzSLR7Cym59Lq9iT9Qdvg9krojubnZFzexiN4
+         s8oTFKWvsjge04uU1koEl5YRsx/BUoaIUdu/TFmW0iBlEpfx0RPmYnW93EOUCq5Xy7CK
+         yW/Po9oXQ1hfQu11Wjhl3hZQbYGe4nuvgg4h2d2XGXpXhGGvt37JAiRFwyfXhloC2Pb9
+         e2zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NUwMELfoN5sdz4QIGxURvLcCWplqvHofYeoKR0bfVRk=;
-        b=HVwiukP6VbRK9ReSqyZvE7ABkVSnbSJRH/rMgZH7BVoJpO3yl8zocMtPhqlfCyNNVB
-         koly+Oh60LsVUXGDRwDCiCEsbTldwCxPPoIy4wKRb4EqIwdERKR24g3DKYU8cDVqmDqt
-         ZdP/7f/HxtEuCnfUcgGx+q2aeQQ8um3ianGzG6sggIsFIm1xj4btKgLnIaTd9KVcD2bq
-         TaUDQ97LfLIBZLnFAHT9sU87SLuhln8I1jUF393GiCfokSzHM2vF159tfyPNPFOxp0TO
-         EiPtCS/BM5hq/KrAwdWPQLqTmY1Ju0clr+v8/3bLzOW40E1JOSirvFWkLcJbo47zwcrh
-         LPhw==
-X-Gm-Message-State: AOAM532gYhM86s9tjkTHB9slhEexl1xGZFGu+ZUbsbxYWYZFKzpB5R7y
-        m6Ze8MYTb/eB47T627WWpcSaupq+JYilHpXbS3YofAOVAlpWpyyyHCn+MNFXp+48uQfHTmk7BRm
-        QnrThtOQbZ1aoAkHtJ2LPxUH+kmEafX+gt/yB9JdJ
-X-Received: by 2002:a2e:b169:: with SMTP id a9mr34411874ljm.369.1638760334648;
-        Sun, 05 Dec 2021 19:12:14 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxu4rPiY8eBrUgt2lLw3I3dthDt2zXcE5AbclsSH3qgPuVmutwQVyiDFVxWdCAwAF5lOseVaPhk79/aBFCs+08=
-X-Received: by 2002:a2e:b169:: with SMTP id a9mr34411854ljm.369.1638760334455;
- Sun, 05 Dec 2021 19:12:14 -0800 (PST)
+        bh=2IyolONNkDbR7sT7twDhZs7xy7XX9+UpOdA7FHMqNRI=;
+        b=bxMAqOxPPCbPfvS1fzNXpaIpg9bfjVYzwUK3a973QWami0FpPcERpsS/QyPnzzv5LH
+         0hHk71TXAjZhzAKY2BajJryYptSRBxH1q5MpOdeKMwqzKb9myASkpk2ykS5y4Kvttyfh
+         B3ZS8yTg7x2b9Qd9dpxXEWoxaIsclUBBGhNlQcelw3MCBVqlysEqJrmVGenAqQwzubkR
+         ebEDXZEfB/4nLAj9krEK9ew42KCwhJbKhSXwGjbsuY+FUsmN4l4+S6+f03BkfLlUKBmt
+         rF7QS+1HKpx4asHI3EZp3VyFjcPynlWd5LlslD/t/WiIN988kwkRCSzEEediEfrRiXrm
+         mKsA==
+X-Gm-Message-State: AOAM531Z/c45SO3FDw8NvC8/bZe1N339bDqUfjKDBmDASH1X/XYNt6gd
+        g/Qho8maR563WRqWJu8yQkfTElZ1NWC6aS1hqXJs
+X-Google-Smtp-Source: ABdhPJxJ7VmkTg3OwBCylZyCwHv8hxCmvxe7XYg6d5Z3vHUbOdKFsPP3tUPleTN7ObhwrjZIFbLhUfkc4kjckpV5i0w=
+X-Received: by 2002:a17:907:9196:: with SMTP id bp22mr40420784ejb.69.1638760344800;
+ Sun, 05 Dec 2021 19:12:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20211203185522.692489-1-arnd@kernel.org>
-In-Reply-To: <20211203185522.692489-1-arnd@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 6 Dec 2021 11:12:03 +0800
-Message-ID: <CACGkMEuv2HQxUyxL8hsAXGOKxhTFED5_AcnZ1dOALh2QsL7ZKQ@mail.gmail.com>
-Subject: Re: [PATCH] eni_vdpa: alibaba: select VIRTIO_PCI_LIB
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20211202033447.253596-1-bernard@vivo.com>
+In-Reply-To: <20211202033447.253596-1-bernard@vivo.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Sun, 5 Dec 2021 22:12:14 -0500
+Message-ID: <CAHC9VhR0bu-D2yjGkACMNxg34qA4Y75MjVbJpr8FQc=rfLu=pg@mail.gmail.com>
+Subject: Re: [PATCH] security/selinux: fix potential memleak
+To:     Bernard Zhao <bernard@vivo.com>
+Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 4, 2021 at 2:55 AM Arnd Bergmann <arnd@kernel.org> wrote:
+On Wed, Dec 1, 2021 at 10:35 PM Bernard Zhao <bernard@vivo.com> wrote:
 >
-> From: Arnd Bergmann <arnd@arndb.de>
+> This patch try to fix potential memleak in function
+> selinux_fs_context_dup`s error branch.
 >
-> When VIRTIO_PCI_LIB is not built-in but the alibaba driver is, the
-> kernel runs into a link error:
->
-> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_features':
-> eni_vdpa.c:(.text+0x23f): undefined reference to `vp_legacy_set_features'
-> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_state':
-> eni_vdpa.c:(.text+0x2fe): undefined reference to `vp_legacy_get_queue_enable'
-> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_address':
-> eni_vdpa.c:(.text+0x376): undefined reference to `vp_legacy_set_queue_address'
-> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_set_vq_ready':
-> eni_vdpa.c:(.text+0x3b4): undefined reference to `vp_legacy_set_queue_address'
-> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_free_irq':
-> eni_vdpa.c:(.text+0x460): undefined reference to `vp_legacy_queue_vector'
-> x86_64-linux-ld: eni_vdpa.c:(.text+0x4b7): undefined reference to `vp_legacy_config_vector'
-> x86_64-linux-ld: drivers/vdpa/alibaba/eni_vdpa.o: in function `eni_vdpa_reset':
-
-Intersting, all those belongs to the legacy library.
-
-And I just have a try and I can complie alibaba eni without
-VIRTIO_PCI_LIB is set.
-
-Can you share your config file?
-
-Thanks
-
->
-> Selecting VIRTIO_PCI_LIB_LEGACY is not sufficient here since that is
-> only part of the VIRTIO_PCI_LIB support.
->
-> Fixes: e85087beedca ("eni_vdpa: add vDPA driver for Alibaba ENI")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Bernard Zhao <bernard@vivo.com>
 > ---
->  drivers/vdpa/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+>  security/selinux/hooks.c | 22 ++++++++++++++++++----
+>  1 file changed, 18 insertions(+), 4 deletions(-)
 >
-> diff --git a/drivers/vdpa/Kconfig b/drivers/vdpa/Kconfig
-> index 50f45d037611..04466603021f 100644
-> --- a/drivers/vdpa/Kconfig
-> +++ b/drivers/vdpa/Kconfig
-> @@ -80,6 +80,7 @@ config VP_VDPA
->
->  config ALIBABA_ENI_VDPA
->         tristate "vDPA driver for Alibaba ENI"
-> +       select VIRTIO_PCI_LIB
->         select VIRTIO_PCI_LIB_LEGACY
->         depends on PCI_MSI && X86
->         help
-> --
-> 2.29.2
->
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index 62d30c0a30c2..36d7fc373839 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -2856,24 +2856,38 @@ static int selinux_fs_context_dup(struct fs_context *fc,
+>         if (src->fscontext) {
+>                 opts->fscontext = kstrdup(src->fscontext, GFP_KERNEL);
+>                 if (!opts->fscontext)
+> -                       return -ENOMEM;
+> +                       goto err_fscontext;
+>         }
+>         if (src->context) {
+>                 opts->context = kstrdup(src->context, GFP_KERNEL);
+>                 if (!opts->context)
+> -                       return -ENOMEM;
+> +                       goto err_context;
+>         }
+>         if (src->rootcontext) {
+>                 opts->rootcontext = kstrdup(src->rootcontext, GFP_KERNEL);
+>                 if (!opts->rootcontext)
+> -                       return -ENOMEM;
+> +                       goto err_rootcontext;
+>         }
+>         if (src->defcontext) {
+>                 opts->defcontext = kstrdup(src->defcontext, GFP_KERNEL);
+>                 if (!opts->defcontext)
+> -                       return -ENOMEM;
+> +                       goto err_defcontext;
+>         }
+>         return 0;
+> +
+> +err_defcontext:
+> +       if (src->rootcontext)
+> +               kfree(opts->rootcontext);
+> +err_rootcontext:
+> +       if (src->context)
+> +               kfree(opts->context);
+> +err_context:
+> +       if (src->fscontext)
+> +               kfree(opts->fscontext);
+> +err_fscontext:
+> +       kfree(fc->security);
+> +
+> +       return -ENOMEM;
+>  }
 
+Thanks for catching this a providing a patch, however I think the
+memory cleanup can be made simpler, see the pseudo code below:
+
+static int selinux_fs_context_dup(...)
+{
+
+  fc->security = kzalloc(...);
+  if (!fc->security)
+    return -ENOMEM;
+
+  opts = fc->security;
+
+  if (src->fscontext) {
+    opts->fscontext = kstrdup(...);
+    if (!opts->fscontext)
+      goto err;
+  }
+
+  /* ... */
+
+  return 0;
+
+  err:
+    kfree(opts->fscontext);
+    kfree(opts->context);
+    kfree(opts->rootcontext);
+    kfree(opts->defcontext);
+    kfree(opts);
+    fc->security = NULL;
+    return -ENOMEM;
+}
+
+--
+paul moore
+www.paul-moore.com

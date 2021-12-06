@@ -2,104 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E628946A8B9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66DF246A8BA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 21:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349799AbhLFUov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 15:44:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50976 "EHLO
+        id S1349875AbhLFUpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 15:45:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344890AbhLFUot (ORCPT
+        with ESMTP id S1349817AbhLFUo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 15:44:49 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A195C0613F8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 12:41:20 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id v15so23391452ljc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 12:41:20 -0800 (PST)
+        Mon, 6 Dec 2021 15:44:59 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1730FC061354
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 12:41:30 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id x32so34664435ybi.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 12:41:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s+1SOzLF6hX940st6pIflWSPzDUH6LhbOw9Hhv96ULM=;
-        b=hQnPxfDy0PDXKUe4s8kf5keyrZhyvWaUf9afzpwNferW4ZVtoiOrtNbdRUaiXb9mgd
-         UUSXJH7KnrLZXblK+LLlfQ/vIGoTVWC66wmsbM7qVnTMMEBl2y6L5EQXOoSnDu4xfpEg
-         LCsyiiWz0gEV81smoKqwYc9v3c6tTAEV427UOzRdQ2FXDAxouNx6pUT0z2LbTd1Xq6Mc
-         5WMw3S0h6I+kb7JX2LrEfu8ppGDCqrEJwdgbSNaOSPL9ADmEE4c2NHBRy/X/8NvwNpFd
-         GWzxuIcq9bSjpP2E1q1LrzYcU1A0J3fD+htn0TkRZObYXnI14sZHXxL8/oEqH90pDzOc
-         qELA==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=uqDlma5CeS60jNk1EQdgd5aCS7/Y1CwTKqbjljlx/3o=;
+        b=U5UJ8uToNPykIbqa4DUtsjfKZ3HrlP/XhxZsld3rbVPBY9ZfzajCBvDarEOF+XmPKL
+         qT80HUoTzdUoDNnkM1FfvqemvaHak6VpaUol9qsJJQENBK0DHtXcnbcnVNjb0YbH9+l/
+         JRV24Uex+w+nqQ+ZhZnqaRbV6tnSXFW1qnM/mGXvTr5m/l14SORfYfFWOk0htoS4d8S0
+         x6yr1R5ufYzkPF10Uo+BErVj09NDmdVx1vZFokVk5PYRvbhvBWkpaL6a4M2UJcII3KTu
+         jBL//s3y/FND6DYplHcJbSzhfxnTv62eUl8YG4Ft41XSLzpIe+CWDcar8VoNYv+a0KH2
+         rd4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s+1SOzLF6hX940st6pIflWSPzDUH6LhbOw9Hhv96ULM=;
-        b=z4axR3wrRngefWLAvCOTSA8ihJVRcREdTE7UK8CTkHW+0+Gulx1gR5UzPhHN3gzmHP
-         OC7J3+7U2x20i0pDC92KR0CCBk9dpFdfJk0DT+FQHj2KTEjppwy0necppBoF1EV7T13a
-         lO+HAzK96PpXQlNWPtkQtYPizDmA7OM6fLBDomvoCqhlW7ipZWUlINBReV2i09yhYJlQ
-         C0HdvNSsjsQ5JNAw6g4lQych6KKT/1YY7E5gBCej6YSoHjTiAcQfadlxISNfzIdftdCX
-         tB8RKDo/UFyjxG852e4vSyr94iN2Gwbr/UAdnlxbifL++MdDePsNDzWJuk3Vs0B8BG0f
-         ocHg==
-X-Gm-Message-State: AOAM532ZswvEjI5GTY1EFVHZiS+ol6dwnWnNVYatPNh6LLK+9U8BHnmg
-        JnYw9NjPSQUxzx5m+9ziRGPNNqmFOWjl+RR4adK6cA==
-X-Google-Smtp-Source: ABdhPJwcMgr6ycxrrmvYtx619D2EaNcMB5rSBdYcFWG5nfoUcZKu5Ljx3kh8iGRfaICeQCUXCEk9zuKxoWnbgCWoyIs=
-X-Received: by 2002:a05:651c:1b0:: with SMTP id c16mr36573404ljn.339.1638823278242;
- Mon, 06 Dec 2021 12:41:18 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=uqDlma5CeS60jNk1EQdgd5aCS7/Y1CwTKqbjljlx/3o=;
+        b=jwC9A95zQW3HjX9dmdy6/ZxqFBogaraaxHR1rnkS1O7vhwZg9Q36chyyLTfu2Douod
+         3ekwd1OlgQR8QB0gjtw6kLgDRWldAaZ68baOwRhXicNDW085KWK0V59MJX3dct0xorjG
+         uzV5wi2Atj5qlMVPud7rGQyIBlTTC7lJqbFfWS1+EchvVvj9zoPidPU8VHHEj14TKPIR
+         MoH9cEdCOvmuM3qkA9lzxfGVW6NfpNeQzJ6QB1Z7SpJbk6pyGqeBjkNwJwDjpPQfqrxE
+         /iIl/fDuTT8NLkc4EDfJht9UOBrBlI1PIc63vFxptMRYoN+edWcsB2Y0Q6RpWiUtDczH
+         v9eg==
+X-Gm-Message-State: AOAM531k/tNzZmVeGswe9UNikvaRdCTDWvR6h3pbLg7Y3fybm1y6oroC
+        w3CyR+2C6R8wBVds2CBZy5BPSerQAeY8m1l5/g==
+X-Google-Smtp-Source: ABdhPJyLcFQJzV0iCmIVvNJlANWJVX+IRmcyop03rvx5iNJoSPIIlyf9/JPj4mSXaPCfJrsUDa6Vig+oXk15ljSNGNA=
+X-Received: by 2002:a25:ae07:: with SMTP id a7mr5342756ybj.254.1638823289178;
+ Mon, 06 Dec 2021 12:41:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20211206023507.447574-1-masahiroy@kernel.org> <20211206023507.447574-2-masahiroy@kernel.org>
-In-Reply-To: <20211206023507.447574-2-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 6 Dec 2021 12:41:06 -0800
-Message-ID: <CAKwvOdkLNj0xw40rPWoB9Ko_8ZVEWAr3yRm=tz-0cvVOdk85-A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] kbuild: remove headers_check stub
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kernel@vger.kernel.org
+Reply-To: laurarenard08@gmail.com
+Sender: maryjosen300@gmail.com
+Received: by 2002:a05:7110:2186:b0:102:7e76:484f with HTTP; Mon, 6 Dec 2021
+ 12:41:28 -0800 (PST)
+From:   Laura Renard <laurarenard133@gmail.com>
+Date:   Mon, 6 Dec 2021 20:41:28 +0000
+X-Google-Sender-Auth: O-fBQsxm-QNYEpIltjNUyerqo98
+Message-ID: <CACmhojAfAZfPGkvQg5R5cXe4h4odiBZ6qusOFUVpc_1UMhZ3uQ@mail.gmail.com>
+Subject: Saluti mia cara amata
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 5, 2021 at 6:36 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Linux 5.15 is out. Remove this stub now.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+--=20
+Carissima in Cristo,
+Sono la signora Laura Renard, sposata con il defunto signor Richard
+Renard da 19 anni senza figli e mio marito =C3=A8 morto nel 2007. La sto
+contattando affinch=C3=A9 lei sappia del mio desiderio di donare la somma
+di (2.800.000 dollari) che ho ereditato dal mio defunto marito in
+beneficenza, attualmente il fondo =C3=A8 ancora in banca.
+Recentemente, il mio medico mi ha detto che ho una malattia grave che
+=C3=A8 problemi di cancro (tumore del sangue e malattie del Parkinson) e
+non durer=C3=B2 per i prossimi 2 mesi.
+Sto cercando una persona che utilizzer=C3=A0 questo fondo per orfanotrofi,
+scuole, chiese, vedove e per propagare la parola di Dio nel suo paese.
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Per favore, richiamami subito dopo aver letto questo messaggio.
+Aspetter=C3=B2 la tua risposta rapida per ulteriori informazioni su questo
+fondo e mi invier=C3=B2 anche le seguenti informazioni di seguito.
 
-> ---
->
-> (no changes since v1)
->
->  Makefile | 9 ---------
->  1 file changed, 9 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 0a6ecc8bb2d2..8d58f65e226b 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1284,15 +1284,6 @@ headers: $(version_h) scripts_unifdef uapi-asm-generic archheaders archscripts
->         $(Q)$(MAKE) $(hdr-inst)=include/uapi
->         $(Q)$(MAKE) $(hdr-inst)=arch/$(SRCARCH)/include/uapi
->
-> -# Deprecated. It is no-op now.
-> -PHONY += headers_check
-> -headers_check:
-> -       @echo >&2 "=================== WARNING ==================="
-> -       @echo >&2 "Since Linux 5.5, 'make headers_check' is no-op,"
-> -       @echo >&2 "and will be removed after Linux 5.15 release."
-> -       @echo >&2 "Please remove headers_check from your scripts."
-> -       @echo >&2 "==============================================="
-> -
->  ifdef CONFIG_HEADERS_INSTALL
->  prepare: headers
->  endif
-> --
-> 2.32.0
->
+Il tuo nome completo ..........
+Indirizzo ...........
+foto ...............
 
-
--- 
-Thanks,
-~Nick Desaulniers
+Rimani benedetto
+Tua sorella in Cristo
+La signora Laura Renard

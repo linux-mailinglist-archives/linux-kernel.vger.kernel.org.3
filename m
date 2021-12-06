@@ -2,209 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D0B46A9DB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6AA46A9E3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 22:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350975AbhLFVUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 16:20:55 -0500
-Received: from mga03.intel.com ([134.134.136.65]:37673 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350882AbhLFVUv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 16:20:51 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237353126"
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="237353126"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 13:16:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="514929360"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga008.jf.intel.com with ESMTP; 06 Dec 2021 13:16:25 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 6 Dec 2021 13:16:24 -0800
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 6 Dec 2021 13:16:24 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Mon, 6 Dec 2021 13:16:24 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.48) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Mon, 6 Dec 2021 13:16:23 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A0oTW8MXz74XwdmRKqArIK4ItyCRzk9ulbrHTes2ApnjT+qYCgPGLtdOFjj0e4rVN4ewwQnmAoKJnFeZcb8sWZNCIL2r29IYcGOMq6eIOjyN6ebQZz1GTbd7FHNo0lBWuNUilPlFO0bUO5MjfVHkjgzYFLhTyufBk71JmCmjqcghpZuFehNLQlud7fQqtYemqZNYlRCApdza45fVFl7Ti5NY5dTXjJZj30f/k3xxJhjxuWRm8MH0hZDFPWaZLwLuu+LPGWo708dHQuLBfzMaM4Yg7KBYnd5KM5YeQP0CNqnie9QrmetwPd0TeCs0kvmR+swCQEUk5jMo2n8xNtlQ0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D5SpyvaBxB09q4lWjnRbWqCW7fSsZu+0i9PuXUeGfKU=;
- b=Kni4JlKy3zyU7ubR5U6Y+2VDdCsYIq06nukyb6khYklN3M7UsBurpXXGPQfY71Tuq/p4WHdZmj2V1ci8vkxTWmkQ2kdq+DsGaeyT3Y66/vReCMdD+S6Mnc/9huC7tVG3PWjDXW84/9RrKIoj1w9Pt4vJCSTOSaMa0Q1xQfY1uVnb/I9FomATAa5ljvE2zSLd/ygw1h96A5/y+E7vib1JuGKdbf3JV1ByqWNKh60/A+wn1pIDRAYHkculVbhleAqk5ilHS3RfkrgvqSowiZe/vmjGG/jJKaU8iItOhiDgxKQnpWTcGIV7yiytQo2cbXbpIubyb1ay+xXug8YWlcLmeQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D5SpyvaBxB09q4lWjnRbWqCW7fSsZu+0i9PuXUeGfKU=;
- b=CVyJUTREXJB1TiiQN+a/xFwDpMtPxGfLl7TJEWFI+mvO9tKlfWXFkXzZtn/PhKEoNPO+j6zolSEfO/DZf5DcpyXPSy/WeEUR2i4NvCGWAXL/sMz+1gBCkCj2L8c64UsMAmkvSIpx+Q003ZRButRkG0ufU4SzlEHKzO90aiXr9H0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com (2603:10b6:408:166::16)
- by BN9PR11MB5513.namprd11.prod.outlook.com (2603:10b6:408:102::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.18; Mon, 6 Dec
- 2021 21:16:22 +0000
-Received: from BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::bcd0:77e1:3a2e:1e10]) by BN0PR11MB5744.namprd11.prod.outlook.com
- ([fe80::bcd0:77e1:3a2e:1e10%3]) with mapi id 15.20.4755.022; Mon, 6 Dec 2021
- 21:16:22 +0000
-Message-ID: <81308f67-a4d1-1774-f58b-223d4e81f8db@intel.com>
-Date:   Mon, 6 Dec 2021 13:16:17 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.3.2
-Subject: Re: [PATCH 03/25] x86/sgx: Support VMA permissions exceeding enclave
- permissions
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-CC:     <dave.hansen@linux.intel.com>, <tglx@linutronix.de>,
-        <bp@alien8.de>, <luto@kernel.org>, <mingo@redhat.com>,
-        <linux-sgx@vger.kernel.org>, <x86@kernel.org>, <seanjc@google.com>,
-        <kai.huang@intel.com>, <cathy.zhang@intel.com>,
-        <cedric.xing@intel.com>, <haitao.huang@intel.com>,
-        <mark.shanahan@intel.com>, <hpa@zytor.com>,
-        <linux-kernel@vger.kernel.org>
-References: <cover.1638381245.git.reinette.chatre@intel.com>
- <7e622156315c9c22c3ef84a7c0aeb01b5c001ff9.1638381245.git.reinette.chatre@intel.com>
- <Yavq83gZzvkVaDqq@iki.fi> <YavrSFDJBGqe7K46@iki.fi>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <YavrSFDJBGqe7K46@iki.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CO1PR15CA0073.namprd15.prod.outlook.com
- (2603:10b6:101:20::17) To BN0PR11MB5744.namprd11.prod.outlook.com
- (2603:10b6:408:166::16)
+        id S1351124AbhLFVVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 16:21:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350958AbhLFVVG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 16:21:06 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5ADC061354
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 13:17:36 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id r11so48151713edd.9
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 13:17:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JO2IWhnphPSYCFUexakELVjEvf2J2IXcJ5uKztle0+I=;
+        b=W7xIySANjVFarMf5vuIrBmPHB2Azy+jRK+7H+vkSa6q5fkxiWR98ODDWY7IlBrlK2C
+         UJAWT+skk9pyUI6iJu0ednt8cVK2C7n3TwtqlFIxZ64sSjQtPdTlc42vVh1gTeF1eD5H
+         5hH1w4uRtrEdC8GEK6+zNcoVDSlKXCSTPcZTE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JO2IWhnphPSYCFUexakELVjEvf2J2IXcJ5uKztle0+I=;
+        b=G7oV+K2aZ13LjKDfA3dFXXRtBG5pWZF4nN4AjjC2yL5Eq6G04+stJWP/Hshc2K+ECS
+         cozyi7EoTeBnCXcUJ4PoabTPq18sa1rPJiKd2VFaOjjFtmr7arc5VDThUUh9jsIbYnGy
+         enPYa5R7ihUaIUM6YySR+LlApizcPIJ3SVlURD/xSvB6EotrIje/DcMa1n/kqfmgQ1Wp
+         gl9A9I7EcoTbKQXGmF/JJNjVNLt4nPA9OU1cKo/KxFrJlxs5+hO3gIrbI0a4ru0VxrGA
+         pR1e/oWX3Wd9ClFOIbPa3fUyVOQooV4iQjdQhFPGKU+2Puu/vqnnPn8Zy+1UVTnuM6cj
+         qDaA==
+X-Gm-Message-State: AOAM532QliG+MnmpsgoOuw0wJEjAjvwx4ix/C5li14KSaesVQc9fcDis
+        LUgPkiaQ8DVTpiHapHbgwldcgnewiWDNTr+f
+X-Google-Smtp-Source: ABdhPJxqtOy7KFim7vlt6wSA5r6MzUSJIztHVtE9XmSJBLW/p+LwGcf+BfZAg+s5MiULt9Mrrn+OBA==
+X-Received: by 2002:a17:907:7b98:: with SMTP id ne24mr51557730ejc.14.1638825454838;
+        Mon, 06 Dec 2021 13:17:34 -0800 (PST)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id d18sm8676866edj.23.2021.12.06.13.17.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 13:17:34 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id p18so9156403wmq.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 13:17:34 -0800 (PST)
+X-Received: by 2002:a1c:800e:: with SMTP id b14mr1338191wmd.155.1638825454105;
+ Mon, 06 Dec 2021 13:17:34 -0800 (PST)
 MIME-Version: 1.0
-Received: from [192.168.1.221] (71.238.111.198) by CO1PR15CA0073.namprd15.prod.outlook.com (2603:10b6:101:20::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20 via Frontend Transport; Mon, 6 Dec 2021 21:16:20 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6fb720d2-8837-47f2-b134-08d9b8fda6fe
-X-MS-TrafficTypeDiagnostic: BN9PR11MB5513:
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <BN9PR11MB5513B99623C6EF80A0274E16F86D9@BN9PR11MB5513.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vmjG9/PoNSEW0NhjUpgTOlywoR1Dpejop3/vY1T88Xi7s0tqffPTVR9SnGewGUICI4EY2EjV3DrmHdFepJOg3DtwywO7JRjksLboiTQ243lh2IcPc1FwdXOiN33F6Pmv0Ym0r5j2xOs+G23mN0F1bdpf2synX2AlgWaaI1Alc6xX6uNn3OdVDxPfpwD1GJ4IeSS67utJUE811eZ+eXzuwhJAeqM/XLY+LAayrEWMtSAvgLpi31W+3Vyp9bYoguUgFllbTa1OnK5GyP5UAvgUd+OUR/LnevLxwNOWopE6GeRHTrtUpbj0XSD8wg6u6Q2Qcxr3af1lzwHN3/ejp9/Q5l9Y4uHRHbUid0h3Ui9aAKMhPdAr12AkgK/xR2xO+hltZjDEU3s9XpVtcb6KhWS2w7BOQhhwKtYQw1iCYvjXzYPm0xjmihwCLMQ1/C4PWDBwdCtxyTRnrIZLT2SC1YjC9Z1vBMakaMaRv1Eo06LMlYtErjrdutjl3eEfL6yh+LYwd1ZzVvbfheaLwlvUgLxeQuPSx81guotq2t1pjKc6NhARExHS4hcLe9KPjwHD0UKigRFIUjSd20kdUaP/gYlgcogAFT0tygucK0JJeetGAhSNDjNo/Pd8xlCuaCpgszotkuC2QJ4btu94c3Rdn9I6TyMOItYXckiI7aUM2MgNanjR1N96U92/NIA+xO86TLJpBYe6yPwMuPJE544mCVcszhVRm6pleDGTyPl4IZfVE2SYha/1vXshLNL4/FybzXwx
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR11MB5744.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(82960400001)(66556008)(7416002)(16576012)(86362001)(956004)(2906002)(66476007)(4326008)(2616005)(38100700002)(5660300002)(316002)(6916009)(36756003)(83380400001)(6666004)(53546011)(31686004)(8676002)(6486002)(8936002)(31696002)(26005)(44832011)(508600001)(66946007)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZTQwdjZVTmQxWVNRN3Jubi9XOGdkbzdiNVdpYnNCK3BVemVTU2lycDNSMy8r?=
- =?utf-8?B?ZzFBM2V3ZFN2dkpiVmZNczI4b21wOVhpQ1VWQmFuYVd4dGVnUWxYbUY4M0kz?=
- =?utf-8?B?Tkw4WFJ4MWRzVXFnVlNPS2xZT0Yycmdqem5WRE1jRVgwSjg3WlFkeldoUWND?=
- =?utf-8?B?ZnZCZFN4c3RIMW5lTlp1Uzc0ZHhVZlNKbjZMR2Jndng2M2dIRDBtaWVYaVJj?=
- =?utf-8?B?eHBVZmtHMERaYlJmanVyVDVlMDUvNTNIbUFWelBRQk1sNlRMQ0F3VzlpN2tC?=
- =?utf-8?B?ZWdWSDZJSVpkVkNGZ1hESFNmb1VLRzAxSEUvbkdjdjlyd0wzdU9oVkV2UXYx?=
- =?utf-8?B?cDJzQU84SjBBUjQ3aUg5MDFyUlRpYktrZWF1U1lYckVxd2hzRGpiczV3Wmhv?=
- =?utf-8?B?YnFZcDlOdGcyWGorZUJnelhLN0ZnVUVneU5uZVlYdWlkblkvbFZ3QUpQSWh2?=
- =?utf-8?B?ZnFvZFBXU1lLVlJ4TjIxYm9tUVJNWDNOcW4vdlNGTHBkaEExZWVSbUFobnRk?=
- =?utf-8?B?cHB4TUZVK0VpOUs1NERhdUZUSmZtMnM2QXV3a3l2d0tzMmVNb0oxVDR2UmZu?=
- =?utf-8?B?NDRjZExHUDBPMUdwMlJtL05sbm9ETXV2Z0NFWDZWVUlKKy95bWRKckpGbzhX?=
- =?utf-8?B?cTd4cVVjb2pOMGVhSkphTy93QUZZUE1wZHNMNkZ6bDhpZFk2UGpETSt5Rys0?=
- =?utf-8?B?eEdEdDl1eERVcldOWlIvbm8zYkZGTlJMTE51NFRwT1JNTVhKWXVxOXhVTURQ?=
- =?utf-8?B?VjN5c2JXanNFa1hwaTUyOUl1Z1lmVVhoMXV1M0pianJhL09FSXRnTzR6M3F3?=
- =?utf-8?B?MHh0cFdpVTVuR3JERHYreTBtdnZHaGZTYXlRUlM3Q29DQ1lmMi9VL2xxYW9y?=
- =?utf-8?B?alRlMHZ3UGtrdkt0UzZTMHhTVjhlVHhnWUI4VGdJSHhDMXpkNmNGQUxUSWI4?=
- =?utf-8?B?TVhFa0NBaDlIZW1IVzFtK2YwN0dZLzI5Zm1aSmxSUFJQWWdJb0FXbFRJbGc1?=
- =?utf-8?B?aHYvdVJPVml5aTloc1pNSWR5cy9KZzRXZmNYbkxWRjQxNXMzRzBhaWRyMXJ4?=
- =?utf-8?B?bmtiNGJ0OFVzcjYxZ0dRazZKQSs4aU9taGd5dlNyb1hkTmVKbnNoQXc3S2xL?=
- =?utf-8?B?cGhPcGpEOVplUHZ5bHUwYW9reWc1c1NlTkdNaUdGY0dTLzE0UTRTaDNoaFkr?=
- =?utf-8?B?dFRrOXRFd1dTZW9VWktja3FxNFVxZEVqb2lrL0NBdmNvMi92U2ljK0JMamdM?=
- =?utf-8?B?cXM0dzhqMkhnN2tieG1VQ2dRT0R2OVZxZHdVbWsyTEVaSFdpUExEUS9FNU9N?=
- =?utf-8?B?SDlRS1QzVGtjRnRScXVFYkc2WFVaSWdyOWkrVDZ2VWFkb0t6RHNvQ0dTakRT?=
- =?utf-8?B?U0FEVmRwN1dBLzk5KzI0VGRMaE5lbDl4bTB3bmZWcUhTUVNVVGdDeDNVSHFL?=
- =?utf-8?B?NUViNG90bzR6Z0ZPUHEwMUEvSnRHMXVQVWRwSi9YanNVaStCdWlsQ3lRV3RF?=
- =?utf-8?B?d1JvbklPVGErZSs4dHRhMlRlbCs3L3ZGVmxOek43VFpnMTExaTB2bTZueVAy?=
- =?utf-8?B?Tmx3emFuQmZ3d0w2TzZlY1JCRFZBN3IrYUJ3UFJaRm9pYTNRWTFzSXdIdlBm?=
- =?utf-8?B?by96TENGTTBIT21wTUdtWXowbURLZHJPNHJnRGdMTEdmNHhvODQ3SklrYW4y?=
- =?utf-8?B?eGE0VnhyUklBbUlUVFFxS1lHZTh2ZnA4OVdoQmVWWnRSMHoxRnk0Rmh6SUsw?=
- =?utf-8?B?QWh4V0N1K0lxNERSOUx2REZwVk1jaThoOG9zYWtXc0RGU2NqU2h3ejFhTm1j?=
- =?utf-8?B?SmNaVVpaQ2RIeFNZM1h3RzRWSkdUK09vdWhqaFR5bklGcHpqcVVlQkswWnJa?=
- =?utf-8?B?QXByRFRIQ3pxYWEyVVV2MTNzaUdHK0FuQnZDclpCcDFFNmJrS0l6djUzVjNl?=
- =?utf-8?B?VTI5ZlMrSXBhM0JSejFIUVFCZ0lpWHFINmZ1NmZFa0w3TVdSYlpKVGdCMnNq?=
- =?utf-8?B?QVQ1VGRsNk4zdzNlc1RDN21BdGVsV3NrbEkwazZTc3l0QVRaZ0Q1bU9oU1A0?=
- =?utf-8?B?RUVCMXlVd3lxWTRGbWpxYXNxbjNRaEFoOC9mYnhPV2phQ0F6ZDhNck5FTmRU?=
- =?utf-8?B?SEs5L1BwT293NGxTNTdXZXZMSHlyOHA5NGpsUlg1aGRNZVVVOHRvMnQrNXE2?=
- =?utf-8?B?ODBCdHVmTnFlbGcyUXBxUzZqcEtSeEZ5QnFwdXFxQk5VY1hGdmhWT0Z5MnRG?=
- =?utf-8?Q?VDj3Epg4+hpGMi2vBYJWLrpzSsuFV6p4QDLi8dJXBA=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6fb720d2-8837-47f2-b134-08d9b8fda6fe
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR11MB5744.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2021 21:16:21.9015
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 390UZ65mtjCD9xs5QIj9zKWxBDWZjHrhZQLgJZcb6sbnybSEeNHjQ2Q6uon+eYsNxGHQ1T0xtkVUmzOJmpm7QrqU/X846F/DAc1wTceNkjQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5513
-X-OriginatorOrg: intel.com
+References: <9f2ad6f1-c1bb-dfac-95c8-7d9eaa7110cc@kernel.dk>
+ <Ya2zfVAwh4aQ7KVd@infradead.org> <Ya3KZiLg5lYjsGcQ@hirez.programming.kicks-ass.net>
+ <CAHk-=wjXmGt9-JQp-wvup4y2tFNUCVjvx2W7MHzuAaxpryP4mg@mail.gmail.com>
+ <282666e2-93d4-0302-b2d0-47d03395a6d4@kernel.dk> <202112061247.C5CD07E3C@keescook>
+In-Reply-To: <202112061247.C5CD07E3C@keescook>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 6 Dec 2021 13:17:17 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wh0RhnMfZG6xQJ=yHTgmPTaxjQOo1Q2=r+_ZR56yiRi4A@mail.gmail.com>
+Message-ID: <CAHk-=wh0RhnMfZG6xQJ=yHTgmPTaxjQOo1Q2=r+_ZR56yiRi4A@mail.gmail.com>
+Subject: Re: [PATCH] block: switch to atomic_t for request references
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jarkko,
+On Mon, Dec 6, 2021 at 12:51 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> I'd like core code to be safe too, though. :)
 
-On 12/4/2021 2:27 PM, Jarkko Sakkinen wrote:
-> On Sun, Dec 05, 2021 at 12:25:59AM +0200, Jarkko Sakkinen wrote:
->> On Wed, Dec 01, 2021 at 11:23:01AM -0800, Reinette Chatre wrote:
->>> === Summary ===
->>>
->>> An SGX VMA can only be created if its permissions are the same or
->>> weaker than the Enclave Page Cache Map (EPCM) permissions. After VMA
->>> creation this rule continues to be enforced by the page fault handler.
->>>
->>> With SGX2 the EPCM permissions of a page can change after VMA
->>> creation resulting in the VMA exceeding the EPCM permissions and the
->>> page fault handler incorrectly blocking access.
->>>
->>> Enable the VMA's pages to remain accessible while ensuring that
->>> the page table entries are installed to match the EPCM permissions
->>> without exceeding the VMA perms issions.
->>
->> I don't understand what the short summary means in English, and the
->> commit message is way too bloated to make any conclusions. It really
->> needs a rewrite.
->>
->> These were the questions I could not find answer for:
->>
->> 1. Why it would be by any means safe to remove a permission check?
+I've told you before, and I'll tell you again: 'refcount_t' is not "safe".
 
-The permission check is redundant for SGX1 and incorrect for SGX2.
+refcount_t is pure garbage, and is HORRID.
 
-In the current SGX1 implementation the permission check in 
-sgx_encl_load_page() is redundant because an SGX VMA can only be created 
-if its permissions are the same or weaker than the EPCM permissions.
+The saturating arithmetic is a fundamental and fatal flaw. It is pure
+and utter crap.
 
-In SGX2 a user is able to change EPCM permissions during runtime (while 
-VMA has the memory mapped). A RW VMA may thus originally have mapped an 
-enclave page with RW EPCM permissions but since then the enclave page 
-may have its permissions changed to read-only. The VMA should still be 
-able to read those enclave pages but the check in sgx_encl_load_page() 
-will prevent that.
+It means that you *cannot* recover from mistakes, and the refcount
+code is broken.
 
->> 2. Why not re-issuing mmap()'s is unfeasible? I.e. close existing
->>     VMA's and mmap() new ones.
+Stop calling it "safe" or arguing that it protects against anything at all.
 
-User is not prevented from closing existing VMAs and creating new ones.
+It is literally and objectively WORSE than what the page counting code
+does using atomics.
 
-> 3. Isn't this an API/ABI break?
+I don't know why you cannot seem to admit to that. refcount_t is
+misdesigned in a very fundamental way.
 
-Could you please elaborate where you see the API/ABI break? The rule 
-that new VMAs cannot exceed EPCM permissions is untouched.
+It generates horrible code, but it also generates actively BROKEN
+code. Saturation is not the answer. Saturation is the question, and
+the answer is "No".
 
-Reinette
+And no, anybody who thinks that saturation is "safe" is just lying to
+themselves and others.
 
+The most realistic main worry for refcounting tends to be underflow,
+and the whole recount underflow situation is no better than an atomic
+with a warning.
 
+Because by the time the underflow is detected, it's already too late -
+the "decrement to zero" was what resulted in the data being free'd -
+so the whole "decrement past zero" is when things have already gone
+south earlier, and all you can do is warn.
+
+End result: atomics with warnings are no worse in the underflow case.
+
+And the overflow case where the saturation is 'safe", has been
+literally mis-designed to not be recoverable, so refcount_t is
+literally broken.
+
+End result: atomics are _better_ in the overflow case, and it's why
+the page counters could not use the garbage that is refcount_t, and
+instead did it properly.
+
+See? In absolutely neither case is recount_t "safer". It's only worse.
+
+I like Jens' patches. They take the _good_ code - the code we use for
+page counters - and make that proper interface available to others.
+
+Not the broken refcount_t code that is unfixable, and only good for
+"we have a thousand drivers, let them wallow in this thing because we
+can never make them all handle overflows properly".
+
+And every single core use of refcount_t that doesn't have a million
+random drivers using it should be converted to use that proper atomic
+interface.
+
+                    Linus

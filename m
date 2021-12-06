@@ -2,161 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9395046A5E8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4600D46A5A2
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347486AbhLFTtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:49:10 -0500
-Received: from vern.gendns.com ([98.142.107.122]:43066 "EHLO vern.gendns.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245093AbhLFTtJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:49:09 -0500
-X-Greylist: delayed 1277 seconds by postgrey-1.27 at vger.kernel.org; Mon, 06 Dec 2021 14:49:08 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=YA/G+b1h/jbDVfkm8Yg0kCmi1TBIab78m8yWhAJ7R8o=; b=R+9y0NUMqiKrlPN4lpSoyvz0fW
-        jQbGzn4WAxDZQzG8I009nr2DImAIOnDschwKKikKKwdlzMpHZ5QVQ0EpD4VLy1Pu+k4SO/MgVUqXF
-        EaK20+oa6tj/o1Vr38Yf1U1LW9L0DBc1a33iDrBjr/LQQY9obm2aPxactXiOKB1i8JSCxYLW++Y05
-        MmDAWB6Zuxd4meS8LzKhexhcIGE2++8lgrtO5is/Vjnrkt4JQYutniZK6bi93ZMhGfqxw40X4Tk2u
-        ShHGe/kMWn5xayGFsmntw0VMmX+UhiV1FiOMI57xnQrHC5H/KnKvuOJAzGqYhcfmHVioUax6bJE41
-        9CuqpwKQ==;
-Received: from 108-198-5-147.lightspeed.okcbok.sbcglobal.net ([108.198.5.147]:49508 helo=[192.168.0.134])
-        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <david@lechnology.com>)
-        id 1muJaz-0005Ni-JU; Mon, 06 Dec 2021 14:24:20 -0500
-Subject: Re: [PATCH v1] counter: interrupt-cnt: add counter_push_event()
-To:     William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     linux-iio@vger.kernel.org,
-        Robin van der Gracht <robin@protonic.nl>,
-        linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        David Jander <david@protonic.nl>,
-        Jonathan Cameron <jic23@kernel.org>
-References: <20211123134540.416695-1-o.rempel@pengutronix.de>
- <YZ3XAeYyfGblfaOi@shinobu> <20211124072720.GA30281@pengutronix.de>
- <YZ7tv79LQwLL7h3T@shinobu>
-From:   David Lechner <david@lechnology.com>
-Message-ID: <f73650b6-5a08-9ea9-9ecb-c47665ef07b0@lechnology.com>
-Date:   Mon, 6 Dec 2021 13:24:18 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1348482AbhLFTaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348473AbhLFTaE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 14:30:04 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E7DC061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 11:26:35 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso14924356otf.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 11:26:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dwqTA7sQYf8xpac6AilPkHwdcgSbiu32CvJYi480RsI=;
+        b=FYHtHc5UGLNmKp1G5mrPrFMktid2lyzAT2kpnDND1Zwvg6Z0zoylL7mzLrYceoFnyH
+         on+lGWMozyPcEHjGpe2uTdUGBlivfATLnNV2RphCFvRtv1k0xwXi2uDoVtHgv5Da2Lt2
+         S/bpK0u1xNcsSzVLn4Xxf+3m0NU2b/um74rpkYBXhSSPJANBrQY0UsFtfTLaLui2ylr6
+         DzBvKbrdg9UcvxbGXm7pEm/XMRMQC3e5+3xnWcR+CUp2L1by60biCF54HYNgibEd+Btr
+         ZkxwmJclf02PuSngswN/bj8S+hqDpAfF+d8dTwDILCukgCxiPpxb2vhMguWADDtTZE9b
+         LzlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dwqTA7sQYf8xpac6AilPkHwdcgSbiu32CvJYi480RsI=;
+        b=R5nRTwTosNdS33I1P/I4Y0xS1eAD2JoDVLOW+7P/FvQG/1X3BerYOZriHZQtSf8ki8
+         mnUtpWCIUaOhuP16GiT0M7GTSj1vKpO8BkR6hunjnWyz6/MGWNL0LOvMMuvZpn5ofMCc
+         AIwkH1N3EQOJah/uDStwZdXGXf9KviARZtEltVVyX7eKQ1ftPq/jVsByhziy/Bz42lry
+         pbmPuj8NlLSdqUcnRvoJ1f3LzpLxqA1nCxXxmiQrokQVDITcTcRynlcZmMc03Zis44Xu
+         61+3JaRLAJa35LZzdtXhs+2wNIdjfqfYDfw4b4RnIho12bI5siyTqi5l+WZnOdbQmUIP
+         Vz9Q==
+X-Gm-Message-State: AOAM531Q3jgS4/rEvXGBkH4yflPmBZ6ufe7qwMPWN5MnHud712A0m9Te
+        LdmdvcJokvR6TMAxbpBSkGyfjg==
+X-Google-Smtp-Source: ABdhPJwJL6uhitz9DTb0wdVgXt9MqFimGDKfjzroarL7wqEJVMshws/SxADnwXdThrKiosCkI/kpGg==
+X-Received: by 2002:a9d:6f0e:: with SMTP id n14mr31292882otq.173.1638818794435;
+        Mon, 06 Dec 2021 11:26:34 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id g2sm2677566oic.35.2021.12.06.11.26.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 11:26:33 -0800 (PST)
+Date:   Mon, 6 Dec 2021 13:26:31 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] rpmsg: core: Clean up resources on announce_create
+ failure.
+Message-ID: <Ya5j55sgDNr/sdJW@builder.lan>
+References: <20211206190758.10004-1-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
-In-Reply-To: <YZ7tv79LQwLL7h3T@shinobu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vern.gendns.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lechnology.com
-X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206190758.10004-1-arnaud.pouliquen@foss.st.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/24/21 7:58 PM, William Breathitt Gray wrote:
-> On Wed, Nov 24, 2021 at 08:27:20AM +0100, Oleksij Rempel wrote:
->> Hi William,
->>
->> On Wed, Nov 24, 2021 at 03:09:05PM +0900, William Breathitt Gray wrote:
->>> On Tue, Nov 23, 2021 at 02:45:40PM +0100, Oleksij Rempel wrote:
->>>> Add counter_push_event() to notify user space about new pulses
->>>>
->>>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
->>>> ---
->>>>   drivers/counter/interrupt-cnt.c | 2 ++
->>>>   1 file changed, 2 insertions(+)
->>>>
->>>> diff --git a/drivers/counter/interrupt-cnt.c b/drivers/counter/interrupt-cnt.c
->>>> index 8514a87fcbee..b237137b552b 100644
->>>> --- a/drivers/counter/interrupt-cnt.c
->>>> +++ b/drivers/counter/interrupt-cnt.c
->>>> @@ -31,6 +31,8 @@ static irqreturn_t interrupt_cnt_isr(int irq, void *dev_id)
->>>>   
->>>>   	atomic_inc(&priv->count);
->>>>   
->>>> +	counter_push_event(&priv->counter, COUNTER_EVENT_OVERFLOW, 0);
->>>> +
->>>>   	return IRQ_HANDLED;
->>>>   }
->>>>   
->>>> -- 
->>>> 2.30.2
->>>
->>> Hi Oleksij,
->>>
->>> It looks like this is pushing a COUNTER_EVENT_OVERFLOW event every time
->>> an interrupt is handled, which I suspect is not what you want to happen.
->>> The COUNTER_EVENT_OVERFLOW event indicates a count value overflow event,
->>> so you'll need to check for a count value overflow before pushing the
->>> event.
->>>
->>> It would be good idea to implement a ceiling extension as well (you can
->>> use the COUNTER_COMP_CEILING() macro) so that users can configure the
->>> particular point where the value overflows.
->>
->> Thank you!
->>
->> What would be the best and resource effective strategy for periodically
->> getting frequency of interrupts/pulses? This is actual information which is
->> needed for my use case.
->>
->> So far, I was pushing every event to the user space, which is working
->> but probably not the most resource effective method of doing it.
->>
->> Regards,
->> Oleskij
->> -- 
->> Pengutronix e.K.                           |                             |
->> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
->> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
->> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+On Mon 06 Dec 13:07 CST 2021, Arnaud Pouliquen wrote:
+
+> During the rpmsg_dev_probe, if rpdev->ops->announce_create returns an
+> error, the rpmsg device and default endpoint should be freed before
+> exiting the function.
 > 
-> We could introduce a new Counter change-of-state event type which would
-> trigger whenever the count value changes, but I agree with you that this
-> is likely not the best way for us to derive the frequency of the
-> interrupts due to the indirection of handling and parsing the event
-> data.
+> Fixes: 5e619b48677c ("rpmsg: Split rpmsg core and virtio backend")
+> Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+Thanks,
+Bjorn
+
+> ---
+>  drivers/rpmsg/rpmsg_core.c | 20 ++++++++++++++++----
+>  1 file changed, 16 insertions(+), 4 deletions(-)
 > 
-> Instead, perhaps introducing a "frequency" or "period" Count extension
-> would make more sense here. This extension could report the value delta
-> between counts, or alternatively the time delta from which you can
-> derive frequency. Regarding implementation, you can store the previous
-> value in a variable, updating it whenever an interrupt occurs, and
-> compute the particular delta every time a read is requested by the user.
+> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+> index 27aad6baf7c5..12d7b7c6e5f9 100644
+> --- a/drivers/rpmsg/rpmsg_core.c
+> +++ b/drivers/rpmsg/rpmsg_core.c
+> @@ -612,13 +612,25 @@ static int rpmsg_dev_probe(struct device *dev)
+>  	err = rpdrv->probe(rpdev);
+>  	if (err) {
+>  		dev_err(dev, "%s: failed: %d\n", __func__, err);
+> -		if (ept)
+> -			rpmsg_destroy_ept(ept);
+> -		goto out;
+> +		goto destroy_ept;
+>  	}
+>  
+> -	if (ept && rpdev->ops->announce_create)
+> +	if (ept && rpdev->ops->announce_create) {
+>  		err = rpdev->ops->announce_create(rpdev);
+> +		if (err) {
+> +			dev_err(dev, "failed to announce creation\n");
+> +			goto remove_rpdev;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +
+> +remove_rpdev:
+> +	if (rpdrv->remove)
+> +		rpdrv->remove(rpdev);
+> +destroy_ept:
+> +	if (ept)
+> +		rpmsg_destroy_ept(ept);
+>  out:
+>  	return err;
+>  }
+> -- 
+> 2.17.1
 > 
-> David Lechner is implementing something similar for the TI eQEP driver
-> to expose speed, so I'm CCing them here in case this is of interest to
-> them.
-> 
-
-Based on my experience, I would recommend that counter drivers be as
-"thin" as possible. They shouldn't try to provide any information that
-the hardware itself doesn't provide. In other words, the kernel should
-provide userspace the information needed to calculate the speed/rate
-but not try to do the actual calculation in the kernel. Inevitably
-there are nuances for specific use cases that can't all possibly be
-handled by such an implementation.
-
-I've tried using gpio interrupts to try to calculate speed/rate in
-the kernel before and it simply doesn't work reliably. Interrupts
-get missed and the calculation will be off.
-
-For really slow counts (i.e. 1 count/second), I can see a use for
-generating an event on each count though. For high rates, I would
-just read the count every 100ms in usespace and divide the change in
-the number of counts by the time period to get the rate.
-
-
-

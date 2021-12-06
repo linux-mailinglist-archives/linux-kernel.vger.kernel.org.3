@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1380B469B19
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACF8469E9A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348238AbhLFPMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:12:44 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59270 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346891AbhLFPJz (ORCPT
+        id S1389746AbhLFPk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:40:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1386608AbhLFP0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:09:55 -0500
+        Mon, 6 Dec 2021 10:26:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5442C08E6E1;
+        Mon,  6 Dec 2021 07:16:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A26D461327;
-        Mon,  6 Dec 2021 15:06:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8685BC341C1;
-        Mon,  6 Dec 2021 15:06:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54C8D61321;
+        Mon,  6 Dec 2021 15:16:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D6CC341C1;
+        Mon,  6 Dec 2021 15:16:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803186;
-        bh=u0CHkqgKsukOjOI54p+nHDYELU0M51iGmTWjCx21O58=;
+        s=korg; t=1638803796;
+        bh=s0sczKJCjhCa2PC1m4yI3VM2DXbgGwBfPUX35AF0CPQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sAV4pdi1aQKKkQ0AgTOsKqn8oed/sA00yzLILUjqI+fICp0cQCB5K8NsT9zr8iJwq
-         9uqmo4hWtzaR09LBw7/Z+3UIfn4QJPemCz85g/K3cNlpV9+B2WH0lPFNrz9x+KNNZ5
-         vJGu2WzcTDy/W1JXAdGCF12TQc1fUgjsjl7kb/SE=
+        b=asPJTIeP8hT4ynPvZ06ve3OGSdGUWGKFCQl5loEC+qdDRGr85SzzaTATFW6za+TUV
+         071Aqvn3qSQobRlbRDIF3T3SfszuiLYJMca+zhT9uzmNbNakSI0edDiSlIRSNsk5Y0
+         rJhZBER58FZBdGdg41mEpKh2mFmG2MI/7KsOoOSQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH 4.14 041/106] PCI: aardvark: Dont touch PCIe registers if no card connected
+        stable@vger.kernel.org, zhangyue <zhangyue1@kylinos.cn>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Subject: [PATCH 5.10 032/130] kprobes: Limit max data_size of the kretprobe instances
 Date:   Mon,  6 Dec 2021 15:55:49 +0100
-Message-Id: <20211206145556.800354579@linuxfoundation.org>
+Message-Id: <20211206145600.758364220@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,52 +49,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Masami Hiramatsu <mhiramat@kernel.org>
 
-commit 70e380250c3621c55ff218cbaf2272830d9dbb1d upstream.
+commit 6bbfa44116689469267f1a6e3d233b52114139d2 upstream.
 
-When there is no PCIe card connected and advk_pcie_rd_conf() or
-advk_pcie_wr_conf() is called for PCI bus which doesn't belong to emulated
-root bridge, the aardvark driver throws the following error message:
+The 'kprobe::data_size' is unsigned, thus it can not be negative.  But if
+user sets it enough big number (e.g. (size_t)-8), the result of 'data_size
++ sizeof(struct kretprobe_instance)' becomes smaller than sizeof(struct
+kretprobe_instance) or zero. In result, the kretprobe_instance are
+allocated without enough memory, and kretprobe accesses outside of
+allocated memory.
 
-  advk-pcie d0070000.pcie: config read/write timed out
+To avoid this issue, introduce a max limitation of the
+kretprobe::data_size. 4KB per instance should be OK.
 
-Obviously accessing PCIe registers of disconnected card is not possible.
+Link: https://lkml.kernel.org/r/163836995040.432120.10322772773821182925.stgit@devnote2
 
-Extend check in advk_pcie_valid_device() function for validating
-availability of PCIe bus. If PCIe link is down, then the device is marked
-as Not Found and the driver does not try to access these registers.
-
-This is just an optimization to prevent accessing PCIe registers when card
-is disconnected. Trying to access PCIe registers of disconnected card does
-not cause any crash, kernel just needs to wait for a timeout. So if card
-disappear immediately after checking for PCIe link (before accessing PCIe
-registers), it does not cause any problems.
-
-Link: https://lore.kernel.org/r/20200702083036.12230-1-pali@kernel.org
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Marek Behún <kabel@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: f47cd9b553aa ("kprobes: kretprobe user entry-handler")
+Reported-by: zhangyue <zhangyue1@kylinos.cn>
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/host/pci-aardvark.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ include/linux/kprobes.h |    2 ++
+ kernel/kprobes.c        |    3 +++
+ 2 files changed, 5 insertions(+)
 
---- a/drivers/pci/host/pci-aardvark.c
-+++ b/drivers/pci/host/pci-aardvark.c
-@@ -598,6 +598,13 @@ static bool advk_pcie_valid_device(struc
- 	if ((bus->number == pcie->root_bus_nr) && PCI_SLOT(devfn) != 0)
- 		return false;
+--- a/include/linux/kprobes.h
++++ b/include/linux/kprobes.h
+@@ -155,6 +155,8 @@ struct kretprobe {
+ 	raw_spinlock_t lock;
+ };
  
-+	/*
-+	 * If the link goes down after we check for link-up, nothing bad
-+	 * happens but the config access times out.
-+	 */
-+	if (bus->number != pcie->root_bus_nr && !advk_pcie_link_up(pcie))
-+		return false;
++#define KRETPROBE_MAX_DATA_SIZE	4096
 +
- 	return true;
- }
+ struct kretprobe_instance {
+ 	union {
+ 		struct hlist_node hlist;
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -2137,6 +2137,9 @@ int register_kretprobe(struct kretprobe
+ 		}
+ 	}
  
++	if (rp->data_size > KRETPROBE_MAX_DATA_SIZE)
++		return -E2BIG;
++
+ 	rp->kp.pre_handler = pre_handler_kretprobe;
+ 	rp->kp.post_handler = NULL;
+ 	rp->kp.fault_handler = NULL;
 
 

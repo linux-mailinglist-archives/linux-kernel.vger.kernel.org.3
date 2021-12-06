@@ -2,246 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2629E46A5EC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B924946A5CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348646AbhLFTuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:50:11 -0500
-Received: from ixit.cz ([94.230.151.217]:55920 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245093AbhLFTuK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:50:10 -0500
-Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        id S1348616AbhLFTnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:43:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346738AbhLFTm7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 14:42:59 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5D2C061746;
+        Mon,  6 Dec 2021 11:39:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id BE17021F5E;
-        Mon,  6 Dec 2021 20:46:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1638819998;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PdhitTOAMaNgMhzeU73LLvbK4Bm75DL0E/e/uvOPRGQ=;
-        b=CMAWrIhZBtW1+WvEfffWHGYQMTEJgy1d/Jn8J5bdQg3tfzioScP4mNXxLlWF5uvzGes1QA
-        yvQd0YedWA0UOtyOYmkenAQ+wUbLhovUQzKoH0RRLEpF/FeJNAEw05PnF6ndR8YHXcMbEk
-        kfguYsHsxz1v/4tk7E5xHqUJ0zPM+eA=
-From:   David Heidelberg <david@ixit.cz>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: misc: convert Qualcomm FastRPC bindings to the YAML schema
-Date:   Mon,  6 Dec 2021 20:38:49 +0100
-Message-Id: <20211206193849.109079-1-david@ixit.cz>
-X-Mailer: git-send-email 2.33.0
+        by sin.source.kernel.org (Postfix) with ESMTPS id 897C8CE17DE;
+        Mon,  6 Dec 2021 19:39:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E3F0C341C1;
+        Mon,  6 Dec 2021 19:39:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638819566;
+        bh=+JbsflOijEIO6kBM6/41bkpaisL5F4hLUYUxKKh4EP8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=uTO9N8ZH+QGKdbvGGPiGTS0mKmjwAEEZGnWKfzWAc3pVQ2BrYD91O6wBEFW3jD/KY
+         2CcHEW2df+FoKVV2DSx/Vktd8PdGD42WF+MzHerhZf6tUp7Ocvmoy0e1cONl7lhDE3
+         I/aR6P/7ofXt0mD24YDaxFYyHXNaMQsGexlJw5TxhGNocFSuZRPBtE4bGwYrpDx9VY
+         CldCbUr3OMUIY32CpryHMS+oFOzlyrcDZ6nsIz8P+9IyL1QFIy+435c6zV/Cs2xRJJ
+         WhsQ2QF/vwDxNsIoGAkD/JR39T4Cj4iJEkhBqK/Xtfq4wLdgNo/mSJMz9n6F6aUmJM
+         fdqB8/usUjRvw==
+Date:   Mon, 6 Dec 2021 13:39:25 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Subhashini Rao Beerisetty <subhashbeerisetty@gmail.com>
+Cc:     linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        kernelnewbies <kernelnewbies@kernelnewbies.org>
+Subject: Re: PCI: latency
+Message-ID: <20211206193925.GA5439@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPY=qRQJ-YbRi0AStrytsE3ke4vFN9K4Cos2T+b1JKDPJGUVOg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch the DT binding to a YAML schema to enable the DT validation.
+On Fri, Dec 03, 2021 at 10:30:58PM +0530, Subhashini Rao Beerisetty wrote:
+>  [ Please keep me in CC as I'm not subscribed to the list]
+> 
+> Hi all,
+> 
+> We are using the Linux OS on an x86_64 machine. I need to measure the
+> PCIe latency on my system, does kernel have any latency measurement
+> module for the PCIe bus?
 
-Also:
- - simplify example
- - embrace compute-cb@ subnodes instead of just cb@
+No, unfortunately not.  Maybe perf could help, but I don't know enough
+to give you any pointers.
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
----
- .../devicetree/bindings/misc/qcom,fastrpc.txt | 78 ---------------
- .../bindings/misc/qcom,fastrpc.yaml           | 94 +++++++++++++++++++
- 2 files changed, 94 insertions(+), 78 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
- create mode 100644 Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+There are a couple tune/trace things like [1], but they're specific to
+hardware that you're probably not using.
 
-diff --git a/Documentation/devicetree/bindings/misc/qcom,fastrpc.txt b/Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
-deleted file mode 100644
-index 2a1827ab50d2..000000000000
---- a/Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
-+++ /dev/null
-@@ -1,78 +0,0 @@
--Qualcomm Technologies, Inc. FastRPC Driver
--
--The FastRPC implements an IPC (Inter-Processor Communication)
--mechanism that allows for clients to transparently make remote method
--invocations across DSP and APPS boundaries. This enables developers
--to offload tasks to the DSP and free up the application processor for
--other tasks.
--
--- compatible:
--	Usage: required
--	Value type: <stringlist>
--	Definition: must be "qcom,fastrpc"
--
--- label
--	Usage: required
--	Value type: <string>
--	Definition: should specify the dsp domain name this fastrpc
--	corresponds to. must be one of this: "adsp", "mdsp", "sdsp", "cdsp"
--
--- #address-cells
--	Usage: required
--	Value type: <u32>
--	Definition: Must be 1
--
--- #size-cells
--	Usage: required
--	Value type: <u32>
--	Definition: Must be 0
--
--= COMPUTE BANKS
--Each subnode of the Fastrpc represents compute context banks available
--on the dsp.
--- All Compute context banks MUST contain the following properties:
--
--- compatible:
--	Usage: required
--	Value type: <stringlist>
--	Definition: must be "qcom,fastrpc-compute-cb"
--
--- reg
--	Usage: required
--	Value type: <u32>
--	Definition: Context Bank ID.
--
--- qcom,nsessions:
--	Usage: Optional
--	Value type: <u32>
--	Defination: A value indicating how many sessions can share this
--		    context bank. Defaults to 1 when this property
--		    is not specified.
--
--Example:
--
--adsp-pil {
--	compatible = "qcom,msm8996-adsp-pil";
--	...
--	smd-edge {
--		label = "lpass";
--		fastrpc {
--			compatible = "qcom,fastrpc";
--			qcom,smd-channels = "fastrpcsmd-apps-dsp";
--			label = "adsp";
--			#address-cells = <1>;
--			#size-cells = <0>;
--
--			cb@1 {
--				compatible = "qcom,fastrpc-compute-cb";
--				reg = <1>;
--			};
--
--			cb@2 {
--				compatible = "qcom,fastrpc-compute-cb";
--				reg = <2>;
--			};
--			...
--		};
--	};
--};
-diff --git a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
-new file mode 100644
-index 000000000000..f42ab208a7fc
---- /dev/null
-+++ b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
-@@ -0,0 +1,94 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/misc/qcom,fastrpc.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Qualcomm FastRPC Driver
-+
-+maintainers:
-+  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-+
-+description: |
-+  The FastRPC implements an IPC (Inter-Processor Communication)
-+  mechanism that allows for clients to transparently make remote method
-+  invocations across DSP and APPS boundaries. This enables developers
-+  to offload tasks to the DSP and free up the application processor for
-+  other tasks.
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: qcom,fastrpc
-+
-+  label:
-+    items:
-+      enum:
-+        - adsp
-+        - mdsp
-+        - sdsp
-+        - cdsp
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 0
-+
-+patternProperties:
-+  "(compute-)?cb@[0-9]$":
-+    type: object
-+
-+    description: >
-+      Each subnode of the Fastrpc represents compute context banks available on the dsp.
-+
-+    properties:
-+      compatible:
-+        items:
-+          - const: qcom,fastrpc-compute-cb
-+
-+      reg:
-+        maxItems: 1
-+
-+      qcom,nsession:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        default: 1
-+        description: >
-+          A value indicating how many sessions can share this context bank.
-+
-+    required:
-+      - compatible
-+      - reg
-+
-+    additionalProperties: true
-+
-+required:
-+  - compatible
-+  - label
-+  - '#address-cells'
-+  - '#size-cells'
-+
-+additionalProperties: true
-+
-+examples:
-+  - |
-+    smd-edge {
-+        label = "lpass";
-+        fastrpc {
-+            compatible = "qcom,fastrpc";
-+            label = "adsp";
-+            qcom,smd-channels = "fastrpcsmd-apps-dsp";
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            compute-cb@1 {
-+                compatible = "qcom,fastrpc-compute-cb";
-+                reg = <1>;
-+            };
-+
-+            compute-cb@2 {
-+                compatible = "qcom,fastrpc-compute-cb";
-+                reg = <2>;
-+            };
-+        };
-+    };
--- 
-2.33.0
-
+[1] https://lore.kernel.org/r/20211116090625.53702-1-yangyicong@hisilicon.com

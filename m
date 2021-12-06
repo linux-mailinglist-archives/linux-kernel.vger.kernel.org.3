@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9BE469B7E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:14:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9969469DC2
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356553AbhLFPRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:17:41 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43734 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347167AbhLFPL2 (ORCPT
+        id S1388313AbhLFPcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:32:33 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:40032 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347711AbhLFPVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:11:28 -0500
+        Mon, 6 Dec 2021 10:21:36 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E32EFB810AC;
-        Mon,  6 Dec 2021 15:07:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E277C341C6;
-        Mon,  6 Dec 2021 15:07:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87E7161329;
+        Mon,  6 Dec 2021 15:18:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68EEDC341C1;
+        Mon,  6 Dec 2021 15:18:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803275;
-        bh=F8ScSE/g0ifcwkrTXQw+13vvRCUtp4sF93kcFMa8mDA=;
+        s=korg; t=1638803886;
+        bh=p15ZnFikex20BkbZRjpWjfG734+ljeA7LYKNoXvuQnM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HeAVfuHH5Jo8JR0yMb0iPMcBynLRb1BeMm0rrRp9wh8sOdbstD3VY4uk9X1w5cuWz
-         WpPTdq+yNUESmigzw6+dAxTlnSHQ/96Wa6aRqNC4CNyAgTIeqhJzhowP/zfmUM8s7d
-         nrdQCHxzE7wL2Fujy2Zrim72Vm8XV+2RNgErnpR0=
+        b=jKHHAxqwNMjMU4az6P1GYlpJFbkiAY2nAhri+q/rMgktFeFiR+trNaQUSBrj4kl2O
+         LkTkoXfPHp12nBbFpnWMbOyivsVb5K4a05kVf4fGGF+b9yb9dGzX8+EwsW9Wjow8zO
+         n4IdvQWe2XlwPouuyvUlNYZXKBzBjAzaGUZoVkjQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Benjamin Poirier <bpoirier@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.14 091/106] net: mpls: Fix notifications when deleting a device
+        stable@vger.kernel.org, Sameer Pujar <spujar@nvidia.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 082/130] ASoC: tegra: Fix kcontrol put callback in AHUB
 Date:   Mon,  6 Dec 2021 15:56:39 +0100
-Message-Id: <20211206145558.667394843@linuxfoundation.org>
+Message-Id: <20211206145602.499758849@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,157 +46,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Poirier <bpoirier@nvidia.com>
+From: Sameer Pujar <spujar@nvidia.com>
 
-commit 7d4741eacdefa5f0475431645b56baf00784df1f upstream.
+commit a4e37950c9e9b126f9cbee79b8ab94a94646dcf1 upstream.
 
-There are various problems related to netlink notifications for mpls route
-changes in response to interfaces being deleted:
-* delete interface of only nexthop
-	DELROUTE notification is missing RTA_OIF attribute
-* delete interface of non-last nexthop
-	NEWROUTE notification is missing entirely
-* delete interface of last nexthop
-	DELROUTE notification is missing nexthop
+The kcontrol put callback is expected to return 1 when there is change
+in HW or when the update is acknowledged by driver. This would ensure
+that change notifications are sent to subscribed applications. Update
+the AHUB driver accordingly.
 
-All of these problems stem from the fact that existing routes are modified
-in-place before sending a notification. Restructure mpls_ifdown() to avoid
-changing the route in the DELROUTE cases and to create a copy in the
-NEWROUTE case.
-
-Fixes: f8efb73c97e2 ("mpls: multipath route support")
-Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 16e1bcc2caf4 ("ASoC: tegra: Add Tegra210 based AHUB driver")
+Signed-off-by: Sameer Pujar <spujar@nvidia.com>
+Suggested-by: Jaroslav Kysela <perex@perex.cz>
+Suggested-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
+Link: https://lore.kernel.org/r/1637219231-406-12-git-send-email-spujar@nvidia.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mpls/af_mpls.c |   68 ++++++++++++++++++++++++++++++++++++++++-------------
- 1 file changed, 52 insertions(+), 16 deletions(-)
+ sound/soc/tegra/tegra210_ahub.c |   11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
---- a/net/mpls/af_mpls.c
-+++ b/net/mpls/af_mpls.c
-@@ -1407,22 +1407,52 @@ static void mpls_dev_destroy_rcu(struct
- 	kfree(mdev);
- }
+--- a/sound/soc/tegra/tegra210_ahub.c
++++ b/sound/soc/tegra/tegra210_ahub.c
+@@ -62,6 +62,7 @@ static int tegra_ahub_put_value_enum(str
+ 	unsigned int *item = uctl->value.enumerated.item;
+ 	unsigned int value = e->values[item[0]];
+ 	unsigned int i, bit_pos, reg_idx = 0, reg_val = 0;
++	int change = 0;
  
--static void mpls_ifdown(struct net_device *dev, int event)
-+static int mpls_ifdown(struct net_device *dev, int event)
- {
- 	struct mpls_route __rcu **platform_label;
- 	struct net *net = dev_net(dev);
--	u8 alive, deleted;
- 	unsigned index;
+ 	if (item[0] >= e->items)
+ 		return -EINVAL;
+@@ -86,12 +87,14 @@ static int tegra_ahub_put_value_enum(str
  
- 	platform_label = rtnl_dereference(net->mpls.platform_label);
- 	for (index = 0; index < net->mpls.platform_labels; index++) {
- 		struct mpls_route *rt = rtnl_dereference(platform_label[index]);
-+		bool nh_del = false;
-+		u8 alive = 0;
- 
- 		if (!rt)
- 			continue;
- 
--		alive = 0;
--		deleted = 0;
-+		if (event == NETDEV_UNREGISTER) {
-+			u8 deleted = 0;
-+
-+			for_nexthops(rt) {
-+				struct net_device *nh_dev =
-+					rtnl_dereference(nh->nh_dev);
-+
-+				if (!nh_dev || nh_dev == dev)
-+					deleted++;
-+				if (nh_dev == dev)
-+					nh_del = true;
-+			} endfor_nexthops(rt);
-+
-+			/* if there are no more nexthops, delete the route */
-+			if (deleted == rt->rt_nhn) {
-+				mpls_route_update(net, index, NULL, NULL);
-+				continue;
-+			}
-+
-+			if (nh_del) {
-+				size_t size = sizeof(*rt) + rt->rt_nhn *
-+					rt->rt_nh_size;
-+				struct mpls_route *orig = rt;
-+
-+				rt = kmalloc(size, GFP_KERNEL);
-+				if (!rt)
-+					return -ENOMEM;
-+				memcpy(rt, orig, size);
-+			}
-+		}
-+
- 		change_nexthops(rt) {
- 			unsigned int nh_flags = nh->nh_flags;
- 
-@@ -1446,16 +1476,15 @@ static void mpls_ifdown(struct net_devic
- next:
- 			if (!(nh_flags & (RTNH_F_DEAD | RTNH_F_LINKDOWN)))
- 				alive++;
--			if (!rtnl_dereference(nh->nh_dev))
--				deleted++;
- 		} endfor_nexthops(rt);
- 
- 		WRITE_ONCE(rt->rt_nhn_alive, alive);
- 
--		/* if there are no more nexthops, delete the route */
--		if (event == NETDEV_UNREGISTER && deleted == rt->rt_nhn)
--			mpls_route_update(net, index, NULL, NULL);
-+		if (nh_del)
-+			mpls_route_update(net, index, rt, NULL);
+ 		/* Update widget power if state has changed */
+ 		if (snd_soc_component_test_bits(cmpnt, update[i].reg,
+-						update[i].mask, update[i].val))
+-			snd_soc_dapm_mux_update_power(dapm, kctl, item[0], e,
+-						      &update[i]);
++						update[i].mask,
++						update[i].val))
++			change |= snd_soc_dapm_mux_update_power(dapm, kctl,
++								item[0], e,
++								&update[i]);
  	}
-+
-+	return 0;
+ 
+-	return 0;
++	return change;
  }
  
- static void mpls_ifup(struct net_device *dev, unsigned int flags)
-@@ -1519,8 +1548,12 @@ static int mpls_dev_notify(struct notifi
- 		return NOTIFY_OK;
- 
- 	switch (event) {
-+		int err;
-+
- 	case NETDEV_DOWN:
--		mpls_ifdown(dev, event);
-+		err = mpls_ifdown(dev, event);
-+		if (err)
-+			return notifier_from_errno(err);
- 		break;
- 	case NETDEV_UP:
- 		flags = dev_get_flags(dev);
-@@ -1531,13 +1564,18 @@ static int mpls_dev_notify(struct notifi
- 		break;
- 	case NETDEV_CHANGE:
- 		flags = dev_get_flags(dev);
--		if (flags & (IFF_RUNNING | IFF_LOWER_UP))
-+		if (flags & (IFF_RUNNING | IFF_LOWER_UP)) {
- 			mpls_ifup(dev, RTNH_F_DEAD | RTNH_F_LINKDOWN);
--		else
--			mpls_ifdown(dev, event);
-+		} else {
-+			err = mpls_ifdown(dev, event);
-+			if (err)
-+				return notifier_from_errno(err);
-+		}
- 		break;
- 	case NETDEV_UNREGISTER:
--		mpls_ifdown(dev, event);
-+		err = mpls_ifdown(dev, event);
-+		if (err)
-+			return notifier_from_errno(err);
- 		mdev = mpls_dev_get(dev);
- 		if (mdev) {
- 			mpls_dev_sysctl_unregister(dev, mdev);
-@@ -1548,8 +1586,6 @@ static int mpls_dev_notify(struct notifi
- 	case NETDEV_CHANGENAME:
- 		mdev = mpls_dev_get(dev);
- 		if (mdev) {
--			int err;
--
- 			mpls_dev_sysctl_unregister(dev, mdev);
- 			err = mpls_dev_sysctl_register(dev, mdev);
- 			if (err)
+ static struct snd_soc_dai_driver tegra210_ahub_dais[] = {
 
 

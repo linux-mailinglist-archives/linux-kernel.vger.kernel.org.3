@@ -2,17 +2,17 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DFA7469DA0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEFF469D80
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387540AbhLFPb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:31:28 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:42974 "EHLO
+        id S1350963AbhLFP37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:29:59 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:42978 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357849AbhLFPTR (ORCPT
+        with ESMTP id S244690AbhLFPTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:19:17 -0500
-Date:   Mon, 06 Dec 2021 15:15:45 -0000
+        Mon, 6 Dec 2021 10:19:18 -0500
+Date:   Mon, 06 Dec 2021 15:15:46 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1638803747;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -20,12 +20,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=e+uW1Cga0RiD6Y1VOJLmIas/qAaIB454K+5a7GdGvFk=;
-        b=sGGVAJIglGn7RN/HGnJuFKyW3xmNLek29eRXmH+YXFA8lnO/XNbTBUkiM5Q0K0WKxVasn9
-        d1L5Ef/XNAHR/FQZnvog+BeqkDIEevlnuOcFptITtmAFSBjYSxF0KiCzscOY495PFgH0H/
-        eYg+Uy/u37cG58oeR1rtL7uXvzjxKZBu7v/yvx1wyP/PSaRBg7BSqmjYbMwGEERckouVgP
-        ag2jzuxW5UJDPGWAv2aTwe6iE5hQ81mnxdbaVrviRRW15EHLWgVRnN2JTb7NQumNEJU6e4
-        F8a+02+ur0zgO4C2CR1aH5rHxLagwsh+Lf3knJfIKnVCtTkq+MQrSagT0yh/MA==
+        bh=tY/3BcngD87GBfij22uw4zmg58s1oiPnQ3wUX4epSuk=;
+        b=e/v1SVZ08YYj26hVYkqHWf8NFuViuCX1iNHgMF/h6iUMgL90xVeMWKWag80PhVBZwuCGRZ
+        as16S93465CPvuLRcTHzndQvJX/QPsYKg31mBL7dVLOf27nh+N0wAWpSfnoB+bB2Ap16ip
+        ZfVQ+7k7bo8ZGmvZmZ84g3tRVxIRZHEPkhs7b34wI63cNgOqryBWqEWFSWGy/Oe30rrDl6
+        acccqDRZZl2tyXD62tehGvZAAW5fhvVKr7FkKvR6tmbh25phsLw0qo2PwGgYJzhcgOF7CX
+        5Jr0+L1OnC9Du8NJFM6pqUdg2zu42Z7XeQb3rorBP5hkPL/3+P6RPa1A3WiHRQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1638803747;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -33,22 +33,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=e+uW1Cga0RiD6Y1VOJLmIas/qAaIB454K+5a7GdGvFk=;
-        b=gWVpxDfJvMQZHCsgG40ClSEC6YgMRB5F28lGJyCpoiLiEtJBpDHLta6UETqsYbPO9KM+Xk
-        014ADx79P40veDBQ==
-From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
+        bh=tY/3BcngD87GBfij22uw4zmg58s1oiPnQ3wUX4epSuk=;
+        b=d7wOuD07A85Pw/rGhxsAB7cOn16tXwKtIQhV05PohP6FguLkqdCYBIBgKUjYVeyWbyKTZy
+        TC5DC2fPmy5jk3BA==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] lockdep/selftests: Avoid using
- local_lock_{acquire|release}().
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+Subject: [tip: locking/core] lockdep: Remove softirq accounting on PREEMPT_RT.
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211129174654.668506-7-bigeasy@linutronix.de>
-References: <20211129174654.668506-7-bigeasy@linutronix.de>
+In-Reply-To: <20211129174654.668506-6-bigeasy@linutronix.de>
+References: <20211129174654.668506-6-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <163880374530.11128.14099889591098475504.tip-bot2@tip-bot2>
+Message-ID: <163880374685.11128.16947312483583939101.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -59,135 +58,95 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     fc78dd08e64011865799764d5b641bf823f84c66
-Gitweb:        https://git.kernel.org/tip/fc78dd08e64011865799764d5b641bf823f84c66
-Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-AuthorDate:    Mon, 29 Nov 2021 18:46:49 +01:00
+Commit-ID:     0c1d7a2c2d32fac7ff4a644724b2d52a64184645
+Gitweb:        https://git.kernel.org/tip/0c1d7a2c2d32fac7ff4a644724b2d52a64184645
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Mon, 29 Nov 2021 18:46:48 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Sat, 04 Dec 2021 10:56:24 +01:00
+CommitterDate: Sat, 04 Dec 2021 10:56:23 +01:00
 
-lockdep/selftests: Avoid using local_lock_{acquire|release}().
+lockdep: Remove softirq accounting on PREEMPT_RT.
 
-The local_lock related functions
-  local_lock_acquire()
-  local_lock_release()
+There is not really a softirq context on PREEMPT_RT.  Softirqs on
+PREEMPT_RT are always invoked within the context of a threaded
+interrupt handler or within ksoftirqd. The "in-softirq" context is
+preemptible and is protected by a per-CPU lock to ensure mutual
+exclusion.
 
-are part of the internal implementation and should be avoided.
-Define the lock as DEFINE_PER_CPU so the normal local_lock() function
-can be used.
+There is no difference on PREEMPT_RT between spin_lock_irq() and
+spin_lock() because the former does not disable interrupts. Therefore
+if a lock is used in_softirq() and locked once with spin_lock_irq()
+then lockdep will report this with "inconsistent {SOFTIRQ-ON-W} ->
+{IN-SOFTIRQ-W} usage".
 
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Teach lockdep that we don't really do softirqs on -RT.
+
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20211129174654.668506-7-bigeasy@linutronix.de
+Link: https://lore.kernel.org/r/20211129174654.668506-6-bigeasy@linutronix.de
 ---
- lib/locking-selftest.c | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+ include/linux/irqflags.h | 23 +++++++++++++++--------
+ kernel/locking/lockdep.c |  2 ++
+ 2 files changed, 17 insertions(+), 8 deletions(-)
 
-diff --git a/lib/locking-selftest.c b/lib/locking-selftest.c
-index 71652e1..4d614c7 100644
---- a/lib/locking-selftest.c
-+++ b/lib/locking-selftest.c
-@@ -139,7 +139,7 @@ static DEFINE_RT_MUTEX(rtmutex_Z2);
+diff --git a/include/linux/irqflags.h b/include/linux/irqflags.h
+index 600c10d..4b14093 100644
+--- a/include/linux/irqflags.h
++++ b/include/linux/irqflags.h
+@@ -71,14 +71,6 @@ do {						\
+ do {						\
+ 	__this_cpu_dec(hardirq_context);	\
+ } while (0)
+-# define lockdep_softirq_enter()		\
+-do {						\
+-	current->softirq_context++;		\
+-} while (0)
+-# define lockdep_softirq_exit()			\
+-do {						\
+-	current->softirq_context--;		\
+-} while (0)
  
+ # define lockdep_hrtimer_enter(__hrtimer)		\
+ ({							\
+@@ -140,6 +132,21 @@ do {						\
+ # define lockdep_irq_work_exit(__work)		do { } while (0)
  #endif
  
--static local_lock_t local_A = INIT_LOCAL_LOCK(local_A);
-+static DEFINE_PER_CPU(local_lock_t, local_A);
++#if defined(CONFIG_TRACE_IRQFLAGS) && !defined(CONFIG_PREEMPT_RT)
++# define lockdep_softirq_enter()		\
++do {						\
++	current->softirq_context++;		\
++} while (0)
++# define lockdep_softirq_exit()			\
++do {						\
++	current->softirq_context--;		\
++} while (0)
++
++#else
++# define lockdep_softirq_enter()		do { } while (0)
++# define lockdep_softirq_exit()			do { } while (0)
++#endif
++
+ #if defined(CONFIG_IRQSOFF_TRACER) || \
+ 	defined(CONFIG_PREEMPT_TRACER)
+  extern void stop_critical_timings(void);
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index 2270ec6..4a882f8 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -5485,6 +5485,7 @@ static noinstr void check_flags(unsigned long flags)
+ 		}
+ 	}
  
- /*
-  * non-inlined runtime initializers, to let separate locks share
-@@ -1320,7 +1320,7 @@ GENERATE_PERMUTATIONS_3_EVENTS(irq_read_recursion3_soft_wlock)
- # define I_MUTEX(x)	lockdep_reset_lock(&mutex_##x.dep_map)
- # define I_RWSEM(x)	lockdep_reset_lock(&rwsem_##x.dep_map)
- # define I_WW(x)	lockdep_reset_lock(&x.dep_map)
--# define I_LOCAL_LOCK(x) lockdep_reset_lock(&local_##x.dep_map)
-+# define I_LOCAL_LOCK(x) lockdep_reset_lock(this_cpu_ptr(&local_##x.dep_map))
- #ifdef CONFIG_RT_MUTEXES
- # define I_RTMUTEX(x)	lockdep_reset_lock(&rtmutex_##x.dep_map)
- #endif
-@@ -1380,7 +1380,7 @@ static void reset_locks(void)
- 	init_shared_classes();
- 	raw_spin_lock_init(&raw_lock_A);
- 	raw_spin_lock_init(&raw_lock_B);
--	local_lock_init(&local_A);
-+	local_lock_init(this_cpu_ptr(&local_A));
++#ifndef CONFIG_PREEMPT_RT
+ 	/*
+ 	 * We dont accurately track softirq state in e.g.
+ 	 * hardirq contexts (such as on 4KSTACKS), so only
+@@ -5499,6 +5500,7 @@ static noinstr void check_flags(unsigned long flags)
+ 			DEBUG_LOCKS_WARN_ON(!current->softirqs_enabled);
+ 		}
+ 	}
++#endif
  
- 	ww_mutex_init(&o, &ww_lockdep); ww_mutex_init(&o2, &ww_lockdep); ww_mutex_init(&o3, &ww_lockdep);
- 	memset(&t, 0, sizeof(t)); memset(&t2, 0, sizeof(t2));
-@@ -2646,8 +2646,8 @@ static void wait_context_tests(void)
- 
- static void local_lock_2(void)
- {
--	local_lock_acquire(&local_A);	/* IRQ-ON */
--	local_lock_release(&local_A);
-+	local_lock(&local_A);	/* IRQ-ON */
-+	local_unlock(&local_A);
- 
- 	HARDIRQ_ENTER();
- 	spin_lock(&lock_A);		/* IN-IRQ */
-@@ -2656,18 +2656,18 @@ static void local_lock_2(void)
- 
- 	HARDIRQ_DISABLE();
- 	spin_lock(&lock_A);
--	local_lock_acquire(&local_A);	/* IN-IRQ <-> IRQ-ON cycle, false */
--	local_lock_release(&local_A);
-+	local_lock(&local_A);	/* IN-IRQ <-> IRQ-ON cycle, false */
-+	local_unlock(&local_A);
- 	spin_unlock(&lock_A);
- 	HARDIRQ_ENABLE();
- }
- 
- static void local_lock_3A(void)
- {
--	local_lock_acquire(&local_A);	/* IRQ-ON */
-+	local_lock(&local_A);	/* IRQ-ON */
- 	spin_lock(&lock_B);		/* IRQ-ON */
- 	spin_unlock(&lock_B);
--	local_lock_release(&local_A);
-+	local_unlock(&local_A);
- 
- 	HARDIRQ_ENTER();
- 	spin_lock(&lock_A);		/* IN-IRQ */
-@@ -2676,18 +2676,18 @@ static void local_lock_3A(void)
- 
- 	HARDIRQ_DISABLE();
- 	spin_lock(&lock_A);
--	local_lock_acquire(&local_A);	/* IN-IRQ <-> IRQ-ON cycle only if we count local_lock(), false */
--	local_lock_release(&local_A);
-+	local_lock(&local_A);	/* IN-IRQ <-> IRQ-ON cycle only if we count local_lock(), false */
-+	local_unlock(&local_A);
- 	spin_unlock(&lock_A);
- 	HARDIRQ_ENABLE();
- }
- 
- static void local_lock_3B(void)
- {
--	local_lock_acquire(&local_A);	/* IRQ-ON */
-+	local_lock(&local_A);	/* IRQ-ON */
- 	spin_lock(&lock_B);		/* IRQ-ON */
- 	spin_unlock(&lock_B);
--	local_lock_release(&local_A);
-+	local_unlock(&local_A);
- 
- 	HARDIRQ_ENTER();
- 	spin_lock(&lock_A);		/* IN-IRQ */
-@@ -2696,8 +2696,8 @@ static void local_lock_3B(void)
- 
- 	HARDIRQ_DISABLE();
- 	spin_lock(&lock_A);
--	local_lock_acquire(&local_A);	/* IN-IRQ <-> IRQ-ON cycle only if we count local_lock(), false */
--	local_lock_release(&local_A);
-+	local_lock(&local_A);	/* IN-IRQ <-> IRQ-ON cycle only if we count local_lock(), false */
-+	local_unlock(&local_A);
- 	spin_unlock(&lock_A);
- 	HARDIRQ_ENABLE();
- 
-@@ -2812,7 +2812,7 @@ void locking_selftest(void)
- 	printk("------------------------\n");
- 	printk("| Locking API testsuite:\n");
- 	printk("----------------------------------------------------------------------------\n");
--	printk("                                 | spin |wlock |rlock |mutex | wsem | rsem |\n");
-+	printk("                                 | spin |wlock |rlock |mutex | wsem | rsem |rtmutex\n");
- 	printk("  --------------------------------------------------------------------------\n");
- 
- 	init_shared_classes();
+ 	if (!debug_locks)
+ 		print_irqtrace_events(current);

@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C41A469F31
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:43:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E32FB469BF4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391519AbhLFPpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:45:53 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35966 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386909AbhLFPaU (ORCPT
+        id S1357962AbhLFPTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54794 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346409AbhLFPNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:30:20 -0500
+        Mon, 6 Dec 2021 10:13:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE188C08EAF7;
+        Mon,  6 Dec 2021 07:06:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 213B0B810AC;
-        Mon,  6 Dec 2021 15:26:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 701DDC34903;
-        Mon,  6 Dec 2021 15:26:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DA566132E;
+        Mon,  6 Dec 2021 15:06:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF0CC341C2;
+        Mon,  6 Dec 2021 15:06:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638804408;
-        bh=cTIY31xDE66jg3uCbrprrqx8pWmnNOvMrVFyPGcMJX0=;
+        s=korg; t=1638803160;
+        bh=x3zMfbuljULYDBpIGmbISV0EKKFYdb7wmRWQcXSTw+E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iZuqND79GLjkIs5cf2hoNwdaFmT+ekOkA46eVFjsa0KwCCfwnj0dnK/vNJqj6n/H4
-         v9NBdKYuieDyhOc7b2m2JwhAkb8XEyAYjXNHtyWxiNxAkh3qzgD0UnPTVQw+Z3u5IK
-         WcYvcQ1NE0sCAoXFO2ymBkWOx/p+KXuFgV+1qgr4=
+        b=CIOYyJgzF4bde1LR9NQsTRVoC9rdfQnzPGC7xvAMTFJoNfPKX5geEkccosVKx0tZt
+         COAMWH2poUTCFUPyrKehZKaAMRqNFOSS4gTKS9JpoY1hgMoRye1GHr53RAvyMcbi8G
+         qzlkyxGehlAJoDN290D1KDkVu7JB6GUEb3FEK44o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Steffen Froemer <sfroemer@redhat.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 104/207] tcp: fix page frag corruption on page fault
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Remi Pommarel <repk@triplefau.lt>
+Subject: [PATCH 4.14 050/106] PCI: aardvark: Fix checking for link up via LTSSM state
 Date:   Mon,  6 Dec 2021 15:55:58 +0100
-Message-Id: <20211206145613.844832146@linuxfoundation.org>
+Message-Id: <20211206145557.157043898@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145610.172203682@linuxfoundation.org>
-References: <20211206145610.172203682@linuxfoundation.org>
+In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
+References: <20211206145555.386095297@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,107 +51,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+From: Pali Rohár <pali@kernel.org>
 
-commit dacb5d8875cc6cd3a553363b4d6f06760fcbe70c upstream.
+commit 661c399a651c11aaf83c45cbfe0b4a1fb7bc3179 upstream.
 
-Steffen reported a TCP stream corruption for HTTP requests
-served by the apache web-server using a cifs mount-point
-and memory mapping the relevant file.
+Current implementation of advk_pcie_link_up() is wrong as it marks also
+link disabled or hot reset states as link up.
 
-The root cause is quite similar to the one addressed by
-commit 20eb4f29b602 ("net: fix sk_page_frag() recursion from
-memory reclaim"). Here the nested access to the task page frag
-is caused by a page fault on the (mmapped) user-space memory
-buffer coming from the cifs file.
+Fix it by marking link up only to those states which are defined in PCIe
+Base specification 3.0, Table 4-14: Link Status Mapped to the LTSSM.
 
-The page fault handler performs an smb transaction on a different
-socket, inside the same process context. Since sk->sk_allaction
-for such socket does not prevent the usage for the task_frag,
-the nested allocation modify "under the hood" the page frag
-in use by the outer sendmsg call, corrupting the stream.
+To simplify implementation, Define macros for every LTSSM state which
+aardvark hardware can return in CFG_REG register.
 
-The overall relevant stack trace looks like the following:
+Fix also checking for link training according to the same Table 4-14.
+Define a new function advk_pcie_link_training() for this purpose.
 
-httpd 78268 [001] 3461630.850950:      probe:tcp_sendmsg_locked:
-        ffffffff91461d91 tcp_sendmsg_locked+0x1
-        ffffffff91462b57 tcp_sendmsg+0x27
-        ffffffff9139814e sock_sendmsg+0x3e
-        ffffffffc06dfe1d smb_send_kvec+0x28
-        [...]
-        ffffffffc06cfaf8 cifs_readpages+0x213
-        ffffffff90e83c4b read_pages+0x6b
-        ffffffff90e83f31 __do_page_cache_readahead+0x1c1
-        ffffffff90e79e98 filemap_fault+0x788
-        ffffffff90eb0458 __do_fault+0x38
-        ffffffff90eb5280 do_fault+0x1a0
-        ffffffff90eb7c84 __handle_mm_fault+0x4d4
-        ffffffff90eb8093 handle_mm_fault+0xc3
-        ffffffff90c74f6d __do_page_fault+0x1ed
-        ffffffff90c75277 do_page_fault+0x37
-        ffffffff9160111e page_fault+0x1e
-        ffffffff9109e7b5 copyin+0x25
-        ffffffff9109eb40 _copy_from_iter_full+0xe0
-        ffffffff91462370 tcp_sendmsg_locked+0x5e0
-        ffffffff91462370 tcp_sendmsg_locked+0x5e0
-        ffffffff91462b57 tcp_sendmsg+0x27
-        ffffffff9139815c sock_sendmsg+0x4c
-        ffffffff913981f7 sock_write_iter+0x97
-        ffffffff90f2cc56 do_iter_readv_writev+0x156
-        ffffffff90f2dff0 do_iter_write+0x80
-        ffffffff90f2e1c3 vfs_writev+0xa3
-        ffffffff90f2e27c do_writev+0x5c
-        ffffffff90c042bb do_syscall_64+0x5b
-        ffffffff916000ad entry_SYSCALL_64_after_hwframe+0x65
-
-The cifs filesystem rightfully sets sk_allocations to GFP_NOFS,
-we can avoid the nesting using the sk page frag for allocation
-lacking the __GFP_FS flag. Do not define an additional mm-helper
-for that, as this is strictly tied to the sk page frag usage.
-
-v1 -> v2:
- - use a stricted sk_page_frag() check instead of reordering the
-   code (Eric)
-
-Reported-by: Steffen Froemer <sfroemer@redhat.com>
-Fixes: 5640f7685831 ("net: use a per task frag allocator")
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Link: https://lore.kernel.org/r/20211005180952.6812-13-kabel@kernel.org
+Fixes: 8c39d710363c ("PCI: aardvark: Add Aardvark PCI host controller driver")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Reviewed-by: Marek Behún <kabel@kernel.org>
+Cc: stable@vger.kernel.org
+Cc: Remi Pommarel <repk@triplefau.lt>
+Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/sock.h |   13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ drivers/pci/host/pci-aardvark.c |   71 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 67 insertions(+), 4 deletions(-)
 
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -2400,19 +2400,22 @@ struct sk_buff *sk_stream_alloc_skb(stru
-  * @sk: socket
-  *
-  * Use the per task page_frag instead of the per socket one for
-- * optimization when we know that we're in the normal context and owns
-+ * optimization when we know that we're in process context and own
-  * everything that's associated with %current.
-  *
-- * gfpflags_allow_blocking() isn't enough here as direct reclaim may nest
-- * inside other socket operations and end up recursing into sk_page_frag()
-- * while it's already in use.
-+ * Both direct reclaim and page faults can nest inside other
-+ * socket operations and end up recursing into sk_page_frag()
-+ * while it's already in use: explicitly avoid task page_frag
-+ * usage if the caller is potentially doing any of them.
-+ * This assumes that page fault handlers use the GFP_NOFS flags.
-  *
-  * Return: a per task page_frag if context allows that,
-  * otherwise a per socket one.
-  */
- static inline struct page_frag *sk_page_frag(struct sock *sk)
- {
--	if (gfpflags_normal_context(sk->sk_allocation))
-+	if ((sk->sk_allocation & (__GFP_DIRECT_RECLAIM | __GFP_MEMALLOC | __GFP_FS)) ==
-+	    (__GFP_DIRECT_RECLAIM | __GFP_FS))
- 		return &current->task_frag;
+--- a/drivers/pci/host/pci-aardvark.c
++++ b/drivers/pci/host/pci-aardvark.c
+@@ -152,9 +152,50 @@
+ #define CFG_REG					(LMI_BASE_ADDR + 0x0)
+ #define     LTSSM_SHIFT				24
+ #define     LTSSM_MASK				0x3f
+-#define     LTSSM_L0				0x10
+ #define     RC_BAR_CONFIG			0x300
  
- 	return &sk->sk_frag;
++/* LTSSM values in CFG_REG */
++enum {
++	LTSSM_DETECT_QUIET			= 0x0,
++	LTSSM_DETECT_ACTIVE			= 0x1,
++	LTSSM_POLLING_ACTIVE			= 0x2,
++	LTSSM_POLLING_COMPLIANCE		= 0x3,
++	LTSSM_POLLING_CONFIGURATION		= 0x4,
++	LTSSM_CONFIG_LINKWIDTH_START		= 0x5,
++	LTSSM_CONFIG_LINKWIDTH_ACCEPT		= 0x6,
++	LTSSM_CONFIG_LANENUM_ACCEPT		= 0x7,
++	LTSSM_CONFIG_LANENUM_WAIT		= 0x8,
++	LTSSM_CONFIG_COMPLETE			= 0x9,
++	LTSSM_CONFIG_IDLE			= 0xa,
++	LTSSM_RECOVERY_RCVR_LOCK		= 0xb,
++	LTSSM_RECOVERY_SPEED			= 0xc,
++	LTSSM_RECOVERY_RCVR_CFG			= 0xd,
++	LTSSM_RECOVERY_IDLE			= 0xe,
++	LTSSM_L0				= 0x10,
++	LTSSM_RX_L0S_ENTRY			= 0x11,
++	LTSSM_RX_L0S_IDLE			= 0x12,
++	LTSSM_RX_L0S_FTS			= 0x13,
++	LTSSM_TX_L0S_ENTRY			= 0x14,
++	LTSSM_TX_L0S_IDLE			= 0x15,
++	LTSSM_TX_L0S_FTS			= 0x16,
++	LTSSM_L1_ENTRY				= 0x17,
++	LTSSM_L1_IDLE				= 0x18,
++	LTSSM_L2_IDLE				= 0x19,
++	LTSSM_L2_TRANSMIT_WAKE			= 0x1a,
++	LTSSM_DISABLED				= 0x20,
++	LTSSM_LOOPBACK_ENTRY_MASTER		= 0x21,
++	LTSSM_LOOPBACK_ACTIVE_MASTER		= 0x22,
++	LTSSM_LOOPBACK_EXIT_MASTER		= 0x23,
++	LTSSM_LOOPBACK_ENTRY_SLAVE		= 0x24,
++	LTSSM_LOOPBACK_ACTIVE_SLAVE		= 0x25,
++	LTSSM_LOOPBACK_EXIT_SLAVE		= 0x26,
++	LTSSM_HOT_RESET				= 0x27,
++	LTSSM_RECOVERY_EQUALIZATION_PHASE0	= 0x28,
++	LTSSM_RECOVERY_EQUALIZATION_PHASE1	= 0x29,
++	LTSSM_RECOVERY_EQUALIZATION_PHASE2	= 0x2a,
++	LTSSM_RECOVERY_EQUALIZATION_PHASE3	= 0x2b,
++};
++
+ /* PCIe core controller registers */
+ #define CTRL_CORE_BASE_ADDR			0x18000
+ #define CTRL_CONFIG_REG				(CTRL_CORE_BASE_ADDR + 0x0)
+@@ -248,13 +289,35 @@ static inline u32 advk_readl(struct advk
+ 	return readl(pcie->base + reg);
+ }
+ 
+-static int advk_pcie_link_up(struct advk_pcie *pcie)
++static u8 advk_pcie_ltssm_state(struct advk_pcie *pcie)
+ {
+-	u32 val, ltssm_state;
++	u32 val;
++	u8 ltssm_state;
+ 
+ 	val = advk_readl(pcie, CFG_REG);
+ 	ltssm_state = (val >> LTSSM_SHIFT) & LTSSM_MASK;
+-	return ltssm_state >= LTSSM_L0;
++	return ltssm_state;
++}
++
++static inline bool advk_pcie_link_up(struct advk_pcie *pcie)
++{
++	/* check if LTSSM is in normal operation - some L* state */
++	u8 ltssm_state = advk_pcie_ltssm_state(pcie);
++	return ltssm_state >= LTSSM_L0 && ltssm_state < LTSSM_DISABLED;
++}
++
++static inline bool advk_pcie_link_training(struct advk_pcie *pcie)
++{
++	/*
++	  * According to PCIe Base specification 3.0, Table 4-14: Link
++	  * Status Mapped to the LTSSM is Link Training mapped to LTSSM
++	  * Configuration and Recovery states.
++	  */
++	u8 ltssm_state = advk_pcie_ltssm_state(pcie);
++	return ((ltssm_state >= LTSSM_CONFIG_LINKWIDTH_START &&
++		  ltssm_state < LTSSM_L0) ||
++		(ltssm_state >= LTSSM_RECOVERY_EQUALIZATION_PHASE0 &&
++		  ltssm_state <= LTSSM_RECOVERY_EQUALIZATION_PHASE3));
+ }
+ 
+ static int advk_pcie_wait_for_link(struct advk_pcie *pcie)
 
 

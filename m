@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14DC5469F3F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B56469AAA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:06:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377734AbhLFPq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:46:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58488 "EHLO
+        id S1345871AbhLFPJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:09:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376309AbhLFP2r (ORCPT
+        with ESMTP id S1346788AbhLFPHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:28:47 -0500
+        Mon, 6 Dec 2021 10:07:34 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190A9C08ED44;
-        Mon,  6 Dec 2021 07:18:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7E5C08E845;
+        Mon,  6 Dec 2021 07:03:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD9D461327;
-        Mon,  6 Dec 2021 15:18:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FB36C341C5;
-        Mon,  6 Dec 2021 15:18:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE8086131F;
+        Mon,  6 Dec 2021 15:03:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF6EFC341C1;
+        Mon,  6 Dec 2021 15:03:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803883;
-        bh=auCRjUVo1vbxCAQ/FDqW8Cra0byWIg6sKV/uXh++Pd0=;
+        s=korg; t=1638803000;
+        bh=g5vzduTfSGynRVeX59VVaxoshbzTsTbElMLPzfqW/JI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wp+2IttKJuVdzBYpbT5OHvOdtrTJlvnWjHbvbIdkHkqyj2qRBQeIvZgIr3Dqy91wG
-         m1Lgy8sWPWu1QK3TMluZ+VDzpo7vkwRbEcPnhZ0qMKnb43mZ6PIzRuaFQ5e+EJDNmx
-         BqujhoZh90EZiDT8XCQyI2yjg3MPBl1EUzin/t88=
+        b=fNoZ3fpeNtS52QQILd9qZF2R+hSKeTxgU86f7cyD1v/vDewfhHm1DYjNGAAchIsao
+         OF7gD9xR9lGfNQ9E3t0bSuYxP4dBxplG/cH978CDgKXHOSg2VeV0KzH3tgC01i97zO
+         FsYQae7f9qR8dbbWNy1qQxriXQaTNsxGcj0Bixb8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
-        Mark Brown <broonie@kernel.org>,
-        Sameer Pujar <spujar@nvidia.com>, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 081/130] ASoC: tegra: Fix kcontrol put callback in DSPK
-Date:   Mon,  6 Dec 2021 15:56:38 +0100
-Message-Id: <20211206145602.467393241@linuxfoundation.org>
+        stable@vger.kernel.org, Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.9 56/62] siphash: use _unaligned version by default
+Date:   Mon,  6 Dec 2021 15:56:39 +0100
+Message-Id: <20211206145551.140729163@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
-References: <20211206145559.607158688@linuxfoundation.org>
+In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
+References: <20211206145549.155163074@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,243 +51,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sameer Pujar <spujar@nvidia.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-commit d6202a57e79d102271d38c34481fedc9d4c79694 upstream.
+commit f7e5b9bfa6c8820407b64eabc1f29c9a87e8993d upstream.
 
-The kcontrol put callback is expected to return 1 when there is change
-in HW or when the update is acknowledged by driver. This would ensure
-that change notifications are sent to subscribed applications. Update
-the DSPK driver accordingly.
+On ARM v6 and later, we define CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+because the ordinary load/store instructions (ldr, ldrh, ldrb) can
+tolerate any misalignment of the memory address. However, load/store
+double and load/store multiple instructions (ldrd, ldm) may still only
+be used on memory addresses that are 32-bit aligned, and so we have to
+use the CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS macro with care, or we
+may end up with a severe performance hit due to alignment traps that
+require fixups by the kernel. Testing shows that this currently happens
+with clang-13 but not gcc-11. In theory, any compiler version can
+produce this bug or other problems, as we are dealing with undefined
+behavior in C99 even on architectures that support this in hardware,
+see also https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100363.
 
-Fixes: 327ef6470266 ("ASoC: tegra: Add Tegra186 based DSPK driver")
-Suggested-by: Jaroslav Kysela <perex@perex.cz>
-Suggested-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sameer Pujar <spujar@nvidia.com>
-Reviewed-by: Takashi Iwai <tiwai@suse.de>
-Link: https://lore.kernel.org/r/1637219231-406-11-git-send-email-spujar@nvidia.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fortunately, the get_unaligned() accessors do the right thing: when
+building for ARMv6 or later, the compiler will emit unaligned accesses
+using the ordinary load/store instructions (but avoid the ones that
+require 32-bit alignment). When building for older ARM, those accessors
+will emit the appropriate sequence of ldrb/mov/orr instructions. And on
+architectures that can truly tolerate any kind of misalignment, the
+get_unaligned() accessors resolve to the leXX_to_cpup accessors that
+operate on aligned addresses.
+
+Since the compiler will in fact emit ldrd or ldm instructions when
+building this code for ARM v6 or later, the solution is to use the
+unaligned accessors unconditionally on architectures where this is
+known to be fast. The _aligned version of the hash function is
+however still needed to get the best performance on architectures
+that cannot do any unaligned access in hardware.
+
+This new version avoids the undefined behavior and should produce
+the fastest hash on all architectures we support.
+
+Link: https://lore.kernel.org/linux-arm-kernel/20181008211554.5355-4-ard.biesheuvel@linaro.org/
+Link: https://lore.kernel.org/linux-crypto/CAK8P3a2KfmmGDbVHULWevB0hv71P2oi2ZCHEAqT=8dQfa0=cqQ@mail.gmail.com/
+Reported-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Fixes: 2c956a60778c ("siphash: add cryptographically secure PRF")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/tegra/tegra186_dspk.c |  178 ++++++++++++++++++++++++++++++++--------
- 1 file changed, 146 insertions(+), 32 deletions(-)
+ include/linux/siphash.h |   14 ++++----------
+ lib/siphash.c           |   12 ++++++------
+ 2 files changed, 10 insertions(+), 16 deletions(-)
 
---- a/sound/soc/tegra/tegra186_dspk.c
-+++ b/sound/soc/tegra/tegra186_dspk.c
-@@ -26,50 +26,162 @@ static const struct reg_default tegra186
- 	{ TEGRA186_DSPK_CODEC_CTRL,  0x03000000 },
- };
- 
--static int tegra186_dspk_get_control(struct snd_kcontrol *kcontrol,
-+static int tegra186_dspk_get_fifo_th(struct snd_kcontrol *kcontrol,
- 				     struct snd_ctl_elem_value *ucontrol)
- {
- 	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
- 	struct tegra186_dspk *dspk = snd_soc_component_get_drvdata(codec);
- 
--	if (strstr(kcontrol->id.name, "FIFO Threshold"))
--		ucontrol->value.integer.value[0] = dspk->rx_fifo_th;
--	else if (strstr(kcontrol->id.name, "OSR Value"))
--		ucontrol->value.enumerated.item[0] = dspk->osr_val;
--	else if (strstr(kcontrol->id.name, "LR Polarity Select"))
--		ucontrol->value.enumerated.item[0] = dspk->lrsel;
--	else if (strstr(kcontrol->id.name, "Channel Select"))
--		ucontrol->value.enumerated.item[0] = dspk->ch_sel;
--	else if (strstr(kcontrol->id.name, "Mono To Stereo"))
--		ucontrol->value.enumerated.item[0] = dspk->mono_to_stereo;
--	else if (strstr(kcontrol->id.name, "Stereo To Mono"))
--		ucontrol->value.enumerated.item[0] = dspk->stereo_to_mono;
-+	ucontrol->value.integer.value[0] = dspk->rx_fifo_th;
- 
- 	return 0;
+--- a/include/linux/siphash.h
++++ b/include/linux/siphash.h
+@@ -27,9 +27,7 @@ static inline bool siphash_key_is_zero(c
  }
  
--static int tegra186_dspk_put_control(struct snd_kcontrol *kcontrol,
-+static int tegra186_dspk_put_fifo_th(struct snd_kcontrol *kcontrol,
- 				     struct snd_ctl_elem_value *ucontrol)
+ u64 __siphash_aligned(const void *data, size_t len, const siphash_key_t *key);
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u64 __siphash_unaligned(const void *data, size_t len, const siphash_key_t *key);
+-#endif
+ 
+ u64 siphash_1u64(const u64 a, const siphash_key_t *key);
+ u64 siphash_2u64(const u64 a, const u64 b, const siphash_key_t *key);
+@@ -82,10 +80,9 @@ static inline u64 ___siphash_aligned(con
+ static inline u64 siphash(const void *data, size_t len,
+ 			  const siphash_key_t *key)
  {
- 	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
- 	struct tegra186_dspk *dspk = snd_soc_component_get_drvdata(codec);
-+	int value = ucontrol->value.integer.value[0];
- 
--	if (strstr(kcontrol->id.name, "FIFO Threshold"))
--		dspk->rx_fifo_th = ucontrol->value.integer.value[0];
--	else if (strstr(kcontrol->id.name, "OSR Value"))
--		dspk->osr_val = ucontrol->value.enumerated.item[0];
--	else if (strstr(kcontrol->id.name, "LR Polarity Select"))
--		dspk->lrsel = ucontrol->value.enumerated.item[0];
--	else if (strstr(kcontrol->id.name, "Channel Select"))
--		dspk->ch_sel = ucontrol->value.enumerated.item[0];
--	else if (strstr(kcontrol->id.name, "Mono To Stereo"))
--		dspk->mono_to_stereo = ucontrol->value.enumerated.item[0];
--	else if (strstr(kcontrol->id.name, "Stereo To Mono"))
--		dspk->stereo_to_mono = ucontrol->value.enumerated.item[0];
-+	if (value == dspk->rx_fifo_th)
-+		return 0;
-+
-+	dspk->rx_fifo_th = value;
-+
-+	return 1;
-+}
-+
-+static int tegra186_dspk_get_osr_val(struct snd_kcontrol *kcontrol,
-+				     struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct tegra186_dspk *dspk = snd_soc_component_get_drvdata(codec);
-+
-+	ucontrol->value.enumerated.item[0] = dspk->osr_val;
-+
-+	return 0;
-+}
-+
-+static int tegra186_dspk_put_osr_val(struct snd_kcontrol *kcontrol,
-+				     struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct tegra186_dspk *dspk = snd_soc_component_get_drvdata(codec);
-+	unsigned int value = ucontrol->value.enumerated.item[0];
-+
-+	if (value == dspk->osr_val)
-+		return 0;
-+
-+	dspk->osr_val = value;
-+
-+	return 1;
-+}
-+
-+static int tegra186_dspk_get_pol_sel(struct snd_kcontrol *kcontrol,
-+				     struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct tegra186_dspk *dspk = snd_soc_component_get_drvdata(codec);
-+
-+	ucontrol->value.enumerated.item[0] = dspk->lrsel;
-+
-+	return 0;
-+}
-+
-+static int tegra186_dspk_put_pol_sel(struct snd_kcontrol *kcontrol,
-+				     struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct tegra186_dspk *dspk = snd_soc_component_get_drvdata(codec);
-+	unsigned int value = ucontrol->value.enumerated.item[0];
-+
-+	if (value == dspk->lrsel)
-+		return 0;
-+
-+	dspk->lrsel = value;
-+
-+	return 1;
-+}
-+
-+static int tegra186_dspk_get_ch_sel(struct snd_kcontrol *kcontrol,
-+				    struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct tegra186_dspk *dspk = snd_soc_component_get_drvdata(codec);
-+
-+	ucontrol->value.enumerated.item[0] = dspk->ch_sel;
-+
-+	return 0;
-+}
-+
-+static int tegra186_dspk_put_ch_sel(struct snd_kcontrol *kcontrol,
-+				    struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct tegra186_dspk *dspk = snd_soc_component_get_drvdata(codec);
-+	unsigned int value = ucontrol->value.enumerated.item[0];
-+
-+	if (value == dspk->ch_sel)
-+		return 0;
-+
-+	dspk->ch_sel = value;
-+
-+	return 1;
-+}
-+
-+static int tegra186_dspk_get_mono_to_stereo(struct snd_kcontrol *kcontrol,
-+					    struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct tegra186_dspk *dspk = snd_soc_component_get_drvdata(codec);
-+
-+	ucontrol->value.enumerated.item[0] = dspk->mono_to_stereo;
-+
-+	return 0;
-+}
-+
-+static int tegra186_dspk_put_mono_to_stereo(struct snd_kcontrol *kcontrol,
-+					    struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct tegra186_dspk *dspk = snd_soc_component_get_drvdata(codec);
-+	unsigned int value = ucontrol->value.enumerated.item[0];
-+
-+	if (value == dspk->mono_to_stereo)
-+		return 0;
-+
-+	dspk->mono_to_stereo = value;
-+
-+	return 1;
-+}
-+
-+static int tegra186_dspk_get_stereo_to_mono(struct snd_kcontrol *kcontrol,
-+					    struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct tegra186_dspk *dspk = snd_soc_component_get_drvdata(codec);
-+
-+	ucontrol->value.enumerated.item[0] = dspk->stereo_to_mono;
- 
- 	return 0;
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+-	if (!IS_ALIGNED((unsigned long)data, SIPHASH_ALIGNMENT))
++	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
++	    !IS_ALIGNED((unsigned long)data, SIPHASH_ALIGNMENT))
+ 		return __siphash_unaligned(data, len, key);
+-#endif
+ 	return ___siphash_aligned(data, len, key);
  }
  
-+static int tegra186_dspk_put_stereo_to_mono(struct snd_kcontrol *kcontrol,
-+					    struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct snd_soc_component *codec = snd_soc_kcontrol_component(kcontrol);
-+	struct tegra186_dspk *dspk = snd_soc_component_get_drvdata(codec);
-+	unsigned int value = ucontrol->value.enumerated.item[0];
-+
-+	if (value == dspk->stereo_to_mono)
-+		return 0;
-+
-+	dspk->stereo_to_mono = value;
-+
-+	return 1;
-+}
-+
- static int __maybe_unused tegra186_dspk_runtime_suspend(struct device *dev)
- {
- 	struct tegra186_dspk *dspk = dev_get_drvdata(dev);
-@@ -278,17 +390,19 @@ static const struct soc_enum tegra186_ds
- static const struct snd_kcontrol_new tegrat186_dspk_controls[] = {
- 	SOC_SINGLE_EXT("FIFO Threshold", SND_SOC_NOPM, 0,
- 		       TEGRA186_DSPK_RX_FIFO_DEPTH - 1, 0,
--		       tegra186_dspk_get_control, tegra186_dspk_put_control),
-+		       tegra186_dspk_get_fifo_th, tegra186_dspk_put_fifo_th),
- 	SOC_ENUM_EXT("OSR Value", tegra186_dspk_osr_enum,
--		     tegra186_dspk_get_control, tegra186_dspk_put_control),
-+		     tegra186_dspk_get_osr_val, tegra186_dspk_put_osr_val),
- 	SOC_ENUM_EXT("LR Polarity Select", tegra186_dspk_lrsel_enum,
--		     tegra186_dspk_get_control, tegra186_dspk_put_control),
-+		     tegra186_dspk_get_pol_sel, tegra186_dspk_put_pol_sel),
- 	SOC_ENUM_EXT("Channel Select", tegra186_dspk_ch_sel_enum,
--		     tegra186_dspk_get_control, tegra186_dspk_put_control),
-+		     tegra186_dspk_get_ch_sel, tegra186_dspk_put_ch_sel),
- 	SOC_ENUM_EXT("Mono To Stereo", tegra186_dspk_mono_conv_enum,
--		     tegra186_dspk_get_control, tegra186_dspk_put_control),
-+		     tegra186_dspk_get_mono_to_stereo,
-+		     tegra186_dspk_put_mono_to_stereo),
- 	SOC_ENUM_EXT("Stereo To Mono", tegra186_dspk_stereo_conv_enum,
--		     tegra186_dspk_get_control, tegra186_dspk_put_control),
-+		     tegra186_dspk_get_stereo_to_mono,
-+		     tegra186_dspk_put_stereo_to_mono),
- };
+@@ -96,10 +93,8 @@ typedef struct {
  
- static const struct snd_soc_component_driver tegra186_dspk_cmpnt = {
+ u32 __hsiphash_aligned(const void *data, size_t len,
+ 		       const hsiphash_key_t *key);
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u32 __hsiphash_unaligned(const void *data, size_t len,
+ 			 const hsiphash_key_t *key);
+-#endif
+ 
+ u32 hsiphash_1u32(const u32 a, const hsiphash_key_t *key);
+ u32 hsiphash_2u32(const u32 a, const u32 b, const hsiphash_key_t *key);
+@@ -135,10 +130,9 @@ static inline u32 ___hsiphash_aligned(co
+ static inline u32 hsiphash(const void *data, size_t len,
+ 			   const hsiphash_key_t *key)
+ {
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+-	if (!IS_ALIGNED((unsigned long)data, HSIPHASH_ALIGNMENT))
++	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
++	    !IS_ALIGNED((unsigned long)data, HSIPHASH_ALIGNMENT))
+ 		return __hsiphash_unaligned(data, len, key);
+-#endif
+ 	return ___hsiphash_aligned(data, len, key);
+ }
+ 
+--- a/lib/siphash.c
++++ b/lib/siphash.c
+@@ -49,6 +49,7 @@
+ 	SIPROUND; \
+ 	return (v0 ^ v1) ^ (v2 ^ v3);
+ 
++#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u64 __siphash_aligned(const void *data, size_t len, const siphash_key_t *key)
+ {
+ 	const u8 *end = data + len - (len % sizeof(u64));
+@@ -80,8 +81,8 @@ u64 __siphash_aligned(const void *data,
+ 	POSTAMBLE
+ }
+ EXPORT_SYMBOL(__siphash_aligned);
++#endif
+ 
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u64 __siphash_unaligned(const void *data, size_t len, const siphash_key_t *key)
+ {
+ 	const u8 *end = data + len - (len % sizeof(u64));
+@@ -113,7 +114,6 @@ u64 __siphash_unaligned(const void *data
+ 	POSTAMBLE
+ }
+ EXPORT_SYMBOL(__siphash_unaligned);
+-#endif
+ 
+ /**
+  * siphash_1u64 - compute 64-bit siphash PRF value of a u64
+@@ -250,6 +250,7 @@ EXPORT_SYMBOL(siphash_3u32);
+ 	HSIPROUND; \
+ 	return (v0 ^ v1) ^ (v2 ^ v3);
+ 
++#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u32 __hsiphash_aligned(const void *data, size_t len, const hsiphash_key_t *key)
+ {
+ 	const u8 *end = data + len - (len % sizeof(u64));
+@@ -280,8 +281,8 @@ u32 __hsiphash_aligned(const void *data,
+ 	HPOSTAMBLE
+ }
+ EXPORT_SYMBOL(__hsiphash_aligned);
++#endif
+ 
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u32 __hsiphash_unaligned(const void *data, size_t len,
+ 			 const hsiphash_key_t *key)
+ {
+@@ -313,7 +314,6 @@ u32 __hsiphash_unaligned(const void *dat
+ 	HPOSTAMBLE
+ }
+ EXPORT_SYMBOL(__hsiphash_unaligned);
+-#endif
+ 
+ /**
+  * hsiphash_1u32 - compute 64-bit hsiphash PRF value of a u32
+@@ -418,6 +418,7 @@ EXPORT_SYMBOL(hsiphash_4u32);
+ 	HSIPROUND; \
+ 	return v1 ^ v3;
+ 
++#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u32 __hsiphash_aligned(const void *data, size_t len, const hsiphash_key_t *key)
+ {
+ 	const u8 *end = data + len - (len % sizeof(u32));
+@@ -438,8 +439,8 @@ u32 __hsiphash_aligned(const void *data,
+ 	HPOSTAMBLE
+ }
+ EXPORT_SYMBOL(__hsiphash_aligned);
++#endif
+ 
+-#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+ u32 __hsiphash_unaligned(const void *data, size_t len,
+ 			 const hsiphash_key_t *key)
+ {
+@@ -461,7 +462,6 @@ u32 __hsiphash_unaligned(const void *dat
+ 	HPOSTAMBLE
+ }
+ EXPORT_SYMBOL(__hsiphash_unaligned);
+-#endif
+ 
+ /**
+  * hsiphash_1u32 - compute 32-bit hsiphash PRF value of a u32
 
 

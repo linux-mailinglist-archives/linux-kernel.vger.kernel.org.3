@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D22E046A5BE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:34:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5D346A5BC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 20:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348599AbhLFTiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 14:38:04 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4216 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348532AbhLFThx (ORCPT
+        id S1348525AbhLFThs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 14:37:48 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:42106 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240539AbhLFThr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 14:37:53 -0500
-Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J7D693Pgrz67NyB;
-        Tue,  7 Dec 2021 03:30:09 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 6 Dec 2021 20:34:20 +0100
-Received: from [10.47.82.161] (10.47.82.161) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 6 Dec
- 2021 19:34:19 +0000
-Subject: Re: [PATCH v2 0/3] blk-mq: Optimise blk_mq_queue_tag_busy_iter() for
- shared tags
-To:     Jens Axboe <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <ming.lei@redhat.com>, <kashyap.desai@broadcom.com>, <hare@suse.de>
-References: <1638794990-137490-1-git-send-email-john.garry@huawei.com>
- <67feacc8-3da7-90de-cc0c-f8b529f84297@kernel.dk>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <544f60f5-a367-a1a0-5a21-9708a7e8d2e1@huawei.com>
-Date:   Mon, 6 Dec 2021 19:34:05 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Mon, 6 Dec 2021 14:37:47 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id ECFB81C0B7A; Mon,  6 Dec 2021 20:34:16 +0100 (CET)
+Date:   Mon, 6 Dec 2021 20:34:15 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 4.4 00/52] 4.4.294-rc1 review
+Message-ID: <20211206193415.GA11359@duo.ucw.cz>
+References: <20211206145547.892668902@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <67feacc8-3da7-90de-cc0c-f8b529f84297@kernel.dk>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.82.161]
-X-ClientProxiedBy: lhreml721-chm.china.huawei.com (10.201.108.72) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="KsGdsel6WgEHnImy"
+Content-Disposition: inline
+In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/12/2021 19:07, Jens Axboe wrote:
-> On 12/6/21 5:49 AM, John Garry wrote:
->> In [0] Kashyap reports high CPU usage for blk_mq_queue_tag_busy_iter()
->> and callees for shared tags.
->>
->> Indeed blk_mq_queue_tag_busy_iter() would be less optimum for moving to
->> shared tags, but it was not optimum previously.
->>
->> This series optimises by having only a single iter (per regular and resv
->> tags) for the shared tags, instead of an iter per HW queue.
->>
->> [0]https://lore.kernel.org/linux-block/e4e92abbe9d52bcba6b8cc6c91c442cc@mail.gmail.com/
 
-Hi Jens,
+--KsGdsel6WgEHnImy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> The patch(es) are missing Fixes tags.
+Hi!
 
-The first two patches aren't fixes, but are general dev. As for the 
-last, it prob should go as a fix for 5.16, but I was not sure how you 
-would feel about that - it's not a trivial change, we're late in the 
-cycle, and Kashyap was happy for 5.17 .
+> This is the start of the stable review cycle for the 4.4.294 release.
+> There are 52 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-Let me know if the last could be accepted as a fix and I'll re-send 
-separately with a fixes tag.
+CIP testing did not find any problems here:
 
-Thanks,
-John
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+4.4.y
+
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+
+Best regards,
+                                                                Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--KsGdsel6WgEHnImy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYa5ltwAKCRAw5/Bqldv6
+8u14AJ9Qddy9R8uIVwEpR3DbPNpwtbvBwACgqjGBg56PG/e0PjEPx+MeaXpxqCM=
+=nacH
+-----END PGP SIGNATURE-----
+
+--KsGdsel6WgEHnImy--

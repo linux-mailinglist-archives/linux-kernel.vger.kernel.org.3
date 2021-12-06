@@ -2,184 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D99046A072
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2782A46A08C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388277AbhLFQEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:04:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
+        id S1445103AbhLFQFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:05:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442880AbhLFP4U (ORCPT
+        with ESMTP id S1388073AbhLFP7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:56:20 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30141C08E847;
-        Mon,  6 Dec 2021 07:40:35 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id n33-20020a05600c502100b0032fb900951eso10707231wmr.4;
-        Mon, 06 Dec 2021 07:40:35 -0800 (PST)
+        Mon, 6 Dec 2021 10:59:02 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC63C08EB3D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 07:42:02 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id de30so11583347qkb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 07:42:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IFFwKnk3cbAW8jNrxL+vFBZxoatRvN6SQuYnsDGyFVg=;
-        b=RPtBn2mfNXoGjx1ojHeBAnLO1qVUSVt60HBdLecCMRKrHAqjM9GVSFYjinL9lWiLaq
-         4rK1gjllQ07iaXREVS0oT3bUlViUpM8UTUlvjeeF7w/dlqhW6nfQS8q4i1HFNU8SScSf
-         i1a7+jP8rB7SiCAfyJLrvwHE7UfRCnaHZmVkGra3o9pUotIYfmaoS2SMwfvGgREGNbB0
-         /IKUC8NqxE9ayTwn6B8bsipozMJRhj1xdSpw1zd0UQgJReAE3jVskGDKXO5vNZLwmFXE
-         nkEY8Wfd4NT0CSGiQtA1NiIULZfrJKzAtODVwIwUsoZxSdsmHzIQqG7Z2iFQlZlFC7Jk
-         SpZQ==
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tv30VS8SeKlLP5GRLFT6OKvsf2r+6PIvjSUcqekajik=;
+        b=ideCG96xgNqked4pgV6jazA+7DiryfKsZEADsB50dAmAVoQWQ4q2pulV7OagAlM8SQ
+         6phVT+EG+Hp4unV7lOISRD0QAojl3NXKQhZh56HGo3Qvce3nSBnzaQ5Evov2KGCMWzyW
+         PF9wp7D5SaIhcxVR5jXomZ4VTfCin+W8shzA85ab73pCx479nJaDzJP1WTngj3RU3FVO
+         KjUwmnkL6NwBn9rWVhTfvpIDgGXeyRyzwygHgoebHNNbA0Oc228naVW7eQ/7v1E0s32p
+         ZL42Eh/1KgCVtQ2e2Hv9nn/V68GyKo0abJRtDL+XtYZr524pDxNKLmo5BlYEmHrtgiMq
+         lBSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IFFwKnk3cbAW8jNrxL+vFBZxoatRvN6SQuYnsDGyFVg=;
-        b=WYdNW/Ar9nSdBZaef2NLNz5JYBi/885VbgjA6fKOsDAvL+9037+6rRj7KBtG9ZTMXw
-         XEmiRFfxCWBMYNeei2Ezmv/apLCZhtALDPNp6GwzenkNc35aBfkBzmfT43SJZQ/H4lsr
-         7GDAY0NQdfRtAun2dn2ZONj+qyYvbn8Cgw9YUdhsz+MGt1U9rp3NoRa0u/QOCPZRn9kE
-         FuWiYK95HslbjwH2Qsne2vjxuyF6VVBUYD4CByrwqGynCn4ydUVqaXG7JnJhZEd/f9Vf
-         7A/YtK7hK7wuxc62zmzbIOBBBVbIlSePXy9+2KeIMa2ZYyKf+SdY1UwiQbwsDwoBNMb6
-         4Rvw==
-X-Gm-Message-State: AOAM533yOZOB4X4Y8leWBE2iPPI0Ixzrzdtw/d6poP0hsiky5YibgwGJ
-        0UfPXn3cHQnrFHJNE1kGfGM=
-X-Google-Smtp-Source: ABdhPJwIK1sZU+XX7uJLcxtVSFOv7RHxMzHCbd/T22a1Vi+8Lo/paQlu7PYjqZSC8rSBYq+OerekTw==
-X-Received: by 2002:a05:600c:154f:: with SMTP id f15mr39332252wmg.86.1638805233630;
-        Mon, 06 Dec 2021 07:40:33 -0800 (PST)
-Received: from localhost (pd9e51d39.dip0.t-ipconnect.de. [217.229.29.57])
-        by smtp.gmail.com with ESMTPSA id u15sm10643561wmq.13.2021.12.06.07.40.32
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tv30VS8SeKlLP5GRLFT6OKvsf2r+6PIvjSUcqekajik=;
+        b=p2UUT99MHZwPMdOm/47rVCiV6dkX7l2fWDT+SJYUeP61MXTDEI7v+tbFw9SJu1wZmM
+         MLOrCyGCO+jHSMdPI9DwqpKRfZEekSmCDv4lxeiD7qCBlKKfsn1Fzi1Pnx6Vk+oE6vfb
+         Wrt7WtcDQ5xG2i+q2dqD1orX5s1gGpMnqAT2gz2We5HmQq3TQsnqzJZ3YultdedocP/M
+         dQbhWka/U0op6i1Kvd84JvUhoO84YsEl1fuaprqWv2aZfMuGMLNvtUx+prdC/mI4zZLs
+         K/fR+ZvSL8FwFAWcOL9KbGAQeeHj/e21gYTOFWPye8GLHGJ71uGfjkIwTDAku8mnWjhS
+         8Xzw==
+X-Gm-Message-State: AOAM532iVznFkTolVaGmEqhLtfg4Vq863AadE7xyB+pEzteiEIbfQWA7
+        sLyy7/iMQfJG0seDLe6y8dLj6g==
+X-Google-Smtp-Source: ABdhPJw+NV2Qe6hp/inCJIC+GhFU4fEbYd9SO3EFcw0nOYD9MI9icSOOAhJ6rOWIykGB0U3g02NFxA==
+X-Received: by 2002:a37:3c4:: with SMTP id 187mr33417527qkd.755.1638805321335;
+        Mon, 06 Dec 2021 07:42:01 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id e20sm7744887qty.14.2021.12.06.07.42.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 07:40:33 -0800 (PST)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: regulators: Document Tegra regulator coupling in json-schema
-Date:   Mon,  6 Dec 2021 16:40:32 +0100
-Message-Id: <20211206154032.227938-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        Mon, 06 Dec 2021 07:42:00 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1muG7r-008xwn-TM; Mon, 06 Dec 2021 11:41:59 -0400
+Date:   Mon, 6 Dec 2021 11:41:59 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     syzbot <syzbot+c94a3675a626f6333d74@syzkaller.appspotmail.com>
+Cc:     avihaih@nvidia.com, dledford@redhat.com, haakon.bugge@oracle.com,
+        leon@kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] BUG: corrupted list in rdma_listen (2)
+Message-ID: <20211206154159.GP5112@ziepe.ca>
+References: <000000000000c3eace05d24f0189@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000c3eace05d24f0189@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+On Sat, Dec 04, 2021 at 01:54:17AM -0800, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    bf152b0b41dc Merge tag 'for_linus' of git://git.kernel.org..
 
-Move the NVIDIA Tegra regulator coupling bindings from the free-form
-text format into the existing json-schema file for regulators.
+??
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- .../nvidia,tegra-regulators-coupling.txt      | 65 -------------------
- .../bindings/regulator/regulator.yaml         | 22 +++++++
- 2 files changed, 22 insertions(+), 65 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/regulator/nvidia,tegra-regulators-coupling.txt
+This commit is nearly a year old?
 
-diff --git a/Documentation/devicetree/bindings/regulator/nvidia,tegra-regulators-coupling.txt b/Documentation/devicetree/bindings/regulator/nvidia,tegra-regulators-coupling.txt
-deleted file mode 100644
-index 4bf2dbf7c6cc..000000000000
---- a/Documentation/devicetree/bindings/regulator/nvidia,tegra-regulators-coupling.txt
-+++ /dev/null
-@@ -1,65 +0,0 @@
--NVIDIA Tegra Regulators Coupling
--================================
--
--NVIDIA Tegra SoC's have a mandatory voltage-coupling between regulators.
--Thus on Tegra20 there are 3 coupled regulators and on NVIDIA Tegra30
--there are 2.
--
--Tegra20 voltage coupling
--------------------------
--
--On Tegra20 SoC's there are 3 coupled regulators: CORE, RTC and CPU.
--The CORE and RTC voltages shall be in a range of 170mV from each other
--and they both shall be higher than the CPU voltage by at least 120mV.
--
--Tegra30 voltage coupling
--------------------------
--
--On Tegra30 SoC's there are 2 coupled regulators: CORE and CPU. The CORE
--and CPU voltages shall be in a range of 300mV from each other and CORE
--voltage shall be higher than the CPU by N mV, where N depends on the CPU
--voltage.
--
--Required properties:
--- nvidia,tegra-core-regulator: Boolean property that designates regulator
--  as the "Core domain" voltage regulator.
--- nvidia,tegra-rtc-regulator: Boolean property that designates regulator
--  as the "RTC domain" voltage regulator.
--- nvidia,tegra-cpu-regulator: Boolean property that designates regulator
--  as the "CPU domain" voltage regulator.
--
--Example:
--
--	pmic {
--		regulators {
--			core_vdd_reg: core {
--				regulator-name = "vdd_core";
--				regulator-min-microvolt = <950000>;
--				regulator-max-microvolt = <1300000>;
--				regulator-coupled-with = <&rtc_vdd_reg &cpu_vdd_reg>;
--				regulator-coupled-max-spread = <170000 550000>;
--
--				nvidia,tegra-core-regulator;
--			};
--
--			rtc_vdd_reg: rtc {
--				regulator-name = "vdd_rtc";
--				regulator-min-microvolt = <950000>;
--				regulator-max-microvolt = <1300000>;
--				regulator-coupled-with = <&core_vdd_reg &cpu_vdd_reg>;
--				regulator-coupled-max-spread = <170000 550000>;
--
--				nvidia,tegra-rtc-regulator;
--			};
--
--			cpu_vdd_reg: cpu {
--				regulator-name = "vdd_cpu";
--				regulator-min-microvolt = <750000>;
--				regulator-max-microvolt = <1125000>;
--				regulator-coupled-with = <&core_vdd_reg &rtc_vdd_reg>;
--				regulator-coupled-max-spread = <550000 550000>;
--
--				nvidia,tegra-cpu-regulator;
--			};
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/regulator/regulator.yaml b/Documentation/devicetree/bindings/regulator/regulator.yaml
-index ed560ee8714e..14f269f1e877 100644
---- a/Documentation/devicetree/bindings/regulator/regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/regulator.yaml
-@@ -224,6 +224,28 @@ properties:
-     description: Maximum difference between current and target voltages
-       that can be changed safely in a single step.
- 
-+  # NVIDIA Tegra SoC's have a mandatory voltage-coupling between regulators. Thus on Tegra20 there
-+  # are 3 coupled regulators and on NVIDIA Tegra30 there are 2.
-+  #
-+  # The 3 coupled regulators on Tegra20 are: CORE, RTC and CPU. The CORE and RTC voltages shall be
-+  # in a range of 170 mV of each other and they both shall be higher than the CPU voltage by at
-+  # least 120 mV.
-+  #
-+  # The 2 coupled regulators on Tegra30 are: CORE and CPU. The CORE and CPU voltages shall be in
-+  # a range of 300 mV of each other and CORE voltage shall be higher than the CPU by N mV, where
-+  # N depends on the CPU voltage.
-+  nvidia,tegra-core-regulator:
-+    $ref: "/schemas/types.yaml#/definitions/flag"
-+    description: if present, designates the regulator as the "CORE domain" voltage regulator
-+
-+  nvidia,tegra-rtc-regulator:
-+    $ref: "/schemas/types.yaml#/definitions/flag"
-+    description: if present, designates the regulator as the "RTC domain" voltage regulator
-+
-+  nvidia,tegra-cpu-regulator:
-+    $ref: "/schemas/types.yaml#/definitions/flag"
-+    description: if present, designates the regulator as the "CPU domain" voltage regulator
-+
- patternProperties:
-   ".*-supply$":
-     description: Input supply phandle(s) for this node
--- 
-2.33.1
+$ git describe --contains bf152b0b41dc
+v5.12-rc4~28
 
+I think this has probably been fixed since, why did a report for such
+an old kernel get sent?
+
+Jason

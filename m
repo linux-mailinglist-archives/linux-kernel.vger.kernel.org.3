@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6BE469AA5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:06:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CD1469CEF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345861AbhLFPJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:09:25 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40488 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345833AbhLFPHX (ORCPT
+        id S1385966AbhLFP0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:26:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358554AbhLFPQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:07:23 -0500
+        Mon, 6 Dec 2021 10:16:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8760C08EC6E;
+        Mon,  6 Dec 2021 07:09:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B487B81123;
-        Mon,  6 Dec 2021 15:03:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9215DC341C1;
-        Mon,  6 Dec 2021 15:03:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 474E561328;
+        Mon,  6 Dec 2021 15:09:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DA20C341C2;
+        Mon,  6 Dec 2021 15:09:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803031;
-        bh=M8HEae/UF5ZV1fSaVZ5VZW210U26HTBby91n/IkM/kk=;
+        s=korg; t=1638803367;
+        bh=DC5LAuL4GwStZqv8zR8y8+4n45rj059UYTyBZoM2Rco=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KW9BxjA4K4CSR/04zjn9Vo6a41A7VPPhVi+6LnWhk5a4IXCounzZY+xgwkhVVc7BK
-         q3U58QGKsPyf6tcDNjcupVnL4h3nwvnEMfO+wzhUPKRN+C6ELBPohr8n86Cm8Rkn5d
-         aqd5vctPRsHyFlYmcYYjrkeB+J8vYaSqkgROYIbM=
+        b=Tgc8f61GGNDAqdedVrH8ZVt7Lna0kNgLCMmMK6ljIqcWeLqvgqSwgMDJyIcmlh5lZ
+         eyEvHTDPowZ6u2DtOg5P0cGf3eTrYdcFB6AZShn6+KU4EoJPr6MrtJHfqrW6SA2GUH
+         EEXQcOxbkfsGYBFxwOzu4AdO3PtrcJVz2qSTv/NM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [PATCH 4.9 50/62] sata_fsl: fix UAF in sata_fsl_port_stop when rmmod sata_fsl
-Date:   Mon,  6 Dec 2021 15:56:33 +0100
-Message-Id: <20211206145550.938064733@linuxfoundation.org>
+        stable@vger.kernel.org, Stephen Suryaputra <ssuryaextr@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.19 17/48] vrf: Reset IPCB/IP6CB when processing outbound pkts in vrf dev xmit
+Date:   Mon,  6 Dec 2021 15:56:34 +0100
+Message-Id: <20211206145549.442413029@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145549.155163074@linuxfoundation.org>
-References: <20211206145549.155163074@linuxfoundation.org>
+In-Reply-To: <20211206145548.859182340@linuxfoundation.org>
+References: <20211206145548.859182340@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,98 +49,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baokun Li <libaokun1@huawei.com>
+From: Stephen Suryaputra <ssuryaextr@gmail.com>
 
-commit 6c8ad7e8cf29eb55836e7a0215f967746ab2b504 upstream.
+commit ee201011c1e1563c114a55c86eb164b236f18e84 upstream.
 
-When the `rmmod sata_fsl.ko` command is executed in the PPC64 GNU/Linux,
-a bug is reported:
- ==================================================================
- BUG: Unable to handle kernel data access on read at 0x80000800805b502c
- Oops: Kernel access of bad area, sig: 11 [#1]
- NIP [c0000000000388a4] .ioread32+0x4/0x20
- LR [80000000000c6034] .sata_fsl_port_stop+0x44/0xe0 [sata_fsl]
- Call Trace:
-  .free_irq+0x1c/0x4e0 (unreliable)
-  .ata_host_stop+0x74/0xd0 [libata]
-  .release_nodes+0x330/0x3f0
-  .device_release_driver_internal+0x178/0x2c0
-  .driver_detach+0x64/0xd0
-  .bus_remove_driver+0x70/0xf0
-  .driver_unregister+0x38/0x80
-  .platform_driver_unregister+0x14/0x30
-  .fsl_sata_driver_exit+0x18/0xa20 [sata_fsl]
-  .__se_sys_delete_module+0x1ec/0x2d0
-  .system_call_exception+0xfc/0x1f0
-  system_call_common+0xf8/0x200
- ==================================================================
+IPCB/IP6CB need to be initialized when processing outbound v4 or v6 pkts
+in the codepath of vrf device xmit function so that leftover garbage
+doesn't cause futher code that uses the CB to incorrectly process the
+pkt.
 
-The triggering of the BUG is shown in the following stack:
+One occasion of the issue might occur when MPLS route uses the vrf
+device as the outgoing device such as when the route is added using "ip
+-f mpls route add <label> dev <vrf>" command.
 
-driver_detach
-  device_release_driver_internal
-    __device_release_driver
-      drv->remove(dev) --> platform_drv_remove/platform_remove
-        drv->remove(dev) --> sata_fsl_remove
-          iounmap(host_priv->hcr_base);			<---- unmap
-          kfree(host_priv);                             <---- free
-      devres_release_all
-        release_nodes
-          dr->node.release(dev, dr->data) --> ata_host_stop
-            ap->ops->port_stop(ap) --> sata_fsl_port_stop
-                ioread32(hcr_base + HCONTROL)           <---- UAF
-            host->ops->host_stop(host)
+The problems seems to exist since day one. Hence I put the day one
+commits on the Fixes tags.
 
-The iounmap(host_priv->hcr_base) and kfree(host_priv) functions should
-not be executed in drv->remove. These functions should be executed in
-host_stop after port_stop. Therefore, we move these functions to the
-new function sata_fsl_host_stop and bind the new function to host_stop.
-
-Fixes: faf0b2e5afe7 ("drivers/ata: add support to Freescale 3.0Gbps SATA Controller")
+Fixes: 193125dbd8eb ("net: Introduce VRF device driver")
+Fixes: 35402e313663 ("net: Add IPv6 support to VRF device")
 Cc: stable@vger.kernel.org
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
-Reviewed-by: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Stephen Suryaputra <ssuryaextr@gmail.com>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Link: https://lore.kernel.org/r/20211130162637.3249-1-ssuryaextr@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ata/sata_fsl.c |   12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/net/vrf.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/ata/sata_fsl.c
-+++ b/drivers/ata/sata_fsl.c
-@@ -1406,6 +1406,14 @@ static int sata_fsl_init_controller(stru
- 	return 0;
- }
+--- a/drivers/net/vrf.c
++++ b/drivers/net/vrf.c
+@@ -210,6 +210,7 @@ static netdev_tx_t vrf_process_v6_outbou
+ 	/* strip the ethernet header added for pass through VRF device */
+ 	__skb_pull(skb, skb_network_offset(skb));
  
-+static void sata_fsl_host_stop(struct ata_host *host)
-+{
-+        struct sata_fsl_host_priv *host_priv = host->private_data;
-+
-+        iounmap(host_priv->hcr_base);
-+        kfree(host_priv);
-+}
-+
- /*
-  * scsi mid-layer and libata interface structures
-  */
-@@ -1438,6 +1446,8 @@ static struct ata_port_operations sata_f
- 	.port_start = sata_fsl_port_start,
- 	.port_stop = sata_fsl_port_stop,
++	memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
+ 	ret = vrf_ip6_local_out(net, skb->sk, skb);
+ 	if (unlikely(net_xmit_eval(ret)))
+ 		dev->stats.tx_errors++;
+@@ -291,6 +292,7 @@ static netdev_tx_t vrf_process_v4_outbou
+ 					       RT_SCOPE_LINK);
+ 	}
  
-+	.host_stop      = sata_fsl_host_stop,
-+
- 	.pmp_attach = sata_fsl_pmp_attach,
- 	.pmp_detach = sata_fsl_pmp_detach,
- };
-@@ -1572,8 +1582,6 @@ static int sata_fsl_remove(struct platfo
- 	ata_host_detach(host);
- 
- 	irq_dispose_mapping(host_priv->irq);
--	iounmap(host_priv->hcr_base);
--	kfree(host_priv);
- 
- 	return 0;
- }
++	memset(IPCB(skb), 0, sizeof(*IPCB(skb)));
+ 	ret = vrf_ip_local_out(dev_net(skb_dst(skb)->dev), skb->sk, skb);
+ 	if (unlikely(net_xmit_eval(ret)))
+ 		vrf_dev->stats.tx_errors++;
 
 

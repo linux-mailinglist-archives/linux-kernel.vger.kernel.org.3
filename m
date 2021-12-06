@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC65469C60
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C030469E9F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356278AbhLFPV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:21:59 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48838 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356991AbhLFPPv (ORCPT
+        id S1389806AbhLFPlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:41:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1386630AbhLFP0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:15:51 -0500
+        Mon, 6 Dec 2021 10:26:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB944C08E840;
+        Mon,  6 Dec 2021 07:16:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 18375B8101B;
-        Mon,  6 Dec 2021 15:12:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 601F0C341C6;
-        Mon,  6 Dec 2021 15:12:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 620ADB8111A;
+        Mon,  6 Dec 2021 15:16:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D84ABC341C2;
+        Mon,  6 Dec 2021 15:16:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803540;
-        bh=8n2IBl+k1S/Bq+MjR5lhlxC6Vz+D8xdsiTdby2ApKEc=;
+        s=korg; t=1638803810;
+        bh=EjcFz6qOTfL7XRZQV2qa8K6VpXSHrW5FFEDptSCUrtQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RaQpQB2+DwLT2c2joNXh7UEcv7eoXRi2Xp/vFW5F3vP53v4rIwdfaaCwiBVQjvgWR
-         4u6hCczCwr7BAsBII38G3PMz5jLCf2xhy3SxmKshEB+5ejLP+7VRwuVZLfcFcBYtKB
-         mNuYkI0UyWCoNP3zCfVstNS9xJgYZUfCXZ65sj2I=
+        b=niH6rzAdIcm3oIJ7rfVXUMTLzJhSitr0z4Voab5TB6B5CC3y2TloUC2lXIczqTQpB
+         57vaybGgXXrNAxZmMnVUfgP4zE0Yio9beUOlJI7nxhFZxn69OXunwaeIbCy6l+9nsb
+         WOgCjkM10PWmjsPstt1jMPA73STrjOkbPVytbduk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xing Song <xing.song@mediatek.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 07/70] mac80211: do not access the IV when it was stripped
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.10 054/130] wireguard: allowedips: add missing __rcu annotation to satisfy sparse
 Date:   Mon,  6 Dec 2021 15:56:11 +0100
-Message-Id: <20211206145552.165501354@linuxfoundation.org>
+Message-Id: <20211206145601.554850261@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145551.909846023@linuxfoundation.org>
-References: <20211206145551.909846023@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,39 +48,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xing Song <xing.song@mediatek.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-[ Upstream commit 77dfc2bc0bb4b8376ecd7a430f27a4a8fff6a5a0 ]
+commit ae9287811ba75571cd69505d50ab0e612ace8572 upstream.
 
-ieee80211_get_keyid() will return false value if IV has been stripped,
-such as return 0 for IP/ARP frames due to LLC header, and return -EINVAL
-for disassociation frames due to its length... etc. Don't try to access
-it if it's not present.
+A __rcu annotation got lost during refactoring, which caused sparse to
+become enraged.
 
-Signed-off-by: Xing Song <xing.song@mediatek.com>
-Link: https://lore.kernel.org/r/20211101024657.143026-1-xing.song@mediatek.com
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: bf7b042dc62a ("wireguard: allowedips: free empty intermediate nodes when removing single node")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mac80211/rx.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/wireguard/allowedips.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/mac80211/rx.c b/net/mac80211/rx.c
-index c7e6bf7c22c78..282bf336b15a4 100644
---- a/net/mac80211/rx.c
-+++ b/net/mac80211/rx.c
-@@ -1918,7 +1918,8 @@ ieee80211_rx_h_decrypt(struct ieee80211_rx_data *rx)
- 		int keyid = rx->sta->ptk_idx;
- 		sta_ptk = rcu_dereference(rx->sta->ptk[keyid]);
+--- a/drivers/net/wireguard/allowedips.c
++++ b/drivers/net/wireguard/allowedips.c
+@@ -163,7 +163,7 @@ static bool node_placement(struct allowe
+ 	return exact;
+ }
  
--		if (ieee80211_has_protected(fc)) {
-+		if (ieee80211_has_protected(fc) &&
-+		    !(status->flag & RX_FLAG_IV_STRIPPED)) {
- 			cs = rx->sta->cipher_scheme;
- 			keyid = ieee80211_get_keyid(rx->skb, cs);
- 
--- 
-2.33.0
-
+-static inline void connect_node(struct allowedips_node **parent, u8 bit, struct allowedips_node *node)
++static inline void connect_node(struct allowedips_node __rcu **parent, u8 bit, struct allowedips_node *node)
+ {
+ 	node->parent_bit_packed = (unsigned long)parent | bit;
+ 	rcu_assign_pointer(*parent, node);
 
 

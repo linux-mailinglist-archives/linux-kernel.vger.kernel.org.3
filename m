@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE0B469B23
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:09:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 593ED469D26
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347369AbhLFPNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:13:07 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57586 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347107AbhLFPIF (ORCPT
+        id S1354630AbhLFP21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:28:27 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51008 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356989AbhLFPSU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:08:05 -0500
+        Mon, 6 Dec 2021 10:18:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B170B61321;
-        Mon,  6 Dec 2021 15:04:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98C1CC341C2;
-        Mon,  6 Dec 2021 15:04:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5002AB810E7;
+        Mon,  6 Dec 2021 15:14:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96BA6C341C5;
+        Mon,  6 Dec 2021 15:14:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638803076;
-        bh=eL40mdcuwcwg14dX1YLltQCctoZvMh7RDj71nkwNu9A=;
+        s=korg; t=1638803689;
+        bh=/Z7CNgucd+B3GlywSkB//6+/YCEKR6UbH4HGynuhu+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uyR2wv4HUXJZWh7xlC4GCdM+tdeqtAwy4dBjri/fqqbexGz/lhc0m1yS5Ex+4ro6J
-         9Y4+7WlHaZ5vhPsliwfeDrajpmbS0hc2r/LJ3Qg8PoMgilycgwEURP2ixeY63q9Jxa
-         85t9C4zVh8VMhjxcb2Gg66yzlg44BfKurXW7v3fM=
+        b=08oDPrCAy0TSQlc5zenzZLWGUU6GvNCwm/gt1Qo5DmSZeSLhBP8/u8XbV25Ts+Jb/
+         TO28Tz3ofCc7Paoh5pzTshAmCL8J9mI9k0LUTUbmGVbvkUuHsgPN1Hg/98Dk2fAVtm
+         2yQfhaThwSwUfDfdzGBwXvEQd/hGO9h2nPSfNQhA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
+        stable@vger.kernel.org, liuguoqiang <liuguoqiang@uniontech.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 020/106] ARM: socfpga: Fix crash with CONFIG_FORTIRY_SOURCE
-Date:   Mon,  6 Dec 2021 15:55:28 +0100
-Message-Id: <20211206145556.069885456@linuxfoundation.org>
+Subject: [PATCH 5.10 012/130] net: return correct error code
+Date:   Mon,  6 Dec 2021 15:55:29 +0100
+Message-Id: <20211206145600.043504956@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211206145555.386095297@linuxfoundation.org>
-References: <20211206145555.386095297@linuxfoundation.org>
+In-Reply-To: <20211206145559.607158688@linuxfoundation.org>
+References: <20211206145559.607158688@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,79 +46,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: liuguoqiang <liuguoqiang@uniontech.com>
 
-[ Upstream commit 187bea472600dcc8d2eb714335053264dd437172 ]
+[ Upstream commit 6def480181f15f6d9ec812bca8cbc62451ba314c ]
 
-When CONFIG_FORTIFY_SOURCE is set, memcpy() checks the potential
-buffer overflow and panics.  The code in sofcpga bootstrapping
-contains the memcpy() calls are mistakenly translated as the shorter
-size, hence it triggers a panic as if it were overflowing.
+When kmemdup called failed and register_net_sysctl return NULL, should
+return ENOMEM instead of ENOBUFS
 
-This patch changes the secondary_trampoline and *_end definitions
-to arrays for avoiding the false-positive crash above.
-
-Fixes: 9c4566a117a6 ("ARM: socfpga: Enable SMP for socfpga")
-Suggested-by: Kees Cook <keescook@chromium.org>
-Buglink: https://bugzilla.suse.com/show_bug.cgi?id=1192473
-Link: https://lore.kernel.org/r/20211117193244.31162-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Signed-off-by: liuguoqiang <liuguoqiang@uniontech.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-socfpga/core.h    | 2 +-
- arch/arm/mach-socfpga/platsmp.c | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ net/ipv4/devinet.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-socfpga/core.h b/arch/arm/mach-socfpga/core.h
-index 65e1817d8afe6..692a287a8712d 100644
---- a/arch/arm/mach-socfpga/core.h
-+++ b/arch/arm/mach-socfpga/core.h
-@@ -48,7 +48,7 @@ extern void __iomem *sdr_ctl_base_addr;
- u32 socfpga_sdram_self_refresh(u32 sdr_base);
- extern unsigned int socfpga_sdram_self_refresh_sz;
+diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
+index 7c18597774297..148ef484a66ce 100644
+--- a/net/ipv4/devinet.c
++++ b/net/ipv4/devinet.c
+@@ -2582,7 +2582,7 @@ static int __devinet_sysctl_register(struct net *net, char *dev_name,
+ free:
+ 	kfree(t);
+ out:
+-	return -ENOBUFS;
++	return -ENOMEM;
+ }
  
--extern char secondary_trampoline, secondary_trampoline_end;
-+extern char secondary_trampoline[], secondary_trampoline_end[];
- 
- extern unsigned long socfpga_cpu1start_addr;
- 
-diff --git a/arch/arm/mach-socfpga/platsmp.c b/arch/arm/mach-socfpga/platsmp.c
-index 0ee76772b5074..a272999ce04b9 100644
---- a/arch/arm/mach-socfpga/platsmp.c
-+++ b/arch/arm/mach-socfpga/platsmp.c
-@@ -31,14 +31,14 @@
- 
- static int socfpga_boot_secondary(unsigned int cpu, struct task_struct *idle)
- {
--	int trampoline_size = &secondary_trampoline_end - &secondary_trampoline;
-+	int trampoline_size = secondary_trampoline_end - secondary_trampoline;
- 
- 	if (socfpga_cpu1start_addr) {
- 		/* This will put CPU #1 into reset. */
- 		writel(RSTMGR_MPUMODRST_CPU1,
- 		       rst_manager_base_addr + SOCFPGA_RSTMGR_MODMPURST);
- 
--		memcpy(phys_to_virt(0), &secondary_trampoline, trampoline_size);
-+		memcpy(phys_to_virt(0), secondary_trampoline, trampoline_size);
- 
- 		writel(__pa_symbol(secondary_startup),
- 		       sys_manager_base_addr + (socfpga_cpu1start_addr & 0x000000ff));
-@@ -56,12 +56,12 @@ static int socfpga_boot_secondary(unsigned int cpu, struct task_struct *idle)
- 
- static int socfpga_a10_boot_secondary(unsigned int cpu, struct task_struct *idle)
- {
--	int trampoline_size = &secondary_trampoline_end - &secondary_trampoline;
-+	int trampoline_size = secondary_trampoline_end - secondary_trampoline;
- 
- 	if (socfpga_cpu1start_addr) {
- 		writel(RSTMGR_MPUMODRST_CPU1, rst_manager_base_addr +
- 		       SOCFPGA_A10_RSTMGR_MODMPURST);
--		memcpy(phys_to_virt(0), &secondary_trampoline, trampoline_size);
-+		memcpy(phys_to_virt(0), secondary_trampoline, trampoline_size);
- 
- 		writel(__pa_symbol(secondary_startup),
- 		       sys_manager_base_addr + (socfpga_cpu1start_addr & 0x00000fff));
+ static void __devinet_sysctl_unregister(struct net *net,
 -- 
 2.33.0
 

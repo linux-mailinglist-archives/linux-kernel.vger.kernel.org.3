@@ -2,66 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 878B54690A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7B14690A6
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 08:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238274AbhLFHIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 02:08:18 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35240 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238261AbhLFHIR (ORCPT
+        id S238292AbhLFHMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 02:12:07 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:33929 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238261AbhLFHMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 02:08:17 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 6 Dec 2021 02:12:07 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11EF0B80FAE;
-        Mon,  6 Dec 2021 07:04:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E298EC341C2;
-        Mon,  6 Dec 2021 07:04:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638774286;
-        bh=CsAT3BKK6v7c59EIZatHrdaRG9z4nq5/YZXAeBiLxMg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eHUjvzQQY3rfYDtAyN8U3++DMYdpI6njFb3CF6YCZn70KveEaEP2UjFN/FUhd0PpA
-         Qc6q/msFUfDCBBjU/y11pfIAveG/MP6jv7JxXzgyfrUJeL58U9AOE4m3K8KOGIX6Vb
-         EJuZvRJXE/AAfyCkZw9VwMXeHyitOkTsLaN70SzA=
-Date:   Mon, 6 Dec 2021 08:04:41 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tony Huang =?utf-8?B?6buD5oe35Y6a?= <tony.huang@sunplus.com>
-Cc:     Tony Huang <tonyhuang.sunplus@gmail.com>,
-        "derek.kiernan@xilinx.com" <derek.kiernan@xilinx.com>,
-        "dragan.cvetic@xilinx.com" <dragan.cvetic@xilinx.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Wells Lu =?utf-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Subject: Re: [PATCH v2 2/2] misc: Add iop driver for Sunplus SP7021
-Message-ID: <Ya22CT1pRO6NCYrC@kroah.com>
-References: <cover.1638499659.git.tonyhuang.sunplus@gmail.com>
- <9bb79f74ff1b08a5f9a1f6707b3b41484506468a.1638499659.git.tonyhuang.sunplus@gmail.com>
- <Yanzu7/J75n/OCUY@kroah.com>
- <4bd765590e3e4a5da2cf79be921bac5b@sphcmbx02.sunplus.com.tw>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J6vfY365mz4xgq;
+        Mon,  6 Dec 2021 18:08:37 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638774517;
+        bh=74ug/3gxfB019QMgyEoJwVlEbtheSzN665REw1NK2i0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LDibWAtIzGieSUtIOTeWfCIwiEnFPTpC9WKUsn64NlEixffAPNfapIu8210Rqiwgs
+         XMIaT2R2PidnwVpMIMUugQ8h7TQWfYD85uDRpcp5isIbjqXqeDN5mXEWEUirY5aH7O
+         Vekrk2z5pShPsmcjMhxrNFIdNqYBg5HqaxcNrHCoov5laa1qa58zB9WSY324Txj68V
+         6FdL1qaTvamQ7i0jAyk/Fas9Te3WoneA28Xk0ljGSLJxzg3GXD/yj0ks8VSYkN6jUL
+         Zx+tNQcv+TR1RgxUrPcTcLLWyL2LWiAw8qIJ/nMVBX9zwxbWOE7El4lhoAxUetInId
+         g7j/9kcMb6oBg==
+Date:   Mon, 6 Dec 2021 18:08:36 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the fscache tree
+Message-ID: <20211206180836.45cf22cf@canb.auug.org.au>
+In-Reply-To: <20211130152753.6899aa0c@canb.auug.org.au>
+References: <20211130152753.6899aa0c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4bd765590e3e4a5da2cf79be921bac5b@sphcmbx02.sunplus.com.tw>
+Content-Type: multipart/signed; boundary="Sig_/olqxnyn6Qcc3t0fNb2ckReG";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 03:50:03AM +0000, Tony Huang 黃懷厚 wrote:
-> > Also, no need for a .h file for a driver that only has one .c file.
-> > 
-> 
-> I need to keep sunglus_iop.h. Other files will use
-> sp_iop_platform_driver_poweroff(void) in poweroff flow.
+--Sig_/olqxnyn6Qcc3t0fNb2ckReG
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-What other files?  That is not included here, nor should other drivers
-be making that call, use the normal poweroff logic.
+Hi all,
 
-thanks,
+On Tue, 30 Nov 2021 15:27:53 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the fscache tree, today's linux-next build (arm64 defconfig)
+> produced this warning:
+>=20
+> fs/9p/vfs_addr.c: In function 'v9fs_release_page':
+> fs/9p/vfs_addr.c:140:16: warning: unused variable 'inode' [-Wunused-varia=
+ble]
+>   140 |  struct inode *inode =3D folio_inode(folio);
+>       |                ^~~~~
+>=20
+> Introduced by commit
+>=20
+>   12b841dc2cfd ("9p: Copy local writes to the cache when writing to the s=
+erver")
 
-greg k-h
+Still getting this ... It will cause build failures for any config with
+CONFIG_9P_FSCACHE not set and CONFIG_WERROR set
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/olqxnyn6Qcc3t0fNb2ckReG
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGttvQACgkQAVBC80lX
+0GzSFAf/ecxcFZnmXLcioNf0YPU/1gWJq0X4Ry2YBAqEUsL4j4NmV1bQWwY+nc8c
+BJoAOIvoIW1laoZbSokdQix5wa3UuiDkO4RYJIXnjSWjt1P5wfYqzNvOqdTlYfJF
+T3EbZajZijTv4jSlyLEa7GpgW9+w2ei/1eRwaYSOGTUip55XOvCXhgdp33kgTorK
+qYQUdIbxwhgIvGe0mCozsBVPPa6kztNMl/v3f6V2bQtEAf3VURx3LXuxpiEIwL24
+oBxYTwfQ5FhdlfvgSFId+NOUVySfTRizvZt6b9jjYsJGHtGAHLEhzdwacfx4/oG5
+bTtZAnTlfwP+JusIgWLwE0BFxm99vg==
+=FJT7
+-----END PGP SIGNATURE-----
+
+--Sig_/olqxnyn6Qcc3t0fNb2ckReG--

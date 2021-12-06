@@ -2,181 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75AD146987D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED81D469888
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 15:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343879AbhLFOWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 09:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42416 "EHLO
+        id S1343923AbhLFOXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 09:23:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244558AbhLFOWF (ORCPT
+        with ESMTP id S1343892AbhLFOXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 09:22:05 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9C6C061746;
-        Mon,  6 Dec 2021 06:18:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=U62ZcSPWhWgjkAasz/W1SPJ0TKrJujh2fnjbz+MxAoM=; b=iHirtUCCzQZTUjaCuIKdBFIo0N
-        SpYk42ie9tcAtRHyapcdPNV5Fx5jAGO0RaXPJgvZCk4AgzWJOp+SdL70ucoco8QXOVrzwo3OZEs4L
-        X49XO1GLEMAxC29lbNH/O31Vx3X2I8N1qe9l9A9D1PMH3HvjRcTrP3yTnYpokTApqfVfkn0aSw7t8
-        UzPkXZmjBzEkQ0MOXbViIUIyGyKItBLg7t/NMPL4z1VCrHka1Ng8dmGY/JRN/WGeCNWC9adqEkS2x
-        ZK0N685y74M3YIiWrvR1/+QCEZDO3VA2BEWh0w1L7ALG43STkHYvH7FI+OTbQ7eaBzHFNUIERwbue
-        X8a+00AQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1muEp7-004omM-3h; Mon, 06 Dec 2021 14:18:33 +0000
-Date:   Mon, 6 Dec 2021 14:18:33 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH 01/19] kallsyms: support "big" kernel symbols
-Message-ID: <Ya4bucmvLBJRWhvn@casper.infradead.org>
-References: <20211206140313.5653-1-ojeda@kernel.org>
- <20211206140313.5653-2-ojeda@kernel.org>
+        Mon, 6 Dec 2021 09:23:01 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67FE7C061354;
+        Mon,  6 Dec 2021 06:19:33 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id np3so7866857pjb.4;
+        Mon, 06 Dec 2021 06:19:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7+TjBg26qYjN6N7+9VcAF9zyslm2ABiWax4bLutA+tA=;
+        b=f9M5JLJRG6hZFPCcZ1VGBj6dk4h92i9GiiVgKsNNUQFiDTSIXmaER9IaQWziUfrQ/0
+         qa3GNaf/njTkL1uJ81a318oppGqxeZ4BbcT9GGYMjs1cw8PHMlBEDdFp5Gu7W2ZYhqeP
+         DQ0dE5SsoRhc/sIPqjG5IRHWnrHc+0w5hEjT3ppnETiBZyKvJyuh5hygqrwyVBhoEnmJ
+         IwRmbyJ5sNomLrxjpRo1y9wtWt2MJXEM2X247X8t1UvJ2rV20IbyXdb2S1lE9i34MGPO
+         C7yQKcwPzpoDJz5kk+NMg8L4gzvSsI27nnr11s1xyG3B7cafIHH1YyJFJ5x78gBD3amG
+         bCXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7+TjBg26qYjN6N7+9VcAF9zyslm2ABiWax4bLutA+tA=;
+        b=UvlXzEXsd3R7DYnp24g12FIxKHRqf3uACVzaNWIxuF/Rm1HM9VYnvDYSkum0zbjTfH
+         bvfDK9J+RbDP3fccdPb4DqZU0m+H4ee2CG+RYQw9SZqQuebuv71BPRnb+dnCvamYg0t3
+         kSHWnxIpfIqGCDbCOWK0rrGFNXqz8Sq0tzZ9l4bSNuIz+YzbJ+MvYtXR5u97dCj5oAV4
+         wxSDrNGtgSBnAqDxetZjh732Qnnae5H6/RHYZGH7oWcHiocovqvmfsLXdAaI6/hQhQtg
+         HEs8tFOATeg7vTzEb+W9AFQaEBhZKjQtX+/xd7mbV/7RdnUojGn65JCEbO+MuJy3/Iqp
+         4rJA==
+X-Gm-Message-State: AOAM533wUm/y5Fvsmg7Hn4FuUXY9kAUcngliIFhkx08PzWCqic65Y5bb
+        ZkWdTPzgZOKDyg7I5VW0IWg=
+X-Google-Smtp-Source: ABdhPJw5eBcqMnlmCu3VP7SDK7JlPHBF3sS/6sU5CfZhorAn8F+Tm/Z37W+b1RJF7S8Gmv/jOQFzmw==
+X-Received: by 2002:a17:90b:4b51:: with SMTP id mi17mr37838716pjb.48.1638800372941;
+        Mon, 06 Dec 2021 06:19:32 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::50b? ([2404:f801:9000:1a:efea::50b])
+        by smtp.gmail.com with ESMTPSA id h1sm3517800pfh.219.2021.12.06.06.19.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Dec 2021 06:19:32 -0800 (PST)
+Message-ID: <581569ce-b166-1cad-2624-66de319cc2b9@gmail.com>
+Date:   Mon, 6 Dec 2021 22:19:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206140313.5653-2-ojeda@kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH V4 3/5] hyperv/IOMMU: Enable swiotlb bounce buffer for
+ Isolation VM
+Content-Language: en-US
+To:     Juergen Gross <jgross@suse.com>, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, sstabellini@kernel.org, boris.ostrovsky@oracle.com,
+        joro@8bytes.org, will@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        arnd@arndb.de, hch@infradead.org, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, thomas.lendacky@amd.com,
+        Tianyu.Lan@microsoft.com, xen-devel@lists.xenproject.org,
+        michael.h.kelley@microsoft.com
+Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
+        hch@lst.de, parri.andrea@gmail.com, dave.hansen@intel.com
+References: <20211205081815.129276-1-ltykernel@gmail.com>
+ <20211205081815.129276-4-ltykernel@gmail.com>
+ <a5943893-510a-3fc8-cbb7-8742369bf36b@suse.com>
+ <125ffb7d-958c-e77a-243b-4cf38f690396@gmail.com>
+ <ed9aa3d5-9ac8-2195-e617-85599ffd7864@suse.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <ed9aa3d5-9ac8-2195-e617-85599ffd7864@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 03:02:55PM +0100, Miguel Ojeda wrote:
-> Rust symbols can become quite long due to namespacing introduced
-> by modules, types, traits, generics, etc.
-> 
-> Increasing to 255 is not enough in some cases, and therefore
-> we need to introduce longer lengths to the symbol table.
-> 
-> In order to avoid increasing all lengths to 2 bytes (since most
-> of them are small, including many Rust ones), we use ULEB128 to
-> keep smaller symbols in 1 byte, with the rest in 2 bytes.
-> 
-> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Co-developed-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 
-Who are all these people, who didn't actually do any of this
-implementation, and where am I who did?
 
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  kernel/kallsyms.c  | 26 ++++++++++++++++++++++----
->  scripts/kallsyms.c | 29 ++++++++++++++++++++++++++---
->  2 files changed, 48 insertions(+), 7 deletions(-)
+On 12/5/2021 6:31 PM, Juergen Gross wrote:
+> On 05.12.21 09:48, Tianyu Lan wrote:
+>>
+>>
+>> On 12/5/2021 4:34 PM, Juergen Gross wrote:
+>>> On 05.12.21 09:18, Tianyu Lan wrote:
+>>>> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+>>>>
+>>>> hyperv Isolation VM requires bounce buffer support to copy
+>>>> data from/to encrypted memory and so enable swiotlb force
+>>>> mode to use swiotlb bounce buffer for DMA transaction.
+>>>>
+>>>> In Isolation VM with AMD SEV, the bounce buffer needs to be
+>>>> accessed via extra address space which is above shared_gpa_boundary
+>>>> (E.G 39 bit address line) reported by Hyper-V CPUID ISOLATION_CONFIG.
+>>>> The access physical address will be original physical address +
+>>>> shared_gpa_boundary. The shared_gpa_boundary in the AMD SEV SNP
+>>>> spec is called virtual top of memory(vTOM). Memory addresses below
+>>>> vTOM are automatically treated as private while memory above
+>>>> vTOM is treated as shared.
+>>>>
+>>>> Hyper-V initalizes swiotlb bounce buffer and default swiotlb
+>>>> needs to be disabled. pci_swiotlb_detect_override() and
+>>>> pci_swiotlb_detect_4gb() enable the default one. To override
+>>>> the setting, hyperv_swiotlb_detect() needs to run before
+>>>> these detect functions which depends on the pci_xen_swiotlb_
+>>>> init(). Make pci_xen_swiotlb_init() depends on the hyperv_swiotlb
+>>>> _detect() to keep the order.
+>>>
+>>> Why? Does Hyper-V plan to support Xen PV guests? If not, I don't see
+>>> the need for adding this change.
+>>>
+>>
+>> This is to keep detect function calling order that Hyper-V detect 
+>> callback needs to call before pci_swiotlb_detect_override() and 
+>> pci_swiotlb_detect_4gb(). This is the same for why
+>> pci_swiotlb_detect_override() needs to depend on the 
+>> pci_xen_swiotlb_detect(). Hyper-V also has such request and so make 
+>> xen detect callback depends on Hyper-V one.
 > 
-> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> index 3011bc33a5ba..80702273494a 100644
-> --- a/kernel/kallsyms.c
-> +++ b/kernel/kallsyms.c
-> @@ -69,12 +69,20 @@ static unsigned int kallsyms_expand_symbol(unsigned int off,
->  	data = &kallsyms_names[off];
->  	len = *data;
->  	data++;
-> +	off++;
-> +
-> +	/* If MSB is 1, it is a "big" symbol, so needs an additional byte. */
-> +	if ((len & 0x80) != 0) {
-> +		len = (len & 0x7F) | (*data << 7);
-> +		data++;
-> +		off++;
-> +	}
->  
->  	/*
->  	 * Update the offset to return the offset for the next symbol on
->  	 * the compressed stream.
->  	 */
-> -	off += len + 1;
-> +	off += len;
->  
->  	/*
->  	 * For every byte on the compressed symbol data, copy the table
-> @@ -127,7 +135,7 @@ static char kallsyms_get_symbol_type(unsigned int off)
->  static unsigned int get_symbol_offset(unsigned long pos)
->  {
->  	const u8 *name;
-> -	int i;
-> +	int i, len;
->  
->  	/*
->  	 * Use the closest marker we have. We have markers every 256 positions,
-> @@ -141,8 +149,18 @@ static unsigned int get_symbol_offset(unsigned long pos)
->  	 * so we just need to add the len to the current pointer for every
->  	 * symbol we wish to skip.
->  	 */
-> -	for (i = 0; i < (pos & 0xFF); i++)
-> -		name = name + (*name) + 1;
-> +	for (i = 0; i < (pos & 0xFF); i++) {
-> +		len = *name;
-> +
-> +		/*
-> +		 * If MSB is 1, it is a "big" symbol, so we need to look into
-> +		 * the next byte (and skip it, too).
-> +		 */
-> +		if ((len & 0x80) != 0)
-> +			len = ((len & 0x7F) | (name[1] << 7)) + 1;
-> +
-> +		name = name + len + 1;
-> +	}
->  
->  	return name - kallsyms_names;
->  }
-> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> index 54ad86d13784..79b11bb7f07d 100644
-> --- a/scripts/kallsyms.c
-> +++ b/scripts/kallsyms.c
-> @@ -470,12 +470,35 @@ static void write_src(void)
->  		if ((i & 0xFF) == 0)
->  			markers[i >> 8] = off;
->  
-> -		printf("\t.byte 0x%02x", table[i]->len);
-> +		/* There cannot be any symbol of length zero. */
-> +		if (table[i]->len == 0) {
-> +			fprintf(stderr, "kallsyms failure: "
-> +				"unexpected zero symbol length\n");
-> +			exit(EXIT_FAILURE);
-> +		}
-> +
-> +		/* Only lengths that fit in up-to-two-byte ULEB128 are supported. */
-> +		if (table[i]->len > 0x3FFF) {
-> +			fprintf(stderr, "kallsyms failure: "
-> +				"unexpected huge symbol length\n");
-> +			exit(EXIT_FAILURE);
-> +		}
-> +
-> +		/* Encode length with ULEB128. */
-> +		if (table[i]->len <= 0x7F) {
-> +			/* Most symbols use a single byte for the length. */
-> +			printf("\t.byte 0x%02x", table[i]->len);
-> +			off += table[i]->len + 1;
-> +		} else {
-> +			/* "Big" symbols use two bytes. */
-> +			printf("\t.byte 0x%02x, 0x%02x",
-> +				(table[i]->len & 0x7F) | 0x80,
-> +				(table[i]->len >> 7) & 0x7F);
-> +			off += table[i]->len + 2;
-> +		}
->  		for (k = 0; k < table[i]->len; k++)
->  			printf(", 0x%02x", table[i]->sym[k]);
->  		printf("\n");
-> -
-> -		off += table[i]->len + 1;
->  	}
->  	printf("\n");
->  
-> -- 
-> 2.34.0
+> And does this even work without CONFIG_SWIOTLB_XEN, i.e. without
+> pci_xen_swiotlb_detect() being in the system?
 > 
+Hi Juergen:
+	Thanks for your review. This is a issue and I just sent out a v5 which 
+decouples the dependency between xen and hyperv.

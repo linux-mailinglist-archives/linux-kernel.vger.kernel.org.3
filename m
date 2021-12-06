@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF6B4699D5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 637A94699D7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 16:02:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345236AbhLFPEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 10:04:07 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53760 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345064AbhLFPDX (ORCPT
+        id S1345286AbhLFPEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 10:04:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36302 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344364AbhLFPD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 10:03:23 -0500
+        Mon, 6 Dec 2021 10:03:28 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA26161318;
-        Mon,  6 Dec 2021 14:59:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC16BC341C1;
-        Mon,  6 Dec 2021 14:59:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B83AB81017;
+        Mon,  6 Dec 2021 14:59:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DB51C341C2;
+        Mon,  6 Dec 2021 14:59:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638802794;
-        bh=PeflhP5R7jplL0vPsZLLoMB5jXRX9vaiMqsKOmG+7Q0=;
+        s=korg; t=1638802797;
+        bh=f3EGS0VFEjwTZS8NIxcdkvJAF1WJeXU+e4r9fD9mAS0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AgdZ5R55dLhwcTTDxj5vIFpkSXxXCVg3YmxVfI+ORkprlvOEAW508r/aNTAibfdXD
-         VdZJEJNkODzRTPcPncre9m4b9TNWNKN/WTkMPb1YePosN/3s5e1pF0/6Px7cqB4RYu
-         XF1oSYXfhqUu51p50twbadQVuQ6P0xqELf1jBmr0=
+        b=Zssorr96Diog/GkhBKkMlg2bHbKQk2XJ4g1yY2r7pPflCL6kS2SgzPkO0+0Tt8Z0N
+         ETCR8rAQov8jHve5WxRgZjWGVN51i0dlOVQfMO9s/PbKn/14t0plPqj5o4tN83qfTQ
+         iIEkFXrQ8QJJt8K8UERLhYMRjGW5x48NFh2NspHU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, liuguoqiang <liuguoqiang@uniontech.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Slark Xiao <slark_xiao@163.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 35/52] net: return correct error code
-Date:   Mon,  6 Dec 2021 15:56:19 +0100
-Message-Id: <20211206145549.094672466@linuxfoundation.org>
+Subject: [PATCH 4.4 36/52] platform/x86: thinkpad_acpi: Fix WWAN device disabled issue after S3 deep
+Date:   Mon,  6 Dec 2021 15:56:20 +0100
+Message-Id: <20211206145549.131949390@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211206145547.892668902@linuxfoundation.org>
 References: <20211206145547.892668902@linuxfoundation.org>
@@ -46,33 +46,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: liuguoqiang <liuguoqiang@uniontech.com>
+From: Slark Xiao <slark_xiao@163.com>
 
-[ Upstream commit 6def480181f15f6d9ec812bca8cbc62451ba314c ]
+[ Upstream commit 39f53292181081d35174a581a98441de5da22bc9 ]
 
-When kmemdup called failed and register_net_sysctl return NULL, should
-return ENOMEM instead of ENOBUFS
+When WWAN device wake from S3 deep, under thinkpad platform,
+WWAN would be disabled. This disable status could be checked
+by command 'nmcli r wwan' or 'rfkill list'.
 
-Signed-off-by: liuguoqiang <liuguoqiang@uniontech.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Issue analysis as below:
+  When host resume from S3 deep, thinkpad_acpi driver would
+call hotkey_resume() function. Finnaly, it will use
+wan_get_status to check the current status of WWAN device.
+During this resume progress, wan_get_status would always
+return off even WWAN boot up completely.
+  In patch V2, Hans said 'sw_state should be unchanged
+after a suspend/resume. It's better to drop the
+tpacpi_rfk_update_swstate call all together from the
+resume path'.
+  And it's confimed by Lenovo that GWAN is no longer
+ available from WHL generation because the design does not
+ match with current pin control.
+
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+Link: https://lore.kernel.org/r/20211108060648.8212-1-slark_xiao@163.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/devinet.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/platform/x86/thinkpad_acpi.c | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
-index 2cb8612e7821e..35961ae1d120c 100644
---- a/net/ipv4/devinet.c
-+++ b/net/ipv4/devinet.c
-@@ -2237,7 +2237,7 @@ static int __devinet_sysctl_register(struct net *net, char *dev_name,
- free:
- 	kfree(t);
- out:
--	return -ENOBUFS;
-+	return -ENOMEM;
+diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+index f3954af14f52f..466a0d0162c3d 100644
+--- a/drivers/platform/x86/thinkpad_acpi.c
++++ b/drivers/platform/x86/thinkpad_acpi.c
+@@ -1168,15 +1168,6 @@ static int tpacpi_rfk_update_swstate(const struct tpacpi_rfk *tp_rfk)
+ 	return status;
  }
  
- static void __devinet_sysctl_unregister(struct ipv4_devconf *cnf)
+-/* Query FW and update rfkill sw state for all rfkill switches */
+-static void tpacpi_rfk_update_swstate_all(void)
+-{
+-	unsigned int i;
+-
+-	for (i = 0; i < TPACPI_RFK_SW_MAX; i++)
+-		tpacpi_rfk_update_swstate(tpacpi_rfkill_switches[i]);
+-}
+-
+ /*
+  * Sync the HW-blocking state of all rfkill switches,
+  * do notice it causes the rfkill core to schedule uevents
+@@ -3015,9 +3006,6 @@ static void tpacpi_send_radiosw_update(void)
+ 	if (wlsw == TPACPI_RFK_RADIO_OFF)
+ 		tpacpi_rfk_update_hwblock_state(true);
+ 
+-	/* Sync sw blocking state */
+-	tpacpi_rfk_update_swstate_all();
+-
+ 	/* Sync hw blocking state last if it is hw-unblocked */
+ 	if (wlsw == TPACPI_RFK_RADIO_ON)
+ 		tpacpi_rfk_update_hwblock_state(false);
 -- 
 2.33.0
 

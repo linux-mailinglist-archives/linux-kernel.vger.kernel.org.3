@@ -2,81 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 761AE46918D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 09:31:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1D246918F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 09:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239481AbhLFIeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 03:34:24 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:40363 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239422AbhLFIeV (ORCPT
+        id S239446AbhLFIfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 03:35:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231612AbhLFIfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 03:34:21 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Mon, 6 Dec 2021 03:35:09 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9404C061746;
+        Mon,  6 Dec 2021 00:31:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=RAOjWEnjdaxO+mN2MflQwOdw7ogQKwCubfs0WO8EAXU=; b=Xbf8ivWkigmBQIlw+0NkBCXonb
+        M8ekMTu9Ou1WaLNpwBz/7CvWGASD6CplmbkMzMJ/w2eizNsKFqEAmly75oLyGDGT5WFDlM52RNQAu
+        +Dm7ppuft5tEm3idLjW4jENEBtOiKsBUmNS/9+M3oitHTaB2uEwpbh0reCTPGUjRHS9CYIQyXezA0
+        OPvxIlVNKawrBhu2C+I2Bgg+ibJsYGuFEJvtlM9tygvaPAIOTAIYalfRSntvXEE5+ENqRJyPDXLCY
+        PMFErOv5rUwdtKHLcP91d7ZGVoErLX0nQhdBNN1tK5lBMWD0t10pir8S2p2CrMXPP35VkbqPXhVw4
+        aonJxp5g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mu9PL-002WHD-My; Mon, 06 Dec 2021 08:31:35 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J6xTR3Hyrz4xgY;
-        Mon,  6 Dec 2021 19:30:51 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638779451;
-        bh=GQQEZgQkyb1HIPHJ1FiAYjERN4arHO6oXJ+tEPDQ5v0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RfbmScdnhbnubm+MhS287auOOr7GIhsUeVBIjq783JFngIzDP3+H9FNboeTyClm5R
-         Wp9E71pPix/2KS3SXWUUoOIA8im1SOXYIVXNfa69E/XSWBaJNVMmUr7Mz98zwEHKze
-         6BKwqeFoilJbzlZ12HlHHFN84kpkGV4Sj/toSQ6VFXFKRIguEypxVg5xLLzZZUSHOI
-         G2L3RRvl0LkiFFFGUynN6ZaV+FJPcjSAE9FaCIYHQje+emPKlN4bD8SdV/PZp4A8nn
-         hV7sda4UkPcJocW46HsZCbTPmki39ECc+M2rKXXuPXTb0qFyGTDPpmBuWC5YxUsj39
-         v8oap3EodOlfw==
-Date:   Mon, 6 Dec 2021 19:30:50 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the driver-core tree
-Message-ID: <20211206193050.17ad78aa@canb.auug.org.au>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 93E69300252;
+        Mon,  6 Dec 2021 09:31:34 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4A46B2B32066D; Mon,  6 Dec 2021 09:31:34 +0100 (CET)
+Date:   Mon, 6 Dec 2021 09:31:34 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        keescook@chromium.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] block: switch to atomic_t for request references
+Message-ID: <Ya3KZiLg5lYjsGcQ@hirez.programming.kicks-ass.net>
+References: <9f2ad6f1-c1bb-dfac-95c8-7d9eaa7110cc@kernel.dk>
+ <Ya2zfVAwh4aQ7KVd@infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Rl0EKpYksTrl.yDU+j2TB=c";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ya2zfVAwh4aQ7KVd@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Rl0EKpYksTrl.yDU+j2TB=c
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, Dec 05, 2021 at 10:53:49PM -0800, Christoph Hellwig wrote:
+> On Fri, Dec 03, 2021 at 08:35:40AM -0700, Jens Axboe wrote:
+> > refcount_t is not as expensive as it used to be, but it's still more
+> > expensive than the io_uring method of using atomic_t and just checking
+> > for potential over/underflow.
+> > 
+> > This borrows that same implementation, which in turn is based on the
+> > mm implementation from Linus.
+> 
+> If refcount_t isn't good enough for a normal kernel fast path we have
+> a problem.  Can we discuss that with the maintainers instead of coming
+> up with our home grown schemes again?
 
-Hi all,
+Quite; and for something that pretends to be about performance, it also
+lacks any actual numbers to back that claim.
 
-After merging the driver-core tree, today's linux-next build (htmldocs)
-produced this warning:
+The proposed implementation also doesn't do nearly as much as the
+refcount_t one does.
 
-Documentation/admin-guide/cputopology.rst:49: WARNING: Block quote ends wit=
-hout a blank line; unexpected unindent.
-
-Introduced by commit
-
-  f1045056c726 ("topology/sysfs: rework book and drawer topology ifdefery")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Rl0EKpYksTrl.yDU+j2TB=c
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGtyjoACgkQAVBC80lX
-0Gw2Zwf/WUoFllcjx1799MzQdpBbGfAIeY2G7bank78EPR3Fnovt5z+4TfQDoS1n
-K+xztGwD1sRVWm6JoprebQGgDaRegUiIItWn9/u5D1mYuvIJCpQbbJljtRtcklg7
-4m5ZU1OSqthCItBkR32c7EG4njngTbAh14pbR+IwAANmNPNNmX+bUqPnh3l75bOW
-Uda7+xOP5dySR4UuvlQOq8y5X0xF/3Uq3YJQlzCtJG7CKbC+TPPtRW66pQFvYo5a
-sdpR/PSSiJvmRGs1BD1yFv5OcwFSnqMmQMHOGkm4BFb64xjlm6RnfXS0NptB0x9F
-4x5Th0Vi75/jV06smscCrA0ZkptG/A==
-=Pgjj
------END PGP SIGNATURE-----
-
---Sig_/Rl0EKpYksTrl.yDU+j2TB=c--
+Anyway refcount_t is just a single "lock xadd" and a few branches, where
+does it go wrong? Do you have perf output to compare between them?

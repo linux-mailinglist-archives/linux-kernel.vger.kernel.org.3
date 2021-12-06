@@ -2,98 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDF846A0EC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6470C46A0F1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Dec 2021 17:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385987AbhLFQR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 11:17:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41380 "EHLO
+        id S1386340AbhLFQRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 11:17:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385933AbhLFQQz (ORCPT
+        with ESMTP id S1345862AbhLFQRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:16:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87766C09B130;
-        Mon,  6 Dec 2021 08:03:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D762FB81018;
-        Mon,  6 Dec 2021 16:03:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BD70C341C2;
-        Mon,  6 Dec 2021 16:03:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638806617;
-        bh=0hIMxUiKaxfvgogyudivj6aZ0CmABcuX/qtX3tWTxI0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qUJFfeWzPWhRDMoZff20CrLQgcnCfziWN+toVPZp3km3h3sgM2GN5jgjHSGKmjZ84
-         i+zraFxKmtDBSMonqNfLCGbYHsSdY/XRktPsww8p+7hZik4r+zfeJzcbvpmnVrxMrp
-         rzFjUB0a0FnQv3n8snNVTjtav+iHl9PuSNVX2z5uWCGPwSDVDqxWHEHFU9sJMfZ1AE
-         /6sx4O0f5D/1r7XpcaN/T+1U2923ytgvktav+1UXUGB476ynUpIwxp6R601y7aIfbC
-         dftx15eMOpGF1qIv3DMSdMaQ+1wI+uxGrNeVL3HK5Xq1jDCz15+BTbhKpZGG0oTk1v
-         ZWSQ7LvRn/2GQ==
-Date:   Mon, 6 Dec 2021 08:03:37 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Emmanuel Deloget <emmanuel.deloget@eho.link>,
-        Louis Amas <louis.amas@eho.link>, andrii@kernel.org,
-        ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
-        kafai@fb.com, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        mw@semihalf.com, netdev@vger.kernel.org, songliubraving@fb.com,
-        yhs@fb.com
-Subject: Re: [PATCH 1/1] net: mvpp2: fix XDP rx queues registering
-Message-ID: <20211206080337.13fc9ae7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <Ya4vd9+pBbVJML+K@shell.armlinux.org.uk>
-References: <DB9PR06MB8058D71218633CD7024976CAFA929@DB9PR06MB8058.eurprd06.prod.outlook.com>
-        <20211110144104.241589-1-louis.amas@eho.link>
-        <bdc1f03c-036f-ee29-e2a1-a80f640adcc4@eho.link>
-        <Ya4vd9+pBbVJML+K@shell.armlinux.org.uk>
+        Mon, 6 Dec 2021 11:17:06 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24ECDC09B19A
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 08:04:28 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id o13so23384145wrs.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 08:04:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=nMw+1lOhPz92ldC1eztxTws1Eot0vmOAhw9KFEmlatA=;
+        b=CXhtCLa0Jq4SL6nVdLuPURxfHR0k4qK1Rww+3X6KrpuMJjurBmpAffkEldJfeQ39yq
+         WZih5woy8XlEsxOHdJDUqODoADNOGf4LSfvGducTV0O91KRnxvQRXdz84uLb5EmqUZr1
+         9bixA2+IivaTlPw62TXacStZ3QRAeVoCdCNJqTCKKwZKYl4NMCZmmTyIhBJ7f0jWmr83
+         IgMBXuElFxUtuBns4W3bkLR6duw8u56rcVHDv7Do7hd6Bvyf9SjJ3eePrRSESt5M6/U7
+         Hjv19pO72SUYCehbREtrEPLcFqBLluLQswPdK7+kMmTt4iFO4pD/pQR2GMRCGZt1l8p5
+         9bbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=nMw+1lOhPz92ldC1eztxTws1Eot0vmOAhw9KFEmlatA=;
+        b=G9O1mAVyONGveDqY0NdIadhzqQ7i+QP29HQTOPf4m0+L/il3vK7l00rk/k8PcqMp5V
+         qiSjzc/ASwvWUj4GaekWvxa8nnSwXdqB59ZDnVqtf2UZVyjryYEoY1+37yOhc5oiXKfW
+         FfUIl+1NebmovnHfUO+Rwenkt8uLPVfT/uaU7wA4jQIYWPJBVFqtnPwDMonNtKib6sNv
+         eNS60hC3Z24X3lKptECql9vTjN75hIkoRMvMoNqHRPEq4b2Bm4g6G6VFR3LRikCxi1k/
+         wWFokSajVCD/BIq/FaYdQ0PYlEBbyJc2fEbr8x+ys7ta3CC8MWCuX+SlvjnqeSPIoAPx
+         KpjQ==
+X-Gm-Message-State: AOAM53383dnRAwyvF6li0+kEnWNtB5bwNTFkNnyiorc6trcFYSlq5AA1
+        XLtJ90Rt1VAU+4B1CUVtPdbBrA==
+X-Google-Smtp-Source: ABdhPJz0YemwuDBQz7Ry7eX34+eYyc0zBI0JawB1/jHvbuzSW780auup+99/7WHLWV533VaaBi8uMg==
+X-Received: by 2002:adf:d1c2:: with SMTP id b2mr44013090wrd.114.1638806666388;
+        Mon, 06 Dec 2021 08:04:26 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:15:13:88f3:db53:e34:7bb0])
+        by smtp.gmail.com with ESMTPSA id o3sm14929749wms.10.2021.12.06.08.04.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 08:04:25 -0800 (PST)
+Date:   Mon, 6 Dec 2021 17:04:20 +0100
+From:   Marco Elver <elver@google.com>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev, x86@kernel.org
+Subject: Re: [PATCH v3 08/25] kcsan: Show location access was reordered to
+Message-ID: <Ya40hEQv5SEu7ZeL@elver.google.com>
+References: <20211130114433.2580590-1-elver@google.com>
+ <20211130114433.2580590-9-elver@google.com>
+ <Ya2Zpf8qpgDYiGqM@boqun-archlinux>
+ <CANpmjNMirKGSBW2m+bWRM9_FnjK3_HjnJC=dhyMktx50mwh1GQ@mail.gmail.com>
+ <Ya4evHE7uQ9eXpax@boqun-archlinux>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ya4evHE7uQ9eXpax@boqun-archlinux>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Dec 2021 15:42:47 +0000 Russell King (Oracle) wrote:
-> On Mon, Dec 06, 2021 at 04:37:20PM +0100, Emmanuel Deloget wrote:
-> > On 10/11/2021 15:41, Louis Amas wrote:  
-> > > The registration of XDP queue information is incorrect because the
-> > > RX queue id we use is invalid. When port->id == 0 it appears to works
-> > > as expected yet it's no longer the case when port->id != 0.
-> > > 
-> > > When we register the XDP rx queue information (using
-> > > xdp_rxq_info_reg() in function mvpp2_rxq_init()) we tell them to use
-> > > rxq->id as the queue id. This value iscomputed as:
-> > > rxq->id = port->id * max_rxq_count + queue_id
-> > > 
-> > > where max_rxq_count depends on the device version. In the MB case,
-> > > this value is 32, meaning that rx queues on eth2 are numbered from
-> > > 32 to 35 - there are four of them.
-> > > 
-> > > Clearly, this is not the per-port queue id that XDP is expecting:
-> > > it wants a value in the range [0..3]. It shall directly use queue_id
-> > > which is stored in rxq->logic_rxq -- so let's use that value instead.
-> > > 
-> > > This is consistent with the remaining part of the code in
-> > > mvpp2_rxq_init().
-
-> > Is there any update on this patch ? Without it, XDP only partially work on a
-> > MACCHIATOBin (read: it works on some ports, not on others, as described in
-> > our analysis sent together with the original patch).  
+On Mon, Dec 06, 2021 at 10:31PM +0800, Boqun Feng wrote:
+[...]
+> Thanks for the explanation, I was missing the swap here. However...
 > 
-> I suspect if you *didn't* thread your updated patch to your previous
-> submission, then it would end up with a separate entry in
-> patchwork.kernel.org,
+> > So in your above example you need to swap "reordered to" and the top
+> > frame of the stack trace.
+> > 
 
-Indeed, it's easier to keep track of patches which weren't posted 
-as a reply in a thread, at least for me.
+Apologies, I wasn't entirely precise ... what you say below is correct.
 
-> and the netdev maintainers will notice that the
-> patch is ready for inclusion, having been reviewed by Marcin.
+> IIUC, the report for my above example will be:
+> 
+>          | write (reordered) to 0xaaaa of ...:
+>          | foo+0x... // address of the write to A
+>          | ...
+>          |  |
+>          |  +-> reordered to: foo+0x... // address of the callsite to bar() in foo()
+> 
+> , right? Because in replace_stack_entry(), it's not the top frame where
+> the race occurred that gets swapped, it's the frame which belongs to the
+> same function as the original access that gets swapped. In other words,
+> when KCSAN finds the problem, top entries of the calling stack are:
+> 
+> 	[0] bar+0x.. // address of the write to B
+> 	[1] foo+0x.. // address of the callsite to bar() in foo()
+> 
+> after replace_stack_entry(), they changes to:
+> 
+> 	[0] bar+0x.. // address of the write to B
+> skip  ->[1] foo+0x.. // address of the write to A
+> 
+> , as a result the report won't mention bar() at all.
 
-In this case I _think_ it was dropped because it didn't apply.
+Correct.
 
-Please rebase on top of net/master and repost if the changes is still
-needed.
+> And I think a better report will be:
+> 
+>          | write (reordered) to 0xaaaa of ...:
+>          | foo+0x... // address of the write to A
+>          | ...
+>          |  |
+>          |  +-> reordered to: bar+0x... // address of the write to B in bar()
+> 
+> because it tells users the exact place the accesses get reordered. That
+> means maybe we want something as below? Not completely tested, but I
+> play with scope checking a bit, seems it gives what I want. Thoughts?
+
+This is problematic because it makes it much harder to actually figure
+out what's going on, given "reordered to" isn't a full stack trace. So
+if you're deep in some call hierarchy, seeing a random "reordered to"
+line is quite useless. What I want to see, at the very least, is the ip
+to the same function where the original access happened.
+
+We could of course try and generate a full stack trace at "reordered
+to", but this would entail
+
+	a) allocating 2x unsigned long[64] on the stack (or moving to
+	   static storage),
+	b) further increasing the report length,
+	c) an even larger number of possibly distinct reports for the
+	   same issue; this makes deduplication even harder.
+
+The reason I couldn't justify all that is that when I looked through
+several dozen "reordered to" reports, I never found anything other than
+the ip in the function frame of the original access useful. That, and in
+most cases the "reordered to" location was in the same function or in an
+inlined function.
+
+The below patch would do what you'd want I think.
+
+My opinion is to err on the side of simplicity until there is evidence
+we need it. Of course, if you have a compelling reason that we need it
+from the beginning, happy to send it as a separate patch on top.
+
+What do you think?
+
+Thanks,
+-- Marco
+
+------ >8 ------
+
+From: Marco Elver <elver@google.com>
+Date: Mon, 6 Dec 2021 16:35:02 +0100
+Subject: [PATCH] kcsan: Show full stack trace of reordered-to accesses
+
+Change reports involving reordered accesses to show the full stack trace
+of "reordered to" accesses. For example:
+
+ | ==================================================================
+ | BUG: KCSAN: data-race in test_kernel_wrong_memorder / test_kernel_wrong_memorder
+ |
+ | read-write to 0xffffffffc02d01e8 of 8 bytes by task 2481 on cpu 2:
+ |  test_kernel_wrong_memorder+0x57/0x90
+ |  access_thread+0xb7/0x100
+ |  kthread+0x2ed/0x320
+ |  ret_from_fork+0x22/0x30
+ |
+ | read-write (reordered) to 0xffffffffc02d01e8 of 8 bytes by task 2480 on cpu 0:
+ |  test_kernel_wrong_memorder+0x57/0x90
+ |  access_thread+0xb7/0x100
+ |  kthread+0x2ed/0x320
+ |  ret_from_fork+0x22/0x30
+ |   |
+ |   +-> reordered to: test_delay+0x31/0x110
+ |                     test_kernel_wrong_memorder+0x80/0x90
+ |
+ | Reported by Kernel Concurrency Sanitizer on:
+ | CPU: 0 PID: 2480 Comm: access_thread Not tainted 5.16.0-rc1+ #2
+ | Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+ | ==================================================================
+
+Signed-off-by: Marco Elver <elver@google.com>
+---
+ kernel/kcsan/report.c | 33 +++++++++++++++++++++++----------
+ 1 file changed, 23 insertions(+), 10 deletions(-)
+
+diff --git a/kernel/kcsan/report.c b/kernel/kcsan/report.c
+index 67794404042a..a8317d5f5123 100644
+--- a/kernel/kcsan/report.c
++++ b/kernel/kcsan/report.c
+@@ -317,22 +317,29 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
+ {
+ 	unsigned long symbolsize, offset;
+ 	unsigned long target_func;
+-	int skip;
++	int skip, i;
+ 
+ 	if (kallsyms_lookup_size_offset(ip, &symbolsize, &offset))
+ 		target_func = ip - offset;
+ 	else
+ 		goto fallback;
+ 
+-	for (skip = 0; skip < num_entries; ++skip) {
++	skip = get_stack_skipnr(stack_entries, num_entries);
++	for (i = 0; skip < num_entries; ++skip, ++i) {
+ 		unsigned long func = stack_entries[skip];
+ 
+ 		if (!kallsyms_lookup_size_offset(func, &symbolsize, &offset))
+ 			goto fallback;
+ 		func -= offset;
+ 
++		replaced[i] = stack_entries[skip];
+ 		if (func == target_func) {
+-			*replaced = stack_entries[skip];
++			/*
++			 * There must be at least 1 entry left in the original
++			 * @stack_entries, so we know that we will never occupy
++			 * more than @num_entries - 1 of @replaced.
++			 */
++			replaced[i + 1] = 0;
+ 			stack_entries[skip] = ip;
+ 			return skip;
+ 		}
+@@ -341,6 +348,7 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
+ fallback:
+ 	/* Should not happen; the resulting stack trace is likely misleading. */
+ 	WARN_ONCE(1, "Cannot find frame for %pS in stack trace", (void *)ip);
++	replaced[0] = 0;
+ 	return get_stack_skipnr(stack_entries, num_entries);
+ }
+ 
+@@ -365,11 +373,16 @@ static int sym_strcmp(void *addr1, void *addr2)
+ }
+ 
+ static void
+-print_stack_trace(unsigned long stack_entries[], int num_entries, unsigned long reordered_to)
++print_stack_trace(unsigned long stack_entries[], int num_entries, unsigned long *reordered_to)
+ {
+ 	stack_trace_print(stack_entries, num_entries, 0);
+-	if (reordered_to)
+-		pr_err("  |\n  +-> reordered to: %pS\n", (void *)reordered_to);
++	if (reordered_to[0]) {
++		int i;
++
++		pr_err("  |\n  +-> reordered to: %pS\n", (void *)reordered_to[0]);
++		for (i = 1; i < NUM_STACK_ENTRIES && reordered_to[i]; ++i)
++			pr_err("                    %pS\n", (void *)reordered_to[i]);
++	}
+ }
+ 
+ static void print_verbose_info(struct task_struct *task)
+@@ -390,12 +403,12 @@ static void print_report(enum kcsan_value_change value_change,
+ 			 struct other_info *other_info,
+ 			 u64 old, u64 new, u64 mask)
+ {
+-	unsigned long reordered_to = 0;
++	unsigned long reordered_to[NUM_STACK_ENTRIES] = { 0 };
+ 	unsigned long stack_entries[NUM_STACK_ENTRIES] = { 0 };
+ 	int num_stack_entries = stack_trace_save(stack_entries, NUM_STACK_ENTRIES, 1);
+-	int skipnr = sanitize_stack_entries(stack_entries, num_stack_entries, ai->ip, &reordered_to);
++	int skipnr = sanitize_stack_entries(stack_entries, num_stack_entries, ai->ip, reordered_to);
+ 	unsigned long this_frame = stack_entries[skipnr];
+-	unsigned long other_reordered_to = 0;
++	unsigned long other_reordered_to[NUM_STACK_ENTRIES] = { 0 };
+ 	unsigned long other_frame = 0;
+ 	int other_skipnr = 0; /* silence uninit warnings */
+ 
+@@ -408,7 +421,7 @@ static void print_report(enum kcsan_value_change value_change,
+ 	if (other_info) {
+ 		other_skipnr = sanitize_stack_entries(other_info->stack_entries,
+ 						      other_info->num_stack_entries,
+-						      other_info->ai.ip, &other_reordered_to);
++						      other_info->ai.ip, other_reordered_to);
+ 		other_frame = other_info->stack_entries[other_skipnr];
+ 
+ 		/* @value_change is only known for the other thread */
+-- 
+2.34.1.400.ga245620fadb-goog
+

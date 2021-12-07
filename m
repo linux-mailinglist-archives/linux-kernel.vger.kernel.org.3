@@ -2,224 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAE146C14E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F5946C14F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 18:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239797AbhLGRIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 12:08:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54630 "EHLO
+        id S239809AbhLGRIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 12:08:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239784AbhLGRIO (ORCPT
+        with ESMTP id S239804AbhLGRI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 12:08:14 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3650DC061574
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 09:04:44 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id c4so30824204wrd.9
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:04:44 -0800 (PST)
+        Tue, 7 Dec 2021 12:08:29 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14188C061574
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 09:04:59 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id f186so42626695ybg.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 09:04:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=I8eF5Cm7NpdqCyk/v+5ozHvBNPRK3ZZovGuWeGlLnro=;
-        b=GyZAIf7sxlpA27BvC5e9ZJbLsqMtDBz6rej2U4LCoYzmvO2ViNdqI1QjFFhifL4AbY
-         GXcLogtZwAXDOMXAZdJBoNFn+BMI/jtmtzQ2OC63iCd9DXfiNX7Pg7sTPeNftBniSOU3
-         fYk49pqCidTZ5Kjx/eh/v65mhIEUjSk6aK8S+mcEXBpoDwijkcXKzr7igUnKkOJJjU3O
-         2AGV38OeiTlZXt15OxJKooPz5pTT/fctZ+1fSmov6/bDnWoLiIvrP1xNksRd6MoqVnmh
-         xeqk1uQzRrDxVEDn35KGa2b6B9BG5pZ/brtT/zEPCY+lepyikgZkR7yGmLJrIH1vFXhU
-         mWbA==
+        bh=O73Ze+VaZ72yqZEQS/KFQihGyU4Mm5AKKp2/1/GYgVA=;
+        b=KrByQ0JfoqCtbQKA/SPw4hrXd2hut53v8cVXeumIKc3jsfhmQy+eu+jBSjFhMOZO5N
+         qFeO9hBpT0uyME6t11z11b1Q48aIYpnkk8+J2oMf275wKThdmf3t6bfm8Cd6HqRs07EQ
+         IA/OeE3VQsz6f26MEfyaWVBqROeIU1N+JGYxx95CFhdsNifoX2cts0O3D8tzXJBCr6TF
+         csw89OCuXY5pilyURgMjZGe34oy2xuj1GJ4VniStv9aEFI57agr1bn0E5sA+WTxxUgTj
+         VGbwhA6J8aUjrf01dyebrbaAaksUlAm5CD+DvdtfpEg2YUbZ83DdSfqHvw+oETsMioTz
+         Wo+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=I8eF5Cm7NpdqCyk/v+5ozHvBNPRK3ZZovGuWeGlLnro=;
-        b=xpxoviUUfAWh8j+1wr4tIKvajs7e1QouPlcdVLfpehMkJC8j+G1AtEvX9/klg8nqOJ
-         my1d14nb1eModo95hoadXbJb1YecoGfYR+Llm19a0qf/M9nOMQK3PLYbYadjHeAvDb+c
-         tCAD/4Sip4wTjq3CPoelcmqCFdD/TY5F5cy0BpcHyScBBvBoJPsSWhEuw4Go5OsuQYAJ
-         pqniOPcRhch7r+fZJUPsOX1GQmfE2vkr+Dtzs+qeBeh6hVrLuEoO5Suh0WbUNeNEca9i
-         qK4ISDIbZgG04dRooVO5ecaE9c2fDjPF0LFMClxhG4BVQ2YNeXAXV83sDIcKOS+0VO6/
-         ZY9w==
-X-Gm-Message-State: AOAM530saMehw6x7jn2I/WNAw+v8Km8r6ULxAI9lLu6Bg/zWoipVDYQ6
-        SjRPmXhFHSGM/Hwd8ubnoQFg06B0alW6IGeuC5EoOg==
-X-Google-Smtp-Source: ABdhPJwIETaZPWETnwifeaLgE8/4vE84mq3whBqpCvFBTnHFeSusueUBDqgttIzMRNvh0UnWKTzCH7xVpDeMW14eukQ=
-X-Received: by 2002:a05:6000:47:: with SMTP id k7mr51292153wrx.485.1638896681406;
- Tue, 07 Dec 2021 09:04:41 -0800 (PST)
+        bh=O73Ze+VaZ72yqZEQS/KFQihGyU4Mm5AKKp2/1/GYgVA=;
+        b=aTDNkfGO08bwI2t9ZrlnyYJAlnl8dmtUXi0qarXudpNhU48Spre2nNQ1ritzFeOPYY
+         l2QSETwTl3C8KQYvpPPE5pz1i1USbFxrLE4eRTh8/5A7yb3nSipVKHrYRozA+niUkLp+
+         2RuGOzQYmYyaxyZcWkrTSVCLgO3Vf08uCqzxwoSK9mYdyYh8o+A0VgrhiPVRxTmHlhkB
+         2Ia/uvLGPa0ByRmmZVBfXwMeepgfkgBqgvEOFtOMLrN1yhc9+OKKFTsrAaEHTrIOKIGT
+         FJFQLKyAzNlb11h+yojXkDIM3MpOMgsQ3XlVTOSQqjaWrXgqML1QYo8P0bo1bNfTQ9K3
+         n5PQ==
+X-Gm-Message-State: AOAM531K5WuIcgNBnUP4a5V5togJIYD8+qOQZR377trxFGGdjhd12S+4
+        5cw0FV0kTpjtmNLqDvu39wyUC0HcedJsneYJ3GNx8Q==
+X-Google-Smtp-Source: ABdhPJwp9DybShWds517wP/lVihTekfcDrGzA+mDrpQ8/7v2KoG0f6RJNuvIBdbUpi9vbxnyaKQN6XHRMU+yLNoUsxs=
+X-Received: by 2002:a25:6ec5:: with SMTP id j188mr52542171ybc.602.1638896698078;
+ Tue, 07 Dec 2021 09:04:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20211206211219.3eff99c9@gandalf.local.home>
-In-Reply-To: <20211206211219.3eff99c9@gandalf.local.home>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Tue, 7 Dec 2021 09:04:30 -0800
-Message-ID: <CAC_TJve8MMAv+H_NdLSJXZUSoxOEq2zB_pVaJ9p=7H6Bu3X76g@mail.gmail.com>
-Subject: Re: [RFC][PATCH] tracefs: Set all files to the same group ownership
- as the mount option
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yabin Cui <yabinc@google.com>
+References: <20211207032202.6022-1-xiaofeng5@xiaomi.com>
+In-Reply-To: <20211207032202.6022-1-xiaofeng5@xiaomi.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 7 Dec 2021 09:04:47 -0800
+Message-ID: <CAJuCfpFgEB0qNcQGhi+wyrx4ktwm+PZujLeKTUeEMZTRUL=31w@mail.gmail.com>
+Subject: Re: [PATCH] mm/madvise: break reclaim when lock race
+To:     xf2017140389@gmail.com
+Cc:     akpm@linux-foundation.org, christian@brauner.io,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        zhangcang@xiaomi.com, wangju@xiaomi.com, fangzhirong@xiaomi.com,
+        xiaofeng <xiaofeng5@xiaomi.com>, Minchan Kim <minchan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 6, 2021 at 6:12 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+On Mon, Dec 6, 2021 at 7:22 PM <xf2017140389@gmail.com> wrote:
 >
-> From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+> From: xiaofeng <xiaofeng5@xiaomi.com>
 >
-> As people have been asking to allow non-root processes to have access to
-> the tracefs directory, it was considered best to only allow groups to have
-> access to the directory, where it is easier to just set the tracefs file
-> system to a specific group (as other would be too dangerous), and that way
-> the admins could pick which processes would have access to tracefs.
+> When the process_madvise() system call is being used, it takes mmap_lock and blocks the application from allocating memory, leading to unreasonable delays. This patchset aims to fix it.
+
+Please use checkpatch.pl script before posting (see this blog for
+example: http://nickdesaulniers.github.io/blog/2017/05/16/submitting-your-first-patch-to-the-linux-kernel-and-responding-to-feedback/).
+
+Could you please describe your usecase a bit more? Which MADV is being
+used specifically (MADV_COLD or MADV_PAGEOUT)?
+CC'ing Minchan as he might be interested in learning more about this.
+
 >
-> Unfortunately, this broke tooling on Android that expected the other bit
-> to be set. For some special cases, for non-root tools to trace the system,
-> tracefs would be mounted and change the permissions of the top level
-> directory which gave access to all running tasks permission to the
-> tracing directory. Even though this would be dangerous to do in a
-> production environment, for testing environments this can be useful.
->
-> Now with the new changes to not allow other (which is still the proper
-> thing to do), it breaks the testing tooling. Now more code needs to be
-> loaded on the system to change ownership of the tracing directory.
->
-> The real solution is to have tracefs honor the gid=xxx option when
-> mounting. That is,
->
-> (tracing group tracing has value 1003)
->
->  mount -t tracefs -o gid=1003 tracefs /sys/kernel/tracing
->
-> should have it that all files in the tracing directory should be of the
-> given group.
->
-> Copy the logic from d_walk() from dcache.c and simplify it for the mount
-> case of tracefs if gid is set. All the files in tracefs will be walked and
-> their group will be set to the value passed in.
->
-> Reported-by: Kalesh Singh <kaleshsingh@google.com>
-> Reported-by: Yabin Cui <yabinc@google.com>
-> Fixes: 49d67e445742 ("tracefs: Have tracefs directories not set OTH permission bits by default")
-> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> Signed-off-by: xiaofeng <xiaofeng5@xiaomi.com>
 > ---
+>  mm/madvise.c | 3 +++
+>  1 file changed, 3 insertions(+)
 >
->   I'm posting this as an RFC as I want to make sure this is the proper way
->   to handle this. It really makes sense. As tracefs is simply a file system
->   with a bunch of control knobs to control tracing, if you mount it with
->   gid=xxx then the control knobs should be controlled by group xxx.
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index 8c927202bbe6..8f1e325873e0 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -322,6 +322,9 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
+>         if (fatal_signal_pending(current))
+>                 return -EINTR;
 >
->
->  fs/tracefs/inode.c | 74 ++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 74 insertions(+)
->
-> diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
-> index 925a621b432e..f20f575cdaef 100644
-> +++ b/fs/tracefs/inode.c
-> @@ -161,6 +161,79 @@ struct tracefs_fs_info {
->         struct tracefs_mount_opts mount_opts;
->  };
->
-> +static void change_gid(struct dentry *dentry, kgid_t gid)
-> +{
-> +       if (!dentry->d_inode)
-> +               return;
-> +       dentry->d_inode->i_gid = gid;
-> +}
+> +       if (mmap_lock_is_contended(mm))
+> +               return -EINTR;
 > +
-> +/*
-> + * Taken from d_walk, but without he need for handling renames.
-> + * Nothing can be renamed while walking the list, as tracefs
-> + * does not support renames. This is only called when mounting
-> + * or remounting the file system, to set all the files to
-> + * the given gid.
-> + */
-
-Hi Steve,
-
-One thing that I missed before: There are files that can be generated
-after the mount, for instance when a new synthetic event is added new
-entries for that event are created under events/synthetic/ and when a
-new instance is created the new entries generated under instances/.
-These new entries don't honor the gid specified when mounting. Could
-we make it so that they also respect the specified gid?
-
-Thanks,
-Kalesh
-
-> +static void set_gid(struct dentry *parent, kgid_t gid)
-> +{
-> +       struct dentry *this_parent;
-> +       struct list_head *next;
-> +
-> +       this_parent = parent;
-> +       spin_lock(&this_parent->d_lock);
-> +
-> +       change_gid(this_parent, gid);
-> +repeat:
-> +       next = this_parent->d_subdirs.next;
-> +resume:
-> +       while (next != &this_parent->d_subdirs) {
-> +               struct list_head *tmp = next;
-> +               struct dentry *dentry = list_entry(tmp, struct dentry, d_child);
-> +               next = tmp->next;
-> +
-> +               spin_lock_nested(&dentry->d_lock, DENTRY_D_LOCK_NESTED);
-> +
-> +               change_gid(dentry, gid);
-> +
-> +               if (!list_empty(&dentry->d_subdirs)) {
-> +                       spin_unlock(&this_parent->d_lock);
-> +                       spin_release(&dentry->d_lock.dep_map, _RET_IP_);
-> +                       this_parent = dentry;
-> +                       spin_acquire(&this_parent->d_lock.dep_map, 0, 1, _RET_IP_);
-> +                       goto repeat;
-> +               }
-> +               spin_unlock(&dentry->d_lock);
-> +       }
-> +       /*
-> +        * All done at this level ... ascend and resume the search.
-> +        */
-> +       rcu_read_lock();
-> +ascend:
-> +       if (this_parent != parent) {
-> +               struct dentry *child = this_parent;
-> +               this_parent = child->d_parent;
-> +
-> +               spin_unlock(&child->d_lock);
-> +               spin_lock(&this_parent->d_lock);
-> +
-> +               /* go into the first sibling still alive */
-> +               do {
-> +                       next = child->d_child.next;
-> +                       if (next == &this_parent->d_subdirs)
-> +                               goto ascend;
-> +                       child = list_entry(next, struct dentry, d_child);
-> +               } while (unlikely(child->d_flags & DCACHE_DENTRY_KILLED));
-> +               rcu_read_unlock();
-> +               goto resume;
-> +       }
-> +       rcu_read_unlock();
-> +
-> +out_unlock:
-> +       spin_unlock(&this_parent->d_lock);
-> +       return;
-> +}
-> +
->  static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
->  {
->         substring_t args[MAX_OPT_ARGS];
-> @@ -193,6 +266,7 @@ static int tracefs_parse_options(char *data, struct tracefs_mount_opts *opts)
->                         if (!gid_valid(gid))
->                                 return -EINVAL;
->                         opts->gid = gid;
-> +                       set_gid(tracefs_mount->mnt_root, gid);
->                         break;
->                 case Opt_mode:
->                         if (match_octal(&args[0], &option))
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>         if (pmd_trans_huge(*pmd)) {
+>                 pmd_t orig_pmd;
 > --
-> 2.31.1
+> 2.17.1
 >

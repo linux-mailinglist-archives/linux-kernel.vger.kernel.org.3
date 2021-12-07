@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D2646C2AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6F446C2B3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 19:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239842AbhLGS1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 13:27:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45182 "EHLO
+        id S240464AbhLGS36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 13:29:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235273AbhLGS1O (ORCPT
+        with ESMTP id S239857AbhLGS36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 13:27:14 -0500
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA29C061748
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 10:23:44 -0800 (PST)
-Received: by mail-ua1-x930.google.com with SMTP id i6so87228uae.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 10:23:44 -0800 (PST)
+        Tue, 7 Dec 2021 13:29:58 -0500
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8E8C061748
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 10:26:27 -0800 (PST)
+Received: by mail-vk1-xa32.google.com with SMTP id q21so9922395vkn.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 10:26:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=WFFnGguuAfJNNlyzWzYsEDjqWn3Es8o9KH8UkSEiIJg=;
-        b=QXZdsesh40yspp/vuC5Vm4kMeddsWnQpKc0BAPZaKnCnpIg7QL+i3AYQbm/r10ITsH
-         kCH+skGM9Kvqr0wsMAM4D0rE5+zGBHo33hoCIH6hI3VPck20O82PjYLJWHBJn6TrUoD5
-         fge5j2BSWbIn2Gi8Lxu55GIILQB7foQ2bwRNfILJZYG9WhX11A/tjE0Ns06xbKV8Sdho
-         Ftpv2zumMtcyoz8/eGZGylQK3VBRYyXJYXuM3NSXp2IQu143V1XWo/80J/YCte/zlfXs
-         tnugYlYug+jWNblRHSs5zDksVV3Xh7DvY4QYxU727mRn4P22JNaLfq+VdlhBlo+Rg3FB
-         71nw==
+         :cc;
+        bh=KOYSjdHYBV8TKUHkuO1ISt5K4kTgwN/3GjP4cOdaJ+0=;
+        b=clfFHliTJzuituvKR96ulQ6OK3kqWSIrEqQOR4zM4aV/baQUI0RFYnullFv8E8Ym9Y
+         G9a5fzk+HtbFCGHBzytGaPwOp/Y5HaPhwRrVCXiE5K7YMbp78l7K0Er0oAghrv2rPMlf
+         bOi/o19luqrfxeLNJq9DjCzvQ2R8NoU2w4fh7oPqs4LAkPE8c/ydOEeJv4b0m7Mm26aq
+         +MtXlJygLTj8zF1+VoYDEDOrVmgkStgRkKvfF/lUwuZa6MW1vRjAFPvIDkYiWN8e+53F
+         CH1U7NAb2Kdszv9cDSv45b/Z7avucxb+enHJ/n//Xh09cinZBY3g+vWzBIEYn7824Rl5
+         ETaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=WFFnGguuAfJNNlyzWzYsEDjqWn3Es8o9KH8UkSEiIJg=;
-        b=bpz4Hy77dH4yb16bF12cVn/OiMnJfZrglK6y0EzS5gpNn0EfD/dgNKUiIzaRaPk8gl
-         8MvECA8q454vM75Hu/H1e7mQoX/8mFaQPtB/ZkB/MAUgrSpW5hWEKH+2W6xKZA0yxFSg
-         HAnAs1BZUJGD0+OituekSOjEmeH2t27pp+AqOqYJVYBsXXdBHu5o4p1jwShOzQ2FP5hd
-         qxpRjb1xDQ6vkDhrJ6Dr9CFmTzgROOO6gHajzcQUmzksSm7GeOLsvVdIxOWp1P8OCkbE
-         g5RrrmrjTc1iC/hJlp/gaNUcfmZEBR8ebEAOD7FgZDSDbnboriqy1lMTV5xqEMPoD2PE
-         g5uw==
-X-Gm-Message-State: AOAM530ncyl+g2Jw5+Hg6WAXTJwrr0M5hMwe0ce4uMfu8K1E3w1i9JIo
-        5SC7TPCfdup4rImAR6Gn8m0UoRth+LE5AbQdYiO39w==
-X-Google-Smtp-Source: ABdhPJzhaNDn+hR8Qy06/GBXd2FkzRqewGIyrqT1j1J8CgqqD8P0mc41IH5Pb0jPdTIcD/UIQ3uJiyVReoJxL8RZWu4=
-X-Received: by 2002:ab0:6f4f:: with SMTP id r15mr962993uat.17.1638901423133;
- Tue, 07 Dec 2021 10:23:43 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=KOYSjdHYBV8TKUHkuO1ISt5K4kTgwN/3GjP4cOdaJ+0=;
+        b=DHH1OqeJkA/Ze1qH13Y44fMV62N4J9MFDl7pmqacTJuBfSCbp3zGXe33xxmXIfJIXq
+         OpTy4iIlV9JBnJ0Q/0UL77TdtmoJ6dMTUu0fumo5+yksK9nikTvZ6nX9M2H8S5epCzkp
+         P+59j9WA30OKiKpc8rpLAAcal3/4gyZc3UX8HONhbmJu693G/O4Yv65q+kybxPZFCRIf
+         y0/3BJqIGualdtNQMU//N3DL8f+OgMlghnsioScWBXaJKMn/mxDIbTHr3JEChv3AsbDD
+         G3kfCMrJumg6e+Il8NNbDJEJk971t0V/8rFqwXbyvNx8Gx1gOc/XrxICiFsqnBiZEVUt
+         uNzA==
+X-Gm-Message-State: AOAM531aDY5/8MG3RhIuG4HC+rndXxnFEXJOMQvvA0UtXPGTw4nBdmEz
+        mh3tgNFsRObbC+lQrqdsPDh8cUszmVEi+ita9LPAyQ==
+X-Google-Smtp-Source: ABdhPJzPkEALntqueRozx/btL2H3rZpdzbM0gxwcBKNAOihMH/NPP8Ud2tf8oC0uIvhCZKEuVTx5xEOXRUx7xNH5JnA=
+X-Received: by 2002:a05:6122:ca6:: with SMTP id ba38mr55043958vkb.14.1638901586564;
+ Tue, 07 Dec 2021 10:26:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20211206153124.427102-1-virag.david003@gmail.com> <20211206153124.427102-3-virag.david003@gmail.com>
-In-Reply-To: <20211206153124.427102-3-virag.david003@gmail.com>
+References: <20211206153124.427102-1-virag.david003@gmail.com> <20211206153124.427102-4-virag.david003@gmail.com>
+In-Reply-To: <20211206153124.427102-4-virag.david003@gmail.com>
 From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Tue, 7 Dec 2021 20:23:31 +0200
-Message-ID: <CAPLW+4ndzvks6os2W1o+_7dyi_DZKjgqpoFfsS90pzXWVTpkGg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/7] dt-bindings: clock: Document Exynos7885 CMU bindings
+Date:   Tue, 7 Dec 2021 20:26:14 +0200
+Message-ID: <CAPLW+4nVPE=RCwhLe7wLFR1aWOHh4ZmrA56uiNPYXij7rPkOag@mail.gmail.com>
+Subject: Re: [PATCH v4 3/7] dt-bindings: arm: samsung: document jackpotlte
+ board binding
 To:     David Virag <virag.david003@gmail.com>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -63,221 +64,48 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, 6 Dec 2021 at 17:32, David Virag <virag.david003@gmail.com> wrote:
 >
-> Provide dt-schema documentation for Exynos7885 SoC clock controller.
-> Description is modified from Exynos850 clock controller documentation as
-> I couldn't describe it any better, that was written by Sam Protsenko.
+> Add binding for the jackpotlte board (Samsung Galaxy A8 (2018)).
 >
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > Signed-off-by: David Virag <virag.david003@gmail.com>
 > ---
 
 Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 
 > Changes in v2:
->   - Fixed double : in description
->   - Added R-b tag by Krzysztof Kozlowski
+>   - Nothing
 >
 > Changes in v3:
 >   - Nothing
 >
 > Changes in v4:
->   - Fix leading 0x in example.
+>   - Nothing
 >
->  .../clock/samsung,exynos7885-clock.yaml       | 166 ++++++++++++++++++
->  1 file changed, 166 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/samsung,exyno=
-s7885-clock.yaml
+>  .../devicetree/bindings/arm/samsung/samsung-boards.yaml     | 6 ++++++
+>  1 file changed, 6 insertions(+)
 >
-> diff --git a/Documentation/devicetree/bindings/clock/samsung,exynos7885-c=
-lock.yaml b/Documentation/devicetree/bindings/clock/samsung,exynos7885-cloc=
-k.yaml
-> new file mode 100644
-> index 000000000000..7e5a9cac2fd2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/samsung,exynos7885-clock.ya=
-ml
-> @@ -0,0 +1,166 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/samsung,exynos7885-clock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+> index ef6dc14be4b5..d88571202713 100644
+> --- a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+> +++ b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+> @@ -199,6 +199,12 @@ properties:
+>                - samsung,exynos7-espresso        # Samsung Exynos7 Espresso
+>            - const: samsung,exynos7
+>
+> +      - description: Exynos7885 based boards
+> +        items:
+> +          - enum:
+> +              - samsung,jackpotlte              # Samsung Galaxy A8 (2018)
+> +          - const: samsung,exynos7885
 > +
-> +title: Samsung Exynos7885 SoC clock controller
-> +
-> +maintainers:
-> +  - D=C3=A1vid Vir=C3=A1g <virag.david003@gmail.com>
-> +  - Chanwoo Choi <cw00.choi@samsung.com>
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> +  - Sylwester Nawrocki <s.nawrocki@samsung.com>
-> +  - Tomasz Figa <tomasz.figa@gmail.com>
-> +
-> +description: |
-> +  Exynos7885 clock controller is comprised of several CMU units, generat=
-ing
-> +  clocks for different domains. Those CMU units are modeled as separate =
-device
-> +  tree nodes, and might depend on each other. The root clock in that roo=
-t tree
-> +  is an external clock: OSCCLK (26 MHz). This external clock must be def=
-ined
-> +  as a fixed-rate clock in dts.
-> +
-> +  CMU_TOP is a top-level CMU, where all base clocks are prepared using P=
-LLs and
-> +  dividers; all other leaf clocks (other CMUs) are usually derived from =
-CMU_TOP.
-> +
-> +  Each clock is assigned an identifier and client nodes can use this ide=
-ntifier
-> +  to specify the clock which they consume. All clocks available for usag=
-e
-> +  in clock consumer nodes are defined as preprocessor macros in
-> +  'dt-bindings/clock/exynos7885.h' header.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - samsung,exynos7885-cmu-top
-> +      - samsung,exynos7885-cmu-core
-> +      - samsung,exynos7885-cmu-peri
-> +
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 10
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    maxItems: 10
-> +
-> +  "#clock-cells":
-> +    const: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: samsung,exynos7885-cmu-top
-> +
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: External reference clock (26 MHz)
-> +
-> +        clock-names:
-> +          items:
-> +            - const: oscclk
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: samsung,exynos7885-cmu-core
-> +
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: External reference clock (26 MHz)
-> +            - description: CMU_CORE bus clock (from CMU_TOP)
-> +            - description: CCI clock (from CMU_TOP)
-> +            - description: G3D clock (from CMU_TOP)
-> +
-> +        clock-names:
-> +          items:
-> +            - const: oscclk
-> +            - const: dout_core_bus
-> +            - const: dout_core_cci
-> +            - const: dout_core_g3d
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: samsung,exynos7885-cmu-peri
-> +
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: External reference clock (26 MHz)
-> +            - description: CMU_PERI bus clock (from CMU_TOP)
-> +            - description: SPI0 clock (from CMU_TOP)
-> +            - description: SPI1 clock (from CMU_TOP)
-> +            - description: UART0 clock (from CMU_TOP)
-> +            - description: UART1 clock (from CMU_TOP)
-> +            - description: UART2 clock (from CMU_TOP)
-> +            - description: USI0 clock (from CMU_TOP)
-> +            - description: USI1 clock (from CMU_TOP)
-> +            - description: USI2 clock (from CMU_TOP)
-> +
-> +        clock-names:
-> +          items:
-> +            - const: oscclk
-> +            - const: dout_peri_bus
-> +            - const: dout_peri_spi0
-> +            - const: dout_peri_spi1
-> +            - const: dout_peri_uart0
-> +            - const: dout_peri_uart1
-> +            - const: dout_peri_uart2
-> +            - const: dout_peri_usi0
-> +            - const: dout_peri_usi1
-> +            - const: dout_peri_usi2
-> +
-> +required:
-> +  - compatible
-> +  - "#clock-cells"
-> +  - clocks
-> +  - clock-names
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  # Clock controller node for CMU_PERI
-> +  - |
-> +    #include <dt-bindings/clock/exynos7885.h>
-> +
-> +    cmu_peri: clock-controller@10010000 {
-> +        compatible =3D "samsung,exynos7885-cmu-peri";
-> +        reg =3D <0x10010000 0x8000>;
-> +        #clock-cells =3D <1>;
-> +
-> +        clocks =3D <&oscclk>,
-> +                 <&cmu_top CLK_DOUT_PERI_BUS>,
-> +                 <&cmu_top CLK_DOUT_PERI_SPI0>,
-> +                 <&cmu_top CLK_DOUT_PERI_SPI1>,
-> +                 <&cmu_top CLK_DOUT_PERI_UART0>,
-> +                 <&cmu_top CLK_DOUT_PERI_UART1>,
-> +                 <&cmu_top CLK_DOUT_PERI_UART2>,
-> +                 <&cmu_top CLK_DOUT_PERI_USI0>,
-> +                 <&cmu_top CLK_DOUT_PERI_USI1>,
-> +                 <&cmu_top CLK_DOUT_PERI_USI2>;
-> +        clock-names =3D "oscclk",
-> +                      "dout_peri_bus",
-> +                      "dout_peri_spi0",
-> +                      "dout_peri_spi1",
-> +                      "dout_peri_uart0",
-> +                      "dout_peri_uart1",
-> +                      "dout_peri_uart2",
-> +                      "dout_peri_usi0",
-> +                      "dout_peri_usi1",
-> +                      "dout_peri_usi2";
-> +    };
-> +
-> +...
+>        - description: Exynos Auto v9 based boards
+>          items:
+>            - enum:
 > --
 > 2.34.1
 >

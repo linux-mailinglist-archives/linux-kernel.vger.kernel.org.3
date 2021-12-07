@@ -2,147 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC9A46C0B0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:27:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9540346C0B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 17:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239649AbhLGQbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 11:31:01 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:54594 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239631AbhLGQbA (ORCPT
+        id S236513AbhLGQbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 11:31:14 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46168 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229882AbhLGQbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 11:31:00 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 68F0C21763;
-        Tue,  7 Dec 2021 16:27:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638894449; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kIF7c/GC399ClUmX9kOCgFAXVwR1ENNV1ti6qlHDyxE=;
-        b=MmhP3fHYP/OFuMvrgV6vV32tQ5r69cLHLQSZNcKJXiHI3PuOOZySlpPbdCBdk/fwjo3pi8
-        jgtjx5jIgAl9fwArKG26wB9uLnWJIB3iESXRxLkR53gZL+NHT3Fpf87hFG/XMfmrzJ0Ged
-        AgL4ZRpRWaGRkCfSS+mWi64FVoAboUA=
-Received: from suse.cz (unknown [10.100.201.86])
+        Tue, 7 Dec 2021 11:31:12 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 333D9A3B88;
-        Tue,  7 Dec 2021 16:27:29 +0000 (UTC)
-Date:   Tue, 7 Dec 2021 17:27:25 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Alexey Makhalov <amakhalov@vmware.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v3] mm: fix panic in __alloc_pages
-Message-ID: <Ya+LbaD8mkvIdq+c@dhcp22.suse.cz>
-References: <Ya89aqij6nMwJrIZ@dhcp22.suse.cz>
- <1043a1a4-b7f2-8730-d192-7cab9f15ee24@redhat.com>
- <Ya9P5NxhcZDcyptT@dhcp22.suse.cz>
- <ab5cfba0-1d49-4e4d-e2c8-171e24473c1b@redhat.com>
- <Ya9gN3rZ1eQou3rc@dhcp22.suse.cz>
- <77e785e6-cf34-0cff-26a5-852d3786a9b8@redhat.com>
- <Ya992YvnZ3e3G6h0@dhcp22.suse.cz>
- <b7deaf90-8c3c-c22a-b8dc-e6d98bc93ae6@redhat.com>
- <Ya+EHUYgzo8GaCeq@dhcp22.suse.cz>
- <d01c20fe-86d2-1dc8-e56d-15c0da49afb3@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9259EB816F8
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 16:27:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFC70C341C3;
+        Tue,  7 Dec 2021 16:27:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638894460;
+        bh=8nN/fY1mhHkeTR7cezH7UxSxdsu1XjxSVOY8LyupowA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dOpVfFOqRj17/JwcQnRMwePsIiutNjHTdd/k4gW0nYPbZbBtFbjIY0utf+DnLBMEY
+         qyTH/g4FRR+x3mN6RShkNs1TNcZ4VavW+um63UU5+ELEqZU/I2WG1elWIN9mhq3q6I
+         Cq626YNvBB+FW/L27EY9DoEisVJ8YykiTPCTDFVyF7NPspFiZUDwNuT3PA7bDgs077
+         ZKbS2BhpAmWgV8xyi3sxwxWB0ZaRKY0ehVv9v67pBFIhgdBBssC6OM1cJdeWHLRHnW
+         K3aKny+mYazyYMDl9v0zCJfqK2uFalMdZ7QwxnpUlR5lH0SjpdXpFBF7RV4T2d/L3z
+         beBG9fBP1BS6A==
+Date:   Tue, 7 Dec 2021 09:27:35 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     arnd@arndb.de, ndesaulniers@google.com,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: Re: [PATCH] powerpc: platforms: cell: pervasive: fix clang
+ -Wimplicit-fallthrough
+Message-ID: <Ya+Ld7OG70Dn9Dub@archlinux-ax161>
+References: <20211207110228.698956-1-anders.roxell@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d01c20fe-86d2-1dc8-e56d-15c0da49afb3@redhat.com>
+In-Reply-To: <20211207110228.698956-1-anders.roxell@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 07-12-21 17:09:50, David Hildenbrand wrote:
-> On 07.12.21 16:56, Michal Hocko wrote:
-> > On Tue 07-12-21 16:34:30, David Hildenbrand wrote:
-> >> On 07.12.21 16:29, Michal Hocko wrote:
-> >>> On Tue 07-12-21 16:09:39, David Hildenbrand wrote:
-> >>>> On 07.12.21 14:23, Michal Hocko wrote:
-> >>>>> On Tue 07-12-21 13:28:31, David Hildenbrand wrote:
-> >>>>> [...]
-> >>>>>> But maybe I am missing something important regarding online vs. offline
-> >>>>>> nodes that your patch changes?
-> >>>>>
-> >>>>> I am relying on alloc_node_data setting the node online. But if we are
-> >>>>> to change the call to arch_alloc_node_data then the patch needs to be
-> >>>>> more involved. Here is what I have right now. If this happens to be the
-> >>>>> right way then there is some additional work to sync up with the hotplug
-> >>>>> code.
-> >>>>>
-> >>>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> >>>>> index c5952749ad40..a296e934ad2f 100644
-> >>>>> --- a/mm/page_alloc.c
-> >>>>> +++ b/mm/page_alloc.c
-> >>>>> @@ -8032,8 +8032,23 @@ void __init free_area_init(unsigned long *max_zone_pfn)
-> >>>>>  	/* Initialise every node */
-> >>>>>  	mminit_verify_pageflags_layout();
-> >>>>>  	setup_nr_node_ids();
-> >>>>> -	for_each_online_node(nid) {
-> >>>>> -		pg_data_t *pgdat = NODE_DATA(nid);
-> >>>>> +	for_each_node(nid) {
-> >>>>> +		pg_data_t *pgdat;
-> >>>>> +
-> >>>>> +		if (!node_online(nid)) {
-> >>>>> +			pr_warn("Node %d uninitialized by the platform. Please report with memory map.\n", nid);
-> >>>>> +			pgdat = arch_alloc_nodedata(nid);
-> >>>>> +			pgdat->per_cpu_nodestats = alloc_percpu(struct per_cpu_nodestat);
-> >>>>> +			arch_refresh_nodedata(nid, pgdat);
-> >>>>> +			node_set_online(nid);
-> >>>>
-> >>>> Setting all possible nodes online might result in quite some QE noice,
-> >>>> because all these nodes will then be visible in the sysfs and
-> >>>> try_offline_nodes() is essentially for the trash.
-> >>>
-> >>> I am not sure I follow. I believe sysfs will not get populate because I
-> >>> do not call register_one_node.
-> >>
-> >> arch/x86/kernel/topology.c:topology_init()
-> >>
-> >> for_each_online_node(i)
-> >> 	register_one_node(i);
-> > 
-> > Right you are.
-> >  
-> >>> You are right that try_offline_nodes will be reduce which is good imho.
-> >>> More changes will be possible (hopefully to drop some ugly code) on top
-> >>> of this change (or any other that achieves that there are no NULL pgdat
-> >>> for possible nodes).
-> >>>
-> >>
-> >> No to exposing actually offline nodes to user space via sysfs.
-> > 
-> > Why is that a problem with the sysfs for non-populated nodes?
-> > 
+On Tue, Dec 07, 2021 at 12:02:28PM +0100, Anders Roxell wrote:
+> Clang warns:
 > 
-> https://lore.kernel.org/linuxppc-dev/20200428093836.27190-1-srikar@linux.vnet.ibm.com/t/
+> arch/powerpc/platforms/cell/pervasive.c:81:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+>         case SRR1_WAKEEE:
+>         ^
+> arch/powerpc/platforms/cell/pervasive.c:81:2: note: insert 'break;' to avoid fall-through
+>         case SRR1_WAKEEE:
+>         ^
+>         break;
+> 1 error generated.
+> 
+> Clang is more pedantic than GCC, which does not warn when failing
+> through to a case that is just break or return. Clang's version
+> is more in line with the kernel's own stance in deprecated.rst.
+> Add athe missing break to silence the warning.
 
-Thanks. It is good to be reminded that we are in cicling around this
-problem for quite some time without really forward much.
+      ^ small typo, probably not worth a resend
 
-> Contains some points -- certainly nothing unfixable but it clearly shows
-> that users expect only nodes with actual memory and cpus to be online --
-> that's why we export the possible+online state to user space. My point
-> is to be careful with such drastic changes and do one step at a time.
->
-> I think preallocation of the pgdat is a reasonable thing to have without
-> changing user-space visible semantics or even in-kernel semantics.
+> 
+> Fixes: 6e83985b0f6e ("powerpc/cbe: Do not process external or decremeter interrupts from sreset")
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 
-So your proposal is to drop set_node_online from the patch and add it as
-a separate one which handles 
-	- sysfs part (i.e. do not register a node which doesn't span a
-	  physical address space)
-	- hotplug side of (drop the pgd allocation, register node lazily
-	  when a first memblocks are registered)
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-Makes sense?
--- 
-Michal Hocko
-SUSE Labs
+> ---
+>  arch/powerpc/platforms/cell/pervasive.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/powerpc/platforms/cell/pervasive.c b/arch/powerpc/platforms/cell/pervasive.c
+> index 5b9a7e9f144b..dff8d5e7ab82 100644
+> --- a/arch/powerpc/platforms/cell/pervasive.c
+> +++ b/arch/powerpc/platforms/cell/pervasive.c
+> @@ -78,6 +78,7 @@ static int cbe_system_reset_exception(struct pt_regs *regs)
+>  	switch (regs->msr & SRR1_WAKEMASK) {
+>  	case SRR1_WAKEDEC:
+>  		set_dec(1);
+> +		break;
+>  	case SRR1_WAKEEE:
+>  		/*
+>  		 * Handle these when interrupts get re-enabled and we take
+> -- 
+> 2.33.0
+> 

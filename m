@@ -2,156 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D12B446B1DA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 05:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B888846B1E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 05:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235855AbhLGEd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 23:33:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
+        id S235992AbhLGEfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 23:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233659AbhLGEd5 (ORCPT
+        with ESMTP id S233659AbhLGEfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 23:33:57 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2476C061746
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 20:30:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wKd62R1O+n/b8+8p7dSshUv94xdrcZFmKMGZQmbSu/8=; b=A+hZR/vUX5VNCcHOMYNR+9q1Gf
-        k+mL5iQ4ZZgSQyG7gkWT5RDAZptG15HEvq79LhxNskciPTWTgZ3Y81xJ/MaVB36m3RgXahYMiAeST
-        m1NBgzCyRfNbClpRAt8Bta9nG61I0WAYpb9/iqGVBU2oKuMLnTfNTXZcyTEKw9ly1vCfjK8T9cCir
-        2v7MVV68LqwJwJjr2zOle6qCci0SQtipocH0Kk6KMLr6lJoUQAB1PIL6Y/8G213eMC2dOUNzZgKNp
-        pTitwH6brwSE2Cj7kMvgaOw7yAqHTydQI21pBslbBvmx+FNqH2PQqF3M4H1cNN8iW+wB1TH37FyRF
-        UZkuEhjA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1muS7V-006w14-G0; Tue, 07 Dec 2021 04:30:25 +0000
-Date:   Tue, 7 Dec 2021 04:30:25 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     syzbot <syzbot+7cd473c2cac13fd2dd72@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference
- in folio_mark_dirty
-Message-ID: <Ya7jYRDwQqftGLtW@casper.infradead.org>
-References: <0000000000005f297e05d24f05f6@google.com>
- <20211206175631.5d0c3caefa96f0479f0fc2e8@linux-foundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206175631.5d0c3caefa96f0479f0fc2e8@linux-foundation.org>
+        Mon, 6 Dec 2021 23:35:02 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8938FC061354
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 20:31:32 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id 61-20020a17090a09c300b001adc4362b42so997469pjo.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 20:31:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=K7euZbyWNX2ta4I57cBHSw4Q5N0mYoG5GUIKq874i+o=;
+        b=dPhH/UsMOylT5QvMK9bZDLTGOriozO3FD1jzQcbKMul8WzY6i8jcO0GaHI0Qt9N+7f
+         tZA3jtLHRLds4VR6Pbmn4MZnBioviDrliJUlAt/7k0ExE/UEtloUkbA0BIqR/+QvTHYD
+         SEiPnvYmZfBO0kTFAQD84O28CVxgOz/6RKzHR9xfpLfnhiH0KVNgums6ovhDmsNbqnTD
+         BxPKK7NR2HTnWTDGjrrMF3UvIOmCNfjsZR8wyb2NcPLeX/UG6d6lvejBbZKZczWDmhd1
+         vGwrn4tr0QKTxsk8Y0fEM5RyVspbsEKXTQiDHfMQ9366FaD5seypcTE4HNoeITXBjBS+
+         dZCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=K7euZbyWNX2ta4I57cBHSw4Q5N0mYoG5GUIKq874i+o=;
+        b=kVzDjOPGsDAhCH/AlyabyieAk3Co26iyrkKLx+fsbNweF8oUraQ7nD/kdsDQXhmr67
+         QVKlIzNmBWkJEhohvrsW2dMnVkWU9gyz+oO8b8xf2gQtbB5Sp7fS/Z6hwAZ76jaFSnNs
+         ZKUvgZEE7BRd6Lj7RyUJsdoW8qN06XLMkgjtPB+PVwq3vyeTZA7OKRVo7DOe2dB+Ed0D
+         4FpeC3e24b9pMYyBn2uYxY7qPMKgenUUvy2SOpeSeVBqEu+Nx40c/1V53Z9bnaaChsJ/
+         ZDqQAdeTgQ4dwjJoj8QJy1GSb3am1mFQugTzQnlKuzHRFGykzE6CHnpAujQEJFYpDajg
+         3tVg==
+X-Gm-Message-State: AOAM5328zrLUTo+5O8OcvCulQiCkNWoWE3l+dwcLz8zb1br95DOMzPXM
+        TK1JX9z+htCh02q0tIekP48vT782/xIJ
+X-Google-Smtp-Source: ABdhPJxiQK8cujFiXdSCJI7KloTZeBJuh8vfwX8QTFSo8Fw35fpkzgDpmwRR/cakDUoIew9SskGdWxgaqR6a
+X-Received: from marcorr-sp.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:e50])
+ (user=marcorr job=sendgmr) by 2002:a17:90b:1486:: with SMTP id
+ js6mr385955pjb.0.1638851491597; Mon, 06 Dec 2021 20:31:31 -0800 (PST)
+Date:   Mon,  6 Dec 2021 20:31:00 -0800
+Message-Id: <20211207043100.3357474-1-marcorr@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
+Subject: [PATCH] KVM: x86: Always set kvm_run->if_flag
+From:   Marc Orr <marcorr@google.com>
+To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        thomas.lendacky@amd.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Marc Orr <marcorr@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 05:56:31PM -0800, Andrew Morton wrote:
-> On Sat, 04 Dec 2021 01:55:17 -0800 syzbot <syzbot+7cd473c2cac13fd2dd72@syzkaller.appspotmail.com> wrote:
-> 
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    58e1100fdc59 MAINTAINERS: co-maintain random.c
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=1362881eb00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=e9ea28d2c3c2c389
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=7cd473c2cac13fd2dd72
-> > compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
-> > 
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+7cd473c2cac13fd2dd72@syzkaller.appspotmail.com
-> > 
-> > BUG: kernel NULL pointer dereference, address: 0000000000000000
-> 
-> cc linux-f2fs-devel@lists.sourceforge.net
-> 
-> And willy, who might help with diagnosing this.  But it does seem that
-> f2fs got itself a NULL page* then put it in places where it shouldn't have.
+The kvm_run struct's if_flag is apart of the userspace/kernel API. The
+SEV-ES patches failed to set this flag because it's no longer needed by
+QEMU (according to the comment in the source code). However, other
+hypervisors may make use of this flag. Therefore, set the flag for
+guests with encrypted regiesters (i.e., with guest_state_protected set).
 
-Oh -- it's not a NULL data pointer.  It's a NULL instruction pointer.
+Fixes: f1c6366e3043 ("KVM: SVM: Add required changes to support intercepts under SEV-ES")
+Signed-off-by: Marc Orr <marcorr@google.com>
+---
+ arch/x86/include/asm/kvm-x86-ops.h | 1 +
+ arch/x86/include/asm/kvm_host.h    | 1 +
+ arch/x86/kvm/svm/svm.c             | 8 ++++++++
+ arch/x86/kvm/vmx/vmx.c             | 6 ++++++
+ arch/x86/kvm/x86.c                 | 9 +--------
+ 5 files changed, 17 insertions(+), 8 deletions(-)
 
-> > #PF: supervisor instruction fetch in kernel mode
-> > #PF: error_code(0x0010) - not-present page
-> > PGD 70764067 P4D 70764067 PUD 0 
-> > Oops: 0010 [#1] PREEMPT SMP KASAN
-> > CPU: 1 PID: 6541 Comm: syz-executor.3 Not tainted 5.16.0-rc3-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > RIP: 0010:0x0
-> > Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
-> > RSP: 0018:ffffc900027ff7f8 EFLAGS: 00010246
-> > RAX: 1ffffffff14fef03 RBX: ffffffff8a7f7818 RCX: ffff88801b40d700
-> > RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffea0002790ec0
-> > RBP: dffffc0000000000 R08: ffffffff81b0fa16 R09: fffff940004f21d9
-> > R10: fffff940004f21d9 R11: 0000000000000000 R12: ffff88806c11c7b0
-> > R13: 0000000000000000 R14: 1ffffd40004f21d9 R15: ffffea0002790ec0
-> > FS:  0000555557165400(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: ffffffffffffffd6 CR3: 0000000030d85000 CR4: 00000000003526e0
-> > Call Trace:
-> >  <TASK>
-> >  folio_mark_dirty+0x136/0x270 mm/page-writeback.c:2639
+diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+index cefe1d81e2e8..9e50da3ed01a 100644
+--- a/arch/x86/include/asm/kvm-x86-ops.h
++++ b/arch/x86/include/asm/kvm-x86-ops.h
+@@ -47,6 +47,7 @@ KVM_X86_OP(set_dr7)
+ KVM_X86_OP(cache_reg)
+ KVM_X86_OP(get_rflags)
+ KVM_X86_OP(set_rflags)
++KVM_X86_OP(get_if_flag)
+ KVM_X86_OP(tlb_flush_all)
+ KVM_X86_OP(tlb_flush_current)
+ KVM_X86_OP_NULL(tlb_remote_flush)
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 860ed500580c..a7f868ff23e7 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1349,6 +1349,7 @@ struct kvm_x86_ops {
+ 	void (*cache_reg)(struct kvm_vcpu *vcpu, enum kvm_reg reg);
+ 	unsigned long (*get_rflags)(struct kvm_vcpu *vcpu);
+ 	void (*set_rflags)(struct kvm_vcpu *vcpu, unsigned long rflags);
++	bool (*get_if_flag)(struct kvm_vcpu *vcpu);
+ 
+ 	void (*tlb_flush_all)(struct kvm_vcpu *vcpu);
+ 	void (*tlb_flush_current)(struct kvm_vcpu *vcpu);
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index d0f68d11ec70..91608f8c0cde 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -1585,6 +1585,13 @@ static void svm_set_rflags(struct kvm_vcpu *vcpu, unsigned long rflags)
+ 	to_svm(vcpu)->vmcb->save.rflags = rflags;
+ }
+ 
++static bool svm_get_if_flag(struct kvm_vcpu *vcpu)
++{
++	struct vmcb *vmcb = to_svm(vcpu)->vmcb;
++
++	return !!(vmcb->control.int_state & SVM_GUEST_INTERRUPT_MASK);
++}
++
+ static void svm_cache_reg(struct kvm_vcpu *vcpu, enum kvm_reg reg)
+ {
+ 	switch (reg) {
+@@ -4621,6 +4628,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+ 	.cache_reg = svm_cache_reg,
+ 	.get_rflags = svm_get_rflags,
+ 	.set_rflags = svm_set_rflags,
++	.get_if_flag = svm_get_if_flag,
+ 
+ 	.tlb_flush_all = svm_flush_tlb,
+ 	.tlb_flush_current = svm_flush_tlb,
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 9453743ce0c4..6056baa13977 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -1363,6 +1363,11 @@ void vmx_set_rflags(struct kvm_vcpu *vcpu, unsigned long rflags)
+ 		vmx->emulation_required = vmx_emulation_required(vcpu);
+ }
+ 
++static bool vmx_get_if_flag(struct kvm_vcpu *vcpu)
++{
++	return !!(vmx_get_rflags(vcpu) & X86_EFLAGS_IF);
++}
++
+ u32 vmx_get_interrupt_shadow(struct kvm_vcpu *vcpu)
+ {
+ 	u32 interruptibility = vmcs_read32(GUEST_INTERRUPTIBILITY_INFO);
+@@ -7575,6 +7580,7 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
+ 	.cache_reg = vmx_cache_reg,
+ 	.get_rflags = vmx_get_rflags,
+ 	.set_rflags = vmx_set_rflags,
++	.get_if_flag = vmx_get_if_flag,
+ 
+ 	.tlb_flush_all = vmx_flush_tlb_all,
+ 	.tlb_flush_current = vmx_flush_tlb_current,
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index e0aa4dd53c7f..45e836db5bcd 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -8995,14 +8995,7 @@ static void post_kvm_run_save(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_run *kvm_run = vcpu->run;
+ 
+-	/*
+-	 * if_flag is obsolete and useless, so do not bother
+-	 * setting it for SEV-ES guests.  Userspace can just
+-	 * use kvm_run->ready_for_interrupt_injection.
+-	 */
+-	kvm_run->if_flag = !vcpu->arch.guest_state_protected
+-		&& (kvm_get_rflags(vcpu) & X86_EFLAGS_IF) != 0;
+-
++	kvm_run->if_flag = static_call(kvm_x86_get_if_flag)(vcpu);
+ 	kvm_run->cr8 = kvm_get_cr8(vcpu);
+ 	kvm_run->apic_base = kvm_get_apic_base(vcpu);
+ 
+-- 
+2.34.1.400.ga245620fadb-goog
 
-        if (likely(mapping)) {
-...
-                if (folio_test_reclaim(folio))
-                        folio_clear_reclaim(folio);
-                return mapping->a_ops->set_page_dirty(&folio->page);
-
-how do we get to a NULL ->set_page_dirty for a metadata page's
-mapping->a_ops?  This is definitely an f2fs expert question.
-
-> >  f2fs_update_meta_page+0x4b/0x380 fs/f2fs/segment.c:2485
-> >  do_checkpoint fs/f2fs/checkpoint.c:1513 [inline]
-> >  f2fs_write_checkpoint+0x31ad/0x5430 fs/f2fs/checkpoint.c:1674
-> >  f2fs_issue_checkpoint+0x361/0x4e0
-> >  sync_filesystem+0x19c/0x1f0 fs/sync.c:63
-> >  generic_shutdown_super+0x6b/0x300 fs/super.c:448
-> >  kill_block_super+0x79/0xd0 fs/super.c:1397
-> >  kill_f2fs_super+0x2f9/0x3c0 fs/f2fs/super.c:4478
-> >  deactivate_locked_super+0xa7/0xf0 fs/super.c:335
-> >  cleanup_mnt+0x462/0x510 fs/namespace.c:1137
-> >  task_work_run+0x146/0x1c0 kernel/task_work.c:164
-> >  tracehook_notify_resume include/linux/tracehook.h:189 [inline]
-> >  exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
-> >  exit_to_user_mode_prepare+0x209/0x220 kernel/entry/common.c:207
-> >  __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
-> >  syscall_exit_to_user_mode+0x2e/0x70 kernel/entry/common.c:300
-> >  do_syscall_64+0x53/0xd0 arch/x86/entry/common.c:86
-> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > RIP: 0033:0x7f6cfdd59f57
-> > Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007fffcbddcad8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-> > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f6cfdd59f57
-> > RDX: 00007fffcbddcbac RSI: 000000000000000a RDI: 00007fffcbddcba0
-> > RBP: 00007fffcbddcba0 R08: 00000000ffffffff R09: 00007fffcbddc970
-> > R10: 0000555557166903 R11: 0000000000000246 R12: 00007f6cfddb2105
-> > R13: 00007fffcbdddc60 R14: 0000555557166810 R15: 00007fffcbdddca0
-> >  </TASK>
-> > Modules linked in:
-> > CR2: 0000000000000000
-> > ---[ end trace 08eda5a5e35b48a0 ]---
-> > RIP: 0010:0x0
-> > Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
-> > RSP: 0018:ffffc900027ff7f8 EFLAGS: 00010246
-> > RAX: 1ffffffff14fef03 RBX: ffffffff8a7f7818 RCX: ffff88801b40d700
-> > RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffea0002790ec0
-> > RBP: dffffc0000000000 R08: ffffffff81b0fa16 R09: fffff940004f21d9
-> > R10: fffff940004f21d9 R11: 0000000000000000 R12: ffff88806c11c7b0
-> > R13: 0000000000000000 R14: 1ffffd40004f21d9 R15: ffffea0002790ec0
-> > FS:  0000555557165400(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: ffffffffffffffd6 CR3: 0000000030d85000 CR4: 00000000003526e0
-> > 
-> > 
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > 
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

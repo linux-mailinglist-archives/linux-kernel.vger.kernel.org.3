@@ -2,139 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEEC46B8C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FFFD46B8CB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 11:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235029AbhLGK0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 05:26:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37105 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229528AbhLGK0E (ORCPT
+        id S235027AbhLGK1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 05:27:12 -0500
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:60383 "EHLO
+        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229528AbhLGK1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 05:26:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638872554;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vIblGTzXX40hR9szafjbMCGgx30k6YagvsBGLTnN0YI=;
-        b=BTDOiJ5TJMdVA0OeZUlCpys29dUUgn83u++Cd8E2huJfN8Z3qTb1VrxgkeAPbXm9tGWon3
-        /2ZKpoQr8JXbzPU6d2+DcsUcR//Eklj4v70MZ03tXpsMUOdlhnRxN5bZ6wdohzgNKIUFMX
-        CVRerwo4ZUgTAErBhPTr8f4ym+2/q0A=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-428-wkeSHWtPPgugkuhUDxoK9g-1; Tue, 07 Dec 2021 05:22:33 -0500
-X-MC-Unique: wkeSHWtPPgugkuhUDxoK9g-1
-Received: by mail-wr1-f69.google.com with SMTP id o4-20020adfca04000000b0018f07ad171aso2765020wrh.20
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 02:22:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:subject:to:cc:references:from
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-transfer-encoding:content-language;
-        bh=vIblGTzXX40hR9szafjbMCGgx30k6YagvsBGLTnN0YI=;
-        b=oxgrsu5GdFKz5SkXuOZ54e3syck1gPdUqqHl/ZXLblPFGU0r5JvmFS5W6/S/Q8OMx4
-         7TZIZIU1KfLwg8taBhl1/XxacfiRYqBuixW912WubbJrdmZhVnhlvo8yqjMePt0J+2Cr
-         AC+GVd5pHw3RQl1pFKrviJYbIXtwe2mr8BPPPWl1S7OVZ0/PKIW2L/ABUype+GqXru/A
-         Qdc5HN63svyGDQcwbykUIecAr0vc20K3MnZB5Wz45+uRlh18wyUgZwaPAWd+NNg5FrIQ
-         frt6tBNOwYWrD6r+HVVXGCBeBj//iM9SrX9X+P4dOaONIopY9N53JiZp4VtwgFAV1Q22
-         51vQ==
-X-Gm-Message-State: AOAM532b+oLhQ8sdNF/dbbuf9doheVH8ViD4e8js2Ob/2MVvV+SSreew
-        9i3KUUNOgZFIamvLp5JOAievjcEf9jrY2H0a0TuzgEL0BkdjqlyIhromVfx9cH/MvZG7ZB/OPKE
-        u+Dqm9K1Mh/k4J+pKBRQ/7QPj
-X-Received: by 2002:a05:600c:4f55:: with SMTP id m21mr5891536wmq.68.1638872552025;
-        Tue, 07 Dec 2021 02:22:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzOgIcH/ywM872FWWEzo4wI3r37JDW61iH1Cfi/iZw3pSmHii9bhQ9WabrWC9ggWBBYhH9xLg==
-X-Received: by 2002:a05:600c:4f55:: with SMTP id m21mr5891493wmq.68.1638872551786;
-        Tue, 07 Dec 2021 02:22:31 -0800 (PST)
-Received: from ?IPv6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id k8sm13945681wrn.91.2021.12.07.02.22.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 02:22:31 -0800 (PST)
-Reply-To: eric.auger@redhat.com
-Subject: Re: [RFC v16 1/9] iommu: Introduce attach/detach_pasid_table API
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     eric.auger.pro@gmail.com, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, will@kernel.org,
-        robin.murphy@arm.com, jean-philippe@linaro.org,
-        zhukeqian1@huawei.com, alex.williamson@redhat.com,
-        jacob.jun.pan@linux.intel.com, yi.l.liu@intel.com,
-        kevin.tian@intel.com, ashok.raj@intel.com, maz@kernel.org,
-        peter.maydell@linaro.org, vivek.gautam@arm.com,
-        shameerali.kolothum.thodi@huawei.com, wangxingang5@huawei.com,
-        jiangkunkun@huawei.com, yuzenghui@huawei.com,
-        nicoleotsuka@gmail.com, chenxiang66@hisilicon.com,
-        sumitg@nvidia.com, nicolinc@nvidia.com, vdumpa@nvidia.com,
-        zhangfei.gao@linaro.org, zhangfei.gao@gmail.com,
-        lushenming@huawei.com, vsethi@nvidia.com
-References: <20211027104428.1059740-1-eric.auger@redhat.com>
- <20211027104428.1059740-2-eric.auger@redhat.com>
- <Ya3qd6mT/DpceSm8@8bytes.org>
-From:   Eric Auger <eric.auger@redhat.com>
-Message-ID: <c7e26722-f78c-a93f-c425-63413aa33dde@redhat.com>
-Date:   Tue, 7 Dec 2021 11:22:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 7 Dec 2021 05:27:10 -0500
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 88FB93201A3C;
+        Tue,  7 Dec 2021 05:23:37 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 07 Dec 2021 05:23:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=nlg692ydclwMWGK24xPJwB5kA06
+        /7G/RW+/el1Qn4DQ=; b=OwmR8CdAgkVclHO/CxofTo6r/QzZbcIFXV2TagnAAXI
+        pOjdPioKHVMrP0SkFRfnlf2KVsgwQq6LwticV/5F651vwFFJyetza+uPf4uhNuZi
+        ZoGDMT5CPTjYUeJsSeoKL5zXBdzaNFn5t/xR/SH0YwKkxtL4kv9jxHvZWRjvyiu4
+        NBkIiTdG5q9F/nmeDnAK9IAfRIAsxC1NWMlKnifykvhFzZ4kAobWYGZ7KFdYHsMD
+        MU/0W4f5SSrJVrmZOpWS8vduwXjUAMTj+UXFNrm7QEghtFmfSl4ip1kXXzzw8H4a
+        9x8skc0cN3h7BCKHs7tloV63GM/qMy3N4A9G21TI60A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=nlg692
+        ydclwMWGK24xPJwB5kA06/7G/RW+/el1Qn4DQ=; b=H/TNBCm4zXMsk41Tkmupwu
+        /sXtnV7YfGWDkwXdm4cIUt1uPDFHOVrmsHqIH/v/+ip7RbNRDEUD7Wf22sBXfB1L
+        vIquaiyh1XGfj6283dahYq3DCtvSlK+yISIuF+n+Vlkf0TKu8kZjJJr7r+00PSik
+        F7EGth61PK5VzGurqEJdyeX3z5dmziUvYSDxhEqyYLE5qUJ9v06aMoXzc5A6xPiz
+        MIZwp3cXd1609ELngaqIcTxveZLEc/YBVefYigPrXyesTRxFiNKjqHZnX3nkJT3C
+        HqGooFpHam05aBo41fC2Cms/dui2vDvaiJm0h4Qqo8cGSQCuioCn/50gCLU7HPlA
+        ==
+X-ME-Sender: <xms:KDavYarxkemzRdjRVt7tHVFR3b7QpdFeGhteJP2tT1rMgPAxrjD5JA>
+    <xme:KDavYYq98A79gG_5espJX8w8SrG-WPLZUO0bQ_lpuRIh1PNFv97qRXs-0oBO4XEB4
+    r9c27KNtmkx8A>
+X-ME-Received: <xmr:KDavYfMHYwUK7qtj15kW0cPBI9Sacwg1KRarOTdqLGYcTMz0nUbPBMPIJhA950a3_w88Ee8BaEbD7yIwJcGwbW-v_WjETe_Y>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjeehgdduiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
+    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
+    gtohhm
+X-ME-Proxy: <xmx:KDavYZ4gNpeWnb-C-9mr2BuoGPxvoVBN8gUVb-WWn2fnQYSzDOuH5w>
+    <xmx:KDavYZ6bRVXQAicfz9fzq4lFKsPb6WmPR9qjO52A9abA7CLLrI2Syw>
+    <xmx:KDavYZjSAdM_sjaRENTxVpnQJKe06AXDImzrw6ni6tgQQaXKGkI3XA>
+    <xmx:KDavYWsVZ178P0GW41BxE3EPZEpTBqvcv4wrDct2mX_oZy34oEq07A>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 7 Dec 2021 05:23:35 -0500 (EST)
+Date:   Tue, 7 Dec 2021 11:23:32 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the driver-core tree
+Message-ID: <Ya82JHGJPzs7D/Hg@kroah.com>
+References: <20211206193050.17ad78aa@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <Ya3qd6mT/DpceSm8@8bytes.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206193050.17ad78aa@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joerg,
+On Mon, Dec 06, 2021 at 07:30:50PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the driver-core tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> Documentation/admin-guide/cputopology.rst:49: WARNING: Block quote ends without a blank line; unexpected unindent.
+> 
+> Introduced by commit
+> 
+>   f1045056c726 ("topology/sysfs: rework book and drawer topology ifdefery")
+> 
 
-On 12/6/21 11:48 AM, Joerg Roedel wrote:
-> On Wed, Oct 27, 2021 at 12:44:20PM +0200, Eric Auger wrote:
->> Signed-off-by: Jean-Philippe Brucker <jean-philippe.brucker@arm.com>
->> Signed-off-by: Liu, Yi L <yi.l.liu@linux.intel.com>
->> Signed-off-by: Ashok Raj <ashok.raj@intel.com>
->> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
->> Signed-off-by: Eric Auger <eric.auger@redhat.com>
-> This Signed-of-by chain looks dubious, you are the author but the last
-> one in the chain?
-The 1st RFC in Aug 2018
-(https://lists.cs.columbia.edu/pipermail/kvmarm/2018-August/032478.html)
-said this was a generalization of Jacob's patch
+Thanks, I took Heiko's patch now to resolve this.
 
-
-  [PATCH v5 01/23] iommu: introduce bind_pasid_table API function
-
-
-  https://lists.linuxfoundation.org/pipermail/iommu/2018-May/027647.html
-
-So indeed Jacob should be the author. I guess the multiple rebases got
-this eventually replaced at some point, which is not an excuse. Please
-forgive me for that.
-Now the original patch already had this list of SoB so I don't know if I
-shall simplify it.
-
-
->
->> +int iommu_uapi_attach_pasid_table(struct iommu_domain *domain,
->> +				  void __user *uinfo)
->> +{
-> [...]
->
->> +	if (pasid_table_data.format == IOMMU_PASID_FORMAT_SMMUV3 &&
->> +	    pasid_table_data.argsz <
->> +		offsetofend(struct iommu_pasid_table_config, vendor_data.smmuv3))
->> +		return -EINVAL;
-> This check looks like it belongs in driver specific code.
-Indeed, I will fix that in my next respin :-)
-
-Thanks!
-
-Eric
->
-> Regards,
->
-> 	Joerg
->
-
+greg k-h

@@ -2,107 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E2D546B224
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 06:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 607D346B222
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 06:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232958AbhLGFVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 00:21:21 -0500
-Received: from mga14.intel.com ([192.55.52.115]:64064 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232346AbhLGFVT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 00:21:19 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237724447"
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="237724447"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 21:17:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="461119270"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 06 Dec 2021 21:17:47 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1muSrK-000MCY-I5; Tue, 07 Dec 2021 05:17:46 +0000
-Date:   Tue, 7 Dec 2021 13:16:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <anup.patel@wdc.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_kvm_aia_v1 34/40] include/linux/stddef.h:8:14:
- warning: initialization of 'unsigned int' from 'void *' makes integer from
- pointer without a cast
-Message-ID: <202112071351.9SgkJaBJ-lkp@intel.com>
+        id S232853AbhLGFU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 00:20:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232346AbhLGFUY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 00:20:24 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1A7C061746
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Dec 2021 21:16:55 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id i12so12325885pfd.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Dec 2021 21:16:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=7rVpB2obUtQAzy/ztIP86+jcl70yMLbAUkD64M1M/30=;
+        b=BOVegIgTDmQbCpRQw/zV0k4oGhCWdbKE4qF2A2ozvwbC4YhQqTcfY4nQXDS9hDe6ae
+         cwvPZg33AGOgP/IDpCxVgAsHH0i+r643oDXTybiBrmSPMp1gJDNSWqJD2ybOSiXRuXFD
+         GMS9vHkdixiVyc9XJ+iZSFOqz0FeLkeXwVPwQKdyK+nPyjyCRbyG66/EH5hYc47syX9c
+         IXbZwPin4q7MBKLwGTRb2KQdnE0+J35pgZGcKMLlRxv3sXHVPb3plzCIEMLyXIQh2Bmw
+         dl1INbt9UNMcqv6KBs557x2FGU9uiskpwcYc9oGbjuC5t7couyzdBaP8Uqeyw4TwjBQv
+         f/cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=7rVpB2obUtQAzy/ztIP86+jcl70yMLbAUkD64M1M/30=;
+        b=KKtZqq03jof4HJm+cuDh+wWwBaId6Sje2fNSWEOI0JszAp+CtDYDY1kCYX/VxL6ORR
+         yVq3/5IoPmfwNIehYC1uZjP0VFxnIbSiSGBNuE2w5bXKAuzfxU9ZJZSyEyL88iWV3hux
+         o4z1u9IEzy1d6mgmZCqjnjvzTmjN4dbepvdsgaykle0DnyO0B2oqU1tF4693prUtpODq
+         UuZYAChfV5E3h9pGDAZgmrN5el9nVbSMgvurpau+cw/gwDjltVWLcdUlTP9CpmMxeBC2
+         eaOiChIG/cxRpCUgvF0ygpRKtlRLwnd0pfwynVSaXAics55xeS3xCyQsTVjVaNXkNO+l
+         K8FA==
+X-Gm-Message-State: AOAM532LXN2hxBCAQwmx3Jdtcngj2dl/VtsXMoFJzHAKXwTuFB7oEGnt
+        ydHjkZcrRc2fzz2L1n+8DnE=
+X-Google-Smtp-Source: ABdhPJx+gpWR1cKsPRdHy8PHWH4WEek0lo348LJSSLFYC94Bdqvm8W1uF0WZlv/OYOdsjP5xpyRorw==
+X-Received: by 2002:a05:6a00:2151:b0:4a2:5c9a:f0a9 with SMTP id o17-20020a056a00215100b004a25c9af0a9mr41931909pfk.39.1638854214595;
+        Mon, 06 Dec 2021 21:16:54 -0800 (PST)
+Received: from localhost ([1.157.14.188])
+        by smtp.gmail.com with ESMTPSA id h186sm13852826pfg.59.2021.12.06.21.16.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 21:16:53 -0800 (PST)
+Date:   Tue, 7 Dec 2021 16:16:50 +1100
+From:   Balbir Singh <bsingharora@gmail.com>
+To:     yong w <yongw.pur@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, mingo@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>, yang.yang29@zte.com.cn,
+        wang.yong12@zte.com.cn
+Subject: Re: [PATCH v2 linux-next] delayacct: track delays from memory compact
+Message-ID: <Ya7uQingLC3fMJlt@balbir-desktop>
+References: <1638619795-71451-1-git-send-email-wang.yong12@zte.com.cn>
+ <Yax01zjuzmNyyJK/@balbir-desktop>
+ <CAOH5QeDhjyjAkS1bUju2cv67KFukUr0ov8uG+z3bM6Oa=iFrMA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOH5QeDhjyjAkS1bUju2cv67KFukUr0ov8uG+z3bM6Oa=iFrMA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
-head:   eb55ca3817a59020fc1e3d5a5de0a5adcebbedd0
-commit: b4ebb979d51698f5a58246c130a356f225c246ad [34/40] RISC-V: KVM: Add G-stage ioremap() and iounmap() functions
-config: arm64-defconfig (https://download.01.org/0day-ci/archive/20211207/202112071351.9SgkJaBJ-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/avpatel/linux/commit/b4ebb979d51698f5a58246c130a356f225c246ad
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_kvm_aia_v1
-        git checkout b4ebb979d51698f5a58246c130a356f225c246ad
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
+On Sun, Dec 05, 2021 at 07:08:02PM +0800, yong w wrote:
+> Balbir Singh <bsingharora@gmail.com> 于2021年12月5日周日 16:17写道：
+> >
+> > On Sat, Dec 04, 2021 at 04:09:55AM -0800, yongw.pur@gmail.com wrote:
+> > > From: wangyong <wang.yong12@zte.com.cn>
+> > >
+> > > Delay accounting does not track the delay of memory compact.
+> > > When there is not enough free memory, tasks can spend
+> > > a amount of their time waiting for compact.
+> > >
+> > > To get the impact of tasks in direct memory compact, measure
+> > > the delay when allocating memory through memory compact.
+> > >
+> >
+> > Should we call this DIRECT_COMPACT and through documentation
+> > or name change imply that this won't work for kcompactd the
+> > kernel thread - based on my reading of the patches.
+> >
+> Using DIRECT_COMPACT is a little redundant，because the
+> delayacct stats of delay accounting is specific to tasks, it has
+> nothing to do with kcompactd, which is similar to the RECLAIM field.
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+What would we expect when we call delayacct -p <pidof kcompactd>
+to be output? Yes, I agree with your comment on the reclaim
+field. Don't feel to strongly, but it can be confusing that kcompactd
+has spent no time in compact'ing? Not that delayacct is used for
+kernel threads, but I am not sure if that use case exists today.
 
-All warnings (new ones prefixed by >>):
+<snip>
 
-   In file included from include/uapi/linux/posix_types.h:5,
-                    from include/uapi/linux/types.h:14,
-                    from include/linux/types.h:6,
-                    from include/linux/kasan-checks.h:5,
-                    from include/asm-generic/rwonce.h:26,
-                    from arch/arm64/include/asm/rwonce.h:71,
-                    from include/linux/compiler.h:266,
-                    from include/asm-generic/bug.h:5,
-                    from arch/arm64/include/asm/bug.h:26,
-                    from include/linux/bug.h:5,
-                    from include/linux/mmdebug.h:5,
-                    from include/linux/mm.h:9,
-                    from include/linux/mman.h:5,
-                    from arch/arm64/kvm/mmu.c:7:
-   arch/arm64/kvm/mmu.c: In function 'kvm_phys_addr_ioremap':
->> include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-       8 | #define NULL ((void *)0)
-         |              ^
-   arch/arm64/kvm/mmu.c:647:62: note: in expansion of macro 'NULL'
-     647 |         struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-         |                                                              ^~~~
-   include/linux/stddef.h:8:14: note: (near initialization for 'cache.gfp_atomic')
-       8 | #define NULL ((void *)0)
-         |              ^
-   arch/arm64/kvm/mmu.c:647:62: note: in expansion of macro 'NULL'
-     647 |         struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
-         |                                                              ^~~~
-
-
-vim +8 include/linux/stddef.h
-
-^1da177e4c3f41 Linus Torvalds   2005-04-16  6  
-^1da177e4c3f41 Linus Torvalds   2005-04-16  7  #undef NULL
-^1da177e4c3f41 Linus Torvalds   2005-04-16 @8  #define NULL ((void *)0)
-6e218287432472 Richard Knutsson 2006-09-30  9  
-
-:::::: The code at line 8 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Balbir Singh.

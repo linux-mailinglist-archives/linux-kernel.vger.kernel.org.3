@@ -2,252 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A0446C443
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:12:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B6446C446
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 21:13:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241169AbhLGUP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 15:15:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241154AbhLGUPZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 15:15:25 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFA9C061746
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 12:11:53 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id i63so267070lji.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 12:11:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2z7VIjH3TRs3FpPaGmEQIvXC55nA6LV8PLAtnIHRqT8=;
-        b=fqQnRafBkW372Q6GgBqp6mQfANVcsgQqnqRwUd5sbog1eoIAwA6G2hqLrxexyjJlV2
-         xu46/rqUqcPRGuQlH5v71fIaSUpe1jw1eAL0nyCBiIciXfVcXFA3MEuZ/hQokpki77e4
-         GWwpIFN7NB6IYAbwQDkmkV2H7RN0VCQ9T90SF2HxuLObzfbIS0wgVLWgP45bx0RItHIh
-         QwoCs40wt1E0+fGNO6Ts+ZZ7pVLIB6QTL7WPel5CmZA/muJkS5nZ0FHqTQ9GBecuNyVw
-         h9YxY4lzouo9rRzCAezaQ1am54bKLaJA+kZLKZyyi0jSfLHl4hcPnuOpY+Yx/uPVQN2n
-         MvGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2z7VIjH3TRs3FpPaGmEQIvXC55nA6LV8PLAtnIHRqT8=;
-        b=xnUyKs/9ted/A3kqniIg//CYnI3S8mOOmro3tytn4gyujndU1fTxVDRl6ii3jep6kH
-         wxfw3u2m0s4386ojxqHzUev5k/gPT7YBpWhmVkkzyfs4bjHZAn0fw0fAHBi4kbsMgicb
-         aygHH2Drk/8MN0aeaSBDg4r0UohDepXq8Zc38vaTURYQ6a69p6v8XBXE1GDQ7uGUi8zi
-         kyalLY9C4FxkD8hRq0xyLQMceUU9XcX6Bqt6WZAwS5i7lLmtvx7OizTqPA1wRz5AqjQ4
-         zyxExtSfszCxjXeFssWXbA6WuHwizgpbNt+7Eizd+Mtv3yelvskOPo97RcJGwarzveg8
-         fKOw==
-X-Gm-Message-State: AOAM532RiKwdD775FycM7K04iaymTI3CuQopm7WE1fKr++wszwvu1baK
-        fvF1ncQDD+ZEEKRosigNqVG+AJNVgspUN25R1ExHrw==
-X-Google-Smtp-Source: ABdhPJwojJy7U4uludZX2r0j1VHbxE3KFK7XAT9u9QEQIuXEvNWRi5p0VU92qo30YTets9rMe0Fg6wazCsw6TVWXyCs=
-X-Received: by 2002:a05:651c:1507:: with SMTP id e7mr44503454ljf.83.1638907911864;
- Tue, 07 Dec 2021 12:11:51 -0800 (PST)
+        id S232314AbhLGUR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 15:17:26 -0500
+Received: from mga18.intel.com ([134.134.136.126]:65347 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230259AbhLGURY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 15:17:24 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="224545550"
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="224545550"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 12:13:53 -0800
+X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
+   d="scan'208";a="515445030"
+Received: from yperng-mobl1.amr.corp.intel.com (HELO [10.209.19.84]) ([10.209.19.84])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 12:13:53 -0800
+Subject: Re: [PATCH v3 0/5] x86: Show in sysfs if a memory node is able to do
+ encryption
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Martin Fernandez <martin.fernandez@eclypsium.com>,
+        Richard Hughes <hughsient@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
+        alex.bazhaniuk@eclypsium.com, alison.schofield@intel.com
+References: <20211203192148.585399-1-martin.fernandez@eclypsium.com>
+ <YaxWXACBguZxWmKS@kernel.org>
+ <CAD2FfiG9wfeW_2xxZqBi9vsjzEJBRjJUZw+AQy1Taos4fh2TLA@mail.gmail.com>
+ <Ya8MUOKPOKVfBfjJ@kernel.org>
+ <CAKgze5Y6F40bk=PgoS3LshcDEAreefOmF4xpCuSxgpiSr+99Kw@mail.gmail.com>
+ <1ed6020b-f84b-a29b-690a-9eee683c93a6@intel.com>
+ <Ya++1FwWzKr2wYQH@kernel.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <9ab81982-d2f1-01ac-959a-50683f4c2a05@intel.com>
+Date:   Tue, 7 Dec 2021 12:13:49 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20211123005036.2954379-1-pbonzini@redhat.com> <20211123005036.2954379-9-pbonzini@redhat.com>
- <CAMkAt6ouPVpRAAEhT1SgYEr3egiVCziKxV0viRiQxg7MD0dHHQ@mail.gmail.com>
-In-Reply-To: <CAMkAt6ouPVpRAAEhT1SgYEr3egiVCziKxV0viRiQxg7MD0dHHQ@mail.gmail.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Tue, 7 Dec 2021 13:11:40 -0700
-Message-ID: <CAMkAt6pLD-r9Zi+31nZYZKh=EpeYPc-nyc8pA_5DtspB3Xv03w@mail.gmail.com>
-Subject: Re: [PATCH 08/12] selftests: sev_migrate_tests: add tests for KVM_CAP_VM_COPY_ENC_CONTEXT_FROM
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <Ya++1FwWzKr2wYQH@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 11:09 AM Peter Gonda <pgonda@google.com> wrote:
->
-> On Mon, Nov 22, 2021 at 5:50 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
-> >
-> > I am putting the tests in sev_migrate_tests because the failure conditions are
-> > very similar and some of the setup code can be reused, too.
-> >
-> > The tests cover both successful creation of a mirror VM, and error
-> > conditions.
-> >
-> > Cc: Peter Gonda <pgonda@google.com>
-> > Cc: Sean Christopherson <seanjc@google.com>
-> > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> > ---
-> >  .../selftests/kvm/x86_64/sev_migrate_tests.c  | 112 ++++++++++++++++--
-> >  1 file changed, 105 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> > index 0cd7e2eaa895..d265cea5de85 100644
-> > --- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> > +++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-> > @@ -54,12 +54,15 @@ static struct kvm_vm *sev_vm_create(bool es)
-> >         return vm;
-> >  }
-> >
-> > -static struct kvm_vm *__vm_create(void)
-> > +static struct kvm_vm *aux_vm_create(bool with_vcpus)
-> >  {
-> >         struct kvm_vm *vm;
-> >         int i;
-> >
-> >         vm = vm_create(VM_MODE_DEFAULT, 0, O_RDWR);
-> > +       if (!with_vcpus)
-> > +               return vm;
-> > +
-> >         for (i = 0; i < NR_MIGRATE_TEST_VCPUS; ++i)
-> >                 vm_vcpu_add(vm, i);
-> >
-> > @@ -93,7 +96,7 @@ static void test_sev_migrate_from(bool es)
-> >
-> >         src_vm = sev_vm_create(es);
-> >         for (i = 0; i < NR_MIGRATE_TEST_VMS; ++i)
-> > -               dst_vms[i] = __vm_create();
-> > +               dst_vms[i] = aux_vm_create(true);
-> >
-> >         /* Initial migration from the src to the first dst. */
-> >         sev_migrate_from(dst_vms[0]->fd, src_vm->fd);
-> > @@ -162,7 +165,7 @@ static void test_sev_migrate_parameters(void)
-> >         sev_vm = sev_vm_create(/* es= */ false);
-> >         sev_es_vm = sev_vm_create(/* es= */ true);
-> >         vm_no_vcpu = vm_create(VM_MODE_DEFAULT, 0, O_RDWR);
-> > -       vm_no_sev = __vm_create();
-> > +       vm_no_sev = aux_vm_create(true);
-> >         sev_es_vm_no_vmsa = vm_create(VM_MODE_DEFAULT, 0, O_RDWR);
-> >         sev_ioctl(sev_es_vm_no_vmsa->fd, KVM_SEV_ES_INIT, NULL);
-> >         vm_vcpu_add(sev_es_vm_no_vmsa, 1);
-> > @@ -203,11 +206,106 @@ static void test_sev_migrate_parameters(void)
-> >         kvm_vm_free(vm_no_sev);
-> >  }
-> >
-> > +static int __sev_mirror_create(int dst_fd, int src_fd)
-> > +{
-> > +       struct kvm_enable_cap cap = {
-> > +               .cap = KVM_CAP_VM_COPY_ENC_CONTEXT_FROM,
-> > +               .args = { src_fd }
-> > +       };
-> > +
-> > +       return ioctl(dst_fd, KVM_ENABLE_CAP, &cap);
-> > +}
-> > +
-> > +
-> > +static void sev_mirror_create(int dst_fd, int src_fd)
-> > +{
-> > +       int ret;
-> > +
-> > +       ret = __sev_mirror_create(dst_fd, src_fd);
-> > +       TEST_ASSERT(!ret, "Copying context failed, ret: %d, errno: %d\n", ret, errno);
-> > +}
-> > +
-> > +static void test_sev_mirror(bool es)
-> > +{
-> > +       struct kvm_vm *src_vm, *dst_vm;
-> > +       struct kvm_sev_launch_start start = {
-> > +               .policy = es ? SEV_POLICY_ES : 0
-> > +       };
-> > +       int i;
-> > +
-> > +       src_vm = sev_vm_create(es);
-> > +       dst_vm = aux_vm_create(false);
-> > +
-> > +       sev_mirror_create(dst_vm->fd, src_vm->fd);
-> > +
-> > +       /* Check that we can complete creation of the mirror VM.  */
-> > +       for (i = 0; i < NR_MIGRATE_TEST_VCPUS; ++i)
-> > +               vm_vcpu_add(dst_vm, i);
-> > +       sev_ioctl(dst_vm->fd, KVM_SEV_LAUNCH_START, &start);
->
-> I don't think this should be called on the mirror and I think it
-> should be an error.
->
-> In  is_cmd_allowed_from_mirror() KVM_SEV_LAUNCH_START should not be allowed:
->
-> if (cmd_id == KVM_SEV_LAUNCH_UPDATE_VMSA ||
->    cmd_id == KVM_SEV_GUEST_STATUS || cmd_id == KVM_SEV_DBG_DECRYPT ||
->    cmd_id == KVM_SEV_DBG_ENCRYPT)
-> return true;
->
-> This overrides the mirrored values and sets up the VM as a new SEV
-> context. I would have thought the sev_bind_asid() in
-> sev_launch_start() would fail because the asid is already used by the
-> source.
+On 12/7/21 12:06 PM, Mike Rapoport wrote:
+>> An ABI that says "everything is encrypted" is pretty meaningless and
+>> only useful for this one, special case.
+>>
+>> A per-node ABI is useful for this case and is also useful going forward
+>> if folks want to target allocations from applications to NUMA nodes
+>> which have encryption capabilities.  The ABI in this set is useful for
+>> the immediate case and is useful to other folks.
+> I don't mind per-node ABI, I'm just concerned that having a small region
+> without the encryption flag set will render the entire node "not
+> encryptable". This may happen because a bug in firmware, a user that shoot
+> themself in a leg with weird memmap= or some hidden gem in interaction
+> between e820, EFI and memblock that we still didn't discover.
 
-Since you already queue'd this I sent another patch to fix the issue
-with sev_ioctl() and remove this call.
+That's a good point.  But, that seems more in the realm of a
+pr_{info,warn}_once() than something deserving of its own specific ABI.
 
->
-> > +       if (es)
-> > +               sev_ioctl(dst_vm->fd, KVM_SEV_LAUNCH_UPDATE_VMSA, NULL);
-> > +
-> > +       kvm_vm_free(src_vm);
-> > +       kvm_vm_free(dst_vm);
-> > +}
-> > +
-> > +static void test_sev_mirror_parameters(void)
-> > +{
-> > +       struct kvm_vm *sev_vm, *sev_es_vm, *vm_no_vcpu, *vm_with_vcpu;
-> > +       int ret;
-> > +
-> > +       sev_vm = sev_vm_create(/* es= */ false);
-> > +       sev_es_vm = sev_vm_create(/* es= */ true);
-> > +       vm_with_vcpu = aux_vm_create(true);
-> > +       vm_no_vcpu = aux_vm_create(false);
-> > +
-> > +       ret = __sev_mirror_create(sev_vm->fd, sev_vm->fd);
-> > +       TEST_ASSERT(
-> > +               ret == -1 && errno == EINVAL,
-> > +               "Should not be able copy context to self. ret: %d, errno: %d\n",
-> > +               ret, errno);
-> > +
-> > +       ret = __sev_mirror_create(sev_vm->fd, sev_es_vm->fd);
-> > +       TEST_ASSERT(
-> > +               ret == -1 && errno == EINVAL,
-> > +               "Should not be able copy context to SEV enabled VM. ret: %d, errno: %d\n",
-> > +               ret, errno);
-> > +
-> > +       ret = __sev_mirror_create(sev_es_vm->fd, sev_vm->fd);
-> > +       TEST_ASSERT(
-> > +               ret == -1 && errno == EINVAL,
-> > +               "Should not be able copy context to SEV-ES enabled VM. ret: %d, errno: %d\n",
-> > +               ret, errno);
-> > +
-> > +       ret = __sev_mirror_create(vm_no_vcpu->fd, vm_with_vcpu->fd);
-> > +       TEST_ASSERT(ret == -1 && errno == EINVAL,
-> > +                   "Copy context requires SEV enabled. ret %d, errno: %d\n", ret,
-> > +                   errno);
-> > +
-> > +       ret = __sev_mirror_create(vm_with_vcpu->fd, sev_vm->fd);
-> > +       TEST_ASSERT(
-> > +               ret == -1 && errno == EINVAL,
-> > +               "SEV copy context requires no vCPUS on the destination. ret: %d, errno: %d\n",
-> > +               ret, errno);
-> > +
-> > +       kvm_vm_free(sev_vm);
-> > +       kvm_vm_free(sev_es_vm);
-> > +       kvm_vm_free(vm_with_vcpu);
-> > +       kvm_vm_free(vm_no_vcpu);
-> > +}
-> > +
-> >  int main(int argc, char *argv[])
-> >  {
-> > -       test_sev_migrate_from(/* es= */ false);
-> > -       test_sev_migrate_from(/* es= */ true);
-> > -       test_sev_migrate_locking();
-> > -       test_sev_migrate_parameters();
-> > +       if (kvm_check_cap(KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM)) {
-> > +               test_sev_migrate_from(/* es= */ false);
-> > +               test_sev_migrate_from(/* es= */ true);
-> > +               test_sev_migrate_locking();
-> > +               test_sev_migrate_parameters();
-> > +       }
-> > +       if (kvm_check_cap(KVM_CAP_VM_COPY_ENC_CONTEXT_FROM)) {
-> > +               test_sev_mirror(/* es= */ false);
-> > +               test_sev_mirror(/* es= */ true);
-> > +               test_sev_mirror_parameters();
-> > +       }
-> >         return 0;
-> >  }
-> > --
-> > 2.27.0
-> >
-> >
+If we have a 100GB of a node that supports encryption, and 4k that
+causes the whole thing to be considered un-encryptable, a warning is be
+appropriate and feasible.

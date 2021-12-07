@@ -2,49 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2DF446B9EA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:18:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D524A46B9F0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 12:18:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233723AbhLGLVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 06:21:33 -0500
-Received: from verein.lst.de ([213.95.11.211]:55823 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230523AbhLGLVc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 06:21:32 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id D37CD68AFE; Tue,  7 Dec 2021 12:17:58 +0100 (CET)
-Date:   Tue, 7 Dec 2021 12:17:58 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Benjamin LaHaise <bcrl@kvack.org>, linux-aio@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ramji Jiyani <ramjiyani@google.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Martijn Coenen <maco@android.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] aio: fix use-after-free and missing wakeups
-Message-ID: <20211207111758.GB18554@lst.de>
-References: <20211207095726.169766-1-ebiggers@kernel.org>
+        id S235652AbhLGLWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 06:22:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230523AbhLGLV7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 06:21:59 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08ECC061574;
+        Tue,  7 Dec 2021 03:18:29 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id v19so9188638plo.7;
+        Tue, 07 Dec 2021 03:18:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XkJS/vk/AFCAw+MrKJZ0hWbQuGoDCAYXbs59fxjYT0Q=;
+        b=YiRYLAImUdwYtDAM2dV92jtzYCI7H/oTaQpaYU9J3BTdl9mZzWQvXZstH079RAnzrO
+         BKa0r12fG0lYvHIKhYcvZ5/oQiXQI7/ElY7ki15eMt2zl5xnYcm+WUhDAb1iJO8dgurD
+         cuaqGlcHLKSI88ln4GStddlJ6GvQmebeg4h/Yrg6MVNZwkXhYpK4afH5hKuQviglzk7h
+         QJ5RXCb+/wBTk4zWrQG/4SWebKyPujunw8RrM+sPLvF7Qa94YrwyUCTnzfD7DA2yj3N+
+         dHWk0mByLS+4vEFJPA9DWEigJjcwc7D8z1Wn/WgwUnxFJH90qjt09MtlBbYIgUxkIXUR
+         18Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XkJS/vk/AFCAw+MrKJZ0hWbQuGoDCAYXbs59fxjYT0Q=;
+        b=tsRMjajf6r++8q4A7PSwTODhfiRDxR8AgUNROWj4RmGTCucK7AQdHvz/yTFOaBD4W+
+         +AbH13KN1Bg5tT8bGOlxHe+8/CfHuLHJoOg3kTXcSSa9zcRjHHD+Mf9C5MMg/rjYAxL9
+         ocvie3U/Ap4VwCvkYGNXWaeRK2ExLNOQpDLpTCTzC4lKRLdRhWjDaFOI88hUG2i40xCV
+         1apsVj+to+WrhxC4YMuroD2Foa6cMGj4dlPtf12RAdTWCGdMZmi2BBy0APChN5+KZVhf
+         kU7sIFVfAuSUq5BXmY0vSdL6g50RaqvPNUYTYpBNw2Alm2E1lHLN2Yo8OItXeaCZRL8c
+         /ihg==
+X-Gm-Message-State: AOAM5306EJEU0pde7eveQ7Ylm5IX1FGov/hdEWoMkU7OJtdbZeiIL0yf
+        KIOis8tv8vmcPmeAfWNUo9Y=
+X-Google-Smtp-Source: ABdhPJy6JQ2U2g/j2Cyw3PWOVycj1dWgdg4/1qcexVGVfrBnGzPoAXWo/lvzcA61q4EzMlW8PtSvNA==
+X-Received: by 2002:a17:902:d34d:b0:143:c927:dc48 with SMTP id l13-20020a170902d34d00b00143c927dc48mr50676636plk.71.1638875909491;
+        Tue, 07 Dec 2021 03:18:29 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::50b? ([2404:f801:9000:18:efec::50b])
+        by smtp.gmail.com with ESMTPSA id m76sm8832389pfd.160.2021.12.07.03.18.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Dec 2021 03:18:29 -0800 (PST)
+Message-ID: <1f967946-6634-9aeb-4840-1b52e30cecc5@gmail.com>
+Date:   Tue, 7 Dec 2021 19:18:18 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211207095726.169766-1-ebiggers@kernel.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH V6 2/5] x86/hyper-v: Add hyperv Isolation VM check in the
+ cc_platform_has()
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, davem@davemloft.net, kuba@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        Tianyu.Lan@microsoft.com, thomas.lendacky@amd.com,
+        michael.h.kelley@microsoft.com, iommu@lists.linux-foundation.org,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, vkuznets@redhat.com, brijesh.singh@amd.com,
+        konrad.wilk@oracle.com, hch@lst.de, joro@8bytes.org,
+        parri.andrea@gmail.com, dave.hansen@intel.com
+References: <20211207075602.2452-1-ltykernel@gmail.com>
+ <20211207075602.2452-3-ltykernel@gmail.com> <Ya8tlQZf7+Ec6Oyp@zn.tnic>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <Ya8tlQZf7+Ec6Oyp@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 01:57:21AM -0800, Eric Biggers wrote:
-> This series fixes two bugs in aio poll, and one issue with POLLFREE more
-> broadly.  This is intended to replace
-> "[PATCH v5] aio: Add support for the POLLFREE"
-> (https://lore.kernel.org/r/20211027011834.2497484-1-ramjiyani@google.com)
-> which has some bugs.
-> 
-> Careful review is appreciated; the aio poll code is very hard to work
-> with, and I don't know of an easy way to test it.  Suggestions of any
-> aio poll tests to run would be greatly appreciated.
+Hi Borislav:
+	Thanks for your review.
 
-libaio has a test for aio poll (test 22).
+On 12/7/2021 5:47 PM, Borislav Petkov wrote:
+> On Tue, Dec 07, 2021 at 02:55:58AM -0500, Tianyu Lan wrote:
+>> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+>>
+>> Hyper-V provides Isolation VM which has memory encrypt support. Add
+>> hyperv_cc_platform_has() and return true for check of GUEST_MEM_ENCRYPT
+>> attribute.
+> 
+> You need to refresh on how to write commit messages - never say what the
+> patch is doing - that's visible in the diff itself. Rather, you should
+> talk about *why* it is doing what it is doing.
+
+Sure. Will update.
+
+> 
+>>   bool cc_platform_has(enum cc_attr attr)
+>>   {
+>> +	if (hv_is_isolation_supported())
+>> +		return hyperv_cc_platform_has(attr);
+> 
+> Is there any reason for the hv_is_.. check to come before...
+> 
+
+Do you mean to check hyper-v before sev? If yes, no special reason.
+
+
+>> +
+>>   	if (sme_me_mask)
+>>   		return amd_cc_platform_has(attr);
+> 
+> ... the sme_me_mask check?
+> 
+> What's in sme_me_mask on hyperv?
+
+sme_me_mask is unset in this case.
+

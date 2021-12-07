@@ -2,144 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B970146B614
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:35:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 750F546B616
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 09:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233017AbhLGIj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 03:39:26 -0500
-Received: from mail-eopbgr30078.outbound.protection.outlook.com ([40.107.3.78]:45794
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231997AbhLGIjY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 03:39:24 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eaCga5Wcj7Wlw+/334q+Nh+HHhIoT8wTcYMrhNGzejGFiTe0MR41XlFInodrkxg8lbS2HgW0JtvKjFdp5YD32QB3bBKqdLdRMb/s0j+A0DtFxnPz6T8iVJy5KJuWvCPTveXNN4zU5lRoPDzw5D1oX6tCWP53XqNiplvXVm14AfAKAxhK6PkvvqGYcfHqb4UEaOWFWfBwmyGYOB8I+uhsT7VKSVhgQoTOZESdn65P2KpWiY33R01pSY4Lp/RuXwAW41e1GJ3QVX6P+XWw6yeK4F1ucgUmVOX1l8R5ANTLAIHn0j+EAp2EchXWTra3aujnNtEBAlnKHAghOV3TT49jhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Qc4PbYNm6juRpJ8+Y5JTiUfUFXznWsWps6c2eGGFdfM=;
- b=n7mPW/jfyVmGvKJuNlVlAadT9Kclq14tgFpYUwF6IkjKTbdKaY8ocISbhc4CIFAhtCeH4qISESN9bSM+xUxKoS1cQje2uO/65qK0rgOhnMdRnoNeFFH1/TSzi66Vm2LkUe24/tlYo2rV8r8wYy59bQozbHrTyB/eCfBB0mZUBHylJGFcX8dba0d/C+20rUdi+7YvTSxXexPJX2lXCH/Kx5Is14I4iBFDR0Mr0gX6mYnOdEKAqeu2Fc1SjgqgyZecI0h5H9Z8QaDngPJK+z9dlvolwR2OVLGGXC1Lnt3ZDceDLgKL2KX1Qo49YWGfQ8vWu2o50kSQXnSgWfS4iGHS2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qc4PbYNm6juRpJ8+Y5JTiUfUFXznWsWps6c2eGGFdfM=;
- b=RXyQP6lqEZdycZhaLqRgQBpn8NoLH850PGCe+VNXxGrPPt9D2pAVo3cd01LNAPSI3Jft6azpkqTGxXT5xKCY3fz7RLKXrfXGhO88Q2J7QMEJ8UoYctCgsYU7mvCM3YR0ec+a3zYqloVrd99FNwxIHsh4nC04vfMEzencxHrvFFM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DU2PR04MB8744.eurprd04.prod.outlook.com (2603:10a6:10:2e2::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Tue, 7 Dec
- 2021 08:35:51 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::82e:6ad2:dd1d:df43]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::82e:6ad2:dd1d:df43%9]) with mapi id 15.20.4755.021; Tue, 7 Dec 2021
- 08:35:51 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     catalin.marinas@arm.com, will@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        ping.bai@nxp.com, aisheng.dong@nxp.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH] arm64: defconfig: enable drivers for booting i.MX8ULP
-Date:   Tue,  7 Dec 2021 16:34:57 +0800
-Message-Id: <20211207083457.2932511-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SGAP274CA0007.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::19)
- To DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+        id S233030AbhLGIj1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Dec 2021 03:39:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233013AbhLGIjZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 03:39:25 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0851BC061748
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 00:35:56 -0800 (PST)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1muVwp-0005HR-6U; Tue, 07 Dec 2021 09:35:39 +0100
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1muVwg-0003U5-SO; Tue, 07 Dec 2021 09:35:30 +0100
+Message-ID: <75d34242693a41978fb7c6703dac3fd3a6437172.camel@pengutronix.de>
+Subject: Re: [PATCH v5 04/10] reset: Add Sunplus SP7021 reset driver
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Qin Jian <qinjian@cqplus1.com>, robh+dt@kernel.org
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
+        maz@kernel.org, linux@armlinux.org.uk, broonie@kernel.org,
+        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, wells.lu@sunplus.com
+Date:   Tue, 07 Dec 2021 09:35:30 +0100
+In-Reply-To: <5b847375ae9591dfd0551c86141102e02b450479.1638515726.git.qinjian@cqplus1.com>
+References: <cover.1638515726.git.qinjian@cqplus1.com>
+         <5b847375ae9591dfd0551c86141102e02b450479.1638515726.git.qinjian@cqplus1.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (119.31.174.66) by SGAP274CA0007.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.14 via Frontend Transport; Tue, 7 Dec 2021 08:35:47 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d8b2fd85-09ca-4cc3-b49f-08d9b95c9334
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8744:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <DU2PR04MB874432DD51CB8B3ADD0404F5C96E9@DU2PR04MB8744.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:386;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fWu3jOKlpeozYGgXq+ip3ZHaJtaT2r1b+KIlalEsaEqwvHUoKcqZf438ylXvJh1vnERO1sQz0um6whQ2Tg5GH9w2pbYQPXcbiOywfmcf7eVKKhRSfIXIK7gS2cMKDHKvAauX2EL79ahTLci2qj66sKga0EL1QybE2d++KqEblGQRy5jQ3KY/Gw7vO6iV63InFaNLgtrLQI24ux1VoiE5ihVWDASnWGOoPE0AnvCeBXF05tERtKLHqd9Yv0VKmfUQrnQBV8O9YpCuo6RdJRNyE5sEpHIfpiTDigOLUNN4Hq4KZKCmfwmVzNKB9vHo+zGPWKQkAEJNdQ67o19VYNKPjYw43CtsqXbm1+c9dTLjcEXS5SnRW4p6g7w8iRR3B/cnVsVXzL5j+JRj12LK47jyp/MHymy1hJEHlhsOFn/moaV2yitKNw3AHgBQLMzIBssq9cvE75tLKfdQZaPZWevHcZgX4mNQ7kGzL3PpREu7VGH4m2FM76ev0kf2XDEsa+Lkn07Sx3j37y9EaWHn7GibUF/DwjR4Sa19jzIQi/mI77SFGCh7cq5YpKCRRQITiL5Ul9ReWkkr4C0TVYp63ab0sJd59lITkpm2mIO036iXE97kewCtWgANDBcHJSsqr2/xP+Ei/Uxq8rwRbe5kGwKaxYRl5ZPJLsRr4G1ViVU+uPsQs4MksGvKnyy8fXVyavmkO2Vmjn6QoqvAAOpd859+eA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(4326008)(6486002)(38100700002)(38350700002)(66946007)(6512007)(508600001)(4744005)(5660300002)(1076003)(26005)(8676002)(8936002)(186003)(956004)(6506007)(2616005)(2906002)(316002)(6666004)(86362001)(66476007)(66556008)(52116002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/EM6fTQc7ltA+TUL0QV+4K/fO51WnWk17BR2z16Q/H2eVisBiiu5ysRJaZat?=
- =?us-ascii?Q?wTsFvXwA+XVVHBtceIudzcWKkALrhC0/yF1Jz1ERCzMs4MpFCkOmhdgy7wJ4?=
- =?us-ascii?Q?lTW1y6wY8qlHHVhLCCmxOpro/twYu9fqK5Aq5PPN/xAmhRX9Gi/SuN5o3BQJ?=
- =?us-ascii?Q?zJv0XaN8xf40q3MwwQzTCWBsHxLRf9tbEM9XLvgEpSNtkVK4+OpvztcXczsK?=
- =?us-ascii?Q?6/G1SJQ//8L/nwE2kRjTNKcbR3G9h2MkWGAi3R6mzJe3txb0JmLEdqm42dW7?=
- =?us-ascii?Q?09jztqjXhK80SeKlAbr7SFdOADCcU9XMDNJGGmMKGRMN6lCLeJIUS6YMxlLa?=
- =?us-ascii?Q?GpVtJqRTZpiQhx+o3xG0ZwcjwxNpcNd4AD8VnJE88O9hLWFVJyjpkFrixuTj?=
- =?us-ascii?Q?wWzaEND4lZZn0GBm6E3zDJelqopDeuJZw+U7ELWw9HuDeSuemSXyB5K6g/mC?=
- =?us-ascii?Q?n76KOASdhvE482PRlWfMPC0dNzkp47Tnkkii9tjBVqV7lC8cskwsida09xrW?=
- =?us-ascii?Q?A2XmIIfLYgOFyFzwpECheb6vApH+fjoHpD4i+Fy4Rb9knEnUXKS+G2OrFzC9?=
- =?us-ascii?Q?OwW5frzh2fD6R9TJSmT53VhGv5ggXSOiYwexGDusmSVEjM8frLUYmq/J2W5Q?=
- =?us-ascii?Q?StNEgAihD7OkdIrOh56V/fIc2y37ZyViqf3fVTCyEjXD9SzPd2ybqIh2uAX3?=
- =?us-ascii?Q?XDpHPePbgo3A/ypQXDFjY/VJbqu8X+sb/x8Lqt8qcCKh3FVb+/I+2TWWfT3r?=
- =?us-ascii?Q?p/mIhUedGRZWTUxH7uyAjdfbgFSLm2mRirJ9VegmEdFmidE+SEJ/787ytoXG?=
- =?us-ascii?Q?T855/wtrXEKIDATYvXR7lrH0df3nqDl3ILVMO+daCKJ4tP6DZ4odS/9LDMIH?=
- =?us-ascii?Q?tf2TY8AuS6tkSsERFVcHRmnzQ5v+GlrdCCl+jwpnXxs/GSIFAww8XgAuDtbW?=
- =?us-ascii?Q?pem0rfF3oCrgQMuKZNl7RmFgx04LZY5GEyEvwKsc/5qmDA9nndsnBLdign9V?=
- =?us-ascii?Q?yIMltgUdbj4J4DTFTy2tM+qY7AAIRQm3wObDjly75sSu2FaQs9EzbsaYYb6h?=
- =?us-ascii?Q?KAaZhHplEuikmtVBLdC+8Ob/xDAP/RxD16uAS2sJMBmWNdxIMuEck9KeXY8V?=
- =?us-ascii?Q?V4l7r3lcwWKRQJiuqWeo1cOAvKcSseosl//TEsnL5tKQl3hl+h2mYjRJOR64?=
- =?us-ascii?Q?nuWkjO51NnqnRxk4+BBvSdPrz0itwxWE2SBf3hC4JWlTfIGLEq2Jrk4k4qnA?=
- =?us-ascii?Q?/5uNodX4jkKmlV+Zo0gmGl6tV1hA011RmD6zDGdxP7KOSxFPLzJ2hGTh+/CI?=
- =?us-ascii?Q?kBokDENITJhVR/OiMuTABG86yEj4MT+8YMwEToGvkTkEXk053AUPheZjqQWr?=
- =?us-ascii?Q?v8/kavUTq5zaZQftIIdo3CKhBMVKt+v0jGS3+slpqX9Wj2kGeSGqdWEEIMva?=
- =?us-ascii?Q?8QF82YFMVNqqfdpE/UwP1owQHdEiNRfvfLfOfaKwiplOW2iKtxa+6a1AwFMA?=
- =?us-ascii?Q?tOcgJ8lCgi+cdS17nbItXJk8MmkMEMFFTJ+pllqmb2CgZDTqtWk/UOXaFo8u?=
- =?us-ascii?Q?PBtZzwBEaMeXdCVuP1lI07JUWI5NghcNRoqe3giJxdvZsSzmhxJ4QlTByPJP?=
- =?us-ascii?Q?DMbfPGdH/QBLmwQpn24qQ7E=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d8b2fd85-09ca-4cc3-b49f-08d9b95c9334
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 08:35:51.2398
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XVIyVBsZ7sMcj6+T+/G34m6IzI4YWN4N26KaCPjEZPGhKKCluVXAWRnVrKN6QBRk/4klg+G94jdQ8TY8mEjNvA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8744
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+On Fri, 2021-12-03 at 15:34 +0800, Qin Jian wrote:
+[...]
+> diff --git a/drivers/reset/reset-sunplus.c b/drivers/reset/reset-sunplus.c
+> new file mode 100644
+> index 000000000..a1d88dbaf
+> --- /dev/null
+> +++ b/drivers/reset/reset-sunplus.c
+> @@ -0,0 +1,132 @@
+> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +/*
+> + * SP7021 reset driver
+> + *
+> + * Copyright (C) Sunplus Technology Co., Ltd.
+> + *       All rights reserved.
+> + */
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset-controller.h>
+> +#include <linux/reboot.h>
+> +
+> +/* HIWORD_MASK_REG BITS */
+> +#define BITS_PER_HWM_REG	16
+> +
+> +struct sp_reset_data {
+> +	struct reset_controller_dev rcdev;
+> +	void __iomem *membase;
+> +} *sp_reset;
+     ^^^^^^^^^^
 
-Select i.MX8ULP CLK and PINCTRL driver to make it boot.
+I'd prefer if you removed the global sp_reset pointer.
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+[...]
+> +static int sp_restart(struct notifier_block *this, unsigned long mode,
+> +		      void *cmd)
+> +{
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 7135eff90327..7461b609eb94 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -507,6 +507,7 @@ CONFIG_PINCTRL_IMX8MQ=y
- CONFIG_PINCTRL_IMX8QM=y
- CONFIG_PINCTRL_IMX8QXP=y
- CONFIG_PINCTRL_IMX8DXL=y
-+CONFIG_PINCTRL_IMX8ULP=y
- CONFIG_PINCTRL_MSM=y
- CONFIG_PINCTRL_IPQ8074=y
- CONFIG_PINCTRL_IPQ6018=y
-@@ -987,6 +988,7 @@ CONFIG_CLK_IMX8MN=y
- CONFIG_CLK_IMX8MP=y
- CONFIG_CLK_IMX8MQ=y
- CONFIG_CLK_IMX8QXP=y
-+CONFIG_CLK_IMX8ULP=y
- CONFIG_TI_SCI_CLK=y
- CONFIG_COMMON_CLK_QCOM=y
- CONFIG_QCOM_A53PLL=y
--- 
-2.25.1
+You could embed the sp_restart_nb notifier block in struct sp_reset_data
+and use container_of(this, struct sp_reset_data, notifier) to get to the
+rcdev here.
 
+> +	sp_reset_assert(&sp_reset->rcdev, 0);
+> +	sp_reset_deassert(&sp_reset->rcdev, 0);
+> +
+> +	return NOTIFY_DONE;
+> +}
+> +
+> +static struct notifier_block sp_restart_nb = {
+> +	.notifier_call = sp_restart,
+> +	.priority = 192,
+> +};
+> +
+> +static const struct reset_control_ops sp_reset_ops = {
+> +	.assert   = sp_reset_assert,
+> +	.deassert = sp_reset_deassert,
+> +	.status   = sp_reset_status,
+> +};
+> +
+> +static const struct of_device_id sp_reset_dt_ids[] = {
+> +	{.compatible = "sunplus,sp7021-reset",},
+> +	{ /* sentinel */ },
+> +};
+> +
+> +static int sp_reset_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	void __iomem *membase;
+> +	struct resource *res;
+> +
+> +	sp_reset = devm_kzalloc(&pdev->dev, sizeof(*sp_reset), GFP_KERNEL);
+> +	if (!sp_reset)
+> +		return -ENOMEM;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	membase = devm_ioremap_resource(dev, res);
+> +	if (IS_ERR(membase))
+> +		return PTR_ERR(membase);
+> +
+> +	sp_reset->membase = membase;
+> +	sp_reset->rcdev.owner = THIS_MODULE;
+> +	sp_reset->rcdev.nr_resets = resource_size(res) / 4 * 16;	/* HIWORD_MASK */
+> +	sp_reset->rcdev.ops = &sp_reset_ops;
+> +	sp_reset->rcdev.of_node = dev->of_node;
+> +	register_restart_handler(&sp_restart_nb);
+
+Either do this after devm_reset_controller_register(), which could
+theoretically fail with -ENOMEM, or call unregister_restart_handler() in
+the error case below.
+
+> +
+> +	return devm_reset_controller_register(dev, &sp_reset->rcdev);
+> +}
+> +
+> +static struct platform_driver sp_reset_driver = {
+> +	.probe = sp_reset_probe,
+> +	.driver = {
+> +		   .name = "sunplus-reset",
+> +		   .of_match_table = sp_reset_dt_ids,
+		^
+Please fix the indentation, two tabs here.
+
+		.suppress_bind_attrs = true,
+
+to stop unbinding the driver. Alternatively, add a driver remove
+function that unregisters the restart handler.
+
+> +		   },
+	^
+One tab here.
+
+> +};
+> +
+> +module_platform_driver(sp_reset_driver);
+> +
+> +MODULE_AUTHOR("Edwin Chiu <edwin.chiu@sunplus.com>");
+> +MODULE_DESCRIPTION("Sunplus Reset Driver");
+> +MODULE_LICENSE("GPL v2");
+
+regards
+Philipp

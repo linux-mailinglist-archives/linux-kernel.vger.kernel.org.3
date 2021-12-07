@@ -2,277 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF9C46BC8E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACDD146BC98
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 14:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237109AbhLGNb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 08:31:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58372 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbhLGNb5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 08:31:57 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC9FC061574;
-        Tue,  7 Dec 2021 05:28:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/fZaDO/odrN9iFMuMmWNdl1apctGbvcx2zlxK6ccYN0=; b=IsD3rgGAwrXgSBKcypdqDqzRHB
-        xmCJPdLZfJ0XqDFGf8VUH2PGOlAFOpGPC0I8yfuKIEUX1yMcOlAgBQ/dSh3nUOj/0q6ulWhqoi8Bb
-        6fx427IZobJEGeJ0Heyz+CuUqGWN3YdbuOxTgg/Ba1wN8jJjBkx1LMMoLyasFV9vWxF1Avpi72dCt
-        A34ILzE0p9rPLRCigl3CccJm3MCYV/4zFl/cl3qHlufXPxJsYNVCFJLDAVooNS6yqvkUXxpLF7riU
-        UD7bhA7KfBm70I31Zmarq4btqfSWpY2wtMSPOfxMYvWuqXOU3zemyEIi8mL31gRQER0OHd17k7QWI
-        5u57CaaA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1muaW7-007NP4-5a; Tue, 07 Dec 2021 13:28:24 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A0A0F300237;
-        Tue,  7 Dec 2021 14:28:22 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 89DEE202A40B1; Tue,  7 Dec 2021 14:28:22 +0100 (CET)
-Date:   Tue, 7 Dec 2021 14:28:22 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
+        id S237113AbhLGNeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 08:34:02 -0500
+Received: from mail-bn7nam10on2076.outbound.protection.outlook.com ([40.107.92.76]:20993
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232505AbhLGNeB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Dec 2021 08:34:01 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DDhRqe9OAqqDi1vUmdsY5MaR9ZyIKoPgSq1AAXr2rOWRrOhkBWFzp1T3BlAJMUUGq/Yk+jWYrpY7URqwP2GhXz7RjI93DSaMUuu9Seg/bN+te8TNgD6DxtRTfEntPp7Zqxl4zBaRWUqkXoNoTSlF0xozWwH4Yah9tgzuiubPqxx4z9cg+ZLbTHf2HXqkDhK80xqObUrAOZ4z3nHPNCm4NdpdyWzByqB5O4dQBMXqU5zn9dA5YkQ8noSyqq30rN+WjqAjaOekr9qGfjmwvDKCr01ljdmu6El/GPape0LxVaGwCF1ufEYimDLJx+gDzs2zgp+eHuJK0kuYi9PAFFT4ag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gm+IrkEw0+t8KnKQEusg5zIr/+5xQSJPo0xcyyCTv2g=;
+ b=MfGp79QeORRiyP8UKXjm7HVc6VvsbFepNMYS24kvsE8WVnGHIEI7I526FBJjbVftuHCIpEH8eclV2N15DFh1hFM5o0CGpOMdbvaFqgvBy1reeD2y7z1jrRR9m3RAQAG78j56o2IN/GRhF4HM70Q7Tkr76xjlCW2JpI5v/ET4MMOEJHfZChqWn0pjAsOnB68Nk6bf2kClqm43qtGTvQhA099u9qZT2xH7t6zLtg/As8Tk4ZeGLZTyeJofVXXc4PJAw6AYsr3atFrFBWrhsqU3Lbqq7tJ980xK2DqHJFvkiKQJssHs7EoJ+qWAavsKu9G99vSz2gWFd0VqEC7aIUMBVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gm+IrkEw0+t8KnKQEusg5zIr/+5xQSJPo0xcyyCTv2g=;
+ b=Jx5VzOiD1arjDZih2+XWOtm9zkuA4pI88uEPAUMmApqJ2LB/6FWd6KuocBKXfhzk3HM6FHmqWWonZlC6EKZaSVOhQo9A+Pc+kwa33jgzGrnhmp2mm8tUh9QzA+ZHZb3eSX30oq6ZwWwLr2gCIXr7CIisVVUrivZSbVDvb4xnwNdfnWSlAscDHw2DZRXdrcxq0EchkhokJCypiMgUou7o/Dmpy/231tEGqSVpIJhl3+7lIk+SfVWXTOkUKu3vgjT8b0Hss6CYEI/cQaipBgLZ2xfndXVe7Ba0Aqenc4CsUprqVq3mYfszHu+FuXkA69FXLgpyYUAWe4lKqh6YJJD8Jw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
+ by BL1PR12MB5223.namprd12.prod.outlook.com (2603:10b6:208:315::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.20; Tue, 7 Dec
+ 2021 13:30:29 +0000
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11]) by BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::d8be:e4e4:ce53:6d11%5]) with mapi id 15.20.4755.022; Tue, 7 Dec 2021
+ 13:30:29 +0000
+Date:   Tue, 7 Dec 2021 09:30:28 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
 To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        keescook@chromium.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] block: switch to atomic_t for request references
-Message-ID: <Ya9hdlBuWYUWRQzs@hirez.programming.kicks-ass.net>
-References: <9f2ad6f1-c1bb-dfac-95c8-7d9eaa7110cc@kernel.dk>
- <Ya2zfVAwh4aQ7KVd@infradead.org>
- <Ya9E4HDK/LskTV+z@hirez.programming.kicks-ass.net>
-MIME-Version: 1.0
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 04/18] driver core: platform: Add driver dma ownership
+ management
+Message-ID: <20211207133028.GB6385@nvidia.com>
+References: <20211206015903.88687-1-baolu.lu@linux.intel.com>
+ <20211206015903.88687-5-baolu.lu@linux.intel.com>
+ <Ya4f662Af+8kE2F/@infradead.org>
+ <20211206150647.GE4670@nvidia.com>
+ <56a63776-48ca-0d6e-c25c-016dc016e0d5@linux.intel.com>
+ <20211207131627.GA6385@nvidia.com>
+ <Ya9gsMmQnVdQ0hyj@infradead.org>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ya9E4HDK/LskTV+z@hirez.programming.kicks-ass.net>
+In-Reply-To: <Ya9gsMmQnVdQ0hyj@infradead.org>
+X-ClientProxiedBy: BL1PR13CA0355.namprd13.prod.outlook.com
+ (2603:10b6:208:2c6::30) To BL0PR12MB5506.namprd12.prod.outlook.com
+ (2603:10b6:208:1cb::22)
+MIME-Version: 1.0
+Received: from mlx.ziepe.ca (142.162.113.129) by BL1PR13CA0355.namprd13.prod.outlook.com (2603:10b6:208:2c6::30) with Microsoft SMTP Server (version=TLS1_2, cipher=) via Frontend Transport; Tue, 7 Dec 2021 13:30:29 +0000
+Received: from jgg by mlx with local (Exim 4.94)        (envelope-from <jgg@nvidia.com>)        id 1muaY8-0002Ze-3p; Tue, 07 Dec 2021 09:30:28 -0400
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 282a0511-14bf-4b4e-3c24-08d9b985bc49
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5223:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB522340679FE18A956B04B939C26E9@BL1PR12MB5223.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3J6WRNz6Py4N9JH45NEwZCEo9UWjVh3jAfVJpBij9HqDJn8Wj0xCJtShOkNHFlBLuetokj+K0cT4mQ4y3q6iF66UW91L7ELC2tKfv0sipvhI1Rrf9rEUIbzwyrL9X6xoArtwzRPt9troAC8hGLHSlIgL/KyqGBaQAov9K+4XKu7Sd6o4qqx28+6AmnWj5tJvBEZeG+cLBxoM1Nu99/2SzK5hDpoVuGvgdvqotbxqbr2ntveSLFyDZgBrdP3mL16h/pX9JTK1FoMFTr/6Nu3HH096PSGPPGv4IlcX/FfYqHbLJ0sAjuPAnviT3F9Z/ddbslgInyNfCKXANOw1JVKYpJiSHO4rvsBJGQ3neO4iLcgsTEJ7gfL92q4xGPqlBnhCmLpPgXa+SzvVpY9Jt5O3ApJaPoEWZ3b+uUk/b14+zgVr1n90N6SqC7WF9xFr8K1x8hzbqwBuM1ssvK5v6aN3dB0YUkmBJlfpkvLwyllc/ltHNZhV1wC8ard4XBG/GZS/naYTW0KcSkYltZj5jgWUt6XSaN6WYPGG+YAtYvHAfD4PK8B8c/vH5elJWEjlzfrtWZt/z/wK329IgZb8XswS3pNig8nPcL8M6KJl0oaw8w7k5HlaVwizo0pQrMqzq9GuQDY2OkzTimWWg9jZnLX28A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(9746002)(8936002)(4744005)(9786002)(83380400001)(54906003)(36756003)(8676002)(426003)(508600001)(7416002)(1076003)(2616005)(33656002)(26005)(6916009)(2906002)(66946007)(38100700002)(186003)(4326008)(5660300002)(66556008)(66476007)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4JcYfwAPfcl4HhBPO/G8ufZEEVQubApl5WspBcXSBUKKZ5/AWDklBrACVSG+?=
+ =?us-ascii?Q?M+azLDJVb3UaWWn1fRhrbTlokEZUN/XENJLvruGfKSWvjVtKMWGAssQW1gDv?=
+ =?us-ascii?Q?cM+ZYsJ5j9tT38ZLTXUlvfnCG6Whm0oXg1ubMA8KKumMvvh9isGtEo4mY91L?=
+ =?us-ascii?Q?dQH6VkQAS9YCnRzqFb38fDpiGGNHAns5ReEPstQ37NMh3LBnjEoPNd7VE+OF?=
+ =?us-ascii?Q?Je+GvRRvEccSvhk2hjUqHjDyoCweRCQVGGSt5xr8q1ndGmdTeZwzaE3eBDUI?=
+ =?us-ascii?Q?+6qP40OLzQ7Ei6DpsVUScmnJJygF2LxeagsBxoIHK9gd2/qvOQVv89p2KfA1?=
+ =?us-ascii?Q?+UwrGVh4z/I603Pe2bLpiXP/uNluCJ47+0MjaFG89NeKsa/+MkvCncg1azJz?=
+ =?us-ascii?Q?9aozEiXzyGJ2QUETNaaDsdokb1AXc4Reyipbnz6kWry5KXqJxPpQWiaulSgL?=
+ =?us-ascii?Q?SzefnxlumO6ni3+xqpMT0GD7GI/cpbGbULfFJFbvEoahHoDVeTUAKs+RFEYd?=
+ =?us-ascii?Q?bBGI8qzpnpFDwclyIHYDTmrYfIxwt1ac0x1IsJJ8utket64Qv7muPDQs9xMd?=
+ =?us-ascii?Q?8z495Vpy60xi34+kjeeG+5co2ip2AvUG0T5Me++xi/rYmuR5AR5GNxA7XfWi?=
+ =?us-ascii?Q?BFDNwJ/xYxG4he042HU7fIyMyGf9L4tcnIyBWCFprphmIATTSzANoD3Bac5K?=
+ =?us-ascii?Q?JfTfaf3vUikb+z5kc9GcIfKDC47DmENAOsZ81/Mtu2bCVT8GADRJJqIc5kJw?=
+ =?us-ascii?Q?aw6ED++Hhp4rBxJtXlsgQl2o/YeGric8F1zkTVu9y+ytXFFN/y0IARzanbwr?=
+ =?us-ascii?Q?infX/yHYHUu+WVRLHChur0VBcOldTtG1Y2QY95TBQ1gdBxos7UrOrraZTv02?=
+ =?us-ascii?Q?lYegaam6tpHZa0dsHPi3rlbcPHCwE8VJt0XV1XAQ5SSjMgmxW5LsztkOBZ+Y?=
+ =?us-ascii?Q?DwshEAMZCHnXe7YaUCH8F2LsQ4jiItydWktxiJqqM+HHCGWL+sFeLHbuwrfJ?=
+ =?us-ascii?Q?sLe2JMlhWcKLXxm5XB05HQiTILuwbxp4WrSS3pquH5vXiPhxUOnN7z0WXbEW?=
+ =?us-ascii?Q?wRy2YP/NAGkVEIP2nil7fT8efRMkJbeWSJNgit568l4SXVWc6OxtHL7IkJed?=
+ =?us-ascii?Q?028EMUdULpjpDbUk+DQfNn7W92vrXrskGqOqOg6DhZkOWF3C+AjVi4eEzEgl?=
+ =?us-ascii?Q?+ERMC2QGRA494QnOiJrd5A2iyaEMbrHZMCTrTS5I8TOk7udFFjSM2+RQaPP4?=
+ =?us-ascii?Q?UJwe2x9iqlZSWXJtWFsIXQHylsH/lvfLOZfedqXRYFxvwjUIGTDLcOLpIhwq?=
+ =?us-ascii?Q?emEOsPwVrnOgNPjoTgQYsY3Jp/06kbdRL4aKj3fLNfm8yqMPk599DEuQ4KkR?=
+ =?us-ascii?Q?e1/3o8MMOcSQDQAXl1lgkR4A3tPB3cQos2gN3ypKUZb5+A7nFmHS8l8lAUAA?=
+ =?us-ascii?Q?mvJH5y6IF8nwII7vWblWwdxfFsqVetAPB3z+9z4k+uakMDjc5Sq+PH35G9hY?=
+ =?us-ascii?Q?yx6+/ouYYh+4VImD0wrlIrJTGsjrMcEGlUikidIoTXmhQAu9Fzjlhehx63kZ?=
+ =?us-ascii?Q?T+XpqWN82O/GC+J6Enc=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 282a0511-14bf-4b4e-3c24-08d9b985bc49
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2021 13:30:29.2696
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Oead6dE0r6hAqyEnvQaB42yhGjaXRdk8rSW9RIPC3jtLzO3lzIz8lIXZiwCrhVkE
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5223
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 07, 2021 at 12:26:24PM +0100, Peter Zijlstra wrote:
-> On Sun, Dec 05, 2021 at 10:53:49PM -0800, Christoph Hellwig wrote:
+On Tue, Dec 07, 2021 at 05:25:04AM -0800, Christoph Hellwig wrote:
+> On Tue, Dec 07, 2021 at 09:16:27AM -0400, Jason Gunthorpe wrote:
+> > Yes, the suggestion was to put everything that 'if' inside a function
+> > and then of course a matching undo function.
 > 
-> > > +#define req_ref_zero_or_close_to_overflow(req)	\
-> > > +	((unsigned int) atomic_read(&(req->ref)) + 127u <= 127u)
-> > > +
-> > > +static inline bool req_ref_inc_not_zero(struct request *req)
-> > > +{
-> > > +	return atomic_inc_not_zero(&req->ref);
-> > > +}
-> > > +
-> > > +static inline bool req_ref_put_and_test(struct request *req)
-> > > +{
-> > > +	WARN_ON_ONCE(req_ref_zero_or_close_to_overflow(req));
-> > > +	return atomic_dec_and_test(&req->ref);
-> > > +}
-> 
-> So it's just about these two ops, right?
-> 
-> Now, afaict refcount_inc_not_zero() doesn't actually generate terrible
-> code here's the fast-path of kernel/events/core.c:ring_buffer_get()
-> 
-> refcount_inc_not_zero():
-> 
->     a9d0:       41 54                   push   %r12
->     a9d2:       49 89 fc                mov    %rdi,%r12
->     a9d5:       e8 00 00 00 00          call   a9da <ring_buffer_get+0xa>       a9d6: R_X86_64_PLT32    __rcu_read_lock-0x4
->     a9da:       4d 8b a4 24 c8 02 00 00         mov    0x2c8(%r12),%r12
->     a9e2:       4d 85 e4                test   %r12,%r12
->     a9e5:       74 24                   je     aa0b <ring_buffer_get+0x3b>
->     a9e7:       41 8b 14 24             mov    (%r12),%edx
->     a9eb:       85 d2                   test   %edx,%edx
->     a9ed:       74 1c                   je     aa0b <ring_buffer_get+0x3b>
->     a9ef:       8d 4a 01                lea    0x1(%rdx),%ecx
-> *   a9f2:       89 d0                   mov    %edx,%eax
->     a9f4:       f0 41 0f b1 0c 24       lock cmpxchg %ecx,(%r12)
->     a9fa:       75 32                   jne    aa2e <ring_buffer_get+0x5e>
-> *   a9fc:       09 ca                   or     %ecx,%edx
-> *   a9fe:       78 19                   js     aa19 <ring_buffer_get+0x49>
->     aa00:       e8 00 00 00 00          call   aa05 <ring_buffer_get+0x35>      aa01: R_X86_64_PLT32    __rcu_read_unlock-0x4
->     aa05:       4c 89 e0                mov    %r12,%rax
->     aa08:       41 5c                   pop    %r12
->     aa0a:       c3                      ret
-> 
-> The * marked instructions are the difference, vs atomic_inc_not_zero():
-> 
->     a9d0:       41 54                   push   %r12
->     a9d2:       49 89 fc                mov    %rdi,%r12
->     a9d5:       e8 00 00 00 00          call   a9da <ring_buffer_get+0xa>       a9d6: R_X86_64_PLT32    __rcu_read_lock-0x4
->     a9da:       4d 8b a4 24 c8 02 00 00         mov    0x2c8(%r12),%r12
->     a9e2:       4d 85 e4                test   %r12,%r12
->     a9e5:       74 1e                   je     aa05 <ring_buffer_get+0x35>
->     a9e7:       41 8b 04 24             mov    (%r12),%eax
->     a9eb:       85 c0                   test   %eax,%eax
->     a9ed:       74 16                   je     aa05 <ring_buffer_get+0x35>
->     a9ef:       8d 50 01                lea    0x1(%rax),%edx
->     a9f2:       f0 41 0f b1 14 24       lock cmpxchg %edx,(%r12)
->     a9f8:       75 f1                   jne    a9eb <ring_buffer_get+0x1b>
->     a9fa:       e8 00 00 00 00          call   a9ff <ring_buffer_get+0x2f>      a9fb: R_X86_64_PLT32    __rcu_read_unlock-0x4
->     a9ff:       4c 89 e0                mov    %r12,%rax
->     aa02:       41 5c                   pop    %r12
->     aa04:       c3                      ret
-> 
-> 
-> Now, ring_buffer_put(), which uses refcount_dec_and_test():
-> 
-> refcount_dec_and_test()
-> 
->     aa40:       b8 ff ff ff ff          mov    $0xffffffff,%eax
->     aa45:       f0 0f c1 07             lock xadd %eax,(%rdi)
->     aa49:       83 f8 01                cmp    $0x1,%eax
->     aa4c:       74 05                   je     aa53 <ring_buffer_put+0x13>
->     aa4e:       85 c0                   test   %eax,%eax
->     aa50:       7e 1e                   jle    aa70 <ring_buffer_put+0x30>
->     aa52:       c3                      ret
-> 
-> atomic_dec_and_test():
-> 
->     aa40:       f0 ff 0f                lock decl (%rdi)
->     aa43:       75 1d                   jne    aa62 <ring_buffer_put+0x22>
-> 
->     ...
-> 
->     aa62:       c3                      ret
-> 
-> Has a larger difference, which is fixable with the below patch, leading
-> to:
-> 
-> 
->     a9f0:       f0 ff 0f                lock decl (%rdi)
->     a9f3:       74 03                   je     a9f8 <ring_buffer_put+0x8>
->     a9f5:       7c 1e                   jl     aa15 <ring_buffer_put+0x25>
->     a9f7:       c3                      ret
-> 
-> 
-> So where exactly is the performance fail? Is it purely the mess made of
-> refcount_dec_and_test() ?
-> 
+> Can't we simplify things even more?  Do away with the DMA API owner
+> entirely, and instead in iommu_group_set_dma_owner iterate over all
+> devices in a group and check that they all have the no_dma_api flag
+> set (plus a similar check on group join).  With that most of the
+> boilerplate code goes away entirely in favor of a little more work at
+> iommu_group_set_dma_owner time.
 
-For refcount_inc(), as extracted from alloc_perf_context(), I get:
+Robin suggested something like this already.
 
-    4b68:       b8 01 00 00 00          mov    $0x1,%eax
-    4b6d:       f0 0f c1 43 28          lock xadd %eax,0x28(%rbx)
-    4b72:       85 c0                   test   %eax,%eax
-    4b74:       74 1b                   je     4b91 <alloc_perf_context+0xf1>
-    4b76:       8d 50 01                lea    0x1(%rax),%edx
-    4b79:       09 c2                   or     %eax,%edx
-    4b7b:       78 20                   js     4b9d <alloc_perf_context+0xfd>
+The locking doesn't work out, we can't nest device_lock()'s safely
+without ABBA deadlocks, and can't touch the dev->driver without the
+device_lock.
 
-the best I can seem to find is: https://godbolt.org/z/ne5o6eEEW
-
-    4b68:	b8 01 00 00 00       	mov    $0x1,%eax
-    4b6d:	f0 0f c1 07          	lock xadd %eax,(%rdi)
-    4b71:	83 c0 01             	add    $0x1,%eax
-    4b74:	74 16                	je     4b8c <alloc_perf_context+0xec>
-    4b76:	78 20                	js     4b98 <alloc_perf_context+0xf8>
-
-per the below updated patch. Still, not really pretty, but loads better
-I'd say.
-
-
----
- arch/x86/include/asm/refcount.h | 48 +++++++++++++++++++++++++++++++++++++++++
- include/linux/refcount.h        |  6 ++++++
- 2 files changed, 54 insertions(+)
-
-diff --git a/arch/x86/include/asm/refcount.h b/arch/x86/include/asm/refcount.h
-new file mode 100644
-index 000000000000..b32b4a5e0f37
---- /dev/null
-+++ b/arch/x86/include/asm/refcount.h
-@@ -0,0 +1,48 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_REFCOUNT_H
-+#define _ASM_X86_REFCOUNT_H
-+
-+#define refcount_dec_and_test refcount_dec_and_test
-+static inline bool refcount_dec_and_test(refcount_t *r)
-+{
-+	asm_volatile_goto (LOCK_PREFIX "decl %[var]\n\t"
-+			   "jz %l[cc_zero]\n\t"
-+			   "jl %l[cc_error]"
-+			   : : [var] "m" (r->refs.counter)
-+			   : "memory"
-+			   : cc_zero, cc_error);
-+	return false;
-+
-+cc_zero:
-+	return true;
-+
-+cc_error:
-+	refcount_warn_saturate(r, REFCOUNT_SUB_UAF);
-+	return false;
-+}
-+
-+#define refcount_inc refcount_inc
-+static inline void refcount_inc(refcount_t *r)
-+{
-+	int one = 1;
-+
-+	asm_volatile_goto (LOCK_PREFIX "xaddl %%eax, %[var]\n\t"
-+			   "addl $1, %%eax\n\t"
-+			   "je %l[cc_zero]\n\t"
-+			   "js %l[cc_error]"
-+			   : : [var] "m" (r->refs.counter), "a" (one)
-+			   : "memory"
-+			   : cc_zero, cc_error);
-+
-+	return;
-+
-+cc_zero:
-+	refcount_warn_saturate(r, REFCOUNT_ADD_UAF);
-+	return;
-+
-+cc_error:
-+	refcount_warn_saturate(r, REFCOUNT_ADD_OVF);
-+	return;
-+}
-+
-+#endif
-diff --git a/include/linux/refcount.h b/include/linux/refcount.h
-index b8a6e387f8f9..3ea5757c0b35 100644
---- a/include/linux/refcount.h
-+++ b/include/linux/refcount.h
-@@ -147,6 +147,8 @@ static inline unsigned int refcount_read(const refcount_t *r)
- 	return atomic_read(&r->refs);
- }
- 
-+#include <asm/refcount.h>
-+
- static inline __must_check bool __refcount_add_not_zero(int i, refcount_t *r, int *oldp)
- {
- 	int old = refcount_read(r);
-@@ -262,10 +264,12 @@ static inline void __refcount_inc(refcount_t *r, int *oldp)
-  * Will WARN if the refcount is 0, as this represents a possible use-after-free
-  * condition.
-  */
-+#ifndef refcount_inc
- static inline void refcount_inc(refcount_t *r)
- {
- 	__refcount_inc(r, NULL);
- }
-+#endif
- 
- static inline __must_check bool __refcount_sub_and_test(int i, refcount_t *r, int *oldp)
- {
-@@ -328,10 +332,12 @@ static inline __must_check bool __refcount_dec_and_test(refcount_t *r, int *oldp
-  *
-  * Return: true if the resulting refcount is 0, false otherwise
-  */
-+#ifndef refcount_dec_and_test
- static inline __must_check bool refcount_dec_and_test(refcount_t *r)
- {
- 	return __refcount_dec_and_test(r, NULL);
- }
-+#endif
- 
- static inline void __refcount_dec(refcount_t *r, int *oldp)
- {
+Jason

@@ -2,140 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38DC846B122
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E419946B126
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 03:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232301AbhLGDBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Dec 2021 22:01:12 -0500
-Received: from mga12.intel.com ([192.55.52.136]:7991 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229946AbhLGDBK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Dec 2021 22:01:10 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="217503763"
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="217503763"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 18:57:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,293,1631602800"; 
-   d="scan'208";a="515065510"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 06 Dec 2021 18:57:32 -0800
-Cc:     baolu.lu@linux.intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 04/18] driver core: platform: Add driver dma ownership
- management
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>
-References: <20211206015903.88687-1-baolu.lu@linux.intel.com>
- <20211206015903.88687-5-baolu.lu@linux.intel.com>
- <Ya4f662Af+8kE2F/@infradead.org> <20211206150647.GE4670@nvidia.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <56a63776-48ca-0d6e-c25c-016dc016e0d5@linux.intel.com>
-Date:   Tue, 7 Dec 2021 10:57:25 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S232137AbhLGDDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Dec 2021 22:03:00 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:29094 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229567AbhLGDDA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Dec 2021 22:03:00 -0500
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J7Q1N1l1sz1DK17;
+        Tue,  7 Dec 2021 10:56:40 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 7 Dec 2021 10:59:28 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 7 Dec 2021 10:59:28 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH] lib/list_debug.c: print more list debugging context in __list_del_entry_valid()
+Date:   Tue, 7 Dec 2021 10:58:35 +0800
+Message-ID: <20211207025835.1909-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-In-Reply-To: <20211206150647.GE4670@nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/6/21 11:06 PM, Jason Gunthorpe wrote:
-> On Mon, Dec 06, 2021 at 06:36:27AM -0800, Christoph Hellwig wrote:
->> I really hate the amount of boilerplate code that having this in each
->> bus type causes.
-> +1
-> 
-> I liked the first version of this series better with the code near
-> really_probe().
-> 
-> Can we go back to that with some device_configure_dma() wrapper
-> condtionally called by really_probe as we discussed?
-> 
+Currently, the entry->prev and entry->next are considered to be valid as
+long as they are not LIST_POISON{1|2}. However, the memory may be
+corrupted. The prev->next is invalid probably because 'prev' is invalid,
+not because prev->next's content is illegal.
 
-Are you talking about below change?
+Unfortunately, the printk and its subfunctions will modify the registers
+that hold the 'prev' and 'next', and we don't see this valuable
+information in the BUG context.
 
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index 68ea1f949daa..368f9e530515 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -577,7 +577,13 @@ static int really_probe(struct device *dev, struct 
-device_driver *drv)
-  	if (dev->bus->dma_configure) {
-  		ret = dev->bus->dma_configure(dev);
-  		if (ret)
--			goto probe_failed;
-+			goto pinctrl_bind_failed;
-+
-+		if (!drv->no_kernel_dma) {
-+			ret = iommu_device_set_dma_owner(dev, DMA_OWNER_DMA_API, NULL);
-+			if (ret)
-+				goto pinctrl_bind_failed;
-+                }
-  	}
+So print the contents of 'entry->prev' and 'entry->next'.
 
-  	ret = driver_sysfs_add(dev);
-@@ -660,6 +666,9 @@ static int really_probe(struct device *dev, struct 
-device_driver *drv)
-  	if (dev->bus)
-  		blocking_notifier_call_chain(&dev->bus->p->bus_notifier,
-  					     BUS_NOTIFY_DRIVER_NOT_BOUND, dev);
-+
-+	if (dev->bus->dma_configure && !drv->no_kernel_dma)
-+		iommu_device_release_dma_owner(dev, DMA_OWNER_DMA_API);
-  pinctrl_bind_failed:
-  	device_links_no_driver(dev);
-  	devres_release_all(dev);
-@@ -1204,6 +1213,9 @@ static void __device_release_driver(struct device 
-*dev, struct device *parent)
-  		else if (drv->remove)
-  			drv->remove(dev);
+Here's an example:
+list_del corruption. prev->next should be c0ecbf74, but was c08410dc
+kernel BUG at lib/list_debug.c:53!
+... ...
+PC is at __list_del_entry_valid+0x58/0x98
+LR is at __list_del_entry_valid+0x58/0x98
+psr: 60000093
+sp : c0ecbf30  ip : 00000000  fp : 00000001
+r10: c08410d0  r9 : 00000001  r8 : c0825e0c
+r7 : 20000013  r6 : c08410d0  r5 : c0ecbf74  r4 : c0ecbf74
+r3 : c0825d08  r2 : 00000000  r1 : df7ce6f4  r0 : 00000044
+... ...
+Stack: (0xc0ecbf30 to 0xc0ecc000)
+bf20:                                     c0ecbf74 c0164fd0 c0ecbf70 c0165170
+bf40: c0eca000 c0840c00 c0840c00 c0824500 c0825e0c c0189bbc c088f404 60000013
+bf60: 60000013 c0e85100 000004ec 00000000 c0ebcdc0 c0ecbf74 c0ecbf74 c0825d08
+bf80: c0e807c0 c018965c 00000000 c013f2a0 c0e807c0 c013f154 00000000 00000000
+bfa0: 00000000 00000000 00000000 c01001b0 00000000 00000000 00000000 00000000
+bfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+bfe0: 00000000 00000000 00000000 00000000 00000013 00000000 00000000 00000000
+(__list_del_entry_valid) from (__list_del_entry+0xc/0x20)
+(__list_del_entry) from (finish_swait+0x60/0x7c)
+(finish_swait) from (rcu_gp_kthread+0x560/0xa20)
+(rcu_gp_kthread) from (kthread+0x14c/0x15c)
+(kthread) from (ret_from_fork+0x14/0x24)
 
-+		if (dev->bus->dma_configure && !drv->no_kernel_dma)
-+			iommu_device_release_dma_owner(dev, DMA_OWNER_DMA_API);
-+
-  		device_links_driver_cleanup(dev);
+At first, I thought prev->next was overwritten. Later, I carefully
+analyzed the RCU code and the disassembly code. The error occurred when
+deleting a node from the list rcu_state.gp_wq. The System.map shows that
+the address of rcu_state is c0840c00. Then I use gdb to obtain the offset
+of rcu_state.gp_wq.task_list.
 
-  		devres_release_all(dev);
-diff --git a/include/linux/device/driver.h b/include/linux/device/driver.h
-index a498ebcf4993..2cf7b757b28e 100644
---- a/include/linux/device/driver.h
-+++ b/include/linux/device/driver.h
-@@ -100,6 +100,7 @@ struct device_driver {
-  	const char		*mod_name;	/* used for built-in modules */
+(gdb) p &((struct rcu_state *)0)->gp_wq.task_list
+$1 = (struct list_head *) 0x4dc
 
-  	bool suppress_bind_attrs;	/* disables bind/unbind via sysfs */
-+	bool no_kernel_dma;
-  	enum probe_type probe_type;
+Again:
+list_del corruption. prev->next should be c0ecbf74, but was c08410dc
 
-  	const struct of_device_id	*of_match_table;
+c08410dc = c0840c00 + 0x4dc = &rcu_state.gp_wq.task_list
 
-Best regards,
-baolu
+Because rcu_state.gp_wq has at most one node, so I can guess that
+"prev = &rcu_state.gp_wq.task_list". But for other scenes, maybe I wasn't
+so lucky, I cannot figure out the value of 'prev'.
+
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ lib/list_debug.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/lib/list_debug.c b/lib/list_debug.c
+index 5d5424b51b746fe..9daa3fb9d1cd615 100644
+--- a/lib/list_debug.c
++++ b/lib/list_debug.c
+@@ -49,11 +49,11 @@ bool __list_del_entry_valid(struct list_head *entry)
+ 			"list_del corruption, %px->prev is LIST_POISON2 (%px)\n",
+ 			entry, LIST_POISON2) ||
+ 	    CHECK_DATA_CORRUPTION(prev->next != entry,
+-			"list_del corruption. prev->next should be %px, but was %px\n",
+-			entry, prev->next) ||
++			"list_del corruption. prev->next should be %px, but was %px. (prev=%px)\n",
++			entry, prev->next, prev) ||
+ 	    CHECK_DATA_CORRUPTION(next->prev != entry,
+-			"list_del corruption. next->prev should be %px, but was %px\n",
+-			entry, next->prev))
++			"list_del corruption. next->prev should be %px, but was %px. (next=%px)\n",
++			entry, next->prev, next))
+ 		return false;
+ 
+ 	return true;
+-- 
+2.25.1
+

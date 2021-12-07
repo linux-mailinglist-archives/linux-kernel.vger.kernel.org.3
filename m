@@ -2,131 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7815D46C73A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F20746C741
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Dec 2021 23:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbhLGWN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Dec 2021 17:13:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
+        id S233310AbhLGWOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Dec 2021 17:14:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242199AbhLGWNV (ORCPT
+        with ESMTP id S242247AbhLGWNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Dec 2021 17:13:21 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E77C061A32
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 14:09:50 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id i12-20020a63584c000000b00330ec6e2c37so178262pgm.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Dec 2021 14:09:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=JNBI+S2Jw5Vs4x4pkp+oETPJ8WHMJe4kYnIfeY40RAo=;
-        b=H0Ol+y/a13fDttBnOc0z9kTIyBRa7LB9zOK5FeI6QQMlBRx6rp+ElP7mpguG1NFW6Q
-         3TrlFcPjXek6+IluQsPwdB/sH+raBYdQvJkp8XfHLIohUErExFS5iMOsjdNxUAUyMjii
-         ZIED1vVYFbjCovBwJhmBTSVw4Vc3KldLKGLDNJbwhwxwbH4zZk2jEpQabC+nlDTIXfz4
-         lUnW46E8xqCkKwNd2SRQGrzNcdREWA1Bf8c2fX6bGf3rLxk/BXR65nLxbpAUFaxIj65Q
-         jWISYOmjde1Cb0/nRiB9BS4KijuJ5KTG5oYZHghGblqQbtSfMkypGOln6kCYugCOAJbM
-         sbCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=JNBI+S2Jw5Vs4x4pkp+oETPJ8WHMJe4kYnIfeY40RAo=;
-        b=0iUuPohth7tn3xD34MTNxFanlwqfL0pm2GAnVet5lilfRpjcC7jSPmVA86iUdHPOJ0
-         RE0/0BhNB3GhzVPYIESGjrUMTZdDmzrVspOeNQOg1n3b32gs3G6QOaHZb7ddFGv7AJd1
-         JdcIoykw1cUzdxFrBWF+sAzJmPro6OeztmtFUacNQLQjDZ6qlE3VfewUJlrm+9ZvpAwJ
-         /fYsaj52sQKy27H/2iPyrF7KOsUWfsXg7Q6gpXXeM9FWA7Pr4BPsxWEUyYwsaHlRFTTu
-         +42Ox3bQ8XSxJzKUWkUJ1+8wOddNc6g+rnBPD2xToQ52UlwBgB5H8zKzw16PIxMSpwbb
-         7kxw==
-X-Gm-Message-State: AOAM532REfnRbq8IjgrcrmVU9KIyEc/bLp2myEGw3NxtXOgwHhtXA58Z
-        3kw/fWms5irAQnnMkMpiTNaptJnE8cQ=
-X-Google-Smtp-Source: ABdhPJzYI9Ielu744KQZUdFhLMEjd4KuXafE47GaJMqZ01zbaWxslijUvytjk8sHKu8mR2UEuWlq6yHLnvk=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:b7cb:b0:141:b33a:9589 with SMTP id
- v11-20020a170902b7cb00b00141b33a9589mr54924224plz.9.1638914990041; Tue, 07
- Dec 2021 14:09:50 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue,  7 Dec 2021 22:09:26 +0000
-In-Reply-To: <20211207220926.718794-1-seanjc@google.com>
-Message-Id: <20211207220926.718794-9-seanjc@google.com>
-Mime-Version: 1.0
-References: <20211207220926.718794-1-seanjc@google.com>
-X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
-Subject: [PATCH v3 8/8] KVM: x86: Add checks for reserved-to-zero Hyper-V
- hypercall fields
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ajay Garg <ajaygargnsit@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 7 Dec 2021 17:13:54 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C1DC0698C8
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 14:10:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 47BD0CE1E6C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Dec 2021 22:10:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39B93C341C3;
+        Tue,  7 Dec 2021 22:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638915008;
+        bh=BHjSZ4MPBPA5I9nGCjac++vO6q6E/wPGv/taWiOLqC0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R1fhtZrqvH8Zx9ctt1zYNJd1LPUsVopxNKFnFxUNZzMF4Cvluz2LX1SGjQgqD1GWu
+         dr4+XRiQCFgarAiLpvOC2iER4TNB5wV8VX8CSYybdv89JdOWg40qJ/Mz+r4DLHO6Gx
+         lJfCoELEFCu7VqfUydGGDKBO+EWFt4hPsptz8GyA48Dg+Nq6+VCuKmCjspIVR9Dn89
+         kgj6Js7ladxfNfBqXM3zyovYc8wo4qRM3A9DqjoTnAQ3I4059pEkBpbDj+2cZ8UclU
+         15w/X4djzH3e7J3FEmMRO62DCIHmSAa1n40v2qLEQPFWZ1V3d+stXA0QnVKZESDo7c
+         X6aCn+855SZwA==
+Date:   Tue, 7 Dec 2021 14:10:06 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        syzbot <syzbot+7cd473c2cac13fd2dd72@syzkaller.appspotmail.com>,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [f2fs-dev] [syzbot] BUG: unable to handle kernel NULL pointer
+ dereference in folio_mark_dirty
+Message-ID: <Ya/bviwnMPsSnOcy@google.com>
+References: <0000000000005f297e05d24f05f6@google.com>
+ <20211206175631.5d0c3caefa96f0479f0fc2e8@linux-foundation.org>
+ <Ya7jYRDwQqftGLtW@casper.infradead.org>
+ <Ya/Ueh7MWyvV2zdg@google.com>
+ <Ya/ZaxznaTmrIvdO@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ya/ZaxznaTmrIvdO@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add checks for the three fields in Hyper-V's hypercall params that must
-be zero.  Per the TLFS, HV_STATUS_INVALID_HYPERCALL_INPUT is returned if
-"A reserved bit in the specified hypercall input value is non-zero."
+On 12/07, Matthew Wilcox wrote:
+> On Tue, Dec 07, 2021 at 01:39:06PM -0800, Jaegeuk Kim wrote:
+> > On 12/07, Matthew Wilcox wrote:
+> > > > > Call Trace:
+> > > > >  <TASK>
+> > > > >  folio_mark_dirty+0x136/0x270 mm/page-writeback.c:2639
+> > > 
+> > >         if (likely(mapping)) {
+> > > ...
+> > >                 if (folio_test_reclaim(folio))
+> > >                         folio_clear_reclaim(folio);
+> > >                 return mapping->a_ops->set_page_dirty(&folio->page);
+> > > 
+> > > how do we get to a NULL ->set_page_dirty for a metadata page's
+> > > mapping->a_ops?  This is definitely an f2fs expert question.
+> > 
+> > I can't find anything in f2fs, since that page was got by f2fs_grab_meta_page
+> > along with grab_cache_page() that we never unlocked it.
+> > 
+> >   40 struct page *f2fs_grab_meta_page(struct f2fs_sb_info *sbi, pgoff_t index)
+> >   41 {
+> >   42         struct address_space *mapping = META_MAPPING(sbi);
+> >   43         struct page *page;
+> >   44 repeat:
+> >   45         page = f2fs_grab_cache_page(mapping, index, false);
+> > 
+> >                     -> grab_cache_page(mapping, index);
+> > 
+> >   46         if (!page) {
+> >   47                 cond_resched();
+> >   48                 goto repeat;
+> >   49         }
+> >   50         f2fs_wait_on_page_writeback(page, META, true, true);
+> >   51         if (!PageUptodate(page))
+> >   52                 SetPageUptodate(page);
+> >   53         return page;
+> >   54 }
+> > 
+> > 
+> > Suspecting something in folio wrt folio_mapping()?
+> > 
+> >  81 bool set_page_dirty(struct page *page)
+> >  82 {
+> >  83         return folio_mark_dirty(page_folio(page));
+> >  84 }
+> 
+> ... huh?  How could folio_mapping() be getting this wrong?
 
-Note, some versions of the TLFS have an off-by-one bug for the last
-reserved field, and define it as being bits 64:60.  See
-https://github.com/MicrosoftDocs/Virtualization-Documentation/pull/1682.
+Dunno.
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- arch/x86/kvm/hyperv.c             | 5 +++++
- include/asm-generic/hyperv-tlfs.h | 6 ++++++
- 2 files changed, 11 insertions(+)
+> page_folio() does the same thing as compound_head() -- as far as I know
+> you don't use compound pages for f2fs metadata, so this basically just
+> casts the page to a struct folio.
+> 
+> folio_mapping() is just like the old page_mapping() (see commit
+> 2f52578f9c64).  Unless you've done something like set the swapcache
+> bit on your metadata page, it's just going to return folio->mapping
+> (ie the same as page->mapping).
 
-diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index 522ccd2f0db4..3be59f13b467 100644
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -2237,6 +2237,11 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
- 		goto hypercall_complete;
- 	}
- 
-+	if (unlikely(hc.param & HV_HYPERCALL_RSVD_MASK)) {
-+		ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
-+		goto hypercall_complete;
-+	}
-+
- 	if (hc.fast && is_xmm_fast_hypercall(&hc)) {
- 		if (unlikely(hv_vcpu->enforce_cpuid &&
- 			     !(hv_vcpu->cpuid_cache.features_edx &
-diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-index 8a04c8fba598..2354378eef4c 100644
---- a/include/asm-generic/hyperv-tlfs.h
-+++ b/include/asm-generic/hyperv-tlfs.h
-@@ -184,11 +184,17 @@ enum HV_GENERIC_SET_FORMAT {
- #define HV_HYPERCALL_FAST_BIT		BIT(16)
- #define HV_HYPERCALL_VARHEAD_OFFSET	17
- #define HV_HYPERCALL_VARHEAD_MASK	GENMASK_ULL(26, 17)
-+#define HV_HYPERCALL_RSVD0_MASK		GENMASK_ULL(31, 27)
- #define HV_HYPERCALL_REP_COMP_OFFSET	32
- #define HV_HYPERCALL_REP_COMP_1		BIT_ULL(32)
- #define HV_HYPERCALL_REP_COMP_MASK	GENMASK_ULL(43, 32)
-+#define HV_HYPERCALL_RSVD1_MASK		GENMASK_ULL(47, 44)
- #define HV_HYPERCALL_REP_START_OFFSET	48
- #define HV_HYPERCALL_REP_START_MASK	GENMASK_ULL(59, 48)
-+#define HV_HYPERCALL_RSVD2_MASK		GENMASK_ULL(63, 60)
-+#define HV_HYPERCALL_RSVD_MASK		(HV_HYPERCALL_RSVD0_MASK | \
-+					 HV_HYPERCALL_RSVD1_MASK | \
-+					 HV_HYPERCALL_RSVD2_MASK)
- 
- /* hypercall status code */
- #define HV_STATUS_SUCCESS			0
--- 
-2.34.1.400.ga245620fadb-goog
-
+Hmm, I've never seen this call stack before, so simply started to suspect
+folio.
